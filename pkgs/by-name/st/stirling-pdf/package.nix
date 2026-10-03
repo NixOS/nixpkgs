@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchNpmDeps,
   rustPlatform,
+  writeShellScriptBin,
 
   cargo,
   cargo-tauri,
@@ -36,6 +37,29 @@ assert isDesktopVariant -> !buildWithFrontend;
 
 let
   gradle = gradle_9;
+  # The Gradle shell launcher has a 64 MiB client heap. It therefore forks a
+  # daemon for this project's 2 GiB JVM configuration, even with --no-daemon.
+  # Darwin's build sandbox cannot connect to that daemon's loopback socket.
+  # Match the project's JVM arguments and forward the Nix Gradle hook's
+  # temporary trust store so Gradle can run its tasks in the client process.
+  gradleClient = writeShellScriptBin "gradle" ''
+    jvmOpts=()
+    for arg in "$@"; do
+      case "$arg" in
+        -Djavax.net.ssl.trustStore=*|-Djavax.net.ssl.trustStorePassword=*)
+          jvmOpts+=("$arg")
+          ;;
+      esac
+    done
+    exec ${lib.getExe gradle.jdk} \
+      -Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 \
+      --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED \
+      "''${jvmOpts[@]}" \
+      -javaagent:${gradle.unwrapped}/libexec/gradle/lib/agents/gradle-instrumentation-agent-${gradle.version}.jar \
+      -Dorg.gradle.appname=gradle \
+      -jar ${gradle.unwrapped}/libexec/gradle/lib/gradle-gradle-cli-main-${gradle.version}.jar \
+      "$@"
+  '';
   jre = jdk25;
   python = python3.withPackages (ps: [ ps.fonttools ]);
 in
@@ -83,7 +107,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!withAdditionalFeatures && !isDesktopVariant) [ ./free-source.patch ];
 
-  postPatch = lib.optionalString isDesktopVariant ''
+  postPatch = ''
+    substituteInPlace gradle.properties \
+      --replace-fail 'org.gradle.daemon=true' 'org.gradle.daemon=false' \
+      --replace-fail 'org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8' \
+        'org.gradle.jvmargs=-Xmx2g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 --add-opens=java.prefs/java.util.prefs=ALL-UNNAMED'
+  ''
+  + lib.optionalString isDesktopVariant ''
     # Nixpkgs does not produce artifacts for Stirling-PDF's upstream updater
     # and does not have access to upstream's private signing key.
     substituteInPlace frontend/editor/src-tauri/tauri.conf.json \
@@ -148,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     go-task
+    gradleClient
     gradle
     jre # one of the tests also require that the `java` command is available on the command line
     makeBinaryWrapper
