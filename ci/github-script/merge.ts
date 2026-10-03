@@ -1,5 +1,44 @@
-// @ts-nocheck
 import { classify } from './supportedBranches.ts'
+
+type GitHub = InstanceType<typeof import('@actions/github/lib/utils').GitHub>
+type Context = typeof import('@actions/github').context
+type Core = typeof import('@actions/core')
+export type PullRequest = Awaited<
+  ReturnType<GitHub['rest']['pulls']['get']>
+>['data']
+export type User = Pick<NonNullable<PullRequest['user']>, 'id' | 'login'>
+export interface Review {
+  state: string
+  commit: { oid: string } | null
+  user: User
+  onBehalfOf: { nodes: { slug: string }[] }
+}
+export interface TimelineEvent {
+  event: string
+  sha?: string
+  commit_id?: string | null
+  body?: string
+  user?: User | null
+  node_id?: string
+  created_at?: string
+  updated_at?: string
+  submitted_at?: string
+  committer?: { date: string }
+}
+export type Maintainers = Record<string, number[]>
+export interface MergeProps {
+  github: GitHub
+  context: Context
+  core: Core
+  log: (key: string, value: unknown) => void
+  dry: boolean
+  pull_request: PullRequest
+  events: TimelineEvent[]
+  reviews: Review[]
+  maintainers: Maintainers
+  getTeamMembers: (slug: string) => Promise<User[]> | User[]
+  getUser: (id: number) => Promise<User | null>
+}
 
 function runChecklist({
   committers,
@@ -10,6 +49,11 @@ function runChecklist({
   reviews,
   user,
   userIsMaintainer,
+}: Pick<MergeProps, 'pull_request' | 'log' | 'maintainers' | 'reviews'> & {
+  committers: Set<number>
+  files: Awaited<ReturnType<GitHub['rest']['pulls']['listFiles']>>['data']
+  user?: User
+  userIsMaintainer?: boolean
 }) {
   const allByName = files.every(
     ({ filename }) =>
@@ -22,7 +66,7 @@ function runChecklist({
     .filter(Boolean)
 
   const eligible = !packages.length
-    ? new Set()
+    ? new Set<number>()
     : packages
         .map((pkg) => new Set(maintainers[pkg]))
         .reduce((acc, cur) => acc?.intersection(cur) ?? cur)
@@ -46,7 +90,7 @@ function runChecklist({
   // Dismissed reviews surface as DISMISSED and comment-only follow-ups as COMMENTED, so
   // both are skipped naturally — the prior actionable review still stands until the
   // committer explicitly approves or requests changes again.
-  const committerReviewState = new Map()
+  const committerReviewState = new Map<number, string>()
   for (const { user, state } of reviews) {
     if (
       committers.has(user.id) &&
@@ -59,7 +103,7 @@ function runChecklist({
     'CHANGES_REQUESTED',
   )
 
-  const checklist = {
+  const checklist: Record<string, boolean | Record<string, boolean>> = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
     'PR touches only files of packages in `pkgs/by-name/`.': allByName,
@@ -85,7 +129,7 @@ function runChecklist({
   if (user) {
     checklist[
       `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) (_see [requesting a new invitation](https://github.com/NixOS/rfc39-record/blob/main/README.md#requesting-a-new-invitation)_).`
-    ] = userIsMaintainer
+    ] = !!userIsMaintainer
     if (allByName) {
       // We can only determine the below, if all packages are in by-name, since
       // we can't reliably relate changed files to packages outside by-name.
@@ -116,14 +160,24 @@ function runChecklist({
 // The merge command must be on a separate line and not within codeblocks or html comments.
 // Codeblocks can have any number of ` larger than 3 to open/close. We only look at code
 // blocks that are not indented, because the later regex wouldn't match those anyway.
-function hasMergeCommand(body) {
+function hasMergeCommand(body: string | null | undefined) {
   return (body ?? '')
     .replace(/<!--.*?-->/gms, '')
     .replace(/(^`{3,})[^`].*?\1/gms, '')
     .match(/^@NixOS\/nixpkgs-merge-bot merge\s*$/im)
 }
 
-export async function handleMergeComment({ github, body, node_id, reaction }) {
+export async function handleMergeComment({
+  github,
+  body,
+  node_id,
+  reaction,
+}: {
+  github: GitHub
+  body: string | null | undefined
+  node_id: string
+  reaction: string
+}) {
   if (!hasMergeCommand(body)) return
 
   await github.graphql(
@@ -150,7 +204,7 @@ export async function handleMerge({
   maintainers,
   getTeamMembers,
   getUser,
-}) {
+}: MergeProps) {
   const pull_number = pull_request.number
 
   const committers = new Set(
@@ -201,7 +255,7 @@ export async function handleMerge({
             // We're only testing this hidden reference, but not the author of the comment.
             // We'll just assume that nobody creates comments with this marker on purpose.
             // Additionally checking the author is quite annoying for local debugging.
-            body.match(new RegExp(`^<!-- comment: ${node_id} -->$`, 'm')),
+            body?.match(new RegExp(`^<!-- comment: ${node_id} -->$`, 'm')),
         )),
   )
 
@@ -217,7 +271,9 @@ export async function handleMerge({
     // doesn't work with Merge Queues. We now have merge queues enabled on all development
     // branches, so we don't need a fallback for regular merges.
     try {
-      const resp = await github.graphql(
+      const resp = await github.graphql<{
+        enqueuePullRequest: { mergeQueueEntry: { mergeQueue: { url: string } } }
+      }>(
         `mutation($node_id: ID!, $sha: GitObjectID) {
           enqueuePullRequest(input: {
             expectedHeadOid: $sha,
@@ -237,7 +293,7 @@ export async function handleMerge({
           `:heavy_check_mark: [Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge (#306934)`,
         ],
       }
-    } catch (e) {
+    } catch (e: any) {
       log('Enqueuing failed', e.response.errors[0].message)
     }
 
@@ -246,7 +302,7 @@ export async function handleMerge({
     // fixing CI requires a new push, which invalidates this merge command anyway (we only
     // act on comments after the latest push). So we don't enable auto-merge and instead
     // ask for a fresh command once CI is green again.
-    if (['error', 'failure'].includes(noPrFailuresState)) {
+    if (['error', 'failure'].includes(noPrFailuresState ?? '')) {
       log('merge', 'CI has failed, not enabling auto-merge')
       return {
         reaction: 'THUMBS_DOWN',
@@ -285,16 +341,18 @@ export async function handleMerge({
           '> If GitHub gets stuck even though CI passed (it sometimes does), leaving another approval should kick off the merge.',
         ],
       }
-    } catch (e) {
+    } catch (e: any) {
       log('Auto Merge failed', e.response.errors[0].message)
       throw new Error(e.response.errors[0].message)
     }
   }
 
   for (const comment of comments) {
-    log('comment', comment.node_id)
+    if (!comment.user || !comment.node_id) continue
+    const node_id = comment.node_id
+    log('comment', node_id)
 
-    async function react(reaction) {
+    async function react(reaction: string) {
       if (dry) {
         core.info(`Reaction ${reaction} on ${comment.node_id} (dry)`)
         return
@@ -303,12 +361,12 @@ export async function handleMerge({
       await handleMergeComment({
         github,
         body: comment.body,
-        node_id: comment.node_id,
+        node_id,
         reaction,
       })
     }
 
-    async function isMaintainer(username) {
+    async function isMaintainer(username: string) {
       try {
         return (
           (
@@ -320,8 +378,11 @@ export async function handleMerge({
           ).data.state === 'active'
         )
       } catch (e) {
-        if (e.status === 404) return false
-        else throw e
+        if (e instanceof Error && 'status' in e && e.status === 404) {
+          return false
+        } else {
+          throw e
+        }
       }
     }
 
@@ -357,7 +418,7 @@ export async function handleMerge({
 
     if (eligible.size > 0 && !eligible.has(comment.user.id)) {
       const users = await Promise.all(
-        Array.from(eligible, async (id) => (await getUser(id)).login),
+        Array.from(eligible, async (id) => (await getUser(id))?.login),
       )
       body.push(
         '> [!TIP]',
@@ -406,6 +467,6 @@ export async function handleMerge({
   })
 
   // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
-  // This is used to set the respective label in bot.js.
+  // This is used to set the respective label in bot.ts.
   return result
 }
