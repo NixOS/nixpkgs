@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  systemd,
+  systemdLibs,
   protobuf,
 }:
 
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     protobuf
   ];
-  buildInputs = [ systemd ];
+  buildInputs = [ systemdLibs ];
 
   cargoBuildFlags = [
     "--package"

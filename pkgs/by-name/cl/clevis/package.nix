@@ -18,7 +18,7 @@
   nixosTests,
   pkg-config,
   stdenv,
-  systemd,
+  systemdLibs,
   tpm2-tools,
 }:
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     jose
     libpwquality
     luksmeta
-    systemd
+    systemdLibs
     tpm2-tools
   ];
 

@@ -10,7 +10,7 @@
   automake,
   libtool,
   openssl,
-  systemd,
+  systemdLibs,
   pam,
   fuse3,
   libdrm,
@@ -112,7 +112,7 @@ let
       openssl
       pam
       pixman
-      systemd
+      systemdLibs
       libx11
       libxfixes
       libxrandr

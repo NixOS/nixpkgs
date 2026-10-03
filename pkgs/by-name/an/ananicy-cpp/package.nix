@@ -7,7 +7,7 @@
   pkg-config,
   spdlog,
   nlohmann_json,
-  systemd,
+  systemdLibs,
   libbpf,
   elfutils,
   bpftools,
@@ -51,7 +51,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     pcre2
     spdlog
     nlohmann_json
-    systemd
+    systemdLibs
     zlib
   ]
   ++ lib.optionals withBpf [

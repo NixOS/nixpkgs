@@ -18,7 +18,7 @@
   openssl,
   readline,
   scitokens-cpp,
-  systemd,
+  systemdLibs,
   voms,
   zlib,
   # If not null, move the default configuration files to "$etc/etc" and look for the configuration
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
     isa-l # not available on Apple silicon
-    systemd # only available on specific non-static Linux platforms
+    systemdLibs # only available on specific non-static Linux platforms
     voms # only available on Linux due to gsoap failing to build on Darwin
   ];
 
