@@ -324,6 +324,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ./python-extension-suffix.patch
     ./cpp-extension-dependency-paths.patch
     ./wheel-tensorpipe-metadata.patch
+    ./nnpack-psimd-array-contracts.patch
   ]
   ++ lib.optionals (!(lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform)) [
     ./cross-blas-dot.patch
@@ -806,6 +807,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     tests =
       callPackage ../tests {
         inherit rocmSupport cudaSupport;
+      }
+      // {
+        nnpackPSIMD = buildPackages.callPackage ../tests/nnpack-psimd.nix {
+          inherit (finalAttrs) src;
+          nnpackPatch = ./nnpack-psimd-array-contracts.patch;
+        };
       }
       // lib.optionalAttrs (cudaSupport && cudaPackages.cudaAtLeast "12.9") {
         cudaArchitectures = callPackage ../tests/cuda-architectures.nix {
