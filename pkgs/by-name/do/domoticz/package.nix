@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src/Config $out/share/domoticz
     cp -r $src/scripts $out/share/domoticz
     cp -r $src/plugins $out/share/domoticz
+    cp -r $src/dzVents $out/share/domoticz
 
     mkdir -p $out/bin
     cp domoticz $out/bin
