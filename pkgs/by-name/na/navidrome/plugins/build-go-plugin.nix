@@ -22,17 +22,20 @@ lib.extendMkDerivation {
       src,
       vendorHash,
       meta,
+      nativeBuildInputs ? [ ],
+      ldflags ? [ ],
       passthru ? { },
       ...
     }@args:
-    {
+    args
+    // {
       __structuredAttrs = true;
 
-      nativeBuildInputs = [
+      nativeBuildInputs = nativeBuildInputs ++ [
         navidromePluginInstallHook
       ];
 
-      ldflags = [ "-buildmode=c-shared" ];
+      ldflags = ldflags ++ [ "-buildmode=c-shared" ];
 
       overrideModAttrs = {
         nativeBuildInputs = [
