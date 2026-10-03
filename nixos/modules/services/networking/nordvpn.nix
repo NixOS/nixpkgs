@@ -120,21 +120,40 @@ in
         ++ [ nordvpn ]
       );
       serviceConfig = {
-        # nordvpnd needs CAP_NET_ADMIN to configure network interfaces
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
+        # nordvpnd needs CAP_NET_ADMIN to configure network interfaces.
+        AmbientCapabilities = [
+          "CAP_NET_ADMIN"
+        ];
+        CapabilityBoundingSet = [
+          "CAP_NET_ADMIN"
+        ];
+        DeviceAllow = [
+          "/dev/net/tun rw"
+        ];
         ExecStart = lib.getExe' nordvpn "nordvpnd";
         Group = cfg.group;
         KillMode = "process";
+        NoNewPrivileges = "yes";
         NonBlocking = true;
+        ProtectControlGroups = true;
+        ProtectSystem = "strict";
+        ReadWritePaths = "/tmp/";
         Requires = "nordvpnd.socket";
         Restart = "on-failure";
         RestartSec = 5;
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = "yes";
         RuntimeDirectory = "nordvpn";
         RuntimeDirectoryMode = "0750";
         StateDirectory = "nordvpn";
         StateDirectoryMode = "0750";
         User = cfg.user;
+        WorkingDirectory = "/var/lib/nordvpn";
       };
       wantedBy = [ "default.target" ];
       wants = [ "network-online.target" ];
@@ -166,7 +185,6 @@ in
       wantedBy = [ "default.target" ];
       wants = [ "network-online.target" ];
     };
-
   };
 
   meta = {
