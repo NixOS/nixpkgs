@@ -4,6 +4,32 @@
   ...
 }:
 
+let
+  # Frigate configured with a custom database location, the directory must be provided by the admin
+  withDatabaseAt = directory: {
+    services.frigate = {
+      enable = true;
+      hostname = "localhost";
+      settings = {
+        mqtt.enabled = false;
+        database.path = "${directory}/frigate.db";
+        cameras.test.ffmpeg.inputs = [
+          {
+            path = "http://127.0.0.1:8080";
+            roles = [ "detect" ];
+          }
+        ];
+        detect.enabled = false;
+      };
+    };
+
+    systemd.tmpfiles.settings."10-frigate-database".${directory}.d = {
+      user = "frigate";
+      group = "frigate";
+      mode = "0750";
+    };
+  };
+in
 {
   name = "frigate";
   meta = { inherit (pkgs.frigate.meta) maintainers; };
@@ -53,6 +79,10 @@
 
       environment.systemPackages = with pkgs; [ httpie ];
     };
+
+    customdb = withDatabaseAt "/srv/frigate";
+
+    homedb = withDatabaseAt "/home/frigate";
   };
 
   testScript = ''
@@ -79,5 +109,16 @@
     machine.wait_for_file("/var/cache/frigate/test@*.mp4")
 
     machine.log(machine.execute("systemd-analyze security frigate.service | grep -v ✓")[1])
+
+    # database outside the state directory
+    for (m, directory) in [(customdb, "/srv/frigate"), (homedb, "/home/frigate")]:
+      with subtest(f"database in {directory}"):
+        m.wait_for_unit("frigate.service")
+        m.wait_for_open_port(5001)
+        m.wait_for_file(f"{directory}/frigate.db")
+        m.fail("test -e /var/lib/frigate/frigate.db")
+
+    customdb.succeed("systemctl show -p ProtectHome frigate.service | grep -q ProtectHome=yes")
+    homedb.succeed("systemctl show -p ProtectHome frigate.service | grep -q ProtectHome=no")
   '';
 }
