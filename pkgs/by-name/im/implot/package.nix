@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "implot";
-  version = "0.17";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "epezent";
     repo = "implot";
     rev = "v${version}";
-    hash = "sha256-HNzNRHPLr352EDkAci4nx5qQnPI308rGH8yHkF+n5OY=";
+    hash = "sha256-dMZ7B8qkBKloEXgwN+RMX9lL/Owq+nnE5PNigaw1mN0=";
   };
 
   cmakeRules = "${vcpkg.src}/ports/implot";
