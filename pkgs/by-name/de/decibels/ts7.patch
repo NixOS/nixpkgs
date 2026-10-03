@@ -1,0 +1,91 @@
+diff --git a/gi-types/gobject2.d.ts b/gi-types/gobject2.d.ts
+index 8a7d8bc..7d41e7a 100644
+--- a/gi-types/gobject2.d.ts
++++ b/gi-types/gobject2.d.ts
+@@ -929,7 +929,7 @@ export class Object {
+         target_property: string,
+         flags: BindingFlags,
+         transform_to: Closure,
+-        transform_from: Closure
++        transform_from: Closure | null
+     ): Binding;
+     force_floating(): void;
+     freeze_notify(): void;
+diff --git a/src/playback-rate-button.ts b/src/playback-rate-button.ts
+index afef452..de6b233 100644
+--- a/src/playback-rate-button.ts
++++ b/src/playback-rate-button.ts
+@@ -36,7 +36,6 @@ export class APPlaybackRateButton extends Adw.Bin {
+       GObject.BindingFlags.SYNC_CREATE,
+     );
+ 
+-    // @ts-expect-error GObject.BindingTransformFunc return arguments are not correctly typed
+     window.stream.bind_property_full(
+       "rate",
+       this._label,
+diff --git a/src/player.ts b/src/player.ts
+index 2f92b0a..5c7662b 100644
+--- a/src/player.ts
++++ b/src/player.ts
+@@ -68,7 +68,6 @@ export class APPlayerState extends Adw.Bin {
+       widget.set_direction(Gtk.TextDirection.LTR);
+     }
+ 
+-    // @ts-expect-error GObject.BindingTransformFunc return arguments are not correctly typed
+     window.stream.bind_property_full(
+       "duration",
+       this._duration_label,
+@@ -80,7 +79,6 @@ export class APPlayerState extends Adw.Bin {
+       null,
+     );
+ 
+-    // @ts-expect-error GObject.BindingTransformFunc return arguments are not correctly typed
+     window.stream.bind_property_full(
+       "timestamp",
+       this._timestamp_label,
+@@ -105,7 +103,6 @@ export class APPlayerState extends Adw.Bin {
+       },
+     );
+ 
+-    // @ts-expect-error GObject.BindingTransformFunc return arguments are not correctly typed
+     window.stream.bind_property_full(
+       "playing",
+       this._playback_image,
+@@ -117,7 +114,6 @@ export class APPlayerState extends Adw.Bin {
+       null,
+     );
+ 
+-    // @ts-expect-error GObject.BindingTransformFunc return arguments are not correctly typed
+     window.stream.bind_property_full(
+       "playing",
+       this._playback_button,
+@@ -129,7 +125,6 @@ export class APPlayerState extends Adw.Bin {
+       null,
+     );
+ 
+-    // @ts-expect-error GObject.BindingTransformFunc return arguments are not correctly typed
+     window.stream.bind_property_full(
+       "timestamp",
+       this._waveform,
+diff --git a/tsconfig.json b/tsconfig.json
+index 4c4ea15..8443264 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -9,13 +9,12 @@
+     "checkJs": true,
+     "outDir": "_build/tsc-out",
+     "strict": true,
+-    "moduleResolution": "node",
+-    "baseUrl": ".",
++    "rootDir": "./src",
+     "paths": {
+       "*": [
+-        "*",
+-        "types",
+-        "gi-types"
++        "./*",
++        "./types",
++        "./gi-types"
+       ]
+     },
+     "typeRoots": [
