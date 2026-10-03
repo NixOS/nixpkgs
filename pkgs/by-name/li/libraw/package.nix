@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  testers,
   fetchFromGitHub,
   autoreconfHook,
   lcms2,
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     inherit imagemagick hdrmerge;
     inherit (python3.pkgs) rawkit;
   };
@@ -56,5 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2Plus
     ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "libraw"
+      "libraw_r"
+    ];
   };
 })
