@@ -52,7 +52,6 @@
   sshfs,
   sops,
   stylish-haskell,
-  tabnine,
   tmux,
   typescript_7,
   typescript-language-server,
@@ -976,15 +975,6 @@ assertNoAdditions {
 
   completion-buffers = super.completion-buffers.overrideAttrs {
     dependencies = [ self.completion-nvim ];
-  };
-
-  completion-tabnine = super.completion-tabnine.overrideAttrs {
-    dependencies = [ self.completion-nvim ];
-    buildInputs = [ tabnine ];
-    postFixup = ''
-      mkdir -p $target/binaries
-      ln -s ${tabnine}/bin/TabNine $target/binaries/TabNine_$(uname -s)
-    '';
   };
 
   conflict-marker-vim = super.conflict-marker-vim.overrideAttrs (old: {

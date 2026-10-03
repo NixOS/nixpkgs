@@ -39,6 +39,7 @@ mapAliases (
     coc-sumneko-lua = throw "'vimPlugins.coc-sumneko-lua' was removed, as it is unmaintained and broken. You should switch to lua_ls"; # Added 2026-02-04
     coc-tsserver = throw "'vimPlugins.coc-tsserver' was removed, as it was unmaintained"; # Added 2026-02-12
     coc-vetur = throw "'vimPlugins.coc-vetur' was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # Added 2025-10-01
+    completion-tabnine = throw "'vimPlugins.completion-tabnine' has been removed, as tabnine has been dropped"; # Added 2026-10-03
     completion-treesitter = throw "'vimPlugins.completion-treesitter' has been archived since 2024-01"; # Added 2025-12-18
     ctags-lsp-nvim = throw "'vimPlugins.ctags-lsp-nvim' has been removed, upstream deleted the repository"; # Added 2026-02-14
     feline-nvim = throw "'vimPlugins.feline-nvim' has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
