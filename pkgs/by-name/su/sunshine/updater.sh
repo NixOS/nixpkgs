@@ -50,18 +50,12 @@ log "src hash: $src_hash"
 log "Patching src hash in $package_nix"
 # The src fetchFromGitHub is the only one with fetchSubmodules; anchor on it so
 # we don't touch the ffmpeg or npmDepsHash entries. sed -z spans newlines.
-sed -i -zE "s#hash = \"sha256-[A-Za-z0-9+/=]+\"(\\s*fetchSubmodules = true;)#hash = \"$src_hash\"\\1#" "$package_nix"
+sed -i -zE "s#hash = \"sha256-[A-Za-z0-9+/=]+\";(\\s*fetchSubmodules = true;)#hash = \"$src_hash\";\\1#" "$package_nix"
 
 if ! grep -q "$src_hash" "$package_nix"; then
     echo "ERROR: failed to write src hash into $package_nix" >&2
     exit 1
 fi
-
-log "Regenerating sunshine.ui package-lock.json"
-# `--generate-lockfile` only regenerates package-lock.json; it skips the npmDepsHash
-# refresh (see nix-update's dependency_hashes.py). Run a second pass to update the hash.
-# `--no-src` avoids re-fetching the (already-pinned) sunshine src on each pass.
-nix-update sunshine --version=skip --no-src --generate-lockfile --subpackage ui
 
 log "Refreshing sunshine.ui npmDepsHash"
 nix-update sunshine --version=skip --no-src --subpackage ui
@@ -90,7 +84,7 @@ log "build-deps tag: $build_deps_tag"
 prefetch_unpacked_sri() {
     local raw
     raw=$(nix-prefetch-url --unpack --type sha256 "$1")
-    nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$raw"
+    nix-hash --type sha256 --to-sri "$raw"
 }
 
 ffmpeg_url() {
