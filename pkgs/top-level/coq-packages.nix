@@ -48,7 +48,7 @@ let
           withPackages =
             f:
             (callPackage ../applications/science/logic/coq/with-packages.nix {
-              inherit coq;
+              inherit (self) coq;
             })
               (f self);
         };
