@@ -19,10 +19,10 @@ buildKodiBinaryAddon rec {
   };
 
   extraCMakeFlags = [
-    "-DMGBA_LIB=${mgba}/lib/retroarch/cores/mgba_libretro.so"
+    "-DMGBA_LIB=${lib.getLib mgba}/lib/retroarch/cores/mgba_libretro.so"
   ];
 
-  extraBuildInputs = [ mgba ];
+  extraBuildInputs = [ (lib.getLib mgba) ];
   propagatedBuildInputs = [
     libretro
   ];

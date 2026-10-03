@@ -19,10 +19,10 @@ buildKodiBinaryAddon rec {
   };
 
   extraCMakeFlags = [
-    "-DFUSE_LIB=${fuse}/lib/retroarch/cores/fuse_libretro.so"
+    "-DFUSE_LIB=${lib.getLib fuse}/lib/retroarch/cores/fuse_libretro.so"
   ];
 
-  extraBuildInputs = [ fuse ];
+  extraBuildInputs = [ (lib.getLib fuse) ];
   propagatedBuildInputs = [
     libretro
   ];
