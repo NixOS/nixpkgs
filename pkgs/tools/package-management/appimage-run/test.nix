@@ -19,6 +19,9 @@ let
 in
 runCommand "appimage-run-tests"
   {
+    inherit (appimage-run) version;
+    pname = "appimage-run-tests";
+
     buildInputs = [
       appimage-run
       glibcLocales
@@ -43,7 +46,7 @@ runCommand "appimage-run-tests"
 
     # Verify desktop entry
     XDG_DATA_DIRS="${appimage-run}/share"
-    [[ "$(xdg-mime query default application/vnd.appimage)" == '${appimage-run.name}.desktop' ]]
+    [[ "$(xdg-mime query default application/vnd.appimage)" == '${appimage-run.pname}.desktop' ]]
 
     set +x
     touch $out
