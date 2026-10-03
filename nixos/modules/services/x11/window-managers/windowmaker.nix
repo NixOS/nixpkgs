@@ -5,26 +5,25 @@
   ...
 }:
 
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.windowmaker;
 in
 {
   ###### interface
-  options = {
-    services.xserver.windowManager.windowmaker.enable = mkEnableOption "windowmaker";
+  options.services.xserver.windowManager.windowmaker = {
+    enable = lib.mkEnableOption "windowmaker";
+    package = lib.mkPackageOption pkgs "windowmaker" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "windowmaker";
       start = ''
-        ${pkgs.windowmaker}/bin/wmaker &
+        ${cfg.package}/bin/wmaker &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.windowmaker ];
+    environment.systemPackages = [ cfg.package ];
   };
 }
