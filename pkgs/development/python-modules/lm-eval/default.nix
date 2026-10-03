@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   setuptools,
@@ -189,6 +190,11 @@ buildPythonPackage (finalAttrs: {
     # zeno-client is not packaged
     "tests/scripts/test_zeno_visualize.py"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$";
+  };
 
   meta = {
     changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${finalAttrs.src.tag}";
