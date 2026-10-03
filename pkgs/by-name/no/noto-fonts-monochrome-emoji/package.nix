@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  rename,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -14,17 +14,10 @@ stdenvNoCC.mkDerivation {
     repo = "fonts";
     rev = "a73b9ab0a5df191bcfed817159a903911ea7958a";
     hash = "sha256-qVFU4uZius8oFPJCIL9ek2YdS3jru5mmTHp2L9RIXfg=";
-    sparseCheckout = [ "ofl/notoemoji" ];
+    rootDir = "ofl/notoemoji";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/noto ofl/notoemoji/*.ttf
-    ${rename}/bin/rename 's/\[.*\]//' $out/share/fonts/noto/*
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   passthru.updateScript = ./update.sh;
 
