@@ -1,0 +1,207 @@
+diff --git a/src/main/runtime/command-line-launcher.ts b/src/main/runtime/command-line-launcher.ts
+index 6dd770f..e29b49c 100644
+--- a/src/main/runtime/command-line-launcher.ts
++++ b/src/main/runtime/command-line-launcher.ts
+@@ -1,26 +1,19 @@
+ import fs from 'node:fs';
+-import os from 'node:os';
+ import path from 'node:path';
+ import {
+-  accessSyncOf,
+   envOf,
+   existsSyncOf,
+   failureMessage,
+   findCommand,
+   getRunCommand,
+-  normalizePathForCompare,
+-  pathEntriesContain,
+   pathModuleFor,
+   platformOf,
+-  splitPath,
+   type CommonOptions,
+   type WindowsPathOptions,
+ } from './command-line-launcher-deps';
+ import {
+   appendWindowsUserPathDir,
+   defaultBunRepairPath,
+-  shimMatchesCurrentInstall,
+-  windowsLauncherPaths,
+   windowsShimContent,
+ } from './command-line-launcher-windows';
+ 
+@@ -72,7 +65,6 @@ const BUN_OFFICIAL_WINDOWS_COMMAND = [
+ ];
+ const INSTALL_TIMEOUT_MS = 10 * 60 * 1000;
+ const COMMAND_TIMEOUT_MS = 15 * 1000;
+-const MACOS_HOMEBREW_PATH_DIRS = ['/opt/homebrew/bin'];
+ 
+ function installMethodForCommand(command: string[] | null): BunSnapshot['installMethod'] {
+   if (!command) return null;
+@@ -163,109 +155,25 @@ function resolveLauncherResourcePath(options: CommonOptions): string {
+   return platformPath.join(options.cwd ?? process.cwd(), 'dist', 'launcher', 'subminer');
+ }
+ 
+-function isWritableDir(candidate: string, options: CommonOptions): boolean {
+-  try {
+-    if (!existsSyncOf(options)(candidate)) return false;
+-    accessSyncOf(options)(candidate, fs.constants.W_OK);
+-    return true;
+-  } catch {
+-    return false;
+-  }
+-}
+-
+-function collectPathDirs(options: CommonOptions): string[] {
+-  const platform = platformOf(options);
+-  const dirs: string[] = [];
+-  const add = (dir: string) => {
+-    if (!pathEntriesContain(dirs, dir, platform)) dirs.push(dir);
+-  };
+-  splitPath(envOf(options).PATH, platform).forEach(add);
+-  return dirs;
+-}
+-
+ export async function resolveLauncherInstallTarget(
+-  options: CommonOptions & WindowsPathOptions = {},
++  _options: CommonOptions & WindowsPathOptions = {},
+ ): Promise<LauncherSnapshot> {
+-  const platform = platformOf(options);
+-  if (platform === 'win32') {
+-    const { binDir, installPath } = windowsLauncherPaths(options);
+-    return {
+-      status: existsSyncOf(options)(installPath) ? 'ready' : 'not_installed',
+-      commandPath: existsSyncOf(options)(installPath) ? installPath : null,
+-      installPath,
+-      pathDir: binDir,
+-      shadowedBy: null,
+-      message: null,
+-    };
+-  }
+-
+-  const homeDir = options.homeDir ?? os.homedir();
+-  const pathDirs = collectPathDirs(options);
+-  const preferred =
+-    platform === 'darwin'
+-      ? [
+-          '/opt/homebrew/bin',
+-          '/usr/local/bin',
+-          path.posix.join(homeDir, '.local', 'bin'),
+-          path.posix.join(homeDir, 'bin'),
+-        ]
+-      : [
+-          path.posix.join(homeDir, '.local', 'bin'),
+-          path.posix.join(homeDir, 'bin'),
+-          '/usr/local/bin',
+-        ];
+-  const manualPreferred =
+-    platform === 'darwin'
+-      ? [
+-          path.posix.join(homeDir, '.local', 'bin'),
+-          path.posix.join(homeDir, 'bin'),
+-          '/usr/local/bin',
+-        ]
+-      : preferred;
+-  const installCandidates = [...manualPreferred, ...pathDirs].filter(
+-    (dir, index, all) =>
+-      all.findIndex(
+-        (other) =>
+-          normalizePathForCompare(other, platform) === normalizePathForCompare(dir, platform),
+-      ) === index,
+-  );
+-  const installedPreferred = pathDirs.find((dir) => {
+-    if (!pathEntriesContain(preferred, dir, platform)) return false;
+-    return existsSyncOf(options)(path.posix.join(dir, 'subminer'));
+-  });
+-  if (installedPreferred) {
+-    const installPath = path.posix.join(installedPreferred, 'subminer');
+-    return {
+-      status: 'ready',
+-      commandPath: installPath,
+-      installPath,
+-      pathDir: installedPreferred,
+-      shadowedBy: null,
+-      message: null,
+-    };
+-  }
+-  const selected = installCandidates.find(
+-    (dir) =>
+-      (platform !== 'darwin' || !pathEntriesContain(MACOS_HOMEBREW_PATH_DIRS, dir, platform)) &&
+-      pathEntriesContain(pathDirs, dir, platform) &&
+-      isWritableDir(dir, options),
+-  );
+-  if (!selected) {
++  const installPath = '@subminerLauncherPath@';
++  if (!fs.existsSync(installPath)) {
+     return {
+-      status: 'not_installable',
++      status: 'failed',
+       commandPath: null,
+-      installPath: null,
+-      pathDir: null,
++      installPath,
++      pathDir: path.dirname(installPath),
+       shadowedBy: null,
+-      message: 'No writable directory was found on your command-line PATH.',
++      message: `Packaged launcher is missing: ${installPath}`,
+     };
+   }
+-  const installPath = path.posix.join(selected, 'subminer');
+   return {
+-    status: existsSyncOf(options)(installPath) ? 'ready' : 'not_installed',
+-    commandPath: existsSyncOf(options)(installPath) ? installPath : null,
++    status: 'ready',
++    commandPath: installPath,
+     installPath,
+-    pathDir: selected,
++    pathDir: path.dirname(installPath),
+     shadowedBy: null,
+     message: null,
+   };
+@@ -274,45 +182,9 @@ export async function resolveLauncherInstallTarget(
+ export async function detectLauncher(
+   options: CommonOptions & WindowsPathOptions & { bunSnapshot?: BunSnapshot } = {},
+ ): Promise<LauncherSnapshot> {
+-  const platform = platformOf(options);
+   const target = await resolveLauncherInstallTarget(options);
+-  if (target.status === 'not_installable') return target;
+-  const expectedPath = target.installPath;
+-  if (!expectedPath) return target;
+-  const platformPath = pathModuleFor(platform);
+-  const launcherResourcePath = resolveLauncherResourcePath(options);
+-  const appExePath = options.appExePath ?? process.execPath;
+-
+-  if (platform === 'win32' && existsSyncOf(options)(expectedPath)) {
+-    const content = String((options.readFileSync ?? fs.readFileSync)(expectedPath, 'utf8'));
+-    if (!shimMatchesCurrentInstall(content, appExePath, launcherResourcePath)) {
+-      return {
+-        ...target,
+-        status: 'not_installed',
+-        commandPath: null,
+-        message: 'Installed launcher points at a previous SubMiner install; reinstall to refresh.',
+-      };
+-    }
+-  }
+-
+-  const commandPath = findCommand('subminer', options);
+-  const expectedNormalized = normalizePathForCompare(expectedPath, platform, platformPath);
+-  if (
+-    commandPath &&
+-    normalizePathForCompare(commandPath, platform, platformPath) !== expectedNormalized
+-  ) {
+-    return { ...target, status: 'shadowed', commandPath: expectedPath, shadowedBy: commandPath };
+-  }
+-  if (!existsSyncOf(options)(expectedPath))
+-    return { ...target, status: 'not_installed', commandPath: null };
+-  if (!commandPath) {
+-    return {
+-      ...target,
+-      status: 'not_on_path',
+-      commandPath: expectedPath,
+-      message: 'Launcher exists but its directory is not on PATH.',
+-    };
+-  }
++  if (target.status !== 'ready' || !target.commandPath) return target;
++  const commandPath = target.commandPath;
+ 
+   const bunSnapshot = options.bunSnapshot ?? (await detectBun(options));
+   if (bunSnapshot.status !== 'ready') {
