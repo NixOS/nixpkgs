@@ -8,8 +8,8 @@
   makeWrapper,
   pkg-config,
   wrapGAppsHook3,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   dbusSupport ? stdenv.hostPlatform.isLinux,
   dbus,
   pcsclite,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       perlPackages.perl
       pcsclite
     ]
-    ++ lib.optional systemdSupport systemd;
+    ++ lib.optional systemdSupport systemdLibs;
 
   nativeBuildInputs = [
     autoconf-archive

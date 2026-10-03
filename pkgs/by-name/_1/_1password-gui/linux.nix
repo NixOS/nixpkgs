@@ -38,7 +38,7 @@
   nspr,
   nss,
   pango,
-  systemd,
+  systemdLibs,
 
   # runtime dependencies
   libappindicator,
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     nspr
     nss
     pango
-    systemd
+    systemdLibs
     (lib.getLib stdenv.cc.cc)
   ];
 
