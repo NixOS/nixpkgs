@@ -2,9 +2,8 @@
   lib,
   stdenv,
   fetchFromBitbucket,
-  fetchpatch2,
   dos2unix,
-  nix-update-script,
+  gitUpdater,
   boost,
   zlib,
   # File backends (for decoding and encoding)
@@ -51,7 +50,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5101";
+  version = "5112";
 
   outputs = [ "out" ];
 
@@ -59,15 +58,10 @@ stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-C+1tmQ8cKGpigWDh5p0mqv9B7/Tv8iJ4JVc835Q4y40=";
+    hash = "sha256-903dvy7XegZzoP/+0ZTWQDg3nWib6k1g+05vGRfcenI=";
   };
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "r([0-9]+)"
-    ];
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "r"; };
 
   strictDeps = true;
 
@@ -85,16 +79,6 @@ stdenv.mkDerivation rec {
   '';
   patches = [
     # fix https://hydra.nixos.org/build/317966891
-    (fetchpatch2 {
-      name = "xmp-fix-for-gcc-15.patch";
-      url = "https://github.com/vitamin-caig/zxtune/commit/7f853a38924f78a25b86ac674b41e2f0fd2524a5.patch?full_index=1";
-      hash = "sha256-F6gD+w4lFymSRHXgDngYX/dZI26f7onOmYFlHkPKms8=";
-    })
-    (fetchpatch2 {
-      name = "update-vgm.patch";
-      url = "https://github.com/vitamin-caig/zxtune/commit/31e3ff7a8d13b72e6f72caecd15ae87cefca0465.patch?full_index=1";
-      hash = "sha256-uEa2LY/r/jVWHHEpFtsQba66YdIjA82fDlm+StKp/EI=";
-    })
     ./disable_updates.patch
   ];
 
@@ -185,7 +169,10 @@ stdenv.mkDerivation rec {
       desktopName = "ZXTune";
       genericName = "ZXTune";
       comment = meta.description;
-      categories = [ "Audio" ];
+      categories = [
+        "Audio"
+        "AudioVideo"
+      ];
       type = "Application";
     })
   ];
