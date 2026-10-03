@@ -362,6 +362,14 @@ in
       ]
       ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
 
+    programs.dconf.profiles.user.databases = lib.optionals (!config.security.pam.p11.enable) [
+      {
+        settings."org/gnome/login-screen" = {
+          enable-smartcard-authentication = false;
+        };
+      }
+    ];
+
     # Use AutomaticLogin if delay is zero, because it's immediate.
     # Otherwise with TimedLogin with zero seconds the prompt is still
     # presented and there's a little delay.
