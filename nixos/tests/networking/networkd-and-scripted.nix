@@ -254,6 +254,29 @@ let
             client.wait_until_succeeds("hostname | grep -q 'client1'")
       '';
     };
+    dhcpResolved = {
+      name = "ResolvedDHCP";
+      nodes.router = router;
+      nodes.client = clientConfig {
+        # must work without explicitly enabling polkit
+        services.resolved.enable = true;
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        networking.interfaces.enp1s0.useDHCP = true;
+      };
+      testScript = ''
+        router.start()
+        router.systemctl("start network-online.target")
+        router.wait_for_unit("network-online.target")
+
+        client.start()
+        client.wait_for_unit("network.target")
+
+        # dhcpcd replaces the DHCPv4 server with the router-advertised IPv6
+        # one moments later, so accept either; both arrive the same way.
+        with subtest("Wait until resolved has received the nameserver"):
+            client.wait_until_succeeds("resolvectl dns enp1s0 | grep -q -E '192.168.1.1|2001:db8::1'")
+      '';
+    };
     dhcpOneIf = {
       name = "OneInterfaceDHCP";
       nodes.router = router;
