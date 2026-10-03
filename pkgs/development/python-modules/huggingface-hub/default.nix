@@ -11,9 +11,10 @@
   filelock,
   fsspec,
   hf-xet,
-  httpx,
+  httpx2,
   packaging,
   pyyaml,
+  tomli,
   tqdm,
   typing-extensions,
 
@@ -41,7 +42,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "huggingface-hub";
-  version = "1.30.0";
+  version = "2.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -49,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-43yZ9wOmCaGw8wcuD0j91kKYwzgf9xqSTabYJaA+tDg=";
+    hash = "sha256-6AbsmB9IA7TVQcfiDrsolFSPF2diEacUnV7Ul4tootQ=";
   };
 
   build-system = [ setuptools ];
@@ -62,9 +63,10 @@ buildPythonPackage (finalAttrs: {
     filelock
     fsspec
     hf-xet
-    httpx
+    httpx2
     packaging
     pyyaml
+    tomli
     tqdm
     typing-extensions
   ];
@@ -90,7 +92,6 @@ buildPythonPackage (finalAttrs: {
     oauth = [
       authlib
       fastapi
-      httpx
       itsdangerous
     ];
     torch = [
