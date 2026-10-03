@@ -200,6 +200,7 @@ in
                     NB_STATE_DIR = client.dir.state;
                     NB_CONFIG = "''${client.dir.state}/config.json";
                     NB_DAEMON_ADDR = "unix://''${client.dir.runtime}/sock";
+                    NB_DISABLE_SSH_CONFIG = mkOptionDefault "true";
                     NB_INTERFACE_NAME = client.interface;
                     NB_LOG_FILE = mkOptionDefault "console";
                     NB_LOG_LEVEL = client.logLevel;
@@ -296,6 +297,65 @@ in
                 ];
                 default = "info";
                 description = "Log level of the NetBird daemon.";
+              };
+
+              ssh.enable = mkOption {
+                type = bool;
+                default = false;
+                description = ''
+                  Routes `ssh <netbird-peer>` through NetBird's JWT/SSO authentication instead of
+                  letting it fall back to password authentication, by adding a `Match` block with
+                  `netbird ssh proxy` as a `ProxyCommand` to {file}`/etc/ssh/ssh_config`.
+
+                  The block applies only to hosts this client's own daemon reports as peers *and*
+                  which serve NetBird SSH, so it stays inert for everything else, including other
+                  clients' peers and peers running a plain `sshd`. Deciding that runs a subprocess
+                  and a daemon round trip on every `ssh` invocation on the machine - around 0.1s,
+                  capped at 2s per enabled client - which is why this is opt-in.
+
+                  Matched hosts get `StrictHostKeyChecking no` and `UserKnownHostsFile /dev/null`,
+                  as upstream's own snippet does. That is not a loss of verification: OpenSSH is
+                  talking to a local `netbird ssh proxy` process over stdio, and the real peer's
+                  host key is checked one hop further in, by the daemon.
+
+                  On a `hardened` client the daemon socket is restricted to `${client.user.group}`.
+                  Users outside that group cannot read it, so the check never matches for them:
+                  their `ssh` keeps its stock behaviour but does not get the SSO proxy either.
+                '';
+              };
+
+              ssh.matchScript = mkOption {
+                type = package;
+                internal = true;
+                default = pkgs.writeShellApplication {
+                  name = "${client.suffixedName}-ssh-match";
+                  runtimeInputs = with pkgs; [
+                    coreutils
+                    jq
+                  ];
+                  text = ''
+                    case "$1" in
+                      *[!a-zA-Z0-9.:_-]*) exit 1 ;;
+                    esac
+
+                    # runs on every ssh invocation: answer at once when the socket is missing
+                    # (daemon down) or unreadable (caller outside of ${client.user.group}),
+                    # rather than waiting out the `timeout` below
+                    test -S "${client.dir.runtime}/sock" || exit 1
+
+                    # ask this client's own daemon. `ssh detect` cannot answer this: it reads the
+                    # target's SSH banner, so the target decides, and it cannot tell two clients'
+                    # peers apart. ssh host names are case insensitive and may be fully qualified.
+                    NB_LOG_LEVEL=error timeout 2 ${getExe client.wrapper} status --json 2>/dev/null \
+                      | jq --exit-status --arg host "$1" \
+                        '($host | ascii_downcase | rtrimstr(".")) as $h
+                         | any(.peers.details[]?;
+                             ((.fqdn // "") | ascii_downcase | rtrimstr(".")) as $f
+                             | $f == $h or ($f | split(".")[0]) == $h
+                               or .netbirdIp == $h or .netbirdIpv6 == $h)' \
+                        >/dev/null
+                  '';
+                };
               };
 
               ui.enable = mkOption {
@@ -440,6 +500,10 @@ in
               NB_STATE_DIR = client.dir.state;
               NB_CONFIG = "${client.dir.state}/config.json";
               NB_DAEMON_ADDR = "unix://${client.dir.runtime}/sock";
+              # upstream's writer targets a hardcoded /etc path (read-only under
+              # `hardened = true`, shared by all clients) and the unwrapped binary,
+              # `clients.<name>.ssh.enable` replaces it
+              NB_DISABLE_SSH_CONFIG = mkOptionDefault "true";
               NB_INTERFACE_NAME = client.interface;
               NB_LOG_FILE = mkOptionDefault "console";
               NB_LOG_LEVEL = client.logLevel;
@@ -571,6 +635,39 @@ in
               ActivationPolicy = "manual";
             };
           }
+        )
+      );
+
+      # `/etc/ssh/ssh_config` does not include `ssh_config.d` on NixOS, so the snippet goes in
+      # directly.
+      #
+      # Both criteria must hold, and ssh evaluates them left to right, stopping at the first
+      # failure: the daemon lookup answers "is this one of my peers", then `ssh detect` answers
+      # "does it actually serve NetBird SSH" - which is off by default upstream, so without it the
+      # proxy would engage for plain-sshd peers and replace a working connection with an SSO
+      # prompt. `detect` alone would not do: it reads the target's own banner, so a lying host
+      # could select itself. Ordered this way a lying host can only fail the second criterion and
+      # opt itself out, which is the safe direction.
+      #
+      # The closing `Match all` restores global scope: `extraConfig` is shared, and without it this
+      # block would swallow whatever another module happens to append after it.
+      #
+      # Quoting `%h` covers ordinary host names. It is not a security boundary: ssh_config has no
+      # escaping, so a `Hostname` directive containing a single quote still reaches the shell.
+      # Host names from the command line are rejected by ssh itself (OpenSSH >= 9.6).
+      programs.ssh.extraConfig = concatStringsSep "" (
+        toClientList (
+          client:
+          optionalString client.ssh.enable ''
+            # NetBird JWT/SSO authentication for ${client.service.name}
+            Match exec "${getExe client.ssh.matchScript} '%h'" exec "${getExe client.wrapper} ssh detect '%h' '%p'"
+                ProxyCommand ${getExe client.wrapper} ssh proxy %h %p
+                UserKnownHostsFile /dev/null
+                StrictHostKeyChecking no
+                # otherwise every proxied connection warns about /dev/null known hosts
+                LogLevel ERROR
+            Match all
+          ''
         )
       );
 
