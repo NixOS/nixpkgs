@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mxml";
-  version = "3.3.1";
+  version = "4.0.5";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "mxml";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-l7GUA+vlSECi/72eU3Y9COpGtLTRh3vYcHUi+uRkCn8=";
+    sha256 = "sha256-I9fpqbprxunK4B+Qheo68DRKWkcX9H838PJ3Bx4qh5Q=";
   };
 
   # remove the -arch flags which are set by default in the build
