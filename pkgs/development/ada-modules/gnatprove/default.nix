@@ -1,7 +1,8 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
+  clang,
   gnat,
   gnatcoll-core,
   gprbuild,
@@ -57,6 +58,9 @@ let
       };
       commit_date = "2023-01-05";
       patches = [
+        # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
+        ./0002-mute-aarch64-warnings.patch
+
         # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
         ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
       ];
@@ -99,7 +103,7 @@ let
       or (throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "gnatprove";
   version = "fsf-${gnat_version}_${thisSpark.commit_date}";
 
@@ -117,7 +121,8 @@ stdenv.mkDerivation {
     ocaml
     findlib
     menhir
-  ]);
+  ])
+  ++ lib.optional stdenvNoCC.targetPlatform.isDarwin clang;
 
   buildInputs = [
     gnatcoll-core
@@ -149,6 +154,8 @@ stdenv.mkDerivation {
     # gnat2why/gnat_src points to the GNAT sources
     tar xf ${gnat.cc.src} --wildcards 'gcc-*/gcc/ada'
     mv gcc-*/gcc/ada gnat2why/gnat_src
+
+    mv src/common/aarch64-darwin src/common/arm64-darwin
   '';
 
   configurePhase = ''

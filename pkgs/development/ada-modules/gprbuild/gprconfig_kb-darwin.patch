@@ -1,0 +1,49 @@
+--- a/db/fallback_targets.xml
++++ b/db/fallback_targets.xml
+@@ -14,6 +14,7 @@
+   <fallback_targets>
+     <target>x86_64-darwin</target>
+     <target>aarch64-darwin</target>
++    <target>arm64-darwin</target>
+   </fallback_targets>
+ 
+ </gprconfig>
+diff --git a/db/linker.xml b/db/linker.xml
+index e2489e88..0aa264e6 100644
+--- a/db/linker.xml
++++ b/db/linker.xml
+@@ -1207,6 +1207,7 @@
+        <target name="^powerpc-.*darwin.*$" />
+        <target name="^x86_64-.*darwin.*$" />
+        <target name="^aarch64-.*darwin.*$" />
++       <target name="^arm64-.*darwin.*$" />
+     </targets>
+     <config>
+    for Library_Builder use "${GPRCONFIG_PREFIX}libexec/gprbuild/gprlib";
+@@ -1242,6 +1243,8 @@
+        <target name="^i.86-.*darwin.*$" />
+        <target name="^powerpc-.*darwin.*$" />
+        <target name="^x86_64-.*darwin.*$" />
++       <target name="^aarch64.*darwin.*$" />
++       <target name="^arm64.*darwin.*$" />
+     </targets>
+     <config>
+     for Library_Rpath_Options ("C++") use ("-print-file-name=libstdc++.dylib");
+diff --git a/db/targetset.xml b/db/targetset.xml
+index 3fdda73e..a096e392 100644
+--- a/db/targetset.xml
++++ b/db/targetset.xml
+@@ -129,6 +129,13 @@
+     <target>x86_64-.*windows-gnu</target>
+   </targetset>
+ 
++  <!-- arm64-darwin -->
++  <targetset canonical="arm64-darwin">
++    <target>arm64-ios</target>
++    <target>arm64-darwin</target>
++    <target>arm64.*-darwin.*</target>
++  </targetset>
++
+   <!-- aarch64-darwin (iOS 64bit) -->
+   <targetset canonical="aarch64-darwin">
+     <target>aarch64-ios</target>
