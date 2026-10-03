@@ -26,6 +26,7 @@
   withNetSnmp ? true,
   krb5,
   pcre2,
+  perl,
   python3,
   rustPlatform,
   rustc,
@@ -42,6 +43,9 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "389-ds-base";
   version = "3.3.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "389ds";
@@ -89,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     openssl
     zlib
+    perl
+    python3
   ]
   ++ lib.optional withSystemd systemd
   ++ lib.optional withOpenldap openldap
@@ -113,12 +119,16 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withOpenldap [
     "--with-openldap"
+    "--with-openldap-inc=${lib.getDev openldap}/include"
+    "--with-openldap-lib=${lib.getLib openldap}/lib"
+    "--with-openldap-bin=${lib.getBin openldap}/bin"
   ]
   ++ lib.optionals withBdb [
     "--with-db-inc=${lib.getDev db}/include"
     "--with-db-lib=${lib.getLib db}/lib"
   ]
   ++ lib.optionals withNetSnmp [
+    "--with-netsnmp=${lib.getDev net-snmp}"
     "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
     "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
   ]
