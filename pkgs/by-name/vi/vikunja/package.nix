@@ -27,13 +27,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "vikunja";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Xh1ozUTOVqywk0i8xQWkG/bPRgPH9EABjRW8p4do1mE=";
+    hash = "sha256-Gy6LRbD6LfWjKwuzj+EBAiSkZluChFVC4qhZgQbeZc8=";
   };
 
   nativeBuildInputs =
@@ -54,7 +54,7 @@ buildGoModule (finalAttrs: {
       writableTmpDirAsHomeHook
     ];
 
-  vendorHash = "sha256-R6M5UyF10pIdoAvjWnS6Dqe/U6LTxmS6OwRTgmxfU4g=";
+  vendorHash = "sha256-NLtp+2QyfS06W/Puuo5MEqalpLc9NodoPqtDJPBbOH4=";
 
   frontend = callPackage ./frontend.nix {
     inherit (finalAttrs) src version;
@@ -76,6 +76,8 @@ buildGoModule (finalAttrs: {
     # These tests require a full config with public URL and CORS enabled.
     ${skipTest 1 "TestCreateOrganizationMap" "pkg/modules/migration/trello/trello_test.go"}
     ${skipTest 1 "TestTaskAttachmentUploadSize" "pkg/webtests/task_attachment_upload_test.go"}
+    # filesystem walk incompatible with trimpath
+    rm pkg/web/error_codes_test.go
   '';
 
   buildPhase = ''

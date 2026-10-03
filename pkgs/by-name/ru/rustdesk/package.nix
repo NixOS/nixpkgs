@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-xuIUWxicsqCJoKRvIDy0YISCHK3qolf1nWS3XMAM3PM=";
+    hash = "sha256-1xa7X+swBIb8Lz3c6m8SeNZAiJWNCUpw+UbdSsMkeSk=";
   };
 
   cargoHash = "sha256-Ym4USlB1NJO0bm0cr2l/yZhoUBfxtd2uTkkjrR7iD3o=";
