@@ -40,7 +40,7 @@
   qt6,
   sdl2-compat,
   shaderc,
-  systemd,
+  systemdLibs,
   udev,
   vulkan-headers,
   vulkan-loader,
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     openxr-loader
     shaderc
-    systemd
+    systemdLibs
     udev
     vulkan-headers
     vulkan-loader
