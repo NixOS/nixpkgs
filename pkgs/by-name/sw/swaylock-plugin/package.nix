@@ -14,7 +14,7 @@
   scdoc,
   stdenv,
   swaybg,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   wayland,
   wayland-protocols,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libxkbcommon
     pam
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
   ];
