@@ -2,14 +2,15 @@
   buildPythonPackage,
   python,
   pkgs,
+  protobuf,
 }:
 
 let
-  gz-math = pkgs.gz-math.override { python3Packages = python.pkgs; };
+  gz-msgs = pkgs.gz-msgs.override { python3Packages = python.pkgs; };
 in
 buildPythonPackage {
-  pname = "gz-math";
-  inherit (gz-math) version;
+  pname = "gz-msgs";
+  inherit (gz-msgs) version;
   pyproject = false;
 
   # The bindings are built by the C++ package; this just places them in
@@ -19,17 +20,19 @@ buildPythonPackage {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/${python.sitePackages}"
-    cp -r ${gz-math}/lib/python/. "$out/${python.sitePackages}/"
+    cp -r ${gz-msgs}/lib/python/. "$out/${python.sitePackages}/"
     runHook postInstall
   '';
 
-  dependencies = [ ];
-
-  pythonImportsCheck = [
-    "gz.math"
+  dependencies = [
+    protobuf
   ];
 
-  meta = gz-math.meta // {
-    description = "Python bindings for gz-math";
+  pythonImportsCheck = [
+    "gz.msgs.vector3d_pb2"
+  ];
+
+  meta = gz-msgs.meta // {
+    description = "Python bindings for gz-msgs";
   };
 }

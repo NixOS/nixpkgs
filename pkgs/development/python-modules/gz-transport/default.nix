@@ -2,14 +2,15 @@
   buildPythonPackage,
   python,
   pkgs,
+  gz-msgs,
 }:
 
 let
-  gz-math = pkgs.gz-math.override { python3Packages = python.pkgs; };
+  gz-transport = pkgs.gz-transport.override { python3Packages = python.pkgs; };
 in
 buildPythonPackage {
-  pname = "gz-math";
-  inherit (gz-math) version;
+  pname = "gz-transport";
+  inherit (gz-transport) version;
   pyproject = false;
 
   # The bindings are built by the C++ package; this just places them in
@@ -19,17 +20,19 @@ buildPythonPackage {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/${python.sitePackages}"
-    cp -r ${gz-math}/lib/python/. "$out/${python.sitePackages}/"
+    cp -r ${gz-transport}/lib/python/. "$out/${python.sitePackages}/"
     runHook postInstall
   '';
 
-  dependencies = [ ];
-
-  pythonImportsCheck = [
-    "gz.math"
+  dependencies = [
+    gz-msgs
   ];
 
-  meta = gz-math.meta // {
-    description = "Python bindings for gz-math";
+  pythonImportsCheck = [
+    "gz.transport"
+  ];
+
+  meta = gz-transport.meta // {
+    description = "Python bindings for gz-transport";
   };
 }

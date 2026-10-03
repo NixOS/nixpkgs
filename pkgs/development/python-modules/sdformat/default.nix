@@ -2,14 +2,15 @@
   buildPythonPackage,
   python,
   pkgs,
+  gz-math,
 }:
 
 let
-  gz-math = pkgs.gz-math.override { python3Packages = python.pkgs; };
+  sdformat = pkgs.sdformat.override { python3Packages = python.pkgs; };
 in
 buildPythonPackage {
-  pname = "gz-math";
-  inherit (gz-math) version;
+  pname = "sdformat";
+  inherit (sdformat) version;
   pyproject = false;
 
   # The bindings are built by the C++ package; this just places them in
@@ -19,17 +20,19 @@ buildPythonPackage {
   installPhase = ''
     runHook preInstall
     mkdir -p "$out/${python.sitePackages}"
-    cp -r ${gz-math}/lib/python/. "$out/${python.sitePackages}/"
+    cp -r ${sdformat}/lib/python/. "$out/${python.sitePackages}/"
     runHook postInstall
   '';
 
-  dependencies = [ ];
-
-  pythonImportsCheck = [
-    "gz.math"
+  dependencies = [
+    gz-math
   ];
 
-  meta = gz-math.meta // {
-    description = "Python bindings for gz-math";
+  pythonImportsCheck = [
+    "sdformat"
+  ];
+
+  meta = sdformat.meta // {
+    description = "Python bindings for sdformat";
   };
 }
