@@ -46,7 +46,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   #   in \
   #   rWrapper.override{ packages = [ xgb ]; }"
   pname = lib.optionalString rLibrary "r-" + "xgboost";
-  version = "3.0.5";
+  version = "3.4.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -57,7 +57,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     repo = "xgboost";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-khaD9gvKfUyWhkrIZXzGzKw/nfgeTcp9akCi5X3IORo=";
+    hash = "sha256-xdukBs4Y+JgQIKxXuY1Gh7gjYH+RbVpGrfjyljdytRk=";
   };
 
   nativeBuildInputs = [
