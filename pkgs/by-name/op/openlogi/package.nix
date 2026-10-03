@@ -34,7 +34,7 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openlogi";
-  version = "0.6.25";
+  version = "0.7.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -43,10 +43,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AprilNEA";
     repo = "OpenLogi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JziSstP3TdPVuqpZHtStT5fEy431tdFW7nB6bZvMyVA=";
+    hash = "sha256-+LHtffr/m4abosbqh1KCkD5iy/GANLVIMac+lmjJWxc=";
   };
 
-  cargoHash = "sha256-MVmPZ2IDss6+HmHKGdg4Q3g4W/fJgaQRGKoeUKDiEFU=";
+  cargoHash = "sha256-uTIqDu1vIEdULqevEH1QkrkgGkgAhPqp3ecaEcEbXr0=";
 
   postPatch = ''
     grep -q 'gpui-component?rev=${gpuiComponentThemes.rev}' Cargo.lock || {
