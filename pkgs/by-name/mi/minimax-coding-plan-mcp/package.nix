@@ -4,21 +4,28 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication (finalAttrs: {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      mcp = self.mcp_2;
+    }
+  );
+in
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "minimax-coding-plan-mcp";
-  version = "0-unstable-2026-02-10";
+  version = "0-unstable-2026-08-20";
 
   src = fetchFromGitHub {
     owner = "MiniMax-AI";
     repo = "MiniMax-Coding-Plan-MCP";
-    rev = "fbac3b3e56922a1249e00eebe07d9ee68f4768dc";
-    hash = "sha256-pxXeakBfn2FYAiznuJyBy58FkoV/Sx1zSYaSFDZUJX0=";
+    rev = "5dbf3494d7dac35d154958e0c1dab03910b89bbd";
+    hash = "sha256-bgaMFVqkbMXJug9q+Aj3MMt9tm/K/dZOT8rj1LtSnMg=";
   };
 
   pyproject = true;
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ pythonPackages.setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = with pythonPackages; [
     mcp
     python-dotenv
     requests
