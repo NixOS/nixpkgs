@@ -49,6 +49,8 @@
   xwaylandSupport ? true,
   libxcursor,
   xwayland,
+  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -127,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "shell-lua" luaSupport)
     (lib.mesonBool "test-junit-xml" false)
     (lib.mesonBool "xwayland" xwaylandSupport)
+    (lib.mesonBool "systemd" systemdSupport)
   ]
   ++ lib.optionals xwaylandSupport [
     (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
