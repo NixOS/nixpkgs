@@ -1,12 +1,13 @@
 {
   stdenv,
-  fetchpatch,
+  fetchpatch2,
   lib,
   tlpdb,
   bin,
   tlpdbxz,
   tl,
   installShellFiles,
+  buildPackages,
   coreutils,
   findutils,
   gawk,
@@ -554,6 +555,35 @@ lib.recursiveUpdate orig rec {
   collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
 
   #### misc
+
+  # fix compatibility with Python 3.14
+  minted.postUnpack =
+    let
+      patch = fetchpatch2 {
+        name = "minted-python314-compat.patch";
+        url = "https://github.com/gpoore/minted/commit/2a7b3a48e47b834bbc4a616679a0ef9710896a16.diff";
+        hash = "sha256-JcaQjSDqBQFsWLNRaOSNxCvPNa2HktfuzjsMKAWUPl8=";
+        includes = [ "python/latexminted/cmdline.py" ];
+      };
+    in
+    ''
+      if [[ -d "$out"/scripts/minted ]] ; then
+        export PATH="${
+          lib.makeBinPath (
+            with buildPackages;
+            [
+              python3Packages.wheel
+              dos2unix
+            ]
+          )
+        }:$PATH"
+        wheel unpack "$out"/scripts/minted/latexminted-0.6.0-py3-none-any.whl
+        dos2unix latexminted-0.6.0/latexminted/cmdline.py
+        patch -d latexminted-0.6.0 -p2 -i "${patch}"
+        unix2dos latexminted-0.6.0/latexminted/cmdline.py
+        wheel pack -d "$out"/scripts/minted latexminted-0.6.0
+      fi
+    '';
 
   # replace tex4ht.jar with our rebuilt version
   tex4ht.deps = (orig.tex4ht.deps or [ ]) ++ [ "tex4htJar" ];
