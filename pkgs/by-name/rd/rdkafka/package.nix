@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.15.0";
+  version = "2.15.1";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "confluentinc";
     repo = "librdkafka";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WW64fwh0xR4lEVwmrv00tP9mo6b49aCNgLLH/P0YS8k=";
+    hash = "sha256-74D1sMSA6advmirxeJiYzoqI0jjBqvbDtUqW8B8PieU=";
   };
 
   outputs = [
