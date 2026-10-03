@@ -33,10 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Framebuffer device maintenance program";
-    # NOTE: the website of the original author disappeared, the only remaining
-    # repository is maintained by the debian maintainer of the package at
-    # https://github.com/sudipm-mukherjee/fbset
-    homepage = "http://users.telenet.be/geertu/Linux/fbdev/";
+    homepage = "https://github.com/sudipm-mukherjee/fbset";
     license = lib.licenses.gpl2Only;
     mainProgram = "fbset";
     maintainers = with lib.maintainers; [ baloo ];

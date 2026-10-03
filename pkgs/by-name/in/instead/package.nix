@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Simple text adventure interpreter for Unix and Windows";
-    homepage = "https://instead.syscall.ru/";
+    homepage = "https://sourceforge.net/projects/instead";
     license = lib.licenses.mit;
     platforms = with lib.platforms; linux;
     maintainers = with lib.maintainers; [ pSub ];
