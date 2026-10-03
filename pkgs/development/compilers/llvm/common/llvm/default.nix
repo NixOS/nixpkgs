@@ -47,6 +47,17 @@ let
   # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
   # and libunwind. It also wants to disable LTO in the first rebuild.
   isDarwinBootstrap = lib.getName stdenv == "bootstrap-stage-xclang-stdenv-darwin";
+
+  # triton-llvm applies these too; see tests/README.md.
+  initializationPatches = [
+    ./initialize-iterator-and-resource-state.patch
+  ]
+  ++ optionals (lib.versionAtLeast release_version "19") [
+    ./initialize-count-copy-and-move.patch
+  ]
+  ++ optionals (lib.versionAtLeast release_version "22") [
+    ./initialize-sframe-cache.patch
+  ];
 in
 
 stdenv.mkDerivation (
@@ -282,7 +293,8 @@ stdenv.mkDerivation (
         # a new arm64 subtype that gives more pointer authentication machinery.
         # Vendored backport of the patch for LLVM 23
         (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
-      ];
+      ]
+      ++ initializationPatches;
 
     nativeBuildInputs = [
       cmake
@@ -636,6 +648,7 @@ stdenv.mkDerivation (
     passthru = {
       # For the update script:
       inherit monorepoSrc;
+      inherit initializationPatches;
       tests.withoutOptionalFeatures = libllvm.override {
         enablePFM = false;
         enablePolly = false;
