@@ -70,9 +70,13 @@ buildNpmPackage (finalAttrs: {
       mkdir -p "$out/lib/paseo/$(dirname "$path")"
       cp -a "$path" "$out/lib/paseo/$path"
     done < daemon-files.txt
+    mkdir -p "$out/lib/paseo/packages/server/dist/server/server"
+    cp packages/server/dist/server/server/exports.js \
+      "$out/lib/paseo/packages/server/dist/server/server/exports.js"
 
     nodePty=packages/server/node_modules/node-pty
-    cp -a "$nodePty/build" "$out/lib/paseo/$nodePty/"
+    mkdir -p "$out/lib/paseo/$nodePty/build"
+    cp -a "$nodePty/build/Release" "$out/lib/paseo/$nodePty/build/"
 
     # Root package.json lets node resolve the workspace layout when the
     # CLI/server bin starts from $out.
