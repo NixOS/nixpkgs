@@ -9,47 +9,44 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "audible-cli";
-  version = "0.3.3";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "audible-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ckI6nZUggIMvjJtN1zWXvTlVdiog0uJy6YR110A+JxM=";
+    hash = "sha256-GsPnnu7xwdcEM/Cj2jmRiDtUN3SSNmNFQrYbjXOfs0g=";
   };
 
-  nativeBuildInputs =
+  build-system = with python3Packages; [ hatchling ];
+
+  nativeBuildInputs = [
+    addBinToPathHook
+    installShellFiles
+  ];
+
+  dependencies =
     with python3Packages;
     [
-      hatchling
+      aiofiles
+      audible
+      click
+      httpx
+      packaging
+      pillow
+      questionary
+      tabulate
+      toml
+      tqdm
     ]
-    ++ [
-      addBinToPathHook
-      installShellFiles
-    ];
-
-  propagatedBuildInputs = with python3Packages; [
-    aiofiles
-    audible
-    click
-    httpx
-    packaging
-    pillow
-    questionary
-    tabulate
-    toml
-    tqdm
-  ];
-
-  pythonRelaxDeps = [
-    "httpx"
-  ];
+    ++ audible.optional-dependencies.cryptography;
 
   postInstall = ''
     installShellCompletion --cmd audible \
       --bash <(source utils/code_completion/audible-complete-bash.sh) \
-      --zsh <(source utils/code_completion/audible-complete-zsh-fish.sh)
+      --zsh <(source utils/code_completion/audible-complete-zsh.sh) \
+      --fish <(source utils/code_completion/audible-complete-fish.sh)
   '';
 
   # upstream has no tests
