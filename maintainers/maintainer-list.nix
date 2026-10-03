@@ -13269,6 +13269,11 @@
     githubId = 1198065;
     name = "Jeffrey David Johnson";
   };
+  jeff-oomu = {
+    github = "jeff-oomu";
+    githubId = 195243343;
+    name = "Jeffrey Allan";
+  };
   jeffcshelton = {
     github = "jeffcshelton";
     githubId = 77426854;
