@@ -147,6 +147,9 @@ An adapter must follow that project's contract, including its override precedenc
 Existing configuration choices determine the available contexts; inherited `*_FOR_BUILD` variables alone do not request a different configuration mode.
 An adapter cannot promise independent contexts when the selected build-system configuration combines them.
 Selecting distinct build-system contexts does not by itself isolate an executable's inherited flags; see the [CC Wrapper](#cc-wrapper) for its handling of multiple roles.
+Collectors can also merge contexts before any tool runs: CMake's setup hook appends every registered role to one `NIXPKGS_CMAKE_PREFIX_PATH`, and Swift's module collector appends to unsuffixed `NIX_SWIFTFLAGS_COMPILE` and `NIX_LDFLAGS`.
+With both BUILD and HOST roles registered, `strictDeps` restricts which dependencies reach each callback but does not separate these resulting variables.
+Selecting a compiler for one role cannot recover dependency provenance already discarded by these collectors.
 
 Execution of generated programs is a separate requirement from selecting their compiler.
 Providing an emulator only enables commands that actually use it; arbitrary recipe commands do not acquire an execution wrapper automatically.
