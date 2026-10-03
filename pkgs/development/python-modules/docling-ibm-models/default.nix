@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "docling-ibm-models";
-  version = "3.14.0";
+  version = "4.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "docling-project";
     repo = "docling-ibm-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+nGqh/ABv6Zg/0iguqse4Sk6VPsUTDHNuOeQ7IkWdX0=";
+    hash = "sha256-XLRrcVGuT97fbinOr97UdjCMqQFzYHnpLe2Y14MdayM=";
   };
 
   build-system = [
