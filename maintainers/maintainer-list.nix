@@ -22281,6 +22281,13 @@
     githubId = 5948762;
     name = "Berk Özkütük";
   };
+  ozozka = {
+    email = "ozkaya.ogzhn@gmail.com";
+    matrix = "@oguzhanozkaya:matrix.org";
+    github = "ozozka";
+    githubId = 53692091;
+    name = "Oğuzhan Özkaya";
+  };
   ozturkkl = {
     email = "97kemalozturk@gmail.com";
     github = "ozturkkl";
