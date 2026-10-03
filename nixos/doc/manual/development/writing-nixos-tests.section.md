@@ -496,7 +496,7 @@ There, you can attach to a [`pdb`](https://docs.python.org/3/library/pdb.html) s
 to step through the Python test script:
 
 ```
-bash# telnet 127.0.0.1 4444
+bash# socat readline tcp:127.0.0.1:4444
 pdb$
 ```
 
