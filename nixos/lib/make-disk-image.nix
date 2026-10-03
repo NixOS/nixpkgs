@@ -514,6 +514,13 @@ let
     export NIX_STATE_DIR=$TMPDIR/state
     nix-store --load-db < ${closureInfo}/registration
 
+    # Force auto-optimise-store off for every store write into $root below.
+    # cptofs (LKL) does not preserve hard links, so populated .links entries
+    # would be copied as independent files and can significantly inflate the
+    # image. Nix can regenerate the optimisation cache on demand via
+    # `nix-store --optimise`.
+    export NIX_CONFIG="auto-optimise-store = false"
+
     chmod 755 "$TMPDIR"
     echo "running nixos-install..."
     nixos-install --root $root --no-bootloader --no-root-passwd \
