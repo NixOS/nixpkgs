@@ -645,6 +645,8 @@ with pkgs;
 
   fetchFromGitHub = callPackage ../build-support/fetchgithub { };
 
+  fetchFromGitProvider = callPackage ../build-support/fetchgitprovider { };
+
   fetchFromHuggingFace = callPackage ../build-support/fetchhuggingface { };
 
   fetchFromBitbucket = callPackage ../build-support/fetchbitbucket { };
