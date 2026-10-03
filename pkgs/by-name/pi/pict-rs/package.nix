@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "asonix";
     repo = "pict-rs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jKUDrYBGaWyumnlzMyj+oC41rx8kVnkkUxixSCwFp3Y=";
+    hash = "sha256-jKUDrYBGaWyumnlzMyj+oC41rx8kVnkkUxixSCwFp3Y=";
   };
 
   cargoHash = "sha256-W4Bj+juON8mPyXDHgFpTBBFOvQlmYIKihXHBHwelah4=";
