@@ -230,7 +230,7 @@ in
             cp -R unpacked/*/. $out
           '';
         };
-        hash = "sha256-jRBuyAh7eyrfK7b1jjezcUxCbkZDQjWKSjtWpfexBuY=";
+        hash = "sha256-Xw0VWl3qZLvNNmRFHuWkltC1XfoIaHJKWM8Po4FSmoQ=";
       };
 
       dontBuild = false;
@@ -555,12 +555,16 @@ in
             ;
           dontBuild = true;
           installPhase = ''
-            cp -R ext/fast_mmaped_file_rs $out
-            rm $out/Cargo.lock
-            cp Cargo.lock $out
+            gem=$src
+            [ -d "$gem" ] && gem=$(echo "$gem"/*.gem)
+
+            mkdir unpacked
+            tar -xOf "$gem" data.tar.gz | tar -xz -C unpacked
+
+            cp -R unpacked $out
           '';
         };
-        hash = "sha256-7jqaf5RIsc9gq98WBCe3Dd3Fv2X+4echdXU1FSK/xnE=";
+        hash = "sha256-lhD8vlqK9a38ZLBD6YagWnJ/DQ8YqbC1NxEyzYnoLh8=";
       };
 
       nativeBuildInputs = [
