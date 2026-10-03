@@ -3,29 +3,28 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "altgraph";
   version = "0.17.5";
 
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yHs5XdEvq96cmVc6l0nWfajSnvneASXH9TZpm0qbyec=";
   };
 
-  dependencies = [
-    # setuptools in dependencies is intentional
-    # https://github.com/ronaldoussoren/altgraph/issues/21
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "altgraph" ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
+
   meta = {
-    changelog = "https://github.com/ronaldoussoren/altgraph/tags${version}";
+    changelog = "https://github.com/ronaldoussoren/altgraph/tags${finalAttrs.version}";
     description = "Fork of graphlib: a graph (network) package for constructing graphs";
     longDescription = ''
       altgraph is a fork of graphlib: a graph (network) package for constructing graphs,
@@ -37,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ septem9er ];
   };
-}
+})
