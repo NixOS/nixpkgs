@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "1.3.0";
 
   strictDeps = true;
-  __structuredattrs = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SolaWing";
