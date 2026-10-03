@@ -1,0 +1,24 @@
+From d6175d7f762e2b4ade3205088cc4c3e35b5820b8 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:12 -0700
+Subject: [PATCH] Disable execution-based Link What You Use when cross
+ compiling
+
+Based on PyTorch v2.13.0.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a8b655d..ebc4ec7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -89,7 +89,7 @@ if(LINUX)
+ endif()
+ 
+ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+-set(CMAKE_LINK_WHAT_YOU_USE TRUE)
++set(CMAKE_LINK_WHAT_YOU_USE FALSE)
+ 
+ # One variable that determines whether the current cmake process is being run
+ # with the main Caffe2 library. This is useful for building modules - if modules

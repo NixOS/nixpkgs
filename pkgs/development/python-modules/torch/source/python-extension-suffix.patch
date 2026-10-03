@@ -1,0 +1,41 @@
+From f5d63d39a0d34e2a818b299454645f0b30b06852 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:12 -0700
+Subject: [PATCH] Accept the target Python extension suffix when cross
+ compiling
+
+Based on PyTorch v2.13.0.
+---
+ tools/setup_helpers/cmake.py | 1 +
+ torch/CMakeLists.txt         | 6 ++++++
+ 2 files changed, 7 insertions(+)
+
+diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
+index 25a33e8..7df3889 100644
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -307,6 +307,7 @@ class CMake:
+         CMake.defines(
+             args,
+             Python_EXECUTABLE=sys.executable,
++            TORCH_PYTHON_EXTENSION_SUFFIX=sysconfig.get_config_var("EXT_SUFFIX"),
+             TORCH_BUILD_VERSION=version,
+             **build_options,
+         )
+diff --git a/torch/CMakeLists.txt b/torch/CMakeLists.txt
+index 23aa88d..09a5f22 100644
+--- a/torch/CMakeLists.txt
++++ b/torch/CMakeLists.txt
+@@ -447,6 +447,12 @@ install(TARGETS torch_python DESTINATION "${TORCH_INSTALL_LIB_DIR}")
+ # same code path.
+ if(BUILD_PYTHON AND NOT BUILD_LIBTORCH_WHL)
+   Python_add_library(_C MODULE WITH_SOABI "${TORCH_SRC_DIR}/csrc/stub.c")
++  # The build interpreter can carry the target's sysconfig when cross compiling.
++  # Use the same suffix as setup.py's package_data, rather than FindPython's
++  # interpreter-derived SOABI, which may be empty for a cross build.
++  if(TORCH_PYTHON_EXTENSION_SUFFIX)
++    set_target_properties(_C PROPERTIES SUFFIX "${TORCH_PYTHON_EXTENSION_SUFFIX}")
++  endif()
+   target_link_libraries(_C PRIVATE torch_python)
+   set_target_properties(_C PROPERTIES
+     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/torch"

@@ -1,0 +1,90 @@
+From 9ddc18486f09354b1f951bf5e0905a87d889d62d Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 3 Oct 2026 10:38:56 -0700
+Subject: [PATCH] Use declared dependency paths for C++ and CUDA extensions
+
+Nixpkgs uses external pybind11 and separate CUDA component outputs. Resolve pybind11 through its public Python API when headers are not bundled. Configure CUDA header/library search paths from the package dependencies, keeping explicit consumer paths ahead of defaults. Reuse library_paths for the Unix CUDA JIT linker instead of maintaining a second toolkit-layout assumption.
+
+Based on the exact PyTorch v2.13.0 source. The cuda_cflags and cuda_library_dirs substitutions are supplied by Nixpkgs, using cudart pkg-config metadata for its transitive public headers.
+---
+ torch/utils/cpp_extension.py | 34 ++++++++++++++++++++--------------
+ 1 file changed, 20 insertions(+), 14 deletions(-)
+
+diff --git a/torch/utils/cpp_extension.py b/torch/utils/cpp_extension.py
+index d987e95..c546663 100644
+--- a/torch/utils/cpp_extension.py
++++ b/torch/utils/cpp_extension.py
+@@ -43,6 +43,10 @@ _HERE = os.path.abspath(__file__)
+ _TORCH_PATH = os.path.dirname(os.path.dirname(_HERE))
+ TORCH_LIB_PATH = os.path.join(_TORCH_PATH, 'lib')
+ 
++# The package's CUDA components need not share the compiler's prefix.
++_CUDA_INCLUDE_DIRS = [flag[2:] for flag in shlex.split('@cuda_cflags@')]
++_CUDA_LIBRARY_DIRS = [path for path in shlex.split('@cuda_library_dirs@') if os.path.isdir(path)]
++
+ 
+ SUBPROCESS_DECODE_ARGS = ('oem',) if IS_WINDOWS else ()
+ MINIMUM_GCC_VERSION = (5, 0, 0)
+@@ -1735,15 +1739,19 @@ def include_paths(device_type: str = "cpu", torch_include_dirs=True) -> list[str
+             # Remove this once torch/torch.h is officially no longer supported for C++ extensions.
+             os.path.join(lib_include, 'torch', 'csrc', 'api', 'include'),
+         ])
++        if not os.path.isdir(os.path.join(lib_include, 'pybind11')):
++            import pybind11
++            paths.append(pybind11.get_include())
+     if device_type == "cuda" and IS_HIP_EXTENSION:
+         paths.append(os.path.join(lib_include, 'THH'))
+         paths.append(_join_rocm_home('include'))
+     elif device_type == "cuda":
+-        cuda_home_include = _join_cuda_home('include')
+-        # if we have the Debian/Ubuntu packages for cuda, we get /usr as cuda home.
+-        # but gcc doesn't like having /usr/include passed explicitly
+-        if cuda_home_include != '/usr/include':
+-            paths.append(cuda_home_include)
++        if not _CUDA_INCLUDE_DIRS:
++            cuda_home_include = _join_cuda_home('include')
++            # if we have the Debian/Ubuntu packages for cuda, we get /usr as cuda home.
++            # but gcc doesn't like having /usr/include passed explicitly
++            if cuda_home_include != '/usr/include':
++                paths.append(cuda_home_include)
+ 
+         # Support CUDA_INC_PATH env variable supported by CMake files
+         if (cuda_inc_path := os.environ.get("CUDA_INC_PATH", None)) and \
+@@ -1752,6 +1760,7 @@ def include_paths(device_type: str = "cpu", torch_include_dirs=True) -> list[str
+             paths.append(cuda_inc_path)
+         if CUDNN_HOME is not None:
+             paths.append(os.path.join(CUDNN_HOME, 'include'))
++        paths.extend(_CUDA_INCLUDE_DIRS)
+     elif device_type == "xpu":
+         paths.append(_join_sycl_home('include'))
+         paths.append(_join_sycl_home('include', 'sycl'))
+@@ -1786,6 +1795,11 @@ def library_paths(device_type: str = "cpu", torch_include_dirs: bool = True, cro
+             if WINDOWS_CUDA_HOME is None:
+                 raise RuntimeError("Need to set WINDOWS_CUDA_HOME for windows cross-compilation")
+             paths.append(os.path.join(WINDOWS_CUDA_HOME, lib_dir))
++        elif _CUDA_LIBRARY_DIRS and not IS_WINDOWS:
++            if CUDNN_HOME is not None:
++                lib_dir = 'lib64' if os.path.isdir(os.path.join(CUDNN_HOME, 'lib64')) else 'lib'
++                paths.append(os.path.join(CUDNN_HOME, lib_dir))
++            paths.extend(_CUDA_LIBRARY_DIRS)
+         else:
+             if IS_WINDOWS:
+                 lib_dir = os.path.join('lib', 'x64')
+@@ -2613,16 +2627,8 @@ def _prepare_ldflags(extra_ldflags, with_cuda, with_sycl, verbose, is_standalone
+             if CUDNN_HOME is not None:
+                 extra_ldflags.append(f'/LIBPATH:{os.path.join(CUDNN_HOME, "lib", "x64")}')
+         elif not IS_HIP_EXTENSION:
+-            extra_lib_dir = "lib64"
+-            if (not os.path.exists(_join_cuda_home(extra_lib_dir)) and
+-                    os.path.exists(_join_cuda_home("lib"))):
+-                # 64-bit CUDA may be installed in "lib"
+-                # Note that it's also possible both don't exist (see _find_cuda_home) - in that case we stay with "lib64"
+-                extra_lib_dir = "lib"
+-            extra_ldflags.append(f'-L{_join_cuda_home(extra_lib_dir)}')
++            extra_ldflags.extend(f'-L{path}' for path in library_paths("cuda", torch_include_dirs=False))
+             extra_ldflags.append('-lcudart')
+-            if CUDNN_HOME is not None:
+-                extra_ldflags.append(f'-L{os.path.join(CUDNN_HOME, "lib64")}')
+         elif IS_HIP_EXTENSION:
+             if IS_WINDOWS:
+                 extra_ldflags.append(f'/LIBPATH:{_join_rocm_home("lib")}')
