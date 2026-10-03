@@ -83,7 +83,7 @@ rec {
 
   nomad_2_0 = generic {
     buildGoModule = buildGo126Module;
-    version = "2.0.0";
+    version = "2.0.5";
     hash = "sha256-5rCAcOXWQ6g2iK1d5wy/a/DZQC2xwwdpI1SscDX98C8=";
     vendorHash = "sha256-3/H7QgVOHtaUs6BOF7ATVgrA0cfNBbm940Axrvq2bKU=";
     license = lib.licenses.bsl11;
