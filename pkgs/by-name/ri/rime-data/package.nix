@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "rime-data";
-  version = "0.38.20231116";
+  version = "0-unstable-2026-09-25";
 
   src = fetchFromGitHub {
     owner = "rime";
