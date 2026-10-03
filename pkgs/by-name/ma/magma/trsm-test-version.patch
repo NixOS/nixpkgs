@@ -1,0 +1,39 @@
+From 19d89a2a94c2da748bec4e3aff2f997ce247d41c Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:27:40 -0700
+Subject: [PATCH] testing: initialize TRSM workspace only for its allocating
+ algorithm
+
+---
+ testing/testing_ztrsm_batched.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/testing/testing_ztrsm_batched.cpp b/testing/testing_ztrsm_batched.cpp
+index c2b6d0d..26ece0c 100644
+--- a/testing/testing_ztrsm_batched.cpp
++++ b/testing/testing_ztrsm_batched.cpp
+@@ -74,6 +74,12 @@ int main( int argc, char** argv)
+ 
+     magma_opts opts( MagmaOptsBatched );
+     opts.parse_opts( argc, argv );
++    if (opts.version != 1 && opts.version != 2) {
++        fprintf(stderr, "--version must be 1 or 2 for trsm_batched\n");
++        opts.cleanup();
++        magma_finalize();
++        return EXIT_FAILURE;
++    }
+     batchCount = opts.batchcount;
+ 
+     double tol = opts.tolerance * lapackf77_dlamch("E");
+@@ -141,10 +147,10 @@ int main( int argc, char** argv)
+ 
+                 magma_zset_pointer( dwork_array, dwork, lddb, 0, 0, dwork_batchSize, batchCount, opts.queue );
+                 magma_zset_pointer( dinvA_array, dinvA, magma_roundup( Ak, TRI_NB ), 0, 0, dinvA_batchSize, batchCount, opts.queue );
++                magmablas_zlaset( MagmaFull, lddb, N*batchCount, c_zero, c_zero, dwork, lddb, opts.queue );
+             }
+ 
+             memset( h_Bmagma, 0, batchCount*ldb*N*sizeof(magmaDoubleComplex) );
+-            magmablas_zlaset( MagmaFull, lddb, N*batchCount, c_zero, c_zero, dwork, lddb, opts.queue );
+ 
+             /* Initialize the matrices */
+             /* Factor A into LU to get well-conditioned triangular matrix.
