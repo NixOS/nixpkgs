@@ -388,7 +388,8 @@ lib.extendMkDerivation {
           python
         ];
 
-      inherit strictDeps;
+      strictDeps = lib.warnIf (attrs.strictDeps or false
+      ) "Explicitly setting `strictDeps = true;' for Python package ${name} is redundant" strictDeps;
 
       env = {
         LANG = "${if python.stdenv.hostPlatform.isDarwin then "en_US" else "C"}.UTF-8";
