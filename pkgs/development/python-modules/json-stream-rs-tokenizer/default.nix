@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.5.1";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     tag = "v${version}";
-    hash = "sha256-D18nMRyCDr2NGBkdo7Lq8gaaMiOXwZAob4DymZwFvW0=";
+    hash = "sha256-oMjSvnGm239pTcJVJSn+KPw0bT2qhGtnM71hK4GOytY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
