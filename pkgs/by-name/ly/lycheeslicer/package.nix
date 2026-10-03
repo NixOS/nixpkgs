@@ -9,11 +9,11 @@
 }:
 let
   pname = "lycheeslicer";
-  version = "7.6.6";
+  version = "7.6.7";
 
   src = fetchurl {
     url = "https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-${version}.AppImage";
-    hash = "sha256-eDMhA8fCD++BYK58t4/2XUlzrhcwtbAuOzRsThQAiVs=";
+    hash = "sha256-XxEvCadqEhldYaru9xX4ND/KJdkZTqRm4Y7aRMJ04ls=";
   };
 
   desktopItem = makeDesktopItem {
