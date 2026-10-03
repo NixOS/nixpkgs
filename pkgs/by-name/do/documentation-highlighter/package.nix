@@ -2,7 +2,7 @@
 runCommand "documentation-highlighter"
   {
     pname = "documentation-highlighter";
-    version = "11.9.0";
+    version = "11.11.1";
 
     meta = {
       description = "Highlight.js sources for the Nix Ecosystem's documentation";
