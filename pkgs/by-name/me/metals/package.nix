@@ -7,6 +7,7 @@
   setJavaClassPath,
   callPackage,
   testers,
+  unzip,
   extraJavaOpts ? "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m",
 }:
 
@@ -17,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     setJavaClassPath
+    unzip
   ];
   buildInputs = [ finalAttrs.passthru.deps ];
 
@@ -33,15 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
 
       mkdir -p $out/bin
 
+      requiredVmOpts=$(unzip -p ${finalAttrs.passthru.deps}/share/java/metals_2.13-${finalAttrs.version}.jar META-INF/metals-required-vm-options.txt | tr '\n' ' ')
+
       makeWrapper ${jre}/bin/java $out/bin/metals \
         --prefix PATH : ${lib.makeBinPath [ jre ]} \
         --set JAVA_HOME ${jre.home} \
-        --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+        --add-flags "${extraJavaOpts} $requiredVmOpts -cp $CLASSPATH scala.meta.metals.Main"
 
       makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
         --prefix PATH : ${lib.makeBinPath [ jre ]} \
         --set JAVA_HOME ${jre.home} \
-        --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
+        --add-flags "${extraJavaOpts} $requiredVmOpts -cp $CLASSPATH scala.meta.metals.McpMain"
 
       runHook postInstall
     '';
