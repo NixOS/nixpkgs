@@ -19690,6 +19690,13 @@
     githubId = 42215704;
     name = "Moritz Böhme";
   };
+  mortebrume = {
+    email = "me@mortebrume.eu";
+    github = "mortebrume";
+    githubId = 32543196;
+    matrix = "@brume:mortebrume.eu";
+    name = "Andrea Attali";
+  };
   mortenmunk = {
     email = "mortenmunk97@gmail.com";
     github = "MortenMunk";
