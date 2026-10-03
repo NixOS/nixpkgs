@@ -63,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-manpage-format=normal"
     "--disable-stripping"
     "--with-versioned-syms"
+    # Installation must not update the system linker cache.
+    "LDCONFIG=:"
+    "ac_cv_path_LDCONFIG=:"
   ]
   ++ lib.optional (!finalAttrs.separateDebugInfo) "--without-debug"
   ++ lib.optional (unicodeSupport && abiVersion == "5") "--enable-widec"

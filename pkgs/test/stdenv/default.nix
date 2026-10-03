@@ -240,6 +240,12 @@ let
 in
 
 {
+  libtool = import ./libtool.nix {
+    stdenv = bootStdenv;
+    inherit (earlyPkgs) autoreconfHook;
+    inherit lib;
+  };
+
   # tests for hooks in `stdenv.defaultNativeBuildInputs`
   hooks = lib.recurseIntoAttrs (
     import ./hooks.nix {
