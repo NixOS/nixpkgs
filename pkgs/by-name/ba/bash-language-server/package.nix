@@ -2,23 +2,24 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs-slim,
   makeBinaryWrapper,
   shellcheck,
   versionCheckHook,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
-  version = "5.6.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "bash-lsp";
     repo = "bash-language-server";
     tag = "server-${finalAttrs.version}";
-    hash = "sha256-Pe32lQSlyWcyUbqwhfoulwNwhrnWdRcKFIl3Jj0Skac=";
+    hash = "sha256-r7X/Ztyl+bXVW02LdCStGMsBM9EJC7GwntkDh6OmQgc=";
   };
 
   pnpmWorkspaces = [ "bash-language-server" ];
@@ -29,15 +30,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-6i+1V3ZkjiJ/IXDun3JfwmfDOiemxCmAXMzS/rGT6ZU=";
+    pnpm = pnpm_12;
+    fetcherVersion = 4;
+    hash = "sha256-WaqagcWZbZYYwkuC5fRv6PjgzLDAwKIGahbYfi2WJec=";
   };
 
   nativeBuildInputs = [
     nodejs-slim
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
     makeBinaryWrapper
     versionCheckHook
   ];
@@ -78,6 +79,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Language server for Bash";
