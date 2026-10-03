@@ -12,13 +12,13 @@ let
   inherit (lib)
     all
     attrNames
+    checkedDerivation
     concatLists
     concatMap
     concatMapStrings
     concatMapStringsSep
     concatStringsSep
     elem
-    extendDerivation
     filter
     filterAttrs
     foldl'
@@ -1012,7 +1012,7 @@ let
         ) env';
     in
 
-    extendDerivation validity.handled (
+    checkedDerivation validity.handled (
       {
         # A derivation that always builds successfully and whose runtime
         # dependencies are the original derivations build time dependencies
@@ -1068,7 +1068,7 @@ let
         # should be made available to Nix expressions using the
         # derivation (e.g., in assertions).
         passthru
-    ) (derivation (derivationArg // checkedEnv));
+    ) (derivationArg // checkedEnv);
 
 in
 {
