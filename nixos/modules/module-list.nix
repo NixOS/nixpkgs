@@ -1933,12 +1933,12 @@
   ./services/x11/display-managers/xpra.nix
   ./services/x11/extra-layouts.nix
   ./services/x11/fractalart.nix
+  ./services/x11/gammastep.nix
   ./services/x11/hardware/digimend.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/imwheel.nix
   ./services/x11/picom.nix
-  ./services/x11/redshift.nix
   ./services/x11/touchegg.nix
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/unclutter.nix

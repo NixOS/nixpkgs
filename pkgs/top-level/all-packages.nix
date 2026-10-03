@@ -9930,20 +9930,6 @@ with pkgs;
 
   xfce = recurseIntoAttrs (callPackage ../desktops/xfce { });
 
-  inherit
-    (callPackages ../applications/misc/redshift {
-      inherit (python3Packages)
-        python
-        pygobject3
-        pyxdg
-        wrapPython
-        ;
-      geoclue = geoclue2;
-    })
-    redshift
-    gammastep
-    ;
-
   ### SCIENCE/CHEMISTY
 
   libxc_7 = pkgs.libxc.override { version = "7.0.0"; };
