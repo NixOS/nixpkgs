@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
     homepage = "https://www.libraw.org/";
+    changelog = "https://www.libraw.org/download#changelog";
     license = with lib.licenses; [
       cddl
       lgpl2Plus
