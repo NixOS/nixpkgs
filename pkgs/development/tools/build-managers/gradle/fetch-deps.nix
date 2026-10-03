@@ -105,7 +105,7 @@ let
         if !isSnapshot then
           version
         else
-          builtins.head (builtins.match "(.*)-([^-]*)-([^-]*)" version) + "-SNAPSHOT";
+          builtins.head (builtins.match "(.*)-([^-]*)(-([^-]*))?" version) + "-SNAPSHOT";
       classifier = if cls == null then null else lib.removePrefix "/" cls;
       clsSuf = if classifier == null then "" else "-${classifier}";
     };
