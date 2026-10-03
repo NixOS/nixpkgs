@@ -62,7 +62,10 @@ let
         if lib.isDerivation defaultValue then
           augmentedValue // lib.genAttrs outputNames (out: outputSplice.${out})
         else if lib.isAttrs defaultValue then
-          spliceReal value'
+          # A completed package graph already assigns its dependency roles.
+          # Nesting it must not shift explicit pkgsBuildHost selections again.
+          # Raw package fixed points still need recursive splicing.
+          if defaultValue.__isSplicedPackages or false then defaultValue else spliceReal value'
         else
           # Don't be fancy about non-derivations. But we could have used used
           # `__functor__` for functions instead.
@@ -93,6 +96,8 @@ let
         ;
     }
     // {
+      __isSplicedPackages = true;
+
       # These should never be spliced under any circumstances
       inherit (pkgs)
         pkgsBuildBuild

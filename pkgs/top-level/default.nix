@@ -197,10 +197,27 @@ let
   # Partially apply some arguments for building bootstrapping stage pkgs
   # sets. Only apply arguments which no stdenv would want to override.
   allPackages =
-    newArgs:
+    stageIndex: newArgs:
     import ./stage.nix (
       {
         inherit lib nixpkgsFun;
+        __stage = {
+          # These operations belong to the import, not accumulated stage overlays.
+          inherit extendGraph;
+          stages = graph;
+          # Projection requires corresponding stage positions. A custom stage
+          # constructor must preserve its layout when overlays change.
+          select =
+            packages:
+            let
+              selected = builtins.elemAt packages.__stage.stages (stageIndex - 1);
+            in
+            assert lib.assertMsg (
+              builtins.length graph == builtins.length packages.__stage.stages
+            ) "Nixpkgs: cannot project between graphs with different stage counts";
+            assert lib.assertMsg (selected != null) "Nixpkgs: a raw bootstrap stage has no spliced package set";
+            selected;
+        };
       }
       // newArgs
     );
@@ -218,7 +235,12 @@ let
       ;
   };
 
-  fixedPoint = boot stages;
+  # Map once so all projections share each stage's public, spliced view.
+  # Raw bootstrap stages have no public view. Preserve their positions.
+  graph = map (
+    stage: if stage ? __splicedPackages then publicPackages stage.__splicedPackages else null
+  ) (boot stages);
+  extendGraph = overlay: nixpkgsFun { overlays = overlays ++ [ overlay ]; };
 
   removeInternallyDisallowedAttrPaths =
     let
@@ -242,15 +264,22 @@ let
     in
     removeAttrPaths (map (x: x.attrPath) config.attrPathsDisallowedForInternalUse);
 
-  pkgs =
-    # Generally only set by CI, don't want to cause a performance hit for users
-    if config.attrPathsDisallowedForInternalUse == [ ] then
-      fixedPoint
-    else
-      # See ./stage.nix, which replaced config.attrPathsDisallowedForInternalUse with aborts.
-      # To prevent these attributes from causing CI failures we remove them entirely.
-      # These attrs are still evaluated but in a different way, see ci/eval/default.nix
-      removeInternallyDisallowedAttrPaths fixedPoint;
+  publicPackages =
+    packages:
+    (
+      # Generally only set by CI, don't want to cause a performance hit for users
+      if config.attrPathsDisallowedForInternalUse == [ ] then
+        packages
+      else
+        # See ./stage.nix, which replaced config.attrPathsDisallowedForInternalUse with aborts.
+        # To prevent these attributes from causing CI failures we remove them entirely.
+        # These attrs are still evaluated but in a different way, see ci/eval/default.nix
+        removeInternallyDisallowedAttrPaths packages
+    );
 
+  # Function-valued configuration always sees the final package set.
+  pkgs =
+    assert builtins.head graph != null;
+    builtins.head graph;
 in
 checked pkgs
