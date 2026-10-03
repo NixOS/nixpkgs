@@ -8,7 +8,6 @@ let
   cfg = config.hardware.printers;
 
   inherit (lib)
-    concatLines
     escapeShellArg
     mkOption
     ;
@@ -168,6 +167,18 @@ in
                   {command}`lpoptions [-p printername] -l` shows supported PPD options for the given printer.
                 '';
               };
+              usernameFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.externalPath;
+                example = "/run/secrets/supersecretusername.txt";
+                default = null;
+                description = "Path to file with username used for auth.";
+              };
+              passwordFile = lib.mkOption {
+                type = lib.types.nullOr lib.types.externalPath;
+                example = "/run/secrets/supersecretpassword.txt";
+                default = null;
+                description = "Path to file with password used for auth.";
+              };
             };
           }
         );
@@ -219,7 +230,6 @@ in
           '';
         }
       )
-
       (
         let
           referencedPrinters = lib.unique (
@@ -262,6 +272,20 @@ in
           '';
         }
       )
+      {
+        assertion = lib.any (p: (p.passwordFile != null -> p.usernameFile != null)) cfg.ensurePrinters;
+        message = ''
+          If password path is set, username path also needs to be set.
+          You can set this with `hardware.printers.ensurePrinters.<name>.usernameFile`
+        '';
+      }
+      {
+        assertion = lib.any (p: (p.usernameFile != null -> p.passwordFile != null)) cfg.ensurePrinters;
+        message = ''
+          If username path is set, password path also needs to be set.
+          You can set this with `hardware.printers.ensurePrinters.<name>.passwordFile`
+        '';
+      }
     ]
     ++ map (class: {
       assertion = cfg.ensureClasses.${class}.printers != [ ] || cfg.ensureClasses.${class}.classes != [ ];
@@ -318,7 +342,16 @@ in
                 "x"
               ];
             in
-            "lpadmin ${toLpadminArgs argsDpx} ${toLpadminArgs argsWoDpx}";
+            (
+              if args.passwordFile != null && args.usernameFile != null then
+                ''
+                  username=$(${lib.getExe' pkgs.coreutils "cat"} ${args.usernameFile})
+                  password=$(${lib.getExe' pkgs.coreutils "cat"} ${args.passwordFile})
+                ''
+              else
+                ""
+            )
+            + "lpadmin ${toLpadminArgs argsDpx} ${toLpadminArgs argsWoDpx}";
 
         in
         ''
@@ -327,12 +360,18 @@ in
             p:
             lpadmin {
               p = p.name;
-              v = p.deviceUri;
+              v =
+                if p.usernameFile == null && p.passwordFile == null then
+                  p.deviceUri
+                else
+                  (builtins.replaceStrings [ "://" ] [ "://$username:$password@" ] p.deviceUri);
               m = p.model;
               L = p.location;
               D = p.description;
               o = lib.mapAttrsToList (name: value: "${name}=${value}") p.ppdOptions;
               E = true;
+              usernameFile = p.usernameFile;
+              passwordFile = p.passwordFile;
             }
           ) cfg.ensurePrinters}
 
