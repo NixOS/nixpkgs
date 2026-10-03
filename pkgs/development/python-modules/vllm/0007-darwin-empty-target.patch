@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+--- a/setup.py
++++ b/setup.py
+@@ -78,8 +78,8 @@
+ 
+ 
+-if sys.platform.startswith("darwin") and VLLM_TARGET_DEVICE != "cpu":
+-    logger.warning("VLLM_TARGET_DEVICE automatically set to `cpu` due to macOS")
+-    VLLM_TARGET_DEVICE = "cpu"
++if sys.platform.startswith("darwin") and VLLM_TARGET_DEVICE not in ("cpu", "empty"):
++    logger.warning("VLLM_TARGET_DEVICE automatically set to `empty` due to macOS")
++    VLLM_TARGET_DEVICE = "empty"
+ elif not (sys.platform.startswith("linux") or sys.platform.startswith("darwin")):
