@@ -21974,6 +21974,8 @@ self: super: with self; {
 
   uhooapi = callPackage ../development/python-modules/uhooapi { };
 
+  uiautomator2 = callPackage ../development/python-modules/uiautomator2 { };
+
   uiprotect = callPackage ../development/python-modules/uiprotect { };
 
   ujson = callPackage ../development/python-modules/ujson { };
