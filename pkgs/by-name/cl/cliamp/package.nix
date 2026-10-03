@@ -14,6 +14,8 @@
   flac,
   yt-dlp,
   versionCheckHook,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 buildGoModule (finalAttrs: {
@@ -39,6 +41,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -51,12 +54,45 @@ buildGoModule (finalAttrs: {
     alsa-lib
   ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "cliamp";
+      type = "Application";
+      desktopName = "Cliamp";
+      genericName = "Music Player";
+      comment = "A retro terminal music player inspired by Winamp 2.x";
+      icon = "cliamp";
+      exec = "cliamp";
+      terminal = true;
+      keywords = [
+        "music"
+        "audio"
+        "player"
+        "terminal"
+        "tui"
+        "winamp"
+        "radio"
+        "podcast"
+      ];
+      categories = [
+        "Audio"
+        "Music"
+        "Player"
+        "AudioVideo"
+        "ConsoleOnly"
+      ];
+      startupNotify = false;
+    })
+  ];
+
   # macOS limits Unix socket paths to 104 bytes; use a shorter TMPDIR.
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export TMPDIR="$(mktemp -d /tmp/cliamp-XXXXXX)"
   '';
 
   postInstall = ''
+    mkdir -p "$out/share/icons/hicolor/512x512/apps";
+    cp "$src/Cliamp.png" "$out/share/icons/hicolor/512x512/apps/cliamp.png";
     wrapProgram $out/bin/cliamp \
       --prefix PATH : ${
         lib.makeBinPath [
