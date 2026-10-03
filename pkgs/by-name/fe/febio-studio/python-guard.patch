@@ -1,0 +1,23 @@
+diff --git a/PyLib/PythonRunner.cpp b/PyLib/PythonRunner.cpp
+index f4989c6..830a26f 100644
+--- a/PyLib/PythonRunner.cpp
++++ b/PyLib/PythonRunner.cpp
+@@ -23,14 +23,18 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.*/
++#ifdef HAS_PYTHON
+ #include <pybind11/pybind11.h>
+ #include <pybind11/embed.h>
++#endif
+ #include "PythonRunner.h"
+ #include "PyFBS.h"
+ #include <algorithm>
+ #include <QCoreApplication>
+ #include <QDir>
++#ifdef HAS_PYTHON
+ namespace py = pybind11;
++#endif
+ 
+ CPythonRunner* CPythonRunner::m_This = nullptr;
+ 
