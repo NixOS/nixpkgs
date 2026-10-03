@@ -11,6 +11,7 @@
   yarnBuildHook,
   yarnConfigHook,
   yarnInstallHook,
+  nixosTests,
 }:
 let
 
@@ -306,6 +307,7 @@ python3Packages.buildPythonApplication rec {
     in
     {
       inherit frontend pythonPath;
+      tests.nixos = nixosTests.inventree;
     };
 
   meta = {
