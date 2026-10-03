@@ -302,7 +302,12 @@ in
 
     controller.start()
     controller.succeed("${pkgs.nodejs}/bin/node --import ${package}/lib/paperclip/server/node_modules/tsx/dist/loader.mjs ${validateConfig} /etc/paperclip-fixture-config.json")
-    controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=180)
+    try:
+        controller.wait_until_succeeds("curl -fsS http://controller:3115/api/health | jq -e '.status == \"ok\"'", timeout=180)
+    except Exception:
+        print(controller.execute("systemctl show paperclip-control.service -p Result -p ExecMainStatus -p ExecMainCode"))
+        print(controller.execute("journalctl -u paperclip-control.service -n 80 --no-pager -o cat"))
+        raise
     controller.fail("curl -fsS http://controller:3115/api/companies")
     worker.fail("test -e /var/lib/paperclip-control/credentials/auth")
     worker.fail("test -e /run/postgresql/.s.PGSQL.5432")
