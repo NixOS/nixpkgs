@@ -99,6 +99,11 @@ in
       nordvpn
     ];
 
+    boot.kernelModules = [
+      "tun" # needed by openvpn
+      "wireguard" # needed by nordlynx
+    ];
+
     systemd.services.nordvpnd = {
       after = [ "network-online.target" ];
       description = "NordVPN daemon.";
