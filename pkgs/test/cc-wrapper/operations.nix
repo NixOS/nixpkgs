@@ -164,6 +164,109 @@ in
     -nostdinc operation-header.c -o operation-header
   ${emulator} ./operation-header
 
+  ${lib.optionalString (stdenv.cc.isGNU && (stdenv.cc.cc.nativeDefaultIncludeBinding or null) != null)
+    ''
+      cat > default-c-header.c <<'EOF'
+      #include <stdio.h>
+      int main(void) { return 0; }
+      EOF
+      for suppression in -Wp,-nostdinc -Xpreprocessor; do
+        flags=("$suppression")
+        if [[ $suppression == -Xpreprocessor ]]; then flags+=(-nostdinc); fi
+        if NIX_CFLAGS_COMPILE= "$BASH" ./prepare-operation \
+          ${parent}/nix-support/compiler ${rawCC} \
+          "''${flags[@]}" -c default-c-header.c -o default-c-header.o \
+          > default-c-header.log 2>&1; then
+          echo "A forwarded -nostdinc retained the selected libc headers" >&2
+          exit 1
+        fi
+        grep -F 'stdio.h' default-c-header.log
+      done
+
+      cat > default-cxx-header.cc <<'EOF'
+      #include <vector>
+      int main() { return 0; }
+      EOF
+      if NIX_CFLAGS_COMPILE= "$BASH" ./prepare-operation \
+        ${parent}/nix-support/compiler ${rawCXX} \
+        -Wp,-nostdinc++ -c default-cxx-header.cc -o default-cxx-header.o \
+        > default-cxx-header.log 2>&1; then
+        echo "A forwarded -nostdinc++ retained the selected C++ headers" >&2
+        exit 1
+      fi
+      grep -F 'vector' default-cxx-header.log
+    ''
+  }
+
+  ${lib.optionalString ((stdenv.cc.cc.nativeDefaultIncludeBinding or null) == "driver") ''
+    cat > no-default-header.c <<'EOF'
+    int main(void) { return 0; }
+    EOF
+    NIX_CFLAGS_COMPILE= "$BASH" ./prepare-operation \
+      ${parent}/nix-support/compiler ${rawCC} \
+      -nostdinc -Werror=unused-command-line-argument \
+      -c no-default-header.c -o no-default-header.o
+
+    cat > default-c-header.c <<'EOF'
+    #include <stdio.h>
+    int main(void) { return 0; }
+    EOF
+    for suppression in -nostdinc -nostdlibinc; do
+      if NIX_CFLAGS_COMPILE= "$BASH" ./prepare-operation \
+        ${parent}/nix-support/compiler ${rawCC} \
+        "$suppression" -c default-c-header.c -o default-c-header.o \
+        > default-c-header.log 2>&1; then
+        echo "Clang retained selected libc headers with $suppression" >&2
+        exit 1
+      fi
+      grep -F 'stdio.h' default-c-header.log
+    done
+
+    cat > default-cxx-header.cc <<'EOF'
+    #include <vector>
+    int main() { return 0; }
+    EOF
+    if NIX_CFLAGS_COMPILE= "$BASH" ./prepare-operation \
+      ${parent}/nix-support/compiler ${rawCXX} \
+      -nostdinc++ -c default-cxx-header.cc -o default-cxx-header.o \
+      > default-cxx-header.log 2>&1; then
+      echo "Clang retained selected C++ headers with -nostdinc++" >&2
+      exit 1
+    fi
+    grep -F 'vector' default-cxx-header.log
+
+    ${lib.optionalString
+      (
+        stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid && (stdenv.cc.libcxx.isLLVM or false)
+      )
+      ''
+        for mode in -E -c; do
+          NIX_CFLAGS_COMPILE= "$BASH" ./prepare-operation \
+            ${parent}/nix-support/compiler ${rawCC} \
+            -Werror=unused-command-line-argument \
+            "$mode" no-default-header.c -o no-default-header.o
+        done
+        # The selected libc++ is a default, not an override of the actual job.
+        # This map has no libstdc++ provider, so selecting it must find no vector.
+        for entry in fresh prepared; do
+          compiler=(${parent}/bin/${targetPrefix}c++)
+          if [[ $entry == prepared ]]; then
+            compiler=("$BASH" ./prepare-operation ${parent}/nix-support/compiler ${rawCXX})
+          fi
+          NIX_CFLAGS_COMPILE= "''${compiler[@]}" -stdlib=libc++ \
+            -E default-cxx-header.cc -o default-cxx-header.i
+          if NIX_CFLAGS_COMPILE= "''${compiler[@]}" -stdlib=libstdc++ \
+            -E default-cxx-header.cc -o default-cxx-header.i \
+            > default-cxx-header.log 2>&1; then
+            echo "Clang replaced the caller's standard-library selection" >&2
+            exit 1
+          fi
+          grep -F 'vector' default-cxx-header.log
+        done
+      ''
+    }
+  ''}
+
   ${lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "checking main linker flags precede implicit runtime libraries..." >&2
     cat > operation-library.c <<'EOF'

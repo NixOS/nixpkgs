@@ -23,6 +23,14 @@
 }:
 
 let
+  # The native Swift importer reads these legacy header-support files directly.
+  # It does not interpret the compiler wrapper's private default-header map.
+  clangForImporter = llvmPackages_upstream.clang.override (prev: {
+    cc = prev.cc // {
+      nativeDefaultIncludeBinding = null;
+    };
+  });
+
   includeTesting = swiftc.supportsMacros && swift-testing != null;
 
   # Need to use an older SDK if `swiftc` does not support macros.
@@ -144,8 +152,8 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w "$out/bin" "$out/lib" "$out/nix-support"
 
     # Swift expects to find Clang next to it.
-    ln -s ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.clang "clang")} "$out/bin/clang"
-    ln -s ${lib.escapeShellArg (lib.getExe' llvmPackages_upstream.clang "clang++")} "$out/bin/clang++"
+    ln -s ${lib.escapeShellArg (lib.getExe' clangForImporter "clang")} "$out/bin/clang"
+    ln -s ${lib.escapeShellArg (lib.getExe' clangForImporter "clang++")} "$out/bin/clang++"
 
     # Swift has a separate resource root from Clang, but locates the Clang resource root via subdir or symlink.
     #

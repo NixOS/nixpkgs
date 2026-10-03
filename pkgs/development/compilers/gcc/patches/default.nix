@@ -85,6 +85,8 @@ optionals noSysDirs (
     ."${majorVersion}" or [ ]
   )
 )
+# Bind selected header providers through GCC's native default lookup.
+++ optional atLeast14 ../common/native-default-includes.patch
 # Pass CFLAGS on to gnat
 ++ optional langAda ./gnat-cflags-11.patch
 ++

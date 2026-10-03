@@ -70,6 +70,9 @@ stdenv.mkDerivation (
       # https://reviews.llvm.org/D51899
       (getVersionFile "clang/gnu-install-dirs.patch")
     ]
+    ++ lib.optional (
+      lib.versionAtLeast release_version "19" && lib.versionOlder release_version "22"
+    ) ./native-default-includes.patch
     ++ lib.optionals (lib.versionOlder release_version "20") [
       # https://github.com/llvm/llvm-project/pull/116476
       # prevent clang ignoring warnings / errors for unsuppored
@@ -216,6 +219,11 @@ stdenv.mkDerivation (
       isClang = true;
       langC = true;
       langCC = true;
+      nativeDefaultIncludeBinding =
+        if lib.versionAtLeast release_version "19" && lib.versionOlder release_version "22" then
+          "driver"
+        else
+          null;
       hardeningUnsupportedFlagsByTargetPlatform =
         targetPlatform:
         [ "fortify3" ]

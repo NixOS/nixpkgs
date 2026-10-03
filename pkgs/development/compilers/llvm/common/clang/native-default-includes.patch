@@ -1,0 +1,172 @@
+From 117de53de2f37c935d7da7f65fd4077d7a36d7a8 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Tue, 29 Sep 2026 11:08:26 -0700
+Subject: [PATCH] clang: bind selected C++ and libc headers at driver lookup
+ sites
+
+---
+ include/clang/Driver/Options.td       |  7 ++++
+ lib/Driver/ToolChains/BoundIncludes.h | 53 +++++++++++++++++++++++++++
+ lib/Driver/ToolChains/Clang.cpp       |  9 +++++
+ lib/Driver/ToolChains/Gnu.cpp         | 10 +++++
+ lib/Driver/ToolChains/Linux.cpp       | 11 ++++++
+ 5 files changed, 90 insertions(+)
+ create mode 100644 lib/Driver/ToolChains/BoundIncludes.h
+
+diff --git a/include/clang/Driver/Options.td b/include/clang/Driver/Options.td
+index 958d0d0..e92f0df 100644
+--- a/include/clang/Driver/Options.td
++++ b/include/clang/Driver/Options.td
+@@ -1763,6 +1763,13 @@ def fprofile_instr_use : Flag<["-"], "fprofile-instr-use">, Group<f_Group>,
+ def fprofile_instr_use_EQ : Joined<["-"], "fprofile-instr-use=">,
+     Group<f_Group>, Visibility<[ClangOption, CLOption]>,
+     HelpText<"Use instrumentation data for profile-guided optimization">;
++def fdefault_include_map_EQ : Joined<["-"], "fdefault-include-map=">,
++    Group<f_Group>, Flags<[NoArgumentUnused]>, Visibility<[ClangOption]>,
++    MetaVarName<"<file>">,
++    HelpText<"Bind selected target C++ and libc default headers from <file>">;
++def idefaultsystem : JoinedOrSeparate<["-"], "idefaultsystem">,
++  Group<clang_i_Group>, Visibility<[ClangOption]>,
++  HelpText<"Add a suppressible toolchain default at this system include position">;
+ def fprofile_remapping_file_EQ : Joined<["-"], "fprofile-remapping-file=">,
+     Group<f_Group>, Visibility<[ClangOption, CC1Option, CLOption]>,
+     MetaVarName<"<file>">,
+diff --git a/lib/Driver/ToolChains/BoundIncludes.h b/lib/Driver/ToolChains/BoundIncludes.h
+new file mode 100644
+index 0000000..8d22d31
+--- /dev/null
++++ b/lib/Driver/ToolChains/BoundIncludes.h
+@@ -0,0 +1,53 @@
++// Bind only selected providers; leave job selection and suppression to Clang.
++#ifndef LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_BOUNDINCLUDES_H
++#define LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_BOUNDINCLUDES_H
++
++#include "clang/Basic/DiagnosticDriver.h"
++#include "clang/Driver/Driver.h"
++#include "clang/Driver/Options.h"
++#include "llvm/ADT/SmallVector.h"
++#include "llvm/ADT/StringRef.h"
++#include "llvm/TargetParser/Triple.h"
++#include "llvm/Option/ArgList.h"
++#include "llvm/Support/MemoryBuffer.h"
++#include <optional>
++#include <string>
++#include <vector>
++
++namespace clang::driver::toolchains {
++// 0 = libc, 1 = libstdc++, 2 = libc++. A present table is total: missing
++// target/family pairs denote no providers, never ambient host discovery.
++inline std::optional<std::vector<std::string>>
++lookupBoundIncludes(const llvm::opt::ArgList &Args, const Driver &D,
++                    const llvm::Triple &Triple, char Family) {
++  const llvm::opt::Arg *A = Args.getLastArg(options::OPT_fdefault_include_map_EQ);
++  if (!A)
++    return std::nullopt;
++  std::vector<std::string> Result;
++  auto Buffer = llvm::MemoryBuffer::getFile(A->getValue());
++  if (!Buffer) {
++    D.Diag(diag::err_drv_invalid_value) << A->getAsString(Args) << "unreadable file";
++    return Result;
++  }
++  llvm::SmallVector<llvm::StringRef> Lines;
++  Buffer.get()->getBuffer().split(Lines, '\n');
++  for (llvm::StringRef Line : Lines) {
++    if (Line.empty())
++      continue;
++    auto [Kind, Rest] = Line.split('\t');
++    auto [Target, Path] = Rest.split('\t');
++    if (Kind.size() != 1 || Kind[0] < '0' || Kind[0] > '2' ||
++        Target.empty() || !Path.starts_with('/') || Path.contains('\t') ||
++        Path.contains('\0')) {
++      D.Diag(diag::err_drv_invalid_value) << A->getAsString(Args)
++                                           << "invalid binding entry";
++      Result.clear();
++      return Result;
++    }
++    if (Kind[0] == Family && llvm::Triple::normalize(Target) == Triple.str())
++      Result.push_back(Path.str());
++  }
++  return Result;
++}
++} // namespace clang::driver::toolchains
++#endif
+diff --git a/lib/Driver/ToolChains/Clang.cpp b/lib/Driver/ToolChains/Clang.cpp
+index 6261332..f259ca9 100644
+--- a/lib/Driver/ToolChains/Clang.cpp
++++ b/lib/Driver/ToolChains/Clang.cpp
+@@ -1039,6 +1039,15 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
+                                                        << A->getAsString(Args);
+         }
+       }
++    } else if (A->getOption().matches(options::OPT_idefaultsystem)) {
++      // Keep the default's position among system paths while honoring caller
++      // suppression, unlike an ordinary explicit -isystem path.
++      A->claim();
++      if (!Args.hasArg(options::OPT_nostdinc, options::OPT_nostdlibinc)) {
++        CmdArgs.push_back("-isystem");
++        CmdArgs.push_back(A->getValue());
++      }
++      continue;
+     } else if (A->getOption().matches(options::OPT_isystem_after)) {
+       // Handling of paths which must come late.  These entries are handled by
+       // the toolchain itself after the resource dir is inserted in the right
+diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
+index f5e2655..735f509 100644
+--- a/lib/Driver/ToolChains/Gnu.cpp
++++ b/lib/Driver/ToolChains/Gnu.cpp
+@@ -7,6 +7,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "Gnu.h"
++#include "BoundIncludes.h"
+ #include "Arch/ARM.h"
+ #include "Arch/CSKY.h"
+ #include "Arch/LoongArch.h"
+@@ -3151,6 +3152,15 @@ void Generic_GCC::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
+                         options::OPT_nostdlibinc))
+     return;
+ 
++  const char Family = GetCXXStdlibType(DriverArgs) == ToolChain::CST_Libcxx
++                          ? '2' : '1';
++  if (auto Paths = lookupBoundIncludes(DriverArgs, getDriver(), getTriple(),
++                                       Family)) {
++    for (const std::string &Path : *Paths)
++      addSystemInclude(DriverArgs, CC1Args, Path);
++    return;
++  }
++
+   switch (GetCXXStdlibType(DriverArgs)) {
+   case ToolChain::CST_Libcxx:
+     addLibCxxIncludePaths(DriverArgs, CC1Args);
+diff --git a/lib/Driver/ToolChains/Linux.cpp b/lib/Driver/ToolChains/Linux.cpp
+index 8ac8d4e..44605b2 100644
+--- a/lib/Driver/ToolChains/Linux.cpp
++++ b/lib/Driver/ToolChains/Linux.cpp
+@@ -7,6 +7,7 @@
+ //===----------------------------------------------------------------------===//
+ 
+ #include "Linux.h"
++#include "BoundIncludes.h"
+ #include "Arch/ARM.h"
+ #include "Arch/LoongArch.h"
+ #include "Arch/Mips.h"
+@@ -645,6 +646,16 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
+     return;
+ 
++  // The bound policy replaces ambient local, multilib and host libc
++  // discovery. The resource directory keeps its native glibc/musl order.
++  if (auto Paths = lookupBoundIncludes(DriverArgs, D, getTriple(), '0')) {
++    for (const std::string &Path : *Paths)
++      addExternCSystemInclude(DriverArgs, CC1Args, Path);
++    if (!DriverArgs.hasArg(options::OPT_nobuiltininc) && getTriple().isMusl())
++      addSystemInclude(DriverArgs, CC1Args, ResourceDirInclude);
++    return;
++  }
++
+   // LOCAL_INCLUDE_DIR
+   addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
+   // TOOL_INCLUDE_DIR
+-- 
+2.43.0
+

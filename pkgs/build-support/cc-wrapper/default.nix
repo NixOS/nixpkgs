@@ -418,8 +418,68 @@ let
   # TODO: Drop `mangle-NIX_STORE-in-__FILE__.patch` from GCC and make
   # this unconditional once the upstream bug is fixed.
   useMacroPrefixMap = !isGNU && !isFlang;
+  nativeIncludeMode = cc.nativeDefaultIncludeBinding or null;
+  nativeGccIncludes =
+    isGNU
+    && targetPlatform.isLinux
+    && !targetPlatform.isAndroid
+    && nativeIncludeMode != null
+    && (libcxx == null || (libcxx.isGNU or false));
+  nativeClangIncludes =
+    isClang
+    && targetPlatform.isLinux
+    && !targetPlatform.isAndroid
+    && nativeIncludeMode == "driver"
+    && (libcxx == null || (libcxx.isGNU or false) || (libcxx.isLLVM or false));
+  # The provider selection is shared; each compiler interprets it at its own
+  # native default-header lookup boundary.
+  bundledCxx =
+    if nativeGccIncludes && nativeIncludeMode == "bundled" then
+      cc
+    else if nativeClangIncludes && useGccForLibs then
+      gccForLibs
+    else
+      null;
+  selectedCxxPaths =
+    if libcxx != null && (libcxx.isLLVM or false) then
+      [ "${getDev libcxx}/include/c++/v1" ]
+    else if libcxx != null && (libcxx.isGNU or false) then
+      [
+        "${getDev libcxx}/include-cxx"
+        "${getDev libcxx}/include-cxx/backward"
+      ]
+    else
+      # Language-specific GCC outputs can still expose g++ and its headers.
+      optionals (bundledCxx != null) [
+        "${bundledCxx}/include/c++/${bundledCxx.version}"
+        "${bundledCxx}/include/c++/${bundledCxx.version}/${targetPlatform.config}"
+        "${bundledCxx}/include/c++/${bundledCxx.version}/backward"
+      ];
+  selectedIncludeProviders =
+    map (path: {
+      kind = if libcxx != null && (libcxx.isLLVM or false) then 2 else 1;
+      inherit path;
+    }) selectedCxxPaths
+    ++ optionals (libc != null) [
+      {
+        kind = 0;
+        path = "${libc_dev}${libc.incdir or "/include"}";
+      }
+    ];
+  gccDefaultIncludes = map (
+    provider: "${toString provider.kind}\t${provider.path}"
+  ) selectedIncludeProviders;
+  clangDefaultIncludes = map (
+    provider: "${toString provider.kind}\t${targetPlatform.config}\t${provider.path}"
+  ) selectedIncludeProviders;
   systemIncludeFlag = if isFlang || isArocc then "-I" else "-idirafter";
-  fortifyIncludeFlag = if isFlang then "-I" else "-isystem";
+  fortifyIncludeFlag =
+    if isFlang then
+      "-I"
+    else if nativeGccIncludes || nativeClangIncludes then
+      "-idefaultsystem"
+    else
+      "-isystem";
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -689,6 +749,22 @@ stdenvNoCC.mkDerivation {
       touch "$out/nix-support/cc-cflags"
       touch "$out/nix-support/cc-ldflags"
     ''
+    + optionalString nativeGccIncludes ''
+      printf '%s' ${escapeShellArg (concatStringsSep "\n" gccDefaultIncludes)} > "$out/nix-support/gcc-default-includes"
+      echo "-fdefault-include-map=$out/nix-support/gcc-default-includes" >> "$out/nix-support/cc-cflags"
+    ''
+    + optionalString nativeClangIncludes ''
+      printf '%s' ${escapeShellArg (concatStringsSep "\n" clangDefaultIncludes)} > "$out/nix-support/clang-default-includes"
+      echo "-fdefault-include-map=$out/nix-support/clang-default-includes" >> "$out/nix-support/cc-cflags"
+      ${concatStringsSep "\n" (
+        map (
+          provider:
+          ''include -isystem "${provider.path}" | tail -n +2 >> "$out/nix-support/${
+            if provider.kind == 0 then "libc-cflags" else "libcxx-cxxflags"
+          }"''
+        ) selectedIncludeProviders
+      )}
+    ''
 
     # Backwards compatibility for packages expecting this file, e.g. with
     # `$NIX_CC/nix-support/dynamic-linker`.
@@ -776,9 +852,11 @@ stdenvNoCC.mkDerivation {
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
       + ''
-        include "${systemIncludeFlag}" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+        ${optionalString (!nativeGccIncludes && !nativeClangIncludes) ''
+          include "${systemIncludeFlag}" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+        ''}
       ''
-      + optionalString isGNU ''
+      + optionalString (isGNU && !nativeGccIncludes) ''
         for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
           include '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
         done
@@ -822,17 +900,27 @@ stdenvNoCC.mkDerivation {
     # already knows how to find its own libstdc++, and adding
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
-    + optionalString (libcxx == null && isClang && useGccForLibs && (cc.langCC or false)) ''
-      for dir in ${gccForLibs}/include/c++/*; do
-        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
-      done
-      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
-        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
-      done
-    ''
+    +
+      optionalString
+        (libcxx == null && isClang && useGccForLibs && (cc.langCC or false) && !nativeClangIncludes)
+        ''
+          for dir in ${gccForLibs}/include/c++/*; do
+            include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+          done
+          for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
+            include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+          done
+        ''
+    # Native Clang selects the library per job. Put its default before caller
+    # arguments, and suppress unused diagnostics only for this default in C jobs.
     + optionalString (libcxx.isLLVM or false) ''
-      include -cxx-isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
-      echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
+      ${optionalString (!nativeClangIncludes) ''
+        include -cxx-isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      ''}
+
+      echo "${optionalString nativeClangIncludes "--start-no-unused-arguments "}-stdlib=libc++${optionalString nativeClangIncludes " --end-no-unused-arguments"}" >> $out/nix-support/${
+        if nativeClangIncludes then "cc-cflags-before" else "libcxx-ldflags"
+      }
     ''
     # This is the GCC NG case, libstdc++ is being built as a separate package.
     #
@@ -841,9 +929,12 @@ stdenvNoCC.mkDerivation {
     # include path -- and libstdc++ ships headers named after C headers
     # (`math.h`, `stdlib.h`, `stdckdint.h`, ...) that are only meant to shadow
     # the C ones in C++. A sibling directory the setup hook ignores is enough.
-    + optionalString (libcxx != null && libcxx.isGNU or false) ''
-      include -isystem "${getDev libcxx}/include-cxx" >> $out/nix-support/libcxx-cxxflags
-    ''
+    +
+      optionalString
+        (libcxx != null && (libcxx.isGNU or false) && !nativeGccIncludes && !nativeClangIncludes)
+        ''
+          include -isystem "${getDev libcxx}/include-cxx" >> $out/nix-support/libcxx-cxxflags
+        ''
 
     ##
     ## Initial CFLAGS
@@ -903,7 +994,9 @@ stdenvNoCC.mkDerivation {
           && !targetPlatform.isAndroid
         )
         ''
-          echo "-nostdlibinc" >> $out/nix-support/cc-cflags
+          ${optionalString (!nativeClangIncludes) ''
+            echo "-nostdlibinc" >> $out/nix-support/cc-cflags
+          ''}
         ''
 
     ##
