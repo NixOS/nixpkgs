@@ -130,6 +130,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = sourceSha256;
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config # required for finding MySQl
@@ -290,13 +295,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "vtk" ];
 
+  # Absolute install path doesn't work for VTK's CMake files, so split it after.
+  # Now vtk-prefix.cmake resolves to dev output (other CMake, includes), and the
+  # fixups below repoint the library references to absolute paths.
+  postInstall = ''
+    moveToOutput lib/vtk "$dev"
+  '';
+
   dontWrapQtApps = true;
 
   postFixup =
-    # Remove thirdparty find module that have been provided in nixpkgs.
+    # Remove thirdparty find modules from VTK in favor of the nixpkgs-supplied ones.
     ''
-      rm -rf $out/lib/cmake/vtk/patches
-      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig,TBB}.cmake
+      rm -rf $dev/lib/cmake/vtk/patches
+      rm $dev/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig,TBB}.cmake
+    ''
+    # Libraries are in out, no longer relative to the CMake module prefix.
+    + ''
+      substituteInPlace $dev/lib/cmake/vtk/*-targets-*.cmake \
+        --replace-quiet "\''${_IMPORT_PREFIX}/lib/" "$out/lib/" \
+        --replace-quiet "\''${_IMPORT_PREFIX}/bin/" "$out/bin/"
     ''
     # libvtkglad.so will find and load libGL.so at runtime.
     + lib.optionalString stdenv.hostPlatform.isLinux ''
