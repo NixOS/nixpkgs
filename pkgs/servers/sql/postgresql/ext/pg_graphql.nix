@@ -34,6 +34,5 @@ buildPgrxExtension (finalAttrs: {
     homepage = "https://supabase.github.io/pg_graphql";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ julm ];
-    broken = lib.versionOlder postgresql.version "14";
   };
 })
