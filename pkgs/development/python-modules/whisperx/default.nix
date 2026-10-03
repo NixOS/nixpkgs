@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   buildPythonPackage,
@@ -30,7 +31,8 @@
   versionCheckHook,
 
   # enable GPU support
-  cudaSupport ? torch.cudaSupport,
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
 }:
 
 let
@@ -38,6 +40,7 @@ let
     ctranslate2-cpp = ctranslate2-cpp.override {
       withCUDA = cudaSupport;
       withCuDNN = cudaSupport;
+      inherit rocmSupport;
     };
   };
 in
