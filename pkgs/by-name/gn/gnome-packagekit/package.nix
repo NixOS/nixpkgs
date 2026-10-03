@@ -10,7 +10,7 @@
   packagekit,
   polkit,
   gtk3,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   desktop-file-utils,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk3
     packagekit
-    systemd
+    systemdLibs
     polkit
   ];
 

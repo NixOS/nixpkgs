@@ -14,7 +14,7 @@
   meson,
   ninja,
   pkg-config,
-  systemd,
+  systemdLibs,
   help2man,
   wrapGAppsHook4,
 }:
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libxmlb
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [
