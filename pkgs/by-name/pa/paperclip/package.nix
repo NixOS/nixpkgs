@@ -33,8 +33,8 @@ let
   src = fetchFromGitHub {
     owner = "caniko";
     repo = "paperclip";
-    rev = "078dfacdddd083f5da45ebbee1c3e91d59bfa5b8";
-    hash = "sha256-Azv5UFq6V7Y0WJg1ZyGFrdlSdApubc9j10ErJw9rM40=";
+    rev = "da988533a14575d9c7404f410ac8b56fa6319293";
+    hash = "sha256-nZ+kMLduRy7KghrgszgL+Exy8GtMBRcPQKg3QZ+4bEU=";
   };
   runtimePath = lib.makeBinPath [
     coreutils
