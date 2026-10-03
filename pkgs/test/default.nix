@@ -18,6 +18,8 @@ let
   inherit (pkgs.lib.strings) toJSON;
 in
 {
+  meson = callPackage ./meson { };
+
   cc-wrapper =
     let
       pkgNames = (attrNames pkgs);
