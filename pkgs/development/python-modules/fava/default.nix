@@ -25,17 +25,17 @@
 let
   src = buildNpmPackage (finalAttrs: {
     pname = "fava-frontend";
-    version = "1.30.12";
+    version = "1.30.13";
 
     src = fetchFromGitHub {
       owner = "beancount";
       repo = "fava";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-krRkcahikP0ChTCXeS/3MBq4v+VmBLViqaYSSGYt6Mc=";
+      hash = "sha256-h4mjZIINR6RLYycGl2RFIEGuPPbJYYSg1TBGlZupCMw=";
     };
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    npmDepsHash = "sha256-kZAwvyjPZUFJffYsr5917zX+0tMyydcOzfr/TDnoJKw=";
+    npmDepsHash = "sha256-DQQISV615wZjNbvZwmF/AGJyJJIIs3iBS1tJCNPpT/o=";
     makeCacheWritable = true;
 
     preBuild = ''
@@ -108,6 +108,7 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [
       prince213
       sigmanificient
+      cbrxyz
     ];
   };
 }
