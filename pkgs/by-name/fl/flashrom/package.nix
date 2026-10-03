@@ -26,6 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZUycYXRcJQzTtczQ5W/EPudpgPkqXgeEIEIGOdZpdaI=";
   };
 
+  # FIXME: Remove once flashrom includes an upstream fix for the dangling
+  # mock_chip pointer in setup_bad_chip. See NixOS/nixpkgs#558302.
+  patches = [ ./fix-bad-chip-test-lifetime.patch ];
+
   nativeBuildInputs = [
     git
     meson
