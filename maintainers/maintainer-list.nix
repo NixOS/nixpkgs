@@ -4427,7 +4427,7 @@
     github = "BugsAplenty";
     githubId = 28706245;
     name = "Michael Neiman";
-  }
+  };
   bugworm = {
     email = "bugworm@zoho.com";
     github = "bugworm";
