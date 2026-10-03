@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "argo-workflows";
-  version = "4.0.5";
+  version = "4.1.4";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-workflows";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UmkUFuYFeuyqgdf/ByZkkulkVRregp53bvcyyEKgZQo=";
+    hash = "sha256-5YM7rHDhXq6VCNbMTdKnz8Fnik/ZHnt7AMbQiTmZMAg=";
   };
 
-  vendorHash = "sha256-UTBM1zd+HrC5bUadn0VSsO52HhqdPGzZwipQv7WOrNU=";
+  vendorHash = "sha256-xqQu+m63tm55kkGp95dAWmbm2JLnAl701Rl/06cP1Hs=";
 
   doCheck = false;
 
