@@ -1,0 +1,61 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 32ce965f..2c196b3f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -108,13 +108,13 @@ list(APPEND LIBS ${Boost_LIBRARIES})
+ ##############
+ # Protobuf is needed to compile ONNX
+ 
+-set(PROTOBUF_VERSION 3.19.2)
++set(PROTOBUF_VERSION 21.12.0)
+ set(PROTOBUF_DEFAULT_DIR "${TOOLS_DIR}/protobuf-${PROTOBUF_VERSION}")
+ if (NOT PROTOBUF_DIR)
+     set(PROTOBUF_DIR ${PROTOBUF_DEFAULT_DIR})
+ endif()
+ 
+-if(NOT EXISTS "${PROTOBUF_DIR}/installed/lib/libprotobuf.a")
++if(NOT EXISTS "${PROTOBUF_DIR}/lib/libprotobuf.so")
+     message("Can't find protobuf, installing. If protobuf is installed please use the PROTOBUF_DIR parameter to pass the path")
+     if (${PROTOBUF_DIR} STREQUAL ${PROTOBUF_DEFAULT_DIR})
+         message("installing protobuf")
+@@ -127,8 +127,8 @@ endif()
+ set(PROTOBUF_LIB protobuf)
+ add_library(${PROTOBUF_LIB} SHARED IMPORTED)
+ set_property(TARGET ${PROTOBUF_LIB} PROPERTY POSITION_INDEPENDENT_CODE ON)
+-set_target_properties(${PROTOBUF_LIB} PROPERTIES IMPORTED_LOCATION ${PROTOBUF_DIR}/installed/lib/libprotobuf.a)
+-target_include_directories(${PROTOBUF_LIB} INTERFACE ${PROTOBUF_DIR}/installed/include)
++set_target_properties(${PROTOBUF_LIB} PROPERTIES IMPORTED_LOCATION ${PROTOBUF_DIR}/lib/libprotobuf.so)
++target_include_directories(${PROTOBUF_LIB} INTERFACE ${PROTOBUF_DIR}/include)
+ list(APPEND LIBS ${PROTOBUF_LIB})
+ 
+ ##########
+@@ -183,7 +183,7 @@ endif()
+ ##############
+ 
+ if (NOT MSVC AND ${ENABLE_OPENBLAS})
+-  set(OPENBLAS_VERSION 0.3.19)
++  set(OPENBLAS_VERSION 0.3.28)
+ 
+   set(OPENBLAS_LIB openblas)
+   set(OPENBLAS_DEFAULT_DIR "${TOOLS_DIR}/OpenBLAS-${OPENBLAS_VERSION}")
+@@ -193,7 +193,7 @@ if (NOT MSVC AND ${ENABLE_OPENBLAS})
+ 
+   message(STATUS "Using OpenBLAS for matrix multiplication")
+   add_compile_definitions(ENABLE_OPENBLAS)
+-  if(NOT EXISTS "${OPENBLAS_DIR}/installed/lib/libopenblas.a")
++  if(NOT EXISTS "${OPENBLAS_DIR}/lib/libopenblas.so")
+     message("Can't find OpenBLAS, installing. If OpenBLAS is installed please use the OPENBLAS_DIR parameter to pass the path")
+       if (${OPENBLAS_DIR} STREQUAL ${OPENBLAS_DEFAULT_DIR})
+         message("Installing OpenBLAS")
+@@ -204,9 +204,9 @@ if (NOT MSVC AND ${ENABLE_OPENBLAS})
+   endif()
+ 
+   add_library(${OPENBLAS_LIB} SHARED IMPORTED)
+-  set_target_properties(${OPENBLAS_LIB} PROPERTIES IMPORTED_LOCATION ${OPENBLAS_DIR}/installed/lib/libopenblas.a)
++  set_target_properties(${OPENBLAS_LIB} PROPERTIES IMPORTED_LOCATION ${OPENBLAS_DIR}/lib/libopenblas.so)
+   list(APPEND LIBS ${OPENBLAS_LIB})
+-  target_include_directories(${OPENBLAS_LIB} INTERFACE ${OPENBLAS_DIR}/installed/include)
++  target_include_directories(${OPENBLAS_LIB} INTERFACE ${OPENBLAS_DIR}/)
+ endif()
+ 
+ ###########
