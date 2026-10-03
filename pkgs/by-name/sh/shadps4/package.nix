@@ -26,6 +26,7 @@
   miniupnpc,
   miniz,
   nlohmann_json,
+  python3,
   libgbm,
   libx11,
   libxcb,
@@ -60,29 +61,22 @@
   withRpc ? true,
 }:
 
-let
-  abseilCppSrc = fetchFromGitHub {
-    owner = "abseil";
-    repo = "abseil-cpp";
-    tag = "20250512.1";
-    hash = "sha256-eB7OqTO9Vwts9nYQ/Mdq0Ds4T1KgmmpYdzU09VPWOhk=";
-  };
-in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.18.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-n2q4qmbknkT6kb6I5aeu6tU6EzSIfdrV+ptzQvhUJ/Q=";
+    hash = "sha256-idlvgqiM+aBtAKRqcmQ1TnhnU2EPJYO9CPvAnKc6pMM=";
 
     postCheckout = ''
       git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
       date -u -d "@$(git -C "$out" log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
 
       git -C "$out/externals" submodule update --init --recursive \
+        abseil-cpp \
         glslang \
         zydis \
         sirit \
@@ -91,7 +85,7 @@ clangStdenv.mkDerivation (finalAttrs: {
         discord-rpc \
         hwinfo \
         openal-soft \
-        dear_imgui \
+        imgui \
         LibAtrac9 \
         aacdec/fdk-aac \
         spdlog \
@@ -111,15 +105,25 @@ clangStdenv.mkDerivation (finalAttrs: {
       --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
       --replace-fail @GIT_DESC@ nixpkgs \
       --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
+
+    sed -i '3i #include <fmt/format.h>' src/core/loader/elf.cpp
+
+    sed -i '3i #include <cstring>' src/video_core/amdgpu/regs.cpp
+    sed -i '/#pragma once/a #include <cstring>' src/video_core/amdgpu/resource.h
   '';
 
-  # System Zstd is not linked by default
-  env.NIX_LDFLAGS = "-lzstd";
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
+    # System Zstd is not linked by default
+    NIX_LDFLAGS = "-lzstd";
+  };
 
   nativeBuildInputs = [
     cmake
     pkg-config
     makeBinaryWrapper
+    python3
   ];
 
   buildInputs = [
@@ -178,7 +182,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" false)
     (lib.cmakeBool "ENABLE_UPDATER" false)
     (lib.cmakeBool "ENABLE_SYSTEM_LIBRARIES" true)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSL" "${abseilCppSrc}")
   ];
 
   # Still in development, help with debugging
