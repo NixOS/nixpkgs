@@ -1,0 +1,52 @@
+From 555a15f6384f77ad73b739dd9559aa850fbac3cd Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:30:18 -0700
+Subject: [PATCH] [compiler-rt] Preserve assertions in freestanding builtins
+
+Use the builtins abort implementation when an assertion fails, retaining
+NDEBUG behavior without depending on a libc assert header or symbol.
+---
+ lib/builtins/clear_cache.c   | 7 ++-----
+ lib/builtins/cpu_model/x86.c | 8 ++++----
+ lib/builtins/int_util.h      | 6 ++++++
+ 3 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/lib/builtins/clear_cache.c b/lib/builtins/clear_cache.c
+index eb58452..27c644f 100644
+--- a/lib/builtins/clear_cache.c
++++ b/lib/builtins/clear_cache.c
+@@ -10,3 +9,0 @@
+-#if defined(__linux__)
+-#include <assert.h>
+-#endif
+@@ -93 +90 @@ void __clear_cache(void *start, void *end) {
+-  assert(start_reg == 0 && "Cache flush syscall failed.");
++  COMPILER_RT_ASSERT(start_reg == 0 && "Cache flush syscall failed.");
+@@ -197 +194 @@ void __clear_cache(void *start, void *end) {
+-  assert(start_reg == 0 && "Cache flush syscall failed.");
++  COMPILER_RT_ASSERT(start_reg == 0 && "Cache flush syscall failed.");
+diff --git a/lib/builtins/cpu_model/x86.c b/lib/builtins/cpu_model/x86.c
+index 606571d..3877e4e 100644
+--- a/lib/builtins/cpu_model/x86.c
++++ b/lib/builtins/cpu_model/x86.c
+@@ -24 +24 @@
+-#include <assert.h>
++#include "../int_lib.h"
+@@ -1198,3 +1198,3 @@ int CONSTRUCTOR_ATTRIBUTE __cpu_indicator_init(void) {
+-  assert(__cpu_model.__cpu_vendor < VENDOR_MAX);
+-  assert(__cpu_model.__cpu_type < CPU_TYPE_MAX);
+-  assert(__cpu_model.__cpu_subtype < CPU_SUBTYPE_MAX);
++  COMPILER_RT_ASSERT(__cpu_model.__cpu_vendor < VENDOR_MAX);
++  COMPILER_RT_ASSERT(__cpu_model.__cpu_type < CPU_TYPE_MAX);
++  COMPILER_RT_ASSERT(__cpu_model.__cpu_subtype < CPU_SUBTYPE_MAX);
+diff --git a/lib/builtins/int_util.h b/lib/builtins/int_util.h
+index c372c2e..8ccbdbc 100644
+--- a/lib/builtins/int_util.h
++++ b/lib/builtins/int_util.h
+@@ -25,0 +26,6 @@ NORETURN void __compilerrt_abort_impl(const char *file, int line,
++#ifdef NDEBUG
++#define COMPILER_RT_ASSERT(expr) ((void)0)
++#else
++#define COMPILER_RT_ASSERT(expr) ((expr) ? (void)0 : compilerrt_abort())
++#endif
++
