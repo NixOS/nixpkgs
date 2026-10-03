@@ -6,16 +6,16 @@
   lib,
 }:
 let
+  versioning = lib.importJSON ./versioning.json;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-admin";
-  version = "2026.930.143634";
+  inherit (versioning) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-88o4InXE0MgnjjaTJchPIsmlmj8/scQZOSC3GqJ++II=";
+    inherit (versioning) rev hash;
   };
 
   nativeBuildInputs = [
@@ -25,8 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     cacert
   ];
-
-  cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
 
   buildAndTestSubdir = "fluxer_admin";
 

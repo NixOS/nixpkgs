@@ -4,18 +4,19 @@
   rustPlatform,
   lib,
 }:
+let
+  versioning = lib.importJSON ./versioning.json;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-users";
-  version = "2026.1002.162104";
+  inherit (versioning) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-5e0fVr4DTvvajjB0vaT+1j1XsZ0pQ4FA9ieSca9MqjY=";
+    inherit (versioning) rev hash;
   };
 
-  cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
   cargoBuildFlags = [
     "--features"
     "scylla"
