@@ -10,6 +10,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xcode-build-server";
   version = "1.3.0";
 
+  strictDeps = true;
+  __structuredattrs = true;
+
   src = fetchFromGitHub {
     owner = "SolaWing";
     repo = "xcode-build-server";
