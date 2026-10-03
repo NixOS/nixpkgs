@@ -12,8 +12,6 @@
   libxml2,
   libxslt,
   withPdfReader ? true,
-  pipewireSupport ? stdenv.hostPlatform.isLinux,
-  pipewire,
   qt6Packages,
   wayland,
   enableWideVine ? false,
@@ -135,7 +133,6 @@ python3.pkgs.buildPythonApplication {
 
   preFixup =
     let
-      libPath = lib.makeLibraryPath [ pipewire ];
       resourcesPath =
         if stdenv.hostPlatform.isDarwin then
           "${qt6Packages.qtwebengine}/lib/QtWebEngineCore.framework/Resources"
@@ -149,7 +146,6 @@ python3.pkgs.buildPythonApplication {
         "''${qtWrapperArgs[@]}"
         # avoid persistant warning on starup
         --set QT_STYLE_OVERRIDE Fusion
-        ${lib.optionalString pipewireSupport "--prefix LD_LIBRARY_PATH : ${libPath}"}
         ${lib.optionalString enableVulkan ''
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
           --set-default QSG_RHI_BACKEND vulkan
