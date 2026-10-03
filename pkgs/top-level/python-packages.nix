@@ -15656,6 +15656,8 @@ self: super: with self; {
 
   pynordpool = callPackage ../development/python-modules/pynordpool { };
 
+  pynormaliz = callPackage ../development/python-modules/pynormaliz { };
+
   pynput = callPackage ../development/python-modules/pynput { };
 
   pynputfix = callPackage ../development/python-modules/pynputfix { };
