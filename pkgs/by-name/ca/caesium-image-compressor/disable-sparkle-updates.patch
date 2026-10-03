@@ -1,0 +1,154 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 277ab62..510b3d5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,12 +6,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
+ set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ set(TARGET caesium_image_compressor)
+ file(STRINGS "libcaesium.conf" LIBCAESIUM_VERSION)
++
++message("-- Configuring for portable")
++add_compile_definitions(IS_PORTABLE)
++
+ if (WIN32)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+-    if (DEFINED PORTABLE AND PORTABLE)
+-        message("-- Configuring for portable")
+-        add_compile_definitions(IS_PORTABLE)
+-    endif ()
+ elseif (APPLE)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wno-deprecated-register -Wno-deprecated")
+ else ()
+@@ -57,20 +57,6 @@ if (WIN32)
+     link_directories(${WINSPARKLE_LIB_DIR})
+ endif ()
+
+-if (APPLE)
+-    if (NOT DEFINED LIBSSH_INCLUDE_DIR)
+-        message(FATAL_ERROR "LIBSSH_INCLUDE_DIR is not defined. Cannot find libssh include dir.")
+-    else ()
+-        include_directories(${LIBSSH_INCLUDE_DIR})
+-    endif ()
+-
+-    if (NOT DEFINED SPARKLE_INCLUDE_DIR)
+-        message(FATAL_ERROR "SPARKLE_INCLUDE_DIR is not defined. Cannot find Sparkle include dir.")
+-    else ()
+-        include_directories(${SPARKLE_INCLUDE_DIR})
+-    endif ()
+-endif ()
+-
+ set(LIBCAESIUM_SOURCE_DIR ${CMAKE_BINARY_DIR}/libcaesium-prefix/src/libcaesium)
+
+ if (NOT CMAKE_BUILD_TYPE)
+@@ -119,11 +105,7 @@ set(SOURCES
+ )
+
+ if (APPLE)
+-    set(OSX_SOURCES
+-            src/updater/osx/AutoUpdater.cpp
+-            src/updater/osx/CocoaInitializer.mm
+-            src/updater/osx/SparkleAutoUpdater.mm
+-    )
++    set(OSX_SOURCES "")
+ endif ()
+
+ set(UI
+@@ -245,7 +227,7 @@ endif ()
+ # --- WinSparkle ---
+
+ if (APPLE)
+-    set(OSX_FRAMEWORKS "-framework AppKit -framework Carbon -framework Foundation -framework ApplicationServices -framework Sparkle")
++    set(OSX_FRAMEWORKS "-framework AppKit -framework Carbon -framework Foundation -framework ApplicationServices")
+     set_target_properties(${TARGET} PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/Info.plist" LINK_FLAGS "-F/Library/Frameworks -Wl -rpath @loader_path/../Frameworks")
+ endif ()
+
+diff --git a/Info.plist b/Info.plist
+index 377a1fb..7d6ce63 100644
+--- a/Info.plist
++++ b/Info.plist
+@@ -22,11 +22,5 @@
+         <string>2.8.5</string>
+         <key>CFBundleVersion</key>
+         <string>2.8.5</string>
+-        <key>SUFeedURL</key>
+-        <string>https://saerasoft.com/repository/com.saerasoft.caesium/osx/appcast.xml</string>
+-        <key>SUEnableAutomaticChecks</key>
+-        <true/>
+-        <key>SUPublicEDKey</key>
+-        <string>0depzkajPbKtmcA32EUat1buX9Z6Vn7cRazkmtWALvM=</string>
+     </dict>
+ </plist>
+diff --git a/src/MainWindow.cpp b/src/MainWindow.cpp
+index 3d2928c..24a0fd7 100644
+--- a/src/MainWindow.cpp
++++ b/src/MainWindow.cpp
+@@ -22,12 +22,12 @@
+ #include <utility>
+ #include <widgets/QCaesiumMessageBox.h>
+
+-#ifdef Q_OS_MAC
++#if defined(Q_OS_MAC) && !defined(IS_PORTABLE)
+ #include "./updater/osx/CocoaInitializer.h"
+ #include "./updater/osx/SparkleAutoUpdater.h"
+ #endif
+
+-#ifdef Q_OS_WIN
++#if defined(Q_OS_WIN) && !defined(IS_PORTABLE)
+ #include "./updater/win/winsparkle.h"
+ #endif
+
+@@ -165,7 +165,7 @@ MainWindow::MainWindow(QWidget* parent)
+
+ MainWindow::~MainWindow()
+ {
+-#ifdef Q_OS_WIN
++#if defined(Q_OS_WIN) && !defined(IS_PORTABLE)
+     win_sparkle_cleanup();
+ #endif
+
+@@ -1077,7 +1077,7 @@ void MainWindow::cModelItemsChanged() const
+ void MainWindow::initUpdater()
+ {
+
+-#ifdef Q_OS_MAC
++#if defined(Q_OS_MAC) && !defined(IS_PORTABLE)
+     CocoaInitializer initializer;
+     auto updater = new SparkleAutoUpdater("https://saerasoft.com/repository/com.saerasoft.caesium/osx/appcast.xml");
+     updater->setCheckForUpdatesAutomatically(QSettings().value("preferences/general/check_updates_at_startup", true).toBool());
+diff --git a/src/dialogs/AboutDialog.cpp b/src/dialogs/AboutDialog.cpp
+index d3400dd..9abd43a 100644
+--- a/src/dialogs/AboutDialog.cpp
++++ b/src/dialogs/AboutDialog.cpp
+@@ -3,12 +3,12 @@
+ #include "ui_AboutDialog.h"
+ #include <QSettings>
+
+-#ifdef Q_OS_MAC
++#if defined(Q_OS_MAC) && !defined(IS_PORTABLE)
+ #include "./updater/osx/CocoaInitializer.h"
+ #include "./updater/osx/SparkleAutoUpdater.h"
+ #endif
+
+-#ifdef Q_OS_WIN
++#if defined(Q_OS_WIN) && !defined(IS_PORTABLE)
+ #include "./updater/win/winsparkle.h"
+ #endif
+
+@@ -41,7 +41,7 @@ AboutDialog::~AboutDialog()
+
+ void AboutDialog::onCheckForUpdatesClicked()
+ {
+-#ifdef Q_OS_MAC
++#if defined(Q_OS_MAC) && !defined(IS_PORTABLE)
+     ui->checkForUpdates_Button->setEnabled(false);
+     CocoaInitializer initializer;
+     auto updater = new SparkleAutoUpdater("https://saerasoft.com/repository/com.saerasoft.caesium/osx/appcast.xml");
+@@ -49,7 +49,7 @@ void AboutDialog::onCheckForUpdatesClicked()
+     ui->checkForUpdates_Button->setEnabled(true);
+ #endif
+
+-#ifdef Q_OS_WIN
++#if defined(Q_OS_WIN) && !defined(IS_PORTABLE)
+     win_sparkle_check_update_with_ui();
+ #endif
+ }
