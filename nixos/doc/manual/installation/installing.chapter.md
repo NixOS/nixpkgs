@@ -285,6 +285,20 @@ Once complete, you can follow with
 #### Formatting {#sec-installation-manual-partitioning-formatting}
 []{#sec-installation-partitioning-formatting} <!-- legacy anchor -->
 
+
+::: {.note}
+If you want to create LVM volumes, encrypted filesystem, or RAID devices,
+do it now before formatting.
+
+-   For creating LVM volumes, the LVM commands, e.g., `pvcreate`,
+    `vgcreate`, and `lvcreate`.
+
+-   For creating an encrypted filesystem for your *root* partition see
+    [LUKS encryption](#sec-luks-file-systems).
+
+-   For creating software RAID devices, use `mdadm`.
+:::
+
 Use the following commands:
 
 -   For initialising Ext4 partitions: `mkfs.ext4`. It is recommended
@@ -312,11 +326,6 @@ Use the following commands:
     ```ShellSession
     # mkfs.fat -F 32 -n boot /dev/sda3
     ```
-
--   For creating LVM volumes, the LVM commands, e.g., `pvcreate`,
-    `vgcreate`, and `lvcreate`.
-
--   For creating software RAID devices, use `mdadm`.
 
 ### Installing {#sec-installation-manual-installing}
 []{#sec-installation-installing} <!-- legacy anchor -->
