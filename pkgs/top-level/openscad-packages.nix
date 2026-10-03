@@ -15,5 +15,6 @@ lib.makeScope newScope (
     bosl = self.callPackage ../development/openscad-packages/bosl { };
     bosl2 = self.callPackage ../development/openscad-packages/bosl2 { };
     dotscad = self.callPackage ../development/openscad-packages/dotscad { };
+    plot-function = self.callPackage ../development/openscad-packages/plot-function { };
   }
 )
