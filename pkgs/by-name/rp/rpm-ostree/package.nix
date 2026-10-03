@@ -22,7 +22,7 @@
   cmake,
   libcap,
   glib,
-  systemd,
+  systemdLibs,
   json-glib,
   libarchive,
   libsolv,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     ostree
     rpm
     glib
-    systemd
+    systemdLibs
     polkit
     bubblewrap
     json-glib

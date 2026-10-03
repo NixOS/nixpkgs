@@ -12,7 +12,7 @@
   libseccomp,
   libselinux,
   # TODO: investigate why changing from `systemd` to `systemdMinimal` breaks `podman logs`
-  systemd,
+  systemdLibs,
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -82,7 +82,7 @@ buildGoModule (finalAttrs: {
     libapparmor
     libseccomp
     libselinux
-    systemd
+    systemdLibs
   ];
 
   env = {
@@ -134,7 +134,7 @@ buildGoModule (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemdLibs ]}":$RPATH $out/bin/.podman-wrapped
     substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
       --replace-fail sleep '${coreutils}/bin/sleep' \
       --replace-fail /bin/sh '${runtimeShell}'
