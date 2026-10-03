@@ -97,7 +97,12 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
 
   setupHooks = [
-    ./setup-hook.sh
+    (buildPackages.replaceVars ./setup-hook.sh {
+      GenCMakeEntriesRC = "${./GenCMakeEntriesRC.cmake}";
+      GetCMakeEntryWith = "${./GetCMakeEntryWith.cmake}";
+      OperateCMakeFlags = "${./OperateCMakeFlags.cmake}";
+      SetCMakeEntryJSON = "${./SetCMakeEntryJSON.cmake}";
+    })
     ./check-pc-files-hook.sh
   ];
 
