@@ -14,13 +14,3 @@ index 2ed6bb29f..8c48c1da2 100644
      void resolveFrontendUrl_usesActualPortWhenServerPortIsEphemeral() {
          System sys = mock(System.class);
          when(applicationProperties.getSystem()).thenReturn(sys);
-diff --git a/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java b/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java
-index 8f57e15bc..143155191 100644
---- a/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java
-+++ b/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java
-@@ -16,4 +16,5 @@ class S3ClientsTest {
-     @Test
-+    @org.junit.jupiter.api.Disabled("requires DNS access")
-     void validateEndpointHost_publicAwsHost_passes() {
-         assertThatCode(
-                         () ->

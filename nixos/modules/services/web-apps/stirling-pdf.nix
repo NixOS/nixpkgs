@@ -29,7 +29,7 @@ in
       };
       description = ''
         Environment variables for the stirling-pdf app.
-        See <https://github.com/Stirling-Tools/Stirling-PDF#customisation> for available options.
+        See <https://docs.stirlingpdf.com/Configuration/> for available options.
       '';
     };
 
@@ -79,11 +79,18 @@ in
       serviceConfig = {
         BindReadOnlyPaths = [ "${pkgs.tesseract}/share/tessdata:/usr/share/tessdata" ];
         CacheDirectory = "stirling-pdf";
-        Environment = [ "HOME=%S/stirling-pdf" ];
+        CacheDirectoryMode = "0700";
+        Environment = [
+          "HOME=%S/stirling-pdf"
+          # DynamicUser state/cache mounts are noexec; PDFium needs an executable native cache.
+          "JDK_JAVA_OPTIONS=-Djpdfium.native.cacheDir=%t/stirling-pdf/jpdfium"
+        ];
         EnvironmentFile = cfg.environmentFiles;
         ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = "stirling-pdf";
+        RuntimeDirectoryMode = "0700";
         StateDirectory = "stirling-pdf";
+        StateDirectoryMode = "0700";
         SuccessExitStatus = 143;
         User = "stirling-pdf";
         WorkingDirectory = "/var/lib/stirling-pdf";
@@ -94,6 +101,7 @@ in
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateTmp = true;
         PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
