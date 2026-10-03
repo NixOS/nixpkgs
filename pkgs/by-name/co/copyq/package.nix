@@ -12,6 +12,7 @@
   miniaudio,
   pkg-config,
   kdePackages,
+  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,9 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     kdePackages.extra-cmake-modules
     qt6.wrapQtAppsHook
-    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -38,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     qt6.qttools
     qt6.qtdeclarative
+    kdePackages.qca
+    kdePackages.qtkeychain
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
     libxfixes
     libxtst
@@ -48,22 +58,33 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.kstatusnotifieritem
     kdePackages.knotifications
     kdePackages.kguiaddons
-    kdePackages.qca
-    kdePackages.qtkeychain
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_QT6" true)
+    (lib.cmakeBool "WITH_NATIVE_NOTIFICATIONS" stdenv.hostPlatform.isLinux)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     (lib.cmakeFeature "MINIAUDIO_INCLUDE_DIR" "${lib.getInclude miniaudio}/include/miniaudio")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "MINIAUDIO_INCLUDE_DIR" "${miniaudio.src}")
   ];
+
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
+  # A symlink makes Qt miss the Cocoa platform plugin because it does not resolve the bundle path.
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/bin
+    makeBinaryWrapper "$out/CopyQ.app/Contents/MacOS/CopyQ" "$out/bin/copyq"
+  '';
 
   meta = {
     homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ artturin ];
-    # NOTE: CopyQ supports windows and osx, but I cannot test these.
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "copyq";
   };
 })
