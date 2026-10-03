@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AC1LS6PfieP8IjGhoIwm0WcLNIsUgULyP7V4HuvSqbg=";
   };
 
+  patches = [ ./cgroup-cpu-quota.patch ];
+
   outputs = [
     "out"
     "dev"
