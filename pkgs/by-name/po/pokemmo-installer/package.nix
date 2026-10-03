@@ -69,5 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.linux;
     mainProgram = "pokemmo-installer";
+    broken = true;
   };
 })
