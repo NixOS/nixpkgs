@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/block/buzz";
     license = lib.licenses.asl20;
     mainProgram = "buzz";
-    maintainers = [ lib.maintainers.sebfried ];
+    maintainers = with lib.maintainers; [
+      sebfried
+      kleinbem
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

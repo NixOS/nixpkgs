@@ -15383,6 +15383,12 @@
     githubId = 231780064;
     name = "Klea";
   };
+  kleinbem = {
+    email = "martin.kleinberger@gmail.com";
+    github = "kleinbem";
+    githubId = 1173376;
+    name = "Martin Kleinberger";
+  };
   kleiner3 = {
     name = "kleiner3";
     email = "nixos@dasriley.de";
