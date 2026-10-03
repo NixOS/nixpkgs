@@ -2742,21 +2742,6 @@ with haskellLib;
     libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.buildPackages.git ];
   }) super.kmonad;
 
-  # 2024-01-24: support optparse-applicative 0.18
-  niv = appendPatches [
-    (fetchpatch {
-      # needed for the following patch to apply
-      url = "https://github.com/nmattia/niv/commit/7b76374b2b44152bfbf41fcb60162c2ce9182e7a.patch";
-      includes = [ "src/*" ];
-      hash = "sha256-3xG+GD6fUCGgi2EgS7WUpjfn6gvc2JurJcIrnyy4ys8=";
-    })
-    (fetchpatch {
-      # Update to optparse-applicative 0.18
-      url = "https://github.com/nmattia/niv/commit/290965abaa02be33b601032d850c588a6bafb1a5.patch";
-      hash = "sha256-YxUdv4r/Fx+8YxHhqEuS9uZR1XKzVCPrLmj5+AY5GRA=";
-    })
-  ] super.niv;
-
   # 2024-03-25: HSH broken because of the unix-2.8.0.0 breaking change
   HSH = appendPatches [ ./patches/HSH-unix-openFd.patch ] super.HSH;
 
