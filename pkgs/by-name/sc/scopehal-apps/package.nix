@@ -112,6 +112,7 @@ stdenv.mkDerivation {
     homepage = "https://www.ngscopeclient.org/";
     license = lib.licenses.bsd3;
     mainProgram = "ngscopeclient";
+    mainDarwinApp = "ngscopeclient.app";
     maintainers = with lib.maintainers; [
       bgamari
       carlossless
