@@ -53,7 +53,7 @@ buildGoModule (finalAttrs: {
       webhook, or even as a kubectl plugin to run policies against Kubernetes
       objects.
     '';
-    homepage = "https://datree.io/";
+    homepage = "https://github.com/datreeio/datree";
     changelog = "https://github.com/datreeio/datree/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
