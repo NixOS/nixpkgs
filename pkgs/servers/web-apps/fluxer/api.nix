@@ -13,16 +13,16 @@
 let
   nodejs = nodejs_26;
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_26; };
+  versioning = lib.importJSON ./versioning.json;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluxer-api";
-  version = "2026.930.210404";
+  inherit (versioning) version;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-M5QhtnNjQntceGmkzmOg3HBpXIaey2Yx3Pp3PB44i9g=";
+    inherit (versioning) rev hash;
   };
 
   env.npm_config_nodedir = nodejs;

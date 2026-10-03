@@ -15,14 +15,14 @@ let
   beamPackages = beamMinimal28Packages;
   zstdStatic = zstd.override { enableStatic = true; };
 
+  versioning = lib.importJSON ./versioning.json;
+
   pname = "fluxer-gateway";
-  version = "2026.1002.120426";
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${pname}@${version}";
-    hash = "sha256-88o4InXE0MgnjjaTJchPIsmlmj8/scQZOSC3GqJ++II=";
+    inherit (versioning) rev hash;
   };
 
   copyVendorDeps =
@@ -40,23 +40,24 @@ let
 
   cargoRootDep = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-ojD7XNHV8ZULRWPSRfY13aH461d8zfiL6PU/hALS4f4=";
+    hash = versioning.cargoHash;
   };
   cargoExtraDeps = [
     (rustPlatform.fetchCargoVendor {
       inherit src;
-      hash = "sha256-lECOMdkbdWAeL829MrWPWGQI44P+4VMnLIp9Jd+xJJo=";
+      hash = versioning.guildMemberListNifHash;
       sourceRoot = "${src.name}/fluxer_gateway/native/guild_member_list_oset_nif";
     })
     (rustPlatform.fetchCargoVendor {
       inherit src;
-      hash = "sha256-9HDcMd1qfIOJPIw6D9bLR4rSfbz8Zv/wz9zQe3PoZjM=";
+      hash = versioning.pushMarkdownPlaintextHash;
       sourceRoot = "${src.name}/fluxer_gateway/native/push_markdown_plaintext_nif";
     })
   ];
 in
 beamPackages.rebar3Relx {
-  inherit pname version src;
+  inherit pname src;
+  inherit (versioning) version;
 
   releaseType = "release";
   profile = "prod";
@@ -71,10 +72,10 @@ beamPackages.rebar3Relx {
 
   checkouts =
     (beamPackages.fetchRebar3Deps {
-      inherit version;
+      inherit (versioning) version;
       name = pname;
       src = "${src}/fluxer_gateway";
-      sha256 = "sha256-rGSvSCUjH+BedJga2Kq2B7diDT5M68l2xmp9hbDD5xI=";
+      sha256 = versioning.rebarHash;
     }).overrideAttrs
       (
         final: prev: {

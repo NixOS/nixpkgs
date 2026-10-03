@@ -3,21 +3,23 @@
   stdenv,
   lib,
 }:
+let
+  versioning = lib.importJSON ./versioning.json;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluxer-static";
-  version = "2026.929.230311";
+  inherit (versioning) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-3RNQ0hjTiYuiXnR9281R52a7sUzKwQD5Y52nEFD7gI8=";
+    inherit (versioning) rev hash;
   };
 
   installPhase = ''
     mkdir -p $out/share/fluxer-static
 
-    cp -r fluxer_static/{avatars,badges,desktop,embeds,emoji,web} $out/share/fluxer-static
+    cp -r fluxer_static/* $out/share/fluxer-static
   '';
 
   meta = {

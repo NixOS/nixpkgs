@@ -14,18 +14,19 @@
   rustPlatform,
   lib,
 }:
+let
+  versioning = lib.importJSON ./versioning.json;
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-media-proxy";
-  version = "2026.1003.2520";
+  inherit (versioning) version cargoHash;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    tag = "${finalAttrs.pname}@${finalAttrs.version}";
-    hash = "sha256-NHMB7FoBK1ccg8rt94NwN8FMsHSPQSCH1YPN2p2gnKU=";
+    inherit (versioning) rev hash;
   };
 
-  cargoLock.lockFile = "${finalAttrs.src}/Cargo.lock";
   buildAndTestSubdir = "fluxer_media_proxy";
 
   nativeBuildInputs = [
