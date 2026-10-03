@@ -41,6 +41,8 @@ lib:
   systemd,
   gnugrep,
   gnused,
+  nftables,
+  gawk,
 
   # Testing dependencies
   nixosTests,
@@ -129,6 +131,8 @@ buildGoModule (finalAttrs: {
           systemd
           gnugrep
           gnused
+          nftables
+          gawk
         ]
       } \
       --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
