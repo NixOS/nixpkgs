@@ -807,6 +807,9 @@ rec {
       + optionalString (def ? stopIfChanged && !def.stopIfChanged) ''
         X-StopIfChanged=false
       ''
+      + optionalString (def ? restartOnStaleEtc && !def.restartOnStaleEtc) ''
+        X-RestartOnStaleEtc=false
+      ''
       + optionalString (def ? notSocketActivated && def.notSocketActivated) ''
         X-NotSocketActivated=true
       ''

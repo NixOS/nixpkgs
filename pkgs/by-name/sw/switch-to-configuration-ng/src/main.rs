@@ -69,6 +69,7 @@ const SYSINIT_REACTIVATION_TARGET: &str = "sysinit-reactivation.target";
 const START_LIST_FILE: &str = "/run/nixos/start-list";
 const RESTART_LIST_FILE: &str = "/run/nixos/restart-list";
 const RELOAD_LIST_FILE: &str = "/run/nixos/reload-list";
+const TRY_RESTART_LIST_FILE: &str = "/run/nixos/try-restart-list";
 
 // Parse restart/reload requests by the activation script. Activation scripts may write
 // newline-separated units to the restart file and switch-to-configuration will handle them. While
@@ -336,6 +337,163 @@ fn get_active_units<'a, 'b>(
 
             acc
         }))
+}
+
+/// Returns the active services whose mount namespace still resolves /etc through a stale
+/// superblock, plus warnings for units that could not be inspected.
+///
+/// Replacing the /etc mount during activation (`system.etc.overlay.enable`) only happens in the
+/// host mount namespace. Other namespaces receive the new mount via mount event propagation,
+/// moved beneath their /etc copy, and the kernel then reveals it by unmounting the copy.
+/// That unmount is skipped for copies with namespace-local child mounts (created by e.g.
+/// BindReadOnlyPaths= or ConfigurationDirectory= sandboxing), leaving the service on the previous
+/// generation's /etc until restarted, with the current /etc invisible beneath it.
+fn stale_etc_units(
+    active_units: &HashMap<String, UnitState>,
+) -> Result<(Vec<String>, Vec<anyhow::Error>)> {
+    let mut stale = Vec::new();
+    let mut warnings = Vec::new();
+
+    let host_etc = std::fs::metadata("/etc").context("Failed to stat /etc")?;
+
+    for (name, unit) in active_units {
+        if !name.ends_with(".service") {
+            continue;
+        }
+        match unit_uses_stale_etc(unit, host_etc.dev()) {
+            Ok(true) => stale.push(name.clone()),
+            Ok(false) => {}
+            Err(err) => {
+                warnings.push(err.context(format!("Failed to inspect {name}")));
+            }
+        }
+    }
+
+    Ok((stale, warnings))
+}
+
+/// Whether the unit's main process resolves /etc through a stale superblock, true if the current
+/// host /etc mount was propagated into the unit's mount namespace but is stuck beneath the mount
+/// the unit still resolves.
+fn unit_uses_stale_etc(unit: &UnitState, host_etc_dev: u64) -> Result<bool> {
+    let pid: u32 = unit
+        .proxy
+        .get("org.freedesktop.systemd1.Service", "MainPID")
+        .context("Failed to get MainPID")?;
+    // No main process to inspect, e.g. RemainAfterExit= oneshots.
+    if pid == 0 {
+        return Ok(false);
+    }
+
+    // The path resolves through the unit's mount namespace. The device identifies the
+    // superblock.
+    let Some(etc) = stat_process_path(&format!("/proc/{pid}/root/etc"))? else {
+        // The process exited mid-scan.
+        return Ok(false);
+    };
+    if etc.dev() == host_etc_dev {
+        // Same superblock, so the umount of the old mount propagated already
+        return Ok(false);
+    }
+
+    // Different superblock, check whether the new mount sits beneath, or whether
+    // we are in a mount namespace that opted out of mount propagation.
+    current_etc_tucked_beneath(pid, etc.dev(), host_etc_dev)
+}
+
+/// Whether, in the mount namespace of the given process, the /etc mount with device `host_dev`
+/// sits directly beneath the /etc mount with device `top_dev`. Mounting beneath a mount makes the
+/// new mount its parent.
+fn current_etc_tucked_beneath(pid: u32, top_dev: u64, host_dev: u64) -> Result<bool> {
+    let pid = i32::try_from(pid).context("Invalid pid")?;
+    let Ok(process) = procfs::process::Process::new(pid) else {
+        // The process exited mid-scan.
+        return Ok(false);
+    };
+    let mountinfo = match process.mountinfo() {
+        Ok(mountinfo) => mountinfo,
+        Err(procfs::ProcError::NotFound(_)) => return Ok(false),
+        Err(err) => {
+            return Err(err).with_context(|| format!("Failed to read mountinfo of pid {pid}"));
+        }
+    };
+
+    // Formats a device number the way mountinfo's `majmin` field spells it.
+    let major_minor = |dev: u64| {
+        format!(
+            "{}:{}",
+            nix::sys::stat::major(dev),
+            nix::sys::stat::minor(dev)
+        )
+    };
+
+    let etc_mounts: Vec<_> = mountinfo
+        .into_iter()
+        .filter(|mount| mount.mount_point == Path::new("/etc"))
+        .collect();
+    let Some(top_mount) = etc_mounts
+        .iter()
+        .find(|mount| mount.majmin == major_minor(top_dev))
+    else {
+        return Ok(false);
+    };
+    let top_mount_parent_id = top_mount.pid;
+    // Look for a mount that is the *parent* of the top mount and has same device as the
+    // host_dev.
+    // When we slide a mount underneath the previous /etc mountpoint, it means that the
+    // new mount is now the *parent* of the old one since it sits one layer lower in the
+    // mount tree, beneath the old mount.
+    Ok(etc_mounts
+        .iter()
+        .any(|mount| mount.mnt_id == top_mount_parent_id && mount.majmin == major_minor(host_dev)))
+}
+
+/// Paths of a unit's file in the given toplevel. Template instances without their own unit file
+/// fall back to their template unit. Returns the unit file, the base unit name and the base unit
+/// file.
+fn toplevel_unit_paths(toplevel: &Path, unit: &str) -> (PathBuf, String, PathBuf) {
+    let unit_file = toplevel.join("etc/systemd/system").join(unit);
+    let mut base_unit = unit.to_string();
+    let mut base_unit_file = unit_file.clone();
+
+    // Detect template instances.
+    if !unit_file.exists() {
+        if let Some((Some(template_name), Some(template_instance))) =
+            TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
+                (
+                    captures.get(1).map(|c| c.as_str()),
+                    captures.get(2).map(|c| c.as_str()),
+                )
+            })
+        {
+            base_unit = format!("{template_name}@.{template_instance}");
+            base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
+        }
+    }
+
+    (unit_file, base_unit, base_unit_file)
+}
+
+/// Whether the unit opted out of being restarted for a stale /etc, either specifically
+/// (X-RestartOnStaleEtc=false) or in general (X-RestartIfChanged=false).
+fn opts_out_of_stale_etc_restart(toplevel: &Path, unit: &str) -> bool {
+    let (unit_file, _, base_unit_file) = toplevel_unit_paths(toplevel, unit);
+    let Ok(unit_info) = parse_unit(&unit_file, &base_unit_file) else {
+        // Not a unit managed by this configuration, restart it.
+        return false;
+    };
+    !parse_systemd_bool(Some(&unit_info), "Service", "X-RestartIfChanged", true)
+        || !parse_systemd_bool(Some(&unit_info), "Service", "X-RestartOnStaleEtc", true)
+}
+
+/// stat() that treats a path vanishing (process exit during the scan) as absence instead of an
+/// error.
+fn stat_process_path(path: &str) -> Result<Option<std::fs::Metadata>> {
+    match std::fs::metadata(path) {
+        Ok(metadata) => Ok(Some(metadata)),
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => Ok(None),
+        Err(err) => Err(err).with_context(|| format!("Failed to stat {path}")),
+    }
 }
 
 // This function takes a single ini file that specified systemd configuration like unit
@@ -1890,6 +2048,7 @@ won't take effect until you reboot the system.
     let mut units_to_start = map_from_list_file(START_LIST_FILE);
     let mut units_to_restart = map_from_list_file(RESTART_LIST_FILE);
     let mut units_to_reload = map_from_list_file(RELOAD_LIST_FILE);
+    let mut units_to_try_restart = map_from_list_file(TRY_RESTART_LIST_FILE);
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
     let systemd = systemd1_proxy(&dbus_conn);
@@ -2254,24 +2413,7 @@ won't take effect until you reboot the system.
         .unwrap_or_default()
         .lines()
     {
-        let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
-        let mut base_unit = unit.to_string();
-        let mut new_base_unit_file = new_unit_file.clone();
-
-        // Detect template instances.
-        if let Some((Some(template_name), Some(template_instance))) =
-            TEMPLATE_UNIT_RE.captures(unit).map(|captures| {
-                (
-                    captures.get(1).map(|c| c.as_str()),
-                    captures.get(2).map(|c| c.as_str()),
-                )
-            })
-        {
-            if !new_unit_file.exists() {
-                base_unit = format!("{template_name}@.{template_instance}");
-                new_base_unit_file = toplevel.join("etc/systemd/system").join(&base_unit);
-            }
-        }
+        let (new_unit_file, base_unit, new_base_unit_file) = toplevel_unit_paths(&toplevel, unit);
 
         let mut base_name = base_unit.as_str();
         if let Some(Some(new_base_name)) = UNIT_NAME_RE
@@ -2325,6 +2467,48 @@ won't take effect until you reboot the system.
     // We can remove the file now because it has been propagated to the other reload file
     remove_file_if_exists(RELOAD_BY_ACTIVATION_LIST_FILE)
         .with_context(|| format!("Failed to remove {RELOAD_BY_ACTIVATION_LIST_FILE}"))?;
+
+    // The activation script may have replaced the /etc mount. Services whose mount namespaces
+    // did not receive the replacement are stuck on the previous /etc and get a try-restart in the
+    // restart phase below. Errors only produce warnings, the affected services then simply keep
+    // the old /etc.
+    match get_active_units(&systemd).and_then(|units| stale_etc_units(&units)) {
+        Ok((stale_units, warnings)) => {
+            for warning in warnings {
+                eprintln!("warning: {warning:#}");
+            }
+            let (mut opted_out, mut scheduled): (Vec<String>, Vec<String>) = stale_units
+                .into_iter()
+                .partition(|unit| opts_out_of_stale_etc_restart(&toplevel, unit));
+            if !scheduled.is_empty() {
+                scheduled.sort_by_key(|name| name.to_lowercase());
+                eprintln!(
+                    "scheduling restart of the following units still using the previous /etc: {}",
+                    scheduled.join(", ")
+                );
+                for unit in scheduled {
+                    units_to_try_restart.insert(unit, ());
+                }
+            }
+            if !opted_out.is_empty() {
+                opted_out.sort_by_key(|name| name.to_lowercase());
+                eprintln!(
+                    "NOT restarting the following units still using the previous /etc: {}",
+                    opted_out.join(", ")
+                );
+            }
+        }
+        Err(err) => {
+            eprintln!("warning: failed to check for services using the previous /etc: {err:#}");
+        }
+    }
+
+    // A try-restart supersedes a reload
+    for unit in units_to_try_restart.keys() {
+        if units_to_reload.remove(unit).is_some() {
+            unrecord_unit(RELOAD_LIST_FILE, unit);
+        }
+    }
 
     // Restart systemd if necessary. Note that this is done using the current version of systemd,
     // just in case the new one has trouble communicating with the running pid 1.
@@ -2547,6 +2731,44 @@ won't take effect until you reboot the system.
         remove_file_if_exists(RESTART_LIST_FILE)
             .with_context(|| format!("Failed to remove {RESTART_LIST_FILE}"))?;
     }
+
+    // Try-restart the queued units. TryRestartUnit only restarts units that are still running,
+    // so a unit that stopped since it was queued is not started by accident. Units the switch
+    // already acts on are skipped, they get their new state from that anyway. Failures are not
+    // worth failing the switch over.
+    let mut try_restart_units = units_to_try_restart
+        .keys()
+        .filter(|unit| {
+            !units_to_restart.contains_key(*unit)
+                && !units_to_stop.contains_key(*unit)
+                && !units_to_start.contains_key(*unit)
+        })
+        .map(String::as_str)
+        .collect::<Vec<&str>>();
+    if !try_restart_units.is_empty() {
+        try_restart_units.sort_by_key(|name| name.to_lowercase());
+        eprintln!(
+            "try-restarting the following units: {}",
+            try_restart_units.join(", ")
+        );
+
+        for unit in try_restart_units {
+            match systemd.try_restart_unit(unit, "replace") {
+                Ok(job_path) => {
+                    let mut jobs = submitted_jobs.borrow_mut();
+                    jobs.insert(job_path, Job::Restart);
+                }
+                Err(err) => {
+                    eprintln!("warning: failed to restart {unit}: {err}");
+                }
+            }
+        }
+
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
+    }
+
+    remove_file_if_exists(TRY_RESTART_LIST_FILE)
+        .with_context(|| format!("Failed to remove {TRY_RESTART_LIST_FILE}"))?;
 
     // Start all active targets, as well as changed units we stopped above. The latter is necessary
     // because some may not be dependencies of the targets (i.e., they were manually started).
