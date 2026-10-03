@@ -65,6 +65,13 @@ qtModule {
     ./windows-resolve-function-name.patch
   ];
 
+  # QLibrary loads through QtCore, so QtMultimedia's RUNPATH cannot supply this.
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace src/multimedia/pipewire/qpipewire_symbolloader.cpp \
+      --replace-fail '"pipewire-" PW_API_VERSION' \
+        '"${lib.getLib pipewire}/lib/libpipewire-" PW_API_VERSION'
+  '';
+
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderToolsTools"
