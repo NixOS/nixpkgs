@@ -28,13 +28,13 @@
   wget,
 }:
 let
-  version = "0.3.1-unstable-2026-10-02";
+  version = "0.3.1-unstable-2026-10-03";
   # Draft packaging source. Replace with a paperclipai release before merging.
   src = fetchFromGitHub {
     owner = "caniko";
     repo = "paperclip";
-    rev = "24f90e874754eb2f23692c0f161a6ba2d98848ed";
-    hash = "sha256-UyebY2qfy6vhT1B9msonvYweu7seXaG3b6eSDfzjuNM=";
+    rev = "230bae818bc55600e90400e01f4fbe6295f47944";
+    hash = "sha256-UwYfTFrEz73pKZo+EJJjXyX2JB83Akv7uM9yeVToQaQ=";
   };
   runtimePath = lib.makeBinPath [
     coreutils
