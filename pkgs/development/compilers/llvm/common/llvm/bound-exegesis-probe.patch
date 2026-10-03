@@ -1,0 +1,43 @@
+From 70f2512dc438de4528b35bb47843de6f7ef0fad5 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 3 Oct 2026 08:32:14 -0700
+Subject: [PATCH] [llvm-exegesis] Bound LLVM 19 test discovery probes
+
+Backport the lit.local.cfg part of upstream commit
+48d00593530dbfd90c4fdb027ae260868f39925f (PR #218102), retaining
+LLVM 19's -snippets-file /dev/null probe instead of the newer
+-opcode-name=ADD64rr invocation. The C++ fix is fetched separately.
+
+Upstream: https://github.com/llvm/llvm-project/pull/218102
+---
+ test/tools/llvm-exegesis/lit.local.cfg | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/test/tools/llvm-exegesis/lit.local.cfg b/test/tools/llvm-exegesis/lit.local.cfg
+index a51a2d7..3d312e1 100644
+--- a/test/tools/llvm-exegesis/lit.local.cfg
++++ b/test/tools/llvm-exegesis/lit.local.cfg
+@@ -19,13 +19,20 @@ def can_use_perf_counters(mode, extra_options=[]):
+         print("could not find llvm-exegesis")
+         return False
+     try:
++        # This runs during test discovery, so a hung llvm-exegesis would stall the
++        # whole lit invocation before a single test starts. A probe takes well
++        # under a second when it works at all.
+         return_code = subprocess.call(
+             [llvm_exegesis_exe, "-mode", mode, "-snippets-file", "/dev/null"]
+             + extra_options,
+             stdout=subprocess.DEVNULL,
+             stderr=subprocess.DEVNULL,
++            timeout=1,
+         )
+         return return_code == 0
++    except subprocess.TimeoutExpired:
++        print("llvm-exegesis timed out")
++        return False
+     except OSError:
+         print("could not exec llvm-exegesis")
+         return False
+-- 
+2.43.0
+
