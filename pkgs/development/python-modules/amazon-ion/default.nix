@@ -42,6 +42,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-oAGFD3yKpym+qTehKDlXZAniCoxwIjPvl4QJby7vA6w=";
   };
 
+  patches = [
+    # Fix a double Py_DECREF in ionc_write_annotations when annotations aren't a list/tuple,
+    # which corrupts the heap (crashes the test suite on darwin with Python 3.14)
+    ./fix-annotations-double-decref.patch
+  ];
+
   postPatch =
     # Ion-C infers version based on Git. But there are issues with making .git folders deterministic.
     # See https://github.com/NixOS/nixpkgs/issues/8567
