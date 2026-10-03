@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "gitea";
     repo = "tea";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-wAs0L3UOwsyElrQ9n5BKV8rDZHzj42xL11HT1CFre8k=";
+    hash = "sha256-wAs0L3UOwsyElrQ9n5BKV8rDZHzj42xL11HT1CFre8k=";
   };
 
   vendorHash = "sha256-QzJai1AmdXz5pYg1SEEFOetWJkkUhDZoQbJkhkz8UD4=";
