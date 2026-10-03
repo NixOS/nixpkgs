@@ -6307,6 +6307,8 @@ self: super: with self; {
 
   flask-simpleldap = callPackage ../development/python-modules/flask-simpleldap { };
 
+  flask-smorest = callPackage ../development/python-modules/flask-smorest { };
+
   flask-sock = callPackage ../development/python-modules/flask-sock { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
@@ -6700,6 +6702,8 @@ self: super: with self; {
       python3 = python;
     }
   );
+
+  gedcom7 = callPackage ../development/python-modules/gedcom7 { };
 
   gehomesdk = callPackage ../development/python-modules/gehomesdk { };
 
@@ -7263,6 +7267,16 @@ self: super: with self; {
   grafanalib = callPackage ../development/python-modules/grafanalib/default.nix { };
 
   grammalecte = callPackage ../development/python-modules/grammalecte { };
+
+  gramps = callPackage ../development/python-modules/gramps { };
+
+  gramps-gedcom7 = callPackage ../development/python-modules/gramps-gedcom7 { };
+
+  gramps-object-query-language =
+    callPackage ../development/python-modules/gramps-object-query-language
+      { };
+
+  gramps-ql = callPackage ../development/python-modules/gramps-ql { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
 
@@ -12384,6 +12398,8 @@ self: super: with self; {
   oauthlib = callPackage ../development/python-modules/oauthlib { };
 
   obfsproxy = callPackage ../development/python-modules/obfsproxy { };
+
+  object-ql = callPackage ../development/python-modules/object-ql { };
 
   objexplore = callPackage ../development/python-modules/objexplore { };
 
@@ -19010,6 +19026,8 @@ self: super: with self; {
 
   sievelib = callPackage ../development/python-modules/sievelib { };
 
+  sifts = callPackage ../development/python-modules/sifts { };
+
   sigima = callPackage ../development/python-modules/sigima { };
 
   signalrcore = callPackage ../development/python-modules/signalrcore { };
@@ -23016,6 +23034,8 @@ self: super: with self; {
   yattag = callPackage ../development/python-modules/yattag { };
 
   yaxmldiff = callPackage ../development/python-modules/yaxmldiff { };
+
+  yclade = callPackage ../development/python-modules/yclade { };
 
   ydata-profiling = callPackage ../development/python-modules/ydata-profiling { };
 
