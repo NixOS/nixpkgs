@@ -26,7 +26,7 @@
   libxkbfile,
   libxcb,
   libgbm,
-  systemd,
+  systemdLibs,
   libGL,
 }:
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   runtimeDependencies = map lib.getLib [
-    systemd
+    systemdLibs
   ];
 
   installPhase = ''

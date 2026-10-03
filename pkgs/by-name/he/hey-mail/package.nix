@@ -22,7 +22,7 @@
   atk,
   libgbm,
   cups,
-  systemd,
+  systemdLibs,
   alsa-lib,
   at-spi2-atk,
   at-spi2-core,
@@ -63,7 +63,7 @@ let
     atk
     libgbm
     cups
-    systemd
+    systemdLibs
     alsa-lib
     at-spi2-atk
     at-spi2-core
