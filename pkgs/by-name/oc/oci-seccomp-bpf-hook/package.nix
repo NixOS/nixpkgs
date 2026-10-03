@@ -15,8 +15,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-seizupkZHWCPsnPMiLlEZrw1cPQNsfsGxYg2S9ZGBbw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-seizupkZHWCPsnPMiLlEZrw1cPQNsfsGxYg2S9ZGBbw=";
   };
   vendorHash = null;
 
@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   '';
 
   postBuild = ''
-    substituteInPlace oci-seccomp-bpf-hook.json --replace HOOK_BIN_DIR "$out/bin"
+    substituteInPlace oci-seccomp-bpf-hook.json --replace-fail HOOK_BIN_DIR "$out/bin"
   '';
 
   installPhase = ''
