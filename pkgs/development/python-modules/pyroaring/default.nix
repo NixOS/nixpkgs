@@ -4,10 +4,10 @@
   fetchFromGitHub,
   cython,
   setuptools,
+  croaring,
   hypothesis,
   pytestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "pyroaring";
   version = "1.0.4";
@@ -20,10 +20,22 @@ buildPythonPackage rec {
     hash = "sha256-7oHnYN44NVf2mjvHXaRgKtHFHMTQohpGEuQJjc9NGzw=";
   };
 
+  patches = [
+    # Link against nixpkgs' croaring instead of building the vendored
+    # amalgamation (pyroaring/roaring.{c,h}).
+    ./use-system-croaring.patch
+  ];
+
+  postPatch = ''
+    rm pyroaring/roaring.c pyroaring/roaring.h
+  '';
+
   build-system = [
     cython
     setuptools
   ];
+
+  buildInputs = [ croaring ];
 
   pythonImportsCheck = [ "pyroaring" ];
 
