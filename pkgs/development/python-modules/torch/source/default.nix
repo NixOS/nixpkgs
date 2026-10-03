@@ -339,6 +339,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # Link What You Use runs ldd on the linked HOST libraries.
     ./disable-cross-lwyu.patch
   ]
+  ++ lib.optionals (cudaSupport || rocmSupport) [
+    ./symmetric-memory-socket-path.patch
+  ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
     ./find-cuda-use-package-paths.patch
@@ -834,6 +837,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
         };
       }
       // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        symmetricMemorySocketName = callPackage ../tests/symm-mem-socket-name.nix {
+          inherit (finalAttrs) src;
+          torch = finalAttrs.finalPackage;
+          socketPatch = ./symmetric-memory-socket-path.patch;
+        };
         tester-csrReductions =
           (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; })
             {
