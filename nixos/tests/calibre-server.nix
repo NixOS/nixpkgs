@@ -64,7 +64,7 @@ let
       calibreScript = ''
         wait_for_unit("calibre-server.service")
         wait_for_open_port(8888)
-        fail("curl --fail http://127.0.0.1:8888")
+        fail("curl --fail http://127.0.0.1:8888/opds")
       '';
     };
   };
