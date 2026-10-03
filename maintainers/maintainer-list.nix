@@ -21995,6 +21995,11 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onaips = {
+    github = "oNaiPs";
+    githubId = 374130;
+    name = "José Luis Pereira";
+  };
   onatustun = {
     email = "contact@onatustun.com";
     name = "Onat Ustun";
