@@ -793,6 +793,11 @@ Runtime environment variables can be set with the `runtimeEnv` argument.
 
   _Default behavior:_ run [`shellcheck`](https://github.com/koalaman/shellcheck) (on supported platforms) and `bash -n` (check syntax but don't execute commands).
 
+`runShellCheck` (Bool, _optional_)
+
+: Whether to run `shellcheck` for potential lint errors. Still leaves `bash -n`
+  (syntax error checking) in the `checkPhase`.
+
 `excludeShellChecks` (List of strings, _optional_)
 
 : Checks to exclude when running `shellcheck`.
