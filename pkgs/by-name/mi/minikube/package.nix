@@ -20,11 +20,11 @@
 
 buildGoModule (finalAttrs: {
   pname = "minikube";
-  version = "1.38.1";
+  version = "1.39.0";
 
   __structuredAttrs = true;
 
-  vendorHash = "sha256-Oy8cM/foZKC83PxqkJW+o8vVYJhszKxXs9l2eks7FN4=";
+  vendorHash = "sha256-9WtBgb1nBGuETWUZZsgJ4G+vN0MNDpZWk/S1+nVPwbE=";
 
   doCheck = false;
 
@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes";
     repo = "minikube";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1unwbu2pJviHXukQKalJLgrkHpjf0sRR2nCm2gKv2VU=";
+    hash = "sha256-I/ZbbsX9BSTAEuBJ65iJ5vtoKxvNuxLY/FSXld1jBuc=";
   };
   postPatch = ''
     substituteInPlace Makefile \
