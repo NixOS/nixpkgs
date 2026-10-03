@@ -9,21 +9,20 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "daqp";
-  version = "0.8.4";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darnstrom";
     repo = "daqp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UakuHHsz4LXDfI7+VT5TO+jg90gpgu3lTJL8RGhtODQ=";
+    hash = "sha256-ms+N/m33zqO0qgtQykOI++eCkDPf50qf8lbi+tO5ae0=";
   };
 
   # Don't try to `rmtree` to "Cleanup C-source"
-  # TODO: to update on next release, master already has `if daqp_src_exists:`
   postPatch = ''
     substituteInPlace setup.py --replace-fail \
-      "if src_path.exists():" \
+      "if daqp_src_exists:" \
       "if False:"
   '';
 
