@@ -14,7 +14,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "caddy";
-  version = "2.11.4";
+  version = "2.11.6";
 
   __structuredAttrs = true;
 
@@ -23,10 +23,10 @@ buildGoModule (finalAttrs: {
     repo = "caddy";
     tag = "v${finalAttrs.version}";
     # remember to update hashes for `dist` and `plugins` test!
-    hash = "sha256-wzk8KRZfDCbbjRlBwkoKAoMjOhV4xF3yuXUueqtl1xM=";
+    hash = "sha256-AvItXV37XL+chgubNpfv9kvfbcQ8UzxcvS5rIrATXDw=";
   };
 
-  vendorHash = "sha256-2GwSM7EKN9GwN6kte7CekpXIJ0vzHhhsnrs3TC6vTW4=";
+  vendorHash = "sha256-RRaUAZzxCu+LQGU6pHZi5mVfj6tJC9WpOFRzH6MNVus=";
 
   ldflags = [
     "-s"
