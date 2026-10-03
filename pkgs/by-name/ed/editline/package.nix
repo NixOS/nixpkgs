@@ -16,12 +16,12 @@ assert lib.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "editline";
-  version = "1.17.1-unstable-2025-05-24";
+  version = "2.1.0";
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
-    rev = "f735e4d1d566cac3caa4a5e248179d07f0babefd";
-    sha256 = "sha256-MUXxSmhpQd8CZdGGC6Ln9eci85E+GBhlNk28VHUvjaU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-elREUDoHseXQzq0vXw6scz+FbyIgrt8BOrL1Qk5wOfE=";
   };
 
   configureFlags = [
