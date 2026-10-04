@@ -40,7 +40,7 @@ in
   config = mkIf cfg.enable {
     boot.initrd = {
       kernelModules = [ "uvesafb" ];
-      extraFiles."/usr/v86d".source = cfg.v86d.package;
+      systemd.contents."/usr/v86d".source = cfg.v86d.package;
     };
 
     boot.kernelParams = [
