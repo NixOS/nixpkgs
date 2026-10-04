@@ -35,14 +35,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "graph-tool";
-  version = "3.8";
+  version = "3.9";
   pyproject = false;
 
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-YnT7qbndwUW+pcau2iahiACRlKc4eKIfSev1NZuCwVA=";
+    hash = "sha256-gSqzV1yuE91vqtluTZMnl6enGoRICh6su4dPLrr8fGk=";
   };
 
   postPatch =
