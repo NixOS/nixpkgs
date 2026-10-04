@@ -42,7 +42,12 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "High volume, minimal dependency trace storage";
     changelog = "https://github.com/grafana/tempo/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
+    license =
+      with lib.licenses;
+      AND [
+        agpl3Only
+        asl20
+      ];
     homepage = "https://grafana.com/oss/tempo/";
     maintainers = [ lib.maintainers.kashw2 ];
   };
