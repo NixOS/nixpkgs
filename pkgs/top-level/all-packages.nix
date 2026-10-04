@@ -8975,13 +8975,14 @@ with pkgs;
   quasselClient = quassel.override {
     monolithic = false;
     client = true;
-    tag = "-client-qt5";
+    tag = "-client";
   };
 
   quasselDaemon = quassel.override {
     monolithic = false;
     enableDaemon = true;
-    tag = "-daemon-qt5";
+    withKDE = false;
+    tag = "-daemon";
   };
 
   quodlibet = callPackage ../applications/audio/quodlibet {
