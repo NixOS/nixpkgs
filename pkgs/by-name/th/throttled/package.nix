@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throttled";
-  version = "0.12.2";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = "throttled";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hwnJO9KEDOizpGcb9NYHYHoEEHKa3PkLt76cKpwgEUs=";
+    hash = "sha256-k3Lp9FusGA+VPnRBM4ObhXNf6l7JDJaLyJPDeLla0r8=";
   };
 
   nativeBuildInputs = [ python3Packages.wrapPython ];
