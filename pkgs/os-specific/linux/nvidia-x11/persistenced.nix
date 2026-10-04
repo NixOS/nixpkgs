@@ -7,9 +7,9 @@
   pkg-config,
   addDriverRunpath,
   libtirpc,
-  platforms,
   version,
   hash,
+  supportedPlatforms,
   versionCheckHook,
 }:
 
@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NVIDIA/nvidia-persistenced";
     description = "NVIDIA driver persistence daemon";
     license = lib.licenses.mit;
+    platforms = supportedPlatforms;
     maintainers = [ ];
     mainProgram = "nvidia-persistenced";
-    inherit platforms;
   };
 })

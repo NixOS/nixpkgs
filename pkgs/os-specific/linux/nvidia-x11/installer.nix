@@ -162,8 +162,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  passthru.is32Bit = stdenvNoCC.hostPlatform.system == "i686-linux";
-
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Unpacked NVIDIA driver installer, shared by the userspace and kernel module builds";

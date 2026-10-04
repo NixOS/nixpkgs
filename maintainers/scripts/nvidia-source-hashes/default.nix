@@ -6,14 +6,10 @@
 # derivation that downloads one URL of a source and checks it against the hash
 # nixpkgs declares.
 #
-# Nothing here knows about the NVIDIA namespace, about its component names or
-# about concrete URLs.  The namespace is walked recursively: plain attribute
-# sets are descended into (so a driver version exposed as a scope is found just
-# like any other set) and every derivation whose `.src` is a fixed-output
-# derivation carrying `urls`/`url` becomes one test per URL.  A derivation also
-# contributes the entries of its `passthru`, one level deep, which is how the
-# extra packages are exposed today; when they move into a scope instead, the
-# plain attribute set recursion picks them up.
+# The namespace is walked recursively. Plain attribute sets are descended into,
+# so a driver version exposed as a scope is found like any other set, and every
+# derivation whose `.src` is a fixed-output derivation with `urls`/`url` becomes
+# one test per URL; a derivation also contributes its `passthru`, one level deep.
 #
 # Each derivation is salted with `pkgs.testers.invalidateFetcherByDrvHash`, so no
 # cache or substituter can satisfy it. A previous run of this script on the same
@@ -29,9 +25,9 @@
 # hash transplanted onto it, which needs no builder for the foreign platform. A
 # source the host itself does not have is skipped.
 #
-# Components that resolve to the same download (aliases such as `stable` and
-# `production`, the `dc` alias, a driver's bundled `lib32`) each get their own
-# check but share one derivation, so nothing is downloaded twice.
+# Components that resolve to the same download (the `stable`/`production` and
+# `dc` aliases, the `installer32` archive older drivers take 32-bit libraries
+# from) each get a check but share one derivation.
 #
 # Arguments (all optional):
 #   pkgs     nixpkgs instance used to build the checks. Defaults to this
@@ -42,7 +38,7 @@
 #            are ignored. Defaults to x86_64-linux, i686-linux and
 #            aarch64-linux.
 #   path     comma-separated substrings a component's path must contain, e.g.
-#            "production" or "passthru.open"; empty means everything.
+#            "production" or "open"; empty means everything.
 #   prefetch when true, every check asks for a bogus hash instead of the
 #            declared one, so realising it always fails and reports the hash the
 #            URL actually yields. Used by ./verify.sh --prefetch to obtain new
@@ -186,7 +182,22 @@ let
                     if !inPassthru && value ? passthru then walk true (path ++ [ "passthru" ]) value.passthru else empty
                   )
             else if lib.isAttrs value then
-              lib.foldl' merge empty (lib.mapAttrsToList (name: walk inPassthru (path ++ [ name ])) value)
+              # The driver's old output spellings are deprecated aliases that
+              # resolve to outputs already contributed, so walking them warns.
+              lib.foldl' merge empty (
+                map (name: walk inPassthru (path ++ [ name ]) value.${name}) (
+                  builtins.filter (
+                    name:
+                    !(lib.elem name [
+                      "out"
+                      "bin"
+                      "lib32"
+                      "firmware"
+                      "modsrc"
+                    ])
+                  ) (builtins.attrNames value)
+                )
+              )
             else
               empty;
           step = builtins.tryEval result;
