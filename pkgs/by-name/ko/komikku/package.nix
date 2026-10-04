@@ -99,7 +99,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
