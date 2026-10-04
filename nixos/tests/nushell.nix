@@ -10,6 +10,9 @@
         formats
         query
       ];
+      interactiveShellInit = ''
+        $env.NIXOS_SHELL_INIT_TEST = "loaded"
+      '';
     };
 
     users.users.test = {
@@ -48,6 +51,11 @@
         output = machine.succeed("cat /tmp/plugins.json")
         assert "formats" in output, f"formats plugin not loaded in interactive session:\n{output}"
         assert "query" in output, f"query plugin not loaded in interactive session:\n{output}"
+
+    with subtest("interactive shell runs interactiveShellInit"):
+        machine.send_chars("$env.NIXOS_SHELL_INIT_TEST | save -f /tmp/init.txt\n")
+        machine.sleep(2)
+        machine.succeed("grep -x loaded /tmp/init.txt")
 
     with subtest("non-interactive invocation finds plugins via the registry"):
         # The first interactive launch should have registered the plugins via
