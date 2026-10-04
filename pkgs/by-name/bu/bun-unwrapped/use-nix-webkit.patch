@@ -1,0 +1,38 @@
+diff --git a/scripts/build/deps/webkit.ts b/scripts/build/deps/webkit.ts
+index 7e8ddec..f641590 100644
+--- a/scripts/build/deps/webkit.ts
++++ b/scripts/build/deps/webkit.ts
+@@ -190,6 +190,14 @@ export const webkit: Dependency = {
+   versionMacro: "WEBKIT",
+
+   source: cfg => {
++    if (process.env.BUN_WEBKIT_DIR) {
++      return {
++        kind: "prebuilt",
++        url: `file://${process.env.BUN_WEBKIT_DIR}`,
++        identity: "nix",
++        destDir: process.env.BUN_WEBKIT_DIR,
++      };
++    }
+     if (cfg.webkit === "prebuilt") {
+       const src: Source = {
+         kind: "prebuilt",
+@@ -222,6 +230,9 @@ export const webkit: Dependency = {
+   },
+
+   build: cfg => {
++    if (process.env.BUN_WEBKIT_DIR) {
++      return { kind: "none" };
++    }
+     if (cfg.webkit === "prebuilt") {
+       return { kind: "none" };
+     }
+@@ -414,7 +425,7 @@ export const webkit: Dependency = {
+     // Local: paths relative to BUILD dir (headers generated during build).
+     // includes uses ABSOLUTE paths via depBuildDir() — source.ts's
+     // resolve-against-srcDir would point at vendor/WebKit/ (wrong).
+-    const buildDir = depBuildDir(cfg, "WebKit");
++    const buildDir = process.env.BUN_WEBKIT_DIR ?? depBuildDir(cfg, "WebKit");
+
+     // Lib paths: emitNestedCmake resolves these relative to the build dir's
+     // libSubdir — we set none, so it's buildDir root. But WebKit's libs are
