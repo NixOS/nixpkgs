@@ -1,0 +1,105 @@
+diff --git a/WORKSPACE b/WORKSPACE
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -344,7 +344,10 @@
+ 
+ load("@rules_foreign_cc//foreign_cc:repositories.bzl", "rules_foreign_cc_dependencies")
+ 
+-rules_foreign_cc_dependencies()
++rules_foreign_cc_dependencies(
++    register_built_tools = False,
++    register_default_tools = False,
++)
+ 
+ load("@bazel_features//:deps.bzl", "bazel_features_deps")
+ 
+@@ -479,7 +482,7 @@
+ new_local_repository(
+     name = "linux_opencv",
+     build_file = "@//third_party:opencv_linux.BUILD",
+-    path = "/usr",
++    path = "@opencv4@",
+ )
+ 
+ new_local_repository(
+diff --git a/setup.py b/setup.py
+--- a/setup.py
++++ b/setup.py
+@@ -30,7 +30,7 @@
+ from setuptools.command import build_py
+ from setuptools.command import install
+ 
+-__version__ = 'dev'
++__version__ = '@version@'
+ MP_DISABLE_GPU = os.environ.get('MEDIAPIPE_DISABLE_GPU') != '0'
+ IS_WINDOWS = (platform.system() == 'Windows')
+ IS_MAC = (platform.system() == 'Darwin')
+@@ -231,7 +231,7 @@
+   boolean_options = build_ext.build_ext.boolean_options + ['link-opencv']
+ 
+   def initialize_options(self):
+-    self.link_opencv = False
++    self.link_opencv = True
+     self.skip_build_ext = os.environ.get('SKIP_LIBMEDIAPIPE_BUILD') is not None
+     build_ext.build_ext.initialize_options(self)
+ 
+@@ -259,7 +259,6 @@
+         'build',
+         '--compilation_mode=opt',
+         '--copt=-DNDEBUG',
+-        '--keep_going',
+         str(ext.bazel_target),
+     ] + GPU_OPTIONS
+ 
+@@ -302,7 +301,7 @@
+   boolean_options = build_py.build_py.boolean_options + ['link-opencv']
+ 
+   def initialize_options(self):
+-    self.link_opencv = False
++    self.link_opencv = True
+     build_py.build_py.initialize_options(self)
+ 
+   def finalize_options(self):
+@@ -327,7 +326,7 @@
+   boolean_options = install.install.boolean_options + ['link-opencv']
+ 
+   def initialize_options(self):
+-    self.link_opencv = False
++    self.link_opencv = True
+     install.install.initialize_options(self)
+ 
+   def finalize_options(self):
+diff --git a/third_party/opencv_linux.BUILD b/third_party/opencv_linux.BUILD
+--- a/third_party/opencv_linux.BUILD
++++ b/third_party/opencv_linux.BUILD
+@@ -18,16 +18,17 @@
+         #"include/aarch64-linux-gnu/opencv4/opencv2/cvconfig.h",
+         #"include/arm-linux-gnueabihf/opencv4/opencv2/cvconfig.h",
+         #"include/x86_64-linux-gnu/opencv4/opencv2/cvconfig.h",
+-        #"include/opencv4/opencv2/**/*.h*",
++        "include/opencv4/opencv2/**/*.h*",
+     ]),
+     includes = [
+         # For OpenCV 4.x
+         #"include/aarch64-linux-gnu/opencv4/",
+         #"include/arm-linux-gnueabihf/opencv4/",
+         #"include/x86_64-linux-gnu/opencv4/",
+-        #"include/opencv4/",
++        "include/opencv4/",
+     ],
+     linkopts = [
++        "-L@opencv4@/lib",
+         "-l:libopencv_core.so",
+         "-l:libopencv_calib3d.so",
+         "-l:libopencv_features2d.so",
+diff --git a/third_party/zlib.BUILD b/third_party/zlib.BUILD
+--- a/third_party/zlib.BUILD
++++ b/third_party/zlib.BUILD
+@@ -8,7 +8,6 @@
+     "@platforms//os:windows": [],
+     "//conditions:default": [
+         "-Wno-dangling-else",
+-        "-Wno-format",
+         "-Wno-implicit-function-declaration",
+         "-Wno-incompatible-pointer-types",
+         "-Wno-incompatible-pointer-types-discards-qualifiers",
