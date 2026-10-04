@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nushell,
   yazi,
+  nixosTests,
   versionCheckHook,
   nix-update-script,
 }:
@@ -39,7 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests.nixos = nixosTests.xdg-desktop-portal-termfilepickers;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "xdg-desktop-portal FileChooser backend for picking files with a terminal file manager";
