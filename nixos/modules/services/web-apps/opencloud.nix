@@ -24,8 +24,10 @@ in
         extraDescription = ''
           OpenCloud has 2 release cycles, explained on https://docs.opencloud.eu/docs/admin/resources/lifecycle.
 
-          Use `pkgs.opencloud` package for the rolling release.
-          Use `pkgs.opencloud-production` package for the production release.
+          Use `pkgs.opencloud` package for the rolling release (every 3 weeks).
+          Use `pkgs.opencloud-production` package for the production release (about every 6 months).
+
+          OpenCloud does not support downgrading existing installations. Switching from `pkgs.opencloud` to `pkgs.opencloud-production` is considered a downgrade.
         '';
       };
       webPackage = lib.mkOption {
