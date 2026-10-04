@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = {
     description = "Accurate sums and dot products for Python";
     homepage = "https://github.com/nschloe/accupy";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
 }
