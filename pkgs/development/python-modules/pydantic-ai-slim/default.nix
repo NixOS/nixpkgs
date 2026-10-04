@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-ai-slim";
-  version = "2.52.0";
+  version = "2.54.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7AI/a0xwWGTl+KMNYVC3pL4AG8qfLeRbeZyd3ZsK1JA=";
+    hash = "sha256-fkE2rww4xoJgeGCF/MP4ijZySTcU411NriIVa7w6NXs=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_ai_slim";
@@ -65,6 +65,7 @@ buildPythonPackage (finalAttrs: {
     text = ''
       nix-update --build --commit python3Packages.genai-prices
       nix-update --build --commit python3Packages.pydantic-graph
+      nix-update --build --commit python3Packages.pydantic-ai-harness
       nix-update --build python3Packages.pydantic-ai-slim
     '';
   });
