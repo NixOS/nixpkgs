@@ -79,7 +79,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       - ... and many more!
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.RossSmyth ];
+    maintainers = with lib.maintainers; [
+      RossSmyth
+      mrdev023
+      telometto
+    ];
     mainProgram = "qmk";
   };
 })
