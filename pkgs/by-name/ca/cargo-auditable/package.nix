@@ -19,9 +19,9 @@ let
     auditable-bootstrap = bootstrap;
   };
 
-  version = "0.7.5";
-  hash = "sha256-0VONJCv/msLcGenItWMLJ7DH79RTD6vsU9gX/nphh1g=";
-  cargoHash = "sha256-/iAYib+xDQSJ8B559/V7b994ErSUGsPSDx64jFF5B6I=";
+  version = "0.7.6";
+  hash = "sha256-vQks5XIrKnYiK71kNA5BaOO51L/l+witMbvVFuNNGsQ=";
+  cargoHash = "sha256-82cPKy3CHddMvNBCObns3ycOn6iaZ8QDhf06HvhZZhc=";
 
   # cargo-auditable cannot be built with cargo-auditable until cargo-auditable is built
   bootstrap = auditableBuilder {
