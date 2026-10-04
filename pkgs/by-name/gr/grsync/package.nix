@@ -5,7 +5,6 @@
   gtk3,
   intltool,
   pkg-config,
-  rsync,
   wrapGAppsHook3,
 }:
 
@@ -26,7 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    rsync
   ];
 
   meta = {
