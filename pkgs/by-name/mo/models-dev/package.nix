@@ -60,7 +60,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "sdk-v0.0.5-unstable-2026-10-02";
+  version = "0.0.5-unstable-2026-10-02";
 
   __structuredAttrs = true;
   strictDeps = true;
