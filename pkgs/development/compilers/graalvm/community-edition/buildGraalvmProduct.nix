@@ -6,6 +6,8 @@
   makeWrapper,
   zlib,
   libxcrypt-legacy,
+}:
+{
   # extra params
   product,
   extraBuildInputs ? [ ],
@@ -15,22 +17,13 @@
 
 let
   extraArgs = removeAttrs args [
-    "lib"
-    "stdenv"
-    "autoPatchelfHook"
-    "darwin"
-    "graalvm-ce"
-    "libxcrypt-legacy"
-    "makeWrapper"
-    "zlib"
     "product"
     "extraBuildInputs"
     "extraNativeBuildInputs"
-    "meta"
   ];
 in
 stdenv.mkDerivation (
-  {
+  lib.recursiveUpdate {
     pname = product;
 
     nativeBuildInputs = [
@@ -72,23 +65,18 @@ stdenv.mkDerivation (
         ./update.sh
         product
       ];
-    }
-    // (args.passhtru or { });
+    };
 
-    meta = (
-      {
-        inherit (graalvm-ce.meta)
-          homepage
-          license
-          sourceProvenance
-          teams
-          platforms
-          ;
-        description = "High-Performance Polyglot VM (Product: ${product})";
-        mainProgram = "js";
-      }
-      // (args.meta or { })
-    );
-  }
-  // extraArgs
+    meta = {
+      inherit (graalvm-ce.meta)
+        homepage
+        license
+        sourceProvenance
+        teams
+        platforms
+        ;
+      description = "High-Performance Polyglot VM (Product: ${product})";
+      mainProgram = "js";
+    };
+  } extraArgs
 )
