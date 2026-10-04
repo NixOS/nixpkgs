@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
 
   # NOTE: Don't update manually. Use passthru.updateScript on a Mac with XCode
   # installed.
-  version = "1.1.1.1";
+  version = "1.3.1.1";
 
   src = fetchFromGitHub {
     owner = "GPGTools";
     repo = "pinentry";
     rev = "v${version}";
-    sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
+    sha256 = "sha256-iVd8Gy8XhQOHCSY7caP2QCgs/MufA+p9RN2pNilrJ9E=";
   };
 
   patches = [
@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
     chmod -R u+w macosx/*.nib
     # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
     cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
+    # Likewise, the bundled gpg-error.m4 is too old to detect libgpg-error via gpgrt-config
+    # (the gpg-error-config it falls back to is now a deprecated stub), so use the updated macro.
+    cp '${lib.getDev libgpg-error}/share/aclocal/gpg-error.m4' m4/gpg-error.m4
     substituteInPlace macosx/copyInfoPlist.sh \
       --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
   '';
@@ -102,6 +105,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "https://github.com/GPGTools/pinentry";
     platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ n4kama ];
     mainProgram = "pinentry-mac";
   };
 }
