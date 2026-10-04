@@ -9,8 +9,8 @@
   writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
+  withOdbcAdapter ? true,
 }:
-
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
   version = "2.16.1";
@@ -61,7 +61,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       wcwidth
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
-    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
+    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ]
+    ++ lib.optionals withOdbcAdapter [ harlequin-odbc ];
 
   pythonImportsCheck = [
     "harlequin"
