@@ -295,8 +295,11 @@ in
         services.avahi.enable = true;
       })
       (lib.mkIf cfg.zeroconf.publish.enable {
-        services.avahi.publish.enable = true;
-        services.avahi.publish.userServices = true;
+        services.avahi.settings.publish = {
+          "disable-publishing" = false;
+          "disable-user-service-publishing" = false;
+          "publish-addresses" = true;
+        };
       })
       (lib.mkIf cfg.tcp.openFirewall {
         networking.firewall.allowedTCPPorts = [ cfg.tcp.port ];
