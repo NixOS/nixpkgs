@@ -36,6 +36,7 @@
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
+  tempo = callPackage ./tempo { };
   ventura-psychrometric-panel = callPackage ./ventura-psychrometric-panel { };
   victoriametrics-logs-datasource = callPackage ./victoriametrics-logs-datasource { };
   victoriametrics-metrics-datasource = callPackage ./victoriametrics-metrics-datasource { };
