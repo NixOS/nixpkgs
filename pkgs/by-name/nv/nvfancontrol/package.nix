@@ -2,12 +2,12 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  linuxPackages,
+  nvidiaPackages,
   libx11,
   libxext,
 }:
 let
-  libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  libXNVCtrl = nvidiaPackages.stable.settings.libXNVCtrl;
 in
 rustPlatform.buildRustPackage rec {
   pname = "nvfancontrol";

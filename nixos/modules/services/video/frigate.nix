@@ -737,7 +737,7 @@ in
         with pkgs;
         [
           # unfree:
-          # config.boot.kernelPackages.nvidiaPackages.latest.bin
+          # pkgs.nvidiaPackages.latest.driver.bin
           libva-utils
           procps
           radeontop
