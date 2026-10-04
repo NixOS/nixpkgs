@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   propagatedBuildOutputs = [ ];
 
-  buildInputs = [ bashNonInteractive ]; # for 'tzselect'
+  buildInputs =
+    # For `tzselect`'s shebang. Where `bashNonInteractive` is unavailable
+    # (e.g. MinGW), `tzselect` keeps its `#!/bin/bash`, which is fine for now
+    # as we're not going to run it there anyways.
+    lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive;
 
   strictDeps = true;
 

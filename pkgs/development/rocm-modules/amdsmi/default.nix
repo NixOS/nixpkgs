@@ -15,7 +15,7 @@ let
   esmi_ib_src = fetchFromGitHub {
     owner = "amd";
     repo = "esmi_ib_library";
-    rev = "esmi_pkg_ver-4.2";
+    tag = "esmi_pkg_ver-4.2";
     hash = "sha256-czF9ezkAO0PuDkXh8y639AcOZH+KVcWiXPX74H5W/nw=";
   };
 in
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/amdsmi"
       "shared"

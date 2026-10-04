@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-Al/0yZPn/wqtBFQU1FcGoSquDMObk6HQ3D5sSh5biHg=";
     sparseCheckout = [
       "projects/hipsparselt"
