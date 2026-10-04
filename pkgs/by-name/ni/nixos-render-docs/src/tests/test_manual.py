@@ -5,6 +5,7 @@ from html.entities import name2codepoint
 from pathlib import Path
 
 import pytest
+
 from nixos_render_docs.manual import HTMLConverter, HTMLParameters
 
 
@@ -97,7 +98,7 @@ def test_nav_metadata_opens_selected_entries(tmp_path: Path) -> None:
         {
             "items": [
                 {"label": "Guides", "id": "guides", "children": [
-                    {"label": "Intro", "file": "intro.md"},
+                    {"id": "intro", "label": "Intro", "file": "intro.md"},
                 ]},
             ],
             "open": ["guides", "manual-chap"],
@@ -108,25 +109,6 @@ def test_nav_metadata_opens_selected_entries(tmp_path: Path) -> None:
     # the group opens by its own id. its link points at the child.
     assert '<details open><summary><a href="#intro">Guides</a>' in html
     assert '<details open><summary><a href="#manual-chap"' in html
-
-
-def test_config_group_without_id_is_not_openable(tmp_path: Path) -> None:
-    # the config lists 'intro' in 'open'.
-    # the group has no id, so its key is empty. the group stays closed.
-    html = _render_with_config(
-        tmp_path,
-        {
-            "items": [
-                {"label": "Guides", "children": [
-                    {"file": "intro.md"},
-                ]},
-            ],
-            "open": ["intro"],
-        },
-        {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
-    )
-    assert '<details><summary><a href="#intro">Guides</a>' in html
-    assert "<details open>" not in html
 
 
 def test_sidebar_depth_caps_the_tree(tmp_path: Path) -> None:
@@ -247,7 +229,7 @@ def _render_with_config(
 def test_config_content_renders_before_manual(tmp_path: Path) -> None:
     html = _render_with_config(
         tmp_path,
-        {"items": [{"label": "Intro", "file": "intro.md"}]},
+        {"items": [{"id": "intro", "label": "Intro", "file": "intro.md"}]},
         {"intro.md": "# Introduction {#intro}\n\nConfig intro body.\n"},
     )
     assert "Config intro body." in html
@@ -261,8 +243,8 @@ def test_config_grouping_node_is_sidebar_only(tmp_path: Path) -> None:
         {
             "items": [
                 {
-                    "label": "Guides", "children": [
-                        {"label": "Install", "file": "install.md"},
+                    "id": "guides", "label": "Guides", "children": [
+                        {"id": "install", "label": "Install", "file": "install.md"},
                     ]
                 }
             ]
@@ -284,7 +266,7 @@ def test_config_leaf_derives_id_and_label_from_file(tmp_path: Path) -> None:
     # the sidebar link reuses the heading id. the label reuses the heading title.
     html = _render_with_config(
         tmp_path,
-        {"items": [{"file": "intro.md"}]},
+        {"items": [{"id": "intro", "file": "intro.md"}]},
         {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
     )
     assert '<h2 id="intro" class="title" >Introduction' in html
@@ -296,7 +278,7 @@ def test_config_leaf_label_differs_from_file_title(tmp_path: Path) -> None:
         tmp_path,
         {
             "items": [
-                {"label": "Sidebar Label", "file": "leaf1.md"}
+                {"id": "leaf1", "label": "Sidebar Label", "file": "leaf1.md"}
             ]
         },
         {"leaf1.md": "# File Title {#leaf1}\n\nBody.\n"},
@@ -310,9 +292,9 @@ def test_config_tree_nests_arbitrarily_deep(tmp_path: Path) -> None:
         tmp_path,
         {
             "items": [
-                {"label": "A", "children": [
-                    {"label": "B", "children": [
-                        {"label": "C", "file": "c.md"},
+                {"id": "a", "label": "A", "children": [
+                    {"id": "b", "label": "B", "children": [
+                        {"id": "c", "label": "C", "file": "c.md"},
                     ]},
                 ]}
             ]
@@ -334,7 +316,7 @@ def test_config_id_is_cross_referenceable(tmp_path: Path) -> None:
     html = _render_with_config(
         tmp_path,
         {
-            "items": [{"label": "Intro", "file": "intro.md"}]
+            "items": [{"id": "intro", "label": "Intro", "file": "intro.md"}]
         },
         {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
         manual_chapter="# Manual chapter {#manual-chap}\n\nSee [](#intro).\n",
@@ -343,12 +325,12 @@ def test_config_id_is_cross_referenceable(tmp_path: Path) -> None:
     assert ">Introduction</a>" in html
 
 
-def test_config_duplicate_id_fails(tmp_path: Path) -> None:
+def test_duplicate_heading_id_fails(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError) as excinfo:
         _render_with_config(
             tmp_path,
             {
-                "items": [{"label": "Dup", "file": "dup.md"}]
+                "items": [{"id": "dup", "label": "Dup", "file": "dup.md"}]
             },
             {"dup.md": "# Dup file {#dup}\n\nBody.\n"},
             manual_chapter="# Manual {#dup}\n\nBody.\n",
@@ -368,7 +350,7 @@ def test_config_malformed_node_fails(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError) as excinfo:
         _render_with_config(
             tmp_path,
-            {"items": [{"file": 123}]},
+            {"items": [{"id": "x", "file": 123}]},
             {},
         )
     assert "'file' must be a string" in str(excinfo.value.__cause__)
@@ -376,7 +358,7 @@ def test_config_malformed_node_fails(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError) as excinfo:
         _render_with_config(
             tmp_path,
-            {"items": [{"children": [{"file": "x.md"}]}]},
+            {"items": [{"id": "g", "children": [{"id": "x", "file": "x.md"}]}]},
             {"x.md": "# X {#x}\n\nB.\n"},
         )
     assert "a group requires a non-empty 'label'" in str(excinfo.value.__cause__)
@@ -410,9 +392,10 @@ def test_config_id_prefix(tmp_path: Path) -> None:
         {
             "items": [
                 {
+                    "id": "library",
                     "label": "Library",
                     "id-prefix": "auto-generated",
-                    "children": [{"file": "functions/library/asserts.md"}],
+                    "children": [{"id": "asserts", "file": "functions/library/asserts.md"}],
                 }
             ]
         },
@@ -428,9 +411,10 @@ def test_config_id_prefix_keeps_explicit_ids(tmp_path: Path) -> None:
         {
             "items": [
                 {
+                    "id": "library",
                     "label": "Library",
                     "id-prefix": "auto-generated",
-                    "children": [{"file": "asserts.md"}],
+                    "children": [{"id": "asserts", "file": "asserts.md"}],
                 }
             ]
         },
@@ -448,11 +432,12 @@ def test_config_id_prefix_is_unique(tmp_path: Path) -> None:
         {
             "items": [
                 {
+                    "id": "library",
                     "label": "Library",
                     "id-prefix": "auto-generated",
                     "children": [
-                        {"file": "asserts.md"},
-                        {"file": "attrsets.md"},
+                        {"id": "asserts", "file": "asserts.md"},
+                        {"id": "attrsets", "file": "attrsets.md"},
                     ],
                 }
             ]
@@ -471,10 +456,12 @@ def test_config_id_prefix_inherit(tmp_path: Path) -> None:
         {
             "items": [
                 {
+                    "id": "outer",
                     "label": "Outer",
                     "id-prefix": "outer",
                     "children": [
-                        {"label": "Inner", "children": [{"file": "asserts.md"}]},
+                        {"id": "inner", "label": "Inner",
+                         "children": [{"id": "asserts", "file": "asserts.md"}]},
                     ],
                 }
             ]
@@ -491,13 +478,15 @@ def test_config_id_prefix_nested_override(tmp_path: Path) -> None:
         {
             "items": [
                 {
+                    "id": "outer",
                     "label": "Outer",
                     "id-prefix": "outer",
                     "children": [
                         {
+                            "id": "inner",
                             "label": "Inner",
                             "id-prefix": "inner",
-                            "children": [{"file": "asserts.md"}],
+                            "children": [{"id": "asserts", "file": "asserts.md"}],
                         },
                     ],
                 }
@@ -514,10 +503,27 @@ def test_config_id_prefix_fails(tmp_path: Path) -> None:
     with pytest.raises(RuntimeError) as excinfo:
         _render_with_config(
             tmp_path,
-            {"items": [{"label": "Library", "children": [{"file": "asserts.md"}]}]},
+            {"items": [{"id": "library", "label": "Library",
+                        "children": [{"id": "asserts", "file": "asserts.md"}]}]},
             {"asserts.md": _NIXDOC_SNIPPET1},
         )
     assert "heading does not have an id" in str(excinfo.value.__cause__)
+
+
+def test_config_id_must_be_url_safe(tmp_path: Path) -> None:
+    for bad in (
+        {"file": "intro.md"},
+        {"id": "Intro", "file": "intro.md"},
+        {"id": "a/b", "file": "intro.md"},
+        {"id": "", "file": "intro.md"},
+    ):
+        with pytest.raises(RuntimeError) as excinfo:
+            _render_with_config(
+                tmp_path,
+                {"items": [bad]},
+                {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
+            )
+        assert "'id' must be lowercase letters, digits and dashes" in str(excinfo.value.__cause__)
 
 
 _NIXDOC_EXPORT = {
