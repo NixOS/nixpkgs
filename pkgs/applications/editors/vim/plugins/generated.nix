@@ -3567,6 +3567,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  code-helper-nvim = buildVimPlugin {
+    pname = "code-helper-nvim";
+    version = "0-unstable-2026-10-04";
+    src = fetchFromGitHub {
+      owner = "sergioia-dev";
+      repo = "code-helper-nvim";
+      rev = "318856be95cafd863c7a1983a1b7381c6454b906";
+      hash = "sha256-OHrZiroVLJEmUKIzuw8l59Ql3Xmv8rImrqtGof9DiUM=";
+    };
+    meta.homepage = "https://github.com/sergioia-dev/code-helper-nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   codecompanion-history-nvim = buildVimPlugin {
     pname = "codecompanion-history.nvim";
     version = "0-unstable-2026-01-22";
