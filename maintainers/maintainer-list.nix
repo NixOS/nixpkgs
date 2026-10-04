@@ -1899,6 +1899,18 @@
     githubId = 587021;
     name = "André V L Matos";
   };
+  andrew15-5 = {
+    name = "Andrew Voynov";
+    github = "Andrew15-5";
+    githubId = 37143421;
+    email = "andrewvoynov.b@gmail.com";
+    matrix = "@andrew15_5:matrix.org";
+    keys = [
+      {
+        fingerprint = "CB7B 1F73 C2AC 56C4 D4D2  D690 1BE9 2DD6 8570 0329";
+      }
+    ];
+  };
   andrewbastin = {
     email = "andrewbastin.k@gmail.com";
     github = "AndrewBastin";
@@ -29538,6 +29550,11 @@
     githubId = 41209208;
     name = "tincotema";
     keys = [ { fingerprint = "F9D5 F663 E497 5CB1 66B5  FEA2 A961 39D7 C110 556C"; } ];
+  };
+  tingerrr = {
+    name = "Erik";
+    github = "tingerrr";
+    githubId = 137803093;
   };
   tiptenbrink = {
     email = "tip@tenbrinkmeijs.com";
