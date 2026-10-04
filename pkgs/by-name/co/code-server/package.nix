@@ -92,18 +92,18 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "88c2b7432e938f6918f21ff8d9dbfc641cd933d0";
+  commit = "ccc19adc2e8992e18b14dd25eb1e646f5b9ef7cf";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.134.0";
+  version = "4.140.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-wPTFYCZiUXHTbQiDFlT+VA3c6CITDju8L6tJrV78UZ8=";
+    hash = "sha256-RBirBi91xZvafLEy5N9uIhDclcN7ajECkfnVv54kHjw=";
   };
 
   nodeModules =
@@ -116,12 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
         ];
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-uCoYvSWOxGJ168sQk0ORVNUYrCX0WL4KF6rbPsp8LVE=";
+        outputHash = "sha256-ttccUM1xjUvnc5Y6ERtQzKNzWt8+7Kf3rPrFhjObGAo=";
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
           npm_config_progress = false;
           npm_config_cafile = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+          NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
         };
       }
       ''
@@ -134,6 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
           prefetch-npm-deps "$p" "$out/$(dirname $p)"
         )
         done
+
+        # VS Code downloads Electron typings outside npm.
+        # Use upstream's version and checksum for the offline dependency cache.
+        node lib/vscode/build/npm/electronTypes.ts
+        cp lib/vscode/.build/typings/electron.d.ts "$out/electron.d.ts"
       '';
 
   nativeBuildInputs = [
@@ -177,6 +183,9 @@ stdenv.mkDerivation (finalAttrs: {
     # dependencies, which prefetch-npm-deps needs for an offline cache.
     cp "$nodeModules/lib/vscode/build/rspack/package-lock.json" \
       lib/vscode/build/rspack/package-lock.json
+
+    # Let VS Code's postinstall use the prefetched, checksum-verified typings.
+    install -Dm644 "$nodeModules/electron.d.ts" lib/vscode/.build/typings/electron.d.ts
 
     export HOME=$PWD
 
