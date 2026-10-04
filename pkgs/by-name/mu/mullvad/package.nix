@@ -13,6 +13,7 @@
   protobuf,
   rust-jemalloc-sys,
   versionCheckHook,
+  makeBinaryWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -69,6 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
     pkg-config
     protobuf
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -92,6 +94,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash $compdir/mullvad.bash \
       --zsh $compdir/_mullvad \
       --fish $compdir/mullvad.fish
+  '';
+
+  preFixup = ''
+    declare MULLVAD_RESOURCE_DIR=$out/share/mullvad/resources/
+    install -Dm444 dist-assets/relays/relays.json $MULLVAD_RESOURCE_DIR/relays.json
+    wrapProgram $out/bin/mullvad-daemon --set-default MULLVAD_RESOURCE_DIR $MULLVAD_RESOURCE_DIR
   '';
 
   __darwinAllowLocalNetworking = true;
