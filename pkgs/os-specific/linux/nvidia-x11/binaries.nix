@@ -4,13 +4,12 @@
   stdenv,
   fetchurl,
   which,
-  libarchive,
   jq,
-  zstd,
   pkgs,
   pkgsi686Linux,
   config,
-  # Whether to build only userspace libraries (without bin/modsrc/firmware outputs)
+  nvidiaDriverUnpackHook,
+  # Whether to build only userspace libraries (without bin/firmware outputs)
   libsOnly,
   # don't include the bundled 32-bit libraries on 64-bit platforms,
   # even if it's in downloaded binary
@@ -45,9 +44,6 @@
   patches,
   preInstall,
   postInstall,
-  # Whether the build is marked broken
-  broken,
-  brokenOpen,
   ...
 }:
 
@@ -164,10 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ]
   ++ lib.optional i686bundled "lib32"
-  ++ lib.optionals (!libsOnly) [
-    "bin"
-    "modsrc"
-  ]
+  ++ lib.optionals (!libsOnly) [ "bin" ]
   ++ lib.optional (!libsOnly && firmware) "firmware";
   outputDev = if libsOnly then null else "bin";
 
@@ -193,12 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
   inherit libPath libPath32;
 
   nativeBuildInputs = [
-    libarchive
     jq
+    nvidiaDriverUnpackHook
   ]
-  # NVIDIA has changed the compression format of their driver to zstd since version 530.30.02
-  # https://forums.developer.nvidia.com/t/linux-solaris-and-freebsd-driver-530-30-02-beta/244406
-  ++ (if (lib.versionAtLeast version "530") then [ zstd ] else [ which ]);
+  # Drivers older than 530 need `which` in the build, see
+  # https://github.com/NixOS/nixpkgs/pull/498612#discussion_r3064133935
+  ++ lib.optional (lib.versionOlder version "530") [ which ];
 
   passthru = {
     compressFirmware = false;
@@ -228,6 +221,5 @@ stdenv.mkDerivation (finalAttrs: {
       edwtjo
     ];
     priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-    broken = broken && brokenOpen;
   };
 })

@@ -4,9 +4,11 @@
   runCommandLocal,
   patchutils,
   callPackage,
+  kernel,
   pkgsi686Linux,
   fetchzip,
   fetchFromGitHub,
+
   libsOnly ? false,
   # Driver version and sources
   version,
@@ -43,8 +45,9 @@
   patchesOpen ? [ ],
   preInstall ? null,
   postInstall ? null,
-  broken ? false,
-  brokenOpen ? broken,
+  # Kernel modules from these sources do not build against this kernel version
+  # or newer. The userspace libraries have no such limit.
+  brokenAbove ? null,
 }:
 
 assert useSettings -> settingsSha256 != null;
@@ -53,6 +56,10 @@ assert useFabricmanager -> fabricmanagerSha256 != null;
 assert useFabricmanager -> !useSettings;
 
 let
+  nvidiaDriverUnpackHook = callPackage ./unpack-hook.nix { };
+
+  modulesBroken = brokenAbove != null && kernel.kernelAtLeast brokenAbove;
+
   fetchFromGithubOrNvidia =
     {
       owner,
@@ -133,8 +140,7 @@ let
           patches
           preInstall
           postInstall
-          broken
-          brokenOpen
+          nvidiaDriverUnpackHook
           ;
       };
     in
@@ -161,11 +167,11 @@ nvidiaDriver.overrideAttrs (
         if !libsOnly then
           callPackage ./kernel-modules.nix {
             open = false;
-            nvidia_x11 = finalAttrs.finalPackage;
-            # build files already patched when building the main package,
-            # so no need to patch them again
-            patches = [ ];
-            inherit broken fetchFromGithubOrNvidia;
+            inherit fetchFromGithubOrNvidia nvidiaDriverUnpackHook;
+            inherit prePatch patches patchFlags;
+            version = finalAttrs.finalPackage.version;
+            src = finalAttrs.finalPackage.src;
+            broken = modulesBroken;
           }
         else
           { };
@@ -173,15 +179,18 @@ nvidiaDriver.overrideAttrs (
         hash:
         callPackage ./kernel-modules.nix {
           open = true;
-          inherit hash;
-          nvidia_x11 = finalAttrs.finalPackage;
+          inherit hash nvidiaDriverUnpackHook;
+          version = finalAttrs.finalPackage.version;
+          src = finalAttrs.finalPackage.src;
+          patchFlags = null;
+          prePatch = null;
           patches =
             (map (rewritePatch {
               from = "kernel";
               to = "kernel-open";
             }) patches)
             ++ patchesOpen;
-          broken = brokenOpen;
+          broken = modulesBroken;
           fetchFromGithubOrNvidia =
             if fetchOpenFromNvidia then
               fetchFromGithubOrNvidia
