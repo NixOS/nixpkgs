@@ -27,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://loco.rs";
     changelog = "https://github.com/loco-rs/loco/blob/master/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sebrut ];
+    maintainers = with lib.maintainers; [
+      sebrut
+      mkapra
+    ];
     mainProgram = "loco";
   };
 })
