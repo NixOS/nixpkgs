@@ -507,10 +507,6 @@ in
             [ "postDeviceCommands" ]
             [ "postResumeCommands" ]
             [ "postMountCommands" ]
-            [
-              "network"
-              "postCommands"
-            ]
           ]
           (name: ''
             systemd stage 1 does not support `boot.initrd.${name}`. Instead, create systemd services using the `boot.initrd.systemd.services` options, which has an API matching the stage 2 `systemd.services` options. Refer to `bootup(7)`, specifically the sections on "Bootup in the Initrd" and "System Manager Bootup", for information about when various units happen, and order services accordingly.
