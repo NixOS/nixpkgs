@@ -1,0 +1,27 @@
+diff --git a/package.json b/package.json
+index dc5207b..47fb8a5 100644
+--- a/package.json
++++ b/package.json
+@@ -81,21 +81,5 @@
+     "@deepseek-ai/dsh-workflow-worker-thread": "^0.1.0-rc.6",
+     "@deepseek-ai/dsh-agent-instructions": "^0.1.0-rc.6",
+     "@deepseek-ai/cordis": "^4.0.1"
+-  },
+-  "devDependencies": {
+-    "@types/js-yaml": "^4.0.9",
+-    "execa": "^10.0.0",
+-    "@deepseek-ai/dsh-agent": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-host-frontend-static": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-host-apiproxy": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-llm": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-llm-mock-server": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-loader-smoke": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-session": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-subagent": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-system-prompt": "^0.1.0-rc.6",
+-    "@deepseek-ai/dsh-tools": "^0.1.0-rc.6"
+   }
+ }
+\ No newline at end of file
