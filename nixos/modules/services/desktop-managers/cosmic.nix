@@ -133,6 +133,15 @@ in
 
     systemd.packages = [ pkgs.cosmic-session ];
 
+    # Packages from above that ship D-Bus service files.  The D-Bus daemons do
+    # not look at the system profile, so they have to be registered explicitly.
+    services.dbus.packages = utils.removePackagesByName (with pkgs; [
+      cosmic-applets
+      playerctl
+      pulseaudio
+      config.services.displayManager.cosmic-greeter.package
+    ]) config.environment.cosmic.excludePackages;
+
     fonts.packages = with pkgs; [
       fira
       noto-fonts
