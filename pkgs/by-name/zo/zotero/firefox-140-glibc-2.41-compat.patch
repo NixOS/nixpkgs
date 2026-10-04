@@ -1,0 +1,51 @@
+diff --git a/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h b/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h
+index a60fe2a..d6a8503 100644
+--- a/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h
++++ b/security/sandbox/chromium/sandbox/linux/system_headers/linux_seccomp.h
+@@ -5,6 +5,8 @@
+ #ifndef SANDBOX_LINUX_SYSTEM_HEADERS_LINUX_SECCOMP_H_
+ #define SANDBOX_LINUX_SYSTEM_HEADERS_LINUX_SECCOMP_H_
+ 
++#include <signal.h>  // for SYS_SECCOMP
++
+ // The Seccomp2 kernel ABI is not part of older versions of glibc.
+ // As we can't break compilation with these versions of the library,
+ // we explicitly define all missing symbols.
+diff --git a/third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h b/third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h
+index 45cb607..5f22aca 100644
+--- a/third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h
++++ b/third_party/rust/glslopt/glsl-optimizer/include/c11/threads_posix.h
+@@ -51,7 +51,9 @@ Configuration macro:
+ #include <pthread.h>
+ 
+ /*---------------------------- macros ----------------------------*/
++#ifndef __once_flag_defined
+ #define ONCE_FLAG_INIT PTHREAD_ONCE_INIT
++#endif
+ #ifdef INIT_ONCE_STATIC_INIT
+ #define TSS_DTOR_ITERATIONS PTHREAD_DESTRUCTOR_ITERATIONS
+ #else
+@@ -66,7 +68,9 @@ typedef pthread_cond_t  cnd_t;
+ typedef pthread_t       thrd_t;
+ typedef pthread_key_t   tss_t;
+ typedef pthread_mutex_t mtx_t;
++#ifndef __once_flag_defined
+ typedef pthread_once_t  once_flag;
++#endif
+ 
+ 
+ /*
+@@ -90,11 +94,13 @@ impl_thrd_routine(void *p)
+ 
+ /*--------------- 7.25.2 Initialization functions ---------------*/
+ // 7.25.2.1
++#ifndef __once_flag_defined
+ static inline void
+ call_once(once_flag *flag, void (*func)(void))
+ {
+     pthread_once(flag, func);
+ }
++#endif
+ 
+ 
+ /*------------- 7.25.3 Condition variable functions -------------*/
