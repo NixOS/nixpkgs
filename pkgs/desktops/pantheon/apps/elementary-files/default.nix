@@ -22,7 +22,7 @@
   libcloudproviders,
   libgit2-glib,
   wrapGAppsHook3,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     pango
     poppler_gi
     sqlite
-    systemd
+    systemdLibs
     zeitgeist
   ];
 

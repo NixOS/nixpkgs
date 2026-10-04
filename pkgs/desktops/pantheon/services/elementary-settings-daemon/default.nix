@@ -21,7 +21,7 @@
   granite,
   libgee,
   packagekit,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     granite
     libgee
     packagekit
-    systemd
+    systemdLibs
   ];
 
   passthru = {

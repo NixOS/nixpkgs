@@ -6,7 +6,7 @@
   gettext,
   xtrans,
   dbus-glib,
-  systemd,
+  systemdLibs,
   libsm,
   libxtst,
   glib,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus-glib
-    systemd
+    systemdLibs
     libsm
     libxtst
     gtk3

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocSHMEM";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-7TiUABwCVPvosoLdR8zN+QGiX+OD7iD+HKMLnGMmRYA=";
   };
 
