@@ -52,17 +52,19 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "--prefix 'PATH' ':' '${
-      lib.makeBinPath [
-        sox
-        pulseaudio
-      ]
-    }'"
-    "--prefix 'PYTHONPATH' ':' '${placeholder "out"}/share/lyrebird'"
-    "--chdir '${placeholder "out"}/share/lyrebird'"
-    ''"''${gappsWrapperArgs[@]}"''
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      '--prefix' 'PATH' ':' '${
+        lib.makeBinPath [
+          sox
+          pulseaudio
+        ]
+      }'
+      '--prefix' 'PYTHONPATH' ':' '${placeholder "out"}/share/lyrebird'
+      '--chdir' "${placeholder "out"}/share/lyrebird"
+      "''${gappsWrapperArgs[@]}"
+    )
+  '';
 
   installPhase = ''
     mkdir -p $out/{bin,share/{applications,lyrebird}}
