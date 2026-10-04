@@ -6,9 +6,9 @@
   zlib,
   glibc,
   versionCheckHook,
-  platforms,
   version,
   hash,
+  supportedPlatforms,
 }:
 
 let
@@ -89,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Fabricmanager daemon for NVLink initialization and control";
     license = lib.licenses.unfreeRedistributable;
+    platforms = supportedPlatforms;
     mainProgram = "nv-fabricmanager";
     maintainers = with lib.maintainers; [ edwtjo ];
-    inherit platforms;
   };
 })
