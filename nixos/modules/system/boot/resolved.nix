@@ -15,6 +15,7 @@ let
     literalExpression
     mapAttrs'
     mapAttrsToList
+    mkDefault
     mkIf
     mkMerge
     mkOption
@@ -221,7 +222,7 @@ in
       ) cfg.dnsDelegates;
 
       # If networkmanager is enabled, ask it to interface with resolved.
-      networking.networkmanager.dns = "systemd-resolved";
+      networking.networkmanager.dns = mkDefault "systemd-resolved";
 
       # Since we explicitly provide a resolv.conf, disable resolvconf
       networking.resolvconf.enable = false;
