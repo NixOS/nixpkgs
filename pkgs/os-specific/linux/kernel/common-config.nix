@@ -421,6 +421,12 @@ let
       # Enable SoC interface for MT7915 module, required for MT798X.
       MT7986_WMAC = whenBetween "5.18" "6.6" yes;
       MT798X_WMAC = whenAtLeast "6.6" yes;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "armv7l-linux") {
+      # MT7623 (BPI-R2): ethernet hidden behind vendor gate; eth/USB3/PCIe clocks live in ethsys/hifsys
+      NET_VENDOR_MEDIATEK = yes;
+      COMMON_CLK_MT2701_ETHSYS = yes;
+      COMMON_CLK_MT2701_HIFSYS = yes;
     };
 
     wireless = {
