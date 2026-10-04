@@ -254,7 +254,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/k2-fsa/sherpa-onnx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jaredmontoya ];
+    maintainers = with lib.maintainers; [
+      jaredmontoya
+      ryan4yin
+    ];
     mainProgram = "sherpa-onnx";
   };
 })
