@@ -3,6 +3,7 @@
   buildRedist,
   cuda_cudart,
   libcublas,
+  libcublasmp,
   libcusolver,
   nccl,
 }:
@@ -20,6 +21,8 @@ buildRedist {
   buildInputs = [
     cuda_cudart
     libcublas
+    # cuSOLVERMp links against cuBLASMp from 0.9.0.
+    libcublasmp
     libcusolver
     nccl
   ];
