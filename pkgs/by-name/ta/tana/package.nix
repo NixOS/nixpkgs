@@ -24,7 +24,7 @@
   nspr,
   nss,
   pango,
-  systemd,
+  systemdLibs,
   fetchurl,
   autoPatchelfHook,
   dpkg,
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
 
   # Needed for Zygote
   runtimeDependencies = [
-    systemd
+    systemdLibs
   ];
 
   installPhase = ''

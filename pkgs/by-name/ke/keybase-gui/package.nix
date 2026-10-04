@@ -21,7 +21,7 @@
   nspr,
   nss,
   pango,
-  systemd,
+  systemdLibs,
   libxtst,
   libxscrnsaver,
   libxrender,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     nspr
     nss
     pango
-    systemd
+    systemdLibs
     libx11
     libxscrnsaver
     libxcomposite

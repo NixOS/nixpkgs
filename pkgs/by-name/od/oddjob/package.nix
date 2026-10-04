@@ -9,7 +9,7 @@
   pam,
   pkg-config,
   stdenv,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libxml2
     pam
-    systemd
+    systemdLibs
   ];
 
   configureFlags = [

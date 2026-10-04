@@ -57,7 +57,7 @@
   numactl ? null,
   numad ? null,
   parted ? null,
-  systemd ? null,
+  systemdLibs ? null,
   util-linux ? null,
 
   # Darwin
@@ -99,7 +99,7 @@ let
       openssh
       passt
       pmutils
-      systemd
+      systemdLibs
     ]
     ++ lib.optionals enableIscsi [
       libiscsi
@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
         name = "virt-secret-init-encryption-sh";
         runtimeInputs = [
           coreutils
-          systemd
+          systemdLibs
         ];
         text = ''exec ${runtimeShell} "$@"'';
       };
@@ -246,7 +246,7 @@ stdenv.mkDerivation rec {
     numactl
     numad
     parted
-    systemd
+    systemdLibs
     util-linux
   ]
   ++ lib.optionals isDarwin [

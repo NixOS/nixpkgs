@@ -8,7 +8,7 @@
   glib,
   dbus,
   ell,
-  systemd,
+  systemdLibs,
   bluez,
   mobile-broadband-provider-info,
   python3,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     dbus
     ell
-    systemd
+    systemdLibs
     bluez
     mobile-broadband-provider-info
   ];
