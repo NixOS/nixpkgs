@@ -56,13 +56,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        iverilog
-        verilator
-        gnumake
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      iverilog
+      verilator
+      gnumake
+    ])
   ];
 
   passthru.updateScript = nix-update-script { };
