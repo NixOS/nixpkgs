@@ -1,0 +1,18 @@
+--- a/app/streaming/video/ffmpeg-renderers/plvk.cpp
++++ b/app/streaming/video/ffmpeg-renderers/plvk.cpp
+@@ -359,6 +359,15 @@
+ bool PlVkRenderer::initialize(PDECODER_PARAMETERS params)
+ {
+     m_Window = params->window;
++
++    // The capability probe falls back to a plain window when Vulkan window
++    // creation fails. SDL2-compat may not initialize its Vulkan entry points in
++    // that case, so do not query extensions on a non-Vulkan window.
++    if (!(SDL_GetWindowFlags(m_Window) & SDL_WINDOW_VULKAN)) {
++        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION,
++                    "Skipping Vulkan renderer for a non-Vulkan window");
++        return false;
++    }
+ 
+     unsigned int instanceExtensionCount = 0;
+     if (!SDL_Vulkan_GetInstanceExtensions(params->window, &instanceExtensionCount, nullptr)) {
