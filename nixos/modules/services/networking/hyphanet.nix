@@ -43,6 +43,7 @@ in
     };
 
     users.users.${userName} = {
+      isSystemUser = true;
       group = userName;
       description = "Hyphanet daemon user";
       home = varDir;
