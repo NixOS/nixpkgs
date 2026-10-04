@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocm-smi-lib"
       "shared"
@@ -24,6 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Si8SbeVKUBtqk6h2QJ9ssQV68bLq6TvESrYXJuArHd8=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocm-smi-lib";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   propagatedBuildInputs = [
     libdrm
@@ -38,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "libexec")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ];
 
   postInstall =
@@ -65,7 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-smi-lib";
+    changelog = "https://github.com/ROCm/rocm-systems/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    mainProgram = "rocm-smi";
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];
