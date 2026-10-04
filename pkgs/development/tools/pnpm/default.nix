@@ -45,16 +45,16 @@ let
       ];
     };
     "10" = {
-      version = "10.34.5";
-      hash = "sha256-zLXEecqxsAYhMlv+fUyaioAx56Ul1ySeJ17L7IGwjbI=";
+      version = "10.34.6";
+      hash = "sha256-RNfbkPy7IxW1gfhZiakTRmdlQh/GVsKOgPrBt6tb5FY=";
     };
     "11" = {
-      version = "11.27.0";
-      hash = "sha256-QKMlFaJVB/jyJt+74lOA4vBTlEwuzGTAwcuYtBy7ke8=";
+      version = "11.28.4";
+      hash = "sha256-pPMYvJBtf+KHB/iU57yGwNE0qNz/XV838eGNfBaHz20=";
     };
     "12" = {
-      version = "12.9.0";
-      srcHash = "sha256-lcs9nh9GIKfy5QYabUCj/pIpePAjLeeKBlu4UKm8zgM=";
+      version = "12.9.1";
+      srcHash = "sha256-inKhKFbI0M1exWL3jDhBmd+VnSwnGdxYOM4LTvs2Vuw=";
       cargoHash = "sha256-NGefDu4dGMC2RGrTPeYBuRrG+Gb8jnx9+SbyK8WPd9E=";
     };
   };
