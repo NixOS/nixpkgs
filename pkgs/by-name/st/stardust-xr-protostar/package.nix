@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-protostar";
-  version = "0.51.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "protostar";
     rev = finalAttrs.version;
-    hash = "sha256-mL7LnBvc2B9Y56NCDeNyqIDQsuWb4iMehZ7koR1KkX8=";
+    hash = "sha256-0120gB7Rh4RVQx7GeaNn/v81+a8+WymUUvrIP/1oMM0=";
   };
 
   env.STARDUST_RES_PREFIXES = "${finalAttrs.src}/res";
 
-  cargoHash = "sha256-6NiEKm6m4xX6ZSF9Gp7APG/lku3fKoobPSS4AodjCI8=";
+  cargoHash = "sha256-1p5E+J1Axtan/fMRSlix0/dPCJACVwpdqsmRc29kumE=";
 
   __structuredAttrs = true;
   strictDeps = true;
