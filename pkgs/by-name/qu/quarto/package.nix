@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
+  patches = lib.optional (lib.versionOlder pandoc.version "3.8") ./pandoc-3.7.patch;
+
   # the macOS tarball unpacks flat instead of into a versioned directory
   sourceRoot = if stdenv.hostPlatform.isDarwin then "." else "quarto-${finalAttrs.version}";
 
