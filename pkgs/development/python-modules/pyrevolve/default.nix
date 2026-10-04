@@ -50,7 +50,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/devitocodes/pyrevolve";
     changelog = "https://github.com/devitocodes/pyrevolve/releases/tag/${src.tag}";
     description = "Python library to manage checkpointing for adjoints";
-    license = lib.licenses.epl10;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }
