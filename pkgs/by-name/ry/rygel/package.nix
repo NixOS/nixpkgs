@@ -106,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"
     "-Dapi-docs=false"
+    (lib.mesonBool "examples" false)
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     (lib.mesonEnable "gtk" withGtk)
