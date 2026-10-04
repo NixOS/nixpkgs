@@ -17,38 +17,6 @@ least specific (the system profile)"
       (setq load-path (cons default-directory load-path))
       (normal-top-level-add-subdirs-to-load-path))))
 
-;;; Remove wrapper site-lisp from EMACSLOADPATH so it's not propagated
-;;; to any other Emacsen that might be started as subprocesses.
-(let ((wrapper-site-lisp (getenv "emacsWithPackages_siteLisp"))
-      (env-load-path (getenv "EMACSLOADPATH")))
-  (when wrapper-site-lisp
-    (setenv "emacsWithPackages_siteLisp" nil))
-  (when (and wrapper-site-lisp env-load-path)
-    (let* ((env-list (split-string env-load-path ":"))
-           (new-env-list (delete wrapper-site-lisp env-list)))
-      (setenv "EMACSLOADPATH" (when new-env-list
-                                (mapconcat 'identity new-env-list ":"))))))
-
-(let ((wrapper-site-lisp (getenv "emacsWithPackages_siteLispNative"))
-      (env-load-path (getenv "EMACSNATIVELOADPATH")))
-  (when wrapper-site-lisp
-    (setenv "emacsWithPackages_siteLispNative" nil))
-  (when (and wrapper-site-lisp env-load-path)
-    (let* ((env-list (split-string env-load-path ":"))
-           (new-env-list (delete wrapper-site-lisp env-list)))
-      (setenv "EMACSNATIVELOADPATH" (when new-env-list
-                                (mapconcat 'identity new-env-list ":"))))))
-
-(let ((wrapper-invocation-directory (getenv "emacsWithPackages_invocationDirectory")))
-  (when wrapper-invocation-directory
-    (setq invocation-directory (file-name-as-directory wrapper-invocation-directory))
-    (setenv "emacsWithPackages_invocationDirectory" nil)))
-
-(let ((wrapper-invocation-name (getenv "emacsWithPackages_invocationName")))
-  (when wrapper-invocation-name
-    (setq invocation-name wrapper-invocation-name)
-    (setenv "emacsWithPackages_invocationName" nil)))
-
 ;;; Set up native-comp load path.
 (when (featurep 'native-compile)
   ;; Append native-comp subdirectories from `NIX_PROFILES'.
