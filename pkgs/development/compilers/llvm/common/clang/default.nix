@@ -12,7 +12,6 @@
   release_version,
   version,
   python3,
-  perl,
   buildLlvmPackages,
   fixDarwinDylibNames,
   enableManpages ? false,
@@ -114,7 +113,6 @@ stdenv.mkDerivation (
       libxml2
       libllvm
       python3
-      perl
     ];
 
     strictDeps = true;
@@ -188,6 +186,8 @@ stdenv.mkDerivation (
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+      # Delete the Perl implementation of scan-build. It doesn’t even work when libexec is in a separate output.
+      rm -rf $out/bin/scan-build $lib/libexec
     ''
     + lib.optionalString (lib.versionOlder release_version "22") ''
       rm $out/bin/c-index-test
