@@ -3,6 +3,8 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  callPackage,
+  rustPlatform,
 
   # tests
   gitMinimal,
@@ -13,7 +15,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.25.4";
+  version = "2.25.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,21 +23,46 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v+Pl15r32DaB/+Yo1zKvMP1iFmC1q111s16KNpWLanI=";
+    hash = "sha256-D3IQbmb8Tcq03FlrmkEzw2XNu+9w9SiR7wP2814d/dI=";
   };
 
-  build-system = with python3Packages; [
-    editables
-    hatch-vcs
-    hatchling
+  patches = [
+    # os.nice() fails with EPERM in the sandbox
+    ./tolerate-unavailable-nice.patch
   ];
 
-  pythonRelaxDeps = true;
-  # Closed-source binary wheel, only needed by the opt-in Unified Harness backend
-  # (`--experimental-harness`), which stays unavailable without it
-  pythonRemoveDeps = [
-    "mistralai-vibe-local-harness"
+  # The Unified Harness native extension (`mistralai_vibe_local_harness._native`)
+  cargoRoot = "harness/core";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.cargoRoot}";
+    hash = "sha256-3ykvTIESFANShoj3gFYw+vDoJCETOft0xYKCgpn2Iy0=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
   ];
+
+  env = {
+    # The v8 crate would otherwise download these at build time
+    RUSTY_V8_ARCHIVE = finalAttrs.passthru.librusty_v8.archive;
+    RUSTY_V8_SRC_BINDING_PATH = finalAttrs.passthru.librusty_v8.srcBinding;
+  };
+
+  # Replicate what upstream's custom build backend (build_backend/maturin_backend.py)
+  # does before handing over to maturin, without its zig/manylinux portability
+  # tweaks and with the Rust TUI built separately.
+  preBuild = ''
+    mkdir -p .native-build
+    cp -r harness/core .native-build/harness-core
+    cp -r harness/runtimes/python/python/mistralai_vibe_local_harness .
+
+    mkdir -p vibe/_bin
+    cp ${lib.getExe finalAttrs.passthru.vibe-rs} vibe/_bin/vibe-rs
+  '';
+
+  pythonRelaxDeps = true;
   dependencies =
     with python3Packages;
     [
@@ -78,6 +105,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       mcp
       mdit-py-plugins
       mdurl
+      miniaudio
       mistralai
       more-itertools
       opentelemetry-api
@@ -113,7 +141,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       setproctitle
       six
       smmap
-      sounddevice
       soupsieve
       sse-starlette
       starlette
@@ -155,6 +182,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
 
+  preCheck = ''
+    # Make sure that the installed runtime, which ships the native extension, is imported
+    rm -rf mistralai_vibe_local_harness
+  '';
+
   disabledTests = [
     # The finite stdio input closes before all responses are flushed in the sandbox.
     "test_stdio_server_uses_the_same_json_rpc_lifecycle"
@@ -176,9 +208,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
-
-    # Flaky: AssertionError: assert <fingerprint> != <fingerprint>
-    "test_changes_when_file_changes"
 
     # Flaky: AssertionError: Timed out waiting for UI state
     "test_incomplete_stream_does_not_retry_ahead_of_queued_prompts"
@@ -203,9 +232,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    # Fails to import the removed `mistralai_vibe_local_harness`
-    "tests/app_server/test_unified_harness_backend_adapter.py"
-
     # All snapshot tests use syrupy 4.8.0, which is not packaged here.
     "tests/snapshots/"
 
@@ -225,9 +251,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # ACP tests require network access
     "tests/acp/test_acp_entrypoint_smoke.py"
 
-    # FileNotFoundError: [Errno 2] No such file or directory: 'bash'
-    "tests/test_install_script.py"
-
     # The installer is run with a PATH restricted to /usr/bin:/bin, where the
     # sandbox provides no `bash`
     "tests/test_install_script.py"
@@ -238,6 +261,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru = {
+    librusty_v8 = callPackage ./librusty_v8.nix { };
+    vibe-rs = callPackage ./vibe-rs.nix {
+      inherit (finalAttrs) version src meta;
+    };
+  };
 
   meta = {
     description = "Minimal CLI coding agent by Mistral";
