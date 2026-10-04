@@ -63,14 +63,15 @@ python3Packages.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        git
-        openssl
-        multipath-tools
-        util-linux
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      git
+      openssl
+      multipath-tools
+      util-linux
+    ])
   ];
 
   passthru.updateScript = gitUpdater { };
