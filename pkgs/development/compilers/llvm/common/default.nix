@@ -26,6 +26,8 @@
   cmakeMinimal,
   python3,
   python3Minimal,
+  cudaSupport ? false,
+  rocmSupport ? false,
   # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
@@ -157,6 +159,64 @@ makeScopeWithSplicing' {
           ln -s "${targetLlvmPackages.compiler-rt.out}/share" "$rsrc/share"
         '';
 
+      # Packages and build commands for OpenMP GPU offloading.  When
+      # cudaSupport or rocmSupport is enabled, the libomptarget runtime
+      # (built as part of the openmp derivation for LLVM 18, or the offload
+      # derivation for LLVM 19+) must be on the library and include search
+      # paths so that `clang -fopenmp -fopenmp-targets=nvptx64-nvidia-cuda`
+      # or `clang -fopenmp -fopenmp-targets=amdgcn-amd-amdhsa` (and the
+      # corresponding flang invocations) work out of the box.
+      #
+      # Note: we do NOT put the offload derivation in extraPackages because
+      # the cc-wrapper splices extraPackages to the target platform, which
+      # would create a separate (non-rocmSupport) offload derivation.
+      # Instead, we reference the host scope's offload path directly in
+      # extraBuildCommands via -L flags.
+      gpuOffloadSupport = cudaSupport || rocmSupport;
+
+      openmpExtraPackages = lib.optionals gpuOffloadSupport [
+        targetLlvmPackages.openmp
+      ];
+
+      openmpExtraBuildCommands = lib.optionalString gpuOffloadSupport ''
+        echo "-L${targetLlvmPackages.openmp}/lib" >> $out/nix-support/cc-ldflags
+        ${lib.optionalString (lib.versionAtLeast metadata.release_version "19") ''
+          echo "-L${self.offload}/lib" >> $out/nix-support/cc-ldflags
+          # The device linker (ld.lld) invoked by clang-linker-wrapper needs
+          # to find libompdevice in the per-triple subdirectory of the offload
+          # runtime.  cc-ldflags only affect the host linker, so we use
+          # -Wl,--device-linker= to forward -L paths to the device linker via
+          # the compiler driver.
+          ${lib.optionalString rocmSupport ''
+            echo "-Wl,--device-linker=-L -Wl,--device-linker=${self.offload}/lib/amdgcn-amd-amdhsa" >> $out/nix-support/cc-cflags
+          ''}
+          ${lib.optionalString cudaSupport ''
+            echo "-Wl,--device-linker=-L -Wl,--device-linker=${self.offload}/lib/nvptx64-nvidia-cuda" >> $out/nix-support/cc-cflags
+          ''}
+        ''}
+        # Tell clang where to find the ROCm device library bitcode, so users
+        # don't need to pass --rocm-device-lib-path manually.
+        ${lib.optionalString rocmSupport ''
+          echo "--rocm-device-lib-path=${pkgs.rocmPackages.rocm-device-libs}/amdgcn/bitcode" >> $out/nix-support/cc-cflags
+        ''}
+        # Make offload tools available on PATH.  The cc-wrapper prepends
+        # $out/bin to PATH (cc-wrapper.sh), so symlinking the tools here
+        # makes them available during device compilation and linking.
+        # - ld.lld: device linker invoked by clang-linker-wrapper
+        # - clang-offload-packager: bundles device code into host objects
+        # - clang-linker-wrapper: orchestrates host+device linking (LLVM 19+)
+        #
+        # clang finds clang-offload-packager relative to its own binary.
+        # This works for the clang wrapper (binary in clang-unwrapped/bin/),
+        # but NOT for the flang wrapper (binary in flang-unwrapped/bin/),
+        # so we must symlink it here for flang to find it.
+        ln -s ${self.lld}/bin/ld.lld $out/bin/ld.lld
+        ln -s ${self.clang-unwrapped}/bin/clang-offload-packager $out/bin/clang-offload-packager
+        ${lib.optionalString (lib.versionAtLeast metadata.release_version "19") ''
+          ln -s ${self.clang-unwrapped}/bin/clang-linker-wrapper $out/bin/clang-linker-wrapper
+        ''}
+      '';
+
       bintoolsNoLibc' = if bootBintoolsNoLibc == null then self.bintoolsNoLibc else bootBintoolsNoLibc;
       bintools' = if bootBintools == null then self.bintools else bootBintools;
     in
@@ -221,15 +281,17 @@ makeScopeWithSplicing' {
         cc = self.clang-unwrapped;
         # libstdcxx is taken from gcc in an ad-hoc way in cc-wrapper.
         libcxx = null;
-        extraPackages = [ targetLlvmPackages.compiler-rt ];
-        extraBuildCommands = mkExtraBuildCommands cc;
+        extraPackages = [ targetLlvmPackages.compiler-rt ] ++ openmpExtraPackages;
+        extraTools = lib.optionals gpuOffloadSupport [ self.lld ];
+        extraBuildCommands = mkExtraBuildCommands cc + openmpExtraBuildCommands;
       };
 
       libcxxClang = wrapCCWith rec {
         cc = self.clang-unwrapped;
         libcxx = targetLlvmPackages.libcxx;
-        extraPackages = [ targetLlvmPackages.compiler-rt ];
-        extraBuildCommands = mkExtraBuildCommands cc;
+        extraPackages = [ targetLlvmPackages.compiler-rt ] ++ openmpExtraPackages;
+        extraTools = lib.optionals gpuOffloadSupport [ self.lld ];
+        extraBuildCommands = mkExtraBuildCommands cc + openmpExtraBuildCommands;
       };
 
       # Darwin uses the system libc++ by default. It is set up as its own clang definition so that `libcxxClang`
@@ -237,8 +299,9 @@ makeScopeWithSplicing' {
       systemLibcxxClang = wrapCCWith rec {
         cc = self.clang-unwrapped;
         libcxx = darwin.libcxx;
-        extraPackages = [ targetLlvmPackages.compiler-rt ];
-        extraBuildCommands = mkExtraBuildCommands cc;
+        extraPackages = [ targetLlvmPackages.compiler-rt ] ++ openmpExtraPackages;
+        extraTools = lib.optionals gpuOffloadSupport [ self.lld ];
+        extraBuildCommands = mkExtraBuildCommands cc + openmpExtraBuildCommands;
       };
 
       lld = callPackage ./lld { };
@@ -464,12 +527,27 @@ makeScopeWithSplicing' {
         stdenv = overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
       };
 
-      openmp = callPackage ./openmp { };
+      openmp = callPackage ./openmp {
+        inherit cudaSupport rocmSupport;
+        inherit (pkgs) cudaPackages rocmPackages;
+      };
 
       mlir = callPackage ./mlir { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt { };
+
+      # The offload project (libomptarget) was split out of the openmp
+      # directory starting with LLVM 19.  For LLVM 18 it is still built
+      # as part of the openmp derivation.  When GPU offloading is enabled,
+      # the DeviceRTL linking step requires clang as the CXX compiler
+      # (it passes --target= and -fuse-ld=lld which g++ doesn't understand),
+      # so we use a clang-based stdenv from buildLlvmPackages.
+      offload = callPackage ./offload {
+        inherit cudaSupport rocmSupport;
+        inherit (pkgs) cudaPackages rocmPackages;
+        stdenv = if cudaSupport || rocmSupport then overrideCC stdenv buildLlvmPackages.clang else stdenv;
+      };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") (
       let
@@ -513,19 +591,23 @@ makeScopeWithSplicing' {
             wrapped = wrapCCWith rec {
               cc = flangUnwrapped;
               bintools = bintools';
-              extraPackages = [ targetLlvmPackages.flang-rt ];
-              extraBuildCommands = mkExtraBuildCommands0 cc + ''
-                # triplet however is not used in darwin
-                PLATFORM_DIR="${if stdenv.targetPlatform.isDarwin then "darwin" else stdenv.targetPlatform.config}"
-                RT_LIB_PATH="${targetLlvmPackages.flang-rt}/lib/clang/${clangVersion}/lib/$PLATFORM_DIR"
-                if [ -d "$RT_LIB_PATH" ]; then
-                  ln -s "$RT_LIB_PATH" "$rsrc"/lib
-                  echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
-                else
-                  ln -s "${targetLlvmPackages.flang-rt}/lib" "$rsrc"/lib
-                  echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
-                fi
-              '';
+              extraPackages = [ targetLlvmPackages.flang-rt ] ++ openmpExtraPackages;
+              extraTools = lib.optionals gpuOffloadSupport [ self.lld ];
+              extraBuildCommands =
+                mkExtraBuildCommands0 cc
+                + ''
+                  # triplet however is not used in darwin
+                  PLATFORM_DIR="${if stdenv.targetPlatform.isDarwin then "darwin" else stdenv.targetPlatform.config}"
+                  RT_LIB_PATH="${targetLlvmPackages.flang-rt}/lib/clang/${clangVersion}/lib/$PLATFORM_DIR"
+                  if [ -d "$RT_LIB_PATH" ]; then
+                    ln -s "$RT_LIB_PATH" "$rsrc"/lib
+                    echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+                  else
+                    ln -s "${targetLlvmPackages.flang-rt}/lib" "$rsrc"/lib
+                    echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+                  fi
+                ''
+                + openmpExtraBuildCommands;
             };
             tests = callPackage ./flang/tests.nix {
               flang = wrapped;
