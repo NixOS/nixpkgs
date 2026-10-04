@@ -1539,8 +1539,8 @@ let
             SPARSEMEM = yes;
 
             # Bump the maximum number of CPUs to support systems like EC2 x1.*
-            # instances and Xeon Phi.
-            NR_CPUS = freeform "384";
+            # instances and Xeon Phi or AMD EPYC.
+            NR_CPUS = freeform "512";
 
             # Enable LEDS to display link-state status of PHY devices (i.e. eth lan/wan interfaces)
             LED_TRIGGER_PHY = yes;
