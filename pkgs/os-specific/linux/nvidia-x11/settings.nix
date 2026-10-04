@@ -19,7 +19,7 @@
   libglvnd,
   wrapGAppsHook3,
   addDriverRunpath,
-  platforms,
+  supportedPlatforms,
   version,
   hash,
   useProfiles,
@@ -38,7 +38,7 @@ let
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
-    inherit platforms;
+    platforms = supportedPlatforms;
   };
 
   libXNVCtrl = stdenv.mkDerivation {

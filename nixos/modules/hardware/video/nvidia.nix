@@ -6,11 +6,38 @@
 }:
 let
   nvidiaEnabled = lib.elem "nvidia" config.services.xserver.videoDrivers;
-  nvidia_x11 = if cfg.enabled then cfg.package else null;
+  nvidia_x11 = if cfg.enabled then cfg.package.driver else null;
+
+  # `hardware.nvidia.package` is a branch (driver plus tools) of the
+  # `pkgs.nvidiaPackages` scope, not a driver package itself.
+  nvidiaBranchType = lib.types.mkOptionType {
+    name = "nvidia driver branch";
+    description = "a branch of the nvidiaPackages scope";
+    descriptionClass = "noun";
+    check = x: lib.isAttrs x && x ? branch && x ? driver && x ? version;
+    # Two definitions must be a conflict, not a silent field-by-field merge of
+    # two different branches.
+    merge = lib.mergeOneOption;
+  };
 
   cfg = config.hardware.nvidia;
 
   inherit (config.boot.kernelPackages) nvidiaPackages;
+
+  # A branch from `config.boot.kernelPackages.nvidiaPackages` carries its kernel
+  # modules; a top-level branch does not, so look it up by branch name there.
+  kernelBranch =
+    if cfg.package ? mod then
+      cfg.package
+    else if nvidiaPackages ? ${cfg.package.branch} then
+      nvidiaPackages.${cfg.package.branch}
+    else
+      throw ''
+        hardware.nvidia.package is built from ${cfg.package.branch} sources, which is not
+        a branch of config.boot.kernelPackages.nvidiaPackages. Use
+        config.boot.kernelPackages.nvidiaPackages.mkDriver for a version that is not in
+        nixpkgs, so that the kernel modules come from the same sources.
+      '';
 
   useOpenModules = cfg.open == true;
 
@@ -20,6 +47,8 @@ let
   reverseSyncCfg = pCfg.reverseSync;
   primeEnabled = syncCfg.enable || reverseSyncCfg.enable || offloadCfg.enable;
   busIDType = lib.types.strMatching "([[:print:]]+:[0-9]{1,3}(@[0-9]{1,10})?:[0-9]{1,2}:[0-9])?";
+  # The driver carries the effective value: a branch that bundles an IBT-aware
+  # driver reports it there, and `binaries.nix` folds in the version rule.
   ibtSupport = useOpenModules || (nvidia_x11.ibtSupport or false);
   settingsFormat = pkgs.formats.keyValue { };
 in
@@ -103,7 +132,7 @@ in
           Requires NVIDIA driver version 595 or newer, and the open source kernel modules.
         ''
         // {
-          default = useOpenModules && lib.versionAtLeast nvidia_x11.version "595";
+          default = useOpenModules && lib.versionAtLeast cfg.package.version "595";
           defaultText = lib.literalExpression ''
             config.hardware.nvidia.open == true && lib.versionAtLeast config.hardware.nvidia.package.version "595"
           '';
@@ -299,11 +328,9 @@ in
       '';
 
       branch = lib.mkOption {
-        type =
-          (lib.types.enum (builtins.attrNames (lib.filterAttrs (_: lib.isDerivation) nvidiaPackages)))
-          // {
-            description = "one of the available driver branches in `pkgs/os-specific/linux/nvidia-x11/default.nix`";
-          };
+        type = (lib.types.enum pkgs.nvidiaPackages.branches) // {
+          description = "one of the available driver branches in `pkgs/os-specific/linux/nvidia-x11/default.nix`";
+        };
         default = if cfg.datacenter.enable then "dc" else "stable";
         defaultText = lib.literalExpression ''
           if config.hardware.nvidia.datacenter.enable then "dc" else "stable"
@@ -333,6 +360,10 @@ in
             no longer support (often Maxwell through Volta; roughly GeForce GTX 9xx
             through 10xx, plus rare Volta cards like TITAN V).
 
+          - legacy_535, legacy_470, legacy_390, legacy_340:
+            Older long-lived series. 470 is the last branch with Kepler support,
+            390 the last with 32-bit x86, and 340 the last with Fermi.
+
           - vulkan_beta:
             The Vulkan developer beta driver, for users interested in testing new
             Vulkan features.
@@ -340,22 +371,52 @@ in
       };
 
       package = lib.mkOption {
-        type = lib.types.package;
-        default = nvidiaPackages.${cfg.branch};
-        defaultText = lib.literalExpression "config.boot.kernelPackages.nvidiaPackages.\${config.hardware.nvidia.branch}";
-        example = lib.literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_470";
+        type = nvidiaBranchType;
+        default = pkgs.nvidiaPackages.${cfg.branch};
+        defaultText = lib.literalExpression "pkgs.nvidiaPackages.\${config.hardware.nvidia.branch}";
+        example = lib.literalExpression "pkgs.nvidiaPackages.legacy_470";
         description = ''
-          The NVIDIA driver package to use.
+          The NVIDIA driver to use, as a branch scope from `nvidiaPackages`.
+          It holds the driver libraries (`.driver`), the userspace tools
+          (`.settings`, `.modprobe`, `.persistenced`) and, when taken from
+          `config.boot.kernelPackages.nvidiaPackages`, the kernel modules
+          (`.mod`, `.open`).
 
           Prefer using {option}`hardware.nvidia.branch` when possible.
 
-          If you set this option, it is recommended to pick a package from
-          `config.boot.kernelPackages.nvidiaPackages` so the driver build matches
-          your configured kernel.
-
-          For custom versions, you can use `nvidiaPackages.mkDriver`; see
+          For custom versions, use the kernel's own factory,
+          `config.boot.kernelPackages.nvidiaPackages.mkDriver`, so that the
+          kernel modules come from the same sources; see
           `pkgs/os-specific/linux/nvidia-x11/README.md` for an example and how
           to obtain the hashes.
+        '';
+      };
+
+      kernelModules = lib.mkOption {
+        type = lib.types.package;
+        default =
+          let
+            module = kernelBranch.${if useOpenModules then "open" else "mod"};
+          in
+          if module == null then
+            throw ''
+              The selected NVIDIA package does not provide open kernel modules.
+              Set hardware.nvidia.open to false, or choose a branch that ships open
+              module sources.
+            ''
+          else
+            module;
+        defaultText = lib.literalExpression ''
+          config.boot.kernelPackages.nvidiaPackages.''${config.hardware.nvidia.package.branch}.''${if config.hardware.nvidia.open == true then "open" else "mod"}
+        '';
+        example = lib.literalExpression ''
+          config.boot.kernelPackages.nvidiaPackages.legacy_470.mod
+        '';
+        description = ''
+          The NVIDIA kernel module to install, built for the configured
+          kernel. Defaults to the module belonging to
+          {option}`hardware.nvidia.package`, taking `open` instead of `mod`
+          when {option}`hardware.nvidia.open` is set.
         '';
       };
 
@@ -363,7 +424,7 @@ in
         example = true;
         description = "Whether to enable the open source NVIDIA kernel module.";
         type = lib.types.nullOr lib.types.bool;
-        default = if lib.versionOlder nvidia_x11.version "560" then false else null;
+        default = if lib.versionOlder cfg.package.version "560" then false else null;
         defaultText = lib.literalExpression ''
           if lib.versionOlder config.hardware.nvidia.package.version "560" then false else null
         '';
@@ -374,7 +435,7 @@ in
           the GPU System Processor (GSP) on the video card
         ''
         // {
-          default = useOpenModules || lib.versionAtLeast nvidia_x11.version "555";
+          default = useOpenModules || lib.versionAtLeast cfg.package.version "555";
           defaultText = lib.literalExpression ''
             config.hardware.nvidia.open == true || lib.versionAtLeast config.hardware.nvidia.package.version "555"
           '';
@@ -420,10 +481,19 @@ in
               '';
             }
             {
-              assertion = !cfg.open || (nvidia_x11.open != null);
+              assertion = !cfg.kernelModules ? branch || cfg.package.branch == cfg.kernelModules.branch;
+              message = ''
+                hardware.nvidia.package is built from the ${cfg.package.branch} sources, but
+                hardware.nvidia.kernelModules is built from the ${cfg.kernelModules.branch} ones.
+                The two must come from the same driver.
+              '';
+            }
+            {
+              # A branch always has `open`; it is null when the branch has no
+              # open module sources.
+              assertion = !useOpenModules || kernelBranch.open != null;
               message = ''
                 The selected NVIDIA package does not provide open kernel modules.
-                Set hardware.nvidia.open = false or choose a package branch with open module support.
               '';
             }
           ];
@@ -574,12 +644,12 @@ in
             }
 
             {
-              assertion = cfg.gsp.enable -> (cfg.package ? firmware);
+              assertion = cfg.gsp.enable -> (nvidia_x11 ? firmware);
               message = "This version of NVIDIA driver does not provide a GSP firmware.";
             }
 
             {
-              assertion = useOpenModules -> (cfg.package ? open);
+              assertion = useOpenModules -> (kernelBranch.open != null);
               message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver.";
             }
 
@@ -709,8 +779,10 @@ in
           hardware.graphics.extraPackages = lib.optional cfg.videoAcceleration pkgs.nvidia-vaapi-driver;
 
           environment.systemPackages =
-            lib.optional cfg.nvidiaSettings nvidia_x11.settings
-            ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced
+            lib.optional (cfg.nvidiaSettings && cfg.package.settings != null) cfg.package.settings
+            ++ lib.optional (
+              cfg.nvidiaPersistenced && cfg.package.persistenced != null
+            ) cfg.package.persistenced
             ++ lib.optional offloadCfg.enableOffloadCmd (
               pkgs.writeShellScriptBin cfg.prime.offload.offloadCmdMainProgram ''
                 export __NV_PRIME_RENDER_OFFLOAD=1
@@ -762,7 +834,7 @@ in
                     Type = "forking";
                     Restart = "always";
                     PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                    ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                    ExecStart = "${lib.getExe cfg.package.persistenced} --verbose";
                     ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
                   };
                 };
@@ -798,8 +870,8 @@ in
             "d /run/nvidia-xdriver 0770 root users"
           ]
           ++
-            lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-              "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+            lib.optional (cfg.package.persistenced != null && config.virtualisation.docker.enableNvidia)
+              "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${cfg.package.persistenced}/origBin/nvidia-persistenced";
 
           hardware.nvidia.moduleParams = lib.mkMerge (
             lib.optional (offloadCfg.enable || cfg.modesetting.enable) { nvidia-drm.modeset = 1; }
@@ -819,7 +891,7 @@ in
           );
 
           boot = {
-            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
+            extraModulePackages = [ cfg.kernelModules ];
             # nvidia-uvm is required by CUDA applications.
             kernelModules = lib.optionals config.services.xserver.enable [
               "nvidia"
@@ -862,12 +934,12 @@ in
         })
         # Data Center
         (lib.mkIf (cfg.datacenter.enable) {
-          boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
+          boot.extraModulePackages = [ cfg.kernelModules ];
 
           systemd = {
             tmpfiles.rules =
-              lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
-                "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+              lib.optional (cfg.package.persistenced != null && config.virtualisation.docker.enableNvidia)
+                "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${cfg.package.persistenced}/origBin/nvidia-persistenced";
 
             services = lib.mkMerge [
               {
@@ -882,18 +954,18 @@ in
                     TimeoutStartSec = 240;
                     ExecStart =
                       let
-                        # Since these rely on the `nvidia_x11.fabricmanager` derivation, they're
+                        # Since these rely on the `cfg.package.fabricmanager` derivation, they're
                         # unsuitable to be mentioned in the configuration defaults, but they _can_
                         # be overridden in `cfg.datacenter.settings` if needed.
                         fabricManagerConfDefaults = {
-                          TOPOLOGY_FILE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
-                          DATABASE_PATH = "${nvidia_x11.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                          TOPOLOGY_FILE_PATH = "${cfg.package.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
+                          DATABASE_PATH = "${cfg.package.fabricmanager}/share/nvidia-fabricmanager/nvidia/nvswitch";
                         };
                         nv-fab-conf = settingsFormat.generate "fabricmanager.conf" (
                           fabricManagerConfDefaults // cfg.datacenter.settings
                         );
                       in
-                      "${lib.getExe nvidia_x11.fabricmanager} -c ${nv-fab-conf}";
+                      "${lib.getExe cfg.package.fabricmanager} -c ${nv-fab-conf}";
                     LimitCORE = "infinity";
                   };
                 };
@@ -906,7 +978,7 @@ in
                     Type = "forking";
                     Restart = "always";
                     PIDFile = "/var/run/nvidia-persistenced/nvidia-persistenced.pid";
-                    ExecStart = "${lib.getExe nvidia_x11.persistenced} --verbose";
+                    ExecStart = "${lib.getExe cfg.package.persistenced} --verbose";
                     ExecStopPost = "${pkgs.coreutils}/bin/rm -rf /var/run/nvidia-persistenced";
                   };
                 };
@@ -915,8 +987,10 @@ in
           };
 
           environment.systemPackages =
-            lib.optional cfg.datacenter.enable nvidia_x11.fabricmanager
-            ++ lib.optional cfg.nvidiaPersistenced nvidia_x11.persistenced;
+            lib.optional (cfg.datacenter.enable && cfg.package.fabricmanager != null) cfg.package.fabricmanager
+            ++ lib.optional (
+              cfg.nvidiaPersistenced && cfg.package.persistenced != null
+            ) cfg.package.persistenced;
         })
       ]
     );
