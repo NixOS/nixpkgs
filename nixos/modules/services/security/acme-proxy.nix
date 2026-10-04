@@ -367,6 +367,47 @@ let
     profiles = mergedProfiles;
   };
   configFile = tomlFormat.generate "acme-proxy.toml" renderedSettings;
+
+  # Per-profile sanity checks. Two directions of mismatch are caught:
+  #
+  #   * `signer.backend = "relay"` with `signer.relay.directoryUrl = ""`
+  #     — the daemon will refuse to start anyway, but a Nix-time error
+  #     tells the user *which* profile is broken instead of a runtime
+  #     complaint from a service the user may not know reads `signer.*`.
+  #
+  #   * `signer.backend != "relay"` (the default is `"local_ca"`) with
+  #     `signer.relay.directoryUrl` non-empty — a silent footgun, since
+  #     `profileToTOML` only emits the `[signer.relay]` table when
+  #     `backend == "relay"`, so the user's relay config is dropped on
+  #     the way to the rendered config file.
+  profileAssertions = lib.concatLists (lib.mapAttrsToList
+    (name: p: [
+      {
+        assertion = !(p.signer.backend == "relay" && p.signer.relay.directoryUrl == "");
+        message = ''
+          services.acme-proxy: profile "${name}" has
+          `signer.backend = "relay"` but `signer.relay.directoryUrl = ""`;
+          the daemon refuses to start without a directory URL. Set
+          `signer.relay.directoryUrl` to the upstream CA's directory
+          (e.g. `https://acme-v02.api.letsencrypt.org/directory`), or
+          change `signer.backend` to something other than `"relay"`.
+        '';
+      }
+      {
+        assertion = !(p.signer.backend != "relay" && p.signer.relay.directoryUrl != "");
+        message = ''
+          services.acme-proxy: profile "${name}" sets
+          `signer.relay.directoryUrl = "${p.signer.relay.directoryUrl}"`
+          but `signer.backend = "${p.signer.backend}"` (not `"relay"`).
+          Because `[signer.relay]` is only emitted when
+          `signer.backend = "relay"`, the relay configuration would be
+          silently dropped from the rendered TOML and the daemon would
+          start as a `${p.signer.backend}` profile. Either set
+          `signer.backend = "relay"`, or remove the relay settings.
+        '';
+      }
+    ])
+    cfg.profiles);
 in
 {
   meta.maintainers = [ lib.maintainers.ser ];
@@ -474,6 +515,7 @@ in
           daemon refuses to start.
         '';
       }
+    ] ++ profileAssertions ++ [
       {
         assertion = !(cfg.openFirewall && serverPort == null);
         message = "services.acme-proxy: openFirewall is set but the server port could not be parsed from settings.server.bind_address.";
