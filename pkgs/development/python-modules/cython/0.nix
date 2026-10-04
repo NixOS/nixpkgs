@@ -97,6 +97,11 @@ buildPythonPackage (finalAttrs: {
   # https://github.com/cython/cython/issues/5089
   setupHook = ./setup-hook.sh;
 
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+  };
+
   meta = {
     changelog = "https://github.com/cython/cython/blob/${finalAttrs.version}/CHANGES.rst";
     description = "Optimising static compiler for both the Python programming language and the extended Cython programming language";
