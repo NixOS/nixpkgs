@@ -68,7 +68,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    pushd $src
 
     # Native Nautilus extension (built in /tmp earlier — see preInstall)
     install -Dm6445 /tmp/wusel-nautilus-build/libwusel-nautilus.so \
