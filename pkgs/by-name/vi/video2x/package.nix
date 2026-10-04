@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   versionCheckHook,
   nix-update-script,
@@ -41,6 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     '';
   };
+
+  patches = [
+    # ncnn 20250916 removed Option::use_shader_pack8; drop RIFE's pack8 warp shader.
+    # Remove when the librife_ncnn_vulkan submodule includes this commit.
+    (fetchpatch {
+      name = "librife-ncnn-vulkan-remove-pack8.patch";
+      url = "https://github.com/k4yt3x/librife-ncnn-vulkan/commit/f1de3a97c49e1bed4a625aa8eef92586a4871e74.patch";
+      stripLen = 1;
+      extraPrefix = "third_party/librife_ncnn_vulkan/";
+      excludes = [ "third_party/librife_ncnn_vulkan/src/ncnn" ];
+      hash = "sha256-vqhi7vEhHDjz/vT4bTRMQiKIIhAI1ZhPsxnpWUcbIFQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace src/fsutils.cpp \
