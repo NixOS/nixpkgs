@@ -25,6 +25,7 @@
   xcbuild,
   quilt,
   nixosTests,
+  nix-update-script,
   prefetch-npm-deps,
 }:
 
@@ -76,37 +77,24 @@ let
     }
     .${system};
 
-  # Comment from @code-asher, the code-server maintainer
-  # See https://github.com/NixOS/nixpkgs/pull/240001#discussion_r1244303617
-  #
-  # If the commit is missing it will break display languages (Japanese, Spanish,
-  # etc). For some reason VS Code has a hard dependency on the commit being set
-  # for that functionality.
-  # The commit is also used in cache busting. Without the commit you could run
-  # into issues where the browser is loading old versions of assets from the
-  # cache.
-  # Lastly, it can be helpful for the commit to be accurate in bug reports
-  # especially when they are built outside of our CI as sometimes the version
-  # numbers can be unreliable (since they are arbitrarily provided).
-  #
-  # To compute the commit when upgrading this derivation, do:
-  # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
-  # Example: `$ git rev-parse v4.16.1`
-  commit = "ccc19adc2e8992e18b14dd25eb1e646f5b9ef7cf";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
   version = "4.140.0";
+  npmDepsHash = "sha256-ttccUM1xjUvnc5Y6ERtQzKNzWt8+7Kf3rPrFhjObGAo=";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RBirBi91xZvafLEy5N9uIhDclcN7ajECkfnVv54kHjw=";
+    postCheckout = ''
+      git -C "$out" rev-parse HEAD > "$out/.git-revision"
+    '';
+    hash = "sha256-M/Sxl08PiiTiqhfxk510FSktSp0a/j74zPzycWcV+xE=";
   };
 
-  nodeModules =
+  npmDeps =
     runCommand "code-server-node-modules"
       {
         inherit (finalAttrs) src;
@@ -116,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
         ];
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-ttccUM1xjUvnc5Y6ERtQzKNzWt8+7Kf3rPrFhjObGAo=";
+        outputHash = finalAttrs.npmDepsHash;
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
@@ -181,11 +169,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # The rspack lockfile omits resolved URLs and integrity hashes for peer
     # dependencies, which prefetch-npm-deps needs for an offline cache.
-    cp "$nodeModules/lib/vscode/build/rspack/package-lock.json" \
+    cp "$npmDeps/lib/vscode/build/rspack/package-lock.json" \
       lib/vscode/build/rspack/package-lock.json
 
     # Let VS Code's postinstall use the prefetched, checksum-verified typings.
-    install -Dm644 "$nodeModules/electron.d.ts" lib/vscode/.build/typings/electron.d.ts
+    install -Dm644 "$npmDeps/electron.d.ts" lib/vscode/.build/typings/electron.d.ts
 
     export HOME=$PWD
 
@@ -193,9 +181,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # inject git commit
     substituteInPlace ./ci/build/build-vscode.sh \
-      --replace-fail '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "$(cat .git-revision)"
     substituteInPlace ./ci/build/build-release.sh \
-      --replace-fail '$(git rev-parse HEAD)' "${commit}"
+      --replace-fail '$(git rev-parse HEAD)' "$(cat .git-revision)"
 
     substituteInPlace ./lib/vscode/build/npm/postinstall.ts \
       --replace-fail "child_process.execSync('git config pull.rebase merges');" \
@@ -220,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export HOME=$TMPDIR/home
     mkdir -p $HOME
-    cp -R $nodeModules $TMPDIR/cache
+    cp -R $npmDeps $TMPDIR/cache
     chmod -R +w $TMPDIR/cache
   '';
 
@@ -354,7 +342,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    prefetchNodeModules = lib.overrideDerivation finalAttrs.nodeModules (d: {
+    updateScript = nix-update-script { };
+    prefetchNodeModules = lib.overrideDerivation finalAttrs.npmDeps (d: {
       outputHash = lib.fakeSha256;
     });
     tests = {
@@ -375,6 +364,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/coder/code-server";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      connornelson
       henkery
       code-asher
     ];
