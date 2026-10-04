@@ -37,6 +37,9 @@ buildPythonPackage rec {
     homepage = "https://tinydb.readthedocs.org/";
     changelog = "https://tinydb.readthedocs.io/en/latest/changelog.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ marcus7070 ];
+    maintainers = with lib.maintainers; [
+      marcus7070
+      sachin-sankar
+    ];
   };
 }

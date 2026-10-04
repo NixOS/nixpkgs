@@ -25916,6 +25916,12 @@
     githubId = 32001364;
     name = "Sam";
   };
+  sachin-sankar = {
+    name = "Sachin Sankar";
+    email = "mail.sachinsankar@gmail.com";
+    github = "sachin-sankar";
+    githubId = 73470743;
+  };
   samlich = {
     email = "nixos@samli.ch";
     github = "samlich";
