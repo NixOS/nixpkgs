@@ -3,12 +3,12 @@
 # - serve this message through IMAP.
 
 let
-  certs = import ../common/acme/server/snakeoil-certs.nix;
+  certs = import ../../common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
 in
 { lib, ... }:
 {
-  name = "stalwart";
+  name = "stalwart-0.15";
 
   nodes.main =
     { pkgs, ... }:

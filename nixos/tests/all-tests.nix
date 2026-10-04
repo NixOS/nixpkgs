@@ -1730,7 +1730,8 @@ in
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
   sssd-legacy-config = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-legacy-config.nix { };
   sstorytime = runTest ./sstorytime.nix;
-  stalwart = runTest ./stalwart/stalwart.nix;
+  stalwart0_15 = runTest ./stalwart/0.15/stalwart.nix;
+  stalwart0_16 = runTest ./stalwart/0.16/stalwart.nix;
   stardust-xr-atmosphere = runTest ./stardust-xr/atmosphere.nix;
   stardust-xr-flatland = runTest ./stardust-xr/flatland.nix;
   stargazer = runTest ./web-servers/stargazer.nix;
