@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   autoreconfHook,
+  versionCheckHook,
   texinfo,
   ncurses,
   libxcrypt,
@@ -41,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     "info"
     "man"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/screen/";
