@@ -49,10 +49,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = [ python3Packages.pygobject3 ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-    "--set-default HOST_DATA_DIRS ${dataDirs}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
+      "--set-default"
+      "HOST_DATA_DIRS"
+      "${dataDirs}"
+    )
+  '';
 
   pythonImportsCheck = [ "gdms" ];
 
