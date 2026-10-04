@@ -2,9 +2,9 @@
   config,
   lib,
   pkgs,
-  utils,
   ...
 }:
+
 let
   cfg = config.services.radicle;
 
@@ -37,19 +37,13 @@ let
     environment = env // {
       RUST_LOG = lib.mkDefault "info";
     };
-    path = [
-      pkgs.gitMinimal
-    ];
-    documentation = [
-      "https://radicle.dev/guides/seeder"
-    ];
+    path = [ pkgs.gitMinimal ];
+    documentation = [ "https://radicle.dev/guides/seeder" ];
     after = [
       "network.target"
       "network-online.target"
     ];
-    requires = [
-      "network-online.target"
-    ];
+    requires = [ "network-online.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = lib.mkMerge [
       {
@@ -132,6 +126,7 @@ let
     };
   };
 in
+
 {
   options = {
     services.radicle = {
@@ -208,7 +203,7 @@ in
               ln -s $out config.json
               install -D -m 644 /dev/stdin keys/radicle.pub <<<"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBgFMhajUng+Rjj/sCFXI9PzG8BQjru2n7JgUVF1Kbv5 snakeoil"
               export RAD_HOME=$PWD
-              ${lib.getExe' pkgs.buildPackages.radicle-node "rad"} config >/dev/null || {
+              ${lib.getExe' cfg.package "rad"} config >/dev/null || {
                 cat -n config.json
                 echo "Invalid config.json according to rad."
                 echo "Please double-check your services.radicle.settings (producing the config.json above),"
@@ -236,9 +231,7 @@ in
             ];
           }
         '';
-        type = lib.types.submodule {
-          freeformType = json.type;
-        };
+        type = lib.types.submodule { freeformType = json.type; };
       };
       httpd = {
         enable = lib.mkEnableOption "Radicle HTTP gateway to radicle-node";
@@ -321,46 +314,30 @@ in
                 "@timer"
               ];
             };
-            confinement.packages = [
-              cfg.package
-            ];
+            confinement.packages = [ cfg.package ];
           }
           # Give only access to the private key to radicle-node.
           {
             serviceConfig =
               if cfg.privateKey == null then
-                {
-                  ImportCredential = [ credentials.privateKey ];
-                }
+                { ImportCredential = [ credentials.privateKey ]; }
               else if lib.types.path.check cfg.privateKey then
-                {
-                  LoadCredential = [ "${credentials.privateKey}:${cfg.privateKey}" ];
-                }
+                { LoadCredential = [ "${credentials.privateKey}:${cfg.privateKey}" ]; }
               else
-                {
-                  ImportCredential = [ "${cfg.privateKey}:${credentials.privateKey}" ];
-                };
+                { ImportCredential = [ "${cfg.privateKey}:${credentials.privateKey}" ]; };
           }
           {
             serviceConfig =
               if cfg.privateKeyPassphrase == null then
-                {
-                  ImportCredential = [ credentials.privateKeyPassphrase ];
-                }
+                { ImportCredential = [ credentials.privateKeyPassphrase ]; }
               else
-                {
-                  ImportCredential = [ "${cfg.privateKeyPassphrase}:${credentials.privateKeyPassphrase}" ];
-                };
+                { ImportCredential = [ "${cfg.privateKeyPassphrase}:${credentials.privateKeyPassphrase}" ]; };
           }
         ];
 
-        environment.systemPackages = [
-          rad-system
-        ];
+        environment.systemPackages = [ rad-system ];
 
-        networking.firewall = lib.mkIf cfg.node.openFirewall {
-          allowedTCPPorts = [ cfg.node.listenPort ];
-        };
+        networking.firewall = lib.mkIf cfg.node.openFirewall { allowedTCPPorts = [ cfg.node.listenPort ]; };
 
         users = {
           users.radicle = {
@@ -369,8 +346,7 @@ in
             home = env.HOME;
             isSystemUser = true;
           };
-          groups.radicle = {
-          };
+          groups.radicle = { };
         };
       }
 
@@ -405,9 +381,7 @@ in
                     "@timer"
                   ];
                 };
-                confinement.packages = [
-                  cfg.httpd.package
-                ];
+                confinement.packages = [ cfg.httpd.package ];
               }
             ];
           }
