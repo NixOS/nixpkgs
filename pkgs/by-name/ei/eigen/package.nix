@@ -24,6 +24,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Fix CUDA-enabled CHOLMOD headers being included inside extern "C".
+    # https://gitlab.com/libeigen/eigen/-/merge_requests/1561
+    (fetchpatch {
+      name = "eigen-cholmod-cuda.patch";
+      url = "https://gitlab.com/libeigen/eigen/-/commit/0b3df4a6e622e7ffbd17240ee6f245db27aadb12.patch";
+      hash = "sha256-JSJyPwWESZPfVJSWJXX9RIqS0eyS7hpH4SoXZMgfJcQ=";
+    })
     # fix bug1213 test
     # ref https://gitlab.com/libeigen/eigen/-/merge_requests/2005 merged upstream
     (fetchpatch {
@@ -31,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-oykUbzaZeVW1A8nBoiMtJvh68Zpu7PDFtAfAjtTQoC0=";
     })
   ];
+
+  prePatch = ''
+    # Match the include indentation used by the upstream CHOLMOD patch.
+    substituteInPlace Eigen/CholmodSupport \
+      --replace-fail '  #include <cholmod.h>' '#include <cholmod.h>'
+  '';
 
   nativeBuildInputs = [
     cmake
