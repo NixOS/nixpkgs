@@ -362,10 +362,13 @@ in
       ]
       ++ [ "${gdm}/share/gdm/greeter-dconf-defaults" ];
 
-    programs.dconf.profiles.user.databases = lib.optionals (!config.security.pam.p11.enable) [
+    programs.dconf.profiles.user.databases = [
       {
         settings."org/gnome/login-screen" = {
-          enable-smartcard-authentication = false;
+          enable-smartcard-authentication = config.security.pam.p11.enable;
+
+          # We currently don't provide a `gdm-switchable-auth` PAM service.
+          enable-switchable-authentication = false;
         };
       }
     ];
