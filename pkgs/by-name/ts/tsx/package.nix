@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs-slim_22,
@@ -10,7 +10,7 @@
   nix-update-script,
 }:
 let
-  pnpm' = pnpm_10.override { nodejs-slim = nodejs-slim_22; };
+  pnpm' = pnpm_10_latest.override { nodejs-slim = nodejs-slim_22; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsx";

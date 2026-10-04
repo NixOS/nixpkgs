@@ -7,14 +7,14 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xr-hardware";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado/utilities";
     repo = "xr-hardware";
     tag = finalAttrs.version;
-    hash = "sha256-w35/LoozCJz0ytHEHWsEdCaYYwyGU6sE13iMckVdOzY=";
+    hash = "sha256-stJjjencaO7cDOyVak2BaDnPQsjsX63+9dwY0Q//7To=";
   };
 
   nativeBuildInputs = [

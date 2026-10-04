@@ -8,7 +8,7 @@
   glib-networking,
   nodejs,
   pkg-config,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   wrapGAppsHook3,
@@ -46,7 +46,7 @@ let
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_10
+      pnpm_10_latest
     ];
 
     pnpmDeps = fetchPnpmDeps {
@@ -56,7 +56,7 @@ let
         src
         sourceRoot
         ;
-      pnpm = pnpm_10;
+      pnpm = pnpm_10_latest;
       fetcherVersion = 3;
       hash = "sha256-m9Rmc9Ww4jb2aQ+RXOwF71daZ6puspdMM/xidnk/YHs=";
     };

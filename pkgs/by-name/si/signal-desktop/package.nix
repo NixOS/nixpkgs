@@ -3,7 +3,7 @@
   stdenv,
   lib,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_latest,
   pnpm_11,
   node-gyp,
   fetchPnpmDeps,
@@ -39,7 +39,7 @@ let
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     inherit (rustPackages_1_97) cargo rustPlatform;
     inherit nodejs;
   };

@@ -3,14 +3,14 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   pnpmConfigHook,
   lib,
   shoko,
   nix-update-script,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shoko-webui";

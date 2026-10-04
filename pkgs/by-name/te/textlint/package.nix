@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs-slim,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   versionCheckHook,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       patches
       ;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 4;
     hash = "sha256-dWcLm8cTo8LC6IqMEe1zDxVJ7ioytKigEwYna6hiO8A=";
   };
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs-slim
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   buildPhase = ''

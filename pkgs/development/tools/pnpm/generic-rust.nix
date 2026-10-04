@@ -34,6 +34,12 @@ rustPackages_1_97.rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ];
 
+  postPatch = ''
+    # upstream duplicates some sources in .cargo/config.toml
+    # that's also defined in Cargo.toml, cargo fails with duplicate definitions
+    sed -i '/# >>> pnpm-managed cargo sources >>>/,/# <<< pnpm-managed cargo sources <<</d' .cargo/config.toml
+  '';
+
   cargoBuildFlags = [
     "--bin=pnpm"
   ];
