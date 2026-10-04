@@ -153,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       zstg
       nolight132
+      miniharinn
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "vicinae";
