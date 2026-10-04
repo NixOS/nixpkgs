@@ -11,6 +11,10 @@ let
     fetchurl {
       inherit name hash;
       url = "https://github.com/IdreesInc/Monocraft/releases/download/v${version}/${name}";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "IdreesInc/Monocraft@${version}";
+      };
     };
 in
 stdenvNoCC.mkDerivation {

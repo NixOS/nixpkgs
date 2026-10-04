@@ -21,14 +21,26 @@ stdenv.mkDerivation (finalAttrs: {
       aarch64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-arm64.tar.gz";
         hash = "sha256-ZBlW1OyxSC3UgtsBu8FkmSFZ4YOAi8zpGBTMfUoumzI=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "unisonweb/unison@${finalAttrs.version}";
+        };
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-arm64.tar.gz";
         hash = "sha256-tphCr3P8EWsyOc7D47duA2sR1xPy/YyBzQlZOn53py0=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "unisonweb/unison@${finalAttrs.version}";
+        };
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
         hash = "sha256-RhO0UawMl/IHSP2vTchwKgLVjpmnA3V3056A14C6Elk=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "unisonweb/unison@${finalAttrs.version}";
+        };
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");

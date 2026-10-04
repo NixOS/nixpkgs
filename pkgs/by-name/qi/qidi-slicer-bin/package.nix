@@ -13,6 +13,10 @@ let
   src = fetchurl {
     url = "https://github.com/QIDITECH/QIDISlicer/releases/download/V${version}/QIDISlicer_${version}_Linux_Ubuntu24.AppImage";
     hash = "sha256-76bdVQu+xCf6uCwkHcpLNNna5MgHm4vbuwMFoQ26N0Y=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "QIDITECH/QIDISlicer@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

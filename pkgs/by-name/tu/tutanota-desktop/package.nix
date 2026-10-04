@@ -14,6 +14,10 @@ let
   linuxSrc = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
     hash = "sha256-bhgKpOVkx5NdnhbfDawZp3cvE9sjdZYu0TKcUSgi6w4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tutao/tutanota@${version}";
+    };
   };
 
   darwinSrc = fetchurl {

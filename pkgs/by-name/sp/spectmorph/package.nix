@@ -19,6 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/swesterfeld/spectmorph/releases/download/${finalAttrs.version}/spectmorph-${finalAttrs.version}.tar.bz2";
     hash = "sha256-H/PaczAkjxeu2Q6S/jazZ0PU9oCmhBzsLgbGLusxXm8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "swesterfeld/spectmorph@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

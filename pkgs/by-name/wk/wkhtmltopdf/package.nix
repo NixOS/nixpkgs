@@ -23,6 +23,10 @@ let
     src = fetchurl {
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox-${version}.macos-cocoa.pkg";
       sha256 = "sha256-gaZrd7UI/t6NvKpnEnIDdIN2Vos2c6F/ZhG21R6YlPg=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "wkhtmltopdf/packaging@${version}";
+      };
     };
 
     nativeBuildInputs = [
@@ -78,6 +82,10 @@ let
     src = fetchurl {
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_arm64.deb";
       hash = "sha256-tmBhV7J8E+BE0Ku+ZwMB+I3k4Xgq/KT5wGpYF/PgOpw=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "wkhtmltopdf/packaging@${version}";
+      };
     };
   }
   // _linuxAttrs;
@@ -87,6 +95,10 @@ let
     src = fetchurl {
       url = "https://github.com/wkhtmltopdf/packaging/releases/download/${version}/wkhtmltox_${version}.bookworm_amd64.deb";
       hash = "sha256-mLoNFXtQ028jvQ3t9MCqKMewxQ/NzcVKpba7uoGjlB0=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "wkhtmltopdf/packaging@${version}";
+      };
     };
   }
   // _linuxAttrs;

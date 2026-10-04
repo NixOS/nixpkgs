@@ -26,6 +26,10 @@ let
   desktopIcon = fetchurl {
     url = "https://github.com/yairm210/Unciv/blob/${version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
     hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "yairm210/Unciv@${version}";
+    };
   };
 
   envLibPath = lib.makeLibraryPath (
@@ -43,6 +47,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
     hash = "sha256-fIdv48YxqcKlBNhflhwUkhBkBs9q7pbc8PQ3bwqRXYg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "yairm210/Unciv@${version}";
+    };
   };
 
   dontUnpack = true;

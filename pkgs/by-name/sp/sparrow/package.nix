@@ -81,16 +81,28 @@ let
       popd
       mv $downloadedFile $out
     '';
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sparrowwallet/sparrow@${version}";
+    };
   };
 
   manifest = fetchurl {
     url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt";
     hash = "sha256-/beBl+4nD9CZLQn0OsiZxWKaJTmyHaQi/devyImEJI8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sparrowwallet/sparrow@${version}";
+    };
   };
 
   manifestSignature = fetchurl {
     url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt.asc";
     hash = "sha256-kk4rC68Ij/mUeSgX1bw7x4unUeriFsmcruBky1pbYro=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sparrowwallet/sparrow@${version}";
+    };
   };
 
   publicKey = ./publickey.asc;

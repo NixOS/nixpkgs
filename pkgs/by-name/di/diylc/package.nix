@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/bancika/diy-layout-creator/releases/download/v${finalAttrs.version}/diylc-${finalAttrs.version}-universal.zip";
     hash = "sha256-ZHGsxQJ6NE8YmQyGnHavhxzgp/6J3z/0XY0Duch9boU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "bancika/diy-layout-creator@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

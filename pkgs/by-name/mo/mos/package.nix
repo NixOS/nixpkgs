@@ -11,6 +11,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}-20260531.1.zip";
     hash = "sha256-LqaelvCS5E2tqTpVvaHN2rMynFJ7vV8G4A37eOlTlgo=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Caldis/Mos@${finalAttrs.version}";
+    };
   };
   sourceRoot = ".";
 

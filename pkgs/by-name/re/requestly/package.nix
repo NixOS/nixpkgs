@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/requestly/requestly-desktop-app/releases/download/v${version}/Requestly-${version}.AppImage";
     hash = "sha256-TnHEt5CCGNb75KtDEzuDbkqba6V5Kqkl1JkPfHT6dPI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "requestly/requestly-desktop-app@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

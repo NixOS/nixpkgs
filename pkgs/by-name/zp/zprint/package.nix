@@ -12,6 +12,10 @@ buildGraalvmNativeImage (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/kkinnear/zprint/releases/download/${finalAttrs.version}/zprint-filter-${finalAttrs.version}";
     sha256 = "sha256-0ogZkC8j+ja0aWvFgNhygof4GZ78aqQA75lRxYfu6do=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "kkinnear/zprint@${finalAttrs.version}";
+    };
   };
 
   extraNativeImageBuildArgs = [

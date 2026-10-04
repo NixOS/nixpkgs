@@ -31,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "kkos/oniguruma@${finalAttrs.version}";
+    };
     homepage = "https://github.com/kkos/oniguruma";
     description = "Regular expressions library";
     mainProgram = "onig-config";

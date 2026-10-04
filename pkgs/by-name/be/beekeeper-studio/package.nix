@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "sha256-ivXtgZjlhoQ0hBIbdUx3VZJY/QUloh8War0OlN2gOfM=";
         aarch64-darwin = "sha256-jPnGw4iDvfCMlim8ASAv5IdbpNsF6jaW2HsnqLvrCwY=";
       };
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "beekeeper-studio/beekeeper-studio@${finalAttrs.version}";
+      };
     };
 
   nativeBuildInputs =

@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/sveinbjornt/Sloth/releases/download/${finalAttrs.version}/sloth-${finalAttrs.version}.zip";
     hash = "sha256-K8DweBFAILEQyqri6NO+p5qRam+BHjIk1tl43gcseNs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sveinbjornt/Sloth@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

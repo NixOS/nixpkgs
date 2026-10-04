@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/quarkusio/quarkus/releases/download/${finalAttrs.version}/quarkus-cli-${finalAttrs.version}.tar.gz";
     hash = "sha256-OmQlwKRnQXGYVS/ehhj/8Yt9IgaGaIVL9V+NgJG9+hg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "quarkusio/quarkus@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

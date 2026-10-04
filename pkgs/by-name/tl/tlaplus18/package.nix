@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/tlaplus/tlaplus/releases/download/v${finalAttrs.version}/tla2tools.jar";
     sha256 = "sha256-OXgpd1xuyvhveunlybBi/N6jnxtp/J8Kmp8PYX3eSZ4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tlaplus/tlaplus@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${finalAttrs.version}/clightning-v${finalAttrs.version}.zip";
     hash = "sha256-MEsZ5GPCY6q/SNO+xcktfGiCZUVgl4p7pdMOiqIqFJM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ElementsProject/lightning@${finalAttrs.version}";
+    };
   };
 
   # when building on darwin we need cctools to provide the correct libtool

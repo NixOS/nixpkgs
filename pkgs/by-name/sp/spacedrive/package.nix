@@ -30,10 +30,18 @@ let
           url = "https://github.com/spacedriveapp/spacedrive/releases/download/${version}/Spacedrive-linux-x86_64.deb";
           hash = "sha256-MLCAHNLJ/9bdCBLBBssrpk98uvKTfHs9YGxmxJ11/oY=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "spacedriveapp/spacedrive@${version}";
+        };
       }
       .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "spacedriveapp/spacedrive@${version}";
+    };
     broken = true;
     description = "Open source file manager, powered by a virtual distributed filesystem";
     homepage = "https://www.spacedrive.com";

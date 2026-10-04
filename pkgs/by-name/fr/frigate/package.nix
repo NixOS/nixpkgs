@@ -2,6 +2,7 @@
   addDriverRunpath,
   callPackage,
   fetchFromGitHub,
+  fetchurl,
   rustPlatform,
   ffmpeg-headless,
   frigate,
@@ -60,6 +61,35 @@ let
   );
 
   inherit (python3Packages) python;
+
+  # Tensorflow Lite models
+  # https://github.com/blakeblackshear/frigate/blob/v0.15.0/docker/main/Dockerfile#L115-L117
+  tflite_cpu_model = fetchurl {
+    url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess.tflite";
+    hash = "sha256-kLszpjTgQZFMwYGapd+ZgY5sOWxNLblSwP16nP/Eck8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "google-coral/test_data@release-frogfish";
+    };
+  };
+  tflite_edgetpu_model = fetchurl {
+    url = "https://github.com/google-coral/test_data/raw/release-frogfish/ssdlite_mobiledet_coco_qat_postprocess_edgetpu.tflite";
+    hash = "sha256-Siviu7YU5XbVbcuRT6UnUr8PE0EVEnENNV2X+qGzVkE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "google-coral/test_data@release-frogfish";
+    };
+  };
+
+  # TODO: OpenVino model
+  coco_91cl_bkgr = fetchurl {
+    url = "https://github.com/openvinotoolkit/open_model_zoo/raw/master/data/dataset_classes/coco_91cl_bkgr.txt";
+    hash = "sha256-5Cj2vEiWR8Z9d2xBmVoLZuNRv4UOuxHSGZQWTJorXUQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "openvinotoolkit/open_model_zoo@master";
+    };
+  };
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "frigate";

@@ -16,6 +16,10 @@ let
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
     hash = "sha256-hK9cu9c2kJRCJ3iy0CucRP0whgDgF5K29JgR4AIKXVg=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "janhq/jan@${version}";
+    };
   };
 
   linux-src = fetchurl {

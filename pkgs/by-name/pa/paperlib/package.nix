@@ -16,6 +16,10 @@ let
           url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}_arm.dmg";
           hash = "sha256-KNMPUeCNtODHzMJhCwI4SJPRfa87RmAe6CRRazgRZCQ=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "Future-Scholars/paperlib@${version}";
+        };
         x86_64-linux = {
           url = "https://github.com/Future-Scholars/paperlib/releases/download/release-electron-${version}/Paperlib_${version}.AppImage";
           hash = "sha256-uBYhiUL4YWwnLLPvXMoXjlQqlqFep/OpwwnmPx7s5dY=";
@@ -28,6 +32,10 @@ let
   };
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "Future-Scholars/paperlib@${version}";
+    };
     homepage = "https://github.com/Future-Scholars/paperlib";
     description = "Open-source academic paper management tool";
     license = lib.licenses.gpl3Only;

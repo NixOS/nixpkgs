@@ -30,6 +30,10 @@ let
     fetchurl {
       url = "https://github.com/${repo}/releases/download/v${version}/${asset}";
       inherit hash;
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "${repo}@${version}";
+      };
     };
 
   bloop-binary = fetchAsset (

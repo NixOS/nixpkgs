@@ -119,6 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "jqlang/jq@jq-${finalAttrs.version}";
+    };
     changelog = "https://github.com/jqlang/jq/releases/tag/jq-${finalAttrs.version}";
     description = "Lightweight and flexible command-line JSON processor";
     homepage = "https://jqlang.github.io/jq/";
@@ -132,9 +136,5 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "jq";
-    identifiers.purlParts = {
-      type = "github";
-      spec = "jqlang/jq@jq-${finalAttrs.version}";
-    };
   };
 })

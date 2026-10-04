@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/staniel359/muffon/releases/download/v${version}/muffon-${version}-linux-x86_64.AppImage";
     hash = "sha256-BrPlvHnwhMoPVm8AFa6bF8A/jCDwKUynkmxBlwPmsic=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "staniel359/muffon@${version}";
+    };
   };
   appimageContents = appimageTools.extract { inherit pname src version; };
 in

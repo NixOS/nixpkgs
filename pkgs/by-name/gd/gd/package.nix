@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/libgd/libgd/releases/download/gd-${finalAttrs.version}/libgd-${finalAttrs.version}.tar.xz";
     sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "libgd/libgd@${finalAttrs.version}";
+    };
   };
 
   patches = [

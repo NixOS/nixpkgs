@@ -17,6 +17,10 @@ let
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
           hash = "sha256-8wc2SkHlvss9k+agB/JKfF/tAHPxLVab6meIXslEeqs=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "hoppscotch/releases@${version}";
+        };
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
           hash = "sha256-pBt5S+8VdqipmRwOGQurHpZg5uHv0MJh0GbuzBFDTjg=";
@@ -27,6 +31,10 @@ let
   passthru.updateScript = ./update.sh;
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "hoppscotch/releases@${version}";
+    };
     description = "Open source API development ecosystem";
     longDescription = ''
       Hoppscotch is a lightweight, web-based API development suite. It was built

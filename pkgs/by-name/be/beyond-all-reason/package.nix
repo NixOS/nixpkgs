@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/beyond-all-reason/BYAR-Chobby/releases/download/v${version}/Beyond-All-Reason-${version}.AppImage";
     hash = "sha256-ZJW5BdxxqyrM2TJTO0SBp4BXt3ILyi77EZx73X8hqJE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "beyond-all-reason/BYAR-Chobby@${version}";
+    };
   };
   appimageContents = appimageTools.extract { inherit pname version src; };
 in

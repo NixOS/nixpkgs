@@ -11,6 +11,10 @@ let
   src = fetchurl {
     url = "https://github.com/artisan-roaster-scope/artisan/releases/download/v${version}/${pname}-linux-${version}.AppImage";
     hash = "sha256-4vhdx97Y8ntj4HU2T/pHq/ZgioeY0yi+ydVcDFrHRrQ=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "artisan-roaster-scope/artisan@${version}";
+    };
   };
 
   appimageContents = appimageTools.extract {

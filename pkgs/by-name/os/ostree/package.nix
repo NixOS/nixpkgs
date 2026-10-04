@@ -67,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
     hash = "sha256-ooHy22MfNyHs1Lnid5oer1bi0D8sxHYpqfARfxIBaoM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "ostreedev/ostree@${finalAttrs.version}";
+    };
   };
 
   patches = [

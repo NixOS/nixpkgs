@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/robm/dzen/tarball/master/dzen2-${finalAttrs.version}git.tar.gz";
     sha256 = "d4f7943cd39dc23fd825eb684b49dc3484860fa8443d30b06ee38af72a53b556";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "robm/dzen@${finalAttrs.version}";
+    };
   };
 
   patchPhase = ''

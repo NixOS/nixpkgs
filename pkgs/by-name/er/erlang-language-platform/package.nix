@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/WhatsApp/erlang-language-platform/releases/download/${version}/${release_name}.tar.gz";
     hash = hashes.${release_name};
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "WhatsApp/erlang-language-platform@${version}";
+    };
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];

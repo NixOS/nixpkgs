@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/fortran-lang/fpm/releases/download/v${finalAttrs.version}/fpm-${finalAttrs.version}.F90";
     hash = "sha256-ABz/bPEUXyFbqgiIuieswGzqMKibedGovpfbP/+8jNI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "fortran-lang/fpm@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

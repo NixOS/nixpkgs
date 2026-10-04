@@ -15,6 +15,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Houston4444/RaySession/releases/download/v${finalAttrs.version}/RaySession-${finalAttrs.version}-source.tar.gz";
     hash = "sha256-cr9kqZdqY6Wq+RkzwYxNrb/PLFREKUgWeVNILVUkc7A=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Houston4444/RaySession@${finalAttrs.version}";
+    };
   };
 
   postPatch = ''

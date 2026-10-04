@@ -16,6 +16,10 @@ let
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.dmg";
           hash = "sha256-sPl7KXC8Z13LFZvxuKg02iDbtrCxn//Yrr8AOOf3VD4=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "Kong/insomnia@${version}";
+        };
         x86_64-linux = {
           url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
           hash = "sha256-PlcKBQnkmgU/SsLRKX7ohrGHm7B4hK9FMkplwlbFolI=";
@@ -24,6 +28,10 @@ let
       .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "Kong/insomnia@${version}";
+    };
     homepage = "https://insomnia.rest";
     description = "Open-source, cross-platform API client for GraphQL, REST, WebSockets, SSE and gRPC, with Cloud, Local and Git storage";
     mainProgram = "insomnia";

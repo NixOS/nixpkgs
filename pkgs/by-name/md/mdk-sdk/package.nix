@@ -57,7 +57,13 @@ stdenv.mkDerivation {
   pname = "mdk-sdk";
   inherit version;
 
-  src = fetchurl { inherit (source) url hash; };
+  src = fetchurl {
+    inherit (source) url hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "wang-bin/mdk-sdk@${version}";
+    };
+  };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 

@@ -18,6 +18,10 @@ pypy2Packages.buildPythonApplication rec {
   src = fetchurl {
     url = "https://github.com/mhagger/cvs2svn/releases/download/${version}/cvs2svn-${version}.tar.gz";
     sha256 = "1ska0z15sjhyfi860rjazz9ya1gxbf5c0h8dfqwz88h7fccd22b4";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "mhagger/cvs2svn@${version}";
+    };
   };
 
   nativeBuildInputs = [

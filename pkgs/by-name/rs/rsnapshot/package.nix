@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/rsnapshot/rsnapshot/releases/download/${finalAttrs.version}/rsnapshot-${finalAttrs.version}.tar.gz";
     hash = "sha256-j2r4BG7msCk7JjidCMtpUMf33f/8H3Tu/LCHvUnUT2I=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rsnapshot/rsnapshot@${finalAttrs.version}";
+    };
   };
 
   propagatedBuildInputs = [

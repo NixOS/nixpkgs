@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pmd/pmd/releases/download/pmd_releases/${finalAttrs.version}/pmd-bin-${finalAttrs.version}.zip";
     hash = "sha256-Iaz5bUPLQNWRyszMHCCmb8eW6t32nqYYEllER7rHoR0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "pmd/pmd@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

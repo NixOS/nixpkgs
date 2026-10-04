@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/cytoscape/cytoscape/releases/download/${finalAttrs.version}/cytoscape-unix-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-gHCU97AfBzo4r+F+Fc5lHd+kQtj/NsoCNipAhv5O7sE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cytoscape/cytoscape@${finalAttrs.version}";
+    };
   };
 
   patches = [

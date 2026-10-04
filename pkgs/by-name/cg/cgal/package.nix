@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/CGAL/cgal/releases/download/v${finalAttrs.version}/CGAL-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-tr53xgdlqEVjNd6ZHur2/+xVJWmE5Knsxql8N7v+hb8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "CGAL/cgal@${finalAttrs.version}";
+    };
   };
 
   strictDeps = true;

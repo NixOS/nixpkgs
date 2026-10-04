@@ -16,6 +16,10 @@ let
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_arm64.AppImage";
           hash = "sha256-9X8AyFcKy94blybAEU/H83Ku5oFQU4piVtCTNn4mobE=";
         };
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "dbgate/dbgate@${version}";
+        };
         x86_64-linux = {
           url = "https://github.com/dbgate/dbgate/releases/download/v${version}/dbgate-${version}-linux_x86_64.AppImage";
           hash = "sha256-v3HPdY5so4IYY8tfk5mqjKOglCvcKk7uKYHV51DoiLM=";
@@ -30,6 +34,10 @@ let
   passthru.updateScript = ./update.sh;
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "dbgate/dbgate@${version}";
+    };
     description = "Database manager for MySQL, PostgreSQL, SQL Server, MongoDB, SQLite and others";
     homepage = "https://dbgate.org/";
     license = lib.licenses.mit;

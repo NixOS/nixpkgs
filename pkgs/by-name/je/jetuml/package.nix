@@ -19,6 +19,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/prmr/JetUML/releases/download/v${finalAttrs.version}/JetUML-${finalAttrs.version}.jar";
     hash = "sha256-X3mLfK06gQnZ9vzYX1CDw6r6krIuZU9DtujgcferxsM=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "prmr/JetUML@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

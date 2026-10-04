@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/redeclipse/base/releases/download/v${finalAttrs.version}/redeclipse_${finalAttrs.version}_nix.tar.bz2";
     sha256 = "143i713ggbk607qr4n39pi0pn8d93x9x6fcbh8rc51jb9qhi8p5i";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "redeclipse/base@${finalAttrs.version}";
+    };
   };
 
   buildInputs = [

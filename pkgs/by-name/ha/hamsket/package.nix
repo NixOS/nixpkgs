@@ -12,6 +12,10 @@ let
   src = fetchurl {
     url = "https://github.com/TheGoddessInari/hamsket/releases/download/nightly/Hamsket-${version}.AppImage";
     sha256 = "sha256-r85ZwcalBd/nCIBxOaQk7XClxj7VZtxwky4eWWm2tZ8=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "TheGoddessInari/hamsket@${version}";
+    };
   };
 
   desktopItem = (

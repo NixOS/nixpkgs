@@ -11,6 +11,10 @@ ocamlPackages.buildDunePackage rec {
   src = fetchurl {
     url = "https://github.com/hhugo/merge-fmt/releases/download/${version}/merge-fmt-${version}.tbz";
     hash = "sha256-F+ds0ToWcKD4NJU3yYSVW4B3m2LBnhR+4QVTDO79q14=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "hhugo/merge-fmt@${version}";
+    };
   };
 
   minimalOCamlVersion = "4.06";

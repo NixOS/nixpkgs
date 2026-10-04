@@ -18,10 +18,18 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/PhotonVision/photonvision/releases/download/v${finalAttrs.version}/photonvision-v${finalAttrs.version}-linuxx64.jar";
         hash = "sha256-yEb6GCt29DjZNDsIqDvF/AiCw3QVMxUFKQM22OlMl7Q=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "PhotonVision/photonvision@${finalAttrs.version}";
+        };
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/PhotonVision/photonvision/releases/download/v${finalAttrs.version}/photonvision-v${finalAttrs.version}-linuxarm64.jar";
         hash = "sha256-YG9wyh+MCsv/RBdiFvgrF6Fw/6AnN7OEi4ofkMptfT0=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "PhotonVision/photonvision@${finalAttrs.version}";
+        };
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

@@ -14,6 +14,10 @@ let
   src = fetchurl {
     url = "https://github.com/Zettlr/Zettlr/releases/download/v${version}/Zettlr-${version}-x86_64.appimage";
     hash = "sha256-DICsOp5ojOmcLJoFJU2vMqr5qqxKQPIwfmlevpjQvfs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Zettlr/Zettlr@${version}";
+    };
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;

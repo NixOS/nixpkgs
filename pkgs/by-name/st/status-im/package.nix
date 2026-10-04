@@ -32,6 +32,10 @@ let
   icon = fetchurl {
     url = "https://github.com/status-im/status-desktop/raw/afde83651724a555626b5d9a3d582918de6c3d59/status.png";
     hash = "sha256-ViGuOr9LskGs/P7pjPO9zYgosWaZlZZYVuPpliOA5dY=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "status-im/status-desktop@${version}";
+    };
   };
   pname = "status-desktop";
 in
@@ -42,6 +46,10 @@ appimageTools.wrapType2 {
     install -m 444 -D ${icon} $out/share/icons/hicolor/512x512/apps/status.png
   '';
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "status-im/status-desktop@${version}";
+    };
     description = "Desktop client for the Status Network";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ a-kenji ];

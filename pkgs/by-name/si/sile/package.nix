@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.zst";
     hash = "sha256-XpfBllGv9xBoe5MpLVNhy0EWUglLzIxiyBHBn3qBRks=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "sile-typesetter/sile@${finalAttrs.version}";
+    };
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

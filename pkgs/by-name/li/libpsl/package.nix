@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/rockdaboot/libpsl/releases/download/${finalAttrs.version}/libpsl-${finalAttrs.version}.tar.lz";
     hash = "sha256-mp9qjG7bplDPnqVUdc0XLdKEhzFoBOnHMgLZdXLNOi0=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "rockdaboot/libpsl@${finalAttrs.version}";
+    };
   };
 
   patches = [

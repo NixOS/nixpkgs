@@ -14,6 +14,10 @@ let
     src = fetchurl {
       url = "https://github.com/kee-org/keepassrpc/releases/download/v${version}/KeePassRPC.plgx";
       hash = "sha256-p5dYluCrXAKhBhlm6sQ3QQE3gLMJzEZsHXwGnVeXFos=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "kee-org/keepassrpc@${version}";
+      };
     };
 
     meta = {

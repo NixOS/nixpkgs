@@ -107,6 +107,10 @@ let
     src = fetchurl {
       url = "https://github.com/DonutWare/Fladder/releases/download/v${sourceBuild.version}/Fladder-macOS-${sourceBuild.version}.dmg";
       hash = "sha256-23+T6DOhSvq7cQMqBmTIMcVnEo1bYMaszEAndQZe/lE=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "DonutWare/Fladder@${sourceBuild.version}";
+      };
     };
 
     nativeBuildInputs = [

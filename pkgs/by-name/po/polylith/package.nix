@@ -13,6 +13,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/polyfy/polylith/releases/download/v${finalAttrs.version}/poly-${finalAttrs.version}.jar";
     sha256 = "sha256-t3WCANee9WwmdYnQldfGp4zEhAH+rFBxR1jPNdOIoio=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "polyfy/polylith@${finalAttrs.version}";
+    };
   };
 
   dontUnpack = true;

@@ -16,6 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/howl-editor/howl/releases/download/${finalAttrs.version}/howl-${finalAttrs.version}.tgz";
     sha256 = "1qc58l3rkr37cj6vhf8c7bnwbz93nscyraz7jxqwjq6k4gj0cjw3";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "howl-editor/howl@${finalAttrs.version}";
+    };
   };
 
   sourceRoot = "howl-${finalAttrs.version}/src";

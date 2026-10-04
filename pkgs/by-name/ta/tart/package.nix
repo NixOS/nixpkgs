@@ -19,6 +19,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/openai/tart/releases/download/${finalAttrs.version}/tart.tar.gz";
     hash = "sha256-1TF1LE2tXUIUrH/1QM78JkffH8ojONQT08AXVPVLNWs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "cirruslabs/tart@${finalAttrs.version}";
+    };
   };
   sourceRoot = ".";
 

@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
     hash = "sha256-YEnVPpmxLiXC2EjbIaxKBjgKRv5MQVckPVVv4GkwBCw=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "gap-system/gap@${version}";
+    };
   };
 
   # remove all non-essential packages (which take up a lot of space)

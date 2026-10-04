@@ -87,6 +87,10 @@ clangStdenv.mkDerivation (finalAttrs: {
       nnue = fetchurl {
         url = "https://github.com/yaneurao/YaneuraOu/releases/download/suisho5/Suisho5.7z";
         hash = "sha256-ZzTjo9KOZ7kgbDRC9tEPFhSBODJ9/4Ecre389YH3mAk=";
+        meta.identifiers.purlParts = {
+          type = "github";
+          spec = "yaneurao/YaneuraOu@${finalAttrs.version}";
+        };
       };
     in
     ''

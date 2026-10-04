@@ -97,6 +97,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    identifiers.purlParts = {
+      type = "github";
+      spec = "Vector35/binaryninja-api@${finalAttrs.version}";
+    };
     changelog = "https://binary.ninja/changelog/#${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";

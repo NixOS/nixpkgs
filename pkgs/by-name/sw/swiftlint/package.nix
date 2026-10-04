@@ -20,6 +20,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/realm/SwiftLint/releases/download/${finalAttrs.version}/${platform.filename}";
     inherit (platform) hash;
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "realm/SwiftLint@${finalAttrs.version}";
+    };
   };
 
   dontPatch = true;

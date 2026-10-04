@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }/latte-int-${finalAttrs.version}.tar.gz";
     hash = "sha256-AGwQ6+XVv9ybFZy6YmSkQyhh/nY84F/oIWJKt9P8IXA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "latte-int/latte@${finalAttrs.version}";
+    };
   };
 
   patches = [

@@ -3,12 +3,16 @@
   stdenvNoCC,
   lib,
 }:
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation rec {
   pname = "rime-zhwiki";
   version = "20260416";
   src = fetchurl {
     url = "https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.3.0/zhwiki-20260416.dict.yaml";
     hash = "sha256-XBQORi+cAKEZUAt/7A07kn8Pg5IAAafqQI4mdI0J6gc=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "felixonmars/fcitx5-pinyin-zhwiki@${version}";
+    };
   };
 
   dontUnpack = true;

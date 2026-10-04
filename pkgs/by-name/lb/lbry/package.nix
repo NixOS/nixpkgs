@@ -15,6 +15,10 @@ appimageTools.wrapAppImage rec {
       url = "https://github.com/lbryio/lbry-desktop/releases/download/v${version}/LBRY_${version}.AppImage";
       # Gotten from latest-linux.yml
       hash = "sha256-FkqIazE4eIEobYRBstXfPWh6MTCaNcCLk14yDGC4rRk=";
+      meta.identifiers.purlParts = {
+        type = "github";
+        spec = "lbryio/lbry-desktop@${version}";
+      };
     };
   };
 

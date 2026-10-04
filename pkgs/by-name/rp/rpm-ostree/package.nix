@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/coreos/rpm-ostree/releases/download/v${finalAttrs.version}/rpm-ostree-${finalAttrs.version}.tar.xz";
     hash = "sha256-/dgF4jN4Sq7pRFmSMWXmG21y0PlkPPOMf8QhP8CB+yA=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "coreos/rpm-ostree@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

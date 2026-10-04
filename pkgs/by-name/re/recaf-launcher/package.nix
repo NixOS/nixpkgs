@@ -9,6 +9,10 @@ let
   jar = fetchurl {
     url = "https://github.com/Col-E/Recaf-Launcher/releases/download/${version}/recaf-gui-${version}.jar";
     hash = "sha256-RHsI8z/orwR9b9s+LrrOHpxpr82J6YOpnfik3dnlsvI=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Col-E/Recaf-Launcher@${version}";
+    };
   };
 in
 buildFHSEnv {

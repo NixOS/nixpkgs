@@ -36,6 +36,10 @@ let
       pandapip1
       prince213
     ];
+    identifiers.purlParts = {
+      type = "github";
+      spec = "localsend/localsend@${version}";
+    };
   };
 in
 if stdenvNoCC.hostPlatform.isDarwin then

@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/tpm2-software/tpm2-tools/releases/download/${finalAttrs.version}/tpm2-tools-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-HLcxhcroFLThXHwtCyJkLWQPr0h3X0FWof2S7fhL73M=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "tpm2-software/tpm2-tools@${finalAttrs.version}";
+    };
   };
 
   nativeBuildInputs = [

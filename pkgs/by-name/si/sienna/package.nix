@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/SimonLarsen/sienna/releases/download/v${version}/sienna-${version}.love";
     hash = "sha256-1bFjhN7jL/PMYMJH1ete6uyHTYsTGgoP60sf/sJTLlU=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "SimonLarsen/sienna@${version}";
+    };
   };
 
   icon = fetchurl {

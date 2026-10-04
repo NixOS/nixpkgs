@@ -18,6 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/SnosMe/awakened-poe-trade/releases/download/v${finalAttrs.version}/Awakened-PoE-Trade-${finalAttrs.version}.AppImage";
     hash = "sha256-DIksV61mC0E2ZPztWK+WnMqR9KXwLMWQpc7hajaymyE=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "SnosMe/awakened-poe-trade@${finalAttrs.version}";
+    };
   };
 
   passthru = {

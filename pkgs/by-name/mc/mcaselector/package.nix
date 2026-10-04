@@ -18,6 +18,10 @@ let
   icon = fetchurl {
     url = "https://github.com/Querz/mcaselector/raw/${version}/installer/linux/icon.png";
     hash = "sha256-nUHTxFHKhp//AL3/B43iXPmp/gcCQPgrEqGAV23U/Vs=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "Querz/mcaselector@${version}";
+    };
   };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {

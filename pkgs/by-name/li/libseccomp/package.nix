@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${finalAttrs.version}/libseccomp-${finalAttrs.version}.tar.gz";
     hash = "sha256-UB9mxmciXVN5G5fh18+Fq3ZMKX0EiB9g849FHEsO4b4=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "seccomp/libseccomp@${finalAttrs.version}";
+    };
   };
 
   outputs = [

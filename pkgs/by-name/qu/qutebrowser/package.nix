@@ -45,6 +45,10 @@ python3.pkgs.buildPythonApplication {
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/qutebrowser-${version}.tar.gz";
     hash = "sha256-x/lYhOpeZnXlhAJb6lXP+VDEfXSa/39BX2jaA/zOD5I=";
+    meta.identifiers.purlParts = {
+      type = "github";
+      spec = "qutebrowser/qutebrowser@${version}";
+    };
   };
 
   # Needs tox

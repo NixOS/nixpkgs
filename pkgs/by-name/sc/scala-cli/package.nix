@@ -96,6 +96,10 @@ stdenv.mkDerivation (finalAttrs: {
       kubukoz
     ];
     inherit platforms;
+    identifiers.purlParts = {
+      type = "github";
+      spec = "Virtuslab/scala-cli@${finalAttrs.version}";
+    };
   };
 
   passthru = {
