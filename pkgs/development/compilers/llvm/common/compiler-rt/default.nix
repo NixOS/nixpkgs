@@ -14,6 +14,7 @@
   libcxx,
   linuxHeaders,
   freebsd,
+  windows,
 
   # Some platforms have switched to using compiler-rt, but still want a
   # libgcc.a for ABI compat purposes. The use case would be old code that
@@ -119,6 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
     hash = "sha256-Av6CN95XjdUagIKh3AAjD0UK8r01fDz0cD0BLjZ70dg=";
     relative = "compiler-rt";
+  })
+  ++ lib.optional (lib.strings.versionOlder version "23.1.0") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/77b7183542f7f6b3b47a271324c2ac93feb8f811.patch";
+    hash = "sha256-AEVaejvvgmay6zAqCSPZ6w4LGtySUCzKRqEErm88pIM=";
+    relative = "compiler-rt";
   });
 
   nativeBuildInputs = [
@@ -149,10 +155,18 @@ stdenv.mkDerivation (finalAttrs: {
         # wrong, or perhaps there is a way to provide an assert.h.
         "-Wno-error=implicit-function-declaration"
       ]
+      ++ lib.optionals (useLLVM && stdenv.targetPlatform.isWindows) [
+        "-isystem ${windows.sdk}/crt/include"
+        "-isystem ${windows.sdk}/sdk/include"
+        "-isystem ${windows.sdk}/sdk/include/ucrt"
+      ]
     );
 
     # Work around clang’s trying to invoke unprefixed-ld on Darwin when `-target` is passed.
     NIX_CFLAGS_LINK = lib.optionalString (stdenv.hostPlatform.isDarwin) "--ld-path=${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}ld";
+  }
+  // lib.optionalAttrs (stdenv.targetPlatform.isWindows && stdenv.cc.bintools.isLLVM) {
+    RC = "${stdenv.cc.bintools}/bin/${stdenv.cc.targetPrefix}windres";
   };
 
   cmakeFlags = [

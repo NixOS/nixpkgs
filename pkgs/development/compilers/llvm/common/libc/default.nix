@@ -14,6 +14,7 @@
   ninja,
   isFullBuild ? true,
   linuxHeaders,
+  fetchpatch,
 }:
 let
   pname = "libc";
@@ -41,11 +42,17 @@ let
   needHdrGen = isFullBuild || lib.versionAtLeast release_version "22";
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version patches;
+  inherit pname version;
 
   src = src';
 
   sourceRoot = "${finalAttrs.src.name}/runtimes";
+
+  patches = lib.optional (lib.versionOlder version "23.1.0") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/commit/77b7183542f7f6b3b47a271324c2ac93feb8f811.patch";
+    hash = "sha256-fyvMLfDGJz5ViNFCpgAGhCODRccAbcBBfk98Jvq7brc=";
+    relative = "runtimes";
+  });
 
   nativeBuildInputs = [
     cmake
