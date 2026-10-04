@@ -1831,6 +1831,8 @@ with pkgs;
 
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
 
+  headroom = python3Packages.toPythonApplication python3Packages.headroom-ai;
+
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   aiovban-pyaudio = python3Packages.toPythonApplication python3Packages.aiovban-pyaudio;

@@ -7611,6 +7611,8 @@ self: super: with self; {
 
   headerparser = callPackage ../development/python-modules/headerparser { };
 
+  headroom-ai = callPackage ../development/python-modules/headroom-ai { };
+
   heapdict = callPackage ../development/python-modules/heapdict { };
 
   heatmiserv3 = callPackage ../development/python-modules/heatmiserv3 { };
