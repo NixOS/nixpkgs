@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.unix;
+    mainProgram = "screen";
     maintainers = [ ];
   };
 })
