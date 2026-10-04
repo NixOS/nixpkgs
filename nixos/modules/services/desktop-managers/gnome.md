@@ -82,7 +82,7 @@ The following example uses `xmonad` window manager:
     {
       wmName = "xmonad";
       wmLabel = "XMonad";
-      wmCommand = "${pkgs.haskellPackages.xmonad}/bin/xmonad";
+      wmCommand = lib.getExe pkgs.haskellPackages.xmonad;
       enableGnomePanel = false;
     }
   ];

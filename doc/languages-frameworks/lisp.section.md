@@ -59,7 +59,7 @@ Such a Lisp can be now used e.g. to compile your sources:
   buildPhase = ''
     runHook preBuild
 
-    ${sbcl'}/bin/sbcl --load my-build-file.lisp
+    ${lib.getExe sbcl'} --load my-build-file.lisp
 
     runHook postBuild
   '';
