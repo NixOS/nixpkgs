@@ -5,11 +5,11 @@
   rust-jemalloc-sys,
   installShellFiles,
   nix-update-script,
-  rustPlatform,
+  rustPackages_1_97,
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_97.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
   version = "1.25.2";
 
