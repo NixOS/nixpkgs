@@ -15,13 +15,13 @@
 
 buildDotnetModule rec {
   pname = "naps2";
-  version = "8.3.2";
+  version = "8.4.1";
 
   src = fetchFromGitHub {
     owner = "cyanfish";
     repo = "naps2";
     tag = "v${version}";
-    hash = "sha256-LGnrQc8/iO/uThiB2M9nx3dJHLXb6Kf3koByUIl7Uxk=";
+    hash = "sha256-8n9m1GYPDNYe/mE3da9KOxVGjxZddZcaPACzLMIFJTY=";
   };
 
   patches = [
