@@ -1,0 +1,7 @@
+[package]
+name = "basic-sparse"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+itoa = "1.0.18"
