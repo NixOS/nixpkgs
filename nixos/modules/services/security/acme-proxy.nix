@@ -88,6 +88,71 @@ in
       '';
     };
 
+    secrets = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
+        options.source = lib.mkOption {
+          type = lib.types.path;
+          description = ''
+            Absolute path on the host to a credential file (private key,
+            certificate, CRL, ...) that the service should read at runtime.
+            Read at activation time by systemd and exposed inside the unit
+            at `/run/credentials/acme-proxy/${name}`.
+          '';
+        };
+      }));
+      default = { };
+      example = lib.literalExpression ''
+        {
+          "tls.cert"  = { source = "/var/lib/secrets/acme-proxy/server.pem"; };
+          "tls.key"   = { source = "/var/lib/secrets/acme-proxy/server.key"; };
+          "local-ca.cert" = { source = "/var/lib/secrets/acme-proxy/ca.pem"; };
+          "local-ca.key"  = { source = "/var/lib/secrets/acme-proxy/ca.key"; };
+          "relay-account.key" = { source = "/var/lib/secrets/acme-proxy/account.key"; };
+        }
+      '';
+      description = ''
+        External credential files (private keys, certificates, CRLs) that
+        the acme-proxy daemon should read at runtime instead of generating
+        or persisting them itself. Each entry is loaded at activation time
+        via systemd's `LoadCredential=` directive and exposed inside the
+        unit's mount namespace at `/run/credentials/acme-proxy/<name>`.
+
+        The source files are read directly from the host filesystem and
+        are **not** stored in the Nix store, so they can be provisioned
+        by `sops-nix`, Ansible, manual file copies, or any out-of-band
+        mechanism. The unit's credential directory is readable only by
+        the service's UID (under `DynamicUser=yes`, the ephemeral UID
+        allocated by systemd from the 60000–64999 pool), so secrets
+        remain confined to the unit.
+
+        Reference a credential from {option}`services.acme-proxy.settings`
+        via its in-unit path, for example
+        `settings.server.tls.cert_path = "/run/credentials/acme-proxy/tls.cert"`,
+        `settings.signer.local_ca.key_path = "/run/credentials/acme-proxy/local-ca.key"`,
+        or `settings.signer.relay.account_key_path = "/run/credentials/acme-proxy/relay-account.key"`.
+
+        Source files should live outside the Nix store at a stable path,
+        conventionally `/var/lib/secrets/acme-proxy/<name>`, owned by
+        `root:root` with mode `0400` (or `0440` if a dedicated
+        management group needs read access). systemd reads the file as
+        root at activation and then confines it to the unit's mount
+        namespace, so on-host ownership never propagates into the
+        service. With [`sops-nix`](https://github.com/Mic92/sops-nix),
+        a typical wiring is:
+
+        ```nix
+        sops.secrets."acme-proxy/local-ca" = {
+          sopsFile = ./secrets/acme-proxy.yaml;
+          owner = "root";
+          group = "root";
+          mode = "0400";
+        };
+        services.acme-proxy.secrets."local-ca.key".source =
+          config.sops.secrets."acme-proxy/local-ca".path;
+        ```
+      '';
+    };
+
     openFirewall = lib.mkEnableOption ''
       opening the TCP port the ACME listener binds to (taken from
       `settings.server.bind_address`)'';
@@ -147,6 +212,13 @@ in
         StateDirectory = "acme-proxy";
         WorkingDirectory = cfg.dataDir;
         Environment = "ACME_PROXY_CONFIG=/etc/acme-proxy/config.toml";
+        # External credentials supplied via services.acme-proxy.secrets.
+        # Each entry is loaded by systemd at activation and exposed at
+        # /run/credentials/acme-proxy/<name>; under DynamicUser=yes the
+        # directory is accessible only to the service's ephemeral UID.
+        LoadCredential = lib.mapAttrsToList
+          (name: sec: "${name}:${toString sec.source}")
+          cfg.secrets;
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         RestartSec = "5s";
