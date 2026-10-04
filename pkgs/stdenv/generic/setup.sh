@@ -196,12 +196,25 @@ _logHook() {
 ######################################################################
 # Hook handling.
 
+# Keep track if pre/post hook was already run, so whether the package uses
+# explicit "runHook" or not, hook runs exactly one. In rare cases when
+# derivation needs to skip particular hook or run it multiple times, it can
+# manipulate this hashmap directly.
+declare -A runHookDone
+
 # Run all hooks with the specified name in the order in which they
 # were added, stopping if any fails (returns a non-zero exit
 # code). The hooks for <hookName> are the shell function or variable
 # <hookName>, and the values of the shell array ‘<hookName>Hooks’.
 runHook() {
     local hookName="$1"
+    if [[ "$hookName" =~ ^(pre|post)[a-zA-Z] ]]; then
+        if [[ -v runHookDone[$hookName] ]] ; then
+            return 0
+        fi
+        runHookDone[$hookName]=1
+    fi
+
     shift
     local hooksSlice="${hookName%Hook}Hooks[@]"
 
@@ -1758,9 +1771,13 @@ runPhase() {
     local startTime endTime
     startTime=$(date +"%s")
 
+    [[ "$curPhase" =~ ^(.*)Phase$ ]] && runHook "pre${BASH_REMATCH[1]^}"
+
     # Evaluate the variable named $curPhase if it exists, otherwise the
     # function named $curPhase.
     eval "${!curPhase:-$curPhase}"
+
+    [[ "$curPhase" =~ ^(.*)Phase$ ]] && runHook "post${BASH_REMATCH[1]^}"
 
     endTime=$(date +"%s")
 
