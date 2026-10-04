@@ -11,6 +11,7 @@
   fetchurl,
   fontconfig,
   gitMinimal,
+  icoutils,
   makeDesktopItem,
   makeWrapper,
   node-gyp,
@@ -45,6 +46,8 @@ let
     meta = gitDependencyMetaOverrides."Nexus-Mods/7z-bin";
   };
 
+  # Replace upstream's network-built .NET version probe with the packaged
+  # runtime's version check; the build and installed asset use the same script.
   dotnetProbe = writeShellScript "dotnetprobe" ''
     requiredMajor="''${1:-9}"
     version=""
@@ -90,8 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Backport the upstream fix that makes API type generation reproducible.
     (fetchpatch {
+      name = "Make-openapi-v3-schema-reproducible.patch";
       url = "https://github.com/Nexus-Mods/Vortex/commit/012a3ca7ddc50607aff8df38e092255ee577d949.patch";
       hash = "sha256-MGOCJyYEV/PRu4D12QuuVW9JQPYndKEITd87QRn7raQ=";
     })
@@ -117,10 +120,18 @@ stdenv.mkDerivation (finalAttrs: {
     };
   });
 
+  disabledPlugins = [
+    "gamebryo-archive-check"
+    "gamebryo-plugin-indexlock"
+    "mtframework-arc-support"
+    "quickbms-support"
+  ];
+
   nativeBuildInputs = [
     autoPatchelfHook
     copyDesktopItems
     gitMinimal
+    icoutils
     makeWrapper
     node-gyp
     nodejs_24
@@ -211,7 +222,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p src/main/build/duckdb-extensions/v1.5.1/linux_amd64
     gzip -dc ${levelPivot} > src/main/build/duckdb-extensions/v1.5.1/linux_amd64/level_pivot.duckdb_extension
 
-    # This is equivalent to upstream's small, network-built .NET version probe.
+    # Install the network-free version probe.
     mkdir -p tools/dotnetprobe/dist
     cp ${dotnetProbe} tools/dotnetprobe/dist/dotnetprobe
     substituteInPlace tools/dotnetprobe/project.json \
@@ -241,11 +252,9 @@ stdenv.mkDerivation (finalAttrs: {
       pnpm nx run @vortex/main:build --output-style=stream --parallel=1
 
     # Do not bundle plugins that cannot be built reproducibly on Linux.
-    rm -rf \
-      src/main/build/bundledPlugins/gamebryo-archive-check \
-      src/main/build/bundledPlugins/gamebryo-plugin-indexlock \
-      src/main/build/bundledPlugins/mtframework-arc-support \
-      src/main/build/bundledPlugins/quickbms-support
+    for plugin in "''${disabledPlugins[@]}"; do
+      rm -rf "src/main/build/bundledPlugins/$plugin"
+    done
 
     pushd src/main
     pnpm cross-env \
@@ -284,7 +293,7 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/share/vortex/resources/app.asar.unpacked/assets/dotnetprobe"
 
     makeWrapper ${lib.getExe electron} "$out/bin/vortex" \
-      --add-flags "$out/share/vortex/resources/app.asar" \
+      --add-flag "$out/share/vortex/resources/app.asar" \
       --unset ELECTRON_RUN_AS_NODE \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
@@ -299,10 +308,14 @@ stdenv.mkDerivation (finalAttrs: {
       --inherit-argv0
 
     makeWrapper "$out/bin/vortex" "$out/bin/vortex-nxm" \
-      --add-flags --download
+      --add-flag --download
 
-    install -Dm644 assets/images/vortex.png \
-      "$out/share/icons/hicolor/256x256/apps/vortex.png"
+    icotool --extract assets/images/vortex.ico
+    for icon in vortex_*x*x32.png; do
+      size="''${icon#vortex_*_}"
+      size="''${size%x32.png}"
+      install -Dm644 "$icon" "$out/share/icons/hicolor/$size/apps/vortex.png"
+    done
 
     runHook postInstall
   '';
@@ -351,7 +364,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source mod manager from Nexus Mods";
     homepage = "https://github.com/Nexus-Mods/Vortex";
-    changelog = "https://github.com/Nexus-Mods/Vortex/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Nexus-Mods/Vortex/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Only
       unfreeRedistributable
@@ -367,11 +380,9 @@ stdenv.mkDerivation (finalAttrs: {
       MattSturgeon
     ];
     longDescription = ''
-      Vortex's native Linux build is pre-alpha software. It lacks some of the
-      features available in the Windows build, including complete Wine/Proton
-      integration and portal-backed file pickers. The ArcTool and QuickBMS
-      integrations are omitted because upstream does not provide versioned
-      artifacts for their bundled Windows executables.
+      Vortex's native Linux build is considered experimental upstream.
+      Several core features available in the Windows build are not yet available on Linux.
+      ArcTool and QuickBMS integrations are omitted because upstream does not provide versioned artifacts for their bundled Windows executables.
     '';
   };
 })
