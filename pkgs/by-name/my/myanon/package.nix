@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "myanon";
-  version = "0.8.5";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "ppomes";
     repo = "myanon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H3XmYenPCxWD3EpxF33oEKYR5Q9mwwDhFgA7vLraIio=";
+    hash = "sha256-s6ZCe+UV+fJzbx3FC9G46LaUV5PSE9Cv7KqhY+BwFug=";
   };
 
   nativeBuildInputs = [
