@@ -7,6 +7,7 @@
   lua,
   makeWrapper,
   makeDesktopItem,
+  copyDesktopItems,
   strip-nondeterminism,
   zip,
 }:
@@ -16,17 +17,6 @@ let
     url = "http://tangramgames.dk/img/thumb/mrrescue.png";
     sha256 = "1y5ahf0m01i1ch03axhvp2kqc6lc1yvh59zgvgxw4w7y3jryw20k";
   };
-
-  desktopItem = makeDesktopItem {
-    name = "mrrescue";
-    exec = "mrrescue";
-    icon = icon;
-    comment = "Arcade-style fire fighting game";
-    desktopName = "Mr. Rescue";
-    genericName = "mrrescue";
-    categories = [ "Game" ];
-  };
-
 in
 
 stdenv.mkDerivation {
@@ -46,6 +36,19 @@ stdenv.mkDerivation {
     makeWrapper
     strip-nondeterminism
     zip
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "mrrescue";
+      exec = "mrrescue";
+      icon = icon;
+      comment = "Arcade-style fire fighting game";
+      desktopName = "Mr. Rescue";
+      genericName = "mrrescue";
+      categories = [ "Game" ];
+    })
   ];
 
   buildPhase = ''
@@ -56,6 +59,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mkdir -p $out/share/games/lovegames
 
@@ -64,8 +69,8 @@ stdenv.mkDerivation {
     makeWrapper ${lib.getExe love} $out/bin/mrrescue --add-flags $out/share/games/lovegames/mrrescue.love
 
     chmod +x $out/bin/mrrescue
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
+
+    runHook postInstall
   '';
 
   meta = {
