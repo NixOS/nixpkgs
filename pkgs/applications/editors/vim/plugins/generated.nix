@@ -4450,6 +4450,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  dadbod-grip-nvim = buildVimPlugin {
+    pname = "dadbod-grip.nvim";
+    version = "3.11.0";
+    src = fetchFromGitHub {
+      owner = "joryeugene";
+      repo = "dadbod-grip.nvim";
+      tag = "v3.11.0";
+      hash = "sha256-iy3J41D1X0u7pTqSSgvBL5ATQeilon2VRDHFxzFAEqs=";
+    };
+    meta.homepage = "https://github.com/joryeugene/dadbod-grip.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   dailies-nvim = buildVimPlugin {
     pname = "dailies.nvim";
     version = "0-unstable-2025-04-21";
