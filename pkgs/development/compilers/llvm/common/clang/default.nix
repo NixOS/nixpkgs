@@ -181,7 +181,7 @@ stdenv.mkDerivation (
       mkdir -p $python/bin $python/share/clang/
     ''
     + ''
-      mv $out/bin/{git-clang-format,scan-view} $python/bin
+      mv $out/bin/{analyze-build,git-clang-format,hmaptool,intercept-build,run-clang-tidy,scan-build-py,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
