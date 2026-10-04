@@ -89,6 +89,10 @@ pythonPackages.buildPythonApplication rec {
       zstandard
       pythonPackages.ollama
     ]
+    ++ markitdown.optional-dependencies.pptx
+    ++ markitdown.optional-dependencies.docx
+    ++ markitdown.optional-dependencies.pdf
+    ++ markitdown.optional-dependencies.youtube-transcription
     ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = with pythonPackages; {
