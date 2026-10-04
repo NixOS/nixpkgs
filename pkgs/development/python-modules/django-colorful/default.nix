@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "django-colorful";
-  version = "1.3";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/SRvL7KX7QdNxDSZZtM6HILQMIt/sNbvbi52uQzv/7c=";
+    hash = "sha256-9mg3SyD22BNaLeRTTKDW2L2z1GI124ZkqNhTLlrw9m4=";
   };
 
   build-system = [ setuptools ];

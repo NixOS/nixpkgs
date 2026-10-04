@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  cryptography,
   debtcollector,
   iso8601,
   netaddr,
@@ -33,15 +34,15 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oslo-utils";
-  version = "10.0.1";
+  version = "10.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_utils";
-    inherit version;
-    hash = "sha256-Ib/Cm7TBzZr7TvdB+445Ro+lSF5gcX9PkPOtPc6KHyI=";
+    inherit (finalAttrs) version;
+    hash = "sha256-uoOd6iwetBXj7hUcTMaI9S4oP1m8H3fMhnchkKizQlk=";
   };
 
   postPatch =
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    cryptography
     debtcollector
     iso8601
     netaddr
@@ -108,4 +110,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
   };
-}
+})

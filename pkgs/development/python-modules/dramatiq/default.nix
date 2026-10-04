@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
     tag = "v${version}";
-    hash = "sha256-wUE3R/lFafP7P9tjKjFC+jwCc3jkvGeXunC8AhkBLbM=";
+    hash = "sha256-0nCTcFKtKkSyuUQelIkXDAemqK+FQh2dTzgIeOEYZo0=";
   };
 
   build-system = [ setuptools_80 ];
@@ -100,6 +100,7 @@ buildPythonPackage rec {
   meta = {
     description = "Background Processing for Python 3";
     homepage = "https://github.com/Bogdanp/dramatiq";
+    changelog = "https://github.com/Bogdanp/dramatiq/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ traxys ];
   };

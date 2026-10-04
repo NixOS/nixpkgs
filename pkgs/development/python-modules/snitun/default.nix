@@ -39,6 +39,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     cryptography
+    trustme
   ];
 
   nativeCheckInputs = [

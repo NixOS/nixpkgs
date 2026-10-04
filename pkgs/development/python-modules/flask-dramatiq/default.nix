@@ -74,6 +74,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Adds Dramatiq support to your Flask application";
     homepage = "https://github.com/pallets-eco/flask-dramatiq";
+    changelog = "https://github.com/pallets-eco/flask-dramatiq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ traxys ];
   };

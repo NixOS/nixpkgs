@@ -14,12 +14,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvo";
-  version = "1.8.1";
+  version = "1.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-08xgqj00FtIsieRloE36n1IQhf3VIozOLP/S/uOp5wk=";
+    hash = "sha256-LybJmvfDLzw0uRni0U6vGpWRQXbWk/t3aXc/OrC3mZ0=";
   };
 
   build-system = [

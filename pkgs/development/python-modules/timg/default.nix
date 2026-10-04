@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "timg";
-  version = "1.1.6";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-k42TmsNQIwD3ueParfXaD4jFuG/eWILXO0Op0Ci9S/0=";
+    hash = "sha256-wmfbimnGQZzjAhCAwd1DFQzdCf9V7lTCuMF65eDkd8E=";
   };
 
   build-system = [

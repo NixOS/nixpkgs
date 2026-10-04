@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "25.04.08.0";
+  version = "26.07.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     repo = "prance";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-71M9ufxb0aaSgokThlsTS4ElOJLZntF2TYIErPccQbU=";
+    hash = "sha256-kUPGSG8ZLJlke0X/Vj3s6USNGIW3xtF8/N2ZUZ7KKoI=";
   };
 
   build-system = [ setuptools-scm ];

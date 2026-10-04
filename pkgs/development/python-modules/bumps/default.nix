@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "bumps";
-  version = "1.0.3";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O5GUoyDlB0X2Z/O3JprN3omoOBDIhv0xrKfUSHTgGpM=";
+    hash = "sha256-mpfKnzG8TV364kE7VmWa2Rzc0/6mZOmMvczPEHEDqjo=";
   };
 
   pythonRemoveDeps = [
