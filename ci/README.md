@@ -13,10 +13,10 @@ Run [`update-pinned.sh`](./update-pinned.sh) to update it.
 ## GitHub specific code
 
 Some of the code is specific to GitHub.
-This code is currently spread out over multiple places and written in both Bash and JavaScript.
-The goal is to eventually have all GitHub specific code in `ci/github-script` and written in JavaScript via `actions/github-script`.
+This code is currently spread out over multiple places and written in both Bash and TypeScript.
+The goal is to eventually have all GitHub specific code in `ci/github-script` and written in TypeScript via `actions/github-script`.
 A lot of code has already been migrated, but some Bash code still remains.
-New CI features need to be introduced in JavaScript, not Bash.
+New CI features need to be introduced in TypeScript, not Bash.
 
 ## Nixpkgs merge bot
 
@@ -24,7 +24,7 @@ The Nixpkgs merge bot empowers package maintainers by enabling them to merge PRs
 It serves as a bridge for maintainers to quickly respond to user feedback, facilitating a more self-reliant approach.
 Especially when considering there are roughly 20 maintainers for every committer, this bot is a game-changer.
 
-Following [RFC 172], the merge bot was originally implemented as a [python webapp](https://github.com/NixOS/nixpkgs-merge-bot), which has now been integrated into [`ci/github-script/bot.js`](./github-script/bot.js) and [`ci/github-script/merge.js`](./github-script/merge.js).
+Following [RFC 172], the merge bot was originally implemented as a [python webapp](https://github.com/NixOS/nixpkgs-merge-bot), which has now been integrated into [`ci/github-script/bot.ts`](./github-script/bot.ts) and [`ci/github-script/merge.ts`](./github-script/merge.ts).
 
 ### Using the merge bot
 
