@@ -35,7 +35,7 @@
   writableTmpDirAsHomeHook,
   buildDocs ? false,
   buildTests ? false,
-  gpuTargets ? clr.gpuTargets,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 let

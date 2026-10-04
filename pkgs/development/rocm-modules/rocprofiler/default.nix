@@ -21,7 +21,7 @@
   mpi,
   gtest,
   python3Packages,
-  gpuTargets ? clr.gpuTargets,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 let
