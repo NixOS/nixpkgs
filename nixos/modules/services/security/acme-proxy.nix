@@ -39,7 +39,11 @@ let
     options = {
       signer = {
         backend = lib.mkOption {
-          type = lib.types.enum [ "local_ca" "relay" "custom" ];
+          type = lib.types.enum [
+            "local_ca"
+            "relay"
+            "custom"
+          ];
           default = "local_ca";
           defaultText = lib.literalExpression ''"local_ca"'';
           description = "The issuance backend this profile uses.";
@@ -55,7 +59,11 @@ let
             '';
           };
           challengeStrategy = lib.mkOption {
-            type = lib.types.enum [ "bypass" "dns01" "http01" ];
+            type = lib.types.enum [
+              "bypass"
+              "dns01"
+              "http01"
+            ];
             default = "bypass";
             defaultText = lib.literalExpression ''"bypass"'';
             description = ''
@@ -126,7 +134,11 @@ let
                 '';
               };
               tsigAlgorithm = lib.mkOption {
-                type = lib.types.enum [ "hmac-sha256" "hmac-sha384" "hmac-sha512" ];
+                type = lib.types.enum [
+                  "hmac-sha256"
+                  "hmac-sha384"
+                  "hmac-sha512"
+                ];
                 default = "hmac-sha256";
                 defaultText = lib.literalExpression ''"hmac-sha256"'';
                 description = ''
@@ -138,7 +150,10 @@ let
             };
             propagation = {
               mode = lib.mkOption {
-                type = lib.types.enum [ "none" "delay" ];
+                type = lib.types.enum [
+                  "none"
+                  "delay"
+                ];
                 default = "none";
                 defaultText = lib.literalExpression ''"none"'';
                 description = ''
@@ -195,7 +210,13 @@ let
       };
       challenge = {
         enabled = lib.mkOption {
-          type = lib.types.listOf (lib.types.enum [ "http-01" "dns-01" "tls-alpn-01" ]);
+          type = lib.types.listOf (
+            lib.types.enum [
+              "http-01"
+              "dns-01"
+              "tls-alpn-01"
+            ]
+          );
           default = [ "http-01" ];
           defaultText = lib.literalExpression ''[ "http-01" ]'';
           description = ''
@@ -228,12 +249,33 @@ let
           '';
         };
         default = lib.mkOption {
-          type = lib.types.enum [ "allow" "deny" ];
+          type = lib.types.enum [
+            "allow"
+            "deny"
+          ];
           default = "deny";
           defaultText = lib.literalExpression ''"deny"'';
           description = ''
             Decision when an applicable rule was evaluated and none
             matched.
+          '';
+        };
+        trustedProxies = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          example = [
+            "10.0.0.0/8"
+            "192.168.0.0/16"
+          ];
+          description = ''
+            CIDR ranges whose `X-Forwarded-For` header is
+            honored for this profile. Overrides the global
+            {option}`services.acme-proxy.filter.trustedProxies`
+            for this profile only. Per-profile override of
+            `[filter] trusted_proxies` — only `rules`, `default`,
+            and `trusted_proxies` are per-profile overrideable
+            upstream; the rest of `[filter]` (the check and rule
+            libraries) is global.
           '';
         };
       };
@@ -292,21 +334,24 @@ let
           };
         };
       };
-      signerSection =
-        { backend = profile.signer.backend; }
-        // lib.optionalAttrs (profile.signer.backend == "relay") {
-          relay = relaySection;
-        }
-        // lib.optionalAttrs (profile.signer.backend == "local_ca") {
-          local_ca = {
-            leaf_validity_days = profile.signer.localCa.leafValidityDays;
-          };
-        }
-        // lib.optionalAttrs (profile.signer.backend == "custom" && profile.signer.custom.scriptPath != null) {
-          custom = {
-            script_path = profile.signer.custom.scriptPath;
-          };
+      signerSection = {
+        backend = profile.signer.backend;
+      }
+      // lib.optionalAttrs (profile.signer.backend == "relay") {
+        relay = relaySection;
+      }
+      // lib.optionalAttrs (profile.signer.backend == "local_ca") {
+        local_ca = {
+          leaf_validity_days = profile.signer.localCa.leafValidityDays;
         };
+      }
+      //
+        lib.optionalAttrs (profile.signer.backend == "custom" && profile.signer.custom.scriptPath != null)
+          {
+            custom = {
+              script_path = profile.signer.custom.scriptPath;
+            };
+          };
     in
     {
       signer = signerSection;
@@ -317,6 +362,7 @@ let
       filter = {
         rules = profile.filter.rules;
         default = profile.filter.default;
+        trusted_proxies = profile.filter.trustedProxies;
       };
     };
 
@@ -343,7 +389,8 @@ let
     "challenge"
     "filter"
   ];
-  mergedProfiles = lib.genAttrs (lib.attrNames (typedProfiles // userProfiles)) (name:
+  mergedProfiles = lib.genAttrs (lib.attrNames (typedProfiles // userProfiles)) (
+    name:
     let
       typedP = typedProfiles.${name} or { };
       userP = userProfiles.${name} or { };
@@ -358,14 +405,280 @@ let
     // lib.optionalAttrs (filterMerged != { }) { filter = filterMerged; }
   );
 
-  # The rendered TOML configuration. Overrides `settings.profiles` with
-  # the merged result so that whatever the user typed (or didn't) lands
-  # in the file the daemon reads. When no profiles are declared at all,
-  # `profiles` is omitted entirely so the daemon refuses to start with
-  # a missing-profiles error rather than silently starting with none.
-  renderedSettings = cfg.settings // lib.optionalAttrs (mergedProfiles != { }) {
-    profiles = mergedProfiles;
+  # Schema for one `[filter.check.<name>]` entry. The `type` field
+  # selects which built-in check the rest of the entry is interpreted
+  # as; the other fields are type-specific. Everything besides `type`
+  # defaults to `null` and is only emitted in the rendered TOML when
+  # the user has set a value, so an empty typed entry (other than
+  # `type`) doesn't pollute the config with `allow = []` placeholders
+  # the daemon would treat as the literal allow-list.
+  checkType = lib.types.submodule (
+    { name, ... }: {
+      options = {
+        type = lib.mkOption {
+          type = lib.types.enum [
+            "allowed_ip"
+            "path"
+            "reverse_dns"
+            "identifiers"
+            "eab"
+            "ipam"
+            "custom"
+          ];
+          description = ''
+            Which built-in check this is. The remaining fields are
+            interpreted by the chosen type — the module does not
+            enforce that the right fields are set, only that an
+            unsupported type fails at evaluation rather than at
+            daemon startup. See [the upstream filter docs](https://acme-proxy.github.io/acme-proxy/filters/checks.html)
+            for the per-type semantics.
+          '';
+        };
+        stages = lib.mkOption {
+          type = lib.types.listOf (
+            lib.types.enum [
+              "connection"
+              "identifiers"
+            ]
+          );
+          default = [ ];
+          description = ''
+            Hooks at which to evaluate this check. Empty uses the
+            type's built-in default.
+          '';
+        };
+        allow = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = null;
+          description = ''
+            Glob patterns that allow the request (e.g. CIDR for
+            `allowed_ip`, URL paths for `path`).
+          '';
+        };
+        deny = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = null;
+          description = ''
+            Glob patterns that deny the request.
+          '';
+        };
+        allowRegex = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = null;
+          description = ''
+            Regular-expression versions of `allow`. Type-specific.
+          '';
+        };
+        denyRegex = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = null;
+          description = ''
+            Regular-expression versions of `deny`. Type-specific.
+          '';
+        };
+        kids = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = null;
+          description = ''
+            Exact ACME EAB key IDs allowed. Only meaningful for
+            `type = "eab"`.
+          '';
+        };
+        requireActive = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
+          default = null;
+          description = ''
+            Require the EAB credential to be active. Only
+            meaningful for `type = "eab"`.
+          '';
+        };
+        allowedTypes = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = null;
+          description = ''
+            Identifier types allowed. Only meaningful for
+            `type = "identifiers"`.
+          '';
+        };
+        allowWildcards = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
+          default = null;
+          description = ''
+            Allow wildcard identifiers. Only meaningful for
+            `type = "identifiers"`.
+          '';
+        };
+        scriptPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = ''
+            Absolute path to a custom check script. Required for
+            `type = "custom"`.
+          '';
+        };
+        timeoutMs = lib.mkOption {
+          type = lib.types.nullOr lib.types.int;
+          default = null;
+          description = ''
+            Per-check timeout in milliseconds. Default is
+            type-specific.
+          '';
+        };
+        passStdin = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
+          default = null;
+          description = ''
+            Pipe request context to the custom script on stdin.
+            Only meaningful for `type = "custom"`.
+          '';
+        };
+        requireForwardConfirm = lib.mkOption {
+          type = lib.types.nullOr lib.types.bool;
+          default = null;
+          description = ''
+            Require the trusted-proxy header to confirm the
+            original address. Only meaningful for
+            `type = "reverse_dns"`.
+          '';
+        };
+        args = lib.mkOption {
+          type = lib.types.nullOr (lib.types.listOf lib.types.str);
+          default = null;
+          description = ''
+            Extra positional arguments to pass to the custom
+            script. Only meaningful for `type = "custom"`.
+          '';
+        };
+      };
+    }
+  );
+
+  # Schema for one `[filter.rule.<name>]` entry: a list of conditions
+  # that, when all true, produce an `allow` or `deny` decision.
+  ruleType = lib.types.submodule {
+    options = {
+      when = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        example = [
+          "ip"
+          "identifiers[0].endsWith('.example.com')"
+        ];
+        description = ''
+          Filter expressions that must all be true for this rule
+          to match. Empty always matches. Strings are evaluated
+          upstream against the request context; see [the upstream
+          filter docs](https://acme-proxy.github.io/acme-proxy/filters/)
+          for the available references.
+        '';
+      };
+      decision = lib.mkOption {
+        type = lib.types.enum [
+          "allow"
+          "deny"
+        ];
+        description = ''
+          Decision when this rule matches. Rendered as the TOML
+          key `then`.
+        '';
+      };
+      message = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Human-readable message recorded in logs when this
+          rule matches.
+        '';
+      };
+    };
   };
+
+  # Top-level [filter] rendering. Scalar keys (`rules`, `default`,
+  # `trusted_proxies`, `forwarded_header`) come from the typed
+  # option when the user set them (`!= null`) and otherwise from
+  # the free-form `settings.filter`; the check and rule sub-tables
+  # merge per-name (typed entries win on collision, free-form-only
+  # entries survive). Any other top-level key the user supplied
+  # free-form (e.g. an upstream field the module does not yet
+  # type) is preserved.
+  userTopFilter = cfg.settings.filter or { };
+
+  emitFilterScalar =
+    tomlKey: typedValue:
+    let
+      v = if typedValue != null then typedValue else userTopFilter.${tomlKey} or null;
+    in
+    lib.optionalAttrs (v != null) { ${tomlKey} = v; };
+
+  checkToTOML =
+    c:
+    {
+      type = c.type;
+    }
+    // lib.optionalAttrs (c.stages != [ ]) { stages = c.stages; }
+    // lib.optionalAttrs (c.allow != null) { allow = c.allow; }
+    // lib.optionalAttrs (c.deny != null) { deny = c.deny; }
+    // lib.optionalAttrs (c.allowRegex != null) { allow_regex = c.allowRegex; }
+    // lib.optionalAttrs (c.denyRegex != null) { deny_regex = c.denyRegex; }
+    // lib.optionalAttrs (c.kids != null) { kids = c.kids; }
+    // lib.optionalAttrs (c.requireActive != null) { require_active = c.requireActive; }
+    // lib.optionalAttrs (c.allowedTypes != null) { allowed_types = c.allowedTypes; }
+    // lib.optionalAttrs (c.allowWildcards != null) { allow_wildcards = c.allowWildcards; }
+    // lib.optionalAttrs (c.scriptPath != null) { script_path = c.scriptPath; }
+    // lib.optionalAttrs (c.timeoutMs != null) { timeout_ms = c.timeoutMs; }
+    // lib.optionalAttrs (c.passStdin != null) { pass_stdin = c.passStdin; }
+    // lib.optionalAttrs (c.requireForwardConfirm != null) {
+      require_forward_confirm = c.requireForwardConfirm;
+    }
+    // lib.optionalAttrs (c.args != null) { args = c.args; };
+
+  ruleToTOML =
+    r:
+    {
+      when = r.when;
+    }
+    // {
+      "then" = r.decision;
+    }
+    // lib.optionalAttrs (r.message != null) { message = r.message; };
+
+  typedChecks = lib.mapAttrs (_: checkToTOML) cfg.filter.check;
+  typedRules = lib.mapAttrs (_: ruleToTOML) cfg.filter.rule;
+  checkMerged = (userTopFilter.check or { }) // typedChecks;
+  ruleMerged = (userTopFilter.rule or { }) // typedRules;
+
+  freeFilterOther = lib.filterAttrs (
+    k: _:
+    !(builtins.elem k [
+      "rules"
+      "default"
+      "trusted_proxies"
+      "forwarded_header"
+      "check"
+      "rule"
+    ])
+  ) userTopFilter;
+
+  topLevelFilterSection =
+    freeFilterOther
+    // emitFilterScalar "rules" cfg.filter.rules
+    // emitFilterScalar "default" cfg.filter.default
+    // emitFilterScalar "trusted_proxies" cfg.filter.trustedProxies
+    // emitFilterScalar "forwarded_header" cfg.filter.forwardedHeader
+    // lib.optionalAttrs (checkMerged != { }) { check = checkMerged; }
+    // lib.optionalAttrs (ruleMerged != { }) { rule = ruleMerged; };
+
+  # The rendered TOML configuration. Overrides `settings.profiles` and
+  # `settings.filter` with the merged result so that whatever the user
+  # typed (or didn't) lands in the file the daemon reads. When no
+  # profiles are declared at all, `profiles` is omitted entirely so
+  # the daemon refuses to start with a missing-profiles error rather
+  # than silently starting with none. `filter` is omitted only when
+  # nothing was declared at all (typed or free-form).
+  renderedSettings =
+    cfg.settings
+    // lib.optionalAttrs (mergedProfiles != { }) { profiles = mergedProfiles; }
+    // lib.optionalAttrs (topLevelFilterSection != { }) { filter = topLevelFilterSection; };
   configFile = tomlFormat.generate "acme-proxy.toml" renderedSettings;
 
   # Per-profile sanity checks. Two directions of mismatch are caught:
@@ -380,8 +693,8 @@ let
   #     `profileToTOML` only emits the `[signer.relay]` table when
   #     `backend == "relay"`, so the user's relay config is dropped on
   #     the way to the rendered config file.
-  profileAssertions = lib.concatLists (lib.mapAttrsToList
-    (name: p: [
+  profileAssertions = lib.concatLists (
+    lib.mapAttrsToList (name: p: [
       {
         assertion = !(p.signer.backend == "relay" && p.signer.relay.directoryUrl == "");
         message = ''
@@ -406,8 +719,8 @@ let
           `signer.backend = "relay"`, or remove the relay settings.
         '';
       }
-    ])
-    cfg.profiles);
+    ]) cfg.profiles
+  );
 in
 {
   meta.maintainers = [ lib.maintainers.ser ];
@@ -476,6 +789,120 @@ in
       '';
     };
 
+    filter = lib.mkOption {
+      type = lib.types.submodule {
+        options = {
+          rules = lib.mkOption {
+            type = lib.types.nullOr (lib.types.listOf lib.types.str);
+            default = null;
+            example = [
+              "allow-internal"
+              "default-deny"
+            ];
+            description = ''
+              Names of `[filter.rule.<name>]` tables to evaluate
+              in order at the global level. First match wins. A
+              profile's
+              {option}`services.acme-proxy.profiles.<name>.filter.rules`
+              overrides this list for the profile's identifiers.
+            '';
+          };
+          default = lib.mkOption {
+            type = lib.types.nullOr (
+              lib.types.enum [
+                "allow"
+                "deny"
+              ]
+            );
+            default = null;
+            defaultText = lib.literalExpression ''"deny"'';
+            description = ''
+              Decision when no rule matched. Upstream's default
+              is `"deny"`. A profile's
+              {option}`services.acme-proxy.profiles.<name>.filter.default`
+              overrides this for the profile.
+            '';
+          };
+          trustedProxies = lib.mkOption {
+            type = lib.types.nullOr (lib.types.listOf lib.types.str);
+            default = null;
+            example = [
+              "10.0.0.0/8"
+              "192.168.0.0/16"
+            ];
+            description = ''
+              CIDR ranges whose `forwardedHeader` is honored
+              globally. Honored by the `reverse_dns` check and
+              any other check that consults the client address.
+              A profile's
+              {option}`services.acme-proxy.profiles.<name>.filter.trustedProxies`
+              overrides this for the profile.
+            '';
+          };
+          forwardedHeader = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            defaultText = lib.literalExpression ''"x-forwarded-for"'';
+            description = ''
+              Header name carrying the original client address
+              when the request comes through a trusted proxy.
+              Global only — upstream does not expose this as a
+              per-profile override.
+            '';
+          };
+          check = lib.mkOption {
+            type = lib.types.attrsOf checkType;
+            default = { };
+            description = ''
+              Library of named filter checks. Per-profile rules
+              may reference any name in this global set; checks
+              themselves are not per-profile overrideable.
+            '';
+          };
+          rule = lib.mkOption {
+            type = lib.types.attrsOf ruleType;
+            default = { };
+            description = ''
+              Library of named filter rules. Per-profile
+              `rules` lists which of these to apply; the
+              definitions themselves are not per-profile
+              overrideable.
+            '';
+          };
+        };
+      };
+      default = { };
+      example = lib.literalExpression ''
+        {
+          default = "deny";
+          trustedProxies = [ "10.0.0.0/8" ];
+          check.internal-ips = {
+            type = "allowed_ip";
+            allow = [ "10.0.0.0/8" ];
+          };
+          rule.allow-internal = {
+            when = [ "check.internal-ips" ];
+            then = "allow";
+          };
+        }
+      '';
+      description = ''
+        Global `[filter]` section, the policy engine that decides
+        whether to serve a request before any profile logic runs.
+        The check and rule sub-tables are libraries shared by all
+        profiles; per-profile
+        {option}`services.acme-proxy.profiles.<name>.filter.{rules,
+        default, trustedProxies}` overrides the matching key for
+        that profile (only `rules`, `default`, and `trusted_proxies`
+        are per-profile overrideable upstream).
+
+        Equivalent to declaring the same fields through
+        {option}`services.acme-proxy.settings.filter`; the typed
+        option is preferred because it surfaces upstream's schema
+        and gives Nix-time errors on typos.
+      '';
+    };
+
     dataDir = lib.mkOption {
       type = lib.types.str;
       default = "/var/lib/acme-proxy";
@@ -515,7 +942,9 @@ in
           daemon refuses to start.
         '';
       }
-    ] ++ profileAssertions ++ [
+    ]
+    ++ profileAssertions
+    ++ [
       {
         assertion = !(cfg.openFirewall && serverPort == null);
         message = "services.acme-proxy: openFirewall is set but the server port could not be parsed from settings.server.bind_address.";
@@ -560,9 +989,11 @@ in
         # pairs as environment variables inside the unit. Two profiles
         # that set the same variable collide in systemd's usual
         # last-wins fashion — the user is expected to keep names unique.
-        EnvironmentFile = lib.concatLists (lib.mapAttrsToList
-          (_: p: lib.optional (p.secretsFile != null) (toString p.secretsFile))
-          cfg.profiles);
+        EnvironmentFile = lib.concatLists (
+          lib.mapAttrsToList (
+            _: p: lib.optional (p.secretsFile != null) (toString p.secretsFile)
+          ) cfg.profiles
+        );
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
         RestartSec = "5s";
@@ -582,8 +1013,16 @@ in
         RestrictSUIDSGID = true;
         LockPersonality = "yes";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
       };
     };
 
