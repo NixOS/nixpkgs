@@ -54,6 +54,7 @@ buildPythonPackage (finalAttrs: {
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${finalAttrs.version}',"
     substituteInPlace pyproject.toml \
+      --replace-fail "cython>=3.1.2,<3.3.0" cython \
       --replace-fail "meson-python>=0.17.1,<0.20.0" meson-python \
       --replace-fail "numpy>=2,<2.5.0" numpy \
       --replace-fail "scipy>=1.10.0,<1.18.0" scipy
