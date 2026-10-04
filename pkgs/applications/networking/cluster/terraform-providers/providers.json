@@ -328,11 +328,11 @@
     "vendorHash": null
   },
   "digitalocean_digitalocean": {
-    "hash": "sha256-fmSMSvmJKFVeZwXUoy+hLjC3rk1mRenhx9206FdIe2E=",
+    "hash": "sha256-2F+w0lU9RrkH8CLF9b7sVNQavKWz2ee/wlVlDnKg+2U=",
     "homepage": "https://registry.terraform.io/providers/digitalocean/digitalocean",
     "owner": "digitalocean",
     "repo": "terraform-provider-digitalocean",
-    "rev": "v2.102.0",
+    "rev": "v2.103.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -526,13 +526,13 @@
     "vendorHash": "sha256-qRX2liR1MQy8JuOuUknV70dibU4mgih3nJOy7/raBug="
   },
   "hashicorp_awscc": {
-    "hash": "sha256-K2F3+jf1kTbduP87bxsy00Z1bJSMsNENTjCLMCYGtiA=",
+    "hash": "sha256-b4fSBncrRLPhMtt50U3IRzW5Gcpfg1XiRiqa6j4yJO4=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/awscc",
     "owner": "hashicorp",
     "repo": "terraform-provider-awscc",
-    "rev": "v1.102.0",
+    "rev": "v1.104.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-JEPUJRuVkvZe6XEQWAe++4eUGE8/q3kMzr85LLR9qsE="
+    "vendorHash": "sha256-8z/XGR79doYlj/2LWzm5B6EItf1SIg9MtpmGtSgJ4jw="
   },
   "hashicorp_azuread": {
     "hash": "sha256-dS5MlFTNQ1vMbOK5bW7VgeU+dPLONnN7jTobWMKwtw8=",
@@ -652,13 +652,13 @@
     "vendorHash": "sha256-xjOOvg1gUxQHUuIHGR0ltsvIpRAPq4PW0XPYUjIGvpE="
   },
   "hashicorp_null": {
-    "hash": "sha256-VzElfl/zIUa38HZfOC+EOsFUygrZwC2K7mMSJ7TBZMU=",
+    "hash": "sha256-WKu8REHZ3nTotxVEDiVnoJXGnCB9gUvaWlLbC39ZGS8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/null",
     "owner": "hashicorp",
     "repo": "terraform-provider-null",
-    "rev": "v3.3.1",
+    "rev": "v3.3.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-STiMgzJWnWfUz2Y+O/6QfTxZ3hClHOa+guJer33dEDg="
+    "vendorHash": "sha256-Kj6FTX1dWgeISWsT2PqgsW39cexSmdirDbksKIrKCHA="
   },
   "hashicorp_random": {
     "hash": "sha256-wfRgzuV4UbP1lonqRcCreCqVje1YBt8lwoysMGH2yYg=",
@@ -941,13 +941,13 @@
     "vendorHash": "sha256-ulhKT0DaS6gg9Ucz9pqqIg4mxRpGDGz2rN1R0RNuumg="
   },
   "mongodb_mongodbatlas": {
-    "hash": "sha256-F0SKTzkM/I4LT2e9kbfmRRBLWp2EI1vKX5Ypu145KA0=",
+    "hash": "sha256-DkhFBXWGkrdn87cJyHdQgGSlvH5mJ00hq904CViamfs=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v2.18.0",
+    "rev": "v2.19.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-wmA9pSlOnkQ3qvmFkIPS5PPXcLrFrud9bD30vq76ZYg="
+    "vendorHash": "sha256-Qt8MxtyUVVs/yBSgURP0/7exaVYihNOG5nyM8XRvD2I="
   },
   "namecheap_namecheap": {
     "hash": "sha256-eV2K3KHTEXEEt1WXwfYfNMK+gLUY0EoHFQg9kLdAI3s=",
@@ -1184,13 +1184,13 @@
     "vendorHash": "sha256-22bOJyR+ERVu8eTX3iT838q6mxViGt5Fd6MVFB49JZY="
   },
   "sap_btp": {
-    "hash": "sha256-unoAcEYCPNldK1AeAjJVJ57YGEXiFIiKUW27zLv3mb8=",
+    "hash": "sha256-eCY4ziX9T5YIGRhFF715CCFGuZwLkgS8cfdWHTevIBc=",
     "homepage": "https://registry.terraform.io/providers/SAP/btp",
     "owner": "SAP",
     "repo": "terraform-provider-btp",
-    "rev": "v1.26.0",
+    "rev": "v1.27.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-89ibvtps4hWcJ18G1LV09RjdeWhrUHLvhfgbuNE1cMI="
+    "vendorHash": "sha256-1vSryOQ1ndiJLLwlztqNN5cgq3xu0VHddff7Jlp+RKE="
   },
   "scaleway_scaleway": {
     "hash": "sha256-1edAhzB1XYPtkn3O55/QPm39zcbH18YG0+oaAxW+e8M=",

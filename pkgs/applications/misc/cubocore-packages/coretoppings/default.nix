@@ -23,7 +23,7 @@
   gawk,
   polkit,
   libnotify,
-  systemd,
+  systemdLibs,
   xdg-utils,
   libcprime,
   libcsys,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     gawk
     polkit
     libnotify
-    systemd
+    systemdLibs
     xdg-utils
     libcprime
     libcsys
