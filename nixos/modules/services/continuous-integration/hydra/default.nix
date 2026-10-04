@@ -208,6 +208,18 @@ in
             default = 9283;
             description = "Port the WebSocket listener binds to.";
           };
+
+          unixSocket = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            default = null;
+            example = "/run/hydra-ws.sock";
+            description = ''
+              Listen on this Unix socket instead of `address`/`port`, e.g. behind a
+              reverse proxy. Set `SocketUser`, `SocketGroup` and `SocketMode` in
+              `systemd.sockets.hydra-ws.socketConfig` to control its ownership and
+              mode.
+            '';
+          };
         };
       };
 
@@ -606,6 +618,18 @@ in
             default = 50051;
             description = "Port the gRPC listener binds to.";
           };
+
+          unixSocket = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
+            default = null;
+            example = "/run/hydra-queue-runner-grpc.sock";
+            description = ''
+              Listen on this Unix socket instead of `address`/`port`, e.g. behind a
+              reverse proxy. Set `SocketUser`, `SocketGroup` and `SocketMode` in
+              `systemd.sockets.hydra-queue-runner-grpc.socketConfig` to control its
+              ownership and mode.
+            '';
+          };
         };
 
         rest = {
@@ -868,6 +892,7 @@ in
 
         # One gRPC stream per builder plus DB pool. 1024 is easily exhausted.
         LimitNOFILE = 65536;
+        ManagedOOMPreference = "avoid";
 
         ExecStart = lib.escapeShellArgs (
           [
@@ -952,7 +977,7 @@ in
       description = "Hydra queue runner gRPC socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = "${queueRunnerCfg.grpc.address}:${toString queueRunnerCfg.grpc.port}";
+        ListenStream = lib.defaultTo "${queueRunnerCfg.grpc.address}:${toString queueRunnerCfg.grpc.port}" queueRunnerCfg.grpc.unixSocket;
         FileDescriptorName = "grpc";
         Service = "hydra-queue-runner.service";
       };
@@ -1030,7 +1055,7 @@ in
       description = "Hydra WebSocket socket";
       wantedBy = [ "sockets.target" ];
       socketConfig = {
-        ListenStream = "${cfg.ws.bind.address}:${toString cfg.ws.bind.port}";
+        ListenStream = lib.defaultTo "${cfg.ws.bind.address}:${toString cfg.ws.bind.port}" cfg.ws.bind.unixSocket;
         FileDescriptorName = "ws";
         Service = "hydra-ws.service";
       };
