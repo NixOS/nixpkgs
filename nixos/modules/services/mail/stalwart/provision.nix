@@ -200,5 +200,6 @@ in
     maintainers = with lib.maintainers; [
       hexstella
     ];
+    # meta.doc omitted, shares the main stalwart module documentation
   };
 }
