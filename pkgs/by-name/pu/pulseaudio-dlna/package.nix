@@ -62,7 +62,12 @@ python3Packages.buildPythonApplication {
   # pulseaudio-dlna shells out to pactl to configure sinks and sources.
   # As pactl might not be in $PATH, add --suffix it (so pactl configured by the
   # user get priority)
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ pulseaudio ]}" ];
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ pulseaudio ])
+  ];
 
   # upstream has no tests
   checkPhase = ''
