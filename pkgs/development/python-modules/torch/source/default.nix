@@ -776,6 +776,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
+    triton = _tritonEffective;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
     tests = callPackage ../tests {

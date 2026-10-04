@@ -42,6 +42,7 @@
   xapian,
   gpgme,
   util-linux,
+  readline,
   tzdata,
   icu,
   libffi,
@@ -960,6 +961,10 @@ in
     buildFlags = [
       "--enable-system-libraries"
     ];
+  };
+
+  readline-ext = attrs: {
+    buildInputs = [ readline ];
   };
 
   rest-client = attrs: {
