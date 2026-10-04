@@ -15,7 +15,7 @@
   pkg-config,
   protobuf,
   python3,
-  systemd,
+  systemdLibs,
   tinyxml-2,
   wrapGAppsHook3,
   gobject-introspection,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     tinyxml-2
     gdbuspp
   ]
-  ++ lib.optionals enableSystemdResolved [ systemd.dev ];
+  ++ lib.optionals enableSystemdResolved [ systemdLibs.dev ];
 
   mesonFlags = [
     (lib.mesonOption "selinux" "disabled")

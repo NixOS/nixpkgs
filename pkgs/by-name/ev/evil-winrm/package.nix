@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "evil-winrm";
-  version = "3.7";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "Hackplayers";
     repo = "evil-winrm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jr8glS732UvSt+qFkhhLFZUB7OIRpRj3SzXm6mVikrE=";
+    hash = "sha256-DOfK0n/qp+Fn3nhM7GWIa3XiIU3jLF1DSeyAfOkOEMk=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "evil-winrm";
     homepage = "https://github.com/Hackplayers/evil-winrm";
     changelog = "https://github.com/Hackplayers/evil-winrm/blob/v${finalAttrs.version}/CHANGELOG.md";
+    maintainers = with lib.maintainers; [ letgamer ];
     license = lib.licenses.lgpl3Plus;
   };
 })

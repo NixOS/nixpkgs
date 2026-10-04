@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   cmake,
   libffi,
@@ -14,7 +14,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "clipboard-jh";
   version = "0.10.0";
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ++ lib.optionals gcc15Stdenv.hostPlatform.isLinux [
     libffi
     wayland-protocols
     wayland
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postFixup = lib.optionalString gcc15Stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/cb --add-rpath $out/lib
   '';
 

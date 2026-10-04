@@ -5,6 +5,7 @@
   kicad,
   interactive-html-bom-inti-cmnb,
   symlinkJoin,
+  nix-update-script,
 }:
 
 let
@@ -70,6 +71,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     find $out -name '*.pyc' -delete
     find $out -name '__pycache__' -type d -exec rm -r {} +
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=v(\\d.\\d.\\d)" ];
+  };
 
   __structuredAttrs = true;
 

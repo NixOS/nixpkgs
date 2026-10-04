@@ -382,6 +382,7 @@ in
   buildbot = runTest ./buildbot.nix;
   buildkite-agents = runTest ./buildkite-agents.nix;
   buildstream = runTest ./buildstream.nix;
+  buildstream-plugins-community = runTest ./buildstream-plugins-community.nix;
   bulwark = runTest ./bulwark.nix;
   c2fmzq = runTest ./c2fmzq.nix;
   caddy = runTest ./caddy.nix;

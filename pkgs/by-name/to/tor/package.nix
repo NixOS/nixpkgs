@@ -11,7 +11,7 @@
   zlib,
   torsocks,
   libseccomp,
-  systemd,
+  systemdLibs,
   libcap,
   xz,
   zstd,
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    systemd
+    systemdLibs
     libcap
   ];
 
