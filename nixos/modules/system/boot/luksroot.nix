@@ -7,9 +7,30 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkOptionDefault
+    optionalString
+    optional
+    filterAttrs
+    optionals
+    mkRemovedOptionModule
+    mkOption
+    types
+    mkIf
+    any
+    attrValues
+    versionAtLeast
+    all
+    concatMapStringsSep
+    concatStrings
+    mapAttrsToList
+    hasAttr
+    mkMerge
+    mapAttrs'
+    nameValuePair
+    ;
+
   luks = config.boot.initrd.luks;
   clevis = config.boot.initrd.clevis;
   systemd = config.boot.initrd.systemd;
