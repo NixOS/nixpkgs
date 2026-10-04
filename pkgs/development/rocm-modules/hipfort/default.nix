@@ -19,35 +19,41 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XaB4jauCN41tgD1YHHA2td/yckwfMBemBe/iL0SCxQo=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
-    rocm-cmake
     gfortran
   ];
 
+  buildInputs = [
+    rocm-cmake
+  ];
+
   cmakeFlags = [
-    "-DHIPFORT_COMPILER=${gfortran}/bin/gfortran"
-    "-DHIPFORT_AR=${gfortran.cc}/bin/gcc-ar"
-    "-DHIPFORT_RANLIB=${gfortran.cc}/bin/gcc-ranlib"
+    (lib.cmakeFeature "HIPFORT_COMPILER" "${gfortran}/bin/gfortran")
+    (lib.cmakeFeature "HIPFORT_AR" "${gfortran.cc}/bin/gcc-ar")
+    (lib.cmakeFeature "HIPFORT_RANLIB" "${gfortran.cc}/bin/gcc-ranlib")
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ];
 
   postPatch = ''
     patchShebangs bin
 
     substituteInPlace bin/hipfc bin/mymcpu \
-      --replace "/bin/cat" "cat"
+      --replace-fail "/bin/cat" "cat"
 
     substituteInPlace bin/CMakeLists.txt \
-      --replace "/bin/mkdir" "mkdir" \
-      --replace "/bin/cp" "cp" \
-      --replace "/bin/sed" "sed" \
-      --replace "/bin/chmod" "chmod" \
-      --replace "/bin/ln" "ln"
+      --replace-fail "/bin/mkdir" "mkdir" \
+      --replace-fail "/bin/cp" "cp" \
+      --replace-fail "/bin/sed" "sed" \
+      --replace-fail "/bin/chmod" "chmod" \
+      --replace-fail "/bin/ln" "ln"
   '';
 
   passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
@@ -55,7 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Fortran interfaces for ROCm libraries";
     homepage = "https://github.com/ROCm/hipfort";
+    changelog = "https://github.com/ROCm/hipfort/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit; # mitx11
+    mainProgram = "hipfc";
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
