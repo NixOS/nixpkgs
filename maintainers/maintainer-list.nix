@@ -14847,6 +14847,13 @@
     githubId = 32744028;
     keys = [ { fingerprint = "7577 13A4 9609 0C2F 51C4  018C B5C8 89A2 F195 28F6"; } ];
   };
+  karol-broda = {
+    name = "Karol Broda";
+    email = "me@karolbroda.com";
+    matrix = "@karolbroda:matrix.karolbroda.com";
+    github = "karol-broda";
+    githubId = 122811026;
+  };
   karpfediem = {
     name = "Karpfen";
     github = "karpfediem";

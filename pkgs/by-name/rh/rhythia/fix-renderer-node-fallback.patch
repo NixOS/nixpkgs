@@ -1,0 +1,18 @@
+diff --git a/scripts/game/Runner.cs b/scripts/game/Runner.cs
+index b2bdb29..23ab025 100644
+--- a/scripts/game/Runner.cs
++++ b/scripts/game/Runner.cs
+@@ -60,9 +60,13 @@ public partial class Runner : Node3D
+ 
+         HudManager ??= GetNode<HudManager>("HUD");
+         Camera ??= GetNode<Camera3D>("Camera3D");
+-        Renderers ??= GetNode<Godot.Collections.Array<Renderer>>("Renderers");
++        Renderers ??= new Godot.Collections.Array<Renderer>(
++            GetNode<Node>("Renderers")
++                .GetChildren()
++                .OfType<Renderer>()
++        );
+         Grid ??= HudManager.GetNode<MeshInstance3D>("Grid");
+-        Cursor ??= GetNode<MeshInstance3D>("Cursor");
++        Cursor ??= Grid.GetNode<MeshInstance3D>("Cursor");
+         // VideoStreamPlayer ??= GetNode<VideoStreamPlayer>("Video/VideoViewport/VideoStreamPlayer");
