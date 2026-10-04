@@ -88,15 +88,15 @@ let
     };
   };
   betaVersion = {
-    version = "2026.2.1.6"; # "Android Studio Rabbit 1 | 2026.2.1 RC 1"
+    version = "2026.2.1.7"; # "Android Studio Rabbit 1 | 2026.2.1 RC 2"
     sources = {
       x86_64-linux = {
-        sha256Hash = "sha256-YXLN4O+SqnRhJpQd6lN74Re1vzdXh3JYFKqIdkRAx8w=";
-        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.1.6/android-studio-rabbit1-rc1-linux.tar.gz";
+        sha256Hash = "sha256-wI2hdMhYl2zPg8SU3+D413ygFqrBQfYMb1yjOsDQ1aA=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.1.7/android-studio-rabbit1-rc2-linux.tar.gz";
       };
       aarch64-darwin = {
-        sha256Hash = "sha256-kdcw7G7t0opNj9Xcn86A9ty0pZ3RBV5Ll8omC0Nhxkg=";
-        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.1.6/android-studio-rabbit1-rc1-mac_arm.dmg";
+        sha256Hash = "sha256-j7ccJ6D+uWOEqpUVEuulv1jjnBqOj2OS/SAhjyVRdso=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.1.7/android-studio-rabbit1-rc2-mac_arm.dmg";
       };
     };
   };
