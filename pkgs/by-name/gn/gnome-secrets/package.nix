@@ -93,7 +93,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
