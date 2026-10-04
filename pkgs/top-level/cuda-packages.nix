@@ -5,6 +5,18 @@
   lib,
 }:
 let
+  # NOTE: We cannot use backendStdenv.hostPlatform for the same reason we cannot use
+  # backendStdenv.hasJetsonCudaCapability (see below).
+  hostPlatform = callPackage ({ stdenv }: stdenv.hostPlatform) { };
+
+  # NOTE: We cannot use backendStdenv.hasJetsonCudaCapability because backendStdenv asserts the requested capabilities
+  # are supported by its CUDA version. Doing so would cause evaluation of every package set to fail when any package
+  # set does not support the requested capabilities, since the manifests of each package set are compared against
+  # those of the default package set. The default capabilities never include Jetson capabilities.
+  hasJetsonCudaCapability = lib.any (
+    cudaCapability: _cuda.db.cudaCapabilityToInfo.${cudaCapability}.isJetson or false
+  ) (config.cudaCapabilities or [ ]);
+
   mkCudaPackages =
     manifestVersions:
     callPackage ../development/cuda-modules {
@@ -30,191 +42,159 @@ let
   #   - 0.8.x supports CUDA 12.9 and newer, so we keep 0.7.1 for CUDA 12.8.
   #   - NVIDIA dropped CUDA 12 support with 0.9.0, so we keep 0.8.1 for CUDA 12.9.
 
-  cudaPackages_12_6 =
-    let
-      inherit (cudaPackages_12_6.backendStdenv) hasJetsonCudaCapability hostPlatform;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "12.6.3";
-      cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.6.3";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt =
-        if hasJetsonCudaCapability then
-          "10.7.0"
-        else if hostPlatform.isAarch64 then
-          "10.13.0"
-        else
-          "11.3.0";
-    };
+  cudaPackages_12_6 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "12.6.3";
+    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.6.3";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt =
+      if hasJetsonCudaCapability then
+        "10.7.0"
+      else if hostPlatform.isAarch64 then
+        "10.13.0"
+      else
+        "11.3.0";
+  };
 
-  cudaPackages_12_8 =
-    let
-      inherit (cudaPackages_12_8.backendStdenv) hasJetsonCudaCapability hostPlatform;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "12.8.2";
-      cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.7.1";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt =
-        if hasJetsonCudaCapability then
-          "10.7.0"
-        else if hostPlatform.isAarch64 then
-          "10.13.0"
-        else
-          "11.3.0";
-    };
+  cudaPackages_12_8 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "12.8.2";
+    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.7.1";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt =
+      if hasJetsonCudaCapability then
+        "10.7.0"
+      else if hostPlatform.isAarch64 then
+        "10.13.0"
+      else
+        "11.3.0";
+  };
 
-  cudaPackages_12_9 =
-    let
-      inherit (cudaPackages_12_9.backendStdenv) hasJetsonCudaCapability hostPlatform;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "12.9.2";
-      cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.8.1";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt =
-        if hasJetsonCudaCapability then
-          "10.7.0"
-        else if hostPlatform.isAarch64 then
-          "10.13.0"
-        else
-          "11.3.0";
-    };
+  cudaPackages_12_9 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "12.9.2";
+    cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.8.1";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt =
+      if hasJetsonCudaCapability then
+        "10.7.0"
+      else if hostPlatform.isAarch64 then
+        "10.13.0"
+      else
+        "11.3.0";
+  };
 
-  cudaPackages_13_0 =
-    let
-      inherit (cudaPackages_13_0.backendStdenv) hasJetsonCudaCapability;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "13.0.3";
-      cudnn = "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.10.0";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.3.0";
-    };
+  cudaPackages_13_0 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "13.0.3";
+    cudnn = "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.10.0";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.3.0";
+  };
 
-  cudaPackages_13_1 =
-    let
-      inherit (cudaPackages_13_1.backendStdenv) hasJetsonCudaCapability;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "13.1.2";
-      cudnn = "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.10.0";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.3.0";
-    };
+  cudaPackages_13_1 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "13.1.2";
+    cudnn = "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.10.0";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.3.0";
+  };
 
-  cudaPackages_13_2 =
-    let
-      inherit (cudaPackages_13_2.backendStdenv) hasJetsonCudaCapability;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "13.2.2";
-      cudnn = "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.10.0";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
-    };
+  cudaPackages_13_2 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "13.2.2";
+    cudnn = "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.10.0";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
+  };
 
-  cudaPackages_13_3 =
-    let
-      inherit (cudaPackages_13_3.backendStdenv) hasJetsonCudaCapability;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "13.3.1";
-      cudnn = "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.10.0";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
-    };
+  cudaPackages_13_3 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "13.3.1";
+    cudnn = "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.10.0";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
+  };
 
-  cudaPackages_13_4 =
-    let
-      inherit (cudaPackages_13_4.backendStdenv) hasJetsonCudaCapability;
-    in
-    mkCudaPackages {
-      cublasmp = "0.10.0";
-      cuda = "13.4.2";
-      cudnn = "9.27.0";
-      cudss = "0.8.0";
-      cuquantum = "26.09.0";
-      cusolvermp = "0.9.1";
-      cusparselt = "0.10.0";
-      cutensor = "2.8.1";
-      nppplus = "0.10.0";
-      nvcomp = "5.3.0";
-      nvjpeg2000 = "0.11.0";
-      nvpl = "26.5";
-      nvtiff = "0.8.0";
-      tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
-    };
+  cudaPackages_13_4 = mkCudaPackages {
+    cublasmp = "0.10.0";
+    cuda = "13.4.2";
+    cudnn = "9.27.0";
+    cudss = "0.8.0";
+    cuquantum = "26.09.0";
+    cusolvermp = "0.9.1";
+    cusparselt = "0.10.0";
+    cutensor = "2.8.1";
+    nppplus = "0.10.0";
+    nvcomp = "5.3.0";
+    nvjpeg2000 = "0.11.0";
+    nvpl = "26.5";
+    nvtiff = "0.8.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
+  };
 in
 {
   inherit
