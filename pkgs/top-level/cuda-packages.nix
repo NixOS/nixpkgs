@@ -26,7 +26,8 @@ let
   #     release everywhere else.
   # - cusparselt:
   #   - 0.7.0 requires CUDA 12.8 or newer, so we keep 0.6.3 for CUDA 12.6.
-  #   - NVIDIA dropped CUDA 12 support with 0.9.0, so we keep 0.8.1 for CUDA 12.8 and 12.9.
+  #   - 0.8.x supports CUDA 12.9 and newer, so we keep 0.7.1 for CUDA 12.8.
+  #   - NVIDIA dropped CUDA 12 support with 0.9.0, so we keep 0.8.1 for CUDA 12.9.
 
   cudaPackages_12_6 =
     let
@@ -66,7 +67,7 @@ let
       cudss = "0.8.0";
       cuquantum = "26.09.0";
       cusolvermp = "0.9.1";
-      cusparselt = "0.8.1";
+      cusparselt = "0.7.1";
       cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.3.0";

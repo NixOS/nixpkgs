@@ -6,4 +6,4 @@ Requirements: <https://docs.nvidia.com/cuda/cusparselt/getting_started.html#prer
 
 NOTE: 0.7.1 only supports CUDA 12.8 and later.
 
-NOTE: 0.8.x is the last series with CUDA 12 builds; 0.9.0 and later only support CUDA 13.
+NOTE: 0.8.x supports CUDA 12.9 and newer and is the last series with CUDA 12 builds; 0.9.0 and later only support CUDA 13.
