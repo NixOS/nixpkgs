@@ -6,6 +6,7 @@
   dawg-python,
   docopt,
   pymorphy2-dicts-ru,
+  pkg-resources-backport,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -21,10 +22,6 @@ buildPythonPackage (finalAttrs: {
   };
 
   postPatch = ''
-    substituteInPlace pymorphy2/analyzer.py \
-      --replace-fail "import pkg_resources" "from importlib.metadata import entry_points" \
-      --replace-fail "ws = pkg_resources.WorkingSet()" "" \
-      --replace-fail "return ws.iter_entry_points(*args, **kwargs)" "return entry_points(group=args[0])"
     substituteInPlace pymorphy2/units/base.py \
       --replace-fail "args, varargs, kw, default = inspect.getargspec(cls.__init__)" "args = inspect.getfullargspec(cls.__init__).args"
   '';
@@ -33,6 +30,7 @@ buildPythonPackage (finalAttrs: {
     dawg-python
     docopt
     pymorphy2-dicts-ru
+    pkg-resources-backport
   ];
 
   pythonImportsCheck = [ "pymorphy2" ];
