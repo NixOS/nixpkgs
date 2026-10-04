@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-storage";
-  version = "24.0.1";
+  version = "25.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_storage";
     inherit version;
-    hash = "sha256-p/cGgWOzCOXx9xhUGsgBT3/5IZ2gRjv3NG7inZw0mTg=";
+    hash = "sha256-SUYurxSNczMsQyn+ZGaQNU5EEib76ZbnIOZoPwIemG8=";
   };
 
   build-system = [ setuptools ];
