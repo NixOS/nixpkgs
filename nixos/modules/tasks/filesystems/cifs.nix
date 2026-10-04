@@ -29,10 +29,6 @@ in
       "sha256"
     ];
 
-    boot.initrd.extraUtilsCommands = mkIf (inInitrd && !config.boot.initrd.systemd.enable) ''
-      copy_bin_and_libs ${mount_cifs}
-    '';
-
     boot.initrd.systemd.extraBin."mount.cifs" = mkIf inInitrd mount_cifs;
 
   };
