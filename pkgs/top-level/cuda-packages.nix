@@ -35,7 +35,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.6.3";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
@@ -62,7 +62,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
@@ -89,7 +89,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
@@ -120,7 +120,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
@@ -143,7 +143,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
@@ -166,7 +166,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
@@ -189,7 +189,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
@@ -212,7 +212,7 @@ let
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
-      cutensor = "2.3.1";
+      cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
       nvjpeg2000 = "0.9.0";
