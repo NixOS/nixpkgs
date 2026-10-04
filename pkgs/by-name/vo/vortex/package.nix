@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version src;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-iTeMC/DnMwKN3DhWMikywKcrExmmAcYl6tzmCPt7noY=";
+    hash = "sha256-sh4S4dBCeuvb92YcIhUcXynnWMZiWS1lx5shUb7OXhs=";
   };
 
   # pnpm's deploy command needs the original archives for Git-hosted
