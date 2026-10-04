@@ -7,6 +7,7 @@
   cmake,
   python3Packages ? { },
   nix-update-script,
+  runCommand,
 
   # dependencies
   alsa-lib,
@@ -108,6 +109,24 @@ let
       };
     }
   ];
+
+  # Use the same yesno TDNN model and audio sample as upstream's offline CTC test,
+  # pinned to a Hugging Face repository commit:
+  # https://github.com/k2-fsa/sherpa-onnx/blob/v1.13.8/.github/scripts/test-offline-ctc.sh
+  yesnoModelRev = "93a6f1d8f477397fc607a6cb151bff7a68c28589";
+  yesnoModelUrl = "https://huggingface.co/csukuangfj/sherpa-onnx-tdnn-yesno/resolve/${yesnoModelRev}";
+  yesnoModel = fetchurl {
+    url = "${yesnoModelUrl}/model-epoch-14-avg-2.onnx";
+    hash = "sha256-xFIeHlyCwxH5A64skF1Nj53ccKCqjy/+ePRcTWclKsA=";
+  };
+  yesnoTokens = fetchurl {
+    url = "${yesnoModelUrl}/tokens.txt";
+    hash = "sha256-Zai7QPb5kTkd0WnmRjfYZk3ZEn6qeoioyOaUMXK8yMA=";
+  };
+  yesnoWav = fetchurl {
+    url = "${yesnoModelUrl}/test_wavs/0_0_1_1_0_1_1_0.wav";
+    hash = "sha256-04LPuot4IYNfYsfIHYtQnj46WXzeYqGQ1pC8R3IBy5k=";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sherpa-onnx";
@@ -206,6 +225,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    # Exercise the installed CLI, ONNX Runtime, model loading, and transcription.
+    # Upstream's yesno model test and expected transcripts:
+    # https://k2-fsa.github.io/sherpa/onnx/pretrained_models/offline-ctc/yesno/
+    tests.offlineRecognition =
+      runCommand "${finalAttrs.pname}-offline-recognition-test"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          sherpa-onnx-offline \
+            --sample-rate=8000 \
+            --feat-dim=23 \
+            --num-threads=1 \
+            --tokens=${yesnoTokens} \
+            --tdnn-model=${yesnoModel} \
+            ${yesnoWav} > result.txt 2>&1
+
+          grep -Fq '"text": "NNYYNYYN"' result.txt
+          touch $out
+        '';
   };
 
   meta = {
