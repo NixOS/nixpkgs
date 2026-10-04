@@ -50,5 +50,17 @@ in
     machine.wait_until_succeeds(
         'journalctl -eu hydra-notify.service -o cat | grep -q "sending mail notification for changed build status to hydra@localhost"'
     )
+
+    # Build a derivation through hydra-ad-hoc: the queue runner builds it as a
+    # Hydra build of the hidden adhoc/adhoc jobset.
+    machine.wait_for_unit("hydra-ad-hoc.socket")
+    drv = machine.succeed("nix-instantiate /etc/hydra-test/ad-hoc.nix").strip()
+    out = machine.succeed(
+        f"nix-store --store unix:///run/hydra-ad-hoc/socket --realise {drv}"
+    ).strip()
+    machine.succeed(f"grep -q 'hello from hydra-ad-hoc' {out}")
+    machine.succeed(
+        'curl -L -s http://localhost:3000/jobset/adhoc/adhoc -H "Accept: application/json" | jq -e .name'
+    )
   '';
 }

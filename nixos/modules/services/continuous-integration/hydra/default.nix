@@ -223,6 +223,82 @@ in
         };
       };
 
+      adHoc = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Whether to enable hydra-ad-hoc, an experimental service presenting Hydra
+            as one big Nix daemon. It serves the Nix daemon protocol on
+            {option}`services.hydra.adHoc.socketPath`, and derivations realised
+            through it are built by the queue runner as Hydra builds of a hidden
+            `adhoc/adhoc` jobset.
+
+            Members of the `hydra-ad-hoc` group can use the socket. Until the
+            daemon has its own access control, they are effectively trusted Nix
+            users on this machine, so grant membership as carefully as
+            {option}`nix.settings.trusted-users`.
+          '';
+        };
+
+        package = lib.mkPackageOption pkgs "hydra-ad-hoc" { };
+
+        socketPath = lib.mkOption {
+          type = lib.types.path;
+          default = "/run/hydra-ad-hoc/socket";
+          description = ''
+            Unix socket clients connect to, e.g. with
+            `nix-store --store unix:///run/hydra-ad-hoc/socket --realise ...`.
+          '';
+        };
+
+        settings = lib.mkOption {
+          description = ''
+            Settings for hydra-ad-hoc, written to {file}`/etc/hydra/ad-hoc.toml`.
+          '';
+          default = { };
+          type = lib.types.submodule {
+            options = {
+              dbUrl = lib.mkOption {
+                type = lib.types.singleLineStr;
+                default = cfg.dbUrl;
+                defaultText = lib.literalExpression "config.services.hydra.dbUrl";
+                description = "PostgreSQL database URL.";
+              };
+
+              maxDbConnections = lib.mkOption {
+                type = lib.types.ints.positive;
+                default = 4;
+                description = "Maximum number of PostgreSQL connections.";
+              };
+
+              upstreamSocket = lib.mkOption {
+                type = lib.types.path;
+                default = "/nix/var/nix/daemon-socket/socket";
+                description = ''
+                  Upstream nix-daemon socket that read operations and `.drv` uploads
+                  are proxied to.
+                '';
+              };
+
+              storeDir = lib.mkOption {
+                type = lib.types.path;
+                default = builtins.storeDir;
+                defaultText = lib.literalExpression "builtins.storeDir";
+                description = "Nix store directory.";
+              };
+
+              hydraDataDir = lib.mkOption {
+                type = lib.types.path;
+                default = baseDir;
+                defaultText = lib.literalExpression ''"${baseDir}"'';
+                description = "Hydra data directory, whose build logs are streamed to clients.";
+              };
+            };
+          };
+        };
+      };
+
       hydraURL = lib.mkOption {
         type = lib.types.str;
         description = ''
@@ -725,6 +801,15 @@ in
       isSystemUser = true;
     };
 
+    users.users.hydra-ad-hoc = lib.mkIf cfg.adHoc.enable {
+      description = "Hydra ad hoc build daemon";
+      group = "hydra";
+      isSystemUser = true;
+    };
+
+    # Clients of the ad hoc socket, deliberately separate from the `hydra` group.
+    users.groups.hydra-ad-hoc = lib.mkIf cfg.adHoc.enable { };
+
     users.users.hydra-www = {
       description = "Hydra web server";
       group = "hydra";
@@ -755,6 +840,11 @@ in
         keep-derivations = true;
         trusted-users = [ "hydra-queue-runner" ];
       }
+
+      # hydra-ad-hoc forwards uploads and build requests on behalf of its clients.
+      (lib.mkIf cfg.adHoc.enable {
+        trusted-users = [ "hydra-ad-hoc" ];
+      })
 
       (lib.mkIf (lib.versionOlder (lib.getVersion config.nix.package.out) "2.4pre") {
         # The default (`true') slows Nix down a lot since the build farm
@@ -1065,6 +1155,101 @@ in
       source = toml.generate "ws.toml" (lib.filterAttrsRecursive (_: v: v != null) cfg.ws.settings);
     };
 
+    systemd.services.hydra-ad-hoc = lib.mkIf cfg.adHoc.enable {
+      description = "Hydra ad hoc build daemon";
+      wantedBy = [ "multi-user.target" ];
+      requires = [
+        "nix-daemon.socket"
+        "hydra-ad-hoc.socket"
+      ];
+      after = [
+        "hydra-init.service"
+        "network.target"
+      ];
+      # The daemon cannot reload its configuration.
+      restartTriggers = [ config.environment.etc."hydra/ad-hoc.toml".source ];
+
+      environment.RUST_BACKTRACE = "1";
+
+      serviceConfig = {
+        Type = "notify";
+        Restart = "always";
+        RestartSec = "5s";
+        Slice = "system-hydra.slice";
+
+        ExecStart = lib.escapeShellArgs [
+          (lib.getExe cfg.adHoc.package)
+          "--socket"
+          "-"
+          "--config-path"
+          "/etc/hydra/ad-hoc.toml"
+        ];
+
+        User = "hydra-ad-hoc";
+        Group = "hydra";
+
+        ReadOnlyPaths = [
+          "/nix/"
+          "${cfg.adHoc.settings.hydraDataDir}/build-logs/"
+        ];
+        ReadWritePaths = [
+          cfg.adHoc.settings.upstreamSocket
+        ]
+        ++ lib.optionals (lib.hasInfix "%2Frun%2Fpostgresql" cfg.adHoc.settings.dbUrl) [
+          "/run/postgresql/.s.PGSQL.${toString config.services.postgresql.settings.port}"
+        ];
+
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        UMask = "0022";
+      };
+    };
+
+    # The socket's group and mode are what limit build submission to members of
+    # the `hydra-ad-hoc` group.
+    systemd.sockets.hydra-ad-hoc = lib.mkIf cfg.adHoc.enable {
+      description = "Hydra ad hoc build daemon socket";
+      wantedBy = [ "sockets.target" ];
+      socketConfig = {
+        ListenStream = cfg.adHoc.socketPath;
+        SocketUser = "hydra-ad-hoc";
+        SocketGroup = "hydra-ad-hoc";
+        SocketMode = "0660";
+        FileDescriptorName = "daemon";
+        Service = "hydra-ad-hoc.service";
+      };
+    };
+
+    environment.etc."hydra/ad-hoc.toml" = lib.mkIf cfg.adHoc.enable {
+      source = toml.generate "ad-hoc.toml" (
+        lib.filterAttrsRecursive (_: v: v != null) cfg.adHoc.settings
+      );
+    };
+
     systemd.services.hydra-evaluator = {
       wantedBy = [ "multi-user.target" ];
       requires = [ "hydra-init.service" ];
@@ -1206,6 +1391,9 @@ in
       ''
       + lib.optionalString cfg.ws.enable ''
         hydra hydra-ws hydra
+      ''
+      + lib.optionalString cfg.adHoc.enable ''
+        hydra hydra-ad-hoc hydra
       ''
     );
 
