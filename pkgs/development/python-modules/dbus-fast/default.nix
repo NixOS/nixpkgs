@@ -15,19 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dbus-fast";
-  version = "5.0.22";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tYgsaXOo1zYjWebcWZyGIIbYHCJApwhRnuYcHOP+ZUs=";
+    hash = "sha256-Evm8YTTcVIcMNknJ7GMNVgE8kHd+PO747OqSlHIFK9k=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "Cython>=3,<3.3.0" Cython
+      --replace-fail "Cython>=3,<3.4" Cython
   '';
 
   # The project can build both an optimized cython version and an unoptimized
