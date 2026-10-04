@@ -28091,6 +28091,12 @@
     githubId = 48666;
     name = "Matthew \"strager\" Glazar";
   };
+  strangeglyph = {
+    email = "github@mail.apophenic.net";
+    github = "strangeglyph";
+    githubId = 974869;
+    name = "strangeglyph";
+  };
   strawbee = {
     email = "henigingames@gmail.com";
     github = "StillToad";

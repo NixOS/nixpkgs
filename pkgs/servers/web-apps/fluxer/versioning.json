@@ -1,0 +1,12 @@
+{
+    "rev": "973aaced96098b77b8dd58c29405905bc999cd5a",
+    "version": "2026.1003.xxx",
+    "hash": "sha256-uDxYn5eWKExMWTNI/MYQNuvqMte01Q0CVFdo9N5JuaU=",
+    "cargoHash": "sha256-eGDObxKXGIDUG/7MC3QgOrHGuvThc5eOvTrJwvfAIak=",
+    "libfluxcoreHash": "sha256-Z9N2jQtXkLPqJP2Fbu6xsNGN25XAE58CbHRm/f0uEIQ=",
+    "libfluxwebpHash": "sha256-zz5JD3jiNCx8FOReZmCm4O2F20s7UbMsfZIM2sIcSS0=",
+    "guildMemberListNifHash": "sha256-lECOMdkbdWAeL829MrWPWGQI44P+4VMnLIp9Jd+xJJo=",
+    "pushMarkdownPlaintextHash": "sha256-9HDcMd1qfIOJPIw6D9bLR4rSfbz8Zv/wz9zQe3PoZjM=",
+    "appproxyPnpmHash": "sha256-vn4Mkzgh0b+xTbqQDwqGBe1RHQTHyA4YQXEUmUhD2/M=",
+    "rebarHash": "sha256-rGSvSCUjH+BedJga2Kq2B7diDT5M68l2xmp9hbDD5xI="
+}
