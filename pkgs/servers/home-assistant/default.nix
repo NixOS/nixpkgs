@@ -401,7 +401,10 @@ python3Packages.buildPythonApplication rec {
     pyqrcode
   ];
 
-  makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
+  makeWrapperArgs = lib.optionals skipPip [
+    "--add-flags"
+    "--skip-pip"
+  ];
 
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
