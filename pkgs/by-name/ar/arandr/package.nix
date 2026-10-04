@@ -69,13 +69,15 @@ buildPythonApplication (finalAttrs: {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "--prefix"
-    "PATH"
-    ":"
-    (lib.makeBinPath [ xrandr ])
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--prefix"
+      "PATH"
+      ":"
+      "${lib.makeBinPath [ xrandr ]}"
+      "''${gappsWrapperArgs[@]}"
+    )
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
