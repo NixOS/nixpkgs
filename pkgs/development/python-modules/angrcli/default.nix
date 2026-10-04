@@ -24,8 +24,20 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "version='1.2.0'" "version='${version}'"
     substituteInPlace tests/test_derefs.py \
       --replace-fail "/bin/ls" "${coreutils}/bin/ls"
+
+    substituteInPlace \
+      angrcli/ast/rendering.py \
+      angrcli/plugins/ContextView/{context_view,disassemblers}.py \
+      tests/test_{interactive_explore,morph,simprocs}.py \
+      --replace-fail "import claripy" "from angr import claripy"
+    substituteInPlace \
+      angrcli/plugins/ContextView/context_view.py \
+      angrcli/plugins/watches.py \
+      --replace-fail "from claripy." "from angr.claripy."
   '';
 
   build-system = [ setuptools ];
@@ -41,7 +53,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (!stdenv.hostPlatform.isx86) [
+  disabledTests = [
+    # Exact SimProcedure prototype strings changed in angr 9.3.
+    "test_sims"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # expects the x86 register "rax" to exist
     "test_cc"
     "test_loop"
@@ -54,6 +70,9 @@ buildPythonPackage rec {
     description = "Python modules to allow easier interactive use of angr";
     homepage = "https://github.com/fmagin/angr-cli";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      connornelson
+      fab
+    ];
   };
 }

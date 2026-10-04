@@ -174,8 +174,6 @@ self: super: with self; {
 
   aigpy = callPackage ../development/python-modules/aigpy { };
 
-  ailment = callPackage ../development/python-modules/ailment { };
-
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
   aio-geojson-generic-client =
@@ -1102,6 +1100,8 @@ self: super: with self; {
       { };
 
   angr = callPackage ../development/python-modules/angr { };
+
+  angr-data = callPackage ../development/python-modules/angr-data { };
 
   angrcli = callPackage ../development/python-modules/angrcli { inherit (pkgs) coreutils; };
 
@@ -3178,8 +3178,6 @@ self: super: with self; {
 
   clarifai-protocol = callPackage ../development/python-modules/clarifai-protocol { };
 
-  claripy = callPackage ../development/python-modules/claripy { };
-
   class-doc = callPackage ../development/python-modules/class-doc { };
 
   classify-imports = callPackage ../development/python-modules/classify-imports { };
@@ -4231,6 +4229,8 @@ self: super: with self; {
   debugpy = callPackage ../development/python-modules/debugpy { };
 
   decli = callPackage ../development/python-modules/decli { };
+
+  declib = callPackage ../development/python-modules/declib { };
 
   declinate = callPackage ../development/python-modules/declinate { };
 
@@ -9603,8 +9603,6 @@ self: super: with self; {
   };
 
   libasyncns = callPackage ../development/python-modules/libasyncns { inherit (pkgs) libasyncns; };
-
-  libbs = callPackage ../development/python-modules/libbs { };
 
   libcap_ng = callPackage (
     {
@@ -15933,7 +15931,7 @@ self: super: with self; {
 
   pypytools = callPackage ../development/python-modules/pypytools { };
 
-  pyqodeng-angr = callPackage ../development/python-modules/pyqodeng-angr { };
+  pyqodeng = callPackage ../development/python-modules/pyqodeng { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
@@ -17598,6 +17596,8 @@ self: super: with self; {
   pyxbe = callPackage ../development/python-modules/pyxbe { };
 
   pyxdg = callPackage ../development/python-modules/pyxdg { };
+
+  pyxdia = callPackage ../development/python-modules/pyxdia { };
 
   pyxeoma = callPackage ../development/python-modules/pyxeoma { };
 
@@ -22031,10 +22031,6 @@ self: super: with self; {
   unicodeit = callPackage ../development/python-modules/unicodeit { };
 
   unicorn = callPackage ../development/python-modules/unicorn { inherit (pkgs) unicorn; };
-
-  unicorn-angr = callPackage ../development/python-modules/unicorn-angr {
-    inherit (pkgs) unicorn-angr;
-  };
 
   unicrypto = callPackage ../development/python-modules/unicrypto { };
 
