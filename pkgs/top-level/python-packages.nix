@@ -13658,6 +13658,8 @@ self: super: with self; {
     piper-phonemize-native = pkgs.piper-phonemize;
   };
 
+  piper-tts = callPackage ../development/python-modules/piper-tts { };
+
   pipetools = callPackage ../development/python-modules/pipetools { };
 
   pipx = callPackage ../development/python-modules/pipx { };
