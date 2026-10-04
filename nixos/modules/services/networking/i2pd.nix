@@ -151,6 +151,16 @@ in
     {
       enable = lib.mkEnableOption "`i2pd` (I2P network router)";
       package = lib.mkPackageOption pkgs "i2pd" { };
+      checkConfig = lib.mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to check the configuration at build time by starting i2pd.
+
+          i2pd has no parse-only mode, so this check can fail when configured
+          listen addresses are unavailable in the build environment.
+        '';
+      };
       gracefulShutdown = lib.mkEnableOption "" // {
         description = ''
           If true, i2pd will wait for transit connections to close.
@@ -475,41 +485,43 @@ in
           '';
     in
     lib.mkIf cfg.enable {
-      system.checks = lib.optional (with pkgs.stdenv; buildPlatform.system == hostPlatform.system) (
-        pkgs.runCommand "services.i2pd.check-i2pd.conf" { }
-          # sh
-          ''
-            set -euo pipefail
-            i2pd="${lib.getExe cfg.package}"
-            conf="${i2pdCheckedConfig.conf}"
-            tunconf="${i2pdCheckedConfig.tunconf}"
+      system.checks =
+        lib.optional (cfg.checkConfig && (with pkgs.stdenv; buildPlatform.system == hostPlatform.system))
+          (
+            pkgs.runCommand "services.i2pd.check-i2pd.conf" { }
+              # sh
+              ''
+                set -euo pipefail
+                i2pd="${lib.getExe cfg.package}"
+                conf="${i2pdCheckedConfig.conf}"
+                tunconf="${i2pdCheckedConfig.tunconf}"
 
-            opts="$("$i2pd" --help | grep -Eo "^  --\S*port(udp)? arg" | sed "s/ arg\$/=0/g")"
+                opts="$("$i2pd" --help | grep -Eo "^  --\S*port(udp)? arg" | sed "s/ arg\$/=0/g")"
 
-            echo Checking "$conf"
-            ok=
-            while read line; do
-              case "$line" in
-                *none*i2pd*starting...*)
-                  [[ -z "$ok" ]] && ok=1
-                  kill -s INT $(cat pidfile)
-                  ;;
-                *critical*)
-                  ok=0
-                  ;;
-              esac
-            done < <(
-              "$i2pd" \
-                --pidfile=pidfile --loglevel=critical --datadir=datadir \
-                --conf="$conf" --tunconf="$tunconf" \
-                $opts 2>&1 \
-                | tee /dev/stderr
-            )
-            [[ "$ok" != "1" ]] && exit 1
+                echo Checking "$conf"
+                ok=
+                while read line; do
+                  case "$line" in
+                    *none*i2pd*starting...*)
+                      [[ -z "$ok" ]] && ok=1
+                      kill -s INT $(cat pidfile)
+                      ;;
+                    *critical*)
+                      ok=0
+                      ;;
+                  esac
+                done < <(
+                  "$i2pd" \
+                    --pidfile=pidfile --loglevel=critical --datadir=datadir \
+                    --conf="$conf" --tunconf="$tunconf" \
+                    $opts 2>&1 \
+                    | tee /dev/stderr
+                )
+                [[ "$ok" != "1" ]] && exit 1
 
-            touch $out
-          ''
-      );
+                touch $out
+              ''
+          );
 
       systemd.services.i2pd = {
         description = "Minimal I2P router";
