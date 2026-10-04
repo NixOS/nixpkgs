@@ -9,7 +9,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgtcalc";
-  version = "0.2.0-unstable-2026-08-07";
+  version = "0.1.0-unstable-2026-08-07";
 
   src = fetchFromGitHub {
     owner = "mattjgalloway";
