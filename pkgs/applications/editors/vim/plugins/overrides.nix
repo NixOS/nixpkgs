@@ -1167,6 +1167,15 @@ assertNoAdditions {
     };
   });
 
+  dadbod-grip-nvim = super.dadbod-grip-nvim.overrideAttrs {
+    # Optional pickers: these adapters probe for telescope/snacks with pcall and
+    # fall back to the built-in picker when the dependency is absent.
+    checkInputs = with self; [
+      snacks-nvim
+      telescope-nvim
+    ];
+  };
+
   dailies-nvim = super.dailies-nvim.overrideAttrs {
     runtimeDeps = [
       dailies
