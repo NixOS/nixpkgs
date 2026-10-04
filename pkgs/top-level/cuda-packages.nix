@@ -43,7 +43,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasJetsonCudaCapability then
           "10.7.0"
@@ -70,7 +70,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasJetsonCudaCapability then
           "10.7.0"
@@ -97,7 +97,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasJetsonCudaCapability then
           "10.7.0"
@@ -128,7 +128,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
@@ -151,7 +151,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
@@ -174,7 +174,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
@@ -197,7 +197,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
@@ -220,7 +220,7 @@ let
       nvcomp = "5.3.0";
       nvjpeg2000 = "0.11.0";
       nvpl = "25.5";
-      nvtiff = "0.5.1";
+      nvtiff = "0.8.0";
       tensorrt =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
     };
