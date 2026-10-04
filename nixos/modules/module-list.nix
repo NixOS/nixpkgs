@@ -576,6 +576,7 @@
   ./services/databases/rethinkdb.nix
   ./services/databases/surrealdb.nix
   ./services/databases/tigerbeetle.nix
+  ./services/databases/typedb.nix
   ./services/databases/victorialogs.nix
   ./services/databases/victoriametrics.nix
   ./services/databases/victoriatraces.nix
