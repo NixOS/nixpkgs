@@ -10,6 +10,7 @@
   version,
   src,
   patches,
+  branch,
   patchFlags ? null,
   prePatch ? null,
   broken,
@@ -38,6 +39,7 @@ stdenv.mkDerivation {
     else
       src;
 
+  passthru.branch = branch;
   driverVersion = version;
 
   inherit patches patchFlags prePatch;
