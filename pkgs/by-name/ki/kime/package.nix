@@ -6,48 +6,44 @@
   cargo,
   fetchFromGitHub,
   pkg-config,
-  cmake,
-  kdePackages,
+  meson,
+  ninja,
+  python3,
+  libGL,
+  libxkbcommon,
   withWayland ? true,
+  wayland,
   withIndicator ? true,
   dbus,
   libdbusmenu,
   withXim ? true,
   libxcb,
-  cairo,
   withGtk3 ? true,
   gtk3,
   withGtk4 ? true,
   gtk4,
-  withQt5 ? true,
+  withQt5 ? false,
   qt5,
-  withQt6 ? false,
+  withQt6 ? true,
   qt6,
 }:
 
-let
-  cmake_args =
-    lib.optionals withGtk3 [ "-DENABLE_GTK3=ON" ]
-    ++ lib.optionals withGtk4 [ "-DENABLE_GTK4=ON" ]
-    ++ lib.optionals withQt5 [ "-DENABLE_QT5=ON" ]
-    ++ lib.optionals withQt6 [ "-DENABLE_QT6=ON" ];
+assert !(withQt5 && withQt6); # Nixpkgs Qt hooks disallow mixing Qt5 and Qt6 in the same derivation
 
-  optFlag = w: (if w then "1" else "0");
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kime";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "Riey";
     repo = "kime";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-apQkxAUve7+2h9XACZZgroqBK1sCUYMNfsX/4nEnCPA=";
+    hash = "sha256-YQQ27pSyuznqOI5o5oqLQIdUPqnrw8UTmD65KL9su3c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-U3SOHZvgyPwv98wY41dnwSCUg+DTkb/LY6woffrAli8=";
+    hash = "sha256-FP7uHsLVozB6kpwCuNFrYY2j6RQUL6n41hfvlFN5/qI=";
   };
 
   # Replace autostart path
@@ -56,42 +52,30 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn "/usr/bin/kime" "kime"
   '';
 
-  dontUseCmakeConfigure = true;
   dontWrapQtApps = true;
-  buildPhase = ''
-    runHook preBuild
-    export KIME_BUILD_CHECK=1
-    export KIME_BUILD_INDICATOR=${optFlag withIndicator}
-    export KIME_BUILD_XIM=${optFlag withXim}
-    export KIME_BUILD_WAYLAND=${optFlag withWayland}
-    export KIME_BUILD_KIME=1
-    export KIME_CARGO_ARGS="-j$NIX_BUILD_CORES --frozen"
-    export KIME_MAKE_ARGS="-j$NIX_BUILD_CORES"
-    export KIME_CMAKE_ARGS="${lib.concatStringsSep " " cmake_args}"
-    bash scripts/build.sh -r
-    runHook postBuild
-  '';
+
+  mesonFlags = [
+    "-Dcargo_profile=release"
+    (lib.mesonEnable "indicator" withIndicator)
+    (lib.mesonEnable "xim" withXim)
+    (lib.mesonEnable "wayland" withWayland)
+    (lib.mesonEnable "gtk3" withGtk3)
+    (lib.mesonEnable "gtk4" withGtk4)
+    (lib.mesonEnable "qt5" withQt5)
+    (lib.mesonEnable "qt6" withQt6)
+  ]
+  ++ lib.optionals withQt5 [
+    "-Dqt5_plugindir=${placeholder "out"}/${qt5.qtbase.qtPluginPrefix}"
+  ]
+  ++ lib.optionals withQt6 [
+    "-Dqt6_plugindir=${placeholder "out"}/${qt6.qtbase.qtPluginPrefix}"
+  ];
 
   doCheck = true;
   checkPhase = ''
     runHook preCheck
     cargo test --release --frozen
     runHook postCheck
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    export KIME_BIN_DIR=bin
-    export KIME_INSTALL_HEADER=1
-    export KIME_INSTALL_DOC=1
-    export KIME_INCLUDE_DIR=include
-    export KIME_DOC_DIR=share/doc/kime
-    export KIME_ICON_DIR=share/icons
-    export KIME_LIB_DIR=lib
-    export KIME_QT5_DIR=lib/qt-${qt5.qtbase.version}
-    export KIME_QT6_DIR=lib/qt-${qt6.qtbase.version}
-    bash scripts/install.sh "$out"
-    runHook postInstall
   '';
 
   doInstallCheck = true;
@@ -104,24 +88,30 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  buildInputs =
-    lib.optionals withIndicator [
-      dbus
-      libdbusmenu
-    ]
-    ++ lib.optionals withXim [
-      libxcb
-      cairo
-    ]
-    ++ lib.optionals withGtk3 [ gtk3 ]
-    ++ lib.optionals withGtk4 [ gtk4 ]
-    ++ lib.optionals withQt5 [ qt5.qtbase ]
-    ++ lib.optionals withQt6 [ qt6.qtbase ];
+  buildInputs = [
+    libGL
+    libxkbcommon
+  ]
+  ++ lib.optionals withIndicator [
+    dbus
+    libdbusmenu
+  ]
+  ++ lib.optionals withXim [
+    libxcb
+  ]
+  ++ lib.optionals withWayland [
+    wayland
+  ]
+  ++ lib.optionals withGtk3 [ gtk3 ]
+  ++ lib.optionals withGtk4 [ gtk4 ]
+  ++ lib.optionals withQt5 [ qt5.qtbase ]
+  ++ lib.optionals withQt6 [ qt6.qtbase ];
 
   nativeBuildInputs = [
     pkg-config
-    cmake
-    kdePackages.extra-cmake-modules
+    meson
+    ninja
+    python3
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustc
@@ -130,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     RUST_BACKTRACE = 1;
-    # https://github.com/Riey/kime/issues/688
-    RUSTFLAGS = "-Clink-args=-L./target/release";
   };
 
   meta = {
