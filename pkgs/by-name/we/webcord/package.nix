@@ -88,6 +88,7 @@ buildNpmPackage.override { nodejs = nodejs_22; } rec {
     license = lib.licenses.mit;
     mainProgram = "webcord";
     maintainers = with lib.maintainers; [
+      eclairevoyant
       huantian
       NotAShelf
     ];
