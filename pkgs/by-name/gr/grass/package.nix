@@ -95,6 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  # GCC 16 defaults to -std=gnu++20, under which autoconf's C++11 conformance probe fails to compile
+  # and falls back to CXX="g++ -std=gnu++11". That is too old for PDAL's headers, which needs C++17
+  # so configure's PDAL link test fails with "Unable to locate suitable (>=1.7.1) PDAL library".
+  env.CXXFLAGS = "-std=gnu++17";
+
   configureFlags = [
     "--with-blas"
     "--with-cairo-ldflags=-lfontconfig"
