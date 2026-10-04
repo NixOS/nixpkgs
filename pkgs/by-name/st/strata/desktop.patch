@@ -1,0 +1,75 @@
+--- a/src/portal_setup.rs
++++ b/src/portal_setup.rs
+@@ -222,7 +222,11 @@
+             .is_ok_and(|name| name == "org.freedesktop.FileManager1")
+             && config.string("D-BUS Service", "Exec").is_ok_and(|exec| {
+                 crate::services::installed_executable()
+-                    .is_ok_and(|path| exec == format!("{} --gapplication-service", path.display()))
++                    .ok()
++                    .and_then(|path| secure_executable(&path).ok())
++                    .is_some_and(|path| {
++                        exec == format!("{} --gapplication-service", path.display())
++                    })
+             })
+     } else {
+         false
+@@ -438,7 +442,8 @@
+         return Ok(false);
+     }
+     let service = context.data_home.join("dbus-1/services").join(SERVICE_FILE);
+-    let expected_exec = format!("Exec={} --portal", executable.display());
++    let activation_executable = secure_executable(executable)?;
++    let expected_exec = format!("Exec={} --portal", activation_executable.display());
+     // Do not interfere with a portal explicitly installed from another Strata build.
+     if !read_utf8(&service)?
+         .lines()
+@@ -722,6 +727,18 @@
+ fn secure_executable_for_user(path: &Path, effective_user: u32) -> Result<PathBuf, String> {
+     let path = fs::canonicalize(path)
+         .map_err(|error| path_error("resolve the Strata executable", path, error))?;
++    // D-Bus must activate the Nix wrapper, which supplies GTK/GStreamer resources.
++    // Check the real executable as well as the wrapper; never consult PATH.
++    let activation_path = if path.starts_with("/nix/store")
++        && path
++            .file_name()
++            .is_some_and(|name| name == ".strata-wrapped")
++    {
++        let wrapper = path.with_file_name("strata");
++        Some(secure_executable_for_user(&wrapper, effective_user)?)
++    } else {
++        None
++    };
+     for (index, component) in path.ancestors().enumerate() {
+         let metadata = fs::metadata(component)
+             .map_err(|error| path_error("inspect the Strata executable path", component, error))?;
+@@ -737,13 +754,28 @@
+                 "The Strata executable path must be owned by the current user or root".to_owned(),
+             );
+         }
+-        if metadata.permissions().mode() & 0o022 != 0 {
++        // Store entries must be root-owned so the sticky store cannot expose a
++        // user-owned package to replacement by its owner.
++        if component.starts_with("/nix/store") && metadata.uid() != 0 {
++            return Err(
++                "The Strata executable path in the Nix store must be owned by root".to_owned(),
++            );
++        }
++        // The root-owned, sticky Nix store allows new entries but does not let
++        // builders replace the root-owned, read-only package checked above.
++        // No other group/world-writable ancestor receives this exception.
++        let nix_store = component == Path::new("/nix/store")
++            && metadata.is_dir()
++            && metadata.uid() == 0
++            && metadata.permissions().mode() & 0o1000 != 0
++            && metadata.permissions().mode() & 0o002 == 0;
++        if metadata.permissions().mode() & 0o022 != 0 && !nix_store {
+             return Err(
+                 "The Strata executable path must not be writable by other users".to_owned(),
+             );
+         }
+     }
+-    Ok(path)
++    Ok(activation_path.unwrap_or(path))
+ }
+ 
+ fn trusted_owner(owner: u32, effective_user: u32) -> bool {
