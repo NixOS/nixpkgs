@@ -1,0 +1,12 @@
+diff --git a/lib/log.cpp b/lib/log.cpp
+index c85962822..7b1bc1ae7 100644
+--- a/lib/log.cpp
++++ b/lib/log.cpp
+@@ -22,6 +22,7 @@ limitations under the License.
+ #define NOGC_ARGS
+ #endif /* HAVE_LIBGC */
+ 
++#include <cstdint>
+ #include <cstring>
+ #include <fstream>  // IWYU pragma: keep
+ #include <iomanip>
