@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
   version = "0.29.1";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
@@ -59,8 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     "CMAKE_INSTALL_BINDIR" = "bin";
     "CMAKE_INSTALL_LIBDIR" = "lib";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -111,12 +112,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH :  ${
-      lib.makeBinPath [
-        nodejs
-        (placeholder "out")
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      nodejs
+      (placeholder "out")
+    ])
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
