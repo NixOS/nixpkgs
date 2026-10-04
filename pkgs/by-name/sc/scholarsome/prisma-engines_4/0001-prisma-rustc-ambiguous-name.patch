@@ -1,0 +1,21 @@
+From 402865d69715ffdc161a8c07e9f534d0a69c2c73 Mon Sep 17 00:00:00 2001
+From: Alexey Orlenko <alex@aqrln.net>
+Date: Thu, 5 Oct 2023 21:28:34 +0200
+Subject: [PATCH] Remove superfluous "use" that causes naming conflicts
+
+---
+ query-engine/schema/src/build/input_types/mod.rs | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/query-engine/schema/src/build/input_types/mod.rs b/query-engine/schema/src/build/input_types/mod.rs
+index f34da22f40af..98c8caa84a38 100644
+--- a/query-engine/schema/src/build/input_types/mod.rs
++++ b/query-engine/schema/src/build/input_types/mod.rs
+@@ -2,7 +2,6 @@ pub(crate) mod fields;
+ pub(crate) mod objects;
+ 
+ use super::*;
+-use crate::*;
+ use fields::*;
+ use prisma_models::ScalarFieldRef;
+ 
