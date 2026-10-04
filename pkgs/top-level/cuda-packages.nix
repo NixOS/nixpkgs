@@ -22,6 +22,9 @@ let
   #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 13 after 9.14.0 and for CUDA 12 after 9.20.0,
   #     so we keep 9.20.0 for Jetson with CUDA 12, 9.13.0 for pre-Thor Jetson with CUDA 13, and use the latest
   #     release everywhere else.
+  # - cusparselt:
+  #   - 0.7.0 requires CUDA 12.8 or newer, so we keep 0.6.3 for CUDA 12.6.
+  #   - NVIDIA dropped CUDA 12 support with 0.9.0, so we keep 0.8.1 for CUDA 12.8 and 12.9.
 
   cudaPackages_12_6 =
     let
@@ -119,7 +122,7 @@ let
       cudss = "0.8.0";
       cuquantum = "26.09.0";
       cusolvermp = "0.9.1";
-      cusparselt = "0.8.1";
+      cusparselt = "0.10.0";
       cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
@@ -142,7 +145,7 @@ let
       cudss = "0.8.0";
       cuquantum = "26.09.0";
       cusolvermp = "0.9.1";
-      cusparselt = "0.8.1";
+      cusparselt = "0.10.0";
       cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
@@ -165,7 +168,7 @@ let
       cudss = "0.8.0";
       cuquantum = "26.09.0";
       cusolvermp = "0.9.1";
-      cusparselt = "0.8.1";
+      cusparselt = "0.10.0";
       cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
@@ -188,7 +191,7 @@ let
       cudss = "0.8.0";
       cuquantum = "26.09.0";
       cusolvermp = "0.9.1";
-      cusparselt = "0.8.1";
+      cusparselt = "0.10.0";
       cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
@@ -211,7 +214,7 @@ let
       cudss = "0.8.0";
       cuquantum = "26.09.0";
       cusolvermp = "0.9.1";
-      cusparselt = "0.8.1";
+      cusparselt = "0.10.0";
       cutensor = "2.8.1";
       nppplus = "0.10.0";
       nvcomp = "5.0.0.6";
