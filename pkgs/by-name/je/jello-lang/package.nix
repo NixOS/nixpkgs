@@ -37,7 +37,12 @@ python3Packages.buildPythonApplication {
   # there are no tests
   doCheck = false;
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ jellyfish ]}" ];
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ jellyfish ])
+  ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
