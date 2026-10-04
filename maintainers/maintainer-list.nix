@@ -26684,6 +26684,12 @@
     matrix = "@shamrocklee:matrix.org";
     name = "Yueh-Shun Li";
   };
+  Shangshui0302 = {
+    email = "2633740366@qq.com";
+    github = "Shangshui0302";
+    githubId = 149566800;
+    name = "Li Shangshui";
+  };
   shard7 = {
     email = "sh7user@gmail.com";
     github = "shard77";
