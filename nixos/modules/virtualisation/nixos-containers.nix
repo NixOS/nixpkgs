@@ -369,6 +369,23 @@ let
           type = types.bool;
           description = "Determine whether the mounted path will be accessed in read-only mode.";
         };
+        idMapping = mkOption {
+          default = "noidmap";
+          type = types.enum [
+            "noidmap"
+            "idmap"
+            "rootidmap"
+            "owneridmap"
+          ];
+          description = ''
+            ID mapping to apply to this bind mount, appended as a mount
+            option to the generated `--bind=`/`--bind-ro=` flag. Relevant
+            when `privateUsers` is enabled: by default, host files owned
+            outside the container's UID/GID range show up as
+            `nobody:nogroup`. See the "Mount Options" section of
+            {manpage}`systemd-nspawn(1)` for the semantics of each mode.
+          '';
+        };
       };
 
       config = {
@@ -404,8 +421,9 @@ let
     let
       flagPrefix = if d.isReadOnly then " --bind-ro=" else " --bind=";
       mountstr = if d.hostPath != null then "${d.hostPath}:${d.mountPoint}" else "${d.mountPoint}";
+      idMappingSuffix = optionalString (d.idMapping != "noidmap") ":${d.idMapping}";
     in
-    flagPrefix + mountstr;
+    flagPrefix + mountstr + idMappingSuffix;
 
   mkBindFlags = bs: concatMapStrings mkBindFlag (lib.attrValues bs);
 
