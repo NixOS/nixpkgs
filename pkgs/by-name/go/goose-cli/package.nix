@@ -36,16 +36,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.49.0";
+  version = "1.53.0";
 
   src = fetchFromGitHub {
     owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KTHfaPJ3Vf2b6efMr0k9/AAMykDaG0lgSVCUpL58fnk=";
+    hash = "sha256-NoJFwEd4kNGASEo7+E/jRG192oV0hZs3PISi5hG3Q4Q=";
   };
 
-  cargoHash = "sha256-78E/J64RIy7AkFODLVQBFy8HPUtT2ODLwNAstErRMdQ=";
+  cargoHash = "sha256-zQc2/t+KEHee7twcpRquhgVP8ZywoMz8w7uHwi9uW8U=";
 
   cargoBuildFlags = [
     "--bin"
@@ -112,6 +112,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=providers::gcpauth::tests::test_token_refresh_race_condition"
     # need network access
     "--skip=test_concurrent_access"
+    # the nix build sandbox /bin only has sh (busybox); the test symlinks
+    # /bin/pwd and execs it, so it cannot pass in a sandboxed build
+    "--skip=providers::command_auth::tests::command_runs_with_configured_cwd_and_resolves_relative_path"
+    # real network holepunching over loopback; times out in the sandbox
+    # (restricted networking) — same class as the other network skips above
+    "--skip=relay_to_direct_upgrade_loses_no_data"
     # these race on process-global state (GOOSE_PATH_ROOT / GOOSE_SHELL env
     # vars, OnceLock caches) when the lib tests run in parallel
     # https://github.com/aaif-goose/goose/issues/11059
