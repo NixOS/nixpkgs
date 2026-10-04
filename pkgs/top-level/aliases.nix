@@ -1928,6 +1928,7 @@ mapAliases {
   numix-sx-gtk-theme = throw "'numix-sx-gtk-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   nushellFull = throw "'nushellFull' has been renamed to/replaced by 'nushell'"; # Converted to throw 2025-10-27
   nuXmv = warnAlias "'nuXmv' has been renamed to 'nuxmv'" nuxmv; # Added 2026-02-08
+  nvidia-modprobe = throw "'nvidia-modprobe' has been moved to 'linuxPackages.nvidiaPackages.<driver>.modprobe'"; # Added 2026-10-03
   o = throw "'o' has been renamed to/replaced by 'orbiton'"; # Converted to throw 2025-10-27
   oam-tools = throw "'oam-tools' has been become part of amass"; # Added 2025-12-21
   oathToolkit = throw "'oathToolkit' has been renamed to/replaced by 'oath-toolkit'"; # Converted to throw 2025-10-27
