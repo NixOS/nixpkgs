@@ -4,9 +4,14 @@
   fetchFromGithubOrNvidia,
   kernel,
   kernelModuleMakeFlags,
-  nvidia_x11,
   open,
+  # Driver version and the archive it came from; the proprietary module is
+  # built from the same installer as the userspace libraries.
+  version,
+  src,
   patches,
+  patchFlags ? null,
+  prePatch ? null,
   broken,
   hash ? null,
   kmod,
@@ -16,14 +21,14 @@ assert open -> hash != null;
 
 stdenv.mkDerivation {
   pname = "nvidia-${if open then "open" else "kernel-modules"}";
-  version = "${nvidia_x11.version}-${kernel.version}";
+  version = "${version}-${kernel.version}";
 
   src =
     if open then
       fetchFromGithubOrNvidia {
         owner = "NVIDIA";
         repo = "open-gpu-kernel-modules";
-        tag = nvidia_x11.version;
+        tag = version;
         nvrepo = "NVIDIA-kernel-module-source";
         nvext = "xz";
         inherit hash;
@@ -31,9 +36,11 @@ stdenv.mkDerivation {
         postFetch = "rm -rf $out/.github $out/CHANGELOG.md";
       }
     else
-      nvidia_x11.modsrc;
+      src;
 
-  inherit patches;
+  driverVersion = version;
+
+  inherit patches patchFlags prePatch;
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
@@ -46,6 +53,12 @@ stdenv.mkDerivation {
       "MODLIB=$(out)/lib/modules/${kernel.modDirVersion}"
       "DATE="
       "TARGET_ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+    ]
+    # The proprietary sources sit in `kernel/` below the directory the
+    # installer unpacks into. The open sources ship a top-level Makefile that
+    # recurses into `kernel-open/` itself.
+    ++ lib.optionals (!open) [
+      "--directory=kernel"
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "C_INCLUDE_PATH=${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
@@ -71,8 +84,8 @@ stdenv.mkDerivation {
       exit 1
     fi
     got=$(modinfo -F version "$module")
-    if [ "$got" != "${nvidia_x11.version}" ]; then
-      echo "nvidia.ko reports version '$got', expected '${nvidia_x11.version}'" >&2
+    if [ "$got" != "$driverVersion" ]; then
+      echo "nvidia.ko reports version '$got', expected '$driverVersion'" >&2
       exit 1
     fi
     runHook postInstallCheck
@@ -83,7 +96,10 @@ stdenv.mkDerivation {
   meta = {
     description = "NVIDIA Linux ${lib.optionalString open "Open "}GPU Kernel Modules";
     homepage =
-      if open then "https://github.com/NVIDIA/open-gpu-kernel-modules" else nvidia_x11.meta.homepage;
+      if open then
+        "https://github.com/NVIDIA/open-gpu-kernel-modules"
+      else
+        "https://www.nvidia.com/object/unix.html";
     license =
       if open then
         with lib.licenses;
@@ -92,7 +108,7 @@ stdenv.mkDerivation {
           mit
         ]
       else
-        nvidia_x11.meta.license;
+        lib.licenses.unfreeRedistributable;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

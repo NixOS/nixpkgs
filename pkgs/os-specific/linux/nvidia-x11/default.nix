@@ -248,7 +248,7 @@ rec {
       "kernel-6.15.patch"
       "kernel-6.17.patch"
     ];
-    broken = kernel.kernelAtLeast "6.18";
+    brokenAbove = "6.18";
 
     # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
     # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
@@ -295,7 +295,7 @@ rec {
       modprobeSha256 = "sha256-aEVCKYliPCk8SJybZ/wcgU8bppmx7tlAUuOaAQqJgeQ=";
       useGLVND = false;
 
-      broken = kernel.kernelAtLeast "6.7";
+      brokenAbove = "6.7";
       patches = map (patch: "${aurPatches}/${patch}") patchset;
 
       # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439

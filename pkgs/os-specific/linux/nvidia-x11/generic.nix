@@ -4,9 +4,11 @@
   runCommandLocal,
   patchutils,
   callPackage,
+  kernel,
   pkgsi686Linux,
   fetchzip,
   fetchFromGitHub,
+
   libsOnly ? false,
   # Driver version and sources
   version,
@@ -43,8 +45,9 @@
   patchesOpen ? [ ],
   preInstall ? null,
   postInstall ? null,
-  broken ? false,
-  brokenOpen ? broken,
+  # Kernel modules from these sources do not build against this kernel version
+  # or newer. The userspace libraries have no such limit.
+  brokenAbove ? null,
 }:
 
 assert useSettings -> settingsSha256 != null;
@@ -53,6 +56,21 @@ assert useFabricmanager -> fabricmanagerSha256 != null;
 assert useFabricmanager -> !useSettings;
 
 let
+  # The installer is a Makeself archive that both the userspace build and the
+  # kernel module build read, so it is unpacked once, for each platform.
+  installerArgs = {
+    inherit
+      version
+      url
+      sha256_32bit
+      sha256_64bit
+      sha256_aarch64
+      openSha256
+      ;
+  };
+
+  modulesBroken = brokenAbove != null && kernel.kernelAtLeast brokenAbove;
+
   fetchFromGithubOrNvidia =
     {
       owner,
@@ -118,9 +136,7 @@ let
       driverArgs = {
         inherit
           version
-          url
           sha256_32bit
-          sha256_64bit
           sha256_aarch64
           openSha256
           useGLVND
@@ -133,19 +149,19 @@ let
           patches
           preInstall
           postInstall
-          broken
-          brokenOpen
           ;
       };
     in
     callPackage ./binaries.nix (
       driverArgs
       // {
+        src = callPackage ./installer.nix installerArgs;
         inherit libsOnly;
         lib32 =
           (pkgsi686Linux.callPackage ./binaries.nix (
             driverArgs
             // {
+              src = pkgsi686Linux.callPackage ./installer.nix installerArgs;
               libsOnly = true;
               lib32 = null;
               firmware = false;
@@ -161,11 +177,11 @@ nvidiaDriver.overrideAttrs (
         if !libsOnly then
           callPackage ./kernel-modules.nix {
             open = false;
-            nvidia_x11 = finalAttrs.finalPackage;
-            # build files already patched when building the main package,
-            # so no need to patch them again
-            patches = [ ];
-            inherit broken fetchFromGithubOrNvidia;
+            inherit fetchFromGithubOrNvidia;
+            inherit prePatch patches patchFlags;
+            version = finalAttrs.finalPackage.version;
+            src = finalAttrs.finalPackage.src;
+            broken = modulesBroken;
           }
         else
           { };
@@ -174,14 +190,17 @@ nvidiaDriver.overrideAttrs (
         callPackage ./kernel-modules.nix {
           open = true;
           inherit hash;
-          nvidia_x11 = finalAttrs.finalPackage;
+          version = finalAttrs.finalPackage.version;
+          src = finalAttrs.finalPackage.src;
+          patchFlags = null;
+          prePatch = null;
           patches =
             (map (rewritePatch {
               from = "kernel";
               to = "kernel-open";
             }) patches)
             ++ patchesOpen;
-          broken = brokenOpen;
+          broken = modulesBroken;
           fetchFromGithubOrNvidia =
             if fetchOpenFromNvidia then
               fetchFromGithubOrNvidia
