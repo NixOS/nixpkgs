@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   autoreconfHook,
   autoconf-archive,
   pkg-config,
@@ -41,6 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Kuc5Nrz4iq5MC5AOcJL9Sb54DWNKlEk3b3DW0vpgSZg=";
   };
   sourceRoot = "${finalAttrs.src.name}/libraries/libapparmor";
+
+  patches = [
+    # Fix build against SWIG >= 4.5
+    # https://gitlab.com/apparmor/apparmor/-/merge_requests/2191
+    (fetchpatch {
+      name = "swig-4.5-compat";
+      url = "https://gitlab.com/apparmor/apparmor/-/commit/6b80489953728aab8aeb4f9075283feb26e2e262.patch";
+      relative = "libraries/libapparmor";
+      hash = "sha256-n28S10obmXmp5X1+mLyY2Pfr/nQ4VtnkPxdCmvLMaaw=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace swig/perl/Makefile.am \
