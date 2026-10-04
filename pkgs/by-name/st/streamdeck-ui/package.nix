@@ -117,10 +117,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapQtApps = true;
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+      "''${gappsWrapperArgs[@]}"
+    )
+  '';
 
   meta = {
     changelog = "https://github.com/streamdeck-linux-gui/streamdeck-linux-gui/releases/tag/v${finalAttrs.version}";
