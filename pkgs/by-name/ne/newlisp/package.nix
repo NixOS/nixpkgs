@@ -6,12 +6,13 @@
   readline,
 }:
 
+# FIXME: The original upstream `www.newlisp.org` does not resolve.
 stdenv.mkDerivation (finalAttrs: {
   pname = "newlisp";
   version = "10.7.5";
 
   src = fetchurl {
-    url = "https://www.newlisp.org/downloads/newlisp-${finalAttrs.version}.tgz";
+    url = "http://deb.debian.org/debian/pool/main/n/newlisp/newlisp_${finalAttrs.version}.orig.tar.gz";
     hash = "sha256-3C0P9lHCsnW8SvOvi6WYUab7bh6t3CCudftgsekBJuw=";
   };
 
@@ -39,9 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       already built in. This includes networking functions, support for
       distributed and multicore processing, and Bayesian statistics.
     '';
-    homepage = "https://www.newlisp.org/";
-    downloadPage = "https://www.newlisp.org/downloads/";
-    changelog = "https://www.newlisp.org/downloads/newlisp-${finalAttrs.version}/doc/CHANGES";
+    downloadPage = "https://packages.debian.org/trixie/source/newlisp";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ rc-zb ];
     mainProgram = "newlisp";
