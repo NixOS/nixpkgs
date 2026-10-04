@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/mrjackwills/havn";
     description = "Fast configurable port scanner with reasonable defaults";
-    changelog = "https://github.com/mrjackwills/havn/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mrjackwills/havn/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "havn";
