@@ -56,18 +56,20 @@ let
 
   machineLearningPackage =
     if cfg.machine-learning.acceleration != null then
-      cfg.package.machine-learning.override {
-        python3 = pkgs.python3.override {
-          packageOverrides = _: pyPrev: {
-            onnxruntime = pyPrev.onnxruntime.override {
-              onnxruntime = pkgs.onnxruntime.override {
-                cudaSupport = cfg.machine-learning.acceleration == "cuda";
-                rocmSupport = cfg.machine-learning.acceleration == "rocm";
-              };
-            };
-          };
-        };
-      }
+      cfg.package.machine-learning.override (prevArgs: {
+        python3 = prevArgs.python3.override (prevPythonArgs: {
+          packageOverrides = lib.composeExtensions (prevPythonArgs.packageOverrides or (_: _: { })) (
+            _: pyPrev: {
+              onnxruntime = pyPrev.onnxruntime.override (prevOnnxArgs: {
+                onnxruntime = prevOnnxArgs.onnxruntime.override {
+                  cudaSupport = cfg.machine-learning.acceleration == "cuda";
+                  rocmSupport = cfg.machine-learning.acceleration == "rocm";
+                };
+              });
+            }
+          );
+        });
+      })
     else
       cfg.package.machine-learning;
 in
