@@ -10,7 +10,7 @@
   patchelf,
 }:
 let
-  inherit (backendStdenv) cudaCapabilities hostRedistSystem;
+  inherit (backendStdenv) cudaCapabilities hasJetsonCudaCapability hostRedistSystem;
   inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep optionalString;
 in
@@ -191,6 +191,11 @@ buildRedist (
     '';
 
     # NOTE: Like cuDNN, NVIDIA offers forward compatibility within a major releases of CUDA.
+    # NOTE: The support matrix lists only CUDA 13.4 for the linux-sbsa release of 11.3.0 (built with CUDA 13.4), while
+    # stating that it is compatible with CUDA 13.x; we have tested it with CUDA 13.0 and 13.4.
+    # NOTE: The support matrix lists only CUDA 13.2 Update 1 for the linux-sbsa and JetPack release of 10.16.1, which
+    # supports Jetson Orin (8.7) and Thor (11.0).
+    # https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/support-matrix.html
     platformAssertions = [
       {
         message =
@@ -217,6 +222,12 @@ buildRedist (
           "tensorrt releases since 10.5.0 (found ${finalAttrs.version})"
           + " support CUDA compute capabilities 7.5 and newer (found ${cudaCapabilitiesJSON})";
         assertion = tensorrtAtLeast105 -> allCCNewerThan75;
+      }
+      {
+        message =
+          "tensorrt releases since 11.2.1 (found ${finalAttrs.version})"
+          + " do not support Jetson devices (found ${cudaCapabilitiesJSON})";
+        assertion = tensorrtAtLeast "11.2.1" -> !hasJetsonCudaCapability;
       }
     ];
 
