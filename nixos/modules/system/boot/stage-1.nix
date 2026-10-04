@@ -440,7 +440,7 @@ let
   # Script to add secret files to the initrd at bootloader update time
   initialRamdiskSecretAppender =
     let
-      compressorExe = initialRamdisk.compressorExecutableFunction pkgs;
+      compressorExe = config.system.build.initialRamdisk.compressorExecutableFunction pkgs;
     in
     pkgs.writeScriptBin "append-initrd-secrets" ''
       #!${pkgs.bash}/bin/bash -e
@@ -487,7 +487,7 @@ let
 
       # mindepth 1 so that we don't change the mode of /
       (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
-        ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
+        ${compressorExe} ${lib.escapeShellArgs config.system.build.initialRamdisk.compressorArgs} >> "$1"
     '';
 
 in
