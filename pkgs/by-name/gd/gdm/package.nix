@@ -15,7 +15,7 @@
   libxdmcp,
   libxcb,
   gnome,
-  systemd,
+  systemdLibs,
   dconf,
   gtk3,
   pam,
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     plymouth
     polkit
-    systemd
+    systemdLibs
   ];
 
   patches = [

@@ -23,7 +23,7 @@
   meson,
   ninja,
   pkg-config,
-  systemd,
+  systemdLibs,
   udisks,
   wrapGAppsHook3,
   xz,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     libpwquality
     libsecret
-    systemd
+    systemdLibs
     udisks
     xz
   ];

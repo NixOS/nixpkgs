@@ -32,12 +32,12 @@
   polkit,
   replaceVars,
   stdenv,
-  systemd,
+  systemdLibs,
   tzdata,
   udevCheckHook,
   upower,
   wrapGAppsNoGuiHook,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     upower
   ]
   ++ lib.optionals withSystemd [
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [
