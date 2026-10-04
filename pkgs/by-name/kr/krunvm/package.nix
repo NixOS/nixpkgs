@@ -10,10 +10,14 @@
   darwin,
   libiconv,
   libkrun,
+  libkrun-efi,
   makeWrapper,
   rustc,
 }:
 
+let
+  libkrun' = if stdenv.hostPlatform.isDarwin then libkrun-efi else libkrun;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "krunvm";
   version = "0.2.6";
@@ -43,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.sigtool ];
 
   buildInputs = [
-    libkrun
+    libkrun'
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -55,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     # do not pollute etc
     substituteInPlace src/utils.rs \
       --replace-fail "etc/containers" "share/krunvm/containers"
+
+    # Fix upstream typo so macOS accepts the library-validation entitlement.
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace krunvm.entitlements \
+        --replace-fail "disable-library-validationr" "disable-library-validation"
+    ''}
   '';
 
   postInstall = ''
@@ -69,15 +79,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/krunvm \
-      --prefix PATH : ${lib.makeBinPath [ buildah ]}
+      --prefix PATH : ${lib.makeBinPath [ buildah ]} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "--set STORAGE_DRIVER vfs"}
   '';
 
   meta = {
     description = "CLI-based utility for creating microVMs from OCI images";
     homepage = "https://github.com/libkrun/krunvm";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nickcao ];
-    platforms = libkrun.meta.platforms;
+    maintainers = with lib.maintainers; [
+      nickcao
+      smissingham
+    ];
+    platforms = lib.unique (libkrun.meta.platforms ++ libkrun-efi.meta.platforms);
     mainProgram = "krunvm";
   };
 })
