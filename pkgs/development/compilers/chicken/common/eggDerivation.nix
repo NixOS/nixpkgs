@@ -92,10 +92,10 @@ in
 
     dontConfigure = true;
 
-    meta = {
+    meta = (args.meta or { }) // {
       inherit (chicken.meta) platforms;
-    }
-    // args.meta or { };
+      maintainers = lib.lists.unique ((args.meta.maintainers or [ ]) ++ chicken.meta.maintainers);
+    };
   }
   // removeAttrs args [
     "name"
