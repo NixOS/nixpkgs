@@ -8,12 +8,12 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "snmalloc";
-  version = "0.7.5";
+  version = "0.7.6";
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "snmalloc";
     tag = finalAttrs.version;
-    hash = "sha256-1wgQilYHYjmKqhUhxA0wXF+OBPRH+hDPgVGMgVxqj4Y=";
+    hash = "sha256-+n1UT8ZsYhC7ydApvlNcuU7jDwGVD+DgKB6IGiFa+5Q=";
   };
 
   outputs = [
