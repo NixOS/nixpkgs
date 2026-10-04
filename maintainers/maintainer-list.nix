@@ -12718,6 +12718,12 @@
     github = "j1nxie";
     githubId = 52886388;
   };
+  j3ssie = {
+    email = "j3ssiejjj@gmail.com";
+    github = "j3ssie";
+    githubId = 23289085;
+    name = "Jessie Ho";
+  };
   j4m3s = {
     name = "James Landrein";
     email = "github@j4m3s.eu";
