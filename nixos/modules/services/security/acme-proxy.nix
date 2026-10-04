@@ -41,7 +41,7 @@ in
     package = lib.mkPackageOption pkgs "acme-proxy" { };
 
     settings = lib.mkOption {
-      type = lib.types.attrsOf lib.types.anything;
+      type = tomlFormat.type;
       default = { };
       example = lib.literalExpression ''
         {
@@ -128,6 +128,10 @@ in
       {
         assertion = cfg.settings ? profiles;
         message = "services.acme-proxy: settings must contain at least one [profiles.<name>] table, or the daemon refuses to start.";
+      }
+      {
+        assertion = !(cfg.openFirewall && serverPort == null);
+        message = "services.acme-proxy: openFirewall is set but the server port could not be parsed from settings.server.bind_address.";
       }
       {
         assertion = !(cfg.openAdminFirewall && adminEnabled && adminPort == null);
