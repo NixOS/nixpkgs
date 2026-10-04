@@ -9,6 +9,7 @@
   makeBinaryWrapper,
   vips,
   faketty,
+  nixosTests,
   openssl,
   bash,
 }:
@@ -123,6 +124,10 @@ buildNpmPackage (finalAttrs: {
       --set PRISMA_MIGRATION_ENGINE_BINARY "${lib.getExe' prisma-engines_4 "migration-engine"}" \
       --set PRISMA_QUERY_ENGINE_LIBRARY "${lib.getLib prisma-engines_4}/lib/libquery_engine.node"
   '';
+
+  passthru.tests = {
+    scholarsome = nixosTests.scholarsome;
+  };
 
   meta = {
     description = "Web-based interactive flashcard learning software";
