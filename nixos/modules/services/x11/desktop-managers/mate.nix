@@ -123,6 +123,23 @@ in
         yelp # for 'Contents' in 'Help' menus
       ]) config.environment.mate.excludePackages;
 
+      # Packages from above that ship D-Bus service files.  The D-Bus daemons do
+      # not look at the system profile, so they have to be registered explicitly.
+      services.dbus.packages = utils.removePackagesByName (with pkgs; [
+        atril
+        engrampa
+        mate-applets
+        mate-indicator-applet
+        mate-netbook
+        mate-notification-daemon
+        mate-power-manager
+        mate-settings-daemon
+
+        (caja-with-extensions.override {
+          extensions = cfg.extraCajaExtensions;
+        })
+      ]) config.environment.mate.excludePackages;
+
       programs.dconf.enable = true;
       # Shell integration for VTE terminals
       programs.bash.vteIntegration = mkDefault true;
