@@ -1,8 +1,6 @@
 {
   backendStdenv,
   buildRedist,
-  cudaAtLeast,
-  cudaMajorMinorVersion,
   lib,
 }:
 buildRedist {
@@ -24,14 +22,6 @@ buildRedist {
         "nvTIFF supports CUDA compute capabilities 7.0 and newer"
         + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
       assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
-    }
-    {
-      message =
-        "nvTIFF supports Jetson Orin (8.7) with linux-sbsa from CUDA 13.2"
-        + " (found ${cudaMajorMinorVersion})";
-      assertion =
-        backendStdenv.hostRedistSystem == "linux-sbsa" && lib.elem "8.7" backendStdenv.cudaCapabilities
-        -> cudaAtLeast "13.2";
     }
   ];
 
