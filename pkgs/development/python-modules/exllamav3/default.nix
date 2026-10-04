@@ -7,7 +7,6 @@
 
   setuptools,
 
-  flash-linear-attention,
   llguidance,
   marisa-trie,
   ninja,
@@ -68,7 +67,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   dependencies = [
-    flash-linear-attention # Upstream vendors it instead
+    # Upstream has a vendored modified flash-linear-attention
     llguidance
     marisa-trie
     numpy
