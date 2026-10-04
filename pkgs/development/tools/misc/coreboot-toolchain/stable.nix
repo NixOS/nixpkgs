@@ -15,10 +15,10 @@
     };
   }
   {
-    name = "mpc-1.3.1.tar.gz";
+    name = "mpc-1.4.1.tar.xz";
     archive = fetchurl {
-      sha256 = "1f2rqz0hdrrhx4y1i5f8pv6yv08a876k1dqcm9s2p26gyn928r5b";
-      url = "mirror://gnu/mpc/mpc-1.3.1.tar.gz";
+      sha256 = "0cg9ff6vzl42d65zfc5bmld526b5rsladm4jr6vx6jqn5z9lq84i";
+      url = "mirror://gnu/mpc/mpc-1.4.1.tar.xz";
     };
   }
   {
@@ -29,10 +29,10 @@
     };
   }
   {
-    name = "binutils-2.45.1.tar.xz";
+    name = "binutils-2.46.1.tar.xz";
     archive = fetchurl {
-      sha256 = "199sa5igipbvz2zg0j1zgvrybphgcznq2bcnjpngs64xzvk03qaz";
-      url = "mirror://gnu/binutils/binutils-2.45.1.tar.xz";
+      sha256 = "1r4l2bmp36ziwa9080gb6z6ji3vnvn1p1jrni7g7ck52rc4sf9z1";
+      url = "mirror://gnu/binutils/binutils-2.46.1.tar.xz";
     };
   }
   {
@@ -43,17 +43,17 @@
     };
   }
   {
-    name = "cmake-4.0.3.tar.gz";
+    name = "cmake-4.3.4.tar.gz";
     archive = fetchurl {
-      sha256 = "1yrzkwkr2nxl8hcjkk333l9ycbw9prkg363k4km609kknyvkfdcd";
-      url = "https://cmake.org/files/v4.0/cmake-4.0.3.tar.gz";
+      sha256 = "1nmd67lrk14pq6bqlrr5yc6l9qdpdvf1wawzadjdfjgbp6bzivzx";
+      url = "https://cmake.org/files/v4.3/cmake-4.3.4.tar.gz";
     };
   }
   {
-    name = "nasm-3.01.tar.bz2";
+    name = "nasm-3.02.tar.bz2";
     archive = fetchurl {
-      sha256 = "1cf08p8ak15sksbzfyjxaiqggkjwc35f9yzjc9w29wzfn3riyyvs";
-      url = "https://www.nasm.us/pub/nasm/releasebuilds/3.01/nasm-3.01.tar.bz2";
+      sha256 = "1brrwa9hpkqniwabwvb9rbaw2yaaqq1nbrylm7j7jlv1h4rdjznf";
+      url = "https://www.nasm.us/pub/nasm/releasebuilds/3.02/nasm-3.02.tar.bz2";
     };
   }
 ]
