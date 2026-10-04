@@ -75,6 +75,10 @@ let
 
         wrapProgram $out/bin/pass \
           --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
+      ''
+      + lib.optionalString dmenuSupport ''
+        wrapProgram $out/bin/passmenu \
+          --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
       '';
       meta.mainProgram = "pass";
     };
