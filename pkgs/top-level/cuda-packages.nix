@@ -19,8 +19,9 @@ let
   #     10.13.1), so we use 10.13.0 for all CUDA 12 releases.
   #   - linux-aarch64 (pre-Thor Jetson) is historically least supported; we use the latest release available.
   # - cudnn:
-  #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support after 9.13.0, so we keep 9.13.0 for pre-Thor
-  #     Jetson and use the latest release everywhere else.
+  #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 13 after 9.14.0 and for CUDA 12 after 9.20.0,
+  #     so we keep 9.20.0 for Jetson with CUDA 12, 9.13.0 for pre-Thor Jetson with CUDA 13, and use the latest
+  #     release everywhere else.
 
   cudaPackages_12_6 =
     let
@@ -29,7 +30,7 @@ let
     mkCudaPackages {
       cublasmp = "0.8.1";
       cuda = "12.6.3";
-      cudnn = if hasJetsonCudaCapability then "9.13.0" else "9.22.0";
+      cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";
@@ -56,7 +57,7 @@ let
     mkCudaPackages {
       cublasmp = "0.8.1";
       cuda = "12.8.2";
-      cudnn = if hasJetsonCudaCapability then "9.13.0" else "9.22.0";
+      cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";
@@ -83,7 +84,7 @@ let
     mkCudaPackages {
       cublasmp = "0.8.1";
       cuda = "12.9.2";
-      cudnn = if hasJetsonCudaCapability then "9.13.0" else "9.22.0";
+      cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";
@@ -114,7 +115,7 @@ let
       cublasmp = "0.8.1";
       cuda = "13.0.3";
       cudnn =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";
@@ -137,7 +138,7 @@ let
       cublasmp = "0.8.1";
       cuda = "13.1.2";
       cudnn =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";
@@ -160,7 +161,7 @@ let
       cublasmp = "0.8.1";
       cuda = "13.2.2";
       cudnn =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";
@@ -183,7 +184,7 @@ let
       cublasmp = "0.8.1";
       cuda = "13.3.1";
       cudnn =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";
@@ -206,7 +207,7 @@ let
       cublasmp = "0.8.1";
       cuda = "13.4.2";
       cudnn =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.22.0";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
       cudss = "0.6.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.8.0";

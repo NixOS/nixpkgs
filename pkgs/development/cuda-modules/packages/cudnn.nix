@@ -43,6 +43,9 @@ buildRedist (
       ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
 
+    # libcudnn_engines_runtime_compiled links directly against the driver library, which is provided at runtime.
+    autoPatchelfIgnoreMissingDeps = [ "libcuda.so.1" ];
+
     # CuDNN depends on libnvrtc.so at runtime, as mentioned here in one small error description
     # https://docs.nvidia.com/deeplearning/cudnn/backend/latest/api/cudnn-graph-library.html
     # libcudnn_adv and libcudnn_engines_precompiled dlopen libcublasLt -- the soname lives in
