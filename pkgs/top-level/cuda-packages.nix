@@ -31,7 +31,7 @@ let
       cublasmp = "0.10.0";
       cuda = "12.6.3";
       cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.6.3";
@@ -58,7 +58,7 @@ let
       cublasmp = "0.10.0";
       cuda = "12.8.2";
       cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
@@ -85,7 +85,7 @@ let
       cublasmp = "0.10.0";
       cuda = "12.9.2";
       cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
@@ -116,7 +116,7 @@ let
       cuda = "13.0.3";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
@@ -139,7 +139,7 @@ let
       cuda = "13.1.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
@@ -162,7 +162,7 @@ let
       cuda = "13.2.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
@@ -185,7 +185,7 @@ let
       cuda = "13.3.1";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
@@ -208,7 +208,7 @@ let
       cuda = "13.4.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
-      cudss = "0.6.0";
+      cudss = "0.8.0";
       cuquantum = "25.09.0";
       cusolvermp = "0.9.1";
       cusparselt = "0.8.1";
