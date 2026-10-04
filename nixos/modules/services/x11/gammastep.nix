@@ -9,13 +9,31 @@ with lib;
 
 let
 
-  cfg = config.services.redshift;
+  cfg = config.services.gammastep;
   lcfg = config.location;
 
 in
 {
 
   imports = [
+    (mkRenamedOptionModule [ "services" "redshift" "enable" ] [ "services" "gammastep" "enable" ])
+    (mkRenamedOptionModule
+      [ "services" "redshift" "temperature" ]
+      [ "services" "gammastep" "temperature" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "redshift" "brightness" ]
+      [ "services" "gammastep" "brightness" ]
+    )
+    (mkRenamedOptionModule [ "services" "redshift" "package" ] [ "services" "gammastep" "package" ])
+    (mkRenamedOptionModule
+      [ "services" "redshift" "executable" ]
+      [ "services" "gammastep" "executable" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "redshift" "extraOptions" ]
+      [ "services" "gammastep" "extraOptions" ]
+    )
     (mkChangedOptionModule [ "services" "redshift" "latitude" ] [ "location" "latitude" ] (
       config:
       let
@@ -39,12 +57,12 @@ in
     (mkRenamedOptionModule [ "services" "redshift" "provider" ] [ "location" "provider" ])
   ];
 
-  options.services.redshift = {
+  options.services.gammastep = {
     enable = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        Enable Redshift to change your screen's colour temperature depending on
+        Enable Gammastep to change your screen's colour temperature depending on
         the time of day.
       '';
     };
@@ -87,14 +105,14 @@ in
       };
     };
 
-    package = mkPackageOption pkgs "redshift" { };
+    package = mkPackageOption pkgs "gammastep" { };
 
     executable = mkOption {
       type = types.str;
-      default = "/bin/redshift";
-      example = "/bin/redshift-gtk";
+      default = "/bin/gammastep";
+      example = "/bin/gammastep-indicator";
       description = ''
-        Redshift executable to use within the package.
+        Gammastep executable to use within the package.
       '';
     };
 
@@ -107,7 +125,7 @@ in
       ];
       description = ''
         Additional command-line arguments to pass to
-        {command}`redshift`.
+        {command}`gammastep`.
       '';
     };
   };
@@ -116,12 +134,12 @@ in
     # needed so that .desktop files are installed, which geoclue cares about
     environment.systemPackages = [ cfg.package ];
 
-    services.geoclue2.appConfig.redshift = {
+    services.geoclue2.appConfig.gammastep = {
       isAllowed = true;
       isSystem = true;
     };
 
-    systemd.user.services.redshift =
+    systemd.user.services.gammastep =
       let
         providerString =
           if lcfg.provider == "manual" then
@@ -130,7 +148,7 @@ in
             lcfg.provider;
       in
       {
-        description = "Redshift colour temperature adjuster";
+        description = "Gammastep colour temperature adjuster";
         wantedBy = [ "graphical-session.target" ];
         partOf = [ "graphical-session.target" ];
         serviceConfig = {
