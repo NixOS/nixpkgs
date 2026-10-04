@@ -1439,6 +1439,7 @@ in
   pangolin = runTest ./pangolin.nix;
   pantalaimon = runTest ./matrix/pantalaimon.nix;
   pantheon = runTest ./pantheon.nix;
+  paperclip = runTestOn [ "x86_64-linux" ] ./paperclip.nix;
   paperless = runTest ./paperless.nix;
   papra = runTest ./papra.nix;
   paretosecurity = runTest ./paretosecurity.nix;
