@@ -6219,6 +6219,11 @@ with pkgs;
   nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
   nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
 
+  # The NVIDIA driver and its userspace tools, one scope per driver branch.
+  # `linuxPackages.nvidiaPackages` instantiates the same factory again and
+  # adds the kernel modules.
+  nvidiaPackages = recurseIntoAttrs (callPackage ../os-specific/linux/nvidia-x11 { });
+
   nvidiaCtkPackages = recurseIntoAttrs (
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix { }
   );
@@ -7595,7 +7600,7 @@ with pkgs;
   conky = callPackage ../os-specific/linux/conky (
     {
       lua = lua5_4;
-      inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
+      inherit (nvidiaPackages.stable.settings) libXNVCtrl;
     }
     // config.conky or { }
   );

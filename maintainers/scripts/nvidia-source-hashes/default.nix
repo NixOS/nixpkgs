@@ -11,10 +11,11 @@
 # about concrete URLs.  The namespace is walked recursively: plain attribute
 # sets are descended into (so a driver version exposed as a scope is found just
 # like any other set) and every derivation whose `.src` is a fixed-output
-# derivation carrying `urls`/`url` becomes one test per URL.  A derivation also
-# contributes the entries of its `passthru`, one level deep, which is how the
-# extra packages are exposed today; when they move into a scope instead, the
-# plain attribute set recursion picks them up.
+# derivation carrying `urls`/`url` becomes one test per URL.  A driver branch is
+# an attribute set rather than a derivation, so its members are found by the
+# plain attribute set recursion; a derivation additionally contributes the
+# entries of its `passthru`, one level deep, which is how `settings` and
+# `modprobe` contribute `libXNVCtrl`.
 #
 # The derivations are salted with `pkgs.testers.invalidateFetcherByDrvHash`,
 # so each one has a unique store path that cannot be satisfied by an already
@@ -154,7 +155,21 @@ let
                 )
               )
             else if lib.isAttrs value then
-              lib.concatMap (name: walk inPassthru (path ++ [ name ]) value.${name}) (builtins.attrNames value)
+              # A branch keeps the driver's old output spellings around as
+              # deprecated aliases.  They resolve to outputs the driver already
+              # contributed, so walking them would only print a warning.
+              lib.concatMap (name: walk inPassthru (path ++ [ name ]) value.${name}) (
+                builtins.filter (
+                  name:
+                  !(lib.elem name [
+                    "out"
+                    "bin"
+                    "lib32"
+                    "firmware"
+                    "modsrc"
+                  ])
+                ) (builtins.attrNames value)
+              )
             else
               [ ]
           );

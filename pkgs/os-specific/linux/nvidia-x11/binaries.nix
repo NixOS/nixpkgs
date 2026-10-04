@@ -3,7 +3,6 @@
   lib,
   stdenv,
   fetchurl,
-  which,
   jq,
   pkgs,
   pkgsi686Linux,
@@ -188,10 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     jq
     nvidiaDriverUnpackHook
-  ]
-  # Drivers older than 530 need `which` in the build, see
-  # https://github.com/NixOS/nixpkgs/pull/498612#discussion_r3064133935
-  ++ lib.optional (lib.versionOlder version "530") [ which ];
+  ];
 
   passthru = {
     compressFirmware = false;

@@ -4,13 +4,16 @@
   fetchFromGithubOrNvidia,
   kernel,
   kernelModuleMakeFlags,
-  nvidiaDriverUnpackHook,
+  # Only the proprietary module is built from the installer; the open sources
+  # are a tarball.
+  nvidiaDriverUnpackHook ? null,
   open,
   # Driver version and the archive it came from; the proprietary module is
   # built from the same installer as the userspace libraries.
   version,
   src,
   patches,
+  branch,
   patchFlags ? null,
   prePatch ? null,
   broken,
@@ -39,16 +42,15 @@ stdenv.mkDerivation {
     else
       src;
 
+  passthru.branch = branch;
   driverVersion = version;
 
   inherit patches patchFlags prePatch;
 
   nativeBuildInputs =
-    [
-      # Brings `bsdtar` and the decompressors the unpack hook shells out to.
-      nvidiaDriverUnpackHook
-    ]
-    ++ kernel.moduleBuildDependencies;
+    # The open sources are a plain tarball that `unpackPhase` handles itself;
+    # only the proprietary module needs the installer unpacked.
+    lib.optionals (!open) [ nvidiaDriverUnpackHook ] ++ kernel.moduleBuildDependencies;
 
   makeFlags =
     kernelModuleMakeFlags
@@ -102,7 +104,10 @@ stdenv.mkDerivation {
   meta = {
     description = "NVIDIA Linux ${lib.optionalString open "Open "}GPU Kernel Modules";
     homepage =
-      if open then "https://github.com/NVIDIA/open-gpu-kernel-modules" else "https://www.nvidia.com/object/unix.html";
+      if open then
+        "https://github.com/NVIDIA/open-gpu-kernel-modules"
+      else
+        "https://www.nvidia.com/object/unix.html";
     license =
       if open then
         with lib.licenses;

@@ -1,18 +1,21 @@
-# Unpacks the `.run` driver installer, which `unpackPhase` cannot handle on its
-# own. Both the userspace libraries and the kernel modules are built from that
-# archive, so they share this hook.
+# Unpacks the NVIDIA driver installer, a Makeself archive that `unpackPhase`
+# cannot handle on its own. Both the userspace libraries and the proprietary
+# kernel module are built from it, so they share this hook.
 {
   makeSetupHook,
-  # Tools the Makeself preamble drives to extract itself. It picks its
-  # decompressor at runtime: `zstd` since 530.30.02, `gzip`/`bzip2`/`xz` before.
-  bzip2,
+  # What the Makeself preamble runs, checked against the 595 and Vulkan-beta
+  # installers: `cksum`/`cut`/`tail`/`head` come from coreutils, the rest here.
   gawk,
   gnused,
-  gzip,
-  # Provides `bsdtar` for the fallback path in the hook.
-  libarchive,
   gnutar,
-  xz,
+  # `bsdtar` for the fallback path in the hook. It detects the compression
+  # itself, so an archive needing `gzip`, `bzip2` or `xz` as a separate program
+  # is still unpacked that way.
+  libarchive,
+  # Older Makeself releases, which the 340-470 drivers ship, locate their
+  # helpers with `which`.
+  which,
+  # The decompressor since 530.30.02; earlier installers ship their own.
   zstd,
 }:
 
@@ -20,13 +23,11 @@ makeSetupHook {
   name = "nvidia-driver-unpack-hook";
 
   propagatedBuildInputs = [
-    bzip2
     gawk
     gnused
-    gzip
-    libarchive
     gnutar
-    xz
+    libarchive
+    which
     zstd
   ];
 } ./unpack-hook.sh

@@ -1,13 +1,39 @@
 # NVIDIA driver packages
 
-The drivers are built from the files here. `default.nix` defines one attribute
-per driver branch in `nvidiaPackages`, reachable as
-`config.boot.kernelPackages.nvidiaPackages` or `pkgs.linuxPackages.nvidiaPackages`,
-and exports the builder as `nvidiaPackages.mkDriver`. That builder is `generic`
-in `default.nix`; the per-driver arguments are handled in `generic.nix`.
+The drivers are built from the files here. `default.nix` is a factory: called
+without a kernel it returns the userspace half of every driver branch, and
+`linuxPackages` calls it again with one to get the kernel modules too.
 
-Each entry names a version and a set of hashes. The version selects the URLs,
-the hashes pin the downloaded content.
+```nix
+{
+  # from default.nix, no kernel
+  driver = pkgs.nvidiaPackages.production;
+
+  # the same factory, with a kernel
+  driverWithModules = pkgs.linuxPackages.nvidiaPackages.production;
+}
+```
+
+`nvidiaPackages` is a `lib.makeScope` set, so a whole new branch can be added
+with `overrideScope`. A branch is a `lib.makeExtensible` set and holds:
+
+| attribute       | what it is                                                     |
+| --------------- | -------------------------------------------------------------- |
+| `branch`        | the branch name, e.g. `production`                             |
+| `version`       | the driver version                                             |
+| `driver`        | the driver package: `out`, `bin`, `firmware`, `lib32` outputs |
+| `settings`      | nvidia-settings, with `libXNVCtrl` in its `passthru`           |
+| `modprobe`      | nvidia-modprobe                                                |
+| `persistenced`  | nvidia-persistenced                                            |
+| `fabricmanager` | nv-fabricmanager, on the data center branches only             |
+| `mod`, `open`   | the kernel modules, only from `linuxPackages`                  |
+
+`out`, `bin`, `firmware` and `lib32` warn and hand back the driver's own output
+of that name; `modsrc` throws. Where the driver builds no such output the alias
+throws too, naming the branch: `legacy_340` and `legacy_390` have no `lib32`,
+and those two plus `legacy_470` have no `firmware`.
+
+`nvidiaPackages.mkDriver` builds a branch that is not in nixpkgs.
 
 ## Adding or updating a driver in nixpkgs
 
@@ -15,7 +41,7 @@ Add an entry to `default.nix`, or change the hashes of an existing one:
 
 ```nix
 {
-  production = generic {
+  production = mkBranch {
     version = "595.104.02";
     sha256_64bit = "sha256-...";
     sha256_aarch64 = "sha256-...";
@@ -57,8 +83,8 @@ After a version change the hashes change too. Update them with the helper
 script in `maintainers/scripts/nvidia-source-hashes`, or by building and
 reading the mismatch error (see the next section).
 
-Adding a legacy driver also means adding it to `pkgs/top-level/linux-kernels.nix`
-in the `nvidia_x11_legacy*` entries.
+Adding a legacy driver also means adding a `nvidia_x11_legacy*` throw to
+`pkgs/top-level/linux-kernels.nix`, so the old name fails with the replacement.
 
 ## Getting and checking hashes
 
@@ -80,12 +106,12 @@ source in `linuxPackages.nvidiaPackages`. Run it from the nixpkgs checkout.
 The hash is computed the way nixpkgs computes it: the unpacked tree for the
 `fetchzip` sources, and after `postFetch` for the open kernel modules. Paste
 the printed value into the matching hash field. One hash covers all URLs of a
-source, so the values printed for those URLs should be equal.
+source, so the values printed for those URLs must match.
 
 Without `--prefetch` the script checks the declared hashes and reports any
-mismatch. `--path` filters by component path, such as `production` or
-`passthru.open`. `--systems` restricts the platforms, and `--list` shows what
-would run without downloading.
+mismatch. `--path` filters by component path, such as `production` or `open`.
+`--systems` restricts the platforms, and `--list` shows what would run without
+downloading.
 
 Each URL is tested on its own. A normal build stops at the first URL that
 works, so it never notices a hash that only matches one of them.
@@ -101,7 +127,7 @@ For a version that is not in nixpkgs, call `mkDriver` from your configuration:
 ```nix
 { config, ... }:
 {
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+  hardware.nvidia.package = pkgs.nvidiaPackages.mkDriver {
     version = "595.104.02";
     sha256_64bit = "";
     sha256_aarch64 = "";
@@ -111,6 +137,9 @@ For a version that is not in nixpkgs, call `mkDriver` from your configuration:
     persistencedSha256 = "";
     modprobeSha256 = "";
   };
+
+  # `hardware.nvidia.kernelModules` follows automatically, looking the branch
+  # up in `config.boot.kernelPackages.nvidiaPackages`.
 }
 ```
 
@@ -140,5 +169,5 @@ can reach. The helper script checks every URL of a source on its own: a URL
 that returns 404 is reported as not published and does not fail the run unless
 `--strict` is given, while a source whose URLs all return 404 fails.
 
-`hardware.nvidia.open` selects the open kernel modules and uses the package's
-`.open` output when set to `true`.
+`hardware.nvidia.open` selects the open kernel modules, which
+`hardware.nvidia.kernelModules` then picks up from the branch.

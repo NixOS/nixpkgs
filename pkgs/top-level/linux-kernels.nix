@@ -361,23 +361,31 @@ in
 
         nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-        nvidiaPackages = dontRecurseIntoAttrs (
-          lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { })
-        );
+        # The same factory as `pkgs.nvidiaPackages`, instantiated again with a
+        # kernel so that each branch also provides its kernel modules. Only the
+        # kernel is passed in: `callPackage` resolves everything else from
+        # `pkgs` after looking in this scope, where `stdenv` is the kernel's.
+        # `default.nix` builds the userspace libraries from `pkgs.callPackage`
+        # for that reason.
+        nvidiaPackages = callPackage ../os-specific/linux/nvidia-x11 {
+          inherit kernel kernelModuleMakeFlags;
+        };
 
-        nvidia_x11 = nvidiaPackages.stable;
-        nvidia_x11_beta = nvidiaPackages.beta;
-        nvidia_x11_latest = nvidiaPackages.latest;
-        nvidia_x11_legacy340 = nvidiaPackages.legacy_340;
-        nvidia_x11_legacy390 = nvidiaPackages.legacy_390;
-        nvidia_x11_legacy470 = nvidiaPackages.legacy_470;
-        nvidia_x11_legacy535 = nvidiaPackages.legacy_535;
-        nvidia_x11_production = nvidiaPackages.production;
-        nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
-        nvidia_dc = nvidiaPackages.dc;
+        # These name the driver of the corresponding branch. They cannot
+        # deprecate themselves: this set is merged into `pkgs`, the release
+        # walk reads the output path of every attribute, and the eval job
+        # treats a warning as a failure.
+        nvidia_x11 = nvidiaPackages.stable.driver;
+        nvidia_x11_beta = nvidiaPackages.beta.driver;
+        nvidia_x11_latest = nvidiaPackages.latest.driver;
+        nvidia_x11_legacy340 = nvidiaPackages.legacy_340.driver;
+        nvidia_x11_legacy390 = nvidiaPackages.legacy_390.driver;
+        nvidia_x11_legacy470 = nvidiaPackages.legacy_470.driver;
+        nvidia_x11_legacy535 = nvidiaPackages.legacy_535.driver;
+        nvidia_x11_production = nvidiaPackages.production.driver;
+        nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta.driver;
+        nvidia_dc = nvidiaPackages.dc.driver;
 
-        # this is not a replacement for nvidia_x11*
-        # only the opensource kernel driver exposed for hydra to build
         nvidia_x11_beta_open = nvidiaPackages.beta.open;
         nvidia_x11_latest_open = nvidiaPackages.latest.open;
         nvidia_x11_production_open = nvidiaPackages.production.open;

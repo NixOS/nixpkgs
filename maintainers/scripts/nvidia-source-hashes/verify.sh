@@ -22,7 +22,7 @@
 #
 # Options:
 #   -p, --path LIST     Comma-separated substrings a component's path must
-#                       contain, e.g. "production" or "passthru.open".
+#                       contain, e.g. "production" or "open".
 #                       Default: everything.
 #   -s, --systems LIST  Comma-separated platforms whose binary driver and
 #                       fabricmanager archives are checked, e.g. "x86_64-linux".
@@ -50,7 +50,7 @@
 #   ./verify.sh
 #
 #   # only the sources that gained an NVIDIA URL
-#   ./verify.sh --path passthru.open,passthru.modprobe
+#   ./verify.sh --path open,modprobe
 #
 #   # a single driver and only the binary driver archives
 #   ./verify.sh --path production
