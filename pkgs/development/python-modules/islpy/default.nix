@@ -20,15 +20,28 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "islpy";
-  version = "2026.1";
+  version = "2026.2.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "islpy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WZl9ix9ZwJsoUCJ23bYcuYGiJzcOMh7I38PHVxWrPBo=";
+    hash = "sha256-rsmEMZty80qG1RXf2V5MXwchv0sQZ3jV9Go7FXzKzNY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "nanobind >=3.0" "nanobind"
+  ''
+  # nanobind < 3.0 compat
+  + ''
+    substituteInPlace stubgen/stubgen.py \
+      --replace-fail \
+        "self.bind(" \
+        "self.import_object("
+  '';
 
   build-system = [
     cmake
