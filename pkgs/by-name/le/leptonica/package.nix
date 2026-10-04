@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "leptonica";
-  version = "1.87.0";
+  version = "1.87.0-pre1";
 
   src = fetchFromGitHub {
     owner = "DanBloomBerg";
     repo = "leptonica";
     rev = finalAttrs.version;
-    hash = "sha256-d67gxWmWN3WfSPuHrjpC+emLyQswJbKV7gzm7D4bpI0=";
+    hash = "sha256-AURgV1CINBv1OxUNoWUf7sr6K4j+Zm/qCyxUweBaiNQ=";
   };
 
   nativeBuildInputs = [
