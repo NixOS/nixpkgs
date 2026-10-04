@@ -2,7 +2,7 @@
   fetchFromGitLab,
   rustPlatform,
   lib,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   stdenvNoCC,
@@ -38,7 +38,7 @@ let
     };
   };
   nodejs-slim = nodejs-slim_22;
-  pnpm' = pnpm_10.override { inherit nodejs-slim; };
+  pnpm' = pnpm_10_latest.override { inherit nodejs-slim; };
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "porn-vault";

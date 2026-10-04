@@ -5,7 +5,7 @@
   makeWrapper,
   node-gyp,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   python3,
@@ -27,14 +27,14 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     node-gyp # required for sqlite3 bindings
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     python3 # required for sqlite3 bindings
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-o7u/ZZS/5PgOtWd07zO4a01mUWZowUTL+JDJ2442mGc=";
   };

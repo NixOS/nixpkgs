@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   fetchPnpmDeps,
-  pnpm_10,
+  pnpm_10_latest,
   ffmpeg-headless,
   wails,
   glib-networking,
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     wails
     makeWrapper
     wrapGAppsHook3
@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/frontend";
-      pnpm = pnpm_10;
+      pnpm = pnpm_10_latest;
       fetcherVersion = 3;
       hash = "sha256-mecNGWbUATjNl1uWByxE1W1b8tfNyPIRMndcZSBl+XM=";
     };

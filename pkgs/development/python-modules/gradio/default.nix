@@ -16,7 +16,7 @@
   # web assets
   zip,
   nodejs-slim,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
 
@@ -78,7 +78,7 @@
   writableTmpDirAsHomeHook,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 buildPythonPackage (finalAttrs: {
   pname = "gradio";
