@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 let
@@ -57,12 +58,42 @@ in
     ];
 
     security.pam.services.lemurs = {
-      unixAuth = true;
-      startSession = true;
+      useDefaultRules = false;
+      rules = {
+        auth = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        account = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+        password = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "substack";
+            modulePath = "login";
+          }
+        ];
+        session = utils.pam.autoOrderRules [
+          {
+            name = "login";
+            control = "include";
+            modulePath = "login";
+          }
+        ];
+      };
+    };
+
+    security.pam.services.login = {
       # See https://github.com/coastalwhite/lemurs/issues/166
       setLoginUid = false;
-      enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
-      oo7.enable = lib.mkDefault config.services.oo7.enable;
     };
 
     environment.systemPackages = [ cfg.package ];
