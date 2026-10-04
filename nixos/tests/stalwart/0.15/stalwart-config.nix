@@ -1,7 +1,7 @@
 { lib, ... }:
 
 let
-  certs = import ../common/acme/server/snakeoil-certs.nix;
+  certs = import ../../common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
 in
 {
