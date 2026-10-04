@@ -1,0 +1,151 @@
+diff --git a/cmd/daemon/main.go b/cmd/daemon/main.go
+--- a/cmd/daemon/main.go
++++ b/cmd/daemon/main.go
+@@ -131,6 +131,7 @@
+ func main() {
+ 	appStartTime := time.Now()
+ 	ksMode := flag.Bool("killswitch-mode", false, "sets killswitch rules and stops")
++	hostsReadOnly := flag.Bool("hosts-readonly", false, "treat /etc/hosts as read-only")
+ 	flag.Parse()
+ 	if *ksMode {
+ 		log.Info("Daemon running in killswitch mode")
+@@ -321,7 +322,7 @@
+ 	gwret := netlinkrouter.Retriever{}
+ 
+ 	dnsSetter := dns.NewDNSServiceSetter(daemonEvents.Debugger.DebuggerEvents)
+-	dnsHostSetter := dns.NewHostsFileSetter(dns.HostsFilePath)
++	dnsHostSetter := dns.NewHostnameSetter(*hostsReadOnly, dns.HostsFilePath)
+ 
+ 	eventsDbPath := filepath.Join(internal.DatFilesPathCommon, "moose.db")
+ 	if err := assignMooseDBPermissions(eventsDbPath); err != nil {
+diff --git a/daemon/dns/hosts.go b/daemon/dns/hosts.go
+--- a/daemon/dns/hosts.go
++++ b/daemon/dns/hosts.go
+@@ -41,6 +41,22 @@
+ 	}
+ }
+ 
++// NoopHostsSetter is a HostnameSetter that never touches the filesystem.
++// Use it when /etc/hosts is managed externally (e.g. NixOS).
++type NoopHostsSetter struct{}
++
++func (NoopHostsSetter) SetHosts(Hosts) error { return nil }
++func (NoopHostsSetter) UnsetHosts() error    { return nil }
++
++// NewHostnameSetter picks the HostnameSetter implementation based on
++// hostsReadOnly: true means /etc/hosts is never modified.
++func NewHostnameSetter(hostsReadOnly bool, path string) HostnameSetter {
++	if hostsReadOnly {
++		return NoopHostsSetter{}
++	}
++	return NewHostsFileSetter(path)
++}
++
+ func (h Host) String() string {
+ 	return fmt.Sprintf("%s\t%s\t%s\t%s", h.IP, h.FQDN, strings.Join(h.DomainNames, "\t"), mark)
+ }
+diff --git a/daemon/dns/hosts_test.go b/daemon/dns/hosts_test.go
+--- a/daemon/dns/hosts_test.go
++++ b/daemon/dns/hosts_test.go
+@@ -4,6 +4,7 @@
+ 	"fmt"
+ 	"net/netip"
+ 	"os"
++	"path/filepath"
+ 	"testing"
+ 
+ 	"github.com/NordSecurity/nordvpn-linux/test/category"
+@@ -247,3 +248,32 @@
+ 		})
+ 	}
+ }
++
++func TestNoopHostsSetter(t *testing.T) {
++	category.Set(t, category.Unit)
++
++	filename := filepath.Join(t.TempDir(), "hosts")
++	original := "127.0.0.1\tlocalhost\n"
++	require.NoError(t, os.WriteFile(filename, []byte(original), 0644))
++	before, err := os.Stat(filename)
++	require.NoError(t, err)
++
++	setter := NoopHostsSetter{}
++	assert.NoError(t, setter.SetHosts(Hosts{{FQDN: "peer.nord"}}))
++	assert.NoError(t, setter.UnsetHosts())
++
++	after, err := os.Stat(filename)
++	require.NoError(t, err)
++	content, err := os.ReadFile(filename)
++	require.NoError(t, err)
++
++	assert.Equal(t, original, string(content))         // bytes untouched
++	assert.Equal(t, before.ModTime(), after.ModTime()) // never opened
++}
++
++func TestNewHostnameSetter(t *testing.T) {
++	category.Set(t, category.Unit)
++
++	assert.IsType(t, NoopHostsSetter{}, NewHostnameSetter(true, HostsFilePath))
++	assert.IsType(t, &HostsFileSetter{}, NewHostnameSetter(false, HostsFilePath))
++}
+diff --git a/norduser/process/norduser_process_manager.go b/norduser/process/norduser_process_manager.go
+--- a/norduser/process/norduser_process_manager.go
++++ b/norduser/process/norduser_process_manager.go
+@@ -29,7 +29,7 @@
+ 	socket := internal.GetNorduserdSocket(uid)
+ 	if snapconf.IsUnderSnap() {
+ 		socket = internal.GetNorduserSocketSnap(uid)
+-	} else if _, err := os.Stat(socket); os.IsNotExist(err) {
++	} else if _, err := os.Stat(socket); os.IsNotExist(err) || os.IsPermission(err) {
+ 		socket = internal.GetNorduserSocketFork(uid)
+ 	}
+
+diff --git a/cmd/norduser/main.go b/cmd/norduser/main.go
+--- a/cmd/norduser/main.go
++++ b/cmd/norduser/main.go
+@@ -298,12 +298,19 @@
+ 	if err := os.Remove(connURL); err != nil && !errors.Is(err, os.ErrNotExist) {
+ 		log.Error("Failed to remove old socket file:", err)
+ 	}
+-	listenerFunction := internal.ManualListener(connURL, internal.PermUserRWX)
++	listenerFunction := internal.ManualListener(connURL, internal.PermUserRWGroupRW)
+ 
+ 	listener, err := listenerFunction()
+ 	if err != nil {
+ 		log.Fatalf("Error on listening to UNIX domain socket: %s", err)
+ 	}
++
++	if gid, err := internal.GetNordvpnGid(); err != nil {
++		log.Fatalf("Error looking up nordvpn group: %s", err)
++	} else if err := os.Chown(connURL, -1, gid); err != nil {
++		log.Fatalf("Error chowning unix socket: %s", err)
++	}
++
+ 	listener = netutil.LimitListener(listener, 100)
+ 
+ 	usr, err := user.Current()
+diff --git a/cmd/fileshare/main.go b/cmd/fileshare/main.go
+--- a/cmd/fileshare/main.go
++++ b/cmd/fileshare/main.go
+@@ -102,11 +102,20 @@
+ 		log.Warn("failed to remove old socket file:", err)
+ 	}
+ 
+-	listener, err := internal.ManualListener(internal.FileshareSocket, internal.PermUserRWX)()
++	listener, err := internal.ManualListener(internal.FileshareSocket, internal.PermUserRWGroupRW)()
+ 	if err != nil {
+ 		log.Error("failed to open unix socket:", err)
+ 		os.Exit(int(childprocess.CodeFailedToCreateUnixScoket))
+ 	}
++
++	if gid, err := internal.GetNordvpnGid(); err != nil {
++		log.Error("failed to look up nordvpn group:", err)
++		os.Exit(int(childprocess.CodeFailedToCreateUnixScoket))
++	} else if err := os.Chown(internal.FileshareSocket, -1, gid); err != nil {
++		log.Error("failed to chown unix socket:", err)
++		os.Exit(int(childprocess.CodeFailedToCreateUnixScoket))
++	}
++
+ 	limitedListener := netutil.LimitListener(listener, 100)
+ 
+ 	defer func() {
