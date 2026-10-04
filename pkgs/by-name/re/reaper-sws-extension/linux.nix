@@ -36,4 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ gtk3 ];
 
+  # remove after a release with https://github.com/reaper-oss/sws/commit/1eac4cba4d3f6f845c82689949f9afdfb5f35d25 lands
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
+  ];
+
 })
