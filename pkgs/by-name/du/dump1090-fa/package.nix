@@ -23,6 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-A6nkct7jvpPtPZ+iM2UKVckIXgNxxq5sxhyPiw5+EZk=";
   };
 
+  postPatch = ''
+    substituteInPlace interactive.c \
+      --replace-fail "char strFl[7]" "char strFl[16]"
+  '';
+
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
