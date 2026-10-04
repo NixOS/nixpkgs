@@ -54,9 +54,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   # Prevent double wrapping from wrapGApps and wrapPythonProgram
   dontWrapGApps = true;
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   strictDeps = false;
 
