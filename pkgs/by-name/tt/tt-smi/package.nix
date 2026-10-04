@@ -36,7 +36,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tt-umd
   ];
 
-  pythonRelaxDeps = [ "tt-umd" ];
+  pythonRelaxDeps = [
+    "tt-umd"
+    "pyluwen"
+  ];
 
   nativeCheckInputs = [ versionCheckHook ];
 
