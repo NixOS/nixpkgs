@@ -1411,6 +1411,7 @@
   ./services/networking/pptpd.nix
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
+  ./services/networking/quad9.nix
   ./services/networking/quassel.nix
   ./services/networking/quicktun.nix
   ./services/networking/r53-ddns.nix

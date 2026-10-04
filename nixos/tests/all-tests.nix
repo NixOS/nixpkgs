@@ -1585,6 +1585,7 @@ in
   qownnotes = runTest ./qownnotes.nix;
   qtile = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile/default.nix;
   qtile-extras = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./qtile-extras/default.nix;
+  quad9 = runTest ./quad9.nix;
   quake3 = runTest ./quake3.nix;
   qui = runTest ./qui.nix;
   quicktun = runTest ./quicktun.nix;
