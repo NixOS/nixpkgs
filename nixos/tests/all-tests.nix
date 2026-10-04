@@ -384,6 +384,7 @@ in
   buildstream = runTest ./buildstream.nix;
   buildstream-plugins-community = runTest ./buildstream-plugins-community.nix;
   bulwark = runTest ./bulwark.nix;
+  buzz-relay = runTest ./buzz-relay.nix;
   c2fmzq = runTest ./c2fmzq.nix;
   caddy = runTest ./caddy.nix;
   cadvisor = runTestOn [ "x86_64-linux" ] ./cadvisor.nix;
