@@ -4,7 +4,7 @@
   removeReferencesTo,
   srcOnly,
   python3,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   fetchFromGitHub,
@@ -22,7 +22,7 @@ let
   nodejs = nodejs_22;
   nodeSources = srcOnly nodejs;
   pythonEnv = python3.withPackages (p: [ p.setuptools ]);
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_latest;
 in
 
 stdenv.mkDerivation (finalAttrs: {

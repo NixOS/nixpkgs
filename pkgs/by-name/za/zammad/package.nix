@@ -13,7 +13,7 @@
   jq,
   moreutils,
   nodejs,
-  pnpm_10,
+  pnpm_10_latest,
   fetchPnpmDeps,
   pnpmConfigHook,
   cacert,
@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation {
     valkey
     postgresql
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
     nodejs
     procps
     cacert
@@ -84,7 +84,7 @@ stdenvNoCC.mkDerivation {
 
   pnpmDeps = fetchPnpmDeps {
     inherit pname src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_latest;
 
     fetcherVersion = 3;
     hash = "sha256-JG1VhG56L1bDyrVOjP4MFB5h//dVchgnrHiqhGNIuw4=";

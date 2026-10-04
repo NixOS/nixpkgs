@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_latest,
   nodejs_24,
   makeWrapper,
   pnpmConfigHook,
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs_24
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_latest
   ];
 
   pnpmWorkspaces = [ "vite" ];
@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    pnpm = pnpm_10_latest;
     fetcherVersion = 3;
     hash = "sha256-02s37dcEvxFlaGO+RNxTMPuTV0/sx7hiX1Nzc3A/qro=";
   };
