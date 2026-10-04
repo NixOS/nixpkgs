@@ -416,6 +416,28 @@ in
     assert owned_lease() == crash_lease
     controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{successor_id} | jq -e '.status == \"queued\"'")
     worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '(.runs | length) == 6'")
+    # Probe the saved revoked key directly while restored ownership still holds.
+    revoked_callback_probe = f"""
+    import urllib.error
+    import urllib.request
+    from pathlib import Path
+
+    request = urllib.request.Request(
+        "http://controller:3115/api/companies/{company_id}/issues?limit=1",
+        headers=dict(Authorization="Bearer " + Path("/var/lib/hermes-fixture/callback-key").read_text().strip()),
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=10) as response:
+            status = response.status
+    except urllib.error.HTTPError as error:
+        status = error.code
+    assert status == 401, "Restored revoked callback key returned HTTP " + str(status)
+    """
+    worker.succeed("${pkgs.python3}/bin/python3 -c " + shlex.quote(revoked_callback_probe))
+    assert owned_lease() == crash_lease
+    controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{crash_id} | jq -e '.status == \"running\"'")
+    controller.succeed(f"curl -fsS -b /run/board-cookies {board_url}/api/heartbeat-runs/{successor_id} | jq -e '.status == \"queued\"'")
+    worker.succeed("curl -fsS http://localhost:8642/__fixture/status | jq -e '.runs[\"fixture-6\"].status == \"running\" and (.runs | length) == 6'")
     # Only a verified parent-terminal response releases the restored checkpoint.
     worker.succeed("rm /var/lib/hermes-fixture/stop-blocked")
     controller.succeed(f"curl -fsS -b /run/board-cookies -H 'Content-Type: application/json' -H 'Origin: {board_url}' --data '{{}}' {board_url}/api/heartbeat-runs/{crash_id}/cancel | jq -e '.status == \"cancelled\" and .resultJson.executionCancellation.state == \"acknowledged\"'")
