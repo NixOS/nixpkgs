@@ -10,6 +10,7 @@
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
+  withWebServer ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -29,6 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace Cargo.toml \
       --replace-fail ', "vendored_curl"' ""
+  ''
+  + lib.optionalString (!withWebServer) ''
+    substituteInPlace Cargo.toml \
+      --replace-fail ', "web_server_capability"' ""
   '';
 
   cargoHash = "sha256-rCK7FyAUIjUq6dxEw9YBaGm29xYvlYjX0b1xHU03XVU=";
