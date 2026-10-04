@@ -6719,6 +6719,12 @@ with pkgs;
   # This should be kept updated to ensure the default zls version matches the default zig version.
   zls = zls_0_16;
 
+  inherit (callPackages ../development/tools/zigscient { })
+    zigscient_0_17
+    ;
+
+  zigscient = zigscient_0_17;
+
   libzint = zint-qt.override { withGUI = false; };
 
   aroccPackages = recurseIntoAttrs (callPackage ../development/compilers/arocc { });
