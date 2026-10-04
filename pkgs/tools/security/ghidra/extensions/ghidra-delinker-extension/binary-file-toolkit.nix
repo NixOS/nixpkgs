@@ -5,22 +5,22 @@
 }:
 maven.buildMavenPackage (finalAttrs: {
   pname = "binary-file-toolkit";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "boricj";
     repo = "binary-file-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HMzRh/Q06Ik33mEkmh5U6qLiWk7ZCEstYq3Ll/pFhXM=";
+    hash = "sha256-dhWBnieXVsFyBoaCBzQIVo7iLWrO6l5y0v1KK1xC/es=";
   };
 
-  mvnHash = "sha256-UrvPqh5zxhTQ6MJNJ7CSAA6dg5DX+Jdx6/wKr4/1brs=";
+  mvnHash = "sha256-GwdpwwAhSb0uHWiExVPBZgOmB8LOEQk6uKgSAs/uw7k=";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/
-    cp dist/* $out/
+    mkdir -p "$out/"
+    cp bft-*/target/*.jar "$out/"
 
     runHook postInstall
   '';
