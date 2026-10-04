@@ -28,7 +28,7 @@ in
         description = "Group with will own the downloaded files";
       };
 
-      openPorts = lib.mkOption {
+      openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Open the web ui port in the firewall";
@@ -82,7 +82,7 @@ in
       metube = { };
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts [ (lib.toInt cfg.settings.PORT) ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ (lib.toInt cfg.settings.PORT) ];
 
     systemd.services.metube = {
       description = "MeTube";
