@@ -65,8 +65,18 @@ class Test(
         input_graph = make_test_graph()
 
         result = self.assertResultKeys(
-            ["rest"],
+            ["main", "common", "rest"],
             split_paths([], input_graph)
+        )
+
+        self.assertGraphEqual(
+            result["main"],
+            directed_graph([])
+        )
+
+        self.assertGraphEqual(
+            result["common"],
+            directed_graph([])
         )
 
         self.assertGraphEqual(
@@ -79,8 +89,18 @@ class Test(
 
         def test_empty(paths):
             result = self.assertResultKeys(
-                ["rest"],
+                ["main", "common", "rest"],
                 split_paths(paths, empty_graph)
+            )
+
+            self.assertGraphEqual(
+                result["main"],
+                directed_graph([])
+            )
+
+            self.assertGraphEqual(
+                result["common"],
+                directed_graph([])
             )
 
             self.assertGraphEqual(
@@ -159,7 +179,7 @@ class Test(
 
     def test_split_no_common(self):
         result = self.assertResultKeys(
-            ["main", "rest"],
+            ["main", "common", "rest"],
             split_paths(["D"], make_test_graph())
         )
 
@@ -181,4 +201,9 @@ class Test(
                 ["X"],
                 pick_keys(["Root1", "B", "X"], vertex_props_dict).items()
             )
+        )
+
+        self.assertGraphEqual(
+            result["common"],
+            directed_graph([])
         )
