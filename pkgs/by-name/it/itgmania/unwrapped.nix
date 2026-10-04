@@ -89,7 +89,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.itgmania.com/";
     description = "Fork of StepMania 5.1, improved for the post-ITG community";
     platforms = lib.platforms.linux;
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Plus
+        cc-by-nc-40
+      ];
     maintainers = with lib.maintainers; [
       ftsimas
       maxwell-lt
