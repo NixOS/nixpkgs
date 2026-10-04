@@ -41,6 +41,17 @@
       path = ../23;
     }
   ];
+  "llvm/align-__linkedit-entries-to-pointer-size.patch" = [
+    {
+      before = "22";
+      path = ../18;
+    }
+    {
+      after = "22";
+      before = "23";
+      path = ../22;
+    }
+  ];
   "llvm/backport-darwin-triple-parsing.patch" = [
     {
       after = "18";
