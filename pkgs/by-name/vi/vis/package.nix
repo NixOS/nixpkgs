@@ -3,40 +3,41 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
   makeDesktopItem,
   ncurses,
-  libtermkey,
   lua,
   tre,
   acl,
   libselinux,
 }:
-
 let
   luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vis";
-  version = "0.9";
+  version = "0.9-unstable-2026-10-03";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    hash = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
+    rev = "bd0bb3449e6eef991d507689c4bfba53c14fd9c5";
+    hash = "sha256-uRGTH5yQGo8O3LahArbSq1uLkH0LZ6rWJqa5S7P50Gg=";
     repo = "vis";
     owner = "martanne";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
     copyDesktopItems
   ];
 
   buildInputs = [
     ncurses
-    libtermkey
     luaEnv
     tre
   ]
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
       exec = "vis %U";
       type = "Application";
       icon = "accessories-text-editor";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "vis";
       genericName = "Text editor";
       categories = [
@@ -79,8 +80,11 @@ stdenv.mkDerivation rec {
     description = "Vim like editor";
     homepage = "https://github.com/martanne/vis";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ramkromberg ];
+    maintainers = with lib.maintainers; [
+      ramkromberg
+      es-sai-fi
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "vis";
   };
-}
+})
