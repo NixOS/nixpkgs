@@ -12,6 +12,7 @@
   rLibrary ? false,
   cudaPackages,
   llvmPackages,
+  testers,
   R,
   rPackages,
 }:
@@ -32,7 +33,6 @@ let
 in
 
 effectiveStdenv.mkDerivation (finalAttrs: {
-  pnameBase = "xgboost";
   # prefix with r when building the R library
   # The R package build results in a special xgboost.so file
   # that contains a subset of the .so file use for the CLI
@@ -101,7 +101,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals rLibrary [ (lib.cmakeBool "R_LIB" true) ];
 
   preConfigure = lib.optionalString rLibrary ''
-    substituteInPlace cmake/RPackageInstall.cmake.in --replace "CMD INSTALL" "CMD INSTALL -l $out/library"
+    substituteInPlace cmake/RPackageInstall.cmake.in --replace-fail "CMD INSTALL" "CMD INSTALL -l $out/library"
     export R_LIBS_SITE="$R_LIBS_SITE''${R_LIBS_SITE:+:}$out/library"
   '';
 
@@ -203,11 +203,21 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     fi
   '';
 
+  passthru.tests = {
+    pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };
+    cmake-config = testers.hasCmakeConfigModules {
+      moduleNames = [ "xgboost" ];
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
+    changelog = "https://github.com/dmlc/xgboost/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "xgboost";
+    pkgConfigModules = [ "xgboost" ];
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       nviets
