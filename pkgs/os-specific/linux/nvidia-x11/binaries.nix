@@ -2,15 +2,13 @@
   # Package dependencies
   lib,
   stdenv,
-  fetchurl,
   which,
-  libarchive,
   jq,
-  zstd,
   pkgs,
   pkgsi686Linux,
-  config,
-  # Whether to build only userspace libraries (without bin/modsrc/firmware outputs)
+  # The unpacked driver installer, shared with the kernel module build.
+  src,
+  # Whether to build only userspace libraries (without bin/firmware outputs)
   libsOnly,
   # don't include the bundled 32-bit libraries on 64-bit platforms,
   # even if it's in downloaded binary
@@ -20,16 +18,12 @@
   # Whether to extract the GSP firmware; datacenter drivers and open
   # kernel module builds need it
   firmware ? openSha256 != null || useFabricmanager,
-  # Whether the user accepts the NVIDIA Software License
-  acceptLicense ? config.nvidia.acceptLicense or false,
   # Hash for open kernel modules; if non-null, allows building
   # without accepting the proprietary license
   openSha256,
   # Driver version and sources
   version,
-  url,
   sha256_32bit,
-  sha256_64bit,
   sha256_aarch64,
   # Feature flags
   useGLVND,
@@ -45,9 +39,6 @@
   patches,
   preInstall,
   postInstall,
-  # Whether the build is marked broken
-  broken,
-  brokenOpen,
   ...
 }:
 
@@ -76,73 +67,10 @@ let
       ]
     );
 
-  # Throw an error about license acceptance
-  throwLicense = throw ''
-    Use of NVIDIA Software requires license acceptance of the license:
-
-      - License For Customer Use of NVIDIA Software [1]
-
-    You can express acceptance by setting acceptLicense to true your nixpkgs.config.
-    Example:
-
-      configuration.nix:
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.config.nvidia.acceptLicense = true;
-
-      config.nix:
-        allowUnfree = true;
-        nvidia.acceptLicense = true;
-
-    [1]: https://www.nvidia.com/content/DriverDownloads/licence.php?lang=us
-  '';
-
-  pkgSuffix = lib.optionalString (lib.versionOlder version "304") "-pkg0";
   i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
 
   libPath = libPathFor pkgs;
   libPath32 = lib.optionalString i686bundled (libPathFor pkgsi686Linux);
-
-  src =
-    if !acceptLicense && (openSha256 == null) then
-      throwLicense
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        urls =
-          if url != null then
-            [ url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_64bit;
-      }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        urls =
-          if url != null then
-            [ url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_32bit;
-      }
-    else if stdenv.hostPlatform.system == "aarch64-linux" && sha256_aarch64 != null then
-      fetchurl {
-        urls =
-          if url != null then
-            [ url ]
-          else
-            [
-              "https://us.download.nvidia.com/XFree86/aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-              "https://download.nvidia.com/XFree86/Linux-aarch64/${version}/NVIDIA-Linux-aarch64-${version}${pkgSuffix}.run"
-            ];
-        sha256 = sha256_aarch64;
-      }
-    else
-      throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
 in
 
@@ -164,28 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ]
   ++ lib.optional i686bundled "lib32"
-  ++ lib.optionals (!libsOnly) [
-    "bin"
-    "modsrc"
-  ]
+  ++ lib.optionals (!libsOnly) [ "bin" ]
   ++ lib.optional (!libsOnly && firmware) "firmware";
   outputDev = if libsOnly then null else "bin";
-
-  # None of the packaged executables reports the driver version without a
-  # loaded driver, so check the unpacked driver itself: its libraries are named
-  # after the version.  This catches an archive whose hash was not updated on a
-  # version bump and which would otherwise be silently reused from the store.
-  # stdenv sets nullglob, so the glob is counted instead of listed.
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    if ! { set -- "$out"/lib/*.so."$version"; [ $# -gt 0 ]; }; then
-      echo "no library is named after version $version, the driver archive is not the expected version:" >&2
-      ls "$out/lib" >&2 || true
-      exit 1
-    fi
-    runHook postInstallCheck
-  '';
 
   dontStrip = true;
   dontPatchELF = true;
@@ -193,12 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
   inherit libPath libPath32;
 
   nativeBuildInputs = [
-    libarchive
     jq
   ]
-  # NVIDIA has changed the compression format of their driver to zstd since version 530.30.02
-  # https://forums.developer.nvidia.com/t/linux-solaris-and-freebsd-driver-530-30-02-beta/244406
-  ++ (if (lib.versionAtLeast version "530") then [ zstd ] else [ which ]);
+  # Drivers older than 530 need `which` in the build, see
+  # https://github.com/NixOS/nixpkgs/pull/498612#discussion_r3064133935
+  ++ lib.optional (lib.versionOlder version "530") [ which ];
 
   passthru = {
     compressFirmware = false;
@@ -228,6 +136,5 @@ stdenv.mkDerivation (finalAttrs: {
       edwtjo
     ];
     priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
-    broken = broken && brokenOpen;
   };
 })

@@ -225,7 +225,7 @@ rec {
         "kernel-6.18-nv_workqueue_flush.patch"
         "kernel-7.0.patch"
       ];
-      broken = kernel.kernelAtLeast "7.2";
+      brokenAbove = "7.2";
 
       # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
       # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
@@ -276,7 +276,7 @@ rec {
       modprobeSha256 = "sha256-aEVCKYliPCk8SJybZ/wcgU8bppmx7tlAUuOaAQqJgeQ=";
       useGLVND = false;
 
-      broken = kernel.kernelAtLeast "6.19";
+      brokenAbove = "6.19";
       patches = map (patch: "${aurPatches}/${patch}") patchset ++ [
         (replaceVars ./legacy340-for-nix-kernel-modules.patch {
           inherit (builtins) storeDir;
