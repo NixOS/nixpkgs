@@ -1,0 +1,22 @@
+diff --git a/scripts/nvx_tools/common.py b/scripts/nvx_tools/common.py
+--- a/scripts/nvx_tools/common.py
++++ b/scripts/nvx_tools/common.py
+@@ -68,17 +68,7 @@
+
+
+ def openvmm_binary_path() -> Path:
+-    executable = (
+-        OpenVMMBuildConstants.WINDOWS_BINARY_NAME
+-        if os.name == "nt"
+-        else OpenVMMBuildConstants.BINARY_NAME
+-    )
+-    return (
+-        OpenVMMBuildConstants.DIRECTORY
+-        / OpenVMMBuildConstants.TARGET_DIRECTORY_NAME
+-        / OpenVMMBuildConstants.BUILD_PROFILE
+-        / executable
+-    )
++    return Path(require_tool("openvmm"))
+
+
+ @dataclass(frozen=True)
