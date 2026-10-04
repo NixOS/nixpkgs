@@ -18402,6 +18402,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  toggable-term-nvim = buildVimPlugin {
+    pname = "toggable-term-nvim";
+    version = "0-unstable-2026-10-04";
+    src = fetchFromGitHub {
+      owner = "sergioia-dev";
+      repo = "toggable-term-nvim";
+      rev = "c61ddbcad7484b1306d643bd2a41699fbf0239d6";
+      hash = "sha256-ellFepBoskQ6iIV5lU7OSSyD7StOHsUgQFRoG+wbNDE=";
+    };
+    meta.homepage = "https://github.com/sergioia-dev/toggable-term-nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   toggleterm-nvim = buildVimPlugin {
     pname = "toggleterm.nvim";
     version = "2.13.1-unstable-2025-03-09";
