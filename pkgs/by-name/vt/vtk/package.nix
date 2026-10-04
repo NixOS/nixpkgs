@@ -1,14 +1,8 @@
 {
-  version,
-  sourceSha256,
-  patches ? [ ],
-}:
-{
   lib,
   newScope,
   stdenv,
   fetchurl,
-  fetchFromGitHub,
   cmake,
   pkg-config,
 
@@ -17,6 +11,7 @@
   mpi,
   python3Packages,
   catalyst,
+  conduit,
   cli11,
   boost,
   eigen,
@@ -102,6 +97,7 @@ let
       mpiSupport
       python3Packages
       pythonSupport
+      conduit
       ;
 
     hdf5 = hdf5.override {
@@ -109,7 +105,7 @@ let
       cppSupport = !mpiSupport;
     };
     netcdf = self.callPackage netcdf.override { };
-    catalyst = self.callPackage catalyst.override { };
+    catalyst = self.callPackage catalyst.override { withExternalConduit = true; };
     adios2 = self.callPackage adios2.override { };
     cgns = self.callPackage cgns.override { };
     viskores = self.callPackage viskores.override { };
@@ -123,16 +119,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtk";
-  inherit version patches;
+  version = "9.7.0";
 
   src = fetchurl {
     url = "https://www.vtk.org/files/release/${lib.versions.majorMinor finalAttrs.version}/VTK-${finalAttrs.version}.tar.gz";
-    hash = sourceSha256;
+    hash = "sha256-r/23oV7DTuAXRAf5EatwtkbHrwEWGBi7q04RYLfv9yA=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config # required for finding MySQl
+    sqlite # for sqlite3 binary required by ThirdParty/sqlite when using strictDeps
   ]
   ++ lib.optionals pythonSupport [
     python3Packages.python
@@ -210,6 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     vtkPackages.netcdf
     vtkPackages.catalyst
     vtkPackages.viskores
+    conduit
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -264,6 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_token" false) # missing in nixpkgs
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_fmt" false) # prefer vendored fmt
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_scn" false) # missing in nixpkgs
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_fides" false) # missing in nixpkgs
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_gl2ps" stdenv.hostPlatform.isLinux) # external gl2ps causes failure linking to macOS OpenGL.framework
 
     # Rendering
@@ -271,6 +273,9 @@ stdenv.mkDerivation (finalAttrs: {
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingOpenXR" false) # openxr
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingOpenVR" false) # openvr
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingAnari" false) # anari
+
+    # IO
+    (vtkBool "VTK_MODULE_ENABLE_VTK_IOIFC" false) # requires IfcOpenShell C++ libs not packaged separately in nixpkgs
 
     # withQt6
     (vtkBool "VTK_GROUP_ENABLE_Qt" withQt6)
