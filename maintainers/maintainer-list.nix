@@ -4361,6 +4361,14 @@
     matrix = "@brsvh:mozilla.org";
     name = "Burgess Chang";
   };
+  brudel = {
+    email = "me@brudel.dev";
+    github = "brudel";
+    githubId = 31035681;
+    keys = [ { fingerprint = "976E 7FCB 32ED FC6B FAF3  0B1C F82A 36B3 964A 485B"; } ];
+    matrix = "@brudel:beeper.com";
+    name = "Bruno Del Monde";
+  };
   brw = {
     email = "hi@bas.sh";
     github = "brw";
