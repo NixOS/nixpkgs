@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit (hydra) version src;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-ULaL4B00O0ApZbBkv7GtLZWAoJI/ZNFPr+0FWsNp3OE=";
+  cargoHash = "sha256-TYFxKCXxe5oCbmjWaaQM98VjInKBgVRr8Ygy+2LKUew=";
 
   cargoBuildFlags = [
     "--package"
