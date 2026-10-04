@@ -6796,6 +6796,11 @@
     githubId = 14032;
     name = "Daniel Brockman";
   };
+  dcarrero = {
+    github = "dcarrero";
+    githubId = 195768;
+    name = "David Carrero F-B";
+  };
   DCsunset = {
     email = "DCsunset@protonmail.com";
     github = "DCsunset";
