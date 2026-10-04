@@ -14265,6 +14265,8 @@ self: super: with self; {
 
   pvextractor = callPackage ../development/python-modules/pvextractor { };
 
+  pvl = callPackage ../development/python-modules/pvl { };
+
   pvlib = callPackage ../development/python-modules/pvlib { };
 
   pvo = callPackage ../development/python-modules/pvo { };
