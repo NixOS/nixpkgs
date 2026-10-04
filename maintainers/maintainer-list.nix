@@ -142,6 +142,11 @@
     githubId = 56617252;
     matrix = "@oxc45:matrix.org";
   };
+  _0xdeafbeef = {
+    name = "Vladimir";
+    github = "0xdeafbeef";
+    githubId = 32823131;
+  };
   _0xErwin1 = {
     email = "ignacio@feuer.me";
     name = "Ignacio Perez";
