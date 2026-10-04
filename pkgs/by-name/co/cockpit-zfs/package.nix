@@ -21,7 +21,7 @@
   smartmontools,
   stdenv,
   su,
-  systemd,
+  systemdLibs,
   util-linux,
   yarn-berry,
   zfs,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     shadow
     smartmontools
     su
-    systemd
+    systemdLibs
     util-linux
     zfs
     cockpit.passthru.python3Packages.pyudev

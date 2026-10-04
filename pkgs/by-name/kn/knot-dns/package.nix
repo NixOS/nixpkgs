@@ -9,7 +9,7 @@
   libcap_ng,
   libidn2,
   libunistring,
-  systemd,
+  systemdLibs,
   nettle,
   libedit,
   zlib,
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap_ng
-    systemd
+    systemdLibs
     xdp-tools
     libbpf
     libmnl # XDP support (it's Linux kernel API)

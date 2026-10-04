@@ -9,7 +9,7 @@
   curl,
   libevent,
   inotify-tools,
-  systemd,
+  systemdLibs,
   zlib,
   rapidjson,
   small,
@@ -33,7 +33,7 @@
   enableMac ? false,
   qt6Packages,
   nixosTests,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   enableDaemon ? true,
   enableCli ? true,
   installLib ? false,
@@ -58,7 +58,7 @@ let
       openssl
       zlib
     ]
-    ++ optionals enableSystemd [ systemd ]
+    ++ optionals enableSystemd [ systemdLibs ]
     ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
   );
 
@@ -183,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpthread-stubs
     libayatana-appindicator
   ]
-  ++ optionals enableSystemd [ systemd ]
+  ++ optionals enableSystemd [ systemdLibs ]
   ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall =

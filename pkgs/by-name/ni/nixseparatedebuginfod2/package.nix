@@ -10,7 +10,7 @@
   elfutils,
   nix,
   nixosTests,
-  systemd,
+  systemdLibs,
   util-linux,
   cacert,
 }:
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemd
+    systemdLibs
   ];
 
   nativeBuildInputs = [ pkg-config ];

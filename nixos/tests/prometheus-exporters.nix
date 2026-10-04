@@ -18,6 +18,9 @@ let
     *  `metricProvider` (optional)
     *    this attribute contains additional machine config
     *
+    *  `maintainers` (optional)
+    *    maintainers for this test
+    *
     *  `nodeName` (optional)
     *    override an incompatible testnode name
     *
@@ -596,8 +599,9 @@ let
       };
 
     ipmi =
-      { ... }:
+      { pkgs, ... }:
       {
+        maintainers = pkgs.freeipmi.meta.maintainers;
         exporterConfig = {
           enable = true;
         };
@@ -2253,7 +2257,7 @@ lib.mapAttrs (
         )}
       '';
 
-      meta.maintainers = [ ];
+      meta.maintainers = testConfig.maintainers or [ ];
     }
   ))
 ) exporterTests
