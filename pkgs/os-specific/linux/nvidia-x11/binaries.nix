@@ -2,7 +2,6 @@
   # Package dependencies
   lib,
   stdenv,
-  which,
   jq,
   pkgs,
   pkgsi686Linux,
@@ -10,16 +9,16 @@
   src,
   # Whether to build only userspace libraries (without bin/firmware outputs)
   libsOnly,
-  # don't include the bundled 32-bit libraries on 64-bit platforms,
-  # even if it's in downloaded binary
-  disable32Bit ? stdenv.hostPlatform.system == "aarch64-linux",
+  # Set when the installer ships the 32-bit libraries itself, so no separate
+  # i686 build is needed. generic.nix decides it, as it fetches the archive.
+  i686bundled,
   # 32 bit libs only version of this package
   lib32,
-  # Whether to extract the GSP firmware; datacenter drivers and open
-  # kernel module builds need it
+  # Whether to build the `firmware` output holding the extracted GSP firmware.
+  # On for branches with open kernel module sources or fabricmanager.
   firmware ? openSha256 != null || useFabricmanager,
-  # Hash for open kernel modules; if non-null, allows building
-  # without accepting the proprietary license
+  # Hash of the open kernel module sources for this branch, if it has any. A
+  # non-null value also turns on the `firmware` output by default.
   openSha256,
   # Driver version and sources
   version,
@@ -67,8 +66,6 @@ let
       ]
     );
 
-  i686bundled = lib.versionAtLeast version "391" && !disable32Bit;
-
   libPath = libPathFor pkgs;
   libPath32 = lib.optionalString i686bundled (libPathFor pkgsi686Linux);
 
@@ -101,18 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit libPath libPath32;
 
-  nativeBuildInputs = [
-    jq
-  ]
-  # Drivers older than 530 need `which` in the build, see
-  # https://github.com/NixOS/nixpkgs/pull/498612#discussion_r3064133935
-  ++ lib.optional (lib.versionOlder version "530") [ which ];
+  nativeBuildInputs = [ jq ];
 
   passthru = {
     compressFirmware = false;
     ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
   }
-  // lib.optionalAttrs (!i686bundled) {
+  // lib.optionalAttrs (!i686bundled && lib32 != null) {
     inherit lib32;
   };
 

@@ -10,11 +10,21 @@
   version,
   src ? null,
   patches,
+  branch,
   patchFlags ? null,
   prePatch ? null,
   broken,
   hash ? null,
   kmod,
+  # Where the module can be built. The proprietary module comes from the
+  # installer archive, which only exists for platforms a branch has a hash for.
+  #
+  # A parameter named `platforms` would be filled by `callPackage` from
+  # `pkgs.platforms` (an attrset), while `meta.platforms` has to stay a list.
+  supportedPlatforms ? [
+    "x86_64-linux"
+    "aarch64-linux"
+  ],
 }:
 
 assert open -> hash != null;
@@ -38,6 +48,7 @@ stdenv.mkDerivation {
     else
       src;
 
+  passthru.branch = branch;
   driverVersion = version;
 
   inherit patches patchFlags prePatch;
@@ -106,10 +117,7 @@ stdenv.mkDerivation {
         ]
       else
         lib.licenses.unfreeRedistributable;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = supportedPlatforms;
     sourceProvenance =
       with lib.sourceTypes;
       [
