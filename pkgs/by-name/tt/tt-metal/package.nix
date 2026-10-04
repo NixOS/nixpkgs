@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
+  applyPatches,
   callPackage,
   pkg-config,
   cmake,
@@ -15,14 +16,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-metal";
-  version = "0.62.2";
+  version = "0.79.0";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-metal";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ZIUjZLifRVmpWpG8Ty+I+pwgpIf5r9gJkI8ULTau4OE=";
+    hash = "sha256-sA9ryiVDBF9yJUfQ2cQDvphEC0nVQx6X2F91s2BA8Qo=";
   };
 
   cpm = fetchurl {
@@ -32,6 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   sfpi = callPackage ./sfpi.nix { };
 
+  patches = [
+    # Remove in next release 0.80.0
+    ./spsc-marker-decode-simde.patch
+  ];
+
   postUnpack = ''
     mkdir -p "$sourceRoot/runtime"
     ln -s "$sfpi" "$sourceRoot/runtime/sfpi"
@@ -40,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     cp $cpm cmake/CPM.cmake
     cp $cpm tt_metal/third_party/umd/cmake/CPM.cmake
+
+    patchShebangs tt_metal/sfpi-info.sh tt_metal/llrt/hal/codegen
+    substituteInPlace tt_metal/sfpi-info.sh \
+      --replace-fail 'sfpi_arch=$(uname -m)' $'sfpi_dist=debian\nsfpi_arch=$(uname -m)'
   '';
 
   cmakeFlags = [
@@ -47,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
     (lib.cmakeFeature "VERSION_NUMERIC" finalAttrs.version)
     (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+    (lib.cmakeBool "ENABLE_TRACY" false)
   ];
 
   preConfigure = ''
@@ -55,11 +66,16 @@ stdenv.mkDerivation (finalAttrs: {
       (name: src: "cp -r --no-preserve=ownership,mode ${src} build/_deps/${name}-src")
       (
         import ./deps.nix {
-          inherit fetchFromGitHub;
+          inherit fetchFromGitHub applyPatches;
+          ttMetalSrc = finalAttrs.src;
         }
       )
     }
     cp $cpm build/_deps/tt-logger-src/cmake/CPM.cmake
+
+    appendToVar cmakeFlags "-Dcadical_SOURCE_DIR=$PWD/build/_deps/cadical-src"
+    appendToVar cmakeFlags "-DCPM_umd_asio_SOURCE=$PWD/build/_deps/umd_asio-src"
+    appendToVar cmakeFlags "-DCPM_ELFIO_SOURCE=$PWD/build/_deps/elfio-src"
   '';
 
   # CMake install fails because "$out/include/tt-logger" tree does not exist.
@@ -86,6 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fixes the parallel hook crashing in the fixupPhase with no error.
   noAuditTmpdir = true;
+
+  passthru.sfpi = finalAttrs.sfpi;
 
   meta = {
     description = "TT-NN operator library, and TT-Metalium low level kernel programming model";
