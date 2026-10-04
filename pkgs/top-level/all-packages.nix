@@ -3697,6 +3697,7 @@ with pkgs;
   openjfx17 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "17"; };
   openjfx21 = openjfx;
   openjfx25 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "25"; };
+  openjfx27 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "27"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;
@@ -3727,6 +3728,11 @@ with pkgs;
   openjdk25_headless = javaPackages.compiler.openjdk25.headless;
   jdk25 = openjdk25;
   jdk25_headless = openjdk25_headless;
+
+  openjdk27 = javaPackages.compiler.openjdk27;
+  openjdk27_headless = javaPackages.compiler.openjdk27.headless;
+  jdk27 = openjdk27;
+  jdk27_headless = openjdk27_headless;
 
   # default JDK
   jdk = jdk21;
@@ -3760,6 +3766,14 @@ with pkgs;
         jdk = jdk25;
         jdkOnBuild = buildPackages.jdk25;
       };
+      jre27_minimal =
+        (callPackage ../development/compilers/openjdk/jre.nix {
+          jdk = jdk27;
+          jdkOnBuild = buildPackages.jdk27;
+        }).overrideAttrs
+          {
+            __structuredAttrs = true;
+          };
       jre_minimal = callPackage ../development/compilers/openjdk/jre.nix {
         jdkOnBuild = buildPackages.jdk;
       };
@@ -3768,6 +3782,7 @@ with pkgs;
     jre17_minimal
     jre21_minimal
     jre25_minimal
+    jre27_minimal
     jre_minimal
     ;
 

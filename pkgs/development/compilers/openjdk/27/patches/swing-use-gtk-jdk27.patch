@@ -1,0 +1,22 @@
+--- a/src/java.desktop/share/classes/javax/swing/UIManager.java
++++ b/src/java.desktop/share/classes/javax/swing/UIManager.java
+@@ -684,9 +684,8 @@
+             Toolkit toolkit = Toolkit.getDefaultToolkit();
+             if (toolkit instanceof SunToolkit) {
+                 SunToolkit suntk = (SunToolkit)toolkit;
+-                String desktop = suntk.getDesktop();
+                 boolean gtkAvailable = suntk.isNativeGTKAvailable();
+-                if ("gnome".equals(desktop) && gtkAvailable) {
++                if (gtkAvailable) {
+                     return "com.sun.java.swing.plaf.gtk.GTKLookAndFeel";
+                 }
+             }
+@@ -1398,7 +1397,7 @@
+             return;
+         }
+ 
+-        String lafName = getCrossPlatformLookAndFeelClassName();
++        String lafName = getSystemLookAndFeelClassName();
+         lafName = swingProps.getProperty(defaultLAFKey, lafName);
+ 
+         try {
