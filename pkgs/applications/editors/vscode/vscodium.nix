@@ -18,6 +18,7 @@ let
       aarch64-linux = "linux-arm64";
       aarch64-darwin = "darwin-arm64";
       loongarch64-linux = "linux-loong64";
+      riscv64-linux = "linux-riscv64";
     }
     .${system} or throwSystem;
 
@@ -29,6 +30,7 @@ let
       aarch64-linux = "sha256-c9h9RtTcII/hLASX3GB6qwpuK/My9UoLaCajoaoyvDQ=";
       aarch64-darwin = "sha256-8h7lJinrXjnAVdrqcBGLemBVxjmuzz2tBeGZeprYOsA=";
       loongarch64-linux = "sha256-p8hwOg5BbVvJGeQoBrgtd4gHsYmwEhsF/I+bk8gzIo4=";
+      riscv64-linux = "sha256-sAc24D+ylgYGLBBcGABJv3VXx/d4fQ/5LiKfVAP/SRU=";
     }
     .${system} or throwSystem;
 
@@ -88,6 +90,7 @@ buildVscode rec {
       "aarch64-linux"
       "aarch64-darwin"
       "loongarch64-linux"
+      "riscv64-linux"
     ];
     # requires libc.so.6 and other glibc specifics
     broken = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu;
