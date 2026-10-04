@@ -6,7 +6,7 @@
 {
   lib,
   stdenv,
-  fetchpatch,
+  fetchpatch2,
   fetchurl,
   runCommand,
   writeShellScript,
@@ -48,6 +48,7 @@
   texinfo,
   texlive,
   # for bin.nix
+  fetchpatch,
   gnum4,
   jdk_headless,
   perlPackages,
@@ -106,11 +107,12 @@ let
         inherit
           stdenv
           lib
-          fetchpatch
+          fetchpatch2
           bin
           tlpdb
           tlpdbxz
           installShellFiles
+          buildPackages
           coreutils
           findutils
           gawk
