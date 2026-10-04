@@ -8,6 +8,7 @@
   libGLU,
   libx11,
   expat,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,11 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     expat
+    zlib
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libx11;
 
   cmakeFlags = [
     (lib.cmakeBool "USE_EXTERNAL_EXPAT" true)
+    # Coin dlopens zlib by bare name at runtime otherwise, which never resolves
+    # on NixOS, so gzip-compressed VRML (.wrz) silently fails to load.
+    (lib.cmakeBool "ZLIB_RUNTIME_LINKING" false)
   ];
 
   meta = {
@@ -40,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
     mainProgram = "coin-config";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mornepousse ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
