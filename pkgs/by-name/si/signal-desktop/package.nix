@@ -28,7 +28,7 @@
 
   withAppleEmojis ? false,
 }:
-assert lib.warnIf (commandLineArgs != "")
+assert lib.throwIf (commandLineArgs != "")
   "`commandLineArgs` has been deprecated and will be removed in the future. Consider creating a wrapper script or a desktop entry with your desired flags."
   true;
 let
