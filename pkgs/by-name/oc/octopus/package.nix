@@ -41,6 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "octopus";
   version = "16.4";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
@@ -69,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     ninja
     makeWrapper
+    mpi
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
@@ -89,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     metis
     (python3.withPackages (ps: [ ps.pyyaml ]))
   ]
-  ++ lib.optional enableMpi scalapack
+  ++ lib.optionals enableMpi [ scalapack ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_cudart
     cudaPackages.libcublas
@@ -104,8 +108,8 @@ stdenv.mkDerivation (finalAttrs: {
     rocmPackages.roctracer
   ];
 
-  propagatedBuildInputs = lib.optional enableMpi mpi;
-  propagatedUserEnvPkgs = lib.optional enableMpi mpi;
+  propagatedBuildInputs = lib.optionals enableMpi [ mpi ];
+  propagatedUserEnvPkgs = lib.optionals enableMpi [ mpi ];
 
   cmakeFlags = [
     (lib.cmakeBool "OCTOPUS_MPI" enableMpi)
@@ -113,20 +117,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "OCTOPUS_OpenMP" true)
     (lib.cmakeBool "OCTOPUS_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ]
-  ++ lib.optional enableCuda (lib.cmakeBool "OCTOPUS_CUDA" true)
+  ++ lib.optionals enableCuda [ (lib.cmakeBool "OCTOPUS_CUDA" true) ]
   ++ lib.optionals enableHip [
     (lib.cmakeBool "OCTOPUS_HIP" true)
-    "-DHIP_ROOT_DIR=${rocmPackages.clr}"
-    "-DCMAKE_MODULE_PATH=${rocmPackages.clr}/lib/cmake/hip"
+    (lib.cmakeFeature "HIP_ROOT_DIR" rocmPackages.clr.outPath)
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${rocmPackages.clr}/lib/cmake/hip")
   ]
   # gfortran >= 15 tightened ISO_C_BINDING argument checking; octopus passes
   # `c_loc()` results to by-reference `type(c_ptr)` dummies in several GPU
   # interop wrappers, which now errors. Relax it for GPU builds only.
-  ++ lib.optional (enableCuda || enableHip) (
-    lib.cmakeFeature "CMAKE_Fortran_FLAGS" "-fallow-argument-mismatch"
-  );
+  ++ lib.optionals (enableCuda || enableHip) [
+    (lib.cmakeFeature "CMAKE_Fortran_FLAGS" "-fallow-argument-mismatch")
+  ];
 
-  nativeCheckInputs = lib.optional enableMpi mpi;
+  nativeCheckInputs = lib.optionals enableMpi [ mpi ];
   doCheck = false; # requires installed data
 
   postPatch = ''
@@ -166,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Real-space time dependent density-functional theory code";
     homepage = "https://octopus-code.org";
+    changelog = "https://gitlab.com/octopus-code/octopus/-/releases/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ markuskowa ];
     license = with lib.licenses; [
       gpl2Only
