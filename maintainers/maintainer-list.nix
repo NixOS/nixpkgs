@@ -7422,6 +7422,11 @@
     githubId = 10913120;
     name = "Dje4321";
   };
+  djmaze = {
+    github = "djmaze";
+    githubId = 7229;
+    name = "Martin Honermeyer";
+  };
   djwf = {
     email = "dave@weller-fahy.com";
     github = "djwf";
