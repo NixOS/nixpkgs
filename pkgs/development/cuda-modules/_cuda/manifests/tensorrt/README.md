@@ -28,3 +28,7 @@ main: storePath: /nix/store/l2hq83ihj3bcm4z836cz2dw3ilkhwrpy-TensorRT-10.2.0.19.
 ```
 
 I set the `release_date` to the date of the corresponding release on their GitHub: <https://github.com/NVIDIA/TensorRT/releases>.
+
+TensorRT 11.x has no linux-sbsa build for CUDA 12 and dropped JetPack support with 11.2, so Jetson devices remain on
+TensorRT 10.x. The 11.x Linux SBSA tarballs are not listed in the GitHub README, but follow the same naming convention as
+the x86_64 tarballs, with `aarch64` in place of `x86_64` (e.g., `Linux-aarch64-cuda-13.4`).

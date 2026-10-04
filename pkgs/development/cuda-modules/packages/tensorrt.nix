@@ -105,6 +105,12 @@ buildRedist (
       ]
       ++ optionals (tensorrtAtLeast "10.13.3") [
         "libcuda.so.1"
+      ]
+      # Some linux-sbsa releases of TensorRT 11 (e.g., 11.3.0, but not 11.1.0) ship libnvdla_compiler.so, which links
+      # against the L4T driver library libnvos.so. No other library in the release has a DT_NEEDED on it, and TensorRT
+      # 10.7 was the last release to support DLA.
+      ++ optionals (hostRedistSystem == "linux-sbsa" && tensorrtAtLeast "11.0.0") [
+        "libnvos.so"
       ];
 
     # Create a symlink for the Onnx header files in include/onnx
@@ -156,6 +162,32 @@ buildRedist (
       patchelf \
         "''${!outputBin:?}/bin/trtexec" \
         --add-needed libnvinfer_plugin.so.${majorVersion}
+    ''
+    # From 11.2.1, TensorRT ships CMake package configuration files in a top-level cmake directory, which
+    # find_package does not search on Unix, and which locate everything relative to the root of the archive.
+    + optionalString (tensorrtAtLeast "11.2.1") ''
+      nixLog "moving CMake package configuration files to ''${!outputDev:?}/lib/cmake/TensorRT-Enterprise"
+      mkdir -p "''${!outputDev:?}/lib/cmake"
+      mv --verbose "''${!outputDev:?}/cmake" "''${!outputDev:?}/lib/cmake/TensorRT-Enterprise"
+
+      nixLog "patching CMake package configuration files to use absolute paths to outputs"
+      for cmakeFile in "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-EnterpriseTargets*.cmake; do
+        substituteInPlace "$cmakeFile" \
+          --replace-quiet '${"$"}{_IMPORT_PREFIX}/bin' "''${!outputBin:?}/bin" \
+          --replace-quiet '${"$"}{_IMPORT_PREFIX}/include' "''${!outputInclude:?}/include" \
+          --replace-quiet '${"$"}{_IMPORT_PREFIX}/lib' "''${!outputLib:?}/lib"
+        if grep -q '${"$"}{_IMPORT_PREFIX}/' "$cmakeFile"; then
+          nixErrorLog "failed to patch all uses of _IMPORT_PREFIX in $cmakeFile"
+          exit 1
+        fi
+      done
+      unset -v cmakeFile
+    ''
+    # We remove the Windows libraries in postInstall; drop the checks CMake performs to ensure they exist.
+    + optionalString (tensorrtAtLeast "11.2.1") ''
+      nixLog "removing CMake import checks for Windows libraries"
+      sed -i '/_cmake_import_check_.*TRT::[A-Za-z_]*_win_/d' \
+        "''${!outputDev:?}"/lib/cmake/TensorRT-Enterprise/TensorRT-EnterpriseTargets-*.cmake
     '';
 
     # NOTE: Like cuDNN, NVIDIA offers forward compatibility within a major releases of CUDA.

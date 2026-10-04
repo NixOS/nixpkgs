@@ -18,6 +18,8 @@ let
   #   - linux-sbsa (post-Orin Jetson and ARM) comes in second; NVIDIA dropped support for CUDA 12 with 10.13.2 (there is no
   #     10.13.1), so we use 10.13.0 for all CUDA 12 releases.
   #   - linux-aarch64 (pre-Thor Jetson) is historically least supported; we use the latest release available.
+  #   - TensorRT 11.x has no linux-sbsa build for CUDA 12 and dropped JetPack support with 11.2, so Jetson devices
+  #     remain on TensorRT 10.x.
   # - cudnn:
   #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 13 after 9.14.0 and for CUDA 12 after 9.20.0,
   #     so we keep 9.20.0 for Jetson with CUDA 12, 9.13.0 for pre-Thor Jetson with CUDA 13, and use the latest
@@ -50,7 +52,7 @@ let
         else if hostPlatform.isAarch64 then
           "10.13.0"
         else
-          "10.16.1";
+          "11.3.0";
     };
 
   cudaPackages_12_8 =
@@ -77,7 +79,7 @@ let
         else if hostPlatform.isAarch64 then
           "10.13.0"
         else
-          "10.16.1";
+          "11.3.0";
     };
 
   cudaPackages_12_9 =
@@ -104,7 +106,7 @@ let
         else if hostPlatform.isAarch64 then
           "10.13.0"
         else
-          "10.16.1";
+          "11.3.0";
     };
 
   # NOTE: Thor is supported from CUDA 13.0, so our check needs to capture whether pre-Thor devices were selected.
@@ -112,7 +114,7 @@ let
 
   cudaPackages_13_0 =
     let
-      inherit (cudaPackages_13_0.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_0.backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.10.0";
@@ -130,12 +132,17 @@ let
       nvpl = "26.5";
       nvtiff = "0.8.0";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then
+          "10.7.0"
+        else if hasJetsonCudaCapability then
+          "10.16.1"
+        else
+          "11.3.0";
     };
 
   cudaPackages_13_1 =
     let
-      inherit (cudaPackages_13_1.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_1.backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.10.0";
@@ -153,12 +160,17 @@ let
       nvpl = "26.5";
       nvtiff = "0.8.0";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then
+          "10.7.0"
+        else if hasJetsonCudaCapability then
+          "10.16.1"
+        else
+          "11.3.0";
     };
 
   cudaPackages_13_2 =
     let
-      inherit (cudaPackages_13_2.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_2.backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.10.0";
@@ -176,12 +188,17 @@ let
       nvpl = "26.5";
       nvtiff = "0.8.0";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then
+          "10.7.0"
+        else if hasJetsonCudaCapability then
+          "10.16.1"
+        else
+          "11.3.0";
     };
 
   cudaPackages_13_3 =
     let
-      inherit (cudaPackages_13_3.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_3.backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.10.0";
@@ -199,12 +216,17 @@ let
       nvpl = "26.5";
       nvtiff = "0.8.0";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then
+          "10.7.0"
+        else if hasJetsonCudaCapability then
+          "10.16.1"
+        else
+          "11.3.0";
     };
 
   cudaPackages_13_4 =
     let
-      inherit (cudaPackages_13_4.backendStdenv) requestedJetsonCudaCapabilities;
+      inherit (cudaPackages_13_4.backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
       cublasmp = "0.10.0";
@@ -222,7 +244,12 @@ let
       nvpl = "26.5";
       nvtiff = "0.8.0";
       tensorrt =
-        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "10.7.0" else "10.16.1";
+        if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then
+          "10.7.0"
+        else if hasJetsonCudaCapability then
+          "10.16.1"
+        else
+          "11.3.0";
     };
 in
 {
