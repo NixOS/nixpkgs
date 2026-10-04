@@ -153,10 +153,6 @@ in
         message = "ZFS filesystem support needs to be enabled for boot.tzpfms to work";
       }
       {
-        assertion = initrdPools != { } -> config.boot.initrd.systemd.enable;
-        message = "boot.zfs.tzpfms requires boot.initrd.systemd.enable = true";
-      }
-      {
         assertion =
           !(cfgZFS.requestEncryptionCredentials == true) || cfgZFS.requestEncryptionCredentials == [ ];
         message = ''
@@ -201,32 +197,28 @@ in
           "tpm_crb"
         ];
       })
-      (lib.mkIf needsInitrd (
-        lib.mkMerge [
-          (lib.mkIf config.boot.initrd.systemd.enable {
-            systemd.extraBin = {
-              zfs-tpm-list = "${lib.getBin cfg.package}/bin/zfs-tpm-list";
-            }
-            // lib.optionalAttrs (lib.elem "TPM2" cfg.backends) {
-              zfs-tpm2-load-key = "${lib.getBin cfg.package}/bin/zfs-tpm2-load-key";
-            }
-            // lib.optionalAttrs (lib.elem "TPM1.X" cfg.backends) {
-              zfs-tpm1x-load-key = "${lib.getBin cfg.package}/bin/zfs-tpm1x-load-key";
-            };
-            systemd.storePaths =
-              lib.optional (lib.elem "TPM2" cfg.backends) pkgs.tpm2-tss
-              ++ lib.optional (lib.elem "TPM1.X" cfg.backends) pkgs.trousers;
-            systemd.services = lib.genAttrs' initrdPools (pool: {
-              name = "tzpfms-load-${pool}";
-              value = mkTzpfmsService {
-                inherit pool;
-                mountUnits = initrdMountsByPool.${pool} or [ ];
-                script = mkTzpfmsScript (datasetsByPool.${pool} or [ ]);
-              };
-            });
-          })
-        ]
-      ))
+      (lib.mkIf needsInitrd {
+        systemd.extraBin = {
+          zfs-tpm-list = "${lib.getBin cfg.package}/bin/zfs-tpm-list";
+        }
+        // lib.optionalAttrs (lib.elem "TPM2" cfg.backends) {
+          zfs-tpm2-load-key = "${lib.getBin cfg.package}/bin/zfs-tpm2-load-key";
+        }
+        // lib.optionalAttrs (lib.elem "TPM1.X" cfg.backends) {
+          zfs-tpm1x-load-key = "${lib.getBin cfg.package}/bin/zfs-tpm1x-load-key";
+        };
+        systemd.storePaths =
+          lib.optional (lib.elem "TPM2" cfg.backends) pkgs.tpm2-tss
+          ++ lib.optional (lib.elem "TPM1.X" cfg.backends) pkgs.trousers;
+        systemd.services = lib.genAttrs' initrdPools (pool: {
+          name = "tzpfms-load-${pool}";
+          value = mkTzpfmsService {
+            inherit pool;
+            mountUnits = initrdMountsByPool.${pool} or [ ];
+            script = mkTzpfmsScript (datasetsByPool.${pool} or [ ]);
+          };
+        });
+      })
     ];
 
     systemd.services = lib.genAttrs' systemPools (
