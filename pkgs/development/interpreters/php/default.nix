@@ -1,6 +1,7 @@
 {
   lib,
   callPackage,
+  fetchurl,
   stdenv,
   llvmPackages,
   pcre2,
@@ -8,11 +9,15 @@
 
 let
   mkPhp =
-    { version, hash }:
+    {
+      version,
+      hash ? null,
+      phpSrc ? null,
+    }:
     let
       base = callPackage ./generic.nix {
         stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-        inherit version hash;
+        inherit version hash phpSrc;
       };
     in
     base.withExtensions (
@@ -80,5 +85,12 @@ in
   php85 = mkPhp {
     version = "8.5.11";
     hash = "sha256-3JQHFqjHPlMcAHjuy5VdWV0yHsLMnUcUnPAInqbhj2Q=";
+  };
+  php86 = mkPhp rec {
+    version = "8.6.0RC3";
+    phpSrc = fetchurl {
+      url = "https://downloads.php.net/~svpernova09/php-${version}.tar.xz";
+      hash = "sha256-Ex+Hoga92QwXjY5E6AJDrgwzPEzuhTH2PRyqms3YaWo=";
+    };
   };
 }

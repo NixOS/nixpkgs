@@ -4400,6 +4400,7 @@ with pkgs;
     php83
     php84
     php85
+    php86
     ;
 
   # PHP Extensions and Packages
@@ -4414,6 +4415,9 @@ with pkgs;
 
   php85Extensions = recurseIntoAttrs php85.extensions;
   php85Packages = recurseIntoAttrs php85.packages;
+
+  php86Extensions = recurseIntoAttrs php86.extensions;
+  php86Packages = recurseIntoAttrs php86.packages;
 
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
