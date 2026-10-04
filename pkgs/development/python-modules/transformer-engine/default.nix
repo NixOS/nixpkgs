@@ -282,7 +282,12 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     # libtransformer_engine.so gets a `DT_NEEDED` on libcuda.so.1, provided by the GPU driver at
     # run time:
     # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
-    || withNcclEp;
+    || withNcclEp
+
+    # libtransformer_engine.so links against libcudnn_engines_runtime_compiled.so, which has a `DT_NEEDED` on
+    # libcuda.so.1 since cuDNN 9.27:
+    # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
+    || lib.versionAtLeast cudaPackages.cudnn.version "9.27";
 
   pythonImportsCheck = [
     "transformer_engine"
