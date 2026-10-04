@@ -15,13 +15,13 @@
 }:
 let
   pname = "metube";
-  version = "2026.04.09";
+  version = "2026.09.25";
 
   src = fetchFromGitHub {
     owner = "alexta69";
     repo = "metube";
     tag = version;
-    hash = "sha256-v4O6IBjB4C1MF+amWLdFL8ZEtx318HmTaL+rirgTbtI=";
+    hash = "sha256-RYSMYtauOnMVXThi4HQcww0N0dcp4OXcQga8mWCbSL4=";
   };
 
   metube-ui = stdenvNoCC.mkDerivation {
@@ -46,7 +46,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 3;
-      hash = "sha256-5cNctxndShhDYCM2sfYK3rqxGOwil1mrw1eDcN8AXAI=";
+      hash = "sha256-482KPJ8Ic5pt6Yw+mG+q3/xtmBZXhOW163DE/76eNwg=";
     };
 
     postBuild = ''
@@ -85,7 +85,10 @@ python3Packages.buildPythonApplication {
         --replace "from ytdl import" "from .ytdl import" \
         --replace "from dl_formats import" "from .dl_formats import" \
         --replace "from state_store import" "from .state_store import" \
-        --replace "from subscriptions import" "from .subscriptions import"
+        --replace "from subscriptions import" "from .subscriptions import" \
+        --replace "import bg_tasks" "from . import bg_tasks" \
+        --replace "from music_metadata import" "from .music_metadata import" \
+        --replace "from url_guard import" "from .url_guard import"
     done
 
     cat >> pyproject.toml << EOF
@@ -111,6 +114,9 @@ python3Packages.buildPythonApplication {
     "--set"
     "BASE_DIR"
     "${placeholder "out"}/share"
+    "--set"
+    "METUBE_VERSION"
+    "${version}"
     "--prefix"
     "PATH"
     ":"
