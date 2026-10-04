@@ -12,7 +12,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "amphp";
     repo = "ext-uv";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-CM81dStUgQpLIb7s6jlWkP3v4WyyxjZ+3EX80tdSPc0=";
   };
 
