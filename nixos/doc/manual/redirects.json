@@ -280,9 +280,6 @@
   "module-virtualisation-xen-introduction": [
     "index.html#module-virtualisation-xen-introduction"
   ],
-  "sec-boot-problems-scripted-stage-1": [
-    "index.html#sec-boot-problems-scripted-stage-1"
-  ],
   "sec-nixos-test-vms-vs-containers": [
     "index.html#sec-nixos-test-vms-vs-containers"
   ],
@@ -707,13 +704,9 @@
     "index.html#sec-luks-file-systems"
   ],
   "sec-luks-file-systems-fido2": [
-    "index.html#sec-luks-file-systems-fido2"
-  ],
-  "sec-luks-file-systems-fido2-legacy": [
+    "index.html#sec-luks-file-systems-fido2",
+    "index.html#sec-luks-file-systems-fido2-systemd",
     "index.html#sec-luks-file-systems-fido2-legacy"
-  ],
-  "sec-luks-file-systems-fido2-systemd": [
-    "index.html#sec-luks-file-systems-fido2-systemd"
   ],
   "sec-nfs-file-systems": [
     "index.html#sec-nfs-file-systems"
@@ -2075,7 +2068,8 @@
     "index.html#ch-troubleshooting"
   ],
   "sec-boot-problems": [
-    "index.html#sec-boot-problems"
+    "index.html#sec-boot-problems",
+    "index.html#sec-boot-problems-scripted-stage-1"
   ],
   "sec-maintenance-mode": [
     "index.html#sec-maintenance-mode"
