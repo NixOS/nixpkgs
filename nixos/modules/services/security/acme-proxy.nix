@@ -65,6 +65,108 @@ let
               with `challenge.bypass = true`).
             '';
           };
+          dns01 = {
+            provider = lib.mkOption {
+              type = lib.types.enum [ "rfc2136" ];
+              default = "rfc2136";
+              defaultText = lib.literalExpression ''"rfc2136"'';
+              description = ''
+                DNS-01 provider used to publish the TXT records the
+                upstream CA asks for. Only `"rfc2136"` is implemented
+                upstream; the option is typed as enum rather than as a
+                free string so an unsupported value fails at
+                evaluation rather than at daemon startup.
+              '';
+            };
+            rfc2136 = {
+              server = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                example = "ns1.example.com:53";
+                description = ''
+                  `host:port` of the authoritative DNS server that
+                  accepts RFC 2136 dynamic updates from this proxy.
+                '';
+              };
+              zone = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                example = "example.com.";
+                description = ''
+                  Zone being updated, with the trailing dot. The
+                  server must `allow-update { key "<name>"; };` the
+                  corresponding zone.
+                '';
+              };
+              tsigKeyName = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                example = "acme-proxy-key";
+                description = ''
+                  TSIG key name, matching the `key "<name>" { ... };`
+                  clause in `named.conf` on the authoritative server.
+                '';
+              };
+              tsigKeySecret = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                example = ''
+                  # Read the secret out of band — see secretsFile.
+                '';
+                description = ''
+                  TSIG key secret in **standard** base64 (as
+                  `dnssec-keygen` and BIND emit it; not base64url).
+                  Empty (the default) is a startup error upstream.
+
+                  Prefer the env-var override mechanism — put
+                  `ACME_PROXY_SIGNER__RELAY__DNS01__RFC2136__TSIG_KEY_SECRET=<base64>`
+                  in the profile's `secretsFile` — over hard-coding
+                  the value here, which would put the secret in the
+                  Nix store.
+                '';
+              };
+              tsigAlgorithm = lib.mkOption {
+                type = lib.types.enum [ "hmac-sha256" "hmac-sha384" "hmac-sha512" ];
+                default = "hmac-sha256";
+                defaultText = lib.literalExpression ''"hmac-sha256"'';
+                description = ''
+                  TSIG HMAC algorithm. `hmac-md5` is deliberately
+                  not offered upstream. The default matches what
+                  `dnssec-keygen -a hmac-sha256` produces.
+                '';
+              };
+            };
+            propagation = {
+              mode = lib.mkOption {
+                type = lib.types.enum [ "none" "delay" ];
+                default = "none";
+                defaultText = lib.literalExpression ''"none"'';
+                description = ''
+                  What to wait for between the dynamic update and
+                  asking the upstream CA to validate the record.
+                  `"none"` triggers validation right after the
+                  update (right when the update server is itself
+                  what the CA asks). `"delay"` sleeps
+                  `delaySecs` first — for a provider that accepts an
+                  update before serving it, or for secondaries that
+                  lag the primary.
+                '';
+              };
+              delaySecs = lib.mkOption {
+                type = lib.types.int;
+                default = 30;
+                defaultText = lib.literalExpression "30";
+                description = ''
+                  Sleep before validation when `mode = "delay"`.
+                  Must be less than
+                  `poll_timeout_secs` (the relay's per-attempt
+                  budget), and the delay runs once per name in the
+                  order — raise that budget accordingly for a
+                  multi-name order.
+                '';
+              };
+            };
+          };
         };
         localCa = {
           leafValidityDays = lib.mkOption {
@@ -170,13 +272,30 @@ let
   profileToTOML =
     profile:
     let
+      relaySection = {
+        directory_url = profile.signer.relay.directoryUrl;
+        challenge_strategy = profile.signer.relay.challengeStrategy;
+      }
+      // lib.optionalAttrs (profile.signer.relay.challengeStrategy == "dns01") {
+        dns01 = {
+          provider = profile.signer.relay.dns01.provider;
+          rfc2136 = {
+            server = profile.signer.relay.dns01.rfc2136.server;
+            zone = profile.signer.relay.dns01.rfc2136.zone;
+            tsig_key_name = profile.signer.relay.dns01.rfc2136.tsigKeyName;
+            tsig_key_secret = profile.signer.relay.dns01.rfc2136.tsigKeySecret;
+            tsig_algorithm = profile.signer.relay.dns01.rfc2136.tsigAlgorithm;
+          };
+          propagation = {
+            mode = profile.signer.relay.dns01.propagation.mode;
+            delay_secs = profile.signer.relay.dns01.propagation.delaySecs;
+          };
+        };
+      };
       signerSection =
         { backend = profile.signer.backend; }
         // lib.optionalAttrs (profile.signer.backend == "relay") {
-          relay = {
-            directory_url = profile.signer.relay.directoryUrl;
-            challenge_strategy = profile.signer.relay.challengeStrategy;
-          };
+          relay = relaySection;
         }
         // lib.optionalAttrs (profile.signer.backend == "local_ca") {
           local_ca = {
