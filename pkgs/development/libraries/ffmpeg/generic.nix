@@ -883,6 +883,9 @@ stdenv.mkDerivation (
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
+    # FFmpeg >= 8.1 compiles some Vulkan filters' shaders with glslc at build
+    # time; without it configure silently drops e.g. scale_vulkan.
+    ++ optionals (withVulkan && lib.versionAtLeast version "8.1") [ shaderc.bin ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
     buildInputs =
