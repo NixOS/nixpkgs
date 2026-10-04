@@ -8,7 +8,6 @@
       { config, pkgs, ... }:
       {
         testing.initrdBackdoor = true;
-        boot.initrd.systemd.enable = true;
         boot.initrd.systemd.contents."/etc/msg".text = "foo";
         boot.initrd.network = {
           enable = true;

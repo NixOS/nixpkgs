@@ -10,7 +10,6 @@
       virtualisation.rootDevice = "/dev/vda1";
 
       boot.initrd.systemd = {
-        enable = true;
         repart = {
           enable = true;
           device = "/dev/vda";

@@ -3,7 +3,6 @@
 
   nodes.machine = {
     virtualisation.useEFIBoot = true;
-    boot.initrd.systemd.enable = true;
     testing.initrdBackdoor = true;
   };
 

@@ -55,10 +55,7 @@
         useEFIBoot = true;
       };
 
-      boot = {
-        loader.grub.enable = false;
-        initrd.systemd.enable = true;
-      };
+      boot.loader.grub.enable = false;
 
       system.image.id = "nixos-appliance";
 
