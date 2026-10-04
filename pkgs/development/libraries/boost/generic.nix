@@ -208,8 +208,9 @@ stdenv.mkDerivation {
     # Backports https://github.com/boostorg/context/pull/337 which fixes a regression that breaks
     # std::uncaught_exceptions for abandoned coroutines under libstdc++ and fcontext implementation.
     # This bug also caused subtle breakage in Nix. See https://github.com/NixOS/nix/issues/16174.
+    # Already fixed upstream as of 1.92.0, so the backport no longer applies there.
     ++
-      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.93.0")
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.92.0")
         (fetchpatch {
           url = "https://github.com/boostorg/context/commit/5883212311535a0046031d74d1568ae173c1e35b.patch";
           relative = "include";
