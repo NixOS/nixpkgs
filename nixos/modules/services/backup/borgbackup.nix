@@ -220,10 +220,9 @@ let
           )}
       '';
 
-  # Returns a singleton list, due to usage of lib.optional
   mkBorgWrapper =
     name: cfg:
-    lib.optional (cfg.wrapper != "" && cfg.wrapper != null) (mkWrapperDrv {
+    mkWrapperDrv {
       original = lib.getExe config.services.borgbackup.package;
       name = cfg.wrapper;
       set = {
@@ -232,7 +231,58 @@ let
       // (mkPassEnv cfg)
       // cfg.environment;
       extraArgs = cfg.extraArgs or null;
-    });
+    };
+
+  mkBackupContractScript =
+    name: backup:
+    let
+      script = mkBorgWrapper name backup;
+    in
+    # I chose to base the contract script on the existing script
+    # to avoid duplicating the environment variables logic.
+    # Similarly, I based the backup command on the systemd service
+    # because it already handled giving the source directories.
+    # I prioritized a small diff size.
+    pkgs.writeShellApplication {
+      name = "borgbackup-${name}";
+      text = ''
+        usage() {
+          echo "$0 snapshots"
+          echo "$0 backup"
+          echo "$0 restore <snapshot>"
+          echo "$0 exec <arg> [<arg>...]"
+        }
+
+        if [ -z "''${1:-}" ]; then
+          usage
+          exit 0
+        fi
+
+        if [ "$1" = "restore" ]; then
+          shift
+          snapshot="$1"
+
+          echo "Will restore snapshot '$snapshot'"
+
+          (cd / && exec ${script}/bin/borg-job-${name} extract "::$snapshot")
+        elif [ "$1" = "backup" ]; then
+          shift
+
+          systemctl start --wait borgbackup-job-${name}
+        elif [ "$1" = "snapshots" ]; then
+          shift
+
+          ${script}/bin/borg-job-${name} list --short
+        elif [ "$1" = "exec" ]; then
+          shift
+
+          exec ${script}/bin/borg-job-${name} "$@"
+        else
+          usage
+          exit 1
+        fi
+      '';
+    };
 
   # Paths listed in ReadWritePaths must exist before service is started
   mkTmpfiles =
@@ -423,7 +473,11 @@ in
 
             paths = lib.mkOption {
               type = with lib.types; nullOr (coercedTo str lib.singleton (listOf str));
-              default = null;
+              default =
+                if config.fileBackupContract == null then
+                  null
+                else
+                  config.fileBackupContract.input.sourceDirectories;
               description = ''
                 Path(s) to back up.
                 Mutually exclusive with {option}`dumpCommand`.
@@ -518,7 +572,8 @@ in
                 User or group need read permission
                 for the specified {option}`paths`.
               '';
-              default = "root";
+              default =
+                if config.fileBackupContract == null then "root" else config.fileBackupContract.input.user;
             };
 
             group = lib.mkOption {
@@ -603,7 +658,9 @@ in
                 Can not be set when {option}`createCommand` is set to
                 `import-tar`.
               '';
-              default = [ ];
+              default = lib.optionals (config.fileBackupContract == null) (
+                map (n: "sh:**/${n}") config.fileBackupContract.input.excludePatterns
+              );
               example = [
                 "/home/*/.cache"
                 "/nix"
@@ -830,6 +887,79 @@ in
               default = [ ];
               example = [ "--cleanup-commits" ];
             };
+
+            fileBackupContract = lib.mkOption {
+              description = "Provider of the fileBackup contract.";
+              default = null;
+              type = lib.types.nullOr (
+                lib.types.submodule {
+                  options = {
+                    input = {
+                      user = lib.mkOption {
+                        description = ''
+                          As which user the backup should run.
+                        '';
+                        type = lib.types.str;
+                        example = "vaultwarden";
+                      };
+
+                      sourceDirectories = lib.mkOption {
+                        description = ''
+                          Directories to backup.
+                        '';
+                        type = lib.types.nonEmptyListOf lib.types.str;
+                        example = [
+                          "/var/lib/vaultwarden"
+                        ];
+                      };
+
+                      excludePatterns = lib.mkOption {
+                        description = ''
+                          File patterns to exclude.
+                        '';
+                        type = lib.types.listOf lib.types.str;
+                        default = [ ];
+                      };
+                    };
+                    output = {
+                      script = lib.mkOption {
+                        description = ''
+                          Script that provide the following commands
+                          and runs with the necessary environment variables:
+
+                          - Listing snapshots:
+
+                            ```bash
+                            <script> snaphots
+                            ```
+
+                          - Restore a snapshot:
+
+                            ```bash
+                            <script> restore <snapshot>
+                            ```
+
+                          - Take a backup:
+
+                            ```bash
+                            <script> backup
+                            ```
+
+                          - Pass a custom command to the underlying provider:
+
+                            ```bash
+                            <script> exec <arg> [<arg> ...]
+                            ```
+                        '';
+                        type = lib.types.package;
+                        default = mkBackupContractScript name config;
+                        defaultText = "/path/to/script";
+                      };
+                    };
+                  };
+                }
+              );
+            };
           };
         }
       )
@@ -961,7 +1091,9 @@ in
       environment.systemPackages = [
         config.services.borgbackup.package
       ]
-      ++ (lib.flatten (lib.mapAttrsToList mkBorgWrapper jobs));
+      ++ (lib.mapAttrsToList mkBorgWrapper (
+        lib.filterAttrs (_: cfg: cfg.wrapper != "" && cfg.wrapper != null) jobs
+      ));
     }
   );
 }
