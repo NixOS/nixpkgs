@@ -157,6 +157,7 @@ in
     };
 
     systemd.services.acme-proxy = {
+      description = "acme-proxy ACME (RFC 8555) server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
@@ -168,6 +169,9 @@ in
         Group = cfg.group;
         UMask = "0077";
         DynamicUser = true;
+        # WorkingDirectory matches StateDirectory: the binary auto-generates
+        # TLS material (server.pem/key, ca.pem/key, CRL, relay keys) and the
+        # SQLite database relative to cwd on first boot.
         StateDirectory = "acme-proxy";
         WorkingDirectory = cfg.dataDir;
         Environment = "ACME_PROXY_CONFIG=/etc/acme-proxy/config.toml";
