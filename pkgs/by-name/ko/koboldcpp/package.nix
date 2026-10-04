@@ -4,9 +4,12 @@
   buildPackages,
   cacert,
   cloudflared,
+  copyDesktopItems,
   coreutils,
   curl,
   fetchFromGitHub,
+  icoutils,
+  makeDesktopItem,
   stdenv,
   runtimeShell,
   replaceVars,
@@ -228,6 +231,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
+    copyDesktopItems
+    icoutils
     python3Packages.wrapPython
   ]
   ++ lib.optionals cublasSupport [
@@ -295,6 +300,29 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildFlags = builtLibraries;
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "koboldcpp";
+      desktopName = "KoboldCpp (Launcher)";
+      comment = "Run GGML and GGUF models with the KoboldAI interface";
+      icon = "koboldcpp";
+      exec = "koboldcpp";
+      categories = [
+        "Utility"
+        "TextTools"
+      ];
+      keywords = [
+        "AI"
+        "GGML"
+        "GGUF"
+        "KoboldAI"
+        "LLM"
+      ];
+      startupNotify = true;
+      terminal = true;
+    })
+  ];
+
   installPhase = lib.concatStringsSep "\n" [
     ''
       runHook preInstall
@@ -306,6 +334,16 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       install -m644 json_to_gbnf.py kcpp_agent.py -t "$installDir"
       install -Dm755 ${lib.escapeShellArgs (map (library: "${library}.so") builtLibraries)} "$installDir"
       cp -r --no-preserve=mode embd_res kcpp_adapters -t "$installDir"
+    ''
+
+    # Install the project licenses and icon alongside the generated desktop
+    # item
+    ''
+      install -Dm644 LICENSE.md MIT_LICENSE_GGML_SDCPP_LLAMACPP_ONLY.md \
+        -t "$out/share/licenses/koboldcpp"
+      mkdir -p "$out/share/icons/hicolor/64x64/apps"
+      icotool --extract --index 1 \
+        --output "$out/share/icons/hicolor/64x64/apps/koboldcpp.png" niko.ico
     ''
 
     (lib.optionalString metalSupport ''
@@ -349,6 +387,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     PYTHONPATH="$installDir" ${python3Packages.python.interpreter} -c \
       'from json_to_gbnf import SchemaConverter'
 
+    # Check the desktop integration artifacts added by this variant-independent
+    # package
+    test -f "$out/share/applications/koboldcpp.desktop"
+    test -f "$out/share/icons/hicolor/64x64/apps/koboldcpp.png"
+    test -f "$out/share/licenses/koboldcpp/LICENSE.md"
+    test -f "$out/share/licenses/koboldcpp/MIT_LICENSE_GGML_SDCPP_LLAMACPP_ONLY.md"
+
     # Verify every selected backend was installed
     ${lib.concatMapStringsSep "\n" (name: ''
       test -f "$installDir/${name}.so"
@@ -386,6 +431,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       with lib.licenses;
       [
         agpl3Only
+        mit
       ]
       ++ lib.optional cublasSupport nvidiaCudaRedist;
     mainProgram = "koboldcpp";
