@@ -1556,6 +1556,7 @@
   ./services/search/sonic-server.nix
   ./services/search/tika.nix
   ./services/search/typesense.nix
+  ./services/security/acme-proxy.nix
   ./services/security/aesmd.nix
   ./services/security/authelia.nix
   ./services/security/bitwarden-directory-connector-cli.nix
