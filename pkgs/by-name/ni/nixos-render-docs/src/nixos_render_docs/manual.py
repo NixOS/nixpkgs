@@ -617,6 +617,9 @@ document.addEventListener("DOMContentLoaded", createObserver);
 def _to_base26(n: int) -> str:
     return (_to_base26(n // 26) if n > 26 else "") + chr(ord("A") + n % 26)
 
+# lowercase words joined by dashes
+_ID_SEGMENT = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
 def _id_segment(fname: str) -> str:
     stem = fname.removesuffix(".md").lower()
@@ -624,17 +627,16 @@ def _id_segment(fname: str) -> str:
 
 @dataclass
 class ConfigLeaf:
+    id: str
     file: str
     label: str | None = None
     id_prefix: str | None = None
 
 @dataclass
 class ConfigGroup:
+    id: str
     label: str
     children: list["ConfigNode"]
-    id: str | None = None
-    # migration support for 'auto-id-prefix'
-    # id-prefix can only be set on a group, matching the legacy "includes" behavior
     id_prefix: str | None = None
 
 # a collection expands to one page per group found in a generated data file.
@@ -717,8 +719,16 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         return ConfigManifest(items=items, open=frozenset(open_ids))
 
     def _parse_config_nodes(self, items: Any, where: str, src: str) -> list[ConfigNode]:
-        return [self._parse_config_node(item, f"{where}[{idx}]", src)
+        nodes = [self._parse_config_node(item, f"{where}[{idx}]", src)
                 for idx, item in enumerate(items)]
+        seen = set()
+        for item in items:
+            nid = item.get("id")
+            if nid:
+                if nid in seen:
+                    raise SrcError(src=src, description=f"{where}: id must be unique, got {nid}")
+                seen.add(nid)
+        return nodes
 
     def _parse_config_node(self, item: Any, where: str, src: str) -> ConfigNode:
         if not isinstance(item, dict):
@@ -748,19 +758,25 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
                     src=src,
                     description=f"{where}: a collection accepts neither 'label' nor 'id-prefix'")
             return ConfigCollection(collection=item['collection'], type=typ)
+
+        nid = item.get('id')
+        if not isinstance(nid, str) or not _ID_SEGMENT.fullmatch(nid):
+            raise SrcError(
+                src=src,
+                description=f"{where}: 'id' must be lowercase letters, digits and dashes, got {nid!r}")
+
         if kinds[0] == 'file':
             if not isinstance(item['file'], str):
                 raise SrcError(src=src, description=f"{where}: 'file' must be a string")
-            return ConfigLeaf(file=item['file'], label=label, id_prefix=id_prefix)
+
+            return ConfigLeaf(id=nid, file=item['file'], label=label, id_prefix=id_prefix)
+
         children = item['children']
         if not isinstance(children, list) or not children:
             raise SrcError(src=src, description=f"{where}: 'children' must be a non-empty array")
         if not isinstance(label, str) or not label:
             raise SrcError(src=src, description=f"{where}: a group requires a non-empty 'label'")
-        gid = item.get('id')
-        if gid is not None and (not isinstance(gid, str) or not gid):
-            raise SrcError(src=src, description=f"{where}: 'id' must be a non-empty string")
-        return ConfigGroup(label=label, children=self._parse_config_nodes(children, where, src), id=gid, id_prefix=id_prefix)
+        return ConfigGroup(label=label, children=self._parse_config_nodes(children, where, src), id=nid, id_prefix=id_prefix)
 
     def _prepend_config(self, infile: Path, tokens: list[Token]) -> None:
         if self._config is None:
