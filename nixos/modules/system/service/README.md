@@ -54,6 +54,40 @@ Many services implement automatic reloading or reloading on e.g. `SIGUSR1`, but 
 - **Simple attribute structure**: Unlike `environment.etc`, `configData` uses a simpler structure with just `enable`, `name`, `text`, `source`, and `path` attributes. Complex ownership options were omitted for simplicity and portability.
   Per-service user creation is still TBD.
 
+## Abstract lifecycle, dependency, runtime and restart options
+
+Service management backends other than systemd (dinit, runit, s6, FreeBSD rc.d)
+need more than `process.argv` and `configData` to translate a service. The
+portable base therefore gained a minimal, init-system-independent option set:
+
+- **`enable`**: A Nix-level switch. When `false`, the service manager generates
+  nothing for the service, including its sub-services. This resolves the
+  earlier ambiguity about `enable` by fixing its meaning: it is not "present
+  but stopped" (that is a backend concern, e.g. a systemd unit without
+  `wantedBy`), it is "not generated at all".
+- **`dependencies`** (`after`, `before`, `requires`, `wants`): Express the
+  dependency graph between sibling services. Values are names of services at
+  the same nesting level; each backend resolves them to its own mechanism
+  (systemd `After=`/`Before=`/`Requires=`/`Wants=`, dinit `depends-on`, a runit
+  dependency graph, rc.d `REQUIRE`). Backends construct configurations for
+  alternative init systems with proper start ordering from these.
+- **`runtime`** (`user`, `group`, `workingDirectory`): Runtime context of the
+  process. `group` defaults to the configured `user`.
+- **`environment`**: Environment variables for the process.
+- **`process.type`** (`simple`, `oneshot`, `forking`, `notify`): Lifecycle
+  shape of the process. systemd maps `notify` to `Type=notify` only when the
+  service opts into a notification protocol; `oneshot` additionally implies
+  `RemainAfterExit`.
+- **`process.stopSignal`**, **`process.startTimeout`**, **`process.stopTimeout`**:
+  Process lifecycle tuning. `null` means "use the backend default".
+- **`restart`** (`policy`, `delay`): Restart behavior shared by the backends.
+
+The systemd implementation (`modules/system/service/systemd/`) translates all
+of these into unit configuration; dependency resolution against the absolute
+unit names happens there (`system.nix`, `unitOrder`), because only the
+translation layer knows the name of the surrounding service tree level.
+Backends for other init systems consume the same abstract options.
+
 ## No `pkgs` module argument
 
 The modular service infrastructure avoids exposing `pkgs` as a module argument to service modules. Instead, derivations and builder functions are provided through lexical closure, making dependency relationships explicit and avoiding uncertainty about where dependencies come from.
