@@ -29,6 +29,8 @@
       cdrtools
     ];
 
+    services.dbus.packages = [ pkgs.kdePackages.k3b ];
+
     security.wrappers = {
       cdrdao = {
         setuid = true;

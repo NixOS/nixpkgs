@@ -175,6 +175,9 @@ in
     # ot-ctl can be used to query the router instance
     environment.systemPackages = [ cfg.package ];
 
+    # otbr-agent ships a D-Bus service file.
+    services.dbus.packages = [ cfg.package ];
+
     # Shared by the agent and web interface for the OpenThread control socket.
     users.groups.otbr = { };
 

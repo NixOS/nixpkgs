@@ -166,6 +166,12 @@ in
       ++ lib.optional cfg.enableScreensaver xfce4-screensaver
     ) excludePackages;
 
+    # Packages from above that ship D-Bus service files.  The D-Bus daemons do
+    # not look at the system profile, so they have to be registered explicitly.
+    services.dbus.packages = utils.removePackagesByName (
+      [ pkgs.xfce4-notifyd ] ++ lib.optional cfg.enableScreensaver pkgs.xfce4-screensaver
+    ) excludePackages;
+
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gnome3;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;

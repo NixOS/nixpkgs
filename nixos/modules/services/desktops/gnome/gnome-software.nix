@@ -21,6 +21,10 @@
       pkgs.gnome-software
     ];
 
+    services.dbus.packages = [
+      pkgs.gnome-software
+    ];
+
     systemd.packages = [
       pkgs.gnome-software
     ];

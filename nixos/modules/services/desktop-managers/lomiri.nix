@@ -145,11 +145,23 @@ in
         lomiri-download-manager
       ];
 
-      services.dbus.packages = with pkgs.lomiri; [
+      # Packages from above that ship D-Bus service files.  The D-Bus daemons
+      # do not look at the system profile, so they have to be registered
+      # explicitly.
+      services.dbus.packages = [
+        pkgs.ubports-click
+      ]
+      ++ (with pkgs.lomiri; [
         hfd-service
         libusermetrics
+        lomiri-content-hub
         lomiri-download-manager
-      ];
+        lomiri-history-service
+        lomiri-telephony-service
+        lomiri-thumbnailer
+        lomiri-url-dispatcher
+        mediascanner2
+      ]);
 
       services.accounts-daemon.enable = true;
       services.udisks2.enable = true;
