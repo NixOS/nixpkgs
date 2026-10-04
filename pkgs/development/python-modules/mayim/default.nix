@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "mayim";
-  version = "1.3.2";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ahopkins";
     repo = "mayim";
     tag = "v${version}";
-    hash = "sha256-HEnzHpgTbEZOBzUG7DDIO9YRWIoLroLY+Spq/jkMib0=";
+    hash = "sha256-QoX3btxsnlymmDuCmZxmtYrgt48RfGqA2YgXo0ymOMc=";
   };
 
   build-system = [
