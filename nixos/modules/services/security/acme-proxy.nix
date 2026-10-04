@@ -88,26 +88,6 @@ in
       '';
     };
 
-    user = lib.mkOption {
-      type = lib.types.str;
-      default = "acme-proxy";
-      description = ''
-        User account under which the service runs. A system user is added
-        automatically only when this option is left at its default; if you
-        change it, declare the user yourself.
-      '';
-    };
-
-    group = lib.mkOption {
-      type = lib.types.str;
-      default = "acme-proxy";
-      description = ''
-        Group under which the service runs. A system group is added
-        automatically only when this option is left at its default; if you
-        change it, declare the group yourself.
-      '';
-    };
-
     openFirewall = lib.mkEnableOption ''
       opening the TCP port the ACME listener binds to (taken from
       `settings.server.bind_address`)'';
@@ -145,17 +125,6 @@ in
 
     environment.etc."acme-proxy/config.toml".source = configFile;
 
-    users.users = lib.mkIf (cfg.user == "acme-proxy") {
-      acme-proxy = {
-        isSystemUser = true;
-        group = cfg.group;
-        home = cfg.dataDir;
-      };
-    };
-    users.groups = lib.mkIf (cfg.group == "acme-proxy") {
-      acme-proxy = { };
-    };
-
     systemd.services.acme-proxy = {
       description = "acme-proxy ACME (RFC 8555) server";
       wantedBy = [ "multi-user.target" ];
@@ -165,9 +134,12 @@ in
 
       serviceConfig = {
         Type = "simple";
-        User = cfg.user;
-        Group = cfg.group;
         UMask = "0077";
+        # Run as a dynamic user allocated by systemd from the 60000-64999
+        # range. systemd.exec(5): when DynamicUser=yes, User= and Group= are
+        # ignored, and StateDirectory is materialized below /var/lib/private
+        # with a /var/lib/<name> symlink so the service sees it as
+        # /var/lib/acme-proxy.
         DynamicUser = true;
         # WorkingDirectory matches StateDirectory: the binary auto-generates
         # TLS material (server.pem/key, ca.pem/key, CRL, relay keys) and the
