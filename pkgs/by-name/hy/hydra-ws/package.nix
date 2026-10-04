@@ -1,0 +1,51 @@
+{
+  lib,
+  hydra,
+  rustPlatform,
+  pkg-config,
+  protobuf,
+  rust-jemalloc-sys,
+  nixosTests,
+}:
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "hydra-ws";
+  inherit (hydra) version src;
+  __structuredAttrs = true;
+
+  cargoHash = "sha256-ULaL4B00O0ApZbBkv7GtLZWAoJI/ZNFPr+0FWsNp3OE=";
+
+  cargoBuildFlags = [
+    "--package"
+    "hydra-ws"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
+
+  buildInputs = [
+    protobuf
+    rust-jemalloc-sys
+  ];
+
+  # The unit tests spin up a PostgreSQL instance, which is not available in the
+  # sandbox.
+  doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) hydra; };
+
+  meta = {
+    description = "WebSocket server streaming build logs for the Hydra web interface";
+    homepage = "https://github.com/NixOS/hydra";
+    license = lib.licenses.gpl3Only;
+    mainProgram = "hydra-ws";
+    maintainers = with lib.maintainers; [
+      conni2461
+      das_j
+      helsinki-Jo
+      mindavi
+    ];
+    platforms = lib.platforms.linux;
+  };
+})
