@@ -1,4 +1,21 @@
-// @ts-nocheck
+import type { MergeProps } from './merge.ts'
+
+type ReviewersProps = Pick<
+  MergeProps,
+  | 'github'
+  | 'context'
+  | 'core'
+  | 'log'
+  | 'dry'
+  | 'pull_request'
+  | 'reviews'
+  | 'getUser'
+> & {
+  user_maintainers: number[]
+  team_maintainers: number[]
+  owners: string[]
+  getTeam: (id: number) => Promise<{ slug: string } | null>
+}
 export async function handleReviewers({
   github,
   context,
@@ -12,19 +29,23 @@ export async function handleReviewers({
   owners,
   getUser,
   getTeam,
-}) {
+}: ReviewersProps) {
   const pull_number = pull_request.number
 
   // Users that the PR has already reached, e.g. they've left a review or have been requested for one
   const users_reached = new Set([
-    ...pull_request.requested_reviewers.map(({ login }) => login.toLowerCase()),
+    ...(pull_request.requested_reviewers ?? []).map(({ login }) =>
+      login.toLowerCase(),
+    ),
     ...reviews.map(({ user }) => user.login.toLowerCase()),
   ])
   log('reviewers - users_reached', Array.from(users_reached).join(', '))
 
   // Same for teams
   const teams_reached = new Set([
-    ...pull_request.requested_teams.map(({ slug }) => slug.toLowerCase()),
+    ...(pull_request.requested_teams ?? []).map(({ slug }) =>
+      slug.toLowerCase(),
+    ),
     ...reviews.flatMap(({ onBehalfOf }) =>
       onBehalfOf.nodes.map(({ slug }) => slug.toLowerCase()),
     ),
@@ -53,7 +74,7 @@ export async function handleReviewers({
           return user?.login?.toLowerCase()
         }),
       )
-    ).filter(Boolean),
+    ).filter((value): value is string => !!value),
     ...owners
       .filter((handle) => handle && !handle.includes('/'))
       .map((handle) => handle.toLowerCase()),
@@ -77,14 +98,16 @@ export async function handleReviewers({
             })
             return username
           } catch (e) {
-            if (e.status !== 404) throw e
+            if (!(e instanceof Error && 'status' in e && e.status === 404)) {
+              throw e
+            }
             core.warning(
               `PR #${pull_number}: User ${username} cannot be requested for review because they don't exist or are not a repository collaborator, ignoring. They probably missed the automated invite to the maintainers team (see <https://github.com/NixOS/nixpkgs/issues/234293>).`,
             )
           }
         }),
       )
-    ).filter(Boolean),
+    ).filter((value): value is string => !!value),
   )
   log('reviewers - users_to_reach', Array.from(users_to_reach).join(', '))
 
@@ -98,7 +121,7 @@ export async function handleReviewers({
           return team?.slug?.toLowerCase()
         }),
       )
-    ).filter(Boolean),
+    ).filter((value): value is string => !!value),
     ...owners
       .map((handle) => handle.split('/'))
       .filter(
@@ -120,14 +143,16 @@ export async function handleReviewers({
             })
             return slug
           } catch (e) {
-            if (e.status !== 404) throw e
+            if (!(e instanceof Error && 'status' in e && e.status === 404)) {
+              throw e
+            }
             core.warning(
               `PR #${pull_number}: Team ${slug} cannot be requested for review because it doesn't exist or has no repository permissions, ignoring. Probably wasn't added to the nixpkgs-maintainers team (see https://github.com/NixOS/nixpkgs/tree/master/maintainers#maintainer-teams)`,
             )
           }
         }),
       )
-    ).filter(Boolean),
+    ).filter((value): value is string => !!value),
   )
   log('reviewers - teams_to_reach', Array.from(teams_to_reach).join(', '))
 
