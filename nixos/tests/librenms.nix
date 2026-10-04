@@ -1,4 +1,9 @@
-{ pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   api_token = "f87f42114e44b63ad1b9e3c3d33d6fbe"; # random md5 hash
@@ -14,6 +19,10 @@ in
     environment.systemPackages = with pkgs; [
       curl
       jq
+    ];
+
+    networking.firewall.allowedUDPPorts = [
+      514
     ];
 
     services.librenms = {
@@ -33,6 +42,7 @@ in
       settings = {
         enable_billing = true;
       };
+      ingestSyslog.enable = true;
     };
 
     # systemd oneshot to create a dummy admin user and a API token for testing
@@ -76,11 +86,22 @@ in
         syslocation Testcity, Testcountry
         syscontact Testi mc Test <test@example.com>
       '';
+    };
 
+    services.rsyslogd = {
+      enable = true;
+      defaultConfig = ''
+        *.*  action(type="omfwd" target="librenms" port="${toString config.nodes.librenms.services.librenms.ingestSyslog.syslogPort}" protocol="udp"
+                    action.resumeRetryCount="100"
+                    queue.type="linkedList" queue.size="10000")
+      '';
     };
   };
 
   testScript = ''
+    import json
+    import time
+
     start_all()
 
     snmphost.wait_for_unit("snmpd.service")
@@ -97,5 +118,21 @@ in
 
     # wait until snmphost gets polled
     librenms.wait_until_succeeds("test $(curl -H 'X-Auth-Token: ${api_token}' http://localhost/api/v0/devices/snmphost | jq -Mr .devices[0].last_polled) != 'null'")
+
+    # wait until syslog messages appear
+    start = time.time()
+    timeout = 60
+    while True:
+        logs = json.loads(str(librenms.wait_until_succeeds("curl -H 'X-Auth-Token: ${api_token}' http://localhost/api/v0/logs/syslog/snmphost")))
+        try:
+            if logs['logs']:
+                assert logs['logs'][0]['msg']
+                break
+            elapsed = time.time() - start
+            if elapsed >= timeout:
+                raise TimeoutError
+            continue
+        except KeyError:
+            continue
   '';
 }
