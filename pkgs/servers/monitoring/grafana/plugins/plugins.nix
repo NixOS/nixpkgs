@@ -26,6 +26,7 @@
   grafana-sentry-datasource = callPackage ./grafana-sentry-datasource { };
   grafana-worldmap-panel = callPackage ./grafana-worldmap-panel { };
   jaeger = callPackage ./jaeger { };
+  loki = callPackage ./loki { };
   marcusolsson-calendar-panel = callPackage ./marcusolsson-calendar-panel { };
   marcusolsson-csv-datasource = callPackage ./marcusolsson-csv-datasource { };
   marcusolsson-dynamictext-panel = callPackage ./marcusolsson-dynamictext-panel { };
