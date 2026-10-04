@@ -61,7 +61,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   makeWrapperArgs = [
-    ''--prefix PATH : "${lib.makeBinPath archivers}"''
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath archivers)
   ];
 
   build-system = [
