@@ -12,6 +12,7 @@
   nix-update-script,
   node-gyp,
   nodejs,
+  patchelf,
   pkg-config,
   python3,
   spdx-license-list-data,
@@ -74,6 +75,7 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       copyDesktopItems
+      patchelf
       pkg-config
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -199,6 +201,15 @@ stdenv.mkDerivation (
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       for shell in bash fish zsh; do
         installShellCompletion --cmd t3 --"$shell" <("$out/bin/t3" --completions "$shell")
+      done
+    '';
+
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Electron's Node runtime does not provide libstdc++ for the bundled
+      # node-pty prebuild. Patch only the host module; the vendored tree also
+      # contains native binaries for other platforms.
+      for module in "$out"/libexec/t3code/node_modules/.pnpm/node-pty@*/node_modules/node-pty/prebuilds/linux-${stdenv.hostPlatform.node.arch}/pty.node; do
+        patchelf --add-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} "$module"
       done
     '';
 
