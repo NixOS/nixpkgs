@@ -5,7 +5,6 @@ from html.entities import name2codepoint
 from pathlib import Path
 
 import pytest
-
 from nixos_render_docs.manual import HTMLConverter, HTMLParameters
 
 
@@ -512,10 +511,12 @@ def test_config_id_prefix_fails(tmp_path: Path) -> None:
 
 def test_config_id_must_be_url_safe(tmp_path: Path) -> None:
     for bad in (
-        {"file": "intro.md"},
-        {"id": "Intro", "file": "intro.md"},
-        {"id": "a/b", "file": "intro.md"},
-        {"id": "", "file": "intro.md"},
+        {"file": "intro.md"}, # missing id
+        {"id": "Intro", "file": "intro.md"}, # No uppercase
+        {"id": "a/b", "file": "intro.md"}, # no "/" (or other special characters)
+        {"id": "", "file": "intro.md"}, # no empty strings
+        {"id": "0a", "file": "intro.md"}, # no leading number
+        {"id": "foo-bar-", "file": "intro.md"}, # no trailing -
     ):
         with pytest.raises(RuntimeError) as excinfo:
             _render_with_config(
@@ -523,7 +524,7 @@ def test_config_id_must_be_url_safe(tmp_path: Path) -> None:
                 {"items": [bad]},
                 {"intro.md": "# Introduction {#intro}\n\nBody.\n"},
             )
-        assert "'id' must be lowercase letters, digits and dashes" in str(excinfo.value.__cause__)
+        assert "'id' must be lowercase letters and digits optionally separated by dashes" in str(excinfo.value.__cause__)
 
 
 _NIXDOC_EXPORT = {

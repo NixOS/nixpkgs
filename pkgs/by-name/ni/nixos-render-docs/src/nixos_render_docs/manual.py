@@ -618,7 +618,7 @@ def _to_base26(n: int) -> str:
     return (_to_base26(n // 26) if n > 26 else "") + chr(ord("A") + n % 26)
 
 # lowercase words joined by dashes
-_ID_SEGMENT = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+_ID_SEGMENT = re.compile(r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*")
 
 _NON_ALNUM = re.compile(r"[^a-z0-9]+")
 def _id_segment(fname: str) -> str:
@@ -726,7 +726,7 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
             nid = item.get("id")
             if nid:
                 if nid in seen:
-                    raise SrcError(src=src, description=f"{where}: id must be unique, got {nid}")
+                    raise SrcError(src=src, description=f"{where}: `id` must be unique within `children`, got duplicate `{nid!r}`")
                 seen.add(nid)
         return nodes
 
@@ -763,7 +763,8 @@ class HTMLConverter(BaseConverter[ManualHTMLRenderer]):
         if not isinstance(nid, str) or not _ID_SEGMENT.fullmatch(nid):
             raise SrcError(
                 src=src,
-                description=f"{where}: 'id' must be lowercase letters, digits and dashes, got {nid!r}")
+                description=f"{where}: 'id' must be lowercase letters and digits optionally separated by dashes (regex {_ID_SEGMENT!r}), got {nid!r}"
+            )
 
         if kinds[0] == 'file':
             if not isinstance(item['file'], str):
