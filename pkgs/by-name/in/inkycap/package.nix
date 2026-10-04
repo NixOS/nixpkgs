@@ -18,13 +18,13 @@
 }:
 
 let
-  version = "26.9.6";
+  version = "26.10.6";
   src = fetchFromForgejo {
     domain = "codefloe.com";
     owner = "InkyCap";
     repo = "app";
     tag = "v${version}";
-    hash = "sha256-X4KjRHUDYx0C61gBa5vr9i1u0DOZok1AUTwe6srVhy4=";
+    hash = "sha256-4ezgFmNOb3K7rvqL1EOFuLlcp7TINzHKL4w/Ohyb9Ew=";
   };
   changelog = "https://codefloe.com/InkyCap/app/releases/tag/v${version}";
   homepage = "http://inkycap.org/";
@@ -39,7 +39,7 @@ let
     pname = "inkycap-frontend";
     inherit version src;
 
-    npmDepsHash = "sha256-vXf4W3U5EIzqHRdUkIy1z+0+umMbR1AflQ31pJCo37M=";
+    npmDepsHash = "sha256-lwxoLDJJ+GMLMygIvmwPk3oxXjHoybF3omz9cl2aAeE=";
 
     # The npm hook installs with `npm ci --ignore-scripts`, so the
     # postinstall script (patch-package) never runs. Apply the patches
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-NHlLURI2O2W28gAWGZd6Hx7lWOXn8LNeoiubReRA5Bo=";
+    hash = "sha256-nRT0s6wRQpfnfeO4VNzIA2vbhMTJ3SI9tNRcZkgdkGI=";
   };
   buildAndTestSubdir = "src-tauri";
 
