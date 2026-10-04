@@ -44,9 +44,9 @@ python3Packages.buildPythonApplication {
     translitcodec
   ];
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   # no tests
   doCheck = false;
