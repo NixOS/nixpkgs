@@ -11,9 +11,26 @@
   gradle,
   makeBinaryWrapper,
   gitMinimal,
+  runCommand,
   versionCheckHook,
+  zip,
 }:
 
+let
+  # The static site template is loaded at runtime from the classpath resource
+  # /static.zip. Upstream gitignores src/main/resources/static.zip and generates
+  # it with ui.sh, which copies assets out of a sibling structurizr/ui checkout,
+  # so it is absent from the git tree and has to be rebuilt here.
+  #
+  # This revision is the one whose assets match the 2025.05.28 release
+  # byte-for-byte; bump it alongside version.
+  ui = fetchFromGitHub {
+    owner = "structurizr";
+    repo = "ui";
+    rev = "b9b0765c69544be2afcc1033657ee4122cc2e76b";
+    hash = "sha256-4up+aMBETdDTFwowtj+VPz2oOxim4zuKO+Kvzq9pULE=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "structurizr-cli";
   version = "2025.05.28";
@@ -70,12 +87,36 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/main/resources/build.properties \
       --subst-var-by BUILD_NUMBER "${finalAttrs.version}" \
       --subst-var-by BUILD_DATE "1970-01-01T00:00:00Z"
+
+    # Reproduce upstream's ui.sh, which is not part of the build and relies on a
+    # sibling structurizr/ui checkout. Keep this asset list in sync with it.
+    mkdir -p static/js static/css
+    for f in jquery-3.6.3.min.js bootstrap-3.3.7.min.js lodash-4.17.21.js \
+             backbone-1.4.1.js joint-3.6.5.js structurizr.js structurizr-util.js \
+             structurizr-ui.js structurizr-workspace.js structurizr-diagram.js \
+             structurizr-quick-navigation.js structurizr-navigation.js \
+             structurizr-tooltip.js structurizr-embed.js; do
+      cp ${ui}/src/js/"$f" static/js/
+    done
+    for f in bootstrap-3.3.7.min.css joint-3.6.5.css structurizr-diagram.css \
+             structurizr-static.css structurizr-static-dark.css; do
+      cp ${ui}/src/css/"$f" static/css/
+    done
+    cp ${ui}/src/static.html static/index.html
+
+    # Normalise mtimes so the archive is reproducible; SOURCE_DATE_EPOCH is
+    # 1980-01-01, which is also the earliest timestamp zip can represent.
+    chmod -R u+w static
+    find static -exec touch -d "@$SOURCE_DATE_EPOCH" {} +
+    (cd static && zip -X -q -r ../src/main/resources/static.zip .)
+    rm -rf static
   '';
 
   nativeBuildInputs = [
     gradle
     makeBinaryWrapper
     gitMinimal
+    zip
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -110,6 +151,40 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
+
+  # versionCheckHook passes even when the static site template is missing, which
+  # is how that breakage shipped unnoticed; exercise a real export instead.
+  passthru.tests.static-export =
+    runCommand "structurizr-cli-static-export"
+      {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      }
+      ''
+        cat > workspace.dsl <<'DSL'
+        workspace {
+          model {
+            u = person "User"
+            s = softwareSystem "System"
+            u -> s "uses"
+          }
+          views {
+            systemContext s {
+              include *
+              autoLayout
+            }
+          }
+        }
+        DSL
+
+        structurizr-cli export -workspace workspace.dsl -format static -output site
+
+        test -f site/index.html
+        test -f site/workspace.js
+        test -f site/js/structurizr-diagram.js
+        test -f site/css/structurizr-static.css
+
+        touch $out
+      '';
 
   meta = {
     description = "Structurizr CLI for publishing C4 architecture diagrams and models";
