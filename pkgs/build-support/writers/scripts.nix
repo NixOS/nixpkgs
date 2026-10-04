@@ -405,9 +405,18 @@ rec {
   writeDash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.dash}"; }) name
+      makeScriptWriter (
+        argsOrScript
+        // {
+          interpreter = "${lib.getExe pkgs.dash}";
+          check = argsOrScript.check or "${lib.getExe pkgs.dash} -n";
+        }
+      ) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.dash}"; } name argsOrScript;
+      makeScriptWriter {
+        interpreter = "${lib.getExe pkgs.dash}";
+        check = "${lib.getExe pkgs.dash} -n";
+      } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to dash
