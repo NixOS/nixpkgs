@@ -10,6 +10,7 @@ let
     concatLists
     concatMap
     concatMapStringsSep
+    elem
     filter
     foldl'
     head
@@ -29,6 +30,8 @@ let
     ;
   inherit (lib.attrsets)
     attrByPath
+    attrNames
+    attrValues
     catAttrs
     optionalAttrs
     showAttrPath
@@ -36,6 +39,9 @@ let
   inherit (lib.strings)
     concatMapStrings
     concatStringsSep
+    hasInfix
+    hasPrefix
+    toLower
     ;
   inherit (lib.types)
     mkOptionType
@@ -564,66 +570,308 @@ rec {
   */
   getFiles = catAttrs "file";
 
+  /**
+    Transform a raw module option set into a base documentation attribute set.
+
+    # Inputs
+
+    `opt`
+
+    : An evaluated module option attribute set (e.g. from `evalModules`).
+
+    # Type
+
+    ```
+    optionToDocItem :: Option -> AttrSet
+    ```
+  */
+  optionToDocItem =
+    opt:
+    let
+      name = showOption opt.loc;
+      visible = opt.visible or true;
+    in
+    {
+      description = opt.description or null;
+      declarations = filter (x: x != unknownModule) opt.declarations;
+      internal = opt.internal or false;
+      visible = if isBool visible then visible else visible == "shallow";
+      readOnly = opt.readOnly or false;
+      type = opt.type.description or "unspecified";
+    }
+    // optionalAttrs (opt ? example) {
+      example = lib.addErrorContext "while evaluating the example of option `${name}`" (
+        renderOptionValue opt.example
+      );
+    }
+    //
+      optionalAttrs
+        (
+          opt ? defaultText
+          || opt ? default
+          # Render emptyValue-based defaults, but only for types without
+          # submodules (e.g. types.submodule). Submodules may evaluate to
+          # error without user defs, and their sub-options are documented
+          # individually, so best to skip those here.
+          || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
+        )
+        {
+          default =
+            lib.addErrorContext
+              "while evaluating the ${
+                if opt ? defaultText then "defaultText" else "default value"
+              } of option `${name}`"
+              (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+        }
+    // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+      inherit (opt) relatedPackages;
+    };
+
+  /**
+    Generic traversal algebra over a module option attribute set hierarchy.
+
+    # Inputs
+
+    `handlers`
+
+    : An attribute set containing optional callback handlers (`onOption`, `onAttrSet`, `empty`).
+
+    # Type
+
+    ```
+    foldOptionSet :: AttrSet -> (OptionSet | Option) -> Any
+    ```
+  */
+  foldOptionSet =
+    {
+      onOption ?
+        doc: subDocs: opt:
+        empty,
+      onAttrSet ? recurse: set: empty,
+      empty ? { },
+      ...
+    }:
+    let
+      recurse =
+        tree:
+        if isOption tree then
+          let
+            v = tree.visible or true;
+            subVisible = if isBool v then v else v == "transparent";
+            ss = tree.type.getSubOptions tree.loc;
+            subDocs = if subVisible && ss != { } then recurse ss else empty;
+          in
+          onOption (optionToDocItem tree) subDocs tree
+        else
+          onAttrSet recurse tree;
+    in
+    recurse;
+
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
   optionAttrSetToDocList = optionAttrSetToDocList' [ ];
 
   optionAttrSetToDocList' =
     _: options:
-    concatMap (
-      opt:
-      let
-        name = showOption opt.loc;
-        visible = opt.visible or true;
-        docOption = {
-          loc = opt.loc;
-          inherit name;
-          description = opt.description or null;
-          declarations = filter (x: x != unknownModule) opt.declarations;
-          internal = opt.internal or false;
-          visible = if isBool visible then visible else visible == "shallow";
-          readOnly = opt.readOnly or false;
-          type = opt.type.description or "unspecified";
-        }
-        // optionalAttrs (opt ? example) {
-          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-            renderOptionValue opt.example
-          );
-        }
-        //
-          optionalAttrs
-            (
-              opt ? defaultText
-              || opt ? default
-              # Render emptyValue-based defaults, but only for types without
-              # submodules (e.g. types.submodule). Submodules may evaluate to
-              # error without user defs, and their sub-options are documented
-              # individually, so best to skip those here.
-              || ((opt.type or { }).emptyValue or { }) ? value && (opt.type or { }).getSubModules or null == null
-            )
+    foldOptionSet {
+      onOption =
+        doc: subDocs: opt:
+        [
+          (
             {
-              default =
-                builtins.addErrorContext
-                  "while evaluating the ${
-                    if opt ? defaultText then "defaultText" else "default value"
-                  } of option `${name}`"
-                  (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+              inherit (opt) loc;
+              name = showOption opt.loc;
             }
-        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-          inherit (opt) relatedPackages;
-        };
+            // doc
+          )
+        ]
+        ++ subDocs;
+      onAttrSet = recurse: set: concatMap recurse (lib.attrValues set);
+      empty = [ ];
+    } options;
 
-        subOptions =
-          let
-            ss = opt.type.getSubOptions opt.loc;
-          in
-          if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
-        subOptionsVisible = if isBool visible then visible else visible == "transparent";
-      in
-      # To find infinite recursion in NixOS option docs:
-      # builtins.trace opt.loc
-      [ docOption ] ++ optionals subOptionsVisible subOptions
-    ) (collect isOption options);
+  isJsonValue =
+    v:
+    let
+      t = builtins.typeOf v;
+    in
+    elem t [
+      "null"
+      "bool"
+      "int"
+      "float"
+      "string"
+    ]
+    || (t == "list" && all isJsonValue v)
+    || (t == "set" && !v ? _type && all isJsonValue (attrValues v));
+
+  typeToSchema =
+    type: subDocs:
+    let
+      name = toLower (type.name or "");
+      nested = type.nestedTypes or { };
+      elemSchema = typeToSchema (nested.elemType or { }) subDocs;
+    in
+    if hasInfix "int" name then
+      { type = "integer"; }
+    else if hasPrefix "bool" name then
+      { type = "boolean"; }
+    else if hasInfix "float" name || hasInfix "number" name then
+      { type = "number"; }
+    else if
+      hasInfix "str" name
+      || elem name [
+        "lines"
+        "path"
+        "package"
+      ]
+    then
+      { type = "string"; }
+    else if name == "enum" then
+      {
+        type = "string";
+        enum = type.functor.payload.values or [ ];
+      }
+    else if name == "nullor" then
+      {
+        anyOf = [
+          { type = "null"; }
+          elemSchema
+        ];
+      }
+    else if name == "either" then
+      {
+        anyOf = [
+          (typeToSchema nested.left { })
+          (typeToSchema nested.right { })
+        ];
+      }
+    else if name == "coercedto" then
+      {
+        anyOf = [
+          (typeToSchema nested.coercedType { })
+          (typeToSchema nested.finalType subDocs)
+        ];
+      }
+    else if name == "listof" then
+      {
+        type = "array";
+        items = elemSchema;
+      }
+    else if hasInfix "attrsof" name then
+      {
+        type = "object";
+        additionalProperties = elemSchema;
+      }
+    else if name == "attrs" then
+      {
+        type = "object";
+        additionalProperties = true;
+      }
+    else if name == "submodule" then
+      subDocs
+      // {
+        additionalProperties =
+          if nested ? freeformType then
+            typeToSchema (nested.freeformType.nestedTypes.elemType or nested.freeformType) { }
+          else
+            false;
+      }
+    else if nested ? elemType then
+      elemSchema
+    else
+      subDocs;
+
+  /**
+    Generate documentation template as a JSON Schema compatible attribute set preserving module option structure.
+
+    # Inputs
+
+    `options`
+
+    : Evaluated module options attribute set (e.g. `(evalModules { ... }).options`).
+
+    # Type
+
+    ```
+    optionToDoc :: (OptionSet | Option) -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## Generate option documentation
+
+    ```nix
+    optionToDoc (evalModules { modules = [ module ]; }).options
+    => {
+      "$schema" = "https://json-schema.org/draft/2020-12/schema";
+      "$defs" = { };
+      type = "object";
+      properties = {
+        boot = {
+          type = "object";
+          properties = {
+            enable = {
+              default = false;
+              defaultText = { _type = "literalExpression"; text = "false"; };
+              description = "Enable boot";
+              nixType = "boolean";
+              readOnly = false;
+              type = "boolean";
+            };
+          };
+        };
+      };
+    }
+    ```
+    :::
+  */
+  optionToDoc =
+    options:
+    {
+      "$schema" = "https://json-schema.org/draft/2020-12/schema";
+      "$defs" = { };
+    }
+    // foldOptionSet {
+      onOption =
+        doc: subDocs: opt:
+        removeAttrs doc (
+          [
+            "type"
+            "default"
+          ]
+          ++ optional (doc.description == null) "description"
+        )
+        // typeToSchema opt.type subDocs
+        // optionalAttrs (opt ? default && isJsonValue opt.default) { default = opt.default; }
+        // optionalAttrs (doc ? default) { defaultText = doc.default; }
+        // {
+          nixType = doc.type;
+        };
+      onAttrSet =
+        recurse: set:
+        let
+          clean = removeAttrs set [
+            "_module"
+            "_freeformOptions"
+          ];
+          req = filter (
+            n:
+            let
+              opt = clean.${n};
+            in
+            isOption opt && !(opt ? default || opt ? defaultText)
+          ) (attrNames clean);
+        in
+        {
+          type = "object";
+          properties = mapAttrs (_: recurse) clean;
+        }
+        // optionalAttrs (req != [ ]) {
+          required = req;
+        };
+      empty = { };
+    } options;
 
   /**
     This function recursively removes all derivation attributes from
