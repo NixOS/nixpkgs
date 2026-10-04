@@ -1,5 +1,4 @@
 {
-  systemdStage1,
   lib,
   pkgs,
   ...
@@ -23,7 +22,6 @@ in
           echo "${msg}" > /dev/kmsg
         fi
       '';
-    boot.initrd.systemd.enable = systemdStage1;
   };
 
   testScript = ''
