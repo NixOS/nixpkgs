@@ -36,6 +36,7 @@ in
           "10.14.1" = sample-data_10_14_1;
           "10.16.1" = sample-data_10_14_1; # Release 10.16 is missing sample data
           "11.0.0" = sample-data_11_0_0;
+          "11.1.0" = sample-data_11_0_0;
           "11.3.0" = sample-data_11_0_0; # Releases 11.1 through 11.3 are missing sample data
         }
     );

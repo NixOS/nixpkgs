@@ -195,6 +195,8 @@ buildRedist (
     # stating that it is compatible with CUDA 13.x; we have tested it with CUDA 13.0 and 13.4.
     # NOTE: The support matrix lists only CUDA 13.2 Update 1 for the linux-sbsa and JetPack release of 10.16.1, which
     # supports Jetson Orin (8.7) and Thor (11.0).
+    # NOTE: The support matrix lists CUDA 13.3 for the linux-sbsa release of 11.1.0 (built with CUDA 13.3) and CUDA 13.2
+    # for its JetPack release, which uses the same archive and supports Jetson Orin (8.7) and Thor (11.0).
     # https://docs.nvidia.com/deeplearning/tensorrt/latest/getting-started/support-matrix.html
     platformAssertions = [
       {

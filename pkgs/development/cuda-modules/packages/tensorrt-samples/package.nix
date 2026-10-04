@@ -127,6 +127,10 @@ backendStdenv.mkDerivation (finalAttrs: {
         tag = "v11.0";
         hash = "sha256-xbGMxCSDTixR0fOoOABWyEVE4S9x031L3i5KQwPu24Y=";
       };
+      "11.1.0" = {
+        tag = "v11.1";
+        hash = "sha256-b+vpN/LTTbE1N/qQ/+1u78YmaVf6vvbg1XtFjQJkwTs=";
+      };
       "11.3.0" = {
         tag = "v11.3";
         hash = "sha256-U52/Pyd+94taV+yhfxseUdyY5lLwOcxBPIwDatjr6gs=";
