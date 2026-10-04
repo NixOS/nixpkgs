@@ -2,7 +2,6 @@
   lib,
   buildRedist,
   libcublas,
-  libnvshmem,
   nccl,
 }:
 buildRedist {
@@ -18,9 +17,10 @@ buildRedist {
 
   # TODO: Looks like the minimum supported capability is 7.0 as of the latest:
   # https://docs.nvidia.com/cuda/cublasmp/getting_started/index.html
+  # NOTE: cuBLASMp has not depended on NVSHMEM since 0.8.0:
+  # https://docs.nvidia.com/cuda/cublasmp/release_notes/index.html
   buildInputs = [
     libcublas
-    libnvshmem
     nccl
   ];
 

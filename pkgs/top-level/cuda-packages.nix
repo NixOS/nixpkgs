@@ -28,7 +28,7 @@ let
       inherit (cudaPackages_12_6.backendStdenv) hasJetsonCudaCapability hostPlatform;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "12.6.3";
       cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
       cudss = "0.6.0";
@@ -55,7 +55,7 @@ let
       inherit (cudaPackages_12_8.backendStdenv) hasJetsonCudaCapability hostPlatform;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "12.8.2";
       cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
       cudss = "0.6.0";
@@ -82,7 +82,7 @@ let
       inherit (cudaPackages_12_9.backendStdenv) hasJetsonCudaCapability hostPlatform;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "12.9.2";
       cudnn = if hasJetsonCudaCapability then "9.20.0" else "9.27.0";
       cudss = "0.6.0";
@@ -112,7 +112,7 @@ let
       inherit (cudaPackages_13_0.backendStdenv) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "13.0.3";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
@@ -135,7 +135,7 @@ let
       inherit (cudaPackages_13_1.backendStdenv) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "13.1.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
@@ -158,7 +158,7 @@ let
       inherit (cudaPackages_13_2.backendStdenv) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "13.2.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
@@ -181,7 +181,7 @@ let
       inherit (cudaPackages_13_3.backendStdenv) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "13.3.1";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
@@ -204,7 +204,7 @@ let
       inherit (cudaPackages_13_4.backendStdenv) requestedJetsonCudaCapabilities;
     in
     mkCudaPackages {
-      cublasmp = "0.8.1";
+      cublasmp = "0.10.0";
       cuda = "13.4.2";
       cudnn =
         if hasPreThorJetsonCudaCapability requestedJetsonCudaCapabilities then "9.13.0" else "9.27.0";
