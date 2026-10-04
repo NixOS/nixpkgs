@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "havn";
-  version = "0.3.9";
+  version = "0.3.10";
 
   __structuredAttrs = true;
 
@@ -16,10 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mrjackwills";
     repo = "havn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-G+aUTzlpUfVTkoftp1igCPeKaQpbS4CyydoitcLzxjk=";
+    hash = "sha256-CABTI2UilR4b0vQdWaiXJK8sRNVK1dV1d+2qckVcWSo=";
   };
 
-  cargoHash = "sha256-G4DNr69FKiLI3vrEX3AMPn3DdWzPbxA7t2vw3bJtW94=";
+  cargoHash = "sha256-qw/+eN27SxPrg0ma3Lj04BDh/XWFPQk0f4hL5a9IzIE=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

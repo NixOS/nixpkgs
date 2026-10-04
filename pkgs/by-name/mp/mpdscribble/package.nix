@@ -9,7 +9,7 @@
   curl,
   libgcrypt,
   libmpdclient,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libgcrypt
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ++ lib.optional stdenv.hostPlatform.isLinux systemdLibs;
 
   meta = {
     description = "MPD client which submits info about tracks being played to a scrobbler";

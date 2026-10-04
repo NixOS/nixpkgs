@@ -116,57 +116,55 @@ def test_build_remote(
         copy_flags={"copy": True},
     ) == Path("/path/to/config")
 
-    mock_run.assert_has_calls(
-        [
-            call(
-                [
-                    "nix-instantiate",
-                    "<nixpkgs/nixos>",
-                    "--attr",
-                    "preAttr.config.system.build.toplevel",
-                    "--add-root",
-                    n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000001",
-                    "--inst",
-                ],
-                stdout=PIPE,
-            ),
-            call(
-                [
-                    "nix-copy-closure",
-                    "--copy",
-                    "--to",
-                    "user@host",
-                    Path("/path/to/file"),
-                ],
-                append_local_env={
-                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
-                },
-            ),
-            call(
-                ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-            call(
-                [
-                    "nix-store",
-                    "--realise",
-                    Path("/path/to/file"),
-                    "--add-root",
-                    Path("/tmp/tmpdir/00000000000000000000000000000002"),
-                    "--realise",
-                ],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-            call(
-                ["readlink", "-f", "/tmp/tmpdir/config"],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-            call(["rm", "-rf", Path("/tmp/tmpdir")], remote=build_host, check=False),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            [
+                "nix-instantiate",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "preAttr.config.system.build.toplevel",
+                "--add-root",
+                n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000001",
+                "--inst",
+            ],
+            stdout=PIPE,
+        ),
+        call(
+            [
+                "nix-copy-closure",
+                "--copy",
+                "--to",
+                "user@host",
+                Path("/path/to/file"),
+            ],
+            append_local_env={
+                "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
+            },
+        ),
+        call(
+            ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+        call(
+            [
+                "nix-store",
+                "--realise",
+                Path("/path/to/file"),
+                "--add-root",
+                Path("/tmp/tmpdir/00000000000000000000000000000002"),
+                "--realise",
+            ],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+        call(
+            ["readlink", "-f", "/tmp/tmpdir/config"],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+        call(["rm", "-rf", Path("/tmp/tmpdir")], remote=build_host, check=False),
+    ]
 
 
 @patch(
@@ -192,47 +190,45 @@ def test_build_remote_flake(
         copy_flags={"copy": True},
         flake_build_flags={"build": True},
     ) == Path("/path/to/file")
-    mock_run.assert_has_calls(
-        [
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "eval",
-                    "--raw",
-                    '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
-                    "--flake",
-                ],
-                stdout=PIPE,
-            ),
-            call(
-                [
-                    "nix-copy-closure",
-                    "--copy",
-                    "--to",
-                    "user@host",
-                    Path("/path/to/file"),
-                ],
-                append_local_env={
-                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
-                },
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "build",
-                    "/path/to/file^*",
-                    "--print-out-paths",
-                    "--build",
-                ],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--raw",
+                '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+                "--flake",
+            ],
+            stdout=PIPE,
+        ),
+        call(
+            [
+                "nix-copy-closure",
+                "--copy",
+                "--to",
+                "user@host",
+                Path("/path/to/file"),
+            ],
+            append_local_env={
+                "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
+            },
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "/path/to/file^*",
+                "--print-out-paths",
+                "--build",
+            ],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+    ]
 
 
 def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
@@ -465,7 +461,7 @@ def test_get_nixpkgs_rev(tmpdir: Path) -> None:
         ],
     ) as mock_run:
         assert n.get_nixpkgs_rev(tmpdir) == ".git.0f7c82403fd6"
-        mock_run.assert_has_calls(expected_calls)
+        assert mock_run.mock_calls == expected_calls
 
     with patch(
         get_qualified_name(n.run_wrapper, n),
@@ -476,7 +472,7 @@ def test_get_nixpkgs_rev(tmpdir: Path) -> None:
         ],
     ) as mock_run:
         assert n.get_nixpkgs_rev(tmpdir) == ".git.0f7c82403fd6M"
-        mock_run.assert_has_calls(expected_calls)
+        assert mock_run.mock_calls == expected_calls
 
 
 def test_get_generations(tmp_path: Path) -> None:
@@ -821,20 +817,23 @@ def test_set_profile(mock_run: Mock) -> None:
         elevate=e.NO_ELEVATOR,
     )
 
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["mkdir", "-p", profile_path.parent],
-                remote=target_host,
-                elevate=e.NO_ELEVATOR,
-            ),
-            call(
-                ["nix-env", "-p", profile_path, "--set", config_path],
-                remote=target_host,
-                elevate=e.NO_ELEVATOR,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["test", "-f", Path("/path/to/config/nixos-version")],
+            remote=m.Remote(host="user@localhost", opts=[], store_type="ssh"),
+            check=False,
+        ),
+        call(
+            ["mkdir", "-p", profile_path.parent],
+            remote=target_host,
+            elevate=e.NO_ELEVATOR,
+        ),
+        call(
+            ["nix-env", "-p", profile_path, "--set", config_path],
+            remote=target_host,
+            elevate=e.NO_ELEVATOR,
+        ),
+    ]
 
     mock_run.reset_mock()
     mock_run.return_value = CompletedProcess([], 1)

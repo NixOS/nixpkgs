@@ -40,7 +40,7 @@
   libxslt,
   libxml2,
   libuuid,
-  systemd,
+  systemdLibs,
   nspr,
   check,
   cmocka,
@@ -191,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     libuuid
-    systemd
+    systemdLibs
     nspr
     check
     cmocka
