@@ -373,6 +373,11 @@ rec {
     descriptionClass = "noun";
   };
 
+  /**
+    A boolean, its values can be `true` or `false`.
+
+    All definitions must have the same value, after priorities. An error is thrown in case of a conflict.
+   */
   bool = mkOptionType {
     name = "bool";
     description = "boolean";
