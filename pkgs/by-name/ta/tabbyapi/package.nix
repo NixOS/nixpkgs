@@ -23,10 +23,6 @@ python3Packages.buildPythonApplication {
     wheel
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-  ];
-
   pythonRelaxDeps = [
     "pydantic"
   ];
@@ -53,7 +49,6 @@ python3Packages.buildPythonApplication {
       httptools
       pillow
       requests
-      numpy
       setuptools
 
       exllamav3
@@ -67,17 +62,6 @@ python3Packages.buildPythonApplication {
   '';
 
   optional-dependencies = with python3Packages; {
-    amd = [
-      pytorch-triton-rocm
-      torch
-    ];
-    cu118 = [
-      torch
-    ];
-    cu121 = [
-      flash-attn
-      torch
-    ];
     dev = [
       ruff
     ];
@@ -104,7 +88,7 @@ python3Packages.buildPythonApplication {
 
   passthru = {
     cudaSupport = python3Packages.torch.cudaSupport;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
