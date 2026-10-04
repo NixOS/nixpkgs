@@ -6,6 +6,7 @@
   coreutils,
   findutils,
   gnused,
+  graphviz,
   jre,
   gradle,
   makeBinaryWrapper,
@@ -98,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
           coreutils
           findutils
           gnused
+          graphviz
           jre
         ]
       }"
