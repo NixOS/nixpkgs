@@ -16,8 +16,10 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     install -Dm644 u9fs.man "$out/share/man/man4/u9fs.4"
     install -Dm755 u9fs -t "$out/bin"
+    runHook postInstall
   '';
 
   meta = {

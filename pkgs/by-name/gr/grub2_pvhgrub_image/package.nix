@@ -42,8 +42,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/lib/grub-${grubPlatform}"
     cp grub-"$GRUB_FORMAT".bin $out/lib/grub-${grubPlatform}/
+    runHook postInstall
   '';
 
   dontFixup = true;

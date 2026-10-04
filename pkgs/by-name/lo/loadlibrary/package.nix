@@ -26,8 +26,10 @@ stdenv_32bit.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin/
     cp mpclient $out/bin/
+    runHook postInstall
   '';
 
   meta = {

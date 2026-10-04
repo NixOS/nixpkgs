@@ -61,6 +61,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/share/hol"
 
     cp -a . "$out/share/hol"
@@ -83,6 +84,7 @@ stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     ln -st "$out/bin" "$out"/share/hol/bin/*
+    runHook postInstall
   '';
 
   meta = {

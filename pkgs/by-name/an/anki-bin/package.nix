@@ -135,8 +135,10 @@ else
     sourceRoot = ".";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/Applications/
       cp -a Anki.app $out/Applications/
+      runHook postInstall
     '';
 
     inherit meta;

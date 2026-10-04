@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     install -m755 -D supergenpass.sh "$out/bin/supergenpass"
     wrapProgram "$out/bin/supergenpass" --prefix PATH : "${
       lib.makeBinPath [
@@ -31,6 +32,7 @@ stdenv.mkDerivation {
         gnugrep
       ]
     }"
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater {

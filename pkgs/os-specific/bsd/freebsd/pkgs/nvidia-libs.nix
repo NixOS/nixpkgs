@@ -52,6 +52,8 @@ mkDerivation {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
     make -C lib install
+    runHook postInstall
   '';
 }

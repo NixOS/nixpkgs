@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/Applications/MonitorControl.app"
     cp -R . "$out/Applications/MonitorControl.app"
+    runHook postInstall
   '';
 
   meta = {

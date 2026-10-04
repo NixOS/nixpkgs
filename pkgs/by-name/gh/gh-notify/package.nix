@@ -40,7 +40,9 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     install -D -m755 "gh-notify" "$out/bin/gh-notify"
+    runHook postInstall
   '';
 
   postFixup = ''

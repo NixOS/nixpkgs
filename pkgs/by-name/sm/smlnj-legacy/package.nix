@@ -73,6 +73,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -pv $out
     cp -rv bin lib $out
 
@@ -80,6 +81,7 @@ stdenv.mkDerivation {
     for i in *; do
       sed -i "2iSMLNJ_HOME=$out/" $i
     done
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update-legacy.sh;

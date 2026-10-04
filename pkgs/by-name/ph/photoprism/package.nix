@@ -51,7 +51,9 @@ let
       dontBuild = true;
 
       installPhase = ''
+        runHook preInstall
         mkdir $out
+        runHook postInstall
       '';
 
       passthru.updateScript = nix-update-script { };

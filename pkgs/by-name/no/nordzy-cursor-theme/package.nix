@@ -16,9 +16,11 @@ stdenvNoCC.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/icons
     cp -r xcursors/* $out/share/icons
     cp -r hyprcursors/themes/* $out/share/icons
+    runHook postInstall
   '';
 
   meta = {

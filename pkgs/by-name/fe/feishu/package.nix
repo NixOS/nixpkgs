@@ -165,6 +165,7 @@ stdenv.mkDerivation {
 
   dontUnpack = true;
   installPhase = ''
+    runHook preInstall
     # This deb file contains a setuid binary,
     # so 'dpkg -x' doesn't work here.
     dpkg --fsys-tarfile $src | tar --extract
@@ -196,6 +197,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/bin
     ln -s $out/opt/bytedance/feishu/bytedance-feishu $out/bin/bytedance-feishu
+    runHook postInstall
   '';
 
   passthru = {

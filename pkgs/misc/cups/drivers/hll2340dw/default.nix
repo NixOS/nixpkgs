@@ -43,6 +43,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     dpkg-deb -x ${cupsdeb} $out
     dpkg-deb -x ${lprdeb} $out
@@ -91,6 +92,7 @@ stdenv.mkDerivation {
           which
         ]
       }
+    runHook postInstall
   '';
 
   meta = {

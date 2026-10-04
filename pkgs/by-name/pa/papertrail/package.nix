@@ -24,8 +24,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ gems ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     makeWrapper ${gems}/bin/papertrail $out/bin/papertrail
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "papertrail";

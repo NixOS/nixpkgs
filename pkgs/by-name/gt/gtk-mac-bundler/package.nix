@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     substitute gtk-mac-bundler.in $out/bin/gtk-mac-bundler \
       --subst-var-by PATH $out/share
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share
     cp -r bundler $out/share
+    runHook postInstall
   '';
 
   meta = {

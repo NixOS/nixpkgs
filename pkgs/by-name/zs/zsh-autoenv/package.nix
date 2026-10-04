@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/{bin,share}
     cp -R $src $out/share/zsh-autoenv
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation {
     echo $out/share/zsh-autoenv
     SCRIPT
     chmod +x $out/bin/zsh-autoenv-share
+    runHook postInstall
   '';
 
   meta = {

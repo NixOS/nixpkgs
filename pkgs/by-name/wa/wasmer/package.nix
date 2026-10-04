@@ -52,7 +52,9 @@ let
       sourceRoot = ".";
       dontBuild = true;
       installPhase = ''
+        runHook preInstall
         cp -r . $out
+        runHook postInstall
       '';
 
       meta.sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

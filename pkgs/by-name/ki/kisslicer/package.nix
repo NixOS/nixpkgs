@@ -42,8 +42,10 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp -p * $out/bin
+    runHook postInstall
   '';
 
   fixupPhase = ''

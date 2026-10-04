@@ -45,10 +45,12 @@ stdenv.mkDerivation {
   allowSubstitutes = false;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     for i in "''${paths[@]}"; do
       ${lndir}/bin/lndir -silent $i $out
     done
+    runHook postInstall
   '';
 
   preFixup = ''

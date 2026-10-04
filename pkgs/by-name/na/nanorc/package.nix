@@ -27,9 +27,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share
 
     install *.nanorc $out/share/
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "update.sh" ''

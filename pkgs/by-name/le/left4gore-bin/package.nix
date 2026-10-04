@@ -19,8 +19,10 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       cp left4gore $out/bin
+      runHook postInstall
     '';
   };
 
@@ -42,8 +44,10 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     ln -s ${env}/bin/* $out/bin/left4gore
+    runHook postInstall
   '';
 
   meta = {

@@ -25,9 +25,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp .heap* $out/bin/
     ./.mkexec ${smlnj-legacy}/bin/sml $out/bin celf
+    runHook postInstall
   '';
 
   meta = {

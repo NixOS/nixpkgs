@@ -17,7 +17,9 @@ stdenv.mkDerivation {
 
   passthru.scripts = [ "autosort.py" ];
   installPhase = ''
+    runHook preInstall
     install -D autosort.py $out/share/autosort.py
+    runHook postInstall
   '';
 
   meta = {

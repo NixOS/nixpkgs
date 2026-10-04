@@ -150,7 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs) version;
       src = "${finalAttrs.src}/tests/system";
       installPhase = ''
+        runHook preInstall
         cp -r . $out/
+        runHook postInstall
       '';
       dontBuild = true;
       postPatch = ''

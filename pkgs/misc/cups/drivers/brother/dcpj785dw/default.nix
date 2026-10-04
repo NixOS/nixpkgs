@@ -44,6 +44,7 @@ in
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
+      runHook preInstall
       substituteInPlace $out/opt/brother/Printers/${model}/lpd/filter${model} \
       --replace /opt "$out/opt"
 
@@ -67,6 +68,7 @@ in
         } \
         --set LD_PRELOAD ${pkgsi686Linux.libredirect}/lib/libredirect.so \
         --set NIX_REDIRECTS /opt/=$out/opt/
+      runHook postInstall
     '';
 
     meta = {
@@ -102,6 +104,7 @@ in
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
+      runHook preInstall
       for f in $out/opt/brother/Printers/${model}/cupswrapper/cupswrapper${model}; do
         wrapProgram $f --prefix PATH : ${
           lib.makeBinPath [
@@ -115,6 +118,7 @@ in
 
       mkdir -p $out/share/cups/model
       ln -s $out/opt/brother/Printers/${model}/cupswrapper/brother_${model}_printer_en.ppd $out/share/cups/model/
+      runHook postInstall
     '';
 
     meta = {

@@ -107,6 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     cd Installer
     sed -i -e 's/^PATH=/# PATH=/' -e 's/=`id -[ug]`/=0/' MathInstaller
 
@@ -149,6 +150,7 @@ stdenv.mkDerivation rec {
 
     # Install man pages
     installManPage $out/libexec/${dirName}/SystemFiles/SystemDocumentation/Unix/*
+    runHook postInstall
   '';
 
   # This is primarily an IO bound build; there's little benefit to building remotely.

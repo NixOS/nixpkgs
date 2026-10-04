@@ -21,8 +21,10 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/seq
     cp META $out/lib/ocaml/${ocaml.version}/site-lib/seq
+    runHook postInstall
   '';
 
 }

@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 bin/release/premake4 $out/bin/premake4
+    runHook postInstall
   '';
 
   premake_cmd = "premake4";

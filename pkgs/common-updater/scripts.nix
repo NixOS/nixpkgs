@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp ${./scripts}/* $out/bin
 
@@ -51,5 +52,6 @@ stdenv.mkDerivation {
     # wrap python scripts
     makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [ nix ]}" )
     wrapPythonPrograms
+    runHook postInstall
   '';
 }

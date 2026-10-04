@@ -22,9 +22,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     swift run -c release CxxInteropTest | grep 'Hello, Swift!'
     ./SwiftToCxxInteropTest | grep 'Hello, C++!'
     touch "$out"
+    runHook postInstall
   '';
 
   __structuredAttrs = true;

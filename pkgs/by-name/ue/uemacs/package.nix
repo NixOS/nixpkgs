@@ -32,8 +32,10 @@ gccStdenv.mkDerivation {
   enableParallelBuilding = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/{bin,share/uemacs}
     make install
+    runHook postInstall
   '';
 
   meta = {

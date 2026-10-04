@@ -48,6 +48,7 @@ beamPackages.mixRelease rec {
     dontBuild = true;
     dontFixup = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p deps/phoenix deps/phoenix_html deps/phoenix_live_view
       echo '{"name": "phoenix", "version": "1.0.0"}' > deps/phoenix/package.json
       echo '{"name": "phoenix_html", "version": "1.0.0"}' > deps/phoenix_html/package.json
@@ -66,6 +67,7 @@ beamPackages.mixRelease rec {
       rm -rf $out/node_modules/phoenix
       rm -rf $out/node_modules/phoenix_html
       rm -rf $out/node_modules/phoenix_live_view
+      runHook postInstall
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";

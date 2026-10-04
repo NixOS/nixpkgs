@@ -198,6 +198,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/arduino
     cp -r ./build/linux/work/* "$out/share/arduino/"
     echo -n ${version} > $out/share/arduino/lib/version.txt
@@ -245,6 +246,7 @@ stdenv.mkDerivation rec {
       mv $out/share/arduino/lib/arduino-core.jar.bak $out/share/arduino/lib/arduino-core.jar
       mv $out/share/arduino/lib/pde.jar.bak $out/share/arduino/lib/pde.jar
     ''}
+    runHook postInstall
   '';
 
   # So we don't accidentally mess with firmware files

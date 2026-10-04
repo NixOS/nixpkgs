@@ -74,7 +74,9 @@ caddy.overrideAttrs (
           (cd buildenv* && go mod vendor)
         '';
       installPhase = ''
+        runHook preInstall
         mv buildenv* $out
+        runHook postInstall
       '';
 
       outputHashMode = "recursive";

@@ -24,7 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ poppler ];
 
   installPhase = ''
+    runHook preInstall
     install -D pdftoipe $out/bin/pdftoipe
+    runHook postInstall
   '';
 
   meta = {

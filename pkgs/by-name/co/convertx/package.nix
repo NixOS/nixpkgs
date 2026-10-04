@@ -107,6 +107,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/share/convertx
     cp -R ./dist $out/share/convertx
@@ -146,6 +147,7 @@ stdenvNoCC.mkDerivation {
           vtracer
         ]
       }
+    runHook postInstall
   '';
 
   meta = {

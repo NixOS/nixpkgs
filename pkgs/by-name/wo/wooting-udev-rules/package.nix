@@ -20,7 +20,9 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     install -Dpm644 $src $out/lib/udev/rules.d/70-wooting.rules
+    runHook postInstall
   '';
 
   meta = {

@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   buildPhase = "make python";
   installPhase = ''
+    runHook preInstall
     mkdir $out
     cp -r python/bin $out/bin
+    runHook postInstall
   '';
   passthru.updateScript = [
     runtimeShell

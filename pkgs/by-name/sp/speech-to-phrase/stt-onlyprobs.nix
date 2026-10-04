@@ -132,8 +132,10 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-std=c++17";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp stt_onlyprobs $out/bin
+    runHook postInstall
   '';
 
   meta = {

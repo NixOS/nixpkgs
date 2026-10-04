@@ -77,6 +77,7 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       substitute usr/bin/lightworks $out/bin/lightworks \
         --replace "/usr/lib/lightworks" "$out/lib/lightworks"
@@ -103,6 +104,7 @@ let
         --set FONTCONFIG_FILE $out/lib/lightworks/fonts.conf
 
       cp -r usr/share $out/share
+      runHook postInstall
     '';
 
     dontPatchELF = true;

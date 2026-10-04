@@ -2485,7 +2485,9 @@ assertNoAdditions {
           hash = "sha256-kzc9jm6d9PJ07yiWfIOwqxOTAAydTpaLXVK6sEWM8gg=";
         };
         installPhase = ''
+          runHook preInstall
           cp -r node_modules $out
+          runHook postInstall
         '';
       };
     in
@@ -4374,7 +4376,9 @@ assertNoAdditions {
         ];
         preferLocalBuild = true;
         installPhase = ''
+          runHook preInstall
           install -Dt $out/bin ftplugin/evinceSync.py
+          runHook postInstall
         '';
       };
       # the vim plugin expects evinceSync.py to be a python file, but it is a C wrapper
@@ -4520,8 +4524,10 @@ assertNoAdditions {
           # remove pre-compiled binaries
           preBuild = "rm -rf static/*";
           installPhase = ''
+            runHook preInstall
             install -Dm 444 -t $out/static static/*
             install -Dm 444 -t $out/lua lua/*
+            runHook postInstall
           '';
         };
       in

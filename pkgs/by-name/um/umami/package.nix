@@ -36,8 +36,10 @@ let
     doBuild = false;
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp ./GeoLite2-City.mmdb $out/GeoLite2-City.mmdb
+      runHook postInstall
     '';
 
     meta.license = lib.licenses.cc-by-40;

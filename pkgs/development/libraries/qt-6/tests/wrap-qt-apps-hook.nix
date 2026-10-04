@@ -50,8 +50,10 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       install -m755 test $out/bin/test
+      runHook postInstall
     '';
 
     meta.mainProgram = "test";

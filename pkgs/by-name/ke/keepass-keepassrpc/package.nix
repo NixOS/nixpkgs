@@ -29,8 +29,10 @@ let
 
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/lib/dotnet/keepass/
       cp $src $out/lib/dotnet/keepass/
+      runHook postInstall
     '';
   };
 in

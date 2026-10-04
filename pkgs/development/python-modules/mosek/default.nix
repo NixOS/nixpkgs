@@ -31,9 +31,11 @@ buildPythonPackage (
       # The packaged tbb would need to be patchelfed to find libstdc++ and would lead
       # with clashes with other code using the nix based tbb, used in rtech for example.
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/lib
         cp ${mosek-major-minor}/tools/platform/linux64x86/bin/libmosek64.so.${mosek-major-minor} $out/lib/
         ln -snf ${onetbb}/lib/libtbb.so.12 $out/lib/libtbb.so.12
+        runHook postInstall
       '';
     };
   in

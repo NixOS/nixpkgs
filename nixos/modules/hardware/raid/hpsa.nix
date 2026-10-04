@@ -22,6 +22,7 @@ let
     unpackPhase = "dpkg -x $src ./";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin $out/share/doc $out/share/man
       mv opt/hp/hpssacli/bld/{hpssascripting,hprmstr,hpssacli} $out/bin/
       mv opt/hp/hpssacli/bld/*.{license,txt}                   $out/share/doc/
@@ -33,6 +34,7 @@ let
                  --set-rpath ${lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]} \
                  $file
       done
+      runHook postInstall
     '';
 
     dontStrip = true;

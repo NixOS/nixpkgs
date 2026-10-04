@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     # make sure dest already exists before symlink
     # this prevents installing a broken link into the path
@@ -28,6 +29,7 @@ stdenv.mkDerivation {
     for cmd in ${perconaToolkit}/bin/*; do
         ln -s $cmd $out/bin
     done
+    runHook postInstall
   '';
 
   dontStrip = true;

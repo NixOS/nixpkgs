@@ -33,7 +33,9 @@ let
     ];
     makeFlags = [ "mktable" ];
     installPhase = ''
+      runHook preInstall
       install -D mktable $out/bin/mktable
+      runHook postInstall
     '';
   };
 in

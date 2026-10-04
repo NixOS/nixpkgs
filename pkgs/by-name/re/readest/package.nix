@@ -152,7 +152,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
 
     installPhase = ''
+      runHook preInstall
       cp -r dist-js $out
+      runHook postInstall
     '';
   };
 

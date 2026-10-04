@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     dir=$out/usr/local/Brother/Printer/mfc465cn
     patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $dir/lpd/brmfc465cnfilter
     wrapProgram $dir/inf/setupPrintcapij \
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
         ]
       }
     chmod -R a+w $dir/inf/
+    runHook postInstall
   '';
 
   meta = {

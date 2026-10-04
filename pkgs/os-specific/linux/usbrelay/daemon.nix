@@ -39,6 +39,7 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   installPhase = ''
+    runHook preInstall
     runHook preInstall;
     install -m 644 -D usbrelayd $out/bin/usbrelayd
     install -m 644 -D usbrelayd.service $out/lib/systemd/system/usbrelayd.service

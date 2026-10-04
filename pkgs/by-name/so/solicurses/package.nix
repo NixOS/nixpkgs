@@ -29,7 +29,9 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     install -D SoliCurses.out $out/bin/solicurses
+    runHook postInstall
   '';
 
   meta = {

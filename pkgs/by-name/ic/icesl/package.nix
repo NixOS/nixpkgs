@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
     cp -r ./ $out
     rm $out/bin/*.so
     mkdir $out/oldbin

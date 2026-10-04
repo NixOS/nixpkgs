@@ -17,7 +17,9 @@ stdenv.mkDerivation {
     $CC -o jpegexiforient jpegexiforient.c
   '';
   installPhase = ''
+    runHook preInstall
     install -Dt $out/bin jpegexiforient
+    runHook postInstall
   '';
   meta = {
     description = "Utility program to get and set the Exif Orientation Tag";

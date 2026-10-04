@@ -29,8 +29,10 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp -r * $out/
+      runHook postInstall
     '';
 
     meta.license = lib.licenses.unfree;

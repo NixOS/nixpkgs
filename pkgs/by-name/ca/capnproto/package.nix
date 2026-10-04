@@ -19,8 +19,10 @@ let
     version = "0";
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p "$out"/lib
       ${clangStdenv.cc.targetPrefix}ar r "$out"/lib/libgcc_eh.a
+      runHook postInstall
     '';
   };
 in

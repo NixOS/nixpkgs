@@ -17,9 +17,11 @@ stdenvNoCC.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     mv bin doc $out/
     cp LICENSE $out/doc/LICENSE
+    runHook postInstall
   '';
 
   passthru = {

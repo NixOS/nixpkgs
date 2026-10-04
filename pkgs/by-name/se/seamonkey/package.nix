@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/lib/seamonkey $out/bin
     cp -r * $out/lib/seamonkey/
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
           libGL
         ]
       }"
+    runHook postInstall
   '';
 
   meta = with lib; {

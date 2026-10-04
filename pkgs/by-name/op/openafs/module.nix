@@ -81,9 +81,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p ${modDestDir}
     cp src/libafs/MODLOAD-*/libafs-${kernel.modDirVersion}.* ${modDestDir}/libafs.ko
     xz -f ${modDestDir}/libafs.ko
+    runHook postInstall
   '';
 
   meta = {

@@ -37,7 +37,9 @@ stdenv.mkDerivation {
     '';
 
   installPhase = ''
+    runHook preInstall
     install -vD darcs-to-git "$out/bin/darcs-to-git"
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

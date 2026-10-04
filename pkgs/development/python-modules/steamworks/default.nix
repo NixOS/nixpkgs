@@ -37,8 +37,10 @@ let
     sourceRoot = "source/library";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp SteamworksPy.so $out/
+      runHook postInstall
     '';
   };
 in

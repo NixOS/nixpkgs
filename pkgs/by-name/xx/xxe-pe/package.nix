@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "${pkg_path}"
     mkdir -p "${pkg_path}" "$out/share/applications"
     cp -a * "${pkg_path}"
@@ -69,6 +70,7 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/share/icons/hicolor/$res/apps"
       mv "$f" "$out/share/icons/hicolor/$res/apps/xxe.png"
     done;
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -98,8 +98,10 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/lib
       cp libsha1.so $out/lib/
+      runHook postInstall
     '';
   };
 

@@ -35,8 +35,10 @@ gccStdenv.mkDerivation {
     make RM="rm -f" proparser.c ${extraTools} opt
   '';
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -m0755 SPASS ${extraTools} $out/bin/
+    runHook postInstall
   '';
 
   meta = {

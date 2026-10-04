@@ -41,10 +41,12 @@ stdenv.mkDerivation {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp $src/zenstates.py $out/bin/zenstates
     chmod +x $out/bin/zenstates
     patchShebangs --build $out/bin/zenstates
+    runHook postInstall
   '';
 
   meta = {

@@ -10,7 +10,9 @@
       hash = "sha256-yjlhBLYYv/FXsk5IpiZNDG2ugDldaD5mf+Dyc6es4GM=";
     };
     installPhase = ''
+      runHook preInstall
       cp -r . $out
+      runHook postInstall
     '';
   },
 }:
@@ -30,10 +32,12 @@ stdenv.mkDerivation rec {
     chmod +x soundSense.sh
   '';
   installPhase = ''
+    runHook preInstall
     mkdir $out
     cp -R . $out/soundsense
     ln -s $out/soundsense/dfhack $out/hack
     ln -s $soundPack $out/soundsense/packs
+    runHook postInstall
   '';
   passthru = { inherit version dfVersion; };
   meta = {

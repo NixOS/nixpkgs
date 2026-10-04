@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     dpkg-deb -x $src $out
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
       --replace /opt "$out/opt"
@@ -111,6 +112,7 @@ stdenv.mkDerivation rec {
           a2ps
         ]
       }
+    runHook postInstall
   '';
 
   meta = {

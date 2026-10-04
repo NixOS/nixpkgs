@@ -46,8 +46,10 @@ rustPlatform.buildRustPackage (
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out
         cp -R dist/* $out/
+        runHook postInstall
       '';
 
       inherit (finalAttrs) meta;

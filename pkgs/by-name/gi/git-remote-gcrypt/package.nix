@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     prefix="$out" ./install.sh
     wrapProgram "$out/bin/git-remote-gcrypt" \
       --prefix PATH ":" "${
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
           gnugrep
         ]
       }"
+    runHook postInstall
   '';
 
   meta = {

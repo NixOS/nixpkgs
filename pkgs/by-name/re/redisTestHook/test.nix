@@ -38,9 +38,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     [[ $PORT_TEST_RAN == 1 && $SOCKET_TEST_RAN == 1 ]]
     echo "test passed"
     touch $out
+    runHook postInstall
   '';
 
   __darwinAllowLocalNetworking = true;

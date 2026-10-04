@@ -54,6 +54,7 @@ in
     ];
     buildInputs = [ bash ];
     installPhase = ''
+      runHook preInstall
       installManPage grimshot/grimshot.1
       installShellCompletion --cmd grimshot grimshot/grimshot-completion.bash
 
@@ -71,6 +72,7 @@ in
             gnugrep
           ]
         }"
+      runHook postInstall
     '';
 
     doInstallCheck = true;

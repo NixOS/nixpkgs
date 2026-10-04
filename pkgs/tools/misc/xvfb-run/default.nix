@@ -42,6 +42,7 @@ stdenvNoCC.mkDerivation {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp $src/trunk/xvfb-run $out/bin/xvfb-run
     installManPage $src/trunk/xvfb-run.1
@@ -61,6 +62,7 @@ stdenvNoCC.mkDerivation {
           coreutils
         ]
       }
+    runHook postInstall
   '';
 
   doInstallCheck = true;

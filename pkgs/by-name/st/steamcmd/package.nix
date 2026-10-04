@@ -38,6 +38,7 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/steamcmd
     find . -type f -exec install -Dm 755 "{}" "$out/share/steamcmd/{}" \;
 
@@ -50,6 +51,7 @@ stdenvNoCC.mkDerivation {
         if stdenvNoCC.hostPlatform.isLinux then (lib.getExe steam-run) else "exec"
       }
     chmod 0755 $out/bin/steamcmd
+    runHook postInstall
   '';
 
   meta = {

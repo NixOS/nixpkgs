@@ -44,8 +44,10 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 wofi-pass -t $out/bin
     install -Dm755 wofi-pass.conf -t $out/share/doc/wofi-pass/wofi-pass.conf
+    runHook postInstall
   '';
 
   fixupPhase = ''

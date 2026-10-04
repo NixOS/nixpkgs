@@ -74,7 +74,9 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm 444 *.bin -t "$out/lib/firmware/edid"
+    runHook postInstall
   '';
 
   __structuredAttrs = true;

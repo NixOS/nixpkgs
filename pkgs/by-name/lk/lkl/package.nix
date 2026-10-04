@@ -58,6 +58,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $lib/lib $dev
 
     cp tools/lkl/bin/lkl-hijack.sh $out/bin
@@ -70,6 +71,7 @@ stdenv.mkDerivation {
     cp tools/lkl/liblkl.a \
        tools/lkl/lib/liblkl.so \
        tools/lkl/lib/hijack/liblkl-hijack.so $lib/lib
+    runHook postInstall
   '';
 
   postFixup = ''

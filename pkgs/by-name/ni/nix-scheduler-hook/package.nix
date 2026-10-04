@@ -69,11 +69,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mv nsh $out/bin
     mkdir -p $out/lib
     shopt -s extglob
     mv subprojects/restclient-cpp/librestclient_cpp.so!(*p) $out/lib
+    runHook postInstall
   '';
 
   passthru = {

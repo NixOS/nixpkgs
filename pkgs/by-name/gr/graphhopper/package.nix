@@ -49,12 +49,14 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
       find $out -type f \( \
         -name \*.lastUpdated \
         -o -name resolver-status.properties \
         -o -name _remote.repositories \) \
         -delete
+      runHook postInstall
     '';
 
     outputHashMode = "recursive";

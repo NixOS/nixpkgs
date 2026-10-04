@@ -70,6 +70,7 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
       cp -r ./tmp/*/ $out
       wrapProgram $out/bin/studio.sh \
         --set-default JAVA_HOME "$out/jbr" \
@@ -129,6 +130,7 @@ let
             libGL
           ]
         }"
+      runHook postInstall
     '';
   };
 

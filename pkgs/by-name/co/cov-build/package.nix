@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/libexec
     mv * $out/libexec
     for x in cov-build cov-capture cov-configure cov-emit cov-emit-java \
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
       cov-manage-history; do
         ln -s $out/libexec/bin/$x $out/bin/$x;
     done
+    runHook postInstall
   '';
 
   dontStrip = true;

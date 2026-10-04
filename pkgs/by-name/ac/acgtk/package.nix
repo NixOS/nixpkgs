@@ -57,7 +57,9 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     dune install -p acgtk --prefix $out --libdir $OCAMLFIND_DESTDIR
+    runHook postInstall
   '';
 
   passthru.updateScript = nix-update-script {

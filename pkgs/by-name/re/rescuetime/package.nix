@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp usr/bin/rescuetime $out/bin
 
@@ -59,6 +60,7 @@ stdenv.mkDerivation rec {
         ]
       }" \
       $out/bin/rescuetime
+    runHook postInstall
   '';
 
   passthru.updateScript = writeScript "${pname}-updater" ''

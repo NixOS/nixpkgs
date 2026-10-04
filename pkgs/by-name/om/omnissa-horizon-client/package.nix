@@ -77,6 +77,7 @@ let
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
+      runHook preInstall
       mkdir ext
       find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
 
@@ -98,6 +99,7 @@ let
 
       ${wrapBinCommands "bin" "horizon-client"}
       ${wrapBinCommands "lib/omnissa/horizon/usb" "horizon-eucusbarbitrator"}
+      runHook postInstall
     '';
   };
 

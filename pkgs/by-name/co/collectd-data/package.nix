@@ -9,6 +9,8 @@ stdenv.mkDerivation {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
     install -Dm444 -t $out/share/collectd/ src/*.{db,conf}
+    runHook postInstall
   '';
 }

@@ -24,7 +24,9 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     install -D kvmfr.ko -t "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/misc/"
+    runHook postInstall
   '';
 
   meta = {

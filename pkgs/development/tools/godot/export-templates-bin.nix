@@ -37,10 +37,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       templates="$out"/share/godot/export_templates
       mkdir -p "$templates"
       read version < templates/version.txt
       mv templates "$templates/$version"
+      runHook postInstall
     '';
 
     meta = {

@@ -26,6 +26,7 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/share/man/man1
     install -m 755 listadmin.pl $out/bin/listadmin
     installManPage listadmin.1
@@ -39,6 +40,7 @@ stdenvNoCC.mkDerivation rec {
           LWPProtocolHttps
         ]
       }"
+    runHook postInstall
   '';
 
   doInstallCheck = true;

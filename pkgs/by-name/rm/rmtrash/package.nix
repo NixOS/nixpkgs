@@ -23,6 +23,7 @@ stdenvNoCC.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     for f in rm{,dir}trash; do
       install -D ./$f $out/bin/$f
       wrapProgram $out/bin/$f \
@@ -35,6 +36,7 @@ stdenvNoCC.mkDerivation rec {
           ]
         }
     done
+    runHook postInstall
   '';
 
   meta = {

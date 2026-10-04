@@ -28,8 +28,10 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -m555 subedit $out/bin/
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out"/{lib/antlr,bin}
     cp "$src" "$out/lib/antlr/antlr-${version}-complete.jar"
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
 
     chmod a+x "$out/bin/antlr"
     ln -s "$out/bin/antlr"{,3}
+    runHook postInstall
   '';
 
   inherit jre;

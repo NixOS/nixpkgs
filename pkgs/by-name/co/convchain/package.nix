@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     grep -m1 -B999 '^[*][/]' ConvChainFast.cs > COPYING.MIT
   '';
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out"/{bin,share/doc/convchain,share/convchain}
     cp README.md COPYING.MIT "$out"/share/doc/convchain
     cp convchain*.exe "$out"/bin
@@ -33,6 +34,7 @@ stdenv.mkDerivation {
     echo "chmod u+w ." >> "$out/bin/convchainfast"
     echo "'${mono}/bin/mono' '$out/bin/convchainfast.exe' \"\$@\"" >>  "$out/bin/convchainfast"
     chmod a+x "$out/bin/convchainfast"
+    runHook postInstall
   '';
   buildInputs = [ mono ];
   meta = {

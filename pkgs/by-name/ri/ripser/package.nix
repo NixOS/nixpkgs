@@ -47,8 +47,10 @@ stdenv.mkDerivation {
   buildPhase = "c++ ripser.cpp -o ripser $buildFlags";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp ripser $out/bin
+    runHook postInstall
   '';
 
   meta = {

@@ -20,8 +20,10 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/include/"
     cp OCamlMakefile "$out/include/"
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;

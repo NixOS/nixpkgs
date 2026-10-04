@@ -22,6 +22,7 @@ let
       src = cfg.package;
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out
         cp -r * $out/
 
@@ -52,6 +53,7 @@ let
         ${concatMapStringsSep "\n" (
           language: "cp -r ${language} $out/share/wordpress/wp-content/languages/"
         ) cfg.languages}
+        runHook postInstall
       '';
     };
 

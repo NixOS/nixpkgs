@@ -24,9 +24,11 @@ let
         tar xf  ${src}
       '';
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/share/dictd
         cp $(ls ./${_subdir}/*.{dict*,index} || true) $out/share/dictd
         echo "${_locale}" >$out/share/dictd/locale
+        runHook postInstall
       '';
 
       meta = {

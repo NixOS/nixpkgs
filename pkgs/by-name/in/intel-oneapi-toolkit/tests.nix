@@ -37,7 +37,11 @@
         ./test-with-$lib
       done
     '';
-    installPhase = ''touch "$out"'';
+    installPhase = ''
+      runHook preInstall
+      touch "$out"
+      runHook postInstall
+    '';
   };
 
   all-binaries-run = runCommand "intel-oneapi-test-all-binaries-run" { } ''
@@ -84,7 +88,11 @@
     buildPhase = "icpx -fsycl $src -o test";
     doCheck = true;
     checkPhase = "./test";
-    installPhase = ''touch "$out"'';
+    installPhase = ''
+      runHook preInstall
+      touch "$out"
+      runHook postInstall
+    '';
   };
 
   headers-available = kit.stdenv.mkDerivation {
@@ -95,7 +103,11 @@
       echo '#include <CL/sycl.hpp>'   | icpx -fsycl -x c++ -E - > /dev/null
       echo '#include <iostream>'      | icpx -x c++ -E - > /dev/null
     '';
-    installPhase = ''touch "$out"'';
+    installPhase = ''
+      runHook preInstall
+      touch "$out"
+      runHook postInstall
+    '';
   };
 
   c-compile = kit.stdenv.mkDerivation {
@@ -108,7 +120,11 @@
     buildPhase = "icx $src -o test";
     doCheck = true;
     checkPhase = "./test";
-    installPhase = ''touch "$out"'';
+    installPhase = ''
+      runHook preInstall
+      touch "$out"
+      runHook postInstall
+    '';
   };
 
   openmp-compile = kit.stdenv.mkDerivation {
@@ -126,6 +142,10 @@
     buildPhase = "icx -fiopenmp $src -o test";
     doCheck = true;
     checkPhase = "./test";
-    installPhase = ''touch "$out"'';
+    installPhase = ''
+      runHook preInstall
+      touch "$out"
+      runHook postInstall
+    '';
   };
 }

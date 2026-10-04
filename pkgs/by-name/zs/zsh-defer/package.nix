@@ -19,8 +19,10 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/zsh-defer
     cp zsh-defer* $out/share/zsh-defer
+    runHook postInstall
   '';
 
   meta = {

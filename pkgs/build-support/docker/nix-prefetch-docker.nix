@@ -16,6 +16,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     install -vD ${./nix-prefetch-docker} $out/bin/$name;
     wrapProgram $out/bin/$name \
       --prefix PATH : ${
@@ -27,6 +28,7 @@ stdenv.mkDerivation {
         ]
       } \
       --set HOME /homeless-shelter
+    runHook postInstall
   '';
 
   preferLocalBuild = true;

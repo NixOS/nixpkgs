@@ -67,10 +67,12 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         mv ./distributions/${name}/_build $out
 
         # Make it reproducible
         rm $out/build.log
+        runHook postInstall
       '';
     };
 

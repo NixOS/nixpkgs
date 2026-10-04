@@ -54,6 +54,7 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/{bin,lib,share}
 
         cp -R usr/{bin,lib,share} $out/
@@ -71,6 +72,7 @@ let
 
         substituteInPlace $out/lib/beyondcompare/bcmount.sh \
           --replace-fail "python3" "${python.interpreter}"
+        runHook postInstall
       '';
 
       nativeBuildInputs = [
@@ -106,8 +108,10 @@ let
     nativeBuildInputs = [ unzip ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/Applications/BCompare.app
       cp -R . $out/Applications/BCompare.app
+      runHook postInstall
     '';
 
     __structuredAttrs = true;

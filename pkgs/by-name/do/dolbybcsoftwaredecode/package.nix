@@ -23,8 +23,10 @@ stdenv.mkDerivation {
     fpc DolbyBi64.PP
   '';
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp DolbyBi64 $out/bin/
+    runHook postInstall
   '';
 
   meta = {

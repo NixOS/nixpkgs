@@ -195,8 +195,10 @@ buildGoModule rec {
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp -r build/* $out/
+      runHook postInstall
     '';
   };
 

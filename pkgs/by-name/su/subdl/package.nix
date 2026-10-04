@@ -19,7 +19,9 @@ stdenv.mkDerivation {
   buildInputs = [ python3 ];
 
   installPhase = ''
+    runHook preInstall
     install -vD subdl $out/bin/subdl
+    runHook postInstall
   '';
 
   meta = {

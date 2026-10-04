@@ -102,8 +102,10 @@ let
         ${pkg}/bin/${program} ${toString flags} < <(echo '(compile-file "asdf.lisp")')
       '';
       installPhase = ''
+        runHook preInstall
         mkdir -p $out
         cp -v asdf.${faslExt} $out
+        runHook postInstall
       '';
     };
 

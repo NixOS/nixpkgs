@@ -59,8 +59,10 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
       mkdir "$out"
       mv -v * "$out/"
+      runHook postInstall
     '';
   };
 

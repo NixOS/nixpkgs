@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -R config libs $out
 
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${bash}/bin:${coreutils}/bin:${gnugrep}/bin:${gnused}/bin"
     done
     chmod +x $out/bin\/*
+    runHook postInstall
   '';
 
   passthru = {

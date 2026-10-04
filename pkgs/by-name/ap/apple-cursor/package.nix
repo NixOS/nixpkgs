@@ -30,8 +30,10 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
     install -dm 0755 $out/share/icons
     cp -r macOS/macOS* $out/share/icons/
+    runHook postInstall
   '';
 
   meta = {

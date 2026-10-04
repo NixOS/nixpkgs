@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     mv usr/bin $out
     mv usr/lib $out
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
         tk
       ]
     }
+    runHook postInstall
   '';
 
   meta = {

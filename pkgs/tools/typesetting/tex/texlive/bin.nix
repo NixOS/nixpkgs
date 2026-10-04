@@ -818,7 +818,9 @@ rec {
     '';
 
     installPhase = ''
+      runHook preInstall
       install -D -t "$tex"/tex4ht/bin tex4ht.dir/texmf/tex4ht/bin/tex4ht.jar
+      runHook postInstall
     '';
   };
 

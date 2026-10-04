@@ -23,8 +23,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libx11 ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/lib/lxvst
     install -Dm644 oxevst64.so -t $out/lib/lxvst
+    runHook postInstall
   '';
 
   meta = {

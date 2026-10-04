@@ -24,8 +24,10 @@ let
     name = "webkitgtk-4.0-compat";
     dontUnpack = true;
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/lib
       ln -s ${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0 $out/lib/libwebkit2gtk-4.0.so.37
+      runHook postInstall
     '';
   };
 in
