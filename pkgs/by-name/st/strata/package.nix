@@ -57,6 +57,8 @@ let
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "strata";
   version = "0.21.0";
 
