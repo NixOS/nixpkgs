@@ -5,6 +5,7 @@
   cmark,
   desktop-file-utils,
   editorconfig-core-c,
+  fetchpatch,
   fetchurl,
   flatpak,
   gnome,
@@ -67,6 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
     #
     #     Typelib file for namespace 'Pango', version '1.0' not found (g-irepository-error-quark, 0)
     ./fix-finding-test-typelibs.patch
+
+    # Fix immediate crash at startup due to missing libdex initialization
+    # Upstream issue: https://gitlab.gnome.org/GNOME/gnome-builder/-/work_items/2413
+    (fetchpatch {
+      name = "libdex-init.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/-/commit/4dc88803f84ea11caaac78a39d2084ac6f1313d3.patch";
+      hash = "sha256-O7iVyl8JQmIie5osTE0jj0hfEt3fKmcSpAE6b73g8ws=";
+    })
   ];
 
   nativeBuildInputs = [
