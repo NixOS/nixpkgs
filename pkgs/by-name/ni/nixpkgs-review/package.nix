@@ -1,3 +1,5 @@
+# If adding a dependency that depends on nix, please make sure that the
+# overrides in pkgs/tools/package-management/lix/default.nix are updated too.
 {
   lib,
   python3Packages,
