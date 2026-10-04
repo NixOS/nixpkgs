@@ -86,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/opt/heroic"
-    cp -r dist/*-unpacked/resources "$out/opt/heroic"
+    mkdir -p "$out/share/heroic"
+    cp -r dist/*-unpacked/resources "$out/share/heroic"
 
-    bin_dir="$out/opt/heroic/resources/app.asar.unpacked/build/bin"
+    bin_dir="$out/share/heroic/resources/app.asar.unpacked/build/bin"
 
     # Clean up prebuilt binaries
     rm -r "$bin_dir"
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
         )
       }" \
       --add-flags --disable-gpu-compositing \
-      --add-flags $out/opt/heroic/resources/app.asar \
+      --add-flags $out/share/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
