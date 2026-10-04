@@ -1,0 +1,86 @@
+diff --git a/src/ui/settings/search/tests.rs b/src/ui/settings/search/tests.rs
+index 274ed02c..a8a26dcd 100644
+--- a/src/ui/settings/search/tests.rs
++++ b/src/ui/settings/search/tests.rs
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: MIT
+ 
+ use super::matching::{page_title, score};
++use crate::ui::settings::page_shown;
+ use super::*;
+ use crate::ui::{blur::BlurBin, preferences::PreferenceManager};
+ 
+@@ -83,8 +84,8 @@ fn shortcut_rows_never_take_a_query_from_a_setting() {
+     crate::test_support::gtk_test(
+         "ui::settings::search::tests::shortcut_rows_never_take_a_query_from_a_setting",
+         || {
+-            let mut words: Vec<&str> = TARGETS
+-                .iter()
++            let shown = || TARGETS.iter().filter(|target| page_shown(target.page));
++            let mut words: Vec<&str> = shown()
+                 .flat_map(|target| {
+                     target
+                         .title
+@@ -102,7 +103,7 @@ fn shortcut_rows_never_take_a_query_from_a_setting() {
+                 }
+                 let mut best = -1;
+                 let mut setting = None;
+-                for target in TARGETS {
++                for target in shown() {
+                     if let Some(score) = score(&query, target)
+                         && score > best
+                     {
+@@ -138,7 +139,9 @@ fn ranks_exact_labels_aliases_and_small_typing_errors() {
+         ("font size", "theme", "text"),
+         ("Show thumbnails", "theme", "show-thumbnails"),
+         ("photos", "theme", "show-thumbnails"),
++        #[cfg(not(strata_updater_disabled))]
+         ("nightly", "updates", "channel"),
++        #[cfg(not(strata_updater_disabled))]
+         ("relase chanel", "updates", "channel"),
+         ("copyright", "about", "license"),
+         ("shortcuts button", "general", "hints"),
+@@ -284,7 +287,8 @@ fn builds_without_the_updater_leave_updates_out_of_navigation_and_search() {
+         "ui::settings::search::tests::builds_without_the_updater_leave_updates_out_of_navigation_and_search",
+         || {
+             crate::ui::prepare_portal_ui();
+-            for updater in [true, false] {
++            // A build compiled without the updater starts with it disabled.
++            for updater in [crate::build_info::updater_enabled(), false] {
+                 if !updater {
+                     crate::build_info::disable_updater_for_test();
+                 }
+@@ -350,7 +354,10 @@ fn late_page_filter_uses_the_current_query_and_recovers_its_sections() {
+                 (crate::services::UpdateMethod::InPlace, true),
+                 (crate::services::UpdateMethod::Pacman, false),
+             ] {
+-                let state = Rc::new(RefCell::new(Some(find_matches("nightly"))));
++                if !crate::build_info::updater_enabled() {
++                return;
++            }
++            let state = Rc::new(RefCell::new(Some(find_matches("nightly"))));
+                 let (page, _) = super::super::updates_page(
+                     PreferenceManager::shared(),
+                     Rc::new(|_| {}),
+@@ -469,7 +476,7 @@ fn global_search_routes_every_target_to_its_page() {
+                 .and_then(|widget| widget.downcast::<gtk::Label>().ok())
+                 .expect("settings title");
+             let mut failures = Vec::new();
+-            for target in TARGETS {
++            for target in TARGETS.iter().filter(|target| page_shown(target.page)) {
+                 let shown_title = super::super::translated(target.title);
+                 entry.set_text(&shown_title);
+                 let mut fail = |problem: String| {
+@@ -487,7 +494,11 @@ fn global_search_routes_every_target_to_its_page() {
+                     ));
+                 }
+                 let matches = find_matches(&normalized(&shown_title));
+-                for page in super::super::NAVIGATION.iter().map(|entry| entry.page) {
++                for page in super::super::NAVIGATION
++                    .iter()
++                    .map(|entry| entry.page)
++                    .filter(|page| page_shown(page))
++                {
+                     let visible = nav(&layer, page).is_visible();
+                     if visible != matches.pages.contains(page) {
+                         fail(format!("{page} navigation button visible={visible}"));

@@ -1,0 +1,51 @@
+diff --git a/src/ui/udiskie_preferences/tests.rs b/src/ui/udiskie_preferences/tests.rs
+index 51c0f7d1..defd401e 100644
+--- a/src/ui/udiskie_preferences/tests.rs
++++ b/src/ui/udiskie_preferences/tests.rs
+@@ -65,6 +65,16 @@ fn wait_until(predicate: impl Fn() -> bool, what: &str) {
+     }
+ }
+ 
++/// A `STRATA_INTEGRATIONS=package` build, as the Nix package is, shows the
++/// package note instead of the runtime installer these rows test.
++fn require_runtime_integrations() -> bool {
++    if crate::build_info::runtime_integrations_enabled() {
++        return true;
++    }
++    eprintln!("runtime integrations are compiled out of this build; skipping");
++    false
++}
++
+ fn has_action_label(row: &gtk::Box, label: &str) -> bool {
+     descendants::<gtk::Button>(row.upcast_ref())
+         .iter()
+@@ -251,6 +261,9 @@ fn settings_row_open_does_not_write_config() {
+     gtk_test(
+         "ui::udiskie_preferences::tests::settings_row_open_does_not_write_config",
+         || {
++            if !require_runtime_integrations() {
++                return;
++            }
+             crate::ui::prepare_portal_ui();
+             let (config, state) = udiskie_paths();
+             let _row = settings_row();
+@@ -273,6 +286,9 @@ fn settings_row_polls_only_while_its_settings_layer_is_shown() {
+         "ui::udiskie_preferences::tests::settings_row_polls_only_while_its_settings_layer_is_shown",
+         [("PATH", bin.path())],
+         || {
++            if !require_runtime_integrations() {
++                return;
++            }
+             crate::ui::prepare_portal_ui();
+             seed_omarchy();
+             let bin = PathBuf::from(std::env::var_os("PATH").expect("isolated PATH"));
+@@ -318,6 +334,9 @@ fn settings_row_polls_availability_while_hidden() {
+         "ui::udiskie_preferences::tests::settings_row_polls_availability_while_hidden",
+         [("PATH", bin.path())],
+         || {
++            if !require_runtime_integrations() {
++                return;
++            }
+             crate::ui::prepare_portal_ui();
+             seed_omarchy();
+             let bin = PathBuf::from(std::env::var_os("PATH").expect("isolated PATH"));
