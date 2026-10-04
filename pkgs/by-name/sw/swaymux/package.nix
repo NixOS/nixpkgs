@@ -5,6 +5,7 @@
   nlohmann_json,
   qt6,
   stdenv,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   version = "1.1";
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://git.grimmauld.de/Grimmauld/swaymux/commits/branch/main";
