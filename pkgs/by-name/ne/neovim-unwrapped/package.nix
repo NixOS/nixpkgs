@@ -173,6 +173,9 @@ stdenv.mkDerivation (
 
     doCheck = true;
 
+    # flaky(under load): screen ended up on the wrong scroll position
+    env.TEST_FILTER_OUT = "works with concealed lines";
+
     # to be exhaustive, one could run
     # make oldtests too
     checkPhase = ''
