@@ -21,7 +21,6 @@
   libvorbis,
   libwebp,
   libx11,
-  lua5,
   makeDesktopItem,
   ncurses,
   nettle,
@@ -158,7 +157,6 @@ stdenv.mkDerivation rec {
     zlib
     ncurses
     geoip
-    lua5
     nettle
     curl
     sdl3
