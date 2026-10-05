@@ -44,6 +44,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
+  # Qt's GTK file dialog needs GTK's GSettings schemas.
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # https://github.com/OpenShot/openshot-qt/blob/930ff919762570eaf35a879574da8f8da9f196be/src/launch.py#L86
   # imports qt_api.py from its own site-packages directory
   postFixup = ''
