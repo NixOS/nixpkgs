@@ -348,11 +348,6 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/bash-completion/completions
     ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
 
-    # grep is a runtime dependency, need to patch so that it's found
-    substituteInPlace $out/libexec/git-core/git-sh-setup \
-        --replace ' grep' ' ${gnugrep}/bin/grep' \
-        --replace ' egrep' ' ${gnugrep}/bin/egrep'
-
     # Fix references to the perl, sed, awk and various coreutil binaries used by
     # shell scripts that git calls (e.g. filter-branch)
     SCRIPT="$(cat <<'EOS'
