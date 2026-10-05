@@ -19,16 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-non-spatial-input";
-  version = "0.51.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "non-spatial-input";
     tag = finalAttrs.version;
-    hash = "sha256-CWPEu+WvTtCo2zUXzyQkFcb5bFG9yVu/OnjPuoGKDGA=";
+    hash = "sha256-VOaZzz3XIpyOSzBqI5+TUe1vJtKxGXUFomU7wTyBxnE=";
   };
 
-  cargoHash = "sha256-QZaVDMeuxqHy9iQngb/wpv/P+KxevkoQqGojYIVzo2s=";
+  cargoHash = "sha256-jXtFBKli3R8IA+nyQIsik/V+WcevV+ReB/6X6XeuETg=";
 
   __structuredAttrs = true;
   strictDeps = true;
