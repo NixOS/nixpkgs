@@ -12,6 +12,7 @@
   gst_all_1,
 
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -92,6 +93,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   nativeCheckInputs = [
     pythonPackages.pytestCheckHook
     writableTmpDirAsHomeHook
+    versionCheckHook
   ];
   doCheck = true;
 
