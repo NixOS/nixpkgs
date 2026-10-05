@@ -4,6 +4,7 @@
   fetchurl,
   callPackage,
   ncurses,
+  pixman,
   bash,
   gawk,
   gettext,
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     ncurses
+    pixman
     bash
     gawk
   ];
