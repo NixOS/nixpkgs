@@ -4,7 +4,7 @@
   fetchurl,
   stdenv,
 
-  boost191,
+  boost,
   cairomm_1_16,
   cgal,
   expat,
@@ -28,7 +28,7 @@
 }:
 
 let
-  boost' = boost191.override {
+  boost' = boost.override {
     enablePython = true;
     inherit python;
   };
