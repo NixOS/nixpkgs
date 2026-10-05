@@ -55,18 +55,19 @@ index bb1464cd6..efbeca91e 100644
    vertical-align: top;
    letter-spacing: inherit;
    font-style: normal;
-@@ -25,15 +23,6 @@
+@@ -25,16 +23,9 @@
    color: hsl(from currentColor h s l / 100%);
  }
  
--.FunStaticEmoji__Text {
+ .FunStaticEmoji__Text {
 -  padding-top: 1px;
+   font-variant-emoji: emoji;
 -
 -  // Emoji font images are slightly higher than optical center
 -  @media (resolution >= 2x) {
 -    padding-top: 0.5px;
 -  }
--}
+ }
 -
  .FunStaticEmoji--Blot {
    display: inline-flex;
@@ -89,10 +90,11 @@ index bb1464cd6..efbeca91e 100644
    font-style: normal;
    color: hsl(from currentColor h s l / 100%);
  }
-@@ -169,26 +156,6 @@ $inline-emoji-container-name: inline-emoji;
+@@ -170,27 +157,7 @@ $inline-emoji-container-name: inline-emoji;
    // Inline-block so copying multiple emoji does not insert newlines around
    // each one in the clipboard plain-text serialization.
    display: inline-block;
+   font-variant-emoji: emoji;
 -
 -  // Emoji font images are slightly higher than optical center
 -  @container #{$inline-emoji-container-name} (width > 16px) {

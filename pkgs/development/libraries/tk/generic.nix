@@ -4,6 +4,7 @@
   src,
   pkg-config,
   tcl,
+  harfbuzz,
   libxft,
   zip,
   zlib,
@@ -75,9 +76,14 @@ tcl.mkTclDerivation {
     # Only used to detect the presence of zlib. Could be replaced with a stub.
     zip
   ];
-  buildInputs = lib.optionals (lib.versionAtLeast tcl.version "9.0") [
-    zlib
-  ];
+  buildInputs =
+    lib.optionals (lib.versionAtLeast tcl.version "9.0") [
+      zlib
+    ]
+    ++ lib.optionals (lib.versionAtLeast tcl.version "9.1") [
+      # For --enable-bidi
+      harfbuzz
+    ];
 
   propagatedBuildInputs = [
     libxft

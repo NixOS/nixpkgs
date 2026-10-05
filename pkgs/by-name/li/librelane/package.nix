@@ -44,6 +44,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "click"
+    # librelane pins ciel<3; only Family.by_name/get_ciel_home/fetch()
+    # (unchanged in ciel 3.0.0) are used, so the pin is safe to relax.
+    "ciel"
   ];
 
   dependencies = with python3Packages; [

@@ -69,7 +69,7 @@
   hypothesis,
   psutil,
   # ROCm build and `torch.compile` requires `triton`
-  tritonSupport ? (!stdenv.hostPlatform.isDarwin),
+  tritonSupport ? (lib.meta.availableOn stdenv.hostPlatform triton),
   triton,
 
   # TODO: 1. callPackage needs to learn to distinguish between the task

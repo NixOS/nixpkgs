@@ -2,7 +2,6 @@
   stdenv,
   lib,
   libidn,
-  lua,
   miniupnpc,
   expat,
   zlib,
@@ -46,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libidn
-    lua
     miniupnpc
     expat
     zlib

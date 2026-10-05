@@ -53,7 +53,6 @@
   libmpeg2,
   libxcb-keysyms,
   lirc,
-  lua5_2,
   taglib,
   libspatialaudio,
   libmtp,
@@ -205,7 +204,6 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg_6
     libxcb-keysyms
     lirc
-    lua5_2
     taglib
     libspatialaudio
     speexdsp
