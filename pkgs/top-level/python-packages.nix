@@ -1389,6 +1389,8 @@ self: super: with self; {
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
 
+  arsc-writer = callPackage ../development/python-modules/arsc-writer { };
+
   asana = callPackage ../development/python-modules/asana { };
 
   ascii-magic = callPackage ../development/python-modules/ascii-magic { };
