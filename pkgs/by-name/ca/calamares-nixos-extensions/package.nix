@@ -8,6 +8,9 @@
 
   optimizeSvgGraphics ? true,
   svgo,
+
+  # for passthru.tests
+  calamares-nixos,
 }:
 
 let
@@ -139,6 +142,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit screenshots branding;
+    tests = {
+      inherit calamares-nixos;
+    };
   };
 
   meta = {
