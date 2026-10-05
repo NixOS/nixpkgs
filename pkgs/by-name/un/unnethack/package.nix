@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   util-linux,
   ncurses,
   flex,
   bison,
-  lua5_4,
+  lua5_5,
 }:
 
 stdenv.mkDerivation {
@@ -25,11 +26,16 @@ stdenv.mkDerivation {
     # util-linux does not contains "col" binary on Darwin. Only needed for documentation build.
     # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
     ./disable-col-check.patch
+    # Add support for Lua 5.5
+    (fetchpatch {
+      url = "https://github.com/UnNetHack/UnNetHack/commit/082d79a20d9c00340ee353938462cafbd4e3356b.patch";
+      hash = "sha256-0RZc4sdsTMPj3KYN7zvBvkBvJx2rU82oU7dq6p3/114=";
+    })
   ];
 
   buildInputs = [
     ncurses
-    lua5_4
+    lua5_5
   ];
 
   nativeBuildInputs = [
