@@ -7284,12 +7284,12 @@ final: prev: {
 
   hardtime-nvim = buildVimPlugin {
     pname = "hardtime.nvim";
-    version = "1.2.0-unstable-2026-09-13";
+    version = "1.3.0";
     src = fetchFromGitHub {
       owner = "m4xshen";
       repo = "hardtime.nvim";
-      rev = "5165840fe680eab46de1fc6dbff48f148fdcf018";
-      hash = "sha256-AhCFZQYtwPicHS/6PDeTkkdU2R9hAGgbyz1Sow3GNdQ=";
+      tag = "v1.3.0";
+      hash = "sha256-dAghosu35TKmEM1UictCCBlHxN/jo/RFUWMvQC+0UFU=";
     };
     meta.homepage = "https://github.com/m4xshen/hardtime.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
