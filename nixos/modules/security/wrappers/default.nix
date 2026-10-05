@@ -131,19 +131,23 @@ let
       ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      : > "$metaWrapperDir/${program}"
 
       # Prevent races
-      chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}:${group} "$wrapperDir/${program}"
+      chmod 0000 "$metaWrapperDir/${program}"
+      chown ${owner}:${group} "$metaWrapperDir/${program}"
+
+      wrapperBinary="$(realpath "${source}")"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.redirect -v "''${wrapperBinary#'${builtins.storeDir}'}" "$metaWrapperDir/${program}"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.metacopy -v "" "$metaWrapperDir/${program}"
 
       # Set desired capabilities on the file plus cap_setpcap so
       # the wrapper program can elevate the capabilities set on
       # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
+      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$metaWrapperDir/${program}"
 
       # Set the executable bit
-      chmod ${permissions} "$wrapperDir/${program}"
+      chmod ${permissions} "$metaWrapperDir/${program}"
     '';
 
   ###### Activation script for the setuid wrappers
@@ -159,13 +163,17 @@ let
       ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      : > "$metaWrapperDir/${program}"
+
+      wrapperBinary="$(realpath "${source}")"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.redirect -v "''${wrapperBinary#'${builtins.storeDir}'}" "$metaWrapperDir/${program}"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.metacopy -v "" "$metaWrapperDir/${program}"
 
       # Prevent races
-      chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}:${group} "$wrapperDir/${program}"
+      chmod 0000 "$metaWrapperDir/${program}"
+      chown ${owner}:${group} "$metaWrapperDir/${program}"
 
-      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
+      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$metaWrapperDir/${program}"
     '';
 
   mkWrappedPrograms = map (
@@ -337,10 +345,15 @@ in
         chmod 755 "${parentWrapperDir}"
 
         # We want to place the tmpdirs for the wrappers to the parent dir.
-        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-        chmod a+rx "$wrapperDir"
+        metaWrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers-meta.XXXXXXXXXX)
+        ${lib.getExe' pkgs.util-linux.mount "mount"} -t tmpfs tmpfs "$metaWrapperDir" # tmpfs can later be unmounted
 
         ${lib.concatStringsSep "\n" mkWrappedPrograms}
+
+        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+        ${lib.getExe' pkgs.util-linux.mount "mount"} -t overlay overlay -o "lowerdir=$metaWrapperDir::${builtins.storeDir},ro" "$wrapperDir"
+        ${lib.getExe' pkgs.util-linux.mount "umount"} "$metaWrapperDir" # overlayfs will keep the FD alive until it gets unmounted on switch/shutdown
+        rm --dir "$metaWrapperDir"
 
         if [ -L ${wrapperDir} ]; then
           # Atomically replace the symlink
@@ -351,6 +364,7 @@ in
           fi
           ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
           mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+          ${lib.getExe' pkgs.util-linux.mount "umount"} --quiet "$old" # quiet in case we are switching from system that had classic wrappers as C programs
           rm --force --recursive "$old"
         else
           # For initial setup
