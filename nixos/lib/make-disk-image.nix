@@ -19,7 +19,7 @@
   - compute the size of the disk image based on the apparent size of the root folder
   - partition the disk image using the corresponding script according to the partition table type
   - format the partitions if needed
-  - use `cptofs` (LKL tool) to copy the root folder inside the disk image
+  - use `cptofs` (LKL tool) to copy the root folder inside the disk image, or, with `populateRootWith = "mke2fs"`, create the root filesystem from the root folder in one step with `mke2fs -d`
 
   At this step, the disk image already contains the Nix store, it now only needs to be converted to the desired format to be used.
 
@@ -192,6 +192,17 @@
   # TODO: support other filesystems someday.
   rootFSUID ? (if fsType == "ext4" then rootGPUID else null),
 
+  # How the staging root folder gets into the root filesystem:
+  # - "cptofs": format the filesystem, then copy the folder in with LKL's `cptofs`.
+  # - "mke2fs": create and populate the filesystem in one pass with `mke2fs -d`.
+  #   Only for ext2, ext3 and ext4. It needs no kernel and writes the
+  #   filesystem from a single thread, in a fixed order.
+  populateRootWith ? "cptofs",
+
+  # In deterministic mode with populateRootWith = "mke2fs", the seed for the
+  # ext4 directory index hashes (a UUID). mke2fs picks a random one otherwise.
+  rootFSHashSeed ? rootFSUID,
+
   # Whether a nix channel based on the current source tree should be
   # made available inside the image. Useful for interactive use of nix
   # utils, but changes the hash of the image when the sources are
@@ -216,6 +227,22 @@ assert (
 assert (
   lib.assertMsg (fsType == "ext4" && deterministic -> rootFSUID != null)
     "In deterministic mode with a ext4 partition, rootFSUID must be non-null, by default, it is equal to rootGPUID."
+);
+assert (
+  lib.assertOneOf "populateRootWith" populateRootWith [
+    "cptofs"
+    "mke2fs"
+  ]
+);
+assert (
+  lib.assertMsg (
+    populateRootWith == "mke2fs"
+    -> lib.elem fsType [
+      "ext2"
+      "ext3"
+      "ext4"
+    ]
+  ) "populateRootWith = \"mke2fs\" needs an ext2, ext3 or ext4 root filesystem."
 );
 # We use -E offset=X below, which is only supported by e2fsprogs
 assert (
@@ -396,12 +423,12 @@ let
       util-linux
       parted
       e2fsprogs
-      lkl
       config.system.build.nixos-install
       nixos-enter
       nix
       systemdMinimal
     ]
+    ++ lib.optional (populateRootWith == "cptofs") lkl
     ++ lib.optional deterministic gptfdisk
     ++ stdenv.initialPath
   );
@@ -424,6 +451,31 @@ let
   };
 
   blockSize = toString (4 * 1024); # ext4fs block size (not block device sector size)
+
+  # The staging folder that becomes the root of the filesystem.
+  stagingRoot = "$root" + lib.optionalString onlyNixStore builtins.storeDir;
+
+  mkfsExtendedOptions = lib.concatStringsSep "," (
+    lib.optional (partitionTableType != "none") "offset=$(sectorsToBytes $START)"
+    ++ lib.optional (
+      populateRootWith == "mke2fs" && deterministic && rootFSHashSeed != null
+    ) "hash_seed=${rootFSHashSeed}"
+  );
+
+  mkfsCommand = lib.concatStringsSep " " (
+    [
+      "mkfs.${fsType}"
+      "-b ${blockSize}"
+      "-F"
+      "-L ${label}"
+    ]
+    ++ lib.optionals (populateRootWith == "mke2fs") (
+      [ "-d ${stagingRoot}" ] ++ lib.optional (deterministic && rootFSUID != null) "-U ${rootFSUID}"
+    )
+    ++ lib.optional (mkfsExtendedOptions != "") "-E ${mkfsExtendedOptions}"
+    ++ [ "$diskImage" ]
+    ++ lib.optional (partitionTableType != "none") "$(sectorsToKilobytes $SECTORS)K"
+  );
 
   prepareImage = ''
     export PATH=${binPath}
@@ -610,26 +662,39 @@ let
 
     ${partitionDiskScript}
 
-    ${
-      if partitionTableType != "none" then
-        ''
-          # Get start & length of the root partition in sectors to $START and $SECTORS.
-          eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
+    ${lib.optionalString (partitionTableType != "none") ''
+      # Get start & length of the root partition in sectors to $START and $SECTORS.
+      eval $(partx $diskImage -o START,SECTORS --nr ${rootPartition} --pairs)
+    ''}
 
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+    ${
+      if populateRootWith == "mke2fs" then
+        ''
+          echo "creating the root filesystem from the staging root..."
+          ${lib.optionalString onlyNixStore ''
+            # cptofs copies the store's entries into a fresh root directory,
+            # while mke2fs -d gives the root directory the folder's own mode.
+            chmod 0755 ${stagingRoot}
+          ''}
+          # mke2fs -d records each file's owner, and the staging root belongs to
+          # the build user. A user namespace that maps that user to root makes
+          # the files belong to root, as cptofs would have them. e2fsprogs
+          # takes its timestamps from SOURCE_DATE_EPOCH.
+          unshare --map-root-user ${mkfsCommand} ||
+            (echo >&2 "ERROR: mke2fs failed. diskSize might be too small for closure."; exit 1)
         ''
       else
         ''
-          mkfs.${fsType} -b ${blockSize} -F -L ${label} $diskImage
+          ${mkfsCommand}
+
+          echo "copying staging root to image..."
+          cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
+                 -t ${fsType} \
+                 -i $diskImage \
+                 ${stagingRoot}/* / ||
+            (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
         ''
     }
-
-    echo "copying staging root to image..."
-    cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
-           -t ${fsType} \
-           -i $diskImage \
-           $root${lib.optionalString onlyNixStore builtins.storeDir}/* / ||
-      (echo >&2 "ERROR: cptofs failed. diskSize might be too small for closure."; exit 1)
   '';
 
   moveOrConvertImage = ''
