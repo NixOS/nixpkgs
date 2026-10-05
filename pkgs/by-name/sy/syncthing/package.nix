@@ -107,6 +107,7 @@ buildGoModule (finalAttrs: {
         syncthing-init
         syncthing-many-devices
         syncthing-no-settings
+        syncthing-private-relay
         syncthing-relay
         ;
     };

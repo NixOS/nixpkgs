@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "ku";
   version = "0.12.0";
   __structuredAttrs = true;

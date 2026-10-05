@@ -12,8 +12,8 @@
   lcms2,
   sqlite,
   udev,
-  systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   dbus,
   gobject-introspection,
   argyllcms,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ]
   ++ lib.optionals enableSystemd [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals enableDaemon [
     polkit

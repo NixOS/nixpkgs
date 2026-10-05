@@ -17,6 +17,7 @@
   autoreconfHook,
   gtk-doc,
   fetchFromGitLab,
+  fetchpatch,
   gettext,
   yelp-tools,
 }:
@@ -26,15 +27,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnumeric";
-  version = "1.12.61";
+  version = "1.12.62";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnumeric";
     tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-SrAFYLCYacTobOmb+Jk4f4OWVLcWS8aq8OBFrdwYcbE=";
+    hash = "sha256-vMXT0KhzQqjyovZAP4Uh27mWsmRz+21p4PAdJJYMhoc=";
   };
+
+  patches = [
+    # This commit should get included in the next release.
+    (fetchpatch {
+      name = "CVE-2026-97222.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/bc1dee29525933994181fb2307d6ad584de6040d.diff";
+      hash = "sha256-8A56BLNgekDOYZnA6WqQiyoC0iJTPJQ8jEPnoKv0OPM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace configure.ac \
