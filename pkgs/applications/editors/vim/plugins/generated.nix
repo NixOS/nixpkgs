@@ -18981,12 +18981,12 @@ final: prev: {
 
   unison = buildVimPlugin {
     pname = "unison";
-    version = "1.4.0";
+    version = "1.5.0";
     src = fetchFromGitHub {
       owner = "unisonweb";
       repo = "unison";
-      tag = "release/1.4.0";
-      hash = "sha256-TDpyRO5PA9DuQ146kujXfqqDiacFOvJdFwHgU8fXcS4=";
+      tag = "release/1.5.0";
+      hash = "sha256-AcnPXBqSl3oU0GfXglYwATkvVPnym2Y00PyQDQZ/WNU=";
     };
     meta.homepage = "https://github.com/unisonweb/unison/";
     meta.license = unfree;
