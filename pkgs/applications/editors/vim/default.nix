@@ -20,7 +20,7 @@
 let
   common = callPackage ./common.nix { inherit stdenv; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vim";
 
   inherit (common)
@@ -96,4 +96,4 @@ stdenv.mkDerivation {
   '';
 
   __impureHostDeps = [ "/dev/ptmx" ];
-}
+})
