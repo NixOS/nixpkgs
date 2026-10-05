@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./post-install-script.patch
     ./postfix-3.0-no-warnings.patch
     ./relative-symlinks.patch
+    ./sendmail-postdrop-postqueue-wrapper.patch
 
     # glibc 2.34 compat
     (fetchpatch {
@@ -183,6 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
           gnused
         ]
       }
+    wrapProgram $sendmail_path \
+      --prefix PATH ":" $command_directory \
+      --prefix PATH ":" /run/wrappers/bin
 
     # Avoid dev-only outputs from being retained in final closure.
     # `makedefs.out` is a documenttation-only file. It should be safe
