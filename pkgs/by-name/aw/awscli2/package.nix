@@ -8,8 +8,7 @@
   fetchpatch,
   installShellFiles,
   nix-update-script,
-  testers,
-  awscli2,
+  versionCheckHook,
   addBinToPathHook,
   writableTmpDirAsHomeHook,
   cacert,
@@ -53,7 +52,7 @@ let
   };
 
 in
-py.pkgs.buildPythonApplication rec {
+py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awscli2";
   version = "2.37.11"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
@@ -61,7 +60,7 @@ py.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jCoq12+jHJWrDfRVGjYDtrkku8uWwWwn/5SD6IgH/qI=";
   };
 
@@ -189,6 +188,9 @@ py.pkgs.buildPythonApplication rec {
     "awscli"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     python = py; # for aws_shell
     updateScript = nix-update-script {
@@ -198,17 +200,12 @@ py.pkgs.buildPythonApplication rec {
         "^(2\\..*)"
       ];
     };
-    tests.version = testers.testVersion {
-      package = awscli2;
-      command = "aws --version";
-      inherit version;
-    };
   };
 
   meta = {
     description = "Unified tool to manage your AWS services";
     homepage = "https://aws.amazon.com/cli/";
-    changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aws/aws-cli/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       davegallant
@@ -217,4 +214,4 @@ py.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "aws";
   };
-}
+})
