@@ -1,6 +1,7 @@
 {
   lib,
   vim,
+  bashInteractive,
   writableTmpDirAsHomeHook,
 }:
 
@@ -13,12 +14,10 @@ vim.overrideAttrs (old: {
   env = old.env or { } // {
     # Test functions matching this Vim regex are skipped; see src/testdir/runtest.vim.
     TEST_SKIP_PAT = lib.concatMapStringsSep "\\|" (test: "^${test}(") [
-      # :terminal runs /bin/sh, which is BusyBox ash in the sandbox; its banner
-      # shows up in the screendumps.
+      # The screendump shows "/bin/sh" in the :terminal status line, so the
+      # shell cannot be swapped for bash (see preCheck); the sandbox /bin/sh is
+      # BusyBox ash, whose banner shows up in the dump.
       "Test_popup_drag_termwin"
-      "Test_popup_opacity_global_terminal_close_no_leftover"
-      "Test_popup_opacity_tablocal_terminal_close_no_leftover"
-      "Test_popup_opacity_terminal_move_no_leftover"
 
       # 'backupskip' contains $TMPDIR/*, $TEMP/* and $TMP/*, which all cover
       # the build directory.
@@ -42,6 +41,11 @@ vim.overrideAttrs (old: {
     # 'writedelay', ...) kills the rest of its file. A FIFO opened read-write
     # never reaches EOF.
     mkfifo "$TMPDIR/stdin"
+
+    # These tests run :terminal with /bin/sh, which is BusyBox ash in the
+    # sandbox; its banner shows up in the screendumps.
+    substituteInPlace src/testdir/test_popupwin.vim \
+      --replace-fail "shell=/bin/sh" "shell=${lib.getExe' bashInteractive "sh"}"
   '';
 
   checkPhase = ''
