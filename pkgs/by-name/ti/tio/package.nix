@@ -7,7 +7,7 @@
   pkg-config,
   glib,
   inih,
-  lua,
+  lua5_5,
   bash-completion,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     inih
-    lua
+    lua5_5
     glib
     bash-completion
   ];
