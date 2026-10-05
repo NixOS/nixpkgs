@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jquast";
     repo = "wcwidth";
     tag = finalAttrs.version;
-    hash = "sha256-rOT2cJDgzKSvx6iLXzBvtcttg8B7cUKBDQma14adCE4=";
+    hash = "sha256-uztBkFbXnDNzOdQ5sd6S0yi8s3o+eLgvDXAFcTkHUvo=";
   };
 
   build-system = [ setuptools ];
