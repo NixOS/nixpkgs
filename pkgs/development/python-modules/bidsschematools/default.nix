@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bidsschematools";
-  version = "1.2.7";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bids-standard";
     repo = "bids-specification";
     tag = "schema-${finalAttrs.version}";
-    hash = "sha256-kDX0oZi/X0lsSYtr7mUU+Y+D9EHdXNEZVSfBWLzH0cM=";
+    hash = "sha256-tcTaESSyVPn/By382I7TAMJGFxugi5qQwnMhcNWGtig=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/tools/schemacode";
