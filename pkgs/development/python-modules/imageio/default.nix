@@ -21,6 +21,7 @@
   imageio-ffmpeg,
   pillow-heif,
   psutil,
+  pydicom,
   tifffile,
 
   # tests
@@ -43,14 +44,14 @@ in
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.37.2";
+  version = "2.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     tag = "v${version}";
-    hash = "sha256-8wKTcmnep67zBMYgd6Gpr3wRCIrzYaqfytL1o7iBNAk=";
+    hash = "sha256-gSQLSIDygNUUofKKdrAxIUJr859G1tdPKkMKZGP5wyY=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -78,6 +79,7 @@ buildPythonPackage rec {
     lytro = [ ];
     numpy = [ ];
     pillow = [ ];
+    pydicom = [ pydicom ];
     simpleitk = [ ];
     spe = [ ];
     swf = [ ];
