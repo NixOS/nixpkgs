@@ -5,7 +5,7 @@
   buildGoModule,
   libpcap,
   nixosTests,
-  systemd,
+  systemdLibs,
   config,
 }:
 
@@ -51,10 +51,10 @@ rec {
   };
   filebeat7 = beat "filebeat" {
     meta.description = "Lightweight shipper for logfiles";
-    buildInputs = [ systemd ];
+    buildInputs = [ systemdLibs ];
     tags = [ "withjournald" ];
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemdLibs) ]} "$out/bin/filebeat"
     '';
   };
   heartbeat7 = beat "heartbeat" {

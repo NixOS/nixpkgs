@@ -14,7 +14,7 @@ let
       darwin = rec {
         systemTag = "nix-darwin";
         capitalized = systemTag;
-        fontFile = "JoyPixels-SBIX.ttf";
+        fontFile = "joypixels-sbix.ttf";
       };
     }
     .${kernel.name} or {
@@ -23,20 +23,31 @@ let
       fontFile = "joypixels-android.ttf";
     };
 
-  joypixels-free-license = lib.licenses.mkLicense {
-    shortName = "JoyPixels-Free";
-    fullName = "JoyPixels Free License Agreement";
-    url = "https://cdn.joypixels.com/free-license.pdf";
-    free = false;
-  };
+  joypixels-free-license =
+    let
+      inherit (systemSpecific) systemTag;
+    in
+    lib.licenses.mkLicense {
+      shortName = "JoyPixels-Free";
+      fullName = "JoyPixels Free License Agreement";
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/license/free-license.txt";
+      free = false;
+    };
 
-  joypixels-license-appendix = lib.licenses.mkLicense {
-    shortName = "JoyPixels-NixOS-Appendix";
-    fullName = "JoyPixels ${systemSpecific.capitalized} License Appendix";
-    url = "https://cdn.joypixels.com/distributions/${systemSpecific.systemTag}/appendix/joypixels-license-appendix.pdf";
-    free = false;
-    redistributable = true;
-  };
+  joypixels-license-appendix =
+    let
+      inherit (systemSpecific)
+        capitalized
+        systemTag
+        ;
+    in
+    lib.licenses.mkLicense {
+      shortName = "JoyPixels-NixOS-Appendix";
+      fullName = "JoyPixels ${capitalized} License Appendix";
+      url = "https://cdn.joypixels.com/distributions/${systemTag}/appendix/joypixels-license-appendix.txt";
+      free = false;
+      redistributable = true;
+    };
 
   throwLicense = throw ''
     Use of the JoyPixels font requires acceptance of the license.
@@ -67,7 +78,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "joypixels";
-  version = "9.0.0";
+  version = "11.0.0";
 
   src =
     assert !acceptLicense -> throwLicense;
@@ -77,9 +88,9 @@ stdenv.mkDerivation rec {
       url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
       sha256 =
         {
-          darwin = "sha256-muUxXzz8BePyPsiZocYvM0ebM1H+u84ysN5YUvsMLiU=";
+          darwin = "sha256-NDxhHgnHDenHict39V4W8mLJIqpmBfmDYfsRx7Es06s=";
         }
-        .${kernel.name} or "sha256-pmGsVgYSK/c5OlhOXhNlRBs/XppMXmsHcZeSmIkuED4=";
+        .${kernel.name} or "sha256-taHKy2rin1SE24BKnB8LZ662U8MO9HL5if3+mHQ38Io=";
     };
 
   dontUnpack = true;
@@ -95,10 +106,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Finest emoji you can use legally (formerly EmojiOne)";
     longDescription = ''
-      Updated for 2024! JoyPixels 9.0 includes 3,820 originally crafted icon
-      designs and is 100% Unicode 15.1 compatible. We offer the largest
-      selection of files ranging from png, svg, iconjar, and fonts (sprites
-      available upon request).
+      Updated for 2026! 3,991 originally-crafted emoji, Unicode 17 compatible.
     '';
     homepage = "https://www.joypixels.com/fonts";
     hydraPlatforms = [ ]; # Just a binary file download, nothing to cache.

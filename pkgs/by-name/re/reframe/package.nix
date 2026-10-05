@@ -6,7 +6,7 @@
   meson,
   ninja,
   cmake,
-  systemd,
+  systemdLibs,
   glib,
   gtk4,
   libdrm,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     glib
     gtk4
     libdrm

@@ -121,6 +121,9 @@ buildPythonPackage (finalAttrs: {
     "test_match_n"
     "test_multi_jobs_p"
     "test_rules_ml_p"
+
+    # Hang indefinitely on some CPUs
+    "TestInt"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:

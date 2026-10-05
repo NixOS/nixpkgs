@@ -8698,8 +8698,6 @@ self: super: with self; {
 
   ixia = callPackage ../development/python-modules/ixia { };
 
-  j2cli = callPackage ../development/python-modules/j2cli { };
-
   j2lint = callPackage ../development/python-modules/j2lint { };
 
   jaconv = callPackage ../development/python-modules/jaconv { };
@@ -16053,6 +16051,8 @@ self: super: with self; {
 
   pyregion = callPackage ../development/python-modules/pyregion { };
 
+  pyregrws = callPackage ../development/python-modules/pyregrws { };
+
   pyrender = callPackage ../development/python-modules/pyrender {
     inherit (pkgs) mesa;
   };
@@ -17570,6 +17570,8 @@ self: super: with self; {
   pywidevine = callPackage ../development/python-modules/pywidevine {
     protobuf = protobuf6;
   };
+
+  pywiim = callPackage ../development/python-modules/pywiim { };
 
   pywikibot = callPackage ../development/python-modules/pywikibot { };
 
@@ -20078,8 +20080,6 @@ self: super: with self; {
   stookwijzer = callPackage ../development/python-modules/stookwijzer { };
 
   stop-words = callPackage ../development/python-modules/stop-words { };
-
-  stopit = callPackage ../development/python-modules/stopit { };
 
   storage3 = callPackage ../development/python-modules/storage3 { };
 

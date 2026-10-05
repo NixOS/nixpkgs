@@ -2323,6 +2323,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  carderne-pi-nvim = buildVimPlugin {
+    pname = "carderne-pi-nvim";
+    version = "0.2.5";
+    src = fetchFromGitHub {
+      owner = "carderne";
+      repo = "pi-nvim";
+      tag = "v0.2.5";
+      hash = "sha256-1ZpHYfpgdezwM5go5KAPhjPeKDIgKgmVSCVGgbPv63o=";
+    };
+    meta.homepage = "https://github.com/carderne/pi-nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   catppuccin-nvim = buildVimPlugin {
     pname = "catppuccin-nvim";
     version = "2.0.0";
@@ -3567,6 +3581,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  code-helper-nvim = buildVimPlugin {
+    pname = "code-helper-nvim";
+    version = "0-unstable-2026-10-04";
+    src = fetchFromGitHub {
+      owner = "sergioia-dev";
+      repo = "code-helper-nvim";
+      rev = "318856be95cafd863c7a1983a1b7381c6454b906";
+      hash = "sha256-OHrZiroVLJEmUKIzuw8l59Ql3Xmv8rImrqtGof9DiUM=";
+    };
+    meta.homepage = "https://github.com/sergioia-dev/code-helper-nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   codecompanion-history-nvim = buildVimPlugin {
     pname = "codecompanion-history.nvim";
     version = "0-unstable-2026-01-22";
@@ -4447,6 +4475,20 @@ final: prev: {
     };
     meta.homepage = "https://github.com/d2lang/d2-vim/";
     meta.license = getLicenseFromSpdxId "BSD-3-Clause";
+    meta.hydraPlatforms = [ ];
+  };
+
+  dadbod-grip-nvim = buildVimPlugin {
+    pname = "dadbod-grip.nvim";
+    version = "3.11.0";
+    src = fetchFromGitHub {
+      owner = "joryeugene";
+      repo = "dadbod-grip.nvim";
+      tag = "v3.11.0";
+      hash = "sha256-iy3J41D1X0u7pTqSSgvBL5ATQeilon2VRDHFxzFAEqs=";
+    };
+    meta.homepage = "https://github.com/joryeugene/dadbod-grip.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 
@@ -18357,6 +18399,20 @@ final: prev: {
     };
     meta.homepage = "https://github.com/freitass/todo.txt-vim/";
     meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
+  toggable-term-nvim = buildVimPlugin {
+    pname = "toggable-term-nvim";
+    version = "0-unstable-2026-10-04";
+    src = fetchFromGitHub {
+      owner = "sergioia-dev";
+      repo = "toggable-term-nvim";
+      rev = "c61ddbcad7484b1306d643bd2a41699fbf0239d6";
+      hash = "sha256-ellFepBoskQ6iIV5lU7OSSyD7StOHsUgQFRoG+wbNDE=";
+    };
+    meta.homepage = "https://github.com/sergioia-dev/toggable-term-nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
 

@@ -73,12 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.tcl
   ];
 
-  buildInputs = [
-    bashNonInteractive
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "9.0") [
-    zlib
-  ];
+  buildInputs =
+    lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive
+    ++ lib.optionals (lib.versionAtLeast version "9.0") [
+      zlib
+    ];
 
   strictDeps = true;
 

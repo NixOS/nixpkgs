@@ -535,6 +535,7 @@
   ./services/continuous-integration/gocd-agent/default.nix
   ./services/continuous-integration/gocd-server/default.nix
   ./services/continuous-integration/hercules-ci-agent/default.nix
+  ./services/continuous-integration/hydra/builder.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/job-builder.nix
@@ -1707,6 +1708,7 @@
   ./services/web-apps/drasl.nix
   ./services/web-apps/drupal.nix
   ./services/web-apps/echoip.nix
+  ./services/web-apps/elk.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ente.nix
   ./services/web-apps/fediwall.nix
