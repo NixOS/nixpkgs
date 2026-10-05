@@ -196,6 +196,14 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
 
+    # With dontPatchELF, host-platform native addons (node-pty, sharp, ...) get
+    # no RUNPATH for libstdc++. Nixpkgs' Electron doesn't load libstdc++, so
+    # they fail to dlopen when the server runs under ELECTRON_RUN_AS_NODE.
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+      find "$out"/libexec/t3code -name '*.node' -path '*linux-${stdenv.hostPlatform.node.arch}*' \
+        -exec patchelf --add-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} {} +
+    '';
+
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       for shell in bash fish zsh; do
         installShellCompletion --cmd t3 --"$shell" <("$out/bin/t3" --completions "$shell")
