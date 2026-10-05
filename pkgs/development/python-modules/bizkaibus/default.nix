@@ -3,22 +3,19 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bizkaibus";
-  version = "0.2.0";
+  version = "1.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "UgaitzEtxebarria";
     repo = "BizkaibusRTPI";
-    rev = version;
-    hash = "sha256-TM02pSSOELRGSwsKc5C+34W94K6mnS0C69aijsPqSWs=";
+    tag = finalAttrs.version;
+    hash = "sha256-6vQICG63+RJEILElrA1IMOBOJTnHqI9LviqrHBUgj68=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module to get information about Bizkaibus buses";
     homepage = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI";
-    changelog = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI/releases/tag/${version}";
+    changelog = "https://github.com/UgaitzEtxebarria/BizkaibusRTPI/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
