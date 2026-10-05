@@ -14,7 +14,7 @@
   sqlite,
   wxwidgets_3_2,
   gtk3,
-  lua,
+  lua5_5_compat,
   wxsqlite3,
 }:
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     wxwidgets_3_2
     gtk3
-    lua
+    lua5_5_compat
     wxsqlite3
   ];
 
