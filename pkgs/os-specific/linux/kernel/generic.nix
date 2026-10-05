@@ -34,7 +34,9 @@ lib.makeOverridable (
     # Allows overriding the default defconfig
     # TODO: Reconsider some of these defaults?
     defconfig ?
-      if stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.parsed.cpu.version or null == "5" then
+      if stdenv.hostPlatform.isArmv7 then
+        "multi_v7_defconfig"
+      else if stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.parsed.cpu.version or null == "5" then
         "multi_v5_defconfig"
       else if stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.parsed.cpu.version or null == "6" then
         "bcm2835_defconfig"
