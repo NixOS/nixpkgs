@@ -68,6 +68,16 @@ in
       '';
     };
 
+    reproducible = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to build a bit-for-bit reproducible image, with a fixed VHD
+        footer. See the `reproducible` parameter of
+        {file}`nixos/lib/make-disk-image.nix`, which also explains the cost.
+      '';
+    };
+
     additionalSpace = mkOption {
       type = types.str;
       default = "512M";
@@ -92,6 +102,7 @@ in
       format = "raw";
       postVM = ''
         ${lib.getExe' pkgs.vmTools.qemu "qemu-img"} convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/${config.image.fileName}
+        ${lib.optionalString cfg.reproducible "normaliseVhdFooter $out/${config.image.fileName}"}
         rm $diskImage
       ''
       + lib.optionalString (cfg.diskSize == "auto") ''
@@ -102,6 +113,7 @@ in
 
       bootSize = "${toString cfg.bootSize}M";
       partitionTableType = if (cfg.vmGeneration == "v2") then "efi" else "legacy";
+      inherit (cfg) reproducible;
 
       inherit (cfg) contents label;
       inherit (config.virtualisation) diskSize;
