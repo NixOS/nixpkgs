@@ -72,21 +72,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_UTILITIES" enableUtilities)
     (lib.cmakeBool "ZFP_WITH_CUDA" enableCuda)
   ]
-  # compile CUDA code for all extant GPUs so the binary will work with any GPU
-  # and driver combination. to be ultimately solved upstream:
-  # https://github.com/LLNL/zfp/issues/178
   ++ lib.optionals enableCuda [
-    (lib.cmakeFeature "CMAKE_CUDA_FLAGS" (toString [
-      "-gencode=arch=compute_52,code=sm_52"
-      "-gencode=arch=compute_60,code=sm_60"
-      "-gencode=arch=compute_61,code=sm_61"
-      "-gencode=arch=compute_70,code=sm_70"
-      "-gencode=arch=compute_75,code=sm_75"
-      "-gencode=arch=compute_80,code=sm_80"
-      "-gencode=arch=compute_86,code=sm_86"
-      "-gencode=arch=compute_87,code=sm_87"
-      "-gencode=arch=compute_86,code=compute_86"
-    ]))
+    (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
   ]
   ++ lib.optionals (bitStreamWordSize != 64) [
     (lib.cmakeFeature "ZFP_BIT_STREAM_WORD_SIZE" (toString bitStreamWordSize))
