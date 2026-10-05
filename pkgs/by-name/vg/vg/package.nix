@@ -7,6 +7,7 @@
 
   # build-time
   autoconf,
+  ninja,
   automake,
   bison,
   cmake,
@@ -14,6 +15,7 @@
   gettext,
   hostname,
   libtool,
+  meson,
   perl,
   pkg-config,
   python3,
@@ -41,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vg";
-  version = "1.75.1";
+  version = "1.77.0";
 
   src = fetchFromGitHub {
     owner = "vgteam";
     repo = "vg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CPyOZ4w5b26NQ+bz5QSaB6DcwQnlyjNNHlK1hHIEu9s=";
+    hash = "sha256-PZ/SYj9Mtebwbav+Pu42eakSERHl2XQ/neQ6ftu2kGI=";
     fetchSubmodules = true;
   };
 
@@ -55,8 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace \
       Makefile \
         --replace-fail "/bin/bash" "${stdenv.shell}" \
-        --replace-fail "\$(shell arch)" "${stdenv.hostPlatform.uname.processor}" \
-        --replace-fail "vg_git_version.hpp]" "vg_git_version.hpp ]"
+        --replace-fail "\$(shell arch)" "${stdenv.hostPlatform.uname.processor}"
 
     substituteInPlace \
       deps/libbdsg/bdsg/deps/pybind11/tests/CMakeLists.txt \
@@ -66,10 +67,22 @@ stdenv.mkDerivation (finalAttrs: {
           "set(PYBIND11_FINDPYTHON ON)
           find_package(pybind11 "
 
+    # https://github.com/jemalloc/jemalloc/commit/1a15fe33a48c52bfe26ea83e49f0d317a47da3ea.patch
+    substituteInPlace deps/jemalloc/src/jemalloc_cpp.cpp \
+      --replace-fail \
+        'std::__throw_bad_alloc();' \
+        'throw std::bad_alloc();'
+
+    # gawk rejects the stray C comment (awk parses `/* */` as regex `* *`)
+    substituteInPlace deps/elfutils/config/known-dwarf.awk \
+      --replace-fail \
+        'set = "SECT"; /* */' \
+        'set = "SECT";'
+
+    patch -p1 -d deps/vcflib -i ${./0001-fix-dynamic-openmp-pthread.patch}
+
     patchShebangs ./
     patchShebangs deps/
-
-    patch -p1 -d deps/libbdsg -i ${./0001-Use-order-only-prerequisite-for-making-sure-dirs-exi.patch}
 
     pushd deps/htslib
       PACKAGE_VERSION=$(./version.sh)
@@ -77,8 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  dontUseCmake = true; # cmake needed for deps, but not main package
   dontConfigure = true;
+  dontUseCmake = true; # needed for deps, but not main package
+  dontUseMesonConfigure = true;
+  dontUseNinjaBuild = true;
+  dontUseNinjaCheck = true;
+  dontUseNinjaInstall = true;
   enableParallelBuilding = true;
 
   __structuredAttrs = true;
@@ -94,8 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     hostname
     libtool
+    meson
+    ninja
     perl
     pkg-config
+    protobuf
     which
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -155,7 +175,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib}
 
-    cp bin/* $out/bin/
+    # skip bin/unittest, a directory of test binaries
+    for f in bin/*; do
+      [[ -f "$f" ]] && cp "$f" $out/bin/
+    done
+
     cp -R lib/lib{handlegraph,vgio,hts,deflate}.so* $out/lib/
 
     runHook postInstall
