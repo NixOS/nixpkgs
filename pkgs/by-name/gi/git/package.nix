@@ -264,7 +264,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!rustSupport) "NO_RUST=YesPlease";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    stdenv.shellPackage
+    buildPackages.runtimeShellPackage
   ];
 
   postBuild = ''
