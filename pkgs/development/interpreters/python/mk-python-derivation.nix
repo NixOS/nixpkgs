@@ -499,11 +499,12 @@ lib.extendMkDerivation {
       let
         deprecatedFlagNotEmpty =
           attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ];
-        pos = builtins.unsafeGetAttrPos "pytestFlagsArray" attrs;
+        pos = unsafeGetAttrPos "pytestFlagsArray" attrs;
+        posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
       in
       {
         ${if deprecatedFlagNotEmpty then "pytestFlagsArray" else null} = throw ''
-          buildPythonPackage: Deprecated flag pytestFlagsArray found at ${pos.file}:${toString pos.line}
+          buildPythonPackage: Deprecated flag pytestFlagsArray found${posString}
             Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
         '';
       }
