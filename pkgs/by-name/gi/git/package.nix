@@ -153,11 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace "$x" \
         --subst-var-by ssh "${openssh}/bin/ssh"
     done
-  ''
-  + lib.optionalString (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) ''
-    substituteInPlace Makefile \
-      --replace-fail "RUST_TARGET_DIR = target/" \
-                     "RUST_TARGET_DIR = target/${stdenv.hostPlatform.rust.cargoShortTarget}/"
   '';
 
   nativeBuildInputs = [
