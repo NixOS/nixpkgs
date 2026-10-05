@@ -5133,7 +5133,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=visualstudiotoolsforunity.vstuc";
           homepage = "https://github.com/MicrosoftDocs/vscode-dotnettools";
           license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.mib ];
+          maintainers = [ ];
         };
       };
 
