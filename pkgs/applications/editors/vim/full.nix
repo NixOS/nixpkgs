@@ -4,6 +4,7 @@
   lib,
   stdenv,
   ncurses,
+  pixman,
   pkg-config,
   gettext,
   writeText,
@@ -174,6 +175,7 @@ stdenv.mkDerivation {
   buildInputs = [
     ncurses
     glib
+    pixman
   ]
   # All X related dependencies
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
