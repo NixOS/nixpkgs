@@ -2,70 +2,51 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
   nodejs,
+  pnpm_11,
+  pnpmConfigHook,
+  fetchPnpmDeps,
   makeBinaryWrapper,
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "commitlint";
-  version = "21.0.0";
+  version = "21.2.3";
 
   src = fetchFromGitHub {
     owner = "conventional-changelog";
     repo = "commitlint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i1Nom/piZHBPV7d8DwBsu/42CCopAu2OAOzlJTwNFP8=";
+    hash = "sha256-FrpD6e2jgu2HmrtViKUCMV7RrXVNEkSJbW0UTIUbhgE=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-e51t2ODoBU19ADUZ4IJBsRs92XipmWCywJWMJ4EzRf8=";
-  };
+  strictDeps = true;
 
   nativeBuildInputs = [
-    yarnConfigHook
-    nodejs
     makeBinaryWrapper
+    nodejs
+    pnpmConfigHook
+    pnpm
   ];
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-rD+oU5OmhzP7yzGEOaHNd4bDR7CjqRyzBxui79+6YmE=";
+  };
 
   buildPhase = ''
     runHook preBuild
 
     # Remove test files to avoid dependency on commitlint test packages
-    rm -rf @commitlint/**/*.test.{js,ts}
+    find @commitlint -type f \( -name '*.test.js' -o -name '*.test.ts' \) -delete
 
-    # See https://github.com/conventional-changelog/commitlint/blob/20.1.0/Dockerfile.ci
-    # Excludes `config-nx-scopes` which is a plain JavaScript package
-    pkgs=(
-      "config-validator"
-      "rules"
-      "parse"
-      "is-ignored"
-      "lint"
-      "resolve-extends"
-      "execute-rule"
-      "load"
-      "read"
-      "types"
-      "cli"
-      "config-conventional"
-      "config-pnpm-scopes"
-      "ensure"
-      "format"
-      "message"
-      "to-lines"
-      "top-level"
-    )
-    for p in "''${pkgs[@]}" ; do
-      echo "Building package: @commitlint/$p"
-      cd @commitlint/$p/
-      yarn run --offline tsc --build --force
-      cd ../..
-    done
+    pnpm build
 
     runHook postBuild
   '';
@@ -73,9 +54,24 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    yarn install --offline --production --ignore-scripts
-    mkdir -p $out/bin
-    mkdir -p $out/lib/node_modules/@commitlint/root
+    find . -name node_modules -type d -prune -exec rm -rf {} +
+    pnpm install --offline --ignore-scripts --frozen-lockfile --prod
+
+    # TODO: when nixpkgs pnpm_12 >= 12.5.1, use pnpm_12 and remove this line https://github.com/pnpm/pnpm/issues/3645#issuecomment-5743392718
+    find . -path '*/node_modules/*' -xtype l -delete
+    # remove non-deterministic files
+    rm -f node_modules/{.modules.yaml,.pnpm-workspace-state-v1.json}
+
+    # link workspace packages into the root so NODE_PATH can resolve bundled configs
+    mkdir -p node_modules/@commitlint
+    for pkg in @commitlint/*; do
+      ln -s "../../$pkg" "node_modules/$pkg"
+    done
+    for pkg in @alias/*; do
+      ln -s "../$pkg" "node_modules/$(basename "$pkg")"
+    done
+
+    mkdir -p $out/{bin,lib/node_modules/@commitlint/root}
     mv * $out/lib/node_modules/@commitlint/root/
 
     makeBinaryWrapper ${lib.getExe nodejs} $out/bin/commitlint \
@@ -89,6 +85,16 @@ stdenv.mkDerivation (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # check bundled configs resolve, both scoped and via the unscoped alias (commitlint-config-angular)
+    echo 'feat: add x' | $out/bin/commitlint --extends @commitlint/config-conventional
+    echo 'feat: add x' | $out/bin/commitlint --extends angular
+
+    runHook postInstallCheck
+  '';
 
   passthru.updateScript = nix-update-script { };
 
