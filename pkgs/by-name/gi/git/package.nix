@@ -196,7 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # This is required for building the rust build.rs script when cross compiling
-  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  depsBuildBuild = lib.optionals (rustSupport && (stdenv.buildPlatform != stdenv.hostPlatform)) [
     buildPackages.stdenv.cc
   ];
 
