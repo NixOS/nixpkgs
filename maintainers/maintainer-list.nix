@@ -7396,6 +7396,11 @@
     githubId = 72784348;
     keys = [ { fingerprint = "8FD2 153F 4889 541A 54F1  E09E 71B6 C31C 8A5A 9D21"; } ];
   };
+  divyacote = {
+    github = "divyacote";
+    githubId = 33461483;
+    name = "Divya Cote";
+  };
   dixslyf = {
     name = "Dixon Sean Low Yan Feng";
     email = "dixonseanlow@protonmail.com";
