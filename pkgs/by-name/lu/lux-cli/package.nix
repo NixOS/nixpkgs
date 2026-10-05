@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gnupg
     gpgme
     libgpg-error
-    lua5_4
     openssl
   ];
 
@@ -60,6 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [
     "--lib" # Disable impure integration tests
+  ];
+
+  checkInputs = [
+    lua5_4 # Test suite uses pkg-config to find Lua libs
   ];
 
   nativeCheckInputs = [
