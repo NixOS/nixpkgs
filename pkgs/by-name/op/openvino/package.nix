@@ -5,7 +5,7 @@
   cudaSupport ? opencv.cudaSupport or false,
 
   # build
-  addDriverRunpath,
+  autoAddDriverRunpath,
   autoPatchelfHook,
   cmake,
   git,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     # order matters here: autoAddDriverRunpath must run after autoPatchelfHook, otherwise the RUNPATH will end up being wrong
     autoPatchelfHook
-    addDriverRunpath
+    autoAddDriverRunpath
 
     cmake
     git
@@ -160,6 +160,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ];
+
+  # OpenVINO's shared libraries dlopen Level Zero; preserve its lookup path.
+  appendRunpaths = lib.optionals stdenv.hostPlatform.isLinux [ "${getLib level-zero}/lib" ];
 
   enableParallelBuilding = true;
 
