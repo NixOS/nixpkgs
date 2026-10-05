@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccid";
-  version = "1.7.1";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "CCID";
     tag = finalAttrs.version;
-    hash = "sha256-5GkpsrjGFfiGDNIhU9zsx0p7/MSVra1fse9yFhjGSFU=";
+    hash = "sha256-DzmNGIa26p0MqcTljGgHdz0+JlMvszqmviMbZPAfXbk=";
   };
 
   postPatch = ''
@@ -29,6 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace meson.build --replace-fail \
       "pcsc_dep.get_variable('usbdropdir')" \
       "'$out/pcsc/drivers'"
+    substituteInPlace meson.build --replace-fail \
+      "pcsc_dep.get_variable('serialconfdir')" \
+      "'$out/etc/reader.conf.d'"
   '';
 
   mesonFlags = [
