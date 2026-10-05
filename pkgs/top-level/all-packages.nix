@@ -2746,7 +2746,7 @@ with pkgs;
   rpatool = with python3Packages; toPythonApplication rpatool;
 
   rpm = callPackage ../tools/package-management/rpm {
-    lua = lua5_4;
+    lua = lua5_5;
   };
 
   rubocop = rubyPackages.rubocop;
