@@ -1,0 +1,30 @@
+--- a/barman/command_wrappers.py
++++ b/barman/command_wrappers.py
+@@ -1144,5 +1144,5 @@
+         # * pass the current configuration file with -c
+         # * set it quiet with -q
+-        self.command = [sys.executable, command, "-c", config, "-q", subcommand]
++        self.command = [command, "-c", config, "-q", subcommand]
+         self.keep_descriptors = keep_descriptors
+         # Handle args for the sub-command (like the server name)
+
+--- a/tests/test_command_wrappers.py
++++ a/tests/test_command_wrappers.py
+@@ -1595,5 +1595,4 @@
+         )
+         assert subprocess.command == [
+-            sys.executable,
+             sys.argv[0],
+             "-c",
+@@ -1622,5 +1621,4 @@
+         )
+         assert subprocess.command == [
+-            sys.executable,
+             "path/to/barman",
+             "-c",
+@@ -1644,5 +1642,4 @@
+ 
+         command = [
+-            sys.executable,
+             "path/to/barman",
+             "-c",

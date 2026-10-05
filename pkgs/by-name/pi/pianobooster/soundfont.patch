@@ -1,0 +1,31 @@
+diff --git a/src/GuiMidiSetupDialog.cpp b/src/GuiMidiSetupDialog.cpp
+index 64d6538..2756611 100644
+--- a/src/GuiMidiSetupDialog.cpp
++++ b/src/GuiMidiSetupDialog.cpp
+@@ -286,12 +286,7 @@ void GuiMidiSetupDialog::on_fluidLoadButton_clicked ( bool checked )
+ 
+         lastSoundFont = QDir::homePath();
+ 
+-        QStringList possibleSoundFontFolders;
+-#if defined (Q_OS_LINUX) || defined (Q_OS_UNIX)
+-        possibleSoundFontFolders.push_back("/usr/share/soundfonts");
+-        possibleSoundFontFolders.push_back("/usr/share/sounds/sf2");
+-#endif
+-        for (const QString &soundFontFolder : possibleSoundFontFolders){
++        for (const QString &soundFontFolder : {@possibleSoundFontFolders@}){
+             if (QDir(soundFontFolder).exists()){
+                 lastSoundFont=soundFontFolder;
+                 break;
+diff --git a/src/Settings.cpp b/src/Settings.cpp
+index 0bfc649..9b9ea3b 100644
+--- a/src/Settings.cpp
++++ b/src/Settings.cpp
+@@ -568,7 +568,7 @@ void CSettings::setupDefaultSoundFont(){
+ #if defined (Q_OS_LINUX) || defined (Q_OS_UNIX)
+         if (!defaultSoundFont.isFile())
+         {
+-            QStringList possibleSoundFontFolders = {"/usr/share/soundfonts","/usr/share/sounds/sf2"};
++            QStringList possibleSoundFontFolders = {@possibleSoundFontFolders@};
+             for (QString soundFontFolder:possibleSoundFontFolders)
+             {
+                 // fluid-soundfont-gm Fluid (R3) General MIDI SoundFont (GM) package

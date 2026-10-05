@@ -1,0 +1,36 @@
+{
+  "ip_allow": [
+    {
+      "apply": "in",
+      "ip_addrs": "127.0.0.1",
+      "action": "allow",
+      "methods": "ALL"
+    },
+    {
+      "apply": "in",
+      "ip_addrs": "::1",
+      "action": "allow",
+      "methods": "ALL"
+    },
+    {
+      "apply": "in",
+      "ip_addrs": "0/0",
+      "action": "deny",
+      "methods": [
+        "PURGE",
+        "PUSH",
+        "DELETE"
+      ]
+    },
+    {
+      "apply": "in",
+      "ip_addrs": "::/0",
+      "action": "deny",
+      "methods": [
+        "PURGE",
+        "PUSH",
+        "DELETE"
+      ]
+    }
+  ]
+}

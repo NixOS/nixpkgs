@@ -1,0 +1,32 @@
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libmnl,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.0.3";
+  pname = "libnetfilter_acct";
+
+  src = fetchurl {
+    url = "https://www.netfilter.org/projects/libnetfilter_acct/files/libnetfilter_acct-${finalAttrs.version}.tar.bz2";
+    sha256 = "06lsjndgfjsgfjr43px2n2wk3nr7whz6r405mks3887y7vpwwl22";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libmnl ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  meta = {
+    homepage = "https://www.netfilter.org/projects/libnetfilter_acct/";
+    description = "Userspace library providing interface to extended accounting infrastructure";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+  };
+})

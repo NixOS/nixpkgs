@@ -1,0 +1,16 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 8b14284..e614755 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -121,10 +121,7 @@ else
+ RUST_BUILD_OPTS += --locked --offline
+ 
+ CARGO_CONFIGURED = $(top_srcdir)/.cargo/.configured-for-offline
+-$(CARGO_CONFIGURED): $(top_srcdir)/.cargo/config.offline
+-	$(AM_V_at)rm -f $(top_srcdir)/.cargo/.configured-for-online
+-	$(AM_V_at)cp $< $(top_srcdir)/.cargo/config
+-	$(AM_V_at)echo "directory = \"$(RUST_VENDORED_SOURCES)\"" >>$(top_srcdir)/.cargo/config
++$(CARGO_CONFIGURED):
+ 	$(AM_V_at)touch $@
+ endif
+ if ENABLE_SHANI

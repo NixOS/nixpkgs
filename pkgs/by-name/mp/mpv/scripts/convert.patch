@@ -1,0 +1,102 @@
+diff --git "a/Convert Script \342\200\223 README.md" "b/Convert Script \342\200\223 README.md"
+index 8e062c1..6e0d798 100644
+--- "a/Convert Script \342\200\223 README.md"	
++++ "b/Convert Script \342\200\223 README.md"	
+@@ -68,7 +68,7 @@ and set some options in ``mpv/lua-settings/convert_script.conf`` or with ``--scr
+     If you don’t want to upgrade your yad. Features like appending segments won’t be available. 
+ 
+     libvpx_fps
+-    Default: --oautofps
++    Default: ""
+     FPS settings (or any other settings really) for libvpx encoding. Set it to --ofps=24000/1001 for example. 
+ 
+-Warning: Some of these options aren’t very robust and setting them to bogus values will break the script. 
+\ No newline at end of file
++Warning: Some of these options aren’t very robust and setting them to bogus values will break the script. 
+diff --git a/convert_script.lua b/convert_script.lua
+index 17d3100..90f88ec 100644
+--- a/convert_script.lua
++++ b/convert_script.lua
+@@ -3,6 +3,12 @@ local msg = require 'mp.msg'
+ local opt = require 'mp.options'
+ local utils = require 'mp.utils'
+ 
++-- executables
++local mkvpropedit_exe = "mkvpropedit"
++local mkvmerge_exe = "mkvmerge"
++local yad_exe = "yad"
++local notify_send_exe = "notify-send"
++
+ -- default options, convert_script.conf is read
+ local options = {
+     bitrate_multiplier = 0.975,			-- to make sure the file won’t go over the target file size, set it to 1 if you don’t care
+@@ -14,7 +20,7 @@ local options = {
+     libvpx_options = "--ovcopts-add=cpu-used=0,auto-alt-ref=1,lag-in-frames=25,quality=good",
+     libvpx_vp9_options = "",
+     legacy_yad = false,				-- if you don’t want to upgrade to at least yad 0.18
+-    libvpx_fps = "--oautofps",			-- --ofps=24000/1001 for example
++    libvpx_fps = "",			-- --ofps=24000/1001 for example
+     audio_bitrate = 112,			-- mpv default, in kbps
+ }
+ 
+@@ -247,12 +253,12 @@ function encode(enc)
+     if string.len(vf) > 0 then
+         vf = vf .. ","
+     end
+-    local sub_file_table = mp.get_property_native("options/sub-file")
++    local sub_file_table = mp.get_property_native("options/sub-files")
+     local sub_file = ""
+     for index, param in pairs(sub_file_table) do
+         sub_file = sub_file .. " --sub-file='" .. string.gsub(tostring(param), "'", "'\\''") .. "'"
+     end
+-    local audio_file_table = mp.get_property_native("options/audio-file")
++    local audio_file_table = mp.get_property_native("options/audio-files")
+     local audio_file = ""
+     for index, param in pairs(audio_file_table) do
+         audio_file = audio_file .. " --audio-file='" .. string.gsub(tostring(param), "'", "'\\''") .. "'"
+@@ -354,9 +360,9 @@ function encode(enc)
+     if ovc == "gif" then
+         full_command = full_command .. ' --vf-add=lavfi=graph=\\"framestep=' .. framestep .. '\\" && convert ' 
+         .. tmpfolder .. '/*.png -set delay ' .. delay .. ' -loop 0 -fuzz ' .. fuzz .. '% ' .. dither .. ' -layers optimize '
+-        .. full_output_path .. ' && rm -rf ' .. tmpfolder .. ' && notify-send "Gif done") & disown'
++        .. full_output_path .. ' && rm -rf ' .. tmpfolder .. ' && ' .. notify_send_exe .. ' "Gif done") & disown'
+     else
+-        full_command = full_command .. ' && notify-send "Encoding done"; mkvpropedit '
++        full_command = full_command .. ' && ' .. notify_send_exe .. ' "Encoding done"; ' .. mkvpropedit_exe .. ' '
+         .. full_output_path .. ' -s title="' .. metadata_title .. '") & disown'
+     end
+     
+@@ -409,7 +415,7 @@ function encode_copy(enc)
+     sep = ",+"
+     
+     if enc then
+-        local command = "mkvmerge '" .. video .. "' " .. mkvmerge_parts .. " -o " .. full_output_path
++        local command = mkvmerge_exe .. " '" .. video .. "' " .. mkvmerge_parts .. " -o " .. full_output_path
+         msg.info(command)
+         os.execute(command)
+         clear()
+@@ -508,7 +514,7 @@ function call_gui ()
+     end
+     
+     
+-    local yad_command = [[LC_NUMERIC=C yad --title="Convert Script" --center --form --fixed --always-print-result \
++    local yad_command = [[LC_NUMERIC=C ]] .. yad_exe .. [[ --title="Convert Script" --center --form --fixed --always-print-result \
+     --name "convert script" --class "Convert Script" --field="Resize to height:NUM" "]] .. scale_sav		--yad_table 1
+     .. [[" --field="Resize to width instead:CHK" ]] .. resize_to_width_instead .. " "				--yad_table 2
+     if options.legacy_yad then
+@@ -524,7 +530,7 @@ function call_gui ()
+         yad_command = yad_command
+         .. [[--field="2pass:CHK" "false" ]]									--yad_table 5
+         .. [[--field="Encode options::CBE" '! --ovcopts=b=2000,cpu-used=0,auto-alt-ref=1,lag-in-frames=25,quality=good,threads=4' ]]	--yad_table 6
+-        .. [[--field="Output format::CBE" ' --ovc=libx264! --oautofps --of=webm --ovc=libvpx' ]]		
++        .. [[--field="Output format::CBE" ' --ovc=libx264! --of=webm --ovc=libvpx' ]]
+         .. [[--field="Simple:FBTN" 'bash -c "echo \"simple\" && kill -s SIGUSR1 \"$YAD_PID\""' ]]
+         advanced = true
+     else
+@@ -734,4 +740,4 @@ mp.set_key_bindings({
+ 
+ mp.add_key_binding("alt+w", "convert_script", convert_script_hotkey_call)
+ 
+-mp.register_event("tick", tick)
+\ No newline at end of file
++mp.register_event("tick", tick)

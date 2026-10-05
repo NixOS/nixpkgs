@@ -1,0 +1,159 @@
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  jre_headless,
+  protobuf_30,
+  xmlstarlet,
+  cyclonedx-cli,
+  makeWrapper,
+  maven,
+  nix-update-script,
+  nixosTests,
+}:
+let
+  version = "4.14.4";
+
+  frontend = buildNpmPackage {
+    pname = "dependency-track-frontend";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "DependencyTrack";
+      repo = "frontend";
+      tag = version;
+      hash = "sha256-Zt6KBqR3CstS/RqqJAVJaGkgpzf835UcblrE/8gzUWE=";
+    };
+
+    installPhase = ''
+      mkdir $out
+      cp -R ./dist $out/
+    '';
+
+    npmDepsHash = "sha256-NQY3bg3cwyIt/ing8RBOFNd3+02hzVwYcj0RXi350xk=";
+    forceGitDeps = true;
+    makeCacheWritable = true;
+
+    # The prepack script runs the build script, which we'd rather do in the build phase.
+    npmPackFlags = [ "--ignore-scripts" ];
+  };
+in
+
+maven.buildMavenPackage rec {
+  inherit version;
+  pname = "dependency-track";
+
+  src = fetchFromGitHub {
+    owner = "DependencyTrack";
+    repo = "dependency-track";
+    tag = version;
+    hash = "sha256-tHtM5xqD7EG3CyZtaL6qsHEAa+5AstcIYRes+hIFyKk=";
+  };
+
+  postPatch = ''
+    # update to version 5.1.3 to fix NullPointer and specify protoc path
+    xmlstarlet ed --inplace -N x=http://maven.apache.org/POM/4.0.0 \
+    --update '//x:plugin[x:artifactId="protobuf-maven-plugin"]/x:version' -v "5.1.3" \
+    --delete '//x:plugin[x:artifactId="protobuf-maven-plugin"]/x:configuration/x:protoc' \
+    --subnode '//x:plugin[x:artifactId="protobuf-maven-plugin"]/x:configuration' -t elem -n protoc -v "" \
+    --var protoc '$prev' \
+    --insert '$protoc' -t attr -n kind -v "path" \
+    --subnode '$protoc' -t elem -n name -v "protoc" \
+    pom.xml
+
+    # remove frontend related tasks
+    xmlstarlet ed --inplace -N x=http://maven.apache.org/POM/4.0.0 \
+    --delete '//x:execution[x:id="frontend-download"]' \
+    --delete '//x:execution[x:id="frontend-extract"]' \
+    --delete '//x:execution[x:id="frontend-resource-deploy"]' \
+    pom.xml
+
+    # add junixsocket to enable unixsocket connection to postgres
+    xmlstarlet ed --inplace -N x=http://maven.apache.org/POM/4.0.0 \
+    --subnode '/x:project/x:dependencies' -t elem -n dependency -v "" \
+    --var dependency '$prev' \
+    --subnode '$dependency' -t elem -n groupId -v "com.kohlschutter.junixsocket" \
+    --subnode '$dependency' -t elem -n artifactId -v "junixsocket-core" \
+    --subnode '$dependency' -t elem -n version -v "2.10.0" \
+    --subnode '$dependency' -t elem -n type -v "pom" \
+    pom.xml
+  '';
+
+  mvnJdk = jre_headless;
+  mvnHash = "sha256-903EuablhywF/2N8k8ISHOnSyZrSJ1LKC9Lx4USO0z8=";
+  manualMvnArtifacts = [
+    "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1"
+    # added to saticfy protobuf compiler plugin dependency resolving
+    "jakarta.el:jakarta.el-api:5.0.1"
+    "com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.19.1"
+    "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.2"
+    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.4"
+    "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1"
+    "io.micrometer:micrometer-core:1.16.0"
+    "io.micrometer:micrometer-observation:1.16.0"
+  ];
+  buildOffline = true;
+
+  mvnDepsParameters = lib.escapeShellArgs [
+    "-Dmaven.test.skip=true"
+    "-P enhance"
+    "-P embedded-jetty"
+  ];
+
+  mvnParameters = lib.escapeShellArgs [
+    "-Dmaven.test.skip=true"
+    "-P enhance"
+    "-P embedded-jetty"
+    "-Dservices.bom.merge.skip=false"
+    "-Dlogback.configuration.file=${src}/src/main/docker/logback.xml"
+    "-Dcyclonedx-cli.path=${lib.getExe cyclonedx-cli}"
+  ];
+
+  afterDepsSetup = ''
+    mvn cyclonedx:makeBom -Dmaven.repo.local=$mvnDeps/.m2 \
+      org.codehaus.mojo:exec-maven-plugin:exec@merge-services-bom
+  '';
+
+  doCheck = false;
+
+  nativeBuildInputs = [
+    makeWrapper
+    xmlstarlet
+    protobuf_30
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 target/dependency-track-*.jar $out/share/dependency-track/dependency-track.jar
+    makeWrapper ${jre_headless}/bin/java $out/bin/dependency-track \
+      --add-flags "-jar $out/share/dependency-track/dependency-track.jar"
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    inherit frontend;
+    tests = {
+      inherit (nixosTests) dependency-track;
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
+  };
+
+  meta = {
+    description = "Intelligent Component Analysis platform that allows organizations to identify and reduce risk in the software supply chain";
+    homepage = "https://github.com/DependencyTrack/dependency-track";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      e1mo
+      xanderio
+    ];
+    mainProgram = "dependency-track";
+    inherit (jre_headless.meta) platforms;
+  };
+}

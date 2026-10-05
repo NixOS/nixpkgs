@@ -1,0 +1,24 @@
+diff --git a/cmd/version.go b/cmd/version.go
+index 816f044..ef107be 100644
+--- a/cmd/version.go
++++ b/cmd/version.go
+@@ -31,8 +31,7 @@ type BuildInfo struct {
+ }
+
+ func (b BuildInfo) String() string {
+-	return fmt.Sprintf("az-pim-cli version %s (built with %s from %s on %s)",
+-		b.Version, b.GoVersion, b.Commit, b.Date)
++    return fmt.Sprintf("az-pim-cli version %s", b.Version)
+ }
+
+ func printVersion(w io.Writer, info BuildInfo) {
+@@ -47,8 +46,8 @@ func createBuildInfo() BuildInfo {
+ 		Date:      date,
+ 	}
+
+-	buildInfo, available := debug.ReadBuildInfo()
+-	if !available {
++	buildInfo, _ := debug.ReadBuildInfo()
++	if true {
+ 		return info
+ 	}

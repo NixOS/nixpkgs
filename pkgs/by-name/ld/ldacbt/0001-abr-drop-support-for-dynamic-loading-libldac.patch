@@ -1,0 +1,164 @@
+From 040210591a5e90fc3e0ca0ec438426273e86c497 Mon Sep 17 00:00:00 2001
+From: "yshuiv7@gmail.com" <Yuxuan Shui>
+Date: Mon, 27 Apr 2026 15:30:10 +0100
+Subject: [PATCH] abr: drop support for dynamic loading libldac
+
+---
+ abr/inc/ldacBT_abr.h |  2 +-
+ abr/src/ldacBT_abr.c | 76 +-------------------------------------------
+ 2 files changed, 2 insertions(+), 76 deletions(-)
+
+diff --git a/abr/inc/ldacBT_abr.h b/abr/inc/ldacBT_abr.h
+index 294e230..735ea67 100644
+--- a/abr/inc/ldacBT_abr.h
++++ b/abr/inc/ldacBT_abr.h
+@@ -89,7 +89,7 @@ typedef struct _ldacbt_abr_param * HANDLE_LDAC_ABR;
+  *  Return value
+  *      HANDLE_LDAC_ABR for success, NULL for failure.
+  */
+-LDAC_ABR_API HANDLE_LDAC_ABR ldac_ABR_get_handle(const char *libpath);
++LDAC_ABR_API HANDLE_LDAC_ABR ldac_ABR_get_handle(void);
+ 
+ /* Release of LDAC ABR handle.
+  *  Format
+diff --git a/abr/src/ldacBT_abr.c b/abr/src/ldacBT_abr.c
+index 0af6278..fad2dd0 100644
+--- a/abr/src/ldacBT_abr.c
++++ b/abr/src/ldacBT_abr.c
+@@ -8,10 +8,6 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-#include <dlfcn.h>
+-#include <errno.h>
+-#endif
+ 
+ #define LDAC_ABR_OBSERVING_TIME_MS 500   /* [ms] the time length for storing Tx Queue Depth */
+ #define LDAC_ABR_PENALTY_MAX 4
+@@ -56,18 +52,11 @@ typedef int (*tLDACBT_GET_ERR)(HANDLE_LDAC_BT hLdacBt);
+ 
+ typedef struct _ldacbt_api_param
+ {
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-    const char *lib_name;
+-    void *lib_handle;
+-#endif
+     tLDACBT_ALTER_EQMID_PRIORITY alter_eqmid_priority;
+     tLDACBT_GET_EQMID            get_eqmid;
+     tLDACBT_GET_ERR              get_error_code;
+ } LDACBT_API_PARAMS, * HANDLE_LDACBT_API;
+ 
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-static int open_lib(HANDLE_LDACBT_API hLdacBtApi, const char *lib_name );
+-#endif
+ 
+ static int load_ldacbt_api_functions(HANDLE_LDACBT_API hLdacBtApi);
+ 
+@@ -122,7 +111,7 @@ static const int sizeOfEqmidToBitrateSortedIdTable = (int)(sizeof(aEqmidToAbrQua
+                                                      / sizeof(aEqmidToAbrQualityModeID[0]));
+ 
+ /* Get LDAC ABR handle */
+-HANDLE_LDAC_ABR ldac_ABR_get_handle(const char *libpath)
++HANDLE_LDAC_ABR ldac_ABR_get_handle(void)
+ {
+     HANDLE_LDAC_ABR hLdacAbr;
+     ABRDBG( "" );
+@@ -131,15 +120,6 @@ HANDLE_LDAC_ABR ldac_ABR_get_handle(const char *libpath)
+         return NULL;
+     }
+     clear_data( hLdacAbr, sizeof(LDAC_ABR_PARAMS) );
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-    if (libpath != NULL) {
+-        if (open_lib( &hLdacAbr->ldacBtApi, libpath ) < 0) {
+-            ABRDBG( "[ERR] Failed to open shared library \"%s\".", libpath );
+-            ldac_ABR_free_handle(hLdacAbr);
+-            return NULL;
+-        }
+-    }
+-#endif
+     if( load_ldacbt_api_functions(&hLdacAbr->ldacBtApi) != 0 ){
+         ldac_ABR_free_handle(hLdacAbr);
+         return NULL;
+@@ -156,12 +136,6 @@ void ldac_ABR_free_handle(HANDLE_LDAC_ABR hLdacAbr)
+         if (hLdacAbr->TxQD_Info.pHist){
+             free(hLdacAbr->TxQD_Info.pHist);
+         }
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-        if (hLdacAbr->ldacBtApi.lib_handle != NULL) {
+-            dlclose(hLdacAbr->ldacBtApi.lib_handle);
+-            hLdacAbr->ldacBtApi.lib_handle = NULL;
+-        }
+-#endif
+         free(hLdacAbr);
+     }
+ }
+@@ -408,65 +382,17 @@ int ldac_ABR_Proc( HANDLE_LDAC_BT hLDAC, HANDLE_LDAC_ABR hLdacAbr,
+ }
+ 
+ 
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-static void *load_func(void *lib_handle, const char* func_name)
+-{
+-    void *func_ptr = dlsym(lib_handle, func_name);
+-    if(func_ptr == NULL){
+-        ABRDBG("[ERR] cannot find function '%s' in the library.\n", func_name);
+-        return NULL;
+-    }
+-    return func_ptr;
+-}
+-
+-static int open_lib(HANDLE_LDACBT_API hLdacBtApi, const char *lib_name )
+-{
+-    if( hLdacBtApi == NULL ){
+-        ABRDBG("[ERR] handle is NULL");
+-        return -1;
+-    }
+-    if( lib_name == NULL ){
+-        ABRDBG("[ERR] lib_name is NULL");
+-        return -1;
+-    }
+-    // open library
+-    hLdacBtApi->lib_handle = dlopen(lib_name, RTLD_NOW);
+-    if(hLdacBtApi->lib_handle == NULL){
+-#ifdef LOCAL_DEBUG
+-        char buffer_str[1024];
+-        strerror_r(errno, buffer_str, sizeof(buffer_str));
+-        ABRDBG("[ERR] cannot open library '%s': errno = %d (%s)\n",
+-                lib_name, errno, buffer_str);
+-#endif
+-        return -1;
+-    }
+-    return 0;
+-}
+-#endif /* LDAC_ABR_DYNAMIC_LINK_LDAC_API */
+-
+ // Load functions
+ static int load_ldacbt_api_functions(HANDLE_LDACBT_API hLdacBtApi)
+ {
+     hLdacBtApi->alter_eqmid_priority =
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-      load_func(hLdacBtApi->lib_handle, "ldacBT_alter_eqmid_priority");
+-#else
+       ldacBT_alter_eqmid_priority;
+-#endif
+ 
+     hLdacBtApi->get_eqmid =
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-      load_func(hLdacBtApi->lib_handle, "ldacBT_get_eqmid");
+-#else
+       ldacBT_get_eqmid;
+-#endif
+ 
+     hLdacBtApi->get_error_code =
+-#ifdef LDAC_ABR_DYNAMIC_LINK_LDAC_API
+-      load_func(hLdacBtApi->lib_handle, "ldacBT_get_error_code");
+-#else
+       ldacBT_get_error_code;
+-#endif
+ 
+     if( (hLdacBtApi->alter_eqmid_priority == NULL) ||
+         (hLdacBtApi->get_eqmid == NULL) ||
+-- 
+2.53.0
+

@@ -1,0 +1,51 @@
+---
+ plugin/host/host_nodejs.go | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/plugin/host/host_nodejs.go b/plugin/host/host_nodejs.go
+index c7554883..b81f693f 100644
+--- a/plugin/host/host_nodejs.go
++++ b/plugin/host/host_nodejs.go
+@@ -6,7 +6,6 @@ import (
+ 	"fmt"
+ 	"os"
+ 	"os/exec"
+-	"path"
+ 	"path/filepath"
+ 	"runtime"
+ 	"strings"
+@@ -39,12 +38,7 @@ func (n *NodejsHost) GetRuntime(ctx context.Context) plugin.Runtime {
+ }
+ 
+ func (n *NodejsHost) Start(ctx context.Context) error {
+-	nodePath, nodeErr := n.resolveNodejsPath(ctx)
+-	if nodeErr != nil {
+-		return nodeErr
+-	}
+-
+-	return n.websocketHost.StartHost(ctx, nodePath, path.Join(util.GetLocation().GetHostDirectory(), "node-host.js"), nil)
++	return n.websocketHost.StartHost(ctx, "env", "@plugin-host-nodejs@", nil)
+ }
+ 
+ // FindNodejsPath finds the best available Node.js interpreter path
+@@ -276,7 +270,7 @@ func collectNodejsPathsForDarwin() []string {
+ 	paths := []string{
+ 		"/opt/homebrew/bin/node",
+ 		"/usr/local/bin/node",
+-		"/usr/bin/node",
++		"@nodejs-path@",
+ 		"/usr/local/node",
+ 	}
+ 	paths = append(paths, collectNodejsPathsFromNvmUnix()...)
+@@ -287,7 +281,7 @@ func collectNodejsPathsForDarwin() []string {
+ func collectNodejsPathsForLinux() []string {
+ 	paths := []string{
+ 		"/usr/local/bin/node",
+-		"/usr/bin/node",
++		"@nodejs-path@",
+ 		"/usr/local/node",
+ 	}
+ 	paths = append(paths, collectNodejsPathsFromNvmUnix()...)
+-- 
+2.54.0
+

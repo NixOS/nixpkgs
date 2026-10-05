@@ -1,0 +1,25 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 435f5e75a..26377aac8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,7 +39,6 @@ add_custom_target(
+ )
+ 
+ install(FILES "deltachat-ffi/deltachat.h" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+-install(FILES "${CARGO_OUT_DIR}/libdeltachat.a" DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+ install(FILES "${CARGO_OUT_DIR}/libdeltachat.${DYNAMIC_EXT}" DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+ install(FILES "${CARGO_OUT_DIR}/pkgconfig/deltachat.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
+ 
+diff --git a/deltachat-ffi/Cargo.toml b/deltachat-ffi/Cargo.toml
+index 0e316d1a3..e09f6566d 100644
+--- a/deltachat-ffi/Cargo.toml
++++ b/deltachat-ffi/Cargo.toml
+@@ -11,7 +11,7 @@ categories = ["cryptography", "std", "email"]
+ 
+ [lib]
+ name = "deltachat"
+-crate-type = ["cdylib", "staticlib"]
++crate-type = ["cdylib"]
+ 
+ [dependencies]
+ deltachat = { workspace = true, default-features = false }

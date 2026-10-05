@@ -1,0 +1,28 @@
+From 60d2d1daf12abae33ee09ca42b9c7f1ad2aa3fa1 Mon Sep 17 00:00:00 2001
+From: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>
+Date: Thu, 19 Feb 2026 20:11:20 -0500
+Subject: [PATCH] dotenv: only switch to uid 2000 when running as root
+
+Non-root processes cannot switch to uid/gid 2000 and may crash under
+strict seccomp filters when setxid syscalls are blocked. Keep the switch
+logic for root-run/container setups (e.g. Synology ACL case).
+---
+ config/dotenv.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/config/dotenv.rb b/config/dotenv.rb
+index b17d9aac..b4ef51b0 100644
+--- a/config/dotenv.rb
++++ b/config/dotenv.rb
+@@ -60,7 +60,7 @@ if ENV['RAILS_ENV'] == 'production'
+     ENV['DATABASE_URL'] = ENV['DATABASE_URL'].to_s.empty? ? database_url : ENV.fetch('DATABASE_URL', nil)
+   end
+ 
+-  unless Process.euid == 2000
++  if Process.uid.zero? && Process.euid != 2000
+     begin
+       test_file = "#{ENV.fetch('WORKDIR', '.')}/test"
+ 
+-- 
+2.52.0
+

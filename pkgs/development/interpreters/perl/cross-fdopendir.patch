@@ -1,0 +1,21 @@
+From f702c387e6940fab3801d7562a668b974a2b3a8f Mon Sep 17 00:00:00 2001
+From: Audrey Dutcher <audrey@rhelmot.io>
+Date: Fri, 30 May 2025 12:29:54 -0700
+Subject: [PATCH] add d_fdopendir configuration
+
+---
+ cnf/configure_func.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/cnf/configure_func.sh b/cnf/configure_func.sh
+index 4c13e4c..b24fe03 100644
+--- a/cnf/configure_func.sh
++++ b/cnf/configure_func.sh
+@@ -83,6 +83,7 @@ checkfunc d_fchmodat 'fchmodat' "0,NULL,0,0" 'unistd.h sys/stat.h'
+ checkfunc d_fchown 'fchown' "0,0,0" 'unistd.h'
+ checkfunc d_fcntl 'fcntl' "0,0" 'unistd.h fcntl.h'
+ checkfunc d_fdclose 'fdclose' "NULL,NULL" 'stdio.h'
++checkfunc d_fdopendir 'fdopendir' "0" 'dirent.h'
+ checkfunc d_ffs 'ffs' "0" 'strings.h'
+ checkfunc d_ffsl 'ffsl' "0" 'strings.h'
+ checkfunc d_fgetpos 'fgetpos' "NULL, 0" 'stdio.h'

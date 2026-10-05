@@ -1,0 +1,143 @@
+{
+  fetchFromGitHub,
+  unzip,
+  zip,
+  lib,
+  pkgs,
+  nodejs,
+  stdenv,
+  testers,
+  yarn,
+  gitMinimal,
+  callPackage,
+  berryVersion ? 4,
+}:
+
+let
+  version_4 = "4.18.0";
+  version_3 = "3.8.7";
+  hash_4 = "sha256-pO89wh17cW9/RGKjo70yiefr+9nlJAQs4ZEdUnzdgQM=";
+  hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
+  lockfileVersion_4 = "10";
+  lockfileVersion_3 = "6";
+in
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "yarn-berry";
+  version = if berryVersion == 4 then version_4 else version_3;
+  lockfileVersion = if berryVersion == 4 then lockfileVersion_4 else lockfileVersion_3;
+
+  src = fetchFromGitHub {
+    owner = "yarnpkg";
+    repo = "berry";
+    tag = "@yarnpkg/cli/${finalAttrs.version}";
+    hash = if berryVersion == 4 then hash_4 else hash_3;
+  };
+
+  buildInputs = [
+    nodejs
+  ];
+
+  nativeBuildInputs = [
+    nodejs
+    yarn
+    gitMinimal
+    unzip
+    zip
+  ];
+
+  strictDeps = true;
+
+  dontConfigure = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    (
+      # Remove when Yarn updates or removes the `got` dependency
+      # https://github.com/yarnpkg/berry/issues/7245#issuecomment-5538874542
+      GOT_CACHE_PATH=$(printf '%s' $(pwd)/.yarn/cache/got-npm-11.8.2-c1eb105458-*.zip)
+      cd $(mktemp -d)
+      unzip $GOT_CACHE_PATH -d .
+      rm $GOT_CACHE_PATH
+      patch -p1 -d node_modules/got < ${./got-npm-11.8.2.patch}
+      zip -Xr got-patched.zip node_modules
+      mv got-patched.zip $GOT_CACHE_PATH
+    )
+
+    yarn workspace @yarnpkg/cli build:cli
+    runHook postBuild
+  '';
+
+  # Confirms that lockfileVersion matches the one defined above
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    YARN_JS_PATH=$(pwd)/packages/yarnpkg-cli/bundles/yarn.js
+    TEST_DIR=$(mktemp -d)
+    export HOME=$(mktemp -d)
+    git config --global user.name nixbld
+    git config --global user.email nixbld@localhost
+    cd $TEST_DIR
+
+    node $YARN_JS_PATH config set --home enableTelemetry 0
+    node $YARN_JS_PATH init
+    node $YARN_JS_PATH install # Yarn 3 doesn't run install during init
+    grep -Pzq '\n__metadata:\n  version: ${finalAttrs.lockfileVersion}\n' yarn.lock
+
+    cd -
+
+    runHook postCheck
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm 755 ./packages/yarnpkg-cli/bundles/yarn.js "$out/bin/yarn"
+    runHook postInstall
+  '';
+
+  passthru = {
+    updateScript = ./update.sh;
+
+    tests =
+      let
+        packageTests =
+          if berryVersion == 4 then
+            {
+              inherit (pkgs)
+                prettier
+                corepack
+                ;
+            }
+          else
+            {
+              inherit (pkgs)
+                svgo
+                yarn-lock-converter
+                ;
+            };
+      in
+      packageTests
+      // {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+        };
+      };
+  }
+  // (callPackage ./fetcher { yarn-berry = finalAttrs; });
+
+  meta = {
+    homepage = "https://yarnpkg.com/";
+    changelog = "https://github.com/yarnpkg/berry/releases/tag/${finalAttrs.src.tag}";
+    description = "Fast, reliable, and secure dependency management";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
+      ryota-ka
+      pyrox0
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "yarn";
+  };
+})
