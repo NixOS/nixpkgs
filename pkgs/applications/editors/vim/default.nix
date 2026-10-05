@@ -96,4 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   __impureHostDeps = [ "/dev/ptmx" ];
+
+  passthru.tests.test-suite = callPackage ./test-suite.nix { vim = finalAttrs.finalPackage; };
 })
