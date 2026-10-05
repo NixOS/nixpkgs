@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   getopt,
-  lua,
+  lua5_5,
   boost,
   libxcrypt,
   pkg-config,
@@ -38,7 +38,7 @@ let
 
     buildInputs = [
       getopt
-      lua
+      lua5_5
       boost
       libxcrypt
     ];
