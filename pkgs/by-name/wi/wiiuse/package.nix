@@ -2,20 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   bluez,
 }:
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "WiiUse";
-  version = "0.15.6";
+  version = "0.15.7";
 
   src = fetchFromGitHub {
     owner = "wiiuse";
     repo = "wiiuse";
     rev = finalAttrs.version;
-    sha256 = "sha256-l2CS//7rx5J3kI32yTSp0BDtP0T5+riLowtnxnfAotc=";
+    sha256 = "sha256-kB/iGzpO9lin3bTDlXBwZEdEg5UOivU1mnWDj/E44k4=";
   };
 
   outputs = [
@@ -23,16 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
     "doc"
     "lib"
-  ];
-
-  patches = [
-    # Fix `.pc` files's double prefixes:
-    #   https://github.com/wiiuse/wiiuse/pull/153
-    (fetchpatch {
-      name = "pc-prefix.patch";
-      url = "https://github.com/wiiuse/wiiuse/commit/9c774ec0b71fa5119eabed823c35e4c745f3277c.patch";
-      hash = "sha256-WEHumCiNzsWfyMl7qu9xrlsNhgNcawdi+EFXf5w8jiE=";
-    })
   ];
 
   nativeBuildInputs = [ cmake ];
