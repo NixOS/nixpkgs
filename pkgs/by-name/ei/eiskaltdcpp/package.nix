@@ -11,7 +11,7 @@
   pcre2,
   libidn2,
   libidn,
-  lua5,
+  lua5_5,
   miniupnpc,
   aspell,
   gettext,
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     pcre2
     libidn2
     libidn
-    lua5
+    lua5_5
     miniupnpc
     aspell
     gettext
