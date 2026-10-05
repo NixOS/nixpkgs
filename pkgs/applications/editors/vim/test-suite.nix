@@ -19,10 +19,6 @@ vim.overrideAttrs (old: {
       # BusyBox ash, whose banner shows up in the dump.
       "Test_popup_drag_termwin"
 
-      # 'backupskip' contains $TMPDIR/*, $TEMP/* and $TMP/*, which all cover
-      # the build directory.
-      "Test_write_backup_symlink"
-
       # GetLatestVimScripts downloads plugins from vim.org.
       "Test_glvs_default_tar_xz"
       "Test_glvs_default_vba_gz"
@@ -35,6 +31,12 @@ vim.overrideAttrs (old: {
 
   preCheck = ''
     export TERM=xterm
+
+    # 'backupskip' defaults to include $TMPDIR/*, $TEMP/* and $TMP/*, and the
+    # build directory is inside all of them, so Vim would never write backups
+    # of the test files.
+    export TMPDIR=$(mktemp -d)
+    export TEMP=$TMPDIR TMP=$TMPDIR
 
     # Vim exits when it reads EOF on stdin, which /dev/null in the sandbox gives
     # it immediately: every test that waits for typeahead (getchar(), mappings,
