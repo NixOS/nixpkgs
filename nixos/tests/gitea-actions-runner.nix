@@ -13,6 +13,7 @@
         database.type = "sqlite3";
         settings = {
           actions.ENABLED = true;
+          server.ROOT_URL = "http://localhost:3000/";
           service.DISABLE_REGISTRATION = true;
         };
       };

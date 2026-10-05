@@ -364,8 +364,9 @@
     ];
     wiim =
       ps: with ps; [
+        pywiim
         wiim
-      ]; # missing pywiim
+      ];
     wikipedia = ps: [
     ];
     yandex_music =

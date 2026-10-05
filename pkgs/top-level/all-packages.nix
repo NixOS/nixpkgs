@@ -1922,6 +1922,11 @@ with pkgs;
     tracy_0_13
     ;
 
+  inherit (callPackages ../by-name/so/solana-platform-tools/package-versions.nix { })
+    solana-platform-tools_154
+    solana-platform-tools_157
+    ;
+
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
@@ -10295,8 +10300,6 @@ with pkgs;
   libjack2 = jack2.override { prefix = "lib"; };
 
   jack_autoconnect = jack-autoconnect;
-
-  j2cli = with python311Packages; toPythonApplication j2cli;
 
   j2lint = with python3Packages; toPythonApplication j2lint;
 
