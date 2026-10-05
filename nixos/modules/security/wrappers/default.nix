@@ -310,7 +310,7 @@ in
         ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
         wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-        ${lib.getExe' pkgs.util-linux.mount "mount"} -t overlay overlay -o "lowerdir=$metaWrapperDir::${builtins.storeDir},ro" "$wrapperDir"
+        ${lib.getExe' pkgs.util-linux.mount "mount"} -t overlay overlay -o "lowerdir=$metaWrapperDir::${builtins.storeDir},ro,metacopy=on,redirect_dir=on" "$wrapperDir"
         ${lib.getExe' pkgs.util-linux.mount "umount"} "$metaWrapperDir" # overlayfs will keep the FD alive until it gets unmounted on switch/shutdown
         rm --dir "$metaWrapperDir"
 
