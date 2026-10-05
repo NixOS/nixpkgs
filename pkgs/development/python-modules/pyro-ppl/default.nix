@@ -21,16 +21,16 @@
   wget,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyro-ppl";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "pyro";
-    tag = version;
-    hash = "sha256-Dvbl/80EGoGWGhWYVIf/xjovUJG1+3WtpMH+lx1oB2E=";
+    tag = finalAttrs.version;
+    hash = "sha256-P33neKtdBoIjKjv8KvoECOtlyaLEyb1spDwyGhPAVHk=";
   };
 
   build-system = [ setuptools ];
@@ -55,12 +55,10 @@ buildPythonPackage rec {
       scikit-learn
       seaborn
       scipy
-      # visdom
       wget
     ];
   };
 
-  # pyro not shipping tests do simple smoke test instead
   doCheck = false;
 
   pythonImportsCheck = [
@@ -73,11 +71,11 @@ buildPythonPackage rec {
   meta = {
     description = "Library for probabilistic modeling and inference";
     homepage = "http://pyro.ai";
-    changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${version}";
+    changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       teh
       georgewhewell
     ];
   };
-}
+})
