@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "bizkaibus";
-  version = "0.2.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "UgaitzEtxebarria";
     repo = "BizkaibusRTPI";
     rev = version;
-    hash = "sha256-TM02pSSOELRGSwsKc5C+34W94K6mnS0C69aijsPqSWs=";
+    hash = "sha256-6vQICG63+RJEILElrA1IMOBOJTnHqI9LviqrHBUgj68=";
   };
 
   build-system = [ setuptools ];
