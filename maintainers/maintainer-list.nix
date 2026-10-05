@@ -24915,6 +24915,17 @@
     githubId = 14910534;
     name = "Riey";
   };
+  righita = {
+    email = "righita@disroot.org";
+    github = "KoNickss";
+    githubId = 61112636;
+    name = "Radu I. Ghita";
+
+    keys = [
+      { fingerprint = "C246 2D51 03FA 6059 E1E3  279C 9E92 99CD 96C6 5EC6"; }
+      { fingerprint = "467D 3CC9 3945 43AD C932  DEAC 0DC3 B5B7 F619 4E08"; }
+    ];
+  };
   rika = {
     email = "rika@paymentswit.ch";
     github = "ScarletHg";
