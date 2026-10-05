@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
 
-  pname = "WiiUse";
+  pname = "wiiuse";
   version = "0.15.7";
 
   src = fetchFromGitHub {
