@@ -1275,6 +1275,7 @@
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix
   ./services/networking/https-dns-proxy.nix
+  ./services/networking/hydrascale.nix
   ./services/networking/hylafax/default.nix
   ./services/networking/hyphanet.nix
   ./services/networking/i2p.nix

@@ -875,6 +875,7 @@ in
   hound = runTest ./hound.nix;
   hub = runTest ./git/hub.nix;
   hydra = runTest ./hydra;
+  hydrascale = runTest ./hydrascale.nix;
   hyphanet = runTest ./hyphanet.nix;
   i18n = runTest ./i18n.nix;
   i2pd = runTest ./i2pd.nix;
