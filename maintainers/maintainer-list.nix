@@ -8578,6 +8578,12 @@
     github = "ericnorris";
     githubId = 1906605;
   };
+  enovamaker = {
+    email = "enovamaker@gmail.com";
+    github = "EnovaMaker";
+    githubId = 309829361;
+    name = "EnovaMaker";
+  };
   Enteee = {
     email = "nix@duckpond.ch";
     github = "Enteee";
