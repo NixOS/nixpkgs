@@ -17,6 +17,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ unzip ];
+  strictDeps = true;
+  __structuredAttrs = true;
   dontConfigure = true;
   dontBuild = true;
 
