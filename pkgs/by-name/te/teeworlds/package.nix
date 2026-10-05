@@ -10,7 +10,6 @@
   libx11,
   libGLU,
   SDL2,
-  lua5_3,
   zlib,
   freetype,
   wavpack,
@@ -78,7 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     python3
-    lua5_3
     zlib
     wavpack
   ]
