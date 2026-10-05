@@ -6599,12 +6599,12 @@ final: prev: {
 
   gentoo-syntax = buildVimPlugin {
     pname = "gentoo-syntax";
-    version = "16";
+    version = "17";
     src = fetchFromGitHub {
       owner = "gentoo";
       repo = "gentoo-syntax";
-      tag = "v16";
-      hash = "sha256-DGsfm52XLPnkWX9yRUkge7sQtfPZ3nxxQPSDArfO1h4=";
+      tag = "v17";
+      hash = "sha256-zRutLD1orVraVfzacIThnIyrlS9hi823TeCKqCf4sCM=";
     };
     meta.homepage = "https://github.com/gentoo/gentoo-syntax/";
     meta.license = unfree;
