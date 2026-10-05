@@ -12075,12 +12075,12 @@ final: prev: {
 
   nerdy-nvim = buildVimPlugin {
     pname = "nerdy.nvim";
-    version = "1.6-unstable-2026-08-04";
+    version = "1.7";
     src = fetchFromGitHub {
       owner = "2KAbhishek";
       repo = "nerdy.nvim";
-      rev = "5d2d37f828a6df2f85e6df6b0a2b375f45bd5125";
-      hash = "sha256-jYqCi92qLzIJcWj5FitZ3pk15r/2nkLiISaLTkj13Yw=";
+      tag = "1.7";
+      hash = "sha256-KzJvVXd5JY3DUulu4OaW1NcZNtKt8DFwlsLUBkU5+Sw=";
     };
     meta.homepage = "https://github.com/2KAbhishek/nerdy.nvim/";
     meta.license = getLicenseFromSpdxId "GPL-3.0-only";
