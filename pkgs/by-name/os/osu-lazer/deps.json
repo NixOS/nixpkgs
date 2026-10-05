@@ -581,8 +581,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2026.921.0",
-    "hash": "sha256-0Ft3vUaE8LIerpC6AFOhFKHXzdNZ9doIV7bVinHUuTg="
+    "version": "2026.1005.0",
+    "hash": "sha256-bvkW4xTMjkJ9OmzIQ3Nv8BU4OjiURBYp2LfNNHT//fo="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -611,8 +611,8 @@
   },
   {
     "pname": "ppy.SDL3-CS",
-    "version": "2026.722.0",
-    "hash": "sha256-PtYY+EPl3sicWR0iJhtAyinejPvK95xqYJwNdNjmylk="
+    "version": "2026.1002.1",
+    "hash": "sha256-xUUBUf+2q/R52c9tNvMx/1OuP71MYzX0yobm4QSWNWg="
   },
   {
     "pname": "ppy.Veldrid",
