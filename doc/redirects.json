@@ -2252,6 +2252,12 @@
   "ex-hascmakeconfigmodules": [
     "index.html#ex-hascmakeconfigmodules"
   ],
+  "ex-hascmakeconfigmodules-defaultvalues": [
+    "index.html#ex-hascmakeconfigmodules-defaultvalues"
+  ],
+  "ex-hascmakeconfigmodules-explicitmodules": [
+    "index.html#ex-hascmakeconfigmodules-explicitmodules"
+  ],
   "tester-lycheeLinkCheck": [
     "index.html#tester-lycheeLinkCheck"
   ],
