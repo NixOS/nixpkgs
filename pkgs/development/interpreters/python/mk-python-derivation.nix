@@ -121,10 +121,6 @@ lib.extendMkDerivation {
     "dependencies"
     "optional-dependencies"
     "build-system"
-
-    # Deprecated arguments
-    "pytestFlagsArray"
-    "unittestFlagsArray"
   ];
 
   extendDrvArgs =
@@ -478,7 +474,11 @@ lib.extendMkDerivation {
 
           # Deprecated pytestFlagsArray (internal)
           ${
-            if attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ] then
+            if
+              finalAttrs ? pytestFlagsArray
+              && finalAttrs.pytestFlagsArray != null
+              && finalAttrs.pytestFlagsArray != [ ]
+            then
               "buildPythonPackage-internal-pytestFlagsArray"
             else
               null
@@ -487,7 +487,11 @@ lib.extendMkDerivation {
               kind = "broken";
               message =
                 let
-                  pos = unsafeGetAttrPos "pytestFlagsArray" attrs;
+                  pos =
+                    if attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ] then
+                      unsafeGetAttrPos "pytestFlagsArray" attrs
+                    else
+                      null;
                   posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
                 in
                 ''
