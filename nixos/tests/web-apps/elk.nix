@@ -9,7 +9,11 @@
     {
       services.elk = {
         enable = true;
-        settings.NUXT_ADMIN_KEY = "test-key";
+        settings = {
+          NUXT_ADMIN_KEY = "test-key";
+          NUXT_PUBLIC_DEFAULT_SERVER = "mastodon.social";
+          NUXT_PUBLIC_SINGLE_INSTANCE = true;
+        };
       };
     };
 
@@ -43,6 +47,16 @@
     machine.succeed(
         "systemctl show elk.service --property=Environment"
         " | grep -F 'NUXT_ADMIN_KEY=test-key'"
+    )
+
+    # Public defaults are baked into the client bundle, cf. https://github.com/elk-zone/elk/issues/2997
+    machine.succeed(
+        "curl --fail --silent http://localhost:3000/"
+        " | grep -F 'defaultServer:\"mastodon.social\"'"
+    )
+    machine.succeed(
+        "curl --fail --silent http://localhost:3000/"
+        " | grep -F 'singleInstance:true'"
     )
 
     # The list of logged-in servers is read from the file system storage in
