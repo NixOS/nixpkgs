@@ -98,5 +98,8 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.dadada ];
+  meta.maintainers = with lib.maintainers; [
+    dadada
+    miniharinn
+  ];
 }
