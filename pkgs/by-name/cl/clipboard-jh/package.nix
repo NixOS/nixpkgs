@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   gcc15Stdenv,
   fetchFromGitHub,
   cmake,
@@ -14,7 +15,11 @@
   openssl,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+let
+  # GCC 16 breaks the build; Darwin needs clang for upstream's -fobjc-arc flag.
+  stdenv' = if stdenv.hostPlatform.isDarwin then stdenv else gcc15Stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "clipboard-jh";
   version = "0.10.0";
 
@@ -38,7 +43,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
   ]
-  ++ lib.optionals gcc15Stdenv.hostPlatform.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libffi
     wayland-protocols
     wayland
@@ -53,7 +58,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  postFixup = lib.optionalString gcc15Stdenv.hostPlatform.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/cb --add-rpath $out/lib
   '';
 
