@@ -6,20 +6,24 @@
     me-and
   ];
 
-  containers = rec {
-    a = { pkgs, ... }: {
-      environment.systemPackages = with pkgs; [
-        curl
-        libxml2
-        syncthing
-      ];
-      services.syncthing = {
-        enable = true;
-        openDefaultPorts = true;
+  containers =
+    let
+      containerModule = { pkgs, ... }: {
+        environment.systemPackages = with pkgs; [
+          curl
+          libxml2
+          syncthing
+        ];
+        services.syncthing = {
+          enable = true;
+          openDefaultPorts = true;
+        };
       };
+    in
+    {
+      a = containerModule;
+      b = containerModule;
     };
-    b = a;
-  };
 
   testScript = ''
     import json
