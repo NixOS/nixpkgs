@@ -43,7 +43,7 @@ buildDunePackage (finalAttrs: {
   pname = "superbol-studio-oss";
   version = "1.0.0";
 
-  minimalOCamlVersion = "4.14";
+  minimalOCamlVersion = "5.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
