@@ -93,28 +93,27 @@ in
     testScript =
       { nodes, ... }:
       let
-        esPort = toString nodes.parsedmarc.services.elasticsearch.port;
-        valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.services.elasticsearch.package.version "7") ".value";
+        osPort = toString nodes.parsedmarc.services.opensearch.settings."http.port";
       in
       ''
         parsedmarc.start()
         parsedmarc.wait_for_unit("postfix.service")
-        parsedmarc.wait_for_unit("dovecot2.service")
+        parsedmarc.wait_for_unit("dovecot.service")
         parsedmarc.wait_for_unit("parsedmarc.service")
         parsedmarc.wait_until_succeeds(
-            "curl -sS -f http://localhost:${esPort}"
+            "curl -sS -f http://localhost:${osPort}"
         )
 
         parsedmarc.fail(
-            "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+            "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
             + " | tee /dev/console"
-            + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+            + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
         )
         parsedmarc.succeed("send-email")
         parsedmarc.wait_until_succeeds(
-            "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+            "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
             + " | tee /dev/console"
-            + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+            + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
         )
       '';
   };
@@ -175,18 +174,25 @@ in
 
             services.dovecot2 = {
               enable = true;
-              protocols = [ "imap" ];
-              sslCACert = "${certs.ca.cert}";
-              sslServerCert = "${certs.${mailDomain}.cert}";
-              sslServerKey = "${certs.${mailDomain}.key}";
+              enablePAM = true;
+              settings = {
+                dovecot_config_version = lib.mkDefault "2.4.3";
+                dovecot_storage_version = lib.mkDefault "2.4.3";
+                protocols.imap = true;
+                mail_driver = lib.mkDefault "maildir";
+                mail_path = lib.mkDefault "${nodes.mail.services.postfix.settings.main.mail_spool_directory}/%{user}";
+                ssl_server_ca_file = certs.ca.cert;
+                ssl_server_cert_file = certs.${mailDomain}.cert;
+                ssl_server_key_file = certs.${mailDomain}.key;
+              };
             };
 
             services.postfix = {
               enable = true;
-              origin = mailDomain;
               settings.main = {
                 myhostname = mailDomain;
                 mydestination = mailDomain;
+                myorigin = mailDomain;
               };
               enableSubmission = true;
               enableSubmissions = true;
@@ -204,30 +210,29 @@ in
       testScript =
         { nodes, ... }:
         let
-          esPort = toString nodes.parsedmarc.services.elasticsearch.port;
-          valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.services.elasticsearch.package.version "7") ".value";
+          osPort = toString nodes.parsedmarc.services.opensearch.settings."http.port";
         in
         ''
           mail.start()
           mail.wait_for_unit("postfix.service")
-          mail.wait_for_unit("dovecot2.service")
+          mail.wait_for_unit("dovecot.service")
 
           parsedmarc.start()
           parsedmarc.wait_for_unit("parsedmarc.service")
           parsedmarc.wait_until_succeeds(
-              "curl -sS -f http://localhost:${esPort}"
+              "curl -sS -f http://localhost:${osPort}"
           )
 
           parsedmarc.fail(
-              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
               + " | tee /dev/console"
-              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
           )
           mail.succeed("send-email")
           parsedmarc.wait_until_succeeds(
-              "curl -sS -f http://localhost:${esPort}/_search?q=report_id:2940"
+              "curl -sS -f http://localhost:${osPort}/_search?q=report_id:2940"
               + " | tee /dev/console"
-              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total.value > 0 end'"
           )
         '';
     };
