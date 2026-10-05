@@ -89,6 +89,7 @@ lib.extendMkDerivation {
         };
 
       strictDeps = true;
+      __structuredAttrs = true;
       buildInputs = [ postgresql ] ++ prevAttrs.buildInputs or [ ];
       nativeBuildInputs = [ postgresql.pg_config ] ++ prevAttrs.nativeBuildInputs or [ ];
 

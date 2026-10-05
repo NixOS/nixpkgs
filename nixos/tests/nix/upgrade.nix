@@ -45,6 +45,8 @@ pkgs.testers.nixosTest {
     imports = [ nixos-module ];
 
     nix.package = nixVersions.stable;
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+
     system.extraDependencies = [
       fallback-paths-external
     ];

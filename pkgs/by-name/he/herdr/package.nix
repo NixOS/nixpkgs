@@ -3,7 +3,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  zig_0_15,
+  zig_0_16,
+  installAgentSkills,
   installShellFiles,
   cctools,
   xcbuild,
@@ -12,7 +13,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "herdr";
-  version = "0.8.2";
+  version = "0.9.3";
 
   __structuredAttrs = true;
 
@@ -20,26 +21,45 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "herdrdev";
     repo = "herdr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sEGIN3dLZasaHob3EHscWBCIQHflMQVchYmzgsETDk4=";
+    hash = "sha256-uu452Xe23pSvFk7w7fKPjiaqY5QenUIljao2SFAxpc0=";
   };
 
-  cargoHash = "sha256-4VThqPwYYEsGvaOKjBeL6XAC5bnNWB6oUMWP/uXc/UQ=";
+  cargoHash = "sha256-+gTWtEheyuI59yf2PqRbcbcFIW+/cYb7zZ2mPv2VN0Y=";
 
-  zigDeps = zig_0_15.fetchDeps {
+  zigDeps = zig_0_16.fetchDeps {
     inherit (finalAttrs) pname version;
     src = "${finalAttrs.src}/vendor/libghostty-vt";
     fetchAll = true;
-    hash = "sha256-PnM+hZIlLyQwK8vJgd/Bhjt1lNIz06T8FahwliRmMrY=";
+    hash = "sha256-Cy0DdSvce+fhOFIfxHMQGF2b2j16UkS27UpGbfC42XI=";
   };
 
   nativeBuildInputs = [
-    zig_0_15.hook
+    zig_0_16
+    installAgentSkills
     installShellFiles
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild
   ];
+
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
+        --replace-fail 'lib.bundle_compiler_rt = true;' 'lib.bundle_compiler_rt = false;' \
+        --replace-fail 'lib.bundle_ubsan_rt = true;' 'lib.bundle_ubsan_rt = false;'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace vendor/libghostty-vt/pkg/apple-sdk/native_link.zig \
+        --replace-fail '"/usr/bin/xcrun"' '"xcrun"'
+
+      substituteInPlace vendor/libghostty-vt/src/build/GhosttyLibVt.zig \
+        --replace-fail '"/bin/ln"' '"ln"'
+
+      substituteInPlace vendor/libghostty-vt/src/build/LibtoolStep.zig \
+        --replace-fail '/bin/cp ' 'cp ' \
+        --replace-fail '/usr/bin/ranlib ' 'ranlib '
+    '';
 
   # Upstream binary tests are renamed, added, or changed between releases and
   # depend on host process details, so Nix-only patches for them are brittle.
@@ -55,11 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     chmod -R u+w "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
-  postInstall = ''
-    mkdir --parents "$out"/share/herdr/skills/herdr
-    "$out"/bin/herdr --skill > "$_"/SKILL.md
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd herdr \
       --bash <("$out/bin/herdr" completion bash) \
       --fish <("$out/bin/herdr" completion fish) \
@@ -82,8 +98,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/herdrdev/herdr/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      kevinpita
+      agilesteel
       faukah
+      kevinpita
     ];
     mainProgram = "herdr";
     platforms = lib.platforms.unix;

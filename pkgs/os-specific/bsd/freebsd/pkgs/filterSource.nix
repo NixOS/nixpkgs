@@ -1,8 +1,6 @@
 {
   lib,
-  pkgsBuildBuild,
   runCommand,
-  writeText,
   source,
 }:
 
@@ -14,26 +12,11 @@
 
 let
   sortedPaths = lib.naturalSort ([ path ] ++ extraPaths);
-  filterText = writeText "${pname}-src-include" (
-    lib.concatMapStringsSep "\n" (path: "/${path}") sortedPaths
-  );
 in
-runCommand "${pname}-filtered-src"
-  {
-    nativeBuildInputs = [
-      (
-        (pkgsBuildBuild.rsync.override {
-          enableZstd = false;
-          enableXXHash = false;
-          enableOpenSSL = false;
-          enableLZ4 = false;
-        }).overrideAttrs
-        {
-          doCheck = false;
-        }
-      )
-    ];
-  }
-  ''
-    rsync -a -r --files-from=${filterText} ${source}/ $out
-  ''
+runCommand "${pname}-filtered-src" { } (
+  lib.concatMapStringsSep "\n" (path: ''
+    mkdir -p "$(dirname "$out/${path}")"
+    cp --archive --no-target-directory "${source}/${path}" "$out/${path}"
+    chmod --recursive u+rwX "$out/${path}"
+  '') sortedPaths
+)

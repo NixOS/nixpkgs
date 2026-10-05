@@ -13,7 +13,6 @@ outer@{
   nixosTests,
   installShellFiles,
   replaceVars,
-  removeReferencesTo,
   gd,
   geoip,
   perl,
@@ -44,6 +43,12 @@ outer@{
   preConfigure ? "",
   preInstall ? "",
   postInstall ? "",
+  stripDebugList ? [
+    "bin"
+    "sbin"
+    "lib"
+    "modules"
+  ],
   meta ? null,
   nginx-doc ? outer.nginx-doc,
   passthru ? { },
@@ -52,6 +57,8 @@ outer@{
 let
 
   moduleNames = map (mod: mod.pname) modules;
+
+  dynamicModules = lib.filter (mod: mod.dynamic or false) modules;
 
   mapModules =
     attrPath:
@@ -66,12 +73,19 @@ let
         throw "Module ${mod.name} does not support nginx version ${nginxVersion}!"
     );
 
+  # Modules can adjust the nginx derivation through passthru.forNginx.
+  mkDerivation =
+    args:
+    lib.foldl (drv: mod: drv.overrideAttrs mod.forNginx) (stdenv.mkDerivation args) (
+      lib.filter (mod: mod ? forNginx) modules
+    );
+
 in
 
 assert lib.assertMsg (lib.unique moduleNames == moduleNames)
   "nginx: duplicate modules: ${lib.concatStringsSep ", " moduleNames}. A common cause for this is that services.nginx.additionalModules adds a module which the nixos module itself already adds.";
 
-stdenv.mkDerivation {
+mkDerivation {
   inherit pname version nginxVersion;
 
   outputs = [
@@ -90,9 +104,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     installShellFiles
-    removeReferencesTo
   ]
-  ++ nativeBuildInputs;
+  ++ nativeBuildInputs
+  ++ mapModules "nativeBuildInputs";
 
   buildInputs = [
     openssl
@@ -106,6 +120,8 @@ stdenv.mkDerivation {
   ++ mapModules "buildInputs"
   ++ lib.optional withGeoIP geoip
   ++ lib.optional withImageFilter gd;
+
+  dontAddStaticConfigureFlags = true;
 
   configureFlags = [
     "--sbin-path=bin/nginx"
@@ -167,6 +183,7 @@ stdenv.mkDerivation {
   ++ lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
   ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
+  ++ lib.optional (dynamicModules != [ ]) "--modules-path=${placeholder "out"}/modules"
   ++ configureFlags;
 
   env = {
@@ -210,13 +227,18 @@ stdenv.mkDerivation {
   ''
   # Make all modules source trees writable
   + ''
-    for module in ${toString modules}; do
-      dst="$NIX_BUILD_TOP/$(basename "$module")"
-      cp --recursive "$module" "$dst"
+    addModule() {
+      local dst="$NIX_BUILD_TOP/$(stripHash "$2")"
+      cp --recursive "$2" "$dst"
       chmod --recursive +w "$dst"
-      appendToVar configureFlags "--add-module=$dst"
-    done
+      appendToVar configureFlags "$1=$dst"
+    }
   ''
+  + lib.concatLines (
+    map (
+      mod: "addModule ${if mod.dynamic or false then "--add-dynamic-module" else "--add-module"} ${mod}"
+    ) modules
+  )
   + preConfigure
   + lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
@@ -271,23 +293,33 @@ stdenv.mkDerivation {
   ''
   + preInstall;
 
-  disallowedReferences = map (m: m.src) modules;
+  disallowedReferences = modules;
+
+  inherit stripDebugList;
 
   postInstall =
     let
-      noSourceRefs = lib.concatMapStrings (
-        m: "remove-references-to -t ${m.src} $(readlink -fn $out/bin/nginx)\n"
-      ) modules;
+      dynamicPost = lib.optionalString (dynamicModules != [ ]) ''
+        shopt -s nullglob
+        sofiles=("$out"/modules/*.so)
+        if (( ''${#sofiles[@]} == 0 )); then
+          echo "nginx: dynamic modules were requested but no .so was produced in $out/modules" >&2
+          exit 1
+        fi
+        mkdir -p "$out/etc/nginx"
+        printf 'load_module %s;\n' "''${sofiles[@]}" > "$out/etc/nginx/dynamic-modules.conf"
+      '';
     in
-    postInstall + noSourceRefs;
+    postInstall + dynamicPost;
 
   passthru = {
-    inherit modules;
+    inherit modules dynamicModules;
     tests =
       passthru.tests or {
         inherit (nixosTests)
           nginx
           nginx-auth
+          nginx-dynamic-modules
           nginx-etag
           nginx-etag-compression
           nginx-globalredirect

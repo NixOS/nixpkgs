@@ -42,16 +42,27 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
-  version = "1.236.0.4";
+  version = "1.237.1.0";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     tag = finalAttrs.version;
-    hash = "sha256-tgFZ29eV6DckdOtbtUqCZ8x4t+SZ+HXNfQJ9WRWu/tU=";
+    hash = "sha256-7u4mddZO5uT64HjbgRrznPkyp/CvPKqFFBgvEEe6vQ0=";
   };
 
-  patches = [ ./proc_globdata.patch ];
+  patches = [
+    ./proc_globdata.patch
+    # https://github.com/Alexey-T/ATSynEdit/issues/388
+    ./lazarus48.patch
+  ];
+
+  prePatch = lib.concatStringsSep "\n" (
+    lib.mapAttrsToList (name: dep: ''
+      cp -r ${dep} ${name}
+      chmod -R +w ${name}
+    '') deps
+  );
 
   postPatch = ''
     substituteInPlace app/proc_globdata.pas \
@@ -88,26 +99,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.makeLibraryPath finalAttrs.buildInputs)
   ];
 
-  buildPhase =
-    lib.concatStringsSep "\n" (
-      lib.mapAttrsToList (name: dep: ''
-        cp -r ${dep} ${name}
-      '') deps
-    )
-    + ''
-      lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
-        bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
-        EncConv/encconv/encconv_package.lpk \
-        ATBinHex-Lazarus/atbinhex/atbinhex_package.lpk \
-        ATFlatControls/atflatcontrols/atflatcontrols_package.lpk \
-        ATSynEdit/atsynedit/atsynedit_package.lpk \
-        ATSynEdit_Cmp/atsynedit_cmp/atsynedit_cmp_package.lpk \
-        EControl/econtrol/econtrol_package.lpk \
-        ATSynEdit_Ex/atsynedit_ex/atsynedit_ex_package.lpk \
-        Python-for-Lazarus/python4lazarus/python4lazarus_package.lpk \
-        Emmet-Pascal/emmet/emmet_package.lpk \
-        app/cudatext.lpi
-    '';
+  buildPhase = ''
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --pcp=./lazarus --ws=${widgetset} \
+      bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
+      EncConv/encconv/encconv_package.lpk \
+      ATBinHex-Lazarus/atbinhex/atbinhex_package.lpk \
+      ATFlatControls/atflatcontrols/atflatcontrols_package.lpk \
+      ATSynEdit/atsynedit/atsynedit_package.lpk \
+      ATSynEdit_Cmp/atsynedit_cmp/atsynedit_cmp_package.lpk \
+      EControl/econtrol/econtrol_package.lpk \
+      ATSynEdit_Ex/atsynedit_ex/atsynedit_ex_package.lpk \
+      Python-for-Lazarus/python4lazarus/python4lazarus_package.lpk \
+      Emmet-Pascal/emmet/emmet_package.lpk \
+      app/cudatext.lpi
+  '';
 
   installPhase = ''
     install -Dm755 app/cudatext -t $out/bin

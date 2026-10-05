@@ -17,11 +17,16 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional stdenv.cc.isGNU [
+    lib.optionals stdenv.cc.isGNU [
       # Required with newer GCC
       "-Wstringop-overflow=0"
     ]
   );
+
+  makeFlags = [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "CC=cc"
+  ];
 
   installPhase = ''
     runHook preInstall

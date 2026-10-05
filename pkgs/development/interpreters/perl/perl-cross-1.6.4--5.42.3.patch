@@ -1,0 +1,86 @@
+perl-cross 1.6.4 ships no patch set for perl 5.42.3. The perl5-5.42.0 set
+applies unchanged, so link it under the name perl-cross looks for. The
+links are per-file because `find cnf/diffs/perl5-$version`, which
+perl-cross uses to collect them, does not descend into a symlinked
+directory.
+
+diff --git a/cnf/diffs/perl5-5.42.3/constant.patch b/cnf/diffs/perl5-5.42.3/constant.patch
+new file mode 120000
+index 0000000..61f792a
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/constant.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/constant.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/dynaloader.patch b/cnf/diffs/perl5-5.42.3/dynaloader.patch
+new file mode 120000
+index 0000000..543415e
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/dynaloader.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/dynaloader.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/findext.patch b/cnf/diffs/perl5-5.42.3/findext.patch
+new file mode 120000
+index 0000000..94ed668
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/findext.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/findext.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/installscripts.patch b/cnf/diffs/perl5-5.42.3/installscripts.patch
+new file mode 120000
+index 0000000..6f715b4
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/installscripts.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/installscripts.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/liblist.patch b/cnf/diffs/perl5-5.42.3/liblist.patch
+new file mode 120000
+index 0000000..5037380
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/liblist.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/liblist.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/makemaker.patch b/cnf/diffs/perl5-5.42.3/makemaker.patch
+new file mode 120000
+index 0000000..cf9fc6c
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/makemaker.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/makemaker.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/posix-makefile.patch b/cnf/diffs/perl5-5.42.3/posix-makefile.patch
+new file mode 120000
+index 0000000..072ba89
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/posix-makefile.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/posix-makefile.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/test-checkcase.patch b/cnf/diffs/perl5-5.42.3/test-checkcase.patch
+new file mode 120000
+index 0000000..6ecc9bc
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/test-checkcase.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/test-checkcase.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/test-makemaker.patch b/cnf/diffs/perl5-5.42.3/test-makemaker.patch
+new file mode 120000
+index 0000000..fc6bcda
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/test-makemaker.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/test-makemaker.patch
+\ No newline at end of file
+diff --git a/cnf/diffs/perl5-5.42.3/xconfig.patch b/cnf/diffs/perl5-5.42.3/xconfig.patch
+new file mode 120000
+index 0000000..87ac501
+--- /dev/null
++++ b/cnf/diffs/perl5-5.42.3/xconfig.patch
+@@ -0,0 +1 @@
++../perl5-5.42.0/xconfig.patch
+\ No newline at end of file

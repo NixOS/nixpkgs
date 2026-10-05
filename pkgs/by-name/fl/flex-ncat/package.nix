@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     description = "FlexRadio remote control (CAT) via hamlib/rigctl protocol";
     changelog = "https://github.com/kc2g-flex-tools/nCAT/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     mainProgram = "nCAT";
   };
 })

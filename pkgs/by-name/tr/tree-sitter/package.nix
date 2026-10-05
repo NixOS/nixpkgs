@@ -135,17 +135,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
-  version = "0.26.9";
+  version = "0.26.11";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ohVhW4AEKX5VspqBePtfxbJGkjmJnNkf5ntU3RUxF+0=";
+    hash = "sha256-YXnmVM90sEH8kqgqCygpeCAyvggMIsv+oXi0SJOvMRM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-3egxdusYHQs8PadxGZ44+VWtlTcGBrcqlWMUyUzpWnY=";
+  cargoHash = "sha256-kHDjPRhBUYlxLWYSv6cn6U1QDIWwCgHeIz2A5yCi1yo=";
 
   cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
 
@@ -193,6 +193,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       substituteInPlace ./Makefile \
           --replace-fail 'all: libtree-sitter.a libtree-sitter.$(SOEXT) tree-sitter.pc' 'all: libtree-sitter.a tree-sitter.pc'
       sed -i '/^install:/,/^[^[:space:]]/ { /$(SOEXT/d; }' ./Makefile
+    ''
+    # rquickjs-sys passes the raw rust target to clang, which does not know riscv64gc
+    + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+      substituteInPlace $cargoDepsCopy/source-*/rquickjs-sys-*/build.rs \
+        --replace-fail \
+          'let mut cflags = vec![format!("--target={}", target)];' \
+          'let mut cflags = vec![format!("--target={}", target.replace("riscv64gc", "riscv64"))];'
     '';
 
   # The Makefile install can't enable the wasm feature.

@@ -42,7 +42,7 @@ mkKdeDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix PATH : ${
+    "--prefix PATH : /run/wrappers/bin:${
       lib.makeBinPath [
         cdrdao
         cdrtools

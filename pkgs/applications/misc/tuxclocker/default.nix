@@ -9,23 +9,22 @@
   ninja,
   pkg-config,
   python3,
-  qtbase,
-  qtcharts,
+  qt5,
   tuxclocker-plugins,
   tuxclocker-without-unfree,
-  wrapQtAppsHook,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuxclocker";
-  version = "1.5.1";
+  version = "1.5.1-unstable-2026-08-19";
 
   src = fetchFromGitHub {
     owner = "Lurkki14";
     repo = "tuxclocker";
     fetchSubmodules = true;
-    rev = finalAttrs.version;
-    hash = "sha256-QLKLqTCpVMWxlDINa8Bo1vgCDcjwovoaXUs/PdMnxv0=";
+    rev = "c7c9021e6c32f3df581f266ccab4275d29810be1";
+    hash = "sha256-FMLpzt/VFzzFdn2b8MUxjPowLJu+tHiJhCDum5I6kSU=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +33,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     boost
-    qtbase
-    qtcharts
+    qt5.qtbase
+    qt5.qtcharts
   ];
 
   postInstall = ''
@@ -54,8 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugins=false"
   ];
 
-  passthru.tests = {
-    inherit tuxclocker-without-unfree;
+  passthru = {
+    tests = {
+      inherit tuxclocker-without-unfree;
+    };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = {

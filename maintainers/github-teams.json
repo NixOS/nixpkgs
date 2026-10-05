@@ -98,7 +98,9 @@
       "tomodachi94": 68489118,
       "tr3foil": 29682759
     },
-    "members": {},
+    "members": {
+      "l0b0": 168301
+    },
     "name": "Categorization"
   },
   "channel-updaters": {
@@ -159,8 +161,7 @@
       "samuela": 226872
     },
     "members": {
-      "ethancedwards8": 60861925,
-      "prusnak": 42201
+      "ethancedwards8": 60861925
     },
     "name": "cuda-maintainers"
   },
@@ -193,6 +194,7 @@
       "Emin017": 99674037,
       "Et7f3": 29592775,
       "Guanran928": 68757440,
+      "KristijanZic": 10299892,
       "LnL7": 689294,
       "Mastermindaxe": 33257997,
       "Moraxyc": 69713071,
@@ -245,7 +247,6 @@
       "mstone": 412508,
       "n8henrie": 1234956,
       "ofalvai": 1694986,
-      "prusnak": 42201,
       "reckenrode": 7413633,
       "ryand56": 22267679,
       "samrose": 115821,
@@ -255,13 +256,13 @@
       "sikmir": 688044,
       "siraben": 8219659,
       "siriobalmelli": 23038812,
-      "skulldogged": 33522919,
       "starcraft66": 1858154,
       "stepbrobd": 81826728,
       "stephank": 89950,
       "stephenstubbs": 18033664,
       "t-monaghan": 62273348,
       "thefloweringash": 42933,
+      "thtrf": 82712122,
       "tricktron": 16036882,
       "uncenter": 47499684,
       "usertam": 22500027,
@@ -383,6 +384,31 @@
     },
     "name": "Freedesktop"
   },
+  "gaming": {
+    "description": "Maintain games, game engines, launchers, compatibility layers, game-related utilities and other gaming software in nixpkgs.",
+    "id": 19617985,
+    "maintainers": {
+      "TomaSajt": 62384384,
+      "ethancedwards8": 60861925,
+      "iedame": 60272,
+      "keenanweaver": 37268985,
+      "l0b0": 168301
+    },
+    "members": {
+      "DrymarchonShaun": 40149778,
+      "Gliczy": 129636582,
+      "Mistyttm": 51770769,
+      "PaulGrandperrin": 1748936,
+      "RoGreat": 64620440,
+      "carlossless": 498906,
+      "dwt": 57199,
+      "liamthexpl0rer": 119797945,
+      "liberodark": 4238928,
+      "qubitnano": 146656568,
+      "yvnth": 201552597
+    },
+    "name": "Gaming"
+  },
   "geospatial": {
     "description": "Maintain geospatial, remote sensing and OpenStreetMap software",
     "id": 7084621,
@@ -432,8 +458,7 @@
     "maintainers": {
       "Aleksanaa": 42209822,
       "Hythera": 87016780,
-      "getchoo": 48872998,
-      "michaelgrahamevans": 5932424
+      "getchoo": 48872998
     },
     "members": {},
     "name": "GNOME Circle"
@@ -443,8 +468,7 @@
     "id": 4020424,
     "maintainers": {
       "Mic92": 96200,
-      "kalbasit": 87115,
-      "katexochen": 49727155
+      "kalbasit": 87115
     },
     "members": {
       "mfrw": 4929861,
@@ -657,7 +681,6 @@
       "djacu": 7043297
     },
     "members": {
-      "Sigmanificient": 53050011,
       "flyfloh": 74379,
       "thilobillerbeck": 7442383
     },
@@ -734,7 +757,7 @@
     "description": "Manage the current nixpkgs/NixOS release",
     "id": 3620128,
     "maintainers": {
-      "jopejoe1": 34899572,
+      "Scrumplex": 11587657,
       "yayayayaka": 73759599
     },
     "members": {},
@@ -856,6 +879,7 @@
       "lorenzleutgeb": 542154
     },
     "members": {
+      "Mic92": 96200,
       "ju1m": 21160136,
       "matthiasbeyer": 427866
     },
@@ -938,16 +962,16 @@
     "name": "Scala"
   },
   "sdl": {
-    "description": "Maintain core SDL libraries",
+    "description": "Maintain core SDL libraries. Matrix: #nixpkgs-sdl-team:nixos.org",
     "id": 13033942,
     "maintainers": {
+      "LordGrimmauld": 49513131,
+      "marcin-serwin": 12128106,
       "pbsds": 140964
     },
     "members": {
-      "LordGrimmauld": 49513131,
       "evysgarden": 92547295,
-      "jansol": 2588851,
-      "marcin-serwin": 12128106
+      "jansol": 2588851
     },
     "name": "SDL"
   },
@@ -959,7 +983,6 @@
     },
     "members": {
       "andir": 638836,
-      "leona-ya": 11006031,
       "pyrox0": 35778371
     },
     "name": "Security review"

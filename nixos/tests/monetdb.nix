@@ -62,8 +62,6 @@ in
   testScript = ''
     machine.start()
     machine.wait_for_unit("monetdb")
-    machine.succeed("monetdbd create mydbfarm")
-    machine.succeed("monetdbd start mydbfarm")
     machine.succeed("monetdb create voc")
     machine.succeed("monetdb release voc")
     machine.succeed("cp ${creds} ./.monetdb")
@@ -74,6 +72,5 @@ in
     machine.succeed("mclient -d voc ${vocData}/voc_dump.sql")
     assert "8131" in machine.succeed("mclient -d voc -s \"SELECT count(*) FROM voyages\"")
     assert "${onboardExpected}" in machine.succeed("mclient -d voc ${onboardPeople}")
-
   '';
 }

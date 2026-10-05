@@ -71,11 +71,14 @@
   pyopenssl,
   # tune
   tensorboardx,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.57.0";
+  version = "2.59.0";
   format = "wheel";
   __structuredAttrs = true;
 
@@ -93,22 +96,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-sMw9Q1vvbn/+hIgW5zadMO4pfojEwavGMjzJOD/zgm8=";
-          cp312 = "sha256-WV0Iix/RrdZGVMbOviA+JZA3h7ZQ01xKPcAI1FHkikE=";
-          cp313 = "sha256-caocUv54AM0he2Ab+f9VfCo//l+tWwD2eS2ppniyyRQ=";
-          cp314 = "sha256-AssrX99BJG9rkwbIUkfucTG/7unTak7a5UZT4C7XiQw=";
+          cp311 = "sha256-ZF9Gdu9v8sqBVOg+3ws4WD0iW2xvuDtgUMoWgdw6hog=";
+          cp312 = "sha256-QFWnpgKT/+5BAFq5s+2ZM+D5tdhFCyFPPAp7HeVQPw4=";
+          cp313 = "sha256-cP3FvsR8wzpPTg2bCB9mUF4Rmr2Ki8bLLF1JJkJ/zm0=";
+          cp314 = "sha256-BQeBCZzmQbfYmJbnsNecgggTUp2obJtcZey3yJQD5mc=";
         };
         aarch64-linux = {
-          cp311 = "sha256-epgm4zv69GUhmrMp4F8D4/apGfzl0haS9axWakQnfLM=";
-          cp312 = "sha256-7rHRrbYb0div/cX7VVrwSU/tj+xTuDV21MYPgR4GvpQ=";
-          cp313 = "sha256-Xi2SWPdRZ291gdwK0wfC2RKQglRCNmEoye0MzQ9guEU=";
-          cp314 = "sha256-4kiTkpbwyPRrPnNCFVV3YJSXKx28c9SAJHm5kXfCJp4=";
+          cp311 = "sha256-5Zu+7Z/TrinjJrz3Om3GuVcCkAQjDp8eh0ZwxOOQsUc=";
+          cp312 = "sha256-CeLdi6Nn8H8YKfwuNfQenD+p9uwLq6zhPXDr4U6M9mI=";
+          cp313 = "sha256-WD8m4fGgSu/SMLkIYh3D8+HKXg0gHuCdXwQMpLgk6AA=";
+          cp314 = "sha256-bWD5t6lPwTisR6B1ZBgnaf1rbO+uBxSqdJmlU73aKUk=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-oBbWJYtTVxlS8qglFXGy1z2PawmBvmxh4WDMkBtxGHE=";
-          cp312 = "sha256-jvWRV1xTF5P+t/d3RMUsNFCf9YtIsw0KO8tqFmYlawI=";
-          cp313 = "sha256-IbZ+3cdRuoxl3u6GVAdcK0KFEQTJNs5CynlExLbsR5k=";
-          cp314 = "sha256-eYoe4k5O3jnpAPzJNdhttfCA0np0xX4yOKUAS6kXEgA=";
+          cp311 = "sha256-ztzmr4ZdB40xi8P2keQVJzMdUy3KABf7gkGRyITlmiI=";
+          cp312 = "sha256-aiQLOTgZwMjAOUDRb6+VIiMAOrHZc21TKMxaX3HJXhw=";
+          cp313 = "sha256-hDv0j0JyLgwUPrpoRrWBlxa7fl4ES55HebHTrFkzBAs=";
+          cp314 = "sha256-rzEVjuj+rUEZxuS3s+DLNBRBZZnfHaLkyZ58U/pcX7M=";
         };
       };
     in
@@ -217,8 +220,6 @@ buildPythonPackage (finalAttrs: {
     serve = lib.unique (
       [
         fastapi
-        # Undeclared upstream: `ray.serve._private.haproxy`, imported by the serve controller since
-        # 2.57.0, needs it
         jinja2
         mmh3
         requests
@@ -268,11 +269,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "ray" ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
+    mainProgram = "ray";
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [

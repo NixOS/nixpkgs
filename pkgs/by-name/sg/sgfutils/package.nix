@@ -43,6 +43,8 @@ stdenv.mkDerivation {
       --set-default FONTCONFIG_FILE ${makeFontsConf { fontDirectories = [ ]; }}
   '';
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://homepages.cwi.nl/~aeb/go/sgfutils/html/sgfutils.html";
     description = "Command line utilities that help working with SGF files";
     longDescription = ''

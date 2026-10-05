@@ -1,0 +1,11 @@
+--- a/features/src/lib.rs
++++ b/features/src/lib.rs
+@@ -941,7 +941,7 @@
+         id: Feature::DaemonAutoStart,
+         key: "daemon_auto_start",
+         stage: Stage::Stable,
+-        default_enabled: true,
++        default_enabled: false,
+     },
+     FeatureSpec {
+         id: Feature::TranscriptV2,

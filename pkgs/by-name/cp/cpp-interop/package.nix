@@ -1,15 +1,16 @@
 {
-  lib,
-  fetchFromGitHub,
-  cmake,
-  ninja,
-  python3,
-  llvmPackages_21,
+  apple-sdk,
   cling,
+  cmake,
+  fetchFromGitHub,
   gcc-unwrapped,
+  lib,
   libffi,
   libxml2,
+  llvmPackages_21,
   ncurses,
+  ninja,
+  python3,
   zlib,
   zstd,
 
@@ -46,20 +47,49 @@ let
       "${clingRoot}/lib/clang/20"
     else
       "${lib.getLib clang}/lib/clang/${lib.versions.major llvm.version}";
+
+  # These must precede the resource dir, because libc++ ships its own <stddef.h>
+  # that include_next's Clang's and errors out if reached second.
+  cxxIncludeArgs =
+    if stdenv.hostPlatform.isDarwin then
+      [
+        "-isystem"
+        "${lib.getDev llvmPackages.libcxx}/include/c++/v1"
+      ]
+    else
+      [
+        "-isystem"
+        "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
+        "-isystem"
+        "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
+      ];
+
+  libcIncludeArgs =
+    if stdenv.hostPlatform.isDarwin then
+      [
+        "-isystem"
+        "${apple-sdk.sdkroot}/usr/include"
+        "-iframework"
+        "${apple-sdk.sdkroot}/System/Library/Frameworks"
+      ]
+    else
+      [
+        "-isystem"
+        "${lib.getDev stdenv.cc.libc}/include"
+      ];
+
   interpreterArgs = [
     "-nostdinc"
     "-nostdinc++"
     "-resource-dir"
     resourceDir
+  ]
+  ++ cxxIncludeArgs
+  ++ [
     "-isystem"
     "${resourceDir}/include"
-    "-isystem"
-    "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}"
-    "-isystem"
-    "${gcc-unwrapped}/include/c++/${gcc-unwrapped.version}/${stdenv.hostPlatform.config}"
-    "-isystem"
-    "${lib.getDev stdenv.cc.libc}/include"
-  ];
+  ]
+  ++ libcIncludeArgs;
 in
 
 assert lib.assertOneOf "backend" backend [

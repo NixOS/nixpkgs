@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "LOGLEVEL" "INFO")
     (lib.cmakeBool "USE_PARALLEL" true)
     (lib.cmakeBool "_NO_TIMING_TESTS" true)

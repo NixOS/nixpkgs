@@ -5,6 +5,7 @@
   autoreconfHook,
   mpiCheckPhaseHook,
   perl,
+  python3,
   mpi,
   blas,
   lapack,
@@ -43,11 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    patchShebangs ./fdep/fortran_dependencies.pl
-    patchShebangs ./test-driver
+    patchShebangs --build ./fdep/fortran_dependencies.pl
 
     # Fix the test script generator
     substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
+  ''
+  + lib.optionalString enableCuda ''
+    patchShebangs --build ./nvcc_wrap ./manual_cpp
   '';
 
   outputs = [
@@ -61,7 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     perl
   ]
-  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+    cudaPackages.libcusolver
+    python3
+  ];
 
   buildInputs = [
     mpi
@@ -74,26 +81,28 @@ stdenv.mkDerivation (finalAttrs: {
     cudaPackages.libcublas
   ];
 
-  preConfigure = ''
-    export FC="mpifort"
-    export CC="mpicc"
-    export CXX="mpicxx"
-    export CPP="cpp"
-
-    # These need to be set for configure to succeed
-    export FCFLAGS="${
-      lib.optionalString stdenv.hostPlatform.isx86_64 "-msse3 "
-      + lib.optionalString avxSupport "-mavx "
-      + lib.optionalString avx2Support "-mavx2 -mfma "
-      + lib.optionalString avx512Support "-mavx512"
-    }"
-
-    export CFLAGS=$FCFLAGS
-  '';
+  env =
+    let
+      optFlags =
+        lib.optionalString stdenv.hostPlatform.isx86_64 "-msse3 "
+        + lib.optionalString avxSupport "-mavx "
+        + lib.optionalString avx2Support "-mavx2 -mfma "
+        + lib.optionalString avx512Support "-mavx512";
+    in
+    {
+      FC = "mpifort";
+      CC = "mpicc";
+      CXX = "mpicxx";
+      CPP = "cpp";
+      FCFLAGS = optFlags;
+      CFLAGS = optFlags;
+    }
+    # elpa's CUDA support pulls in a custom compiler wrapper
+    # that does not distinguish gcc/g++
+    // lib.optionalAttrs enableCuda { LDFLAGS = "-lstdc++"; };
 
   configureFlags = [
     "--with-mpi"
-    "--enable-openmp"
     "--without-threading-support-check-during-build"
   ]
   ++ lib.optional blas.isILP64 "--enable-64bit-integer-math-support"
@@ -103,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!stdenv.hostPlatform.isx86_64) "--disable-sse"
   ++ lib.optional (!stdenv.hostPlatform.isx86_64) "--disable-sse-assembly"
   ++ lib.optional stdenv.hostPlatform.isx86_64 "--enable-sse-assembly"
+  ++ lib.optional (!enableCuda) "--enable-openmp"
   ++ lib.optionals enableCuda [
     "--enable-nvidia-gpu"
     "--with-NVIDIA-GPU-compute-capability=${nvidiaArch}"
@@ -114,8 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ mpiCheckPhaseHook ];
   preCheck = ''
-    #patchShebangs ./
-
     # Reduce test problem sizes
     export TEST_FLAGS="1500 50 16"
   '';

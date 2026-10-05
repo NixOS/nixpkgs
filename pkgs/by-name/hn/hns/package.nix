@@ -38,6 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Speech-to-text CLI to transcribe voice from microphone directly to clipboard";
     homepage = "https://hns-cli.dev";
     license = lib.licenses.mit;
+    mainProgram = "hns";
     maintainers = with lib.maintainers; [
       afh
       dwt

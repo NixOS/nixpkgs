@@ -20,14 +20,14 @@ buildDunePackage {
     duration
     domain-name
     fmt
-    ipaddr
-    mtime
+    logs
   ];
 
   propagatedBuildInputs = [
     happy-eyeballs
-    logs
+    ipaddr
     miou
+    mtime
   ];
 
   doCheck = true;

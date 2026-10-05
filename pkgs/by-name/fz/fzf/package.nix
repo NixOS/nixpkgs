@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "fzf";
-  version = "0.74.3";
+  version = "0.74.4";
 
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "junegunn";
     repo = "fzf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DIz3Nudiov2uwxAtq6++rt2zwz0adOlv9W+c0SW3EHc=";
+    hash = "sha256-QQ4hwbTeZ6MSojjCFn7dlISz1aGQbewGq4wnfs3/4K0=";
   };
 
   vendorHash = "sha256-NojjUf/3c4q4B96eQ/qcI+GdRvHakHUyMRaQ6/IZpEw=";

@@ -5,12 +5,12 @@
   tcllib,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "ruff";
   version = "2.4.2";
 
   src = fetchzip {
-    url = "mirror://sourceforge/magicsplat/ruff/ruff-${version}.tgz";
+    url = "mirror://sourceforge/magicsplat/ruff/ruff-${finalAttrs.version}.tgz";
     hash = "sha256-BeO0YtFDSg3e0ehdcpbojAw6WsInkiiHh01I0bYOkRY=";
   };
 
@@ -41,4 +41,4 @@ mkTclDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

@@ -14,6 +14,7 @@
   libxml2,
   gtk4,
   glib,
+  glib-networking,
   gtksourceview5,
   wrapGAppsHook4,
   gnome,
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     glib
+    glib-networking
     libxml2
     gtksourceview5
     mpfr

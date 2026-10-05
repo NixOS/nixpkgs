@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "airwindows-lv2";
-  version = "38.0";
+  version = "40.0";
   src = fetchFromSourcehut {
     owner = "~hannes";
     repo = "airwindows-lv2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M54HGcU1LxvV+KwOlnvI8gxeMxnCQ+2yAH8BPBM4/eg=";
+    hash = "sha256-o2xLp95CBqItYuwyu3Kcnz6pPB+LU+vhVqyyoqwW10s=";
   };
 
   nativeBuildInputs = [

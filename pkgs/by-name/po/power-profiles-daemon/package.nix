@@ -21,7 +21,6 @@
   libxslt,
   upower,
   umockdev,
-  systemd,
   python3,
   nixosTests,
   nix-update-script,
@@ -74,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bash-completion
     libgudev
-    systemd
     upower
     glib
     polkit

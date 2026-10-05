@@ -10,16 +10,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ibm-cloud-sdk-core";
-  version = "3.26.0";
+  version = "3.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IBM";
     repo = "python-sdk-core";
-    tag = "v${version}";
-    hash = "sha256-indY3DCATi3Czs8Btlyhx3H1ZsMZSbgddIa9XC06FEI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-i3j4E8egDjO8sJt3wLn4ZyJH8jS0BF8y5LY0iEhJpLo=";
   };
 
   pythonRelaxDeps = [ "requests" ];
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
-    changelog = "https://github.com/IBM/python-sdk-core/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/IBM/python-sdk-core/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

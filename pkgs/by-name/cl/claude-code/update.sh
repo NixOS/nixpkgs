@@ -9,4 +9,4 @@ BASE_URL="https://downloads.claude.ai/claude-code-releases"
 
 VERSION="${1:-$(curl -fsSL "$BASE_URL/latest")}"
 
-curl -fsSL "$BASE_URL/$VERSION/manifest.json" --output manifest.json
+curl -fsSL "$BASE_URL/$VERSION/manifest.zst.json" --output manifest.zst.json

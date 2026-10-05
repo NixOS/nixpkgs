@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -114,6 +115,10 @@ buildPythonPackage (finalAttrs: {
     "test_client_decode_text_using_autodetect"
     "test_client_decode_text_using_explicit_encoding"
     "test_response_decode_text_using_autodetect"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # TODO?
+    "test_keepalive_ping"
   ];
 
   passthru.tests = {

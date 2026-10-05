@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform desktop IM client for the Matrix protocol";
     mainProgram = "quaternion";
     homepage = "https://matrix.org/ecosystem/clients/quaternion/";

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -77,6 +78,12 @@ buildPythonPackage (finalAttrs: {
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [ "tests/httpcore2" ];
+
+  # Skip tests does not pass: 10ms cancellation-timing test
+  disabledTests = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "test_h2_timeout_during_request"
+    "test_h2_timeout_during_response"
+  ];
 
   passthru.tests = {
     inherit httpx2;

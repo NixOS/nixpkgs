@@ -6,13 +6,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "mem_usage";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-mem_usage";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5tQNsqbiU9oJvKHUjeTo/ST4A0Axc95gdJISLaa9VRM=";
+    hash = "sha256-LGOWqxEGENpo/1OZPKcVYqwz0YQi2iKtMA/npAeFZuE=";
   };
 
   minimalOCamlVersion = "4.07";

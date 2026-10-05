@@ -47,6 +47,10 @@ let
           "TestParseReferenceCores"
           "TestPlatformSearch"
           "TestPlatformSearchSorting"
+        ]
+        # This test fails with "platform is not available for your OS"
+        ++ lib.optionals (!stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.isAarch) [
+          "TestFindPlatformReleaseDependencies"
         ];
       in
       ''

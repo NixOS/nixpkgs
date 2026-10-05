@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   name = "cloudlog";
-  nodes = {
+  containers = {
     machine = {
       services.mysql.package = pkgs.mariadb;
       services.cloudlog.enable = true;

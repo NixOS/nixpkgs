@@ -42,10 +42,7 @@ buildGoModule (finalAttrs: {
     description = "Simple terminal UI for both docker and docker-compose";
     homepage = "https://github.com/jesseduffield/lazydocker";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      das-g
-      yvnth
-    ];
+    maintainers = with lib.maintainers; [ das-g ];
     mainProgram = "lazydocker";
   };
 })

@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simpleini";
-  version = "4.26";
+  version = "4.27";
 
   src = fetchFromGitHub {
     name = "simpleini-sources-${finalAttrs.version}";
     owner = "brofield";
     repo = "simpleini";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l8PolFjy9Nbdsk7PvuuRWukha4GygzxqMEzuzglqmUs=";
+    hash = "sha256-oNCrcz0onMoM+2kG+74i6VaMkQq5b8VtfRRv2seDplY=";
   };
 
   nativeBuildInputs = [

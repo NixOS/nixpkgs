@@ -578,6 +578,10 @@ lib.recursiveUpdate orig rec {
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
   luajittex.binfiles = lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) orig.luajittex.binfiles;
+  luajittex.formats = lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) orig.luajittex.formats;
+  mflua.binfiles = lib.filter (
+    bin: lib.meta.availableOn stdenv.hostPlatform luajit || !lib.hasPrefix "mfluajit" bin
+  ) orig.mflua.binfiles;
 
   texdoc = {
     extraRevision = "-tlpdb${toString tlpdbVersion.revision}";

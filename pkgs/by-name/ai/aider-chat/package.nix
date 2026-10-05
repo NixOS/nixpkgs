@@ -173,6 +173,11 @@ let
         url = "https://github.com/Aider-AI/aider/commit/38716cc5a2621499c50454aa77ee379aa2b0c590.patch";
         hash = "sha256-uDIUHbauAmzCfaqx6aswnkUHcmgJi4X2OdMPyn4NeYU=";
       })
+
+      # litellm >= 1.101.0 exports the new VectorStoreSearchError exception at
+      # top level, which trips the strict audit in LiteLLMExceptions._load()
+      # (same failure mode as the two patches above)
+      ./add-vector-store-search-error.patch
     ];
 
     disabledTestPaths = [

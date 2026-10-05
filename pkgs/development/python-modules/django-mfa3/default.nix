@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-mfa3";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xi";
     repo = "django-mfa3";
     tag = version;
-    hash = "sha256-J31NiqOysOS6FFDCaCiPAJUBvD0Xu99sIykLxfk0M3U=";
+    hash = "sha256-uVlDEfkM2+XYHL6hjA/ieuls12fZKzh9ZMSMPZ5O3aY=";
   };
 
   build-system = [ setuptools ];

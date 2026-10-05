@@ -67,6 +67,8 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Attempt to guess a canonical system name";
     homepage = "https://savannah.gnu.org/projects/config";

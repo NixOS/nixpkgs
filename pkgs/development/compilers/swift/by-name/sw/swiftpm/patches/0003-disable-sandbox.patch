@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 13 Dec 2025 22:57:33 -0500
+Subject: [PATCH 03/11] disable-sandbox
+
+---
+ Sources/Basics/Sandbox.swift | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
+
+diff --git a/Sources/Basics/Sandbox.swift b/Sources/Basics/Sandbox.swift
+index f24636cac..8b65b2489 100644
+--- a/Sources/Basics/Sandbox.swift
++++ b/Sources/Basics/Sandbox.swift
+@@ -57,18 +57,20 @@ public enum Sandbox {
+         allowNetworkConnections: [SandboxNetworkPermission] = []
+     ) throws -> [String] {
+         #if os(macOS)
+-        let profile = try macOSSandboxProfile(
+-            fileSystem: fileSystem,
+-            strictness: strictness,
+-            writableDirectories: writableDirectories,
+-            readOnlyDirectories: readOnlyDirectories,
+-            allowNetworkConnections: allowNetworkConnections
+-        )
+-        return ["/usr/bin/sandbox-exec", "-p", profile] + command
+-        #else
++        let env = ProcessInfo.processInfo.environment
++        if env["NIX_BUILD_TOP"] == nil || env["IN_NIX_SHELL"] != nil {
++            let profile = try macOSSandboxProfile(
++                fileSystem: fileSystem,
++                strictness: strictness,
++                writableDirectories: writableDirectories,
++                readOnlyDirectories: readOnlyDirectories,
++                allowNetworkConnections: allowNetworkConnections
++            )
++            return ["/usr/bin/sandbox-exec", "-p", profile] + command
++        }
++        #endif
+         // rdar://40235432, rdar://75636874 tracks implementing sandboxes for other platforms.
+         return command
+-        #endif
+     }
+ 
+     /// Basic strictness level of a sandbox applied to a command line.
+-- 
+2.54.0
+

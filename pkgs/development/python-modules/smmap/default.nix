@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "smmap";
-  version = "6.0.0";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jXkCjqbMEx2l6rCZpdlamY1DxneZVv/+O0VQQJEQdto=";
+    hash = "sha256-TZ3ruLmQB65HFlq8CGcL10y3S1In3af2Q+zMTp61ZCw=";
   };
 
   build-system = [ setuptools ];

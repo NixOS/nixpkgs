@@ -39,16 +39,16 @@ let
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "BoilR";
-  version = "1.9.6";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "PhilipK";
     repo = "BoilR";
     tag = "v.${version}";
-    hash = "sha256-qCY/I3ACrs5mWpgN+xmWi42rF9Mzqxxce2DIA+R1RNs=";
+    hash = "sha256-1//4P/Elx/bScyU9iAIc5ToNHSda1RapVnmv0KVklC0=";
   };
 
-  cargoHash = "sha256-9B2NcFO/Bj553yaOMi7oBZJTFtCQmBnJkU9nK+vjThU=";
+  cargoHash = "sha256-jclZq45yeOJ9F/tnJ9KhLAvkREER45qB08n0md0SHn0=";
 
   nativeBuildInputs = [
     perl

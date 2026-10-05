@@ -5,6 +5,7 @@
   gradle_8,
   jdk,
   quark-engine,
+  coreutils,
   makeBinaryWrapper,
   librsvg,
   makeDesktopItem,
@@ -61,7 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp build/jadx/bin/$prog $out/bin
       wrapProgram $out/bin/$prog \
         --set JAVA_HOME ${jdk.home} \
-        --prefix PATH : "${lib.makeBinPath [ quark-engine ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            quark-engine
+            coreutils
+          ]
+        }"
     done
 
     for size in 16 32 48; do

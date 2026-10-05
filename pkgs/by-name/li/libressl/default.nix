@@ -70,7 +70,7 @@ let
         # missing a .note.GNU-stack section. An executable stack is dangerous
         # and unintentional, but without this check the derivation will build
         # and even run if W^X is not enforced; it would fail dangerously.
-        objdump -p **/*.so | awk '
+        $OBJDUMP -p **/*.so | awk '
           BEGIN { res = 0 }
           /file format/ { file = $1 }
           /STACK/ { stack = 1; next }

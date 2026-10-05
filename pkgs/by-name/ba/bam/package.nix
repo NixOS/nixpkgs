@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lua5_3,
   python3,
 }:
 
@@ -18,7 +17,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    lua5_3
     python3
   ];
 
@@ -44,6 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.zlib;
-    downloadPage = "http://matricks.github.com/bam/";
+    downloadPage = "https://matricks.github.io/bam/";
   };
 })

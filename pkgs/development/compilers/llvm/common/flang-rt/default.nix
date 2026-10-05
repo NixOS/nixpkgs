@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "${finalAttrs.pname}-src-${version}"
       {
         inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
       }
       ''
         mkdir -p "$out"
@@ -60,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     libllvm
   ];
 
+  strictDeps = true;
+
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     MACOSX_DEPLOYMENT_TARGET = effectiveDarwinVersion;
     NIX_CFLAGS_COMPILE = "-mmacosx-version-min=${effectiveDarwinVersion}";
@@ -76,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_OSX_DEPLOYMENT_TARGET" effectiveDarwinVersion)
   ];
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://flang.llvm.org";

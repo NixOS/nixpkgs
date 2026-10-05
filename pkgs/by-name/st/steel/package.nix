@@ -89,12 +89,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/steel completions zsh)
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/forge --set-default STEEL_HOME "$out/lib/steel"
-    wrapProgram $out/bin/cargo-steel-lib --set-default STEEL_HOME "$out/lib/steel"
-  '';
+  postFixup =
+    lib.concatMapStringsSep "\n"
+      (bin: ''wrapProgram "$out/bin/${bin}" --prefix SEARCH_STEEL_PATHS : "$out/lib/steel/cogs"'')
+      [
+        "cargo-steel-lib"
+        "forge"
+        "steel"
+        "steel-language-server"
+      ];
 
   env = {
     OPENSSL_NO_VENDOR = true;

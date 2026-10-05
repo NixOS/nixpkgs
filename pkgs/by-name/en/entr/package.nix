@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "entr";
-  version = "5.8";
+  version = "5.9";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/entr-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3Jor3FVrK+kAwdjN9DLeJkkt5a8/+t4ADUv9l/MSK/s=";
+    hash = "sha256-DvLOfbcoFnhEqRkElEzQfHzMb9MEG4ScrYYSJNEGqEU=";
   };
 
   postPatch = ''

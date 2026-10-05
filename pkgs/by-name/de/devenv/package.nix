@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  useMoldLinker,
   fetchFromGitHub,
   gitMinimal,
   makeBinaryWrapper,
+  cmake,
   installShellFiles,
   rustPlatform,
   testers,
@@ -24,16 +26,16 @@
 }:
 
 let
-  version = "2.2.2";
-  devenvNixVersion = "2.34";
-  devenvNixRev = "59407321a92f7d34d4a53e38959294007c0bc37a";
+  version = "2.4.0";
+  devenvNixVersion = "2.35";
+  devenvNixRev = "2a2ff1045ef7361212d7eac0c062534538968de6";
 
   devenvNixSrc = fetchFromGitHub {
     name = "devenv-nix-${devenvNixVersion}-source";
     owner = "cachix";
     repo = "nix";
     rev = devenvNixRev;
-    hash = "sha256-WcqKvA7f7TGrlDVd69T1UXUqVXJ+wfoRbO+mg5L7/Rc=";
+    hash = "sha256-1CSuPNIbGyL2JJjOVg0KU7NWst1yZ6iXGDkiN/3bY5o=";
   };
 
   nix_components = (nixVersions.nixComponents_git.overrideSource devenvNixSrc).overrideScope (
@@ -41,23 +43,32 @@ let
       version = devenvNixVersion;
     }
   );
+  buildRustPackage = rustPlatform.buildRustPackage.override {
+    stdenv = if stdenv.hostPlatform.isLinux then useMoldLinker stdenv else stdenv;
+  };
 in
-rustPlatform.buildRustPackage {
+buildRustPackage {
   pname = "devenv";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "cachix";
     repo = "devenv";
-    tag = "v2.2.2";
-    hash = "sha256-UXA2rr/JNIrbTrhPcmbC2y4Uit8NzeAMZAlUfBQ45uw=";
+    tag = "v${version}";
+    hash = "sha256-MCSbrGsgWXod/Qzk4v5tYO/fev1d5OcEGZ2vzVAvMfQ=";
   };
 
-  cargoHash = "sha256-w7RUfoY2HoPdHQzn+qfTl0StoiJLkCN5UtxXLNAfbrM=";
+  cargoHash = "sha256-ed2k0D5tp7tlvpqXdxr4uGJozI2gvW1Dvz1SSJDR4NI=";
+
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail '"pkg-config",' '"pkg-config", "link-dynamic",'
+  '';
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    OPENSSL_NO_VENDOR = "1";
     DEVENV_IS_RELEASE = true;
   };
 
@@ -66,9 +77,12 @@ rustPlatform.buildRustPackage {
     "devenv"
     "-p"
     "devenv-run-tests"
+    "-p"
+    "devenv-proxy"
   ];
 
   nativeBuildInputs = [
+    cmake
     installShellFiles
     makeBinaryWrapper
     pkg-config
@@ -107,6 +121,12 @@ rustPlatform.buildRustPackage {
   '';
 
   useNextest = true;
+  # Binding a TCP socket is not permitted in the darwin sandbox.
+  checkFlags = [
+    "--skip"
+    "waits_for_previous_proxy_to_release_control_socket"
+  ];
+
   cargoTestFlags = [
     "-p"
     "devenv"

@@ -11,6 +11,10 @@ let
   configFile = settingsFormat.generate "config.toml" cfg.extraConfig;
 in
 {
+  meta = {
+    inherit (pkgs.telegraf.meta) maintainers;
+  };
+
   ###### interface
   options = {
     services.telegraf = {

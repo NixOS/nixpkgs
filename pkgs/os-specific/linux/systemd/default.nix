@@ -203,13 +203,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261.1";
+  version = "261.3";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4iOitWGdRmGgJjEXGWtq2lEhPtGguma+qrjTShrps2g=";
+    hash = "sha256-W3E6QUxr+x5jt4KJlHWbP4unyQCI7yA5oymgz6la1ng=";
   };
 
   # PATCH POLICY
@@ -798,6 +798,9 @@ stdenv.mkDerivation (finalAttrs: {
           fsck-systemd-stage-1
           hibernate-systemd-stage-1
           switchTest
+          switchTest-basics
+          switchTest-units
+          switchTest-user
           systemd
           systemd-analyze
           systemd-bpf

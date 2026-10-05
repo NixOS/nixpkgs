@@ -114,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ openssl ]; # see Libs: in libssh2.pc
   buildInputs = [ zlib ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
+  strictDeps = true;
+
   passthru.tests = {
     inherit
       aria2
@@ -123,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     curl = (curl.override { scpSupport = true; }).tests.withCheck;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Client-side C library implementing the SSH2 protocol";

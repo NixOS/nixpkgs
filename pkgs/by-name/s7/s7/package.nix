@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-lpthread"
       "--export-all-symbols"
     ]
-    ++ lib.optional (!static && stdenv.hostPlatform.isMinGW) [ "--out-implib,libs7dll.a" ]
+    ++ lib.optionals (!static && stdenv.hostPlatform.isMinGW) [ "--out-implib,libs7dll.a" ]
     ++ lib.optional withArb "-lflint"
     ++ lib.optionals withGMP [
       "-lgmp"

@@ -7,24 +7,34 @@
   autoPatchelfHook,
   wayland,
   libxkbcommon,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxcb,
   libGL,
   stdenv,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oklch-color-picker";
-  version = "2.3.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "eero-lehtinen";
     repo = "oklch-color-picker";
     tag = finalAttrs.version;
-    hash = "sha256-AdLpP01VeeAAOBEeX/dxLPdAqTfgH9X+NDCmFgqA3hs=";
+    hash = "sha256-1QKI88aYJDVRuSeu6rweM2NpshvD2NDa4vSDPkSVcvY=";
   };
 
-  cargoHash = "sha256-FB8zvWhO+ZbzWjkQCnf3ghgM+IL4px7QNO4dLPcczec=";
+  cargoHash = "sha256-WLeF8+KHmOReg6gtvKp/V2gZJPdDlplg/okG9+yA7ek=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   runtimeDependencies = [
     libGL
@@ -32,11 +42,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     libxkbcommon
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxcb
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    install -Dm444 assets/icon.png $out/share/icons/hicolor/512x512/apps/${finalAttrs.meta.mainProgram}.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
+      icon = finalAttrs.meta.mainProgram;
+      desktopName = "OKLCH Color Picker";
+      genericName = "Color Picker";
+      comment = finalAttrs.meta.description;
+      categories = [
+        "Graphics"
+      ];
+    })
+  ];
 
   meta = {
     description = "Color picker for Oklch";
@@ -46,6 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://github.com/eero-lehtinen/oklch-color-picker";
     changelog = "https://github.com/eero-lehtinen/oklch-color-picker/releases/tag/${finalAttrs.version}";
+    mainProgram = "oklch-color-picker";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ videl ];
   };

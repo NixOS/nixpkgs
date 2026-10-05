@@ -1,6 +1,9 @@
 { pkgs, lib, ... }:
 {
   name = "nixseparatedebuginfod2";
+  defaults = {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  };
   # A binary cache with debug info and source for gnumake
   nodes.cache =
     { pkgs, ... }:

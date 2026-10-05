@@ -11,14 +11,12 @@
   lib,
   stdenv,
   callPackages,
-  gcc14Stdenv,
   fetchurl,
   fetchgit,
   fetchpatch,
   fetchFromGitHub,
   makeSetupHook,
   python3,
-  llvmPackages_19,
   darwin,
 
   # options

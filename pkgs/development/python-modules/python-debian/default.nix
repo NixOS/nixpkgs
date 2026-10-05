@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-debian";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "python-debian-team";
     repo = "python-debian";
     tag = finalAttrs.version;
-    hash = "sha256-v2b9xobxCrSz0tOEBo6awmQuTyykyJlsryPBMRU9EmM=";
+    hash = "sha256-K5i0zDZXeAgoAdblqp+f5QX9FIZYVpJ4wWk29hwVjfM=";
   };
 
   build-system = [
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     setuptools-scm
   ];
 
-  dependencies = [
+  optional-dependencies.encodings = [
     charset-normalizer
   ];
 

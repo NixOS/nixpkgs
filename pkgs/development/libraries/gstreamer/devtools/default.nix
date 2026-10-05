@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-devtools";
-  version = "1.28.5";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-devtools/gst-devtools-${finalAttrs.version}.tar.xz";
-    hash = "sha256-dFkEXbMdbkRgC8vgEdySV1AmiHDnuQ9+ego69KIcCeU=";
+    hash = "sha256-nzo4nWp++loY11ZHJKfzscP67P/Lj9E1HtDoEdGHOtU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -132,5 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

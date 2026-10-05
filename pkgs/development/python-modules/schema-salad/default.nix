@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.9.20260327095315";
+  version = "8.10.20260814121804";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
     tag = version;
-    hash = "sha256-j3jevOMsNHT9+HI/8MD4MUwj+IHUisKMs/OA5wpweao=";
+    hash = "sha256-82124Xb4fOl0CjaE/FVbf8V1adtVw2dVpifql6xUB2k=";
   };
 
   pythonRelaxDeps = [ "mistune" ];
@@ -37,8 +37,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<11"]' '["setuptools_scm"]'
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools_scm[toml]>=8.0.4,<11"' '"setuptools_scm[toml]"' \
-      --replace-fail "mypy[mypyc]==1.19.1" "mypy"
+      --replace-fail '"setuptools_scm[toml]>=8.0.4,<11"' '"setuptools_scm[toml]"'
     sed -i "/black>=/d" pyproject.toml
   '';
 

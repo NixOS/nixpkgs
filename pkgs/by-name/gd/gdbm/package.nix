@@ -17,6 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
+  strictDeps = true;
+
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
@@ -62,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
       command = "gdbmtool --version";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/gdbm/";

@@ -27,8 +27,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-Q5nJ+n9h5ZhCQuJ5rNFRm+7CRrmKZ21EpLKrlOnuywE=";
   };
 
-  strictDeps = true;
-
   depsBuildBuild = [
     pkg-config
   ];

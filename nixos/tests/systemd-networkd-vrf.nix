@@ -146,6 +146,14 @@ in
     # Check that networkd properly configures the main routing table
     # and the routing tables for the VRF.
     with subtest("check vrf routing tables"):
+        # network.target does not wait for networkd to finish configuring
+        # the links, so the routes may not be installed yet.
+        def configured(dev):
+            status = json.loads(client.succeed(f"networkctl status --json=short {dev}"))
+            return status["AdministrativeState"] == "configured"
+
+        for dev in ["vrf1", "vrf2", "eth1", "eth2"]:
+            retry(lambda _: configured(dev))
         compare(
             client.succeed("ip --json -4 route list"),
             [

@@ -36,28 +36,26 @@
   pytest-mock,
   pytestCheckHook,
   tantivy,
-
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.36.0";
+  version = "0.39.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${finalAttrs.version}";
-    hash = "sha256-JOUrLHoVBZs4B8UGYFZIs00kzBnxFFAkTXFIz2bOZ7w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4Sa6LIpUI2Gv0kFxX4ylFkXj9qghMWMvdX/2Cqd4AWM=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-KEczUf/e3+Eb53pouOzajp+yVjWctDUNbdVEgQVoCZE=";
+    hash = "sha256-CAMygfYyQmg5L/IvBdMnUtJ1BT/o2YVN5rY5IiTxRF8=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -68,7 +66,7 @@ buildPythonPackage (finalAttrs: {
   # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
   # AVX2 / scalar kernels.
   postPatch = ''
-    lanceDistance="$cargoDepsCopy/source-registry-0/lance-linalg-9.0.0/src/distance"
+    lanceDistance=("$cargoDepsCopy"/source-registry-0/lance-linalg-*/src/distance)
 
     substituteInPlace "$lanceDistance/dot_u8.rs" \
       --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
@@ -131,6 +129,9 @@ buildPythonPackage (finalAttrs: {
     # Requires internet access
     # RuntimeError: lance error: LanceError(IO): Generic S3 error
     "test_bucket_without_dots_is_not_rejected"
+    # RuntimeError: lance error: LanceError(IO): Generic HTTP client error
+    "test_bucket_with_dots_and_aws_region_is_not_rejected"
+    "test_bucket_with_dots_and_region_is_not_rejected"
 
     # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
     "TestAsyncNamespaceConnection"
@@ -169,12 +170,7 @@ buildPythonPackage (finalAttrs: {
     "test_remote_db.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "python-v(.*)"
-    ];
-  };
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";

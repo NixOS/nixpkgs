@@ -2,75 +2,16 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  stdenv,
-  nodejs_24,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  buildGoModule,
+  buildGo127Module,
   mage,
-  dart-sass,
+  writableTmpDirAsHomeHook,
   writeShellScriptBin,
   nixosTests,
   nix-update-script,
 }:
 
 let
-  version = "2.5.0";
-  src = fetchFromGitHub {
-    owner = "go-vikunja";
-    repo = "vikunja";
-    rev = "v${version}";
-    hash = "sha256-qI4mkgcN9yYRmh5V+KzIHupX7uWsszV4Xb31OYvukxQ=";
-  };
-
-  frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "vikunja-frontend";
-    inherit version src;
-
-    sourceRoot = "${finalAttrs.src.name}/frontend";
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        sourceRoot
-        ;
-      pnpm = pnpm_10;
-      fetcherVersion = 3;
-      hash = "sha256-xZBgE4GM59Ihl5a3qgcmkjR4Q3wYlcsiDapiNEzBQOg=";
-    };
-
-    nativeBuildInputs = [
-      nodejs_24
-      dart-sass
-      pnpmConfigHook
-      pnpm_10
-    ];
-
-    postPatch = ''
-      substituteInPlace src/version.json \
-        --replace-fail '"dev"' '"${finalAttrs.version}"'
-    '';
-
-    doCheck = true;
-
-    postBuild = ''
-      # Force sass-embedded to use our dart-sass instead of bundled binaries.
-      substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-        --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
-      pnpm run build
-    '';
-
-    checkPhase = ''
-      pnpm run test:unit --run
-    '';
-
-    installPhase = ''
-      cp -r dist/ $out
-    '';
-  });
+  buildGoModule = buildGo127Module;
 
   # Injects a `t.Skip()` into a given test since there's apparently no other way to skip tests here.
   skipTest =
@@ -85,14 +26,21 @@ let
     '';
 in
 buildGoModule (finalAttrs: {
-  inherit src version;
   pname = "vikunja";
+  version = "2.7.0";
+
+  src = fetchFromGitHub {
+    owner = "go-vikunja";
+    repo = "vikunja";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Gy6LRbD6LfWjKwuzj+EBAiSkZluChFVC4qhZgQbeZc8=";
+  };
 
   nativeBuildInputs =
     let
       fakeGit = writeShellScriptBin "git" ''
         if [[ $@ = "describe --tags --always --abbrev=10" ]]; then
-            echo "${version}"
+            echo "${finalAttrs.version}"
         else
             >&2 echo "Unknown command: $@"
             exit 1
@@ -102,15 +50,23 @@ buildGoModule (finalAttrs: {
     [
       fakeGit
       mage
+      # mage wants to write some files to HOME
+      writableTmpDirAsHomeHook
     ];
 
-  vendorHash = "sha256-bn+bcGzeB0/KkhPNkbjK/EgKQG3iqVlJxtt6betGUNE=";
+  vendorHash = "sha256-NLtp+2QyfS06W/Puuo5MEqalpLc9NodoPqtDJPBbOH4=";
 
-  inherit frontend;
-  veans = callPackage ./veans.nix { inherit (finalAttrs) src version meta; };
+  frontend = callPackage ./frontend.nix {
+    inherit (finalAttrs) src version;
+  };
+
+  veans = callPackage ./veans.nix {
+    inherit (finalAttrs) src version meta;
+    inherit buildGoModule;
+  };
 
   prePatch = ''
-    cp -r ${frontend} frontend/dist
+    cp -r ${finalAttrs.frontend} frontend/dist
   '';
 
   postConfigure = ''
@@ -120,44 +76,61 @@ buildGoModule (finalAttrs: {
     # These tests require a full config with public URL and CORS enabled.
     ${skipTest 1 "TestCreateOrganizationMap" "pkg/modules/migration/trello/trello_test.go"}
     ${skipTest 1 "TestTaskAttachmentUploadSize" "pkg/webtests/task_attachment_upload_test.go"}
+    # filesystem walk incompatible with trimpath
+    rm pkg/web/error_codes_test.go
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    # Fixes "mkdir /homeless-shelter: permission denied" - "Error: error compiling magefiles" during build
-    export HOME=$(mktemp -d)
     mage build:build
 
     runHook postBuild
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     mage test:feature
     mage test:web
+
+    runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
+
     install -Dt $out/bin vikunja
+
     runHook postInstall
   '';
 
   passthru = {
+    desktop = callPackage ./desktop.nix {
+      inherit (finalAttrs)
+        src
+        version
+        meta
+        frontend
+        ;
+    };
+
     tests.vikunja = nixosTests.vikunja;
-    frontend = frontend;
+
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
         "frontend"
         "--subpackage"
         "veans"
+        "--subpackage"
+        "desktop"
       ];
     };
   };
 
   meta = {
-    changelog = "https://github.com/go-vikunja/vikunja/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/go-vikunja/vikunja/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Todo-app to organize your life";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;

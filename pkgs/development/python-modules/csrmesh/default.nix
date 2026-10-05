@@ -3,20 +3,25 @@
   bluepy,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pycryptodomex,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "csrmesh";
   version = "0.10.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "03lzam54ypcfvqvikh3gsrivvlidmz1ifdq15xv8c5i3n5b178ag";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-T6ETVrEjFoZ2LwE3F8OvLdK9Y9ZvwBk33o5dT0pVnw4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     bluepy
     pycryptodomex
   ];
@@ -31,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

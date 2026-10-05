@@ -213,7 +213,7 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     "pic"
     "fortify"
   ]
-  ++ lib.optional stdenv.hostPlatform.isAarch64 "relro";
+  ++ lib.optional stdenv.hostPlatform.isNone "relro";
 
   buildFlags =
     # IPv6 has no reason to be disabled.

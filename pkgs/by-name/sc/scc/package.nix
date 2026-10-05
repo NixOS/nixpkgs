@@ -7,13 +7,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "scc";
-  version = "3.7.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "boyter";
     repo = "scc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gOr09UzPfmNDUqvGJtmXYdn0gWfcvvVyoBfyRBDSy88=";
+    hash = "sha256-Kpf0wvCreK+IrfnV79wBP8feu0EG0rvuQQ6P0sLDsQg=";
   };
 
   vendorHash = null;

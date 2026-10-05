@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prevail";
-  version = "0.2.0";
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "vbpf";
     repo = "prevail";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-qlQSoz9GE2Z2rzmrPIj+HnIQmNxiBSgvR40FR9psuDc=";
+    hash = "sha256-c4km7WO9K0Hb0mTOkilXLwpFC8pJ8MEIqqlpBLJoC10=";
   };
 
   patches = [

@@ -13,7 +13,6 @@ let
     mkEnableOption
     mkIf
     mkOption
-    mkOverride
     mkPackageOption
     nameValuePair
     recursiveUpdate
@@ -351,13 +350,11 @@ in
         fedimintdName: cfg:
         (nameValuePair cfg.nginx.fqdn (
           lib.mkMerge [
-            cfg.nginx.config
+            (lib.mapAttrsRecursive (_: lib.mkDefault) cfg.nginx.config)
 
             {
-              # Note: we want by default to enable OpenSSL, but it seems anything 100 and above is
-              # overridden by default value from vhost-options.nix
-              enableACME = mkOverride 99 true;
-              forceSSL = mkOverride 99 true;
+              enableACME = true;
+              forceSSL = true;
               locations.${cfg.nginx.path_ws} = {
                 proxyPass = "http://127.0.0.1:${toString cfg.api_ws.port}/";
                 proxyWebsockets = true;

@@ -1,8 +1,8 @@
 diff --git a/Modules/CMakeDetermineSystem.cmake b/Modules/CMakeDetermineSystem.cmake
-index dc26258eac..dd8d30e3d9 100644
+index c70fea184d..10b18675b0 100644
 --- a/Modules/CMakeDetermineSystem.cmake
 +++ b/Modules/CMakeDetermineSystem.cmake
-@@ -68,7 +68,7 @@
+@@ -74,7 +74,7 @@ if(CMAKE_HOST_UNIX)
        endif()
        if(_CMAKE_APPLE_SILICON_PROCESSOR)
          if(";${_CMAKE_APPLE_SILICON_PROCESSOR};" MATCHES "^;(arm64|x86_64);$")
@@ -12,10 +12,10 @@ index dc26258eac..dd8d30e3d9 100644
              ERROR_VARIABLE _sysctl_stderr
              RESULT_VARIABLE _sysctl_result
 diff --git a/Modules/Platform/Darwin-Initialize.cmake b/Modules/Platform/Darwin-Initialize.cmake
-index 31dd4346b1..7c4f123a1d 100644
+index 0b1fda27d7..f5491ef048 100644
 --- a/Modules/Platform/Darwin-Initialize.cmake
 +++ b/Modules/Platform/Darwin-Initialize.cmake
-@@ -28,7 +28,7 @@
+@@ -22,7 +22,7 @@ set(CMAKE_OSX_ARCHITECTURES "$ENV{CMAKE_OSX_ARCHITECTURES}" CACHE STRING
  if(NOT CMAKE_CROSSCOMPILING AND
     CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND
     CMAKE_HOST_SYSTEM_PROCESSOR MATCHES "^(arm64|x86_64)$")
@@ -25,10 +25,10 @@ index 31dd4346b1..7c4f123a1d 100644
      ERROR_VARIABLE _sysctl_stderr
      RESULT_VARIABLE _sysctl_result
 diff --git a/Modules/ProcessorCount.cmake b/Modules/ProcessorCount.cmake
-index 260b6631c0..ffb8fcd8d2 100644
+index b8fa1fabc0..7c3112b817 100644
 --- a/Modules/ProcessorCount.cmake
 +++ b/Modules/ProcessorCount.cmake
-@@ -87,8 +87,7 @@
+@@ -87,8 +87,7 @@ function(ProcessorCount var)
  
    if(NOT count)
      # Mac, FreeBSD, OpenBSD (systems with sysctl):
@@ -52,10 +52,10 @@ index 8c22b4e43a..6d9ccef5e7 100644
  #elif defined(__sun) && (defined(__SVR4) || defined(__svr4__)) /* Solaris */
  #  define KWSYSPE_PS_COMMAND "ps -e -o pid,ppid"
 diff --git a/Source/kwsys/SystemInformation.cxx b/Source/kwsys/SystemInformation.cxx
-index 0a7cc380c3..9923dc4ab9 100644
+index 173ceb0a64..7bddddf955 100644
 --- a/Source/kwsys/SystemInformation.cxx
 +++ b/Source/kwsys/SystemInformation.cxx
-@@ -3876,7 +3876,7 @@
+@@ -3878,7 +3878,7 @@ long long SystemInformationImplementation::GetProcMemoryUsed()
    long long memUsed = 0;
    pid_t pid = getpid();
    std::ostringstream oss;
@@ -65,10 +65,10 @@ index 0a7cc380c3..9923dc4ab9 100644
    if (!file) {
      return -1;
 diff --git a/Tests/CMakeLists.txt b/Tests/CMakeLists.txt
-index 33bb304cf7..7dbda40a81 100644
+index d32e6a6693..683e27ece7 100644
 --- a/Tests/CMakeLists.txt
 +++ b/Tests/CMakeLists.txt
-@@ -216,7 +216,7 @@
+@@ -249,7 +249,7 @@ if(BUILD_TESTING)
    endif()
  
    if(CMAKE_SYSTEM_NAME STREQUAL "Darwin" AND NOT DEFINED CMake_TEST_APPLE_SILICON)

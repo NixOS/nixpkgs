@@ -92,7 +92,7 @@ in
     systemd.services.systemd-journal-gatewayd.serviceConfig.ExecStart = [
       # Clear the default command line
       ""
-      "${pkgs.systemd}/lib/systemd/systemd-journal-gatewayd ${cliArgs}"
+      "${config.systemd.package}/lib/systemd/systemd-journal-gatewayd ${cliArgs}"
     ];
 
     systemd.sockets.systemd-journal-gatewayd = {

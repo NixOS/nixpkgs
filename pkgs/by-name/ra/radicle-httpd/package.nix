@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-httpd";
-  version = "0.27.0";
+  version = "0.28.0";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -29,10 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "/Cargo.toml"
       "/Cargo.lock"
     ];
-    hash = "sha256-OJrHV5WdFNzoYrOkqpN1ctrJDB3JTJhH54q/C6IV9ZU=";
+    hash = "sha256-D15u6aU6lKch/bEa1J6PBntb42NMHWYChIgprbJM+4M=";
   };
 
-  cargoHash = "sha256-FjYhw27pAX9Tilgm/Tg18Vkv4/K5kEFJAbhv1mDY0rg=";
+  cargoHash = "sha256-z/ddTzoitMOsfndleM8Wu2sOn156ZTg8w/3/AJYw8wE=";
 
   nativeBuildInputs = [
     asciidoctor

@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation {
   pname = "x264";
-  version = "0-unstable-2025-01-03";
+  version = "0-unstable-2025-09-10";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "x264";
-    rev = "373697b467f7cd0af88f1e9e32d4f10540df4687";
-    hash = "sha256-WWtS/UfKA4i1yakHErUnyT/3/+Wy2H5F0U0CmxW4ick=";
+    rev = "0480cb05fa188d37ae87e8f4fd8f1aea3711f7ee";
+    hash = "sha256-yV/uN0Bgx+GbwGBnr/P0w9bnu9UXaa3YRPa7TICq24w=";
   };
 
   patches = [

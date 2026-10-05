@@ -11,16 +11,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sandhole";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "EpicEric";
     repo = "sandhole";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iU9rMBiI+nlEqGthb/zHKsG/KPdBd16BKUsvzyCR0UY=";
+    hash = "sha256-9Bs8J+aHxKoHX8ksxe/iwl297rVyKDk4nm3+vzzh7Lo=";
   };
 
-  cargoHash = "sha256-PX2tRsNC60S2sc6kVuRS7uqFvX4CYV37v7HOqspEb7M=";
+  cargoHash = "sha256-DQWVTI7cwVuqWSXMkAw4RwRtp1SXeJj0idP3C68QTT4=";
 
   nativeBuildInputs = [
     cmake
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://sandhole.com.br";
     changelog = "https://github.com/EpicEric/sandhole/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "sandhole";
     maintainers = with lib.maintainers; [ EpicEric ];
     platforms = lib.platforms.all;

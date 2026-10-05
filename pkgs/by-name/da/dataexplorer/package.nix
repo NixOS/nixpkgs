@@ -14,11 +14,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dataexplorer";
-  version = "4.0.2";
+  version = "4.0.7";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${finalAttrs.version}-src.tar.gz";
-    hash = "sha256-HaupE8tCbmlUVMd0ZFt7QwY1AKEx+op21fUeGBpR+UY=";
+    hash = "sha256-wVfnp1uirPoVdao4SEt7CCXCLKWAPstTIhB5lMk4Uoc=";
   };
 
   nativeBuildInputs = [

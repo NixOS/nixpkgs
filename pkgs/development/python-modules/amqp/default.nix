@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "5.3.1";
+  version = "5.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zdwAxyVElSICO62Un3D/97SPCxredNFwpvEKsERzlDI=";
+    hash = "sha256-qqM5h9y2p4k5VdO09TfF1HVa3c4QCZKeY+XRjBtRoKc=";
   };
 
   propagatedBuildInputs = [ vine ];

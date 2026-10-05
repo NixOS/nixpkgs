@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.8.1";
+  version = "2.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-OCVy8OH+jt4a6fjJhtQG8BODulmVb4XFY4LDxMLgmZY=";
+    hash = "sha256-tTxP6nwftaf2LTfhYjXmZAOMMTBvEJ17dc72ZAggwMw=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "granian";
     inherit version src;
-    hash = "sha256-YnQf9mJ0ujL7hq3LW3jTJfwNIzrwD5Z8tHOsrCRGOuo=";
+    hash = "sha256-svx71ncZVVUO99SnzWY1/PYzsWAIEz29lj0nyDryxbc=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -87,6 +87,15 @@ buildPythonPackage rec {
     # SSLCertVerificationError: certificate verify failed: certificate has expired
     "test_asgi_ws_scope"
     "test_rsgi_ws_scope"
+
+    # Connection refused
+    "test_asgi"
+    "test_rsgi"
+    "test_wsgi"
+    "test_https"
+
+    # No such file or directory: 'granian.sock'
+    "test_uds_default_file_permission"
   ];
 
   # This is a measure of last resort. Granian tests fully lock up

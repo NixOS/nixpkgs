@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-lsp-ruff";
-  version = "2.3.3";
+  version = "2.3.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ buildPythonPackage (finalAttrs: {
     owner = "python-lsp";
     repo = "python-lsp-ruff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KRA/yDZaDtxNV8X9nOGfE+H1EyNYtRwNzsRmIqJASmU=";
+    hash = "sha256-9VRbQvQCVqB92jx7E7QF1xHW3n6lO0ScFr7FhDw9Jgg=";
   };
 
   postPatch =

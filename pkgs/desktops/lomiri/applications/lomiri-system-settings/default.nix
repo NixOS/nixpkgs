@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   accountsservice,
@@ -27,6 +28,7 @@
   lomiri-indicator-network,
   lomiri-schemas,
   lomiri-settings-components,
+  lomiri-ui-extras,
   lomiri-ui-toolkit,
   maliit-keyboard,
   mesa,
@@ -48,13 +50,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-system-settings-unwrapped";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-system-settings";
     tag = finalAttrs.version;
-    hash = "sha256-bVBxJgOy1eXqwzcgBRUTlFoJxxw9I1Qc+Wn92U0QzA4=";
+    hash = "sha256-tFdAWPoMJlkKXaWg4H/pv2VJGCutprcjL4CyBSRPXeI=";
   };
 
   outputs = [
@@ -63,37 +65,47 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
+    # Remove when version > 1.4.0
+    (fetchpatch {
+      name = "0001-lomiri-system-settings-Avoid-UB-when-VARIANT_ID-is-not-set.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/78b462aed589213e7a26064ec1bd27d201bb8f04.patch";
+      hash = "sha256-Xb6x/AlL+m8qD29bHeiU20Je2GeHzybcUprPLQuh8fk=";
+    })
+
     ./2000-Support-wrapping-for-Nixpkgs.patch
   ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}" \
-
-    # Port from lomiri-keyboard to maliit-keyboard
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  ''
+  # Port from lomiri-keyboard to maliit-keyboard
+  + ''
     substituteInPlace plugins/language/{PageComponent,SpellChecking,ThemeValues}.qml plugins/language/onscreenkeyboard-plugin.cpp plugins/sound/PageComponent.qml \
       --replace-fail 'com.lomiri.keyboard.maliit' 'org.maliit.keyboard.maliit'
-
-    # Gets list of available localisations from current system, but later drops any language that doesn't cover LSS
-    # So just give it its own prefix
+  ''
+  # Gets list of available localisations from current system, but later drops any language that doesn't cover LSS
+  # So just give it its own prefix
+  + ''
     substituteInPlace plugins/language/language-plugin.cpp \
       --replace-fail '/usr/share/locale' '${placeholder "out"}/share/locale'
-
-    # Decide which entries should be visible based on the current system
+  ''
+  # Decide which entries should be visible based on the current system
+  + ''
     substituteInPlace plugins/*/*.settings \
       --replace-warn '/etc' '/run/current-system/sw/etc'
-
-    # Don't use absolute paths in desktop file
+  ''
+  # Don't use absolute paths in desktop file
+  + ''
     substituteInPlace lomiri-system-settings.desktop.in.in \
       --replace-fail 'Icon=@SETTINGS_SHARE_DIR@/system-settings.svg' 'Icon=lomiri-system-settings' \
-      --replace-fail 'X-Lomiri-Splash-Image=@SETTINGS_SHARE_DIR@/system-settings-app-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-system-settings.svg' \
-      --replace-fail 'X-Screenshot=@SETTINGS_SHARE_DIR@/screenshot.png' 'X-Screenshot=lomiri-app-launch/screenshot/lomiri-system-settings.png'
-
-    # https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/525
-    substituteInPlace \
-      plugins/notifications/click_applications_model.h \
-      plugins/notifications/general_notification_settings.h \
-      --replace-fail '<QGSettings/QGSettings>' '<QGSettings>'
+      --replace-fail 'X-Lomiri-Splash-Image=@SETTINGS_SHARE_DIR@/system-settings-app-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/lomiri-system-settings.svg'
+  ''
+  # https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/547
+  # Remove when version > 1.4.0
+  + ''
+    substituteInPlace plugins/printing/CMakeLists.txt \
+      --replace-fail 'GLIB_LD_FLAGS' 'GLIB_LDFLAGS'
   '';
 
   strictDeps = true;
@@ -134,6 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-indicator-network
     lomiri-schemas
     lomiri-settings-components
+    lomiri-ui-extras
     lomiri-ui-toolkit
     maliit-keyboard
     qmenumodel
@@ -188,11 +201,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
 
-    mkdir -p $out/share/{icons/hicolor/scalable/apps,lomiri-app-launch/{splash,screenshot}}
+    mkdir -p $out/share/{icons/hicolor/scalable/apps,lomiri-app-launch/splash}
 
     ln -s $out/share/lomiri-system-settings/system-settings.svg $out/share/icons/hicolor/scalable/apps/lomiri-system-settings.svg
     ln -s $out/share/lomiri-system-settings/system-settings-app-splash.svg $out/share/lomiri-app-launch/splash/lomiri-system-settings.svg
-    ln -s $out/share/lomiri-system-settings/screenshot.png $out/share/lomiri-app-launch/screenshot/lomiri-system-settings.png
   '';
 
   passthru = {

@@ -8,7 +8,6 @@
   qt6Packages,
   radare2,
   xvfb-run,
-  breakpointHook,
   writableTmpDirAsHomeHook,
   stdenv,
 }:
@@ -50,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     qt6Packages.qttools
     qt6Packages.wrapQtAppsHook
-    breakpointHook
   ];
 
   buildInputs = [

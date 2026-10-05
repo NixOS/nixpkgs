@@ -54,6 +54,8 @@ let
       };
 
       meta = {
+        # last successful hydra build on darwin was in 2025
+        broken = lib.versionOlder version "11" && stdenv.hostPlatform.isDarwin;
         description = "Small, safe and fast formatting library";
         longDescription = ''
           fmt (formerly cppformat) is an open-source formatting library. It can be
@@ -106,7 +108,7 @@ in
     version = "12.2.0";
     hash = "sha256-Tc7PmNxUv7ajw6GaHPGEEtrD/fl6is7RB8TPestJa1o=";
 
-    patches = lib.optionals stdenv.hostPlatform.is32bit [
+    patches = [
       # fix build on 32-bit targets
       # FIXME: remove in next update
       (fetchpatch {

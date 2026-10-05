@@ -121,13 +121,13 @@
       walled.succeed("${reset}")
       attacker.fail("curl --fail --connect-timeout 2 http://walled/ >&2")
 
+      # Check whether activation of a new configuration reloads the firewall.
+      walled.succeed(
+          "/run/booted-system/specialisation/different-config/bin/switch-to-configuration test 2>&1 | grep -F ${unit}.service"
+      )
+
       # If we stop the firewall, then connections should succeed.
       walled.stop_job("${unit}")
       attacker.succeed("curl -v http://walled/ >&2")
-
-      # Check whether activation of a new configuration reloads the firewall.
-      walled.succeed(
-          "/run/booted-system/specialisation/different-config/bin/switch-to-configuration test 2>&1 | grep -qF ${unit}.service"
-      )
     '';
 }

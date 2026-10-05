@@ -12,7 +12,7 @@
   glib,
   libxslt,
   gettext,
-  gcr,
+  gcr_3,
   libcap_ng,
   libselinux,
   p11-kit,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     libcap_ng
     libselinux
-    gcr
+    gcr_3
     p11-kit
   ];
 

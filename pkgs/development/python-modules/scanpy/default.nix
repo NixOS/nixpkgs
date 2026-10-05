@@ -64,7 +64,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scanpy";
-  version = "1.12.3";
+  version = "1.12.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -72,7 +72,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scverse";
     repo = "scanpy";
     tag = finalAttrs.version;
-    hash = "sha256-/QkkKNwc8RS4dYSkptqJDwRmmP9WDBpBoPtufqKvwqw=";
+    hash = "sha256-TToqDM4Ze5zdt9hQ/0G2SXsTmtZmzyZ7+etn1dqfH/U=";
   };
 
   # Otherwise, several tests fail to be collected:
@@ -191,15 +191,18 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # try to download data:
+    "tests/plotting/legacy/test_plotting.py"
     "tests/test_aggregated.py"
     "tests/test_highly_variable_genes.py"
     "tests/test_normalization.py"
     "tests/test_pca.py"
-    "tests/test_plotting.py"
-    "tests/test_plotting_embedded/"
 
     # fixture 'backed_adata' not found
     "tests/test_backed.py"
+
+    # Need `docs/`, which is resolved relatively to the installed package:
+    #   FileNotFoundError: .../docs/_static/img/Scanpy_Logo_RGB.png
+    "tests/plotting/legacy/embedded/"
   ];
 
   disabledTests = [

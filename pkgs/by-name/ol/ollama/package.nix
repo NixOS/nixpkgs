@@ -111,12 +111,12 @@ let
   # vendored in-tree. Pre-stage the pin (tracks upstream's
   # `LLAMA_CPP_VERSION` file) so the FetchContent step uses our copy
   # instead of trying to clone over the network in the sandbox.
-  llamaCppVersion = "b10488";
+  llamaCppVersion = "b11232";
   llamaCppSrc = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = llamaCppVersion;
-    hash = "sha256-5noPIcSD9Ki1D3J7b6JofeXiPO1RdL/Q8z+E0ZCwceY=";
+    hash = "sha256-2+yobqi5pOI8FyMK2StFIWAOLR2JgQGh/7gX6o4k8JU=";
   };
 
   wrapperOptions = [
@@ -152,16 +152,16 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.32.15";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BpN3y1unf6Yd1RBura2S4O5jLSkImzi1Guo6GWbNZI8=";
+    hash = "sha256-5qJyJhqL/Zhfq2s/Z3x5Sq0GFgBai812cQkgNq82nm4=";
   };
 
-  vendorHash = "sha256-HMwoaFBMbpoy8f0I+O+i7kIa9BslLu3FcVWeaIOkpvs=";
+  vendorHash = "sha256-45FfI47tNHBPYOBLRrwuhADCUtkjAhlFrExlEy9piMI=";
   proxyVendor = true;
 
   env =
@@ -225,15 +225,15 @@ goBuild (finalAttrs: {
     # OLLAMA_LLAMA_CPP_SKIP_COMPAT_PATCH=ON to the child build) — the
     # caller has to. The apply-patch.cmake script is idempotent so this
     # is safe to re-run.
-    if [[ ${llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
-      echo "llama-cpp version mismatch, expected ${llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
+    if [[ ${finalAttrs.passthru.llamaCppVersion} != $(cat LLAMA_CPP_VERSION) ]]; then
+      echo "llama-cpp version mismatch, expected ${finalAttrs.passthru.llamaCppVersion}, but found $(cat LLAMA_CPP_VERSION)"
       exit 1
     fi
-    cp -r ${llamaCppSrc} $TMPDIR/llama-cpp-src
+    cp -r ${finalAttrs.passthru.llamaCppSrc} $TMPDIR/llama-cpp-src
     chmod -R +w $TMPDIR/llama-cpp-src
     ( cd $TMPDIR/llama-cpp-src && \
       cmake -DPATCH_DIR=$NIX_BUILD_TOP/source/llama/compat \
-        -P $NIX_BUILD_TOP/source/llama/compat/apply-patch.cmake )
+        -P $NIX_BUILD_TOP/source/cmake/apply-git-patches.cmake )
   '';
 
   overrideModAttrs = _: _: {
@@ -383,9 +383,10 @@ goBuild (finalAttrs: {
       service-rocm = nixosTests.ollama-rocm;
       service-vulkan = nixosTests.ollama-vulkan;
     };
-    updateScript = ./update.sh;
   }
-  // lib.optionalAttrs (!enableRocm && !enableCuda && !enableVulkan) { updateScript = ./update.sh; };
+  // lib.optionalAttrs (!rocmRequested && !cudaRequested && !vulkanRequested) {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description =

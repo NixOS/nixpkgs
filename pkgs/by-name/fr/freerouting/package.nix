@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeBinaryWrapper,
+  makeWrapper,
   makeDesktopItem,
   jdk25,
-  gradle,
+  gradle_9,
   copyDesktopItems,
   jre25_minimal,
 }:
@@ -32,25 +32,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerouting";
-  version = "2.2.4";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "freerouting";
     repo = "freerouting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-stsU8QwXSrjVpEeMhgrbAKfjIzTDF32uVxluBTbF7ag=";
+    hash = "sha256-u466KolTd2zXRXljLSsxQWTIiVKCdVVcwO2Nm0zc00A=";
   };
 
   gradleBuildTask = "dist";
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    makeWrapper
     jdk25
-    gradle
+    gradle_9
     copyDesktopItems
   ];
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     inherit (finalAttrs) pname;
     data = ./deps.json;
   };
@@ -60,6 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
   gradleFlags = [ "--no-configuration-cache" ];
 
   postPatch = ''
+    # Fix reproducibility: mock git revision, honor SOURCE_DATE_EPOCH, and normalize username
+    substituteInPlace build.gradle \
+      --replace-fail "commandLine('git', 'rev-parse', 'HEAD')" "commandLine('echo', 'v${finalAttrs.version}')" \
+      --replace-fail "def buildDateTime = new Date()" \
+        "def buildDateTime = new Date((System.getenv('SOURCE_DATE_EPOCH') ?: '0').toLong() * 1000); TimeZone.setDefault(TimeZone.getTimeZone('UTC'))" \
+      --replace-fail "System.properties['user.name']" "'nixbld'"
+
     # Disable telemetry and contact options by default
     substituteInPlace src/main/java/app/freerouting/settings/UserProfileSettings.java \
       --replace-fail 'public Boolean isTelemetryAllowed = true;' 'public Boolean isTelemetryAllowed = false;'

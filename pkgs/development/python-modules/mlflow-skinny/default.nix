@@ -8,6 +8,7 @@
   setuptools,
 
   # dependencies
+  anyio,
   cachetools,
   click,
   cloudpickle,
@@ -40,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GVa/O2nT0vJS6NG00NMGpyX+3Z+bbOarNe0ZZqCQrH8=";
+    hash = "sha256-gJzEKig5txbfi17AikC2ecdSJMaSoAb9ATIIZuVXkMw=";
   };
 
   postPatch = ''
@@ -55,6 +56,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
+    anyio
     cachetools
     click
     cloudpickle

@@ -6,24 +6,27 @@
   installShellFiles,
   versionCheckHook,
   nix-update-script,
+  fosrl-newt,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "pangolin-cli";
-  version = "0.15.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "cli";
     tag = finalAttrs.version;
-    hash = "sha256-CWjTBFMo0D7M+nWBodIMpxTnHYsVoJvbgUgf7Nn7UiA=";
+    hash = "sha256-lf5fV+uAXl3GmFoBF9u5MsGENWAc83sA/TzmkuvUjNQ=";
   };
 
   ldflags = [
     "-X github.com/fosrl/cli/internal/version.Version=${finalAttrs.version}"
+    "-X github.com/fosrl/cli/internal/version.NewtVersionOverride=${fosrl-newt.version}"
+    "-X github.com/fosrl/cli/internal/config.ManagedBy=nix"
   ];
 
-  vendorHash = "sha256-mb5IGRRz5pZoi7QJSNVRubQDfhRZu977CWq1Gf6Z7bQ=";
+  vendorHash = "sha256-2kspX9UE7qHF6CfJxILkUfjWohQSmIkKRe7JuYKq3WQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 

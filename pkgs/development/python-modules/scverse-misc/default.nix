@@ -29,7 +29,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scverse-misc";
-  version = "0.1.3";
+  version = "0.1.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -37,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scverse";
     repo = "scverse-misc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5AKqvB3MFEPXgIQN7Z0LT4pW7gmJiHg1Qy7CZVnwPO8=";
+    hash = "sha256-URoqbX2wONWz0WnRxawW3fLH8iiaIBPK1poEtzW5Go0=";
   };
 
   build-system = [

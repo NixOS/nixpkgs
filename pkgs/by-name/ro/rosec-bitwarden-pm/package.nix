@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
 
   sourceRoot = "${src.name}/rosec-bitwarden-pm";
 
-  cargoHash = "sha256-hNeCZPclwz2WMKnHsECBL0TduqkWsYhadEfsw54lGBg=";
+  cargoHash = "sha256-TAP1G0QJGg3w0lKCUHTsfVvwON7nSlcM4jhtIB+WByQ=";
 
   env.RUSTFLAGS = "-C linker=wasm-ld";
   nativeBuildInputs = [ lld ];

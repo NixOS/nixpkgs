@@ -67,19 +67,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
-        ''
-          mkdir -p "$out"
-          cp -r ${monorepoSrc}/cmake "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "21") ''
-          cp -r ${monorepoSrc}/third-party "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/compiler-rt "$out"
-          cp -r ${monorepoSrc}/llvm "$out"
-        ''
-      )
+      runCommand "compiler-rt-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        (
+          ''
+            mkdir -p "$out"
+            cp -r ${monorepoSrc}/cmake "$out"
+          ''
+          + lib.optionalString (lib.versionAtLeast release_version "21") ''
+            cp -r ${monorepoSrc}/third-party "$out"
+          ''
+          + ''
+            cp -r ${monorepoSrc}/compiler-rt "$out"
+            cp -r ${monorepoSrc}/llvm "$out"
+          ''
+        )
     else
       src;
 
@@ -124,6 +130,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
     ++ lib.optional (stdenv.hostPlatform.isFreeBSD) freebsd.include;
+
+  strictDeps = true;
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
@@ -239,6 +247,23 @@ stdenv.mkDerivation (finalAttrs: {
         substituteInPlace lib/builtins/int_util.c \
           --replace-fail "#include <stdlib.h>" ""
       ''
+      +
+        lib.optionalString
+          (
+            stdenv.hostPlatform.isLinux
+            && stdenv.hostPlatform.isAarch64
+            && lib.versionAtLeast release_version "22"
+          )
+          # LLVM 22 dropped the __has_include guard around <sys/auxv.h> in the
+          # AArch64 LSE/FMV feature detection (llvm/llvm-project#161751). Without
+          # a libc the header does not exist, so restore the LLVM 21 behaviour:
+          # skip the auxv-based detection and leave __aarch64_have_lse_atomics
+          # false. Only the __linux__ branches are touched, so keep the Darwin
+          # derivations (built without a libc too) unchanged.
+          ''
+            substituteInPlace lib/builtins/cpu_model/aarch64.c \
+              --replace-fail "#elif defined(__linux__)" "#elif defined(__linux__) && __has_include(<sys/auxv.h>)"
+          ''
       + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
         # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
         # see description above for why we're nuking assert.h normally but that doesn't work here.
@@ -296,6 +321,8 @@ stdenv.mkDerivation (finalAttrs: {
       # create a link with the original soname as well, so it's found at runtime
       ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/
     '';
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://compiler-rt.llvm.org/";

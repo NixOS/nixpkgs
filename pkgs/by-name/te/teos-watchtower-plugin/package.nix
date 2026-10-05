@@ -6,6 +6,7 @@
   protobuf,
   rustfmt,
   openssl,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage {
@@ -29,6 +30,8 @@ rustPlatform.buildRustPackage {
   __darwinAllowLocalNetworking = true;
 
   meta = teos.meta // {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Lightning watchtower plugin for clightning";
     mainProgram = "watchtower-client";
   };

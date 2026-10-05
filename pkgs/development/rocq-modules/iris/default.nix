@@ -9,8 +9,11 @@
 let
   derivation = mkRocqDerivation {
     pname = "iris";
-    domain = "gitlab.mpi-sws.org";
-    owner = "iris";
+    # MPI's gitlab is unfortunately under siege of various LLM scrappers
+    # and had to establish some strong rate limiting, a mirror is put on github
+    # domain = "gitlab.mpi-sws.org";
+    # owner = "iris";
+    owner = "rocq-iris";
     inherit version;
     defaultVersion =
       let

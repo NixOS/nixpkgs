@@ -94,7 +94,17 @@ import ../make-test-python.nix {
           (
             { user, privateTmp }:
             let
-              withTmp = if privateTmp then "with PrivateTmp" else "without PrivateTmp";
+              isPrivateTmp = lib.elem privateTmp [
+                true
+                "disconnected"
+              ];
+              withTmp =
+                if privateTmp == true then
+                  "with PrivateTmp=true"
+                else if privateTmp == "disconnected" then
+                  "with PrivateTmp=disconnected"
+                else
+                  "without PrivateTmp";
 
               serviceConfig =
                 if user == "static-user" then
@@ -118,7 +128,7 @@ import ../make-test-python.nix {
                   # Only set if privateTmp is true to ensure that the default is false.
                   serviceConfig =
                     serviceConfig
-                    // lib.optionalAttrs privateTmp {
+                    // lib.optionalAttrs isPrivateTmp {
                       PrivateTmp = true;
                     };
                 };
@@ -132,9 +142,9 @@ import ../make-test-python.nix {
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
                         'run': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     ''
                   else
@@ -146,9 +156,9 @@ import ../make-test-python.nix {
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
                         'run': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     '';
               }
@@ -158,7 +168,7 @@ import ../make-test-python.nix {
                   # Only set if privateTmp is false to ensure that the default is true.
                   serviceConfig =
                     serviceConfig
-                    // lib.optionalAttrs (!privateTmp) {
+                    // lib.optionalAttrs (!isPrivateTmp) {
                       PrivateTmp = false;
                     };
                 };
@@ -171,15 +181,15 @@ import ../make-test-python.nix {
                       assert_permissions({
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
                         'run': Accessibility.WRITABLE,
 
                         'proc': Accessibility.SPECIAL,
                         'sys': Accessibility.SPECIAL,
                         'dev': Accessibility.WRITABLE,
 
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     ''
                   else
@@ -190,7 +200,7 @@ import ../make-test-python.nix {
                       assert_permissions({
                         'bin': Accessibility.READABLE,
                         'nix': Accessibility.READABLE,
-                        ${lib.optionalString privateTmp "'tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'tmp': Accessibility.STICKY,"}
                         'run': Accessibility.STICKY,
 
                         'proc': Accessibility.SPECIAL,
@@ -199,8 +209,8 @@ import ../make-test-python.nix {
                         'dev/shm': Accessibility.STICKY,
                         'dev/mqueue': Accessibility.STICKY,
 
-                        ${lib.optionalString privateTmp "'var': Accessibility.READABLE,"}
-                        ${lib.optionalString privateTmp "'var/tmp': Accessibility.STICKY,"}
+                        ${lib.optionalString isPrivateTmp "'var': Accessibility.READABLE,"}
+                        ${lib.optionalString isPrivateTmp "'var/tmp': Accessibility.STICKY,"}
                       })
                     '';
               }
@@ -216,6 +226,7 @@ import ../make-test-python.nix {
               privateTmp = [
                 true
                 false
+                "disconnected"
               ];
             }
           );

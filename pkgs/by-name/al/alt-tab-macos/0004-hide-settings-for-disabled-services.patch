@@ -11,7 +11,7 @@ diff --git a/src/preferences/settings-window/tabs/GeneralTab.swift b/src/prefere
 index ab64ea9c..19dbef5e 100644
 --- a/src/preferences/settings-window/tabs/GeneralTab.swift
 +++ b/src/preferences/settings-window/tabs/GeneralTab.swift
-@@ -20,12 +20,6 @@ class GeneralTab {
+@@ -21,12 +21,6 @@ class GeneralTab {
              ])
          let language = TableGroupView.Row(leftTitle: NSLocalizedString("Language", comment: ""),
              rightViews: [LabelAndControl.makeDropdown("language", LanguagePreference.allCases, extraAction: setLanguageCallback)])
@@ -24,7 +24,7 @@ index ab64ea9c..19dbef5e 100644
          for i in 0..<MenubarIconPreference.allCases.count {
              let image = NSImage.initCopy("menubar-\(i)")
              image.isTemplate = i < 2
-@@ -45,13 +39,6 @@ class GeneralTab {
+@@ -46,13 +40,6 @@ class GeneralTab {
          table.addRow(captureWindowsInBackground)
          table.addNewTable()
          table.addRow(language)

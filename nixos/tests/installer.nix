@@ -684,6 +684,9 @@ let
       nodes =
         let
           commonConfig = {
+            # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+            nix.enable = true;
+
             # builds stuff in the VM, needs more juice
             virtualisation.diskSize = 12 * 1024;
             virtualisation.cores = 8;
@@ -772,7 +775,7 @@ let
                   # Only the out output is included here, which is what is
                   # required to build the NixOS udev rules
                   # See the comment in services/hardware/udev.nix
-                  systemdMinimal.out
+                  systemd.out
 
                   # add curl so that rather than seeing the test attempt to download
                   # curl's tarball, we see what it's trying to download
@@ -1858,7 +1861,7 @@ in
     createPartitions = ''
       installer.succeed(
         "sgdisk --zap-all /dev/vda",
-        "sgdisk --new=1:0:+100M --typecode=0:ef00 /dev/vda", # /boot
+        "sgdisk --new=1:0:+200M --typecode=0:ef00 /dev/vda", # /boot
         "sgdisk --new=2:0:+1G --typecode=0:8200 /dev/vda", # swap
         "sgdisk --new=3:0:+5G --typecode=0:8300 /dev/vda", # /
         "udevadm settle",

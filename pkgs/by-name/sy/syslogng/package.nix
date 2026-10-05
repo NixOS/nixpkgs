@@ -14,7 +14,7 @@
   pkg-config,
   glib,
   hiredis,
-  systemd,
+  systemdLibs,
   perl,
   python3,
   riemann_c_client,
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     eventlog
     glib
     py
-    systemd
+    systemdLibs
     riemann_c_client
     protobufc
     libnet

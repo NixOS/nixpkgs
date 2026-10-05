@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "2.3.7";
+  version = "2.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     tag = version;
     # TODO: unvendor llhttp
     fetchSubmodules = true;
-    hash = "sha256-vca2uCQ1S21xQmAXdpLhI0DFZYUSyKhSkvETa2VqbkA=";
+    hash = "sha256-qLWvw7C9TNdaUSLIiDEapBFi7MkJGsCrWsjoJZuX8Pk=";
   };
 
   build-system = [ setuptools ];

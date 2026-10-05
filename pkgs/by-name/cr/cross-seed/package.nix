@@ -4,9 +4,11 @@
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
+  nodejs_22,
 }:
 
-buildNpmPackage rec {
+# Override can be removed once cross-seed v7 releases
+buildNpmPackage.override { nodejs = nodejs_22; } rec {
   pname = "cross-seed";
   version = "6.13.7";
 

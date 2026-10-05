@@ -101,5 +101,11 @@ stdenv.mkDerivation rec {
     description = "PAM module for authentication through the SSH agent";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    license =
+      with lib.licenses;
+      AND [
+        bsd2 # pam_ssh_agent_auth
+        publicDomain # ed25519-donna
+      ];
   };
 }

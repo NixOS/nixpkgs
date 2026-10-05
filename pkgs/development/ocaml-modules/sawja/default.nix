@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
-    homepage = "http://sawja.inria.fr/";
+    homepage = "https://github.com/javalib-team/sawja";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.vbgl ];
     inherit (ocaml.meta) platforms;

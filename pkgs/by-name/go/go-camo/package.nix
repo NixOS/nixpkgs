@@ -1,24 +1,26 @@
 {
   lib,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   nixosTests,
   scdoc,
 }:
 
-buildGo125Module rec {
+buildGoModule rec {
   pname = "go-camo";
-  version = "2.7.5";
+  version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = "go-camo";
     tag = "v${version}";
-    hash = "sha256-P0n1rnxR9GQQw53MvHII7EXc4gWRThL4k1kulHTz9FU=";
+    hash = "sha256-QFCvsX+F8OclFrRME0STRThkS/UvkMJovWJrKKaptgY=";
   };
 
-  vendorHash = "sha256-Fl+amgzolwcuz+eVQzD6mfBdMNzUm6UCwf9BbAt+85U=";
+  vendorHash = "sha256-s+2tt0e93KeEcc3sWx94c2p5d684lwxn/vzsdRDWLxE=";
+
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     installShellFiles

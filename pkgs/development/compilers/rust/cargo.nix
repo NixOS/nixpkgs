@@ -116,6 +116,8 @@ rustPlatform.buildRustPackage.override
       rustPlatform.rust.rustc.unwrapped
     ];
 
+    __structuredAttrs = true;
+
     meta = {
       homepage = "https://crates.io";
       description = "Downloads your Rust project's dependencies and builds your project";

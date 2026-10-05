@@ -10,7 +10,7 @@ buildDotnetGlobalTool {
     description = "Tool to assist developers in upgrading .NET Framework applications to .NET 6 and beyond";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
-    mainProgram = "ugprade-assistant";
+    mainProgram = "upgrade-assistant";
     platforms = lib.platforms.all;
   };
 }

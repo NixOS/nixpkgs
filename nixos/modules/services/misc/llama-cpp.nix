@@ -111,7 +111,13 @@ in
         ExecStart = toString [
           (lib.getExe' cfg.package "llama-server")
           (lib.cli.toCommandLine (optionName: {
-            option = if builtins.stringLength optionName > 1 then "--${optionName}" else "-${optionName}";
+            option =
+              if lib.hasPrefix "-" optionName then
+                optionName
+              else if builtins.stringLength optionName > 1 then
+                "--${optionName}"
+              else
+                "-${optionName}";
             sep = " ";
             explicitBool = false;
             formatArg = lib.generators.mkValueStringDefault { };

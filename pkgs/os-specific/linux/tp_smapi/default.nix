@@ -17,6 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-rB+DNgWUXd1oQBbDgVEAJVJ16nKCaKDtWGAmpcFsx+A=";
   };
 
+  patches = [
+    # Linux v7.2 removed function strncpy, have to use strscpy instead.
+    # This is an open issue in upstream, patching with upstream PR's commit.
+    # This patch should be removed once the PR is merged in upstream.
+    #
+    # Upstream issue: https://github.com/linux-thinkpad/tp_smapi/issues/82
+    # Upstream pull request: https://github.com/linux-thinkpad/tp_smapi/pull/81
+    # Upstream commit: https://github.com/linux-thinkpad/tp_smapi/commit/0483993a64f6d922d71dddd8f7f353d8bc22d1bf
+    ./0001-use-strscpy-instead-of-strncpy.patch
+  ];
+
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];

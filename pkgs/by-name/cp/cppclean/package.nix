@@ -20,6 +20,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     patchShebangs .
   '';
 
+  postPatch = ''
+    # Fix Python 3.14 compat
+    substituteInPlace setup.py \
+      --replace-fail 'value.s' 'value.value'
+  '';
+
   build-system = with python3Packages; [
     setuptools
   ];

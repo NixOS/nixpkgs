@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyqwest";
-  version = "0.9.0";
+  version = "0.10.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "curioswitch";
     repo = "pyqwest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K/zkPD7x3qKRPo7YJDWFrTLczaXvayKc8Zf/SQr2xL0=";
+    hash = "sha256-1TngkJkiYYgPiit+jAzFVbBcHzoRCQyODHkVWLnW5dc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkpasswd
   ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
+  doCheck = true;
 
   meta = {
     description = "Rich and powerful protocol-independent mail framework";

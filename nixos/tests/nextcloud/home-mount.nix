@@ -15,13 +15,10 @@ runTest (
 
     imports = [ testBase ];
 
-    nodes.nextcloud = { pkgs, ... }: {
-      system.activationScripts.nc-mock-mount = {
-        deps = [ "users" ];
-        text = ''
-          ${pkgs.coreutils}/bin/mkdir -p /mnt
-          ${pkgs.util-linux}/bin/mount -t tmpfs tmpfs /mnt
-        '';
+    nodes.nextcloud = {
+      fileSystems."/mnt" = {
+        fsType = "tmpfs";
+        device = "tmpfs";
       };
       services.nextcloud = {
         config.dbtype = "sqlite";

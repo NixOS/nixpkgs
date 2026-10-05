@@ -719,6 +719,26 @@ let
             else
               null;
         };
+        swift = {
+          arch = final.uname.processor;
+          platform =
+            if final.isMacOS then
+              "macosx"
+            else if final.isiOS then
+              "iphoneos"
+            else if final.isLinux then
+              "linux"
+            else if final.isWindows then
+              "windows"
+            else
+              null;
+          triple =
+            if final.isDarwin then
+              # FIXME: Can this be done a better way?
+              "${final.swift.arch}-${final.parsed.vendor.name}-${final.swift.platform}${final.darwinMinVersion}"
+            else
+              final.config;
+        };
       };
     in
     # Platforms elaborated by pre-26.11 Nixpkgs will include the `linux-kernel` attr,

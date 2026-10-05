@@ -146,6 +146,7 @@ let
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath
           backendStdenv
+          cudaMajorMinorPatchVersion
           cudaMajorMinorVersion
           cudaMajorVersion
           cudaNamePrefix

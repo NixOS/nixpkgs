@@ -115,7 +115,6 @@ lib.trivial.pipe super [
     patches = [
       (replaceVars ./extensionOverridesPatches/ding_at_rastersoft.com.patch {
         inherit gjs;
-        util_linux = util-linux;
         xdg_utils = xdg-utils;
         gtk3_gsettings_path = glib.getSchemaPath gtk3;
         nautilus_gsettings_path = glib.getSchemaPath nautilus;
@@ -276,13 +275,6 @@ lib.trivial.pipe super [
     postPatch = ''
       # remove unused dangling symlink
       rm utilities-teatime.svg
-    '';
-  })
-
-  (patchExtension "named-workspaces@a31.at" {
-    postPatch = ''
-      # remove duplicate schema file
-      rm schemas/org.gnome.shell.extensions.workspace-name.gschema.xml
     '';
   })
 ]

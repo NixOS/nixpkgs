@@ -19,6 +19,7 @@
 stdenv.mkDerivation rec {
   pname = "mbedtls";
   inherit version;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mbed-TLS";

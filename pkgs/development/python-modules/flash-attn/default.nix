@@ -26,7 +26,7 @@ let
   inherit (cudaPackages.flags) dropDots;
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
-  pname = "flash-attention";
+  pname = "flash-attn";
   version = "2.8.3.post1";
   pyproject = true;
   __structuredAttrs = true;

@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zenith";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = "zenith";
     rev = finalAttrs.version;
-    hash = "sha256-NOQ+LqymP1VQ80up6XR7kBYRfWey82wbDbGkf1NsQhc=";
+    hash = "sha256-kxxavotpejDcWgsP06BmhpCe46tsu8EIPuao9i3RUpg=";
   };
 
   # remove cargo config so it can find the linker on aarch64-linux
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-OABHxLLysx/atZBWCMJCcypugzs5OFtRp2KW3dkp2DE=";
+  cargoHash = "sha256-9c1c+DnGLyUpmevEn6H+9oD+aclvYAONaMutyQa7Fbc=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
 

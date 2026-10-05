@@ -11,10 +11,12 @@
   libGL,
   libx11,
   mtdev,
+  python3,
   SDL2,
   SDL2_image,
   SDL2_ttf,
   SDL2_mixer,
+  angle,
   withGstreamer ? true,
   gst_all_1,
   pygments,
@@ -66,6 +68,9 @@ buildPythonPackage (finalAttrs: {
     libx11
     mtdev
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    angle
+  ]
   ++ lib.optionals withGstreamer (
     with gst_all_1;
     [
@@ -99,9 +104,15 @@ buildPythonPackage (finalAttrs: {
         "-Wno-error=incompatible-pointer-types"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # fatal error: 'Python.h' file not found
+        "-I${python3}/include/${python3.libPrefix}"
         "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
       ]
     );
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    KIVY_ANGLE_INCLUDE_DIR = "${lib.getInclude angle}/include";
+    KIVY_ANGLE_LIB_DIR = "${lib.getLib angle}/lib";
   };
 
   /*

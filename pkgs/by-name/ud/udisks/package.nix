@@ -8,7 +8,7 @@
   autoreconfHook,
   gtk-doc,
   acl,
-  systemd,
+  systemdLibs,
   glib,
   libatasmart,
   polkit,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
     libblockdev
     acl
-    systemd
+    systemdLibs
     glib
     libatasmart
     polkit

@@ -11,7 +11,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xaos";
-  version = "4.3.7";
+  version = "4.3.8";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xaos-project";
     repo = "XaoS";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-3fXWUDja4DDc2+c17L4ifHN5vz25B42kapLJ15Ed0QI=";
+    hash = "sha256-FNeeU1ffNYBwUxtAmvtJWZwXK6mMGFz/Dq2+JdrVHTI=";
   };
 
   nativeBuildInputs = [

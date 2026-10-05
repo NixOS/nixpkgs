@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nurl";
-  version = "0.4.0";
+  version = "0.4.1";
 
   __structuredAttrs = true;
 
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nix-community";
     repo = "nurl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BxtvT2k4mErYPU9lNpZlat9ULI2wKXQToic7+PgkCSk=";
+    hash = "sha256-mtMKiMwG23XWcjL9dPOeoGX0MWxIj3M1QdVaKeEioSA=";
   };
 
-  cargoHash = "sha256-4ACuHFzfuF4JWU0cPAJO+RPiA1HZ6o3b8K0C4NWJHmM=";
+  cargoHash = "sha256-Lk2beX9/KjNtFpJuu6bA7qnChJjggRR1ZFGajG/s/w4=";
 
   nativeBuildInputs = [
     installShellFiles

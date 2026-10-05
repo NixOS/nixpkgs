@@ -38,16 +38,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tokenspeed-triton-llvm";
-  version = "23.0.0-unstable-2026-04-08"; # See cmake/Modules/LLVMVersion.cmake
+  version = "24.0.0-unstable-2026-08-03"; # See cmake/Modules/LLVMVersion.cmake
   __structuredAttrs = true;
   strictDeps = true;
 
-  # See https://github.com/lightseekorg/triton/blob/v3.7.10.post20260531/cmake/llvm-info.json
+  # See https://github.com/lightseekorg/triton/blob/v3.8.10.post20260920/cmake/llvm-info.json
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = "87717bf9f81f7b29466c5d9a30a3453bdfc93941";
-    hash = "sha256-8+Q19pOgovZgpN0it5TDrrQfXZFGiIRoP0Ha5dLQJp0=";
+    rev = "b010a18d2b648cab83c83967ff26b8fde11acdc6";
+    hash = "sha256-stgOKrTcZo6eq/oOkIRo89t/lIJ2ADFzh7XHuNdxeJs=";
   };
 
   nativeBuildInputs = [

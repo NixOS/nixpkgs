@@ -2,18 +2,31 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  libxcb,
+  stdenv,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustfetch";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "lemuray";
     repo = "rustfetch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iGcxDKl36kbEi+OiH4gB2+HxP37bpqAMZguIXDzq3Jw=";
+    hash = "sha256-7+25SYYpOwbJM3UofTjk8hAuDVQ33tUge+2k1oSRvvY=";
   };
-  cargoHash = "sha256-87wfFczmgCft4ke/RQKi54wvqFKGRJMtqhkwQgDCedg=";
+  cargoHash = "sha256-/D6y6h86V7qUfJqXW6XXTHAyiqwNJAfSQOLHxNfajv8=";
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
+
+  checkFlags = [
+    # requires os calls which will error out to "Permission denied" in the sandbox
+    "--skip=test_no_pretty_name"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "CLI tool designed to fetch system information in the fastest and safest way possible";

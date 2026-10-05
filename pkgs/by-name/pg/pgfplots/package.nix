@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pgfplots";
-  version = "1.18.2";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "pgf-tikz";
     repo = "pgfplots";
     tag = finalAttrs.version;
-    hash = "sha256-Qw7H/oCZDtqm6sdCfwDm9SbIxdoemmhj/XCaHZf5/5c=";
+    hash = "sha256-QKXPhZBnyjUQQDMW4+hKSQf9ea97zIr7RDx7nXPjGpU=";
   };
 
   installPhase = ''

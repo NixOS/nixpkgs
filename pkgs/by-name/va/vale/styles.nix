@@ -126,12 +126,12 @@ in
 
   readability = buildStyle rec {
     name = "Readability";
-    version = "0.1.1";
+    version = "0.2.0";
     src = fetchFromGitHub {
       owner = "errata-ai";
       repo = "readability";
       rev = "v${version}";
-      hash = "sha256-5Y9v8QsZjC2w3/pGIcL5nBdhpogyJznO5IFa0s8VOOI=";
+      hash = "sha256-3IGEt42ifvv3kSunDsHu7dJov7Y2AWUDIob2luIu2ak=";
     };
     meta = {
       description = "Vale-compatible implementations of many popular \"readability\" metrics";
@@ -142,12 +142,12 @@ in
 
   redhat = buildStyle rec {
     name = "RedHat";
-    version = "675";
+    version = "680";
     src = fetchFromGitHub {
       owner = "redhat-documentation";
       repo = "vale-at-red-hat";
       rev = "v${version}";
-      hash = "sha256-9al8xLbj/0fxidM1BOoSuFPOwayk47CStjjPh4611Yg=";
+      hash = "sha256-1n/hKmNRxSpKFNBSnXdtcgxzu4A+ZF4cIP+6qCVewYo=";
     };
     stylePath = ".vale/styles/RedHat";
     meta = {

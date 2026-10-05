@@ -3,6 +3,7 @@
   buildPythonPackage,
   cvxopt,
   fetchFromGitHub,
+  fetchpatch,
   matplotlib,
   numpy,
   numpydoc,
@@ -24,6 +25,19 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-E9RZDUK01hzjutq83XdLr3d97NwjmQzt65hqVg2TBGE=";
   };
+
+  patches = [
+    # matplotlib >= 3.11 no longer warns when tight layout is not applied
+    (fetchpatch {
+      url = "https://github.com/python-control/python-control/commit/3b70cb41b5d41ed4aa4da9f2db2eb3d83c3ffdcd.patch";
+      hash = "sha256-zJAbgbeiYQlglG/mbtREvs7AFxwGxzlzrr0iuKPHp5I=";
+    })
+    # numpy >= 2.5 deprecates assigning to .shape
+    (fetchpatch {
+      url = "https://github.com/python-control/python-control/commit/ae4915c4ece5f417fa514dadeb0d30ab412a28aa.patch";
+      hash = "sha256-Z5U9sgtlp35bHYOYC2ag9007fGVXwzhTgBQN7yLsjCI=";
+    })
+  ];
 
   build-system = [
     setuptools

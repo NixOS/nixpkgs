@@ -12,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gittuf";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "gittuf";
     repo = "gittuf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VWbM7y9XCs/pANJtPa3MDbDhuEtVQ97X5Cyo6yY0Rd8=";
+    hash = "sha256-DKtw10oer0INHh8JCdIRmrVQuPlCeOnAua6xsw7CEp0=";
   };
 
-  vendorHash = "sha256-VTfS0bLq7B037qmFABO5JDrV98zik5ycR4s6NZr3H4s=";
+  vendorHash = "sha256-xdpU2wJELRFHhaNOwdPFQa13FxE/g4yimEmMQCdCNmw=";
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${finalAttrs.version}" ];
 

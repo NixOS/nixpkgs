@@ -29,7 +29,7 @@
   qt6,
   stepcode,
   tcl,
-  tinygltf,
+  tinygltf_2,
   tk,
   zlib,
 
@@ -187,11 +187,20 @@ stdenv.mkDerivation (finalAttrs: {
         build/bext/tktable/tktable/CMake/FindTCL.cmake \
         build/bext/tkhtml/tkhtml/CMake/FindTCL.cmake
     ''
-    # remove a failing test
+    # remove failing tests
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       substituteInPlace src/libbu/tests/CMakeLists.txt \
         --replace-fail \
           "brlcad_add_test(NAME bu_color_to_rgb_floats_1 COMMAND bu_test test_color 4 192,78,214)" \
+          ""
+    ''
+    # This test opens 16k mapped files from every CPU, each open being a linear scan
+    # under one global semaphore, so its runtime explodes on many-core machines and
+    # blows past ctest's 1500s default timeout on our 80-core aarch64 builders.
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      substituteInPlace src/libbu/tests/CMakeLists.txt \
+        --replace-fail \
+          "brlcad_add_test(NAME bu_mappedfile_parallel_16384 COMMAND bu_test test_mappedfile 2 16384)" \
           ""
     '';
 
@@ -224,7 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
     pugixml
     stepcode
     tcl
-    tinygltf
+    tinygltf_2
     tk
     zlib
   ]

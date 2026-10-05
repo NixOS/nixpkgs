@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "docstrfmt";
-  version = "2.2.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LilSpazJoekp";
     repo = "docstrfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DMeTrFHSJpUPBsE70dZ96WwQuY6C1POAGOJkSRfa2ho=";
+    hash = "sha256-nvkSQ5yUJe+DFARPmVCO5KSCHpAUr8GVuxk4VLrOJP4=";
   };
 
   build-system = [

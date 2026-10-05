@@ -56,8 +56,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Locale data for Darwin";
     homepage = "https://github.com/apple-oss-distributions/adv_cmds";
     license = [
-      lib.licenses.apsl10
-      lib.licenses.apsl20
+      lib.licenses.apple-psl10
+      lib.licenses.apple-psl20
     ];
     teams = [ lib.teams.darwin ];
   };

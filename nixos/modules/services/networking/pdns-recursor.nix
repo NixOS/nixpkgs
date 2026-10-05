@@ -94,6 +94,13 @@ in
       '';
     };
 
+    api.enable = mkEnableOption ''
+      the built-in webserver. It serves the REST API (which additionally needs
+      an API key set via {option}`services.pdns-recursor.settings.webservice.api_key`)
+      and, at `/metrics`, statistics in Prometheus format. Without this the
+      `api.address`, `api.port` and `api.allowFrom` options have no effect, as
+      the webserver stays disabled'';
+
     api.address = mkOption {
       type = types.str;
       default = "0.0.0.0";
@@ -222,6 +229,7 @@ in
       };
 
       webservice = mkDefaultAttrs {
+        webserver = cfg.api.enable;
         address = cfg.api.address;
         port = cfg.api.port;
         allow_from = cfg.api.allowFrom;

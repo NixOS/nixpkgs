@@ -54,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = "rmdir $out/dev";
 
   meta = {
+    # last successful hydra build on aarch64-linux was in 2018
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = "grsecurity RBAC administration and policy analysis utility";
     homepage = "https://grsecurity.net";
     license = lib.licenses.gpl2Only;

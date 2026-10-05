@@ -46,8 +46,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pillow
   ];
 
-  strictDeps = true;
-
   dontWrapGApps = true;
 
   makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];

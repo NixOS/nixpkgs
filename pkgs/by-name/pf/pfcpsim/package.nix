@@ -5,17 +5,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "pfcpsim";
-  version = "1.5.0";
+  version = "1.5.6";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "omec-project";
     repo = "pfcpsim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RhroRtnHweZxQCHUFNlCCekUUrLvtu5YpGB8bKAT5ic=";
+    hash = "sha256-MhZKtYs/Y6C93ALecfN0H44/JTXyGmd4LRnhZ4O7jws=";
   };
 
-  vendorHash = "sha256-Rb2MJbWqFbkTFLZs/oLPNFcmKDkXQt4IdPwnsdc4QXU=";
+  vendorHash = "sha256-Qm/Ca/EskbJfQdgxxSGk0TL2pgKU60ueiFjMQEAqCJ0=";
 
   # Fuzzing cannot be performed without user plane function (upf)
   checkFlags = [ "-skip=^Fuzz$" ];

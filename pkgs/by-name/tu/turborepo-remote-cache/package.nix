@@ -13,20 +13,20 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "turborepo-remote-cache";
-  version = "2.12.0";
+  version = "2.14.1";
 
   src = fetchFromGitHub {
     owner = "ducktors";
     repo = "turborepo-remote-cache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jyNH/JAUQ4QinL1C3gmpZw7M5ZQmoQ2Yk2Gc4uYyeV0=";
+    hash = "sha256-VvSF8Uj/Am0V5g0taAxHk32/WHgZ5KBEywNduK6ZE/I=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-9TysHztWvSXiCOGofDKfSeZNrXVCTHDyiWsMtKI6l8k=";
+    hash = "sha256-YCwTqY9iyOY7u6TscRi1j7/p+08qbQdQkWXelx7kWwo=";
   };
 
   nativeBuildInputs = [

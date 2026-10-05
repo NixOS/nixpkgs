@@ -1,39 +1,91 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
-  nodejs_22,
   fetchFromGitHub,
   nix-update-script,
-  jq,
   git,
   ripgrep,
   pkg-config,
   glib,
   libsecret,
+  versionCheckHook,
+  clang_20,
+  makeSetupHook,
+  writeText,
 }:
 
+let
+  # https://github.com/numtide/llm-agents.nix/blob/main/packages/darwinOpenptyHook/package.nix
+  darwinOpenptyHook =
+    let
+      header = writeText "darwin-openpty-shim.h" ''
+        #ifndef DARWIN_OPENPTY_SHIM_H
+        #define DARWIN_OPENPTY_SHIM_H
+        /*
+         * https://github.com/NixOS/nixpkgs/issues/457238
+         *
+         * macOS node-gyp builds sometimes see src/util.h from Node.js instead of
+         * the SDK's util.h. That header does not declare openpty(3)/forkpty(3),
+         * which causes node-pty (and other consumers) to fail to build. Including
+         * this shim restores the missing declarations without depending on the
+         * system header lookup.
+         */
+        #include <sys/types.h>
+        struct termios;
+        struct winsize;
+        #ifdef __cplusplus
+        extern "C" {
+        #endif
+        int openpty(int *, int *, char *, struct termios *, struct winsize *);
+        pid_t forkpty(int *, char *, struct termios *, struct winsize *);
+        #ifdef __cplusplus
+        }
+        #endif
+        #endif /* DARWIN_OPENPTY_SHIM_H */
+      '';
+      hookScript = writeText "darwin-openpty-hook.sh" ''
+        # shellcheck shell=bash
+        if [ -z "''${darwinOpenptyHookApplied-}" ]; then
+          export NIX_CFLAGS_COMPILE="''${NIX_CFLAGS_COMPILE-} -include ${header}"
+          darwinOpenptyHookApplied=1
+        fi
+      '';
+    in
+    makeSetupHook {
+      name = "darwin-openpty-hook";
+      meta = {
+        description = "Setup hook that injects openpty/forkpty prototypes on Darwin";
+        platforms = lib.platforms.darwin;
+      };
+      passthru = {
+        hideFromDocs = true;
+      };
+    } hookScript;
+in
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.16.0";
+  version = "0.23.4";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XWhQ5GlAGW0WAyiPwBULLz1yQps2IdjVkusQ0a88tCs=";
+    hash = "sha256-AWmZhul7/p1atYkLZd/pojGaO80gydGfx+mnSP9SHnY=";
   };
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-2vr8Yspm6CCVnO6Jf8B3wiL6X+Tp6hZZEPr+WC/Dcak=";
+  npmDepsHash = "sha256-tyLLtckMO/jFQHvdhHBWIE2Gx5vdHJBYHssVdq/abBU=";
 
-  # npm 11 incompatible with fetchNpmDeps
-  # https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
+  makeCacheWritable = true;
 
   nativeBuildInputs = [
-    jq
     pkg-config
     git
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    clang_20 # Works around node-addon-api constant expression issue with clang 21+ (keytar)
+    darwinOpenptyHook
   ];
 
   buildInputs = [
@@ -42,48 +94,26 @@ buildNpmPackage (finalAttrs: {
     libsecret
   ];
 
-  postPatch = ''
-    # patches below remove node-pty and keytar dependencies which cause build fail on Darwin
-    # should be conditional on platform but since package-lock.json is patched it changes its hash
-    # though seems like these dependencies are not really required by the package
-    ${jq}/bin/jq '
-      del(.packages."node_modules/node-pty") |
-      del(.packages."node_modules/@lydell/node-pty") |
-      del(.packages."node_modules/@lydell/node-pty-darwin-arm64") |
-      del(.packages."node_modules/@lydell/node-pty-darwin-x64") |
-      del(.packages."node_modules/@lydell/node-pty-linux-arm64") |
-      del(.packages."node_modules/@lydell/node-pty-linux-x64") |
-      del(.packages."node_modules/@lydell/node-pty-win32-arm64") |
-      del(.packages."node_modules/@lydell/node-pty-win32-x64") |
-      del(.packages."node_modules/keytar") |
-      walk(
-        if type == "object" and has("dependencies") then
-          .dependencies |= with_entries(select(.key | (contains("node-pty") | not) and (contains("keytar") | not)))
-        elif type == "object" and has("optionalDependencies") then
-          .optionalDependencies |= with_entries(select(.key | (contains("node-pty") | not) and (contains("keytar") | not)))
-        else .
-        end
-      ) |
-      walk(
-        if type == "object" and has("peerDependencies") then
-          .peerDependencies |= with_entries(select(.key | (contains("node-pty") | not) and (contains("keytar") | not)))
-        else .
-        end
-      )
-    ' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
-  '';
-
   buildPhase = ''
     runHook preBuild
 
-    # Build several internal packages first (required by main bundle)
-    npm run build --workspace=@qwen-code/channel-base
-    npm run build --workspace=@qwen-code/channel-telegram
-    npm run build --workspace=@qwen-code/channel-weixin
-    npm run build --workspace=@qwen-code/channel-dingtalk
-    npm run build --workspace=@qwen-code/web-templates
+    # Increase Node.js heap size on Darwin to prevent OOM during
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export NODE_OPTIONS="--max-old-space-size=8192"
+    ''}
+
+    # npmConfigHook only patches the root node_modules. Workspaces with
+    # nested .bin (web-shell's vite) keep /usr/bin/env otherwise.
+    patchShebangs packages/*/node_modules
 
     npm run generate
+
+    # The CLI esbuild bundle resolves imports against workspace dist/ output.
+    # Use upstream's --cli-only build order so every workspace the bundle pulls
+    # in (core, channels, acp-bridge, sdk-typescript, ...) is built, without
+    # us having to track the dependency list by hand across releases.
+    node scripts/build.js --cli-only
+
     npm run bundle
 
     runHook postBuild
@@ -93,17 +123,31 @@ buildNpmPackage (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/qwen-code
+
     cp -r dist/* $out/share/qwen-code/
+
+    # The bundled dist/cli.js has no shebang; upstream ships a bin wrapper
+    # (scripts/cli-entry.js) that relaunches cli.js with node --expose-gc and
+    # reads package.json for the reported version. Install both next to cli.js.
+    cp scripts/cli-entry.js $out/share/qwen-code/cli-entry.js
+    cp package.json $out/share/qwen-code/package.json
+
     # Install production dependencies only
     npm prune --production
     cp -r node_modules $out/share/qwen-code/
+
     # Remove broken symlinks that cause issues in Nix environment
     find $out/share/qwen-code/node_modules -type l -delete || true
+
     patchShebangs $out/share/qwen-code
-    ln -s $out/share/qwen-code/cli.js $out/bin/qwen
+
+    ln -s $out/share/qwen-code/cli-entry.js $out/bin/qwen
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 

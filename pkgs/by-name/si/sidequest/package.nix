@@ -150,6 +150,9 @@ buildFHSEnv {
       rvolosatovs
     ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "SideQuest";
+    mainProgram = "sidequest";
+    knownVulnerabilities = [
+      "Uses EOL Electron 29, many known CVEs."
+    ];
   };
 }

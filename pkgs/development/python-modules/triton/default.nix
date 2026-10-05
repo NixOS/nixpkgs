@@ -47,7 +47,7 @@ let
 in
 buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
   pname = "triton";
-  version = "3.7.0";
+  version = "3.7.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -56,7 +56,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     owner = "triton-lang";
     repo = "triton";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxbBY1lPq7765MqAPR7UljzPsmjOhKKbYExlKgeudew=";
+    hash = "sha256-2+NAHZZjFQxj+9UGiNpk4TVAKW6nydw1L1FTTJpNya4=";
   };
 
   patches = [
@@ -410,7 +410,7 @@ buildPythonPackage.override { stdenv = effectiveStdenv; } (finalAttrs: {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/triton-lang/triton";
     changelog = "https://github.com/triton-lang/triton/releases/tag/${finalAttrs.src.tag}";
-    platforms = lib.platforms.linux;
+    platforms = lib.intersectLists lib.platforms.linux llvm.meta.platforms;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage

@@ -25,6 +25,7 @@
   pythonSupport ? (stdenv.buildPlatform.canExecute stdenv.hostPlatform),
   cudaSupport ? config.cudaSupport,
   ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
+  tensorrtSupport ? cudaSupport && cudaPackages.tensorrt.meta.available,
   openvinoSupport ? stdenv.hostPlatform.isLinux,
   rocmSupport ? config.rocmSupport,
   coremlSupport ? stdenv.hostPlatform.isDarwin,
@@ -219,6 +220,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       cuda_cudart
     ]
     ++ lib.optionals ncclSupport [ nccl ]
+    ++ lib.optionals tensorrtSupport [ tensorrt ]
   )
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
@@ -298,6 +300,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_COREML" coremlSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
+    # GCC 16 implemented P0952R2, which changes the output of libstdc++'s
+    # std::generate_canonical. Some of onnxruntime('s tests) rely on this old
+    # behavior, so we restore the old behavior with the provided macro. Based
+    # on a fix suggested by upstream at
+    # https://github.com/microsoft/onnxruntime/pull/31346#issuecomment-5688923246
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-D_GLIBCXX_USE_OLD_GENERATE_CANONICAL")
   ]
   ++ lib.optionals openvinoSupport [
     (lib.cmakeBool "onnxruntime_USE_OPENVINO" true)
@@ -324,6 +332,11 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "onnxruntime_CUDNN_HOME" "${cudaPackages.cudnn}")
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaArchitecturesString)
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
+  ]
+  ++ lib.optionals tensorrtSupport [
+    (lib.cmakeBool "onnxruntime_USE_TENSORRT" true)
+    (lib.cmakeBool "onnxruntime_USE_TENSORRT_BUILTIN_PARSER" true)
+    (lib.cmakeFeature "onnxruntime_TENSORRT_HOME" "") # Only used as a find hint
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (

@@ -51,17 +51,18 @@
   # passthru
   testers,
   nix-update-script,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2606";
+  version = "2609"; # Please backport to stable for netplay compat
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-Rs/b5Vnm1VAYpvC6YWj3bZqHBCw2SCHnzLro1UrvsdY=";
+    hash = "sha256-mylUTwDBIOIdGKCdA64RSqioTVc9f6oTP5WHAVtkH9w=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -184,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
-        command = "dolphin-emu-nogui --version";
+        command = "${lib.getExe xvfb-run} dolphin-emu --version";
         inherit (finalAttrs) version;
       };
     };

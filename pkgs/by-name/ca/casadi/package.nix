@@ -10,7 +10,7 @@
   cplex,
   fatrop,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   gurobi,
   highs,
   hpipm,
@@ -38,32 +38,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.7.2";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
     tag = finalAttrs.version;
-    hash = "sha256-I6CYtKVvE67NSYH/JGJFP5wHhm1xACctz7uTwOFFihA=";
+    hash = "sha256-GY7Dyt53QE3+/aPB5oDRfZzpRLqKTGrxrmvihq4YJ2o=";
   };
 
-  patches = [
-    # Add missing include
-    # ref. https://github.com/casadi/casadi/pull/4192
-    (fetchpatch {
-      url = "https://github.com/casadi/casadi/pull/4192/commits/fc1a83e8db37f328657eabff41f00a9a34d3cc74.patch";
-      hash = "sha256-9GXOtYa/BFq5vp6tE8HxO8xW3ep3my6TPD3FvkDhUUA=";
-    })
-
-    # Fix build with osqp v1
-    # ref. https://github.com/casadi/casadi/pull/4105
-    (fetchpatch {
-      url = "https://github.com/casadi/casadi/pull/4105/commits/cca4eb5d423c9d034f0666f71338063d3f8c9c43.patch";
-      hash = "sha256-pDI9x4yzPj+rjtzZpFKwfSsyE52Jt20izfqo5blkUOA=";
-    })
-    (fetchpatch {
-      url = "https://github.com/casadi/casadi/pull/4105/commits/6035a95e48088928134c3827ab90a2a3a82b1389.patch";
-      hash = "sha256-1nOcCLXVwFBRH/abAhTly28+1oNjDumJCjT0NyRAgz0=";
+  # fix python build
+  # ref. https://github.com/casadi/casadi/pull/4418 merged upstream
+  patches = lib.optionals pythonSupport [
+    (fetchpatch2 {
+      name = "add-missing-stub-guards.patch";
+      url = "https://github.com/casadi/casadi/commit/fc4b71177089c2fabbfc3a41dca8a6e40a0a81f4.patch?full_index=1";
+      hash = "sha256-/T9Fof36l/wEeKusI1teCcrax3Zg+fhpteBwnVjWr0o=";
     })
   ];
 
@@ -105,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    swig
   ];
 
   buildInputs = [
@@ -140,13 +134,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals pythonSupport [
     python3Packages.numpy
-    python3Packages.python
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)
-    (lib.cmakeBool "WITH_PYTHON3" pythonSupport)
     # We don't mind always setting this cmake variable, it will be read only if
     # pythonSupport is enabled.
     "-DPYTHON_PREFIX=${placeholder "out"}/${python3Packages.python.sitePackages}"
@@ -199,6 +193,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   meta = {
     description = "Symbolic framework for numeric optimization";

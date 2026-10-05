@@ -8,14 +8,14 @@
 python3Packages.buildPythonApplication rec {
   __structuredAttrs = true;
   pname = "graphify";
-  version = "0.9.42";
+  version = "0.9.74";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Graphify-Labs";
     repo = "graphify";
     tag = "v${version}";
-    hash = "sha256-QXdjA+xSgh6I+A2snvlaigHG2FQJWoFWIYQJfCmshGQ=";
+    hash = "sha256-AdQhEYKDHc9oaE9tr/YNx6EMM552gb9PlO3TvlKWgog=";
   };
 
   build-system = [
@@ -76,6 +76,9 @@ python3Packages.buildPythonApplication rec {
     ];
     chinese = [
       jieba
+    ];
+    commonlisp = [
+      tree-sitter-grammars.tree-sitter-commonlisp
     ];
     leiden = [
       graspologic

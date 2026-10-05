@@ -42,17 +42,17 @@ umpleUrl="https://github.com/umple/umple/releases/download/$latestTag/$umpleName
 umpleHash=$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 \
   "$(nix-prefetch-url "$umpleUrl")")
 
-# Save version info
+# Save version info.
+# Note that the Nix package version is directly inlined so that nixpkgs-update
+# can properly detect when the version changes in the source
 jq -n \
-  --arg version "$latestVersion" \
   --arg longVersion "$longVersion" \
   --arg revision "$revision" \
-  --arg commitCount "$commitCount" \
+  --argjson commitCount "$commitCount" \
   --arg umpleUrl "$umpleUrl" \
   --arg umpleHash "$umpleHash" \
   '{
     "umple": {
-      "version": $version,
       "longVersion": $longVersion,
       "revision": $revision,
       "commitCount": $commitCount
@@ -63,5 +63,5 @@ jq -n \
     }
   }' > "$location/versions.json"
 
-# Version update is done; use nix-update for hashes and Gradle deps
-nix-update umple --version=skip
+# use nix-update for hashes and Gradle deps
+nix-update umple --version="$latestVersion"

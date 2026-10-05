@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.18";
+  version = "1.0.19";
   pname = "mdp";
 
   src = fetchFromGitHub {
     owner = "visit1985";
     repo = "mdp";
     rev = finalAttrs.version;
-    sha256 = "sha256-7ltqnvNzdr+sJiiiCQpp25dzhOrcUCOAgMTt1RIgVTw=";
+    sha256 = "sha256-qMxuhq6LqS1o5TqQAbmGYgISWzmcocaHEYTASUN6S2c=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

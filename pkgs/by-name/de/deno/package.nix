@@ -17,6 +17,7 @@
   zstd,
   lcms2,
   lld,
+  vulkan-loader,
   writableTmpDirAsHomeHook,
 
   # Test deps
@@ -36,7 +37,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.9.4";
+  version = "2.9.7";
 
   __structuredAttrs = true;
 
@@ -51,10 +52,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-ivch++yGRUyWtox/5QqomC4DlTvMBxK+gIcN9/7tt5E=";
+    hash = "sha256-GOhud8uXlsDdyAN84WscakxK2qCFTEYSUwR5Wt2QPAs=";
   };
 
-  cargoHash = "sha256-ynbHLZXkPPYpsC4dCu6jA6x8ftiTHWZ/uxzdbUcUaa0=";
+  cargoHash = "sha256-VSWkdTJiSX8O3+Kpu7RKnydxB3OcbwG9+NJCvLdFl68=";
 
   patches = [
     ./patches/0002-tests-replace-hardcoded-paths.patch
@@ -96,6 +97,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Disable the default feature `upgrade` (which controls the self-update subcommand and update checks)
   buildNoDefaultFeatures = true;
+  buildFeatures = [
+    "v8"
+  ];
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
@@ -173,10 +177,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=node_unit_tests::tls_test"
     "--skip=npm::lock_file_lock_write"
     "--skip=happy_eyeballs::tests::test_parallel_second_wins"
-
-    # GPU access
-    "--skip=js_unit_tests::webgpu_test"
-    "--skip=js_unit_tests::jupyter_test"
 
     # Use of /usr/bin
     "--skip=specs::permission::proc_self_fd"
@@ -262,6 +262,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]} $out/bin/deno
   '';
 
   doInstallCheck = canExecute;

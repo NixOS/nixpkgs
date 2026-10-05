@@ -8,6 +8,7 @@
   libvorbis,
   pkg-config,
   libmpg123,
+  libmikmod,
   flac,
   autoreconfHook,
   stdenv,
@@ -21,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_mixer";
-  version = "1.2.12-unstable-2026-05-11";
+  version = "1.2.12-unstable-2026-09-29";
 
   # word of caution: while there is a somewhat maintained SDL-1.2 branch on
   # https://github.com/libsdl-org/SDL_mixer, it switches from smpeg to mpg123 which
@@ -30,9 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_mixer";
-    rev = "50517740a3916e5ffd719c053c6e7b65f933e23a";
-    hash = "sha256-VQywKO2aaZKTAzseWsb0nywLfpS9NHxCCanNTmUsUcs=";
+    rev = "31fe14e9043e1a19caa42dce744b06bc0b648a56";
+    hash = "sha256-RnrPiMyxvNMb0XEvtcUA//+/gJ85sxFyapyoNBlIgG0=";
   };
+
+  # Upstream does an okay job bumping these vendor dependencies, and we don't use them in nix anyways.
+  # However, we want to be sure to not accidentally use these,
+  # e.g. with automatic feature detection, so just remove them.
+  postPatch = ''
+    rm -rf external/*
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -40,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ./configure: line 5346: /usr/bin/file: No such file or directory
     autoreconfHook
     SDL # for sdl.m4
+    libmikmod # for libmikmod-config
   ];
 
   buildInputs = [
@@ -50,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libmpg123
     flac
+    libmikmod
   ];
 
   configureFlags = [

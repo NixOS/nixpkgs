@@ -26,8 +26,6 @@ mkNginxPlugin (finalAttrs: {
     export LUAJIT_INC="$(realpath ${luajit_openresty}/include/luajit-*)"
   '';
 
-  allowMemoryWriteExecute = true;
-
   passthru.tests = {
     inherit (nixosTests) nginx-lua;
   };

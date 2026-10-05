@@ -61,6 +61,8 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+  propagatedBuildOutputs = [ "out" ];
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";

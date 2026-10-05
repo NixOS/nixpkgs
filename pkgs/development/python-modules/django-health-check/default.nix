@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.5.0";
+  version = "4.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-YisYa2YAVhg9fganL7w1fnanXvtQJh6iccDDOxHG5WQ=";
+    hash = "sha256-ZWYLbsFeDM219rUde12tp3bXKxQpb8VjyZ4iUAJM9X8=";
   };
 
   build-system = [
@@ -66,6 +66,9 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # require online DNS resolution
     "test_run_check__dns_working"
+    "test_run_check__custom_nameservers"
+    "test_run_check__custom_record_type"
+    "test_run_check__custom_record_type_str"
     "test_check_status__nonexistent_hostname"
     "test_check_status__no_answer"
     # not reproducible

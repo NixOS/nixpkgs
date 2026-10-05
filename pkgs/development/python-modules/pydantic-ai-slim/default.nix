@@ -10,9 +10,10 @@
   uv-dynamic-versioning,
 
   # dependencies
+  anyio,
   genai-prices,
   griffelib,
-  httpx,
+  httpx2,
   opentelemetry-api,
   pydantic-graph,
   pydantic,
@@ -22,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-ai-slim";
-  version = "2.31.1";
+  version = "2.52.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9kAUDDstOJP+s/eRZ6DtS7tZ16zIz7yxDpNJtAYiEmw=";
+    hash = "sha256-7AI/a0xwWGTl+KMNYVC3pL4AG8qfLeRbeZyd3ZsK1JA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_ai_slim";
@@ -40,9 +41,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    anyio
     genai-prices
     griffelib
-    httpx
+    httpx2
     opentelemetry-api
     pydantic-graph
     pydantic

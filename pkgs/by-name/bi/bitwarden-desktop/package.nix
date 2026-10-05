@@ -26,17 +26,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "bitwarden-desktop";
-  version = "2026.8.0";
+  version = "2026.9.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "desktop-v${finalAttrs.version}";
-    hash = "sha256-6rtOJfSTJuxFR7ahTdjGKnes6qV+WS/5bIfx+dkgT7o=";
+    hash = "sha256-mEWZuJ/AU3EKX4pskYMY+cd48nLvP0VCXucfPcod9tI=";
   };
 
   patches = [
-    ./electron-builder-package-lock.patch
     ./dont-auto-setup-biometrics.patch
 
     # ensures `app.getPath("exe")` returns our wrapper, not ${electron}/bin/electron
@@ -74,7 +73,7 @@ buildNpmPackage (finalAttrs: {
 
   npmWorkspace = "apps/desktop";
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-5i6/TlqBhPLv00tN0sxFA/iRQ8QRyUxhCqYkhVBLz3w=";
+  npmDepsHash = "sha256-6sFt+415Valu8ZhoHb4maACGY5o3YurTMNn9fqnGVl4=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs)
@@ -84,7 +83,7 @@ buildNpmPackage (finalAttrs: {
       cargoRoot
       patches
       ;
-    hash = "sha256-OtdwNqZzoMt47O353IKr7FA7DF/tN0MYNK6Eg6skez8=";
+    hash = "sha256-v9XueWkzL/J0owdsvujtmhyrxvkCFUXzYpJCiotXBMM=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 

@@ -1,5 +1,6 @@
 {
   stdenvNoLibc,
+  fetchpatch,
   buildPackages,
   fetchFromGitHub,
   lib,
@@ -33,6 +34,14 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-FhTNgffsnHbzIXOOwCMe6O1FGkEtqWfw+e30RW+Y4K4=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/picolibc/picolibc/commit/11a46b6ed03c4dca64e0534435da9841e837b160.patch";
+      hash = "sha256-i1dKW1L5si0gf0/Sn4sU/BuIof778tvHgCCCY1TxMME=";
+    })
+  ];
 
   depsBuildBuild = lib.optionals canExecute [
     buildPackages.stdenv.cc

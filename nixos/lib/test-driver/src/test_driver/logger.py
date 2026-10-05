@@ -80,17 +80,18 @@ class JunitXMLLogger(AbstractLogger):
             self.failure = False
 
     def __init__(self, outfile: Path) -> None:
-        self.tests: dict[str, JunitXMLLogger.TestCaseState] = {
-            "main": self.TestCaseState()
-        }
-        self.currentSubtest = "main"
+        self.testsuite = JunitXMLLogger.TestCaseState()
+        self.tests: dict[str, JunitXMLLogger.TestCaseState] = {}
+        self.currentSubtest = None
         self.outfile: Path = outfile
         self._print_serial_logs = True
         self._log_level = LogLevel.INFO
         atexit.register(self.close)
 
     def log(self, message: str, attributes: dict[str, str] = {}) -> None:
-        self.tests[self.currentSubtest].stdout += message + os.linesep
+        self.testsuite.stdout += message + os.linesep
+        if self.currentSubtest:
+            self.tests[self.currentSubtest].stdout += message + os.linesep
 
     @contextmanager
     def subtest(self, name: str, attributes: dict[str, str] = {}) -> Iterator[None]:
@@ -109,19 +110,28 @@ class JunitXMLLogger(AbstractLogger):
 
     def debug(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.DEBUG:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+            self.testsuite.stdout += args[0] + os.linesep
+            if self.currentSubtest:
+                self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def info(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.INFO:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+            self.testsuite.stdout += args[0] + os.linesep
+            if self.currentSubtest:
+                self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def warning(self, *args, **kwargs) -> None:
         if self._log_level <= LogLevel.WARNING:
-            self.tests[self.currentSubtest].stdout += args[0] + os.linesep
+            self.testsuite.stdout += args[0] + os.linesep
+            if self.currentSubtest:
+                self.tests[self.currentSubtest].stdout += args[0] + os.linesep
 
     def error(self, *args, **kwargs) -> None:
-        self.tests[self.currentSubtest].stderr += args[0] + os.linesep
-        self.tests[self.currentSubtest].failure = True
+        self.testsuite.stderr += args[0] + os.linesep
+        self.testsuite.failure = True
+        if self.currentSubtest:
+            self.tests[self.currentSubtest].stderr += args[0] + os.linesep
+            self.tests[self.currentSubtest].failure = True
 
     def log_test_error(self, *args, **kwargs) -> None:
         self.error(*args, **kwargs)
@@ -141,6 +151,9 @@ class JunitXMLLogger(AbstractLogger):
     def close(self) -> None:
         with open(self.outfile, "w") as f:
             test_cases = []
+            if len(self.tests) == 0:
+                self.tests.setdefault("main", self.TestCaseState())
+                self.tests["main"].failure = self.testsuite.failure
             for name, test_case_state in self.tests.items():
                 tc = TestCase(
                     name,
@@ -151,7 +164,12 @@ class JunitXMLLogger(AbstractLogger):
                     tc.add_failure_info("test case failed")
 
                 test_cases.append(tc)
-            ts = TestSuite("NixOS integration test", test_cases)
+            ts = TestSuite(
+                "NixOS integration test",
+                test_cases,
+                stdout=self.testsuite.stdout,
+                stderr=self.testsuite.stderr,
+            )
             f.write(TestSuite.to_xml_string([ts]))
 
 

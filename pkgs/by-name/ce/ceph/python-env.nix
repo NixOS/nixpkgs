@@ -9,7 +9,7 @@ ceph-python.withPackages (
     ceph-python-common
 
     # build time
-    cython_0
+    cython
 
     # debian/control
     bcrypt

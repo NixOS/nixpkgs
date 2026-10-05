@@ -167,7 +167,13 @@ lib.makeExtensible (
             hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
           };
         }).appendPatches
-          [ ];
+          (
+            lib.optionals stdenv.hostPlatform.isDarwin [
+              # Avoid recursive arch probes when libnixstore is preloaded by Cachix.
+              # https://github.com/NixOS/nixpkgs/issues/562481
+              ./detect-rosetta-via-runtime-file.patch
+            ]
+          );
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
@@ -208,12 +214,12 @@ lib.makeExtensible (
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "f8bb823a23bf6d62f4c8feb792a77702d7a49fe1";
-            hash = "sha256-eWBQ01zjUjTF6VyWzmt6fN6jI+vlCDtqYaJG1McIKpc=";
+            rev = "203f85b2e851fc52e253e8e33eff5fb92936736a";
+            hash = "sha256-ahm58Y+ASv19VGVzC2IwNsQpkVR8rgEwwHDYwnMadkI=";
           };
         in
         (nixDependencies.callPackage ./modular/packages.nix {
-          version = "2.35pre20260619_${lib.substring 0 8 src.rev}";
+          version = "2.36pre20260912_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = removeFunctionalTests commonDisabledTests src;

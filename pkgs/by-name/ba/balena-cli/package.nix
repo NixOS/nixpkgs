@@ -4,7 +4,6 @@
   balena-compose-parser,
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_24,
   versionCheckHook,
   node-gyp,
   python3,
@@ -12,31 +11,23 @@
   xcbuild,
 }:
 
-let
-  buildNpmPackage' = buildNpmPackage.override {
-    nodejs = nodejs_24;
-  };
-  node-gyp' = node-gyp.override {
-    nodejs = nodejs_24;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage (finalAttrs: {
   pname = "balena-cli";
-  version = "25.1.6";
+  version = "25.2.6";
 
   src = fetchFromGitHub {
     owner = "balena-io";
     repo = "balena-cli";
-    rev = "v${version}";
-    hash = "sha256-ipl8eK9DpMGd4kyr46QTMUqYfr5ghOY3u5WS1GXVeIw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OnlVd3rcNwc71ZSMrVp41cQdRjLyXdJsl8UuG+lAzsk=";
   };
 
-  npmDepsHash = "sha256-HAOZlCRcPjX0u9GBLaYR03Jb+bvg679MqcGGHkQ2FPM=";
+  npmDepsHash = "sha256-BtZysLU3FhPusTpEs3aSVs9qNe0u8p6OTaWDmJGxHAE=";
 
   makeCacheWritable = true;
 
   nativeBuildInputs = [
-    node-gyp'
+    node-gyp
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -46,6 +37,17 @@ buildNpmPackage' rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
   ];
+
+  env = {
+    # This is a bit heavy handed but resolves errors stemming from the Node.js
+    # USB package, such as
+    #
+    # > /build/source/node_modules/usb/node_modules/node-addon-api/napi-inl.h:1433:8: note: 'std::string_view' is only available from C++17 onwards
+    #
+    # The issue seems to have been resolved upstream but not released yet:
+    # https://github.com/node-usb/node-usb/pull/964
+    CXXFLAGS = "-std=c++20";
+  };
 
   postInstall = ''
     cp ${lib.getExe balena-compose-parser} $out/lib/node_modules/balena-cli/node_modules/@balena/compose-parser/bin/
@@ -72,11 +74,11 @@ buildNpmPackage' rec {
       and the balena SDK, and can also be directly imported in Node.js applications.
     '';
     homepage = "https://github.com/balena-io/balena-cli";
-    changelog = "https://github.com/balena-io/balena-cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/balena-io/balena-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kalebpace
     ];
     mainProgram = "balena";
   };
-}
+})

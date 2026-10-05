@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prismlauncher-unwrapped";
-  version = "11.0.3";
+  version = "11.1.1";
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     tag = finalAttrs.version;
-    hash = "sha256-0o31pLKnYY0mulLrZKzZtaTPzCviGsgCnEcBt0Y/aG4=";
+    hash = "sha256-vSCiCDatoRnA1vpqLDuelC/2cBCKp+fXGT/O0DYjHuk=";
   };
 
   postUnpack = ''
@@ -109,5 +109,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "prismlauncher";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "prismlauncher" finalAttrs.version // {
+      product = "prism_launcher";
+    };
   };
 })

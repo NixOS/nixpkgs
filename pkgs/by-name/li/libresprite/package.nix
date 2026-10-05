@@ -21,7 +21,6 @@
   zlib,
   SDL2,
   SDL2_image,
-  lua,
 
   nixosTests,
 }:
@@ -65,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     SDL2
     SDL2_image
-    lua
     # no v8 due to missing libplatform and libbase
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -88,9 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
     done
 
-    substituteInPlace $out/share/thumbnailers/libresprite.thumbnailer \
-      --replace-fail "TryExec=libresprite-thumbnailer" "TryExec=$out/bin/libresprite-thumbnailer" \
-      --replace-fail "Exec=libresprite-thumbnailer" "Exec=$out/bin/libresprite-thumbnailer"
+    if [ -f $out/share/thumbnailers/libresprite.thumbnailer ]; then
+      substituteInPlace $out/share/thumbnailers/libresprite.thumbnailer \
+        --replace-fail "TryExec=libresprite-thumbnailer" "TryExec=$out/bin/libresprite-thumbnailer" \
+        --replace-fail "Exec=libresprite-thumbnailer" "Exec=$out/bin/libresprite-thumbnailer"
+    fi
   '';
 
   passthru.tests = {

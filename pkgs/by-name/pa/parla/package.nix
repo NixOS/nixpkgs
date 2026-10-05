@@ -12,11 +12,14 @@
   pkg-config,
   stdenv,
   vala,
+  gst_all_1,
+  webkitgtk_6_0,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parla";
-  version = "0.8.0";
+  version = "0.9.8";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -24,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "trufae";
     repo = "parla";
     tag = finalAttrs.version;
-    hash = "sha256-uUtmkDwEenXzNsOTAtmkgbaSYl3CbgEOeVjOrSZwoW4=";
+    hash = "sha256-7A77iywQfi+C1s6gZhrYPyHykUSOEd/bDGHjDT+vEvA=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
+    wrapGAppsHook4
   ];
 
   mesonFlags = [
@@ -43,7 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     json-glib
     libadwaita
-  ];
+    webkitgtk_6_0
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
 
   passthru.updateScript = nix-update-script { };
 

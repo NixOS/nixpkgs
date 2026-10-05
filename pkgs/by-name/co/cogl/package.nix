@@ -116,11 +116,11 @@ stdenv.mkDerivation rec {
     );
     NIX_CFLAGS_COMPILE = toString (
       [ ]
-      ++ lib.optional stdenv.cc.isGNU [
+      ++ lib.optionals stdenv.cc.isGNU [
         # Fix build with gcc15
         "-std=gnu17"
       ]
-      ++ lib.optional stdenv.cc.isClang [
+      ++ lib.optionals stdenv.cc.isClang [
         "-Wno-error=implicit-function-declaration"
       ]
     );

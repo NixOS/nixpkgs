@@ -43,7 +43,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-server";
-  version = "2.20.0";
+  version = "2.21.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "jupyter_server";
     inherit (finalAttrs) version;
-    hash = "sha256-tXeLozfYAVo9wrgIA+zdWsGNN5f932GlDqX7RytOvhQ=";
+    hash = "sha256-cNmhiD9X01duoX9M4GHsGnqtfvOI0AQoz7f15PACInE=";
   };
 
   build-system = [
@@ -130,6 +130,9 @@ buildPythonPackage (finalAttrs: {
     # nbconvert failed: `relax_add_props` kwargs of validate has been
     # deprecated for security reasons, and will be removed soon.
     "tests/nbconvert/test_handlers.py"
+    # timing sensitive
+    "tests/services/contents/test_manager.py::test_created_timestamp"
+    "tests/services/kernels/test_connection.py::test_disconnect_resolves_orphaned_kernel_info_future"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -141,5 +144,11 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.bsdOriginal;
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-server";
+    identifiers.cpeParts = {
+      vendor = "jupyter";
+      product = "jupyter_server";
+      version = finalAttrs.version;
+      update = "*";
+    };
   };
 })

@@ -16,16 +16,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   # The configure script of libpaper is buggy: it uses AC_SUBST on a headerfile
   # to compile sysconfdir into the library. Autoconf however defines sysconfdir
   # as "${prefix}/etc", which is not expanded by AC_SUBST so libpaper will look
   # for config files in (literally, without expansion) '${prefix}/etc'. Manually
   # setting sysconfdir fixes this issue.
-  preConfigure = ''
-    configureFlagsArray+=(
-      "--sysconfdir=$out/etc"
-    )
-  '';
+  configureFlags = [
+    "--sysconfdir=${placeholder "out"}/etc"
+  ];
 
   # Set the default paper to letter (this is what libpaper uses as default as well,
   # if you call getdefaultpapername()).
@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/etc
     echo letter > $out/etc/papersize
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     changelog = "https://github.com/rrthomas/libpaper/releases/tag/v${finalAttrs.version}";

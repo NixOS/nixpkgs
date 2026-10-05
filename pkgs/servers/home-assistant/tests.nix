@@ -118,11 +118,6 @@ let
       "tests/components/ecovacs/test_vacuum.py::test_clean_area_no_map"
       "tests/components/ecovacs/test_vacuum.py::test_clean_area_invalid_map_id"
     ];
-    izone = [
-      # [2026.7.2] Failed: Description not found for placeholder `host` in component.izone.config.step.confirm.description
-      "tests/components/izone/test_config_flow.py::test_not_found"
-      "tests/components/izone/test_config_flow.py::test_found"
-    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"
@@ -136,21 +131,9 @@ let
       "tests/components/minecraft_server/test_init.py"
       "tests/components/minecraft_server/test_sensor.py"
     ];
-    netatmo = [
-      # [2026.7.2] Language string mismatch (id vs ID)
-      "tests/components/netatmo/test_media_source.py::test_async_browse_media"
-    ];
-    remote_calendar = [
-      # [2026.8.0] AssertionError: assert '2026-05-18 06:40:00' == '2026-05-19 08:00:00'
-      "tests/components/remote_calendar/test_calendar.py::test_coordinator_refresh_updates_upcoming_event_state"
-    ];
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
-    ];
-    wmspro = [
-      # [2026.7.2] Outdated snapshot
-      "tests/components/wmspro/test_number.py::test_number_update"
     ];
   };
 
@@ -166,10 +149,6 @@ let
     homeassistant = [
       # disabled via nixos-was-never-supported.patch
       "test_deprecated_installation_issue_core"
-    ];
-    smlight = [
-      # [2026.7.1] outdated snapshot
-      "test_entry_diagnostics"
     ];
     zeroconf = [
       # multicast socket bind, not possible in the sandbox
@@ -198,8 +177,6 @@ lib.genAttrs home-assistant.supportedComponentsWithTests (
     dontUsePytestXdist = true;
 
     enabledTestPaths = [ "tests/components/${component}" ];
-
-    pytestFlags = [ "-vvv" ];
 
     meta = old.meta // {
       broken = lib.elem component [ ];

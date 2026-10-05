@@ -73,6 +73,9 @@ mkMesonLibrary (finalAttrs: {
     nlohmann_json
   ];
 
+  # Don't use the default name "build": that conflicts with an existing directory.
+  mesonBuildDir = "meson-build-dir";
+
   mesonFlags = [
     (lib.mesonEnable "seccomp-sandboxing" stdenv.hostPlatform.isLinux)
     (lib.mesonBool "embedded-sandbox-shell" embeddedSandboxShell)

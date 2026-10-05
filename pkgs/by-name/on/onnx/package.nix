@@ -23,9 +23,8 @@ let
     ;
   inherit (python3Packages)
     build
-    pybind11
     python
-    setuptools
+    scikit-build-core
     ;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -33,14 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "onnx";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eF6BdTwTuHh6ckuLGN1d6z2GLU47lPqtzu4zIv8+cTs=";
+    hash = "sha256-gc65t/VN3kdvV9tiFoOk6Sw+OZe4Udgm3VcZPP9gzpE=";
   };
+
+  # We can't use pythonRelaxDeps as we're not using buildPythonPackage
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "protobuf==4.25.1" "protobuf"
+  '';
 
   outputs = [
     "out"
@@ -51,9 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     build
     cmake
     ninja
-    pybind11
     python
-    setuptools
+    scikit-build-core
   ];
 
   # NOTE: python3Packages.protobuf does not propagate a dependency on protobuf's dev output, so we must bring it in
@@ -63,14 +67,23 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.protobuf
   ];
 
-  # Declared in setup.py
-  cmakeBuildDir = ".setuptools-cmake-build";
+  # Standalone C++ build directory for the libonnx C++ library (`out`).
+  # Kept separate from the Python wheel's build directory (scikit-build-core hardcodes
+  # `.setuptools-cmake-build` in pyproject.toml, where it builds onnx with ONNX_INSTALL=OFF):
+  # sharing the directory would clobber this build's install prefix and leave `out` empty.
+  cmakeBuildDir = "build-cpp";
 
-  # Python setup.py just takes stuff from the environment.
+  # scikit-build-core's cmake.define reads several of these from the environment (see pyproject.toml).
   env = {
-    # NOTE: Darwin requires a static build; otherwise, tests fail in the Python package.
-    BUILD_SHARED_LIBS = if stdenv.hostPlatform.isDarwin then "0" else "1";
-    ONNX_BUILD_PYTHON = "1";
+    # NOTE: onnx is built statically on all platforms.
+    # Since 1.22.0, libonnx is built with hidden symbol visibility, and ONNX refuses to combine
+    # ONNX_BUILD_PYTHON=ON with BUILD_SHARED_LIBS=ON: both the Python extension and the C++ gtests
+    # link ONNX internals not on the public API surface, which a hidden-visibility shared libonnx
+    # does not export. Building statically (as Darwin already required) keeps the wheel and the C++
+    # tests linkable.
+    # No consumer links the C++ libonnx as a shared library (onnxruntime builds onnx from its own source).
+    BUILD_SHARED_LIBS = "0";
+
     ONNX_BUILD_TESTS = if finalAttrs.finalPackage.doCheck then "1" else "0";
     # ONNX_ML is enabled by default.
     # See: https://github.com/onnx/onnx/blob/b751946c3d59a3c8358abcc0569b59e6ddb08cdd/CMakeLists.txt#L66-L73
@@ -92,8 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     pushd ..
     nixLog "exporting cmakeFlags as CMAKE_ARGS for Python build"
-    export CMAKE_ARGS="''${cmakeFlags[*]}"
+    # Reuse the C++ build flags, additionally enabling the Python extension for the wheel.
+    export CMAKE_ARGS="''${cmakeFlags[*]} -DONNX_BUILD_PYTHON=ON"
     nixLog "building Python wheel"
+    # --no-isolation: use the build tools from nativeBuildInputs.
     pyproject-build \
       --no-isolation \
       --outdir "$dist/" \

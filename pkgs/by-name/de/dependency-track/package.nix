@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchpatch2,
   jre_headless,
   protobuf_30,
   xmlstarlet,
@@ -13,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.14.2";
+  version = "4.14.4";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -23,7 +22,7 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       tag = version;
-      hash = "sha256-/MH1YjEJdRjYjenkzOcp7oytudsJcinPbc9OAGFnI/Q=";
+      hash = "sha256-Zt6KBqR3CstS/RqqJAVJaGkgpzf835UcblrE/8gzUWE=";
     };
 
     installPhase = ''
@@ -31,14 +30,7 @@ let
       cp -R ./dist $out/
     '';
 
-    patches = [
-      (fetchpatch2 {
-        url = "https://github.com/DependencyTrack/frontend/pull/1575.patch?full_index=1";
-        hash = "sha256-Wo+6yXa/8jB/pph0DTNsFz6lK3sedvro+7yvLSKes9c=";
-      })
-    ];
-
-    npmDepsHash = "sha256-md+PGEC1/Kl2MQhhYldSErcsDSefbPvwVDsw0Yklq1E=";
+    npmDepsHash = "sha256-NQY3bg3cwyIt/ing8RBOFNd3+02hzVwYcj0RXi350xk=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -55,7 +47,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     tag = version;
-    hash = "sha256-9EPjIm2VOmt1FEiPoJtwNHoKZcewO0kJgBSc9fnUXeI=";
+    hash = "sha256-tHtM5xqD7EG3CyZtaL6qsHEAa+5AstcIYRes+hIFyKk=";
   };
 
   postPatch = ''
@@ -88,15 +80,15 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-pshUDIPPGGGzxg5WJXC3mjnqGXn8HVowFCb2l5f6zjA=";
+  mvnHash = "sha256-903EuablhywF/2N8k8ISHOnSyZrSJ1LKC9Lx4USO0z8=";
   manualMvnArtifacts = [
     "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1"
     # added to saticfy protobuf compiler plugin dependency resolving
     "jakarta.el:jakarta.el-api:5.0.1"
     "com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.19.1"
-    "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.21.0"
-    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.3"
-    "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.2"
+    "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.2"
+    "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.4"
+    "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1"
     "io.micrometer:micrometer-core:1.16.0"
     "io.micrometer:micrometer-observation:1.16.0"
   ];

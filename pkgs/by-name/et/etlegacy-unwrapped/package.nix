@@ -22,7 +22,7 @@
   versionCheckHook,
 }:
 let
-  version = "2.85.0";
+  version = "2.86.0";
   fakeGit = writeScriptBin "git" ''
     if [ "$1" = "describe" ]; then
       echo "${version}"
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     owner = "etlegacy";
     repo = "etlegacy";
     tag = "v${version}";
-    hash = "sha256-oOgoM5BLBnmrmbdXFGYkVcQLYq8tVpLgnzJXax7g3vI=";
+    hash = "sha256-3m6LJtZ0AbTYPXVnX80wdW7Wchd4mp5v5QAWKPjwctA=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,6 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     (lib.cmakeBool "CROSS_COMPILE32" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_SERVER" true)
     (lib.cmakeBool "BUILD_CLIENT" true)
     (lib.cmakeBool "BUNDLED_WOLFSSL" false)

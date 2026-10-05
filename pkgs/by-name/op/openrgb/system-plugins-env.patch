@@ -1,8 +1,17 @@
 diff --git a/PluginManager.cpp b/PluginManager.cpp
-index 157b6cd5..42d9b59d 100644
+index 79f84f97..00b71803 100644
 --- a/PluginManager.cpp
 +++ b/PluginManager.cpp
-@@ -59,6 +59,18 @@ void PluginManager::ScanAndLoadPlugins()
+@@ -7,6 +7,8 @@
+ |   SPDX-License-Identifier: GPL-2.0-or-later               |
+ \*---------------------------------------------------------*/
+ 
++#include <cstdlib>
++
+ #include "LogManager.h"
+ #include "filesystem.h"
+ #include "PluginManager.h"
+@@ -102,6 +104,18 @@ void PluginManager::ScanAndLoadPlugins()
      filesystem::path plugins_dir = ResourceManager::get()->GetConfigurationDirectory() / plugins_path;
      ScanAndLoadPluginsFrom(plugins_dir, false);
  

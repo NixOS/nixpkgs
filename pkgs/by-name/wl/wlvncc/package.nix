@@ -67,7 +67,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Wayland Native VNC Client";
     homepage = "https://github.com/any1/wlvncc";
-    license = lib.licenses.gpl2Only;
+    license = with lib.licenses; [
+      isc
+      gpl2Only
+    ];
     maintainers = with lib.maintainers; [ teutat3s ];
     platforms = lib.platforms.linux;
     mainProgram = "wlvncc";

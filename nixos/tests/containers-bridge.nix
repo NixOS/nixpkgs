@@ -49,6 +49,7 @@ in
         localAddress = containerIp;
         localAddress6 = containerIp6;
         config = {
+          nix.enable = false; # disabled by default on the host. See all-tests.nix / tag(no-nix-by-default)
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
@@ -60,6 +61,7 @@ in
         privateNetwork = true;
         hostBridge = "br0";
         config = {
+          nix.enable = false; # disabled by default on the host. See all-tests.nix / tag(no-nix-by-default)
           services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];

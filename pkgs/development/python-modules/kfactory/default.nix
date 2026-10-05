@@ -56,6 +56,7 @@ buildPythonPackage (finalAttrs: {
   pythonRelaxDeps = [
     "pydantic"
     "klayout"
+    "typer"
   ];
 
   dependencies = [

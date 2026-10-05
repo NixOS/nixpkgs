@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   pkgconfig,
@@ -37,6 +38,20 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-p3V75DLUI2PKdharP3/0HrKOgma9Kh3lAOZLRAQjo80=";
   };
+
+  patches = [
+    # https://github.com/lsh123/xmlsec/issues/1148
+    # https://github.com/xmlsec/python-xmlsec/pull/422
+    (fetchpatch {
+      name = "xmlsec-1.3.11-test-compatibility.patch";
+      url = "https://github.com/xmlsec/python-xmlsec/commit/5e8b4e6aa133c358b8aaf8e17ceb5b3b7fea78e8.patch";
+      includes = [
+        "src/*"
+        "tests/*"
+      ];
+      hash = "sha256-+J2L6oq802/534qIDvFqsWYfn9LExRlXXIeDvVqZEYk=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

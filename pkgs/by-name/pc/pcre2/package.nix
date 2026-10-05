@@ -3,18 +3,15 @@
   stdenv,
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
-  # Causes consistent segfaults on ELFv1 PPC64 when trying to use Perl regex in gnugrep
-  # https://github.com/PCRE2Project/pcre2/issues/762
-  withJitSealloc ? !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv1),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcre2";
-  version = "10.47";
+  version = "10.48";
 
   src = fetchurl {
     url = "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${finalAttrs.version}/pcre2-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-R/6MmUYSUNQviebo/a66naBXhV0G63/AjZygP9CNe8c=";
+    hash = "sha256-tsaP3286wxOItQqon/D8ScAMmHwW57UUZJHRIAPyyO0=";
   };
 
   __structuredAttrs = true;
@@ -28,9 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-pcre2-32"
     # only enable jit on supported platforms which excludes Apple Silicon, see https://github.com/zherczeg/sljit/issues/51
     "--enable-jit=${if stdenv.hostPlatform.isS390x then "no" else "auto"}"
-  ]
-  # fix pcre jit in systemd units that set MemoryDenyWriteExecute=true like gitea
-  ++ lib.optional withJitSealloc "--enable-jit-sealloc";
+  ];
 
   outputs = [
     "bin"

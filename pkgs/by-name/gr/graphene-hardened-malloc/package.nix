@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   lib,
   makeWrapper,
   nix-update-script,
@@ -19,6 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-QUGDJyTnD5MuBUMlc4PZOZSAfevVUB6QbncVyXIAgb8=";
   };
+
+  patches = [
+    # GCC 16 moved `std::__throw_bad_alloc` to `<bits/new_throw.h>`
+    (fetchpatch {
+      url = "https://github.com/GrapheneOS/hardened_malloc/commit/04a25bd141efcd2c0d29ef7d868b205a844b3ad2.patch";
+      hash = "sha256-+FBjnGnjs1nyN/zu0Gf0bIv7RHEDscevDsFkvb1/A20=";
+    })
+  ];
 
   nativeCheckInputs = [ python3 ];
   # these tests cover use as a build-time-linked library

@@ -80,6 +80,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "BNF wrangling and railroad diagrams";
     mainProgram = "kgt";
     longDescription = ''

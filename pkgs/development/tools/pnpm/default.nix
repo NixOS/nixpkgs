@@ -23,6 +23,8 @@ let
         "CVE-2026-59194"
         "CVE-2026-59195"
         "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     # 10.34.1 made a breaking change that causes
@@ -38,6 +40,8 @@ let
         "CVE-2026-59194"
         "CVE-2026-59195"
         "CVE-2026-59196"
+        "CVE-2026-82392"
+        "CVE-2026-82393"
       ];
     };
     "10" = {
@@ -45,12 +49,17 @@ let
       hash = "sha256-zLXEecqxsAYhMlv+fUyaioAx56Ul1ySeJ17L7IGwjbI=";
     };
     "11" = {
-      version = "11.22.0";
-      hash = "sha256-V6l+byOj+v/AMVOk74x3CgVSYSuGQK6+Ob/dV1TQ69w=";
+      version = "11.27.0";
+      hash = "sha256-QKMlFaJVB/jyJt+74lOA4vBTlEwuzGTAwcuYtBy7ke8=";
+    };
+    "12" = {
+      version = "12.9.0";
+      srcHash = "sha256-lcs9nh9GIKfy5QYabUCj/pIpePAjLeeKBlu4UKm8zgM=";
+      cargoHash = "sha256-NGefDu4dGMC2RGrTPeYBuRrG+Gb8jnx9+SbyK8WPd9E=";
     };
   };
 
-  callPnpm =
+  callPnpmNode =
     variant:
     callPackage ./generic.nix (
       variant
@@ -59,6 +68,10 @@ let
         nodejs = null; # Passing null to detect out-of-tree overrides
       }
     );
+
+  callPnpmRust = callPackage ./generic-rust.nix;
+
+  callPnpm = variant: if variant ? cargoHash then callPnpmRust variant else callPnpmNode variant;
 
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
 in

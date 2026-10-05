@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -25,6 +24,7 @@
   pandas,
   pdfminer-six,
   pybase62,
+  pygments,
   pyjks,
   pysquashfsimage,
   python-dateutil,
@@ -34,9 +34,10 @@
   pyyaml,
   rpmfile,
   striprtf,
+  tqdm,
   whatthepatch,
   xlrd,
-  # < python 3.14 only:
+  # python>=3.14 only:
   zstandard,
 
   # tests
@@ -44,21 +45,21 @@
   hypothesis,
   psutil,
   pytestCheckHook,
+  pythonOlder,
   versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.17.4";
+  version = "1.18.5";
   pyproject = true;
-
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JsKwmzC9kMF3dkYVFrLDxYsxOc5X13pFN9aealZEgqY=";
+    hash = "sha256-zgYd6a+FqGWqqmDUqPDQiq+aU3Ji54RwZZwSthvf8eY=";
   };
 
   build-system = [ hatchling ];
@@ -80,6 +81,7 @@ buildPythonPackage (finalAttrs: {
     pandas
     pdfminer-six
     pybase62
+    pygments
     pyjks
     pysquashfsimage
     python-dateutil
@@ -89,6 +91,7 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     rpmfile
     striprtf
+    tqdm
     whatthepatch
     xlrd
   ]
@@ -109,11 +112,18 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Probability tests
     "test_data_p"
+    "test_data_scan_depth_3_pedantic_p"
+    "test_data_scan_doc_p"
+    "test_data_scan_no_filters_p"
+    "test_data_scan_output_p"
     "test_depth_n"
     "test_depth_p"
     "test_match_n"
     "test_multi_jobs_p"
     "test_rules_ml_p"
+
+    # Hang indefinitely on some CPUs
+    "TestInt"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
@@ -125,6 +135,7 @@ buildPythonPackage (finalAttrs: {
     "test_it_works_n"
     "test_log_n"
     "test_log_p"
+    "test_sqlite_injection_n"
   ];
 
   meta = {

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -29,7 +30,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Fix undefined reference to `__rust_probestack` from wasmer_vm.
   # Define it as a no-op since it's only needed for stack overflow detection.
-  env.RUSTFLAGS = "-C link-arg=-Wl,--defsym,__rust_probestack=0";
+  env.RUSTFLAGS =
+    let
+      linkArgs = [
+        "-Wl"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        "--defsym"
+        "__rust_probestack=0"
+      ];
+    in
+    "-C link-arg=${builtins.concatStringsSep "," linkArgs}";
 
   cargoBuildFlags = [ "--all-features" ];
 

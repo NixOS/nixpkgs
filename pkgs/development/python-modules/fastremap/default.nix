@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "fastremap";
-  version = "1.19.0";
+  version = "1.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seung-lab";
     repo = "fastremap";
     tag = version;
-    hash = "sha256-fPDgCpCJrMomxr0dicM9NBqzH4s+/Ux37hTsnsGts2g=";
+    hash = "sha256-ULxjG61AE7BiBh3cMRmxsQZmY8nTEo/Rcq40zwKvNiU=";
   };
 
   build-system = [

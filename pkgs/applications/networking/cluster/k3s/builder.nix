@@ -377,6 +377,7 @@ buildGoModule (finalAttrs: {
   pname = "k3s";
   version = k3sVersion;
   pos = builtins.unsafeGetAttrPos "k3sVersion" attrs;
+  __structuredAttrs = true;
 
   tags = [
     "libsqlite3"

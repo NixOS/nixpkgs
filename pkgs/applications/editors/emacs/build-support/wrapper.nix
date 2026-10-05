@@ -35,6 +35,7 @@
   lndir,
   makeBinaryWrapper,
   runCommand,
+  runtimeShell,
 }:
 self:
 let
@@ -171,16 +172,6 @@ runCommand (lib.appendToName "with-packages" emacs).name
           cat >"$siteStart" <<EOF
           ;;; -*- lexical-binding: t -*-
           (load "$emacs/share/emacs/site-lisp/site-start" nil t)
-          ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
-          ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
-          (add-to-list 'exec-path "$out/bin")
-          ;; Also expose extra package binaries via PATH so that subprocesses
-          ;; which rebuild their environment from PATH (e.g. direnv/envrc) can
-          ;; still find them. See https://github.com/purcell/envrc/issues/9
-          (let ((deps-bin "$out/bin")
-                (current-path (or (getenv "PATH") "")))
-            (unless (member deps-bin (split-string current-path path-separator))
-              (setenv "PATH" (concat deps-bin path-separator current-path))))
           ${lib.optionalString withTreeSitter ''
             (add-to-list 'treesit-extra-load-path "$out/lib/")
           ''}
@@ -217,9 +208,10 @@ runCommand (lib.appendToName "with-packages" emacs).name
       rm -f "$out/bin/$progname"
 
       substitute ${./wrapper.sh} $out/bin/$progname \
-        --subst-var-by bash ${emacs.stdenv.shell} \
+        --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by wrapperInvocationDirectory "$out/bin/" \
         --subst-var-by wrapperInvocationName "$progname" \
         --subst-var prog
@@ -243,9 +235,10 @@ runCommand (lib.appendToName "with-packages" emacs).name
 
 
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
-        --subst-var-by bash ${emacs.stdenv.shell} \
+        --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperBinDir "$deps/bin" \
         --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
         --subst-var-by wrapperInvocationName "Emacs" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"

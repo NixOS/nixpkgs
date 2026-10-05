@@ -46,14 +46,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "rembg";
-  version = "2.0.81";
+  version = "2.0.85";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5d0/WAZ90lUrDcQ3+bg0abLej67zXuoKsjMMCAqgdM4=";
+    hash = "sha256-mUJ18XFEK01jwkYUdEctQrIkz3dx3kw/vcs5VnZ9kY0=";
   };
 
   env.POETRY_DYNAMIC_VERSIONING_BYPASS = finalAttrs.version;

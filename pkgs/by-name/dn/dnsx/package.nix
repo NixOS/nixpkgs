@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dnsx";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "dnsx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-325pwIcI8YjHA1K+gF3NA1LCP9dyZRJW4eKxm2AQyB8=";
+    hash = "sha256-PYcrpcr6VfoqKh48uXtgxyBolXj/BtD9fSCMl9miBCc=";
   };
 
-  vendorHash = "sha256-ep9IN/aPWy4N5HADh4U5T6XeBnm0YB5Tv8yeaqBxZi0=";
+  vendorHash = "sha256-KwZQG/rMKtu+6j7QzPTzLIGtY+fs+zVmrtaQCY1nTOg=";
 
   subPackages = [ "cmd/dnsx" ];
 

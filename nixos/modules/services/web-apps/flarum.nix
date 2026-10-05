@@ -13,7 +13,8 @@ let
   # Only placeholders reach the world-readable Nix store; the install
   # script substitutes the real secrets at runtime.
   dbConfig =
-    cfg.database
+    # `engine` is MySQL-only; omit for other drivers
+    (if cfg.database.driver == "mysql" then cfg.database else removeAttrs cfg.database [ "engine" ])
     // optionalAttrs (cfg.databasePasswordFile != null) {
       password = "@databasePassword@";
     };
@@ -138,36 +139,84 @@ in
     };
 
     database = mkOption {
-      type =
-        with types;
-        attrsOf (oneOf [
-          str
-          bool
-          int
-        ]);
+      type = types.submodule {
+        freeformType =
+          with types;
+          attrsOf (oneOf [
+            str
+            bool
+            int
+          ]);
+        options = {
+          driver = mkOption {
+            type = types.str;
+            default = "mysql";
+            description = "Database driver; i.e. MySQL, MariaDB...";
+          };
+          host = mkOption {
+            type = types.str;
+            default = "localhost";
+            description = "Database server hostname.";
+          };
+          port = mkOption {
+            type = types.port;
+            default = 3306;
+            description = "Database connection port; defaults to 3306 with MySQL.";
+          };
+          database = mkOption {
+            type = types.str;
+            default = "flarum";
+            description = "Database name.";
+          };
+          username = mkOption {
+            type = types.str;
+            default = "flarum";
+            description = "Username for database server access.";
+          };
+          password = mkOption {
+            type = types.str;
+            default = "";
+            description = "Password for database server access.";
+          };
+          charset = mkOption {
+            type = types.str;
+            default = "utf8mb4";
+            description = "Character encoding for the database.";
+          };
+          collation = mkOption {
+            type = types.str;
+            default = "utf8mb4_unicode_ci";
+            description = "Character collation for database sorting and comparison.";
+          };
+          prefix = mkOption {
+            type = types.str;
+            default = "";
+            description = "Table prefix; useful for sharing a database with other services.";
+          };
+          strict = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Enable strict SQL mode.";
+          };
+          engine = mkOption {
+            type = types.str;
+            default = "InnoDB";
+            description = "Storage engine for new tables; MySQL-only.";
+          };
+          prefix_indexes = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Apply table prefix to database index names.";
+          };
+        };
+      };
+      default = { };
       description = ''
         MySQL database parameters.
 
         WARNING: A `password` set here is stored world-readable in the
         Nix store. Use {option}`databasePasswordFile` instead.
       '';
-      default = {
-        # the database driver; i.e. MySQL; MariaDB...
-        driver = "mysql";
-        # the host of the connection; localhost in most cases unless using an external service
-        host = "localhost";
-        # the name of the database in the instance
-        database = "flarum";
-        # database username
-        username = "flarum";
-        # database password
-        password = "";
-        # the prefix for the tables; useful if you are sharing the same database with another service
-        prefix = "";
-        # the port of the connection; defaults to 3306 with MySQL
-        port = 3306;
-        strict = false;
-      };
     };
 
     databasePasswordFile = mkOption {
@@ -193,6 +242,25 @@ in
         WARNING: Due to <https://github.com/flarum/framework/issues/4018>, this option is set
         to false by default. The 'flarum install' command may delete existing database tables.
         Only set this to true if you are certain you are working with a fresh, empty database.
+      '';
+    };
+
+    adoptConfig = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to let this module manage a pre-existing config.php,
+        such as a hand-maintained one (typically with
+        {option}`createDatabaseLocally` = false).
+
+        By default, a config.php this module didn't create is left alone:
+        {option}`baseUrl` and {option}`database` are not applied to it, so
+        real settings can't get silently overwritten by their defaults.
+
+        Before enabling this, make sure {option}`baseUrl` and
+        {option}`database` already match the file's real values. Once
+        enabled, config.php is regenerated from these options on every
+        activation, and anything in the file not covered by them is lost.
       '';
     };
   };
@@ -272,8 +340,13 @@ in
       before = [ "phpfpm-flarum.service" ];
       requires = [ "mysql.service" ];
       after = [ "mysql.service" ];
+      restartTriggers = [
+        cfg.package
+        configPhpFile
+      ];
       serviceConfig = {
         Type = "oneshot";
+        RemainAfterExit = true;
         User = cfg.user;
         Group = cfg.group;
         # The secret-filled install config is staged in /tmp
@@ -287,6 +360,16 @@ in
         cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
         ln -sf ${cfg.package}/share/php/flarum/vendor .
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
+
+        ${optionalString cfg.adoptConfig "touch .flarum-installed"}
+
+        # config.php with no marker means we didn't write it, so leave it alone.
+        # This check must come before the guard below: that guard also touches
+        # the marker, which would make this check pass for the wrong reason.
+        if [ ! -f .flarum-installed ] && [ -f config.php ]; then
+          echo "flarum-install: config.php exists but wasn't written by this module; leaving it untouched." >&2
+          echo "flarum-install: set services.flarum.adoptConfig = true to adopt it." >&2
+        else
       ''
       + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
         if [ ! -f .flarum-installed ]; then
@@ -306,14 +389,18 @@ in
         fi
       ''
       + ''
-        install -m 0600 ${configPhpFile} config.php
-        ${optionalString (cfg.databasePasswordFile != null) ''
-          ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
-            ${escapeShellArg cfg.databasePasswordFile} config.php
-        ''}
+          touch .flarum-installed
+          install -m 0600 ${configPhpFile} config.php
+          ${optionalString (cfg.databasePasswordFile != null) ''
+            ${pkgs.replace-secret}/bin/replace-secret '@databasePassword@' \
+              ${escapeShellArg cfg.databasePasswordFile} config.php
+          ''}
+        fi
 
-        php flarum migrate
-        php flarum cache:clear
+        if [ -f config.php ]; then
+          php flarum migrate
+          php flarum cache:clear
+        fi
       '';
     };
   };

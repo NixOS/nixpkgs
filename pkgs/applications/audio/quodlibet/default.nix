@@ -16,7 +16,7 @@
   glib,
   glib-networking,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   kakasi,
   keybinder3,
   libappindicator,
@@ -89,7 +89,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     glib
     glib-networking
     gtk3
-    gtksourceview
+    gtksourceview3
     kakasi
     keybinder3
     libappindicator

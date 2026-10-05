@@ -32,8 +32,8 @@
 /lib/asserts.nix            @infinisil @hsjobeki @llakala
 /lib/path/*                 @infinisil @hsjobeki @llakala
 /lib/fileset                @infinisil @hsjobeki @llakala
-/maintainers/github-teams.json @infinisil @llakala
-/maintainers/computed-team-list.nix @infinisil @llakala
+/maintainers/github-teams.json @infinisil @llakala @NixOS/nixpkgs-ci
+/maintainers/computed-team-list.nix @infinisil @llakala @NixOS/nixpkgs-ci
 ## Standard environment–related libraries
 /lib/customisation.nix      @alyssais @NixOS/stdenv @llakala
 /lib/derivations.nix        @NixOS/stdenv @llakala
@@ -97,18 +97,13 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 # Contributor documentation
 /CONTRIBUTING.md
 /.github/PULL_REQUEST_TEMPLATE.md
-/doc/contributing/
-/doc/contributing/contributing-to-documentation.chapter.md @jtojnar
+/doc/contributing.md @infinisil
 /lib/README.md
 /doc/README.md
 /nixos/README.md
 /pkgs/README.md
 /pkgs/by-name/README.md
 /maintainers/README.md
-
-# User-facing development documentation
-/doc/development.md @infinisil
-/doc/development @infinisil
 
 # NixOS Internals
 /nixos/default.nix                                    @infinisil
@@ -199,7 +194,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
 /maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
 /pkgs/development/compilers/ghc               @sternenseemann @maralorn @wolfgangwalther
-/pkgs/development/compilers/ghc/9.6.6-debian-binary.nix  @sternenseemann @maralorn @wolfgangwalther @OPNA2608
+/pkgs/development/compilers/ghc/9.6.6-debian-binary.nix  @sternenseemann @maralorn @wolfgangwalther @OPNA2608 @liberodark @NixOS/loongarch64
 /pkgs/development/haskell-modules             @sternenseemann @maralorn @wolfgangwalther
 /pkgs/test/haskell                            @sternenseemann @maralorn @wolfgangwalther
 /pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @wolfgangwalther
@@ -393,9 +388,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /doc/build-helpers/images/dockertools.section.md @roberth @jhol
 
 # Go
-/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92
-/pkgs/build-support/go @kalbasit @katexochen @Mic92
-/pkgs/development/compilers/go @kalbasit @katexochen @Mic92
+/doc/languages-frameworks/go.section.md @kalbasit @Mic92
+/pkgs/build-support/go @kalbasit @Mic92
+/pkgs/development/compilers/go @kalbasit @Mic92
 
 # GNOME
 /pkgs/desktops/gnome                              @NixOS/gnome
@@ -449,9 +444,9 @@ nixos/tests/forgejo.nix               @adamcstephens @bendlas @christoph-heiss @
 /doc/hooks/zig.section.md       @RossComputerGuy
 
 # Buildbot
-nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
-nixos/tests/buildbot.nix                               @Mic92 @zowoq
-pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
+nixos/modules/services/continuous-integration/buildbot @Mic92
+nixos/tests/buildbot.nix                               @Mic92
+pkgs/development/tools/continuous-integration/buildbot @Mic92
 
 # Pretix
 pkgs/by-name/pr/pretix/ @mweinelt
@@ -528,3 +523,7 @@ pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @4evy @johnrtitor
 /nixos/lib/testing                                          @NixOS/test-driver
 /nixos/tests/nixos-test-driver                              @NixOS/test-driver
 /nixos/modules/virtualisation/nspawn-container/run-nspawn   @NixOS/test-driver
+
+# Boot security
+/pkgs/by-name/au/autopen    @NixOS/boot-security
+/pkgs/misc/signed-packages  @NixOS/boot-security

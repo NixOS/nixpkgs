@@ -13,7 +13,7 @@
   fwupd,
   gdk-pixbuf,
   geoclue2,
-  gexiv2,
+  gexiv2_0_10,
   glib,
   gnome-settings-daemon,
   gobject-introspection,
@@ -21,7 +21,7 @@
   granite,
   libgee,
   packagekit,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
@@ -52,14 +52,14 @@ stdenv.mkDerivation rec {
     fwupd
     gdk-pixbuf
     geoclue2
-    gexiv2
+    gexiv2_0_10
     glib
     gnome-settings-daemon # org.gnome.settings-daemon.* gschema
     gtk3
     granite
     libgee
     packagekit
-    systemd
+    systemdLibs
   ];
 
   passthru = {

@@ -27,5 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Convert git logs to GNU style ChangeLog files";
     platforms = lib.platforms.unix;
     mainProgram = "git2cl";
+    license = lib.licenses.gpl3Plus;
   };
 })

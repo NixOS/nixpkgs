@@ -9,7 +9,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpmBuildHook,
-  electron_43,
+  electron_44,
   python3,
   makeWrapper,
   callPackage,
@@ -34,7 +34,7 @@ assert lib.warnIf (commandLineArgs != "")
 let
   nodejs = nodejs_24;
   pnpm = pnpm_11;
-  electron = electron_43;
+  electron = electron_44;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix {
@@ -45,13 +45,13 @@ let
   webrtc = callPackage ./webrtc.nix { };
   ringrtc = callPackage ./ringrtc.nix { inherit webrtc; };
 
-  version = "8.24.0";
+  version = "8.29.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-z5Z0ujG2AQvmrrdmJxOAnhi56ISSlGoI4kdMcZMpZzY=";
+    hash = "sha256-QwI3OzZc1octWZZ7G4SNlG1Ohi7w2BManPFFN5gTorQ=";
     # Emoji font files will be added in `postFetch` if `withAppleEmojis` is enabled. They
     # are fetched separately below.
     postFetch = ''
@@ -80,8 +80,11 @@ let
         pnpmWorkspaces
         ;
       inherit pnpm;
+      prePnpmInstall = ''
+        pnpm config set fetch-timeout 300000
+      '';
       fetcherVersion = 4;
-      hash = "sha256-3hwxTcxVzD5as6WcI3batU1DBKNeEDvGRn+lfSjrJBM=";
+      hash = "sha256-tDyhLzyG5Vo00nH/WAdVABLFn+SZVPs/WRjqReNDIZM=";
     };
 
     strictDeps = true;
@@ -184,14 +187,19 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     inherit pnpm;
+    prePnpmInstall = ''
+      pnpm config set fetch-timeout 300000
+    '';
     fetcherVersion = 4;
-    hash = "sha256-3hwxTcxVzD5as6WcI3batU1DBKNeEDvGRn+lfSjrJBM=";
+    hash = "sha256-tDyhLzyG5Vo00nH/WAdVABLFn+SZVPs/WRjqReNDIZM=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1787172744;
+    # Signal enforces that builds expire 90 days after the last source code change to disallow sending messages from older versions.
+    # We set the source-changed date to match the corresponding upstream release date.
+    SOURCE_DATE_EPOCH = 1790889255;
   };
 
   preBuild = ''

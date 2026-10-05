@@ -16,6 +16,7 @@ let
     getExe
     literalExpression
     optional
+    optionals
     attrValues
     mapAttrs
     ;
@@ -158,7 +159,7 @@ in
           "LOG_LEVEL=${cfg.logLevel}"
           "PHX_SERVER=true"
         ]
-        ++ optional cfg.selfhosted [ "RUN_CONTEXT=selfhosted" ]
+        ++ optionals cfg.selfhosted [ "RUN_CONTEXT=selfhosted" ]
         ++ optional (!isNull config.time.timeZone) "TZ=${config.time.timeZone}"
         ++ attrValues (mapAttrs (name: value: name + "=" + toString value) cfg.extraConfig);
         EnvironmentFile = optional (cfg.secretsFile != null) cfg.secretsFile;

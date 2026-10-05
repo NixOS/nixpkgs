@@ -22,7 +22,7 @@
 }:
 let
   pname = "python-glanceclient";
-  version = "4.11.0";
+  version = "4.13.0";
 
   disabledTests = [
     # Skip tests which require networking.
@@ -39,7 +39,7 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "python_glanceclient";
     inherit version;
-    hash = "sha256-XOIRi/50YpNIBZFmF+U3vFsA/UyrP7e7iKT5JTlwVi0=";
+    hash = "sha256-+jNZvIvZPnrryjctr+yOGQA7TB9kSZ4uuCsncdqPpBw=";
   };
 
   postPatch = ''

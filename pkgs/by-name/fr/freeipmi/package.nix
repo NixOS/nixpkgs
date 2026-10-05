@@ -10,20 +10,13 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.6.18";
+  version = "1.6.19";
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/freeipmi-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-gJiyOCADitCqOavw+aAS4kaD04TZ+R52CssqaLRl4P4=";
+    sha256 = "sha256-+Vwrc3l8SgNBpCp7PEPvtglUxBMNCCrTSP1A2lVLToU=";
   };
-
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace man/Makefile.in \
-      --replace-fail \
-        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man $@.pre $@' \
-        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man -o $@ $@.pre'
-  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -73,7 +66,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.gpl3Plus;
 
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      booxter
+      raskin
+    ];
     platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
 })

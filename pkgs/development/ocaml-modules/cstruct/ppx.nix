@@ -6,7 +6,8 @@
   sexplib,
   ppxlib,
   ocaml-migrate-parsetree-2,
-  ounit,
+  crowbar,
+  fmt,
   cppo,
   ppx_sexp_conv,
   cstruct-unix,
@@ -21,8 +22,6 @@ else
     pname = "ppx_cstruct";
     inherit (cstruct) version src meta;
 
-    minimalOCamlVersion = "4.08";
-
     propagatedBuildInputs = [
       cstruct
       ppxlib
@@ -32,7 +31,8 @@ else
     doCheck = !lib.versionAtLeast ocaml.version "5.1";
     nativeCheckInputs = [ cppo ];
     checkInputs = [
-      ounit
+      crowbar
+      fmt
       ppx_sexp_conv
       cstruct-sexp
       cstruct-unix

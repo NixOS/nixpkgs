@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "infisicalsdk";
-  version = "1.0.16";
+  version = "1.0.17";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -22,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Infisical";
     repo = "python-sdk-official";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2bfT99ynl14CSbqIOG2SMQb3oW+uAWD+iJifdMQG8CE=";
+    hash = "sha256-P8tpcXznT8lLH8iQD4IXK4SX44KiZs280LI8+VWxlqw=";
   };
 
   # fix version in setup.py AND pyproject.toml

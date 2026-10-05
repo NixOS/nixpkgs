@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trusttunnel-endpoint";
-  version = "1.0.41";
+  version = "1.1.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TrustTunnel";
     repo = "TrustTunnel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZFlHX17n0GQ+HVbJD9NQ5Jeg93G9A7dkjSkRD84ZNFQ=";
+    hash = "sha256-4cItVXJNGSFihHXWMpLKx/qJABwLZCvlJYGw2nM9SHY=";
   };
 
-  cargoHash = "sha256-2ivFP6JjFFlScO6jcaHOTzcmntKlmOmJQE0q/81NOxc=";
+  cargoHash = "sha256-8X0eA3a1zAYbRIWGunBHFUeluk9mYV9tn78tuYPru2Y=";
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs $cargoDepsCopy/*/quiche-*/src/build.rs \
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
 
     # remove reference to deprecated boringssl API
-    patch -d $cargoDepsCopy/*/boring-4.19.0/ -p1 -i ${./boring-no-secp224r1.patch}
+    patch -d $cargoDepsCopy/*/boring-4.22.0/ -p1 -i ${./boring-no-secp224r1.patch}
   '';
 
   env = {

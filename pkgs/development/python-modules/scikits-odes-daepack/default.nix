@@ -3,6 +3,7 @@
   gfortran,
   meson-python,
   numpy,
+  pyprojectVersionPatchHook,
   scikits-odes-core,
 }:
 
@@ -16,6 +17,7 @@ buildPythonPackage rec {
   build-system = [
     meson-python
     numpy
+    pyprojectVersionPatchHook
   ];
 
   nativeBuildInputs = [ gfortran ];

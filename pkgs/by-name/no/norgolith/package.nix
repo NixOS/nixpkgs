@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "norgolith";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "norgolith";
     repo = "core";
     tag = "norgolith-v${finalAttrs.version}";
-    hash = "sha256-R74IUEQ7XkeC/YeEhKTOTPwnhRwDh+nAbAOstc9PzFk=";
+    hash = "sha256-XCcycFHAi3NAVGg7toCLMkVylV0kTAUb5CkLmvplR1w=";
   };
 
-  cargoHash = "sha256-Zy8IhQq5Fdnv7CkkEFHV/wxedEAmd6OfKw7BWbRoA7w=";
+  cargoHash = "sha256-sEC20LrVHOXTf9HJPxPiWlZ94Ev8aZq57k4gMR6VTNI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "The monolithic Norg static site generator built with Rust";
     homepage = "https://norgolith.dev";
-    changelog = "https://github.com/norgolith/core/releases/tag/norgolith-v${finalAttrs.version}";
+    changelog = "https://github.com/norgolith/core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.Ladas552 ];
     mainProgram = "lith";

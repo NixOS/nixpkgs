@@ -1,24 +1,36 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   makeBinaryWrapper,
   which,
+  cmake,
   nix-update-script,
   llvmPackages,
+  enableBox2d ? true,
 }:
 
 let
   inherit (llvmPackages) stdenv;
+  box2dVersion = "3.1.1";
+  box2dTarball =
+    if enableBox2d then
+      fetchurl {
+        url = "https://github.com/erincatto/box2d/archive/refs/tags/v${box2dVersion}.tar.gz";
+        hash = "sha256-+275FLUPQxLX2SGmAOq8EjGLs8VaC4wLkGCPpEiO8uQ=";
+      }
+    else
+      null;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "odin";
-  version = "dev-2026-07a";
+  version = "dev-2026-09";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
     repo = "Odin";
     tag = finalAttrs.version;
-    hash = "sha256-sjL6mj2zfUVpiwkooTTBCVkPRoPWR7ci/hb9TYF+J/I=";
+    hash = "sha256-wJm7J1DU9XxUGrh4AKqHtDJEzxSSVKqOVKWEhckl94Q=";
   };
 
   patches = [
@@ -28,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     # available on Nix based systems. Instead, use the "system" Raylib version,
     # which can be provided by a pure Nix expression, for example in a shell.
     ./system-raylib.patch
+    ./box2d-no-network.patch
   ];
 
   postPatch = ''
@@ -52,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     which
+    cmake
   ];
 
   installPhase = ''
@@ -77,9 +91,16 @@ stdenv.mkDerivation (finalAttrs: {
       } \
       --set-default ODIN_ROOT $out/share
 
-    make -C "$out/share/vendor/cgltf/src/"
-    make -C "$out/share/vendor/stb/src/"
-    make -C "$out/share/vendor/miniaudio/src/"
+    patchShebangs $out/share/vendor/
+
+    $out/share/vendor/cgltf/src/build_cgltf.sh
+    $out/share/vendor/stb/src/build_stb.sh
+    $out/share/vendor/miniaudio/src/build_miniaudio.sh
+    $out/share/vendor/kb_text_shape/src/build_unix.sh
+
+    if [ "${lib.boolToString enableBox2d}" = "true" ]; then
+      BOX2D_TARBALL=${box2dTarball} BOX2D_VERSION=${box2dVersion} $out/share/vendor/box2d/build_box2d.sh
+    fi
 
     runHook postInstall
   '';
@@ -91,11 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     downloadPage = "https://github.com/odin-lang/Odin";
     homepage = "https://odin-lang.org/";
     changelog = "https://github.com/odin-lang/Odin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.zlib;
     mainProgram = "odin";
     maintainers = with lib.maintainers; [
       astavie
       atomicptr
+      yvnth
     ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isMusl;

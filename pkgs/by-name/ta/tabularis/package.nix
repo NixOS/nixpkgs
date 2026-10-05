@@ -19,14 +19,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabularis";
-  version = "0.20.0";
+  version = "0.22.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TabularisDB";
     repo = "tabularis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q03i0EhhRPOQYkb27MwIzcGH1uA4npcD3OJbTHQG0hw=";
+    hash = "sha256-RXkyhgicrUCuQ0Ei4mnBwPwSAEtmWA35kVn9oGQEYX0=";
   };
 
   strictDeps = true;
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-7UMmX8dPAYtWM8dG150RKCTdpUpVqlUaEiqio7K7ZIg=";
+  cargoHash = "sha256-z3dMc9mnBfyjsSVWh/7nQWmogndl/bfrbvuz7X0JIMM=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;

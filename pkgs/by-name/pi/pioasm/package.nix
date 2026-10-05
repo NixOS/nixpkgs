@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioasm";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "pico-sdk";
     tag = finalAttrs.version;
-    hash = "sha256-QFKeOSYDuoSuVQsZ68fyQgVnGxZdBl8sehbQf665suM=";
+    hash = "sha256-UWWrZT7Mg2yei/LlDxgei3yXWaP9ETMlgiVOFFAEMZ8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/tools/pioasm";

@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "fastspec";
-  version = "0.2.3";
+  version = "0.2.5";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "AnswerDotAI";
     repo = "fastspec";
     tag = finalAttrs.version;
-    hash = "sha256-bSD3x/oqxfPfUAe5jl5UhXknsvJ39j5voVIX6zDntW4=";
+    hash = "sha256-VpMIf+o5JhMm/wJ7Fysx0bicQ1hg8nHqRo35nB/aXhw=";
   };
 
   build-system = [ setuptools ];

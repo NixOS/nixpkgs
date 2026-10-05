@@ -15,7 +15,7 @@
   dbus,
   elfutils,
   libepoxy,
-  gexiv2,
+  gexiv2_0_10,
   glib,
   gobject-introspection,
   gst_all_1,
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     libepoxy
     elfutils
-    gexiv2
+    gexiv2_0_10
     glib
     lerc
     gst_all_1.gst-plugins-base

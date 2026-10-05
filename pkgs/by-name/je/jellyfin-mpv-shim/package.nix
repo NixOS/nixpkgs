@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.10.0";
+  version = "3.0.0";
   pyproject = true;
 
   # contains shaderpacks
   src = fetchPypi {
     pname = "jellyfin_mpv_shim";
     inherit version;
-    hash = "sha256-ZWmJQJAGAonStZyWww4P+034f2vGnTwLua7KUOqoBBE=";
+    hash = "sha256-K4dmJ7/aNsxEWKLXY8RNvszmA8FstzD/Kh7M0wkU/Rs=";
   };
 
   nativeBuildInputs = [
@@ -34,10 +34,9 @@ python3Packages.buildPythonApplication rec {
     python-mpv-jsonipc
     requests
 
-    # gui + mirror dependencies
+    # gui dependencies
     pillow
     pystray
-    tkinter
 
     # discord rich presence dependency
     pypresence

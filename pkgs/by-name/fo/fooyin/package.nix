@@ -16,6 +16,8 @@
   libopenmpt,
   soundtouch,
   soxr,
+  libpulseaudio,
+  libprojectm,
   game-music-emu,
   SDL2,
   icu,
@@ -26,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.11.1";
+  version = "0.12.6";
 
   __structuredAttrs = true;
 
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fooyin";
     repo = "fooyin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-228hxjKkxE0ILzP8dnIS21R3AW9Y0+wutgcYlQdCgXc=";
+    hash = "sha256-rmejU5Q/qpxvIpl9HpXa0qdr/yQk6eKhbhEvNnvAYgw=";
   };
 
   buildInputs = [
@@ -59,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     game-music-emu
     soundtouch
     soxr
+    libpulseaudio
+    libprojectm
   ];
 
   nativeBuildInputs = [

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "py-opensonic";
-  version = "10.3.0";
+  version = "10.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "khers";
     repo = "py-opensonic";
     tag = "v${version}";
-    hash = "sha256-4gUo8qu902lJhBJgp6ynYoazq0K04rNHNDKL/psnr4c=";
+    hash = "sha256-sC6dP6SBdgvDVAOlM0c91n8RYfV1kp5IHk8xGqL7kCQ=";
   };
 
   build-system = [ setuptools ];
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/khers/py-opensonic";
     changelog = "https://github.com/khers/py-opensonic/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

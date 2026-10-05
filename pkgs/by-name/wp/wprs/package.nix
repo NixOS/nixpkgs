@@ -10,13 +10,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "wprs";
-  version = "0-unstable-2025-09-05";
+  version = "0-unstable-2026-08-31";
 
   src = fetchFromGitHub {
     owner = "wayland-transpositor";
     repo = "wprs";
-    rev = "1eb482e0f80cc84a3ee55f7cda99df9bea6573af";
-    hash = "sha256-+m0gXQQa2NkUFNXfGPCwHTlyTFOw1nfjrUBgSD5iGMo=";
+    rev = "12b864dc5b308e63edede4714f664afa88507fce";
+    hash = "sha256-fWJlXMY0tKGmpdG/9vcz7Kc0ckucWHLS2kcUU7r3fwc=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
     (python3.withPackages (pp: with pp; [ psutil ]))
   ];
 
-  cargoHash = "sha256-krrVgdoCcW3voSiQAoWsG+rPf1HYKbuGhplhn21as2c=";
+  cargoHash = "sha256-khU7SfEfEIlRqI0bFxP57cVUxoIBRso7o0Rw+i2MtSc=";
 
   env.RUSTFLAGS = "-C target-feature=+avx2"; # only works on x86 systems supporting AVX2
 

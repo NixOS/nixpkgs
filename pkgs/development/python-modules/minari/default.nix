@@ -29,16 +29,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "minari";
-  version = "0.5.3";
+  version = "0.5.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
-    tag = "v${version}";
-    hash = "sha256-LvJwp2dZdGPazJPWQtrk+v7zaPjOlomBu5j9avVdCcA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bLOlhc87Ew1tq9bQA9nfTLznXuOogZoE4mcjJeMQbU0=";
   };
 
   build-system = [
@@ -80,7 +81,7 @@ buildPythonPackage rec {
     jaxlib
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # Require internet access
@@ -101,7 +102,7 @@ buildPythonPackage rec {
   meta = {
     description = "Standard format for offline reinforcement learning datasets, with popular reference datasets and related utilities";
     homepage = "https://github.com/Farama-Foundation/Minari";
-    changelog = "https://github.com/Farama-Foundation/Minari/releases/tag/v${version}";
+    changelog = "https://github.com/Farama-Foundation/Minari/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       asl20
       mit
@@ -109,4 +110,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "minari";
   };
-}
+})

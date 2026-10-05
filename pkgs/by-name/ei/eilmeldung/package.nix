@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "eilmeldung";
-  version = "1.7.2";
+  version = "1.9.0";
 
   __structuredAttrs = true;
 
@@ -23,10 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "christo-auer";
     repo = "eilmeldung";
     tag = finalAttrs.version;
-    hash = "sha256-QCGtuf1XSLpWr72GYUsz20JllWHNJ7Q4cAtNTywi4JM=";
+    hash = "sha256-Hq+MEeyJpsDCAHOavT6RWBUMe0SsS0OC8FoEfkqIM7s=";
   };
 
-  cargoHash = "sha256-8ICcVeL/wFcrWbdmvu3HVHVsts9541ZkBtxDamLjcok=";
+  cargoHash = "sha256-fhiH215ZpwK89zm0cCFCzKcZjvs49LJZhRMmhK5ftkc=";
 
   nativeBuildInputs = [
     pkg-config

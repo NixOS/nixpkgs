@@ -7,11 +7,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unnaturalscrollwheels";
-  version = "1.4.0";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "https://github.com/ther0n/UnnaturalScrollWheels/releases/download/${finalAttrs.version}/UnnaturalScrollWheels-${finalAttrs.version}.dmg";
-    hash = "sha256-KJQnV/XWM+JpW3O29nyGo64Jte6Gw3I54bXfFSAkUrc=";
+    hash = "sha256-t1w+XrsT+UBT5ZPTP04QGTJ9fLYDQiFL6uZaq3hD64g=";
   };
   sourceRoot = ".";
 

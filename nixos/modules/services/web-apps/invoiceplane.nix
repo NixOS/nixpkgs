@@ -332,6 +332,18 @@ in
             assertion = cfg.cron.enable -> cfg.cron.key != null;
             message = ''services.invoiceplane.sites."${hostName}".cron.key must be set in order to use cron service.'';
           }
+          {
+            assertion =
+              (lib.versionAtLeast (pkg hostName cfg).version "1.7.2" && cfg.invoiceTemplates != [ ])
+              -> cfg.settings ? CUSTOM_INVOICE_TEMPLATES_PDF;
+            message = ''services.invoiceplane.sites."${hostName}".invoiceTemplates is set but settings.CUSTOM_INVOICE_TEMPLATES_PDF is not. Since InvoicePlane >= 1.7.2 (current: ${cfg.package.version}), the filename of the custom invoice template PHP file must be explicitly whitelisted via settings.CUSTOM_INVOICE_TEMPLATES_PDF, otherwise it will not be picked up.'';
+          }
+          {
+            assertion =
+              (lib.versionAtLeast (pkg hostName cfg).version "1.7.2" && cfg.quoteTemplates != [ ])
+              -> cfg.settings ? CUSTOM_QUOTE_TEMPLATES_PDF;
+            message = ''services.invoiceplane.sites."${hostName}".quoteTemplates is set but settings.CUSTOM_QUOTE_TEMPLATES_PDF is not. Since InvoicePlane >= 1.7.2 (current: ${cfg.package.version}), the filename of the custom quote template PHP file must be explicitly whitelisted via settings.CUSTOM_QUOTE_TEMPLATES_PDF, otherwise it will not be picked up.'';
+          }
         ]) eachSite
       );
 

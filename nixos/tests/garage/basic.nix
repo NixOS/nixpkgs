@@ -6,7 +6,7 @@
   ...
 }:
 {
-  name = "garage-basic";
+  name = "garage-${package.version}-basic";
 
   nodes = {
     single_node = mkNode {

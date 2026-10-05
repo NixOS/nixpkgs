@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "C library implementing a suite of algorithms to factor large integers";
     mainProgram = "msieve";
     license = lib.licenses.publicDomain;

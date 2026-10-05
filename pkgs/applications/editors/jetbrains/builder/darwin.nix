@@ -1,9 +1,11 @@
 # Darwin-specific base builder.
 
 {
+  # keep-sorted start
   lib,
   stdenvNoCC,
   undmg,
+  # keep-sorted end
 
   excludeDrvArgNames,
   ...

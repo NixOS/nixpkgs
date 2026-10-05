@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "seconlay";
-  version = "0-unstable-2026-07-13";
+  version = "0-unstable-2026-09-01";
 
   src = fetchFromGitLab {
     group = "alasca.cloud";
     owner = "scl";
     repo = "scl-management";
-    rev = "0157c1bb0d8711f1b9903db4207e5da30db1e16a";
-    hash = "sha256-ZywfeqTln++Zz6/ygImzwuZG28lzmLqqIoqL+U6KNo4=";
+    rev = "6959d2c87e2625bfc36d70d4e8b92d5ea6409118";
+    hash = "sha256-0AvNMe1yq1AWmDvoWi3x4gXQ5Y3Ho+n3alQ+dc8rlHM=";
   };
 
-  cargoHash = "sha256-aX5HL/zDdrQ+V4vCYZrqlO2vNWuvF4GW2P30jtbv1tE=";
+  cargoHash = "sha256-njFKZScbr+owYMsqvDwdDnwd4hzxHcPqPoElF0U1u7c=";
 
   nativeBuildInputs = [
     pkg-config

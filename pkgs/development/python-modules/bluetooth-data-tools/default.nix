@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bluetooth-data-tools";
-  version = "1.29.18";
+  version = "1.29.24";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-data-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hY0b9wJa9qBVDJ+Ve0KhX8TXx770Ep+3sp6+UQrYgJI=";
+    hash = "sha256-NPr9jZbqO78FUxJgGApkqdmU5V9BSZ3qpP9cbwCIqEA=";
   };
 
   # The project can build both an optimized cython version and an unoptimized

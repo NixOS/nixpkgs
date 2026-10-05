@@ -4,39 +4,46 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nodejs,
-  typescript,
+  typescript_7,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "vscode-css-languageserver";
-  version = "1.105.0";
+  version = "1.139.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode";
     tag = finalAttrs.version;
-    hash = "sha256-t3S8PHxuwz1DxJ+FPJkRCyaPm4tPW/fHKj3aiIaTuls=";
+    hash = "sha256-GTZ+JlNezWVgesT8PIAnC/HPQ/zAoF3fk37Ao6LF1F8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/extensions/css-language-features/server";
 
-  npmDepsHash = "sha256-duYwm1Hf9oLyu0gapdEGbXqdwFV4svkX2tGhvyoZ5Lo=";
+  npmDepsHash = "sha256-84JmUHlm6N+PThma7yKv8tymuwd57lYhK+RUxMeVDX4=";
+
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    typescript
+    typescript_7
   ];
 
   buildPhase = ''
     runHook preBuild
-    tsc -p .
+
+    tsc -p . \
+      --typeRoots ./node_modules/@types \
+      --module nodenext \
+      --moduleResolution nodenext
+
     runHook postBuild
   '';
 
   dontNpmBuild = true;
 
   postInstall = ''
-    makeBinaryWrapper ${nodejs}/bin/node $out/bin/vscode-css-languageserver \
+    makeBinaryWrapper ${lib.getExe nodejs} $out/bin/vscode-css-languageserver \
       --add-flags $out/lib/node_modules/vscode-css-languageserver/out/node/cssServerMain.js
     ln -s $out/bin/vscode-css-languageserver $out/bin/vscode-css-language-server
   '';

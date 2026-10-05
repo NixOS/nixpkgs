@@ -6,7 +6,7 @@ set -o pipefail
 OWNER="Freika"
 REPO="dawarich"
 
-old_version=$(nix-instantiate --eval -A 'dawarich.version' default.nix | tr -d '"')
+old_version=$(nix-instantiate --eval --raw -A dawarich.version)
 version=$(curl -s ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/repos/$OWNER/$REPO/releases/latest" | jq -r ".tag_name")
 
 echo "Updating to $version"

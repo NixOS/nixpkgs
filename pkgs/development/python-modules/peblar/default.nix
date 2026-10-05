@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "peblar";
-  version = "0.5.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-peblar";
     tag = "v${version}";
-    hash = "sha256-58PIvbl0QqOrvEc2rIieImWSnGZVIrhVAwsN+fZcWT4=";
+    hash = "sha256-co3440R9OVEdcLPNsBu1jz6WzZTz746IEFcyTlzNkc0=";
   };
 
   postPatch = ''

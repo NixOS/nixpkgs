@@ -10,6 +10,11 @@
     "hash": "sha256-xHpoMkhYSj7ejeMmI2e7ygef84QGZhttPjYOnLjITd0="
   },
   {
+    "pname": "AngleSharp",
+    "version": "1.7.0",
+    "hash": "sha256-ltWbyN4Bb993PayYfWQmTLpaPR+8Gf11NrkuLLKMqNU="
+  },
+  {
     "pname": "AsyncKeyedLock",
     "version": "8.0.2",
     "hash": "sha256-0NKdC+oxdYxS3Uz1lak5RpdTWyKYT7C3hkCdm5T0D84="
@@ -21,8 +26,8 @@
   },
   {
     "pname": "CSharpier.MsBuild",
-    "version": "1.2.6",
-    "hash": "sha256-jvY05AmHK0MO9cbSTwAvAXf4urL+6Df2ug4IKwcleDw="
+    "version": "1.3.0",
+    "hash": "sha256-9nnms3N8g4Te+iLv6pzsY54P073QoFb8RuY4xDNTriM="
   },
   {
     "pname": "Deorcify",
@@ -40,19 +45,24 @@
     "hash": "sha256-vhuDDUSzDS5u9dfup0qk6j7Vc9i8Wyo7dBivpVaEpDw="
   },
   {
+    "pname": "JsonExtensions",
+    "version": "1.2.3",
+    "hash": "sha256-uG6sXxl6j95ouRtZzY1MMiNhjhLEmvK64K8rUHP36fQ="
+  },
+  {
     "pname": "Polly",
-    "version": "8.6.6",
-    "hash": "sha256-0BrOttCw+HQYB24Y2uMy2vo0P5/txUlhELC8FlyLKps="
+    "version": "8.7.0",
+    "hash": "sha256-iMNusWW+4nuIvkNLUaoru23Roe9vpC140TOIHbLvewE="
   },
   {
     "pname": "Polly.Core",
-    "version": "8.6.6",
-    "hash": "sha256-y6/a4OWrUlRfe0J8qdhBRmYRDi6K2y+kwhEVCIUOjvU="
+    "version": "8.7.0",
+    "hash": "sha256-1AT4Xym9hn2Awgul9WErwXk2bBPN58P9XfRExrIPItg="
   },
   {
     "pname": "PowerKit",
-    "version": "2.0.1",
-    "hash": "sha256-mqXd34gelLM26cAlHCBWOkAhyVlzrRKr2NH2kiGf8qk="
+    "version": "2.3.1",
+    "hash": "sha256-Q1na4zSVLvs86XMwnndXIllDswt8c+uLNucgU+vvC0A="
   },
   {
     "pname": "RazorBlade",
@@ -61,13 +71,13 @@
   },
   {
     "pname": "Spectre.Console",
-    "version": "0.55.2",
-    "hash": "sha256-PmvyqWWej8pT0X/J80Yr9ClMoO96zq7QlJme8AuQ6Tc="
+    "version": "0.57.2",
+    "hash": "sha256-ORLa6NVkaski0XYP4Mg+BtxO7kuIZNOOGFG1uJHrwww="
   },
   {
     "pname": "Spectre.Console.Ansi",
-    "version": "0.55.2",
-    "hash": "sha256-ha2TNW1IOgtkr1NUEs6sSlN6t+hwCEccUUiCGwEen9U="
+    "version": "0.57.2",
+    "hash": "sha256-pL8hSDbW0Cy9jpr9HKsfUPzY1WvWP7l0VndwpxHWjCw="
   },
   {
     "pname": "Superpower",

@@ -21,10 +21,16 @@
   aiohttp,
   httpx-aiohttp,
 
+  # optional-dependencies (bedock)
+  botocore,
+
   # optional-dependencies (datalib)
   numpy,
   pandas,
   pandas-stubs,
+
+  # optional-dependencies (httpx2)
+  httpx2,
 
   # optional-dependencies (realtime)
   websockets,
@@ -36,29 +42,29 @@
   pytestCheckHook,
   dirty-equals,
   inline-snapshot,
-  nest-asyncio,
+  jsonschema,
   pytest-asyncio,
   pytest-mock,
   pytest-xdist,
   respx,
 
   # optional-dependencies toggle
-  withAiohttp ? true,
+  withAiohttp ? false,
   withDatalib ? false,
-  withRealtime ? true,
-  withVoiceHelpers ? true,
+  withRealtime ? false,
+  withVoiceHelpers ? false,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "openai";
-  version = "2.41.1";
+  version = "2.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
-    tag = "v${version}";
-    hash = "sha256-jSkBxZY5POlrznhBwFMR2NcL92uGRSYI6BDDC3C7RfU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XwiSIKjYD07zhx8uIO8wsPWdAASBCJ5KqFUgdk+uaUU=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -78,20 +84,28 @@ buildPythonPackage rec {
     tqdm
     typing-extensions
   ]
-  ++ lib.optionals withAiohttp optional-dependencies.aiohttp
-  ++ lib.optionals withDatalib optional-dependencies.datalib
-  ++ lib.optionals withRealtime optional-dependencies.realtime
-  ++ lib.optionals withVoiceHelpers optional-dependencies.voice-helpers;
+  ++ lib.optionals withAiohttp finalAttrs.passthru.optional-dependencies.aiohttp
+  ++ lib.optionals withDatalib finalAttrs.passthru.optional-dependencies.datalib
+  ++ lib.optionals withRealtime finalAttrs.passthru.optional-dependencies.realtime
+  ++ lib.optionals withVoiceHelpers finalAttrs.passthru.optional-dependencies.voice-helpers;
 
   optional-dependencies = {
     aiohttp = [
       aiohttp
       httpx-aiohttp
     ];
+    bedrock = [
+      botocore
+    ];
     datalib = [
       numpy
       pandas
       pandas-stubs
+    ];
+    httpx2 = [
+      anyio
+      httpx
+      httpx2
     ];
     realtime = [
       websockets
@@ -108,12 +122,14 @@ buildPythonPackage rec {
     pytestCheckHook
     dirty-equals
     inline-snapshot
-    nest-asyncio
+    jsonschema
     pytest-asyncio
     pytest-mock
     pytest-xdist
     respx
-  ];
+  ]
+  # including pandas-stubs would cause infinite recursion
+  ++ lib.concatAttrValues (lib.removeAttrs finalAttrs.passthru.optional-dependencies [ "datalib" ]);
 
   disabledTestPaths = [
     # Test makes network requests
@@ -126,8 +142,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
-    changelog = "https://github.com/openai/openai-python/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/openai/openai-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.malo ];
   };
-}
+})

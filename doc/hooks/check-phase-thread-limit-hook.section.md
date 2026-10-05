@@ -3,7 +3,7 @@
 This hook defaults a variety of environment variables known
 to control thread counts to 1. Many of these otherwise default
 to `$(nproc)`, which causes massive overloads on build machines
-if nix build jobs and build cores are already tuned to fully utilize
+if nix build jobs and build cores are already tuned to fully use
 compute capacity of a builder without additional parallelism.
 
 Currently sets the following environment variables:

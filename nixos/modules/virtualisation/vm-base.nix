@@ -136,14 +136,18 @@ in
     systemd.services.register-nix-paths = lib.mkIf config.nix.enable {
       # Runs early so the store DB is populated first; `--load-db` needs no daemon.
       unitConfig.DefaultDependencies = false;
-      wantedBy = [ "sysinit.target" ];
+      requiredBy = [ "sysinit.target" ];
       before = [
         "sysinit.target"
         "shutdown.target"
         "nix-daemon.socket"
         "nix-daemon.service"
       ];
-      after = [ "local-fs.target" ];
+      after = [
+        "local-fs.target"
+        "systemd-tmpfiles-setup.service"
+      ];
+      requires = [ "systemd-tmpfiles-setup.service" ];
       conflicts = [ "shutdown.target" ];
       restartIfChanged = false;
       serviceConfig = {

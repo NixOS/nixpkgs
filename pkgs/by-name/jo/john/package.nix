@@ -18,6 +18,7 @@
   withOpenCL ? true,
   opencl-headers,
   ocl-icd,
+  libxcrypt-legacy,
   # include non-free ClamAV unrar code
   enableUnfree ? false,
   replaceVars,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation {
   pname = "john";
-  version = "1.9.0-Jumbo-1-unstable-2026-07-07";
+  version = "1.9.0-Jumbo-1-unstable-2026-08-02";
 
   src = fetchFromGitHub {
     owner = "openwall";
     repo = "john";
-    rev = "b544069b36ac166fb0a2fb19d0dc144ca72da6bb";
-    hash = "sha256-dSdezI0+WSufYVLNChNJQ04VzuKczbfBLrI/5smR1fA=";
+    rev = "9a336d800a091bec9650c29282485145f31c9ffc";
+    hash = "sha256-6UM2C1nyo6a/3fjgRjWE+4foaUf/SNrjDrVoGGL+XIA=";
   };
 
   patches = lib.optionals withOpenCL [
@@ -65,6 +66,8 @@ stdenv.mkDerivation {
   configureFlags = [
     "--disable-native-tests"
     "--with-systemwide"
+    "LDFLAGS=-L${libxcrypt-legacy}/lib"
+    "CPPFLAGS=-I${libxcrypt-legacy}/include"
   ]
   ++ lib.optionals (!enableUnfree) [ "--without-unrar" ];
 
@@ -77,6 +80,7 @@ stdenv.mkDerivation {
     zlib
     libpcap
     re2
+    libxcrypt-legacy
   ]
   ++ lib.optionals withOpenCL [
     opencl-headers

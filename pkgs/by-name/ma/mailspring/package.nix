@@ -4,6 +4,7 @@
   buildNpmPackage,
   callPackage,
   fetchFromGitHub,
+  nix-update-script,
 
   actool,
   makeBinaryWrapper,
@@ -11,29 +12,28 @@
   wrapGAppsHook3,
   zip,
 
-  electron_43,
+  electron_44,
   html-tidy,
 
   # Command line arguments which are always set e.g "--password-store=kwallet6"
   commandLineArgs ? "",
 }:
 let
-  version = "1.23.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "Foundry376";
     repo = "Mailspring";
     tag = version;
-    hash = "sha256-GbY3lov3MT8c8LehEifzOH28VAYpBWDbwXrqEfFfwJg=";
+    hash = "sha256-kyiHxhhsQFXggjeiHq6f/PAyOd+l/Kk+tkLY4/aC7GM=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./remove-rpm-deb-and-macos-package-generation.patch
-    ./update-electron-from-41.7.2-43.4.1.patch
   ];
 
-  electron = electron_43;
+  electron = electron_44;
 
   mailspring-sync = callPackage ./mailsync.nix { inherit src version; };
 
@@ -41,7 +41,7 @@ let
     pname = "mailspring-app";
     inherit version src patches;
     postPatch = "cd app"; # we don't use sourceRoot so that we don't have to make the patch relative to it
-    npmDepsHash = "sha256-FnbSnkMcOEoWTIy42JccdP+GqHWkoQKEZqVxzsw2cwc=";
+    npmDepsHash = "sha256-Bj41bbICX8mHw0DqzGekjDnain0HGJ3Y5B3aADPV8+0=";
     dontNpmBuild = true;
     env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -67,7 +67,7 @@ buildNpmPackage (finalAttrs: {
   pname = "mailspring";
   inherit version src patches;
 
-  npmDepsHash = "sha256-jDuCLreiQvOUhSWw+E2zJXy39/6ITB7FEmrXBUiWYDU=";
+  npmDepsHash = "sha256-EWXLOGKWPvE42PvpzJL47i0FojoZeVcMkUctuf3/Hnw=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -162,6 +162,13 @@ buildNpmPackage (finalAttrs: {
   + ''
     runHook postInstall
   '';
+
+  passthru = {
+    inherit mailspring-app;
+    updateScript = nix-update-script {
+      extraArgs = [ "--subpackage=mailspring-app" ];
+    };
+  };
 
   meta = {
     description = "Beautiful, fast and maintained fork of Nylas Mail by one of the original authors";

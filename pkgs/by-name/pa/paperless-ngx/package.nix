@@ -17,8 +17,6 @@
   tesseract5,
   poppler-utils,
   liberation_ttf,
-  symlinkJoin,
-  nltk-data,
   lndir,
   nix-update-script,
   extraPythonPackageOverrides ? (_final: _prev: { }),
@@ -47,15 +45,6 @@ let
     poppler-utils
   ];
 
-  nltkDataDir = symlinkJoin {
-    name = "paperless-ngx-nltk-data";
-    paths = with nltk-data; [
-      punkt-tab
-      snowball-data
-      stopwords
-    ];
-  };
-
   # The paperless_ai want tiktoken's cl100k_base tokenizer. If not provided, they would try to download them and fail.
   # Seed tiktoken's on-disk cache instead so the tests can run and succeed offline; it keys cached files by sha1 of the download URL.
   tiktokenCacheDir = linkFarm "paperless-ngx-tiktoken-cache" [
@@ -70,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.0.5";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ByITplmCoZNt38gZXDc2DPlo5B+bjDpxsfby0TbWB5M=";
+    hash = "sha256-z9M3BS4YbWyr3Y2RepSYyzZHumL4ohqivt5NXSncucg=";
   };
 
   postPatch = ''
@@ -96,11 +85,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "django-allauth"
     "django-filter"
+    "django-guardian"
     "drf-spectacular-sidecar"
     "redis"
+    "regex"
     "torch"
-    "zxing-cpp"
-    "zxing-cpp"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"
@@ -152,7 +141,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       llama-index-llms-ollama
       llama-index-llms-openai-like
       mysqlclient
-      nltk
       ocrmypdf
       openai
       pathvalidate
@@ -176,11 +164,15 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       torch
       watchfiles
       whitenoise
+      whoosh-compat
       zxing-cpp
     ]
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
-    ++ redis.optional-dependencies.hiredis;
+    ++ gotenberg-client.optional-dependencies.httpx
+    ++ redis.optional-dependencies.hiredis
+    ++ tika-client.optional-dependencies.httpx
+    ++ whoosh-compat.optional-dependencies.tantivy;
 
   postBuild = ''
     # v3 rejects the default secret key at import, which the manage.py calls below hit.
@@ -254,7 +246,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-    export PAPERLESS_NLTK_DIR=${finalAttrs.passthru.nltkDataDir}
     # Limit threads per worker based on NIX_BUILD_CORES, capped at 256
     # ocrmypdf has an internal limit of 256 jobs and will fail with more:
     # https://github.com/ocrmypdf/OCRmyPDF/blob/66308c281306302fac3470f587814c3b212d0c40/src/ocrmypdf/cli.py#L234
@@ -273,19 +264,17 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # FileNotFoundError(2, 'No such file or directory'): /build/tmp...
     "test_script_with_output"
     "test_script_exit_non_zero"
-    # Something broken with new Tesseract and inline RTL/LTR overrides?
-    "test_rtl_language_detection"
-    # Favicon tests fail due to static file handling in the test environment
-    # https://github.com/NixOS/nixpkgs/issues/421393
-    "test_favicon_view"
-    "test_favicon_view_missing_file"
-    # Requires DNS
+    # Requires internet
     "test_send_webhook_data_or_json"
-    # execnet.gateway_base.DumpError: can't serialize <class 'pathlib._local.PosixPath'>
-    # https://github.com/pytest-dev/pytest-xdist/issues/384
-    "test_subdirectory_upload"
-    # AssertionError: 4 != 3
-    "testNormalOperation"
+  ];
+
+  disabledTestPaths = [
+    # flaky test
+    #   AssertionError: Expected 'apply_async' to not have been called.
+    "src/documents/tests/test_management_consumer.py::TestCommandWatchEdgeCases::test_handles_deleted_before_stable"
+    # flaky test:
+    #   ValueError: Failed to open file for read: 'FileDoesNotExist("meta.json")'
+    "src/documents/tests/test_permission_filtering_security.py::TestTrashRestorePermissionBoundary::test_restore_allows_document_with_explicit_delete_permission"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -296,7 +285,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       meta = removeAttrs finalAttrs.meta [ "mainProgram" ];
     };
     inherit
-      nltkDataDir
       path
       tesseract5
       tiktokenCacheDir

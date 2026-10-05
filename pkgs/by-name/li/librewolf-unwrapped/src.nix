@@ -1,20 +1,19 @@
 {
   lib,
   fetchurl,
-  fetchFromGitLab,
+  fetchFromForgejo,
 }:
 let
   src = lib.importJSON ./src.json;
 in
 {
   inherit (src) packageVersion;
-  source = fetchFromGitLab (
+  source = fetchFromForgejo (
     src.source
     // {
       domain = "librewolf.dev";
       owner = "librewolf";
       repo = "source";
-      fetchSubmodules = true;
     }
   );
   firefox = fetchurl (

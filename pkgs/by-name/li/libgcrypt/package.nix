@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   gettext,
   libgpg-error,
   enableCapabilities ? false,
@@ -16,24 +15,14 @@
 
 assert enableCapabilities -> stdenv.hostPlatform.isLinux;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgcrypt";
-  version = "1.12.2";
+  version = "1.12.4";
 
   src = fetchurl {
-    url = "mirror://gnupg/libgcrypt/${pname}-${version}.tar.bz2";
-    hash = "sha256-fOM8JJIiGgQ2+WqFACFenz49y1/SanV81BXnqEO6vV4=";
+    url = "mirror://gnupg/libgcrypt/libgcrypt-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-139o9Ih5UQ55ovZZd8zGiYF4HqCSPlvf+sKhk+o9Zg4=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isRiscV64 [
-    # Remove in next release
-    # https://github.com/gpg/libgcrypt/commit/3f684fc6ab3ac98320e245a06b3563ad37ec56f5
-    # zvkned AES corrupts CBC/CFB/CTR/OCB/XTS output on VLEN>128 hardware
-    (fetchpatch {
-      url = "https://github.com/gpg/libgcrypt/commit/3f684fc6ab3ac98320e245a06b3563ad37ec56f5.patch";
-      hash = "sha256-1LSrIwsN0n5IBRDZ+9MJTEjzY+/T6LQO6hX1ke8hSuc=";
-    })
-  ];
 
   outputs = [
     "bin"
@@ -123,13 +112,15 @@ stdenv.mkDerivation rec {
     inherit gnupg libotr rsyslog;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/libgcrypt/";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=blob;f=NEWS;hb=refs/tags/libgcrypt-${finalAttrs.version}";
     description = "General-purpose cryptographic library";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.all;
-    maintainers = [ ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
+    maintainers = with lib.maintainers; [ coolcuber ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" finalAttrs.version;
   };
-}
+})

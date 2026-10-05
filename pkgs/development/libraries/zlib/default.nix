@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/madler/zlib/pull/1171
   patches = [
     ./export-variable.patch
+    # https://github.com/madler/zlib/pull/1296
+    ./mingw-shared.patch
   ];
 
   postPatch = ''
@@ -69,15 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  dontConfigure = (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin);
-
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     export CHOST=${stdenv.hostPlatform.config}
   '';
 
   configureFlags = [
     "--includedir=${placeholder "dev"}/include"
-    "--sharedlibdir=${placeholder "out"}/lib"
+    "--sharedlibdir=${placeholder "out"}/${if stdenv.hostPlatform.isWindows then "bin" else "lib"}"
     "--libdir=${placeholder (if splitStaticOutput then "static" else "out")}/lib"
     # See comment near splitStaticOutput argument
     (lib.enableFeature shared "shared")
@@ -101,11 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       for file in $out/lib/*.so* $out/lib/*.dylib* ; do
         ${stdenv.cc.bintools.targetPrefix}install_name_tool -id "$file" $file
       done
-    ''
-    # Non-typical naming confuses libtool which then refuses to use zlib's DLL
-    # in some cases, e.g. when compiling libpng.
-    + lib.optionalString (stdenv.hostPlatform.isMinGW && shared) ''
-      ln -s zlib1.dll $out/bin/libz.dll
     '';
 
   env =
@@ -116,12 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
         [ "-static-libgcc" ] ++ lib.optional stdenv.hostPlatform.isCygwin "-DHAVE_UNISTD_H"
       );
     }
-    // lib.optionalAttrs (stdenv.hostPlatform.linker == "lld") {
-      # lld 16 enables --no-undefined-version by default
-      # This makes configure think it can't build dynamic libraries
-      # this may be removed when a version is packaged with https://github.com/madler/zlib/issues/960 fixed
-      NIX_LDFLAGS = "--undefined-version";
-    };
+    //
+      lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+        {
+          # https://reviews.llvm.org/D135402
+          # Without this flag configure decides that it cannot build shared libraries and does not make a libz.so
+          NIX_LDFLAGS = "--undefined-version";
+        };
 
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
@@ -141,18 +137,9 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${stdenv.cc.targetPrefix}"
     "pkgconfigdir=${placeholder "dev"}/share/pkgconfig"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) [
-    "-f"
-    "win32/Makefile.gcc"
-  ]
   ++ lib.optionals stdenv.hostPlatform.isCygwin [
     "SHAREDLIB=cygz.dll"
     "IMPLIB=libz.dll.a"
-  ]
-  ++ lib.optionals shared [
-    # Note that as of writing (zlib 1.2.11), this flag only has an effect
-    # for Windows as it is specific to `win32/Makefile.gcc`.
-    "SHARED_MODE=1"
   ];
 
   passthru.tests = {
@@ -160,6 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
     # uses `zlib` derivation:
     inherit minizip;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://zlib.net";

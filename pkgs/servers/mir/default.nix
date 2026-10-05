@@ -5,12 +5,13 @@ let
 in
 {
   mir = common {
-    version = "2.28.0";
-    hash = "sha256-sSxV20loRXQfGWMI1zAzrAwww00bc/BQqJaFB8whH5E=";
-    cargoHash = "sha256-AHB4OYP2kU47EsutOxYa693pMLgyXuF1p+mLXg2cIGs=";
+    version = "2.29.0";
+    hash = "sha256-jh8Qgr/5Ht0eioLH9ES4M+jZr3RLKHg2YJXX5XzzwEA=";
+    cargoHash = "sha256-VQpLjoKlaoYaSfVVNjxDGJXSlIri4RwETaQJf8faqHQ=";
   };
 
   mir_2_15 = common {
+    broken = true; # doesn't build with glibc 2.44
     version = "2.15.0";
     pinned = true;
     hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";

@@ -6,53 +6,61 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
   exiftool,
+  zoxide,
 }:
-let
-  version = "1.3.3";
-  tag = "v${version}";
-in
-buildGoModule {
+
+buildGoModule (finalAttrs: {
   pname = "superfile";
-  inherit version;
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "yorukot";
     repo = "superfile";
-    inherit tag;
-    hash = "sha256-A1SWsBcPtGNbSReslp5L3Gg4hy3lDSccqGxFpLfVPrk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JETdQ42vGPnpviCAR29BSdBTG+huWRr5syN5NysnAlo=";
   };
 
-  vendorHash = "sha256-sqt0BzJW1nu6gYAhscrXlTAbwIoUY7JAOuzsenHpKEI=";
+  vendorHash = "sha256-d2Yo8fWJ2fj7RJrnktljY6TkEPq6Tnbdh2BM4DIAr0E=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  nativeBuildInputs = [ exiftool ];
+  # TestLayout test does not support parallel testing
+  enableParallelBuilding = false;
+
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    exiftool
+    zoxide
+  ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  # Upstream notes that this could be flaky, and it consistently fails for me.
-  checkFlags = [
-    "-skip=^TestReturnDirElement/Sort_by_Date$"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Only failing on nix darwin. I suspect this is due to the way
-    # darwin handles file permissions.
-    "-skip=^TestCompressSelectedFiles"
-  ];
+  preCheck = ''
+    mkdir -p $HOME/.local/share/superfile
+
+    # TestLayout expects at least one entry
+    touch "$HOME/test-file"
+
+    # TestFileDelete/Move_to_trash needs .Trash available
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$HOME/.Trash"
+    ''}
+  '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Pretty fancy and modern terminal file manager";
     homepage = "https://github.com/yorukot/superfile";
-    changelog = "https://github.com/yorukot/superfile/blob/${tag}/changelog.md";
+    changelog = "https://github.com/yorukot/superfile/blob/${finalAttrs.src.tag}/changelog.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       redyf
     ];
     mainProgram = "superfile";
   };
-}
+})

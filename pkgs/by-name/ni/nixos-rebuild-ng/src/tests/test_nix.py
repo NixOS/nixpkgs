@@ -3,7 +3,7 @@ import sys
 import textwrap
 import uuid
 from pathlib import Path
-from subprocess import PIPE, CompletedProcess
+from subprocess import PIPE, CalledProcessError, CompletedProcess
 from typing import Any
 from unittest.mock import ANY, Mock, call, patch
 
@@ -116,57 +116,55 @@ def test_build_remote(
         copy_flags={"copy": True},
     ) == Path("/path/to/config")
 
-    mock_run.assert_has_calls(
-        [
-            call(
-                [
-                    "nix-instantiate",
-                    "<nixpkgs/nixos>",
-                    "--attr",
-                    "preAttr.config.system.build.toplevel",
-                    "--add-root",
-                    n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000001",
-                    "--inst",
-                ],
-                stdout=PIPE,
-            ),
-            call(
-                [
-                    "nix-copy-closure",
-                    "--copy",
-                    "--to",
-                    "user@host",
-                    Path("/path/to/file"),
-                ],
-                append_local_env={
-                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
-                },
-            ),
-            call(
-                ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-            call(
-                [
-                    "nix-store",
-                    "--realise",
-                    Path("/path/to/file"),
-                    "--add-root",
-                    Path("/tmp/tmpdir/00000000000000000000000000000002"),
-                    "--realise",
-                ],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-            call(
-                ["readlink", "-f", "/tmp/tmpdir/config"],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-            call(["rm", "-rf", Path("/tmp/tmpdir")], remote=build_host, check=False),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            [
+                "nix-instantiate",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "preAttr.config.system.build.toplevel",
+                "--add-root",
+                n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000001",
+                "--inst",
+            ],
+            stdout=PIPE,
+        ),
+        call(
+            [
+                "nix-copy-closure",
+                "--copy",
+                "--to",
+                "user@host",
+                Path("/path/to/file"),
+            ],
+            append_local_env={
+                "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
+            },
+        ),
+        call(
+            ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+        call(
+            [
+                "nix-store",
+                "--realise",
+                Path("/path/to/file"),
+                "--add-root",
+                Path("/tmp/tmpdir/00000000000000000000000000000002"),
+                "--realise",
+            ],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+        call(
+            ["readlink", "-f", "/tmp/tmpdir/config"],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+        call(["rm", "-rf", Path("/tmp/tmpdir")], remote=build_host, check=False),
+    ]
 
 
 @patch(
@@ -192,47 +190,45 @@ def test_build_remote_flake(
         copy_flags={"copy": True},
         flake_build_flags={"build": True},
     ) == Path("/path/to/file")
-    mock_run.assert_has_calls(
-        [
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "eval",
-                    "--raw",
-                    '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
-                    "--flake",
-                ],
-                stdout=PIPE,
-            ),
-            call(
-                [
-                    "nix-copy-closure",
-                    "--copy",
-                    "--to",
-                    "user@host",
-                    Path("/path/to/file"),
-                ],
-                append_local_env={
-                    "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
-                },
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "build",
-                    "/path/to/file^*",
-                    "--print-out-paths",
-                    "--build",
-                ],
-                remote=build_host,
-                stdout=PIPE,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--raw",
+                '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+                "--flake",
+            ],
+            stdout=PIPE,
+        ),
+        call(
+            [
+                "nix-copy-closure",
+                "--copy",
+                "--to",
+                "user@host",
+                Path("/path/to/file"),
+            ],
+            append_local_env={
+                "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
+            },
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "/path/to/file^*",
+                "--print-out-paths",
+                "--build",
+            ],
+            remote=build_host,
+            stdout=PIPE,
+        ),
+    ]
 
 
 def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
@@ -465,7 +461,7 @@ def test_get_nixpkgs_rev(tmpdir: Path) -> None:
         ],
     ) as mock_run:
         assert n.get_nixpkgs_rev(tmpdir) == ".git.0f7c82403fd6"
-        mock_run.assert_has_calls(expected_calls)
+        assert mock_run.mock_calls == expected_calls
 
     with patch(
         get_qualified_name(n.run_wrapper, n),
@@ -476,7 +472,7 @@ def test_get_nixpkgs_rev(tmpdir: Path) -> None:
         ],
     ) as mock_run:
         assert n.get_nixpkgs_rev(tmpdir) == ".git.0f7c82403fd6M"
-        mock_run.assert_has_calls(expected_calls)
+        assert mock_run.mock_calls == expected_calls
 
 
 def test_get_generations(tmp_path: Path) -> None:
@@ -584,9 +580,71 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
         ),
     ],
 )
-def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
-    # Probably better to test this function in a real system, this test is
-    # mostly to make sure it doesn't break horribly
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_list_generations(
+    mock_run: Mock,
+    mock_get_generations: Mock,
+    tmp_path: Path,
+) -> None:
+    # happy path
+    mock_run.return_value = CompletedProcess(
+        args=[],
+        returncode=0,
+        stdout=json.dumps(
+            {
+                "configurationRevision": "3f0180ea99a4c8277961825ec5fca2b50a0eca75",
+                "kernelVersion": "7.2.8",
+                "nixosVersion": "26.11.20260925.e94cb15",
+                "specialisations": ["foo", "bar"],
+            }
+        ),
+    )
+    assert n.list_generations(m.Profile("system", tmp_path)) == [
+        {
+            "configurationRevision": "3f0180ea99a4c8277961825ec5fca2b50a0eca75",
+            "current": True,
+            "date": "2024-11-07 23:54:17",
+            "generation": 2,
+            "kernelVersion": "7.2.8",
+            "nixosVersion": "26.11.20260925.e94cb15",
+            "specialisations": ["foo", "bar"],
+        },
+        {
+            "configurationRevision": "3f0180ea99a4c8277961825ec5fca2b50a0eca75",
+            "current": False,
+            "date": "2024-11-07 23:54:17",
+            "generation": 1,
+            "kernelVersion": "7.2.8",
+            "nixosVersion": "26.11.20260925.e94cb15",
+            "specialisations": ["foo", "bar"],
+        },
+    ]
+
+    # parsing invalid JSON
+    mock_run.return_value = CompletedProcess(args=[], returncode=0, stdout="garbage")
+    assert n.list_generations(m.Profile("system", tmp_path)) == [
+        {
+            "configurationRevision": "Unknown",
+            "current": True,
+            "date": "2024-11-07 23:54:17",
+            "generation": 2,
+            "kernelVersion": "Unknown",
+            "nixosVersion": "Unknown",
+            "specialisations": [],
+        },
+        {
+            "configurationRevision": "Unknown",
+            "current": False,
+            "date": "2024-11-07 23:54:17",
+            "generation": 1,
+            "kernelVersion": "Unknown",
+            "nixosVersion": "Unknown",
+            "specialisations": [],
+        },
+    ]
+
+    # error calling nixos-version
+    mock_run.side_effect = CalledProcessError(returncode=1, cmd=[])
     assert n.list_generations(m.Profile("system", tmp_path)) == [
         {
             "configurationRevision": "Unknown",
@@ -749,6 +807,35 @@ def test_set_profile(mock_run: Mock) -> None:
         elevate=e.NO_ELEVATOR,
     )
 
+    mock_run.reset_mock()
+    target_host = m.Remote("user@localhost", [], "ssh")
+
+    n.set_profile(
+        m.Profile("something", profile_path),
+        config_path,
+        target_host=target_host,
+        elevate=e.NO_ELEVATOR,
+    )
+
+    assert mock_run.mock_calls == [
+        call(
+            ["test", "-f", Path("/path/to/config/nixos-version")],
+            remote=m.Remote(host="user@localhost", opts=[], store_type="ssh"),
+            check=False,
+        ),
+        call(
+            ["mkdir", "-p", profile_path.parent],
+            remote=target_host,
+            elevate=e.NO_ELEVATOR,
+        ),
+        call(
+            ["nix-env", "-p", profile_path, "--set", config_path],
+            remote=target_host,
+            elevate=e.NO_ELEVATOR,
+        ),
+    ]
+
+    mock_run.reset_mock()
     mock_run.return_value = CompletedProcess([], 1)
 
     with pytest.raises(m.NixOSRebuildError) as exc:
@@ -869,9 +956,16 @@ def test_switch_to_configuration_without_systemd_run_env_var(
     )
 
 
+@patch(
+    get_qualified_name(n._systemd_run_supports_output_cat, n),
+    autospec=True,
+    return_value=True,
+)
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_switch_to_configuration_with_systemd_run(
-    mock_run: Mock, monkeypatch: MonkeyPatch
+    mock_run: Mock,
+    mock_supports_output_cat: Mock,
+    monkeypatch: MonkeyPatch,
 ) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
@@ -891,6 +985,9 @@ def test_switch_to_configuration_with_systemd_run(
     mock_run.assert_called_with(
         [
             *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            "--wait",
+            "--verbose",
+            "--output=cat",
             profile_path / "bin/switch-to-configuration",
             "switch",
         ],
@@ -904,6 +1001,7 @@ def test_switch_to_configuration_with_systemd_run(
         stdout=sys.stderr,
     )
 
+    mock_supports_output_cat.return_value = False
     target_host = m.Remote("user@localhost", [], "ssh")
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
@@ -921,6 +1019,7 @@ def test_switch_to_configuration_with_systemd_run(
     mock_run.assert_called_with(
         [
             *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            "--pipe",
             config_path / "specialisation/special/bin/switch-to-configuration",
             "test",
         ],
@@ -932,6 +1031,33 @@ def test_switch_to_configuration_with_systemd_run(
         elevate=SUDO,
         remote=target_host,
         stdout=sys.stderr,
+    )
+
+
+@pytest.mark.parametrize(
+    ("version_output", "expected"),
+    [
+        ("systemd 260 (260.1)\n", False),
+        (
+            textwrap.dedent("""\
+               systemd 261 (261.2)
+               +PAM +AUDIT -SELINUX +APPARMOR +IMA +IPE +SMACK +SECCOMP +GCRYPT -GNUTLS +OPENSSL +ACL +BLKID +CURL +ELFUTILS +FIDO2 +IDN2 +KMOD +LIBCRYPTSETUP +LIBCRYPTSETUP_PLUGINS +LIBFDISK +PCRE2 +PWQUALITY +P11KIT +QRENCODE +TPM2 +BZIP2 +LZ4 +XZ +ZLIB +ZSTD +BPF_FRAMEWORK -BTF -XKBCOMMON +UTMP +LIBARCHIVE
+            """),
+            True,
+        ),
+        ("systemd 270 (270.2)\n", True),
+        ("unexpected output\n", False),
+    ],
+)
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+def test_systemd_run_supports_output_cat(
+    mock_run: Mock, version_output: str, expected: bool
+) -> None:
+    mock_run.return_value = CompletedProcess([], 0, stdout=version_output)
+
+    assert n._systemd_run_supports_output_cat(None) is expected
+    mock_run.assert_called_once_with(
+        ["systemd-run", "--version"], remote=None, capture_output=True
     )
 
 

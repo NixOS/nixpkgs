@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   docbook_xsl,
   exempi,
   gdk-pixbuf,
@@ -35,22 +34,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xviewer";
-  version = "3.4.16";
+  version = "3.4.17";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xviewer";
     rev = finalAttrs.version;
-    hash = "sha256-ayd91gVLuSUVlCxaPSBbx7hg4tthVTaBEnl5V9YYbQw=";
+    hash = "sha256-U6p79pgiXdCLLnLZ4h3fvXj9UXG0atBccoBXGvAM5Yo=";
   };
-
-  patches = [
-    # build: Add support for GIRepository-2.0.
-    (fetchpatch {
-      url = "https://github.com/linuxmint/xviewer/commit/74d7d4ba2584c658ae6fb87208543671664943cc.patch";
-      hash = "sha256-lL4MTvC2RvdVZ4O5RaYyK+1sHnLGPYzGNbZ99aN22U8=";
-    })
-  ];
 
   nativeBuildInputs = [
     docbook_xsl

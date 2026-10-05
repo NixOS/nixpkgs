@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "frogatto-data";
-  version = "unstable-2023-02-27";
+  version = "1.3.1-unstable-2023-02-27";
 
   src = fetchFromGitHub {
     owner = "frogatto";

@@ -1,29 +1,36 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
-  # other
-  gitMinimal,
+
+  # dependencies
+  xclip,
+
+  # tests
+  versionCheckHook,
+
   withPcap ? true,
   withXclip ? stdenv.hostPlatform.isLinux,
-  xclip,
-  testers,
-  visidata,
-  stdenv,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "visidata";
-  version = "3.3";
-  format = "setuptools";
+  version = "3.4";
+  pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-y+HqRww/Fm+YeiNYH0a2TcUYOc72qL+9tC0PRudptrA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h5utXfafQP6uZ7vXQAYXfV26y0qHbk6vulPl6DXbVX4=";
   };
 
-  propagatedBuildInputs =
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies =
     with python3Packages;
     [
       # from visidata/requirements.txt
@@ -34,6 +41,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       lxml
       openpyxl
       xlrd
+      standard-mailcap
       xlwt
       h5py
       psycopg2
@@ -66,6 +74,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       sh
       psutil
       numpy
+      shapely
 
       #requests_cache
       beautifulsoup4
@@ -85,50 +94,37 @@ python3Packages.buildPythonApplication (finalAttrs: {
         dnslib
       ]
     )
-    ++ lib.optional withXclip xclip;
+    ++ lib.optionals withXclip [
+      xclip
+    ];
 
   nativeCheckInputs = [
-    gitMinimal
+    versionCheckHook
   ];
 
   # check phase uses the output bin, which is not possible when cross-compiling
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  checkPhase = ''
-    runHook preCheck
-
+  preCheck = ''
     # disable some tests which require access to the network
-    rm -f tests/load-http.vd            # http
-    rm -f tests/graph-cursor-nosave.vd  # http
-    rm -f tests/messenger-nosave.vd     # dns
+    rm tests/load-http-flaky.vd       # http
+    rm tests/messenger-nosave.vd      # dns
 
     # tests to disable because we don't have a package to load such files
-    rm -f tests/load-conllu.vdj         # no 'pyconll'
-    rm -f tests/load-sav.vd             # no 'savReaderWriter'
-    rm -f tests/load-fec.vdj            # no 'fecfile'
+    rm tests/load-conllu.vdj          # no 'pyconll'
+    rm tests/load-fec.vdj             # no 'fecfile'
 
-    # tests use git to compare outputs to references
-    git init -b "test-reference"
-    git config user.name "nobody"
-    git config user.email "no@where"
-    git add .
-    git commit -m "test reference"
-
-    substituteInPlace dev/test.sh --replace "bin/vd" "$out/bin/vd"
+    patchShebangs tests/
+    substituteInPlace tests/test-vdx.sh --replace-fail "bin/vd" "$out/bin/vd"
     bash dev/test.sh
-    runHook postCheck
   '';
+
   postInstall = ''
     python dev/zsh-completion.py
     install -Dm644 _visidata -t $out/share/zsh/site-functions
   '';
 
   pythonImportsCheck = [ "visidata" ];
-
-  passthru.tests.version = testers.testVersion {
-    package = visidata;
-    version = "v${finalAttrs.version}";
-  };
 
   meta = {
     description = "Interactive terminal multitool for tabular data";
@@ -139,6 +135,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       markus1189
     ];
     homepage = "https://visidata.org/";
-    changelog = "https://github.com/saulpw/visidata/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/saulpw/visidata/blob/${finalAttrs.src.rev}/CHANGELOG.md";
   };
 })

@@ -18,7 +18,7 @@ let
       };
 in
 {
-  name = "garage-3node-replication";
+  name = "garage-${package.version}-3node-replication";
 
   nodes = {
     node1 = mkNode {

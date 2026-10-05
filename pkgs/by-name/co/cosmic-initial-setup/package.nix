@@ -14,14 +14,14 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
-  version = "1.6.0";
+  version = "1.9.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-initial-setup";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-ta73ldHhrv6EPu7ECILyWe/dRKc0drBV3oKJvbNX9kQ=";
+    hash = "sha256-S26e8QDwFySJEhjiMtiSN+WSVK6z/5AXk/QqBg4uUCY=";
   };
 
   postPatch = ''

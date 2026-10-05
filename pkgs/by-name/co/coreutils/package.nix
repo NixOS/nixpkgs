@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
-      --replace 'mode3=2755' 'mode3=1755'
+      --replace-fail 'mode3=2755' 'mode3=1755'
 
     # Fails on systems with a rootfs. Looks like a bug in the test, see
     # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
@@ -162,12 +162,14 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (isCross && stdenv.hostPlatform.libc != "glibc") libiconv;
 
+  strictDeps = true;
+
   hardeningDisable = [ "trivialautovarinit" ];
 
   configureFlags = [
     "--with-packager=https://nixos.org"
     "--with-selinux"
-    "--enable-install-program=kill,uptime"
+    "--enable-install-program=arch,kill,uptime"
   ]
   ++ optional (singleBinary != false) (
     "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
@@ -258,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
       }{chroot,env,install,nice,nohup,runcon,sort,split,${stdbuf}timeout}
       execer cannot bin/${
         if withPrefix then "g" else ""
-      }{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+      }{[,arch,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
     '';
   }
   // optionalAttrs (singleBinary == false) {
@@ -270,6 +272,8 @@ stdenv.mkDerivation (finalAttrs: {
       execer can bin/${if withPrefix then "g" else ""}runcon
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/coreutils/";

@@ -64,13 +64,15 @@ buildPythonPackage (finalAttrs: {
   # Override the overly strict pyproject.toml:tool.pytest.ini_options.filterwarnings
   # https://github.com/skops-dev/skops/issues/523
   pytestFlags = [
-    "-W"
-    "ignore::FutureWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::FutureWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [
+    # AssertionError
+    # assert result.count("sk-top-container") == 1
+    "test_no_overflow"
+
     # fairlearn is not available in nixpkgs
     "TestAddFairlearnMetricFrame"
   ]

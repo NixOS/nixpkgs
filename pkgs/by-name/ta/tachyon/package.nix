@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
       "linux-arm"
     else if stdenv.hostPlatform.system == "armv7l-linux" then
       "linux-arm"
+    else if stdenv.hostPlatform.system == "riscv64-linux" then
+      "linux-arm"
     else if stdenv.hostPlatform.system == "aarch64-darwin" then
       "macosx"
     else if stdenv.hostPlatform.system == "x86_64-darwin" then

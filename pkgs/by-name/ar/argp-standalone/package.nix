@@ -22,7 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
+  strictDeps = true;
+
   doCheck = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/argp-standalone/argp-standalone";

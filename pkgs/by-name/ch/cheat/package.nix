@@ -1,48 +1,44 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
+  git,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cheat";
-  version = "4.5.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "cheat";
     repo = "cheat";
     tag = finalAttrs.version;
-    sha256 = "sha256-RDfOdyQL9QICXZmgYCmz532iTuPdCW8GixajvEXmaUQ=";
+    hash = "sha256-0c8NZzzLxssMJffEWBI5L3leWWOU/Y0slPIg6bPKzfI=";
   };
-
-  subPackages = [ "cmd/cheat" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  patches = [
-    (builtins.toFile "fix-zsh-completion.patch" ''
-      diff --git a/scripts/cheat.zsh b/scripts/cheat.zsh
-      index befe1b2..675c9f8 100755
-      --- a/scripts/cheat.zsh
-      +++ b/scripts/cheat.zsh
-      @@ -62,4 +62,4 @@ _cheat() {
-         esac
-       }
-
-      -compdef _cheat cheat
-      +_cheat "$@"
-    '')
+  nativeCheckInputs = [
+    git
   ];
 
   postInstall = ''
     installManPage doc/cheat.1
-    installShellCompletion scripts/cheat.{bash,fish,zsh}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd cheat \
+      --bash <($out/bin/cheat --completion bash) \
+      --fish <($out/bin/cheat --completion fish) \
+      --zsh <($out/bin/cheat --completion zsh)
   '';
 
   vendorHash = null;
 
-  doCheck = false;
+  doCheck = true;
+
+  env.EDITOR = "cat";
 
   meta = {
     description = "Create and view interactive cheatsheets on the command-line";

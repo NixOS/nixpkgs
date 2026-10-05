@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "swipe-navigation";
-  version = "1.16.0";
+  version = "1.16.1";
 
   src = fetchFromGitHub {
     owner = "zanna-37";
     repo = "hass-swipe-navigation";
     tag = "v${version}";
-    hash = "sha256-a2ZbMQgFi4bJPnZeSB60THFd46O/K4QERCmZQMjC0ZI=";
+    hash = "sha256-6EMpxiug6YNDjekqyXMIv12Eg4iW42rOR2InNGzGmQU=";
   };
 
-  npmDepsHash = "sha256-vQnYQ7iKSotbdresqXMNUJALMVPYxk0FtZxAhJTQ8pc=";
+  npmDepsHash = "sha256-cySnkW+UOFSbQtsvx4av7UqVxHH0AEb0LzbFQOIvBME=";
 
   buildPhase = ''
     runHook preBuild

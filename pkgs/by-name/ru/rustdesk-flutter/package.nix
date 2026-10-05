@@ -66,14 +66,14 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.5";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-FRtYafsIKHnGPV8NaiaHxIHkon8/T2P83uq9taUD1Xc=";
+    hash = "sha256-AnwdIO4TveC48uMioBCvH60xun24ckK420ONSEB9lQI=";
   };
 
   strictDeps = true;
@@ -82,7 +82,8 @@ flutter329.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.9/flutter/pubspec.lock | yq > pubspec.lock.json
+  # Then add flutter_test, fake_async, leak_tracker*, vm_service SDK deps manually
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
 
@@ -95,7 +96,7 @@ flutter329.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-mEtTo1ony5w/dzJcHieG9WywHirBoQ/C0WpiAr7pUVc=";
+    hash = "sha256-HPvvsTcjSErGfdNwsHgWhs930Fe0hmK1g5J/ngtlkKM=";
   };
 
   dontCargoBuild = true;

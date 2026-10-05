@@ -10,7 +10,7 @@ skawarePackages.buildPackage {
   version = "2.15.1.0";
   sha256 = "sha256-+ckF50k1xv6RHH40Tj6J1fvSAUwaBGULUksVzptWNdE=";
 
-  description = "Set of general-purpose C programming libraries";
+  meta.description = "Set of general-purpose C programming libraries";
 
   outputs = [
     "lib"
@@ -20,11 +20,13 @@ skawarePackages.buildPackage {
   ];
 
   configureFlags = [
+    "--libdir=${placeholder "lib"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "lib"}/libexec"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     # assume /dev/random works
     "--enable-force-devr"
-    "--libdir=\${lib}/lib"
-    "--dynlibdir=\${lib}/lib"
-    "--includedir=\${dev}/include"
     "--sysdepdir=\${lib}/lib/skalibs/sysdeps"
     # Empty the default path, which would be "/usr/bin:bin".
     # It would be set when PATH is empty. This hurts hermeticity.

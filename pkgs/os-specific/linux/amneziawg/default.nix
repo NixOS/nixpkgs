@@ -9,20 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg";
-  version = "3.1.20260812";
+  version = "3.1.20260828";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-linux-kernel-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dJ7Au4J8iPlphSzTa3Gol/LMlroroSc2IUmXZfjA0k8=";
+    hash = "sha256-eYZDt8TEdWywnK6Ue6y9PfRavwOH1kTLKYY/mD8AcQI=";
   };
-
-  patches = [
-    # Compatibility fixes for kernel 7.1.5+, 7.2
-    # Submitted upstream: https://github.com/amnezia-vpn/amneziawg-linux-kernel-module/pull/194
-    ./sk-715.patch
-  ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
   hardeningDisable = [ "pic" ];

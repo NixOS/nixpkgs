@@ -1,0 +1,6 @@
+HloModule smoke
+ENTRY main {
+  a = f32[2] constant({1, 2})
+  b = f32[2] constant({3, 4})
+  ROOT add = f32[2] add(a, b)
+}

@@ -68,8 +68,7 @@ let
         -t $out/share/applications
       substituteInPlace $out/share/applications/caido.desktop \
         --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=caido-desktop %U"
-      install -m 444 -D ${appimageContents}/caido.png \
-        $out/share/icons/hicolor/512x512/apps/caido.png
+      cp -r ${appimageContents}/usr/share/icons $out/share
       wrapProgram $out/bin/${pname} \
         --set WEBKIT_DISABLE_COMPOSITING_MODE 1 \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"

@@ -15,6 +15,7 @@
   pure-magic-rs,
   pydub,
   pyfaup-rs,
+  python-socks,
   pytz,
   requests,
   rfc3161-client,
@@ -26,22 +27,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "playwrightcapture";
-  version = "1.40.8";
+  version = "1.41.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UWWHU0ePW8ThHbC1jumpYot8k/yZLeBou9nsIEbObEA=";
+    hash = "sha256-aHdYewNwEc063QYLpZXTrg28uPVuy6NMS3JLokuH30k=";
   };
 
   pythonRelaxDeps = [
-    "aiohttp"
     "aiohttp-socks"
+    "aiohttp"
     "beautifulsoup4"
     "orjson"
     "playwright"
+    "python-socks"
     "setuptools"
     "tzdata"
   ];
@@ -60,6 +62,7 @@ buildPythonPackage (finalAttrs: {
     playwright-stealth
     pure-magic-rs
     pyfaup-rs
+    python-socks
     pytz
     requests
     rfc3161-client

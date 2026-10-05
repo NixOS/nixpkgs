@@ -2,40 +2,40 @@
   lib,
   python3,
   fetchFromGitLab,
-  fetchpatch2,
+  fetchFromGitHub,
   openldap,
   nixosTests,
   postgresql,
 }:
 
 let
-  python = python3;
+  python = python3.override {
+    self = python;
+    packageOverrides = _final: prev: {
+      # TODO remove when wtforms has a 3.3 stable release
+      wtforms = prev.wtforms.overridePythonAttrs (_old: rec {
+        version = "3.3.0b3";
+        src = fetchFromGitHub {
+          owner = "wtforms";
+          repo = "wtforms";
+          tag = version;
+          hash = "sha256-h+rzhFPN+N4Jxs9lugvWqNy2eXkXtSCpMW3wp2KgrFk=";
+        };
+      });
+    };
+  };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "canaille";
-  version = "0.2.7";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    tag = version;
-    hash = "sha256-hreEjMrD6mRapgrSDPRWcmqfLxfsOpK7dC8lHJkAY7Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-Zn1MZa4TYNfdVrDmi6KHQxrdK9UfRxYqJpCXVbqnvII=";
   };
-
-  patches = [
-    # Backport authlib 1.7 compatibility.
-    (fetchpatch2 {
-      url = "https://gitlab.com/yaal/canaille/-/commit/b356baa82109a7fdf61a8258572d199ffd3c9604.diff";
-      hash = "sha256-/U6S3h6qIl763ZsGpOm6CVk4NaY3A7mq3PkT193aLEs=";
-    })
-    # Update OIDC tests for authlib 1.7 behavior.
-    (fetchpatch2 {
-      url = "https://gitlab.com/yaal/canaille/-/commit/c1b6d103ebf374cd6a21d9af8376c910c2d0d5d9.diff";
-      hash = "sha256-MjwkUb54ikt1+xUXBTOIBi9E+DmPdwYhw0W0c0prF/Q=";
-      includes = [ "tests/oidc/*" ];
-    })
-  ];
 
   build-system = with python.pkgs; [
     hatchling
@@ -79,7 +79,7 @@ python.pkgs.buildPythonApplication rec {
       time-machine
       pytest-scim2-server
     ]
-    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
+    ++ (lib.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies));
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -115,14 +115,13 @@ python.pkgs.buildPythonApplication rec {
       flask-talisman
       flask-themer
       isodate
-      pycountry
       pytz
-      tomlkit
       zxcvbn-rs-py
     ];
     oidc = [
       authlib
       joserfc
+      tomlkit
     ];
     scim = [
       authlib
@@ -172,11 +171,11 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
-    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://gitlab.com/yaal/canaille/-/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "canaille";
   };
 
-}
+})

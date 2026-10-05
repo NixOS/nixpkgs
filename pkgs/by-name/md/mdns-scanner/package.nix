@@ -7,7 +7,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdns-scanner";
-  version = "0.28.0";
+  version = "1.0.1";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "CramBL";
     repo = "mdns-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2AefYmbWHL2t6/CNwFv1T2GZT6/HUzoGUNCVqo7/Y5c=";
+    hash = "sha256-qPeqNM02m18Z8eI/Y3pqHGomWZhFUmOetWmpEXaIjpk=";
   };
 
-  cargoHash = "sha256-iMaD7xTiIyHB+K8VIojILNHLwh5NiBVPWOMwoD/C4gk=";
+  cargoHash = "sha256-I+6ivhTfVR8xSCFVndsylk/LxTuCNeBfILvyo+6pk70=";
 
   passthru.updateScript = nix-update-script { };
 

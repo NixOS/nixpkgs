@@ -9,6 +9,7 @@
   libcap,
   perl,
   ncurses,
+  fetchpatch,
 }:
 let
   lua = lua5_1;
@@ -23,6 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-Fz+qvgw5ipyAcZlWBGkmSHuGrZ95i5OorLN3dkdsYKU=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/chaos/diod/commit/d56db0c55012c8a9ea2d3c72749022292c0f65b8.patch";
+      hash = "sha256-wuPok3D3VKiao9NmHYLcccsL+91xVbhUeSDExw17X/E=";
+    })
+  ];
 
   postPatch = ''
     sed -i configure.ac -e '/git describe/c ${finalAttrs.version})'

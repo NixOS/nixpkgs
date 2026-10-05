@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://cubicsdr.com";
+    homepage = "https://github.com/cjcliffe/CubicSDR";
     description = "Software Defined Radio application";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lasandell ];

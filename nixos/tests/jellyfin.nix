@@ -48,6 +48,19 @@
       virtualisation.diskSize = 3 * 1024;
     };
 
+    machineWithQsvTranscoding = {
+      services.jellyfin = {
+        enable = true;
+        hardwareAcceleration = {
+          enable = true;
+          type = "qsv";
+          device = "/dev/dri/renderD128";
+        };
+      };
+      environment.systemPackages = with pkgs; [ ffmpeg ];
+      virtualisation.diskSize = 3 * 1024;
+    };
+
     machineWithForceConfig = {
       services.jellyfin = {
         enable = true;
@@ -127,14 +140,14 @@
 
 
       def api_get(path):
-          return f"curl --fail 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{auth_header}'"
+          return f"curl --fail 'http://localhost:8096{path}' -H 'Authorization:{auth_header}'"
 
 
       def api_post(path, json_file=None):
           if json_file:
-              return f"curl --fail -X post 'http://localhost:8096{path}' -d '@{json_file}' -H Content-Type:application/json -H 'X-Emby-Authorization:{auth_header}'"
+              return f"curl --fail -X post 'http://localhost:8096{path}' -d '@{json_file}' -H Content-Type:application/json -H 'Authorization:{auth_header}'"
           else:
-              return f"curl --fail -X post 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{auth_header}'"
+              return f"curl --fail -X post 'http://localhost:8096{path}' -H 'Authorization:{auth_header}'"
 
       # Test dashboard-based configuration verification
       with subtest("Dashboard configuration verification"):
@@ -149,7 +162,7 @@
           token = auth_result["AccessToken"]
 
           def api_get_with_token(path):
-              return f"curl --fail 'http://localhost:8096{path}' -H 'X-Emby-Authorization:MediaBrowser Client=\"Test\", DeviceId=\"test\", Token={token}'"
+              return f"curl --fail 'http://localhost:8096{path}' -H 'Authorization:MediaBrowser Client=\"Test\", DeviceId=\"test\", Token={token}'"
 
           # Get encoding config and verify key settings
           config = json.loads(machineWithTranscoding.succeed(api_get_with_token("/System/Configuration/encoding")))
@@ -185,6 +198,31 @@
           assert "h264" in decoding_codecs, f"h264 should be in HardwareDecodingCodecs, got {decoding_codecs}"
           assert "hevc" in decoding_codecs, f"hevc should be in HardwareDecodingCodecs, got {decoding_codecs}"
           assert "vp9" in decoding_codecs, f"vp9 should be in HardwareDecodingCodecs, got {decoding_codecs}"
+
+      # Regression test: the qsv branch used to write the device path to a
+      # nonexistent <OpenclDevice> XML element, which Jellyfin silently
+      # ignores, instead of <QsvDevice> (see MediaBrowser.Model/Configuration/
+      # EncodingOptions.cs upstream, which has no OpenclDevice property).
+      with subtest("QSV hardware acceleration configuration"):
+          wait_for_jellyfin(machineWithQsvTranscoding)
+
+          machineWithQsvTranscoding.succeed("systemctl show jellyfin.service --property=DeviceAllow | grep '/dev/dri/renderD128 rw'")
+
+          machineWithQsvTranscoding.wait_until_succeeds(api_get("/Startup/Configuration"))
+          machineWithQsvTranscoding.succeed(api_get("/Startup/FirstUser"))
+          machineWithQsvTranscoding.succeed(api_post("/Startup/Complete"))
+
+          qsv_auth_result = json.loads(machineWithQsvTranscoding.succeed(
+              api_post("/Users/AuthenticateByName", "${payloads.auth}")
+          ))
+          qsv_token = qsv_auth_result["AccessToken"]
+
+          qsv_config = json.loads(machineWithQsvTranscoding.succeed(
+              f"curl --fail 'http://localhost:8096/System/Configuration/encoding' -H 'Authorization:MediaBrowser Client=\"Test\", DeviceId=\"test\", Token={qsv_token}'"
+          ))
+
+          assert qsv_config.get("HardwareAccelerationType") == "qsv", f"Hardware acceleration type: expected 'qsv', got '{qsv_config.get('HardwareAccelerationType')}'"
+          assert qsv_config.get("QsvDevice") == "/dev/dri/renderD128", f"QSV device: expected '/dev/dri/renderD128', got '{qsv_config.get('QsvDevice')}'"
 
 
       with machine.nested("Wizard completes"):
@@ -279,7 +317,7 @@
 
           machine.succeed(
               "ffmpeg"
-              + f" -headers 'X-Emby-Authorization:{auth_header}'"
+              + f" -headers 'Authorization:{auth_header}'"
               + f" -i http://localhost:8096/Videos/{video}/master.m3u8?mediaSourceId={media_source_id}"
               + " /tmp/test.mkv"
           )

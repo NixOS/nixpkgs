@@ -25,7 +25,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "frame-media-converter";
-  version = "0.31.1";
+  version = "0.33.1";
 
   __structuredAttrs = true;
 
@@ -33,10 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "66HEX";
     repo = "frame";
     tag = finalAttrs.version;
-    hash = "sha256-QBwwa5z0BbNa0p7MbV2J+K+NOe0cFxXq9LyvalKTMFY=";
+    hash = "sha256-oUJ6yiSZGrpdKra22H/nyLjDh9f6p9gOA9TeXjlDuRY=";
   };
 
-  cargoHash = "sha256-HJZEY4noPypIXHB6ZMtPKuBawaMmmEpVbfo44v6tKws=";
+  cargoHash = "sha256-Rq2/CWxKN7HmmFtmt26CMfVwmwc4Wl2wnbvB9inVsHw=";
   cargoBuildFlags = cargoFlags;
   cargoTestFlags = cargoFlags;
 

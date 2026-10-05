@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.08.08-1";
+  version = "26.09.12";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SbDdC910EdQy4HEwovuHjTzK4zEbzeI1w6pEQ1EQAGI=";
+    hash = "sha256-8bI2cysknSHohBJky17rHPV+BO3bsTM1rjbTIRRmUQQ=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-P0NcsKNmLHlfZ8tMjkfOChLrJ7l5tc9xy6FtZqyL1As=";
+    hash = "sha256-cR+0Y13VJgevuwz7LlhQuLuRx50FYycj0dUnrOCgAbk=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   #broken entry unused entry in Cargo.toml, can probably be removed with next update
   postUnpack = ''
-      substituteInPlace ./source/matrix-rust-sdk/Cargo.toml --replace-fail \
-      "ruma = { git = \"https://github.com/matrix-org/ruma\", rev = \"2a1d714314f6f711d5bca755c73cf2ce3053c3d1\" }" \
-    ""
+    substituteInPlace ./source/matrix-rust-sdk/Cargo.toml --replace-fail \
+      "ruma = { git = \"https://github.com/matrix-org/ruma\", rev = \"bf21677a8fcba04fd01e341809eb5991908441a2\" }" \
+      ""
   '';
 
   gradleBuildTask = "createReleaseDistributable";
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle composeApp:dependencies composeApp:checkRuntime --write-verification-metadata sha256
+    gradle composeApp:dependencies composeApp:checkRuntime composeApp:kspCommonMainKotlinMetadata --write-verification-metadata sha256
     ##### Fallback
     ## If the update script starts missing dependencies after an update this should still work.
     ## Unfortunately it also unnecessarily builds the entire rust crate

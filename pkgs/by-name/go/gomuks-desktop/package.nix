@@ -25,11 +25,11 @@ buildNpmPackage (finalAttrs: {
   npmBuildScript = "package";
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-m3T9aPBuknyDIySa2fJagj0xeQmcJ/RgkzlDCsvfTKs=";
+  npmDepsHash = "sha256-eAQev2MSzweUVofoLceFCrL1OMsqYXmegpHKgJwHDXA=";
 
   patches = [
-    ./gomuks-binary-path.patch # fix location of gomuks-web binary at build-time
-    ./resources-path.patch # allow specifying location of icons
+    # allow specifying location of icons and gomuks-web binary at runtime
+    ./resources-path.patch
   ];
 
   nativeBuildInputs = [

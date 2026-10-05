@@ -45,7 +45,8 @@ class Accessibility(IntEnum):
         elif path.is_dir():
             writable = True
 
-            dummy_file = path / 'can_i_write'
+            # Concurrent probes collide in shared mounts like /dev/hugepages.
+            dummy_file = path / f'can_i_write.{os.getpid()}'
             try:
                 dummy_file.touch()
             except OSError as e:

@@ -38,7 +38,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "CLI for executing Cirrus tasks locally and in any CI";
     homepage = "https://github.com/cirruslabs/cirrus-cli";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ techknowlogick ];
     mainProgram = "cirrus";
   };

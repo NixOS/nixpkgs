@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ugrep";
-  version = "7.8.4";
+  version = "7.8.5";
 
   src = fetchFromGitHub {
     owner = "Genivia";
     repo = "ugrep";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wmAr4ITw5g8//+4HIdDVPG4Qcm3ErXNf5uoW2IVu6tE=";
+    hash = "sha256-KLVSsl8I4plrKVHfPD1rFumun4Bo2DEV+mGLS95U9WE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

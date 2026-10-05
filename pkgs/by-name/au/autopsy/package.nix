@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "autopsy";
-  version = "4.22.1";
+  version = "4.23.1";
 
   src = fetchzip {
-    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${finalAttrs.version}/autopsy-${finalAttrs.version}_v2.zip";
-    hash = "sha256-IHpUzwSXoghjixsPwpj3lMwHIby3+zx7BjzGRlAVcVs=";
+    url = "https://github.com/sleuthkit/autopsy/releases/download/autopsy-${finalAttrs.version}/autopsy-${finalAttrs.version}.zip";
+    hash = "sha256-4MADKow3FX0n4IzblWxcfNLfDKSkLDtIil24/QioF7U=";
   };
 
   nativeBuildInputs = [

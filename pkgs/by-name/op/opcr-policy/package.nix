@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     mainProgram = "policy";
-    homepage = "https://www.openpolicyregistry.io/";
+    homepage = "https://openpolicycontainers.com/";
     changelog = "https://github.com/opcr-io/policy/releases/tag/v${finalAttrs.version}";
     description = "CLI for managing authorization policies";
     longDescription = ''

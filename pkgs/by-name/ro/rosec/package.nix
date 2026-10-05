@@ -22,7 +22,7 @@ symlinkJoin (
       owner = "jmylchreest";
       repo = "rosec";
       tag = "v${version}";
-      hash = "sha256-qs6WjgiK2AFhGlbsl85fEmVaWr/aw5pOIaKw68rsLZ0=";
+      hash = "sha256-dlHOzUW/kH9SS/mPl+VvEetCzOY/L2qEpoYLJTCWR90=";
     };
 
     rosecPam = stdenv.mkDerivation {
@@ -48,7 +48,7 @@ symlinkJoin (
       pname = "rosec-unwrapped";
       inherit version src;
 
-      cargoHash = "sha256-kE3qpdQGvXtjlospxSeoyPIUNyioLq5Ao5y94yIsjMs=";
+      cargoHash = "sha256-X1LEL8/ntKkdRQLU+XBJ7oaDhNph2WAeVWVJ2KnzVzA=";
 
       nativeBuildInputs = [
         autoPatchelfHook
@@ -66,6 +66,8 @@ symlinkJoin (
 
       preCheck = ''
         export $(dbus-launch --config-file=${dbus}/share/dbus-1/session.conf)
+        # rosec-vault sidecar tests require writable xdg data directory
+        export XDG_DATA_HOME=$TMPDIR/xdg-data
       '';
 
       postInstall = ''
@@ -85,7 +87,7 @@ symlinkJoin (
   in
   {
     pname = "rosec";
-    version = "0.0.28";
+    version = "0.0.34";
 
     paths = [
       rosecCore

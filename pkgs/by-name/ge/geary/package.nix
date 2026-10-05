@@ -21,7 +21,7 @@
   libxml2,
   gettext,
   sqlite,
-  gcr,
+  gcr_3,
   json-glib,
   itstool,
   libgee,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     adwaita-icon-theme
     enchant
     folks
-    gcr
+    gcr_3
     glib-networking
     gmime3
     gnome-online-accounts

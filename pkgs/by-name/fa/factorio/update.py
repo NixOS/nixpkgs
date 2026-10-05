@@ -1,18 +1,16 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -i python -p "python3.withPackages (ps: with ps; [ ps.absl-py ps.requests ])"
 
-from collections import defaultdict
 import copy
-from dataclasses import dataclass
 import json
 import os.path
-from typing import Callable, Dict
+from collections import defaultdict
+from collections.abc import Callable
+from dataclasses import dataclass
+from functools import total_ordering
 
-from absl import app
-from absl import flags
-from absl import logging
 import requests
-
+from absl import app, flags, logging
 
 FACTORIO_RELEASES = "https://factorio.com/api/latest-releases"
 FACTORIO_HASHES = "https://factorio.com/download/sha256sums/"
@@ -34,10 +32,25 @@ flags.DEFINE_list(
 
 
 @dataclass
+@total_ordering
+class Version:
+    version: str
+    @property
+    def ver(self):
+        return [int(v) for v in self.version.split(".")]
+    def __eq__(self, other):
+        return self.ver == other.ver
+    def __lt__(self, other):
+        return self.ver < other.ver
+
+
+@dataclass
 class System:
     nix_name: str
     url_name: str
     tar_name: str
+    file_name: str
+    min_ver: Version
 
 
 @dataclass
@@ -52,34 +65,60 @@ class ReleaseChannel:
     name: str
 
 
-FactorioVersionsJSON = Dict[str, Dict[str, str]]
-OurVersionJSON = Dict[str, Dict[str, Dict[str, Dict[str, str]]]]
+FactorioVersionsJSON = dict[str, dict[str, str]]
+OurVersionJSON = dict[str, dict[str, dict[str, dict[str, str]]]]
 
-FactorioHashes = Dict[str, str]
+FactorioHashes = dict[str, str]
 
 
 SYSTEMS = [
-    System(nix_name="x86_64-linux", url_name="linux64", tar_name="x64"),
+    System(
+        nix_name="x86_64-linux",
+        url_name="linux64",
+        tar_name="x64",
+        file_name="linux",
+        min_ver=Version("1.1.86"),
+   ),
+    System(
+        nix_name="aarch64-linux",
+        url_name="linux-arm64",
+        tar_name="arm64",
+        file_name="linux-arm64",
+        min_ver=Version("2.1.18"),
+    ),
 ]
 
 RELEASE_TYPES = [
     ReleaseType(
         "alpha",
         needs_auth=True,
-        hash_filename_format=["factorio_linux_{version}.tar.xz"],
+        hash_filename_format=[
+            "factorio_{system.url_name}_{version}.tar.xz",
+            "factorio_{system.file_name}_{version}.tar.xz",
+        ],
     ),
-    ReleaseType("demo", hash_filename_format=["factorio-demo_linux_{version}.tar.xz"]),
+    ReleaseType(
+        "demo",
+        hash_filename_format=[
+            "factorio-demo_{system.url_name}_{version}.tar.xz",
+            "factorio-demo_{system.file_name}_{version}.tar.xz",
+        ],
+    ),
     ReleaseType(
         "headless",
         hash_filename_format=[
-            "factorio-headless_linux_{version}.tar.xz",
-            "factorio_headless_x64_{version}.tar.xz",
+            "factorio-headless_{system.url_name}_{version}.tar.xz",
+            "factorio-headless_{system.file_name}_{version}.tar.xz",
+            "factorio_headless_{system.tar_name}_{version}.tar.xz",
         ],
     ),
     ReleaseType(
         "expansion",
         needs_auth=True,
-        hash_filename_format=["factorio-space-age_linux_{version}.tar.xz"],
+        hash_filename_format=[
+            "factorio-space-age_{system.url_name}_{version}.tar.xz",
+            "factorio-space-age_{system.file_name}_{version}.tar.xz",
+        ],
     ),
 ]
 
@@ -141,7 +180,7 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
         for release_type in RELEASE_TYPES:
             for release_channel in RELEASE_CHANNELS:
                 version = factorio_versions[release_channel.name].get(release_type.name)
-                if version is None:
+                if version is None or Version(version) < system.min_ver:
                     continue
                 this_release = {
                     "name": f"factorio_{release_type.name}_{system.tar_name}-{version}.tar.xz",
@@ -149,7 +188,7 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
                     "version": version,
                     "needsAuth": release_type.needs_auth,
                     "candidateHashFilenames": [
-                        fmt.format(version=version)
+                        fmt.format(version=version, system=system)
                         for fmt in release_type.hash_filename_format
                     ],
                     "tarDirectory": system.tar_name,
@@ -162,7 +201,7 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
 
 def iter_version(
     versions: OurVersionJSON,
-    it: Callable[[str, str, str, Dict[str, str]], Dict[str, str]],
+    it: Callable[[str, str, str, dict[str, str]], dict[str, str]],
 ) -> OurVersionJSON:
     versions = copy.deepcopy(versions)
     for system_name, system in versions.items():
@@ -181,8 +220,8 @@ def merge_versions(old: OurVersionJSON, new: OurVersionJSON) -> OurVersionJSON:
         system_name: str,
         release_type_name: str,
         release_channel_name: str,
-        release: Dict[str, str],
-    ) -> Dict[str, str]:
+        release: dict[str, str],
+    ) -> dict[str, str]:
         old_system = old.get(system_name, {})
         old_release_type = old_system.get(release_type_name, {})
         old_release = old_release_type.get(release_channel_name, {})
@@ -235,8 +274,8 @@ def fill_in_hash(
         system_name: str,
         release_type_name: str,
         release_channel_name: str,
-        release: Dict[str, str],
-    ) -> Dict[str, str]:
+        release: dict[str, str],
+    ) -> dict[str, str]:
         for candidate_filename in release["candidateHashFilenames"]:
             if candidate_filename in factorio_hashes:
                 release["sha256"] = factorio_hashes[candidate_filename]

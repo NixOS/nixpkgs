@@ -9,7 +9,7 @@
 
 let
   pname = "notesnook";
-  version = "3.4.5";
+  version = "3.4.7";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -26,9 +26,9 @@ let
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-Zcx6TzmyInwE2+0RbBm6+1yAL85rhcFWbr2FOSmOT6Y=";
-        aarch64-linux = "sha256-ghxdb8TG4/uh1iuN5jaQ6aeYrXJh5+oX0ZpT/j8+5Ck=";
-        aarch64-darwin = "sha256-xw8oSGqTovCioRu6FVKZIrFraE72PwPvqZms5+K3S/M=";
+        x86_64-linux = "sha256-NwNfhTufJ25wqdZuRXV73aVOHjdqGPQ4jZdMXaW+3vM=";
+        aarch64-linux = "sha256-dAjLOiWvozJoz8O/feKrM4/qE9XS83INA4IC4gWZtg0=";
+        aarch64-darwin = "sha256-aZFiaWA8tr1Nuule/qKTr1hUuQ/9gTs2AJqrojAFeDQ=";
       }
       .${system} or throwSystem;
   };
@@ -96,7 +96,7 @@ let
 
     nativeBuildInputs = [ _7zz ];
 
-    sourceRoot = "Notesnook.app";
+    sourceRoot = "Install Notesnook/Notesnook.app";
 
     # 7zz did not unpack in setup hook for some reason, done manually here
     unpackPhase = ''

@@ -2,12 +2,14 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   nodejs,
   gnutar,
   makeBinaryWrapper,
   yarn-berry_4,
+  nodejsInstallManuals,
+  nodejsInstallExecutables,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gitbeaker-cli";
   version = "43.8.0";
@@ -16,14 +18,27 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jdalrymple";
     repo = "gitbeaker";
     tag = finalAttrs.version;
-    hash = "sha256-EVxDUEuxCnMiqqsKFs9JpRVJ86d9hW22K4a4we8eoJA=";
+    hash = "sha256-zGcSilIQUKn7iMGFkDZuvPZZM9UcZadczelB7JgVYb4=";
+
+    # Remove when updating since upstream migrated to pnpm
+    # https://github.com/jdalrymple/gitbeaker/blob/main/package.json#L61
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
-  patches = [
-    # Remove this when updating since upstream migrated to pnpm
-    # https://github.com/jdalrymple/gitbeaker/blob/main/package.json#L59
-    ./yarn-4.14-support.patch
-  ];
+  # Set for the `nodejsInstall` hooks
+  npmWorkspace = "@gitbeaker/cli";
 
   nativeBuildInputs = [
     nodejs
@@ -31,13 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry_4
     makeBinaryWrapper
     gnutar
+    nodejsInstallManuals
+    nodejsInstallExecutables
   ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-RTgdHicbfbJbToif51TchLCfdIPZynvT0n/KwrydLYU=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-OMsa/4pRyZVjgYPfYsaj1D+auKOHRAXKtEDYWenI33I=";
   };
 
   buildPhase = ''
@@ -52,23 +69,37 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/lib
-    cp -r packages $out/lib/packages
-    cp -r node_modules/ $out/lib/node_modules
-    # Remove dev dependencies
-    rm -rf $out/lib/node_modules/{.bin,tsup,typescript,@auto-it,@codecov,@swc,#types,@typescript-eslint,jest*,nx,prettier*,eslint*}
+    mkdir -p $out/lib/node_modules/@gitbeaker/cli
+    export yarnTmpDir=$(mktemp -d)
+    export yarnPack=$yarnTmpDir/yarn-pack.tgz
+    export packageRoot=$out/lib/node_modules/@gitbeaker
+    export nodeModPath=$out/lib/node_modules/@gitbeaker/cli/node_modules
+
+    # Basically yarnInstallHook
+    pushd packages
+    cp -r ./* "$packageRoot"/
+    pushd cli
+    nodejsInstallExecutables ./package.json
+    nodejsInstallManuals ./package.json
+    popd
+    popd
+    yarn workspaces focus --production @gitbeaker/cli
+    find node_modules -maxdepth 1 -type d -empty -delete
+    rm -rf node_modules/.bin
+    cp -r ./node_modules $nodeModPath
+    pushd $packageRoot
+    ln -s $nodeModPath core/node_modules
+    ln -s $nodeModPath requester-utils/node_modules
+    ln -s $nodeModPath rest/node_modules
+    popd
+    unlink $nodeModPath/@gitbeaker/cli
+    unlink $nodeModPath/@gitbeaker/core
+    unlink $nodeModPath/@gitbeaker/requester-utils
+    unlink $nodeModPath/@gitbeaker/rest
+    rm -rrf $nodeModPath/@gitbeaker
+    ln -s $packageRoot $nodeModPath
 
     runHook postInstall
-  '';
-
-  postFixup = ''
-    chmod +x $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs
-    patchShebangs $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs
-
-    makeWrapper $out/lib/node_modules/@gitbeaker/cli/dist/index.mjs $out/bin/gb \
-      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-
-    ln -s $out/bin/gb $out/bin/gitbeaker
   '';
 
   passthru.updateScript = ./update.sh;
@@ -79,5 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/jdalrymple/gitbeaker";
     maintainers = [ ];
     mainProgram = "gitbeaker";
+    license = lib.licenses.mit;
   };
 })
