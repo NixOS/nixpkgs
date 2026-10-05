@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "numpy-groupies";
-  version = "0.11.3";
+  version = "0.12.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ml31415";
     repo = "numpy-groupies";
     tag = "v${version}";
-    hash = "sha256-pg9hOtIgS8pB/Y9Xqto9Omsdg8TxaA5ZGE1Qh1DCceU=";
+    hash = "sha256-18BarAUWq2ith7nB/o9oqi7zCH5pRY2nSY9go7I2AiA=";
   };
 
   build-system = [
