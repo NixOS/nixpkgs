@@ -4,6 +4,7 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  nixosTests,
   cmake,
   cmake-extras,
   intltool,
@@ -124,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
+    tests.vm = nixosTests.lomiri-printing-app;
     updateScript = gitUpdater { };
   };
 
