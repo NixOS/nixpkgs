@@ -1140,15 +1140,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2701-1";
+      version = "0.0.2708-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2701-1.rockspec";
-          sha256 = "0ligp083swi8zfj6s8syc4i3fyiiv95nh1bnzfpd4j1hfs4ljnac";
+          url = "mirror://luarocks/fzf-lua-0.0.2708-1.rockspec";
+          sha256 = "0mlwn4jvbmq83r8wfs2ywsqcvnqsnv0s5ay22gichq3ka45bdxzp";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/78b85d2a522b1e6a2d154216b3e532a1df1ad6d7.zip";
-        sha256 = "1hgl34ama6756y6dlczv1zlqji0sz54s8j12nmrvygggdfgzmrcr";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/bba13a0d260ca5e049683344ba70791c9ad8ece6.zip";
+        sha256 = "1qqza6vjyd56jmgaffrbrr6vwzsyy0x92gcy7p94ggh67pz0x8h2";
       };
 
       disabled = luaOlder "5.1";
@@ -6821,7 +6821,7 @@ final: prev: {
       version = "0.3.5-2";
       knownRockspec =
         (fetchurl {
-          url = "https://luarocks.org/warna-0.3.5-2.rockspec";
+          url = "mirror://luarocks/warna-0.3.5-2.rockspec";
           sha256 = "0vkkpldgaav9cnx63wal6851rlcq6n93fpv5xpvm9al308q45d0r";
         }).outPath;
       src = fetchFromGitHub {

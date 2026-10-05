@@ -7,7 +7,7 @@
   nix-update-script,
 
   # tests
-  lua,
+  lua5_5,
   nodejs,
   php,
   python3,
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    lua
+    lua5_5
     nodejs
     php
     python3

@@ -13,6 +13,8 @@ buildDunePackage (finalAttrs: {
   pname = "ppx_protocol_conv";
   version = "5.2.3";
 
+  minimalOCamlVersion = "5.3";
+
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
