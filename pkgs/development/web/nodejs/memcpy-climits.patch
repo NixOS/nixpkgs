@@ -1,0 +1,22 @@
+From 3efa9faedf576b3e72441f0e021c183b4ae855ca Mon Sep 17 00:00:00 2001
+From: Antoine du Hamel <duhamelantoine1995@gmail.com>
+Date: Sun, 04 Oct 2026 23:20:27 +0200
+Subject: [PATCH] fix compilation with GCC 16 on arm64
+
+Change-Id: I2cbe5f2a68d4a69bac48eea876ff0ed0cb589171
+Bug: https://github.com/nodejs/node/pull/66497#issuecomment-5978321562
+Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/8500805
+---
+
+diff --git a/deps/v8/src/base/memcopy.h b/deps/v8/src/base/memcopy.h
+index 4c2bea2..51b285d 100644
+--- a/deps/v8/src/base/memcopy.h
++++ b/deps/v8/src/base/memcopy.h
+@@ -5,6 +5,7 @@
+ #ifndef V8_BASE_MEMCOPY_H_
+ #define V8_BASE_MEMCOPY_H_
+ 
++#include <limits.h>
+ #include <stdlib.h>
+ 
+ #include <algorithm>

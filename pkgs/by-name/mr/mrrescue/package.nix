@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchurl,
   love,
-  lua,
   makeWrapper,
   makeDesktopItem,
   strip-nondeterminism,
@@ -41,7 +40,6 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    lua
     love
     makeWrapper
     strip-nondeterminism

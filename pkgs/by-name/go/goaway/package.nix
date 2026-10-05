@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   fetchPnpmDeps,
   makeWrapper,
@@ -61,7 +61,7 @@ let
 
   });
 in
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "goaway";
   inherit
     version

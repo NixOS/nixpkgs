@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-yk+TSzjmAr9QMTYduKVe/Aizph/NNmSS385pvGJckiQ=";
   };
+  patches = [
+    ./fix-vtable-link.patch
+  ];
 
   strictDeps = true;
 
