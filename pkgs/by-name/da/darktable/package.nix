@@ -85,12 +85,12 @@ let
   pugixml-shared = pugixml.override { shared = true; };
 in
 stdenv.mkDerivation rec {
-  version = "5.6.0";
+  version = "5.6.2";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-FX1tOEevivyr54lERUeG9zqIbgilBLS9YRTCBl/gBuQ=";
+    hash = "sha256-0tqSxnBAHTULV2Qx8h5YvuQDSOH1B4IBqKG4wnBYWDQ=";
   };
 
   nativeBuildInputs = [
