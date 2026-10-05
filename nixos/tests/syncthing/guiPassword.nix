@@ -1,10 +1,13 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 {
   name = "syncthing-guiPassword";
-  meta.maintainers = with lib.maintainers; [ nullcube ];
+  meta.maintainers = with lib.maintainers; [
+    nullcube
+    me-and
+  ];
   enableOCR = true;
 
-  nodes.machine = {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ../common/x11.nix ];
     environment.systemPackages = with pkgs; [
       syncthing
