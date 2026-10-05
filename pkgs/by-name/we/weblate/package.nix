@@ -10,7 +10,6 @@
   redisTestHook,
   fontconfig,
   nixosTests,
-  fetchpatch,
 
   # runtime inputs
   gitSVN,
@@ -35,7 +34,7 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "2026.9.1";
+  version = "2026.11.2";
   pyproject = true;
 
   outputs = [
@@ -47,7 +46,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${finalAttrs.version}";
-    hash = "sha256-T28Qq4iAjm14Lj2i1+db9mpCw7BOSLNbygrbnuViI3U=";
+    hash = "sha256-iS9KYKnQGTOaK5/h73aseKeIHRDb5wxzP+QnHAlaDCk=";
   };
 
   postPatch = ''
@@ -61,20 +60,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
         '_cmd: ClassVar[str] = "git"' \
         '_cmd: ClassVar[str] = "${lib.getExe gitSVN}"'
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "typing_improvement"; # a prerequisite for the fix_migration patch
-      url = "https://github.com/WeblateOrg/weblate/commit/df5aa0fd19287feb035eaf02323c72bcce92d1ad.patch";
-      hash = "sha256-oOxCD5/g2XPwXtOKHHiiKV9caITxfoiWTzolwgwZobc=";
-    })
-    (fetchpatch {
-      name = "fix_migration"; # should be included in post-2026.9.1 release
-      url = "https://github.com/WeblateOrg/weblate/commit/7c4235779f89a421c7c6c24ee5bbbaa4f0ab50f1.patch";
-      excludes = [ "docs/changes.rst" ]; # incompatible change
-      hash = "sha256-V8HyeBALZ8HaXHmhC8PK8ktB4osf9za+FH7dFLI3xis=";
-    })
-  ];
 
   build-system = with python3Packages; [ setuptools ];
 
@@ -110,6 +95,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
         "weblate-language-data"
         "translation-finder"
         "translate-toolkit"
+        "arsc-writer"
       ];
     in
     lib.concatMap (
@@ -119,11 +105,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies =
     with python3Packages;
     [
+      aeidon
       ahocorasick-rs
       altcha
       argon2-cffi-bindings
       argon2-cffi
+      arsc-writer
+      billiard
       (toPythonModule (borgbackup.override { python3 = python; }))
+      brotli
+      cel-expr-python
       celery
       certifi
       cffi
@@ -151,17 +142,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
       docutils
       drf-spectacular
       drf-standardized-errors
-      fedora-messaging
       filelock
       gitpython
       hiredis
-      html2text
       httpx2
       idna
       jsonschema
+      kombu
       lxml
       matplotlib
       mistletoe
+      msgpack
       nh3
       openpyxl
       opentelemetry-exporter-otlp-proto-http
@@ -194,7 +185,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       tesserocr
       translate-toolkit
       translation-finder
+      turbohtml
       twisted
+      ua-parser
       unicode-segmentation-rs
       unidecode
       urllib3
@@ -228,6 +221,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   optional-dependencies = with python3Packages; {
     amazon = [
       boto3
+      botocore
       # django-ses
     ];
     asgi = [ granian ];
@@ -242,13 +236,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ];
     ldap = [ django-auth-ldap ];
     # mercurial = [ mercurial ];
+    oidc = [ django-oauth-toolkit ];
     postgres = [ psycopg ];
     rollbar = [ rollbar ];
     saml = [
       python3-saml
       xmlsec
     ];
-    # saml2idp = [ djangosaml2idp2 ];
     sphinx = [ sphinx ];
     # wllegal = [ wllegal ];
     wsgi = [ granian ];
@@ -262,6 +256,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       postgresqlTestHook
       postgresql
       redisTestHook
+      hypothesis
       pytest-cov-stub
       pytest-django
       pytest-xdist
