@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   openssl,
-  lua,
+  lua5_5,
   pcre2,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     pcre2
-    lua
+    lua5_5
   ];
 
   meta = {
