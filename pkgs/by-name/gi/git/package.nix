@@ -32,7 +32,7 @@
   svnSupport ? false,
   subversionClient,
   perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
-  nlsSupport ? true,
+  withGettext ? !stdenv.hostPlatform.isMusl,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
   guiSupport ? false,
   # Disable the manual since libxslt doesn't seem to parse the files correctly.
@@ -149,13 +149,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # Fix references to gettext.sh at runtime: hard-code it to
   # ${pkgs.gettext}/bin/gettext.sh instead of assuming gettext.sh is in $PATH
-  ++ lib.optional (!stdenv.hostPlatform.isMusl) ./git-sh-i18n.patch;
+  ++ lib.optional withGettext ./git-sh-i18n.patch;
 
   postPatch = ''
     substituteInPlace contrib/credential/libsecret/Makefile \
       --replace-fail 'pkg-config' "$PKG_CONFIG"
   ''
-  + lib.optionalString (!stdenv.hostPlatform.isMusl) ''
+  + lib.optionalString withGettext ''
     substituteInPlace git-sh-i18n.sh \
       --subst-var-by gettext ${gettext}
   ''
@@ -261,12 +261,11 @@ stdenv.mkDerivation (finalAttrs: {
     "NO_INET_PTON="
   ]
   ++ (if stdenv.hostPlatform.isDarwin then [ "NO_APPLE_COMMON_CRYPTO=1" ] else [ "sysconfdir=/etc" ])
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
+  ++ lib.optionals (!withGettext) [
     "NO_SYS_POLL_H=1"
     "NO_GETTEXT=YesPlease"
   ]
   ++ lib.optional withpcre2 "USE_LIBPCRE2=1"
-  ++ lib.optional (!nlsSupport) "NO_GETTEXT=1"
   # git-gui refuses to start with the version of tk distributed with
   # macOS Catalina. We can prevent git from building the .app bundle
   # by specifying an invalid tk framework. The postInstall step will
