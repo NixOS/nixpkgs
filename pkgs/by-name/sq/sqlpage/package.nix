@@ -92,7 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "SQL-only webapp builder, empowering data analysts to build websites and applications quickly";
-    homepage = "https://github.com/sqlpage/SQLpage";
+    downloadPage = "https://github.com/sqlpage/SQLpage";
+    homepage = "https://sql-page.com";
     changelog = "https://github.com/sqlpage/SQLpage/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hythera ];
