@@ -101,6 +101,8 @@ stdenv.mkDerivation {
     substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c \
       --replace-fail "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0)" \
       "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0) || RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999)"
+
+    sed -i '0,/RTLNX_VER_MIN(6,19,0)/s//RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,112, 6,12,999) || RTLNX_VER_RANGE(6,18,55, 6,18,999)/' ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_main.c
   '';
 
   buildPhase = ''
