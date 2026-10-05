@@ -210,10 +210,12 @@ stdenv.mkDerivation rec {
     patchShebangs ./tools/generate_styles_string.sh
   '';
 
+  # darktable hangs in versionCheckHook on darwin for an unknown reason, use darktable-cli instead
+  # (possibly related to accessing /var/empty/.config/darktable, but writableTmpDirAsHomeHook did not help as of v5.6.2
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  doInstallCheck = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "release-";
