@@ -4604,9 +4604,16 @@ with pkgs;
   };
 
   tcl = tcl-8_6;
-  tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
-  tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
-  tcl-9_1 = callPackage ../development/interpreters/tcl/9.1.nix { };
+  inherit
+    ({
+      tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
+      tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
+      tcl-9_1 = callPackage ../development/interpreters/tcl/9.1.nix { };
+    })
+    tcl-8_6
+    tcl-9_0
+    tcl-9_1
+    ;
 
   tclPackages = dontRecurseIntoAttrs tcl8Packages;
   # We don't need minor-versioned package sets thanks to the tcl stubs mechanism.
@@ -6631,10 +6638,16 @@ with pkgs;
   tinyxml = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
   tk = tk-8_6;
-
-  tk-9_1 = callPackage ../development/libraries/tk/9.1.nix { tcl = tcl-9_1; };
-  tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
-  tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
+  inherit
+    ({
+      tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
+      tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
+      tk-9_1 = callPackage ../development/libraries/tk/9.1.nix { tcl = tcl-9_1; };
+    })
+    tk-8_6
+    tk-9_0
+    tk-9_1
+    ;
 
   tpm2-tss = callPackage ../development/libraries/tpm2-tss {
     autoreconfHook = buildPackages.autoreconfHook269;
