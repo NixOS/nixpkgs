@@ -3,12 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  translate-toolkit,
+  setuptools-gettext,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "weblate-language-data";
-  version = "2026.10";
+  version = "2026.11";
   pyproject = true;
 
   # nixpkgs-update: no auto update
@@ -17,12 +17,14 @@ buildPythonPackage (finalAttrs: {
     owner = "WeblateOrg";
     repo = "language-data";
     tag = finalAttrs.version;
-    hash = "sha256-/kfdgsOT+6RulyzJuUsXK2gpUebaqNN58N66EzshwS0=";
+    hash = "sha256-+ZCQbljkXp9NTtT+oYFuBpNxKfHXBzJUAhaqTot8430=";
   };
 
-  build-system = [ setuptools ];
-
-  dependencies = [ translate-toolkit ];
+  build-system = [
+    setuptools
+    setuptools-gettext
+  ]
+  ++ setuptools-gettext.optional-dependencies.translate-toolkit;
 
   # No tests
   doCheck = false;
