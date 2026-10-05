@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mail-parser";
-  version = "4.6.5";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SpamScope";
     repo = "mail-parser";
     tag = finalAttrs.version;
-    hash = "sha256-tN0QVdiyina1PZqsuYBFW/GgD2pFkpKcvqcqKEEtHnI=";
+    hash = "sha256-eiLnNTkBanoJkBthOLsblL0VEWNUKtGV1c2obMuUXJA=";
   };
 
   build-system = [ hatchling ];
