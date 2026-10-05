@@ -74,8 +74,9 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/pyro-ppl/pyro/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      teh
+      Filippo-Galli
       georgewhewell
+      teh
     ];
   };
 })
