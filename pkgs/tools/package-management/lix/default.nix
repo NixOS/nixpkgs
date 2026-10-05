@@ -7,10 +7,7 @@
   aws-sdk-cpp,
   boehmgc,
   callPackage,
-  fetchgit,
-  fetchFromGitHub,
   fetchFromGitea,
-  fetchpatch2,
   fetchpatch,
   rustPlatform,
   editline,
@@ -37,23 +34,10 @@
   confDir ? "/etc",
 }:
 let
-  lixMdbookPatch = fetchpatch2 {
-    name = "lix-mdbook-0.5-support.patch";
-    url = "https://git.lix.systems/lix-project/lix/commit/54df89f601b3b4502a5c99173c9563495265d7e7.patch";
-    excludes = [ "package.nix" ];
-    hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
-  };
-
   lixFunctional2TimeoutPatch = fetchpatch {
     name = "lix-f2-increase-timeouts-and-max-worker-count.patch";
     url = "https://git.lix.systems/lix-project/lix/commit/c6d22874d6dffc9646279601ad546c1d78d9a409.patch";
     hash = "sha256-V6Q9XFsdla/OPwGPvAkb8mBisdfQbkaNKqpCfL3Tk4U=";
-  };
-
-  lixSyscallhPatch = fetchpatch {
-    name = "lix-libutil-always-include-sys-syscallh.patch";
-    url = "https://git.lix.systems/lix-project/lix/commit/570f5b8d1f7ad4e3146dd307a223e8a6993ddcc5.patch";
-    hash = "sha256-7fs1D50XhUIQj09VNPsWRLobSwWpr3s7u4qexQFK1lw=";
   };
 
   makeLixScope =
@@ -194,17 +178,6 @@ lib.makeExtensible (
   {
     inherit makeLixScope;
 
-    lix_2_94 = self.makeLixScope {
-      attrName = "lix_2_94";
-
-      lix-args = (import ./2.94.nix { inherit fetchFromGitea rustPlatform; }) // {
-        patches = [
-          lixMdbookPatch
-          lixSyscallhPatch
-        ];
-      };
-    };
-
     lix_2_95 = self.makeLixScope {
       attrName = "lix_2_95";
 
@@ -253,5 +226,6 @@ lib.makeExtensible (
     lix_2_91 = throw (removedMessage "2.91"); # added in 2025-09-11
     lix_2_92 = throw (removedMessage "2.92"); # added in 2025-09-11
     lix_2_93 = throw (removedMessage "2.93"); # added in 2026-04-19
+    lix_2_94 = throw (removedMessage "2.94"); # added in 2026-10-04
   }
 )

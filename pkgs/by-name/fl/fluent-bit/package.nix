@@ -22,7 +22,7 @@
   pkg-config,
   rdkafka,
   sqlite,
-  systemd,
+  systemdLibs,
   versionCheckHook,
   zstd,
 }:
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # libbpf doesn't build for Darwin yet.
     libbpf
-    systemd
+    systemdLibs
   ];
 
   cmakeFlags = [

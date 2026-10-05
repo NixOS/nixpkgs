@@ -19,7 +19,7 @@
   libx11,
   libGL,
   libdrm,
-  gitUpdater,
+  unstableGitUpdater,
   replaceVars,
 }:
 stdenv.mkDerivation {
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Software clone of the Wii U gamepad";

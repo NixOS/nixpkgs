@@ -40,7 +40,7 @@
   sqlite,
   stdenv,
   symlinkJoin,
-  systemd,
+  systemdLibs,
   zlib,
 
   withCloudUi ? false,
@@ -127,7 +127,7 @@ stdenv.mkDerivation (
       libnetfilter_acct
     ]
     ++ lib.optionals withSsl [ openssl ]
-    ++ lib.optionals (withSystemdJournal || withSystemdUnits) [ systemd ];
+    ++ lib.optionals (withSystemdJournal || withSystemdUnits) [ systemdLibs ];
 
     patches = [
       # Allow ndsudo to use non-hardcoded `PATH`
