@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   gtk3,
-  lua,
+  lua5_5,
   glib,
 }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    lua
+    lua5_5
     gtk3
   ];
 
