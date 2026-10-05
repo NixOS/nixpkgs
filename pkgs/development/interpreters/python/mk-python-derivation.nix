@@ -443,19 +443,31 @@ lib.extendMkDerivation {
       }
       // meta
       // {
-        problems =
-          let
-            disabled' = if meta ? problems then meta.problems ? unsupportedPython else disabled;
-          in
-          meta.problems or { }
-          // {
-            ${if disabled' then "unsupportedPython" else null} = meta.problems.unsupportedPython or { } // {
+        problems = meta.problems or { } // {
+          ${if meta ? problems.unsupportedPython then "unsupportedPython" else null} =
+            meta.problems.unsupportedPython or { }
+            // {
               kind = "broken";
               message =
                 meta.problems.unsupportedPython.message
                   or "${removePrefix namePrefix finalAttrs.name} not supported for interpreter ${python.executable}";
             };
+          # attrs.disabled must come from overridePythonPackages,
+          # since the one from buildPythonPackage has been converted and removed
+          # in python-packages-base.nix
+          ${if attrs ? disabled then "buildPythonPackage-attrs-disabled-overridePythonAttrs" else null} = {
+            kind = "broken";
+            message =
+              let
+                pos = unsafeGetAttrPos "disabled" attrs;
+                posString = lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+              in
+              ''
+                buildPythonPackage: ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
+                  Add/remove `meta.problems.unsupportedPython` instead.
+              '';
           };
+        };
       };
     }
     // optionalAttrs (attrs ? checkPhase) {
