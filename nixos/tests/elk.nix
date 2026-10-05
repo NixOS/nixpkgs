@@ -130,11 +130,6 @@ let
               logstash = {
                 enable = true;
                 package = elk.logstash;
-                # The NixOS module runs logstash as root, which logstash 8+
-                # refuses by default.
-                extraSettings = ''
-                  allow_superuser: true
-                '';
                 inputConfig = ''
                   exec { command => "echo -n flowers" interval => 1 type => "test" }
                   exec { command => "echo -n dragons" interval => 1 type => "test" }
