@@ -44,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+    # Doesn't compile with C23
+    "-std=gnu17"
+  ];
 
   meta = {
     description = "Interactive spelling checker";
