@@ -784,6 +784,7 @@ in
   gotify-server = runTest ./gotify-server.nix;
   gotosocial = runTest ./web-apps/gotosocial.nix;
   goupile = runTest ./web-apps/goupile;
+  gradient = runTestOn [ "x86_64-linux" ] ./gradient.nix;
   grafana = import ./grafana {
     inherit runTest;
   };

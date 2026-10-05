@@ -534,6 +534,8 @@
   ./services/continuous-integration/gitlab-runner/runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
   ./services/continuous-integration/gocd-server/default.nix
+  ./services/continuous-integration/gradient/default.nix
+  ./services/continuous-integration/gradient/worker.nix
   ./services/continuous-integration/hercules-ci-agent/default.nix
   ./services/continuous-integration/hydra/builder.nix
   ./services/continuous-integration/hydra/default.nix
