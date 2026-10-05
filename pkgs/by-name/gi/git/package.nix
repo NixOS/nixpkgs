@@ -29,6 +29,7 @@
   makeWrapper,
   libiconv,
   libiconvReal,
+  pkgsHostHost,
   runtimeShellPackage,
   svnSupport ? false,
   subversionClient,
@@ -506,7 +507,19 @@ stdenv.mkDerivation (finalAttrs: {
       GIT_TEST_INSTALLED=$out/bin
       ${lib.optionalString (!svnSupport) "NO_SVN_TESTS=y"}
     )
-
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # Some tests (e.g. t3434) compare the output of iconv(1) byte-for-byte with
+    # Git's own conversions, so they need the iconv(1) that matches the host's
+    # iconv(3), not the build platform's.  For example, glibc and musl encode
+    # ISO-2022-JP differently, though both encodings are valid.
+    #
+    # Adding `pkgsHostHost.iconv` to nativeInstallCheckInputs isn't enough:
+    # the build platform's iconv(1) comes in via depsBuildBuild's
+    # `buildPackages.stdenv.cc`, which is earlier on PATH.  So prepend it.
+    export PATH="${lib.makeBinPath [ pkgsHostHost.iconv ]}:$PATH"
+  ''
+  + ''
     function disable_test {
       local test=$1 pattern=$2
       if [ $# -eq 1 ]; then
