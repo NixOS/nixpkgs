@@ -140,7 +140,11 @@
               unitConfig = {
                 DefaultDependencies = false;
                 RequiresMountsFor = [
-                  "/sysroot"
+                  # /.rw-etc may be configured as a separate mount.
+                  # Without the following line, you end up with a race condition between
+                  # Binding to / (/sysroot)'s .rw-etc mount or the separate /.rw-etc (/sysroot/.rw-etc)
+                  # mount.
+                  "/sysroot/.rw-etc"
                   # Needed so we can clear stale opaque markers from the
                   # upperdir based on the contents of the new metadata layer
                   # before the overlay is mounted.

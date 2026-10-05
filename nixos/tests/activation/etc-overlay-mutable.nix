@@ -56,6 +56,21 @@
       };
     };
 
+  # /.rw-etc on separate mount as you'd have if tmpfs were root. Ensures mount race conditions are handled correctly
+  nodes.separateRwEtc = {
+    system.etc.overlay.enable = true;
+    system.etc.overlay.mutable = true;
+    boot.initrd.systemd.enable = true;
+
+    virtualisation.emptyDiskImages = [ 64 ];
+    virtualisation.fileSystems."/.rw-etc" = {
+      device = "/dev/vdb";
+      fsType = "ext4";
+      autoFormat = true;
+      neededForBoot = true;
+    };
+  };
+
   testScript = # python
     ''
       newergen = machine.succeed("realpath /run/current-system/specialisation/newer-generation/bin/switch-to-configuration").rstrip()
@@ -167,5 +182,20 @@
         machine.wait_for_unit("multi-user.target")
         machine.fail("getfattr -h -n trusted.overlay.opaque /.rw-etc/upper/pam.d")
         machine.succeed("test -e /etc/pam.d/login")
+
+      with subtest("upperdir is used from a separately mounted /.rw-etc"):
+        separateRwEtc.wait_for_unit("multi-user.target")
+        separateRwEtc.succeed("findmnt --mountpoint /.rw-etc --source /dev/vdb")
+        separateRwEtc.succeed("findmnt --kernel --type overlay /etc")
+
+        separateRwEtc.succeed("echo -n 'some-contents' > /etc/persisted")
+        # If overlay mounted before /.rw-etc, then the upperdir will be hidden
+        # underneath the mount and this file won't appear
+        separateRwEtc.succeed("test -e /.rw-etc/upper/persisted")
+
+        separateRwEtc.shutdown()
+        separateRwEtc.start()
+        separateRwEtc.wait_for_unit("multi-user.target")
+        assert separateRwEtc.succeed("cat /etc/persisted") == "some-contents"
     '';
 }
