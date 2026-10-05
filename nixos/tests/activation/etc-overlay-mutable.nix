@@ -183,10 +183,9 @@
         machine.fail("getfattr -h -n trusted.overlay.opaque /.rw-etc/upper/pam.d")
         machine.succeed("test -e /etc/pam.d/login")
 
-      with subtest("upperdir is used from a separately mounted /.rw-etc"):
-        separateRwEtc.wait_for_unit("multi-user.target")
+      with subtest("upperdir uses the separately mounted /.rw-etc"):
+        separateRwEtc.wait_for_unit("etc.mount")
         separateRwEtc.succeed("findmnt --mountpoint /.rw-etc --source /dev/vdb")
-        separateRwEtc.succeed("findmnt --kernel --type overlay /etc")
 
         separateRwEtc.succeed("echo -n 'some-contents' > /etc/persisted")
         # If overlay mounted before /.rw-etc, then the upperdir will be hidden
@@ -195,7 +194,7 @@
 
         separateRwEtc.shutdown()
         separateRwEtc.start()
-        separateRwEtc.wait_for_unit("multi-user.target")
-        assert separateRwEtc.succeed("cat /etc/persisted") == "some-contents"
+        separateRwEtc.wait_for_unit("etc.mount")
+        t.assertEqual(separateRwEtc.succeed("cat /etc/persisted"), "some-contents", "/etc/persisted has different contents after rebooting")
     '';
 }

@@ -142,8 +142,7 @@
                 RequiresMountsFor = [
                   # /.rw-etc may be configured as a separate mount.
                   # Without the following line, you end up with a race condition between
-                  # Binding to / (/sysroot)'s .rw-etc mount or the separate /.rw-etc (/sysroot/.rw-etc)
-                  # mount.
+                  # binding to the mountpoint or to the directory in /sysroot.
                   "/sysroot/.rw-etc"
                   # Needed so we can clear stale opaque markers from the
                   # upperdir based on the contents of the new metadata layer
