@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   autoreconfHook,
+  versionCheckHook,
   texinfo,
   ncurses,
   libxcrypt,
@@ -70,6 +71,9 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/screen/";
     description = "Window manager that multiplexes a physical terminal";
@@ -98,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     platforms = lib.platforms.unix;
+    mainProgram = "screen";
     maintainers = [ ];
   };
 })
