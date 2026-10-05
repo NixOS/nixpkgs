@@ -17509,6 +17509,8 @@ self: super: with self; {
 
   pyvista = callPackage ../development/python-modules/pyvista { };
 
+  pyvista-validation = callPackage ../development/python-modules/pyvista-validation { };
+
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
 
   pyvlx = callPackage ../development/python-modules/pyvlx { };
