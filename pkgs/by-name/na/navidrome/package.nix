@@ -29,6 +29,11 @@ buildGo127Module (finalAttrs: {
     hash = "sha256-6667wi23YSPdF/LL5k7VmYEAM5rxQYjqlvAtg5vJzj4=";
   };
 
+  patches = [
+    # remove once version > 0.64.2
+    ./6221.patch
+  ];
+
   vendorHash = "sha256-/3NhF/OHDxWrciN5GdROiO1yhjjdm5F5ntW7h6tzFGc=";
 
   npmRoot = "ui";
