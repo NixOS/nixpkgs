@@ -83,6 +83,19 @@
 
   This partition could be booted by a BIOS able to understand GPT layouts and recognizing the MBR at the start.
 
+  ### Reproducible images
+
+  `deterministic` (the default) fixes the identifiers: partition GUIDs and the root filesystem UUID. `reproducible = true` goes further and makes the whole image bit-for-bit identical across builds of the same inputs, for ext4 root filesystems:
+
+  - the root filesystem is created with `mke2fs -d` instead of `cptofs`, with a fixed directory hash seed;
+  - the build VM gets a single CPU, and fixed Perl and Python hash seeds;
+  - after the VM, the times and generation numbers of the inodes it touched are reset to `SOURCE_DATE_EPOCH`, the inodes it created and deleted are zeroed, the directories are rebuilt with `e2fsck -D`, the journal is recreated and the free blocks are zeroed;
+  - the FAT boot partitions are zeroed, formatted with `mkfs.vfat --invariant` and rebuilt from their files in sorted order;
+  - a VHD (`format = "vpc"`) gets a fixed footer time and unique ID;
+  - the image's Nix database is registered in sorted order, with every registration time set to `SOURCE_DATE_EPOCH`.
+
+  This costs some build time, mostly for the single-CPU VM and `e2fsck -D`. `nixos/tests/make-disk-image-reproducible.nix` builds an image twice and compares the results.
+
   ### How to run determinism analysis on results?
 
   Build your derivation with `--check` to rebuild it and verify it is the same.
