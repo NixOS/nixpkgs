@@ -61,6 +61,7 @@ buildPythonPackage (finalAttrs: {
     ./5.2/disable-failing-test.patch
     # skip flaky performnace test
     ./6.0/skip-flaky-tests.patch
+    ./6.x/fix-flaky-tests.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./5.2/gdal.patch {
