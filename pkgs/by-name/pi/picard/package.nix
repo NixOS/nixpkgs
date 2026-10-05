@@ -1,30 +1,23 @@
 {
   lib,
   stdenv,
-  python313Packages,
+  python3Packages,
   fetchFromGitHub,
 
   gettext,
-  qt5,
+  qt6,
+  wrapGAppsHook3,
 
-  enablePlayback ? true,
   gst_all_1,
   chromaprint,
 
   writableTmpDirAsHomeHook,
-  versionCheckHook,
   nix-update-script,
 }:
 
-let
-  # A few more tests fail with python314Packages, indicating the code isn't
-  # ready for it yet.
-  pythonPackages = python313Packages;
-  pyqt5 = if enablePlayback then pythonPackages.pyqt5-multimedia else pythonPackages.pyqt5;
-in
-pythonPackages.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "picard";
-  version = "2.13.3";
+  version = "3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,50 +25,43 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "metabrainz";
     repo = "picard";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-Q0W5Q1+PbN+yneh98jx0/UNHVfD6okX92hxNzCE+Ibc=";
+    hash = "sha256-aUiXmiGZTg2nQtHlE8B1/DFgvK5jLVOzN8i21fPsNk4=";
   };
 
   nativeBuildInputs = [
     gettext
-    qt5.wrapQtAppsHook
-    pythonPackages.setuptools
+    qt6.wrapQtAppsHook
+    python3Packages.setuptools
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    qt5.qtbase
-  ]
-  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt5.qtwayland) [
-    qt5.qtwayland
-  ]
-  ++ lib.optionals pyqt5.multimediaEnabled [
-    qt5.qtmultimedia.bin
+    qt6.qtbase
+    qt6.qtmultimedia
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-  ];
-
-  pythonRelaxDeps = lib.optionals stdenv.hostPlatform.isDarwin [
-    # Should be resolved in the next version
-    "pyobjc-core"
-    "pyobjc-framework-Cocoa"
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform qt6.qtwayland) [
+    qt6.qtwayland
   ];
 
   dependencies = [
     chromaprint # Not strictly required, but added for fpcalc in the wrapper
   ]
   ++ (
-    with pythonPackages;
+    with python3Packages;
     [
       charset-normalizer
       discid
-      fasteners
       markdown
       mutagen
       pyjwt
-      pyqt5
-      python-dateutil
+      pyqt6
+      pygit2
       pyyaml
+      tomlkit
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pyobjc-core
@@ -83,28 +69,35 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ]
   );
 
-  # Not reporting any of these issues because the next upstream version will
-  # include many breaking changes and this might not be relevant.
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
-    "test/test_const_appdirs.py::AppPathsTest::test_cache_folder_macos" # - AssertionError: '/nix/var/nix/builds/nix-54642-966088698/.h[33 chars]card' ...
-    "test/test_const_appdirs.py::AppPathsTest::test_config_folder_macos" # - AssertionError: '/nix/var/nix/builds/nix-54642-966088698/.h[38 chars]card' ...
-    "test/test_const_appdirs.py::AppPathsTest::test_plugin_folder_macos" # - AssertionError: '/nix/var/nix/builds/nix-54642-966088698/.h[46 chars]gins' ...
-    "test/test_plugins.py" # Various PermissionError for /var/empty/Library - hopefully will be resolved in the next release.
-    "test/test_utils.py::HiddenFileTest::test_macos" # - FileNotFoundError: [Errno 2] No such file or directory: 'SetFile'
+  # Not reporting any of these issues upstream since they are all caused by
+  # the restricted darwin build sandbox (no real $HOME, no access to
+  # /var/empty/Library, no SetFile utility), not by picard itself.
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "_macos"
+    "TestListenQueue"
   ];
 
   nativeCheckInputs = [
-    pythonPackages.pytestCheckHook
+    python3Packages.pytestCheckHook
     writableTmpDirAsHomeHook
-    versionCheckHook
   ];
   doCheck = true;
 
+  env = {
+    # pygit2 needs this to initialize its TLS settings, otherwise importing
+    # it fails during the tests; also baked into the wrapper below for
+    # runtime, and for versionCheckHook.
+    inherit (python3Packages.pygit2) SSL_CERT_FILE;
+  };
+
   # In order to spare double wrapping, we use:
+  dontWrapGApps = true;
+  dontWrapQt = true;
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   ''
-  + lib.optionalString pyqt5.multimediaEnabled ''
+  + lib.optionalString (lib.meta.availableOn stdenv.hostPlatform qt6.qtwayland) ''
     makeWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
