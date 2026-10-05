@@ -1287,6 +1287,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  atlas-nvim = buildVimPlugin {
+    pname = "atlas.nvim";
+    version = "0.7.13";
+    src = fetchFromGitHub {
+      owner = "emrearmagan";
+      repo = "atlas.nvim";
+      tag = "0.7.13";
+      hash = "sha256-oZY6EQmtfp6bH04CjAdoQwJOyD5ikTLFX2bl7hnCOcE=";
+    };
+    meta.homepage = "https://github.com/emrearmagan/atlas.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   ats-vim = buildVimPlugin {
     pname = "ats-vim";
     version = "0.1-unstable-2020-09-04";

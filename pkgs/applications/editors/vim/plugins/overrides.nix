@@ -27,6 +27,7 @@
   fzy,
   gawk,
   git,
+  gh,
   glow,
   helm-ls,
   himalaya,
@@ -258,6 +259,17 @@ assertNoAdditions {
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     # Optional toggleterm integration
     checkInputs = [ self.toggleterm-nvim ];
+  };
+
+  atlas-nvim = super.atlas-nvim.overrideAttrs {
+    runtimeDeps = [
+      curl
+      gitMinimal
+    ];
+    checkInputs = with self; [
+      fzf-lua
+      snacks-nvim
+    ];
   };
 
   augment-vim = super.augment-vim.overrideAttrs (old: {
