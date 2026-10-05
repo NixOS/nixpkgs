@@ -147,6 +147,8 @@ let
             phpWithExtensions = symlinkJoin {
               pname = "php-with-extensions";
               inherit (php) version;
+              strictDeps = true;
+              __structuredAttrs = true;
               nativeBuildInputs = [ makeBinaryWrapper ];
               passthru = php.passthru // {
                 buildEnv = mkBuildEnv allArgs allExtensionFunctions;
