@@ -187,7 +187,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./tests/cpp/tests_continuous_batching \
       --gtest_filter="-${
         lib.concatStringsSep ":" (
-          [ "GoogleTestVerification.UninstantiatedParameterizedTestSuite*" ]
+          [
+            "GoogleTestVerification.UninstantiatedParameterizedTestSuite*"
+            # Compares CPU-plugin logits against a naive matmul with a 1e-4
+            # tolerance; some CPUs exceed it.
+            "MtpModelTransforms.GraftedLogitsMatchTiedWeightMatmul"
+          ]
           ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
             "TestCacheManager.*"
             "TestLinearAttentionCacheManager.*"
