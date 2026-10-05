@@ -32,7 +32,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    applicationVersion = lib.concatStringsSep "." (lib.take 3 (lib.versions.splitVersion finalAttrs.version));
+    applicationVersion = lib.concatStringsSep "." (
+      lib.take 3 (lib.versions.splitVersion finalAttrs.version)
+    );
     resourceDir = "share/${finalAttrs.pname}";
     updateScript = nix-update-script {
       extraArgs = [ "--version=unstable" ];
