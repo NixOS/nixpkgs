@@ -119,7 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PYTHONPATH : $out/share/openvswitch/python
   '';
 
-  doCheck = true;
+  # Upstream test suite is flaky on aarch64 due to timing-sensitive daemon IPC
+  doCheck = !stdenv.hostPlatform.isAarch64;
   preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
     export RECHECK=yes
