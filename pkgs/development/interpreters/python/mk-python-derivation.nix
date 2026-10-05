@@ -445,7 +445,7 @@ lib.extendMkDerivation {
       // {
         problems =
           let
-            disabled' = meta ? problems.unsupportedPython || disabled;
+            disabled' = if meta ? problems then meta.problems ? unsupportedPython else disabled;
           in
           meta.problems or { }
           // {
