@@ -4,6 +4,7 @@
   fetchurl,
   replaceVars,
   fetchpatch,
+  installShellFiles,
   meson,
   ninja,
   pkg-config,
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    installShellFiles
     meson
     ninja
     pkg-config
@@ -54,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     moveToOutput "bin/lsusb.py" "$python"
     install -Dm555 usbreset -t $out/bin
+    installManPage ../man/usbreset.1
   '';
 
   meta = {
