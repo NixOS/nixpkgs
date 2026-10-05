@@ -474,6 +474,26 @@ lib.extendMkDerivation {
                 + posString;
             };
 
+          # Deprecated pytestFlagsArray (internal)
+          ${
+            if attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ] then
+              "buildPythonPackage-internal-pytestFlagsArray"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message =
+                let
+                  pos = unsafeGetAttrPos "pytestFlagsArray" attrs;
+                  posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                in
+                ''
+                  ${finalAttrs.name}: Deprecated argument pytestFlagsArray found${posString}
+                    Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+                '';
+            };
+
           # Deprecated argument stdenv (internal)
           ${if attrs ? stdenv then "buildPythonPackage-internal-stdenv" else null} = {
             kind = "broken";
@@ -495,20 +515,6 @@ lib.extendMkDerivation {
       # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
       installCheckPhase = attrs.checkPhase;
     }
-    // (
-      let
-        deprecatedFlagNotEmpty =
-          attrs ? pytestFlagsArray && attrs.pytestFlagsArray != null && attrs.pytestFlagsArray != [ ];
-        pos = unsafeGetAttrPos "pytestFlagsArray" attrs;
-        posString = optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
-      in
-      {
-        ${if deprecatedFlagNotEmpty then "pytestFlagsArray" else null} = throw ''
-          buildPythonPackage: Deprecated flag pytestFlagsArray found${posString}
-            Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
-        '';
-      }
-    )
     //
       lib.mapAttrs
         (
