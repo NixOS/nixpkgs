@@ -6821,7 +6821,7 @@ final: prev: {
       version = "0.3.5-2";
       knownRockspec =
         (fetchurl {
-          url = "https://luarocks.org/warna-0.3.5-2.rockspec";
+          url = "mirror://luarocks/warna-0.3.5-2.rockspec";
           sha256 = "0vkkpldgaav9cnx63wal6851rlcq6n93fpv5xpvm9al308q45d0r";
         }).outPath;
       src = fetchFromGitHub {
