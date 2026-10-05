@@ -15702,6 +15702,10 @@ self: super: with self; {
     callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth
       { };
 
+  pyobjc-framework-CoreMedia =
+    callPackage ../development/python-modules/pyobjc-framework-CoreMedia
+      { };
+
   pyobjc-framework-CoreText = callPackage ../development/python-modules/pyobjc-framework-CoreText { };
 
   pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
