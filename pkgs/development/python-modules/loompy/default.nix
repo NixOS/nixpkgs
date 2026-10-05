@@ -35,6 +35,11 @@ let
 
     nativeCheckInputs = [ pytestCheckHook ];
 
+    # Needed for Numba disk-based cache
+    preBuild = ''
+      export HOME="$(mktemp -d)"
+    '';
+
     # Deprecated numpy attributes access
     disabledTests = [
       "test_scan_with_default_ordering"
