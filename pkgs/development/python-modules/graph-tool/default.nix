@@ -123,5 +123,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://git.skewed.de/count0/graph-tool/commits/release-${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.mjoerg ];
+    broken = stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "22";
   };
 })
