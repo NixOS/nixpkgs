@@ -89,12 +89,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "test/test_utils.py::HiddenFileTest::test_macos" # - FileNotFoundError: [Errno 2] No such file or directory: 'SetFile'
   ];
 
-  setupPyGlobalFlags = [
-    "build"
-    "--disable-autoupdate"
-    "--localedir=${placeholder "out"}/share/locale"
-  ];
-
   nativeCheckInputs = [
     pythonPackages.pytestCheckHook
     writableTmpDirAsHomeHook
