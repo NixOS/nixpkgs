@@ -62,7 +62,7 @@ in
         ExecStart = "${lib.getExe cfg.package} serve";
 
         # Hooks must be executable, but DynamicUser mounts /var/lib/private as noexec
-        ExecPaths = "${stateDir}/repos";
+        ExecPaths = stateDir;
 
         StateDirectory = "soft-serve";
         WorkingDirectory = stateDir;
