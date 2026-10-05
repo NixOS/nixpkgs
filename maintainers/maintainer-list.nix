@@ -232,6 +232,11 @@
     github = "2hexed";
     githubId = 54501296;
   };
+  _2youg1 = {
+    name = "2youg1";
+    github = "2youg1";
+    githubId = 65069696;
+  };
   _2zqa = {
     name = "Marijn Kok";
     email = "hkju4b4ds@mozmail.com";
