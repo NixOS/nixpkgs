@@ -14,7 +14,7 @@
   withTeXLive ? false,
   texliveSmall,
   withLua ? false,
-  lua,
+  lua5_5,
   withCaca ? false,
   libcaca,
   libx11,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optional withTeXLive texliveSmall
-  ++ lib.optional withLua lua
+  ++ lib.optional withLua lua5_5
   ++ lib.optional withCaca libcaca
   ++ lib.optionals withX [
     libx11
