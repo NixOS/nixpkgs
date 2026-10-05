@@ -13,15 +13,20 @@
 
 buildPythonPackage (finalAtts: {
   pname = "levenshtein";
-  version = "0.27.4";
+  version = "0.27.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rapidfuzz";
     repo = "Levenshtein";
     tag = "v${finalAtts.version}";
-    hash = "sha256-GPOiwbK1dV6lF3xiBCjzC3hXMWVVggvkviLHXSMU+Vs=";
+    hash = "sha256-W21aC2/dJ7IoK9SnGSqXsJx9/1lF4ymnPGOdMU+T7O4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.1.6,<3.3.0" "Cython"
+  '';
 
   build-system = [
     cmake
