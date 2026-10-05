@@ -7,19 +7,19 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stardust-xr-gravity";
-  version = "0.51.1";
+  version = "0.52.0";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "gravity";
     tag = finalAttrs.version;
-    hash = "sha256-upw0MjGccSI1B10wabKPMGrEo7ATfg4a7Hzaucbf99w=";
+    hash = "sha256-+AJZILI157bo2otxm3Plftgk4AsGZiajvOcKmzJxFy8=";
   };
 
   __structuredAttrs = true;
   strictDeps = true;
 
-  cargoHash = "sha256-tkWY+dLFDnyir6d0supR3Z202p5i4UewY+J66mL1x/o=";
+  cargoHash = "sha256-ykhRbPOftWVo2jN22cwMppSnxFus7ac1uKZBm5cFRpQ=";
 
   passthru.updateScript = nix-update-script { };
 
