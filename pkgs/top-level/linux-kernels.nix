@@ -220,6 +220,15 @@ in
       {
         inherit callPackage;
         kernel = kernel_;
+
+        # vmlinux.h derived from this kernel's BTF, for BPF consumers such as
+        # systemd's nsresourced/mountfsd.
+        # This derivation requires CONFIG_DEBUG_INFO_BTF-built kernel (this is
+        # the case in nixpkgs), otherwise it will fail.
+        ebpf-headers = callPackage ../os-specific/linux/kernel/ebpf-headers.nix {
+          inherit kernel;
+        };
+
         inherit (kernel) stdenv; # in particular, use the same compiler by default
 
         # to help determine module compatibility
