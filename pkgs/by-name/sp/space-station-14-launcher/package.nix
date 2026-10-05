@@ -8,7 +8,6 @@
   fetchFromGitHub,
   iconConvTools,
   copyDesktopItems,
-  makeDesktopItem,
   libx11,
   libice,
   libsm,
@@ -118,17 +117,7 @@ buildDotnetModule {
     copyDesktopItems
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "SS14.Launcher";
-      exec = "SS14.Launcher";
-      icon = "SS14";
-      desktopName = "Space Station 14 Launcher";
-      comment = "A multiplayer disaster simulator";
-      categories = [ "Game" ];
-      startupWMClass = "SS14.Launcher";
-    })
-  ];
+  desktopItems = [ "PublishFiles/SS14.desktop" ];
 
   postInstall = ''
     mkdir -p $out/lib/SS14.Launcher/loader
