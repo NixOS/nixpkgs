@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   appstream,
   cmake,
   createrepo_c,
@@ -37,7 +36,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dnf5";
-  version = "5.4.4.0";
+  version = "5.4.6.0";
 
   outputs = [
     "out"
@@ -48,16 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpm-software-management";
     repo = "dnf5";
     tag = finalAttrs.version;
-    hash = "sha256-l0wdC2XMl8CevKtq4VINoCZ4p/KEMCKaKTQ8bjskb3M=";
+    hash = "sha256-7TWCPX7WmGWcDZ3wNaVnwIB5IDyeSzyjuPNAN3ecpdM=";
   };
-
-  patches = [
-    # fmt 12.2.0 no longer includes <cstring> transitively.
-    (fetchpatch {
-      url = "https://github.com/rpm-software-management/dnf5/commit/10b3ea5df53349511df179eee8dbe3b7a77e8ba4.patch";
-      hash = "sha256-vhkEqoFtB/hk1vhHo6qpzrqbEVrn5eVdsDsnNsb70uM=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -70,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ (with python3Packages; [
     breathe
-    sphinx-autoapi
     sphinx-rtd-theme
   ]);
 
@@ -120,6 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   prePatch = ''
+    # autoapi needs the swig-generated python bindings (WITH_PYTHON3),
+    # it is only used for the python API docs, not for the man pages.
+    substituteInPlace doc/conf.py.in \
+      --replace-fail "'autoapi.extension'," ""
     substituteInPlace CMakeLists.txt \
       --replace-fail "/usr/lib/systemd/system" "$out/lib/systemd/system"
     substituteInPlace dnf5daemon-server/dbus/CMakeLists.txt \
