@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
+  installShellFiles,
   jq,
   glow,
   nix-update-script,
@@ -19,7 +20,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-VNYZ9WKspAL2mUb1SDuGxv1MhOCBya7eEMJmy5H99xU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -36,6 +40,8 @@ stdenvNoCC.mkDerivation {
           jq
         ]
       }"
+
+    installManPage man/xdg-ninja.1
     runHook postInstall
   '';
 
