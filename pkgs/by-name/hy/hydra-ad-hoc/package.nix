@@ -3,12 +3,14 @@
   rustPlatform,
   hydra,
   pkg-config,
+  postgresql,
   protobuf,
   rust-jemalloc-sys,
   nixosTests,
+  withOtel ? false,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "hydra-evaluator";
+  pname = "hydra-ad-hoc";
   inherit (hydra) version src;
   __structuredAttrs = true;
 
@@ -16,8 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [
     "--package"
-    "hydra-evaluator"
+    "hydra-ad-hoc"
   ];
+
+  buildFeatures = lib.optional withOtel "otel";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,17 +33,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys
   ];
 
-  # The unit tests spin up a PostgreSQL instance, which is not available in the
-  # sandbox.
-  doCheck = false;
+  # The tests start their own throwaway PostgreSQL instances.
+  nativeCheckInputs = [ postgresql ];
+
+  cargoTestFlags = [
+    "--package"
+    "hydra-ad-hoc"
+  ];
 
   passthru.tests = { inherit (nixosTests) hydra; };
 
   meta = {
-    description = "Evaluator for the Nix-based continuous build system Hydra";
+    description = "Experimental Hydra service presenting Hydra as one big Nix daemon for ad hoc builds";
     homepage = "https://github.com/NixOS/hydra";
     license = lib.licenses.gpl3Only;
-    mainProgram = "hydra-evaluator";
+    mainProgram = "hydra-ad-hoc";
     maintainers = with lib.maintainers; [
       conni2461
       das_j
