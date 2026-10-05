@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
   versionCheckHook,
   writeShellApplication,
   curl,
@@ -58,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Language server implementation for systemd unit files made in Rust";
     homepage = "https://github.com/JFryy/systemd-lsp";
-    changelog = "https://github.com/JFryy/systemd-lsp/releases/tag/v${releaseDate}";
+    changelog = "https://github.com/JFryy/systemd-lsp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mahyarmirrashed ];
     mainProgram = "systemd-lsp";
