@@ -11,6 +11,7 @@
   tailscale,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
   stdenv,
 }:
 
@@ -80,7 +81,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) hydrascale; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Run multiple Tailscale tailnets simultaneously on one Linux host";
