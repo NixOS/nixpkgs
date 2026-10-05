@@ -17,6 +17,8 @@ let
     version = "3.0.8";
     pyproject = true;
 
+    __structuredAttrs = true;
+
     src = fetchPypi {
       inherit (finalAttrs) pname version;
       hash = "sha256-wfSNC/Iaorve7iGgV3VTy6lgnZQ118MraHaGu7WGnKc=";
@@ -49,7 +51,7 @@ let
     pythonImportsCheck = [ "loompy" ];
 
     meta = {
-      changelog = "https://github.com/linnarsson-lab/loompy/releases";
+      changelog = "https://github.com/linnarsson-lab/loompy/releases/tag/${finalAttrs.version}";
       description = "Python implementation of the Loom file format";
       homepage = "https://github.com/linnarsson-lab/loompy";
       license = lib.licenses.bsd2;
