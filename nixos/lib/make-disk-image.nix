@@ -186,6 +186,14 @@
   # Also, to fix last time checked of the ext4 partition if fsType = ext4.
   deterministic ? true,
 
+  # Whether to make the image bit-for-bit reproducible: two builds from the
+  # same inputs produce identical files, so `nix build --rebuild` passes.
+  # Requires `deterministic` and an ext2, ext3 or ext4 root filesystem, and
+  # populates it with mke2fs. It costs some build time: the build VM gets a
+  # single CPU, and the filesystems are normalised after the VM has run.
+  # See "How to run determinism analysis on results?" above.
+  reproducible ? false,
+
   # GPT Partition Unique Identifier for root partition.
   rootGPUID ? "F222513B-DED1-49FA-B591-20CE86A2FE7F",
   # When fsType = ext4, this is the root Filesystem Unique Identifier.
@@ -197,7 +205,7 @@
   # - "mke2fs": create and populate the filesystem in one pass with `mke2fs -d`.
   #   Only for ext2, ext3 and ext4. It needs no kernel and writes the
   #   filesystem from a single thread, in a fixed order.
-  populateRootWith ? "cptofs",
+  populateRootWith ? if reproducible then "mke2fs" else "cptofs",
 
   # In deterministic mode with populateRootWith = "mke2fs", the seed for the
   # ext4 directory index hashes (a UUID). mke2fs picks a random one otherwise.
@@ -243,6 +251,21 @@ assert (
       "ext4"
     ]
   ) "populateRootWith = \"mke2fs\" needs an ext2, ext3 or ext4 root filesystem."
+);
+assert (
+  lib.assertMsg
+    (
+      reproducible
+      ->
+        deterministic
+        && populateRootWith == "mke2fs"
+        && lib.elem fsType [
+          "ext2"
+          "ext3"
+          "ext4"
+        ]
+    )
+    "reproducible = true needs deterministic = true and an ext2, ext3 or ext4 root filesystem populated with mke2fs."
 );
 # We use -E offset=X below, which is only supported by e2fsprogs
 assert (
@@ -430,6 +453,10 @@ let
     ]
     ++ lib.optional (populateRootWith == "cptofs") lkl
     ++ lib.optional deterministic gptfdisk
+    ++ lib.optionals reproducible [
+      mtools
+      sqlite
+    ]
     ++ stdenv.initialPath
   );
 
@@ -451,6 +478,174 @@ let
   };
 
   blockSize = toString (4 * 1024); # ext4fs block size (not block device sector size)
+
+  # nixos-enter runs the activation script and the bootloader installer,
+  # which are partly Perl and Python. Their hash tables otherwise iterate in a
+  # random order, and so may create and write files in a random order.
+  hashSeedEnv = lib.optionalString reproducible "PERL_HASH_SEED=0 PERL_PERTURB_KEYS=0 PYTHONHASHSEED=0 ";
+
+  # The FAT boot partitions the build VM creates and mounts.
+  bootPartitions =
+    let
+      esp = {
+        device = "/dev/vda1";
+        label = "ESP";
+        mountPoint = "/mnt/boot";
+      };
+    in
+    {
+      efi = [ esp ];
+      hybrid = [ esp ];
+      "legacy+boot" = [ (esp // { label = "BOOT"; }) ];
+      efixbootldr = [
+        (esp // { mountPoint = "/mnt/efi"; })
+        {
+          device = "/dev/vda2";
+          label = "BOOT";
+          mountPoint = "/mnt/boot";
+        }
+      ];
+    }
+    .${partitionTableType} or [ ];
+
+  # mkfs.vfat otherwise derives the volume ID and the root directory's times
+  # from the clock.
+  mkfsVfat = "mkfs.vfat" + lib.optionalString reproducible " --invariant";
+
+  # Recreates each FAT boot partition from its files, in a fixed order and
+  # with fixed times. The kernel's vfat driver records when the bootloader
+  # installer wrote each file, and places the files in the order it wrote
+  # them. mtools takes its times from SOURCE_DATE_EPOCH.
+  rebuildBootPartitions = lib.concatMapStrings (p: ''
+    echo "rebuilding the ${p.label} partition..."
+    staging=/tmp/staging${p.mountPoint}
+    mkdir -p $staging
+    cp -r ${p.mountPoint}/. $staging/
+    umount ${p.mountPoint}
+    find $staging -exec touch -h -d @$SOURCE_DATE_EPOCH {} +
+    # mkfs.vfat leaves the data area as it was.
+    blkdiscard --zeroout ${p.device}
+    ${mkfsVfat} -n ${p.label} ${p.device}
+    (cd $staging && find . -mindepth 1 -type d -printf '%P\n' | LC_ALL=C sort) |
+      while IFS= read -r dir; do
+        MTOOLS_SKIP_CHECK=1 mmd -i ${p.device} "::/$dir"
+      done
+    (cd $staging && find . -type f -printf '%P\n' | LC_ALL=C sort) |
+      while IFS= read -r file; do
+        MTOOLS_SKIP_CHECK=1 mcopy -m -i ${p.device} "$staging/$file" "::/$file"
+      done
+  '') bootPartitions;
+
+  # Lists the inodes of the root filesystem that the build VM created or
+  # changed. Everything mke2fs wrote is at or before SOURCE_DATE_EPOCH, and the
+  # root filesystem is mounted noatime, so these are the inodes with a later
+  # access, change or modification time. rebuildBootPartitions has unmounted
+  # the boot partitions, so that their mount points are seen and not crossed.
+  recordTouchedInodes = ''
+    find /mnt -xdev \( -newerat @$SOURCE_DATE_EPOCH -o -newermt @$SOURCE_DATE_EPOCH -o -newerct @$SOURCE_DATE_EPOCH \) \
+      -printf '%i\n' | sort -nu > /tmp/touched-inodes
+    echo "the build VM touched $(wc -l < /tmp/touched-inodes) inodes of the root filesystem"
+  '';
+
+  # Rewrites what the build VM's kernel left in the unmounted root filesystem
+  # that depends on when and how the build ran. e2fsprogs takes its own
+  # timestamps from SOURCE_DATE_EPOCH.
+  normaliseRootFilesystem = ''
+    echo "normalising the root filesystem..."
+
+    # The times and generation numbers of the inodes the VM touched.
+    while read -r ino; do
+      echo "sif <$ino> generation 0"
+      for field in atime mtime ctime crtime; do
+        echo "sif <$ino> $field @$SOURCE_DATE_EPOCH"
+        echo "sif <$ino> ''${field}_extra 0"
+      done
+    done < /tmp/touched-inodes > /tmp/normalise.debugfs
+    # The superblock's mount time and counters.
+    for field in "mtime @$SOURCE_DATE_EPOCH" "mnt_count 0" "kbytes_written 0" "last_orphan 0"; do
+      echo "ssv $field"
+    done >> /tmp/normalise.debugfs
+    debugfs -w -f /tmp/normalise.debugfs $rootDisk > /dev/null 2> /tmp/normalise.err
+    if grep -v '^debugfs [0-9]' /tmp/normalise.err; then
+      echo "debugfs failed to normalise the root filesystem" >&2
+      exit 1
+    fi
+
+    # Inodes the VM created and deleted are free, but keep their contents.
+    # Zero every free inode below each group's high-water mark: inodes above it
+    # were never used, and all-zero inodes are what mke2fs leaves. This needs
+    # the group descriptor checksums (metadata_csum or uninit_bg) that record
+    # the mark, which ext4 has by default.
+    dumpe2fs $rootDisk 2> /dev/null | awk '
+      /^Block size:/ { bs = $3 }
+      /^Inodes per group:/ { ipg = $4 }
+      /^Inode size:/ { isz = $3 }
+      /^Group [0-9]+:/ { g = $2 + 0; limit = -1 }
+      /^  Inode table at / { split($4, t, "-"); table = t[1] }
+      / unused inodes$/ { limit = g * ipg + ipg - $(NF - 2); marks++ }
+      /^  Free inodes: / {
+        sub(/^  Free inodes: */, "")
+        n = split($0, ranges, ", ")
+        for (i = 1; i <= n; i++) {
+          if (ranges[i] == "") continue
+          split(ranges[i], r, "-")
+          first = r[1] + 0
+          last = (2 in r) ? r[2] + 0 : first
+          if (last > limit) last = limit
+          if (first > last) continue
+          printf "%d %d %d\n", isz, table * bs / isz + first - 1 - g * ipg, last - first + 1
+        }
+      }
+      END { if (!marks) { print "no inode table high-water marks" > "/dev/stderr"; exit 1 } }
+    ' > /tmp/free-inodes
+    while read -r size seek count; do
+      dd if=/dev/zero of=$rootDisk bs=$size seek=$seek count=$count conv=notrunc status=none
+    done < /tmp/free-inodes
+    echo "zeroed $(awk '{ n += $3 } END { print n + 0 }' /tmp/free-inodes) free inodes"
+
+    # Rebuild the directories, dropping what deleted entries left in them.
+    # e2fsck exits with 1 when it has changed the filesystem, as -D always does.
+    e2fsck -fyD $rootDisk > /tmp/e2fsck.log || [ $? -le 1 ] || {
+      cat /tmp/e2fsck.log
+      exit 1
+    }
+
+    # The journal still holds the VM's transactions, with their commit times.
+    tune2fs -O ^has_journal $rootDisk > /dev/null
+    tune2fs -O has_journal $rootDisk > /dev/null
+
+    # Free blocks keep whatever the VM, or the old journal, last wrote into
+    # them. List them, as byte ranges of the root partition, for
+    # zeroRootFreeBlocks.
+    dumpe2fs $rootDisk 2> /dev/null | awk '
+      /^Block size:/ { bs = $3 }
+      /^  Free blocks: / {
+        sub(/^  Free blocks: */, "")
+        n = split($0, ranges, ", ")
+        for (i = 1; i <= n; i++) {
+          if (ranges[i] == "") continue
+          split(ranges[i], r, "-")
+          first = r[1] + 0
+          last = (2 in r) ? r[2] + 0 : first
+          printf "%d %d\n", first * bs, (last - first + 1) * bs
+        }
+      }
+    ' > /tmp/xchg/root-free-blocks
+  '';
+
+  # Zeroes the root filesystem's free blocks in the image file, once the VM
+  # has stopped, by punching holes into it: the image stays sparse.
+  zeroRootFreeBlocks = ''
+    rootOffset=${
+      if partitionTableType != "none" then
+        "$(( $(partx $diskImage -g -o START --nr ${rootPartition}) * 512 ))"
+      else
+        "0"
+    }
+    while read -r offset length; do
+      fallocate --punch-hole --keep-size --offset $((rootOffset + offset)) --length $length $diskImage
+    done < xchg/root-free-blocks
+  '';
 
   # The staging folder that becomes the root of the filesystem.
   stagingRoot = "$root" + lib.optionalString onlyNixStore builtins.storeDir;
@@ -577,6 +772,30 @@ let
       nix --extra-experimental-features nix-command copy --to $root --no-check-sigs ${lib.concatStringsSep " " additionalPaths'}
     ''}
 
+    ${lib.optionalString reproducible ''
+      # nixos-install and nix copy register each store path as its copy
+      # completes, several at a time: the database numbers the paths in that
+      # order and records when each was registered. Register the same paths
+      # again from the closure's sorted registration, and date them all
+      # SOURCE_DATE_EPOCH.
+      db=$root/nix/var/nix/db
+      mv $db $TMPDIR/copied-db
+      nix-store --store $root --load-db < ${closureInfo}/registration
+      sqlite3 $db/db.sqlite "UPDATE ValidPaths SET registrationTime = $SOURCE_DATE_EPOCH"
+      rm -f $db/db.sqlite-wal $db/db.sqlite-shm
+      # Both must describe the same store paths and references.
+      describe() {
+        sqlite3 "$1" "SELECT path, hash, narSize, deriver FROM ValidPaths ORDER BY path;
+          SELECT a.path, b.path FROM Refs JOIN ValidPaths a ON a.id = referrer
+            JOIN ValidPaths b ON b.id = reference ORDER BY 1, 2"
+      }
+      if ! cmp -s <(describe $TMPDIR/copied-db/db.sqlite) <(describe $db/db.sqlite); then
+        echo "ERROR: the re-registered Nix database differs from the copied one" >&2
+        exit 1
+      fi
+      rm -r $TMPDIR/copied-db
+    ''}
+
     diskImage=nixos.raw
 
     bootSize=$(round_to_nearest $(numfmt --from=iec '${bootSize}') $mebibyte)
@@ -697,7 +916,50 @@ let
     }
   '';
 
+  # The VHD footer's unique ID, as printf escapes.
+  vhdUniqueId =
+    let
+      hex = lib.toLower (lib.replaceStrings [ "-" ] [ "" ] rootGPUID);
+    in
+    lib.concatMapStrings (i: "\\x" + builtins.substring (2 * i) 2 hex) (lib.range 0 15);
+
+  # Defines normaliseVhdFooter, which postVM can also call on a VHD it
+  # converts itself. qemu-img writes the current time and a random unique ID
+  # into the footer of a VHD (format "vpc"); this sets the time from
+  # SOURCE_DATE_EPOCH (VHD times count from 2000-01-01, so earlier dates become
+  # 0) and the ID to rootGPUID, and recomputes the checksum. A dynamic VHD
+  # also has a copy of the footer at its start.
+  defineNormaliseVhdFooter = ''
+    normaliseVhdFooterAt() {
+      local file=$1 offset=$2 time sum
+      if [ "$(dd if="$file" bs=1 skip="$offset" count=8 status=none | tr -d '\0')" != conectix ]; then
+        echo "normaliseVhdFooter: no VHD footer at offset $offset of $file" >&2
+        return 1
+      fi
+      vhdWriteBytes() {
+        printf "$3" | dd of="$1" bs=1 seek=$(($2)) conv=notrunc status=none
+      }
+      vhdBe32() {
+        printf '\\x%02x\\x%02x\\x%02x\\x%02x' $(($1 >> 24 & 255)) $(($1 >> 16 & 255)) $(($1 >> 8 & 255)) $(($1 & 255))
+      }
+      time=$((SOURCE_DATE_EPOCH > 946684800 ? SOURCE_DATE_EPOCH - 946684800 : 0))
+      vhdWriteBytes "$file" "offset + 24" "$(vhdBe32 $time)"
+      vhdWriteBytes "$file" "offset + 68" '${vhdUniqueId}'
+      vhdWriteBytes "$file" "offset + 64" '\x00\x00\x00\x00'
+      sum=$(od -An -v -tu1 -j "$offset" -N 512 "$file" | awk '{ for (i = 1; i <= NF; i++) s += $i } END { print s }')
+      vhdWriteBytes "$file" "offset + 64" "$(vhdBe32 $((~sum & 0xFFFFFFFF)))"
+    }
+    normaliseVhdFooter() {
+      local file=$1
+      normaliseVhdFooterAt "$file" $(($(stat -c %s "$file") - 512)) || return 1
+      if [ "$(head -c 8 "$file" | tr -d '\0')" = conectix ]; then
+        normaliseVhdFooterAt "$file" 0
+      fi
+    }
+  '';
+
   moveOrConvertImage = ''
+    ${lib.optionalString reproducible defineNormaliseVhdFooter}
     ${
       if format == "raw" then
         ''
@@ -706,6 +968,7 @@ let
       else
         ''
           ${pkgs.qemu-utils}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+          ${lib.optionalString (reproducible && format == "vpc") "normaliseVhdFooter $out/${filename}"}
         ''
     }
     diskImage=$out/${filename}
@@ -731,7 +994,11 @@ let
           e2fsprogs
           dosfstools
         ];
-        postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
+        postVM =
+          lib.optionalString reproducible zeroRootFreeBlocks
+          + moveOrConvertImage
+          + createHydraBuildProducts
+          + postVM;
         QEMU_OPTS = lib.concatStringsSep " " (
           lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
           ++ lib.optionals touchEFIVars [
@@ -745,6 +1012,11 @@ let
           ]
         );
         inherit memSize;
+        # runCommand gives the VM one vCPU per build core. ext4 serves block
+        # and inode allocations from per-CPU pools, so with several vCPUs the
+        # layout depends on which one each write in the VM happened to run on.
+        # A reproducible image gets a single vCPU.
+        enableParallelBuilding = !reproducible;
       }
       ''
         export PATH=${binPath}:$PATH
@@ -763,21 +1035,21 @@ let
 
         mountPoint=/mnt
         mkdir $mountPoint
-        mount $rootDisk $mountPoint
+        mount ${lib.optionalString reproducible "-o noatime"} $rootDisk $mountPoint
 
         # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
         # '-E offset=X' option, so we can't do this outside the VM.
         ${lib.optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
           mkdir -p /mnt/boot
-          mkfs.vfat -n ESP /dev/vda1
+          ${mkfsVfat} -n ESP /dev/vda1
           mount /dev/vda1 /mnt/boot
 
           ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
         ''}
         ${lib.optionalString (partitionTableType == "efixbootldr") ''
           mkdir -p /mnt/{boot,efi}
-          mkfs.vfat -n ESP /dev/vda1
-          mkfs.vfat -n BOOT /dev/vda2
+          ${mkfsVfat} -n ESP /dev/vda1
+          ${mkfsVfat} -n BOOT /dev/vda2
           mount /dev/vda1 /mnt/efi
           mount /dev/vda2 /mnt/boot
 
@@ -785,7 +1057,7 @@ let
         ''}
         ${lib.optionalString (partitionTableType == "legacy+boot") ''
           mkdir -p /mnt/boot
-          mkfs.vfat -n BOOT /dev/vda1
+          ${mkfsVfat} -n BOOT /dev/vda1
           mount /dev/vda1 /mnt/boot
         ''}
 
@@ -825,7 +1097,7 @@ let
           # nix builds in the target image if sandboxing is turned off (through
           # __noChroot for example).
           export HOME=$TMPDIR
-          NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+          ${hashSeedEnv}NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
         ''}
 
         # Set the ownerships of the contents. The modes are set in preVM.
@@ -839,12 +1111,14 @@ let
           group="''${groups_[$i]}"
           if [ -n "$user$group" ]; then
             # We have to nixos-enter since we need to use the user and group of the VM
-            nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
+            ${hashSeedEnv}nixos-enter --root $mountPoint -- chown -R "$user:$group" "$target"
           fi
         done
 
+        ${lib.optionalString reproducible (rebuildBootPartitions + recordTouchedInodes)}
         umount -R /mnt
 
+        ${lib.optionalString reproducible normaliseRootFilesystem}
         # Make sure resize2fs works. Note that resize2fs has stricter criteria for resizing than a normal
         # mount, so the `-c 0` and `-i 0` don't affect it. Setting it to `now` doesn't produce deterministic
         # output, of course, but we can fix that when/if we start making images deterministic.
