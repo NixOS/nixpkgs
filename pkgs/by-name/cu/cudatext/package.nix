@@ -42,19 +42,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cudatext";
-  version = "1.237.1.0";
+  version = "1.237.2.0";
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     tag = finalAttrs.version;
-    hash = "sha256-7u4mddZO5uT64HjbgRrznPkyp/CvPKqFFBgvEEe6vQ0=";
+    hash = "sha256-K2GGfgWyXV92s6TEWP4T2qfWFF4QRXmxaaGUoidP8oE=";
   };
 
   patches = [
     ./proc_globdata.patch
-    # https://github.com/Alexey-T/ATSynEdit/issues/388
-    ./lazarus48.patch
   ];
 
   prePatch = lib.concatStringsSep "\n" (
