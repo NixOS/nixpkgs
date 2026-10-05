@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ndisc6";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchurl {
     url = "https://www.remlab.net/files/ndisc6/ndisc6-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-Hy+y3BFydwqloJ05c4pE2LdTzF4uJeMGynhoL5/qC08=";
+    hash = "sha256-H9zS8qvIpp8YJjGlOQLQcg/IsAcD4tkTHa2rfjJ/R4s=";
   };
 
   buildInputs = [ perl ];
