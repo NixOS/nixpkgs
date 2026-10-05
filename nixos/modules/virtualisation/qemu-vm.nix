@@ -832,7 +832,6 @@ in
 
       networkingOptions = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [
           "-net nic,netdev=user.0,model=virtio"
           "-netdev user,id=user.0,\${QEMU_NET_OPTS:+,$QEMU_NET_OPTS}"
@@ -1293,7 +1292,7 @@ in
         );
         restrictNetworkOption = lib.optionalString cfg.restrictNetwork "restrict=on,";
       in
-      [
+      lib.mkDefault [
         "-net nic,netdev=user.0,model=virtio"
         "-netdev user,id=user.0,${forwardingOptions}${restrictNetworkOption}\"$QEMU_NET_OPTS\""
       ];
