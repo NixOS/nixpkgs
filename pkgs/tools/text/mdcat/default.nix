@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "2.17.0";
+  version = "2.18.0";
 
   src = fetchFromGitHub {
     owner = "BIRSAx2";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    hash = "sha256-pBKGxMUZ9U93HmotoItxIitijZ2yMBPduBv5Ul1yQyI=";
+    hash = "sha256-wCWyOSiKvKEJltswRoZuzo+6Pfs+dS4V7uCCXukB7aE=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  cargoHash = "sha256-9/v33gdd9dGCdEDf53u1bKhsQGQXCBrtSe5ZvCGN1LU=";
+  cargoHash = "sha256-ujwqV0LSHxW9lWigHr7B6CeSL3PAVWgc2g4ZggNpHJg=";
 
   nativeCheckInputs = [
     ansi2html
