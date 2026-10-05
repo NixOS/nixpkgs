@@ -185,18 +185,18 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    runHook preFixup
-
-    for bin in $out/bin/* ; do
-      patchelf --allowed-rpath-prefixes /nix/store --shrink-rpath $bin
-      patchelf --set-rpath "$out/lib:$(patchelf --print-rpath $bin)" $bin
+  preFixup = ''
+    # Link-time RUNPATHs still point at the build tree (/build/source/lib),
+    # which is a forbidden reference in the output (audit-tmpdir).
+    #
+    # To fix this, we drop everything outside /nix/store, then point at the
+    # copies of those libs installed in $out/lib so the binaries can resolve
+    # them.
+    for elf in $out/bin/* $out/lib/*.so* ; do
+      [[ -f "$elf" && ! -L "$elf" ]] || continue
+      patchelf --allowed-rpath-prefixes /nix/store --shrink-rpath "$elf"
+      patchelf --set-rpath "$out/lib:$(patchelf --print-rpath "$elf")" "$elf"
     done
-
-    # remove debugging symbols that make the binary bloated in size
-    strip -d $out/bin/vg
-
-    runHook postFixup
   '';
 
   passthru = {
