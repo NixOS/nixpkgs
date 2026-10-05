@@ -1,13 +1,35 @@
-// @ts-nocheck
 import { readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { DefaultArtifactClient } from '@actions/artifact'
-import { handleMerge } from './merge.js'
-import { handleReviewers } from './reviewers.js'
+import {
+  handleMerge,
+  type Maintainers,
+  type MergeProps,
+  type Review,
+  type TimelineEvent,
+  type User,
+} from './merge.ts'
+import { handleReviewers } from './reviewers.ts'
 import { classify } from './supportedBranches.ts'
-import withRateLimit from './withRateLimit.ts'
+import withRateLimit, { type Stats } from './withRateLimit.ts'
 
-export default async ({ github, context, core, dry }) => {
+type GitHub = MergeProps['github']
+type Item = Pick<
+  Awaited<ReturnType<GitHub['rest']['issues']['listForRepo']>>['data'][number],
+  'number' | 'updated_at' | 'created_at' | 'html_url' | 'pull_request'
+> & { labels: ({ name?: string } | string)[] }
+type ReviewNode = Omit<Review, 'user'> & { user: Partial<User> | null }
+interface ChangedPaths {
+  labels: Record<string, boolean>
+  attrdiff?: { added?: string[] }
+}
+
+export default async ({
+  github,
+  context,
+  core,
+  dry,
+}: Pick<MergeProps, 'github' | 'context' | 'core' | 'dry'>) => {
   const artifactClient = new DefaultArtifactClient()
 
   // Detect if running in a fork (not NixOS/nixpkgs)
@@ -19,9 +41,7 @@ export default async ({ github, context, core, dry }) => {
     })
   ).data.id
 
-  async function downloadMaintainerMap(branch) {
-    let run
-
+  async function downloadMaintainerMap(branch: string): Promise<Maintainers> {
     const commits = (
       await github.rest.repos.listCommits({
         ...context.repo,
@@ -60,12 +80,13 @@ export default async ({ github, context, core, dry }) => {
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
+          workflowRunId: run.id,
           repositoryName: context.repo.repo,
           repositoryOwner: context.repo.owner,
           token: core.getInput('github-token'),
         },
         path: path.resolve(path.join('branches', branch)),
-        expectedHash: artifact.digest,
+        expectedHash: artifact.digest ?? undefined,
       })
 
       return JSON.parse(
@@ -108,8 +129,8 @@ export default async ({ github, context, core, dry }) => {
   // Simple cache for maintainer maps to avoid downloading the same artifacts
   // over and over again. Ultimately returns a promise, so the result must be
   // awaited for.
-  const maintainerMaps = {}
-  function getMaintainerMap(branch) {
+  const maintainerMaps: Record<string, Promise<Maintainers>> = {}
+  function getMaintainerMap(branch: string): Promise<Maintainers> {
     if (!maintainerMaps[branch]) {
       maintainerMaps[branch] = downloadMaintainerMap(branch)
     }
@@ -118,8 +139,8 @@ export default async ({ github, context, core, dry }) => {
 
   // Caching the list of team members saves API requests when running the bot on the schedule and
   // processing many PRs at once.
-  const members = {}
-  function getTeamMembers(team_slug) {
+  const members: Record<string, Promise<User[]>> = {}
+  function getTeamMembers(team_slug: string) {
     if (context.eventName === 'pull_request') {
       // We have no chance of getting a token in the pull_request context with the right
       // permissions to access the members endpoint below. Thus, we're pretending to have
@@ -147,11 +168,11 @@ export default async ({ github, context, core, dry }) => {
   // Caching users saves API requests when running the bot on the schedule and processing
   // many PRs at once. It also helps to encapsulate the special logic we need, because
   // actions/github doesn't support that endpoint fully, yet.
-  const users = {}
-  function getUser(id) {
+  const users: Record<number, Promise<User | null>> = {}
+  function getUser(id: number) {
     if (!users[id]) {
       users[id] = github
-        .request({
+        .request<User>({
           method: 'GET',
           url: '/user/{id}',
           id,
@@ -168,11 +189,11 @@ export default async ({ github, context, core, dry }) => {
   }
 
   // Same for teams
-  const teams = {}
-  function getTeam(id) {
+  const teams: Record<number, Promise<{ slug: string } | null>> = {}
+  function getTeam(id: number) {
     if (!teams[id]) {
       teams[id] = github
-        .request({
+        .request<{ slug: string }>({
           method: 'GET',
           url: '/organizations/{orgId}/team/{id}',
           orgId,
@@ -189,8 +210,17 @@ export default async ({ github, context, core, dry }) => {
     return teams[id]
   }
 
-  async function handlePullRequest({ item, stats, events }) {
-    const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
+  async function handlePullRequest({
+    item,
+    stats,
+    events,
+  }: {
+    item: Item
+    stats: Stats
+    events: TimelineEvent[]
+  }) {
+    const log = (k: string, v: unknown) =>
+      core.info(`PR #${item.number} - ${k}: ${v}`)
 
     const pull_number = item.number
 
@@ -210,7 +240,9 @@ export default async ({ github, context, core, dry }) => {
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
     // `commit { oid }` is needed by handleMerge to verify approvals are against the current head.
     const reviews = (
-      await github.graphql(
+      await github.graphql<{
+        repository: { pullRequest: { reviews: { nodes: ReviewNode[] } } }
+      }>(
         `query($owner: String!, $repo: String!, $pr: Int!) {
         repository(owner: $owner, name: $repo) {
           pullRequest(number: $pr) {
@@ -247,11 +279,12 @@ export default async ({ github, context, core, dry }) => {
         },
       )
     ).repository.pullRequest.reviews.nodes.filter(
-      (r) =>
+      (r): r is Review =>
         // The `... on User` makes it such that .login only exists for users,
         // but we still need to filter the others out.
         // Accounts could be deleted as well, so don't count them.
-        r.user?.login &&
+        !!r.user?.login &&
+        typeof r.user.id === 'number' &&
         // Also exclude author reviews, can't request their review in any case
         r.user.id !== pull_request.user?.id,
     )
@@ -282,9 +315,9 @@ export default async ({ github, context, core, dry }) => {
     // This is intentionally less than the time that Eval takes, so that the label job
     // running after Eval can indeed label the PR as conflicted if that is the case.
     const merge_commit_sha_valid =
-      Date.now() - new Date(pull_request.created_at) > 3 * 60 * 1000
+      Date.now() - new Date(pull_request.created_at).getTime() > 3 * 60 * 1000
 
-    const prLabels = {
+    const prLabels: Record<string, boolean> = {
       // We intentionally don't use the mergeable or mergeable_state attributes.
       // Those have an intermediate state while the test merge commit is created.
       // This doesn't work well for us, because we might have just triggered another
@@ -349,20 +382,20 @@ export default async ({ github, context, core, dry }) => {
         // existing reviews, too.
         '9.needs: reviewer':
           !pull_request.draft &&
-          pull_request.requested_reviewers.length === 0 &&
+          (pull_request.requested_reviewers ?? []).length === 0 &&
           reviews.length === 0,
       })
     }
 
-    const artifact =
-      run_id &&
-      (
-        await github.rest.actions.listWorkflowRunArtifacts({
-          ...context.repo,
-          run_id,
-          name: 'comparison',
-        })
-      ).data.artifacts[0]
+    const artifact = run_id
+      ? (
+          await github.rest.actions.listWorkflowRunArtifacts({
+            ...context.repo,
+            run_id,
+            name: 'comparison',
+          })
+        ).data.artifacts[0]
+      : undefined
 
     // Instead of checking the boolean artifact.expired, we will give us a minute to
     // actually download the artifact in the next step and avoid that race condition.
@@ -372,20 +405,21 @@ export default async ({ github, context, core, dry }) => {
       !artifact ||
       new Date(artifact?.expires_at ?? 0) < new Date(Date.now() + 60 * 1000)
     log('Artifact expires at', artifact?.expires_at ?? '<n/a>')
-    if (!expired) {
+    if (run_id && artifact && !expired) {
       stats.artifacts++
 
       await artifactClient.downloadArtifact(artifact.id, {
         findBy: {
+          workflowRunId: run_id,
           repositoryName: context.repo.repo,
           repositoryOwner: context.repo.owner,
           token: core.getInput('github-token'),
         },
         path: path.resolve(pull_number.toString()),
-        expectedHash: artifact.digest,
+        expectedHash: artifact.digest ?? undefined,
       })
 
-      const changedPaths = JSON.parse(
+      const changedPaths: ChangedPaths = JSON.parse(
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
       )
       const evalLabels = changedPaths.labels
@@ -410,7 +444,7 @@ export default async ({ github, context, core, dry }) => {
       // Label new package PRs: "packagename: init at X.Y.Z"
       // Exclude NixOS module commits like "nixos/timekpr: init at 0.5.8"
       const newPackagePattern = /^(?<!nixos\/)\S+: init at\b/
-      const hasNewPackages = changedPaths.attrdiff?.added?.length > 0
+      const hasNewPackages = (changedPaths.attrdiff?.added?.length ?? 0) > 0
       const commitsIndicateNewPackage = commitSubjects.some((msg) =>
         newPackagePattern.test(msg),
       )
@@ -430,13 +464,13 @@ export default async ({ github, context, core, dry }) => {
       // TODO: Get "changed packages" information from list of changed by-name files
       // in addition to just the Eval results, to make this work for these packages
       // when Eval results have expired as well.
-      let packages
+      let packages: string[]
       try {
         packages = JSON.parse(
           await readFile(`${pull_number}/packages.json`, 'utf-8'),
         )
       } catch (e) {
-        if (e.code !== 'ENOENT') throw e
+        if (!(e instanceof Error && 'code' in e && e.code === 'ENOENT')) throw e
         // TODO: Remove this fallback code once all old artifacts without packages.json
         // have expired. This should be the case in ~ February 2026.
         packages = Array.from(
@@ -444,7 +478,7 @@ export default async ({ github, context, core, dry }) => {
             Object.values(
               JSON.parse(
                 await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
-              ),
+              ) as Record<string, string[]>,
             ).flat(1),
           ),
         )
@@ -462,7 +496,7 @@ export default async ({ github, context, core, dry }) => {
       })
 
       if (!pull_request.draft) {
-        let owners = []
+        let owners: string[] = []
         try {
           // TODO: Create owner map similar to maintainer map.
           owners =
@@ -471,17 +505,21 @@ export default async ({ github, context, core, dry }) => {
             ) || []
         } catch (e) {
           // Older artifacts don't have the owners.txt, yet.
-          if (e.code !== 'ENOENT') throw e
+          if (!(e instanceof Error && 'code' in e && e.code === 'ENOENT')) {
+            throw e
+          }
         }
 
-        let team_maintainers = []
+        let team_maintainers: number[] = []
         try {
           team_maintainers = Object.keys(
             JSON.parse(await readFile(`${pull_number}/teams.json`, 'utf-8')),
           ).map((id) => parseInt(id))
         } catch (e) {
           // Older artifacts don't have the teams.json, yet.
-          if (e.code !== 'ENOENT') throw e
+          if (!(e instanceof Error && 'code' in e && e.code === 'ENOENT')) {
+            throw e
+          }
         }
 
         // TODO: Use maintainer map instead of the artifact.
@@ -521,10 +559,16 @@ export default async ({ github, context, core, dry }) => {
 
   // Returns true if the issue was closed. In this case, the labeling does not need to
   // continue for this issue. Returns false if no action was taken.
-  async function handleAutoClose(item) {
+  async function handleAutoClose(item: Item) {
     const issue_number = item.number
 
-    if (item.labels.some(({ name }) => name === '0.kind: packaging request')) {
+    if (
+      item.labels.some(
+        (label) =>
+          (typeof label === 'string' ? label : label.name) ===
+          '0.kind: packaging request',
+      )
+    ) {
       const body = [
         'Thank you for your interest in packaging new software in Nixpkgs. Unfortunately, to mitigate the unsustainable growth of unmaintained packages, **Nixpkgs is no longer accepting package requests** via Issues.',
         '',
@@ -560,9 +604,9 @@ export default async ({ github, context, core, dry }) => {
     return false
   }
 
-  async function handle({ item, stats }) {
+  async function handle({ item, stats }: { item: Item; stats: Stats }) {
     try {
-      const log = (k, v, skip) => {
+      const log = (k: string, v: unknown, skip = false) => {
         core.info(`#${item.number} - ${k}: ${v}${skip ? ' (skipped)' : ''}`)
         return skip
       }
@@ -572,7 +616,7 @@ export default async ({ github, context, core, dry }) => {
 
       const issue_number = item.number
 
-      const itemLabels = {}
+      const itemLabels: Record<string, boolean> = {}
 
       const events = await github.paginate(
         github.rest.issues.listEventsForTimeline,
@@ -583,8 +627,10 @@ export default async ({ github, context, core, dry }) => {
         },
       )
 
+      const timelineEvents = events as TimelineEvent[]
+
       const latest_event_at = new Date(
-        events
+        timelineEvents
           .filter(({ event }) =>
             [
               // These events are hand-picked from:
@@ -593,8 +639,12 @@ export default async ({ github, context, core, dry }) => {
               // Most of these use created_at.
               'assigned',
               'commented', // uses updated_at, because that could be > created_at
-              'committed', // uses committer.date
-              ...(item.labels.some(({ name }) => name === '5.scope: tracking')
+              'committed', // uses committer!.date
+              ...(item.labels.some(
+                (label) =>
+                  (typeof label === 'string' ? label : label.name) ===
+                  '5.scope: tracking',
+              )
                 ? ['cross-referenced']
                 : []),
               'head_ref_force_pushed',
@@ -613,11 +663,11 @@ export default async ({ github, context, core, dry }) => {
           .map(
             ({ created_at, updated_at, committer, submitted_at }) =>
               new Date(
-                updated_at ?? created_at ?? submitted_at ?? committer.date,
+                updated_at ?? created_at ?? submitted_at ?? committer!.date,
               ),
           )
           // Reverse sort by date value. The default sort() sorts by string representation, which is bad for dates.
-          .sort((a, b) => b - a)
+          .sort((a, b) => b.getTime() - a.getTime())
           .at(0) ?? item.created_at,
       )
       log('latest_event_at', latest_event_at.toISOString())
@@ -634,12 +684,18 @@ export default async ({ github, context, core, dry }) => {
           stats.prs++
           Object.assign(
             itemLabels,
-            await handlePullRequest({ item, stats, events }),
+            await handlePullRequest({ item, stats, events: timelineEvents }),
           )
         }
       } else {
         stats.issues++
-        if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
+        if (
+          item.labels.some(
+            (label) =>
+              (typeof label === 'string' ? label : label.name) ===
+              '4.workflow: auto-close',
+          )
+        ) {
           // If this returns true, the issue was closed. In this case we return, to not
           // label the issue anymore. Most importantly this avoids unlabeling stale issues
           // which are closed via auto-close.
@@ -695,7 +751,7 @@ export default async ({ github, context, core, dry }) => {
 
   await withRateLimit({ github, core, maxConcurrent }, async (stats) => {
     if (context.payload.pull_request) {
-      await handle({ item: context.payload.pull_request, stats })
+      await handle({ item: context.payload.pull_request as Item, stats })
     } else {
       // We don't use filters here because that causes GitHub to use an often-outdated index,
       // resulting in the cursor not being updated, and therefore causing the same PRs
@@ -738,11 +794,11 @@ export default async ({ github, context, core, dry }) => {
           ].join(' AND '),
           per_page: 100,
           // TODO: Remove after 2025-11-04, when it becomes the default.
-          advanced_search: true,
+          advanced_search: 'true',
         },
       )
 
-      let cursor
+      let cursor: string | undefined
 
       // No workflow run available the first time.
       if (lastRun) {
@@ -764,14 +820,17 @@ export default async ({ github, context, core, dry }) => {
             artifact.id,
             {
               findBy: {
+                workflowRunId: lastRun.id,
                 repositoryName: context.repo.repo,
                 repositoryOwner: context.repo.owner,
                 token: core.getInput('github-token'),
               },
-              expectedHash: artifact.digest,
+              expectedHash: artifact.digest ?? undefined,
             },
           )
 
+          if (!downloadPath)
+            throw new Error('Artifact download returned no path.')
           cursor = await readFile(path.resolve(downloadPath, 'cursor'), 'utf-8')
         }
       }
@@ -799,7 +858,8 @@ export default async ({ github, context, core, dry }) => {
         /<([^<>]+)>;\s*rel="next"/,
       ) ?? [])[1]
       if (next) {
-        cursor = new URL(next).searchParams.get('after')
+        cursor = new URL(next).searchParams.get('after') ?? undefined
+        if (!cursor) throw new Error('Pagination link contains no cursor.')
         const uploadPath = path.resolve('cursor')
         await writeFile(uploadPath, cursor, 'utf-8')
         if (dry) {
@@ -822,13 +882,11 @@ export default async ({ github, context, core, dry }) => {
       }
 
       // Some items might be in both search results, so filtering out duplicates as well.
-      const items = []
-        .concat(updatedItems, allItems.data)
-        .filter(
-          (thisItem, idx, arr) =>
-            idx ===
-            arr.findIndex((firstItem) => firstItem.number === thisItem.number),
-        )
+      const items: Item[] = [...updatedItems, ...allItems.data].filter(
+        (thisItem, idx, arr) =>
+          idx ===
+          arr.findIndex((firstItem) => firstItem.number === thisItem.number),
+      )
 
       // Instead of handling all items in parallel we set up some workers to handle the queue
       // with more controlled parallelism. This avoids problems with `pull_request` fetched at
@@ -842,7 +900,11 @@ export default async ({ github, context, core, dry }) => {
             try {
               await handle({ item, stats })
             } catch (e) {
-              core.setFailed(`${e.message}\n${e.cause.stack}`)
+              core.setFailed(
+                e instanceof Error
+                  ? `${e.message}\n${e.cause instanceof Error ? e.cause.stack : e.cause}`
+                  : String(e),
+              )
             }
           }
         }),
