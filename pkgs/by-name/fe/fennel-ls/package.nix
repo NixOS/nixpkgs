@@ -2,10 +2,14 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  lua,
-  luaPackages,
+  lua5_5,
   pandoc,
 }:
+
+let
+  lua = lua5_5;
+  luaPackages = lua.pkgs;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";
   version = "0.2.4";
