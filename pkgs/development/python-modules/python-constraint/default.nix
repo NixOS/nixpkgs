@@ -12,15 +12,15 @@
   pep440,
 }:
 
-buildPythonPackage rec {
-  pname = "python-constraint";
+buildPythonPackage (finalAttrs: {
+  pname = "python-constraint2";
   version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-constraint";
     repo = "python-constraint";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-VTecK82VSDoUOkPnuC+PnQYPjPBsaPeWCqm2st6Wwvg=";
   };
 
@@ -48,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})
