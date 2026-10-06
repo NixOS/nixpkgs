@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "pyro-ppl";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "pyro";
     tag = version;
-    hash = "sha256-Dvbl/80EGoGWGhWYVIf/xjovUJG1+3WtpMH+lx1oB2E=";
+    hash = "sha256-P33neKtdBoIjKjv8KvoECOtlyaLEyb1spDwyGhPAVHk=";
   };
 
   build-system = [ setuptools ];
