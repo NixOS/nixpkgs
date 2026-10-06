@@ -242,6 +242,7 @@ let
 in
 {
   uki = runTestOn [ "x86_64-linux" ] (import ./systemd-boot-uki.nix { });
+  ukiXbootldr = runTestOn [ "x86_64-linux" ] (import ./systemd-boot-uki.nix { xbootldr = true; });
   ukiSecureBoot = runTestOn [ "x86_64-linux" ] (import ./systemd-boot-uki.nix { signed = true; });
   ukiSecureBootXbootldr = runTestOn [ "x86_64-linux" ] (
     import ./systemd-boot-uki.nix {

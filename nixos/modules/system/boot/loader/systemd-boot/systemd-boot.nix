@@ -210,13 +210,27 @@ in
           installed images are verified and reused; they do not accumulate in
           temporary storage. Set `TMPDIR` to a larger filesystem if necessary.
           Existing images are pruned only after new images and entries are installed.
+          Reserve free boot space for replacing every retained image after a
+          systemd update. Generate byte-reproducible extra archives to avoid
+          unnecessary image replacements.
 
-          Extra initrd archives are resolved relative to the boot partition (XBOOTLDR if
-          configured, otherwise the ESP) and must exist
+          Extra initrd paths are relative to the boot partition (XBOOTLDR if
+          configured, otherwise the ESP). Archives declared in
+          {option}`boot.loader.systemd-boot.extraFiles`
+          are read directly from that generation's source files, before copying
+          them to the boot partition. Signed UKIs require these sources to reside
+          in the Nix store; they never sign boot-partition archives. Keep secrets
+          out of these files and use {option}`boot.initrd.secrets` instead.
+
+          In unsigned mode, other extra archives must exist on the boot partition
           before assembly. Create them with
           {option}`boot.loader.systemd-boot.extraPrepareCommands`; the existing
           {option}`boot.loader.systemd-boot.extraInstallCommands` hook runs after
           assembly and menu generation.
+
+          Restore all retained generations' runtime secret inputs before disabling
+          UKIs or using an older installer. Legacy installers cannot recover
+          secrets from installed UKIs.
         '';
       };
 
@@ -325,6 +339,8 @@ in
 
         `null` means no limit i.e. all generations
         that have not been garbage collected yet.
+        With UKIs enabled, the requested default generation stays within this
+        limit even when rolling back outside the newest generations.
       '';
     };
 
@@ -639,6 +655,24 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
+        assertion =
+          !cfg.uki.enable
+          || lib.all (
+            path: !(hasPrefix "/" path) && !(builtins.elem ".." (lib.splitString "/" path))
+          ) config.system.boot.extraInitrd.paths;
+        message = "systemd-boot UKI extra initrd paths must be boot-partition-relative without '..'.";
+      }
+      {
+        assertion =
+          cfg.uki.privateKey == null
+          || lib.all (
+            path:
+            builtins.hasAttr path cfg.extraFiles
+            && hasPrefix "${builtins.storeDir}/" "${cfg.extraFiles.${path}}"
+          ) config.system.boot.extraInitrd.paths;
+        message = "Signed systemd-boot UKIs require extra initrds declared in extraFiles with immutable Nix store sources. Use boot.initrd.secrets for private inputs.";
+      }
+      {
         assertion = (cfg.uki.privateKey == null) == (cfg.uki.certificate == null);
         message = "systemd-boot UKI signing requires both privateKey and certificate.";
       }
@@ -767,6 +801,9 @@ in
     boot.bootspec.extensions."org.nixos.systemd-boot" = {
       inherit (config.boot.loader.systemd-boot) sortKey;
       uname = config.boot.kernelPackages.kernel.modDirVersion;
+      extraInitrdSources = lib.mapAttrs (_: source: "${source}") (
+        lib.filterAttrs (name: _: builtins.elem name config.system.boot.extraInitrd.paths) cfg.extraFiles
+      );
       devicetree = lib.mkIf cfg.installDeviceTree "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
     };
 

@@ -45,9 +45,9 @@ let
     boot.loader.efi.efiSysMountPoint = if xbootldr then "/efi" else "/boot";
     boot.loader.systemd-boot.xbootldrMountPoint = lib.mkIf xbootldr "/boot";
     system.boot.extraInitrd.paths = lib.optionals xbootldr [ "extra-uki.cpio" ];
-    boot.loader.systemd-boot.extraPrepareCommands = lib.mkIf xbootldr ''
-      cp ${extraArchive} /boot/extra-uki.cpio
-    '';
+    boot.loader.systemd-boot.extraFiles = lib.mkIf xbootldr {
+      "extra-uki.cpio" = extraArchive;
+    };
     boot.initrd.systemd.mounts = lib.optionals xbootldr [
       {
         what = "/uki-extra-canary";
@@ -140,10 +140,31 @@ in
       system.extraDependencies = [
         nodes.first.system.build.toplevel
         nodes.second.system.build.toplevel
+        nodes.unsignedInstaller.system.build.installBootLoader
+        nodes.legacyInstaller.system.build.installBootLoader
+        nodes.limitedInstaller.system.build.installBootLoader
       ];
     };
     first = candidate "first";
     second = candidate "second";
+    unsignedInstaller = {
+      imports = [ common ];
+      virtualisation.installBootLoader = false;
+    };
+    legacyInstaller = {
+      imports = [ common ];
+      virtualisation.installBootLoader = false;
+      boot.loader.systemd-boot.uki.enable = lib.mkForce false;
+    };
+    limitedInstaller = {
+      imports = [ common ];
+      virtualisation.installBootLoader = false;
+      boot.loader.systemd-boot.configurationLimit = 1;
+      boot.loader.systemd-boot.uki = lib.mkIf signed {
+        privateKey = "/var/lib/sbctl/keys/db/db.key";
+        certificate = "/var/lib/sbctl/keys/db/db.pem";
+      };
+    };
   };
   testScript = { nodes, ... }: ''
     import os
@@ -322,6 +343,50 @@ in
         machine.succeed(f"{second}/bin/switch-to-configuration boot")
         assert snapshot() == before
 
+    ${lib.optionalString xbootldr ''
+      with subtest("Boot-partition archive tampering cannot enter a store-backed UKI"):
+          machine.succeed("printf untrusted-extra-archive > /boot/extra-uki.cpio")
+          machine.succeed(f"{second}/bin/switch-to-configuration boot")
+          machine.reboot()
+          check_boot(second, "uki.test=second", 3)
+    ''}
+
+    ${lib.optionalString signed ''
+      with subtest("Signing-mode changes tolerate unavailable historical secrets"):
+          error = machine.succeed(f"${nodes.unsignedInstaller.system.build.installBootLoader} {second} 2>&1")
+          assert "ignoring unusable retained UKI" in error, error
+          machine.succeed(f"${lib.getExe pkgs.sbctl} sign {esp}/EFI/systemd/systemd-bootx64.efi")
+          machine.succeed(f"${lib.getExe pkgs.sbctl} sign {esp}/EFI/BOOT/BOOTX64.EFI")
+          error = machine.succeed(f"{second}/bin/switch-to-configuration boot 2>&1")
+          assert "ignoring unusable retained UKI" in error, error
+          machine.succeed("printf 'disposable-uki-fixture\\n' > /root/uki-secret-first")
+          machine.succeed("printf 'disposable-legacy-fixture\\n' > /root/uki-secret-legacy")
+          install(second)
+          first_image = image_for(2)
+          machine.succeed("rm /root/uki-secret-first /root/uki-secret-legacy")
+          machine.reboot()
+          check_boot(second, "uki.test=second", 3)
+    ''}
+
+    ${lib.optionalString (!signed) ''
+      with subtest("Leaving UKI mode reports missing old inputs and restores legacy boot"):
+          error = machine.succeed(f"${nodes.legacyInstaller.system.build.installBootLoader} {second} 2>&1")
+          assert "Using the pristine initrd without runtime secrets" in error, error
+          machine.succeed("printf 'disposable-uki-fixture\\n' > /root/uki-secret-first")
+          machine.succeed("printf 'disposable-legacy-fixture\\n' > /root/uki-secret-legacy")
+          machine.succeed(f"${nodes.legacyInstaller.system.build.installBootLoader} {second}")
+          machine.reboot()
+          machine.wait_for_unit("multi-user.target")
+          machine.succeed(f'test "$(readlink -f /run/current-system)" = "{second}"')
+          machine.fail("bootctl status | grep -F systemd-stub")
+          machine.succeed("grep -Fx disposable-uki-fixture /run/uki-test-secret")
+          install(second)
+          first_image = image_for(2)
+          machine.succeed("rm /root/uki-secret-first /root/uki-secret-legacy")
+          machine.reboot()
+          check_boot(second, "uki.test=second", 3)
+    ''}
+
     with subtest("Missing secrets for the requested default remain fatal"):
         machine.succeed("mv /root/uki-secret-second /root/saved-secret")
         before = snapshot()
@@ -329,13 +394,17 @@ in
         assert snapshot() == before
         machine.succeed("mv /root/saved-secret /root/uki-secret-second")
 
-    with subtest("Retained UKIs still require intact executable contents"):
-        machine.succeed(f"cp {shlex.quote(first_image)} /root/retained.efi")
+    with subtest("Damaged retired-secret UKIs fall back without authenticating their contents"):
         machine.succeed(f"printf X | dd of={shlex.quote(first_image)} bs=1 seek=512 count=1 conv=notrunc")
-        before = snapshot()
-        machine.fail(f"{second}/bin/switch-to-configuration boot")
-        assert snapshot() == before
-        machine.succeed(f"cp /root/retained.efi {shlex.quote(first_image)}")
+        error = machine.succeed(f"{second}/bin/switch-to-configuration boot 2>&1")
+        assert "ignoring unusable retained UKI" in error, error
+        fallback_image = image_for(2)
+        machine.succeed(f"${pkgs.binutils}/bin/objcopy --dump-section .initrd=/root/fallback-initrd {fallback_image} /root/inspected.efi")
+        machine.fail("grep -aF disposable-uki-fixture /root/fallback-initrd")
+        machine.succeed("printf 'disposable-uki-fixture\\n' > /root/uki-secret-first")
+        install(second)
+        first_image = image_for(2)
+        machine.succeed("rm /root/uki-secret-first")
 
     with subtest("A corrupted existing UKI is refused before menu/default changes"):
         machine.succeed(f"cp {shlex.quote(second_image)} /root/original.efi")
@@ -392,6 +461,14 @@ in
         machine.succeed(f"{recovery}/bin/switch-to-configuration boot")
         machine.reboot()
         check_boot(recovery, "uki.specialisation=1", 2, specialisation=True)
+
+    with subtest("A rollback target remains bootable within configurationLimit"):
+        machine.succeed(f"${nodes.limitedInstaller.system.build.installBootLoader} {recovery}")
+        machine.fail("grep -l 'version Generation 3 ' /boot/loader/entries/nixos-*.conf")
+        machine.reboot()
+        check_boot(recovery, "uki.specialisation=1", 2, specialisation=True)
+        machine.succeed(f"{recovery}/bin/switch-to-configuration boot")
+        machine.succeed(f"test -e {shlex.quote(second_image)}")
 
     with subtest("Pruning removes only unreferenced NixOS boot files"):
         machine.succeed("nix-env -p /nix/var/nix/profiles/system --delete-generations 3")

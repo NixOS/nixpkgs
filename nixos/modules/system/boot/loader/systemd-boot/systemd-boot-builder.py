@@ -16,7 +16,7 @@ import json
 import stat
 import struct
 from typing import NamedTuple, Any, Protocol, Sequence, BinaryIO
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 # These values will be replaced with actual values during the package build
@@ -60,6 +60,7 @@ class BootSpec:
     devicetree: Path | None = None  # noqa: N815
     initrdSecrets: str | None = None  # noqa: N815
     uname: str | None = None
+    extraInitrdSources: dict[str, str] = field(default_factory=dict)  # noqa: N815
 
 
 class WriteBootFile(Protocol):
@@ -118,11 +119,17 @@ class InitrdWithSecretsWriter:
                 # Keep the entry bootable by leaving at least a pristine
                 # initrd in place. CopyWriter is a no-op if one already
                 # exists.
+                retained = path.exists()
                 CopyWriter(source=self.source).write_boot_file(path, critical=False)
                 print(
                     "warning: failed to update initrd secrets for an older "
-                    f"generation ({self.generation}). The previous secrets "
-                    "in this initrd will continue to be used. To silence "
+                    f"generation ({self.generation}). "
+                    + (
+                        "The previous installed initrd is retained. "
+                        if retained
+                        else "Using the pristine initrd without runtime secrets. "
+                    )
+                    + "To silence "
                     "this warning, restore the secret files to their "
                     "original locations or delete this generation.",
                     file=sys.stderr,
@@ -375,6 +382,12 @@ def bootspec_from_json(bootspec_json: dict[str, Any]) -> BootSpec:
         devicetree=devicetree,
         extraInitrdPaths=extraInitrdPaths,
         uname=systemdBootExtension.get("uname"),
+        extraInitrdSources={
+            str(Path(path)): source
+            for path, source in systemdBootExtension.get(
+                "extraInitrdSources", {}
+            ).items()
+        },
     )
 
 
@@ -453,11 +466,7 @@ class PEHeader:
             )
             if name in sections or (
                 raw_size
-                and (
-                    size > raw_size
-                    or raw_offset < headers_end
-                    or raw_offset + raw_size > length
-                )
+                and (raw_offset < headers_end or raw_offset + raw_size > length)
             ):
                 raise ValueError(f"Invalid PE section: {path}: {name}")
             sections[name] = PESection(size, raw_size, raw_offset)
@@ -503,7 +512,11 @@ class PEImage:
     def sections(self) -> dict[str, memoryview]:
         data = memoryview(self.data)
         return {
-            name: data[section.offset : section.offset + section.size]
+            # PE sections can have a zero-filled virtual tail. Keep the file
+            # view bounded; compare virtual sizes separately for UKI payloads.
+            name: data[
+                section.offset : section.offset + min(section.size, section.raw_size)
+            ]
             if section.raw_size
             else data[:0]
             for name, section in self.header.sections.items()
@@ -610,13 +623,21 @@ def retained_uki_candidates(work: Path) -> dict[bytes, list[Path]]:
     for image in sorted((BOOT_MOUNT_POINT / NIXOS_DIR).glob("*-uki.efi")):
         if re.fullmatch(r"[0-9a-f]{64}-uki\.efi", image.name) is None:
             continue
-        with image.open("rb") as file:
-            header = PEHeader.read(file, os.fstat(file.fileno()).st_size, image)
-            section = header.sections.get(".cmdline")
-            if section is None or not section.raw_size:
-                continue
-            file.seek(section.offset)
-            candidates.setdefault(file.read(section.size), []).append(image)
+        try:
+            with image.open("rb") as file:
+                header = PEHeader.read(file, os.fstat(file.fileno()).st_size, image)
+                section = header.sections.get(".cmdline")
+                if section is None or not section.raw_size:
+                    continue
+                file.seek(section.offset)
+                candidates.setdefault(
+                    file.read(min(section.size, section.raw_size)), []
+                ).append(image)
+        except ValueError as error:
+            print(
+                f"warning: ignoring unusable retained UKI {image}: {error}",
+                file=sys.stderr,
+            )
     return candidates
 
 
@@ -624,20 +645,43 @@ def retained_uki_initrd(
     expected: dict[str, bytes], pristine: bytes, work: Path
 ) -> bytes | None:
     for image in retained_uki_candidates(work).get(expected[".cmdline"], []):
-        payload = PEImage.read(image)
-        sections = payload.sections()
-        verify_signature(image)
-        if image.name != f"{uki_identifier(payload)}-uki.efi":
-            raise ValueError(f"Retained UKI contents do not match their name: {image}")
-        for name, contents in expected.items():
-            if name != ".initrd" and sections.get(name) != contents:
-                raise ValueError(f"Retained UKI payload mismatch: {image}: {name}")
-        if sections.get(".dtb") != expected.get(".dtb"):
-            raise ValueError(f"Retained UKI devicetree mismatch: {image}")
-        initrd = sections.get(".initrd")
-        if initrd is None or initrd[: len(pristine)] != pristine:
-            raise ValueError(f"Retained UKI initrd mismatch: {image}")
-        return bytes(initrd)
+        # Verify a private snapshot, then reuse those exact bytes. The boot
+        # partition can otherwise change between reading and sbverify.
+        check_staging_space(work, image.stat().st_size)
+        with tempfile.TemporaryDirectory(dir=work, prefix="retained-") as directory:
+            snapshot = Path(directory) / "image.efi"
+            shutil.copyfile(image, snapshot)
+            try:
+                verify_signature(snapshot)
+                payload = PEImage.read(snapshot)
+                sections = payload.sections()
+                if image.name != f"{uki_identifier(payload)}-uki.efi":
+                    raise ValueError(
+                        f"Retained UKI contents do not match their name: {image}"
+                    )
+                for name, contents in expected.items():
+                    if name != ".initrd" and (
+                        sections.get(name) != contents
+                        or payload.header.sections[name].size != len(contents)
+                    ):
+                        raise ValueError(
+                            f"Retained UKI payload mismatch: {image}: {name}"
+                        )
+                if sections.get(".dtb") != expected.get(".dtb"):
+                    raise ValueError(f"Retained UKI devicetree mismatch: {image}")
+                initrd = sections.get(".initrd")
+                if (
+                    initrd is None
+                    or initrd[: len(pristine)] != pristine
+                    or payload.header.sections[".initrd"].size != len(initrd)
+                ):
+                    raise ValueError(f"Retained UKI initrd mismatch: {image}")
+                return bytes(initrd)
+            except (ValueError, subprocess.CalledProcessError) as error:
+                print(
+                    f"warning: ignoring unusable retained UKI {image}: {error}",
+                    file=sys.stderr,
+                )
     return None
 
 
@@ -701,8 +745,29 @@ def uki_boot_file(
     if bootspec.devicetree is not None:
         command.append(f"--devicetree={bootspec.devicetree}")
         expected[".dtb"] = bootspec.devicetree.read_bytes()
+    extra_sources: list[Path] = []
+    extra_error = None
+    for extra in bootspec.extraInitrdPaths:
+        if extra.is_absolute() or ".." in extra.parts:
+            raise ValueError(
+                f"Extra initrd path must be boot-partition-relative: {extra}"
+            )
+        source = Path(
+            bootspec.extraInitrdSources.get(str(extra), str(BOOT_MOUNT_POINT / extra))
+        )
+        if UKI_CONFIG["privateKey"] is not None and not source.resolve().is_relative_to(
+            STORE_DIR
+        ):
+            extra_error = f"Signed UKI extra initrd requires an immutable extraFiles source: {extra}"
+            break
+        if not source.is_file():
+            extra_error = f"Missing extra initrd archive: {source}"
+            break
+        extra_sources.append(source)
+    if extra_error is not None and critical:
+        raise ValueError(extra_error)
     retained = None
-    if secrets_failed:
+    if secrets_failed or extra_error is not None:
         retained = retained_uki_initrd(expected, bootspec.initrd.read_bytes(), work)
         # Unsigned migration may preserve legacy secrets. In signed mode an
         # unauthenticated legacy tail must never be promoted into a signed UKI.
@@ -718,6 +783,7 @@ def uki_boot_file(
             initrd.write_bytes(retained)
         elif (
             UKI_CONFIG["privateKey"] is None
+            and secrets_failed
             and previous is not None
             and previous.exists()
         ):
@@ -729,21 +795,17 @@ def uki_boot_file(
             # output left by the failed appender.
             shutil.copyfile(bootspec.initrd, initrd)
         print(
-            "warning: failed to update initrd secrets for an older "
-            f"generation ({generation}). Using its previous installed initrd "
+            "warning: unavailable initrd inputs for an older "
+            f"generation ({generation}): {extra_error or 'failed runtime secrets appender'}. Using its previous installed initrd "
             "if authenticated (or signing is disabled), otherwise its pristine initrd.",
             file=sys.stderr,
         )
-    if retained is None:
+    if retained is None and extra_error is None:
         with initrd.open("ab") as output:
-            for extra in bootspec.extraInitrdPaths:
-                if extra.is_absolute() or ".." in extra.parts:
-                    raise ValueError(
-                        f"Extra initrd path must be boot-partition-relative: {extra}"
-                    )
+            for source in extra_sources:
                 # Linux permits concatenated, four-byte-aligned initramfs archives.
                 output.write(b"\0" * (-output.tell() % 4))
-                with (BOOT_MOUNT_POINT / extra).open("rb") as input_file:
+                with source.open("rb") as input_file:
                     shutil.copyfileobj(input_file, output)
     expected[".initrd"] = initrd.read_bytes()
     # Reserve room for ukify output and, when signing, a second image. The
@@ -781,7 +843,9 @@ def uki_boot_file(
     ):
         raise ValueError("UKI does not execute the selected systemd-stub")
     for name, contents in expected.items():
-        if sections.get(name) != contents:
+        if sections.get(name) != contents or payload.header.sections[name].size != len(
+            contents
+        ):
             raise ValueError(f"UKI payload mismatch: {name}")
     for name, stub_contents in stub_sections.items():
         section = payload.header.sections.get(name)
@@ -882,7 +946,9 @@ def boot_file(
     )
 
 
-def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
+def get_generations(
+    profile: str | None = None, *, default_config: Path | None = None
+) -> list[SystemIdentifier]:
     gen_list = run(
         [
             f"{NIX}/bin/nix-env",
@@ -903,7 +969,22 @@ def get_generations(profile: str | None = None) -> list[SystemIdentifier]:
         )
         for line in gen_lines
     ]
-    return configurations[-configurationLimit:]
+    retained = configurations[-configurationLimit:]
+    if default_config is not None:
+        # The current rollback target can lie outside the newest-N window.
+        # Its specialisations are separate closures, referenced from the root.
+        for generation in configurations:
+            if generation in retained:
+                continue
+            directory = system_dir(profile, generation.generation, None)
+            targets = [directory, *(directory / "specialisation").glob("*")]
+            if any(target.resolve() == default_config for target in targets):
+                if configurationLimit > 0:
+                    retained = retained[1:]
+                retained.append(generation)
+                break
+        retained.sort(key=lambda generation: generation.generation)
+    return retained
 
 
 def cleanup_esp() -> None:
@@ -1026,9 +1107,11 @@ def install_bootloader_staged(args: argparse.Namespace, work: Path) -> None:
     (BOOT_MOUNT_POINT / NIXOS_DIR).mkdir(parents=True, exist_ok=True)
     (BOOT_MOUNT_POINT / "loader/entries").mkdir(parents=True, exist_ok=True)
 
-    gens = get_generations()
+    default_config = Path(args.default_config)
+    requested = default_config if UKI_CONFIG["enable"] else None
+    gens = get_generations(default_config=requested)
     for profile in get_profiles():
-        gens += get_generations(profile)
+        gens += get_generations(profile, default_config=requested)
 
     if not gens:
         # With zero generations we would garbage-collect every kernel,
@@ -1044,13 +1127,25 @@ def install_bootloader_staged(args: argparse.Namespace, work: Path) -> None:
     boot_files: BootFileList = []
     critical_paths: set[Path] = set()
 
-    default_config = Path(args.default_config)
     default_entry_id: str | None = None
+
+    specifications = [(gen, get_bootspec(gen.profile, gen.generation)) for gen in gens]
+    if UKI_CONFIG["enable"] and not any(
+        Path(spec.init).parent == default_config
+        or any(
+            Path(child.init).parent == default_config
+            for child in spec.specialisations.values()
+        )
+        for _, spec in specifications
+        if spec is not None
+    ):
+        raise ValueError(
+            "Requested default configuration is not a bootable retained generation"
+        )
 
     run([PREPARE_EXTRA_FILES])
 
-    for gen in gens:
-        bootspec = get_bootspec(gen.profile, gen.generation)
+    for gen, bootspec in specifications:
         if bootspec is None:
             continue
         is_default = Path(bootspec.init).parent == default_config

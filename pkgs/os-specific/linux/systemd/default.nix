@@ -780,6 +780,7 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-boot-uki
           systemd-boot-ukiSecureBoot
           systemd-boot-ukiSecureBootXbootldr
+          systemd-boot-ukiXbootldr
           systemd-boot-specialisation
           systemd-boot-switch-test
           systemd-boot-update
