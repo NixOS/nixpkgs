@@ -834,9 +834,9 @@
   },
   "mongo-db": {
     "pname": "mongo-db",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mongo_db-1.0.0-py3-none-any.whl",
-    "hash": "sha256-kbU/GRizMppGD2OJ29awQaFUXIMLin0DJpX8Nnymqzo=",
+    "version": "1.1.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mongo_db-1.1.0b1-py3-none-any.whl",
+    "hash": "sha256-W/yt4nS+AcmW28lUH56HuBObIVbAL2gqkkt7Q7lmL/0=",
     "description": "Microsoft Azure Command-Line Tools MongoDb Extension"
   },
   "monitor-control-service": {
