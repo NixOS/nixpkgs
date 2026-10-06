@@ -109,7 +109,6 @@ A set of functions that build a predefined set of minimal Linux distributions im
 ### Images {#vm-tools-diskImageFuns-images}
 
 * Fedora
-  * `fedora42x86_64`
   * `fedora43x86_64`
   * `fedora44x86_64`
 * Rocky Linux

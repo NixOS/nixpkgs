@@ -1030,22 +1030,6 @@ let
   # The set of supported RPM-based distributions.
 
   rpmDistros = {
-    fedora42x86_64 = {
-      name = "fedora-42-x86_64";
-      fullName = "Fedora 42 (x86_64)";
-      packagesList = fetchurl {
-        url = "https://dl.fedoraproject.org/pub/fedora/linux/releases/42/Everything/x86_64/os/repodata/cd483b35df017d68b73a878a392bbf666a43d75db54c386e4720bc369eb5c3a3-primary.xml.zst";
-        hash = "sha256-zUg7Nd8BfWi3OoeKOSu/ZmpD1121TDhuRyC8Np61w6M=";
-      };
-      urlPrefix = "https://dl.fedoraproject.org/pub/fedora/linux/releases/42/Everything/x86_64/os";
-      archs = [
-        "noarch"
-        "x86_64"
-      ];
-      packages = commonFedoraPackages;
-      unifiedSystemDir = true;
-    };
-
     fedora43x86_64 = {
       name = "fedora-43-x86_64";
       fullName = "Fedora 43 (x86_64)";

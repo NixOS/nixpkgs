@@ -33,7 +33,7 @@ in
     stdenv.mkDerivation {
       inherit (hello) pname version src;
 
-      diskImage = diskImages.fedora42x86_64;
+      diskImage = diskImages.fedora44x86_64;
       diskImageFormat = "qcow2";
       memSize = 512;
     }
@@ -64,7 +64,6 @@ in
   );
 
   # RPM-based distros
-  testFedora42Image = makeImageTestScript diskImages.fedora42x86_64;
   testFedora43Image = makeImageTestScript diskImages.fedora43x86_64;
   testFedora44Image = makeImageTestScript diskImages.fedora44x86_64;
   testRocky9Image = makeImageTestScript diskImages.rocky9x86_64;
