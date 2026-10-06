@@ -568,10 +568,10 @@
     name = "Andrea Bueide";
   };
   abuibrahim = {
-    email = "ruslan@babayev.com";
+    email = "abdurrahman@hussain.house";
     github = "abuibrahim";
     githubId = 2321000;
-    name = "Ruslan Babayev";
+    name = "Abdurrahman Hussain";
   };
   abustany = {
     email = "adrien@bustany.org";
@@ -3655,12 +3655,6 @@
     github = "berbiche";
     githubId = 20448408;
     keys = [ { fingerprint = "D446 E58D 87A0 31C7 EC15  88D7 B461 2924 45C6 E696"; } ];
-  };
-  bergey = {
-    email = "bergey@teallabs.org";
-    github = "bergey";
-    githubId = 251106;
-    name = "Daniel Bergey";
   };
   bergkvist = {
     email = "tobias@bergkv.ist";
@@ -24688,6 +24682,14 @@
     github = "k0001";
     githubId = 3302;
     name = "Renzo Carbonara";
+  };
+  reo101 = {
+    name = "Pavel Atanasov";
+    email = "pavel.atanasov2001@gmail.com";
+    github = "reo101";
+    githubId = 37866329;
+    matrix = "@reo101:matrix.org";
+    keys = [ { fingerprint = "49B8 3918 36E2 4FEC BC68  7504 7DA9 78E6 383E 5885"; } ];
   };
   replicapra = {
     name = "replicapra";
