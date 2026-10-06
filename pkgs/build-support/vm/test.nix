@@ -71,7 +71,11 @@ in
     diskImage = diskImages.debian13x86_64;
     diskImageFormat = "qcow2";
     meta.description = "GNU hello, built as a .deb";
+    debName = "gnu-hello";
+    debMaintainer = "Nixpkgs <nixpkgs@example.org>";
     postInstall = ''
+      test "$(dpkg-deb --field $out/debs/*.deb Package)" = gnu-hello
+      test "$(dpkg-deb --field $out/debs/*.deb Maintainer)" = "Nixpkgs <nixpkgs@example.org>"
       dpkg-deb --contents $out/debs/*.deb > contents
       grep -q '\./usr/bin/hello$' contents
       if grep '\./nix/' contents; then
