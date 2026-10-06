@@ -552,6 +552,13 @@
     "hash": "sha256-RjWu9LF27ji8M2uADiUjlJsnf+30DkCT+d1AU3EOf0s=",
     "description": "Microsoft Azure Command-Line Tools FootprintMonitoringManagementClient Extension"
   },
+  "foundry-cost-control": {
+    "pname": "foundry-cost-control",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/foundry_cost_control-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-R2sz8yTIQr4TdTexzdxLLwNBmC7xruJaqA87sOFSoFA=",
+    "description": "Microsoft Azure Command-Line Tools -- Foundry Cost Control Extension"
+  },
   "front-door": {
     "pname": "front-door",
     "version": "2.3.0",
