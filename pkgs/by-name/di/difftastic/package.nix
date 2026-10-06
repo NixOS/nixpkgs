@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   stdenv,
   versionCheckHook,
   nix-update-script,
@@ -21,12 +22,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-HEX8njuArbgMQI8yDr66siRB8t+4P2Q7rxHuCeaD9Uw=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [ rust-jemalloc-sys ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isStatic { RUSTFLAGS = "-C relocation-model=static"; };
 
   # skip flaky tests
   checkFlags = [ "--skip=options::tests::test_detect_display_width" ];
+
+  postInstall = ''
+    installManPage difft.1
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/difft";

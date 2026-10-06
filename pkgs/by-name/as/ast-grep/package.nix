@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       xiaoxiangmoe
-      astratagem
+      montchr
       lord-valen
       cafkafk
     ];

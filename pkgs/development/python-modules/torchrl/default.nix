@@ -73,6 +73,7 @@
   pytestCheckHook,
   pyyaml,
   scipy,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -212,6 +213,7 @@ buildPythonPackage (finalAttrs: {
     pyyaml
     scipy
     torchvision
+    writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.atari
   ++ finalAttrs.passthru.optional-dependencies.gym-continuous
@@ -249,6 +251,9 @@ buildPythonPackage (finalAttrs: {
 
     # ray.exceptions.RuntimeEnvSetupError: Failed to set up runtime environment
     "TestRayCollector"
+
+    # AttributeError: module 'ray.internal' has no attribute 'free'
+    "test_ray_collector_stats"
 
     # torchrl is incompatible with gymnasium>=1.0
     # https://github.com/pytorch/rl/discussions/2483
