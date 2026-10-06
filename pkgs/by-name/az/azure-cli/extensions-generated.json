@@ -218,9 +218,9 @@
   },
   "cdn": {
     "pname": "cdn",
-    "version": "1.0.0b2",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cdn-1.0.0b2-py2.py3-none-any.whl",
-    "hash": "sha256-Dt39rt65jcU6tV9Oo8cwL74xosYFP2o791v83n6QbfM=",
+    "version": "1.0.0b3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/cdn-1.0.0b3-py2.py3-none-any.whl",
+    "hash": "sha256-junur3SkoIUJTe+sEst6EuUM7DPXLezy49fMn1lGv9c=",
     "description": "Microsoft Azure Command-Line Tools CDN and AFD Extension"
   },
   "change-analysis": {
