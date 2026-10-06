@@ -1269,8 +1269,9 @@ let
   # The set of supported Dpkg-based distributions.
 
   debDistros = {
-    # Ubuntu's snapshot service returns the same data for 22.04 regardless of the timestamp in the
-    # URL. The hashes don't change between mirror://ubuntu and snapshot.ubuntu.com, so this is fine.
+    # The Ubuntu images pin package lists from snapshot.ubuntu.com. A release pocket (e.g. `jammy`)
+    # is frozen, so its hash stays put when the snapshot timestamp moves; the `-updates` and
+    # `-security` pockets keep changing, so their hashes need refreshing along with the timestamp.
     ubuntu2204i386 = {
       name = "ubuntu-22.04-jammy-i386";
       fullName = "Ubuntu 22.04 Jammy (i386)";
