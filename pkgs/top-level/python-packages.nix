@@ -16915,7 +16915,7 @@ self: super: with self; {
 
   python-coinmarketcap = callPackage ../development/python-modules/python-coinmarketcap { };
 
-  python-constraint = callPackage ../development/python-modules/python-constraint { };
+  python-constraint2 = callPackage ../development/python-modules/python-constraint2 { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
 
