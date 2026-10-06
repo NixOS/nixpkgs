@@ -55,6 +55,35 @@ body:
     validations:
       required: true
   - type: "textarea"
+    id: "reproducer"
+    attributes:
+      label: "Minimal reproducer"
+      description: |
+        A reproducer that another person can run is the fastest way to get this fixed.
+
+        Please paste a `flake.nix` that triggers the bug, pinned to the Nixpkgs revision you tested, and say which command triggers it.
+
+        ```nix
+        {
+          inputs.nixpkgs.url = "github:NixOS/nixpkgs/REVISION";
+
+          outputs =
+            { nixpkgs, ... }:
+            let
+              system = "x86_64-linux";
+              pkgs = nixpkgs.legacyPackages.${system};
+            in
+            {
+              packages.${system}.default = pkgs.PACKAGENAME;
+            };
+        }
+        ```
+
+        If this bug cannot be reduced to a flake, leave this empty and make sure **Steps to reproduce** gives a reviewer everything they need to see it themselves.
+      render: "nix"
+    validations:
+      required: false
+  - type: "textarea"
     id: "expected-behaviour"
     attributes:
       label: "Expected behaviour"

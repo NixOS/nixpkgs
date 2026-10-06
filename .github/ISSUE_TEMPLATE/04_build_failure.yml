@@ -49,6 +49,35 @@ body:
       description: "Please include a step-by-step guide for reproducing this build failure. Consider writing in concise, numbered bullet points to ensure that Nixpkgs developers can retrace your steps."
     validations:
       required: true
+  - type: "textarea"
+    id: "reproducer"
+    attributes:
+      label: "Minimal reproducer"
+      description: |
+        A reproducer that another person can run is the fastest way to get this fixed.
+
+        Please paste a `flake.nix` that reproduces the failure, pinned to the Nixpkgs revision you tested. A reviewer should be able to copy it into an empty directory and run `nix build .#default` to see the same error.
+
+        ```nix
+        {
+          inputs.nixpkgs.url = "github:NixOS/nixpkgs/REVISION";
+
+          outputs =
+            { nixpkgs, ... }:
+            let
+              system = "x86_64-linux";
+              pkgs = nixpkgs.legacyPackages.${system};
+            in
+            {
+              packages.${system}.default = pkgs.PACKAGENAME;
+            };
+        }
+        ```
+
+        If this failure cannot be reduced to a flake, leave this empty and make sure **Steps to reproduce** gives a reviewer everything they need to see it themselves.
+      render: "nix"
+    validations:
+      required: false
   - type: "dropdown"
     id: "hydra"
     attributes:
