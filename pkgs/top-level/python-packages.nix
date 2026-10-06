@@ -12375,6 +12375,8 @@ self: super: with self; {
 
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
 
+  nvsmi = callPackage ../development/python-modules/nvsmi { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   nxt-python = callPackage ../development/python-modules/nxt-python { };
