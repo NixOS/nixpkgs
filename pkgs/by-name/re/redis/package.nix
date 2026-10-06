@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch2,
   apple-sdk,
-  lua,
   jemalloc,
   pkg-config,
   nixosTests,
@@ -62,12 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    lua
-  ]
-  ++ lib.optional useSystemJemalloc jemalloc
-  ++ lib.optional withSystemd systemd
-  ++ lib.optional tlsSupport openssl;
+  buildInputs =
+    lib.optional useSystemJemalloc jemalloc
+    ++ lib.optional withSystemd systemd
+    ++ lib.optional tlsSupport openssl;
 
   # More cross-compiling fixes.
   makeFlags = [
