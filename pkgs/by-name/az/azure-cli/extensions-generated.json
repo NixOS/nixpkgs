@@ -645,9 +645,9 @@
   },
   "horizondb": {
     "pname": "horizondb",
-    "version": "1.0.0b7",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/horizondb-1.0.0b7-py2.py3-none-any.whl",
-    "hash": "sha256-h+Smm4Pou2vZB/9EFOA/xtAZLYSMUCeiy/K34RKrBig=",
+    "version": "1.0.0b8",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/horizondb-1.0.0b8-py2.py3-none-any.whl",
+    "hash": "sha256-xBLL+0r7I3+X8ZUPWXFT7CD2meWbL2bx/Gq5uRAxVxE=",
     "description": "Microsoft Azure Command-Line Tools HorizonDB Extension"
   },
   "hpc-cache": {
