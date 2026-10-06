@@ -112,6 +112,18 @@
     },
     "name": "channel-updaters"
   },
+  "coder": {
+    "description": "Maintainers of Coder.com products (Coder, code-server, etc.)",
+    "id": 19200022,
+    "maintainers": {
+      "phorcys420": 57866459
+    },
+    "members": {
+      "faukah": 75451918,
+      "kylecarbs": 7122116
+    },
+    "name": "coder"
+  },
   "coq": {
     "description": "Coq proof assistant and package maintainers",
     "id": 7617261,
@@ -219,11 +231,11 @@
       "fiddlerwoaroof": 808745,
       "fulsomenko": 14945057,
       "gador": 1883533,
-      "griff": 4368,
       "gshpychka": 23005347,
       "hexagonal-sun": 222664,
       "heywoodlh": 18178614,
       "iamanaws": 78835633,
+      "iedame": 60272,
       "isabelroses": 71222764,
       "jonhermansen": 660911,
       "juliusrickert": 5007494,
@@ -388,6 +400,7 @@
     "id": 19617985,
     "maintainers": {
       "TomaSajt": 62384384,
+      "dwt": 57199,
       "ethancedwards8": 60861925,
       "iedame": 60272,
       "keenanweaver": 37268985,
@@ -400,7 +413,6 @@
       "PaulGrandperrin": 1748936,
       "RoGreat": 64620440,
       "carlossless": 498906,
-      "dwt": 57199,
       "liamthexpl0rer": 119797945,
       "liberodark": 4238928,
       "qubitnano": 146656568,
@@ -588,12 +600,9 @@
     "description": "Lix maintainers in nixpkgs/NixOS",
     "id": 13838744,
     "maintainers": {
-      "lf-": 6652840
-    },
-    "members": {
-      "Qyriad": 1542224,
       "RaitoBezarius": 314564
     },
+    "members": {},
     "name": "Lix maintainers"
   },
   "llvm": {

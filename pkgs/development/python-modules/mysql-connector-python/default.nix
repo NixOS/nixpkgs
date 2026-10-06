@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "mysql-connector";
+  pname = "mysql-connector-python";
   version = "9.7.0";
   format = "setuptools";
 

@@ -44,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/dee6523426b75c10c36b188fafe6e7a27b6631e3.patch";
       hash = "sha256-a4KgxsrU9m/dZqu2LNC+jWiXvCTcRPzZW/67pg8yLGY=";
     })
+    (fetchpatch {
+      name = "CVE-2026-97222.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/bc1dee29525933994181fb2307d6ad584de6040d.diff";
+      hash = "sha256-8A56BLNgekDOYZnA6WqQiyoC0iJTPJQ8jEPnoKv0OPM=";
+    })
   ];
 
   postPatch = ''
