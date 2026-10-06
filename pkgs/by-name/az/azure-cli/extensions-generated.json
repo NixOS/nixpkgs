@@ -671,6 +671,13 @@
     "hash": "sha256-EXf8KT3BGLRJt2HsLHKNOXVfw5Od6NS/2JzOG/shjoY=",
     "description": "Microsoft Azure Command-Line Tools Init Extension"
   },
+  "interconnect": {
+    "pname": "interconnect",
+    "version": "1.0.0b2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/interconnect-1.0.0b2-py3-none-any.whl",
+    "hash": "sha256-nusq5PD8X5I1fjIaOdT3WS7iFRLfsNrpyBdVZNBBAVA=",
+    "description": "Microsoft Azure Command-Line Tools Interconnect Extension"
+  },
   "internet-analyzer": {
     "pname": "internet-analyzer",
     "version": "1.0.0b2",
