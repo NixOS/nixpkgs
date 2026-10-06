@@ -17,19 +17,6 @@ stdenv.mkDerivation {
 }
 ```
 
-If you use a custom `checkPhase`, remember to add the `runHook` calls:
-```nix
-{
-  checkPhase = ''
-    runHook preCheck
-
-    # ... your tests
-
-    runHook postCheck
-  '';
-}
-```
-
 ## Variables {#sec-redisTestHook-variables}
 
 The hook logic will read the following variables and set them to a default value if unset or empty.
