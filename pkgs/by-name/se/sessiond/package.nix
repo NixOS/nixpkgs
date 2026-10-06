@@ -11,15 +11,31 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "sessiond";
-  version = "0.2.3";
-
-  cargoHash = "sha256-qKhqteERy38UEx0T9PilmNCZnKL7s910twTd44sUc8E=";
+  version = "0.3.0";
 
   src = fetchFromTangled {
     did = "did:plc:vj3bxta3i3cp26nn46yideoh";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-M+jBd3LcltdLprm8oI/n/LIpxj319QCt+LP4JspGtM4=";
+    tag = "${finalAttrs.pname}-v${finalAttrs.version}";
+    hash = "sha256-X2ePs10hjZNOcHAJuN4J5KeBQaW24E2jMRq0biNdY3E=";
   };
+
+  cargoHash = "sha256-+ENVyHs4UFsN62rkIau1aXC2RmF3Mqtj6XWeR55rR8w=";
+
+  cargoBuildFlags = [
+    "--locked"
+    "-p"
+    "sessiond"
+    "-p"
+    "sessionctl"
+    "-p"
+    "pam"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optionals withConsoleKit [
+    "sessiond/consolekit"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -30,15 +46,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     linux-pam
   ];
 
-  buildFeatures = lib.optionals withConsoleKit [
-    "consolekit"
-  ];
-
   postInstall = ''
     mkdir -p $out/lib/security
     mv $out/lib/libpam.so $out/lib/security/pam_sessiond.so
-    mv $out/bin/daemon $out/bin/sessiond
-    mv $out/bin/ctl $out/bin/sessionctl
   ''
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sessionctl \
@@ -56,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Session management daemon";
     homepage = "https://tangled.org/r0chd.pl/sessiond";
     license = lib.licenses.gpl3Only;
-    maintainers = builtins.attrValues { inherit (lib.maintainers) r0chd; };
+    maintainers = [ lib.maintainers.r0chd ];
     platforms = lib.platforms.linux;
   };
 })
