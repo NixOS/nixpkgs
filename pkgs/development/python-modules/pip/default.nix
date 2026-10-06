@@ -30,7 +30,7 @@
 
 let
 
-  sphinxSupported = !sphinx.disabled;
+  sphinxSupported = !sphinx ? meta.problems.unsupportedPython;
 
   self = buildPythonPackage rec {
     pname = "pip";
