@@ -74,10 +74,11 @@ stdenv.mkDerivation {
       # both privately and for commercial purposes, as long as this does not limit
       # what other people may do with the program and the images they produce with
       # the program"
-      {
+      (mkLicense {
+        shortName = "planetGenerator";
         free = true;
         url = "http://hjemmesider.diku.dk/~torbenm/Planet";
-      }
+      })
 
       # All image files are copyright by Peter Penev.
       #

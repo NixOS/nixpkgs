@@ -254,7 +254,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # License history is complex: originally MIT, then a potentially problematic
     # relicensing to a modified BSD-3 clause occurred around v0.5.5/v0.6.6.
     # Due to these concerns and non-standard terms, it's treated as custom non-free.
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "openWebUI";
       fullName = "Open WebUI License";
       url = "https://github.com/open-webui/open-webui/blob/0cef844168e97b70de2abee4c076cc30ffec6193/LICENSE";
       # Marked non-free due to concerns over the MIT -> modified BSD-3 relicensing process,

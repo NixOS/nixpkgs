@@ -318,6 +318,17 @@ stdenv.mkDerivation (
           url = "https://github.com/gnuradio/gnuradio/commit/d8814e0c3ef68372e5a1093603ef602e2119cd8a.patch";
           hash = "sha256-TQxqsce1AhSjdwaG2IP11QTeOgdJHN6cAAnznBl8eM8=";
         })
+        # Needed for the patch below to be able to apply
+        (fetchpatch {
+          url = "https://github.com/gnuradio/gnuradio/commit/56d230fd33fa2e8d6dc3685c9545589f21a6a1fd.patch";
+          hash = "sha256-N6Y7B1EJKQxWlpu3E7sjNgivva8+x0V2DlBQMXYLXbA=";
+        })
+        # Fixes a test failing due to precision. See:
+        # https://github.com/gnuradio/gnuradio/pull/8181
+        (fetchpatch {
+          url = "https://github.com/gnuradio/gnuradio/commit/aee9fd3f79389c4282a98e8d62c8405c73fd91df.patch";
+          hash = "sha256-UtYAJqqmydGs2EP4JOTGrQ6OgvL/jwGVwlhG4xxj8SU=";
+        })
       ];
       passthru = shared.passthru // {
         # Deps that are potentially overridden and are used inside GR plugins - the same version must

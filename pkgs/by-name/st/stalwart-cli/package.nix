@@ -31,12 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/stalwartlabs/cli/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.OR [
       lib.licenses.agpl3Only
-      {
-        fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
-        url = "https://github.com/stalwartlabs/cli/blob/main/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
     mainProgram = "stalwart-cli";
     maintainers = with lib.maintainers; [

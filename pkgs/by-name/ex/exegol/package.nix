@@ -67,13 +67,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Only
-      {
+      (mkLicense {
+        shortName = "esl10";
         fullName = "Exegol Software License (ESL) - Version 1.0";
         url = "https://docs.exegol.com/legal/software-license";
         # Please use exegol4 if you prefer to avoid the unfree version of Exegol.
         free = false;
         redistributable = false;
-      }
+      })
     ];
     mainProgram = "exegol";
     maintainers = with lib.maintainers; [

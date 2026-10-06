@@ -56,6 +56,7 @@
   cargo,
   rustc,
   nix-update-script,
+  withBreakingChanges ? false,
 }:
 
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
@@ -275,7 +276,8 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
   ++ lib.optional stdenv.hostPlatform.isDarwin "TKFRAMEWORK=/nonexistent"
   # Starting with future Git version 3.0.0, rust will be mandatory. For now, it's optional.
-  ++ lib.optional (!rustSupport) "NO_RUST=YesPlease";
+  ++ lib.optional (!rustSupport) "NO_RUST=YesPlease"
+  ++ lib.optional withBreakingChanges "WITH_BREAKING_CHANGES=YesPlease";
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     stdenv.shellPackage
