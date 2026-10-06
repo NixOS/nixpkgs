@@ -6,6 +6,7 @@
   libopenshot,
   wrapGAppsHook3,
   python3Packages,
+  qt6,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -24,10 +25,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   nativeBuildInputs = [
     doxygen
     wrapGAppsHook3
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     gtk3
+    qt6.qtbase
+    qt6.qtsvg
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -44,9 +48,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dontWrapGApps = true;
   dontWrapQtApps = true;
 
-  # Qt's GTK file dialog needs GTK's GSettings schemas.
+  # Pass GTK schemas and Qt plugins to the Python application wrapper.
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
   # https://github.com/OpenShot/openshot-qt/blob/930ff919762570eaf35a879574da8f8da9f196be/src/launch.py#L86
