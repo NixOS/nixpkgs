@@ -1292,31 +1292,31 @@ let
       fullName = "Ubuntu 22.04 Jammy (i386)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy/main/binary-i386/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy/main/binary-i386/Packages.xz";
           hash = "sha256-iZBmwT0ep4v+V3sayybbOgZBOFFZwPGpOKtmuLMMVPQ=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy/universe/binary-i386/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy/universe/binary-i386/Packages.xz";
           hash = "sha256-DO2LdpZ9rDDBhWj2gvDWd0TJJVZHxKsYTKTi6GXjm1E=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-updates/main/binary-i386/Packages.xz";
-          hash = "sha256-g95BtOoMxacZEHMBbcMes4a1P9HKf/QGOMOPr+OKayo=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-updates/main/binary-i386/Packages.xz";
+          hash = "sha256-2Gz620zbVf8KB/K1OJloMrPAIeqjBydLnrXeb6blBnQ=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-updates/universe/binary-i386/Packages.xz";
-          hash = "sha256-VbazaDDJKSUyQchGmw5f+FYAr4PIXWZJSBF0WVC5j+0=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-updates/universe/binary-i386/Packages.xz";
+          hash = "sha256-6qLgdus0Qi8pidtNeCrKO8djvRaGfDG9TnyJK9cwVnI=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-security/main/binary-i386/Packages.xz";
-          hash = "sha256-SkP4PqjUAbEMtktR5WQm/3jQl9O0T2VOVTP9QIYIVkQ=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-security/main/binary-i386/Packages.xz";
+          hash = "sha256-DqODg/IRb4GOlO+8PlRmAK2i9s4C5QrgHqGKLChVZlw=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-security/universe/binary-i386/Packages.xz";
-          hash = "sha256-citjk8LAGSRlXgOXgf3oe9vBCUC6/DJGhRJl/3ppN9c=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-security/universe/binary-i386/Packages.xz";
+          hash = "sha256-rpF3KZIwJ331oSyYjNzqBFy/bMZxUPHjtLg+cRRKe2g=";
         })
       ];
-      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z";
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"
@@ -1328,31 +1328,31 @@ let
       fullName = "Ubuntu 22.04 Jammy (amd64)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy/main/binary-amd64/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy/main/binary-amd64/Packages.xz";
           hash = "sha256-N8tX8VVMv6ccWinun/7hipqMF4K7BWjgh0t/9M6PnBE=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy/universe/binary-amd64/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy/universe/binary-amd64/Packages.xz";
           hash = "sha256-0pyyTJP+xfQyVXBrzn60bUd5lSA52MaKwbsUpvNlXOI=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-updates/main/binary-amd64/Packages.xz";
-          hash = "sha256-I57YuLZ458RljXfp1xFxqQLGNJh9uu8kQC0hc88XZro=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-updates/main/binary-amd64/Packages.xz";
+          hash = "sha256-eTt/gy/NKFj9I3DKzTFNhrSIkreo02KQOkw97/Gu/Ek=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-updates/universe/binary-amd64/Packages.xz";
-          hash = "sha256-ZXobWMi7tkakZ89GoyKpiRhRxMRXud0DOerSfzz5CPE=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-updates/universe/binary-amd64/Packages.xz";
+          hash = "sha256-go794qHEmpAl2dpeFS1Todfs2Vm6wPVimTZUHviUHDo=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-security/main/binary-amd64/Packages.xz";
-          hash = "sha256-cifTPY1iyckkaLd7dp+VPRlF0viWKrWXhM8HVWaMuUw=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-security/main/binary-amd64/Packages.xz";
+          hash = "sha256-4YvHIw5BdVZxNWkOj7l93BM7Az5a7hXydSQ0eRD8R4k=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/jammy-security/universe/binary-amd64/Packages.xz";
-          hash = "sha256-LTSOGbzkv0KrF2JM6oVT1Ml2KQkySXMbKNMBb9AyfQM=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/jammy-security/universe/binary-amd64/Packages.xz";
+          hash = "sha256-Q7CEJugWyCIq4jn8FOhH76P0DZKcFS4M2WXlmxzL48g=";
         })
       ];
-      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z";
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"
@@ -1364,31 +1364,31 @@ let
       fullName = "Ubuntu 24.04 Noble (amd64)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/noble/main/binary-amd64/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/noble/main/binary-amd64/Packages.xz";
           hash = "sha256-KmoZnhAxpcJ5yzRmRtWUmT81scA91KgqqgMjmA3ZJFE=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/noble/universe/binary-amd64/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/noble/universe/binary-amd64/Packages.xz";
           hash = "sha256-upBX+huRQ4zIodJoCNAMhTif4QHQwUliVN+XI2QFWZo=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/noble-updates/main/binary-amd64/Packages.xz";
-          hash = "sha256-leBJ29a2C2qdIPdjSSuwkHKUSq8GEC9L0DgdxHWZ55s=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/noble-updates/main/binary-amd64/Packages.xz";
+          hash = "sha256-9rl5/r5AaEtfwh1VzoJwkyLzlMpOYl/FZV+lhWlSGDM=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/noble-updates/universe/binary-amd64/Packages.xz";
-          hash = "sha256-CWYA0A4ytptWdClW3ACdIH4hKscblDh5OgxExP4VdJA=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/noble-updates/universe/binary-amd64/Packages.xz";
+          hash = "sha256-MewIwk3CFVFunDimEElNBujjZLd/3krdla9AGDrxpZA=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/noble-security/main/binary-amd64/Packages.xz";
-          hash = "sha256-TYs8ugCYqzOleH2OebdrpB8E68PfxB+7sRb+PlfANEo=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/noble-security/main/binary-amd64/Packages.xz";
+          hash = "sha256-RYnobbYvZrqZloQMni+XqP7NHw2z7tf3kYYsvHtfNbI=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z/dists/noble-security/universe/binary-amd64/Packages.xz";
-          hash = "sha256-bK9R8CUjLQ1V4GP7/KqZooSnKHF5+T5SuBs0butC82M=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/noble-security/universe/binary-amd64/Packages.xz";
+          hash = "sha256-Mzg8qg+YJCJQ36UlqKB09T5eaoLYX7KBG+lggmaT+6I=";
         })
       ];
-      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260101T000000Z";
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"
@@ -1400,31 +1400,31 @@ let
       fullName = "Ubuntu 26.04 Resolute (amd64)";
       packagesLists = [
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/main/binary-amd64/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/resolute/main/binary-amd64/Packages.xz";
           hash = "sha256-7ZrEHLJj767MWgagdC3FZXDi+1/5TE8uSy+9zd1zzyQ=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute/universe/binary-amd64/Packages.xz";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/resolute/universe/binary-amd64/Packages.xz";
           hash = "sha256-FYe+htZtOFQjJSFeDhCfdb1pXI8k15Os4nYgOKatWB4=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/main/binary-amd64/Packages.xz";
-          hash = "sha256-xaUdPgtH3jCgTJXYUbksMHvzt6jj6YfdzSAb+91tQNw=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/resolute-updates/main/binary-amd64/Packages.xz";
+          hash = "sha256-VYms1Kfq0A8lxX7BpxvBdCNbI2CugAoehvbigYnD8n4=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-updates/universe/binary-amd64/Packages.xz";
-          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/resolute-updates/universe/binary-amd64/Packages.xz";
+          hash = "sha256-bEy0vpjRcO4yD1CqHQcRpbOWRhe+LM7oqmCyIqILHyM=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/main/binary-amd64/Packages.xz";
-          hash = "sha256-tzAvbwp+/6snpL8TtbtTx2kEL2f+XfGAwDCl/r6ka6Y=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/resolute-security/main/binary-amd64/Packages.xz";
+          hash = "sha256-VN96MEriyJQP0hS7QWYSNidc7cGH3ZI/dRLZFmdOjtg=";
         })
         (fetchurl {
-          url = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z/dists/resolute-security/universe/binary-amd64/Packages.xz";
-          hash = "sha256-gXEKlgpgyrcnIhYwz1vxypFNX50EMbwhmidbDvUruKc=";
+          url = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z/dists/resolute-security/universe/binary-amd64/Packages.xz";
+          hash = "sha256-KUd0UkdPfWKSgzZMjgR/knl2Crsb8sn+MWKQzp1ICmU=";
         })
       ];
-      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20260515T222303Z";
+      urlPrefix = "https://snapshot.ubuntu.com/ubuntu/20261006T000000Z";
       packages = commonDebPackages ++ [
         "diffutils"
         "libc-bin"
