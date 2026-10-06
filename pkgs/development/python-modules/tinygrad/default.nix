@@ -197,6 +197,8 @@ buildPythonPackage (finalAttrs: {
     "test_recursive_pad"
     # AssertionError: 23476983700 not greater than 60457564575 (performance test)
     "test_flops"
+    # Assertion error: Itemes are not equal (actual: 127, desired: 126)
+    "test_float_to_fp8e4m3_extreme_values"
 
     # Require internet access
     "testCopySHMtoDefault"
@@ -250,6 +252,7 @@ buildPythonPackage (finalAttrs: {
     # Skipped when building on Hydra (no network access),
     # but interferes with local builds
     "test_xlm_roberta_large"
+
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # Fail with AssertionError

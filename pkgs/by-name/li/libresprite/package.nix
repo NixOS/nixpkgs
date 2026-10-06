@@ -21,7 +21,6 @@
   zlib,
   SDL2,
   SDL2_image,
-  lua,
 
   nixosTests,
 }:
@@ -65,7 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     SDL2
     SDL2_image
-    lua
     # no v8 due to missing libplatform and libbase
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

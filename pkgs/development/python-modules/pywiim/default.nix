@@ -66,7 +66,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "pywiim" ];
 
   meta = {
-    changelog = "https://github.com/mjcumming/pywiim/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mjcumming/pywiim/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Python library for WiiM/LinkPlay device communication";
     homepage = "https://github.com/mjcumming/pywiim";
     license = lib.licenses.mit;

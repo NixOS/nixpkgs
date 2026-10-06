@@ -28,9 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./install-config-files.patch
   ];
 
+  # Let BUILD_SHARED_LIBS pick the library type instead of forcing SHARED
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_library(''${ISPELL_TARGET_NAME} SHARED' 'add_library(''${ISPELL_TARGET_NAME}'
+  '';
+
   cmakeFlags = [
-    "-DENABLE_STATIC=NO"
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "ENABLE_STATIC" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -44,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+    # Doesn't compile with C23
+    "-std=gnu17"
+  ];
 
   meta = {
     description = "Interactive spelling checker";

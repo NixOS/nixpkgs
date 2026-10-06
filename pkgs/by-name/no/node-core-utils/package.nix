@@ -9,16 +9,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "node-core-utils";
-  version = "7.3.1";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "node-core-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JvZ6/S9QYDPMrPsCAET1Q6P8gwblDyDpKicsYulUg4Y=";
+    hash = "sha256-CBGoOUss+7NnoAVYMBx3xzLR1Qg43Hf+icc4gN/IaBg=";
   };
 
-  npmDepsHash = "sha256-aE8KH+BQUu8D20DBvWJmr8RWCa85bHjAWEDNZ8l2okg=";
+  npmDepsHash = "sha256-sDenglT9P2mXBY3ahm3wNKSxu4ho+BNQsGg141W4Cd4=";
 
   dontNpmBuild = true;
   dontNpmPrune = true;

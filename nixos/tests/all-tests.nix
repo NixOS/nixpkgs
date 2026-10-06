@@ -1392,6 +1392,7 @@ in
   openafs = runTest ./openafs.nix;
   openarena = runTest ./openarena.nix;
   openbao = runTest ./openbao.nix;
+  openbao-agent = runTest ./openbao-agent.nix;
   opencloud = runTest ./opencloud.nix;
   openldap = runTest ./openldap.nix;
   openresty-lua = runTest ./openresty-lua.nix;
@@ -1787,6 +1788,7 @@ in
   syncthing-init = runTest ./syncthing/init.nix;
   syncthing-many-devices = runTest ./syncthing/many-devices.nix;
   syncthing-no-settings = runTest ./syncthing/no-settings.nix;
+  syncthing-private-relay = runTest ./syncthing/private-relay.nix;
   syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;

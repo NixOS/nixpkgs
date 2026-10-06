@@ -1,14 +1,13 @@
 {
   lib,
   fetchFromGitHub,
-  # Requires Go 1.26, drop when that's the default.
-  buildGo126Module,
+  buildGoModule,
   nix-update-script,
   versionCheckHook,
   applyPatches,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "athens";
   version = "0.18.1";
 

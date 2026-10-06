@@ -14,7 +14,6 @@
   libx11,
   libxi,
   libxcursor,
-  lua,
   makeDesktopItem,
   copyDesktopItems,
 }:
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxi
     libxcursor
-    lua
   ];
 
   cmakeFlags = [
