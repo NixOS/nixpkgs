@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "redis-om";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-om-python";
     tag = "v${version}";
-    hash = "sha256-qjGrhEINW9p2Rd3O5WI4QKYcj8tn/FI3pjnhI1k3mmc=";
+    hash = "sha256-hpDGF+9YiJSCOSUrulE5iCG/YL5xlAWNxZcadOp3XBM=";
   };
 
   pythonRelaxDeps = [
