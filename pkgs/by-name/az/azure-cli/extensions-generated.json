@@ -482,6 +482,13 @@
     "hash": "sha256-bFIW0MS8t0ggUMfSU/VQki2VcYYQpALAVoPLGWt5aro=",
     "description": "Microsoft Azure Command-Line Tools Extension for Azure Front Door Edge Actions"
   },
+  "edgeoperator": {
+    "pname": "edgeoperator",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/edgeoperator-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-Tuzyn/qGjEA08u3TmK0CEJE8L1Nc4wD31tPZonUJmFY=",
+    "description": "Microsoft Azure Command-Line Tools ALDO Extension"
+  },
   "edgeorder": {
     "pname": "edgeorder",
     "version": "0.1.0",
