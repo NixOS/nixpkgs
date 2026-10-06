@@ -14,16 +14,16 @@ let
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2026.2.2.1.tar.gz";
-      hash = "sha256-ENJ699YXT798jpTQQVpFwTvlhvXbQlwQMQxE3zXxVHE=";
+      url = "https://download.jetbrains.com/go/goland-2026.2.3.tar.gz";
+      hash = "sha256-CvPoLmP5BoJMScQf2/bG5nmgKrlKsR/ATycFCmlw128=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/go/goland-2026.2.2.1-aarch64.tar.gz";
-      hash = "sha256-JxQLaXRb5nOKWQ/ZrpBoDotiauahIZy+VuuqZnxYfy0=";
+      url = "https://download.jetbrains.com/go/goland-2026.2.3-aarch64.tar.gz";
+      hash = "sha256-bUrRNCzhwqc4/ZP2oZ8qcSRcBP0pWhYqSGMF/D8T4qU=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/go/goland-2026.2.2.1-aarch64.dmg";
-      hash = "sha256-xTTNC4J1rRHtR+wZkZsDQX1x+BdYbhHb6ehOh/ToCMY=";
+      url = "https://download.jetbrains.com/go/goland-2026.2.3-aarch64.dmg";
+      hash = "sha256-ke7RSi4TH3q/4zGHo9vZlogNWJJxiVzisEZ0vvqV0nY=";
     };
   };
   # update-script-end: urls
@@ -37,8 +37,8 @@ in
   product = "Goland";
 
   # update-script-start: version
-  version = "2026.2.2.1";
-  buildNumber = "262.10315.160";
+  version = "2026.2.3";
+  buildNumber = "262.10968.67";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
