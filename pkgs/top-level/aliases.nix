@@ -1729,6 +1729,7 @@ mapAliases {
   mellowplayer = throw "'mellowplayer' has been removed as it was discontinued upstream in 2021."; # Added 2026-02-10
   melmatcheq.lv2 = melmatcheq-lv2; # Added 2025-09-27
   melonDS = warnAlias "'melonDS' has been renamed to 'melonds'" melonds; # Added 2026-02-08
+  merge-ut-dictionaries = throw "'merge-ut-dictionaries' has been removed and replaced by a local dictionary-merging script in 'mozc'. Use 'mozc-ut' for Mozc with UT dictionaries."; # Added 2026-10-06
   meshlab-unstable = throw "meshlab-unstable has been removed, as it was behind meshlab"; # Added 2025-09-21
   metaBuildEnv = throw "'metaBuildEnv' has been removed, due to it being ancient unmaintained software"; # Added 2026-02-11
   meteo = throw "'meteo' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
