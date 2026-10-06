@@ -32,9 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd prek \
-      --bash <(COMPLETE=bash $out/bin/prek) \
-      --fish <(COMPLETE=fish $out/bin/prek) \
-      --zsh <(COMPLETE=zsh $out/bin/prek)
+      --bash <($out/bin/prek util generate-shell-completion bash) \
+      --fish <($out/bin/prek util generate-shell-completion fish) \
+      --nushell <($out/bin/prek util generate-shell-completion nushell) \
+      --zsh <($out/bin/prek util generate-shell-completion zsh)
   '';
 
   doInstallCheck = true;
