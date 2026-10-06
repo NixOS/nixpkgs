@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/ssgelm/checkinstall";
     description = "Tool for automatically generating Slackware, RPM or Debian packages when doing `make install`";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ philiptaron ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
   };
