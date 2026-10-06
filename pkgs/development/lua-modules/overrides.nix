@@ -574,6 +574,17 @@ in
   });
 
   luacheck = prev.luacheck.overrideAttrs (old: {
+    patches = [
+      # Lua 5.5 makes for-loop control variables read-only, so 1.2.0 fails at
+      # startup. Fixed on master but unreleased; drop with the next release.
+      # https://github.com/lunarmodules/luacheck/issues/147
+      (fetchpatch {
+        name = "luacheck-lua-5.5-loop-variable.patch";
+        url = "https://github.com/lunarmodules/luacheck/commit/eea104d82fa66f27df2a7d900b3c271a6ca122ac.patch";
+        hash = "sha256-0dVg3su1gvx8bnxFrpWknP38OGCUjoCiKdwAfhFB7hI=";
+      })
+    ];
+
     meta = old.meta // {
       mainProgram = "luacheck";
     };
