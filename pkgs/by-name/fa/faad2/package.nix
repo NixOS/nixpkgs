@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "faad2";
-  version = "2.11.3";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "knik0";
     repo = "faad2";
     rev = finalAttrs.version;
-    hash = "sha256-39CMBSnGkOS6E5sSi2t70nWJHTFsaNx02gu8zQNVgiA=";
+    hash = "sha256-luBimrRvTMb1yo9ZXka2n2YJqmDtymR7ImbEcXqs7dE=";
   };
 
   outputs = [
