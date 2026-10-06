@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  strictDeps = true;
+
   passthru.tests = {
     inherit mpd vlc;
     inherit (gst_all_1) gst-plugins-bad;
