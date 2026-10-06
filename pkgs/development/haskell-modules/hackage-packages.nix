@@ -442015,8 +442015,6 @@ self: {
       ];
       description = "LiquidHaskell specs for the parallel package";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
-      broken = true;
     }
   ) { };
 
@@ -442069,6 +442067,38 @@ self: {
     }:
     mkDerivation {
       pname = "liquid-prelude";
+      version = "0.9.12.2.1";
+      sha256 = "0gxrdb98ch414ihdvhjrl19khz6amqk4cbcrl1fj3vxj1wh5im2g";
+      setupHaskellDepends = [
+        base
+        Cabal
+        liquidhaskell-boot
+      ];
+      libraryHaskellDepends = [
+        base
+        bytestring
+        containers
+        ghc-prim
+        liquidhaskell
+      ];
+      description = "General utility modules for LiquidHaskell";
+      license = lib.licenses.bsd3;
+    }
+  ) { };
+
+  liquid-prelude_0_9_14_1 = callPackage (
+    {
+      mkDerivation,
+      base,
+      bytestring,
+      Cabal,
+      containers,
+      ghc-prim,
+      liquidhaskell,
+      liquidhaskell-boot,
+    }:
+    mkDerivation {
+      pname = "liquid-prelude";
       version = "0.9.14.1";
       sha256 = "11mkqyqiw0yhbjr5mw5sl94l7zvaj504941rdk1nhx8c80sw4ks2";
       setupHaskellDepends = [
@@ -442086,7 +442116,6 @@ self: {
       description = "General utility modules for LiquidHaskell";
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
-      broken = true;
     }
   ) { };
 
@@ -442115,8 +442144,6 @@ self: {
       ];
       description = "LiquidHaskell specs for the vector package";
       license = lib.licenses.bsd3;
-      hydraPlatforms = lib.platforms.none;
-      broken = true;
     }
   ) { };
 
