@@ -193,5 +193,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
+    identifiers.cpeParts = {
+      vendor = "7-zip";
+      product = "7-zip";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
 })
