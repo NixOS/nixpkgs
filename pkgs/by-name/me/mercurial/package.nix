@@ -11,6 +11,7 @@
   cargo,
   rustPlatform,
   rustc,
+  pkg-config,
   fullBuild ? false,
   gitSupport ? fullBuild,
   guiSupport ? fullBuild,
@@ -24,6 +25,7 @@
   git,
   cacert,
   gnupg,
+  zstd,
 }:
 
 let
@@ -83,8 +85,14 @@ let
       rustPlatform.cargoSetupHook
       cargo
       rustc
+      pkg-config
     ];
-    buildInputs = [ docutils ];
+    buildInputs = [
+      docutils
+    ]
+    ++ lib.optionals rustSupport [
+      zstd
+    ];
 
     makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";
 
