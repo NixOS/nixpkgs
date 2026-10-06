@@ -17687,6 +17687,8 @@ self: super: with self; {
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
 
+  qiskit-algorithms = callPackage ../development/python-modules/qiskit-algorithms { };
+
   qiskit-finance = callPackage ../development/python-modules/qiskit-finance { };
 
   qiskit-machine-learning = callPackage ../development/python-modules/qiskit-machine-learning { };
