@@ -5,9 +5,7 @@
   makeWrapper,
   gradle_9,
   openjdk25_headless,
-  libmatthew_java,
   dbus,
-  dbus_java,
   callPackage,
   versionCheckHook,
   signal-cli,
@@ -37,9 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libmatthew_java
     dbus
-    dbus_java
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -81,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${openjdk25_headless}/bin/java $out/bin/signal-cli \
       --set JAVA_HOME "${openjdk25_headless}" \
       --add-flags "--enable-native-access=ALL-UNNAMED" \
-      --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
-      --add-flags "-Djava.library.path=$out/lib:${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus" \
+      --add-flags "-classpath '$out/lib/*'" \
+      --add-flags "-Djava.library.path=$out/lib" \
       --add-flags "org.asamk.signal.Main"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
