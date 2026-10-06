@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # Vendor Patchwork patches; the site is often unavailable.
   patches = [
     # Retry storing chassis indices and serialize concurrent allocations.
     (fetchpatch {
@@ -61,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ovn-org/ovn/commit/196afaf300bcd5a50a68917ba6c96282752a2b02.patch";
       hash = "sha256-4Mo3SWbFcm1GM5jPfqTp71YUDtDn/BzrU8gB7fzb640=";
     })
+    # Prevent early listener FINs from interrupting ACL CT TCP tests.
+    # https://patchwork.ozlabs.org/project/ovn/patch/20261006010454.80801-1-ihar.hrachyshka@gmail.com/
+    ./ovn-acl-ct-tcp-no-shutdown.patch
   ];
 
   outputs = [
