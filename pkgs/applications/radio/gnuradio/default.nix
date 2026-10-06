@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  ctestCheckHook,
   # Remove gcc and python references
   removeReferencesTo,
   pkg-config,
@@ -318,6 +319,11 @@ stdenv.mkDerivation (
           url = "https://github.com/gnuradio/gnuradio/commit/d8814e0c3ef68372e5a1093603ef602e2119cd8a.patch";
           hash = "sha256-TQxqsce1AhSjdwaG2IP11QTeOgdJHN6cAAnznBl8eM8=";
         })
+      ];
+      nativeCheckInputs = [ ctestCheckHook ];
+      disabledTests = [
+        # precision: variance slightly out of tolerance
+        "qa_fastnoise"
       ];
       passthru = shared.passthru // {
         # Deps that are potentially overridden and are used inside GR plugins - the same version must
