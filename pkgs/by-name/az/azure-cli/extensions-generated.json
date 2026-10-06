@@ -421,9 +421,9 @@
   },
   "discovery": {
     "pname": "discovery",
-    "version": "1.0.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/discovery-1.0.1-py3-none-any.whl",
-    "hash": "sha256-meLITo7gB1iIs0T08vDuJaGo263eUbEXdeeYV83EFaM=",
+    "version": "1.0.2",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/discovery-1.0.2-py3-none-any.whl",
+    "hash": "sha256-H8SSLB87nIMYOOaRUHiofsfMYKRp+l4TBA1iKQlUWYw=",
     "description": "Commands for managing Microsoft Discovery resources including bookshelves, workspaces, supercomputers, and tools"
   },
   "diskpool": {
