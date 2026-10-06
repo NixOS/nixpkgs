@@ -317,8 +317,10 @@ let
       ''${diskImage:+diskImage=$diskImage}
       # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
       # Since we are running in a sandbox already, the difference between seccomp and none is minimal
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --shared-dir "${storeDir}" &
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --shared-dir xchg &
+      # File handles need CAP_DAC_READ_SEARCH, which a build never has, so do not try them; and only
+      # log what might need attention, not every connect and disconnect.
+      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir "${storeDir}" &
+      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir xchg &
 
       # Wait until virtiofsd has created these sockets to avoid race condition.
       until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 0.1; done
