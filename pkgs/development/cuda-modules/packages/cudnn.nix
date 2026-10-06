@@ -115,7 +115,7 @@ buildRedist (
       homepage = "https://developer.nvidia.com/cudnn";
       changelog = "https://docs.nvidia.com/deeplearning/cudnn/backend/latest/release-notes.html";
 
-      license = _cuda.lib.licenses.cudnn;
+      license = lib.licenses.nvidiaCudnn;
 
       maintainers = with lib.maintainers; [
         mdaiter

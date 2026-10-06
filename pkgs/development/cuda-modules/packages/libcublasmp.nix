@@ -1,5 +1,5 @@
 {
-  _cuda,
+  lib,
   buildRedist,
   libcublas,
   libnvshmem,
@@ -38,6 +38,6 @@ buildRedist {
     '';
     homepage = "https://docs.nvidia.com/cuda/cublasmp";
     changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes";
-    license = _cuda.lib.licenses.math_sdk_sla;
+    license = lib.licenses.nvidiaMath_sdk_sla;
   };
 }
