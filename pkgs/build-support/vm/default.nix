@@ -1084,21 +1084,21 @@ let
     # Rocky Linux's /pub/rocky/9/ URL is rolling and changes with each minor release. We use the
     # vault instead, which provides stable URLs for specific minor versions.
     rocky9x86_64 = {
-      name = "rocky-9.6-x86_64";
-      fullName = "Rocky Linux 9.6 (x86_64)";
+      name = "rocky-9.7-x86_64";
+      fullName = "Rocky Linux 9.7 (x86_64)";
       packagesLists = [
         (fetchurl {
-          url = "https://dl.rockylinux.org/vault/rocky/9.6/BaseOS/x86_64/os/repodata/9965e429a90787a87a07eed62872d046411fb7dded524b96d74c4ce1eade327a-primary.xml.gz";
-          hash = "sha256-mWXkKakHh6h6B+7WKHLQRkEft93tUkuW10xM4ereMno=";
+          url = "https://dl.rockylinux.org/vault/rocky/9.7/BaseOS/x86_64/os/repodata/992a27c23b8d59070d247f034b8c646230cb24a07e95d7cdb189e56a56d56829-primary.xml.gz";
+          hash = "sha256-mSonwjuNWQcNJH8DS4xkYjDLJKB+ldfNsYnlalbVaCk=";
         })
         (fetchurl {
-          url = "https://dl.rockylinux.org/vault/rocky/9.6/AppStream/x86_64/os/repodata/8cc9f795679c3365c06b6135f685ebf4188a5863a5f52f09f8cabd4f09c4dfa1-primary.xml.gz";
-          hash = "sha256-jMn3lWecM2XAa2E19oXr9BiKWGOl9S8J+Mq9TwnE36E=";
+          url = "https://dl.rockylinux.org/vault/rocky/9.7/AppStream/x86_64/os/repodata/dec99744f47487c005ffc02acc95b323c0152abf25c394cf8c0dc646b43ff0b6-primary.xml.gz";
+          hash = "sha256-3smXRPR0h8AF/8AqzJWzI8AVKr8lw5TPjA3GRrQ/8LY=";
         })
       ];
       urlPrefixes = [
-        "https://dl.rockylinux.org/vault/rocky/9.6/BaseOS/x86_64/os"
-        "https://dl.rockylinux.org/vault/rocky/9.6/AppStream/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/9.7/BaseOS/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/9.7/AppStream/x86_64/os"
       ];
       archs = [
         "noarch"
@@ -1113,21 +1113,21 @@ let
     # Rocky Linux's /pub/rocky/10/ URL is rolling and changes with each minor release. We use the
     # vault instead, which provides stable URLs for specific minor versions.
     rocky10x86_64 = {
-      name = "rocky-10.0-x86_64";
-      fullName = "Rocky Linux 10.0 (x86_64)";
+      name = "rocky-10.1-x86_64";
+      fullName = "Rocky Linux 10.1 (x86_64)";
       packagesLists = [
         (fetchurl {
-          url = "https://dl.rockylinux.org/vault/rocky/10.0/BaseOS/x86_64/os/repodata/484d5c43cdb1058dd1328a6b891f45c85f1cb2620c528f2ef423d4b9feb9e2f0-primary.xml.gz";
-          hash = "sha256-SE1cQ82xBY3RMopriR9FyF8csmIMUo8u9CPUuf654vA=";
+          url = "https://dl.rockylinux.org/vault/rocky/10.1/BaseOS/x86_64/os/repodata/257e46ec2fe040f3beffe892e33ba8442574b3a42bfcd75328960b11949fc5fe-primary.xml.gz";
+          hash = "sha256-JX5G7C/gQPO+/+iS4zuoRCV0s6Qr/NdTKJYLEZSfxf4=";
         })
         (fetchurl {
-          url = "https://dl.rockylinux.org/vault/rocky/10.0/AppStream/x86_64/os/repodata/32c93064142d89f3f19c11e92642c5abd8368418f7ab3f3bdd752e4afa9b5b23-primary.xml.gz";
-          hash = "sha256-MskwZBQtifPxnBHpJkLFq9g2hBj3qz873XUuSvqbWyM=";
+          url = "https://dl.rockylinux.org/vault/rocky/10.1/AppStream/x86_64/os/repodata/4e8267a2e7a627e7e6f658dec2d25597b80c0f6f5d17c56710b323f399a097b2-primary.xml.gz";
+          hash = "sha256-ToJnouemJ+fm9ljewtJVl7gMD29dF8VnELMj85mgl7I=";
         })
       ];
       urlPrefixes = [
-        "https://dl.rockylinux.org/vault/rocky/10.0/BaseOS/x86_64/os"
-        "https://dl.rockylinux.org/vault/rocky/10.0/AppStream/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/10.1/BaseOS/x86_64/os"
+        "https://dl.rockylinux.org/vault/rocky/10.1/AppStream/x86_64/os"
       ];
       archs = [
         "noarch"
