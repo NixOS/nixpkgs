@@ -5,13 +5,13 @@
 }:
 buildNavidromeGoPlugin (finalAttrs: {
   pname = "audiomuseai";
-  version = "8";
+  version = "10";
 
   src = fetchFromGitHub {
     owner = "NeptuneHub";
     repo = "AudioMuse-AI-NV-plugin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WyobjyadD9IcY6mFYhCmuQgLbnoHpDoiLfINNfKmQM8=";
+    hash = "sha256-nsutpiatfjwg3cruzz8Np6xEFm78Ea64B2e3zmaZu40=";
   };
 
   vendorHash = "sha256-mXes+doBSa5kcfHp1cuzTz30wnyyPN7NLC0iOSL8FDo=";

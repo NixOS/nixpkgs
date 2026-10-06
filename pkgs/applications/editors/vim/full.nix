@@ -12,7 +12,7 @@
   glib,
   gtk2-x11,
   gtk3-x11,
-  lua,
+  lua5_5,
   python3,
   perl,
   tcl,
@@ -52,6 +52,8 @@
 }:
 
 let
+  lua = lua5_5;
+
   nixosRuntimepath = writeText "nixos-vimrc" ''
     set nocompatible
     syntax on

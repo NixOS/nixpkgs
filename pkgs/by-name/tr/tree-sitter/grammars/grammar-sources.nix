@@ -3362,9 +3362,9 @@
   };
 
   vcl = rec {
-    version = "0.4.0";
+    version = "0.4.1";
     url = "github:ntsk/tree-sitter-vcl?ref=v${version}";
-    hash = "sha256-qV+Ww5pzUHxmv9R6zIJDcLZnHLHL6xi3EZoRlhzgISQ=";
+    hash = "sha256-KnEB2iLjw8wIXAsDPVg+w+YEI/UzlgSftPUMpS6hQEQ=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
