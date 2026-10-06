@@ -20,6 +20,9 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  # tests start httptest servers on localhost
+  __darwinAllowLocalNetworking = true;
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd reader \
       --bash <($out/bin/reader completion bash) \
