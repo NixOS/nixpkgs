@@ -1266,10 +1266,10 @@ let
       name = "amazon-2023-x86_64";
       fullName = "Amazon Linux 2023 (x86_64)";
       packagesList = fetchurl {
-        url = "https://cdn.amazonlinux.com/al2023/core/guids/6fa961924efb4835a7e8de43c89726dca28a5cf5906f891262d8f78a31ea3aaf/x86_64/repodata/primary.xml.gz";
-        hash = "sha256-Ezdsc8a2aOIbyXvQ/nyanWe1fl089VgtfegaPcu2oo4=";
+        url = "https://cdn.amazonlinux.com/al2023/core/guids/5775d799f6e8c33e94d68682d3490cae250052e8798e544edd2d76501d867228/x86_64/repodata/primary.xml.gz";
+        hash = "sha256-Pzz1Gnvir1VsyLXPIBlniC8yatdm+aRqNjeP19DR8LE=";
       };
-      urlPrefix = "https://cdn.amazonlinux.com/al2023/core/guids/6fa961924efb4835a7e8de43c89726dca28a5cf5906f891262d8f78a31ea3aaf/x86_64";
+      urlPrefix = "https://cdn.amazonlinux.com/al2023/core/guids/5775d799f6e8c33e94d68682d3490cae250052e8798e544edd2d76501d867228/x86_64";
       archs = [
         "noarch"
         "x86_64"
