@@ -34,6 +34,7 @@ buildPecl rec {
   ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP extension for interfacing with memcached via libmemcached library";
     license = lib.licenses.php301;
     homepage = "https://github.com/php-memcached-dev/php-memcached";
