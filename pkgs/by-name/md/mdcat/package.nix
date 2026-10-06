@@ -45,7 +45,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    installManPage $releaseDir/build/mdcat-*/out/mdcat.1
+    asciidoctor -b manpage -a reproducible -o mdcat.1 mdcat.1.adoc
+    installManPage mdcat.1
+    ln -s mdcat.1 $out/share/man/man1/mdless.1
+    ln -s mdcat.1 $out/share/man/man1/mdpick.1
     ln -sr $out/bin/{mdcat,mdless}
     ln -sr $out/bin/{mdcat,mdpick}
     wrapProgram $out/bin/mdpick --suffix PATH : ${lib.makeBinPath [ fzf ]}
