@@ -2,11 +2,12 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
+  testers,
   cmake,
   dbus,
   libqtdbustest,
+  lomiri,
   lomiri-api,
   pkg-config,
   qtbase,
@@ -27,26 +28,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-T9Diebp91kZrIt6o9acRQyn+9Hhu20YUYxf6iTntpsc=";
   };
 
-  patches = [
-    # To be removed during lomiri-api 0.4.0 bump
-    (fetchpatch {
-      name = "0001-lomiri-notifications-revert-notifications-interface-vendoring.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-notifications/-/commit/69d8d0fb6abb13c9fb909a491e4b62530c52e33d.patch";
-      revert = true;
-      hash = "sha256-HckIxUzvU99xqCYilD7PPG5LjkpILzW9benQScwWKGU=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   ''
-  # Need to replace prefix to not try to install into lomiri-api prefix
+  # Agreed-upon location between multiple components
+  # Qt6 one is already correct as-is
   + ''
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail \
-        '--variable=plugindir lomiri-shell-api' \
-        '--define-variable=libdir=''${CMAKE_INSTALL_LIBDIR} --variable=plugindir lomiri-shell-api'
+      --replace-fail 'SHELL_PLUGINDIR_SUFFIX lomiri/qml' 'SHELL_PLUGINDIR_SUFFIX ${lomiri.passthru.shellPlugindirSuffix}' \
+      --replace-fail 'string(APPEND SHELL_PLUGINDIR_SUFFIX "6")' '# string(APPEND SHELL_PLUGINDIR_SUFFIX "6")'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \
@@ -91,7 +82,10 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
   '';
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Free Desktop Notification server QML implementation for Lomiri";
@@ -99,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.com/ubports/development/core/lomiri-notifications/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];
+    pkgConfigModules = [
+      "lomiri-shell-notifications${lib.optionalString withQt6 "-qt6"}"
+    ];
     platforms = lib.platforms.linux;
   };
 })
