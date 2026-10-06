@@ -95,6 +95,10 @@ extra-packages:
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
   - insert-ordered-containers < 0.3     # 2026-05-25: Needed for building postgrest
   - language-javascript == 0.7.0.0      # required by purescript
+  - liquid-fixpoint == 0.9.6.3.7        # 2026-10-06: for liquidhaskell-boot 0.9.14.* (GHC 9.14)
+  - liquid-prelude == 0.9.14.*          # 2026-10-06: for liquidhaskell 0.9.14.* (GHC 9.14)
+  - liquidhaskell == 0.9.14.*           # 2026-10-06: for GHC 9.14
+  - liquidhaskell-boot == 0.9.14.*      # 2026-10-06: for GHC 9.14
   - magic <= 1.1                        # 2026-09-10: Needed for building git-annex
   - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
   - postgresql-binary < 0.15            # 2026-09-05: Needed for building postgrest
