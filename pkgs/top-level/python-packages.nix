@@ -12373,6 +12373,8 @@ self: super: with self; {
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
+  nvitop = callPackage ../development/python-modules/nvitop { };
+
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
 
   nvsmi = callPackage ../development/python-modules/nvsmi { };
