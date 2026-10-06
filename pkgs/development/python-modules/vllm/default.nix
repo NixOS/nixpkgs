@@ -161,8 +161,8 @@ let
   deepgemm = fetchFromGitHub {
     owner = "deepseek-ai";
     repo = "DeepGEMM";
-    rev = "a6b593d2826719dcf4892609af7b84ee23aaf32a";
-    hash = "sha256-Kym2OAIBsx0mxWHY32bkifgPOzpuPgOu1d79ynHQHEs=";
+    rev = "8b1392b978f5a03c828dd1711090d7fb50958b8a";
+    hash = "sha256-Dy3s3LJXkvgKAOMOwyissYjr47OjkwqlShVKUthL/II=";
     fetchSubmodules = true;
   };
 
@@ -199,8 +199,8 @@ let
   fmha-sm100 = fetchFromGitHub {
     owner = "vllm-project";
     repo = "MSA";
-    rev = "2e63ec37a0fc29bc20f39cd1a52e0f5affc33a73";
-    hash = "sha256-TFW3THDfTn8Uf91+BhcY6ApU1jxxvzs5m0oxJ+kzgdM=";
+    rev = "087c161814d4d9c735b46c21212a09e5f8eb92fa";
+    hash = "sha256-y1NZBwmpiILIDb4ph1NJ+0jU1Tg4qP3y4w3tOCN4gEw=";
     fetchSubmodules = true;
   };
 
@@ -224,13 +224,24 @@ let
   };
 
   # grep for GIT_TAG in the following file
+  # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/flashkda.cmake
+  flashkda = fetchFromGitHub {
+    name = "FlashKDA-source";
+    owner = "vllm-project";
+    repo = "FlashKDA";
+    rev = "053de1b716ef3255873e02d2d28f4adf09951978";
+    hash = "sha256-ew0xOyDP3Z+2c0azRf+nESZ4wgRXe/qQIyl7K+MmgKI=";
+    fetchSubmodules = true;
+  };
+
+  # grep for GIT_TAG in the following file
   # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/qutlass.cmake
   qutlass = fetchFromGitHub {
     name = "qutlass-source";
     owner = "IST-DASLab";
     repo = "qutlass";
-    rev = "830d2c4537c7396e14a02a46fbddd18b5d107c65";
-    hash = "sha256-aG4qd0vlwP+8gudfvHwhtXCFmBOJKQQTvcwahpEqC84=";
+    rev = "e74319e3405ce6d71965732880f5dc1f52371f64";
+    hash = "sha256-Gzl3KuYXXLXMrVciEYrBPu1FH2cplGUPTFpWzFfUmMo=";
   };
 
   vllm-flash-attn' = lib.defaultTo (stdenv.mkDerivation {
@@ -244,8 +255,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "caaa4eb59845388a20b1f435ecaafb4bd9517ad8";
-      hash = "sha256-oPCjHhjRuUVarnlIn17ZqSgvDOlDZqYYZjKyAQsBMP0=";
+      rev = "f3e1a4f74c99145c0717709860bf765de1703779";
+      hash = "sha256-/szsVNSp1LvT2Ojbj67jy6tY31RTPR1qW2XzcB31B80=";
     };
 
     patches = [
@@ -375,7 +386,7 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.26.0";
+  version = "0.28.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -383,7 +394,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jFzV6vQX88FhemF98HmT5j3t6Trj5lXVlym4WD/X+Kw=";
+    hash = "sha256-Ia5SB9bQ+Vxkc5wBwY7HxQo6rqYFpWlVxeQyyP55dMg=";
   };
 
   cargoRoot = "rust";
@@ -394,7 +405,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-/kRtossDL0xuOYEzHA6xwN3P55kn6j0+eSm7j75e2ao=";
+    hash = "sha256-CLvLAkejYfrnrPXJ78xh2mgCyRg7F56Um1LPnJtj7iw=";
   };
 
   patches = [
@@ -624,12 +635,13 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   cmakeFlags = [
   ]
   ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "DEEPGEMM_SRC_DIR" "${lib.getDev deepgemm}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
-    (lib.cmakeFeature "FLASH_MLA_SRC_DIR" "${lib.getDev flashmla}")
-    (lib.cmakeFeature "FMHA_SM100_SRC_DIR" "${lib.getDev fmha-sm100}")
-    (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn'}")
-    (lib.cmakeFeature "QUTLASS_SRC_DIR" "${lib.getDev qutlass}")
+    (lib.cmakeFeature "DEEPGEMM_SRC_DIR" (lib.getDev deepgemm).outPath)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" (lib.getDev cutlass).outPath)
+    (lib.cmakeFeature "FLASH_KDA_SRC_DIR" (lib.getDev flashkda).outPath)
+    (lib.cmakeFeature "FLASH_MLA_SRC_DIR" (lib.getDev flashmla).outPath)
+    (lib.cmakeFeature "FMHA_SM100_SRC_DIR" (lib.getDev fmha-sm100).outPath)
+    (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" (lib.getDev vllm-flash-attn').outPath)
+    (lib.cmakeFeature "QUTLASS_SRC_DIR" (lib.getDev qutlass).outPath)
     (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
     (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
     (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${symlinkJoin {
