@@ -28,5 +28,8 @@
     # Make sure the admin wrapper is working
     machine.succeed("cd ~")
     assert "--version" in machine.succeed("navidrome-cli --help")
+
+    # Make sure that the rust plugin loads
+    assert "nd-lyrics" in machine.succeed("navidrome-cli plugin list")
   '';
 }
