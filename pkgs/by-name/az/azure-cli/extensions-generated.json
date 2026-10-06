@@ -811,6 +811,13 @@
     "hash": "sha256-ZQAUxctPWu/2a5vqiF2WjcpeYRgO8EP6FGkcs7AgCgs=",
     "description": "Support for Azure Migrate preview"
   },
+  "mission": {
+    "pname": "mission",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/mission-1.0.0-py3-none-any.whl",
+    "hash": "sha256-RL9txTK95Y1l9HtdHqGlY2H85Dov/CTZZ7v29hNaQm0=",
+    "description": "Microsoft Azure Command-Line Tools Mission Extension"
+  },
   "mixed-reality": {
     "pname": "mixed-reality",
     "version": "1.0.0b1",
