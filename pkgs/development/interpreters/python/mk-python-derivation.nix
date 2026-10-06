@@ -33,7 +33,12 @@
 }:
 
 let
-  inherit (builtins) unsafeGetAttrPos;
+  inherit (builtins)
+    getEnv
+    trace
+    tryEval
+    unsafeGetAttrPos
+    ;
   inherit (lib)
     elem
     extendDerivation
@@ -52,6 +57,24 @@ let
     all
     seq
     ;
+
+  # NOTE: We cannot catch the Nix option abort-on-warn here.
+  abortOnWarn = elem (getEnv "NIX_ABORT_ON_WARN") [
+    "1"
+    "true"
+    "yes"
+  ];
+
+  warnCatchably =
+    if abortOnWarn then
+      # `abort` fails `builtins.tryEval`, use `throw` instead.
+      throw
+    else
+      # Taken from lib.warn to avoid using builtins.warn
+      # as we cannot handle the Nix option abort-on-warn.
+      # NOTE: This function will stay `warn`
+      # even when the Nix option `abort-on-warn` is `true`.
+      msg: trace "[1;35mevaluation warning:[0m ${msg}";
 
   leftPadName =
     name: against:
@@ -423,7 +446,9 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
 
-        disabled = finalAttrs ? meta.problems.unsupportedPython;
+        disabled = warnCatchably ''
+          ${finalAttrs.name}: `passthru.disabled` is deprecated. Use `meta ? problems.unsupportedPython` instead.
+        '' (finalAttrs ? meta.problems.unsupportedPython);
 
         updateScript = nix-update-script { };
       }
@@ -468,6 +493,24 @@ lib.extendMkDerivation {
               ''
               + posString;
           };
+
+          # Deprecated attribute passthru.disabled
+          # Add only when environment variable NIX_ABORT_ON_WARN is set.
+          ${
+            if
+              abortOnWarn && finalAttrs ? passthru.disabled && (tryEval finalAttrs.passthru.disabled).success
+            then
+              "buildPythonPackage-internal-disabled-overrideAttrs"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message = ''
+                buildPythonPackage: ${finalAttrs.name}: Overriding attribute `passthru.disabled` with `<pkg>.overrideAttrs` is deprecated.
+                  Add/remove `meta.problems.unsupportedPython` instead.
+              '';
+            };
 
           # Deprecated argument stdenv (internal)
           ${if attrs ? stdenv then "buildPythonPackage-internal-stdenv" else null} = {
