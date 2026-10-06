@@ -75,6 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ovn-org/ovn/commit/196afaf300bcd5a50a68917ba6c96282752a2b02.patch";
       hash = "sha256-4Mo3SWbFcm1GM5jPfqTp71YUDtDn/BzrU8gB7fzb640=";
     })
+    # Prevent early listener FINs from interrupting ACL CT TCP tests.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/aa02ed31006e11b556ee8d1f6dc9e2539e2b70d2.patch";
+      hash = "sha256-PLA7jP8p7uxvlJbGicxmRg4ueKW/pOMlNpphJ0epSLw=";
+    })
   ];
 
   nativeBuildInputs = [
