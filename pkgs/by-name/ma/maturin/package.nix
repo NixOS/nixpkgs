@@ -8,6 +8,8 @@
   nix-update-script,
   maturin,
   python3,
+  pkg-config,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,7 +25,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-9VqS9wvQAsSYNhH7B9WlD6SZjXR4S2sYzYoNy6vbYBM=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
