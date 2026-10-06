@@ -101,6 +101,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     for mozjs_dir in $cargoDepsCopy/*/mozjs_*/; do
       cp Cargo.lock $mozjs_dir
     done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The nix cc wrapper prints a warning to stderr when it receives a `--target`
+    # that differs from its default one.
+    # cc-rs probes whether a flag is supported by compiling a test file and
+    # treats any stderr output as unsupported, so every `flag_if_supported`
+    # flag is silently dropped, including `-fno-rtti` for mozjs-sys jsglue:
+    # https://github.com/servo/mozjs/blob/de3c7bdc1178274c31bedccf60ae04a3ff5c0619/mozjs-sys/build.rs#L572
+    # https://github.com/rust-lang/cc-rs/blob/c619f08c5f270c3f153fd3bce20540d2422d1356/src/lib.rs#L1748
+    # Compiling jsglue with RTTI while SpiderMonkey is built without results
+    # in a linker error.
+    substituteInPlace $cargoDepsCopy/*/cc-1.*/src/lib.rs \
+      --replace-fail '"--target={clang_target}"' '"--target=${stdenv.hostPlatform.config}"'
   '';
 
   # set `HOME` to a temp dir for write access
@@ -130,8 +143,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     yasm
   ];
 
-  env.UV_PYTHON = customPython.interpreter;
-
   buildInputs = [
     fontconfig
     freetype
@@ -153,23 +164,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     vulkan-loader
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # mozjs-sys fails with:
-      #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
-      "-Wno-error=format-security"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
-    ]
-  );
+  env = {
+    UV_PYTHON = customPython.interpreter;
+
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        # mozjs-sys fails with:
+        #  cc1plus: error: '-Wformat-security' ignored without '-Wformat'
+        "-Wno-error=format-security"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "-I${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+      ]
+    );
+  };
 
   # copy resources into `$out` to be used during runtime
-  # link runtime libraries
   postFixup = ''
     mkdir -p $out/resources
     cp -r ./resources $out/
-
+  ''
+  # link runtime libraries
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/servoshell \
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
@@ -180,8 +196,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    # undefined libmozjs_sys symbols during linking
-    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/servo/servo/releases/tag/${finalAttrs.src.tag}";
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";

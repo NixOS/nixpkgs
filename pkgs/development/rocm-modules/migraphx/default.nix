@@ -35,7 +35,7 @@
   writableTmpDirAsHomeHook,
   buildDocs ? false,
   buildTests ? false,
-  gpuTargets ? clr.gpuTargets,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 let
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "AMDMIGraphX";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-raYsrMZASdEIxSstk14b38q9dt5EOq3rKidoFvobnxk=";
   };
 

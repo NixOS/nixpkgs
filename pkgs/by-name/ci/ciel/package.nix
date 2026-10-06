@@ -9,7 +9,7 @@
   openssl,
   pkg-config,
   rustPlatform,
-  systemd,
+  systemdLibs,
   xz,
   zlib,
 }:
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Therefore, bash is required for plugins to work.
   buildInputs = [
     bash
-    systemd
+    systemdLibs
     dbus
     openssl
     libssh2

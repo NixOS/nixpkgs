@@ -97,12 +97,11 @@ let
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
         rm test/recipes/01-test_symbol_presence.t
       ''
-      # this test has inconsistent behavior in the freebsd sandbox
-      # (binds to only ipv6 and connects on only ipv4)
+      # this test has multiple issues in the freebsd sandbox:
+      # * binds to only ipv6 and connects on only ipv4
+      # * attempts name resolution which fails
       + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
-        substituteInPlace test/recipes/82-test_ocsp_cert_chain.t \
-          --replace-fail '"-accept",' '"-4", "-accept",' \
-          --replace-fail '"-connect",' '"-4", "-connect",'
+        rm test/recipes/82-test_ocsp_cert_chain.t
       '';
 
       outputs = [

@@ -5,18 +5,19 @@
   automake,
   libtool,
   intltool,
+  ddccontrol-dbgen,
   fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ddccontrol-db";
-  version = "20260922";
+  version = "20260928";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol-db";
     tag = finalAttrs.version;
-    sha256 = "sha256-i5d/zvJVZpQ9EUXPbiT398hdfjC6jbES0UIM0Un3BQY=";
+    sha256 = "sha256-JpHarxvL147ATcvYLR1nxfMY24Pp2TYJlEXG9L1vqSo=";
   };
 
   nativeBuildInputs = [
@@ -24,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     intltool
     libtool
+    ddccontrol-dbgen
   ];
 
   preConfigure = ''

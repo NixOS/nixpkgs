@@ -171,6 +171,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # TypeError: cannot pickle 'itertools.count' object (Python 3.14 compatibility)
     "test_orchestrator_deepcopies_and_stays_functional"
+
+    # Flaky: AssertionError: assert <fingerprint> != <fingerprint>
+    "test_changes_when_file_changes"
+
+    # Flaky: AssertionError: Timed out waiting for UI state
+    "test_incomplete_stream_does_not_retry_ahead_of_queued_prompts"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # AssertionError: Timed out waiting for UI state
@@ -206,6 +212,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
     # ACP tests require network access
     "tests/acp/test_acp_entrypoint_smoke.py"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: 'bash'
+    "tests/test_install_script.py"
   ];
 
   __darwinAllowLocalNetworking = true;

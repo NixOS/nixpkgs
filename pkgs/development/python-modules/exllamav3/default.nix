@@ -7,7 +7,6 @@
 
   setuptools,
 
-  flash-linear-attention,
   llguidance,
   marisa-trie,
   ninja,
@@ -26,6 +25,7 @@ let
   # https://github.com/turboderp-org/exllamav3/issues/44
   # Using unsupported platforms the build will fail
   cudaCapabilities = lib.intersectLists torch.cudaCapabilities [
+    "7.5"
     "8.0"
     "8.6"
     "8.9"
@@ -36,14 +36,14 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "exllamav3";
-  version = "1.5.0";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gW6A2nWx3lumnJz7r7vxQyC1qM9Agqdr0DiL68yJvAI=";
+    hash = "sha256-0oHiNJkMhWPM0+FQIGJ5SBiiqtJkn9okRlmyjtaL3t0=";
   };
 
   pythonRelaxDeps = [
@@ -67,7 +67,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   dependencies = [
-    flash-linear-attention # Upstream vendors it instead
+    # Upstream has a vendored modified flash-linear-attention
     llguidance
     marisa-trie
     numpy

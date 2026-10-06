@@ -1,0 +1,70 @@
+--- a/src/webapi/Api.cpp
++++ b/src/webapi/Api.cpp
+@@ -8604,12 +8604,10 @@
+ 	}
+ 	const auto &obj = root.get<picojson::object>();
+ 
+-	// Body: {"ip": "1.2.3.4", "port": <uint16>}. A dotted quad, and only that. The
+-	// integer form is gone: ParseIpv4Dotted() packs a.b.c.d least-significant byte
+-	// first, while the integer branch took the JSON value verbatim, so 2130706433
+-	// (0x7F000001, the conventional big-endian spelling of 127.0.0.1) bootstrapped
+-	// 1.0.0.127.
+-	std::uint32_t ip_he = 0;
++	// Body: {"ip": "1.2.3.4", "port": <uint16>}. A dotted quad, and only that.
++	// ParseIpv4Dotted() packs a.b.c.d least-significant byte first (a | b << 8 |
++	// c << 16 | d << 24), the order Uint32toStringIP() reads back for the echo below.
++	std::uint32_t ip = 0;
+ 	{
+ 		const auto it = obj.find("ip");
+ 		if (it == obj.end()) {
+@@ -8621,7 +8619,7 @@
+ 				"`ip` must be a dotted-quad IPv4 address string, e.g. "
+ 				"\"127.0.0.1\"");
+ 		}
+-		if (!ParseIpv4Dotted(it->second.get<std::string>(), ip_he)) {
++		if (!ParseIpv4Dotted(it->second.get<std::string>(), ip)) {
+ 			return ErrorResponse(400, "bad_request", "`ip` must be a dotted-quad IPv4 address");
+ 		}
+ 	}
+@@ -8640,8 +8638,12 @@
+ 		port = static_cast<std::uint16_t>(v);
+ 	}
+ 
++	// EC_TAG_BOOTSTRAP_IP is in Kad order, a << 24 | b << 16 | c << 8 | d: amuled hands it
++	// straight to CKademlia::Bootstrap(), which byte-swaps it for the socket, and it is
++	// what amulegui (KadDlg) and amuleweb send. Passing the ParseIpv4Dotted() value
++	// unswapped sent the bootstrap request to d.c.b.a.
+ 	std::unique_ptr<CECPacket> ec_req(new CECPacket(EC_OP_KAD_BOOTSTRAP_FROM_IP));
+-	ec_req->AddTag(CECTag(EC_TAG_BOOTSTRAP_IP, ip_he));
++	ec_req->AddTag(CECTag(EC_TAG_BOOTSTRAP_IP, wxUINT32_SWAP_ALWAYS(ip)));
+ 	ec_req->AddTag(CECTag(EC_TAG_BOOTSTRAP_PORT, port));
+ 
+ 	const CECPacket *ec_resp = m_app.SendRecvSerialized(ec_req.get());
+@@ -8666,7 +8668,7 @@
+ 	// echo reports which address the daemon actually parsed, which the caller cannot
+ 	// recover anywhere else.
+ 	w.Key("ip");
+-	w.ValueString(Uint32toStringIP(ip_he));
++	w.ValueString(Uint32toStringIP(ip));
+ 	w.Key("port");
+ 	w.ValueInt(static_cast<int64_t>(port));
+ 	w.EndObject();
+--- a/unittests/curl-tests/amuleapi/16-networks-connect.sh
++++ b/unittests/curl-tests/amuleapi/16-networks-connect.sh
+@@ -178,12 +178,10 @@
+ _assert_json_eq '. | has("ok")' false 'kad/bootstrap response has no constant ok field'
+ _assert_json_eq '.port' 4672   'kad/bootstrap response echoes port'
+ 
+-# The uint32 form is refused. It was accepted alongside the quad and the two
+-# disagreed about byte order: ParseIpv4Dotted() packs a.b.c.d least-significant
+-# byte first, while the integer was taken verbatim, so 2130706433 (0x7F000001,
+-# what a client computing an IPv4 integer the conventional way writes for
+-# 127.0.0.1) bootstrapped 1.0.0.127. Every IP on this surface is a quad now, in
+-# both directions, so the question does not arise.
++# The uint32 form is refused: every IP on this surface is a dotted quad, in both
++# directions, so a client never has to know which byte order EC carries. The
++# echo above cannot show where the probe went: it is read back with the same
++# packing the request was parsed with.
+ _curl -X POST -H "Authorization: Bearer $ADMIN_TOKEN" \
+ 	-H "Content-Type: application/json" \
+ 	-d '{"ip":2130706433,"port":4672}' \

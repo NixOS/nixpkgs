@@ -15,16 +15,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ashell";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "MalpenZibo";
     repo = "ashell";
     tag = finalAttrs.version;
-    hash = "sha256-1ci09G9qQCAmYnERtd1Pm2hZPEL0AMuYF7B9AlnnfbE=";
+    hash = "sha256-mBbKWTA/mN5yJy6AUoJ3AzNYVvjSKuM7bS81B3RcMLY=";
   };
 
-  cargoHash = "sha256-yuj74sMsL1c0vLEb0iyXTJYUw0rH7bJdxJRVVpPCkf0=";
+  cargoHash = "sha256-vc1aV7NOwfRrb1RUnpGyMJ6KXjcYicM4QyrBd5Q9P1A=";
 
   nativeBuildInputs = [
     pkg-config

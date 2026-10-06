@@ -4,6 +4,7 @@
   fetchurl,
   struct,
   statistics,
+  autoreconfHook,
   lapack,
   blas,
 }:
@@ -17,6 +18,10 @@ buildOctavePackage rec {
     sha256 = "sha256-Wfs3caLSojE0R1MsWaLgAKanu3pnfz74GD+6qrVJOhQ=";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
   buildInputs = [
     lapack
     blas
@@ -26,6 +31,19 @@ buildOctavePackage rec {
     struct
     statistics
   ];
+
+  # autoreconfHook provides an autoreconfPhase that is run as a
+  # preconfigurePhase, which means it runs AFTER the source is un-tarred, and
+  # before buildOctavePackage's buildPhase re-tars it up into a format for later
+  # consumption by Octave's "pkg build" command.
+  preAutoreconf = ''
+    pushd src
+    # Remove any files upstream generated for distribution.
+    rm config.*
+  '';
+  postAutoreconf = ''
+    popd
+  '';
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/optim/";

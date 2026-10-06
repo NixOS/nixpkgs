@@ -1140,15 +1140,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2701-1";
+      version = "0.0.2708-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2701-1.rockspec";
-          sha256 = "0ligp083swi8zfj6s8syc4i3fyiiv95nh1bnzfpd4j1hfs4ljnac";
+          url = "mirror://luarocks/fzf-lua-0.0.2708-1.rockspec";
+          sha256 = "0mlwn4jvbmq83r8wfs2ywsqcvnqsnv0s5ay22gichq3ka45bdxzp";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/78b85d2a522b1e6a2d154216b3e532a1df1ad6d7.zip";
-        sha256 = "1hgl34ama6756y6dlczv1zlqji0sz54s8j12nmrvygggdfgzmrcr";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/bba13a0d260ca5e049683344ba70791c9ad8ece6.zip";
+        sha256 = "1qqza6vjyd56jmgaffrbrr6vwzsyy0x92gcy7p94ggh67pz0x8h2";
       };
 
       disabled = luaOlder "5.1";
@@ -6805,6 +6805,40 @@ final: prev: {
         homepage = "https://github.com/notomo/vusted";
         license = lib.licenses.mit;
         description = "`busted` wrapper for testing neovim plugin";
+      };
+    }
+  ) { };
+
+  warna = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "warna";
+      version = "0.3.5-2";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/warna-0.3.5-2.rockspec";
+          sha256 = "0vkkpldgaav9cnx63wal6851rlcq6n93fpv5xpvm9al308q45d0r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "komothecat";
+        repo = "warna";
+        tag = "v0.3.5-2";
+        hash = "sha256-6L2MNVlBwhQC/dqnXIMqQh+U11LqEx0KU3/FOCLySOA=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/komothecat/warna#readme";
+        maintainers = with lib.maintainers; [ Freed-Wu ];
+        license = lib.licenses.mit;
+        description = "🎨 Terminal text styling for Lua";
+        longDescription = "Warna is a simple text styling for the terminal. View more on GitHub.";
       };
     }
   ) { };

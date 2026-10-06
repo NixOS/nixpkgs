@@ -7,7 +7,7 @@
   installShellFiles,
   lib,
   libgpg-error,
-  lua5_4,
+  lua5_5,
   makeWrapper,
   nix,
   openssl,
@@ -49,7 +49,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gnupg
     gpgme
     libgpg-error
-    lua5_4
     openssl
   ];
 
@@ -62,8 +61,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--lib" # Disable impure integration tests
   ];
 
+  checkInputs = [
+    lua5_5 # Test suite uses pkg-config to find Lua libs
+  ];
+
   nativeCheckInputs = [
-    lua5_4
+    lua5_5
     nix
   ];
 

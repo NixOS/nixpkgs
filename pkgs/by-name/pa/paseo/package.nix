@@ -13,7 +13,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "paseo";
-  version = "0.10.2";
+  version = "0.10.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -22,12 +22,12 @@ buildNpmPackage (finalAttrs: {
     owner = "getpaseo";
     repo = "paseo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jbiQMZUho0yqi0DFXPeBxFbvldL/GCQ5h8XuHcU7wg4=";
+    hash = "sha256-yI/H8XPC0lLdmokePJ4qyVxaV+/PsgePzQupumm5LPQ=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-tT7qrQpJSxXTJMc9KinfnDQoeTdvLt7NWanYANKunqg=";
+  npmDepsHash = "sha256-uG7EkoQMVLk5CzDEbJbR5aPxeq59x4vjF21JGatxD7k=";
 
   npmRebuildFlags = [ "--ignore-scripts" ];
 
@@ -71,8 +71,13 @@ buildNpmPackage (finalAttrs: {
       cp -a "$path" "$out/lib/paseo/$path"
     done < daemon-files.txt
 
+    # The CLI resolves this export to locate the supervisor without loading it.
+    cp packages/server/dist/server/server/exports.js \
+      $out/lib/paseo/packages/server/dist/server/server/
+
     nodePty=packages/server/node_modules/node-pty
-    cp -a "$nodePty/build" "$out/lib/paseo/$nodePty/"
+    mkdir -p "$out/lib/paseo/$nodePty/build"
+    cp -a "$nodePty/build/Release" "$out/lib/paseo/$nodePty/build/"
 
     # Root package.json lets node resolve the workspace layout when the
     # CLI/server bin starts from $out.

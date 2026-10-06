@@ -6,15 +6,18 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mjpg-streamer";
-  version = "unstable-2019-05-24";
+  version = "1.0.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jacksonliam";
     repo = "mjpg-streamer";
-    rev = "501f6362c5afddcfb41055f97ae484252c85c912";
-    sha256 = "1cl159svfs1zzzrd3zgn4x7qy6751bvlnxfwf5hn5fmg4iszajw7";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q+B/T2Mpavxy54Z27LtaiVIGeQep5L8+XaQEJMS7AXE=";
   };
 
   patches = [
@@ -46,4 +49,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     mainProgram = "mjpg_streamer";
   };
-}
+})

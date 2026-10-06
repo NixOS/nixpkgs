@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "~craftyguy";
     repo = "caerbannog";
     tag = finalAttrs.version;
-    sha256 = "0wqkb9zcllxm3fdsr5lphknkzy8r1cr80f84q200hbi99qql1dxh";
+    hash = "sha256-sLdAMU4pLgiAwAQ5gDILGfk/7YSXlqybG7VTyn5aE3M=";
   };
 
   nativeBuildInputs = [

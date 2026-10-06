@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
-  version = "2.11.0";
+  version = "2.12.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Automattic";
     repo = "harper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bsXHj9jJezAz22aQkQ6YN+09AxR2ASm0Al+xotIbkEQ=";
+    hash = "sha256-id5+LeHKsu9sZJ3QJeZWynFyOABSbL8KjMsk7GEEt9w=";
   };
 
-  cargoHash = "sha256-1scyXlOCp0hVHgHNCPxl0KUY4Q+6rsO507p5Es6rN3E=";
+  cargoHash = "sha256-xRQah0ckm7M1mtB8+xciuD9sYx0qNpH+fTXIHvIFAt0=";
 
   cargoBuildFlags = [
     "--package=harper-cli"

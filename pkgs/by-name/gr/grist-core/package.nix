@@ -34,7 +34,7 @@ stdenv.mkDerivation (
     enterprise = fetchGristEnterprise {
       gristSrc = finalAttrs.src;
       inherit (finalAttrs) version;
-      hash = "sha256-7lqt+L/Qmx/3kl2zJnRsbmCSmu+iAyzpNnqI/yJD9Q8=";
+      hash = "sha256-fAi0qCfNPH+w51EmsaecS1y0aP4vx2kYK9hS5UQHIA8=";
       offlineCacheHash = "sha256-oMLNZZolY9Wg4DwJyYPDL6K28aEyWcXS9ivnzCuYcS0=";
     };
 
@@ -66,19 +66,19 @@ stdenv.mkDerivation (
   in
   {
     pname = "grist-core";
-    version = "1.7.19";
+    version = "1.7.20";
     __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "gristlabs";
       repo = "grist-core";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-IKnSluSQnPHO+qAwWF7KR/ukIDHVVulmJqIqaMI88Lg=";
+      hash = "sha256-umLdlxC0YBhhb17XMDVOeSNVJqkO9+DFwaHP3Sq3rWw=";
     };
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${finalAttrs.src}/yarn.lock";
-      hash = "sha256-E8LDY7GF9d7+iXxr4BLYRUkwQxcpVihMU6HrXJ80pic=";
+      hash = "sha256-o3hsHfgq1/14j0O13mjJ4a+dpwQ9kXkDnNOHsEhCroM=";
     };
 
     env = {
@@ -237,7 +237,7 @@ stdenv.mkDerivation (
         spreadsheets.
       '';
       homepage = "https://github.com/gristlabs/grist-core";
-      license = if enterpriseEdition then lib.unfree else lib.licenses.asl20;
+      license = if enterpriseEdition then lib.licenses.unfree else lib.licenses.asl20;
       platforms = lib.platforms.linux;
     };
   }

@@ -535,6 +535,7 @@
   ./services/continuous-integration/gocd-agent/default.nix
   ./services/continuous-integration/gocd-server/default.nix
   ./services/continuous-integration/hercules-ci-agent/default.nix
+  ./services/continuous-integration/hydra/builder.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/job-builder.nix
@@ -642,6 +643,7 @@
   ./services/development/turborepo-remote-cache.nix
   ./services/development/vsmartcard-vpcd.nix
   ./services/development/zammad.nix
+  ./services/display-managers/airlock.nix
   ./services/display-managers/cosmic-greeter.nix
   ./services/display-managers/default.nix
   ./services/display-managers/dms-greeter.nix
@@ -1706,6 +1708,7 @@
   ./services/web-apps/drasl.nix
   ./services/web-apps/drupal.nix
   ./services/web-apps/echoip.nix
+  ./services/web-apps/elk.nix
   ./services/web-apps/engelsystem.nix
   ./services/web-apps/ente.nix
   ./services/web-apps/fediwall.nix

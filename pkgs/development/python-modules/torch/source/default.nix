@@ -69,7 +69,7 @@
   hypothesis,
   psutil,
   # ROCm build and `torch.compile` requires `triton`
-  tritonSupport ? (!stdenv.hostPlatform.isDarwin),
+  tritonSupport ? (lib.meta.availableOn stdenv.hostPlatform triton),
   triton,
 
   # TODO: 1. callPackage needs to learn to distinguish between the task
@@ -391,6 +391,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   + lib.optionalString rocmSupport ''
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
+    patchShebangs aten/src/ATen/native/transformers/hip/flash_attn/ck/add_make_kernel_pt.sh
   ''
   # When possible, composable kernel as dependency, rather than built-in third-party
   + lib.optionalString (rocmSupport && !vendorComposableKernel) ''
@@ -775,6 +776,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
+    triton = _tritonEffective;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
     tests = callPackage ../tests {

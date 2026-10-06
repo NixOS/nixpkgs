@@ -835,10 +835,10 @@
   };
 
   fsharp = {
-    version = "0.3.0-unstable-2026-04-16";
+    version = "0.3.12-unstable-2026-09-12";
     url = "github:ionide/tree-sitter-fsharp";
-    rev = "5247c1197cb290fcaea0e0a793d32829c1396831";
-    hash = "sha256-ntcLDSt6BPF9PtASx221hwZhKl3yKKrzbEYQD/ghYxw=";
+    rev = "aefd0c8741bdf3aeb827a228aa4a996a6536697e";
+    hash = "sha256-mFZaHFq1hdJfCKfxgmiHwX1BXYl0r46ncZ6dDPo2aII=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -3025,9 +3025,9 @@
   };
 
   t32 = {
-    version = "9.0.1";
+    version = "9.0.2";
     url = "github:xasc/tree-sitter-t32";
-    hash = "sha256-7qWKy5ZcAB2VptlVHIGf3qTPmDI7mRdvB8weRvH9mi0=";
+    hash = "sha256-hs0JHC4SOC4LvBQTMv/kKDQnW590p6waPHuO58CUaUw=";
     meta = {
       maintainers = with lib.maintainers; [
         aciceri
@@ -3086,10 +3086,10 @@
   };
 
   tcl = {
-    version = "0-unstable-2025-05-14";
+    version = "0-unstable-2026-08-05";
     url = "github:tree-sitter-grammars/tree-sitter-tcl";
-    rev = "8f11ac7206a54ed11210491cee1e0657e2962c47";
-    hash = "sha256-JrGSHGolf7OhInxotXslw1QXxJscl+bXCxZPYJeBfTY=";
+    rev = "850a72ab6436e06645b33b11cfa60cbdb04b1f01";
+    hash = "sha256-ay0MMCB4MRzS8eV+ZnpD37udkiL6GVDLgI90Q+2gjdM=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -3362,9 +3362,9 @@
   };
 
   vcl = rec {
-    version = "0.4.0";
+    version = "0.4.1";
     url = "github:ntsk/tree-sitter-vcl?ref=v${version}";
-    hash = "sha256-qV+Ww5pzUHxmv9R6zIJDcLZnHLHL6xi3EZoRlhzgISQ=";
+    hash = "sha256-KnEB2iLjw8wIXAsDPVg+w+YEI/UzlgSftPUMpS6hQEQ=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -3396,10 +3396,10 @@
   };
 
   vhdl = {
-    version = "1.5.0-unstable-2026-08-10";
+    version = "2.0.3-unstable-2026-09-14";
     url = "github:jpt13653903/tree-sitter-vhdl";
-    rev = "68dc07f69d9571c2ebea6b32f995925905d09741";
-    hash = "sha256-TWn6KXkn+FTIATpATrMTCWk8HknZCUEK0dllkljP/z4=";
+    rev = "9be8e45c3ae7e7a4373a943a5c81ff92ce3656f8";
+    hash = "sha256-TU1dnMty8+OD24993bb7PB2M0RuzvKElWk4IkTCwGeg=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [

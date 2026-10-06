@@ -35,6 +35,7 @@
   lndir,
   makeBinaryWrapper,
   runCommand,
+  runtimeShell,
 }:
 self:
 let
@@ -207,7 +208,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
       rm -f "$out/bin/$progname"
 
       substitute ${./wrapper.sh} $out/bin/$progname \
-        --subst-var-by bash ${emacs.stdenv.shell} \
+        --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var-by wrapperBinDir "$deps/bin" \
@@ -234,7 +235,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
 
 
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
-        --subst-var-by bash ${emacs.stdenv.shell} \
+        --subst-var-by bash ${runtimeShell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
         --subst-var-by wrapperBinDir "$deps/bin" \
