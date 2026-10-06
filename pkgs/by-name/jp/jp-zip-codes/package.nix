@@ -39,8 +39,5 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides some zip files
-    hydraPlatforms = [ ];
   };
 }
