@@ -23,7 +23,6 @@
   openssl,
   webkitgtk_4_1,
 
-  nix-update-script,
   nixosTests,
   stirling-pdf,
 
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     "stirling-pdf"
     + lib.optionalString isDesktopVariant "-desktop"
     + lib.optionalString (!isDesktopVariant && !withAdditionalFeatures) "-free";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "Stirling-Tools";
@@ -79,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash =
       if withAdditionalFeatures || isDesktopVariant then
-        "sha256-YhXyEFGWL3Z6vJadxK5asZe30OTQpRU6htTvd+/NYdA="
+        "sha256-u6/OpRTym9SHZZVi4I/aKoH9hq8YEGbg4rz0/bxmLuo="
       else
-        "sha256-T+3PbRluwjjQi+RoISciG/pWLgu56ld5ATa93UkgKLc=";
+        "sha256-GKky6Z/cu7NLuEk/f963zg1U5QwzxbqPEXzSdLmvqhA=";
     # The public cache must not distribute directories under the upstream
     # User License when building the MIT-only server.
     postFetch = lib.optionalString (!withAdditionalFeatures && !isDesktopVariant) ''
@@ -132,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "stirling-pdf-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     postPatch = "cd ${finalAttrs.npmRoot}";
-    hash = "sha256-UQfkdERCa2Bl+E+yXJCzW98wL01+f6IE5A+QQ/iQtLk=";
+    hash = "sha256-N3Af1XbFkSnA2xVb+hm08TJiMpas01r+qxFZbMeFmZ8=";
   };
 
   cargoRoot = "frontend/editor/src-tauri";
@@ -146,7 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       cargoRoot
       ;
-    hash = "sha256-dSk5zpMvY5qZ82TxRPOk/siicaPSTUyHm6Z6FuJzSqw=";
+    hash = "sha256-HLC1nknDiN4Gzws6cu3lV3zo2vzeoTyqu4qsiq3688c=";
   };
 
   mitmCache = gradle.fetchDeps {
@@ -266,7 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
   }
   // lib.optionalAttrs (!isDesktopVariant && withAdditionalFeatures) {
     # this being optional makes the auto-update PRs always put stirling-pdf in the title
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
   meta = {
@@ -283,7 +282,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       else
         lib.licenses.mit;
-    mainProgram = if isDesktopVariant then "stirling-pdf" else "Stirling-PDF";
+    mainProgram =
+      if isDesktopVariant && stdenv.hostPlatform.isDarwin then "stirling-pdf" else "Stirling-PDF";
     maintainers = with lib.maintainers; [
       tomasajt
       staticdev
