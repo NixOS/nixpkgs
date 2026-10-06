@@ -8,6 +8,7 @@
   libx11,
   libxft,
   libxinerama,
+  lua5_4,
   freetype,
   fontconfig,
   writableTmpDirAsHomeHook,
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libxft
     libxinerama
+    lua5_4
     freetype
     fontconfig
   ];
