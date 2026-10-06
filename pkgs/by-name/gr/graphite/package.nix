@@ -29,13 +29,13 @@
 }:
 
 let
-  version = "0-unstable-2026-09-15";
-  rev = "fdf6cfe296e308c45aa5696a88a947feec2fe67a";
+  version = "0-unstable-2026-10-05";
+  rev = "e38fab22455c45068fcd1eb976afb0c088fa222d";
 
-  srcHash = "sha256-k0C6ocP0lHwG402pmDHO0BLQ6DsK0Y4NqXLMJHHnBao=";
-  shaderHash = "sha256-LReut68Cwoz/YmXaLiVnccg+RerMrKqEWhiWGyx5k+Q=";
-  cargoHash = "sha256-/XEsrJed6rdsOpWFq6+trK9ylcH7v8g2XCExEI335jY=";
-  npmHash = "sha256-Cay+aZcZGAU2vKAs7nub/YVcQ/sxsruWhjZ9KkqXHuc=";
+  srcHash = "sha256-lKNJwRJRrtLh/0cQNFnBss2DYZp8UkoP0pkI1pQEB0Y=";
+  shaderHash = "sha256-SBJt5iEBvHM4cirnrBVUHtC0bnw8ZUQW9oEs6P02AKc=";
+  cargoHash = "sha256-5WhnrB+8eZSQ1dPJlG+pFffR3VF12NUkCn0AAoDByYM=";
+  npmHash = "sha256-VUNW+YfBvJc3EyigULBdv4Uqb+vKgTjrDMOAVk1DCvI=";
 
   brandingRev = "6687dc6d3d8552948458d00d35e2bee3a40ab66b";
   brandingHash = "sha256-yD4O50gz2mtby1h4o+9PqjMfYmTbBOX6XDc5Ez5fgnY=";
