@@ -83,7 +83,8 @@ buildPythonApplication {
 
   checkPhase = ''
     echo -e "\x1b[32m## run ty\x1b[0m"
-    ty check --error-on-warning test_driver extract-docstrings.py
+    # Installation adds the driver to PYTHONPATH; keep ty imports in the source tree.
+    PYTHONPATH=".:$PYTHONPATH" ty check --error-on-warning test_driver extract-docstrings.py
     echo -e "\x1b[32m## run ruff check\x1b[0m"
     ruff check .
     echo -e "\x1b[32m## run ruff format\x1b[0m"
