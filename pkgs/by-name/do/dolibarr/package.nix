@@ -4,7 +4,27 @@
   fetchFromGitHub,
   nixosTests,
   stateDir ? "/var/lib/dolibarr",
+  # > Q: My PDF template doesn’t understand foreign characters, it outputs them
+  # > as ???
+  # >
+  # > — https://wiki.dolibarr.org/index.php/Create_document_model#Q:_My_PDF_template_doesn't_understand_foreign_characters,_it_outputs_them_as_???
+  #
+  # Add fonts for generating PDFs (NOTE: the default only supports ASCII).
+  #
+  # Usage:
+  #
+  #   dolibarr.override {
+  #     extraPDFFonts = { foofont = $DERVIATION_OR_PATH; };
+  #   }
+  #
+  extraPDFFonts ? { },
 }:
+
+assert builtins.isAttrs extraPDFFonts;
+assert lib.all (
+  { name, value }:
+  builtins.match "[a-z0-9_]+" name != null && (lib.isDerivation value || builtins.isPath value)
+) (lib.attrsToList extraPDFFonts);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolibarr";
@@ -31,6 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace htdocs/install/inc.php \
       --replace-fail '//$conffile = ' '$conffile = ' \
       --replace-fail '//$conffiletoshow = ' '$conffiletoshow = '
+
+    ${lib.optionalString (extraPDFFonts != { }) /* bash */ ''
+      fonts_dir="htdocs/includes/tecnickcom/tcpdf/fonts"
+
+      ${lib.concatMapAttrsStringSep "\n" (family: drvOrPath: /* bash */ ''
+        if [ ! -f "${drvOrPath}/${family}.php" ]; then
+          echo "extraPDFFonts.${family}: missing ${family}.php in derivation or path" >&2
+          exit 1
+        fi
+        for f in "${drvOrPath}"/*; do
+          ln -s "$f" "$fonts_dir/"
+        done
+      '') extraPDFFonts}
+    ''}
   '';
 
   installPhase = ''
