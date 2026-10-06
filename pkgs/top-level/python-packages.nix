@@ -14486,6 +14486,8 @@ self: super: with self; {
 
   pyalsaaudio = callPackage ../development/python-modules/pyalsaaudio { };
 
+  pyamdgpuinfo = callPackage ../development/python-modules/pyamdgpuinfo { };
+
   pyamg = callPackage ../development/python-modules/pyamg { };
 
   pyaml = callPackage ../development/python-modules/pyaml { };
