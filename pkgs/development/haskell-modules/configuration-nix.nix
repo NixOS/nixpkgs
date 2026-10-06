@@ -1120,6 +1120,12 @@ builtins.intersectAttrs super {
     doHaddock = false;
   }) super.liquidhaskell;
 
+  # The liquid-* packages run the LiquidHaskell plugin while compiling their
+  # library, so they need an SMT solver as well.
+  liquid-parallel = addBuildTool pkgs.z3 super.liquid-parallel;
+  liquid-prelude = addBuildTool pkgs.z3 super.liquid-prelude;
+  liquid-vector = addBuildTool pkgs.z3 super.liquid-vector;
+
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
   colour = dontCheck super.colour;

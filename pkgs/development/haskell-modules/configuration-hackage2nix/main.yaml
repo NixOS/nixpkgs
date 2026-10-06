@@ -37,11 +37,9 @@ default-package-overrides:
   - hnix-store-remote < 0.7
   # 2025-08-03: need to match stackage version of hosc
   - hsc3 >= 0.21 && < 0.22
-  # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
-  - liquid-fixpoint == 0.9.6.3.2
-  # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
-  - liquidhaskell == 0.9.10.*
-  - liquidhaskell-boot == 0.9.10.*
+  # 2026-10-06: needs to match liquidhaskell 0.9.12.* from Stackage;
+  # each liquidhaskell release supports only one GHC major version
+  - liquid-prelude == 0.9.12.*
   # Needs to match microlens == 0.4.* in Stackage
   - microlens-pro < 0.2.0.4
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
