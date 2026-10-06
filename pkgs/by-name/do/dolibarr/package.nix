@@ -10,6 +10,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "dolibarr";
   version = "24.0.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
