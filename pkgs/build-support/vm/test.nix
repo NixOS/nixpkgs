@@ -66,6 +66,7 @@ in
   # RPM-based distros
   testFedora42Image = makeImageTestScript diskImages.fedora42x86_64;
   testFedora43Image = makeImageTestScript diskImages.fedora43x86_64;
+  testFedora44Image = makeImageTestScript diskImages.fedora44x86_64;
   testRocky9Image = makeImageTestScript diskImages.rocky9x86_64;
   testRocky10Image = makeImageTestScript diskImages.rocky10x86_64;
   testAlma9Image = makeImageTestScript diskImages.alma9x86_64;

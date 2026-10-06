@@ -1062,6 +1062,25 @@ let
       unifiedSystemDir = true;
     };
 
+    fedora44x86_64 = {
+      name = "fedora-44-x86_64";
+      fullName = "Fedora 44 (x86_64)";
+      packagesList = fetchurl {
+        url = "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Everything/x86_64/os/repodata/c48e47563bbf65b996c95caf4a608223f982c314cab637e6ab87dd1df67b9d26-primary.xml.zst";
+        hash = "sha256-xI5HVju/ZbmWyVyvSmCCI/mCwxTKtjfmq4fdHfZ7nSY=";
+      };
+      urlPrefix = "https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Everything/x86_64/os";
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonFedoraPackages ++ [
+        "gpgverify"
+        "rpm-plugin-selinux"
+      ];
+      unifiedSystemDir = true;
+    };
+
     # Rocky Linux's /pub/rocky/9/ URL is rolling and changes with each minor release. We use the
     # vault instead, which provides stable URLs for specific minor versions.
     rocky9x86_64 = {
