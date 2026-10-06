@@ -4483,6 +4483,11 @@
     matrix = "@synapse:byteflavour.dev";
     name = "Byte Flavour";
   };
+  ByteMe6 = {
+    github = "ByteMe6";
+    githubId = 120343461;
+    name = "ByteMe6";
+  };
   ByteSudoer = {
     email = "bytesudoer@gmail.com";
     github = "ByteSudoer";
