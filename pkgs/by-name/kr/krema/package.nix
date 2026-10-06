@@ -6,6 +6,7 @@
   ninja,
   kdePackages,
   qt6,
+  spirv-tools,
   wayland,
   wayland-scanner,
 }:
@@ -26,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     kdePackages.extra-cmake-modules
     qt6.wrapQtAppsHook
+    spirv-tools
     wayland-scanner
   ];
 
