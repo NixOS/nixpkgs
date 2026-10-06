@@ -440,11 +440,7 @@ For these projects, build with `pnpm --filter=<pnpm workspace name> build`, beca
 ```nix
 {
   buildPhase = ''
-    runHook preBuild
-
     pnpm --filter=@astrojs/language-server build
-
-    runHook postBuild
   '';
 }
 ```

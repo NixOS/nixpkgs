@@ -1266,7 +1266,6 @@ Sample template for a new package review is provided below.
 - [ ] source is fetched using the appropriate function
 - [ ] the motives for any special packaging choices are documented
 - [ ] the list of `phases` is not overridden
-- [ ] when a phase (like `installPhase`) is overridden it starts with `runHook preInstall` and ends with `runHook postInstall`.
 - [ ] patches have a comment describing either the upstream URL or a reason why the patch wasn't upstreamed
 - [ ] patches that are remotely available are fetched rather than vendored
 

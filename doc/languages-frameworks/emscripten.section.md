@@ -48,36 +48,23 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
   configurePhase = ''
     # FIXME: Some tests require writing at $HOME
     HOME=$TMPDIR
-    runHook preConfigure
 
     #export EMCC_DEBUG=2
     emconfigure ./configure --prefix=$out --shared
-
-    runHook postConfigure
   '';
 
   dontStrip = true;
   outputs = [ "out" ];
 
   buildPhase = ''
-    runHook preBuild
-
     emmake make
-
-    runHook postBuild
   '';
 
   installPhase = ''
-    runHook preInstall
-
     emmake make install
-
-    runHook postInstall
   '';
 
   checkPhase = ''
-    runHook preCheck
-
     echo "================= testing zlib using node ================="
 
     echo "Compiling a custom test"
@@ -96,8 +83,6 @@ One advantage is that when `pkgs.zlib` is updated, it will automatically update 
       echo "it seems to work! very good."
     fi
     echo "================= /testing zlib using node ================="
-
-    runHook postCheck
   '';
 
   postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
@@ -145,8 +130,6 @@ pkgs.buildEmscriptenPackage {
   };
 
   configurePhase = ''
-    runHook preConfigure
-
     rm -f fastXmlLint.js*
     # a fix for ERROR:root:For asm.js, TOTAL_MEMORY must be a multiple of 16MB, was 234217728
     # https://gitlab.com/odfplugfest/xmlmirror/issues/8
@@ -156,16 +139,10 @@ pkgs.buildEmscriptenPackage {
     sed -e "s/\$(JSONC_LDFLAGS) \$(ZLIB_LDFLAGS) \$(LIBXML20_LDFLAGS)/\$(JSONC_LDFLAGS) \$(LIBXML20_LDFLAGS) \$(ZLIB_LDFLAGS) /g" -i Makefile.emEnv
     # https://gitlab.com/odfplugfest/xmlmirror/issues/11
     sed -e "s/-o fastXmlLint.js/-s EXTRA_EXPORTED_RUNTIME_METHODS='[\"ccall\", \"cwrap\"]' -o fastXmlLint.js/g" -i Makefile.emEnv
-
-    runHook postConfigure
   '';
 
   buildPhase = ''
-    runHook preBuild
-
     make -f Makefile.emEnv
-
-    runHook postBuild
   '';
 
   outputs = [
@@ -174,8 +151,6 @@ pkgs.buildEmscriptenPackage {
   ];
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/share
     mkdir -p $doc/share/${name}
 
@@ -189,14 +164,10 @@ pkgs.buildEmscriptenPackage {
     cp *.json $out/share
     cp *.rng $out/share
     cp README.md $doc/share/${name}
-
-    runHook postInstall
   '';
 
   checkPhase = ''
-    runHook preCheck
-
-    runHook postCheck
+    ...
   '';
 }
 ```

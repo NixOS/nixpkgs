@@ -1283,11 +1283,7 @@ test run would be:
 {
   nativeCheckInputs = [ pytest ];
   checkPhase = ''
-    runHook preCheck
-
     pytest
-
-    runHook postCheck
   '';
 }
 ```
