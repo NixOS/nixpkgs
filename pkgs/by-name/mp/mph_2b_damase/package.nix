@@ -17,8 +17,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ installFonts ];
 
   meta = {
-    # Some other repositories list it as Public Domain; couldn't find evidence for this
-    license = lib.licenses.unfree;
+    # Font file has metadata listing it as PD
+    license = lib.licenses.publicDomain;
     homepage = "https://www.wazu.jp/gallery/views/View_MPH2BDamase.html";
   };
 }

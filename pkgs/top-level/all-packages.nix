@@ -5200,7 +5200,12 @@ with pkgs;
 
   pycritty = with python3Packages; toPythonApplication pycritty;
 
-  radare2 = callPackage ../development/tools/analysis/radare2 (config.radare or { });
+  radare2 = callPackage ../development/tools/analysis/radare2 (
+    {
+      lua = lua5;
+    }
+    // (config.radare or { })
+  );
 
   rizinPlugins = recurseIntoAttrs rizin.plugins;
 
