@@ -227,7 +227,7 @@ let
             keycloak.succeed(
                 "systemctl stop keycloak.service",
                 "mysql -N -e \"ALTER USER 'keycloak'@'localhost' IDENTIFIED BY 'legacy'\"",
-                "systemctl restart keycloakMySQLInit.service",
+                "systemctl restart keycloakMySQLAuthMigration.service",
                 "systemctl start keycloak.service",
             )
             keycloak.wait_for_unit("keycloak.service")
