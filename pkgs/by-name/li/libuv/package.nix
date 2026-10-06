@@ -133,6 +133,13 @@ stdenv.mkDerivation (finalAttrs: {
         # Aborts (SIGABRT, exit 134)
         "poll_nested_epoll"
       ]
+      ++ lib.optionals stdenv.hostPlatform.isMusl [
+        # The expected struct sizes for Linux are recorded against glibc.
+        # uv_getnameinfo_t embeds char host[NI_MAXHOST], which is 1025 on
+        # glibc but 255 on musl, and musl's pthread types differ in size
+        # from glibc's on some architectures (e.g. aarch64).
+        "sizeof"
+      ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
         # ENETUNREACH when performed in jailed build env
         "tcp_connect"
