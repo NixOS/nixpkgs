@@ -4198,6 +4198,8 @@ self: super: with self; {
 
   dbus-mediaplayer = callPackage ../development/python-modules/dbus-mediaplayer { };
 
+  dbus-networkdevices = callPackage ../development/python-modules/dbus-networkdevices { };
+
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
   dbus-python = callPackage ../development/python-modules/dbus-python { inherit (pkgs) dbus; };
