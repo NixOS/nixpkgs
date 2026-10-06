@@ -23,6 +23,15 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   };
 
   postPatch = ''
+    # some of them will be fixed with https://github.com/NixOS/nixpkgs/pull/554025
+    sed -i requirements.txt \
+      -e 's/certifi==.*/certifi/' \
+      -e 's/lxml==.*/lxml/' \
+      -e 's/pygments==.*/pygments/' \
+      -e 's/curl_cffi==.*/curl_cffi/' \
+      -e 's/msgspec==.*/msgspec/' \
+      -e 's/typer==.*/typer/'
+
     substituteInPlace requirements.txt \
       --replace-fail "==" ">="
   '';
@@ -79,6 +88,10 @@ python.pkgs.buildPythonPackage (finalAttrs: {
   doCheck = false;
 
   postInstall = ''
+    PYTHONPATH=${
+      python.withPackages (_: finalAttrs.passthru.dependencies)
+    }/${python.sitePackages} ${lib.getExe python.pkgs.pip} install --break-system-packages --dry-run --no-index -r requirements.txt
+
     # Create a symlink for easier access to static data
     mkdir -p $out/share
     ln -s ../${python.sitePackages}/searx/static $out/share/
