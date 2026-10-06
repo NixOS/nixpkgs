@@ -20,15 +20,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-4cItVXJNGSFihHXWMpLKx/qJABwLZCvlJYGw2nM9SHY=";
   };
 
-  cargoHash = "sha256-8X0eA3a1zAYbRIWGunBHFUeluk9mYV9tn78tuYPru2Y=";
+  cargoPatches = [
+    # Bump boring to v5 (and by necessity, quiche to 0.30) for compatibility
+    # with recent boringssl versions, which have removed curves that were
+    # considered insufficiently secure.
+    # Upstream PR: https://github.com/TrustTunnel/TrustTunnel/pull/155
+    ./boring-v5.patch
+  ];
+
+  cargoHash = "sha256-wZbyro1ozP+h/o8MocgI8FxeJHfEzessWfNObfc4CEg=";
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/*/boring-sys-*/build/main.rs $cargoDepsCopy/*/quiche-*/src/build.rs \
       --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
       --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
-
-    # remove reference to deprecated boringssl API
-    patch -d $cargoDepsCopy/*/boring-4.22.0/ -p1 -i ${./boring-no-secp224r1.patch}
   '';
 
   env = {
