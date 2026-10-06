@@ -117,7 +117,7 @@ in
     __intentionallyOverridingVersion = true;
 
     meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.5";
+      broken = luaOlder "5.1";
     };
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -149,7 +149,7 @@ in
         # 'all' target auto-detects correct Lua version, which is fine for us as
         # we only have the right one available :)
         sed -Ei ''${rockspecFilename} \
-          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.4|' \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.5|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
