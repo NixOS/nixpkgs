@@ -2,24 +2,29 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "weather-icons";
   version = "2.0.12";
 
   src = fetchzip {
-    url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${version}.zip";
+    url = "https://github.com/erikflowers/weather-icons/archive/refs/tags/${finalAttrs.version}.zip";
     hash = "sha256-0ZFH2awUo4BkTpK1OsWZ4YKczJHo+HHM6ezGBJAmT+U=";
   };
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -Dm644 _docs/font-source/weathericons-regular.otf -t $out/share/fonts/opentype
-
-    runHook postInstall
+  postPatch = ''
+    # Remove duplicate fonts in gh-pages to prevent installFonts hook from tripping
+    rm -rf _docs/gh-pages
   '';
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   meta = {
     description = "Weather Icons";
@@ -33,4 +38,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pnelson ];
   };
-}
+})
