@@ -675,29 +675,33 @@ in
           })
         ];
 
-      systemd.services.keycloakPostgreSQLInit = mkIf createLocalPostgreSQL {
-        after = [ "postgresql.target" ];
-        before = [ "keycloak.service" ];
-        bindsTo = [ "postgresql.target" ];
-        path = [ config.services.postgresql.package ];
-        environment.PGPORT = toString config.services.postgresql.settings.port;
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          User = "postgres";
-          Group = "postgres";
-        };
-        script = ''
-          set -o errexit -o pipefail -o nounset -o errtrace
-          shopt -s inherit_errexit
-
-          psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tAc 'CREATE ROLE keycloak WITH LOGIN CREATEDB'
-          psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || psql -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
-        '';
-        enableStrictShellChecks = true;
+      services.postgresql = mkIf createLocalPostgreSQL {
+        enable = mkDefault true;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.username;
+            ensureDBOwnership = true;
+          }
+        ];
       };
 
-      systemd.services.keycloakMySQLInit =
+      services.mysql = mkIf createLocalMySQL {
+        enable = mkDefault true;
+        package = mkDefault (if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql84);
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.username;
+            ensurePermissions."${cfg.database.name}.*" = "ALL PRIVILEGES";
+          }
+        ];
+      };
+
+      # Older versions of this module created the keycloak user with password authentication,
+      # which ensureUsers leaves as is, so switch it to socket authentication once.
+      # This uses the same plugin check and ALTER USER as mysql.nix does for root@localhost.
+      systemd.services.keycloakMySQLAuthMigration =
         let
           account = "'${cfg.database.username}'@'localhost'";
           socketPlugin = if cfg.database.type == "mariadb" then "unix_socket" else "auth_socket";
@@ -718,11 +722,6 @@ in
           script = ''
             set -o errexit -o pipefail -o nounset -o errtrace
             shopt -s inherit_errexit
-
-            ( echo "CREATE USER IF NOT EXISTS ${account} IDENTIFIED ${identifiedBySocket};"
-              echo "CREATE DATABASE IF NOT EXISTS keycloak CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
-              echo "GRANT ALL PRIVILEGES ON keycloak.* TO ${account};"
-            ) | mysql -N
 
             plugin="$(mysql -N -e "SELECT plugin FROM mysql.user WHERE user = '${cfg.database.username}' AND host = 'localhost'")"
             if [[ "$plugin" != ${socketPlugin} ]]; then
@@ -755,13 +754,10 @@ in
         let
           databaseServices =
             if createLocalPostgreSQL then
-              [
-                "keycloakPostgreSQLInit.service"
-                "postgresql.target"
-              ]
+              [ "postgresql.target" ]
             else if createLocalMySQL then
               [
-                "keycloakMySQLInit.service"
+                "keycloakMySQLAuthMigration.service"
                 "mysql.service"
               ]
             else
@@ -834,14 +830,6 @@ in
           '';
           enableStrictShellChecks = true;
         };
-
-      services.postgresql.enable = mkDefault createLocalPostgreSQL;
-      services.mysql.enable = mkDefault createLocalMySQL;
-      services.mysql.package =
-        let
-          dbPkg = if cfg.database.type == "mariadb" then pkgs.mariadb else pkgs.mysql84;
-        in
-        mkIf createLocalMySQL (mkDefault dbPkg);
     };
 
   meta.doc = ./keycloak.md;
