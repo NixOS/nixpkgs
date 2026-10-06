@@ -449,6 +449,9 @@ lib.extendMkDerivation {
           in
           meta.problems or { }
           // {
+            ## Public meta.problems interface for all Python packages
+
+            # Unsupported Python interpreter
             ${if disabled' then "unsupportedPython" else null} = meta.problems.unsupportedPython or { } // {
               kind = "broken";
               message =
