@@ -433,6 +433,65 @@ def test_get_build_image_variants_flake(mock_run: Mock) -> None:
         stdout=PIPE,
     )
 
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, '"armv7l-linux"'),
+)
+def test_get_system(mock_run: Mock, tmp_path: Path) -> None:
+    build_attr = m.BuildAttr("<nixpkgs/nixos>", None)
+    assert n.get_system(build_attr) == "armv7l-linux"
+    mock_run.assert_called_with(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            "<nixpkgs/nixos>",
+            "--attr",
+            "pkgs.stdenv.hostPlatform.system",
+        ],
+        stdout=PIPE,
+    )
+
+    build_attr = m.BuildAttr(tmp_path, "preAttr")
+    assert n.get_system(build_attr, {"inst_flag": True}) == "armv7l-linux"
+    mock_run.assert_called_with(
+        [
+            "nix-instantiate",
+            "--eval",
+            "--strict",
+            "--json",
+            tmp_path,
+            "--attr",
+            "preAttr.pkgs.stdenv.hostPlatform.system",
+            "--inst-flag",
+        ],
+        stdout=PIPE,
+    )
+
+
+@patch(
+    get_qualified_name(n.run_wrapper, n),
+    autospec=True,
+    return_value=CompletedProcess([], 0, '"armv7l-linux"'),
+)
+def test_get_system_flake(mock_run: Mock) -> None:
+    flake = m.Flake("/flake.nix", "myAttr")
+    assert n.get_system_flake(flake, {"eval_flag": True}) == "armv7l-linux"
+    mock_run.assert_called_with(
+        [
+            "nix",
+            "--extra-experimental-features",
+            "nix-command flakes",
+            "eval",
+            "--json",
+            "/flake.nix#myAttr.pkgs.stdenv.hostPlatform.system",
+            "--eval-flag",
+        ],
+        stdout=PIPE,
+    )
+
 
 def test_get_nixpkgs_rev(tmpdir: Path) -> None:
     assert n.get_nixpkgs_rev(None) is None
