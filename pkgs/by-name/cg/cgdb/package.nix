@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://cgdb.me/files/cgdb-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/cgdb/cgdb/releases/download/v{finalAttrs.version}/cgdb-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
   };
 
