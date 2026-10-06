@@ -169,9 +169,9 @@
   },
   "azure-firewall": {
     "pname": "azure-firewall",
-    "version": "2.2.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-2.2.1-py2.py3-none-any.whl",
-    "hash": "sha256-q4ai0UErqKI97A8OZ4/JkuT1QLOKa36rYZPItiu1r9s=",
+    "version": "2.4.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/azure_firewall-2.4.0-py2.py3-none-any.whl",
+    "hash": "sha256-pdnnh8A8lCjQQGkg3N1MMvKiyzIb26btH3DcEUW5Cpo=",
     "description": "Manage Azure Firewall resources"
   },
   "azurelargeinstance": {
