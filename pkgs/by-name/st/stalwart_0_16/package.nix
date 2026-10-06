@@ -299,12 +299,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       lib.licenses.agpl3Only
     ]
     ++ lib.optionals stalwartEnterprise [
-      {
-        fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
-        url = "https://github.com/stalwartlabs/stalwart/blob/${finalAttrs.src.tag}/LICENSES/LicenseRef-SEL.txt";
-        free = false;
-        redistributable = false;
-      }
+      lib.licenses.stalwart
     ];
     maxSilent = 14400; # 4 hours
     mainProgram = "stalwart";
