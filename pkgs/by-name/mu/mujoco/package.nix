@@ -38,8 +38,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "ea13a98decd497a8c5588fb5de71b57bcf10d864";
-      hash = "sha256-v9bNWc9yfK3vG8hYhQ7vkc7DHaoPF6RAKfX9kC0Gw8c=";
+      rev = "087757ad50159b5bd86ab73e4df34e6b4ea74258";
+      hash = "sha256-TkL3tRL+hw7zHO3NUviaKDNUsrZQJJ+LqeQWaFl5TpU=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -82,15 +82,15 @@ let
     lodepng = fetchFromGitHub {
       owner = "lvandeve";
       repo = "lodepng";
-      rev = "17d08dd26cac4d63f43af217ebd70318bfb8189c";
-      hash = "sha256-vnw52G0lY68471dzH7NXc++bTbLRsITSxGYXOTicA5w=";
+      rev = "22561883dd63fd1850f18e1f6adac321e4f609b0";
+      hash = "sha256-JscUapUNVs2n0Ky08dksFCigBv83DcbxWHcaktqYP7Y=";
     };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.14.0";
+  version = "3.15.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-9h2glQJHeXjLgAwFx2g78O9p3euovKLRtlkD++6Qn+A=";
+    hash = "sha256-o3WtBj64YZ3oqqOih5lMtdL8jxLj+1Hwu0GfMbOOYfg=";
   };
 
   patches = [
