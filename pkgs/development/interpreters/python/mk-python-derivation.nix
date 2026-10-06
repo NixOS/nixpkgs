@@ -33,7 +33,11 @@
 }:
 
 let
-  inherit (builtins) unsafeGetAttrPos;
+  inherit (builtins)
+    getEnv
+    tryEval
+    unsafeGetAttrPos
+    ;
   inherit (lib)
     elem
     extendDerivation
@@ -51,7 +55,18 @@ let
     stringLength
     all
     seq
+    warn
     ;
+
+  abortOnWarn = elem (getEnv "NIX_ABORT_ON_WARN") [
+    "1"
+    "true"
+    "yes"
+  ];
+
+  # `abort` fails `builtins.tryEval`
+  # Use `throw` instead.
+  warnCatchably = if abortOnWarn then throw else warn;
 
   leftPadName =
     name: against:
@@ -424,7 +439,9 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
 
-        disabled = finalAttrs ? meta.problems.unsupportedPython;
+        disabled = warnCatchably ''
+          ${finalAttrs.name}: `passthru.disabled` is deprecated. Use `meta ? problems.unsupportedPython` instead.
+        '' (finalAttrs ? meta.problems.unsupportedPython);
 
         updateScript = nix-update-script { };
         # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
@@ -467,6 +484,19 @@ lib.extendMkDerivation {
                   Add/remove `meta.problems.unsupportedPython` instead.
               '';
           };
+          ${
+            if abortOnWarn && (tryEval finalAttrs.passthru.disabled).success then
+              "buildPythonPackage-attrs-disabled-overrideAttrs"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message = ''
+                buildPythonPackage: ${finalAttrs.name}: Overriding attribute `passthru.disabled` with `<pkg>.overrideAttrs` is deprecated.
+                  Add/remove `meta.problems.unsupportedPython` instead.
+              '';
+            };
         };
       };
     }
