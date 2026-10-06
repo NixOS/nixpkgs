@@ -174,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Command line version of the 7-Zip archiver utility";
     homepage = "https://7-zip.org";
+    changelog = "https://7-zip.org/history.txt";
     license =
       with lib.licenses;
       # 7zip code is largely lgpl2Plus
