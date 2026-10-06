@@ -4892,8 +4892,6 @@ with pkgs;
       {
       };
 
-  libbpf = callPackage ../os-specific/linux/libbpf { };
-
   bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
 
   # Wrapper that works as gcc or g++
