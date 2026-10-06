@@ -170,7 +170,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ''}
   ''
   + lib.optionalString installManPages ''
-    installManPage target/debug/build/voxtype-*/out/man/*
+    installManPage target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType/build/voxtype-*/out/man/*
   ''
   + lib.optionalString installShellCompletions ''
     installShellCompletion packaging/completions/voxtype.{bash,zsh,fish}
