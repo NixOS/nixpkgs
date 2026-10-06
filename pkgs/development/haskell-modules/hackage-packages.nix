@@ -441929,6 +441929,7 @@ self: {
       license = lib.licenses.bsd3;
       hydraPlatforms = lib.platforms.none;
       mainProgram = "liquidhaskell";
+      broken = true;
     }
   ) { };
 
