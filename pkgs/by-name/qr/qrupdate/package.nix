@@ -53,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     which
     gfortran
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
+    # when linking C examples against libgfortran, see
+    # https://github.com/NixOS/nixpkgs/pull/370526
+    gfortran.cc
   ];
 
   buildInputs = [
