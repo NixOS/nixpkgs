@@ -129,6 +129,18 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests/
   '';
 
+  checkPhase = ''
+    runHook preCheck
+
+    if ! make check; then
+      echo "Some tests failed. Collecting logs for analysis..."
+      find tests/testsuite.dir -type f -exec echo "==== Contents of {} ====" \; -exec cat {} \;
+      exit 1
+    fi
+
+    runHook postCheck
+  '';
+
   nativeCheckInputs = [
     iproute2
     openssl
