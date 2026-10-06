@@ -9,6 +9,7 @@
   pkg-config,
   volk,
   cppunit,
+  ctestCheckHook,
   orc,
   boost,
   spdlog,
@@ -446,6 +447,10 @@ stdenv.mkDerivation (finalAttrs: {
   # On darwin, it requires playing with DYLD_FALLBACK_LIBRARY_PATH to make if
   # find libgnuradio-runtim.3.*.dylib .
   doCheck = !stdenv.hostPlatform.isDarwin;
+  nativeCheckInputs = [
+    # To allow easier future test manipulations
+    ctestCheckHook
+  ];
   preCheck = ''
     export HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen
