@@ -7,6 +7,7 @@
   nixosTests,
   openssl,
   systemd,
+  lua,
   luajit,
   protobuf,
   libsodium,
@@ -47,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     openssl
     systemd
+    lua
     luajit
     libsodium
     curl
