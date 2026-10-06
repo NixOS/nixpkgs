@@ -23,7 +23,7 @@
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_34;
+  nixComponents = nixVersions.latest.libs;
   common = rec {
     version = "2.9.3";
 
