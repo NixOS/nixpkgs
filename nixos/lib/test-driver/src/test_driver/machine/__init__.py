@@ -32,6 +32,7 @@ from test_driver.duration import (
 from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
+from test_driver.machine.nspawn_display import NspawnVnc, NspawnVncConfiguration
 from test_driver.machine.ocr import (
     perform_ocr_on_screenshot,
     perform_ocr_variants_on_screenshot,
@@ -1687,6 +1688,7 @@ class NspawnMachine(BaseMachine):
     machine_sock_path: Path
     machine_sock: socket.socket | None
     notify_thread: threading.Thread | None
+    vnc: NspawnVnc | None
 
     @staticmethod
     def machine_name_from_start_command(start_command: str) -> str:
@@ -1703,6 +1705,7 @@ class NspawnMachine(BaseMachine):
         logger: AbstractLogger,
         callbacks: list[Callable] | None = None,
         keep_machine_state: bool = False,
+        vnc: NspawnVncConfiguration | None = None,
     ):
         # TODO: don't compute `name` from `start_command` path, instead thread it down explicitly.
         # See analogous TODO in `QemuStartCommand::machine_name`.
@@ -1716,6 +1719,8 @@ class NspawnMachine(BaseMachine):
         )
 
         self.start_command = start_command
+        self.vnc_configuration = vnc
+        self.vnc = None
         self.process = None
         self.notify_thread = None
         # State maintained by the notify-socket drainer thread (see
@@ -1806,6 +1811,8 @@ class NspawnMachine(BaseMachine):
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
+        self._stop_vnc()
+
         if self.process is None:
             return
 
@@ -2053,6 +2060,18 @@ class NspawnMachine(BaseMachine):
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
 
+        if self.vnc_configuration is not None:
+            if any(name in os.environ for name in ("DISPLAY", "WAYLAND_DISPLAY")):
+                self.vnc = NspawnVnc(self, self.vnc_configuration)
+                self.vnc.start()
+            else:
+                self.log("no graphical host display available; VNC viewer disabled")
+
+    def _stop_vnc(self) -> None:
+        if self.vnc is not None:
+            self.vnc.stop()
+            self.vnc = None
+
     def shutdown(self) -> None:
         """
         Shut down the container, waiting for it to exit.
@@ -2075,6 +2094,7 @@ class NspawnMachine(BaseMachine):
                 timeout=timeout.total_seconds() if timeout is not None else None
             )
             self.process = None
+            self._stop_vnc()
 
 
 class MachineDeprecationWrapper:
