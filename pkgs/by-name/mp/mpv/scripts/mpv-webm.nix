@@ -2,7 +2,7 @@
   lib,
   buildLua,
   fetchFromGitHub,
-  luaPackages,
+  lua55Packages,
   unstableGitUpdater,
 }:
 
@@ -22,7 +22,7 @@ buildLua {
   };
 
   dontBuild = false;
-  nativeBuildInputs = [ luaPackages.moonscript ];
+  nativeBuildInputs = [ lua55Packages.moonscript ];
   scriptPath = "build/webm.lua";
 
   meta = {
