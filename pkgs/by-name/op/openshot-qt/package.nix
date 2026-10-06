@@ -21,7 +21,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   format = "setuptools";
 
   patches = [
+    # https://github.com/OpenShot/openshot-qt/pull/6176
     ./recover-invalid-export-settings.patch
+    # https://github.com/OpenShot/openshot-qt/pull/6175
     ./fix-wayland-app-id.patch
   ];
 
