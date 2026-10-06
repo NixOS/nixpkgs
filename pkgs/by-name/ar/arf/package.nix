@@ -4,7 +4,7 @@
   fetchFromGitHub,
   R,
   rPackages,
-  bashInteractive,
+  coreutils,
   writableTmpDirAsHomeHook,
   air-formatter,
   versionCheckHook,
@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arf";
-  version = "0.5.2";
+  version = "0.5.3";
 
   __structuredAttrs = true;
 
@@ -21,20 +21,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "eitsupi";
     repo = "arf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cmIx03Ll5HryrrHAmQ2B5WenAmIWqehCM3MzjoGSvyk=";
+    hash = "sha256-Ema0s5whJwYY9Bg3HSKf1XFWqANzuoJgpqSVsVKBoWg=";
   };
 
-  cargoHash = "sha256-q5Xe95JfkqzNv1CzBFDg/WKqu4g4vnrKLE52qPDU2Bo=";
+  cargoHash = "sha256-yGV/JSqK03bSoHsvbDyg4d+1Zf59nsT8tg9YH4oL7Lg=";
 
   # The test suite spawns helper scripts with a `#!/bin/sh` shebang, which does
   # not exist inside the build sandbox.
   postPatch = ''
     substituteInPlace \
-      crates/arf-console/src/external/formatter.rs \
-      crates/arf-console/tests/resolve_tests.rs \
-      crates/arf-console/tests/tui/prompt.rs \
-      crates/arf-console/tests/tui/reprex.rs \
-      --replace-fail '#!/bin/sh' '#!${lib.getExe bashInteractive}'
+      crates/arf-console/tests/tui/support.rs \
+      --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
   # The tests spawn R and the R packages `dplyr`/`askpass` (plus their
@@ -49,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     air-formatter
-    bashInteractive
+    coreutils
     R
     writableTmpDirAsHomeHook
   ];
