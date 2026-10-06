@@ -22,6 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FwADI7o4JD/TTm/E5/Gm4b7pThakERY+1rVtaSb+yrM=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
