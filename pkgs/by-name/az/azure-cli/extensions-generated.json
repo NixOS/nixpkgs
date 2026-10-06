@@ -281,9 +281,9 @@
   },
   "connectedmachine": {
     "pname": "connectedmachine",
-    "version": "3.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/connectedmachine-3.0.0b1-py3-none-any.whl",
-    "hash": "sha256-IKu0T6vo2F5q2phXb+WkV98iQKPMxFbdvhX7cKyZpaU=",
+    "version": "3.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/connectedmachine-3.0.0-py3-none-any.whl",
+    "hash": "sha256-F/Jgi51l3LOI2XVOpyDvrN96IkLfYa7PtXnb6U/Lbag=",
     "description": "Microsoft Azure Command-Line Tools ConnectedMachine Extension"
   },
   "connectedvmware": {
