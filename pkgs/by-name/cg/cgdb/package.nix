@@ -40,9 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--warnings=no-portability"
   ];
 
+  # VERSION file must exist with the cgdb version
   preAutoreconf = ''
-    export AUTOMAKE_FLAGS="--foreign --add-missing --copy
-    export CGDB_VERSION=${finalAttrs.version}"
+    export AUTOMAKE_FLAGS="--foreign --add-missing --copy"
+    echo ${finalAttrs.version} > VERSION
   '';
 
   strictDeps = true;
