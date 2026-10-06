@@ -1095,7 +1095,9 @@ builtins.intersectAttrs super {
     testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.z3 ];
   }) super.smtlib-backends-process;
 
-  # overrideCabal because the tests need to execute the built executable "fixpoint"
+  # overrideCabal because
+  # - the tests need to execute the built executable "fixpoint"
+  # - the installed fixpoint executable starts an SMT solver at runtime
   liquid-fixpoint = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/fixpoint:$PATH
@@ -1105,6 +1107,16 @@ builtins.intersectAttrs super {
       pkgs.cvc5
       pkgs.z3
     ];
+    buildTools = (drv.buildTools or [ ]) ++ [ pkgs.buildPackages.makeWrapper ];
+    postInstall = (drv.postInstall or "") + ''
+      wrapProgram $out/bin/fixpoint \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            pkgs.cvc5
+            pkgs.z3
+          ]
+        }"
+    '';
   }) super.liquid-fixpoint;
 
   # overrideCabal because
