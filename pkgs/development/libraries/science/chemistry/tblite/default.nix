@@ -103,10 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Light-weight tight-binding framework";
     mainProgram = "tblite";
-    license = with lib.licenses; [
-      gpl3Plus
-      lgpl3Plus
-    ];
+    license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/tblite/tblite";
     changelog = "https://github.com/tblite/tblite/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
