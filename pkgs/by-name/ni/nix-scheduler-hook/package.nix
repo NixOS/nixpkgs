@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   fetchFromCodeberg,
-  stdenv,
+  clangStdenv,
   lib,
   nixVersions,
   meson,
@@ -32,7 +32,7 @@ let
   };
   nix = nixVersions.nix_2_34;
 in
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "nix-scheduler-hook";
   version = "0.11.0";
 
