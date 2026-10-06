@@ -1,4 +1,5 @@
 # The Standard Environment {#chap-stdenv}
+[]{#part-stdenv} <!-- legacy anchor -->
 
 The standard build environment in the Nix Packages collection provides an environment for building Unix packages that does a lot of common build tasks automatically. In fact, for Unix packages that use the standard `./configure; make; make install` build interface, you don’t need to write a build script at all; the standard environment does everything automatically. If `stdenv` doesn’t do what you need automatically, you can easily customise or override the various build phases.
 
@@ -1528,7 +1529,7 @@ Here are some more packages that provide a setup hook. Since the list of hooks i
 ### Other hooks {#stdenv-other-hooks}
 
 Many other packages provide hooks, that are not part of `stdenv`. You can find
-these in the [Hooks Reference](#chap-hooks).
+these in [](#chap-hooks).
 
 ### Compiler and Linker wrapper hooks {#compiler-linker-wrapper-hooks}
 
