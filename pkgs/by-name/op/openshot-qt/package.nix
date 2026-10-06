@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   patches = [
     ./recover-invalid-export-settings.patch
+    ./fix-wayland-app-id.patch
   ];
 
   outputs = [ "out" ]; # "lib" can't be split
