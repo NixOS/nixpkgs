@@ -7,58 +7,52 @@
   ppxlib,
   uchar,
   ppx_expect,
+  menhir,
+  menhirLib,
 }:
 
 let
-  param =
-    if lib.versionAtLeast ppxlib.version "0.26.0" then
-      {
-        version = "3.7";
-        sha256 = "sha256-ucqrJkzS6cVogGUf1vU8oBpSryneMBqTjzxwsOi6Egs=";
-      }
-    else
-      {
-        version = "2.5";
-        sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
-      };
-in
-
-let
-  unicodeVersion = "17.0.0";
+  unicodeVersion = "18.0.0";
   baseUrl = "https://www.unicode.org/Public/${unicodeVersion}";
 
   DerivedCoreProperties = fetchurl {
     url = "${baseUrl}/ucd/DerivedCoreProperties.txt";
-    hash = "sha256-JMf+0RlcSC+q79XB5+uCHF7h+23gfs26pktWqZ2iLAg=";
+    hash = "sha256-CckoiGoXj8r9k8KeS9WQc6BY5aEAtxbUJctWOrUPaMk=";
   };
   DerivedGeneralCategory = fetchurl {
     url = "${baseUrl}/ucd/extracted/DerivedGeneralCategory.txt";
-    hash = "sha256-1i5bq3DKdPCZND9xIk+gUcsf3WGhq0XASIxEz8C2EC4=";
+    hash = "sha256-1rFR0tQO6bGHbSb0F5gPRf+uR7YFXM9yA8sx8HoDD5Q=";
   };
   PropList = fetchurl {
     url = "${baseUrl}/ucd/PropList.txt";
-    hash = "sha256-Ew3N3Kra8HEAi9/OHndD4E/fvJEIhvAX2fmskx2MZN0=";
+    hash = "sha256-9Dj1Muhze7iicCEmzfnEr141fFjHrPnZ6y/HwaHZVdY=";
   };
-  atLeast31 = lib.versionAtLeast param.version "3.1";
+  atLeast = v: param: lib.versionAtLeast param.version v;
 in
 buildDunePackage (finalAttrs: {
   pname = "sedlex";
-  inherit (param) version;
-
-  minimalOCamlVersion = "4.08";
+  version = if lib.versionAtLeast ppxlib.version "0.26.0" then "3.8.1" else "2.5";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "sedlex";
-    rev = "v${finalAttrs.version}";
-    inherit (param) sha256;
+    tag = "v${finalAttrs.version}";
+    hash =
+      {
+        "3.8.1" = "sha256-hFYC1tLsW4uPlwBPyo0Oo1TJM8pRLtmVFm7j2Rv71jQ=";
+        "2.5" = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
+      }
+      ."${finalAttrs.version}";
   };
+
+  nativeBuildInputs = lib.optionals (atLeast "3.8" finalAttrs) [ menhir ];
+  buildInputs = lib.optionals (atLeast "3.8" finalAttrs) [ menhirLib ];
 
   propagatedBuildInputs = [
     gen
     ppxlib
   ]
-  ++ lib.optionals (!atLeast31) [
+  ++ lib.optionals (!atLeast "3.1" finalAttrs) [
     uchar
   ];
 
@@ -69,7 +63,7 @@ buildDunePackage (finalAttrs: {
     ln -s ${PropList} src/generator/data/PropList.txt
   '';
 
-  checkInputs = lib.optionals atLeast31 [
+  checkInputs = lib.optionals (atLeast "3.1" finalAttrs) [
     ppx_expect
   ];
 
