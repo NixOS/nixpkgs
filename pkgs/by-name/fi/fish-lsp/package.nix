@@ -66,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
         --fish <($out/bin/fish-lsp complete --fish)
     ''}
 
+    installManPage man/fish-lsp.1
+
     runHook postInstall
   '';
 
