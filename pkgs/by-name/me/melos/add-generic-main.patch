@@ -1,22 +1,26 @@
 diff --git a/bin/melos.dart b/bin/melos.dart
-index 2476436..ee6adb0 100644
+index 4239dc8..e5b7718 100644
 --- a/packages/melos/bin/melos.dart
 +++ b/packages/melos/bin/melos.dart
-@@ -1,11 +1,74 @@
+@@ -1,14 +1,74 @@
  import 'package:cli_launcher/cli_launcher.dart';
  import 'package:melos/src/command_runner.dart';
-+import 'dart:io';
-+import 'package:yaml/yaml.dart';
-+import 'package:path/path.dart' as path;
- 
+-import 'package:melos/src/sdk_launcher.dart';
+-
 -Future<void> main(List<String> arguments) async => launchExecutable(
 -  arguments,
 -  LaunchConfig(
 -    name: ExecutableName('melos'),
 -    launchFromSelf: false,
 -    entrypoint: melosEntryPoint,
+-    resolveLocalLaunchConfig: (context) =>
+-        resolveLocalLaunchConfig(arguments, context),
 -  ),
 -);
++import 'dart:io';
++import 'package:yaml/yaml.dart';
++import 'package:path/path.dart' as path;
++
 +final ExecutableName executableName = ExecutableName('melos');
 +
 +// Substituted at build time to the package's install location in the
