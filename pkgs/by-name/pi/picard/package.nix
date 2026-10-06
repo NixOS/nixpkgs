@@ -4,12 +4,12 @@
   python313Packages,
   fetchFromGitHub,
 
-  chromaprint,
   gettext,
   qt5,
 
   enablePlayback ? true,
   gst_all_1,
+  chromaprint,
 
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -61,11 +61,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "pyobjc-framework-Cocoa"
   ];
 
-  dependencies =
+  dependencies = [
+    chromaprint # Not strictly required, but added for fpcalc in the wrapper
+  ]
+  ++ (
     with pythonPackages;
     [
       charset-normalizer
-      chromaprint
       discid
       fasteners
       markdown
@@ -78,7 +80,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pyobjc-core
       pyobjc-framework-Cocoa
-    ];
+    ]
+  );
 
   # Not reporting any of these issues because the next upstream version will
   # include many breaking changes and this might not be relevant.
