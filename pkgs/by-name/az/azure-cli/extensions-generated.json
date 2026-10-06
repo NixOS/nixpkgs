@@ -666,9 +666,9 @@
   },
   "image-gallery": {
     "pname": "image-gallery",
-    "version": "1.0.0b2",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/image_gallery-1.0.0b2-py2.py3-none-any.whl",
-    "hash": "sha256-Q2lgO2YZvvwKoTi+7WDLuBbN2HuCa8DcdcC31RgNLCw=",
+    "version": "1.1.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/image_gallery-1.1.0b1-py2.py3-none-any.whl",
+    "hash": "sha256-oVb8lVYO0J5bG8fILJgcwWM5CB6HrtbBZp7UyMBZ8gI=",
     "description": "Support for Azure Image Gallery"
   },
   "import-export": {
