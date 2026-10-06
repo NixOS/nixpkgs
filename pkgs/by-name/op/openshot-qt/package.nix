@@ -20,6 +20,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
   format = "setuptools";
 
+  patches = [
+    ./recover-invalid-export-settings.patch
+  ];
+
   outputs = [ "out" ]; # "lib" can't be split
 
   nativeBuildInputs = [
