@@ -1315,7 +1315,7 @@ Each entry corresponds to a vulnerable version of a package; as a consequence:
 - One entry can contain several CVEs;
 - A single package can be concerned by several entries.
 
-Maintainers are encouraged to [subscribe to notifications](https://tracker.security.nixos.org/subscriptions/) for the packages they maintain.
+Maintainers are encouraged to [subscribe to notifications](https://tracker.security.nixos.org/user/subscriptions) for the packages they maintain.
 
 #### Triaging and Fixing
 
