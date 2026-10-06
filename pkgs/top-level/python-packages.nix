@@ -22891,6 +22891,8 @@ self: super: with self; {
 
   xknxproject = callPackage ../development/python-modules/xknxproject { };
 
+  xlib-hotkeys = callPackage ../development/python-modules/xlib-hotkeys { };
+
   xlrd = callPackage ../development/python-modules/xlrd { };
 
   xlsx2csv = callPackage ../development/python-modules/xlsx2csv { };
