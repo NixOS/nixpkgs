@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   fetchFromGitHub,
 }:
 
@@ -19,6 +20,7 @@ buildPecl {
   };
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://pecl.php.net/package-changelog.php?package=excimer&release=${version}";
     description = "PHP extension that provides an interrupting timer and a low-overhead sampling profiler";
     license = lib.licenses.asl20;
