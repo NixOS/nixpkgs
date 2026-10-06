@@ -210,6 +210,10 @@ let
               self;
           in
           assert myPython.pkgs.foobar == myPython.pkgs.numpy;
+          assert myPython.pkgs.python.pkgs.foobar == myPython.pkgs.numpy;
+          assert
+            myPython.pkgs.python.withPackages (ps: with ps; [ foobar ])
+            == myPython.withPackages (ps: with ps; [ numpy ]);
           myPython.withPackages (ps: with ps; [ foobar ]);
         test-overrideScope =
           let
