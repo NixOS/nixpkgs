@@ -1226,6 +1226,34 @@ let
       unifiedSystemDir = true;
     };
 
+    # See the comment on oracle9x86_64 about rolling URLs.
+    oracle10x86_64 = {
+      name = "oracle-10-x86_64";
+      fullName = "Oracle Linux 10 (x86_64)";
+      packagesLists = [
+        (fetchurl {
+          url = "https://yum.oracle.com/repo/OracleLinux/OL10/baseos/latest/x86_64/repodata/fb0f0eab3d33d53d26d28f012b800cabbac3fdd3b2921a30504213f62ce17db9-primary.xml.gz";
+          hash = "sha256-+w8Oqz0z1T0m0o8BK4AMq7rD/dOykhowUEIT9izhfbk=";
+        })
+        (fetchurl {
+          url = "https://yum.oracle.com/repo/OracleLinux/OL10/appstream/x86_64/repodata/fe3a1915c11263cd8029cd310b0ff96d9aca7c5fb9dc9e15423f259dde2e79d4-primary.xml.gz";
+          hash = "sha256-/joZFcESY82AKc0xCw/5bZrKfF+53J4VQj8lnd4uedQ=";
+        })
+      ];
+      urlPrefixes = [
+        "https://yum.oracle.com/repo/OracleLinux/OL10/baseos/latest/x86_64"
+        "https://yum.oracle.com/repo/OracleLinux/OL10/appstream/x86_64"
+      ];
+      archs = [
+        "noarch"
+        "x86_64"
+      ];
+      packages = commonOraclePackages ++ [
+        "annobin-plugin-gcc"
+      ];
+      unifiedSystemDir = true;
+    };
+
     # Amazon Linux 2023 uses GUID-based URLs that don't allow directory listing.
     # To update: The GUID corresponds to a specific AL2023 release version. You can find the
     # current GUID by either:

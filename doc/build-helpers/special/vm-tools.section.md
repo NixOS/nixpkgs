@@ -120,6 +120,7 @@ A set of functions that build a predefined set of minimal Linux distributions im
   * `alma10x86_64`
 * Oracle Linux
   * `oracle9x86_64`
+  * `oracle10x86_64`
 * Amazon Linux
   * `amazon2023x86_64`
 * Ubuntu

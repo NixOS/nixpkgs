@@ -72,6 +72,7 @@ in
   testAlma9Image = makeImageTestScript diskImages.alma9x86_64;
   testAlma10Image = makeImageTestScript diskImages.alma10x86_64;
   testOracle9Image = makeImageTestScript diskImages.oracle9x86_64;
+  testOracle10Image = makeImageTestScript diskImages.oracle10x86_64;
   testAmazon2023Image = makeImageTestScript diskImages.amazon2023x86_64;
 
   # Debian-based distros
