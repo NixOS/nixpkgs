@@ -35,6 +35,7 @@
 let
   inherit (builtins)
     getEnv
+    trace
     tryEval
     unsafeGetAttrPos
     ;
@@ -55,18 +56,25 @@ let
     stringLength
     all
     seq
-    warn
     ;
 
+  # NOTE: We cannot catch the Nix option abort-on-warn here.
   abortOnWarn = elem (getEnv "NIX_ABORT_ON_WARN") [
     "1"
     "true"
     "yes"
   ];
 
-  # `abort` fails `builtins.tryEval`
-  # Use `throw` instead.
-  warnCatchably = if abortOnWarn then throw else warn;
+  warnCatchably =
+    if abortOnWarn then
+      # `abort` fails `builtins.tryEval`, use `throw` instead.
+      throw
+    else
+      # Taken from lib.warn to avoid using builtins.warn
+      # as we cannot handle the Nix option abort-on-warn.
+      # NOTE: This function will stay `warn`
+      # even when the Nix option `abort-on-warn` is `true`.
+      msg: trace "[1;35mevaluation warning:[0m ${msg}";
 
   leftPadName =
     name: against:
@@ -485,7 +493,9 @@ lib.extendMkDerivation {
               '';
           };
           ${
-            if abortOnWarn && (tryEval finalAttrs.passthru.disabled).success then
+            if
+              abortOnWarn && finalAttrs ? passthru.disabled && (tryEval finalAttrs.passthru.disabled).success
+            then
               "buildPythonPackage-attrs-disabled-overrideAttrs"
             else
               null
