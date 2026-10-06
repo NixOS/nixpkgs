@@ -118,7 +118,6 @@ lib.extendMkDerivation {
     "doInstallCheck"
     "pyproject"
     "format"
-    "stdenv"
     "dependencies"
     "optional-dependencies"
     "build-system"
@@ -453,7 +452,21 @@ lib.extendMkDerivation {
                   or "${removePrefix namePrefix finalAttrs.name} not supported for interpreter ${python.executable}";
             };
 
-            ## Implementation details, subject to changes
+            ## Implementation details, subject to changes (`buildPythonPackage-internal-*`)
+
+            # Deprecated argument stdenv (internal)
+            ${if attrs ? stdenv then "buildPythonPackage-internal-stdenv" else null} = {
+              kind = "broken";
+              message =
+                let
+                  pos = unsafeGetAttrPos "stdenv" attrs;
+                  posString = lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+                in
+                ''
+                  `buildPythonPackage`/`buildPythonApplication`: Deprecated argument `stdenv` found${posString}
+                    Override `stdenv` with `buildPythonPackage.override` or `buildPythonApplication.override` instead.
+                '';
+            };
           };
       };
     }
