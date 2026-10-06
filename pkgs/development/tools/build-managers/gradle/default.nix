@@ -1,6 +1,7 @@
 {
   callPackage,
   stdenv,
+  fetchFromGitHub,
   gradle-native-platform ? null,
   jdk11,
   jdk17,
@@ -369,6 +370,20 @@ let
 
   # Calls the generated Gradle package with default arguments.
   mkGradle = args: callPackage (mkGradle' args) { };
+
+  # gradle 9 ships native-platform 0.22-milestone-29
+  gradle-native-platform-m29 = gradle-native-platform.overrideAttrs (
+    finalAttrs: _: {
+      version = "0.22-milestone-29";
+      src = fetchFromGitHub {
+        owner = "gradle";
+        repo = "native-platform";
+        tag = finalAttrs.version;
+        hash = "sha256-HNVA6QDiPPKh0BQpCBjwiv4LNYxDySlqXcZjYC+FdFo=";
+      };
+      nativeVersionHash = "660c5614fbf4a5f2a75b1949f50a0caf5cd603558e7d8a26e50b933a0cfb79d1";
+    }
+  );
 in
 rec {
   # Keep these exposed (but not at toplevel) so users can call
@@ -385,6 +400,8 @@ rec {
     hash = "sha256-uv1c6c+uoPvM/chDmhrEL71M2cidyamIIo2KJjmljmw=";
     defaultJava = jdk25;
     updateScriptMajorVersion = "9";
+    extraNativePlatformJars =
+      if stdenv.hostPlatform.isRiscV64 then gradle-native-platform-m29 else null;
   };
   gradle_8 = mkGradle {
     version = "8.14.4";
