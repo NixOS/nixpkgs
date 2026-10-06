@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       anas
       numinit
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "qdl";
   };
 })
