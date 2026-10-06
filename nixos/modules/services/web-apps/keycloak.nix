@@ -187,10 +187,21 @@ in
           in
           mkOption {
             type = port;
-            default = dbPorts.${cfg.database.type};
-            defaultText = literalMD "default port of selected database";
+            default =
+              if cfg.database.createLocally && cfg.database.type == "postgresql" then
+                config.services.postgresql.settings.port
+              else
+                dbPorts.${cfg.database.type};
+            defaultText = literalMD ''
+              [](#opt-services.postgresql.settings.port) for a locally created
+              PostgreSQL database, otherwise the default port of the selected database.
+            '';
             description = ''
               Port of the database to connect to.
+
+              For PostgreSQL socket connections, this selects the socket file
+              (`.s.PGSQL.<port>`) within the socket directory. It is unused for
+              MySQL and MariaDB socket connections.
             '';
           };
 
@@ -652,6 +663,7 @@ in
         before = [ "keycloak.service" ];
         bindsTo = [ "postgresql.target" ];
         path = [ config.services.postgresql.package ];
+        environment.PGPORT = toString config.services.postgresql.settings.port;
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
