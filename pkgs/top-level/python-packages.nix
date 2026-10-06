@@ -4194,6 +4194,8 @@ self: super: with self; {
 
   dbus-fast = callPackage ../development/python-modules/dbus-fast { };
 
+  dbus-idle = callPackage ../development/python-modules/dbus-idle { };
+
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
   dbus-python = callPackage ../development/python-modules/dbus-python { inherit (pkgs) dbus; };
