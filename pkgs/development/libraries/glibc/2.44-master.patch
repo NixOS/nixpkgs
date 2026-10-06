@@ -6751,3 +6751,693 @@ index 1f7a4498b0..cbf83f8f8e 100644
    /* Clear all backing arrays.  */
    while (__environ_array_list != NULL)
      {
+
+commit 13fd9fe7df9783ef1471865786ecb841165b213e
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Aug 31 13:09:36 2026 -0300
+
+    Revert "posix: Add POSIX aliases to some spawn functions" (BZ 34437)
+    
+    This reverts commit 7594b4e5a75d41e891782aa7e3fb51924f6840cb.
+    
+    Reviewed-by: Andreas K. Huettel <dilfridge@gentoo.org>
+    (cherry picked from commit 24b18e1dfd46e05198a516133648fc18a49e3610)
+
+diff --git a/conform/data/spawn.h-data b/conform/data/spawn.h-data
+index 1f332324c2..43aa9cb8ae 100644
+--- a/conform/data/spawn.h-data
++++ b/conform/data/spawn.h-data
+@@ -29,10 +29,6 @@ function int posix_spawnattr_setpgroup (posix_spawnattr_t*, pid_t)
+ function int posix_spawnattr_setschedparam (posix_spawnattr_t*, const struct sched_param*)
+ function int posix_spawnattr_setschedpolicy (posix_spawnattr_t*, int)
+ function int posix_spawnattr_setsigmask (posix_spawnattr_t*, const sigset_t*)
+-#if defined XOPEN2K24 || defined POSIX2024
+-function int posix_spawn_file_actions_addchdir (posix_spawn_file_actions_t*, const char *)
+-function int posix_spawn_file_actions_addfchdir (posix_spawn_file_actions_t*, int)
+-#endif
+ function int posix_spawn_file_actions_addclose (posix_spawn_file_actions_t*, int)
+ function int posix_spawn_file_actions_adddup2 (posix_spawn_file_actions_t*, int, int)
+ function int posix_spawn_file_actions_addopen (posix_spawn_file_actions_t*, int, const char *, int, mode_t)
+diff --git a/posix/Makefile b/posix/Makefile
+index 10d70ae0ae..7478cc2174 100644
+--- a/posix/Makefile
++++ b/posix/Makefile
+@@ -316,7 +316,6 @@ tests := \
+   tst-rxspencer-no-utf8 \
+   tst-sched_getaffinity \
+   tst-spawn-chdir \
+-  tst-spawn-chdir-posix \
+   tst-spawn4 \
+   tst-spawn5 \
+   tst-spawn6 \
+diff --git a/posix/spawn.h b/posix/spawn.h
+index 0aabf5ebef..5e68752a66 100644
+--- a/posix/spawn.h
++++ b/posix/spawn.h
+@@ -200,26 +200,6 @@ extern int posix_spawn_file_actions_adddup2 (posix_spawn_file_actions_t *
+ 					     int __fd, int __newfd)
+      __THROW __nonnull ((1));
+ 
+-#ifdef __USE_XOPEN2K24XSI
+-
+-/* Add an action changing the directory to PATH during spawn.  This
+-   affects the subsequent file actions.
+-   Alias of posix_spawn_file_actions_addchdir_np.  */
+-extern int __REDIRECT_NTH (posix_spawn_file_actions_addchdir,
+-                            (posix_spawn_file_actions_t * __restrict __actions,
+-                             const char *__restrict __path),
+-                            posix_spawn_file_actions_addchdir_np);
+-
+-/* Add an action changing the directory to FD during spawn.  This
+-   affects the subsequent file actions.  FD is not duplicated and must
+-   be open when the file action is executed.
+-   Alias of posix_spawn_file_actions_addfchdir_np.  */
+-extern int __REDIRECT_NTH (posix_spawn_file_actions_addfchdir,
+-                           (posix_spawn_file_actions_t *, int __fd),
+-                           posix_spawn_file_actions_addfchdir_np);
+-
+-#endif /* __USE_XOPEN2K24XSI */
+-
+ #ifdef __USE_MISC
+ /* Add an action changing the directory to PATH during spawn.  This
+    affects the subsequent file actions.  */
+diff --git a/posix/tst-spawn-chdir-posix.c b/posix/tst-spawn-chdir-posix.c
+deleted file mode 100644
+index 3f8d8952bb..0000000000
+--- a/posix/tst-spawn-chdir-posix.c
++++ /dev/null
+@@ -1,2 +0,0 @@
+-#define USE_POSIX_ALIASES
+-#include "tst-spawn-chdir.c"
+diff --git a/posix/tst-spawn-chdir.c b/posix/tst-spawn-chdir.c
+index 166f835492..a3478d61f6 100644
+--- a/posix/tst-spawn-chdir.c
++++ b/posix/tst-spawn-chdir.c
+@@ -78,25 +78,12 @@ add_chdir (posix_spawn_file_actions_t *actions, const char *path,
+     {
+       TEST_COMPARE (posix_spawn_file_actions_addopen
+                     (actions, tmpfd, path, O_DIRECTORY | O_RDONLY, 0), 0);
+-
+-#ifdef USE_POSIX_ALIASES
+-      int ret = posix_spawn_file_actions_addfchdir (actions, tmpfd);
+-#else
+-      int ret = posix_spawn_file_actions_addfchdir_np (actions, tmpfd);
+-#endif
+-      TEST_COMPARE (ret, 0);
+-
++      TEST_COMPARE (posix_spawn_file_actions_addfchdir_np
++                    (actions, tmpfd), 0);
+       TEST_COMPARE (posix_spawn_file_actions_addclose (actions, tmpfd), 0);
+     }
+   else
+-    {
+-#ifdef USE_POSIX_ALIASES
+-      int ret = posix_spawn_file_actions_addchdir (actions, path);
+-#else
+-      int ret = posix_spawn_file_actions_addchdir_np (actions, path);
+-#endif
+-      TEST_COMPARE (ret, 0);
+-    }
++    TEST_COMPARE (posix_spawn_file_actions_addchdir_np (actions, path), 0);
+ }
+ 
+ static int
+
+commit 6dea23eeac895231d86c375891a580b27866f6e1
+Author: mengqinggang <mengqinggang@loongson.cn>
+Date:   Wed Aug 5 16:03:34 2026 +0800
+
+    LoongArch: Fix intermittent nptl/tst-cancel32 failure
+    
+    The nptl/tst-cancel32 test fails intermittently on LoongArch
+    with SIGSEGV at __longjmp:
+    
+    0x7ffff7de7f6c <__longjmp+28>   rotri.d         $sp, $t0, 0x11
+    0x7ffff7de7f70 <__longjmp+32>   xor             $sp, $sp, $t1
+    
+    rotri.d and xor are expanded from PTR_DEMANGLE2.
+    If the thread is cancelled between the rotri.d and xor,
+    an incomplete sp register causes the SIGSEGV.
+    
+    Change the destination register of rotri.d to avoid an incomplete sp.
+    
+    (cherry picked from commit 4b0c2842a85f2f3cbe4aa11bd8aea18487982ba8)
+
+diff --git a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+index 75498545cb..24e27e4092 100644
+--- a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
++++ b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+@@ -40,8 +40,8 @@
+   xor  dst, src, guard; \
+   rotri.d  dst, dst, 47;
+ # define PTR_DEMANGLE2(dst, src, guard) \
+-  rotri.d  dst, src, 17; \
+-  xor  dst, dst, guard;
++  rotri.d  src, src, 17; \
++  xor  dst, src, guard;
+ #endif
+ 
+ #endif /* POINTER_GUARD_ASM_H */
+
+commit 2ee4e25c971eedb25a9413e17f38a88e2f5b43c3
+Author: mengqinggang <mengqinggang@loongson.cn>
+Date:   Mon Aug 10 16:44:53 2026 +0800
+
+    LoongArch: Support pointer guard on LoongArch32
+    
+    LoongArch32 Reduced has no rotri.d/rotri.w instructions.
+    Use slli.w/srli.w/or to synthesize the rotation on LoongArch32
+    and LoongArch32 Reduced.
+    
+    Reported-by: Haiyong Sun <sunhaiyong@loongson.cn>
+    
+    (cherry picked from commit dd63105d1b883a9fb5603a5eb3e12aab64d72d47)
+
+diff --git a/sysdeps/loongarch/__longjmp.S b/sysdeps/loongarch/__longjmp.S
+index 191f03320a..302cb6894a 100644
+--- a/sysdeps/loongarch/__longjmp.S
++++ b/sysdeps/loongarch/__longjmp.S
+@@ -23,9 +23,9 @@
+ ENTRY (__longjmp)
+ #ifdef PTR_MANGLE
+ 	REG_L t0, a0, 0*SZREG
+-	PTR_DEMANGLE (ra, t0, t1)
++	PTR_DEMANGLE (ra, t0, t1, t2)
+ 	REG_L t0, a0, 1*SZREG
+-	PTR_DEMANGLE2 (sp, t0, t1)
++	PTR_DEMANGLE2 (sp, t0, t1, t2)
+ #else
+ 	REG_L ra, a0, 0*SZREG
+ 	REG_L sp, a0, 1*SZREG
+diff --git a/sysdeps/loongarch/setjmp.S b/sysdeps/loongarch/setjmp.S
+index 591e0d2709..58c1ee02b2 100644
+--- a/sysdeps/loongarch/setjmp.S
++++ b/sysdeps/loongarch/setjmp.S
+@@ -31,9 +31,9 @@ END (setjmp)
+ 
+ ENTRY (__sigsetjmp)
+ #ifdef PTR_MANGLE
+-	PTR_MANGLE (t0, ra, t1)
++	PTR_MANGLE (t0, ra, t1, t2)
+ 	REG_S t0, a0, 0*SZREG
+-	PTR_MANGLE2 (t0, sp, t1)
++	PTR_MANGLE2 (t0, sp, t1, t2)
+ 	REG_S t0, a0, 1*SZREG
+ #else
+ 	REG_S ra, a0, 0*SZREG
+diff --git a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+index 24e27e4092..006b713f9c 100644
+--- a/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
++++ b/sysdeps/unix/sysv/linux/loongarch/pointer_guard-asm.h
+@@ -24,24 +24,40 @@
+       || (!defined SHARED && (IS_IN (libc) \
+       || IS_IN (libpthread))))
+ #  define PTR_MANGLE_LOAD(guard) \
+-  LOAD_LOCAL (guard, __pointer_chk_guard_local);
++	LOAD_LOCAL (guard, __pointer_chk_guard_local);
+ # else
+ #  define PTR_MANGLE_LOAD(guard) \
+-  LOAD_GLOBAL (guard, __pointer_chk_guard);
++	LOAD_GLOBAL (guard, __pointer_chk_guard);
+ # endif
+-# define PTR_MANGLE(dst, src, guard) \
+-  PTR_MANGLE_LOAD (guard); \
+-  PTR_MANGLE2 (dst, src, guard);
+-# define PTR_DEMANGLE(dst, src, guard) \
+-  PTR_MANGLE_LOAD (guard); \
+-  PTR_DEMANGLE2 (dst, src, guard);
++
++# define PTR_MANGLE(dst, src, guard, tmp) \
++	PTR_MANGLE_LOAD (guard); \
++	PTR_MANGLE2 (dst, src, guard, tmp);
++# define PTR_DEMANGLE(dst, src, guard, tmp) \
++	PTR_MANGLE_LOAD (guard); \
++	PTR_DEMANGLE2 (dst, src, guard, tmp);
++
++# if __loongarch_grlen == 64
+ /* Use PTR_MANGLE2 for efficiency if guard is already loaded.  */
+-# define PTR_MANGLE2(dst, src, guard) \
+-  xor  dst, src, guard; \
+-  rotri.d  dst, dst, 47;
+-# define PTR_DEMANGLE2(dst, src, guard) \
+-  rotri.d  src, src, 17; \
+-  xor  dst, src, guard;
++#  define PTR_MANGLE2(dst, src, guard, tmp) \
++	xor	  tmp, src, guard; \
++	rotri.d	  dst, tmp, 47;
++#  define PTR_DEMANGLE2(dst, src, guard, tmp) \
++	rotri.d	  tmp, src, 17; \
++	xor	  dst, tmp, guard;
++# elif __loongarch_grlen == 32 /* __loongarch_grlen == 64 */
++#  define PTR_MANGLE2(dst, src, guard, tmp) \
++	xor	  tmp, src, guard; \
++	slli.w	  dst, tmp, 9; \
++	srli.w	  tmp, tmp, 23; \
++	or	  dst, dst, tmp;
++#  define PTR_DEMANGLE2(dst, src, guard, tmp) \
++	srli.w	  tmp, src, 9; \
++	slli.w	  src, src, 23; \
++	or	  tmp, tmp, src; \
++	xor	  dst, tmp, guard;
++# endif /* __loongarch_grlen == 64 */
++
+ #endif
+ 
+ #endif /* POINTER_GUARD_ASM_H */
+
+commit 67dd5150c6c1f76262b7d76ecbc296c564376c74
+Author: mengqinggang <mengqinggang@loongson.cn>
+Date:   Mon Aug 24 17:48:52 2026 +0800
+
+    LoongArch: Add standard search paths for 32-bit
+    
+    Previously, add_system_dir added different paths depending on the ABI:
+      ilp32d: /lib32
+      ilp32s: /lib32/sf
+    
+    Now, add_sysmtem_dir adds all of the following directories to standard
+    search path for both ilp32d ABI and ilp32s ABI:
+      /lib
+      /lib32
+      /lib32/sf
+      /lib64
+      /lib64/sf
+    
+    This change fixes elf/tst-ptrguard-static-dlopen on ilp32s ABI.
+    The test is a statically linked executable with dlopen
+    tst-ptrguard-static-dlopen-mod.so. Without this patch, the test fails
+    because it looks for ld.so in /lib32/sf, but the file is actually
+    in /lib32.
+    
+    (cherry picked from commit b3d14eff4fe5c9a3d52ab076d3edd29f96f0082d)
+
+diff --git a/sysdeps/unix/sysv/linux/loongarch/dl-cache.h b/sysdeps/unix/sysv/linux/loongarch/dl-cache.h
+index 955f0dc68f..e52c6e2090 100644
+--- a/sysdeps/unix/sysv/linux/loongarch/dl-cache.h
++++ b/sysdeps/unix/sysv/linux/loongarch/dl-cache.h
+@@ -33,6 +33,8 @@
+    LoongArch, libraries can be found in paths ending in:
+      - /lib64
+      - /lib64/sf
++     - /lib32
++     - /lib32/sf
+    so this will add all of those paths.  */
+ 
+ #define add_system_dir(dir) 						\
+@@ -41,6 +43,8 @@
+       static const char* lib_dirs[] = {					\
+ 	"/lib64",							\
+ 	"/lib64/sf",							\
++	"/lib32",							\
++	"/lib32/sf",							\
+ 	NULL,								\
+       };								\
+       const size_t lib_len = sizeof ("/lib") - 1;			\
+
+commit c90398e00571476711792baacb6d92bd2a7b6891
+Author: DJ Delorie <dj@redhat.com>
+Date:   Mon Sep 28 14:27:16 2026 +0200
+
+    CVE-2026-89092: nscd: replace alloca with malloc in aicache, hstcache
+    
+    This changes the alloca fallback to a malloc fallback
+    in the addrinfo and host cache code.
+    
+    This fixes bug 34624.
+    
+    Co-authored-by: Florian Weimer <fweimer@redhat.com>
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit cbf59b836645b6ac69ad8c47a560598bc4942ecc)
+
+diff --git a/nscd/aicache.c b/nscd/aicache.c
+index ef15c373f5..d87e7e966f 100644
+--- a/nscd/aicache.c
++++ b/nscd/aicache.c
+@@ -102,7 +102,9 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+   int32_t ttl = INT32_MAX;
+   ssize_t total = 0;
+   char *key_copy = NULL;
+-  bool alloca_used = false;
++  /* If not NULL, dataset is a temporary dataset not inserted into the
++     database, and needs to be free'd.  */
++  void *dataset_alloc = NULL;
+   time_t timeout = MAX_TIMEOUT_VALUE;
+ 
+   while (!no_more)
+@@ -173,10 +175,12 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 	      /* We cannot permanently add the result in the moment.  But
+ 		 we can provide the result as is.  Store the data in some
+ 		 temporary memory.  */
+-	      dataset = (struct dataset *) alloca (total + req->key_len);
++	      dataset = (struct dataset *) malloc (total + req->key_len);
++	      if (dataset == NULL)
++		goto out;
+ 
+ 	      /* We cannot add this record to the permanent database.  */
+-	      alloca_used = true;
++	      dataset_alloc = dataset;
+ 	    }
+ 
+ 	  /* Fill in the address and address families.  */
+@@ -345,10 +349,12 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 	      /* We cannot permanently add the result in the moment.  But
+ 		 we can provide the result as is.  Store the data in some
+ 		 temporary memory.  */
+-	      dataset = (struct dataset *) alloca (total + req->key_len);
++	      dataset = (struct dataset *) malloc (total + req->key_len);
++	      if (dataset == NULL)
++		goto out;
+ 
+ 	      /* We cannot add this record to the permanent database.  */
+-	      alloca_used = true;
++	      dataset_alloc = dataset;
+ 	    }
+ 
+ 	  /* Fill in the address and address families.  */
+@@ -400,8 +406,7 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 						   resp)) == 0)
+ 	    {
+ 	      /* The data has not changed.  We will just bump the
+-		 timeout value.  Note that the new record has been
+-		 allocated on the stack and need not be freed.  */
++		 timeout value.  */
+ 	      dh->timeout = dataset->head.timeout;
+ 	      dh->ttl = dataset->head.ttl;
+ 	      ++dh->nreloads;
+@@ -419,7 +424,9 @@ addhstaiX (struct database_dyn *db, int fd, request_header *req,
+ 		  key_copy = (char *) newp + (key_copy - (char *) dataset);
+ 
+ 		  dataset = memcpy (newp, dataset, total + req->key_len);
+-		  alloca_used = false;
++
++		  free (dataset_alloc);
++		  dataset_alloc = NULL;
+ 		}
+ 
+ 	      /* Mark the old record as obsolete.  */
+@@ -502,7 +509,7 @@ next_nip:
+  out:
+   __resolv_context_put (ctx);
+ 
+-  if (dataset != NULL && !alloca_used)
++  if (dataset != NULL && dataset_alloc == NULL)
+     {
+       /* If necessary, we also propagate the data to disk.  */
+       if (db->persistent)
+@@ -528,6 +535,8 @@ next_nip:
+   scratch_buffer_free (&tmpbuf4);
+   scratch_buffer_free (&canonbuf);
+ 
++  free (dataset_alloc);
++
+   return timeout;
+ }
+ 
+diff --git a/nscd/hstcache.c b/nscd/hstcache.c
+index fe91818640..44ef80be77 100644
+--- a/nscd/hstcache.c
++++ b/nscd/hstcache.c
+@@ -15,7 +15,6 @@
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, see <https://www.gnu.org/licenses/>.  */
+ 
+-#include <alloca.h>
+ #include <assert.h>
+ #include <errno.h>
+ #include <error.h>
+@@ -188,7 +187,7 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       /* Determine the I/O structure.  */
+       size_t h_name_len = strlen (hst->h_name) + 1;
+       size_t h_aliases_cnt;
+-      uint32_t *h_aliases_len;
++      uint32_t *h_aliases_len = NULL;
+       size_t h_addr_list_cnt;
+       char *addresses;
+       char *aliases;
+@@ -202,7 +201,13 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       for (cnt = 0; hst->h_aliases[cnt] != NULL; ++cnt)
+ 	++h_aliases_cnt;
+       /* Determine the length of all aliases.  */
+-      h_aliases_len = (uint32_t *) alloca (h_aliases_cnt * sizeof (uint32_t));
++      if (h_aliases_cnt > 0)
++	{
++	  h_aliases_len = (uint32_t *) reallocarray (NULL, h_aliases_cnt,
++						     sizeof (uint32_t));
++	  if (h_aliases_len == NULL)
++	    return MAX_TIMEOUT_VALUE;
++	}
+       total = 0;
+       for (cnt = 0; cnt < h_aliases_cnt; ++cnt)
+ 	{
+@@ -216,8 +221,11 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	++h_addr_list_cnt;
+ 
+       if (h_addr_list_cnt == 0)
+-	/* Invalid entry.  */
+-	return MAX_TIMEOUT_VALUE;
++	{
++	  /* Invalid entry.  */
++	  free (h_aliases_len);
++	  return MAX_TIMEOUT_VALUE;
++	}
+ 
+       total += (sizeof (struct dataset)
+ 		+ h_name_len
+@@ -228,8 +236,10 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	 change.  Allocate memory on the cache since it is likely
+ 	 discarded anyway.  If it turns out to be necessary to have a
+ 	 new record we can still allocate real memory.  */
+-      bool alloca_used = false;
+       dataset = NULL;
++      /* If not NULL, dataset is a temporary dataset not inserted into
++	 the database, and needs to be free'd.  */
++      void *dataset_alloc = NULL;
+ 
+       /* If the record contains more than one IP address (used for
+ 	 load balancing etc) don't cache the entry.  This is something
+@@ -245,10 +255,15 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	  /* We cannot permanently add the result in the moment.  But
+ 	     we can provide the result as is.  Store the data in some
+ 	     temporary memory.  */
+-	  dataset = (struct dataset *) alloca (total + req->key_len);
++	  dataset = (struct dataset *) malloc (total + req->key_len);
++	  if (dataset == NULL)
++	    {
++	      free (h_aliases_len);
++	      return MAX_TIMEOUT_VALUE;
++	    }
+ 
+ 	  /* We cannot add this record to the permanent database.  */
+-	  alloca_used = true;
++	  dataset_alloc = dataset;
+ 	}
+ 
+       timeout = datahead_init_pos (&dataset->head, total + req->key_len,
+@@ -271,7 +286,8 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       cp = dataset->strdata;
+ 
+       cp = mempcpy (cp, hst->h_name, h_name_len);
+-      cp = mempcpy (cp, h_aliases_len, h_aliases_cnt * sizeof (uint32_t));
++      if (h_aliases_cnt > 0)
++	cp = mempcpy (cp, h_aliases_len, h_aliases_cnt * sizeof (uint32_t));
+ 
+       /* The normal addresses first.  */
+       addresses = cp;
+@@ -283,6 +299,8 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+       for (cnt = 0; cnt < h_aliases_cnt; ++cnt)
+ 	cp = mempcpy (cp, hst->h_aliases[cnt], h_aliases_len[cnt]);
+ 
++      free (h_aliases_len);
++
+       assert (cp
+ 	      == dataset->strdata + total - offsetof (struct dataset,
+ 						      strdata));
+@@ -308,8 +326,7 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 			 dh->allocsize - offsetof (struct dataset, resp)) == 0)
+ 	    {
+ 	      /* The data has not changed.  We will just bump the
+-		 timeout value.  Note that the new record has been
+-		 allocated on the stack and need not be freed.  */
++		 timeout value.  */
+ 	      assert (h_addr_list_cnt == 1);
+ 	      dh->ttl = dataset->head.ttl;
+ 	      dh->timeout = dataset->head.timeout;
+@@ -335,7 +352,9 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 		      key_copy = (char *) newp + (key_copy - (char *) dataset);
+ 
+ 		      dataset = memcpy (newp, dataset, total + req->key_len);
+-		      alloca_used = false;
++
++		      free (dataset_alloc);
++		      dataset_alloc = NULL;
+ 		    }
+ 		}
+ 
+@@ -363,7 +382,7 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 	 the current cache handling cannot handle and it is more than
+ 	 questionable whether it is worthwhile complicating the cache
+ 	 handling just for handling such a special case. */
+-      if (! alloca_used)
++      if (dataset_alloc == NULL)
+ 	{
+ 	  /* If necessary, we also propagate the data to disk.  */
+ 	  if (db->persistent)
+@@ -394,6 +413,8 @@ cache_addhst (struct database_dyn *db, int fd, request_header *req,
+ 
+ 	  pthread_rwlock_unlock (&db->lock);
+ 	}
++      free (dataset_alloc);
++      dataset_alloc = NULL;
+     }
+ 
+   if (__builtin_expect (!all_written, 0) && debug_level > 0)
+
+commit 07dc0a64a3256151beb20a2b4ebc77ee74ebe0dc
+Author: Samuel Thibault <samuel.thibault@ens-lyon.org>
+Date:   Mon Sep 28 01:23:15 2026 +0200
+
+    realloc: Fix mmap non-mremap reallocation case [BZ #34697]
+    
+    This case was missing copying SIZE_SZ bytes from the old allocation.
+    
+    Fixes commit 614cfd0f8a2820aed54f9745077c7da0e6643bac
+    ("malloc: Change mmap chunk layout"), which went into glibc 2.43.
+    
+    Checked by Wilco Dijkstra <Wilco.Dijkstra@arm.com>
+    
+    Resolves #34697.
+    
+    (cherry picked from commit 1e0512a684809e32170eae42c8f04f61126d77cc)
+
+diff --git a/malloc/malloc.c b/malloc/malloc.c
+index 8fe8b18340..a50ff3598c 100644
+--- a/malloc/malloc.c
++++ b/malloc/malloc.c
+@@ -3256,7 +3256,7 @@ __libc_realloc (void *oldmem, size_t bytes)
+       if (newmem == NULL)
+         return NULL;              /* propagate failure */
+ 
+-      memcpy (newmem, oldmem, oldsize - CHUNK_HDR_SZ);
++      memcpy (newmem, oldmem, usable);
+       munmap_chunk (oldp);
+       return newmem;
+     }
+
+commit 34106fee698c83eb0af71d4d0381e66b399be746
+Author: Sachin Monga <smonga@linux.ibm.com>
+Date:   Thu Oct 1 00:51:23 2026 +0530
+
+    powerpc: Fix one byte overread in strncasecmp (bug 34683, CVE-2026-97399)
+    
+    The Power8 strncasecmp (strcasecmp.S with USE_AS_STRNCASECMP) touches
+    s1[n]/s2[n] in three places when the first n bytes compare equal and
+    contain no NUL: L(loop) preloads the next byte before its bdnz;
+    L(loop1) increments then loads before its bdnz; and L(bytebybyte) loads
+    s1[0]/s2[0] before checking r5. A caller that maps exactly n readable bytes
+    can get SIGSEGV if byte n falls on an unmapped page.
+    
+    The L(bytebybyte) site was identified by Florian Weimer; the
+    original AISLE report covered only the two loops.
+    
+    Fix all three sites: guard L(bytebybyte) with a r5 == 0 check, split the
+    bdnz/load pairs in L(loop) and L(loop1) so the load only runs when the
+    count is still positive, and preload rCHAR1/rCHAR2 in L(lessthan4) after
+    confirming r5 != 0.  strcasecmp is unaffected; its generated code is
+    unchanged.
+    
+    Add string/test-strncasecmp-nonarray.c, built on the test-Xncmp-nonarray.c
+    skeleton: maps a PROT_NONE page past both buffers and sweeps all start
+    offsets and lengths.  Runs as an xtest.
+    
+    Reported-by: AISLE in partnership with Red Hat
+    Suggested-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit e622f82ea8797704ac8f761f88ed3e429e97fedd)
+
+diff --git a/string/Makefile b/string/Makefile
+index aa0b0c2f57..bfda81daaa 100644
+--- a/string/Makefile
++++ b/string/Makefile
+@@ -244,8 +244,8 @@ endif
+ # This test allocates a lot of memory and can run for a long time.
+ xtests += tst-strcoll-overflow
+ 
+-# This test runs for a long time.
+-xtests += test-strncmp-nonarray
++# These tests run for a long time.
++xtests += test-strncasecmp-nonarray test-strncmp-nonarray
+ 
+ # This test needs libdl.
+ ifeq (yes,$(build-shared))
+diff --git a/string/test-strncasecmp-nonarray.c b/string/test-strncasecmp-nonarray.c
+new file mode 100644
+index 0000000000..d68e58d5ec
+--- /dev/null
++++ b/string/test-strncasecmp-nonarray.c
+@@ -0,0 +1,4 @@
++#define TEST_IDENTIFIER strncasecmp
++#define TEST_NAME "strncasecmp"
++typedef char CHAR;
++#include "test-Xncmp-nonarray.c"
+diff --git a/sysdeps/powerpc/powerpc64/power8/strcasecmp.S b/sysdeps/powerpc/powerpc64/power8/strcasecmp.S
+index 3c45e9ea50..8de75fb7e5 100644
+--- a/sysdeps/powerpc/powerpc64/power8/strcasecmp.S
++++ b/sysdeps/powerpc/powerpc64/power8/strcasecmp.S
+@@ -355,6 +355,14 @@ L(bytebybyte):
+ 	offset and string descriptors are only updated in the end
+ 	of loop unrolling. */
+ 	ld	rLOC, LOCALE_CTYPE_TOLOWER(rLOC)
++#ifdef USE_AS_STRNCASECMP
++	/* This entry point can be reached from the vector loop with
++	   r5 == 0 (the last vector chunk ended exactly at the `n'
++	   boundary).  Do not read s1[0]/s2[0] in that case: those
++	   bytes are s1[n]/s2[n], one past the caller's bound.  */
++	cmpdi	cr7, r5, 0
++	beq	cr7, L(retnull)
++#endif
+ 	lbz	rCHAR1, 0(rSTR1)	/* Load char from s1 */
+ 	lbz	rCHAR2, 0(rSTR2)	/* Load char from s2 */
+ #ifdef USE_AS_STRNCASECMP
+@@ -405,19 +413,23 @@ L(loop):
+ 	cmpw	cr1, rLWR1, rLWR2
+ 	crorc	4*cr1+eq,eq,4*cr1+eq
+ 	beq     cr1, L(done)
++#ifdef USE_AS_STRNCASECMP
++	/* Test the remaining count before touching the next byte. */
++	bdnz	L(loop_load)
++	b	L(lessthan4)
++L(loop_load):
++#endif
+ 	lbz	rCHAR1, 0(rSTR1)	/* Load char from s1 */
+ 	lbz	rCHAR2, 0(rSTR2)	/* Load char from s2 */
+-#ifdef USE_AS_STRNCASECMP
+-	bdnz	L(loop)
+-#else
+ 	b	L(loop)
+-#endif
+ #ifdef USE_AS_STRNCASECMP
+ L(lessthan4):
+ 	clrldi	r5, r5, 62
+ 	cmpdi	cr7, r5, 0
+ 	beq	cr7, L(retnull)
+ 	mtctr	r5
++	lbz	rCHAR1, 0(rSTR1)
++	lbz	rCHAR2, 0(rSTR2)
+ L(loop1):
+ 	cmpdi	rCHAR1, 0
+ 	sldi	rADDR1, rCHAR1, 2
+@@ -427,11 +439,14 @@ L(loop1):
+ 	cmpw	cr1, rLWR1, rLWR2
+ 	crorc	4*cr1+eq,eq,4*cr1+eq
+ 	beq	cr1, L(done)
++	bdnz	L(loop1_load)
++	b	L(retnull)
++L(loop1_load):
+ 	addi	rSTR1, rSTR1, 1
+ 	addi	rSTR2, rSTR2, 1
+ 	lbz	rCHAR1, 0(rSTR1)
+ 	lbz	rCHAR2, 0(rSTR2)
+-	bdnz	L(loop1)
++	b	L(loop1)
+ #endif
+ L(done):
+ 	subf	r0, rLWR2, rLWR1
