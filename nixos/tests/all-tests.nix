@@ -626,7 +626,7 @@ in
   etebase-server = runTest ./etebase-server.nix;
   etesync-dav = runTest ./etesync-dav.nix;
   evcc = runTest ./evcc.nix;
-  extra-initrd = import ./extra-initrd.nix { inherit runTest; };
+  extra-initrd = import ./extra-initrd.nix { inherit runTest lib; };
   facter = runTest ./facter;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = runTest ./fakeroute.nix;

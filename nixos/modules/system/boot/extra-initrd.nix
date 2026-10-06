@@ -5,8 +5,9 @@
       type = lib.types.listOf lib.types.str;
       default = [ ];
       description = ''
-        List of paths relative to the ESP that are combined with the NixOS
-        main initrd before being passed to the kernel.
+        List of paths relative to the boot partition that are combined with the NixOS
+        main initrd before being passed to the kernel. With systemd-boot this is
+        the XBOOTLDR partition when configured, otherwise the ESP.
       '';
     };
   };

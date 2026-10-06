@@ -1,4 +1,4 @@
-{ runTest }:
+{ runTest, lib }:
 let
   common =
     { config, pkgs, ... }:
@@ -50,26 +50,43 @@ let
       # the extra initrd and our initrd mount unit bound it into sysroot
       assert machine.succeed("cat /run/canary.txt").strip() == "canary"
     '';
+  systemdBootTest =
+    uki:
+    runTest (
+      { pkgs, ... }: {
+        name = "systemd-boot-extra-initrd" + lib.optionalString uki "-uki";
+
+        nodes.machine = { config, ... }: {
+          imports = [ common ];
+
+          boot.loader.systemd-boot = {
+            enable = true;
+            uki.enable = uki;
+            ${if uki then "extraPrepareCommands" else "extraInstallCommands"} = ''
+              cp ${canaryCpio pkgs} ${config.boot.loader.efi.efiSysMountPoint}/${extraInitrdPath}
+            '';
+          };
+        };
+
+        testScript =
+          lib.optionalString uki "machine.start(allow_reboot=True)\n"
+          + testScript
+          + lib.optionalString uki ''
+            machine.succeed("bootctl status | grep -F systemd-stub")
+            # A conflicting installer-CWD archive must not override the ESP file.
+            machine.succeed("printf incorrect > /root/custom.cpio")
+            machine.succeed("cd /root; /run/current-system/bin/switch-to-configuration boot")
+            machine.reboot()
+            machine.wait_for_unit("multi-user.target")
+            assert machine.succeed("cat /run/canary.txt").strip() == "canary"
+            machine.succeed("bootctl status | grep -F systemd-stub")
+          '';
+      }
+    );
 in
 {
-  systemd-boot = runTest (
-    { pkgs, ... }: {
-      name = "systemd-boot-extra-initrd";
-
-      nodes.machine = { config, ... }: {
-        imports = [ common ];
-
-        boot.loader.systemd-boot = {
-          enable = true;
-          extraInstallCommands = ''
-            cp ${canaryCpio pkgs} ${config.boot.loader.efi.efiSysMountPoint}/${extraInitrdPath}
-          '';
-        };
-      };
-
-      inherit testScript;
-    }
-  );
+  systemd-boot = systemdBootTest false;
+  systemd-boot-uki = systemdBootTest true;
 
   limine = runTest {
     name = "limine-extra-initrd";

@@ -241,6 +241,14 @@ let
     );
 in
 {
+  uki = runTestOn [ "x86_64-linux" ] (import ./systemd-boot-uki.nix { });
+  ukiSecureBoot = runTestOn [ "x86_64-linux" ] (import ./systemd-boot-uki.nix { signed = true; });
+  ukiSecureBootXbootldr = runTestOn [ "x86_64-linux" ] (
+    import ./systemd-boot-uki.nix {
+      signed = true;
+      xbootldr = true;
+    }
+  );
   defaultEntry = defaultEntry { };
   garbage-collect-entry = garbage-collect-entry { };
 

@@ -777,6 +777,9 @@ stdenv.mkDerivation (finalAttrs: {
           systemd-boot-memtestSortKey
           systemd-boot-netbootxyz
           systemd-boot-secureBoot
+          systemd-boot-uki
+          systemd-boot-ukiSecureBoot
+          systemd-boot-ukiSecureBootXbootldr
           systemd-boot-specialisation
           systemd-boot-switch-test
           systemd-boot-update
