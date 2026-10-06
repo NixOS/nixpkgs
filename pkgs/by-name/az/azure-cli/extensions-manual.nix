@@ -380,6 +380,7 @@
   adp = throw "The 'adp' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8038
   akshybrid = throw "The 'akshybrid' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/8955
   appservice-kube = throw "The 'appservice-kube' extensions for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/10036
+  arize-ai = throw "The 'arize-ai' extension for azure-cli was removed upstream"; # Added 2026-10-06, https://github.com/Azure/azure-cli-extensions/pull/10297
   astronomer = throw "The 'astronomer' extension for azure-cli was removed upstream"; # Added 2026-10-06, https://github.com/Azure/azure-cli-extensions/pull/10201
   azurestackhci = throw "The 'azurestackhci' extension for azure-cli was deprecated upstream"; # Added 2025-07-01, https://github.com/Azure/azure-cli-extensions/pull/8898
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26, https://github.com/Azure/azure-cli-extensions/pull/7370
