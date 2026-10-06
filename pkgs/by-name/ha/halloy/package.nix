@@ -101,7 +101,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p "$APP_DIR/MacOS"
     cp -r ${finalAttrs.src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
-    substituteInPlace "$APP_DIR/Info.plist" \
+    substitute \
+      "${finalAttrs.src}/assets/macos/Info.plist.in" \
+      "$APP_DIR/Info.plist" \
       --replace-fail "{{ VERSION }}" "${finalAttrs.version}" \
       --replace-fail "{{ BUILD }}" "${finalAttrs.version}-nixpkgs"
 
