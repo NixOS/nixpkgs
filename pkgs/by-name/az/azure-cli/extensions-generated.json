@@ -456,9 +456,9 @@
   },
   "documentdb": {
     "pname": "documentdb",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/documentdb-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-0ZbE9sj2y12PfLmkTb6H+4d/Qp86GWDuwEpacwKo9BE=",
+    "version": "1.1.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/documentdb-1.1.0b1-py3-none-any.whl",
+    "hash": "sha256-Ljm34pi/Abz6i8K4YfW5QktDU7NyJfGKGS6jf2t3ti4=",
     "description": "Microsoft Azure Command-Line Tools Documentdb Extension"
   },
   "durabletask": {
