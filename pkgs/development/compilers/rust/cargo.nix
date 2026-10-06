@@ -11,6 +11,8 @@
   openssl,
   cmake,
   zlib,
+  libgit2,
+  sqlite,
   installShellFiles,
   makeWrapper,
   rustPlatform,
@@ -72,6 +74,8 @@ rustPlatform.buildRustPackage.override
       python3
       openssl
       zlib
+      libgit2
+      sqlite
     ];
 
     env = {
