@@ -743,9 +743,9 @@
   },
   "log-analytics": {
     "pname": "log-analytics",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/log_analytics-1.0.0b1-py2.py3-none-any.whl",
-    "hash": "sha256-zNNqjKaXnFSdt9f9eACZB+nnvCsJQ3iF292LEHyxW2Y=",
+    "version": "1.0.0b3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/log_analytics-1.0.0b3-py2.py3-none-any.whl",
+    "hash": "sha256-01o0tdGh6YI/2Z53D5+GU7jLR4OlqWHiWz/R5iQ296k=",
     "description": "Support for Azure Log Analytics query capabilities"
   },
   "log-analytics-solution": {
