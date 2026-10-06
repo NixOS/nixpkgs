@@ -11,13 +11,11 @@
   unzip,
   xdg-utils,
   jp-zip-codes,
+  jawiki-all-titles-in-ns0,
+  writers,
   dictionaries ? [ ],
-  merge-ut-dictionaries,
 }:
 
-let
-  ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
-in
 buildBazelPackage rec {
   pname = "mozc";
   version = "2.30.5544.102"; # make sure to update protobuf if needed
@@ -94,9 +92,18 @@ buildBazelPackage rec {
   preConfigure = ''
     cd src
   ''
-  + lib.optionalString (dictionaries != [ ]) ''
-    cat ${ut-dictionary}/mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
-  '';
+  + lib.optionalString (dictionaries != [ ]) (
+    let
+      merge-dictionaries = writers.writePython3 "merge-mozc-ut-dictionaries" { } ./merge-dictionaries.py;
+    in
+    ''
+      # Use this exact Mozc source so duplicate filtering and context IDs match.
+      ${merge-dictionaries} mozcdic-ut.txt \
+        ${src} ${jawiki-all-titles-in-ns0}/jawiki-all-titles-in-ns0.gz \
+        ${lib.concatMapStringsSep " " (dictionary: "${dictionary}/mozcdic-ut-*.txt*.bz2") dictionaries}
+      cat mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
+    ''
+  );
 
   buildAttrs.installPhase = ''
     runHook preInstall
