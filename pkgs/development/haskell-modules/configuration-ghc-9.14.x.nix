@@ -104,6 +104,12 @@ with haskellLib;
   ormolu = doDistribute self.ormolu_0_9_0_0;
   fourmolu = doDistribute self.fourmolu_0_20_1_0;
 
+  # Each LiquidHaskell release supports only one GHC major version
+  liquid-fixpoint = doDistribute self.liquid-fixpoint_0_9_6_3_7;
+  liquid-prelude = doDistribute self.liquid-prelude_0_9_14_1;
+  liquidhaskell = doDistribute self.liquidhaskell_0_9_14_1_1;
+  liquidhaskell-boot = doDistribute self.liquidhaskell-boot_0_9_14_1_1;
+
   inherit
     (
       let
