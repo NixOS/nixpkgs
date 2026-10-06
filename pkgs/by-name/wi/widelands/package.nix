@@ -18,6 +18,7 @@
   icu,
   installShellFiles,
   libpng,
+  lua,
   python3,
   zlib,
   minizip,
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
     glew
     icu
     libpng
+    lua
     python3
     zlib
     minizip

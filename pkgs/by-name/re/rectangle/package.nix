@@ -1,5 +1,6 @@
 {
   lib,
+  apple-sdk_26,
   fetchFromGitHub,
   darwin,
   actool,
@@ -43,7 +44,7 @@ let
       {
         CFBundleInfoDictionaryVersion = "6.0";
         CFBundlePackageType = "APPL";
-        LSMinimumSystemVersion = "10.15";
+        LSMinimumSystemVersion = "14.0";
         NSMainStoryboardFile = "Main";
         NSPrincipalClass = "NSApplication";
       }
@@ -121,25 +122,16 @@ let
       SUPublicEDKey = "lpt9M3PhocbZ3MZiLH+crEqRfU11kfoNzGxSqiEIdvM=";
       SUScheduledCheckInterval = 172800;
     };
-
-  launcherInfoPlist = mkAppPlist {
-    CFBundleExecutable = "RectangleLauncher";
-    CFBundleIdentifier = "com.knollsoft.RectangleLauncher";
-    CFBundleName = "RectangleLauncher";
-    CFBundleShortVersionString = "1.0";
-    CFBundleVersion = "1";
-    LSBackgroundOnly = true;
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rectangle";
-  version = "1.100";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "rxhanson";
     repo = "Rectangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QfOsZ7VR750zat2xuZba3/HiJ6LID2Qxc7tmW9cAgFA=";
+    hash = "sha256-A/wQd68hXckjW7YrS9FnX91cvC0qgFg/AMNe9nnlWgU=";
   };
 
   nativeBuildInputs = [
@@ -149,6 +141,22 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.autoSignDarwinBinariesHook
     makeWrapper
   ];
+
+  buildInputs = [
+    apple-sdk_26
+  ];
+
+  postPatch = ''
+    # Requires the macOS 27 SDK, whose Swift interfaces are too new for our Swift
+    substituteInPlace Rectangle/AppDelegate.swift \
+      --replace-fail "newMenuItem.preferredImageVisibility = .visible" ""
+
+    # Annotate the closure type, otherwise the type checker times out
+    substituteInPlace Rectangle/MultiWindow/GridTiling.swift \
+      --replace-fail \
+        "let candidates = (0..<stages.count).map { step in" \
+        "let candidates = (0..<stages.count).map { (step: Int) -> Int in"
+  '';
 
   dontConfigure = true;
 
@@ -216,14 +224,6 @@ stdenv.mkDerivation (finalAttrs: {
       -Xlinker -rpath -Xlinker "@executable_path/../Frameworks" \
       "''${rectSwiftFiles[@]}" -o "$buildDir/Rectangle"
 
-    nixLog "compiling RectangleLauncher"
-    swiftc "''${commonSwiftFlags[@]}" -emit-executable \
-      -module-name RectangleLauncher \
-      -parse-as-library \
-      -framework AppKit \
-      RectangleLauncher/AppDelegate.swift \
-      -o "$buildDir/RectangleLauncher"
-
     runHook postBuild
   '';
 
@@ -283,15 +283,6 @@ stdenv.mkDerivation (finalAttrs: {
       --platform macosx --minimum-deployment-target 14.0 \
       --app-icon AppIcon --output-partial-info-plist /dev/null \
       Rectangle/Assets.xcassets
-
-    # RectangleLauncher.app
-    ${mkAppBundle {
-      name = "RectangleLauncher";
-      binary = "$buildDir/RectangleLauncher";
-      sourceDir = "RectangleLauncher";
-      plist = launcherInfoPlist;
-      destDir = "$app/Contents/Library/LoginItems";
-    }}
 
     makeWrapper "$app/Contents/MacOS/Rectangle" "$out/bin/rectangle"
 
