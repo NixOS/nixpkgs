@@ -166,12 +166,14 @@ in
           type = str;
           default = "localhost";
           description = ''
-            Hostname of the database to connect to.
+            Hostname of the database to connect to, or the path of a Unix
+            socket to connect through using socket authentication.
 
-            For PostgreSQL, this can also be a path to a Unix socket
-            directory (e.g., `/run/postgresql`) to use peer authentication.
-            This requires adding `junixsocket-common` and `junixsocket-native-common`
-            to [](#opt-services.keycloak.plugins).
+            For PostgreSQL, a socket path is the directory containing the
+            socket (e.g. `/run/postgresql`). For MySQL and MariaDB, it is the
+            socket file itself (e.g. `/run/mysqld/mysqld.sock`). The
+            `junixsocket` plugins needed for PostgreSQL and MySQL socket
+            connections are added automatically.
           '';
         };
 
@@ -265,8 +267,8 @@ in
           description = ''
             The path to a file containing the database password.
 
-            Not required when using Unix socket authentication (peer auth)
-            by setting `host` to a socket path like `/run/postgresql`.
+            Not required if [](#opt-services.keycloak.database.host) is a Unix
+            socket path.
           '';
         };
       };
@@ -446,6 +448,7 @@ in
           "mysql"
           "mariadb"
         ];
+      isUnixSocket = hasPrefix "/" cfg.database.host;
 
       mySqlCaKeystore = pkgs.runCommand "mysql-ca-keystore" { } ''
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
@@ -518,7 +521,16 @@ in
           ++ (with cfg.package.plugins; [
             quarkus-systemd-notify
             quarkus-systemd-notify-deployment
-          ]);
+          ])
+          # the MariaDB driver supports Unix sockets natively
+          ++ optionals (isUnixSocket && cfg.database.type != "mariadb") (
+            with cfg.package.plugins;
+            [
+              junixsocket-common
+              junixsocket-native-common
+            ]
+            ++ optionals (cfg.database.type == "mysql") [ junixsocket-mysql ]
+          );
       };
     in
     mkIf cfg.enable {
@@ -564,10 +576,10 @@ in
           '';
         }
         {
-          assertion = cfg.database.passwordFile != null || hasPrefix "/" cfg.database.host;
+          assertion = !isUnixSocket -> cfg.database.passwordFile != null;
           message = ''
-            services.keycloak.database.passwordFile must be set unless using
-            Unix socket authentication (host starting with /).
+            services.keycloak.database.passwordFile must be set when connecting over TCP
+            (services.keycloak.database.host not starting with /).
           '';
         }
       ];
@@ -603,9 +615,13 @@ in
           dbName = if databaseActuallyCreateLocally then "keycloak" else cfg.database.name;
           dbProps = if cfg.database.type == "postgresql" then postgresParams else mariadbParams;
 
-          # Unix socket connection requires junixsocket library and special JDBC URL
-          isUnixSocket = hasPrefix "/" cfg.database.host;
-          unixSocketUrl = "jdbc:postgresql://localhost/${dbName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=${cfg.database.host}/.s.PGSQL.${toString cfg.database.port}&sslMode=disable";
+          unixSocketUrl =
+            {
+              postgresql = "jdbc:postgresql://localhost/${dbName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=${cfg.database.host}/.s.PGSQL.${toString cfg.database.port}&sslMode=disable";
+              mariadb = "jdbc:mariadb://address=(localSocket=${cfg.database.host})/${dbName}";
+              mysql = "jdbc:mysql://localhost/${dbName}?socketFactory=org.newsclub.net.mysql.AFUNIXDatabaseSocketFactoryCJ&junixsocket.file=${cfg.database.host}&sslMode=DISABLED";
+            }
+            .${cfg.database.type};
         in
         mkMerge [
           {

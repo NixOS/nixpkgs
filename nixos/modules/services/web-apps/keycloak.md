@@ -41,7 +41,7 @@ External database access can also be configured by setting
 appropriate. Note that you need to manually create the database
 and allow the configured database user full access to it.
 
-[](#opt-services.keycloak.database.passwordFile)
+When connecting over TCP, [](#opt-services.keycloak.database.passwordFile)
 must be set to the path to a file containing the password used
 to log in to the database. If [](#opt-services.keycloak.database.host)
 and [](#opt-services.keycloak.database.createLocally)
@@ -56,27 +56,10 @@ paths are copied into the world readable Nix store.
 
 ## Unix socket authentication {#module-services-keycloak-unix-socket}
 
-For PostgreSQL, Keycloak can connect via Unix socket using peer
-authentication, avoiding the need for a database password.
+Keycloak can connect via Unix socket, avoiding the need for a database password.
 
-To use Unix sockets, set [](#opt-services.keycloak.database.host)
-to the PostgreSQL socket directory (e.g., `/run/postgresql`) and
-add the required junixsocket plugins:
-```nix
-{
-  services.keycloak = {
-    database.host = "/run/postgresql";
-    plugins = with pkgs.keycloak.plugins; [
-      junixsocket-common
-      junixsocket-native-common
-    ];
-  };
-}
-```
-
-::: {.note}
-Unix socket authentication is only supported for PostgreSQL.
-:::
+To use Unix sockets with an external database, set [](#opt-services.keycloak.database.host)
+to the socket directory for PostgreSQL (e.g., `/run/postgresql`) or the socket file for MySQL and MariaDB (e.g., `/run/mysqld/mysqld.sock`). The required junixsocket plugins are added automatically.
 
 ## Hostname {#module-services-keycloak-hostname}
 
