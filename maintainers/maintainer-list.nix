@@ -12499,6 +12499,12 @@
     githubId = 71222764;
     name = "Isabel Roses";
   };
+  isac322 = {
+    name = "Byeonghoon Yoo";
+    email = "bhyoo@bhyoo.com";
+    github = "isac322";
+    githubId = 4602209;
+  };
   isaozler = {
     email = "isaozler@gmail.com";
     github = "isaozler";
