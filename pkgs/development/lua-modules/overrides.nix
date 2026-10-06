@@ -318,6 +318,20 @@ in
       # https://github.com/lgi-devs/lgi/pull/361
       # https://github.com/NixOS/nixpkgs/issues/523345
       ./lgi/glib-2.88.patch
+
+      # Lua 5.4 and 5.5 support, unreleased since 0.9.2; drop with the next release.
+      # https://github.com/lgi-devs/lgi/pull/249
+      (fetchpatch {
+        name = "lgi-lua-5.4-lua_resume.patch";
+        url = "https://github.com/lgi-devs/lgi/commit/5cfd42c386d3adae6d211fbb4011179c3c141b04.patch";
+        hash = "sha256-lpCkRzLy5V540COJkQatjCVR2Y/ThcgswgwxWpmLcyM=";
+      })
+      # https://github.com/lgi-devs/lgi/pull/359
+      (fetchpatch {
+        name = "lgi-lua-5.5-loop-variable.patch";
+        url = "https://github.com/lgi-devs/lgi/commit/1953ef7f9178671c4ef878ecf2482da6eb493251.patch";
+        hash = "sha256-gwcf4sb6mugohcWq2C3sc8L3BDS3QCGmNhLHUkz8+/k=";
+      })
     ];
 
     # https://github.com/lgi-devs/lgi/pull/300
@@ -330,12 +344,6 @@ in
     preConfigure = ''
       make rock
     '';
-
-    # Lua 5.4 support is experimental at the moment, see
-    # https://github.com/lgi-devs/lgi/pull/249
-    meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4";
-    };
   });
 
   ljsyscall = prev.ljsyscall.overrideAttrs (old: rec {
