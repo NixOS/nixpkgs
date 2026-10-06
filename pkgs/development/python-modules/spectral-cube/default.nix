@@ -69,7 +69,11 @@ buildPythonPackage rec {
     "test_reproject_3D_memory"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # This test fails with "Passing a non-Collection iterable to parametrize is deprecated".
+    "spectral_cube/tests/test_casafuncs.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # On x86_darwin, this test fails with "Fatal Python error: Aborted"
     # when sandbox = true.
     "spectral_cube/tests/test_visualization.py"

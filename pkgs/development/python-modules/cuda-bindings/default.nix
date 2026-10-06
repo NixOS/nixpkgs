@@ -23,6 +23,7 @@
   pytest-benchmark,
   pytestCheckHook,
   util-linux,
+  pyglet,
 
   # passthru
   cuda-bindings,
@@ -188,6 +189,7 @@ buildPythonPackage (finalAttrs: {
     # some tests
     cuda-pathfinder
 
+    pyglet
     pytest-benchmark
     util-linux # findmnt
   ];
