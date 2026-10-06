@@ -7,8 +7,6 @@
   pkg-config,
   asciidoctor,
   openssl,
-  ansi2html,
-  less,
   installShellFiles,
   makeWrapper,
   fzf,
@@ -40,7 +38,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ujwqV0LSHxW9lWigHr7B6CeSL3PAVWgc2g4ZggNpHJg=";
 
   nativeCheckInputs = [
-    ansi2html
     # mdpick test pipes through `less -r`
     # Upstream fix: https://github.com/BIRSAx2/mdcat/pull/54
     # Can be removed when upstream is merged and released
