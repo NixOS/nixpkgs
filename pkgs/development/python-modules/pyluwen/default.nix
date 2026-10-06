@@ -38,6 +38,13 @@ buildPythonPackage (finalAttrs: {
     sed -i '0,/version = /{s/version = "*.*.*"/version = "${finalAttrs.version}"/g}' Cargo.toml
   '';
 
+  maturinBuildFlags = [
+    "--features"
+    "abi3-py311"
+  ];
+
+  env.PYO3_USE_ABI3_FORWARD_COMPATIBILITY = "1";
+
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
@@ -45,6 +52,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   build-system = [ maturin ];
+
+  pythonImportsCheck = [ "pyluwen" ];
 
   meta = {
     description = "Tenstorrent system interface library";
