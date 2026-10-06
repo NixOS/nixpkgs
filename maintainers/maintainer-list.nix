@@ -18683,7 +18683,8 @@
   };
   me-and = {
     name = "Adam Dinwoodie";
-    email = "nix.thunder.wayne@post.dinwoodie.org";
+    email = "adam@dinwoodie.org";
+    matrix = "@me_and:matrix.org";
     github = "me-and";
     githubId = 1397507;
   };
