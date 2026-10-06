@@ -75,8 +75,6 @@ in
   testAmazon2023Image = makeImageTestScript diskImages.amazon2023x86_64;
 
   # Debian-based distros
-  testDebian11i386Image = makeImageTestScript diskImages.debian11i386;
-  testDebian11x86_64Image = makeImageTestScript diskImages.debian11x86_64;
   testDebian12i386Image = makeImageTestScript diskImages.debian12i386;
   testDebian12x86_64Image = makeImageTestScript diskImages.debian12x86_64;
   testDebian13i386Image = makeImageTestScript diskImages.debian13i386;

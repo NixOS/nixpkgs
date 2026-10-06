@@ -1415,28 +1415,6 @@ let
       ];
     };
 
-    debian11i386 = {
-      name = "debian-11.11-bullseye-i386";
-      fullName = "Debian 11.11 Bullseye (i386)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bullseye/main/binary-i386/Packages.xz";
-        hash = "sha256-kUg1VBUO6co/5bKloxncta49191oCeF05Hm399+UuDA=";
-      };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
-      packages = commonDebianPackages;
-    };
-
-    debian11x86_64 = {
-      name = "debian-11.11-bullseye-amd64";
-      fullName = "Debian 11.11 Bullseye (amd64)";
-      packagesList = fetchurl {
-        url = "https://snapshot.debian.org/archive/debian/20260105T082626Z/dists/bullseye/main/binary-amd64/Packages.xz";
-        hash = "sha256-HDQFREKX6thkcRwY5kvOSBDbY7SDQKL52BGC2fI1rXE=";
-      };
-      urlPrefix = "https://snapshot.debian.org/archive/debian/20260105T082626Z";
-      packages = commonDebianPackages;
-    };
-
     debian12i386 = {
       name = "debian-12.12-bookworm-i386";
       fullName = "Debian 12.12 Bookworm (i386)";
