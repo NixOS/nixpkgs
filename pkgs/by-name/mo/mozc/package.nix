@@ -100,7 +100,7 @@ buildBazelPackage rec {
       # Use this exact Mozc source so duplicate filtering and context IDs match.
       ${merge-dictionaries} mozcdic-ut.txt \
         ${src} ${jawiki-all-titles-in-ns0}/jawiki-all-titles-in-ns0.gz \
-        ${lib.concatMapStringsSep " " (dictionary: "${dictionary}/mozcdic-ut-*.txt*.bz2") dictionaries}
+        ${lib.concatMapStringsSep " " (dictionary: "${dictionary}/mozcdic-ut-*.txt.bz2") dictionaries}
       cat mozcdic-ut.txt >> data/dictionary_oss/dictionary00.txt
     ''
   );

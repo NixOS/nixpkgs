@@ -12,9 +12,7 @@ import bz2
 import csv
 import gzip
 import html
-import io
 import sys
-import tarfile
 from pathlib import Path
 from unicodedata import normalize
 
@@ -87,23 +85,6 @@ def wikipedia_hits(path):
     return hits
 
 
-def dictionary_rows(path):
-    """Read current bzip2 files and legacy tar.bz2 dictionary archives."""
-    # Keep both formats working during package-by-package updates.
-    # Read archive members directly without filesystem extraction.
-    if path.endswith(".tar.bz2"):
-        with tarfile.open(path, "r:bz2") as archive:
-            for member in archive.getmembers():
-                if member.isfile() and member.name.endswith(".txt"):
-                    with io.TextIOWrapper(
-                        archive.extractfile(member), encoding="utf-8"
-                    ) as dictionary:
-                        yield from csv.reader(dictionary, delimiter="\t")
-    else:
-        with bz2.open(path, "rt", encoding="utf-8") as dictionary:
-            yield from csv.reader(dictionary, delimiter="\t")
-
-
 def main():
     if len(sys.argv) < 5:
         sys.exit(
@@ -118,12 +99,15 @@ def main():
     # win over all UT sources; insertion order preserves upstream's ties.
     unique = {}
     for path in dictionaries:
-        for reading, _left_id, _right_id, cost, form in dictionary_rows(path):
-            if not valid_form(form):
-                continue
-            form = normalize_form(form)
-            if (reading, form) not in known:
-                unique.setdefault((reading, form), cost)
+        with bz2.open(path, "rt", encoding="utf-8") as dictionary:
+            for reading, _left_id, _right_id, cost, form in csv.reader(
+                dictionary, delimiter="\t"
+            ):
+                if not valid_form(form):
+                    continue
+                form = normalize_form(form)
+                if (reading, form) not in known:
+                    unique.setdefault((reading, form), cost)
 
     hits = wikipedia_hits(title_dump)
     result = []
