@@ -48,6 +48,13 @@
     "hash": "sha256-z5G04SBrhpBQHYR8vkbD7BP2We96TTZ63XTtXo+X1pw=",
     "description": "Add AI powered examples to help content"
   },
+  "aimanager": {
+    "pname": "aimanager",
+    "version": "2.0.1b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/aimanager-2.0.1b1-py3-none-any.whl",
+    "hash": "sha256-o4G81vISdETEnCNmW7jNuEYZTrZXox6Sss3cYNmvtgI=",
+    "description": "Manage AI Manager resources, namespaces, and GPU-backed model deployments for Azure Kubernetes Service (AKS)"
+  },
   "aks-preview": {
     "pname": "aks-preview",
     "version": "21.0.0b13",
