@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   cmake,
   dbus,
@@ -17,14 +18,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-notifications";
-  version = "1.3.3";
+  version = "1.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-notifications";
     tag = finalAttrs.version;
-    hash = "sha256-9K9+zS2MDqARTlGH2bu363ysrCg82D53sBkKiLSXBoI=";
+    hash = "sha256-T9Diebp91kZrIt6o9acRQyn+9Hhu20YUYxf6iTntpsc=";
   };
+
+  patches = [
+    # To be removed during lomiri-api 0.4.0 bump
+    (fetchpatch {
+      name = "0001-lomiri-notifications-revert-notifications-interface-vendoring.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-notifications/-/commit/69d8d0fb6abb13c9fb909a491e4b62530c52e33d.patch";
+      revert = true;
+      hash = "sha256-HckIxUzvU99xqCYilD7PPG5LjkpILzW9benQScwWKGU=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
