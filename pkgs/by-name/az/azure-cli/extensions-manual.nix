@@ -389,6 +389,7 @@
   deidservice = throw "The 'deidservice' extension for azure-cli was moved under healthcareapis"; # Added 2024-11-19, https://github.com/Azure/azure-cli-extensions/pull/8224
   fileshares = throw "The 'fileshares' extensions for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/9910
   hdinsightonaks = throw "The 'hdinsightonaks' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/8956
+  lambda-test = throw "The 'lambda-test' extension for azure-cli was removed upstream"; # Added 2026-10-06, https://github.com/Azure/azure-cli-extensions/pull/10270
   logz = throw "The 'logz' extension for azure-cli was deprecated upstream"; # Added 2024-11-02, https://github.com/Azure/azure-cli-extensions/pull/8459
   mobile-network = throw "The 'mobile-network' extension for azure-cli was removed upstream"; # https://github.com/Azure/azure-cli-extensions/pull/9453
   neon = throw "The 'neon' extension for azure-cli was removed upstream"; # Added 2026-04-13, https://github.com/Azure/azure-cli-extensions/pull/9661
