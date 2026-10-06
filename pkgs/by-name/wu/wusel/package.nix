@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Native Nautilus extension (built by preInstall into the source dir)
-    install -Dm6445 integration/nautilus/libwusel-nautilus.so \
+    install -Dm755 integration/nautilus/libwusel-nautilus.so \
       $out/lib/nautilus/extensions-4/libwusel-nautilus.so
 
     # State emblems (cloud / cached / pinned / …) — into the cross-desktop
