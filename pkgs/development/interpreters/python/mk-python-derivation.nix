@@ -449,12 +449,17 @@ lib.extendMkDerivation {
           in
           meta.problems or { }
           // {
+            ## Public meta.problems interface for all Python packages
+
+            # Unsupported Python interpreter
             ${if disabled' then "unsupportedPython" else null} = meta.problems.unsupportedPython or { } // {
               kind = "broken";
               message =
                 meta.problems.unsupportedPython.message
                   or "${removePrefix namePrefix finalAttrs.name} not supported for interpreter ${python.executable}";
             };
+
+            ## Implementation details, subject to changes
           };
       };
     }
