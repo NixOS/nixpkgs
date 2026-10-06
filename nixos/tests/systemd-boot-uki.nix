@@ -94,7 +94,6 @@ in
       boot.loader.systemd-boot.extraPrepareCommands = ''
         printf 'disposable-legacy-fixture\n' > /root/uki-secret-legacy
       '';
-      # UKIs duplicate the initrd for each generation and specialisation.
       virtualisation.useBootLoader = lib.mkForce false;
       # The custom disk image below installs systemd-boot; suppress the
       # direct-kernel QEMU module's assumption that secrets are unsupported.

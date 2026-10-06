@@ -233,7 +233,7 @@ in
 
           Signing requires an existing systemd-boot manager signed with this
           certificate, matching {option}`systemd.package`, at both the normal
-          and fallback EFI paths. This initial implementation verifies and
+          and fallback EFI paths. The installer verifies and
           preserves those managers; it refuses manager upgrades. Key enrollment
           and manager provisioning, including firmware boot entry registration,
           are separate administrative steps. In signed mode the installer does
@@ -342,7 +342,7 @@ in
       type = types.lines;
       description = ''
         Additional shell commands run before preparing boot files and generating
-        menu entries. Use this to create boot-partition-relative archives listed in
+        menu entries. Create boot-partition-relative archives listed in
         {option}`system.boot.extraInitrd.paths` before UKI assembly, including
         during the first installation. The boot partition is XBOOTLDR when
         configured, otherwise the ESP. These commands may change extra files

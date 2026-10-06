@@ -604,7 +604,7 @@ def uki_identifier(image: PEImage) -> str:
 
 @functools.cache
 def retained_uki_candidates(work: Path) -> dict[bytes, list[Path]]:
-    # Index just the section table and command line once per installation. Large
+    # Index the section table and command line once per installation. Large
     # payloads are read only for a matching closure, never cached across images.
     candidates: dict[bytes, list[Path]] = {}
     for image in sorted((BOOT_MOUNT_POINT / NIXOS_DIR).glob("*-uki.efi")):
@@ -653,7 +653,7 @@ def check_staging_space(work: Path, required: int) -> None:
 def uki_boot_file(
     bootspec: BootSpec, work: Path, generation: int, *, critical: bool
 ) -> BootFile:
-    # Assemble privately before changing the ESP, boot manager or default.
+    # Stage images privately before publishing UKIs, entries or the default.
     directory = Path(tempfile.mkdtemp(dir=work))
     initrd = directory / "initrd"
     check_staging_space(work, bootspec.initrd.stat().st_size)
@@ -791,7 +791,6 @@ def uki_boot_file(
             or section.size != stub_payload.header.sections[name].size
         ):
             raise ValueError(f"UKI stub mismatch: {name}")
-    # Compute normalized contents once, including every executable byte.
     identifier = uki_identifier(payload)
     # Release large payload buffers before reading an installed image.
     del expected, sections, payload, stub_sections, stub_payload, contents, retained
