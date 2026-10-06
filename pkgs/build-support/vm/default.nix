@@ -1204,12 +1204,12 @@ let
       fullName = "Oracle Linux 9 (x86_64)";
       packagesLists = [
         (fetchurl {
-          url = "https://yum.oracle.com/repo/OracleLinux/OL9/baseos/latest/x86_64/repodata/bc292d67f73fc606db1872d5ba8804da06a514efe64523247035f0d3b678fb63-primary.xml.gz";
-          hash = "sha256-vCktZ/c/xgbbGHLVuogE2galFO/mRSMkcDXw07Z4+2M=";
+          url = "https://yum.oracle.com/repo/OracleLinux/OL9/baseos/latest/x86_64/repodata/016acc77aebf68eeeaf54e4186163c701f4c9410374561dfed11b515000bec77-primary.xml.gz";
+          hash = "sha256-AWrMd66/aO7q9U5BhhY8cB9MlBA3RWHf7RG1FQAL7Hc=";
         })
         (fetchurl {
-          url = "https://yum.oracle.com/repo/OracleLinux/OL9/appstream/x86_64/repodata/6fabacadf7cdf22cbb21dc296f58e6b852d5b8ec9a927e214231477ef90083f9-primary.xml.gz";
-          hash = "sha256-b6usrffN8iy7Idwpb1jmuFLVuOyakn4hQjFHfvkAg/k=";
+          url = "https://yum.oracle.com/repo/OracleLinux/OL9/appstream/x86_64/repodata/f97e5ebb6bfc1fdc0d32c29e8b4b1a302f1b1d78b24d417e12970d51cf05636f-primary.xml.gz";
+          hash = "sha256-+X5eu2v8H9wNMsKei0saMC8bHXiyTUF+EpcNUc8FY28=";
         })
       ];
       urlPrefixes = [
