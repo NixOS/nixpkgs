@@ -44,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
+  # Wrapping breaks accessibility API permissions on Darwin
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
   qmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CONFIG+=non_portable" ];
 
   postPatch = ''
@@ -64,6 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $out/Applications $out/bin
         cp -r sioyek.app $out/Applications
         ln -s $out/Applications/sioyek.app/Contents/MacOS/sioyek $out/bin/sioyek
+
+        mkdir -p $out/Applications/sioyek.app/Contents/Resources
+        ln -sfn ../MacOS/shaders $out/Applications/sioyek.app/Contents/Resources/shaders
+        ln -sfn ../MacOS/prefs.config $out/Applications/sioyek.app/Contents/Resources/prefs.config
+        ln -sfn ../MacOS/keys.config $out/Applications/sioyek.app/Contents/Resources/keys.config
+        ln -sfn ../MacOS/tutorial.pdf $out/Applications/sioyek.app/Contents/Resources/tutorial.pdf
       ''
     else
       ''
