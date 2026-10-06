@@ -142,6 +142,7 @@ let
           stdenv
           stdenvNoCC
           zstd
+          testers
           ;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath
