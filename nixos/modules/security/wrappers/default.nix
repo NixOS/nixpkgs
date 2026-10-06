@@ -300,36 +300,48 @@ in
       ];
       serviceConfig.RestrictSUIDSGID = false;
       serviceConfig.Type = "oneshot";
-      script = ''
-        chmod 755 "${parentWrapperDir}"
+      script =
+        let
+          mount = lib.getExe' pkgs.util-linux.mount "mount";
+          umount = lib.getExe' pkgs.util-linux.mount "umount";
+        in
+        ''
+          chmod 755 "${parentWrapperDir}"
 
-        # We want to place the tmpdirs for the wrappers to the parent dir.
-        metaWrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers-meta.XXXXXXXXXX)
-        ${lib.getExe' pkgs.util-linux.mount "mount"} -t tmpfs tmpfs "$metaWrapperDir" # tmpfs can later be unmounted
+          # We want to place the tmpdirs for the wrappers to the parent dir.
+          metaWrapperDirParent=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers-meta.XXXXXXXXXX)
+          ${mount} -t tmpfs tmpfs "$metaWrapperDirParent" # tmpfs can later be unmounted
+          metaWrapperDir="$metaWrapperDirParent/bin"
+          mkdir -p "$metaWrapperDir"
+          ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.opaque -v "y" "$metaWrapperDir"
 
-        ${lib.concatStringsSep "\n" mkWrappedPrograms}
+          ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
-        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-        ${lib.getExe' pkgs.util-linux.mount "mount"} -t overlay overlay -o "lowerdir=$metaWrapperDir::${builtins.storeDir},ro,metacopy=on,redirect_dir=on" "$wrapperDir"
-        ${lib.getExe' pkgs.util-linux.mount "umount"} "$metaWrapperDir" # overlayfs will keep the FD alive until it gets unmounted on switch/shutdown
-        rm --dir "$metaWrapperDir"
+          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+          # linux 6.1 does not support meta-only layers, and opaque on the root is ignored.
+          # solution: set opaque on /bin, and mount just the subdir
+          # FIXME: This is kind of a hack which needs to be cleaned up and replaced
+          # with a proper meta-only layer after linux 6.1 goes EOL in december 2027
+          ${mount} -t overlay overlay -o "lowerdir=$metaWrapperDirParent:${builtins.storeDir},ro,metacopy=on,redirect_dir=on,X-mount.subdir=/bin" "$wrapperDir"
+          ${umount} "$metaWrapperDirParent" # overlayfs will keep the FD alive until it gets unmounted on switch/shutdown
+          rm --dir "$metaWrapperDirParent"
 
-        if [ -L ${wrapperDir} ]; then
-          # Atomically replace the symlink
-          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-          old=$(readlink -f ${wrapperDir})
-          if [ -e "${wrapperDir}-tmp" ]; then
-            rm --force --recursive "${wrapperDir}-tmp"
+          if [ -L ${wrapperDir} ]; then
+            # Atomically replace the symlink
+            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+            old=$(readlink -f ${wrapperDir})
+            if [ -e "${wrapperDir}-tmp" ]; then
+              rm --force --recursive "${wrapperDir}-tmp"
+            fi
+            ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+            mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+            ${umount} --quiet "$old" # quiet in case we are switching from system that had classic wrappers as C programs
+            rm --force --recursive "$old"
+          else
+            # For initial setup
+            ln --symbolic "$wrapperDir" "${wrapperDir}"
           fi
-          ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
-          mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
-          ${lib.getExe' pkgs.util-linux.mount "umount"} --quiet "$old" # quiet in case we are switching from system that had classic wrappers as C programs
-          rm --force --recursive "$old"
-        else
-          # For initial setup
-          ln --symbolic "$wrapperDir" "${wrapperDir}"
-        fi
-      '';
+        '';
     };
 
     ###### wrappers consistency checks
