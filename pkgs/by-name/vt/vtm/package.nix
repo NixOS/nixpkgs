@@ -5,7 +5,7 @@
   cmake,
   freetype,
   harfbuzz,
-  lua5_4,
+  lua5_5,
   lunasvg,
   plutovg,
   stb,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     harfbuzz
-    lua5_4
+    lua5_5
     lunasvg
     plutovg
     stb
