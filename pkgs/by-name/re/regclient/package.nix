@@ -47,8 +47,8 @@ buildGoModule (finalAttrs: {
   postInstall = lib.concatMapStringsSep "\n" (
     bin:
     ''
-      export bin=''$${bin}
-      export outputBin=bin
+      local bin=''$${bin}
+      local outputBin=bin
 
       mkdir -p $bin/bin
       mv $out/bin/${bin} $bin/bin
@@ -61,8 +61,6 @@ buildGoModule (finalAttrs: {
     ''
     + ''
       lndir -silent $bin $out
-
-      unset bin outputBin
     ''
   ) bins;
 

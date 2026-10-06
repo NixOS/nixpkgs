@@ -9,7 +9,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bencher-cli";
-  version = "0.6.12";
+  version = "0.6.13";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "bencherdev";
     repo = "bencher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7tM35WsQfnGj/xLj8/GICsd6gELh82LP+aCwXLM9byA=";
+    hash = "sha256-QvziTC/ju+rqNZEjtZagbNfy+PwjD+vRVa7UHDJ1gVY=";
   };
 
-  cargoHash = "sha256-EuRobN0g/3iA8YqrrMV5O3WfZHNVWW6yaO6esY/uXOU=";
+  cargoHash = "sha256-i6OXpMYZXnQLO+oya1D5mikTTRGlxtqJu2DcMfhPlXc=";
 
   nativeBuildInputs = [ mold ];
   nativeInstallCheckInputs = [ versionCheckHook ];
