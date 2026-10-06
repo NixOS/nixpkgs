@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.enablePluginStatus = {
     # TODO: Change back to `true` once dcap is fixed on Darwin.
-    dcap = !dcap.meta.broken;
+    dcap = !stdenv.hostPlatform.isDarwin;
     file = true;
     gridftp = false;
     # davix-copy's dependency gsoap is currently only available on Linux.
