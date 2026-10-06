@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "traccar";
-  version = "6.15.3";
+  version = "6.16.0";
 
   src = fetchFromGitHub {
     owner = "traccar";
     repo = "traccar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ic9l5WnbsCLl+THyz9LXkTGTTwyrm3gU4IPi3B362Gc=";
+    hash = "sha256-AXTy4/LOVj5991Oij0cA5BJG3W1zmBXMS8eSza+sYaI=";
     fetchSubmodules = true;
   };
 
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/traccar-web";
-    hash = "sha256-C/jfTuFFGdGNGyoYb5fhEmsKdWb5XfsoJ388Rzh35fY=";
+    hash = "sha256-MFONdpqcb77XeZUtb49JmgufN7jpBjgqOQyzvruVm8g=";
   };
 
   preBuild = ''
