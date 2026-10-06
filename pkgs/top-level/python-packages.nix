@@ -1992,6 +1992,10 @@ self: super: with self; {
     callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup
       { };
 
+  azure-mgmt-recoveryservicesbackup-passivestamp =
+    callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup-passivestamp
+      { };
+
   azure-mgmt-redhatopenshift =
     callPackage ../development/python-modules/azure-mgmt-redhatopenshift
       { };
