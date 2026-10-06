@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  autoreconfHook,
   nettle,
 }:
 
@@ -17,11 +18,24 @@ buildOctavePackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    autoreconfHook
   ];
 
   buildInputs = [
     nettle
   ];
+
+  # autoreconfHook provides an autoreconfPhase that is run as a
+  # preconfigurePhase, which means it runs AFTER the source is un-tarred, and
+  # before buildOctavePackage's buildPhase re-tars it up into a format for later
+  # consumption by Octave's "pkg build" command.
+  preAutoreconf = ''
+    pushd src
+    rm -rf config.*
+  '';
+  postAutoreconf = ''
+    popd
+  '';
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/general/";
