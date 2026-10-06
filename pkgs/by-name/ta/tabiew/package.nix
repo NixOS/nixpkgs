@@ -3,7 +3,8 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  perl,
+  openssl,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tabiew";
@@ -20,8 +21,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    perl
+    pkg-config
   ];
+
+  buildInputs = [ openssl ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   outputs = [
     "out"
