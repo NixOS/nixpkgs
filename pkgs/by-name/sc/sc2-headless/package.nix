@@ -64,7 +64,8 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     description = "Starcraft II headless linux client for machine learning research";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "starcraft2";
       fullName = "BLIZZARD® STARCRAFT® II AI AND MACHINE LEARNING LICENSE";
       url = "https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html";
       free = false;
