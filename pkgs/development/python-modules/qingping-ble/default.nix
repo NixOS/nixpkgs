@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "qingping-ble";
-  version = "1.1.7";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "qingping-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vVIQ3TmrFVykv9rv7E8PU5pEUupGW5W1Q3dDWfUSM/s=";
+    hash = "sha256-gsoD9BtVMX+qQTsgA1iqKKjg01ebfcfBjgJFRCkX19A=";
   };
 
   build-system = [ poetry-core ];
