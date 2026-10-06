@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sview";
-  version = "26.07";
+  version = "26.09";
 
   src = fetchFromGitHub {
     owner = "gkv311";
     repo = "sview";
     tag = lib.replaceString "." "_" version;
-    hash = "sha256-Kyz+FHYpBKKAyHMEM0DTKNNIAw4/tORxeCOFOLySspY=";
+    hash = "sha256-q254Yw7uipeYHwaTYoHlK3hBveWbhtn5zguwCgqEjYE=";
   };
 
   droidSansFallback = fetchurl {

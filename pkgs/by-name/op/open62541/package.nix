@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
-  version = "1.4.17";
+  version = "1.4.20";
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EUQ/wXv1dON7MzOKmnyNUY0mTC64qUEF1++YzPC2xIo=";
+    hash = "sha256-61NhpyI03gtNh0U/RbZvm9jYA79b20+2NLt1E9oU4fc=";
     fetchSubmodules = true;
   };
 

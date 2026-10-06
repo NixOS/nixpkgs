@@ -50,6 +50,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Asserts a specific exiv2 version
     "test_version"
+    # Broken with exiv2 0.28.9, remove on next version bump
+    "test_read_raw_xmp"
+    "test_modify_raw_xmp"
+    "test_memory_leak_when_reading"
   ];
 
   pythonImportsCheck = [

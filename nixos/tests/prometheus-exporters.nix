@@ -18,6 +18,9 @@ let
     *  `metricProvider` (optional)
     *    this attribute contains additional machine config
     *
+    *  `maintainers` (optional)
+    *    maintainers for this test
+    *
     *  `nodeName` (optional)
     *    override an incompatible testnode name
     *
@@ -472,12 +475,13 @@ let
       };
 
     fail2ban =
-      { ... }:
+      { pkgs, ... }:
       {
-        testBackend = "nodes"; # setfacl
         exporterConfig = {
           enable = true;
           exitOnError = true;
+          username = "fail2ban-web";
+          passwordFile = pkgs.writeText "fail2ban-password" "hunter2";
         };
         metricProvider = {
           services.fail2ban.enable = true;
@@ -486,7 +490,9 @@ let
           wait_for_unit("fail2ban.service")
           wait_for_unit("prometheus-fail2ban-exporter.service")
           wait_for_open_port(9191)
-          succeed("curl -sSf http://localhost:9191/metrics | grep 'f2b_errors'")
+
+          fail("curl -sSf http://localhost:9191/metrics")
+          succeed("curl -sSf --user fail2ban-web:hunter2 http://localhost:9191/metrics | grep 'f2b_errors'")
         '';
       };
 
@@ -593,8 +599,9 @@ let
       };
 
     ipmi =
-      { ... }:
+      { pkgs, ... }:
       {
+        maintainers = pkgs.freeipmi.meta.maintainers;
         exporterConfig = {
           enable = true;
         };
@@ -1400,26 +1407,23 @@ let
           settings = {
             targets = [
               {
-                "localhost" = {
-                  alias = "local machine";
-                  env = "prod";
-                  type = "domain";
-                };
+                host = "localhost";
+                alias = "local machine";
+                env = "prod";
+                type = "domain";
               }
               {
-                "127.0.0.1" = {
-                  alias = "local machine";
-                  type = "v4";
-                };
+                host = "127.0.0.1";
+                alias = "local machine";
+                type = "v4";
               }
               {
-                "::1" = {
-                  alias = "local machine";
-                  type = "v6";
-                };
+                host = "::1";
+                alias = "local machine";
+                type = "v6";
               }
               {
-                "google.com" = { };
+                host = "google.com";
               }
             ];
             dns = { };
@@ -2253,7 +2257,7 @@ lib.mapAttrs (
         )}
       '';
 
-      meta.maintainers = [ ];
+      meta.maintainers = testConfig.maintainers or [ ];
     }
   ))
 ) exporterTests

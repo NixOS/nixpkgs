@@ -6,12 +6,12 @@
 }:
 let
   pname = "bazecor";
-  version = "1.9.0";
+  version = "1.10.0";
   src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       url = "https://github.com/Dygmalab/Bazecor/releases/download/v${version}/Bazecor-${version}-x64.AppImage";
-      hash = "sha256-PSzcUirHoUJtNRSHw/53f+eGK7IgU1JnRcLuArMZJ+w=";
+      hash = "sha256-tdkuZ7YIdHetdLi5EUk9HMvW0mW0Oqsb28xseises2Q=";
     };
 
     # Workaround for https://github.com/Dygmalab/Bazecor/issues/370
@@ -19,8 +19,8 @@ let
       substituteInPlace \
         $out/usr/lib/bazecor/resources/app/.webpack/main/index.js \
         --replace-fail \
-          'checkUdev=()=>{try{if(l.default.existsSync(h))return l.default.readFileSync(h,"utf-8").trim()===f.trim()}catch(e){d.default.error(e)}return!1}' \
-          'checkUdev=()=>{return 1}'
+          't.checkUdev=()=>{try{if(l.default.existsSync(f))return l.default.readFileSync(f,"utf-8").trim()===h.trim()}catch(e){d.default.error(e)}return!1}' \
+          't.checkUdev=()=>{return 1}'
     '';
   };
 in

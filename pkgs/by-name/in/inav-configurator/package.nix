@@ -79,5 +79,8 @@ stdenv.mkDerivation rec {
       wucke13
     ];
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "Uses Electron 38.7.2, EOL on 28-Jan-2026, with several known CVEs."
+    ];
   };
 }

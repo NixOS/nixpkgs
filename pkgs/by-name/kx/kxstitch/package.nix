@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "kxstitch";
-  version = "unstable-2025-08-16";
+  version = "2.2.0-unstable-2025-08-16";
 
   src = fetchgit {
     url = "https://invent.kde.org/graphics/kxstitch.git";

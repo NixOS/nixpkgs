@@ -7,9 +7,7 @@
   pname,
   meta,
   stdenv,
-  lib,
   passthru,
-  graphicsmagick,
 }:
 let
   src = fetchurl { inherit url hash; };
@@ -25,28 +23,21 @@ appimageTools.wrapType2 {
     passthru
     ;
 
-  nativeBuildInputs = [ graphicsmagick ];
-
   extraPkgs = pkgs: [ pkgs.ocl-icd ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications
+    # upstream ships pre-rendered icons for every hicolor size
+    mkdir -p $out/share/icons
+    cp -r ${appimageContents}/usr/share/icons/hicolor $out/share/icons/
 
-    # setup icons (see https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=lmstudio#n55 for how Arch solved this; approach adapted to here)
-    src_icon="${appimageContents}/usr/share/icons/hicolor/0x0/apps/lm-studio.png"
-    sizes=("16x16" "32x32" "48x48" "64x64" "128x128" "256x256")
-    for size in "''${sizes[@]}"; do
-      install -dm755 "$out/share/icons/hicolor/$size/apps"
-      gm convert "$src_icon" -resize "$size" "$out/share/icons/hicolor/$size/apps/lm-studio.png"
-    done
-
-    install -m 444 -D ${appimageContents}/lm-studio.desktop -t $out/share/applications
+    install -m 444 -D ${appimageContents}/ai.elementlabs.lmstudio.desktop \
+      -t $out/share/applications
 
     # Rename the main executable from lmstudio to lm-studio
     mv $out/bin/lmstudio $out/bin/lm-studio
 
-    substituteInPlace $out/share/applications/lm-studio.desktop \
-      --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lm-studio'
+    substituteInPlace $out/share/applications/ai.elementlabs.lmstudio.desktop \
+      --replace-fail 'Exec=AppRun %U' 'Exec=lm-studio %U'
 
     # lms cli tool
     install -m 755 ${appimageContents}/resources/app/.webpack/lms $out/bin/

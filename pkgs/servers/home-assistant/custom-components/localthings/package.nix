@@ -12,13 +12,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "mbillow";
   domain = "localthings";
-  version = "0.22.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "mbillow";
     repo = "localthings";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fgpSB+/4FXiRmOdYPheLyKkcBa/Ltp902fUQIeOOBog=";
+    hash = "sha256-/WOVkF7/crcHuNAzK+zfNkOxmk6Q+S+gOhMlydRio/o=";
   };
 
   dependencies = [

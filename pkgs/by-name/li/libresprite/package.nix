@@ -88,9 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
     done
 
-    substituteInPlace $out/share/thumbnailers/libresprite.thumbnailer \
-      --replace-fail "TryExec=libresprite-thumbnailer" "TryExec=$out/bin/libresprite-thumbnailer" \
-      --replace-fail "Exec=libresprite-thumbnailer" "Exec=$out/bin/libresprite-thumbnailer"
+    if [ -f $out/share/thumbnailers/libresprite.thumbnailer ]; then
+      substituteInPlace $out/share/thumbnailers/libresprite.thumbnailer \
+        --replace-fail "TryExec=libresprite-thumbnailer" "TryExec=$out/bin/libresprite-thumbnailer" \
+        --replace-fail "Exec=libresprite-thumbnailer" "Exec=$out/bin/libresprite-thumbnailer"
+    fi
   '';
 
   passthru.tests = {

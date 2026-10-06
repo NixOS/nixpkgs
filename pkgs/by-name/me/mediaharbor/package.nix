@@ -20,7 +20,6 @@
   pango,
   pkg-config,
   rustPlatform,
-  typescript,
   webkitgtk_4_1,
   wrapGAppsHook4,
   zlib,
@@ -59,7 +58,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     pkg-config
-    typescript
     wrapGAppsHook4
   ];
 
@@ -103,5 +101,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ idkdontaskm3 ];
     mainProgram = "mediaharbor";
+    platforms = [
+      "x86_64-linux"
+    ];
   };
 })

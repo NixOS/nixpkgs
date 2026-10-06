@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiowebostv";
-  version = "0.9.2";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aiowebostv";
     tag = "v${version}";
-    hash = "sha256-Bswq/8PvKUTSbOklJBJ/hKsEQyd+s1ZVDsKCbRN1Bc4=";
+    hash = "sha256-LtQkuAoqC6ELlcz56m0J+v8IuGGJn9SAoQsUNoL76m0=";
   };
 
   postPatch = ''

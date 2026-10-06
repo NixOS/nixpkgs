@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   flit-core,
   django,
   djangorestframework,
@@ -13,16 +12,17 @@
   django-filter,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "drf-standardized-errors";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ghazi-git";
     repo = "drf-standardized-errors";
-    tag = "v${version}";
-    hash = "sha256-OM1bTqM3yQSPuerTrq5FKTf5eKpZsF6/QgupMtnnT4Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-M1wJIsrs4cimtG3bJloIycHnogEPFpvDRD+3u7Th9uQ=";
   };
 
   build-system = [ flit-core ];
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Standardize your DRF API error responses";
     homepage = "https://github.com/ghazi-git/drf-standardized-errors";
-    changelog = "https://github.com/ghazi-git/drf-standardized-errors/releases/tag/${src.tag}";
+    changelog = "https://github.com/ghazi-git/drf-standardized-errors/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

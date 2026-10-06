@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "dosbox";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-09-05";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "dosbox-libretro";
-    rev = "4024bf0048c261db58ef98cb5e16de291c429f4e";
-    hash = "sha256-sHq4xObXvgpaEnqtjJikN8g/io6FQdZWztifzSGPdH4=";
+    rev = "988aa330d10b1423873ebfd8dcb6106df2538c44";
+    hash = "sha256-yRipBvCzDyceBI35iHFMZPpl7md5fImRAQ8Azr7z9Rs=";
   };
 
   env.CXXFLAGS = "-std=gnu++11";

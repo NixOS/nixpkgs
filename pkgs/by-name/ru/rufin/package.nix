@@ -1,20 +1,26 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   cacert,
+  cargo,
+  cmake,
   glib,
+  glib-networking,
   gettext,
   gst_all_1,
   gtk4,
   libadwaita,
+  ninja,
   pkg-config,
+  rustc,
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rufin";
-  version = "0.13.1";
+  version = "0.16.6";
 
   __structuredAttrs = true;
 
@@ -22,21 +28,30 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "screwys";
     repo = "Rufin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BCn88jedL9+5rLjwHmOIiG6Yg6EZwcDOALEJgDvzfNs=";
+    hash = "sha256-Anm5iV/cd9Qw/xolZUQD3RpOfjaU9GOPwJY4zmoJ+bA=";
   };
 
-  cargoHash = "sha256-kAti4GinC/zcAuhuQi/t/VnbY0laie9BEeUphXLc/M8=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-s+wUcvssyjL1nHTqAmqTgYe2ECxAqJyhZeD4PQg0Lu0=";
+  };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    cargo
+    cmake
     gettext
+    ninja
     pkg-config
+    rustPlatform.cargoSetupHook
+    rustc
     wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
+    glib-networking
     gtk4
     libadwaita
   ]
@@ -49,54 +64,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gst-libav
   ]);
 
-  cargoBuildFlags = [
-    "-p"
-    "rufin"
-  ];
-
   doCheck = false;
 
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  cmakeFlags = [
+    (lib.cmakeFeature "RUFIN_BUILD_IDENTITY" "stable")
+    (lib.cmakeBool "RUFIN_CARGO_FROZEN" true)
+  ];
+
   postInstall = ''
-    install -Dm644 data/japanese-readings.dic \
-      "$out/share/rufin/japanese-readings.dic"
-    install -Dm644 data/japanese-readings.LICENSE \
-      "$out/share/licenses/rufin/japanese-readings.LICENSE"
-    install -Dm644 data/io.github.screwys.Rufin.desktop \
-      "$out/share/applications/io.github.screwys.Rufin.desktop"
     substituteInPlace "$out/share/applications/io.github.screwys.Rufin.desktop" \
       --replace-fail "Exec=rufin" "Exec=$out/bin/rufin"
-    install -Dm644 data/io.github.screwys.Rufin.metainfo.xml \
-      "$out/share/metainfo/io.github.screwys.Rufin.metainfo.xml"
-    install -Dm644 data/icons/hicolor/scalable/apps/io.github.screwys.Rufin.svg \
-      "$out/share/icons/hicolor/scalable/apps/io.github.screwys.Rufin.svg"
-    install -Dm644 -t "$out/share/icons/hicolor/scalable/actions" \
-      data/icons/hicolor/scalable/actions/*.svg
-    install -Dm644 -t "$out/share/icons/hicolor/scalable/status" \
-      data/icons/hicolor/scalable/status/*.svg
-    install -Dm644 -t "$out/share/icons/hicolor/512x512/apps" \
-      data/icons/hicolor/512x512/apps/*.png
-    install -Dm644 -t "$out/share/icons/hicolor/64x64/apps" \
-      data/icons/hicolor/64x64/apps/*.png
-
-    for po_file in crates/localization/locales/*.po; do
-      if [ -f "$po_file" ]; then
-        lang="$(basename "$po_file" .po)"
-        mkdir -p "$out/share/locale/$lang/LC_MESSAGES"
-        msgfmt "$po_file" -o "$out/share/locale/$lang/LC_MESSAGES/rufin.mo"
-      fi
-    done
   '';
 
   preFixup = ''
     gappsWrapperArgs+=(
       --set-default RUFIN_LOCALEDIR "$out/share/locale"
       --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
     )
   '';
 
   meta = {
-    description = "Native GTK4/libadwaita music client for Jellyfin, Subsonic, Navidrome and local libraries written in Rust";
+    description = "Native music player for Jellyfin, Navidrome/OpenSubsonic, Plex, and Emby servers;  local folders,  WebDAV including a direct Nextcloud browser login path, Samba and NAS shares";
     homepage = "https://github.com/screwys/Rufin";
     changelog = "https://github.com/screwys/Rufin/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;

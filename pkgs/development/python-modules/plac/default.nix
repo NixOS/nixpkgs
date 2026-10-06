@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plac";
-  version = "1.4.6";
+  version = "1.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ialbert";
     repo = "plac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5bYQaZwojGSsfVvF4gkYczpUF77IdptFq1wG2vA4km4=";
+    hash = "sha256-KlUxM/3ZywwiNbDB6fDfGbOopQCibvTAWKm3Mgkfuao=";
   };
 
   build-system = [ setuptools ];

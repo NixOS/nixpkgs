@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-vector-stores-faiss";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_faiss";
     inherit (finalAttrs) version;
-    hash = "sha256-AL/rbLdXHg6FZWbLTxDIm0FbYQjxUdmtSO6cMdpWP14=";
+    hash = "sha256-ZTHrDeP72ogqFuRCvu7tWQIJxf16CfLPI1l32U6X/WM=";
   };
 
   build-system = [ hatchling ];

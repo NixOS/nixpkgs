@@ -3,6 +3,7 @@
   callPackage,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
   pnpm_10,
   fetchPnpmDeps,
@@ -30,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.22.1";
+  version = "2.22.3";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CpbCXmvfwXT16ZG/6fwPWSjBwK02ykJ/GuZk1VcW+tU=";
+    hash = "sha256-gXG0ojLIT28aAYXhpMmR9Oksmdfidr4m6M7PDJWwa1c=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -44,11 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
-      patches
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-NrglT9vtDMAYXmZ4G3vifvLXu1yS6xbp+cqE6B6vQFc=";
+    hash = "sha256-oY59X+Ma23fmw6K6/PuHCn5Jj4xFPLq5vJRVIzrpUrM=";
   };
 
   nativeBuildInputs = [
@@ -57,11 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm
     python3
     makeWrapper
-  ];
-
-  patches = [
-    # Make Heroic create Steam shortcuts (to non-steam games) with the correct path to heroic.
-    ./fix-non-steam-shortcuts.patch
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -133,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit epic-integration;
+    updateScript = nix-update-script { };
   };
 
   meta = {

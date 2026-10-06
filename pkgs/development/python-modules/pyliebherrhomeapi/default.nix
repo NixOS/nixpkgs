@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyliebherrhomeapi";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mettolen";
     repo = "pyliebherrhomeapi";
     tag = finalAttrs.version;
-    hash = "sha256-j6hdzgGMG3A2WS6nScUC65buRuhDjiNLz57Dv5hBAOs=";
+    hash = "sha256-Nejr9rSG+FNpIbTMUXcb36+LCzjLzdk8zHUFmWu2uuM=";
   };
 
   build-system = [ setuptools ];

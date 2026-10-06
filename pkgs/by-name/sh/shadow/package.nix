@@ -68,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLibbsd libbsd
   ++ lib.optional withTcb tcb;
 
+  strictDeps = true;
+
   patches = [
     # Don't set $PATH to /bin:/usr/bin but inherit the $PATH of the caller.
     ./keep-path.patch
@@ -126,6 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences = lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
   ) stdenv.shellPackage;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://github.com/shadow-maint/shadow";

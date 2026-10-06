@@ -6,21 +6,21 @@
   glib,
   gobject-introspection,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   pango,
   webkitgtk_4_1,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rednotebook";
-  version = "2.42";
+  version = "2.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-4e3LvBVrhqzNja9kOZ5xJVYvwjGkKNvIuXou4YfD6w4=";
+    sha256 = "sha256-s80s5saJCNkuOGgdA7rVMLinBYOcq8h8MPR6lquOHSw=";
   };
 
   # We have not packaged tests.
@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gdk-pixbuf
     glib
     gtk3
-    gtksourceview
+    gtksourceview3
     pango
     webkitgtk_4_1
   ]

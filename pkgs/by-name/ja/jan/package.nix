@@ -11,7 +11,6 @@
 }:
 
 let
-  pname = "Jan";
   version = "0.8.4";
 
   darwin-src = fetchzip {
@@ -25,7 +24,8 @@ let
   };
 
   appimageContents = appimageTools.extract {
-    inherit pname version;
+    pname = "Jan";
+    inherit version;
     src = linux-src;
   };
 
@@ -45,7 +45,8 @@ let
   };
 
   linux = appimageTools.wrapType2 {
-    inherit pname version;
+    pname = "Jan";
+    inherit version;
     src = linux-src;
 
     extraInstallCommands = ''
@@ -53,17 +54,17 @@ let
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
 
-    extraPkgs =
-      pkgs:
-      lib.optionals cudaSupport [
-        cudaPackages.cudatoolkit
-      ];
+    extraPkgs = pkgs: lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
     inherit passthru meta;
   };
 
   darwin = stdenvNoCC.mkDerivation {
-    inherit pname version;
+    pname = "Jan";
+    inherit version;
+
+    strictDeps = true;
+    __structuredAttrs = true;
 
     src = darwin-src;
 
@@ -76,11 +77,11 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications/${pname}.app
+      mkdir -p $out/Applications/Jan.app
       mkdir -p $out/bin
-      cp -R $src/. $out/Applications/${pname}.app/
-      if [ -x "$out/Applications/${pname}.app/Contents/MacOS/${pname}" ]; then
-        makeWrapper "$out/Applications/${pname}.app/Contents/MacOS/${pname}" $out/bin/${pname}
+      cp -R $src/. $out/Applications/Jan.app/
+      if [ -x "$out/Applications/Jan.app/Contents/MacOS/Jan" ]; then
+        makeWrapper "$out/Applications/Jan.app/Contents/MacOS/Jan" $out/bin/Jan
       fi
 
       runHook postInstall

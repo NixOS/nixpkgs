@@ -11,10 +11,7 @@
   doxygen,
   dpkg,
   gettext,
-  gnutls,
   gtest,
-  libgcrypt,
-  libgpg-error,
   libseccomp,
   libtasn1,
   libxslt,
@@ -75,10 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     db
     dpkg
-    gnutls
     gtest
-    libgcrypt
-    libgpg-error
     libseccomp
     libtasn1
     lz4
@@ -96,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeOptionType "filepath" "BERKELEY_INCLUDE_DIRS" "${lib.getDev db}/include")
     (lib.cmakeOptionType "filepath" "DPKG_DATADIR" "${dpkg}/share/dpkg")
     (lib.cmakeOptionType "filepath" "DOCBOOK_XSL" "${docbook_xsl}/share/xml/docbook-xsl")
-    (lib.cmakeOptionType "filepath" "GNUTLS_INCLUDE_DIR" "${lib.getDev gnutls}/include")
     (lib.cmakeFeature "DROOT_GROUP" "root")
     (lib.cmakeBool "USE_NLS" withNLS)
     (lib.cmakeBool "WITH_DOC" withDocs)

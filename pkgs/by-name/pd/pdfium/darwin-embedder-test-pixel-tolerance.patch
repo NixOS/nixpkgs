@@ -1,13 +1,15 @@
 --- a/testing/embedder_test.cpp
 +++ b/testing/embedder_test.cpp
-@@ -1180,7 +1180,9 @@ void EmbedderTest::CompareBitmapWithExpectationSuffix(
-
+@@ -1155,6 +1155,11 @@ void EmbedderTest::CompareBitmapWithExpectationSuffix(
      SCOPED_TRACE(testing::Message()
                   << "CompareBitmapWithExpectationSuffix() with " << png_path);
--    CompareBitmapToPngFile(bitmap, png_path, max_pixel_per_channel_delta);
-+    CompareBitmapToPngFile(
-+        bitmap, png_path,
-+        std::max(max_pixel_per_channel_delta, GetPlatformMaxPixelDelta()));
+-    CompareBitmapToPngFile(bitmap, png_path, options);
++    DiffOptions adjusted_options = options;
++#if BUILDFLAG(IS_MAC)
++    adjusted_options.max_pixel_per_channel_delta =
++        std::max(adjusted_options.max_pixel_per_channel_delta, 1);
++#endif
++    CompareBitmapToPngFile(bitmap, png_path, adjusted_options);
      if (EmbedderTestEnvironment::GetInstance()->write_pngs()) {
        WriteBitmapToPng(bitmap, png_path);
      }

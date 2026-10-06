@@ -2,20 +2,35 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dipc";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "doprz";
     repo = "dipc";
-    rev = "b111b8cb997e3337974f861f44a73b557fb3c294";
-    hash = "sha256-qP7LRwNIM92p5xQeuvQ03kwBM/HnRH+BniiKeYoihKw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sK4wyrEr1RCdug6uDjFQvMlZzrhPAcXi6yTiiWiPQcc=";
   };
 
-  cargoHash = "sha256-F6EYnkquvTsw4C7rl28Y1h9i9ChGccwZGkYSVrsEhVk=";
+  cargoHash = "sha256-BCJXROjsaztzv6HWi1+i2GYCoeEgdXbYrEjpEdUvGFg=";
+
+  patches = [
+    # TODO: Remove it once it goes to the next version (>1.2.0)
+    # feat(theme): add Kanagawa theme (#45)
+    (fetchpatch {
+      name = "kanagawa-theme";
+      url = "https://github.com/doprz/dipc/commit/e5a7d851117ccef1250f2a7999ab05dfd9538c53.patch";
+      hash = "sha256-OteBFaRT+HdDtWNe5nLaoIgNjapzNOdZfAttOA7G+2E=";
+    })
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Convert your favorite images and wallpapers with your favorite color palettes/themes";
@@ -30,4 +45,4 @@ rustPlatform.buildRustPackage {
     ];
     mainProgram = "dipc";
   };
-}
+})

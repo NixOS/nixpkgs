@@ -5,7 +5,7 @@ index b02fa4438..23e8704ed 100644
 @@ -5,31 +5,7 @@ import "core:c"
  RAYGUI_SHARED :: #config(RAYGUI_SHARED, false)
  RAYGUI_WASM_LIB :: #config(RAYGUI_WASM_LIB, "wasm/libraygui.a")
-
+ 
 -when ODIN_OS == .Windows {
 -	foreign import lib {
 -		"windows/rayguidll.lib" when RAYGUI_SHARED else "windows/raygui.lib",
@@ -32,17 +32,17 @@ index b02fa4438..23e8704ed 100644
 -	foreign import lib "system:raygui"
 -}
 +foreign import lib "system:raygui"
-
+ 
  RAYGUI_VERSION :: "4.0"
-
+ 
 diff --git a/vendor/raylib/raylib.odin b/vendor/raylib/raylib.odin
-index 0a30fd72b..91a2b8bac 100644
+index 01235b6ec..3d1361945 100644
 --- a/vendor/raylib/raylib.odin
 +++ b/vendor/raylib/raylib.odin
 @@ -99,53 +99,7 @@ MAX_MATERIAL_MAPS      :: #config(RAYLIB_MAX_MATERIAL_MAPS, 12)
  RAYLIB_SHARED :: #config(RAYLIB_SHARED, false)
  RAYLIB_WASM_LIB :: #config(RAYLIB_WASM_LIB, "wasm/libraylib.web.a")
-
+ 
 -when ODIN_OS == .Windows {
 -	@(extra_linker_flags="/NODEFAULTLIB:" + ("msvcrt" when RAYLIB_SHARED else "libcmt"))
 -	foreign import lib {
@@ -59,7 +59,7 @@ index 0a30fd72b..91a2b8bac 100644
 -			// multiple copies of raylib.so, but since these bindings are for
 -			// particular version of the library, I better specify it. Ideally,
 -			// though, it's best specified in terms of major (.so.4)
--			"linux-arm64/libraylib.so.600" when RAYLIB_SHARED else "linux-arm/libraylib.a",
+-			"linux-arm64/libraylib.so.600" when RAYLIB_SHARED else "linux-arm64/libraylib.a",
 -			"system:dl",
 -			"system:pthread",
 -			"system:X11",
@@ -91,6 +91,6 @@ index 0a30fd72b..91a2b8bac 100644
 -	foreign import lib "system:raylib"
 -}
 +foreign import lib "system:raylib"
-
+ 
  VERSION_MAJOR :: 6
  VERSION_MINOR :: 0

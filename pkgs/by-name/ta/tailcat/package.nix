@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "tailcat";
-  version = "0.3.0";
+  version = "0.7.0";
 
   __structuredAttrs = true;
 
@@ -16,12 +16,28 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailcat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EwjhZzovODhW4seO3FToPLiAV+YwVbrX/u93RfbWMZ4=";
+    hash = "sha256-Hue5NZAmAf8mxFqgoDcjt7YHiROeudpAoanxSFnZkTk=";
   };
 
-  vendorHash = "sha256-3uVUHATnd2s+Axdq06/xAQ2IbzJZfP1yQ/nEopgckq0=";
+  patches = [
+    # The sandbox has no non-loopback interface, so magicsock starts with
+    # its network down. The server's first netcheck can then run before
+    # SetNetworkUp(true) and it never picks a home DERP, which makes the
+    # e2e tests time out on "tailcat Ping: context deadline exceeded".
+    ./network-up-before-first-netcheck.patch
+  ];
+
+  vendorHash = "sha256-yfOl/gWIijLlqchXFiTRZ7vlgS/kn0xOmv52TFMYs+E=";
 
   subPackages = [ "cmd/tailcat" ];
+
+  # Build with the same tags as the official release binaries. The
+  # comma-separated list lives in build-tags.txt in the source tree
+  # (see build-tags.md there); it omits unused tailscale.com library
+  # features to shrink the binary.
+  preBuild = ''
+    IFS=, read -ra tags < build-tags.txt
+  '';
 
   ldflags = [
     "-s"
@@ -29,6 +45,13 @@ buildGoModule (finalAttrs: {
   ];
 
   env.CGO_ENABLED = "0";
+
+  # The release tags apply only to the binary. Vendored test helpers
+  # do not compile with the omit tags, and upstream CI runs go test
+  # without them.
+  preCheck = ''
+    unset tags
+  '';
 
   __darwinAllowLocalNetworking = true;
 
@@ -43,7 +66,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/tailscale/tailcat";
     changelog = "https://github.com/tailscale/tailcat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ sophronesis ];
+    maintainers = with lib.maintainers; [
+      sophronesis
+      mfrw
+    ];
     mainProgram = "tailcat";
   };
 })

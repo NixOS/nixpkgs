@@ -11,6 +11,8 @@
   libGL,
   libGLU,
   libx11,
+  giflib,
+  libpng,
   janet,
   lua5_3_compat,
   quickjs,
@@ -20,37 +22,29 @@
   withPro ? false,
 }:
 let
-  # git rev-list HEAD --count
-  revision = "3049";
-  year = "2025";
+  year = "2026";
 in
 
 stdenv.mkDerivation {
   pname = "tic-80";
-  # use an untagged version until upstream tags a new version. We want
-  # 'PREFER_SYSTEM_LIBRARIES', and without it tic-80 won't build
-  version = "1.1-unstable-2025-12-30";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "nesbox";
     repo = "TIC-80";
-    rev = "881828910e77c799c1a6894cadc2d05a5c2f3f70";
+    rev = "v1.2.0";
     # TIC-80 vendors its dependencies as submodules. For the following dependencies,
     # there are no (or no compatible) packages in nixpkgs yet, so we use the vendored
     # ones as a fill-in: wasm, squirrel, pocketpy, argparse, naett,
     # sdlgpu, mruby.
     fetchSubmodules = true;
-    hash = "sha256-bqLVoLJpT62k9d+WZUgIu4ClcJNUvURB7j+NE/fzWNk=";
+    hash = "sha256-RTtqgGAAolK1qoaKV08i/KfGu7fd34W+AyXeNcqPVgk=";
   };
 
-  # TIC-80 tries to determine the revision part of the version using its Git history.
-  # Because using leaveDotGit tends be non-reproducible with submodules, we just
-  # hardcode it.
   # To avoid the awkward copyright range of "2017-1980", which would be caused by the
   # sandbox environment, hardcode the year of the release.
   postPatch = ''
     substituteInPlace cmake/version.cmake \
-      --replace-fail 'set(VERSION_REVISION 0)' 'set(VERSION_REVISION ${revision})' \
       --replace-fail 'string(TIMESTAMP VERSION_YEAR "%Y")' 'set(VERSION_YEAR "${year}")'
   '';
 
@@ -95,6 +89,8 @@ stdenv.mkDerivation {
     libGL
     libGLU
     libx11
+    giflib
+    libpng
     janet
     (lua5_3_compat.withPackages (ps: [ ps.fennel ]))
     quickjs

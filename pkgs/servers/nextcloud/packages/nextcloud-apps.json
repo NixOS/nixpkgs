@@ -1,7 +1,9 @@
 {
   "app_api" : "agpl3Plus"
+, "bbb" : "agpl3Plus"
 , "bookmarks": "agpl3Plus"
 , "calendar": "agpl3Plus"
+, "calendar_resource_management": "agpl3Only"
 , "checksum": "agpl3Plus"
 , "collectives": "agpl3Plus"
 , "contacts": "agpl3Plus"

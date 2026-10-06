@@ -14,13 +14,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "home-assistant-HomeWhiz";
   domain = "homewhiz";
-  version = "0.5.25";
+  version = "0.5.27";
 
   src = fetchFromGitHub {
     owner = "home-assistant-HomeWhiz";
     repo = "home-assistant-HomeWhiz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rqjP09J1YPH2gSwFvgZBGGjRMwzcpjx83iCqDepbDY8=";
+    hash = "sha256-r8+1y6QruTdRr0XLy2jqD46VomvnkLwFoXp69d+lyzk=";
   };
 
   dependencies = [

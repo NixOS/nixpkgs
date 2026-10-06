@@ -35,11 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     patches = [
       # bundix and bundlerEnv fail with system-specific gems
       ./0001-build-ffi-gem.diff
-      # Ensure fix for CVE-2026-66066
-      # https://github.com/rails/rails/security/advisories/GHSA-xr9x-r78c-5hrm
-      # While Dawarich 1.10.3 already unintentionally patches this vulnerability,
-      # it is safer to bump rails to a fixed version.
-      ./0002-rails-CVE-2026-66066.diff
     ];
     postPatch = ''
       substituteInPlace ./Gemfile \

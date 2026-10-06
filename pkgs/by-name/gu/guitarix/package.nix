@@ -13,7 +13,7 @@
   gettext,
   glib,
   glib-networking,
-  glibmm,
+  glibmm_2_4,
   gperf,
   gtk3,
   gtkmm3,
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     glib-networking.out
-    glibmm
+    glibmm_2_4
     gtk3
     gtkmm3
     ladspa-header

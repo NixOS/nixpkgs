@@ -185,6 +185,7 @@ let
       X86_INTEL_LPSS = yes;
       X86_INTEL_PSTATE = yes;
       X86_AMD_PSTATE = whenAtLeast "5.17" yes;
+      AMD_PMF_UTIL_SUPPORT = whenAtLeast "7.3" yes;
       # Intel DPTF (Dynamic Platform and Thermal Framework) Support
       ACPI_DPTF = yes;
 
@@ -235,6 +236,7 @@ let
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
       DAMON_STAT = whenAtLeast "6.17" yes;
+      DAMON_STAT_ENABLED_DEFAULT = whenAtLeast "6.17" no;
       # Support recovering from memory failures on systems with ECC and MCA recovery.
       MEMORY_FAILURE = yes;
 
@@ -409,6 +411,9 @@ let
       # HAM radio
       HAMRADIO = whenOlder "7.1" yes;
       AX25 = whenOlder "7.1" module;
+
+      # Gate for the DINGHAI_PF module
+      DINGHAI = whenAtLeast "7.3" yes;
     }
     // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # Not enabled by default, hides modules behind it
@@ -717,6 +722,7 @@ let
 
       NTFS_FS = whenBetween "5.15" "6.9" no;
       NTFS_FS_POSIX_ACL = whenAtLeast "7.1" yes;
+      NTFS_FS_WOF_COMPRESSION = whenAtLeast "7.3" yes;
       NTFS3_LZX_XPRESS = whenAtLeast "5.15" yes;
       NTFS3_FS_POSIX_ACL = whenAtLeast "5.15" yes;
 
@@ -1182,6 +1188,7 @@ let
         ];
         MODULE_COMPRESS_ALL = whenAtLeast "6.12" yes;
         MODULE_COMPRESS_XZ = yes;
+        MODULE_DECOMPRESS = whenAtLeast "6.0" yes;
 
         SYSVIPC = yes; # System-V IPC
 
@@ -1212,6 +1219,9 @@ let
         SCSI_LOWLEVEL = yes; # enable lots of SCSI devices
         SCSI_LOWLEVEL_PCMCIA = yes;
         SCSI_SAS_ATA = yes; # added to enable detection of hard drive
+
+        # Required for booting our ISO in qemu's IBM pSeries machine emulation mode via '-cdrom'.
+        SCSI_IBMVSCSI = lib.mkIf (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) yes;
 
         SPI = yes; # needed for many devices
         SPI_MASTER = yes;
@@ -1380,6 +1390,7 @@ let
         BINFMT_SCRIPT = yes;
         # For systemd-binfmt
         BINFMT_MISC = option yes;
+        BINFMT_MISC_BPF = whenAtLeast "7.3" (whenPlatformHasEBPFJit (option yes));
 
         # Required for EDID overriding
         FW_LOADER = yes;
@@ -1395,6 +1406,8 @@ let
         # Allows PCIe devices to report errors with Advanced Error Reporting (AER).
         PCIEAER = yes;
         ACPI_APEI_PCIEAER = yes;
+        # PCIe link training status, e.g. on Cix P1
+        PCIE_CADENCE_DEBUGFS = whenAtLeast "7.3" (option yes);
 
         # Enable all available thermal governors
         THERMAL_GOV_BANG_BANG = yes;
@@ -1510,8 +1523,8 @@ let
             ACPI_HOTPLUG_CPU = yes;
             ACPI_HOTPLUG_MEMORY = yes;
             MEMORY_HOTPLUG = yes;
-            MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.14" yes;
-            MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.14" yes;
+            MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.12" yes;
+            MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.12" yes;
             MEMORY_HOTREMOVE = lib.mkIf (
               with stdenv.hostPlatform;
               isLoongArch64

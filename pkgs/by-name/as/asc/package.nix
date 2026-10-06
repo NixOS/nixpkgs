@@ -6,7 +6,7 @@
   SDL_image,
   SDL_mixer,
   SDL_sound,
-  libsigcxx,
+  libsigcxx_2_0,
   physfs,
   boost,
   expat,
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     flac
     libvorbis
     libogg
-    libsigcxx
+    libsigcxx_2_0
   ];
 
   meta = {

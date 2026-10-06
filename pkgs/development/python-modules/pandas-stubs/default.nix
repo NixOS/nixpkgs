@@ -35,7 +35,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pandas-stubs";
-  version = "3.0.5.260730";
+  version = "3.0.5.260914";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pandas-dev";
     repo = "pandas-stubs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ke1v5ubrUe32fvf8vw1Neux6jzRcDA9QvxIP3765EG0=";
+    hash = "sha256-5SSqxYzTUszIDB+1OIDYR5rdxD8GI8ubuhe/kfoNvoc=";
   };
 
   build-system = [ poetry-core ];

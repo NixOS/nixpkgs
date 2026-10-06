@@ -124,6 +124,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "override_deny_alias_and_bypass_protection_merge_in_argv_order"
       "shell_dry_run_rejects_block_net_with_upstream_proxy"
       "run_launch_plan_rejects_block_net_with_upstream_proxy"
+      "why_self_reports_active_profile_deny_before_covering_allow"
 
       # env_vars
       # doesn't work inside of the /nix dir, which build-dir is under

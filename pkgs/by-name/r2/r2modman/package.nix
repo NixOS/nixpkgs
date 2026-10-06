@@ -9,6 +9,7 @@
   makeWrapper,
   nodejs,
   yarn-berry,
+  substitute,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,22 +20,34 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QGs3kF2GkHlISmRb0cIYOKts1b1RvBj5qkc2cUPawwE=";
+    hash = "sha256-6vSc3Gx0VZJoGSXm70T6rsOLhlv/7CnjK4HWkPOZv2s=";
+
+    # Remove when updating since upstream migrated to pnpm
+    # https://github.com/ebkr/r2modmanPlus/commit/db41dfdf4e4b9059ce0d574a7fab0d2d344e633a
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src patches missingHashes;
-    hash = "sha256-6CwayFhy0ZwdL1ZOZVtCJLlchCv5raX7WF1V4TvVpq4=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-CAtDbWbl9u8tPdPQKxB2qcN7OhDomwO8EqDdRZppgQU=";
   };
 
   patches = [
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
-
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/ebkr/r2modmanPlus/blob/develop/package.json#L118
-    ./yarn-4.14-support.patch
 
     # Fix copying of wrapper files to game directory
     ./wrapper-fix.patch

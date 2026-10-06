@@ -56,6 +56,7 @@ vimUtils.buildVimPlugin {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
     changelog = "https://github.com/Saghen/blink.cmp/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       balssh
       redxtech

@@ -14,6 +14,7 @@
   version,
   hash,
   versionCheckHook,
+  symlinkJoin,
 
   # downstream dependencies
   python3,
@@ -35,6 +36,28 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "protobuf";
     tag = "v${version}";
     inherit hash;
+  };
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "proto"
+  ];
+
+  outputChecks = {
+    out.disallowedReferences = [
+      "dev"
+    ];
+    lib.disallowedReferences = [
+      "out"
+      "dev"
+    ];
+    proto.disallowedReferences = [
+      "out"
+      "lib"
+      "dev"
+    ];
   };
 
   patches =
@@ -173,6 +196,23 @@ stdenv.mkDerivation (finalAttrs: {
     GTEST_DEATH_TEST_STYLE = "threadsafe";
   };
 
+  # protoc expects to find `.proto` files relative to itself, so we put those to a separate output and add symlinks.
+  postFixup = ''
+    pushd "$dev" > /dev/null
+
+    find include -name '*.proto' -print0 | while IFS= read -r -d ''' FILE; do
+      mkdir -p "$proto/$(dirname "$FILE")"
+      mkdir -p "$out/$(dirname "$FILE")"
+
+      mv "$FILE" "$proto/$FILE"
+
+      ln -s "$proto/$FILE" "$out/$FILE"
+      ln -s "$proto/$FILE" "$dev/$FILE"
+    done
+
+    popd > /dev/null
+  '';
+
   passthru = {
     tests = {
       pythonProtobuf = python3.pkgs.protobuf;
@@ -180,9 +220,18 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (python3.pkgs) celery;
 
       version = testers.testVersion { package = protobuf; };
+
+      pkg-config = testers.hasPkgConfigModules {
+        package = protobuf;
+      };
     };
 
     inherit abseil-cpp;
+
+    full = symlinkJoin {
+      inherit (finalAttrs.finalPackage) name;
+      paths = finalAttrs.finalPackage.all;
+    };
   };
 
   meta = {
@@ -197,5 +246,15 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://protobuf.dev/";
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "protoc";
+    pkgConfigModules = [
+      "protobuf"
+      "protobuf-lite"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "22") [
+      "utf8_range"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "27") [
+      "upb"
+    ];
   };
 })

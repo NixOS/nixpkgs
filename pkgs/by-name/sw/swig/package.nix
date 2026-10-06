@@ -20,13 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jsi83v9sg0n5kUfDACqdNAS2VuLSyxv+pe2LRcO4Khc=";
   };
 
+  # It is necessary to pull in the target pcre2-config binary this way because including pcre2 in nativeBuildInputs can create linking failures with cross-compilation
+  env.PCRE2_CONFIG = "${pcre2.dev}/bin/pcre2-config";
   strictDeps = true;
   nativeBuildInputs = [
     autoconf
     automake
     libtool
     bison
-    pcre2
   ];
   buildInputs = [ pcre2 ];
 

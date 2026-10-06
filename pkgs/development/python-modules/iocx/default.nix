@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iocx";
-  version = "0.7.6.1";
+  version = "0.7.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iocx-dev";
     repo = "iocx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-djhw3AF68IAhHW3TE/wRwQWi/3E/B6bopVqLWPTIpyA=";
+    hash = "sha256-tRiFys/1xrToGeTb/lD2Z/YJOBJzenN1m2bsq6L7+vQ=";
   };
 
   build-system = [ setuptools ];

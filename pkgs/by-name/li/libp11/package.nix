@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libp11";
-  version = "0.4.18";
+  version = "0.4.21";
 
   src = fetchFromGitHub {
     owner = "OpenSC";
     repo = "libp11";
     rev = "${pname}-${version}";
-    sha256 = "sha256-bvVUiv8y5c0P9fHAFs1JX3V7xsorbKUmm0qt3l2SoQQ=";
+    sha256 = "sha256-Tqc9PJsVBmq1Qy+YQVmSiD2Yb7ppif5pJ7uRHyTlqQ8=";
   };
 
   configureFlags = [

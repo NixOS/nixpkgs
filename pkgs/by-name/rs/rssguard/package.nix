@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ];
 
+  # This string must have quotes around Release or the package will break!
+  # See https://github.com/NixOS/nixpkgs/issues/563621
+  cmakeBuildType = "\"Release\"";
+
   dontWrapGApps = true;
 
   preFixup = ''

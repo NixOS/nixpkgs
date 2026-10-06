@@ -10,6 +10,7 @@
   pandoc,
   systemd,
   nixosTests,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,9 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     c-ares
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux systemd;
+  ++ lib.optional systemdSupport systemd;
   enableParallelBuilding = true;
-  configureFlags = lib.optional stdenv.hostPlatform.isLinux "--with-systemd";
+  configureFlags = lib.optional systemdSupport "--with-systemd";
 
   passthru.tests = {
     pgbouncer = nixosTests.pgbouncer;

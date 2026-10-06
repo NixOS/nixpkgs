@@ -53,4 +53,9 @@ export emacsWithPackages_siteLispNative=@wrapperSiteLispNative@
 export emacsWithPackages_invocationDirectory=@wrapperInvocationDirectory@
 export emacsWithPackages_invocationName=@wrapperInvocationName@
 
+if [[ ${PATH-} != *"@wrapperBinDir@":* ]]
+then
+    export PATH="@wrapperBinDir@${PATH:+:$PATH}"
+fi
+
 exec @prog@ "$@"

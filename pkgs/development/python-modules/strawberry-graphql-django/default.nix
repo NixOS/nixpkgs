@@ -20,7 +20,6 @@
   pytestCheckHook,
   django-guardian,
   django-model-utils,
-  django-mptt,
   django-polymorphic,
   django-tree-queries,
   factory-boy,
@@ -74,7 +73,6 @@ buildPythonPackage rec {
 
     django-guardian
     django-model-utils
-    django-mptt
     django-polymorphic
     django-tree-queries
     factory-boy

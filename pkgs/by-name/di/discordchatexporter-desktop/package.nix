@@ -1,8 +1,23 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  makeDesktopItem,
+  makeBinaryWrapper,
+  gitUpdater,
+  _experimental-update-script-combinators,
+  libGL,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
+  libice,
+  libsm,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -23,13 +38,71 @@ buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = dotnetCorePackages.runtime_10_0;
 
-  patches = [ ./settings-path.patch ];
+  dotnetBuildFlags = [
+    "-p:CSharpier_Bypass=true"
+    "-p:FirstTargetFrameworks=workaround-for-csharpier-pr-1696"
+  ];
 
-  postFixup = ''
-    ln -s $out/bin/DiscordChatExporter $out/bin/discordchatexporter
+  executables = [ "DiscordChatExporter" ];
+
+  postPatch = ''
+    substituteInPlace DiscordChatExporter.Gui/StartOptions.cs \
+      --replace-fail 'AppContext.BaseDirectory' 'Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "discordchatexporter")'
   '';
 
-  passthru.updateScript = ./updater.sh;
+  nativeBuildInputs = [
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+    makeBinaryWrapper
+  ];
+
+  runtimeDeps = lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxrandr
+    libice
+    libsm
+  ];
+
+  postInstall = ''
+    install -Dm444 $src/favicon.png \
+      $out/share/icons/hicolor/256x256/apps/discordchatexporter.png
+  '';
+
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      ln -sf $out/bin/DiscordChatExporter $out/bin/discordchatexporter
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      rm $out/Applications/DiscordChatExporter.app/Contents/MacOS/DiscordChatExporter
+      makeBinaryWrapper $out/bin/DiscordChatExporter $out/Applications/DiscordChatExporter.app/Contents/MacOS/DiscordChatExporter
+    '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "discordchatexporter";
+      desktopName = "DiscordChatExporter";
+      comment = finalAttrs.meta.description;
+      exec = "DiscordChatExporter";
+      icon = "discordchatexporter";
+      categories = [
+        "Network"
+        "Chat"
+      ];
+    })
+  ];
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { }).command
+      (finalAttrs.passthru.fetch-deps)
+    ];
+  };
 
   meta = {
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/releases/tag/${finalAttrs.version}";
@@ -40,10 +113,8 @@ buildDotnetModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       phanirithvij
       willow
+      philocalyst
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

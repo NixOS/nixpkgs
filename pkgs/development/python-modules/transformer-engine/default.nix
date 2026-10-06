@@ -86,7 +86,7 @@ let
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
   pname = "transformer-engine";
-  version = "2.18";
+  version = "2.19";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -96,7 +96,7 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Their CMakeLists.txt does not easily let us inject dependencies
     fetchSubmodules = true;
-    hash = "sha256-NKky2b5grlfVdWsPf6HO4QZAvVuibCKvmfU0DxUIfvs=";
+    hash = "sha256-CPGw1gHTW/nA8V2aZ5YOqgnAMostlbnvlOHA5uno0HM=";
   };
 
   patches = optionals cudaSupport [
@@ -131,16 +131,13 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
           'te_path = Path(importlib.util.find_spec("transformer_engine").origin).parent.parent' \
           'te_path = Path("${placeholder "out"}/${python.sitePackages}")'
     ''
-    # nccl-ep is built from the vendored `3rdparty/nccl` submodule (see the NCCL_EP_* CMake
-    # variables in `transformer_engine/common/CMakeLists.txt`), which pins a newer NCCL than
-    # `cudaPackages.nccl-ep` provides.
-    # Only `libnccl_ep.a` is consumed (whole-archive), so skip the shared library, which would
-    # otherwise need `-lnccl -lcuda` on the link line.
-    + optionalString withNcclEp ''
-      substituteInPlace 3rdparty/nccl/contrib/nccl_ep/Makefile \
+    # The vendored NCCL probes for `nvcc` with `which`, which is not available in the sandbox, so
+    # the CUDA version it derives (passed as `-DCUDA_MAJOR`/`-DCUDA_MINOR`) comes out empty.
+    + ''
+      substituteInPlace 3rdparty/nccl-extensions/third_party/nccl/makefiles/common.mk \
         --replace-fail \
-          'lib: $(LIBTARGET) $(SOLIBTARGET) $(SOLIBLINKS) $(HEADER_TARGETS)' \
-          'lib: $(LIBTARGET) $(HEADER_TARGETS)'
+          'which $(NVCC) >/dev/null' \
+          'command -v $(NVCC) >/dev/null'
     '';
 
   # https://github.com/NVIDIA/TransformerEngine/blob/main/docs/envvars.rst
@@ -169,6 +166,9 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     CUDA_HOME = optionalString withNcclEp (getBin cudaPackages.cuda_nvcc).outPath;
     CUDA_INC = optionalString withNcclEp "${getInclude cudaPackages.cuda_cudart}/include";
     CUDA_LIB = optionalString withNcclEp "${getLib cudaPackages.cuda_cudart}/lib";
+    # `libnccl_ep.so` is linked with `-lcuda`, which is only provided by the GPU driver at run
+    # time. Link against the cudart stub instead.
+    LDFLAGS = optionalString withNcclEp "-L${getLib cudaPackages.cuda_cudart}/lib/stubs";
 
     NVTE_UB_WITH_MPI = if withMpi then 1 else 0;
     # NOTE: Make sure to use mpi from buildPackages to match the spliced version created through nativeBuildInputs.

@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "rkbin";
-  version = "0-unstable-2025-12-30";
+  version = "0-unstable-2026-06-26";
 
   src = fetchFromGitHub {
     owner = "rockchip-linux";
     repo = "rkbin";
-    rev = "ecb4fcbe954edf38b3ae037d5de6d9f5bccf81f4";
-    hash = "sha256-U8d2cH6/TSXfBnLhh141A9wP/t6prFgwYMvwgXBf4vc=";
+    rev = "3e288fe814e059dd06833495f845cab04ac20a5c";
+    hash = "sha256-CgGTTGsR0ptrCffYw6A1iujOeQHvVEywqtiqTnxsZjw=";
   };
 
   installPhase = ''
@@ -24,10 +24,10 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     BL31_RK3568 = "${rkbin}/bin/rk35/rk3568_bl31_v1.46.elf";
-    BL31_RK3588 = "${rkbin}/bin/rk35/rk3588_bl31_v1.54.elf";
-    TPL_RK3566 = "${rkbin}/bin/rk35/rk3566_ddr_1056MHz_v1.25.bin";
-    TPL_RK3568 = "${rkbin}/bin/rk35/rk3568_ddr_1056MHz_v1.25.bin";
-    TPL_RK3588 = "${rkbin}/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.21.bin";
+    BL31_RK3588 = "${rkbin}/bin/rk35/rk3588_bl31_v1.56.elf";
+    TPL_RK3566 = "${rkbin}/bin/rk35/rk3566_ddr_1056MHz_v1.26.bin";
+    TPL_RK3568 = "${rkbin}/bin/rk35/rk3568_ddr_1056MHz_v1.26.bin";
+    TPL_RK3588 = "${rkbin}/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.24.bin";
   };
 
   meta = {

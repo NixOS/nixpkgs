@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   replaceVars,
 
   # build-system
@@ -21,6 +20,7 @@
 
   # tests
   bitsandbytes,
+  datasets,
   expecttest,
   fire,
   pytest-xdist,
@@ -43,19 +43,15 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "torchao";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Mry6jsZKkoC8dq3fYNsRyGbL4+S8ZYuHpkETNDy5qsg=";
+    hash = "sha256-szPyGqvvXSboDRcsLKAkXSBI+Kgx4Fganw/SlONimcY=";
   };
-
-  # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
-  # new attributes. Did you mean: '__reduce__'?
-  disabled = pythonAtLeast "3.14";
 
   patches = lib.optionals isAarch64Darwin [
     ./use-system-cpuinfo.patch
@@ -96,6 +92,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     bitsandbytes
+    datasets
     expecttest
     fire
     parameterized
@@ -302,10 +299,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    # ImportError: cannot import name 'ToyLinearModel' from 'torchao.testing.model_architectures'
-    "benchmarks/microbenchmarks/test/test_benchmark_profiler.py"
-    "benchmarks/microbenchmarks/test/test_utils.py"
-
     # ImportError: cannot import name 'fp8_blockwise_weight_dequant' from 'torchao.kernel.blockwise_quantization'
     "test/kernel/test_blockwise_triton.py"
   ]

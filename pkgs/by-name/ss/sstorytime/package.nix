@@ -12,15 +12,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "sstorytime";
-  version = "1.0-beta-unstable-2026-08-20";
+  version = "1.0-beta-unstable-2026-09-15";
 
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "markburgess";
     repo = "SSTorytime";
-    rev = "a9b34d5197cb0a9fb586bc4722eb8153dffaf044";
-    hash = "sha256-NYMIxUlx5jf2weTdMxziMhZ7dMxPc5L330wRFzhDmFw=";
+    rev = "f56e7b01b098dff89422c15a56414dd8dec80b03";
+    hash = "sha256-2qIbn4OX4bDYIuEx3fP6lVzDFbLFcqLSpZ6Dqf8+hO8=";
   };
 
   vendorHash = "sha256-lei5IG02QYSigHmLArlE7huDFVGoVMkw8DTEQeJWFX0=";

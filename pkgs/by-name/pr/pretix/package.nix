@@ -19,6 +19,7 @@ let
     packageOverrides = self: super: {
       chardet = super.chardet_5;
       django = super.django_5;
+      djangorestframework = super.djangorestframework_3_17;
 
       django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: rec {
         version = "2.3.0";
@@ -55,14 +56,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "pretix";
-  version = "2026.7.0";
+  version = "2026.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ozgsveEstgX3Wy24EaYhpbTUQrwbm+cIWFE0F2YIqfw=";
+    hash = "sha256-6/9Q8IxLdKb7p3LJUe+blLhETE0tI7zLUFdgrphieGo=";
   };
 
   patches = [
@@ -92,7 +93,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-3sF6TmzDBu3UJASNaPL6zkJNRCHZIHzFTjJWmfkMeAo=";
+    hash = "sha256-iHtQrZLqjz9RbcIAhFrY+mrIe5pqzE9vCOH0u7cC4MU=";
   };
 
   nativeBuildInputs = [
@@ -208,6 +209,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "cryptography"
     "django-bootstrap3"
     "django-compressor"
+    "django-countries"
     "django-filter"
     "django-formset-js-improved"
     "django-i18nfield"
@@ -258,6 +260,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     with pythonPackages;
     [
       libredirect.hook
+      pypdfium2
       pytestCheckHook
       pytest-xdist
       pytest-mock

@@ -10,12 +10,12 @@
   nix-update-script,
 }:
 let
-  version = "2.1.0";
+  version = "2.1.1";
   src = fetchFromGitHub {
     owner = "mistricky";
     repo = "codesnap.nvim";
     tag = "v${version}";
-    hash = "sha256-HHBk6TgFPZ7zymzIFWWuGJAKrwKf4/PHNy9X+YnHBDE=";
+    hash = "sha256-lQxV0Ka/eU/226sbXa2bB/x39okyrKSNsRIBNZ/IaK4=";
   };
   codesnap-lib = rustPlatform.buildRustPackage {
     pname = "codesnap-lib";
@@ -51,6 +51,8 @@ in
 vimUtils.buildVimPlugin {
   pname = "codesnap.nvim";
   inherit version src;
+
+  strictDeps = true;
 
   postPatch =
     let

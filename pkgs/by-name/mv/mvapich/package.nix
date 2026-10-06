@@ -15,10 +15,18 @@
   zlib,
   makeWrapper,
   python3,
+  config,
+  autoAddDriverRunpath,
   # InfiniBand dependencies
   ucx,
   # OmniPath dependencies
   libfabric,
+  # CUDA support
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
+  # ROCm support
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
   # Compile with slurm as a process manager
   useSlurm ? false,
   # Network backend for MVAPICH2
@@ -29,6 +37,7 @@ assert builtins.elem network [
   "ucx"
   "ofi"
 ];
+assert cudaSupport -> !rocmSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvapich";
@@ -52,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
     python3
     removeReferencesTo
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -68,7 +81,17 @@ stdenv.mkDerivation (finalAttrs: {
     rdma-core
     libfabric
   ]
-  ++ lib.optional useSlurm slurm;
+  ++ lib.optional useSlurm slurm
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals rocmSupport (
+    with rocmPackages;
+    [
+      rocm-core
+      rocm-runtime
+      rocm-device-libs
+      clr
+    ]
+  );
 
   configureFlags = [
     "--with-pm=hydra"
@@ -83,7 +106,18 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (network == "ofi") [
     "--with-device=ch4:ofi"
+  ]
+  ++ lib.optionals cudaSupport [
+    "--with-cuda=${lib.getBin cudaPackages.cuda_nvcc}"
+    "--with-cuda-include=${lib.getDev cudaPackages.cuda_cudart}/include"
+    "--with-cuda-lib=${lib.getLib cudaPackages.cuda_cudart}/lib"
+  ]
+  ++ lib.optionals rocmSupport [
+    "--with-hip=${rocmPackages.clr}"
   ];
+
+  # Fake libcuda.so (the real one is deployed impurely)
+  env.LDFLAGS = lib.optionalString cudaSupport "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs";
 
   doCheck = false; # requires bindir/bin/mpicc before install is run
 
@@ -115,6 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    inherit cudaSupport rocmSupport;
+  };
 
   meta = {
     description = "MPI-3.1 implementation optimized for Infiband and OmniPath transport";

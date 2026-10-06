@@ -48,6 +48,7 @@
 
           # Accounts daemon looks for dbus interfaces in $XDG_DATA_DIRS/accountsservice
           environment.XDG_DATA_DIRS = "${config.system.path}/share";
+          environment.LD_LIBRARY_PATH = config.system.nssModules.path;
 
         }
         (

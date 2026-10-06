@@ -2,7 +2,7 @@
 {
   name = "kexec";
   meta = with lib.maintainers; {
-    maintainers = [
+    maintainers = pkgs.kexec-tools.meta.maintainers ++ [
       flokli
       lassulus
     ];

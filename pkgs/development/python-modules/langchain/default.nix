@@ -46,7 +46,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain";
-  version = "1.3.14";
+  version = "1.4.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain==${finalAttrs.version}";
-    hash = "sha256-SmbqK8/AmUYfp+hUEnuwl18K+A/6csLxMUTv0oQHhEs=";
+    hash = "sha256-p4YqDRa37QC0diLMUPUX1J8Rc3q+DFxjPU+w8M0EJtY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langchain_v1";
@@ -128,9 +128,15 @@ buildPythonPackage (finalAttrs: {
     # AttributeError: 'ImportErrorProfileModel' object has no attribute 'profile'
     # https://github.com/langchain-ai/langchain/issues/36312
     "test_summarization_middleware_missing_profile"
+    # langchain.mcp requires fastmcp>=4 (nixpkgs has 3.x) and jsonschema
+    "test_import_all"
+    "test_import_all_using_dir"
   ];
 
   disabledTestPaths = [
+    # Requires fastmcp>=4 (nixpkgs has 3.x) and jsonschema
+    "tests/unit_tests/mcp"
+
     # Their configuration tests don't place nicely with nixpkgs
     "tests/unit_tests/test_pytest_config.py"
 

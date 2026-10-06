@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "btrsync";
-  version = "0.3";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andreittr";
     repo = "btrsync";
     tag = "v${version}";
-    hash = "sha256-1LpHO70Yli9VG1UeqPZWM2qUMUbSbdgNP/r7FhUY/h4=";
+    hash = "sha256-FTN2YOGoaGwUww6HWuZbZdrERdDSPAgIzGrTfHL/9NU=";
   };
 
   build-system = [ setuptools ];

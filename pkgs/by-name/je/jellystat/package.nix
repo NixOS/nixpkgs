@@ -4,10 +4,11 @@
   fetchFromGitHub,
   makeWrapper,
   nodejs_22,
+  nix-update-script,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "jellystat";
-  version = "1.1.11";
+  version = "1.1.12";
 
   __structuredAttrs = true;
 
@@ -15,7 +16,7 @@ buildNpmPackage (finalAttrs: {
     owner = "CyferShepard";
     repo = "Jellystat";
     tag = finalAttrs.version;
-    hash = "sha256-HuLSXhj90fPfxv5qyCVCY67w07WwTBGp220iG9dGZyk=";
+    hash = "sha256-DVWo6zeEOAE3EaCXmN1JYouCvyG1lx4OrJP3BGnjumo=";
   };
 
   patches = [
@@ -24,7 +25,7 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsFetcherVersion = 2;
 
-  npmDepsHash = "sha256-yfcrBLbD11x3Siqv670jw8A3K11DrwnBj0VSC64JBP0=";
+  npmDepsHash = "sha256-hVvwjm3oY9NBVP98Vf2cBkDY7N9AeIL2PauSuk2NaVM=";
 
   makeCacheWritable = true;
 
@@ -55,12 +56,16 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Jellystat is a free and open source Statistics App for Jellyfin";
     homepage = "https://github.com/CyferShepard/Jellystat";
     license = licenses.mit;
     maintainers = with maintainers; [ mistyttm ];
     mainProgram = "jellystat";
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 })

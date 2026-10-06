@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
-    downloadPage = "https://mpir.org/downloads.html";
-    homepage = "https://mpir.org/";
+    homepage = "https://github.com/wbhart/mpir";
   };
 })

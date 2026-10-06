@@ -214,8 +214,15 @@ Certificates and other files supplied here need to be readable by the
 `wpa_supplicant` user; it is therefore recommended to store them in the
 `/etc/wpa_supplicant` directory.
 
-If your network authentication protocol requires write access to files, smart
-cards or TPM devices, you may have to disable security hardening with
+With [](#opt-networking.wireless.pkcs11.enable), the default tpm2-pkcs11
+database directory `/etc/tpm2_pkcs11` is available inside the sandbox. A
+database in another location must be added explicitly:
+```nix
+{ systemd.services.wpa_supplicant.serviceConfig.BindPaths = [ "/var/lib/tpm2_pkcs11" ]; }
+```
+
+If your network authentication protocol requires other access that cannot be
+granted explicitly, you may have to disable security hardening with
 ```nix
 { networking.wireless.enableHardening = false; }
 ```

@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "telemt";
-  version = "3.5.0";
+  version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "telemt";
     repo = "telemt";
     tag = version;
-    hash = "sha256-HbFWXhMe4LkHr+Wb5J9FTd4LvNmDnzrwufepW2bPyYI=";
+    hash = "sha256-5oIJDwnCRiKQjUZ7jzeOXyiF/IZAVdetUhIwIPlI49A=";
   };
 
-  cargoHash = "sha256-0ifAAUTro1brXrO/ajmL1rr6Qp644ZCgcmfDxROZMnU=";
+  cargoHash = "sha256-sGimKbZwFQFopSIHB38dareGGdCoorygEj8RhUGb1qE=";
 
   checkFlags = [
     # flaky: races between MiddleClientWriterCancelled and TrafficBudgetWaitCancelled observation paths
@@ -29,5 +29,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/telemt/telemt";
     maintainers = with lib.maintainers; [ r4v3n6101 ];
     platforms = lib.platforms.linux;
+    license = {
+      # Custom license "based on Apache License 2 principles"
+      shortName = "telemt-pl3";
+      fullName = "Telemt Public License 3";
+      free = true;
+      redistributable = true;
+    };
   };
 }

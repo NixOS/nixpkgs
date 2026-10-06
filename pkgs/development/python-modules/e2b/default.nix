@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "e2b";
-  version = "2.46.1";
+  version = "2.51.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     owner = "e2b-dev";
     repo = "E2B";
     tag = "@e2b/python-sdk@${finalAttrs.version}";
-    hash = "sha256-DtrTcDTpqHHRzDsboTdIDqyGUY2lCluw4EUMFt7lfo0=";
+    hash = "sha256-Q/DhYn2dyzXytgccC6QNBlvkhM+hxqgmMeKAsVlQJuk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/python-sdk";

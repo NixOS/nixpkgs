@@ -7,7 +7,6 @@
   libjpeg,
   openssl,
   zlib,
-  libgcrypt,
   libpng,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
@@ -77,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libjpeg
     openssl
-    libgcrypt
     libpng
   ]
   ++ lib.optionals withSystemd [

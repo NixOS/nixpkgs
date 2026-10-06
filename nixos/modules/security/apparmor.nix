@@ -190,10 +190,11 @@ in
               ${config.users.defaultUserShell} = icnu
           '';
           footer = "${pkgs.apparmor-utils}/etc/apparmor/logprof.conf";
-          passAsFile = [ "header" ];
+          strictDeps = true;
+          __structuredAttrs = true;
         }
         ''
-          cp $headerPath $out
+          printf "%s" "$header" > $out
           sed '1,/\[qualifiers\]/d' $footer >> $out
         '';
 

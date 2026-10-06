@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gersemi";
-  version = "0.28.1";
+  version = "0.29.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BlankSpruce";
     repo = "gersemi";
     tag = finalAttrs.version;
-    hash = "sha256-eKaloLttIzBsLSNroTQLAN5WKvL5M/u0d6eSlw58oro=";
+    hash = "sha256-SEIg8jIB5mP0qdlOP99pCGD8MYAiUfOi4p5jg2/ZHbk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

@@ -6,22 +6,22 @@
   git,
   jq,
   makeBinaryWrapper,
-  nodejs_22,
+  nodejs_24,
   python3,
   xcbuild,
   yarn-berry_4,
   nixosTests,
 }:
 let
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
-  version = "26.8.1";
+  version = "26.10.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-xOvcp4B3yz+v/XAx4wVQ5PgBia6z/7SWRGkFDlcc6J0=";
+    hash = "sha256-jBh6mrYVVX7dNz5rv/VO766ezIuwBmXbtRSKgUOkahc=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -29,8 +29,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "f5a3541768632052e2e2039f977e3dc608ef0b60";
-    hash = "sha256-NTEStwU6UzbrGpYoEosbwstoQAXvZYqgK2HCF6Jf6Ak=";
+    rev = "1d3585a06ae3ad8b2833667234317ae149c3c008";
+    hash = "sha256-e/NN5u4h5m5sO/xPLC9oO0Q5tXH+Irm3lmUheVdf+N0=";
   };
 
 in
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-wYBRDhf1lu1xiNdWh7jXM2Ecimj/aETI863G0PlFLRU=";
+    hash = "sha256-NYjJeQWeDsLsEme/gIkZzgwWaqpQNSfLeYgZHaPTuH8=";
   };
 
   pname = "actual-server";

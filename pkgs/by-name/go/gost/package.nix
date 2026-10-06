@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "gost";
-  version = "3.2.6";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "go-gost";
     repo = "gost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zq9UrzXbKVraqq8eGY5XOHOMdpfuOog5V17+wh9vwIc=";
+    hash = "sha256-+g8YjOuH1WKfEYPLbrKB2YIHnY7HXJv0rQfxiL/jdQI=";
   };
 
-  vendorHash = "sha256-LbmGYV85+JmiLlJhdozAyzWIql4QxpHj2C4hjo+PT1k=";
+  vendorHash = "sha256-lEPJpOXyPiMbFEbVlMGdhBGRYj5JTx2zun7YmX19r4k=";
 
   # Based on ldflags in upstream's .goreleaser.yaml
   ldflags = [
@@ -30,6 +30,9 @@ buildGoModule (finalAttrs: {
 
   # i/o timeout
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  # Skip e2e tests that require a Docker daemon.
+  excludedPackages = [ "tests/e2e" ];
 
   doInstallCheck = true;
 

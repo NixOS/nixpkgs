@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libunwind";
     repo = "libunwind";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ed+FUPApDxNHxznXMhiTeNr8yRxRDSCyJJdIhouGNho=";
   };
 
@@ -30,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -63,6 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
     versionCheck = true;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.nongnu.org/libunwind";

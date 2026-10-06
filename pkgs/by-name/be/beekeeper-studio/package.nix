@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "6.0.5";
+  version = "6.1.4";
 
   src =
     let
@@ -54,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-AlimxfT2aMPXJQKU7NxSmhqhQApIWp1K5qd3wFRvo/w=";
-        aarch64-linux = "sha256-W+Avv/yKefGk64Wvz3rF7ehYkD73EbsMXqeQi/tXjtw=";
-        aarch64-darwin = "sha256-+NFFtfX4CxlzjBA8iAgexGIOx+5thEJ4iZR9ngkTsjI=";
+        x86_64-linux = "sha256-8RWqYHAG2OkUPQjNwhSRfxsEbXjxsh0xA/EuUQxg/b4=";
+        aarch64-linux = "sha256-ivXtgZjlhoQ0hBIbdUx3VZJY/QUloh8War0OlN2gOfM=";
+        aarch64-darwin = "sha256-jPnGw4iDvfCMlim8ASAv5IdbpNsF6jaW2HsnqLvrCwY=";
       };
     };
 
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modern and easy to use SQL client for MySQL, Postgres, SQLite, SQL Server, and more";
     homepage = "https://www.beekeeperstudio.io";
     changelog = "https://github.com/beekeeper-studio/beekeeper-studio/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "beekeeper-studio";
     maintainers = with lib.maintainers; [
@@ -158,6 +158,9 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
       "aarch64-darwin"
+    ];
+    knownVulnerabilities = [
+      "Uses Electron 39.8.10, which was EOL on March 13 2026, with several known CVEs"
     ];
   };
 })

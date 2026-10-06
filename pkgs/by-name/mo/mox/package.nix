@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mox";
-  version = "0.0.15";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "mjl-";
     repo = "mox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-apIV+nClXTUbmCssnvgG9UwpTNTHTe6FgLCxp14/s0A=";
+    hash = "sha256-9zStO4bxiPUtL7e6h1Z/yDDALgYcIGI0CGoOQUok8Vc=";
   };
 
   # set the version during buildtime
@@ -28,12 +28,15 @@ buildGoModule (finalAttrs: {
     "-X github.com/mjl-/mox/moxvar.VersionBare=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modern full-featured open source secure mail server for low-maintenance self-hosted email";
     mainProgram = "mox";
     homepage = "https://github.com/mjl-/mox";
+    changelog = "https://updates.xmox.nl/changelog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kotatsuyaki

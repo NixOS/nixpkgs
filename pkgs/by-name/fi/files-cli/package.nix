@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "files-cli";
-  version = "2.15.448";
+  version = "2.15.463";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     repo = "files-cli";
     owner = "files-com";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-blOBJWst/SYrf/POXM1hNrCr86SM+LBdEVewE0ej1CA=";
+    hash = "sha256-OG/fMitBklIGAOV5+ghURpWw7NdiQR3eL6tL4fJOo7s=";
   };
 
-  vendorHash = "sha256-7uZNHUWtzH/5p1ZXCY07iP1huPpxz5lQOJc0NXu68kQ=";
+  vendorHash = "sha256-p9MQvNZXkvcgKpIGqSNP+hCN2iMLsXplGp3236ZP2O0=";
 
   ldflags = [
     "-s"

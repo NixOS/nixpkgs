@@ -89,7 +89,7 @@ in
                     to extract two values from it. Given the instance name of "${name}", you should
                     be able to find it at `/var/lib/gitea-runner/${name}/.runner'.
 
-                 2. Read the contents of it, for example using `cat /var/lib/gitea-runner/native/.runner'.
+                 2. Read the contents of it, for example using `cat /var/lib/gitea-runner/${name}/.runner'.
 
                  3. Take note of the "uuid" and set the option `${options.settings}.server.connections.default.uuid'
                     to that value. For example "c9e50be9-a7c3-4aee-ba35-624c4ff8c519".
@@ -110,7 +110,7 @@ in
                     to extract two values from it. Given the instance name of "${name}", you should
                     be able to find it at `/var/lib/gitea-runner/${name}/.runner'.
 
-                 2. Read the contents of it, for example using `cat /var/lib/gitea-runner/native/.runner'.
+                 2. Read the contents of it, for example using `cat /var/lib/gitea-runner/${name}/.runner'.
 
                  3. Take note of the "uuid" and set the option `${options.settings}.server.connections.default.uuid'
                     to that value. For example "c9e50be9-a7c3-4aee-ba35-624c4ff8c519".

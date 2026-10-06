@@ -15,13 +15,13 @@
 
 let
   pname = "gitlab-ci-local";
-  version = "4.75.1";
+  version = "4.76.0";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-2zCfLLOtFTsiW1TGujOa9JGOetlVTzY477pUa2wt2qw=";
+    hash = "sha256-K03nw+8SNnqm4ouOIa3ejUmcsUdVzdGn2jMZY5bKVOI=";
   };
 
   node_modules = stdenv.mkDerivation {
@@ -57,7 +57,7 @@ let
       runHook postInstall
     '';
 
-    outputHash = "sha256-AqO7FeCtd5INzASBjMgSXYI1WPjqtk3Uipd5TjocYX4=";
+    outputHash = "sha256-yx1ev37/78bjaNcA1/tSxKEn2cHx0CexZByL16AAUvw=";
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";

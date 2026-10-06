@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tools for maintaining UEFI signature databases";
-    homepage = "http://jk.ozlabs.org/docs/sbkeysync-maintaing-uefi-key-databases";
+    homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git";
     maintainers = with lib.maintainers; [
       hmenke
       raitobezarius

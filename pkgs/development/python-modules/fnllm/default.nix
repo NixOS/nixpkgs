@@ -8,6 +8,7 @@
   hatchling,
   httpx,
   json-repair,
+  numpy,
   openai,
   polyfactory,
   pydantic,
@@ -48,6 +49,7 @@ buildPythonPackage (finalAttrs: {
       azure-identity
       azure-storage-blob
     ];
+    numpy = [ numpy ];
     openai = [
       openai
       tiktoken

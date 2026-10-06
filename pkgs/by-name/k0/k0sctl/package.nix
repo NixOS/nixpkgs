@@ -1,24 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   testers,
   k0sctl,
 }:
 
-buildGoModule rec {
+buildGo127Module rec {
   pname = "k0sctl";
-  version = "0.31.1";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = "k0sctl";
     tag = "v${version}";
-    hash = "sha256-AbSHyc+Orclm2Cun9QTBqC5AxN1+QOveNzBqzX62vBA=";
+    hash = "sha256-g/8rN0UWbUjiIuWKcBb9sr8PjMx+rcq3Hce64cGziU0=";
   };
 
-  vendorHash = "sha256-zc/6fC6VQJp7g2URWivaGW0APVHMa+uyHlBPM4b0bf8=";
+  vendorHash = "sha256-3TIQ1VY+52DFCVWiJs5U+5A+mVSU3QPyr5Vzrzs7zF8=";
 
   ldflags = [
     "-s"
@@ -26,6 +26,11 @@ buildGoModule rec {
     "-X=github.com/k0sproject/k0sctl/version.Environment=production"
     "-X=github.com/carlmjohnson/versioninfo.Version=v${version}" # Doesn't work currently: https://github.com/carlmjohnson/versioninfo/discussions/12
     "-X=github.com/carlmjohnson/versioninfo.Revision=v${version}"
+  ];
+
+  checkFlags = [
+    # requires sudo
+    "-skip=^TestLocalBinaryProviderCreatesParentDir$"
   ];
 
   nativeBuildInputs = [ installShellFiles ];

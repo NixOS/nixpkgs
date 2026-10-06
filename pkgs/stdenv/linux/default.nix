@@ -877,6 +877,7 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.coreutils;
     assert isBuiltByNixpkgsCompiler prevStage.gnugrep;
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
+    assert stage0.checkBootstrapPackages prevStage;
     {
       inherit (prevStage) config overlays stdenv;
     }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -34,6 +35,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.ZEE_DISABLE_GRAMMAR_BUILD = 1;
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Modern text editor for the terminal written in Rust";
     homepage = "https://github.com/zee-editor/zee";
     license = lib.licenses.mit;

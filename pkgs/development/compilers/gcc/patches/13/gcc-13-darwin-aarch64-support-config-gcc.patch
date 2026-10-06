@@ -1,0 +1,79 @@
+diff --git a/gcc/config.gcc b/gcc/config.gcc
+index e084f0831e..d58a070337 100644
+--- a/gcc/config.gcc
++++ b/gcc/config.gcc
+@@ -1125,6 +1125,26 @@
+   ;;
+ esac
+ 
++# Figure out if we need to enable heap trampolines
++# and variadic functions handling.
++case ${target} in
++aarch64*-*-darwin2*)
++  # This applies to arm64 Darwin variadic funtions.
++  tm_defines="$tm_defines STACK_USE_CUMULATIVE_ARGS_INIT=1"
++  # Executable stack is forbidden.
++  tm_defines="$tm_defines HEAP_TRAMPOLINES_INIT=1"
++  ;;
++*-*-darwin2*)
++  tm_defines="$tm_defines STACK_USE_CUMULATIVE_ARGS_INIT=0"
++  # Currently, we do this for macOS 11 and above.
++  tm_defines="$tm_defines HEAP_TRAMPOLINES_INIT=1"
++  ;;
++*)
++  tm_defines="$tm_defines STACK_USE_CUMULATIVE_ARGS_INIT=0"
++  tm_defines="$tm_defines HEAP_TRAMPOLINES_INIT=0"
++  ;;
++esac
++
+ case ${target} in
+ aarch64*-*-elf | aarch64*-*-fuchsia* | aarch64*-*-rtems*)
+ 	tm_file="${tm_file} elfos.h newlib-stdint.h"
+@@ -1164,6 +1184,14 @@
+ 	done
+ 	TM_MULTILIB_CONFIG=`echo $TM_MULTILIB_CONFIG | sed 's/^,//'`
+ 	;;
++aarch64-*-darwin* )
++	tm_file="${tm_file} aarch64/aarch64-errata.h"
++	tmake_file="${tmake_file} aarch64/t-aarch64 aarch64/t-aarch64-darwin"
++	tm_defines="${tm_defines} TARGET_DEFAULT_ASYNC_UNWIND_TABLES=1"
++	tm_defines="${tm_defines} DISABLE_AARCH64_AS_CRC_BUGFIX=1"
++	# Choose a default CPU version that will work for all current releases.
++	with_cpu=${with_cpu:-apple-m1}
++	;;
+ aarch64*-*-freebsd*)
+ 	tm_file="${tm_file} elfos.h ${fbsd_tm_file}"
+ 	tm_file="${tm_file} aarch64/aarch64-elf.h aarch64/aarch64-errata.h aarch64/aarch64-freebsd.h"
+@@ -4133,8 +4161,8 @@
+ 		fi
+ 		for which in cpu arch tune; do
+ 			eval "val=\$with_$which"
+-			base_val=`echo $val | sed -e 's/\+.*//'`
+-			ext_val=`echo $val | sed -e 's/[a-z0-9.-]\+//'`
++			base_val=`echo $val | sed -E -e 's/\+.*//'`
++			ext_val=`echo $val | sed -E -e 's/[a-z0-9.-]+//'`
+ 
+ 			if [ $which = arch ]; then
+ 			  def=aarch64-arches.def
+@@ -4166,9 +4194,9 @@
+ 
+ 			  while [ x"$ext_val" != x ]
+ 			  do
+-				ext_val=`echo $ext_val | sed -e 's/\+//'`
+-				ext=`echo $ext_val | sed -e 's/\+.*//'`
+-				base_ext=`echo $ext | sed -e 's/^no//'`
++				ext_val=`echo $ext_val | sed -E -e 's/\+//'`
++				ext=`echo $ext_val | sed -E -e 's/\+.*//'`
++				base_ext=`echo $ext | sed -E -e 's/^no//'`
+ 				opt_line=`echo -e "$options_parsed" | \
+ 					grep "^\"$base_ext\""`
+ 
+@@ -4179,7 +4207,7 @@
+ 				  echo "Unknown extension used in --with-$which=$val" 1>&2
+ 				  exit 1
+ 				fi
+-				ext_val=`echo $ext_val | sed -e 's/[a-z0-9-]\+//'`
++				ext_val=`echo $ext_val | sed -E -e 's/[a-z0-9-]\+//'`
+ 			  done
+ 
+ 			  true

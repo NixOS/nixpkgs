@@ -1,30 +1,41 @@
 {
   lib,
   stdenv,
+  apple-sdk_26,
+  darwinMinVersionHook,
+  cacert,
   fetchFromGitHub,
-  fetchpatch,
-  unicode-emoji,
-  unicode-character-database,
-  unicode-idna,
-  publicsuffix-list,
+  fetchzip,
+  pdfjs,
   chromium-hsts-preload-list,
   cmake,
+  gitMinimal,
   ninja,
   pkg-config,
   curlFull, # Websocket support
   libavif,
   angle, # libEGL
-  libjxl,
+  brotli,
+  cpptrace,
+  glib,
+  glslang,
+  harfbuzz,
+  libdrm,
+  libGL,
+  libjpeg_turbo,
+  libpng,
+  libpsl,
+  libxml2,
   libedit,
   libpulseaudio,
   libwebp,
-  libxcrypt,
   mimalloc,
   openssl,
   perl,
   python3,
   qt6Packages,
   woff2,
+  wuffs,
   cargo,
   fast-float,
   ffmpeg,
@@ -32,6 +43,8 @@
   fontconfig,
   rustPlatform,
   rustc,
+  rcodesign,
+  makeWrapper,
   simdutf,
   skia,
   nixosTests,
@@ -42,23 +55,51 @@
   sdl3,
   icu78,
   simdjson,
+  sqlite,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-memory-allocator,
+  zlib,
 }:
 
+let
+  # The integration patch shipped by Ladybird targets this PDF.js version.
+  pdfjsForLadybird = pdfjs.overrideAttrs (
+    final: _prev: {
+      version = "5.6.205";
+      src = fetchzip {
+        url = "https://github.com/mozilla/pdf.js/releases/download/v${final.version}/pdfjs-${final.version}-dist.zip";
+        hash = "sha256-JMmxoT68PNJ/MmlMwVNYcHerorklLv5YY6C55xjn73w=";
+        stripRoot = false;
+      };
+    }
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-06-05";
+  version = "0-unstable-2026-09-18";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "02b205361dd239e134f434e484b609d1fa5f1938";
-    hash = "sha256-+CVJjrL1kqT2A7r89F+riiHpMa39rcggqG9SByidUY4=";
+    rev = "b90af890b56cbd51c452d929fe71abcb8adaa36f";
+    hash = "sha256-CfSC0zEn1VUZaoBHi4a91n/QLTdpapygVf9c/v44X9E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-n0ACVH8NXwe7SIaGFoJ20WIGGR3XjcuLTwPSKGJpT5s=";
+    hash = "sha256-UshQ0YBl5TLbrEanqsNVeXgONYEux2bgBhI4ISby0Qc=";
   };
+
+  patches = [
+    # https://github.com/LadybirdBrowser/ladybird/issues/11772
+    ./build-information-source-archive.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/LadybirdBrowser/ladybird/issues/11875
+    # https://github.com/LadybirdBrowser/ladybird/issues/11891
+    ./darwin-build.patch
+  ];
 
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
@@ -67,28 +108,28 @@ stdenv.mkDerivation (finalAttrs: {
       's/find_package\(ICU 78\.[0-9]+ EXACT REQUIRED COMPONENTS data i18n uc\)/find_package(ICU ${icu78.version} EXACT REQUIRED COMPONENTS data i18n uc)/ or die "ICU dependency not found\n"' \
       Meta/CMake/check_for_dependencies.cmake
 
+    # Install the same PDF viewer assets and integration patch as the vcpkg build.
+    cp -r ${pdfjsForLadybird}/share/pdf.js pdfjs
+    chmod -R u+w pdfjs
+    patch -d pdfjs -p1 < Meta/CMake/vcpkg/overlay-ports/pdfjs/0001-ladybird-embed.patch
+    substituteInPlace UI/cmake/ResourceFiles.cmake \
+      --replace-fail 'if (NOT "''${VCPKG_INSTALLED_DIR}" STREQUAL "" AND NOT "''${VCPKG_TARGET_TRIPLET}" STREQUAL "")' 'if (TRUE)' \
+      --replace-fail '"''${VCPKG_INSTALLED_DIR}/''${VCPKG_TARGET_TRIPLET}/share/pdfjs"' '"''${LADYBIRD_SOURCE_DIR}/pdfjs"'
+
     # Don't set absolute paths in RPATH
     substituteInPlace Meta/CMake/lagom_install_options.cmake \
       --replace-fail "\''${CMAKE_INSTALL_BINDIR}" "bin" \
       --replace-fail "\''${CMAKE_INSTALL_LIBDIR}" "lib"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Services/RequestServer/main.cpp \
+      --replace-fail '@NIX_CA_BUNDLE@' '${cacert}/etc/ssl/certs/ca-bundle.crt'
   '';
 
   preConfigure = ''
-    # Setup caches for LibUnicode, LibTLS and LibGfx
-    # Note that the versions of the input data packages must match the
-    # expected version in the package's CMake.
-
+    # HSTS preload data is the only remaining downloaded data cache.
     mkdir -p build/Caches
-
-    cp -r ${unicode-character-database}/share/unicode build/Caches/UCD
-    chmod +w build/Caches/UCD
-    cp ${unicode-emoji}/share/unicode/emoji/emoji-test.txt build/Caches/UCD
-    cp ${unicode-idna}/share/unicode/idna/IdnaMappingTable.txt build/Caches/UCD
-    echo -n ${unicode-character-database.version} > build/Caches/UCD/version.txt
-    chmod -w build/Caches/UCD
-
-    mkdir build/Caches/PublicSuffix
-    cp ${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat build/Caches/PublicSuffix
+    cmakeFlagsArray+=("-DLADYBIRD_CACHE_DIR=$PWD/build/Caches")
 
     mkdir build/Caches/HSTSPreload
     cp ${chromium-hsts-preload-list}/share/chromium-hsts-preload-list/transport_security_state_static.json build/Caches/HSTSPreload
@@ -97,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cargo
     cmake
+    gitMinimal
     ninja
     perl
     pkg-config
@@ -104,57 +146,93 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustc
     qt6Packages.wrapQtAppsHook
-    libtommath
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ glslang ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+    rcodesign
   ];
 
   buildInputs = [
     curlFull
+    brotli
+    cpptrace
     fast-float
     ffmpeg
     fmt
     fontconfig
+    harfbuzz
     libavif
     angle # libEGL
-    libjxl
+    libGL
+    libjpeg_turbo
+    libpng
+    libpsl
+    libtommath
+    libxml2
     libedit
     libwebp
-    libxcrypt
-    mimalloc
+    (mimalloc.overrideAttrs {
+      # Ladybird uses heap APIs removed in mimalloc 3.
+      version = "2.2.7";
+      src = fetchFromGitHub {
+        owner = "microsoft";
+        repo = "mimalloc";
+        tag = "v2.2.7";
+        hash = "sha256-z9qMOTcGkURblZChXDGfQ58hrql52lG6EE1NQmxxuj0=";
+      };
+    })
     openssl
     qt6Packages.qtbase
-    qt6Packages.qtmultimedia
+    qt6Packages.qtpositioning
     sdl3
     simdutf
     (skia.overrideAttrs (prev: {
+      # Ladybird also uses Skia's color management API directly.
       gnFlags = prev.gnFlags ++ [
-        # https://github.com/LadybirdBrowser/ladybird/commit/af3d46dc06829dad65309306be5ea6fbc6a587ec
-        # https://github.com/LadybirdBrowser/ladybird/commit/4d7b7178f9d50fff97101ea18277ebc9b60e2c7c
-        # Remove when/if this gets upstreamed in skia.
-        "extra_cflags+=[\"-DSKCMS_API=[[gnu::visibility(\\\"default\\\")]]\"]"
+        "extra_cflags+=[\"-DSKCMS_DLL\"]"
       ];
-      # Ladybird depends on the vcpkg-packaged version of skia,
-      # which includes this patch that exposes deprecated interfaces.
-      patches = prev.patches or [ ] ++ [
-        (fetchpatch {
-          url = "https://github.com/microsoft/vcpkg/raw/64e1fbee7d9f40eab5d112aaff648c4dcffe9e47/ports/skia/skpath-enable-edit-methods.patch";
-          hash = "sha256-r5+HqSjACINn8igXqBANQsq0K+fn+Ut8L2VRs40FkTM=";
-        })
-      ];
+    }))
+    (wuffs.overrideAttrs (prev: {
+      # Ladybird includes the stable 0.3 single-file library.
+      version = "0.3.4";
+      vendorHash = "sha256-CRzsGHE3K/WWPX0A3B1CvvEdADlxdIhaT5fOtaA3LPo=";
+      src = fetchFromGitHub {
+        owner = "google";
+        repo = "wuffs";
+        tag = "v0.3.4";
+        hash = "sha256-XiaHus+bZ4jAk2zwinzz7VzyThCNlx36Auqyw2OH5rM=";
+      };
+      postInstall =
+        lib.replaceStrings
+          [ "release/c/wuffs-unsupported-snapshot.c" "wuffs-v0.4.c" ]
+          [ "release/c/wuffs-v0.3.c" "wuffs-v0.3.c" ]
+          prev.postInstall;
     }))
     woff2
     icu78
     simdjson
+    sqlite
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
+    glib
+    libdrm
     qt6Packages.qtwayland
+    vulkan-headers
+    vulkan-loader
+    vulkan-memory-allocator
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_26
+    (darwinMinVersionHook "14.0")
   ];
 
   cmakeFlags = [
     # Takes an enormous amount of resources, even with mold
     (lib.cmakeBool "ENABLE_LTO_FOR_RELEASE" false)
     # Disable network operations
-    "-DLADYBIRD_CACHE_DIR=Caches"
     "-DENABLE_NETWORK_DOWNLOADS=OFF"
     # Ladybird requires icu 78, but without this flag the default icu
     # from other dependencies gets picked up instead.
@@ -169,11 +247,19 @@ stdenv.mkDerivation (finalAttrs: {
   # ld: [...]/OESVertexArrayObject.cpp.o: undefined reference to symbol 'glIsVertexArrayOES'
   # ld: [...]/libGL.so.1: error adding symbols: DSO missing from command line
   # https://github.com/LadybirdBrowser/ladybird/issues/371#issuecomment-2616415434
-  env.NIX_LDFLAGS = "-lGL -lfontconfig";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-lGL " + "-lfontconfig";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
     mv $out/bundle/Ladybird.app $out/Applications
+    makeWrapper "$out/Applications/Ladybird.app/Contents/MacOS/Ladybird" "$out/bin/Ladybird"
+  '';
+
+  # Sign the complete bundle after stripping and other fixups, preserving entitlements.
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    rcodesign sign \
+      --entitlements-xml-file ${finalAttrs.src}/Meta/Entitlements.plist \
+      "$out/Applications/Ladybird.app"
   '';
 
   # Only Ladybird and WebContent need wrapped, if Qt is enabled.
@@ -219,9 +305,5 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
     ];
     mainProgram = "Ladybird";
-    broken = stdenv.hostPlatform.isDarwin;
-    knownVulnerabilities = [
-      "CVE-2026-58592"
-    ];
   };
 })

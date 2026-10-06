@@ -10,7 +10,7 @@
   cups,
   docbook-xsl-nons,
   fontconfig,
-  gcr,
+  gcr_3,
   gdk-pixbuf,
   gettext,
   glib,
@@ -29,6 +29,7 @@
   libgtop,
   libgudev,
   libhandy,
+  libjxl,
   libkrb5,
   libnma,
   libpulseaudio,
@@ -105,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     colord
     colord-gtk
     fontconfig
-    gcr
+    gcr_3
     gdk-pixbuf
     glib
     glib-networking
@@ -148,6 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
+          libjxl
           librsvg
           webp-pixbuf-loader
         ];

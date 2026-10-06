@@ -7,10 +7,10 @@
 }:
 let
   pname = "lmath";
-  version = "1.11.1";
+  version = "1.11.2";
   src = fetchurl {
     url = "https://github.com/lehtoroni/lmath-issues/releases/download/v${version}/LMath_Linux_r${version}-release.AppImage";
-    hash = "sha256-GkEE+rrrCiX1gBDB7HpWZ2pYPA3YGVTt5zZdbw3u+S4=";
+    hash = "sha256-NHfNnBYxKXRk4IQonQTjYtIIk3apZs45BbWGIvLfl3w=";
   };
 
   appimageContents = appimageTools.extract {

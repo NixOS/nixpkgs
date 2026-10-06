@@ -227,6 +227,8 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
             return CompletedProcess([], 0, "nixpkgs-rev")
         elif args[0] == "nix-build":
             return CompletedProcess([], 0, str(config_path))
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 261 (261.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -234,80 +236,86 @@ def test_execute_nix_boot(mock_run: Mock, tmp_path: Path) -> None:
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--no-reexec"])
 
-    assert mock_run.call_count == 8
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                capture_output=True,
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
-                capture_output=True,
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["git", "-C", nixpkgs_path, "diff", "--quiet"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-build",
-                    "<nixos-system>",
-                    "--attr",
-                    "config.system.build.toplevel",
-                    "--no-out-link",
-                    "-vvv",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-env",
-                    "-p",
-                    Path("/nix/var/nix/profiles/system"),
-                    "--set",
-                    config_path,
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["test", "-d", "/run/systemd/system"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
-                    config_path / "bin/switch-to-configuration",
-                    "boot",
-                ],
-                check=True,
-                stdout=ANY,
-                **(
-                    DEFAULT_RUN_KWARGS
-                    | {
-                        "env": {
-                            "NIXOS_INSTALL_BOOTLOADER": "0",
-                        }
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            capture_output=True,
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-instantiate", "--find-file", "nixpkgs", "-vvv"],
+            capture_output=True,
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["git", "-C", nixpkgs_path, "diff", "--quiet"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-build",
+                "<nixos-system>",
+                "--attr",
+                "config.system.build.toplevel",
+                "--no-out-link",
+                "-vvv",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-env",
+                "-p",
+                Path("/nix/var/nix/profiles/system"),
+                "--set",
+                config_path,
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["test", "-d", "/run/systemd/system"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["systemd-run", "--version"],
+            check=True,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                "--wait",
+                "--verbose",
+                "--output=cat",
+                config_path / "bin/switch-to-configuration",
+                "boot",
+            ],
+            check=True,
+            stdout=ANY,
+            **(
+                DEFAULT_RUN_KWARGS
+                | {
+                    "env": {
+                        "NIXOS_INSTALL_BOOTLOADER": "0",
                     }
-                ),
+                }
             ),
-        ]
-    )
+        ),
+    ]
 
 
 # https://github.com/NixOS/nixpkgs/issues/437872
@@ -332,31 +340,28 @@ def test_execute_nix_build(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 2
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "build",
-                    "--print-out-paths",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
-                    "--no-link",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "--print-out-paths",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                "--no-link",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch.dict(os.environ, {}, clear=True)
@@ -388,32 +393,79 @@ def test_execute_nix_build_vm(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 2
-    mock_run.assert_has_calls(
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-build",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "config.system.build.vm",
+                "--include",
+                "nixos-config=./configuration.nix",
+                "--include",
+                "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
+
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_execute_nix_build_vm_with_bootloader_and_specialisation(
+    mock_run: Mock, tmp_path: Path
+) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-build":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
         [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-build",
-                    "<nixpkgs/nixos>",
-                    "--attr",
-                    "config.system.build.vm",
-                    "--include",
-                    "nixos-config=./configuration.nix",
-                    "--include",
-                    "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
+            "nixos-rebuild",
+            "build-vm-with-bootloader",
+            "--specialisation",
+            "custom-specialisation",
+            "--no-flake",
+            "--no-reexec",
         ]
     )
+
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-build",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "config.specialisation.custom-specialisation.configuration.system.build.vmWithBootLoader",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch.dict(os.environ, {}, clear=True)
@@ -449,58 +501,55 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 4
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "eval",
-                    "--json",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images',
-                    "--apply",
-                    "builtins.attrNames",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "build",
-                    "--print-out-paths",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure',
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "eval",
-                    "--json",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure.passthru.filePath',
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--json",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.images',
+                "--apply",
+                "builtins.attrNames",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "--print-out-paths",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure',
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--json",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure.passthru.filePath',
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch.dict(
@@ -518,6 +567,8 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -540,66 +591,70 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 5
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "build",
-                    "--print-out-paths",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
-                    "--no-link",
-                    "-v",
-                    "--option",
-                    "narinfo-cache-negative-ttl",
-                    "1200",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "sudo",
-                    "nix-env",
-                    "-p",
-                    Path("/nix/var/nix/profiles/system"),
-                    "--set",
-                    config_path,
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["test", "-d", "/run/systemd/system"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "sudo",
-                    "env",
-                    "-i",
-                    "NIXOS_INSTALL_BOOTLOADER=1",
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
-                    config_path / "bin/switch-to-configuration",
-                    "switch",
-                ],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "--print-out-paths",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                "--no-link",
+                "-v",
+                "--option",
+                "narinfo-cache-negative-ttl",
+                "1200",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "sudo",
+                "nix-env",
+                "-p",
+                Path("/nix/var/nix/profiles/system"),
+                "--set",
+                config_path,
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["test", "-d", "/run/systemd/system"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["systemd-run", "--version"],
+            check=True,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "sudo",
+                "env",
+                "-i",
+                "NIXOS_INSTALL_BOOTLOADER=1",
+                *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                "--pipe",
+                config_path / "bin/switch-to-configuration",
+                "switch",
+            ],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch.dict(
@@ -610,7 +665,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
 @patch("subprocess.run", autospec=True)
 @patch("uuid.uuid4", autospec=True)
 @patch(get_qualified_name(nr.services.cleanup_ssh), autospec=True)
-def test_execute_nix_switch_build_target_host(
+def test_execute_nix_switch_build_target_host_custom_profile(
     mock_cleanup_ssh: Mock,
     mock_uuid4: Mock,
     mock_run: Mock,
@@ -632,6 +687,8 @@ def test_execute_nix_switch_build_target_host(
             return CompletedProcess([], 0, "/tmp/tmpdir")
         elif args[0] == "ssh" and "readlink" in args:
             return CompletedProcess([], 0, str(config_path))
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -654,201 +711,236 @@ def test_execute_nix_switch_build_target_host(
             "nixos-config=./configuration.nix",
             "-I",
             "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            "--profile-name",
+            "custom-profile",
         ]
     )
 
-    assert mock_run.call_count == 12
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-instantiate",
-                    "--find-file",
-                    "nixpkgs",
-                    "--include",
-                    "nixos-config=./configuration.nix",
-                    "--include",
-                    "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
-                ],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-instantiate",
-                    "<nixpkgs/nixos>",
-                    "--attr",
-                    "config.system.build.toplevel",
-                    "--add-root",
-                    nr.tmpdir.TMPDIR_PATH / "00000000000000000000000000000000",
-                    "--include",
-                    "nixos-config=./configuration.nix",
-                    "--include",
-                    "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["nix-copy-closure", "--to", "user@build-host", config_path],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@build-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "mktemp",
-                    "-d",
-                    "-t",
-                    "nixos-rebuild.XXXXX",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@build-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "nix-store",
-                    "--realise",
-                    str(config_path),
-                    "--add-root",
-                    "/tmp/tmpdir/00000000000000000000000000000000",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@build-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "readlink",
-                    "-f",
-                    "/tmp/tmpdir/config",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@build-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "rm",
-                    "-rf",
-                    "/tmp/tmpdir",
-                ],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "copy",
-                    "--from",
-                    "ssh://user@build-host",
-                    "--to",
-                    "ssh://user@target-host",
-                    config_path,
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@target-host",
-                    "--",
-                    "sudo",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "nix-env",
-                    "-p",
-                    "/nix/var/nix/profiles/system",
-                    "--set",
-                    str(config_path),
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@target-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "test",
-                    "-d",
-                    "/run/systemd/system",
-                ],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@target-host",
-                    "--",
-                    "sudo",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
-                    "sh",
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
-                    str(config_path / "bin/switch-to-configuration"),
-                    "switch",
-                ],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-instantiate",
+                "--find-file",
+                "nixpkgs",
+                "--include",
+                "nixos-config=./configuration.nix",
+                "--include",
+                "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            ],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-instantiate",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "config.system.build.toplevel",
+                "--add-root",
+                nr.tmpdir.TMPDIR_PATH / "00000000000000000000000000000000",
+                "--include",
+                "nixos-config=./configuration.nix",
+                "--include",
+                "nixpkgs=$HOME/.nix-defexpr/channels/pinned_nixpkgs",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-copy-closure", "--to", "user@build-host", config_path],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@build-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "mktemp",
+                "-d",
+                "-t",
+                "nixos-rebuild.XXXXX",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@build-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "nix-store",
+                "--realise",
+                str(config_path),
+                "--add-root",
+                "/tmp/tmpdir/00000000000000000000000000000000",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@build-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "readlink",
+                "-f",
+                "/tmp/tmpdir/config",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@build-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "rm",
+                "-rf",
+                "/tmp/tmpdir",
+            ],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "copy",
+                "--from",
+                "ssh://user@build-host",
+                "--to",
+                "ssh://user@target-host",
+                config_path,
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@target-host",
+                "--",
+                "sudo",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "mkdir",
+                "-p",
+                "/nix/var/nix/profiles/system-profiles",
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@target-host",
+                "--",
+                "sudo",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "nix-env",
+                "-p",
+                "/nix/var/nix/profiles/system-profiles/custom-profile",
+                "--set",
+                str(config_path),
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@target-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "test",
+                "-d",
+                "/run/systemd/system",
+            ],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@target-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "systemd-run",
+                "--version",
+            ],
+            check=True,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@target-host",
+                "--",
+                "sudo",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                "sh",
+                *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                "--pipe",
+                str(config_path / "bin/switch-to-configuration"),
+                "switch",
+            ],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch.dict(
@@ -871,6 +963,8 @@ def test_execute_nix_switch_flake_target_host(
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -889,92 +983,107 @@ def test_execute_nix_switch_flake_target_host(
         ]
     )
 
-    assert mock_run.call_count == 6
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "build",
-                    "--print-out-paths",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
-                    "--no-link",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["nix-copy-closure", "--to", "user@localhost", config_path],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@localhost",
-                    "--",
-                    "sudo",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "nix-env",
-                    "-p",
-                    "/nix/var/nix/profiles/system",
-                    "--set",
-                    str(config_path),
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@localhost",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "test",
-                    "-d",
-                    "/run/systemd/system",
-                ],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@localhost",
-                    "--",
-                    "sudo",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
-                    "sh",
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
-                    str(config_path / "bin/switch-to-configuration"),
-                    "switch",
-                ],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "--print-out-paths",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
+                "--no-link",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-copy-closure", "--to", "user@localhost", config_path],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@localhost",
+                "--",
+                "sudo",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "nix-env",
+                "-p",
+                "/nix/var/nix/profiles/system",
+                "--set",
+                str(config_path),
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@localhost",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "test",
+                "-d",
+                "/run/systemd/system",
+            ],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@localhost",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "systemd-run",
+                "--version",
+            ],
+            check=True,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@localhost",
+                "--",
+                "sudo",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                "sh",
+                *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                "--pipe",
+                str(config_path / "bin/switch-to-configuration"),
+                "switch",
+            ],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch.dict(
@@ -999,6 +1108,8 @@ def test_execute_nix_switch_flake_build_host(
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "nix-instantiate":
             return CompletedProcess([], 1)
+        elif "systemd-run" in args and "--version" in args:
+            return CompletedProcess([], 0, "systemd 258 (258.2)")
         else:
             return CompletedProcess([], 0)
 
@@ -1016,93 +1127,97 @@ def test_execute_nix_switch_flake_build_host(
         ]
     )
 
-    assert mock_run.call_count == 8
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "eval",
-                    "--raw",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["nix-copy-closure", "--to", "user@localhost", config_path],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@localhost",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "nix",
-                    "--extra-experimental-features",
-                    "'nix-command flakes'",
-                    "build",
-                    f"'{config_path}^*'",
-                    "--print-out-paths",
-                    "--no-link",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-copy-closure",
-                    "--from",
-                    "user@localhost",
-                    config_path,
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-env",
-                    "-p",
-                    Path("/nix/var/nix/profiles/system"),
-                    "--set",
-                    config_path,
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["test", "-d", "/run/systemd/system"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
-                    config_path / "bin/switch-to-configuration",
-                    "switch",
-                ],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--raw",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-copy-closure", "--to", "user@localhost", config_path],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@localhost",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "nix",
+                "--extra-experimental-features",
+                "'nix-command flakes'",
+                "build",
+                f"'{config_path}^*'",
+                "--print-out-paths",
+                "--no-link",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-copy-closure",
+                "--from",
+                "user@localhost",
+                config_path,
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-env",
+                "-p",
+                Path("/nix/var/nix/profiles/system"),
+                "--set",
+                config_path,
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["test", "-d", "/run/systemd/system"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["systemd-run", "--version"],
+            check=True,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                "--pipe",
+                config_path / "bin/switch-to-configuration",
+                "switch",
+            ],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch("subprocess.run", autospec=True)
@@ -1135,60 +1250,57 @@ def test_execute_switch_rollback(mock_run: Mock, tmp_path: Path) -> None:
         ]
     )
 
-    assert mock_run.call_count == 6
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                capture_output=True,
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["nix-instantiate", "--find-file", "nixpkgs"],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "git",
-                    "-C",
-                    nixpkgs_path,
-                    "rev-parse",
-                    "--short",
-                    "HEAD",
-                ],
-                check=False,
-                capture_output=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-env",
-                    "--rollback",
-                    "-p",
-                    Path("/nix/var/nix/profiles/system"),
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["test", "-d", "/run/systemd/system"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    Path("/nix/var/nix/profiles/system/bin/switch-to-configuration"),
-                    "switch",
-                ],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            capture_output=True,
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-instantiate", "--find-file", "nixpkgs"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "git",
+                "-C",
+                nixpkgs_path,
+                "rev-parse",
+                "--short",
+                "HEAD",
+            ],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-env",
+                "--rollback",
+                "-p",
+                Path("/nix/var/nix/profiles/system"),
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["test", "-d", "/run/systemd/system"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                Path("/nix/var/nix/profiles/system/bin/switch-to-configuration"),
+                "switch",
+            ],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch("subprocess.run", autospec=True)
@@ -1204,28 +1316,25 @@ def test_execute_build(mock_run: Mock, tmp_path: Path) -> None:
 
     nr.execute(["nixos-rebuild", "build", "--no-flake", "--no-reexec"])
 
-    assert mock_run.call_count == 2
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                capture_output=True,
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-build",
-                    "<nixpkgs/nixos>",
-                    "--attr",
-                    "config.system.build.toplevel",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            capture_output=True,
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-build",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "config.system.build.toplevel",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch("subprocess.run", autospec=True)
@@ -1255,57 +1364,54 @@ def test_execute_build_dry_run_build_and_target_remote(
         ]
     )
 
-    assert mock_run.call_count == 4
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                capture_output=True,
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "eval",
-                    "--raw",
-                    '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["nix-copy-closure", "--to", "user@build-host", config_path],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@build-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "nix",
-                    "--extra-experimental-features",
-                    "'nix-command flakes'",
-                    "build",
-                    f"'{config_path}^*'",
-                    "--print-out-paths",
-                    "--dry-run",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            capture_output=True,
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--raw",
+                '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel.drvPath',
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-copy-closure", "--to", "user@build-host", config_path],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@build-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "nix",
+                "--extra-experimental-features",
+                "'nix-command flakes'",
+                "build",
+                f"'{config_path}^*'",
+                "--print-out-paths",
+                "--dry-run",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch("subprocess.run", autospec=True)
@@ -1327,42 +1433,39 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
         ["nixos-rebuild", "test", "--flake", "github:user/repo#hostname", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 4
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                capture_output=True,
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix",
-                    "--extra-experimental-features",
-                    "nix-command flakes",
-                    "build",
-                    "--print-out-paths",
-                    'github:user/repo#nixosConfigurations."hostname".config.system.build.toplevel',
-                    "--no-link",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["test", "-d", "/run/systemd/system"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [config_path / "bin/switch-to-configuration", "test"],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            capture_output=True,
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "--print-out-paths",
+                'github:user/repo#nixosConfigurations."hostname".config.system.build.toplevel',
+                "--no-link",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["test", "-d", "/run/systemd/system"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [config_path / "bin/switch-to-configuration", "test"],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch("subprocess.run", autospec=True)
@@ -1397,38 +1500,41 @@ def test_execute_test_rollback(
         ["nixos-rebuild", "test", "--rollback", "--profile-name", "foo", "--no-reexec"]
     )
 
-    assert mock_run.call_count == 4
-    mock_run.assert_has_calls(
-        [
-            call(
-                [
-                    "nix-env",
-                    "-p",
-                    Path("/nix/var/nix/profiles/system-profiles/foo"),
-                    "--list-generations",
-                ],
-                check=True,
-                stdout=PIPE,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["test", "-d", "/run/systemd/system"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    Path(
-                        "/nix/var/nix/profiles/system-profiles/foo-2083-link/bin/switch-to-configuration"
-                    ),
-                    "test",
-                ],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-env",
+                "-p",
+                Path("/nix/var/nix/profiles/system-profiles/foo"),
+                "--list-generations",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["test", "-d", "/run/systemd/system"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                Path(
+                    "/nix/var/nix/profiles/system-profiles/foo-2083-link/bin/switch-to-configuration"
+                ),
+                "test",
+            ],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 
 @patch.dict(
@@ -1454,50 +1560,54 @@ def test_execute_switch_store_path(mock_run: Mock, tmp_path: Path) -> None:
     )
 
     # --store-path skips build and write_version_suffix, so only activation calls
-    assert mock_run.call_count == 4
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-instantiate", "--find-file", "nixos-system"],
-                capture_output=True,
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "nix-env",
-                    "-p",
-                    Path("/nix/var/nix/profiles/system"),
-                    "--set",
-                    config_path,
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                ["test", "-d", "/run/systemd/system"],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
-                    config_path / "bin/switch-to-configuration",
-                    "switch",
-                ],
-                check=True,
-                stdout=ANY,
-                **(
-                    DEFAULT_RUN_KWARGS
-                    | {
-                        "env": {
-                            "NIXOS_INSTALL_BOOTLOADER": "0",
-                        }
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            capture_output=True,
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-env",
+                "-p",
+                Path("/nix/var/nix/profiles/system"),
+                "--set",
+                config_path,
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["test", "-d", "/run/systemd/system"],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["systemd-run", "--version"],
+            check=True,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                "--pipe",
+                config_path / "bin/switch-to-configuration",
+                "switch",
+            ],
+            check=True,
+            stdout=ANY,
+            **(
+                DEFAULT_RUN_KWARGS
+                | {
+                    "env": {
+                        "NIXOS_INSTALL_BOOTLOADER": "0",
                     }
-                ),
+                }
             ),
-        ]
-    )
+        ),
+    ]
 
 
 @patch.dict(os.environ, {}, clear=True)
@@ -1527,86 +1637,107 @@ def test_execute_switch_store_path_target_host(
     )
 
     # --store-path skips build and write_version_suffix, so only copy/activation calls
-    assert mock_run.call_count == 6
-    mock_run.assert_has_calls(
-        [
-            call(
-                ["nix-copy-closure", "--to", "user@remote-host", config_path],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@remote-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "test",
-                    "-f",
-                    str(config_path / "nixos-version"),
-                ],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@remote-host",
-                    "--",
-                    "sudo",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "nix-env",
-                    "-p",
-                    "/nix/var/nix/profiles/system",
-                    "--set",
-                    str(config_path),
-                ],
-                check=True,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@remote-host",
-                    "--",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
-                    "sh",
-                    "test",
-                    "-d",
-                    "/run/systemd/system",
-                ],
-                check=False,
-                **DEFAULT_RUN_KWARGS,
-            ),
-            call(
-                [
-                    "ssh",
-                    *nr.process.SSH_DEFAULT_OPTS,
-                    "user@remote-host",
-                    "--",
-                    "sudo",
-                    "/bin/sh",
-                    "-c",
-                    """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
-                    "sh",
-                    *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
-                    str(config_path / "bin/switch-to-configuration"),
-                    "switch",
-                ],
-                check=True,
-                stdout=ANY,
-                **DEFAULT_RUN_KWARGS,
-            ),
-        ]
-    )
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            ["nix-copy-closure", "--to", "user@remote-host", config_path],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@remote-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "test",
+                "-f",
+                str(config_path / "nixos-version"),
+            ],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@remote-host",
+                "--",
+                "sudo",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "nix-env",
+                "-p",
+                "/nix/var/nix/profiles/system",
+                "--set",
+                str(config_path),
+            ],
+            check=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@remote-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "test",
+                "-d",
+                "/run/systemd/system",
+            ],
+            check=False,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@remote-host",
+                "--",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" "$@"'""",
+                "sh",
+                "systemd-run",
+                "--version",
+            ],
+            check=True,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "ssh",
+                *nr.process.SSH_DEFAULT_OPTS,
+                "user@remote-host",
+                "--",
+                "sudo",
+                "/bin/sh",
+                "-c",
+                """'exec /usr/bin/env -i PATH="${PATH-}" LOCALE_ARCHIVE="${LOCALE_ARCHIVE-}" NIXOS_NO_CHECK="${NIXOS_NO_CHECK-}" NIXOS_INSTALL_BOOTLOADER=0 "$@"'""",
+                "sh",
+                *nr.nix.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+                "--pipe",
+                str(config_path / "bin/switch-to-configuration"),
+                "switch",
+            ],
+            check=True,
+            stdout=ANY,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]

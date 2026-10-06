@@ -2,17 +2,11 @@
   buildDunePackage,
   lib,
   fetchurl,
-  uri,
-  base64,
-  digestif,
+  jws,
+  lun,
   logs,
   fmt,
-  lwt,
-  mirage-crypto,
-  mirage-crypto-ec,
-  mirage-crypto-pk,
   x509,
-  yojson,
   ounit2,
   ptime,
   domain-name,
@@ -20,14 +14,12 @@
 
 buildDunePackage (finalAttrs: {
   pname = "letsencrypt";
-  version = "1.1.0";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "https://github.com/mmaker/ocaml-letsencrypt/releases/download/v${finalAttrs.version}/letsencrypt-${finalAttrs.version}.tbz";
-    hash = "sha256-Iw55GffyG5tWA49hao1z9BX6p4N2+EKuhLIoOwG8EKM=";
+    hash = "sha256-jv/CxJFhqb4ouC7CvYMXHhVRmgpdlMPIwPYPAMt7Bts=";
   };
-
-  minimalOCamlVersion = "4.08";
 
   buildInputs = [
     fmt
@@ -36,16 +28,10 @@ buildDunePackage (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
+    jws
     logs
-    yojson
-    lwt
-    base64
-    digestif
-    mirage-crypto
-    mirage-crypto-ec
-    mirage-crypto-pk
+    lun
     x509
-    uri
   ];
 
   doCheck = true;

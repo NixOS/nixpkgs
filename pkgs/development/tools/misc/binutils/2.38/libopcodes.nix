@@ -50,6 +50,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library from binutils for manipulating machine code";
     homepage = "https://www.gnu.org/software/binutils/";

@@ -67,9 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swaylock";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      wineee
-      yvnth
-    ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 })

@@ -34,10 +34,10 @@
   pam,
   pkg-config,
   polkit,
-  python312Packages,
+  python3Packages,
   removeReferencesTo,
   sscg,
-  systemd,
+  systemdLibs,
   udev,
   util-linux,
   xmlto,
@@ -45,22 +45,15 @@
   withBranding ? true,
   nixos-icons,
 }:
-
-let
-  # Pinned to 3.12 due to cockpit-zfs dependency py-libzfs not being compatible
-  # with 3.13+
-  python3Packages = python312Packages;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "366";
+  version = "368";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-WyV6I8u83ETVLmjJ7Mjh0D1cLY+RQkxGAIMTkRfy3T0=";
+    hash = "sha256-2bFQwK5L0S84nLSkUeHmbNgBkjBJIxR88t/21h5jmps=";
     fetchSubmodules = true;
   };
 
@@ -80,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.setuptools
     removeReferencesTo
-    systemd
+    systemdLibs
     xmlto
   ];
 
@@ -231,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 
     substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
-      --replace-warn libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
+      --replace-warn libsystemd.so.0 ${systemdLibs}/lib/libsystemd.so.0
 
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
       --replace-fail /usr $out
@@ -257,7 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       -t ${lib.getDev stdenv.cc.libc} \
       -t ${lib.getDev glib} \
       -t ${lib.getDev json-glib} \
-      -t ${lib.getDev systemd} \
+      -t ${lib.getDev systemdLibs} \
       -t ${lib.getDev gnutls} \
       -t ${lib.getDev krb5} \
       "$out/lib/security/pam_ssh_add.so" \
@@ -275,7 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getDev stdenv.cc.libc)
     (lib.getDev glib)
     (lib.getDev json-glib)
-    (lib.getDev systemd)
+    (lib.getDev systemdLibs)
     (lib.getDev gnutls)
     (lib.getDev krb5)
   ];

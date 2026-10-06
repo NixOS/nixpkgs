@@ -1,27 +1,31 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   fetchPypi,
   hatchling,
+  psutil,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiopulse";
-  version = "0.4.7";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DM/zDFoTYgaW+o2YYv4bDAja5iwabIBfFJ7Yep4Fywc=";
+    hash = "sha256-acUcJM5ghUKezpYTncDADQTZa6NMyteG6Yu7GFPbuLs=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies = [ async-timeout ];
+  dependencies = [ psutil ];
 
-  # Tests are not present
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "aiopulse" ];
 

@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes yarnLock;
 
-    hash = "sha256-FiDuAwEj/AIH/lJRLyuNPvthcoynsFGcUYZyx7DMnFA=";
+    hash = "sha256-YNW6Hqk3WU0IRCbDQpNOTiIHT9T5zBMhNm5GxX1WqrM=";
   };
 
   postUnpack = ''

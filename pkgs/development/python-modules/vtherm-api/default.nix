@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "vtherm-api";
-  version = "0.3.0";
+  version = "0.5.0";
   pyproject = true;
 
   disabled = python.version != home-assistant.python3Packages.python.version;
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jmcollin78";
     repo = "vtherm_api";
     tag = finalAttrs.version;
-    hash = "sha256-8YE9+Y+R6TvBKssRPvDLSdVzonDawWgg01Ngk94eMzM=";
+    hash = "sha256-lhESu3rAvlbTYV2O3d3oTZiiwbzXzumqUvNNptpgsT8=";
   };
 
   build-system = [ setuptools ];

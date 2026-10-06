@@ -4,8 +4,8 @@
 set -eu -o pipefail
 
 ATTR=legends-of-equestria
-DOWNLOADS_PAGE="$(curl -s "$(nix-instantiate --eval -A "$ATTR.meta.downloadPage" | tr -d '"')")"
-OLD_VERSION="$(nix-instantiate --eval -A "$ATTR.version" | tr -d '"')"
+DOWNLOADS_PAGE="$(curl -s "$(nix-instantiate --eval --raw -A "$ATTR.meta.downloadPage")")"
+OLD_VERSION="$(nix-instantiate --eval --raw -A "$ATTR.version")"
 NIX_FILE="$(nix-instantiate --eval -A "$ATTR.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')"
 TMP=$(mktemp -d)
 

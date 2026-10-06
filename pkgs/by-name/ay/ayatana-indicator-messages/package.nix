@@ -19,7 +19,7 @@
   lomiri,
   pkg-config,
   python3,
-  systemd,
+  systemdLibs,
   vala,
   wrapGAppsHook3,
 }:
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri.cmake-extras
     glib
     gobject-introspection
-    systemd
+    systemdLibs
   ];
 
   nativeCheckInputs = [

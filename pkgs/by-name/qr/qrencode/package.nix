@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
+  strictDeps = true;
+
   doCheck = false;
 
   checkPhase = ''
@@ -56,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     };
     updateScript = nix-update-script { };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://fukuchi.org/works/qrencode/";

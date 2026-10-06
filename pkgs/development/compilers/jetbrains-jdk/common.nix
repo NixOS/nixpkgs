@@ -222,12 +222,12 @@ jdk.overrideAttrs (oldAttrs: {
       JetBrains Runtime is not a certified build of OpenJDK. Please, use at
       your own risk.
     '';
-    homepage = "https://confluence.jetbrains.com/display/JBR/JetBrains+Runtime";
-    inherit (jdk.meta) license platforms mainProgram;
+    homepage = "https://github.com/JetBrains/JetBrainsRuntime";
+    inherit (jdk.meta) license mainProgram;
     maintainers = with lib.maintainers; [
       aoli-al
     ];
 
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "panasonic-viera";
-  version = "0.4.4";
+  version = "0.4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "florianholzapfel";
     repo = "panasonic-viera";
     tag = version;
-    hash = "sha256-f/FLM6xoJwRZwq8Q6uf9W+fJN96wE6HvJozaNVmORtg=";
+    hash = "sha256-AJivKcZPe9kb8pZlb/c4u5406EbLkznQiEYu7C9Y37U=";
   };
 
   build-system = [ poetry-core ];

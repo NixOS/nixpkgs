@@ -1,0 +1,11 @@
+--- a/app/composables/masto/masto.ts
++++ b/app/composables/masto/masto.ts
+@@ -76,7 +76,7 @@
+       masto.streamingClient.value = createStreamingClient(newInstance.configuration.urls.streaming)
+ 
+     instanceStorage.value[server] = newInstance
+-  })
++  }).catch(noop)
+ 
+   return instance
+ }

@@ -5,6 +5,7 @@
   nodejs,
   nix-update-script,
   nixosTests,
+  stdenv, # for meta.broken
 }:
 buildNpmPackage rec {
   pname = "db-rest";
@@ -31,6 +32,8 @@ buildNpmPackage rec {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Clean REST API wrapping around the Deutsche Bahn API";
     homepage = "https://v6.db.transport.rest/";
     license = lib.licenses.isc;

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pythonkuma";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tr4nt0r";
     repo = "pythonkuma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jQapfwdDuHb5Ha25cUQycfRb/A07pRtm92Iy8bbYfqI=";
+    hash = "sha256-EEglMS8KwzlPrtcnJ3QpBYWfeur0QdEtJQuC+6WBHWg=";
   };
 
   build-system = [

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
+  installShellFiles,
   bash,
   gitMinimal,
   delta,
@@ -24,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ScgzMG40uR9+4cjTIHwmefSoAxVNELNx8fDVXGFl8rU=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
+
   buildInputs = [ bash ];
 
   __structuredAttrs = true;
@@ -53,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }" \
       --suffix PATH : "${lib.makeBinPath [ delta ]}"
+
+    installManPage man/man1/git-recent.1
 
     runHook postInstall
   '';

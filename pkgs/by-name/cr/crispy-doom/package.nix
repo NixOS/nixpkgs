@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
   '';
 
-  configureFlags = lib.optional enableTruecolor [ "--enable-truecolor" ];
+  configureFlags = lib.optionals enableTruecolor [ "--enable-truecolor" ];
 
   nativeBuildInputs = [
     autoreconfHook

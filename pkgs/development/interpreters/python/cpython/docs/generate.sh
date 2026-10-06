@@ -50,6 +50,7 @@ EOF
         echo "Generating ${outfile}"
         url=$(echo -n $URL |sed -e "s,VERSION,${version},g" -e "s,TYPE,${type},")
         sha=$(nix-prefetch-url ${url} ${hash})
+        sha=$(nix hash convert --from nix32 --to sri --hash-algo sha256 "$sha")
 
 
         sed -e "s,VERSION,${version}," \

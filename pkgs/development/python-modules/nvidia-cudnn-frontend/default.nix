@@ -18,6 +18,10 @@
   # propagatedBuildInputs
   nlohmann_json,
 
+  # dependencies
+  apache-tvm-ffi,
+  nvidia-cutlass-dsl,
+
   # tests
   looseversion,
   pytestCheckHook,
@@ -72,6 +76,11 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
 
   propagatedBuildInputs = [
     nlohmann_json
+  ];
+
+  dependencies = [
+    apache-tvm-ffi
+    nvidia-cutlass-dsl
   ];
 
   pythonImportsCheck = [ "cudnn" ];

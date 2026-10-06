@@ -22,14 +22,14 @@ buildPythonPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "netbox-qrcode";
-  version = "0.0.21";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-qrcode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A4qjpbfTULzS0UchUN9eX8jZmwoX/ej/18L/YAB8dKA=";
+    hash = "sha256-4BtK1//TfcNiFgw2U+S6SH58Nb/kAmFk+a/GAhQ/+SU=";
   };
 
   build-system = [ setuptools ];

@@ -1,11 +1,13 @@
 {
   autoPatchelfHook,
   copyDesktopItems,
+  curl,
   dbus,
   fetchurl,
   fontconfig,
   freetype,
   lib,
+  libdrm,
   libGLU,
   libxkbcommon,
   makeDesktopItem,
@@ -16,16 +18,28 @@
   libxcb-keysyms,
   libxcb-render-util,
   libxcb-wm,
-  libxml2,
 }:
+let
+  version = "6.0.10601";
+
+  sources = {
+    x86_64-linux = {
+      url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${version}/binaryninja_free_linux.zip";
+      hash = "sha256-PoucWGGr5umwTIa1+cStLchs7ep5ty17Cu4f3PfOkdY=";
+    };
+    aarch64-linux = {
+      url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${version}/binaryninja_free_linux-arm.zip";
+      hash = "sha256-G3gSWFa+Rh9zJMoA9QyH8XiIXsEK0YVXgHDtmR6X11o=";
+    };
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "binaryninja-free";
-  version = "5.2.8722";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/Vector35/binaryninja-api/releases/download/stable/${finalAttrs.version}/binaryninja_free_linux.zip";
-    hash = "sha256-YlBr/Cdjev7LWY/VsKgv/i3zHj4YR49RX69zmhhie7U=";
-  };
+  src = fetchurl (
+    sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")
+  );
 
   icon = fetchurl {
     url = "https://raw.githubusercontent.com/Vector35/binaryninja-api/448f40be71dffa86a6581c3696627ccc1bdf74f2/docs/img/logo.png";
@@ -54,9 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    curl
     dbus
     fontconfig
     freetype
+    libdrm
     libGLU
     libxkbcommon
     stdenv.cc.cc.lib
@@ -96,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
       scoder12
       timschumi
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

@@ -27,10 +27,14 @@ stdenv.mkDerivation {
     nss
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   postPatch = ''
     patchShebangs ./scripts
     substituteInPlace ./scripts/getversion.sh \
       --replace-fail "unknown" "${branch}"
+    substituteInPlace ./Makefile \
+      --replace-fail "ar qcT" "${stdenv.cc.targetPrefix}ar qcT"
   '';
 
   makeFlags = [

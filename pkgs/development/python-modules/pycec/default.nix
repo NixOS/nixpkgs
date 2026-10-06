@@ -30,7 +30,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "pycec" ];
+  pythonImportsCheck = [
+    "cec"
+    "pycec"
+  ];
 
   meta = {
     description = "Python modules to access HDMI CEC devices";

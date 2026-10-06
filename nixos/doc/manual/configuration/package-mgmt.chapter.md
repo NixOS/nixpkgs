@@ -11,8 +11,3 @@ NixOS has two distinct styles of package management:
 -   *Ad hoc*, where you install, upgrade and uninstall packages via the
     `nix-env` command. This style allows mixing packages from different
     Nixpkgs versions. It's the only choice for non-root users.
-
-```{=include=} sections
-declarative-packages.section.md
-ad-hoc-packages.section.md
-```

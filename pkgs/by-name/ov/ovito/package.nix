@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovito";
-  version = "3.15.5";
+  version = "3.16.0";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ySU9AW4p7u1/yR9uOSmS82vIwx5fh4pWrFEqBZOoEHA=";
+    hash = "sha256-NN5q+qh84w7myBYiRAsBxDDV/82AmIz8j2yk6JiEHcY=";
     fetchSubmodules = true;
   };
 

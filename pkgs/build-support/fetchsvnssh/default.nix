@@ -24,6 +24,13 @@ lib.fetchers.withNormalizedHash { } (
       expect
     ];
 
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    env = lib.optionalAttrs sshSupport {
+      SVN_SSH = lib.getExe openssh;
+    };
+
     inherit outputHash outputHashAlgo;
     outputHashMode = "recursive";
 
@@ -34,8 +41,6 @@ lib.fetchers.withNormalizedHash { } (
       password
       url
       rev
-      sshSupport
-      openssh
       ;
   }
 )

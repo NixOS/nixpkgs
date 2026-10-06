@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  gitUpdater,
+  bashNonInteractive,
   tk,
   tclPackages,
   tcl,
@@ -14,14 +14,18 @@
       true,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "remind";
-  version = "06.02.10";
+  version = "06.03.05";
 
   src = fetchzip {
-    url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    hash = "sha256-R6kceXLzg5CRMYAgMyhnmKxWT49ayXIFm/IpXuDgl8I=";
+    url = "https://dianne.skoll.ca/projects/remind/download/remind-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4TESOZrPqa2LahojSy27qgIzkuS/tr8ElAS7nw/t5Fo=";
   };
+
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   propagatedBuildInputs = lib.optionals withGui [
     tclPackages.tcllib
@@ -33,20 +37,20 @@ tcl.mkTclDerivation rec {
     # as rem2pdf is currently not build since it requires the JSON::MaybeXS,
     # Pango and Cairo Perl modules.
     substituteInPlace scripts/tkremind.in \
-      --replace-fail "exec wish" "exec ${lib.getExe' tk "wish"}" \
+      --replace-fail '@TCLSH@' '${lib.getExe' tcl "tclsh"}' \
       --replace-fail 'set Remind "remind"' "set Remind \"$out/bin/remind\"" \
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # On Darwin setenv and unsetenv are defined in stdlib.h from libSystem
-    "-DHAVE_SETENV"
-    "-DHAVE_UNSETENV"
-  ]);
-
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = "-BETA";
+    NIX_CFLAGS_COMPILE = toString [
+      "-DHAVE_SETENV"
+      "-DHAVE_UNSETENV"
+    ];
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://dianne.skoll.ca/projects/remind/";
@@ -60,4 +64,4 @@ tcl.mkTclDerivation rec {
     mainProgram = "remind";
     platforms = lib.platforms.unix;
   };
-}
+})

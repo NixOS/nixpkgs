@@ -19,7 +19,23 @@ buildGraalvmNativeImage (finalAttrs: {
     "-H:Log=registerResource:"
     "--no-fallback"
     "--no-server"
+    "-J-Djet.native=true"
+    # GraalVM >= 25.1 no longer discovers @AutomaticFeature annotations.
+    "--features=InitAtBuildTimeFeature"
   ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    output="$(
+      printf '%s\n' '{"value":1}' \
+        | $out/bin/jet --from json --to edn --keywordize
+    )"
+    test "$output" = '{:value 1}'
+
+    runHook postInstallCheck
+  '';
 
   passthru.tests.version = testers.testVersion {
     inherit (finalAttrs) version;

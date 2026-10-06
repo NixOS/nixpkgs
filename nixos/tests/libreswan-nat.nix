@@ -125,6 +125,7 @@ in
         leftid=@server
         leftsubnet=::/0
         leftupdown=${pkgs.writeScript "updown" ''
+          PATH=${pkgs.iproute2}/bin
           # act as NDP proxy for VPN clients
           if test "$PLUTO_VERB" = up-client-v6; then
             ip neigh add proxy "$PLUTO_PEER_CLIENT_NET" dev eth2

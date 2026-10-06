@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 4 Jul 2026 12:34:17 -0400
+Subject: [PATCH 10/10] Remove dependency on _StringProcessing during stage 1
+ bootstrap
+
+---
+ .../SwiftMacros/DebugDescriptionMacro.swift   | 25 ++++++++-----------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
+
+diff --git a/lib/Macros/Sources/SwiftMacros/DebugDescriptionMacro.swift b/lib/Macros/Sources/SwiftMacros/DebugDescriptionMacro.swift
+index 4483bf7a0c9..7dbc301a1d0 100644
+--- a/lib/Macros/Sources/SwiftMacros/DebugDescriptionMacro.swift
++++ b/lib/Macros/Sources/SwiftMacros/DebugDescriptionMacro.swift
+@@ -13,7 +13,6 @@
+ import SwiftSyntax
+ import SwiftSyntaxMacros
+ import SwiftDiagnostics
+-import _StringProcessing
+ 
+ public enum DebugDescriptionMacro {}
+ public enum _DebugDescriptionPropertyMacro {}
+@@ -515,23 +514,19 @@ extension String {
+ 
+ extension String {
+   fileprivate func escapedForLLDB() -> String {
+-    guard #available(macOS 13, *) else {
+-      guard self.firstIndex(of: "$") != nil else {
+-        return self
+-      }
++    guard self.firstIndex(of: "$") != nil else {
++      return self
++    }
+ 
+-      var result = ""
+-      for char in self {
+-        if char == "$" {
+-          result.append("\\$")
+-        } else {
+-          result.append(char)
+-        }
++    var result = ""
++    for char in self {
++      if char == "$" {
++        result.append("\\$")
++      } else {
++        result.append(char)
+       }
+-      return result
+     }
+-
+-    return self.replacing("$", with: "\\$")
++    return result
+   }
+ }
+ 
+-- 
+2.54.0
+

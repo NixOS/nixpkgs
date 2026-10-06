@@ -56,5 +56,7 @@ buildPythonPackage (finalAttrs: {
     ];
     license = lib.licenses.mit;
     inherit (beets-minimal.meta) platforms;
+    # https://github.com/gtronset/beets-filetote/issues/402
+    broken = lib.versionAtLeast beets-minimal.version "2.14.0";
   };
 })

@@ -71,7 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    [
+      # GCC 16 fails due to what is ostensibly an out-of-bounds read, but it is
+      # introduced by GCC's own optimizations; building with -O0 or -fno-inline
+      # does not trigger a failure. Possibly related GCC bug:
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122197
+      "-Wno-error=array-bounds"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Wno-deprecated-copy-dtor"
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
@@ -122,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
+    "lib"
   ];
 
   setupHook = ./setup-hook.sh;
@@ -130,11 +138,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
 
+  postBuild = ''
+    make $makeFlags -j $NIX_BUILD_CORES -C ../Format7zF -f ${makefile}
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
     install -Dm444 -t $out/share/doc/7zz ../../../../DOC/*.txt
+
+    mkdir -p $lib/lib
+    install -Dm555 -t $lib/lib ../Format7zF/b/*/7z.*
 
     runHook postInstall
   '';

@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${finalAttrs.version}.source.tar.gz";
-    hash = "sha256-9jHuvuPb6hKPFBX0t4T16DY3orQxGTvOdfEDhfce/FY=";
+    hash = "sha256-RK2iU7GTXTS2gBIiIy1Qcx/nxePLz6tHc0yFAxz75NM=";
   };
 
   clad_src = fetchFromGitHub {

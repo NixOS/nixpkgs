@@ -49,19 +49,19 @@ let
 
     llvmMajorVersion = "22";
 
-    version = "7.0.1";
+    version = "7.1.1";
 
     src = fetchFromGitHub {
       owner = "intel";
       repo = "llvm";
       tag = "v${self.version}";
-      hash = "sha256-O925Qe+XpwtNqlAIGVkUjcjo7zS4iRp7qatBczDpdn0=";
+      hash = "sha256-XVfLWx7lsjS1m+w/T2x0kGg2k51r7jCmKX2ZcR2aAHg=";
     };
 
     # The commit date of the release tag above, kept in sync by `updateScript`.
     # If you override src, you'll probably also want to override this,
     # as some packages check for this date to decide what features the compiler supports.
-    commitDate = "20260821";
+    commitDate = "20260915";
 
     vc-intrinsics-src = fetchFromGitHub {
       owner = "intel";

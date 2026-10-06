@@ -5,6 +5,7 @@
   pkg-config,
   libspnav,
   qt6,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     qt6.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libx11
   ];
 
   buildInputs = [

@@ -10,6 +10,7 @@
   coreutils,
   e2fsprogs,
   fetchzip,
+  fetchpatch,
   fio,
   gawk,
   keyutils,
@@ -38,12 +39,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfstests";
-  version = "2026.07.21";
+  version = "2026.09.02";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/snapshot/xfstests-dev-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-b2bL8t1I+kOryAvq3pYTVhx+LwIDf26xdHl7Wdq+Mw8=";
+    hash = "sha256-jnwEcGUSkKW9afGQTUsWR7CNQECWz/sYdSaDx0hY1Uo=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://lore.kernel.org/fstests/20260813150846.280498-1-zlang@kernel.org/raw";
+      hash = "sha256-NOPMo0cdKKoPMwG53BdTe+G+vDXb+2ICGYFRs4g+edQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -65,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace-fail "cp include/install-sh ." "cp -f include/install-sh ."
 
@@ -182,7 +191,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Torture test suite for filesystems";
     homepage = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/";
     license = lib.licenses.gpl2Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      alberand
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "xfstests-check";
   };

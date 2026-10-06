@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fW6Tc0UEPYFTgEFMUxZaVm2NU5LNFqszifqOqfdFJZY=";
   };
 
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   nativeBuildInputs = [ which ];
   buildInputs = [ gmp ];
 

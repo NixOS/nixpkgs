@@ -30,7 +30,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thunar";
-  version = "4.20.9";
+  version = "4.20.10";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xfce";
     repo = "thunar";
     tag = "thunar-${finalAttrs.version}";
-    hash = "sha256-rKKxCl7hoIcEDcKVaaRJfU+hyDHE/vpL0gxXExX6NeI=";
+    hash = "sha256-jHS59xc1GVLFePaWsT+aQrHi5nwKRwKwzzin24cRVPk=";
   };
 
   nativeBuildInputs = [

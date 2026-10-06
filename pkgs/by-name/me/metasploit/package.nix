@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "metasploit-framework";
-  version = "6.5.2";
+  version = "6.5.3";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     tag = finalAttrs.version;
-    hash = "sha256-1xeK/0rvJLRhJ3tz5nfuVD/4hV1O75fYby+UaTKW6Bs=";
+    hash = "sha256-sY3SKhwZIv0afSswyHRIkVhs9gO26rsmWsBAhQbbZJ8=";
   };
 
   __structuredAttrs = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # Patch the boot script to disable bootsnap.
     # Bootsnap tries to write cache files to the frozen /nix/store, causing a crash on startup.
-    sed -i '/bootsnap\/setup/d' config/boot.rb
+    sed -i '/Bootsnap\.setup/d' config/boot.rb
 
     # Remove the strict version check for ActionView.
     # Metasploit upstream enforces a specific patch version (e.g., 7.2.2.2), but our bundler

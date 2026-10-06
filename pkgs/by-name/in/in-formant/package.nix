@@ -19,7 +19,10 @@
 
 stdenv.mkDerivation {
   pname = "in-formant";
-  version = "unstable-2022-09-15";
+  version = "3.1.2-unstable-2022-09-15";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "in-formant";

@@ -10,6 +10,8 @@
   gobject-introspection,
   gst-plugins-base,
   gst-plugins-bad,
+  # only for passthru.gstreamerCpeParts
+  gstreamer,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -19,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-rtsp-server";
-  version = "1.28.6";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -28,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DLclsTUfdeiIA8Vd3eofJ74JUj3c1/KasYJw4YKipGM=";
+    hash = "sha256-3kOlmgyJoU6xwUro6B5bRcTp17H5MLDrqtNg+bXgtcQ=";
   };
 
   separateDebugInfo = true;
@@ -82,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       A library on top of GStreamer for building an RTSP server.
     '';
     license = lib.licenses.lgpl2Plus;
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bkchr ];
   };

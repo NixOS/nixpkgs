@@ -21,5 +21,5 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = { };
+  meta.license = lib.licenses.bitstreamVera;
 }

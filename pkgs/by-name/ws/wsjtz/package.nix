@@ -32,7 +32,7 @@ wsjtx.overrideAttrs (
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [
         Cryolitia
-        scd31
+        n3tcat
       ];
       mainProgram = "wsjtz";
     };

@@ -20,13 +20,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
-  version = "0.1.6";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "stumpapp";
     repo = "stump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y870qA9r9uhFJthKiz0uIu6xFMtZ0L5xBj4iRr20/QI=";
+    hash = "sha256-MV9vhY15JgiCDN5J62AjI2uSkcM+cYjlT5hocxQXSOA=";
   };
 
   frontend = stdenv.mkDerivation (_: {
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
-      hash = "sha256-j+S3FkiWZRZyX3CfwEDbspjG+oltECgIFOZZuN7FKRY=";
+      hash = "sha256-eKp7rRuo1kk8Nq7mK9JwvliUdaV8L03SoKAqXGQfWLg=";
     };
 
     nativeBuildInputs = [
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-2WI/sjRM9GESBc3APrTwQ2F28CPkZCUfzEE+EMMWHKA=";
+  cargoHash = "sha256-eKS4Cax2HCPpeyjuHRFJy42I8KTwhv1oNH4jKaN+2dQ=";
 
   cargoBuildFlags = [
     "--package"
@@ -116,7 +116,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://stumpapp.dev/";
     description = "A free and open source comics, manga and digital book server with OPDS support";
     license = lib.licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.all;
     mainProgram = "stump_server";
+    maintainers = with lib.maintainers; [
+      jvanbruegge
+      tr3foil
+    ];
   };
 })

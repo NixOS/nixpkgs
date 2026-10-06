@@ -1,9 +1,9 @@
 {
-  lib,
   buildHomeAssistantComponent,
   ha-mcp,
   nix-update-script,
   ruamel-yaml,
+  voluptuous-openapi,
 }:
 
 buildHomeAssistantComponent {
@@ -12,7 +12,9 @@ buildHomeAssistantComponent {
   inherit (ha-mcp.src) owner;
 
   dependencies = [
+    ha-mcp
     ruamel-yaml
+    voluptuous-openapi
   ];
 
   passthru.updateScript = nix-update-script {

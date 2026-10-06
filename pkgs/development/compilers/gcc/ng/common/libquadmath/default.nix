@@ -21,6 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
 
       cp -r libquadmath "$out"
 
+      # `printf/gmp-impl.h` includes `longlong.h`, which lives here; the
+      # `Makefile` already looks in `../include` for it.
+      cp -r include "$out"
+
       cp config.guess "$out"
       cp config.rpath "$out"
       cp config.sub "$out"

@@ -205,7 +205,7 @@ let
         "--with-udevdir=$(out)/lib/udev"
         "--with-systemdunitdir=$(out)/etc/systemd/system"
         "--with-systemdpresetdir=$(out)/etc/systemd/system-preset"
-        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generator"
+        "--with-systemdgeneratordir=$(out)/lib/systemd/system-generators"
         "--with-mounthelperdir=$(out)/bin"
         "--libexecdir=$(out)/libexec"
         "--sysconfdir=/etc"

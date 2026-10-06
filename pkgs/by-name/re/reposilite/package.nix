@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchurl {
     url = "https://maven.reposilite.com/releases/com/reposilite/reposilite/${finalAttrs.version}/reposilite-${finalAttrs.version}-all.jar";
-    hash = "sha256-N7oGxGQHGwy6iflj6uiiJGCc5KpCZgIO7+QACiR2Fuc=";
+    hash = "sha256-fJc8Et98svDcVtibcGSoVeJaLJl1qb1eO+2OxfeVqA8=";
   };
 
   dontUnpack = true;

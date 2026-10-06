@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "radicale";
-  version = "3.7.8";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yANC2XD1DXjjb/FTl8zgdd0XnINkcokIo6dVcrDWGEw=";
+    hash = "sha256-457vXuaj+55bK4irqtzcUrbPdZY0JGAo6c1X/6QMojA=";
   };
 
   build-system = with python3.pkgs; [
@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       pika
       requests
       ldap3
+      python-pam
     ]
     ++ libpass.optional-dependencies.argon2
     ++ libpass.optional-dependencies.bcrypt;

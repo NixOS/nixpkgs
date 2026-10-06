@@ -12,6 +12,7 @@
   libopus,
   libopusenc,
   libshout,
+  openssl,
 
   nix-update-script,
 }:
@@ -40,14 +41,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libopus
     libopusenc
     libshout
+    openssl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     jack2
   ];
 
-  # fatal error: 'opus.h' file not found
-  env.NIX_CFLAGS_COMPILE = "-I${libopus.dev}/include/opus";
+  env = {
+    # fatal error: 'opus.h' file not found
+    NIX_CFLAGS_COMPILE = "-I${libopus.dev}/include/opus";
+    OPENSSL_NO_VENDOR = "true";
+  };
 
   postPatch = ''
     # The opusenc crate hardcodes `*const i8`, but bindgen generates `*const c_char`,

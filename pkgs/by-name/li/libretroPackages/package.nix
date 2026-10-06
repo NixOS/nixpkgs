@@ -1,4 +1,5 @@
 {
+  lib,
   stdenvNoCC,
 }:
 
@@ -23,6 +24,11 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Dummy package for the libretro package set";
-    platforms = [ ];
+    # XXX: nixpkgs-merge-bot needs this package to evaluate clearly to allow
+    # the individual cores to be merged, and that members that want to merge
+    # via bot to be added to this list instead of each individual core.
+    platforms = lib.platforms.all;
+    teams = [ lib.teams.libretro ];
+    maintainers = [ ];
   };
 }

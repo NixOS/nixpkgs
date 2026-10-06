@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-azuretools";
     name = "vscode-containers";
-    version = "2.5.0";
-    hash = "sha256-NYYI2w5N8PEPeFcO1PHtD6hinK6Rb6Ux6Ot8OYxYydU=";
+    version = "2.5.2";
+    hash = "sha256-ERpwIOxLZxelWPRFYwsaEcbnOxW3cC3vGOKIkg92ztw=";
   };
 
   meta = {

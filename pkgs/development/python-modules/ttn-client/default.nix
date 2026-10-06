@@ -4,23 +4,26 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ttn-client";
-  version = "1.3.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angelnu";
     repo = "thethingsnetwork_python_client";
     tag = "v${version}";
-    hash = "sha256-n5AvHE9oe7+vqxUsqqGeVcENU8+I0y0jikbulAHAR3Q=";
+    hash = "sha256-Fh2l3SL72D0yXwOil73VFQjCLli3GZwsatNIYVmOoTA=";
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [ aiohttp ];
 

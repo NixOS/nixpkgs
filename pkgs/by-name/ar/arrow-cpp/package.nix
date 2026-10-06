@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   fetchFromGitHub,
   fixDarwinDylibNames,
   apache-orc,
@@ -95,6 +96,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
 
+  patches = [
+    # Fix flaky test racing on (not) waiting for azurite
+    # https://github.com/apache/arrow/pull/50878
+    (fetchpatch {
+      url = "https://github.com/apache/arrow/commit/e6a89be6c7cc537b04844796bd84ac8240942050.patch";
+      hash = "sha256-hB2ebq6a64FPBZeg7aS+tSZZIzhFs3w9A3n2NK+/ob8=";
+    })
+  ];
+  patchFlags = [ "-p2" ];
+
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
 
@@ -132,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # apache-orc looks for things in caps
       LZ4_HOME = lz4;
-      PROTOBUF_HOME = protobuf;
+      PROTOBUF_HOME = protobuf.full;
       SNAPPY_HOME = snappy.dev;
       ZSTD_HOME = zstd.dev;
       ARROW_TEST_DATA = "${arrow-testing}/data";
@@ -318,7 +329,16 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstallCheck
 
-      ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      ctestArgs=(
+        -L unittest
+        --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      )
+
+      # Match ci/scripts/cpp_test.sh to fight flakiness.
+      # https://github.com/apache/arrow/issues/40121
+      ctestArgs+=(--repeat until-pass:3)
+
+      ctest "''${ctestArgs[@]}"
 
       runHook postInstallCheck
     '';

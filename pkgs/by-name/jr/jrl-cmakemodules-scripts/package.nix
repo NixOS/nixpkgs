@@ -28,7 +28,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   meta = jrl-cmakemodules.meta // {
     description = "Release scripting tools for JRL CMake modules";

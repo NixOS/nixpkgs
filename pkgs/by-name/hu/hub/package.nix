@@ -13,7 +13,9 @@
 
 buildGoModule (finalAttrs: {
   pname = "hub";
-  version = "unstable-2022-12-01";
+  version = "2.14.2-unstable-2022-12-01";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mislav";
@@ -66,6 +68,8 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/hub \
       --suffix PATH : ${lib.makeBinPath [ git ]}
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     git

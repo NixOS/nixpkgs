@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlitecpp";
-  version = "3.3.3";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "SRombauts";
     repo = "sqlitecpp";
     rev = finalAttrs.version;
-    hash = "sha256-RSNJGfvIvNfk+/Awzh06tDi/TA5Wc35X8ya0X5mP9IE=";
+    hash = "sha256-lmXvh2z+6QLLUapsHouBuAxgBQwbC5XKq80sza6CaUI=";
   };
 
   nativeBuildInputs = [

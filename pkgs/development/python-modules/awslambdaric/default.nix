@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "4.0.2";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     tag = version;
-    sha256 = "sha256-bEkaZUAAtilHLuUUvKloeF25DuesAr8RpKcxZq8Tqts=";
+    sha256 = "sha256-TePJeZ9SzJPjZ+oNOQXfQ2Eh133ihdHS6Rc/kJr5lgE=";
   };
 
   propagatedBuildInputs = [

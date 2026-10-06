@@ -9,7 +9,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nix-fast-build";
-  version = "2.0.1";
+  version = "2.0.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Mic92";
     repo = "nix-fast-build";
     tag = finalAttrs.version;
-    hash = "sha256-VOzpaf8Si/c7B5xXwxZi+i34LKoDaMgPNZbSMZkpXP4=";
+    hash = "sha256-sc/NZIHkRhgyAzK8Xn6G++vGrl/Uf7QHh+J5fnZ/o4s=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -58,6 +58,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/Mic92/nix-fast-build/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      GaetanLepage
       getchoo
       mic92
     ];

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   replaceVars,
   pkg-config,
   autoreconfHook,
@@ -156,6 +157,14 @@ python3Packages.buildPythonApplication {
     (fetchurl {
       url = "https://web.archive.org/web/20230226174550/https://sources.debian.org/data/main/h/hplip/3.22.10+dfsg0-1/debian/patches/0028-Remove-ImageProcessor-binary-installs.patch";
       hash = "sha256-tNYccuwrcx5WCe7ULk8r8J6MVcUytGspiW64zAvO0qI=";
+    })
+    # Python 3.14 removed urllib.request.URLopener. Remove references to it until
+    # upstream updates the code accordingly.
+    # See https://bugs.launchpad.net/hplip/+bug/2115046 and
+    # https://bugs.launchpad.net/ubuntu/+source/hplip/+bug/2146570
+    (fetchpatch {
+      url = "https://launchpadlibrarian.net/800485629/hplip-no-urlopener.patch";
+      hash = "sha256-LCd43WnwPo6SBjcxGI3bVryWedDeyKXc9tCF16edDK4=";
     })
   ];
 

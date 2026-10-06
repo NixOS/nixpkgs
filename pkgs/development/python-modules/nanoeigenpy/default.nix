@@ -21,7 +21,7 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nanoeigenpy";
   version = "0.5.0";
   pyproject = false; # Built with cmake
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "nanoeigenpy";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-FWNIZFzY7BXC3vQKsIUFIJr3dQ8V1+OOmt5mKQP9/3M=";
   };
 
@@ -57,8 +57,6 @@ buildPythonPackage rec {
     # which is not in the current eigen v3.4.0-unstable-2022-05-19
     # (lib.cmakeBool "BUILD_WITH_ACCELERATE_SUPPORT" stdenv.hostPlatform.isDarwin)
   ];
-
-  strictDeps = true;
 
   buildInputs = [ jrl-cmakemodules ];
   nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs ++ [ nanobind ];
@@ -91,9 +89,9 @@ buildPythonPackage rec {
   meta = {
     description = "Support library for bindings between Eigen in C++ and Python, based on nanobind";
     homepage = "https://github.com/Simple-Robotics/nanoeigenpy";
-    changelog = "https://github.com/Simple-Robotics/nanoeigenpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/Simple-Robotics/nanoeigenpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

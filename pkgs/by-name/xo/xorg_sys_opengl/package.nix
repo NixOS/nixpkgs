@@ -29,5 +29,6 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
   };
 }

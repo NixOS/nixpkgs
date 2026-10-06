@@ -23,13 +23,11 @@
   openblas,
 
   # tests
+  callPackage,
   numpy,
   pytestCheckHook,
   python,
-  runCommand,
-
-  # passthru
-  mlx,
+  sysctl,
 }:
 
 let
@@ -44,7 +42,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "mlx";
-  version = "0.32.0";
+  version = "0.32.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -52,7 +50,7 @@ buildPythonPackage (finalAttrs: {
     owner = "ml-explore";
     repo = "mlx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yHpTyRf9FOPbdyDWSM7b6VC72STnUpgCMLbDxLbdaqs=";
+    hash = "sha256-VstsaBOAvqHJhTNXczjFavG4l5VTJdJWT0VKuzmwIEA=";
   };
 
   patches = [
@@ -109,6 +107,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     numpy
     pytestCheckHook
+    sysctl
   ];
 
   enabledTestPaths = [
@@ -151,25 +150,11 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     inherit gguf-tools;
 
-    tests = {
-      mlxTest =
-        runCommand "run-mlx-examples"
-          {
-            buildInputs = [ mlx ];
-            nativeBuildInputs = [ python ];
-          }
-          ''
-            cp ${finalAttrs.src}/examples/python/logistic_regression.py .
-            ${python.interpreter} logistic_regression.py
-            rm logistic_regression.py
-
-            cp ${finalAttrs.src}/examples/python/linear_regression.py .
-            ${python.interpreter} linear_regression.py
-            rm linear_regression.py
-
-            touch $out
-          '';
-    };
+    tests.mlxTest =
+      (callPackage ./tests.nix {
+        mlx = finalAttrs.finalPackage;
+        inherit (finalAttrs) src;
+      }).mlxTest;
 
     updateScript = lib.getExe (writeShellApplication {
       name = "mlx-update";

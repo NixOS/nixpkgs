@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "globalping-cli";
-  version = "1.5.2";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
     repo = "globalping-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MaqBaR177gcgoqEpsER1+8oYZmiGeySfL/O9r6CxqCY=";
+    hash = "sha256-mzfskgv9w5jMNvALpvLTgCzHhcexyaZUnrLQi76z2gE=";
   };
 
-  vendorHash = "sha256-7fhcQptMyq8IuRaqx3Znc9QFLaV0t6HpM4eCtdimupA=";
+  vendorHash = "sha256-HFgWH6kcCv3voyiWkcaNiK3NvnQlgop9DLC1o0xeSN0=";
 
   nativeBuildInputs = [ installShellFiles ];
 

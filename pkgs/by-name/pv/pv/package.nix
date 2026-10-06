@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pv";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchurl {
     url = "https://www.ivarch.com/programs/sources/pv-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/ALJ/CuCsgqSzI2Y+ES+Y/IqvZh1Go5KvIdeHYA2Yus=";
+    hash = "sha256-Mf29tEnHFDzSloVnvvdZnp8DGVDmFY7nu3bkCuv2/7g=";
   };
 
   # pv is used by syncoid (part of the sanoid package) by default

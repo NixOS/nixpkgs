@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "davidrapan";
   domain = "solarman";
-  version = "25.08.16";
+  version = "26.01.31";
 
   src = fetchFromGitHub {
     owner = "davidrapan";
     repo = "ha-solarman";
     tag = "v${version}";
-    hash = "sha256-SsUObH3g3i9xQ4JvRDcCm1Fg2giH+MN3rC3NMPYO5m0=";
+    hash = "sha256-FgxSS0PEgBoSbEFbHo2VTHT55tzkBKzfhuiniQFP4hs=";
   };
 
   dependencies = [

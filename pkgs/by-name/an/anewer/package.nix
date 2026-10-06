@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anewer";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ysf";
     repo = "anewer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FyK0AvwGAFmxswrf42ZBzYCZdZ7X0goQRCUpqFOTD9o=";
+    hash = "sha256-h18La0Xu0SX4yR3TkNCttxNOTLli3tLTifvvL6EpPnM=";
   };
 
-  cargoHash = "sha256-7qOfGHS9WPsdBUOjWztkIrkr+krfw84aEf9+5fvmhXM=";
+  cargoHash = "sha256-c2AztEVbmY8AzdDHEqZcFLu3OaN2UtSXWU8fd+11doU=";
 
   doInstallCheck = true;
 

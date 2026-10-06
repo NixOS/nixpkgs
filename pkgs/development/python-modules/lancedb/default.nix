@@ -36,13 +36,11 @@
   pytest-mock,
   pytestCheckHook,
   tantivy,
-
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.37.1";
+  version = "0.39.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -50,14 +48,14 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lancedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ibyiZeZDSI7W7Cog+6N5zp7jr2Rm0Ql0BfePngucPW0=";
+    hash = "sha256-4Sa6LIpUI2Gv0kFxX4ylFkXj9qghMWMvdX/2Cqd4AWM=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-aBc77iHWrFJhygwtcZaIu6ScHNnDXxn+QKHmvjRYLWg=";
+    hash = "sha256-CAMygfYyQmg5L/IvBdMnUtJ1BT/o2YVN5rY5IiTxRF8=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -131,6 +129,9 @@ buildPythonPackage (finalAttrs: {
     # Requires internet access
     # RuntimeError: lance error: LanceError(IO): Generic S3 error
     "test_bucket_without_dots_is_not_rejected"
+    # RuntimeError: lance error: LanceError(IO): Generic HTTP client error
+    "test_bucket_with_dots_and_aws_region_is_not_rejected"
+    "test_bucket_with_dots_and_region_is_not_rejected"
 
     # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
     "TestAsyncNamespaceConnection"
@@ -169,7 +170,7 @@ buildPythonPackage (finalAttrs: {
     "test_remote_db.py"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";

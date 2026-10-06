@@ -39,5 +39,6 @@ stdenv.mkDerivation {
     description = "Utility for Nixpkgs contributors to check Nixpkgs for common errors";
     mainProgram = "nixpkgs-lint";
     platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

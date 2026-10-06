@@ -14,7 +14,7 @@
   configText ? "",
 }:
 let
-  version = "2605";
+  version = "2606";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -24,7 +24,7 @@ let
   # The downloaded archive also contains ARM binaries, but these have not been tested.
 
   # For USB support, ensure that /var/run/omnissa/<YOUR-UID>
-  # exists and is owned by you. Then run omnissa-usbarbitrator as root.
+  # exists and is owned by you. Then run horizon-eucusbarbitrator as root.
 
   mainProgram = "horizon-client";
 
@@ -72,8 +72,8 @@ let
     pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.omnissa.com/software/CART27FQ1_LIN_2603_TARBALL/Omnissa-Horizon-Client-Linux-2603-8.18.0-24120621798.tar.gz";
-      hash = "sha256:acd30479cec91ee693bbd685880fa3834f3678f8dd336511bb9d732f134f71d7";
+      url = "https://download3.omnissa.com/software/CART27FQ2_LIN_2606_TARBALL/Omnissa-Horizon-Client-Linux-2606-8.19.0-32216036411.tar.gz";
+      hash = "sha256-5kpZAPeiY4R3a8WRLLjWLndWXGhqrg7rC4d6EBoC2Ao=";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -119,10 +119,14 @@ let
           freetype
           gdk-pixbuf
           glib
+          gst_all_1.gst-plugins-base
+          gst_all_1.gstreamer
           gtk2
           gtk3-x11
           harfbuzz
           liberation_ttf
+          libgbm
+          libglvnd
           libjpeg
           libpng
           libpulseaudio
@@ -130,13 +134,11 @@ let
           libudev0-shim
           libuuid
           libv4l
-          pango
-          pcsclite
-          pixman
-          udev
-          omnissaHorizonClientFiles
+          libva
+          libvdpau
           libx11
           libxau
+          libxcb
           libxcursor
           libxext
           libxi
@@ -146,8 +148,12 @@ let
           libxrender
           libxscrnsaver
           libxtst
+          omnissaHorizonClientFiles
+          pango
+          pcsclite
+          pixman
+          udev
           zlib
-          libxml2_13
 
           (writeTextDir "etc/omnissa/config" configText)
         ];
@@ -179,7 +185,7 @@ stdenv.mkDerivation {
     runHook preInstall
     mkdir -p $out/bin
     ln -s ${omnissaFHSUserEnv "horizon-client"}/bin/horizon-client $out/bin/
-    ln -s ${omnissaFHSUserEnv "omnissa-usbarbitrator"}/bin/omnissa-usbarbitrator $out/bin/
+    ln -s ${omnissaFHSUserEnv "horizon-eucusbarbitrator"}/bin/horizon-eucusbarbitrator $out/bin/
     runHook postInstall
   '';
 

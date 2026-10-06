@@ -11,21 +11,42 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ntfy-sh"
+      "user"
+    ] "ntfy-sh is now a DynamicUser service, so a static user is no longer needed.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "ntfy-sh"
+      "group"
+    ] "ntfy-sh is now a DynamicUser service, so a static group is no longer needed.")
+  ];
+
   options.services.ntfy-sh = {
     enable = lib.mkEnableOption "[ntfy-sh](https://ntfy.sh), a push notification service";
 
     package = lib.mkPackageOption pkgs "ntfy-sh" { };
 
-    user = lib.mkOption {
-      default = "ntfy-sh";
-      type = lib.types.str;
-      description = "User the ntfy-sh server runs under.";
-    };
+    nginx = {
+      enable = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = "Whether to set up an nginx virtual host.";
+      };
 
-    group = lib.mkOption {
-      default = "ntfy-sh";
-      type = lib.types.str;
-      description = "Primary group of ntfy-sh user.";
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 2586;
+        description = "Internal port for ntfy to listen to.";
+      };
+
+      virtualHost = lib.mkOption {
+        type = lib.types.nonEmptyStr;
+        example = "push.example.com";
+        description = "Virtual host to use for nginx.";
+      };
     };
 
     settings = lib.mkOption {
@@ -88,7 +109,7 @@ in
 
       services.ntfy-sh.settings = {
         auth-file = lib.mkDefault "/var/lib/ntfy-sh/user.db";
-        listen-http = lib.mkDefault "127.0.0.1:2586";
+        listen-http = if cfg.nginx.enable then "[::1]:${cfg.nginx.port}" else lib.mkDefault "[::1]:2586";
         attachment-cache-dir = lib.mkDefault "/var/lib/ntfy-sh/attachments";
         cache-file = lib.mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
@@ -101,7 +122,6 @@ in
 
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
-          User = cfg.user;
           StateDirectory = "ntfy-sh";
           RuntimeDirectory = "ntfy-sh";
 
@@ -126,14 +146,21 @@ in
         };
       };
 
-      users.groups = lib.optionalAttrs (cfg.group == "ntfy-sh") {
-        ntfy-sh = { };
-      };
+      services.nginx = lib.mkIf cfg.nginx.enable {
+        enable = true;
+        virtualHosts."${cfg.nginx.virtualHost}" = {
+          forceSSL = true;
 
-      users.users = lib.optionalAttrs (cfg.user == "ntfy-sh") {
-        ntfy-sh = {
-          isSystemUser = true;
-          group = cfg.group;
+          locations."/" = {
+            proxyPass = "http://[::1]:${cfg.nginx.port}";
+            proxyWebsockets = true;
+            extraConfig = ''
+              proxy_connect_timeout 3m;
+              proxy_send_timeout 3m;
+              proxy_read_timeout 3m;
+              client_max_body_size 0;
+            '';
+          };
         };
       };
     };

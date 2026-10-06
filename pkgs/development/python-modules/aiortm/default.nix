@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiortm";
-  version = "0.20.0";
+  version = "0.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiortm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WtcpODzewytX5AyF3YbFyCqe6EWc0UJUvB90FU3MYCo=";
+    hash = "sha256-KhvqTj33dtJschS9ImSJdjwdAjXrm7b6Ng1KDBgMFog=";
   };
 
   pythonRelaxDeps = [ "typer" ];

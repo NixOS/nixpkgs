@@ -12,7 +12,7 @@
   qtbase,
   qtdeclarative,
   qtquickcontrols2 ? null,
-  systemd,
+  systemdLibs,
   xkeyboard-config,
   nixosTests,
   docutils,
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtdeclarative
     qtquickcontrols2
-    systemd
+    systemdLibs
   ];
 
   # We will wrap manually later

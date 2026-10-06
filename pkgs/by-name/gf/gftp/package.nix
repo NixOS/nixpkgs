@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/masneyb/gftp";
     description = "GTK-based multithreaded FTP client for *nix-based machines";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.haylin ];
     platforms = lib.platforms.unix;
     mainProgram = "gftp";

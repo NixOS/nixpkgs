@@ -66,6 +66,9 @@ let
     lib.optionalAttrs (lib.versions.isGe "1.2.0" o.version || o.version == "dev") {
       buildPhase = "make build";
     }
+    // (lib.optionalAttrs (lib.versions.range "1.1" "1.6" o.version) {
+      nativeBuildInputs = [ rocq-core.ocamlPackages.ocaml ] ++ o.nativeBuildInputs;
+    })
     // (
       if lib.versions.range "1.1.0" "1.9.1" o.version then
         { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }

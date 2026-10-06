@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "svgpathtools";
-  version = "1.7.4";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mathandy";
     repo = "svgpathtools";
     tag = "v${version}";
-    hash = "sha256-kuVEP4iVwFIiSON1CxbsmExu2ioKEhQXDeEpqULI0Rk=";
+    hash = "sha256-m+sjXVSF1gUksbq09DQvazn3IxadX9YJXqw3kTRO7Ac=";
   };
 
   build-system = [

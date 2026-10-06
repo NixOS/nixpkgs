@@ -115,6 +115,22 @@ let
       stopIfChanged = false;
       restartTriggers = [ config.environment.etc."wpa_supplicant/nixos.conf".source ];
 
+      # OpenSSL's dynamic engine loader only searches its own store path,
+      # which does not contain the pkcs11 engine (it is built separately,
+      # in libp11), so ENGINE_by_id("pkcs11") fails unless the search path
+      # is redirected to the libp11 package
+      environment = lib.optionalAttrs cfg.pkcs11.enable (
+        {
+          OPENSSL_ENGINES = "${cfg.pkcs11.package}/lib/engines";
+        }
+        # security.tpm2.tctiEnvironment exports its variables only to login
+        # shells, not to systemd units, so mirror the TCTI selection here for
+        # the TPM2 PKCS11 module
+        // lib.optionalAttrs config.security.tpm2.tctiEnvironment.enable {
+          inherit (config.environment.variables) TPM2_PKCS11_TCTI;
+        }
+      );
+
       path = [ pkgs.wpa_supplicant ];
       serviceConfig = {
         RuntimeDirectory = "wpa_supplicant";
@@ -154,14 +170,27 @@ let
           "/dev/rfkill"
         ]
         ++ lib.optional cfg.dbusControlled "/run/dbus"
-        ++ lib.optional cfg.allowAuxiliaryImperativeNetworks "/etc/wpa_supplicant";
+        ++ lib.optional cfg.allowAuxiliaryImperativeNetworks "/etc/wpa_supplicant"
+        # token access for the PKCS#11 backends
+        ++ lib.optionals cfg.pkcs11.enable [
+          "-${config.security.tpm2.tctiEnvironment.deviceConf}"
+          "-/run/pcscd"
+          "-/etc/tpm2_pkcs11"
+        ];
         BindReadOnlyPaths = [
           builtins.storeDir
           "/etc/"
         ]
         ++ cfg.extraConfigFiles
         ++ lib.optional (cfg.secretsFile != null) cfg.secretsFile;
-        DeviceAllow = "/dev/rfkill rw";
+        DeviceAllow = [
+          "/dev/rfkill rw"
+        ]
+        ++ lib.optional cfg.pkcs11.enable "${config.security.tpm2.tctiEnvironment.deviceConf} rw";
+        # Grant tss group for tpm2 access if pkcs11 is enabled.
+        SupplementaryGroups = lib.optional (
+          cfg.pkcs11.enable && config.security.tpm2.enable && config.security.tpm2.tssGroup != null
+        ) config.security.tpm2.tssGroup;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
@@ -615,6 +644,58 @@ in
           access to mutable files, smart cards or TPM devices).
           :::
         '';
+      };
+
+      pkcs11 = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to make the OpenSSL pkcs11 engine available to
+            wpa_supplicant, for EAP-TLS authentication with client keys on
+            PKCS#11 tokens such as smartcards or a TPM.
+
+            ::: {.note}
+            With {option}`networking.wireless.enableHardening` enabled,
+            the service is additionally granted:
+              - Membership in {option}`security.tpm2.tssGroup`.
+              - Access to the TPM device configured by
+                {option}`security.tpm2.tctiEnvironment.deviceConf`.
+              - pcscd socket for smartcard readers.
+              - Access to default system-wide token store `/etc/tpm2_pkcs11`.
+                Note that the hardened service by default has no home directory,
+                so only the system store location applies.
+
+            The store must be writable by {option}`security.tpm2.tssGroup`.
+            Enable {option}`security.tpm2.pkcs11.enable` option to grant
+            tss group access to the store.
+            :::
+
+            ::: {.note}
+            wpa_supplicant loads the engine through OpenSSL's dynamic engine
+            mechanism, which only searches OpenSSL's own store path;
+            This option points the search path (the `OPENSSL_ENGINES` environment
+            variable) at the configured libp11 package instead,
+            which shadows OpenSSL's built-in engine directory rather than extending it.
+
+            wpa_supplicant never requests the engines shipped there (afalg,
+            capi, loader_attic, padlock), so this is normally invisible.
+            A configuration that nevertheless loads one of them by name
+            inside this service (e.g. through a custom `OPENSSL_CONF`) can
+            restore the union of both directories:
+
+            ```nix
+            networking.wireless.pkcs11.package = pkgs.symlinkJoin {
+              name = "wpa-supplicant-engines";
+              paths = [ pkgs.libp11 ];
+              postBuild = "ln -s ''${pkgs.openssl.out}/lib/engines-3/*.so $out/lib/engines/";
+            };
+            ```
+            :::
+          '';
+        };
+
+        package = mkPackageOption pkgs "libp11" { };
       };
 
       extraConfig = mkOption {

@@ -3,7 +3,7 @@ set -eu -o pipefail
 
 [[ -d "$DATA_DIR" ]]	# Ensure DATA_DIR is defined and exists
 
-export RELEASE=@VERSION@
+export SERVER_VERSION=@VERSION@
 export NODE_ENV=production
 export NODE_PATH="@KARAKEEP_LIB_PATH@"/apps/workers
 

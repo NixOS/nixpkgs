@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cli50";
-  version = "8.0.1";
+  version = "8.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cs50";
     repo = "cli50";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0gu31NPql8pFPN4jFbPwYkQmF/rbrAai6EY1ZVfXLew=";
+    hash = "sha256-+9XYKGkc0/c4EtJn3nKsrWTmNyrAH63JFPx+w/gb6lI=";
   };
 
   build-system = [

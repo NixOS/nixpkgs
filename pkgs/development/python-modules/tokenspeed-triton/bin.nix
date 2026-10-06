@@ -22,20 +22,20 @@ let
 
   hashes = {
     aarch64-linux = {
-      cp310 = "sha256-rRex0Y8vvOsLsJO+gxeZNkRF+iT/79IWQ5ShvwZJm3Y=";
-      cp311 = "sha256-Ds3Y1+o63Z19ckG4NcgMEthCZSvWsg3NhNsYojXhYIQ=";
-      abi3 = "sha256-Fs0KP8HP/rRYp+A+hohxT0n98LWhCL/KmZ9GWXw/qrs=";
+      cp310 = "sha256-fkYRq6wkAavw4BwOHOt8aybu+IfRLLvrD5oU6JFTHlw=";
+      cp311 = "sha256-tGfvQ4M7eOqfndLnC842WevPx6N1HjTzHI/+4g0S1+U=";
+      abi3 = "sha256-KZ9Ygd4Go0SNjk9L/s32/58UiWk7rxYwPehBa6gsFtY=";
     };
     x86_64-linux = {
-      cp310 = "sha256-GGrclq8qFWW1Z27JIvYSZdf+u5pK6KK/5ioTigYMJ7Y=";
-      cp311 = "sha256-Ur4JbdxSJcbyNF4NCQrStWRmqFu+uGbMEaIOD+Pd4b8=";
-      abi3 = "sha256-uQrEHn8VkzeXVF/xqegDqdi+tMqbpw9tQang/CZIT1w=";
+      cp310 = "sha256-vHTyzQZDGs5gt3dkBSaA3QGK5rDFpC0NPWk9dOTRmVw=";
+      cp311 = "sha256-9qMpxrtZSfKxTUdJ1ulwWUwxvTUniPtc7sjkmxffWbw=";
+      abi3 = "sha256-616ubE09sR4TtwWMibV+B1+n35BdQxac/bBm4WGIZCE=";
     };
   };
 in
 buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-triton";
-  version = "3.7.10.post20260531";
+  version = "3.8.10.post20260920";
   pyproject = false;
   __structuredAttrs = true;
 

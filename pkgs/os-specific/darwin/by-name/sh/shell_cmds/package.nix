@@ -63,9 +63,16 @@ mkAppleDerivation {
 
   meta = {
     description = "Darwin shell commands and the Almquist shell";
-    license = [
-      lib.licenses.bsd2
-      lib.licenses.bsd3
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        apple-psl20
+        bsd2
+        bsd2WithViews
+        bsd3
+        bsdOriginal
+        bsdOriginalUC
+        publicDomain
+      ];
   };
 }

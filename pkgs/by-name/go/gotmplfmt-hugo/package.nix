@@ -9,14 +9,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotmplfmt-hugo";
-  version = "0.4.1";
+  version = "0.5.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "gotmplfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z+Qsg0QWWU4+QZrMg61W5bLRm8Ps5b6IsJdUNoYqJFA=";
+    hash = "sha256-1DZ25DEdpdfHgkTixtldiiTGFhO5wik6YTsRHstEje8=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-OEXvKQ/dBxhz6/pbQNDYIjBf3O0x36ZE3Se/FqEgYRg=";
+  vendorHash = "sha256-swFaZPk1WqSDXPnBz8atMT3YTucGRsQ9XX5iXOPiPS0=";
 
   ldflags = [
     "-s"

@@ -225,7 +225,7 @@ in
 
         Example usage: `nvidia-offload sauerbraten_client`
 
-        This script can be renamed with {option}`hardware.nvidia.prime.offload.enableOffloadCmd`.
+        This script can be renamed with {option}`hardware.nvidia.prime.offload.offloadCmdMainProgram`.
       '';
       prime.offload.offloadCmdMainProgram = lib.mkOption {
         type = lib.types.str;

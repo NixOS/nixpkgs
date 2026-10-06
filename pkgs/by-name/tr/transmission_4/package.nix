@@ -9,7 +9,7 @@
   curl,
   libevent,
   inotify-tools,
-  systemd,
+  systemdLibs,
   zlib,
   rapidjson,
   small,
@@ -33,7 +33,7 @@
   enableMac ? false,
   qt6Packages,
   nixosTests,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   enableDaemon ? true,
   enableCli ? true,
   installLib ? false,
@@ -58,7 +58,7 @@ let
       openssl
       zlib
     ]
-    ++ optionals enableSystemd [ systemd ]
+    ++ optionals enableSystemd [ systemdLibs ]
     ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
   );
 
@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   __structuredAttrs = true;
+  doCheck = true;
 
   patches = [
     ./0001-Skip-bundle-fixup.patch
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_GTK" enableGTK)
     (cmakeBool "ENABLE_MAC" enableMac)
     (cmakeBool "ENABLE_QT" enableQt)
+    (cmakeBool "ENABLE_TESTS" finalAttrs.doCheck)
     (cmakeBool "INSTALL_LIB" installLib)
     (cmakeBool "RUN_CLANG_TIDY" false)
   ]
@@ -181,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpthread-stubs
     libayatana-appindicator
   ]
-  ++ optionals enableSystemd [ systemd ]
+  ++ optionals enableSystemd [ systemdLibs ]
   ++ optionals stdenv.hostPlatform.isLinux [ inotify-tools ];
 
   postInstall =

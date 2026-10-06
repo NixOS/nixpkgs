@@ -5,7 +5,7 @@
   ensureNewerSourcesForZipFilesHook,
   pkg-config,
   scons,
-  glibmm,
+  glibmm_2_4,
   libpulseaudio,
   libao,
   speechd-minimal,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    glibmm
+    glibmm_2_4
     libpulseaudio
     libao
     speechd-minimal

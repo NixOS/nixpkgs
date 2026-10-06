@@ -195,6 +195,11 @@ let
         error_log ${cfg.logError};
         daemon off;
 
+        # load_module is a main-context directive that must precede events{}/http{}.
+        ${optionalString (
+          (cfg.package.dynamicModules or [ ]) != [ ]
+        ) "include ${cfg.package}/etc/nginx/dynamic-modules.conf;"}
+
         ${optionalString cfg.enableQuicBPF ''
           quic_bpf on;
         ''}
@@ -1642,7 +1647,7 @@ in
           SystemCallFilter = [
             "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid"
           ]
-          ++ optional cfg.enableQuicBPF [ "bpf" ];
+          ++ optionals cfg.enableQuicBPF [ "bpf" ];
         };
       };
 

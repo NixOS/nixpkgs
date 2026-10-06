@@ -36,7 +36,7 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "nixl";
-  version = "1.4.0";
+  version = "1.5.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,7 +45,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     owner = "ai-dynamo";
     repo = "nixl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fOtPutRgKscP396J0Rh6V9PIQ+LsE7h71vtduviHvWI=";
+    hash = "sha256-ZsYchzywmsxcZGv44v0tk3d5JJjYrpkYzL59D5jMME0=";
   };
 
   postPatch =
@@ -58,15 +58,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
         --replace-fail 'm.ReaderLock()' 'm.lock_shared()' \
         --replace-fail 'm.ReaderUnlock()' 'm.unlock_shared()'
     ''
-    # Fix asio::io_context::post() removed in asio 1.36+
-    # Use the free function asio::post(io_context, handler) instead
-    + ''
-      substituteInPlace src/plugins/ucx/ucx_backend.cpp \
-        --replace-fail 'io_->post(' 'asio::post(*io_, '
-    ''
     # Fix GDS plugin: Nix uses lib/ not lib64/
     + ''
-      substituteInPlace src/plugins/cuda_gds/meson.build src/plugins/gds_mt/meson.build \
+      substituteInPlace src/plugins/cuda_gds/meson.build \
         --replace-fail "'/lib64'" "'/lib'"
     '';
 

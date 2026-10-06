@@ -23,13 +23,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
-  version = "2.8.3";
+  version = "2.8.5";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://github.com/libexpat/libexpat/releases/download/${tagFor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-9iVt+QyQZ3PTRNoIRAK30+TyLtQbGlnJiQmKg9PqDIU=";
+    hash = "sha256-HnJ7iTPsUad6mp2a/PjmiLzkXZB8E+Nqtzk/425wMYI=";
   };
 
   strictDeps = true;

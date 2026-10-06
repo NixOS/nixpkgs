@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "chirpstack-packet-multiplexer";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-packet-multiplexer";
     tag = "v${version}";
-    hash = "sha256-BMlfYYt3fS3bOZulLqT9QRIZS0T4r/u9Y2VnQdI0oF0=";
+    hash = "sha256-GZygrejsenunkPlvejbi0MEIw226hrcbEYoBCRPQXMM=";
   };
 
-  cargoHash = "sha256-8HyIrViGKVldlA66k1fz+iHJ+ZdsGi1AqGQtxo8WLFQ=";
+  cargoHash = "sha256-DUPhgDfJQ6BhhgiBhYr6qtO8hjB1KcOXlFSbvjo1PHk=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

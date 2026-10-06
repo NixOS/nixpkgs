@@ -11,15 +11,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clouddrive2";
-  version = "1.0.14";
+  version = "1.0.20";
 
   src = fetchurl {
     url = "https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v${finalAttrs.version}/clouddrive-2-${os}-${arch}-${finalAttrs.version}.tgz";
     hash =
       {
-        x86_64-linux = "sha256-0Q+7y1c4kx7J+8Ji8nxgl1AewVVumE8FME7ev/gai3s=";
-        aarch64-linux = "sha256-lLwJD5Xr8X10eJnMZjvJjioTcuPHvp1MgJc6o5QHdak=";
-        aarch64-darwin = "sha256-eJyIt2tOXXjgC6fXuxpTQyTTs0QzzA2ityQJyYpPRU0=";
+        x86_64-linux = "sha256-FVT9B3XK4FR8gkEPgaoXh1zuL4IuYNJZLsS0Hynfgxs=";
+        aarch64-linux = "sha256-bFAJYVg80Ny+arr5Gsnu+DGa0ABOyKKi+7zZkpDfY2g=";
+        aarch64-darwin = "sha256-z8AwAeVBA0NoC7AIO5xkROtbzbX4aKB97L14G7tzEFc=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
   };

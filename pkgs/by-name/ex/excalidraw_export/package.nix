@@ -5,6 +5,7 @@
   cairo,
   pango,
   pkg-config,
+  stdenv, # for meta.broken
 }:
 
 buildNpmPackage {
@@ -35,6 +36,8 @@ buildNpmPackage {
   nativeBuildInputs = [ pkg-config ];
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     description = "CLI to export Excalidraw drawings to SVG and PDF";
     homepage = "https://github.com/Timmmm/excalidraw_export";
     license = lib.licenses.mit;

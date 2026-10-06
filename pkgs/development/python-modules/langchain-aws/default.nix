@@ -20,6 +20,7 @@
   langchain-anthropic,
 
   # tests
+  langchain-openai,
   langchain-tests,
   pytest-asyncio,
   pytest-cov-stub,
@@ -31,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.6.4";
+  version = "1.7.8";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -39,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     owner = "langchain-ai";
     repo = "langchain-aws";
     tag = "langchain-aws==${finalAttrs.version}";
-    hash = "sha256-7qg2cUjlFEo6ekK269Ew0wmmSx+1BwUdTJZCMPd2tBU=";
+    hash = "sha256-WIa2LWG21WEV4O58K172FGMOpJLfdHj/8+UWabGBKdw=";
   };
 
   postPatch = ''
@@ -72,6 +73,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     anthropic
     langchain
+    langchain-openai
     langchain-tests
     pytest-asyncio
     pytest-cov-stub
@@ -84,6 +86,11 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
+    # Requires aws-bedrock-token-generator (not packaged)
+    "test_bedrock_api_key_provider"
+    "test_installed_provider_mints_token_when_called"
+    # botocore added new content block keys
+    "test__bedrock_content_block_keys_match_botocore"
   ];
 
   pythonImportsCheck = [ "langchain_aws" ];

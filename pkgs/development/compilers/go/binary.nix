@@ -1,14 +1,17 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   version,
   hashes,
+  bashNonInteractive,
 }:
 let
-  platform = with stdenv.hostPlatform.go; "${GOOS}-${if GOARCH == "arm" then "armv6l" else GOARCH}";
+  platform =
+    with stdenvNoCC.hostPlatform.go;
+    "${GOOS}-${if GOARCH == "arm" then "armv6l" else GOARCH}";
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   name = "go-${version}-${platform}-bootstrap";
 
   src = fetchurl {
@@ -16,8 +19,14 @@ stdenv.mkDerivation {
     sha256 = hashes.${platform} or (throw "Missing Go bootstrap hash for platform ${platform}");
   };
 
+  buildInputs = [
+    bashNonInteractive
+  ];
+
   # We must preserve the signature on Darwin
-  dontStrip = stdenv.hostPlatform.isDarwin;
+  dontStrip = stdenvNoCC.hostPlatform.isDarwin;
+
+  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
@@ -26,6 +35,8 @@ stdenv.mkDerivation {
     ln -s $out/share/go/bin/go $out/bin/go
     runHook postInstall
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

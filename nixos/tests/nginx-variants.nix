@@ -1,4 +1,4 @@
-{ pkgs, runTest, ... }:
+{ runTest }:
 builtins.listToAttrs (
   map
     (packageName: {

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   runCommand,
   writeText,
@@ -8,7 +9,6 @@
   withNvenc ? false,
   atk,
   cairo,
-  cudatoolkit,
   cudaPackages,
   ffmpeg,
   gdk-pixbuf,
@@ -104,14 +104,14 @@ let
 in
 effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.4.4";
+  version = "6.5.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-zDI6xksviTjsfsh5OJdkif24BGPW9zfDsxATC98eeX0=";
+    hash = "sha256-TXqnheJjq3WZZffbEPjS5/u/02OlJkDJ9IqyCabYr1E=";
   };
 
   patches = [
@@ -120,7 +120,7 @@ effectiveBuildPythonApplication rec {
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace xpra/platform/posix/features.py \
+    substituteInPlace xpra/scripts/config.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
 
     patchShebangs --build fs/bin/build_cuda_kernels.py
@@ -142,7 +142,7 @@ effectiveBuildPythonApplication rec {
     pandoc
     udevCheckHook
   ]
-  ++ lib.optional withNvenc cudatoolkit;
+  ++ lib.optionals withNvenc [ cudaPackages.cudatoolkit ];
 
   buildInputs = [
     libx11
@@ -237,7 +237,7 @@ effectiveBuildPythonApplication rec {
     "--with-pam"
     "--with-vsock"
   ]
-  ++ lib.optional withNvenc [
+  ++ lib.optionals withNvenc [
     "--with-nvenc"
     "--with-nvjpeg_encoder"
   ];
@@ -290,12 +290,11 @@ effectiveBuildPythonApplication rec {
 
   passthru = {
     inherit xf86videodummy;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    homepage = "https://xpra.org/";
-    downloadPage = "https://xpra.org/src/";
+    homepage = "https://github.com/Xpra-org/xpra";
     description = "Persistent remote applications for X";
     changelog = "https://github.com/Xpra-org/xpra/releases/tag/v${version}";
     platforms = lib.platforms.linux;

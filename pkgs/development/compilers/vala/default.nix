@@ -119,7 +119,10 @@ let
           antono
           jtojnar
         ];
-        teams = [ lib.teams.pantheon ];
+        teams = [
+          lib.teams.gnome
+          lib.teams.pantheon
+        ];
       };
     }
   );

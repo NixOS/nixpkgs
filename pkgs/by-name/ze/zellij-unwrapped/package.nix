@@ -6,6 +6,7 @@
   installShellFiles,
   pkg-config,
   curl,
+  libssh2,
   openssl,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -38,6 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-rCK7FyAUIjUq6dxEw9YBaGm29xYvlYjX0b1xHU03XVU=";
 
+  env.LIBSSH2_SYS_USE_PKG_CONFIG = 1;
   env.OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
@@ -48,6 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     curl
+    libssh2
     openssl
   ];
 

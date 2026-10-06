@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carpedm20";
     repo = "emoji";
     tag = "v${version}";
-    hash = "sha256-YHf5UIxbdBS4JEPrD4BWE+wzYkzAboMpGmuMbOgR7s0=";
+    hash = "sha256-sDQ4KE9J7/0hlmXxyploRYGkIzj3YIFrxzq7yA5NFp0=";
   };
 
   build-system = [ setuptools ];

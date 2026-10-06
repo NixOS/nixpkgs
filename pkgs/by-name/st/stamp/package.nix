@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation {
   pname = "stamp";
-  version = "0-unstable-2026-08-24";
+  version = "0-unstable-2026-09-12";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation {
     domain = "gitlab.gnome.org";
     owner = "jbrummer";
     repo = "stamp";
-    rev = "7b40424fd5e3bb97b7be0fd8be3f2b1759ccefd4";
-    hash = "sha256-1RpYMe30ymkb9iy9RwYNahsYqAxPlGrDYy3HfYn/7nM=";
+    rev = "0ea93b7bce71a586274a835ffeae69ebc014641b";
+    hash = "sha256-GSAYL5nw3oaHHtNX/EOOD1lkKxOPuSzlo9uaVrDupNk=";
   };
 
   dontUseCmakeConfigure = true;

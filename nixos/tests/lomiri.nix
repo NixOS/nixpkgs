@@ -88,6 +88,7 @@ let
 
   sharedTestFunctions = lib: ''
     from collections.abc import Callable
+    import datetime
     import tempfile
     import subprocess
 
@@ -140,7 +141,7 @@ let
       with machine.nested("Waiting for the screen to have terminalTextColor {} on it:".format(terminalTextColor)):
         retry(check_for_color(terminalTextColor))
       with machine.nested("Ensuring terminalTextColor {} stays present on the screen:".format(terminalTextColor)):
-        retry(fn=check_for_color_continued_presence(terminalTextColor), timeout_seconds=5)
+        retry(fn=check_for_color_continued_presence(terminalTextColor), timeout=datetime.timedelta(seconds=5))
 
     def change_tty_back_forth(ttynumMain: int, ttynumDiff: int) -> None:
       """
@@ -148,9 +149,9 @@ let
       """
 
       machine.send_key(f"ctrl-alt-f{ttynumDiff}")
-      machine.sleep(10)
+      machine.sleep(datetime.timedelta(seconds=10))
       machine.send_key(f"ctrl-alt-f{ttynumMain}")
-      machine.sleep(10)
+      machine.sleep(datetime.timedelta(seconds=10))
 
     def ensure_greeter_launched() -> None:
       """
@@ -189,7 +190,7 @@ let
       with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
         retry(check_for_color(launcherColor))
       with machine.nested("Ensuring launcherColor {} stays present on the screen:".format(launcherColor)):
-        retry(fn=check_for_color_continued_presence(launcherColor), timeout_seconds=30)
+        retry(fn=check_for_color_continued_presence(launcherColor), timeout=datetime.timedelta(seconds=30))
 
       # Display "hangs" since qtmir bump? Not sure why. Switch to a different tty and back, and ensure that launcher button is still shown
       change_tty_back_forth(ttynumMain, ttynumDiff)
@@ -198,7 +199,7 @@ let
 
       # First input seems to get dropped while Mir registers the new input device. Send a key that does nothing, to get that out of the way, and sleep a tiny bit for registration to finish.
       machine.send_key("left")
-      machine.sleep(3)
+      machine.sleep(datetime.timedelta(seconds=3))
 
       machine.screenshot("lomiri_launched")
 
@@ -207,7 +208,7 @@ let
       Wait for on-screen text, and try to optimise retry count for slow hardware.
       """
 
-      machine.sleep(30)
+      machine.sleep(datetime.timedelta(seconds=30))
       machine.wait_for_text(text)
 
     def toggle_maximise() -> None:
@@ -220,9 +221,9 @@ let
       # For some reason, Lomiri in these VM tests very frequently opens the starter menu a few seconds after sending the above.
       # Because this isn't 100% reproducible all the time, and there is no command to await when OCR doesn't pick up some text,
       # the best we can do is send some Escape input after waiting some arbitrary time and hope that it works out fine.
-      machine.sleep(5)
+      machine.sleep(datetime.timedelta(seconds=5))
       machine.send_key("esc")
-      machine.sleep(5)
+      machine.sleep(datetime.timedelta(seconds=5))
 
     def mouse_click(xpos, ypos) -> None:
       """
@@ -231,11 +232,11 @@ let
 
       # Move
       machine.execute(f"ydotool mousemove --absolute -- {xpos} {ypos}")
-      machine.sleep(2)
+      machine.sleep(datetime.timedelta(seconds=2))
 
       # Click (C0 - left button: down & up)
       machine.execute("ydotool click 0xC0")
-      machine.sleep(2)
+      machine.sleep(datetime.timedelta(seconds=2))
 
     def open_starter() -> None:
       """
@@ -672,10 +673,10 @@ in
                   machine.send_chars("run0 touch /tmp/polkit-test\n")
                   # There's an authentication notification here that gains focus, but we struggle with OCRing it
                   # Just hope that it's up after a short wait
-                  machine.sleep(10)
+                  machine.sleep(datetime.timedelta(seconds=10))
                   machine.screenshot("polkit_agent")
                   machine.send_chars("${password}")
-                  machine.sleep(2) # Hopefully enough delay to make sure all the password characters have been registered? Maybe just placebo
+                  machine.sleep(datetime.timedelta(seconds=2)) # Hopefully enough delay to make sure all the password characters have been registered? Maybe just placebo
                   machine.send_chars("\n")
                   machine.wait_for_file("/tmp/polkit-test", 10)
 
@@ -732,7 +733,7 @@ in
               machine.send_key("tab")
               machine.send_key("ret")
 
-              machine.sleep(2) # sleep a tiny bit so gallery can close & the focus can return to LSS
+              machine.sleep(datetime.timedelta(seconds=2)) # sleep a tiny bit so gallery can close & the focus can return to LSS
               machine.send_key("alt-f4")
         '';
     }
@@ -824,9 +825,9 @@ in
                 machine.wait_for_console_text('SET KEYMAP "us"')
 
                 # Handle keybind fallout
-                machine.sleep(10) # wait for everything to settle
+                machine.sleep(datetime.timedelta(seconds=10)) # wait for everything to settle
                 machine.send_key("esc") # close launcher in case it was opened
-                machine.sleep(2) # wait for animation to finish
+                machine.sleep(datetime.timedelta(seconds=2)) # wait for animation to finish
                 # Make sure input leaks are gone
                 machine.send_key("backspace")
                 machine.send_key("backspace")

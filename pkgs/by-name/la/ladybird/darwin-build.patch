@@ -1,0 +1,71 @@
+Link LibGfx's direct CoreText calls explicitly and use Nix dependencies
+instead of searching the host's Homebrew installation.
+
+Defer bundle signing until postFixup, after Nix has finished modifying it.
+Provide a default CA bundle to both curl and the RequestServer sandbox
+when no certificate file was supplied explicitly.
+
+--- a/Libraries/LibGfx/CMakeLists.txt
++++ b/Libraries/LibGfx/CMakeLists.txt
+@@ -97,6 +97,7 @@
+ endif()
+
+ if (APPLE)
++    target_link_libraries(LibGfx PRIVATE "-framework CoreText")
+     target_link_libraries(LibCore PUBLIC "-framework Metal")
+     target_link_libraries(LibCore PUBLIC "-framework Accelerate")
+ endif()
+--- a/Meta/CMake/compile_options.cmake
++++ b/Meta/CMake/compile_options.cmake
+@@ -210,7 +210,6 @@
+ endif()
+
+ if (APPLE)
+-    list(APPEND CMAKE_PREFIX_PATH /opt/homebrew)
+     add_cxx_link_options(LINKER:-dead_strip)
+ endif()
+
+--- a/UI/CMakeLists.txt
++++ b/UI/CMakeLists.txt
+@@ -32,10 +32,6 @@
+         # This makes the bundle in the build directory *NOT* relocatable
+         add_custom_command(TARGET ${target_name} POST_BUILD
+             COMMAND "${CMAKE_COMMAND}" -E create_symlink "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" "${bundle_dir}/Contents/lib"
+-        )
+-
+-        add_custom_command(TARGET ${target_name} POST_BUILD
+-            COMMAND codesign -s - -v -f --entitlements "${LADYBIRD_ENTITLEMENTS_FILE}" "${bundle_dir}"
+         )
+     endif()
+
+@@ -111,17 +107,6 @@
+ if (APPLE)
+     set_helper_process_properties(WebDriver)
+
+-    # WebDriver links into the bundle after ladybird has signed it — and that leaves the seal stale until something
+-    # later relinks ladybird. Sign once more with everything in place.
+-    set(bundle_signed_stamp "${CMAKE_CURRENT_BINARY_DIR}/ladybird_bundle_signed.stamp")
+-    add_custom_command(
+-        OUTPUT "${bundle_signed_stamp}"
+-        COMMAND codesign -s - -v -f --entitlements "${LADYBIRD_ENTITLEMENTS_FILE}" "$<TARGET_BUNDLE_DIR:ladybird>"
+-        COMMAND "${CMAKE_COMMAND}" -E touch "${bundle_signed_stamp}"
+-        DEPENDS ladybird WebDriver "${LADYBIRD_ENTITLEMENTS_FILE}"
+-        VERBATIM
+-    )
+-    add_custom_target(sign_ladybird_bundle ALL DEPENDS "${bundle_signed_stamp}")
+ endif()
+
+ if(NOT CMAKE_SKIP_INSTALL_RULES)
+--- a/Services/RequestServer/main.cpp
++++ b/Services/RequestServer/main.cpp
+@@ -69,6 +69,10 @@
+     if (wait_for_debugger)
+         Core::Process::wait_for_debugger_and_break();
+
++    // Pass the default CA bundle through the sandbox allowlist as well as to curl.
++    if (certificates.is_empty())
++        certificates.append("@NIX_CA_BUNDLE@");
++
+     // FIXME: Update RequestServer to support multiple custom root certificates.
+     if (!certificates.is_empty())
+         RequestServer::set_default_certificate_path(certificates.first());

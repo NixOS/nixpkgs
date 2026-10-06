@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.poedit.net/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ dasj19 ];
+    maintainers = with lib.maintainers; [ RumBugen ];
     # configure: error: GTK+ build of wxWidgets is required
     broken = stdenv.hostPlatform.isDarwin;
   };

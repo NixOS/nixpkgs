@@ -12,7 +12,7 @@
   libzip,
   libftdi1,
   hidapi,
-  glibmm,
+  glibmm_2_4,
   python3,
   bluez,
   libsForQt5,
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     libzip
     libftdi1
     hidapi
-    glibmm
+    glibmm_2_4
     python3
     libsForQt5.qtsvg
   ]

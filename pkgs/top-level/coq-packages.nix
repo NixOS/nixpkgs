@@ -59,13 +59,13 @@ let
           withPackages =
             f:
             (callPackage ../applications/science/logic/coq/with-packages.nix {
-              inherit coq;
+              inherit (self) coq;
             })
               (f self);
         };
       });
 
-      rocq-core = coq;
+      rocq-core = self.coq;
 
       contribs = lib.recurseIntoAttrs (callPackage ../development/rocq-modules/contribs { });
 
@@ -263,6 +263,10 @@ let
             version =
               with lib.versions;
               lib.switch self.coq.version [
+                {
+                  case = range "8.19" "9.0";
+                  out = "3.17";
+                }
                 {
                   case = range "8.15" "8.18";
                   out = "3.13.1";

@@ -5,7 +5,7 @@
   pkg-config,
   gtk3,
   glib,
-  glibmm,
+  glibmm_2_4,
   gtkmm3,
   gtkspell3,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk3
     glib
-    glibmm
+    glibmm_2_4
     gtkmm3
   ];
 

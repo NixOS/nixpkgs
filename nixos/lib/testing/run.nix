@@ -195,6 +195,7 @@ in
 
     # useful for inspection (debugging / exploration)
     passthru.config = config;
+    passthru.options = options;
 
     /**
       For discoverTests only. Deprecated. Will be removed when discoverTests can be removed from NixOS all-tests.nix.

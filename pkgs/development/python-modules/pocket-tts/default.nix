@@ -7,7 +7,6 @@
   hatchling,
 
   # dependencies
-  beartype,
   einops,
   fastapi,
   huggingface-hub,
@@ -18,6 +17,7 @@
   safetensors,
   scipy,
   sentencepiece,
+  tokenizers,
   torch,
   typer,
   typing-extensions,
@@ -30,7 +30,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pocket-tts";
-  version = "3.0.2";
+  version = "3.3.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage (finalAttrs: {
     owner = "kyutai-labs";
     repo = "pocket-tts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/8MLr8Z1UDqrS5DBVPdsKOKO2XCFjk8aK+CXY1lYjRQ=";
+    hash = "sha256-5ymwdjYUcRbC8Qfscvg/8ebg3zyRrEbgiCLO0KyYBl4=";
   };
 
   build-system = [
@@ -46,7 +46,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    beartype
     einops
     fastapi
     huggingface-hub
@@ -57,6 +56,7 @@ buildPythonPackage (finalAttrs: {
     safetensors
     scipy
     sentencepiece
+    tokenizers
     torch
     typer
     typing-extensions

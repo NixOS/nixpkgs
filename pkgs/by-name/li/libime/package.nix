@@ -18,26 +18,26 @@ let
     url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.zst";
     hash = "sha256-Pp2HsEo5PxMXI0csjqqGDdI8N4o9T2qQBVE7KpWzYUs=";
   };
-  arpaVer = "20250113";
+  arpaVer = "20260629";
   arpa = fetchurl {
     url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.zst";
-    hash = "sha256-7oPs8g1S6LzNukz2zVcYPVPCV3E6Xrd+46Y9UPw3lt0=";
+    hash = "sha256-BoCDM7kXPlN0zyy1r8EtCPViW/mrtTZInKw3b8BfLn8=";
   };
-  dictVer = "20250327";
+  dictVer = "20260703";
   dict = fetchurl {
     url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.zst";
-    hash = "sha256-fKa+R1TA1MJ7p3AsDc5lFlm9LKH6pcvyhI2BoAU8jBM=";
+    hash = "sha256-xobKtt+JZMSNWW9X0gW6wx/HKHCwaoMBfkRQPfjAlpc=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libime";
-  version = "1.1.14";
+  version = "1.1.16";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     tag = finalAttrs.version;
-    hash = "sha256-q9OSY1q4MNlFqw6lRMrHO6QT9xP8Czz4b4M0BuIkp34=";
+    hash = "sha256-SDp7j37ZtIQ+YqOh+JKGaPgnrz0sVIom3lJx0Jmbk38=";
     fetchSubmodules = true;
   };
 

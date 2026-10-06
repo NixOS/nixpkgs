@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rofi-games";
-  version = "1.18.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";
     repo = "rofi-games";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6/UeQ+j38NeQFkeP0Pb2UKUbwruPgUos3e9TUQwv9WI=";
+    hash = "sha256-+2I4WR5SOLYSWnPUrJFlRwhnebu4RNy3Dd4/gKW8xXU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-oWmfzlt/qqg1CYfk1pKWhaapiP3iqFU4Idn6pBivjko=";
+    hash = "sha256-dPm9+rxEtx32HVaXLrbxZiVyUrYwFPvuk/gRQR4Fo+s=";
   };
 
   patches = [

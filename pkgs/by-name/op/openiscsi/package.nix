@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-iscsi";
-  version = "2.1.12";
+  version = "2.1.13";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-iscsi";
     rev = finalAttrs.version;
-    hash = "sha256-CJkThrLskIOAFOLkMn+Jk7oSEjeLqBZlm2ll0MspBqk=";
+    hash = "sha256-omQ1cWVqAoIwKJRUUmGBLDyJy80Pwk3OnHWOrfzdvj8=";
   };
 
   nativeBuildInputs = [

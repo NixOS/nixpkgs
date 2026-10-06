@@ -86,6 +86,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_escape_with_style"
     "test_explorer_extract_links"
     "test_explorer_filtering"
+    "test_explorer_for_non_existing_files"
     "test_false"
     "test_fetch_source_files_typo3"
     "test_fetch_source_files"

@@ -113,8 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit binaryName;
     applicationName = "Floorp";
     libName = "floorp-bin-${finalAttrs.version}";
-    ffmpegSupport = true;
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
     gtk3 = gtk3;
     updateScript = ./update.sh;
   };

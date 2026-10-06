@@ -1,56 +1,65 @@
 {
+  lib,
+  stdenv,
+  fetchurl,
+
+  # build-time
+  autoPatchelfHook,
+  buildPackages,
+
+  # run-time
   alsa-lib,
   at-spi2-core,
   atk,
-  autoPatchelfHook,
   buildEnv,
-  buildPackages,
   cairo,
   cups,
   dbus,
   expat,
-  fetchurl,
   ffmpeg,
   fontconfig,
   freetype,
   gdk-pixbuf,
   glib,
   gtk3,
-  lib,
+  libGL,
   libcap,
   libdrm,
-  libGL,
+  libgbm,
   libnotify,
   libuuid,
+  libx11,
   libxcb,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
   libxkbcommon,
-  makeWrapper,
-  libgbm,
+  libxrandr,
+  libxrender,
+  libxscrnsaver,
+  libxshmfence,
+  libxtst,
   nspr,
   nss,
   pango,
-  sdk ? false,
   sqlite,
-  stdenv,
   systemd,
   udev,
-  libxtst,
-  libxscrnsaver,
-  libxrender,
-  libxrandr,
-  libxi,
-  libxfixes,
-  libxext,
-  libxdamage,
-  libxcursor,
-  libxcomposite,
-  libx11,
-  libxshmfence,
+
+  # update script
+  writeShellApplication,
+  common-updater-scripts,
+  curl,
+  jq,
+
+  # options
+  sdk ? false,
 }:
 
 let
-  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
-
   nwEnv = buildEnv {
     name = "nwjs-env";
     paths = [
@@ -66,27 +75,27 @@ let
       gdk-pixbuf
       glib
       gtk3
+      libGL
       libcap
       libdrm
-      libGL
-      libnotify
-      libxkbcommon
       libgbm
-      nspr
-      nss
-      pango
+      libnotify
       libx11
-      libxscrnsaver
       libxcomposite
       libxcursor
       libxdamage
       libxext
       libxfixes
       libxi
+      libxkbcommon
       libxrandr
       libxrender
-      libxtst
+      libxscrnsaver
       libxshmfence
+      libxtst
+      nspr
+      nss
+      pango
       # libnw-specific (not chromium dependencies)
       ffmpeg
       libxcb
@@ -101,30 +110,25 @@ let
       "out"
     ];
   };
-
-  version = "0.102.1";
 in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "nwjs";
-  inherit version;
+  version = "0.117.0";
 
   src =
     let
-      flavor = if sdk then "sdk-" else "";
+      flavor = if sdk then "sdk" else "normal";
+
+      arch =
+        if stdenv.hostPlatform.is64bit then
+          "x64"
+        else if stdenv.hostPlatform.isAarch64 then
+          "arm64"
+        else
+          throw "nwjs: unsupported architecture.";
     in
-    fetchurl {
-      url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
-      # TODO: Write an update script to update all 4 hashes.
-      # nixpkgs-update: no auto update
-      hash =
-        {
-          "sdk-ia32" = "sha256-uzDbEq2vNC+fm95Co3lnQX7mrUXsIDWFoa0osWCn3EM=";
-          "sdk-x64" = "sha256-jWw5kXYGxu7oen8fK2Q58QPhiBRC6H2ibGXkeUFW2pI=";
-          "ia32" = "sha256-oODdSKNlOPSLD9vAqRwYcAgH6mumyOB5Fp6G9ifSgok=";
-          "x64" = "sha256-WhHV+xj2ngEz+i1ipBhwZD9b0EF/hdi8gMBZw5qYRGA=";
-        }
-        ."${flavor + bits}";
-    };
+    finalAttrs.passthru.srcs."${flavor}-${arch}";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -133,11 +137,14 @@ stdenv.mkDerivation {
     (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
-  buildInputs = [ nwEnv ];
+  buildInputs = [
+    nwEnv
+  ];
+
   appendRunpaths = map (pkg: (lib.getLib pkg) + "/lib") [
     nwEnv
-    stdenv.cc.libc
     stdenv.cc.cc
+    stdenv.cc.libc
   ];
 
   preFixup = ''
@@ -164,16 +171,69 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru = {
+    srcs =
+      let
+        mkUrl =
+          flavor: arch:
+          "https://dl.nwjs.io/v${finalAttrs.version}/nwjs-${
+            lib.optionalString (flavor == "sdk") "sdk-"
+          }v${finalAttrs.version}-linux-${arch}.tar.gz";
+      in
+      {
+        normal-arm64 = fetchurl {
+          url = mkUrl "normal" "arm64";
+          hash = "sha256-fYzBiRradqodDhIeI3rXYnGC/W/VrpKsLiuvtwiWL5w=";
+        };
+        normal-x64 = fetchurl {
+          url = mkUrl "normal" "x64";
+          hash = "sha256-KIHtHzqQMdWNj6DwcU0L2se0XVK97Alc1yqk8x4I3r8=";
+        };
+        sdk-arm64 = fetchurl {
+          url = mkUrl "sdk" "arm64";
+          hash = "sha256-2BHtclshr1mEovMTbyW0g0BNPgpsO2PcGSlpHxncvKQ=";
+        };
+        sdk-x64 = fetchurl {
+          url = mkUrl "sdk" "x64";
+          hash = "sha256-ZkQ7WgnrtDpW8xHpX8F4wBhTUG17cgM2BeqmsaFwTuw=";
+        };
+      };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-nwjs";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        jq
+      ];
+      text = ''
+        LATEST_VERSION="$(curl -sL https://nwjs.io/versions.json | jq -r '.stable' | sed 's/^v//')"
+        ARCHIVE_NAMES="${toString (lib.attrNames finalAttrs.passthru.srcs)}"
+
+        for name in $ARCHIVE_NAMES; do
+          update-source-version nwjs "$LATEST_VERSION" \
+            --source-key="passthru.srcs.$name" \
+            --ignore-same-version \
+            --print-changes
+        done
+      '';
+    });
+  };
+
   meta = {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [
-      "i686-linux"
+      "aarch64-linux"
       "x86_64-linux"
     ];
+    changelog = "https://github.com/nwjs/nw.js/blob/nw-v${finalAttrs.version}/CHANGELOG.md";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = [ lib.maintainers.mikaelfangel ];
+    maintainers = with lib.maintainers; [
+      mikaelfangel
+      eljamm
+    ];
     mainProgram = "nw";
     license = lib.licenses.mit;
   };
-}
+})

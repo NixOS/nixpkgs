@@ -6,6 +6,31 @@
 let
   domain = "example.test";
   ip = "192.168.1.2";
+  migrationCertNames = [
+    "migration-2.${domain}"
+    "migration-3.${domain}"
+  ];
+  migrationCerts = lib.genAttrs migrationCertNames (_: {
+    listenHTTP = ":80";
+  });
+  migrationTestLego = pkgs.writeShellScriptBin "lego" ''
+    if [[ ''${1-} == migrate ]]; then
+      printf '1\n' >> /run/acme/test-migration-attempts
+      if ! mkdir /run/acme/test-migration-active; then
+        touch /run/acme/test-migration-collision
+        exit 99
+      fi
+      trap 'rm -rf /run/acme/test-migration-active' EXIT
+      sleep 2
+    fi
+
+    ${lib.getExe pkgs.lego} "$@"
+  '';
+  migrationServicePaths =
+    lib.genAttrs (map (name: "acme-order-renew-${name}") migrationCertNames)
+      (_: {
+        path = lib.mkBefore [ migrationTestLego ];
+      });
 in
 {
   name = "http01-builtin";
@@ -37,6 +62,12 @@ in
           extraDomainNames = [ ip ];
           listenHTTP = ":80";
         };
+
+        # Delay account migration and fail a second concurrent invocation so
+        # the shared-account migration race is deterministic.
+        systemd.services."acme-order-renew-${config.networking.fqdn}".path = lib.mkBefore [
+          migrationTestLego
+        ];
 
         systemd.targets."renew-triggered" = {
           wantedBy = [ "acme-order-renew-${config.networking.fqdn}.service" ];
@@ -81,6 +112,18 @@ in
 
           preservation.configuration = { };
 
+          migration_serial.configuration = {
+            security.acme.maxConcurrentRenewals = 1;
+            security.acme.certs = migrationCerts;
+            systemd.services = migrationServicePaths;
+          };
+
+          migration_parallel.configuration = {
+            security.acme.maxConcurrentRenewals = 10;
+            security.acme.certs = migrationCerts;
+            systemd.services = migrationServicePaths;
+          };
+
           add_cert_and_domain.configuration = {
             security.acme.certs = {
               "${config.networking.fqdn}" = {
@@ -94,6 +137,10 @@ in
             };
             # To make sure it's the account creation leader that is doing the work.
             security.acme.maxConcurrentRenewals = 10;
+          };
+
+          remove_domain.configuration = {
+            security.acme.certs."${config.networking.fqdn}".extraDomainNames = lib.mkForce [ ip ];
           };
 
           concurrency.configuration = {
@@ -170,9 +217,12 @@ in
 
       domain = "${domain}"
       ip = "${ip}"
+      jq = "${lib.getExe pkgs.jq}"
       cert = "${certName}"
       cert2 = "builtin-2." + domain
       cert3 = "builtin-3." + domain
+      migration_certs = [cert] + ${builtins.toJSON migrationCertNames}
+      migration_units = [f"acme-order-renew-{name}.service" for name in migration_certs]
       legacy_account_dir = "/var/lib/acme/.lego/accounts/1ccf607d9aa280e9af00"
 
       acme.start()
@@ -186,6 +236,93 @@ in
           check_issuer(builtin, cert, "pebble")
           check_domain(builtin, cert, cert)
           check_ip(builtin, cert, ip)
+
+      with subtest("Handles v4 account and certificate state"):
+          switch_to(builtin, "migration_serial")
+          for migration_cert in migration_certs:
+              check_issuer(builtin, migration_cert, "pebble")
+              check_domain(builtin, migration_cert, migration_cert)
+
+          switch_to(builtin, "migration_parallel")
+          builtin.succeed(f"systemctl start {' '.join(migration_units)}")
+
+          builtin.succeed(
+              f"""
+              set -euo pipefail
+
+              account_file=$(find /var/lib/acme/.lego/accounts -type f -name account.json -print -quit)
+              test -n "$account_file"
+              account_dir=$(dirname "$account_file")
+
+              account_id=$(basename "$account_dir")
+              key_path="$account_dir/$account_id.key"
+              test -f "$key_path"
+
+              mkdir "$account_dir/keys"
+              mv "$key_path" "$account_dir/keys/$account_id.key"
+              {jq} '{{
+                email: .email,
+                registration: {{
+                  body: (.registration | del(.accountURL)),
+                  uri: .registration.accountURL
+                }}
+              }}' "$account_dir/account.json" > "$account_dir/account.json.tmp"
+              mv "$account_dir/account.json.tmp" "$account_dir/account.json"
+
+              {jq} -e '
+                .registration.body.status == "valid"
+                and (.registration.uri | startswith("https://acme.test/"))
+              ' "$account_dir/account.json" > /dev/stderr
+
+              cert_resource=$(find "/var/lib/acme/.lego/{cert}" -type f -name '{cert}.json' -print -quit)
+              test -n "$cert_resource"
+              {jq} '{{
+                domain: .id,
+                certUrl: .certUrl,
+                certStableUrl: .certStableUrl
+              }}' "$cert_resource" > "$cert_resource.tmp"
+              mv "$cert_resource.tmp" "$cert_resource"
+
+              chown -R acme:acme /var/lib/acme/.lego/accounts "/var/lib/acme/.lego/{cert}"
+              chmod -R u=rwX,g=,o= /var/lib/acme/.lego/accounts
+              chmod -R u=rwX,g=rX,o= "/var/lib/acme/.lego/{cert}"
+              rm -rf /run/acme/test-migration-*
+              """
+          )
+
+          builtin.succeed(f"systemctl start {' '.join(migration_units)}")
+          builtin.succeed('test "$(wc -l < /run/acme/test-migration-attempts)" -eq 1')
+          builtin.succeed("test ! -e /run/acme/test-migration-active")
+          builtin.succeed("test ! -e /run/acme/test-migration-collision")
+          builtin.succeed(
+              f"""
+              set -euo pipefail
+
+              account_file=$(find /var/lib/acme/.lego/accounts -type f -name account.json -print -quit)
+              test -n "$account_file"
+              account_dir=$(dirname "$account_file")
+
+              account_id=$(basename "$account_dir")
+              test -f "$account_dir/$account_id.key"
+              test ! -e "$account_dir/keys"
+
+              {jq} -e '
+                .origin == "migration"
+                and .keyType == "EC256"
+                and .server == "https://acme.test/dir"
+                and .registration.status == "valid"
+                and (.registration.accountURL | startswith("https://acme.test/"))
+              ' "$account_dir/account.json" > /dev/stderr
+              """
+          )
+          builtin.succeed(f"systemctl start acme-order-renew-{cert}.service")
+
+          check_issuer(builtin, cert, "pebble")
+          check_domain(builtin, cert, cert)
+          check_ip(builtin, cert, ip)
+          for migration_cert in migration_certs[1:]:
+              check_issuer(builtin, migration_cert, "pebble")
+              check_domain(builtin, migration_cert, migration_cert)
 
       with subtest("Validate permissions"):
           check_permissions(builtin, cert, "acme")
@@ -297,6 +434,16 @@ in
           builtin.succeed("test $(ls -1 /var/lib/acme/.lego/accounts | tee /dev/stderr | wc -l) -eq 2")
           check_permissions(builtin, cert, "acme")
           check_permissions(builtin, cert2, "acme")
+
+      with subtest("Remove an existing cert domain"):
+          builtin.succeed("systemctl stop renew-triggered.target")
+          switch_to(builtin, "remove_domain")
+          builtin.wait_for_unit("renew-triggered.target")
+
+          check_issuer(builtin, cert, "pebble")
+          check_domain(builtin, cert, f"builtin-alt.{domain}", fail=True)
+          check_ip(builtin, cert, ip)
+          check_permissions(builtin, cert, "acme")
 
       with subtest("Check account hashing compatibility with pre-24.05 settings"):
           builtin.succeed("systemctl stop renew-triggered.target")

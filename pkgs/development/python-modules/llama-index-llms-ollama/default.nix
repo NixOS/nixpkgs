@@ -7,15 +7,15 @@
   ollama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-llms-ollama";
-  version = "0.10.1";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_llms_ollama";
-    inherit version;
-    hash = "sha256-Rw7YNt7kO8AXHcBcaMLao2GKfDgWa4BE1/g2DNjNj6Y=";
+    inherit (finalAttrs) version;
+    hash = "sha256-5rjKwgCp/2fK6lMf7OCmJyqJ41BrK5ZI7HCaz/5KeYA=";
   };
 
   build-system = [ hatchling ];
@@ -36,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

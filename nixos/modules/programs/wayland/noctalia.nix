@@ -33,7 +33,13 @@ in
   config = lib.mkIf cfg.enable (
     lib.mkMerge [
       {
-        environment.systemPackages = [ cfg.package ];
+        environment.systemPackages = [
+          cfg.package
+        ];
+
+        # Needed to add the freedesktop sound theme
+        # It's only a runtime dependency for noctalia, so it's not made a package dependency.
+        xdg.sounds.enable = true;
 
         systemd.user.services.noctalia = lib.mkIf cfg.systemd.enable {
           description = "Noctalia Wayland desktop shell";

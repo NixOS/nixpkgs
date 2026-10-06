@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odamex";
-  version = "12.2.0";
+  version = "12.3.0";
 
   src = fetchFromGitHub {
     owner = "odamex";
     repo = "odamex";
     tag = finalAttrs.version;
-    hash = "sha256-cRQtY4C0gjzheE4cG8aPjzAoPf/Hm05a6tidsbce7uM=";
+    hash = "sha256-JT8flyIEHfCejJnRd+bpUGKNAM746i51EuTItLho5WE=";
     fetchSubmodules = true;
   };
 

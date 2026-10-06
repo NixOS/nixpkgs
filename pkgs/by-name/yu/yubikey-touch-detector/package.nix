@@ -11,15 +11,15 @@
 
 buildGoModule (finalAttrs: {
   pname = "yubikey-touch-detector";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "max-baz";
     repo = "yubikey-touch-detector";
     tag = finalAttrs.version;
-    hash = "sha256-aHR/y8rAKS+dMvRdB3oAmOiI7hTA6qlF4Z05OjwYOO4=";
+    hash = "sha256-GaahrYx5ySUIAM073JknQGPwC2pw2VXj3D25sEZANJk=";
   };
-  vendorHash = "sha256-oHEcpu3QvcVC/YCtGtP7nNT9++BSU8BPT5pf8NdLrOo=";
+  vendorHash = "sha256-Uvybz2i2i/EWJvmvlb4VcJo/2SNaDAuj8t997sxlvtY=";
 
   nativeBuildInputs = [
     pkg-config

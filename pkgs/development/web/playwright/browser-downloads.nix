@@ -20,13 +20,13 @@ in
 {
   chromium = {
     x86_64-linux = mk (cftUrl "linux64/chrome-linux64.zip") true;
-    aarch64-linux = mk (registryUrl "chromium" "chromium-linux-arm64.zip") true;
+    aarch64-linux = mk (cftUrl "linux-arm64/chrome-linux-arm64.zip") true;
     aarch64-darwin = mk (cftUrl "mac-arm64/chrome-mac-arm64.zip") false;
   };
 
   "chromium-headless-shell" = {
     x86_64-linux = mk (cftUrl "linux64/chrome-headless-shell-linux64.zip") false;
-    aarch64-linux = mk (registryUrl "chromium" "chromium-headless-shell-linux-arm64.zip") false;
+    aarch64-linux = mk (cftUrl "linux-arm64/chrome-headless-shell-linux-arm64.zip") false;
     aarch64-darwin = mk (cftUrl "mac-arm64/chrome-headless-shell-mac-arm64.zip") false;
   };
 

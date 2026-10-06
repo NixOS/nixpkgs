@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.10.1";
+  version = "8.10.2";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-fGLuOuiM3VHj70qlSpb2s25RYD8gFARrqwAhW6CIHXE=";
+    hash = "sha256-lje8tQPxIgOt8xOlSySmD2ZNcLOvIGIQMbdmQiFrj1k=";
   };
 
   patches = [

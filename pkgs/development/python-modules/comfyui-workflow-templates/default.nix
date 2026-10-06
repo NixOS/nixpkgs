@@ -8,6 +8,7 @@
   comfyui-workflow-templates-json,
   comfyui-workflow-templates-media-api,
   comfyui-workflow-templates-media-assets-01,
+  comfyui-workflow-templates-media-assets-02,
   comfyui-workflow-templates-media-video,
   comfyui-workflow-templates-media-image,
   comfyui-workflow-templates-media-other,
@@ -15,13 +16,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "comfyui-workflow-templates";
-  version = "0.11.48";
+  version = "0.11.66";
   pyproject = true;
 
+  # nixpkgs-update: no auto update
+  # updated via comfyui
   src = fetchPypi {
     pname = "comfyui_workflow_templates";
     inherit (finalAttrs) version;
-    hash = "sha256-UQ/tuOOO9504uDc5kFfaJN6CnwbKCZUL6WxprxQlVD8=";
+    hash = "sha256-PYTvWQ0u7MavD9lPHaEytxkdXOy35eze55qjd+D8tGI=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +34,7 @@ buildPythonPackage (finalAttrs: {
     comfyui-workflow-templates-json
     comfyui-workflow-templates-media-api
     comfyui-workflow-templates-media-assets-01
+    comfyui-workflow-templates-media-assets-02
     comfyui-workflow-templates-media-image
     comfyui-workflow-templates-media-other
     comfyui-workflow-templates-media-video

@@ -9,11 +9,11 @@
 # that the entire compilation is more tested using clang from an upstream POV.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "openbgpd";
-  version = "9.2";
+  version = "9.3";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenBGPD/openbgpd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TiGrX0eO/ImGQJZqkRXZtr5C+r4RTqYA3Jwiz04PA6o=";
+    hash = "sha256-tDwXLtw4D4cXHvHNE3tPzhy47sZQtUtk8YmhrlLSHHI=";
   };
 
   buildInputs = [

@@ -10,7 +10,7 @@
 let
 
   pname = "sleek-todo";
-  version = "2.0.26";
+  version = "2.0.28";
 
   suffixMap = {
     aarch64-darwin = "mac-arm64.dmg";
@@ -26,9 +26,9 @@ let
     url = "https://github.com/ransome1/sleek/releases/download/v${version}/sleek-${version}-${suffix}";
     sha256 =
       {
-        aarch64-darwin = "sha256-cQ5c9qs3Icl5vwSoU0tCM5QbrqftYUwlBBzDGaggyOE=";
-        aarch64-linux = "sha256-zcMUCLzIseipG15PQXsECNz/baAYBEzOGxh3hvw6pdg=";
-        x86_64-linux = "sha256-QpeWbnSJTCFXrj/sy+Ava7dk2OlHCzaiDoIM29q9r44=";
+        aarch64-darwin = "sha256-+xqn/Ffm5p4NbWmvrCp2ViG/CGtRRXcw0gE8Cs19N2Y=";
+        aarch64-linux = "sha256-ujeXAJlB1sElk7bRlZ7dbTurKzD3IGRpHxsVNmUU5Ro=";
+        x86_64-linux = "sha256-VzZwONKFl/7l6HXn387UfTllrU+x14X9vK6FN3buimU=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.system}");
   };

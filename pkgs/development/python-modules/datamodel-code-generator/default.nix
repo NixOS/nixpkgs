@@ -134,6 +134,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/koxudaxi/datamodel-code-generator/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
-    mainProgram = "datamodel-code-generator";
+    mainProgram = "datamodel-codegen";
   };
 })

@@ -17,6 +17,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "corepack";
   version = "0.36.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "corepack";

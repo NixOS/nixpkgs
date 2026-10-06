@@ -3,22 +3,27 @@
   buildPythonPackage,
   dnspython,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "srvlookup";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gmr";
     repo = "srvlookup";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-iXbi25HsoNX0hnhwZoFik5ddlJ7i+xml3HGaezj3jgY=";
   };
 
-  propagatedBuildInputs = [ dnspython ];
+  build-system = [ setuptools ];
+
+  dependencies = [ dnspython ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -30,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmlb ];
   };
-}
+})

@@ -5,7 +5,7 @@
   SDL2_ttf,
   alsa-lib,
   fetchFromGitHub,
-  glibmm,
+  glibmm_2_4,
   gtk3,
   libGL,
   libGLU,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     alsa-lib
-    glibmm
+    glibmm_2_4
     sqlite
     SDL2
     SDL2_ttf

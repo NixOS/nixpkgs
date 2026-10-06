@@ -1,5 +1,5 @@
 diff --git a/forge.config.ts b/forge.config.ts
-index 4fda2d92..16581c55 100644
+index 2d3be537..d7271ed0 100644
 --- a/forge.config.ts
 +++ b/forge.config.ts
 @@ -61,7 +61,7 @@ const config: ForgeConfig = {
@@ -11,11 +11,19 @@ index 4fda2d92..16581c55 100644
  	},
  	hooks: {
  		readPackageJson: async (_forgeConfig, packageJSON) => {
+@@ -87,6 +87,7 @@ const config: ForgeConfig = {
+ 			}
+ 		},
+ 		packageAfterCopy: async (_forgeConfig, buildPath, _electronVersion, platform) => {
++			return;
+ 			const binaryName = platform === "win32" ? "gomuks.exe" : "gomuks"
+ 			const resourcesDir = path.resolve(buildPath, "..")
+ 			const dest = path.join(resourcesDir, binaryName)
 diff --git a/src/mainwindow.ts b/src/mainwindow.ts
-index da649371..94b52173 100644
+index 0fba60fc..d297f665 100644
 --- a/src/mainwindow.ts
 +++ b/src/mainwindow.ts
-@@ -56,7 +56,7 @@ export class GomuksWindow {
+@@ -129,7 +129,7 @@ export class GomuksWindow {
  
  	createTray() {
  		const trayIconPath = path.join(
@@ -24,7 +32,7 @@ index da649371..94b52173 100644
  			process.platform === "darwin" ? "trayTemplate@2x.png" : "tray@2x.png",
  		)
  		this.tray = new Tray(nativeImage.createFromPath(trayIconPath))
-@@ -136,6 +136,7 @@ export class GomuksWindow {
+@@ -207,6 +207,7 @@ export class GomuksWindow {
  			width: 1280,
  			height: 720,
  			autoHideMenuBar: true,

@@ -49,6 +49,11 @@ Before adding a new package, please consider the following questions:
 
 If any of these questions' answer is no, then you should probably not add the package.
 
+> [!NOTE]
+> Many upstream developers submit their own projects for inclusion in Nixpkgs.
+> While these PRs are welcomed, this is often a sign that the package doesn't yet meet the userbase requirements.
+> Consider waiting for another user of your project to submit it instead.
+
 Special care has to be taken with security-critical software components.
 Because entries in the Nix store are inert and do nothing by themselves, packages should be considered by their intended use, e.g. when used together with a NixOS module.
 
@@ -912,9 +917,9 @@ stdenv.mkDerivation {
 ## Automatic package updates
 [automatic-package-updates]: #automatic-package-updates
 
-The [community bot `r-ryantm`](https://nix-community.org/update-bot/), periodically tries to update all packages in Nixpkgs.
-It runs the program [`nixpkgs-update`](https://nix-community.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
-`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nix-community.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
+The [community bot `r-ryantm`](https://github.com/NixOS/infra/blob/main/non-critical-infra/modules/nixpkgs-update/README.md), periodically tries to update all packages in Nixpkgs.
+It runs the program [`nixpkgs-update`](https://nixos.github.io/nixpkgs-update/) which finds new versions of packages, modifies the relevant files, and opens a Nixpkgs PR.
+`nixpkgs-update` has a specific set of capabilities of finding new versions for a package, and updating Nix files accordingly (see their [FAQ](https://nixos.github.io/nixpkgs-update/nixpkgs-maintainer-faq/)).
 However, setting a `passthru.updateScript` for a package, sets an explicit update procedure for `nixpkgs-update`, that can find the latest version more reliably than `nixpkgs-update`, and modify the necessary files more correctly.
 
 ### Valid `passthru.updateScript` values

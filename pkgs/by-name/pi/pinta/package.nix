@@ -11,6 +11,8 @@
   pango,
   intltool,
   wrapGAppsHook4,
+  webp-pixbuf-loader,
+  gnome,
   nix-update-script,
 
   # Darwin transitive deps
@@ -82,6 +84,17 @@ buildDotnetModule rec {
   postBuild = ''
     intltool-merge -x po/ xdg/com.github.PintaProject.Pinta.metainfo.xml.in xdg/com.github.PintaProject.Pinta.metainfo.xml
     intltool-merge -d po/ xdg/com.github.PintaProject.Pinta.desktop.in xdg/com.github.PintaProject.Pinta.desktop
+  '';
+
+  postInstall = ''
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   postFixup = ''
