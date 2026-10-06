@@ -4202,6 +4202,8 @@ self: super: with self; {
 
   dbus-next = callPackage ../development/python-modules/dbus-next { };
 
+  dbus-notification = callPackage ../development/python-modules/dbus-notification { };
+
   dbus-python = callPackage ../development/python-modules/dbus-python { inherit (pkgs) dbus; };
 
   dbus-python-client-gen = callPackage ../development/python-modules/dbus-python-client-gen { };
