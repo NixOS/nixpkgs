@@ -571,9 +571,6 @@ in
     buildInputs = old.buildInputs ++ [
       zlib.dev
     ];
-    meta = old.meta // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4";
-    };
   });
 
   luacheck = prev.luacheck.overrideAttrs (old: {
