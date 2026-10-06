@@ -7912,6 +7912,7 @@ with pkgs;
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
     buildLibsOnly = true;
+    withCompression = true;
   };
   # We do not want to include ukify in the normal systemd attribute as it
   # relies on Python at runtime.
