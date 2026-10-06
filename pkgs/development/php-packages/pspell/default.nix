@@ -3,6 +3,7 @@
   buildPecl,
   fetchFromGitHub,
   lib,
+  php,
 }:
 
 let
@@ -24,6 +25,7 @@ buildPecl {
   doCheck = true;
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP extension for checking the spelling of a word";
     homepage = "https://pecl.php.net/package/pspell";
     license = lib.licenses.php301;
