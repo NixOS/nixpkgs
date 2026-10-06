@@ -7,12 +7,20 @@ let
   frontendUrl = "https://${certs.domain}";
 
   keycloakTest =
-    databaseType:
+    {
+      databaseType,
+      tcp ? false,
+    }:
     import ./make-test-python.nix (
       { pkgs, ... }:
       let
+        inherit (pkgs) lib;
         initialAdminPassword = "h4Iho\"JFn't2>iQIR9";
         adminPasswordFile = pkgs.writeText "admin-password" "${initialAdminPassword}";
+        isMySQL = databaseType != "postgresql";
+        dbName = "also_bogus";
+        dbUser = "bogus";
+        dbPassword = ''wzf6\"vO"Cb\nP>p#6;c&o?eu=q'THE'''H''''E'';
       in
       {
         name = "keycloak";
@@ -23,41 +31,72 @@ let
         nodes = {
           keycloak =
             { config, ... }:
-            {
-              virtualisation.memorySize = 2047;
+            lib.mkMerge [
+              {
+                virtualisation.memorySize = 2047;
 
-              security.pki.certificateFiles = [
-                certs.ca.cert
-              ];
-
-              networking.extraHosts = ''
-                127.0.0.1 ${certs.domain}
-              '';
-
-              services.keycloak = {
-                enable = true;
-                settings = {
-                  hostname = certs.domain;
-                  metrics-enabled = true;
-                };
-                inherit initialAdminPassword;
-                sslCertificate = "${certs.${certs.domain}.cert}";
-                sslCertificateKey = "${certs.${certs.domain}.key}";
-                database = {
-                  type = databaseType;
-                  username = "bogus";
-                  name = "also bogus";
-                  passwordFile = "${pkgs.writeText "dbPassword" ''wzf6\"vO"Cb\nP>p#6;c&o?eu=q'THE'''H''''E''}";
-                };
-                plugins = with config.services.keycloak.package.plugins; [
-                  keycloak-discord
+                security.pki.certificateFiles = [
+                  certs.ca.cert
                 ];
-              };
-              environment.systemPackages = with pkgs; [
-                htmlq
-                jq
-              ];
-            };
+
+                networking.extraHosts = ''
+                  127.0.0.1 ${certs.domain}
+                '';
+
+                services.keycloak = {
+                  enable = true;
+                  settings = {
+                    hostname = certs.domain;
+                    metrics-enabled = true;
+                  };
+                  inherit initialAdminPassword;
+                  sslCertificate = "${certs.${certs.domain}.cert}";
+                  sslCertificateKey = "${certs.${certs.domain}.key}";
+                  database = {
+                    type = databaseType;
+                  }
+                  // lib.optionalAttrs tcp {
+                    createLocally = false;
+                    host = "localhost";
+                    name = dbName;
+                    username = dbUser;
+                    passwordFile = "${pkgs.writeText "dbPassword" dbPassword}";
+                  };
+                  plugins = with config.services.keycloak.package.plugins; [
+                    keycloak-discord
+                  ];
+                };
+                environment.systemPackages = with pkgs; [
+                  htmlq
+                  jq
+                ];
+              }
+              (lib.mkIf tcp {
+                services.postgresql = lib.mkIf (!isMySQL) {
+                  enable = true;
+                  initialScript = pkgs.writeText "keycloak-db.sql" ''
+                    CREATE ROLE ${dbUser} WITH LOGIN PASSWORD ${"$kc$" + dbPassword + "$kc$"};
+                    CREATE DATABASE ${dbName} OWNER ${dbUser};
+                  '';
+                };
+                services.mysql = lib.mkIf isMySQL {
+                  enable = true;
+                  package = if databaseType == "mariadb" then pkgs.mariadb else pkgs.mysql84;
+                  initialScript = pkgs.writeText "keycloak-db.sql" ''
+                    SET sql_mode = 'NO_BACKSLASH_ESCAPES';
+                    CREATE DATABASE ${dbName};
+                    CREATE USER '${dbUser}'@'localhost' IDENTIFIED BY '${
+                      lib.replaceStrings [ "'" ] [ "''" ] dbPassword
+                    }';
+                    GRANT ALL PRIVILEGES ON ${dbName}.* TO '${dbUser}'@'localhost';
+                  '';
+                };
+                systemd.services.keycloak = {
+                  after = [ (if isMySQL then "mysql.service" else "postgresql.target") ];
+                  requires = [ (if isMySQL then "mysql.service" else "postgresql.target") ];
+                };
+              })
+            ];
         };
 
         testScript =
@@ -175,12 +214,46 @@ let
             keycloak.succeed(
                 "curl -sSf -H @auth_header '${frontendUrl}/realms/${realm.realm}/protocol/openid-connect/userinfo' | jq -f ${jqCheckUserinfo}"
             )
+          ''
+          + lib.optionalString tcp ''
+
+            keycloak.succeed("grep -qx 'db-url-host=localhost' /run/keycloak/conf/keycloak.conf")
+          ''
+          + lib.optionalString (isMySQL && !tcp) ''
+
+            ### Socket authentication migration ###
+
+            # Older module versions created a password-authenticated user
+            keycloak.succeed(
+                "systemctl stop keycloak.service",
+                "mysql -N -e \"ALTER USER 'keycloak'@'localhost' IDENTIFIED BY 'legacy'\"",
+                "systemctl restart keycloakMySQLInit.service",
+                "systemctl start keycloak.service",
+            )
+            keycloak.wait_for_unit("keycloak.service")
+            keycloak.wait_for_open_port(443)
+            keycloak.succeed(
+                "mysql -N -e \"SELECT plugin FROM mysql.user WHERE user = 'keycloak' AND host = 'localhost'\" | grep -Ex '(unix|auth)_socket'",
+                "curl -sSf '${frontendUrl}/realms/${realm.realm}'",
+            )
           '';
       }
     );
 in
 {
-  postgres = keycloakTest "postgresql";
-  mariadb = keycloakTest "mariadb";
-  mysql = keycloakTest "mysql";
+  postgres = keycloakTest { databaseType = "postgresql"; };
+  mariadb = keycloakTest { databaseType = "mariadb"; };
+  mysql = keycloakTest { databaseType = "mysql"; };
+  postgres-tcp = keycloakTest {
+    databaseType = "postgresql";
+    tcp = true;
+  };
+  mariadb-tcp = keycloakTest {
+    databaseType = "mariadb";
+    tcp = true;
+  };
+  mysql-tcp = keycloakTest {
+    databaseType = "mysql";
+    tcp = true;
+  };
 }

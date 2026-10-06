@@ -24,15 +24,12 @@ instance.
 
 ## Database access {#module-services-keycloak-database}
 
-Keycloak can be used with either PostgreSQL, MariaDB or
-MySQL. Which one is used can be
-configured in [](#opt-services.keycloak.database.type). The selected
-database will automatically be enabled and a database and role
-created unless [](#opt-services.keycloak.database.host) is changed
-from its default of `localhost` or
-[](#opt-services.keycloak.database.createLocally) is set to `false`.
+Keycloak can use PostgreSQL, MariaDB or MySQL, as set by [](#opt-services.keycloak.database.type).
 
-External database access can also be configured by setting
+If [](#opt-services.keycloak.database.createLocally) is enabled (the default), the selected database is enabled and a `keycloak` database and user are created. Keycloak connects to it over its Unix socket without a password.
+
+External database access can be configured by setting
+[](#opt-services.keycloak.database.createLocally) to `false` and setting
 [](#opt-services.keycloak.database.host),
 [](#opt-services.keycloak.database.name),
 [](#opt-services.keycloak.database.username),
@@ -43,11 +40,7 @@ and allow the configured database user full access to it.
 
 When connecting over TCP, [](#opt-services.keycloak.database.passwordFile)
 must be set to the path to a file containing the password used
-to log in to the database. If [](#opt-services.keycloak.database.host)
-and [](#opt-services.keycloak.database.createLocally)
-are kept at their defaults, the database role
-`keycloak` with that password is provisioned
-on the local database instance.
+to log in to the database.
 
 ::: {.warning}
 The path should be provided as a string, not a Nix path, since Nix
@@ -131,6 +124,7 @@ should be set to. See the description of
 ## Example configuration {#module-services-keycloak-example-config}
 
 A basic configuration with some custom settings could look like this:
+
 ```nix
 {
   services.keycloak = {
@@ -141,7 +135,6 @@ A basic configuration with some custom settings could look like this:
     initialAdminPassword = "e6Wcm0RrtegMEHl"; # change on first login
     sslCertificate = "/run/keys/ssl_cert";
     sslCertificateKey = "/run/keys/ssl_key";
-    database.passwordFile = "/run/keys/db_password";
   };
 }
 ```
