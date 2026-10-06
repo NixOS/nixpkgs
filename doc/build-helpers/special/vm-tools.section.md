@@ -126,6 +126,7 @@ A set of functions that build a predefined set of minimal Linux distributions im
   * `ubuntu2204i386`
   * `ubuntu2204x86_64`
   * `ubuntu2404x86_64`
+  * `ubuntu2604x86_64`
 * Debian
   * `debian12i386`
   * `debian12x86_64`
