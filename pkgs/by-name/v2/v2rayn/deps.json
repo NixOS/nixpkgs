@@ -111,8 +111,8 @@
   },
   {
     "pname": "Downloader",
-    "version": "5.9.6",
-    "hash": "sha256-K5d537COUFYZw6ArkXpr0i/ptOtyqUbtOBfO0pud95A="
+    "version": "5.9.8",
+    "hash": "sha256-AhKvplFqNDOtpUcnZWzxGIIGhexBgY+GWZtXbifHqus="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -161,8 +161,8 @@
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
-    "version": "10.0.8",
-    "hash": "sha256-HV30fu+lF/GYkeVP+Yq/EU1FzgdMqwqlepCpvxUgugE="
+    "version": "10.0.12",
+    "hash": "sha256-RmT6sKxLVriTUzP1nunngByKuW3nxXyztuuBkqWmHFU="
   },
   {
     "pname": "Microsoft.Extensions.DependencyInjection.Abstractions",
@@ -171,8 +171,8 @@
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
-    "version": "10.0.8",
-    "hash": "sha256-VruWNhGycjxU2+BxiE++Aw2Tzv50lARcslDp66ImCDE="
+    "version": "10.0.12",
+    "hash": "sha256-NOqqYK+2HtPYbi4maergxpDQ4jfopwZrpb20WjhnCec="
   },
   {
     "pname": "Microsoft.Extensions.Logging.Abstractions",
@@ -201,8 +201,8 @@
   },
   {
     "pname": "ReactiveUI",
-    "version": "24.2.0",
-    "hash": "sha256-Df76yL1ljW9TTzO9DEBWvhyv8CNOBuUzxGEL4tc8C2E="
+    "version": "24.3.0",
+    "hash": "sha256-2khl480kzl1oLkbBhZbtI9mNxfXsm9gIF+XATXGjMHk="
   },
   {
     "pname": "ReactiveUI.Avalonia",
@@ -211,8 +211,8 @@
   },
   {
     "pname": "ReactiveUI.Core",
-    "version": "24.2.0",
-    "hash": "sha256-25IrK2JzRqxMuEPKK9SSIZp8DcXJBoHIN06y5fSBrN0="
+    "version": "24.3.0",
+    "hash": "sha256-MmrEtyQ/abuatVNdiXbsS85t8B2tNUOd7lyodSav4A8="
   },
   {
     "pname": "ReactiveUI.Disposables",
@@ -221,23 +221,23 @@
   },
   {
     "pname": "ReactiveUI.Disposables",
-    "version": "7.3.0",
-    "hash": "sha256-DqgiXKcS3Qq8H0V01IXr1jGc8q8I5CSBSXE2Fqc3iOo="
-  },
-  {
-    "pname": "ReactiveUI.Disposables",
     "version": "7.4.0",
     "hash": "sha256-EOEOcGHhoIIlu0cyRFdcJicD6/cO5TXY9FzXlDWs39Y="
   },
   {
-    "pname": "ReactiveUI.Primitives",
-    "version": "7.3.0",
-    "hash": "sha256-fj7Pk6MoEcR5WTsd6OJ42GHgh+NxwPSu5D8eIG/IqOQ="
+    "pname": "ReactiveUI.Disposables",
+    "version": "8.2.0",
+    "hash": "sha256-olmyT323D8ofetv+hEQsbWpZFR9cyYxD4QsCnqNmtmI="
   },
   {
     "pname": "ReactiveUI.Primitives",
     "version": "7.4.0",
     "hash": "sha256-Ohj8xPSfE3KKMKhtXM/0qs5/jz6QprtYTM+1nB/Xjc4="
+  },
+  {
+    "pname": "ReactiveUI.Primitives",
+    "version": "8.2.0",
+    "hash": "sha256-pUsxPdceRbO6kme3SUQ+uyIsEsDg+QPFhtJQcU67U+s="
   },
   {
     "pname": "ReactiveUI.Primitives.Avalonia",
@@ -246,13 +246,13 @@
   },
   {
     "pname": "ReactiveUI.Primitives.Core",
-    "version": "7.3.0",
-    "hash": "sha256-v6ExhrzO7kcdu68OUcGbFVVEYOixfQTsFUPy7kjWybI="
+    "version": "7.4.0",
+    "hash": "sha256-F4WW6j+jRC645mKp+UNGpDTUhw8g3HwLY0P3bhGWeBw="
   },
   {
     "pname": "ReactiveUI.Primitives.Core",
-    "version": "7.4.0",
-    "hash": "sha256-F4WW6j+jRC645mKp+UNGpDTUhw8g3HwLY0P3bhGWeBw="
+    "version": "8.2.0",
+    "hash": "sha256-rT0VOhio4/as2z0hmbnbdno/oTrPLsyAOaOWxI90eQ0="
   },
   {
     "pname": "ReactiveUI.SourceGenerators",

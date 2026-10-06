@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       randomizedcoder
       zahrun
     ];
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     inherit (obs-studio.meta) platforms;
   };
 }

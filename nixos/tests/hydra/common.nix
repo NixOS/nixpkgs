@@ -14,6 +14,17 @@
         }
       '';
 
+      # Realised through hydra-ad-hoc, without any jobset or evaluation.
+      adHocJob = pkgs.writeText "ad-hoc.nix" ''
+        derivation {
+          name = "hello-adhoc";
+          system = "${pkgs.stdenv.hostPlatform.system}";
+          builder = "/bin/sh";
+          allowSubstitutes = false;
+          args = ["-c" "echo hello from hydra-ad-hoc > $out"];
+        }
+      '';
+
       createTrivialProject = pkgs.stdenv.mkDerivation {
         name = "create-trivial-project";
         dontUnpack = true;
@@ -29,6 +40,7 @@
     {
       virtualisation.memorySize = 2048;
       time.timeZone = "UTC";
+      environment.etc."hydra-test/ad-hoc.nix".source = adHocJob;
       environment.systemPackages = [
         createTrivialProject
         pkgs.jq
@@ -38,6 +50,7 @@
         # Hydra needs those settings to start up, so we add something not harmfull.
         hydraURL = "example.com";
         notificationSender = "example@example.com";
+        adHoc.enable = true;
         extraConfig = ''
           <email_notifications>
             build = 1

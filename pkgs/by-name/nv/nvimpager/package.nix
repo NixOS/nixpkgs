@@ -7,7 +7,6 @@
   neovim-unwrapped,
   procps,
   scdoc,
-  lua51Packages,
   util-linux,
 }:
 
@@ -41,7 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   nativeCheckInputs = [
-    lua51Packages.busted
+    # we want to use the same version of lua as neovim because we will load
+    # part of the lua code of nvimpager during the tests
+    neovim-unwrapped.lua.pkgs.busted
     ncurses # for tput
     neovim-unwrapped
     procps # for nvim_get_proc() which uses ps(1)

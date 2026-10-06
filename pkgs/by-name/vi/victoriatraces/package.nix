@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
@@ -11,7 +11,7 @@
   withVtGen ? false,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "VictoriaTraces";
   version = "0.11.1";
 

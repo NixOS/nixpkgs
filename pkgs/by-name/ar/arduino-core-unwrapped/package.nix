@@ -301,7 +301,6 @@ stdenv.mkDerivation rec {
       auntie
       robberer
       bjornfor
-      bergey
     ];
   };
 }
