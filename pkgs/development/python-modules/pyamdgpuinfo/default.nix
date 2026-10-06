@@ -1,12 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   cython,
   setuptools,
-  wheel,
 
   # buildInputs
   libdrm,
@@ -18,22 +17,25 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-44mYHwC/Qv3kEjOViiHGKIhTpGx9/nsGKyq+BUz7HXs=";
+  src = fetchFromGitHub {
+    owner = "mark9064";
+    repo = "pyamdgpuinfo";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K4PcIgYn9lC6iHNjL9AQ1dUQEBueWbAF98BPC/xiBgE=";
   };
 
   # The Cython extension is compiled against libdrm's amdgpu headers, which upstream looks for at the
   # Debian/Arch location.
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'include_dirs=["/usr/include/libdrm"]' 'include_dirs=["${libdrm.dev}/include/libdrm"]'
+      --replace-fail \
+        'include_dirs=["/usr/include/libdrm"]' \
+        'include_dirs=["${libdrm.dev}/include/libdrm"]'
   '';
 
   build-system = [
     cython
     setuptools
-    wheel
   ];
 
   buildInputs = [ libdrm ];

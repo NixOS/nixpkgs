@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -16,10 +16,11 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "dbus_idle";
-    inherit (finalAttrs) version;
-    hash = "sha256-r7vIeB08DgcqsR3DQv+6ggJnxn9XGKCc52moVOhYbH0=";
+  src = fetchFromGitHub {
+    owner = "bkbilly";
+    repo = "dbus_idle";
+    tag = finalAttrs.version;
+    hash = "sha256-0ONEXtITw8DKjngPYvC0kMCK8CVHSOAU85wPMsFPQRs=";
   };
 
   build-system = [ setuptools ];

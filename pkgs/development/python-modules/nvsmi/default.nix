@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   poetry-core,
@@ -13,9 +13,11 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-waORx8Ta3G7FcpCf8DckUdRk663BROWqX7vMiT3Le/o=";
+  src = fetchFromGitHub {
+    owner = "pmav99";
+    repo = "nvsmi";
+    tag = finalAttrs.version;
+    hash = "sha256-oyvkxW9dNxc3Izko88BcVSDQJcpafN6qoxuPt69n5Cg=";
   };
 
   # Packaged before poetry split its build backend out into poetry-core, so the declared backend no

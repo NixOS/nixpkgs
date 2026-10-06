@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -16,10 +16,11 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "dbus_networkdevices";
-    inherit (finalAttrs) version;
-    hash = "sha256-SrKC+KZsgrOQ18WO8PfTk6GObObM2KJNN6ppJr32EIU=";
+  src = fetchFromGitHub {
+    owner = "bkbilly";
+    repo = "dbus_networkdevices";
+    tag = finalAttrs.version;
+    hash = "sha256-NSV5RowDHd7EtTajmYs8VpBjI38hD8Fwhfpr1QQ2fbg=";
   };
 
   build-system = [ setuptools ];

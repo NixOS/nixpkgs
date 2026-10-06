@@ -1,13 +1,16 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
 
   # dependencies
   jeepney,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -16,18 +19,18 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "dbus_notification";
-    inherit (finalAttrs) version;
-    hash = "sha256-W/503FQPlOdV7gXOCn8obpSGhXmrIeGzScZfeKNk30g=";
+  src = fetchFromGitHub {
+    owner = "bkbilly";
+    repo = "dbus_notification";
+    tag = finalAttrs.version;
+    hash = "sha256-/lEaaWSqWtWZ1cJKkYQkMBUAw9VaUM+wNzjNHeQGNqU=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ jeepney ];
 
-  # Upstream ships no test suite.
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "dbus_notification" ];
 

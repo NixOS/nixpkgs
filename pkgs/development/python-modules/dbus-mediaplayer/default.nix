@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -16,10 +16,11 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "dbus_mediaplayer";
-    inherit (finalAttrs) version;
-    hash = "sha256-LKr/DdnceXfmS7V03HoiOEWshRdFJltoDetYap31ZOU=";
+  src = fetchFromGitHub {
+    owner = "bkbilly";
+    repo = "dbus_mediaplayer";
+    tag = finalAttrs.version;
+    hash = "sha256-9T6eiszbBjKwxDS+s3SiCz413a6gS7t6oZzetUyRKxA=";
   };
 
   build-system = [ setuptools ];

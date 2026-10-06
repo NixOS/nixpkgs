@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -16,17 +16,20 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "xlib_hotkeys";
-    inherit (finalAttrs) version;
-    hash = "sha256-KRGoZ45OgU5UOMZImTDIrgTXFPzaAN0N/IvHeonW2UU=";
+  src = fetchFromGitHub {
+    owner = "bkbilly";
+    repo = "xlib_hotkeys";
+    tag = finalAttrs.version;
+    hash = "sha256-9NqvxhRvmqLwUL6Y6i9oRY7+VaRefytGqiBzaEG/r4g=";
   };
 
   # Upstream pins its build backend with `~=` to versions from 2023. Nothing in the build actually
   # needs them, and nixpkgs checks build dependencies, so relax them to what is available.
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'requires = ["setuptools~=68.0.0", "wheel~=0.40.0"]' 'requires = ["setuptools"]'
+      --replace-fail \
+        'requires = ["setuptools~=68.0.0", "wheel~=0.40.0"]' \
+        'requires = ["setuptools"]'
   '';
 
   build-system = [ setuptools ];
