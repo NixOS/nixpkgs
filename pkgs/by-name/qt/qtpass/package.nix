@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtpass";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "IJHack";
     repo = "QtPass";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FDqRM7wMyxWBHWg5LYIlXoL4RAtx3wK45IIXn0Z4zXM=";
+    hash = "sha256-6PIQwMtz5Zv+BOmM4BsZwz1btgMsB2+hJieVGERjS6M=";
   };
 
   postPatch = ''
