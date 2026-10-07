@@ -12,6 +12,7 @@
   python3,
   blas,
   shaderc,
+  mesh-llm,
   spirv-headers,
   vulkan-headers,
   vulkan-loader,
@@ -270,6 +271,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # llama.cpp release number of src (its bNNNNN tag), reported by the library.
     inherit (release) llamaCppBuild;
 
+    # Serves a tiny model with mesh-llm and this runtime, offline.
+    tests = { inherit (mesh-llm.tests) serve; };
   };
 
   meta = {
