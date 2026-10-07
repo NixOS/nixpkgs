@@ -90,6 +90,7 @@
   py-libnuma,
   # cuda-only
   cupy,
+  flashinfer-jit-cache,
   flashinfer-python,
   nvidia-ml-py,
   tokenspeed-mla,
@@ -617,6 +618,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   ]
   ++ lib.optionals cudaSupport [
     cupy
+    flashinfer-jit-cache
     flashinfer-python
     nvidia-ml-py
     tokenspeed-mla
