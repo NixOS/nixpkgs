@@ -7769,8 +7769,6 @@ self: super: with self; {
 
   home-connect-async = callPackage ../development/python-modules/home-connect-async { };
 
-  homeassistant-stubs = callPackage ../servers/home-assistant/stubs.nix { };
-
   homeconnect = callPackage ../development/python-modules/homeconnect { };
 
   homekit-audio-proxy = callPackage ../development/python-modules/homekit-audio-proxy { };
