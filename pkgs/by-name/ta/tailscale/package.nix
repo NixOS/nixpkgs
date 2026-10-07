@@ -89,7 +89,7 @@ buildGo127Module (finalAttrs: {
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
 
-  # Tests are in the `tests` passthru derivation because they are flaky, frequently causing build failures.
+  # Tests are in the `go-*` passthru derivations because they are flaky, frequently causing build failures.
   doCheck = false;
 
   preCheck = ''
@@ -252,11 +252,82 @@ buildGo127Module (finalAttrs: {
       --zsh <($out/bin/tailscale completion zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) headscale;
-    inherit tailscale-nginx-auth;
-    tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-  };
+  passthru.tests =
+    let
+      # Top-level directories whose Go tests get a derivation of their own.
+      # Packages in every other directory are tested by `go-other`.
+      goTestGroups = [
+        "client"
+        "cmd"
+        "control"
+        "derp"
+        "drive"
+        "feature"
+        "ipn"
+        "k8s-operator"
+        "kube"
+        "net"
+        "ssh"
+        "tsnet"
+        "tstest"
+        "tsweb"
+        "types"
+        "util"
+        "wgengine"
+      ];
+
+      mkGoTests =
+        name: pattern: excludedDirs:
+        let
+          excludeRegex = "^tailscale\\.com/(${
+            lib.concatMapStringsSep "|" lib.escapeRegex (
+              [ "tool" ] ++ finalAttrs.excludedPackages ++ excludedDirs
+            )
+          })(/|$)";
+        in
+        finalAttrs.finalPackage.overrideAttrs (old: {
+          pname = "${old.pname}-go-tests-${name}";
+          outputs = [ "out" ];
+          dontBuild = true;
+          doCheck = true;
+
+          # A single `go test` invocation for the whole group, so that every
+          # failing package is reported rather than only the first.
+          checkPhase = ''
+            runHook preCheck
+            # We do not set trimpath for tests, in case they reference test assets
+            export GOFLAGS=''${GOFLAGS//-trimpath/}
+
+            tags=${lib.escapeShellArg (lib.concatStringsSep "," finalAttrs.tags)}
+            packages=$(go list -tags="$tags" ${pattern} | { grep -v -E ${lib.escapeShellArg excludeRegex} || true; })
+            if [[ -z $packages ]]; then
+              echo "error: no Go packages matched ${pattern}" >&2
+              exit 1
+            fi
+
+            go test -vet=off -p "$NIX_BUILD_CORES" -tags="$tags" \
+              -ldflags=${lib.escapeShellArg (toString finalAttrs.ldflags)} \
+              $checkFlags $packages
+
+            runHook postCheck
+          '';
+
+          installPhase = ''
+            runHook preInstall
+            touch $out
+            runHook postInstall
+          '';
+          postInstall = "";
+        });
+    in
+    {
+      inherit (nixosTests) headscale;
+      inherit tailscale-nginx-auth;
+      go-other = mkGoTests "other" "./..." goTestGroups;
+    }
+    // lib.genAttrs' goTestGroups (
+      dir: lib.nameValuePair "go-${dir}" (mkGoTests dir "./${dir}/..." [ ])
+    );
 
   meta = {
     homepage = "https://tailscale.com";
