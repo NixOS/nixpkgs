@@ -6,16 +6,16 @@
 }:
 maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-orgs";
-  version = "0.182";
+  version = "0.188";
 
   src = fetchFromGitHub {
     owner = "p2-inc";
     repo = "keycloak-orgs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X+PjAw7L6373Zp2hikxP9+KotqBziUDo/aRuw2gnias=";
+    hash = "sha256-QNCv2U8v/DHSTCQPXsv3PkzUc2gdMdnDjFzZHZWVeMY=";
   };
 
-  mvnHash = "sha256-kU9nmiu/hWJaEfQzdVKC/IIWqZarRPpOqDP/bJQIIEY=";
+  mvnHash = "sha256-VkkDHVW2pffMRoV+pTVmqP/FWrHep+1tQ+7LJ3s6VZg=";
 
   # no .git present, so give buildnumber a fallback and skip the spotless check
   mvnParameters = "-Dmaven.buildNumber.revisionOnScmFailure=v${finalAttrs.version} -DskipTests -Dspotless.check.skip=true";
