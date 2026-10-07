@@ -16,6 +16,7 @@
   at-spi2-core,
   bzip2,
   cairo,
+  coreutils,
   cups,
   dbus,
   expat,
