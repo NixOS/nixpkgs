@@ -252,7 +252,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     };
     # llama.cpp release number of src (its bNNNNN tag), reported by the library.
     inherit (release) llamaCppBuild;
-
   };
 
   meta = {
