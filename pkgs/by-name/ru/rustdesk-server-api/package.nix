@@ -8,6 +8,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
+  __structuredAttrs = true;
   pname = "rustdesk-server-api";
   version = "0.1.2";
 

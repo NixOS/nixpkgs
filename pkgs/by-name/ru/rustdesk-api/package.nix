@@ -5,6 +5,7 @@
   fetchFromGitHub,
 }:
 buildGoModule rec {
+  __structuredAttrs = true;
   pname = "rustdesk-api";
   version = "2.7";
 
