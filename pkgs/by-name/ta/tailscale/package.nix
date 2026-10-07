@@ -203,78 +203,90 @@ buildGo127Module (finalAttrs: {
 
   passthru.tests =
     let
-      # Top-level directories whose Go tests get a derivation of their own.
-      # Packages in every other directory are tested by `go-other`.
-      goTestGroups = [
-        "client"
-        "cmd"
-        "control"
-        "derp"
-        "drive"
-        "feature"
-        "ipn"
-        "k8s-operator"
-        "kube"
-        "net"
-        "ssh"
-        "tsnet"
-        "tstest"
-        "tsweb"
-        "types"
-        "util"
-        "wgengine"
-      ];
+      # Directories whose Go tests get a derivation of their own, mapped to
+      # attributes (or a function of the previous attributes) to override in
+      # it. A directory nested in another group is tested only by its own
+      # group. Packages in every other directory are tested by `go-other`.
+      goTestGroups = {
+        client = { };
+        cmd = { };
+        control = { };
+        derp = { };
+        drive = { };
+        feature = { };
+        ipn = { };
+        k8s-operator = { };
+        kube = { };
+        net = { };
+        ssh = { };
+        tsnet = { };
+        tstest = { };
+        tsweb = { };
+        types = { };
+        util = { };
+        wgengine = { };
+      };
+      goTestDirs = lib.attrNames goTestGroups;
 
       mkGoTests =
-        name: pattern: excludedDirs:
+        name: pattern: excludedDirs: overrides:
         let
           excludeRegex = "^tailscale\\.com/(${
             lib.concatMapStringsSep "|" lib.escapeRegex ([ "tool" ] ++ excludedDirs)
           })(/|$)";
         in
-        finalAttrs.finalPackage.overrideAttrs (old: {
-          pname = "${old.pname}-go-tests-${name}";
-          outputs = [ "out" ];
-          dontBuild = true;
-          doCheck = true;
+        finalAttrs.finalPackage.overrideAttrs (
+          old:
+          {
+            pname = "${old.pname}-go-tests-${name}";
+            outputs = [ "out" ];
+            dontBuild = true;
+            doCheck = true;
 
-          # A single `go test` invocation for the whole group, so that every
-          # failing package is reported rather than only the first.
-          checkPhase = ''
-            runHook preCheck
-            # We do not set trimpath for tests, in case they reference test assets
-            export GOFLAGS=''${GOFLAGS//-trimpath/}
+            # A single `go test` invocation for the whole group, so that every
+            # failing package is reported rather than only the first.
+            checkPhase = ''
+              runHook preCheck
+              # We do not set trimpath for tests, in case they reference test assets
+              export GOFLAGS=''${GOFLAGS//-trimpath/}
 
-            tags=${lib.escapeShellArg (lib.concatStringsSep "," finalAttrs.tags)}
-            packages=$(go list -tags="$tags" ${pattern} | { grep -v -E ${lib.escapeShellArg excludeRegex} || true; })
-            if [[ -z $packages ]]; then
-              echo "error: no Go packages matched ${pattern}" >&2
-              exit 1
-            fi
+              tags=${lib.escapeShellArg (lib.concatStringsSep "," finalAttrs.tags)}
+              packages=$(go list -tags="$tags" ${pattern} | { grep -v -E ${lib.escapeShellArg excludeRegex} || true; })
+              if [[ -z $packages ]]; then
+                echo "error: no Go packages matched ${pattern}" >&2
+                exit 1
+              fi
 
-            go test -vet=off -p "$NIX_BUILD_CORES" -tags="$tags" \
-              -ldflags=${lib.escapeShellArg (toString finalAttrs.ldflags)} \
-              $checkFlags $packages
+              go test -vet=off -p "$NIX_BUILD_CORES" -tags="$tags" \
+                -ldflags=${lib.escapeShellArg (toString finalAttrs.ldflags)} \
+                $checkFlags $packages
 
-            runHook postCheck
-          '';
+              runHook postCheck
+            '';
 
-          installPhase = ''
-            runHook preInstall
-            touch $out
-            runHook postInstall
-          '';
-          postInstall = "";
-        });
+            installPhase = ''
+              runHook preInstall
+              touch $out
+              runHook postInstall
+            '';
+            postInstall = "";
+          }
+          // lib.toFunction overrides old
+        );
     in
     {
       inherit (nixosTests) headscale;
       inherit tailscale-nginx-auth;
-      go-other = mkGoTests "other" "./..." goTestGroups;
+      go-other = mkGoTests "other" "./..." goTestDirs { };
     }
-    // lib.genAttrs' goTestGroups (
-      dir: lib.nameValuePair "go-${dir}" (mkGoTests dir "./${dir}/..." [ ])
-    );
+    // lib.mapAttrs' (
+      dir: overrides:
+      let
+        name = lib.replaceStrings [ "/" ] [ "-" ] dir;
+        nestedDirs = lib.filter (lib.hasPrefix "${dir}/") goTestDirs;
+      in
+      lib.nameValuePair "go-${name}" (mkGoTests name "./${dir}/..." nestedDirs overrides)
+    ) goTestGroups;
 
   meta = {
     homepage = "https://tailscale.com";
