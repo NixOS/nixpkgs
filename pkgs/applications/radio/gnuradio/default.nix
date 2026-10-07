@@ -11,6 +11,7 @@
   cppunit,
   ctestCheckHook,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   orc,
   boost,
   spdlog,
@@ -385,6 +386,9 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (hasFeature "gr-qtgui") ''
     export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru = {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must
