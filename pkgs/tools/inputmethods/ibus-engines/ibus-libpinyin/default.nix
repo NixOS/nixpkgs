@@ -14,14 +14,14 @@
   glib,
   gtk3,
   python3,
-  lua5_2_compat,
+  lua5_5,
   opencc,
   libsoup_3,
   json-glib,
   libnotify,
 }:
 let
-  lua = lua5_2_compat;
+  lua = lua5_5;
 in
 
 stdenv.mkDerivation rec {
