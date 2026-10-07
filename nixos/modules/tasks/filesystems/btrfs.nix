@@ -92,6 +92,10 @@ let
 in
 
 {
+  meta.maintainers = with lib.maintainers; [
+    Deric-W
+  ];
+
   options = {
     services.btrfs.autoBalance = {
       enable = mkEnableOption "regular btrfs balance";
