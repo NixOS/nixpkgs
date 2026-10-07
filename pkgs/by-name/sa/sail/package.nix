@@ -4,7 +4,12 @@
   fetchFromGitHub,
   protobuf,
   pkg-config,
+  aws-lc,
   python3,
+  zstd,
+  xz,
+  zlib,
+  libgit2,
   nix-update-script,
   versionCheckHook,
 }:
@@ -37,7 +42,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    aws-lc
     python3
+    zstd
+    xz
+    zlib
+    libgit2
   ];
 
   env = {
