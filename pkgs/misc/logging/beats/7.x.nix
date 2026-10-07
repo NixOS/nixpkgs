@@ -10,6 +10,9 @@
 }:
 
 let
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
+
   beat =
     package: extraArgs:
     buildGoModule (
@@ -51,10 +54,10 @@ rec {
   };
   filebeat7 = beat "filebeat" {
     meta.description = "Lightweight shipper for logfiles";
-    buildInputs = [ systemdLibs ];
+    buildInputs = [ systemdLibs' ];
     tags = [ "withjournald" ];
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemdLibs) ]} "$out/bin/filebeat"
+      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemdLibs') ]} "$out/bin/filebeat"
     '';
   };
   heartbeat7 = beat "heartbeat" {
