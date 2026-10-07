@@ -6,10 +6,12 @@
   installShellFiles,
   pkg-config,
   oniguruma,
+  libgit2,
   stdenv,
   git,
   zlib,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     oniguruma
+    libgit2
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     zlib
@@ -41,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
@@ -68,7 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
 
   meta = {

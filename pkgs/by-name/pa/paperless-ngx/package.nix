@@ -59,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.2.1";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z9M3BS4YbWyr3Y2RepSYyzZHumL4ohqivt5NXSncucg=";
+    hash = "sha256-a46gdO5gjPF2Zo+oinfAbKibBgy4UrXTV55HtslyoTk=";
   };
 
   postPatch = ''
@@ -84,12 +84,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "django-allauth"
-    "django-filter"
-    "django-guardian"
-    "drf-spectacular-sidecar"
     "redis"
     "regex"
-    "torch"
+    "turbohtml"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"
@@ -101,7 +98,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     [
       azure-ai-documentintelligence
       babel
-      bleach
       celery
       channels
       channels-redis
@@ -121,7 +117,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-soft-delete
       django-treenode
       djangorestframework
-      djangorestframework-guardian
       drf-spectacular
       drf-spectacular-sidecar
       drf-writable-nested
@@ -162,14 +157,17 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       tantivy
       tika-client
       torch
+      turbohtml
       watchfiles
       whitenoise
       whoosh-compat
       zxing-cpp
     ]
+    ++ celery.optional-dependencies.redis
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ gotenberg-client.optional-dependencies.httpx
+    ++ ocrmypdf.optional-dependencies.heic or [ ]
     ++ redis.optional-dependencies.hiredis
     ++ tika-client.optional-dependencies.httpx
     ++ whoosh-compat.optional-dependencies.tantivy;

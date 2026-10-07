@@ -13,6 +13,7 @@
   src,
   version,
   meta,
+  buildPackages,
 }:
 let
   pnpm = pnpm_10;
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit pnpm;
     inherit (finalAttrs) pname version src;
     fetcherVersion = 4;
-    hash = "sha256-xVo3+C3VtPcuLynyuUC1KYVrBiWWyT1f7SDPZI8Pzic=";
+    hash = "sha256-rUmXx0AbhSXZGIH5uMoidShhT1OjV6pThDvP6spmHYQ=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    substituteInPlace node_modules/.pnpm/sass-embedded@*/node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe buildPackages.dart-sass}"];'
 
     # cat forcefully disables angular cli's spinner which doesn't work with nix' tty which is 0x0
     pnpm run build --configuration production | cat

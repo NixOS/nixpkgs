@@ -22,8 +22,8 @@
 buildPythonPackage {
   pname = "mujoco-mjx";
   inherit (mujoco-main) src version;
-
   pyproject = true;
+  __structuredAttrs = true;
 
   sourceRoot = "${mujoco-main.src.name}/mjx";
 
