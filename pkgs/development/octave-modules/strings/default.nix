@@ -2,42 +2,61 @@
   buildOctavePackage,
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   pkg-config,
+  autoreconfHook,
   pcre2,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "strings";
-  version = "1.3.1";
+  version = "1.3.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-9l5eYgzw5K85trRAJW9eMYZxvf0RDNxDlD0MtwrSCLc=";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "octave-strings";
+    tag = "release-${version}";
+    sha256 = "sha256-VkF6GF//NbiEcWqSo48QeKqoJR8zvk1KWGzVJwhzHRU=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    autoreconfHook
   ];
 
   buildInputs = [
     pcre2
   ];
 
-  # The gripes library no longer exists.
-  # https://build.opensuse.org/package/view_file/openSUSE:Backports:SLE-15-SP3/octave-forge-strings/octave-forge-strings.spec
-  # toascii is a deprecated function. Has been fixed in recent commits, but has
-  # not been released yet.
-  # https://sourceforge.net/p/octave/strings/ci/2db1dbb75557eef94605cb4ac682783ab78ac8d8/
-  patchPhase = ''
-    sed -i -s -e 's/gripes.h/errwarn.h/' -e 's/gripe_/err_/g' src/*.cc
-    sed -i s/toascii/double/g inst/*.m
+  # autoreconfHook provides an autoreconfPhase that is run as a
+  # preconfigurePhase, which means it runs AFTER the source is un-tarred, and
+  # before buildOctavePackage's buildPhase re-tars it up into a format for later
+  # consumption by Octave's "pkg build" command.
+  preAutoreconf = ''
+    pushd src
+    rm -rf config.*
   '';
+  postAutoreconf = ''
+    popd
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
+  };
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/strings/";
-    license = lib.licenses.gpl3Plus;
-    # Claims to have a freebsd license, but I found none.
+    # No license file, but has copyright header in files.
+    license = [
+      # The .m files are GPL3+
+      lib.licenses.gpl3Plus
+      # The C++ files are BSD2
+      lib.licenses.bsd2
+    ];
     maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Additional functions for manipulation and analysis of strings";
     # Some pcre symbols claimed to be missing
