@@ -97,9 +97,6 @@ buildGo127Module (finalAttrs: {
   checkFlags =
     let
       skippedTests = [
-        # tries to start tailscaled
-        "TestContainerBoot" # cmd/containerboot
-
         # self reported potentially flakey test
         "TestConnMemoryOverhead" # control/controlbase
 
@@ -195,7 +192,13 @@ buildGo127Module (finalAttrs: {
       # group. Packages in every other directory are tested by `go-other`.
       goTestGroups = {
         client = { };
-        cmd = { };
+        cmd = {
+          # TestContainerBoot embeds these as fake tailscale{,d} binaries.
+          preCheck = ''
+            chmod +x cmd/containerboot/test_tailscale{,d}.sh
+            patchShebangs cmd/containerboot/test_tailscale{,d}.sh
+          '';
+        };
         # TestRace* run `go test -race`, which needs cgo.
         "cmd/testwrapper" = old: {
           env = old.env // {
