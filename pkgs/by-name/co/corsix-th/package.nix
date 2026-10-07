@@ -8,7 +8,7 @@
   ffmpeg,
   freetype,
   libpng,
-  lua5_2_compat,
+  lua5_5,
   makeWrapper,
   SDL2,
   SDL2_mixer,
@@ -17,10 +17,10 @@
   # Update
   nix-update-script,
 }:
-let
-  lua = lua5_2_compat;
-in
 
+let
+  lua = lua5_5;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";
   version = "0.70.1";
