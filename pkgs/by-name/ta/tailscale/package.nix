@@ -116,11 +116,6 @@ buildGo127Module (finalAttrs: {
         # also requires executing commands but nixbld user has /noshell
         "TestSSH" # ssh/tailssh
         "TestExitCodePassthrough" # ssh/tailssh
-        # wants users alice & ubuntu
-        "TestMultipleRecorders" # ssh/tailssh
-        "TestSSHAuthFlow" # ssh/tailssh
-        "TestSSHRecordingCancelsSessionsOnUploadFailure" # ssh/tailssh
-        "TestSSHRecordingNonInteractive" # ssh/tailssh
 
         # test for a dev util which helps to fork golang.org/x/crypto/acme
         # not necessary and fails to match
@@ -215,7 +210,13 @@ buildGo127Module (finalAttrs: {
         k8s-operator = { };
         kube = { };
         net = { };
-        ssh = { };
+        ssh = {
+          # SSH sessions otherwise get an FHS-style default PATH, which finds
+          # nothing in the sandbox.
+          preCheck = ''
+            export TAILSCALE_SSH_DEFAULT_PATH="$PATH"
+          '';
+        };
         tsnet = { };
         tstest = { };
         tsweb = { };
