@@ -36,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ipython";
-  version = "9.14.0";
+  version = "9.17.1";
   outputs = [
     "out"
     "man"
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-byf/Dx2eoFDgVR9xVovEs02KuleejxEcW0F19ErGtKo=";
+    hash = "sha256-iRm+jCfyCm9EIxRQKAY/Zje0KgPOV2ZbsSAV7h8HNSk=";
   };
 
   build-system = [ setuptools ];
@@ -105,6 +105,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://ipython.readthedocs.io/en/stable/";
     changelog = "https://github.com/ipython/ipython/blob/${finalAttrs.version}/docs/source/whatsnew/version${lib.versions.major finalAttrs.version}.rst";
     license = lib.licenses.bsd3;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "ipython" finalAttrs.version;
     maintainers = with lib.maintainers; [ bjornfor ];
     teams = [ lib.teams.jupyter ];
   };
