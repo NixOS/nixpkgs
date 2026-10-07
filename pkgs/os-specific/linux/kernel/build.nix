@@ -322,7 +322,14 @@ lib.makeOverridable (
 
       # avoid leaking Rust source file names into the final binary, which adds
       # a false dependency on rust-lib-src on targets with uncompressed kernels
-      KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+      KRUSTFLAGS = lib.optionalString withRust (
+        "--remap-path-prefix ${rustPlatform.rustLibSrc}=/"
+        # Apply the equivalent of upstream commit
+        # dda135077ecc9f15c407f094dcfe7800376be867 to older versions to
+        # avoid cyclic output dependency issues when building
+        # uncompressed kernel images.
+        + lib.optionalString (lib.versionOlder version "7.0") " --remap-path-prefix=${placeholder "dev"}/lib/modules/${modDirVersion}/source/= --remap-path-scope=macro"
+      );
     };
 
     makeFlags = [
