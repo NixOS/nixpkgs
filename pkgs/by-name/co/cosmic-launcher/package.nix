@@ -7,6 +7,7 @@
   libcosmicAppHook,
   nix-update-script,
   nixosTests,
+  enableHardwareAcceleration ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,6 +45,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-target-dir"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional enableHardwareAcceleration "wgpu";
 
   passthru = {
     tests = {
