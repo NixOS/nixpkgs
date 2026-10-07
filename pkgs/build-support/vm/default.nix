@@ -1557,6 +1557,9 @@ let
   commonDebPackages = [
     "base-passwd"
     "dpkg"
+    # Provides update-rc.d, which the installation scripts of packages
+    # that ship a service call.
+    "init-system-helpers"
     "libc6-dev"
     "perl"
     "bash"
