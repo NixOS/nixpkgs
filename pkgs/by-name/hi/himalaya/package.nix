@@ -23,14 +23,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit buildFeatures buildNoDefaultFeatures;
 
   pname = "himalaya";
-  version = "2.1.0";
-  cargoHash = "sha256-aBNgXnAjyNYe3FHQ5GhHek5OMWyc3+6h/CIg9qXejYU=";
+  version = "2.2.1";
+  cargoHash = "sha256-KDsvF8wHMIEw+rjBJpUTgX6QIhcCMVjLWcPWklpxG3Q=";
 
   src = fetchFromGitHub {
     owner = "pimalaya";
     repo = "himalaya";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m+eJqHJ9tTHP6dqHyjDxe/fexoEX736Qs8KcrnCqku8=";
+    hash = "sha256-fYspChAGb0PLdsgP5GViAwp4NdmDXDyait0mpqIkGfQ=";
   };
 
   # openssl should not be provided by vendors, not even on windows
@@ -54,8 +54,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ''
       mkdir -p $out/share/{completions,man,schemas}
       ${exe} completion -d "$out"/share/completions bash elvish fish powershell zsh
-      ${exe} manual "$out"/share/man
-      ${exe} json-schema "$out"/share/schemas
+      ${exe} manual -d "$out"/share/man
+      ${exe} json-schema -d "$out"/share/schemas
     ''
     + lib.optionalString installManPages ''
       installManPage "$out"/share/man/*
