@@ -467,10 +467,8 @@ let
           ln -s ${kernelModules}/lib /lib
           ${kmod}/bin/modprobe mtd
           ${kmod}/bin/modprobe mtdram total_size=131072
-          ${kmod}/bin/modprobe mtdchar
           ${kmod}/bin/modprobe mtdblock
           ${kmod}/bin/modprobe jffs2
-          ${kmod}/bin/modprobe zlib
 
           mkdir -p $out
           mkdir -p tmp
