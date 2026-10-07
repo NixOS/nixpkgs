@@ -21,8 +21,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -Dm755 among-sus $out/bin
+    runHook postInstall
   '';
 
   meta = {

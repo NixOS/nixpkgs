@@ -49,6 +49,7 @@ let
       name = "ccWrapperStub";
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/bin
         cat > $out/bin/clang-${llvmMajorVersion} <<'EOF'
         #!/bin/sh
@@ -57,6 +58,7 @@ let
         chmod +x $out/bin/clang-${llvmMajorVersion}
         cp $out/bin/clang-${llvmMajorVersion} $out/bin/clang
         cp $out/bin/clang-${llvmMajorVersion} $out/bin/clang++
+        runHook postInstall
       '';
       passthru = {
         isClang = true;

@@ -16,6 +16,7 @@ stdenvNoCC.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/share/plasma/desktoptheme/Colorful-Dark-Global-6"
     mkdir -p "$out/share/aurorae/themes/Colorful-Dark-6"
     mkdir -p "$out/share/color-schemes"
@@ -32,6 +33,7 @@ stdenvNoCC.mkDerivation {
 
     cp -rd "Colorful Color Schemes"/* -t "$out/share/color-schemes/"
     cp -rd "Colorful Icons Themes/Colorful-Dark-Icons" -t "$out/share/icons/"
+    runHook postInstall
   '';
 
   meta = {

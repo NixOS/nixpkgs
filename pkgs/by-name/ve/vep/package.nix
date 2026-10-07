@@ -35,6 +35,7 @@ let
 
         ${customInstallPhase}
 
+        runHook postInstall
         runHook postInstall'';
     };
 

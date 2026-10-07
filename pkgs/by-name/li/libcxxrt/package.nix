@@ -37,9 +37,11 @@ stdenv'.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $dev/include $out/lib
     cp ../src/cxxabi.h $dev/include
     cp lib/libcxxrt${stdenv'.hostPlatform.extensions.library} $out/lib
+    runHook postInstall
   '';
 
   passthru = {

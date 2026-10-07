@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ unzip ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/bin"
     mkdir -p "$out/lib"
 
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
 
     EOF
     chmod a+x "$out/bin/umlet"
+    runHook postInstall
   '';
 
   meta = {

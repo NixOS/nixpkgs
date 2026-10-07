@@ -21,7 +21,9 @@ stdenv.mkDerivation {
   makeFlags = [ "CC:=$(CC)" ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 -t $out/bin althttpd
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;

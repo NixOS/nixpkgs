@@ -152,6 +152,7 @@ let
       });
       dontUnpack = true;
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/google-cloud-sdk/.install
 
         # If there is a source, unpack it
@@ -167,6 +168,7 @@ let
 
         # Write the snapshot file to the `.install` folder
         printf "%s" "$snapshot" > $out/google-cloud-sdk/.install/${pname}.snapshot.json
+        runHook postInstall
       '';
       nativeBuildInputs = [
         python3

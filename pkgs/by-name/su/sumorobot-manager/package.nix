@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/opt/sumorobot-manager
     cp -r main.py lib res $out/opt/sumorobot-manager
     chmod -R 644 $out/opt/sumorobot-manager/lib/*
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     dos2unix $out/opt/sumorobot-manager/main.py
     makeQtWrapper $out/opt/sumorobot-manager/main.py $out/bin/sumorobot-manager \
       --chdir "$out/opt/sumorobot-manager"
+    runHook postInstall
   '';
 
   preFixup = ''

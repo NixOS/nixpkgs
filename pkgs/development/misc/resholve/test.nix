@@ -121,10 +121,12 @@ rec {
     setSourceRoot = "sourceRoot=$(echo */tests/nix/openssl)";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin $out/libexec
       install openssl.sh $out/bin/openssl.sh
       install libexec.sh $out/libexec/invokeme
       install profile $out/profile
+      runHook postInstall
     '';
     # LOGLEVEL="DEBUG";
     solutions = {
@@ -173,6 +175,7 @@ rec {
     setSourceRoot = "sourceRoot=$(echo */tests/nix/future_perfect_tense)";
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
       install conjure.sh $out/bin/conjure.sh
       ${resholve.phraseSolution "conjure" {
@@ -186,6 +189,7 @@ rec {
           ];
         };
       }}
+      runHook postInstall
     '';
   };
 
@@ -196,8 +200,10 @@ rec {
     dontBuild = true;
 
     installPhase = ''
+      runHook preInstall
       mkdir $out
       cp *.ansi $out/
+      runHook postInstall
     '';
 
     doCheck = true;

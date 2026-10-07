@@ -65,7 +65,9 @@ let
       cc -fPIC -shared lib.c -o ${wrapperLibName}
     '';
     installPhase = ''
+      runHook preInstall
       install -D ${wrapperLibName} -t $out/lib
+      runHook postInstall
     '';
   };
 

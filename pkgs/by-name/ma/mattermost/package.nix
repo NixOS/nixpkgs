@@ -76,12 +76,14 @@ let
 
           # Just link all the server and webapp root directories together.
           installPhase = ''
+            runHook preInstall
             mkdir -p $out
             for dir in "$server" "$webapp"; do
               for path in "$dir"/*; do
                 ln -s "$path" "$out/$(basename -- "$path")"
               done
             done
+            runHook postInstall
           '';
 
           passthru = finalPassthru;

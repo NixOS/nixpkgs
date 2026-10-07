@@ -163,6 +163,7 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/etc/onlyoffice/documentserver/log4js
       cp ${server-src}/Common/config/default.json $out/etc/onlyoffice/documentserver
       cp ${server-src}/Common/config/production-linux.json $out/etc/onlyoffice/documentserver
@@ -201,6 +202,7 @@ let
       ## required for bwrap --bind
       chmod u+w $out/var
       mkdir -p $out/var/lib/onlyoffice
+      runHook postInstall
     '';
 
     # stripping self extracting javascript binaries likely breaks them

@@ -28,8 +28,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -dm 755 $out/share/icons
     cp -dr --no-preserve='ownership' Numix-Cursor{,-Light} $out/share/icons/
+    runHook postInstall
   '';
 
   meta = {

@@ -34,9 +34,11 @@ stdenv.mkDerivation {
   buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags' LNKFLAGS='-lcrypt -lresolv'";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/man/man1
     make -f makefile install
+    runHook postInstall
   '';
 
   # Old K&R C sources fail under GCC 14+ default C standard (e.g. dosexp prototypes).

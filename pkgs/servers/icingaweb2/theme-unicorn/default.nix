@@ -36,10 +36,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out"
     cp -r * "$out"
     chmod 755 $out/public/img
     cp unicorn.png "$out/public/img/unicorn.png"
+    runHook postInstall
   '';
 
   meta = {

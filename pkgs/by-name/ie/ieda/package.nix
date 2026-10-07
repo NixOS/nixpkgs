@@ -54,7 +54,9 @@ let
     dontBuild = true;
     dontFixup = true;
     installPhase = ''
+      runHook preInstall
       cp -r . $out
+      runHook postInstall
     '';
 
   };

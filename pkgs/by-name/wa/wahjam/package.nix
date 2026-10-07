@@ -56,6 +56,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/share/icons/hicolor/scalable/apps
 

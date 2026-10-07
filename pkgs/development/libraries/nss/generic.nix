@@ -203,6 +203,7 @@ stdenv.mkDerivation rec {
     chmod 0755 $out/bin/nss-config
 
     installManPage doc/nroff/*
+    runHook postInstall
   '';
 
   postInstall = lib.optionalString useP11kit ''

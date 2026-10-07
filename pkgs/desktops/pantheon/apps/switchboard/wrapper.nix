@@ -49,6 +49,7 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     for i in "''${paths[@]}"; do
       lndir -silent $i $out
@@ -58,6 +59,7 @@ stdenv.mkDerivation {
     rm -f "$out/$dbus_file"
     substitute "${switchboard}/$dbus_file" "$out/$dbus_file" \
       --replace-fail "${switchboard}" "$out"
+    runHook postInstall
   '';
 
   preFixup = ''

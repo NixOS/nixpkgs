@@ -62,8 +62,10 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/bin
         cp test $out/bin/sycl-test
+        runHook postInstall
       '';
 
       meta = {

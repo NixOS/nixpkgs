@@ -329,6 +329,7 @@ stdenv.mkDerivation rec {
     installShellCompletion --fish \
       --name bazel.fish \
       ./output/bazel-complete.fish
+    runHook postInstall
   '';
 
   postFixup =

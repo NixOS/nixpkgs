@@ -40,10 +40,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin $out/lib
     cp init.scm $out/lib
     cp libtinyscheme* $out/lib
     cp scheme $out/bin/tinyscheme
+    runHook postInstall
   '';
 
   passthru.tests = {

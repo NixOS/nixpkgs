@@ -67,11 +67,13 @@ clangStdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mv src/nsh $out/bin
     mkdir -p $out/lib
     shopt -s extglob
     mv subprojects/restclient-cpp/librestclient_cpp.so!(*p) $out/lib
+    runHook postInstall
   '';
 
   passthru = {

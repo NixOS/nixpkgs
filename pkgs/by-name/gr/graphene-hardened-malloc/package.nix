@@ -79,12 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/test
         cp -r test $out/test
 
         mkdir -p $out/bin
         makeWrapper ${python3.interpreter} $out/bin/run-tests \
           --add-flags "-I -m unittest discover --start-directory $out/test"
+        runHook postInstall
       '';
     };
     tests = {

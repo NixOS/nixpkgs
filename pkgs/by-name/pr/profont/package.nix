@@ -32,6 +32,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/share/fonts/misc"
     for f in *.pcf; do
       gzip -n -9 -c "$f" > "$out/share/fonts/misc/$f.gz"
@@ -39,6 +40,7 @@ stdenv.mkDerivation {
     install -D -m 644 LICENSE -t "$out/share/doc/$pname"
     install -D -m 644 "$srcOtb/profontn.otb" -t $out/share/fonts/misc
     mkfontdir "$out/share/fonts/misc"
+    runHook postInstall
   '';
 
   meta = {

@@ -23,9 +23,11 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     binPath="$(swiftpmBinPath)"
     mkdir -p $out/lib
     cp $binPath/libpam-watchid.dylib $out/lib/pam_watchid.so
+    runHook postInstall
   '';
 
   meta = {

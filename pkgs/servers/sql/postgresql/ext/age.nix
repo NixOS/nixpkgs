@@ -88,7 +88,9 @@ postgresqlBuildExtension (finalAttrs: {
       '';
 
     installPhase = ''
+      runHook preInstall
       touch $out
+      runHook postInstall
     '';
   };
 

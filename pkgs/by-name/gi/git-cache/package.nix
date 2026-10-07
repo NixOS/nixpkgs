@@ -18,7 +18,9 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 git-cache $out/bin/git-cache
+    runHook postInstall
   '';
 
   meta = {

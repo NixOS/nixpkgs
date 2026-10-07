@@ -45,6 +45,7 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp -vr ./step-agent $out/bin/step-agent
     wrapProgram $out/bin/step-agent --prefix PATH : ${
@@ -55,6 +56,7 @@ stdenvNoCC.mkDerivation {
         p11-kit
       ]
     }
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;

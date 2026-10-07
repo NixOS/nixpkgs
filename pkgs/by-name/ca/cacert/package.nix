@@ -88,6 +88,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -D -t "$out/etc/ssl/certs" ca-bundle.crt
 
     # install standard PEM compatible bundle
@@ -103,6 +104,7 @@ stdenv.mkDerivation {
     # use cp as install doesn't copy symlinks
     mkdir -p $hashed/etc/ssl/certs/
     cp -P hashed/* $hashed/etc/ssl/certs/
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;

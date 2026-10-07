@@ -21,8 +21,10 @@ mkDerivation {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     make -C nvml install
+    runHook postInstall
   '';
 
   meta.platforms = [ "x86_64-freebsd" ];

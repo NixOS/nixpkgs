@@ -24,8 +24,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ xcbuildHook ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp Products/Default/contacts $out/bin
+    runHook postInstall
   '';
 
   meta = {

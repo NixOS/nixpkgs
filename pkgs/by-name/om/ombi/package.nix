@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/{bin,share/${pname}-${version}}
     cp -r * $out/share/${pname}-${version}
 
@@ -72,6 +73,7 @@ stdenv.mkDerivation rec {
         ]
       } \
       --chdir "$out/share/${pname}-${version}"
+    runHook postInstall
   '';
 
   passthru = {

@@ -19,8 +19,10 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     swift run -c release differentiation 4 | grep '8.0'
     touch "$out"
+    runHook postInstall
   '';
 
   __structuredAttrs = true;

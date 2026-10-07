@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 btrfs-auto-snapshot $out/bin/btrfs-auto-snapshot
+    runHook postInstall
   '';
 
   wrapperPath = lib.makeBinPath (

@@ -38,6 +38,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     cd $out
 
@@ -50,6 +51,7 @@ stdenv.mkDerivation {
       installShellCompletion --cmd $c --bash ${ttGem}/lib/ruby/gems/*/gems/timetrap*/completions/bash/*
       installShellCompletion --cmd $c --zsh ${ttGem}/lib/ruby/gems/*/gems/timetrap*/completions/zsh/*
     done
+    runHook postInstall
   '';
 
   meta = {

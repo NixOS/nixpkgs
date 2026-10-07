@@ -164,9 +164,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp manifest.txt $out/
       cp -r modules/ $out/
+      runHook postInstall
     '';
   };
 
@@ -261,10 +263,12 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp manifest.txt $out/
       cp -r modules/ $out/
       cp -r native-libs/ $out/
+      runHook postInstall
     '';
   };
 in
@@ -305,11 +309,13 @@ stdenvNoCC.mkDerivation rec {
     nativeBuildInputs = [ imagemagick ];
 
     installPhase = ''
+      runHook preInstall
       for n in 16 24 32 48 64 96 128 256; do
         size=$n"x"$n
         mkdir -p $out/hicolor/$size/apps
         convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow-desktop.png
         done;
+      runHook postInstall
     '';
   };
 

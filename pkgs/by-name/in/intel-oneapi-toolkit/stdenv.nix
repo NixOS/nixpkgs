@@ -15,6 +15,7 @@ let
     #       icx/icpx. Through a symlink it would see clang/clang++ and
     #       select the wrong behavior.
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/bin
 
       cat > $out/bin/clang++ << 'EOF'
@@ -28,6 +29,7 @@ let
       exec ${kit}/compiler/latest/bin/icx "$@"
       EOF
       chmod +x $out/bin/clang
+      runHook postInstall
     '';
 
     passthru = {

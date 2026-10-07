@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     auto-patchelf \
       --paths ./usr/bin/ToneLib-Jam \
       --libs ${lib.getLib freetype}/lib \
@@ -52,6 +53,7 @@ stdenv.mkDerivation {
     })' log.jsonl
 
     cp log.jsonl $out
+    runHook postInstall
   '';
 
 }

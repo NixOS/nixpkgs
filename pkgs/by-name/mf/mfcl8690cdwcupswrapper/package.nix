@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     dpkg-deb -x $src $out
 
     basedir=${mfcl8690cdwlpr}/opt/brother/Printers/mfcl8690cdw
@@ -52,6 +53,7 @@ stdenv.mkDerivation rec {
 
     ln $dir/cupswrapper/brother_lpdwrapper_mfcl8690cdw $out/lib/cups/filter
     ln $dir/cupswrapper/brother_mfcl8690cdw_printer_en.ppd $out/share/cups/model
+    runHook postInstall
   '';
 
   meta = {

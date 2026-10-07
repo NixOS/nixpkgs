@@ -37,8 +37,10 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mv usr $out
     mv $out/bin/holochain-launcher-${prerelease} $out/bin/holochain-launcher
+    runHook postInstall
   '';
 
   preFixup = ''

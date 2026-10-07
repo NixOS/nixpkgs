@@ -83,8 +83,10 @@ let
                 ;
               dontBuilt = true;
               installPhase = ''
+                runHook preInstall
                 cp -R ext/glaz $out
                 cp Cargo.lock $out
+                runHook postInstall
               '';
             };
             hash = "sha256-5fGoW6TpkIQ8OIXjt2fLGzG9xhZ2TT+v2zLH1ecItII=";
@@ -132,9 +134,11 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
+              runHook preInstall
               cp -R ext/gitlab_glfm_markdown $out
               rm $out/Cargo.lock
               cp Cargo.lock $out
+              runHook postInstall
             '';
           };
           hash = "sha256-zRw3eNj17kHVazqeuXp4CxNl1FWaXufINb3yzvVcQS0=";
@@ -172,9 +176,11 @@ let
               nativeBuildInputs
               ;
             installPhase = ''
+              runHook preInstall
               mkdir -p $out
               cp Cargo.lock $out
               cp -R ext/gitlab_query_language/* $out
+              runHook postInstall
             '';
           };
 
@@ -246,9 +252,11 @@ let
               ;
             dontBuilt = true;
             installPhase = ''
+              runHook preInstall
               cp -R ext/fast_mmaped_file_rs $out
               rm $out/Cargo.lock
               cp Cargo.lock $out
+              runHook postInstall
             '';
           };
           hash = "sha256-pEgmtBnvLjc2xG26hdLQnJOJDFv8YaYlOW/OYqJL98I=";
@@ -465,6 +473,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share
     cp -r . $out/share/gitlab
     ln -sf ${assets} $out/share/gitlab/public/assets
@@ -480,6 +489,7 @@ stdenv.mkDerivation {
 
     # manually patch the shebang line in generate-loose-foreign-key
     wrapProgram $out/share/gitlab/scripts/decomposition/generate-loose-foreign-key --set ENABLE_SPRING 0 --add-flags 'runner -e test'
+    runHook postInstall
   '';
 
   passthru = {

@@ -227,6 +227,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     cp -rT ${xinit} $out
     chmod -R u+w $out
     cp -rT ${xorg-server} $out
@@ -292,6 +293,7 @@ stdenv.mkDerivation {
       --subst-var-by "MKFONTSCALE"     "${mkfontscale}/bin/mkfontscale" \
       --subst-var-by "FC_CACHE"        "${fontconfig.bin}/bin/fc-cache" \
       --subst-var-by "FONTCONFIG_FILE" "$fontsConfPath"
+    runHook postInstall
   '';
 
   passthru = {

@@ -80,7 +80,9 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         cp -r ${outputPath} $out
+        runHook postInstall
       '';
 
       outputHashMode = "recursive";

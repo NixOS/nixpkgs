@@ -119,7 +119,9 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
     install -D -m755 ../build/libgraphics.so $out/lib/libgraphics.so
+    runHook postInstall
   '';
 
   # Breaks dfhack because of inlining.

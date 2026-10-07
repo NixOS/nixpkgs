@@ -23,8 +23,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp bakelite $out/bin
+    runHook postInstall
   '';
 
   passthru = {

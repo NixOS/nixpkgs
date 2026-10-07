@@ -52,6 +52,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 openBrf $out/share/openBrf/openBrf
     install -Dm644 carry_positions.txt $out/share/openBrf/carry_positions.txt
     install -Dm644 reference.brf $out/share/openBrf/reference.brf
@@ -70,6 +71,7 @@ stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     ln -s "$out/share/openBrf/openBrf" "$out/bin/openBrf"
+    runHook postInstall
   '';
 
   dontPatchELF = true;

@@ -40,7 +40,9 @@ lib.fetchers.withNormalizedHash { } (
     '';
 
     installPhase = ''
+      runHook preInstall
       mv vendor $out
+      runHook postInstall
     '';
 
     preferLocalBuild = true;

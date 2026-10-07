@@ -138,6 +138,7 @@ let
             nativeBuildInputs = [ p7zip ];
 
             installPhase = ''
+              runHook preInstall
               mkdir -p $out/{azurehound,sharphound}
 
               ${copyAzurehoundZips}
@@ -146,6 +147,7 @@ let
 
               cp ${sharphound} $out/sharphound/sharphound-${shver}.zip
               for i in $out/*/*.zip; do sha256sum "$i" > "$i.sha256"; done
+              runHook postInstall
             '';
           }
         )

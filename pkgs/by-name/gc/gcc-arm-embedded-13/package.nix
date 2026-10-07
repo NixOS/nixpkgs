@@ -51,10 +51,12 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp -r * $out
     # these binaries require ancient Python 3.8 not available in Nixpkgs
     rm $out/bin/{arm-none-eabi-gdb-py,arm-none-eabi-gdb-add-index-py} || :
+    runHook postInstall
   '';
 
   preFixup =

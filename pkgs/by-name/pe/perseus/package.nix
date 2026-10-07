@@ -29,8 +29,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp perseus $out/bin
+    runHook postInstall
   '';
 
   meta = {

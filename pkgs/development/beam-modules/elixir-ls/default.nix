@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     cp -R . $out
     ln -s $out/VERSION $out/scripts/VERSION
 

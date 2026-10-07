@@ -76,6 +76,7 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out
         cp -r * $out/
 
@@ -98,6 +99,7 @@ let
         ${concatMapStringsSep "\n" (
           template: "cp -r ${template}/. $out/application/views/quote_templates/pdf/"
         ) cfg.quoteTemplates}
+        runHook postInstall
       '';
     };
 

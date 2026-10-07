@@ -142,6 +142,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     ext=$out/$installPrefix
     runHook preInstall
 

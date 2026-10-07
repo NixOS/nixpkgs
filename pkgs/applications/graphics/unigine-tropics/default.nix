@@ -34,6 +34,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     bash $src --target $name
 
     install -D -m 0755 $name/bin/libUnigine_x86.so $out/lib/unigine/tropics/bin/libUnigine_x86.so

@@ -21,10 +21,12 @@ stdenvNoCC.mkDerivation rec {
   nativeInstallCheckInputs = [ zsh ];
 
   installPhase = ''
+    runHook preInstall
     install -D zsh-autocomplete.plugin.zsh $out/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
     install -D z-async/z-async $out/share/zsh-autocomplete/z-async/z-async
     cp -R Completions $out/share/zsh-autocomplete/Completions
     cp -R Functions $out/share/zsh-autocomplete/Functions
+    runHook postInstall
   '';
 
   doInstallCheck = true;

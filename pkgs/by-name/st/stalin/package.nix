@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   buildPhase = "./build ";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/bin"
     cp stalin "$out/bin"
 
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
       --replace "$PWD/include/stalin" "$out/share/stalin-${version}/include/stalin"
     substituteInPlace "$out/bin/stalin" \
       --replace "$PWD/include" "$out/share/stalin-${version}/include"
+    runHook postInstall
   '';
 
   meta = {

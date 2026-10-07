@@ -93,6 +93,7 @@ let
     dontStrip = 1;
 
     installPhase = ''
+      runHook preInstall
       # compatible semeru jdk
       TARGET_SOURCE=$(find . -maxdepth 1 -type d ! -name "." ! -name "*jmods" -print -quit)
 
@@ -131,6 +132,7 @@ let
           wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
         fi
       done
+      runHook postInstall
     '';
 
     preFixup = ''

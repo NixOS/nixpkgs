@@ -24,11 +24,13 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/etc/xdg/autostart
     cp ${mate-settings-daemon}/etc/xdg/autostart/mate-settings-daemon.desktop $out/etc/xdg/autostart
 
     mkdir -p $out/share/man
     cp -r ${mate-settings-daemon.man}/share/man/* $out/share/man/
+    runHook postInstall
   '';
 
   postFixup = ''

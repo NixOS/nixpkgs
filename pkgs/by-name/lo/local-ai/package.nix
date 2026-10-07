@@ -229,10 +229,12 @@ let
       onnxruntime
     ];
     installPhase = ''
+      runHook preInstall
       cp -r --no-preserve=mode $src $out
       mkdir -p $out/piper-phonemize/pi
       cp -r --no-preserve=mode ${piper-phonemize}/share $out/piper-phonemize/pi
       cp *.a $out
+      runHook postInstall
     '';
   };
 
@@ -292,11 +294,13 @@ let
       fetchSubmodules = true;
     };
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/build
       cp -ra $src/* $out
       find . \( -name '*.a' -or -name '*.c.o' \) -print0 \
         | tar cf - --null --files-from - \
         | tar xf - -C $out/build
+      runHook postInstall
     '';
     nativeBuildInputs = [ cmake ];
   };
@@ -311,11 +315,13 @@ let
       fetchSubmodules = true;
     };
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/build
       cp -ra $src/* $out
       find . \( -name '*.a' -or -name '*.c.o' \) -print0 \
         | tar cf - --null --files-from - \
         | tar xf - -C $out/build
+      runHook postInstall
     '';
     cmakeFlags = [
       (lib.cmakeFeature "GGML_BUILD_NUMBER" "1")

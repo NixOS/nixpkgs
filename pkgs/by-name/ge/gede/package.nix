@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     python build.py install --verbose --prefix="$out"
     wrapProgram $out/bin/gede \
       --prefix QT_PLUGIN_PATH : ${libsForQt5.qtbase}/${libsForQt5.qtbase.qtPluginPrefix} \
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
           gdb
         ]
       }
+    runHook postInstall
   '';
 
   meta = {

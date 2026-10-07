@@ -30,7 +30,9 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     install -D $srcs -t $out/share/fonts/truetype/
+    runHook postInstall
   '';
 
   meta = {

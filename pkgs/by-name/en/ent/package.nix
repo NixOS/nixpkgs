@@ -23,8 +23,10 @@ stdenv.mkDerivation {
   buildFlags = lib.optional stdenv.cc.isClang "CC=clang";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp ent $out/bin/
+    runHook postInstall
   '';
 
   meta = {

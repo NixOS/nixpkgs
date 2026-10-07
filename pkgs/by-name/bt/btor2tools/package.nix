@@ -20,11 +20,13 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out $dev/include/btor2parser/ $lib/lib
 
     cp -vr bin $out
     cp -v  ../src/btor2parser/btor2parser.h $dev/include/btor2parser
     cp -v  lib/libbtor2parser.* $lib/lib
+    runHook postInstall
   '';
 
   doInstallCheck = true;

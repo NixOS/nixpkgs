@@ -76,6 +76,7 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
       # Prune the `.git` directories
       find ${depsDir} -name .git -type d -prune -exec rm -rf {} \;;
       # Build a reproducible tar, per instructions at https://reproducible-builds.org/docs/archives/
@@ -85,6 +86,7 @@ let
             ${depsDir} \
             cmake \
             _deps/googletest-subbuild/googletest-populate-prefix/src/*.zip
+      runHook postInstall
     '';
 
     outputHash =

@@ -46,8 +46,10 @@ stdenvNoCC.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/lib/firmware/
     cp xone_dongle_*.bin $out/lib/firmware/
+    runHook postInstall
   '';
 
   meta = {

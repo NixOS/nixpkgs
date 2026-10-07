@@ -34,8 +34,10 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp -a esshader $out/bin/
+    runHook postInstall
   '';
 
   meta = {

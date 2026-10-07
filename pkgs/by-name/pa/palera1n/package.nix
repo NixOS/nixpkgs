@@ -121,7 +121,9 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 src/palera1n $out/bin/palera1n
+    runHook postInstall
   '';
 
   meta = {

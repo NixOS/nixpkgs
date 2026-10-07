@@ -21,8 +21,10 @@ stdenv.mkDerivation {
   buildInputs = [ libpng ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install bin/Release/guetzli $out/bin/
+    runHook postInstall
   '';
 
   meta = {

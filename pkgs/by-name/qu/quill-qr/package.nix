@@ -25,6 +25,7 @@ stdenvNoCC.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp -a quill-qr.sh $out/bin/quill-qr.sh
     patchShebangs $out/bin
@@ -37,6 +38,7 @@ stdenvNoCC.mkDerivation rec {
         gzip
       ]
     }"
+    runHook postInstall
   '';
 
   meta = {

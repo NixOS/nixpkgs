@@ -44,8 +44,10 @@ let
       ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp ./pixart2svg.py $out
+      runHook postInstall
     '';
   };
 

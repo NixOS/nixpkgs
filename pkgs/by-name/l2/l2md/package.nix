@@ -17,8 +17,10 @@ stdenv.mkDerivation {
   buildInputs = [ libgit2 ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp l2md $out/bin
+    runHook postInstall
   '';
 
   meta = {

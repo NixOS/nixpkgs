@@ -20,8 +20,10 @@ stdenv.mkDerivation {
   buildInputs = [ perl ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp bin/xmlformat.pl $out/bin/xmlformat
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

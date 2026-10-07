@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out $out/share/doc/ndi-6
     mv bin/${ndiPlatform} $out/bin
     mv lib/${ndiPlatform} $out/lib
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     mv include examples $out/
     mv licenses $out/share/doc/ndi-6/licenses
     mv documentation/* $out/share/doc/ndi-6/
+    runHook postInstall
   '';
 
   dontPatchELF = true;

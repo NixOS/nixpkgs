@@ -14,7 +14,9 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     install -Dm644 YDP-GrandPiano-*.sf2 $out/share/soundfonts/YDP-GrandPiano.sf2
+    runHook postInstall
   '';
 
   meta = {

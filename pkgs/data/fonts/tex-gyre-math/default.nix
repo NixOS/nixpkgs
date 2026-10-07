@@ -53,8 +53,10 @@ let
       };
 
       installPhase = ''
+        runHook preInstall
         install -m444 -Dt $out/share/fonts/opentype opentype/*.otf
         install -m444 -Dt $out/share/doc/${pname}-${version}    doc/*.txt
+        runHook postInstall
       '';
 
       outputHashAlgo = "sha256";

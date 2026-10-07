@@ -31,8 +31,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp cpond $out/bin/
+    runHook postInstall
   '';
 
   meta = {

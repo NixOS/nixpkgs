@@ -82,6 +82,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir "$out"
     cp -ar . "$out/app"
     cd "$out"
@@ -124,6 +125,7 @@ stdenv.mkDerivation {
     EOF
 
     chmod +x bin/pcloud
+    runHook postInstall
   '';
 
   meta = {

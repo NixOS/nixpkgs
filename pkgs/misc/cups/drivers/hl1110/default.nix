@@ -52,6 +52,7 @@ stdenv.mkDerivation {
     gcc -Wall ${srcdir}/brcupsconfig/brcupsconfig.c -o brcupsconfig4
   '';
   installPhase = ''
+    runHook preInstall
     # install lpr
     dpkg-deb -x ${lprdeb} $out
 
@@ -104,6 +105,7 @@ stdenv.mkDerivation {
       ]
     }
 
+    runHook postInstall
   '';
 
   meta = {

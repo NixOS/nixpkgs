@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $curSrc source";
 
   installPhase = ''
+    runHook preInstall
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-Zoom.desktop --replace /usr/ $out/
 
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     # works fine with webkitgtk_4_1, though, so patch it to use webkitgtk_4_1 instead
     mkdir -p $out/lib/
     ln -s ${webkitgtk_4_1}/lib/libwebkit2gtk-4.1.so.0 $out/lib/libwebkit2gtk-4.0.so.37
+    runHook postInstall
   '';
 
   meta = {

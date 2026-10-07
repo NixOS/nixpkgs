@@ -31,6 +31,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     install -Dm755 -t $out/bin tmpmail
     installManPage tmpmail.1
@@ -42,6 +43,7 @@ stdenvNoCC.mkDerivation rec {
         xclip
       ]
     }
+    runHook postInstall
   '';
 
   meta = {

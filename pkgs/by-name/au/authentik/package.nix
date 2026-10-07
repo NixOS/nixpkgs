@@ -175,8 +175,10 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir $out
       cp -r api/build $out/help
+      runHook postInstall
     '';
   };
 
@@ -210,9 +212,11 @@ let
     # dependencies of workspace projects are installed into separate node_modules folders with
     # symlinks between them, so we have to copy all of them
     installPhase = ''
+      runHook preInstall
       mkdir $out
       echo "Copying node_modules folders:"
       find -type d -name node_modules -prune -print -exec mkdir -p $out/{} \; -exec cp -rT {} $out/{} \;
+      runHook postInstall
     '';
 
     dontCheckForBrokenSymlinks = true;

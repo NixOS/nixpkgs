@@ -35,6 +35,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/share/cyberchef"
     mkdir -p "$out/bin"
 
@@ -52,6 +53,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/applications/
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications/
+    runHook postInstall
   '';
 
   meta = {

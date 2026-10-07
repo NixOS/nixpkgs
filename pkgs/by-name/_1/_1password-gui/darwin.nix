@@ -24,8 +24,10 @@ stdenv.mkDerivation {
   sourceRoot = ".";
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+    runHook postInstall
   '';
 
   # 1Password is notarized.

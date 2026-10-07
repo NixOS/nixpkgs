@@ -21,6 +21,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 src/capture.sh $out/bin/capture
 
     patchShebangs $out/bin/capture
@@ -31,6 +32,7 @@ stdenv.mkDerivation {
           ffmpeg
         ]
       }'
+    runHook postInstall
   '';
 
   meta = {

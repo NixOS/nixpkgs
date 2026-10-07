@@ -35,7 +35,9 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
       install -Dvm644 libtweetnacl.so $out/lib/libtweetnacl.so
+      runHook postInstall
     '';
   };
 in

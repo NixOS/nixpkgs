@@ -92,10 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
             fi
           '';
           installPhase = ''
+            runHook preInstall
             mkdir $out
             for target in "''${targets[@]}" ; do
               [[ $target != Makefile* ]] || continue
             done
+            runHook postInstall
           '';
         };
     in

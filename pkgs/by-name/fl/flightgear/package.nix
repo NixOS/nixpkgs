@@ -124,8 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
       dontUnpack = true;
 
       installPhase = ''
+        runHook preInstall
         mkdir -p "$out/share/FlightGear"
         cp -a "$src"/* "$out/share/FlightGear/"
+        runHook postInstall
       '';
     };
   };

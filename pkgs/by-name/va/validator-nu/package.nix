@@ -48,9 +48,11 @@ let
     '';
 
     installPhase = ''
+      runHook preInstall
       mkdir "$out" "$out/build"
       mv dependencies extras "$out"
       mv build/html5spec "$out/build"
+      runHook postInstall
     '';
 
     outputHashMode = "recursive";

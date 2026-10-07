@@ -33,6 +33,7 @@ stdenvNoCC.mkDerivation rec {
     installShellFiles
   ];
   installPhase = ''
+    runHook preInstall
     installManPage DOC/podget.7
     install -m 755 -D podget $out/bin/podget
     wrapProgram $out/bin/podget --prefix PATH : ${
@@ -44,6 +45,7 @@ stdenvNoCC.mkDerivation rec {
         wget
       ]
     }
+    runHook postInstall
   '';
 
   meta = {

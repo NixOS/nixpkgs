@@ -51,6 +51,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     # install lpr
     dpkg-deb -x ${lprdeb} $out
 
@@ -107,6 +108,7 @@ stdenv.mkDerivation {
           gawk
         ]
       }
+    runHook postInstall
   '';
 
   meta = {

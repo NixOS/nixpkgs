@@ -23,8 +23,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mv serpent $out/bin
+    runHook postInstall
   '';
 
   meta = {

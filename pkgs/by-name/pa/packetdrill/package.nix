@@ -31,6 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [ libpcap ];
 
   installPhase = ''
+    runHook preInstall
     install -m 0755 -t $out/bin -D \
       packetdrill \
       packet_parser_test \
@@ -38,6 +39,7 @@ stdenv.mkDerivation {
       checksum_test
     mkdir -p $out/share
     cp -r ../tests $out/share/packetdrill-tests
+    runHook postInstall
   '';
 
   meta = {

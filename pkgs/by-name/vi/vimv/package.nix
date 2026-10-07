@@ -16,9 +16,11 @@ stdenvNoCC.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
     install -d $out/bin
     install $src/vimv $out/bin/vimv
     patchShebangs $out/bin/vimv
+    runHook postInstall
   '';
 
   meta = {

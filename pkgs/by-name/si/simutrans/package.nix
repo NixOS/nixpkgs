@@ -185,11 +185,13 @@ let
     enableParallelBuilding = true;
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/share/
       mv simutrans $out/share/
 
       mkdir -p $out/bin/
       mv build/default/sim $out/bin/simutrans
+      runHook postInstall
     '';
 
     meta = {

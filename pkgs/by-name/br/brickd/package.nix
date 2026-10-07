@@ -60,9 +60,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     cd ../brickd
     mkdir -p $out/bin
     cp brickd $out/bin/brickd
+    runHook postInstall
   '';
 
   meta = {

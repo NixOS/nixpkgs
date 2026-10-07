@@ -265,6 +265,7 @@ let
       # Copy files stripping until first dash (path and hash)
       unpackCmd = "cp $curSrc \${curSrc##*-}";
       installPhase = ''
+        runHook preInstall
         # hunspell dicts
         install -dm755 "$out/share/hunspell"
         install -m644 ${dictFileName}.dic "$out/share/hunspell/"
@@ -273,6 +274,7 @@ let
         install -dm755 "$out/share/myspell/dicts"
         ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
         ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+        runHook postInstall
       '';
 
       meta = {
@@ -309,6 +311,7 @@ let
       dontBuild = true;
 
       installPhase = ''
+        runHook preInstall
         patchShebangs bin
         make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
         # hunspell dicts
@@ -319,6 +322,7 @@ let
         install -dm755 "$out/share/myspell/dicts"
         ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
         ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
+        runHook postInstall
       '';
 
       meta = {

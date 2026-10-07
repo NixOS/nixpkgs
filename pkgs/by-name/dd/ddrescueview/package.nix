@@ -53,10 +53,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dt $out/bin ddrescueview
     cd ../resources/linux
     mkdir -p "$out/share"
     cp -ar applications icons man $out/share
+    runHook postInstall
   '';
 
   meta = {

@@ -19,8 +19,10 @@ stdenv.mkDerivation {
   buildInputs = [ perlPackages.perl ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     cp tes3cmd $out/bin/tes3cmd
+    runHook postInstall
   '';
 
   meta = {

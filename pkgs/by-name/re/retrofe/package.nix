@@ -71,6 +71,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/share/retrofe
     cp -r Artifacts/linux/RetroFE $out/share/retrofe/example

@@ -26,10 +26,12 @@ stdenv.mkDerivation rec {
   dontCheckForBrokenSymlinks = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     cp -r * $out/
     ln -sf /etc/roundcube/config.inc.php $out/config/config.inc.php
     rm -rf $out/installer
+    runHook postInstall
   '';
 
   passthru.withPlugins =

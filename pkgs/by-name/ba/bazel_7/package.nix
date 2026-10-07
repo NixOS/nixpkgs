@@ -239,8 +239,10 @@ let
       '';
 
       installPhase = ''
+        runHook preInstall
         mkdir -p $out/vendor_dir
         cp -r --reflink=auto vendor_dir/* $out/vendor_dir
+        runHook postInstall
       '';
 
       outputHashMode = "recursive";

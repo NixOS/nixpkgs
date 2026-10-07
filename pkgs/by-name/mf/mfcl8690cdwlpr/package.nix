@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   installPhase = ''
+    runHook preInstall
     dpkg-deb -x $src $out
 
     dir=$out/opt/brother/Printers/mfcl8690cdw
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
         ${pkgs.pkgsi686Linux.glibc}/lib/ld-linux.so.2 \
         $file
     done
+    runHook postInstall
   '';
 
   meta = {

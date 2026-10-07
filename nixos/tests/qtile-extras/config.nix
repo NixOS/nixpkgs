@@ -24,7 +24,9 @@ stdenvNoCC.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     cp config.py $out/config.py
+    runHook postInstall
   '';
 }

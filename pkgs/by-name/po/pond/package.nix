@@ -28,9 +28,11 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     runHook preInstall;
     install -m555 -Dt $out/bin bin/pond
     runHook postInstall;
+    runHook postInstall
   '';
 
   meta = {

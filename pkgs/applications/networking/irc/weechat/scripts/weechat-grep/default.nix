@@ -16,8 +16,10 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share
     cp $src $out/share/grep.py
+    runHook postInstall
   '';
 
   passthru = {

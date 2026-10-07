@@ -24,8 +24,10 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm0555 influxdb2-provision.py $out/bin/influxdb2-provision
     wrapProgram $out/bin/influxdb2-provision --prefix PYTHONPATH : "$PYTHONPATH"
+    runHook postInstall
   '';
 
   meta = {

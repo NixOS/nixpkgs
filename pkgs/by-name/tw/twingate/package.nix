@@ -54,12 +54,14 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     mv etc $out/
     mv usr/bin $out/bin
     mv usr/sbin/* $out/bin
     mv usr/lib $out/lib
     mv usr/share $out/share
+    runHook postInstall
   '';
 
   passthru.tests = { inherit (nixosTests) twingate; };

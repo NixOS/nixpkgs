@@ -69,6 +69,7 @@ let
     ];
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/lib
       mkdir -p $out/include/NVCtrl
 
@@ -76,6 +77,7 @@ let
       cp NVCtrl.h     $out/include/NVCtrl
       cp NVCtrlLib.h  $out/include/NVCtrl
       cp -P libXNVCtrl.so* $out/lib
+      runHook postInstall
     '';
 
     meta = meta // {

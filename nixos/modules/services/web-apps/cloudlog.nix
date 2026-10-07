@@ -56,6 +56,7 @@ let
     version = src.version;
     src = pkgs.cloudlog;
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp -r * $out/
 
@@ -70,6 +71,7 @@ let
         rm -rf $out/$directory
         ln -s ${cfg.dataDir}/$directory $out/$directory
       done
+      runHook postInstall
     '';
   };
 in

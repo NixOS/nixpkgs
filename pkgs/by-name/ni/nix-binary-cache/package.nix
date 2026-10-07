@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/bin"
     substitute "${./nix-binary-cache.cgi.in}" "$out"/bin/nix-binary-cache.cgi \
       --replace @out@ "$out/bin" \
@@ -53,6 +54,7 @@ stdenv.mkDerivation {
       --replace "xXxXx" "xXxXx"
 
     chmod a+x "$out/bin/nix-binary-cache-start"
+    runHook postInstall
   '';
 
   meta = {

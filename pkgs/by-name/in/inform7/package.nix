@@ -26,6 +26,7 @@ stdenv.mkDerivation {
   preConfigure = "touch Makefile.PL";
   buildPhase = "";
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
     pushd $src
     ./install-inform7.sh --prefix $out
@@ -33,6 +34,7 @@ stdenv.mkDerivation {
 
     substituteInPlace "$out/bin/i7" \
       --replace "/usr/bin/perl" "${perl}/bin/perl"
+    runHook postInstall
   '';
 
   meta = {

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     install -dm755 $out/helm-git
     install -m644 -Dt $out/helm-git plugin.yaml
     cp helm-git helm-git-plugin.sh $out/helm-git/

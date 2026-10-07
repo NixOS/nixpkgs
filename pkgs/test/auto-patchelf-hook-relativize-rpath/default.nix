@@ -46,8 +46,10 @@ let
     # we don't set buildCommand because we want to ensure fixupPhase
     # (containing autoPatchelfHook) is run.
     installPhase = ''
+      runHook preInstall
       mkdir -p $out
       cp -R ${baz-bundle}/lib $out/lib
+      runHook postInstall
     '';
 
     # Now these two .so files refer neither to `baz-bundle`, nor contain self-references.

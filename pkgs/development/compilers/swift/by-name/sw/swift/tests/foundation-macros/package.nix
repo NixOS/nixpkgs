@@ -18,8 +18,10 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     swift run -c release foundation-macros | grep 'Hello, foundation macros'
     touch "$out"
+    runHook postInstall
   '';
 
   __structuredAttrs = true;

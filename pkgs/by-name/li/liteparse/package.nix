@@ -53,7 +53,9 @@ let
       sourceRoot = "source";
 
       installPhase = ''
+        runHook preInstall
         cp -r . $out
+        runHook postInstall
       '';
     };
 

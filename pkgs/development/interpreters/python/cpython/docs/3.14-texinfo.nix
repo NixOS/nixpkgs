@@ -15,8 +15,10 @@ stdenv.mkDerivation {
     sha256 = "sha256-xSzL8/kZRFhsaqpFDAtI5G6cGEuB8Q1tqeuUtVRiGPY=";
   };
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/info
     cp ./python.info $out/share/info
+    runHook postInstall
   '';
   meta = {
     maintainers = with lib.maintainers; [

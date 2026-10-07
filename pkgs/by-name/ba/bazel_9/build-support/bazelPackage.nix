@@ -141,7 +141,9 @@ let
           inherit autoPatchelfIgnoreMissingDeps;
           src = stage1;
           installPhase = ''
+            runHook preInstall
             cp -r . $out
+            runHook postInstall
           '';
         }
       );

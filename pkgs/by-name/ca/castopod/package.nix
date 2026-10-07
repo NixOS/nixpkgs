@@ -40,8 +40,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/share/castopod
     cp -r . $out/share/castopod
+    runHook postInstall
   '';
 
   passthru.tests.castopod = nixosTests.castopod;

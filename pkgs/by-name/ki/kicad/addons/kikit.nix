@@ -50,8 +50,10 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     mv build/${targetSpec.resultZip} $out/${addonPath}
+    runHook postInstall
   '';
 
   meta = kikit-module.meta // {

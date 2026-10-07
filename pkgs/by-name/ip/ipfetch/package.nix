@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mkdir -p $out/share/ipfetch/
     cp -r flags $out/share/ipfetch/
@@ -37,6 +38,7 @@ stdenv.mkDerivation {
         wget
       ]
     }
+    runHook postInstall
   '';
 
   meta = {
