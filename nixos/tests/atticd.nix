@@ -27,6 +27,9 @@ in
     };
 
     postgres = {
+      # The upload client needs the guest's registered Nix store paths.
+      nix.enable = true;
+
       services.atticd = {
         enable = true;
         inherit environmentFile;
@@ -93,6 +96,7 @@ in
           local.succeed("attic push test-cache ${environmentFile}")
 
       with subtest("PostgreSQL metadata survives a restart"):
+          postgres.wait_for_unit("register-nix-paths.service")
           postgres.wait_for_unit("postgresql.service")
           postgres.wait_for_unit("atticd.service")
           postgres.succeed(
