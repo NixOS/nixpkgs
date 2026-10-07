@@ -107,9 +107,6 @@ buildGo127Module (finalAttrs: {
         # tries to start tailscaled
         "TestContainerBoot" # cmd/containerboot
 
-        # just part of a tool which generates yaml for k8s CRDs
-        # requires helm
-        "Test_generate" # cmd/k8s-operator/generate
         # self reported potentially flakey test
         "TestConnMemoryOverhead" # control/controlbase
 
@@ -173,9 +170,6 @@ buildGo127Module (finalAttrs: {
         "TestSelfDial" # tsnet
         "TestListenUnspecifiedAddr" # tsnet
         "TestListenMultipleEphemeralPorts" # tsnet
-
-        # flaky: https://github.com/tailscale/tailscale/issues/15348
-        "TestSafeFuncHappyPath"
 
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
