@@ -13,6 +13,8 @@
 }:
 
 stdenv.mkDerivation {
+  strictDeps = true;
+  __structuredAttrs = true;
   pname = "qingjian-data";
   version = "3"; # upstream release tag data-v3
 

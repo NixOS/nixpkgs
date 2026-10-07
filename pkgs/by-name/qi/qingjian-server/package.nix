@@ -17,6 +17,8 @@
 }:
 
 rustPlatform.buildRustPackage rec {
+  strictDeps = true;
+  __structuredAttrs = true;
   pname = "qingjian-server";
   version = "0.1.5-unstable-2026-09-29";
 

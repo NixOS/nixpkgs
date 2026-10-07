@@ -14,6 +14,8 @@
 }:
 
 stdenv.mkDerivation rec {
+  strictDeps = true;
+  __structuredAttrs = true;
   pname = "fcitx5-qingjian";
   version = "0.1.5-unstable-2026-09-29";
 
