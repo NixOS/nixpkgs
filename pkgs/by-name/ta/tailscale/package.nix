@@ -136,10 +136,6 @@ buildGo127Module (finalAttrs: {
 
         # Fails because we vendor dependencies
         "TestLicenseHeaders"
-
-        # Runs `go test -race`, which requires cgo, but we build with CGO_ENABLED=0
-        "TestRaceAttributedToPassingTest" # cmd/testwrapper
-        "TestRaceSuppressesFlakyRetry" # cmd/testwrapper
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -210,6 +206,12 @@ buildGo127Module (finalAttrs: {
       goTestGroups = {
         client = { };
         cmd = { };
+        # TestRace* run `go test -race`, which needs cgo.
+        "cmd/testwrapper" = old: {
+          env = old.env // {
+            CGO_ENABLED = 1;
+          };
+        };
         control = { };
         derp = { };
         drive = { };
