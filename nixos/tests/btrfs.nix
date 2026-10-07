@@ -1,5 +1,6 @@
-{ ... }:
+{ pkgs, runTest }:
 {
+  autoscrub = runTest {
   name = "btrfs-autoscrub";
 
   nodes.machine =
@@ -66,4 +67,5 @@
     with subtest("Verify that the service can scrub device files directly"):
       run_scrub("dev-vdb")
   '';
+  };
 }
