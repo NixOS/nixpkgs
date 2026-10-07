@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  runCommand,
+  php,
   nixosTests,
   stateDir ? "/var/lib/dolibarr",
   # > Q: My PDF template doesn’t understand foreign characters, it outputs them
@@ -14,7 +16,9 @@
   # Usage:
   #
   #   dolibarr.override {
-  #     extraPDFFonts = { foofont = $DERVIATION_OR_PATH; };
+  #     extraPDFFonts =
+  #       { foofont = $DERVIATION_OR_PATH; }
+  #       // dolibarr.mkTCPDFFont { name = "freesans"; src = pkgs.freefont_ttf; findFilePrefix = "FreeSans"; };
   #   }
   #
   extraPDFFonts ? { },
@@ -23,7 +27,9 @@
 assert builtins.isAttrs extraPDFFonts;
 assert lib.all (
   { name, value }:
-  builtins.match "[a-z0-9_]+" name != null && (lib.isDerivation value || builtins.isPath value)
+  builtins.match "[a-z0-9_]+" name != null
+  && builtins.isAttrs value
+  && (lib.isDerivation value.src || builtins.isPath value.src)
 ) (lib.attrsToList extraPDFFonts);
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
           exit 1
         fi
         for f in "${drvOrPath}"/*; do
-          ln -s "$f" "$fonts_dir/"
+          ln -sfn "$f" "$fonts_dir/"
         done
       '') extraPDFFonts}
     ''}
@@ -72,8 +78,85 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r * $out
   '';
 
-  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    inherit (nixosTests) dolibarr;
+  passthru = {
+    mkTCPDFFont =
+      {
+        name,
+        src,
+        findFilePrefix ? "-",
+      }:
+      {
+        ${name} = runCommand "TCPDF-font-${name}" { nativeBuildInputs = [ php ]; } ''
+          set -eu -o pipefail
+
+          # All found TTF files
+          candidates=$(find "${src}" -type f -iname "*${findFilePrefix}*.ttf" | sort || true)
+          # Dashless italic/oblique lookups must not resolve to bold variants
+          # (such as “*BoldItalic.ttf”)
+          candidates_no_bold=$(printf '%s\n' "$candidates" | grep -vi -E "bold(italic|oblique)" || true)
+          # Bare stem for families whose regular face carries no variant token
+          # (such as “FreeSans.ttf”)
+          bare_prefix=$(printf '%s' "${findFilePrefix}" | sed 's/[-_ ]$//')
+
+          # Tokens are regex fragments matched against the candidate list
+          # (case-insensitive); the first token with a hit wins (top sorted hit).
+          pick_ttf_from() {
+            local list="$1"
+            shift
+            local token hit
+            for token in "$@"; do
+              hit=$(printf '%s\n' "$list" | grep -i -E "$token" | head -n1 || true)
+              if [ -n "$hit" ]; then
+                printf '%s\n' "$hit"
+                return 0
+              fi
+            done
+            return 0
+          }
+
+          mkdir -p "$out"
+
+          regular=$(pick_ttf_from "$candidates" "[-_]?[Rr]egular\.ttf$")
+          if [ -z "$regular" ] && [ -n "$bare_prefix" ]; then
+            regular=$(printf '%s\n' "$candidates" | grep -i -F "/$bare_prefix.ttf" | head -n1 || true)
+          fi
+          if [ -n "$regular" ]; then
+            cp "$regular" "$out/${name}.ttf"
+          else
+            echo "No matching Regular TTF file for “${name}” to create a TCPDF font" >&2
+            exit 1
+          fi
+
+          bold=$(pick_ttf_from "$candidates" "[-_]?[Bb]old\.ttf$")
+          if [ -n "$bold" ]; then
+            cp "$bold" "$out/${name}b.ttf"
+          fi
+
+          italic=$(pick_ttf_from "$candidates_no_bold" "[-_]?[Ii]talic\.ttf$" "[-_]?[Oo]blique\.ttf$")
+          if [ -n "$italic" ]; then
+            cp "$italic" "$out/${name}i.ttf"
+          fi
+
+          bold_italic=$(pick_ttf_from "$candidates" "[-_]?[Bb]old[Ii]talic\.ttf$" "[-_]?[Bb]old[Oo]blique\.ttf$")
+          if [ -n "$bold_italic" ]; then
+            cp "$bold_italic" "$out/${name}bi.ttf"
+          fi
+
+          for ttf in "$out"/*.ttf; do
+            php -r '${/* php */ ''
+              require "${finalAttrs.src}/htdocs/includes/tecnickcom/tcpdf/include/tcpdf_font_data.php";
+              require "${finalAttrs.src}/htdocs/includes/tecnickcom/tcpdf/include/tcpdf_static.php";
+              require "${finalAttrs.src}/htdocs/includes/tecnickcom/tcpdf/include/tcpdf_fonts.php";
+              $font = TCPDF_FONTS::addTTFfont($argv[1], "TrueTypeUnicode", "", 32, $argv[2], 3, 1, false, false);
+              exit($font ? 0 : 1);
+            ''}' -- "$ttf" "$out/"
+          done
+        '';
+      };
+
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) dolibarr;
+    };
   };
 
   meta = {
