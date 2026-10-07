@@ -26,3 +26,5 @@ base="$(github "https://raw.githubusercontent.com/$repo/$tag/Cargo.toml" |
 sed -i "s|tag = \"desktop-v[^\"]*\";|tag = \"$tag\";|" pkgs/by-name/bu/buzz-cli/package.nix
 update-source-version buzz-cli "$base-unstable-$date"
 nix-update buzz-cli --version skip
+# The relay's web bundles have their own pnpm dependency hash.
+nix-update buzz-relay --version skip --subpackage web
