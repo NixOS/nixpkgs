@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ];
 
-  mesonFlags =  [
+  mesonFlags = [
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "gtk_doc" withIntrospection)
     (lib.mesonBool "tpm2" withTpm2Tss)
