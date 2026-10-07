@@ -1,69 +1,68 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
   gettext,
+  dpkg,
+  file,
+  util-linux,
+  which,
+  nix-update-script,
+  runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "checkinstall";
-  version = "1.6.2";
+  version = "1.8.3";
 
-  src = fetchurl {
-    url = "https://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-${version}.tar.gz";
-    sha256 = "1x4kslyvfd6lm6zd1ylbq2pjxrafb77ydfjaqi16sa5qywn1jqfw";
+  src = fetchFromGitHub {
+    owner = "ssgelm";
+    repo = "checkinstall";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JpfiESEdfPbPVkdzMgGBKnEmIIEHAp85GUts+Hu/psg=";
   };
 
   patches = [
+    # installwatch logs faccessat() and euidaccess() calls since 1.8.0, but
+    # the package file list only drops access() lines. Drop these too, or
+    # every program a shell checks before running it ends up in the package.
+    ./filter-access-family.patch
+
     # Include empty directories created by the installation script in
     # generated packages.  (E.g., if a `make install' does `mkdir
     # /var/lib/mystuff', then /var/lib/mystuff should be included in
     # the package.)
     ./empty-dirs.patch
 
-    # Implement the getxattr(), lgetxattr(), __open_2() and
-    # __open64_2() functions.  Needed for doing builds on Ubuntu 8.10.
-    ./missing-functions.patch
-
-    # Don't include directories in the Debian `conffiles' file.
-    ./etc-dirs.patch
-
-    # Support Glibc >= 2.8.
-    ./glibc-check.patch
-
-    # Fix a `conflicting types for 'scandir'' error on Glibc 2.11.
-    ./scandir.patch
-
-    # Fix a `conflicting types for 'readlink'' error since Glibc 2.19
-    ./readlink-types.patch
-
-    # Fix BuildRoot handling in RPM builds.
-    ./set-buildroot.patch
-
-    (fetchurl {
-      url = "https://salsa.debian.org/debian/checkinstall/-/raw/7175ae9de0e45f42fdd7f185ab9a12043d5efeeb/debian/patches/0016-Define-_STAT_VER-_MKNOD_VER-locally-dropped-in-glibc.patch";
-      hash = "sha256-InodEfvVMuN708yjXPrVXb+q8aUcyFhCLx35PHls0Eo=";
+    # Stop access() from copying the file it asks about into the package.
+    # Otherwise every tool `make install` runs ends up in the package.
+    # Remove when updating to 1.8.4 or later.
+    (fetchpatch {
+      name = "stop-access-materialising.patch";
+      url = "https://github.com/ssgelm/checkinstall/commit/f2538619907e73b7d7183b7775a456f28ced6579.patch";
+      hash = "sha256-g9TaRQDx4D75aBfrEXNkhUosqrkiZdBlPP2LMadIheo=";
     })
-  ]
+  ];
 
-  ++
-    lib.optional (stdenv.hostPlatform.system == "x86_64-linux")
-      # Force use of old memcpy so that installwatch works on Glibc <
-      # 2.14.
-      ./use-old-memcpy.patch;
-
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   hardeningDisable = [ "fortify" ];
 
-  preBuild = ''
-    makeFlagsArray=(PREFIX=$out)
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-    substituteInPlace checkinstall --replace /usr/local/lib/checkinstall $out/lib/checkinstall
-    substituteInPlace checkinstallrc-dist --replace /usr/local $out
+  postPatch = ''
+    patchShebangs tests
+    # The tests write their install scripts with heredocs, which patchShebangs
+    # doesn't handle. Their #!/bin/sh may be a static busybox, which installwatch
+    # cannot be LD_PRELOADed into.
+    substituteInPlace tests/tests/*.sh --replace-quiet '#!/bin/sh' '#!${runtimeShell}'
+
+    substituteInPlace checkinstallrc-dist \
+      --replace-fail /usr/local "$out"
 
     substituteInPlace installwatch/create-localdecls \
-      --replace /usr/include/unistd.h ${stdenv.cc.libc.dev}/include/unistd.h
+      --replace-fail /usr/include/unistd.h ${lib.getDev stdenv.cc.libc}/include/unistd.h
   '';
 
   postInstall =
@@ -74,14 +73,32 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "" $out/lib/installwatch.so
     '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    dpkg
+    file
+    util-linux
+    which
+  ];
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    sed "s|^BASE_TMP_DIR=/var/tmp|BASE_TMP_DIR=$TMPDIR|" \
+      $out/lib/checkinstall/checkinstallrc-dist > "$NIX_BUILD_TOP/checkinstallrc"
+
+    CHECKINSTALL_INSTALLED=$out CHECKINSTALL_RC="$NIX_BUILD_TOP/checkinstallrc" \
+      tests/run-tests.sh
+
+    runHook postInstallCheck
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    homepage = "https://checkinstall.izto.org/";
+    homepage = "https://github.com/ssgelm/checkinstall";
     description = "Tool for automatically generating Slackware, RPM or Debian packages when doing `make install`";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ philiptaron ];
     platforms = lib.platforms.linux;
-    license = lib.licenses.gpl2Plus;
-    knownVulnerabilities = [
-      "CVE-2020-25031"
-    ];
+    license = lib.licenses.gpl2Only;
   };
-}
+})
