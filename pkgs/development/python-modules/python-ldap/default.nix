@@ -64,6 +64,11 @@ buildPythonPackage (finalAttrs: {
     "test_tls_ext_noca"
   ];
 
+  disabledTestPaths = [
+    # flaky
+    "Tests/t_cext.py::TestLdapCExtension::test_simple_bind_fileno_invalid"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = {
