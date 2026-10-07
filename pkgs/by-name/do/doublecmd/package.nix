@@ -9,9 +9,13 @@
   lazarus,
   libx11,
   libsForQt5,
-  lua,
+  lua5_5,
   writableTmpDirAsHomeHook,
 }:
+
+let
+  lua = lua5_5;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
@@ -42,6 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   postPatch = ''
+    # Double Commander saves this default into the user's configuration, so use
+    # the symlink installed next to the executable instead of a store path.
+    substituteInPlace src/platform/lua.pas \
+      --replace-fail "LuaDLL = 'liblua5.1.so.0';" "LuaDLL = '%COMMANDER_PATH%/liblua.so';"
     patchShebangs build.sh install/linux/install.sh
     substituteInPlace build.sh \
       --replace-warn '$(which lazbuild)' '"${lazarus}/bin/lazbuild --lazarusdir=${lazarus}/share/lazarus"'
