@@ -8,6 +8,7 @@
 let
   # Type for a valid systemd unit option. Needed for correctly passing "timerConfig" to "systemd.timers"
   inherit (utils.systemdUtils.unitOptions) unitOption;
+  config' = config;
 in
 {
   options.services.restic.backups = lib.mkOption {
@@ -16,7 +17,7 @@ in
     '';
     type = lib.types.attrsOf (
       lib.types.submodule (
-        { name, ... }:
+        { name, config, ... }:
         {
           options = {
             passwordFile = lib.mkOption {
@@ -254,7 +255,7 @@ in
 
             runCheck = lib.mkOption {
               type = lib.types.bool;
-              default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
+              default = builtins.length config'.services.restic.backups.${name}.checkOpts > 0;
               defaultText = lib.literalExpression "builtins.length config.services.backups.${name}.checkOpts > 0";
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
@@ -318,7 +319,34 @@ in
               '';
               example = 0.1;
             };
+
+            generatedWrapper = lib.mkOption {
+              type = lib.types.package;
+              readOnly = true;
+              description = ''
+                Generated via createWrapper
+              '';
+            };
           };
+
+          config.generatedWrapper =
+            let
+              extraOptions = lib.concatMapStrings (arg: " -o ${arg}") config.extraOptions;
+              resticCmd = "${lib.getExe config.package}${extraOptions}";
+            in
+            pkgs.writeShellScriptBin "restic-${name}" ''
+              set -a  # automatically export variables
+              ${lib.optionalString (config.environmentFile != null) "source ${config.environmentFile}"}
+              # set same environment variables as the systemd service
+              ${lib.pipe config'.systemd.services."restic-backups-${name}".environment [
+                (lib.filterAttrs (n: v: v != null && n != "PATH"))
+                (lib.mapAttrs (_: v: "${v}"))
+                lib.toShellVars
+              ]}
+              PATH=${config'.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
+
+              exec ${resticCmd} "$@"
+            '';
         }
       )
     );
@@ -517,25 +545,8 @@ in
     ) (lib.filterAttrs (_: backup: backup.timerConfig != null) config.services.restic.backups);
 
     # generate wrapper scripts, as described in the createWrapper option
-    environment.systemPackages = lib.mapAttrsToList (
-      name: backup:
-      let
-        extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-        resticCmd = "${lib.getExe backup.package}${extraOptions}";
-      in
-      pkgs.writeShellScriptBin "restic-${name}" ''
-        set -a  # automatically export variables
-        ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
-        # set same environment variables as the systemd service
-        ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
-          (lib.filterAttrs (n: v: v != null && n != "PATH"))
-          (lib.mapAttrs (_: v: "${v}"))
-          lib.toShellVars
-        ]}
-        PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
-
-        exec ${resticCmd} "$@"
-      ''
-    ) (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
+    environment.systemPackages = lib.mapAttrsToList (_: backup: backup.generatedWrapper) (
+      lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups
+    );
   };
 }
