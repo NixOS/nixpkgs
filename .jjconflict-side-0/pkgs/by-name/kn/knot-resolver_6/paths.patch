@@ -1,0 +1,14 @@
+--- a/meson.build
++++ b/meson.build
+@@ -50,2 +50,3 @@
+-systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
+-systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
++systemd_work_dir  = '/var/lib/knot-resolver'
++systemd_cache_dir = '/var/cache/knot-resolver'
++run_dir = '/run/knot-resolver'
+
+--- a/python/knot_resolver/constants.py.in
++++ b/python/knot_resolver/constants.py.in
+@@ -12 +12 @@
+-ETC_DIR = Path("@etc_dir@")
++ETC_DIR = Path("/etc/knot-resolver")

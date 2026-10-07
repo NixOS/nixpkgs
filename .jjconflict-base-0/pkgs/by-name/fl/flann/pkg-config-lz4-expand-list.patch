@@ -1,0 +1,41 @@
+From 25eb56ec78472bd419a121c6905095a793cf8992 Mon Sep 17 00:00:00 2001
+From: Mike Purvis <mpurvis@clearpath.ai>
+Date: Fri, 9 Jul 2021 15:53:06 +0000
+Subject: [PATCH] Use string(JOIN) to avoid semicolons in pc file.
+
+---
+ CMakeLists.txt    | 3 ++-
+ cmake/flann.pc.in | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f4b94d25..aabf93ac 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 3.12)
+ 
+ if(COMMAND cmake_policy)
+     cmake_policy(SET CMP0003 NEW)
+@@ -148,7 +148,8 @@ endif(BUILD_CUDA_LIB)
+ 
+ find_package(PkgConfig REQUIRED)
+ pkg_check_modules(LZ4 REQUIRED liblz4)
+ include_directories(${LZ4_INCLUDE_DIRS})
++string(JOIN " " LZ4_STATIC_LDFLAGS_STR ${LZ4_STATIC_LDFLAGS})
+ 
+ #set the C/C++ include path to the "include" directory
+ include_directories(BEFORE ${PROJECT_SOURCE_DIR}/src/cpp)
+diff --git a/cmake/flann.pc.in b/cmake/flann.pc.in
+index 07b8d649..1e7673ac 100644
+--- a/cmake/flann.pc.in
++++ b/cmake/flann.pc.in
+@@ -8,6 +8,6 @@ Name: @PROJECT_NAME@
+ Description: @PKG_DESC@
+ Version: @FLANN_VERSION@
+ Requires: @PKG_EXTERNAL_DEPS@
+-Libs: -L${libdir} @LZ4_STATIC_LDFLAGS@ -lflann -lflann_cpp
++Libs: -L${libdir} @LZ4_STATIC_LDFLAGS_STR@ -lflann -lflann_cpp
+ Cflags: -I${includedir}
+ 

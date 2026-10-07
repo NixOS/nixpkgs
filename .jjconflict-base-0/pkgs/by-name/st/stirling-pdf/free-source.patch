@@ -1,0 +1,19 @@
+diff --git a/build.gradle b/build.gradle
+index caaa02a79b94..41c758901c54 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -483 +482,0 @@ subprojects {
+-            dependsOn(":proprietary:jar")
+@@ -679,3 +677,0 @@ dependencies {
+-    if (rootProject.ext.isSecurityDisabled()) {
+-        implementation project(':proprietary')
+-    }
+diff --git a/settings.gradle b/settings.gradle
+index 85b1c4520735..dfa1b92c4276 100644
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -89 +89 @@ gradle.ext.enableSaas = enableSaas
+-include 'stirling-pdf', 'common', 'proprietary'
++include 'stirling-pdf', 'common'
+@@ -93 +92,0 @@ project(':common'      ).projectDir = file('app/common')
+-project(':proprietary' ).projectDir = file('app/proprietary')

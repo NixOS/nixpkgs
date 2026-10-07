@@ -1,0 +1,26 @@
+diff --git a/PS2PatchElf/PS2PatchElf.csproj b/PS2PatchElf/PS2PatchElf.csproj
+index 3bfd30f..bb0c835 100644
+--- a/PS2PatchElf/PS2PatchElf.csproj
++++ b/PS2PatchElf/PS2PatchElf.csproj
+@@ -2,7 +2,7 @@
+
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+
+diff --git a/PS2PatchLib/PS2PatchLib.csproj b/PS2PatchLib/PS2PatchLib.csproj
+index 4de8048..8d2b232 100644
+--- a/PS2PatchLib/PS2PatchLib.csproj
++++ b/PS2PatchLib/PS2PatchLib.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <Nullable>enable</Nullable>
+   </PropertyGroup>
+

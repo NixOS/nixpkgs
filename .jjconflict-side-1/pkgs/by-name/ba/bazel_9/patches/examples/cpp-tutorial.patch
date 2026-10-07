@@ -1,0 +1,15 @@
+diff --git a/BUILD b/BUILD
+new file mode 100644
+index 0000000..e69de29
+diff --git a/MODULE.bazel b/MODULE.bazel
+index 4874ffc..f4e0d56 100644
+--- a/MODULE.bazel
++++ b/MODULE.bazel
+@@ -1 +1,6 @@
+ bazel_dep(name = "rules_cc", version = "0.0.17")
++single_version_override(
++    module_name = "rules_cc",
++    patches = [":rules_cc.patch"],
++    patch_strip = 1,
++)
+

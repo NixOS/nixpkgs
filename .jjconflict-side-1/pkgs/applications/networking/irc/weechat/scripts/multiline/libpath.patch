@@ -1,0 +1,9 @@
+diff --git a/multiline.pl b/multiline.pl
+index 54474d4..42fbef8 100644
+--- a/multiline.pl
++++ b/multiline.pl
+@@ -1,3 +1,4 @@
++use lib '@env@/lib/perl5/site_perl';
+ use strict; use warnings;
+ $INC{'Encode/ConfigLocal.pm'}=1;
+ require Encode;

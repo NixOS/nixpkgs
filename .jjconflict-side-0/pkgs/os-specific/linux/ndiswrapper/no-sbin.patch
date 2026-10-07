@@ -1,0 +1,11 @@
+--- a/driver/Makefile
++++ b/driver/Makefile
+@@ -191,7 +191,7 @@ clean:
+ 	rm -rf .tmp_versions
+ 
+ install: config_check $(MODULE)
+-	@/sbin/modinfo $(MODULE) | grep -q "^vermagic: *$(KVERS) " || \
++	@modinfo $(MODULE) | grep -q "^vermagic: *$(KVERS) " || \
+ 		{ echo "$(MODULE)" is not for Linux $(KVERS); exit 1; }
+ 	mkdir -p -m 755 $(DESTDIR)$(INST_DIR)
+ 	install -m 0644 $(MODULE) $(DESTDIR)$(INST_DIR)

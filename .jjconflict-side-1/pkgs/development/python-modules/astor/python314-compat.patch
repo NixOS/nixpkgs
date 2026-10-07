@@ -1,0 +1,99 @@
+From d0b5563cc1e263f08df9312d89a7691167448f4d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Micha=C5=82=20G=C3=B3rny?= <mgorny@gentoo.org>
+Date: Wed, 14 May 2025 19:52:30 +0200
+Subject: [PATCH] Fix compatibility with Python 3.14 (mostly)
+
+Fix the code and the test suite to work with Python 3.14, where
+deprecated constant-like AST nodes were removed. Notably:
+
+1. Skip tests for deprecated nodes in Python 3.14.
+
+2. Use `ast.Constant` over `ast.Num` for non-deprecated code
+   in Python 3.6+.
+
+3. Check for `ast.Str` only in Python < 3.14, and handle `ast.Constant`
+   being used to represent a string instead.
+
+With these changes, all tests except for:
+
+    tests/test_rtrip.py::RtripTestCase::test_convert_stdlib
+
+pass. However, this particular test also hanged for me with older Python
+versions.
+
+Related to #217
+---
+ astor/code_gen.py      |  9 +++++++--
+ tests/test_code_gen.py | 11 ++++++++---
+ 2 files changed, 15 insertions(+), 5 deletions(-)
+
+diff --git a/astor/code_gen.py b/astor/code_gen.py
+index b2bae12..4330f49 100644
+--- a/astor/code_gen.py
++++ b/astor/code_gen.py
+@@ -692,6 +692,7 @@ def _handle_string_constant(self, node, value, is_joined=False):
+         current_line = ''.join(current_line)
+ 
+         has_ast_constant = sys.version_info >= (3, 6)
++        has_ast_str = sys.version_info < (3, 14)
+ 
+         if is_joined:
+             # Handle new f-strings.  This is a bit complicated, because
+@@ -700,7 +701,7 @@ def _handle_string_constant(self, node, value, is_joined=False):
+ 
+             def recurse(node):
+                 for value in node.values:
+-                    if isinstance(value, ast.Str):
++                    if has_ast_str and isinstance(value, ast.Str):
+                         # Double up braces to escape them.
+                         self.write(value.s.replace('{', '{{').replace('}', '}}'))
+                     elif isinstance(value, ast.FormattedValue):
+@@ -713,7 +714,11 @@ def recurse(node):
+                                 self.write(':')
+                                 recurse(value.format_spec)
+                     elif has_ast_constant and isinstance(value, ast.Constant):
+-                        self.write(value.value)
++                        if isinstance(value.value, str):
++                            # Double up braces to escape them.
++                            self.write(value.value.replace('{', '{{').replace('}', '}}'))
++                        else:
++                            self.write(value.value)
+                     else:
+                         kind = type(value).__name__
+                         assert False, 'Invalid node %s inside JoinedStr' % kind
+diff --git a/tests/test_code_gen.py b/tests/test_code_gen.py
+index e828eb9..1825030 100644
+--- a/tests/test_code_gen.py
++++ b/tests/test_code_gen.py
+@@ -28,7 +28,10 @@ def astorexpr(x):
+     return eval(astor.to_source(ast.Expression(body=x)))
+ 
+ def astornum(x):
+-    return astorexpr(ast.Num(n=x))
++    if sys.version_info >= (3, 6):
++        return astorexpr(ast.Constant(x))
++    else:
++        return astorexpr(ast.Num(n=x))
+ 
+ class Comparisons(object):
+ 
+@@ -515,8 +518,8 @@ def test_deprecated_constants_as_name(self):
+             ast.Assign(targets=[ast.Name(id='spam')], value=ast.Name(id='None')),
+             "spam = None")
+ 
+-    @unittest.skipUnless(sys.version_info >= (3, 4),
+-                         "ast.NameConstant introduced in Python 3.4")
++    @unittest.skipUnless((3, 4) <= sys.version_info < (3, 14),
++                         "ast.NameConstant introduced in Python 3.4, removed in 3.14")
+     def test_deprecated_name_constants(self):
+         self.assertAstEqualsSource(
+             ast.Assign(targets=[ast.Name(id='spam')], value=ast.NameConstant(value=True)),
+@@ -530,6 +533,8 @@ def test_deprecated_name_constants(self):
+             ast.Assign(targets=[ast.Name(id='spam')], value=ast.NameConstant(value=None)),
+             "spam = None")
+ 
++    @unittest.skipIf(sys.version_info >= (3, 14),
++                     "Deprecated Constant nodes removed in Python 3.14")
+     def test_deprecated_constant_nodes(self):
+         self.assertAstEqualsSource(
+             ast.Assign(targets=[ast.Name(id='spam')], value=ast.Num(3)),

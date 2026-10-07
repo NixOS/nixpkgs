@@ -1,0 +1,13 @@
+diff --git a/sh/helpers.sh b/sh/helpers.sh
+index fef8691..229d38f 100644
+--- a/sh/helpers.sh
++++ b/sh/helpers.sh
+@@ -73,7 +73,7 @@ is_anim_image() {
+ chafa_run() {
+ 	format='-f symbols'
+ 	autochafa && format=
+-	chafasixel && format='-f sixels'
++	chafasixel && format='-f sixels --polite on'
+ 	chafa -s "${w}x${h}" $format "$1" | sed 's/#/\n#/g'
+ }
+ 

@@ -1,0 +1,54 @@
+{
+  stdenv,
+  lib,
+  gfortran,
+  fetchFromGitHub,
+  cmake,
+  blas,
+  lapack,
+  python3Packages,
+}:
+
+assert blas.isILP64 == lapack.isILP64;
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "mopac";
+  version = "23.2.5";
+
+  src = fetchFromGitHub {
+    owner = "openmopac";
+    repo = "mopac";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/A/JmXdTlnQjTCfuph0jth6p9TA28KQmHwmd/P2L/ao=";
+  };
+
+  nativeBuildInputs = [
+    gfortran
+    cmake
+  ];
+
+  buildInputs = [
+    blas
+    lapack
+  ];
+
+  checkInputs = with python3Packages; [
+    python
+    numpy
+  ];
+
+  doCheck = true;
+
+  meta = {
+    description = "Semiempirical quantum chemistry";
+    homepage = "https://github.com/openmopac/mopac";
+    # also mopac-makpol, mopac-param
+    mainProgram = "mopac";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      sheepforce
+      markuskowa
+    ];
+  };
+})

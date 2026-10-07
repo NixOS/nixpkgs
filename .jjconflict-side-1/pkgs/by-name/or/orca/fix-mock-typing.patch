@@ -1,0 +1,64 @@
+diff --git a/tests/unit_tests/test_dbus_service.py b/tests/unit_tests/test_dbus_service.py
+index bf8cab8a7..0db3afd60 100644
+--- a/tests/unit_tests/test_dbus_service.py
++++ b/tests/unit_tests/test_dbus_service.py
+@@ -59,6 +59,7 @@ class TestDBusService:
+         external_modules = [
+             "gi",
+             "gi.repository",
++            "gi.repository.Atspi",
+             "dasbus",
+             "dasbus.connection",
+             "dasbus.error",
+@@ -96,8 +97,16 @@ class TestDBusService:
+                 """Unpack the variant value."""
+                 return self._value
+ 
+-        essential_modules["gi.repository"].GLib = test_context.Mock()
+-        essential_modules["gi.repository"].GLib.Variant = MockGLibVariant
++        gi_repository_mock = essential_modules["gi.repository"]
++        gi_repository_mock.GLib = test_context.Mock()
++        gi_repository_mock.GLib.Variant = MockGLibVariant
++
++        class Fake():
++            pass
++
++        atspi_mock = essential_modules["gi.repository.Atspi"]
++        atspi_mock.Accessible = Fake
++        gi_repository_mock.Atspi = atspi_mock
+ 
+         class MockPublishable:
+             """Mock Publishable base class for inheritance."""
+
+
+Taken from https://gitlab.gnome.org/GNOME/orca/-/commit/20340d2075a34721aa6af46507d02525f3eac5f5
+
+diff --git a/src/orca/ax_utilities_application.py b/src/orca/ax_utilities_application.py
+index 2edcabf11..d59b8ae9e 100644
+--- a/src/orca/ax_utilities_application.py
++++ b/src/orca/ax_utilities_application.py
+@@ -21,6 +21,7 @@
+ 
+ """Utilities for accessible applications."""
+ 
++from __future__ import annotations
+ import gi
+ 
+ gi.require_version("Atspi", "2.0")
+
+
+Taken from https://gitlab.gnome.org/GNOME/orca/-/commit/6c18ba002c6fac3fb80a10791b0daab6ea85f072
+
+diff --git a/src/orca/ax_event_synthesizer.py b/src/orca/ax_event_synthesizer.py
+index 4b999ef75..cb0f0e31a 100644
+--- a/src/orca/ax_event_synthesizer.py
++++ b/src/orca/ax_event_synthesizer.py
+@@ -22,6 +22,8 @@
+ 
+ """Provides support for synthesizing accessible input events."""
+ 
++from __future__ import annotations
++
+ import gi
+ 
+ gi.require_version("Atspi", "2.0")

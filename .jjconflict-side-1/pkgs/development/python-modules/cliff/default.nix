@@ -1,0 +1,57 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  autopage,
+  cmd2_4,
+  openstackdocstheme,
+  pbr,
+  prettytable,
+  pyyaml,
+  stevedore,
+  sphinxHook,
+  callPackage,
+}:
+
+buildPythonPackage rec {
+  pname = "cliff";
+  version = "4.16.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-hTFK1JvWL5ClEJTU4xsctNO5L7g8s5Ne66AjbDKDnnU=";
+  };
+
+  build-system = [
+    openstackdocstheme
+    pbr
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
+    autopage
+    cmd2_4
+    prettytable
+    pyyaml
+    stevedore
+  ];
+
+  # check in passthru.tests.pytest to escape infinite recursion with stestr
+  doCheck = false;
+
+  pythonImportsCheck = [ "cliff" ];
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
+
+  meta = {
+    description = "Command Line Interface Formulation Framework";
+    homepage = "https://github.com/openstack/cliff";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
+  };
+}

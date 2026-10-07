@@ -1,0 +1,67 @@
+From 4f5148dc85d06ca934d571d1401f6e69b8ad07de Mon Sep 17 00:00:00 2001
+From: R0ttCyph3r <146866845+R0ttCyph3r@users.noreply.github.com>
+Date: Mon, 3 Jun 2024 16:48:25 +0530
+Subject: [PATCH] Update loader.py
+
+As of python 3.12 imp module is depreciated and removed so wfuzz gives error for that
+
+### Summary of Changes:
+- Replaced `imp.find_module` and `imp.load_module` with `importlib.util.spec_from_file_location` and `importlib.util.module_from_spec`.
+- Updated the `_load_py_from_file` method to use `importlib` for loading the modules.
+---
+ src/wfuzz/externals/moduleman/loader.py | 26 +++++++++----------------
+ 1 file changed, 9 insertions(+), 17 deletions(-)
+
+diff --git a/src/wfuzz/externals/moduleman/loader.py b/src/wfuzz/externals/moduleman/loader.py
+index 4e7d81c8ebc683f97ba1f9c953cf1e69eb5bbac7..26e7f581895e531cbb754e61e31753a72ca2e7e2 100644
+--- a/src/wfuzz/externals/moduleman/loader.py
++++ b/src/wfuzz/externals/moduleman/loader.py
+@@ -1,6 +1,6 @@
+ import inspect
+ import logging
+-import imp
++import importlib.util
+ import os.path
+ 
+ 
+@@ -52,32 +52,24 @@ class FileLoader(IModuleLoader):
+         """
+         self.__logger.debug("__load_py_from_file. START, file=%s" % (filename,))
+ 
+-        dirname, filename = os.path.split(filename)
+-        fn = os.path.splitext(filename)[0]
+-        exten_file = None
+-        module = None
++        module_name = os.path.splitext(os.path.basename(filename))[0]
+ 
+         try:
+-            exten_file, filename, description = imp.find_module(fn, [dirname])
+-            module = imp.load_module(fn, exten_file, filename, description)
++            spec = importlib.util.spec_from_file_location(module_name, filename)
++            if spec and spec.loader:
++                module = importlib.util.module_from_spec(spec)
++                spec.loader.exec_module(module)
++            else:
++                raise ImportError(f"Could not load spec for {filename}")
+         except ImportError as msg:
+             self.__logger.critical(
+                 "__load_py_from_file. Filename: %s Exception, msg=%s" % (filename, msg)
+             )
+-            # raise msg
+-            pass
++            return
+         except SyntaxError as msg:
+-            # incorrect python syntax in file
+             self.__logger.critical(
+                 "__load_py_from_file. Filename: %s Exception, msg=%s" % (filename, msg)
+             )
+-            # raise msg
+-            pass
+-        finally:
+-            if exten_file:
+-                exten_file.close()
+-
+-        if module is None:
+             return
+ 
+         for objname in dir(module):

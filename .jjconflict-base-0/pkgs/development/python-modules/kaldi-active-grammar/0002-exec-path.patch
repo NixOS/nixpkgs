@@ -1,0 +1,34 @@
+diff --git a/kaldi_active_grammar/utils.py b/kaldi_active_grammar/utils.py
+index 823f997..3850336 100644
+--- a/kaldi_active_grammar/utils.py
++++ b/kaldi_active_grammar/utils.py
+@@ -79,7 +79,7 @@ elif sys.platform.startswith('linux'): platform = 'linux'
+ elif sys.platform.startswith('darwin'): platform = 'macos'
+ else: raise KaldiError("unknown sys.platform")
+ 
+-exec_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'exec', platform)
++exec_dir = '/'
+ 
+ import ush
+ 
+@@ -87,13 +87,13 @@ class ExternalProcess(object):
+ 
+     shell = ush.Shell(raise_on_error=True)
+ 
+-    fstcompile = shell(os.path.join(exec_dir, 'fstcompile'))
+-    fstarcsort = shell(os.path.join(exec_dir, 'fstarcsort'))
+-    fstaddselfloops = shell(os.path.join(exec_dir, 'fstaddselfloops'))
+-    fstinfo = shell(os.path.join(exec_dir, 'fstinfo'))
+-    # compile_graph = shell(os.path.join(exec_dir, 'compile-graph'))
+-    compile_graph_agf = shell(os.path.join(exec_dir, 'compile-graph-agf'))
+-    # compile_graph_agf_debug = shell(os.path.join(exec_dir, 'compile-graph-agf-debug'))
++    fstcompile = shell('fstcompile')
++    fstarcsort = shell('fstarcsort')
++    fstaddselfloops = shell('fstaddselfloops')
++    fstinfo = shell('fstinfo')
++    # compile_graph = shell('compile-graph')
++    compile_graph_agf = shell('compile-graph-agf')
++    # compile_graph_agf_debug = shell('compile-graph-agf-debug')
+ 
+     make_lexicon_fst = shell([sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), 'kaldi', 'make_lexicon_fst%s.py' % ('_py2' if PY2 else ''))])
+ 

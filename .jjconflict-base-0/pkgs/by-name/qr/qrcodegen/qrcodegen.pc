@@ -1,0 +1,9 @@
+prefix=@out@
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: @pname@
+Description: High-quality QR Code generator library in many languages
+Version: @version@
+Cflags: -I${includedir}/qrcodegen
+Libs: -L${libdir} -lqrcodegen

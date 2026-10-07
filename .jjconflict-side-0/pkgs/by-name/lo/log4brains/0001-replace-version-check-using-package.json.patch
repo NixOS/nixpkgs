@@ -1,0 +1,40 @@
+From 6a8571098024d1eb69efaae1f1622b3a91417b5f Mon Sep 17 00:00:00 2001
+From: tropf <tropf@users.noreply.github.com>
+Date: Tue, 26 Aug 2025 15:08:07 +0200
+Subject: [PATCH 1/2] replace version check using package.json
+
+In the distributed (nix) version, package.json is not available under
+the expected path. As nix can inject the version during build time, this
+patch removes the reference to package.json, and injects a marker for
+the version to be replaced during the patchPhase.
+---
+ packages/web/nextjs/next.config.js | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/packages/web/nextjs/next.config.js b/packages/web/nextjs/next.config.js
+index 9b2b364..db9d680 100644
+--- a/packages/web/nextjs/next.config.js
++++ b/packages/web/nextjs/next.config.js
+@@ -5,10 +5,6 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
+   enabled: process.env.ANALYZE === "true"
+ });
+ 
+-const packageJson = require(`${
+-  fs.existsSync(path.join(__dirname, "package.json")) ? "./" : "../"
+-}package.json`);
+-
+ module.exports = withBundleAnalyzer({
+   reactStrictMode: true,
+   target: "serverless",
+@@ -16,7 +12,7 @@ module.exports = withBundleAnalyzer({
+   trailingSlash: true,
+   serverRuntimeConfig: {
+     PROJECT_ROOT: __dirname, // https://github.com/vercel/next.js/issues/8251
+-    VERSION: packageJson.version
++    VERSION: "@NIX_LOG4BRAINS_VERSION@",
+   },
+   webpack(config, { webpack, buildId }) {
+     // For cache invalidation purpose (thanks https://github.com/vercel/next.js/discussions/14743)
+-- 
+2.50.1
+

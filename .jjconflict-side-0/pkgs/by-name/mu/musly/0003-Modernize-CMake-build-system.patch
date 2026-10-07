@@ -1,0 +1,151 @@
+From 8abe6385e433b44c43134b4deef208c7498ab0d7 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Sat, 3 Aug 2024 12:21:12 +0100
+Subject: [PATCH 3/4] Modernize CMake build system
+
+Use GNUInstallDirs, CTest, and FindPkgConfig.
+---
+ .travis.yml             |  2 +-
+ CMakeLists.txt          | 25 +++++++++++--------------
+ libmusly/CMakeLists.txt | 11 +++--------
+ musly/CMakeLists.txt    |  6 +-----
+ 4 files changed, 16 insertions(+), 28 deletions(-)
+
+diff --git a/.travis.yml b/.travis.yml
+index 8556b26..b051004 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -19,7 +19,7 @@ matrix:
+ script:
+     - mkdir -p build
+     - cd build
+-    - cmake -DBUILD_TEST=ON ..
++    - cmake ..
+     - make -j
+     - ctest -V
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4fab4ab..8d8bf0e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,9 +4,11 @@
+ # (c) 2013-2014, Dominik Schnitzer <dominik@schnitzer.at>
+ #          2014, Jan Schlueter <jan.schlueter@ofai.at>
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.17)
+ 
+ project(musly)
++include(GNUInstallDirs)
++include(CTest)
+ set(MUSLY_VERSION "0.2")
+ add_definitions(-DMUSLY_VERSION="${MUSLY_VERSION}")
+ 
+@@ -36,8 +38,6 @@ else ()
+     set(BUILD_SHARED_LIBS ON)
+ endif ()
+ 
+-option(BUILD_TEST "Build selftest executable" OFF)
+-
+ option(USE_OPENMP "Compile with OpenMP support (Parallelization)" OFF)
+ if (USE_OPENMP)
+     find_package(OpenMP)
+@@ -54,26 +54,23 @@ if (USE_OPENMP)
+     endif()
+ endif ()
+ 
+-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+-
+-find_package(Eigen3 REQUIRED)
+-find_package(LibAV 0.8 COMPONENTS avcodec avformat avutil REQUIRED)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(EIGEN3 REQUIRED IMPORTED_TARGET eigen3)
++pkg_check_modules(FFMPEG REQUIRED IMPORTED_TARGET
++    libavcodec
++    libavformat
++    libavutil)
+ 
+ include_directories(
+-    "${PROJECT_BINARY_DIR}"
+     "${PROJECT_SOURCE_DIR}/include")
+ 
+ add_subdirectory(libmusly) 
+ add_subdirectory(musly) 
+ add_subdirectory(include) 
+-if (BUILD_TEST)
+-    enable_testing()
++if (BUILD_TESTING)
+     add_subdirectory(test)
+ endif ()
+ 
+ # Documentation
+ set(musly_DOC_FILES AUTHORS COPYING README.md)
+-set(musly_DOC_PATH "share/doc/musly")
+-install(FILES ${musly_DOC_FILES}
+-        DESTINATION ${musly_DOC_PATH})
+-
++install(FILES ${musly_DOC_FILES} DESTINATION ${CMAKE_INSTALL_DOCDIR})
+diff --git a/libmusly/CMakeLists.txt b/libmusly/CMakeLists.txt
+index 98151df..b9f6d11 100644
+--- a/libmusly/CMakeLists.txt
++++ b/libmusly/CMakeLists.txt
+@@ -4,9 +4,6 @@
+ # (c) 2013-2014, Dominik Schnitzer <dominik@schnitzer.at>
+ #     2014-2016, Jan Schlueter <jan.schlueter@ofai.at>
+ 
+-add_subdirectory(
+-    libresample)
+-
+ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external")
+     add_subdirectory(
+         external)
+@@ -24,8 +21,6 @@ endif()
+ 
+ include_directories(
+     ${LIBMUSLY_INCLUDE}
+-    ${EIGEN3_INCLUDE_DIR}
+-    ${LIBAV_INCLUDE_DIRS}
+     ${CMAKE_CURRENT_SOURCE_DIR})
+ 
+ add_library(libmusly
+@@ -60,7 +55,8 @@ set_target_properties(libmusly
+ 
+ target_link_libraries(libmusly
+     ${LIBMUSLY_LIBS}
+-    ${LIBAV_LIBRARIES})
++    PkgConfig::EIGEN3
++    PkgConfig::FFMPEG)
+ if(WIN32 OR MINGW)
+     # link against winsock2 for ntohl() and htonl()
+     target_link_libraries(libmusly ws2_32)
+@@ -69,5 +65,4 @@ endif()
+ set_target_properties(libmusly
+     PROPERTIES PREFIX "")
+ 
+-install(TARGETS libmusly
+-    DESTINATION lib)
++install(TARGETS libmusly)
+diff --git a/musly/CMakeLists.txt b/musly/CMakeLists.txt
+index 88d153b..846ed2c 100644
+--- a/musly/CMakeLists.txt
++++ b/musly/CMakeLists.txt
+@@ -3,10 +3,6 @@
+ 
+ # (c) 2013, Dominik Schnitzer <dominik@schnitzer.at>
+ 
+-include_directories(
+-    ${EIGEN3_INCLUDE_DIR})
+-
+-
+ add_executable(musly
+     tools.cpp
+     fileiterator.cpp
+@@ -17,4 +13,4 @@ add_executable(musly
+ target_link_libraries(musly
+     libmusly)
+ 
+-install(TARGETS musly DESTINATION bin)
++install(TARGETS musly)
+-- 
+2.45.2
+

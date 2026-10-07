@@ -1,0 +1,89 @@
+diff --git a/test/Unit/lit.cfg.py b/test/Unit/lit.cfg.py
+index e426e0e..303f7cf 100644
+--- a/test/Unit/lit.cfg.py
++++ b/test/Unit/lit.cfg.py
+@@ -3,6 +3,7 @@
+ # Configuration file for the 'lit' test runner.
+ 
+ import os
++import platform
+ import subprocess
+ 
+ import lit.formats
+@@ -64,6 +65,31 @@ if sys.platform in ["win32", "cygwin"] and os.path.isdir(config.shlibdir):
+ if sys.platform == "win32" and "SYSTEMDRIVE" in os.environ:
+     config.environment["SYSTEMDRIVE"] = os.environ["SYSTEMDRIVE"]
+ 
++# Add the LLVM dynamic libs to the platform-specific loader search path env var:
++#
++# TODO: this is copied from `clang`'s `lit.cfg.py`; should unify..
++def find_shlibpath_var():
++    if platform.system() in ["Linux", "FreeBSD", "NetBSD", "OpenBSD", "SunOS"]:
++        yield "LD_LIBRARY_PATH"
++    elif platform.system() == "Darwin":
++        yield "DYLD_LIBRARY_PATH"
++    elif platform.system() == "Windows":
++        yield "PATH"
++    elif platform.system() == "AIX":
++        yield "LIBPATH"
++
++
++for shlibpath_var in find_shlibpath_var():
++    shlibpath = os.path.pathsep.join(
++        (config.shlibdir, config.environment.get(shlibpath_var, ""))
++    )
++    config.environment[shlibpath_var] = shlibpath
++    break
++else:
++    lit_config.warning(
++        "unable to inject shared library path on '{}'".format(platform.system())
++    )
++
+ # The unit tests on z/OS need auto-conversion turned on.
+ if sys.platform == "zos":
+     config.environment["_BPXK_AUTOCVT"] = "ON"
+diff --git a/test/lit.cfg.py b/test/lit.cfg.py
+index a320ddc..7d24e5e 100644
+--- a/test/lit.cfg.py
++++ b/test/lit.cfg.py
+@@ -101,6 +101,29 @@ llvm_config.with_environment("PATH", config.llvm_tools_dir, append_path=True)
+ # Propagate some variables from the host environment.
+ llvm_config.with_system_environment(["HOME", "INCLUDE", "LIB", "TMP", "TEMP"])
+ 
++# Add the LLVM dynamic libs to the platform-specific loader search path env var:
++#
++# TODO: this is copied from `clang`'s `lit.cfg.py`; should unify..
++def find_shlibpath_var():
++    if platform.system() in ["Linux", "FreeBSD", "NetBSD", "OpenBSD", "SunOS"]:
++        yield "LD_LIBRARY_PATH"
++    elif platform.system() == "Darwin":
++        yield "DYLD_LIBRARY_PATH"
++    elif platform.system() == "Windows":
++        yield "PATH"
++    elif platform.system() == "AIX":
++        yield "LIBPATH"
++
++
++for shlibpath_var in find_shlibpath_var():
++    shlibpath = config.llvm_shlib_dir
++    llvm_config.with_environment(shlibpath_var, shlibpath, append_path=True)
++    break
++else:
++    lit_config.warning(
++        "unable to inject shared library path on '{}'".format(platform.system())
++    )
++
+ 
+ # Set up OCAMLPATH to include newly built OCaml libraries.
+ top_ocaml_lib = os.path.join(config.llvm_lib_dir, "ocaml")
+@@ -609,7 +632,9 @@ def have_cxx_shared_library():
+ 
+     try:
+         readobj_cmd = subprocess.Popen(
+-            [readobj_exe, "--needed-libs", readobj_exe], stdout=subprocess.PIPE
++            [readobj_exe, "--needed-libs", readobj_exe],
++            stdout=subprocess.PIPE,
++            env=config.environment,
+         )
+     except OSError:
+         print("could not exec llvm-readobj")

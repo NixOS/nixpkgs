@@ -1,0 +1,50 @@
+From 38e9742ed794febbc8caa4177df14d097607a2d9 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 5 Oct 2025 12:45:25 +0200
+Subject: [PATCH 1/2] localedata: allow reproducible & parallel install of
+ locale-archive
+
+The problem with the current approach is that N processes are compiling
+a locale and updating the locale-archive at the same time. Hence,
+there's a race which process gets to update the archive first and thus
+the build is not reproducible[1].
+
+This patch changes that by adding the `--no-archive` flag to the
+`$(LOCALEDEF)` invocation in `build-one-locale` to parallelize the build
+process in a race-free manner. A single `localedef --add-to-archive`
+then adds all previously built locales to the archive.
+
+[1] https://github.com/NixOS/nixpkgs/issues/245360
+---
+ localedata/Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/localedata/Makefile b/localedata/Makefile
+index 01b32348d4..13f7d3a2c4 100644
+--- a/localedata/Makefile
++++ b/localedata/Makefile
+@@ -538,8 +538,13 @@ LOCALEDEF=I18NPATH=. GCONV_PATH=$(common-objpfx)iconvdata LC_ALL=C \
+ $(rtld-prefix) $(common-objpfx)locale/localedef
+ install-locales: install-locale-archive
+ 
++define install-all-locales
++  $(LOCALEDEF) $$flags --add-to-archive `find $(inst_complocaledir) -maxdepth 1 -mindepth 1 -type d | sort`
++endef
++
+ # Create and install the locale-archive file.
+ install-locale-archive: $(INSTALL-SUPPORTED-LOCALE-ARCHIVE)
++	$(install-all-locales)
+ # Create and install the locales individually (no archive).
+ install-locale-files: $(INSTALL-SUPPORTED-LOCALE-FILES)
+ 
+@@ -565,6 +570,7 @@ define build-one-locale
+ 	$(LOCALEDEF) $$flags --alias-file=../intl/locale.alias \
+ 		     -i locales/$$input -f charmaps/$$charset \
+ 		     $(addprefix --prefix=,$(install_root)) $$locale \
++		     --no-archive \
+ 	&& echo ' done';
+ endef
+ 
+-- 
+2.50.1
+

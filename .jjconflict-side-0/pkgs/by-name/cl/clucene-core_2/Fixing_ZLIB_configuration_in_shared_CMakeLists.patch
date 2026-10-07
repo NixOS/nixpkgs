@@ -1,0 +1,20 @@
+From 772481ca94071ddfe65102a451926e4f9aeb4d2c Mon Sep 17 00:00:00 2001
+From: Veit Jahns <idolum@users.sourceforge.net>
+Date: Thu, 26 May 2011 13:35:28 +0200
+Subject: [PATCH] Fixing ZLIB configuration in shared's CMakeLists
+
+---
+ src/shared/CMakeLists.txt |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/src/shared/CMakeLists.txt
++++ b/src/shared/CMakeLists.txt
+@@ -42,7 +42,7 @@ INCLUDE (CheckAtomicFunctions)
+ find_package(ZLIB)
+ IF ( ZLIB_FOUND )
+   SET ( EXTRA_LIBS ${EXTRA_LIBS} ${ZLIB_LIBRARY} )
+-ELSEIF ( ZLIB_FOUND )
++ELSE ( ZLIB_FOUND )
+   MESSAGE( "ZLIB not found, using local: ${clucene-ext_SOURCE_DIR}/zlib" )
+   SET(ZLIB_INCLUDE_DIR ${clucene-ext_SOURCE_DIR}/zlib )
+   SET(ZLIB_LIBRARY ${clucene-ext_BINARY_DIR})

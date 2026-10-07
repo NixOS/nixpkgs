@@ -1,0 +1,64 @@
+--- a/src/common/utils/electron.ts
++++ b/src/common/utils/electron.ts
+@@ -24,15 +24,15 @@
+  * 复制文本到剪贴板
+  * @param str
+  */
+-export const clipboardWriteText = (str: string) => {
+-  clipboard.writeText(str)
++export const clipboardWriteText = (str: string) => {
++  void clipboard.writeText(str)
+ }
+ 
+ /**
+  * 从剪贴板读取文本
+  * @returns
+  */
+-export const clipboardReadText = (): string => {
++export const clipboardReadText = async (): Promise<string> => {
+   return clipboard.readText()
+ }
+ 
+--- a/src/renderer/views/List/MusicList/components/SearchList.vue
++++ b/src/renderer/views/List/MusicList/components/SearchList.vue
+@@ -196,8 +196,8 @@
+       } else return
+       this.$refs.dom_scrollContainer.scrollTo(0, top)
+     },
+-    handleContextMenu() {
+-      let str = clipboardReadText()
++    async handleContextMenu() {
++      let str = await clipboardReadText()
+       str = str.trim()
+       str = str.replace(/\t|\r\n|\n|\r/g, ' ')
+       str = str.replace(/\s+/g, ' ')
+--- a/src/renderer/components/material/SearchInput.vue
++++ b/src/renderer/components/material/SearchInput.vue
+@@ -179,8 +179,8 @@
+         this.selectIndex = -1
+       }
+     },
+-    handleContextMenu() {
+-      let str = clipboardReadText()
++    async handleContextMenu() {
++      let str = await clipboardReadText()
+       str = str.trim()
+       str = str.replace(/\t|\r\n|\n|\r/g, ' ')
+       str = str.replace(/\s+/g, ' ')
+--- a/src/renderer/components/base/Input.vue
++++ b/src/renderer/components/base/Input.vue
+@@ -65,12 +65,12 @@
+     focus() {
+       this.$refs.dom_input.focus()
+     },
+-    handleContextMenu(event) {
++    async handleContextMenu(event) {
+       if (this.stopContentEventPropagation) event.stopPropagation()
+       if (!this.autoPaste) return
+       let dom_input = this.$refs.dom_input
+       if (dom_input.selectionStart === null) return
+-      let str = clipboardReadText()
++      let str = await clipboardReadText()
+       str = str.trim()
+       str = str.replace(/\t|\r\n|\n|\r/g, ' ')
+       str = str.replace(/\s+/g, ' ')

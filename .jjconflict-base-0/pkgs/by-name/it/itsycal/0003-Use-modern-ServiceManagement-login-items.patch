@@ -1,0 +1,116 @@
+From d3d2dd9ce8b566496503c38158199432a5ae87bb Mon Sep 17 00:00:00 2001
+From: 4evy <git@evy.pink>
+Date: Sat, 11 Jul 2026 01:12:47 +0300
+Subject: [PATCH 3/4] Use modern ServiceManagement login items
+
+LSSharedFileList was deprecated in macOS 10.11 and its status lookup can fail
+when disconnected network volumes are present. Nixpkgs now targets macOS 14,
+so no legacy fallback is needed.
+
+Use SMAppService.mainAppService, available since macOS 13. Treat
+RequiresApproval as registered so users can still turn the pending login item
+off. The package signs the complete app bundle after fixup, as required by
+ServiceManagement.
+---
+ Itsycal/MoLoginItem.m    | 58 +++++++---------------------------------
+ Itsycal/PrefsGeneralVC.m | 12 +--------
+ 2 files changed, 11 insertions(+), 59 deletions(-)
+
+diff --git a/Itsycal/MoLoginItem.m b/Itsycal/MoLoginItem.m
+index 7efa602..0dc4960 100644
+--- a/Itsycal/MoLoginItem.m
++++ b/Itsycal/MoLoginItem.m
+@@ -4,60 +4,22 @@
+ //
+ 
+ #import "MoLoginItem.h"
+-
+-// LSSharedFileList API was deprecated in macOS 10.11
+-#pragma clang diagnostic push
+-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
++#import <ServiceManagement/ServiceManagement.h>
+ 
+ BOOL MOIsLoginItemEnabled(void)
+ {
+-    BOOL isEnabled = NO;
+-    NSString *appPath = [[NSBundle mainBundle] bundlePath];
+-    LSSharedFileListRef loginItemsRef = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+-
+-    if (loginItemsRef) {
+-        UInt32 seedValue;
+-        NSArray *loginItems = CFBridgingRelease(LSSharedFileListCopySnapshot(loginItemsRef, &seedValue));
+-        for (id item in loginItems) {
+-            LSSharedFileListItemRef itemRef = (__bridge LSSharedFileListItemRef)item;
+-            NSURL *pathURL = CFBridgingRelease(LSSharedFileListItemCopyResolvedURL(itemRef, 0, NULL));
+-            if (pathURL && [pathURL.path hasPrefix:appPath]) {
+-                isEnabled = YES;
+-                break;
+-            }
+-        }
+-        CFRelease(loginItemsRef);
+-    }
+-    return isEnabled;
++    SMAppServiceStatus status = SMAppService.mainAppService.status;
++    return status == SMAppServiceStatusEnabled || status == SMAppServiceStatusRequiresApproval;
+ }
+ 
+ void MOEnableLoginItem(BOOL enable)
+ {
+-    NSString *appPath = [[NSBundle mainBundle] bundlePath];
+-    LSSharedFileListRef loginItemsRef = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+-
+-    if (loginItemsRef) {
+-        if (enable) {
+-            // We call LSSharedFileListInsertItemURL to insert the item at the bottom of Login Items list.
+-            CFURLRef url = (__bridge CFURLRef)[NSURL fileURLWithPath:appPath];
+-            LSSharedFileListItemRef item = LSSharedFileListInsertItemURL(loginItemsRef, kLSSharedFileListItemLast, NULL, NULL, url, NULL, NULL);
+-            if (item != NULL) CFRelease(item);
+-        }
+-        else {
+-            // Grab the contents of the shared file list (LSSharedFileListItemRef objects)
+-            // and pop it in an array so we can iterate through it to find our item.
+-            UInt32 seedValue;
+-            NSArray *loginItems = CFBridgingRelease(LSSharedFileListCopySnapshot(loginItemsRef, &seedValue));
+-            for (id item in loginItems) {
+-                LSSharedFileListItemRef itemRef = (__bridge LSSharedFileListItemRef)item;
+-                NSURL *pathURL = CFBridgingRelease(LSSharedFileListItemCopyResolvedURL(itemRef, 0, NULL));
+-                if (pathURL && [pathURL.path hasPrefix:appPath]) {
+-                    LSSharedFileListItemRemove(loginItemsRef, itemRef); // Deleting the item
+-                }
+-            }
+-        }
+-        CFRelease(loginItemsRef);
++    SMAppService *service = SMAppService.mainAppService;
++    NSError *error = nil;
++    BOOL succeeded = enable
++        ? [service registerAndReturnError:&error]
++        : [service unregisterAndReturnError:&error];
++    if (!succeeded) {
++        NSLog(@"Unable to %@ launch at login: %@", enable ? @"enable" : @"disable", error);
+     }
+ }
+-
+-#pragma clang diagnostic pop
+diff --git a/Itsycal/PrefsGeneralVC.m b/Itsycal/PrefsGeneralVC.m
+index 86f6be0..ecfd30d 100644
+--- a/Itsycal/PrefsGeneralVC.m
++++ b/Itsycal/PrefsGeneralVC.m
+@@ -158,17 +158,7 @@ static NSString * const kCalendarCellId = @"CalendarCell";
+     
+     _sourcesAndCalendars = [self.ec sourcesAndCalendars];
+     
+-    // The API used to check the login item's state (LSSharedFileList) causes
+-    // errors for users who have network drives but are not connected to their
+-    // network (github.com/sfsam/Itsycal/issues/15). Give them an option to
+-    // disable this check.
+-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DoNotCheckLoginItemStatus"] == NO) {
+-        _login.hidden = NO;
+-        _login.state = MOIsLoginItemEnabled() ? NSControlStateValueOn : NSControlStateValueOff;
+-    }
+-    else {
+-        _login.hidden = YES;
+-    }
++    _login.state = MOIsLoginItemEnabled() ? NSControlStateValueOn : NSControlStateValueOff;
+     
+     _calendarsTV.enabled = self.ec.calendarAccessGranted;
+     _agendaDaysPopup.enabled = self.ec.calendarAccessGranted;

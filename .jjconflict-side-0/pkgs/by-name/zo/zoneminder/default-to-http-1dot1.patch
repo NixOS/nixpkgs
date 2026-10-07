@@ -1,0 +1,13 @@
+diff --git a/scripts/ZoneMinder/lib/ZoneMinder/ConfigData.pm.in b/scripts/ZoneMinder/lib/ZoneMinder/ConfigData.pm.in
+index fa7b86079..c9d3c6f6c 100644
+--- a/scripts/ZoneMinder/lib/ZoneMinder/ConfigData.pm.in
++++ b/scripts/ZoneMinder/lib/ZoneMinder/ConfigData.pm.in
+@@ -877,7 +877,7 @@ our @options = (
+   },
+   {
+     name        => 'ZM_HTTP_VERSION',
+-    default     => '1.0',
++    default     => '1.1',
+     description => 'The version of HTTP that ZoneMinder will use to connect',
+     help        => q`
+       ZoneMinder can communicate with network cameras using either of

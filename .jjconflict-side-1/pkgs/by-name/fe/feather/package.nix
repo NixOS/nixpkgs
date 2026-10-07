@@ -1,0 +1,91 @@
+{
+  abseil-cpp,
+  bc-ur,
+  boost,
+  cmake,
+  fetchFromGitHub,
+  hidapi,
+  lib,
+  libsodium,
+  libusb1,
+  openssl,
+  pkg-config,
+  protobuf,
+  python3,
+  qrencode,
+  qt6,
+  readline,
+  stdenv,
+  testers,
+  tor,
+  unbound,
+  zxing-cpp,
+}:
+let
+  protobuf' = protobuf.override { abseil-cpp = abseil-cpp.override { cxxStandard = "17"; }; };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "feather";
+  version = "2.9.1";
+
+  src = fetchFromGitHub {
+    owner = "feather-wallet";
+    repo = "feather";
+    tag = finalAttrs.version;
+    hash = "sha256-/rnQw+SNMpFROJln/Sv2RgJlRxa8PnZMs4HfIAxP9VY=";
+    fetchSubmodules = true;
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    qt6.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    bc-ur
+    boost
+    hidapi
+    libsodium
+    libusb1
+    openssl
+    protobuf'
+    qrencode
+    unbound
+    zxing-cpp
+  ]
+  ++ (with qt6; [
+    qtbase
+    qtmultimedia
+    qtsvg
+    qttools
+    qtwayland
+    qtwebsockets
+  ]);
+
+  cmakeFlags = [
+    "-DReadline_INCLUDE_DIR=${lib.getDev readline}/include/readline"
+    "-DReadline_LIBRARY=${lib.getLib readline}/lib/libreadline.so"
+    "-DReadline_ROOT_DIR=${lib.getDev readline}"
+    "-DTOR_DIR=${lib.makeBinPath [ tor ]}"
+    "-DTOR_VERSION=${tor.version}"
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = ''
+      QT_QPA_PLATFORM=minimal ${finalAttrs.finalPackage.meta.mainProgram} --version
+    '';
+  };
+
+  meta = {
+    description = "Free Monero desktop wallet";
+    homepage = "https://featherwallet.org/";
+    changelog = "https://featherwallet.org/changelog/#${finalAttrs.version}%20changelog";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    mainProgram = "feather";
+    maintainers = with lib.maintainers; [ surfaceflinger ];
+  };
+})

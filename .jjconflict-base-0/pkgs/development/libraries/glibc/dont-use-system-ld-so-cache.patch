@@ -1,0 +1,69 @@
+diff --git a/elf/Makefile b/elf/Makefile
+index dc39ccea60..3230939376 100644
+--- a/elf/Makefile
++++ b/elf/Makefile
+@@ -1745,14 +1745,14 @@ $(objpfx)sln: $(sln-modules:%=$(objpfx)%.o)
+ 
+ $(objpfx)ldconfig: $(ldconfig-modules:%=$(objpfx)%.o)
+ 
+-SYSCONF-FLAGS := -D'SYSCONFDIR="$(sysconfdir)"'
+-CFLAGS-ldconfig.c += $(SYSCONF-FLAGS) -D'LIBDIR="$(libdir)"' \
++PREFIX-FLAGS := -D'PREFIX="$(prefix)"'
++CFLAGS-ldconfig.c += $(PREFIX-FLAGS) -D'LIBDIR="$(libdir)"' \
+ 		    -D'SLIBDIR="$(slibdir)"'
+ libof-ldconfig = ldconfig
+-CFLAGS-dl-cache.c += $(SYSCONF-FLAGS)
+-CFLAGS-cache.c += $(SYSCONF-FLAGS)
+-CFLAGS-rtld.c += $(SYSCONF-FLAGS)
+-CFLAGS-dl-usage.c += $(SYSCONF-FLAGS) \
++CFLAGS-dl-cache.c += $(PREFIX-FLAGS)
++CFLAGS-cache.c += $(PREFIX-FLAGS)
++CFLAGS-rtld.c += $(PREFIX-FLAGS)
++CFLAGS-dl-usage.c += $(PREFIX-FLAGS) \
+   -D'RTLD="$(rtlddir)/$(rtld-installed-name)"'
+ CFLAGS-dl-diagnostics.c += $(SYSCONF-FLAGS) \
+   -D'PREFIX="$(prefix)"' \
+diff --git a/elf/dl-diagnostics.c b/elf/dl-diagnostics.c
+index 21311178c7..719e02f8e6 100644
+--- a/elf/dl-diagnostics.c
++++ b/elf/dl-diagnostics.c
+@@ -204,7 +204,7 @@ print_paths (void)
+ {
+   _dl_diagnostics_print_labeled_string ("path.prefix", PREFIX);
+   _dl_diagnostics_print_labeled_string ("path.rtld", RTLD);
+-  _dl_diagnostics_print_labeled_string ("path.sysconfdir", SYSCONFDIR);
++  _dl_diagnostics_print_labeled_string ("path.sysconfdir", PREFIX "/etc");
+ 
+   unsigned int index = 0;
+   static const char *system_dirs = SYSTEM_DIRS "\0";
+diff --git a/elf/ldconfig.c b/elf/ldconfig.c
+index a39f3ecfcd..b5f12d0760 100644
+--- a/elf/ldconfig.c
++++ b/elf/ldconfig.c
+@@ -48,11 +48,11 @@
+ 
+ 
+ #ifndef LD_SO_CONF
+-# define LD_SO_CONF SYSCONFDIR "/ld.so.conf"
++# define LD_SO_CONF PREFIX "/etc/ld.so.conf"
+ #endif
+ 
+ #ifndef TUNABLES_CONF
+-# define TUNABLES_CONF SYSCONFDIR "/tunables.conf"
++# define TUNABLES_CONF PREFIX "/etc/tunables.conf"
+ #endif
+ 
+ /* Get libc version number.  */
+diff --git a/sysdeps/generic/dl-cache.h b/sysdeps/generic/dl-cache.h
+index 972ab32b86..a0e0775506 100644
+--- a/sysdeps/generic/dl-cache.h
++++ b/sysdeps/generic/dl-cache.h
+@@ -35,7 +35,7 @@
+ #endif
+ 
+ #ifndef LD_SO_CACHE
+-# define LD_SO_CACHE SYSCONFDIR "/ld.so.cache"
++# define LD_SO_CACHE PREFIX "/etc/ld.so.cache"
+ #endif
+ 
+ #ifndef add_system_dir

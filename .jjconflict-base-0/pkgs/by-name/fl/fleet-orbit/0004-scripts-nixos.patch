@@ -1,0 +1,33 @@
+diff --git a/server/fleet/scripts.go b/server/fleet/scripts.go
+index 4ae230e..930a520 100644
+--- a/server/fleet/scripts.go
++++ b/server/fleet/scripts.go
+@@ -387,8 +387,8 @@ const (
+ // anchored, so that it matches to the end of the line
+ var (
+ 	scriptHashbangValidation       = regexp.MustCompile(`^#!\s*(:?/usr)?/bin/(ba|z)?sh(?:\s*|\s+.*)$`)
+-	ErrUnsupportedInterpreter      = errors.New(`Interpreter not supported. Supported interpreters are "#!/bin/sh", "#!/bin/bash", "#!/bin/zsh", "#!/usr/bin/env python3", or an absolute path to "python" / "python3".`)
+-	ErrUnsupportedShellInterpreter = errors.New(`Interpreter not supported. Shell scripts must run in "#!/bin/sh", "#!/bin/bash", or "#!/bin/zsh."`)
++	ErrUnsupportedInterpreter      = errors.New(`Interpreter not supported. Supported interpreters are "#!/bin/sh", "#!/bin/bash", "#!/bin/zsh", "#!/run/current-system/sw/bin/sh", "#!/run/current-system/sw/bin/bash", "#!/run/current-system/sw/bin/zsh", "#!/usr/bin/env sh", "#!/usr/bin/env bash", "#!/usr/bin/env zsh", "#!/usr/bin/env python3", or an absolute path to "python" / "python3".`)
++	ErrUnsupportedShellInterpreter = errors.New(`Interpreter not supported. Shell scripts must run in "#!/bin/sh", "#!/bin/bash", "#!/bin/zsh", "#!/run/current-system/sw/bin/sh", "#!/run/current-system/sw/bin/bash", "#!/run/current-system/sw/bin/zsh", or their "/usr/bin/env" equivalents.`)
+ )
+ 
+ type ShebangKind int
+@@ -454,7 +454,7 @@ func shebangInfo(contents string) (kind shebangKind, directExecute bool, err err
+ 	// Support env-based shebangs like "#!/usr/bin/env python3"
+ 	if base == "env" {
+ 		// Require env to be in /bin or /usr/bin (common, predictable locations)
+-		if !strings.HasPrefix(interp, "/bin/") && !strings.HasPrefix(interp, "/usr/bin/") {
++		if !strings.HasPrefix(interp, "/bin/") && !strings.HasPrefix(interp, "/usr/bin/") && !strings.HasPrefix(interp, "/run/current-system/sw/bin/") {
+ 			return shebangNone, false, ErrUnsupportedInterpreter
+ 		}
+ 
+@@ -486,7 +486,7 @@ func shebangInfo(contents string) (kind shebangKind, directExecute bool, err err
+ 
+ 	switch {
+ 	case base == "sh" || base == "bash" || base == "zsh":
+-		if !strings.HasPrefix(interp, "/bin/") && !strings.HasPrefix(interp, "/usr/bin/") {
++		if !strings.HasPrefix(interp, "/bin/") && !strings.HasPrefix(interp, "/usr/bin/") && !strings.HasPrefix(interp, "/run/current-system/sw/bin/") {
+ 			return shebangNone, false, ErrUnsupportedInterpreter
+ 		}
+ 		return shebangShell, true, nil

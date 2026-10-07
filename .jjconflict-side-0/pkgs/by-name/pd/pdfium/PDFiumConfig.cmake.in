@@ -1,0 +1,17 @@
+set(PDFium_VERSION "@version@")
+set(PDFium_INCLUDE_DIR "@dev@/include/public")
+set(PDFium_LIBRARY "@out@/lib/libpdfium@sharedLibrary@")
+
+if(NOT TARGET pdfium)
+  add_library(pdfium SHARED IMPORTED)
+  set_target_properties(pdfium PROPERTIES
+    IMPORTED_LOCATION "${PDFium_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${PDFium_INCLUDE_DIR};${PDFium_INCLUDE_DIR}/cpp"
+  )
+endif()
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(PDFium
+  REQUIRED_VARS PDFium_LIBRARY PDFium_INCLUDE_DIR
+  VERSION_VAR PDFium_VERSION
+)

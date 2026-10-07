@@ -1,0 +1,13 @@
+diff --git a/include/minilog.h b/include/minilog.h
+index b1c387e..9390a6e 100644
+--- a/include/minilog.h
++++ b/include/minilog.h
+@@ -198,7 +198,7 @@ Log<T>::from_string(
+     else if (level == "NONE")
+         return logNONE;
+     else {
+-        Log<T>().Get(logWARNING) << "Unknown logging level '" << level
++        Log<T>().get(logWARNING) << "Unknown logging level '" << level
+                 << "'. Using INFO level as default.";
+         return logINFO;
+     }

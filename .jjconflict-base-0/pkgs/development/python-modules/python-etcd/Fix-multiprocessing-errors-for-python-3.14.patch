@@ -1,0 +1,194 @@
+From 9a903af867a6f1571ed5716a568afcfbc0010552 Mon Sep 17 00:00:00 2001
+From: Tom van Dijk <18gatenmaker6@gmail.com>
+Date: Sun, 22 Mar 2026 17:01:13 +0100
+Subject: [PATCH] Fix multiprocessing errors for python 3.14
+
+---
+ src/etcd/tests/integration/test_simple.py | 98 +++++++++++------------
+ 1 file changed, 49 insertions(+), 49 deletions(-)
+
+diff --git a/src/etcd/tests/integration/test_simple.py b/src/etcd/tests/integration/test_simple.py
+index 54e2a13..a5de541 100644
+--- a/src/etcd/tests/integration/test_simple.py
++++ b/src/etcd/tests/integration/test_simple.py
+@@ -243,6 +243,14 @@ class TestClusterFunctions(EtcdIntegrationTest):
+ 
+ 
+ class TestWatch(EtcdIntegrationTest):
++    def watch_change_value(key, newValue):
++        c = etcd.Client(port=6001)
++        c.set(key, newValue)
++
++    def watch_watch_value(key, queue):
++        c = etcd.Client(port=6001)
++        queue.put(c.watch(key).value)
++
+     def test_watch(self):
+         """INTEGRATION: Receive a watch event from other process"""
+ 
+@@ -250,23 +258,15 @@ class TestWatch(EtcdIntegrationTest):
+ 
+         queue = multiprocessing.Queue()
+ 
+-        def change_value(key, newValue):
+-            c = etcd.Client(port=6001)
+-            c.set(key, newValue)
+-
+-        def watch_value(key, queue):
+-            c = etcd.Client(port=6001)
+-            queue.put(c.watch(key).value)
+-
+         changer = multiprocessing.Process(
+-            target=change_value,
++            target=TestWatch.watch_change_value,
+             args=(
+                 "/test-key",
+                 "new-test-value",
+             ),
+         )
+ 
+-        watcher = multiprocessing.Process(target=watch_value, args=("/test-key", queue))
++        watcher = multiprocessing.Process(target=TestWatch.watch_watch_value, args=("/test-key", queue))
+ 
+         watcher.start()
+         time.sleep(1)
+@@ -279,6 +279,16 @@ class TestWatch(EtcdIntegrationTest):
+ 
+         assert value == "new-test-value"
+ 
++    def watch_indexed_change_value(key, newValue):
++        c = etcd.Client(port=6001)
++        c.set(key, newValue)
++        c.get(key)
++
++    def watch_indexed_watch_value(key, index, queue):
++        c = etcd.Client(port=6001)
++        for i in range(0, 3):
++            queue.put(c.watch(key, index=index + i).value)
++
+     def test_watch_indexed(self):
+         """INTEGRATION: Receive a watch event from other process, indexed"""
+ 
+@@ -290,18 +300,8 @@ class TestWatch(EtcdIntegrationTest):
+ 
+         queue = multiprocessing.Queue()
+ 
+-        def change_value(key, newValue):
+-            c = etcd.Client(port=6001)
+-            c.set(key, newValue)
+-            c.get(key)
+-
+-        def watch_value(key, index, queue):
+-            c = etcd.Client(port=6001)
+-            for i in range(0, 3):
+-                queue.put(c.watch(key, index=index + i).value)
+-
+         proc = multiprocessing.Process(
+-            target=change_value,
++            target=TestWatch.watch_indexed_change_value,
+             args=(
+                 "/test-key",
+                 "test-value3",
+@@ -309,7 +309,7 @@ class TestWatch(EtcdIntegrationTest):
+         )
+ 
+         watcher = multiprocessing.Process(
+-            target=watch_value, args=("/test-key", original_index, queue)
++            target=TestWatch.watch_indexed_watch_value, args=("/test-key", original_index, queue)
+         )
+ 
+         watcher.start()
+@@ -325,6 +325,19 @@ class TestWatch(EtcdIntegrationTest):
+         watcher.join(timeout=5)
+         proc.join(timeout=5)
+ 
++    def watch_generator_change_value(key):
++        time.sleep(0.5)
++        c = etcd.Client(port=6001)
++        for i in range(0, 3):
++            c.set(key, "test-value%d" % i)
++            c.get(key)
++
++    def watch_generator_watch_value(key, queue):
++        c = etcd.Client(port=6001)
++        for i in range(0, 3):
++            event = next(c.eternal_watch(key)).value
++            queue.put(event)
++
+     def test_watch_generator(self):
+         """INTEGRATION: Receive a watch event from other process (gen)"""
+ 
+@@ -332,22 +345,9 @@ class TestWatch(EtcdIntegrationTest):
+ 
+         queue = multiprocessing.Queue()
+ 
+-        def change_value(key):
+-            time.sleep(0.5)
+-            c = etcd.Client(port=6001)
+-            for i in range(0, 3):
+-                c.set(key, "test-value%d" % i)
+-                c.get(key)
++        changer = multiprocessing.Process(target=TestWatch.watch_generator_change_value, args=("/test-key",))
+ 
+-        def watch_value(key, queue):
+-            c = etcd.Client(port=6001)
+-            for i in range(0, 3):
+-                event = next(c.eternal_watch(key)).value
+-                queue.put(event)
+-
+-        changer = multiprocessing.Process(target=change_value, args=("/test-key",))
+-
+-        watcher = multiprocessing.Process(target=watch_value, args=("/test-key", queue))
++        watcher = multiprocessing.Process(target=TestWatch.watch_generator_watch_value, args=("/test-key", queue))
+ 
+         watcher.start()
+         changer.start()
+@@ -361,6 +361,16 @@ class TestWatch(EtcdIntegrationTest):
+         watcher.join(timeout=5)
+         changer.join(timeout=5)
+ 
++    def watch_indexed_generator_change_value(key, newValue):
++        c = etcd.Client(port=6001)
++        c.set(key, newValue)
++
++    def watch_indexed_generator_watch_value(key, index, queue):
++        c = etcd.Client(port=6001)
++        iterevents = c.eternal_watch(key, index=index)
++        for i in range(0, 3):
++            queue.put(next(iterevents).value)
++
+     def test_watch_indexed_generator(self):
+         """INTEGRATION: Receive a watch event from other process, ixd, (2)"""
+ 
+@@ -372,18 +382,8 @@ class TestWatch(EtcdIntegrationTest):
+ 
+         queue = multiprocessing.Queue()
+ 
+-        def change_value(key, newValue):
+-            c = etcd.Client(port=6001)
+-            c.set(key, newValue)
+-
+-        def watch_value(key, index, queue):
+-            c = etcd.Client(port=6001)
+-            iterevents = c.eternal_watch(key, index=index)
+-            for i in range(0, 3):
+-                queue.put(next(iterevents).value)
+-
+         proc = multiprocessing.Process(
+-            target=change_value,
++            target=TestWatch.watch_indexed_generator_change_value,
+             args=(
+                 "/test-key",
+                 "test-value3",
+@@ -391,7 +391,7 @@ class TestWatch(EtcdIntegrationTest):
+         )
+ 
+         watcher = multiprocessing.Process(
+-            target=watch_value, args=("/test-key", original_index, queue)
++            target=TestWatch.watch_indexed_generator_watch_value, args=("/test-key", original_index, queue)
+         )
+ 
+         watcher.start()
+-- 
+2.53.0
+

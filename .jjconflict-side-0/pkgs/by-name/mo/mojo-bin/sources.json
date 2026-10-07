@@ -1,0 +1,75 @@
+{
+  "version": "1.2.0",
+  "mblackVersion": "26.7.0",
+  "maxVersion": "26.7.0",
+  "common": {
+    "maxMojoLibs": {
+      "url": "https://files.pythonhosted.org/packages/17/90/0ba44cb7ea447591858118bb9a96a0c036ac5013d86e4bd8383f0940616a/max_mojo_libs-26.7.0-py3-none-any.whl",
+      "hash": "sha256-ye6u8BoZVluEZ9qca3zVf6eHdZzllUFAsOAx0JXGMLk="
+    },
+    "mojoCompilerMojoLibs": {
+      "url": "https://files.pythonhosted.org/packages/3d/bb/9602cbee467102584721c700dda8033af67c3888c6c8edb6f66275c1df74/mojo_compiler_mojo_libs-1.2.0-py3-none-any.whl",
+      "hash": "sha256-PWMffnmMEdACnEqJLrrh9XQnUfrAxSavdLRaiuB8Oss="
+    },
+    "mblack": {
+      "url": "https://files.pythonhosted.org/packages/d7/d5/bfd1a8bcc198cc209be3602bde68f4bbe60cedaf52c616724553373b6850/mblack-26.7.0-py3-none-any.whl",
+      "hash": "sha256-p9zzzxqEObrND8aS63V4O4/TFfz9UmDg906OW6d+UTM="
+    }
+  },
+  "systems": {
+    "x86_64-linux": {
+      "maxCore": {
+        "url": "https://files.pythonhosted.org/packages/9e/c1/f39fe791b6fbb3cadaee5e7724dbfeb0a77ce93ff9e72c7910721388194b/max_core-26.7.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-Wb1MlbDkGuHwBvZatuYnBBO4Smc7n/x/toSer2fEEZo="
+      },
+      "mojo": {
+        "url": "https://files.pythonhosted.org/packages/32/d2/e44568aa7d49ef8bd160933d668d78bb8f072efd73ce58c4a180067e8b39/mojo-1.2.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-kuIccJBy4UQ7gXCWNVg8YuF8GzLjTw5qieXotH+TUvk="
+      },
+      "mojoCompiler": {
+        "url": "https://files.pythonhosted.org/packages/54/8b/2758e8a2207793613d386f41e36f2bfd28837b157a659518c7b7474f7eb3/mojo_compiler-1.2.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-PuNKOybGzMqpUjoOjbj2e+qVRJfXgtl8nmHDxOy9rHs="
+      },
+      "mojoLldbLibs": {
+        "url": "https://files.pythonhosted.org/packages/39/79/320ed56b180e553f04329e0b94dffe9dbfed79c0439f5824fcac9d56fe6c/mojo_lldb_libs-1.2.0-py3-none-manylinux_2_34_x86_64.whl",
+        "hash": "sha256-Jbnxhu755Q0NMxsulmaw1VDNJ39iIjl5vQJaj4uQ78o="
+      }
+    },
+    "aarch64-linux": {
+      "maxCore": {
+        "url": "https://files.pythonhosted.org/packages/9d/1b/a67463c6d75fdf63b23b13df1fb2ba643a02b7c6974554b5d09a6dac13da/max_core-26.7.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-9KTJVRxA4abOzOLW6XrvUpheetgBcPNCcyzVWUlG0PI="
+      },
+      "mojo": {
+        "url": "https://files.pythonhosted.org/packages/83/82/8e6119c6f7f84fa6b45f09fc053bcdf461f238c9def78b35b63591fa847e/mojo-1.2.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-y1SUL9mb40bvJzzJvq5faSxYGV3L43mFlrLnNo1PcZw="
+      },
+      "mojoCompiler": {
+        "url": "https://files.pythonhosted.org/packages/62/c6/c716f593f140abf9cf40dd44a1b6a4745ead22cd3fd03cc856b024e6c799/mojo_compiler-1.2.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-ctb4MhpQE2lFWYq0uYdOmYC9AxA7+TVFREtESJGeSMk="
+      },
+      "mojoLldbLibs": {
+        "url": "https://files.pythonhosted.org/packages/ab/d2/b3c38e08d887d35142d3b4a437b97c8006f107f38c131550be3ba43ea435/mojo_lldb_libs-1.2.0-py3-none-manylinux_2_34_aarch64.whl",
+        "hash": "sha256-lo1ajgTdGMNTsLqPphweNK55hunM2ILtqM2RRz4a6Rw="
+      }
+    },
+    "aarch64-darwin": {
+      "maxCore": {
+        "url": "https://files.pythonhosted.org/packages/13/ba/d732958bca0ea0d8e29fbaa36e2b73fe450baf464b8fe4815cb7df731a42/max_core-26.7.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-QbJjRXtSfrlqXGm5yEVjfRabeCHHGDfoLcu5soFmgSM="
+      },
+      "mojo": {
+        "url": "https://files.pythonhosted.org/packages/d0/64/6889babfad953d22620594064651fe8165ddb0074ba5a901d1bea1d059dd/mojo-1.2.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-6QvNDjofatUwbWrxvTprvNhJ3f0GxmVSpEQGgr9vcDo="
+      },
+      "mojoCompiler": {
+        "url": "https://files.pythonhosted.org/packages/d6/0c/df22d1807e2bddebd992caee411e6cbe0c5d41834e36bff883f4a7d95fc3/mojo_compiler-1.2.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-vBd32bPPRSLuITzIOHaxlVSZrsKqjdinXOR38M0iepA="
+      },
+      "mojoLldbLibs": {
+        "url": "https://files.pythonhosted.org/packages/a1/ee/f40b38b0638d15371181e011b812d26d53877fd2dfd49ad687fc66ec3ac5/mojo_lldb_libs-1.2.0-py3-none-macosx_13_0_arm64.whl",
+        "hash": "sha256-3CkOflbVYNnWclou7HZIz2mysVvF0l88mijVskQdEWA="
+      }
+    }
+  }
+}

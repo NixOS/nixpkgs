@@ -1,0 +1,13 @@
+--- a/salt/utils/rsax931.py	2021-11-24 00:39:57.940790184 +0100
++++ b/salt/utils/rsax931.py	2021-11-24 00:38:35.436728341 +0100
+@@ -85,6 +85,10 @@
+     """
+     Attempt to load libcrypto.
+     """
++    try:
++        return cdll.LoadLibrary('@libcrypto@')
++    except OSError:
++        pass
+     return cdll.LoadLibrary(_find_libcrypto())
+ 
+ 

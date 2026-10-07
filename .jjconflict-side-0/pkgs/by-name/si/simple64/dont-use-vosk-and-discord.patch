@@ -1,0 +1,37 @@
+diff --git a/build.sh b/build.sh
+index 254a90d..e2d26cf 100644
+--- a/build.sh
++++ b/build.sh
+@@ -77,7 +77,7 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE="${RELEASE_TYPE}" ..
+ cmake --build .
+ cp simple64-video-parallel.* "${install_dir}"
+ 
+-if [[ ! -d "${base_dir}/discord" ]]; then
++if false; then
+   echo "Downloading Discord SDK"
+   mkdir -p "${base_dir}/discord"
+   cd "${base_dir}/discord"
+@@ -86,7 +86,7 @@ if [[ ! -d "${base_dir}/discord" ]]; then
+   rm discord_game_sdk.zip
+ fi
+ 
+-if [[ ! -d "${base_dir}/vosk" ]]; then
++if false; then
+   mkdir -p "${base_dir}/vosk"
+   cd "${base_dir}/vosk"
+   if [[ ${UNAME} == *"MINGW64"* ]]; then
+@@ -156,14 +156,6 @@ if [[ ${UNAME} == *"MINGW64"* ]]; then
+   cp -v "${base_dir}/7z/x64/7za.exe" "${install_dir}"
+   cp -v "${base_dir}/discord/lib/x86_64/discord_game_sdk.dll" "${install_dir}"
+   cp -v "${base_dir}/vosk/libvosk.dll" "${install_dir}/vosk.dll"
+-else
+-  cp "${base_dir}/vosk/libvosk.so" "${install_dir}"
+-  if [[ "${PLATFORM}" == "aarch64" ]]; then
+-    my_os=linux_aarch64
+-  else
+-    my_os=linux_x86_64
+-    cp "${base_dir}/discord/lib/x86_64/discord_game_sdk.so" "${install_dir}/libdiscord_game_sdk.so"
+-  fi
+ fi
+ 
+ if [[ "$1" == "zip" ]]; then

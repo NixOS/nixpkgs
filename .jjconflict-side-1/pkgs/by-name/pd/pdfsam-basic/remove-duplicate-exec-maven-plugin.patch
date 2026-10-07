@@ -1,0 +1,53 @@
+Merge the notarize-dmg execution into the mac profile's first exec-maven-plugin.
+
+The mac profile declared org.codehaus.mojo:exec-maven-plugin twice (for the
+jpackage and notarize-dmg executions). Maven >= 3.10 rejects duplicate
+plugins in a POM as a model validation error, even for inactive profiles.
+Merging the executions keeps the build behaviour identical.
+---
+--- a/pdfsam-basic/pom.xml
++++ b/pdfsam-basic/pom.xml
+@@ -610,6 +610,18 @@
+                                     </arguments>
+                                 </configuration>
+                             </execution>
++                            <execution>
++                                <id>notarize-dmg</id>
++                                <phase>integration-test</phase>
++                                <goals>
++                                    <goal>exec</goal>
++                                </goals>
++                                <configuration>
++                                    <executable>
++                                        ${project.build.directory}/dmg/notarize_dmg.sh
++                                    </executable>
++                                </configuration>
++                            </execution>
+                         </executions>
+                     </plugin>
+                     <plugin>
+@@ -630,24 +642,6 @@
+                             </execution>
+                         </executions>
+                     </plugin>
+-                    <plugin>
+-                        <groupId>org.codehaus.mojo</groupId>
+-                        <artifactId>exec-maven-plugin</artifactId>
+-                        <executions>
+-                            <execution>
+-                                <id>notarize-dmg</id>
+-                                <phase>integration-test</phase>
+-                                <goals>
+-                                    <goal>exec</goal>
+-                                </goals>
+-                                <configuration>
+-                                    <executable>
+-                                        ${project.build.directory}/dmg/notarize_dmg.sh
+-                                    </executable>
+-                                </configuration>
+-                            </execution>
+-                        </executions>
+-                    </plugin>
+                     <plugin>
+                         <!-- this is needed to create a detached signature of the artifact -->
+                         <groupId>org.codehaus.mojo</groupId>

@@ -1,0 +1,13 @@
+diff --git a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/dialog/StartDialog.java b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/dialog/StartDialog.java
+index 260ecd78..7b5c5649 100644
+--- a/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/dialog/StartDialog.java
++++ b/application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/dialog/StartDialog.java
+@@ -61,7 +61,7 @@ public class StartDialog extends DestroyableVBox implements DestroyableTemplate
+                 .withStyleClass("buttons")
+                 .withNodes(createButtons())
+                 .buildHBox();
+-        this.getNodes().addAll(whatsNewTitle, whatsNewContent, policyTitle, policyContent, eulaTitle, eulaContent, buttonsBox);
++        this.getNodes().addAll(whatsNewTitle, whatsNewContent, policyTitle, policyContent, buttonsBox);
+         if(!VersionService.isDev()){
+             PreferencesService.setPreference(PreferenceConstants.WHATS_NEW_VERSION, VersionService.getBuildVersion());
+         }

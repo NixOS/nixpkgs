@@ -1,0 +1,34 @@
+diff --git a/src/tools/macdeployqt/shared/shared.cpp b/src/tools/macdeployqt/shared/shared.cpp
+index d1b5694df62..7d9eef816e0 100644
+--- a/src/tools/macdeployqt/shared/shared.cpp
++++ b/src/tools/macdeployqt/shared/shared.cpp
+@@ -1302,6 +1302,10 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+     if (qmlImportScannerPath.isEmpty())
+         qmlImportScannerPath = QCoreApplication::applicationDirPath() + "/qmlimportscanner";
+ 
++    // Fallback: Pass qml import scanner via environment variable
++    if (!QFile::exists(qmlImportScannerPath))
++        qmlImportScannerPath = ::qgetenv("NIX_QMLIMPORTSCANNER");
++
+     // Verify that we found a qmlimportscanner binary
+     if (!QFile::exists(qmlImportScannerPath)) {
+         LogError() << "qmlimportscanner not found at" << qmlImportScannerPath;
+@@ -1318,7 +1322,17 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+     }
+     for (const QString &importPath : qmlImportPaths)
+         argumentList << "-importPath" << importPath;
+-    for (const QString &importPath : QLibraryInfo::paths(QLibraryInfo::QmlImportsPath))
++    for (const QString &importPath : QLibraryInfo::paths(QLibraryInfo::QmlImportsPath)) {
++        if (QFile::exists(importPath)) {
++            argumentList << "-importPath" << importPath;
++        }
++    }
++
++    // In a modularized installation of qt as we have in Nix, instead, we will
++    // read the paths from the environment, as they are spread in multiple
++    // locations and normally set in the environment like this
++    auto envQmlImportPaths = ::qgetenv("QML2_IMPORT_PATH").split(':');
++    for (const QString &importPath : envQmlImportPaths)
+         argumentList << "-importPath" << importPath;
+ 
+     // run qmlimportscanner

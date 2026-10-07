@@ -1,0 +1,17 @@
+diff --git a/src/mss/linux.py b/src/mss/linux.py
+index 6dac52b..c90bd93 100644
+--- a/src/mss/linux.py
++++ b/src/mss/linux.py
+@@ -185,9 +185,9 @@ class XWindowAttributes(Structure):
+ 
+ 
+ _ERROR = {}
+-_X11 = find_library("X11")
+-_XFIXES = find_library("Xfixes")
+-_XRANDR = find_library("Xrandr")
++_X11 = "@x11@"
++_XFIXES = "@xfixes@"
++_XRANDR = "@xrandr@"
+ 
+ 
+ @CFUNCTYPE(c_int, POINTER(Display), POINTER(XErrorEvent))

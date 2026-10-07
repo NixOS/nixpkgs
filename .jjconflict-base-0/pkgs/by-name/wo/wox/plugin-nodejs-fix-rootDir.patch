@@ -1,0 +1,30 @@
+Subject: [PATCH] fix(plugin): add rootDir to nodejs
+
+to fix TS5011 with TypeScript 7:
+
+```
+> tsconfig.json:10:5 - error TS5011: The common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+>   Visit https://aka.ms/ts6 for migration information.
+>
+> 10     "outDir": "./dist",
+>        ~~~~~~~~
+```
+---
+ wox.plugin.nodejs/tsconfig.json | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/wox.plugin.nodejs/tsconfig.json b/wox.plugin.nodejs/tsconfig.json
+index 0ad196f8a..46a7e320b 100644
+--- a/wox.plugin.nodejs/tsconfig.json
++++ b/wox.plugin.nodejs/tsconfig.json
+@@ -8,6 +8,7 @@
+     "module": "NodeNext",
+     "declaration": false,
+     "outDir": "./dist",
++    "rootDir": "./src",
+     "noEmit": false,
+     "strict": true,
+     "noImplicitAny": true,
+-- 
+2.54.0
+

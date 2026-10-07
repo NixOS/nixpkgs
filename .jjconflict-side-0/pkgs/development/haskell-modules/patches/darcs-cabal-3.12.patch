@@ -1,0 +1,24 @@
+diff -rN -u old-darcs.net/darcs.cabal new-darcs.net/darcs.cabal
+--- old-darcs.net/darcs.cabal	2025-09-13 02:45:32.790227974 +0200
++++ new-darcs.net/darcs.cabal	2025-09-13 02:45:32.791227985 +0200
+@@ -124,7 +124,7 @@
+ 
+ custom-setup
+     setup-depends: base      >= 4.10 && < 4.20,
+-                   Cabal     >= 2.4 && < 3.11,
++                   Cabal     >= 2.4 && < 3.13,
+                    process   >= 1.2.3.0 && < 1.7,
+                    filepath  >= 1.4.1 && < 1.5.0.0,
+                    directory >= 1.2.7 && < 1.4
+diff -rN -u old-darcs.net/Setup.hs new-darcs.net/Setup.hs
+--- old-darcs.net/Setup.hs	2025-09-13 02:45:32.789227964 +0200
++++ new-darcs.net/Setup.hs	2025-09-13 02:45:32.790227974 +0200
+@@ -8,7 +8,7 @@
+ import Distribution.Package ( packageVersion )
+ import Distribution.Version( Version )
+ import Distribution.Simple.LocalBuildInfo
+-         ( LocalBuildInfo(..), absoluteInstallDirs )
++         ( LocalBuildInfo(..), absoluteInstallDirs, buildDir )
+ import Distribution.Simple.InstallDirs (mandir, CopyDest (NoCopyDest))
+ import Distribution.Simple.Setup
+     (buildVerbosity, copyDest, copyVerbosity, fromFlag,

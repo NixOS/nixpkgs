@@ -1,0 +1,69 @@
+diff --git a/kcms/fonts/kxftconfig.cpp b/kcms/fonts/kxftconfig.cpp
+index b67d885de7..29cc3a00d8 100644
+--- a/kcms/fonts/kxftconfig.cpp
++++ b/kcms/fonts/kxftconfig.cpp
+@@ -310,6 +310,10 @@ bool KXftConfig::apply()
+             m_excludePixelRange.from = (int)point2Pixel(m_excludeRange.from);
+             m_excludePixelRange.to = (int)point2Pixel(m_excludeRange.to);
+ 
++            // Ensure m_doc is the config file we want
++            m_doc.clear();
++            parseConfigFile(m_file);
++
+             FcAtomic *atomic = FcAtomicCreate((const unsigned char *)(QFile::encodeName(m_file).data()));
+ 
+             ok = false;
+@@ -618,7 +622,7 @@ void KXftConfig::readContents()
+                 }
+             }
+         } else if (childNodesCount == 3) { // CPD: Is target "font" or "pattern" ????
+-            if (u"font" != e.attribute(u"target"_s)) {
++            if (u"font" != e.attribute(u"target"_s) && u"pattern" != e.attribute(u"target"_s)) {
+                 break;
+             }
+ 
+@@ -692,7 +696,7 @@ void KXftConfig::applySubPixelType()
+         QDomElement editNode = m_doc.createElement(u"edit"_s);
+         QDomText typeText = m_doc.createTextNode(toStr(m_subPixel.type));
+ 
+-        matchNode.setAttribute(u"target"_s, u"font"_s);
++        matchNode.setAttribute(u"target"_s, u"pattern"_s);
+         editNode.setAttribute(u"mode"_s, u"assign"_s);
+         editNode.setAttribute(u"name"_s, u"rgba"_s);
+         editNode.appendChild(typeNode);
+@@ -724,7 +728,7 @@ void KXftConfig::applyHintStyle()
+         QDomElement matchNode = m_doc.createElement(u"match"_s), typeNode = m_doc.createElement(u"const"_s), editNode = m_doc.createElement(u"edit"_s);
+         QDomText typeText = m_doc.createTextNode(toStr(m_hint.style));
+ 
+-        matchNode.setAttribute(u"target"_s, u"font"_s);
++        matchNode.setAttribute(u"target"_s, u"pattern"_s);
+         editNode.setAttribute(u"mode"_s, u"assign"_s);
+         editNode.setAttribute(u"name"_s, u"hintstyle"_s);
+         editNode.appendChild(typeNode);
+@@ -744,7 +748,7 @@ void KXftConfig::applyHinting()
+     QDomElement matchNode = m_doc.createElement(u"match"_s), typeNode = m_doc.createElement(u"bool"_s), editNode = m_doc.createElement(u"edit"_s);
+     QDomText typeText = m_doc.createTextNode(m_hinting.set ? u"true"_s : u"false"_s);
+ 
+-    matchNode.setAttribute(u"target"_s, u"font"_s);
++    matchNode.setAttribute(u"target"_s, u"pattern"_s);
+     editNode.setAttribute(u"mode"_s, u"assign"_s);
+     editNode.setAttribute(u"name"_s, u"hinting"_s);
+     editNode.appendChild(typeNode);
+@@ -778,7 +782,7 @@ void KXftConfig::applyExcludeRange(bool pixel)
+                     boolNode = m_doc.createElement(u"bool"_s);
+         QDomText fromText = m_doc.createTextNode(fromString), toText = m_doc.createTextNode(toString), boolText = m_doc.createTextNode(u"false"_s);
+ 
+-        matchNode.setAttribute(u"target"_s, u"font"_s); // CPD: Is target "font" or "pattern" ????
++        matchNode.setAttribute(u"target"_s, u"pattern"_s); // CPD: Is target "font" or "pattern" ????
+         fromTestNode.setAttribute(u"qual"_s, u"any"_s);
+         fromTestNode.setAttribute(u"name"_s, pixel ? u"pixelsize"_s : u"size"_s);
+         fromTestNode.setAttribute(u"compare"_s, u"more_eq"_s);
+@@ -840,7 +844,7 @@ void KXftConfig::applyAntiAliasing()
+         QDomElement editNode = m_doc.createElement(u"edit"_s);
+         QDomText typeText = m_doc.createTextNode(m_antiAliasing.state == AntiAliasing::Enabled ? u"true"_s : u"false"_s);
+ 
+-        matchNode.setAttribute(u"target"_s, u"font"_s);
++        matchNode.setAttribute(u"target"_s, u"pattern"_s);
+         editNode.setAttribute(u"mode"_s, u"assign"_s);
+         editNode.setAttribute(u"name"_s, u"antialias"_s);
+         editNode.appendChild(typeNode);

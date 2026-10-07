@@ -1,0 +1,26 @@
+diff --git a/src/cmd/go/internal/modload/import.go b/src/cmd/go/internal/modload/import.go
+index 04e95b7a8d..1ab4431d95 100644
+--- a/src/cmd/go/internal/modload/import.go
++++ b/src/cmd/go/internal/modload/import.go
+@@ -350,7 +350,7 @@ func importFromModules(loaderstate *State, ctx context.Context, path string, rs
+ 				// vendor/modules.txt does not exist or the user manually added directories to the vendor directory.
+ 				// Go 1.23 and later require vendored packages to be present in modules.txt to be imported.
+ 				_, ok := vendorPkgModule[path]
+-				if ok || (gover.Compare(loaderstate.MainModules.GoVersion(loaderstate), gover.ExplicitModulesTxtImportVersion) < 0) {
++				if ok || (gover.Compare(loaderstate.MainModules.GoVersion(loaderstate), gover.ExplicitModulesTxtImportVersion) < 0) || os.Getenv("GO_NO_VENDOR_CHECKS") == "1" {
+ 					mods = append(mods, vendorPkgModule[path])
+ 					dirs = append(dirs, dir)
+ 					roots = append(roots, vendorDir)
+diff --git a/src/cmd/go/internal/modload/vendor.go b/src/cmd/go/internal/modload/vendor.go
+index 9956bcdb12..5247daabfa 100644
+--- a/src/cmd/go/internal/modload/vendor.go
++++ b/src/cmd/go/internal/modload/vendor.go
+@@ -159,7 +159,7 @@ func checkVendorConsistency(loaderstate *State, indexes []*modFileIndex, modFile
+ 			panic(fmt.Errorf("not in workspace mode but number of indexes is %v, not 1", len(indexes)))
+ 		}
+ 		index := indexes[0]
+-		if gover.Compare(index.goVersion, "1.14") < 0 {
++		if gover.Compare(index.goVersion, "1.14") < 0 || (os.Getenv("GO_NO_VENDOR_CHECKS") == "1" && len(vendorMeta) == 0) {
+ 			// Go versions before 1.14 did not include enough information in
+ 			// vendor/modules.txt to check for consistency.
+ 			// If we know that we're on an earlier version, relax the consistency check.

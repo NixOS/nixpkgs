@@ -1,0 +1,12 @@
+diff --git i/src/direvent.h w/src/direvent.h
+index 18ab4c8..3c49500 100644
+--- i/src/direvent.h
++++ w/src/direvent.h
+@@ -313,6 +313,7 @@ int sigv_set_all(void (*handler)(int), int sigc, int *sigv,
+ 		 struct sigaction *retsa);
+ int sigv_set_tab(int sigc, struct sigtab *sigtab, struct sigaction *retsa);
+ int sigv_set_action_tab(int sigc, struct sigtab *sigtab, struct sigaction *sa);
++int sigv_restore_tab(int sigc, struct sigtab *sigtab, struct sigaction *sa);
+ 
+ struct grecs_locus;
+ int filpatlist_add(filpatlist_t *fptr, char const *arg,

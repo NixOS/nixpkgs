@@ -1,0 +1,34 @@
+From 91833ab6c1a769f82f30dbf126362d079905bfc6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=A9clairevoyant?=
+ <848000+eclairevoyant@users.noreply.github.com>
+Date: Fri, 26 Jun 2026 21:28:41 -0400
+Subject: [PATCH] addfeatures/hmtx: avoid unsigned integer underflow
+
+---
+ c/addfeatures/hotconv/hmtx.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/c/addfeatures/hotconv/hmtx.cpp b/c/addfeatures/hotconv/hmtx.cpp
+index 9336c986..2d8ca98e 100644
+--- a/c/addfeatures/hotconv/hmtx.cpp
++++ b/c/addfeatures/hotconv/hmtx.cpp
+@@ -52,12 +52,12 @@ int hmtxFill(hotCtx g) {
+     /* Optimize metrics */
+     FWord width = hmtx.advanceWidth.back();
+     size_t i;
+-    for (i = hmtx.advanceWidth.size() - 2; i >= 0; i--) {
+-        if (hmtx.advanceWidth[i] != width)
++    for (i = hmtx.advanceWidth.size(); i >= 2; i--) {
++        if (hmtx.advanceWidth[i-2] != width)
+             break;
+     }
+-    if (i + 2 != hmtx.advanceWidth.size())
+-        hmtx.advanceWidth.resize(i+2);
++    if (i != hmtx.advanceWidth.size())
++        hmtx.advanceWidth.resize(i);
+ 
+     return hmtx.Fill();
+ }
+-- 
+2.54.0
+

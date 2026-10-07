@@ -1,0 +1,12 @@
+diff --git a/processcore/plugins/network/networkconstants.h.in b/processcore/plugins/network/networkconstants.h.in
+index f4556252..23559401 100644
+--- a/processcore/plugins/network/networkconstants.h.in
++++ b/processcore/plugins/network/networkconstants.h.in
+@@ -2,6 +2,6 @@
+ 
+ namespace NetworkConstants {
+ 
+-static const QString HelperLocation = QStringLiteral("@KDE_INSTALL_FULL_LIBEXECDIR@/ksysguard/ksgrd_network_helper");
++static const QString HelperLocation = QStringLiteral("/run/wrappers/bin/ksgrd_network_helper");
+ 
+ }

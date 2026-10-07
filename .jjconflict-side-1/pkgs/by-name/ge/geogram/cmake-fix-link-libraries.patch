@@ -1,0 +1,17 @@
+--- a/src/lib/geogram/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/lib/geogram/CMakeLists.txt	2026-03-03 10:21:32.918057952 +0100
+@@ -92,7 +92,13 @@
+   if(GEOGRAM_USE_BUILTIN_DEPS)
+       target_link_libraries(geogram pthread dl)
+   else()
+-      target_link_libraries(geogram pthread dl lua5.4 z triangle Meshb.7 rply)
++      target_link_libraries(geogram pthread dl z Meshb.7 rply)
++      if(GEOGRAM_WITH_LUA)
++         target_link_libraries(geogram lua5.4)
++      endif()
++      if(GEOGRAM_WITH_TRIANGLE)
++         target_link_libraries(geogram triangle)
++      endif()
+   endif()
+ endif()
+ endif()

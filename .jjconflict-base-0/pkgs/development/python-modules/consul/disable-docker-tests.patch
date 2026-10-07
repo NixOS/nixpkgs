@@ -1,0 +1,19 @@
+diff --git a/conftest.py b/conftest.py
+index 533d99c..c57afd8 100644
+--- a/conftest.py
++++ b/conftest.py
+@@ -7,11 +7,11 @@ import socket
+ import time
+ import uuid
+ 
+-import docker
++#import docker
+ import pytest
+ import requests
+-from docker import DockerClient
+-from docker.errors import APIError, NotFound
++#from docker import DockerClient
++#from docker.errors import APIError, NotFound
+ from requests import RequestException
+ 
+ CONSUL_VERSIONS = ["1.17.3", "1.19.2", "1.20.2"]

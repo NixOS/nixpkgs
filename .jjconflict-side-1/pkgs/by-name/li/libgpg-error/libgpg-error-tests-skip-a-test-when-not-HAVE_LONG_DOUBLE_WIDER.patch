@@ -1,0 +1,59 @@
+commit bfdf7b0b7b62f4463451a7d5f8408cec75520dca
+Author: NIIBE Yutaka <gniibe@fsij.org>
+Date:   Thu Jun 25 10:53:29 2026 +0900
+
+    tests: Skip a test when !HAVE_LONG_DOUBLE_WIDER.
+    
+    * configure.ac (AC_TYPE_LONG_DOUBLE_WIDER): New.
+    * tests/t-printf.c (check_large_float): Fix a typo.
+    [!HAVE_LONG_DOUBLE_WIDER]: Skip the LDBL_MAX test.
+    
+    --
+    
+    GnuPG-bug-id: 8309
+    Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
+
+diff --git a/configure.ac b/configure.ac
+index e9abe0d..7871769 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -276,6 +276,7 @@ AC_C_CONST
+ AC_CHECK_SIZEOF(int)
+ AC_CHECK_SIZEOF(long)
+ AC_CHECK_SIZEOF(long long)
++AC_TYPE_LONG_DOUBLE_WIDER
+ 
+ GNUPG_FUNC_MKDIR_TAKES_ONE_ARG
+ 
+diff --git a/tests/t-printf.c b/tests/t-printf.c
+index 6cbd03f..b0a3f3f 100644
+--- a/tests/t-printf.c
++++ b/tests/t-printf.c
+@@ -449,7 +449,7 @@ check_large_float (void)
+             errno, strerror (errno));
+     }
+   else if (verbose)
+-    show ("format \"%%.100f\" with DBL_MAX: ->%s<-\n", buf2);
++    show ("format \"%%.101f\" with DBL_MAX: ->%s<-\n", buf2);
+ 
+   if (strcmp (buf, buf2))
+     fail ("format \"%%.100f\" does not match \"%%.101f\"\n" );
+@@ -469,6 +469,7 @@ check_large_float (void)
+     show ("format \"%%.100Lf\" with DBL_MAX: ->%s<-\n", buf);
+   gpgrt_free (buf);
+ 
++# ifdef HAVE_LONG_DOUBLE_WIDER
+   ld = LDBL_MAX;
+   buf = gpgrt_bsprintf ("%.100Lf\n", ld);
+   if (buf)
+@@ -478,6 +479,10 @@ check_large_float (void)
+   else if (verbose)
+     show ("format \"%%.100Lf\" with LDBL_MAX failed as expected\n");
+   gpgrt_free (buf);
++# else
++  if (verbose)
++    show ("LDBL_MAX == DBL_MAX - skipping LDBL_MAX test\n");
++# endif
+ 
+ #endif /*HAVE_LONG_DOUBLE*/
+ }

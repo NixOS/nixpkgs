@@ -1,0 +1,10 @@
+diff --git a/qmltermwidget.pro b/qmltermwidget.pro
+index c9594a9..aa1a804 100644
+--- a/qmltermwidget.pro
++++ b/qmltermwidget.pro
+@@ -62,4 +62,4 @@ kblayouts2.path = $$INSTALL_DIR/$$PLUGIN_IMPORT_PATH/kb-layouts/historic
+ scrollbar.files = $$PWD/src/QMLTermScrollbar.qml
+ scrollbar.path = $$INSTALL_DIR/$$PLUGIN_IMPORT_PATH
+ 
+-INSTALLS += target qmldir assets colorschemes colorschemes2 kblayouts kblayouts2 scrollbar
++INSTALLS += target qmldir assets

@@ -1,0 +1,130 @@
+From 4e1e354d17b558954c8e006bb432bb746922ec81 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sat, 2 May 2026 04:26:09 +0800
+Subject: [PATCH] express-ws: convert ESM sources to CommonJS for Node.js 22
+
+---
+ express-ws/index.js               |  4 +---
+ express-ws/src/add-ws-method.js   |  8 +++++---
+ express-ws/src/index.js           | 14 ++++++++------
+ express-ws/src/trailing-slash.js  |  4 +++-
+ express-ws/src/websocket-url.js   |  6 ++++--
+ express-ws/src/wrap-middleware.js |  4 +++-
+ 6 files changed, 24 insertions(+), 16 deletions(-)
+
+diff --git a/express-ws/index.js b/express-ws/index.js
+index b0df682..bada276 100644
+--- a/express-ws/index.js
++++ b/express-ws/index.js
+@@ -1,4 +1,2 @@
+ /* eslint-disable-next-line no-underscore-dangle */
+-const _require = require('esm')(module);
+-
+-module.exports = _require('./src/index').default;
++module.exports = require("./src/index");
+diff --git a/express-ws/src/add-ws-method.js b/express-ws/src/add-ws-method.js
+index 8c3a279..633ff86 100644
+--- a/express-ws/src/add-ws-method.js
++++ b/express-ws/src/add-ws-method.js
+@@ -1,7 +1,7 @@
+-import wrapMiddleware from './wrap-middleware';
+-import websocketUrl from './websocket-url';
++const wrapMiddleware = require('./wrap-middleware');
++const websocketUrl = require('./websocket-url');
+ 
+-export default function addWsMethod(target) {
++function addWsMethod(target) {
+   /* This prevents conflict with other things setting `.ws`. */
+   if (target.ws === null || target.ws === undefined) {
+     target.ws = function addWsRoute(route, ...middlewares) {
+@@ -28,3 +28,5 @@ export default function addWsMethod(target) {
+     };
+   }
+ }
++
++module.exports = addWsMethod;
+diff --git a/express-ws/src/index.js b/express-ws/src/index.js
+index dab6c66..16f3a2b 100644
+--- a/express-ws/src/index.js
++++ b/express-ws/src/index.js
+@@ -3,14 +3,14 @@
+  *
+  * Here be dragons. */
+ 
+-import http from 'http';
+-import express from 'express';
+-import ws from 'ws';
++const http = require('http');
++const express = require('express');
++const ws = require('ws');
+ 
+-import websocketUrl from './websocket-url';
+-import addWsMethod from './add-ws-method';
++const websocketUrl = require('./websocket-url');
++const addWsMethod = require('./add-ws-method');
+ 
+-export default function expressWs(app, httpServer, options = {}) {
++function expressWs(app, httpServer, options = {}) {
+   let server = httpServer;
+ 
+   if (server === null || server === undefined) {
+@@ -84,3 +84,5 @@ export default function expressWs(app, httpServer, options = {}) {
+     }
+   };
+ }
++
++module.exports = expressWs;
+diff --git a/express-ws/src/trailing-slash.js b/express-ws/src/trailing-slash.js
+index c7cba79..791c43c 100644
+--- a/express-ws/src/trailing-slash.js
++++ b/express-ws/src/trailing-slash.js
+@@ -1,7 +1,9 @@
+-export default function addTrailingSlash(string) {
++function addTrailingSlash(string) {
+   let suffixed = string;
+   if (suffixed.charAt(suffixed.length - 1) !== '/') {
+     suffixed = `${suffixed}/`;
+   }
+   return suffixed;
+ }
++
++module.exports = addTrailingSlash;
+diff --git a/express-ws/src/websocket-url.js b/express-ws/src/websocket-url.js
+index 64b845f..d2f35eb 100644
+--- a/express-ws/src/websocket-url.js
++++ b/express-ws/src/websocket-url.js
+@@ -1,7 +1,7 @@
+-import trailingSlash from './trailing-slash';
++const trailingSlash = require('./trailing-slash');
+ 
+ /* The following fixes HenningM/express-ws#17, correctly. */
+-export default function websocketUrl(url) {
++function websocketUrl(url) {
+   if (url.indexOf('?') !== -1) {
+     const [baseUrl, query] = url.split('?');
+ 
+@@ -9,3 +9,5 @@ export default function websocketUrl(url) {
+   }
+   return `${trailingSlash(url)}.websocket`;
+ }
++
++module.exports = websocketUrl;
+diff --git a/express-ws/src/wrap-middleware.js b/express-ws/src/wrap-middleware.js
+index 09b0dbf..c8586d7 100644
+--- a/express-ws/src/wrap-middleware.js
++++ b/express-ws/src/wrap-middleware.js
+@@ -1,4 +1,4 @@
+-export default function wrapMiddleware(middleware) {
++function wrapMiddleware(middleware) {
+   return (req, res, next) => {
+     if (req.ws !== null && req.ws !== undefined) {
+       req.wsHandled = true;
+@@ -15,3 +15,5 @@ export default function wrapMiddleware(middleware) {
+     }
+   };
+ }
++
++module.exports = wrapMiddleware;
+-- 
+2.53.0
+

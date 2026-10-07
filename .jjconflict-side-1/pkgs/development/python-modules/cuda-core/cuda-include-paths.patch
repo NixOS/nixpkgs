@@ -1,0 +1,71 @@
+--- a/examples/thread_block_cluster.py
++++ b/examples/thread_block_cluster.py
+@@ -70,18 +70,8 @@
+         print("This example requires NumPy 2.2.5 or later", file=sys.stderr)
+         sys.exit(1)
+ 
+-    cuda_path = get_cuda_path_or_home()
+-    if cuda_path is None:
+-        print("This example requires CUDA_PATH or CUDA_HOME to point to a CUDA toolkit.", file=sys.stderr)
+-        sys.exit(1)
+-    cuda_include = os.path.join(cuda_path, "include")
+-    if not os.path.isdir(cuda_include):
+-        print(f"CUDA include directory not found: {cuda_include}", file=sys.stderr)
+-        sys.exit(1)
+-    include_path = [cuda_include]
+-    cccl_include = os.path.join(cuda_include, "cccl")
+-    if os.path.isdir(cccl_include):
+-        include_path.insert(0, cccl_include)
++    # Nixpkgs installs CCCL and the CUDA runtime headers in separate prefixes, not under one toolkit root.
++    include_path = ["@cccl@", "@cudartInclude@"]
+ 
+     dev = Device()
+     arch = dev.compute_capability
+--- a/examples/tma_tensor_map.py
++++ b/examples/tma_tensor_map.py
+@@ -108,21 +108,8 @@
+ 
+ 
+ def _get_cccl_include_paths():
+-    cuda_path = get_cuda_path_or_home()
+-    if cuda_path is None:
+-        print("This example requires CUDA_PATH or CUDA_HOME to point to a CUDA toolkit.", file=sys.stderr)
+-        sys.exit(1)
+-
+-    cuda_include = os.path.join(cuda_path, "include")
+-    if not os.path.isdir(cuda_include):
+-        print(f"CUDA include directory not found: {cuda_include}", file=sys.stderr)
+-        sys.exit(1)
+-
+-    include_path = [cuda_include]
+-    cccl_include = os.path.join(cuda_include, "cccl")
+-    if os.path.isdir(cccl_include):
+-        include_path.insert(0, cccl_include)
+-    return include_path
++    # Nixpkgs installs CCCL and the CUDA runtime headers in separate prefixes, not under one toolkit root.
++    return ["@cccl@", "@cudartInclude@"]
+ 
+ 
+ def main():
+--- a/tests/helpers/__init__.py
++++ b/tests/helpers/__init__.py
+@@ -10,16 +10,9 @@
+ from cuda_python_test_helpers import *
+ 
+ CUDA_PATH = get_cuda_path_or_home()
+-CUDA_INCLUDE_PATH = None
+-CCCL_INCLUDE_PATHS = None
+-if CUDA_PATH is not None:
+-    path = os.path.join(CUDA_PATH, "include")
+-    if os.path.isdir(path):
+-        CUDA_INCLUDE_PATH = path
+-        CCCL_INCLUDE_PATHS = (path,)
+-        path = os.path.join(path, "cccl")
+-        if os.path.isdir(path):
+-            CCCL_INCLUDE_PATHS = (path,) + CCCL_INCLUDE_PATHS
++# Nixpkgs installs CCCL and the CUDA runtime headers in separate prefixes, not under one toolkit root.
++CUDA_INCLUDE_PATH = "@cudartInclude@"
++CCCL_INCLUDE_PATHS = ("@cccl@", "@cudartInclude@")
+ 
+ 
+ @functools.cache
