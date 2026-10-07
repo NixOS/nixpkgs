@@ -6,16 +6,16 @@
 }:
 maven.buildMavenPackage (finalAttrs: {
   pname = "keycloak-magic-link";
-  version = "0.84";
+  version = "0.89";
 
   src = fetchFromGitHub {
     owner = "p2-inc";
     repo = "keycloak-magic-link";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t+OACAr9TJvJbjAQZzFbMf33CuhK9s/n+MESPRD4lUU=";
+    hash = "sha256-LllzFVmp8SIOaW1pw8Gpn/WA4usGr+RpzeXn6U9ccZw=";
   };
 
-  mvnHash = "sha256-nSJvNSgo1gftGYmx0lFXHIeIhpZ+Ph1KvOHz8jF3voE=";
+  mvnHash = "sha256-85GWDJYTMEDOQwBUusjCAjprtiqwpFYfv/j3kCWMZho=";
 
   # skip the spotless git check and sandbox-incompatible unit tests
   mvnParameters = "-DskipTests -Dspotless.check.skip=true";
