@@ -40,7 +40,6 @@ PKG_SET = "home-assistant.python3Packages"
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
     "av": "av",
-    "caldav": "caldav",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "fints": "fints",
     "HAP-python": "hap-python",
@@ -71,7 +70,6 @@ EXTRA_COMPONENT_DEPS = {
 OUR_VERSION_IS_NEWER_THAN = {
     "blinkstick": "1.2.0",
     "gps3": "0.33.3",
-    "ouman-eh-800-api": "0.5.0",
     "proxmoxer": "2.2.0",
     "py-cpuinfo": "9.0.0",
     "pybluez": "0.22",

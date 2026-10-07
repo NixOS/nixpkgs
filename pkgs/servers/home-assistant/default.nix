@@ -43,31 +43,6 @@ let
         postPatch = null;
       };
 
-      aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
-        version = "22.7.0";
-        src = fetchFromGitHub {
-          owner = "tkdrob";
-          repo = "aioskybell";
-          tag = version;
-          hash = "sha256-aBT1fDFtq1vasTvCnAXKV2vmZ6LBLZqRCiepv1HDJ+Q=";
-        };
-      });
-
-      aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.1";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "aiowatttime";
-          tag = version;
-          hash = "sha256-tWnxGLJT+CRFvkhxFamHxnLXBvoR8tfOvzH1o1i5JJg=";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml --replace-fail \
-            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
-            '"poetry-core"'
-        '';
-      });
-
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
@@ -82,21 +57,6 @@ let
         '';
         propagatedBuildInputs = (oldAttrs.propagatedBuildInputs or [ ]) ++ [
           self.pytz
-        ];
-      });
-
-      caldav = self.caldav_2;
-
-      gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
-        version = "5.12.4";
-        src = fetchFromGitHub {
-          owner = "burnash";
-          repo = "gspread";
-          tag = "v${version}";
-          hash = "sha256-i+QbnF0Y/kUMvt91Wzb8wseO/1rZn9xzeA5BWg1haks=";
-        };
-        dependencies = with self; [
-          requests
         ];
       });
 
@@ -133,46 +93,6 @@ let
         doCheck = false; # no tests
       });
 
-      plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
-        version = "4.15.16";
-        src = fetchFromGitHub {
-          owner = "pkkid";
-          repo = "python-plexapi";
-          tag = version;
-          hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
-        };
-
-        # ancient pinned version requires pkg_resources
-        nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
-          self.setuptools_80
-        ];
-      });
-
-      # Pinned due to API changes in 0.1.0
-      poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.8";
-        src = fetchPypi {
-          pname = "poolsense";
-          inherit version;
-          hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
-        };
-      });
-
-      py-madvr2 = super.py-madvr2.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.40";
-        src = fetchFromGitHub {
-          owner = "iloveicedgreentea";
-          repo = "py-madvr";
-          tag = "v${version}";
-          hash = "sha256-0IX57Sa/oXGiViD39FVBRa2jxuKuZ3UNsOTHwuBdmWs=";
-        };
-        pythonImportsCheck = [ "madvr" ];
-        disabledTests = oldAttrs.disabledTests ++ [
-          "test_async_add_tasks"
-          "test_send_heartbeat"
-        ];
-      });
-
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
         version = "0.6.5";
         src = fetchFromGitHub {
@@ -184,30 +104,6 @@ let
         dependencies = oldAttrs.propagatedBuildInputs or [ ] ++ [
           self.pytz
         ];
-      });
-
-      pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.6";
-        src = fetchFromGitHub {
-          owner = "AustinBrunkhorst";
-          repo = "pysnooz";
-          tag = "v${version}";
-          hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
-        };
-        patches = [ ];
-        doCheck = false;
-      });
-
-      pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
-        version = "9.0.1";
-        src = fetchFromGitHub {
-          owner = "home-assistant-libs";
-          repo = "pytradfri";
-          tag = version;
-          hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
-        };
-        patches = [ ];
-        doCheck = false;
       });
 
       serialx = super.serialx.overridePythonAttrs (oldAttrs: {
@@ -251,7 +147,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.9.4";
+  hassVersion = "2026.10.0";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -272,13 +168,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-DoJ0Y0v6Q+ZoXGcLWHxiPw0ZVAELCTGp/9k3FlgZbm8=";
+    hash = "sha256-gc+GOGp11aFzSq8tG8q2gWq8m5KlnH1nXGGW5K0u2qw=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-MKb9e2NJnJlZvpVnxLffuMFzFGbeZ6sm5VmKutGrv/c=";
+    hash = "sha256-kQUNAkwDK4X4cBR3NS0QRwZWLYp1ydos/kkMI+qhPpI=";
   };
 
   build-system = with python3Packages; [
@@ -306,9 +202,6 @@ python3Packages.buildPythonApplication rec {
     # No scaring our users about our install method
     ./patches/nixos-was-never-supported.patch
 
-    # Fix portainer hang due to missing fixture autouse
-    ./patches/portainer-fixture-autouse.patch
-
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
@@ -319,11 +212,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace tests/test_core_config.py --replace-fail '"/usr"' "\"$NIX_BUILD_TOP/media\""
 
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==78.1.1" setuptools
-
-    # https://github.com/RenierM26/pyEzvizApi/commit/ae0651ea93f031e94e7286fa3439fcc12acfb001
-    substituteInPlace homeassistant/components/ezviz/switch.py \
-      --replace-fail "SupportFulldayRecord" "SupportFullDayRecord"
+      --replace-fail "setuptools==84.0.0" setuptools
   '';
 
   pythonRemoveDeps = [
@@ -358,8 +247,8 @@ python3Packages.buildPythonApplication rec {
     fnv-hash-fast
     gazetteer-matcher
     ha-ffmpeg
-    hass-nabucasa
     hassil
+    hass-nabucasa
     home-assistant-bluetooth
     home-assistant-intents
     httpx
@@ -390,9 +279,6 @@ python3Packages.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
-    voluptuous
-    voluptuous-openapi
-    voluptuous-serialize
     webrtc-models
     yarl
     zeroconf
