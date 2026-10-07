@@ -17,12 +17,9 @@ import ./make-test-python.nix (
           enable = true;
 
           username = "test";
-          passwordFile.response = config.testing.hardcoded-secret.fileSecrets."stash-password".response;
-
-          jwtSecretKey.response.path =
-            config.testing.hardcoded-secret.fileSecrets."jwt_secret_key".response.path;
-          sessionStoreKey.response.path =
-            config.testing.hardcoded-secret.fileSecrets."session_store_key".response.path;
+          passwordFile.response = config.contracts.fileSecrets.results.stash-passwordFile;
+          jwtSecretKey.response = config.contracts.fileSecrets.results.stash-jwtSecretKey;
+          sessionStoreKey.response = config.contracts.fileSecrets.results.stash-sessionStoreKey;
 
           plugins =
             let
@@ -67,17 +64,11 @@ import ./make-test-python.nix (
             stash = [ { path = "/srv"; } ];
           };
         };
-        testing.hardcoded-secret.fileSecrets."stash-password" = {
-          request = config.services.stash.passwordFile.request;
-          providerOptions.content = "MyPassword";
-        };
-        testing.hardcoded-secret.fileSecrets."jwt_secret_key" = {
-          request = config.services.stash.jwtSecretKey.request;
-          providerOptions.content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-        };
-        testing.hardcoded-secret.fileSecrets."session_store_key" = {
-          request = config.services.stash.sessionStoreKey.request;
-          providerOptions.content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+        contracts.fileSecrets.defaultProvider = config.contracts.fileSecrets.providers.hardcoded-secret;
+        testing.hardcoded-secret.fileSecrets = {
+          stash-passwordFile.providerOptions.content = "MyPassword";
+          stash-jwtSecretKey.providerOptions.content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+          stash-sessionStoreKey.providerOptions.content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
         };
       };
 

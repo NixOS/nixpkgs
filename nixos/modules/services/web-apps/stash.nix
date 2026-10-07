@@ -506,6 +506,16 @@ in
   };
 
   config = mkIf cfg.enable {
+    # Send the request of each secret option that uses the contract to `want`.
+    # The user sets the `response`, for example from `results`.
+    contracts.fileSecrets.want = {
+      stash-passwordFile = mkIf (lib.isAttrs cfg.passwordFile) { inherit (cfg.passwordFile) request; };
+      stash-jwtSecretKey = mkIf (lib.isAttrs cfg.jwtSecretKey) { inherit (cfg.jwtSecretKey) request; };
+      stash-sessionStoreKey = mkIf (lib.isAttrs cfg.sessionStoreKey) {
+        inherit (cfg.sessionStoreKey) request;
+      };
+    };
+
     assertions = [
       {
         assertion =
