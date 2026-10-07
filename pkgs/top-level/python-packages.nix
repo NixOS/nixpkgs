@@ -2851,8 +2851,6 @@ self: super: with self; {
 
   caldav = callPackage ../development/python-modules/caldav { };
 
-  caldav_2 = callPackage ../development/python-modules/caldav/2.nix { };
-
   callee = callPackage ../development/python-modules/callee { };
 
   calmjs = callPackage ../development/python-modules/calmjs { };
