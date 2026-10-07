@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Wrapper for Auburns' FastNoise Lite noise generation library";
-    homepage = "https://github.com/tizilogic/PyFastNoiseLite";
+    homepage = "https://github.com/ledFx/audio-hotplug";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };

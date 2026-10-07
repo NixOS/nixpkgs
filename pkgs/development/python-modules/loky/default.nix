@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "loky";
-  version = "3.6.0";
+  version = "3.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "joblib";
     repo = "loky";
     tag = finalAttrs.version;
-    hash = "sha256-z5LVm+lRPbLn3m7vyAJqAEu90rERFpF108KSCEZ4d3k=";
+    hash = "sha256-4THM0g6H5fCHRbjyatXtalL7jeAFZKAMoUr/IIDBsX8=";
   };
 
   postPatch =
@@ -60,8 +60,13 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # FileNotFoundError: [Errno 2] No such file or directory: ''
     "test_resource_tracker"
+
+    # Sends 2.2GB through a pipe and can exceed the 60s faulthandler timeout on busy builders
+    "test_no_failure_on_large_data_send"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Flaky: AssertionError: Executor took too long to shutdown
+    "test_first_exception_some_already_complete"
     # Exercises the `pgrep` fallback, which is unavailable in the darwin sandbox
     "test_kill_process_tree"
     # PermissionError: [Errno 13] Permission denied: '/tmp/foobar'
