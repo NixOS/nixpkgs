@@ -44,14 +44,9 @@
   # Features available to override, the list of them is in featuresInfo. They
   # are all turned on by default.
   features ? { },
-  # If one wishes to use a different src or name for a very custom build
-  overrideSrc ? { },
-  pname ? "gnuradio",
-  version ? "3.10.12.0",
 }:
 
 let
-  sourceSha256 = "sha256-489Pc6z6Ha7jkTzZSEArDQJGkWdWRDIn1uhfFyLLiCo=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -279,26 +274,19 @@ let
     };
   };
   hasFeature = feat: (if builtins.hasAttr feat features then features.${feat} else true);
-  versionAttr = {
-    major = builtins.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
-    minor = builtins.elemAt (lib.splitVersion version) 2;
-    patch = builtins.elemAt (lib.splitVersion version) 3;
-  };
   cross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version;
-  src =
-    if overrideSrc != { } then
-      overrideSrc
-    else
-      fetchFromGitHub {
-        repo = "gnuradio";
-        owner = "gnuradio";
-        rev = "v${version}";
-        sha256 = sourceSha256;
-      };
+  pname = "gnuradio";
+  version = "3.10.12.0";
+
+  src = fetchFromGitHub {
+    owner = "gnuradio";
+    repo = "gnuradio";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-489Pc6z6Ha7jkTzZSEArDQJGkWdWRDIn1uhfFyLLiCo=";
+  };
 
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
@@ -382,12 +370,16 @@ stdenv.mkDerivation (finalAttrs: {
     # Inherit functions and Nix attribute sets
     inherit
       hasFeature
-      versionAttr
       features
       featuresInfo
       ;
-    gnuradioOlder = lib.versionOlder versionAttr.major;
-    gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
+    versionAttr = {
+      major = lib.versions.majorMinor finalAttrs.version;
+      minor = lib.versions.patch finalAttrs.version;
+      patch = lib.elemAt (lib.splitVersion finalAttrs.version) 3;
+    };
+    gnuradioOlder = lib.versionOlder finalAttrs.passthru.versionAttr.major;
+    gnuradioAtLeast = lib.versionAtLeast finalAttrs.passthru.versionAttr.major;
   }
   // lib.optionalAttrs (hasFeature "gr-qtgui") {
     qt = qt5;
@@ -472,6 +464,7 @@ stdenv.mkDerivation (finalAttrs: {
       real-world radio systems.
     '';
     homepage = "https://www.gnuradio.org";
+    changelog = "https://github.com/gnuradio/gnuradio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
