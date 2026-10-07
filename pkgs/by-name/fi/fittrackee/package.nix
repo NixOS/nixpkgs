@@ -106,6 +106,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "fittrackee"
   ];
 
+  disabledTests = [
+    # Raises the error but it's not captured by the test
+    "test_it_raises_error_when_token_body_is_invalid"
+  ];
+
   postgresqlTestSetupPost = ''
     echo "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" | PGUSER=postgres psql test_db
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
