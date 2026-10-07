@@ -5473,6 +5473,12 @@
       }
     ];
   };
+  cleboost = {
+    email = "clement.balarot@gmail.com";
+    github = "Cleboost";
+    githubId = 61158869;
+    name = "Clément Balarot";
+  };
   clebs = {
     email = "borja.clemente@gmail.com";
     github = "clebs";
