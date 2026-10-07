@@ -97,8 +97,6 @@ buildGo127Module (finalAttrs: {
   checkFlags =
     let
       skippedTests = [
-        # dislikes vendoring
-        "TestPackageDocs" # .
         # tries to start tailscaled
         "TestContainerBoot" # cmd/containerboot
 
@@ -133,9 +131,6 @@ buildGo127Module (finalAttrs: {
 
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
-
-        # Fails because we vendor dependencies
-        "TestLicenseHeaders"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -279,7 +274,16 @@ buildGo127Module (finalAttrs: {
     {
       inherit (nixosTests) headscale;
       inherit tailscale-nginx-auth;
-      go-other = mkGoTests "other" "./..." goTestDirs { };
+      go-other = mkGoTests "other" "./..." goTestDirs {
+        # TestLicenseHeaders and TestPackageDocs walk the source tree and
+        # would check the vendored dependencies too. `filepath.Walk` does not
+        # follow symlinks, so link the vendor directory instead of copying it.
+        preCheck = ''
+          chmod -R u+w vendor
+          rm -rf vendor
+          ln -s "$goModules" vendor
+        '';
+      };
     }
     // lib.mapAttrs' (
       dir: overrides:
