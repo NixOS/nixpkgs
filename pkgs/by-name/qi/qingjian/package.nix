@@ -85,6 +85,8 @@ let
 in
 # 聚合包：server + 插件 + 数据装进同一个 $out
 stdenv.mkDerivation {
+  strictDeps = true;
+  __structuredAttrs = true;
   pname = "qingjian";
   version = "0.1.5-unstable-2026-09-29";
 
