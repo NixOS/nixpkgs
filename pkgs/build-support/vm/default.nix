@@ -244,10 +244,10 @@ let
     ${coreutils}/bin/chmod 755 /run/modprobe
     echo /run/modprobe > /proc/sys/kernel/modprobe
 
-    # For debugging: if this is the second time this image is run,
-    # then don't start the build again, but instead drop the user into
-    # an interactive shell.
-    if test -n "$origBuilder" -a ! -e /.debug; then
+    # For debugging: if this is the second time this image is run, or
+    # `run-vm --shell` asked for it, then don't start the build again,
+    # but instead drop the user into an interactive shell.
+    if test -n "$origBuilder" -a ! -e /.debug -a ! -e /tmp/xchg/debug-shell; then
       exec < /dev/null
       ${coreutils}/bin/touch /.debug
       declare -a argsArray=()
@@ -262,6 +262,7 @@ let
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
+      echo "(To power off the VM: ${busybox}/bin/poweroff -f, or Ctrl-A X)"
       exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemu-common.qemuSerialDevice} &> /dev/${qemu-common.qemuSerialDevice}
     fi
   '';
@@ -330,6 +331,12 @@ let
       ${coreutils}/bin/cat > ./run-vm <<EOF
       #! ${bash}/bin/sh
       ''${diskImage:+diskImage=$diskImage}
+      # \`./run-vm --shell\` boots into an interactive shell instead of the build.
+      if [ "\''${1-}" = --shell ]; then
+        ${coreutils}/bin/touch xchg/debug-shell
+      else
+        ${coreutils}/bin/rm -f xchg/debug-shell
+      fi
       ${startVirtiofsd}
 
       ${qemuCommand}
