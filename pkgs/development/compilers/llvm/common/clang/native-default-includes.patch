@@ -1,25 +1,31 @@
-From 117de53de2f37c935d7da7f65fd4077d7a36d7a8 Mon Sep 17 00:00:00 2001
+From 5771f787ed592be45a16ef58588122f3da768cbd Mon Sep 17 00:00:00 2001
 From: Connor Baker <ConnorBaker01@gmail.com>
-Date: Tue, 29 Sep 2026 11:08:26 -0700
+Date: Wed, 7 Oct 2026 16:08:02 -0700
 Subject: [PATCH] clang: bind selected C++ and libc headers at driver lookup
  sites
 
+Replace ambient libc discovery as a block, leaving native builtin-header
+insertion unchanged. LLVM19-21 append builtin headers after libc on musl;
+Swift's LLVM19 fork adds them before libc on every target instead. Copying
+the former insertion into the bound-provider branch both duplicates the
+latter and refers to a variable outside its scope.
+
+Swift's ordering and related builtin-header adaptations are recorded in:
+https://github.com/swiftlang/llvm-project/commit/0b329781b231092b205b010b0d0a876cedd05675
 ---
- include/clang/Driver/Options.td       |  7 ++++
- lib/Driver/ToolChains/BoundIncludes.h | 53 +++++++++++++++++++++++++++
- lib/Driver/ToolChains/Clang.cpp       |  9 +++++
- lib/Driver/ToolChains/Gnu.cpp         | 10 +++++
- lib/Driver/ToolChains/Linux.cpp       | 11 ++++++
- 5 files changed, 90 insertions(+)
+ include/clang/Driver/Options.td       |  7 +++
+ lib/Driver/ToolChains/BoundIncludes.h | 53 ++++++++++++++++++++
+ lib/Driver/ToolChains/Clang.cpp       |  9 ++++
+ lib/Driver/ToolChains/Gnu.cpp         | 10 ++++
+ lib/Driver/ToolChains/Linux.cpp       | 69 +++++++++++++++------------
+ 5 files changed, 117 insertions(+), 31 deletions(-)
  create mode 100644 lib/Driver/ToolChains/BoundIncludes.h
 
 diff --git a/include/clang/Driver/Options.td b/include/clang/Driver/Options.td
-index 958d0d0..e92f0df 100644
+index 15f9ee7..fcba8f5 100644
 --- a/include/clang/Driver/Options.td
 +++ b/include/clang/Driver/Options.td
-@@ -1763,6 +1763,13 @@ def fprofile_instr_use : Flag<["-"], "fprofile-instr-use">, Group<f_Group>,
- def fprofile_instr_use_EQ : Joined<["-"], "fprofile-instr-use=">,
-     Group<f_Group>, Visibility<[ClangOption, CLOption]>,
+@@ -1789,2 +1789,9 @@ def fprofile_instr_use_EQ : Joined<["-"], "fprofile-instr-use=">,
      HelpText<"Use instrumentation data for profile-guided optimization">;
 +def fdefault_include_map_EQ : Joined<["-"], "fdefault-include-map=">,
 +    Group<f_Group>, Flags<[NoArgumentUnused]>, Visibility<[ClangOption]>,
@@ -29,8 +35,6 @@ index 958d0d0..e92f0df 100644
 +  Group<clang_i_Group>, Visibility<[ClangOption]>,
 +  HelpText<"Add a suppressible toolchain default at this system include position">;
  def fprofile_remapping_file_EQ : Joined<["-"], "fprofile-remapping-file=">,
-     Group<f_Group>, Visibility<[ClangOption, CC1Option, CLOption]>,
-     MetaVarName<"<file>">,
 diff --git a/lib/Driver/ToolChains/BoundIncludes.h b/lib/Driver/ToolChains/BoundIncludes.h
 new file mode 100644
 index 0000000..8d22d31
@@ -91,12 +95,10 @@ index 0000000..8d22d31
 +} // namespace clang::driver::toolchains
 +#endif
 diff --git a/lib/Driver/ToolChains/Clang.cpp b/lib/Driver/ToolChains/Clang.cpp
-index 6261332..f259ca9 100644
+index 8858c31..2b301f4 100644
 --- a/lib/Driver/ToolChains/Clang.cpp
 +++ b/lib/Driver/ToolChains/Clang.cpp
-@@ -1039,6 +1039,15 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
-                                                        << A->getAsString(Args);
-         }
+@@ -1173,2 +1173,11 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
        }
 +    } else if (A->getOption().matches(options::OPT_idefaultsystem)) {
 +      // Keep the default's position among system paths while honoring caller
@@ -108,23 +110,15 @@ index 6261332..f259ca9 100644
 +      }
 +      continue;
      } else if (A->getOption().matches(options::OPT_isystem_after)) {
-       // Handling of paths which must come late.  These entries are handled by
-       // the toolchain itself after the resource dir is inserted in the right
 diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
-index f5e2655..735f509 100644
+index 5e9a655..47eec46 100644
 --- a/lib/Driver/ToolChains/Gnu.cpp
 +++ b/lib/Driver/ToolChains/Gnu.cpp
-@@ -7,6 +7,7 @@
- //===----------------------------------------------------------------------===//
- 
+@@ -9,2 +9,3 @@
  #include "Gnu.h"
 +#include "BoundIncludes.h"
  #include "Arch/ARM.h"
- #include "Arch/CSKY.h"
- #include "Arch/LoongArch.h"
-@@ -3151,6 +3152,15 @@ void Generic_GCC::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
-                         options::OPT_nostdlibinc))
-     return;
+@@ -3261,2 +3262,11 @@ void Generic_GCC::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
  
 +  const char Family = GetCXXStdlibType(DriverArgs) == ToolChain::CST_Libcxx
 +                          ? '2' : '1';
@@ -136,37 +130,87 @@ index f5e2655..735f509 100644
 +  }
 +
    switch (GetCXXStdlibType(DriverArgs)) {
-   case ToolChain::CST_Libcxx:
-     addLibCxxIncludePaths(DriverArgs, CC1Args);
 diff --git a/lib/Driver/ToolChains/Linux.cpp b/lib/Driver/ToolChains/Linux.cpp
-index 8ac8d4e..44605b2 100644
+index 35bf390..832c7a9 100644
 --- a/lib/Driver/ToolChains/Linux.cpp
 +++ b/lib/Driver/ToolChains/Linux.cpp
-@@ -7,6 +7,7 @@
- //===----------------------------------------------------------------------===//
- 
+@@ -9,2 +9,3 @@
  #include "Linux.h"
 +#include "BoundIncludes.h"
  #include "Arch/ARM.h"
- #include "Arch/LoongArch.h"
- #include "Arch/Mips.h"
-@@ -645,6 +646,16 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
-   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
-     return;
+@@ -643,38 +644,44 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
  
-+  // The bound policy replaces ambient local, multilib and host libc
-+  // discovery. The resource directory keeps its native glibc/musl order.
+-  // LOCAL_INCLUDE_DIR
+-  addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
+-  // TOOL_INCLUDE_DIR
+-  AddMultilibIncludeArgs(DriverArgs, CC1Args);
+-
+-  // Check for configure-time C include directories.
+-  StringRef CIncludeDirs(C_INCLUDE_DIRS);
+-  if (CIncludeDirs != "") {
+-    SmallVector<StringRef, 5> dirs;
+-    CIncludeDirs.split(dirs, ":");
+-    for (StringRef dir : dirs) {
+-      StringRef Prefix =
+-          llvm::sys::path::is_absolute(dir) ? "" : StringRef(SysRoot);
+-      addExternCSystemInclude(DriverArgs, CC1Args, Prefix + dir);
++  // Bind libc providers without changing the native builtin-header order.
 +  if (auto Paths = lookupBoundIncludes(DriverArgs, D, getTriple(), '0')) {
 +    for (const std::string &Path : *Paths)
 +      addExternCSystemInclude(DriverArgs, CC1Args, Path);
-+    if (!DriverArgs.hasArg(options::OPT_nobuiltininc) && getTriple().isMusl())
-+      addSystemInclude(DriverArgs, CC1Args, ResourceDirInclude);
-+    return;
-+  }
++  } else {
++    // LOCAL_INCLUDE_DIR
++    addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
++    // TOOL_INCLUDE_DIR
++    AddMultilibIncludeArgs(DriverArgs, CC1Args);
 +
-   // LOCAL_INCLUDE_DIR
-   addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
-   // TOOL_INCLUDE_DIR
--- 
-2.43.0
-
++    // Check for configure-time C include directories.
++    StringRef CIncludeDirs(C_INCLUDE_DIRS);
++    if (CIncludeDirs != "") {
++      SmallVector<StringRef, 5> dirs;
++      CIncludeDirs.split(dirs, ":");
++      for (StringRef dir : dirs) {
++        StringRef Prefix =
++            llvm::sys::path::is_absolute(dir) ? "" : StringRef(SysRoot);
++        addExternCSystemInclude(DriverArgs, CC1Args, Prefix + dir);
++      }
++      return;
+     }
+-    return;
+-  }
+ 
+-  // On systems using multiarch and Android, add /usr/include/$triple before
+-  // /usr/include.
+-  std::string MultiarchIncludeDir = getMultiarchTriple(D, getTriple(), SysRoot);
+-  if (!MultiarchIncludeDir.empty() &&
+-      D.getVFS().exists(concat(SysRoot, "/usr/include", MultiarchIncludeDir)))
+-    addExternCSystemInclude(
+-        DriverArgs, CC1Args,
+-        concat(SysRoot, "/usr/include", MultiarchIncludeDir));
++    // On systems using multiarch and Android, add /usr/include/$triple before
++    // /usr/include.
++    std::string MultiarchIncludeDir = getMultiarchTriple(D, getTriple(), SysRoot);
++    if (!MultiarchIncludeDir.empty() &&
++        D.getVFS().exists(concat(SysRoot, "/usr/include", MultiarchIncludeDir)))
++      addExternCSystemInclude(
++          DriverArgs, CC1Args,
++          concat(SysRoot, "/usr/include", MultiarchIncludeDir));
+ 
+-  if (getTriple().getOS() == llvm::Triple::RTEMS)
+-    return;
++    if (getTriple().getOS() == llvm::Triple::RTEMS)
++      return;
+ 
+-  // Add an include of '/include' directly. This isn't provided by default by
+-  // system GCCs, but is often used with cross-compiling GCCs, and harmless to
+-  // add even when Clang is acting as-if it were a system compiler.
+-  addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/include"));
++    // Add an include of '/include' directly. This isn't provided by default by
++    // system GCCs, but is often used with cross-compiling GCCs, and harmless to
++    // add even when Clang is acting as-if it were a system compiler.
++    addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/include"));
+ 
+-  addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/include"));
++    addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/include"));
++  }
+ 
