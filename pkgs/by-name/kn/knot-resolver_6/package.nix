@@ -52,6 +52,17 @@ let
     patches = [
       # Install-time paths sometimes differ from run-time paths in nixpkgs.
       ./paths.patch
+      # Temporary patches that will be included in further upstream releases.
+      (fetchpatch {
+        name = "logging-level-regression.patch";
+        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/ec5b6d9f1a0defa5f817bf2d1c53a5df2f2a5e99.diff";
+        hash = "sha256-Bde8mIFUjf8aVBFh2TeWZMiw94VGMXkfd1+SvhzhvLo=";
+      })
+      (fetchpatch {
+        name = "musl-build-regression.patch";
+        url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/8c4bd515a0c0da5fbff85038322a2b9f2d077dfd.diff";
+        hash = "sha256-+fHQ2pmUGTLiCP+OKb5PobFfQ2nwdEGm+IXbSpK35Ik=";
+      })
     ];
 
     # systemd Exec* options are difficult to override in NixOS *if present*, so we drop them.
