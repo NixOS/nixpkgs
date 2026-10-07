@@ -17795,6 +17795,12 @@
     githubId = 1678126;
     name = "Marco A L Barbosa";
   };
+  malhussan = {
+    email = "malhussan@meshcloud.io";
+    github = "malhussan";
+    githubId = 30862222;
+    name = "Mohammad Alhussan";
+  };
   malik = {
     name = "Malik";
     email = "abdelmalik.najhi@stud.hs-kempten.de";
