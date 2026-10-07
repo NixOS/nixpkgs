@@ -20,7 +20,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  version = "26.04.4";
+  version = "26.04.6";
 
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nextflow-io";
     repo = "nextflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U0QHIzIbNe9dxqxhGAxJuskR9183UgGgLZQAGB7TKmo=";
+    hash = "sha256-lBlTQb6/6+C5EyEXAUKaR+RieBZe3RKAeG15AEg5Tyg=";
   };
 
   buildInputs = [
@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
       Etjean
       mulatta
       David-Moody
+      pjones
     ];
     mainProgram = "nextflow";
     platforms = lib.platforms.unix;
