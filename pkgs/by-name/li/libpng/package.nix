@@ -46,6 +46,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [ zlib ];
 
+  strictDeps = true;
+
   doCheck = true;
 
   passthru = {
@@ -53,6 +55,8 @@ stdenv'.mkDerivation (finalAttrs: {
 
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description =
