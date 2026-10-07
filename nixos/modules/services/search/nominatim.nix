@@ -392,7 +392,7 @@ in
                   echo ">>> ${mapName}: No existing data found. Importing fresh map."
 
                   echo ">>> ${mapName}: Downloading the initial map (this can take some time)"
-                  curl --silent --show-error -L -o map.osm.pbf "${mapUrl}"
+                  curl --silent --show-error --location --output map.osm.pbf "${mapUrl}"
                   trap 'rm -rf map.osm.pbf' EXIT
 
                   echo ">>> ${mapName}: Importing the initial map (this can take a lot of time!)"
