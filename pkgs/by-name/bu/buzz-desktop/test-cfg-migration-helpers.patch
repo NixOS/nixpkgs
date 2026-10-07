@@ -1,0 +1,13 @@
+diff --git a/desktop/src-tauri/src/managed_agents/storage.rs b/desktop/src-tauri/src/managed_agents/storage.rs
+--- a/desktop/src-tauri/src/managed_agents/storage.rs
++++ b/desktop/src-tauri/src/managed_agents/storage.rs
+@@ -492,3 +492,3 @@ pub fn migrate_agent_keys_to_dev_service(app: &tauri::AppHandle) {
+ /// entirely (no prod keyring access).
+-#[cfg(debug_assertions)]
++#[cfg(any(debug_assertions, test))]
+ const DEV_MIGRATION_MARKER: &str = "_dev_migration_v1";
+@@ -513,3 +513,3 @@ const DEV_MIGRATION_MARKER: &str = "_dev_migration_v1";
+ /// fresh key on their next onboarding run.
+-#[cfg(debug_assertions)]
++#[cfg(any(debug_assertions, test))]
+ fn copy_agent_keys_between_stores(pubkeys: &[String], src: &impl KeyStore, dst: &impl KeyStore) {

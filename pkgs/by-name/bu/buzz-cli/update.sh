@@ -4,7 +4,8 @@
 
 # The CLI crates have no releases of their own, so the packages built from this
 # workspace follow Buzz Desktop releases (desktop-v* tags), which ship these
-# binaries. They inherit the source and Cargo hash from buzz-cli.
+# binaries. They inherit the source and Cargo hash from buzz-cli; buzz-desktop
+# takes its version from the tag and gets new hashes.
 
 set -euo pipefail
 
@@ -26,3 +27,4 @@ base="$(github "https://raw.githubusercontent.com/$repo/$tag/Cargo.toml" |
 sed -i "s|tag = \"desktop-v[^\"]*\";|tag = \"$tag\";|" pkgs/by-name/bu/buzz-cli/package.nix
 update-source-version buzz-cli "$base-unstable-$date"
 nix-update buzz-cli --version skip
+nix-update buzz-desktop --version skip
