@@ -2668,6 +2668,12 @@
     githubId = 1048831;
     name = "Adam Simpson";
   };
+  asinglesprinkle = {
+    email = "cmichaelsd@gmail.com";
+    github = "asinglesprinkle";
+    githubId = 34247773;
+    name = "Cole Michaels";
+  };
   asininemonkey = {
     email = "nixpkgs@asininemonkey.com";
     github = "asininemonkey";
