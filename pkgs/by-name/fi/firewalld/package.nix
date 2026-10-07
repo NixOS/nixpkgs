@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "firewalld";
