@@ -6,12 +6,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-colorized";
-  version = "0-unstable-2019-12-05";
+  version = "0-unstable-2026-06-24";
 
   src = fetchgit {
     url = "https://gitlab.com/NalaGinrut/guile-colorized";
-    rev = "1625a79f0e31849ebd537e2a58793fb45678c58f";
-    hash = "sha256-MxRFt3dPOBA/u2RbdnwWCfS6qjnVYtiuV7K+B6SFp4w=";
+    rev = "f9dfbde0cf0a7c72d29ad9efff22a69af85f0894";
+    hash = "sha256-RNQRePn3p2ItxrY9LYFK7sKBPCEOjUU0Ztt418XgA2I=";
   };
 
   strictDeps = true;
