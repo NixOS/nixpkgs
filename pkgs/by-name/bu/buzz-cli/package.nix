@@ -2,24 +2,28 @@
   cacert,
   fetchFromGitHub,
   lib,
+  runCommand,
   rustPlatform,
   stdenv,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "buzz-cli";
-  version = "0.1.0-unstable-2026-09-02";
+  # The CLI crates have no releases of their own (their crate version stays
+  # 0.1.0, https://github.com/block/buzz/issues/8553): Buzz releases ship them
+  # with the desktop app, so this follows Buzz Desktop releases (desktop-v* tags).
+  version = "0.5.28";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "buzz";
-    rev = "47d068e2109d077414cbf2f4f1c927f6d051037a";
-    hash = "sha256-sLIyStOy330KzzVF9QnIn27loT5QXCRz0U4NN9bxU40=";
+    tag = "desktop-v${finalAttrs.version}";
+    hash = "sha256-NEsLQwcoQ2zTgznFgGFGNgYPnoclicNVycSEjl7I0Wo=";
   };
 
-  cargoHash = "sha256-q8FUmTHnPfy/Ub+TNs3UK3exOoX1GdZGwHkH5pDteKE=";
+  cargoHash = "sha256-UQ8qNqoeDwkwhmVZebi++gb2GP61dr1Zv2QU9mJ6KJ8=";
   cargoBuildFlags = [ "--package=buzz-cli" ];
   cargoTestFlags = [ "--package=buzz-cli" ];
 
@@ -39,9 +43,36 @@ rustPlatform.buildRustPackage {
     export NIX_CFLAGS_COMPILE="-ffile-prefix-map=$NIX_BUILD_TOP=/build ''${NIX_CFLAGS_COMPILE:-}"
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+    # `buzz pack` works without a relay: a minimal persona pack validates and
+    # inspects, and one that points at a missing persona file is rejected.
+    tests.persona-pack = runCommand "buzz-cli-persona-pack" { } ''
+      mkdir -p pack/.plugin pack/agents
+      cat > pack/.plugin/plugin.json <<'EOF'
+      {"id": "org.nixos.test", "name": "Test", "version": "1.0.0", "personas": ["agents/tester.persona.md"]}
+      EOF
+      cat > pack/agents/tester.persona.md <<'EOF'
+      ---
+      name: tester
+      display_name: Tester
+      description: Checks the package.
+      ---
+      You test the nixpkgs package.
+      EOF
+      buzz=${lib.getExe finalAttrs.finalPackage}
+      $buzz pack validate pack | grep -qx Valid.
+      $buzz pack inspect pack | grep -q 'Display: Tester'
+      sed -i s/tester.persona/missing.persona/ pack/.plugin/plugin.json
+      ! $buzz pack validate pack
+      touch $out
+    '';
+  };
+
   meta = {
     description = "Agent-first CLI for Buzz relay";
     homepage = "https://github.com/block/buzz";
+    changelog = "https://github.com/block/buzz/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     mainProgram = "buzz";
     maintainers = with lib.maintainers; [
@@ -50,4 +81,4 @@ rustPlatform.buildRustPackage {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
