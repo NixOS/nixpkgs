@@ -33,16 +33,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "mole-cleaner";
-  version = "1.46.0";
+  version = "1.58.0";
 
   src = fetchFromGitHub {
     owner = "tw93";
     repo = "Mole";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-rIoVXEz4K0RFb1ir1gRCyDw5euNwQvLS0GwBsJhuApE=";
+    hash = "sha256-fk77PqWiRQu1q5c7VFpyS0HdfGhhfuPVOjPjmg2m+Xs=";
   };
 
-  vendorHash = "sha256-hLFlAy4AE1eNOxd4d75Mbo3ZKlwvNK7QV2DNVPd7NHc=";
+  vendorHash = "sha256-iGwtKV6mJfSgZ5rMB5ASXzdKTPBy9RqoysM4JRh0dts=";
 
   __structuredAttrs = true;
 
@@ -105,7 +105,11 @@ buildGoModule (finalAttrs: {
     export GOFLAGS="''${GOFLAGS//-trimpath/}"
     mkdir -p "$TMPDIR/mole-test-bin"
     ln -s ${duForTests} "$TMPDIR/mole-test-bin/du"
-    PATH="$TMPDIR/mole-test-bin:$PATH" go test ./...
+    # No usable ps in the build sandbox: /usr/bin is not mounted and nixpkgs'
+    # ps (adv_cmds) lacks entitlements, so %mem/rss are empty for foreign
+    # processes and exit 1. Upstream CI runs these against the system ps.
+    PATH="$TMPDIR/mole-test-bin:$PATH" go test \
+      -skip='AcceptsCurrentDarwinOutput|CollectProcessesUnderCommaLocale' ./...
     runHook postCheck
   '';
 
