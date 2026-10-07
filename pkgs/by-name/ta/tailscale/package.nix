@@ -111,9 +111,6 @@ buildGo127Module (finalAttrs: {
         # not necessary and fails to match
         "TestSyncedToUpstream" # tempfork/acme
 
-        # flaky: https://github.com/tailscale/tailscale/issues/11762
-        "TestTwoDevicePing"
-
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
       ]
