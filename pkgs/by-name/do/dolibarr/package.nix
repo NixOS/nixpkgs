@@ -18,19 +18,33 @@
   #   dolibarr.override {
   #     extraPDFFonts =
   #       { foofont = $DERVIATION_OR_PATH; }
-  #       // dolibarr.mkTCPDFFont { name = "freesans"; src = pkgs.freefont_ttf; findFilePrefix = "FreeSans"; };
+  #       // dolibarr.mkTCPDFFont {
+  #         name = "mplus1";
+  #         src = pkgs.mplus-outline-fonts.githubRelease;
+  #         findFilePrefix = "Mplus1-";
+  #       };
+  #     fontForLanguage = {
+  #       ja_JP = "mplus1";
+  #       de_DE = "helvetica";
+  #     };
   #   }
-  #
   extraPDFFonts ? { },
+  fontForLanguage ? { },
 }:
 
 assert builtins.isAttrs extraPDFFonts;
 assert lib.all (
   { name, value }:
-  builtins.match "[a-z0-9_]+" name != null
-  && builtins.isAttrs value
-  && (lib.isDerivation value.src || builtins.isPath value.src)
+  builtins.match "[a-z0-9_]+" name != null && (lib.isDerivation value || builtins.isPath value)
 ) (lib.attrsToList extraPDFFonts);
+
+assert builtins.isAttrs fontForLanguage;
+assert lib.all (
+  { name, value }:
+  builtins.match "[a-z]+_[A-Z]+" name != null
+  && builtins.isString value
+  && builtins.match "[a-z0-9_]+" value != null
+) (lib.attrsToList fontForLanguage);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolibarr";
@@ -70,6 +84,29 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sfn "$f" "$fonts_dir/"
         done
       '') extraPDFFonts}
+    ''}
+
+    ${lib.optionalString (fontForLanguage != { }) /* bash */ ''
+      fonts_dir="htdocs/includes/tecnickcom/tcpdf/fonts"
+
+      ${lib.concatMapAttrsStringSep "\n" (lang: family: /* bash */ ''
+        if [ ! -f "$fonts_dir/${family}.php" ]; then
+          echo "fontForLanguage: no TCPDF font ${family} for language ${lang}" >&2
+          exit 1
+        fi
+
+        target="htdocs/langs/${lang}/main.lang"
+
+        if [ ! -f "$target" ]; then
+          mkdir -p "htdocs/langs/${lang}"
+          printf '%s\n' "FONTFORPDF=${family}" >"$target"
+        elif grep -q '^FONTFORPDF=' "$target"; then
+          current_font=$(grep '^FONTFORPDF=' "$target" | head -n1 | cut -d '=' -f 2-)
+          substituteInPlace "$target" --replace-fail "FONTFORPDF=$current_font" "FONTFORPDF=${family}"
+        else
+          sed -i "1i FONTFORPDF=${family}" "$target"
+        fi
+      '') fontForLanguage}
     ''}
   '';
 
