@@ -675,6 +675,16 @@ in
     };
   });
 
+  luaffi-tkl = prev.luaffi-tkl.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = isLuaJIT;
+      license = lib.licenses.AND [
+        lib.licenses.bsd3
+        lib.licenses.mit
+      ];
+    };
+  });
+
   lualdap = prev.lualdap.overrideAttrs (_: {
     externalDeps = [
       {

@@ -3418,6 +3418,39 @@ final: prev: {
     }
   ) { };
 
+  luaffi-tkl = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "luaffi-tkl";
+      version = "1.0.5-2";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luaffi-tkl-1.0.5-2.rockspec";
+          sha256 = "1b87mqkvw36bxmdj79mqpna8ydwif23cryr574q2c6f07jaqi6jc";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "Tekenlight";
+        repo = "luaffifb";
+        tag = "v1.0.5-2";
+        hash = "sha256-6XBWjm7sNoN96uv9lC64dlF43QuF9NE2ky0bycxBkHY=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/Tekenlight/luaffifb";
+        license = lib.licenses.free;
+        description = "FFI library for calling C functions from lua";
+        longDescription = "";
+      };
+    }
+  ) { };
+
   luafilesystem = callPackage (
     {
       buildLuarocksPackage,
