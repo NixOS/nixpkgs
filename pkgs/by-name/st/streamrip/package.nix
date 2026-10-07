@@ -12,12 +12,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "streamrip";
   version = "2.2.0";
   pyproject = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nathom";
     repo = "streamrip";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OeU1KBGcmpryOlDmW1aFNAgSP484ZAcc4CVsgfrsKVI=";
   };
 
