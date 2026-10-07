@@ -188,19 +188,24 @@ in
             NOMINATIM_IMPORT_STYLE = "admin";
           };
           ui.enable = false;
-          maps.andorra = {
-            mapUrl = "http://localhost/map/andorra-latest.osm.pbf";
-            replicationUrl = "http://localhost/replication";
-          };
-          updates = {
-            enable = true;
-            startAt = [ ];
+          mapData = {
+            maps.andorra = {
+              mapUrl = "http://localhost/map/andorra-latest.osm.pbf";
+              replicationUrl = "http://localhost/replication";
+            };
+            updates = {
+              enable = true;
+              startAt = [ ];
+            };
           };
           importanceData = {
             enable = true;
-            startAt = [ ];
             url = "http://localhost/importance-data/wikimedia-importance.sql.gz";
             secondaryUrl = "http://localhost/importance-data/wikimedia-secondary-importance.sql.gz";
+            updates = {
+              enable = true;
+              startAt = [ ];
+            };
           };
         };
 

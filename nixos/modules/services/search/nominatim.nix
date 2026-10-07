@@ -73,53 +73,54 @@ in
       };
     };
 
-    maps = lib.mkOption {
-      description = ''
-        An attrset of maps to be imported into the nominatim database.
-      '';
-      type = lib.types.attrsOf (
-        lib.types.submodule {
-          options = {
-            enable =
-              lib.mkEnableOption ''
-                downloading this map into nominatim.
-
-                Note that disabling or removing a map from your config will not
-                remove it from nominatim once it has been downloaded.
-              ''
-              // {
-                default = true;
-              };
-            mapUrl = lib.mkOption {
-              type = lib.types.str;
-              description = ''
-                The url at which to download the main map
-              '';
-              example = "https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf";
-            };
-            replicationUrl = lib.mkOption {
-              type = lib.types.str;
-              description = ''
-                The url under which the diffs and the `state.txt` file can be found
-              '';
-              example = "https://planet.openstreetmap.org/replication/hour";
-            };
-          };
-        }
-      );
-    };
-
-    updates = {
-      enable = lib.mkEnableOption "Regular updates of nominatim maps";
-      startAt = lib.mkOption {
-        type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
-        default = "hourly";
+    mapData = {
+      maps = lib.mkOption {
         description = ''
-          How often and when to update nominatim maps
-
-          The format is described in
-          {manpage}`systemd.time(7)`.
+          An attrset of maps to be imported into the nominatim database.
         '';
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              enable =
+                lib.mkEnableOption ''
+                  downloading this map into nominatim.
+
+                  Note that disabling or removing a map from your config will not
+                  remove it from nominatim once it has been downloaded.
+                ''
+                // {
+                  default = true;
+                };
+              mapUrl = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The url at which to download the main map
+                '';
+                example = "https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf";
+              };
+              replicationUrl = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The url under which the diffs and the `state.txt` file can be found
+                '';
+                example = "https://planet.openstreetmap.org/replication/hour";
+              };
+            };
+          }
+        );
+      };
+      updates = {
+        enable = lib.mkEnableOption "Regular updates of nominatim maps";
+        startAt = lib.mkOption {
+          type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
+          default = "hourly";
+          description = ''
+            How often and when to update nominatim map data
+
+            The format is described in
+            {manpage}`systemd.time(7)`.
+          '';
+        };
       };
     };
 
@@ -144,15 +145,18 @@ in
           Url for the secondary importance data.
         '';
       };
-      startAt = lib.mkOption {
-        type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
-        default = "yearly";
-        description = ''
-          How often and when to update importance data
+      updates = {
+        enable = lib.mkEnableOption "Regular updates of nominatim importance data";
+        startAt = lib.mkOption {
+          type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
+          default = "yearly";
+          description = ''
+            How often and when to update importance data
 
-          The format is described in
-          {manpage}`systemd.time(7)`.
-        '';
+            The format is described in
+            {manpage}`systemd.time(7)`.
+          '';
+        };
       };
     };
 
@@ -362,7 +366,7 @@ in
         };
       };
 
-      systemd.services.nominatim-import-map-data = lib.mkIf (cfg.maps != { }) {
+      systemd.services.nominatim-import-map-data = lib.mkIf (cfg.mapData.maps != { }) {
         description = "Import nominatim map data";
         serviceConfig = {
           User = cfg.database.superUser;
@@ -403,7 +407,7 @@ in
 
                 else
                 ${
-                  if cfg.updates.enable then
+                  if cfg.mapData.updates.enable then
                     ''
                       echo ">>> Refreshing functions"
                       nominatim refresh --functions --project-dir "$STATE_DIRECTORY"
@@ -434,7 +438,7 @@ in
 
             (flock -n 9 || ( echo "failed to acquire lock" && exit 1 ) # Don't try to update map data and importance files at the same time
 
-              ${lib.concatStringsSep "\n" (lib.mapAttrsToList importOneMap cfg.maps)}
+              ${lib.concatStringsSep "\n" (lib.mapAttrsToList importOneMap cfg.mapData.maps)}
 
             ) 9>"$STATE_DIRECTORY/update-lock"
           '';
@@ -447,7 +451,7 @@ in
         after = [ "nominatim.service" ];
         requires = [ "nominatim.service" ];
         wantedBy = [ "multi-user.target" ];
-        startAt = cfg.updates.startAt;
+        startAt = cfg.mapData.updates.startAt;
         environment = serviceEnvironment;
       };
 
@@ -460,6 +464,13 @@ in
         };
         script = ''
           set -euo pipefail
+
+          ${lib.optionalString cfg.importanceData.updates.enable ''
+            if [[ -f "$STATE_DIRECTORY/initial-setup-done" ]]; then
+              echo ">>> Existing importance data found, and updates are disabled. leaving as-is"
+              exit 0
+            fi
+          ''}
 
           (flock -n 9 || ( echo "failed to acquire lock" && exit 1 ) # Don't try to update map data and importance files at the same time
 
@@ -476,6 +487,7 @@ in
             echo ">>> Refresh data"
             nominatim refresh --wiki-data --secondary-importance --importance --project-dir "$STATE_DIRECTORY"
 
+            touch "$STATE_DIRECTORY/initial-setup-done"
           ) 9>"$STATE_DIRECTORY/update-lock"
         '';
         path = [
@@ -486,7 +498,7 @@ in
         ];
         after = [ "nominatim-import-map-data.service" ];
         wantedBy = [ "multi-user.target" ];
-        startAt = cfg.importanceData.startAt;
+        startAt = lib.mkIf cfg.importanceData.updates.enable cfg.importanceData.updates.startAt;
       };
 
       services.nginx = {
