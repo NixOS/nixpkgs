@@ -3,7 +3,9 @@
   buildPackages,
   autoAddDriverRunpath,
   cmake,
+  ctestCheckHook,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   stdenv,
 
@@ -34,6 +36,7 @@
   npmHooks,
 
   pkg-config,
+  python3,
   metalSupport ? stdenv.hostPlatform.isDarwin && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
@@ -104,7 +107,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-l6l6JIlIVTaVC6xh5M4fRHFtXsweQuugtkNTWHcZZF4=";
   };
 
-  patches = [ ];
+  patches = [
+    # Initialize dynamically loaded backends before generating test models.
+    # https://github.com/ggml-org/llama.cpp/pull/30034
+    (fetchpatch {
+      url = "https://github.com/ggml-org/llama.cpp/commit/07ccce23cf7fe3c84e13d810accff672b1d966bf.patch";
+      hash = "sha256-KtsPcveFM51fY1hDWntiqCW/KHoWLv05Gmnhd1U/9Zs=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -158,6 +168,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "LLAMA_BUILD_EXAMPLES" false)
     (cmakeBool "LLAMA_BUILD_SERVER" true)
     (cmakeBool "LLAMA_BUILD_TESTS" (finalAttrs.finalPackage.doCheck or false))
+    (cmakeBool "LLAMA_TESTS_INSTALL" false)
     (cmakeBool "LLAMA_BUILD_IS_DEV" false)
     (cmakeBool "LLAMA_OPENSSL" true)
     (cmakeBool "BUILD_SHARED_LIBS" true)
@@ -202,8 +213,30 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     installShellCompletion --cmd llama-server --bash <($out/bin/llama-server --completion-bash)
   '';
 
-  # the tests are failing as of 2025-08
-  doCheck = false;
+  doCheck = true;
+
+  # Use CTest to skip disabled tests.
+  dontUseNinjaCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    ctestCheckHook
+    (python3.withPackages (ps: [ ps.jinja2 ]))
+  ];
+
+  preCheck = optionalString metalSupport ''
+    export GGML_METAL_DEVICES=0
+  '';
+
+  disabledTests = [
+    # Network needed.
+    "test-tokenizers-ggml-vocabs"
+    "test-download-model"
+    "test-arg-parser"
+    "test-thread-safety"
+    "test-state-restore-fragmented"
+  ];
 
   passthru = lib.optionalAttrs (!cudaSupport && !rocmSupport && !vulkanSupport) {
     updateScript = ./update.sh;
