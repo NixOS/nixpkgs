@@ -2,6 +2,9 @@
 {
   autobalance = runTest {
     name = "btrfs-autobalance";
+    meta.maintainers = with pkgs.lib.maintainers; [
+      Deric-W
+    ];
 
     nodes.machine = { ... }: {
       virtualisation.emptyDiskImages = [ 128 ];
@@ -68,6 +71,9 @@
 
   autoscrub = runTest {
     name = "btrfs-autoscrub";
+    meta.maintainers = with pkgs.lib.maintainers; [
+      Deric-W
+    ];
 
     nodes.machine =
       { ... }:
