@@ -12,6 +12,7 @@
 rustPlatform.buildRustPackage {
   pname = "tincan";
   version = "0.3.3";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bilalyazicioglu";
