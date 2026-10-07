@@ -2,7 +2,7 @@
   lib,
   stdenv,
 
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
 
   makeWrapper,
@@ -15,6 +15,8 @@
   procps,
   # runtime tooling - darwin
   lsof,
+  # check phase tooling
+  gitMinimal,
   # check phase tooling - darwin
   unixtools,
 
@@ -22,9 +24,9 @@
   tailscale-nginx-auth,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "tailscale";
-  version = "1.102.5";
+  version = "1.104.1";
 
   outputs = [
     "out"
@@ -35,17 +37,21 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gm5NN4IqR7epks8WjncQBsPYaPsH+ooXporzpuCEac0=";
+    hash = "sha256-f80GVxstQrr8ENP1bseoIpLflQ+QYEisDF8PHzTs7Lg=";
   };
 
-  vendorHash = "sha256-amKkUPszyhG4N5ZtrB01swBACYq76raSS+SQRneLmwc=";
+  vendorHash = "sha256-f9abuyk1qvVr6MPpfmHay6p/U/+8flm1SBmHGjZa1aU=";
 
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
   ];
 
-  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  nativeCheckInputs = [
+    # misc/git_hook/githook tests create a scratch repository
+    gitMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     unixtools.netstat
   ];
 
@@ -118,6 +124,7 @@ buildGoModule (finalAttrs: {
         # launches an ssh server which works when provided openssh
         # also requires executing commands but nixbld user has /noshell
         "TestSSH" # ssh/tailssh
+        "TestExitCodePassthrough" # ssh/tailssh
         # wants users alice & ubuntu
         "TestMultipleRecorders" # ssh/tailssh
         "TestSSHAuthFlow" # ssh/tailssh
