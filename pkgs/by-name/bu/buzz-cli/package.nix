@@ -2,7 +2,6 @@
   cacert,
   fetchFromGitHub,
   lib,
-  nix-update-script,
   runCommand,
   rustPlatform,
   stdenv,
@@ -47,15 +46,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # No versionCheckHook: `buzz` has no --version flag.
 
   passthru = {
-    # Mobile releases tag the same repository far more often, so the release
-    # feed nix-update reads by default rarely shows a desktop release.
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--use-github-releases"
-        "--version-regex"
-        "^desktop-v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+    # Also updates buzz-relay, which shares this source and cargoHash.
+    updateScript = ./update.sh;
     # `buzz pack` works without a relay: a minimal persona pack validates and
     # inspects, and one that points at a missing persona file is rejected.
     tests.persona-pack = runCommand "buzz-cli-persona-pack" { } ''
