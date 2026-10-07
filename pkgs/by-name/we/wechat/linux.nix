@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchurl,
+  replaceVars,
 
   # native
   autoPatchelfHook,
@@ -15,10 +16,12 @@
   at-spi2-core,
   bzip2,
   cairo,
+  coreutils,
   cups,
   dbus,
   expat,
   fontconfig,
+  gawk,
   glib,
   gtk3,
   libredirect,
@@ -46,6 +49,7 @@
   util-linuxMinimal,
   wayland,
   xkeyboard-config,
+  xrdb,
   zlib,
 
   pname,
@@ -53,7 +57,6 @@
   meta,
   ...
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   inherit pname;
 
@@ -146,26 +149,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   preFixup = ''
-    # Bundled Qt 5 cannot position IME candidate popups under native Wayland.
+    mkdir -p "$out/bin"
+
     makeShellWrapper "$out/opt/wechat/wechat" "$out/bin/wechat" \
       "''${gappsWrapperArgs[@]}" \
-      --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
-      --set NIX_REDIRECTS "/usr/bin/lsblk=${lib.getExe' util-linuxMinimal "lsblk"}" \
+      --prefix LD_PRELOAD : "${lib.getLib libredirect}/lib/libredirect.so" \
+      --prefix NIX_REDIRECTS : "/usr/bin/lsblk=${lib.getExe' util-linuxMinimal "lsblk"}" \
       --set XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb" \
       --set XLOCALEDIR "${libx11}/share/X11/locale" \
-      --set QT_QPA_PLATFORM "xcb" \
-      --set-default QT_AUTO_SCREEN_SCALE_FACTOR "1" \
+      --set-default QT_AUTO_SCREEN_SCALE_FACTOR 1 \
       --run '
-        if [ -z "''${QT_IM_MODULE:-}" ]; then
-          case "''${XMODIFIERS:-}" in
-            *fcitx*)
-              export QT_IM_MODULE=fcitx
-              ;;
-            *ibus*)
-              export QT_IM_MODULE=ibus
-              export IBUS_USE_PORTAL=1
-              ;;
-          esac
+        if [ -z "''${QT_QPA_PLATFORM:-}" ]; then
+          if [ -n "''${WAYLAND_DISPLAY:-}" ] || [ "''${XDG_SESSION_TYPE:-}" = wayland ]; then
+            export QT_QPA_PLATFORM=wayland
+            export QT_IM_MODULE=text-input-unstable-v3
+          else
+            export QT_QPA_PLATFORM=xcb
+
+            case "''${XMODIFIERS:-}" in
+              *@im=fcitx*)
+                export QT_IM_MODULE=fcitx
+                export GTK_IM_MODULE=fcitx
+                ;;
+              *@im=ibus*)
+                export QT_IM_MODULE=ibus
+                export GTK_IM_MODULE=ibus
+                export IBUS_USE_PORTAL=1
+                ;;
+            esac
+          fi
         fi
       '
   '';
@@ -182,9 +194,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       "$out/opt/wechat/RadiumWMPF/runtime/WeChatAppEx"
   '';
 
-  passthru = (passthru finalAttrs) // {
-    
-  };
+  passthru = passthru finalAttrs;
 
   meta = meta finalAttrs;
 })

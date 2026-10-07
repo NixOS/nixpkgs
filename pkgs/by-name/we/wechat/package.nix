@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchurl,
+  replaceVars,
 
   # native
   _7zz,
@@ -16,10 +17,12 @@
   at-spi2-core,
   bzip2,
   cairo,
+  coreutils,
   cups,
   dbus,
   expat,
   fontconfig,
+  gawk,
   glib,
   gtk3,
   libredirect,
@@ -47,6 +50,7 @@
   util-linuxMinimal,
   wayland,
   xkeyboard-config,
+  xrdb,
   zlib,
 }@args:
 let
