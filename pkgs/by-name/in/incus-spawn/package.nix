@@ -102,7 +102,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           echo "incus-spawn is already at $NEW_VERSION"
           exit 0
       fi
-      update-source-version incus-spawn "$NEW_VERSION" --source-key="git-remote-isx"
+      update-source-version incus-spawn "$NEW_VERSION" --source-key="git-remote-isx" --ignore-same-hash
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
         update-source-version incus-spawn "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done

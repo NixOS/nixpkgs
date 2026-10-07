@@ -145,7 +145,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       psycopg2
     ];
   };
-  postBuild = ''
+
+  preBuild = ''
     # Generate all static files and translations, see
     # https://docs.pretalx.org/administrator/commands.html#python-m-pretalx-rebuild
     PYTHONPATH=$PYTHONPATH:./src python -m pretalx rebuild

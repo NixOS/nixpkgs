@@ -30,7 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix-empty-return.patch
     ./remove-opencc-options.patch
-    ./set-cuda-archs.patch
   ];
 
   configureFlags = (
@@ -70,6 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  # upstream hardcodes a `-gencode` flags dropped by modern cuda versions
+  makeFlags = lib.optionals cudaSupport [
+    "GENCODE_FLAGS=${cudaPackages.flags.gencodeString}"
+  ];
 
   installFlags = [ "prefix=$(out)" ];
 

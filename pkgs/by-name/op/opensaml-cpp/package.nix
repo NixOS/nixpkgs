@@ -11,18 +11,25 @@
   xml-security-c,
   xml-tooling-c,
   zlib,
-  unstableGitUpdater,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensaml-cpp";
-  version = "3.0.1";
+  version = "3.3.1";
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "doc"
+  ];
 
   src = fetchFromCodeberg {
     owner = "Shibboleth";
     repo = "cpp-opensaml";
     tag = finalAttrs.version;
-    hash = "sha256-iBfKM40SzCiDGHacnxc7zZdvOYbCy9NEWjhPzCvWQ1c=";
+    hash = "sha256-/9ba1/fBc1pVleGswb/UBs6bcnu1oEUb+tu+5NN9IJM=";
   };
 
   buildInputs = [
@@ -41,14 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--with-boost=${boost.dev}"
-    "--with-xmltooling=${xml-tooling-c}"
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://shibboleth.net/products/opensaml-cpp.html";

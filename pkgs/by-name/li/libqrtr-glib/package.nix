@@ -15,12 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqrtr-glib";
-  version = "1.2.2";
+  version = "1.4.0";
 
   outputs = [
     "out"
     "dev"
-    "devdoc"
   ];
 
   src = fetchFromGitLab {
@@ -28,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mobile-broadband";
     repo = "libqrtr-glib";
     rev = finalAttrs.version;
-    sha256 = "kHLrOXN6wgBrHqipo2KfAM5YejS0/bp7ziBSpt0s1i0=";
+    sha256 = "sha256-1zsGwZogsI0QvIvvQy5FhcRSq2Q75/J724OcM+K/QBo=";
   };
 
   strictDeps = true;

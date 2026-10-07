@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   autoconf,
   automake,
@@ -18,6 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "ctemplate-${finalAttrs.version}";
     sha256 = "1x0p5yym6vvcx70pm8ihnbxxrl2wnblfp72ih5vjyg8mzkc8cxrr";
   };
+
+  patches = [
+    # C++20 (the default with GCC 16) removed the
+    # std::allocated::<T>::const_pointer typedef which ctemplate used. It was
+    # ignored anyway, so we fetch the patch which removes this unused hint.
+    (fetchpatch {
+      name = "c++20-std-allocator-const-pointer-typedef.patch";
+      url = "https://github.com/OlafvdSpek/ctemplate/commit/5aa5a00e74ea8a1ea22d6a9760b4b420687fa4e5.patch";
+      hash = "sha256-Yqp7MOOdH/W09OQ2JkyAlert1UMoA/GS+6PT9WKVVEo=";
+    })
+  ];
 
   nativeBuildInputs = [
     python3

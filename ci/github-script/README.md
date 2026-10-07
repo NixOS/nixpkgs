@@ -1,6 +1,6 @@
 # GitHub specific CI scripts
 
-This folder contains [`actions/github-script`](https://github.com/actions/github-script)-based JavaScript code.
+This folder contains [`actions/github-script`](https://github.com/actions/github-script)-based TypeScript code.
 It provides a `nix-shell` environment to run and test these actions locally.
 
 To run any of the scripts locally:
@@ -20,4 +20,4 @@ Run `./run labels OWNER REPO`, where OWNER is your username or "NixOS" and REPO 
 
 Run `./run reminders OWNER REPO PR` to post the reminders that apply to the paths a pull request touches.
 
-To add a reminder, write the review body to `reminders/KEY.md` and list KEY with its path regexes in `reminders.js`.
+To add a reminder, write the review body to `reminders/KEY.md` and list KEY with its path regexes in `reminders.ts`.

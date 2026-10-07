@@ -22,7 +22,7 @@
   libmpdclient,
   libnl,
   libpulseaudio,
-  libsigcxx,
+  libsigcxx_2_0,
   libxkbcommon,
   meson,
   ncurses,
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk-layer-shell
     gtkmm3
     jsoncpp
-    libsigcxx
+    libsigcxx_2_0
     libxkbcommon
     spdlog
     wayland

@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "textpieces";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitLab {
     owner = "liferooter";
     repo = "textpieces";
     tag = finalAttrs.version;
-    hash = "sha256-BUhcPnvi6cuhaYYNZV9pvOLH/cIV3t7ncpG55fBjqwo=";
+    hash = "sha256-bMCa2n1szBe+tO8nZhmUrKNOshuV3csys0NVgW0nOGs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-bJKhakxHBhhqvgrFwEgaSNDI7cDaYQ+2SW/gSZzRvK0=";
+    hash = "sha256-hwF3nSGPBeHz52gaFVUFi1NDSi6nGRNuCwMi7KVRJWc=";
   };
 
   nativeBuildInputs = [

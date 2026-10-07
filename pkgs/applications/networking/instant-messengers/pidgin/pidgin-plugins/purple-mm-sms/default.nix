@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  glibmm,
+  glibmm_2_4,
   pidgin,
   pkg-config,
   modemmanager,
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glibmm
+    glibmm_2_4
     pidgin
     modemmanager
   ];

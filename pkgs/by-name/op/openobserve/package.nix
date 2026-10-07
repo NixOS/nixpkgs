@@ -72,7 +72,8 @@ if enableEnterprise then
     meta = commonMeta // {
       homepage = "https://openobserve.ai/";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-      license = {
+      license = lib.licenses.mkLicense {
+        shortName = "openObserveEE";
         fullName = "OpenObserve Enterprise Edition License Agreement";
         url = "https://openobserve.ai/legal/enterprise-license/";
         free = false;
@@ -252,7 +253,7 @@ else
       meta = commonMeta // {
         homepage = "https://github.com/openobserve/openobserve";
         changelog = "https://github.com/openobserve/openobserve/releases/tag/v${finalAttrs.version}";
-        license = lib.licenses.asl20;
+        license = lib.licenses.agpl3Plus;
         platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     }

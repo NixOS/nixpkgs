@@ -21,8 +21,7 @@
 }:
 
 # ./update.sh fully automates updating for each quarterly release.  you can run
-# it manually, or wait for https://nix-community.github.io/nixpkgs-update/ to do
-# so.
+# it manually, or wait for nixpkgs-update to do so.
 #
 # then, to test (on x86_64):
 # for e in $(cat pkgs/applications/editors/eclipse/eclipses.json | jq '.eclipses | keys | .[] | ascii_downcase' -r); do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix-build -A ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done

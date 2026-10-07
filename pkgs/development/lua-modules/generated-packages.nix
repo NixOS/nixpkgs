@@ -651,15 +651,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "cqueues";
-      version = "20200726.52-0";
+      version = "20261006.52-0";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/cqueues-20200726.52-0.rockspec";
-          sha256 = "0w2kq9w0wda56k02rjmvmzccz6bc3mn70s9v7npjadh85i5zlhhp";
+          url = "mirror://luarocks/cqueues-20261006.52-0.rockspec";
+          sha256 = "1c8hffqawivwrb95pl6mc3j471cavkr9yrqidyigw3a2s01zdrsq";
         }).outPath;
       src = fetchurl {
-        url = "https://github.com/wahern/cqueues/archive/rel-20200726.tar.gz";
-        sha256 = "0lhd02ag3r1sxr2hx847rdjkddm04l1vf5234v5cz9bd4kfjw4cy";
+        url = "https://github.com/wahern/cqueues/archive/rel-20261006.tar.gz";
+        sha256 = "1i77z3939wk9qq7sqa781wgpzmpwrpdakc8zqykidfgh5yc4avaa";
       };
 
       disabled = lua.luaversion != "5.2";
@@ -1140,15 +1140,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2700-1";
+      version = "0.0.2708-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2700-1.rockspec";
-          sha256 = "05cvz50763yk0dkrhkh5f8wjk0mckhv8ri77bmfmlgysz0hv9ir9";
+          url = "mirror://luarocks/fzf-lua-0.0.2708-1.rockspec";
+          sha256 = "0mlwn4jvbmq83r8wfs2ywsqcvnqsnv0s5ay22gichq3ka45bdxzp";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/13bb178a299f7493dd64427a58e61904c4b58ecb.zip";
-        sha256 = "0pl1ysj952jswxckcl21laa573gf2zmqcj5mfymx26z2pg2imyzx";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/bba13a0d260ca5e049683344ba70791c9ad8ece6.zip";
+        sha256 = "1qqza6vjyd56jmgaffrbrr6vwzsyy0x92gcy7p94ggh67pz0x8h2";
       };
 
       disabled = luaOlder "5.1";
@@ -6805,6 +6805,40 @@ final: prev: {
         homepage = "https://github.com/notomo/vusted";
         license = lib.licenses.mit;
         description = "`busted` wrapper for testing neovim plugin";
+      };
+    }
+  ) { };
+
+  warna = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "warna";
+      version = "0.3.5-2";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/warna-0.3.5-2.rockspec";
+          sha256 = "0vkkpldgaav9cnx63wal6851rlcq6n93fpv5xpvm9al308q45d0r";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "komothecat";
+        repo = "warna";
+        tag = "v0.3.5-2";
+        hash = "sha256-6L2MNVlBwhQC/dqnXIMqQh+U11LqEx0KU3/FOCLySOA=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/komothecat/warna#readme";
+        maintainers = with lib.maintainers; [ Freed-Wu ];
+        license = lib.licenses.mit;
+        description = "🎨 Terminal text styling for Lua";
+        longDescription = "Warna is a simple text styling for the terminal. View more on GitHub.";
       };
     }
   ) { };

@@ -1,21 +1,19 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
   base58,
   beautifulsoup4,
   bech32,
   brotli,
+  buildPythonPackage,
   colorama,
   cryptography,
+  deepdiff,
+  fetchFromGitHub,
   gitpython,
+  hatchling,
   humanfriendly,
+  hypothesis,
   lxml,
   numpy,
   odfpy,
@@ -23,35 +21,31 @@
   openpyxl,
   pandas,
   pdfminer-six,
+  psutil,
   pybase62,
   pygments,
   pyjks,
   pysquashfsimage,
+  pytestCheckHook,
   python-dateutil,
   python-docx,
   python-pptx,
+  pythonOlder,
   pyxlsb,
   pyyaml,
   rpmfile,
   striprtf,
+  tabulate,
   tqdm,
+  versionCheckHook,
   whatthepatch,
   xlrd,
-  # python>=3.14 only:
   zstandard,
-
-  # tests
-  deepdiff,
-  hypothesis,
-  psutil,
-  pytestCheckHook,
-  pythonOlder,
-  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "credsweeper";
-  version = "1.18.5";
+  version = "1.19.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -59,7 +53,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Samsung";
     repo = "CredSweeper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zgYd6a+FqGWqqmDUqPDQiq+aU3Ji54RwZZwSthvf8eY=";
+    hash = "sha256-PJWZYWtj8AZ3u/oDAQAFUJQEavQK67Ph5y20wgnLRis=";
   };
 
   build-system = [ hatchling ];
@@ -104,6 +98,7 @@ buildPythonPackage (finalAttrs: {
     hypothesis
     psutil
     pytestCheckHook
+    tabulate
     versionCheckHook
   ];
 
@@ -121,6 +116,9 @@ buildPythonPackage (finalAttrs: {
     "test_match_n"
     "test_multi_jobs_p"
     "test_rules_ml_p"
+
+    # Hang indefinitely on some CPUs
+    "TestInt"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:

@@ -49,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  # Prefer IPv4 to fix sandboxed Darwin builds.
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    JAVA_TOOL_OPTIONS = "-Djava.net.preferIPv4Stack=true";
+  };
+
   # Use the JDK for building
   gradleFlags = [
     "-Dfile.encoding=utf-8"

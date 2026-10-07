@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitLab,
   nix-update-script,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage {
@@ -26,5 +27,7 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ristate";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

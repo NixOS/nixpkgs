@@ -5,7 +5,7 @@
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-type BranchType = 'channel' | 'development' | 'primary' | 'secondary'
+type BranchType = 'channel' | 'development' | 'primary' | 'secondary' | 'wip'
 
 const typeConfig: Record<string, BranchType[]> = {
   master: ['development', 'primary'],
@@ -19,7 +19,7 @@ const typeConfig: Record<string, BranchType[]> = {
 }
 
 // "order" ranks the development branches by how likely they are the intended base branch
-// when they are an otherwise equally good fit according to ci/github-script/prepare.js.
+// when they are an otherwise equally good fit according to ci/github-script/prepare.ts.
 const orderConfig: Record<string, number> = {
   master: 0,
   release: 1,
@@ -44,7 +44,7 @@ function split(branch: string) {
   return groups as unknown as SplitResult
 }
 
-interface BranchClassification {
+export interface BranchClassification {
   branch: string
   order: number
   stable: boolean

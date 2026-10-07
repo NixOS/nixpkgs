@@ -5,8 +5,10 @@
   fetchFromGitHub,
   freezegun,
   google-api-core,
+  google-auth,
   google-cloud-core,
   google-cloud-testutils,
+  grpcio,
   mock,
   proto-plus,
   protobuf,
@@ -21,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-firestore";
-  version = "2.28.0";
+  version = "2.31.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-firestore-v${finalAttrs.version}";
-    hash = "sha256-dct5yBerIMNQgVIvOWdO9yTxSrH1JDUen6I7CYHftC0=";
+    hash = "sha256-kDtGHIc6UDqBomO39ZEe6fF/eZ/Ved9/0bvykVvcvag=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-firestore";
@@ -37,7 +39,9 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     google-api-core
+    google-auth
     google-cloud-core
+    grpcio
     proto-plus
     protobuf
   ]

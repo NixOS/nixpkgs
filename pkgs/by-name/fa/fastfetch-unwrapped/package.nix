@@ -47,7 +47,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch-unwrapped";
-  version = "2.68.1";
+  version = "2.69.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-dRzkKWs3wKy2TzyUmqdsok+xfA5SpICOEE6gQ2sIntk=";
+    hash = "sha256-osfQZEP6t3TdwlO+0agD8fU2z1UECJWLF+WPovwEk64=";
   };
 
   outputs = [

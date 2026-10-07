@@ -6,7 +6,6 @@
   doxygen,
   eigen,
   fetchFromGitHub,
-  fetchpatch,
   fmt,
   graphviz,
   gts,
@@ -62,13 +61,13 @@ in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.1.3";
+    version = "1.1.4";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
       tag = finalAttrs.version;
-      hash = "sha256-RP68rd19wX4gDD5PuRQ1J4Z9Qmp5HpEg6sC94RRMEdI=";
+      hash = "sha256-VB2jxacRtpLeVaCMuHqGDzNZKx5wqOJXYlbJEpDXB70=";
       fetchSubmodules = true;
     };
 
@@ -106,15 +105,7 @@ freecad-utils.makeCustomizable (
     ]
     ++ pythonDeps;
 
-    patches = [
-      ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
-      (fetchpatch {
-        # https://github.com/FreeCAD/FreeCAD/pull/30899
-        # fix COIN3D_MICRO_VERSION regex for coin 4.0.10
-        url = "https://github.com/FreeCAD/FreeCAD/commit/e3e56059865849c6b1c85161f69183ad872414e3.patch";
-        hash = "sha256-qe0wn7DwvQT/pmrSCa44+orMetztpw8DZ+NhDJEYAMw=";
-      })
-    ];
+    patches = [ ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch ];
 
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \

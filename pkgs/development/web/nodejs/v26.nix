@@ -49,6 +49,9 @@ buildNodejs {
       ./use-nix-codesign.patch
 
       ./fix-temporal-integration-with-shared-icu.patch
+
+      # https://github.com/NixOS/nixpkgs/issues/568974
+      ./memcpy-climits.patch
     ]
     ++ gypPatches;
 }

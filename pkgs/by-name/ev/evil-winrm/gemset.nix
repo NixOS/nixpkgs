@@ -201,6 +201,16 @@
     };
     version = "0.0.4";
   };
+  readline-ext = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1a7aqd7cgrd5j8v639wzfnjawqac6vfz5djxn1acahs2afjx82j9";
+      type = "gem";
+    };
+    version = "0.2.0";
+  };
   reline = {
     dependencies = [ "io-console" ];
     groups = [ "default" ];

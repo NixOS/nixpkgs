@@ -3,6 +3,7 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
+  fetchpatch,
 
   stdenv,
   # Build inputs
@@ -24,6 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-qaiRWRd9+ElJ40QGOS3AxT2NvF3phQCyPnVz6RfTt8c=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/Zygo/bees/commit/14c82dce8a7e9714d6f9cd03229e0fb55460aa25.patch";
+      hash = "sha256-bAYacaS3u01XdlM/8+baD+sMuCOyYDtSis4NvTkx8jk=";
+    })
+  ];
 
   buildInputs = [
     btrfs-progs # for btrfs/ioctl.h

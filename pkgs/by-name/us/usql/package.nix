@@ -1,6 +1,8 @@
 {
   lib,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
   buildGo126Module,
   unixodbc,
   icu,
@@ -11,14 +13,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "usql";
-  version = "0.21.5";
+  version = "0.21.6";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ikDmV5OoiiUTolIxkiPG0UIcgrDJrR3Xq7MHU4GthsM=";
+    hash = "sha256-GBCu2zPQNRMuP6uispht9Cuff+e1lpQuu+qG1Ndzc9M=";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     unixodbc
@@ -56,6 +60,13 @@ buildGo126Module (finalAttrs: {
 
   # All the checks currently require docker instances to run the databases.
   doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd usql \
+      --bash <($out/bin/usql completion bash) \
+      --fish <($out/bin/usql completion fish) \
+      --zsh <($out/bin/usql completion zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

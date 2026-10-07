@@ -14,17 +14,18 @@
 
 buildGo127Module (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.152.0";
+  version = "1.153.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3PDFQbVJhwyMUvA/ToXJKBOIN9xKoBGp/YjHntjwKr4=";
+    hash = "sha256-mp6BEoTsG0MJMOEUOVX0NcNlQRYNBKdGADTIlkWfexw=";
   };
 
   vendorHash = null;
-  env.CGO_ENABLED = 0;
+  # cgo enabled to work around https://github.com/VictoriaMetrics/VictoriaMetrics/issues/11683
+  env.CGO_ENABLED = 1;
 
   subPackages =
     lib.optionals withServer [

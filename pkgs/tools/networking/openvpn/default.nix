@@ -9,8 +9,8 @@
   lzo,
   openssl,
   pam,
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   update-systemd-resolved,
   pkcs11Support ? false,
   pkcs11helper,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnl
     pam
   ]
-  ++ optional useSystemd systemd
+  ++ optional useSystemd systemdLibs
   ++ optional pkcs11Support pkcs11helper;
 
   configureFlags =

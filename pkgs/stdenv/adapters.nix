@@ -95,6 +95,8 @@ rec {
             (mkDerivationSuper args).overrideAttrs (
               args:
               (
+                # OpenBSD's rcrt0 expects the linker-provided _DYNAMIC symbol
+                # emitted for static PIE executables.
                 if (args ? NIX_CFLAGS_LINK) then
                   lib.warn
                     (
@@ -103,12 +105,18 @@ rec {
                       + lib.optionalString (args ? version) "-${args.version}"
                     )
                     {
-                      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+                      NIX_CFLAGS_LINK =
+                        toString (args.NIX_CFLAGS_LINK or "")
+                        + " -static"
+                        + lib.optionalString stdenv.hostPlatform.isOpenBSD " -pie";
                     }
                 else
                   {
                     env = (args.env or { }) // {
-                      NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -static";
+                      NIX_CFLAGS_LINK =
+                        toString (args.env.NIX_CFLAGS_LINK or "")
+                        + " -static"
+                        + lib.optionalString stdenv.hostPlatform.isOpenBSD " -pie";
                     };
                   }
               )

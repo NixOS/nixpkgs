@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "prowler";
-  version = "5.43.0";
+  version = "5.44.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "prowler-cloud";
     repo = "prowler";
     tag = finalAttrs.version;
-    hash = "sha256-eh3LitCEVqd60rZ+C9yh+3vnTNYlEziQzj7on/rTkIU=";
+    hash = "sha256-dqj1yP0nnoNpkaCmqKwtm3dQuejT27znNg4+GAeB858=";
   };
 
   postPatch = ''

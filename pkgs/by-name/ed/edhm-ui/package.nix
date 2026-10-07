@@ -114,12 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BlueMystical/EDHM_UI";
     license = [
       lib.licenses.gpl3Plus
-      {
+      (lib.licenses.mkLicense {
         shortName = "edhm-custom";
         fullName = "EDHM Custom Restrictive License - Non-redistributable";
         free = false;
         redistributable = false;
-      }
+      })
     ];
     maintainers = with lib.maintainers; [
       graysontinker

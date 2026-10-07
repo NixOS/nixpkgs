@@ -8,16 +8,16 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "gh-enhance";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-enhance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-n75RASNnuGNSwzCZlag4qHFnNswTVbjRmbM3yrB6GVg=";
+    hash = "sha256-NydqnXj8nd5fgPgdwFcAmtd5kbcJXOqScm51fW5DES0=";
   };
 
-  vendorHash = "sha256-ZMocJFBRMB7gddQaSeR/Sa1A0OL5WDsxmOl8w5yUZh0=";
+  vendorHash = "sha256-gPs05ByMdsfjjY4rVp8UYX9OkfJ1BkUl4ywiFIBen8w=";
 
   ldflags = [
     "-s"

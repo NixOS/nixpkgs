@@ -80,7 +80,7 @@ buildPythonPackage rec {
     description = "Proof-of-origin token provider plugin for yt-dlp";
     homepage = "https://github.com/Brainicism/bgutil-ytdlp-pot-provider";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = [ ];
     mainProgram = "bgutil-ytdlp-pot-provider";
   };
 }

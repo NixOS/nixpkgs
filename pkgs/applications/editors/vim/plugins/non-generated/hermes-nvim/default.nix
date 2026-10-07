@@ -8,17 +8,20 @@
   curl,
   cacert,
   jq,
+  nix,
+  gnugrep,
+  gnused,
   common-updater-scripts,
   nix-prefetch-scripts,
   pkg-config,
 }:
 
 let
-  version = "0.12.1";
+  version = "0.14.0";
 
   src = fetchzip {
     url = "https://github.com/Ruddickmg/hermes.nvim/archive/refs/tags/v${version}.tar.gz";
-    hash = "sha256-chPhu7e3LG28DAzkJRWEIG5tVnKXrF+ctc23ZwQc8o0=";
+    hash = "sha256-YUe+Mg1StwcxpcIcWr9T/32nkH921UranMM0bE+7lu8=";
   };
 
   dejavuFont = fetchzip {
@@ -57,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   inherit version src;
   __structuredAttrs = true;
 
-  cargoHash = "sha256-cKMurBrYpCv0F6AvAKycsCFbY1tl35WNgyBwh5T3oao=";
+  cargoHash = "sha256-X1YI0iT3/5hncU0M5qJY+12nO6Et4B/xqwvjaq8AV1Q=";
 
   cargoBuildFeatures = [ "with-icons" ];
 
@@ -86,7 +89,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit agentSvgs dejavuFont;
 
     tests.basic =
-      runCommand "hermes-nvim-test-basic" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+      runCommand "hermes-nvim-test-basic"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
         ''
           test -f "${finalAttrs.finalPackage}/lua/hermes/init.lua"
           test -f "${finalAttrs.finalPackage}/plugin/hermes.lua"
@@ -101,6 +107,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
         lib.makeBinPath [
           curl
           jq
+          nix
+          gnugrep
+          gnused
           common-updater-scripts
           nix-prefetch-scripts
         ]
@@ -112,6 +121,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
       fi
       update-source-version "vimPlugins.hermes-nvim" "$NEW_VERSION" --ignore-same-version
 
+      PKG_FILE="pkgs/applications/editors/vim/plugins/non-generated/hermes-nvim/default.nix"
+
+      NEW_CARGO_HASH=$(
+        nix-build --no-out-link -E '
+          let
+            pkgs = import ./. {};
+            pkg = pkgs.vimPlugins.hermes-nvim;
+          in pkg.cargoDeps.overrideAttrs (old: {
+            vendorStaging = old.vendorStaging.overrideAttrs (_: {
+              outputHash = "";
+              outputHashAlgo = "sha256";
+            });
+          })
+        ' 2>&1 | grep -oP 'got:\s+\K\S+'
+      ) || true
+      if [[ -n "$NEW_CARGO_HASH" ]]; then
+        sed -i "s|cargoHash = \"sha256-[^\"]*\";|cargoHash = \"$NEW_CARGO_HASH\";|" "$PKG_FILE"
+      fi
+
       NEW_SVG_HASH=$(
         nix-build --no-out-link -E '
           let
@@ -121,11 +149,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
             outputHash = "";
             outputHashAlgo = "sha256";
           })
-        ' 2>&1 | grep -oP 'got: \K.*'
+        ' 2>&1 | grep -oP 'got:\s+\K\S+'
       ) || true
       if [[ -n "$NEW_SVG_HASH" ]]; then
-        sed -i "s|outputHash = \"[^\"]*\";|outputHash = \"$NEW_SVG_HASH\";|" \
-          "pkgs/applications/editors/vim/plugins/non-generated/hermes-nvim/default.nix"
+        sed -i "s|outputHash = \"sha256-[^\"]*\";|outputHash = \"$NEW_SVG_HASH\";|" "$PKG_FILE"
       fi
     '';
   };

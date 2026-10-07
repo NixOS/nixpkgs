@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  swiftPackages,
+  stdenv,
   swift,
   swiftpm,
   swiftpm2nix,
@@ -10,7 +10,6 @@
 }:
 let
   generated = swiftpm2nix.helpers ./generated;
-  stdenv = swiftPackages.stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xcodes";

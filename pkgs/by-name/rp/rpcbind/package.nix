@@ -7,7 +7,7 @@
   libtirpc,
   autoreconfHook,
   useSystemd ? true,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnsl
     libtirpc
   ]
-  ++ lib.optional useSystemd systemd;
+  ++ lib.optional useSystemd systemdLibs;
 
   configureFlags = [
     "--with-systemdsystemunitdir=${

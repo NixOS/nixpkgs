@@ -12,7 +12,7 @@
   git,
   guile,
   kakoune-unwrapped,
-  lua5_3,
+  lua5_5,
   plan9port,
   rustPlatform,
 }:
@@ -198,13 +198,9 @@ self: super: {
       sha256 = "0y1g3zpa2ql8l9rl5i2w84bka8a09kig9nq9zdchaff5pw660mcx";
     };
 
-    buildInputs = [ lua5_3 ];
-
-    installPhase = ''
-      mkdir -p $out/share/kak/autoload/plugins/
-      cp quickscope.* $out/share/kak/autoload/plugins/
-      # substituteInPlace does not like the pipe
-      sed -e 's,[|] *lua,|${lua5_3}/bin/lua,' quickscope.kak >$out/share/kak/autoload/plugins/quickscope.kak
+    postInstall = ''
+      substituteInPlace $out/share/kak/autoload/plugins/quickscope-kak/quickscope.kak \
+        --replace-fail '|lua ' '|${lib.getExe lua5_5} '
     '';
 
     meta = {

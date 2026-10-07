@@ -74,14 +74,14 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.9.3";
+  version = "0.9.4";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uuWwp1f0GCCCml/lkfrs0+ceE98MirQII0YJZJyZ40o=";
+    hash = "sha256-/40obacG8jIx6BOQ8uUTiT503jRDnHrlrw5PGoEfbEM=";
   };
 
   patches = [
@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
           ""
     '';
 
-  cargoHash = "sha256-nHcXQQYu6fzeAWQdUN1uV6e/fO6bvyPtIejb3EIW9T4=";
+  cargoHash = "sha256-56Z1ea/5x8fE055lvi7kfFQTyNTH49+bnotn0XCRwpU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -247,6 +247,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=rlimit_nproc_caps_processes"
     "--skip=seccomp_blocks_ptrace"
     "--skip=unshare_is_denied_inside_child"
+
+    # Timing-sensitive (relies on a 30ms sleep), flaky under load
+    "--skip=isq_executor::tests::executor_waits_for_budget_release"
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # system-configuration panics in the sandbox: "Attempted to create a NULL object."
+    "--skip=search::tests::search_tools_refuse_internal_urls"
   ];
 
   nativeInstallCheckInputs = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.3.1";
 
   src = fetchurl {
-    url = "${finalAttrs.meta.homepage}/releases/tiptop-${finalAttrs.version}.tar.gz";
+    url = "http://tiptop.gforge.inria.fr/releases/tiptop-${finalAttrs.version}.tar.gz";
     sha256 = "10j1138y3cj3hsmfz4w0bmk90523b0prqwi9nhb4z8xvjnf49i2i";
   };
 

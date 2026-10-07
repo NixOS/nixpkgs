@@ -11,13 +11,13 @@ in
 
 haskellPackages.mkDerivation {
   pname = "hooky";
-  version = "1.0.6";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "brandonchinn178";
     repo = "hooky";
-    rev = "463904d439f7aa10c8f9a8aad1719df412166007";
-    hash = "sha256-g+33B9KPKQDSoBvMpRfL1MoiE1kMml2dw/Z1GwPfyd0=";
+    rev = "24359d44a05b9c0f3615f40b13456157112de33c";
+    hash = "sha256-zPS0z3tyxCm4vlXNrkScysfyMaj67RaKhoi7x00uGis=";
   };
 
   isLibrary = true;

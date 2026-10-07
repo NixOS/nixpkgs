@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lndir";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/util/lndir-${finalAttrs.version}.tar.xz";
-    hash = "sha256-O2VXelV1zOCVZk9UkhZKlpQYAP5ikKEjcx1H8+cQTds=";
+    hash = "sha256-GPbWZOUolLfe4NL8mxceDlhWblCR5E+VNfEObZQZEqQ=";
   };
 
   strictDeps = true;

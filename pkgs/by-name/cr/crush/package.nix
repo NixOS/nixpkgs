@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
@@ -9,18 +9,18 @@
   versionCheckHook,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "crush";
-  version = "0.92.0";
+  version = "0.96.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qAwbvPV1yxqQu7H6YyFYCth09Kg/c0akCTpQTfOXla8=";
+    hash = "sha256-iaZ0rw9585iLVj+HSWCiQnaj2XZ+eYr6zprpUs/47z0=";
   };
 
-  vendorHash = "sha256-iq3EDdEwZEPzHrBqy0k8QLcLSCLGlezKxICWgo7vMqg=";
+  vendorHash = "sha256-ADDHgngAChNch8Sp6Zltw52eSlk7swEQG+R4fCxDbY8=";
 
   ldflags = [
     "-s"

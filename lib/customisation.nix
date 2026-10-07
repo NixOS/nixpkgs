@@ -87,7 +87,7 @@ rec {
     mySed = overrideDerivation pkgs.gnused (oldAttrs: {
       name = "sed-4.2.2-pre";
       src = fetchurl {
-        url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
+        url = "ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2";
         hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
       };
       patches = [];

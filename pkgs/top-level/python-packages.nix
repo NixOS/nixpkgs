@@ -2764,6 +2764,10 @@ self: super: with self; {
 
   buildstream-plugins = callPackage ../development/python-modules/buildstream-plugins { };
 
+  buildstream-plugins-community =
+    callPackage ../development/python-modules/buildstream-plugins-community
+      { };
+
   bumble = callPackage ../development/python-modules/bumble { };
 
   bump-my-version = callPackage ../development/python-modules/bump-my-version { };
@@ -2876,8 +2880,6 @@ self: super: with self; {
   canopen = callPackage ../development/python-modules/canopen { };
 
   cantools = callPackage ../development/python-modules/cantools { };
-
-  capa = callPackage ../development/python-modules/capa { };
 
   capstone = callPackage ../development/python-modules/capstone { inherit (pkgs) capstone; };
 
@@ -3728,6 +3730,8 @@ self: super: with self; {
   countryinfo = callPackage ../development/python-modules/countryinfo { };
 
   courlan = callPackage ../development/python-modules/courlan { };
+
+  covdefaults = callPackage ../development/python-modules/covdefaults { };
 
   coverage = callPackage ../development/python-modules/coverage { };
 
@@ -4804,6 +4808,8 @@ self: super: with self; {
   django-pgpubsub = callPackage ../development/python-modules/django-pgpubsub { };
 
   django-pgtrigger = callPackage ../development/python-modules/django-pgtrigger { };
+
+  django-pgware = callPackage ../development/python-modules/django-pgware { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
 
@@ -6196,6 +6202,8 @@ self: super: with self; {
   flametree = callPackage ../development/python-modules/flametree { };
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
+
+  flare-capa = callPackage ../development/python-modules/flare-capa { };
 
   flasgger = callPackage ../development/python-modules/flasgger { };
 
@@ -8690,8 +8698,6 @@ self: super: with self; {
 
   ixia = callPackage ../development/python-modules/ixia { };
 
-  j2cli = callPackage ../development/python-modules/j2cli { };
-
   j2lint = callPackage ../development/python-modules/j2lint { };
 
   jaconv = callPackage ../development/python-modules/jaconv { };
@@ -9207,6 +9213,10 @@ self: super: with self; {
   kgb = callPackage ../development/python-modules/kgb { };
 
   khanaa = callPackage ../development/python-modules/khanaa { };
+
+  kiauto = callPackage ../development/python-modules/kiauto {
+    kicadPkg = pkgs.kicad;
+  };
 
   kicad = toPythonModule (pkgs.kicad.override { python3 = python; }).src;
 
@@ -10533,6 +10543,8 @@ self: super: with self; {
 
   marko = callPackage ../development/python-modules/marko { };
 
+  markovify = callPackage ../development/python-modules/markovify { };
+
   markuppy = callPackage ../development/python-modules/markuppy { };
 
   markups = callPackage ../development/python-modules/markups { };
@@ -11856,6 +11868,8 @@ self: super: with self; {
 
   nanobind = callPackage ../development/python-modules/nanobind { };
 
+  nanobind_3 = callPackage ../development/python-modules/nanobind_3 { };
+
   nanoeigenpy = callPackage ../development/python-modules/nanoeigenpy { };
 
   nanoemoji = callPackage ../development/python-modules/nanoemoji { };
@@ -12299,7 +12313,7 @@ self: super: with self; {
 
   numkong = callPackage ../development/python-modules/numkong { };
 
-  numpy = numpy_2;
+  numpy = callPackage ../development/python-modules/numpy { };
 
   numpy-financial = callPackage ../development/python-modules/numpy-financial { };
 
@@ -12310,10 +12324,6 @@ self: super: with self; {
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
   numpy-typing-compat = callPackage ../development/python-modules/numpy-typing-compat { };
-
-  numpy_1 = callPackage ../development/python-modules/numpy/1.nix { };
-
-  numpy_2 = callPackage ../development/python-modules/numpy/2.nix { };
 
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
@@ -12424,6 +12434,8 @@ self: super: with self; {
 
   odfpy = callPackage ../development/python-modules/odfpy { };
 
+  odl-renderer = callPackage ../development/python-modules/odl-renderer { };
+
   odp-amsterdam = callPackage ../development/python-modules/odp-amsterdam { };
 
   odsgenerator = callPackage ../development/python-modules/odsgenerator { };
@@ -12449,6 +12461,8 @@ self: super: with self; {
   ohme = callPackage ../development/python-modules/ohme { };
 
   oic = callPackage ../development/python-modules/oic { };
+
+  oinker = callPackage ../development/python-modules/oinker { };
 
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
@@ -13798,6 +13812,10 @@ self: super: with self; {
 
   plumbum = callPackage ../development/python-modules/plumbum { };
 
+  plumed = callPackage ../development/python-modules/plumed {
+    inherit (pkgs) plumed;
+  };
+
   pluralizer = callPackage ../development/python-modules/pluralizer { };
 
   pluthon = callPackage ../development/python-modules/pluthon { };
@@ -14242,6 +14260,8 @@ self: super: with self; {
   pushover-complete = callPackage ../development/python-modules/pushover-complete { };
 
   pvextractor = callPackage ../development/python-modules/pvextractor { };
+
+  pvl = callPackage ../development/python-modules/pvl { };
 
   pvlib = callPackage ../development/python-modules/pvlib { };
 
@@ -15756,8 +15776,6 @@ self: super: with self; {
 
   pyosoenergyapi = callPackage ../development/python-modules/pyosoenergyapi { };
 
-  pyosohotwaterapi = callPackage ../development/python-modules/pyosohotwaterapi { };
-
   pyotb = callPackage ../development/python-modules/pyotb { };
 
   pyotgw = callPackage ../development/python-modules/pyotgw { };
@@ -16032,6 +16050,8 @@ self: super: with self; {
   pyrect = callPackage ../development/python-modules/pyrect { };
 
   pyregion = callPackage ../development/python-modules/pyregion { };
+
+  pyregrws = callPackage ../development/python-modules/pyregrws { };
 
   pyrender = callPackage ../development/python-modules/pyrender {
     inherit (pkgs) mesa;
@@ -16513,6 +16533,8 @@ self: super: with self; {
   pytest-describe = callPackage ../development/python-modules/pytest-describe { };
 
   pytest-django = callPackage ../development/python-modules/pytest-django { };
+
+  pytest-django_4_12 = callPackage ../development/python-modules/pytest-django_4_12 { };
 
   pytest-docker = callPackage ../development/python-modules/pytest-docker { };
 
@@ -17549,6 +17571,8 @@ self: super: with self; {
     protobuf = protobuf6;
   };
 
+  pywiim = callPackage ../development/python-modules/pywiim { };
+
   pywikibot = callPackage ../development/python-modules/pywikibot { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };
@@ -17890,6 +17914,8 @@ self: super: with self; {
 
   realtime = callPackage ../development/python-modules/realtime { };
 
+  rebiber = callPackage ../development/python-modules/rebiber { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
@@ -18095,6 +18121,8 @@ self: super: with self; {
   resampy = callPackage ../development/python-modules/resampy { };
 
   resend = callPackage ../development/python-modules/resend { };
+
+  resize-image = callPackage ../development/python-modules/resize-image { };
 
   resize-right = callPackage ../development/python-modules/resize-right { };
 
@@ -18780,6 +18808,8 @@ self: super: with self; {
   selenium-wire = callPackage ../development/python-modules/selenium-wire { };
 
   selenium-wire-roadtx = callPackage ../development/python-modules/selenium-wire-roadtx { };
+
+  selfies = callPackage ../development/python-modules/selfies { };
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
@@ -20019,7 +20049,7 @@ self: super: with self; {
 
   steampy = callPackage ../development/python-modules/steampy { };
 
-  steamworkspy = callPackage ../development/python-modules/steamworkspy { };
+  steamworks = callPackage ../development/python-modules/steamworks { };
 
   stem = callPackage ../development/python-modules/stem { };
 
@@ -20050,8 +20080,6 @@ self: super: with self; {
   stookwijzer = callPackage ../development/python-modules/stookwijzer { };
 
   stop-words = callPackage ../development/python-modules/stop-words { };
-
-  stopit = callPackage ../development/python-modules/stopit { };
 
   storage3 = callPackage ../development/python-modules/storage3 { };
 
@@ -21267,6 +21295,8 @@ self: super: with self; {
 
   tstr = callPackage ../development/python-modules/tstr { };
 
+  tsv = callPackage ../development/python-modules/tsv { };
+
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
   tt-perf-report = callPackage ../development/python-modules/tt-perf-report { };
@@ -21300,6 +21330,8 @@ self: super: with self; {
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   tunit = callPackage ../development/python-modules/tunit { };
+
+  turbohtml = callPackage ../development/python-modules/turbohtml { };
 
   turnt = callPackage ../development/python-modules/turnt { };
 
@@ -22667,6 +22699,8 @@ self: super: with self; {
 
   whoosh = callPackage ../development/python-modules/whoosh { };
 
+  whoosh-compat = callPackage ../development/python-modules/whoosh-compat { };
+
   whoosh-reloaded = callPackage ../development/python-modules/whoosh-reloaded { };
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
@@ -23090,6 +23124,8 @@ self: super: with self; {
   zenlog = callPackage ../development/python-modules/zenlog { };
 
   zenoh = callPackage ../development/python-modules/zenoh { };
+
+  zensical = callPackage ../development/python-modules/zensical { };
 
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 

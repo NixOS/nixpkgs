@@ -10,12 +10,12 @@
 (buildMozillaMach rec {
   pname = "firefox-devedition";
   binaryName = "firefox-devedition";
-  version = "156.0b4";
+  version = "158.0b1";
   applicationName = "Firefox Developer Edition";
   branding = "browser/branding/aurora";
   src = fetchurl {
     url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "5ebdcd33004516625f90f1862b66198e80b906074371cfa2be22e44666fecbe5f93301290427f2860b45a94918d645ae0a26eed32c78b46136c745b1dcf89a1b";
+    sha512 = "0780e3f58d8dd3f51863aa5b3abffed59a85ad693f9a15e59de0d7cb926f69aeefa35d68bddcfeb88d148288e7ac5cf03ddb3b33b254db0e781cad07634cac16";
   };
 
   # buildMozillaMach sets MOZ_APP_REMOTINGNAME during configuration, but
@@ -32,7 +32,6 @@
     description = "Web browser built from Firefox Developer Edition source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [
-      jopejoe1
       rhendric
     ];
     platforms = lib.platforms.unix;

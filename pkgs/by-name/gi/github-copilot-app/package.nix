@@ -17,7 +17,7 @@
   webkitgtk_4_1,
   atk,
   libsoup_3,
-  openssl_3,
+  openssl_3_5,
   libayatana-appindicator,
 }:
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     webkitgtk_4_1
     atk
     libsoup_3
-    openssl_3
+    openssl_3_5
     libayatana-appindicator
     stdenv.cc.cc.lib
   ];
@@ -111,7 +111,8 @@ stdenv.mkDerivation {
 
         # Update desktop file to use the new executable name
         substituteInPlace $out/share/applications/*.desktop \
-          --replace-fail "Exec=github" "Exec=github-copilot-app"
+          --replace-fail "Exec=github" "Exec=github-copilot-app" \
+          --replace-fail "StartupWMClass=github" "StartupWMClass=github-copilot-app"
       ''
   )
   + ''

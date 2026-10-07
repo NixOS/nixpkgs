@@ -5,9 +5,13 @@
 mixBuildDirHook() {
   echo "Executing mixBuildDirHook"
 
+  local lib dir dest build_dir
+
   mkdir -p _build/"$MIX_BUILD_PREFIX"/lib
-  while read -r -d ':' lib; do
+  while IFS= read -r -d ':' lib; do
+    [ -n "$lib" ] || continue
     for dir in "$lib"/*; do
+      [ -d "$dir" ] || continue
       # Strip version number for directory name if it exists, so naming of
       # all libs matches what mix's expectation.
       dest=$(basename "$dir" | cut -d '-' -f1)

@@ -77,15 +77,13 @@ def test_reexec(
     mock_build.return_value = Path("/path")
 
     s.reexec(argv, args, grouped_nix_args)
-    mock_build.assert_has_calls(
-        [
-            call(
-                s.NIXOS_REBUILD_ATTR,
-                n.models.BuildAttr(ANY, ANY),
-                {"build": True, "no_out_link": True},
-            )
-        ]
-    )
+    assert mock_build.mock_calls == [
+        call(
+            s.NIXOS_REBUILD_ATTR,
+            n.models.BuildAttr(ANY, ANY),
+            {"build": True, "no_out_link": True},
+        )
+    ]
     # do not exec if there is no new version
     mock_execve.assert_not_called()
 

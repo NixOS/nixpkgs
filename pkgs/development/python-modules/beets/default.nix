@@ -571,7 +571,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://beets.io";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      astratagem
+      montchr
       doronbehar
       lovesegfault
       pjones

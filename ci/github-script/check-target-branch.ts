@@ -9,9 +9,9 @@ import {
 import { dismissReviews, postReview } from './reviews.ts'
 import { split } from './supportedBranches.ts'
 
-// TODO: should this be combined with the branch checks in prepare.js?
+// TODO: should this be combined with the branch checks in prepare.ts?
 // They do seem quite similar, but this needs to run after eval,
-// and prepare.js obviously doesn't.
+// and prepare.ts obviously doesn't.
 
 const reviewKey = 'check-target-branch'
 

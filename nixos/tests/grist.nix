@@ -103,5 +103,19 @@ in
       record = check_answer(r)["records"][0]
       if record["fields"]["result"] != record["fields"]["number"] * 2:
         sys.exit(1)
+
+    # Importing a file needs the built-in parsers registered in plugins/ and a
+    # gVisor sandbox that can read the upload.
+    with subtest("Import a CSV file"):
+      r = requests.post(
+        f"{url}docs",
+        files={"upload": ("import.csv", "name,value\nfoo,1\nbar,2\n")},
+        headers={"X-Requested-With": "XMLHttpRequest"},
+      )
+      import_doc_id = check_answer(r)
+      r = requests.get(f"{url}docs/{import_doc_id}/tables/Import/records")
+      names = [rec["fields"]["name"] for rec in check_answer(r)["records"]]
+      if names != ["foo", "bar"]:
+        sys.exit(1)
   '';
 }

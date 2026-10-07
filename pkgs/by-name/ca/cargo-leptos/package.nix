@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-leptos";
-  version = "0.3.9";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = "cargo-leptos";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W2A55uZhuPtQsKSd9Hvf1IXUVhfPiaj2idWCmj30hQs=";
+    hash = "sha256-izVMc3q4i691B9BuI8ESESHcql3CGd9ebtSs/qG/F88=";
   };
 
-  cargoHash = "sha256-o9E1sQPtbvTkgpeuZusUmaN7Xv18JTZpmayurhu8+H4=";
+  cargoHash = "sha256-iFkpIOkj8Ems9C2DjylFwvFLFrUnGachNyld4BLwurU=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -14,12 +14,12 @@
 }:
 let
 
-  version = "1.3.5";
+  version = "1.5.5";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
     tag = "${version}";
-    hash = "sha256-SxJc09zy7aKW+PVl4My3jzwsktkbsvNnyXMTMs/NzUA=";
+    hash = "sha256-6O2zVTj9soB/Y2xYTYX6fbc2pFsgHL+BHMtB2U1P6HE=";
     postCheckout = ''
       git -C $out rev-parse HEAD > $out/commit_hash.txt
       git -C $out show -s --format=%cd --date=short HEAD > $out/commit_date.txt
@@ -39,7 +39,7 @@ let
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = finalAttrs.src + "/yarn.lock";
-        hash = "sha256-PIhmMIFHW+6jVZcS394yU9L5Zn+wkfrWmJH7lAbevbU=";
+        hash = "sha256-iJfu2eo8anGDGoPDx68+LyFI6/bmaUms5kkiMpuEC+Y=";
       };
 
       nativeBuildInputs = [
@@ -117,7 +117,6 @@ python3Packages.buildPythonApplication rec {
       djangorestframework
       drf-spectacular
 
-      bleach
       cryptography
       distutils
       dulwich
@@ -137,6 +136,7 @@ python3Packages.buildPythonApplication rec {
       sentry-sdk
       structlog
       tablib
+      tqdm
       tinycss2
       weasyprint
       whitenoise
@@ -187,6 +187,7 @@ python3Packages.buildPythonApplication rec {
         "test_rates"
         "test_refresh_endpoint"
         # Tries to use pip
+        "test_initial_install"
         "test_full_process"
         "test_package_loading"
         "test_plugin_install"
@@ -196,6 +197,10 @@ python3Packages.buildPythonApplication rec {
         "test_commit_info"
         # TODO figure out why this fails
         "test_setting_object"
+        # Extracts text from generated PDFs; result depends on fonts available in the sandbox
+        "test_print_custom_template"
+        # Unbounded recursion in pint overflows the C stack and segfaults the test worker
+        "test_api_circular_unit"
       ];
       skippedFuncScripts = map (funcName: ''
         grep -rlZ ${funcName} . | while IFS= read -r -d "" file; do
@@ -205,6 +210,10 @@ python3Packages.buildPythonApplication rec {
     in
     ''
       ${lib.concatStringsSep "\n" skippedFuncScripts}
+
+      # Wall-clock query-time assertions are not deterministic on build machines
+      substituteInPlace src/backend/InvenTree/InvenTree/unit_test.py \
+        --replace-fail "self.assertLessEqual(dt, max_query_time)" "pass"
     '';
 
   installPhase =
@@ -284,7 +293,10 @@ python3Packages.buildPythonApplication rec {
     ${python3.interpreter} ./manage.py migrate
     ${python3.interpreter} ./manage.py compilemessages
 
-    ${python3.interpreter} ./manage.py test --parallel --failfast
+    # Upstream excludes performance_test unconditionally, and only runs migration_test
+    # against PostgreSQL (under sqlite3, stock.0121 writes aware datetimes with USE_TZ=False)
+    ${python3.interpreter} ./manage.py test --parallel --failfast \
+      --exclude-tag migration_test --exclude-tag performance_test
     popd &>/dev/null
 
     runHook postCheck

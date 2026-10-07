@@ -15,16 +15,13 @@
   gtk-doc,
   gtk3,
   gtk-layer-shell,
-  ibus,
-  intltool,
   libcanberra-gtk3,
   libgee,
+  libgtop,
   libnotify,
   libpeas2,
   libpulseaudio,
   libuuid,
-  libwacom,
-  libwnck,
   libxfce4windowing,
   meson,
   mutter,
@@ -53,14 +50,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.10.2";
+  version = "10.10.3";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Eaq7/LY65HpyPRfR57FWDPqkVqBbymlHHQHFUvxER20=";
+    hash = "sha256-WEUFB3Q3RQZfsZd/xUn6qmGXPM/dR3sUe6pBnJG3vIk=";
   };
 
   outputs = [
@@ -77,10 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     gobject-introspection
     gtk-doc
-    intltool
     meson
     ninja
     pkg-config
+    python3
     sassc
     vala
     validatePkgConfig
@@ -97,14 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-base
     gtk3
     gtk-layer-shell
-    ibus
     libcanberra-gtk3
     libgee
+    libgtop
     libnotify
     libpulseaudio
     libuuid
-    libwacom
-    libwnck
     libxfce4windowing
     mutter # org.gnome.mutter.keybindings
     pythonEnv
@@ -117,19 +112,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    "-Dbudgie-session-libexecdir=${budgie-session}/libexec"
     "-Dgsd-libexecdir=${gnome-settings-daemon}/libexec"
+    "-Dxdp-libexecdir=${xdg-desktop-portal}/libexec"
     "-Dwith-runtime-dependencies=false"
   ];
 
   postPatch = ''
-    substituteInPlace src/session/budgie-desktop.in \
-      --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}" \
-      --replace-fail "@libexecdirroot@/xdg-desktop-portal" "${xdg-desktop-portal}/libexec/xdg-desktop-portal" \
-      --replace-fail "@gsd_libexecdir@/budgie-session-compositor-ready" "${budgie-session}/libexec/budgie-session-compositor-ready"
+    patchShebangs po/listUiFiles.py
 
-    chmod +x src/bridges/labwc/labwc_bridge.py
-    substituteInPlace src/bridges/labwc/org.buddiesofbudgie.labwc-bridge.desktop.in \
-      --replace-fail "Exec=python3 @libexecdir@/labwc_bridge.py" "Exec=@libexecdir@/labwc_bridge.py"
+    substituteInPlace src/session/budgie-desktop.in \
+      --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}"
   '';
 
   passthru = {

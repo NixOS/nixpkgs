@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "erigon";
-  version = "3.6.1";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "erigontech";
     repo = "erigon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-54ME/ssXM/wi8UQu08q0phDq9n2/wozKV7qgVHozuT8=";
+    hash = "sha256-e5aXY3GIqoPjawHFev/6E1CvqJQPR3eBpsPpxc0Qw2I=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-kedZWMfpI33SQQvfv+HsonxkD9OBKqG1vtCDQec1Crg=";
+  vendorHash = "sha256-W9W+adF5Ch8pr6+uqMlitiIcN+8BssRI0G1FwSoCSnc=";
   proxyVendor = true;
 
   subPackages = [

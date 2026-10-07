@@ -12,7 +12,6 @@
   kdePackages,
   libinput,
   librsvg,
-  libx11,
   nix-update-script,
   pkg-config,
   python3,
@@ -31,13 +30,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "3.5.10";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ti4O0wyUYVyGzFmlG8SN3wusoM8TlsbmI60BPyaS0RU=";
+    hash = "sha256-q0NT54HFH3grCppiWR00taATOSUv7t3PEaTlbcIehlg=";
     fetchSubmodules = true;
   };
 
@@ -49,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
         pname = "fcitx5-lotus-go-modules";
         inherit (finalAttrs) version src;
         modRoot = "bamboo";
-        vendorHash = "sha256-0Q8axcw5UKrODpe5oU0yWiBykPWNPuun1161MUgnrlM=";
+        vendorHash = "sha256-p9YpDSRtOkYa6cZHzWOfcYKaFb5LXXfXXnQo9xTEnWI=";
       }).goModules;
 
     updateScript = nix-update-script { };
@@ -71,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     fcitx5
     kdePackages.extra-cmake-modules
     libinput
-    libx11
     pythonEnv
     qt6.qtbase
     qt6.qtsvg
@@ -101,9 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5") == 0' \
                      '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 11 && strcmp(exe_path + strlen(exe_path) - 11, "/bin/fcitx5") == 0)'
 
-    substituteInPlace src/lotus-engine.cpp \
-      --replace-fail '/usr/share/icons/hicolor' '/run/current-system/sw/share/icons/hicolor'
-
     substituteInPlace settings-gui/i18n.py \
       --replace-fail 'localedir = "/usr/share/locale"' 'localedir = "'"$out"'/share/locale"'
 
@@ -116,7 +111,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/setfacl" "${acl}/bin/setfacl"
 
     substituteInPlace $out/lib/systemd/system/fcitx5-lotus-server@.service \
-      --replace-fail "/usr/bin/setfacl" "${acl}/bin/setfacl" \
       --replace-fail "/usr/bin/fcitx5-lotus-server" "$out/bin/fcitx5-lotus-server"
   '';
 

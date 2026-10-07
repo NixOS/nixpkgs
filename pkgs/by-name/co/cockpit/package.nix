@@ -37,7 +37,7 @@
   python3Packages,
   removeReferencesTo,
   sscg,
-  systemd,
+  systemdLibs,
   udev,
   util-linux,
   xmlto,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3Packages.setuptools
     removeReferencesTo
-    systemd
+    systemdLibs
     xmlto
   ];
 
@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 
     substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
-      --replace-warn libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
+      --replace-warn libsystemd.so.0 ${systemdLibs}/lib/libsystemd.so.0
 
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
       --replace-fail /usr $out
@@ -250,7 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
       -t ${lib.getDev stdenv.cc.libc} \
       -t ${lib.getDev glib} \
       -t ${lib.getDev json-glib} \
-      -t ${lib.getDev systemd} \
+      -t ${lib.getDev systemdLibs} \
       -t ${lib.getDev gnutls} \
       -t ${lib.getDev krb5} \
       "$out/lib/security/pam_ssh_add.so" \
@@ -268,7 +268,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getDev stdenv.cc.libc)
     (lib.getDev glib)
     (lib.getDev json-glib)
-    (lib.getDev systemd)
+    (lib.getDev systemdLibs)
     (lib.getDev gnutls)
     (lib.getDev krb5)
   ];

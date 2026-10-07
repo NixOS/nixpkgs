@@ -18,7 +18,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-umd";
-  version = "0.9.6";
+  version = "0.9.12";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tenstorrent";
     repo = "tt-umd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3IrgsKRaJP/rEXiMvi2LnzS9n2+Giu5d05RohzRgPw4=";
+    hash = "sha256-lhcNZuCV8n3ebbUU1MveZXR49qaybmOiSTLpitG96/s=";
   };
 
   cpm = fetchurl {
@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # https://github.com/tenstorrent/tt-umd/pull/2187
-    ./fix-targets.patch
+    # https://github.com/tenstorrent/tt-umd/pull/3593
+    ./link-shared-yaml-cpp-into-baremetal-tests.patch
   ];
 
   postPatch = ''
@@ -82,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "TT_UMD_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "TT_UMD_BUILD_STATIC" stdenv.hostPlatform.isStatic)
     (lib.cmakeBool "TT_UMD_BUILD_PYTHON" true)
+    (lib.cmakeBool "CMAKE_COMPILE_WARNING_AS_ERROR" false)
     (lib.cmakeFeature "nanobind_DIR" "${python3.pkgs.nanobind}/${python3.sitePackages}/nanobind/cmake")
   ];
 

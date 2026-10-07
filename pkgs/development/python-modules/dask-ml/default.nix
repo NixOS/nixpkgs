@@ -39,8 +39,9 @@ buildPythonPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'addopts = "-rsx -v --durations=10 --color=yes"' \
-                     'addopts = ["-rsx", "-v", "--durations=10", "--color=yes"]'
+      --replace-fail \
+        'addopts = "-rsx -v --durations=10 --color=yes"' \
+        'addopts = ["-rsx", "-v", "--durations=10", "--color=yes"]'
   '';
 
   build-system = [
@@ -74,9 +75,15 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
-  # Meant as informational warnings, but treated as errors
   pytestFlags = [
+    # Skipping check check_array_api_input for KMeans because it raised SkipTest:
+    # SCIPY_ARRAY_API is not set: not checking array_api input
     "-Wignore::sklearn.exceptions.SkipTestWarning"
+
+    # pandas.errors.Pandas4Warning: For backward compatibility, 'str' dtypes are included by select_dtypes when 'object' dtype is specified.
+    # This behavior is deprecated and will be removed in a future version.
+    # Explicitly pass 'str' to `include` to select them, or to `exclude` to remove them and silence this warning.
+    # See https://pandas.pydata.org/docs/user_guide/migration-3-strings.html#string-migration-select-dtypes for details on how to write code that works with pandas 2 and 3.
     "-Wignore::pandas.errors.Pandas4Warning"
   ];
 
@@ -91,18 +98,6 @@ buildPythonPackage (finalAttrs: {
     # MockClassifier predates sklearn 1.6 __sklearn_tags__
     "tests/model_selection/dask_searchcv/test_model_selection.py"
     "tests/model_selection/dask_searchcv/test_model_selection_sklearn.py"
-
-    # AttributeError: 'numpy.ndarray' object has no attribute 'map_blocks'
-    "tests/preprocessing/test_data.py::TestQuantileTransformer::test_basic"
-
-    #  TypeError: fmin_l_bfgs_b() got an unexpected keyword argument 'iprint'
-    "tests/linear_model/test_glm.py::test_fit_solver[lbfgs]"
-
-    # TypeError: Cannot interpret '<StringDtype(na_value=nan)>' as a data type
-    "tests/preprocessing/test_label.py::TestLabelEncoder::test_input_types"
-
-    # AssertionError on is_object_dtype
-    "tests/preprocessing/test_data.py::TestCategorizer::test_columns"
   ];
 
   disabledTests = [

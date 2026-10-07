@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
 }:
 
 let
@@ -11,8 +11,7 @@ stdenv.mkDerivation {
   inherit pname;
   version = "0-unstable-2014-04-06";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "jdwhite";
     repo = "aquosctl";
     rev = "b5e48d9ef848188b97dfb24bfcc99d5196cab5f6";

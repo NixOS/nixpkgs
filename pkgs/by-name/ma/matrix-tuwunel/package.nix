@@ -205,5 +205,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       scvalex
     ];
     mainProgram = "tuwunel";
+    broken = stdenv.hostPlatform.isDarwin; # macos build fails with a rocksdb linker error
   };
 })

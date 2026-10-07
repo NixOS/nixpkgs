@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sun, 4 Jan 2026 14:44:49 -0500
+Subject: [PATCH 09/10] siloptimizer-bootstrap-workaround
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Restore the SimplifyCFG optimization when bootstrapping. Even though
+it’s buggy, it’s needed to build later stages of the bootstrap.
+---
+ lib/SILOptimizer/Transforms/SimplifyCFG.cpp | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/lib/SILOptimizer/Transforms/SimplifyCFG.cpp b/lib/SILOptimizer/Transforms/SimplifyCFG.cpp
+index f4781b4ca5c..ef99a41d864 100644
+--- a/lib/SILOptimizer/Transforms/SimplifyCFG.cpp
++++ b/lib/SILOptimizer/Transforms/SimplifyCFG.cpp
+@@ -3322,12 +3322,6 @@ static bool splitBBArguments(SILFunction &Fn) {
+ }
+ 
+ bool SimplifyCFG::run() {
+-#ifndef SWIFT_ENABLE_SWIFT_IN_SWIFT
+-  // This pass results in verification failures when Swift sources are not
+-  // enabled.
+-  LLVM_DEBUG(llvm::dbgs() << "SimplifyCFG disabled in C++-only Swift compiler\n");
+-  return false;
+-#endif //!SWIFT_ENABLE_SWIFT_IN_SWIFT
+   LLVM_DEBUG(llvm::dbgs() << "### Run SimplifyCFG on " << Fn.getName() << '\n');
+ 
+   // Disable some expensive optimizations if the function is huge.
+-- 
+2.54.0
+

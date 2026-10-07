@@ -219,7 +219,6 @@ lib.extendMkDerivation {
       env = args.env or { } // {
         inherit (go) GOOS GOARCH;
 
-        GO111MODULE = "on";
         GOTOOLCHAIN = "local";
 
         CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;

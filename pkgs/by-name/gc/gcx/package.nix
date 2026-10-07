@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gcx";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "gcx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U+iy121v9VJSIipo7ul6HDFVmLQehZsZzZjbxhFu3v4=";
+    hash = "sha256-FgVU4y3HHMsCqeZwFuBw7BduSvPFZ6RJaVK/Mp0VA5U=";
   };
 
   vendorHash = "sha256-1XEIVRiUUCFFGU0sloavpGDBhV+HrqljfpXi/MieULI=";

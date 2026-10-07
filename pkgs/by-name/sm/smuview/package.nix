@@ -11,7 +11,7 @@
   libzip,
   libftdi1,
   hidapi,
-  glibmm,
+  glibmm_2_4,
   python3,
   bluez,
   pcre2,
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     libzip
     libftdi1
     hidapi
-    glibmm
+    glibmm_2_4
     python3
     pcre2
     libsForQt5.qwt

@@ -12,7 +12,7 @@
   fmt,
   gtest,
   libpng,
-  libsigcxx,
+  libsigcxx_2_0,
   argpp,
   geomcpp,
   logmich,
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     fmt
     gtest
     libpng
-    libsigcxx
+    libsigcxx_2_0
     argpp
     geomcpp
     logmich

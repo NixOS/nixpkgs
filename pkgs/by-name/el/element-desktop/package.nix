@@ -9,6 +9,8 @@
   element-web,
   callPackage,
   typescript_7,
+  node-gyp,
+  python3,
   tsx,
   sqlcipher,
   # command line arguments which are always set
@@ -30,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "element-desktop";
-  version = "1.12.28";
+  version = "1.12.30";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "element-web";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-goP/f1Go7227R2euXu8aJrwHeUp84DQ+18ztyf4uXhM=";
+    hash = "sha256-4MdfIEfpWtYHmBGMX7d1S/PgUpHLTLIkVT28/LpeSm0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -47,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = "sha256-eLTMKzVgP1oSiat80ygWUH2zGF7ukKSLvOEGay/pr9Y=";
+    hash = "sha256-6Kyv9Hp6p04JVmDfAyMkb0AAbRqswthNvku0S42QzDA=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -62,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     tsx
     faketty
+    node-gyp
+    python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
@@ -91,6 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/nrwl/nx/issues/22445
   buildPhase = ''
     runHook preBuild
+
+    # to prevent node-gyp from trying to download electron-headers
+    export npm_config_nodedir="${electron.headers}"
 
     export VERSION=${finalAttrs.version}
 
@@ -155,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/element-hq/element-desktop/blob/develop/package.json
+  # https://github.com/element-hq/element-web/blob/develop/apps/desktop/package.json
   desktopItems = [
     (makeDesktopItem {
       name = "element-desktop";

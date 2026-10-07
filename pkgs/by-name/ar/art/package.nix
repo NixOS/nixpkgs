@@ -25,7 +25,7 @@
   fftwSinglePrec,
   expat,
   pcre2,
-  libsigcxx,
+  libsigcxx_2_0,
   lensfun,
   librsvg,
   libcanberra-gtk3,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwSinglePrec
     expat
     pcre2
-    libsigcxx
+    libsigcxx_2_0
     lensfun
     librsvg
     exiv2

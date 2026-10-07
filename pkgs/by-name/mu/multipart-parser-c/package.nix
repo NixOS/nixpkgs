@@ -6,7 +6,10 @@
 
 stdenv.mkDerivation {
   pname = "multipart-parser-c";
-  version = "unstable-2015-12-14";
+  version = "0-unstable-2015-12-14";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "iafonov";
@@ -16,19 +19,25 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
     make solib
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
     mv lib*${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
 
     mkdir -p $out/include
     mv *.h $out/include/
+
+    runHook postInstall
   '';
 
   meta = {
-    description = "Http multipart parser implemented in C";
+    description = "HTTP multipart parser implemented in C";
     homepage = "https://github.com/iafonov/multipart-parser-c";
     license = lib.licenses.mit;
   };

@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valhalla";
-  version = "3.8.3";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "valhalla";
     repo = "valhalla";
     tag = finalAttrs.version;
-    hash = "sha256-wWiiadJqoZylV2YK+mu+cQBfd597id39RQgwaQDtvW4=";
+    hash = "sha256-dr7F7tuqpSfDnH7Ays58vKoCysepZkPSIerMweMErH4=";
     fetchSubmodules = true;
   };
 

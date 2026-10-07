@@ -33,7 +33,7 @@
   opencascade-occt_7_6,
   openvdb,
   opencv,
-  systemd,
+  systemdLibs,
   onetbb,
   webkitgtk_4_1,
   wxwidgets_3_3,
@@ -127,7 +127,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     opencv.cxxdev
     libnoise
   ]
-  ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withSystemd [ systemdLibs ]
   ++ finalAttrs.checkInputs;
 
   patches = [

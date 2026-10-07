@@ -28,7 +28,6 @@
   libepoxy,
   libjxl,
   at-spi2-core,
-  cairo,
   expat,
   libxml2,
   libsoup_3,
@@ -73,6 +72,7 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemdLibs,
   testers,
+  directoryListingUpdater,
   fetchpatch,
 }:
 
@@ -83,7 +83,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.52.6";
+  version = "2.54.1";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -98,7 +98,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-F5ouo/j27dS+fzH9xVr8V70HKfH7pkjGHUGBU5rBFvw=";
+    hash = "sha256-6gu7AtvbxZaHSk5601tmZFs+CiMr0OQIHeXtkusKOX0=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -139,7 +139,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     at-spi2-core
-    cairo # required even when using skia
     enchant
     expat
     flite
@@ -254,7 +253,10 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    updateScript = directoryListingUpdater { };
+  };
 
   meta = {
     description = "Web content rendering engine, GTK port";

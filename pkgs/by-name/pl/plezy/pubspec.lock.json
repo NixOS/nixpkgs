@@ -128,8 +128,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "1bcc9978e9b5e503dd08176cc423cfabee703761",
-        "resolved-ref": "1bcc9978e9b5e503dd08176cc423cfabee703761",
+        "ref": "7f500a1ed64fdef0173e1a69548e898b0d23c581",
+        "resolved-ref": "7f500a1ed64fdef0173e1a69548e898b0d23c581",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",

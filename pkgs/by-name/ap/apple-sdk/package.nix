@@ -100,6 +100,7 @@ stdenvNoCC.mkDerivation (
 
     passthru = {
       sdkroot = finalAttrs.finalPackage + "/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk";
+      tests = callPackage ./tests { };
     };
 
     __structuredAttrs = true;

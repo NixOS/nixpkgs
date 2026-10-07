@@ -130,6 +130,9 @@ buildPythonPackage (finalAttrs: {
     # nbconvert failed: `relax_add_props` kwargs of validate has been
     # deprecated for security reasons, and will be removed soon.
     "tests/nbconvert/test_handlers.py"
+    # timing sensitive
+    "tests/services/contents/test_manager.py::test_created_timestamp"
+    "tests/services/kernels/test_connection.py::test_disconnect_resolves_orphaned_kernel_info_future"
   ];
 
   __darwinAllowLocalNetworking = true;

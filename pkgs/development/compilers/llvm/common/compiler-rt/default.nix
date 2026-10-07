@@ -36,7 +36,8 @@
   # implementation of the routines instead of the implementation
   # using ad-hoc mutexes (which doesn't depend on libc at all).
   # Use of pthreads helps code play better with sanitizers.
-  withAtomicsPthread ? lib.versionAtLeast release_version "19" && stdenv.cc.libc != null,
+  withAtomicsPthread ?
+    lib.versionAtLeast release_version "19" && stdenv.cc.libc != null && !stdenv.hostPlatform.isMinGW,
 
   # In recent releases, the compiler-rt build seems to produce
   # many `libclang_rt*` libraries, but not a single unified
@@ -222,7 +223,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Fixes https://github.com/NixOS/nixpkgs/issues/393603
       (lib.cmakeBool "COMPILER_RT_DISABLE_AARCH64_FMV" true)
   ++ lib.optionals withAtomics [
-    (lib.cmakeBool "COMPILER_RT_EXCLUDE_ATOMIC_BUILTIN" (!withAtomicsLib))
+    (lib.cmakeBool "COMPILER_RT_EXCLUDE_ATOMIC_BUILTIN" withAtomicsLib)
     (lib.cmakeBool "COMPILER_RT_BUILD_STANDALONE_LIBATOMIC" withAtomicsLib)
     (lib.cmakeBool "COMPILER_RT_LIBATOMIC_USE_PTHREAD" withAtomicsPthread)
   ]
@@ -247,6 +248,23 @@ stdenv.mkDerivation (finalAttrs: {
         substituteInPlace lib/builtins/int_util.c \
           --replace-fail "#include <stdlib.h>" ""
       ''
+      +
+        lib.optionalString
+          (
+            stdenv.hostPlatform.isLinux
+            && stdenv.hostPlatform.isAarch64
+            && lib.versionAtLeast release_version "22"
+          )
+          # LLVM 22 dropped the __has_include guard around <sys/auxv.h> in the
+          # AArch64 LSE/FMV feature detection (llvm/llvm-project#161751). Without
+          # a libc the header does not exist, so restore the LLVM 21 behaviour:
+          # skip the auxv-based detection and leave __aarch64_have_lse_atomics
+          # false. Only the __linux__ branches are touched, so keep the Darwin
+          # derivations (built without a libc too) unchanged.
+          ''
+            substituteInPlace lib/builtins/cpu_model/aarch64.c \
+              --replace-fail "#elif defined(__linux__)" "#elif defined(__linux__) && __has_include(<sys/auxv.h>)"
+          ''
       + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
         # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
         # see description above for why we're nuking assert.h normally but that doesn't work here.
@@ -299,11 +317,21 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString forceLinkCompilerRt ''
       ln -s $out/lib/*/libclang_rt.builtins-*.a $out/lib/libcompiler_rt.a
     ''
-    + lib.optionalString (withAtomics && withAtomicsLib) ''
-      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/libatomic.so
-      # create a link with the original soname as well, so it's found at runtime
-      ln -s $out/lib/*/libclang_rt.atomic-*.so $out/lib/
-    '';
+    + lib.optionalString (withAtomics && withAtomicsLib) (
+      let
+        isMinGW = stdenv.hostPlatform.isMinGW;
+        sharedLibrary = stdenv.hostPlatform.extensions.sharedLibrary;
+        linkLibrarySuffix = lib.optionalString isMinGW ".a";
+        runtimeDirectory = if isMinGW then "$out/bin" else "$out/lib";
+        atomicLibrary = "libclang_rt.atomic" + lib.optionalString isMinGW "_dynamic" + "-*${sharedLibrary}";
+      in
+      ''
+        mkdir -p ${runtimeDirectory}
+        ln -s $out/lib/*/${atomicLibrary}${linkLibrarySuffix} $out/lib/libatomic${sharedLibrary}${linkLibrarySuffix}
+        # Link the original runtime name where the loader searches for shared libraries.
+        ln -s $out/lib/*/${atomicLibrary} ${runtimeDirectory}/
+      ''
+    );
 
   __structuredAttrs = true;
 

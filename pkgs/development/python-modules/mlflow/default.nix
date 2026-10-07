@@ -28,7 +28,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mlflow";
-  version = "3.16.0";
+  version = "3.16.1";
   format = "wheel";
   __structuredAttrs = true;
 
@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
     format = "wheel";
     dist = "py3";
     python = "py3";
-    hash = "sha256-xKxehjSqytGj19WhoxvpJ5WT69SLhCcoQ2gtsRlwz3E=";
+    hash = "sha256-5N/mnOrjHfx7hIDnb/5qfzZ1K9+sMOBY5kMK3h+1kgs=";
   };
 
   # Nix-wrapped python populates sys.path via NIX_PYTHONPATH/site hooks,

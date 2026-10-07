@@ -7,17 +7,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "free5gc-udr";
-  version = "1.4.4";
+  version = "1.4.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "free5gc";
     repo = "udr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P3uk6qoFHs4IT1PZSi1PToxOkiKPMRLcoShAIpcf1Oo=";
+    hash = "sha256-h0q20ut11aAF3nNN7Yq7MmYiea0DfZ5y9q/Ygb0bozY=";
   };
 
-  vendorHash = "sha256-/cRgN1fB4az0HI2wYPClBJu8m5zC6XHqW+ACWtgbxmU=";
+  vendorHash = "sha256-vDTHS10Ie7qk3RVEfgjd00WukDI6Upn+IGmYmI4MQiE=";
 
   ldflags = [
     "-X github.com/free5gc/util/version.VERSION=v${finalAttrs.version}"

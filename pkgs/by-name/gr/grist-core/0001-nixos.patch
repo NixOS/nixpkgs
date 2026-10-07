@@ -1,5 +1,5 @@
 diff --git a/sandbox/gvisor/run.py b/sandbox/gvisor/run.py
-index db074508..d94b3cc8 100755
+index db074508..8aa09637 100755
 --- a/sandbox/gvisor/run.py
 +++ b/sandbox/gvisor/run.py
 @@ -75,8 +75,8 @@ mounts = [             # These will be filled in more fully programmatically bel
@@ -13,7 +13,21 @@ index db074508..d94b3cc8 100755
  ] + (args.env or [])
  settings = {
    "ociVersion": "1.0.0",
-@@ -157,17 +157,13 @@ def preserve(*locations, short_failure=False):
+@@ -87,8 +87,12 @@ settings = {
+     # during imports, try commenting this section out. We could make imports work
+     # for any version of gvisor by setting mode when using tmp.dir to allow
+     # others to list directory contents.
++    # NixOS: runsc runs with -rootless, where only container uid 0 is mapped
++    # to the invoking (service) user. Any other uid is unmapped inside the
++    # sandbox and cannot read uploaded files (0600, owned by the service user),
++    # which breaks imports. Container uid 0 grants nothing beyond that user.
+     "user": {
+-      "uid": os.getuid(),
++      "uid": 0,
+       "gid": 0
+     },
+     "args": cmd_args,
+@@ -157,17 +161,13 @@ def preserve(*locations, short_failure=False):
      })
      preserved.add(location)
  
@@ -33,7 +47,7 @@ index db074508..d94b3cc8 100755
  
  # Support user-specific extra directories. This is handy if Python is
  # somewhere weird and there is a maze of soft links to get
-@@ -176,31 +172,7 @@ extra_dirs = os.environ.get('GVISOR_EXTRA_DIRS')
+@@ -176,31 +176,7 @@ extra_dirs = os.environ.get('GVISOR_EXTRA_DIRS')
  if extra_dirs:
    preserve(*extra_dirs.split(':'))
  
@@ -66,7 +80,7 @@ index db074508..d94b3cc8 100755
  
  # Set up any specific shares requested.
  if args.mount:
-@@ -227,18 +199,15 @@ settings['mounts'] = sorted(tmpfs_mounts, key=lambda mount: mount["destination"]
+@@ -227,18 +203,15 @@ settings['mounts'] = sorted(tmpfs_mounts, key=lambda mount: mount["destination"]
  # because gvisor is written in Go and doesn't use the standard library that faketime
  # tweaks.
  if args.faketime:

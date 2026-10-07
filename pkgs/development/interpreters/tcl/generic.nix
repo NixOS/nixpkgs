@@ -73,12 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     buildPackages.tcl
   ];
 
-  buildInputs = [
-    bashNonInteractive
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "9.0") [
-    zlib
-  ];
+  buildInputs =
+    lib.optional (lib.meta.availableOn stdenv.hostPlatform bashNonInteractive) bashNonInteractive
+    ++ lib.optionals (lib.versionAtLeast version "9.0") [
+      zlib
+    ];
 
   strictDeps = true;
 
@@ -193,10 +192,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tcl scripting language";
-    homepage = "https://www.tcl.tk/";
+    homepage = "https://www.tcl-lang.org/";
     license = lib.licenses.tcltk;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ agbrooks ];
+    mainProgram = "tclsh";
+    maintainers = with lib.maintainers; [
+      agbrooks
+      fgaz
+    ];
   };
 
   passthru =
@@ -222,7 +225,9 @@ stdenv.mkDerivation (finalAttrs: {
         { buildPackages }:
         makeSetupHook {
           name = "tcl-requires-check-hook";
-          propagatedBuildInputs = [ buildPackages.makeBinaryWrapper ];
+          substitutions = {
+            tcl_hook = ./tcl-requires-check-hook.tcl;
+          };
           meta = {
             inherit (finalAttrs.meta) maintainers platforms;
             license = lib.licenses.mit;

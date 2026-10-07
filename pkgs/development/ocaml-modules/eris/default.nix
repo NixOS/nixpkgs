@@ -22,7 +22,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "eris";
-  version = "1.0.0-unstable-2026-03-11";
+  version = "1.0.0-unstable-2026-09-30";
 
   minimalOCamlVersion = "4.14";
   __structuredAttrs = true;
@@ -30,8 +30,8 @@ buildDunePackage (finalAttrs: {
   src = fetchFromCodeberg {
     owner = "eris";
     repo = "ocaml-eris";
-    rev = "ced19e6054b4fcf546930a9ecee06055908c0b73";
-    hash = "sha256-Yng7liiDS3Pupr9c4J5vNIyomxwjPLn2GJHIO12rIWc=";
+    rev = "142882564bb587375e690182e48cb438e207173a";
+    hash = "sha256-NEckZ1+oD+UWQ9aoYvjGs6ucrFenWFihYoiTHXh9ohw=";
   };
 
   dunePackages = [

@@ -12,7 +12,7 @@
   libxml2,
   openssl,
   pkg-config,
-  systemd,
+  systemdLibs,
   cppunit,
   ipv6 ? true,
   nixosTests,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
     pam
-    systemd
+    systemdLibs
   ];
 
   enableParallelBuilding = true;

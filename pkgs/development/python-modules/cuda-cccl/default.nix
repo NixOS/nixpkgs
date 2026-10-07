@@ -30,7 +30,7 @@
 
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cuda-cccl";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +38,7 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     owner = "NVIDIA";
     repo = "cccl";
     tag = "python-${finalAttrs.version}";
-    hash = "sha256-0Qsf3l9VvSxYVVWQG0ST7S33s7LdsNyWoV6Q2f0Ru6o=";
+    hash = "sha256-GyZD6YGqZNS3HDuhv0Y286LtisqqxHLr8SlGee5rXlw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/cuda_cccl";

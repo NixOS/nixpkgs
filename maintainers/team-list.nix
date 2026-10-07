@@ -291,6 +291,10 @@ with lib.maintainers;
     github = "freedesktop";
   };
 
+  gaming = {
+    github = "gaming";
+  };
+
   gcc = {
     members = [
       vcunat
@@ -750,6 +754,7 @@ with lib.maintainers;
 
   swift = {
     members = [
+      reckenrode
       samasaur
       stephank
     ];

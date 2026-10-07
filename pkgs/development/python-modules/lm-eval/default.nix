@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
   setuptools,
@@ -31,6 +32,7 @@
   immutabledict,
   langdetect,
   librosa,
+  litellm,
   nltk,
   numpy,
   optimum,
@@ -47,20 +49,21 @@
   wandb,
 
   # tests
+  pillow,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lm-eval";
-  version = "0.4.11";
+  version = "0.4.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+zhZ+I+gzoF7g0xYvlPbZFcFy2PuFOgNTFLvbmdE1R0=";
+    hash = "sha256-ju9DcClupxlFW1Ik7NUIJtYE+G6lFEwLYoTXCzOmwVs=";
   };
 
   build-system = [
@@ -72,16 +75,15 @@ buildPythonPackage (finalAttrs: {
     dill
     evaluate
     jinja2
-    jsonlines
     more-itertools
     pytablewriter
     rouge-score
     sacrebleu
     scikit-learn
     sqlitedict
+    tqdm
     typing-extensions
     word2number
-    zstandard
   ];
 
   optional-dependencies = {
@@ -91,6 +93,10 @@ buildPythonPackage (finalAttrs: {
       tenacity
       tiktoken
       tqdm
+    ];
+    archiver = [
+      jsonlines
+      zstandard
     ];
     audiolm_qwen = [
       librosa
@@ -111,6 +117,13 @@ buildPythonPackage (finalAttrs: {
     libra = [
       pymorphy2
     ];
+    litellm = [
+      aiohttp
+      litellm
+      requests
+      tenacity
+      tqdm
+    ];
     optimum = [ optimum ] ++ optimum.optional-dependencies.openvino;
     sentencepiece = [ sentencepiece ];
     vllm = [ vllm ];
@@ -124,15 +137,18 @@ buildPythonPackage (finalAttrs: {
     # - deepsparse
     # - gptq
     # - gptqmodel
+    # - habana
     # - ibm_watsonx_ai
     # - ipex
     # - japanese_leaderboard
     # - longbench
     # - math
     # - multilingual
+    # - onnxruntime-genai
     # - ruler
     # - sparsify
     # - tasks
+    # - trackio
     # - unitxt
     # - zeno
   };
@@ -142,6 +158,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "lm_eval" ];
 
   nativeCheckInputs = [
+    pillow
     pytestCheckHook
     sentencepiece
     writableTmpDirAsHomeHook
@@ -162,7 +179,6 @@ buildPythonPackage (finalAttrs: {
     "tests/models/test_bos_handling.py"
     "tests/models/test_huggingface.py"
     "tests/test_evaluator.py"
-    "tests/test_include_path.py"
     "tests/test_prompt.py"
     "tests/test_task_manager.py"
     "tests/test_tasks.py"
@@ -174,6 +190,11 @@ buildPythonPackage (finalAttrs: {
     # zeno-client is not packaged
     "tests/scripts/test_zeno_visualize.py"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$";
+  };
 
   meta = {
     changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${finalAttrs.src.tag}";

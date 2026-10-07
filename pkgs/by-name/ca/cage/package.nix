@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.hjdskes.nl/projects/cage/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ olduser101 ];
     mainProgram = "cage";
   };
 })

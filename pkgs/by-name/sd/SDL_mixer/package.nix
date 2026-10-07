@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_mixer";
-  version = "1.2.12-unstable-2026-09-12";
+  version = "1.2.12-unstable-2026-09-29";
 
   # word of caution: while there is a somewhat maintained SDL-1.2 branch on
   # https://github.com/libsdl-org/SDL_mixer, it switches from smpeg to mpg123 which
@@ -31,8 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_mixer";
-    rev = "98c1b9615ee7507dbdd30c4fe3b907cc58800064";
-    hash = "sha256-FwDwUPLzuOlokKP91w8dF/BJPG2rFIlgn5kR6Tka0ws=";
+    rev = "31fe14e9043e1a19caa42dce744b06bc0b648a56";
+    hash = "sha256-RnrPiMyxvNMb0XEvtcUA//+/gJ85sxFyapyoNBlIgG0=";
   };
 
   # Upstream does an okay job bumping these vendor dependencies, and we don't use them in nix anyways.

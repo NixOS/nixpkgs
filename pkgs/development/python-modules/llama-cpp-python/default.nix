@@ -34,15 +34,16 @@
   cudaPackages ? { },
 
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-cpp-python";
   version = "0.3.23";
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LqSgohfTv02RNZGMjKG0Pq2vHuIX+446uI2Q3KRmnzI=";
     fetchSubmodules = true;
   };
@@ -132,11 +133,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for llama.cpp";
     homepage = "https://github.com/abetlen/llama-cpp-python";
-    changelog = "https://github.com/abetlen/llama-cpp-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/abetlen/llama-cpp-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       booxter
       kirillrdy
     ];
   };
-}
+})

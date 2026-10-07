@@ -228,13 +228,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "joplin";
+      name = "appimagekit-joplin";
       desktopName = "Joplin";
       exec = "joplin-desktop %U";
       icon = "joplin";
       comment = "Joplin for Desktop";
       categories = [ "Office" ];
-      startupWMClass = "joplin-app-desktop";
+      startupWMClass = "appimagekit-joplin";
       mimeTypes = [ "x-scheme-handler/joplin" ];
     })
   ];

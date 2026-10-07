@@ -1,6 +1,12 @@
 # Contributing to the Nixpkgs manual
 
-This directory houses the source files for the Nixpkgs manual.
+This directory houses the source files for the Nixpkgs manual, including
+
+- [Getting Started](./getting-started) guides
+- [Onboarding guides](./using-nixpkgs.md) for using Nixpkgs
+- [Language frameworks](./languages-frameworks) shipped with Nixpkgs.
+
+There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/unstable/) and [latest stable release](https://nixos.org/manual/nixpkgs/stable/).
 
 > [!NOTE]
 >
@@ -15,9 +21,6 @@ When writing new docs use **Progressive Disclosure:**
 
 Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
 
-Documentation about Nixpkgs belongs here.
-This includes getting started guides and onboarding guides for *using* Nixpkgs and the language frameworks it ships.
-
 Write **guides** task-first: lead with a working example, then explain in prose.
 Write **reference** as the specification of functions and attributes.
 
@@ -30,55 +33,35 @@ nix-repl> :doc lib.mapAttrsToList
 
 See [Document structure](#document-structure) for a structural template.
 
-Rendered documentation:
-- [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
-- [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
+## Building and navigating documentation locally
 
-The rendering tool is [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs), sometimes abbreviated `nrd`.
-
-## Contributing to this documentation
-
-You can quickly check your edits with `nix-build`:
-
-```ShellSession
-$ cd /path/to/nixpkgs
-$ nix-build doc
-```
-
-If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
+The Nixpkgs manual is rendered by [`nixos-render-docs`](../pkgs/by-name/ni/nixos-render-docs/).
+Its index is [`nav.json`](./nav.json).
 
 ### Development environment
 
-To reduce repetition, consider using tools from the documentation development environment:
+Consider using the tooling in the documentation development environment.
 
 ```ShellSession
 $ cd /path/to/nixpkgs/doc
 $ nix-shell
 ```
 
-To load the documentation development environment automatically when entering that directory:
+### Live preview
 
-1. Install [`nix-direnv`](https://search.nixos.org/packages?channel=unstable&query=nix-direnv#show=nix-direnv)
-1. Set up direnv in the documentation directory:
+Within the developer environment, run [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual.
+If the `nixos-render-docs` source-code changes, `devmode` must be restarted.
 
-   ```ShellSession
-   $ cd doc
-   $ echo "use nix" > .envrc
-   $ direnv allow
-   ```
+### Building the docs
 
-#### Live preview
-
-Run [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual: it rebuilds on every change and reloads the page in your browser automatically.
-
-Changes to the renderer 'pkgs/by-name/ni/nixos-render-docs' need a manual restart. Run: `devmode` again.
+To build the documentation, run `nix-build doc`.
+A successful build is stored in `./result/share/doc/nixpkgs/manual.html`.
 
 ### Testing redirects
 
-Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
+Once you have a successful build, you can open the aforementioned path in a browser along with the anchor, and observe the redirection.
 
-Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload.
-This is because browsers do not re-run client JS code when only the anchor has changed.
+To test redirects, perform a browser refresh, as browsers do not re-run client JS code when only the anchor has changed.
 
 ## Syntax
 
@@ -140,13 +123,11 @@ A few markups for other kinds of literals are also available:
 - `` {env}`XDG_DATA_DIRS` ``
 - `` {file}`/etc/passwd` ``
 - `` {option}`networking.useDHCP` ``
-- `` {var}`/etc/passwd` ``
+- `` {var}`pkgs` ``
+
+The values will be formatted as inline `<code>` elements.
 
 These literal kinds are used mostly in NixOS option documentation.
-
-This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
-Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
-They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
 
@@ -170,7 +151,7 @@ The following are supported:
 - `example`
 
 Example admonitions require a title to work.
-If you don't provide one, the manual won't be built.
+If you don't provide one, the manual won't build.
 
 ```markdown
 ::: {.example #ex-showing-an-example}
@@ -186,11 +167,11 @@ Text for the example.
 For defining a group of terms:
 
 ```markdown
-pear
-:   green or yellow bulbous fruit
+Pear
+:   Green or yellow bulbous fruit
 
-watermelon
-:   green fruit with red flesh
+Watermelon
+:   Green fruit with red flesh
 ```
 
 ## Commit conventions

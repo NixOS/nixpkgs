@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitea,
+  fetchFromCodeberg,
 
   # build-system
   uv-build,
@@ -16,8 +16,7 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "victorpoughon";
     repo = "indicio";
     tag = finalAttrs.version;

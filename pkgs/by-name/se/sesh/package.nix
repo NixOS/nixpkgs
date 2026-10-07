@@ -8,7 +8,7 @@
 }:
 buildGo127Module (finalAttrs: {
   pname = "sesh";
-  version = "2.31.0";
+  version = "2.32.0";
   __structuredAttrs = true;
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ buildGo127Module (finalAttrs: {
     owner = "joshmedeski";
     repo = "sesh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SV7BSrBS3NDVFACG5vShCECJlQ4+9rIdOxmINR8J3ms=";
+    hash = "sha256-pHsRKndjE2U+Gl0oKW5d+rRST0jDEp61sXm+tRTiD3w=";
   };
 
   # NOTE: prevent crash when getting vendor deps/hash
@@ -32,7 +32,7 @@ buildGo127Module (finalAttrs: {
     mockery
   '';
 
-  vendorHash = "sha256-81PNc4Gt3wzGyihRWOtJFlIiA7HieZyGh/4gpFHVlYA=";
+  vendorHash = "sha256-7wfg53djcty9R8WGo1H4C2VkGDraTu/n1w5c/62/YTc=";
 
   ldflags = [
     "-s"

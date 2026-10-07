@@ -7,7 +7,7 @@
 
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "sideband";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     owner = "markqvist";
     repo = "Sideband";
     tag = finalAttrs.version;
-    hash = "sha256-RCSSyTtt2eN9hYT1xzPYjJloPjnkIS6bo21PHrlg5S8=";
+    hash = "sha256-7T588CbV1YuZl8V+UQPz0w5GpG4UMhaqGNCGYsplalU=";
   };
 
   # Unable to upstream all of this

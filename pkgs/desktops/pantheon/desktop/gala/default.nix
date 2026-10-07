@@ -24,7 +24,7 @@
   libhandy,
   mutter,
   sqlite,
-  systemd,
+  systemdLibs,
   nix-update-script,
 }:
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     libhandy
     mutter
     sqlite
-    systemd
+    systemdLibs
   ];
 
   postPatch = ''

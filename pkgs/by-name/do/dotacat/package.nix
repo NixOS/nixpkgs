@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitLab {
     domain = "gitlab.scd31.com";
-    owner = "stephen";
+    owner = "sophie";
     repo = "dotacat";
     rev = "f3b7e7816bed6b84123e066c57cf4003d77a85f1";
     hash = "sha256-y+u9PO01W+IzBatGHZpgOD7cRKjdeuy4/VX7/V9cu3Q=";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Like lolcat, but fast";
-    homepage = "https://gitlab.scd31.com/stephen/dotacat";
+    homepage = "https://gitlab.scd31.com/sophie/dotacat";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ traxys ];
     mainProgram = "dotacat";

@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   stdenv,
   buildPythonPackage,
@@ -21,7 +22,6 @@
   torchcodec,
   torchvision,
   transformers,
-  triton,
 
   # native packages
   ffmpeg,
@@ -31,7 +31,8 @@
   versionCheckHook,
 
   # enable GPU support
-  cudaSupport ? torch.cudaSupport,
+  cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
 }:
 
 let
@@ -39,6 +40,7 @@ let
     ctranslate2-cpp = ctranslate2-cpp.override {
       withCUDA = cudaSupport;
       withCuDNN = cudaSupport;
+      inherit rocmSupport;
     };
   };
 in
@@ -86,7 +88,7 @@ buildPythonPackage (finalAttrs: {
     transformers
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-    triton
+    torch.triton
   ];
 
   # No python tests in repository

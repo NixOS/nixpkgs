@@ -30,8 +30,8 @@
   rustPlatform,
   rustc,
   openssl,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   zlib,
   rsync,
   withCockpit ? true,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     zlib
   ]
-  ++ lib.optional withSystemd systemd
+  ++ lib.optional withSystemd systemdLibs
   ++ lib.optional withOpenldap openldap
   ++ lib.optional withBdb db
   ++ lib.optional withNetSnmp net-snmp;

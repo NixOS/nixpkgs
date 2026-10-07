@@ -78,24 +78,32 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
+  postPatch =
     # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
     # Patch out failure if QMake is not found, since we don't use it
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}" \
-      --replace-fail 'QMAKE_EXECUTABLE STREQUAL "QMAKE_EXECUTABLE-NOTFOUND"' 'FALSE'
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}" \
+        --replace-fail 'QMAKE_EXECUTABLE STREQUAL "QMAKE_EXECUTABLE-NOTFOUND"' 'FALSE'
+    ''
 
-  ''
-  + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    substituteInPlace tests/common/dbus-services/CMakeLists.txt \
-      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
-      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
-      ${replaceDbusService dconf "ca.desrt.dconf.service"}
+    # protobuf -> abseil-cpp needs >= C++20
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
+    ''
 
-    substituteInPlace cmake/modules/GenerateTest.cmake \
-      --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
-      --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
-  '';
+    # Tests launch these DBus services, fix paths related to them
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      substituteInPlace tests/common/dbus-services/CMakeLists.txt \
+        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
+        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
+        ${replaceDbusService dconf "ca.desrt.dconf.service"}
+
+      substituteInPlace cmake/modules/GenerateTest.cmake \
+        --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
+        --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
+    '';
 
   strictDeps = true;
 

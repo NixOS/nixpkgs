@@ -9,17 +9,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "tea-dash";
-  version = "0.3.8";
+  version = "0.3.9";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gbarany";
     repo = "tea-dash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0MUzkbQzyp1TRZaHnCmIR+1MjBzmqBndaBmVTBMCPGI=";
+    hash = "sha256-g7dQ3WPL1GUzrN/uqWNT0Ud8RE8rkremYQN/5OzWBaQ=";
   };
 
-  vendorHash = "sha256-CNty+TgwujfTguhwIXurtz2ILBnGYonVjgrJOtXO644=";
+  vendorHash = "sha256-gvjy23OFXQoqNAlDgKurEgV/F60wvboPuCK9Wq6wjiU=";
 
   ldflags = [
     "-s"

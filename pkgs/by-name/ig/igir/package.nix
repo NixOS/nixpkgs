@@ -13,7 +13,7 @@
   libz,
   lz4,
   sdl2-compat,
-  systemd,
+  systemdLibs,
 }:
 
 buildNpmPackage rec {
@@ -43,7 +43,7 @@ buildNpmPackage rec {
     libz
     lz4
     sdl2-compat
-    systemd
+    systemdLibs
   ];
 
   # from lib/node_modules/igir/node_modules/@node-rs/crc32-linux-x64-musl/crc32.linux-x64-musl.node

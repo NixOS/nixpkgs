@@ -1,9 +1,10 @@
 {
   lib,
-  swiftPackages,
   fetchFromGitHub,
   leveldb,
   perl,
+  stdenv,
+  swift,
   actool,
   makeWrapper,
   rcodesign,
@@ -11,8 +12,6 @@
 }:
 
 let
-  inherit (swiftPackages) stdenv swift;
-
   frameworks = [
     "Kit"
     "CPU"

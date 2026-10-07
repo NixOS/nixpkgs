@@ -9,6 +9,19 @@ let
 
   # By default a StateDirectory is used; anything else needs its own directory and a hole in the unit's mount namespace.
   isDefaultDataDir = cfg.dataDir == "/var/lib/comfyui";
+
+  modelDrvs = map (m: {
+    inherit m;
+    drv = pkgs.fetchurl (lib.filterAttrs (n: _: n == "name" || n == "url" || n == "hash") m);
+  }) cfg.models;
+
+  modelSymlinks = lib.concatMapStringsSep "\n" (
+    x:
+    lib.concatMapStringsSep "\n" (p: ''
+      mkdir -p ${lib.escapeShellArg "${cfg.dataDir}/models/${p}"}
+      ln -sn ${lib.escapeShellArg "${x.drv}"} ${lib.escapeShellArg "${cfg.dataDir}/models/${p}/${x.m.name}"}
+    '') x.m.installPaths
+  ) modelDrvs;
 in
 {
   options = {
@@ -67,6 +80,64 @@ in
           Flags set by the module are prepended with `lib.mkBefore`, so any user supplied flag wins over that.
         '';
       };
+
+      models = lib.mkOption {
+        type = lib.types.listOf (
+          lib.types.submodule {
+            options = {
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The model file name, used as the link name in `models/<installPath>/<name>`.
+                  It must be unique within the same `<installPath>`, to avoid conflicts.
+                '';
+              };
+              url = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The download URL of the model file.
+                  Pinned-resolve URLs (e.g. HuggingFace's `/resolve/<commit>/<file>`) are recommended to have a stable hash.
+                '';
+              };
+              hash = lib.mkOption {
+                type = lib.types.str;
+                example = lib.fakeHash;
+                description = ''
+                  The SRI hash of the model file. Generate it with `nix-prefetch-url <url>`,
+                  or set this to `lib.fakeHash`, build once and copy the hash from the error message.
+                '';
+              };
+              installPaths = lib.mkOption {
+                # A directory string is converted to a list.
+                type =
+                  with lib.types;
+                  coercedTo (strMatching "[A-Za-z0-9_-]+") lib.singleton (
+                    nonEmptyListOf (strMatching "[A-Za-z0-9_-]+")
+                  );
+                description = ''
+                  String or list of target subdirectory names below `models/`, such as `upscale_models`, `loras`, `checkpoints`.
+                  Write bare directory names (the module assembles them into `models/<installPath>`,
+                  one symlink per install path); a single string is also accepted and upgraded to a one-element list.
+                '';
+                example = [ "upscale_models" ];
+              };
+            };
+          }
+        );
+        default = [ ];
+        example = lib.literalExpression ''
+          [ {
+            name = "RealESRGAN_x4plus_anime_6B.pth";
+            url = "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth";
+            hash = "sha256-+HLYN9PJDtLgUie+1xGvVnGm/RyffX6RyRGmHxVemdo=";
+            installPaths = "upscale_models";
+          } ]
+        '';
+        description = ''
+          ComfyUI models to fetch and symlink into `''${services.comfyui.dataDir}/models/<installPath>/<name>`.
+          Files placed manually in the `models` directory are left untouched.
+        '';
+      };
     };
   };
 
@@ -98,6 +169,17 @@ in
             cp --no-preserve=all -r ${cfg.package}/share/comfyui/$d "${cfg.dataDir}/"
           fi
         done
+
+        # Remove all symlinks pointing into /nix/store, then relink them, so that no stale ones are left behind.
+        readarray -d "" stale < <(find "${cfg.dataDir}/models" -type l -print0)
+        for link in "''${stale[@]}"; do
+          if [[ "$(readlink "$link")" == ${lib.escapeShellArg builtins.storeDir}/* ]]; then
+            rm "$link"
+          fi
+        done
+
+        # Rebuild model symlinks
+        ${modelSymlinks}
       '';
 
       serviceConfig = {

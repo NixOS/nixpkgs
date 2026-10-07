@@ -263,6 +263,7 @@ let
       # These keys are documented
       description = str;
       mainProgram = str;
+      mainDarwinApp = str;
       longDescription = str;
       branch = str;
       homepage = either str (listOf str);
@@ -281,6 +282,7 @@ let
       teams = listOf attrs; # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
+      cmakeConfigModules = listOf str;
       inherit platforms;
       hydraPlatforms = listOf str;
       # Automatically turns into meta.problems.broken, see ./problems.nix

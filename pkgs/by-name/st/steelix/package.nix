@@ -35,18 +35,18 @@ let
   steelix-unwrapped = helix-unwrapped.overrideAttrs (
     finalAttrs: _: {
       pname = "steelix-unwrapped";
-      version = "0-unstable-2026-05-21";
+      version = "0-unstable-2026-09-26";
 
       src = fetchFromGitHub {
         owner = "mattwparas";
         repo = "helix";
-        rev = "4d86612df48447088ef4190bf503fd54a7562aa9";
-        hash = "sha256-qAUODNxHM9K6CrRCFgfBcbqzRd+YHiWn9fEfmIzrohA=";
+        rev = "df595c7dc5729e2712c79dd2e35977e3474b3ec6";
+        hash = "sha256-zWOzgArhg4PCgi8AMKLtcttBtchlQJay6atEpobCASk=";
       };
 
       cargoDeps = rustPlatform.fetchCargoVendor {
         inherit (finalAttrs) src pname version;
-        hash = "sha256-6bu8sIM4So3AbnHHYbh8uu+rEB4IjMQjDgh7/AkLQs0=";
+        hash = "sha256-h4HkOppmseHzX1gHUGO1XSwrg4uCJ4PjmI/3WsYp2C4=";
       };
 
       cargoBuildFlags = [

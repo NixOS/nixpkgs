@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "textlint-rule-preset-ai-words-ja";
-  version = "1.2.1";
+  version = "1.2.2";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "p1ass";
     repo = "textlint-rule-preset-ai-words-ja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0QgNPVyheFdPLCLq6JJy5AFIJ5txr1TOvzJ2VFC2C0I=";
+    hash = "sha256-uQmcThe2eSFi8iOstUaA58PX/rvcLKyGGLXHwI/9gfc=";
   };
 
   pnpmDeps = fetchPnpmDeps {

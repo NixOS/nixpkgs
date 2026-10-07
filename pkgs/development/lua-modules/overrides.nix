@@ -117,7 +117,7 @@ in
     __intentionallyOverridingVersion = true;
 
     meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.5";
+      broken = luaOlder "5.1";
     };
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -149,7 +149,7 @@ in
         # 'all' target auto-detects correct Lua version, which is fine for us as
         # we only have the right one available :)
         sed -Ei ''${rockspecFilename} \
-          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.4|' \
+          -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.5|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
@@ -318,6 +318,20 @@ in
       # https://github.com/lgi-devs/lgi/pull/361
       # https://github.com/NixOS/nixpkgs/issues/523345
       ./lgi/glib-2.88.patch
+
+      # Lua 5.4 and 5.5 support, unreleased since 0.9.2; drop with the next release.
+      # https://github.com/lgi-devs/lgi/pull/249
+      (fetchpatch {
+        name = "lgi-lua-5.4-lua_resume.patch";
+        url = "https://github.com/lgi-devs/lgi/commit/5cfd42c386d3adae6d211fbb4011179c3c141b04.patch";
+        hash = "sha256-lpCkRzLy5V540COJkQatjCVR2Y/ThcgswgwxWpmLcyM=";
+      })
+      # https://github.com/lgi-devs/lgi/pull/359
+      (fetchpatch {
+        name = "lgi-lua-5.5-loop-variable.patch";
+        url = "https://github.com/lgi-devs/lgi/commit/1953ef7f9178671c4ef878ecf2482da6eb493251.patch";
+        hash = "sha256-gwcf4sb6mugohcWq2C3sc8L3BDS3QCGmNhLHUkz8+/k=";
+      })
     ];
 
     # https://github.com/lgi-devs/lgi/pull/300
@@ -330,12 +344,6 @@ in
     preConfigure = ''
       make rock
     '';
-
-    # Lua 5.4 support is experimental at the moment, see
-    # https://github.com/lgi-devs/lgi/pull/249
-    meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4";
-    };
   });
 
   ljsyscall = prev.ljsyscall.overrideAttrs (old: rec {
@@ -571,12 +579,20 @@ in
     buildInputs = old.buildInputs ++ [
       zlib.dev
     ];
-    meta = old.meta // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4";
-    };
   });
 
   luacheck = prev.luacheck.overrideAttrs (old: {
+    patches = [
+      # Lua 5.5 makes for-loop control variables read-only, so 1.2.0 fails at
+      # startup. Fixed on master but unreleased; drop with the next release.
+      # https://github.com/lunarmodules/luacheck/issues/147
+      (fetchpatch {
+        name = "luacheck-lua-5.5-loop-variable.patch";
+        url = "https://github.com/lunarmodules/luacheck/commit/eea104d82fa66f27df2a7d900b3c271a6ca122ac.patch";
+        hash = "sha256-0dVg3su1gvx8bnxFrpWknP38OGCUjoCiKdwAfhFB7hI=";
+      })
+    ];
+
     meta = old.meta // {
       mainProgram = "luacheck";
     };

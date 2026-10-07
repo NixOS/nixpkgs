@@ -5,7 +5,7 @@
   portaudio,
   boost,
   libjack2,
-  libsigcxx,
+  libsigcxx_2_0,
   lilv,
   pkg-config,
   python3,
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   buildInputs = [
     boost
     libjack2
-    libsigcxx
+    libsigcxx_2_0
     lilv
     portaudio
     raul

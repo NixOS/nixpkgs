@@ -4,7 +4,7 @@
   autoreconfHook,
   fetchFromGitHub,
   pkg-config,
-  lua,
+  lua5_5,
   fpc,
   portaudio,
   freetype,
@@ -34,7 +34,7 @@ let
     SDL2_net
     SDL2_ttf
     sqlite
-    lua
+    lua5_5
     zlib
     ffmpeg
   ]

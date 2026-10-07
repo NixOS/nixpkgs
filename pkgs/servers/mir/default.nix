@@ -127,6 +127,29 @@ in
         ];
         hash = "sha256-UqClQFHzA1th2P7NH67dMJtncw8n/ey9RlPD5Z3VPk0=";
       })
+
+      # Errors with glibc 2.44
+      # Fix some missing headers
+      # Remove when version >= 2.18.0
+      (fetchpatch {
+        name = "0400-mir-Add-missing-headers-to-make-libcxx-happy.patch";
+        url = "https://github.com/canonical/mir/commit/5c0894e932ae9173b6bb276047a6313795b62823.patch";
+        excludes = [
+          "src/platforms/virtual/display.h"
+        ];
+        hash = "sha256-HwL0gteHapFe3y4ksAduAGEGlrfF4oPBvwkBlWs9GpY=";
+      })
+      # Fix -Werror=discarded-qualifiers
+      # Remove when version >= 2.25.0
+      (fetchpatch {
+        name = "0401-mir-Fix-discarded-qualifiers-error-in-xcursor.patch";
+        url = "https://github.com/canonical/mir/commit/129063cb9f0a8c7d069be8be25a6f68460c2eace.patch";
+        hash = "sha256-l4QXhgQjWqeDv2sV5Yy8dlIn7XNSZEvtXKX7bUIAiww=";
+      })
+      # Fix some more missing headers
+      # Remove when version >= 2.26.0
+      # https://github.com/canonical/mir/commit/ae186449fb791c38a63e6f8cb28c0e4b6d5af654 (hunk error)
+      ./0402-mir-Missing-headers.patch
     ];
   };
 }

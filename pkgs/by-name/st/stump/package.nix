@@ -20,13 +20,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stump";
-  version = "0.1.7";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "stumpapp";
     repo = "stump";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ERERTzoh0RoWtVNrOejiyFu7ZmSVgUVGFaTsj36Je48=";
+    hash = "sha256-MV9vhY15JgiCDN5J62AjI2uSkcM+cYjlT5hocxQXSOA=";
   };
 
   frontend = stdenv.mkDerivation (_: {
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = finalAttrs.src + "/yarn.lock";
-      hash = "sha256-x5aZLRhNmoxcrMOQNvNDfuJCfc0ezYazVGm17v3CwqE=";
+      hash = "sha256-eKp7rRuo1kk8Nq7mK9JwvliUdaV8L03SoKAqXGQfWLg=";
     };
 
     nativeBuildInputs = [
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-4qCxyoo1WyurXLEw5Nq291Tglds0Lg1LGHfgZxsoZBQ=";
+  cargoHash = "sha256-eKS4Cax2HCPpeyjuHRFJy42I8KTwhv1oNH4jKaN+2dQ=";
 
   cargoBuildFlags = [
     "--package"

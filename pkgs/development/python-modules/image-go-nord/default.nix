@@ -43,7 +43,7 @@ buildPythonPackage rec {
     description = "Tool that can convert rgb images to nordtheme palette";
     homepage = "https://github.com/Schrodinger-Hat/ImageGoNord-pip";
     changelog = "https://github.com/Schroedinger-Hat/ImageGoNord-pip/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
   };
 }

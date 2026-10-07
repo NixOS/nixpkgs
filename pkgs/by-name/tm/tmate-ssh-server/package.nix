@@ -54,7 +54,7 @@ stdenv.mkDerivation {
   passthru.tests.tmate-ssh-server = nixosTests.tmate-ssh-server;
 
   meta = {
-    homepage = "https://tmate.io/";
+    homepage = "https://github.com/tmate-io/tmate-ssh-server";
     description = "tmate SSH Server";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

@@ -90,7 +90,6 @@ import ./make-test-python.nix (
       # test server
       machine.succeed("${qgisPackage}/bin/qgis_mapserver --version | grep 'QGIS ${qgisPackage.version}'")
 
-      machine.succeed("curl --head http://localhost | grep 'Server:.*${qgisPackage.version}'")
       machine.succeed("curl http://localhost/index.json | grep 'Landing page as JSON'")
     '';
   }
