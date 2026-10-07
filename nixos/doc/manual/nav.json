@@ -461,6 +461,10 @@
         {
           "id": "modular-services",
           "file": "development/modular-services.md"
+        },
+        {
+          "id": "contracts",
+          "file": "development/contracts.md"
         }
       ]
     },
