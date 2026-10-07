@@ -1,109 +1,82 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  python3Packages,
+  fetchPypi,
   pkg-config,
-  autoreconfHook,
-  makeWrapper,
-  runCommandCC,
-  runCommand,
-  vapoursynth,
-  buildEnv,
+  ninja,
   zimg,
   libass,
+  glslang,
+  vulkan-headers,
+  vapoursynth,
   python3,
-  testers,
-  darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "vapoursynth";
-  version = "73";
+  version = "82";
+  pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "vapoursynth";
-    repo = "vapoursynth";
-    rev = "R${finalAttrs.version}";
-    hash = "sha256-cs+MEnOi1bwA52fiTIlGGzYjy5/m/FdoK55WSADR/gQ=";
+  src = fetchPypi {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ESgxZiCJC6jltpySSmZfmAAbK6QjDa3q0PKWRG6nGEM=";
   };
+
+  build-system = [
+    python3Packages.meson-python
+  ];
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
-    makeWrapper
+    ninja
+    python3Packages.sphinx
+    python3Packages.cython
   ];
+
   buildInputs = [
     zimg
     libass
-    (python3.withPackages (
-      ps: with ps; [
-        sphinx
-        cython
-      ]
-    ))
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (darwinMinVersionHook "13.3")
+    vulkan-headers
+    glslang
   ];
 
-  enableParallelBuilding = true;
-  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+  # Link system glslang
+  env.NIX_LDFLAGS = "-L${glslang.out}/lib -lglslang -lglslang-default-resource-limits";
 
-  passthru = rec {
-    # If vapoursynth is added to the build inputs of mpv and then
-    # used in the wrapping of it, we want to know once inside the
-    # wrapper, what python3 version was used to build vapoursynth so
-    # the right python3.sitePackages will be used there.
-    inherit python3;
+  mesonFlags = [
+    "-Db_lto=false" # fails with undefined symbols if on
+  ];
 
-    withPlugins = import ./plugin-interface.nix {
-      inherit
-        lib
-        python3
-        buildEnv
-        runCommandCC
-        stdenv
-        runCommand
-        vapoursynth
-        makeWrapper
-        withPlugins
-        ;
-    };
+  patches = [
+    ./ignore-vapoursynth-toml.patch
+  ];
 
-    tests.version = testers.testVersion {
-      package = vapoursynth;
-      # Check Core version to prevent false positive with API version
-      version = "Core R${finalAttrs.version}";
-    };
-  };
+  postPatch = ''
+    # Disable vendored glslang (it tries to download from the internet)
+    substituteInPlace meson.build --replace-fail \
+      "glslang_dep = subproject('glslang').get_variable('glslang_dep')" \
+      "glslang_dep = dependency('zimg', version: '>=1.4')"
 
-  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    # Export weak symbol nixPluginDir to permit override of default plugin path
-    sed -E -i \
-      -e 's/(VS_PATH_PLUGINDIR)/(nixPluginDir ? nixPluginDir : \1)/g' \
-      -e '1i\extern char const __attribute__((weak)) nixPluginDir[];' \
-      src/core/vscore.cpp
+    # Relax cython version check
+    substituteInPlace pyproject.toml --replace-fail 'Cython>=3.3.0' Cython
+
+    # Set fallback python interpreter
+    export pythonExePath=${python3}
+    export pythonSymbolPath=${python3}/lib/libpython3${stdenv.hostPlatform.extensions.sharedLibrary}
+    substituteAllInPlace src/vsscript/vsscript.cpp
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/vspipe \
-        --prefix PYTHONPATH : $out/${python3.sitePackages}
+  postFixup = ''
+    # Use the right interpreter inside a Nix environment (python3.withPackages)
+    for prog in "$out"/bin/*; do
+      sed -i "$prog" \
+        -e '1a export VAPOURSYNTH_INTERP=$NIX_PYTHONEXECUTABLE' \
+        -e "1a export PYTHONPATH=$out/${python3.sitePackages}"
+    done
 
-    # VapourSynth does not include any plugins by default
-    # and emits a warning when the system plugin directory does not exist.
-    mkdir $out/lib/vapoursynth
-  '';
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    libv="$out/lib/libvapoursynth${stdenv.hostPlatform.extensions.sharedLibrary}"
-    if ! $NM -g -P "$libv" | grep -q '^nixPluginDir w'; then
-      echo "Weak symbol nixPluginDir is missing from $libv." >&2
-      exit 1
-    fi
-
-    runHook postInstallCheck
+    # Link pkgconfig to a normal location
+    ln -s "$out/${python3.sitePackages}/vapoursynth/pkgconfig" "$out/lib/"
   '';
 
   meta = {

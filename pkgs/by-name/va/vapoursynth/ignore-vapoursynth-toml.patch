@@ -1,0 +1,46 @@
+commit 9a41927dcbd076f61dab721fb37bd97726d7ba82
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Sat Nov 7 10:08:17 2026 +0100
+
+    Do not use vapoursynth.toml to discover the python interpreter
+    
+    We use either
+    
+    1. the interpreter the package was built with, hardcoded
+    
+    2. the wrapped interpreter of the current environment,
+       discovered using the NIX_PYTHONEXECUTABLE variable
+
+diff --git a/src/vsscript/vsscript.cpp b/src/vsscript/vsscript.cpp
+index 9977ce8d..3ea67b70 100644
+--- a/src/vsscript/vsscript.cpp
++++ b/src/vsscript/vsscript.cpp
+@@ -229,16 +229,12 @@ static void realInit() VS_NOEXCEPT {
+     MODULE_HANDLE_TYPE libraryHandle = nullptr;
+ 
+     std::filesystem::path vsscriptPath = getLibraryPath();
++    std::filesystem::path pythonExePath = "@pythonExePath@";
++    std::filesystem::path pythonSymbolPath = "@pythonSymbolPath@";
+ 
+-    auto [pythonExePath, pythonSymbolPath] = readEnvConfig(vsscriptPath);
+-
+-    if (pythonExePath.empty() || pythonSymbolPath.empty()) {
+-#ifdef VS_TARGET_OS_WINDOWS
+-        runConfigTool();
+-#else
+-        system("vapoursynth config >/dev/null 2>&1");
+-#endif
+-        std::tie(pythonExePath, pythonSymbolPath) = readEnvConfig(vsscriptPath);
++    char * pythonExe = std::getenv("VAPOURSYNTH_INTERP");
++    if (pythonExe && strlen(pythonExe) > 0) {
++      pythonExePath = std::filesystem::path(pythonExe);
+     }
+ 
+     if (pythonExePath.empty() || pythonSymbolPath.empty()) {
+@@ -536,4 +532,4 @@ const char *VS_CC getVSScriptAPILastError() VS_NOEXCEPT {
+     if (!extendedErrorMessage.empty())
+         return extendedErrorMessage.c_str();
+     return versionError;
+-}
+\ No newline at end of file
++}
