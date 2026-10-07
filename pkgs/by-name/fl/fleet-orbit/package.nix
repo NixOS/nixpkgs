@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   versionCheckHook,
+  xdg-utils,
 }:
 
 buildGoModule (finalAttrs: {
@@ -40,6 +41,11 @@ buildGoModule (finalAttrs: {
     ./0003-osquery-log-path.patch
     ./0004-scripts-nixos.patch
   ];
+
+  postPatch = ''
+    substituteInPlace orbit/cmd/orbit/orbit.go \
+      --replace-fail '"/usr/bin/xdg-open"' '"${lib.getExe' xdg-utils "xdg-open"}"'
+  '';
 
   doInstallCheck = true;
   versionCheckProgramArg = "version";
