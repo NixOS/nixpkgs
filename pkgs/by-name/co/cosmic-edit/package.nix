@@ -10,6 +10,7 @@
   libinput,
   fontconfig,
   freetype,
+  oniguruma,
   nixosTests,
   nix-update-script,
 }:
@@ -35,7 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
+  env = {
+    RUSTONIG_SYSTEM_LIBONIG = true;
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+  };
 
   nativeBuildInputs = [
     just
@@ -48,6 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libinput
     fontconfig
     freetype
+    oniguruma
   ];
 
   dontUseJustBuild = true;

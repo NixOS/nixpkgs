@@ -41,10 +41,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/alvations/sacremoses";
+    homepage = "https://github.com/hplt-project/sacremoses";
     description = "Python port of Moses tokenizer, truecaser and normalizer";
     mainProgram = "sacremoses";
-    license = lib.licenses.lgpl21Plus;
+    license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pashashocky ];
   };

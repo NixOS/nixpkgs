@@ -10,13 +10,13 @@
 
 buildGo127Module rec {
   pname = "immich-kiosk";
-  version = "0.44.1";
+  version = "0.44.2";
 
   src = fetchFromGitHub {
     owner = "damongolding";
     repo = "immich-kiosk";
     tag = "v${version}";
-    hash = "sha256-IJPJ5c6mlsvx3gDkzk3okTxWJENDv5Rsok3vO+rrwvI=";
+    hash = "sha256-E1emLQzXPRdhsQeoOjyVBZODXiSFbxVII2CWsdtrEw0=";
   };
 
   postPatch = ''
@@ -25,13 +25,13 @@ buildGo127Module rec {
     # immich-kiosk bumps go at a faster cadence than nixpkgs
     sed -i -E 's/^go 1\.27\.[0-9]+$/go 1.27/' go.mod
   '';
-  vendorHash = "sha256-pAixcJ577ioezOn1qiSFCUYcMiOgNy+S2ZKT9wNy2Yg=";
+  vendorHash = "sha256-2N5tk4xEW45cBQbdrGAdFJ9ovLBSCP1wx9z9R5OGQVQ=";
   proxyVendor = true;
 
   npmDeps = fetchNpmDeps {
     inherit src;
     sourceRoot = "${src.name}/frontend";
-    hash = "sha256-mhqhc+imdMb/w1U3cZS55P3WEWKxPvfTe4CHPZSVoOs=";
+    hash = "sha256-eKKguY1nlStG86Iap4aSz2hi0LgXkInp8YDGyypYmlI=";
   };
   # Frontend is in a subdirectory
   npmRoot = "frontend";
