@@ -10,6 +10,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsonschema-cli";
   version = "0.58.5";
+  __structuredAttrs = true;
 
   src = fetchCrate {
     pname = "jsonschema-cli";
@@ -39,5 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       kachick
     ];
     mainProgram = "jsonschema-cli";
+    platforms = with lib.platforms; unix ++ windows;
   };
 })
