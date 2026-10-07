@@ -144,11 +144,6 @@ buildGo127Module (finalAttrs: {
         # Runs `go test -race`, which requires cgo, but we build with CGO_ENABLED=0
         "TestRaceAttributedToPassingTest" # cmd/testwrapper
         "TestRaceSuppressesFlakyRetry" # cmd/testwrapper
-
-        # Uses testing/synctest which spawns goroutines that block on syscalls
-        # incompatible with synctest's bubble mechanism
-        "TestDNSTrampleRecovery"
-        "TestOnPolicyChangeSkipsPreAuthConns" # ssh/tailssh
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
