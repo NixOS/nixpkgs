@@ -593,6 +593,14 @@ in
       })
     ];
 
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    doInstallCheck = true;
+    versionCheckProgramArg = "--version";
+    # $version carries the rockspec revision (1.2.0-1).
+    preVersionCheck = ''
+      version="Luacheck: ''${version%-*}"
+    '';
+
     meta = old.meta // {
       mainProgram = "luacheck";
     };
