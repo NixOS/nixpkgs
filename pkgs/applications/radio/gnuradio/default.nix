@@ -167,12 +167,10 @@ let
       cmakeEnableFlag = "GR_DTV";
     };
     gr-audio = {
-      runtime =
-        [ ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
-          alsa-lib
-          libjack2
-        ];
+      runtime = lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib
+        libjack2
+      ];
       cmakeEnableFlag = "GR_AUDIO";
     };
     gr-channels = {
@@ -273,8 +271,10 @@ let
       ];
     };
   };
-  hasFeature = feat: (if builtins.hasAttr feat features then features.${feat} else true);
+  hasFeature = feat: features.${feat} or true;
+  enabledFeatures = lib.attrValues (lib.filterAttrs (feat: _: hasFeature feat) featuresInfo);
   cross = stdenv.hostPlatform != stdenv.buildPlatform;
+  libgnuradioRuntime = "$(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})";
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -315,26 +315,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     removeReferencesTo
   ]
-  ++ lib.flatten (
-    lib.mapAttrsToList (
-      feat: info:
-      (lib.optionals (hasFeature feat) (
-        (lib.optionals (builtins.hasAttr "native" info) info.native)
-        ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
-      ))
-    ) featuresInfo
-  );
-  buildInputs = lib.flatten (
-    lib.mapAttrsToList (
-      feat: info:
-      (lib.optionals (hasFeature feat) (
-        (lib.optionals (builtins.hasAttr "runtime" info) info.runtime)
-        ++ (lib.optionals (
-          builtins.hasAttr "pythonRuntime" info && hasFeature "python-support"
-        ) info.pythonRuntime)
-      ))
-    ) featuresInfo
-  );
+  ++ lib.concatMap (info: info.native or [ ] ++ info.pythonNative or [ ]) enabledFeatures;
+  buildInputs = lib.concatMap (
+    info: info.runtime or [ ] ++ lib.optionals (hasFeature "python-support") (info.pythonRuntime or [ ])
+  ) enabledFeatures;
   cmakeFlags = [
     # https://pybind11.readthedocs.io/en/stable/changelog.html#version-2-13-0-june-25-2024
     (lib.cmakeBool "CMAKE_CROSSCOMPILING" cross)
@@ -370,7 +354,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Inherit functions and Nix attribute sets
     inherit
       hasFeature
-      features
       featuresInfo
       ;
     versionAttr = {
@@ -393,21 +376,20 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   postInstall =
-    ""
     # Gcc references
-    + lib.optionalString (hasFeature "gnuradio-runtime") ''
-      remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+    lib.optionalString (hasFeature "gnuradio-runtime") ''
+      remove-references-to -t ${stdenv.cc} ${libgnuradioRuntime}
     ''
     # Clang references in InstalledDir
     + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.hostPlatform.isDarwin) ''
-      remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t ${stdenv.cc.cc} ${libgnuradioRuntime}
     ''
     # This is the only python reference worth removing, if needed.
     + lib.optionalString (!hasFeature "python-support") ''
       remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
     + lib.optionalString (!hasFeature "python-support" && hasFeature "gnuradio-runtime") ''
-      remove-references-to -t ${python} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t ${python} ${libgnuradioRuntime}
       remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     '';
   disallowedReferences = [
