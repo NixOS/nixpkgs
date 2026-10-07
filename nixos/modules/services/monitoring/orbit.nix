@@ -142,6 +142,9 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
+      # Orbit launches Fleet Desktop in the user's session via sudo.
+      path = lib.optional cfg.desktop.enable "/run/wrappers";
+
       environment = lib.filterAttrs (_: value: value != null) {
         ORBIT_FLEET_URL = cfg.fleetUrl;
         ORBIT_ENROLL_SECRET_PATH = "%d/enroll-secret";
