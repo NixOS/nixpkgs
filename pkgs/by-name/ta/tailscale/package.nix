@@ -17,6 +17,7 @@
   lsof,
   # check phase tooling
   gitMinimal,
+  openssh,
   # check phase tooling - darwin
   unixtools,
 
@@ -108,11 +109,6 @@ buildGo127Module (finalAttrs: {
 
         # remote udp call to 8.8.8.8
         "TestDefaultInterfacePortable" # net/netutil
-
-        # launches an ssh server which works when provided openssh
-        # also requires executing commands but nixbld user has /noshell
-        "TestSSH" # ssh/tailssh
-        "TestExitCodePassthrough" # ssh/tailssh
 
         # test for a dev util which helps to fork golang.org/x/crypto/acme
         # not necessary and fails to match
@@ -213,7 +209,15 @@ buildGo127Module (finalAttrs: {
         k8s-operator = { };
         kube = { };
         net = { };
-        ssh = {
+        ssh = old: {
+          # TestSSH and TestExitCodePassthrough drive the server with an ssh client.
+          nativeCheckInputs = old.nativeCheckInputs ++ [ openssh ];
+          env = old.env // {
+            # Skip the TestSSH subtests that upstream skips in its own CI;
+            # TestSSH/env expects sessions to start in $HOME, which tailssh
+            # only does if /usr/bin/true or /bin/true exists.
+            CI = "true";
+          };
           # SSH sessions otherwise get an FHS-style default PATH, which finds
           # nothing in the sandbox.
           preCheck = ''
