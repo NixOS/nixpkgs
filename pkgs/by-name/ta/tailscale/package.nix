@@ -64,11 +64,6 @@ buildGo127Module (finalAttrs: {
     "cmd/get-authkey"
   ];
 
-  excludedPackages = [
-    # Exclude integration tests which fail to work and require additional tooling
-    "tstest/integration"
-  ];
-
   ldflags = [
     "-w"
     "-s"
@@ -114,6 +109,7 @@ buildGo127Module (finalAttrs: {
         "TestDefaultRouteInterface" # net/netmon
         "TestRouteLinuxNetlink" # net/netmon
         "TestGetRouteTable" # net/routetable
+        "TestDeriveBindhost" # tstest/integration/vms
 
         # remote udp call to 8.8.8.8
         "TestDefaultInterfacePortable" # net/netutil
@@ -233,9 +229,7 @@ buildGo127Module (finalAttrs: {
         name: pattern: excludedDirs:
         let
           excludeRegex = "^tailscale\\.com/(${
-            lib.concatMapStringsSep "|" lib.escapeRegex (
-              [ "tool" ] ++ finalAttrs.excludedPackages ++ excludedDirs
-            )
+            lib.concatMapStringsSep "|" lib.escapeRegex ([ "tool" ] ++ excludedDirs)
           })(/|$)";
         in
         finalAttrs.finalPackage.overrideAttrs (old: {
