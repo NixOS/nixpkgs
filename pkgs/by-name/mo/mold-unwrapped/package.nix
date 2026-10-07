@@ -1,58 +1,39 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  nix-update-script,
-
-  cmake,
-  mimalloc,
-  ninja,
-  onetbb,
-  zlib,
-  zstd,
-
   buildPackages,
   clangStdenv,
+  fetchFromGitHub,
   gccStdenv,
   hello,
+  lib,
   mold,
-  mold-unwrapped,
+  nix-update-script,
   runCommandCC,
-  testers,
+  rustPlatform,
+  stdenv,
   useMoldLinker,
-
   versionCheckHook,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mold-unwrapped";
-  version = "2.42.1";
+  version = "3.0.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = "mold";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3buWURGv4cnXUArWAjH+0Qwa54EAP//INe+/27Wt1S8=";
+    hash = "sha256-XigEJb7wv46XuzT9s83pllLxCqN0Va3ZN7P/Ch9qXsY=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  cargoHash = "sha256-DgCFmTz+qulwXu1Oax8gBnc/6HIT6TlY8+xzBRGFvu0=";
 
-  buildInputs = [
-    onetbb
-    zlib
-    zstd
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    mimalloc
-  ];
+  postInstall = ''
+    cp $out/bin/{mold,ld.mold}
+  '';
 
-  cmakeFlags = [
-    "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
-    "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
-  ];
+  # FIXME(azahi) Integration tests require $src/tests/*. These files must be
+  # either passed to test phase or the test itself must be skipped.
+  doCheck = false;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -91,10 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
             fi
           '';
       in
-      {
-        version = testers.testVersion { package = mold-unwrapped; };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      lib.optionalAttrs stdenv.hostPlatform.isLinux {
         adapter-gcc = helloTest "adapter-gcc" (
           hello.override (old: {
             stdenv = useMoldLinker gccStdenv;
@@ -108,19 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
         wrapped = helloTest "wrapped" (
           hello.overrideAttrs (previousAttrs: {
             nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ mold ];
-            NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+            env.NIX_CFLAGS_LINK = toString (previousAttrs.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
           })
         );
       };
   };
 
   meta = {
-    description = "Faster drop-in replacement for existing Unix linkers (unwrapped)";
+    description = "A high-performance ELF linker, rewritten in Rust";
     longDescription = ''
-      mold is a faster drop-in replacement for existing Unix linkers. It is
-      several times faster than the LLVM lld linker. mold is designed to
-      increase developer productivity by reducing build time, especially in
-      rapid debug-edit-rebuild cycles.
+      mold is a high-performance drop-in replacement for existing Unix linkers,
+      designed to speed up builds.
     '';
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${finalAttrs.version}";
