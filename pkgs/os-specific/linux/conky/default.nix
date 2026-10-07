@@ -82,7 +82,6 @@ assert imlib2Support -> x11Support && imlib2 != null;
 assert luaSupport -> lua != null;
 assert luaImlib2Support -> luaSupport && imlib2Support && toluapp != null;
 assert luaCairoSupport -> luaSupport && toluapp != null && cairo != null;
-assert luaCairoSupport || luaImlib2Support -> lua.luaversion == "5.4";
 
 assert wirelessSupport -> wirelesstools != null;
 assert nvidiaSupport -> libXNVCtrl != null;
