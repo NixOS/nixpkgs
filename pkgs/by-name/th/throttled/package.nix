@@ -1,15 +1,15 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   python3Packages,
   pciutils,
   versionCheckHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "throttled";
   version = "0.12.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erpalma";
@@ -18,43 +18,38 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hwnJO9KEDOizpGcb9NYHYHoEEHKa3PkLt76cKpwgEUs=";
   };
 
-  nativeBuildInputs = [ python3Packages.wrapPython ];
+  build-system = [ python3Packages.setuptools ];
 
-  pythonPath = [ python3Packages.dbus-fast ];
+  dependencies = with python3Packages; [
+    configparser
+    dbus-fast
+  ];
 
   # The upstream unit assumes the /opt/throttled venv install location
   postPatch = ''
     substituteInPlace systemd/throttled.service \
       --replace-fail '/opt/throttled/venv/bin/throttled' \
-      '${placeholder "out"}/bin/throttled.py'
+      '${placeholder "out"}/bin/throttled'
 
     substituteInPlace throttled.py --replace-fail "'setpci'" "'${lib.getExe' pciutils "setpci"}'"
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -m755 -t $out/bin throttled.py
-    install -D -m644 -t $out/${python3Packages.python.sitePackages} mmio.py throttled_version.py
+  postInstall = ''
     install -D -m644 -t $out/etc etc/*
     install -D -m644 -t $out/lib/systemd/system systemd/*
-
-    runHook postInstall
   '';
 
-  postFixup = "wrapPythonPrograms";
+  pythonImportsCheck = [ "throttled" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  env.PYTHONDONTWRITEBYTECODE = "1";
-  versionCheckKeepEnvironment = "PYTHONDONTWRITEBYTECODE";
 
   meta = {
     description = "Fix for Intel CPU throttling issues";
     homepage = "https://github.com/erpalma/throttled";
     changelog = "https://github.com/erpalma/throttled/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    mainProgram = "throttled.py";
+    mainProgram = "throttled";
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };
