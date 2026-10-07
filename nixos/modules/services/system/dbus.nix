@@ -120,11 +120,6 @@ in
 
       environment.etc."dbus-1".source = configDir;
 
-      environment.pathsToLink = [
-        "/etc/dbus-1"
-        "/share/dbus-1"
-      ];
-
       users.users.messagebus = {
         uid = config.ids.uids.messagebus;
         description = "D-Bus system message bus daemon user";
@@ -147,7 +142,6 @@ in
 
       services.dbus.packages = [
         cfg.dbusPackage
-        config.system.path
       ];
 
       systemd.user.sockets.dbus.wantedBy = [
