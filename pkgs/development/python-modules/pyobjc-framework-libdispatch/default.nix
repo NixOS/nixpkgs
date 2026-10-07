@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   darwin,
-  fetchFromGitHub,
   lib,
   pyobjc-core,
   pyobjc-framework-Cocoa,
@@ -9,21 +8,18 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyobjc-framework-libdispatch";
   pyproject = true;
+  __structuredAttrs = true;
 
   inherit (pyobjc-core) version src;
 
-  patches = pyobjc-core.patches or [ ];
-
-  sourceRoot = "${src.name}/pyobjc-framework-libdispatch";
+  sourceRoot = "${finalAttrs.src.name}/pyobjc-framework-libdispatch";
 
   build-system = [ setuptools ];
 
-  buildInputs = [
-    darwin.libffi
-  ];
+  buildInputs = [ darwin.libffi ];
 
   nativeBuildInputs = [
     darwin.DarwinTools # sw_vers
@@ -33,14 +29,7 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  # See https://github.com/ronaldoussoren/pyobjc/pull/641. Unfortunately, we
-  # cannot just pull that diff with fetchpatch due to https://discourse.nixos.org/t/how-to-apply-patches-with-sourceroot/59727.
-  postPatch = ''
-    substituteInPlace pyobjc_setup.py \
-      --replace-fail "-buildversion" "-buildVersion" \
-      --replace-fail "-productversion" "-productVersion" \
-      --replace-fail "/usr/bin/" ""
-  '';
+  patches = [ ../pyobjc-core/use-PATH-for-macOS-tools.patch ];
 
   dependencies = [
     pyobjc-core
@@ -64,4 +53,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})
