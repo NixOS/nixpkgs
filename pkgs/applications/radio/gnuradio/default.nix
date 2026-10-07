@@ -10,6 +10,7 @@
   volk,
   cppunit,
   ctestCheckHook,
+  writableTmpDirAsHomeHook,
   orc,
   boost,
   spdlog,
@@ -376,9 +377,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     # To allow easier future test manipulations
     ctestCheckHook
+    writableTmpDirAsHomeHook
   ];
   preCheck = ''
-    export HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen
   ''
   + lib.optionalString (hasFeature "gr-qtgui") ''
