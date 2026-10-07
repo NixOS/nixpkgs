@@ -8,12 +8,13 @@
   stdenv,
   fetchurl,
   pkg-config,
-  gettext,
   glib,
-  slang,
   gpm,
-  e2fsprogs,
   file,
+  e2fsprogs,
+  perl,
+  gettext,
+  slang,
   libssh2,
   curl,
   samba,
@@ -22,7 +23,6 @@
   sqlite,
   lua5_4,
   coreutils,
-  perl,
 
   # updater only
   writeScript,
@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    file
     glib
+    libssh2
     slang
     gpm
     e2fsprogs
-    file
-    libssh2
     curl
     samba
     libarchive

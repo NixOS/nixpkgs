@@ -16155,6 +16155,12 @@
     github = "langsjo";
     githubId = 104687438;
   };
+  lapo = {
+    name = "Lapo Luchini";
+    email = "lapo@lapo.it";
+    github = "lapo-luchini";
+    githubId = 420454;
+  };
   larry0x = {
     name = "Larry Engineer";
     email = "nixpkgs@larry.engineer";
@@ -16185,12 +16191,6 @@
     github = "Lassulus";
     githubId = 621759;
     name = "Lassulus";
-  };
-  lapo = {
-    name = "Lapo Luchini";
-    email = "lapo@lapo.it";
-    github = "lapo-luchini";
-    githubId = 420454;
   };
   lavafroth = {
     email = "lavafroth@protonmail.com";
