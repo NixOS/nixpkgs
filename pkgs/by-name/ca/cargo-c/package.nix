@@ -4,6 +4,9 @@
   fetchCrate,
   pkg-config,
   curl,
+  libgit2,
+  libz,
+  sqlite,
   openssl,
   stdenv,
   libiconv,
@@ -18,6 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-c";
   version = "0.10.22";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     inherit (finalAttrs) pname;
     version = "${finalAttrs.version}+cargo-${cargoVersion}";
@@ -26,11 +31,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-yeJWZtkgCRB0ipyTslsGcJi9Fi/XoWziuv74exRhAIk=";
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
+    LIBZ_SYS_STATIC = 0;
+  };
+
   nativeBuildInputs = [
     pkg-config
     (lib.getDev curl)
   ];
   buildInputs = [
+    libgit2
+    libz
+    sqlite
     openssl
     curl
   ]
