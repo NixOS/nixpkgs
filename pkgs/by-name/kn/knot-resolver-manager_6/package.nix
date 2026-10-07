@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication {
   inherit (kresd) version src;
   pyproject = true;
 
-  patches = [
+  patches = (kresd.patches or [ ]) ++ [
     # Rewrap the two supervisor's binaries, so that they obtain access to python modules
     # defined in the manager.  Those are then used as extensions of supervisord.
     # Manager needs this fixed bin/supervisord on its $PATH.
