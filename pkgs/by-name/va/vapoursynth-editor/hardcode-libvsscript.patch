@@ -1,0 +1,33 @@
+commit 8a37b87d26c1421db9aec8d43899f8aa03c565d4
+Author: rnhmjoj <rnhmjoj@eurofusion.eu>
+Date:   Mon Nov 9 02:58:49 2026 +0100
+
+    hardcode libvsscript.so path
+
+diff --git a/common-src/vapoursynth/vs_script_library.cpp b/common-src/vapoursynth/vs_script_library.cpp
+index c579abf..a09a5ad 100644
+--- a/common-src/vapoursynth/vs_script_library.cpp
++++ b/common-src/vapoursynth/vs_script_library.cpp
+@@ -489,7 +489,7 @@ bool VSScriptLibrary::initLibrary2()
+ 	auto load_from_path = [&]()
+ 	{
+ 		m_vsScriptLibrary.unload();
+-		m_vsScriptLibrary.setFileName(libraryNameOld);
++		m_vsScriptLibrary.setFileName("@vsscriptPath@");
+ 		loaded = m_vsScriptLibrary.load();
+ 		if(loaded)
+ 		{
+@@ -509,12 +509,12 @@ bool VSScriptLibrary::initLibrary2()
+ 	}
+ 	else
+ 	{
++		if(!loaded) load_from_path();
+ 		if(!loaded) load_from_python();
+ 		if(!loaded) load_from_env();
+ 		if(!loaded) load_from_list2();
+ 		if(!loaded) load_from_list();
+ 		if(!loaded) load_from_registry();
+-		if(!loaded) load_from_path();
+ 	}
+ 
+ 	if(!m_cpVSSAPI)
