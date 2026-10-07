@@ -32,6 +32,12 @@ stdenvNoCC.mkDerivation (
 
     nativeBuildInputs = [ makeWrapper ];
 
+    # Upstream stamps this placeholder during its container release build.
+    postPatch = ''
+      substituteInPlace backend/__version__.py \
+        --replace-fail '<version>' '${finalAttrs.version}'
+    '';
+
     dontConfigure = true;
     dontBuild = true;
 
