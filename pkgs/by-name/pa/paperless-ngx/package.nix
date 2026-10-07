@@ -167,7 +167,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
     ++ gotenberg-client.optional-dependencies.httpx
-    ++ ocrmypdf.optional-dependencies.heic or [ ]
+    ++ ocrmypdf.optional-dependencies.heic
     ++ redis.optional-dependencies.hiredis
     ++ tika-client.optional-dependencies.httpx
     ++ whoosh-compat.optional-dependencies.tantivy;
