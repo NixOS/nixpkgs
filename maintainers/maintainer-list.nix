@@ -31988,6 +31988,12 @@
     githubId = 16359093;
     name = "Xinyang Li";
   };
+  xiongchenyu6 = {
+    name = "Xiong Chenyu";
+    email = "xiongchenyu6@gmail.com";
+    github = "xiongchenyu6";
+    githubId = 4978864;
+  };
   xiorcale = {
     email = "quentin.vaucher@pm.me";
     github = "xiorcale";
