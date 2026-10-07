@@ -20,6 +20,9 @@ let
   inherit (lib.trivial)
     boolToString
     ;
+  inherit (lib)
+    optionals
+    ;
   zig = zig_0_16;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    wayland-scanner
     pkg-config
     zig
   ];
@@ -44,10 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libxkbcommon
     wayland
-    dbus
+    wayland-scanner
     river
     wayland-protocols
     river-channel
+  ]
+  ++ optionals withNotify [
+    dbus
   ];
 
   zigDeps = zig.fetchDeps {
