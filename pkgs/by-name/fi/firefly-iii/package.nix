@@ -13,7 +13,7 @@
 }:
 let
   php = php85;
-  version = "6.7.6";
+  version = "6.7.7";
 
   # Release tarball contains translations downloaded from crowdin
   releaseTarball = fetchzip {
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "firefly-iii";
     repo = "firefly-iii";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v9Bfd8bQemO4jkLg+KHLkjJupqOKoa+7wh19hzdxKeQ=";
+    hash = "sha256-8svaK8jvsR4jCbkSFzWg8Q3jX/zYL10SJzR3hGMBBDY=";
   };
 
   buildInputs = [ php ];
@@ -49,13 +49,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname src version;
     composerStrictValidation = true;
     strictDeps = true;
-    vendorHash = "sha256-Ne0twRNAuTx9wJOEa2bvEIuBNkChveg/9YAMR33PNhQ=";
+    vendorHash = "sha256-WxBC8zg954mYoCuXOJh+UFXFU7fXAZcfpwWPxbUWXao=";
   };
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
-    hash = "sha256-JEpMwD18zCccRKLw7S3tfBrwLd/RcSbf7SOM0Y9sN8k=";
+    hash = "sha256-8OBn/SM9ccJ0viA7edDiSz9HX+r92SmQZY+0gX6UgPc=";
   };
 
   preInstall = ''
