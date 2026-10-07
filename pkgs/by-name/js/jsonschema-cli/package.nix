@@ -2,6 +2,8 @@
   lib,
   fetchCrate,
   rustPlatform,
+  pkg-config,
+  aws-lc,
   cacert,
   versionCheckHook,
   nix-update-script,
@@ -19,6 +21,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-aAuBbdAgO9AW2TtHyVsR0o0DOZYZ7ixaGQRQS4eeFl4=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+  ];
+
+  env = {
+    AWS_LC_SYS_USE_SYSTEM = true;
+  };
 
   preCheck = ''
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
