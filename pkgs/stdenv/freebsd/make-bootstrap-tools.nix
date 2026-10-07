@@ -62,60 +62,68 @@ rec {
       ''
         rm -rf include lib/*.a lib/bash share
       '';
-  bootstrap-tools = tar-all "bootstrap-tools.tar.xz" (
-    with pkgs;
-    # SYNCME: this version number must be synced with the one in default.nix
-    let
-      llvmPackages = llvmPackages_21;
-    in
-    [
-      (runCommand "bsdcp" { } "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
-      coreutils
-      gnutar
-      findutils
-      gnumake
-      gnused
-      patchelf
-      gnugrep
-      gawk
-      diffutils
-      patch
-      bash
-      xz
-      xz.dev
-      gzip
-      bzip2
-      bzip2.dev
-      # We don't use wcurl, and it uses shebangs for the build system when cross-compiling.
-      # That pollutes the bootstrap tarballs and prevents it from working.
-      (curl.overrideAttrs (old: {
-        postFixup = "rm $bin/bin/wcurl";
-      }))
-      expand-response-params
-      binutils-unwrapped
-      freebsd.libc
-      stdenv.cc.libcxx
-      stdenv.cc.libcxx.dev
-      llvmPackages.clang-unwrapped
-      (freebsd.locales.override { locales = [ "C.UTF-8" ]; })
-    ]
-    # INSTRUCTIONS FOR GENERATING THE SPURIOUS LIST
-    # - empty this list
-    # - rebuild bootstrap files and update their urls and hashes
-    # - turn on atime on your FreeBSD nix store filesystem
-    # - run nix-collect-garbage on FreeBSD to make it so we rebuild FODs
-    # - build the nixpkgs __bootstrapArchive attribute on FreeBSD
-    # - reboot your FreeBSD system. Otherwise the atimes will simply be wrong because of kernel caching
-    # - run a full build of stdenv on FreeBSD. with -j3, this takes 1h40 on my 20 cpu VM (AMD host)
-    # - use the following to generate a list with access times and filenames
-    #   find /nix/store/###-bootstrap-archive -type f | xargs stat | grep -E 'Access: 2|File:' | paste -d ' ' - - | awk '{ print $4 " " $5 " " $6 " " $2 }' | sort -n > atimes
-    # - manually identify the point where files have no longer been accessed after the patching phase
-    # - use your favorite text editor to snip out the time column, the /nix/store/###-bootstrap-archive/ prefix, and the files that have not been used during bootstrap
-    # - turn off atime if it was off before since it will degrade performance
-    # - manually remove bin/strings from the list, since it will be used only during bootstrap
-    # - manually remove all files under include and lib/clang/*/include from the list in order to improve forward compatibility (and since they are very small)
-    # - plop it here
-  ) "xargs rm -f <${./bootstrap-tools-spurious.txt}";
+  bootstrap-tools =
+    tar-all "bootstrap-tools.tar.xz"
+      (
+        with pkgs;
+        # SYNCME: this version number must be synced with the one in default.nix
+        let
+          llvmPackages = llvmPackages_21;
+        in
+        [
+          (runCommand "bsdcp" { } "mkdir -p $out/bin; cp ${freebsd.cp}/bin/cp $out/bin/bsdcp")
+          coreutils
+          gnutar
+          findutils
+          gnumake
+          gnused
+          patchelf
+          gnugrep
+          gawk
+          diffutils
+          patch
+          bash
+          xz
+          xz.dev
+          gzip
+          bzip2
+          bzip2.dev
+          # We don't use wcurl, and it uses shebangs for the build system when cross-compiling.
+          # That pollutes the bootstrap tarballs and prevents it from working.
+          (curl.overrideAttrs (old: {
+            postFixup = "rm $bin/bin/wcurl";
+          }))
+          expand-response-params
+          binutils-unwrapped
+          freebsd.libc
+          stdenv.cc.libcxx
+          stdenv.cc.libcxx.dev
+          llvmPackages.clang-unwrapped
+          (freebsd.locales.override { locales = [ "C.UTF-8" ]; })
+        ]
+        # INSTRUCTIONS FOR GENERATING THE SPURIOUS LIST
+        # - empty this list
+        # - rebuild bootstrap files and update their urls and hashes
+        # - turn on atime on your FreeBSD nix store filesystem
+        # - run nix-collect-garbage on FreeBSD to make it so we rebuild FODs
+        # - build the nixpkgs __bootstrapArchive attribute on FreeBSD
+        # - reboot your FreeBSD system. Otherwise the atimes will simply be wrong because of kernel caching
+        # - run a full build of stdenv on FreeBSD. with -j3, this takes 1h40 on my 20 cpu VM (AMD host)
+        # - use the following to generate a list with access times and filenames
+        #   find /nix/store/###-bootstrap-archive -type f | xargs stat | grep -E 'Access: 2|File:' | paste -d ' ' - - | awk '{ print $4 " " $5 " " $6 " " $2 }' | sort -n > atimes
+        # - manually identify the point where files have no longer been accessed after the patching phase
+        # - use your favorite text editor to snip out the time column, the /nix/store/###-bootstrap-archive/ prefix, and the files that have not been used during bootstrap
+        # - turn off atime if it was off before since it will degrade performance
+        # - manually remove bin/strings from the list, since it will be used only during bootstrap
+        # - manually remove all files under include and lib/clang/*/include from the list in order to improve forward compatibility (and since they are very small)
+        # - plop it here
+        #
+        # libintl.h is not in the spurious list, it must not be there otherwise an early python build breaks
+      )
+      ''
+        rm include/libintl.h
+        xargs rm -f <${./bootstrap-tools-spurious.txt}
+      '';
   build = runCommand "build" { } ''
     mkdir -p $out/on-server
     ln -s ${unpack} $out/on-server/unpack.nar.xz
