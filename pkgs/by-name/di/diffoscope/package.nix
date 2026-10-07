@@ -23,6 +23,7 @@
   enableBloat ? true,
   enjarify,
   fetchurl,
+  fetchpatch,
   file,
   findutils,
   fontforge-fonttools,
@@ -126,6 +127,10 @@ python.pkgs.buildPythonApplication rec {
     # https://salsa.debian.org/reproducible-builds/diffoscope/-/merge_requests/166
     ./fix-tests-with-zipdetails-4.006.patch
     ./radare2.patch
+    (fetchpatch {
+      url = "https://salsa.debian.org/reproducible-builds/diffoscope/-/commit/1e32d8957aebc67addb6dd03ab03feeabbd4e188.patch";
+      hash = "sha256-09ELEsxz3ls2pCIBaPfk3OltWPDh/DaOmtf8g8Un61g=";
+    })
   ];
 
   postPatch = ''
