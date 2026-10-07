@@ -45,6 +45,41 @@ let
       EOF
     '';
   });
+  ppcHeaders = stdenv.mkDerivation {
+    name = "cc-wrapper-header-provider";
+    buildCommand = ''
+      mkdir -p "$out/include"
+      echo '#define SELECTED_PROVIDER 731' > "$out/include/selected-provider.h"
+    '';
+  };
+  # Preprocessing needs only a header provider, not a foreign libc or linker.
+  ppcCompilers =
+    map
+      (
+        abi:
+        stdenv.cc.override (
+          old:
+          let
+            libc = old.libc // {
+              dev = ppcHeaders;
+            };
+          in
+          {
+            stdenvNoCC = old.stdenvNoCC // {
+              targetPlatform = lib.systems.elaborate "powerpc64-unknown-linux-gnuabielfv${abi}";
+            };
+            inherit libc;
+            bintools = old.bintools.override { inherit libc; };
+            libcxx = null;
+            gccForLibs = null;
+            includeFortifyHeaders = false;
+          }
+        )
+      )
+      [
+        "1"
+        "2"
+      ];
 in
 ''
   echo "checking independent nested compilers and caller inputs..." >&2
@@ -199,6 +234,23 @@ in
   }
 
   ${lib.optionalString ((stdenv.cc.cc.nativeDefaultIncludeBinding or null) == "driver") ''
+    ${lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid) ''
+      # The configured ABI lives in -mabi; its map must use the same target
+      # spelling as the driver. Exercise real wrapper generation for both ABIs.
+      cat > selected-provider.c <<'EOF'
+      #include <selected-provider.h>
+      #if _CALL_ELF != EXPECTED_ABI
+      #error Wrong PowerPC ABI
+      #endif
+      SELECTED_PROVIDER
+      EOF
+      ${lib.concatImapStringsSep "\n" (abi: compiler: ''
+        env -i ${compiler}/bin/${compiler.targetPrefix}cc \
+          -DEXPECTED_ABI=${toString abi} -E -P selected-provider.c > selected-provider.out
+        [[ $(cat selected-provider.out) == 731 ]]
+      '') ppcCompilers}
+    ''}
+
     cat > no-default-header.c <<'EOF'
     int main(void) { return 0; }
     EOF
