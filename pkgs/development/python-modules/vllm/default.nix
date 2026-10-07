@@ -710,6 +710,15 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       "VLLM_NCCL_SO_PATH"
       "${cudaPackages.nccl}/lib/libnccl.so"
     ]
+    ++ lib.optionals cudaSupport [
+      "--set"
+      "CUDA_HOME"
+      "${cudaPackages.cudatoolkit}"
+
+      "--set"
+      "CUDA_PATH"
+      "${cudaPackages.cudatoolkit}"
+    ]
     ++ lib.optionals rocmSupport [
       "--set"
       "HIP_DEVICE_LIB_PATH"
