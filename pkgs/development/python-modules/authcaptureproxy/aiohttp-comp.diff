@@ -1,0 +1,17 @@
+diff --git a/tests/test_regression_headers_and_json_parsing.py b/tests/test_regression_headers_and_json_parsing.py
+index 52822c5..dde28df 100644
+--- a/tests/test_regression_headers_and_json_parsing.py
++++ b/tests/test_regression_headers_and_json_parsing.py
+@@ -59,6 +59,12 @@ class MockProtocol(asyncio.BaseProtocol):
+         def __init__(self):
+             self._reading_paused = False
+ 
++        def pause_reading(self):
++            self._reading_paused = True
++
++        def resume_reading(self, resume_parser: bool = True):
++            self._reading_paused = False
++
+     protocol = MockProtocol()
+ 
+     # aiohttp 3.9: StreamReader(protocol, limit, loop)
