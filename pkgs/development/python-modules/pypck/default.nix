@@ -39,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
     changelog = "https://github.com/alengwenus/pypck/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.epl20;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

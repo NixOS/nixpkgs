@@ -741,11 +741,6 @@
         "tdlib"
       ]
     },
-    "tensorflow": {
-      "attrPath": [
-        "libtensorflow"
-      ]
-    },
     "uuid": {
       "attrPath": [
         "libossp_uuid"
