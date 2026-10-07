@@ -18,19 +18,19 @@
   python-dateutil,
   pyyaml,
   setuptools,
-  syrupy,
+  syrupy_6,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyrainbird";
-  version = "6.5.0";
+  version = "6.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "pyrainbird";
     tag = finalAttrs.version;
-    hash = "sha256-JPnp77NhgT878sQJ7Az58R6JnMuprr69rPiZjkh+E1I=";
+    hash = "sha256-f3mIM4kEJiR12jvi65P/Mx0yKV1GJ9GxWNWXFNK9IuY=";
   };
 
   build-system = [ setuptools ];
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
     pytest-golden
     pytest-mock
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   pythonImportsCheck = [ "pyrainbird" ];
