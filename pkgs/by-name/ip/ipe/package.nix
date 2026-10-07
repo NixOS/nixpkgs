@@ -3,6 +3,7 @@
   stdenv,
   makeDesktopItem,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   copyDesktopItems,
   cairo,
@@ -32,6 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-gcc16-missing-include.patch";
+      url = "https://salsa.debian.org/science-team/ipe/-/raw/e6dc9db1e2d889e86bfa21a95775e778f82ae802/debian/patches/0002-include-stding.patch";
+      hash = "sha256-E5F7+qL0ZFTkfixO2+yIhNvKZKW0kltkHDfN+EcB/w8=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
