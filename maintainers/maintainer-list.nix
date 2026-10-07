@@ -5842,6 +5842,12 @@
     githubId = 217918;
     name = "Viktor Kronvall";
   };
+  constkarma = {
+    email = "constkarma@proton.me";
+    github = "constkarma";
+    githubId = 135730548;
+    name = "Minhyeok Lee";
+  };
   Continous = {
     email = "continous159@gmail.com";
     github = "Continous";
