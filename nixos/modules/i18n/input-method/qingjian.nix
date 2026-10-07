@@ -69,8 +69,8 @@ in
         Optional custom resource root (a directory with data/generated,
         data/models/hanzhang-*, assets, ... as expected by the official layout).
         Defaults to null, in which case QINGJIAN_RESOURCES points at
-        ${cfg.dataPackage}/share/qingjian/resources. Setting this overrides the
-        data package.
+        `share/qingjian/resources` inside the selected data package (see
+        `dataPackage`). Setting this overrides the data package.
       '';
     };
 
