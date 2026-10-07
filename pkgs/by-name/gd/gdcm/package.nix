@@ -89,6 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     "TestWrapPython"
     # AttributeError: module 'gdcm' has no attribute 'UIDGenerator_SetRoot'; maybe a wrapping regression:
     "TestUIDGeneratorPython"
+    # Lossy Problem with: 1.2.840.10008.1.2.8.1
+    "TestTransferSyntax"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
     "TestRescaler2"

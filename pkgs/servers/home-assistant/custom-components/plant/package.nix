@@ -35,6 +35,6 @@ buildHomeAssistantComponent rec {
     homepage = "https://github.com/Olen/homeassistant-plant";
     changelog = "https://github.com/Olen/homeassistant-plant/releases/tag/${src.tag}";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
   };
 }

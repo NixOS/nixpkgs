@@ -3,7 +3,6 @@
   buildPythonPackage,
   cudaPackages,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   cython,
@@ -20,7 +19,7 @@
 
 buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cupy";
-  version = "14.1.1";
+  version = "14.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -29,21 +28,13 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     repo = "cupy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-8jreEbQA24V7EAD87z3uFwlr3LPDoGRCvF5vbf2dKvI=";
+    hash = "sha256-EYje+FnIVIsd+rVrCkwXXyLp6jnPTTFpuRRri88XK0k=";
   };
 
   patches = [
     # Let cupy_setup_build.py find static libraries (.a) from buildInputs.
     # By default, it looks for them in `$CUDA_PATH/lib{64,}`.
     ./link-static-libraries.patch
-
-    # Fix test collection with pytest>=9
-    # https://github.com/cupy/cupy/pull/10020
-    (fetchpatch {
-      name = "pytest-9-compat.patch";
-      url = "https://github.com/cupy/cupy/commit/6f52f1541e0e047cdb84286793d6110567bce5c8.patch";
-      hash = "sha256-D4VjOL0XO8gnfItGC/2MjuWYCJ7eNJYFn8jIyM+EojM=";
-    })
   ];
 
   postPatch =

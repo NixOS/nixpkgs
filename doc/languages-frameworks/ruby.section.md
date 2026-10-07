@@ -14,7 +14,7 @@ Since not all gems have executables like `nokogiri`, it's usually more convenien
 
 ### Temporary Ruby environment with `nix-shell` {#temporary-ruby-environment-with-nix-shell}
 
-Rather than having a single Ruby environment shared by all Ruby development projects on a system, Nix allows you to create separate environments per project. `nix-shell` gives you the possibility to temporarily load another environment akin to a combined `chruby` or `rvm` and `bundle exec`.
+Rather than having a single Ruby environment shared by all Ruby development projects on a system, Nix creates separate environments per project. `nix-shell` gives you the possibility to temporarily load another environment akin to a combined `chruby` or `rvm` and `bundle exec`.
 
 There are two methods for loading a shell with Ruby packages. The first and recommended method is to create an environment with `ruby.withPackages` and load that.
 
@@ -277,7 +277,7 @@ To check the gems for any security vulnerabilities, run `./maintainers/scripts/a
 
 ### Packaging applications {#packaging-applications}
 
-A common task is to add a Ruby executable to Nixpkgs; popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, that allows you to make a package that only exposes the listed executables. Otherwise, the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
+A common task is to add a Ruby executable to Nixpkgs; popular examples would be `chef`, `jekyll`, or `sass`. A good way to do that is to use the `bundlerApp` function, which makes a package that only exposes the listed executables. Otherwise, the package may cause conflicts through common paths like `bin/rake` or `bin/bundler` that aren't meant to be used.
 
 The absolute easiest way to do that is to write a `Gemfile` along these lines:
 

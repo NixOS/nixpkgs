@@ -15,13 +15,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "jellyfin";
-  version = "12.1"; # ensure that jellyfin-web has matching version
+  version = "12.2"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WB/miD5uwoCY9DcTRRtxxOu9G+jojNGp5FZ0HHDqhys=";
+    hash = "sha256-7Iz+P07SQvoKTGZbLUcxIfDSBdFUFJQTfgFA4pj//vg=";
   };
 
   nativeBuildInputs = [
