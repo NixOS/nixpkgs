@@ -291,6 +291,15 @@ let
       })
     ];
 
+    # Ignore the python version check because it hard-codes minor versions and
+    # is often out-of-date
+    postPatch = ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          'set(PYTHON_SUPPORTED_VERSIONS' \
+          'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+    '';
+
     dontConfigure = true;
 
     # vllm-flash-attn normally relies on `git submodule update` to fetch cutlass and composable_kernel
