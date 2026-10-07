@@ -16186,6 +16186,12 @@
     githubId = 621759;
     name = "Lassulus";
   };
+  lapo = {
+    name = "Lapo Luchini";
+    email = "lapo@lapo.it";
+    github = "lapo-luchini";
+    githubId = 420454;
+  };
   lavafroth = {
     email = "lavafroth@protonmail.com";
     github = "lavafroth";
