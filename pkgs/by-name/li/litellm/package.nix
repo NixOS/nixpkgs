@@ -1,9 +1,14 @@
 { python3Packages }:
 
 let
-  litellm = python3Packages.litellm;
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      mcp = self.mcp_2;
+    }
+  );
+  litellm = pythonPackages.litellm;
 in
-python3Packages.toPythonApplication (
+pythonPackages.toPythonApplication (
   litellm.overridePythonAttrs (oldAttrs: {
     dependencies =
       (oldAttrs.dependencies or [ ])
