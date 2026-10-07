@@ -139,38 +139,6 @@ buildGo127Module (finalAttrs: {
         "TestTaildropIntegration"
         "TestTaildropIntegration_Fresh"
 
-        # context deadline exceeded
-        "TestPacketFilterFromNetmap" # tsnet
-
-        # tsnet tests that need a full tailscale server and hang in the sandbox
-        "TestListener_Server" # tsnet
-        "TestDialBlocks" # tsnet
-        "TestConn" # tsnet
-        "TestLoopbackLocalAPI" # tsnet
-        "TestLoopbackSOCKS5" # tsnet
-        "TestTailscaleIPs" # tsnet
-        "TestListenerCleanup" # tsnet
-        "TestStartStopStartGetsSameIP" # tsnet
-        "TestFunnel" # tsnet
-        "TestFunnelClose" # tsnet
-        "TestListenService" # tsnet
-        "TestListenerClose" # tsnet
-        "TestFallbackTCPHandler" # tsnet
-        "TestCapturePcap" # tsnet
-        "TestUDPConn" # tsnet
-        "TestUserMetricsByteCounters" # tsnet
-        "TestUserMetricsRouteGauges" # tsnet
-        "TestTUN" # tsnet
-        "TestTUNDNS" # tsnet
-        "TestListenPacket" # tsnet
-        "TestListenTCP" # tsnet
-        "TestListenTCPDualStack" # tsnet
-        "TestDialTCP" # tsnet
-        "TestDialUDP" # tsnet
-        "TestSelfDial" # tsnet
-        "TestListenUnspecifiedAddr" # tsnet
-        "TestListenMultipleEphemeralPorts" # tsnet
-
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
 
