@@ -87,6 +87,9 @@ optionals noSysDirs (
 )
 # Bind selected header providers through GCC's native default lookup.
 ++ optional atLeast14 ../common/native-default-includes.patch
+# Cross-built libstdc++ uses the existing BUILD-to-TARGET compiler, which must
+# not supply its own C++ headers while compiling the new library.
+++ optional (majorVersion == "16" && !buildIsHost) ./16/cxx23-nostdincxx.patch
 # Share the standalone runtime's full-int UID buffer bound. The no-libc
 # cross compiler disables libgomp.
 ++ optional (
