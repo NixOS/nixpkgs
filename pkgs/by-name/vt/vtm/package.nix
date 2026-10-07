@@ -15,6 +15,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vtm";
   version = "2026.09.29";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "directvt";
     repo = "vtm";
