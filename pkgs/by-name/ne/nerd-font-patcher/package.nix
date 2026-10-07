@@ -21,10 +21,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   patches = [
     ./use-nix-paths.patch
   ];
-  postPatch = ''
-    substituteInPlace font-patcher \
-      --replace-fail "'glyphnames.json'" "'../share/glyphnames.json'"
-  '';
 
   dontBuild = true;
 
@@ -34,6 +30,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
     install -Dm644 glyphnames.json $out/share/glyphnames.json
     cp -ra src/glyphs $out/share/
     cp -ra bin/scripts/name_parser $out/lib/
+  '';
+
+  preFixup = ''
+    substituteInPlace "$out"/bin/nerd-font-patcher \
+        --replace-fail "'glyphnames.json'" "'$out/share/glyphnames.json'"
   '';
 
   meta = {
