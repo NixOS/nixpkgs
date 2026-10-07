@@ -1265,13 +1265,13 @@
     "vendorHash": "sha256-jEqN6WvPXKxk9UHKZrzXo1+L6tHVV1Wb+E0O22LfMl0="
   },
   "spotinst_spotinst": {
-    "hash": "sha256-Am9SpejteynDdFm2lcENxuYwADZIveNe4oFNoy/xh2E=",
+    "hash": "sha256-9sg3PYpEF974qpwDmTwJ/JnJvt1aPCG5VdMZSflpAOs=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.241.1",
+    "rev": "v1.241.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-o7DX6kQgt5+qNbZO3o8TfE8H/wT/8V5kZIuyT9z7+J0="
+    "vendorHash": "sha256-7tnXQGn1USkhnbFwIDRzBA4I6gJQ2ZTzGqzS47307P8="
   },
   "statuscakedev_statuscake": {
     "hash": "sha256-zXBZZA+2uRN2FeGrayq0a4EBk7T+PvlBIwbuxwM7yBc=",
