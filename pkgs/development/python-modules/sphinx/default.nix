@@ -104,6 +104,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  # Parallel autodoc tests import shared test roots while other tests copy them.
+  # Keep transient bytecode files out of those shared inputs.
+  preCheck = ''
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
+
   disabledTestPaths = lib.optionals isPyPy [
     # internals are asserted which are sightly different in PyPy
     "tests/test_ext_autodoc/test_ext_autodoc.py"
