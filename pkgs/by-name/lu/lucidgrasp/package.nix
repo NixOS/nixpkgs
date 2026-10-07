@@ -10,6 +10,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "lucidgrasp";
   version = "1.2.3";
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dialga-cmd";
