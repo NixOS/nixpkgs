@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "trafilatura";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "adbar";
     repo = "trafilatura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Bf50Q+rJaRy3SoWyInzNWs37slDBfSlWxRddf3eqqLM=";
+    hash = "sha256-VcS0x7lU7bHIyJJm+tQVa8Eypyu5cvXjZ+i3tG/N7z0=";
   };
 
   build-system = [ setuptools ];
