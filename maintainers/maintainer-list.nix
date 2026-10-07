@@ -10900,6 +10900,12 @@
     githubId = 343415;
     name = "Greg Roodt";
   };
+  grubmeshi = {
+    email = "agrub@meshcloud.io";
+    github = "grubmeshi";
+    githubId = 247164247;
+    name = "Andreas Grub";
+  };
   gruve-p = {
     email = "groestlcoin@gmail.com";
     github = "gruve-p";
