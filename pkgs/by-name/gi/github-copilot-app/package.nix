@@ -111,7 +111,8 @@ stdenv.mkDerivation {
 
         # Update desktop file to use the new executable name
         substituteInPlace $out/share/applications/*.desktop \
-          --replace-fail "Exec=github" "Exec=github-copilot-app"
+          --replace-fail "Exec=github" "Exec=github-copilot-app" \
+          --replace-fail "StartupWMClass=github" "StartupWMClass=github-copilot-app"
       ''
   )
   + ''
