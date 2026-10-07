@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm build
   '';
 
-  PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
 
   doCheck = false;
 
