@@ -149,7 +149,6 @@
   withSsh ? withHeadlessDeps, # SFTP protocol
   withSvg ? withFullDeps, # SVG protocol
   withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isMinGW, # AV1 encoder/decoder (focused on speed and correctness)
-  withTensorflow ? false, # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
   withTheora ? withHeadlessDeps, # Theora encoder
   withTwolame ? withFullDeps, # MP2 encoding
   withUavs3d ? withFullDeps, # AVS3 decoder
@@ -310,7 +309,6 @@
   librist,
   librsvg,
   libssh,
-  libtensorflow,
   libtheora,
   libv4l,
   libva,
@@ -742,7 +740,7 @@ stdenv.mkDerivation (
       (enableFeature withSsh "libssh")
       (enableFeature withSvg "librsvg")
       (enableFeature withSvtav1 "libsvtav1")
-      (enableFeature withTensorflow "libtensorflow")
+      (enableFeature false "libtensorflow")
       (enableFeature withTheora "libtheora")
       (enableFeature withTwolame "libtwolame")
       (enableFeature withUavs3d "libuavs3d")
@@ -965,7 +963,6 @@ stdenv.mkDerivation (
       ++ optionals withSsh [ libssh ]
       ++ optionals withSvg [ librsvg ]
       ++ optionals withSvtav1 [ svt-av1 ]
-      ++ optionals withTensorflow [ libtensorflow ]
       ++ optionals withTheora [ libtheora ]
       ++ optionals withTwolame [ twolame ]
       ++ optionals withUavs3d [ uavs3d ]

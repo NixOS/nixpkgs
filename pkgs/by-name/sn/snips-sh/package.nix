@@ -3,8 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
   sqlite,
-  libtensorflow,
-  withTensorflow ? false,
   nixosTests,
 }:
 buildGoModule (finalAttrs: {
@@ -19,9 +17,9 @@ buildGoModule (finalAttrs: {
     hash = "sha256-71YEkCUZqX/Hyq8wzj5Lf+ydDO708F+44ILLKrTpHF0=";
   };
 
-  tags = (lib.optional (!withTensorflow) "noguesser");
+  tags = [ "noguesser" ];
 
-  buildInputs = [ sqlite ] ++ (lib.optional withTensorflow libtensorflow);
+  buildInputs = [ sqlite ];
 
   passthru.tests = nixosTests.snips-sh;
 
