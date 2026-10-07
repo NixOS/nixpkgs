@@ -473,16 +473,11 @@ in
           ''}
 
           (flock -n 9 || ( echo "failed to acquire lock" && exit 1 ) # Don't try to update map data and importance files at the same time
-
-            mkdir -p "$STATE_DIRECTORY/import-importance-data"
-
-            trap 'rm -rf $STATE_DIRECTORY/import-importance-data/*' EXIT
-
-            cd "$STATE_DIRECTORY/import-importance-data"
+            trap 'rm -rf "$STATE_DIRECTORY/wikimedia-importance.sql.gz" "$STATE_DIRECTORY/secondary_importance.sql.gz"' EXIT
 
             echo ">>> downloading wikimedia importance files"
-            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.url} -o "wikimedia-importance.sql.gz"
-            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.secondaryUrl} -o "secondary_importance.sql.gz"
+            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.url} -o "$STATE_DIRECTORY/wikimedia-importance.sql.gz"
+            curl --silent -L -A "Wget/1.21.2" ${cfg.importanceData.secondaryUrl} -o "$STATE_DIRECTORY/secondary_importance.sql.gz"
 
             echo ">>> Refresh data"
             nominatim refresh --wiki-data --secondary-importance --importance --project-dir "$STATE_DIRECTORY"
