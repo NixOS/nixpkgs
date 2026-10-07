@@ -1045,18 +1045,6 @@ with pkgs;
 
   winbox = winbox4;
 
-  ### APPLICATIONS/VERSION-MANAGEMENT
-  gitMinimal = git.override {
-    withManual = false;
-    osxkeychainSupport = false;
-    pythonSupport = false;
-    perlSupport = false;
-    rustSupport = false; # Needed for bootstrap
-    withpcre2 = false;
-    cargo = cargo.override { auditable = false; }; # Break `cargo-auditable` -> `fetch-cargo-vendor` -> `nix-prefetch-git` -> `gitMinimal` cycle
-    curl = if stdenv.hostPlatform.isFreeBSD then curlMinimal else curl; # Needed for FreeBSD bootstrap
-  };
-
   bump2version = with python3Packages; toPythonApplication bump2version;
 
   datalad = with python3Packages; toPythonApplication datalad;
