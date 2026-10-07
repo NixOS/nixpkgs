@@ -1,0 +1,38 @@
+diff --git a/src/main.js b/src/main.js
+index 52764b2..47cb9c7 100644
+--- a/src/main.js
++++ b/src/main.js
+@@ -2,7 +2,7 @@ import { createApp } from 'vue'
+ import 'element-plus/dist/index.css'
+ import App from './App.vue'
+ import ElementPlus from 'element-plus'
+-import zhCn from 'element-plus/es/locale/lang/zh-cn'
++import en from 'element-plus/es/locale/lang/en'
+ import { router } from '@/router'
+ import 'normalize.css/normalize.css'
+ import { pinia } from '@/store'
+@@ -12,7 +12,7 @@ import '@/styles/style.scss'
+ import * as ElementIcons from '@element-plus/icons'
+ 
+ const app = createApp(App)
+-app.use(ElementPlus, { locale: zhCn })
++app.use(ElementPlus, { locale: en })
+ app.use(pinia)
+ app.use(router)
+ for (let icon in ElementIcons){
+diff --git a/src/store/app.js b/src/store/app.js
+index 46caaf3..ed284f0 100644
+--- a/src/store/app.js
++++ b/src/store/app.js
+@@ -18,7 +18,10 @@ const langs = {
+   'es': { name: 'Español', value: es, sideBarWidth: '280px' },
+   'zh-TW': { name: '中文繁体', value: zhTw, sideBarWidth: '210px' },
+ }
+-const defaultLang = localStorage.getItem('lang') || navigator.language || 'zh-CN'
++// Use a supported locale: region tags such as en-US otherwise show keys.
++const preferredLang = (localStorage.getItem('lang') || 'en').replace('_', '-')
++const baseLang = preferredLang.split('-')[0]
++const defaultLang = langs[preferredLang] ? preferredLang : (langs[baseLang] ? baseLang : 'en')
+ export const useAppStore = defineStore({
+   id: 'App',
+   state: () => ({
