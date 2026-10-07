@@ -1738,6 +1738,7 @@
   ./services/web-apps/grav.nix
   ./services/web-apps/greenlight.nix
   ./services/web-apps/grist.nix
+  ./services/web-apps/grimmory.nix
   ./services/web-apps/grocy.nix
   ./services/web-apps/guacamole-client.nix
   ./services/web-apps/guacamole-server.nix
