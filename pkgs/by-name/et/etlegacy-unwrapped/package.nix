@@ -22,7 +22,7 @@
   versionCheckHook,
 }:
 let
-  version = "2.86.0";
+  version = "2.86.1";
   fakeGit = writeScriptBin "git" ''
     if [ "$1" = "describe" ]; then
       echo "${version}"
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     owner = "etlegacy";
     repo = "etlegacy";
     tag = "v${version}";
-    hash = "sha256-3m6LJtZ0AbTYPXVnX80wdW7Wchd4mp5v5QAWKPjwctA=";
+    hash = "sha256-5jFThKkyaUl8+1Z5sUZ6MdEpfyWQ5hLzjl5SDnjeyB4=";
   };
 
   nativeBuildInputs = [
