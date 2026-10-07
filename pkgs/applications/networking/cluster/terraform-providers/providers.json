@@ -200,13 +200,13 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "clevercloud_clevercloud": {
-    "hash": "sha256-JKjsEGICQnYZAd/Ywu7OLQaCqqeAyn9AiRIvNYt4BA8=",
+    "hash": "sha256-mVwkTnVgnRMoECI05s4uUaO1VO3ZD2eS4rw8RoLtOJw=",
     "homepage": "https://registry.terraform.io/providers/clevercloud/clevercloud",
     "owner": "CleverCloud",
     "repo": "terraform-provider-clevercloud",
-    "rev": "v2.2.1",
+    "rev": "v2.3.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-BeFD02YByrmdvIMIYlLQqYGQkfD53Dxeox5EzKd5SJA="
+    "vendorHash": "sha256-lfdc8+yyKzTJqfYQoiAvbtEaIN4TE9hHikyjd2bmfKM="
   },
   "cloudamqp_cloudamqp": {
     "hash": "sha256-WD4ZIUTg8xGfxa4oqA7EGVwcggBzJK/MRchxdldypqU=",
@@ -580,13 +580,13 @@
     "vendorHash": "sha256-KcaKxpiI9kAaBJ33ATVOJ6hm5HtGg1IAFfZU/Sf4gm4="
   },
   "hashicorp_external": {
-    "hash": "sha256-SiTFDI5s/wSyGd1iKe3cHYlyoPueT+nc3DqpcG7zkg4=",
+    "hash": "sha256-i9BEq7T3BZaTPpMs13obJyCdQB0/ZPLyOukbz8tZODQ=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/external",
     "owner": "hashicorp",
     "repo": "terraform-provider-external",
-    "rev": "v2.4.1",
+    "rev": "v2.4.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-gv54RqpkWri5yL40ajcLnqzF0XvMEzFoFEEV2/g1paE="
+    "vendorHash": "sha256-kkCiz73W5RT0Zw+euWD9bnBpe5enVOT4mTJ5daszU4s="
   },
   "hashicorp_google": {
     "hash": "sha256-NTGkDJvCvChsRRkrI+ShMyZ6+QQoiBk0vdBjvFGYogE=",

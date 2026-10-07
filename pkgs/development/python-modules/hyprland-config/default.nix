@@ -4,7 +4,7 @@
   fetchFromGitHub,
   hatchling,
   hypothesis,
-  lua5_4,
+  lua5_5,
   pytestCheckHook,
 }:
 
@@ -26,14 +26,14 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace src/hyprland_config/_lua/_read/_runner.py \
       --replace-fail '_LUA_BINARY_CANDIDATES = ("lua", "lua5.5", "lua5.4", "lua5.3", "lua5.2")' \
-                     '_LUA_BINARY_CANDIDATES = ("${lib.getExe lua5_4}",)'
+                     '_LUA_BINARY_CANDIDATES = ("${lib.getExe lua5_5}",)'
   '';
 
   build-system = [ hatchling ];
 
   nativeCheckInputs = [
     hypothesis
-    lua5_4 # the test helpers probe PATH for lua/luac themselves
+    lua5_5 # the test helpers probe PATH for lua/luac themselves
     pytestCheckHook
   ];
 

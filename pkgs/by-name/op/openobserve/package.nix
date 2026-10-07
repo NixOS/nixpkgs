@@ -253,7 +253,7 @@ else
       meta = commonMeta // {
         homepage = "https://github.com/openobserve/openobserve";
         changelog = "https://github.com/openobserve/openobserve/releases/tag/v${finalAttrs.version}";
-        license = lib.licenses.asl20;
+        license = lib.licenses.agpl3Plus;
         platforms = lib.platforms.linux ++ lib.platforms.darwin;
       };
     }
