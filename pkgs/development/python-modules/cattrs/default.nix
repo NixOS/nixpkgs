@@ -25,14 +25,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cattrs";
-  version = "26.1.0";
+  version = "26.2.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "python-attrs";
     repo = "cattrs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i1C7TvtQhiEZPi4YELxPHkiz33nNw2rtgRTqs98PVlc=";
+    hash = "sha256-MgG6Plq/IPIRpiQ6Uk1VqS0FV9++jBjiFeakQTeuMuA=";
   };
 
   postPatch = ''
