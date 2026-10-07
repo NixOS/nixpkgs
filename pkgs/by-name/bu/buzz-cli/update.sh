@@ -6,6 +6,8 @@
 # its own (https://github.com/block/buzz/issues/8553). Mobile releases tag the
 # same repository far more often, so GitHub's release feed, which nix-update
 # reads, rarely shows a desktop release: list the releases through the API.
+# The other Buzz packages inherit the source, version and Cargo hash from
+# buzz-cli; buzz-desktop has its own Cargo and pnpm hashes.
 
 set -euo pipefail
 
@@ -16,3 +18,4 @@ tag="$(curl -sSfL ${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "https://api.github.com/r
 
 update-source-version buzz-cli "${tag#desktop-v}"
 nix-update buzz-cli --version skip
+nix-update buzz-desktop --version skip
