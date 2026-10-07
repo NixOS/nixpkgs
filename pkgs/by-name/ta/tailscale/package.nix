@@ -98,9 +98,6 @@ buildGo127Module (finalAttrs: {
   checkFlags =
     let
       skippedTests = [
-        # self reported potentially flakey test
-        "TestConnMemoryOverhead" # control/controlbase
-
         # interacts with `/proc/net/route` and need a default route
         "TestDefaultRouteInterface" # net/netmon
         "TestRouteLinuxNetlink" # net/netmon
