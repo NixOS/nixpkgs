@@ -277,6 +277,16 @@ let
         url = "https://github.com/Dao-AILab/flash-attention/commit/dad67c88d4b6122c69d0bed1cebded0cded71cea.patch";
         hash = "sha256-JSgXWItOp5KRpFbTQj/cZk+Tqez+4mEz5kmH5EUeQN4=";
       })
+      # fix build with newer CUTLASS
+      (fetchpatch {
+        url = "https://github.com/Dao-AILab/flash-attention/commit/e26dd28e487117ee3e6bc4908682f41f31e6f83a.patch";
+        hash = "sha256-NkCEowXSi+tiWu74Qt+VPKKavx0H9JeteovSJKToK9A=";
+      })
+      # fix build with newer CUTLASS
+      (fetchpatch {
+        url = "https://github.com/Dao-AILab/flash-attention/commit/c75d019dea9d910312974417bc28f190dfdda6d9.patch";
+        hash = "sha256-1cPuB1nF2Oi8bAkfgxx2tkeHB03ICQjn9SZ+ssnKDkI=";
+      })
     ];
 
     dontConfigure = true;
