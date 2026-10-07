@@ -274,6 +274,10 @@ let
       })
     ];
 
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace-fail 'PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13"' 'PYTHON_SUPPORTED_VERSIONS "3.9" "3.10" "3.11" "3.12" "3.13" "3.14"'
+    '';
+
     dontConfigure = true;
 
     # vllm-flash-attn normally relies on `git submodule update` to fetch cutlass and composable_kernel
