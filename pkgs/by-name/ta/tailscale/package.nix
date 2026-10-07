@@ -135,10 +135,6 @@ buildGo127Module (finalAttrs: {
         # flaky: https://github.com/tailscale/tailscale/issues/11762
         "TestTwoDevicePing"
 
-        # timeout 10m
-        "TestTaildropIntegration"
-        "TestTaildropIntegration_Fresh"
-
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
 
