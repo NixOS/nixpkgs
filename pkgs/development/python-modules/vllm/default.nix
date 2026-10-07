@@ -569,6 +569,10 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # `openai_harmony` module, but with embedded tiktoken vocabularies.
     "oss-harmony"
 
+    # CUDA-only, not packaged in nixpkgs
+    "PyNvVideoCodec"
+    "nvtx"
+
     # ROCm-only, not packaged in nixpkgs
     "mooncake-transfer-engine-rocm"
   ];
