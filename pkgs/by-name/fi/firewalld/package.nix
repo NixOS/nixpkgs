@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoconf,
   automake,
   docbook_xml_dtd_42,
@@ -60,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./respect-xml-catalog-files-var.patch
     ./specify-localedir.patch
 
-    ./gettext-0.25.patch
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/firewalld/-/raw/5f2f37e3018835d0183ca44bc4467b3a096edec7/fix_gettext_domain.patch";
+      hash = "sha256-cZnat9fAVktgDn3rdKOLCbK27ddcKW7o2KuKAm8GV8Y=";
+    })
   ]
   ++ lib.optional withGui ./nm-connection-editor.patch;
 
