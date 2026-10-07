@@ -13893,6 +13893,12 @@
     githubId = 297653;
     name = "Joe Salisbury";
   };
+  JohannesRudolph = {
+    email = "jrudolph@meshcloud.io";
+    github = "JohannesRudolph";
+    githubId = 130103;
+    name = "Johannes Rudolph";
+  };
   johannwagner = {
     email = "nix@wagner.digital";
     github = "johannwagner";
