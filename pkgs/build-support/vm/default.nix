@@ -281,6 +281,21 @@ let
       $QEMU_OPTS
   '';
 
+  # Start the virtiofsd daemons that share the Nix store and ./xchg with the
+  # VM (see qemuCommandLinux), and wait for their sockets.
+  startVirtiofsd = ''
+    # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
+    # Since we are running in a sandbox already, the difference between seccomp and none is minimal
+    # File handles need CAP_DAC_READ_SEARCH, which a build never has, so do not try them; and only
+    # log what might need attention, not every connect and disconnect.
+    ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir "${storeDir}" &
+    ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir xchg &
+
+    # Wait until virtiofsd has created these sockets to avoid race condition.
+    until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 0.1; done
+    until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 0.1; done
+  '';
+
   vmRunCommand =
     qemuCommand:
     writeText "vm-run" ''
@@ -315,16 +330,7 @@ let
       ${coreutils}/bin/cat > ./run-vm <<EOF
       #! ${bash}/bin/sh
       ''${diskImage:+diskImage=$diskImage}
-      # GitHub Actions runners seems to not allow installing seccomp filter: https://github.com/rcambrj/nix-pi-loader/issues/1#issuecomment-2605497516
-      # Since we are running in a sandbox already, the difference between seccomp and none is minimal
-      # File handles need CAP_DAC_READ_SEARCH, which a build never has, so do not try them; and only
-      # log what might need attention, not every connect and disconnect.
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir "${storeDir}" &
-      ${virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --seccomp none --inode-file-handles=never --log-level warn --shared-dir xchg &
-
-      # Wait until virtiofsd has created these sockets to avoid race condition.
-      until [[ -e virtio-store.sock ]]; do ${coreutils}/bin/sleep 0.1; done
-      until [[ -e virtio-xchg.sock ]]; do ${coreutils}/bin/sleep 0.1; done
+      ${startVirtiofsd}
 
       ${qemuCommand}
       EOF
@@ -633,13 +639,19 @@ let
       if ! test -e "$diskImage"; then
         ${qemu}/bin/qemu-img create -b ${image}/disk-image.qcow2 -f qcow2 -F qcow2 "$diskImage"
       fi
+      diskImage=$(${coreutils}/bin/realpath "$diskImage")
       export TMPDIR=$(mktemp -d)
+      cd "$TMPDIR"
       export out=/dummy
+      export stdenv=${stdenv}
       export origBuilder=
       export origArgs=
-      mkdir $TMPDIR/xchg
-      export > $TMPDIR/xchg/saved-env
+      mkdir xchg
+      export > xchg/saved-env
       mountDisk=1
+      # virtiofs needs the guest's memory to be shared with virtiofsd.
+      QEMU_OPTS="-m 1024 -object memory-backend-memfd,id=mem,size=1024M,share=on -machine memory-backend=mem ''${QEMU_OPTS:-}"
+      ${startVirtiofsd}
       ${qemuCommandLinux}
     '';
 
