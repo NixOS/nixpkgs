@@ -463,6 +463,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     "fastsafetensors"
     "instanttensor"
 
+    "PyNvVideoCodec" # Optional dep not in nixpkgs
+    "nvtx" # Optional dep not in nixpkgs
+
     # QuACK and Cutlass DSL seem to be added only for FA4
     # which in our case handles its own deps
     "nvidia-cutlass-dsl"
