@@ -77,6 +77,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     PROTOC = "${protobuf}/bin/protoc";
     RUSTONIG_SYSTEM_LIBONIG = true;
 
+    # upstream forces openssl/vendored
+    OPENSSL_NO_VENDOR = true;
+
     TZDIR = "${tzdata}/share/zoneinfo";
 
     # needed to dynamically link rdkafka
