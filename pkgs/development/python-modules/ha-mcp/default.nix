@@ -6,7 +6,9 @@
   cryptography,
   fastmcp,
   httpx,
+  httpx2,
   packaging,
+  psutil,
   pydantic,
   pydantic-monty,
   python-dotenv,
@@ -17,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ha-mcp";
-  version = "8.4.3";
+  version = "8.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "homeassistant-ai";
     repo = "ha-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VrgMLYi8ZBoAflEqM37pP0V8/ud0/OF3bK6OVPWSrbE=";
+    hash = "sha256-dS3Opv4DNl9a3FSnWk49pe+Ft05l0RoSoet9/gpYIAA=";
   };
 
   build-system = [
@@ -37,7 +39,9 @@ buildPythonPackage (finalAttrs: {
     cryptography
     fastmcp
     httpx
+    httpx2
     packaging
+    psutil
     pydantic
     pydantic-monty
     python-dotenv
