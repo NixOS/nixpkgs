@@ -89,7 +89,7 @@ buildPythonPackage (finalAttrs: {
     in
     runCommand "certbot-with-plugins-${finalAttrs.version}"
       {
-        inherit (finalAttrs) pname version;
+        inherit (finalAttrs) pname version meta;
       }
       ''
         mkdir -p $out/bin
