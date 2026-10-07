@@ -20,6 +20,22 @@
       path = ../18;
     }
   ];
+  "lld/initialize-symbol-fields.patch" = [
+    {
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "20";
+      path = ../19;
+    }
+    {
+      after = "20";
+      before = "22";
+      path = ../20;
+    }
+  ];
   "lldb/backport-ParseTrieEntries-fixes.patch" = [
     {
       before = "22";
