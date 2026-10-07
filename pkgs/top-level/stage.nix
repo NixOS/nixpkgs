@@ -211,7 +211,7 @@ let
       n: localSystem:
       nixpkgsFun {
         inherit localSystem;
-        crossSystem = stdenv.hostPlatform.system;
+        crossSystem = stdenv.hostPlatform;
       }
     ) lib.systems.examples;
 
