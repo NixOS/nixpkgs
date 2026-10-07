@@ -157,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
       kwohlfahrt
       zainkergaye
       doronbehar
+      Mop-u
     ];
   };
 })
