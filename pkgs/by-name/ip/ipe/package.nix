@@ -3,6 +3,7 @@
   stdenv,
   makeDesktopItem,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   copyDesktopItems,
   cairo,
@@ -12,7 +13,7 @@
   libjpeg,
   libpng,
   libspiro,
-  lua5,
+  lua5_5,
   qt6Packages,
   texliveSmall,
   qhull,
@@ -33,6 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fix-gcc16-missing-include.patch";
+      url = "https://salsa.debian.org/science-team/ipe/-/raw/e6dc9db1e2d889e86bfa21a95775e778f82ae802/debian/patches/0002-include-stding.patch";
+      hash = "sha256-E5F7+qL0ZFTkfixO2+yIhNvKZKW0kltkHDfN+EcB/w8=";
+    })
+    # Backport of https://github.com/otfried/ipe/commit/4c4f13ddd70f4c1d56470a455df596b9c59ae8fd,
+    # extended to update-styles.lua
+    ./lua55-for-loop-variables.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
     copyDesktopItems
@@ -47,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libspiro
-    lua5
+    lua5_5
   ]
   ++ (with qt6Packages; [
     qtbase

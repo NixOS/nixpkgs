@@ -5,7 +5,6 @@
   makeWrapper,
   runCommand,
   stdenv,
-  writableTmpDirAsHomeHook,
 
   _4ti2,
   autoreconfHook,
@@ -196,10 +195,9 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   postInstall = ''
-    substituteInPlace "$out/bin/M2" \
-      --replace-fail "/bin/sh" "${runtimeShell}"
+    rm "$out/bin/M2"
 
-    wrapProgram "$out/bin/M2-binary" \
+    makeWrapper "$out/bin/M2-binary" "$out/bin/M2" \
       --prefix PATH : ${
         lib.makeBinPath [
           _4ti2
@@ -215,7 +213,9 @@ stdenv.mkDerivation (finalAttrs: {
           topcom
         ]
       } \
-      --prefix ${if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${
+      --prefix ${
+        if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"
+      } : $out/lib/Macaulay2/lib:${
         lib.makeLibraryPath [
           cddlib
           flint
@@ -232,6 +232,14 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix R_LIBS_SITE : ${lib.makeSearchPath "library" rWrapper.recommendedPackages}
   '';
 
+  # run engine tests only
+  checkFlags = [
+    "-C"
+    "Macaulay2/e"
+  ];
+
+  doCheck = true;
+
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/M2 --check 1
@@ -246,23 +254,21 @@ stdenv.mkDerivation (finalAttrs: {
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
-            writableTmpDirAsHomeHook
           ];
         }
         ''
-          M2 --check 2 && touch $out
+          M2 -q --check 2 && touch $out
         '';
 
     all-packages =
-      runCommand "macaulay2-all-packages-test"
+      runCommand "macaulay2-all-package-tests"
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
-            writableTmpDirAsHomeHook
           ];
         }
         ''
-          M2 --check 3 && touch $out
+          M2 -q --check 3 && touch $out
         '';
   };
 

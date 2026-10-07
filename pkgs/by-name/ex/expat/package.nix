@@ -7,7 +7,7 @@
   python3,
   perlPackages,
   haskellPackages,
-  luaPackages,
+  lua55Packages,
   ocamlPackages,
   testers,
 }:
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3.pkgs) xmltodict;
     inherit (haskellPackages) hexpat;
     inherit (perlPackages) XMLSAXExpat XMLParser;
-    inherit (luaPackages) luaexpat;
+    inherit (lua55Packages) luaexpat;
     inherit (ocamlPackages) ocaml_expat;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
