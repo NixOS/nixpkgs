@@ -8,13 +8,14 @@
   makeDesktopItem,
   ncurses,
   libtermkey,
-  lua,
+  lua5_2_compat,
   tre,
   acl,
   libselinux,
 }:
 
 let
+  lua = lua5_2_compat;
   luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
 in
 stdenv.mkDerivation rec {

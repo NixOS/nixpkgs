@@ -10,7 +10,7 @@
   libjpeg,
   libxml2,
   xz,
-  lua,
+  lua5_2_compat,
   ode,
   libGL,
   libGLU,
@@ -24,6 +24,9 @@
   libxdg_basedir,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "xmoto";
