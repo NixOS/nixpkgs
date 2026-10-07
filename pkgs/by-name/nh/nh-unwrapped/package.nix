@@ -3,6 +3,7 @@
   lib,
   rustPlatform,
   installShellFiles,
+  sqlite,
   fetchFromGitHub,
   nix-update-script,
   buildPackages,
@@ -32,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
   ];
+
+  buildInputs = [ sqlite ];
 
   # pkgs.sudo is not available on the Darwin platform, and thus breaks build
   # if added to nativeCheckInputs. We must manually disable the tests that
@@ -105,7 +108,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  env.NH_REV = finalAttrs.src.tag;
+  env = {
+    NH_REV = finalAttrs.src.tag;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
+  };
 
   meta = {
     changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.tag}/CHANGELOG.md";
