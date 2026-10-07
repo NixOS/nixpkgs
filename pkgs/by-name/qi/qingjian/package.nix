@@ -36,7 +36,7 @@ let
     inherit src;
 
     cargoLock = {
-      lockFile = "${src}/Cargo.lock";
+      lockFile = ./Cargo.lock;
       outputHashes = {
         "cosmic-text-0.19.0" = "sha256-c7DuyTTF5vkClCeGGIWBX4HAMecA+1RujvVA0fcTQRE=";
       };
@@ -65,8 +65,14 @@ let
     inherit src;
     sourceRoot = "source/apps/linux/fcitx5";
 
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ fcitx5 nlohmann_json ];
+    nativeBuildInputs = [
+      cmake
+      pkg-config
+    ];
+    buildInputs = [
+      fcitx5
+      nlohmann_json
+    ];
 
     cmakeFlags = [ "-DBUILD_TESTING=OFF" ];
   };
