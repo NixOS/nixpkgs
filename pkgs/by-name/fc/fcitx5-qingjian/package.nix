@@ -13,7 +13,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   strictDeps = true;
   __structuredAttrs = true;
   pname = "fcitx5-qingjian";

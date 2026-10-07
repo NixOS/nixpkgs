@@ -16,7 +16,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   strictDeps = true;
   __structuredAttrs = true;
   pname = "qingjian-server";
