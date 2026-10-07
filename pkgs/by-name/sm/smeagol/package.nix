@@ -2,6 +2,10 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  libz,
+  zstd,
   versionCheckHook,
   nix-update-script,
 }:
@@ -18,6 +22,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-cd8PotJPNdwpXKpuHbMQ4aJeNewDhyRvctAHimVdLS8=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
+    libz
+    zstd
+  ];
+
+  env = {
+    LIBGIT2_NO_VENDOR = "1";
+    LIBZ_SYS_STATIC = "0";
+    ZSTD_SYS_USE_PKG_CONFIG = "1";
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook
