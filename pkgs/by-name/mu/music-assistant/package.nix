@@ -21,10 +21,10 @@ let
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
       music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.213";
+        version = "1.1.216";
 
         src = oldAttrs.src.override {
-          hash = "sha256-0GTScDUoZLXgKWtwvleRZDGRRtUVPt91OG/Z5dyPMek=";
+          hash = "sha256-J6eWYzhCMT+JXtVJ8qMllCI0+OlU6c+UclT5cJc/doc=";
         };
       });
     }
@@ -78,7 +78,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.11.0b3";
+  version = "2.11.0b4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-dLIm37a//wjHDP0r2Ak/JFt2oG8ce2Na8eeAp/fHPYQ=";
+    hash = "sha256-GgC1TmU9SaefvwD8+ahNPhU+oo0J7obPtKt7ym4OR2c=";
   };
 
   patches = [
@@ -159,7 +159,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "aiosqlite"
     "cryptography"
-    "torch"
+    "zeroconf"
   ];
 
   pythonRemoveDeps = [
@@ -185,6 +185,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       chardet
       colorlog
       cryptography
+      defusedxml
       getmac
       gql
       ifaddr
@@ -238,6 +239,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ++ (lib.concatMap (provider: providerPackages.${provider} pythonPackages) [
       "acoustid_lookup"
       "airplay"
+      "alexa"
       "apple_music"
       "audible"
       "audiobookshelf"
@@ -291,6 +293,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/amplipi"
     "tests/providers/bbc_sounds"
     "tests/providers/deezer"
+    "tests/providers/genius_lyrics"
     "tests/providers/hue_entertainment"
     "tests/providers/ibroadcast"
     "tests/providers/kion_music"
