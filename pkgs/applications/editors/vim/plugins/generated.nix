@@ -20421,6 +20421,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-cooklang = buildVimPlugin {
+    pname = "vim-cooklang";
+    version = "0-unstable-2024-01-24";
+    src = fetchFromGitHub {
+      owner = "luizribeiro";
+      repo = "vim-cooklang";
+      rev = "ba334ed1668ddf82ad46beea5354aa6398093ec6";
+      hash = "sha256-vWlk7G1V4DLC0G0f3GLEG3JsvAwJ637CPocmMmFxQek=";
+    };
+    meta.homepage = "https://github.com/luizribeiro/vim-cooklang/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-cool = buildVimPlugin {
     pname = "vim-cool";
     version = "0-unstable-2025-02-19";

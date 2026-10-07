@@ -1046,37 +1046,12 @@ with pkgs;
   winbox = winbox4;
 
   ### APPLICATIONS/VERSION-MANAGEMENT
-
-  # The full-featured Git.
-  gitFull = git.override {
-    svnSupport = stdenv.buildPlatform == stdenv.hostPlatform;
-    guiSupport = true;
-    sendEmailSupport = stdenv.buildPlatform == stdenv.hostPlatform;
-    withSsh = true;
-    withLibsecret = !stdenv.hostPlatform.isDarwin;
-  };
-
-  # Git with SVN support, but without GUI.
-  gitSVN = lowPrio (git.override { svnSupport = true; });
-
-  git-doc =
-    # doc attribute is not present at least for pkgsLLVM
-    if (gitFull ? doc) then
-      lib.addMetaAttrs {
-        description = "Additional documentation for Git";
-        longDescription = ''
-          This package contains additional documentation (HTML and text files) that
-          is referenced in the man pages of Git.
-        '';
-      } gitFull.doc
-    else
-      throw "'git-doc' can't be evaluated as 'gitFull' does not expose 'doc' attribute";
-
   gitMinimal = git.override {
     withManual = false;
     osxkeychainSupport = false;
     pythonSupport = false;
     perlSupport = false;
+    rustSupport = false; # Needed for bootstrap
     withpcre2 = false;
     cargo = cargo.override { auditable = false; }; # Break `cargo-auditable` -> `fetch-cargo-vendor` -> `nix-prefetch-git` -> `gitMinimal` cycle
     curl = if stdenv.hostPlatform.isFreeBSD then curlMinimal else curl; # Needed for FreeBSD bootstrap
@@ -5389,6 +5364,7 @@ with pkgs;
     boost189
     boost190
     boost191
+    boost192
     ;
 
   boost = boost191;
@@ -7499,6 +7475,8 @@ with pkgs;
   virtualenv = with python3Packages; toPythonApplication virtualenv;
 
   virtualenv-clone = with python3Packages; toPythonApplication virtualenv-clone;
+
+  whisparr = whisparr_2;
 
   mkfontdir = mkfontscale;
   xcbproto = xcb-proto;

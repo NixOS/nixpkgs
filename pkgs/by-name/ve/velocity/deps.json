@@ -66,6 +66,7 @@
   },
   "com/squareup/okio#okio-jvm/3.6.0": {
    "jar": "sha256-Z1Q/Bzb8QirpJ+0OUEuYvF4mn9oNNQBXkzfLcT2ihBI=",
+   "module": "sha256-scIZnhwMyWnvYcu+SvLsr5sGQRvd4By69vyRNN/gToo=",
    "pom": "sha256-YbTXxRWgiU/62SX9cFJiDBQlqGQz/TURO1+rDeiQpX8="
   },
   "com/squareup/okio#okio/3.6.0": {
@@ -1206,31 +1207,31 @@
    "module": "sha256-/2oi2kAECTh1HbCuIRd+dlF9vxJqdnlvVCZye/dsEig=",
    "pom": "sha256-pWM6vVNGfOuRYi2B8umCCAh3FF4LduG3V4hxVDSIXQs="
   },
-  "org/jline#jline-native/4.3.1": {
-   "jar": "sha256-/5SrS8zDwVSURAgs4HonYMvxrU2uBOQ1CFl72AK8sjE=",
-   "pom": "sha256-GtgjRIisZV0MN6GKQgZQz5vu6ZlIrWQLxG0ERX61qR8="
+  "org/jline#jline-native/4.4.6": {
+   "jar": "sha256-lFINp0rSRTwOsbBBJWyZykGq93edKHPE4lHnJrr36VY=",
+   "pom": "sha256-7sqw9fmE2gt32/swoYZ8czPx0NXgylWdnYSkhqIsZJ4="
   },
   "org/jline#jline-parent/3.20.0": {
    "pom": "sha256-cXjGACAsS8Jux6S2IlXu829wVsrSpeYjnFdL7qXCEMo="
   },
-  "org/jline#jline-parent/4.3.1": {
-   "pom": "sha256-KE7hO/HegCVCPmekmMQ8nGkBU3zcY0jkyZx8sMd34Xw="
+  "org/jline#jline-parent/4.4.6": {
+   "pom": "sha256-zJzlerTqqqwoXe8ekK7AOwDHSYmztTgPE/ktuVNBvGk="
   },
   "org/jline#jline-reader/3.20.0": {
    "jar": "sha256-rNHJTR4iiqe3li9psh7Tqf2CjrOmPkuvkIaVTmJq8fA=",
    "pom": "sha256-2fF+3XIcAqExcgN21sB4eHgutrb6/rX/QkBKtXFD4TY="
   },
-  "org/jline#jline-terminal-jni/4.3.1": {
-   "jar": "sha256-HEhzeY82QSgnCHAT5CQZm87SnafIQh84UM/n8x8nTBw=",
-   "pom": "sha256-nppxnoPflSsnmONa8SnPK4Y0rhKgdbrF5+pSjowJfFs="
+  "org/jline#jline-terminal-ffm/4.4.6": {
+   "jar": "sha256-PGNa1RqVQb/B6cm84Q3ZUzuW0n7qHE2VX3IxJK3jcDo=",
+   "pom": "sha256-jQrdWzVMxCsVad+qCKYZRRZ9cT8DnpKLQQM1gwbElg0="
   },
   "org/jline#jline-terminal/3.20.0": {
    "jar": "sha256-EhJRcOeVUZum3IAQwHC1PHaq6StIXB43Uw5Uq13QjUM=",
    "pom": "sha256-EMo7z1F48YUH8hCmOtljeJaFM0OtHBKRoBmhFvIWpUg="
   },
-  "org/jline#jline-terminal/4.3.1": {
-   "jar": "sha256-JyknNjRx/b8vOHEL77/oZqzB7TRyBiqM7QKxZobye8w=",
-   "pom": "sha256-vwkp2Y0b/BrKJZIKT2zOOy9HSzrdl5KAyOM33dc2FRw="
+  "org/jline#jline-terminal/4.4.6": {
+   "jar": "sha256-SMkNGTo9VYl5dwcXU50RgB9PrHSxk9m2QpkUS9oAwR8=",
+   "pom": "sha256-uzVqWHnxkXySmuCzIzkHxYmu0cB7qWNXr9cGE0PgY6g="
   },
   "org/jspecify#jspecify/1.0.0": {
    "jar": "sha256-H61ua+dVd4Hk0zcp1Jrhzcj92m/kd7sMxozjUer9+6s=",

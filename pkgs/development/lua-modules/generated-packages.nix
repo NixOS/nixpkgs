@@ -651,15 +651,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "cqueues";
-      version = "20200726.52-0";
+      version = "20261006.52-0";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/cqueues-20200726.52-0.rockspec";
-          sha256 = "0w2kq9w0wda56k02rjmvmzccz6bc3mn70s9v7npjadh85i5zlhhp";
+          url = "mirror://luarocks/cqueues-20261006.52-0.rockspec";
+          sha256 = "1c8hffqawivwrb95pl6mc3j471cavkr9yrqidyigw3a2s01zdrsq";
         }).outPath;
       src = fetchurl {
-        url = "https://github.com/wahern/cqueues/archive/rel-20200726.tar.gz";
-        sha256 = "0lhd02ag3r1sxr2hx847rdjkddm04l1vf5234v5cz9bd4kfjw4cy";
+        url = "https://github.com/wahern/cqueues/archive/rel-20261006.tar.gz";
+        sha256 = "1i77z3939wk9qq7sqa781wgpzmpwrpdakc8zqykidfgh5yc4avaa";
       };
 
       disabled = lua.luaversion != "5.2";

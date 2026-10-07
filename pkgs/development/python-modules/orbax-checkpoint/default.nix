@@ -43,7 +43,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "orbax-checkpoint";
-  version = "0.12.6";
+  version = "0.12.7";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -51,7 +51,7 @@ buildPythonPackage (finalAttrs: {
     owner = "google";
     repo = "orbax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Dyi3a+ecGCu0I1tDIvqmjuGsZcUjnXiKhxggS6jsE3c=";
+    hash = "sha256-19JYJikTaQ/UKEB7IAkFam2/zsgfgV5H9SU6A0ysqsQ=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/checkpoint";

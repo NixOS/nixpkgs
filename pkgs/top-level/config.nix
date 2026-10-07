@@ -354,7 +354,7 @@ let
       description = ''
         Whether to enable the cuda_compat package which provides user mode backports of newer kernel
         mode driver functionality.
-        Ony enable this if your host driver is older than the driver provided by the default
+        Only enable this if your host driver is older than the driver provided by the default
         cudaPackages package set.
       '';
     };

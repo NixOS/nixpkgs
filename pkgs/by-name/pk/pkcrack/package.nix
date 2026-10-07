@@ -42,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Breaking PkZip-encryption";
     homepage = "https://www.unix-ag.uni-kl.de/~conrad/krypto/pkcrack.html";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "pkcrack";
       fullName = "PkCrack Non Commercial License";
       url = "https://www.unix-ag.uni-kl.de/~conrad/krypto/pkcrack/pkcrack-readme.html";
       free = false;

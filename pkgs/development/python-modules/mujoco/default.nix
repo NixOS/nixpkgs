@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   # in the project's CI.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-91oHMfb9gpOHobqcmniR7+xCkABRemw/mvmPQXNdO28=";
+    hash = "sha256-JqgL8mwxzFkiGrIHT5NkmnvuDbh/hkYgKZXcIGWiHn4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -93,6 +93,11 @@ buildPythonPackage (finalAttrs: {
       # cmake/third_party_deps/lodepng.cmake and uses fetchpackage (same-line args)
       + ''
         ${lib.getExe perl} -0777 -i -pe "s/GIT_REPO[^\n]*\n[^\n]*GIT_TAG[^\n]*\n//g" mujoco/cmake/third_party_deps/lodepng.cmake
+      ''
+      # In 3.15.0, FindOrFetch switched to a git-based DOWNLOAD_COMMAND which would wipe the
+      # prefilled sources
+      + ''
+        ${lib.getExe perl} -0777 -i -pe "s/ *find_package\(Git REQUIRED\)\n//; s/ *DOWNLOAD_COMMAND\n(?:[^\n]*\n)*?[^\n]*submodule update[^\n]*\n//" mujoco/cmake/FindOrFetch.cmake
 
         build="build/temp.${platform}-cpython-${pythonVersionMajorMinor}"
         mkdir -p $build/_deps

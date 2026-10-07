@@ -1,5 +1,5 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 54aadcca..070057a3 100644
+index 21a3181a..250918de 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -210,7 +210,7 @@ target_link_libraries(
@@ -11,8 +11,26 @@ index 54aadcca..070057a3 100644
  )
  
  if(NOT EMSCRIPTEN)
+diff --git a/cmake/FindOrFetch.cmake b/cmake/FindOrFetch.cmake
+index 12ace957..c41c6776 100644
+--- a/cmake/FindOrFetch.cmake
++++ b/cmake/FindOrFetch.cmake
+@@ -138,13 +138,6 @@ if(NOT COMMAND FindOrFetch)
+           message(STATUS "mujoco::FindOrFetch: Using FetchContent for ${_ARGS_LIBRARY_NAME}: ${_ARGS_GIT_REPO}")
+           FetchContent_Declare(
+             ${_ARGS_LIBRARY_NAME}
+-            DOWNLOAD_COMMAND
+-              ${CMAKE_COMMAND} -E rm -rf <SOURCE_DIR>
+-              COMMAND ${GIT_EXECUTABLE} init <SOURCE_DIR>
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> remote add origin ${_ARGS_GIT_REPO}
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> fetch --depth 1 origin ${_ARGS_GIT_TAG}
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> -c advice.detachedHead=false checkout FETCH_HEAD
+-              COMMAND ${GIT_EXECUTABLE} -C <SOURCE_DIR> submodule update --init --recursive --depth 1
+             PATCH_COMMAND ${_WRAPPED_PATCH_COMMAND}
+             UPDATE_DISCONNECTED TRUE
+           )
 diff --git a/cmake/MujocoDependencies.cmake b/cmake/MujocoDependencies.cmake
-index 6e205a7d..815d1c90 100644
+index cc602ace..2760cb23 100644
 --- a/cmake/MujocoDependencies.cmake
 +++ b/cmake/MujocoDependencies.cmake
 @@ -88,8 +88,6 @@ include(third_party_deps/lodepng)
@@ -120,7 +138,7 @@ index 6e205a7d..815d1c90 100644
  
      FetchContent_GetProperties(Eigen3)
 diff --git a/cmake/third_party_deps/lodepng.cmake b/cmake/third_party_deps/lodepng.cmake
-index b604f052..9f4d531d 100644
+index c6e4c384..a6c6331b 100644
 --- a/cmake/third_party_deps/lodepng.cmake
 +++ b/cmake/third_party_deps/lodepng.cmake
 @@ -22,7 +22,5 @@ include(FindOrFetch)
@@ -180,10 +198,10 @@ index 666a3725..d89bb499 100644
    gtest_add_tests(TARGET tuple_tools_test SOURCES tuple_tools_test.cc)
  endif()
 diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-index f1bbba61..4c3ee22d 100644
+index df7974a1..dcbe56bb 100644
 --- a/test/CMakeLists.txt
 +++ b/test/CMakeLists.txt
-@@ -98,8 +98,8 @@ target_link_libraries(
+@@ -105,8 +105,8 @@ target_link_libraries(
           absl::synchronization
           absl::flat_hash_map
           absl::flat_hash_set

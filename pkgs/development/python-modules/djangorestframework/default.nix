@@ -63,6 +63,11 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ finalAttrs.passthru.optional-dependencies.complete;
 
+  disabledTestPaths = lib.optionals (lib.versionAtLeast django.version "6") [
+    # AssertionError: assert '�\\u0125\\u01a6.txt' == 'ÀĥƦ.txt'"
+    "tests/test_parsers.py::TestFileUploadParser::test_get_encoded_filename"
+  ];
+
   pythonImportsCheck = [ "rest_framework" ];
 
   meta = {

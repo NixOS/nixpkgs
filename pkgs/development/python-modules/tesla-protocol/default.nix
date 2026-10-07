@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "tesla-protocol";
-  version = "3.0.0";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Teslemetry";
     repo = "tesla-protocol";
     tag = "@teslemetry/tesla-protocol@${finalAttrs.version}";
-    hash = "sha256-q5GDWaxgxVH9ZUiu0dKVcKJUo7A/pK+YtVvMrM6Ys88=";
+    hash = "sha256-kYLSBSxqAd0Gj9ZzYgCZkfN0LGdde/zLqX+3nbHV9+8=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/python";

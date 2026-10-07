@@ -11,7 +11,7 @@
   libGLU,
   libGL,
   pkg-config,
-  ttf_bitstream_vera,
+  ttf-bitstream-vera,
   nix-update-script,
 }:
 let
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace common.mak \
       --replace /usr/local "$out" \
-      --replace /usr/share/fonts/truetype/ttf-bitstream-vera "${ttf_bitstream_vera}/share/fonts/truetype"
+      --replace /usr/share/fonts/truetype/ttf-bitstream-vera "${ttf-bitstream-vera}/share/fonts/truetype"
   '';
 
   nativeBuildInputs = [ pkg-config ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     lv2
     libGLU
     libGL
-    ttf_bitstream_vera
+    ttf-bitstream-vera
   ];
 
   doInstallCheck = true;

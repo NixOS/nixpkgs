@@ -1443,6 +1443,12 @@ lib.mapAttrs mkLicense (
       redistributable = true; # Definitely redistributable though, it's an AGPL derivative
     };
 
+    stalwart = {
+      fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
+      url = "https://github.com/stalwartlabs/cli/blob/main/LICENSES/LicenseRef-SEL.txt";
+      free = false;
+    };
+
     stk = {
       spdxId = "MIT-STK";
       fullName = "MIT-STK License";

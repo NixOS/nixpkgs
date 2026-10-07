@@ -12313,7 +12313,7 @@ self: super: with self; {
 
   numkong = callPackage ../development/python-modules/numkong { };
 
-  numpy = numpy_2;
+  numpy = callPackage ../development/python-modules/numpy { };
 
   numpy-financial = callPackage ../development/python-modules/numpy-financial { };
 
@@ -12324,10 +12324,6 @@ self: super: with self; {
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
   numpy-typing-compat = callPackage ../development/python-modules/numpy-typing-compat { };
-
-  numpy_1 = callPackage ../development/python-modules/numpy/1.nix { };
-
-  numpy_2 = callPackage ../development/python-modules/numpy/2.nix { };
 
   numpydoc = callPackage ../development/python-modules/numpydoc { };
 
@@ -21334,6 +21330,8 @@ self: super: with self; {
   tunigo = callPackage ../development/python-modules/tunigo { };
 
   tunit = callPackage ../development/python-modules/tunit { };
+
+  turbohtml = callPackage ../development/python-modules/turbohtml { };
 
   turnt = callPackage ../development/python-modules/turnt { };
 
