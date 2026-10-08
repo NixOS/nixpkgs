@@ -126,8 +126,10 @@ let
         network = lib.mkOption {
           type = lib.types.nullOr (
             lib.types.enum [
-              "holesky"
+              "dev"
+              "hoodi"
               "sepolia"
+              "mainnet"
             ]
           );
           default = null;
