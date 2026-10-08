@@ -16,7 +16,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "validate-pyproject";
-  version = "0.25";
+  version = "0.26";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -24,8 +24,8 @@ buildPythonPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "abravalheri";
     repo = "validate-pyproject";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-byxghU2x8at4tAAOzIzlnnsMbvzer//0R0DNiIE4Dpk=";
+    tag = finalAttrs.version;
+    hash = "sha256-D56oopd55qV1yMarAXQ7OWXau+zevGdCBsOQt8fGFBU=";
   };
 
   build-system = [

@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # By downloading and using the software, you agree to fully
       # comply with the terms and conditions of the NVIDIA Software
       # License Agreement.
-      _cuda.lib.licenses.math_sdk_sla
+      lib.licenses.nvidiaMath_sdk_sla
 
       # Some of the libmathdx routines were written by or derived
       # from code written by Meta Platforms, Inc. and affiliates and

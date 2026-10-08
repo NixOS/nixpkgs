@@ -24,6 +24,8 @@ let
   repo = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
   version = "7.75.0";
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
 
   src = fetchFromGitHub {
     inherit owner repo;
@@ -62,7 +64,7 @@ buildGoModule rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemdLibs ];
+  buildInputs = [ rtloader ] ++ lib.optionals withSystemd [ systemdLibs' ];
 
   proxyVendor = true;
 
@@ -114,7 +116,7 @@ buildGoModule rec {
       --set PYTHONPATH "$out/${python.sitePackages}"''
   + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${
      lib.makeLibraryPath [
-       (lib.getLib systemdLibs)
+       (lib.getLib systemdLibs')
        rtloader
      ]
    }";

@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  sqlite,
   nix-update-script,
   versionCheckHook,
 }:
@@ -20,8 +21,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-m2jRDMjZTJHKbe0Ep76SFT3tV1xytThvaRAt6A0CF3A=";
 
+  buildInputs = [ sqlite ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  env.LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
 
   passthru.updateScript = nix-update-script { };
 

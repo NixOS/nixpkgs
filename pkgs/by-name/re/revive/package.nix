@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "revive";
-  version = "1.17.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "mgechev";
     repo = "revive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RbWpGQ5rGkp2yBZ42if3hYyelWEZg+hlelw3WQ1VFRg=";
+    hash = "sha256-3s12X7DhTSXzipkvBRlpMuAitS+mcx2GiKTd0drYapQ=";
 
     postFetch = ''
       # The repository currently has a 'v1' and 'V1' directory.
@@ -24,7 +24,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-467AG0QMO565IBaUyZnqpUbLW6/J87x2b7zfbWqHecM=";
+  vendorHash = "sha256-zZWhcj8ZS0zUg3X43F+Umcw8NlUKrm/CXAedKchpuYE=";
 
   # Only build the revive package at the root.
   subPackages = [ "." ];

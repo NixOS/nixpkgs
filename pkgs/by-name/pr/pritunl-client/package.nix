@@ -21,12 +21,12 @@
   withWireguard ? stdenv.hostPlatform.isLinux,
 }:
 let
-  version = "1.3.4275.94";
+  version = "1.4.4752.50";
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client";
     rev = version;
-    sha256 = "sha256-a1arRI4qQy5niKV8JAyusAjheMa/LtEXPZGhngsH+TU=";
+    sha256 = "sha256-BJWm+nuqt9+wqmFsYqJap9vHvMQIusCnH4k8UzBjfbs=";
   };
 
   cli = buildGoModule {
@@ -34,7 +34,7 @@ let
     inherit version src;
 
     modRoot = "cli";
-    vendorHash = "sha256-xozdrNKBgrrCZ5WYHGWKOuuGrEhx/VzOKLZTGq3scoo=";
+    vendorHash = "sha256-2QR6WDg/y4fScK5Z/Z+M3H8G5Rlwi2RlrkhNBv6mYM0=";
 
     postInstall = ''
       mv $out/bin/cli $out/bin/pritunl-client
@@ -47,7 +47,7 @@ let
     inherit version src;
 
     modRoot = "service";
-    vendorHash = "sha256-3dgBiCqWj+nwWn9mFARBKIpgjn2aJYvVUrqMIzhToQs=";
+    vendorHash = "sha256-Zdu3Sx/YIEPOohVgkRaT2cnLmY+96Lu8kl1ZC91e/xU=";
 
     nativeBuildInputs = [ makeWrapper ];
 

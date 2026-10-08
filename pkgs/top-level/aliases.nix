@@ -826,7 +826,6 @@ mapAliases {
   falcon = throw "'falcon' has been removed as it is unmaintained and depends on pcre, which is deprecated"; # Added 2026-06-16
   fancontrol-gui = throw "'fancontrol-gui' has been removed due to outdated KF5 dependencies"; # Added 2026-05-01
   fancy-motd = throw "'fancy-motd' has been removed because upstream archived the project in September 2025."; # Added 2026-09-02
-  fasd = throw "'fasd' has been removed because it was archived upstream"; # Added 2026-08-15
   fast-cli = throw "'fast-cli' has been removed because it was unmaintainable in nixpkgs"; # Added 2025-11-17
   fastfetchMinimal = warnAlias "'fastfetchMinimal' has been renamed to 'fastfetch-unwrapped'" fastfetch-unwrapped; # Added 2026-05-18
   fastJson = warnAlias "'fastJson' has been renamed to 'libfastjson'" libfastjson; # Added 2026-02-08
@@ -1517,9 +1516,9 @@ mapAliases {
   linux-rt_latest = throw "linux-rt_latest has been removed due to lack of maintenance"; # Added 2026-03-24
   linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-26
   linux_5_4_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
-  linux_5_10 = linuxKernel.kernels.linux_5_10;
+  linux_5_10 = throw "linux 5.10 was removed because it will reach its end of life within 26.11"; # Added 2026-10-05
   linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
-  linux_5_15 = linuxKernel.kernels.linux_5_15;
+  linux_5_15 = throw "linux 5.15 was removed because it will reach its end of life within 26.11"; # Added 2026-10-05
   linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
   linux_6_1 = linuxKernel.kernels.linux_6_1;
   linux_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
@@ -1554,9 +1553,9 @@ mapAliases {
   linuxPackages-rt_latest = throw "linuxPackages-rt_latest has been removed due to lack of maintenance"; # Added 2026-03-24
   linuxPackages_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-26
   linuxPackages_5_4_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
-  linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
+  linuxPackages_5_10 = throw "linux 5.10 was removed because it will reach its end of life within 26.11"; # Added 2025-10-05
   linuxPackages_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
-  linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
+  linuxPackages_5_15 = throw "linux 5.15 was removed because it will reach its end of life within 26.11"; # Added 2025-10-05
   linuxPackages_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
   linuxPackages_6_1 = linuxKernel.packages.linux_6_1;
   linuxPackages_6_1_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10

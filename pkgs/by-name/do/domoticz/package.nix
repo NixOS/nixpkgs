@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "domoticz";
-  version = "2026.3";
+  version = "2026.4";
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = "domoticz";
     tag = finalAttrs.version;
-    hash = "sha256-ATz5SZLGOX7+sLiX2dV43gJfVcSN0PUIwtQWPxBJDXY=";
+    hash = "sha256-zuZI/2VD5nDg2nK8ivqMHXEDLQTcSONCVOI+KCN19B4=";
     fetchSubmodules = true;
   };
 

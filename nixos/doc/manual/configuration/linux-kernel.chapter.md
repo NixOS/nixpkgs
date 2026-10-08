@@ -50,7 +50,7 @@ instance, to enable support for the kernel debugger KGDB:
   nixpkgs.config.packageOverrides =
     pkgs:
     pkgs.lib.recursiveUpdate pkgs {
-      linuxKernel.kernels.linux_5_10 = pkgs.linuxKernel.kernels.linux_5_10.override {
+      linuxKernel.kernels.linux_6_18 = pkgs.linuxKernel.kernels.linux_6_18.override {
         extraConfig = ''
           KGDB y
         '';
