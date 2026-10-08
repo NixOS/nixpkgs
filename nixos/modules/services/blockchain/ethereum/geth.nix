@@ -215,7 +215,6 @@ in
                     port
                     maxpeers
                     ;
-                  nousb = true;
                   ipcdisable = true;
                   datadir = dataDir;
                   ${cfg.network} = true;
