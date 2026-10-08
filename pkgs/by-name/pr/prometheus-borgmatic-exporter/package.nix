@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication (finallAttrs: {
   version = "0.5.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "maxim-mityutko";
     repo = "borgmatic-exporter";
