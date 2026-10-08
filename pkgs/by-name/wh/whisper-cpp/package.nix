@@ -9,7 +9,7 @@
   wget,
   which,
   ffmpeg-headless,
-  autoAddDriverRunpath,
+  llama-cpp,
   makeWrapper,
   nix-update-script,
 
@@ -22,12 +22,8 @@
 
   rocmSupport ? config.rocmSupport,
   rocmPackages ? { },
-  rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets,
 
   vulkanSupport ? false,
-  shaderc,
-  vulkan-headers,
-  vulkan-loader,
 
   withSDL ? true,
 
@@ -45,7 +41,6 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
   inherit (lib)
     cmakeBool
-    cmakeFeature
     optional
     optionals
     ;
@@ -54,40 +49,33 @@ let
     isStatic
     isLinux
     isAarch64
-    isx86
     ;
 
-  cudaBuildInputs = with cudaPackages; [
-    cccl # <nv/target>
-
-    # A temporary hack for reducing the closure size, remove once cudaPackages
-    # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
-    cuda_cudart
-    libcublas
-  ];
-
-  rocmBuildInputs = with rocmPackages; [
-    clr
-    hipblas
-    rocblas
-  ];
-
-  vulkanBuildInputs = [
-    shaderc
-    vulkan-headers
-    vulkan-loader
-  ];
+  # whisper-talk-llama needs llama.cpp, and upstream only supports the system
+  # one together with its ggml (WHISPER_USE_SYSTEM_LLAMA forces
+  # WHISPER_USE_SYSTEM_GGML). The compute backends therefore come from
+  # llama-cpp and the acceleration options are passed on to it.
+  llama-cpp' = llama-cpp.override {
+    inherit
+      cudaSupport
+      cudaPackages
+      rocmSupport
+      rocmPackages
+      vulkanSupport
+      metalSupport
+      ;
+  };
 
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.9.2";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tW3UkERd/4PLpjSObBkZVqJPzue70oGeLDNiQDTDwSU=";
+    hash = "sha256-Qqqpt+pvCQwSbyaBr1bdb7q+3LbELTcloHdiSikGPc4=";
   };
 
   # The upstream download script tries to download the models to the
@@ -102,57 +90,25 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ninja
     which
     makeWrapper
-  ]
-  ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    autoAddDriverRunpath
   ];
 
-  buildInputs =
-    optional withSDL SDL2
-    ++ optional withFFmpegSupport ffmpeg-headless
-    ++ optionals cudaSupport cudaBuildInputs
-    ++ optionals rocmSupport rocmBuildInputs
-    ++ optionals vulkanSupport vulkanBuildInputs;
+  buildInputs = optional withSDL SDL2 ++ optional withFFmpegSupport ffmpeg-headless;
+
+  # whisper.h includes ggml.h and whisper.pc links to libggml.
+  propagatedBuildInputs = [ llama-cpp' ];
 
   cmakeFlags = [
     (cmakeBool "WHISPER_BUILD_EXAMPLES" true)
-    (cmakeBool "GGML_CUDA" cudaSupport)
-    (cmakeBool "GGML_HIP" rocmSupport)
-    (cmakeBool "GGML_VULKAN" vulkanSupport)
+    (cmakeBool "WHISPER_USE_SYSTEM_LLAMA" true)
     (cmakeBool "WHISPER_SDL2" withSDL)
-    (cmakeBool "GGML_LTO" true)
-    (cmakeBool "GGML_NATIVE" false)
     (cmakeBool "BUILD_SHARED_LIBS" (!isStatic))
   ]
   ++ optionals isLinux [
     (cmakeBool "WHISPER_COMMON_FFMPEG" withFFmpegSupport)
   ]
-  ++ optionals (isx86 && !isStatic) [
-    (cmakeBool "GGML_BACKEND_DL" true)
-    (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
-    (cmakeFeature "GGML_BACKEND_DIR" "${placeholder "out"}/lib")
-  ]
-  ++ optionals cudaSupport [
-    (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
-  ]
-  ++ optionals rocmSupport [
-    (cmakeFeature "CMAKE_C_COMPILER" "hipcc")
-    (cmakeFeature "CMAKE_CXX_COMPILER" "hipcc")
-
-    # Build all targets supported by rocBLAS. When updating search for TARGET_LIST_ROCM
-    # in https://github.com/ROCmSoftwarePlatform/rocBLAS/blob/develop/CMakeLists.txt
-    # and select the line that matches the current nixpkgs version of rocBLAS.
-    (cmakeFeature "AMDGPU_TARGETS" rocmGpuTargets)
-  ]
   ++ optionals coreMLSupport [
     (cmakeBool "WHISPER_COREML" true)
     (cmakeBool "WHISPER_COREML_ALLOW_FALLBACK" true)
-  ]
-  ++ optionals metalSupport [
-    (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
-    (cmakeBool "GGML_METAL" true)
-    (cmakeBool "GGML_METAL_EMBED_LIBRARY" true)
   ];
 
   postInstall = ''
@@ -165,8 +121,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/whisper-server" \
       --prefix PATH : ${lib.makeBinPath [ ffmpeg-headless ]}
   '';
-
-  requiredSystemFeatures = optionals rocmSupport [ "big-parallel" ]; # rocmSupport multiplies build time by the number of GPU targets, which takes arround 30 minutes on a 16-cores system to build
 
   # libcuda.so is provided by the driver at runtime and is not available in the sandbox
   # /nix/store/...-whisper-cpp-1.8.3/bin/whisper-cli: error while loading shared libraries: libcuda.so.1: cannot open shared object file: No such file or directory

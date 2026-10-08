@@ -10,16 +10,18 @@
   pandas,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "numpy-groupies";
-  version = "0.11.3";
+  version = "0.12.3";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ml31415";
     repo = "numpy-groupies";
-    tag = "v${version}";
-    hash = "sha256-pg9hOtIgS8pB/Y9Xqto9Omsdg8TxaA5ZGE1Qh1DCceU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-18BarAUWq2ith7nB/o9oqi7zCH5pRY2nSY9go7I2AiA=";
   };
 
   build-system = [
@@ -39,9 +41,9 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/ml31415/numpy-groupies";
-    changelog = "https://github.com/ml31415/numpy-groupies/releases/tag/${src.tag}";
+    changelog = "https://github.com/ml31415/numpy-groupies/releases/tag/${finalAttrs.version}";
     description = "Optimised tools for group-indexing operations: aggregated sum and more";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ berquist ];
   };
-}
+})

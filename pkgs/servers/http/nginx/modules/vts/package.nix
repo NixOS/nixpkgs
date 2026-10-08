@@ -15,6 +15,10 @@ mkNginxPlugin (finalAttrs: {
     hash = "sha256-5Cwjy3vrhyBohsroSB43qMvxZjIJtP/QHSK5QWnplzw=";
   };
 
+  passthru = {
+    dynamic = true;
+  };
+
   meta = {
     description = "Virtual host traffic status module";
     homepage = "https://github.com/vozlt/nginx-module-vts";

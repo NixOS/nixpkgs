@@ -37,6 +37,6 @@ buildRedist (finalAttrs: {
     changelog = "https://docs.nvidia.com/cuda/cublasmp/release_notes";
 
     maintainers = [ lib.maintainers.sepiabrown ];
-    license = _cuda.lib.licenses.cusparse_lt;
+    license = lib.licenses.nvidiaCusparse_lt;
   };
 })

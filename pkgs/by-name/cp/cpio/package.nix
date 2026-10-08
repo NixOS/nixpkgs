@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.gnu.org/software/cpio/";
     description = "Program to create or extract from cpio archives";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raboof ];
     platforms = lib.platforms.all;
     priority = 6; # resolves collision with gnutar's "libexec/rmt"

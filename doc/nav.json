@@ -2,601 +2,780 @@
   "open": [],
   "items": [
     {
+      "id": "preface",
       "file": "preface.chapter.md"
     },
     {
-      "label": "Getting started",
       "id": "getting-started",
+      "label": "Getting started",
       "children": [
         {
+          "id": "index",
           "file": "getting-started/getting-started.part.md"
         },
         {
+          "id": "first-package",
           "file": "getting-started/first-package.chapter.md"
         },
         {
+          "id": "dev-environments",
           "file": "getting-started/dev-environments.md"
         }
       ]
     },
     {
-      "label": "Guides",
       "id": "guides",
+      "label": "Guides",
       "children": [
         {
+          "id": "using-nixpkgs",
           "file": "using-nixpkgs.md"
         },
         {
+          "id": "channels",
           "file": "channels.chapter.md"
         },
         {
+          "id": "platform-support",
           "file": "using/platform-support.chapter.md"
         },
         {
+          "id": "configuration",
           "file": "using/configuration.chapter.md"
         },
         {
+          "id": "overlays",
           "file": "using/overlays.chapter.md"
         },
         {
+          "id": "overrides",
           "file": "using/overrides.chapter.md"
         },
         {
+          "id": "stdenv",
           "label": "Standard environment",
-          "id": "part-stdenv",
           "children": [
             {
+              "id": "index",
               "file": "stdenv.md"
             },
             {
+              "id": "stdenv",
               "file": "stdenv/stdenv.chapter.md"
             },
             {
+              "id": "meta",
               "file": "stdenv/meta.chapter.md"
             },
             {
+              "id": "passthru",
               "file": "stdenv/passthru.chapter.md"
             },
             {
+              "id": "multiple-output",
               "file": "stdenv/multiple-output.chapter.md"
             },
             {
+              "id": "cross-compilation",
               "file": "stdenv/cross-compilation.chapter.md"
             },
             {
+              "id": "platform-notes",
               "file": "stdenv/platform-notes.chapter.md"
             }
           ]
         },
         {
+          "id": "languages",
           "label": "Languages and frameworks",
-          "id": "chap-language-support",
           "children": [
             {
+              "id": "index",
               "file": "languages-frameworks/index.md"
             },
             {
+              "id": "agda",
               "file": "languages-frameworks/agda.section.md"
             },
             {
+              "id": "android",
               "file": "languages-frameworks/android.section.md"
             },
             {
+              "id": "astal",
               "file": "languages-frameworks/astal.section.md"
             },
             {
+              "id": "beam",
               "file": "languages-frameworks/beam.section.md"
             },
             {
+              "id": "chicken",
               "file": "languages-frameworks/chicken.section.md"
             },
             {
+              "id": "cosmic",
               "file": "languages-frameworks/cosmic.section.md"
             },
             {
+              "id": "crystal",
               "file": "languages-frameworks/crystal.section.md"
             },
             {
+              "id": "cuda",
               "file": "languages-frameworks/cuda.section.md"
             },
             {
+              "id": "cuelang",
               "file": "languages-frameworks/cuelang.section.md"
             },
             {
+              "id": "dart",
               "file": "languages-frameworks/dart.section.md"
             },
             {
+              "id": "dhall",
               "file": "languages-frameworks/dhall.section.md"
             },
             {
+              "id": "dlang",
               "file": "languages-frameworks/dlang.section.md"
             },
             {
+              "id": "dotnet",
               "file": "languages-frameworks/dotnet.section.md"
             },
             {
+              "id": "emscripten",
               "file": "languages-frameworks/emscripten.section.md"
             },
             {
+              "id": "factor",
               "file": "languages-frameworks/factor.section.md"
             },
             {
+              "id": "gnome",
               "file": "languages-frameworks/gnome.section.md"
             },
             {
+              "id": "go",
               "file": "languages-frameworks/go.section.md"
             },
             {
+              "id": "gradle",
               "file": "languages-frameworks/gradle.section.md"
             },
             {
+              "id": "hare",
               "file": "languages-frameworks/hare.section.md"
             },
             {
+              "id": "haskell",
               "file": "languages-frameworks/haskell.section.md"
             },
             {
+              "id": "hy",
               "file": "languages-frameworks/hy.section.md"
             },
             {
+              "id": "idris",
               "file": "languages-frameworks/idris.section.md"
             },
             {
+              "id": "idris2",
               "file": "languages-frameworks/idris2.section.md"
             },
             {
+              "id": "ios",
               "file": "languages-frameworks/ios.section.md"
             },
             {
+              "id": "java",
               "file": "languages-frameworks/java.section.md"
             },
             {
+              "id": "javascript",
               "file": "languages-frameworks/javascript.section.md"
             },
             {
+              "id": "julia",
               "file": "languages-frameworks/julia.section.md"
             },
             {
+              "id": "lean4",
               "file": "languages-frameworks/lean4.section.md"
             },
             {
+              "id": "lisp",
               "file": "languages-frameworks/lisp.section.md"
             },
             {
+              "id": "lua",
               "file": "languages-frameworks/lua.section.md"
             },
             {
+              "id": "maven",
               "file": "languages-frameworks/maven.section.md"
             },
             {
+              "id": "nim",
               "file": "languages-frameworks/nim.section.md"
             },
             {
+              "id": "ocaml",
               "file": "languages-frameworks/ocaml.section.md"
             },
             {
+              "id": "octave",
               "file": "languages-frameworks/octave.section.md"
             },
             {
+              "id": "perl",
               "file": "languages-frameworks/perl.section.md"
             },
             {
+              "id": "php",
               "file": "languages-frameworks/php.section.md"
             },
             {
+              "id": "pkg-config",
               "file": "languages-frameworks/pkg-config.section.md"
             },
             {
+              "id": "python",
               "file": "languages-frameworks/python.section.md"
             },
             {
+              "id": "qt",
               "file": "languages-frameworks/qt.section.md"
             },
             {
+              "id": "r",
               "file": "languages-frameworks/r.section.md"
             },
             {
+              "id": "rocq",
               "file": "languages-frameworks/rocq.section.md"
             },
             {
+              "id": "ruby",
               "file": "languages-frameworks/ruby.section.md"
             },
             {
+              "id": "rust",
               "file": "languages-frameworks/rust.section.md"
             },
             {
+              "id": "scheme",
               "file": "languages-frameworks/scheme.section.md"
             },
             {
+              "id": "swift",
               "file": "languages-frameworks/swift.section.md"
             },
             {
+              "id": "tcl",
               "file": "languages-frameworks/tcl.section.md"
             },
             {
+              "id": "texlive",
               "file": "languages-frameworks/texlive.section.md"
             },
             {
+              "id": "typst",
               "file": "languages-frameworks/typst.section.md"
             },
             {
+              "id": "vim",
               "file": "languages-frameworks/vim.section.md"
             },
             {
+              "id": "neovim",
               "file": "languages-frameworks/neovim.section.md"
             }
           ]
         },
         {
+          "id": "toolchains",
           "label": "Toolchains",
-          "id": "part-toolchains",
           "children": [
             {
+              "id": "index",
               "file": "toolchains.md"
             },
             {
+              "id": "llvm",
               "file": "toolchains/llvm.chapter.md"
             }
           ]
         },
         {
+          "id": "build-helpers",
           "label": "Build helpers",
-          "id": "part-builders",
           "children": [
             {
+              "id": "index",
               "file": "build-helpers.md"
             },
             {
+              "id": "fixed-point-arguments",
               "file": "build-helpers/fixed-point-arguments.chapter.md"
             },
             {
+              "id": "fetchers",
               "file": "build-helpers/fetchers.chapter.md"
             },
             {
+              "id": "trivial-build-helpers",
               "file": "build-helpers/trivial-build-helpers.chapter.md"
             },
             {
+              "id": "testers",
               "file": "build-helpers/testers.chapter.md"
             },
             {
+              "id": "dev-shell-tools",
               "file": "build-helpers/dev-shell-tools.chapter.md"
             },
             {
+              "id": "special",
               "label": "Special build helpers",
-              "id": "chap-special",
               "children": [
                 {
+                  "id": "index",
                   "file": "build-helpers/special.md"
                 },
                 {
+                  "id": "buildenv",
                   "file": "build-helpers/special/buildenv.section.md"
                 },
                 {
+                  "id": "fakenss",
                   "file": "build-helpers/special/fakenss.section.md"
                 },
                 {
+                  "id": "fhs-environments",
                   "file": "build-helpers/special/fhs-environments.section.md"
                 },
                 {
+                  "id": "makesetuphook",
                   "file": "build-helpers/special/makesetuphook.section.md"
                 },
                 {
+                  "id": "mkshell",
                   "file": "build-helpers/special/mkshell.section.md"
                 },
                 {
+                  "id": "vm-tools",
                   "file": "build-helpers/special/vm-tools.section.md"
                 },
                 {
+                  "id": "checkpoint-build",
                   "file": "build-helpers/special/checkpoint-build.section.md"
                 }
               ]
             },
             {
+              "id": "images",
               "label": "Images",
-              "id": "chap-images",
               "children": [
                 {
+                  "id": "index",
                   "file": "build-helpers/images.md"
                 },
                 {
+                  "id": "appimagetools",
                   "file": "build-helpers/images/appimagetools.section.md"
                 },
                 {
+                  "id": "dockertools",
                   "file": "build-helpers/images/dockertools.section.md"
                 },
                 {
+                  "id": "ocitools",
                   "file": "build-helpers/images/ocitools.section.md"
                 },
                 {
+                  "id": "portableservice",
                   "file": "build-helpers/images/portableservice.section.md"
                 },
                 {
+                  "id": "makediskimage",
                   "file": "build-helpers/images/makediskimage.section.md"
                 },
                 {
+                  "id": "binarycache",
                   "file": "build-helpers/images/binarycache.section.md"
                 }
               ]
             },
             {
+              "id": "hooks",
               "label": "Hooks reference",
-              "id": "chap-hooks",
               "children": [
                 {
+                  "id": "index",
                   "file": "hooks/index.md"
                 },
                 {
+                  "id": "autoconf",
                   "file": "hooks/autoconf.section.md"
                 },
                 {
+                  "id": "automake",
                   "file": "hooks/automake.section.md"
                 },
                 {
+                  "id": "autopatchcil",
                   "file": "hooks/autopatchcil.section.md"
                 },
                 {
+                  "id": "autopatchelf",
                   "file": "hooks/autopatchelf.section.md"
                 },
                 {
+                  "id": "aws-c-common",
                   "file": "hooks/aws-c-common.section.md"
                 },
                 {
+                  "id": "bmake",
                   "file": "hooks/bmake.section.md"
                 },
                 {
+                  "id": "breakpoint",
                   "file": "hooks/breakpoint.section.md"
                 },
                 {
+                  "id": "cernlib",
                   "file": "hooks/cernlib.section.md"
                 },
                 {
+                  "id": "check-phase-thread-limit-hook",
                   "file": "hooks/check-phase-thread-limit-hook.section.md"
                 },
                 {
+                  "id": "cmake",
                   "file": "hooks/cmake.section.md"
                 },
                 {
+                  "id": "desktop-file-utils",
                   "file": "hooks/desktop-file-utils.section.md"
                 },
                 {
+                  "id": "gdk-pixbuf",
                   "file": "hooks/gdk-pixbuf.section.md"
                 },
                 {
+                  "id": "gnome",
                   "file": "hooks/gnome.section.md"
                 },
                 {
+                  "id": "guileimportscheckhook",
                   "file": "hooks/guileImportsCheckHook.section.md"
                 },
                 {
+                  "id": "haredo",
                   "file": "hooks/haredo.section.md"
                 },
                 {
+                  "id": "installagentskills",
                   "file": "hooks/installAgentSkills.section.md"
                 },
                 {
+                  "id": "installshellfiles",
                   "file": "hooks/installShellFiles.section.md"
                 },
                 {
+                  "id": "installfonts",
                   "file": "hooks/installFonts.section.md"
                 },
                 {
+                  "id": "juce",
                   "file": "hooks/juce.section.md"
                 },
                 {
+                  "id": "julec",
                   "file": "hooks/julec.section.md"
                 },
                 {
+                  "id": "just",
                   "file": "hooks/just.section.md"
                 },
                 {
+                  "id": "libglycin",
                   "file": "hooks/libglycin.section.md"
                 },
                 {
+                  "id": "libiconv",
                   "file": "hooks/libiconv.section.md"
                 },
                 {
+                  "id": "libxml2",
                   "file": "hooks/libxml2.section.md"
                 },
                 {
+                  "id": "memcached-test-hook",
                   "file": "hooks/memcached-test-hook.section.md"
                 },
                 {
+                  "id": "meson",
                   "file": "hooks/meson.section.md"
                 },
                 {
+                  "id": "mpi-check-hook",
                   "file": "hooks/mpi-check-hook.section.md"
                 },
                 {
+                  "id": "ninja",
                   "file": "hooks/ninja.section.md"
                 },
                 {
+                  "id": "nodejs-install-executables",
                   "file": "hooks/nodejs-install-executables.section.md"
                 },
                 {
+                  "id": "nodejs-install-manuals",
                   "file": "hooks/nodejs-install-manuals.section.md"
                 },
                 {
+                  "id": "npm-build-hook",
                   "file": "hooks/npm-build-hook.section.md"
                 },
                 {
+                  "id": "npm-config-hook",
                   "file": "hooks/npm-config-hook.section.md"
                 },
                 {
+                  "id": "npm-install-hook",
                   "file": "hooks/npm-install-hook.section.md"
                 },
                 {
+                  "id": "patch-rc-path-hooks",
                   "file": "hooks/patch-rc-path-hooks.section.md"
                 },
                 {
+                  "id": "perl",
                   "file": "hooks/perl.section.md"
                 },
                 {
+                  "id": "pkg-config",
                   "file": "hooks/pkg-config.section.md"
                 },
                 {
+                  "id": "postgresql-test-hook",
                   "file": "hooks/postgresql-test-hook.section.md"
                 },
                 {
+                  "id": "premake",
                   "file": "hooks/premake.section.md"
                 },
                 {
+                  "id": "python",
                   "file": "hooks/python.section.md"
                 },
                 {
+                  "id": "redis-test-hook",
                   "file": "hooks/redis-test-hook.section.md"
                 },
                 {
+                  "id": "scons",
                   "file": "hooks/scons.section.md"
                 },
                 {
+                  "id": "tauri",
                   "file": "hooks/tauri.section.md"
                 },
                 {
+                  "id": "tetex-tex-live",
                   "file": "hooks/tetex-tex-live.section.md"
                 },
                 {
+                  "id": "udevcheckhook",
                   "file": "hooks/udevCheckHook.section.md"
                 },
                 {
+                  "id": "unzip",
                   "file": "hooks/unzip.section.md"
                 },
                 {
+                  "id": "validatepkgconfig",
                   "file": "hooks/validatePkgConfig.section.md"
                 },
                 {
+                  "id": "versioncheckhook",
                   "file": "hooks/versionCheckHook.section.md"
                 },
                 {
+                  "id": "waf",
                   "file": "hooks/waf.section.md"
                 },
                 {
+                  "id": "writable-tmpdir-as-home-hook",
                   "file": "hooks/writable-tmpdir-as-home-hook.section.md"
                 },
                 {
+                  "id": "zig",
                   "file": "hooks/zig.section.md"
                 },
                 {
+                  "id": "xcbuild",
                   "file": "hooks/xcbuild.section.md"
                 },
                 {
+                  "id": "xfce4-dev-tools",
                   "file": "hooks/xfce4-dev-tools.section.md"
                 }
               ]
             },
             {
+              "id": "packages",
               "label": "Packages",
-              "id": "chap-packages",
               "children": [
                 {
+                  "id": "index",
                   "file": "packages/index.md"
                 },
                 {
+                  "id": "citrix",
                   "file": "packages/citrix.section.md"
                 },
                 {
+                  "id": "darwin-builder",
                   "file": "packages/darwin-builder.section.md"
                 },
                 {
+                  "id": "dlib",
                   "file": "packages/dlib.section.md"
                 },
                 {
+                  "id": "eclipse",
                   "file": "packages/eclipse.section.md"
                 },
                 {
+                  "id": "elm",
                   "file": "packages/elm.section.md"
                 },
                 {
+                  "id": "emacs",
                   "file": "packages/emacs.section.md"
                 },
                 {
+                  "id": "firefox",
                   "file": "packages/firefox.section.md"
                 },
                 {
+                  "id": "friction-graphics",
                   "file": "packages/friction-graphics.section.md"
                 },
                 {
+                  "id": "fish",
                   "file": "packages/fish.section.md"
                 },
                 {
+                  "id": "fuse",
                   "file": "packages/fuse.section.md"
                 },
                 {
+                  "id": "geant4",
                   "file": "packages/geant4.section.md"
                 },
                 {
+                  "id": "ibus",
                   "file": "packages/ibus.section.md"
                 },
                 {
+                  "id": "inkscape",
                   "file": "packages/inkscape.section.md"
                 },
                 {
+                  "id": "kakoune",
                   "file": "packages/kakoune.section.md"
                 },
                 {
+                  "id": "krita",
                   "file": "packages/krita.section.md"
                 },
                 {
+                  "id": "linux",
                   "file": "packages/linux.section.md"
                 },
                 {
+                  "id": "lhapdf",
                   "file": "packages/lhapdf.section.md"
                 },
                 {
+                  "id": "locales",
                   "file": "packages/locales.section.md"
                 },
                 {
+                  "id": "etc-files",
                   "file": "packages/etc-files.section.md"
                 },
                 {
+                  "id": "nginx",
                   "file": "packages/nginx.section.md"
                 },
                 {
+                  "id": "nrfutil",
                   "file": "packages/nrfutil.section.md"
                 },
                 {
+                  "id": "opengl",
                   "file": "packages/opengl.section.md"
                 },
                 {
+                  "id": "packer",
                   "file": "packages/packer.section.md"
                 },
                 {
+                  "id": "shell-helpers",
                   "file": "packages/shell-helpers.section.md"
                 },
                 {
+                  "id": "python-tree-sitter",
                   "file": "packages/python-tree-sitter.section.md"
                 },
                 {
-                  "label": "treefmt",
                   "id": "treefmt",
+                  "label": "treefmt",
                   "children": [
                     {
+                      "id": "index",
                       "file": "packages/treefmt.section.md"
                     },
                     {
+                      "id": "treefmt-functions",
                       "id-prefix": "auto-generated-treefmt-functions",
                       "file": "packages/treefmt-functions.section.md"
                     }
                   ]
                 },
                 {
+                  "id": "steam",
                   "file": "packages/steam.section.md"
                 },
                 {
+                  "id": "cataclysm-dda",
                   "file": "packages/cataclysm-dda.section.md"
                 },
                 {
+                  "id": "urxvt",
                   "file": "packages/urxvt.section.md"
                 },
                 {
+                  "id": "vcpkg",
                   "file": "packages/vcpkg.section.md"
                 },
                 {
+                  "id": "weechat",
                   "file": "packages/weechat.section.md"
                 },
                 {
+                  "id": "uv",
                   "file": "packages/uv.section.md"
                 },
                 {
+                  "id": "build-support",
                   "file": "packages/build-support.md"
                 }
               ]
@@ -604,13 +783,15 @@
           ]
         },
         {
-          "label": "Modules",
           "id": "modules",
+          "label": "Modules",
           "children": [
             {
+              "id": "index",
               "file": "modules/index.md"
             },
             {
+              "id": "generic",
               "file": "modules/generic.chapter.md"
             }
           ]
@@ -618,16 +799,19 @@
       ]
     },
     {
-      "label": "Reference",
       "id": "reference",
+      "label": "Reference",
       "children": [
         {
+          "id": "lib",
           "file": "lib.md"
         },
         {
+          "id": "functions",
           "file": "functions.md"
         },
         {
+          "id": "library",
           "file": "functions/library.md"
         },
         {
@@ -635,28 +819,35 @@
           "type": "nixdoc"
         },
         {
+          "id": "generators",
           "file": "functions/generators.section.md"
         },
         {
+          "id": "debug",
           "file": "functions/debug.section.md"
         },
         {
+          "id": "prefer-remote-fetch",
           "file": "functions/prefer-remote-fetch.section.md"
         },
         {
+          "id": "nix-gitignore",
           "file": "functions/nix-gitignore.section.md"
         },
         {
+          "id": "module-system",
           "file": "module-system/module-system.chapter.md"
         },
         {
+          "id": "interoperability",
           "label": "Interoperability Standards",
-          "id": "part-interoperability",
           "children": [
             {
+              "id": "index",
               "file": "interoperability.md"
             },
             {
+              "id": "cyclonedx",
               "file": "interoperability/cyclonedx.md"
             }
           ]
@@ -664,6 +855,7 @@
       ]
     },
     {
+      "id": "contributing",
       "file": "contributing.md"
     }
   ]

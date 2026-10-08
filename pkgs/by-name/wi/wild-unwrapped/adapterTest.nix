@@ -13,6 +13,10 @@
   lld,
   clang-tools,
   useWildLinker,
+  makeRustPlatform,
+  rustc,
+  cargo,
+  fd,
   hello,
   taplo,
 }:
@@ -151,6 +155,16 @@ in
   adapter-llvm = helloTest "adapter-llvm" (
     hello.override (_: {
       stdenv = useWildLinker clangStdenv;
+    })
+  );
+
+  # Test the adapter works with a Rust package
+  adapter-rust = helloTest "adapter-rust" (
+    fd.override (_: {
+      rustPlatform = makeRustPlatform {
+        inherit rustc cargo;
+        stdenv = useWildLinker stdenv;
+      };
     })
   );
 }

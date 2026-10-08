@@ -16,6 +16,8 @@
 
 let
   beylaVersion = "v3.9.8";
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
 in
 
 buildGoModule (finalAttrs: {
@@ -96,7 +98,7 @@ buildGoModule (finalAttrs: {
     // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
       # Uses go-systemd, which uses libsystemd headers.
       # https://github.com/coreos/go-systemd/issues/351
-      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemdLibs}/include";
+      NIX_CFLAGS_COMPILE = "-I${lib.getDev systemdLibs'}/include";
     };
 
   nativeBuildInputs = [
@@ -123,7 +125,7 @@ buildGoModule (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${
-        lib.makeLibraryPath [ (lib.getLib systemdLibs) ]
+        lib.makeLibraryPath [ (lib.getLib systemdLibs') ]
       }:$(patchelf --print-rpath $out/bin/alloy)" \
       $out/bin/alloy
   '';
