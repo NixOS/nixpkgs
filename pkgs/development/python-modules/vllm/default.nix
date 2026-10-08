@@ -758,6 +758,5 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       #   RISC-V support.
       "aarch64-darwin"
     ];
-    broken = cudaSupport;
   };
 })
