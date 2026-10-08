@@ -6697,7 +6697,7 @@
     name = "David Sánchez";
   };
   davy-tw = {
-    email = "me@davy.tw";
+    email = "nixpkgs@id.davy.tw";
     github = "davy-tw";
     githubId = 841969;
     name = "Tzu-Te \"Davy\" Kuo";
