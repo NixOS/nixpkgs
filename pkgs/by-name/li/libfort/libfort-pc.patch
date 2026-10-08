@@ -1,0 +1,15 @@
+--- a/lib/libfort.pc.in
++++ b/lib/libfort.pc.in
+@@ -1,8 +1,8 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: libfort
+ Description: A simple C/C++ crossplatform library to create formatted text tables.
+ Version: @libfort_VERSION@
+ Cflags: -I${includedir}
+ Libs: -L${libdir} -lfort
