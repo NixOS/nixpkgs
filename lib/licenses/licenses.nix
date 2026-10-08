@@ -1259,6 +1259,14 @@ lib.mapAttrs mkLicense (
       redistributable = false;
     };
 
+    nvidiaCutlassDsl = {
+      shortName = "CUTLASS DSLs SLA";
+      fullName = "NVIDIA Software License Agreement for the NVIDIA CUTLASS DSLs";
+      url = "https://github.com/NVIDIA/cutlass/blob/main/EULA.txt";
+      free = false;
+      redistributable = false;
+    };
+
     nvidiaTensorrt = {
       shortName = "TensorRT EULA";
       fullName = "TensorRT SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";

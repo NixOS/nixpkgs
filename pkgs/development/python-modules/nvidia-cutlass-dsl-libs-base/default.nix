@@ -190,7 +190,7 @@ buildPythonPackage {
     homepage = "https://github.com/NVIDIA/cutlass";
     changelog = "https://github.com/NVIDIA/cutlass/blob/v${version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary
+    license = lib.licenses.nvidiaCutlassDsl;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.linux;
   };
