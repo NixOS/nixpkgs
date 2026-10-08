@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPackages,
+  callPackage,
   autoreconfHook,
   fetchpatch,
   fetchurl,
@@ -96,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./float128-complex-and-external32.patch
     ./cuda-diagnostic-formats.patch
     ./ucx-fence-completion.patch
+    ./oshmem-language-metadata.patch
   ]
   ++ lib.optionals crossFortran [ ./fortran-cross-probes.patch ];
 
@@ -263,8 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
           "c++"
           "cxx"
           "cc"
-        ]
-        ++ lib.optionals fortranSupport [
+          # OpenSHMEM installs unsupported-language wrappers even without Fortran.
           "f77"
           "f90"
           "fort"
@@ -315,6 +316,7 @@ stdenv.mkDerivation (finalAttrs: {
       # The main wrapper that all the rest of the commonly used binaries are
       # symlinked to
       moveToOutput "bin/opal_wrapper" "''${!outputDev}"
+      moveToOutput "share/openmpi/help-opal-wrapper.txt" "''${!outputDev}"
       # All of the following files are symlinks to opal_wrapper
       ${lib.pipe fileNamesToIterate [
         (lib.mapCartesianProduct (
@@ -364,8 +366,16 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   passthru = {
-    tests.ucxFence = buildPackages.callPackage ./tests/ucx-fence.nix {
-      inherit (finalAttrs) src patches;
+    tests = {
+      ucxFence = buildPackages.callPackage ./tests/ucx-fence.nix {
+        inherit (finalAttrs) src patches;
+      };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      pkgConfig = callPackage ./tests/pkg-config.nix {
+        openmpi = finalAttrs.finalPackage;
+        inherit fortranSupport;
+      };
     };
     defaultAvxOptions = {
       sse3 = true;
