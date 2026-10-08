@@ -11,7 +11,6 @@ rustPlatform.buildRustPackage {
   version = "0.1.0-unstable-2026-09-02";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "block";
