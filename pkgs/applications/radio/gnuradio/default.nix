@@ -223,7 +223,6 @@ let
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
         click
-        click-plugins
         pygccxml
       ];
       cmakeEnableFlag = "GR_MODTOOL";
