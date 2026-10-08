@@ -31,12 +31,15 @@ in
   ];
 
   options = {
-    # The provider: adds 1 to each request.
     services.increment = mkOption {
-      type = types.raw;
-      default = lib.mapAttrsRecursiveCond (v: !(v ? request)) (_: entry: {
-        response.value = entry.request.value + 1;
-      }) count.providerRequests.increment;
+      default = count.providerRequests.increment;
+      type = config.contractTypes.count.mkProviderType {
+        fulfill =
+          { value }:
+          {
+            value = value + 1;
+          };
+      };
     };
 
     wantedNames = mkOption {

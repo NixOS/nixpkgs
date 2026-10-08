@@ -4,7 +4,7 @@
 
   meta.doc = ./contracts.md;
 
-  # `mkContract` is read-only, so set only the options that a definition sets.
+  # `mkContract` and `mkProviderType` are read-only, so set only the options that a definition sets.
   contractTypes = lib.mapAttrs (_: contractType: {
     inherit (contractType) meta interface;
   }) lib.contracts;

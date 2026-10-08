@@ -3,6 +3,19 @@
 let
   inherit (lib) mkOption types;
 
+  # Module that imports `interface`, and adds the attributes in `overrides` to its options.
+  # The empty definitions let the user omit an option of the interface,
+  # if each of its options has a default.
+  interfaceWith = interface: overrides: {
+    imports = [ interface ];
+    options = lib.mapAttrs (
+      _: options:
+      mkOption {
+        type = types.submodule { options = lib.mapAttrs (_: mkOption) options; };
+      }
+    ) overrides;
+    config = lib.mapAttrs (_: _: { }) overrides;
+  };
   # The options in `request` or `response` of `interface`.
   interfaceOptions = (lib.evalModules { modules = [ config.interface ]; }).options;
   subOptions = name: removeAttrs (interfaceOptions.${name}.type.getSubOptions [ ]) [ "_module" ];
@@ -107,19 +120,102 @@ in
       '';
       type = types.functionTo types.optionType;
       readOnly = true;
-      default =
-        overrides:
-        types.submodule {
-          imports = [ config.consumerInterface ];
-          options = lib.mapAttrs (
-            _: options:
-            mkOption {
-              type = types.submodule { options = lib.mapAttrs (_: mkOption) options; };
-            }
-          ) overrides;
-          config = lib.mapAttrs (_: _: { }) overrides;
-        };
+      default = overrides: types.submodule (interfaceWith config.consumerInterface overrides);
       defaultText = lib.literalMD "a function that makes a submodule type from `interface` and `overrides`";
+    };
+
+    mkProviderType = mkOption {
+      description = ''
+        Make the type of the option in which a provider gets its requests.
+        The type is `nestedAttrsOf` a submodule that imports `interface`.
+
+        `mkProviderType :: { overrides?, providerOptions?, fulfill?, fulfill'? } -> optionType`
+
+        **Inputs:**
+
+        `overrides`
+
+        : 1\. Attributes to add to the options of the interface, as in `mkContract`.
+
+        `providerOptions`
+
+        : 2\. Options of the provider that are not part of the contract type.
+          They are in the option `providerOptions` of each entry.
+
+        `fulfill`
+
+        : 3\. Function from the `request` of an entry to its `response`.
+          Each attribute of the result has `mkDefault` priority,
+          thus a definition of the same `response` option replaces it.
+
+        `fulfill'`
+
+        : 4\. Function from `{ request, name, loc, instance }` to the `response` of an entry.
+          `name` is the last attribute name of the entry,
+          `loc` is the location of the entry,
+          and `instance` is the configuration of the entry.
+          Set `fulfill` or `fulfill'`, not the two.
+
+        **Example:**
+
+        ```nix
+        { config, options, ... }:
+        {
+          options.services.increment.number = lib.mkOption {
+            type = config.contractTypes.number.mkProviderType {
+              fulfill = request: { value = request.value + 1; };
+            };
+          };
+          config = {
+            services.increment.number = config.contracts.number.providerRequests.increment;
+            contracts.number.providers.increment.module = options.services.increment;
+          };
+        }
+        ```
+      '';
+      type = types.functionTo types.optionType;
+      readOnly = true;
+      default =
+        {
+          overrides ? { },
+          providerOptions ? { },
+          fulfill ? null,
+          fulfill' ? null,
+        }:
+        assert lib.assertMsg (
+          fulfill == null || fulfill' == null
+        ) "mkProviderType: set `fulfill` or `fulfill'`, not the two.";
+        let
+          fulfill'' = if fulfill != null then { request, ... }: fulfill request else fulfill';
+          inherit (config) interface;
+        in
+        types.nestedAttrsOf (
+          types.submodule (
+            {
+              config,
+              options,
+              name,
+              ...
+            }:
+            {
+              imports = [ (interfaceWith interface overrides) ];
+              options.providerOptions = mkOption {
+                description = "Options of the provider that are not part of the contract type.";
+                default = { };
+                type = types.submodule { options = providerOptions; };
+              };
+              config.response = lib.mkIf (fulfill'' != null) (
+                lib.mapAttrs (_: lib.mkDefault) (fulfill'' {
+                  inherit (config) request;
+                  inherit name;
+                  loc = lib.init options.request.loc;
+                  instance = config;
+                })
+              );
+            }
+          )
+        );
+      defaultText = lib.literalMD "a function that makes a `nestedAttrsOf` type from `interface` and the inputs";
     };
   };
 }

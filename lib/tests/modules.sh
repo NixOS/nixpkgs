@@ -481,6 +481,16 @@ checkConfigError 'The option .consumer.request.value. is read-only' config.consu
 checkConfigError 'is not of type .signed integer.' config.consumer.response.value ./contracts-mkcontract.nix ./contracts-mkcontract-wrong-type.nix
 checkConfigOutput '^"0400 me me /run/secret"$' config.secretSummary ./contracts-mkcontract.nix
 
+# contracts: `mkProviderType` makes the response of each entry with `fulfill` or `fulfill'`
+checkConfigOutput '^11$' config.contracts.number.results.app.x.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^0$' config.contracts.number.results.app.db.primary.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^6$' config.increment.direct.response.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^21$' config.locate.a.b.response.value ./contracts-mkprovidertype.nix
+checkConfigOutput '^"b locate.a.b"$' config.locate.a.b.response.text ./contracts-mkprovidertype.nix
+checkConfigOutput '^"postgresql://db.example.com:5432"$' config.contracts.connection.results.app.db.url ./contracts-mkprovidertype.nix
+checkConfigError 'is not of type .signed integer.' config.contracts.number.results.app.x.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-wrong-request.nix
+checkConfigError "set .fulfill. or .fulfill'., not the two" config.both.x.request.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-two-fulfill.nix
+
 # contracts: rename a contract type, and send the requests of the old name to the provider of the new name
 checkConfigOutput '^6$' config.contracts.number.results.old.x.value ./contracts-type-rename.nix
 checkConfigOutput '^2$' config.contracts.count.results.new.x.value ./contracts-type-rename.nix

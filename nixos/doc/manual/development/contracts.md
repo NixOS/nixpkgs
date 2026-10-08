@@ -125,6 +125,36 @@ Use the path of an entry, and not only its name, to make a unique resource for e
 Two consumers can use the same option name.
 To apply a function to each entry, use `lib.concatMapNestedAttrs'` with the type of the option.
 
+The function `mkProviderType` of a contract type makes a type of the same shape.
+`overrides` adds attributes to the options of the interface, as in `mkContract`.
+`providerOptions` contains the options of `providerOptions`.
+`fulfill` is a function from the `request` of an entry to its `response`.
+Example, the provider option from the example before, with `mkProviderType`:
+
+```nix
+{ lib, ... }:
+{
+  options.testing.hardcoded-secret.fileSecrets = lib.mkOption {
+    type = lib.contracts.fileSecrets.mkProviderType {
+      overrides.request = {
+        owner.default = "root";
+        group.default = "root";
+      };
+      providerOptions.content = lib.mkOption { type = lib.types.str; };
+      fulfill' =
+        { loc, ... }:
+        {
+          path = "${cfg.directory}/${lib.concatStringsSep "/" (lib.drop (lib.length opt.fileSecrets.loc) loc)}";
+        };
+    };
+  };
+}
+```
+
+Use `fulfill'` if the response also needs the location `loc` of the entry, its last attribute name `name`, or its configuration `instance`.
+Each attribute of the response from `fulfill` or `fulfill'` has `mkDefault` priority.
+Thus a definition of a `response` option replaces it.
+
 ## Connect a consumer to a provider {#contracts-connect}
 
 The user connects each consumer option to a provider entry.
@@ -150,7 +180,7 @@ To use a different provider, change these two definitions.
 ## Contract types {#contracts-types}
 
 `lib.contracts` contains the contract types of nixpkgs.
-Each contract type has `meta.description`, `meta.maintainers`, an `interface` module and the function `mkContract`.
+Each contract type has `meta.description`, `meta.maintainers`, an `interface` module, and the functions `mkContract` and `mkProviderType`.
 
 The option [](#opt-contractTypes) contains the contract types that a configuration can use.
 In NixOS, it contains each contract type in `lib.contracts`.
