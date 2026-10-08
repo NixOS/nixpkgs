@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aubio-ledfx";
-  version = "0.4.11";
+  version = "0.4.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LedFx";
     repo = "aubio-ledfx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ec6QiTj1AOza+ggJPl3EULNDB/rrpCDZW0HaSywy/4E=";
+    hash = "sha256-g/VdeoQSkq8FB3uWK0A+KME7OCmQTa4gjr7iGDwq0gU=";
   };
 
   build-system = [
