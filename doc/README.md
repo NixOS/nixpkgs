@@ -13,8 +13,6 @@ There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/
 > We are actively restructuring our documentation to be more beginner friendly.
 >
 
-Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
-
 Write **guides** task-first: lead with a working example, then explain in prose.
 Write **reference** as the specification of functions and attributes.
 
