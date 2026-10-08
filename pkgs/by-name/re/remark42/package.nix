@@ -69,8 +69,6 @@ buildGoModule (finalAttrs: {
   pname = "remark42";
   inherit version src;
 
-  strictDeps = true;
-
   modRoot = "backend";
 
   # build the main package in ./backend/app
