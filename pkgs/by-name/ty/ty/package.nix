@@ -13,6 +13,7 @@
   buildPackages,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -95,6 +96,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+
+    # ensure that an update doesn't break the test-driver.
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+    };
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
