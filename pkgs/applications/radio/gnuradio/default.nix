@@ -337,40 +337,6 @@ stdenv.mkDerivation (finalAttrs: {
     )
   ) featuresInfo;
 
-  passthru = {
-    # Deps that are potentially overridden and are used inside GR plugins - the same version must
-    inherit
-      uhd
-      boost
-      volk
-      libiio
-      libad9361
-      python
-      ;
-    # Used by many gnuradio modules, the same attribute is present in
-    # previous gnuradio versions where there it's log4cpp.
-    logLib = spdlog;
-    inherit (libsForQt5) qwt;
-    # Inherit functions and Nix attribute sets
-    inherit
-      hasFeature
-      featuresInfo
-      ;
-    versionAttr = {
-      major = lib.versions.majorMinor finalAttrs.version;
-      minor = lib.versions.patch finalAttrs.version;
-      patch = lib.elemAt (lib.splitVersion finalAttrs.version) 3;
-    };
-    gnuradioOlder = lib.versionOlder finalAttrs.passthru.versionAttr.major;
-    gnuradioAtLeast = lib.versionAtLeast finalAttrs.passthru.versionAttr.major;
-  }
-  // lib.optionalAttrs (hasFeature "gr-qtgui") {
-    qt = qt5;
-  }
-  // lib.optionalAttrs (hasFeature "gnuradio-companion") {
-    gtk = gtk3;
-  };
-
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
   dontWrapQtApps = true;
@@ -432,6 +398,40 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString (hasFeature "gr-qtgui") ''
     export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
   '';
+
+  passthru = {
+    # Deps that are potentially overridden and are used inside GR plugins - the same version must
+    inherit
+      uhd
+      boost
+      volk
+      libiio
+      libad9361
+      python
+      ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # previous gnuradio versions where there it's log4cpp.
+    logLib = spdlog;
+    inherit (libsForQt5) qwt;
+    # Inherit functions and Nix attribute sets
+    inherit
+      hasFeature
+      featuresInfo
+      ;
+    versionAttr = {
+      major = lib.versions.majorMinor finalAttrs.version;
+      minor = lib.versions.patch finalAttrs.version;
+      patch = lib.elemAt (lib.splitVersion finalAttrs.version) 3;
+    };
+    gnuradioOlder = lib.versionOlder finalAttrs.passthru.versionAttr.major;
+    gnuradioAtLeast = lib.versionAtLeast finalAttrs.passthru.versionAttr.major;
+  }
+  // lib.optionalAttrs (hasFeature "gr-qtgui") {
+    qt = qt5;
+  }
+  // lib.optionalAttrs (hasFeature "gnuradio-companion") {
+    gtk = gtk3;
+  };
 
   meta = {
     description = "Software Defined Radio (SDR) software";
