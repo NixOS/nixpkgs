@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoTestFlags = [ "--max-fail=all" ];
 
-  strictDeps = true;
-
   __structuredAttrs = true;
 
   passthru = {
