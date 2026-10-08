@@ -66,7 +66,6 @@ let
       ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pythonOnBuildForHost.pkgs; [
         mako
-        six
       ];
     };
     doxygen = {
@@ -77,7 +76,6 @@ let
       cmakeEnableFlag = "MANPAGES";
     };
     python-support = {
-      pythonRuntime = [ python.pkgs.six ];
       native = [
         python
       ];
