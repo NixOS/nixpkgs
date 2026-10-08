@@ -19,6 +19,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tron-terminal";
   version = "0.4.4";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "skyline69";
     repo = "tron-terminal";
