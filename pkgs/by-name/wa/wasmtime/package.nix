@@ -21,6 +21,11 @@ let
       hash = "sha256-+zwOVdidbJs8IWL1vwghkwvWwaYOQ5LvVlY2BGs0Lbg=";
       cargoHash = "sha256-V64KmH4M/biKmMZh/kT8nd4v8xOlHjOoWEO9RCWyX1c=";
     };
+    lts-48 = {
+      version = "48.0.5";
+      hash = "sha256-uilBYiRdRhwiiMUnP48U0UQ4S+Of7VeosJj/6q7eXR4=";
+      cargoHash = "sha256-5HLqqypiXgiA+igK6DQoPIHJbtjYxEKLxURGhWLi8xQ=";
+    };
     main = {
       version = "49.0.2";
       hash = "sha256-XwJOxAswT93KPPe1/Vv2DHHeNRUhfq68x2giRDQmK9o=";
