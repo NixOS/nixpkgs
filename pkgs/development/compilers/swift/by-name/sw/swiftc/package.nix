@@ -39,11 +39,9 @@
     "compiler"
     "compiler-swift-syntax-lib"
     #    "dev"
-    "editor-integration"
     #    "llvm-toolchain-dev-tools"
     "license"
     "sdk-overlay"
-    (if stdenv.hostPlatform.isDarwin then "sourcekit-xpc-service" else "sourcekit-inproc")
     #    "stdlib-experimental"
     "swift-syntax-lib"
     #    "testsuite-tools"
@@ -51,6 +49,13 @@
     "toolchain-tools"
     #    "tools"
   ]
+  # Only build editor integration in the final compiler. It’s not needed for the bootstrap compiler or stdlib.
+  ++ lib.optionals (lib.versions.majorMinor swift_release != "6.2" && bootstrapStage == 2) (
+    [
+      "editor-integration"
+      (if stdenv.hostPlatform.isDarwin then "sourcekit-xpc-service" else "sourcekit-inproc")
+    ]
+  )
   ++ lib.optionals (stdlib == null) [
     "back-deployment"
     "sdk-overlay"
