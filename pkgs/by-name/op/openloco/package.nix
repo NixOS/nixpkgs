@@ -22,20 +22,20 @@ let
   };
 
   openloco-objects = fetchurl {
-    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.8/objects.zip";
-    sha256 = "sha256-ZYiR2UpGBAt79x39fwG7wd2mRwcSyz3AdIKTH+tQE8c=";
+    url = "https://github.com/OpenLoco/OpenGraphics/releases/download/v0.1.12/objects.zip";
+    sha256 = "sha256-nmWWqqUrIpbPx3m746qwHQ+zfvYfyyPNDl/00rnoRso=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "openloco";
-  version = "26.04";
+  version = "26.09";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
     tag = "v${version}";
-    hash = "sha256-tOvqDJfF6iG05EatUdWGp4wv8UDXdDs1frQ9FMF5myU=";
+    hash = "sha256-qAppsd/aznLs2HMfbGg+mKx6RwFeJCrYL7qxXc+UdWc=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     sed -i '/#define OPENLOCO_NAME "OpenLoco"/a\
     #define OPENLOCO_VERSION_TAG "${version}"\
     #define OPENLOCO_BRANCH "master"\
-    #define OPENLOCO_COMMIT_SHA1_SHORT "b79ace0"'\
+    #define OPENLOCO_COMMIT_SHA1_SHORT "ec72a7d"'\
       src/Version/include/OpenLoco/Version.hpp
 
     # prefetch sfl header sources
