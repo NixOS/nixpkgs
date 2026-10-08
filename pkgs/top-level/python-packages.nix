@@ -1531,6 +1531,8 @@ self: super: with self; {
 
   asyncua = callPackage ../development/python-modules/asyncua { };
 
+  asyncudp = callPackage ../development/python-modules/asyncudp { };
+
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
   asysocks = callPackage ../development/python-modules/asysocks { };
@@ -1990,6 +1992,10 @@ self: super: with self; {
 
   azure-mgmt-recoveryservicesbackup =
     callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup
+      { };
+
+  azure-mgmt-recoveryservicesbackup-passivestamp =
+    callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup-passivestamp
       { };
 
   azure-mgmt-redhatopenshift =
@@ -17873,6 +17879,8 @@ self: super: with self; {
 
   ray = callPackage ../development/python-modules/ray { };
 
+  raygeo = callPackage ../development/python-modules/raygeo { };
+
   raylib = callPackage ../development/python-modules/raylib { inherit (pkgs) raylib; };
 
   razdel = callPackage ../development/python-modules/razdel { };
@@ -18486,6 +18494,8 @@ self: super: with self; {
   ruff-api = callPackage ../development/python-modules/ruff-api { };
 
   ruff-format = callPackage ../development/python-modules/ruff-format { };
+
+  ruida-pa = callPackage ../development/python-modules/ruida-pa { };
 
   rules = callPackage ../development/python-modules/rules { };
 
@@ -22396,6 +22406,8 @@ self: super: with self; {
       python3Packages = self;
     }
   );
+
+  vtracer = callPackage ../development/python-modules/vtracer { };
 
   vttlib = callPackage ../development/python-modules/vttlib { };
 
