@@ -51,8 +51,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ln -s $out/bin/generate_interactive_bom $out/bin/generate_interactive_bom.py
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Interactive HTML BOM generation for KiCad, EasyEDA, Eagle, Fusion360 and Allegro PCB designer";
     homepage = "https://github.com/INTI-CMNB/InteractiveHtmlBom";
