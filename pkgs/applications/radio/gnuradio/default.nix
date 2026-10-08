@@ -222,7 +222,6 @@ let
     };
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
-        setuptools
         click
         click-plugins
         pygccxml
