@@ -7,6 +7,13 @@
 }:
 let
   inherit (stdenv.cc) suffixSalt targetPrefix;
+  cxxProvider =
+    if stdenv.cc.libcxx != null then
+      stdenv.cc.libcxx
+    else if stdenv.cc.useGccForLibs then
+      stdenv.cc.gccForLibs
+    else
+      stdenv.cc.cc;
   rawCC = lib.getExe' stdenv.cc.cc "${targetPrefix}${if stdenv.cc.isClang then "clang" else "gcc"}";
   rawCXX = lib.getExe' stdenv.cc.cc "${targetPrefix}${
     if stdenv.cc.isClang then "clang++" else "g++"
@@ -158,6 +165,30 @@ in
     "$BASH" ./prepare-operation ${child}/nix-support/compiler ${rawCXX} \
     '@operation cxx.rsp'
   ${emulator} ./entry-cxx
+
+  ${lib.optionalString
+    (
+      stdenv.cc.isGNU
+      && (cxxProvider.isGNU or false)
+      && lib.versionAtLeast cxxProvider.version "14"
+      && lib.versionOlder cxxProvider.version stdenv.cc.version
+    )
+    ''
+      # A newer frontend may use an older selected runtime. Localized chrono
+      # formatting needs library symbols absent from the older runtime when
+      # the frontend's newer headers are selected accidentally.
+      cat > provider-chrono.cc <<'EOF'
+      #include <chrono>
+      #include <format>
+      #include <locale>
+      int main() {
+        return std::format(std::locale::classic(), "{:L%A}", std::chrono::weekday{2}) != "Tuesday";
+      }
+      EOF
+      ${parent}/bin/${targetPrefix}c++ -std=c++20 provider-chrono.cc -o provider-chrono
+      ${emulator} ./provider-chrono
+    ''
+  }
 
   echo "checking driver personality independently of per-input language..." >&2
   cat > driver-language.c <<'EOF'

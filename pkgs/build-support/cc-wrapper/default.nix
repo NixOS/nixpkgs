@@ -435,7 +435,10 @@ let
   # native default-header lookup boundary.
   bundledCxx =
     if nativeGccIncludes && nativeIncludeMode == "bundled" then
-      cc
+      # GNU's newer runtimes retain the older header ABI, but older runtimes
+      # cannot supply symbols introduced by newer headers. Keep headers within
+      # both the frontend's release and the selected runtime's release.
+      if useGccForLibs && lib.versionOlder gccForLibs.version cc.version then gccForLibs else cc
     else if nativeClangIncludes && useGccForLibs then
       gccForLibs
     else
