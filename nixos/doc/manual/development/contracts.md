@@ -64,17 +64,27 @@ In `providerOptions`, an option of the provider cannot conflict with an option o
 Example, a simplified version of the provider option `testing.hardcoded-secret.fileSecrets`:
 
 ```nix
+{ lib, options, ... }:
+let
+  opt = options.testing.hardcoded-secret;
+in
 {
   options.testing.hardcoded-secret.fileSecrets = lib.mkOption {
-    type = lib.types.attrsOf (
+    type = lib.types.nestedAttrsOf (
       lib.types.submodule (
-        { name, ... }:
+        { options, ... }:
+        let
+          # Path of this entry in `fileSecrets`, for example `[ "stash" "passwordFile" ]`.
+          entryPath = lib.drop (lib.length opt.fileSecrets.loc) (lib.init options.response.loc);
+        in
         {
           imports = [ lib.contracts.fileSecrets.interface ];
           options.response = lib.mkOption {
             default = { };
             type = lib.types.submodule {
-              options.path = lib.mkOption { default = "${cfg.directory}/${name}"; };
+              options.path = lib.mkOption {
+                default = "${cfg.directory}/${lib.concatStringsSep "/" entryPath}";
+              };
             };
           };
           options.providerOptions = lib.mkOption {
@@ -89,6 +99,11 @@ Example, a simplified version of the provider option `testing.hardcoded-secret.f
   };
 }
 ```
+
+The entries can be in nested attribute sets, as in [`want`](#contracts-routing).
+Use the path of an entry, and not only its name, to make a unique resource for each entry.
+Two consumers can use the same option name.
+To apply a function to each entry, use `lib.concatMapNestedAttrs'` with the type of the option.
 
 ## Connect a consumer to a provider {#contracts-connect}
 
@@ -129,16 +144,19 @@ It does not depend on NixOS, so other module systems can also import it.
 
 For each contract type, [](#opt-contracts) sends the requests of consumers to a provider, and sends the responses back:
 
-- `contracts.<type>.want.<name>`: an entry with a `request` from a consumer.
-  Each name must be unique for all consumers, for example `<consumer>-<option>`.
-- `contracts.<type>.providers.<provider>`: where to find the *provider option*, the option of the provider that has an entry for each request that the provider fulfills.
+- `contracts.<type>.want.<consumer>.<option>`: an entry with a `request` from a consumer.
+  Each consumer puts its entries in an attribute set with its own name.
+  Entries can be in nested attribute sets of any depth, for example `want.<consumer>.db.primary`.
+  An attribute set that contains only names of interface options, such as `request`, is an entry and not a namespace.
+  Empty attribute sets, for example from `mkIf false`, do not go to a provider.
+- `contracts.<type>.providers.<provider>`: where to find the *provider option*, the option of the provider that has an entry for each request that the provider fulfills, at the same path as in `want`.
   `module` is the options of the provider, and `contract` is the path of the provider option in `module`.
 - `contracts.<type>.defaultProvider`: the provider that gets the requests, one of `providers`.
-- `contracts.<type>.instances.<name>`: the provider that gets the entry `<name>` of `want`.
+- `contracts.<type>.instances.<consumer>.<option>`: the provider that gets the entry at the same path in `want`.
   The default is `defaultProvider`.
 - `contracts.<type>.providerRequests.<provider>`: the requests that a provider must fulfill.
   These are the entries of `want` that `instances` sends to the provider, and `{ }` for providers not routed to fulfill requests.
-- `contracts.<type>.results.<name>`: the `response` from the provider in `instances` for each entry in `want`.
+- `contracts.<type>.results.<consumer>.<option>`: the `response` from the provider in `instances` for each entry in `want`, at the same path.
 
 A provider reads `providerRequests.<provider>` into its provider option, and sets `providers.<provider>.module` to its options.
 `providers.<provider>.contract` is the path of the provider option in `module`:
@@ -216,7 +234,7 @@ Example, with the consumer from the example before and the provider `testing.har
 
 To use a different provider, change `defaultProvider`, and set the options of that provider.
 
-To send one entry to a different provider, set `instances.<name>` to that provider:
+To send one entry to a different provider, set `instances` at the path of the entry to that provider:
 
 ```nix
 { config, ... }:
@@ -226,8 +244,8 @@ To send one entry to a different provider, set `instances.<name>` to that provid
 }
 ```
 
-To connect one entry manually, as in [](#contracts-connect), set `instances.<name>` to `null`.
-Then no provider gets the request of that entry from `providerRequests`, and `results.<name>` is not available.
+To connect one entry manually, as in [](#contracts-connect), set `instances` at the path of the entry to `null`.
+Then no provider gets the request of that entry from `providerRequests`, and `results` at that path is not available.
 
 ## Rename a contract type {#contracts-rename-type}
 

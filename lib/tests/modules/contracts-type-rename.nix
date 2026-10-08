@@ -34,7 +34,7 @@ in
     # The provider: adds 1 to each request.
     services.increment = mkOption {
       type = types.raw;
-      default = lib.mapAttrs (_: entry: {
+      default = lib.mapAttrsRecursiveCond (v: !(v ? request)) (_: entry: {
         response.value = entry.request.value + 1;
       }) count.providerRequests.increment;
     };
@@ -58,8 +58,8 @@ in
     };
 
     # A consumer of the old name, and a consumer of the new name.
-    contracts.number.want.old.request.value = 5;
-    contracts.count.want.new.request.value = 1;
+    contracts.number.want.old.x.request.value = 5;
+    contracts.count.want.new.x.request.value = 1;
 
     contracts.count.providers.increment = {
       module = options.services.increment;

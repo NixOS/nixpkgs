@@ -17,7 +17,7 @@ let
   # The responses of the provider `name`.
   respond =
     name: n:
-    lib.mapAttrs (_: entry: {
+    lib.mapAttrsRecursiveCond (v: !(v ? request)) (_: entry: {
       response.value = entry.request.value + n;
     }) number.providerRequests.${name};
   providerOption =
@@ -57,7 +57,7 @@ in
     };
 
     contracts.number = {
-      want = lib.genAttrs [ "a" "b" "c" "d" ] (_: {
+      want.consumer = lib.genAttrs [ "a" "b" "c" "d" ] (_: {
         request.value = 10;
       });
       providers = {
@@ -72,7 +72,7 @@ in
         };
         four.module = options.services.four;
       };
-      instances = {
+      instances.consumer = {
         a = config.contracts.number.providers.one;
         b = config.contracts.number.providers.two;
         c = config.contracts.number.providers.three;

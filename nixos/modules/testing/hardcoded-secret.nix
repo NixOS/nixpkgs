@@ -7,10 +7,11 @@
 }:
 let
   cfg = config.testing.hardcoded-secret;
+  opt = options.testing.hardcoded-secret;
 
-  inherit (lib) mapAttrs' mkOption nameValuePair;
+  inherit (lib) mkOption;
   inherit (lib.types)
-    attrsOf
+    nestedAttrsOf
     str
     submodule
     ;
@@ -23,8 +24,8 @@ in
       default = "/run/hardcodedsecrets";
       description = ''
         Directory in which the provider writes the secret files.
-        Each secret file has the name of its entry in
-        [](#opt-testing.hardcoded-secret.fileSecrets).
+        The path of each secret file in this directory is the path of its entry in
+        [](#opt-testing.hardcoded-secret.fileSecrets), for example `stash/passwordFile`.
       '';
     };
 
@@ -47,7 +48,7 @@ in
       '';
       example = lib.literalExpression ''
         {
-          mySecret = {
+          myService.mySecret = {
             request = {
               owner = "me";
               group = "me";
@@ -57,9 +58,13 @@ in
           };
         }
       '';
-      type = attrsOf (
+      type = nestedAttrsOf (
         submodule (
-          { name, ... }:
+          { options, ... }:
+          let
+            # Path of this entry in `fileSecrets`, for example `[ "stash" "passwordFile" ]`.
+            entryPath = lib.drop (lib.length opt.fileSecrets.loc) (lib.init options.response.loc);
+          in
           {
             imports = [ lib.contracts.fileSecrets.interface ];
 
@@ -77,8 +82,8 @@ in
                 default = { };
                 type = submodule {
                   options.path = mkOption {
-                    default = "${cfg.directory}/${name}";
-                    defaultText = lib.literalExpression ''"''${config.testing.hardcoded-secret.directory}/<name>"'';
+                    default = "${cfg.directory}/${lib.concatStringsSep "/" entryPath}";
+                    defaultText = lib.literalExpression ''"''${config.testing.hardcoded-secret.directory}/<path>"'';
                   };
                 };
               };
@@ -116,35 +121,38 @@ in
     # and `systemd-sysusers` and `userborn` create users after activation.
     # The services run before `sysinit.target`, thus before all services
     # that have default dependencies, such as the consumers of the secrets.
-    systemd.services = mapAttrs' (
-      n: cfg':
+    systemd.services = lib.concatMapNestedAttrs' opt.fileSecrets.type (
+      path: cfg':
       let
+        n = lib.concatStringsSep "_" path;
         source = writeText "hardcodedsecret_${n}_content" cfg'.providerOptions.content;
 
         inherit (cfg') request response;
       in
-      nameValuePair "hardcodedsecret_${n}" {
-        description = "Hardcoded secret ${n}";
-        wantedBy = [ "sysinit.target" ];
-        after = [
-          "local-fs.target"
-          "systemd-sysusers.service"
-          "userborn.service"
-        ];
-        before = [
-          "sysinit.target"
-          "shutdown.target"
-        ];
-        conflicts = [ "shutdown.target" ];
-        unitConfig.DefaultDependencies = false;
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
+      {
+        "hardcodedsecret_${n}" = {
+          description = "Hardcoded secret ${lib.showAttrPath path}";
+          wantedBy = [ "sysinit.target" ];
+          after = [
+            "local-fs.target"
+            "systemd-sysusers.service"
+            "userborn.service"
+          ];
+          before = [
+            "sysinit.target"
+            "shutdown.target"
+          ];
+          conflicts = [ "shutdown.target" ];
+          unitConfig.DefaultDependencies = false;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          script = ''
+            install -D -m ${request.mode} -o ${request.owner} -g ${request.group} \
+              ${source} "${response.path}"
+          '';
         };
-        script = ''
-          install -D -m ${request.mode} -o ${request.owner} -g ${request.group} \
-            ${source} "${response.path}"
-        '';
       }
     ) cfg.fileSecrets;
   };

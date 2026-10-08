@@ -117,13 +117,48 @@ in
             default = { };
             type = types.submodule (
               { config, ... }:
+              let
+                entryType = types.submodule { imports = [ contractType.interface ]; };
+                # An entry has only the keys of the interface, such as `request`.
+                # Other attribute sets are namespaces, for example `want.<consumer>`.
+                isEntry = v: v != { } && lib.isNestedAttrsLeaf lib.all entryType v;
+                # Apply `f path entry` to each entry in `want` for which `pred path` is true.
+                # Remove empty namespaces, for example from `mkIf false`,
+                # because a provider reads `{ }` as an entry.
+                filterMapEntries =
+                  pred: f:
+                  let
+                    go =
+                      path:
+                      lib.concatMapAttrs (
+                        name: v:
+                        let
+                          path' = path ++ [ name ];
+                          mapped = go path' v;
+                        in
+                        if isEntry v then
+                          lib.optionalAttrs (pred path') { ${name} = f path' v; }
+                        else
+                          lib.optionalAttrs (mapped != { }) { ${name} = mapped; }
+                      );
+                  in
+                  go [ ] config.want;
+                mapEntries = filterMapEntries (_: true);
+                # The provider in `instances` for the entry at `path`.
+                instanceOf = path: lib.getAttrFromPath path config.instances;
+              in
               {
                 options = {
                   want = mkOption {
                     description = ''
                       Requests from consumers.
-                      Each name must be unique for all consumers,
-                      for example `<consumer>-<option>`.
+                      Entries can be in nested attribute sets of any depth.
+                      Each consumer puts its entries in an attribute set with its own name,
+                      for example `want.<consumer>.<option>`.
+                      An attribute set that contains only names of interface options,
+                      such as `request`, is an entry and not a namespace.
+                      Thus a name in a namespace must not be the name of an interface option,
+                      such as `request` or `response`.
 
                       Each entry has the options `request` and `response` of the interface of `${contractName}`.
                       A consumer sets only the `request`.
@@ -132,20 +167,21 @@ in
                       **Example:**
 
                       ```nix
-                      contracts.${contractName}.want."<consumer>-<option>" = {
-                        inherit (config.services."<consumer>"."<option>") request;
+                      contracts.${contractName}.want."<consumer>" = {
+                        "<option>" = { inherit (config.services."<consumer>"."<option>") request; };
+                        "<group>"."<option>" = { inherit (config.services."<consumer>"."<group>"."<option>") request; };
                       };
                       ```
                     '';
                     default = { };
-                    type = types.attrsOf (types.submodule { imports = [ contractType.interface ]; });
+                    type = types.nestedAttrsOf entryType;
                   };
 
                   requests = mkOption {
-                    description = "The `request` of each entry in `want`.";
+                    description = "The `request` of each entry in `want`, at the same path.";
                     readOnly = true;
                     type = types.attrsOf types.raw;
-                    default = lib.mapAttrs (_: want: { inherit (want) request; }) config.want;
+                    default = mapEntries (_: want: { inherit (want) request; });
                     defaultText = lib.literalMD "the `request` of each entry in `want`";
                   };
 
@@ -155,7 +191,7 @@ in
                       Each provider has a *provider option*, in which the provider gets its requests
                       from `providerRequests.<provider>`.
                       The value of the provider option has an entry with a `response`
-                      for each request that the provider gets, with the same name.
+                      for each request that the provider gets, at the same path.
 
                       A provider module adds itself here with `module` and `contract`.
                       Thus the module takes `options` in its arguments:
@@ -224,7 +260,7 @@ in
 
                   instances = mkOption {
                     description = ''
-                      For each entry in `want`, with the same name,
+                      For each entry in `want`, at the same path,
                       the provider that has the instance of the entry, one of `providers`.
                       The default is `defaultProvider`.
                       To connect an entry to a provider manually, set it to `null`.
@@ -234,11 +270,11 @@ in
 
                       ```nix
                       contracts.${contractName}.defaultProvider = config.contracts.${contractName}.providers."<provider>";
-                      contracts.${contractName}.instances."<consumer>-<option>" =
+                      contracts.${contractName}.instances."<consumer>"."<option>" =
                         config.contracts.${contractName}.providers."<other-provider>";
                       ```
                     '';
-                    type = types.attrsOf (types.nullOr providerRefType);
+                    type = types.nestedAttrsOf (types.nullOr providerRefType);
                   };
 
                   providerRequests = mkOption {
@@ -260,40 +296,40 @@ in
                     type = types.attrsOf (types.attrsOf types.raw);
                     default = lib.mapAttrs (
                       _: provider:
-                      lib.filterAttrs (
-                        name: _: config.instances.${name} != null && config.instances.${name}.loc == provider.loc
-                      ) config.requests
+                      filterMapEntries (path: instanceOf path != null && (instanceOf path).loc == provider.loc) (
+                        _: want: { inherit (want) request; }
+                      )
                     ) config.providers;
                     defaultText = lib.literalMD "the entries of `requests` that `instances` sends to each provider";
                   };
 
                   results = mkOption {
                     description = ''
-                      The `response` from the provider in `instances` for each entry in `want`, with the same name.
+                      The `response` from the provider in `instances` for each entry in `want`, at the same path.
 
                       The user sets the `response` of a consumer option from this option:
 
                       ```nix
-                      services."<consumer>"."<option>".response = config.contracts.${contractName}.results."<consumer>-<option>";
+                      services."<consumer>"."<option>".response = config.contracts.${contractName}.results."<consumer>"."<option>";
                       ```
                     '';
                     readOnly = true;
                     # Lazy, so that an entry without a provider does not make the other entries fail.
                     type = types.lazyAttrsOf types.raw;
-                    default = lib.mapAttrs (
-                      name: _:
-                      if config.instances.${name} == null then
-                        throw "contracts.${contractName}.want.${name}: no provider. Set `contracts.${contractName}.defaultProvider` or `contracts.${contractName}.instances.${name}`."
+                    default = mapEntries (
+                      path: _:
+                      if instanceOf path == null then
+                        throw "contracts.${contractName}.want.${lib.showAttrPath path}: no provider. Set `contracts.${contractName}.defaultProvider` or `contracts.${contractName}.instances.${lib.showAttrPath path}`."
                       else
-                        config.instances.${name}.value.${name}.response
-                    ) config.want;
+                        (lib.getAttrFromPath path (instanceOf path).value).response
+                    );
                     defaultText = lib.literalMD "the `response` from the provider in `instances` for each entry in `want`";
                   };
                 };
 
                 # A default for each entry, and not for the option,
                 # so that a definition of one entry does not remove the defaults of the other entries.
-                config.instances = lib.mapAttrs (_: _: lib.mkOptionDefault config.defaultProvider) config.want;
+                config.instances = mapEntries (_: _: lib.mkOptionDefault config.defaultProvider);
               }
             );
           }

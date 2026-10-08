@@ -452,20 +452,30 @@ checkConfigError 'A definition for option .* is not of type .*' config.value.b.f
 checkConfigError 'expected an attribute set with keys from \[request, result\]' config.value.consumer ./declare-nested-attrs-misshapen.nix
 
 # contracts: find the provider option from `module` and `contract`
-checkConfigOutput '^11$' config.contracts.number.results.a.value ./contracts-provider-path.nix
-checkConfigOutput '^12$' config.contracts.number.results.b.value ./contracts-provider-path.nix
-checkConfigOutput '^13$' config.contracts.number.results.c.value ./contracts-provider-path.nix
-checkConfigOutput '^14$' config.contracts.number.results.d.value ./contracts-provider-path.nix
+checkConfigOutput '^11$' config.contracts.number.results.consumer.a.value ./contracts-provider-path.nix
+checkConfigOutput '^12$' config.contracts.number.results.consumer.b.value ./contracts-provider-path.nix
+checkConfigOutput '^13$' config.contracts.number.results.consumer.c.value ./contracts-provider-path.nix
+checkConfigOutput '^14$' config.contracts.number.results.consumer.d.value ./contracts-provider-path.nix
 STRICT_EVAL=1 checkConfigOutput '^\["services","two","numbers"\]$' config.contracts.number.providers.two.loc ./contracts-provider-path.nix
 STRICT_EVAL=1 checkConfigOutput '^\["services","four","number"\]$' config.contracts.number.providers.four.loc ./contracts-provider-path.nix
 checkConfigError 'a provider `module` must be an option' config.contracts.number.providers.wrong.loc ./contracts-provider-path.nix ./contracts-provider-path-wrong.nix
 
+# contracts: route nested `want` entries to a provider and back
+checkConfigOutput '^112$' config.contracts.sum.results.c1.x.value ./contracts-nested.nix
+checkConfigOutput '^3$' config.contracts.sum.results.c2.x.value ./contracts-nested.nix
+checkConfigOutput '^6$' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix
+checkConfigOutput '^"c1:x,c2:x,c3:db"$' config.wantedEntries ./contracts-nested.nix
+checkConfigError 'contracts.sum.want.c3.db.primary: no provider' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix ./contracts-nested-no-provider.nix
+checkConfigOutput '^"c1:x,c2:x"$' config.wantedEntries ./contracts-nested.nix ./contracts-nested-manual.nix
+checkConfigOutput '^112$' config.contracts.sum.results.c1.x.value ./contracts-nested.nix ./contracts-nested-manual.nix
+checkConfigError 'contracts.sum.want.c3.db.primary: no provider. Set .* or `contracts.sum.instances.c3.db.primary`' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix ./contracts-nested-manual.nix
+
 # contracts: rename a contract type, and send the requests of the old name to the provider of the new name
-checkConfigOutput '^6$' config.contracts.number.results.old.value ./contracts-type-rename.nix
-checkConfigOutput '^2$' config.contracts.count.results.new.value ./contracts-type-rename.nix
+checkConfigOutput '^6$' config.contracts.number.results.old.x.value ./contracts-type-rename.nix
+checkConfigOutput '^2$' config.contracts.count.results.new.x.value ./contracts-type-rename.nix
 checkConfigOutput '^"new,old"$' config.wantedNames ./contracts-type-rename.nix
 STRICT_EVAL=1 checkConfigOutput '^\["The option .number. defined in [^"]*contracts-type-rename.nix. has been renamed to .count.\."\]$' config.contracts.warnings ./contracts-type-rename.nix
-checkConfigError 'contracts.count.want.old: no provider' config.contracts.number.results.old.value ./contracts-type-rename.nix ./contracts-type-rename-no-provider.nix
+checkConfigError 'contracts.count.want.old.x: no provider' config.contracts.number.results.old.x.value ./contracts-type-rename.nix ./contracts-type-rename-no-provider.nix
 # contracts: a contract type cannot have the name `warnings`
 checkConfigError 'The option .contracts.warnings. in .* is already declared in' config.contracts.warnings ./contracts-type-name-warnings.nix
 
