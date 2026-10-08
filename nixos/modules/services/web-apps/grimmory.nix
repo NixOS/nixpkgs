@@ -223,11 +223,15 @@ in
 
       environment = cfg.environment;
 
-      script = if cfg.database.passwordFile != null then ''
-        DATABASE_PASSWORD="$(cat ''${CREDENTIALS_DIRECTORY}/db-password)" ${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}
-      '' else ''
-        ${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}
-      '';
+      script =
+        if cfg.database.passwordFile != null then
+          ''
+            DATABASE_PASSWORD="$(cat ''${CREDENTIALS_DIRECTORY}/db-password)" ${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}
+          ''
+        else
+          ''
+            ${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}
+          '';
 
       serviceConfig = {
         User = cfg.user;
@@ -264,7 +268,8 @@ in
         StateDirectory = mkIf (cfg.stateDir == "/var/lib/grimmory") "grimmory";
 
         # Make paths writable if not in the state directory
-        ReadWritePaths = []
+        ReadWritePaths =
+          [ ]
           ++ (optional (cfg.stateDir != "/var/lib/grimmory") cfg.stateDir)
           ++ (optional (!(lib.hasPrefix cfg.stateDir cfg.bookdropDir)) cfg.bookdropDir)
           ++ (optional (!(lib.hasPrefix cfg.stateDir cfg.booksDir)) cfg.booksDir);
