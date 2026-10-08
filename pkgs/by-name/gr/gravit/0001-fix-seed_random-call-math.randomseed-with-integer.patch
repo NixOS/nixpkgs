@@ -1,0 +1,27 @@
+From cf82c9d16cde446403e4e5a25ffa1f027e059516 Mon Sep 17 00:00:00 2001
+From: airone01 <airone01@proton.me>
+Date: Sat, 10 Oct 2026 20:38:17 +0200
+Subject: [PATCH 1/2] fix(seed_random): call math.randomseed with integer
+
+`math.randomseed([x [, y]])` must be called with an integer, not a
+float. This patch floors the parameter before calling the function.
+---
+ spawn/functions.lua | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/spawn/functions.lua b/spawn/functions.lua
+index 57031ac..1da3bcb 100644
+--- a/spawn/functions.lua
++++ b/spawn/functions.lua
+@@ -23,7 +23,7 @@ function seed_random()
+        -- improved seeding on some platforms, by throwing away the high part of time,
+        -- then reversing the digits so the least significant part makes the biggest change
+        -- see http://lua-users.org/wiki/MathLibraryTutorial
+-       r_seed = tonumber(tostring( r_seed ):reverse():sub(1,8))
++       r_seed = math.floor(tonumber(tostring( r_seed ):reverse():sub(1,8)))
+        math.randomseed( r_seed )
+        random_firstuse=0
+ end
+-- 
+2.55.0
+
