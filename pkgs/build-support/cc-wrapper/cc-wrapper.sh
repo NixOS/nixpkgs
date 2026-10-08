@@ -38,7 +38,6 @@ nonFlagArgs=0
 cc1=0
 # shellcheck disable=SC2193
 [[ "$wrapperCompiler" = *++ ]] && isCxx=1 || isCxx=0
-cxxInput=0
 cxxInclude=1
 cxxLibrary=1
 cInclude=1
@@ -58,13 +57,9 @@ while (( "$n" < "$nParams" )); do
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
         -x*-header) dontLink=1 ;; # both `-x c-header` and `-xc-header` are accepted by clang
-        --driver-mode=g++) isCxx=1 ;;
-        --driver-mode=gcc | --driver-mode=cpp) isCxx=0 ;;
-        -xc++*) cxxInput=1 ;;        # both `-xc++` and `-x c++` are accepted by clang
         -x)
             case "$p2" in
                 *-header) dontLink=1 ;;
-                c++*) cxxInput=1 ;;
             esac
             ;;
         --) # Everything else is positional args!
@@ -82,8 +77,6 @@ while (( "$n" < "$nParams" )); do
         *) nonFlagArgs=1 ;; # Includes a solitary dash (`-`) which signifies standard input; it is not a flag
     esac
 done
-
-if [[ $cxxInput == 1 ]]; then isCxx=1; fi
 
 # If we pass a flag like -Wl, then gcc will call the linker unless it
 # can figure out that it has to do something else (e.g., because of a
@@ -149,16 +142,27 @@ if [ "$wrapper_NIX_ENFORCE_NO_NATIVE" = 1 ]; then
     params=(${kept+"${kept[@]}"})
 fi
 
-# Some build systems such as Bazel and SwiftPM use `clang` instead of `clang++`,
-# which will find the libc++ headers in the sysroot for C++ files.
-if [[ "$isCxx" = 0 && "@isClang@" ]]; then
-# This duplicates the behavior of a native toolchain, which can find the
-# libc++ headers but requires `-lc++` to be specified explicitly when linking.
-    isCxx=1
-    cxxLibrary=0
+# Select personality from the primary command in emission order, before
+# conditional C++ policy is added. A mode inside that conditional policy or a
+# late hook cannot recursively change which policy was selected.
+if [[ "@isClang@" == 1 && "@isFlang@" != 1 ]]; then
+    primaryDriverArgs=($wrapper_NIX_CFLAGS_COMPILE_BEFORE "${params[@]}" $wrapper_NIX_CFLAGS_COMPILE)
+    if [[ $dontLink != 1 ]]; then
+        primaryDriverArgs+=($wrapper_NIX_CFLAGS_LINK)
+    fi
+    # Clang selects its mode before option parsing, even in operands and after --.
+    primaryDriverArgs+=("${positionalArgs[@]}")
+    for p in "${primaryDriverArgs[@]}"; do
+        case "$p" in
+            --driver-mode=g++) isCxx=1 ;;
+            --driver-mode=*) isCxx=0 ;;
+        esac
+    done
 fi
 
-wrapperCompileFlags
+# -x belongs to native per-input language selection. Clang's C driver still
+# needs packaged C++ header defaults without opaque caller C++ arguments.
+wrapperCompileFlags "@isClang@"
 
 source @out@/nix-support/add-hardening.sh
 

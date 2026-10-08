@@ -23,6 +23,11 @@ let
       mkdir -p "$out/nix-support/operation-include"
       echo '#define OPERATION_HEADER 42' > "$out/nix-support/operation-include/operation-header.h"
       echo " -isystem $out/nix-support/operation-include" >> "$out/nix-support/libc-cflags"
+      ${lib.optionalString stdenv.cc.isClang ''
+        mkdir -p "$out/nix-support/operation-cxx-include"
+        echo '#define PACKAGED_CXX_HEADER 42' > "$out/nix-support/operation-cxx-include/packaged-cxx-header.h"
+        echo " -cxx-isystem $out/nix-support/operation-cxx-include" >> "$out/nix-support/libcxx-cxxflags"
+      ''}
       cat > "$out/nix-support/cc-wrapper-hook" <<'EOF'
       case "''${WRAPPER_TEST_ENTRY:-}" in
         nested)
@@ -154,7 +159,142 @@ in
     '@operation cxx.rsp'
   ${emulator} ./entry-cxx
 
+  echo "checking driver personality independently of per-input language..." >&2
+  cat > driver-language.c <<'EOF'
+  #ifdef __cplusplus
+  #error Expected a C input
+  #endif
+  #if defined(DRIVER_CXX_POLICY) != EXPECT_DRIVER_CXX_POLICY
+  #error Wrong driver policy
+  #endif
+  int main(void) { return 0; }
+  EOF
+  cat > driver-language.cc <<'EOF'
+  #ifndef __cplusplus
+  #error Expected a C++ input
+  #endif
+  #include <vector>
+  #if defined(DRIVER_CXX_POLICY) != EXPECT_DRIVER_CXX_POLICY
+  #error Wrong driver policy
+  #endif
+  std::vector<int> values;
+  EOF
+  # -x is stateful per input, including reset to extension-based selection.
+  # Opaque caller flags are global driver policy, not per-input C++ options.
+  for driver in cc c++; do
+    expected=0
+    if [[ $driver == c++ ]]; then expected=1; fi
+    NIX_CXXSTDLIB_COMPILE=-DDRIVER_CXX_POLICY=1 \
+      ${parent}/bin/${targetPrefix}"$driver" -fsyntax-only \
+      -DEXPECT_DRIVER_CXX_POLICY="$expected" \
+      -x c++ driver-language.cc -x c driver-language.c
+    NIX_CXXSTDLIB_COMPILE=-DDRIVER_CXX_POLICY=1 \
+      ${parent}/bin/${targetPrefix}"$driver" -fsyntax-only \
+      -DEXPECT_DRIVER_CXX_POLICY="$expected" \
+      -x c++ -x c driver-language.c -x none driver-language.cc
+  done
+  # A C driver does not acquire C++ runtime policy from an earlier -x c++;
+  # a C++ driver retains it even when all inputs are explicitly C.
+  NIX_CXXSTDLIB_LINK=-lmissing_driver_policy \
+    ${parent}/bin/${targetPrefix}cc -DEXPECT_DRIVER_CXX_POLICY=0 \
+    -x c++ -x c driver-language.c -o driver-language
+  ${emulator} ./driver-language
+  if NIX_CXXSTDLIB_LINK=-lmissing_driver_policy \
+    ${parent}/bin/${targetPrefix}c++ -DEXPECT_DRIVER_CXX_POLICY=0 \
+    -x c driver-language.c -o driver-language > driver-language.log 2>&1; then
+    echo "C++ driver lost its runtime policy for a C input" >&2
+    exit 1
+  fi
+  grep -F missing_driver_policy driver-language.log
+
+  # Suppressing default headers/libraries does not suppress explicit policy.
+  cat > explicit-policy.cc <<'EOF'
+  #ifndef EXPLICIT_CXX_POLICY
+  #error explicit C++ policy was suppressed
+  #endif
+  static_assert(__cplusplus >= 201703L);
+  EOF
+  for suppression in -nostdinc -nostdinc++; do
+    NIX_CXXSTDLIB_COMPILE='-std=c++17 -DEXPLICIT_CXX_POLICY=1' \
+      ${parent}/bin/${targetPrefix}c++ "$suppression" -c explicit-policy.cc -o explicit-policy.o
+  done
+  ${lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir explicit-policy
+    echo 'int explicit_value(void) { return 42; }' > explicit-policy/value.c
+    ${CC} -fPIC -c explicit-policy/value.c -o explicit-policy/value.o
+    $AR crs explicit-policy/libexplicit.a explicit-policy/value.o
+    cat > explicit-policy/link.cc <<'EOF'
+    extern "C" int explicit_value(void);
+    int entry() { return explicit_value(); }
+    EOF
+    if ${parent}/bin/${targetPrefix}c++ -shared -fPIC -nostdlib -Wl,--no-undefined \
+      explicit-policy/link.cc -o explicit-policy/missing.so > explicit-policy/missing.log 2>&1; then
+      echo "A missing explicit library unexpectedly linked" >&2
+      exit 1
+    fi
+    grep -F explicit_value explicit-policy/missing.log
+    NIX_CXXSTDLIB_LINK="-L$PWD/explicit-policy -lexplicit" \
+      ${parent}/bin/${targetPrefix}c++ -shared -fPIC -nostdlib -Wl,--no-undefined \
+      explicit-policy/link.cc -o explicit-policy/linked.so
+    echo 'void *operator new(__SIZE_TYPE__); void *entry() { return ::operator new(1); }' \
+      > explicit-policy/default-runtime.cc
+    ${parent}/bin/${targetPrefix}c++ -shared -fPIC -Wl,--no-undefined \
+      explicit-policy/default-runtime.cc -o explicit-policy/default-runtime.so
+    if ${parent}/bin/${targetPrefix}c++ -shared -fPIC -nostdlib -Wl,--no-undefined \
+      explicit-policy/default-runtime.cc -o explicit-policy/suppressed.so > explicit-policy/default.log 2>&1; then
+      echo "The suppressed C++ runtime unexpectedly linked" >&2
+      exit 1
+    fi
+    grep -F 'operator new' explicit-policy/default.log
+  ''}
+
+  # Unlike GCC, Clang selects mode before parsing even option operands.
+  touch -- --driver-mode=g++
+  NIX_CXXSTDLIB_COMPILE=-DDRIVER_CXX_POLICY=1 \
+    ${parent}/bin/${targetPrefix}cc -include --driver-mode=g++ \
+    -x c -c driver-language.c -DEXPECT_DRIVER_CXX_POLICY=${if stdenv.cc.isClang then "1" else "0"} \
+    -o driver-language.o
+
   ${lib.optionalString stdenv.cc.isClang ''
+    # Its global scan also sees tokens after --, after our generic arguments.
+    NIX_CFLAGS_COMPILE=--driver-mode=gcc NIX_CXXSTDLIB_COMPILE=-DDRIVER_CXX_POLICY=1 \
+      ${parent}/bin/${targetPrefix}cc -x c -c driver-language.c \
+      -DEXPECT_DRIVER_CXX_POLICY=1 -x none -- --driver-mode=g++
+
+    # Generic argument channels take effect in their actual BEFORE/AFTER
+    # order. Conditional C++ flags are selected only after that primary mode.
+    for channel in NIX_CFLAGS_COMPILE_BEFORE NIX_CFLAGS_COMPILE; do
+      for mode in gcc g++; do
+        expected=0
+        if [[ $mode == g++ ]]; then expected=1; fi
+        cliMode=gcc
+        if [[ $channel == NIX_CFLAGS_COMPILE_BEFORE ]]; then
+          cliMode=g++
+          expected=1
+        fi
+        env "$channel=--driver-mode=$mode" NIX_CXXSTDLIB_COMPILE=-DDRIVER_CXX_POLICY=1 \
+          ${parent}/bin/${targetPrefix}cc --driver-mode="$cliMode" \
+          -x c driver-language.c -fsyntax-only -DEXPECT_DRIVER_CXX_POLICY="$expected"
+      done
+    done
+
+    if NIX_CFLAGS_LINK=--driver-mode=g++ NIX_CXXSTDLIB_LINK=-lmissing_driver_policy \
+      ${parent}/bin/${targetPrefix}cc -x c driver-language.c \
+      -DEXPECT_DRIVER_CXX_POLICY=0 -o driver-language > driver-mode-link.log 2>&1; then
+      echo "Generic link arguments did not select C++ runtime policy" >&2
+      exit 1
+    fi
+    grep -F missing_driver_policy driver-mode-link.log
+
+    # The C driver needs packaged C++ headers without opaque caller flags,
+    # including when a different receiver interprets the prepared request.
+    echo '#include <packaged-cxx-header.h>' > packaged-header.cc
+    echo 'static_assert(PACKAGED_CXX_HEADER == 42);' >> packaged-header.cc
+    NIX_CXXSTDLIB_COMPILE=-std=c++17 \
+      "$BASH" ./prepare-operation ${child}/nix-support/compiler ${rawCC} \
+      -fsyntax-only -DEXPECT_DRIVER_CXX_POLICY=0 \
+      -x c driver-language.c -x c++ packaged-header.cc
+
     # Swift's actual link job uses clang --driver-mode=g++, not necessarily a
     # compiler whose basename ends in ++.
     env -u NIX_CFLAGS_COMPILE_${suffixSalt} NIX_CFLAGS_COMPILE= \

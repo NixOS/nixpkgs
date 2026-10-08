@@ -1545,9 +1545,14 @@ Lists retain their order, boolean inputs combine by disjunction, and singular in
 Selections that a later operation can still change must remain separate: libc include defaults are retained independently so a delegated compiler can honor its own `-nostdinc` without deleting a caller-provided include option.
 GNAT deliberately selects no C include defaults for its compiler jobs.
 C++ header and runtime flags are likewise added when interpreting the individual compiler invocation.
-The current C-family interpreter still summarizes language selection with one invocation-wide C++ flag.
-It can therefore apply C++ policy after `-x c++ -x c` selects only C, or to the C job of a mixed C/C++ invocation; GCC's [per-input language selection](https://gcc.gnu.org/onlinedocs/gcc/Overall-Options.html) requires finer distinctions.
-Preserving the selected policy across wrappers does not establish correctness of this operation classification.
+Opaque `NIX_CXXSTDLIB_COMPILE` and `NIX_CXXSTDLIB_LINK` arguments belong to the invocation's C++ **driver personality**, not to individual input languages.
+The executable name (`g++` or `clang++`) supplies the initial personality; Clang’s `--driver-mode` options in the primary command override it in emission order: generic BEFORE flags, explicit arguments, generic compile flags, generic link flags when linking, and the restored positional tail after `--`.
+Clang selects this mode before parsing options, including mode-shaped tokens used as operands or positional filenames.
+Selection precedes conditional C++ arguments and late wrapper hooks; options they introduce still affect the native driver, but do not recursively change the policy already selected.
+`-x` and `-x none` remain native per-input language selectors: `gcc -x c++` does not acquire implicit C++ runtime policy, while `g++ -x c` retains its driver policy.
+These caller channels apply to the whole invocation, so their options must be valid for every job in a mixed-language invocation; use separate compiler invocations for incompatible per-language options.
+Packaged C++ header and runtime defaults remain separate from those opaque arguments: `-nostdinc++` and `-nostdlib` suppress defaults, not explicit caller policy.
+Clang's C driver can discover C++ headers without receiving a caller's `-std=c++17`, while native default-header bindings retain per-job language selection.
 Role-indexed contributions combine pointwise; selecting one use preserves ordered combination and is a monoid homomorphism.
 Specifically, `(P <> Q)(r) = P(r) ++ Q(r)`, so evaluation at `r` preserves both concatenation and the empty contribution.
 This characterizes selection only together with its singleton meaning: retain precisely the contribution for the requested use; the constant-empty function is also a homomorphism.

@@ -47,12 +47,16 @@ if [[ -e @out@/nix-support/libc-crt1-cflags ]]; then
     wrapper_CC_CRT_FLAGS="$(< @out@/nix-support/libc-crt1-cflags)"
 fi
 
+# Packaged header defaults are distinct from opaque caller C++ arguments:
+# Clang's C driver can need the former without accepting the latter.
+wrapper_CC_CXX_FLAGS=
 if [ -e @out@/nix-support/libcxx-cxxflags ]; then
-    wrapper_NIX_CXXSTDLIB_COMPILE+=" $(< @out@/nix-support/libcxx-cxxflags)"
+    wrapper_CC_CXX_FLAGS="$(< @out@/nix-support/libcxx-cxxflags)"
 fi
 
+wrapper_CC_CXX_LINK_FLAGS=
 if [ -e @out@/nix-support/libcxx-ldflags ]; then
-    wrapper_NIX_CXXSTDLIB_LINK+=" $(< @out@/nix-support/libcxx-ldflags)"
+    wrapper_CC_CXX_LINK_FLAGS="$(< @out@/nix-support/libcxx-ldflags)"
 fi
 
 if [ -e @out@/nix-support/gnat-cflags ]; then
