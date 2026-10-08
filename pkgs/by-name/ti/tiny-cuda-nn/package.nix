@@ -7,7 +7,6 @@
   ninja,
   python3Packages ? { },
   pythonSupport ? false,
-  stdenv,
   symlinkJoin,
   which,
 }:
@@ -44,9 +43,11 @@ let
 
   cudaArchitecturesString = strings.concatMapStringsSep ";" flags.dropDots cudaCapabilities;
 in
-stdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
   pname = "tiny-cuda-nn";
   version = "2.0";
+
+  __structuredAttrs = true;
   strictDeps = true;
 
   format = strings.optionalString pythonSupport "setuptools";
@@ -98,19 +99,17 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  env = {
+    TCNN_CUDA_ARCHITECTURES = cudaArchitecturesString;
+    CUDA_HOME = cuda-native-redist.outPath;
+    LIBRARY_PATH = "${cuda-native-redist}/lib/stubs";
+  };
+
   # NOTE: We cannot use pythonImportsCheck for this module because it uses torch to immediately
   #   initialize CUDA and GPU access is not allowed in the nix build environment.
   # NOTE: There are no tests for the C++ library or the python bindings, so we just skip the check
   #   phase -- we're not missing anything.
   doCheck = false;
-
-  preConfigure = ''
-    export TCNN_CUDA_ARCHITECTURES="${cudaArchitecturesString}"
-    export CUDA_HOME="${cuda-native-redist}"
-    export LIBRARY_PATH="${cuda-native-redist}/lib/stubs:$LIBRARY_PATH"
-    export CC="${backendStdenv.cc}/bin/cc"
-    export CXX="${backendStdenv.cc}/bin/c++"
-  '';
 
   # When building the python bindings, we cannot re-use the artifacts from the C++ build so we
   # skip the CMake configurePhase and the buildPhase.
@@ -120,13 +119,16 @@ stdenv.mkDerivation (finalAttrs: {
   # need to change directories to the source directory.
   configurePhase = strings.optionalString pythonSupport ''
     runHook preConfigure
+
     mkdir -p "$NIX_BUILD_TOP/build"
     cd "$NIX_BUILD_TOP/build"
+
     runHook postConfigure
   '';
 
   buildPhase = strings.optionalString pythonSupport ''
     runHook preBuild
+
     python -m pip wheel \
       --no-build-isolation \
       --no-clean \
@@ -135,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
       --verbose \
       --wheel-dir "$NIX_BUILD_TOP/build" \
       "$NIX_BUILD_TOP/source/bindings/torch"
+
     runHook postBuild
   '';
 
