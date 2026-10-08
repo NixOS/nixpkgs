@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "simit";
   version = "0.8.0";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     pname = "simit";
     inherit (finalAttrs) version;
