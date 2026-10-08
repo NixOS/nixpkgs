@@ -7,13 +7,20 @@
 
 let
   cfg = config.programs.kde-pim;
+  mkProgramOption =
+    name:
+    lib.mkEnableOption name
+    // {
+      default = cfg.enable;
+      defaultText = "config.programs.kde-pim.enable";
+    };
 in
 {
   options.programs.kde-pim = {
     enable = lib.mkEnableOption "KDE PIM base packages";
-    kmail = lib.mkEnableOption "KMail";
-    kontact = lib.mkEnableOption "Kontact";
-    merkuro = lib.mkEnableOption "Merkuro";
+    kmail = mkProgramOption "KMail";
+    kontact = mkProgramOption "Kontact";
+    merkuro = mkProgramOption "Merkuro";
   };
 
   config = lib.mkIf cfg.enable {
