@@ -26603,6 +26603,11 @@
     githubId = 863807;
     name = "Serge Guelton";
   };
+  sergioia-dev = {
+    name = "Sergio IA";
+    github = "sergioia-dev";
+    githubId = 175462788;
+  };
   sergioribera = {
     github = "SergioRibera";
     githubId = 56278796;
