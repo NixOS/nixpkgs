@@ -40,7 +40,6 @@ swiftpmBuildPhase() {
     local flagsArray=(
         -j "$buildCores"
         -c "${swiftpmBuildConfig-release}"
-        -Xswiftc -module-cache-path -Xswiftc "$NIX_BUILD_TOP/module-cache"
     )
     concatTo flagsArray swiftpmFlags swiftpmFlagsArray
 
