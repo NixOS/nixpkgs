@@ -52,6 +52,7 @@
   doInstallCheck ? !stdenv.hostPlatform.isDarwin, # extremely slow on darwin
   tests,
   testers,
+  runCommand,
   rustSupport ? lib.meta.availableOn stdenv.hostPlatform rustc,
   cargo,
   rustc,
@@ -261,7 +262,10 @@ stdenv.mkDerivation (finalAttrs: {
     "NO_INET_NTOP="
     "NO_INET_PTON="
   ]
-  ++ (if stdenv.hostPlatform.isDarwin then [ "NO_APPLE_COMMON_CRYPTO=1" ] else [ "sysconfdir=/etc" ])
+  ++ lib.optional stdenv.hostPlatform.isDarwin "NO_APPLE_COMMON_CRYPTO=1"
+  ++ [ "sysconfdir=/etc" ]
+  # Read the packaged defaults, which include /etc/gitconfig after them.
+  ++ lib.optional osxkeychainSupport "ETC_GITCONFIG=${placeholder "out"}/etc/gitconfig"
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     "NO_SYS_POLL_H=1"
     "NO_GETTEXT=YesPlease"
@@ -483,11 +487,15 @@ stdenv.mkDerivation (finalAttrs: {
       ''
   )
   + lib.optionalString osxkeychainSupport ''
-    # enable git-credential-osxkeychain on darwin if desired (default)
+    # git reads this file as its system config. It sets the keychain default
+    # and then includes /etc/gitconfig, so settings there override it.
+    # git ignores the include if /etc/gitconfig does not exist.
     mkdir -p $out/etc
     cat > $out/etc/gitconfig << EOF
     [credential]
       helper = osxkeychain
+    [include]
+      path = /etc/gitconfig
     EOF
   ''
   + ''
@@ -639,6 +647,29 @@ stdenv.mkDerivation (finalAttrs: {
         doInstallCheck = true;
       });
       buildbot-integration = nixosTests.buildbot;
+      system-config-paths =
+        runCommand "git-system-config-paths" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+          ''
+            export HOME=$TMPDIR
+            unset GIT_CONFIG_SYSTEM GIT_CONFIG_GLOBAL
+            [ "$(git var GIT_ATTR_SYSTEM)" = /etc/gitattributes ]
+            ${
+              if osxkeychainSupport then
+                ''
+                  [ "$(git var GIT_CONFIG_SYSTEM)" = ${finalAttrs.finalPackage}/etc/gitconfig ]
+                  cfg="git config --system --no-includes"
+                  [ "$($cfg --get-all credential.helper)" = osxkeychain ]
+                  [ "$($cfg --get-all include.path)" = /etc/gitconfig ]
+                  # the include comes after the defaults, so /etc/gitconfig wins
+                  [ "$($cfg --name-only --list | tail -n1)" = include.path ]
+                ''
+              else
+                ''
+                  [ "$(git var GIT_CONFIG_SYSTEM)" = /etc/gitconfig ]
+                ''
+            }
+            touch $out
+          '';
     }
     // lib.optionalAttrs svnSupport {
       git-svn-version = testers.testVersion {
