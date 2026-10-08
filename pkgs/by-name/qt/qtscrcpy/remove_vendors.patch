@@ -1,17 +1,15 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ba1c572..0a0ccdd 100644
+diff --git a/QtScrcpy/QtScrcpyCore/CMakeLists.txt b/QtScrcpy/QtScrcpyCore/CMakeLists.txt
+index 91988b0..ec6795d 100644
 --- a/QtScrcpy/QtScrcpyCore/CMakeLists.txt
 +++ b/QtScrcpy/QtScrcpyCore/CMakeLists.txt
-@@ -162,87 +162,8 @@ target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DI
+@@ -163,100 +163,8 @@ target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DI
  target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/device/recorder)
  target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/devicemanage)
  
 -#
 -# plantform deps
 -#
-+find_package(PkgConfig REQUIRED)
-+pkg_check_modules(FFMPEG REQUIRED libavcodec libavformat libavutil libswscale)
- 
+-
 -# windows
 -if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 -    # ffmpeg
@@ -44,6 +42,14 @@ index ba1c572..0a0ccdd 100644
 -
 -# MacOS
 -if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+-    # VideoToolbox decoder (macOS, Objective-C++)
+-    target_sources(${QSC_PROJECT_NAME} PRIVATE
+-        src/device/decoder/vtdecoder.mm
+-        src/device/decoder/vtdecoder.h
+-    )
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(FFMPEG REQUIRED libavcodec libavformat libavutil libswscale)
+ 
 -    # ffmpeg
 -    # include
 -    target_include_directories(${QSC_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/third_party/ffmpeg/include)
@@ -55,6 +61,13 @@ index ba1c572..0a0ccdd 100644
 -        avcodec.58
 -        avutil.56
 -        swscale.5
+-    )
+-
+-    # VideoToolbox + CoreMedia + CoreVideo (Apple Silicon H.264 硬解)
+-    target_link_libraries(${QSC_PROJECT_NAME} PRIVATE
+-        "-framework VideoToolbox"
+-        "-framework CoreMedia"
+-        "-framework CoreVideo"
 -    )
 -
 -    # copy bundle file    
