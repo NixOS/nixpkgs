@@ -3,8 +3,16 @@
   lib,
   pkgsCross,
   buildPythonPackage,
+  common-updater-scripts,
+  coreutils,
+  curl,
+  diffutils,
   fetchFromGitHub,
-  gitUpdater,
+  gnutar,
+  gzip,
+  jq,
+  nix,
+  nix-update,
   packaging,
   setuptools,
   pdfium,
@@ -13,6 +21,7 @@
   pytestCheckHook,
   removeReferencesTo,
   python,
+  writeShellApplication,
 }:
 
 let
@@ -87,9 +96,23 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    updateScript = gitUpdater {
-      allowedVersions = "^[.0-9]+$";
-    };
+    inherit ctypesgen;
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "pypdfium2-update";
+      runtimeInputs = [
+        common-updater-scripts
+        coreutils
+        curl
+        diffutils
+        gnutar
+        gzip
+        jq
+        nix
+        nix-update
+      ];
+      text = builtins.readFile ./update.sh;
+    });
     tests.cross = pkgsCross.aarch64-multiplatform.python3Packages.pypdfium2;
   };
 
