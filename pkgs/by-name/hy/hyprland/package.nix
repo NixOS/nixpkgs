@@ -39,6 +39,7 @@
   readline,
   systemd,
   tomlplusplus,
+  tzdata,
   udis86,
   uwsm,
   wayland,
@@ -211,6 +212,7 @@ customStdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     ${optionalString wrapRuntimeDeps ''
       wrapProgram $out/bin/Hyprland \
+        --set-default TZDIR ${tzdata}/share/zoneinfo \
         --suffix PATH : ${
           makeBinPath [
             binutils
