@@ -10,8 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "1.8.5";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "KraXen72";
     repo = "shira";
