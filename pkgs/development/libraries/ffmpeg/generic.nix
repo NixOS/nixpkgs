@@ -516,6 +516,15 @@ stdenv.mkDerivation (
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/a5d4c398b411a00ac09d8fe3b66117222323844c";
           hash = "sha256-peIXXU5+5DRQc3Xdpz5V+xIN7Vohs0Dlal6mHiMryXc=";
         })
+      ]
+      ++ optionals (lib.versionAtLeast version "8") [
+        # compatibility with openapv 1.1. remove when >8.1.3 and >9.0.2
+        # https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/24663
+        (fetchpatch2 {
+          name = "openapv-1.1-compat.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/c54710db21c1827dbc3e47658a562525af0fe528.patch";
+          hash = "sha256-ENpPDEHtl3kj/UF52hfV+LwvO7CUaK8UvTy+OAYlWFw=";
+        })
       ];
 
     configurePlatforms = [ ];

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   cmake,
   nix-update-script,
+  ffmpeg-headless,
 }:
 let
   # Requires an /etc/os-release file, so we override it with this.
@@ -12,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openapv";
-  version = "0.2.1.3";
+  version = "1.1.2.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openapv";
-    tag = "v${finalAttrs.version}-fix"; # Remove the `-fix` suffix after the next version
-    hash = "sha256-lc/x2dWh6T8c63siHB32ka+SPVYTTyaO4YrQ12EbGqw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zDz/JQrgsKT8bfRp3tWdaTurpilUsCZwFjFdA7k4PY8=";
   };
 
   postPatch = ''
@@ -28,7 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = nix-update-script { };
+  doCheck = true;
+
+  passthru = {
+    tests = { inherit ffmpeg-headless; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/openapv/releases/tag/v${finalAttrs.version}";
