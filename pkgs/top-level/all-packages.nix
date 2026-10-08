@@ -9557,7 +9557,7 @@ with pkgs;
     withGui = false;
   };
 
-  napari = with python312Packages; toPythonApplication napari;
+  napari = with python3Packages; toPythonApplication napari;
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 
