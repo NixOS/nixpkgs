@@ -5,6 +5,8 @@
   rustPlatform,
   buildPackages,
   installShellFiles,
+  pkg-config,
+  zstd,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -13,6 +15,7 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
   version = "0.60.1";
+  __structuredAttrs = true;
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -26,11 +29,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-wPN+gsanyM57BK9KYkRoFN3tf8ZboIaYf+pJxK2CW40=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
-  # Adding "libunwind" in buildInputs did not resolve it.
-  env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
+  buildInputs = [
+    zstd
+  ];
+
+  env = {
+    # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
+    # Adding "libunwind" in buildInputs did not resolve it.
+    RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   # Avoiding utils::url::test::* failures in the Darwin sandbox
   __darwinAllowLocalNetworking = true;

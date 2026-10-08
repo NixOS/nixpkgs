@@ -45,6 +45,7 @@
   pytest-freezegun,
   pytest-mock,
   pytest-snapshot,
+  pytest-timeout,
   requests-mock,
   types-freezegun,
 }:
@@ -120,6 +121,7 @@ buildPythonPackage (finalAttrs: {
     "opentelemetry-exporter-otlp-proto-http"
     "opentelemetry-sdk"
     "peewee"
+    "pyjwt"
     "wcmatch"
   ];
   dependencies = [
@@ -163,6 +165,7 @@ buildPythonPackage (finalAttrs: {
     pytest-freezegun
     pytest-mock
     pytest-snapshot
+    pytest-timeout
     requests-mock
     types-freezegun
   ];

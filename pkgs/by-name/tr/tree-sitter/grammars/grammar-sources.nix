@@ -2260,10 +2260,10 @@
   };
 
   php-only = {
-    version = "0.25.0-unstable-2026-09-24";
+    version = "0.25.1-unstable-2026-10-06";
     url = "github:tree-sitter/tree-sitter-php";
-    rev = "92b5271b60bec77fb65b5e5bc41561e8dac81299";
-    hash = "sha256-EkKYb9jatSl0/o+7tO2O3vx44ufDmZ4YJ/6t4il/Yk0=";
+    rev = "58d5643086ae60e93a3746cca648363ee97c8761";
+    hash = "sha256-L8c2OkkwryR5wpqYS++Zn8ZJ85wr//dvH2oe1PJcE8o=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
@@ -3006,9 +3006,9 @@
   };
 
   swift = rec {
-    version = "0.7.3";
+    version = "0.7.4";
     url = "github:alex-pinkus/tree-sitter-swift/${version}-with-generated-files";
-    hash = "sha256-SnWwqk6IRpaNldsraSKwHGtS64LiCndxDksrvLMs1P8=";
+    hash = "sha256-cnC1qVvtkgHSsYsMi9sbH8VGwGckRMTZpMQsdisU3AI=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
