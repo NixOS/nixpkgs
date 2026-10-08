@@ -17,7 +17,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "qcsuper";
   version = "2.1.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "P1sec";
