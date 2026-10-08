@@ -121,7 +121,10 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
-    maintainers = with lib.maintainers; [ puffnfresh ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      _0x48piraj
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
     platforms = builtins.attrNames srcHashes;
