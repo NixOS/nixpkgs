@@ -8,7 +8,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exegol";
   version = "5.1.13";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ThePorgs";
