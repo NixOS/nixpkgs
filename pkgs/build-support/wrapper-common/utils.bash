@@ -12,6 +12,7 @@ wrapperInput() {
 # Keeping the suppressible component separate lets a delegated compiler honor
 # its own -nostdinc without discarding an identical caller-provided option.
 wrapperCompileFlags() {
+    local cxxHeadersForCDriver=${1:-0}
     declare -g +x wrapperCFlags wrapperCFlagsLink
     wrapperCFlags=$wrapper_NIX_CFLAGS_COMPILE
     wrapperCFlagsLink=$wrapper_NIX_CFLAGS_LINK
@@ -19,11 +20,17 @@ wrapperCompileFlags() {
         wrapperCFlags="$wrapper_CC_LIBC_FLAGS $wrapperCFlags"
     fi
     wrapperCFlags="$wrapper_CC_CRT_FLAGS $wrapperCFlags"
-    if [[ $isCxx == 1 && $cxxInclude == 1 ]]; then
+    if [[ $isCxx == 1 ]]; then
         wrapperCFlags+=" $wrapper_NIX_CXXSTDLIB_COMPILE"
+        wrapperCFlagsLink+=" $wrapper_NIX_CXXSTDLIB_LINK"
+    fi
+    if [[ $cxxInclude == 1 ]]; then
+        if [[ $isCxx == 1 || $cxxHeadersForCDriver == 1 ]]; then
+            wrapperCFlags+=" $wrapper_CC_CXX_FLAGS"
+        fi
     fi
     if [[ $isCxx == 1 && $cxxLibrary == 1 ]]; then
-        wrapperCFlagsLink+=" $wrapper_NIX_CXXSTDLIB_LINK"
+        wrapperCFlagsLink+=" $wrapper_CC_CXX_LINK_FLAGS"
     fi
 }
 
