@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "3.6.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "agude";
     repo = "wayback-machine-archiver";
