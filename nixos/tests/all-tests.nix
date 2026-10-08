@@ -937,8 +937,6 @@ in
   ipget = runTest ./ipget.nix;
   ipv6 = runTest ./ipv6.nix;
   irqbalance = runTest ./irqbalance.nix;
-  iscsi-multipath-root = runTest ./iscsi-multipath-root.nix;
-  iscsi-root = runTest ./iscsi-root.nix;
   isolate = runTest ./isolate.nix;
   isso = runTest ./isso.nix;
   jackett = runTest ./jackett.nix;
