@@ -22,6 +22,7 @@ in
       [
         # core packages
         akonadi
+        akonadi-import-wizard
         kdepim-runtime
       ]
       ++ lib.optionals cfg.kmail [
