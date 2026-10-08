@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TbvJit+xbT7IIv7/uxXIKGjgEmVUwwdKfb4ptMQEztM=";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   passthru = {
