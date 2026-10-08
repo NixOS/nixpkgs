@@ -383,8 +383,12 @@ stdenv.mkDerivation (finalAttrs: {
       caniko
       MattSturgeon
     ];
+    problems.broken = {
+      message = "Upstream does not currently support the native Linux build; several core features are unavailable.";
+      urls = [ "https://github.com/NixOS/nixpkgs/pull/491344#issuecomment-6001514698" ];
+    };
     longDescription = ''
-      Vortex's native Linux build is considered experimental upstream.
+      Vortex's native Linux build is not currently supported upstream.
       Several core features available in the Windows build are not yet available on Linux.
       ArcTool and QuickBMS integrations are omitted because upstream does not provide versioned artifacts for their bundled Windows executables.
     '';
