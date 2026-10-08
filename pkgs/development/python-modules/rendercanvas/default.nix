@@ -6,24 +6,26 @@
   # build-system
   flit-core,
 
+  # dependencies
+  numpy,
+
   # nativeCheckInputs
   pytestCheckHook,
   imageio,
   glfw,
-  numpy,
   trio,
   wgpu,
 }:
 buildPythonPackage rec {
   pname = "rendercanvas";
-  version = "2.5.2";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "rendercanvas";
     tag = "v${version}";
-    hash = "sha256-fOjiGNxEUVI+jddrwqrlBYT+CAMDQCIPNHwGonBH4Hk=";
+    hash = "sha256-ht9oFB1pQu+NGQ7CIE+5iWM6NSd8gpgrSgeclGDZJDs=";
   };
 
   postPatch = ''
@@ -36,6 +38,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ flit-core ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -54,6 +58,12 @@ buildPythonPackage rec {
 
     # AssertionError
     "test_that_we_are_on_lavapipe"
+
+    # assert ('jpeg' in 'image/png')
+    "test_encode_array"
+
+    # encode_jpeg() needs simplejpeg but it is not installed.
+    "test_encode_jpeg"
   ];
   disabledTestPaths = [
     "tests/test_loop.py"
