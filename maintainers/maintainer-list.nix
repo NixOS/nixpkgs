@@ -22064,6 +22064,10 @@
     github = "osnyx";
     githubId = 104593071;
     name = "Oliver Schmidt";
+    affiliation."flyingcircus.io" = {
+      contactUnresponsive = "mailto:mail@flyingcircus.io";
+      fallbackMaintainers = [ self.leona ];
+    };
   };
   ostrolucky = {
     email = "gabriel.ostrolucky@gmail.com";
