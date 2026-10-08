@@ -7,7 +7,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "polysh";
   version = "1.0.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "innogames";
