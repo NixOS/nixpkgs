@@ -20,6 +20,7 @@ Subject: [PATCH 1/6] replace-impure-paths
  Sources/SWBGenericUnixPlatform/Plugin.swift          |  2 +-
  Sources/SWBProjectModel/PIFGenerationModel.swift     |  4 ++--
  .../ShellScriptTaskProducer.swift                    |  2 +-
+ .../GeneratedFilesTaskProducer.swift                 |  2 +-
  Sources/SWBTaskExecution/BuildDescription.swift      |  4 ++--
  .../TaskActions/CopyTiffTaskAction.swift             |  2 +-
  .../TaskActions/EmbedSwiftStdLibTaskAction.swift     |  2 +-
@@ -31,8 +32,8 @@ Subject: [PATCH 1/6] replace-impure-paths
  Sources/SWBUniversalPlatform/Specs/CodeSign.xcspec   |  2 +-
  Sources/SWBUtil/PbxCp.swift                          | 12 ++++++------
  Sources/SWBUtil/Signatures.swift                     |  2 +-
- .../CoreQualificationTester.swift                    |  2 +-
- 28 files changed, 50 insertions(+), 48 deletions(-)
+ .../CoreQualificationTester.swift                    |  4 ++--
+ 29 files changed, 52 insertions(+), 50 deletions(-)
 
 diff --git a/Plugins/run-xcodebuild/run-xcodebuild.swift b/Plugins/run-xcodebuild/run-xcodebuild.swift
 index 710a84a2..c83982de 100644
@@ -275,6 +276,19 @@ index fedc42f6..81bb8734 100644
  
          let isSandboxingEnabled: Bool
  
+diff --git a/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift b/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
+index 17f0d1e0..93e3b1d4 100644
+--- a/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
++++ b/Sources/SWBTaskConstruction/TaskProducers/OtherTaskProducers/GeneratedFilesTaskProducer.swift
+@@ -62,7 +62,7 @@ final class GeneratedFilesTaskProducer: PhasedTaskProducer, TaskProducer {
+             await appendGeneratedTasks(&tasks) { delegate in
+                 await context.productPackagingSpec.constructProductEntitlementsTasks(CommandBuildContext(producer: context, scope: scope, inputs: [FileToBuild(context: context, absolutePath: input)], output: entitlements.output), delegate, entitlementsVariant, fs: context.workspaceContext.fs)
+ 
+-                delegate.createTask(type: context.productPackagingSpec, ruleInfo: ["ProcessProductPackagingDER", entitlements.output.str, entitlements.outputDer.str], commandLine: ["/usr/bin/derq", "query", "-f", "xml", "-i", entitlements.output.str, "-o", entitlements.outputDer.str, "--raw"], environment: EnvironmentBindings([:]), workingDirectory: context.defaultWorkingDirectory, inputs: [delegate.createNode(entitlements.output)], outputs: [delegate.createNode(entitlements.outputDer)], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: context.userPreferences), execDescription: "Generate DER entitlements", enableSandboxing: context.productPackagingSpec.enableSandboxing)
++                delegate.createTask(type: context.productPackagingSpec, ruleInfo: ["ProcessProductPackagingDER", entitlements.output.str, entitlements.outputDer.str], commandLine: ["@re-derq@/bin/derq", "query", "-f", "xml", "-i", entitlements.output.str, "-o", entitlements.outputDer.str, "--raw"], environment: EnvironmentBindings([:]), workingDirectory: context.defaultWorkingDirectory, inputs: [delegate.createNode(entitlements.output)], outputs: [delegate.createNode(entitlements.outputDer)], action: delegate.taskActionCreationDelegate.createDeferredExecutionTaskActionIfRequested(userPreferences: context.userPreferences), execDescription: "Generate DER entitlements", enableSandboxing: context.productPackagingSpec.enableSandboxing)
+             }
+         }
+ 
 diff --git a/Sources/SWBTaskExecution/BuildDescription.swift b/Sources/SWBTaskExecution/BuildDescription.swift
 index 081a0acd..55ccc539 100644
 --- a/Sources/SWBTaskExecution/BuildDescription.swift
@@ -510,7 +524,7 @@ index eb3c1e27..180dcc62 100644
          let stderrContent = String(data: executionResult.stderr, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
  
 diff --git a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
-index e6166507..c7221f9e 100644
+index e6166507..8597e5aa 100644
 --- a/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
 +++ b/Sources/SwiftBuildTestSupport/CoreQualificationTester.swift
 @@ -324,7 +324,7 @@ extension FileContentsCheckingResult {
@@ -522,6 +536,15 @@ index e6166507..c7221f9e 100644
                  plist = try !bytes.isEmpty ? PropertyList.fromBytes(bytes) : nil
              case .simulated:
                  // xcrun otool-classic [-arch arch] -X -s __TEXT __entitlements <path>
+@@ -350,7 +350,7 @@ extension FileContentsCheckingResult {
+ 
+                         let derPlist: PropertyListItem = try await withTemporaryDirectory { path in
+                             try localFS.write(path.join("in.der"), contents: ByteString(bytes))
+-                            try await runProcess(["/usr/bin/derq", "query", "-i", path.join("in.der").str, "-o", path.join("out.xml").str, "--xml"])
++                            try await runProcess(["@re-derq@/bin/derq", "query", "-i", path.join("in.der").str, "-o", path.join("out.xml").str, "--xml"])
+                             return try PropertyList.fromPath(path.join("out.xml"), fs: localFS)
+                         }
+                         #expect(plist == derPlist, "Expected both DER and plist entitlements to be equivalent")
 -- 
 2.54.0
 
