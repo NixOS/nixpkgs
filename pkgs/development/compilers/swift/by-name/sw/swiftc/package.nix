@@ -471,6 +471,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
       + lib.optionalString (lib.versionAtLeast finalAttrs.version "6.3") ''
         swiftLibsDeps+=(
+          libnixpkgsStuff
           libswiftBasicSwift
         )
       ''
