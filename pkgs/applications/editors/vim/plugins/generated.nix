@@ -1765,12 +1765,12 @@ final: prev: {
 
   black-metal-theme-neovim = buildVimPlugin {
     pname = "black-metal-theme-neovim";
-    version = "2.1.0";
+    version = "2.2.0";
     src = fetchFromGitHub {
       owner = "metalelf0";
       repo = "black-metal-theme-neovim";
-      tag = "v2.1.0";
-      hash = "sha256-rVZPpbakoC6AoSPi8adKoY5aYGO/syjpwGTrsXm3Yag=";
+      tag = "v2.2.0";
+      hash = "sha256-umpGi46V8z5lkPtyrrLrUbUbCCjvPXukMWPkggJim1o=";
     };
     meta.homepage = "https://github.com/metalelf0/black-metal-theme-neovim/";
     meta.license = getLicenseFromSpdxId "Apache-2.0";
