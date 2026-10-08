@@ -220,11 +220,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://nvidia.github.io/cuda-python/cuda-bindings/latest/release/${finalAttrs.version}-notes.html";
     license =
       # Relicensed from the NVIDIA Software License to Apache-2.0 in 13.4
-      if cudaAtLeast "13.4" then
-        lib.licenses.asl20
-      # NVIDIA Proprietary Software
-      else
-        lib.licenses.unfreeRedistributable;
+      if cudaAtLeast "13.4" then lib.licenses.asl20 else lib.licenses.nvidiaCudaPython;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

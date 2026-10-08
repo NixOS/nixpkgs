@@ -1235,6 +1235,14 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    nvidiaCudaPython = {
+      shortName = "CUDA Python License";
+      fullName = "NVIDIA Software License for NVIDIA CUDA Python";
+      url = "https://github.com/NVIDIA/cuda-python/blob/v12.9.7/cuda_bindings/LICENSE";
+      free = false;
+      redistributable = true;
+    };
+
     nvidiaCudnn = {
       shortName = "cuDNN EULA";
       fullName = "cuDNN SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
