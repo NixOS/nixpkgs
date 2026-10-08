@@ -21,7 +21,7 @@
   installShellFiles,
   buildPackages,
   cmake,
-  wasmtime_36,
+  wasmtime_48,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   wasmSupport ? false,
@@ -135,17 +135,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
-  version = "0.26.11";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YXnmVM90sEH8kqgqCygpeCAyvggMIsv+oXi0SJOvMRM=";
+    hash = "sha256-KbPqA6pfplWRUtwRgbNXUF7aivj/n4shJqWbjNO93nQ=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-kHDjPRhBUYlxLWYSv6cn6U1QDIWwCgHeIz2A5yCi1yo=";
+  cargoHash = "sha256-GbW/qFq8X0UNi9LIepTIAKSAqCXM/gdy6XV6s5YO8r0=";
 
   cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
 
@@ -153,7 +153,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ]
   ++ lib.optionals wasmSupport [
-    wasmtime_36
+    wasmtime_48
   ]
   ++ lib.optionals webUISupport [
     openssl
@@ -205,8 +205,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # The Makefile install can't enable the wasm feature.
   cmakeFlags = lib.optionals wasmSupport [
     (lib.cmakeBool "TREE_SITTER_FEATURE_WASM" true)
-    (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_36}/include")
-    (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_36}/lib/libwasmtime${stdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_48}/include")
+    (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_48}/lib/libwasmtime${stdenv.hostPlatform.extensions.sharedLibrary}")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
