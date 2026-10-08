@@ -12,6 +12,7 @@
   libtapi,
   llvmPackages,
   ninja,
+  re-derq,
   replaceVars,
   sqlite,
   stdenv,
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit gnumake;
       inherit gnused;
       inherit iconv;
+      inherit re-derq;
       inherit what;
       tapi = lib.getBin libtapi;
     })
