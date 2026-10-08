@@ -57,6 +57,7 @@ stdenvNoCC.mkDerivation {
   nativeCheckInputs = [
     atf
     kyua
+    libtiff
   ];
 
   preCheck = ''
