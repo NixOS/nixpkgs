@@ -20,9 +20,20 @@ let
           frontend = llvm.clangUseLLVM.override (
             old:
             let
-              cc = old.cc.overrideAttrs (attrs: {
-                postInstall = (attrs.postInstall or "") + "\n: selected-clang-frontend\n";
-              });
+              cc =
+                (old.cc.override (args: {
+                  monorepoSrc = args.monorepoSrc.overrideAttrs (_: {
+                    name = "selected-clang-source";
+                  });
+                  buildLlvmPackages = args.buildLlvmPackages // {
+                    tblgen = args.buildLlvmPackages.tblgen.overrideAttrs (_: {
+                      name = "selected-build-tblgen";
+                    });
+                  };
+                })).overrideAttrs
+                  (attrs: {
+                    postInstall = (attrs.postInstall or "") + "\n: selected-clang-frontend\n";
+                  });
             in
             {
               inherit cc;
@@ -55,6 +66,8 @@ let
     compiler.isClang
     && targetCompiler.isClang
     && compiler.version == targetCompiler.version
+    && compiler.cc.src.outPath == targetCompiler.cc.src.outPath
+    && lib.any (lib.hasInfix "selected-build-tblgen") targetCompiler.cc.cmakeFlags
     && lib.hasInfix ": selected-clang-frontend" targetCompiler.cc.postInstall
     && lib.hasInfix (builtins.unsafeDiscardStringContext "${lib.getLib compiler.cc}/lib/clang/${toString major}/include") targetCompiler.postFixup
     && compiler.bintools.bintools.version == targetCompiler.bintools.bintools.version
@@ -99,6 +112,20 @@ let
               # Bootstrap this independent runtime with GCC rather than with the
               # compiler whose runtime is being selected here.
               { libcxx = packages.llvmPackages.libcxx.override { stdenv = packages.gccStdenv; }; }
+            else if policy == "local-ng" then
+              {
+                cc = packages."gccNGPackages_${toString major}".gcc.cc.override (args: {
+                  langFortran = true;
+                  monorepoSrc = args.monorepoSrc.overrideAttrs (_: {
+                    name = "selected-gcc-source";
+                  });
+                  buildGccPackages = args.buildGccPackages // {
+                    libiberty = args.buildGccPackages.libiberty.overrideAttrs (_: {
+                      name = "selected-build-libiberty";
+                    });
+                  };
+                });
+              }
             else if policy == "local-frontend" then
               {
                 cc =
@@ -173,6 +200,12 @@ let
     &&
       lib.versions.major cuda.backendCC.version
       == (if args.major or 14 == 16 then "15" else toString (args.major or 14));
+  localNG =
+    (gnuPackages true {
+      major = 15;
+      ng = true;
+      policy = "local-ng";
+    }).targetPackages.stdenv.cc;
   localFrontend = (gnuPackages true { policy = "local-frontend"; }).targetPackages.stdenv.cc;
   withDependency = gnuPackages true {
     overlays = [
@@ -183,7 +216,83 @@ let
       })
     ];
   };
+  selectedLinkerPackages = nixpkgsFun {
+    localSystem = "x86_64-linux";
+    crossSystem = "aarch64-linux";
+    config.replaceCrossStdenv =
+      { buildPackages, baseStdenv }:
+      buildPackages.overrideCC baseStdenv (
+        buildPackages.gcc14.override {
+          runtimeShell = "/bin/selected-shell";
+          nixSupport.__spliced = "ordinary-option-data";
+          bintools = buildPackages.llvmPackages_19.bintools.override {
+            runtimeShell = "/bin/selected-linker-shell";
+            extraBuildCommands = "echo selected-linker > $out/nix-support/selected-linker";
+          };
+        }
+      );
+  };
+  selectedLinkerCompiler = selectedLinkerPackages.targetPackages.stdenv.cc;
+  # Raw/custom stages can reach postStage without forcing adjacency assertions.
+  # Reject unsupported compiler contexts before reinterpreting dependency roles.
+  postCompiler =
+    stdenv:
+    let
+      stages =
+        import ../../stdenv/booter.nix
+          {
+            inherit lib;
+            allPackages = throw "raw compiler context control must not call allPackages";
+          }
+          [
+            (_: {
+              __raw = true;
+              inherit stdenv;
+            })
+          ];
+    in
+    (builtins.head stages).stdenv.__hatPackages.stdenv.cc;
+  projectsContext =
+    finalTarget: compilerTarget:
+    let
+      platform = lib.systems.elaborate;
+      compiler = postCompiler {
+        buildPlatform = platform "x86_64-linux";
+        hostPlatform = platform "aarch64-linux";
+        targetPlatform = platform finalTarget;
+        hasCC = true;
+        cc = {
+          isGNU = true;
+          stdenv = {
+            buildPlatform = platform "x86_64-linux";
+            hostPlatform = platform "x86_64-linux";
+            targetPlatform = platform compilerTarget;
+          };
+          override = _: { recalled = true; };
+        };
+      };
+    in
+    (builtins.tryEval compiler.recalled).success;
+
 in
+assert
+  postCompiler {
+    hasCC = false;
+    cc = "no compiler";
+  } == "no compiler";
+assert
+  (postCompiler {
+    hasCC = true;
+    hostPlatform = lib.systems.elaborate "aarch64-linux";
+    cc = {
+      stdenv.hostPlatform = lib.systems.elaborate "aarch64-linux";
+      unchanged = true;
+      isGNU = throw "same-HOST compiler must not be inspected or recalled";
+    };
+  }).unchanged;
+assert projectsContext "aarch64-linux" "aarch64-linux";
+assert !projectsContext "riscv64-linux" "riscv64-linux";
+assert !projectsContext "aarch64-linux" "riscv64-linux";
 assert lib.all
   (
     runtime:
@@ -219,6 +328,19 @@ assert preservesGNU true {
   major = 15;
   ng = true;
 };
+assert selectedLinkerCompiler.nixSupport.__spliced == "ordinary-option-data";
+assert selectedLinkerCompiler.bintools.isLLVM;
+assert
+  selectedLinkerCompiler.bintools.bintools.version
+  == selectedLinkerPackages.stdenv.cc.bintools.bintools.version;
+assert lib.hasInfix "selected-linker" selectedLinkerCompiler.bintools.postFixup;
+assert selectedLinkerCompiler.shell == "/bin/selected-shell";
+assert selectedLinkerCompiler.bintools.shell == "/bin/selected-linker-shell";
+assert builtins.isString selectedLinkerCompiler.drvPath;
+assert localNG.cc.langFortran;
+assert localNG.cc.src.name == "selected-gcc-source";
+assert lib.hasInfix "selected-build-libiberty" localNG.cc.preConfigure;
+assert builtins.isString localNG.drvPath;
 assert localFrontend.cc.langFortran;
 assert !localFrontend.cc.noSysDirs;
 assert lib.hasInfix ": local-frontend" localFrontend.cc.postInstall;

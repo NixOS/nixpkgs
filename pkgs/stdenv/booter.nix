@@ -103,51 +103,70 @@ let
           cc = buildPackages.stdenv.cc;
           isClang = cc.isClang or false;
           isGNU = cc.isGNU or false;
-          major = lib.versions.major cc.version;
-          constructor = lib.functionArgs cc.cc.override;
-          monolithicGNU = isGNU && constructor ? majorMinorVersion;
-          scope =
-            if isClang then
-              buildPackages."llvmPackages_${major}"
-            else if monolithicGNU then
-              buildPackages
-            else if constructor ? buildGccPackages then
-              buildPackages."gccNGPackages_${major}"
+          # The selected constructor was called in (B,B,H). Retain its
+          # selections while supplying the corresponding (B,H,H) role table.
+          # Only derivations carry this internal table; ordinary option sets
+          # (and explicit unspliced dependency pins) are not reinterpreted.
+          project =
+            value:
+            if lib.isDerivation value && value ? __spliced then
+              let
+                s = value.__spliced;
+              in
+              (buildPackages.splicePackages {
+                pkgsBuildBuild.value = s.buildBuild;
+                pkgsBuildHost.value = s.buildTarget;
+                pkgsBuildTarget.value = s.buildTarget;
+                pkgsHostHost.value = s.targetTarget;
+                pkgsHostTarget.value = s.targetTarget;
+                pkgsTargetTarget.value = s.targetTarget;
+              }).value
             else
-              throw "stdenv: unknown compiler constructor for target-role rebinding";
-          # Re-call the selected constructor in HOST's dependency scope. This
-          # preserves its options and overrideAttrs; dependency overrides belong
-          # in the package graph so both roles receive them.
-          callOverride =
-            scope: package: args:
-            scope.callPackage (lib.setFunctionArgs (args: package.override args)
-              # Required arguments are already bound by .override. noSysDirs is
-              # constructor policy, despite also being a top-level attribute.
-              (lib.mapAttrs (_: _: true) (removeAttrs (lib.functionArgs package.override) [ "noSysDirs" ]))
-            ) args;
-          raw = callOverride scope cc.cc (
-            {
-              stdenv = buildPackages.overrideCC buildPackages.stdenv cc;
+              value;
+          # Package graph references denote contexts, while unspliced explicit
+          # inputs remain caller selections. Re-call each original constructor.
+          context = {
+            stdenv = buildPackages.overrideCC buildPackages.stdenv cc;
+            inherit (buildPackages)
+              stdenvNoCC
+              buildPackages
+              pkgsBuildTarget
+              targetPackages
+              callPackage
+              ;
+            _systemInfo = {
+              buildIsHost = lib.systems.equals buildPackages.stdenv.buildPlatform buildPackages.stdenv.hostPlatform;
+              hostIsTarget = lib.systems.equals buildPackages.stdenv.hostPlatform buildPackages.stdenv.targetPlatform;
+            };
+          };
+          recall =
+            package: f:
+            package.override (
+              original:
+              lib.mapAttrs (_: project) original
+              // lib.intersectAttrs (lib.functionArgs package.override) context
+              // f original
+            );
+          wrapperShell =
+            original:
+            lib.optionalAttrs
+              (
+                original ? runtimeShell
+                && original ? stdenvNoCC
+                && original.runtimeShell == original.stdenvNoCC.shell
+              )
+              {
+                inherit (buildPackages) runtimeShell;
+              };
+          raw = recall cc.cc (_: { });
+          linkerRaw = recall cc.bintools.bintools (_: { });
+          linker = recall cc.bintools (
+            original:
+            wrapperShell original
+            // {
+              bintools = linkerRaw;
+              inherit (cc) libc;
             }
-            // (
-              if isClang then
-                {
-                  buildLlvmPackages = buildPackages.buildPackages."llvmPackages_${major}";
-                }
-              else if monolithicGNU then
-                {
-                  # gcc/all.nix cached these relations for the original role.
-                  _systemInfo = {
-                    buildIsHost = lib.systems.equals buildPackages.stdenv.buildPlatform buildPackages.stdenv.hostPlatform;
-                    hostIsTarget = lib.systems.equals buildPackages.stdenv.hostPlatform buildPackages.stdenv.targetPlatform;
-                  };
-                  isl = if buildPackages.stdenv.hostPlatform.isDarwin then null else buildPackages.isl_0_20;
-                }
-              else
-                {
-                  buildGccPackages = buildPackages.buildPackages."gccNGPackages_${major}";
-                }
-            )
           );
           useGccForLibs =
             cc.useGccForLibs or (import ../build-support/cc-wrapper/use-gcc-for-libs.nix (
@@ -160,10 +179,18 @@ let
         if lib.systems.equals cc.stdenv.hostPlatform buildPackages.stdenv.hostPlatform then
           cc
         else if isGNU || isClang then
-          callOverride scope cc (
-            {
+          assert lib.assertMsg (
+            lib.systems.equals cc.stdenv.buildPlatform buildPackages.stdenv.buildPlatform
+            && lib.systems.equals cc.stdenv.hostPlatform buildPackages.stdenv.buildPlatform
+            && lib.systems.equals cc.stdenv.targetPlatform buildPackages.stdenv.hostPlatform
+            && lib.systems.equals buildPackages.stdenv.hostPlatform buildPackages.stdenv.targetPlatform
+          ) "stdenv compiler projection requires (BUILD,BUILD,HOST) -> (BUILD,HOST,HOST) contexts";
+          recall cc (
+            original:
+            wrapperShell original
+            // {
               cc = raw;
-              bintools = (scope.bintools or buildPackages.binutils).override { inherit (cc) libc; };
+              bintools = linker;
               inherit (cc)
                 libc
                 libcxx
@@ -172,7 +199,6 @@ let
                 ;
             }
             // lib.optionalAttrs (isGNU && cc.libcxx == null && !useGccForLibs) {
-              # The executable changes roles, but its TARGET runtime does not.
               gccForLibs = cc.cc;
               useCcForLibs = true;
             }
