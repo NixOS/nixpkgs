@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   writeScript,
 
   # build-system
@@ -77,6 +78,11 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
     "TestFindMatching"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # KeyError: 'TestAutoRecord' / assert 5 == 6
+    "test_recorded_function_with_override_and_additional_fields"
+    "test_recorded_function_with_override_and_additional_optional_fields"
   ];
 
   pythonImportsCheck = [ "dbt_common" ];
