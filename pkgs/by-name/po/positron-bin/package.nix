@@ -135,11 +135,11 @@ stdenv.mkDerivation {
         # Fix libGL.so not found errors.
         wrapProgram "$out/share/positron/positron" \
           --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libglvnd ]}" \
-          --add-flags "--disable-updates"
+          --append-flags "--disable-updates"
 
 
         mkdir -p "$out/bin"
-        ln -s "$out/share/positron/positron" "$out/bin/positron"
+        ln -s "$out/share/positron/bin/positron" "$out/bin/positron"
         runHook postInstall
       '';
 
@@ -152,6 +152,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       b-rodrigues
       detroyejr
+      hectorgray
     ];
     mainProgram = "positron";
     platforms = [
