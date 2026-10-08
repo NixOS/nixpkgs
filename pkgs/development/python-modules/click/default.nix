@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.3.3";
+  version = "8.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "click";
     tag = version;
-    hash = "sha256-LcnAI4hyiuaJ4qnFnbAR5Cft/yvW5tAIjY6qc6K/Nrw=";
+    hash = "sha256-VYdaEN9l2MRVz42I8t8IDOpG5XeDM8bf34dLZy3yf10=";
   };
 
   build-system = [ flit-core ];
