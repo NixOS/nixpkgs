@@ -1,0 +1,57 @@
+diff --git a/README.md b/README.md
+index cae214380b..99e1ba502c 100644
+--- a/README.md
++++ b/README.md
+@@ -73,7 +73,7 @@ ### Hardened runtime
+ 
+ ### Bundle signing
+ 
+-`codesign` accepts a path to a `.framework`, `.app`, `.bundle`, or `.xpc`
++`codesign` accepts a path to a `.framework`, `.app`, `.bundle`, `.xpc`, or `.xctest`
+ directory (or a `Foo.framework/Versions/X` subpath). For bundles it:
+ 
+   - reads `CFBundleIdentifier` from `Info.plist` (XML or binary plist) as the
+diff --git a/bundle.cpp b/bundle.cpp
+index 788b569f5b..cfb679a430 100644
+--- a/bundle.cpp
++++ b/bundle.cpp
+@@ -154,7 +154,7 @@ Bundle detectBundle(const std::string& rawPath) {
+     }
+ 
+     // App / generic .app-style bundle: Foo.app
+-    if (endsWith(path, ".app") || endsWith(path, ".bundle") || endsWith(path, ".xpc")) {
++    if (endsWith(path, ".app") || endsWith(path, ".bundle") || endsWith(path, ".xpc") || endsWith(path, ".xctest")) {
+         b.type = Bundle::Type::App;
+         b.root = path;
+         b.contentsRoot = path + "/Contents";
+@@ -169,7 +169,7 @@ Bundle detectBundle(const std::string& rawPath) {
+         std::string execName = values[1];
+         if (execName.empty()) {
+             std::string base = basename(path);
+-            for (const auto& suffix : {".app", ".bundle", ".xpc"}) {
++            for (const auto& suffix : {".app", ".bundle", ".xpc", ".xctest"}) {
+                 if (endsWith(base, suffix)) {
+                     execName = base.substr(0, base.size() - std::string{suffix}.size());
+                     break;
+@@ -186,7 +186,7 @@ Bundle detectBundle(const std::string& rawPath) {
+ 
+     throw std::runtime_error{
+             "directory '" + rawPath + "' is not a recognised bundle "
+-            "(*.framework, *.app, *.bundle, *.xpc)"};
++            "(*.framework, *.app, *.bundle, *.xpc, *.xctest)"};
+ }
+ 
+ };
+diff --git a/resources.cpp b/resources.cpp
+index 5067df1d09..b21b7723e3 100644
+--- a/resources.cpp
++++ b/resources.cpp
+@@ -91,7 +91,7 @@ void walk(const std::string& walkRoot, const std::string& subdir,
+ }
+ 
+ bool looksLikeBundleSuffix(const std::string& name) {
+-    static const char* suffixes[] = {".framework", ".app", ".xpc", ".bundle"};
++    static const char* suffixes[] = {".framework", ".app", ".xpc", ".bundle", ".xctest"};
+     for (auto* s : suffixes) {
+         size_t sl = std::string{s}.size();
+         if (name.size() > sl

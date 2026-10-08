@@ -9,6 +9,7 @@
   gnumake,
   gnused,
   iconv,
+  libplist,
   libtapi,
   llvmPackages,
   ninja,
@@ -36,6 +37,17 @@ let
   swift' = swift.override {
     enableRepl = false;
   };
+
+  # FIXME: Drop once `darwin.sigtool` has a new release.
+  sigtool = darwin.sigtool.overrideAttrs (old: {
+    version = "0.2.2-unstable-2026-10-14";
+    src = fetchFromGitHub {
+      owner = "nix-community";
+      repo = "sigtool";
+      rev = "de5de43c5f8bd97bce4de4a8cfc1b3708074a2b2";
+      hash = lib.fakeHash;
+    };
+  });
 in
 
 # Swift Build is a dependency of SwiftPM. It must be built with CMake to avoid dependency cycles.
@@ -59,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Remove as many impure paths as possible.
     (replaceVars ./patches/0001-replace-impure-paths.patch {
-      inherit (darwin) graphics_cmds sigtool;
+      inherit (darwin) graphics_cmds;
       inherit (llvmPackages) llvm;
       inherit (xcbuild) xcrun;
       inherit bashNonInteractive;
@@ -69,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit gnused;
       inherit iconv;
       inherit re-derq;
+      inherit sigtool;
       inherit what;
       tapi = lib.getBin libtapi;
     })
