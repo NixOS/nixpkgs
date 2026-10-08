@@ -18,35 +18,36 @@ Co-authored-by: DavHau <hsngrmpf+github@gmail.com>
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/build.rs b/build.rs
-index 09b723e..4093c9e 100644
+index 6568def..e7dee2f 100644
 --- a/build.rs
 +++ b/build.rs
-@@ -11,14 +11,20 @@ fn main() {
+@@ -11,6 +11,9 @@ fn main() {
      #[allow(unused_variables)]
-     let is_64_bit_python = matches!(python_config.pointer_width, Some(64));
+     let is_64_bit_python = matches!(python_config.pointer_width(), Some(64));
  
 +    let target_arch = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap_or_default();
 +    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
 +
-     match python_config.implementation {
+     match python_config.implementation() {
          pyo3_build_config::PythonImplementation::CPython => {
              println!("cargo:rustc-cfg=CPython");
-             if python_config.abi3 {
+@@ -21,8 +24,11 @@ fn main() {
+             if is_abi3 {
                  println!("cargo:rustc-cfg=Py_LIMITED_ABI");
              }
 -            #[cfg(any(target_arch = "x86_64", target_arch = "aarch64"))]
--            if is_64_bit_python && !python_config.abi3 {
+-            if is_64_bit_python && !is_abi3 {
 +
 +            if (target_arch == "x86_64" || target_arch == "aarch64")
 +                && is_64_bit_python
-+                && !python_config.abi3
++                && !is_abi3
 +            {
                  println!("cargo:rustc-cfg=feature=\"inline_int\"");
                  #[cfg(target_endian = "little")]
                  println!("cargo:rustc-cfg=feature=\"inline_str\"");
-@@ -51,8 +57,7 @@ fn main() {
-     println!("cargo:rustc-check-cfg=cfg(Py_LIMITED_ABI)");
+@@ -57,8 +63,7 @@ fn main() {
      println!("cargo:rustc-check-cfg=cfg(PyPy)");
+     println!("cargo:rustc-check-cfg=cfg(trusted_len)");
  
 -    #[cfg(all(target_arch = "x86_64", not(target_os = "macos")))]
 -    if is_64_bit_python {
