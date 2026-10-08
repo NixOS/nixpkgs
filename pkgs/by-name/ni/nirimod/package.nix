@@ -16,8 +16,6 @@ python3Packages.buildPythonApplication {
   version = "0-unstable-2026-09-19";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "srinivasr";
     repo = "nirimod";
