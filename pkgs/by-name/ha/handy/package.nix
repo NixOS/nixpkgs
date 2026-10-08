@@ -10,6 +10,7 @@
   cctools,
   cargo-tauri,
   jq,
+  sqlite,
   writableTmpDirAsHomeHook,
   makeBinaryWrapper,
   swift,
@@ -129,6 +130,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    sqlite
     onnxruntime
     openssl
   ]
