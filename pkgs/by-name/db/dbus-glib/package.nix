@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = { inherit dbus glib; };
 
   meta = {
+    changelog = "https://gitlab.freedesktop.org/dbus/dbus-glib/-/blob/dbus-glib-${finalAttrs.version}/NEWS";
     homepage = "https://dbus.freedesktop.org";
     license = with lib.licenses; [
       afl21
