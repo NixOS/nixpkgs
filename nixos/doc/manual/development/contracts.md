@@ -81,11 +81,17 @@ If a provider declares an option at the top level, a new option of the contract 
 In `providerOptions`, an option of the provider cannot conflict with an option of the contract type.
 `request` and `response` are not in a namespace, because the contract type declares them.
 
-Example, a simplified version of the provider option `testing.hardcoded-secret.fileSecrets`:
+Example, a provider option of the contract type `fileSecrets`:
 
 ```nix
-{ lib, options, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
 let
+  cfg = config.testing.hardcoded-secret;
   opt = options.testing.hardcoded-secret;
 in
 {
@@ -129,10 +135,19 @@ The function `mkProviderType` of a contract type makes a type of the same shape.
 `overrides` adds attributes to the options of the interface, as in `mkContract`.
 `providerOptions` contains the options of `providerOptions`.
 `fulfill` is a function from the `request` of an entry to its `response`.
-Example, the provider option from the example before, with `mkProviderType`:
+Example, a simplified version of the provider option `testing.hardcoded-secret.fileSecrets`, which declares the same option as the example before with `mkProviderType`:
 
 ```nix
-{ lib, ... }:
+{
+  config,
+  lib,
+  options,
+  ...
+}:
+let
+  cfg = config.testing.hardcoded-secret;
+  opt = options.testing.hardcoded-secret;
+in
 {
   options.testing.hardcoded-secret.fileSecrets = lib.mkOption {
     type = lib.contracts.fileSecrets.mkProviderType {

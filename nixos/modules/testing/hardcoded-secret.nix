@@ -10,11 +10,7 @@ let
   opt = options.testing.hardcoded-secret;
 
   inherit (lib) mkOption;
-  inherit (lib.types)
-    nestedAttrsOf
-    str
-    submodule
-    ;
+  inherit (lib.types) str;
   inherit (pkgs) writeText;
 in
 {
@@ -58,54 +54,26 @@ in
           };
         }
       '';
-      type = nestedAttrsOf (
-        submodule (
-          { options, ... }:
-          let
-            # Path of this entry in `fileSecrets`, for example `[ "stash" "passwordFile" ]`.
-            entryPath = lib.drop (lib.length opt.fileSecrets.loc) (lib.init options.response.loc);
-          in
+      type = lib.contracts.fileSecrets.mkProviderType {
+        overrides.request = {
+          owner.default = "root";
+          group.default = "root";
+        };
+        providerOptions.content = mkOption {
+          type = str;
+          description = ''
+            Content of the secret as a string.
+
+            This will be stored in the nix store and should only be used for testing or maybe in dev.
+          '';
+        };
+        # The path of the entry in `fileSecrets`, for example `stash/passwordFile`.
+        fulfill' =
+          { loc, ... }:
           {
-            imports = [ lib.contracts.fileSecrets.interface ];
-
-            options = {
-              request = mkOption {
-                type = submodule {
-                  options = {
-                    owner = mkOption { default = "root"; };
-                    group = mkOption { default = "root"; };
-                  };
-                };
-              };
-
-              response = mkOption {
-                default = { };
-                type = submodule {
-                  options.path = mkOption {
-                    default = "${cfg.directory}/${lib.concatStringsSep "/" entryPath}";
-                    defaultText = lib.literalExpression ''"''${config.testing.hardcoded-secret.directory}/<path>"'';
-                  };
-                };
-              };
-
-              providerOptions = mkOption {
-                description = "Options of this provider that are not part of the file secrets contract.";
-                default = { };
-                type = submodule {
-                  options.content = mkOption {
-                    type = str;
-                    description = ''
-                      Content of the secret as a string.
-
-                      This will be stored in the nix store and should only be used for testing or maybe in dev.
-                    '';
-                  };
-                };
-              };
-            };
-          }
-        )
-      );
+            path = "${cfg.directory}/${lib.concatStringsSep "/" (lib.drop (lib.length opt.fileSecrets.loc) loc)}";
+          };
+      };
     };
   };
 
