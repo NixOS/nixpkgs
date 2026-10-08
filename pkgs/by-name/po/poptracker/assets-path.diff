@@ -1,0 +1,12 @@
+diff --git a/src/poptracker.cpp b/src/poptracker.cpp
+index dbf477b..6ccfac2 100644
+--- a/src/poptracker.cpp
++++ b/src/poptracker.cpp
+@@ -217,6 +217,7 @@ PopTracker::PopTracker(int argc, char** argv, bool cli, const json& args)
+         Pack::addOverrideSearchPath(os_pathcat(appPath, "user-override")); // portable/system overrides
+         Assets::addSearchPath(os_pathcat(appPath, "assets")); // system assets
+     }
++    Assets::addSearchPath("@assets@");
+ 
+     _asio = new asio::io_service();
+     HTTP::certfile = asset("cacert.pem"); // https://curl.se/docs/caextract.html

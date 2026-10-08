@@ -1,0 +1,12 @@
+--- a/src/firewall/config/__init__.py.in
++++ b/src/firewall/config/__init__.py.in
+@@ -19,6 +19,9 @@
+ DOMAIN = "firewalld"
+ import gettext
+ 
++locale.bindtextdomain(DOMAIN, "/usr/share/locale")
++gettext.bindtextdomain(DOMAIN, "/usr/share/locale")
++
+ gettext.install(domain=DOMAIN)
+ 
+ from . import dbus  # noqa: F401

@@ -1,0 +1,51 @@
+diff --git i/src/main/ffmpeg.ts w/src/main/ffmpeg.ts
+index 3e2e71c9..11da9721 100644
+--- i/src/main/ffmpeg.ts
++++ w/src/main/ffmpeg.ts
+@@ -50,8 +50,8 @@ function getFfPath(cmd: string) {
+ 
+   if (customFfPath) return join(customFfPath, exeName);
+ 
+-  if (app.isPackaged) {
+-    return join(process.resourcesPath, exeName);
++  if (app.isPackaged || true) {
++    return join('@losslesscut_resources_path@', exeName);
+   }
+ 
+   // local dev
+@@ -110,8 +110,6 @@ function getExecaOptions<T extends ExecaOptions>({ env, cancelSignal, ...rest }:
+     ...rest,
+     env: {
+       ...env,
+-      // https://github.com/mifi/lossless-cut/issues/1143#issuecomment-1500883489
+-      ...(isLinux && !isDev && !customFfPath && { LD_LIBRARY_PATH: process.resourcesPath }),
+     },
+   };
+   return execaOptions as T;
+diff --git i/src/main/i18nCommon.ts w/src/main/i18nCommon.ts
+index 431eb396..2c96a93f 100644
+--- i/src/main/i18nCommon.ts
++++ w/src/main/i18nCommon.ts
+@@ -16,8 +16,7 @@ export function setCustomLocalesPath(p: string) {
+ 
+ function getLangPath(subPath: string) {
+   if (customLocalesPath != null) return join(customLocalesPath, subPath);
+-  if (app.isPackaged) return join(process.resourcesPath, 'locales', subPath);
+-  return join('locales', subPath);
++  return join('@losslesscut_resources_path@', 'locales', subPath);
+ }
+ 
+ export const fallbackLng = 'en';
+diff --git i/src/main/logger.ts w/src/main/logger.ts
+index 80355d78..2536d83d 100644
+--- i/src/main/logger.ts
++++ w/src/main/logger.ts
+@@ -28,7 +28,7 @@ const createLogger = () => winston.createLogger({
+   ),
+ });
+ 
+-const logDirPath = app.isPackaged ? app.getPath('userData') : '.';
++const logDirPath = app.getPath('userData');
+ export const logFilePath = join(logDirPath, 'app.log');
+ 
+ const logger = createLogger();

@@ -1,0 +1,14 @@
+diff --git a/Makefile.am b/Makefile.am
+index 45f216a..39c3c82 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -3,6 +3,9 @@ ACLOCAL_AMFLAGS = -I m4
+ include_HEADERS = cudd/cudd.h
+ if DDDMP
+ include_HEADERS += dddmp/dddmp.h
++include_HEADERS += util/util.h
++include_HEADERS += config.h
++include_HEADERS += mtr/mtr.h
+ endif
+ if OBJ
+ include_HEADERS += cplusplus/cuddObj.hh

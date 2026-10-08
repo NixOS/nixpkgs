@@ -1,0 +1,8 @@
+--- a/pnpm-workspace.yaml
++++ b/pnpm-workspace.yaml
+@@ -1,3 +1,5 @@
++packages:
++  - '.'
+ allowBuilds:
+   '@parcel/watcher': true
+   electron: true

@@ -1,0 +1,54 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 3762b62..dfee082 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -33,7 +33,7 @@ classifiers = [
+ 	"Topic :: Terminals",
+ 	"Topic :: Utilities",
+ ]
+-dependencies = ["aiohttp >=3.12.13", "nodejs-wheel-binaries >= 22.20.0"]
++dependencies = ["aiohttp >=3.12.13"]
+ 
+ [project.urls]
+ "Homepage" = "https://github.com/juanbindez/pytubefix"
+diff --git a/pytubefix/botGuard/bot_guard.py b/pytubefix/botGuard/bot_guard.py
+index d7bde7e..ca10816 100644
+--- a/pytubefix/botGuard/bot_guard.py
++++ b/pytubefix/botGuard/bot_guard.py
+@@ -1,11 +1,10 @@
+ import os
+ import subprocess
+ import sys
+-import nodejs_wheel.executable
+ 
+ PLATFORM = sys.platform
+ 
+-NODE_DIR = nodejs_wheel.executable.ROOT_DIR
++NODE_DIR = "@nodejs@"
+ 
+ def _node_path() -> str:
+     suffix = ".exe" if os.name == "nt" else ""
+diff --git a/pytubefix/sig_nsig/node_runner.py b/pytubefix/sig_nsig/node_runner.py
+index 9ac068a..a7a2c72 100644
+--- a/pytubefix/sig_nsig/node_runner.py
++++ b/pytubefix/sig_nsig/node_runner.py
+@@ -1,11 +1,10 @@
+ import os
+ import json
+ import subprocess
+-import nodejs_wheel.executable
+ 
+ 
+ RUNNER_PATH = os.path.join(os.path.dirname(__file__), "vm", "runner.js")
+-NODE_DIR = nodejs_wheel.executable.ROOT_DIR
++NODE_DIR = "@nodejs@"
+ 
+ class NodeRunner:
+     def __init__(self, code: str):
+@@ -44,4 +43,4 @@ class NodeRunner:
+     def close(self):
+         self.proc.stdin.close()
+         self.proc.terminate()
+-        self.proc.wait()
+\ No newline at end of file
++        self.proc.wait()

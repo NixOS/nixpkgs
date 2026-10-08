@@ -1,0 +1,24 @@
+From 1c4b0f26614bff331eb8a9f2b514309af6f31fd0 Mon Sep 17 00:00:00 2001
+From: Jose <pepone@users.noreply.github.com>
+Date: Mon, 26 Jun 2023 16:43:43 +0200
+Subject: [PATCH] Add 'unistd' header for readlink (#8)
+
+---
+ src/system.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/system.c b/src/system.c
+index a3501f9..646caf6 100644
+--- a/src/system.c
++++ b/src/system.c
+@@ -37,6 +37,11 @@
+  *      2. append the system-dependent routines in this file.
+  */
++
++#ifndef _MSC_VER
++#  include <unistd.h> // For readlink()
++#endif
++
+ #if PREPROCESSED
+ #include    "mcpp.H"
+ #else

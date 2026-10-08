@@ -1,0 +1,139 @@
+https://github.com/archlinuxarm/PKGBUILDs/issues/296
+
+Fixes the bug causing a segfault on nscd and sshd:
+symbol lookup error: /usr/lib/libnss_ldap.so.2: undefined symbol: __libc_lock_lock
+
+--- ldap-nss.c.orig	2012-10-17 12:32:03.908730283 +0000
++++ ldap-nss.c	2012-10-17 12:38:10.906767283 +0000
+@@ -148,7 +148,7 @@
+  */
+ static ldap_session_t __session = { NULL, NULL, 0, LS_UNINITIALIZED };
+ 
+-#if defined(HAVE_PTHREAD_ATFORK) || defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#if defined(HAVE_PTHREAD_ATFORK) || defined(HAVE___LIBC_ONCE)
+ static pthread_once_t __once = PTHREAD_ONCE_INIT;
+ #endif
+ 
+@@ -168,7 +168,7 @@
+ static int __ssl_initialized = 0;
+ #endif /* HAVE_LDAPSSL_CLIENT_INIT */
+ 
+-#if defined(HAVE_PTHREAD_ATFORK) || defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#if defined(HAVE_PTHREAD_ATFORK) || defined(HAVE___LIBC_ONCE)
+ /*
+  * Prepare for fork(); lock mutex.
+  */
+@@ -519,7 +519,7 @@
+ }
+ #endif /* HAVE_NSSWITCH_H */
+ 
+-#if defined(HAVE_PTHREAD_ATFORK) || defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#if defined(HAVE_PTHREAD_ATFORK) || defined(HAVE___LIBC_ONCE)
+ static void
+ do_atfork_prepare (void)
+ {
+@@ -553,7 +553,7 @@
+ #ifdef HAVE_PTHREAD_ATFORK
+   (void) pthread_atfork (do_atfork_prepare, do_atfork_parent,
+ 			 do_atfork_child);
+-#elif defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#elif defined(HAVE___LIBC_ATFORK)
+   (void) __libc_atfork (do_atfork_prepare, do_atfork_parent, do_atfork_child);
+ #endif
+ 
+@@ -1119,7 +1119,7 @@
+     }
+ 
+ #ifndef HAVE_PTHREAD_ATFORK
+-#if defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#if defined(HAVE___LIBC_ONCE)
+   /*
+    * This bogosity is necessary because Linux uses different
+    * PIDs for different threads (like IRIX, which we don't
+@@ -1151,7 +1151,7 @@
+     pid = -1;			/* linked against libpthreads, don't care */
+ #else
+   pid = getpid ();
+-#endif /* HAVE_LIBC_LOCK_H || HAVE_BITS_LIBC_LOCK_H */
++#endif /* HAVE___LIBC_ONCE */
+ #endif /* HAVE_PTHREAD_ATFORK */
+ 
+   euid = geteuid ();
+@@ -1161,7 +1161,7 @@
+   syslog (LOG_DEBUG,
+ 	  "nss_ldap: __session.ls_state=%d, __session.ls_conn=%p, __euid=%i, euid=%i",
+ 	  __session.ls_state, __session.ls_conn, __euid, euid);
+-#elif defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#elif defined(HAVE___LIBC_ONCE)
+   syslog (LOG_DEBUG,
+ 	  "nss_ldap: libpthreads=%s, __session.ls_state=%d, __session.ls_conn=%p, __pid=%i, pid=%i, __euid=%i, euid=%i",
+  	  ((__pthread_once == NULL || __pthread_atfork == NULL) ? "FALSE" : "TRUE"),
+@@ -1185,11 +1185,11 @@
+     }
+   else
+ #ifndef HAVE_PTHREAD_ATFORK
+-#if defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#if defined(HAVE___LIBC_ONCE)
+   if ((__pthread_once == NULL || __pthread_atfork == NULL) && __pid != pid)
+ #else
+   if (__pid != pid)
+-#endif /* HAVE_LIBC_LOCK_H || HAVE_BITS_LIBC_LOCK_H */
++#endif /* HAVE___LIBC_ONCE */
+     {
+       do_close_no_unbind ();
+     }
+@@ -1250,9 +1250,9 @@
+       debug ("<== do_init (pthread_once failed)");
+       return NSS_UNAVAIL;
+     }
+-#elif defined(HAVE_PTHREAD_ATFORK) && ( defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H) )
++#elif defined(HAVE_PTHREAD_ATFORK) && defined(HAVE___LIBC_ONCE)
+   __libc_once (__once, do_atfork_setup);
+-#elif defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#elif defined(HAVE___LIBC_ONCE)
+   /*
+    * Only install the pthread_atfork() handlers i
+    * we are linked against libpthreads. Otherwise,
+--- ldap-nss.h.orig	2012-10-17 12:33:05.681379283 +0000
++++ ldap-nss.h	2012-10-17 12:34:06.337050753 +0000
+@@ -671,7 +671,7 @@
+ #define NSS_LDAP_LOCK(m)		mutex_lock(&m)
+ #define NSS_LDAP_UNLOCK(m)		mutex_unlock(&m)
+ #define NSS_LDAP_DEFINE_LOCK(m)		static mutex_t m = DEFAULTMUTEX
+-#elif defined(HAVE_LIBC_LOCK_H) || defined(HAVE_BITS_LIBC_LOCK_H)
++#elif defined(HAVE___LIBC_LOCK_LOCK) && defined(HAVE___LIBC_LOCK_UNLOCK)
+ #define NSS_LDAP_LOCK(m)		__libc_lock_lock(m)
+ #define NSS_LDAP_UNLOCK(m)		__libc_lock_unlock(m)
+ #define NSS_LDAP_DEFINE_LOCK(m)		static pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER
+--- ldap-nss.c.orig	2012-10-17 12:58:20.270783283 +0000
++++ ldap-nss.c	2012-10-17 12:58:43.699267283 +0000
+@@ -156,7 +156,7 @@
+ static FILE *__debugfile;
+ #endif /* LBER_OPT_LOG_PRINT_FILE */
+ 
+-#ifndef HAVE_PTHREAD_ATFORK
++#if !defined(HAVE_PTHREAD_ATFORK) || !defined(HAVE___LIBC_ONCE)
+ /* 
+  * Process ID that opened the session.
+  */
+--- configure.in.orig	2012-10-17 12:59:31.707235283 +0000
++++ configure.in	2012-10-17 13:00:15.854289283 +0000
+@@ -255,6 +255,7 @@
+ AC_CHECK_FUNCS(pthread_once)
+ AC_CHECK_FUNCS(ether_aton)
+ AC_CHECK_FUNCS(ether_ntoa)
++AC_CHECK_FUNCS(__libc_once __libc_atfork __libc_lock_lock __libc_lock_unlock)
+ 
+ AC_MSG_CHECKING(for struct ether_addr)
+ AC_TRY_COMPILE([#include <sys/types.h>
+--- ldap-nss.c.orig	2012-10-17 13:02:01.418010283 +0000
++++ ldap-nss.c	2012-10-17 13:03:25.017240283 +0000
+@@ -1102,7 +1102,7 @@
+ do_init (void)
+ {
+   ldap_config_t *cfg;
+-#ifndef HAVE_PTHREAD_ATFORK
++#if !defined(HAVE_PTHREAD_ATFORK) || !defined(HAVE___LIBC_ONCE)
+   pid_t pid;
+ #endif
+   uid_t euid;

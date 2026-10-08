@@ -1,0 +1,13 @@
+diff --git a/src/LzFind.c b/src/LzFind.c
+index 98d0ac6..f1bee55 100755
+--- a/src/LzFind.c
++++ b/src/LzFind.c
+@@ -229,7 +229,7 @@ static unsigned short * GetMatches2(UInt32 lenLimit, UInt32 curMatch, UInt32 pos
+     const unsigned char* _min = min;
+     unsigned cnt = 0;
+     if (_min < pb - (rle_len - len)) {_min = pb - (rle_len - len);}
+-    while (rle_pos > _min && *(uint64_t*)(rle_pos - 8) == starter_full) {rle_pos-=8; cnt+=8;}
++    while (rle_pos > _min && *(__typeof__(const uint64_t __attribute__((aligned(1))))*)(rle_pos - 8) == starter_full) {rle_pos-=8; cnt+=8;}
+     if (cnt) {
+       if (cnt + len > rle_len - 1) {cnt = rle_len - 1 - len;}
+       curMatch_rle -= cnt;

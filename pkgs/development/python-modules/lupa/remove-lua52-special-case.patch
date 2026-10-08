@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index 972277e..ec426a0 100644
+--- a/setup.py
++++ b/setup.py
+@@ -302,8 +302,6 @@ def use_bundled_lua(path, macros):
+         os.path.splitext(obj_file)[0] + '.c' if obj_file != 'lj_vm.o' else 'lj_vm.s'
+         for obj_file in obj_files
+     ]
+-    if libname == 'lua52':
+-        lua_sources.extend(['lbitlib.c', 'lcorolib.c', 'lctype.c'])
+     src_dir = os.path.dirname(makefile)
+     ext_libraries = [
+         [libname, {

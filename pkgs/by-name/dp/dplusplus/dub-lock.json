@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "libclang": {
+      "version": "0.3.3",
+      "sha256": "0abmwx294zrnmpzdqbwnw74i07wmvsvycsbh5j0yy1kcz411n6r8"
+    },
+    "sumtype": {
+      "version": "1.2.8",
+      "sha256": "0zvl0nncmrqvj2x96qjry2ws67fi3mykz1zr11pnpvwp9xdkw9zx"
+    },
+    "unit-threaded": {
+      "version": "2.1.9",
+      "sha256": "0x3d8jv65v4sh4nk4fkah202vbqnkhbzdc7k40yjqbjlgx76h1hy"
+    }
+  }
+}

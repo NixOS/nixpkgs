@@ -1,0 +1,123 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  pybind11,
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  cmake,
+  ninja,
+
+  # dependencies
+  cloudpickle,
+  importlib-metadata,
+  numpy,
+  orjson,
+  packaging,
+  pyvers,
+  torch,
+
+  # tests
+  h5py,
+  pytestCheckHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "tensordict";
+  version = "0.14.2";
+  pyproject = true;
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "pytorch";
+    repo = "tensordict";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KrqAKUCbqi0XGBV1aMzfRDJ1X+qQ7adrjHs8sPo5/VU=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11[global]" "pybind11"
+  '';
+
+  build-system = [
+    pybind11
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+  dontUseCmakeConfigure = true;
+
+  dependencies = [
+    cloudpickle
+    importlib-metadata
+    numpy
+    orjson
+    packaging
+    pyvers
+    torch
+  ];
+
+  pythonImportsCheck = [ "tensordict" ];
+
+  # We have to delete the source because otherwise it is used instead of the installed package.
+  preCheck = ''
+    rm -rf tensordict
+  '';
+
+  nativeCheckInputs = [
+    h5py
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs forever
+    "test/distributed/test_distributed.py"
+  ];
+
+  disabledTests = [
+    # TypeError: not all arguments converted during string formatting
+    "test_dtensor"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/tensordict/tensorclass.pyi
+    "test_tensorclass_instance_methods"
+    "test_tensorclass_stub_methods"
+
+    # hangs forever on some CPUs
+    "test_map_iter_interrupt_early"
+
+    # AssertionError: assert 'a string!' == 'a metadata!'
+    "test_save_load_memmap"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: Failed to initialize cpuinfo!
+    "test_cast_to"
+    "test_casts"
+    "test_td_params_cast"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Hangs due to the use of a pool
+    "test_chunksize_num_chunks"
+    "test_index_with_generator"
+    "test_map_exception"
+    "test_map"
+    "test_multiprocessing"
+  ];
+
+  meta = {
+    description = "Pytorch dedicated tensor container";
+    changelog = "https://github.com/pytorch/tensordict/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/pytorch/tensordict";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+  };
+})

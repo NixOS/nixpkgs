@@ -1,0 +1,98 @@
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  replaceVars,
+  writeShellScript,
+  steam,
+  winetricks,
+  yad,
+  nix-update-script,
+  extraCompatPaths ? "",
+}:
+
+let
+  steam-run =
+    (steam.override {
+      extraLibraries =
+        p: with p; [
+          # Fixes installing vcrun2022
+          # https://github.com/Matoking/protontricks/issues/461
+          freetype
+        ];
+    }).run-free;
+in
+python3Packages.buildPythonApplication (finalAttrs: {
+  pname = "protontricks";
+  version = "1.15.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "Matoking";
+    repo = "protontricks";
+    tag = finalAttrs.version;
+    hash = "sha256-+XD6RxQKXhrvJI3z3NBAhNP/KKHkUG+fGyvTkztH5G4=";
+  };
+
+  patches = [
+    # Use steam-run to run Proton binaries
+    (replaceVars ./steam-run.patch {
+      steamRun = lib.getExe steam-run;
+      bash = writeShellScript "steam-run-bash" ''
+        exec ${lib.getExe steam-run} bash "$@"
+      '';
+    })
+
+    # Revert vendored vdf since our vdf includes `appinfo.vdf` v29 support
+    # See https://github.com/Matoking/protontricks/commit/4198b7ea82369a91e3084d6e185f9b370f78eaec
+    ./revert-vendored-vdf.patch
+  ];
+
+  # Contents of vendored vdf are removed manually to reduce the size of the revert patch
+  postPatch = ''
+    rm -rf src/protontricks/_vdf
+  '';
+
+  build-system = with python3Packages; [ setuptools-scm ];
+
+  dependencies = with python3Packages; [
+    vdf
+    pillow
+  ];
+
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        winetricks
+        yad
+      ]
+    }"
+    # Steam Runtime does not work outside of steam-run, so don't use it
+    "--set STEAM_RUNTIME 0"
+  ]
+  ++ lib.optional (extraCompatPaths != "") "--set STEAM_EXTRA_COMPAT_TOOLS_PATHS ${extraCompatPaths}";
+
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
+
+  # From 1.6.0 release notes (https://github.com/Matoking/protontricks/releases/tag/1.6.0):
+  # In most cases the script is unnecessary and should be removed as part of the packaging process.
+  postInstall = ''
+    rm "$out/bin/protontricks-desktop-install"
+  '';
+
+  pythonImportsCheck = [ "protontricks" ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
+    homepage = "https://github.com/Matoking/protontricks";
+    changelog = "https://github.com/Matoking/protontricks/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
+  };
+})

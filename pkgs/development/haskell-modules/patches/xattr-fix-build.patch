@@ -1,0 +1,16 @@
+diff --git a/System/Xattr.hsc b/System/Xattr.hsc
+index adaf9cb..9b49996 100644
+--- a/System/Xattr.hsc
++++ b/System/Xattr.hsc
+@@ -45,11 +45,7 @@ module System.Xattr
+     where
+ 
+ #include <sys/types.h>
+-#ifdef __APPLE__
+ #include <sys/xattr.h>
+-#else
+-#include <attr/xattr.h>
+-#endif
+ 
+ import Data.Functor ((<$>))
+ import Foreign.C

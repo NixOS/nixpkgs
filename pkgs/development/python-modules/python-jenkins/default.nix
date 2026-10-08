@@ -1,0 +1,65 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  mock,
+  pbr,
+  pyyaml,
+  six,
+  multi-key-dict,
+  testscenarios,
+  requests,
+  requests-mock,
+  stestr,
+  multiprocess,
+}:
+
+buildPythonPackage rec {
+  pname = "python-jenkins";
+  version = "1.8.3";
+  format = "setuptools";
+
+  src = fetchPypi {
+    pname = "python_jenkins";
+    inherit version;
+    hash = "sha256-j0dhw5GsEejB8j93EBCSDBBEBJdwWrcXXVI1j1oS3Jg=";
+  };
+
+  # test uses timeout mechanism unsafe for use with the "spawn"
+  # multiprocessing backend used on macos
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace tests/test_jenkins_sockets.py \
+      --replace test_jenkins_open_no_timeout dont_test_jenkins_open_no_timeout
+  '';
+
+  pythonRelaxDeps = [ "setuptools" ];
+
+  buildInputs = [ mock ];
+  propagatedBuildInputs = [
+    pbr
+    pyyaml
+    six
+    multi-key-dict
+    requests
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    stestr
+    testscenarios
+    requests-mock
+    multiprocess
+  ];
+  checkPhase = ''
+    stestr run
+  '';
+
+  meta = {
+    description = "Python bindings for the remote Jenkins API";
+    homepage = "https://pypi.org/project/python-jenkins/";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gador ];
+  };
+}

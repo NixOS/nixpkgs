@@ -1,0 +1,10 @@
+--- a/tests/runselftest.py
++++ b/tests/runselftest.py
+@@ -113,6 +113,7 @@
+         '3d_points.vsz',
+         '3d_surface.vsz',
+         '3d_volume.vsz',
++        'vectorfield.vsz',
+     ])
+
+ class StupidFontMetrics:
