@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   python3Packages,
 }:
 
@@ -33,6 +34,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "mutmut" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Mutation testing system for Python, with a strong focus on ease of use";
