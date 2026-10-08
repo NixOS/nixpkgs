@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/google/kati";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danielfullmer ];
+    maintainers = with lib.maintainers; [
+      danielfullmer
+      evanwporter
+    ];
   };
 })
