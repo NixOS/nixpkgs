@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchurl,
   fetchNpmDeps,
   rustPlatform,
   npmHooks,
@@ -45,6 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-uqJAfYL62R4GaDszaNloP3h1FNXZkxZfLAGBJk5zLmE=";
 
+  fidoMdsBlob = fetchurl {
+    name = "fido-mds-290.jwt";
+    url = "https://mds.fidoalliance.org/";
+    hash = "sha256-6LybO7BuGJMRht2pbZkm9T5FnHxHRj+6GrQwiRERABM=";
+  };
+
   preBuild = ''
     pushd src/wasm-modules
     wasm-pack build -d ../../frontend/src/wasm/spow --no-pack --out-name spow --features spow
@@ -53,6 +60,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pushd "$npmRoot"
     npm run build
     popd
+
+    # The release build embeds this dataset. Bootstrap the upstream prep tool
+    # in debug mode and transform the pinned blob without network access.
+    cargo run --offline --locked --jobs "$NIX_BUILD_CORES" --bin fido-mds-prep -- \
+      --source ${finalAttrs.fidoMdsBlob} --out assets/fido_mds/dataset.bin
   '';
 
   # Tests fail and appear unmaintained upstream.
