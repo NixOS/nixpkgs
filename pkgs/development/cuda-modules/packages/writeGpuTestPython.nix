@@ -35,9 +35,10 @@ let
           "name"
         ]
         // {
+          # Preserve argument boundaries in makeWrapperArgs.
+          __structuredAttrs = true;
           inherit content;
           nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ makeWrapper ];
-          passAsFile = args.passAsFile or [ ] ++ [ "content" ];
         }
       )
       ''
@@ -45,11 +46,11 @@ let
         cat << EOF >"$out/bin/$name"
         #!${lib.getExe interpreter}
         EOF
-        cat "$contentPath" >>"$out/bin/$name"
+        printf '%s' "$content" >>"$out/bin/$name"
         chmod +x "$out/bin/$name"
 
         if [[ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]] ; then
-          wrapProgram "$out/bin/$name" ''${makeWrapperArgs[@]}
+          wrapProgram "$out/bin/$name" "''${makeWrapperArgs[@]}"
         fi
       '';
   tester' = tester.overrideAttrs (oldAttrs: {

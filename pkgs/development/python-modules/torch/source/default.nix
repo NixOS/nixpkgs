@@ -815,6 +815,19 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
     tests =
+      let
+        csrTester =
+          feature:
+          (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; }) {
+            name = "torch-csr-reductions" + lib.optionalString (feature == null) "-cpu";
+            inherit feature;
+            libraries = [ finalAttrs.finalPackage ];
+            makeWrapperArgs = lib.optionals (feature == null) [
+              "--add-flags"
+              "--device cpu"
+            ];
+          } (builtins.readFile ../tests/csr-reductions.py);
+      in
       callPackage ../tests {
         inherit rocmSupport cudaSupport;
       }
@@ -823,6 +836,10 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
           inherit (finalAttrs) src;
           nnpackPatch = ./nnpack-psimd-array-contracts.patch;
         };
+        tester-csrReductionsCpu = csrTester null;
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        csrReductionsCpu = (csrTester null).gpuCheck;
       }
       // lib.optionalAttrs (cudaSupport && cudaPackages.cudaAtLeast "12.9") {
         cudaArchitectures = callPackage ../tests/cuda-architectures.nix {
@@ -835,6 +852,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
           inherit cudaPackages python;
           torch = finalAttrs.finalPackage;
         };
+        tester-csrReductions = csrTester "cuda";
       }
       // lib.optionalAttrs (cudaSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
         symmetricMemorySocketName = callPackage ../tests/symm-mem-socket-name.nix {
@@ -842,13 +860,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
           torch = finalAttrs.finalPackage;
           socketPatch = ./symmetric-memory-socket-path.patch;
         };
-        tester-csrReductions =
-          (cudaPackages.writeGpuTestPython.override { python3Packages = python.pkgs; })
-            {
-              name = "torch-csr-reductions";
-              libraries = [ finalAttrs.finalPackage ];
-            }
-            (builtins.readFile ../tests/csr-reductions.py);
       };
   };
 

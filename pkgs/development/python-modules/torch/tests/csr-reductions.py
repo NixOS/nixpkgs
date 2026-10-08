@@ -197,7 +197,12 @@ def csr_reductions(operators=None, devices=("cpu", "cuda")):
 
 
 if __name__ == "__main__":
-    result = csr_reductions()
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--device", action="append", choices=("cpu", "cuda"))
+    args = parser.parse_args()
+    result = csr_reductions(devices=args.device or ("cpu", "cuda"))
     print(json.dumps({"torch": torch.__version__, "torch_path": torch.__file__, **result,
                       "cases": [case for case in result["cases"] if not case["passed"]]}, indent=2))
     raise SystemExit(0 if result["passed"] else 1)
