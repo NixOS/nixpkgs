@@ -20,12 +20,14 @@ let
     "arithmatex"
     "b64"
     "betterem"
+    "bracketspan"
     "caret"
     "critic"
     "details"
     "emoji"
     "escapeall"
     "extra"
+    "fancylists"
     "highlight"
     "inlinehilite"
     "keys"
@@ -33,7 +35,9 @@ let
     "mark"
     "pathconverter"
     "progressbar"
+    "quotes"
     "saneheaders"
+    "slugs"
     "smartsymbols"
     "snippets"
     "striphtml"
@@ -43,16 +47,17 @@ let
     "tilde"
   ];
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymdown-extensions";
-  version = "11.0.2";
+  version = "12.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
-    tag = version;
-    hash = "sha256-AmKt9KNBvT5yGyKfYmS3BE5XQHZVAP+UJGMBCR3jbLI=";
+    tag = finalAttrs.version;
+    hash = "sha256-Qztx/Qh6+Pun+RzXMhzCTCptWRKj2GkMfEkJov+Qrdc=";
   };
 
   build-system = [ hatchling ];
@@ -79,7 +84,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/facelessuser/pymdown-extensions/blob/${src.tag}/docs/src/markdown/about/changelog.md";
+    changelog = "https://github.com/facelessuser/pymdown-extensions/blob/${finalAttrs.src.tag}/docs/src/markdown/about/changelog.md";
     description = "Extensions for Python Markdown";
     homepage = "https://facelessuser.github.io/pymdown-extensions/";
     license = with lib.licenses; [
@@ -88,4 +93,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

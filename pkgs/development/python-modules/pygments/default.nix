@@ -8,6 +8,7 @@
 
   # tests
   pytestCheckHook,
+  versionCheckHook,
   wcag-contrast-ratio,
 }:
 
@@ -16,6 +17,7 @@ let
     pname = "pygments";
     version = "2.21.0";
     pyproject = true;
+    __structuredAttrs = true;
 
     src = fetchPypi {
       inherit (finalAttrs) pname version;
@@ -26,9 +28,11 @@ let
 
     # circular dependencies if enabled by default
     doCheck = false;
+    doInstallCheck = true;
 
     nativeCheckInputs = [
       pytestCheckHook
+      versionCheckHook
       wcag-contrast-ratio
     ];
 
@@ -38,6 +42,8 @@ let
     ];
 
     pythonImportsCheck = [ "pygments" ];
+
+    versionCheckProgramArg = [ "-V" ];
 
     passthru.tests = {
       check = pygments.overridePythonAttrs (_: {
