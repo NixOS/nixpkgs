@@ -7,11 +7,16 @@
   rustPlatform,
   installShellFiles,
   which,
+  pkg-config,
+  libgit2,
+  libz,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-absorb";
   version = "0.9.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tummychow";
@@ -28,8 +33,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-8uCXk5bXn/x4QXbGOROGlWYMSqIv+/7dBGZKbYkLfF4=";
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+    LIBZ_SYS_STATIC = 0;
+  };
+
   nativeCheckInputs = [
     gitMinimal
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
+    libz
   ];
 
   postInstall = ''
