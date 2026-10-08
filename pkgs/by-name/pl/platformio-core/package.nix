@@ -11,31 +11,7 @@
   udevCheckHook,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      marshmallow = super.marshmallow.overridePythonAttrs (oldAttrs: rec {
-        version = "3.26.1";
-        src = fetchFromGitHub {
-          owner = "marshmallow-code";
-          repo = "marshmallow";
-          tag = version;
-          hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
-        };
-
-        dependencies = with python3.pkgs; [ packaging ];
-
-        disabledTests = [
-          # 'year must be in 1..9999, not 292278994' instead of 'out of range'
-          "test_from_timestamp_with_overflow_value"
-        ];
-      });
-    };
-  };
-  python3Packages = python.pkgs;
-in
-with python3Packages;
+with python3.pkgs;
 buildPythonApplication rec {
   pname = "platformio";
   version = "6.1.19";
@@ -56,7 +32,7 @@ buildPythonApplication rec {
 
   patches = [
     (replaceVars ./interpreter.patch {
-      interpreter = (python3Packages.python.withPackages (_: dependencies)).interpreter;
+      interpreter = (python3.withPackages (_: dependencies)).interpreter;
     })
     (replaceVars ./use-local-spdx-license-list.patch {
       spdx_license_list_data = spdx-license-list-data.json;
@@ -100,7 +76,7 @@ buildPythonApplication rec {
     git
     intelhex
     lockfile
-    marshmallow
+    marshmallow_3
     packaging
     pip
     pyelftools
@@ -243,7 +219,7 @@ buildPythonApplication rec {
   ];
 
   passthru = {
-    python = python3Packages.python;
+    python = python3;
   };
 
   meta = {
