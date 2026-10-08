@@ -92,9 +92,9 @@ let
     in
     thisStage;
 
-  # This is a hack for resolving cross-compiled compilers' run-time
-  # deps. (That is, compilers that are themselves cross-compiled, as
-  # opposed to used to cross-compile packages.)
+  # Compiler recipes use this final companion for TARGET runtime and linker
+  # dependencies. For GNU/Clang it also provides the selected HOST frontend;
+  # other toolchains retain the existing GNU resource-provider fallback.
   postStage = buildPackages: {
     __raw = true;
     stdenv.cc =
@@ -204,6 +204,8 @@ let
             }
           )
         else
+          # This supplies runtime resources, not the selected toolchain's HOST
+          # executable. Its constructors need not support the projection above.
           buildPackages.gcc
       else
         # This will blow up if anything uses it, but that's OK. The `if
