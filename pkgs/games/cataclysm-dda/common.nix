@@ -1,0 +1,127 @@
+{
+  lib,
+  stdenv,
+  pkg-config,
+  gettext,
+  ncurses,
+  tiles,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  libx11,
+  freetype,
+  zlib,
+  debug,
+  useXdgDir,
+}:
+
+let
+  inherit (lib) optionals optionalString;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "cataclysm-dda";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    gettext
+    zlib
+  ]
+  ++ lib.optionals tiles [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    libx11
+    freetype
+  ]
+  ++ lib.optional (!tiles) ncurses;
+
+  postPatch = ''
+    patchShebangs lang/compile_mo.sh
+    substituteInPlace data/fontdata.json \
+      --replace-fail 'data/font/' 'font/'
+  '';
+
+  env.NIX_CFLAGS_COMPILE = optionalString stdenv.hostPlatform.isDarwin "-Wno-missing-noreturn";
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "LANGUAGES=all"
+    (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
+  ]
+  ++ optionals (!debug) [
+    "RELEASE=1"
+  ]
+  ++ optionals tiles [
+    "TILES=1"
+    "SOUND=1"
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    "NATIVE=osx"
+    "CLANG=1"
+    "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
+  ];
+
+  postInstall =
+    optionalString tiles ''
+      install -Dm644 data/xdg/org.cataclysmdda.CataclysmDDA.svg \
+        $out/share/icons/hicolor/scalable/apps/org.cataclysmdda.CataclysmDDA.svg
+
+      install -Dm644 data/xdg/org.cataclysmdda.CataclysmDDA.appdata.xml \
+        $out/share/metainfo/org.cataclysmdda.CataclysmDDA.appdata.xml
+    ''
+    + optionalString (tiles && stdenv.hostPlatform.isDarwin) ''
+      app=$out/Applications/Cataclysm.app
+
+      install -Dm444 build-data/osx/Info.plist -t $app/Contents
+      install -Dm444 build-data/osx/AppIcon.icns -t $app/Contents/Resources
+      install -Dm555 build-data/osx/Cataclysm.sh $app/Contents/MacOS/Cataclysm.sh
+      ln -sf $out/bin/cataclysm-tiles $app/Contents/Resources/cataclysm-tiles
+    '';
+
+  dontStrip = debug;
+  enableParallelBuilding = true;
+
+  passthru = {
+    isTiles = tiles;
+    isCurses = !tiles;
+  };
+
+  meta = {
+    description = "Free post-apocalyptic zombie-infested roguelike";
+    mainProgram = "cataclysm-tiles";
+    longDescription = ''
+      Cataclysm: Dark Days Ahead is a roguelike set in a post-apocalyptic world.
+      Surviving is difficult: you have been thrown, ill-equipped, into a
+      landscape now riddled with monstrosities of which flesh eating zombies are
+      neither the strangest nor the deadliest.
+
+      Yet with care and a little luck, many things are possible. You may try to
+      eke out an existence in the forests silently executing threats and
+      providing sustenance with your longbow. You can ride into town in a
+      jerry-rigged vehicle, all guns blazing, to settle matters in a fug of
+      smoke from your molotovs. You could take a more measured approach and
+      construct an impregnable fortress, surrounded by traps to protect you from
+      the horrors without. The longer you survive, the more skilled and adapted
+      you will get and the better equipped and armed to deal with the threats
+      you are presented with.
+
+      In the course of your ordeal there will be opportunities and temptations
+      to improve or change your very nature. There are tales of survivors fitted
+      with extraordinary cybernetics giving great power and stories too of
+      gravely mutated survivors who, warped by their ingestion of exotic
+      substances or radiation, now more closely resemble insects, birds or fish
+      than their original form.
+    '';
+    homepage = "https://cataclysmdda.org/";
+    license = lib.licenses.cc-by-sa-30;
+    maintainers = with lib.maintainers; [
+      mnacamura
+      DeeUnderscore
+      philocalyst
+    ];
+    platforms = lib.platforms.unix;
+  };
+})

@@ -1,0 +1,27 @@
+From 697fac371b414212526aae25e7c9774f167f4ef3 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Mon, 23 Feb 2026 17:26:26 +0100
+Subject: [PATCH 3/3] sdl/np2.c: Fix wrong order of arguments to fgets call
+
+/build/source/sdl/np2.c:373:19: error: passing argument 2 of 'fgets' makes integer from pointer without a cast [-Wint-conversion]
+/build/source/sdl/np2.c:373:25: error: passing argument 3 of 'fgets' makes pointer from integer without a cast [-Wint-conversion]
+---
+ sdl/np2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sdl/np2.c b/sdl/np2.c
+index 6712ac1..002ee33 100755
+--- a/sdl/np2.c
++++ b/sdl/np2.c
+@@ -370,7 +370,7 @@ char np2_main_read_m3u(const char *file)
+ #if defined(__LIBRETRO__)
+   while (filestream_gets(f, line, sizeof(line)) && np2_main_disk_images_count < sizeof(np2_main_disk_images_paths) / MAX_PATH)
+ #else
+-  while (fgets(f, line, sizeof(line)) && np2_main_disk_images_count < sizeof(np2_main_disk_images_paths) / MAX_PATH)
++  while (fgets(f, sizeof(line), line) && np2_main_disk_images_count < sizeof(np2_main_disk_images_paths) / MAX_PATH)
+ #endif
+   {
+     if (line[0] == '#')
+-- 
+2.52.0
+

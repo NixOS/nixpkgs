@@ -1,0 +1,34 @@
+diff --git a/forge.config.ts b/forge.config.ts
+index 4fda2d92..16581c55 100644
+--- a/forge.config.ts
++++ b/forge.config.ts
+@@ -61,7 +61,7 @@ const config: ForgeConfig = {
+ 		} : undefined,
+ 		appBundleId: "app.gomuks.desktop",
+ 		appCategoryType: "public.app-category.social-networking",
+-		extraResource: ["tray@2x.png", "trayTemplate@2x.png"],
++		extraResource: ["tray@2x.png", "trayTemplate@2x.png", "icon.png"],
+ 	},
+ 	hooks: {
+ 		readPackageJson: async (_forgeConfig, packageJSON) => {
+diff --git a/src/mainwindow.ts b/src/mainwindow.ts
+index da649371..94b52173 100644
+--- a/src/mainwindow.ts
++++ b/src/mainwindow.ts
+@@ -56,7 +56,7 @@ export class GomuksWindow {
+ 
+ 	createTray() {
+ 		const trayIconPath = path.join(
+-			app.isPackaged ? process.resourcesPath : app.getAppPath(),
++			process.env.GOMUKS_DESKTOP_RESOURCES_PATH,
+ 			process.platform === "darwin" ? "trayTemplate@2x.png" : "tray@2x.png",
+ 		)
+ 		this.tray = new Tray(nativeImage.createFromPath(trayIconPath))
+@@ -136,6 +136,7 @@ export class GomuksWindow {
+ 			width: 1280,
+ 			height: 720,
+ 			autoHideMenuBar: true,
++			icon: path.join(process.env.GOMUKS_DESKTOP_RESOURCES_PATH, "icon.png")
+ 		})
+ 		newWindow.on("close", () => {
+ 			if (this.window === newWindow) {

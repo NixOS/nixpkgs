@@ -1,0 +1,28 @@
+{
+  "depends": [
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/63sp165yl6is029c8g5cn3550vq8pp1x-source",
+      "rev": "e9f0c49b234fd4a2038b752ab02703288346ce98",
+      "sha256": "1rwr4d150l0v14ccmwr13zi6fr8din1h8spivmxwkcfa66jm73j1",
+      "url": "https://github.com/WyattBlue/csort/archive/e9f0c49b234fd4a2038b752ab02703288346ce98.tar.gz",
+      "ref": "1.0.0",
+      "packages": [
+        "csort"
+      ],
+      "srcDir": "src"
+    },
+    {
+      "method": "fetchzip",
+      "path": "/nix/store/f2xp1v0vnplwfjnk8nqsi7gd9pnb9gcv-source",
+      "rev": "b3dbc9c4d08e58c5b7bfad6dc7ef2ee52f2f4c08",
+      "sha256": "1v4rz42lwcazs6isi3kmjylkisr84mh0kgmlqycx4i885dn3g0l4",
+      "url": "https://github.com/cheatfate/nimcrypto/archive/b3dbc9c4d08e58c5b7bfad6dc7ef2ee52f2f4c08.tar.gz",
+      "ref": "v0.7.3^{}",
+      "packages": [
+        "nimcrypto"
+      ],
+      "srcDir": ""
+    }
+  ]
+}

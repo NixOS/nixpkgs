@@ -1,0 +1,63 @@
+From ceeca9463380ab11483ec22f9e46fdc3f83162b0 Mon Sep 17 00:00:00 2001
+From: Nathan Regner <nathanregner@gmail.com>
+Date: Sat, 15 Mar 2025 15:50:13 -0600
+Subject: [PATCH] Repurpose vscode-graphql build script
+
+Bundling the output script means we don't have to ship 1GB of
+`node_modules` (there are lots of unrelated dependencies used by other
+packages in the monorepo).
+---
+ .../esbuild.js                                | 28 ++-----------------
+ 1 file changed, 2 insertions(+), 26 deletions(-)
+ rename packages/{vscode-graphql => graphql-language-service-cli}/esbuild.js (59%)
+
+diff --git a/packages/vscode-graphql/esbuild.js b/packages/graphql-language-service-cli/esbuild.js
+similarity index 59%
+rename from packages/vscode-graphql/esbuild.js
+rename to packages/graphql-language-service-cli/esbuild.js
+index 744f4e60..4b9147fa 100644
+--- a/packages/vscode-graphql/esbuild.js
++++ b/packages/graphql-language-service-cli/esbuild.js
+@@ -1,12 +1,8 @@
+ const { build } = require('esbuild');
+ const [, , arg] = process.argv;
+ 
+-const logger = console;
+-
+-const isWatchMode = arg === '--watch';
+-
+ build({
+-  entryPoints: ['src/extension.ts', 'src/server/index.ts'],
++  entryPoints: ['bin/graphql.js'],
+   bundle: true,
+   minify: arg === '--minify',
+   platform: 'node',
+@@ -50,24 +46,4 @@ build({
+     'liquor',
+     'twig',
+   ],
+-})
+-  .then(({ errors, warnings }) => {
+-    if (warnings.length) {
+-      logger.warn(...warnings);
+-    }
+-    if (errors.length) {
+-      logger.error(...errors);
+-    }
+-
+-    logger.log('successfully bundled vscode-graphql 🚀');
+-
+-    if (isWatchMode) {
+-      logger.log('watching... 🕰');
+-    } else {
+-      process.exit();
+-    }
+-  })
+-  .catch(err => {
+-    logger.error(err);
+-    process.exit(1);
+-  });
++});
+-- 
+2.48.1
+

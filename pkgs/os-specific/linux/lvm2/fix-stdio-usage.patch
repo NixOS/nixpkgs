@@ -1,0 +1,68 @@
+diff --git a/lib/commands/toolcontext.c b/lib/commands/toolcontext.c
+index 56dc1f856..011ec2700 100644
+--- a/lib/commands/toolcontext.c
++++ b/lib/commands/toolcontext.c
+@@ -1660,6 +1660,7 @@ struct cmd_context *create_toolcontext(unsigned is_clvmd,
+ 	/* FIXME Make this configurable? */
+ 	reset_lvm_errno(1);
+ 
++#ifdef __GLIBC__
+ 	/* Set in/out stream buffering before glibc */
+ 	if (set_buffering
+ 	    && !cmd->running_on_valgrind /* Skipping within valgrind execution. */
+@@ -1704,7 +1705,7 @@ struct cmd_context *create_toolcontext(unsigned is_clvmd,
+ 	} else if (!set_buffering)
+ 		/* Without buffering, must not use stdin/stdout */
+ 		init_silent(1);
+-
++#endif
+ 	/*
+ 	 * Environment variable LVM_SYSTEM_DIR overrides this below.
+ 	 */
+@@ -2038,6 +2039,7 @@ void destroy_toolcontext(struct cmd_context *cmd)
+ 	if (cmd->cft_def_hash)
+ 		dm_hash_destroy(cmd->cft_def_hash);
+ 
++#ifdef __GLIBC__
+ 	if (!cmd->running_on_valgrind && cmd->linebuffer) {
+ 		int flags;
+ 		/* Reset stream buffering to defaults */
+@@ -2061,6 +2063,7 @@ void destroy_toolcontext(struct cmd_context *cmd)
+ 
+ 		free(cmd->linebuffer);
+ 	}
++#endif
+ 
+ 	destroy_config_context(cmd);
+ 
+diff --git a/tools/lvmcmdline.c b/tools/lvmcmdline.c
+index 1b2f7f47c..e0674d42d 100644
+--- a/tools/lvmcmdline.c
++++ b/tools/lvmcmdline.c
+@@ -3378,7 +3378,7 @@ static int _check_standard_fds(void)
+ 	int err = is_valid_fd(STDERR_FILENO);
+ 
+ 	if (!is_valid_fd(STDIN_FILENO) &&
+-	    !(stdin = fopen(_PATH_DEVNULL, "r"))) {
++	    !freopen(_PATH_DEVNULL, "r", stdin)) {
+ 		if (err)
+ 			perror("stdin stream open");
+ 		else
+@@ -3388,7 +3388,7 @@ static int _check_standard_fds(void)
+ 	}
+ 
+ 	if (!is_valid_fd(STDOUT_FILENO) &&
+-	    !(stdout = fopen(_PATH_DEVNULL, "w"))) {
++	    !freopen(_PATH_DEVNULL, "w", stdout)) {
+ 		if (err)
+ 			perror("stdout stream open");
+ 		/* else no stdout */
+@@ -3396,7 +3396,7 @@ static int _check_standard_fds(void)
+ 	}
+ 
+ 	if (!is_valid_fd(STDERR_FILENO) &&
+-	    !(stderr = fopen(_PATH_DEVNULL, "w"))) {
++	    !freopen(_PATH_DEVNULL, "w", stderr)) {
+ 		printf("stderr stream open: %s\n",
+ 		       strerror(errno));
+ 		return 0;

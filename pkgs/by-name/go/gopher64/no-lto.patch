@@ -1,0 +1,14 @@
+--- a/build.rs
++++ b/build.rs
+@@ -150,11 +143,6 @@
+         println!("cargo:rustc-link-lib=dylib=freetype");
+     }
+ 
+-    volk_build.flag("-flto=thin");
+-    rdp_build.flag("-flto=thin");
+-    simd_build.flag("-flto=thin");
+-    retroachievements_build.flag("-flto=thin");
+-
+     volk_build.compile("volk");
+     rdp_build.compile("parallel-rdp");
+     retroachievements_build.compile("retroachievements");

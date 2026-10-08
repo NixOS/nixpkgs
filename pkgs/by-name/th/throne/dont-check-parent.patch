@@ -1,0 +1,13 @@
+diff --git a/core/server/parentcheck/parentcheck.go b/core/server/parentcheck/parentcheck.go
+index 0991a7f..58fd32f 100644
+--- a/core/server/parentcheck/parentcheck.go
++++ b/core/server/parentcheck/parentcheck.go
+@@ -11,6 +11,8 @@ import (
+ )
+ 
+ func CheckParentProcess() {
++	return
++
+ 	parentPath, err := getParentExePath(ParentPID)
+ 	if err != nil {
+ 		log.Fatalf("parent check: cannot read parent executable: %v", err)

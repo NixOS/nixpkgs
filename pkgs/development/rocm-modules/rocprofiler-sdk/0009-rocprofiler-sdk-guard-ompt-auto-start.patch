@@ -1,0 +1,50 @@
+From 502d2df0ddd84f0f2fa718b9a02ee0f01f36dac1 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Tue, 2 Jun 2026 01:31:05 -0700
+Subject: [PATCH] [rocprofiler-sdk] don't auto-start OMPT tool before glog is
+ initialized
+
+The OpenMP runtime resolves its weak ompt_start_tool to the strong symbol we
+export and calls it during OpenMP init. That can fire from an unrelated
+library's constructor (observed: OpenBLAS calling omp_get_num_places) while
+librocprofiler-sdk is still being dlopen'd. init_logging() then dereferences
+glog's gflags FLAGS_vmodule, whose backing pointer is still null until glog's
+static initializers run, and the process segfaults on `import torch`.
+
+The init order is not reliably fixable from here: a dependency cycle among the
+ROCm libraries makes the loader run our constructors before libglog's, so a
+flag set by our own constructor does not imply glog is ready. Instead gate the
+tool start on glog itself, by testing whether gflags has populated FLAGS_vmodule
+yet; reading the raw pointer is safe even before construction. It is read via an
+asm label because the gflags header only exposes it as a reference, which the
+compiler assumes is never null. Declining (nullptr) when glog is not yet ready
+is a valid OMPT "no tool" response; deliberate profiling (rocprofv3 preloads the
+tool early, before such constructors) is unaffected.
+---
+ source/lib/rocprofiler-sdk/ompt.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/source/lib/rocprofiler-sdk/ompt.cpp b/source/lib/rocprofiler-sdk/ompt.cpp
+index a9ccc57..3231087 100644
+--- a/source/lib/rocprofiler-sdk/ompt.cpp
++++ b/source/lib/rocprofiler-sdk/ompt.cpp
+@@ -199,6 +199,8 @@ finalize_ompt()
+ }  // namespace ompt
+ }  // namespace rocprofiler
+
++extern void* const rocprofiler_glog_vmodule_flag asm("_ZN3fLS13FLAGS_vmoduleB5cxx11E");
++
+ extern "C" {
+
+ rocprofiler_status_t
+@@ -245,6 +247,8 @@ ompt_start_tool(unsigned int omp_version, const char* runtime_version) ROCPROFIL
+ ompt_start_tool_result_t*
+ ompt_start_tool(unsigned int omp_version, const char* runtime_version)
+ {
++    if(rocprofiler_glog_vmodule_flag == nullptr) return nullptr;
++
+     ::rocprofiler::registration::init_logging();
+     ::rocprofiler::registration::initialize();
+     return rocprofiler_ompt_start_tool(omp_version, runtime_version);
+--
+2.54.0

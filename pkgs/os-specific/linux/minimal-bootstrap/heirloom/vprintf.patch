@@ -1,0 +1,128 @@
+--- cksum/cksum.c
++++ cksum/cksum.c
+@@ -147,7 +147,7 @@ cksum(const char *name)
+ 		s = (s << 8) ^ crctab[(s >> 24) ^ c];
+ 	}
+ 	s = ~s;
+-	printf("%u %llu", (unsigned)s, nbytes);
++	printf("%u %lu", (unsigned)s, nbytes);
+ 	if(name)
+ 		printf(" %s", name);
+ 	printf("\n");
+--- cmp/cmp.c
++++ cmp/cmp.c
+@@ -246,8 +246,8 @@ different:
+ 				errcnt = 1;
+ 			} else {
+ 				if (sflag == 0)
+-					printf("%s %s differ: char %lld,"
+-							" line %lld\n",
++					printf("%s %s differ: char %ld,"
++							" line %ld\n",
+ 						f1->f_nam, f2->f_nam,
+ 						(long long)offset(f1),
+ 						line);
+--- csplit/csplit.c
++++ csplit/csplit.c
+@@ -284,7 +284,7 @@ csplit(const char *fn)
+ 				op = nextfile();
+ 			if (op) {
+ 				if (!sflag)
+-					printf("%lld\n", bytes);
++					printf("%ld\n", bytes);
+ 				bytes = 0;
+ 				fclose(op);
+ 			}
+--- expr/expr.y
++++ expr/expr.y
+@@ -140,7 +140,7 @@ expression:	expr NOARG {
+ 			if (sus && numeric($1)) {
+ 				int64_t	n;
+ 				n = atoll($1);
+-				printf("%lld\n", n);
++				printf("%ld\n", n);
+ 				exit(n == 0);
+ 			} else
+ 				puts($1);
+@@ -447,10 +447,10 @@ numpr(int64_t val)
+ 	int	ret;
+ 
+ 	rv = smalloc(NUMSZ);
+-	ret = snprintf(rv, NUMSZ, "%lld", (long long)val);
++	ret = snprintf(rv, NUMSZ, "%ld", (long long)val);
+ 	if (ret < 0 || ret >= NUMSZ) {
+ 		rv = srealloc(rv, ret + 1);
+-		ret = snprintf(rv, ret, "%lld", (long long)val);
++		ret = snprintf(rv, ret, "%ld", (long long)val);
+ 		if (ret < 0)
+ 			yyerror("illegal number");
+ 	}
+--- grep/Makefile.mk
++++ grep/Makefile.mk
+@@ -92,7 +92,7 @@ config.h:
+ 	-echo 'long long foo;' >___build$$$$.c ; \
+ 	$(CC) $(CFLAGS2) $(CPPFLAGS) $(IWCHAR) $(ICOMMON) $(IUXRE) $(LARGEF) -c ___build$$$$.c >/dev/null 2>&1 ; \
+ 	if test $$? = 0 && test -f ___build$$$$.o ; \
+-	then	echo '#define	LONGLONG' >>config.h ; \
++	then	echo '' >>config.h ; \
+ 	fi ; \
+ 	rm -f ___build$$$$.o ___build$$$$.c
+ 
+--- ls/Makefile.mk
++++ ls/Makefile.mk
+@@ -76,7 +76,7 @@ config.h:
+ 	-echo 'long long foo;' >___build$$$$.c ; \
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) $(LARGEF) $(IWCHAR) -c ___build$$$$.c >/dev/null 2>&1 ; \
+ 	if test $$? = 0 && test -f ___build$$$$.o ; \
+-	then	echo '#define	LONGLONG' >>config.h ; \
++	then	echo '' >>config.h ; \
+ 	fi ; \
+ 	rm -f ___build$$$$.o ___build$$$$.c
+ 	-echo '#include <sys/types.h>' >___build$$$$.c ; \
+--- pr/pr.c
++++ pr/pr.c
+@@ -548,7 +548,7 @@ print(const char *fp, const char **argp)
+ 			putcs("  ");
+ 			putcs(header);
+ 			snprintf(linebuf, sizeof linebuf,
+-					" Page %lld\n\n\n", page);
++					" Page %ld\n\n\n", page);
+ 			putcs(linebuf);
+ 		}
+ 		c = putpage();
+--- sed/sed1.c
++++ sed/sed1.c
+@@ -489,7 +489,7 @@ command(struct reptr *ipc)
+ 			break;
+ 
+ 		case EQCOM:
+-			fprintf(stdout, "%lld\n", lnum);
++			fprintf(stdout, "%ld\n", lnum);
+ 			break;
+ 
+ 		case GCOM:
+--- sum/sum.c
++++ sum/sum.c
+@@ -116,7 +116,7 @@ sum(const char *name)
+ 	else {
+ 		s = (s & 0xFFFF) + (s >> 16);
+ 		s = (s & 0xFFFF) + (s >> 16);
+-		printf("%u %llu", (unsigned)s,
++		printf("%u %lu", (unsigned)s,
+ 				(unsigned long long)(nbytes+UNIT-1)/UNIT);
+ 	}
+ 	if(name)
+--- wc/wc.c
++++ wc/wc.c
+@@ -89,9 +89,9 @@ report(unsigned long long count)
+ #if defined (S42)
+ 	if (putspace++)
+ 		printf(" ");
+-	printf("%llu", count);
++	printf("%lu", count);
+ #else	/* !S42 */
+-	printf("%7llu ", count);
++	printf("%7lu ", count);
+ #endif	/* !S42 */
+ }
+ 

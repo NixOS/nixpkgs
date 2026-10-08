@@ -1,0 +1,30 @@
+--- ./lib/vscode/build/gulpfile.reh.ts
++++ ./lib/vscode/build/gulpfile.reh.ts
+@@ -349,10 +349,7 @@
+ 			.pipe(util.stripSourceMappingURL())
+ 			.pipe(jsFilter.restore);
+ 
+-		const nodePath = `.build/node/v${nodeVersion}/${platform}-${arch}`;
+-		const node = gulp.src(`${nodePath}/**`, { base: nodePath, dot: true });
+-
+-		let web: NodeJS.ReadWriteStream[] = [];
++		let web: NodeJS.ReadWriteStream[] = [];
+ 		if (type === 'reh-web') {
+ 			web = [
+ 				'resources/server/favicon.ico',
+@@ -368,7 +365,6 @@
+ 			license,
+ 			sources,
+ 			deps,
+-			node,
+ 			...web
+ 		);
+ 
+@@ -515,7 +511,6 @@
+ 
+ 			const packageTasks: task.Task[] = [
+ 				compileNativeExtensionsBuildTask,
+-				gulp.task(`node-${platform}-${arch}`) as task.Task,
+ 				util.rimraf(path.join(BUILD_ROOT, destinationFolderName)),
+ 				packageTask(type, platform, arch, sourceFolderName, destinationFolderName),
+ 				copyCopilotNativeDepsTaskREH(platform, arch, destinationFolderName)

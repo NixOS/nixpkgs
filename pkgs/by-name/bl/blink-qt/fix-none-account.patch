@@ -1,0 +1,25 @@
+From 6e438d1ab9f9da5e55b0cc96ea81fbac1f1a871b Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 5 Jul 2026 19:40:36 +0530
+Subject: [PATCH] fix: handle None default_account on startup
+
+---
+ blink/mainwindow.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/blink/mainwindow.py b/blink/mainwindow.py
+index d0baa21..77c67e8 100644
+--- a/blink/mainwindow.py
++++ b/blink/mainwindow.py
+@@ -1109,7 +1109,7 @@ class MainWindow(base_class, ui_class):
+ 
+     def _NH_SIPAccountManagerDidStart(self, notification):
+         account = notification.sender.default_account
+-        if account is not BonjourAccount() and account.sms.enable_pgp and account.sms.private_key is not None and os.path.exists(account.sms.private_key.normalized):
++        if account is not None and account is not BonjourAccount() and account.sms.enable_pgp and account.sms.private_key is not None and os.path.exists(account.sms.private_key.normalized):
+             self.export_pgp_key_action.setEnabled(True)
+ 
+     def _NH_SIPAccountManagerDidRemoveAccount(self, notification):
+-- 
+2.54.0
+

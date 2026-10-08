@@ -1,0 +1,39 @@
+From 7313d220616e756c4bb4f2c8cc5cf6b6b2e4789c Mon Sep 17 00:00:00 2001
+From: nixpkgs <nix@nixpkgs>
+Date: Fri, 10 Jul 2026 12:21:11 +0300
+Subject: [PATCH 2/4] replace .extraLarge with .large for macOS 14 SDK
+
+---
+ src/preferences/settings-window/SettingsWindow.swift | 2 +-
+ src/switcher/main-window/TilesView.swift             | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/preferences/settings-window/SettingsWindow.swift b/src/preferences/settings-window/SettingsWindow.swift
+index 866329ea..44f1da76 100644
+--- a/src/preferences/settings-window/SettingsWindow.swift
++++ b/src/preferences/settings-window/SettingsWindow.swift
+@@ -462,7 +462,7 @@ class SettingsWindow: NSWindow {
+         searchField.sendsWholeSearchString = true
+         searchField.bezelStyle = .roundedBezel
+         if #available(macOS 26.0, *) {
+-            searchField.controlSize = .extraLarge
++            searchField.controlSize = .large
+         } else if #available(macOS 13.0, *) {
+             searchField.controlSize = .large
+         }
+diff --git a/src/switcher/main-window/TilesView.swift b/src/switcher/main-window/TilesView.swift
+index d6c7fb69..b6f374c9 100644
+--- a/src/switcher/main-window/TilesView.swift
++++ b/src/switcher/main-window/TilesView.swift
+@@ -142,7 +142,7 @@ class TilesView {
+         searchField.sendsWholeSearchString = true
+         searchField.bezelStyle = .roundedBezel
+         if #available(macOS 26.0, *) {
+-            searchField.controlSize = .extraLarge
++            searchField.controlSize = .large
+         } else if #available(macOS 13.0, *) {
+             searchField.controlSize = .large
+         } else {
+-- 
+2.55.0
+

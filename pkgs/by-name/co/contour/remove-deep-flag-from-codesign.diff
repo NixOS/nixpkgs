@@ -1,0 +1,16 @@
+diff --git a/remove-deep-flag-from-codesign.diff b/remove-deep-flag-from-codesign.diff
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/src/contour/CMakeLists.txt b/src/contour/CMakeLists.txt
+index 3c7ac83720..55e6830bfc 100644
+--- a/src/contour/CMakeLists.txt
++++ b/src/contour/CMakeLists.txt
+@@ -510,7 +510,7 @@
+         # Ensure code signature
+         execute_process(
+             WORKING_DIRECTORY \"${CMAKE_CURRENT_BINARY_DIR}\"
+-            COMMAND codesign --force --deep --sign \"${CODE_SIGN_CERTIFICATE_ID}\" \"${BUNDLE_APP}\"
++            COMMAND codesign --force --sign \"${CODE_SIGN_CERTIFICATE_ID}\" \"${BUNDLE_APP}/Contents/MacOS/contour\"
+         )
+     ")
+ else()

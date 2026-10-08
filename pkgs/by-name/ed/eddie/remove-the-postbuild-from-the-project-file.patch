@@ -1,0 +1,18 @@
+diff --git a/src/App.CLI.Linux/App.CLI.Linux.net10.csproj b/src/App.CLI.Linux/App.CLI.Linux.net10.csproj
+index 8d53d36..b4b3822 100644
+--- a/src/App.CLI.Linux/App.CLI.Linux.net10.csproj
++++ b/src/App.CLI.Linux/App.CLI.Linux.net10.csproj
+@@ -50,9 +50,4 @@
+ 		<ProjectReference Include="..\Lib.Core\Lib.Core.net10.csproj" />
+ 		<ProjectReference Include="..\Lib.Platform.Linux\Lib.Platform.Linux.net10.csproj" />
+ 	</ItemGroup>
+-
+-	<Target Name="LinuxPostBuild" AfterTargets="PostBuildEvent">		
+-		<Exec Command="$(ProjectDir)/postbuild.sh &quot;$(TargetDir)&quot; $(RuntimeIdentifier) $(ConfigurationName)" />
+-	</Target>
+-
+ </Project>
+\ No newline at end of file
+-- 
+2.47.0
+

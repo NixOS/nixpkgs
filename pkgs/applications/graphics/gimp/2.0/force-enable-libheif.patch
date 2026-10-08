@@ -1,0 +1,22 @@
+diff --git a/configure.ac b/configure.ac
+index 48c3c77892..3189781817 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1843,13 +1843,13 @@ can_export_heic=no
+ can_import_avif=no
+ can_export_avif=no
+ if test "x$have_libheif" = xyes; then
+-  can_import_heic=`$PKG_CONFIG --variable=builtin_h265_decoder libheif`
+-  can_export_heic=`$PKG_CONFIG --variable=builtin_h265_encoder libheif`
++  can_import_heic=yes
++  can_export_heic=yes
+   if test "x$can_import_heic" = xyes; then
+     MIME_TYPES="$MIME_TYPES;image/heif;image/heic"
+   fi
+-  can_import_avif=`$PKG_CONFIG --variable=builtin_avif_decoder libheif`
+-  can_export_avif=`$PKG_CONFIG --variable=builtin_avif_encoder libheif`
++  can_import_avif=yes
++  can_export_avif=yes
+   if test "x$can_import_avif" = xyes; then
+     MIME_TYPES="$MIME_TYPES;image/avif"
+   fi

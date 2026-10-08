@@ -1,0 +1,46 @@
+commit 4c9e26cdc9f58f0e35aa345ae3bb643bea139608
+Author: Christian Krause <chkr@plauener.de>
+Date:   Tue May 6 00:33:39 2025 +0200
+
+    Export nm_vpn_editor_factory_vpnc properly
+    
+    - commit e2fc231149165cb37a25362b85cbcd58b15a2a11 removed
+      libnm-glib version
+    - after that commit, nm_vpn_editor_factory_vpnc was not correctly
+      exported anymore which caused the settings editor be missing
+      when adding or editing a vnpc connection in gnome-control-center
+    - this commit re-adds the removed G_MODULE_EXPORT declaration
+
+diff --git a/properties/nm-vpnc-editor.c b/properties/nm-vpnc-editor.c
+index a06807d..0c8081d 100644
+--- a/properties/nm-vpnc-editor.c
++++ b/properties/nm-vpnc-editor.c
+@@ -27,7 +27,6 @@
+ #include "nm-default.h"
+ 
+ #include "nm-vpnc-editor.h"
+-#include "nm-vpnc-editor-plugin.h"
+ 
+ #include <nma-cert-chooser.h>
+ #include <netinet/in.h>
+@@ -1130,3 +1129,20 @@ vpnc_editor_interface_init (NMVpnEditorInterface *iface)
+ 	iface->get_widget = get_widget;
+ 	iface->update_connection = update_connection;
+ }
++
++/*****************************************************************************/
++
++#ifndef NM_VPN_OLD
++
++#include "nm-vpnc-editor-plugin.h"
++
++G_MODULE_EXPORT NMVpnEditor *
++nm_vpn_editor_factory_vpnc (NMVpnEditorPlugin *editor_plugin,
++                            NMConnection *connection,
++                            GError **error)
++{
++       g_return_val_if_fail (!error || !*error, NULL);
++
++       return nm_vpnc_editor_new (connection, error);
++}
++#endif

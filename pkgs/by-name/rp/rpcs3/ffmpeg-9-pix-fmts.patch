@@ -1,0 +1,13 @@
+diff --git a/rpcs3/rpcs3qt/recording_settings_dialog.cpp b/rpcs3/rpcs3qt/recording_settings_dialog.cpp
+--- a/rpcs3/rpcs3qt/recording_settings_dialog.cpp
++++ b/rpcs3/rpcs3qt/recording_settings_dialog.cpp
+@@ -31,9 +31,6 @@ static std::vector<const AVCodec*> get_video_codecs(const AVOutputFormat* fmt)
+ 	void* opaque = nullptr;
+ 	while (const AVCodec* codec = av_codec_iterate(&opaque))
+ 	{
+-		if (!codec->pix_fmts)
+-			continue;
+-
+ 		if (codec->capabilities & AV_CODEC_CAP_EXPERIMENTAL)
+ 			continue;
+ 

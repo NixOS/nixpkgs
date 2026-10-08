@@ -1,0 +1,12 @@
+diff --git a/configure.ac b/configure.ac
+index 52dea73..6b1a818 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -5,6 +5,8 @@ AC_INIT([caribou],
+         [caribou])
+
+ AC_CONFIG_MACRO_DIR([m4])
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.25])
+
+ AM_PROG_LIBTOOL

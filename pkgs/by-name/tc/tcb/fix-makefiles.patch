@@ -1,0 +1,52 @@
+diff --git a/Make.defs b/Make.defs
+index a961f7d..9e8d59b 100644
+--- a/Make.defs
++++ b/Make.defs
+@@ -19,7 +19,7 @@ LDFLAGS += $(DBGFLAG) -L../libs
+
+ PREFIX = /usr
+ SBINDIR = /sbin
+-SLIBDIR = /lib
++SLIBDIR = $(PREFIX)/lib
+ INCLUDEDIR = $(PREFIX)/include
+ LIBDIR = $(PREFIX)/lib
+ LIBEXECDIR = $(PREFIX)/libexec
+diff --git a/libs/Makefile b/libs/Makefile
+index 0083b13..27238f6 100644
+--- a/libs/Makefile
++++ b/libs/Makefile
+@@ -7,7 +7,7 @@ LIBTCB_A = libtcb.a
+ LIB_MAP = libtcb.map
+ NSS_MAP = libnss_tcb.map
+ 
+-all: $(LIBTCB_LONG) $(LIBNSS) $(LIBTCB_A)
++all: $(LIBTCB_LONG) $(LIBNSS)
+ 
+ $(LIBTCB_A): libtcb_a.o
+ 	ar -cr $@ $<
+@@ -36,9 +36,8 @@ install:
+ 	$(MKDIR) -p -m 755 $(DESTDIR)$(LIBDIR)
+ 	$(INSTALL) -m $(SHLIBMODE) $(LIBTCB_LONG) $(DESTDIR)$(SLIBDIR)/
+ 	ln -sf $(LIBTCB_LONG) $(DESTDIR)$(SLIBDIR)/$(LIBTCB)
+-	ln -sf ../..$(SLIBDIR)/$(LIBTCB) $(DESTDIR)$(LIBDIR)/libtcb.so
++	ln -sf $(LIBTCB) $(DESTDIR)$(LIBDIR)/libtcb.so
+ 	$(INSTALL) -m $(SHLIBMODE) $(LIBNSS) $(DESTDIR)$(SLIBDIR)/
+-	$(INSTALL) -m 644 $(LIBTCB_A) $(DESTDIR)$(LIBDIR)/
+ 
+ clean:
+ 	rm -f *.o *~ $(LIBTCB)* libtcb.so $(LIBNSS) *.a
+diff --git a/progs/Makefile b/progs/Makefile
+index c3a6879..e24f74b 100644
+--- a/progs/Makefile
++++ b/progs/Makefile
+@@ -23,8 +23,8 @@ install-non-root: install-common
+ 	$(INSTALL) -m 700 $(CHKPWD) $(DESTDIR)$(LIBEXECDIR)/chkpwd/
+ 
+ install: install-common
+-	$(INSTALL) -d -o root -g chkpwd -m 710 $(DESTDIR)$(LIBEXECDIR)/chkpwd
+-	$(INSTALL) -m 2711 -o root -g shadow $(CHKPWD) \
++	$(INSTALL) -d $(DESTDIR)$(LIBEXECDIR)/chkpwd
++	$(INSTALL) $(CHKPWD) \
+ 		$(DESTDIR)$(LIBEXECDIR)/chkpwd/
+ 
+ install-common:

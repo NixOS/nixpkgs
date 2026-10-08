@@ -1,0 +1,13 @@
+--- a/src/core.c/CompUnit/Repository/Installation.rakumod
++++ b/src/core.c/CompUnit/Repository/Installation.rakumod
+@@ -848,6 +848,10 @@
+                 my $val = $1.Str;
+                 given $op {
+                     when "plain" | "plat-sep" {
++                        # use rakudo from our store path and avoid PATH lookups
++                        if $val ~~ / ^ "rakudo" / {
++                            return '"@out@/bin/' ~ sh-escape($val) ~ '"';
++                        }
+                         return '"' ~ sh-escape($val) ~ '"';
+                     }
+                     when "cmd-args" {

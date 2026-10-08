@@ -1,0 +1,24 @@
+Fix doc snarfing with GCC 4.5.
+From <http://git.savannah.gnu.org/cgit/guile.git/commit/?h=branch_release-1-8&id=aac41d28358cea594bb30f6e547afb82bb6004a6>.
+
+diff --git a/scripts/snarf-check-and-output-texi b/scripts/snarf-check-and-output-texi
+index ea33e17..8cd42e8 100755
+--- a/scripts/snarf-check-and-output-texi
++++ b/scripts/snarf-check-and-output-texi
+@@ -267,6 +267,17 @@ exec ${GUILE-guile} -l $0 -c "(apply $main (cdr (command-line)))" "$@"
+       (set! *file* file)
+       (set! *line* line))
+ 
++     ;; newer gccs like to throw around more location markers into the
++     ;; preprocessed source; these (hash . hash) bits are what they translate to
++     ;; in snarfy terms.
++     (('location ('string . file) ('int . line) ('hash . 'hash))
++      (set! *file* file)
++      (set! *line* line))
++
++     (('location ('hash . 'hash) ('string . file) ('int . line) ('hash . 'hash))
++      (set! *file* file)
++      (set! *line* line))
++
+      (('arglist rest ...)
+       (set! *args* (do-arglist rest)))

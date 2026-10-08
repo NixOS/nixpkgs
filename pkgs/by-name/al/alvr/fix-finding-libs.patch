@@ -1,0 +1,45 @@
+From 1e792a4e7356f070856e4bf5775a07b18c3cc5ee Mon Sep 17 00:00:00 2001
+From: jopejoe1 <johannes@joens.email>
+Date: Sat, 7 Sep 2024 23:28:25 +0200
+Subject: [PATCH] fix finding libs
+
+---
+ alvr/server_openvr/build.rs | 18 +++---------------
+ alvr/session/build.rs       |  4 +---
+ 2 files changed, 4 insertions(+), 18 deletions(-)
+
+diff --git a/alvr/server_openvr/build.rs b/alvr/server_openvr/build.rs
+index b9bc4bd8..0581de0d 100644
+--- a/alvr/server_openvr/build.rs
++++ b/alvr/server_openvr/build.rs
+@@ -1,24 +1,12 @@
+-use std::{env, path::PathBuf};
++use std::{env, path::{Path, PathBuf}};
+ 
+ fn get_ffmpeg_path() -> PathBuf {
+-    let ffmpeg_path = alvr_filesystem::deps_dir()
+-        .join(if cfg!(target_os = "linux") {
+-            "linux"
+-        } else {
+-            "windows"
+-        })
+-        .join("ffmpeg");
+-
+-    if cfg!(target_os = "linux") {
+-        ffmpeg_path.join("alvr_build")
+-    } else {
+-        ffmpeg_path
+-    }
++    Path::new("@ffmpeg@").to_owned()
+ }
+ 
+ #[cfg(all(target_os = "linux", feature = "gpl"))]
+ fn get_linux_x264_path() -> PathBuf {
+-    alvr_filesystem::deps_dir().join("linux/x264/alvr_build")
++     Path::new("@x264@").to_owned()
+ }
+ 
+ fn main() {
+-- 
+2.46.0
+

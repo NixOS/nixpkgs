@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ball=C3=B3=20Gy=C3=B6rgy?= <ballogyor@gmail.com>
+Date: Wed, 13 Nov 2024 14:13:28 +0100
+Subject: [PATCH] Add option to disable URL preview feature
+
+It has security and privacy concerns.
+
+Closes: https://gitlab.gnome.org/GNOME/polari/-/issues/133
+---
+ data/org.gnome.Polari.gschema.xml | 5 +++++
+ data/ui/main-window.ui            | 4 ++++
+ src/application.js                | 2 ++
+ src/chatView.js                   | 3 ++-
+ 4 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/data/org.gnome.Polari.gschema.xml b/data/org.gnome.Polari.gschema.xml
+index bfc3de08ab26..a97603976f40 100644
+--- a/data/org.gnome.Polari.gschema.xml
++++ b/data/org.gnome.Polari.gschema.xml
+@@ -36,6 +36,11 @@ SPDX-FileCopyrightText: 2015 Florian Müllner <fmuellner@gnome.or>
+       <summary>Last active channel</summary>
+       <description>Last active (selected) channel</description>
+     </key>
++    <key type="b" name="url-preview">
++      <default>false</default>
++      <summary>URL Preview</summary>
++      <description>Show preview for URLs.</description>
++    </key>
+   </schema>
+ 
+   <schema id="org.gnome.Polari.Account">
+diff --git a/data/ui/main-window.ui b/data/ui/main-window.ui
+index 0756a5e24f7d..021a71e3c0ef 100644
+--- a/data/ui/main-window.ui
++++ b/data/ui/main-window.ui
+@@ -21,6 +21,10 @@ SPDX-License-Identifier: GPL-2.0-or-later
+         <attribute name="action">app.run-in-background</attribute>
+         <attribute name="label" translatable="yes">Run in Background</attribute>
+       </item>
++      <item>
++        <attribute name="action">app.url-preview</attribute>
++        <attribute name="label" translatable="yes">URL Preview</attribute>
++      </item>
+     </section>
+     <section>
+       <item>
+diff --git a/src/application.js b/src/application.js
+index 6a297646e39f..9a06fbd1081b 100644
+--- a/src/application.js
++++ b/src/application.js
+@@ -361,6 +361,8 @@ class Application extends Adw.Application {
+         this._settings = new Gio.Settings({schema_id: 'org.gnome.Polari'});
+         let action = this._settings.create_action('run-in-background');
+         this.add_action(action);
++        action = this._settings.create_action('url-preview');
++        this.add_action(action);
+ 
+         action = this.lookup_action('user-list');
+         action.connect('notify::enabled', () => {
+diff --git a/src/chatView.js b/src/chatView.js
+index fcb373687327..de13a80e2e44 100644
+--- a/src/chatView.js
++++ b/src/chatView.js
+@@ -1305,7 +1305,8 @@ class ChatView extends Gtk.ScrolledWindow {
+             this._insertWithTags(iter,
+                 url.name, tags.concat(this._lookupTag('url'), tag));
+ 
+-            if (GLib.uri_parse_scheme(url.url).startsWith('http'))
++            if (this._app._settings.get_boolean('url-preview') &&
++                GLib.uri_parse_scheme(url.url).startsWith('http'))
+                 previews.push(new URLPreview({uri: url.url}));
+ 
+             pos = url.pos + url.name.length;

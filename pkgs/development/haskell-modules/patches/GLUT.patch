@@ -1,0 +1,12 @@
+diff --git a/GLUT.cabal b/GLUT.cabal
+index f370d6c..a404e1e 100644
+--- a/GLUT.cabal
++++ b/GLUT.cabal
+@@ -103,6 +103,7 @@ library
+   else
+     cpp-options: "-DCALLCONV=ccall"
+     cc-options: "-DUSE_DLSYM"
++  pkgconfig-depends: glut
+ 
+ executable BOGLGP01-OnYourOwn1
+   if !flag(BuildExamples)

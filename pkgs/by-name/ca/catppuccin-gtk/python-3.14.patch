@@ -1,0 +1,20 @@
+diff --git a/sources/build/args.py b/sources/build/args.py
+index 38a0a12..9221dec 100644
+--- a/sources/build/args.py
++++ b/sources/build/args.py
+@@ -84,7 +84,6 @@ def parse_args():
+     parser.add_argument(
+         "--zip",
+         help="Whether to bundle the theme into a zip",
+-        type=bool,
+         default=False,
+         action=argparse.BooleanOptionalAction,
+     )
+@@ -92,7 +91,6 @@ def parse_args():
+     parser.add_argument(
+         "--patch",
+         help="Whether to patch the colloid submodule",
+-        type=bool,
+         default=True,
+         action=argparse.BooleanOptionalAction,
+     )

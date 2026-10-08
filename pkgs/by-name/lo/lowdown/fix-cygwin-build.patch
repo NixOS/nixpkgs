@@ -1,0 +1,64 @@
+diff --git a/Makefile b/Makefile
+index 8877a17..f73fe5f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -161,7 +161,7 @@ MAIN_OBJS	 = $(COMPAT_OBJS)
+ 
+ # Mac OS X and other Unix systems use different conventions for
+ # indicating shared library versions.
+-.if $(LINKER_SOSUFFIX) == "dylib"
++.if $(LINKER_SOSUFFIX) == "dylib" || $(LINKER_SOSUFFIX) == "dll"
+ LIB_SOVER	 = liblowdown.$(LIBVER).$(LINKER_SOSUFFIX)
+ .else
+ LIB_SOVER	 = liblowdown.$(LINKER_SOSUFFIX).$(LIBVER)
+@@ -190,7 +190,7 @@ REGRESS_ARGS	+= "--parse-no-deflists"
+ REGRESS_ENV	 = LC_ALL=en_US.UTF-8
+ 
+ all: bins lowdown.pc $(LIB_SO)
+-bins: lowdown lowdown-diff
++bins: lowdown$(EXESUFFIX) lowdown-diff
+ 
+ www: all $(HTMLS) $(PDFS) $(THUMBS) lowdown.tar.gz lowdown.tar.gz.sha512
+ 
+@@ -202,11 +202,11 @@ installwww: www
+ 	$(INSTALL) -m 0444 lowdown.tar.gz $(WWWDIR)/snapshots
+ 	$(INSTALL) -m 0444 lowdown.tar.gz.sha512 $(WWWDIR)/snapshots
+ 
+-lowdown: $(LIB_LOWDOWN) $(MAIN_OBJS) main.o
++lowdown$(EXESUFFIX): $(LIB_LOWDOWN) $(MAIN_OBJS) main.o
+ 	$(CC) -o $@ main.o $(MAIN_OBJS) $(LIB_LOWDOWN) $(LDFLAGS) $(LDADD_MD5) -lm $(LDADD)
+ 
+-lowdown-diff: lowdown
+-	ln -f lowdown lowdown-diff
++lowdown-diff: lowdown$(EXESUFFIX)
++	ln -f lowdown$(EXESUFFIX) lowdown-diff
+ 
+ $(LIB_ST): $(OBJS) $(COMPAT_OBJS)
+ 	$(AR) rs $@ $(OBJS) $(COMPAT_OBJS)
+@@ -240,7 +240,7 @@ install: bins
+ 	$(INSTALL_DATA) share/man/* $(DESTDIR)$(SHAREDIR)/lowdown/man
+ 	$(INSTALL_DATA) share/ms/* $(DESTDIR)$(SHAREDIR)/lowdown/ms
+ 	$(INSTALL_DATA) share/odt/* $(DESTDIR)$(SHAREDIR)/lowdown/odt
+-	$(INSTALL_PROGRAM) lowdown $(DESTDIR)$(BINDIR)
++	$(INSTALL_PROGRAM) lowdown$(EXESUFFIX) $(DESTDIR)$(BINDIR)
+ 	$(INSTALL_PROGRAM) lowdown-diff $(DESTDIR)$(BINDIR)
+ 	for f in $(MAN1S) $(MAN5S) ; do \
+ 		name=`basename $$f .html` ; \
+@@ -273,7 +273,7 @@ uninstall_shared: uninstall_lib_common
+ 	rm -f $(LIBDIR)/$(LIB_SOVER) $(LIBDIR)/$(LIB_SO)
+ 
+ install_shared: $(LIB_SO) install_lib_common
+-	$(INSTALL_LIB) $(LIB_SOVER) $(DESTDIR)$(LIBDIR)
++	$(INSTALL_LIB) $(LIB_SOVER) $(IMPLIB) $(DESTDIR)$(LIBDIR)
+ 	( cd $(DESTDIR)$(LIBDIR) && ln -sf $(LIB_SOVER) $(LIB_SO) )
+ 
+ uninstall_static: uninstall_lib_common
+@@ -406,7 +406,7 @@ main.o: lowdown.h
+ 
+ clean:
+ 	rm -f $(OBJS) $(COMPAT_OBJS) main.o
+-	rm -f lowdown lowdown-diff lowdown.pc
++	rm -f lowdown$(EXESUFFIX) lowdown-diff lowdown.pc
+ 	rm -f $(LIB_ST) $(LIB_SO) $(LIB_SOVER)
+ 	rm -f index.xml diff.xml diff.diff.xml README.xml lowdown.tar.gz.sha512 lowdown.tar.gz
+ 	rm -f $(PDFS) $(HTMLS) $(THUMBS)

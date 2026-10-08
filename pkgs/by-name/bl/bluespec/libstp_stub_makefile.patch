@@ -1,0 +1,28 @@
+diff -ru bsc-orig/src/vendor/stp/Makefile bsc-new/src/vendor/stp/Makefile
+--- bsc-orig/src/vendor/stp/Makefile	1969-12-31 16:00:01.000000000 -0800
++++ bsc-new/src/vendor/stp/Makefile	2020-11-12 17:42:40.115143035 -0800
+@@ -9,12 +9,13 @@
+ SRC = src
+ else
+ SRC = src_stub
++SNAME += lib/libstp_stub.so
+ endif
+ 
+ ifeq ($(OSTYPE), Darwin)
+-SNAME=libstp.dylib
++SNAME = lib/libstp.dylib
+ else
+-SNAME=libstp.so.1
++SNAME += lib/libstp.so.1
+ endif
+ 
+ all: install
+@@ -23,7 +24,7 @@
+ 	$(MAKE) -C $(SRC) install
+ 	ln -fsn HaskellIfc include_hs
+ 	install -m 755 -d $(PREFIX)/lib/SAT
+-	install -m 644 lib/$(SNAME) $(PREFIX)/lib/SAT
++	install -m 644 $(SNAME) $(PREFIX)/lib/SAT
+ 
+ clean:
+ 	$(MAKE) -C $(SRC) clean

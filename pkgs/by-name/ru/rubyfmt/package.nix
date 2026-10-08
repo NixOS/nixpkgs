@@ -1,0 +1,75 @@
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  bison,
+  ruby,
+  zlib,
+  readline,
+  libiconv,
+  libunwind,
+  libxcrypt,
+  libyaml,
+  rust-jemalloc-sys,
+  nix-update-script,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "rubyfmt";
+  version = "0.14.1";
+
+  src = fetchFromGitHub {
+    owner = "fables-tales";
+    repo = "rubyfmt";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2pNM6C+Xm5Dy/0O+w76LwrbhDk5pRiZQ+ia7vqxJdRY=";
+    fetchSubmodules = true;
+  };
+
+  nativeBuildInputs = [
+    autoconf
+    automake
+    bison
+    ruby
+    rustPlatform.bindgenHook
+  ];
+
+  buildInputs = [
+    zlib
+    libxcrypt
+    libyaml
+    rust-jemalloc-sys
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    readline
+    libiconv
+    libunwind
+  ];
+
+  cargoHash = "sha256-N3Wv4iducK6p0TzH2isD9x7jdDjjIm1o5NiWmthITOc=";
+
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-fdeclspec";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    "BINDGEN_EXTRA_CLANG_ARGS_${stdenv.hostPlatform.rust.rustcTarget}" =
+      "-isystem ${stdenv.cc.libc.dev}/include";
+  };
+
+  preFixup = ''
+    mv $out/bin/rubyfmt{-main,}
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  meta = {
+    description = "Ruby autoformatter";
+    homepage = "https://github.com/fables-tales/rubyfmt";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    mainProgram = "rubyfmt";
+  };
+})

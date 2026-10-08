@@ -1,0 +1,24 @@
+--- a/tests/test_client.py
++++ b/tests/test_client.py
+@@ -37,19 +37,12 @@
+     process: None | subprocess.Popen[bytes]
+ 
+     def __init__(self) -> None:
+-        cwd = os.getcwd()
+-        traildepot = "../testfixture" if cwd.endswith("python") else "client/testfixture"
+-
+-        logger.info("Building TrailBase")
+-        build = subprocess.run(["cargo", "build"])
+-        assert build.returncode == 0, f"{build.stderr}"
++        traildepot = os.environ["TRAILBASE_TESTFIXTURE"]
+ 
+         logger.info("Starting TrailBase")
+         self.process = subprocess.Popen(
+             [
+-                "cargo",
+-                "run",
+-                "--",
++                os.environ.get("TRAILBASE_BIN", "trail"),
+                 "--data-dir",
+                 traildepot,
+                 "run",

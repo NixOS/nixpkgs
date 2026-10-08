@@ -1,0 +1,56 @@
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  llvmPackages,
+  enableSse4_1 ? stdenv.hostPlatform.sse4_1Support,
+  enableAvx ? stdenv.hostPlatform.avxSupport,
+  enableAvx2 ? stdenv.hostPlatform.avx2Support,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "kalign";
+  version = "3.5.1";
+
+  src = fetchFromGitHub {
+    owner = "TimoLassmann";
+    repo = "kalign";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wcVzKedd8IFKql+TU4wJ4jEGDPdDfpyC5iGXrPYa0oY=";
+  };
+
+  patches = [
+    # Allow overriding the hardcoded Homebrew libomp path on macOS and
+    # restrict the workaround to AppleClang so other compilers fall back
+    # to the standard OpenMP detection path.
+    # https://github.com/TimoLassmann/kalign/pull/65
+    ./macos-openmp-config.patch
+  ];
+
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
+
+  cmakeFlags =
+    # these flags are ON by default
+    lib.optional (!enableSse4_1) "-DENABLE_SSE=OFF"
+    ++ lib.optional (!enableAvx) "-DENABLE_AVX=OFF"
+    ++ lib.optional (!enableAvx2) "-DENABLE_AVX2=OFF";
+
+  doCheck = true;
+
+  meta = {
+    description = "Fast multiple sequence alignment program";
+    mainProgram = "kalign";
+    homepage = "https://github.com/TimoLassmann/kalign";
+    changelog = "https://github.com/TimoLassmann/kalign/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ natsukium ];
+    platforms = lib.platforms.unix;
+  };
+})

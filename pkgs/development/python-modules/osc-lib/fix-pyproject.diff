@@ -1,0 +1,18 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 34680b2..95f573c 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -37,10 +37,9 @@ test = [
+     "testtools>=2.2.0",  # MIT
+ ]
+ 
+-[tool.setuptools]
+-packages = [
+-    "osc_lib"
+-]
++[tool.setuptools.packages.find]
++where = ["."]
++include = ["osc_lib*"]
+ 
+ [tool.mypy]
+ show_column_numbers = true
