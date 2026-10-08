@@ -165,7 +165,6 @@ in
     "$BASH" ./prepare-operation ${child}/nix-support/compiler ${rawCXX} \
     '@operation cxx.rsp'
   ${emulator} ./entry-cxx
-
   ${lib.optionalString
     (
       stdenv.cc.isGNU
@@ -189,7 +188,6 @@ in
       ${emulator} ./provider-chrono
     ''
   }
-
   echo "checking driver personality independently of per-input language..." >&2
   cat > driver-language.c <<'EOF'
   #ifdef __cplusplus
