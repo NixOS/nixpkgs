@@ -1,0 +1,27 @@
+diff --git a/packages/backend/server/src/base/graphql/index.ts b/packages/backend/server/src/base/graphql/index.ts
+index 14d9aba..b8c7562 100644
+--- a/packages/backend/server/src/base/graphql/index.ts
++++ b/packages/backend/server/src/base/graphql/index.ts
+@@ -1,7 +1,5 @@
+ import './config';
+ 
+-import { join } from 'node:path';
+-
+ import type { ApolloDriverConfig } from '@nestjs/apollo';
+ import { ApolloDriver } from '@nestjs/apollo';
+ import { Global, Module } from '@nestjs/common';
+@@ -33,12 +31,7 @@ export type GraphqlContext = {
+           },
+           useGlobalPrefix: true,
+           graphiql: env.NODE_ENV === NodeEnv.Development,
+           sortSchema: true,
+-          autoSchemaFile: join(
+-            env.projectRoot,
+-            env.testing
+-              ? './node_modules/.cache/schema.gql'
+-              : './src/schema.gql'
+-          ),
++          autoSchemaFile: true,
+           path: '/graphql',
+           csrfPrevention: {
+             requestHeaders: ['content-type'],
