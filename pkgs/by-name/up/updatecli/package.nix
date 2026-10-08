@@ -2,7 +2,7 @@
   lib,
   stdenv,
   go,
-  buildGoModule,
+  buildGoLatestModule,
   fetchFromGitHub,
   nix-update-script,
   installShellFiles,
@@ -10,19 +10,19 @@
   updatecli,
 }:
 
-buildGoModule (finalAttrs: {
+buildGoLatestModule (finalAttrs: {
   pname = "updatecli";
-  version = "0.120.1";
+  version = "0.122.1";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Cp6721G8xxVe0s9hVMYOx8u++6m2mXLKTn2Djrq7Kv0=";
+    hash = "sha256-Qfq2GzesnjRUt8gUqIBsGr8rt1mblz1+4RIP/EtLr2Y=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-D6zcSo6MXabfgpUetyUCCFCYokbwGwmG6dLNAEOdHYU=";
+  vendorHash = "sha256-3BwtGovBqiUkeGKSq+b2k80H6gf2YHnl/H2G1P+hoZ0=";
 
   # tests require network access
   doCheck = false;
