@@ -4979,8 +4979,8 @@ assertNoAdditions {
 
   vim-agda = super.vim-agda.overrideAttrs {
     preFixup = ''
-      substituteInPlace "$out"/autoload/agda.vim \
-        --replace-fail "jobstart(['agda'" "jobstart(['${agda}/bin/agda'"
+      substituteInPlace "$out"/ftplugin/agda.vim \
+        --replace-fail "let g:agda_executable = 'agda'" "let g:agda_executable = '${agda}/bin/agda'"
     '';
   };
 
