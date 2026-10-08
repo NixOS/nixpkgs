@@ -133,11 +133,7 @@ buildGoModule (
       maintainers = with lib.maintainers; [
         DrakeTDL
       ];
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "aarch64-darwin"
-      ];
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
     };
   }
 )
