@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "catt";
   version = "0.13.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skorokithakis";
