@@ -3,8 +3,9 @@
   stdenv,
   fetchFromGitHub,
   openssl,
-  lua,
+  lua5_5,
   pcre2,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,8 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     pcre2
-    lua
+    lua5_5
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     homepage = "https://github.com/lefcha/imapfilter";
