@@ -120,7 +120,7 @@ let
     name: ext: mkAzExtension (ext // { passthru.updateScript = [ ]; })
   ) (builtins.fromJSON (builtins.readFile ./extensions-generated.json));
   extensions-manual = callPackages ./extensions-manual.nix {
-    inherit mkAzExtension;
+    inherit mkAzExtension python3;
     python3Packages = python3.pkgs;
   };
   extensions = extensions-generated // extensions-manual;
