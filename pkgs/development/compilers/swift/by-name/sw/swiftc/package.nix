@@ -53,7 +53,10 @@
   ++ lib.optionals (lib.versions.majorMinor swift_release != "6.2" && bootstrapStage == 2) (
     [
       "editor-integration"
-      (if stdenv.hostPlatform.isDarwin then "sourcekit-xpc-service" else "sourcekit-inproc")
+      "sourcekit-inproc"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "sourcekit-xpc-service"
     ]
   )
   ++ lib.optionals (stdlib == null) [
