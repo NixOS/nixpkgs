@@ -34,7 +34,6 @@ let
     version = "0.2.1";
     inherit src;
     pyproject = true;
-    __structuredAttrs = true;
 
     buildAndTestSubdir = "rust/exo_pyo3_bindings";
 
