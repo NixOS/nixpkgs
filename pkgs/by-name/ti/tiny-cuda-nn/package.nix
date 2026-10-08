@@ -65,6 +65,15 @@ backendStdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         "from pkg_resources import parse_version" \
         "from packaging.version import Version as parse_version"
+  ''
+  # Fix typo in vendored cutlass, rejected by GCC >= 14 (-Wtemplate-body)
+  # https://github.com/NVlabs/tiny-cuda-nn/issues/530
+  # https://github.com/NVIDIA/cutlass/pull/1784
+  + ''
+    substituteInPlace dependencies/cutlass/include/cutlass/matrix.h \
+      --replace-fail \
+        "m.set_slice3x3(" \
+        "m.set_slice_3x3("
   '';
 
   nativeBuildInputs = [
