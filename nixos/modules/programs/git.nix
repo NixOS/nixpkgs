@@ -7,6 +7,11 @@
 
 let
   cfg = config.programs.git;
+
+  packageDefaults = cfg.package.defaultSystemConfig or null;
+
+  gitconfigSections =
+    lib.optional (packageDefaults != null) { include.path = packageDefaults; } ++ cfg.config;
 in
 
 {
@@ -70,6 +75,9 @@ in
           order, which can be helpful for sections such as `include` and
           `includeIf`. See the CONFIGURATION FILE section of {manpage}`git-config(1)` for
           more information.
+
+          If {option}`programs.git.package` ships default settings, `/etc/gitconfig`
+          includes them first so this configuration can override them.
         '';
       };
 
@@ -104,8 +112,8 @@ in
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
-      environment.etc.gitconfig = lib.mkIf (cfg.config != [ ]) {
-        text = lib.concatMapStringsSep "\n" lib.generators.toGitINI cfg.config;
+      environment.etc.gitconfig = lib.mkIf (gitconfigSections != [ ]) {
+        text = lib.concatMapStringsSep "\n" lib.generators.toGitINI gitconfigSections;
       };
 
       environment.etc.gitattributes = lib.mkIf (cfg.attributes != "") {
