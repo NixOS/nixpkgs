@@ -943,10 +943,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "18q33rfwsiggaq8h9bzvqhl70y1nlrfbcb2xwap2jwvpd20gv1x3";
+      sha256 = "106r2277f3s9x10rzdjcarhsxfzjnn4my92aygv8hdrm1c0dwwjp";
       type = "gem";
     };
-    version = "5.1.0";
+    version = "5.1.4";
   };
   dartsass-rails = {
     dependencies = [
@@ -3119,10 +3119,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1mz3sswgbq0wfy0r044zg6qq72kzxar96kf0c2nbc5rmvh8jcx6d";
+      sha256 = "1biqhfhcan9mv06312r27ibw9r25530a7if7aa70wmalfbkq4r0k";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.0.3";
   };
   rack-session = {
     dependencies = [
