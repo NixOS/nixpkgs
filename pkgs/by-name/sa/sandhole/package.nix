@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     perl
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
-  strictDeps = true;
 
   useNextest = true;
   # Skip tests that require networking.
