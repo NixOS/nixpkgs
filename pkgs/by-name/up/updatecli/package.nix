@@ -69,6 +69,7 @@ buildGoLatestModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       croissong
       lpostula
+      lunkentuss
     ];
   };
 })
