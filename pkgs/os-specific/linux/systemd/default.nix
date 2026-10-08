@@ -552,8 +552,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "hwdb" withHwdb)
     (lib.mesonBool "timedated" withTimedated)
     (lib.mesonBool "timesyncd" withTimesyncd)
-    (lib.mesonBool "nsresourced" withNsresourced)
-    (lib.mesonBool "mountfsd" withMountfsd)
     (lib.mesonBool "userdb" withUserDb)
     (lib.mesonBool "coredump" withCoredump)
     (lib.mesonBool "firstboot" withFirstboot)
@@ -570,6 +568,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
+  ]
+  ++ lib.optionals withNsresourced [
+    (lib.mesonBool "nsresourced" withNsresourced)
+  ]
+  ++ lib.optionals withMountfsd [
+    (lib.mesonBool "mountfsd" withMountfsd)
   ]
   ++ lib.optionals (withLibBPF && vmlinux-btf != null) [
     (lib.mesonOption "vmlinux-h" "provided")
