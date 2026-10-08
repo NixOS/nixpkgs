@@ -182,6 +182,15 @@ import ../make-test-python.nix (
           rootless.succeed(su_cmd("podman stop sleeping"))
           rootless.succeed(su_cmd("podman rm sleeping"))
 
+      with subtest("Report why the default OCI runtime failed to initialize"):
+          out = rootless.fail(
+              su_cmd(
+                  "rt=$(mktemp -d) && mkdir -p $rt/libpod/tmp && chmod 555 $rt/libpod/tmp && HOME=$(mktemp -d) XDG_RUNTIME_DIR=$rt podman info 2>&1"
+              )
+          )
+          assert 'default OCI runtime "crun" failed to initialize' in out, out
+          assert "exits: permission denied" in out, out
+
       with subtest("rootlessport"):
           rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
           rootless.succeed(
