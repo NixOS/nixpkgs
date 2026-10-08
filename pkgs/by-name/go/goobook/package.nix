@@ -4,6 +4,7 @@
   docutils,
   installShellFiles,
   python3Packages,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -50,10 +51,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     installManPage goobook.1
   '';
 
-  # has no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "goobook" ];
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Access your Google contacts from the command line";
