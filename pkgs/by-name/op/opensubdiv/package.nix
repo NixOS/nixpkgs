@@ -21,9 +21,16 @@
   openclSupport ? !cudaSupport,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+  inherit (effectiveStdenv) hostPlatform;
+in
+effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "opensubdiv";
   version = "3.7.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
@@ -31,6 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-yWi+SaJfyMHPnc8hhrMZ4W6cBRkFOhRehXg3BqSGPcM=";
   };
+
+  patches = [
+    # Prevent CMake from generating a redundant nested path like /nix/store/.../nix/store/...
+    ./cmake-config.patch
+  ];
 
   outputs = [
     "out"
@@ -48,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isUnix [
+    lib.optionals hostPlatform.isUnix [
       libGLU
       libGL
       # FIXME: these are not actually needed, but the configure script wants them.
@@ -60,56 +72,48 @@ stdenv.mkDerivation (finalAttrs: {
       libxinerama
       libxi
     ]
-    ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [
+    ++ lib.optionals (openclSupport && hostPlatform.isLinux) [
       ocl-icd
     ]
     ++ lib.optionals cudaSupport [
       cudaPackages.cuda_cudart
+      cudaPackages.cuda_nvcc # crt/host_config.h; even though we include this in nativeBuildInputs, it's needed here too
     ];
 
-  patches = [
-    # Prevent CMake from generating a redundant nested path like /nix/store/.../nix/store/...
-    ./cmake-config.patch
-  ];
-
-  # It's important to set OSD_CUDA_NVCC_FLAGS,
-  # because otherwise OSD might piggyback unwanted architectures:
-  # https://github.com/PixarAnimationStudios/OpenSubdiv/blob/7d0ab5530feef693ac0a920585b5c663b80773b3/CMakeLists.txt#L602
-  preConfigure = lib.optionalString cudaSupport ''
-    cmakeFlagsArray+=(
-      -DOSD_CUDA_NVCC_FLAGS="${lib.concatStringsSep " " cudaPackages.flags.gencode}"
-    )
-  '';
-
-  cmakeFlags = [
-    (lib.mapAttrsToList lib.cmakeBool {
+  cmakeFlags =
+    lib.mapAttrsToList lib.cmakeBool {
       NO_TUTORIALS = true;
       NO_REGRESSION = true;
       NO_EXAMPLES = true;
-      NO_DX = stdenv.hostPlatform.isWindows;
-      NO_METAL = !stdenv.hostPlatform.isDarwin;
+      NO_DX = hostPlatform.isWindows;
+      NO_METAL = !hostPlatform.isDarwin;
       NO_OPENCL = !openclSupport;
       NO_CUDA = !cudaSupport;
-    })
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [
-    (lib.mapAttrsToList lib.cmakeFeature {
-      GLEW_INCLUDE_DIR = "${glew.dev}/include";
-      GLEW_LIBRARY = "${glew.dev}/lib";
-    })
-  ];
+    }
+    ++ lib.optionals (hostPlatform.isUnix && !hostPlatform.isDarwin) (
+      lib.mapAttrsToList lib.cmakeFeature {
+        GLEW_INCLUDE_DIR = "${lib.getInclude glew}/include";
+        GLEW_LIBRARY = "${lib.getLib glew}/lib";
+      }
+    )
+    # It's important to set OSD_CUDA_NVCC_FLAGS,
+    # because otherwise OSD might piggyback unwanted architectures:
+    # https://github.com/PixarAnimationStudios/OpenSubdiv/blob/7d0ab5530feef693ac0a920585b5c663b80773b3/CMakeLists.txt#L602
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "OSD_CUDA_NVCC_FLAGS" (lib.concatStringsSep " " cudaPackages.flags.gencode))
+    ];
 
   preBuild =
     let
       maxBuildCores = 12;
     in
+    # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
     lib.optionalString cudaSupport ''
-      # https://github.com/PixarAnimationStudios/OpenSubdiv/issues/1313
       NIX_BUILD_CORES=$(( NIX_BUILD_CORES < ${toString maxBuildCores} ? NIX_BUILD_CORES : ${toString maxBuildCores} ))
     '';
 
   postInstall =
-    if stdenv.hostPlatform.isWindows then
+    if hostPlatform.isWindows then
       ''
         ln -s $out $static
       ''
@@ -118,8 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
         moveToOutput "lib/libosd*.a" $static
       '';
 
+  # Adjust static library path to reflect relocation to $static
   postFixup = ''
-    # Adjust static library path to reflect relocation to $static
     sed -i -E "s|\\\$\{_IMPORT_PREFIX\}/lib/(libosd.*\.a)|$static/lib/\1|" \
       $dev/lib/cmake/OpenSubdiv/OpenSubdivTargets-release.cmake
   '';
