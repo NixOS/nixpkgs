@@ -41,17 +41,32 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   same complete 5,751-object derivation graph, including raw derivation bytes.
   That identity result predates the following review fixes; it does not transfer
   execution evidence to their changed dependency graphs.
-- Compiler role rebinding now re-calls the selected GNU/LLVM constructor in the
-  HOST dependency scope instead of replacing its frontend with the global
-  default. Constructor options and `overrideAttrs` survive; graph overlays
-  supply dependencies for the new role. A closed BUILD-only dependency override
+- Compiler role rebinding re-calls the original compiler, linker and wrapper
+  constructors, projecting their spliced dependencies from `(B,B,H)` to
+  `(B,H,H)`. It does not reconstruct a compiler-family scope: doing so lost
+  selected Clang sources and alternate linkers. Constructor options,
+  `overrideAttrs`, BUILD-tool selections and explicit shell pins survive;
+  graph overlays supply dependencies for the new role. A closed BUILD-only dependency override
   cannot automatically become a corresponding HOST dependency. The selected
   TARGET libc and C++ provider remain independent of the compiler executable's
   role, including CUDA's supported-frontend fallback. The existing wrapper
   predicate determines whether `gccForLibs` is active; it is shared rather than
-  approximated by testing that field for null. Bintools retains the same libc.
+  approximated by testing that field for null. Bintools retains its selected
+  family and TARGET libc.
   `pkgs/test/top-level/compiler-runtime.nix` covers GNU, GCC-NG, LLVM 19/21,
   explicit/implicit/null providers, libc++, frontend options and graph overlays.
+  The projection establishes its two-platform precondition before re-calling
+  constructors: custom raw stages cannot bypass it with three distinct
+  platforms or a mismatched compiler TARGET. Same-HOST and no-CC cases retain
+  their existing lazy behavior. This is not Canadian-cross support.
+- A stage introduced only by `crossOverlays` retains the native environment
+  when the fully elaborated platforms are equal. Clearing its bootstrap
+  overrides caused a libc/iconv/IDN dependency cycle on both master and the
+  branch; restoring overrides alone also lost custom build inputs. Reusing the
+  selected native stdenv and no-CC environment preserves both. Overlay stages
+  remain distinct, explicit compiler policies remain significant, and
+  `replaceCrossStdenv` still applies. Ordinary native/cross production identities
+  are unchanged by this repair and the compiler projection above.
 - Torch's installed CSR runners are now available for cross packages. Only the
   automatically executed CPU check requires BUILD to execute HOST. CPU-only
   Torch also exposes the CPU runner. The shared Python tester uses structured
@@ -71,6 +86,15 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   fixes passes the same 531 derivations and 547 outputs. All 531 selected roots
   change identity through core wrapper dependencies: previous full-build results
   cannot be transferred to them. Of 5,751 derivation objects, 472 remain shared.
+  Fresh native SM 89 and AArch64 SM 121a Torch/MAGMA builds for commit
+  `9071eb53077f` started on nixos-desktop on 2026-10-08. Their missing closure
+  comprises 1,872 derivations, including bootstrap dependencies; acceptance is
+  pending. The remaining review covers override and three-platform semantics,
+  non-Linux interpretation, and reducing the stage/splicing and package changes.
+  Source changes after that commit require separate validation before its build
+  results can be transferred. The subsequent native-stage repair and compiler
+  projection preserve all four production derivations and fourteen outputs;
+  the wrapper/header work remains under investigation.
 - Current normal wrapper/backend/NVCC factories over cached raw dependencies
   pass the package-owned NVCC runtime and CMake SAXPY builds for SM 89 and
   SM 121a. Installed native/Spark C++17/20 host/GPU math and standard-library
@@ -82,10 +106,22 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   derivation-path records (native/cross, CUDA 12.9/13.3). CPU is 0.870/0.855 s,
   allocated bytes increase 0.044%, and maximum RSS is 484,768/482,124 KiB.
   This single subsecond sample does not establish a speed improvement.
+  A later matched nine-context compiler workload, with three fresh processes
+  per implementation in alternating order, measures the original-argument
+  projection: median allocations increase 1.72%, calls 2.09%, and evaluator CPU
+  4.11% (1.259/1.311 s). Wall-time ranges overlap. Preserving the selected
+  sources, BUILD tools and linkers costs evaluation; this is not a speedup.
 - The wrapper interpretation limits are documented in the stdenv manual's
   CC Wrapper section. Selection laws do not prove operation classification or
   equivalence for opaque wrappers. Fresh shell controls verify Flang flag
   routing and role/policy transport, not real Flang or Darwin compilation.
+  Further actual-driver controls refute the shell operation classifier:
+  `-include -c main.c` has an operand named `-c`, while a generic compile
+  channel can contain the actual `-c` option. Clang's config tail changes
+  argument positions; GCC specs cannot carry arbitrary driver policy. A
+  `-###` probe is not a pure planner: GCC's `-truncate` and `-time` options
+  still write files. These findings remain unresolved and are not consequences
+  proved by the selection law.
 - At least 44 files and 4,741 added lines concern independent numerical,
   ownership, initialization, and ancillary repairs rather than the cross
   selection abstraction. Their validation does not establish that this entire
