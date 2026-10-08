@@ -105,21 +105,19 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   `GLIBCXX_3.4.34` helpers absent from that runtime. Matching GNU 14 headers and
   runtime pass at both tested optimization levels. The earlier vector,
   exception and threading probes do not establish arbitrary header/runtime ABI
-  compatibility. A candidate binds headers to the selected runtime provider;
-  native and AArch64 chrono controls pass with GNU 14 headers/runtime. CUDA
-  13.3 controls also pass CCCL, C++20 formatting and GPU SAXPY with GNU 16
-  headers/runtime and its GNU 15 frontend. These use copied installed wrappers
-  whose header maps match the candidate factory, not newly realized wrappers.
-  The candidate changes all four production derivations. It is not accepted:
-  CUDA 12.9's frontend crashes when those GNU 16 headers use `__builtin_ctzg`,
-  in both native and cross C++20 chrono controls. Header selection must satisfy
-  frontend compatibility as well as runtime API compatibility; their providers
-  cannot unconditionally be identical. The same CUDA 12.9 source compiles with
-  the original GNU 14 headers and GNU 16 runtime; its native GPU check passes.
-  The revised GNU policy retains frontend headers when the runtime is newer,
-  and uses the older runtime's headers when necessary. This relies on upstream
-  GNU release ordering and backward library compatibility, not a general proof
-  of compatibility for arbitrary compiler forks or altered version metadata.
+  compatibility. The GNU policy now retains frontend headers when the runtime
+  is newer, and uses the older runtime's headers when necessary. Four realized
+  normal-wrapper suites pass, including native and emulated ARM chrono checks.
+  CUDA 12.9 refutes unconditional runtime-header selection: its frontend crashes
+  on GNU 16's `__builtin_ctzg`; the same CCCL/C++20 source with GNU 14 headers
+  and GNU 16 runtime passes native and Spark GPU checks. Header selection must
+  satisfy both frontend and runtime constraints. The bounded policy relies on
+  upstream GNU release ordering and backward library compatibility, rather
+  than proving compatibility for arbitrary forks or altered version metadata.
+  It preserves all four running production goals and fourteen outputs. A fresh
+  thirteen-selector replay also passes all 531 derivations and 547 outputs;
+  compiler/provider metadata remains identical. Removing two incidental blank
+  lines restores the seven changed compiler-test identities as well.
 - Current normal wrapper/backend/NVCC factories over cached raw dependencies
   pass the package-owned NVCC runtime and CMake SAXPY builds for SM 89 and
   SM 121a. Installed native/Spark C++17/20 host/GPU math and standard-library
@@ -136,6 +134,12 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   projection: median allocations increase 1.72%, calls 2.09%, and evaluator CPU
   4.11% (1.259/1.311 s). Wall-time ranges overlap. Preserving the selected
   sources, BUILD tools and linkers costs evaluation; this is not a speedup.
+  Forced-import tracing finds one graph for default CUDA scopes and two for a
+  named scope shared across three cross roles, versus master's four graphs for
+  the same named requests. That workload allocates 249.4/531.7 MB with median
+  CPU 0.469/1.012 s (branch/master); their derivations are not identical.
+  Additional configuration and restricted-library caches preserve selections
+  but save under 0.3% allocation without a stable CPU benefit, so are rejected.
 - The wrapper interpretation limits are documented in the stdenv manual's
   CC Wrapper section. Selection laws do not prove operation classification or
   equivalence for opaque wrappers. Fresh shell controls verify Flang flag
