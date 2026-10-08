@@ -128,6 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       johntitor
       joaquintrinanes
       ryan4yin
+      koffydrop
     ];
     mainProgram = "nu";
   };
