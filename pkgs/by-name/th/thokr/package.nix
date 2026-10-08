@@ -9,7 +9,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.5.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jrnxf";
