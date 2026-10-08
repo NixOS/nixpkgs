@@ -1,0 +1,75 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  openssl,
+  ffmpeg,
+  libuv,
+  llhttp,
+  minizip,
+  nlohmann_json,
+  zlib,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "icey";
+  version = "2.5.1";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "nilstate";
+    repo = "icey";
+    tag = finalAttrs.version;
+    hash = "sha256-vgbKU3z719WXxQcPorF3ts706GhGhmKdGi2MueUW8Og=";
+  };
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    ffmpeg
+    libuv
+    llhttp
+    minizip
+    nlohmann_json
+    openssl
+    zlib
+  ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DUSE_SYSTEM_DEPS=ON"
+    "-DBUILD_TESTS=OFF"
+    "-DBUILD_SAMPLES=OFF"
+    "-DBUILD_APPLICATIONS=OFF"
+    "-DBUILD_FUZZERS=OFF"
+    "-DBUILD_BENCHMARKS=OFF"
+    "-DBUILD_PERF=OFF"
+    "-DBUILD_ALPHA=OFF"
+    "-DCMAKE_DISABLE_FIND_PACKAGE_Doxygen=TRUE"
+    "-DENABLE_NATIVE_ARCH=OFF"
+    "-DWITH_FFMPEG=ON"
+    "-DWITH_LIBDATACHANNEL=OFF"
+    "-DBUILD_MODULE_webrtc=OFF"
+    "-DWITH_OPENCV=OFF"
+  ];
+
+  meta = {
+    description = "C++20 real-time media stack and libwebrtc alternative";
+    homepage = "https://0state.com/icey/";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ auscaster ];
+    platforms = lib.platforms.linux;
+  };
+})
