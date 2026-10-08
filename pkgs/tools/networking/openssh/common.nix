@@ -30,7 +30,7 @@
   libredirect,
   etcDir ? null,
   withKerberos ? false,
-  withLdns ? true,
+  withLdns ? false,
   krb5,
   libfido2,
   libxcrypt,
