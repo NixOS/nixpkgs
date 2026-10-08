@@ -590,6 +590,14 @@ no_args_displays_usage_body() {
     atf_check -s exit:1 -o inline:"$expected_message" tiffutil
 }
 
+atf_test_case supports_big_tiff
+supports_big_tiff_body() {
+    expected_message="1 image written to out.tiff.\n"
+    atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
+        "$(atf_get_srcdir)/data/input-test-file-bigtiff.tiff"
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-bigtiff-image.tiff" out.tiff
+}
+
 atf_init_test_cases() {
     atf_add_test_case none_writes_out_tiff_with_no_compression
     atf_add_test_case none_with_too_many_filenames_fails_with_an_error
@@ -633,4 +641,6 @@ atf_init_test_cases() {
 
     atf_add_test_case missing_out_filename_treats_out_as_filename
     atf_add_test_case no_args_displays_usage
+
+    atf_add_test_case supports_big_tiff
 }

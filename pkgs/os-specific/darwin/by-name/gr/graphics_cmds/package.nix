@@ -43,12 +43,14 @@ stdenvNoCC.mkDerivation {
       --replace-fail '@cut@' ${lib.getExe' coreutils "cut"} \
       --replace-fail '@echo@' ${lib.getExe' coreutils "echo"} \
       --replace-fail '@exiftool@' ${lib.getExe exiftool} \
+      --replace-fail '@file@' ${lib.getExe file} \
       --replace-fail '@jq@' ${lib.getExe jq} \
       --replace-fail '@tail@' ${lib.getExe' coreutils "tail"} \
       --replace-fail '@sed@' ${lib.getExe gnused} \
       --replace-fail '@tiffcp@' ${lib.getExe' libtiff "tiffcp"} \
       --replace-fail '@tiffdump@' ${lib.getExe' libtiff "tiffdump"} \
-      --replace-fail '@tiffinfo@' ${lib.getExe' libtiff "tiffinfo"}
+      --replace-fail '@tiffinfo@' ${lib.getExe' libtiff "tiffinfo"} \
+      --replace-fail '@tiffset@' ${lib.getExe' libtiff "tiffset"}
 
     chmod a+x build/*
 

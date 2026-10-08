@@ -80,8 +80,14 @@ set_resolution() {
     local dpi_x=$3
     local dpi_y=$4
 
-    @exiftool@ -q -overwrite_original \
-        -IFD$offset:XResolution=$dpi_x_num/$dpi_x_dem -IFD$offset:YResolution=$dpi_y_num/$dpi_y_dem -- "$out"
+    # Using exiftool allows for rationals to be set exactly, but it doesn’t support BigTIFF.
+    if @file@ "$out" | grep -q "Big TIFF"; then
+        @tiffset@ -s 282 $(@bc@ --scale=10 -e "$dpi_x") "$out"
+        @tiffset@ -s 283 $(@bc@ --scale=10 -e "$dpi_y") "$out"
+    else
+        @exiftool@ -q -overwrite_original \
+            -IFD$offset:XResolution=$dpi_x -IFD$offset:YResolution=$dpi_y -- "$out"
+    fi
 }
 
 usage() {
