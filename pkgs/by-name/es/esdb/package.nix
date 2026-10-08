@@ -12,8 +12,10 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "scowl";
-  version = "2020.12.07";
+  pname = "esdb";
+  version = "2026.02.25";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "en-wl";
