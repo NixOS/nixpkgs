@@ -39,6 +39,18 @@ export interface MergeProps {
   getTeamMembers: (slug: string) => Promise<User[]> | User[]
   getUser: (id: number) => Promise<User | null>
 }
+export type Checklist = Record<string, boolean | Record<string, boolean>>
+
+/**
+ * Evaluate a mergebot checklist.
+ * A checklist evaluates to true when all values are either `true`,
+ * or a record with at least one `true` value.
+ */
+function evalChecklist(checklist: Checklist): boolean {
+  return Object.values(checklist).every((v) =>
+    typeof v === 'boolean' ? v : Object.values(v).some(Boolean),
+  )
+}
 
 function runChecklist({
   committers,
@@ -103,7 +115,7 @@ function runChecklist({
     'CHANGES_REQUESTED',
   )
 
-  const checklist: Record<string, boolean | Record<string, boolean>> = {
+  const checklist: Checklist = {
     'PR targets a [development branch](https://github.com/NixOS/nixpkgs/blob/-/ci/README.md#branch-classification).':
       classify(pull_request.base.ref).type.includes('development'),
     'PR touches only files of packages in `pkgs/by-name/`.': allByName,
@@ -126,6 +138,8 @@ function runChecklist({
       noBlockingReviews,
   }
 
+  const userAgnosticResult = evalChecklist(checklist)
+
   if (user) {
     checklist[
       `${user.login} is a member of [@NixOS/nixpkgs-maintainers](https://github.com/orgs/NixOS/teams/nixpkgs-maintainers) (_see [requesting a new invitation](https://github.com/NixOS/rfc39-record/blob/main/README.md#requesting-a-new-invitation)_).`
@@ -142,17 +156,17 @@ function runChecklist({
     checklist['PR has maintainers eligible to merge.'] = eligible.size > 0
   }
 
-  const result = Object.values(checklist).every((v) =>
-    typeof v === 'boolean' ? v : Object.values(v).some(Boolean),
-  )
+  const result = evalChecklist(checklist)
 
   log('checklist', JSON.stringify(checklist))
   log('eligible', JSON.stringify(Array.from(eligible)))
+  log('userAgnosticResult', userAgnosticResult)
   log('result', result)
 
   return {
     checklist,
     eligible,
+    userAgnosticResult,
     result,
   }
 }
@@ -386,7 +400,7 @@ export async function handleMerge({
       }
     }
 
-    const { result, eligible, checklist } = runChecklist({
+    const { result, userAgnosticResult, eligible, checklist } = runChecklist({
       committers,
       files,
       pull_request,
@@ -422,7 +436,7 @@ export async function handleMerge({
       )
       body.push(
         '> [!TIP]',
-        '> Maintainers eligible to merge are:',
+        `> Maintainers ${userAgnosticResult ? 'eligible to merge' : 'of all touched packages'} are:`,
         ...users.map((login) => `> - ${login}`),
         '',
       )
