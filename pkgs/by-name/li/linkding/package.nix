@@ -80,8 +80,6 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-TvcUD4GHQCjIk3nxGi/X82NECTsecUiK/axITrsNyVM=";
   };
 
-  __structuredAttrs = true;
-
   build-system = with python.pkgs; [
     setuptools
   ];
