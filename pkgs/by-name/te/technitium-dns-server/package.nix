@@ -10,7 +10,7 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "technitium-dns-server";
-  version = "15.5.1";
+  version = "15.6.0";
 
   __structuredAttrs = true;
 
@@ -18,7 +18,7 @@ buildDotnetModule (finalAttrs: {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h6GhWVqv+SRpJberH/xJ2bny1j+RFM7FI1E+LxuhLOw=";
+    hash = "sha256-1BihL4y33XdI0TpQck0yriW50o9kclN+vnFLUJN8h4Y=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
