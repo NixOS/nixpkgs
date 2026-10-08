@@ -2,7 +2,10 @@
   rustPlatform,
   fetchFromGitHub,
   runCommand,
+  makeWrapper,
   cacert,
+  coreutils,
+  gawk,
   git,
   beamMinimal28Packages,
   cargo,
@@ -68,6 +71,12 @@ beamPackages.rebar3Relx {
     cargo
     rustc
     rustPlatform.cargoSetupHook
+    makeWrapper
+  ];
+
+  buildInputs = [
+    coreutils
+    gawk
   ];
 
   checkouts =
@@ -119,13 +128,18 @@ beamPackages.rebar3Relx {
       cp ${zstdStatic.out}/lib/libzstd.a _checkouts/ezstd/_build/deps/zstd/lib
     '';
 
-  postInstall = ''
-    mv $out/fluxer_gateway $out/fluxer_gateway-unwrapped
+  postFixup = ''
+    mv $out/bin/fluxer_gateway $out/bin/fluxer_gateway-unwrapped
     makeWrapper \
-      $out/fluxer_gateway-unwrapped \
-      $out/fluxer_gateway \
-      --set-default RELX_OUT_FILE_PATH '$(mktemp -d)' \
-      --set-default FLUXER_ERLANG_NODE_NAME fluxer-gateway@127.0.0.1
+      $out/bin/fluxer_gateway-unwrapped \
+      $out/bin/fluxer_gateway \
+      --set-default FLUXER_ERLANG_NODE_NAME fluxer-gateway@127.0.0.1 \
+      --run 'export RELX_OUT_FILE_PATH="''${RELX_OUT_FILE_PATH:-$(mktemp -d)}"' \
+
+    install --mode=0755 scripts/docker_entrypoint.sh $out/bin/fluxer_gateway-entrypoint
+    substituteInPlace $out/bin/fluxer_gateway-entrypoint \
+      --replace-fail "#!/usr/bin/env sh" "#!${lib.getExe bash}" \
+      --replace-fail "/opt/fluxer_gateway/bin/fluxer_gateway" "$out/bin/fluxer_gateway"
   '';
 
   meta = {
@@ -133,6 +147,6 @@ beamPackages.rebar3Relx {
     license = lib.licenses.agpl3Plus;
     homepage = "https://github.com/fluxerapp/fluxer";
     maintainers = [ lib.maintainers.strangeglyph ];
-    mainProgram = "fluxer_gateway";
+    mainProgram = "fluxer_gateway-entrypoint";
   };
 }
