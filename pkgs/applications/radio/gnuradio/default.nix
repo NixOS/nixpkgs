@@ -27,7 +27,6 @@
   SDL,
   gsl,
   soapysdr,
-  libsodium,
   libsndfile,
   libunwind,
   thrift,
@@ -240,7 +239,6 @@ let
       cmakeEnableFlag = "GR_WAVELET";
       runtime = [
         gsl
-        libsodium
       ];
     };
     gr-zeromq = {
