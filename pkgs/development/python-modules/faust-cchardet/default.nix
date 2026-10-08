@@ -3,16 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   cython,
-  packaging,
-  pkgconfig,
-  setuptools,
+  meson-python,
   pytestCheckHook,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "faust-cchardet";
-  version = "2.1.20";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,19 +18,12 @@ buildPythonPackage rec {
     repo = "cChardet";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-MeRX/g38c+q2jiTtEhUpaGYf+5tkhexRGuIG0PdUGvI=";
+    hash = "sha256-m/wa41dhLFmRg20iAn1YkXVCIubp5bT4PI+YuUIK3Wc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "packaging<26" packaging
-  '';
 
   build-system = [
     cython
-    packaging
-    pkgconfig
-    setuptools
+    meson-python
   ];
 
   postFixup = ''

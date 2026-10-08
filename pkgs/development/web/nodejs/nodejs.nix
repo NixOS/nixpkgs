@@ -30,7 +30,7 @@
   zlib,
   zstd,
   icu,
-  bash,
+  bashNonInteractive,
   ninja,
   pkgconf,
   unixtools,
@@ -187,9 +187,15 @@ let
     inherit zstd;
   });
 
-  copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
-    builtins.attrNames sharedLibDeps
-  );
+  sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
+
+  # node-gyp expects headers for the following libs (the list is maintained upstream in tools/install.py)
+  # to be at the path given by `process.config.variables.node_prefix`, which is set to $out.
+  libHeadersForGYP = [
+    libuv
+    openssl
+    zlib
+  ];
 
   bundlesCorepack = !lib.versionAtLeast version "25.0.0";
 
@@ -252,6 +258,14 @@ let
         # Note: do not set TERM=dumb environment variable globally, it is used in
         # test-ci-js test suite to skip tests that otherwise run fine.
         NINJA = "TERM=dumb ninja";
+
+        # configure.py queries pkg-config for every --shared-* lib (and needs it
+        # for system-icu and shared abseil), then embeds the resulting -I/-L flags
+        # in config.gypi, i.e. process.config in bin/node, which would keep the
+        # -dev outputs in the runtime closure. The cc wrapper already passes these
+        # paths, so have pkgconf treat them as system paths and omit them.
+        PKG_CONFIG_SYSTEM_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" sharedLibInputs;
+        PKG_CONFIG_SYSTEM_LIBRARY_PATH = lib.makeSearchPathOutput "dev" "lib" sharedLibInputs;
       }
       // lib.optionalAttrs (!canExecute && !canEmulate) {
         # these are used in the --cross-compiling case. see comment at postConfigure.
@@ -260,14 +274,8 @@ let
         AR_host = touchScript "${buildPackages.stdenv.cc}/bin/ar";
       };
 
-      # NB: technically, we do not need bash in build inputs since all scripts are
-      # wrappers over the corresponding JS scripts. There are some packages though
-      # that use bash wrappers, e.g. polaris-web.
-      buildInputs = [
-        bash
-        icu
-      ]
-      ++ builtins.attrValues sharedLibDeps;
+      # NB: we need bash for npm (and corepack) outputs
+      buildInputs = [ bashNonInteractive ] ++ sharedLibInputs;
 
       nativeBuildInputs = [
         installShellFiles
@@ -325,14 +333,6 @@ let
       ++ lib.concatMap (name: [
         "--shared-${name}"
         "--shared-${name}-libpath=${lib.getLib sharedLibDeps.${name}}/lib"
-        /**
-          Closure notes: we explicitly avoid specifying --shared-*-includes,
-          as that would put the paths into bin/nodejs.
-          Including pkg-config in build inputs would also have the same effect!
-
-          FIXME: the statement above is outdated, we have to include pkg-config
-          in build inputs for system-icu.
-        */
       ]) (builtins.attrNames sharedLibDeps);
 
       configurePlatforms = [ ];
@@ -554,6 +554,10 @@ let
             "npm"
           ]
           ++ lib.optional bundlesCorepack "corepack";
+          # See PKG_CONFIG_SYSTEM_INCLUDE_PATH.
+          disallowedRequisites = map (dep: dep.dev) (
+            lib.filter (dep: !(builtins.elem dep libHeadersForGYP) && dep ? dev) sharedLibInputs
+          );
         };
         corepack = {
           disallowedReferences = [
@@ -622,9 +626,9 @@ let
           ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
             $npm/share/bash-completion/completions/npm
 
-          # install the missing headers for node-gyp
-          # TODO: use propagatedBuildInputs instead of copying headers.
-          cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
+          ln -s ${
+            lib.concatStringsSep " " (map (dep: "${lib.getDev dep}/include/*") libHeadersForGYP)
+          } $out/include/node/
 
           # assemble a static v8 library and put it in the 'libv8' output
           mkdir -p $libv8/lib

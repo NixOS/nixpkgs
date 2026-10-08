@@ -1045,8 +1045,6 @@ with pkgs;
 
   winbox = winbox4;
 
-  ### APPLICATIONS/VERSION-MANAGEMENT
-
   bump2version = with python3Packages; toPythonApplication bump2version;
 
   datalad = with python3Packages; toPythonApplication datalad;
@@ -2092,8 +2090,6 @@ with pkgs;
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;
 
   gvm-tools = with python3.pkgs; toPythonApplication gvm-tools;
-
-  gzip = callPackage ../tools/compression/gzip { };
 
   haskell-language-server =
     callPackage ../development/tools/haskell/haskell-language-server/withWrapper.nix
@@ -3941,15 +3937,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_98 = callPackage ../development/compilers/rust/1_98.nix { };
-  rust = rust_1_98;
+  rust_1_99 = callPackage ../development/compilers/rust/1_99.nix { };
+  rust = rust_1_99;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_98 = rust_1_98.packages.stable;
-  rustPackages = rustPackages_1_98;
+  rustPackages_1_99 = rust_1_99.packages.stable;
+  rustPackages = rustPackages_1_99;
 
   inherit (rustPackages)
     cargo
@@ -4038,6 +4034,7 @@ with pkgs;
   swiftPackages = recurseIntoAttrs (callPackage ./swift-packages.nix { });
   inherit (swiftPackages)
     fetchSwiftPMDeps
+    prefetch-swiftpm-deps
     sourcekit-lsp
     swift
     swift-corelibs-libdispatch
@@ -4856,8 +4853,6 @@ with pkgs;
     callPackage ../development/tools/continuous-integration/buildkite-test-collector-rust
       {
       };
-
-  libbpf = callPackage ../os-specific/linux/libbpf { };
 
   bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
 
@@ -6182,6 +6177,7 @@ with pkgs;
   nv-codec-headers-10 = nv-codec-headers.override { majorVersion = "10"; };
   nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
   nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
+  nv-codec-headers-13 = nv-codec-headers.override { majorVersion = "13"; };
 
   nvidiaCtkPackages = recurseIntoAttrs (
     callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix { }
@@ -6548,6 +6544,7 @@ with pkgs;
     withFlite = false;
     withEspeak = false;
     withPico = false;
+    withPipewire = false;
     libsOnly = true;
   };
 
@@ -7837,7 +7834,6 @@ with pkgs;
     withDocumentation = false;
     withEfi = false;
     withFido2 = false;
-    withGcrypt = false;
     withHostnamed = false;
     withHomed = false;
     withHwdb = false;
@@ -7882,6 +7878,7 @@ with pkgs;
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
     buildLibsOnly = true;
+    withCompression = true;
   };
   # We do not want to include ukify in the normal systemd attribute as it
   # relies on Python at runtime.

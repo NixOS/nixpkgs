@@ -2,31 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # tests
+  hatch-vcs,
+  hatchling,
   astropy,
   numpy,
   pillow,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyavm";
-  version = "0.9.8";
+  version = "0.9.9";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zhHCeex1vfgj0MOGEkoVKKXns2+l3U0mSZInk58Rf4g=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-vA9gXZV8H9bXdlUj/LqLmnI3esbFFGHCqDj+RGALzZo=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  build-system = [
+    hatch-vcs
+    hatchling
   ];
 
   nativeCheckInputs = [
@@ -41,7 +37,8 @@ buildPythonPackage rec {
   meta = {
     description = "Simple pure-python AVM meta-data handling";
     homepage = "https://astrofrog.github.io/pyavm/";
+    changelog = "https://github.com/astrofrog/pyavm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

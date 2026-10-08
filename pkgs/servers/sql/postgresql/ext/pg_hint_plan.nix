@@ -48,11 +48,6 @@ postgresqlBuildExtension {
     inherit (source) hash;
   };
 
-  postPatch = lib.optionalString (lib.versionOlder postgresql.version "14") ''
-    # https://github.com/ossc-db/pg_hint_plan/commit/e9e564ad59b8bd4a03e0f13b95b5122712e573e6
-    substituteInPlace Makefile --replace "LDFLAGS+=-Wl,--build-id" ""
-  '';
-
   enableUpdateScript = false;
 
   meta = {

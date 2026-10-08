@@ -24,14 +24,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.52.1";
+  version = "1.53.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y9Nph2LkT1qnOYTW3WCumWWwORnI4P7HxzBjUlGaL7M=";
+    hash = "sha256-AC1LS6PfieP8IjGhoIwm0WcLNIsUgULyP7V4HuvSqbg=";
   };
 
   outputs = [
@@ -132,6 +132,13 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
         # Aborts (SIGABRT, exit 134)
         "poll_nested_epoll"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isMusl [
+        # The expected struct sizes for Linux are recorded against glibc.
+        # uv_getnameinfo_t embeds char host[NI_MAXHOST], which is 1025 on
+        # glibc but 255 on musl, and musl's pthread types differ in size
+        # from glibc's on some architectures (e.g. aarch64).
+        "sizeof"
       ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
         # ENETUNREACH when performed in jailed build env

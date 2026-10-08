@@ -19,12 +19,12 @@
 }:
 buildPythonPackage rec {
   pname = "nglview";
-  version = "4.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LAz/LFseKgpy4zkwh85ErgMIUkxapflTV4EtPtvCboM=";
+    hash = "sha256-HhW4Gbn4raPlIeWH0kzDdUVzIDzJnuXYAc7yjZkoZaU=";
   };
 
   nativeBuildInputs = [

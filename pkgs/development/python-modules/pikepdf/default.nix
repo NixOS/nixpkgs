@@ -6,8 +6,10 @@
   clang-tools,
   cmake,
   fetchFromGitHub,
+  fonttools,
   hypothesis,
   jbig2dec,
+  jsonschema,
   deprecated,
   lxml,
   withMupdf ? false,
@@ -23,13 +25,14 @@
   python-dateutil,
   python-xmp-toolkit,
   qpdf,
+  referencing,
   replaceVars,
   scikit-build-core,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pikepdf";
-  version = "10.10.0";
+  version = "10.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -42,7 +45,7 @@ buildPythonPackage (finalAttrs: {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-ZNynqKNmUO8wGoT3Ml2sS2kOGJD37JRaHzBV9igvoHw=";
+    hash = "sha256-6EDwFOs/++LBlAbHcCV42IvQ909B/9IlyV04ahZJqFo=";
   };
 
   patches = [
@@ -93,6 +96,14 @@ buildPythonPackage (finalAttrs: {
     packaging
     pillow
   ];
+
+  optional-dependencies = {
+    pdfa = [
+      fonttools
+      jsonschema
+      referencing
+    ];
+  };
 
   pythonImportsCheck = [ "pikepdf" ];
 

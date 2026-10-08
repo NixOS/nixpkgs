@@ -26,13 +26,13 @@
 
 buildPythonPackage rec {
   pname = "localstack-ext";
-  version = "4.12.0";
+  version = "4.14.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "localstack_ext";
     inherit version;
-    hash = "sha256-AQrG6iRTBarinrGgJeLr5OYguuN7KWyxRUYNMHz4mlE=";
+    hash = "sha256-JTHK4YavQyp78tYloZvZ5er6w6U4wGGHDfgL345nNiY=";
   };
 
   build-system = [

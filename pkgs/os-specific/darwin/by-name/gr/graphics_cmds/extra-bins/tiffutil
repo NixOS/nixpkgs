@@ -1,0 +1,277 @@
+#!/usr/bin/env bash
+
+set -eu -o pipefail
+
+declare compression=()
+declare cmd=usage
+declare outfile=out.tiff
+
+declare -A options=(
+  [dump_images]=false
+  [hidpicheck]=false
+  [normalize_dpi]=false
+  [nosizecheck]=false
+  [index]=
+)
+
+declare -a files=()
+
+check_hidpi_image_set() {
+    local -a image_props
+    readarray -d\  -t image_props <<< "$1"
+
+    # The Aqua requirement appears to be two images with the same point size where the DPI of the second
+    # is twice the DPI of the first.
+    if [ "${#image_props[@]}" != 2 ]; then
+        return 1
+    fi
+
+    local image_pts=""
+    local image_dpi_x=""
+    local image_dpi_y=""
+
+    for prop in "${image_props[@]}"; do
+        local pts=$(@cut@ -d\| -f1 <<< $prop)
+        if [[ -n "$image_pts" && "$pts" != "$image_pts" ]]; then
+            return 1
+        else
+            image_pts=$pts
+        fi
+
+        local dpi=$(@cut@ -d\| -f2 <<< $prop)
+        local dpi_x=$(@cut@ -dx -f1 <<< $dpi)
+        local dpi_y=$(@cut@ -dx -f2 <<< $dpi)
+
+        # The order of images doesn’t matter. Both just need to meet the requirements.
+        if [ -z "$image_dpi_x" ]; then
+            image_dpi_x=$dpi_x
+            image_dpi_y=$dpi_y
+        elif
+            [[
+                ( $((dpi_x * 2)) -ne "$image_dpi_x" || $((dpi_y * 2)) -ne "$image_dpi_y")
+                && ( $((image_dpi_x * 2)) -ne "$dpi_x" || $((image_dpi_y * 2)) -ne "$dpi_y")
+            ]]; then
+            return 1
+        fi
+    done
+}
+
+get_dimensions() {
+    local src=$1
+    local out=$(@tiffinfo@ "$src")
+    @tiffinfo@ "$src" | @sed@ -nE -e 's/^ *Image Width: ([0-9]+) Image Length: ([0-9]+)$/\1x\2/p'
+}
+
+get_resolutions() {
+    local src=$1
+    local out=$(@tiffinfo@ "$src")
+    @tiffinfo@ "$src" | @sed@ -nE -e 's/^ *Resolution: ([0-9]+), ([0-9]+).*$/\1x\2/p'
+}
+
+usage() {
+    @echo@ "tiffutil: <command> <input> [<input>...] [-out <output>]"
+    @echo@
+    @echo@ "Arguments:"
+    @echo@ "  <input>               One or more files to provide to command. Some commands"
+    @echo@ "                        may support only one file. The effect of the command"
+    @echo@ "                        will be applied to every image in the input files."
+    @echo@ "  <output>              Where to write the output of the command."
+    @echo@ "                        Default: “out.tiff” in the current working directory."
+    @echo@
+    @echo@ "Compression Commands:"
+    @echo@ "Copy all images from <input> to <output> and compress it with the specified"
+    @echo@ "algorithm. Only one <input> is supported."
+    @echo@ "  -none                 Write <output> with no compression."
+    @echo@ "  -lzw                  Write <output> using LZW compression."
+    @echo@ "  -packbits             Write <output> using PackBits compression."
+    @echo@
+    @echo@ "Concatenation Commands:"
+    @echo@ "Combine all images from one or more <input> and write them to <output>."
+    @echo@ "  -cat                  Copy all images in <input> to <output>."
+    @echo@ "  -catnosizecheck       Like “-cat” except suppress warnings about size."
+    @echo@ "  -cathidpicheck        Like “-cat” except warn when images do not conform to"
+    @echo@ "                        Aqua requirements. Normalizes DPI of images to 72x72."
+    @echo@
+    @echo@ "Extraction Commands:"
+    @echo@ "Extracts image from <input> to <output>"
+    @echo@ "  -extract <index>      Extract image at directory <index> from <input>."
+    @echo@
+    @echo@ "Informational Commands:"
+    @echo@ "Support only one <input> and no <output>."
+    @echo@ "  -info                 Prints information about <input>."
+    @echo@ "  -verboseinfo          A more verbose way of specifying “-info”."
+    @echo@ "  -dump                 Equivalent to \`tiffdump\`."
+    exit 1
+}
+
+# Parse the command.
+case "${1-}" in
+    "")
+        usage
+        ;;
+    -none|-lzw|-packbits)
+        compression=('-c' "${1:1}")
+        cmd=copy
+        ;;
+    -catnosizecheck|-cathidpicheck)
+        options["${1:4}"]=true
+        ;&
+    -cat)
+        cmd=cat
+        ;;
+    -dump)
+        cmd=dump
+        ;;
+    -extract)
+        cmd=extract
+        shift
+        options[index]=$1
+        ;;
+    -info|-verboseinfo)
+        cmd=info
+        ;;
+esac
+shift
+
+# Treat remaining args as files until we hit “-out”.
+while [[ "$#" -gt 0 && "$1" != "-out" ]]; do
+  if [ -n "$1" ]; then
+      files+=("$1")
+  fi
+  shift
+done
+
+# Get the output file (default: out.tiff).
+case $cmd,"${1-}","${2-}" in
+    *,-out,)
+        # If a filename isn’t specified, treat `-out` as a file name.
+        files+=('-out')
+        ;;
+    dump,-out,*|info,-out,*)
+        @echo@ "Error: Can't specify output file name for -info, -verboseinfo, or -dump."
+        usage
+        ;;
+    *,-out,*)
+        outfile=$2
+        ;;
+esac
+
+case "${#files[@]},$cmd" in
+    0,*)
+        usage
+        ;;
+    1,*)
+        ;;
+    *,copy|*,extract)
+        @echo@ "Error: One input file name expected."
+        usage
+        ;;
+esac
+
+case $cmd in
+   cat|copy)
+      declare num_images=0
+      declare -A plurals=([1]="")
+
+      declare -A sizes_seen=()
+      declare -a tiff_infos=()
+
+      for tiff in "${files[@]}"; do
+          declare -a dims
+          readarray -t dims <<< $(get_dimensions "$tiff")
+
+          declare -a dpis
+          readarray -t dpis <<< $(get_resolutions "$tiff")
+
+          for idx in "${!dims[@]}"; do
+              dim=${dims[$idx]}
+              dim_x=$(@cut@ -dx -f1 <<< $dim)
+              dim_y=$(@cut@ -dx -f2 <<< $dim)
+
+              dpi=${dpis[$idx]}
+              dpi_x=$(@cut@ -dx -f1 <<< $dpi)
+              dpi_y=$(@cut@ -dx -f2 <<< $dpi)
+
+              pts_x=$((dim_x * 7200 / dpi_x))
+              pts_y=$((dim_y * 7200 / dpi_y))
+              if [[ "${pts_x: -2}" = "00" && "${pts_x: -2}" = "00" ]]; then
+                  pts="${pts_x: 0:-2}x${pts_y: 0:-2}"
+              else
+                  pts="${pts_x: 0:-2}.${pts_x: -2}x${pts_y: 0:-2}.${pts_y: -2}"
+              fi
+
+              sizes_seen[$pts]="${sizes_seen[$pts]+${sizes_seen[$pts]-} }$pts|$dpi"
+              num_images=$((num_images + 1))
+
+              tiff_infos+=("Image $((idx + 1)) in file $tiff: $pts points ($dim pixels, $dpi dpi)")
+          done
+      done
+
+      if ${options[hidpicheck]}; then
+          if ! check_hidpi_image_set "${sizes_seen[*]}"; then
+              @echo@ "Warning: Sizes of concatenated images do not follow Aqua guidelines for resolution independent multi-image TIFFs."
+              @echo@ "         Please provide two images, one with exactly twice the pixel width as the other."
+              options[dump_images]=true
+          fi
+          options[normalize_dpi]=true
+      elif ! ${options[nosizecheck]} && [ "${#sizes_seen[@]}" -gt 1 ]; then
+          @echo@ 'Warning: Sizes of concatenated images are not the same; this will lead to problems in choosing the appropriate image in some cases.'
+          options[dump_images]=true
+      fi
+
+      if ${options[dump_images]}; then
+          for info in "${tiff_infos[@]}"; do
+              @echo@ " $info"
+          done
+      fi
+
+      @echo@ "$num_images image${plurals[$num_images]-s} written to $outfile."
+
+      if [[ "$cmd" = "cat" && "${#files[@]}" -eq 1 ]]; then
+          @cp@ -- "${files[@]}" "$outfile"
+      else
+          @tiffcp@ "${compression[@]}" -- "${files[@]}" "$outfile"
+      fi
+
+      if ${options[normalize_dpi]}; then
+          for idx in $(seq 0 $((num_images - 1))); do
+              # 282 and 283 are the tag numbers for XResolution and YResolution respectively.
+              @tiffset@ -d $idx -s 282 72.0 -- "$outfile"
+              @tiffset@ -d $idx -s 283 72.0 -- "$outfile"
+          done
+      fi
+      ;;
+   dump)
+      for file in "${files[@]}"; do
+          if ${print_newline-false}; then
+              @echo@
+              @echo@ "*** $file"
+          elif [ "${#files[@]}" -gt 1 ]; then
+              print_newline=true
+              @echo@ "*** $file"
+          fi
+          @tiffdump@ -- "$file" \
+              | @tail@ -n +2
+      done
+      ;;
+   extract)
+      @tiffcp@ "${compression[@]}" -- "${files[@]}","${options[index]}" "$outfile"
+      @echo@ "1 image written to $outfile."
+      ;;
+   usage)
+      usage
+      ;;
+   info)
+      for file in "${files[@]}"; do
+          if ${print_newline-false}; then
+              @echo@
+              @echo@ "*** $file"
+          elif [ "${#files[@]}" -gt 1 ]; then
+              print_newline=true
+              @echo@ "*** $file"
+          fi
+          @tiffinfo@ -- "$file" \
+              | @sed@ -E -e '/^=== TIFF directory/d;/^$/d;s/^TIFF (Directory at) offset (0x[0-9a-fA-F]*) .*$/\1 \2/'
+      done
+      ;;
+esac

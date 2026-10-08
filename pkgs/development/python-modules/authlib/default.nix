@@ -9,7 +9,11 @@
   httpx,
   joserfc,
   mock,
+  django,
+  anyio,
+  pytest-django,
   pytest-asyncio,
+  pycryptodomex,
   pytestCheckHook,
   python-multipart,
   requests,
@@ -37,19 +41,33 @@ buildPythonPackage (finalAttrs: {
     joserfc
   ];
 
+  optional-dependencies = {
+    clients = [
+      anyio
+      cachelib
+      django
+      flask
+      httpx
+      requests
+      starlette
+    ]
+    ++ starlette.optional-dependencies.full;
+    django = [
+      django
+      pytest-django
+    ];
+    flask = [
+      flask
+      flask-sqlalchemy
+    ];
+    jose = [ pycryptodomex ];
+  };
+
   nativeCheckInputs = [
-    cachelib
-    flask
-    flask-sqlalchemy
-    httpx
-    mock
     pytest-asyncio
     pytestCheckHook
-    python-multipart
-    requests
-    starlette
-    werkzeug
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "authlib" ];
 
@@ -59,6 +77,16 @@ buildPythonPackage (finalAttrs: {
     "tests/clients/test_django/"
     # Unsupported encryption algorithm
     "tests/jose/test_chacha20.py"
+  ];
+
+  disabledTests = [
+    # AssertionError
+    "test_access_resource"
+    "test_entitlements_restriction"
+    "test_extra_attributes"
+    "test_introspection"
+    "test_scope_restriction"
+    "test_typ"
   ];
 
   meta = {

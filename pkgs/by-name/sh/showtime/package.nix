@@ -58,7 +58,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [ pygobject3 ];
 
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   pythonImportsCheck = [ "showtime" ];
 

@@ -1,32 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
-  pytestCheckHook,
   charset-normalizer,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aeidon";
-  version = "1.15";
+  version = "2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "otsaloma";
     repo = "gaupol";
     tag = version;
-    hash = "sha256-lhNyeieeiBBm3rNDEU0BuWKeM6XYlOtv1voW8tR8cUM=";
+    hash = "sha256-vMmDG9oQ6u9J4f972EdbsI5Z3faGumlkUzXVmqtd+O4=";
   };
 
-  postPatch = ''
-    mv setup.py setup_gaupol.py
-    substituteInPlace setup-aeidon.py \
-      --replace "from setup import" "from setup_gaupol import"
-    mv setup-aeidon.py setup.py
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ charset-normalizer ];
 
@@ -42,11 +35,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aeidon" ];
 
   meta = {
-    changelog = "https://github.com/otsaloma/gaupol/releases/tag/${version}";
     description = "Reading, writing and manipulating text-based subtitle files";
     homepage = "https://github.com/otsaloma/gaupol";
+    changelog = "https://github.com/otsaloma/gaupol/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-
 }

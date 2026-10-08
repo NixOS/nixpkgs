@@ -41,14 +41,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "5.2.17";
+  version = "5.2.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
     tag = finalAttrs.version;
-    hash = "sha256-7it3opzsiN/hHhpipZz4ogmRKGz7E9/LmTF03/UYIB0=";
+    hash = "sha256-XoNmtE4gmpm/i9vfaQwHZw1q6ctxSvotu0I+02UZutk=";
   };
 
   patches = [
@@ -61,6 +61,7 @@ buildPythonPackage (finalAttrs: {
     ./5.2/disable-failing-test.patch
     # skip flaky performnace test
     ./6.0/skip-flaky-tests.patch
+    ./6.x/fix-flaky-tests.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./5.2/gdal.patch {

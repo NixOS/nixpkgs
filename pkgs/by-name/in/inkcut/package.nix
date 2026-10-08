@@ -57,11 +57,14 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [
-    "--unset"
-    "PYTHONPATH"
-    "\${qtWrapperArgs[@]}"
-  ];
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      "--unset"
+      "PYTHONPATH"
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
 
   postInstall = ''
     mkdir -p $out/share/inkscape/extensions

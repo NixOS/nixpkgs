@@ -161,6 +161,9 @@
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
+  "guileImportsCheckHook": [
+    "index.html#guileImportsCheckHook"
+  ],
   "how-channels-work": [
     "index.html#how-channels-work"
   ],
@@ -2960,6 +2963,9 @@
   "meson-honored-variables": [
     "index.html#meson-honored-variables"
   ],
+  "meson-disabled-tests": [
+    "index.html#meson-disabled-tests"
+  ],
   "setup-hook-mpi-check": [
     "index.html#setup-hook-mpi-check"
   ],
@@ -4596,6 +4602,9 @@
   ],
   "ssec-swift-packaging-with-swiftpm2nix": [
     "index.html#ssec-swift-packaging-with-swiftpm2nix"
+  ],
+  "ssec-swiftpm-prefetch-dependencies": [
+    "index.html#ssec-swiftpm-prefetch-dependencies"
   ],
   "ssec-swiftpm-patching-dependencies": [
     "index.html#ssec-swiftpm-patching-dependencies"

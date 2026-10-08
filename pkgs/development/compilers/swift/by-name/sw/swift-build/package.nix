@@ -1,45 +1,33 @@
 {
   lib,
+  bashNonInteractive,
   cmake,
   coreutils,
   darwin,
   diffutils,
   fetchFromGitHub,
+  gnumake,
   gnused,
-  libiconv,
-  libtiff,
-  llvmPackages_upstream,
-  llvm_libtool,
+  iconv,
+  llvmPackages,
   ninja,
-  oxipng,
   replaceVars,
   sqlite,
   stdenv,
-  stdenvNoCC,
   swift,
   swift-argument-parser,
   swift-driver,
   swift-llbuild,
   swift-system,
+  swift-tools-protocols,
   swift-tools-support-core,
+  what,
   xcbuild,
   swift_release,
   swift_sources,
 }:
 
 let
-  graphics_cmds = stdenvNoCC.mkDerivation {
-    pname = "graphics_cmds";
-    version = "1";
-
-    # Note: These depend on oxipng and tools from libtiff, but we don’t want to pull them into the Swift Build
-    # closure unnecessarily. Packages using those commands will have to add them themselves.
-    buildCommand = ''
-      install -m755 -D ${replaceVars ./extra-bins/copypng { inherit coreutils; }} "$out/bin/copypng"
-      install -m755 -D ${replaceVars ./extra-bins/tiffutil { }} "$out/bin/tiffutil"
-    '';
-  };
-
   swiftPlatform = stdenv.hostPlatform.swift.platform;
 in
 
@@ -64,17 +52,16 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Remove as many impure paths as possible.
     (replaceVars ./patches/0001-replace-impure-paths.patch {
-      xcrun = if stdenv.hostPlatform.isDarwin then xcbuild.xcrun else "/not-supported";
-      inherit graphics_cmds;
-      coreutils = lib.getBin coreutils;
-      diffutils = lib.getBin diffutils;
-      gnused = lib.getBin gnused;
-      libiconv = lib.getBin libiconv;
-      libtool = lib.getBin llvm_libtool;
-      llvm = lib.getBin llvmPackages_upstream.llvm;
-      shell_cmds =
-        if stdenv.hostPlatform.isDarwin then lib.getBin darwin.shell_cmds else "/not-supported";
-      sigtool = lib.getBin darwin.sigtool;
+      inherit (darwin) graphics_cmds sigtool;
+      inherit (llvmPackages) llvm;
+      inherit (xcbuild) xcrun;
+      inherit bashNonInteractive;
+      inherit coreutils;
+      inherit diffutils;
+      inherit gnumake;
+      inherit gnused;
+      inherit iconv;
+      inherit what;
     })
     # Swift Build checks whether the SDK is Xcode by looking at the `DEVELOPER_DIR` path for Xcode.
     # Have it treat store paths as being Xcode SDKs so that the nixpkgs SDK is treated as a Darwin platform.
@@ -121,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     swift-argument-parser
     swift-driver
     swift-llbuild
+    swift-tools-protocols
     swift-system
     swift-tools-support-core
   ];

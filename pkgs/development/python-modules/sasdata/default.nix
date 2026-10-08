@@ -15,7 +15,7 @@
 
 let
   pname = "sasdata";
-  version = "0.11.0";
+  version = "0.12.2";
 in
 buildPythonPackage {
   inherit pname version;
@@ -23,7 +23,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HIqEFN0Y+A4C6oF8NcI1puBt4SmyoNoAFobHQcYepnI=";
+    hash = "sha256-WwSvM1XelSRj9VmXPMdVwkFAN0Yytz6N7/hVW9L1ATg=";
   };
 
   build-system = [
