@@ -6,30 +6,34 @@
 }:
 let
   inherit (lib)
+    literalExpression
     mkIf
     mkDefault
     mkOption
     mkEnableOption
+    mkMerge
+    mkPackageOption
+    optional
     types
     ;
   cfg = config.services.grimmory;
 in
 {
   options.services.grimmory = {
-    enable = mkEnableOption "Grimmory, a self-hosted digital library for people who take their reading seriously.";
+    enable = mkEnableOption "Whether to enable Grimmory Server.";
 
-    package = mkOption {
-      description = "Grimmory package to use";
-      default = pkgs.grimmory;
-      defaultText = "pkgs.grimmory";
-      type = types.package;
+    package = mkPackageOption pkgs "grimmory" { };
+
+    host = mkOption {
+      description = "Listen address which Grimmory should listen on. (`SERVER_ADDRESS`)";
+      default = "localhost";
+      type = types.str;
     };
 
     port = mkOption {
-      description = "Port on which Grimmory shoud listen on";
+      description = "Port on which Grimmory should listen on. (`BOOKLORE_PORT`)";
       default = 6060;
       type = types.port;
-      example = 8080;
     };
 
     user = mkOption {
@@ -47,25 +51,55 @@ in
     };
 
     stateDir = mkOption {
-      description = "State and configuration directory Grimmory will use.";
+      description = "State and configuration directory Grimmory will use. (`APP_PATH_CONFIG`)";
       default = "/var/lib/grimmory";
       type = types.str;
       example = "/grimmory";
     };
 
+    booksDir = mkOption {
+      description = "Path to root directory of book library.";
+      default = "${cfg.stateDir}/books";
+      type = types.str;
+      example = "/books";
+    };
+
+    bookdropDir = mkOption {
+      description = "Path to directory where Grimmory watches for books to import. (`APP_BOOKDROP_FOLDER`)";
+      default = "${cfg.stateDir}/bookdrop";
+      type = types.str;
+      example = "/bookdrop";
+    };
+
     database = {
+      createLocally = mkOption {
+        description = "Create a local MariaDB database and user for Grimmory via `services.mysql`.";
+        default = true;
+        type = types.bool;
+      };
+
       name = mkOption {
-        description = ''
-          Name of the MySQL database that holds Grimmory's data.
-        '';
+        description = "MySQL database name that holds Grimmory's data. (`DATABASE_NAME`)";
         default = "grimmory";
         type = types.str;
         example = "booklore";
       };
 
-      username = mkOption {
+      host = mkOption {
+        description = "MySQL Database host (`DATABASE_HOST`)";
+        default = "localhost";
+        type = types.str;
+      };
+
+      port = mkOption {
+        description = "MySQL Database port (`DATABASE_PORT`)";
+        default = 3306;
+        type = types.port;
+      };
+
+      user = mkOption {
         description = ''
-          Name of the user with all permissions to the Grimmory MySQL database.
+          Name of the user with all permissions to the Grimmory MySQL database. (`DATABASE_USERNAME`)
         '';
         default = "grimmory";
         type = types.str;
@@ -97,6 +131,12 @@ in
       };
     };
 
+    environmentFile = mkOption {
+      description = "Optional path to an `EnvironmentFile` to configure or add secrets to Grimmory service.";
+      default = null;
+      type = types.nullOr types.path;
+    };
+
     extraArgs = mkOption {
       description = ''
         Additional command-line arguments passed verbatim to grimmory after -jar grimmory.jar
@@ -106,26 +146,40 @@ in
       example = [ "--debug" ];
     };
 
-    webserver = mkOption {
-      description = ''
-        A proxy is required to serve the grimmory frontend, if left empty then you must configure a proxy yourself.
-      '';
-      default = "";
-      type = types.enum [
-        ""
-        "caddy"
-        "nginx"
-      ];
-      example = "caddy";
+    domain = mkOption {
+      description = "Domain to use for the virtualhost to serve Grimmory at.";
+      type = types.str;
+      example = literalExpression "grimmory.\${config.networking.domain}";
     };
 
-    virtualHost = mkOption {
-      description = ''
-        virtualhost to serve the
-      '';
-      default = "grimmory";
-      type = types.str;
-      example = lib.literalExpression "grimmory.\${config.networking.domain}";
+    caddy = {
+      enable = mkEnableOption "a virtualhost to serve Grimmory through caddy";
+      virtualHost = mkOption {
+        description = "Extra configuration for the caddy virtualhost for Grimmory.";
+        type = types.submodule (
+          import ../web-servers/caddy/vhost-options.nix { cfg = config.services.caddy; }
+        );
+        default = { };
+        example = literalExpression ''
+          {
+            serverAliases = [ "grimmory.''${config.networking.domain}" ];
+          }
+        '';
+      };
+    };
+
+    nginx = {
+      enable = mkEnableOption "a virtualhost to serve Grimmory through nginx";
+      virtualHost = mkOption {
+        description = "Extra configuration for the nginx virtualhost for Grimmory.";
+        type = types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+        default = { };
+        example = literalExpression ''
+          {
+            serverAliases = [ "grimmory.''${config.networking.domain}" ];
+          }
+        '';
+      };
     };
 
   };
@@ -133,10 +187,14 @@ in
   config = mkIf cfg.enable {
 
     services.grimmory.environment = {
+      SERVER_ADDRESS = mkDefault cfg.host;
       BOOKLORE_PORT = mkDefault (toString cfg.port);
-      DATABASE_URL = mkDefault "jdbc:mariadb://localhost:3306/${cfg.database.name}";
+      APP_PATH_CONFIG = mkDefault cfg.stateDir;
+      APP_BOOKDROP_FOLDER = mkDefault cfg.bookdropDir;
+      DATABASE_HOST = mkDefault cfg.database.host;
+      DATABASE_PORT = mkDefault (toString cfg.database.port);
       DATABASE_NAME = mkDefault cfg.database.name;
-      DATABASE_USERNAME = mkDefault cfg.database.username;
+      DATABASE_USERNAME = mkDefault cfg.database.user;
     };
 
     users.groups = mkIf (cfg.group == "grimmory") { grimmory = { }; };
@@ -151,7 +209,7 @@ in
     };
 
     systemd.services.grimmory = {
-      description = "Grimmory is a self-hosted digital library for people who take their reading seriously.";
+      description = "Grimmory is a self-hosted library for your ebooks, comics and audiobooks.";
 
       wantedBy = [ "multi-user.target" ];
       wants = [
@@ -165,8 +223,10 @@ in
 
       environment = cfg.environment;
 
-      script = mkIf (cfg.database.passwordFile != null) ''
-        DATABASE_PASSWORD="$(cat ''${CREDENTIALS_DIRECTORY}/db-password)" ${lib.getExe cfg.package} ${lib.concatStringsSep " " cfg.extraArgs}
+      script = if cfg.database.passwordFile != null then ''
+        DATABASE_PASSWORD="$(cat ''${CREDENTIALS_DIRECTORY}/db-password)" ${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}
+      '' else ''
+        ${lib.getExe cfg.package} ${lib.escapeShellArgs cfg.extraArgs}
       '';
 
       serviceConfig = {
@@ -176,15 +236,38 @@ in
         Type = "simple";
         Restart = "on-failure";
 
-        ExecStart = mkIf (
-          cfg.database.passwordFile == null
-        ) "${lib.getExe cfg.package} ${lib.concatStringsSep " " cfg.extraArgs}";
+        EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
 
         LoadCredential = mkIf (cfg.database.passwordFile != null) [
           "db-password:${cfg.database.passwordFile}"
         ];
 
+        ExecStartPre = mkIf cfg.database.createLocally "+${pkgs.writeShellScript "update-grimmory-password" ''
+          ${lib.optionalString (cfg.database.passwordFile != null) ''
+            DATABASE_PASSWORD="$(cat ''${CREDENTIALS_DIRECTORY}/db-password)"
+          ''}
+
+          if [ -z "$DATABASE_PASSWORD" ]; then
+            echo "DATABASE_PASSWORD is empty or unset; add a password file with services.grimmory.database.passwordFile or add DATABASE_PASSWORD to services.grimmory.environmentFile" >&2
+            exit 1
+          fi
+
+          escaped_password="$(printf '%s' "$DATABASE_PASSWORD" | sed "s/'/'''/g")"
+
+          ${lib.getExe' config.services.mysql.package "mysql"} <<EOF
+          SET sql_mode = 'NO_BACKSLASH_ESCAPES';
+          ALTER USER '${cfg.database.user}'@'localhost' IDENTIFIED BY '$escaped_password';
+          FLUSH PRIVILEGES;
+          EOF
+        ''}";
+
         StateDirectory = mkIf (cfg.stateDir == "/var/lib/grimmory") "grimmory";
+
+        # Make paths writable if not in the state directory
+        ReadWritePaths = []
+          ++ (optional (cfg.stateDir != "/var/lib/grimmory") cfg.stateDir)
+          ++ (optional (!(lib.hasPrefix cfg.stateDir cfg.bookdropDir)) cfg.bookdropDir)
+          ++ (optional (!(lib.hasPrefix cfg.stateDir cfg.booksDir)) cfg.booksDir);
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -205,7 +288,7 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
-          "AF_NETLINK"
+          "AF_UNIX"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -218,66 +301,42 @@ in
     services.mysql = {
       enable = true;
       package = pkgs.mariadb;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
 
-    systemd.services.mysql.serviceConfig.LoadCredential = mkIf (cfg.database.passwordFile != null) [
-      "db-password:${cfg.database.passwordFile}"
-    ];
-    systemd.services.mysql.postStart = lib.mkAfter (
-      if (cfg.database.passwordFile == null) then
-        ''
-          ( echo "CREATE DATABASE IF NOT EXISTS \`${cfg.database.name}\` CHARACTER SET utf8 COLLATE utf8_bin;"
-            echo "CREATE USER IF NOT EXISTS '${cfg.database.username}'@'localhost' IDENTIFIED WITH unix_socket;"
-            echo "GRANT ALL PRIVILEGES ON \`${cfg.database.name}\`.* TO '${cfg.database.username}'@'localhost';"
-          ) | ${config.services.mysql.package}/bin/mysql -N
-        ''
-      else
-        ''
-          DATABASE_PASSWORD="$(cat ''${CREDENTIALS_DIRECTORY}/db-password)"
-          ( echo "CREATE DATABASE IF NOT EXISTS \`${cfg.database.name}\` CHARACTER SET utf8 COLLATE utf8_bin;"
-            echo "CREATE USER IF NOT EXISTS '${cfg.database.username}'@'localhost' IDENTIFIED BY '$DATABASE_PASSWORD';"
-            echo "GRANT ALL PRIVILEGES ON \`${cfg.database.name}\`.* TO '${cfg.database.username}'@'localhost';"
-          ) | ${config.services.mysql.package}/bin/mysql -N
-        ''
-    );
-
-    services.caddy = mkIf (cfg.webserver == "caddy") {
-      enable = true;
-      virtualHosts.${cfg.virtualHost}.extraConfig = ''
-        @backend path /api/* /ws
-        reverse_proxy @backend localhost:${toString cfg.port}
-        root * ${cfg.package.passthru.grimmory-frontend}
-        file_server
-      '';
-    };
-
-    services.nginx = mkIf (cfg.webserver == "nginx") {
-      enable = true;
-      virtualHosts.${cfg.virtualHost} = {
-        root = cfg.package.passthru.grimmory-frontend;
-
-        locations."/ws/" = {
-          proxyWebsockets = true;
-          proxyPass = "http://localhost:${toString cfg.port}";
-          recommendedProxySettings = true;
-        };
-
-        locations."/api/" = {
-          proxyWebsockets = true;
-          proxyPass = "http://localhost:${toString cfg.port}";
-          recommendedProxySettings = true;
+    services.caddy = mkIf cfg.caddy.enable {
+      enable = lib.mkDefault true;
+      virtualHosts.${cfg.domain} = mkMerge [
+        cfg.caddy.virtualHost
+        {
+          hostName = lib.mkForce cfg.domain;
           extraConfig = ''
-            proxy_set_header X-Forwarded-Port $server_port;
-            proxy_buffer_size 64k;
-            proxy_buffers 4 128k;
-            proxy_busy_buffers_size 128k;
+            reverse_proxy ${cfg.host}:${toString cfg.port}
           '';
-        };
+        }
+      ];
+    };
 
-        locations."/" = {
-          tryFiles = "$uri $uri/ /index.html =404";
-        };
-      };
+    services.nginx = mkIf cfg.nginx.enable {
+      enable = lib.mkDefault true;
+      virtualHosts.${cfg.domain} = mkMerge [
+        cfg.nginx.virtualHost
+        {
+          locations."/" = {
+            proxyPass = "http://${cfg.host}:${toString cfg.port}";
+            proxyWebsockets = true;
+            recommendedProxySettings = true;
+          };
+        }
+      ];
     };
   };
 
