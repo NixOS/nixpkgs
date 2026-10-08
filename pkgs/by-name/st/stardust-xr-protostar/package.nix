@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-6NiEKm6m4xX6ZSF9Gp7APG/lku3fKoobPSS4AodjCI8=";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   checkFlags = [
     # ---- xdg::test_get_desktop_files stdout ----
