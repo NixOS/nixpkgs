@@ -516,4 +516,33 @@ in
       ${CC} operation-main.c -loperation-shared -o operation-shared
     ${emulator} ./operation-shared
   ''}
+  ${lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic) ''
+    if [[ -f ${stdenv.cc.bintools}/nix-support/dynamic-linker ]]; then
+      echo "checking dynamic linker agreement across roles..." >&2
+      loader=$(< ${stdenv.cc.bintools}/nix-support/dynamic-linker)
+      env -i PATH="$PATH" \
+        NIX_CC_WRAPPER_TARGET_BUILD_${suffixSalt}=1 \
+        NIX_CC_WRAPPER_TARGET_HOST_${suffixSalt}=1 \
+        NIX_BINTOOLS_WRAPPER_TARGET_BUILD_${suffixSalt}=1 \
+        NIX_BINTOOLS_WRAPPER_TARGET_HOST_${suffixSalt}=1 \
+        NIX_DYNAMIC_LINKER_FOR_BUILD="$loader" NIX_DYNAMIC_LINKER="$loader" \
+        ${CC} ${./cc-main.c} -o role-loader
+      ${stdenv.cc.bintools}/bin/${targetPrefix}readelf -l role-loader > role-loader.headers
+      grep -Fq "Requesting program interpreter: $loader]" role-loader.headers
+      ${emulator} ./role-loader
+      for other in /conflicting-loader ""; do
+        if env -i PATH="$PATH" \
+          NIX_CC_WRAPPER_TARGET_BUILD_${suffixSalt}=1 \
+          NIX_CC_WRAPPER_TARGET_HOST_${suffixSalt}=1 \
+          NIX_BINTOOLS_WRAPPER_TARGET_BUILD_${suffixSalt}=1 \
+          NIX_BINTOOLS_WRAPPER_TARGET_HOST_${suffixSalt}=1 \
+          NIX_DYNAMIC_LINKER_FOR_BUILD="$loader" NIX_DYNAMIC_LINKER="$other" \
+          ${CC} ${./cc-main.c} -o conflicting-loader > loader-error.log 2>&1; then
+          echo "Expected conflicting dynamic linkers to fail" >&2
+          exit 1
+        fi
+        grep -Fq 'Multiple conflicting values defined for NIX_DYNAMIC_LINKER_${suffixSalt}' loader-error.log
+      done
+    fi
+  ''}
 ''
