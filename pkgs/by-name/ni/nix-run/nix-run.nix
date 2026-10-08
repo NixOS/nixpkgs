@@ -2,7 +2,7 @@
   mkDerivation,
   attoparsec,
   base,
-  fetchgit,
+  fetchFromTangled,
   filepath,
   hercules-ci-optparse-applicative,
   hpack,
@@ -15,8 +15,8 @@
 mkDerivation rec {
   pname = "nix-run";
   version = "0.1.0.0-alpha.2";
-  src = fetchgit {
-    url = "https://tangled.org/weethet.bsky.social/nix-run";
+  src = fetchFromTangled {
+    did = "did:plc:jhj73bgwgby7m5sudz5jk6gb";
     tag = version;
     hash = "sha256-vnYD3N32H6eEPLis8eNlglXVY+guP5DDKCf2z7CLzwA=";
   };
@@ -34,7 +34,7 @@ mkDerivation rec {
     unix
   ];
   prePatch = "hpack";
-  homepage = "https://tangled.org/@weethet.bsky.social/nix-run";
+  homepage = "https://tangled.org/weethet.eurosky.social/nix-run";
   license = lib.licenses.bsd3;
   mainProgram = "nix-run";
 }

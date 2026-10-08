@@ -12,22 +12,22 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
-  version = "4.6.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qdN+stXuwChv6IaFSX2SrSdej7Id/M0UaO2cggAvWdc=";
+    hash = "sha256-WhGXMQfc8yHc2B8YBuoVhGjj33Uj8NOdM1hG48bPBrg=";
   };
 
   # Upstream composer.json file is missing the name, description and license fields
   composerStrictValidation = false;
-  vendorHash = "sha256-xoPO/LAvMcpvx2sszSj3K9p09izeW1l67KYwpydMdNI=";
+  vendorHash = "sha256-mxZcRga2mUyZPyvy77H5INF8tDr/UEj4hw+DhIL9o6M=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-48+u0NYZZiYvP2ADAkRdL079wmjWMHwPHi8rlDP41Eo=";
+    hash = "sha256-NnAhw53Ojh0VGWOkwlOoN8mm7/BOUutgV87/Z14dfxg=";
   };
 
   nativeBuildInputs = [

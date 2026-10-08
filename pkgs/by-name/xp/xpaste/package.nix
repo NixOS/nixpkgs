@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
-    xlib
+    python-xlib
   ];
 
   # no tests, no python module to import, no version output to check

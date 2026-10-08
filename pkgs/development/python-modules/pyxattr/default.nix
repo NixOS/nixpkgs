@@ -4,17 +4,20 @@
   fetchPypi,
   stdenv,
   buildPythonPackage,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyxattr";
   version = "0.8.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-SMV47PjqC9Q1GxdSRw4wGpCjdhx8IfAPlT3PbW+m7lo=";
   };
+
+  build-system = [ setuptools ];
 
   # IOError: [Errno 95] Operation not supported (expected)
   doCheck = false;
@@ -27,4 +30,4 @@ buildPythonPackage rec {
     # Darwin doesn't need `attr` for this.
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

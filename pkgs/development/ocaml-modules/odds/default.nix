@@ -5,7 +5,7 @@
   menhir,
   cmdliner,
 }:
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "odds";
   version = "1.2";
 
@@ -13,8 +13,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "raphael-proust";
-    repo = pname;
-    tag = version;
+    repo = "odds";
+    tag = finalAttrs.version;
     hash = "sha256-tPDowkpsJQKCoeuXOb9zPORoudUvkRBZ3OzkH2QE2zg=";
   };
 
@@ -32,4 +32,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.Denommus ];
   };
-}
+})

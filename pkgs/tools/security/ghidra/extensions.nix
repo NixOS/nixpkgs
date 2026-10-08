@@ -13,6 +13,8 @@ lib.makeScope newScope (self: {
 
   findcrypt = self.callPackage ./extensions/findcrypt { };
 
+  ghidralib = self.callPackage ./extensions/ghidralib { };
+
   ghidra-delinker-extension = self.callPackage ./extensions/ghidra-delinker-extension {
     inherit ghidra;
   };
@@ -32,6 +34,8 @@ lib.makeScope newScope (self: {
   machinelearning = self.callPackage ./extensions/machinelearning { inherit ghidra; };
 
   ret-sync = self.callPackage ./extensions/ret-sync { };
+
+  reva = self.callPackage ./extensions/reva { };
 
   sleighdevtools = self.callPackage ./extensions/sleighdevtools { inherit ghidra; };
 

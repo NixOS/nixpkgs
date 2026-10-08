@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10,
+  pnpm_11,
   python3,
   nodejs,
   node-gyp,
@@ -33,11 +33,11 @@
   pango,
   perl,
   pixman,
-  vips_8_17, # thumbnail generation fails with vips 8.18
+  vips,
   buildPackages,
 }:
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -45,12 +45,12 @@ let
       buildPackages.buildGoModule (
         args
         // rec {
-          version = "0.25.5";
+          version = "0.28.2";
           src = fetchFromGitHub {
             owner = "evanw";
             repo = "esbuild";
             tag = "v${version}";
-            hash = "sha256-jemGZkWmN1x2+ZzJ5cLp3MoXO0oDKjtZTmZS9Be/TDw=";
+            hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
           };
           vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
         }
@@ -77,14 +77,14 @@ let
   # The geodata website is not versioned, so we use the internet archive
   geodata =
     let
-      timestamp = "20260408011516";
+      timestamp = "20260911002105";
       date =
         "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
         + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
     in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-WSKaTn54+8ckXPsk3jsOJ4yCsO0jLKf3y+apqwNlHc4=";
+        outputHash = "sha256-zxMbIEFF5MA2qkAbXs4sD4EQFWfCYt8t3AaC0m0LtEY=";
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -106,29 +106,23 @@ let
         unzip ./cities500.zip -d $out/
         echo "${date}" > $out/geodata-date.txt
       '';
-
-  # Without this thumbnail generation for raw photos fails with
-  #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
-  vips' = vips_8_17.overrideAttrs (prev: {
-    mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
-  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.7.5";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EC1IXM7KObAWfwG5KEao5VDp79d8WGNEI7E89lLOJ44=";
+    hash = "sha256-napG+EMZbbbeq7R8FtnuDsDwdpxItkwTVWztnw07DfA=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-FEesjbhxP7ydFfNshF3iFIk9N3Z53jrEZ9DRBjgEfs0=";
+    fetcherVersion = 4;
+    hash = "sha256-N6eaRcJxik1wzGE1H/LnKR1JUcSc8iswPFkIGymOKVA=";
   };
 
   postPatch = ''
@@ -137,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
+    binaryen
+    extism-js
     nodejs
     pkg-config
     pnpmConfigHook
@@ -160,7 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     pixman
     # Required for sharp
-    vips'
+    vips
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;
@@ -174,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     # If exiftool-vendored.pl isn't found, exiftool is searched for on the PATH
     rm node_modules/.pnpm/node_modules/exiftool-vendored.pl
 
-    pnpm --filter immich build
+    pnpm --filter immich... --filter immich-web... --filter @immich/plugin-core... build
 
     runHook postBuild
   '';
@@ -188,6 +184,9 @@ stdenv.mkDerivation (finalAttrs: {
     # upstream uses pnpm deploy to build their docker images
     pnpm --filter immich deploy --prod --no-optional "$packageOut"
 
+    # build sharp from source
+    pnpm --dir "$packageOut/node_modules/sharp" exec npm run build
+
     # remove build artifacts that bloat the closure
     find "$packageOut/node_modules" \( \
       -name config.gypi \
@@ -196,9 +195,9 @@ stdenv.mkDerivation (finalAttrs: {
       -o -name '*.target.mk' \
     \) -exec rm -r {} +
 
-    mkdir -p "$packageOut/build"
-    ln -s '${finalAttrs.passthru.plugins}' "$packageOut/build/corePlugin"
-    ln -s '${finalAttrs.passthru.web}' "$packageOut/build/www"
+    mkdir -p "$packageOut/build/plugins/immich-plugin-core"
+    cp -r packages/plugin-core/{dist,manifest.json} "$packageOut/build/plugins/immich-plugin-core/"
+    cp -r web/build "$packageOut/build/www"
     ln -s '${geodata}' "$packageOut/build/geodata"
 
     echo '${builtins.toJSON buildLock}' > "$packageOut/build/build-lock.json"
@@ -231,66 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
       immich = finalAttrs.finalPackage;
     };
 
-    plugins = stdenv.mkDerivation {
-      pname = "immich-plugins";
-      inherit (finalAttrs) version src pnpmDeps;
-
-      nativeBuildInputs = [
-        binaryen
-        extism-js
-        nodejs
-        pnpmConfigHook
-        pnpm
-      ];
-
-      buildPhase = ''
-        runHook preBuild
-
-        pnpm --filter plugins build
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        cd plugins
-        mkdir $out
-        cp -r dist manifest.json $out
-
-        runHook postInstall
-      '';
-    };
-
-    web = stdenv.mkDerivation {
-      pname = "immich-web";
-      inherit (finalAttrs) version src pnpmDeps;
-
-      nativeBuildInputs = [
-        nodejs
-        pnpmConfigHook
-        pnpm
-      ];
-
-      buildPhase = ''
-        runHook preBuild
-
-        pnpm --filter @immich/sdk build
-        pnpm --filter immich-web build
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        cd web
-        cp -r build $out
-
-        runHook postInstall
-      '';
-    };
-
     inherit
       geodata
       pnpm
@@ -306,6 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-40 # geonames
     ];
     maintainers = with lib.maintainers; [
+      diogotcorreia
       dotlambda
       jvanbruegge
       Scrumplex

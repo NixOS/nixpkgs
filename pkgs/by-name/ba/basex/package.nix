@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "basex";
-  version = "12.3";
+  version = "12.4";
 
   src = fetchurl {
     url = "http://files.basex.org/releases/${finalAttrs.version}/BaseX${
       builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.zip";
-    hash = "sha256-5BLKv6lNk7keHO/5mcI1+DdCbgJa5/GtnvYEz7LtQFA=";
+    hash = "sha256-qIaAy05V5JUZ+YuuesFecCvdpCYoZm0/dWFnInpHvKE=";
   };
 
   nativeBuildInputs = [

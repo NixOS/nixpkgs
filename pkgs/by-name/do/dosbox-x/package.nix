@@ -2,12 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
+  writers,
   alsa-lib,
   autoreconfHook,
   ffmpeg,
   fluidsynth,
   freetype,
   glib,
+  libGL,
   libicns,
   libpcap,
   libpng,
@@ -25,15 +28,23 @@
   zlib,
 }:
 
+let
+  check-dosbox-conf = writers.writeText "check-dosbox.conf" ''
+    [autoexec]
+    MOUNT C .
+
+    VER > C:\BLUB
+  '';
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2026.03.29";
+  version = "2026.08.31";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-hOP+hmvVCdFSqXnD6+6OVIQ7allEidKt9W9AT704htA=";
+    hash = "sha256-RYnepkAHwLOQFBXNZSPkH4L9bi3BkVC2RKd+YReGMqU=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
@@ -78,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    libGL
     libxkbfile
     libxrandr
   ];
@@ -85,11 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL2_net}/include/SDL2";
 
-  configureFlags = [ "--enable-sdl2" ];
+  configureFlags = [ (lib.strings.enableFeature true "sdl2") ];
 
   enableParallelBuilding = true;
-
-  hardeningDisable = [ "format" ]; # https://github.com/joncampbell123/dosbox-x/issues/4436
 
   # Build optional App Bundle target, which needs at least one arch-suffixed binary
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -110,10 +120,36 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper $out/Applications/dosbox-x.app/Contents/MacOS/dosbox-x $out/bin/dosbox-x
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    # Version output on stderr, program returns status code 1
-    command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+  # Can't personally check Darwin anymore
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    env \
+      SDL_AUDIODRIVER=dummy \
+      SDL_VIDEODRIVER=dummy \
+      $out/bin/dosbox-x \
+        -nopromptfolder -nogui \
+        -exit \
+        -machine pc98 \
+        -conf ${check-dosbox-conf}
+
+    grep -q 'Reported DOS version' BLUB
+
+    runHook postInstallCheck
+  '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      # Version output on stderr, program returns status code 1
+      command = "${lib.getExe finalAttrs.finalPackage} -version 2>&1 || true";
+    };
+    updateScript = gitUpdater {
+      rev-prefix = "dosbox-x-v";
+      ignoredVersions = "-osfree$";
+    };
   };
 
   meta = {

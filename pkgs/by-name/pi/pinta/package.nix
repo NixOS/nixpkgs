@@ -8,6 +8,7 @@
   gtk4,
   glib,
   libadwaita,
+  pango,
   intltool,
   wrapGAppsHook4,
   nix-update-script,
@@ -15,7 +16,6 @@
   # Darwin transitive deps
   graphene,
   gettext,
-  pango,
   gdk-pixbuf,
   cairo,
   harfbuzz,
@@ -46,13 +46,13 @@ buildDotnetModule rec {
     gtk4
     glib
     libadwaita
+    pango
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Transitive dylib deps that Pinta's NativeImportResolver dlopen's by bare name.
     # These are not pulled in by wrapGAppsHook4's LD_LIBRARY_PATH on Darwin, so symlink is needed.
     graphene
     gettext
-    pango
     gdk-pixbuf
     cairo
     harfbuzz
@@ -73,7 +73,7 @@ buildDotnetModule rec {
 
   projectFile = "Pinta";
 
-  env = lib.optionalAttrs (!stdenv.isDarwin) {
+  env = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
     LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
   };
 
@@ -93,7 +93,7 @@ buildDotnetModule rec {
     mkdir -p "$out/share/icons"
     cp -r "$out/lib/Pinta/icons/." "$out/share/icons/"
   ''
-  + lib.optionalString (!stdenv.isDarwin) ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     dotnet build installer/linux/install.proj \
       -target:Install \
       -p:ContinuousIntegrationBuild=true \
@@ -102,7 +102,7 @@ buildDotnetModule rec {
       -p:PublishDir="$out/lib/Pinta" \
       -p:InstallPrefix="$out"
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Symlink all dylibs from runtimeDeps into the assembly dir.
     # GirCore and Pinta's own NativeImportResolver both search here by bare name.
     for dir in ${lib.concatMapStringsSep " " (d: "${lib.getLib d}/lib") runtimeDeps}; do

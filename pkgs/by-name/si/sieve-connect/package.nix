@@ -63,13 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Client for the MANAGESIEVE Protocol";
     longDescription = ''
       This is sieve-connect. A client for the ManageSieve protocol,
-      as specifed in RFC 5804. Historically, this was MANAGESIEVE as
+      as specified in RFC 5804. Historically, this was MANAGESIEVE as
       implemented by timsieved in Cyrus IMAP.
     '';
     homepage = "https://github.com/philpennock/sieve-connect";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ das_j ];
+    maintainers = [ ];
     mainProgram = "sieve-connect";
   };
 })

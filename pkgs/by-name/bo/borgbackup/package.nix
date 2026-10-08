@@ -22,14 +22,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "borgbackup";
-  version = "1.4.4";
+  version = "1.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "borgbackup";
     repo = "borg";
     tag = finalAttrs.version;
-    hash = "sha256-pMZr9cVr84b948b5Iuevpy6AtMeYo/Ma8uFLuagAYy4=";
+    hash = "sha256-jkFF+nNZL8lEXgworFLNoEKTr2LgCat1fOFlTh7AWs4=";
   };
 
   postPatch = ''
@@ -70,11 +70,15 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     acl
   ];
 
-  dependencies = with python.pkgs; [
-    msgpack
-    packaging
-    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
-  ];
+  dependencies =
+    with python.pkgs;
+    [
+      msgpack
+      packaging
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pyfuse3
+    ];
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
@@ -99,7 +103,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     py
     pytest-benchmark
     pytest-xdist
-    pytestCheckHook
+    pytest9_0CheckHook
     versionCheckHook
   ];
 

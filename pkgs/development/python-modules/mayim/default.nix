@@ -44,11 +44,14 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
   ]
-  ++ (with optional-dependencies; [
-    postgres
-    mysql
-    sqlite
-  ]);
+  ++ (
+    with optional-dependencies;
+    lib.concatLists [
+      postgres
+      mysql
+      sqlite
+    ]
+  );
 
   pythonImportsCheck = [ "mayim" ];
 

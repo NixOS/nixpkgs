@@ -35,8 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/zineland/zine";
     changelog = "https://github.com/zineland/zine/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      dit7ya
+    maintainers = [
     ];
     mainProgram = "zine";
   };

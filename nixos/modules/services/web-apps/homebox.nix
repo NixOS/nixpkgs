@@ -1,12 +1,14 @@
 {
   lib,
   config,
+  options,
   pkgs,
   ...
 }:
 let
   cfg = config.services.homebox;
   inherit (lib)
+    literalExpression
     mkEnableOption
     mkPackageOption
     mkDefault
@@ -17,6 +19,11 @@ let
 
   defaultUser = "homebox";
   defaultGroup = "homebox";
+
+  pepperDefault =
+    (cfg.secrets ? HBOX_AUTH_API_KEY_PEPPER)
+    && (cfg.secrets.HBOX_AUTH_API_KEY_PEPPER == "/var/lib/homebox/api-pepper-secret");
+  opts = options.services.homebox;
 in
 {
   options.services.homebox = {
@@ -61,6 +68,37 @@ in
         '';
       };
     };
+    secrets = mkOption {
+      type = types.submodule {
+        options = {
+          HBOX_AUTH_API_KEY_PEPPER = mkOption {
+            type = types.externalPath;
+            default = "/var/lib/homebox/api-pepper-secret";
+            description = ''
+              Path to the API key pepper secret file (required for homebox to start).
+            '';
+            example = "/run/secrets/homebox-api-pepper";
+          };
+        };
+        freeformType = types.attrsOf types.externalPath;
+      };
+
+      default = { };
+      description = ''
+        This follows the same structure as {option}`${opts.settings}`
+        but the value of each key is a path.
+
+        The specified secret path is then read by systemd via [`LoadCredential=`]
+        and templated into {option}`${opts.settings}` for you.
+
+        [`LoadCredential=`]: https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#Credentials
+      '';
+      example = literalExpression ''
+        {
+          HBOX_AUTH_API_KEY_PEPPER = "/run/secrets/homebox-api-pepper";
+        }
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -92,7 +130,7 @@ in
         HBOX_DATABASE_DRIVER = "sqlite3";
         HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
         HBOX_OPTIONS_ALLOW_REGISTRATION = "false";
-        HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
+        HBOX_OPTIONS_GITHUB_RELEASE_CHECK = "false";
         HBOX_MODE = "production";
         # Fix this startup issue:
         #   failed to create modcache index dir: mkdir /var/empty/.cache: read-only file system
@@ -121,58 +159,92 @@ in
         }
       ];
     };
-    systemd.services.homebox = {
-      requires = lib.optional cfg.database.createLocally "postgresql.target";
-      after = lib.optional cfg.database.createLocally "postgresql.target";
-      environment = lib.filterAttrs (_: v: v != null) cfg.settings;
-      preStart = ''
-        "${pkgs.coreutils}/bin/rm" -rf /var/lib/homebox/tmp
-        "${pkgs.coreutils}/bin/mkdir" -p /var/lib/homebox/tmp
+    systemd.services.homebox-setup = mkIf pepperDefault {
+      script = ''
+        if [ ! -r "$STATE_DIRECTORY"/api-pepper-secret ]; then
+          umask 0277
+          openssl rand -base64 48 > "$STATE_DIRECTORY"/api-pepper-secret
+        fi
       '';
+      path = [
+        pkgs.openssl
+      ];
       serviceConfig = {
+        Type = "oneshot";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = lib.getExe cfg.package;
-        LimitNOFILE = "1048576";
-        PrivateTmp = true;
-        PrivateDevices = true;
-        Restart = "always";
         StateDirectory = "homebox";
-
-        # Hardening
-        CapabilityBoundingSet = "";
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        PrivateUsers = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProcSubset = "pid";
-        ProtectSystem = "strict";
-        RestrictAddressFamilies = [
-          "AF_UNIX"
-          "AF_INET"
-          "AF_INET6"
-          "AF_NETLINK"
-        ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service"
-          "@pkey"
-        ];
-        RestrictSUIDSGID = true;
-        PrivateMounts = true;
-        UMask = "0077";
       };
-      wantedBy = [ "multi-user.target" ];
     };
+    systemd.services.homebox =
+      let
+        deps =
+          lib.optionals pepperDefault [
+            "homebox-setup.service"
+          ]
+          ++ lib.optionals cfg.database.createLocally [
+            "postgresql.target"
+          ];
+      in
+      {
+        requires = deps;
+        after = deps;
+        environment = lib.filterAttrs (_: v: v != null) cfg.settings;
+        preStart = ''
+          "${pkgs.coreutils}/bin/rm" -rf /var/lib/homebox/tmp
+          "${pkgs.coreutils}/bin/mkdir" -p /var/lib/homebox/tmp
+        '';
+        script = ''
+          ${lib.strings.concatLines (
+            lib.mapAttrsToList (name: _: "export ${name}=$(<\"$CREDENTIALS_DIRECTORY\"/${name})") cfg.secrets
+          )}
+
+          exec ${lib.getExe cfg.package}
+        '';
+        serviceConfig = {
+          User = cfg.user;
+          Group = cfg.group;
+          LoadCredential = (lib.mapAttrsToList (name: path: "${name}:${path}") cfg.secrets);
+          LimitNOFILE = "1048576";
+          PrivateTmp = true;
+          PrivateDevices = true;
+          Restart = "always";
+          StateDirectory = "homebox";
+
+          # Hardening
+          CapabilityBoundingSet = "";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          PrivateUsers = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          ProtectSystem = "strict";
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "@pkey"
+          ];
+          RestrictSUIDSGID = true;
+          PrivateMounts = true;
+          UMask = "0077";
+        };
+        wantedBy = [ "multi-user.target" ];
+      };
   };
   meta.maintainers = with lib.maintainers; [
     patrickdag

@@ -2,30 +2,18 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
-let
-  inherit (stdenvNoCC.hostPlatform) system;
-  version = "17.2.17";
-  source =
-    {
-      x86_64-linux = {
-        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-x86_64.tar.xz";
-        hash = "sha256-9elOokCY1bxzG2iL4iOODC/7qavwn77a0zOEBpAtT8Q=";
-      };
-      aarch64-linux = {
-        url = "https://github.com/frida/frida/releases/download/${version}/frida-core-devkit-${version}-linux-arm64.tar.xz";
-        hash = "sha256-jk8BKmp3VNvCYK6kgGouFOBECoDaGiWQ8EzZvBwL7cc=";
-      };
-    }
-    .${system} or (throw "Unsupported system: ${system}");
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libfrida-core";
-  inherit version;
+  version = "17.17.0";
 
-  src = fetchurl {
-    inherit (source) url hash;
-  };
+  src =
+    finalAttrs.passthru.sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
   dontUnpack = true;
 
   installPhase = ''
@@ -37,16 +25,48 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru = {
+    sources = {
+      x86_64-linux = fetchurl {
+        url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-linux-x86_64.tar.xz";
+        hash = "sha256-SD4aJZRc66pp5hwJ14BGksQtI0yrDFgmGnM4IWMCei4=";
+      };
+      aarch64-linux = fetchurl {
+        url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-linux-arm64.tar.xz";
+        hash = "sha256-k6zkhO1hCWG6FTsXbGNjpaxZih2zskXveFF1qCKVaLA=";
+      };
+      aarch64-darwin = fetchurl {
+        url = "https://github.com/frida/frida/releases/download/${finalAttrs.version}/frida-core-devkit-${finalAttrs.version}-macos-arm64.tar.xz";
+        hash = "sha256-QBFjimGpADNntHUWjG5DsvX3LRDuKpJcRF9NrqGlBQo=";
+      };
+    };
+    updateScript = writeShellScript "update-libfrida-core" ''
+      set -o errexit
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
+      NEW_VERSION=$(curl --silent ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} https://api.github.com/repos/frida/frida/releases/latest | jq '.tag_name' --raw-output)
+      if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
+        echo "The new version is the same as the old version."
+        exit 0
+      fi
+      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+        update-source-version "libfrida-core" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+      done
+    '';
+  };
+
   meta = {
     description = "Frida core library intended for static linking into bindings";
     homepage = "https://frida.re/";
     changelog = "https://frida.re/news/";
     license = lib.licenses.wxWindowsException31;
     maintainers = with lib.maintainers; [ nilathedragon ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = builtins.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pygreat";
-  version = "2024.0.5";
+  version = "2026.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "libgreat";
     tag = "v${version}";
-    hash = "sha256-2PFeCG7m8qiK3eBX2838P6ZsLoQxcJBG+/TppUMT6dE=";
+    hash = "sha256-m+s2TAJK7UhKWbuSd5ec1O40WeMXxJyTD9yqPOr0LEM=";
   };
 
   sourceRoot = "${src.name}/host";
@@ -25,8 +25,6 @@ buildPythonPackage rec {
       --replace-fail '"setuptools-git-versioning<2"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
-
-  pythonRemoveDeps = [ "backports.functools_lru_cache" ];
 
   build-system = [ setuptools ];
 

@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchurl,
-  libsForQt5,
+  qt6,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,16 +16,20 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    libsForQt5.qtbase
+    qt6.qtbase
   ];
 
   preConfigure = ''
     cd Src/
   '';
+
+  passthru.tests = {
+    veroroute = nixosTests.veroroute;
+  };
 
   meta = {
     description = "Qt based Veroboard/Perfboard/PCB layout and routing application";

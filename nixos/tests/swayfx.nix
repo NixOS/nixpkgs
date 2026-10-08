@@ -2,6 +2,7 @@
 {
   name = "swayfx";
   meta = {
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
     maintainers = [ ];
   };
 
@@ -149,7 +150,7 @@
       machine.send_chars("test-x11\n")
       machine.wait_for_file("/tmp/test-x11-exit-ok")
       print(machine.succeed("cat /tmp/test-x11.out"))
-      machine.copy_from_vm("/tmp/test-x11.out")
+      machine.copy_from_machine("/tmp/test-x11.out")
       machine.screenshot("alacritty_glinfo")
       machine.succeed("pkill alacritty")
 
@@ -161,7 +162,7 @@
       machine.send_chars("test-wayland\n")
       machine.wait_for_file("/tmp/test-wayland-exit-ok")
       print(machine.succeed("cat /tmp/test-wayland.out"))
-      machine.copy_from_vm("/tmp/test-wayland.out")
+      machine.copy_from_machine("/tmp/test-wayland.out")
       machine.screenshot("foot_wayland_info")
       machine.send_key("alt-shift-q")
       machine.wait_until_fails("pgrep foot")

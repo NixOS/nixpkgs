@@ -1,4 +1,5 @@
 {
+  lib,
   mkKdeDerivation,
   python3,
 }:
@@ -18,4 +19,7 @@ mkKdeDerivation {
   ];
 
   setupHook = ./ecm-hook.sh;
+
+  # Pure CMake macros, also used by non-KDE packages on all platforms.
+  meta.platforms = lib.platforms.all;
 }

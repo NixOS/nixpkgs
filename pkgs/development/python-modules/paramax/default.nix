@@ -46,7 +46,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    description = "Small library of paramaterizations and parameter constraints for PyTrees";
+    description = "Small library of parameterizations and parameter constraints for PyTrees";
     homepage = "https://github.com/danielward27/paramax";
     changelog = "https://github.com/danielward27/paramax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;

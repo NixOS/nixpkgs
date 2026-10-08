@@ -2,33 +2,39 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  uv-build,
   pytestCheckHook,
   pytest-cov-stub,
   multidict,
-  xmljson,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "latex2mathml";
-  version = "3.79.0";
+  version = "3.81.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "roniemartinez";
     repo = "latex2mathml";
     tag = finalAttrs.version;
-    hash = "sha256-/ixS6TlovxOZgBqDq1t6KzcG6EKBSYwf3c+drHjQec4=";
+    hash = "sha256-NY8SVEN9i8OcT8YS8887/TgLuIYAsS26me2BqGW0ubs=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
     multidict
-    xmljson
+    syrupy
   ];
+
+  # nixpkgs is only at uv_build 0.10.0
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.10.11,<0.11.0' 'uv_build'
+  '';
 
   pythonImportsCheck = [ "latex2mathml" ];
 

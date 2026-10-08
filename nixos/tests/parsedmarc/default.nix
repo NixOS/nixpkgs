@@ -93,8 +93,8 @@ in
     testScript =
       { nodes, ... }:
       let
-        esPort = toString nodes.parsedmarc.config.services.elasticsearch.port;
-        valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.config.services.elasticsearch.package.version "7") ".value";
+        esPort = toString nodes.parsedmarc.services.elasticsearch.port;
+        valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.services.elasticsearch.package.version "7") ".value";
       in
       ''
         parsedmarc.start()
@@ -143,7 +143,7 @@ in
 
             networking.extraHosts = ''
               127.0.0.1 ${parsedmarcDomain}
-              ${nodes.mail.config.networking.primaryIPAddress} ${mailDomain}
+              ${nodes.mail.networking.primaryIPAddress} ${mailDomain}
             '';
 
             services.parsedmarc = {
@@ -170,7 +170,7 @@ in
 
             networking.extraHosts = ''
               127.0.0.1 ${mailDomain}
-              ${nodes.parsedmarc.config.networking.primaryIPAddress} ${parsedmarcDomain}
+              ${nodes.parsedmarc.networking.primaryIPAddress} ${parsedmarcDomain}
             '';
 
             services.dovecot2 = {
@@ -204,8 +204,8 @@ in
       testScript =
         { nodes, ... }:
         let
-          esPort = toString nodes.parsedmarc.config.services.elasticsearch.port;
-          valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.config.services.elasticsearch.package.version "7") ".value";
+          esPort = toString nodes.parsedmarc.services.elasticsearch.port;
+          valueObject = lib.optionalString (lib.versionAtLeast nodes.parsedmarc.services.elasticsearch.package.version "7") ".value";
         in
         ''
           mail.start()

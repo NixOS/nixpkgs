@@ -14,6 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MhYfgzbGPmrhPx89EpObrEkxaII7uz4TbWXeEGF7Xws=";
   };
 
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
   preInstall = ''

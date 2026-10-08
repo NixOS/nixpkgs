@@ -4,6 +4,7 @@ let
     "bat"
     "bottom"
     "btop"
+    "delta"
     "element"
     "grub"
     "hyprland"
@@ -88,6 +89,14 @@ let
       repo = "btop";
       rev = "f437574b600f1c6d932627050b15ff5153b58fa3";
       hash = "sha256-mEGZwScVPWGu+Vbtddc/sJ+mNdD2kKienGZVUcTSl+c=";
+    };
+
+    delta = fetchFromGitHub {
+      name = "delta";
+      owner = "catppuccin";
+      repo = "delta";
+      rev = "011516f5d14f66b771b3e716f29c77231e008c74";
+      hash = "sha256-lztkxX9O41YossvRzpR7tqxMhDNT1Efy2JvkCwtsiXQ=";
     };
 
     element = fetchFromGitHub {
@@ -267,6 +276,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     + lib.optionalString (lib.elem "bottom" themeList) ''
       mkdir -p "$out/bottom"
       cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom"
+
+    ''
+    + lib.optionalString (lib.elem "delta" themeList) ''
+      mkdir -p "$out/delta"
+      cp "${sources.delta}/catppuccin.gitconfig" "$out/delta"
 
     ''
     + lib.optionalString (lib.elem "element" themeList) ''

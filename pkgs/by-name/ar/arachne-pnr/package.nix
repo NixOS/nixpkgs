@@ -5,15 +5,18 @@
   icestorm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "arachne-pnr";
   version = "2019.07.29";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo = "arachne-pnr";
     rev = "c40fb2289952f4f120cc10a5a4c82a6fb88442dc";
-    sha256 = "0lg9rccr486cvips3jf289af2b4a2j9chc8iqnkhykgi1hw4pszc";
+    hash = "sha256-7OtLOAzxTQ+nxRExyJIUiizhVELCyaFv3MwgkhnL6VE=";
   };
 
   enableParallelBuilding = true;
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace ./Makefile \
-      --replace 'echo UNKNOWN' 'echo ${lib.substring 0 10 src.rev}'
+      --replace 'echo UNKNOWN' 'echo ${lib.substring 0 10 finalAttrs.src.rev}'
   '';
 
   meta = {
@@ -48,4 +51,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

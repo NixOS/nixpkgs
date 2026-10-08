@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   metakernel,
   svgwrite,
   ipywidgets,
@@ -9,19 +10,23 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "calysto";
   version = "1.0.6";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Calysto";
     repo = "calysto";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lr/cHFshpFs/PGMCsa3FKMRPTP+eE9ziH5XCpV+KzO8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     metakernel
     svgwrite
     ipywidgets
@@ -40,4 +45,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
   };
-}
+})

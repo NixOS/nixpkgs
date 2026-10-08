@@ -17,7 +17,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "irpf";
-  version = "2026-1.1";
+  version = "2026-1.5";
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     in
     fetchzip {
       url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
-      hash = "sha256-/UB8mWB3yaT+mDa3mqGm2ULqDdNcmQu+cHKNdKQa/ug=";
+      hash = "sha256-/y0XE+i+Sug/2TfqQuPQesYaDVn41v3hkikU/hmxxNE=";
     };
 
   nativeBuildInputs = [
@@ -86,9 +86,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Brazillian government application for reporting income tax";
+    description = "Brazilian government application for reporting income tax";
     longDescription = ''
-      Brazillian government application for reporting income tax.
+      Brazilian government application for reporting income tax.
 
       IRFP - Imposto de Renda Pessoa Física - Receita Federal do Brasil.
     '';

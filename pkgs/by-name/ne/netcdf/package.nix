@@ -7,8 +7,8 @@
   bzip2,
   libzip,
   zstd,
-  szipSupport ? false,
-  szip,
+  szipSupport ? hdf5.szipSupport,
+  libaec,
   libxml2,
   m4,
   curl, # for DAP
@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.9.3";
+  version = "4.10.1";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/netcdf-c-${finalAttrs.version}.tar.gz";
-    hash = "sha256-pHQUmETmFEVmZz+s8Jf+olPchDw3vAp9PeBH3Irdpd0=";
+    hash = "sha256-2ztp/0pe4afXmlw2Zk0hKLdSwmbpZjafz3MR7F+SdWQ=";
   };
 
   postPatch = ''
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     zstd
   ]
-  ++ lib.optional szipSupport szip
+  ++ lib.optional szipSupport libaec
   ++ lib.optional mpiSupport mpi;
 
   strictDeps = true;
@@ -101,5 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.unidata.ucar.edu/software/netcdf/";
     changelog = "https://docs.unidata.ucar.edu/netcdf-c/${finalAttrs.version}/RELEASE_NOTES.html";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      doronbehar
+    ];
   };
 })

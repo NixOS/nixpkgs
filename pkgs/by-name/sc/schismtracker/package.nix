@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schismtracker";
-  version = "20251014";
+  version = "20260524";
 
   src = fetchFromGitHub {
     owner = "schismtracker";
     repo = "schismtracker";
     tag = finalAttrs.version;
-    hash = "sha256-N1wCOR7Su3PllzrffkwB6LfhZlol1/4dVegySzJlH28=";
+    hash = "sha256-BohXd4AafM2odrAO/d25B7ZBKDLrmdzOtshlIJeYtZI=";
   };
 
   # If we let it try to get the version from git, it will fail and fall back
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://schismtracker.org/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ftrvxmtrx ];
+    maintainers = [ ];
     mainProgram = "schismtracker";
   };
 })

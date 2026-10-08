@@ -11,16 +11,15 @@
   xwayland,
   withSystemd ? true,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwayland-satellite";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BUE41HjLIGPjq3U8VXPjf8asH8GaMI7FYdgrIHKFMXA=";
+    hash = "sha256-Mb7jpqnrcYCfNSItIkkHpuR3YxWFxPuIBfcwNKlRBkk=";
   };
 
   postPatch = ''
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
-  cargoHash = "sha256-16L6gsvze+m7XCJlOA1lsPNELE3D364ef2FTdkh0rVY=";
+  cargoHash = "sha256-Saa3SRsQuY6u6pfBGezaEExOt/ReblnrG7pAXjA6Dk8=";
 
   nativeBuildInputs = [
     installShellFiles

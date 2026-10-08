@@ -15,17 +15,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-store";
-  version = "1.0.10";
+  version = "1.8.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-store";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-miR50DtNaUOOoVZ25vD0WuQ+PN/8DYy2cPFGcUE7Y+Y=";
+    hash = "sha256-z2w+FYNGsvRzCRp5EQ1QwrITHso2HhCAVz19M50Tk48=";
   };
 
-  cargoHash = "sha256-AsppupxVQlzKbdd+qt9oMZa3flcpC8fUwN3Lw0cgzW8=";
+  cargoHash = "sha256-MxLb1ur7IwVAfAxViXXaFoVN35vhuIF1S1HRvg3wPo4=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     just

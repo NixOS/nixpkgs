@@ -1,19 +1,22 @@
 diff --git a/Makefile.ckati b/Makefile.ckati
-index e4067bb..15518f3 100644
+index d585106..7e15d08 100644
 --- a/Makefile.ckati
 +++ b/Makefile.ckati
-@@ -102,14 +102,8 @@ $(KATI_CXX_TEST_EXES): $(KATI_BIN_PATH)/%: $(KATI_INTERMEDIATES_PATH)/%.o
+@@ -101,16 +101,8 @@ $(KATI_CXX_TEST_EXES): $(KATI_BIN_PATH)/%: $(KATI_INTERMEDIATES_PATH)/%.o
  	$(KATI_LD) $^ -o $@ $(KATI_LIBS)
  
  # Rule to generate version.cc
--KATI_GIT_DIR := $(shell git -C $(KATI_SRC_PATH) rev-parse --show-toplevel)
+-KATI_GIT_DIR := $(shell cd $(KATI_SRC_PATH); realpath `git rev-parse --git-dir`)
+ KATI_VERSION_DEPS :=
 -ifneq ($(KATI_GIT_DIR),)
--KATI_VERSION_DEPS := $(KATI_GIT_DIR)/.git/HEAD $(KATI_GIT_DIR)/.git/index
+-KATI_VERSION_DEPS := $(wildcard $(KATI_GIT_DIR)/HEAD $(KATI_GIT_DIR)/index)
+-endif
+-ifneq ($(KATI_VERSION_DEPS),)
 -KATI_VERSION := $(shell git -C $(KATI_GIT_DIR) rev-parse HEAD)
 -else
- KATI_VERSION_DEPS :=
- KATI_VERSION := unknown
+-KATI_VERSION := unknown
 -endif
++KATI_VERSION := @version@
  $(KATI_INTERMEDIATES_PATH)/version.cc: $(KATI_VERSION_DEPS)
  	@mkdir -p $(dir $@)
  	echo '// +build ignore' > $@

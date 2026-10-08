@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pdftoipe";
-  version = "7.2.29.1";
+  version = "7.2.29.2";
 
   src = fetchFromGitHub {
     owner = "otfried";
     repo = "ipe-tools";
     rev = "v${version}";
-    hash = "sha256-6FI0ZLRrDmNFAKyht7hB94MsCy+TasD6Mb/rx6sdCdg=";
+    hash = "sha256-BLZKOq7/3QSuwR0yjrDiiIh9N93qk8ihbEPIQ2h+Ffc=";
   };
 
   sourceRoot = "${src.name}/pdftoipe";

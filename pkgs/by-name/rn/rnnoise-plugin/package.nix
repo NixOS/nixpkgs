@@ -5,7 +5,7 @@
   fetchFromGitHub,
   freetype,
   gtk3-x11,
-  pcre,
+  pcre2,
   pkg-config,
   webkitgtk_4_1,
   libxrandr,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     freetype
     gtk3-x11
-    pcre
+    pcre2
     libx11
     libxrandr
   ]
@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Real-time noise suppression plugin for voice based on Xiph's RNNoise";
     homepage = "https://github.com/werman/noise-suppression-for-voice";
     license = lib.licenses.gpl3;

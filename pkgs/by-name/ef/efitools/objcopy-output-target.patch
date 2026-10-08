@@ -1,0 +1,15 @@
+Use --output-target instead of --target in objcopy invocation.
+Newer binutils dropped support for --target as an output format specifier.
+
+Bug-Debian: https://bugs.debian.org/1122408
+--- a/Make.rules
++++ b/Make.rules
+@@ -26,7 +26,7 @@
+ LDSCRIPT	= elf_$(ARCH)_efi.lds
+ LDFLAGS		+= -shared -Bsymbolic $(CRTOBJS) -L $(CRTPATH) -L /usr/lib -L /usr/lib64 -T $(LDSCRIPT)
+ LOADLIBES	= -lefi -lgnuefi $(shell $(CC) $(ARCH3264) -print-libgcc-file-name)
+-FORMAT		= --target=efi-app-$(ARCH)
++FORMAT		= --output-target=efi-app-$(ARCH)
+ OBJCOPY		= objcopy
+ MYGUID		= 11111111-2222-3333-4444-123456789abc
+ INSTALL		= install

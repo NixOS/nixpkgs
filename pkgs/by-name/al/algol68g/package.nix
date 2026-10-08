@@ -15,12 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.11.3";
+  version = "3.12.3";
 
   src = fetchurl {
-    # Uses archive.org because the original site removes older versions.
-    url = "https://web.archive.org/web/20260419212716/https://jmvdveer.home.xs4all.nl/algol68g-3.11.3.tar.gz";
-    hash = "sha256-P8hKm5lFG3P8+OigX2mFPzL1bN30bblAvijajJzTcxA=";
+    url = "https://algol68genie.nl/algol68g-${finalAttrs.version}.tar.gz";
+    hash = "sha256-TS5m+Byi+5j4jiOuQbR159QERfNJsQiGNngtoyC9IrE=";
   };
 
   outputs = [
@@ -48,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall =
     let
       pdfdoc = fetchurl {
-        url = "https://jmvdveer.home.xs4all.nl/learning-algol-68-genie.pdf";
-        hash = "sha256-QCwn1e/lVfTYTeolCFErvfMhvwCgsBnASqq2K+NYmlU=";
+        url = "https://algol68genie.nl/learning-algol-68-genie.pdf";
+        hash = "sha256-BrVjYXd5sknV0+UCRgQMf0H3QMzMQcLhytEEuiTGkLE=";
       };
     in
     lib.optionalString withPDFDoc ''
@@ -57,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = {
-    homepage = "https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html";
+    homepage = "https://algol68genie.nl/en/algol-68-genie/";
     description = "Algol 68 Genie compiler-interpreter";
     longDescription = ''
       Algol 68 Genie (a68g) is a recent checkout hybrid compiler-interpreter,

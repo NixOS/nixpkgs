@@ -7,14 +7,14 @@
   qcheck-core,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "iter";
   version = "1.9";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/c-cube/iter/releases/download/v${version}/iter-${version}.tbz";
+    url = "https://github.com/c-cube/iter/releases/download/v${finalAttrs.version}/iter-${finalAttrs.version}.tbz";
     hash = "sha256-26nluxUuDQ2wBUw2sqlHZ0eihKdzjxXxGVo+IDXH6Wg=";
   };
 
@@ -36,4 +36,4 @@ buildDunePackage rec {
     '';
     license = lib.licenses.bsd2;
   };
-}
+})

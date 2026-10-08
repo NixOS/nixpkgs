@@ -15,7 +15,7 @@
   glibmm,
   gsettings-desktop-schemas,
   hicolor-icon-theme,
-  libappindicator-gtk3,
+  libappindicator,
   libnotify,
   libxdg_basedir,
   wxwidgets_3_2,
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     hicolor-icon-theme
     gsettings-desktop-schemas
-    libappindicator-gtk3
+    libappindicator
     libnotify
     libxdg_basedir
     lsb-release
@@ -87,7 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./no-dl-googletest.patch
-    ./tests-c++17.patch
   ];
 
   postPatch = ''
@@ -95,6 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $x --replace /usr $out
     done
     substituteInPlace package/CMakeLists.txt --replace /etc/xdg/autostart $out/etc/xdg/autostart
+
+    # jsoncpp 1.9.7 only exports std::string_view overloads under C++17
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set(CMAKE_CXX_STANDARD 14)" "set(CMAKE_CXX_STANDARD 17)"
 
     # We don't find the radiotray-ng-notification icon otherwise
     substituteInPlace data/radiotray-ng.desktop \
@@ -104,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # 'wxFont::wxFont(int, int, int, int, bool, const wxString&, wxFontEncoding)' is deprecated

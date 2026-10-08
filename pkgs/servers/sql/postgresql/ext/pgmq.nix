@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgmq";
-  version = "1.11.1";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
-    owner = "tembo-io";
+    owner = "pgmq";
     repo = "pgmq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BPOrQ7HcgTaTJIRzWUCG3iJN3mUjwIxa/wPxvJ1l4o4=";
+    hash = "sha256-0/L/ic6WZ64Uc6JDNnKGVFVpQa2a+3OGIeyQwPFTJ5U=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pgmq-extension";
@@ -23,7 +23,7 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "Lightweight message queue like AWS SQS and RSMQ but on Postgres";
     homepage = "https://tembo.io/pgmq";
-    changelog = "https://github.com/tembo-io/pgmq/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/pgmq/pgmq/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ takeda ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.postgresql;

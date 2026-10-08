@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -109,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Mixed precision matrix multiplication and accumulation";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocwmma";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

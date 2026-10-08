@@ -26,6 +26,7 @@
   libsm,
   libice,
   libxext,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -79,6 +80,7 @@ stdenv.mkDerivation rec {
     asio
     libsm # XXX: these should be propagated by SDL2?
     libice
+    libx11
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libxext;
 

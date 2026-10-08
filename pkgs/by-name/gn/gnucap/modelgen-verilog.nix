@@ -8,13 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnucap-modelgen-verilog";
-  version = "20240220";
+  version = "20260729-dev";
 
   src = fetchgit {
     url = "https://https.git.savannah.gnu.org/git/gnucap/gnucap-modelgen-verilog.git";
     tag = finalAttrs.version;
-    hash = "sha256-hDH+aUuCjr5JK2UOy1diNXJaqt6Lrw4GgiiZmQ/SaQs=";
+    hash = "sha256-GfMfwSZOpi/NKWLporb8pVEeNthxWV7gIxbeiebo3Fk=";
   };
+  patches = [
+    ./modelgen-verilog-format.patch
+  ];
 
   nativeBuildInputs = [
     installShellFiles

@@ -23,12 +23,11 @@ in
 {
   julia_110-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.10.10";
+      version = "1.10.12";
       sha256 = {
-        x86_64-linux = "6a78a03a71c7ab792e8673dc5cedb918e037f081ceb58b50971dfb7c64c5bf81";
-        aarch64-linux = "a4b157ed68da10471ea86acc05a0ab61c1a6931ee592a9b236be227d72da50ff";
-        x86_64-darwin = "942b0d4accc9704861c7781558829b1d521df21226ad97bd01e1e43b1518d3e6";
-        aarch64-darwin = "52d3f82c50d9402e42298b52edc3d36e0f73e59f81fc8609d22fa094fbad18be";
+        x86_64-linux = "03dw4zykf09wnzc7mm8yv6k8hfb2pv0f090db34gyxlx6kz0vidh";
+        aarch64-linux = "18p5h0h00320rfc3yhjgp9z4f5xfgpzimphpzqmn8jbhjqhpn9fc";
+        aarch64-darwin = "0gvqmdnqgs2gv72zsnnppfhbsj7qynvimll9hm4nvm905bp2mcak";
       };
     }) { }
   );
@@ -38,27 +37,25 @@ in
       sha256 = {
         x86_64-linux = "0dfy4wlrz6jbs7kd9r0bjk9d6sqgf4fakrxrnzwfl1bsdlsn6qxk";
         aarch64-linux = "0gk2zxkwz2yyg3im23jpgaxzixchyywm19nbh51szmniah31y1x2";
-        x86_64-darwin = "14nz5qf9raida260srcmh7p41xdylipx5n61nbx9sf12vcyrrd7p";
         aarch64-darwin = "1mrvycjlxs225sspdvvq4qbay1riyyjzqjs1d0xgqdkh6c6kv47d";
       };
     }) { }
   );
   julia_112-bin = wrapJulia (
     callPackage (import ./generic-bin.nix {
-      version = "1.12.6";
+      version = "1.12.7";
       sha256 = {
-        x86_64-linux = "16h77px97qpzfcf5lfrj8kj8baq6fs07sxjasbdsj8cly6zg7axv";
-        aarch64-linux = "16a8gkaqzsxw5z8axdyp13qdlqxapg9q11csgxigs3xxayw976q2";
-        x86_64-darwin = "0b34hb93pyqj4yfljy4krzf182dkwmlj6wkf4j5c7fnn0v3bfw0s";
-        aarch64-darwin = "0cbarn632dxn1x1zi68k31plimvrr4yizr5kcc4rvagdsbxq4z97";
+        x86_64-linux = "1s39x8l6rgp6jw3b4bj3phaszm5h77g7rrhd4lslililcrvrwzjf";
+        aarch64-linux = "1whyfcdf7bncz2n1ixxzf3h30slildgfx8a06a401wy74jsw0hwj";
+        aarch64-darwin = "06b9r4a6zddqr1cg9cv206zmjbdaiz1rb5nr2f69qssvnbgwx3xg";
       };
     }) { }
   );
   julia_110 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.10.10";
-        hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
+        version = "1.10.12";
+        hash = "sha256-KIFenIPyMWflO9SnnAhea5VHrigIrLI0FatcVYqFzuw=";
         patches = [
           # Revert https://github.com/JuliaLang/julia/pull/55354
           # [build] Some improvements to the LLVM build system
@@ -89,8 +86,8 @@ in
   julia_112 = wrapJulia (
     callPackage
       (import ./generic.nix {
-        version = "1.12.6";
-        hash = "sha256-cR86qNbsXJAEWT6489U+NWTNdZrLqK1K2ulnr8IDMsw=";
+        version = "1.12.7";
+        hash = "sha256-XH2Ft3HeMYXuyp+8LmFz2Lz2109oQYYiqenEOtdSr1E=";
         patches = lib.optionals stdenv.hostPlatform.isDarwin [
           ./patches/1.12/0001-zlib-rpath.patch
           ./patches/1.12/0002-lbt-blas-detection.patch

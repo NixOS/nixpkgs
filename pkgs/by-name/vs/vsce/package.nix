@@ -13,16 +13,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MYsJOQSrpsEMDw5WbfcfNfrTvu6R5JmKVMeq8WpaFqs=";
+    hash = "sha256-DjPRSFXkw+MXDGjpWJGdp1bfptFdQEs5Djft2WyYK70=";
   };
 
-  npmDepsHash = "sha256-QN3twFFcLPqHH4wdC3+G34ze/G/m1RlaPwrHVa0NoFI=";
+  npmDepsHash = "sha256-U5FTBunSvHDl1lCMNcTuPrVZw6YTbT3LCJfbc6E2Sys=";
 
   postPatch = ''
     substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
@@ -32,7 +32,7 @@ buildNpmPackage (finalAttrs: {
     pkg-config
     nodejs-slim.python
   ]
-  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
 
   buildInputs = [ libsecret ];
 

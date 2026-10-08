@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-fsutil";
-  version = "0.16.1";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-fsutil";
     tag = finalAttrs.version;
-    hash = "sha256-/KlnQdN8R95qjxMGui0SofLFZl10vq6ufl05JuVuhDw=";
+    hash = "sha256-HQdQwPfMXTXSP9v/VF5fy3DicWm562V/KxxaO85nQ0c=";
   };
 
   build-system = [ setuptools ];

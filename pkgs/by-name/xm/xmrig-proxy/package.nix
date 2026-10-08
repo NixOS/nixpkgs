@@ -50,6 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xmrig-proxy";
     homepage = "https://github.com/xmrig/xmrig-proxy";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aij ];
+    maintainers = [ ];
   };
 })

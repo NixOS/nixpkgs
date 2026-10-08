@@ -18,18 +18,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "noriskclient-launcher-unwrapped";
-  version = "0.6.19";
+  version = "0.6.24";
 
   src = fetchFromGitHub {
     owner = "NoRiskClient";
     repo = "noriskclient-launcher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHLYCpflIjslCuCPROyuVsIdNIkHWl2BVflgxAz3RYg=";
+    hash = "sha256-X0j5cWAIMdpLSUSDAUx7oSJ42xvRLL1PY8JK9i4wGhA=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-tRvtYeOUn3xm7dhLWnzlpS8SK8NVVQAtNgvyiM48X28=";
+    hash = "sha256-VWl6YqTiBRz85GICFKGwDZRBcITGQdWE7EUzW58wHdY=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
-  cargoHash = "sha256-j41whr62i0FlTe/fWoPsMS9kX5aPgCjM9TckeZpnwgw=";
+  cargoHash = "sha256-dwGJKLO+3i5FUgv+Huu1ZD/hFg/KdyWofApwkIDFD1I=";
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;

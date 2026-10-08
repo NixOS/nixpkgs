@@ -4,23 +4,23 @@
   desktop-file-utils,
   dotnetCorePackages,
   fetchFromGitHub,
-  makeDesktopItem,
   makeWrapper,
-  avalonia,
   # Runtime dependencies
   libglvnd,
+  libxkbcommon,
+  wayland,
   # passthru
   nix-update-script,
 }:
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "wheelwizard";
-  version = "2.4.4";
+  version = "2.5.7";
 
   src = fetchFromGitHub {
     owner = "TeamWheelWizard";
     repo = "WheelWizard";
-    tag = version;
-    hash = "sha256-uuEAJPV3P9SRs77nDC9nR3XtnGJreD+H1Xweyx4tU2s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bN0GtoPrMK5+cd7pTf+uRpVab8opTkCm22m4n4Uss8o=";
   };
   postPatch = ''
     rm .config/dotnet-tools.json
@@ -28,34 +28,33 @@ buildDotnetModule rec {
 
   projectFile = "WheelWizard";
   buildType = "Release";
-  dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0-bin;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0-bin;
   nugetDeps = ./deps.json;
-  mapNuGetDependencies = true;
 
   nativeBuildInputs = [
     makeWrapper
     desktop-file-utils
   ];
 
-  buildInputs = [
-    avalonia
-  ];
-
   runtimeDeps = [
     libglvnd
+    libxkbcommon
+    wayland
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/lib/wheelwizard $out/bin
-    cp -r WheelWizard/bin/Release/net8.0/*/* $out/lib/wheelwizard/
+    cp -r WheelWizard/bin/Release/net10.0/*/* $out/lib/wheelwizard/
 
     makeWrapper $out/lib/wheelwizard/WheelWizard $out/bin/WheelWizard \
-      --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
+      --prefix PATH : ${lib.makeBinPath [ finalAttrs.dotnet-runtime ]}
 
-    install -D $desktopItem/share/applications/* -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard.desktop -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard-url-handler.desktop -t $out/share/applications
+    install -Dm444 Flatpak/io.github.TeamWheelWizard.WheelWizard.png $out/share/icons/hicolor/256x256/apps/io.github.TeamWheelWizard.WheelWizard.png
 
     runHook postInstall
   '';
@@ -63,14 +62,6 @@ buildDotnetModule rec {
   postFixup = ''
     rm $out/bin/*.{so,dylib}
   '';
-
-  desktopItem = makeDesktopItem {
-    name = "wheelwizard";
-    exec = "WheelWizard";
-    comment = "WheelWizard, Retro Rewind Launcher";
-    desktopName = "Wheel Wizard";
-    categories = [ "Game" ];
-  };
 
   passthru.updateScript = nix-update-script { };
 
@@ -82,4 +73,4 @@ buildDotnetModule rec {
     mainProgram = "WheelWizard";
     maintainers = with lib.maintainers; [ DerHalbGrieche ];
   };
-}
+})

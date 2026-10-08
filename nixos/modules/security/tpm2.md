@@ -59,6 +59,9 @@ So the raw tpm character device, the kernel RM, and `tabrmd` are all "TCTIs".
 The ESAPI library speaks the client side of the TCTI protocol, and can be connected to any server TCTI.
 All of the other libraries or programs that work with TPM all use ESAPI under the hood, and so a common characteristic among all these libraries is that you will find you need to configure them in some way as to which TCTI they should be talking to.
 
+A TPM-enabled system should choose to enable either the Linux kernel resource manager or the `tabrmd` resource manager. The tpm2-software group does not have absolute guidance on this, but the userspace resource manager supports an anti-contention feature known as session un-gapping but has not seen recent development.
+The kernel resource manager has seen more active development and is the resource manager of choice in immutable distributions such as Fedora Silverblue.
+
 #### Higher Level Interfaces {#module-security-tpm2-introduction-hli}
 
 As alluded to previously, there are a number of ways of speaking the client side TCTI that all amount to wrappers around ESAPI. They include:
@@ -75,6 +78,16 @@ A typical configuration is:
 ```
 security.tpm2 = {
     enable = true;
+    pkcs11.enable = true;
+
+    tctiEnvironment.enable = true;
+}
+```
+
+Or to use the `tpm2-abrmd` resource manager:
+```
+security.tpm2 = {
+    enable = true;
     abrmd.enable = true;
     pkcs11.enable = true;
 
@@ -85,7 +98,6 @@ security.tpm2 = {
 `enable = true;` is required for any tpm functionality other than the raw character device and kernel resource manager to be available.
 
 `abrmd.enable = true;` causes the tpm2-abrmd program (the user-space resource manager) to run as a systemd service.
-Generally you want this because the user-space resource manager gets more frequent updates than the kernel-space RM, and there aren't any kernel RM features that are unavailable in the user-space RM.
 
 `pkcs11.enable = true;` makes the PKCS11 tool and libraries available in the system path.
 Generally you want this because it's unlikely to cause problems and it's required by one of the more common TPM use cases, which is protecting an ssh key using the TPM.

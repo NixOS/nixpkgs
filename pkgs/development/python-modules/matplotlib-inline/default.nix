@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "matplotlib-inline";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ipython";
     repo = "matplotlib-inline";
     tag = version;
-    hash = "sha256-qExS0SsbnYgu0wFTew90z5QwPyJ+UWGVEgFURSMedSY=";
+    hash = "sha256-pLJGwykQ0+LK+cljGQmkSDuBSAdGq+SCPYGQ0ZF7nq0=";
   };
 
   build-system = [ flit-core ];

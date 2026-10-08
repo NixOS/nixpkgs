@@ -25,6 +25,7 @@
   nlohmann_json,
   tinyxml-2,
   spdlog,
+  stb,
   writeTextFile,
   fixDarwinDylibNames,
   applyPatches,
@@ -83,12 +84,6 @@ let
     '';
   };
 
-  stb' = fetchurl {
-    name = "stb_image.h";
-    url = "https://raw.githubusercontent.com/nothings/stb/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h";
-    hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
-  };
-
   stormlib' = applyPatches {
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
@@ -122,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-hQxYKZi6YJPittwes3sUZySChPBdGTz0GADbqgfjP5M=";
+    hash = "sha256-jTKhvyFaP59+T85CI7IteMABggOt6WVvQJ1vbSz1ops=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -208,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     mkdir stb
-    cp ${stb'} ./stb/${stb'.name}
+    cp ${stb}/include/stb/stb_image.h ./stb/stb_image.h
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"

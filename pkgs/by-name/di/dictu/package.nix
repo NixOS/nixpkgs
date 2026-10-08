@@ -42,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
         -e 's/-flto/${lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation"}/'
   '';
 
+  # bcrypt magic value triggers gcc 15 -Wunterminated-string-initialization.
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unterminated-string-initialization";
+
   cmakeFlags = [
     "-DBUILD_CLI=${if cliSupport then "ON" else "OFF"}"
     "-DDISABLE_HTTP=${if httpSupport then "OFF" else "ON"}"

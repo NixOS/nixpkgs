@@ -20,14 +20,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  version = "25.10.2";
+  version = "26.04.4";
+
+  __structuredAttrs = true;
+
+  # Suggested as an improvement, but currently breaks nix-build -A nextflow.tests
+  # strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "nextflow-io";
     repo = "nextflow";
-    rev = "c03082c9b816774c799660d22c2b56d72218fddc";
-    hash = "sha256-k8B393GOsU1gs+ZS5x3VZUmz+n8lH8/cmXkpzU301lY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-U0QHIzIbNe9dxqxhGAxJuskR9183UgGgLZQAGB7TKmo=";
   };
+
+  buildInputs = [
+    bash
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -84,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  # --run is used instead of --set to avoid makeWrapper's single-quote escaping,
+  # which prevents $USER from expanding at runtime. See #192396
   postFixup = ''
     wrapProgram $out/bin/nextflow \
       --prefix PATH : ${
@@ -96,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       } \
       --set JAVA_HOME ${openjdk.home} \
-      --set NXF_OPTS "-Duser.name=\''${USER}"
+      --run 'export NXF_OPTS="-Duser.name=''$USER''${NXF_OPTS:+ ''$NXF_OPTS}"'
   '';
 
   passthru.tests.default = nixosTests.nextflow;
@@ -122,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Etjean
       mulatta
+      David-Moody
     ];
     mainProgram = "nextflow";
     platforms = lib.platforms.unix;

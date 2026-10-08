@@ -1,37 +1,34 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
-
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1.tar.gz";
-      hash = "sha256-XX5Gh+wTep4EqW7pP1nBVtxmSpuYRFg7xK+AUV0qPt4=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.2.tar.gz";
+      hash = "sha256-RyzXihbj7vmROdfByTmwkljqSHxdFcd+aa2GAA+Rrjs=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1-aarch64.tar.gz";
-      hash = "sha256-B/0W4u41PUJzF1Lrpkq5I+ZFwTmszFjBTCZncwiNCi0=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1.dmg";
-      hash = "sha256-NcfFMsdTIcsp4fd8PjchO+FdIYo3+Zy2nqrJPjsH5LQ=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.2-aarch64.tar.gz";
+      hash = "sha256-wVkVg0SeB0cf5ad2mt5nsPPg98tbMbCXQPEoFWQdK6U=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/datagrip/datagrip-2026.1.1-aarch64.dmg";
-      hash = "sha256-W5fpsJp9QlKaVTEoanOf0tbLhhka3OkI4pdQPsdUauU=";
+      url = "https://download.jetbrains.com/datagrip/datagrip-2026.2.2-aarch64.dmg";
+      hash = "sha256-EdZcvRD7rU7hfR4tYZrmUCC/tLfdC1eX+UZ/5wFwqqE=";
     };
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "datagrip";
 
@@ -39,11 +36,18 @@ mkJetBrainsProduct {
   product = "DataGrip";
 
   # update-script-start: version
-  version = "2026.1.1";
-  buildNumber = "261.22158.354";
+  version = "2026.2.2";
+  buildNumber = "262.9437.70";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
   meta = {
@@ -54,6 +58,7 @@ mkJetBrainsProduct {
       It allows you to quickly migrate and refactor relational databases, construct efficient, statically checked SQL queries and much more.
     '';
     maintainers = [ ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

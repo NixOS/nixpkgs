@@ -1,9 +1,8 @@
 {
-  fetchFromGitHub,
+  fetchurl,
   buildDunePackage,
   lib,
   logs,
-  miou,
   fmt,
   h2,
   h1,
@@ -12,21 +11,22 @@
   tls-miou-unix,
   dns-client-miou-unix,
   happy-eyeballs-miou-unix,
-  mirage-crypto-rng-miou-unix,
+  mirage-crypto-rng,
   alcotest,
   digestif,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "httpcats";
-  version = "0.2.1";
+  version = "0.3.2";
 
-  src = fetchFromGitHub {
-    owner = "robur-coop";
-    repo = "httpcats";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-I7u/n49WOnpc0EaagsjC4Ts/kz0Xj6YHZv6+QZKLrC4=";
+  src = fetchurl {
+    url = "https://github.com/robur-coop/httpcats/releases/download/v${finalAttrs.version}/httpcats-${finalAttrs.version}.tbz";
+    hash = "sha256-n0InZn+7jaDbf3WaMACdh3DPMfkfewmkcXQAVfR81rg=";
   };
+
+  # Fix tests with x509 1.2
+  patches = [ ./x509-1_2.patch ];
 
   propagatedBuildInputs = [
     h2
@@ -38,11 +38,13 @@ buildDunePackage (finalAttrs: {
     happy-eyeballs-miou-unix
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
   checkInputs = [
     logs
     fmt
-    mirage-crypto-rng-miou-unix
+    mirage-crypto-rng
     alcotest
     digestif
   ];
@@ -50,7 +52,7 @@ buildDunePackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/robur-coop/httpcats/";
     description = "A simple HTTP client / server using h1, h2, and miou";
-    changelog = "https://github.com/robur-coop/httpcats/blob/${finalAttrs.src.tag}/CHANGES.md";
+    changelog = "https://github.com/robur-coop/httpcats/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ rpqt ];
   };

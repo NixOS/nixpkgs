@@ -1,9 +1,11 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchFromGitHub,
   asio_1_32_0,
   glib,
+  fmt_11,
   jsoncpp,
   libcap_ng,
   libnl,
@@ -23,32 +25,45 @@
   cmake,
   git,
   nix-update-script,
+  unzip,
   enableSystemdResolved ? true,
 }:
-
-stdenv.mkDerivation rec {
+let
+  # Derived from subprojects/fmt.wrap
+  libfmt-meson-patch = fetchurl {
+    url = "https://wrapdb.mesonbuild.com/v2/fmt_11.2.0-1/get_patch";
+    hash = "sha256-ZFvxwzWiRgi0s08W7RC5I3u7ATFIhmj7hkVCAiOeCGw=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn3";
-  version = "25";
+  version = "27.1";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
-    tag = "v${version}";
-    hash = "sha256-Fme8OT49h2nZw5ypyeKdHlqv2Hk92LW2KVisd0jC66s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Egt6lVcvlmxnABw4v0cdROQzVdkA3DgOGGCSgl+QFdM=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
   };
 
   patches = [
-    # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
-    ./v25-latest-linux-fix.patch
     ./0001-handle-result-from-DcoKeyConfig_ParseFromString.patch
   ];
 
+  prePatch = ''
+    cp -r ${fmt_11.src} subprojects/fmt-11.2.0
+    chmod +w -R subprojects/fmt-11.2.0 # Allow patches for subprojects to work
+    tmp=$(mktemp -d)
+    unzip ${libfmt-meson-patch} -d $tmp
+    cp -r $tmp/*/* subprojects/fmt-11.2.0
+  '';
+
   postPatch = ''
     echo '#define OPENVPN_VERSION "3.git:unknown:unknown"
-    #define PACKAGE_GUIVERSION "v${builtins.replaceStrings [ "_" ] [ ":" ] version}"
+    #define PACKAGE_GUIVERSION "v${builtins.replaceStrings [ "_" ] [ ":" ] finalAttrs.version}"
     #define PACKAGE_NAME "openvpn3-linux"
     ' > ./src/build-version.h
 
@@ -72,6 +87,7 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     git
+    unzip
 
     python3.pkgs.wrapPython
     python3.pkgs.docutils
@@ -107,6 +123,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "dbus_policy_dir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbus_system_service_dir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "systemd_system_unit_dir" "${placeholder "out"}/lib/systemd/system")
+    (lib.mesonOption "systemd_user_unit_dir" "${placeholder "out"}/lib/systemd/user")
     (lib.mesonOption "create_statedir" "false")
     (lib.mesonOption "sharedstatedir" "/etc")
   ];
@@ -117,7 +134,7 @@ stdenv.mkDerivation rec {
   '';
   postFixup = ''
     wrapPythonPrograms
-    wrapPythonProgramsIn "$out/libexec/openvpn3-linux" "$out ${pythonPath}"
+    wrapPythonProgramsIn "$out/libexec/openvpn3-linux" "$out ${finalAttrs.pythonPath}"
   '';
 
   env.NIX_LDFLAGS = "-lpthread";
@@ -128,10 +145,10 @@ stdenv.mkDerivation rec {
     description = "OpenVPN 3 Linux client";
     license = lib.licenses.agpl3Plus;
     homepage = "https://github.com/OpenVPN/openvpn3-linux/";
-    changelog = "https://github.com/OpenVPN/openvpn3-linux/releases/tag/v${version}";
+    changelog = "https://github.com/OpenVPN/openvpn3-linux/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       progrm_jarvis
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -5,21 +5,24 @@
   fetchPnpmDeps,
   rustPlatform,
   nodejs,
-  pnpm,
+  pnpm_11,
   pnpmConfigHook,
   geist-font,
   nix-update-script,
+  which,
   writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.25.4";
+  pnpm = pnpm_11;
+
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${version}";
-    hash = "sha256-2Dv+ZY9cvcz6EIpI+gkV9w5eqQzpAD2N+yf4dJrmdwg=";
+    hash = "sha256-C+XplCHOdFDQGPUnrCDuq7U4LkAX0QB3fC4uVA8o11w=";
   };
 
   # The Rust CLI embeds the dashboard UI via RustEmbed at compile time.
@@ -38,16 +41,16 @@ let
 
     pnpmDeps = fetchPnpmDeps {
       pname = "agent-browser-dashboard";
-      inherit version src;
+      inherit version src pnpm;
       pnpmWorkspaces = [ "dashboard" ];
-      fetcherVersion = 3;
-      hash = "sha256-ldxmXpejqVN/xuWcdLYMwNPc1VZ1rdNwRrumy8Is3N4=";
+      fetcherVersion = 4;
+      hash = "sha256-AEWwJtzmAUspGwFrMqoCvUfefPg2aTvMilBfJPSF9jA=";
     };
 
     pnpmWorkspaces = [ "dashboard" ];
 
-    # Replace Google Fonts fetch with a local font from nixpkgs since
-    # the nix sandbox has no network access.
+    # Replace Google Fonts fetch with a local font from nixpkgs since the
+    # Nix sandbox has no network access.
     postPatch = ''
       substituteInPlace packages/dashboard/src/app/layout.tsx --replace-fail \
         '{ Geist } from "next/font/google"' \
@@ -80,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-3vzVVHFo13ZLsbbXw7n9BE/YXBJwoxzhvfjuqOQwdfg=";
+  cargoHash = "sha256-Ei26Iz0qMqayucULLCSwN+fjw0VJ3S2L2A4vGhfYGqI=";
 
   # Place the pre-built dashboard where RustEmbed expects it
   postUnpack = ''
@@ -88,14 +91,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -r ${dashboard} source/packages/dashboard/out
   '';
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  # `which_exists` spawns the external `which` binary at runtime to probe
+  # for optional tools; pin it to an absolute store path.
+  postPatch = ''
+    substituteInPlace src/doctor/helpers.rs src/install.rs \
+      src/native/cdp/chrome.rs src/native/cdp/lightpanda.rs --replace-fail \
+      '"which"' '"${lib.getExe which}"'
+  '';
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  # Flaky test: reads the AGENT_BROWSER_CDP env variable without using the
+  # shared test lock.
+  checkFlags = [
+    "--skip"
+    "native::actions::tests::test_execute_unknown_command"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  # skills/ contains SKILL.md for tools like Claude Code
+  # The `skills` subcommand looks for `skills/` and `skill-data/` next to
+  # `bin/`, relative to the canonical exe path. See cli/src/skills.rs.
   postInstall = ''
-    mkdir -p $out/share/agent-browser
-    cp -r ../skills $out/share/agent-browser/
+    cp -r ../skills $out/skills
+    cp -r ../skill-data $out/skill-data
   '';
 
   passthru = {

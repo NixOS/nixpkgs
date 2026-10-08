@@ -2,17 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmowgli";
-  version = "2.1.3";
+  version = "2.1.3-unstable-2026-08-12";
 
   src = fetchFromGitHub {
     owner = "atheme";
     repo = "libmowgli-2";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jlw6ixMoIdIjmQ86N+KN+Gez218sw894POkcCYnT0s0=";
+    rev = "35d10d758d5aec35c9265640969e5d1dd32f975b";
+    hash = "sha256-6jGGUhwFN9zb+oAuVBzW6GbeNn3iaNm3QxfTsUvBM2w=";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
   };
 
   meta = {

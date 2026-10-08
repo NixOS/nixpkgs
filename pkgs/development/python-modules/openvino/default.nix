@@ -3,7 +3,7 @@
   buildPythonPackage,
   openvino-native,
   numpy,
-  python,
+  packaging,
 }:
 
 buildPythonPackage {
@@ -13,13 +13,16 @@ buildPythonPackage {
 
   src = openvino-native.python;
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [
+    numpy
+    packaging
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/${python.sitePackages}
-    cp -Rv * $out/${python.sitePackages}/
+    mkdir -p $out
+    cp -Rv * $out/
 
     runHook postInstall
   '';

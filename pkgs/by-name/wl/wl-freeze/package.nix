@@ -3,15 +3,19 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
+  installShellFiles,
   jq,
   procps,
   psmisc,
   libnotify,
+  xdotool,
+  kdotool,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wl-freeze";
-  version = "2.0.2";
+  version = "2.1.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -20,13 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Zerodya";
     repo = "wl-freeze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-miyDiUN86Zy9RfVm1MefKrYihX4+bFv6Jr4Cl4GzGz8=";
+    hash = "sha256-WY1XB17ARU34dAlU7CqMg3AXVlE0qilXwfGMpYeeiwk=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -51,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
           procps
           psmisc
           libnotify
+          xdotool
+          kdotool
+          kdePackages.qttools
         ]
       }
   '';

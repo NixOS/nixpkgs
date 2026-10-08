@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  flutter338,
+  flutter347,
   fetchFromGitHub,
   fetchurl,
   pkg-config,
@@ -22,16 +22,15 @@
   makeBinaryWrapper,
   runCommand,
 }:
-
 let
   pname = "plezy";
-  version = "1.30.0";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "edde746";
     repo = "plezy";
     tag = version;
-    hash = "sha256-9bB9L9f2s0i2xF4JIe4vlEpt/bmF1gf3gxcoHdCrYqc=";
+    hash = "sha256-q0oGOAHco7wWS8P2sUdplZS/Rvlh4a1/MVfRbrETQ/0=";
   };
 
   simdutf = fetchurl {
@@ -46,16 +45,17 @@ let
   '';
 
   meta = {
-    description = "Modern cross-platform Plex client built with Flutter";
+    description = "Modern cross-platform Emby, Plex & Jellyfin client built with Flutter";
     homepage = "https://github.com/edde746/plezy";
+    changelog = "https://github.com/edde746/plezy/releases/tag/${version}";
     mainProgram = "plezy";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       mio
       miniharinn
+      BatteredBunny
     ];
     platforms = lib.platforms.linux ++ [
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -63,12 +63,16 @@ let
     );
   };
 
-  linux = flutter338.buildFlutterApplication rec {
+  linux = flutter347.buildFlutterApplication rec {
     inherit pname version src;
 
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = lib.importJSON ./git-hashes.json;
+
+    patches = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      ./aarch64-linux.patch
+    ];
 
     nativeBuildInputs = [
       pkg-config
@@ -134,7 +138,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/edde746/plezy/releases/download/${version}/plezy-macos.dmg";
-      hash = "sha256-a3LvwWZvLPD7yKKbC+oYXSgoHXUS+mOojzfDyW7/QOE=";
+      hash = "sha256-cQ5lGdhnWnfVUI6fqx8pk5zgdaQrZbZxD5mSwVpTbmM=";
     };
 
     nativeBuildInputs = [

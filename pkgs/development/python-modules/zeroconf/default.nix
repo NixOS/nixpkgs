@@ -13,16 +13,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zeroconf";
-  version = "0.148.0";
+  version = "0.151.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    tag = version;
-    hash = "sha256-odjuJrUXQXn3WeF/oS8DLO937p2nHpSk9QGO4Tgsd8o=";
+    tag = finalAttrs.version;
+    hash = "sha256-iMWlTX+GnJ7A2roh5aryoEf+9+963W2i4HVjtb5I00Q=";
   };
 
   build-system = [
@@ -44,13 +44,13 @@ buildPythonPackage rec {
   disabledTests = [
     # OSError: [Errno 19] No such device
     "test_close_multiple_times"
+    "test_context_manager_marks_done"
+    "test_default_interface_warns_when_ipv6_requested"
+    "test_open_and_close_cleanly"
     "test_integration_with_listener_ipv6"
     "test_launch_and_close"
     "test_launch_and_close_context_manager"
     "test_launch_and_close_v4_v6"
-
-    # Flaky (see e.g. https://hydra.nixos.org/build/326378736); https://github.com/python-zeroconf/python-zeroconf/issues/1663
-    "test_run_coro_with_timeout"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of multicast DNS service discovery";
     homepage = "https://github.com/python-zeroconf/python-zeroconf";
-    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Only;
     maintainers = [ ];
   };
-}
+})

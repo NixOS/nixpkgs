@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     pygobject3
-    dbus-python
   ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];
@@ -54,7 +53,7 @@ python3Packages.buildPythonApplication {
       maintainers
       license
       ;
-    description = "Power-rofiles-daemon like DBus interface for TLP";
+    description = "Power-profiles-daemon like DBus interface for TLP";
     mainProgram = "tlp-pd";
   };
 }

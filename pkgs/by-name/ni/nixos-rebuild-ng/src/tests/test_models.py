@@ -81,7 +81,7 @@ def test_flake_parse(mock_node: Mock, tmpdir: Path, monkeypatch: MonkeyPatch) ->
         autospec=True,
         return_value=subprocess.CompletedProcess([], 0, stdout="remote\n"),
     ):
-        target_host = m.Remote("target@remote", [], None, "ssh")
+        target_host = m.Remote("target@remote", [], "ssh")
         assert m.Flake.parse("/path/to/flake", target_host) == m.Flake(
             "/path/to/flake", 'nixosConfigurations."remote"'
         )
@@ -201,23 +201,25 @@ def test_flake_from_arg(
         ),
     ):
         assert m.Flake.from_arg(
-            "/path/to", m.Remote("user@host", [], None, "ssh")
+            "/path/to", m.Remote("user@host", [], "ssh")
         ) == m.Flake("/path/to", 'nixosConfigurations."remote-hostname"')
 
 
-@patch("pathlib.Path.mkdir", autospec=True)
-def test_profile_from_arg(mock_mkdir: Mock) -> None:
+def test_profile_from_arg() -> None:
     assert m.Profile.from_arg("system") == m.Profile(
         "system",
         Path("/nix/var/nix/profiles/system"),
     )
-    mock_mkdir.assert_not_called()
 
     assert m.Profile.from_arg("something") == m.Profile(
         "something",
         Path("/nix/var/nix/profiles/system-profiles/something"),
     )
-    mock_mkdir.assert_called_once()
+
+
+def test_profile_is_custom() -> None:
+    assert not m.Profile("system", Path()).is_custom()
+    assert m.Profile("something", Path()).is_custom()
 
 
 def test_grouped_nix_args_flake_build_flags() -> None:

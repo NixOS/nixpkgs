@@ -9,7 +9,7 @@
 
 let
   odoo_version = "18.0";
-  odoo_release = "20250506";
+  odoo_release = "20260420";
   python = python312.override {
     self = python;
   };
@@ -21,10 +21,17 @@ python.pkgs.buildPythonApplication rec {
 
   src = fetchzip {
     # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
-    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
+    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.tar.gz";
     name = "odoo-${version}";
-    hash = "sha256-rNG0He+51DnRT5g1SovGZ9uiE1HWXtcmAybcadBMjY4="; # odoo
+    hash = "sha256-+ilM07s33pdwZc3XoAXbID7MRz/m6PHnzjHzi183eyM="; # odoo
   };
+
+  postPatch = ''
+    # hardcode the location of the unwrapped python scrip, otherwise the websocket
+    # server (called longpoll in codebase) will fail to start.
+    substituteInPlace odoo/service/server.py \
+      --replace-fail 'sys.argv[0]' "'${placeholder "out"}/bin/.odoo-wrapped'"
+  '';
 
   makeWrapperArgs = [
     "--prefix PATH : ${
@@ -97,7 +104,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      inherit (nixosTests) odoo18;
+      inherit (nixosTests) odoo18 odoo18-multiprocess;
     };
   };
 

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "togrill-bluetooth";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "togrill-bluetooth";
     tag = version;
-    hash = "sha256-UZul5JEGv0zRcnUsEH2dkIiFt7jNYAc+9RvmDJMxkk0=";
+    hash = "sha256-78q/BDUj//8td/kFJyJgkwDylciQ3xeR9FeFN9clzk8=";
   };
 
   build-system = [

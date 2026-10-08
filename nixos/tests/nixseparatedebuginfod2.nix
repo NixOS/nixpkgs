@@ -1,6 +1,9 @@
 { pkgs, lib, ... }:
 {
   name = "nixseparatedebuginfod2";
+  defaults = {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  };
   # A binary cache with debug info and source for gnumake
   nodes.cache =
     { pkgs, ... }:
@@ -44,8 +47,7 @@
     start_all()
     cache.wait_for_unit("nginx.service")
     cache.wait_for_open_port(80)
-    machine.wait_for_unit("nixseparatedebuginfod2.service")
-    machine.wait_for_open_port(1949)
+    machine.wait_for_unit("nixseparatedebuginfod2.socket")
 
     with subtest("check that the binary cache works"):
       machine.succeed("nix-store --extra-substituters http://cache --option require-sigs false -r ${pkgs.sl}")

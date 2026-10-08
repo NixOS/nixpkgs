@@ -5,7 +5,7 @@
   gtk3,
   jdupes,
   adwaita-icon-theme,
-  libsForQt5,
+  kdePackages,
   hicolor-icon-theme,
 }:
 
@@ -27,11 +27,12 @@ stdenvNoCC.mkDerivation rec {
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    libsForQt5.breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;
+  dontWrapQtApps = true;
 
   # These fixup steps are slow and unnecessary.
   dontPatchELF = true;

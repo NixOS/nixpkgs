@@ -5,16 +5,16 @@
 }:
 buildDubPackage (finalAttrs: {
   pname = "ddhx";
-  version = "0.9.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "dd86k";
     repo = "ddhx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1AoTSoykukvKEsdAU0WUQA7LwVebKELam/0kqEWTxFc=";
+    hash = "sha256-vmWO7NodB5j5ZhzdiB9H3hzXVgW5MCqlGlnp7VKnui0=";
   };
 
-  dubLock = ./dub-lock.json;
+  dubLock.dependencies = { };
 
   installPhase = ''
     runHook preInstall
@@ -31,5 +31,6 @@ buildDubPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ryand56 ];
     platforms = lib.platforms.unix;
+    mainProgram = "ddhx";
   };
 })

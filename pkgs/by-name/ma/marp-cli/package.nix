@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "marp-cli";
-  version = "4.3.1";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "marp-team";
     repo = "marp-cli";
     rev = "v${version}";
-    hash = "sha256-Dj3DkHgoez4S2TtQQ9KlOWUFZkKDy5lUoNUhPkgUu64=";
+    hash = "sha256-ZcidJIcZ3ZFsQFIGiY1sBeRE7GZkGPPQNHhRnti/EGY=";
   };
 
-  npmDepsHash = "sha256-tPFc7b5OtjRJiD8yGLOYiAMQ7NroJvGlpIvRlrq2TxQ=";
+  npmDepsHash = "sha256-qgEwuPGbepTpbkZj3Zp2Xd5TRJbXwukWO9LLriek9H4=";
   npmPackFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
 

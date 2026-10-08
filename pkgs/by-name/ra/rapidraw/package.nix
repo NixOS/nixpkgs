@@ -33,29 +33,31 @@
   dbus,
   gvfs,
   libheif,
+  libgphoto2,
   glib-networking,
   nodejs_24,
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.4";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-T7qBa0CEVfvc6qWxdJe0pbJAN3VNrpP9EKaX2R+PtUw=";
+    hash = "sha256-OSIFBX52QOez2tn93XcSLP/oP9krPy/rIEBvhINkjS8=";
   };
 
-  cargoHash = "sha256-kyJIHfrb3Tlm3IYQxU6N9mB9JxZWmMcBsPXHQmTwxAg=";
+  cargoHash = "sha256-B1W6buXovnvIddQWjBLw1uOgQnoZLtJp1dX4gOg7cAQ=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-1A6b63FjNvkAbu62dRXfMjTL1y2wr2gEsZkLqYvTk0w=";
+    hash = "sha256-P1YT5agK1hMVpe7pLXkWrK99g/uAA46ovF+mUe+xVhk=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs_24
     npmHooks.npmConfigHook
     cargo-tauri.hook
+    rustPlatform.bindgenHook
     writableTmpDirAsHomeHook
   ];
 
@@ -92,14 +95,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
     libGL
     dbus
-    gvfs
     libheif
     onnxruntime
     wrapGAppsHook4
+    libgphoto2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libappindicator
+    gvfs
   ];
 
   cargoRoot = "src-tauri";
@@ -118,10 +122,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'if !is_valid' 'if false'
   '';
 
-  # Fix dyld error about onnxruntime not being loaded on darwin during cargo test
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export DYLD_LIBRARY_PATH="${onnxruntime}/lib:$DYLD_LIBRARY_PATH"
-  '';
+  tauriBuildFlags = [
+    "--features"
+    "tethering"
+  ];
 
   dontWrapGApps = true;
 
@@ -141,8 +145,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # The binary links against @rpath/libonnxruntime.*.dylib but has no LC_RPATH entries
-      install_name_tool -add_rpath "${onnxruntime}/lib" "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw"
       # The app also dlopen()s libonnxruntime.dylib at a hardcoded path inside the bundle
       mkdir -p "$out/Applications/RapidRAW.app/Contents/Resources/resources"
       ln -sf ${onnxruntime}/lib/libonnxruntime.dylib "$out/Applications/RapidRAW.app/Contents/Resources/resources/libonnxruntime.dylib"
@@ -159,12 +161,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --set ORT_STRATEGY "system"
     '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Blazingly-fast, non-destructive, and GPU-accelerated RAW image editor built with performance in mind";
     homepage = "https://github.com/CyberTimon/RapidRAW";
     license = lib.licenses.agpl3Only;
     mainProgram = "rapidraw";
-    maintainers = with lib.maintainers; [ taciturnaxolotl ];
+    maintainers = with lib.maintainers; [
+      philipdb
+      taciturnaxolotl
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

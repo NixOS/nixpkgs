@@ -9,13 +9,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nomnatong";
-  version = "5.16";
+  version = "5.18";
 
   src = fetchFromGitHub {
     owner = "nomfoundation";
     repo = "font";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/VjnNZKHEXOOzDjic1tZufYS49rVDXcIl7eDj7jl7Vo=";
+    hash = "sha256-4kBEWYm7OvJbPFqum0zYTclsVpK4BECHtYoaH84ZyGo=";
   };
 
   nativeBuildInputs = [

@@ -6,16 +6,16 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "life360";
-  version = "7.0.1";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pnbruckner";
     repo = "life360";
-    tag = "v${version}";
-    hash = "sha256-GkCs479lXcnCvb5guxyc+ZuZdiH4n8uD2VbkC+yijgg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ySa84lUyx8D7Dgg/hdZ4o/+Znn3CR0O9rdeXBrj/k5U=";
   };
 
   build-system = [ setuptools ];
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Life360";
     homepage = "https://github.com/pnbruckner/life360";
-    changelog = "https://github.com/pnbruckner/life360/releases/tag/v${version}";
+    changelog = "https://github.com/pnbruckner/life360/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

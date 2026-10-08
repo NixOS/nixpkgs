@@ -3,17 +3,19 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  nix-update-script,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "simdjson";
-  version = "4.6.0";
+  version = "4.6.8";
 
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VGErBWAHk63XMv8yC+Na+gXHByhYhtIEMSBySwIDlXk=";
+    hash = "sha256-ZMYYjwyeqqlklwY4UWBgT5sJ0Ojkg38Xcxg6CO461Ec=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,11 +30,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-mpower8-vector")
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
   meta = {
     homepage = "https://simdjson.org/";
+    changelog = "https://github.com/simdjson/simdjson/releases/tag/${finalAttrs.src.tag}";
     description = "Parsing gigabytes of JSON per second";
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ chessai ];
+    pkgConfigModules = [ "simdjson" ];
   };
 })

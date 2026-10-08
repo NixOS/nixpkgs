@@ -1,13 +1,13 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   pugixml,
   nix-update-script,
 }:
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwayland-scanner";
   version = "0.4.6";
 
@@ -34,7 +34,7 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/hyprwm/hyprwayland-scanner";
     description = "Hyprland version of wayland-scanner in and for C++";
-    changelog = "https://github.com/hyprwm/hyprwayland-scanner/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/hyprwm/hyprwayland-scanner/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.hyprland ];
     mainProgram = "hyprwayland-scanner";

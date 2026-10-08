@@ -17,7 +17,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  version = "1.3.11";
+  version = "1.4.2";
   pname = "bun";
 
   src =
@@ -27,7 +27,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   sourceRoot =
     {
       aarch64-darwin = "bun-darwin-aarch64";
-      x86_64-darwin = "bun-darwin-x64-baseline";
     }
     .${stdenvNoCC.hostPlatform.system} or null;
 
@@ -59,41 +58,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         -change /usr/lib/libicucore.A.dylib '${lib.getLib darwin.ICU}/lib/libicucore.A.dylib'
       '${lib.getExe rcodesign}' sign --code-signature-flags linker-signed $out/bin/bun
     ''
-    # We currently cannot generate completions for x86_64-darwin because bun requires avx support to run, which is:
-    # 1. Not currently supported by the version of Rosetta on our aarch64 builders
-    # 2. Is not correctly detected even on macOS 15+, where it is available through Rosetta
-    #
-    # The baseline builds are no longer an option because they too now require avx support.
-    +
-      lib.optionalString
-        (
-          stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform
-          && !(stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isx86_64)
-        )
-        ''
-          installShellCompletion --cmd bun \
-            --bash <(SHELL="bash" $out/bin/bun completions) \
-            --zsh <(SHELL="zsh" $out/bin/bun completions) \
-            --fish <(SHELL="fish" $out/bin/bun completions)
-        '';
+    + lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+      installShellCompletion --cmd bun \
+        --bash <(SHELL="bash" $out/bin/bun completions) \
+        --zsh <(SHELL="zsh" $out/bin/bun completions) \
+        --fish <(SHELL="fish" $out/bin/bun completions)
+    '';
 
   passthru = {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-aarch64.zip";
-        hash = "sha256-b1o0Z+2crsR5W/eM1HZQfZ+HDH1XuGyUX8szgSZ3L/w=";
+        hash = "sha256-kJh6OhbX21VtiGrD1VHnttPt8KHPQ6yu1iLoZ2vh0S8=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
-        hash = "sha256-0TlE2hKlPsx0v2pyC9HQTEVVwDjf5CI2U1anvkdpH98=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-darwin-x64-baseline.zip";
-        hash = "sha256-+2c5sIv1RVDtqnyCTNWy3KRbagav70CEQwh6YxBfb40=";
+        hash = "sha256-VDKLvC2cjgyfiSxUTWbFeoO4QTnjSQnl7oF1jxrI/ac=";
       };
       "x86_64-linux" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64.zip";
-        hash = "sha256-hhG6k1r4hvBabzh0ChUWAybBXl1dB63vlmEwtEk2B+0=";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-x64-baseline.zip";
+        hash = "sha256-xngEDxT+BEDrg503y9DOTAUaMtpygGrJfeamqra/co8=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -133,15 +117,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       jk
       thilobillerbeck
       cdmistman
-      coffeeispower
       diogomdp
     ];
     platforms = builtins.attrNames finalAttrs.passthru.sources;
     # Broken for Musl at 2024-01-13, tracking issue:
     # https://github.com/NixOS/nixpkgs/issues/280716
     broken = stdenvNoCC.hostPlatform.isMusl;
-
-    # Hangs when run via Rosetta 2 on Apple Silicon
-    hydraPlatforms = lib.lists.remove "x86_64-darwin" lib.platforms.all;
   };
 })

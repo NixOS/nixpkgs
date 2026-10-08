@@ -1,44 +1,27 @@
 {
   lib,
+  stdenvNoCC,
   appimageTools,
   fetchurl,
   makeWrapper,
-  gitUpdater,
+  undmg,
 }:
 
-appimageTools.wrapType2 rec {
+let
   pname = "tutanota-desktop";
-  version = "340.260326.1";
+  version = "359.260904.0";
 
-  src = fetchurl {
+  linuxSrc = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-9QtiB4VyktUgItJkOIdeGYthFxGt8RsNlAFf9ERoAEg=";
+    hash = "sha256-bhgKpOVkx5NdnhbfDawZp3cvE9sjdZYu0TKcUSgi6w4=";
   };
 
-  extraPkgs = pkgs: [ pkgs.libsecret ];
-
-  nativeBuildInputs = [ makeWrapper ];
-
-  extraInstallCommands =
-    let
-      appimageContents = appimageTools.extract { inherit pname version src; };
-    in
-    ''
-      install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
-      cp -r ${appimageContents}/usr/share/icons/. $out/share/icons
-
-      substituteInPlace $out/share/applications/tutanota-desktop.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
-
-      wrapProgram $out/bin/tutanota-desktop \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
-    '';
-
-  passthru.updateScript = gitUpdater {
-    url = "https://github.com/tutao/tutanota";
-    rev-prefix = "tutanota-desktop-release-";
-    allowedVersions = ".+\\.[0-9]{6}\\..+";
+  darwinSrc = fetchurl {
+    url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-mac.dmg";
+    hash = "sha256-l0M1p/9HNOS7Z0+ljnDeX0eHeyLHc6rM4//EjDsWzo4=";
   };
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Tuta official desktop client";
@@ -48,6 +31,66 @@ appimageTools.wrapType2 rec {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ s0ssh ];
     mainProgram = "tutanota-desktop";
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
   };
-}
+
+  linux = appimageTools.wrapType2 {
+    inherit
+      pname
+      version
+      passthru
+      meta
+      ;
+    src = linuxSrc;
+
+    extraPkgs = pkgs: [ pkgs.libsecret ];
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    extraInstallCommands =
+      let
+        appimageContents = appimageTools.extract {
+          inherit pname version;
+          src = linuxSrc;
+        };
+      in
+      ''
+        install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
+        cp -r ${appimageContents}/usr/share/icons/. $out/share/icons
+
+        substituteInPlace $out/share/applications/tutanota-desktop.desktop \
+          --replace 'Exec=AppRun' 'Exec=${pname}'
+
+        wrapProgram $out/bin/tutanota-desktop \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      '';
+  };
+
+  darwin = stdenvNoCC.mkDerivation {
+    inherit
+      pname
+      version
+      passthru
+      meta
+      ;
+    src = darwinSrc;
+
+    sourceRoot = ".";
+
+    nativeBuildInputs = [
+      undmg
+      makeWrapper
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/Applications"
+      cp -R "Tuta Mail.app" "$out/Applications/"
+      makeWrapper "$out/Applications/Tuta Mail.app/Contents/MacOS/Tuta Mail" "$out/bin/tutanota-desktop"
+
+      runHook postInstall
+    '';
+  };
+in
+if stdenvNoCC.hostPlatform.isDarwin then darwin else linux

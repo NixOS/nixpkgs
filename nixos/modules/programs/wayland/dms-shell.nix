@@ -29,15 +29,13 @@ let
   builtInRemovedMsg = "This is now built-in in DMS and doesn't need additional dependencies.";
 
   optionalPackages =
-    optionals cfg.enableSystemMonitoring [ pkgs.dgop ]
-    ++ optionals cfg.enableVPN [
+    optionals cfg.enableVPN [
       pkgs.glib
       pkgs.networkmanager
     ]
     ++ optional cfg.enableDynamicTheming pkgs.matugen
     ++ optional cfg.enableAudioWavelength pkgs.cava
-    ++ optional cfg.enableCalendarEvents pkgs.khal
-    ++ optional cfg.enableClipboardPaste pkgs.wtype;
+    ++ optional cfg.enableCalendarEvents pkgs.khal;
 in
 {
   imports = [
@@ -47,6 +45,8 @@ in
       path ++ [ "enableSystemSound" ]
     ) "qtmultimedia is now included on dms-shell package.")
     (lib.mkRemovedOptionModule (path ++ [ "enableClipboard" ]) builtInRemovedMsg)
+    (lib.mkRemovedOptionModule (path ++ [ "enableSystemMonitoring" ]) builtInRemovedMsg)
+    (lib.mkRemovedOptionModule (path ++ [ "enableClipboardPaste" ]) builtInRemovedMsg)
   ];
 
   options.programs.dms-shell = {
@@ -84,17 +84,6 @@ in
           after a system rebuild.
         '';
       };
-    };
-
-    enableSystemMonitoring = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for system monitoring widgets.
-        This includes process list viewers and system resource monitors.
-
-        Requires: dgop
-      '';
     };
 
     enableVPN = mkOption {
@@ -138,17 +127,6 @@ in
         This enables calendar widgets that display events and reminders via khal.
 
         Requires: khal
-      '';
-    };
-
-    enableClipboardPaste = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether to install dependencies required for pasting directly from the clipboard history support.
-        This enables pressing Shift+Return for pasting entries from the clipboard history.
-
-        Requires: wtype
       '';
     };
 

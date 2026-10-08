@@ -1,41 +1,42 @@
 {
   lib,
   aiohttp,
+  aioresponses,
+  anyio,
   buildPythonPackage,
-  colorlog,
   fetchFromGitHub,
+  orjson,
   pint,
-  setuptools,
-  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
+  setuptools,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiocomelit";
-  version = "2.0.2";
+  version = "2.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "chemelli74";
     repo = "aiocomelit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k/p6z+flMvmuwwHqPH9Aw/ai761kbT+HQUXVNKeqk0U=";
+    hash = "sha256-T48aRtuF9eNrW5L97CGkjc2PCdRzbuGCvhdWCuqe7yk=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    colorlog
+    orjson
     pint
   ];
 
   nativeCheckInputs = [
-    pytest-cov-stub
+    aioresponses
+    anyio
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "aiocomelit" ];

@@ -129,7 +129,7 @@ trivial, so I'll also link to some real-world examples:
 
 ## Basic `resholve.phraseSolution` example
 
-This function has a similar API to `writeScript` and `writeScriptBin`, except it does require a `scripts` attr. It is intended to make resholve a little easier to mix into more types of builds. This example is a little
+This function has a similar API to `writeScript` and `writeScriptBin`, except it does require a `scripts` attr. It is intended to make resholve a little easier to mix into more types of build. This example is a little
 trivial for now. If you have a real usage that you find helpful, please PR it.
 
 ```nix

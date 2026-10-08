@@ -12,13 +12,13 @@ let
   # override options if they need using lib.mkForce (that has 50 priority)
   mkKernelOverride = lib.mkOverride 90;
 
-  suffix = "zen1";
+  suffix = "zen2";
 in
 
 buildLinux (
   args
   // rec {
-    version = "6.19.12";
+    version = "7.2.6";
     pname = "linux-zen";
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
     isZen = true;
@@ -27,7 +27,7 @@ buildLinux (
       owner = "zen-kernel";
       repo = "zen-kernel";
       rev = "v${version}-${suffix}";
-      sha256 = "062qr3j5c3v4khv20q7g8lmrrvvg8708wwy02z3vygany43k3rgb";
+      sha256 = "0m3nfsyg7gsyfj5zbww62vrz90kaqhg6wds7xpjz65331ssdz0q1";
     };
 
     # This is based on the following source:
@@ -45,7 +45,6 @@ buildLinux (
 
       # Preempt (low-latency)
       PREEMPT = mkKernelOverride yes;
-      PREEMPT_VOLUNTARY = mkKernelOverride no;
       PREEMPT_LAZY = mkKernelOverride no;
 
       # Preemptible tree-based hierarchical RCU
@@ -92,6 +91,7 @@ buildLinux (
         thiagokokada
         jerrysm64
         axertheaxe
+        eljamm
       ];
       teams = [ ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads.";

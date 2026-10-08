@@ -7,18 +7,23 @@
   nix-update-script,
 }:
 
-maven.buildMavenPackage rec {
-  version = "13.2.0";
+maven.buildMavenPackage (finalAttrs: {
+  version = "14.0.0";
   pname = "checkstyle";
 
   src = fetchFromGitHub {
     owner = "checkstyle";
     repo = "checkstyle";
-    tag = "checkstyle-${version}";
-    hash = "sha256-f9jJK9zp7sm8VEn30qQA73+ynARJWY3BxbSMEppEDlk=";
+    tag = "checkstyle-${finalAttrs.version}";
+    hash = "sha256-8XrYOILxxPMFkSjJyFULzFiqF1T63F/PIzPiRevUYws=";
   };
 
-  mvnHash = "sha256-+l3ubVFWx1QVTSgwVv0yGVyh8RPnxyHBU/vKE4sBRoE=";
+  patches = [
+    # PR: https://github.com/checkstyle/checkstyle/pull/21242
+    ./drop-nexus-codehaus-snapshot-plugin-repository.patch
+  ];
+
+  mvnHash = "sha256-8HMUvqhvI8dl2E4uPj3qmgwnyY5fAMtbTbXm67P1Wpo=";
 
   nativeBuildInputs = [
     maven
@@ -31,7 +36,7 @@ maven.buildMavenPackage rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/checkstyle
-    install -Dm644 target/checkstyle-${version}-all.jar $out/share/checkstyle/checkstyle-all.jar
+    install -Dm644 target/checkstyle-${finalAttrs.version}-all.jar $out/share/checkstyle/checkstyle-all.jar
 
     makeWrapper ${jre}/bin/java $out/bin/checkstyle \
       --add-flags "-jar $out/share/checkstyle/checkstyle-all.jar"
@@ -50,7 +55,7 @@ maven.buildMavenPackage rec {
       Conventions, but is highly configurable.
     '';
     homepage = "https://checkstyle.org/";
-    changelog = "https://checkstyle.org/releasenotes.html#Release_${version}";
+    changelog = "https://checkstyle.org/releasenotes.html#Release_${finalAttrs.version}";
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode
@@ -62,4 +67,4 @@ maven.buildMavenPackage rec {
     ];
     inherit (jre.meta) platforms;
   };
-}
+})

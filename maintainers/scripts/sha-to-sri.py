@@ -166,7 +166,7 @@ def atomicFileUpdate(target: Path):
 
     Yields a pair `(original, new)` of open files.
     `original` is the pre-existing file at `target`, open for reading;
-    `new` is an empty, temporary file in the same filder, open for writing.
+    `new` is an empty, temporary file in the same folder, open for writing.
 
     Upon exiting the context, the files are closed; if no exception was
     raised, `new` (atomically) replaces the `target`, otherwise it is deleted.

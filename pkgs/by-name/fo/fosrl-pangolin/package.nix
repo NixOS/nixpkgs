@@ -5,15 +5,22 @@
   buildNpmPackage,
   makeWrapper,
   formats,
-  inter,
   databaseType ? "sqlite",
+  edition ? "oss",
   environmentVariables ? { },
   nixosTests,
+  nodejs_22,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
   "sqlite"
   "pg"
+];
+
+assert lib.assertOneOf "edition" edition [
+  "enterprise"
+  "oss"
+  "saas"
 ];
 
 let
@@ -29,46 +36,43 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.17.1";
+  version = "1.21.1";
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-V1yOSFN2g5MHPIXF/UFymgXrfN5tE99cuIFnWpdCVCA=";
+    hash = "sha256-zfXHev0bN3KVkoiSQ+2WQCgmcCtWi3dib6EiaYmthTo=";
   };
 
-  npmDepsHash = "sha256-DyPfylne9Ku7sEUNN0LLlN0EOnCjcklsh+F6YP+rXv4=";
+  nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-9wPn2nSD9VxMyHywrG52WrChsrJ/ctnKGlMZZEymP6A=";
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # dependency resolution is borked
-  npmFlags = [ "--legacy-peer-deps" ];
-
-  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
-  # Based on pkgs.nextjs-ollama-llm-ui.
-  postPatch = ''
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Inter } from \"next/font/google\"" \
-      "localFont from \"next/font/local\""
-
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "const inter = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
-      "const inter = localFont({ src: './Inter.ttf' });"
-
-    substituteInPlace server/lib/consts.ts --replace-fail \
-      'export const APP_VERSION = "1.17.0";' \
-      'export const APP_VERSION = "${finalAttrs.version}";'
-
-    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+  # remove the proprietary code
+  postUnpack = lib.optionalString (edition == "oss") ''
+    rm -rf server/private
   '';
+
+  # upstream inconsistently updates this
+  # so leaving this here in case it's needed
+  # postPatch = ''
+  #   substituteInPlace server/lib/consts.ts --replace-fail \
+  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+  #     'export const APP_VERSION = "${finalAttrs.version}";'
+  # '';
 
   preBuild = ''
     npm run set:${db false}
-    npm run set:oss
+    npm run set:${edition}
     npm run db:generate
   '';
 
@@ -171,7 +175,7 @@ buildNpmPackage (finalAttrs: {
     description = "Tunneled reverse proxy server with identity and access control";
     homepage = "https://github.com/fosrl/pangolin";
     changelog = "https://github.com/fosrl/pangolin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = [ lib.licenses.agpl3Only ] ++ lib.optional (edition != "oss") lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jackr
       water-sucks

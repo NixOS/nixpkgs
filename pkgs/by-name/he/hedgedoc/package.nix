@@ -11,22 +11,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgedoc";
-  version = "1.10.8";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     tag = finalAttrs.version;
-    hash = "sha256-9gKpjmE8z/9PUILCiVK1utNYKD8kscbCBKxerqTO3z4=";
+    hash = "sha256-QYWDgQuSsMf8xElSK0MpthOMAB6EJXcxfOWcHrR4ODU=";
   };
+
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/hedgedoc/hedgedoc/blob/develop/package.json#L28
+    ./yarn-4.14-support.patch
+  ];
 
   # Generate this file with:
   # nix run nixpkgs#yarn-berry_4.yarn-berry-fetcher missing-hashes yarn.lock
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-HbrkmuL1OBZZoA6o438GePId50lJrYfI7M2FsP00YGc=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-2qwTV9GRKnVIhK6dsSfis+JOTfjcdwW0RVdrJZa/uJc=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Realtime collaborative markdown notes on all platforms";
     license = lib.licenses.agpl3Only;
     homepage = "https://hedgedoc.org";
+    changelog = "https://github.com/hedgedoc/hedgedoc/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "hedgedoc";
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     platforms = lib.platforms.linux;

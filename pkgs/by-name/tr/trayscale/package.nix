@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   pkg-config,
@@ -8,20 +9,21 @@
   gtk4,
   gobject-introspection,
   libadwaita,
+  desktopToDarwinBundle,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "trayscale";
-  version = "0.18.8";
+  version = "0.18.9";
 
   src = fetchFromGitHub {
     owner = "DeedleFake";
     repo = "trayscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eOKTzIZ/040R6qIRBTtNXz8Me9I/PYuX9+ne4gxGKSw=";
+    hash = "sha256-MPKOxU3b+i85Y5xaCYWzy7fLWi3K9rN7yPtaUv7fsEU=";
   };
 
-  vendorHash = "sha256-NdXXnSaNhp1CikrkycvGbjFS3Ow0SOQcBiWIVYwEODU=";
+  vendorHash = "sha256-G53kmNrTXhHCT5Axb/h9Mkbz/S2mScxnYjn07fBT2Lc=";
 
   subPackages = [ "cmd/trayscale" ];
 
@@ -35,6 +37,9 @@ buildGoModule (finalAttrs: {
     pkg-config
     gobject-introspection
     wrapGAppsHook4
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
   ];
   buildInputs = [
     gtk4

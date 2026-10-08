@@ -1,5 +1,6 @@
 {
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   attica,
   karchive,
@@ -23,7 +24,10 @@
 
 mkDerivation {
   pname = "knewstuff";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
   buildInputs = [
     karchive
     kcompletion

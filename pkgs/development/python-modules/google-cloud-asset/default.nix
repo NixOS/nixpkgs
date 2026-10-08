@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-asset";
-  version = "4.2.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-asset-v${finalAttrs.version}";
-    sha256 = "sha256-dVgcnnInqjUjySL7wjxGzI33t1YZJ8e9mSsmjAJ+fBI=";
+    sha256 = "sha256-M/7uDWWz4YCfxa4gyM9BaAo10iyTMvtR2MhNpdFYnis=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-asset";
@@ -74,7 +74,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = nix-update-script {
       extraArgs = [
-        "--version-regexp"
+        "--version-regex"
         "^google-cloud-asset: v([0-9.]+)"
       ];
     };
@@ -83,7 +83,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-${finalAttrs.src.tag}/packages/google-cloud-asset/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-cloud-asset/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };

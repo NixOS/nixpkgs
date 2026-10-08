@@ -15,6 +15,7 @@
   pciutils,
   procps,
   libtirpc,
+  libtool,
   rpcsvc-proto,
   libx11,
   libxext,
@@ -53,13 +54,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open-vm-tools";
-  version = "13.0.5";
+  version = "13.1.0";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     tag = "stable-${finalAttrs.version}";
-    hash = "sha256-N0z7OpJP8ubYOeb0KHEQkITlWkKP04rpm79VXRnCe0I=";
+    hash = "sha256-XDIgWp6imGVFrodDAncTKh4ohGkTQKulAw5AC4iQ/zc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/open-vm-tools";
@@ -71,8 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    glib # provides glib-genmarshal at build time
     makeWrapper
     pkg-config
+    rpcsvc-proto # provides rpcgen at build time
     udevCheckHook
   ];
 
@@ -84,12 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libmspack
     libtirpc
+    libtool # provides libltdl (libxmlsec dynamic loading)
     libxcrypt
     libxml2
     openssl
     pam
     procps
-    rpcsvc-proto
     udev
     xercesc
     xmlsec
@@ -185,6 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
   '';
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://github.com/vmware/open-vm-tools";

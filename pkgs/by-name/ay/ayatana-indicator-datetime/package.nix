@@ -9,7 +9,7 @@
   dbus,
   dbus-test-runner,
   evolution-data-server,
-  extra-cmake-modules,
+  kdePackages,
   glib,
   gst_all_1,
   gtest,
@@ -37,13 +37,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${if enableLomiriFeatures then "lomiri" else "ayatana"}-indicator-datetime";
-  version = "25.4.0";
+  version = "26.6.0";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-datetime";
     tag = finalAttrs.version;
-    hash = "sha256-8E9ucy8I0w9DDzsLtzJgICz/e0TNqOHgls9LrgA5nk4=";
+    hash = "sha256-zjAQjd5kFho8YfcoWRGbQbzzAJT0id5nh7zQoZXB1Uk=";
   };
 
   postPatch = ''
@@ -93,11 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
     if enableLomiriFeatures then
       (
         [
-          extra-cmake-modules
+          kdePackages.extra-cmake-modules
           mkcal
         ]
         ++ (with libsForQt5; [
-          kcalendarcore
+          __internalKF5.kcalendarcore
           qtbase
         ])
         ++ (with lomiri; [
@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GSETTINGS_LOCALINSTALL" true)
     (lib.cmakeBool "GSETTINGS_COMPILE" true)
     (lib.cmakeBool "ENABLE_LOMIRI_FEATURES" enableLomiriFeatures)
+    (lib.cmakeBool "ENABLE_MKCAL" enableLomiriFeatures)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optionals enableLomiriFeatures [

@@ -32,7 +32,6 @@ let
     ];
     teams = [ lib.teams.electron ];
     platforms = [
-      "x86_64-darwin"
       "x86_64-linux"
       "armv7l-linux"
       "aarch64-linux"
@@ -52,7 +51,6 @@ let
     x86_64-linux = "linux-x64";
     aarch64-linux = "linux-arm64";
     armv7l-linux = "linux-armv7l";
-    x86_64-darwin = "darwin-x64";
     aarch64-darwin = "darwin-arm64";
   };
 
@@ -86,6 +84,9 @@ let
       install -m777 -D chromedriver $out/bin/chromedriver
       runHook postInstall
     '';
+
+    __structuredAttrs = true;
+    strictDeps = true;
   };
 
   darwin = {

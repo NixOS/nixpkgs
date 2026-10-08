@@ -7,14 +7,14 @@
 }:
 
 let
-  version = "2.9.8.1";
+  version = "2.9.9.2";
 in
 skawarePackages.buildPackage {
   inherit version;
 
   pname = "execline";
   # ATTN: also check whether there is a new manpages version
-  sha256 = "sha256-IzUNEHl5CWNgYFImB1kctKIRgyjLWMXmX7GaLA1HJk4=";
+  sha256 = "sha256-kI7U2zprOiOiBdj9TPKnEIkVbyrq4PVGVgRar60t7jI=";
 
   # Maintainer of manpages uses following versioning scheme: for every
   # upstream $version he tags manpages release as ${version}.1, and,
@@ -22,13 +22,13 @@ skawarePackages.buildPackage {
   # ${version}.3 and so on are created.
   manpages = skawarePackages.buildManPages {
     pname = "execline-man-pages";
-    version = "2.9.8.1.3";
-    sha256 = "sha256-jYNx15n9pOK4PPEf0ynvHpgGucgWQKd/4nggY7OmR4M=";
+    version = "2.9.9.1.1";
+    sha256 = "sha256-SMQLeiS03fW9HGDmk+MMfUbnvRGqTzXc/4CuS5LW18U=";
     description = "Port of the documentation for the execline suite to mdoc";
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 
-  description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
+  meta.description = "Small scripting language, to be used in place of a shell in non-interactive scripts";
 
   outputs = [
     "bin"
@@ -37,17 +37,17 @@ skawarePackages.buildPackage {
     "doc"
     "out"
   ];
+  buildInputs = [ skalibs ];
 
   # TODO: nsss support
   configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "lib"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "lib"}/libexec"
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
   ];
 
   postInstall = ''
@@ -70,11 +70,10 @@ skawarePackages.buildPackage {
       -Wall -Wpedantic \
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
-      -I "${skalibs.dev}/include" \
-      -L "${skalibs.lib}/lib" \
+      $(pkg-config --cflags libskarnet) \
       -o "$bin/bin/execlineb" \
       ${./execlineb-wrapper.c} \
-      -lskarnet
+      $(pkg-config --libs libskarnet)
   '';
 
   # Write an execline script.

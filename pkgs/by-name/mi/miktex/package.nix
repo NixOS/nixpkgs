@@ -104,12 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./startup-config-support-nix-store.patch
-    # Miktex will search exectables in "GetMyPrefix(true)/bin".
+    # Miktex will search executables in "GetMyPrefix(true)/bin".
     # The path evaluate to "/usr/bin" in FHS style linux distribution,
     # compared to "/nix/store/.../bin" in NixOS.
     # As a result, miktex will fail to find e.g. 'pkexec','ksudo','gksu'
     # under /run/wrappers/bin in NixOS.
-    # We fix this by adding the PATH environment variable to exectables' search path.
+    # We fix this by adding the PATH environment variable to executables' search path.
     ./find-exectables-in-path.patch
   ];
 

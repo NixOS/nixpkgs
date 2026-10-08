@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "DESTDIR=$(out)"
     "prefix="
+    "VKDT_USE_RAWINPUT=2"
     "VKDT_USE_MCRAW=false" # TODO: support mcraw
   ];
 

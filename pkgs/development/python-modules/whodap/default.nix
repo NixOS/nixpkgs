@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python RDAP utility for querying and parsing information about domain names";
     homepage = "https://github.com/pogzyb/whodap";
-    changelog = "https://github.com/pogzyb/whodap/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/pogzyb/whodap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update,
+  writeShellApplication,
 
   # build-system
   hatchling,
@@ -20,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydantic-ai-slim";
-  version = "1.87.0";
+  version = "2.31.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "pydantic-ai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q5h+7XZ3SU1B9/kY2qBYraYrWFX3vcDFwQLld2oeQaA=";
+    hash = "sha256-9kAUDDstOJP+s/eRZ6DtS7tZ16zIz7yxDpNJtAYiEmw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/pydantic_ai_slim";
@@ -53,7 +55,20 @@ buildPythonPackage (finalAttrs: {
 
   doCheck = false;
 
+  passthru.updateScript = lib.getExe (writeShellApplication {
+    name = "pydantic-ai-updater";
+    runtimeInputs = [
+      nix-update
+    ];
+    text = ''
+      nix-update --build --commit python3Packages.genai-prices
+      nix-update --build --commit python3Packages.pydantic-graph
+      nix-update --build python3Packages.pydantic-ai-slim
+    '';
+  });
+
   meta = {
+    changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
     description = "GenAI Agent Framework, the Pydantic way";
     homepage = "https://github.com/pydantic/pydantic-ai";
     license = lib.licenses.mit;

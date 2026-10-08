@@ -9,6 +9,7 @@
   libidn2,
   libtool,
   libxml2,
+  json_c,
   openssl,
   liburcu,
   libuv,
@@ -29,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.22";
+  version = "9.20.26";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
-    hash = "sha256-y6kv9jG5SWVfR1/ktUKQ9oYP0AcNOZ8iefZDfA04PsY=";
+    hash = "sha256-VSSN7w+HDExGs95yl46pcmFRMVFmYxiKRWTcodIL81A=";
   };
 
   outputs = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libtool
     libxml2
+    json_c
     openssl
     liburcu
     libuv
@@ -109,31 +111,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
   strictDeps = true;
+  __structuredAttrs = true;
 
-  doCheck = false;
-  # TODO: investigate failures; see this and linked discussions:
-  # https://github.com/NixOS/nixpkgs/pull/192962
-  /*
-    doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
-      # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
-      && !is32bit;
-  */
+  doCheck = with stdenv.hostPlatform; !isStatic && isLinux && !isLoongArch64;
   checkTarget = "unit";
   checkInputs = [
     cmocka
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-    tzdata
   ];
-  preCheck =
-    lib.optionalString stdenv.hostPlatform.isMusl ''
-      # musl doesn't respect TZDIR, skip timezone-related tests
-      sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Test timeouts on Darwin
-      sed -i '/^ISC_TEST_ENTRY(tcpdns_recv_one/d' tests/isc/netmgr_test.c
-    '';
+  preCheck = ''
+    # skip timezone-related tests, they are flaky inside the nix sandbox
+    sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
+  ''
+  + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+    # lock benchmarks exceed the 300s test watchdog on slower hardware
+    sed -i '/^ISC_TEST_ENTRY(isc_mutex_benchmark/d' tests/isc/mutex_test.c
+    sed -i '/^ISC_TEST_ENTRY_CUSTOM(isc_rwlock_benchmark/d' tests/isc/rwlock_test.c
+    sed -i '/^ISC_TEST_ENTRY(isc_spinlock_benchmark/d' tests/isc/spinlock_test.c
+  '';
 
   postFixup = ''
     remove-references-to -t "$out" "$dnsutils/bin/delv"
@@ -166,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ bartoostveen ];
     platforms = lib.platforms.unix;
 
     outputsToInstall = [

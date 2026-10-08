@@ -8,18 +8,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastchess";
-  version = "1.8.0-alpha";
+  version = "1.8.2-alpha";
 
   src = fetchFromGitHub {
     owner = "Disservin";
     repo = "fastchess";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FwBsFgFNPbIL1bzQU1Uxf6JAxWKJXaJx1iZV+1hchX0=";
+    hash = "sha256-jeD29xc7xcNapvHKWw4deTCxyCNdpcnBY4/BGe3S8Zw=";
   };
 
   nativeBuildInputs = [
     lowdown-unsandboxed
   ];
+
+  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace app/Makefile \

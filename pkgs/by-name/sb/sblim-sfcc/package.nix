@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     description = "Small Footprint CIM Client Library";
     homepage = "https://sourceforge.net/projects/sblim/";
     license = lib.licenses.cpl10;
-    maintainers = with lib.maintainers; [ deepfire ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

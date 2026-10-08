@@ -7,17 +7,18 @@
   libGL,
   libGLU,
   libx11,
+  expat,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coin";
-  version = "4.0.7";
+  version = "4.0.10";
 
   src = fetchFromGitHub {
     owner = "coin3d";
     repo = "coin";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Sb0WWuUKgKaBvOXChEoWt2CeTqSq4gXig4eGxvtN+/M=";
+    hash = "sha256-Zymizcj+HeNgvvuuIoIHf03I0suOyWGOBIqvnjx5qyw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -26,8 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     libGL
     libGLU
+    expat
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libx11;
+
+  cmakeFlags = [
+    (lib.cmakeBool "USE_EXTERNAL_EXPAT" true)
+  ];
 
   meta = {
     homepage = "https://github.com/coin3d/coin";

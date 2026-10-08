@@ -1,6 +1,7 @@
 # Test printing via CUPS.
 {
   pkgs,
+  testName,
   socket ? true, # whether to use socket activation
   listenTcp ? true, # whether to open port 631 on client
   ...
@@ -11,7 +12,7 @@ let
 in
 
 {
-  name = "printing";
+  name = testName;
   meta = {
     maintainers = [ ];
   };
@@ -49,14 +50,34 @@ in
       services.printing.enable = true;
       services.printing.startWhenNeeded = socket;
       services.printing.listenAddresses = lib.mkIf (!listenTcp) [ ];
-      # Add printer to the client as well, via IPP.
+      # Add printers to the client as well, via IPP.
       hardware.printers.ensurePrinters = [
         {
           name = "DeskjetRemote";
           deviceUri = "ipp://server/printers/DeskjetLocal";
           model = "drv:///sample.drv/deskjet.ppd";
         }
+        {
+          name = "DeskjetRemote2";
+          deviceUri = "ipp://server/printers/DeskjetLocal";
+          model = "drv:///sample.drv/deskjet.ppd";
+        }
       ];
+      hardware.printers.ensureClasses = {
+        Basement = {
+          description = "All the printers in my basement";
+          location = "Floor 0";
+          printers = [ "DeskjetRemote" ];
+        };
+        House = {
+          description = "All the printers in my house";
+          location = "Home";
+          printers = [
+            "DeskjetRemote"
+            "DeskjetRemote2"
+          ];
+        };
+      };
       hardware.printers.ensureDefaultPrinter = "DeskjetRemote";
     };
 
@@ -66,11 +87,13 @@ in
 
     start_all()
 
-    with subtest("Make sure that cups is up on both sides and printers are set up"):
-        server.wait_for_unit("ensure-printers.service")
-        client.wait_for_unit("ensure-printers.service")
+    with subtest("Make sure that cups is up on both sides"):
+        server.wait_for_unit("cups.${if socket then "socket" else "service"}")
+        client.wait_for_unit("cups.${if socket then "socket" else "service"}")
 
     assert "scheduler is running" in client.succeed("lpstat -r")
+
+    client.wait_until_succeeds("journalctl -u cups.service --grep 'CUPS provisioning complete'")
 
     with subtest("UNIX socket is used for connections"):
         assert "/var/run/cups/cups.sock" in client.succeed("lpstat -H")
@@ -81,7 +104,14 @@ in
         server.fail(f"curl --fail --connect-timeout 2 http://{client.name}:631/")
 
     with subtest("LP status checks"):
-        assert "DeskjetRemote accepting requests" in client.succeed("lpstat -a")
+        lpstat = client.succeed("lpstat -a")
+        assert all([
+          "DeskjetRemote accepting requests" in lpstat,
+          "DeskjetRemote2 accepting requests" in lpstat,
+          "Basement accepting requests" in lpstat,
+          "House accepting requests" in lpstat,
+        ])
+
         assert "DeskjetLocal accepting requests" in client.succeed(
             f"lpstat -h {server.name}:631 -a"
         )
@@ -103,7 +133,7 @@ in
         "${pkgs.groff.doc}/share/doc/*/examples/mom/penguin.pdf",
         "${pkgs.groff.doc}/share/doc/*/meref.ps",
         "${pkgs.cups.out}/share/doc/cups/images/cups.png",
-        "${pkgs.pcre.doc}/share/doc/pcre/pcre.txt",
+        "${pkgs.groff.doc}/share/doc/*/examples/mom/README.txt",
     ]:
         file_name = os.path.basename(file)
         with subtest(f"print {file_name}"):

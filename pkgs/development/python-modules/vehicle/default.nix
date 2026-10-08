@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -10,20 +10,22 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  rich,
   syrupy,
+  typer,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "vehicle";
-  version = "2.2.2";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-vehicle";
     tag = "v${version}";
-    hash = "sha256-MPK5Aim/kGXLMOapttkp5ygl8gIlHv0675sBBf6kyAA=";
+    hash = "sha256-gmLBm3ru525cayhdRJ0Ccwsq+juZRQAAjCQQq7g0m+0=";
   };
 
   postPatch = ''
@@ -41,13 +43,21 @@ buildPythonPackage rec {
     yarl
   ];
 
+  optional-dependencies = {
+    cli = [
+      rich
+      typer
+    ];
+  };
+
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "vehicle" ];
 
@@ -56,6 +66,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/frenck/python-vehicle";
     changelog = "https://github.com/frenck/python-vehicle/releases/tag/v${version}";
     license = lib.licenses.mit;
+    mainProgram = "vehicle";
     maintainers = with lib.maintainers; [ fab ];
   };
 }

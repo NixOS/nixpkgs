@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Zaps arguments and environment from the process list";
     homepage = "https://github.com/hackerschoice/zapper";
-    changelog = "https://github.com/hackerschoice/zapper/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/hackerschoice/zapper/releases/tag/${finalAttrs.src.tag}";
     # https://github.com/hackerschoice/zapper/issues/4
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ fab ];

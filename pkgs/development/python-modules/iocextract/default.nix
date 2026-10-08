@@ -13,8 +13,8 @@ buildPythonPackage rec {
   format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "InQuest";
-    repo = "python-iocextract";
+    owner = "pedramamini";
+    repo = "iocextract";
     tag = "v${version}";
     hash = "sha256-cCp9ug/TuVY1zL+kiDlFGBmfFJyAmVwxLD36WT0oRAE=";
   };
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to extract Indicator of Compromises (IOC)";
     mainProgram = "iocextract";
-    homepage = "https://github.com/InQuest/python-iocextract";
-    changelog = "https://github.com/InQuest/python-iocextract/releases/tag/v${version}";
+    homepage = "https://github.com/pedramamini/iocextract";
+    changelog = "https://github.com/pedramamini/iocextract/releases/tag/v${version}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
   };

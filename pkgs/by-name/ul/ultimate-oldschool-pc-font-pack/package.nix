@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,14 +15,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-54U8tZzvivTSOgmGesj9QbIgkSTm9w4quMhsuEc0Xy4=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp */*.ttf $out/share/fonts/truetype
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Ultimate Oldschool PC Font Pack (TTF Fonts)";

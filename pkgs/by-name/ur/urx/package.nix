@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "urx";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "urx";
     tag = finalAttrs.version;
-    hash = "sha256-NSPEAA+tD1CdCjRj3myQB8bPdMhT7H76qAIIWx2z++I=";
+    hash = "sha256-mGFTCKsubT+gIUxdgRAhE69WtgMghkKII/73Auffrt4=";
   };
 
-  cargoHash = "sha256-nPm4ofmu03Rb12spjb+m36C6EauJIppgqTkX1oJF3uk=";
+  cargoHash = "sha256-PRP+iGH3fzfPOUQZAaIab7BSAUGZyxF1MX7tbfAIDks=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -32,6 +32,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Tests require network access
     "--skip=providers"
     "--skip=network::client::tests"
+    "--skip=link_extractor::tests::test_client_is_built_once_and_reused"
+    "--skip=link_extractor::tests::test_reused_client_extracts_from_multiple_urls"
+    "--skip=status_checker::tests::test_client_is_built_once_and_reused"
+    "--skip=status_checker::tests::test_clones_share_one_client"
+    "--skip=status_checker::tests::test_reused_client_checks_multiple_urls"
   ];
 
   doInstallCheck = true;

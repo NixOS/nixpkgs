@@ -7,6 +7,7 @@
 
   aligator,
 
+  ctestCheckHook,
   crocoddyl,
   pinocchio,
   python,
@@ -37,6 +38,7 @@ toPythonModule (
     ++ lib.optional buildStandalone aligator;
 
     nativeCheckInputs = [
+      ctestCheckHook
       pythonImportsCheckHook
     ];
 
@@ -45,7 +47,12 @@ toPythonModule (
       pytest
     ];
 
-    disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    disabledTests = [
+      # known to work in pinocchio 3, but not 4.
+      # ref https://github.com/Simple-Robotics/aligator/pull/404
+      "aligator-test-py-constrained-dynamics"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # SIGTRAP
       "aligator-test-py-rollout"
     ];

@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rgl";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "ink0rr";
     repo = "rgl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kucD1FosCV2dxhLzxpOv/HvsqddH3NiAEVkqGTWTmGE=";
+    hash = "sha256-UBr6yv6fDa3DhPYY/RGkCcjT15UnGa5cDJBUsCkeRjw=";
   };
 
-  cargoHash = "sha256-/BeT18tIucgq1b5js+7QX0d1OyF5drNWMAFtv+g/XtM=";
+  cargoHash = "sha256-6qjk6f7mclRI1X91JNlKCWonSANb2R757r5/MBPRmRA=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

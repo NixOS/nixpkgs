@@ -7,25 +7,34 @@
   pkg-config,
   makeWrapper,
   alsa-lib,
+  libmpg123,
   libogg,
   libvorbis,
   ffmpeg,
   flac,
   yt-dlp,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "cliamp";
-  version = "1.37.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bjarneo";
     repo = "cliamp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dwpRsdAJuUOR5EKtuwJb6s+gOVWSpn9Kme50PPPELlU=";
+    hash = "sha256-r7MrrcVt+/f+iPozn9jaczJmpPv431wAoW8LvHKBtB8=";
   };
 
-  vendorHash = "sha256-raj7FKKC9xLrbYQR+l4AH3X2RPQKzLvghKK+FvFXryU=";
+  vendorHash = "sha256-rtwUWbft5XGEbuBCn0OMCn4TS5Ul+UXJNIqNOzXfU+M=";
+
+  ldflags = [
+    "-s"
+    "-X main.version=${finalAttrs.version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   nativeBuildInputs = [
     pkg-config
@@ -33,6 +42,7 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
+    libmpg123
     libogg
     libvorbis
     flac
@@ -40,6 +50,11 @@ buildGoModule (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ];
+
+  # macOS limits Unix socket paths to 104 bytes; use a shorter TMPDIR.
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export TMPDIR="$(mktemp -d /tmp/cliamp-XXXXXX)"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/cliamp \
@@ -60,6 +75,7 @@ buildGoModule (finalAttrs: {
     description = "Terminal Winamp - a retro terminal music player inspired by Winamp 2.x";
     homepage = "https://github.com/bjarneo/cliamp";
     license = lib.licenses.mit;
+    platforms = with lib.platforms; darwin ++ linux;
     maintainers = with lib.maintainers; [ supermarin ];
     mainProgram = "cliamp";
   };

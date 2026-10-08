@@ -1,8 +1,6 @@
-diff --git a/xpra/server/util.py b/xpra/server/util.py
-index 401a9fb959..678e2ce745 100644
---- a/xpra/server/util.py
-+++ b/xpra/server/util.py
-@@ -175,6 +175,10 @@ def xpra_env_shell_script(socket_dir: str, env: dict[str, str]) -> str:
+--- a/xpra/server/runner_script.py
++++ b/xpra/server/runner_script.py
+@@ -74,6 +74,10 @@
  
  
  def xpra_runner_shell_script(xpra_file: str, starting_dir: str) -> str:

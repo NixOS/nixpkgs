@@ -176,6 +176,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       if !withGraphics then
         "https://github.com/alacritty/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md"
       else
-        "https://github.com/ayosec/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md";
+        "https://github.com/ayosec/alacritty/blob/v${finalAttrs.version}-graphics/CHANGELOG.md";
   };
 })

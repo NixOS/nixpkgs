@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse${clr.gpuArchSuffix}";
-  version = "7.2.2";
+  version = "7.2.3";
 
   outputs = [
     "out"
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "ROCm SPARSE implementation";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/rocsparse";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

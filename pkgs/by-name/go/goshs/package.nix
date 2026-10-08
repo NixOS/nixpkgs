@@ -1,40 +1,32 @@
 {
+  lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  stdenv,
-  lib,
-  fetchpatch,
-  testers,
-
-  # passthru
-  goshs,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "goshs";
-  version = "2.0.3";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
-    owner = "patrickhener";
+    owner = "goshs-labs";
     repo = "goshs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DdGzX1qVz8mA+T9l+V2n7r6ngtV1moypT3sLO7f4OcY=";
+    hash = "sha256-0d4iB6Mtann0OZd/KyWnwq7+fCcWEibAzHSYe30Mce0=";
   };
 
+  vendorHash = "sha256-E+GZn7Trnz3KqzTsEfavWxP1dhsGPx4PyYYae8wjCb4=";
+
   patches = [
-    # Fixes the build for 2.0.3
-    (fetchpatch {
-      url = "https://github.com/patrickhener/goshs/commit/dc4a86e846b5a2e6f7cc97a29a73367dea26f91a.patch";
-      hash = "sha256-yXVBxOAp37yVdI5JlFMzSuSwiUaF2gWOfy4GfBVkGSI=";
-    })
+    # No upstream fix yet; remove when updating to a release that uses goldmark 1.7.17 or later.
+    ./CVE-2026-5160.patch
   ];
 
-  vendorHash = "sha256-R0U/cytan8U9nE/qYHmDUlUfIYhZAcjV2v/uIlZPTCs=";
+  ldflags = [ "-s" ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
@@ -51,20 +43,15 @@ buildGoModule (finalAttrs: {
     "-skip=^TestGetIPv4Addr$"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = goshs;
-    command = "goshs -v";
-    version = "goshs ${finalAttrs.version}";
-  };
+  versionCheckProgramArg = [ "-v" ];
 
   meta = {
     description = "Simple, yet feature-rich web server written in Go";
     homepage = "https://goshs.de";
-    changelog = "https://github.com/patrickhener/goshs/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/goshs-labs/goshs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fab
-      matthiasbeyer
       seiarotg
     ];
     mainProgram = "goshs";

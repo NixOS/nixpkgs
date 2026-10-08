@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "toml-test";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "toml-lang";
     repo = "toml-test";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J5+JO+BrHzje3YmEC9WWA7U6fn+Eye4DQj/knVR+QhE=";
+    hash = "sha256-GqBH657RSIK7wyRRtSn5N3wAZSJazlvcw4wp2Zhbb9o=";
   };
 
   vendorHash = "sha256-JcTW21Zva/7Uvc5AvW9H1IxAcaw3AU0FAdtI3IOtZAc=";

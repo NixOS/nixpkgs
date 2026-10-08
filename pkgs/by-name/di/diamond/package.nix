@@ -3,22 +3,26 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  sqlite,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "diamond";
-  version = "2.1.16";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-/rSnyOlQ7PWMpoX8vojOmD73jrvIDLjT5LOB7MyTnMo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bWJIcQJR2BQED8YGnDSWIO+UehWThgJwHv7hGuT99D8=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib ];
+  buildInputs = [
+    sqlite
+    zlib
+  ];
 
   meta = {
     description = "Accelerated BLAST compatible local sequence aligner";
@@ -34,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
       - Buchfink B, Reuter K, Drost HG, "Sensitive protein alignments at tree-of-life scale using DIAMOND", Nature Methods 18, 366–368 (2021). doi:10.1038/s41592-021-01101-x
     '';
     homepage = "https://github.com/bbuchfink/diamond";
+    changelog = "https://github.com/bbuchfink/diamond/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      debtquity
+    ];
   };
 })

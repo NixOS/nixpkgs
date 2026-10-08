@@ -36,11 +36,13 @@ let
     repo = "gvdb";
     rev = "4758f6fb7f889e074e13df3f914328f3eecb1fd3";
     hash = "sha256-4mqoHPlrMPenoGPwDqbtv4/rJ/uq9Skcm82pRvOxNIk=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phoc";
-  version = "0.53.0";
+  version = "0.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -48,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phoc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qBeOsHxdcJjAx/KGJEQKuqkexp1lGWeEaJPBjAy1Yxw=";
+    hash = "sha256-P81D3gCC4Q1JQPUlAtLbMZdlVOPpJJ1/rLX7zijFcc0=";
     # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
     forceFetchGit = true;
   };

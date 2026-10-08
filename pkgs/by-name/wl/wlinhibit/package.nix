@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   version = "0.1.2";
 
   src = fetchFromGitHub {
-    owner = "0x5a4";
+    owner = "einetuer";
     repo = "wlinhibit";
     rev = "v0.1.2";
     hash = "sha256-mAEBnlIfW1R5+3CMH4ZumQ39Ss2K7PfW28I4/O9saWE=";
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple, stupid idle inhibitor for wayland";
     license = lib.licenses.mit;
-    homepage = "https://github.com/0x5a4/wlinhibit";
+    homepage = "https://github.com/einetuer/wlinhibit";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ _0x5a4 ];
   };

@@ -16,5 +16,10 @@ buildDartApplication {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-  meta.mainProgram = "domine";
+
+  meta = {
+    homepage = "https://github.com/breitburg/domine";
+    mainProgram = "domine";
+    license = lib.licenses.gpl2Only;
+  };
 }

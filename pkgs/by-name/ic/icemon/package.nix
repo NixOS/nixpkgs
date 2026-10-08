@@ -4,7 +4,8 @@
   asciidoc,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
+  pkg-config,
   icecream,
   libcap_ng,
   lzo,
@@ -27,7 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     asciidoc
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
+    pkg-config
     qt6.wrapQtAppsHook
   ];
   buildInputs = [

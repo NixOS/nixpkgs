@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmpc";
-  version = "1.4.0"; # to avoid clash with the MPD client
+  version = "1.4.1"; # to avoid clash with the MPD client
 
   src = fetchurl {
     url = "mirror://gnu/mpc/mpc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MhCzpUaxywDClso2CJHXdA7m/wbesCono1sgzTwLsaU=";
+    hash = "sha256-kSBM0y8WS9O3yZLUpqjOZRlRGq2rMPeLaYLQv41z6TE=";
   };
 
   strictDeps = true;
@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true; # not cross;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";
 
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.multiprecision.org/mpc/";
-    license = lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl3Plus;
 
     platforms = lib.platforms.all;
     maintainers = [ ];

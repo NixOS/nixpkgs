@@ -62,8 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
       "varmod-localtime"
     ]
     # TODO: drop the name-conditioning on stdenv rebuild
-    ++ lib.optional (stdenv.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin") "export"
+    ++ lib.optional (
+      stdenv.hostPlatform.isDarwin && lib.getName stdenv != "bootstrap-stage1-stdenv-darwin"
+    ) "export"
   );
+
+  __structuredAttrs = true;
 
   strictDeps = true;
 
@@ -91,7 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    ./boot-strap --prefix=$out -o . op=install
+    # `boot-strap op=install` runs the built bmake, which breaks cross builds.
+    install -Dm755 bmake $out/bin/bmake
+    install -Dm644 bmake.1 $man/share/man/man1/bmake.1
+    install -Dm755 -d $out/share/mk
+    sh mk/install-mk -v -m 444 $out/share/mk
 
     runHook postInstall
   '';

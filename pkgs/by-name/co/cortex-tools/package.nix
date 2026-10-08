@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   version = "0.11.3";
 
   src = fetchFromGitHub {
-    owner = "grafana";
+    owner = "grafana-cold-storage";
     repo = "cortex-tools";
     tag = "v${finalAttrs.version}";
     hash = "sha256-+GWUC+lnCn5Nw2WytSvW/UsIMmMelCCsnKdBCHuue24=";
@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
   env.CGO_ENABLED = 0;
 
   ldflags = [
-    "-X github.com/grafana/cortex-tools/pkg/version.Version=${finalAttrs.src.tag}"
+    "-X github.com/grafana-cold-storage/cortex-tools/pkg/version.Version=${finalAttrs.src.tag}"
     "-s"
     "-w"
   ];
@@ -60,7 +60,7 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
 
   meta = {
-    changelog = "https://github.com/grafana/cortex-tools/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/grafana-cold-storage/cortex-tools/releases/tag/${finalAttrs.src.tag}";
     description = "Tools used for interacting with Cortex, a Prometheus-compatible server";
     longDescription = ''
       Tools used for interacting with Cortex, a horizontally scalable, highly available, multi-tenant, long term Prometheus server:
@@ -70,7 +70,7 @@ buildGoModule (finalAttrs: {
       - logtool: Tool which parses Cortex query-frontend logs and formats them for easy analysis.
       - e2ealerting: Tool that helps measure how long an alert takes from scrape of sample to Alertmanager notification delivery.
     '';
-    homepage = "https://github.com/grafana/cortex-tools";
+    homepage = "https://github.com/grafana-cold-storage/cortex-tools";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.windows ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ videl ];

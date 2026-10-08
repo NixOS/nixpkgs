@@ -5,6 +5,8 @@
   python,
 
   # build-system
+  cmake,
+  cython,
   setuptools,
 
   # dependencies
@@ -28,6 +30,8 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/catboost/python-package";
 
   build-system = [
+    cmake
+    cython
     setuptools
   ];
 
@@ -40,6 +44,15 @@ buildPythonPackage rec {
     scipy
     six
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "cmake (>=3.24, <4.0)" "cmake" \
+      --replace-fail "'conan (>=2.4.1, <3.0)', " "" \
+      --replace-fail "cython ~= 3.0.10" "cython"
+  '';
+
+  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
@@ -55,8 +68,5 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "catboost" ];
 
-  meta = catboost.meta // {
-    # https://github.com/catboost/catboost/issues/2671
-    broken = lib.versionAtLeast numpy.version "2";
-  };
+  meta = catboost.meta;
 }

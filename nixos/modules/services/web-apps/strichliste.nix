@@ -128,21 +128,23 @@ in
           };
 
           account = {
-            lower = mkOption {
-              type = types.int;
-              default = -200000;
-              example = 0;
-              description = ''
-                The credit limit for user accounts.
-              '';
-            };
+            boundary = {
+              lower = mkOption {
+                type = types.int;
+                default = -200000;
+                example = 0;
+                description = ''
+                  The credit limit for user accounts.
+                '';
+              };
 
-            upper = mkOption {
-              type = types.ints.positive;
-              default = 200000;
-              description = ''
-                The maximum balance on a user account.
-              '';
+              upper = mkOption {
+                type = types.ints.positive;
+                default = 200000;
+                description = ''
+                  The maximum balance on a user account.
+                '';
+              };
             };
           };
 
@@ -246,7 +248,17 @@ in
               };
             };
 
-            transaction = {
+            splitInvoice = {
+              enabled = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  Whether to allow splitting invoices.
+                '';
+              };
+            };
+
+            transactions = {
               enabled = mkOption {
                 type = types.bool;
                 default = true;
@@ -464,18 +476,9 @@ in
         wants = unitDependencies;
         after = unitDependencies;
         inherit (cfg) environment;
-        preStart = ''
-          set -ex
-          if [ ! -e "/var/lib/strichliste/.db-init" ]; then
-            ${lib.optionalString (lib.hasInfix "sqlite" cfg.environment.DATABASE_URL) ''
-              ${lib.getExe cfg.packages.backend} doctrine:database:create
-            ''}
-            ${lib.getExe cfg.packages.backend} doctrine:schema:create
-            touch "/var/lib/strichliste/.db-init"
-          fi
-        '';
         serviceConfig = {
-          Type = "exec";
+          Type = "oneshot";
+          RemainAfterExit = true;
           User = "strichliste";
           Group = "strichliste";
           EnvironmentFile = cfg.environmentFiles;
@@ -491,6 +494,11 @@ in
       systemd.services.phpfpm-strichliste = {
         inherit (cfg) environment;
         serviceConfig.EnvironmentFile = cfg.environmentFiles;
+        restartTriggers = [ settingsFile ];
+        preStart = toString [
+          (lib.getExe cfg.packages.backend)
+          "cache:clear"
+        ];
       };
 
       services.phpfpm.pools.strichliste = {

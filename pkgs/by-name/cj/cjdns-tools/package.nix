@@ -39,7 +39,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/cjdelisle/cjdns";
-    description = "Tools for cjdns managment";
+    description = "Tools for cjdns management";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

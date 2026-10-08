@@ -85,7 +85,6 @@ let
             }) group;
           }) groups;
         };
-        passAsFile = [ "catalogJson" ];
         passthru = {
           inherit groups;
         };
@@ -93,6 +92,7 @@ let
           jq
           json-schema-catalog-rs
         ];
+        __structuredAttrs = true;
       }
       // lib.optionalAttrs (version != null) {
         inherit version;
@@ -105,7 +105,7 @@ let
         mkdir -p "$out_dir"
 
         # Write the catalog JSON. `jq` formats it nicely.
-        jq . <"$catalogJsonPath" >"$out_file"
+        printf "%s" "$catalogJson" | jq . >"$out_file"
 
         json-schema-catalog check "$out_file"
       '';

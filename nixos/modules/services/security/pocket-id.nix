@@ -31,7 +31,8 @@ let
   format = pkgs.formats.keyValue { };
   settingsFile = format.generate "pocket-id-env-vars" cfg.settings;
 
-  exportCredentials = n: _: ''export ${n}="$(${pkgs.systemd}/bin/systemd-creds cat ${n}_FILE)"'';
+  exportCredentials =
+    n: _: ''export ${n}="$(${config.systemd.package}/bin/systemd-creds cat ${n}_FILE)"'';
   exportAllCredentials = vars: lib.concatStringsSep "\n" (lib.mapAttrsToList exportCredentials vars);
   getLoadCredentialList = lib.mapAttrsToList (n: v: "${n}_FILE:${v}") cfg.credentials;
 in
@@ -70,10 +71,13 @@ in
         ENCRYPTION_KEY = "/run/secrets/pocket-id/encryption-key";
       };
       description = ''
-        Environment variables which are loaded from the contents of the specified file paths.
+        Credentials which are loaded from the contents of the specified file paths.
+
         This can be used to securely store tokens and secrets outside of the world-readable Nix store.
 
-        See [PocketID environment variables](https://pocket-id.org/docs/configuration/environment-variables).
+        See [PocketID environment variables](https://pocket-id.org/docs/configuration/environment-variables) (all with the `_FILE` suffix).
+
+        Accepts an attrset mapping from the variable name *without its `_FILE` suffix* to the path on disk.
 
         Alternatively you can use `services.pocket-id.environmentFile` to define all the variables in a single file.
       '';

@@ -19,13 +19,13 @@
 buildHomeAssistantComponent rec {
   owner = "danielcherubini";
   domain = "elegoo_printer";
-  version = "2.8.0";
+  version = "2.12.2";
 
   src = fetchFromGitHub {
     owner = "danielcherubini";
     repo = "elegoo-homeassistant";
     tag = "v${version}";
-    hash = "sha256-JyAgBPaj7BQNn+qhBRZPDw0HypRxpBKGvAuKfQk/bn4=";
+    hash = "sha256-iso1y8fjX88esIJPtgKQIOLlNYnj6zf9W/WlftQzewU=";
   };
 
   dependencies = [

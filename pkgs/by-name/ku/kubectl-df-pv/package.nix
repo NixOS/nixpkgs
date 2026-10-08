@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-df-pv";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "yashbhutwala";
     repo = "kubectl-df-pv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dGWGPamVD/26iEgKQcWGKpFIMMlDivFpD/XzmjCr8pQ=";
+    hash = "sha256-avHWyrTQpk4683JoU90i2H5pnzkZ5IoJ6r6TtXUhxvI=";
   };
 
-  vendorHash = "sha256-J15tCwYiVSPa2hSB3DMFtVW9Uer7pFMCD1OpCobnYMc=";
+  vendorHash = "sha256-Xz8ePhvo0yikpIf9b/7DjZHYWynwNFoL0juohyflZEg=";
 
   meta = {
     description = "df-like utility for persistent volumes on Kubernetes";

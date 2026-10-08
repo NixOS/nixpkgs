@@ -5,7 +5,7 @@
   texliveInfraOnly,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # buildInputs
   cairo,
@@ -42,6 +42,7 @@
   # optional-dependencies
   jupyterlab,
   notebook,
+  typst,
 
   # tests
   ffmpeg,
@@ -187,21 +188,31 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "manim";
+  version = "0.21.0";
   pyproject = true;
-  version = "0.20.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rfPqKPbxT8UsxSin4DquDjPMAUEYmKixx2fBlr5mz8U=";
+    hash = "sha256-K6+U+ri/bBf760JmyhpkzQsQqp+ofve5zBByZPVdc1w=";
   };
 
-  build-system = [
-    hatchling
-  ];
-
   patches = [ ./pytest-report-header.patch ];
+
+  postPatch =
+    # nixpkgs still ships uv-build < 0.12.1
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          "uv_build>=0.12.1,<0.13.0" \
+          "uv_build"
+    '';
+
+  build-system = [
+    uv-build
+  ];
 
   buildInputs = [ cairo ];
 
@@ -246,6 +257,9 @@ buildPythonPackage (finalAttrs: {
     ];
     # TODO package dearpygui
     # gui = [ dearpygui ];
+    typst = [
+      typst
+    ];
   };
 
   makeWrapperArgs = [
@@ -264,10 +278,11 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook
+    typst
     versionCheckHook
   ];
 
-  # about 55 of ~600 tests failing mostly due to demand for display
+  # about 45 of ~1050 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
 
   pythonImportsCheck = [ "manim" ];

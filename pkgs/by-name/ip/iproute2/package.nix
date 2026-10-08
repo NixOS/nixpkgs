@@ -16,33 +16,25 @@
   pkgsStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iproute2";
-  version = "6.19.0";
+  version = "7.1.0";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-kzIhPTVIC2RwhqcMMC3oVo3oNFWph3TTXeIWxM4ZEAY=";
+    url = "mirror://kernel/linux/utils/net/iproute2/iproute2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/Z+huVgJQXFXyoPdcpV+MmG9vOiWNTy5NvgK8LM6S1w=";
   };
-
-  patches = [
-    # musl build fix: https://lore.kernel.org/netdev/20260223223435.289652-1-slyich@gmail.com/T/#u
-    (fetchurl {
-      name = "musl.patch";
-      url = "https://lore.kernel.org/netdev/20260223223435.289652-1-slyich@gmail.com/raw";
-      hash = "sha256-H45PUilF1D+1DxgtxSRBCgH4RQ7+APBfIW4QE9v6gUE=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace "CC := gcc" "CC ?= $CC"
+      --replace-fail "CC := gcc" "CC ?= $CC"
   '';
 
   outputs = [
     "out"
     "dev"
     "scripts"
+    "man"
   ];
 
   configureFlags = [
@@ -53,7 +45,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "SBINDIR=$(out)/sbin"
-    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
     "HDRDIR=$(dev)/include/iproute2"
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -95,6 +86,8 @@ stdenv.mkDerivation rec {
     libbpf
   ];
 
+  __structuredAttrs = true;
+  strictDeps = true;
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
@@ -114,4 +107,4 @@ stdenv.mkDerivation rec {
       fpletz
     ];
   };
-}
+})

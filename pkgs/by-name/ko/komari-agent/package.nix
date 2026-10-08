@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "komari-agent";
-  version = "1.1.93";
+  version = "1.2.60";
 
   src = fetchFromGitHub {
     owner = "komari-monitor";
     repo = "komari-agent";
     tag = finalAttrs.version;
-    hash = "sha256-6rS+DvPrraW4EgYiyTzhzFTSKQQ4OssiBUSOMaOlBvo=";
+    hash = "sha256-SsM/RbwdWmKty+6ueL4J9auKcPkRMNX59Imko3oPOiQ=";
   };
 
-  vendorHash = "sha256-5RL/dDR/Or9GRCPVQmUYKTV82q7xuN2Mqc4/86WmbqY=";
+  vendorHash = "sha256-teKx9u7M2ZQdd7G3xSCqhwjcHRzBzKeBViSl62TRg+g=";
 
   ldflags = [
     "-s"
@@ -27,7 +27,9 @@ buildGoModule (finalAttrs: {
   # tests require network access
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = {
     homepage = "https://github.com/komari-monitor/komari-agent";

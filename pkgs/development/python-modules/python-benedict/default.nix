@@ -16,26 +16,31 @@
   python-slugify,
   pyyaml,
   requests,
+  pydantic,
   setuptools,
-  toml,
+  tomli-w,
+  typing-extensions,
   useful-types,
   xlrd,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-benedict";
-  version = "0.36.0";
+  version = "0.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
-    tag = version;
-    hash = "sha256-FIajPROnyuMhM2YzlqJm5A5eRp6v39VHb8RJZjmXqxQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-1YZqc0Ytqx4a1WGaqz5y0r2hw3okvax0/r267YTTGCE=";
   };
 
-  pythonRelaxDeps = [ "boto3" ];
+  pythonRelaxDeps = [
+    "boto3"
+    "typing_extensions"
+  ];
 
   build-system = [ setuptools ];
 
@@ -44,6 +49,7 @@ buildPythonPackage rec {
     python-slugify
     requests
     useful-types
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -54,9 +60,10 @@ buildPythonPackage rec {
       mailchecker
       openpyxl
       phonenumbers
+      pydantic
       python-dateutil
       pyyaml
-      toml
+      tomli-w
       xlrd
       xmltodict
     ];
@@ -68,7 +75,7 @@ buildPythonPackage rec {
       beautifulsoup4
       openpyxl
       pyyaml
-      toml
+      tomli-w
       xlrd
       xmltodict
     ];
@@ -79,7 +86,8 @@ buildPythonPackage rec {
       python-dateutil
     ];
     s3 = [ boto3 ];
-    toml = [ toml ];
+    schema = [ pydantic ];
+    toml = [ tomli-w ];
     xls = [
       openpyxl
       xlrd
@@ -93,7 +101,7 @@ buildPythonPackage rec {
     pytestCheckHook
     python-decouple
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # Tests require network access
@@ -115,8 +123,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module with keylist/keypath support";
     homepage = "https://github.com/fabiocaccamo/python-benedict";
-    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/fabiocaccamo/python-benedict/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

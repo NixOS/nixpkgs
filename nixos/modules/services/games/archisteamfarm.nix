@@ -22,6 +22,9 @@ let
     // lib.optionalAttrs (cfg.ipcPasswordFile != null) {
       IPCPassword = "#ipcPassword#";
     }
+    // lib.optionalAttrs (cfg.licenseFile != null) {
+      LicenseID = "#licenseID#";
+    }
   );
 
   ipc-config = format.generate "IPC.config" cfg.ipcSettings;
@@ -107,6 +110,12 @@ in
         Statistics = false;
       };
       default = { };
+    };
+
+    licenseFile = lib.mkOption {
+      type = with lib.types; nullOr path;
+      default = null;
+      description = "Path to a file containing the license. The file must be readable by the `archisteamfarm` user/group.";
     };
 
     ipcPasswordFile = lib.mkOption {
@@ -272,6 +281,10 @@ in
             mkdir -p config
 
             cp --no-preserve=mode ${configFile} config/ASF.json
+
+            ${lib.optionalString (cfg.licenseFile != null) ''
+              ${replaceSecretBin} '#licenseID#' '${cfg.licenseFile}' config/ASF.json
+            ''}
 
             ${lib.optionalString (cfg.ipcPasswordFile != null) ''
               ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json

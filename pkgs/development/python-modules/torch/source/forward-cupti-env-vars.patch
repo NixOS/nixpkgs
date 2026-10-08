@@ -1,0 +1,12 @@
+diff --git a/cmake/EnvVarForwarding.cmake b/cmake/EnvVarForwarding.cmake
+--- a/cmake/EnvVarForwarding.cmake
++++ b/cmake/EnvVarForwarding.cmake
+@@ -18,6 +18,8 @@
+   CUDA_HOST_COMPILER
+   CUDA_NVCC_EXECUTABLE
+   CUDA_SEPARABLE_COMPILATION
++  CUDA_cupti_LIBRARY
++  CUDAToolkit_CUPTI_INCLUDE_DIR
+   CUDNN_LIBRARY
+   CUDNN_INCLUDE_DIR
+   CUDNN_ROOT

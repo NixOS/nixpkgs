@@ -16,16 +16,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "argc";
-  version = "1.23.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = "argc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-in2ymxiSZbs3wZwo/aKfu11x8SLx4OHOoa/tVxr3FyM=";
+    hash = "sha256-xgJIJUk9T7zUbr1MqN89mbt6IY4J4lG9uCzWrsmOW0Q=";
   };
 
-  cargoHash = "sha256-2UmI9CMa130T7ML9iVNQ8Zh/stiFg05eBtF1sprmwk8=";
+  cargoHash = "sha256-5en2517Xgn+4FYeTcpj6m2ZN/MTItiu2g9g/UEJAEiw=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional (!canExecuteHost) buildPackages.argc;
 
@@ -42,9 +42,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     LANG = "C.UTF-8";
-  }
-  // lib.optionalAttrs (glibcLocales != null) {
-    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+    LOCALE_ARCHIVE = lib.optionalString (
+      finalAttrs.finalPackage.doInstallCheck && glibcLocales != null
+    ) "${glibcLocales}/lib/locale/locale-archive";
   };
 
   doInstallCheck = true;
@@ -55,14 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
     tests = {
       cross =
-        (
-          if stdenv.hostPlatform.isDarwin then
-            if stdenv.hostPlatform.isAarch64 then pkgsCross.x86_64-darwin else pkgsCross.aarch64-darwin
-          else if stdenv.hostPlatform.isAarch64 then
-            pkgsCross.gnu64
-          else
-            pkgsCross.aarch64-multiplatform
-        ).argc;
+        (if stdenv.hostPlatform.isAarch64 then pkgsCross.gnu64 else pkgsCross.aarch64-multiplatform).argc;
     };
   };
 

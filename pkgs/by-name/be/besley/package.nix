@@ -8,6 +8,11 @@ stdenvNoCC.mkDerivation {
   pname = "besley";
   version = "4.0-unstable-2023-01-09";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "indestructible-type";
     repo = "Besley";

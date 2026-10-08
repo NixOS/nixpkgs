@@ -9,6 +9,11 @@ stdenvNoCC.mkDerivation {
   pname = "blackout";
   version = "2014-07-29";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchFromGitHub {
     owner = "theleagueof";
     repo = "blackout";

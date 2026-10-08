@@ -5,11 +5,12 @@
   makeWrapper,
   writeText,
   fpc,
-  gtk2,
+  gtk3,
   glib,
   pango,
   atk,
   gdk-pixbuf,
+  harfbuzz,
   libxi,
   xorgproto,
   libx11,
@@ -27,7 +28,7 @@
 #  1. the build date is embedded in the binary through `$I %DATE%` - we should dump that
 
 let
-  version = "4.4-0";
+  version = "4.8-0";
 
   # as of 2.0.10 a suffix is being added. That may or may not disappear and then
   # come back, so just leave this here.
@@ -43,7 +44,7 @@ let
     )
   );
 
-  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk2";
+  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk3";
 
   qtVersion = lib.versions.major qtbase.version;
 in
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${majorMinorPatch version}/lazarus-${version}.tar.gz";
-    hash = "sha256-GQ7ce3p7GEMFAslkpF399UGP8Wu8rVwEQjszoJ0izAY=";
+    hash = "sha256-a0yeyU/nn+TlgCfde/ENm2w1ycsvkdtZMLdYC0ogGpk=";
   };
 
   postPatch = ''
@@ -61,9 +62,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    # we need gtk2 unconditionally as that is the default target when building applications with lazarus
+    # we need gtk unconditionally as that is the default target when building applications with lazarus
     fpc
-    gtk2
+    gtk3
     glib
     libxi
     xorgproto
@@ -73,6 +74,7 @@ stdenv.mkDerivation rec {
     atk
     stdenv.cc
     gdk-pixbuf
+    harfbuzz
   ]
   ++ lib.optionals withQt [
     libqtpas
@@ -109,11 +111,13 @@ stdenv.mkDerivation rec {
         "-lc"
         "-lcairo"
         "-lgcc_s"
-        "-lgdk-x11-2.0"
+        "-lgdk-3"
         "-lgdk_pixbuf-2.0"
         "-lglib-2.0"
-        "-lgtk-x11-2.0"
+        "-lgtk-3"
         "-lpango-1.0"
+        "-lharfbuzz"
+        "-lharfbuzz-gobject"
       ]
       ++ lib.optionals withQt [
         "-L${lib.getLib libqtpas}/lib"

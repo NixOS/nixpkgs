@@ -169,6 +169,12 @@ in
           krdp
           kconfig # required for xdg-terminal from xdg-utils
           qtbase # for qtpaths which is required for xdg-mime from xdg-utils
+          # touch keyboard
+          plasma-keyboard
+          qtvirtualkeyboard # used by plasma-keyboard KCM
+
+          # experimental(?) Union theme
+          union
         ]
         ++ lib.optional config.networking.networkmanager.enable qrca
         ++ lib.optionals config.hardware.sensor.iio.enable [
@@ -191,8 +197,8 @@ in
           # Only symlink the KIO plugins, so we don't accidentally pull any services
           # like KCMs or kcookiejar
           let
-            kioPluginPath = "${pkgs.plasma5Packages.qtbase.qtPluginPrefix}/kf5/kio";
-            inherit (pkgs.plasma5Packages) kio;
+            kioPluginPath = "${pkgs.libsForQt5.qtbase.qtPluginPrefix}/kf5/kio";
+            inherit (pkgs.libsForQt5.__internalKF5) kio;
           in
           pkgs.runCommand "kio5-plugins-only" { } ''
             mkdir -p $out/${kioPluginPath}
@@ -268,6 +274,7 @@ in
 
     services.power-profiles-daemon.enable = mkDefault true;
     services.system-config-printer.enable = mkIf config.services.printing.enable (mkDefault true);
+    programs.fuse.enable = true;
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;

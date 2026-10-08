@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4";
 
   src = fetchurl {
-    url = "http://www.delorie.com/store/ace/ace-${finalAttrs.version}.tar.gz";
+    url = "https://www.delorie.com/store/ace/ace-${finalAttrs.version}.tar.gz";
     hash = "sha256-H+47BTOSGkKHPAYj8z2HOgZ7HuxY8scMAUSRRueaTM4=";
   };
 
@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-gcc-14.patch
     # error: initialization of 'void (*)(int,  int,  int)' from incompatible pointer type 'void (*)(void)' [-Wincompatible-pointer-types]
     ./fix-gcc-15.patch
+    # fixes Wayland segfault from missing X11 fonts by providing a fallback
+    ./fix-wayland-segfault.patch
   ];
 
   nativeBuildInputs = [
@@ -67,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   meta = {
-    homepage = "http://www.delorie.com/store/ace/";
+    homepage = "https://www.delorie.com/store/ace/";
     description = "Solitaire games in X11";
     longDescription = ''
       The Ace of Penguins is a set of Unix/X solitaire games based on the ones

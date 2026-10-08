@@ -17,7 +17,7 @@
   cx-oracle,
   mariadb,
   mypy,
-  mysql-connector,
+  mysql-connector-python,
   mysqlclient,
   pg8000,
   psycopg2,
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     ];
     mssql_pyodbc = [ pyodbc ];
     mysql = [ mysqlclient ];
-    mysql_connector = [ mysql-connector ];
+    mysql_connector = [ mysql-connector-python ];
     mariadb_connector = [ mariadb ];
     oracle = [ cx-oracle ];
     postgresql = [ psycopg2 ];
@@ -100,9 +100,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sqlalchemy" ];
 
   meta = {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }";
+    changelog =
+      let
+        shortVersion = lib.replaceString "." "" (lib.versions.majorMinor version);
+      in
+      "https://github.com/sqlalchemy/sqlalchemy/blob/${src.rev}/doc/build/changelog/changelog_${shortVersion}.rst";
     description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
     license = lib.licenses.mit;

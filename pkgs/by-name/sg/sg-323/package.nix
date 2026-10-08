@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libx11
     libxcomposite

@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ping-exporter";
-  version = "1.1.4";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "czerwonk";
     repo = "ping_exporter";
-    rev = version;
-    hash = "sha256-H+HcwDMnRgvEnbaI/tcS457Ir2Xtq30g44EYo4UPCE0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r9+cx5mU3aW9Yf7LoRm1G8izFt3D4gMOlLGuNo4L5z0=";
   };
 
-  vendorHash = "sha256-bEJstamu0+EfHL2cduWb/iDeYCp8tzGCS2Lvc7Onp48=";
+  vendorHash = "sha256-JKkvg09rtnc4CCUoZ5+NZEVcHh5nLFvkhaBQS4IksF4=";
 
   meta = {
     description = "Prometheus exporter for ICMP echo requests";
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nudelsalat ];
   };
-}
+})

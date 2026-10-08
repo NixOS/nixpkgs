@@ -10,24 +10,34 @@
   python3,
 }:
 let
-  version = "18.7.0";
+  version = "20.4.0";
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
     rev = "v${version}";
-    hash = "sha256-Z+PtS88Rv9Vv6FA15KxSBWCmOtwmTqO1etgCV7WaTXo=";
+    hash = "sha256-EMN54PR9lhrZcGMq2iNUsdyBP3wVk4G/isjsneIGslI=";
   };
   missingHashes = ./missing-hashes.json;
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/expo/eas-cli/blob/v18.7.0/package.json#L37
+    ./yarn-4.14-support.patch
+  ];
 in
 # cc is necessary because of building an npm package without a prebuilt binary
 #  for ARM. See comment in nativeBuildInputs below.
 stdenv.mkDerivation (finalAttrs: {
   pname = "eas-cli";
-  inherit src version missingHashes;
+  inherit
+    src
+    version
+    missingHashes
+    patches
+    ;
 
   yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit src missingHashes;
-    hash = "sha256-ZlbCHWEwVaYCfzowrm1qrM1MpLo5vNmEG5bWzWT/cTU=";
+    inherit src missingHashes patches;
+    hash = "sha256-dOx4T009+FMFEvTZtlyJpAUo2UYBm1O1hIyBnSbqIgw=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
     tmpfile="$(mktemp)"
     jq '.useNx = false' lerna.json > "$tmpfile"
     mv "$tmpfile" lerna.json
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
   '';
 
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.

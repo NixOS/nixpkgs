@@ -4,10 +4,11 @@
   rustPlatform,
   cargo-tauri,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
   pkg-config,
+  protobuf,
   wrapGAppsHook3,
   desktop-file-utils,
   webkitgtk_4_1,
@@ -27,27 +28,28 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadlock-mod-manager";
-  version = "0.18.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "deadlock-mod-manager";
     repo = "deadlock-mod-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+64Y6BFwgQIQhmFzZXOeJ/IGFn+OXV58I/ZdARVFt4w=";
+    hash = "sha256-TqMChiww+Do16T3rJDkRIjILg/DuWx0tphGeQiMSHkA=";
   };
 
   cargoRoot = "apps/desktop";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-6ljyPdobcoBaYyarc7Iin5N24y1YXPafrYAk2xvBtvY=";
+  cargoHash = "sha256-/Y0f0FRv3DNfoxAbf9FGLTQ6ZplGrD40HRpHf1qsMDE=";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     cargo-tauri.hook
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_11
     pkg-config
+    protobuf
     wrapGAppsHook3
   ];
 
@@ -76,10 +78,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 2;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
     sourceRoot = "source";
-    hash = "sha256-fFcKyqAo/HpGBaEJMk6Lq0FafNXrGu9z9nHnav5d6Hg=";
+    hash = "sha256-ZxlP6zOwY9Fxa4BCqnUoCmci3lviHn7H3HU5SnmdrSU=";
   };
 
   patches = [
@@ -88,9 +90,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.VITE_API_URL = "https://api.deadlockmods.app";
 
-  # Skip tests that require network access
   checkFlags = [
+    # Requires network access
     "--skip=download_manager::downloader::tests::test_download_file"
+    # Asserts that set_steam_dir rejects a non-Steam directory, but steamlocate
+    # 2.1.0's SteamDir::from_dir only checks that the path is a directory
+    # (further validation is an upstream TODO), so this fails in any environment.
+    "--skip=mod_manager::steam_manager::tests::set_steam_dir_rejects_invalid_directory"
   ];
 
   preFixup = ''

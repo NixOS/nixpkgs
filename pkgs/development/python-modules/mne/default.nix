@@ -29,14 +29,16 @@
 
 buildPythonPackage rec {
   pname = "mne";
-  version = "1.12.0";
+  version = "1.12.1";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mne-tools";
     repo = "mne-python";
     tag = "v${version}";
-    hash = "sha256-j5PpUF7Yle8mFtIjawDaulq1s7zzVPpT3Y4+xNbQ+fk=";
+    hash = "sha256-8PzYTG8z35IG0nVegoPaJB/vpULujqHDd2VtLeXS0SQ=";
   };
 
   postPatch = ''
@@ -97,11 +99,6 @@ buildPythonPackage rec {
     # Fails when no "model name" is present in /proc/cpuinfo,
     # which is common on Arm Linux systems
     "test_sys_info_basic"
-  ];
-
-  pytestFlag = [
-    # removes 700k lines from pytest log, remove this when scipy is at v1.17.0
-    "--disable-warnings"
   ];
 
   disabledTestMarks = [

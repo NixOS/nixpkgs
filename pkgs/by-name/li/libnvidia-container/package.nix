@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libnvidia-container";
-  version = "1.17.8";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OzjcYxnWjzgmrjERyPN3Ch3EQj4t1J5/TbATluoDESg=";
+    hash = "sha256-FlHMGMyKkqqtIAl/T5nGkfZNsurcoltKwxn2lSIOq7g=";
   };
 
   patches = [

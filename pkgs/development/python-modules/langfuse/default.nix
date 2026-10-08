@@ -15,17 +15,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langfuse";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langfuse";
     repo = "langfuse-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JJfVh09ziAnizQcUusjEJPLUBpi9o04gfBysO+hA6Fg=";
+    hash = "sha256-BTwCAyqZMic5sOVAXOhhS6H1SBoEePo1fGOt5vLiLUo=";
   };
 
   build-system = [ poetry-core ];
+
+  pythonRelaxDeps = [
+    "wrapt"
+  ];
 
   dependencies = [
     backoff

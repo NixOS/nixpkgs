@@ -19,6 +19,21 @@ let
     )
   );
 
+  fishFunctions = lib.mapAttrs' (
+    name: value: {
+      name = "fish/functions/${name}.fish";
+      value.source =
+        let
+          body = if lib.isPath value then lib.readFile value else value;
+        in
+        indentFishFile "${name}.fish" ''
+          function ${name}
+            ${lib.strings.removeSuffix "\n" body}
+          end
+        '';
+    }
+  );
+
   envShellInit = pkgs.writeText "shellInit" cfge.shellInit;
   envLoginShellInit = pkgs.writeText "loginShellInit" cfge.loginShellInit;
   envInteractiveShellInit = pkgs.writeText "interactiveShellInit" cfge.interactiveShellInit;
@@ -27,11 +42,16 @@ let
   # See https://github.com/fish-shell/fish-shell/issues/12079
   indentFishFile =
     name: text:
-    pkgs.runCommandLocal name {
-      nativeBuildInputs = [ cfg.package ];
-      inherit text;
-      passAsFile = [ "text" ];
-    } "fish --no-config -c 'fish_indent $textPath' > $out";
+    pkgs.runCommandLocal name
+      {
+        nativeBuildInputs = [ cfg.package ];
+        strictDeps = true;
+        inherit text;
+        __structuredAttrs = true;
+      }
+      ''
+        printf "%s" "$text" | fish --no-config -c fish_indent > $out
+      '';
 
   sourceEnv =
     file:
@@ -131,6 +151,58 @@ in
         type = with lib.types; attrsOf (nullOr (either str path));
       };
 
+      shellFunctions = lib.mkOption {
+        description = ''
+          A set of fish functions, with the attribute name being the function name. Function names cannot be reserved
+          words or have spaces. These are elements of fish syntax or builtin commands which are essential for the
+          operations of the shell.
+
+          See the documentation for [fish functions](https://fishshell.com/docs/current/cmds/function.html) for further information.
+        '';
+        example = {
+          ll.body = "ls -l $argv";
+          mcd = {
+            modifiers = {
+              description = "Create a directory and set CWD";
+            };
+            body = ''
+              command mkdir $argv
+              if test $status = 0
+                switch $argv[(count $argv)]
+                  case '-*'
+
+                  case '*'
+                    cd $argv[(count $argv)]
+                    return
+                end
+              end
+            '';
+          };
+        };
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              body = lib.mkOption {
+                type = lib.types.str;
+                description = ''
+                  The function body. You may provide a path or a string containing the fish function body.
+                '';
+              };
+
+              modifiers = lib.mkOption {
+                type = lib.types.attrsOf lib.types.anything;
+                default = { };
+                defaultText = "input for 'lib.cli.toCommandLine'";
+                description = ''
+                  Modifiers to be applied to the function. This is a string, concatenated with a space after the function nane
+                '';
+              };
+            };
+
+          }
+        );
+      };
+
       shellInit = lib.mkOption {
         default = "";
         description = ''
@@ -199,16 +271,16 @@ in
             ''
           else
             indentFishFile "nixos-env-preinit.fish" ''
-              # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
-              # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
-              set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d $__fish_datadir/functions
+              # This happens before embedded:config.fish sets fish_function_path, so it is currently
+              # unset. We set it and then completely erase it, leaving its configuration to embedded:config.fish
+              set fish_function_path ${pkgs.fishPlugins.foreign-env}/share/fish/vendor_functions.d
 
               # source the NixOS environment config
               if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
                 fenv source ${config.system.build.setEnvironment}
               end
 
-              # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
+              # clear fish_function_path so that it will be correctly set when we return to embedded:config.fish
               set -e fish_function_path
             '';
       }
@@ -222,6 +294,9 @@ in
             ${sourceEnv "shellInit"}
 
             ${cfg.shellInit}
+
+            # Add the search path for global fish functions
+            set fish_function_path /etc/fish/functions/ $fish_function_path
 
             # and leave a note so we don't source this config section again from
             # this very shell (children will source the general config anew)
@@ -259,25 +334,35 @@ in
         '';
       }
 
+      {
+        etc = lib.mapAttrs' (name: value: {
+          name = "fish/functions/${name}.fish";
+          value.source =
+            let
+              modifiers = lib.cli.toCommandLineShellGNU { } value.modifiers;
+            in
+            indentFishFile "${name}.fish" ''
+              function ${name} ${modifiers}
+                ${lib.trim value.body}
+              end
+            '';
+        }) cfg.shellFunctions;
+      }
+
       (lib.mkIf cfg.generateCompletions {
         etc."fish/generated_completions".source =
           let
-            patchedGenerator = pkgs.stdenv.mkDerivation {
-              name = "fish_patched-completion-generator";
-              srcs = [
-                "${cfg.package}/share/fish/tools/create_manpage_completions.py"
-              ];
-              unpackCmd = "cp $curSrc $(basename $curSrc)";
-              sourceRoot = ".";
-              patches = [ ./fish_completion-generator.patch ]; # to prevent collisions of identical completion files
-              dontBuild = true;
-              installPhase = ''
-                mkdir -p $out
-                cp * $out/
-              '';
-              preferLocalBuild = true;
-              allowSubstitutes = false;
-            };
+            # fish embeds the generator script in the binary, so extract it.
+            generator =
+              pkgs.runCommandLocal "fish_completion-generator"
+                {
+                  nativeBuildInputs = [ cfg.package ];
+                }
+                ''
+                  mkdir -p $out
+                  fish --no-config -c 'status get-file tools/create_manpage_completions.py' \
+                    > $out/create_manpage_completions.py
+                '';
             generateCompletions =
               package:
               pkgs.runCommandLocal
@@ -298,14 +383,40 @@ in
                 ''
                   mkdir -p $out
                   if [ -d $package/share/man ]; then
-                    find -L $package/share/man -type f | xargs ${pkgs.python3.pythonOnBuildForHost.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
+                    find -L $package/share/man -type f -print0 \
+                      | xargs -0 ${pkgs.python3.pythonOnBuildForHost.interpreter} \
+                          ${generator}/create_manpage_completions.py --directory $out \
+                          >/dev/null
                   fi
+
+                  # The generator emits a header comment containing the man page store
+                  # path. Strip it so identical completions from different packages
+                  # don't collide and so we don't retain runtime references to the
+                  # inputs. Fail if generated files lack the expected header so that a
+                  # change in the upstream format gets noticed.
+                  shopt -s nullglob
+                  for f in $out/*.fish; do
+                    if ! grep -q '^# Autogenerated from ' "$f"; then
+                      echo "error: expected '# Autogenerated from' header not found in $f" >&2
+                      exit 1
+                    fi
+                    sed -i '/^# Autogenerated from /d' "$f"
+                  done
                 '';
+            packages =
+              if
+                config.documentation.enable && config.documentation.nixos.enable && config.documentation.man.enable
+              then
+                builtins.filter (pkg: pkg != config.system.build.manual.nixos-configuration-reference-manpage) (
+                  cfge.systemPackages ++ cfg.extraCompletionPackages
+                )
+              else
+                cfge.systemPackages ++ cfg.extraCompletionPackages;
           in
           pkgs.buildEnv {
             name = "system_fish-completions";
             ignoreCollisions = true;
-            paths = map generateCompletions (config.environment.systemPackages ++ cfg.extraCompletionPackages);
+            paths = map generateCompletions packages;
           };
       })
 

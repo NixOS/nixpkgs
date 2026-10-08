@@ -3,44 +3,38 @@
   buildPythonPackage,
   certifi,
   cryptography,
-  docker,
   fetchFromGitHub,
-  flit-core,
-  podman,
+  poetry-core,
   pycryptodome,
   pytestCheckHook,
-  python-dateutil,
   typing-extensions,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "nethsm";
-  version = "2.0.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nethsm-sdk-py";
     tag = "v${version}";
-    hash = "sha256-wqnyI6QmsBfQW7NbJrk92Ufw0+IFmc8/0ZsUp5XswYw=";
+    hash = "sha256-kOZ/kNvYlnKi/ojv4b4ZGmNZqARZPAT0g12xi6gw39E=";
   };
 
   pythonRelaxDeps = true;
 
-  build-system = [ flit-core ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     certifi
     cryptography
-    python-dateutil
     typing-extensions
     urllib3
   ];
 
   nativeCheckInputs = [
-    docker
-    podman
     pycryptodome
     pytestCheckHook
   ];
@@ -62,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Nitrokey/nethsm-sdk-py";
     changelog = "https://github.com/Nitrokey/nethsm-sdk-py/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ frogamic ];
+    maintainers = [ lib.maintainers.panicgh ];
   };
 }

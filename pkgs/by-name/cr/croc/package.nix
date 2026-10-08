@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   callPackage,
   installShellFiles,
@@ -9,20 +9,24 @@
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "croc";
-  version = "10.4.2";
+  version = "11.5.2";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = "croc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JZV02QZAS4OhnFdEB/EKm2FL0o4VmNSJIWNBdmIIdrE=";
+    hash = "sha256-1qUwvMazz3bvkaIEDuI/SeDazINsh1EQgg+vfj/R5kU=";
   };
 
-  vendorHash = "sha256-/qPBHpCdEu1uBFFwE7uzmCcm4EL8TxUWdjiaFlUSxIU=";
+  vendorHash = "sha256-6B7KZd0Y/RvV9q9U8kHFnKqkDX7uA1tCW2vaFnfeQZ0=";
 
   subPackages = [ "." ];
+
+  # The root package's interrupt tests start a local relay, which needs to bind
+  # a port inside the Darwin sandbox.
+  __darwinAllowLocalNetworking = true;
 
   nativeBuildInputs = [
     installShellFiles
@@ -70,8 +74,8 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       equirosa
-      SuperSandro2000
       ryan4yin
+      kaynetik
     ];
     mainProgram = "croc";
   };

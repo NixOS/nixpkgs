@@ -49,6 +49,13 @@ buildPythonPackage rec {
         cmake
         gfortran
       ];
+
+      env = {
+        # -fmacro-prefix-map is not a valid option for Fortran.
+        # This is true on all platforms, but the flag only seems to be a problem on Darwin.
+        NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-complain-wrong-lang";
+        NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-z,noexecstack";
+      };
     };
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=incompatible-pointer-types"

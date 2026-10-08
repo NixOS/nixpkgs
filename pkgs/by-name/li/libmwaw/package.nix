@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmwaw";
-  version = "0.3.22";
+  version = "0.3.23";
 
   src = fetchurl {
     url = "mirror://sourceforge/libmwaw/libmwaw/libmwaw-${finalAttrs.version}/libmwaw-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-oaOf/Oo/8qenquDCOHfd9JGLVUv4Kw3l186Of2HqjjI=";
+    sha256 = "sha256-rDWQ9pGikE64x9yLdXuKKfEl9ZJEnkIUWa6PqSizmes=";
   };
 
   nativeBuildInputs = [ pkg-config ];

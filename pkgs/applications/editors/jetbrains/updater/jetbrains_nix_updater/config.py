@@ -3,7 +3,7 @@ import os
 import dataclasses
 from pathlib import Path
 
-SUPPORTED_SYSTEMS = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
+SUPPORTED_SYSTEMS = ["x86_64-linux", "aarch64-linux", "aarch64-darwin"]
 
 
 def find_nixpkgs(current_path: Path) -> Path:

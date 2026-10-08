@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "randomX";
-  version = "1.2.1";
+  version = "1.2.3";
 
   nativeBuildInputs = [ cmake ];
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tevador";
     repo = "randomX";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dfImzwbEfJQcaPZCoWypHiI6dishVRdqS/r+n3tfjvM=";
+    sha256 = "sha256-H5tsmvCeMYMpLd+XHe5365QRMaXaUF7GkXk21ZH2W1E=";
   };
 
   meta = {

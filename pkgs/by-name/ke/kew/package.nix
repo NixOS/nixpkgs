@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.7.3";
+  version = "4.3.4";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-134SOyYnMPt7pIS8fb+lSA6ouubJQMGlIXPLyoRg6xA=";
+    hash = "sha256-zhvnPCxPm04kMOhfRBGB4EmTJITw17svVgD8zuHcu1c=";
   };
 
   postPatch = ''
@@ -83,9 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
-    "PREFIX=${placeholder "out"}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -103,6 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       demine
+      ddogfoodd
       matteopacini
     ];
     mainProgram = "kew";

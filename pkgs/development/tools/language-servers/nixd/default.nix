@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   gtest,
@@ -19,18 +18,20 @@
   pkg-config,
   testers,
   python3,
+  libxml2,
+  zlib,
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.nixComponents_2_34;
   common = rec {
-    version = "2.9.0";
+    version = "2.9.2";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-/IU5yJQzUwv/d4mXr+m/AKrw7ufY8r+JAysUhhaHUZY=";
+      hash = "sha256-rjLF0nTRuPKVyxXjNlkHG6k4SdcSwjNOW26u/qlP8uA=";
     };
 
     nativeBuildInputs = [
@@ -55,7 +56,6 @@ let
         inclyc
         Ruixi-rebirth
         aleksana
-        redyf
       ];
       platforms = lib.platforms.unix;
     };
@@ -134,17 +134,6 @@ in
     // {
       pname = "nixd";
 
-      patches = [
-        # Pull upstream fix for boost-1.89 & boost 1.87 support:
-        #   https://github.com/nix-community/nixd/pull/783
-        (fetchpatch {
-          name = "boost-1.89.patch";
-          url = "https://github.com/nix-community/nixd/commit/11dfdf5f2db2e0fc1fea0349fb68739a9c747a41.patch";
-          hash = "sha256-aCb9wRKqZSuUXmamzjpYe0vRqEQh4tenwoScv+juYK8=";
-          stripLen = 1;
-        })
-      ];
-
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
@@ -157,9 +146,15 @@ in
         llvmPackages.llvm
         gtest
         boost
+        libxml2
+        zlib
       ];
 
       nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
+
+      mesonFlags = [ (lib.mesonBool "llvm_static" true) ];
+
+      disallowedRequisites = [ (lib.getLib llvmPackages.llvm) ];
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;

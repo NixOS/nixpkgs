@@ -18,11 +18,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-4I+N9uKZBzw0AePjS8CiALye/fuykBtpAoYxp+5iTW8=";
   };
 
+  patches = [
+    # Remove after upstream updates to Yarn 4.14
+    # https://github.com/vultisig/vultisig-sdk/blob/main/package.json#L4
+    ./yarn-4.14-support.patch
+  ];
+
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Ob0O69CDQwxQ+CnAtCSyweUahqDz0/g/JnJnAoruzIk=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-EW0Vc3502xoL4iDr2hPDXQ39McvvsiBWpMKgZRtF44M=";
   };
 
   nativeBuildInputs = [

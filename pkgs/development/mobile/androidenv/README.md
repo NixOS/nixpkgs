@@ -1,6 +1,6 @@
 # How to update
 
-`nix-shell maintainers/scripts/update.nix  --argstr package androidenv.test-suite --argstr commit true`
+`nix-shell maintainers/scripts/update.nix  --argstr package androidenv.test-suite --arg commit true`
 
 # How to run tests
 

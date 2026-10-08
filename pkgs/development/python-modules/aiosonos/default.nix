@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     description = "Async python library to communicate with Sonos devices";
     homepage = "https://github.com/music-assistant/aiosonos";
     changelog = "https://github.com/music-assistant/aiosonos/releases/tag/${finalAttrs.src.tag}";
-    license = [ lib.licenses.asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.autrimpo ];
   };
 })

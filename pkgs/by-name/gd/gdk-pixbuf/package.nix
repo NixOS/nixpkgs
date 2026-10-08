@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.44.5";
+  version = "2.44.7";
 
   outputs = [
     "out"
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${lib.versions.majorMinor finalAttrs.version}/gdk-pixbuf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-abk+CRObgMDuZhUD1g3rWlh0oxdytRhLnNVGKkEAq2g=";
+    hash = "sha256-Fy+A42JuwxUgqXBADxo2lOBHGPbCzSiF91JQ+1pplaQ=";
   };
 
   patches = [
@@ -83,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
+    # https://gitlab.archlinux.org/archlinux/packaging/packages/gdk-pixbuf2/-/work_items/13
+    "-Dlegacy_xpm=enabled"
     "-Dgio_sniffing=false"
     "-Dandroid=disabled"
     "-Dglycin=disabled"

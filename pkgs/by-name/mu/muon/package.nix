@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildDocs [
     scdoc
   ]
-  ++ lib.optionals (buildDocs || finalAttrs.doCheck) [
+  ++ lib.optionals (buildDocs || finalAttrs.finalPackage.doCheck) [
     (python3.withPackages (ps: [ ps.pyyaml ]))
   ];
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     find subprojects -name "*.py" -exec chmod +x {} \;
     patchShebangs subprojects
   ''
-  + lib.optionalString finalAttrs.doCheck ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
     substituteInPlace \
       "subprojects/meson-tests/common/14 configure file/test.py.in" \
       "subprojects/meson-tests/common/274 customtarget exe for test/generate.py" \
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
         (muonBool "static" stdenv.targetPlatform.isStatic)
         (muonEnable "man-pages" buildDocs)
         (muonEnable "meson-docs" buildDocs)
-        (muonEnable "meson-tests" finalAttrs.doCheck)
+        (muonEnable "meson-tests" finalAttrs.finalPackage.doCheck)
         (muonEnable "samurai" embedSamurai)
         (muonEnable "tracy" false)
         (muonEnable "website" false)
@@ -177,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "muon-build";
       rev = "db92588773a24f67cda2f331b945825ca3a63fa7";
       hash = "sha256-z4Fc1lr/m2MwIwhXJwoFWpzeNg+udzMxuw5Q/zVvpSM=";
-      passthru.use = finalAttrs.doCheck;
+      passthru.use = finalAttrs.finalPackage.doCheck;
     };
   };
 

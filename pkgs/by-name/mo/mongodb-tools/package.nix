@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mongo-tools";
-  version = "100.16.0";
+  version = "100.18.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
     tag = finalAttrs.version;
-    hash = "sha256-r5oqgHs5aFeuKTGPy/+DPdJbc70S53frBh0ffMBiEFs=";
+    hash = "sha256-cNz5qQhTcW7hBdvXQRnnnvIz4UpC0ZmFVxMfxUSJ2y8=";
   };
 
   vendorHash = null;

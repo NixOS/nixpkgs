@@ -322,7 +322,7 @@ in
       # and check if the blocks have the correct labels:
       store.succeed(
           "thanos tools bucket ls "
-          + "--objstore.config-file=${nodes.store.config.services.thanos.store.objstore.config-file} "
+          + "--objstore.config-file=${nodes.store.services.thanos.store.objstore.config-file} "
           + "--output=json | "
           + "jq .thanos.labels.some_label | "
           + "grep 'required by thanos'"

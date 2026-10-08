@@ -10,19 +10,20 @@
   gtk3,
   libxrandr,
   libxi,
+  libsecret,
   libxcursor,
   nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "13.3.4";
+  version = "14.2.2";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
-    hash = "sha256-GCPAUbi8VWV/EmhEoEgjf5QdNbuuVGBMnvFQ8G6+kmk=";
+    hash = "sha256-IP3q8n5Bt3fjujkkFfUa3KhM8O5KA5AVAQJkPbwTHvg=";
   };
 
   sourceRoot = "${src.name}/Source";
@@ -57,6 +58,8 @@ buildDotnetModule rec {
     gtk3
     # For web view (login dialog); loaded via P/Invoke at runtime
     glib
+    # For encrypting secrets
+    libsecret
   ];
 
   postInstall = ''

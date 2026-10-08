@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "e1s";
-  version = "1.0.53";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "keidarcy";
     repo = "e1s";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Cy/aZVO6xM1oCeyT6x1O+otbUZ5lS90fl3iZzkf02QM=";
+    hash = "sha256-bOG6txoreiP/buYO3rvcxhL1yAxlECkbwf9FqvWLz9k=";
   };
 
-  vendorHash = "sha256-8z2RVT2W8TLXdZBAmi/2fu63pijVgzqSvF9xpGexlQ0=";
+  vendorHash = "sha256-vVUuoAsoxVKDGxLOQBjOx56IiPWBbtYBJbJNq+kPV7A=";
 
   meta = {
     description = "Easily Manage AWS ECS Resources in Terminal";

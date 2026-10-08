@@ -117,6 +117,8 @@ let
 
       rccl = self.callPackage ./rccl { };
 
+      rocshmem = self.callPackage ./rocshmem { };
+
       hipcub = self.callPackage ./hipcub { };
 
       hipsparse = self.callPackage ./hipsparse { };
@@ -154,6 +156,8 @@ let
       hipblas = self.callPackage ./hipblas { };
 
       hipblaslt = self.callPackage ./hipblaslt { };
+
+      hipsparselt = self.callPackage ./hipsparselt { };
 
       # hipTensor - Only supports GFX9
 

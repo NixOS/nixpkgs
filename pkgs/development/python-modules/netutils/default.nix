@@ -8,19 +8,20 @@
   poetry-core,
   pytestCheckHook,
   pyyaml,
+  rpds-py,
   toml,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "netutils";
-  version = "1.17.2";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = "netutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DHftRRqbuUa74ATfh8MHxINwNkpz9lo/drwOmeo0itE=";
+    hash = "sha256-5BtrtlwY/V8hFUxUOri8v8j4hd6hF2c7ZWvQEmKdTjM=";
   };
 
   build-system = [ poetry-core ];
@@ -28,16 +29,18 @@ buildPythonPackage (finalAttrs: {
   dependencies = [ jsonschema ];
 
   optional-dependencies.optionals = [
+    jinja2
     jsonschema
     napalm
+    rpds-py
   ];
 
   nativeCheckInputs = [
-    jinja2
     pytestCheckHook
     pyyaml
     toml
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "netutils" ];
 

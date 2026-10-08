@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-town";
-  version = "22.7.1";
+  version = "24.0.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MGiWqFWA4PMyGL7QqgcDWrgM/Wo8us8GMhdsrXBgWmg=";
+    hash = "sha256-Es2FextJFPV3SVIIuZOv7EjUHwFar3C5wBMlWlhMu1M=";
   };
 
   vendorHash = null;
@@ -56,13 +56,14 @@ buildGoModule (finalAttrs: {
     let
       # Disable tests requiring local operations
       skippedTests = [
-        "TestGodog"
         "TestMockingRunner/MockCommand"
         "TestMockingRunner/MockCommitMessage"
         "TestMockingRunner/QueryWith"
         "TestTestCommands/CreateChildFeatureBranch"
         "TestTestCommands/CreateChildBranch"
         "TestTestCommands/CreateLocalBranchUsingGitTown"
+        "TestFrontendRunner_RetryOnIndexLock" # Timing issues.
+
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];

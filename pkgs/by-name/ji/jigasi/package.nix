@@ -3,20 +3,17 @@
   stdenv,
   fetchurl,
   dpkg,
-  jdk11,
+  jdk17_headless,
   nixosTests,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "jigasi";
-  version = "1.1-395-g3bb4143";
+  version = "1.1-412-ge9a3acc";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/jigasi_${version}-1_all.deb";
-    hash = "sha256-kBUo9TZZs3/OUrV1t813jk8Pf2vNrKEP7hZL2L2oMNE=";
+    url = "https://download.jitsi.org/stable/jigasi_${finalAttrs.version}-1_all.deb";
+    hash = "sha256-NlJxfUyUGUqyk8rQAtykZhyAhMapmTvca42HaG1MRJU=";
   };
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   nativeBuildInputs = [ dpkg ];
 
@@ -25,7 +22,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     substituteInPlace usr/share/jigasi/jigasi.sh \
-      --replace-fail "exec java" "exec ${jdk11}/bin/java"
+      --replace-fail "exec java" "exec ${lib.getExe jdk17_headless}"
 
     mkdir -p $out/{share,bin}
     mv usr/share/jigasi $out/share/
@@ -49,4 +46,4 @@ stdenv.mkDerivation {
     teams = [ lib.teams.jitsi ];
     platforms = lib.platforms.linux;
   };
-}
+})

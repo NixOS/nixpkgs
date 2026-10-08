@@ -1,20 +1,20 @@
-From e4449f06a8989ff22947309151855b388c311aed Mon Sep 17 00:00:00 2001
+From 0db315c9ca1e8f2144edf020aa4dd309e889d4d1 Mon Sep 17 00:00:00 2001
 From: Jared Baur <jaredbaur@fastmail.com>
 Date: Mon, 22 Jan 2024 20:42:48 -0800
 Subject: [PATCH] Add dlopen discoverer
 
 ---
- internal/lookup/dlopen.go  | 57 ++++++++++++++++++++++++++++++++++++++
- internal/lookup/library.go |  3 ++
- 2 files changed, 60 insertions(+)
- create mode 100644 internal/lookup/dlopen.go
+ pkg/lookup/dlopen.go  | 63 +++++++++++++++++++++++++++++++++++++++++++
+ pkg/lookup/library.go |  1 +
+ 2 files changed, 64 insertions(+)
+ create mode 100644 pkg/lookup/dlopen.go
 
-diff --git a/internal/lookup/dlopen.go b/internal/lookup/dlopen.go
+diff --git a/pkg/lookup/dlopen.go b/pkg/lookup/dlopen.go
 new file mode 100644
-index 00000000..7cd84522
+index 0000000..7af8ca0
 --- /dev/null
-+++ b/internal/lookup/dlopen.go
-@@ -0,0 +1,57 @@
++++ b/pkg/lookup/dlopen.go
+@@ -0,0 +1,63 @@
 +package lookup
 +
 +// #cgo LDFLAGS: -ldl
@@ -35,11 +35,17 @@ index 00000000..7cd84522
 +	file
 +}
 +
-+// NewDlopenLocator creats a locator that can be used for locating libraries
++// NewDlopenLocator creates a locator that can be used for locating libraries
 +// through the dlopen mechanism.
 +func NewDlopenLocator(opts ...Option) Locator {
-+	f := newFileLocator(opts...)
-+	d := dlopenLocator{file: *f}
++	o := NewFactory(opts...)
++	f := file{
++		logger:   o.logger,
++		filter:   o.filter,
++		count:    o.count,
++		prefixes: getSearchPrefixes(o.root, o.searchPaths...),
++	}
++	d := dlopenLocator{file: f}
 +	return &d
 +}
 +
@@ -72,19 +78,18 @@ index 00000000..7cd84522
 +
 +	return []string{libAbsolutePath}, nil
 +}
-diff --git a/internal/lookup/library.go b/internal/lookup/library.go
-index 7f5cf7c8..916edde2 100644
---- a/internal/lookup/library.go
-+++ b/internal/lookup/library.go
-@@ -61,7 +61,10 @@ func NewLibraryLocator(opts ...Option) Locator {
- 	// We construct a symlink locator for expected library locations.
- 	symlinkLocator := NewSymlinkLocator(opts...)
- 
-+	dlopenLocator := NewDlopenLocator(opts...)
-+
- 	l := First(
-+		dlopenLocator,
- 		symlinkLocator,
- 		newLdcacheLocator(opts...),
+diff --git a/pkg/lookup/library.go b/pkg/lookup/library.go
+index e57bd0e..adeff77 100644
+--- a/pkg/lookup/library.go
++++ b/pkg/lookup/library.go
+@@ -51,6 +51,7 @@ func NewLibraryLocator(opts ...Option) Locator {
+ 		}...),
  	)
---
+ 	l := First(
++		NewDlopenLocator(opts...),
+ 		NewSymlinkLocator(opts...),
+ 		f.newLdcacheLocator(),
+ 	)
+-- 
+2.54.0
+

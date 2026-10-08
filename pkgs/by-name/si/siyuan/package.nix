@@ -6,50 +6,59 @@
   replaceVars,
   pandoc,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
+  pnpmBuildHook,
   electron,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
   nix-update-script,
   xdg-utils,
+  zip,
+  darwin,
 }:
 
 let
+  inherit (stdenv.hostPlatform) isLinux isDarwin system;
+
+  pnpm = pnpm_11;
+
   platformIds = {
     "x86_64-linux" = "linux";
     "aarch64-linux" = "linux-arm64";
+    "aarch64-darwin" = "darwin-arm64";
   };
 
-  platformId = platformIds.${stdenv.system} or (throw "Unsupported platform: ${stdenv.system}");
+  platformId = platformIds.${system} or (throw "Unsupported platform: ${system}");
 
-  desktopEntry = makeDesktopItem {
-    name = "siyuan";
-    desktopName = "SiYuan";
-    comment = "Refactor your thinking";
-    icon = "siyuan";
-    exec = "siyuan %U";
-    categories = [ "Utility" ];
+  # The pandoc archive that electron-builder expects for each platform. We build
+  # it from the Nix pandoc binary, so only the current platform's archive is needed.
+  pandocArchives = {
+    "linux" = "pandoc-linux-amd64.zip";
+    "linux-arm64" = "pandoc-linux-arm64.zip";
+    "darwin-arm64" = "pandoc-darwin-arm64.zip";
   };
+
+  pandocArchive = pandocArchives.${platformId};
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.6.4";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dfM8mlZrfq8tqxwVL+TLGT26wLOzVJmw561eicFx2VY=";
+    hash = "sha256-MzsfeAWApHLDt4+aC9/O+5Dl8OD8p0l+/8tb2ZZyTos=";
   };
 
   kernel = buildGoModule {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-TixhAJwIHQwCrA2kdpAN2vK6UeSzLMGfX85j2KtlPfQ=";
+    vendorHash = "sha256-x8saxKDLeZdEbTBjNXnOBU9zkliZXm6D92Mom8CUCbs=";
 
     patches = [
       (replaceVars ./set-pandoc-path.patch {
@@ -69,25 +78,35 @@ stdenv.mkDerivation (finalAttrs: {
     # Set flags and tags as per upstream's Dockerfile
     ldflags = [
       "-s"
-      "-w"
-      "-X"
-      "github.com/siyuan-note/siyuan/kernel/util.Mode=prod"
+      "-X 'github.com/siyuan-note/siyuan/kernel/util.Mode=prod'"
     ];
-    tags = [ "fts5" ];
-  };
+    tags = [
+      "fts5"
+      "sqlcipher"
+    ];
 
-  # this should contain a 'packages' key, but it doesn't...
-  # we can remove it because it's not needed to build
-  postPatch = ''
-    rm pnpm-workspace.yaml
-  '';
+    env.CGO_ENABLED = "1";
+
+    # Tests are skipped here because many upstream tests make assumptions that
+    # do not hold in the Nix sandbox (system MIME table, missing model.Conf
+    # initialization, missing system fonts, our set-pandoc-path.patch, etc.).
+    # They are run as a separate derivation via passthru.tests.kernel.
+    doCheck = false;
+  };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm
+    zip
+  ]
+  ++ lib.optionals isLinux [
+    pnpmBuildHook
     makeWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -96,11 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      postPatch
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-jvTDT0Uze+E3hQ9wU3RqKQ7RI9+OLQlewGd+kSHuZ34=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-ACWwXIwuiLp/e+1dwlClzAi8ZC6oEQc3ETFK/WvVnGk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -108,32 +126,61 @@ stdenv.mkDerivation (finalAttrs: {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   postConfigure = ''
-    # remove prebuilt pandoc archives
-    rm -r pandoc
+    # Remove the prebuilt pandoc archives; we provide our own built from the
+    # Nix pandoc binary below, and keep pandoc-resources for the kernel.
+    rm -f pandoc/pandoc-*.zip
+
+    # Build the current platform's pandoc archive from the Nix pandoc binary so
+    # the electron-builder afterPack hook can extract it. The kernel itself uses
+    # the Nix pandoc directly via set-pandoc-path.patch.
+    (
+      cd pandoc
+      mkdir -p .tmp/bin
+      cp ${lib.getExe pandoc} .tmp/bin/pandoc
+      (
+        cd .tmp
+        zip -qr ../${pandocArchive} bin/pandoc
+      )
+      rm -rf .tmp
+    )
 
     # link kernel into the correct starting place so that electron-builder can copy it to it's final location
     mkdir kernel-${platformId}
     ln -s ${finalAttrs.kernel}/bin/kernel kernel-${platformId}/SiYuan-Kernel
+
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
   '';
 
-  buildPhase = ''
-    runHook preBuild
+  postBuild = ''
+    electronBuilderArgs=(
+      --dir
+      --config electron-builder-${platformId}.yml
+      -c.electronDist=electron-dist
+      -c.electronVersion=${electron.version}
+      -c.mac.identity=null
+    )
 
-    pnpm build
-
-    npm exec electron-builder -- \
-        --dir \
-        --config electron-builder-${platformId}.yml \
-        -c.electronDist=${electron.dist} \
-        -c.electronVersion=${electron.version}
-
-    runHook postBuild
+    npm exec electron-builder -- "''${electronBuilderArgs[@]}"
   '';
 
   installPhase = ''
     runHook preInstall
+  ''
+  + lib.optionalString isDarwin ''
+    mkdir -p $out/Applications $out/bin
 
+    cp -R build/mac*/*.app $out/Applications/SiYuan.app
+
+    cat > $out/bin/siyuan << EOF
+    #!${stdenv.shell}
+    exec open -na "$out/Applications/SiYuan.app" --args "\$@"
+    EOF
+    chmod +x $out/bin/siyuan
+  ''
+  + lib.optionalString isLinux ''
     mkdir -p $out/share/siyuan
+
     cp -r build/*-unpacked/{locales,resources{,.pak}} $out/share/siyuan
 
     makeWrapper ${lib.getExe electron} $out/bin/siyuan \
@@ -145,19 +192,45 @@ stdenv.mkDerivation (finalAttrs: {
         --inherit-argv0
 
     install -Dm644 src/assets/icon.svg $out/share/icons/hicolor/scalable/apps/siyuan.svg
-
+  ''
+  + ''
     runHook postInstall
   '';
 
-  desktopItems = [ desktopEntry ];
+  desktopItems = lib.optional isLinux (makeDesktopItem {
+    name = "siyuan";
+    desktopName = "SiYuan";
+    comment = "Refactor your thinking";
+    icon = "siyuan";
+    exec = "siyuan %U";
+    categories = [ "Utility" ];
+  });
 
   passthru = {
-    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
+    kernel = finalAttrs.kernel;
+
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
         "^v(\\d+\\.\\d+\\.\\d+)$"
+        "--subpackage=kernel"
       ];
+    };
+
+    # Upstream kernel tests require model.Conf initialization, system fonts,
+    # pandoc, and other assumptions that do not hold in the Nix sandbox during
+    # the main build. Run them as a separate derivation so the package build
+    # stays reliable while test results remain available via
+    # nix-build -A siyuan.passthru.tests.kernel.
+    tests.kernel = finalAttrs.kernel.overrideAttrs {
+      pname = "${finalAttrs.pname}-kernel-test";
+      doCheck = true;
+      checkPhase = ''
+        runHook preCheck
+        go test -vet=off -tags=fts5,sqlcipher ./...
+        runHook postCheck
+      '';
+      installPhase = "touch $out";
     };
   };
 
@@ -169,6 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tomasajt
       ltrump
+      myul
     ];
     platforms = lib.attrNames platformIds;
   };

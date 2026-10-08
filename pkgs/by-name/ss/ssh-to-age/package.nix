@@ -2,28 +2,31 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "ssh-to-age";
-  version = "1.2.0";
+  version = "1.3.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-age";
-    rev = finalAttrs.version;
-    sha256 = "sha256-0i3h46lVyCbA4zJdjHM9GyRxZR6IsavpdDG3pdFEGjk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j+X+kZCOmMdNw8LBDoixl8ToRmDjbmRVe7+IGS/2sMg=";
   };
 
-  vendorHash = "sha256-4R+44AM0zS6WyKWfg0TH5OxmrC1c4xN0MSBgaZrWPX4=";
+  vendorHash = "sha256-FveYuYa6C3R50+jdAlU1jorRw/mg482eZ4ZJ8Pu+R0s=";
 
-  checkPhase = ''
-    runHook preCheck
-    go test ./...
-    runHook postCheck
-  '';
+  ldflags = [
+    "-s"
+    "-X main.version=${finalAttrs.version}"
+  ];
 
-  doCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Convert ssh private keys in ed25519 format to age keys";

@@ -16,21 +16,26 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-edit";
-  version = "1.0.10";
+  version = "1.8.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-L4OtNqcvXMjQZtt26H+NIh6bzgDoFlyZuViXoG9RdaI=";
+    hash = "sha256-mZnL9W67hnHVS4wJBAprdPzU8VEq6mguzuhXjtPPIhc=";
   };
-
-  cargoHash = "sha256-Qs+THwbp6TNcSzO33Y0j/o8WP9E5ti0HCxknOo7h1H0=";
 
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
+
+  cargoHash = "sha256-NERnN9TqqpzI9kD2ujfs11W0RnVxU+Ra6GjGk3FGO3A=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
 
   nativeBuildInputs = [
     just

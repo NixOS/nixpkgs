@@ -12,16 +12,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "soju";
-  version = "0.10.1";
+  version = "0.11.0";
 
   src = fetchFromCodeberg {
     owner = "emersion";
     repo = "soju";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kOV7EFRr+Ca9bQ1bdDMNf1FiiniIHDebsf5SpbJshsI=";
+    hash = "sha256-pen7Lb/aUWY67Y8KBCGfBkG1pX3sdQ8+D9L7xw8afaQ=";
   };
 
-  vendorHash = "sha256-NP4njea0hcklxWFoxPQqrvyWExeRP/TOzUJcamRnx+s=";
+  vendorHash = "sha256-LiTr+ilKYRA3K93RjVGsmWm2jvImmt9YIYTZPtXv6cE=";
 
   nativeBuildInputs = [
     installShellFiles

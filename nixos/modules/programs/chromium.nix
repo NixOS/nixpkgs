@@ -85,7 +85,32 @@ in
       extraOpts = lib.mkOption {
         type = lib.types.attrs;
         description = ''
-          Extra chromium policy options. A list of available policies
+          Extra chromium policy options. These settings are locked and the user cannot change them in the browser later.
+          A list of available policies
+          can be found in the Chrome Enterprise documentation:
+          <https://cloud.google.com/docs/chrome-enterprise/policies/>
+          Make sure the selected policy is supported on Linux and your browser version.
+        '';
+        default = { };
+        example = lib.literalExpression ''
+          {
+            "BrowserSignin" = 0;
+            "SyncDisabled" = true;
+            "PasswordManagerEnabled" = false;
+            "SpellcheckEnabled" = true;
+            "SpellcheckLanguage" = [
+              "de"
+              "en-US"
+            ];
+          }
+        '';
+      };
+
+      extraOptsRecommended = lib.mkOption {
+        type = lib.types.attrs;
+        description = ''
+          Extra chromium policy options in recommended. These are default settings. The user can change them in the browser later if they want to.
+          A list of available policies
           can be found in the Chrome Enterprise documentation:
           <https://cloud.google.com/docs/chrome-enterprise/policies/>
           Make sure the selected policy is supported on Linux and your browser version.
@@ -141,6 +166,9 @@ in
       "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
         text = builtins.toJSON cfg.extraOpts;
       };
+      "chromium/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+        text = builtins.toJSON cfg.extraOptsRecommended;
+      };
       "chromium/initial_preferences" = lib.mkIf (cfg.initialPrefs != { }) {
         text = builtins.toJSON cfg.initialPrefs;
       };
@@ -156,12 +184,18 @@ in
       "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
         text = builtins.toJSON cfg.extraOpts;
       };
+      "opt/chrome/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+        text = builtins.toJSON cfg.extraOptsRecommended;
+      };
       # for brave
       "brave/policies/managed/default.json" = lib.mkIf (defaultProfile != { }) {
         text = builtins.toJSON defaultProfile;
       };
       "brave/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != { }) {
         text = builtins.toJSON cfg.extraOpts;
+      };
+      "brave/policies/recommended/extra.json" = lib.mkIf (cfg.extraOptsRecommended != { }) {
+        text = builtins.toJSON cfg.extraOptsRecommended;
       };
     };
   };

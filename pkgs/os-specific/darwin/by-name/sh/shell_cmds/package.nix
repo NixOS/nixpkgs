@@ -9,24 +9,12 @@
   libxo,
   mkAppleDerivation,
   pkg-config,
-  pkgs,
+  sourceRelease,
 }:
 
 let
-  f =
-    pkgs: prev:
-    if
-      !pkgs.stdenv.hostPlatform.isDarwin
-      || pkgs.stdenv.name == "bootstrap-stage0-stdenv-darwin"
-      || !(pkgs.stdenv ? __bootPackages)
-    then
-      prev.darwin.sourceRelease
-    else
-      f pkgs.stdenv.__bootPackages pkgs;
-  bootstrapSourceRelease = f pkgs pkgs;
-  # TODO(reckenrode): Use `sourceRelease` after migration has been merged and all releases updated to the same version.
   # nohup requires vproc_priv.h from launchd
-  launchd = bootstrapSourceRelease "launchd";
+  launchd = sourceRelease "launchd";
 in
 mkAppleDerivation {
   releaseName = "shell_cmds";
@@ -36,7 +24,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-fY8k7qzqqiv/KvGIB4a82qbNsm23QPnGOadrZmNoi54=";
+  xcodeHash = "sha256-sbgPFMMXgUp+F1IRLiaFto+PsfMHBd23KQ1sQK7tP7A=";
 
   postPatch = ''
     # Fix `mktemp` templates

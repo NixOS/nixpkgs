@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "disorderfs";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "reproducible-builds";
     repo = "disorderfs";
     tag = finalAttrs.version;
-    hash = "sha256-1ehGbNYbOewnDrQ1JhozKMvfVaCH7sDCxrD0dvwAfw0=";
+    hash = "sha256-5eW5/fZesRvgXUANtbDCTDHiBvFiTQ32BPJSqoW/yYc=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Overlay FUSE filesystem that introduces non-determinism into filesystem metadata";
+    homepage = "https://salsa.debian.org/reproducible-builds/disorderfs";
     mainProgram = "disorderfs";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;

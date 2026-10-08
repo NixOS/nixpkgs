@@ -7,8 +7,8 @@
   gitUpdater,
 
   cmake,
+  pkg-config,
   ninja,
-  extra-cmake-modules,
   flex,
   bison,
   wrapGAppsHook3,
@@ -63,14 +63,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "digikam";
-  version = "9.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "digikam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zYOtTL4qEjXa/ZYlDIvneziYBXq4tIiVjRsrSJMaS0k=";
+    hash = "sha256-rrAqHSG7AsyG8DM0zYfyuGyu6jI/ZDmSYco91nhdmhQ=";
   };
 
   patches = [
@@ -81,8 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     ninja
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     flex
     bison
     kdePackages.wrapQtAppsHook
@@ -168,11 +169,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_WITH_QT6" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_KFILEMETADATASUPPORT" true)
     #(lib.cmakeBool "ENABLE_AKONADICONTACTSUPPORT" true)
     (lib.cmakeBool "ENABLE_MEDIAPLAYER" true)
     (lib.cmakeBool "ENABLE_APPSTYLES" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
+  ]
+  ++ lib.optionals enableCuda [
+    "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}"
   ];
 
   # Tests segfault for some reason…

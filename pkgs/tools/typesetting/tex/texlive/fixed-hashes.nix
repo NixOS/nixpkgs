@@ -9749,7 +9749,7 @@
     source = "12np4gmh0y5cg66ijb96kfbdq49d38rg485nql5q0n6pgn42apnc";
   };
   l3build-77170 = {
-    run = "0f3qfgm4whm1p8alx8gwca2glgx86c48w04d62zkpzgpadkyhzbq";
+    run = "18104w97ad97ki02yghqclcdv0v916h8lyp676cyg3wc7hjvs5cq";
     doc = "0i45c0bni3xx38wgcp30gh2dg0ak2snsfjrx86kwfyvmgjsm9ric";
     source = "1n2g8vcfnya74dsm8plaj0vbfwgs8a4lqpxqvxa9vgdda288534p";
   };
@@ -17603,7 +17603,7 @@
     doc = "0np84cifjrc9ls39gvnf0pfmyr2azbmkjng68wf22mpbbax0vblj";
   };
   tex4ht-77991 = {
-    run = "1brpxgcxrn8x45rnxd2mi9fjjlifafrd5d9naghxd12h36i5xz50";
+    run = "1g06wmrnj8psqyby6nq53m0wavs0pcl8wllyhms6jyc1vnya9in7";
     doc = "04z1bsgy3lisx7ifskxzna5jcbjkbwwjlqfwbfppnmjp5rwphxdv";
     source = "1fvgpz4r686f86hf8mjj31724dcr1l9s02nirfn01fjlxq9fkpkm";
   };

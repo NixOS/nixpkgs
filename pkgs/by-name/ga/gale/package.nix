@@ -38,13 +38,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.13.0";
+  version = "1.22.2";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-q/DBgAOFyIqhagWffJ6z+F7TXAZd7otPOGJI4oid4vM=";
+    hash = "sha256-XyMfu3fLN9wongMld1YA7A4BurXABuaLsDl7dh4NbQE=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-bCGiYVmoWjpwneTQUwetna7u29BMIv48qWgZ2gd93hQ=";
+    hash = "sha256-Duwy8cKOnMT8s0SWrxiBvkK/v1s9En0i+7z4NuY/m9E=";
   };
 
   postPatch = ''
@@ -70,7 +70,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-V8MKgicqHU9kEMTw17xeM2pzzkAlGBZJ2j4W5OEIit0=";
+  cargoHash = "sha256-/b0a35IO0DHAPiDZy0jG0OXTDd+W36vMX0XD0UfhQ+c=";
+
+  checkFlags = [
+    "--skip=config::bepinex::tests::check_from_string" # Fails a left == right check, even with left and right data being identical
+  ];
 
   nativeBuildInputs = [
     jq

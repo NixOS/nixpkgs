@@ -18,17 +18,19 @@ import traceback
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, replace
-from datetime import datetime, date
+from datetime import UTC, datetime
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import Any, Callable
-from urllib.parse import urljoin, urlparse, urlsplit
+from typing import Any
+from urllib.parse import unquote, urljoin, urlparse, urlsplit
 
 import git
-from packaging.version import InvalidVersion, parse as parse_version
+from packaging.version import InvalidVersion
+from packaging.version import parse as parse_version
 
 ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"  # " vim gets confused here
 ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
@@ -40,11 +42,11 @@ AUTO_BRANCH = ""
 VERSION_DATE_PATTERN = re.compile(r"(\d{4}-\d{2}-\d{2})$")
 VERSION_TAG_PATTERN = re.compile(r"^(.+?)-unstable-")
 NON_RELEASE_TAG_PREFIXES = ("pre-",)
-RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@-]*)$")
+RELEASE_VERSION_PATTERN = re.compile(r"^[^\d]*(\d[\w.@+-]*)$")
 
 LOG_LEVELS = {
     logging.getLevelName(level): level
-    for level in [logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR]
+    for level in [logging.DEBUG, logging.INFO, logging.WARNING, logging.ERROR]
 }
 
 log = logging.getLogger()
@@ -70,7 +72,7 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
                 try:
                     return f(*args, **kwargs)
                 except ExceptionToCheck as e:
-                    print(f"{str(e)}, Retrying in {mdelay} seconds...")
+                    print(f"{e!s}, Retrying in {mdelay} seconds...")
                     time.sleep(mdelay)
                     mtries -= 1
                     mdelay *= backoff
@@ -89,7 +91,7 @@ class FetchConfig:
 
 def make_request(url: str, token=None) -> urllib.request.Request:
     headers = {}
-    if token is not None:
+    if token:
         headers["Authorization"] = f"token {token}"
     return urllib.request.Request(url, headers=headers)
 
@@ -127,10 +129,30 @@ def select_latest_tag(
 
 def first_release_tag(tags: list[str]) -> str | None:
     for tag in tags:
-        if normalize_release_version(tag) is not None:
-            return tag
+        normalized_tag = normalize_release_version(tag)
+        if normalized_tag is None:
+            continue
+
+        try:
+            version = parse_version(normalized_tag)
+            if version.is_prerelease or version.is_devrelease:
+                continue
+        except InvalidVersion:
+            pass
+
+        return tag
 
     return None
+
+
+def tag_from_github_atom_href(href: str) -> str | None:
+    path = urlparse(href).path
+    marker = "/releases/tag/"
+    if marker in path:
+        return unquote(path.split(marker, 1)[1])
+
+    tag_name = Path(path).name
+    return unquote(tag_name) if tag_name else None
 
 
 class Repo:
@@ -139,8 +161,8 @@ class Repo:
         """Url to the repo"""
         self._branch = branch
         # Redirect is the new Repo to use
-        self.redirect: "Repo | None" = None
-        self.token: str | None = "dummy_token"
+        self.redirect: Repo | None = None
+        self.token: str | None = None
 
     @property
     def name(self):
@@ -211,7 +233,7 @@ class Repo:
         except subprocess.CalledProcessError as e:
             log.debug("Failed to fetch tags for %s: %s", self.uri, e)
             return None
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             log.warning("Unexpected error fetching tags for %s: %s", self.uri, e)
             return None
 
@@ -227,20 +249,25 @@ class Repo:
         loaded = json.loads(data)
         return loaded
 
-    def prefetch(self, ref: str) -> str:
+    def prefetch(self, ref: str, has_submodules: bool | None = None) -> str:
         log.info("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
 
     def as_nix(self, plugin: "Plugin") -> str:
         ref_attr = (
-            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
         )
         return f"""fetchgit {{
       url = "{self.uri}";
       {ref_attr}
       hash = "{plugin.to_sri_hash()}";
     }}"""
+
+    def get_license_spdx_id(self, fallback_license: str | None = None) -> str | None:
+        return fallback_license
 
 
 class RepoGitHub(Repo):
@@ -297,7 +324,9 @@ class RepoGitHub(Repo):
             assert updated_tag is not None and updated_tag.text is not None, (
                 f"No updated tag found feed entry {xml!r}"
             )
-            updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
+            updated = datetime.strptime(
+                updated_tag.text, "%Y-%m-%dT%H:%M:%SZ"
+            ).replace(tzinfo=UTC)
             return Path(str(url.path)).name, updated
 
     @retry(urllib.error.URLError, tries=4, delay=3, backoff=2)
@@ -344,7 +373,7 @@ class RepoGitHub(Repo):
             if not href:
                 continue
 
-            tag_name = Path(urlparse(href).path).name
+            tag_name = tag_from_github_atom_href(href)
             if tag_name:
                 tags.append(tag_name)
 
@@ -414,7 +443,7 @@ class RepoGitHub(Repo):
 
             recent_tags = [node["name"] for node in repo["refs"]["nodes"]]
             if not recent_tags:
-                return None
+                return self._get_latest_tag_from_fallbacks()
 
             latest_tag = first_release_tag(recent_tags)
             return latest_tag if latest_tag is not None else recent_tags[0]
@@ -439,15 +468,16 @@ class RepoGitHub(Repo):
     def _check_for_redirect(self, url: str, req: http.client.HTTPResponse):
         response_url = req.geturl()
         if url != response_url:
-            new_owner, new_name = (
-                urlsplit(response_url).path.strip("/").split("/")[:2]
-            )
+            new_owner, new_name = urlsplit(response_url).path.strip("/").split("/")[:2]
 
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self._branch)
             self.redirect = new_repo
 
-    def prefetch(self, commit: str) -> str:
-        if self.has_submodules():
+    def prefetch(self, commit: str, has_submodules: bool | None = None) -> str:
+        if has_submodules is None:
+            has_submodules = self.has_submodules()
+
+        if has_submodules:
             sha256 = super().prefetch(commit)
         else:
             sha256 = self.prefetch_github(commit)
@@ -460,6 +490,41 @@ class RepoGitHub(Repo):
         loaded = json.loads(data)
         return loaded["hash"]
 
+    def get_license_spdx_id(self, fallback_license: str | None = None) -> str | None:
+        license_url = f"https://api.github.com/repos/{self.owner}/{self.repo}/license"
+        log.debug("Fetching license metadata from %s", license_url)
+
+        def log_fetch_failure(reason: str) -> str | None:
+            log.warning(
+                "Failed to fetch license metadata for %s/%s: %s; reusing %s",
+                self.owner,
+                self.repo,
+                reason,
+                fallback_license or "no cached license",
+            )
+            return fallback_license
+
+        try:
+            req = make_request(license_url, self.token)
+            with urllib.request.urlopen(req, timeout=10) as response:
+                data = json.load(response)
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
+            return log_fetch_failure(f"HTTP {e.code}")
+        except urllib.error.URLError as e:
+            return log_fetch_failure(str(e))
+
+        license_info = data.get("license")
+        if not isinstance(license_info, dict):
+            return None
+
+        spdx_id = license_info.get("spdx_id")
+        if not spdx_id or spdx_id == "NOASSERTION":
+            return None
+
+        return spdx_id
+
     def as_nix(self, plugin: "Plugin") -> str:
         if plugin.has_submodules:
             submodule_attr = "\n      fetchSubmodules = true;"
@@ -467,7 +532,9 @@ class RepoGitHub(Repo):
             submodule_attr = ""
 
         ref_attr = (
-            f'tag = "{plugin.tag}";' if plugin.tag is not None else f'rev = "{plugin.commit}";'
+            f'tag = "{plugin.tag}";'
+            if plugin.tag is not None
+            else f'rev = "{plugin.commit}";'
         )
 
         return f"""fetchFromGitHub {{
@@ -526,6 +593,7 @@ class Plugin:
     date: datetime | None = None
     last_tag: str | None = None
     tag: str | None = None
+    license: str | None = None
 
     @property
     def normalized_name(self) -> str:
@@ -593,6 +661,29 @@ def make_unstable_version(date: datetime, last_tag: str | None) -> str:
     return f"{tag_part}-unstable-{date_str}"
 
 
+def newer_version_tag(first_tag: str | None, second_tag: str | None) -> str | None:
+    if first_tag is None:
+        return second_tag
+    if second_tag is None:
+        return first_tag
+
+    first_version = normalize_release_version(first_tag)
+    second_version = normalize_release_version(second_tag)
+    if first_version is None:
+        return second_tag
+    if second_version is None:
+        return first_tag
+
+    try:
+        return (
+            first_tag
+            if parse_version(first_version) >= parse_version(second_version)
+            else second_tag
+        )
+    except InvalidVersion:
+        return first_tag if first_version >= second_version else second_tag
+
+
 def get_commit_target(
     repo: Repo,
     branch: str,
@@ -626,13 +717,14 @@ def select_plugin_target(
         f"{GIT_TAGS_PREFIX}{latest_tag}"
     )
 
-    if current_plugin is not None:
-        if (
-            current_plugin.date is not None
-            and current_plugin.tag is None
-            and current_plugin.date.date() > release_date.date()
-        ):
-            return get_commit_target(plugin_desc.repo, "HEAD", latest_tag)
+    if (
+        current_plugin is not None
+        and current_plugin.date is not None
+        and current_plugin.tag is None
+        and current_plugin.date.date() > release_date.date()
+    ):
+        latest_tag = newer_version_tag(current_plugin.last_tag, latest_tag)
+        return get_commit_target(plugin_desc.repo, "HEAD", latest_tag)
 
     return release_commit, release_date, release_version, latest_tag
 
@@ -692,7 +784,7 @@ class Editor:
         deprecated: Path | None = None,
         cache_file: str | None = None,
     ):
-        log.debug("get_plugins:", get_plugins)
+        log.debug("get_plugins: %s", get_plugins)
         self.name = name
         self.root = root
         self.get_plugins = get_plugins
@@ -733,10 +825,7 @@ class Editor:
             if autocommit:
                 assert editor.nixpkgs_repo is not None
 
-                commit_message = "{drv_name}: init at {version}".format(
-                    drv_name=editor.get_drv_name(plugin.normalized_name),
-                    version=plugin.version,
-                )
+                commit_message = f"{editor.get_drv_name(plugin.normalized_name)}: init at {plugin.version}"
 
                 if isinstance(pdesc.repo, RepoGitHub):
                     github_url = (
@@ -781,6 +870,7 @@ class Editor:
                 date,
                 last_tag=last_tag,
                 tag=source_tag,
+                license=attr.get("license"),
             )
 
             plugins.append((pdesc, p))
@@ -885,9 +975,7 @@ class Editor:
                 cache.store()
 
             print(f"{len(results)} of {len(current_plugins)} were checked")
-            # Do only partial update of out file
-            if len(results) != len(current_plugins):
-                results = self.merge_results(current_plugins, results)
+            results = self.merge_results(current_plugins, results)
             plugins, redirects = check_results(results)
 
             # Track version changes for commit message generation
@@ -927,9 +1015,11 @@ class Editor:
             if isinstance(plugin, Plugin) and hasattr(plugin, "normalized_name"):
                 result[plugin.normalized_name] = (plugin_desc, plugin, redirect)
             elif isinstance(plugin, Exception):
-                # For exceptions, we can't determine the normalized_name
-                # Just log the error and continue
-                log.error(f"Error fetching plugin {plugin_desc.name}: {plugin!r}")
+                log.warning(
+                    "Keeping current plugin data after error fetching %s: %r",
+                    plugin_desc.name,
+                    plugin,
+                )
             else:
                 # For unexpected types, log the issue
                 log.error(
@@ -947,6 +1037,9 @@ class Editor:
 
     def rewrite_input(self, *args, **kwargs):
         return rewrite_input(*args, **kwargs)
+
+    def configure_add_parser(self, _parser: argparse.ArgumentParser) -> None:
+        """Add updater-specific arguments to the add subcommand."""
 
     def create_parser(self):
         common = argparse.ArgumentParser(
@@ -1006,7 +1099,7 @@ class Editor:
             "--debug",
             "-d",
             choices=LOG_LEVELS.keys(),
-            default=logging.getLevelName(logging.WARN),
+            default=logging.getLevelName(logging.WARNING),
             help="Adjust log level",
         )
 
@@ -1033,6 +1126,7 @@ class Editor:
             nargs="+",
             help=f"Plugin to add to {self.attr_path} from Github in the form owner/repo",
         )
+        self.configure_add_parser(padd)
 
         pupdate = subparsers.add_parser(
             "update",
@@ -1067,7 +1161,7 @@ class Editor:
         getattr(self, command)(args)
 
 
-class CleanEnvironment(object):
+class CleanEnvironment:
     def __init__(self, nixpkgs):
         self.local_pkgs = nixpkgs
 
@@ -1081,7 +1175,7 @@ class CleanEnvironment(object):
         self.empty_config.flush()
         return f"localpkgs={self.local_pkgs}"
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    def __exit__(self, exc_type: object, exc_value: object, traceback: object) -> None:
         os.environ.update(self.old_environ)
         self.empty_config.close()
 
@@ -1105,9 +1199,16 @@ def prefetch_plugin(
         latest_tag,
     )
 
-    cached_plugin = cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
+    cached_plugin = (
+        cache[target_cache_key(p.repo.uri, commit, source_tag)] if cache else None
+    )
     if cached_plugin is not None:
         log.debug(f"Cache hit for {p.name}!")
+        license_spdx_id = (
+            cached_plugin.license
+            or (current_plugin.license if current_plugin else None)
+            or p.repo.get_license_spdx_id()
+        )
         return (
             replace(
                 cached_plugin,
@@ -1117,6 +1218,7 @@ def prefetch_plugin(
                 date=date,
                 last_tag=latest_tag,
                 tag=source_tag,
+                license=license_spdx_id,
             ),
             p.repo.redirect,
         )
@@ -1124,7 +1226,14 @@ def prefetch_plugin(
     has_submodules = p.repo.has_submodules()
     log.debug(f"prefetch {p.name}")
     sha256 = (
-        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}") if source_tag else p.repo.prefetch(commit)
+        p.repo.prefetch(f"{GIT_TAGS_PREFIX}{source_tag}", has_submodules=has_submodules)
+        if source_tag
+        else p.repo.prefetch(commit, has_submodules=has_submodules)
+    )
+    license_spdx_id = (
+        current_plugin.license
+        if current_plugin and current_plugin.license
+        else p.repo.get_license_spdx_id()
     )
 
     return (
@@ -1137,6 +1246,7 @@ def prefetch_plugin(
             date=date,
             last_tag=latest_tag,
             tag=source_tag,
+            license=license_spdx_id,
         ),
         p.repo.redirect,
     )
@@ -1155,7 +1265,6 @@ def print_download_error(plugin: PluginDesc, ex: Exception):
 def check_results(
     results: list[tuple[PluginDesc, Exception | Plugin, Repo | None]],
 ) -> tuple[list[tuple[PluginDesc, Plugin]], Redirects]:
-    """ """
     failures: list[tuple[PluginDesc, Exception]] = []
     plugins = []
     redirects: Redirects = {}
@@ -1243,6 +1352,7 @@ class Cache:
                     attr.get("version", ""),
                     last_tag=attr.get("last_tag"),
                     tag=attr.get("tag"),
+                    license=attr.get("license"),
                 )
                 downloads[cache_key] = p
         return downloads
@@ -1277,7 +1387,7 @@ def prefetch(
         plugin, redirect = prefetch_plugin(pluginDesc, cache, current_plugin)
         cache[target_cache_key(pluginDesc.repo.uri, plugin.commit, plugin.tag)] = plugin
         return (pluginDesc, plugin, redirect)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         return (pluginDesc, e, None)
 
 
@@ -1286,9 +1396,14 @@ def rewrite_input(
     input_file: Path,
     deprecated: Path,
     # old pluginDesc and the new
-    redirects: Redirects = {},
-    append: list[PluginDesc] = [],
+    redirects: Redirects | None = None,
+    append: list[PluginDesc] | None = None,
 ):
+    if redirects is None:
+        redirects = {}
+    if append is None:
+        append = []
+
     log.info("Rewriting input file %s", input_file)
     plugins = load_plugins_from_csv(config, input_file)
 
@@ -1297,7 +1412,7 @@ def rewrite_input(
     if redirects:
         log.debug("Dealing with deprecated plugins listed in %s", deprecated)
 
-        cur_date_iso = datetime.now().strftime("%Y-%m-%d")
+        cur_date_iso = datetime.now(tz=UTC).strftime("%Y-%m-%d")
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
         # TODO parallelize this step
@@ -1383,7 +1498,7 @@ def update_plugins(editor: Editor, args):
                 name, old_ver, new_ver = updated_plugins[0]
                 message = f"{editor.attr_path}.{name}: {old_ver} -> {new_ver}"
             else:
-                message = f"{editor.attr_path}: update on {date.today()}"
+                message = f"{editor.attr_path}: update on {datetime.now(tz=UTC).date()}"
 
             print(args.outfile)
             commit(repo, message, [args.outfile])

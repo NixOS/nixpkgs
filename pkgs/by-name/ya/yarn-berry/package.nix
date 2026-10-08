@@ -1,6 +1,9 @@
 {
   fetchFromGitHub,
+  unzip,
+  zip,
   lib,
+  pkgs,
   nodejs,
   stdenv,
   testers,
@@ -10,9 +13,9 @@
 }:
 
 let
-  version_4 = "4.13.0";
+  version_4 = "4.14.1";
   version_3 = "3.8.7";
-  hash_4 = "sha256-FP15a2ueihDm6f/GdXsnqI5drVHo0EtbmrhCZfRdugQ=";
+  hash_4 = "sha256-0UnU5jRSUFMw+WowvXqYqaaN1ZbZAdLLJ6LPyuK6iCc=";
   hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
 in
 
@@ -34,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     nodejs
     yarn
+    unzip
+    zip
   ];
 
   strictDeps = true;
@@ -42,6 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
+
+    (
+      # Remove when Yarn updates or removes the `got` dependency
+      # https://github.com/yarnpkg/berry/issues/7245#issuecomment-5538874542
+      GOT_CACHE_PATH=$(printf '%s' $(pwd)/.yarn/cache/got-npm-11.8.2-c1eb105458-*.zip)
+      cd $(mktemp -d)
+      unzip $GOT_CACHE_PATH -d .
+      rm $GOT_CACHE_PATH
+      patch -p1 -d node_modules/got < ${./got-npm-11.8.2.patch}
+      zip -Xr got-patched.zip node_modules
+      mv got-patched.zip $GOT_CACHE_PATH
+    )
+
     yarn workspace @yarnpkg/cli build:cli
     runHook postBuild
   '';
@@ -55,11 +73,30 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
 
-    tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
+    tests =
+      let
+        packageTests =
+          if berryVersion == 4 then
+            {
+              inherit (pkgs)
+                prettier
+                corepack
+                ;
+            }
+          else
+            {
+              inherit (pkgs)
+                svgo
+                yarn-lock-converter
+                ;
+            };
+      in
+      packageTests
+      // {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+        };
       };
-    };
   }
   // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 

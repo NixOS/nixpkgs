@@ -61,6 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "GUI for Cargo";
     mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";

@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     # nlohmann_json can be only discovered via cmake files
     cmake
   ]
-  ++ (lib.optional stdenv.cc.isClang [ buildPackages.clang-tools ]);
+  ++ (lib.optional stdenv.cc.isClang buildPackages.clang-tools);
 
   # point 'nix edit' and ofborg at the file that defines the attribute,
   # not this common file.

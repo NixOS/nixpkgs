@@ -1,39 +1,37 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start case=no
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   libgcc,
-  runCommand,
   R,
+  runCommand,
+  stdenv,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.2.tar.gz";
-      hash = "sha256-rRcGQOEVc7nnqyFDVvkjgZlvoKZfnuSCR5TnqrMFDjo=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3.tar.gz";
+      hash = "sha256-57ExydRnfCiYCQj61Xo/omKAIbKZFykjqDSOuEdkgGg=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.2-aarch64.tar.gz";
-      hash = "sha256-WQqGvwaBkdJU9AN+LIThnZlW/HDzEpZuS0q+ir/ncfw=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.2.dmg";
-      hash = "sha256-k3GEiAnqst8EB8AFwcVMGaZYJ/jR+MGhQ59ysTP/9uI=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.tar.gz";
+      hash = "sha256-bcgJWYryfh9vEf2xjemGEU15+SfZRMQxEivLh+PPoww=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/python/dataspell-2025.3.2-aarch64.dmg";
-      hash = "sha256-R8iT4fDtpOzI6Xcw1mR0rE0Gqhk6r8wl8HoDoaTGzfs=";
+      url = "https://download.jetbrains.com/python/dataspell-2026.1.3-aarch64.dmg";
+      hash = "sha256-EFkZRmtvsdJB8QP4hn6mUrSTyNBIK7UUkn4N3m0jGtY=";
     };
   };
   # update-script-end: urls
 in
-mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "dataspell";
 
@@ -41,11 +39,18 @@ mkJetBrainsProduct {
   product = "DataSpell";
 
   # update-script-start: version
-  version = "2025.3.2";
-  buildNumber = "253.30387.154";
+  version = "2026.1.3";
+  buildNumber = "261.26222.84";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
 
   # NOTE: This `lib.optionals` is only here because the old Darwin builder ignored `buildInputs`.
   #       DataSpell may need these, even on Darwin!
@@ -66,6 +71,7 @@ mkJetBrainsProduct {
       Mainly it integrates Jupyter notebooks in the IntelliJ platform.
     '';
     maintainers = with lib.maintainers; [ leona ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then

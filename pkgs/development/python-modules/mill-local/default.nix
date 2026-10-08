@@ -4,7 +4,7 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-t6nZ6KXX5GFIcdNIXyFxYtSjOuuUJmCekaBITNgcIkU=";
   };
 
-  buildInputs = [ setuptools ];
+  buildInputs = [ setuptools_80 ];
 
   dependencies = [
     aiohttp

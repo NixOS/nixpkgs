@@ -8,16 +8,16 @@
 
 buildGo126Module (finalAttrs: {
   pname = "swgp-go";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "database64128";
     repo = "swgp-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GnWcpAXViyO0T9u/AwVPr0SxvohuX+60C8j2kZbyKD0=";
+    hash = "sha256-H4fWOh1L99/uhME81uc5DwWBO2r3Ddo+MLxMy/sWZGM=";
   };
 
-  vendorHash = "sha256-qiFFXL2nFZhsUsAZ98FRS2kF4ROaQUat5Skceh1DWaQ=";
+  vendorHash = "sha256-r6h3s84n6sbsyNwF5dX9c/vl9p355SYPNg1pEVu8adU=";
 
   ldflags = [
     "-s"

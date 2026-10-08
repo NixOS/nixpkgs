@@ -53,7 +53,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Formatting technology for Swift source code";
-    homepage = "https://github.com/apple/swift-format";
+    homepage = "https://github.com/swiftlang/swift-format";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
     teams = [ lib.teams.swift ];

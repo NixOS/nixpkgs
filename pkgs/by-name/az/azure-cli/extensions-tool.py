@@ -187,7 +187,7 @@ def find_extension_version(
         return None
     if ext_name and latest["metadata"]["name"] != ext_name:
         return None
-    if not requirements and "run_requires" in latest["metadata"]:
+    if not requirements and latest["metadata"].get("run_requires"):
         return None
     return latest
 
@@ -450,12 +450,22 @@ def main() -> None:
     logger.info("updating generated extension set")
 
     extensions_remote_filtered = set()
+    extensions_gained_requirements = set()
     for _ext_name, extension in extensions_remote.items():
-        extension = find_and_transform_extension_version(
-            extension, cli_version, args.extension
+        without_req = find_and_transform_extension_version(
+            extension, cli_version, requirements=False
         )
-        if extension:
-            extensions_remote_filtered.add(extension)
+        if without_req:
+            extensions_remote_filtered.add(without_req)
+            continue
+        # The latest compatible version was dropped by the requirement-less
+        # filter, i.e. it declares run_requires. Keep track of it so we can tell
+        # extensions that merely gained requirements apart from genuine removals.
+        with_req = find_and_transform_extension_version(
+            extension, cli_version, requirements=True
+        )
+        if with_req:
+            extensions_gained_requirements.add(with_req)
 
     extension_file = (
         Path(repo.working_dir) / "pkgs/by-name/az/azure-cli/extensions-generated.json"
@@ -474,9 +484,24 @@ def main() -> None:
     )
     updated = set(filter(_filter_updated, updated))
 
+    # An extension reported as removed that still has a compatible version in the
+    # index was not actually removed: its latest version now declares
+    # requirements, so the requirement-less filter drops it. Report these
+    # separately and leave them untouched instead of removing them.
+    gained_by_pname = {ext.pname: ext for ext in extensions_gained_requirements}
+    gained_requirements = {
+        (prev, gained_by_pname[prev.pname])
+        for prev in removed
+        if prev.pname in gained_by_pname
+    }
+    removed = {prev for prev in removed if prev.pname not in gained_by_pname}
+
     logger.info("initialized extensions:")
     for ext in init:
         logger.info(f"  {ext.pname} {ext.version}")
+    logger.info("extensions that gained requirements (previously without):")
+    for prev, new in gained_requirements:
+        logger.info(f"  {prev.pname} {prev.version} -> {new.version}")
     logger.info("removed extensions:")
     for ext in removed:
         logger.info(f"  {ext.pname} {ext.version}")

@@ -9,11 +9,11 @@
 }:
 let
   pname = "lycheeslicer";
-  version = "7.6.4";
+  version = "7.6.6";
 
   src = fetchurl {
     url = "https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-${version}.AppImage";
-    hash = "sha256-lLE40ByNdfK7GkLjfbEEX0nmhL0+E51qPDe+whIJqEM=";
+    hash = "sha256-eDMhA8fCD++BYK58t4/2XUlzrhcwtbAuOzRsThQAiVs=";
   };
 
   desktopItem = makeDesktopItem {
@@ -24,7 +24,10 @@ let
     noDisplay = false;
     exec = "lycheeslicer";
     terminal = false;
-    mimeTypes = [ "model/stl" ];
+    mimeTypes = [
+      "model/stl"
+      "x-scheme-handler/lycheeslicer"
+    ];
     categories = [ "Graphics" ];
     keywords = [
       "STL"
@@ -56,6 +59,6 @@ appimageTools.wrapType2 {
       ZachDavies
     ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "LycheeSlicer";
+    mainProgram = "lycheeslicer";
   };
 }

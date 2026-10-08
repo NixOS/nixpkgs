@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  writableTmpDirAsHomeHook,
 
   # build-system
   setuptools,
@@ -12,6 +11,7 @@
   arviz,
   cachetools,
   cloudpickle,
+  matplotlib,
   numpy,
   pandas,
   pytensor,
@@ -23,14 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pymc";
-  version = "5.28.4";
+  version = "6.3.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-REQ9+II6MFZ64FlJudRRhmXA4/Cb017XrsrZFZBY7R0=";
+    hash = "sha256-0s0Yzp+f/Yij9LOzH2ZUoqoCiMFzm9cd8v0CfZc6uco=";
   };
 
   build-system = [
@@ -38,10 +39,16 @@ buildPythonPackage (finalAttrs: {
     versioneer
   ];
 
+  pythonRelaxDeps = [
+    "cachetools"
+  ];
   dependencies = [
     arviz
     cachetools
     cloudpickle
+    # `matplotlib` is an undeclared runtime dependency: the default (`progressbar = True`) sampling
+    # path imports it in `pymc/progress_bar/rich_progress.py`.
+    matplotlib
     numpy
     pandas
     pytensor
@@ -49,13 +56,6 @@ buildPythonPackage (finalAttrs: {
     scipy
     threadpoolctl
     typing-extensions
-  ];
-
-  nativeBuildInputs = [
-    # Arviz (imported by pymc) wants to write a stamp file to the homedir at import time.
-    # Without $HOME being writable, `pythonImportsCheck` fails.
-    # https://github.com/arviz-devs/arviz/commit/4db612908f588d89bb5bfb6b83a08ada3d54fd02
-    writableTmpDirAsHomeHook
   ];
 
   # The test suite is computationally intensive and test failures are not

@@ -217,5 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.agpl3Plus;
+    mainProgram = "zrythm";
   };
 })

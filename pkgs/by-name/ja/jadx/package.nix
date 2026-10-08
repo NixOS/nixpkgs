@@ -5,6 +5,7 @@
   gradle_8,
   jdk,
   quark-engine,
+  coreutils,
   makeBinaryWrapper,
   librsvg,
   makeDesktopItem,
@@ -17,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.5.5";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WONsXDNhlDuqKsS2Olz3ndZIbi6mdi9JBKaHPpcdTQQ=";
+    hash = "sha256-qwGFMj18xJOrBudthAIeKc/PT0uUzjmTgBYovF4A/94=";
   };
 
   patches = [
@@ -61,7 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp build/jadx/bin/$prog $out/bin
       wrapProgram $out/bin/$prog \
         --set JAVA_HOME ${jdk.home} \
-        --prefix PATH : "${lib.makeBinPath [ quark-engine ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            quark-engine
+            coreutils
+          ]
+        }"
     done
 
     for size in 16 32 48; do

@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/rustedpy/result";
     changelog = "https://github.com/rustedpy/result/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emattiza ];
+    maintainers = [ ];
   };
 }

@@ -8,11 +8,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "yamlx";
-  version = "0.1.0";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://github.com/mjambon/yamlx/releases/download/${finalAttrs.version}/yamlx-${finalAttrs.version}.tbz";
-    hash = "sha256-Ihar37R1dUFMXSgNGEJu5z6ysFMcrg1Hd74hNLletwE=";
+    hash = "sha256-ejpFZY4G6m4/EPApN6GDwEfFC9qS8azWeJQspOCRhkA=";
   };
 
   propagatedBuildInputs = [ ppx_deriving ];

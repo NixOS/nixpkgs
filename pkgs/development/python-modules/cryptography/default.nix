@@ -21,19 +21,19 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "46.0.6";
+  version = "50.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-b6wQnPEf18ViqQVch+Jg1w0Cn372QKxLknD9rL4JjxY=";
+    hash = "sha256-KHxEVSYr8yrODSVsGNgZowI/YnhG3qnFgae9877H+VE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-5ElDEl7MdcQfu/hy+POSBcvkNCFAMo6La5s6uRhZ/fM=";
+    hash = "sha256-heJGLh0MgDPpksWyPLaIkZ5gVEWx8UnaJKv4GvclpmI=";
   };
 
   postPatch = ''

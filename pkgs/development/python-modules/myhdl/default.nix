@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "myhdl";
-  version = "0.11.51";
+  version = "0.11.52";
   pyproject = true;
 
   # No recent tags on GitHub
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nZEdYLRjk2rgS3byc4iu9oJazodnoNg63MBUMasGZiw=";
+    hash = "sha256-gUz3hyyBan+4q+ltmLJDuBXanomAVt/bvbaAY9ruZJY=";
   };
 
   build-system = [

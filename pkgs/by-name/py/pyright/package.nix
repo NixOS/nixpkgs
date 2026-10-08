@@ -1,87 +1,90 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
   fetchFromGitHub,
-  runCommand,
-  jq,
+  fetchPnpmDeps,
+  pnpm_11,
+  pnpmConfigHook,
+  nodejs,
+  makeBinaryWrapper,
+  nix-update-script,
+  testers,
 }:
 
-let
-  version = "1.1.409";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "pyright";
+  version = "1.1.414";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "pyright";
-    tag = version;
-    hash = "sha256-h0sXYwRCIQlrnNIp/a7ow55McA9fdHP2FcvrRCqWROg=";
+    tag = finalAttrs.version;
+    hash = "sha256-rNlRQSkKgIGcHje1YonWsX5oXAAmFxfwq3aA1R5p7HA=";
   };
 
-  patchedPackageJSON =
-    runCommand "package.json"
-      {
-        nativeBuildInputs = [ jq ];
-      }
-      ''
-        jq '
-          .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
-          | .scripts =  {  }
-          ' ${src}/package.json > $out
-      '';
+  pnpmWorkspaces = [
+    "pyright-root"
+    "pyright-internal"
+    "pyright"
+  ];
 
-  pyright-root = buildNpmPackage {
-    pname = "pyright-root";
-    inherit version src;
-    sourceRoot = "${src.name}"; # required for update.sh script
-    npmDepsHash = "sha256-OpXxcALwMyBJEcZz5WTnjAysufbgWkW/VKAg1zIJgDE=";
-    dontNpmBuild = true;
-    postPatch = ''
-      cp ${patchedPackageJSON} ./package.json
-      cp ${./package-lock.json} ./package-lock.json
-    '';
-    installPhase = ''
-      runHook preInstall
-      cp -r . "$out"
-      runHook postInstall
-    '';
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      pnpmWorkspaces
+      ;
+    pnpm = pnpm_11;
+    fetcherVersion = 4;
+    hash = "sha256-FZl5XSiA0uEH3lZxOxzLpD0ZY8vmZuxLIxAxh7kqPKo=";
   };
 
-  pyright-internal = buildNpmPackage {
-    pname = "pyright-internal";
-    inherit version src;
-    sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-HG2714eCHWD6aQAKGpGClMg+XDPQ08Q0ofXf3wMafg0=";
-    dontNpmBuild = true;
-    installPhase = ''
-      runHook preInstall
-      cp -r . "$out"
-      runHook postInstall
-    '';
-  };
-in
-buildNpmPackage rec {
-  pname = "pyright";
-  inherit version src;
+  nativeBuildInputs = [
+    nodejs
+    pnpm_11
+    pnpmConfigHook
+    makeBinaryWrapper
+  ];
 
-  sourceRoot = "${src.name}/packages/pyright";
-  npmDepsHash = "sha256-wyswu6pTtZmksj1hZUhaZLWuJnf8WKofo1htLtgKm9w=";
+  buildPhase = ''
+    runHook preBuild
 
-  postPatch = ''
-    chmod +w ../../
-    ln -s ${pyright-root}/node_modules ../../node_modules
-    chmod +w ../pyright-internal
-    ln -s ${pyright-internal}/node_modules ../pyright-internal/node_modules
+    pnpm --filter pyright build
+
+    runHook postBuild
   '';
 
-  dontNpmBuild = true;
+  installPhase = ''
+    runHook preInstall
 
-  passthru.updateScript = ./update.sh;
+    mkdir -p "$out/lib/pyright"
+    cp -r packages/pyright/{dist,index.js,langserver.index.js,package.json} "$out/lib/pyright/"
+    cp LICENSE.txt README.md "$out/lib/pyright/"
+
+    makeWrapper ${lib.getExe nodejs} "$out/bin/pyright" \
+      --add-flags "$out/lib/pyright/index.js"
+    makeWrapper ${lib.getExe nodejs} "$out/bin/pyright-langserver" \
+      --add-flags "$out/lib/pyright/langserver.index.js"
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  };
 
   meta = {
-    changelog = "https://github.com/Microsoft/pyright/releases/tag/${src.tag}";
+    changelog = "https://github.com/Microsoft/pyright/releases/tag/${finalAttrs.src.tag}";
     description = "Type checker for the Python language";
     homepage = "https://github.com/Microsoft/pyright";
     license = lib.licenses.mit;
     mainProgram = "pyright";
     maintainers = with lib.maintainers; [ kalekseev ];
+    platforms = nodejs.meta.platforms;
   };
-}
+})

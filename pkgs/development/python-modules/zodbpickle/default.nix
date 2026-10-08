@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "zodbpickle";
-  version = "4.3";
+  version = "4.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3qcOi0CBZ9BjrCOk2vRTJGrNENvljLCmwNew+Gl+oqs=";
+    hash = "sha256-Z9QpXdtoskEP5BcJT/4aiw7UGDTuMIAg9Y7htjPh91E=";
   };
 
   build-system = [ setuptools ];

@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awsbck";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DZ2k0fwEyfeP24maTuxG2vmQaZuQ4LJo0KaKFTUDSYM=";
+    hash = "sha256-6idZCa96HLbvrjVlZmZsF8YD91b+hXw2qIpqqqgwNV8=";
   };
 
-  cargoHash = "sha256-wydSzfb8GAJYJPNtSyYBUHtN3+9jsGINSex2F3ILQKI=";
+  cargoHash = "sha256-5PCenLDOZAFp8G9dvU/pSkJa0HnGPKfFOj/DkTb6prI=";
 
   # tests run in CI on the source repo
   doCheck = false;

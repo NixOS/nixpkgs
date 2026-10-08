@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   cmake,
@@ -27,19 +28,35 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libusermetrics";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libusermetrics";
     rev = finalAttrs.version;
-    hash = "sha256-NXwOdKII7Bvjnk2xUEYRCP7r7Woj7DOh8BOO8yuS9kk=";
+    hash = "sha256-WkQqMuPoDDzA2HwD+6YCS9ZigiGL8WGNRZ51ywGNm4s=";
   };
 
   outputs = [
     "out"
     "dev"
     "doc"
+  ];
+
+  patches = [
+    # Upstream switched to building qdjango statically so users don't have to build & install a dead project.
+    # Maybe https://gitlab.com/ubports/development/core/libusermetrics/-/merge_requests/24 will get rid of it for good.
+    # Until then, undo & link against our system-installed build.
+    (fetchpatch {
+      name = "0001-libusermetrics-revert-qdjango-vendoring.patch";
+      url = "https://gitlab.com/ubports/development/core/libusermetrics/-/commit/87f83dd4711bfb4e94fd87bc68403a9bd5cfef2a.patch";
+      revert = true;
+      includes = [
+        "CMakeLists.txt"
+        "src/usermetricsservice/CMakeLists.txt"
+      ];
+      hash = "sha256-OPTQPRr10I7bk7dQ/9x17mv42pKc8yIQUGEGak01Hic=";
+    })
   ];
 
   postPatch = ''
@@ -76,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Tests need to be able to check locale
-  LC_ALL = lib.optionalString finalAttrs.finalPackage.doCheck "en_US.UTF-8";
+  env.LC_ALL = lib.optionalString finalAttrs.finalPackage.doCheck "en_US.UTF-8";
 
   nativeCheckInputs = [
     dbus

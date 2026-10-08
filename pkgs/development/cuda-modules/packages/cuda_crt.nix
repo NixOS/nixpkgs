@@ -2,6 +2,7 @@
   lib,
   backendStdenv,
   buildRedist,
+  cudaOlder,
   glibc,
 }:
 buildRedist {
@@ -11,10 +12,11 @@ buildRedist {
   outputs = [ "out" ];
 
   # Fix compatibility with glibc 2.42:
-  # CUDA >= 13.0 fixed sinpi/cospi (using __NV_IEC_60559_FUNCS_EXCEPTION_SPECIFIER), but
-  # rsqrt/rsqrtf in math_functions.h still lack noexcept, conflicting with glibc 2.42's
-  # declarations.
-  postInstall = lib.optionalString (lib.versionAtLeast glibc.version "2.42") ''
+  # - CUDA >= 13.0 fixed sinpi/cospi (using __NV_IEC_60559_FUNCS_EXCEPTION_SPECIFIER), but
+  #   rsqrt/rsqrtf in math_functions.h still lack noexcept, conflicting with glibc 2.42's
+  #   declarations.
+  # - CUDA >= 13.2 fixed rsqrt/rsqrtf as well (using _NV_RSQRT_SPECIFIER).
+  postInstall = lib.optionalString (cudaOlder "13.2" && lib.versionAtLeast glibc.version "2.42") ''
     nixLog "Patching math_functions.h rsqrt signatures to match glibc's ones"
     substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.h" \
       --replace-fail \

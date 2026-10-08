@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "targ";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "piccolo-orm";
     repo = "targ";
     tag = version;
-    hash = "sha256-myQe8Gpnx5CqKnYNK0PZ2P7o+eVWKLInjyTaZd30WxU=";
+    hash = "sha256-1Xv2d/5R1lXcJ90GF353hhiKh7MdaJzJBRlu+DnUyfc=";
   };
 
   build-system = [ setuptools ];

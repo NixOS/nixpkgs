@@ -2,9 +2,8 @@
   lib,
   stdenv,
   installShellFiles,
-  fetchgit,
+  fetchFromTangled,
   zig_0_14,
-  callPackage,
   versionCheckHook,
 }:
 
@@ -14,19 +13,22 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsr";
   version = "1.0.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
-  src = fetchgit {
-    url = "https://tangled.sh/@rockorager.dev/lsr";
-    rev = "v${finalAttrs.version}";
-    sparseCheckout = [
-      "src"
-      "docs"
-    ];
-    hash = "sha256-VeB0R/6h9FXSzBfx0IgpGlBz16zQScDSiU7ZvTD/Cds=";
+  src = fetchFromTangled {
+    did = "did:plc:7sufqp5jkgsrtsit7gd5wpo2";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Te6GKPnW0XFliSjTI9UhkmT72AEmuUXfO7xNrV01mJk=";
+  };
+
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-lnOow40km0mcj21i2mTQiDGXLhcSxQ2kJoAgUhkQiEg=";
   };
 
   postConfigure = ''
-    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
   '';
 
   nativeBuildInputs = [

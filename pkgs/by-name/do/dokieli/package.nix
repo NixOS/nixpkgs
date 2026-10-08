@@ -16,19 +16,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dokieli";
-  version = "0-unstable-2026-04-20";
+  version = "0-unstable-2026-08-10";
 
   src = fetchFromGitHub {
     owner = "dokieli";
     repo = "dokieli";
-    rev = "01714c999c7b2390ae15f092ef5b7b4d6cc9c3e8";
-    hash = "sha256-PRU4X3lVRnPvvVPzabJ/J2ly4eyFwCxSsKuL0yuRy2I=";
+    rev = "c23e80e4fe54a2ad20f36a9f21a0987f5e3e4505";
+    hash = "sha256-ZwK+MxrTodDvvJuQCIhcDkluor4ri856m/WhcVRwfzo=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-3FyctNQ8pDvJ559SJvAJZjn49wptfB5Q5Takk51oqMQ=";
+    hash = "sha256-AqmUWgVDksQeBKcC8mpq1xgQ5NcHTjX/YSgm9J+feBs=";
   };
 
   buildPhase = ''
@@ -78,10 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Clientside editor for decentralised article publishing, annotations and social interactions";
-    homepage = "https://github.com/linkeddata/dokieli";
-    license = with lib.licenses; [
-      cc-by-40
-      mit
+    homepage = "https://github.com/dokieli/dokieli";
+    license = lib.licenses.AND [
+      lib.licenses.asl20
+      lib.licenses.cc-by-40
     ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ shogo ];

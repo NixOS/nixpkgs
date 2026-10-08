@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nail-parquet";
-  version = "1.6.5";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "Vitruves";
     repo = "nail-parquet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CPiOeaESerQj+nV0hQIGv06/MFP8s7p9olpmhnWpAAg=";
+    hash = "sha256-IDGVdC4jvDfFTP0N0LAi8MTGdUOCT6A7mKXIz2au6jY=";
   };
 
-  cargoHash = "sha256-x4BJZcQkisw9hA/TBzSSdkxh7oUNL0OD3H/v67otYj8=";
+  cargoHash = "sha256-c4yuXCQAlwpDlKURwN51d3AI+m7cUNGRdgl29qgWIvA=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config

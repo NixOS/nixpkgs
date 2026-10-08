@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyx";
-  version = "2024.02.29";
+  version = "2026.01.11";
 
   src = fetchurl {
     url = "https://yx7.cc/code/hyx/hyx-${lib.replaceStrings [ "-" ] [ "." ] finalAttrs.version}.tar.xz";
-    sha256 = "sha256-dufx3zsabeet7Rp0d60MIuNqisIQd6UgE7WDZYNHl3E=";
+    hash = "sha256-VQhjyeaiwOJhjBalYsjumV6IwdMOYqv99Oy4GbPE31Q=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

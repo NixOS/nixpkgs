@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weconnect";
   version = "0.60.11";
   pyproject = true;
@@ -20,19 +20,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-llAWCjhP/fwI+H8BRpMYxba8jC+WDc66xkUDwT3NHcA=";
   };
 
   postPatch = ''
     substituteInPlace weconnect/__version.py \
-      --replace-fail "0.0.0dev" "${version}"
+      --replace-fail "0.0.0dev" "${finalAttrs.version}"
     substituteInPlace setup.py \
       --replace-fail "setup_requires=SETUP_REQUIRED" "setup_requires=[]" \
       --replace-fail "tests_require=TEST_REQUIRED" "tests_require=[]"
     substituteInPlace pytest.ini \
       --replace-fail "required_plugins = pytest-cov" ""
   '';
+
+  pythonRelaxDeps = [
+    "oauthlib"
+    "requests"
+  ];
 
   build-system = [ setuptools ];
 
@@ -41,8 +46,6 @@ buildPythonPackage rec {
     pyjwt
     requests
   ];
-
-  pythonRelaxDeps = [ "oauthlib" ];
 
   optional-dependencies = {
     Images = [
@@ -61,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client for the Volkswagen WeConnect Services";
     homepage = "https://github.com/tillsteinbach/WeConnect-python";
-    changelog = "https://github.com/tillsteinbach/WeConnect-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/tillsteinbach/WeConnect-python/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

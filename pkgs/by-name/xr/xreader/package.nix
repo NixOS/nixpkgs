@@ -19,8 +19,6 @@
   poppler,
   libspectre,
   libgxps,
-  webkitgtk_4_1,
-  mathjax,
   ninja,
   djvulibre,
   backends ? [
@@ -31,19 +29,18 @@
     "pixbuf"
     "comics"
     "xps"
-    "epub"
   ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xreader";
-  version = "4.6.3";
+  version = "4.6.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xreader";
     rev = finalAttrs.version;
-    hash = "sha256-lVJFNOiayAai/Lg4tl8lNaK5fdTlZ0ptzstUzciH1mA=";
+    hash = "sha256-mSaEVXwX6rErIEi9KxmMrGYunZFK8AbxNCTl8EJQGTM=";
   };
 
   nativeBuildInputs = [
@@ -57,8 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    # FIXME: `MathJax.js` is only available in MathJax 2.7.x.
-    "-Dmathjax-directory=${mathjax}"
     "-Dintrospection=true"
   ]
   ++ (map (x: "-D${x}=true") backends);
@@ -74,10 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
     poppler
     libspectre
     libgxps
-    webkitgtk_4_1
-    mathjax
     djvulibre
   ];
+
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/xreader.thumbnailer \
+      --replace-fail "TryExec=xreader-thumbnailer" "TryExec=$out/bin/xreader-thumbnailer" \
+      --replace-fail "Exec=xreader-thumbnailer" "Exec=$out/bin/xreader-thumbnailer"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

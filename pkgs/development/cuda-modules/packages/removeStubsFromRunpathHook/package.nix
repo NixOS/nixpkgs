@@ -1,4 +1,5 @@
 {
+  lib,
   addDriverRunpath,
   arrayUtilities,
   autoFixElfFiles,
@@ -14,4 +15,6 @@ makeSetupHook {
   substitutions = {
     driverLinkLib = addDriverRunpath.driverLink + "/lib";
   };
+
+  meta.license = lib.licenses.mit;
 } ./removeStubsFromRunpathHook.bash

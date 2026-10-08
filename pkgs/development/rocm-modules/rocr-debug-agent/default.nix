@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocr-debug-agent";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Library that provides some debugging functionality for ROCr";
     homepage = "https://github.com/ROCm/rocr_debug_agent";
-    license = with lib.licenses; [ ncsa ];
+    license = lib.licenses.ncsa;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

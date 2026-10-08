@@ -1,88 +1,73 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
-  pytestCheckHook,
-  pkgs,
+  fetchFromGitHub,
+
+  # build-system
+  cmake,
+  ninja,
+  pybind11,
+  scikit-build-core,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  swig,
+
+  # dependencies
   awkward,
   numpy,
-  pybind11,
-  python,
-  setuptools,
-  setuptools-scm,
   vector,
+
+  # tests
+  pytestCheckHook,
 }:
 
-let
-  fastjet =
-    (pkgs.fastjet.override {
-      inherit python;
-      withPython = true;
-    }).overrideAttrs
-      (prev: {
-        postInstall = (prev.postInstall or "") + ''
-          mv "$out/${python.sitePackages}/"{fastjet.py,_fastjet_swig.py}
-        '';
-      });
-  fastjet-contrib = pkgs.fastjet-contrib.override {
-    inherit fastjet;
-  };
-in
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "fastjet";
-  version = "3.5.1.2";
+  version = "3.5.1.4";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    pname = "fastjet";
-    inherit version;
-    hash = "sha256-dDvlFBZrTWhpNhngKuAvu9zpbcLWvz7IpRQsmctvaW0=";
+  src = fetchFromGitHub {
+    owner = "scikit-hep";
+    repo = "fastjet";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-Q2ukR7aA12d0+mRm/y8hAMpOo3vRkFo3B/fx6XChARI=";
   };
-
-  # unvendor fastjet/fastjet-contrib
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail 'cmdclass={"build_ext": FastJetBuild, "install": FastJetInstall},' "" \
-      --replace-fail 'str(OUTPUT / "include")' "" \
-      --replace-fail 'str(OUTPUT / "lib")' ""
-    for file in src/fastjet/*.py; do
-      substituteInPlace "$file" \
-        --replace-warn "fastjet._swig" "_fastjet_swig"
-    done
-    sed -i src/fastjet/_pyjet.py -e '1iimport _fastjet_swig'
-  '';
-
-  strictDeps = true;
 
   build-system = [
-    setuptools
+    cmake
+    ninja
+    pybind11
+    scikit-build-core
     setuptools-scm
   ];
+  dontUseCmakeConfigure = true;
+
+  nativeBuildInputs = [
+    swig
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   dependencies = [
     awkward
-    fastjet
     numpy
     vector
   ];
 
-  buildInputs = [
-    pybind11
-    fastjet-contrib
-  ];
+  pythonImportsCheck = [ "fastjet" ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   meta = {
     description = "Jet-finding in the Scikit-HEP ecosystem";
     homepage = "https://github.com/scikit-hep/fastjet";
-    changelog = "https://github.com/scikit-hep/fastjet/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/fastjet/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

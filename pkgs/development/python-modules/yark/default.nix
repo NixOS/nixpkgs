@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "Module for YouTube archiving";
     mainProgram = "yark";
     homepage = "https://github.com/Owez/yark";
-    changelog = "https://github.com/Owez/yark/releases/tag/v${version}";
+    changelog = "https://github.com/Owez/yark/releases/tag/v${lib.versions.majorMinor version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };

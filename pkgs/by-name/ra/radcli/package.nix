@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "radcli";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "radcli";
     repo = "radcli";
     tag = finalAttrs.version;
-    hash = "sha256-Q+rcNhYmQpEE5LYC/zvbh4RIxx2g9djuWmrSUdh00+c=";
+    hash = "sha256-8lumfZXIYeFTjtakj1s+gxoVaDMzoKlQMYgpq4BIc+U=";
   };
 
   postUnpack = ''

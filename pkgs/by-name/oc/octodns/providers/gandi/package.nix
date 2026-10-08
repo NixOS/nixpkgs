@@ -37,6 +37,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  pytestFlags = [
+    # Ignore octoDNS 2.0 deprecation warnings
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = {
     description = "Gandi v5 API provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-gandi";

@@ -46,22 +46,16 @@ assert useSDL -> sdl2-compat != null;
 
 stdenv.mkDerivation rec {
   pname = "allegro";
-  version = "5.2.10.1";
+  version = "5.2.11.3";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "sha256-agE3K+6VhhG/LO52fiesCsOq1fNYVRhdW7aKdPCbTOo=";
+    hash = "sha256-Nyab9ytqMZT9no2MT0vDe9tDVxXc6dwScHZ1uMVh+nE=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "Bump-CMake-minimum-version-to-3.5";
-      url = "https://github.com/liballeg/allegro5/commit/6e93fcaabaafd81701f4cd1b74f4b69dd598bc9b.patch?full_index=1";
-      hash = "sha256-IEnn66bS2m6MVFCNf341yLtd7jTl2gflL5EFJFmbEt4=";
-    })
-  ];
+  patches = [ ];
 
   nativeBuildInputs = [
     cmake

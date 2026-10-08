@@ -137,6 +137,8 @@ body:
           required: true
         - label: "I assert that I have read the [NixOS Code of Conduct](https://github.com/NixOS/.github/blob/master/CODE_OF_CONDUCT.md) and agree to abide by it."
           required: true
+        - label: "I assert that I have read the [automation/AI policy](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#automationai-policy) and that this issue report complies with it."
+          required: true
   - type: "markdown"
     attributes:
       value: |

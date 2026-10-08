@@ -91,13 +91,14 @@ in
       environment = {
         STATIC_DIR = "${cfg.stateDir}/static";
         DATA_DIR = "${cfg.stateDir}/data";
+        HOME = cfg.stateDir;
         HF_HOME = "${cfg.stateDir}/hf_home";
         SENTENCE_TRANSFORMERS_HOME = "${cfg.stateDir}/transformers_home";
         WEBUI_URL = "http://localhost:${toString cfg.port}";
       }
       // cfg.environment;
 
-      # backwards compatability migration
+      # backwards compatibility migration
       preStart = ''
         if [ -d "${cfg.stateDir}/data" ] && [ -n "$(ls -A "${cfg.stateDir}/data" 2>/dev/null)" ]; then
           exit 0

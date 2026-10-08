@@ -8,7 +8,6 @@
   fontconfig,
   freetype,
   giflib,
-  gitUpdater,
   glib,
   harfbuzzFull,
   libicns,
@@ -35,34 +34,27 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.17";
+  version = "1.3.18.3";
 
-  srcs = [
-    (fetchFromGitHub {
-      name = "aseprite-source";
-      owner = "aseprite";
-      repo = "aseprite";
-      tag = "v${finalAttrs.version}";
-      fetchSubmodules = true;
-      hash = "sha256-mBFwcf+Q/h1t7HDuiX6NTAiq0BCZZk6MUid1MuA67LY=";
-    })
+  src = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "aseprite";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-pMjBFJ1nhSNLITDS4oliD2DPMey6JBWplIqdcOtZfqM=";
+  };
 
-    # Translation strings
-    (fetchFromGitHub {
-      name = "aseprite-strings";
-      owner = "aseprite";
-      repo = "strings";
-      rev = "0f49265d7e7aea4b862b7d1e670ed969e8a469b8";
-      hash = "sha256-S3YkWA5ECvyyqGvojDhIZci04CTjbJzTQiJ5FZsB4lU=";
-    })
-  ];
+  asepriteStrings = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "strings";
+    rev = "b43be33343efa40c1c4bda00f985b8cd83bddf2a";
+    hash = "sha256-JxNEtWnP3RtntXM3CmJLXyByW6dri98COp2O0A6ZwBA=";
+  };
 
-  # Sets the main build directory to "aseprite-source" since multiple sources are fetched.
-  sourceRoot = "aseprite-source";
-
-  # Translation files are copied without overwriting existing ones to preserve the potentially more up-to-date English file from the main source.
+  # Translation files are copied without overwriting existing ones to preserve
+  # the potentially more up-to-date English file from the main source.
   postUnpack = ''
-    cp --no-clobber $PWD/aseprite-strings/* ./aseprite-source/data/strings
+    cp --no-clobber ${finalAttrs.asepriteStrings}/* "$sourceRoot/data/strings"
   '';
 
   nativeBuildInputs = [
@@ -111,6 +103,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/ver/CMakeLists.txt \
       --replace-fail '"1.x-dev"' '"${finalAttrs.version}"'
+
+    # fmt 12.2 no longer exposes fmt::format through fmt/core.h.
+    substituteInPlace src/app/i18n/strings.h \
+      --replace-fail '"fmt/core.h"' '"fmt/format.h"'
 
     # Fix build on Darwin with `-Werror=format-security`
     # (NSLog requires a string-literal format)
@@ -183,7 +179,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     rmdir "$out/bin" 2>/dev/null || true
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://www.aseprite.org/";

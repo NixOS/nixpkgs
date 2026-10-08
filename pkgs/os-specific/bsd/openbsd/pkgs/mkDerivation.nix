@@ -35,6 +35,7 @@ lib.makeOverridable (
       i586 = "i386";
       i686 = "i386";
       x86_64 = "amd64";
+      riscv64 = "riscv64";
     };
 
     archMap = {
@@ -44,6 +45,7 @@ lib.makeOverridable (
       i586 = "i386";
       i686 = "i386";
       x86_64 = "amd64";
+      riscv64 = "riscv64";
     };
 
   in

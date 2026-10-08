@@ -7,7 +7,7 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   withWayland ? true,
   withIndicator ? true,
   dbus,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-U3SOHZvgyPwv98wY41dnwSCUg+DTkb/LY6woffrAli8=";
   };
 
@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     rustc

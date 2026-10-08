@@ -115,6 +115,11 @@ stdenv.mkDerivation (
     }
     // (args.env or { });
 
+    preConfigure = ''
+      export CRYSTAL_WORKERS="''${CRYSTAL_WORKERS:-$NIX_BUILD_CORES}"
+    ''
+    + (args.preConfigure or "");
+
     inherit enableParallelBuilding;
     strictDeps = true;
     buildInputs =
@@ -198,12 +203,16 @@ stdenv.mkDerivation (
 
     installCheckPhase =
       args.installCheckPhase or ''
+        runHook preInstallCheck
+
         for f in $out/bin/*; do
-          if [ $f == $out/bin/*.dwarf ]; then
+          if [[ $f == *.dwarf ]]; then
             continue
           fi
           $f --help > /dev/null
         done
+
+        runHook postInstallCheck
       '';
 
     meta = {

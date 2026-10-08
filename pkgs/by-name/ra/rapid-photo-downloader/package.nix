@@ -8,7 +8,7 @@
   gobject-introspection,
   libgudev,
   udisks,
-  gexiv2,
+  gexiv2_0_10,
   gst_all_1,
   libnotify,
   ifuse,
@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    gexiv2
+    gexiv2_0_10
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -100,8 +100,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
 
-  strictDeps = true;
-
   preFixup = ''
     makeWrapperArgs+=(
       --set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"
@@ -125,7 +123,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Photo and video importer for cameras, phones, and memory cards";
     mainProgram = "rapid-photo-downloader";
-    homepage = "https://www.damonlynch.net/rapid/";
+    homepage = "https://damonlynch.net/rapid/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ philipdb ];

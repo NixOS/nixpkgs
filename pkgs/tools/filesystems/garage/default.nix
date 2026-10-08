@@ -94,7 +94,6 @@ let
         homepage = "https://garagehq.deuxfleurs.fr";
         license = lib.licenses.agpl3Only;
         maintainers = with lib.maintainers; [
-          adamcstephens
           nickcao
           _0x4A6F
           teutat3s
@@ -113,16 +112,9 @@ rec {
   };
 
   garage_2 = generic {
-    version = "2.3.0";
-    hash = "sha256-CqHcaVGgXL/jjqq7XN+kzEp6xoNgwBfGpMKYbTd78Ys=";
-    cargoHash = "sha256-ANh97G/2/KtCMN4gldteq6ROduk1AQJkI5zS9n97OJY=";
-    cargoPatches = [
-      (fetchpatch2 {
-        # fix: prevent depending on aws-lc via reqwest
-        url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/commit/7c18abb664d891cdb696b478058b7506e3d53f44.patch";
-        hash = "sha256-f/+vDOC+kcmJVLtx1Y6OepoJBZhX30DULwSLnyQN5aI=";
-      })
-    ];
+    version = "2.4.1";
+    hash = "sha256-+3w4R0IGxc7GCVW3t7Izt6Y5PVUjxHsdLrr74ckR9Mg=";
+    cargoHash = "sha256-G928EsavtEgxugLzpBGSbo2RMHLzu9PZf9r3GqU5J3E=";
   };
 
   garage = garage_1;

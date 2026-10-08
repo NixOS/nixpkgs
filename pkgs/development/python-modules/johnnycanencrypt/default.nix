@@ -10,24 +10,25 @@
   pkg-config,
   pytestCheckHook,
   rustPlatform,
+  tzdata,
   vcrpy,
 }:
 
 buildPythonPackage rec {
   pname = "johnnycanencrypt";
-  version = "0.16.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kushaldas";
     repo = "johnnycanencrypt";
     tag = "v${version}";
-    hash = "sha256-9T8B6zG3zMOBMX9C+u34MGBAgQ8YR44CW2BTdO1CciI=";
+    hash = "sha256-qpta6D5aslUwuJ0+voYrHFIDetlsUB6PkScrtl/plVs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-V1z16GKaSQVjp+stWir7kAO2wsnOYPdhKi4KzIKmKx8=";
+    hash = "sha256-EzHbV/IBbGjoKFIbXSo2dlf+DU7ZXV16bVR93Sq0lis=";
   };
 
   build-system = with rustPlatform; [
@@ -53,7 +54,10 @@ buildPythonPackage rec {
     libiconv
   ];
 
-  dependencies = [ httpx ];
+  dependencies = [
+    httpx
+    tzdata
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "icalendar-compatibility";
-  version = "0.1.4";
+  version = "0.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "icalendar_compatibility";
     tag = "v${version}";
-    hash = "sha256-h9rpbltNEPMteicPJ6oC32NsZS8QXQphLbC0Qiu7j5Q=";
+    hash = "sha256-rHx4wuLKSBI3/3ShxtpyyuK+iWULpbzfDN8DCNUryHg=";
   };
 
   # hatch-vcs tries to read the current git commit hash
@@ -39,9 +39,12 @@ buildPythonPackage rec {
     git
   ];
 
-  pythonImportsCheck = [ "icalendar_compatibility" ];
+  disabledTests = [
+    # https://github.com/niccokunzmann/icalendar_compatibility/issues/5
+    "test_geo_location_is_also_escaped"
+  ];
 
-  # env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  pythonImportsCheck = [ "icalendar_compatibility" ];
 
   meta = {
     homepage = "https://icalendar-compatibility.readthedocs.io/en/latest/";

@@ -8,6 +8,7 @@ let
   cfg = config.services.harmonia;
   cacheCfg = cfg.cache;
   daemonCfg = cfg.daemon;
+  gcCfg = cfg.gc;
 
   format = pkgs.formats.toml { };
 
@@ -50,7 +51,7 @@ in
         signKeyPath = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
           default = null;
-          description = "DEPRECATED: Use `services.harmonia-dev.cache.signKeyPaths` instead. Path to the signing key to use for signing the cache";
+          description = "DEPRECATED: Use `services.harmonia.cache.signKeyPaths` instead. Path to the signing key to use for signing the cache";
         };
 
         signKeyPaths = lib.mkOption {
@@ -66,6 +67,105 @@ in
             Settings to merge with the default configuration.
             For the list of the default configuration, see <https://github.com/nix-community/harmonia/tree/master#configuration>.
           '';
+        };
+      };
+
+      gc = {
+        enable = lib.mkEnableOption "harmonia-gc, a faster nix-collect-garbage";
+
+        automatic = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Run garbage collection automatically on a schedule.";
+        };
+
+        dates = lib.mkOption {
+          type = with lib.types; either singleLineStr (listOf str);
+          apply = lib.toList;
+          default = [ "03:15" ];
+          example = "weekly";
+          description = ''
+            When to run garbage collection. Calendar event in the format
+            specified by {manpage}`systemd.time(7)`.
+          '';
+        };
+
+        randomizedDelaySec = lib.mkOption {
+          type = lib.types.singleLineStr;
+          default = "0";
+          example = "45min";
+          description = "Randomized delay before each run.";
+        };
+
+        persistent = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = "Run on next boot if a scheduled run was missed.";
+        };
+
+        deleteOlderThan = lib.mkOption {
+          type = lib.types.nullOr lib.types.singleLineStr;
+          default = null;
+          example = "30d";
+          description = "Delete profile generations older than this.";
+        };
+
+        ensureFree = lib.mkOption {
+          type = lib.types.nullOr lib.types.singleLineStr;
+          default = null;
+          example = "50G";
+          description = ''
+            Free space until this much is available, then stop. Accepts an
+            absolute size like "50G" or a percentage of the store's filesystem
+            like "20%".
+          '';
+        };
+
+        keepRecent = lib.mkOption {
+          type = lib.types.nullOr lib.types.singleLineStr;
+          default = null;
+          example = "1d";
+          description = ''
+            Keep store paths registered within this time window. Avoids deleting
+            build dependencies fetched during a recent build.
+          '';
+        };
+
+        noVacuum = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = ''
+            Skip the SQLite VACUUM after garbage collection. Enable on busy
+            builders, where concurrent nix-daemon readers prevent cleanup of
+            the database-sized WAL that VACUUM produces.
+          '';
+        };
+
+        chunkSize = lib.mkOption {
+          type = lib.types.nullOr lib.types.ints.positive;
+          default = null;
+          description = ''
+            Number of dead paths invalidated per database transaction. Lower
+            values keep the WAL (and its disk use) smaller during deletion at
+            the cost of more checkpoints; null uses the built-in default.
+          '';
+        };
+
+        gcRootsDirs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          example = [ "/mnt/extra-roots" ];
+          description = ''
+            Extra directories to scan for GC roots, treated like the standard
+            gcroots directory. Nix only scans its own state directories; this
+            keeps roots that live elsewhere from being collected.
+          '';
+        };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = "Extra arguments to pass to harmonia-gc.";
         };
       };
 
@@ -109,31 +209,30 @@ in
         else
           [ ];
 
-      nix.settings.extra-allowed-users = [ "harmonia" ];
-      users.users.harmonia = {
-        isSystemUser = true;
-        group = "harmonia";
+      services.harmonia.cache.settings = builtins.mapAttrs (_: v: lib.mkDefault v) {
+        bind = "[::]:5000";
+        workers = 4;
+        max_connection_rate = 256;
+        priority = 50;
       };
-      users.groups.harmonia = { };
 
-      services.harmonia.cache.settings = builtins.mapAttrs (_: v: lib.mkDefault v) (
-        {
-          bind = "[::]:5000";
-          workers = 4;
-          max_connection_rate = 256;
-          priority = 50;
-        }
-        // lib.optionalAttrs daemonCfg.enable {
-          daemon_socket = daemonCfg.socketPath;
-        }
-      );
+      # Socket activation lets the service run with PrivateNetwork; the
+      # inherited fd keeps referring to the host netns.
+      systemd.sockets.harmonia = {
+        description = "harmonia binary cache socket";
+        wantedBy = [ "sockets.target" ];
+        socketConfig.ListenStream =
+          let
+            b = cacheCfg.settings.bind;
+          in
+          if lib.hasPrefix "unix:" b then lib.removePrefix "//" (lib.removePrefix "unix:" b) else b;
+      };
 
       systemd.services.harmonia = {
         description = "harmonia binary cache service";
 
-        requires = if daemonCfg.enable then [ "harmonia-daemon.service" ] else [ "nix-daemon.socket" ];
-        after = [ "network.target" ] ++ lib.optional daemonCfg.enable "harmonia-daemon.service";
-        wantedBy = [ "multi-user.target" ];
+        requires = [ "harmonia.socket" ];
+        after = [ "harmonia.socket" ];
 
         environment = {
           CONFIG_FILE = format.generate "harmonia.toml" cacheCfg.settings;
@@ -150,6 +249,9 @@ in
           ExecStart = lib.getExe cfg.package;
           User = "harmonia";
           Group = "harmonia";
+          DynamicUser = true;
+          Type = "notify";
+          WatchdogSec = 15;
           Restart = "on-failure";
           PrivateUsers = true;
           DeviceAllow = [ "" ];
@@ -174,7 +276,12 @@ in
           ProtectProc = "invisible";
           RestrictNamespaces = true;
           SystemCallArchitectures = "native";
-          PrivateNetwork = false;
+
+          # accept(2) on the inherited fd is exempt from both restrictions.
+          PrivateNetwork = true;
+          RestrictAddressFamilies = [ "AF_UNIX" ];
+          IPAddressDeny = "any";
+
           PrivateTmp = true;
           PrivateDevices = true;
           PrivateMounts = true;
@@ -182,8 +289,64 @@ in
           ProtectSystem = "strict";
           ProtectHome = true;
           LockPersonality = true;
-          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
           LimitNOFILE = 65536;
+        };
+      };
+    })
+
+    (lib.mkIf gcCfg.enable {
+      assertions = [
+        {
+          assertion = gcCfg.automatic -> config.nix.enable;
+          message = "services.harmonia.gc.automatic requires nix.enable";
+        }
+      ];
+
+      warnings = lib.optional (gcCfg.automatic && config.nix.gc.automatic) ''
+        Both services.harmonia.gc.automatic and nix.gc.automatic are enabled.
+        Disable nix.gc.automatic to avoid running two garbage collectors.
+      '';
+
+      systemd.services.harmonia-gc = {
+        description = "Harmonia Nix Garbage Collector";
+        # `nix config show` for keep-derivations/keep-outputs.
+        path = [ config.nix.package ];
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStart = lib.escapeShellArgs (
+            [ (lib.getExe' cfg.package "harmonia-gc") ]
+            ++ lib.optionals (gcCfg.deleteOlderThan != null) [
+              "--delete-older-than"
+              gcCfg.deleteOlderThan
+            ]
+            ++ lib.optionals (gcCfg.ensureFree != null) [
+              "--ensure-free"
+              gcCfg.ensureFree
+            ]
+            ++ lib.optionals (gcCfg.keepRecent != null) [
+              "--keep-recent"
+              gcCfg.keepRecent
+            ]
+            ++ lib.optional gcCfg.noVacuum "--no-vacuum"
+            ++ lib.optionals (gcCfg.chunkSize != null) [
+              "--chunk-size"
+              (toString gcCfg.chunkSize)
+            ]
+            ++ lib.concatMap (d: [
+              "--gc-roots-dir"
+              d
+            ]) gcCfg.gcRootsDirs
+            ++ gcCfg.extraArgs
+          );
+        };
+        startAt = lib.optionals gcCfg.automatic gcCfg.dates;
+        restartIfChanged = false;
+      };
+
+      systemd.timers.harmonia-gc = lib.mkIf gcCfg.automatic {
+        timerConfig = {
+          RandomizedDelaySec = gcCfg.randomizedDelaySec;
+          Persistent = gcCfg.persistent;
         };
       };
     })

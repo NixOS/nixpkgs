@@ -19,7 +19,6 @@ prefetch() {
 LINUX_AARCH64_SHA256=$(prefetch "linux-aarch64")
 LINUX_X64_SHA256=$(prefetch "linux-x86_64")
 DARWIN_AARCH64_SHA256=$(prefetch "macos-aarch64")
-DARWIN_X64_SHA256=$(prefetch "macos-x86_64")
 
 sed -i "s/version = \".*\"/version = \"$VERSION\"/" "$NIX_DRV"
 
@@ -32,4 +31,3 @@ replace-sha256() {
 replace-sha256 "aarch64-linux" "$LINUX_AARCH64_SHA256"
 replace-sha256 "x86_64-linux" "$LINUX_X64_SHA256"
 replace-sha256 "aarch64-darwin" "$DARWIN_AARCH64_SHA256"
-replace-sha256 "x86_64-darwin" "$DARWIN_X64_SHA256"

@@ -16,13 +16,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "glpi-agent";
-  version = "1.17";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "glpi-project";
     repo = "glpi-agent";
     tag = version;
-    hash = "sha256-ug3/ullvEn98UUg4fzDQl5PjVFlbgbaIiz0tuWz9XeA=";
+    hash = "sha256-KAvGfuHk/B4uDYuZqG9NMCrqWfW04nkTmN4NF5Wr1mw=";
   };
 
   postPatch = ''

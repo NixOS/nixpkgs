@@ -40,9 +40,10 @@
         ./common/x11.nix
       ];
 
-      environment.systemPackages = with pkgs; [
-        moonlight-qt
-      ];
+      programs.moonlight-qt = {
+        enable = true;
+        capSysNice = true;
+      };
 
     };
 
@@ -52,6 +53,7 @@
     # start the tests, wait for sunshine to be up
     start_all()
     sunshine.wait_for_open_port(48010,"localhost")
+    moonlight.succeed("${pkgs.libcap}/bin/getcap \"$(command -v moonlight)\" | grep -q 'cap_sys_nice'")
 
     # set the admin username/password, restart sunshine
     sunshine.execute("sunshine --creds sunshine sunshine")

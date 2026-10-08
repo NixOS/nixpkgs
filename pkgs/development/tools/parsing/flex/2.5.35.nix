@@ -10,15 +10,19 @@
   m4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flex";
   version = "2.5.35";
 
   src = fetchurl {
     url = "https://github.com/westes/flex/archive/flex-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.tar.gz";
-    sha256 = "0wh06nix8bd4w1aq4k2fbbkdq5i30a9lxz3xczf3ff28yy0kfwzm";
+    hash = "sha256-9XM3gfdIODfcZ338TpMCIxbc5lpOTIJV4KQt1KM1AHI=";
+  };
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
   };
 
   postPatch = ''
@@ -35,12 +39,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ m4 ];
 
+  strictDeps = true;
+
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     ac_cv_func_malloc_0_nonnull=yes
     ac_cv_func_realloc_0_nonnull=yes
   '';
 
   doCheck = false; # fails 2 out of 46 tests
+
+  __structuredAttrs = true;
 
   meta = {
     branch = "2.5.35";
@@ -50,4 +58,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
   };
-}
+})

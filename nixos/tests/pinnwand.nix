@@ -12,7 +12,7 @@ in
     maintainers = [ hexa ];
   };
 
-  nodes = {
+  containers = {
     server =
       { config, ... }:
       {

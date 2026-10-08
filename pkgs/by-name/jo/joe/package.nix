@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "joe";
-  version = "4.7";
+  version = "4.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/joe-editor/joe-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-cSsjqDo3V6k9K0p2Mludq7pVTBgrIJ0mdVN8Jyhn/Lo=";
+    sha256 = "sha256-aZWyjuINzbvLWkWkwRBkLcltZ3SK6idFDHTNtN0HzCA=";
   };
 
   patches = [ ./macos-fix.patch ];

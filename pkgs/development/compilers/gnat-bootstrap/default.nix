@@ -33,37 +33,20 @@ stdenv.mkDerivation (
         url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${finalAttrs.version}/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
       in
       {
-        "12" = {
-          gccVersion = "12.1.0";
-          alireRevision = "2";
-        }
-        // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
-            upstreamTriplet = "x86_64-apple-darwin19.6.0";
-          };
-          x86_64-linux = {
-            inherit url;
-            hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
-            upstreamTriplet = "x86_64-pc-linux-gnu";
-          };
-        }
-        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
         "13" = {
           gccVersion = "13.2.0";
           alireRevision = "2";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-DNHcHTIi7pw0rsVtpyGTyLVElq3IoO2YX/OkDbdeQyo=";
-            upstreamTriplet = "x86_64-apple-darwin21.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-DC95udGSzRDE22ON4UpekxTYWOSBeUdJvILbSFj6MFQ=";
             upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+          aarch64-darwin = {
+            inherit url;
+            hash = "sha256-Bjl6iuM2xLknezR92j/kpDYpxqTcxK1v8rffmivOAVw=";
+            upstreamTriplet = "aarch64-apple-darwin23.2.0";
           };
         }
         .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
@@ -72,11 +55,6 @@ stdenv.mkDerivation (
           alireRevision = "1";
         }
         // {
-          x86_64-darwin = {
-            inherit url;
-            hash = "sha256-3YOnvuI6Qq7huQcqgFSz/o+ZgY2wNkKDqHIuzNz1MVY=";
-            upstreamTriplet = "x86_64-apple-darwin21.6.0";
-          };
           x86_64-linux = {
             inherit url;
             hash = "sha256-pH3IuOpCM9sY/ppTYcxBmgpsUiMrisIjmAa/rmmZXb4=";
@@ -86,6 +64,55 @@ stdenv.mkDerivation (
             inherit url;
             hash = "sha256-SVW/0yyj6ZH1GAjvD+unII+zSLGd3KGFt1bjjQ3SEFU=";
             upstreamTriplet = "aarch64-linux-gnu";
+          };
+          aarch64-darwin = {
+            inherit url;
+            hash = "sha256-/nARwdQzAMd41fslUbrgloxn0hVZp9PokfQ9yPmL1g8=";
+            upstreamTriplet = "aarch64-apple-darwin23.6.0";
+          };
+        }
+        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        "15" = {
+          gccVersion = "15.3.0";
+          alireRevision = "1";
+        }
+        // {
+          x86_64-linux = {
+            inherit url;
+            hash = "sha256-8CDxqAQW7zskadfdzMjJqzPN8GZ2qu/7NWvcQLDis1s=";
+            upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+          aarch64-linux = {
+            inherit url;
+            hash = "sha256-cLLYWqdZuEZxV4ofd0GtO/+pQDMKs6TAOrAHw3DgI94=";
+            upstreamTriplet = "aarch64-linux-gnu";
+          };
+          aarch64-darwin = {
+            inherit url;
+            hash = "sha256-WKwNQJEghnXQLexKHswn494b4sz+usvgYEIoNaedzCk=";
+            upstreamTriplet = "aarch64-apple-darwin24.6.0";
+          };
+        }
+        .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+        "16" = {
+          gccVersion = "16.1.0";
+          alireRevision = "1";
+        }
+        // {
+          x86_64-linux = {
+            inherit url;
+            hash = "sha256-5bKYPJnXDGa80BtAogLE82X0zTuYKdN2cKh503oMeic=";
+            upstreamTriplet = "x86_64-pc-linux-gnu";
+          };
+          aarch64-linux = {
+            inherit url;
+            hash = "sha256-jJnqDJGBOjqbT4hDW0nRpV0oA3RXxJhvI7BuvQkPDQI=";
+            upstreamTriplet = "aarch64-linux-gnu";
+          };
+          aarch64-darwin = {
+            inherit url;
+            hash = "sha256-TJlV/Ngq6SwpIgGkwamTN3aRGP2BnEzJyBGovtWb6Y0=";
+            upstreamTriplet = "aarch64-apple-darwin24.6.0";
           };
         }
         .${stdenv.hostPlatform.system} or throwUnsupportedSystem;
@@ -136,13 +163,15 @@ stdenv.mkDerivation (
     ++
       lib.optionals
         (
-          lib.versionAtLeast majorVersion "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux
+          (majorVersion == "14" && stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux)
+          || (lib.versionAtLeast majorVersion "15" && stdenv.hostPlatform.isLinux)
         )
         [
           # not sure why the bootstrap binaries link to zstd only on this architecture but they do
           zstd
         ];
 
+    __structuredAttrs = true;
     strictDeps = true;
 
     # https://github.com/alire-project/GNAT-FSF-builds/issues/51
@@ -194,7 +223,7 @@ stdenv.mkDerivation (
     # [2]: https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/Fixed-Headers.html
 
     + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-      upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/x86_64-darwin/gcc/install"
+      upstreamBuildPrefix="/Users/runner/work/GNAT-FSF-builds/GNAT-FSF-builds/sbx/${stdenv.hostPlatform.system}/gcc/install"
       for i in "$out"/lib/*.dylib "$out"/lib/gcc/*/*/adalib/*.dylib; do
         if [[ -f "$i" && ! -h "$i" ]]; then
           install_name_tool -id "$i" "$i" || true
@@ -231,12 +260,17 @@ stdenv.mkDerivation (
       description = "GNAT, the GNU Ada Translator";
       homepage = "https://www.gnu.org/software/gnat";
       license = lib.licenses.gpl3;
-      maintainers = with lib.maintainers; [ ethindp ];
+      maintainers = with lib.maintainers; [
+        ethindp
+        sempiternal-aurora
+      ];
       platforms = [
         "x86_64-linux"
-        "x86_64-darwin"
+        "aarch64-darwin"
       ]
-      ++ lib.optionals (lib.versionAtLeast majorVersion "14") [ "aarch64-linux" ];
+      ++ lib.optionals (lib.versionAtLeast majorVersion "14") [
+        "aarch64-linux"
+      ];
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
   }

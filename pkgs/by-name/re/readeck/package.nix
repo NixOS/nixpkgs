@@ -6,32 +6,39 @@
   nodejs_22,
   npmHooks,
   python3,
+  templ,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "readeck";
-  version = "0.22.2";
+  version = "0.23.2";
 
   src = fetchFromCodeberg {
     owner = "readeck";
     repo = "readeck";
     tag = finalAttrs.version;
-    hash = "sha256-0arC5t7FlW5+AyGF9FuIPc+aeF+CMKIzO1vLJ7aisQE=";
+    hash = "sha256-veoQz28B4HAxwtY2pDVO9EymUCYJs73BhD8r4x4MtBk=";
   };
 
   nativeBuildInputs = [
     nodejs_22
     npmHooks.npmConfigHook
     (python3.withPackages (ps: with ps; [ babel ]))
+    templ
   ];
 
   npmRoot = "web";
 
   env.NODE_PATH = "$npmDeps";
 
+  postPatch = ''
+    templ generate
+  '';
+
   preBuild = ''
-    make generate
+    make TEMPL=templ generate
   '';
 
   subPackages = [ "." ];
@@ -62,12 +69,15 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/web";
-    hash = "sha256-80mh7fATUKf9G/JGsfHYHOLjr/je7g0uRdRGqBWapnY=";
+    hash = "sha256-PURkorsNLDMe64g6tzKCcbuX490QXBgatZCnjBTk3+U=";
   };
 
-  vendorHash = "sha256-4cLv7eYNzj+YzrinbEg7tT+JkEen+C5ypg3NTQOB6FM=";
+  vendorHash = "sha256-s72IaPhsTz3XawNiVYO1LMs88CO/qPOxyUAG0FA/2J0=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) readeck; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Web application that lets you save the readable content of web pages you want to keep forever";

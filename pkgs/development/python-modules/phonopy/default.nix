@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -14,6 +15,7 @@
   # dependencies
   h5py,
   matplotlib,
+  phonors,
   pyyaml,
   scipy,
   spglib,
@@ -24,14 +26,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "phonopy";
-  version = "3.4.0";
+  version = "4.4.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonopy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pCBCZzVSthExY6NhmQKyGj7aFgvHLyztUToYGL4Y3Jo=";
+    hash = "sha256-w31B4/o/lo/0LIfrn7DR2cJ2OY6Pfe4zAMgcQfJ2q1g=";
   };
 
   postPatch = ''
@@ -54,12 +58,18 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     numpy
     pyyaml
+    phonors
     scipy
     spglib
     symfc
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Prevents 'Fatal Python error: Aborted' on darwin during checkPhase
+    MPLBACKEND = "Agg";
+  };
 
   # prevent pytest from importing local directory
   preCheck = ''

@@ -1,46 +1,26 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
-  jinja2,
-  poetry-core,
-  pytest,
-  requests,
-  setuptools,
+  hatchling,
+  httpx,
 }:
 
 buildPythonPackage rec {
   pname = "meraki";
-  version = "2.1.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meraki";
     repo = "dashboard-api-python";
     tag = version;
-    hash = "sha256-B9eda7ccpCRGuBB2XfRI/Fz+MVBUIjFZzHYWfckQT2g=";
+    hash = "sha256-SYILd5epeB/V/fa+yxZvT49eHapZnqxcTW1s8gH3fAY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=78.1.1,<79.0.0" "setuptools"
-  '';
+  build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "pytest"
-    "setuptools"
-  ];
-
-  build-system = [ poetry-core ];
-
-  dependencies = [
-    aiohttp
-    jinja2
-    pytest
-    requests
-    setuptools
-  ];
+  dependencies = [ httpx ];
 
   # All tests require an API key
   doCheck = false;

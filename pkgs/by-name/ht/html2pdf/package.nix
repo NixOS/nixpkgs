@@ -6,21 +6,22 @@
   makeWrapper,
   chromium,
   withChromium ? (lib.meta.availableOn stdenv.hostPlatform chromium),
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "html2pdf";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ilaborie";
     repo = "html2pdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z1fb7pDjawMIhJgl4ao2VoV6zpfcGy/48Dt7JtIxgJo=";
+    hash = "sha256-Oc8XrDhJhbBAUHa3+ILcJvnRs2wCowh0GqJzMtYkOog=";
   };
 
-  cargoHash = "sha256-T5A2b7Qcg8dQKndaD8P5RAutBZeINOqIBUHR2VDOeo0=";
+  cargoHash = "sha256-j94eelRqEBLUVRa8HacojGTY3zyJNlaOUmljlR5RyXY=";
 
   # Avoiding "rustfmt not found" error in auto_generate_cdp.
   # ref: https://github.com/mdrokz/auto_generate_cdp/pull/8
@@ -40,6 +41,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrapProgram "$out/bin/html2pdf" --prefix PATH : '${lib.makeBinPath runtimeInputs}'
     ''
   );
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru.updateScript = nix-update-script { };
 

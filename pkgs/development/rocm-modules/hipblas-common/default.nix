@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas-common";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Common files shared by hipBLAS and hipBLASLt";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblas-common";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

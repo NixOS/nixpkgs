@@ -1,0 +1,24 @@
+--- a/crates/bender-slang/build.rs
++++ b/crates/bender-slang/build.rs
+@@ -55,6 +55,9 @@
+         .define("CMAKE_DISABLE_FIND_PACKAGE_fmt", "ON")
+         .define("CMAKE_DISABLE_FIND_PACKAGE_mimalloc", "ON")
+         .define("CMAKE_DISABLE_FIND_PACKAGE_Boost", "ON")
++        .define("FETCHCONTENT_SOURCE_DIR_SLANG", "@slangSrc@")
++        .define("FETCHCONTENT_SOURCE_DIR_FMT", "@fmtSrc@")
++        .define("FETCHCONTENT_SOURCE_DIR_MIMALLOC", "@mimallocSrc@")
+         .profile(cmake_profile);
+
+     // Apply common defines and flags
+@@ -71,9 +74,9 @@
+     // With FetchContent, cmake builds slang in a _deps subdirectory rather than
+     // installing it. Point directly at the FetchContent build/source directories.
+     let slang_lib_dir = dst.join("build/_deps/slang-build/lib");
+-    let slang_include_dir = dst.join("build/_deps/slang-src/include");
++    let slang_include_dir = std::path::PathBuf::from("@slangSrc@").join("include");
+     let slang_generated_include_dir = dst.join("build/_deps/slang-build/source");
+-    let fmt_include_dir = dst.join("build/_deps/fmt-src/include");
++    let fmt_include_dir = std::path::PathBuf::from("@fmtSrc@").join("include");
+
+     // Generate cpp/compile_flags.txt for clangd IDE support
+     if !in_publish {

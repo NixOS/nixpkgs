@@ -4,6 +4,7 @@
   fetchzip,
   fetchurl,
   makeDesktopItem,
+  autoPatchelfHook,
   copyDesktopItems,
   buildFHSEnv,
   alsa-lib,
@@ -32,7 +33,15 @@ let
       hash = "sha256-wL9L4I2iw9r3r69TOr37XXEs3iECMuNGX9Ez63P/f8w=";
     };
 
-    nativeBuildInputs = [ copyDesktopItems ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      copyDesktopItems
+    ];
+
+    buildInputs = [
+      alsa-lib
+      expat
+    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -67,13 +76,11 @@ buildFHSEnv {
   inherit (decent-sampler) pname version;
 
   targetPkgs = pkgs: [
-    alsa-lib
     alsa-plugins
     decent-sampler
     freetype
     nghttp2
     libx11
-    expat
   ];
 
   runScript = "decent-sampler";
@@ -99,7 +106,6 @@ buildFHSEnv {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       adam248
-      chewblacka
       kaptcha0
     ];
   };

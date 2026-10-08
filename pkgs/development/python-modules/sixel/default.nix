@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-sixel";
+  pname = "sixel";
   version = "0.2.0";
   pyproject = true;
 

@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem-pl-parser";
-  version = "3.26.6";
+  version = "3.26.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/totem-pl-parser/${lib.versions.majorMinor version}/totem-pl-parser-${version}.tar.xz";
-    sha256 = "wN8PaNXPnX2kPIHH8T8RFYNYNo+Ywi1Hci870EvTrBw=";
+    sha256 = "YNUXwayr5UrjN/ZEUSZPx2cwaW6q4mtUgPs3FmaJtfM=";
   };
 
   patches = [

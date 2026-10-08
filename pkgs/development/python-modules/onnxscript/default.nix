@@ -15,7 +15,8 @@
   onnx-ir,
   packaging,
   typing-extensions,
-  pynvml,
+  # cuda-only:
+  nvidia-ml-py,
 
   # tests
   onnxruntime,
@@ -30,7 +31,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnxscript";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -38,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     owner = "microsoft";
     repo = "onnxscript";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PktzMtG8GpeRy3XUz8MFbOSISVzAIubpeOS0ESbVvrI=";
+    hash = "sha256-Fd7nQ4KZECgUUfLrCo54NiUVcx1IdhGfUdYWXEo7D8o=";
   };
 
   env = {
@@ -58,7 +59,7 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ]
   ++ lib.optionals cudaSupport [
-    pynvml
+    nvidia-ml-py
   ];
 
   pythonImportsCheck = [ "onnxscript" ];

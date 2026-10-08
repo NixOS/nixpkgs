@@ -66,8 +66,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       patchShebangs bin/click
     '';
 
-  strictDeps = true;
-
   pkgsBuildBuild = [
     pkg-config
   ];
@@ -90,11 +88,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     properties-cpp
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = [
+    python3Packages.setuptools_80
+  ];
+
+  dependencies = with python3Packages; [
     python-debian
     chardet
     pygobject3
-    setuptools
   ];
 
   nativeCheckInputs = [

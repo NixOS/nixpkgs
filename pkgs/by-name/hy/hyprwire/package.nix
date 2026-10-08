@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,7 +9,7 @@
   pugixml,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprwire";
   version = "0.3.1";
 
@@ -30,6 +30,9 @@ gcc15Stdenv.mkDerivation (finalAttrs: {
     libffi
     pugixml
   ];
+
+  cmakeBuildType = "RelWithDebInfo";
+  separateDebugInfo = true;
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;

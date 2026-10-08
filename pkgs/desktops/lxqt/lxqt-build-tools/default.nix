@@ -9,7 +9,7 @@
   perl,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "2.3.0",
+  version ? "2.4.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     hash =
       {
         "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
-        "2.3.0" = "sha256-lbDcIOrOkGU/n0bPPAlZSsdBYMlBh3afXwwTkTWQLpo=";
+        "2.4.0" = "sha256-PvDXL4hHaHeHt7CXeNCj8L2bv3YYY78ZDTxsctc73fo=";
       }
       ."${version}";
   };
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
       --replace-fail AppleClang Clang
   ''
-  + lib.optionalString (lib.versionOlder version "2.3.0") ''
+  + lib.optionalString (lib.versionOlder version "2.4.0") ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';

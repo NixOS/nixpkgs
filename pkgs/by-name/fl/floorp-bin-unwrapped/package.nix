@@ -113,14 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit binaryName;
     applicationName = "Floorp";
     libName = "floorp-bin-${finalAttrs.version}";
-    ffmpegSupport = true;
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
     gtk3 = gtk3;
     updateScript = ./update.sh;
   };
 
   meta = {
-    changelog = "https://blog.floorp.app/en/release/${finalAttrs.version}.html";
+    changelog = "https://blog.floorp.app/en/release/${finalAttrs.version}/";
     description = "Fork of Firefox that seeks balance between versatility, privacy and web openness";
     homepage = "https://floorp.app/";
     # https://github.com/Floorp-Projects/Floorp#-floorp-license-notices-

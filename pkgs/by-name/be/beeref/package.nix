@@ -1,11 +1,11 @@
 {
   lib,
-  python3Packages,
+  python313Packages,
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication (finalAttrs: {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "beeref";
   version = "0.3.3";
   pyproject = true;
@@ -17,9 +17,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-GtxiJKj3tlzI1kVXzJg0LNAUcodXSna17ZvAtsAEH4M=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ python313Packages.setuptools ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python313Packages; [
     exif
     lxml
     pyqt6

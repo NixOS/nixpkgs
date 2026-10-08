@@ -65,11 +65,11 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  # We have to run pytest from a diffferent directory to force it to import tiledb from $out
+  # We have to run pytest from a different directory to force it to import tiledb from $out
   # otherwise it cannot be imported because extension modules are not compiled in sources
   checkPhase = ''
     pushd "$TMPDIR"
-    ${python.interpreter} -m pytest --pyargs tiledb${lib.optionalString stdenv.isDarwin " -k 'not test_ctx_thread_cleanup and not test_array'"}
+    ${python.interpreter} -m pytest --pyargs tiledb${lib.optionalString stdenv.hostPlatform.isDarwin " -k 'not test_ctx_thread_cleanup and not test_array'"}
     popd
   '';
 

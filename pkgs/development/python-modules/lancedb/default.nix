@@ -36,28 +36,47 @@
   pytest-mock,
   pytestCheckHook,
   tantivy,
-
-  nix-update-script,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.30.2";
+  version = "0.39.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
-    tag = "python-v${finalAttrs.version}";
-    hash = "sha256-k7eVUOnriR91DqVRJP7N9VG75bHAzbDB8bHFLFi5h1w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4Sa6LIpUI2Gv0kFxX4ylFkXj9qghMWMvdX/2Cqd4AWM=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-yux18lKMaNOmrmVOYNMo5MMNAO0at5g/0eEsjF97Pes=";
+    hash = "sha256-CAMygfYyQmg5L/IvBdMnUtJ1BT/o2YVN5rY5IiTxRF8=";
   };
+
+  # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
+  # `_mm512_dpwssd_epi32`. With the current toolchain, stdarch's signature for these intrinsics
+  # mismatches LLVM's `llvm.x86.avx512.vpdpbusd.512`, so the crate fails to compile.
+  # Drop the AVX-512 VNNI dispatch branch: the kernels then become dead code (their module is
+  # crate-private and otherwise only used from `#[cfg(test)]`, which is not built for
+  # dependencies), so they are never codegen'd and runtime dispatch falls back to the equivalent
+  # AVX2 / scalar kernels.
+  postPatch = ''
+    lanceDistance=("$cargoDepsCopy"/source-registry-0/lance-linalg-*/src/distance)
+
+    substituteInPlace "$lanceDistance/dot_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::dot_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/l2_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::l2_u8_avx512_vnni(a, b) };" ""
+
+    substituteInPlace "$lanceDistance/cosine_u8.rs" \
+      --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
+  '';
 
   build-system = [ rustPlatform.maturinBuildHook ];
 
@@ -109,7 +128,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Requires internet access
     # RuntimeError: lance error: LanceError(IO): Generic S3 error
-    "test_bucket_without_dots_passes"
+    "test_bucket_without_dots_is_not_rejected"
+    # RuntimeError: lance error: LanceError(IO): Generic HTTP client error
+    "test_bucket_with_dots_and_aws_region_is_not_rejected"
+    "test_bucket_with_dots_and_region_is_not_rejected"
 
     # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
     "TestAsyncNamespaceConnection"
@@ -148,12 +170,7 @@ buildPythonPackage (finalAttrs: {
     "test_remote_db.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "python-v(.*)"
-    ];
-  };
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Developer-friendly, serverless vector database for AI applications";

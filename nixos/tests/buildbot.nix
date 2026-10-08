@@ -3,7 +3,7 @@
 {
   name = "buildbot";
 
-  nodes = {
+  containers = {
     bbmaster =
       { pkgs, ... }:
       {
