@@ -43,14 +43,14 @@ in
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.38.0";
+  version = "2.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     tag = "v${version}";
-    hash = "sha256-gSQLSIDygNUUofKKdrAxIUJr859G1tdPKkMKZGP5wyY=";
+    hash = "sha256-IFcLIEcUpWeCyTKnPCCd1poIzQsIRQ/IcrShYhoxi6w=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
