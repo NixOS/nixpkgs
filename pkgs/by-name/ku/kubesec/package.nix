@@ -10,6 +10,8 @@ buildGo127Module (finalAttrs: {
   pname = "kubesec";
   version = "2.15.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "kubesec";
@@ -23,7 +25,6 @@ buildGo127Module (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/controlplaneio/kubesec/v${lib.versions.major finalAttrs.version}/cmd.version=v${finalAttrs.version}"
   ];
 
