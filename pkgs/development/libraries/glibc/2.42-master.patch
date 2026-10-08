@@ -11172,3 +11172,1075 @@ index 731d1650e9..50b0d7a256 100644
 -  *pwordexp = old_word;
    return error;
  }
+
+commit 2ea357280d82dab462851419a2338d940516a37e
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 14 13:41:16 2026 +0200
+
+    misc: Fix out-of-bounds array write in tdelete (bug 34506)
+    
+    Allocate the maximum array sizes directly, instead of resizing
+    the arrays as needed.  This eliminates alloca usage from the
+    function, and fixes the out-of-bounds accesses.  The asserts
+    guard against the bug coming back if the balancing of the tree
+    turns out not to work correctly.
+    
+    Reviewed-by: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+    (cherry picked from commit e2789c46e3bfdcd67a82bea9946b315c179e83d3)
+
+diff --git a/misc/tsearch.c b/misc/tsearch.c
+index d15260baed..350fe15bf0 100644
+--- a/misc/tsearch.c
++++ b/misc/tsearch.c
+@@ -85,6 +85,7 @@
+ #include <assert.h>
+ #include <stdalign.h>
+ #include <stddef.h>
++#include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <search.h>
+@@ -406,12 +407,13 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+   int cmp;
+   node *rootp = (node *) vrootp;
+   node root, unchained;
+-  /* Stack of nodes so we remember the parents without recursion.  It's
+-     _very_ unlikely that there are paths longer than 40 nodes.  The tree
+-     would need to have around 250.000 nodes.  */
+-  int stacksize = 40;
++  /* Stack of nodes so we remember the parents without recursion.  The
++     stack size is a conservative approximation of the maximum height
++     of a red-black tree, based on size of the address space.
++     Actual numbers are closer to 57 (32 bit) and 117 (63 bit).  */
++  enum { stacksize = 2 * UINTPTR_WIDTH };
+   int sp = 0;
+-  node **nodestack = alloca (sizeof (node *) * stacksize);
++  node *nodestack[stacksize];
+ 
+   if (rootp == NULL)
+     return NULL;
+@@ -424,14 +426,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+   root = DEREFNODEPTR(rootp);
+   while ((cmp = (*compar) (key, root->key)) != 0)
+     {
+-      if (sp == stacksize)
+-	{
+-	  node **newstack;
+-	  stacksize += 20;
+-	  newstack = alloca (sizeof (node *) * stacksize);
+-	  nodestack = memcpy (newstack, nodestack, sp * sizeof (node *));
+-	}
+-
++      assert (sp < stacksize);
+       nodestack[sp++] = rootp;
+       p = DEREFNODEPTR(rootp);
+       if (cmp < 0)
+@@ -470,13 +465,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+       node upn;
+       for (;;)
+ 	{
+-	  if (sp == stacksize)
+-	    {
+-	      node **newstack;
+-	      stacksize += 20;
+-	      newstack = alloca (sizeof (node *) * stacksize);
+-	      nodestack = memcpy (newstack, nodestack, sp * sizeof (node *));
+-	    }
++	  assert (sp < stacksize);
+ 	  nodestack[sp++] = parentp;
+ 	  parentp = up;
+ 	  upn = DEREFNODEPTR(up);
+@@ -541,6 +530,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+ 		  SETNODEPTR(pp,q);
+ 		  /* Make sure pp is right if the case below tries to use
+ 		     it.  */
++		  assert (sp < stacksize);
+ 		  nodestack[sp++] = pp = LEFTPTR(q);
+ 		  q = RIGHT(p);
+ 		}
+@@ -625,6 +615,7 @@ __tdelete (const void *key, void **vrootp, __compar_fn_t compar)
+ 		  SETLEFT(p,RIGHT(q));
+ 		  SETRIGHT(q,p);
+ 		  SETNODEPTR(pp,q);
++		  assert (sp < stacksize);
+ 		  nodestack[sp++] = pp = RIGHTPTR(q);
+ 		  q = LEFT(p);
+ 		}
+
+commit 893379d4ed263d483505a66a437df37d02d12e9d
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Thu Aug 13 08:53:06 2026 -0300
+
+    posix: Remove unnecessary overflow check in wordexp (BZ 34090)
+    
+    The WRDE_APPEND path duplicates the caller's we_wordv array, which
+    already holds we_offs + we_wordc + 1 pointers.  Follow-up to commit
+    e2cefe16c37.
+    
+    Checked on x86_64-linux-gnu and i686-linux-gnu.
+    
+    (cherry picked from commit 53ec26f1736aee747b353aaea0667b1ebdd5cae7)
+
+diff --git a/posix/wordexp.c b/posix/wordexp.c
+index 50b0d7a256..09c20cf5d4 100644
+--- a/posix/wordexp.c
++++ b/posix/wordexp.c
+@@ -35,7 +35,6 @@
+ #include <scratch_buffer.h>
+ #include <_itoa.h>
+ #include <assert.h>
+-#include <intprops.h>
+ 
+ /*
+  * This is a recursive-descent-style word expansion routine.
+@@ -2269,16 +2268,14 @@ wordexp (const char *words, wordexp_t *pwordexp, int flags)
+     {
+       /* WRDE_APPEND with an existing word list: duplicate the array so that
+ 	 realloc during parsing does not invalidate the caller's pointer.  The
+-	 strings themselves are shared.  */
+-      size_t num_p;
+-      char **dup;
+-      if (INT_ADD_WRAPV (pwordexp->we_offs, pwordexp->we_wordc, &num_p)
+-	  || INT_ADD_WRAPV (num_p, 1, &num_p))
+-	return WRDE_NOSPACE;
+-      dup = __libc_reallocarray (NULL, num_p, sizeof *dup);
++	 strings themselves are shared an the array already holds
++	 'we_offs + we_wordc + 1 pointers' (so the size computation cannot
++	 overflow).  */
++      size_t num_p = pwordexp->we_offs + pwordexp->we_wordc + 1;
++      char **dup = malloc (num_p * sizeof (char *));
+       if (dup == NULL)
+ 	return WRDE_NOSPACE;
+-      memcpy (dup, pwordexp->we_wordv, num_p * sizeof *dup);
++      memcpy (dup, pwordexp->we_wordv, num_p * sizeof (char *));
+       saved_wordv = pwordexp->we_wordv;
+       pwordexp->we_wordv = dup;
+     }
+
+commit 6ad255db1dad9f2761935d3125b5bc7fa0e6128f
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Aug 27 13:34:54 2026 +0200
+
+    stdlib: Fix right-justification in strfmon (bug 34510, CVE-2026-19499)
+    
+    The memmove call did not take into account that __printf_buffer_pad
+    updated the buffer pointers.
+    
+    Fixes commit e88b9f0e5cc50cab57a299dc7efe1a4eb385161d
+    ("stdio-common: Convert vfprintf and related functions to buffers"),
+    which went into glibc 2.37.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit b090cf226ff65b913e41536f1f573f500855615c)
+
+diff --git a/stdlib/Makefile b/stdlib/Makefile
+index 25f777e1a5..0f3183268a 100644
+--- a/stdlib/Makefile
++++ b/stdlib/Makefile
+@@ -343,6 +343,7 @@ tests := \
+   tst-stdc_leading_zeros \
+   tst-stdc_trailing_ones \
+   tst-stdc_trailing_zeros \
++  tst-strfmon-bug34510 \
+   tst-strfmon_l \
+   tst-strfrom \
+   tst-strfrom-locale \
+diff --git a/stdlib/strfmon_l.c b/stdlib/strfmon_l.c
+index 5e22aac750..bd849ff470 100644
+--- a/stdlib/strfmon_l.c
++++ b/stdlib/strfmon_l.c
+@@ -549,7 +549,8 @@ __vstrfmon_l_buffer (struct __printf_buffer *buf, locale_t loc,
+       /* Now test whether the output width is filled.  */
+       if (buf->write_ptr - startp < width)
+ 	{
+-	  size_t pad_width = width - (buf->write_ptr - startp);
++	  size_t written_width = buf->write_ptr - startp;
++	  size_t pad_width = width - written_width;
+ 	  __printf_buffer_pad (buf, ' ', pad_width);
+ 	  if (__printf_buffer_has_failed (buf))
+ 	    /* Implies length check.  */
+@@ -558,7 +559,7 @@ __vstrfmon_l_buffer (struct __printf_buffer *buf, locale_t loc,
+ 	     Otherwise move the field contents in place.  */
+ 	  if (!left)
+ 	    {
+-	      memmove (startp + pad_width, startp, buf->write_ptr - startp);
++	      memmove (startp + pad_width, startp, written_width);
+ 	      memset (startp, ' ', pad_width);
+ 	    }
+ 	}
+diff --git a/stdlib/tst-strfmon-bug34510.c b/stdlib/tst-strfmon-bug34510.c
+new file mode 100644
+index 0000000000..b187bde1f4
+--- /dev/null
++++ b/stdlib/tst-strfmon-bug34510.c
+@@ -0,0 +1,33 @@
++/* Test handling of right-padding in strfmon (bug 34510, CVE-2026-19499).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <monetary.h>
++#include <errno.h>
++#include <support/check.h>
++#include <support/next_to_fault.h>
++
++static int
++do_test (void)
++{
++  struct support_next_to_fault ntf = support_next_to_fault_allocate (100);
++  TEST_COMPARE (strfmon (ntf.buffer, ntf.length, "%100n", 1.23), -1);
++  TEST_COMPARE (errno, E2BIG);
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 67db60ee152d221782d2ae915268871d3e06a007
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 28 10:26:07 2026 +0200
+
+    iconvdata: SHIFT_JISX0213 decoding lacks pending character reset (CVE-2026-77117)
+    
+    This fixes bug 34556.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 68d94bbe50b7577d48998107d632ef3a0df050e3)
+
+diff --git a/iconvdata/shift_jisx0213.c b/iconvdata/shift_jisx0213.c
+index 364298dcff..834fa81322 100644
+--- a/iconvdata/shift_jisx0213.c
++++ b/iconvdata/shift_jisx0213.c
+@@ -226,6 +226,9 @@
+ 	    STANDARD_FROM_LOOP_ERR_HANDLER (1);				      \
+ 	  }								      \
+       }									      \
++    else 								      \
++      /* There was a pending character.  Clear it.  */			      \
++      *statep = 0;							      \
+ 									      \
+     put32 (outptr, ch);							      \
+     outptr += 4;							      \
+
+commit 87c2795cf6a7584e351036ab43e74b03ccc54a83
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 28 10:26:07 2026 +0200
+
+    iconvdata: EUC_JISX0213 decoding lacks pending character reset (CVE-2026-80489)
+    
+    This fixes bug 34568.
+    
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 4dafa087ff5fe7df45bd37dc727e988da6b8c935)
+
+diff --git a/iconvdata/euc-jisx0213.c b/iconvdata/euc-jisx0213.c
+index 9c3f28da2d..f0305c113a 100644
+--- a/iconvdata/euc-jisx0213.c
++++ b/iconvdata/euc-jisx0213.c
+@@ -224,6 +224,9 @@
+ 	    STANDARD_FROM_LOOP_ERR_HANDLER (1);				      \
+ 	  }								      \
+       }									      \
++    else 								      \
++      /* There was a pending character.  Clear it.  */			      \
++      *statep = 0;							      \
+ 									      \
+     put32 (outptr, ch);							      \
+     outptr += 4;							      \
+
+commit 0afd4d5feb591512629d5f46ceab310b54a06034
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Aug 28 10:26:07 2026 +0200
+
+    iconvdata: Test case for bug 34556, bug 34568
+    
+    Assisted-by: LLM
+    Reviewed-by: Carlos O'Donell <carlos@redhat.com>
+    (cherry picked from commit 35efcffa97553df071bc37ab31fd7dc2c634e7da)
+
+diff --git a/iconvdata/Makefile b/iconvdata/Makefile
+index cc689f63e9..36f48749d2 100644
+--- a/iconvdata/Makefile
++++ b/iconvdata/Makefile
+@@ -76,7 +76,8 @@ tests = bug-iconv1 bug-iconv2 tst-loading tst-e2big tst-iconv4 bug-iconv4 \
+ 	tst-iconv6 bug-iconv5 bug-iconv6 tst-iconv7 bug-iconv8 bug-iconv9 \
+ 	bug-iconv10 bug-iconv11 bug-iconv12 tst-iconv-big5-hkscs-to-2ucs4 \
+ 	bug-iconv13 bug-iconv14 bug-iconv15 \
+-	tst-iconv-iso-2022-cn-ext tst-bug33980
++	tst-iconv-iso-2022-cn-ext tst-bug33980 \
++	tst-jisx0213-progress
+ ifeq ($(have-thread-library),yes)
+ tests += bug-iconv3
+ endif
+@@ -335,6 +336,8 @@ $(objpfx)tst-iconv-iso-2022-cn-ext.out: $(addprefix $(objpfx), $(gconv-modules))
+ 					$(addprefix $(objpfx),$(modules.so))
+ $(objpfx)tst-bug33980.out: $(addprefix $(objpfx), $(gconv-modules)) \
+ 			   $(addprefix $(objpfx),$(modules.so))
++$(objpfx)tst-jisx0213-progress.out: \
++  $(addprefix $(objpfx), $(gconv-modules)) $(addprefix $(objpfx),$(modules.so))
+ 
+ $(objpfx)iconv-test.out: run-iconv-test.sh \
+ 			 $(addprefix $(objpfx), $(gconv-modules)) \
+diff --git a/iconvdata/tst-jisx0213-progress.c b/iconvdata/tst-jisx0213-progress.c
+new file mode 100644
+index 0000000000..7b2073be1f
+--- /dev/null
++++ b/iconvdata/tst-jisx0213-progress.c
+@@ -0,0 +1,124 @@
++/* Test JISX0213 combining character conversion progress (bug 34556, bug 34568).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++/* Certain JISX0213 byte sequences map to a combining sequence, for
++   example U+304B (HIRAGANA LETTER KA) followed by U+309A (COMBINING
++   SEMI-VOICED SOUND MARK).  When converting to internal encoding
++   (actually UTF-32) with a small output buffer, the first code point
++   is emitted and the second is queued in the converter state.  This
++   test verifies that the queued code point is consumed exactly once
++   on retry, so that the conversion makes progress and terminates.  */
++
++#include <errno.h>
++#include <iconv.h>
++#include <stdio.h>
++#include <string.h>
++
++#include <support/check.h>
++#include <support/support.h>
++
++static void
++test_one (const char *charset, const char *input, size_t outbufsize)
++{
++  printf ("info: %s: testing output buffer size %zu\n", charset, outbufsize);
++
++  /* Expected UTF-32 output.  */
++  static const wchar_t expected[] = { 0x304b, 0x309a, 'A' };
++
++  /* Use WCHAR_T encoding to avoid the BOM.  */
++  iconv_t cd = iconv_open ("WCHAR_T", charset);
++  TEST_VERIFY_EXIT (cd != (iconv_t) -1);
++
++  char result[64];
++  size_t result_len = 0;
++
++  char *inptr = (char *) input;
++  size_t inleft = strlen (input);
++
++  char outbuf[64];
++
++  int iterations = 0;
++  while (inleft > 0)
++    {
++      char *outptr = outbuf;
++      size_t outleft = outbufsize;
++      size_t inleft_before = inleft;
++
++      size_t ret = iconv (cd, &inptr, &inleft, &outptr, &outleft);
++      size_t produced = outptr - outbuf;
++
++      TEST_VERIFY_EXIT (result_len + produced <= sizeof (result));
++      memcpy (result + result_len, outbuf, produced);
++      result_len += produced;
++
++      if (ret == (size_t) -1 && errno == E2BIG)
++	{
++	  if (produced == 0 && inleft == inleft_before)
++	    {
++	      /* Output buffer too small for a single code point.  */
++	      TEST_VERIFY_EXIT (outbufsize < 4);
++	      break;
++	    }
++	  /* Bound iterations to detect non-progress bugs.  */
++	  if (++iterations < 10)
++	    continue;
++	  else
++	    {
++	      FAIL ("%s: no progress", charset);
++	      goto out;
++	    }
++	}
++      if (ret == (size_t) -1)
++	FAIL_EXIT1 ("outbufsize %zu: iconv: %m", outbufsize);
++      break;
++    }
++
++  /* Flush pending converter state.  */
++  {
++    char *outptr = outbuf;
++    size_t outleft = outbufsize;
++    size_t ret = iconv (cd, NULL, NULL, &outptr, &outleft);
++    TEST_VERIFY (ret == 0);
++    size_t produced = outptr - outbuf;
++    memcpy (result + result_len, outbuf, produced);
++    result_len += produced;
++  }
++
++  if (outbufsize >= 4)
++    {
++      TEST_COMPARE (inleft, 0);
++      TEST_COMPARE_BLOB (result, result_len,
++			 expected, sizeof (expected));
++    }
++
++ out:
++  TEST_VERIFY_EXIT (iconv_close (cd) == 0);
++}
++
++static int
++do_test (void)
++{
++  for (size_t outbufsize = 1; outbufsize <= 16; outbufsize++)
++    {
++      test_one ("EUC-JISX0213", "\244\367A", outbufsize);
++      test_one ("SHIFT_JISX0213", "\202\365A", outbufsize);
++    }
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit 2ba6f4c063e9b2d451e25e758d704f33b5d958a6
+Author: Dongkyun Son <dongkyun.s@samsung.com>
+Date:   Fri Sep 4 21:28:41 2026 +0900
+
+    libio: Fix CVE-2026-18374 heap buffer overflow in ccs= handling
+    
+    When fopen() is called with a ,ccs= parameter whose value becomes empty
+    after strip(), the code must reject it with EINVAL instead of attempting
+    to use it.  The original upstr() fallback could read past the ',' delimiter
+    and cause a heap buffer overflow.
+    
+    The fix checks if the charset specification is empty after strip() and
+    returns EINVAL immediately, preventing the overflow and following the
+    approach described in BZ #34574.
+    
+    CVE-2026-18374 - CVSS 4.9 (AV:L/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L)
+    
+    Reported-by: AISLE in partnership with Red Hat
+    Signed-off-by: Dongkyun Son <dongkyun.s@samsung.com>
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit 9765a538ebf8661a6e5578e01e35a3dd30db7eb4)
+
+diff --git a/libio/fileops.c b/libio/fileops.c
+index 0cce828859..3e2ac36d48 100644
+--- a/libio/fileops.c
++++ b/libio/fileops.c
+@@ -339,12 +339,14 @@ _IO_new_file_fopen (FILE *fp, const char *filename, const char *mode,
+ 	  *((char *) __mempcpy (ccs, cs + 5, endp - (cs + 5))) = '\0';
+ 	  strip (ccs, ccs);
+ 
+-	  if (__wcsmbs_named_conv (&fcts, ccs[2] == '\0'
+-				   ? upstr (ccs, cs + 5) : ccs) != 0)
++	  /* After stripping, ccs[2] == '\0' means the charset name is empty.
++	     This is not a valid charset and would cause problems downstream.
++	     Reject it with EINVAL (BZ #34574, CVE-2026-18374).  */
++	  if (ccs[2] == '\0' || __wcsmbs_named_conv (&fcts, ccs) != 0)
+ 	    {
+-	      /* Something went wrong, we cannot load the conversion modules.
+-		 This means we cannot proceed since the user explicitly asked
+-		 for these.  */
++	      /* Either the charset name is empty after strip(), or conversion
++		 modules cannot be loaded.  This means we cannot proceed since
++		 the user explicitly asked for character conversion.  */
+ 	      (void) _IO_file_close_it (fp);
+ 	      free (ccs);
+ 	      __set_errno (EINVAL);
+
+commit 552849c43c8f14b35af3c0496502748b9c549a2a
+Author: Shamil Abdulaev <ashamil435@gmail.com>
+Date:   Thu Sep 3 20:19:42 2026 +0300
+
+    libio: Add test for fopen with an empty ", ccs=" value [BZ #34574]
+    
+    This goes on top of the fix for CVE-2026-18374.  The test runs the
+    reproducer from the bug report, plus "w,ccs=" and "w,ccs=,", and
+    expects NULL with errno set to EINVAL.
+    
+    Signed-off-by: Shamil Abdulaev <ashamil435@gmail.com>
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit cca93e5d88d3d4ed073c03100467696f652269e7)
+
+diff --git a/libio/Makefile b/libio/Makefile
+index fa2b8ae791..c6728d8552 100644
+--- a/libio/Makefile
++++ b/libio/Makefile
+@@ -107,6 +107,7 @@ tests = \
+   tst-fgetc-after-eof \
+   tst-fgetwc \
+   tst-fgetws \
++  tst-fopen-ccs-empty \
+   tst-fopenloc2 \
+   tst-fputws \
+   tst-freopen \
+diff --git a/libio/tst-fopen-ccs-empty.c b/libio/tst-fopen-ccs-empty.c
+new file mode 100644
+index 0000000000..64723965e1
+--- /dev/null
++++ b/libio/tst-fopen-ccs-empty.c
+@@ -0,0 +1,62 @@
++/* Test fopen with an empty ",ccs=" value in the mode string (bug 34574).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/support.h>
++#include <support/temp_file.h>
++#include <support/xunistd.h>
++
++static void
++check_fopen_fails (const char *path, const char *mode)
++{
++  errno = 0;
++  FILE *fp = fopen (path, mode);
++  TEST_VERIFY (fp == NULL);
++  TEST_COMPARE (errno, EINVAL);
++  if (fp != NULL)
++    fclose (fp);
++}
++
++static int
++do_test (void)
++{
++  char *path;
++  xclose (create_temp_file ("tst-fopen-ccs-empty", &path));
++
++  /* The value is blank and the mode string continues well past it.  */
++  enum { size = 1024 * 1024 };
++  char *mode = xmalloc (size);
++  memset (mode, 'X', size);
++  mode[size - 1] = '\0';
++  static const char prefix[] = "w,ccs=                     ,";
++  memcpy (mode, prefix, sizeof (prefix) - 1);
++  check_fopen_fails (path, mode);
++  free (mode);
++
++  check_fopen_fails (path, "w,ccs=");
++  check_fopen_fails (path, "w,ccs=,");
++
++  free (path);
++  return 0;
++}
++
++#include <support/test-driver.c>
+
+commit bc76f2aa9b26b8d15bf8bb5cb13d5564cba517e8
+Author: Andreas Schwab <schwab@suse.de>
+Date:   Tue May 19 11:39:15 2026 +0200
+
+    nss_files: fix swapped arguments in service parser
+    
+    The port number in the service file is a decimal number followed by a
+    single slash.
+    
+    (cherry picked from commit 66efdda2f8bce2680f5984a6bd5e488a9b528ead)
+
+diff --git a/nss/nss_files/files-service.c b/nss/nss_files/files-service.c
+index a6503f7571..7b152b61a4 100644
+--- a/nss/nss_files/files-service.c
++++ b/nss/nss_files/files-service.c
+@@ -32,7 +32,7 @@ struct servent_data {};
+ LINE_PARSER
+ ("#",
+  STRING_FIELD (result->s_name, isspace, 1);
+- INT_FIELD (result->s_port, ISSLASH, 10, 0, htons);
++ INT_FIELD (result->s_port, ISSLASH, 0, 10, htons);
+  STRING_FIELD (result->s_proto, isspace, 1);
+  )
+ 
+
+commit a27376f0dc77ba6eb8848d1ff2808510507b31d7
+Author: Andreas Schwab <schwab@suse.de>
+Date:   Tue May 19 11:45:41 2026 +0200
+
+    nss_files: use booleans in parser macro calls
+    
+    The swallow argument in the INT_FIELD and STRING_FIELD macros is used as a
+    boolean, change all callers to use false and true instead of 0 and 1.
+    
+    (cherry picked from commit aa56ccb98b701680ad48431fea2a1966bac7fa31)
+
+diff --git a/nss/nss_files/files-ethers.c b/nss/nss_files/files-ethers.c
+index 3c8715133d..c9604f0f87 100644
+--- a/nss/nss_files/files-ethers.c
++++ b/nss/nss_files/files-ethers.c
+@@ -36,16 +36,16 @@ LINE_PARSER
+        unsigned int number;
+ 
+        if (cnt < 5)
+-	 INT_FIELD (number, ISCOLON , 0, 16, (unsigned int))
++	 INT_FIELD (number, ISCOLON , false, 16, (unsigned int))
+        else
+-	 INT_FIELD (number, isspace, 1, 16, (unsigned int))
++	 INT_FIELD (number, isspace, true, 16, (unsigned int))
+ 
+        if (number > 0xff)
+ 	 return 0;
+        result->e_addr.ether_addr_octet[cnt] = number;
+      }
+  };
+- STRING_FIELD (result->e_name, isspace, 1);
++ STRING_FIELD (result->e_name, isspace, true);
+  )
+ 
+ 
+diff --git a/nss/nss_files/files-hosts.c b/nss/nss_files/files-hosts.c
+index d8987c723a..ce1f20302c 100644
+--- a/nss/nss_files/files-hosts.c
++++ b/nss/nss_files/files-hosts.c
+@@ -53,7 +53,7 @@ LINE_PARSER
+  {
+    char *addr;
+ 
+-   STRING_FIELD (addr, isspace, 1);
++   STRING_FIELD (addr, isspace, true);
+ 
+    /* Parse address.  */
+    if (__inet_pton (af == AF_UNSPEC ? AF_INET : af, addr, entdata->host_addr)
+@@ -96,7 +96,7 @@ LINE_PARSER
+    entdata->h_addr_ptrs[1] = NULL;
+    result->h_addr_list = entdata->h_addr_ptrs;
+ 
+-   STRING_FIELD (result->h_name, isspace, 1);
++   STRING_FIELD (result->h_name, isspace, true);
+  })
+ 
+ #define EXTRA_ARGS_VALUE , AF_INET, 0
+diff --git a/nss/nss_files/files-network.c b/nss/nss_files/files-network.c
+index f08daaf55f..4fafdb2110 100644
+--- a/nss/nss_files/files-network.c
++++ b/nss/nss_files/files-network.c
+@@ -38,9 +38,9 @@ LINE_PARSER
+    char *cp;
+    int n = 1;
+ 
+-   STRING_FIELD (result->n_name, isspace, 1);
++   STRING_FIELD (result->n_name, isspace, true);
+ 
+-   STRING_FIELD (addr, isspace, 1);
++   STRING_FIELD (addr, isspace, true);
+    /* 'inet_network' does not add zeroes at the end if the network number
+       does not contain four byte values.  We shift result ourselves if
+       necessary.  */
+diff --git a/nss/nss_files/files-parse.c b/nss/nss_files/files-parse.c
+index 3ebd61f6e2..ed268f849d 100644
+--- a/nss/nss_files/files-parse.c
++++ b/nss/nss_files/files-parse.c
+@@ -20,6 +20,7 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <stdbool.h>
+ #include <stdint.h>
+ #include <nss_files.h>
+ 
+diff --git a/nss/nss_files/files-proto.c b/nss/nss_files/files-proto.c
+index e10255ebaf..8bbbc6e0cb 100644
+--- a/nss/nss_files/files-proto.c
++++ b/nss/nss_files/files-proto.c
+@@ -29,8 +29,8 @@ struct protoent_data {};
+ #include "files-parse.c"
+ LINE_PARSER
+ ("#",
+- STRING_FIELD (result->p_name, isspace, 1);
+- INT_FIELD (result->p_proto, isspace, 1, 10,);
++ STRING_FIELD (result->p_name, isspace, true);
++ INT_FIELD (result->p_proto, isspace, true, 10,);
+  )
+ 
+ #include GENERIC
+diff --git a/nss/nss_files/files-rpc.c b/nss/nss_files/files-rpc.c
+index 79ae72c2dd..1aaaad5d18 100644
+--- a/nss/nss_files/files-rpc.c
++++ b/nss/nss_files/files-rpc.c
+@@ -29,8 +29,8 @@ struct rpcent_data {};
+ #include "files-parse.c"
+ LINE_PARSER
+ ("#",
+- STRING_FIELD (result->r_name, isspace, 1);
+- INT_FIELD (result->r_number, isspace, 1, 10,);
++ STRING_FIELD (result->r_name, isspace, true);
++ INT_FIELD (result->r_number, isspace, true, 10,);
+  )
+ 
+ #include GENERIC
+diff --git a/nss/nss_files/files-service.c b/nss/nss_files/files-service.c
+index 7b152b61a4..81b4ef726b 100644
+--- a/nss/nss_files/files-service.c
++++ b/nss/nss_files/files-service.c
+@@ -31,9 +31,9 @@ struct servent_data {};
+ #define ISSLASH(c) ((c) == '/')
+ LINE_PARSER
+ ("#",
+- STRING_FIELD (result->s_name, isspace, 1);
+- INT_FIELD (result->s_port, ISSLASH, 0, 10, htons);
+- STRING_FIELD (result->s_proto, isspace, 1);
++ STRING_FIELD (result->s_name, isspace, true);
++ INT_FIELD (result->s_port, ISSLASH, false, 10, htons);
++ STRING_FIELD (result->s_proto, isspace, true);
+  )
+ 
+ #include GENERIC
+
+commit 5e45e86fed68c24cd1ba94056e77275e2eab5fae
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Thu May 28 17:30:07 2026 -0300
+
+    hesiod: fix swapped arguments in service parser
+    
+    The port number in the service file is a decimal number followed by a
+    single slash.
+    
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    (cherry picked from commit 41e9457c53610c6c79a7e036f61de032686e9ef0)
+
+diff --git a/hesiod/nss_hesiod/hesiod-service.c b/hesiod/nss_hesiod/hesiod-service.c
+index ae3b51fa28..525af1e6ce 100644
+--- a/hesiod/nss_hesiod/hesiod-service.c
++++ b/hesiod/nss_hesiod/hesiod-service.c
+@@ -41,7 +41,7 @@ LINE_PARSER
+ ("#",
+  STRING_FIELD (result->s_name, ISSC_OR_SPACE, 1);
+  STRING_FIELD (result->s_proto, ISSC_OR_SPACE, 1);
+- INT_FIELD (result->s_port, ISSC_OR_SPACE, 10, 0, htons);
++ INT_FIELD (result->s_port, ISSC_OR_SPACE, 0, 10, htons);
+  )
+ 
+ enum nss_status
+
+commit d407ace6e19304d740a1d0ded7920f49ab5c9820
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Thu May 28 17:30:08 2026 -0300
+
+    hesiod: use booleans in parser macro calls
+    
+    The swallow argument in the INT_FIELD and STRING_FIELD macros is used as a
+    boolean, change all callers to use false and true instead of 0 and 1.
+    
+    Reviewed-by: H.J. Lu <hjl.tools@gmail.com>
+    (cherry picked from commit 7052455f0e85673abebad5d5814e73e22287c081)
+
+diff --git a/hesiod/nss_hesiod/hesiod-proto.c b/hesiod/nss_hesiod/hesiod-proto.c
+index 751b9c0219..9518cf3d0f 100644
+--- a/hesiod/nss_hesiod/hesiod-proto.c
++++ b/hesiod/nss_hesiod/hesiod-proto.c
+@@ -39,8 +39,8 @@ struct protoent_data {};
+ #include <nss/nss_files/files-parse.c>
+ LINE_PARSER
+ ("#",
+- STRING_FIELD (result->p_name, isspace, 1);
+- INT_FIELD (result->p_proto, isspace, 1, 10,);
++ STRING_FIELD (result->p_name, isspace, true);
++ INT_FIELD (result->p_proto, isspace, true, 10,);
+  )
+ 
+ enum nss_status
+diff --git a/hesiod/nss_hesiod/hesiod-service.c b/hesiod/nss_hesiod/hesiod-service.c
+index 525af1e6ce..748e1db505 100644
+--- a/hesiod/nss_hesiod/hesiod-service.c
++++ b/hesiod/nss_hesiod/hesiod-service.c
+@@ -39,9 +39,9 @@ struct servent_data {};
+ #define ISSC_OR_SPACE(c)	((c) ==  ';' || isspace (c))
+ LINE_PARSER
+ ("#",
+- STRING_FIELD (result->s_name, ISSC_OR_SPACE, 1);
+- STRING_FIELD (result->s_proto, ISSC_OR_SPACE, 1);
+- INT_FIELD (result->s_port, ISSC_OR_SPACE, 0, 10, htons);
++ STRING_FIELD (result->s_name, ISSC_OR_SPACE, true);
++ STRING_FIELD (result->s_proto, ISSC_OR_SPACE, true);
++ INT_FIELD (result->s_port, ISSC_OR_SPACE, false, 10, htons);
+  )
+ 
+ enum nss_status
+
+commit 6c453bb60669c9612bfe18f7f211d2dc28cad943
+Author: Hemanth Kumar M D <Hemanth.KumarMD@windriver.com>
+Date:   Mon Sep 7 01:59:06 2026 -0700
+
+    nptl: Skip pretty-printer tests without python3 [BZ #34507]
+    
+    The tests-printers-out rule in Rules wraps $(PYTHON) through
+    $(test-wrapper-env).  Unlike ordinary tests, which wrap a freshly built
+    target binary, this wraps python3, a build-host tool.  When cross-testing
+    with test-wrapper set (e.g. via scripts/cross-test-ssh.sh) the whole
+    command is forwarded to the target; if the target lacks python3 the shell
+    returns 127 and evaluate-test.sh reports the six nptl pretty-printer
+    tests as FAIL instead of UNSUPPORTED.
+    
+    scripts/test_printers_common.py already exits UNSUPPORTED (77) when its
+    dependencies are missing, but that is unreachable when python3 itself is
+    absent.
+    
+    Guard the invocation with a "command -v" check so the recipe exits 77
+    (UNSUPPORTED) when python3 is not found.  Native builds are unaffected,
+    as configure requires python3.
+    
+    Signed-off-by: Hemanth Kumar M D <Hemanth.KumarMD@windriver.com>
+    Suggested-by: Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit c958d789db3bd8dbfb93868d8a975d13a3d66396)
+
+diff --git a/NEWS b/NEWS
+index 7e7e1930dd..df9b76f44e 100644
+--- a/NEWS
++++ b/NEWS
+@@ -18,6 +18,8 @@ The following bugs were resolved with this release:
+   [33361] nss: Group merge does not react to ERANGE during merge
+   [33814] glob: wordexp with WRDE_REUSE and WRDE_APPEND may return
+     uninitialized memory
++  [34507] nptl: Pretty-printer tests FAIL instead of UNSUPPORTED when
++    cross-testing without python3 on target
+ 
+ Version 2.42
+ 
+diff --git a/Rules b/Rules
+index 44c041c491..0087a772f6 100644
+--- a/Rules
++++ b/Rules
+@@ -423,8 +423,9 @@ py-env := PYTHONPATH=$(py-const-dir):$(..)scripts:$${PYTHONPATH}
+ # The pretty printer files and test_common_printers.py must be present for all.
+ $(tests-printers-out): $(objpfx)%.out: $(objpfx)% %.py %.c $(pretty-printers) \
+ 		       $(..)scripts/test_printers_common.py
+-	$(test-wrapper-env) $(py-env) \
+-	    $(PYTHON) $*.py $*.c $(objpfx)$* $(pretty-printers) > $@; \
++	$(test-wrapper-env) $(py-env) sh -c \
++	    'command -v $(firstword $(PYTHON)) > /dev/null 2>&1 || exit 77; \
++	     exec $(PYTHON) $*.py $*.c $(objpfx)$* $(pretty-printers)' > $@; \
+ 	$(evaluate-test)
+ endif
+ 
+
+commit 1bab8b37dc20bcae733d4310345aae08cab13dfa
+Author: Paul Eggert <eggert@cs.ucla.edu>
+Date:   Wed Sep 9 15:47:44 2026 -0700
+
+    zic: keep needed last transition to new type (bug 34618)
+    
+    Do not mishandle tzdata 2026b+'s temporary hacks that work around
+    bugs in the Unicode CLDR project when localizing recent
+    timekeeping changes in western Canada.  Unfortunately, the hacks
+    run afoul of a zic bug in glibc 2.40 through 2.43,
+    corresponding to tzcode 2023d through 2024a.
+    
+    The bug causes zic in its default -b slim mode to generate TZif
+    files that do not conform to Internet RFC 9636 section 3.3, and
+    these buggy files in turn cause some TZif readers, including
+    tzcode itself, to ignore the 2026-11-01 timekeeping transitions in
+    America/Vancouver and elsewhere in western Canada.
+    
+    * timezone/zic.c (outzone): Omit an incorrect use of ‘useuntil’.
+    This fixes a bug introduced in “Fix zic bug with Palestine after
+    2075” (tz commit 35c116b7536a36c43eb7cd36bff71ad0c5ecf071 dated
+    2023-10-15), which caused zic to mess up if the last transition is
+    to a new time type.
+    
+    This artificial input illustrates the bug:
+                Rule Canada 2007 max - Mar Sun>=8 2:00 1:00 D
+                Rule Canada 2007 max - Nov Sun>=1 2:00 0    S
+                Zone America/Vancouver  -8:00 -      PST  2026 Mar 9
+                                        -8:00 Canada P%sT 2026 Nov 1 02:00
+                                        -7:00 -      MST
+    Without the fix, zic generates a nonconforming TZif file that omits
+    the last transition even though the trailing TZ string is "MST7".
+    
+    (cherry picked from 2026-03-07 tz commit
+    <https://github.com/eggert/tz/commit/d63b92876ee6b57061fa8fb30500fcd11dbe9271>)
+
+diff --git a/timezone/zic.c b/timezone/zic.c
+index d5d30163b0..17c6f906b2 100644
+--- a/timezone/zic.c
++++ b/timezone/zic.c
+@@ -3234,7 +3234,7 @@ outzone(const struct zone *zpfirst, ptrdiff_t zonecount)
+ 				startttisut);
+ 			if (usestart) {
+ 				addtt(starttime, type);
+-				if (useuntil && nonTZlimtime < starttime) {
++				if (nonTZlimtime < starttime) {
+ 				  nonTZlimtime = starttime;
+ 				  nonTZlimtype = type;
+ 				}
+
+commit c0c8a45dee30c8089822d859575a3ad4324b15ff
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Mon Sep 14 17:08:03 2026 -0300
+
+    resolv: Fix assertion failure on search list truncation [BZ 31026, CVE-2026-8674]
+    
+    update_from_conf copies the search list into the 256-byte
+    resp->defdname and truncates it when an entry does not fit, then
+    asserts that resolv_conf_matches accepts the result.
+    
+    The truncation check there compared the accumulated size against
+    sizeof (resp->dnsrch) (the pointer array) instead of resp->defdname,
+    and the empty-list case did not account for a first entry that does
+    not fit at all.  A long search domain in resolv.conf or LOCALDOMAIN
+    thus aborts any process using the resolver.
+    
+    Check whether the entry fits in the remaining defdname space, matching
+    alloc_buffer_copy_string, and also accept an empty resp->dnsrch when
+    the first entry is too long.  Add tests covering both cases through
+    the search and domain directives.
+    
+    Checked on x86_64-linux-gnu and i686-linux-gnu.
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    
+    (cherry picked from commit 506ea57086bfb9ce3daff1c14246a1cb532aba0a)
+
+diff --git a/resolv/resolv_conf.c b/resolv/resolv_conf.c
+index dcf92ee90e..0418267044 100644
+--- a/resolv/resolv_conf.c
++++ b/resolv/resolv_conf.c
+@@ -281,8 +281,12 @@ resolv_conf_matches (const struct __res_state *resp,
+   {
+     if (resp->dnsrch[0] == NULL)
+       {
+-        /* Empty search list.  No default domain name.  */
+-        return conf->search_list_size == 0 && resp->defdname[0] == '\0';
++        /* Empty search list, or the first entry does not fit in
++           resp->defdname.  No default domain name.  */
++        return resp->defdname[0] == '\0'
++          && (conf->search_list_size == 0
++              || (strlen (conf->search_list[0]) + 1
++                  > sizeof (resp->defdname)));
+       }
+ 
+     if (resp->dnsrch[0] != resp->defdname)
+@@ -309,11 +313,12 @@ resolv_conf_matches (const struct __res_state *resp,
+           }
+         else
+           {
+-            /* resp->dnsrch is truncated if the number of elements
+-               exceeds MAXDNSRCH, or if the combined storage space for
+-               the search list exceeds what can be stored in
+-               resp->defdname.  */
+-            if (i == MAXDNSRCH || search_list_size > sizeof (resp->dnsrch))
++            /* resp->dnsrch is truncated if the number of elements exceeds
++               MAXDNSRCH, or if conf->search_list[i] does not fit in the
++               remaining space of resp->defdname.  */
++            if (i == MAXDNSRCH
++                || (search_list_size + strlen (conf->search_list[i]) + 1
++                    > sizeof (resp->defdname)))
+               break;
+             /* Otherwise, a mismatch indicates a match failure.  */
+             return false;
+diff --git a/resolv/tst-resolv-res_init-skeleton.c b/resolv/tst-resolv-res_init-skeleton.c
+index 3ccbe71db9..4e9c57f3cb 100644
+--- a/resolv/tst-resolv-res_init-skeleton.c
++++ b/resolv/tst-resolv-res_init-skeleton.c
+@@ -724,6 +724,41 @@ struct test_case test_cases[] =
+      "nameserver 192.0.2.1\n"
+      "; nameserver[0]: [192.0.2.1]:53\n"
+     },
++/* Search list entries which do not fit in the legacy 256-byte
++   resp->defdname buffer (bug 31026).  LONG244 is 244 characters long,
++   so it does not fit after "example.com\0" (12 bytes).  LONG256 is 256
++   characters long, so it does not fit even as the first entry.  */
++#define LBL63 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
++#define LONG244 LBL63 "." LBL63 "." LBL63 "." \
++  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
++#define LONG256 LBL63 "." LBL63 "." LBL63 "." LBL63 "a"
++    {.name = "search list truncated at long entry after short entry",
++     .conf = "nameserver 192.0.2.1\n"
++     "search example.com " LONG244 "\n",
++     .expected = "search example.com\n"
++     "; search[0]: example.com\n"
++     "; search[1]: " LONG244 "\n"
++     "nameserver 192.0.2.1\n"
++     "; nameserver[0]: [192.0.2.1]:53\n"
++    },
++    {.name = "search list truncated at long first entry",
++     .conf = "nameserver 192.0.2.1\n"
++     "search " LONG256 " example.com\n",
++     .expected = "; search[0]: " LONG256 "\n"
++     "; search[1]: example.com\n"
++     "nameserver 192.0.2.1\n"
++     "; nameserver[0]: [192.0.2.1]:53\n"
++    },
++    {.name = "long first entry from the domain directive",
++     .conf = "nameserver 192.0.2.1\n"
++     "domain " LONG256 "\n",
++     .expected = "; search[0]: " LONG256 "\n"
++     "nameserver 192.0.2.1\n"
++     "; nameserver[0]: [192.0.2.1]:53\n"
++    },
++#undef LONG256
++#undef LONG244
++#undef LBL63
+     {.name = "trust-ad flag",
+      .conf = "options trust-ad\n"
+      "nameserver 192.0.2.1\n",
+
+commit c7169c068453a95f104f47a4eb79a902721712dd
+Author: Mark Wielaard <mark@klomp.org>
+Date:   Fri Sep 18 00:24:34 2026 +0200
+
+    stdlib: Don't call clearenv from __libc_setenv_freemem
+    
+    Since commit 7a61e7f557a9 ("stdlib: Make getenv thread-safe in more
+    cases") clearenv doesn't call any deallocation functions anymore.
+    __libc_setenv_freemem (called from __libc_freeres) now clears all
+    backing arrays. So there is no reason anymore to call clearenv from
+    __libc_setenv_freemem.
+    
+    Tested against valgrind memcheck with --run-libc-freeres=yes which is
+    the default.
+    
+    Reviewed-by: Florian Weimer <fweimer@redhat.com>
+    (cherry picked from commit b837aae83df8fe80c8977b5ed5c538aebd2b152a)
+
+diff --git a/stdlib/setenv.c b/stdlib/setenv.c
+index 0ef5dde373..e25fbff351 100644
+--- a/stdlib/setenv.c
++++ b/stdlib/setenv.c
+@@ -394,9 +394,6 @@ clearenv (void)
+ void
+ __libc_setenv_freemem (void)
+ {
+-  /* Remove all traces.  */
+-  clearenv ();
+-
+   /* Clear all backing arrays.  */
+   while (__environ_array_list != NULL)
+     {

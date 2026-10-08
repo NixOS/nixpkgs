@@ -59,6 +59,8 @@ buildPythonPackage rec {
     ./5.2/pythonpath.patch
     # disable test that expects timezone issues
     ./5.2/disable-failing-test.patch
+    ./6.x/skip-flaky-tests.patch
+    ./6.x/fix-flaky-tests.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./5.2/gdal.patch {

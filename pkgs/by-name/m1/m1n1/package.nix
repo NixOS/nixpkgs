@@ -31,21 +31,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yYXB2DhLcLqxaqwP5mII+j2PMIoXdZ35bpx/d0WSZA8=";
-    fetchSubmodules = true;
+    hash = "sha256-h+gRa1Msdbb7CCYWo2Wo5Q1MwPfIXBBBpdAGWLbRDdk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version;
     src = "${finalAttrs.src}/rust";
     sourceRoot = "rust";
-    hash = "sha256-iuiRp2FA5jnb3uh/p1gpc7Sznt1s4/UR91wEtXTf97o=";
+    hash = "sha256-7G9aTQEiQ8ocsY0gSoBg9A2cusfqR4a1nhFikpWMXAA=";
   };
   cargoRoot = "rust";
 
@@ -131,8 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
       # m1n1 embeds several libraries, all of which cannot be
       # unvendored easily.
 
-      # m1n1, minlzma, musl-libc
-      mit
+      # m1n1
+      gpl2Plus
+      # minlzma: MIT
+      # musl-libc: MIT
       # libfdt: dual BSD2 and GPL-2-or-later
       # tinf: zlib
       # arm-trusted-firmware: BSD3
@@ -140,11 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
       # PDCLib: CC0
       # Source Code Pro: OFL1.1
       # dwc3: BSD3 and GPL-2-or-later
+      mit
       cc0
       ofl
       zlib
       bsd2
-      gpl2Plus
       bsd3
       asl20
     ];
