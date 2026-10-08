@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 14 Oct 2026 11:03:47 -0400
+Subject: [PATCH] Add <cstdint> header for GCC 16
+
+---
+ bundle.cpp | 2 ++
+ commands.h | 1 +
+ 2 files changed, 3 insertions(+)
+
+diff --git a/bundle.cpp b/bundle.cpp
+index 788b569..a800e60 100644
+--- a/bundle.cpp
++++ b/bundle.cpp
+@@ -3,6 +3,8 @@
+ #include <fstream>
+ #include <sstream>
+ #include <stdexcept>
++#include <vector>
++
+ #include <sys/stat.h>
+ #include <unistd.h>
+ 
+diff --git a/commands.h b/commands.h
+index eac90ae..089d298 100644
+--- a/commands.h
++++ b/commands.h
+@@ -1,6 +1,7 @@
+ #ifndef SIGTOOL_COMMANDS_H
+ #define SIGTOOL_COMMANDS_H
+ 
++#include <cstdint>
+ #include <string>
+ 
+ namespace SigTool {
+-- 
+2.54.0
+
