@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "rime-data";
-  version = "0.38.20231116";
+  version = "0-unstable-2026-10-08";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "plum";
-    rev = "6f502ff6fa87789847fa18200415318e705bffa4";
-    sha256 = "sha256-DNSLP0dzzgJ6XzwvxGPeRqRrRIUV/GwD2+8cz9bYAwA=";
+    rev = "b1be1969f914cc005add4090631b855db00c2591";
+    sha256 = "sha256-o16OYMjYrLhoo0H9hw7s/VnXAs+vS0OIY29T1v96WDE=";
   };
 
   buildInputs = [ librime ];
