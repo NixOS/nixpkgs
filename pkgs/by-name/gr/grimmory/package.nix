@@ -48,7 +48,12 @@ let
     __structuredAttrs = true;
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src pnpmWorkspaces;
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        pnpmWorkspaces
+        ;
       inherit pnpm;
       fetcherVersion = 4;
       hash = "sha256-wOldjA3z+KknkGjLJKz4J0ddWnP3DN/x6jSVuKgI35I=";

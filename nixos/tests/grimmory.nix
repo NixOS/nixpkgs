@@ -49,44 +49,44 @@
   testScript =
     { nodes, ... }:
     ''
-    with subtest("Testing basic Grimmory config"):
-      grimmory.wait_for_unit("mysql.service")
-      grimmory.wait_for_unit("grimmory.service")
-      grimmory.wait_for_open_port(6060)
+      with subtest("Testing basic Grimmory config"):
+        grimmory.wait_for_unit("mysql.service")
+        grimmory.wait_for_unit("grimmory.service")
+        grimmory.wait_for_open_port(6060)
 
-      with subtest("Check Frontend accessible"):
-        grimmory.succeed("curl --fail http://localhost:6060/login")
+        with subtest("Check Frontend accessible"):
+          grimmory.succeed("curl --fail http://localhost:6060/login")
 
-      with subtest("Check API accessible"):
-        grimmory.succeed("curl --fail http://localhost:6060/api/v1/healthcheck")
+        with subtest("Check API accessible"):
+          grimmory.succeed("curl --fail http://localhost:6060/api/v1/healthcheck")
 
-      with subtest("Create an admin user"):
-        grimmory.succeed('curl --fail -X POST -H "Content-Type: application/json" --data \'{"username":"admin","password":"snakeoil-password","name":"Admin","email":"admin@localhost"}\' http://localhost:6060/api/v1/setup')
+        with subtest("Create an admin user"):
+          grimmory.succeed('curl --fail -X POST -H "Content-Type: application/json" --data \'{"username":"admin","password":"snakeoil-password","name":"Admin","email":"admin@localhost"}\' http://localhost:6060/api/v1/setup')
 
-    with subtest("Testing nginx Grimmory config"):
-      grimmory.succeed("${nodes.grimmory.system.build.toplevel}/specialisation/nginx/bin/switch-to-configuration test")
-      grimmory.wait_for_unit("nginx.service")
-      grimmory.wait_for_unit("mysql.service")
-      grimmory.wait_for_unit("grimmory.service")
-      grimmory.wait_for_open_port(8888)
+      with subtest("Testing nginx Grimmory config"):
+        grimmory.succeed("${nodes.grimmory.system.build.toplevel}/specialisation/nginx/bin/switch-to-configuration test")
+        grimmory.wait_for_unit("nginx.service")
+        grimmory.wait_for_unit("mysql.service")
+        grimmory.wait_for_unit("grimmory.service")
+        grimmory.wait_for_open_port(8888)
 
-      with subtest("Check Frontend accessible via nginx"):
-        grimmory.succeed("curl --fail http://localhost/login")
+        with subtest("Check Frontend accessible via nginx"):
+          grimmory.succeed("curl --fail http://localhost/login")
 
-      with subtest("Check API accessible via nginx"):
-        grimmory.succeed("curl --fail http://localhost/api/v1/healthcheck")
+        with subtest("Check API accessible via nginx"):
+          grimmory.succeed("curl --fail http://localhost/api/v1/healthcheck")
 
-    with subtest("Testing caddy Grimmory config"):
-      grimmory.succeed("${nodes.grimmory.system.build.toplevel}/specialisation/caddy/bin/switch-to-configuration test")
-      grimmory.wait_for_unit("caddy.service")
-      grimmory.wait_for_unit("mysql.service")
-      grimmory.wait_for_unit("grimmory.service")
-      grimmory.wait_for_open_port(6060)
+      with subtest("Testing caddy Grimmory config"):
+        grimmory.succeed("${nodes.grimmory.system.build.toplevel}/specialisation/caddy/bin/switch-to-configuration test")
+        grimmory.wait_for_unit("caddy.service")
+        grimmory.wait_for_unit("mysql.service")
+        grimmory.wait_for_unit("grimmory.service")
+        grimmory.wait_for_open_port(6060)
 
-      with subtest("Check Frontend accessible via caddy"):
-        grimmory.succeed("curl --fail -k https://localhost/login")
+        with subtest("Check Frontend accessible via caddy"):
+          grimmory.succeed("curl --fail -k https://localhost/login")
 
-      with subtest("Check API accessible via caddy"):
-        grimmory.succeed("curl --fail -k https://localhost/api/v1/healthcheck")
-  '';
+        with subtest("Check API accessible via caddy"):
+          grimmory.succeed("curl --fail -k https://localhost/api/v1/healthcheck")
+    '';
 }
