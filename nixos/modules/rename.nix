@@ -24,6 +24,10 @@ in
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
       "The raspberryPi boot loader has been removed. See https://github.com/NixOS/nixpkgs/pull/241534 for what to use instead."
     )
+    (mkRemovedOptionModule [
+      "boot"
+      "iscsi-initiator"
+    ] "Support for booting from iSCSI has been removed due to lack of maintenance.")
     (mkRemovedOptionModule [ "environment" "blcr" "enable" ] "The BLCR module has been removed")
     (mkRemovedOptionModule [ "environment" "noXlibs" ] ''
       The environment.noXlibs option was removed, as it often caused surprising breakages for new users.
