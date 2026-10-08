@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   postPatch = ''
     substituteInPlace data/org.freedesktop.impl.portal.desktop.generic.service \
