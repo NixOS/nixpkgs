@@ -44,6 +44,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ./cmake-config.patch
   ];
 
+  # cudaThreadSynchronize was deprecated and removed in CUDA 13
+  postPatch = lib.optionalString cudaSupport ''
+    substituteInPlace opensubdiv/osd/cudaEvaluator.cpp \
+      --replace-fail \
+        "cudaThreadSynchronize" \
+        "cudaDeviceSynchronize"
+  '';
+
   outputs = [
     "out"
     "dev"
