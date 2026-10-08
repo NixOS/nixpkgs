@@ -21,16 +21,16 @@
   pnpmConfigHook,
 }:
 let
-  version = "3.2.4";
+  version = "3.5.0";
   gradle = gradle_9;
   src = fetchFromGitHub {
     owner = "grimmory-tools";
     repo = "grimmory";
     tag = "v${version}";
-    hash = "sha256-RiERszsb/oGsXja6EWoGSVGQ0T2KIfWBXqnDOFcoiQU=";
+    hash = "sha256-j9VXtqWLc13qVn89T1OmLQcAlhTP4w8AmOZINqhtNa4=";
   };
   meta = {
-    description = "Grimmory is a self-hosted digital library for people who take their reading seriously.";
+    description = "Grimmory is a self-hosted library for your ebooks, comics and audiobooks.";
     homepage = "https://grimmory.org";
     maintainers = [ lib.maintainers.kraftnix ];
     license = lib.licenses.agpl3Only;
@@ -48,10 +48,10 @@ let
     __structuredAttrs = true;
 
     pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
+      inherit (finalAttrs) pname version src pnpmWorkspaces;
       inherit pnpm;
       fetcherVersion = 4;
-      hash = "sha256-S/Q4+kSOIrL7JSebH0XWGCCMaegre9Fx63RbuIs5P9s=";
+      hash = "sha256-wOldjA3z+KknkGjLJKz4J0ddWnP3DN/x6jSVuKgI35I=";
     };
 
     nativeBuildInputs = [
@@ -60,13 +60,15 @@ let
       pnpmConfigHook
     ];
 
+    pnpmWorkspaces = [ "grimmory" ];
+
     env.NG_CLI_ANALYTICS = "false";
     env.CI = "1";
 
     buildPhase = ''
       runHook preBuild
 
-      pnpm -C frontend run build:prod
+      pnpm --filter=grimmory run build:prod
 
       runHook postBuild
     '';
@@ -86,9 +88,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grimmory";
-  inherit version;
+  inherit version src;
 
-  src = "${src}/backend";
+  patches = [
+    # gradle.fetchDeps fetches jacoco 0.8.15 instead of 0.8.14
+    ./patch-jacoco-version.patch
+  ];
+
+  sourceRoot = "${finalAttrs.src.name}/backend";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -97,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     gradle
     makeWrapper
     jdk25_headless
-    grimmory-frontend
   ];
 
   buildInputs = [
@@ -108,9 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mitmCache = gradle.fetchDeps {
-    inherit (finalAttrs) pname;
+    # inherit (finalAttrs) pname;
+    pkg = finalAttrs.finalPackage;
     data = ./deps.json;
   };
+
+  __darwinAllowLocalNetworking = true;
 
   env.APP_VERSION = finalAttrs.version;
   env.APP_REVISION = "nix";
@@ -120,9 +129,13 @@ stdenv.mkDerivation (finalAttrs: {
   gradleFlags = [
     "-Dorg.gradle.java.home=${jdk25_headless.home}"
     "-Dfile.encoding=utf-8"
-    # NOTE: this doesn't correctly embed the frontend
-    "-DfrontendDistDir=${grimmory-frontend}"
   ];
+
+  preConfigure = ''
+    cp -r ${grimmory-frontend} frontend-dist
+    chmod -R u+w frontend-dist
+    gradleFlagsArray+=("-PfrontendDistDir=$PWD/frontend-dist")
+  '';
 
   installPhase = ''
     mkdir -p $out/{bin,share/grimmory}
@@ -141,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = writeShellScript "update-grimmory" ''
     ${lib.getExe nix-update} grimmory --src-only
     ${lib.getExe nix-update} --subpackage grimmory-frontend grimmory --no-src
-    $(nix-build -A grimmory.mitmCache.updateScript)
+    $(nix-build -A grimmory.mitmCache.updateScript --no-out-link)
   '';
 
   passthru.src = src;
