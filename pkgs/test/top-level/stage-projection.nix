@@ -43,6 +43,63 @@ let
       system = "x86_64-linux";
     };
   };
+  nativeWithCrossOverlay = nixpkgsFun {
+    localSystem.system = "x86_64-linux";
+    crossOverlays = [ (_: _: { runStageOnly = true; }) ];
+  };
+  nativeSelections =
+    p:
+    map (name: p.${name}.drvPath) [
+      "stdenv"
+      "stdenvNoCC"
+      "hello"
+      "libc"
+      "libiconv"
+      "libidn2"
+    ];
+  nativeWithInputs = nixpkgsFun {
+    localSystem.system = "x86_64-linux";
+    crossOverlays = [ (_: _: { }) ];
+    stdenvStages =
+      args:
+      let
+        stages = import ../../stdenv args;
+      in
+      lib.imap0 (
+        index: makeStage: previous:
+        let
+          stage = makeStage previous;
+        in
+        if index == builtins.length stages - 3 then
+          stage
+          // {
+            stdenv = stage.stdenv.override { extraBuildInputs = [ previous.zlib ]; };
+          }
+        else
+          stage
+      ) stages;
+  };
+  nativeReplaced = nixpkgsFun {
+    localSystem.system = "x86_64-linux";
+    crossOverlays = [ (_: _: { }) ];
+    config.replaceCrossStdenv = { baseStdenv, ... }: baseStdenv // { replacedCross = true; };
+  };
+  sameSystemCompilers =
+    map
+      (
+        compiler:
+        nixpkgsFun {
+          localSystem.system = "x86_64-linux";
+          crossSystem = {
+            system = "x86_64-linux";
+            ${compiler} = true;
+          };
+        }
+      )
+      [
+        "useLLVM"
+        "useGccNG"
+      ];
   filtered = nixpkgsFun {
     localSystem = {
       system = "x86_64-linux";
@@ -81,6 +138,24 @@ let
       };
   };
 in
+# A stage-only overlay retains native bootstrap libraries and selected inputs.
+assert nativeSelections nativeWithCrossOverlay == nativeSelections native;
+assert samePlatforms nativeWithCrossOverlay native;
+assert nativeWithCrossOverlay.runStageOnly;
+assert !(nativeWithCrossOverlay.pkgsBuildHost ? runStageOnly);
+assert nativeWithInputs.stdenv.extraBuildInputs != [ ];
+assert
+  map (x: x.drvPath) nativeWithInputs.stdenv.extraBuildInputs
+  == map (x: x.drvPath) nativeWithInputs.pkgsBuildHost.stdenv.extraBuildInputs;
+assert nativeReplaced.stdenv.replacedCross;
+# Equal CPU/kernel names do not erase explicit compiler selection.
+assert lib.all (
+  p: !(lib.systems.equals p.stdenv.buildPlatform p.stdenv.hostPlatform)
+) sameSystemCompilers;
+assert (builtins.elemAt sameSystemCompilers 0).stdenv.cc.isClang;
+assert
+  (builtins.elemAt sameSystemCompilers 1).stdenv.cc.drvPath == (builtins.elemAt sameSystemCompilers 1)
+  .buildPackages.gccNGPackages.gcc.drvPath;
 assert !(builtins.tryEval (extendAt changingLayout.pkgsBuildHost (_: _: { }))).success;
 # A projected view retains the original graph, including later stages.
 assert samePlatforms (builtins.head extended.__stage.stages) original;
