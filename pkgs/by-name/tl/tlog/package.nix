@@ -8,6 +8,7 @@
   curl,
   json_c,
   systemdLibs,
+  nixosTests,
   runtimeShell,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
@@ -103,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
+  passthru.tests.tlog = nixosTests.tlog.extendNixOS {
+    module.programs.tlog.package = finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "Terminal I/O recorder and player for auditing user sessions";
     longDescription = ''
@@ -112,8 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
 
       All tlog binaries refuse to start unless their system-wide
       configuration exists in /etc/tlog (tlog-rec.conf, tlog-rec-session.conf
-      and tlog-play.conf); create them (an empty JSON object `{}` is a valid
-      configuration).
+      and tlog-play.conf). On NixOS, enable `programs.tlog`, which provides
+      these files and the setuid tlog-rec-session wrapper; elsewhere, create
+      them (an empty JSON object `{}` is a valid configuration).
     '';
     homepage = "https://github.com/Scribery/tlog";
     changelog = "https://github.com/Scribery/tlog/releases/tag/v${finalAttrs.version}";
