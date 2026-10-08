@@ -12,7 +12,7 @@
   glfw,
   numpy,
   trio,
-  wgpu-py,
+  wgpu,
 }:
 buildPythonPackage rec {
   pname = "rendercanvas";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     numpy
     trio
     # break circular dependency cycle
-    (wgpu-py.overrideAttrs { doInstallCheck = false; })
+    (wgpu.overrideAttrs { doInstallCheck = false; })
   ];
 
   disabledTests = [

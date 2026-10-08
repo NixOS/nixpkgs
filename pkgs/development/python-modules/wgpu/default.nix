@@ -35,10 +35,10 @@
 
   # passthru
   testers,
-  wgpu-py,
+  wgpu,
 }:
 buildPythonPackage (finalAttrs: {
-  pname = "wgpu-py";
+  pname = "wgpu";
   version = "0.31.0";
   pyproject = true;
 
@@ -135,7 +135,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = wgpu-py;
+    package = wgpu;
     command = "python3 -c 'import wgpu; print(wgpu.__version__)'";
   };
 
