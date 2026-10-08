@@ -37,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tone3000-bin";
   version = "0.0.12";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   # This package installs upstream release binaries. The -bin suffix distinguishes
   # it from source-build packaging, which integrates upstream's patched JUCE and
   # pinned NeuralAmpModelerCore, AudioDSPTools, and clap-juce-extensions sources.
