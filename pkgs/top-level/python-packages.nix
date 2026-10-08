@@ -15426,6 +15426,8 @@ self: super: with self; {
 
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };
 
+  pyln-proto = callPackage ../development/python-modules/pyln-proto { };
+
   pylnk3 = callPackage ../development/python-modules/pylnk3 { };
 
   pyloadapi = callPackage ../development/python-modules/pyloadapi { };
