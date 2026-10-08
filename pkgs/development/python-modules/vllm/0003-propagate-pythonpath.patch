@@ -7,7 +7,7 @@ index a2de597c8..4c2410209 100644
          # contains relative imports
          returned = subprocess.run(
 -            _SUBPROCESS_COMMAND, input=input_bytes, capture_output=True
-+            _SUBPROCESS_COMMAND, input=input_bytes, capture_output=True, env={'PYTHONPATH': ':'.join(sys.path)},
++            _SUBPROCESS_COMMAND, input=input_bytes, capture_output=True, env={**os.environ, 'PYTHONPATH': ':'.join(sys.path)},
          )
  
          # check if the subprocess is successful
