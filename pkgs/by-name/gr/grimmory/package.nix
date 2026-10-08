@@ -157,8 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
     $(nix-build -A grimmory.mitmCache.updateScript --no-out-link)
   '';
 
-  passthru.src = src;
-
   passthru.tests = {
     inherit (nixosTests) grimmory;
   };
