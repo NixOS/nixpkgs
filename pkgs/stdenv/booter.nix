@@ -99,24 +99,84 @@ let
     __raw = true;
     stdenv.cc =
       if buildPackages.stdenv.hasCC then
-        if
-          buildPackages.stdenv.cc.isClang or false
-        # buildPackages.clang checks targetPackages.stdenv.cc (i. e. this
-        # attribute) to get a sense of the its set's default compiler and
-        # chooses between libc++ and libstdc++ based on that. If we hit this
-        # code here, we'll cause an infinite recursion. Select an explicit
-        # HOST compiler with the platform's runtime policy, preserving the
-        # chosen compiler's TARGET C++ runtime provider.
-        then
-          (
-            if buildPackages.stdenv.targetPlatform.useLLVM or false then
-              buildPackages.llvmPackages.clangUseLLVM
+        let
+          cc = buildPackages.stdenv.cc;
+          isClang = cc.isClang or false;
+          isGNU = cc.isGNU or false;
+          major = lib.versions.major cc.version;
+          constructor = lib.functionArgs cc.cc.override;
+          monolithicGNU = isGNU && constructor ? majorMinorVersion;
+          scope =
+            if isClang then
+              buildPackages."llvmPackages_${major}"
+            else if monolithicGNU then
+              buildPackages
+            else if constructor ? buildGccPackages then
+              buildPackages."gccNGPackages_${major}"
             else
-              buildPackages.llvmPackages.libcxxClang
-          ).override
+              throw "stdenv: unknown compiler constructor for target-role rebinding";
+          # Re-call the selected constructor in HOST's dependency scope. This
+          # preserves its options and overrideAttrs; dependency overrides belong
+          # in the package graph so both roles receive them.
+          callOverride =
+            scope: package: args:
+            scope.callPackage (lib.setFunctionArgs (args: package.override args)
+              # Required arguments are already bound by .override. noSysDirs is
+              # constructor policy, despite also being a top-level attribute.
+              (lib.mapAttrs (_: _: true) (removeAttrs (lib.functionArgs package.override) [ "noSysDirs" ]))
+            ) args;
+          raw = callOverride scope cc.cc (
             {
-              inherit (buildPackages.stdenv.cc) libcxx gccForLibs useCcForLibs;
+              stdenv = buildPackages.overrideCC buildPackages.stdenv cc;
             }
+            // (
+              if isClang then
+                {
+                  buildLlvmPackages = buildPackages.buildPackages."llvmPackages_${major}";
+                }
+              else if monolithicGNU then
+                {
+                  # gcc/all.nix cached these relations for the original role.
+                  _systemInfo = {
+                    buildIsHost = lib.systems.equals buildPackages.stdenv.buildPlatform buildPackages.stdenv.hostPlatform;
+                    hostIsTarget = lib.systems.equals buildPackages.stdenv.hostPlatform buildPackages.stdenv.targetPlatform;
+                  };
+                  isl = if buildPackages.stdenv.hostPlatform.isDarwin then null else buildPackages.isl_0_20;
+                }
+              else
+                {
+                  buildGccPackages = buildPackages.buildPackages."gccNGPackages_${major}";
+                }
+            )
+          );
+          useGccForLibs =
+            cc.useGccForLibs or (import ../build-support/cc-wrapper/use-gcc-for-libs.nix (
+              cc
+              // {
+                targetPlatform = cc.stdenv.targetPlatform;
+              }
+            ));
+        in
+        if lib.systems.equals cc.stdenv.hostPlatform buildPackages.stdenv.hostPlatform then
+          cc
+        else if isGNU || isClang then
+          callOverride scope cc (
+            {
+              cc = raw;
+              bintools = (scope.bintools or buildPackages.binutils).override { inherit (cc) libc; };
+              inherit (cc)
+                libc
+                libcxx
+                gccForLibs
+                useCcForLibs
+                ;
+            }
+            // lib.optionalAttrs (isGNU && cc.libcxx == null && !useGccForLibs) {
+              # The executable changes roles, but its TARGET runtime does not.
+              gccForLibs = cc.cc;
+              useCcForLibs = true;
+            }
+          )
         else
           buildPackages.gcc
       else
