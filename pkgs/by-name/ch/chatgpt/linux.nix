@@ -144,7 +144,7 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       wattmto
-      crolandojr
+      cRolandoJr
     ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
