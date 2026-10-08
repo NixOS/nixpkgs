@@ -39,6 +39,7 @@ let
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
   version = "2.13.0";
+  cuda-bindings' = cuda-bindings.override { inherit cudaPackages; };
 in
 buildPythonPackage {
   inherit version;
@@ -48,6 +49,14 @@ buildPythonPackage {
   # Don't forget to update torch to the same version.
 
   format = "wheel";
+
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "cxxdev"
+  ];
+  cudaPropagateToOutput = "cxxdev";
 
   # determine supported interpreters by the ones we have x86_64-linux wheels for
   disabled = isPyPy || !(srcs ? "x86_64-linux-${pyVerNoDot}");
@@ -112,7 +121,7 @@ buildPythonPackage {
     typing-extensions
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    cuda-bindings
+    cuda-bindings'
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     triton
@@ -125,6 +134,15 @@ buildPythonPackage {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
+
+    # Any consumer that doesn't set MKL_ROOT (e.g. torchcodec) would fail RPATH_CHANGE at install time,
+    # as those paths collapse to /lib, /lib/intel64
+    (
+      cd $out/${python.sitePackages}/torch/share/cmake/Caffe2
+      patch -p2 < ${../source/disable-cmake-mkl-rpath.patch}
+    )
+
+    mkdir -p "$cxxdev"
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/296179
@@ -155,6 +173,14 @@ buildPythonPackage {
     inherit (config) rocmSupport cudaSupport;
   };
 
+  # Expose mostly the same attrs as the source build to stay compatible
+  passthru = {
+    inherit cudaPackages triton;
+    cudaSupport = stdenv.hostPlatform.isLinux;
+    rocmSupport = false;
+    cudaCapabilities = lib.optionals stdenv.hostPlatform.isLinux cudaPackages.flags.cudaCapabilities;
+  };
+
   meta = {
     description = "PyTorch: Tensors and Dynamic neural networks in Python with strong GPU acceleration";
     homepage = "https://pytorch.org/";
@@ -180,13 +206,12 @@ buildPythonPackage {
       GaetanLepage
       junjihashimoto
     ];
-    # cuda-bindings<14,>=13.0.3 not satisfied by version 12.9.7
-    problems = lib.optionalAttrs (lib.versionOlder cuda-bindings.version "13.0.3") {
+    problems = lib.optionalAttrs (lib.versionOlder cuda-bindings'.version "13.0.3") {
       unsupported-cuda-version = {
         message = ''
-          cudaPackages is too old (${cudaPackages.cudaMajorMinorVersion}).
-          PyTorch expects cuda-bindings>=13.0.3, current is ${cuda-bindings.version}.
-          Please override cudaPackages with a more recent version.
+          The cudaPackages used by torch-bin is too old,
+          the minimum required cuda-bindings version is 13.0.3, but the current used one is ${cuda-bindings'.version}.
+          Please override cudaPackages of torch-bin with a more recent version.
         '';
         kind = "broken";
       };

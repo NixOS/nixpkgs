@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "plakar";
-  version = "1.1.5";
+  version = "1.1.7";
 
   # to avoid having all the Test(Get|Set|Validate)Service.* tests fail on darwin
   __darwinAllowLocalNetworking = true;
@@ -22,18 +22,24 @@ buildGoModule (finalAttrs: {
     owner = "PlakarKorp";
     repo = "plakar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6uw20jqAtJnPEeNrMsK/jA7+stdY4tAEkPe+mov6UNo=";
+    hash = "sha256-cbfPWNlTcpQsjd3a1aE+wXos5EN8b96fpA2Cz+qzyR4=";
   };
 
-  vendorHash = "sha256-s/4vTHFFfOuGnVc3FK0B5aa9kRATr356/mGydw4cMng=";
+  vendorHash = "sha256-RQ1HhWL33Zi5n8G6RerLLgE2YJk/7HD4k1yiK+sQTBU=";
 
-  # Remove in next release
+  # Remove in next next release
   patches = [
     (fetchpatch {
       name = "backup-allow-multiple-ignore-files.patch";
       url = "https://github.com/PlakarKorp/plakar/commit/049603ba4db8086ceb9aadf6197751083821e699.patch";
       includes = [ "subcommands/backup/backup.go" ];
       hash = "sha256-9uxkXpuWs758xlu3afANB14hqhVut7agvIeOlcm+98k=";
+    })
+    (fetchpatch {
+      name = "api-add-test-helpers.patch";
+      url = "https://github.com/PlakarKorp/plakar/commit/e4153a448174e9d9df9f446560e303d89c48dd10.patch";
+      includes = [ "api/helpers_test.go" ];
+      hash = "sha256-XsP83iWMFyFFVSjcXsckk3QMLLoJcrVCmvPCe3BlNIQ=";
     })
   ];
 

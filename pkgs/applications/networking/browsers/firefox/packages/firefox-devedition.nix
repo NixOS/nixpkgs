@@ -10,12 +10,12 @@
 (buildMozillaMach rec {
   pname = "firefox-devedition";
   binaryName = "firefox-devedition";
-  version = "156.0b2";
+  version = "158.0b1";
   applicationName = "Firefox Developer Edition";
   branding = "browser/branding/aurora";
   src = fetchurl {
     url = "mirror://mozilla/devedition/releases/${version}/source/firefox-${version}.source.tar.xz";
-    sha512 = "683326ff4367f9b807c4c5b93f100970258ada9838da2c597358105a99ff4aa7e33269fe67d6c68d466e2f539d2bea3015457109516af19e1785588ce43426b5";
+    sha512 = "0780e3f58d8dd3f51863aa5b3abffed59a85ad693f9a15e59de0d7cb926f69aeefa35d68bddcfeb88d148288e7ac5cf03ddb3b33b254db0e781cad07634cac16";
   };
 
   # buildMozillaMach sets MOZ_APP_REMOTINGNAME during configuration, but
@@ -32,7 +32,6 @@
     description = "Web browser built from Firefox Developer Edition source tree";
     homepage = "http://www.mozilla.com/en-US/firefox/";
     maintainers = with lib.maintainers; [
-      jopejoe1
       rhendric
     ];
     platforms = lib.platforms.unix;
@@ -42,6 +41,11 @@
     maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
     license = lib.licenses.mpl20;
     mainProgram = binaryName;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mozilla" version // {
+      product = "firefox";
+      sw_edition = "devedition";
+    };
+
   };
   tests = {
     inherit (nixosTests) firefox-devedition;

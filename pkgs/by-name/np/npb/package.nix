@@ -24,19 +24,18 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npb";
-  version = "1.0.0";
+  version = "1.1.3";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "samestep";
     repo = "npb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pXatlxVJnrt8JFf+TPcUAL1U5mz4kWn8qfRtVHekYjA=";
+    hash = "sha256-8GsMAmwRGTZ9ZvDXfPmVDoOCSHJuQd/1EwIP7hmTDGo=";
   };
 
-  cargoHash = "sha256-pZAaTweVR/JkTdtB4/FtXfSDPFTl1+cEdqx5finWMBk=";
+  cargoHash = "sha256-apnM5aLI0bXp86yvTgkUL6LnHHCEDeVD9ltovmsQ0ak=";
 
   nativeBuildInputs = lib.optional buildCanExecuteHost installShellFiles;
 
@@ -76,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     mainProgram = "npb";
     homepage = "https://github.com/samestep/npb";
+    changelog = "https://github.com/samestep/npb/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       samestep

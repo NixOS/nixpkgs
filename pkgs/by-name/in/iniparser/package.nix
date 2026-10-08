@@ -54,9 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
       (unity-test.override {
         supportDouble = true;
       }).overrideAttrs
-      {
-        doCheck = false;
-      }
+        {
+          doCheck = false;
+        }
     )
   ];
 

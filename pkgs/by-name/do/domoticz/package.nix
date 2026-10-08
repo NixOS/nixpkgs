@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "domoticz";
-  version = "2026.3";
+  version = "2026.4";
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = "domoticz";
     tag = finalAttrs.version;
-    hash = "sha256-ATz5SZLGOX7+sLiX2dV43gJfVcSN0PUIwtQWPxBJDXY=";
+    hash = "sha256-zuZI/2VD5nDg2nK8ivqMHXEDLQTcSONCVOI+KCN19B4=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r $src/Config $out/share/domoticz
     cp -r $src/scripts $out/share/domoticz
     cp -r $src/plugins $out/share/domoticz
+    cp -r $src/dzVents $out/share/domoticz
 
     mkdir -p $out/bin
     cp domoticz $out/bin

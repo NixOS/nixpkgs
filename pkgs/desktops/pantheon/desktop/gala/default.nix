@@ -18,23 +18,25 @@
   granite7,
   gtk3,
   gtk4,
+  ibus,
+  json-glib,
   libgee,
   libhandy,
   mutter,
   sqlite,
-  systemd,
+  systemdLibs,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gala";
-  version = "8.5.1";
+  version = "8.6.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "gala";
     tag = finalAttrs.version;
-    hash = "sha256-f+/RaKG208v84q1V9NkDci0wuGAtXwjVsF7ITDAgHCQ=";
+    hash = "sha256-q2GoJSa/ECn54UM0t8Z86bdTVea6XAflotkMoEOXK0Q=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -59,11 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     granite7
     gtk3 # daemon-gtk3
     gtk4
+    ibus
+    json-glib
     libgee
     libhandy
     mutter
     sqlite
-    systemd
+    systemdLibs
   ];
 
   postPatch = ''

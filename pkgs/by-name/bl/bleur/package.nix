@@ -3,30 +3,36 @@
   pkg-config,
   openssl,
   rustPlatform,
-  fetchgit,
+  fetchFromCodeberg,
+  libgit2,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bleur";
   version = "0.0.7";
   __structuredAttrs = true;
 
-  src = fetchgit {
-    url = "https://git.oss.uzinfocom.uz/bleur/bleur.git";
-    rev = "v${finalAttrs.version}";
+  src = fetchFromCodeberg {
+    owner = "bleur";
+    repo = "bleur";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bFpOvnC2MILr3b+KdVOAvDGmEZM8LDlwGd04csk2l18=";
   };
 
   cargoHash = "sha256-edeegm0QeXqj0E46+BHcmJMU1Ewn6p9hi3WArDtyVnI=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
-  strictDeps = true;
+  buildInputs = [
+    openssl
+    libgit2
+  ];
 
   meta = {
     description = "Template manager & buddy for bleur templates by Orzklv";
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "bleur";
-    homepage = "https://bleur.uz/";
+    homepage = "https://codeberg.org/bleur/bleur";
     license = with lib.licenses; [
       mit
       asl20

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "amnezia-xray";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-xray-bindings";
     tag = "v${version}";
-    hash = "sha256-kGtRw5Ic/++1ehwLToZ96WfC3ULp+DIsPYArqjL06ck=";
+    hash = "sha256-lvU3bDzd5kgYl5DjdglnQzgjPwhtczxWu6LyxeVvVXE=";
   };
 
-  vendorHash = "sha256-JAHpQUMQT6tJKwGld0QCobDxgLVujA4KHkhOLXHS65w=";
+  vendorHash = "sha256-L05GHzj9lyFAm9JgR8ZDQf+2auumug6PcoD1F4ozk3E=";
 
   env.CGO_ENABLED = 1;
 

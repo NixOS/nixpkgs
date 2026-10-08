@@ -6,7 +6,7 @@
   pkg-config,
   glib,
   gtk3,
-  lua,
+  lua5_5,
   libwnck,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    lua
+    lua5_5
     libwnck
   ];
 

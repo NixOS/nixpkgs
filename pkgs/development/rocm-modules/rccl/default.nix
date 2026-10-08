@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rccl";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-A1IQYIDWqu3JLiPQ70G52s1/0ZweQxFlgMUH81qJWmU=";
   };
 

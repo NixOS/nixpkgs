@@ -400,7 +400,7 @@ in
         # Security
         NoNewPrivileges = true;
         # Directory
-        RuntimeDirectoryMode = "0750";
+        RuntimeDirectoryMode = "0755";
         StateDirectoryMode = "0750";
         # Sandboxing
         ProtectSystem = "strict";
@@ -413,10 +413,23 @@ in
         ProtectControlGroups = true;
       };
     };
-    systemd.sockets.fail2ban.wantedBy = [
-      "sockets.target"
-      "fail2ban.service"
-    ];
+
+    systemd.sockets.fail2ban = {
+      wantedBy = [
+        "sockets.target"
+        "fail2ban.service"
+      ];
+      listenStreams = [
+        ""
+        cfg.daemonSettings.Definition.socket
+      ];
+      socketConfig = {
+        SocketGroup = "fail2ban";
+        SocketMode = "0660";
+      };
+    };
+
+    users.groups.fail2ban = { };
 
     # Defaults for the daemon settings
     services.fail2ban.daemonSettings.Definition = {

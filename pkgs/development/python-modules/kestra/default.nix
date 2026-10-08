@@ -9,6 +9,7 @@
   pytestCheckHook,
   pytest-mock,
   requests-mock,
+  stdenv, # for meta.broken
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -45,7 +46,9 @@ buildPythonPackage (finalAttrs: {
     description = "Infinitely scalable orchestration and scheduling platform, creating, running, scheduling, and monitoring millions of complex pipelines";
     homepage = "https://github.com/kestra-io/libs";
     changelog = "https://github.com/kestra-io/libs/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ DataHearth ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

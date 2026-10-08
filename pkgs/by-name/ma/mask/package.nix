@@ -7,11 +7,12 @@
   nix-update-script,
 
   # tests
-  lua,
+  lua5_5,
   nodejs,
   php,
   python3,
   ruby,
+  swift,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,16 +33,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   nativeCheckInputs = [
-    lua
+    lua5_5
     nodejs
     php
     python3
     ruby
-  ];
-
-  checkFlags = [
-    # requires swift which currently fails to build
-    "--skip=swift"
+    swift
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

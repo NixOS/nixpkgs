@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "explorer";
     publisher = "vitest";
-    version = "1.50.8";
-    hash = "sha256-LkfCnEELkdj1BRlHZpphM+bTSh/U7oE11U/E+Hx/8sU=";
+    version = "1.52.2";
+    hash = "sha256-/K5BpvWEt7Cxm4TlIjUIL4rxKs/oWJkwaHFhczAD0zE=";
   };
   meta = {
     changelog = "https://github.com/vitest-dev/vscode/releases";

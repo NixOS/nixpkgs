@@ -7,7 +7,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "thunderbird-cli";
-  version = "1.0.2";
+  version = "1.1.0";
 
   __structuredAttrs = true;
 
@@ -15,14 +15,14 @@ buildNpmPackage (finalAttrs: {
     owner = "vitalio-sh";
     repo = "thunderbird-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jtIXOHjijFkwdh5FWrqdSfEwbEmWQud8Qr2jsTEwJts=";
+    hash = "sha256-WSbczKPxTyaSqYeI8WYKpo983sfJWa7QCYbElMetUqY=";
   };
 
   forceEmptyCache = true;
   dontNpmBuild = true;
 
   npmWorkspace = "cli";
-  npmDepsHash = "sha256-ixzfebmKITD1lnPNQq765S1f+i7xBTTWWdZoJOqY7qg=";
+  npmDepsHash = "sha256-1+VkzCrLZvL7XUxoK/AazwSR3yLqgZ4CGJwDAJ2e+5U=";
 
   # TODO: revisit this when https://github.com/NixOS/nixpkgs/pull/333759 has landed
   postInstall = ''

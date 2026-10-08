@@ -20,12 +20,14 @@
     in
     with lib.versions;
     lib.switch coq.coq-version [
-      (case (range "8.20" "9.1") "2026.03.1")
+      (case (range "8.20" "9.1") "2026.03.3")
       (case (isEq "8.19") "2025.02.2")
       (case (isEq "8.18") "2024.07.4")
     ] null;
   releaseRev = v: "v${v}";
 
+  release."2026.03.3".hash = "sha256-C41usqCbj/sKhWCIOdF4oVPRoqnWfIC58gyrDRnxPEw=";
+  release."2026.03.3".rev = "aad63329716bfc0489c2dd0cb5aaf0497ec2d324";
   release."2026.03.1".hash = "sha256-CE+WbcG0lgKvaV/OSMlTp3fG+v82X41z/w7ynsM/LLg=";
   release."2026.03.0".hash = "sha256-MzdVbZhXlb9JFLsf+23yJNFiGJDBJZGbX6Ox3/U1EzA=";
   release."2025.06.1".hash = "sha256-wEL1tN0HUa1Eb7FiQOBA6sAkuonrAMdkqq8gu9/CED0=";

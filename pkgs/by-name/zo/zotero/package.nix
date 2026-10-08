@@ -15,7 +15,7 @@
   pkg-config,
   pango,
   giflib,
-  firefox-esr-140-unwrapped,
+  firefox-esr-153-unwrapped,
   makeDesktopItem,
   copyDesktopItems,
   libGL,
@@ -33,14 +33,14 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "10.0.0";
+  version = "10.0.4";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-lNeujToTGzOTG7aKycoZfnyZawM9EQFWSdRJ4/KEPqQ=";
+    hash = "sha256-vevcTBWo4o2K7ibg+FOetx07EyH3k1V2I43UF2tQrRU=";
   };
 
   pdf-js = buildNpmPackage {
@@ -223,6 +223,7 @@ buildNpmPackage (finalAttrs: {
       "should use BrowserRequest for 403 when enforcing file type" \
       "should use BrowserRequest for a JS redirect page" \
       "should throw error on broken symlink" \
+      "should convert the target of a symlinked database file" \
       "should mark every selected collection as current for a multiple-collection selection" \
     ; do
       sed -i -E "s|it(\([\"']$test.*[\"'])|it.skip\1|" test/tests/*.js
@@ -252,10 +253,10 @@ buildNpmPackage (finalAttrs: {
       mkdir -p app/xulrunner/
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cp -r "${firefox-esr-140-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
+      cp -r "${firefox-esr-153-unwrapped}/Applications/Firefox ESR.app" app/xulrunner/Firefox.app
     ''
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      cp -r "${firefox-esr-140-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
+      cp -r "${firefox-esr-153-unwrapped}/lib/firefox" "app/xulrunner/firefox-${stdenv.hostPlatform.parsed.kernel.name}-${
         lib.replaceString "aarch64" "arm64" stdenv.hostPlatform.parsed.cpu.name
       }"
     ''

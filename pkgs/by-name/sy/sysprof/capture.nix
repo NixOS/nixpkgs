@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     ninja
   ];
 
+  strictDeps = true;
+
   mesonFlags = [
     "-Dsysprofd=none"
     "-Dgtk=false"
@@ -27,6 +29,8 @@ stdenv.mkDerivation {
     "-Dpolkit-agent=disabled" # only useful for sysprof-cli
     "-Ddebuginfod=disabled"
   ];
+
+  __structuredAttrs = true;
 
   meta = sysprof.meta // {
     description = "Static library for Sysprof capture data generation";

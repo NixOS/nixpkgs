@@ -43,8 +43,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "geobug"
   ];
 
-  strictDeps = true;
-
   __structuredAttrs = true;
 
   meta = {

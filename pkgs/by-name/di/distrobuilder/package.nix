@@ -35,15 +35,15 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "distrobuilder";
-  version = "3.3.1";
+  version = "3.4.0";
 
-  vendorHash = "sha256-7dYfY6u8URJDMADY6yTW2SjOeSiRwqIh7oxUup6BHMg=";
+  vendorHash = "sha256-ipKwCeUNVgtkQTPOB5lze2SFaktClUr+4+c0uLX5J/w=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-l9HtpeG4BSN9saDsNaF9uyOJbHGyLN0PwJ728IJfN/s=";
+    sha256 = "sha256-dcRUUHpaqNCq4eld+anVrGKywJNpZLJYu3WtERlP3Ps=";
   };
 
   buildInputs = bins;

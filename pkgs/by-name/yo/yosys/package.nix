@@ -79,7 +79,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.68";
+  version = "0.69";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -89,11 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "yosys";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-cf3L3Il717ReAcPTPNHZLwldDeCwuPqHYoxeQusBOOg=";
+    hash = "sha256-Vjyk6aMKwnJEE25tQ0SKWQcXfJxjpCVou+4Hf8c+IL4=";
   };
 
   postPatch = ''
-    patchShebangs tests
+    patchShebangs tests ./misc/yosys-config.in
     substituteInPlace tests/aiger/generate_mk.py \
       --replace-fail 'SHELL := /usr/bin/env bash' 'SHELL := ${stdenv.shell}'
   ''
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals enablePython [
-    python3
+    pythonEnv
   ];
 
   cmakeFlags = [

@@ -1,15 +1,24 @@
-{ pkgs, ... }:
+{ ... }:
 {
   name = "navidrome";
 
   nodes.machine =
-    { ... }:
+    { pkgs, ... }:
     {
       services.navidrome = {
         enable = true;
-        plugins = with pkgs.navidromePlugins; [
+        plugins = with pkgs.pkgsCross.wasi32.navidromePlugins; [
+          # basic go plugin
           listenbrainz-daily-playlist
+          # uses bundleName instead of pname
+          apple-music
+          # rust plugin
+          lyrics-plugin
         ];
+        settings = {
+          # Disables all external network connections
+          EnableExternalServices = "false";
+        };
       };
     };
 
@@ -19,5 +28,8 @@
     # Make sure we saw at least one plugin load
     machine.wait_for_console_text("plugin=listenbrainz-daily-playlist")
     machine.wait_for_open_port(4533)
+    # Make sure the admin wrapper is working
+    machine.succeed("cd ~")
+    assert "--version" in machine.succeed("navidrome-cli --help")
   '';
 }

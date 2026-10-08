@@ -1,27 +1,30 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
+  python313Packages,
   versionCheckHook,
 }:
-python3Packages.buildPythonApplication (finalAttrs: {
+# jsons depends on typish, which is disabled on Python 3.14
+# TODO: switch back to python3Packages once typish supports Python 3.14
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-burnin";
-  version = "0.4.0";
+  version = "0.4.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-burnin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NI32BerBCuMMulB2fsseeoWI50iklpNqMyTs4BArl2A=";
+    hash = "sha256-ZHc9qhOZE8fv/oj0bHGTyncZNT1mJtk1pFAPCRY4TtE=";
   };
 
-  build-system = with python3Packages; [
+  build-system = with python313Packages; [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = with python313Packages; [
     pyluwen
     tt-tools-common
     jsons

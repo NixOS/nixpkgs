@@ -17,18 +17,18 @@ assert lib.asserts.assertMsg (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ketesa";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "etkecc";
     repo = "ketesa";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tW7lOYl/TNQgvsMFMDQKXzqzzfnxNIUQ8Iqld8M5Hjc=";
+    hash = "sha256-LB+e19nyIlXJ4hQJnN+G/eN8khZjj7andVzbeFpAGCg=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-+xWyq/jGJke4HQ6p37y+fJJ73wxNmNMKA3zrP6ANh8E=";
+    hash = "sha256-KYDQiMGeY5jwnL4iQBoCHwvbI4bHoQo08/63r6i8K0Q=";
   };
 
   nativeBuildInputs = [

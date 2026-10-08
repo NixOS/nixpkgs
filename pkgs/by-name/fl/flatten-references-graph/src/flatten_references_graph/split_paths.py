@@ -5,6 +5,7 @@ from .lib import (
     debug,
     debug_plot,
     DEBUG_PLOT,
+    empty_directed_graph,
     find_vertex_by_name_or_none,
     graph_is_empty,
     is_None,
@@ -111,7 +112,7 @@ def split_paths(split_paths, graph_in):
             debug_plot(graph_in, f"{graph_name_prefix}input", layout=layout)
             debug_plot(graph_in, f"{graph_name_prefix}result", layout=layout)
 
-        return {"rest": graph_in}
+        return {"main": empty_directed_graph(), "common": empty_directed_graph(), "rest": graph_in}
 
     # If graph has multiple roots, add a single one connecting all existing
     # roots to make it easy to split the graph into 2 sets of vertices after
@@ -135,7 +136,7 @@ def split_paths(split_paths, graph_in):
                 vertex_color="green"
             )
 
-        return {"main": graph_in}
+        return {"main": graph_in, "common": empty_directed_graph(), "rest": empty_directed_graph()}
 
     # Copy graph if coerce_to_singly_rooted_graph has not already created
     # a copy, since we are going to mutate the graph and don"t want to
@@ -214,14 +215,9 @@ def split_paths(split_paths, graph_in):
 
     debug('result_values', result_values[0].vs["name"])
 
-    return tlz.valfilter(
-        tlz.complement(graph_is_empty),
-        dict(zip(
-            result_keys,
-            (
-                result_values if root_name != fake_root_name
-                # If root was added, remove it
-                else tlz.map(remove_vertex(fake_root_name), result_values)
-            )
-        ))
+    result_values_final = (
+        result_values if root_name != fake_root_name
+        else list(tlz.map(remove_vertex(fake_root_name), result_values))
     )
+
+    return dict(zip(result_keys, result_values_final))

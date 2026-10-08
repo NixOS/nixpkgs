@@ -74,7 +74,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = nix-update-script {
       extraArgs = [
-        "--version-regexp"
+        "--version-regex"
         "^google-cloud-asset: v([0-9.]+)"
       ];
     };

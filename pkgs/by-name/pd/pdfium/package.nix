@@ -68,6 +68,14 @@ let
         };
       };
 
+      "src/third_party/dragonbox/src" = {
+        fetcher = "fetchFromGitiles";
+        args = {
+          url = "https://chromium.googlesource.com/external/github.com/jk-jeon/dragonbox";
+          inherit (sources.dragonbox) rev hash;
+        };
+      };
+
       "src/third_party/fast_float/src" = {
         fetcher = "fetchFromGitiles";
         args = {
@@ -127,6 +135,8 @@ let
       "x64"
     else if platform.isAarch64 then
       "arm64"
+    else if platform.isRiscV64 then
+      "riscv64"
     else
       throw "unsupported CPU for pdfium";
   chromiumToolchain =
@@ -169,6 +179,10 @@ let
     "RetainPtr.SetContains"
   ];
 
+  darwin27FailingEmbedderTests = lib.filter (test: test != "") (
+    lib.splitString "\n" (builtins.readFile ./darwin-27-failing-embedder-tests.txt)
+  );
+
   disabledEmbedderTests = [
     # These assert exact serialized PDF and font-subset output. With system
     # libraries, output differs from upstream's in-tree stack; known
@@ -179,12 +193,17 @@ let
     # These render tests also differ from upstream's in-tree stack. The known
     # FreeType difference is the system autofit/autohinting configuration.
     "FPDFViewEmbedderTest.RenderAnnotsGrayScale"
+    # The embedded CID font renders with different edge shades from the
+    # shared PNG reference on both Linux and macOS.
+    "FPDFEditEmbedderTest.SetPositionsVertical"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorScheme"
     "FPDFProgressiveRenderEmbedderTest.RenderHighlightWithColorSchemeAndConvertFillToStroke"
     "FPDFAnnotEmbedderTest.ModifyRectQuadpointsWithAP"
-  ];
+  ]
+  # Changes to CoreGraphics rendering broke these tests when run on macOS 27+.
+  ++ lib.optionals stdenv.hostPlatform.isDarwin darwin27FailingEmbedderTests;
 
   mkDisabledGtestFilter = disabledTests: "-${lib.concatStringsSep ":" disabledTests}";
   unitTestFilter = mkDisabledGtestFilter disabledUnitTests;
@@ -262,6 +281,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
+    substituteInPlace .gn \
+      --replace-fail 'script_executable = "//third_party/cpython3/host/bin/python3"' \
+        'script_executable = "${lib.getExe buildPackages.python3}"'
+
     substituteInPlace BUILD.gn \
       --replace-fail 'component("pdfium")' 'shared_library("pdfium")'
 
@@ -456,6 +479,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
+      "riscv64-linux"
       "x86_64-darwin"
       "x86_64-linux"
     ];

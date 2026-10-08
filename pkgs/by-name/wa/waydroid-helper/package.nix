@@ -98,8 +98,6 @@ python3Packages.buildPythonApplication {
     pywayland
   ];
 
-  strictDeps = true;
-
   dontWrapGApps = true;
 
   makeWrapperArgs = [

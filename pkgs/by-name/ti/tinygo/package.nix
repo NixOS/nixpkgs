@@ -1,11 +1,11 @@
 {
   stdenv,
   lib,
-  buildGo126Module,
+  buildGo127Module,
   fetchFromGitHub,
   makeWrapper,
-  llvmPackages_20,
-  go_1_26,
+  llvmPackages_22,
+  go_1_27,
   xar,
   binaryen,
   avrdude,
@@ -18,10 +18,10 @@
 let
   # nixpkgs typically updates default llvm and go versions faster than tinygo releases
   # which ends up breaking this build. Use fixed versions for each release.
-  buildGoModule = buildGo126Module;
-  go = go_1_26;
+  buildGoModule = buildGo127Module;
+  go = go_1_27;
   llvmMajor = lib.versions.major llvm.version;
-  inherit (llvmPackages_20)
+  inherit (llvmPackages_22)
     llvm
     clang
     compiler-rt
@@ -38,13 +38,13 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "tinygo";
-  version = "0.41.1";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8Zpvhx+xgC/Cjdm3zSpntLKOT4HsBU7lPWdLumWeFyw=";
+    hash = "sha256-9XIqkrq8lInPpQ7G2D5gxRs8Q+pf5ry6JMgvf6dXxds=";
     fetchSubmodules = true;
     # The public hydra server on `hydra.nixos.org` is configured with
     # `max_output_size` of 3GB. The purpose of this `postFetch` step
@@ -55,10 +55,10 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-OO8o/s71jZIypfYZCLT6jwUPyQJ89AKg3DfzTrbrD/A=";
+  vendorHash = "sha256-GkFyLorvYJ6pr1eNqV7AodilnJxitncnaaZDEav6jCo=";
 
   patches = [
-    ./0001-GNUmakefile.patch
+    ./Makefiles.patch
   ];
 
   nativeCheckInputs = [ binaryen ];
@@ -93,7 +93,7 @@ buildGoModule (finalAttrs: {
     mkdir -p lib/compiler-rt-builtins
     cp -a ${compiler-rt.src}/compiler-rt/lib/builtins/* lib/compiler-rt-builtins/
 
-    substituteInPlace GNUmakefile \
+    substituteInPlace make/release.mk \
       --replace "build/release/tinygo/bin" "$out/bin" \
       --replace "build/release/" "$out/share/"
   '';

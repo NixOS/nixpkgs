@@ -18,18 +18,20 @@
   aio-pika,
   httpx,
   feedparser,
+  fakeredis,
+  testcontainers,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.5.1";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-PbimG445XclS7A4SBAZ+9W0WpoerhpqOI4A36Vyqscc=";
+    hash = "sha256-nz6ymaUz9FsNexFfMebVZ7+a1zExXCaDRC52Ly/OgP4=";
   };
 
   build-system = [
@@ -61,11 +63,16 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytest-asyncio
     libredirect.hook
+    fakeredis
+    testcontainers
   ];
 
   disabledTests = [
     # require online DNS resolution
     "test_run_check__dns_working"
+    "test_run_check__custom_nameservers"
+    "test_run_check__custom_record_type"
+    "test_run_check__custom_record_type_str"
     "test_check_status__nonexistent_hostname"
     "test_check_status__no_answer"
     # not reproducible

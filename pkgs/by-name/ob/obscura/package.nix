@@ -5,6 +5,9 @@
   rustPlatform,
   openssl,
   pkg-config,
+  cmake,
+  perl,
+  git,
   nix-update-script,
   versionCheckHook,
   _experimental-update-script-combinators,
@@ -16,19 +19,35 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "obscura";
   __structuredAttrs = true;
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "h4ckf0r0day";
     repo = "obscura";
     rev = "v${version}";
-    hash = "sha256-f09I77mKhQA1mCt8YmtVqbK/QIb9MrvhpYav+FJdkRI=";
+    hash = "sha256-ponNfeiRO4ajUYRZ3Pz3JYtPW1j8OP5jGDSF/a6PYuw=";
   };
 
-  cargoHash = "sha256-tBuPQjjqXkF+vcBRXXyi9+gcBzg8L3QH2jjixBzGODE=";
+  cargoHash = "sha256-YUKy5m6gOHD62kcOuk/o3oj1MfudeetBQV4q5asaOqQ=";
+
+  # Enable the `render` (HTML rendering/PDF) and `stealth` (anti-bot
+  # evasion) features.
+  buildFeatures = [
+    "render"
+    "stealth"
+  ];
 
   nativeBuildInputs = [
     pkg-config
+    # Sets LIBCLANG_PATH/BINDGEN_EXTRA_CLANG_ARGS for crates using the
+    # `bindgen` crate at build time (e.g. boringssl's rust bindings).
+    rustPlatform.bindgenHook
+    # btls-sys (pulled in via the `render` feature) builds its bundled
+    # BoringSSL checkout with CMake during the build.
+    cmake
+    perl
+    # btls-sys also runs `git init` on the BoringSSL checkout.
+    git
   ];
 
   buildInputs = [
@@ -51,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = 1;
     RUSTY_V8_ARCHIVE = librusty_v8;
     # Upstream never bumps the workspace Cargo.toml version per release (still
-    # 0.1.0 at the v0.2.0 tag); obscura-cli/build.rs only reports the git tag
+    # 0.1.0 at the v0.2.2 tag); obscura-cli/build.rs only reports the git tag
     # on GitHub Actions and otherwise falls back to CARGO_PKG_VERSION. Pin it
     # here so `obscura --version` matches the packaged release.
     OBSCURA_VERSION = version;

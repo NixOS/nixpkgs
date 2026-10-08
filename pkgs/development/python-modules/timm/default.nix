@@ -23,7 +23,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "timm";
-  version = "1.0.29";
+  version = "1.0.30";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "pytorch-image-models";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kmz6olMnxeD5MMiJnz3mcdz6RYO7T8kaP2+mJI2RAco=";
+    hash = "sha256-NUoyA0q67TU9U5O9sd51q7Q0rvRsHoOfwZ8epiFyKrw=";
   };
 
   # Fix torch 2.11.0 compatibility

@@ -10,6 +10,7 @@
   # dependencies
   argparse-dataclass,
   configargparse,
+  packaging,
 
   # tests
   pytestCheckHook,
@@ -48,6 +49,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     argparse-dataclass
     configargparse
+    packaging
   ];
 
   pythonImportsCheck = [ "snakemake_interface_common" ];

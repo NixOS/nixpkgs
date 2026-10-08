@@ -3,6 +3,7 @@
   callPackage,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
   pnpm_10,
   fetchPnpmDeps,
@@ -30,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.22.1";
+  version = "2.22.3";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CpbCXmvfwXT16ZG/6fwPWSjBwK02ykJ/GuZk1VcW+tU=";
+    hash = "sha256-gXG0ojLIT28aAYXhpMmR9Oksmdfidr4m6M7PDJWwa1c=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -44,11 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
       pname
       version
       src
-      patches
       ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-NrglT9vtDMAYXmZ4G3vifvLXu1yS6xbp+cqE6B6vQFc=";
+    hash = "sha256-oY59X+Ma23fmw6K6/PuHCn5Jj4xFPLq5vJRVIzrpUrM=";
   };
 
   nativeBuildInputs = [
@@ -86,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p "$out/opt/heroic"
-    cp -r dist/*-unpacked/resources "$out/opt/heroic"
+    mkdir -p "$out/share/heroic"
+    cp -r dist/*-unpacked/resources "$out/share/heroic"
 
-    bin_dir="$out/opt/heroic/resources/app.asar.unpacked/build/bin"
+    bin_dir="$out/share/heroic/resources/app.asar.unpacked/build/bin"
 
     # Clean up prebuilt binaries
     rm -r "$bin_dir"
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
         )
       }" \
       --add-flags --disable-gpu-compositing \
-      --add-flags $out/opt/heroic/resources/app.asar \
+      --add-flags $out/share/heroic/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D "flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications/com.heroicgameslauncher.hgl.desktop"
@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit epic-integration;
+    updateScript = nix-update-script { };
   };
 
   meta = {

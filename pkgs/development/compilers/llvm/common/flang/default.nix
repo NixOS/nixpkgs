@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "${finalAttrs.pname}-src-${finalAttrs.version}"
       {
         inherit (monorepoSrc) passthru;
+        strictDeps = true;
+        __structuredAttrs = true;
       }
       ''
         mkdir -p "$out"
@@ -60,6 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
     libllvm.dev
     mlir.dev
   ];
+
+  strictDeps = true;
+
   preConfigure = ''
     ls -l ${libllvm.dev}/lib/cmake/llvm/LLVMConfig.cmake
     ls -l ${libclang.dev}/lib/cmake/clang/ClangConfig.cmake
@@ -101,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ];
   requiredSystemFeatures = [ "big-parallel" ];
+
+  __structuredAttrs = true;
+
   meta = llvm_meta // {
     homepage = "https://flang.llvm.org/";
     description = "LLVM-based Fortran frontend";

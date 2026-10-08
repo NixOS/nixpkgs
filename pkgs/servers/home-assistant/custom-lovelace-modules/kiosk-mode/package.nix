@@ -12,20 +12,20 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kiosk-mode";
-  version = "14.1.0";
+  version = "14.2.1";
 
   src = fetchFromGitHub {
     owner = "nemesisre";
     repo = "kiosk-mode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ei3ilYwIQIMojYFo5MeK4okzbJuUGiNGNu6EJLkP/BY=";
+    hash = "sha256-8QflfG1D2/29QemkMX4KwQa7p/xvZxm3xoGw5i2wy+Q=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-d0u1jGF6vBMSyr5fgCMjNW0eL8BtaTPtJmVhx3JBkYM=";
+    hash = "sha256-AYwWqjY+RDxmDPB0FFPOz0PzwRxTLnXfQ2JTe3imW9s=";
   };
 
   nativeBuildInputs = [

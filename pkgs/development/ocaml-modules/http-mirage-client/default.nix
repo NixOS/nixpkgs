@@ -14,15 +14,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "http-mirage-client";
-  version = "0.0.10";
-
-  minimalOCamlVersion = "4.08";
+  version = "0.0.11";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchurl {
     url = "https://github.com/robur-coop/http-mirage-client/releases/download/v${finalAttrs.version}/http-mirage-client-${finalAttrs.version}.tbz";
-    hash = "sha256-AXEIH1TIAayD4LkFv0yGD8OYvcdC/AJnGudGlkjcWLY=";
+    hash = "sha256-sNl/GvHATfLKymy5f91GUJkyjOgjpYIouuFntIzE+CM=";
   };
 
   propagatedBuildInputs = [

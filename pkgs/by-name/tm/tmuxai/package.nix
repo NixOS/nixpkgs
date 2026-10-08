@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tmuxai";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "alvinunreal";
     repo = "tmuxai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CZDGiOi0eD/HTpOXhlRyCw1MaA0gRZI1k0ET5O2xC3I=";
+    hash = "sha256-HD7UdzEmJBcy+VlBSbp3cuNe4aVjTZ2Wg1A2iVfZTVc=";
   };
 
-  vendorHash = "sha256-Wzc7EDaW0fA76Fh4obqyAHiowXXxNbJXknkHXFBcKjY=";
+  vendorHash = "sha256-9tMT84mf8XfDOn55JNtHhLa4F4Y+0j0vpn14JtICzvY=";
 
   ldflags = [
     "-s"

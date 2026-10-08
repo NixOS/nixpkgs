@@ -426,8 +426,11 @@ stdenv.mkDerivation (
         + ''
           ln -rs "$unpacked" "$packed"
         ''
+        # Some resources, such as Tree-Sitter WASM, are loaded directly from this directory.
+        # Keep it available without duplicating the extracted files.
         + ''
           rm -rf "resources/app/node_modules.asar.unpacked"
+          ln -rs "$unpacked" "resources/app/node_modules.asar.unpacked"
         ''
       )
       + (

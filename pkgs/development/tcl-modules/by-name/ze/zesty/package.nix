@@ -6,15 +6,15 @@
   nix-update-script,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "zesty";
-  version = "0.2";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "nico-robert";
     repo = "zesty";
-    tag = "v${version}";
-    hash = "sha256-1K3E9rQAXEXegLjp2mZTzwyDXq3lMpDr0DB4I+ACH08=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TT6NXE2gNVoXrlVONvndrAkoUKH3kEZbuE9ncR37itc=";
   };
 
   propagatedBuildInputs = [
@@ -25,9 +25,13 @@ mkTclDerivation rec {
     runHook preInstall
 
     install -Dm644 -t $out/lib/zesty/ *.tcl
+    cp -r src $out/lib/zesty/src
+    install -Dm644 -t $out/doc/zesty/examples/ examples/*.tcl
 
     runHook postInstall
   '';
+
+  tclRequiresCheck = [ "zesty" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -38,4 +42,4 @@ mkTclDerivation rec {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
   };
-}
+})

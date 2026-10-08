@@ -61,7 +61,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2126.0";
+  version = "2126.1.2";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
@@ -74,8 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
       echo "${finalAttrs.version}" > "$out/GIT-TAG"
       git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
     '';
-    hash = "sha256-/ON5YbwIHZmstjt3zAbw/uns9DVicjyJD3eDcY6JX24=";
+    hash = "sha256-XAj2T9sPHFzhUpOl9x2fmeEDmrNtMkbyrNfqyi1D/SY=";
   };
+
+  patches = [ ./quartzcore.patch ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -157,9 +159,10 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "DISABLE_SYSTEM_SPIRV_HEADERS" true)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
-    (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
+    (cmakeBool "ENABLE_DISCORD_RPC" useDiscordRichPresence)
     (cmakeBool "ENABLE_SSE42" enableSSE42)
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (cmakeBool "USE_SYSTEM_MOLTENVK" true);
 
   installPhase = optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall

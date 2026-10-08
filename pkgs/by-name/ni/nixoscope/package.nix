@@ -8,22 +8,23 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "nixoscope";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giomf";
     repo = "nixoscope";
     tag = "v${version}";
-    hash = "sha256-9w5+KgC1daxGZ0BEVX75bKExpdnzik5pFnOPGHLDtiQ=";
+    hash = "sha256-Q4WuRpI2CdZx/JLP9SbmI2mz71oU1Fcjw/czvXinH8c=";
   };
 
   build-system = with python3Packages; [
-    setuptools
+    hatchling
   ];
 
   dependencies = with python3Packages; [
     graphviz
+    mermaid-py
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];

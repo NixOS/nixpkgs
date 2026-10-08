@@ -8,7 +8,7 @@
   gobject-introspection,
   libgudev,
   udisks,
-  gexiv2,
+  gexiv2_0_10,
   gst_all_1,
   libnotify,
   ifuse,
@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   buildInputs = [
     gdk-pixbuf
-    gexiv2
+    gexiv2_0_10
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -99,8 +99,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     export QT_QPA_PLATFORM=offscreen
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
-
-  strictDeps = true;
 
   preFixup = ''
     makeWrapperArgs+=(

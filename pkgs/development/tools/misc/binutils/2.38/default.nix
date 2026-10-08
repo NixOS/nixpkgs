@@ -263,6 +263,8 @@ stdenv.mkDerivation {
     isGNU = true;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";
     longDescription = ''

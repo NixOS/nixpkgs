@@ -98,5 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pmars";
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.unix;
+    # pmars-x11 last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin && enableXwinGraphics;
   };
 })

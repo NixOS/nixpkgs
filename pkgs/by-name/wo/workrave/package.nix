@@ -16,17 +16,17 @@
   libxtst,
   gobject-introspection,
   glib,
-  glibmm,
+  glibmm_2_4,
   gtkmm3,
   atk,
   pango,
-  pangomm,
+  pangomm_1_4,
   cairo,
-  cairomm,
+  cairomm_1_0,
   dbus,
   dbus-glib,
   gst_all_1,
-  libsigcxx,
+  libsigcxx_2_0,
   boost,
   python3Packages,
 }:
@@ -61,19 +61,19 @@ stdenv.mkDerivation (finalAttrs: {
     libxscrnsaver
     libxtst
     glib
-    glibmm
+    glibmm_2_4
     gtkmm3
     atk
     pango
-    pangomm
+    pangomm_1_4
     cairo
-    cairomm
+    cairomm_1_0
     dbus
     dbus-glib
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    libsigcxx
+    libsigcxx_2_0
     boost
   ];
 

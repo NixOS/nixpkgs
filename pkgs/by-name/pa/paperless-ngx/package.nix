@@ -17,8 +17,6 @@
   tesseract5,
   poppler-utils,
   liberation_ttf,
-  symlinkJoin,
-  nltk-data,
   lndir,
   nix-update-script,
   extraPythonPackageOverrides ? (_final: _prev: { }),
@@ -47,15 +45,6 @@ let
     poppler-utils
   ];
 
-  nltkDataDir = symlinkJoin {
-    name = "paperless-ngx-nltk-data";
-    paths = with nltk-data; [
-      punkt-tab
-      snowball-data
-      stopwords
-    ];
-  };
-
   # The paperless_ai want tiktoken's cl100k_base tokenizer. If not provided, they would try to download them and fail.
   # Seed tiktoken's on-disk cache instead so the tests can run and succeed offline; it keys cached files by sha1 of the download URL.
   tiktokenCacheDir = linkFarm "paperless-ngx-tiktoken-cache" [
@@ -70,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.1.3";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iTNl+TGs9NbbPl1Z+Y7z5DaBIv//Fcq21A9zhkmqIuw=";
+    hash = "sha256-a46gdO5gjPF2Zo+oinfAbKibBgy4UrXTV55HtslyoTk=";
   };
 
   postPatch = ''
@@ -95,11 +84,9 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "django-allauth"
-    "django-filter"
-    "drf-spectacular-sidecar"
     "redis"
     "regex"
-    "torch"
+    "turbohtml"
     # requested by maintainer
     "imap-tools"
     "ocrmypdf"
@@ -111,7 +98,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     [
       azure-ai-documentintelligence
       babel
-      bleach
       celery
       channels
       channels-redis
@@ -131,7 +117,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       django-soft-delete
       django-treenode
       djangorestframework
-      djangorestframework-guardian
       drf-spectacular
       drf-spectacular-sidecar
       drf-writable-nested
@@ -151,7 +136,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       llama-index-llms-ollama
       llama-index-llms-openai-like
       mysqlclient
-      nltk
       ocrmypdf
       openai
       pathvalidate
@@ -173,13 +157,20 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       tantivy
       tika-client
       torch
+      turbohtml
       watchfiles
       whitenoise
+      whoosh-compat
       zxing-cpp
     ]
+    ++ celery.optional-dependencies.redis
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
-    ++ redis.optional-dependencies.hiredis;
+    ++ gotenberg-client.optional-dependencies.httpx
+    ++ ocrmypdf.optional-dependencies.heic or [ ]
+    ++ redis.optional-dependencies.hiredis
+    ++ tika-client.optional-dependencies.httpx
+    ++ whoosh-compat.optional-dependencies.tantivy;
 
   postBuild = ''
     # v3 rejects the default secret key at import, which the manage.py calls below hit.
@@ -253,7 +244,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-    export PAPERLESS_NLTK_DIR=${finalAttrs.passthru.nltkDataDir}
     # Limit threads per worker based on NIX_BUILD_CORES, capped at 256
     # ocrmypdf has an internal limit of 256 jobs and will fail with more:
     # https://github.com/ocrmypdf/OCRmyPDF/blob/66308c281306302fac3470f587814c3b212d0c40/src/ocrmypdf/cli.py#L234
@@ -293,7 +283,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       meta = removeAttrs finalAttrs.meta [ "mainProgram" ];
     };
     inherit
-      nltkDataDir
       path
       tesseract5
       tiktokenCacheDir

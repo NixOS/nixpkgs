@@ -81,8 +81,6 @@ python3Packages.buildPythonApplication {
     mcp
   ];
 
-  strictDeps = true;
-
   postInstallCheck = ''
     mesonCheckPhase
   '';

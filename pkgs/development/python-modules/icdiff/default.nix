@@ -60,6 +60,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/jeffkaufman/icdiff";
     changelog = "https://github.com/jeffkaufman/icdiff/releases/tag/release-${version}/CHANGELOG.md";
     license = lib.licenses.psfl;
+    mainProgram = "icdiff";
     maintainers = with lib.maintainers; [ philiptaron ];
   };
 }

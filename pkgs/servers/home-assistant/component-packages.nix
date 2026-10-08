@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.9.0";
+  version = "2026.9.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -662,6 +662,7 @@
         aioruuvigateway
         aioshelly
         aiousbwatcher
+        besen
         bleak
         bleak-esphome
         bleak-retry-connector
@@ -683,7 +684,7 @@
         pyspeex-noise
         serialx
         zeroconf
-      ]; # missing inputs: besen
+      ];
     "beverly" =
       ps: with ps; [
       ];
@@ -695,7 +696,8 @@
       ];
     "bitcoin" =
       ps: with ps; [
-      ]; # missing inputs: blockchain
+        blockchain
+      ];
     "bizkaibus" =
       ps: with ps; [
         bizkaibus
@@ -2661,7 +2663,8 @@
       ];
     "harbor" =
       ps: with ps; [
-      ]; # missing inputs: harbor-python
+        harbor-python
+      ];
     "hardkernel" =
       ps: with ps; [
         aiohasupervisor
@@ -2677,7 +2680,8 @@
       ];
     "harman_luxury" =
       ps: with ps; [
-      ]; # missing inputs: aioharmanluxury
+        aioharmanluxury
+      ];
     "harmony" =
       ps: with ps; [
         aioharmony
@@ -2923,7 +2927,8 @@
       ];
     "hortimax" =
       ps: with ps; [
-      ]; # missing inputs: aiohortos
+        aiohortos
+      ];
     "hotspring" =
       ps: with ps; [
         python-hotspring
@@ -3532,7 +3537,8 @@
       ];
     "karakeep" =
       ps: with ps; [
-      ]; # missing inputs: aiokarakeep
+        aiokarakeep
+      ];
     "keba" =
       ps: with ps; [
         keba-kecontact
@@ -4143,7 +4149,8 @@
       ps: with ps; [
         async-upnp-client
         ifaddr
-      ]; # missing inputs: lyngdorf
+        lyngdorf
+      ];
     "lyric" =
       ps: with ps; [
         aiolyric
@@ -4751,7 +4758,8 @@
       ];
     "neopool" =
       ps: with ps; [
-      ]; # missing inputs: neopool-modbus
+        neopool-modbus
+      ];
     "ness_alarm" =
       ps: with ps; [
         nessclient
@@ -5715,7 +5723,8 @@
       ];
     "ptdevices" =
       ps: with ps; [
-      ]; # missing inputs: aioptdevices
+        aioptdevices
+      ];
     "pterodactyl" =
       ps: with ps; [
         py-dactyl
@@ -6267,7 +6276,8 @@
       ];
     "scorpiontrack" =
       ps: with ps; [
-      ]; # missing inputs: pyscorpiontrack
+        pyscorpiontrack
+      ];
     "scrape" =
       ps: with ps; [
         beautifulsoup4
@@ -7799,7 +7809,8 @@
       ];
     "vizio" =
       ps: with ps; [
-      ]; # missing inputs: vizaio
+        vizaio
+      ];
     "vlc_telnet" =
       ps: with ps; [
         aiovlc
@@ -8432,6 +8443,7 @@
     "bang_olufsen"
     "battery"
     "bayesian"
+    "besen"
     "binary_sensor"
     "blackbird"
     "blebox"
@@ -8716,8 +8728,10 @@
     "guntamatic"
     "habitica"
     "hanna"
+    "harbor"
     "hardkernel"
     "hardware"
+    "harman_luxury"
     "harmony"
     "hassio"
     "hddtemp"
@@ -8753,6 +8767,7 @@
     "homeworks"
     "honeywell"
     "honeywell_string_lights"
+    "hortimax"
     "hotspring"
     "hr_energy_qube"
     "html5"
@@ -8835,6 +8850,7 @@
     "justnimbus"
     "jvc_projector"
     "kaleidescape"
+    "karakeep"
     "keenetic_ndms2"
     "kegtron"
     "keymitt_ble"
@@ -8906,6 +8922,7 @@
     "lupusec"
     "lutron"
     "lutron_caseta"
+    "lyngdorf"
     "lyric"
     "madvr"
     "mailgun"
@@ -8992,6 +9009,7 @@
     "nasweb"
     "neato"
     "nederlandse_spoorwegen"
+    "neopool"
     "ness_alarm"
     "nest"
     "netatmo"
@@ -9124,6 +9142,7 @@
     "proxmoxve"
     "prusalink"
     "ps4"
+    "ptdevices"
     "pterodactyl"
     "pure_energie"
     "purpleair"
@@ -9205,6 +9224,7 @@
     "scene"
     "schedule"
     "schlage"
+    "scorpiontrack"
     "scrape"
     "screenlogic"
     "script"
@@ -9427,6 +9447,7 @@
     "vilfo"
     "vistapool"
     "vivotek"
+    "vizio"
     "vlc_telnet"
     "vodafone_station"
     "voicerss"

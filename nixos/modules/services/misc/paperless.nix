@@ -38,11 +38,7 @@ let
     PAPERLESS_REDIS = "unix://${redisServer.unixSocket}";
   }
   // lib.optionalAttrs (cfg.settings.PAPERLESS_AI_ENABLED or true) {
-    NLTK_DATA = cfg.package.nltkDataDir;
     TIKTOKEN_CACHE_DIR = cfg.package.tiktokenCacheDir;
-  }
-  // lib.optionalAttrs (cfg.settings.PAPERLESS_ENABLE_NLTK or true) {
-    PAPERLESS_NLTK_DIR = cfg.package.nltkDataDir;
   }
   // lib.optionalAttrs (cfg.openMPThreadingWorkaround) {
     OMP_NUM_THREADS = "1";
@@ -717,7 +713,9 @@ in
           "d '${cfg.exporter.directory}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
         ];
 
-        services.paperless.exporter.settings = options.services.paperless.exporter.settings.default;
+        services.paperless.exporter.settings = lib.mapAttrs (
+          _: v: lib.mkDefault v
+        ) options.services.paperless.exporter.settings.default;
 
         systemd.services.paperless-exporter = {
           startAt = lib.defaultTo [ ] cfg.exporter.onCalendar;

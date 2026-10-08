@@ -49,6 +49,8 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}"
       unwrapped = rustc-unwrapped;
     };
 
+    __structuredAttrs = true;
+
     meta = rustc-unwrapped.meta // {
       description = "${rustc-unwrapped.meta.description} (wrapper script)";
       priority = 10;

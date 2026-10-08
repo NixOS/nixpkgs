@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nar-serve";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nar-serve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C9MBCN/ResbYjmRkT65m8XnNbquoZ0PC/zx/Y7QFXkA=";
+    hash = "sha256-nbB5eduYl72HGvOXqS/0mnAi2hxvrak7j457baAvqJo=";
   };
 
-  vendorHash = "sha256-BP14jmOZ2MCugeTgbDR8wSZ8sRWt4QUWrH3+e2FBgqU=";
+  vendorHash = "sha256-82uMrkvqsUaSvEi0mlGBOAP9JCLABsHsHsikrrCknWY=";
 
   doCheck = false;
 
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     description = "Serve NAR file contents via HTTP";
     mainProgram = "nar-serve";
     homepage = "https://github.com/numtide/nar-serve";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       rizary
       zimbatm

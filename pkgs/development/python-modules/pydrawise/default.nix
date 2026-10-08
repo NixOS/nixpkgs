@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydrawise";
-  version = "2026.8.0";
+  version = "2026.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dknowles2";
     repo = "pydrawise";
     tag = finalAttrs.version;
-    hash = "sha256-fV52ZTS7ieyEro9kF8Cm3Au+TlhsaMKWiur7XqTjKTs=";
+    hash = "sha256-KlQ1SGqCx2PD+x0OfHYCgOemRZJovsXHg6UbAIf1QSs=";
   };
 
   build-system = [

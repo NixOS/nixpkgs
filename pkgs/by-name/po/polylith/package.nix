@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "polylith";
-  version = "0.3.32";
+  version = "0.3.33";
 
   src = fetchurl {
     url = "https://github.com/polyfy/polylith/releases/download/v${finalAttrs.version}/poly-${finalAttrs.version}.jar";
-    sha256 = "sha256-bfF7YXGA6StGF1jZor/TZQ6tNU28Z8kcaiPdkmjljx4=";
+    sha256 = "sha256-t3WCANee9WwmdYnQldfGp4zEhAH+rFBxR1jPNdOIoio=";
   };
 
   dontUnpack = true;

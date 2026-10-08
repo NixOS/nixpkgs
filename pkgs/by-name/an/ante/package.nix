@@ -24,8 +24,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-b2vGeOLGCmKkhTbDLrtzEcISvE5IGymqECkk57seXSE=";
 
-  strictDeps = true;
-
   nativeBuildInputs = [ llvmPackages_21.llvm ];
   buildInputs = [
     zlib

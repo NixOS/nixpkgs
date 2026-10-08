@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   bison,
   # boost derivation to use for the src and version.
   # This is used by the boost derivation to build
@@ -34,6 +35,22 @@ stdenv.mkDerivation {
 
   patches =
     useBoost.boostBuildPatches or [ ]
+    ++
+      lib.optional
+        (
+          useBoost ? version
+          && lib.versionAtLeast useBoost.version "1.91"
+          && lib.versionOlder useBoost.version "1.92"
+          && stdenv.hostPlatform.isLoongArch64
+        )
+        # Fix crash in var_defines when define string is empty
+        # https://github.com/boostorg/boost/issues/1141
+        (
+          fetchpatch {
+            url = "https://github.com/boostorg/build/commit/708353cdeb6006757e7c6971283efb53f718ae25.patch";
+            hash = "sha256-9WWgQPyiKrvQY1ox6sdWoeksgNPDIy0DAbDOfQKJ5y0=";
+          }
+        )
     ++ lib.optional (
       useBoost ? version
       && lib.versionAtLeast useBoost.version "1.81"

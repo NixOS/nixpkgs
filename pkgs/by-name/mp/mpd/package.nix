@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   glib,
-  systemd,
+  systemdLibs,
   fmt,
   buildPackages,
   # Inputs
@@ -140,7 +140,7 @@ let
     pcre = [ pcre2 ];
     sqlite = [ sqlite ];
     syslog = [ ];
-    systemd = [ systemd ];
+    systemd = [ systemdLibs ];
     zeroconf = [
       avahi
       dbus

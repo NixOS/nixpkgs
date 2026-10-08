@@ -22,7 +22,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cardwire";
-  version = "0.12.1";
+  version = "0.12.3";
 
   __structuredAttrs = true;
 
@@ -30,9 +30,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "opengamingcollective";
     repo = "cardwire";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jt8CxN99JSayN6UawAKEFrxU3wz5OiAFqYnBytLB1Xs=";
+    hash = "sha256-nnalCEh0QdGigyd/BXWdomMnYBmR2BAKwYPuRtAEXVg=";
   };
-  cargoHash = "sha256-3wgdr9R5eY3BwdhzZ7LjlxHkJFRd2imqXIMlAszKvQY=";
+  cargoHash = "sha256-IVA7FQyd5fSWbmremgZUfnRCPB0khtA+CWPFiePjJ04=";
 
   postPatch = ''
     # Workaround to build cardwire-ebpf, when RUSTC_BOOTSTRAP is set to 1

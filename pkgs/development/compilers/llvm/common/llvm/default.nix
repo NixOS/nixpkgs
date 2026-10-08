@@ -87,21 +87,36 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (
-          ''
-            mkdir -p "$out"
-            cp -r ${monorepoSrc}/llvm "$out"
-            cp -r ${monorepoSrc}/cmake "$out"
-            cp -r ${monorepoSrc}/third-party "$out"
-          ''
-          + lib.optionalString enablePolly ''
-            chmod u+w "$out/llvm/tools"
-            cp -r ${monorepoSrc}/polly "$out/llvm/tools"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "21") ''
-            cp -r ${monorepoSrc}/libc "$out"
-          ''
-        )
+        runCommand "llvm-src-${version}"
+          {
+            inherit (monorepoSrc) passthru;
+            strictDeps = true;
+            __structuredAttrs = true;
+          }
+          (
+            ''
+              mkdir -p "$out"
+              cp -r ${monorepoSrc}/llvm "$out"
+              cp -r ${monorepoSrc}/cmake "$out"
+              cp -r ${monorepoSrc}/third-party "$out"
+            ''
+            + lib.optionalString enablePolly ''
+              chmod u+w "$out/llvm/tools"
+              cp -r ${monorepoSrc}/polly "$out/llvm/tools"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "21") ''
+              cp -r ${monorepoSrc}/libc "$out"
+            ''
+            + lib.optionalString (lib.versionAtLeast release_version "23" && enableManpages) ''
+              # utils/docs contains an internal tooling Python module llvm_sphinx needed for building docs
+              mkdir -p "$out/utils"
+              cp -r ${monorepoSrc}/utils/docs "$out/utils/docs"
+
+              # The docs are referring to a file from mlir/utils/
+              mkdir -p "$out/mlir"
+              cp -r ${monorepoSrc}/mlir/utils "$out/mlir/utils"
+            ''
+          )
       else
         src;
 
@@ -250,6 +265,28 @@ stdenv.mkDerivation (
           stripLen = 1;
           hash = "sha256-HHVMVL7ZWiZkbfnD37zYxFWnfvI3LNS0Z2oFHhOaZsU=";
         })
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # As of macOS 27 (and iOS 27, etc), the Darwin version number is the same as the OS version number.
+        # This change breaks target parsing because `darwin27` is incorrectly interpreted as macOS 28.
+        # This patch is a backport of the target parsing changes in LLVM 23, which fixes the problem.
+        # Hopefully, Apple does not change the version number scheme again any time soon.
+        (getVersionFile "llvm/backport-darwin-triple-parsing.patch")
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "22") [
+        # Needed to add arm64e.x1 support, as the enum name differs from the architecture name
+        (fetchpatch {
+          name = "llvm-textapi-separate-arch-name-enum-label.patch";
+          url = "https://github.com/llvm/llvm-project/commit/477a65a051ce151895193f8dede1262fdc251132.patch";
+          stripLen = 1;
+          hash = "sha256-XXteX2zK5TzFQX+XhLzUtikY4PkCWF1f8l5MshelzX4=";
+        })
+      ]
+      ++ lib.optionals (lib.versionOlder release_version "23") [
+        # Needed to link with the macOS 27 sdk, as it has libraries linked for arm64e.x1
+        # a new arm64 subtype that gives more pointer authentication machinery.
+        # Vendored backport of the patch for LLVM 23
+        (getVersionFile "llvm/backport-minimal-arm64e_x1-support.patch")
       ];
 
     nativeBuildInputs = [
@@ -282,6 +319,8 @@ stdenv.mkDerivation (
       which
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
+
+    strictDeps = true;
 
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
@@ -326,20 +365,15 @@ stdenv.mkDerivation (
               --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
           ''
         +
-          # Fails on macOS ≥ 26 due to the changed OS version scheme.
-          #
-          # This was fixed upstream in LLVM 21 with
-          # 88f041f3e05e26617856cc096d2e2864dfaa1c7b, but it’s too
-          # painful to backport all the way.
-          lib.optionalString (lib.versionOlder release_version "21") ''
-            substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-          ''
-        +
           # This test fails with a `dysmutil` crash; have not yet dug into what's
           # going on here (TODO(@rrbutani)).
           lib.optionalString (stdenv.hostPlatform.isx86 && lib.versionOlder release_version "19") ''
             rm test/tools/dsymutil/ARM/obfuscated.test
+          ''
+        +
+          # Requires a version of `codesign` that supports signing bundles, which sigtool does not support.
+          lib.optionalString (lib.versionAtLeast release_version "23") ''
+            rm test/tools/dsymutil/codesign.test
           ''
       )
 
@@ -614,6 +648,9 @@ stdenv.mkDerivation (
     };
 
     requiredSystemFeatures = [ "big-parallel" ];
+
+    __structuredAttrs = true;
+
     meta = llvm_meta // {
       homepage = "https://llvm.org/";
       description = "Collection of modular and reusable compiler and toolchain technologies";

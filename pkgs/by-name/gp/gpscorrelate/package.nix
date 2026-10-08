@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpscorrelate";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "dfandrich";
     repo = "gpscorrelate";
     tag = finalAttrs.version;
-    hash = "sha256-7uNYwnMkW9jlt3kBrNqkhJsDoVkUFbCmqt0lQv8bRE0=";
+    hash = "sha256-BwBKCX4fvSb8jOgU8RoCidP/BFCcoGAX4jSifKYu96E=";
   };
 
   nativeBuildInputs = [

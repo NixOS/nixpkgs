@@ -24,22 +24,24 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-ml";
   version = "2025.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-ml";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-DHxx0LFuJmGWYuG/WGHj+a5XHAEekBmlHUUb90rl2IY=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'addopts = "-rsx -v --durations=10 --color=yes"' \
-                     'addopts = ["-rsx", "-v", "--durations=10", "--color=yes"]'
+      --replace-fail \
+        'addopts = "-rsx -v --durations=10 --color=yes"' \
+        'addopts = ["-rsx", "-v", "--durations=10", "--color=yes"]'
   '';
 
   build-system = [
@@ -71,6 +73,18 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    # Skipping check check_array_api_input for KMeans because it raised SkipTest:
+    # SCIPY_ARRAY_API is not set: not checking array_api input
+    "-Wignore::sklearn.exceptions.SkipTestWarning"
+
+    # pandas.errors.Pandas4Warning: For backward compatibility, 'str' dtypes are included by select_dtypes when 'object' dtype is specified.
+    # This behavior is deprecated and will be removed in a future version.
+    # Explicitly pass 'str' to `include` to select them, or to `exclude` to remove them and silence this warning.
+    # See https://pandas.pydata.org/docs/user_guide/migration-3-strings.html#string-migration-select-dtypes for details on how to write code that works with pandas 2 and 3.
+    "-Wignore::pandas.errors.Pandas4Warning"
   ];
 
   disabledTestPaths = [
@@ -131,4 +145,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

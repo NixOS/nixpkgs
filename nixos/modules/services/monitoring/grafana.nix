@@ -421,11 +421,12 @@ in
         If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot
         be manually installed.
 
-        Keep in mind that this turns off drilldown: for this to work, you need to add
-        `grafana-metricsdrilldown-app`, `grafana-lokiexplore-app`, `grafana-exploretraces-app`
-        and `grafana-pyroscope-app` to this option.
+        Keep in mind that this overrides any app that Grafana might preinstall.
+        This affects for instance Grafana Drilldown (`grafana-metricsdrilldown-app`,
+        `grafana-lokiexplore-app`, `grafana-exploretraces-app` and `grafana-pyroscope-app`),
+        but also data-sources like `prometheus`, `loki`, `tempo` and `jaeger`.
       '';
-      example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
+      example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel prometheus loki tempo ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
       # times.
@@ -2082,8 +2083,9 @@ in
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
       after = [
-        "network.target"
+        "network-online.target"
       ]
       ++ lib.optional usePostgresql "postgresql.target"
       ++ lib.optional useMysql "mysql.service";

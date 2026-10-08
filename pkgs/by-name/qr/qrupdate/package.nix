@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qrupdate";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "mpimd-csc";
     repo = "qrupdate-ng";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-d5bc9JJOM3Tn41yZfqq3/rPMqZQxxICJo49oELSwxjc=";
+    hash = "sha256-m+Svxv2HONd37d8zP7glLw1wbo0e4zZMwsudnVZ0/HQ=";
   };
 
   cmakeFlags =
@@ -53,6 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     which
     gfortran
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
+    # when linking C examples against libgfortran, see
+    # https://github.com/NixOS/nixpkgs/pull/370526
+    gfortran.cc
   ];
 
   buildInputs = [

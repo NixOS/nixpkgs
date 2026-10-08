@@ -6,9 +6,10 @@ from typing import TypedDict
 
 # Coupled to where this file lives!
 # Needed to resolve the relative includes file paths
-DOC_ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 
-ROOT_FILE = DOC_ROOT / "manual.md.in"
+ROOT_FILE = REPO_ROOT / "nixos/doc/manual/manual.md"
+DOC_ROOT = ROOT_FILE.parent
 
 INCLUDE_RE = re.compile(r"^```\{=include=\}(?P<rest>.*)$")
 FENCE_RE = re.compile(r"^(```|~~~)")

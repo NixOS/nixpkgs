@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     license = lib.licenses.lgpl3Plus;
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ coolcuber ];
     platforms = lib.platforms.all;
   };
 })

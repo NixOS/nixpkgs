@@ -14,7 +14,7 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.43.3.10861-07dfddaeb";
+  version = "1.43.4.10903-e5521bd8c";
   pname = "plexmediaserver";
 
   # Fetch the source
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.system == "aarch64-linux" then
       fetchurl {
         url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-        sha256 = "1bhm5y803ggzhss4va9hfkal7f91vf1yr2idr0h3kkam1q8hch1d";
+        sha256 = "1az511cpn0gc5diphpc9yqvb74hqx73fmfv9a4mljqaga788cpll";
       }
     else
       fetchurl {
         url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-        sha256 = "0cnk5zqiyq59z5xc8p0hj33ikfzagc56n6c4f6kxhzfbnh8akhxk";
+        sha256 = "1nry7dffb5lv30mqmcb6d9pssjw8951r79ji07rf2yfp6s1iqskg";
       };
   outputs = [
     "out"

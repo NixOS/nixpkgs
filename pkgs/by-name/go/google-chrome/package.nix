@@ -180,7 +180,7 @@ let
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta;
-    version = "152.0.7977.82";
+    version = "155.0.8059.39";
 
     src =
       let
@@ -195,8 +195,8 @@ let
         url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_${debArch}.deb";
         hash =
           {
-            amd64 = "sha256-TSXkoCjHinrpEGg1UcLyNHksxVlefj40k59Zk0KtpEY=";
-            arm64 = "sha256-HcBFWH2AjCB6GenrNw9ukS3X5pZpU6+5PIHZnD/jGOM=";
+            amd64 = "sha256-xYqg8s1mF5yfBQ4GLIgtJ6qbn4wrfHP+40mFYLXtCzg=";
+            arm64 = "sha256-NVZJRYCnHs7hXL6zts4jvzrzYLwFPZDTEFJBwiR9pSs=";
           }
           .${debArch};
       };
@@ -306,11 +306,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta;
-    version = "152.0.7977.83";
+    version = "155.0.8059.40";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/g62gliie746ywu62ed7go3adam_152.0.7977.83/GoogleChrome-152.0.7977.83.dmg";
-      hash = "sha256-Uc16WeBPhu/r7zB/UE9yt+cgkbpRYkRM3xtENFltqps=";
+      url = "https://dl.google.com/release2/chrome/lr7fpw3uxyyx5tnf7oone26c6m_155.0.8059.40/GoogleChrome-155.0.8059.40.dmg";
+      hash = "sha256-AEwDm1wMe+PWH6UlTisJXDclN4rhmcZT8yS3D0rtiUw=";
     };
 
     dontPatch = true;

@@ -70,9 +70,7 @@ let
         ];
 
     in
-    if (val == "") then
-      "\"\""
-    else if val == "y" || val == "m" || val == "n" then
+    if val == "y" || val == "m" || val == "n" then
       val
     else if all isNumber (stringToCharacters val) then
       val
@@ -87,6 +85,9 @@ let
   #       VIRTIO_BLK y
   #       VIRTIO_CONSOLE n
   #       NET_9P_VIRTIO? y
+  #       LOCALVERSION
+  #
+  # A line without a value means an empty string.
   #
   # Borrowed from copumpkin https://github.com/NixOS/nixpkgs/pull/12158
   # returns a string, expr should be an attribute set
@@ -100,9 +101,8 @@ let
         let
           val = if item.freeform != null then item.freeform else item.tristate;
         in
-        optionalString (val != null) (
-          if (item.optional) then "${key}? ${mkValue val}\n" else "${key} ${mkValue val}\n"
-        );
+        optionalString (val != null)
+          "${key}${optionalString item.optional "?"}${optionalString (val != "") " ${mkValue val}"}\n";
 
       mkConf = cfg: concatStrings (mapAttrsToList mkConfigLine cfg);
     in
@@ -119,6 +119,7 @@ in
       example = ''
         USB? y
         DEBUG n
+        LOCALVERSION
       '';
       description = ''
         The result of converting the structured kernel configuration in settings

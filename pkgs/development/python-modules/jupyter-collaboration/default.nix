@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupyter-collaboration";
-  version = "5.0.0";
+  version = "5.0.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +32,7 @@ buildPythonPackage (finalAttrs: {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Gho8ndF8SU1AWJUlcuw2a/kHD2zu7vH/z4QV8drDrP0=";
+    hash = "sha256-cGCM4kkBwOaXcGWuihOglLsjTKpTrejhwzYVE1g9jBI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/projects/jupyter-collaboration";

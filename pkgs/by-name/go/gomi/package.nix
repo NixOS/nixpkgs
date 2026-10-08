@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gomi";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "babarot";
     repo = "gomi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-25nwTqPGxGsDe2LutcZwIxswqhrV3ASD0l73UfYZV9Y=";
+    hash = "sha256-SlPd4ahtJYwQpe4qtCuVPt/lJ1kFTlh9SX0ZVPjxURM=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   subPackages = [ "." ];
 
   # Add version information fetched from the repository to ldflags.
-  # https://github.com/babarot/gomi/blob/v1.6.4/.goreleaser.yaml#L20-L22
+  # https://github.com/babarot/gomi/blob/v1.6.5/.goreleaser.yaml#L20-L22
   ldflags = [
     "-X main.version=v${finalAttrs.version}"
   ];

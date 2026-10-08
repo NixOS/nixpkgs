@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   meson,
   ninja,
   glib,
   pkg-config,
   nix-update-script,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdbuspp";
   version = "3";
@@ -18,6 +18,20 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-LwEUNBQ7BUyoTm8tBgE4hwL7AbimCY/grQus8lWSI/M=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Require C++20 for abseil-cpp 202608.
+      url = "https://github.com/OpenVPN/gdbuspp/commit/7462325fb03d318658eaa9fecfc34f46cc5705fc.patch?full_index=1";
+      hash = "sha256-gO2wi20CGb83TgIz/tJTJFcaVPasQStJzY/ICzGWWZw=";
+    })
+  ];
+
+  # The upstream patch's proxy.cpp hunk has context from post-v3 refactors.
+  patchFlags = [
+    "-p1"
+    "--fuzz=2"
+  ];
 
   postPatch = ''
     patchShebangs --build ./scripts/get-git-ref

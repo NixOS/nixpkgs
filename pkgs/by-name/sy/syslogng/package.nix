@@ -14,7 +14,7 @@
   pkg-config,
   glib,
   hiredis,
-  systemd,
+  systemdLibs,
   perl,
   python3,
   riemann_c_client,
@@ -62,6 +62,8 @@ let
       ply
     ];
   py = python3.withPackages python-deps;
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
@@ -94,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     eventlog
     glib
     py
-    systemd
+    systemdLibs'
     riemann_c_client
     protobufc
     libnet

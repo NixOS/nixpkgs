@@ -22,7 +22,7 @@
 }:
 let
   pname = "gcc";
-  version = "15.3.0";
+  version = "16.2.0";
   linkerName =
     {
       i686-linux = "ld-linux.so.2";
@@ -32,7 +32,7 @@ let
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
-    hash = "sha256-+lnBvu+JlfJ8TXHB3yJ1hxiTFdPm+v8btDBuYbDFMOs=";
+    hash = "sha256-5nOOKVl/czJwcxqpBgDzf/3ARQed/CfsfoGSzIEIXD4=";
   };
 
   gmpVersion = "6.3.0";
@@ -154,6 +154,9 @@ bash.runCommand "${pname}-${version}"
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    # Header installation tools retain build-time bash and sed unnecessarily.
+    rm -rf $out/libexec/gcc/*/*/install-tools $out/lib/gcc/*/*/install-tools
 
     # libstdc++ gdb pretty-printers + man pages are unused downstream.
     rm -rf $out/share/gcc-*/python $out/share/man $out/share/info

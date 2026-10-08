@@ -11,7 +11,7 @@
   pytest-asyncio,
   pytest-cov-stub,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "x3dh";
   version = "1.3.0";
   pyproject = true;
@@ -19,11 +19,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-x3dh";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-F2uUooi9N4Ib9cyDul4LXVtG99UYxhEGpZU427P1DFQ=";
   };
-
-  strictDeps = true;
 
   build-system = [
     setuptools
@@ -47,9 +45,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python Implementation of the Extended Triple Diffie-Hellman key Agreement Protocol";
     homepage = "https://github.com/Syndace/python-x3dh";
-    changelog = "https://github.com/Syndace/python-x3dh/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Syndace/python-x3dh/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
     maintainers = [ ];
   };
-}
+})

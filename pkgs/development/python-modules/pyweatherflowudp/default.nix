@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyweatherflowudp";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "briis";
     repo = "pyweatherflowudp";
     tag = finalAttrs.version;
-    hash = "sha256-CM0TuvvIz0UDwSi+Kx7Ay52hSj/4qaA7BXhG1krVn/Q=";
+    hash = "sha256-YkFrbzpeQkN6bIPiff8wBFtWvyfQpJuV3sCRWw/jYAs=";
   };
 
   build-system = [
@@ -48,6 +48,8 @@ buildPythonPackage (finalAttrs: {
     "test_listener_connection_errors"
     "test_invalid_messages"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library to receive UDP Packets from Weatherflow Weatherstations";

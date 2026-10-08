@@ -306,6 +306,16 @@ effectiveStdenv.mkDerivation {
     [
       ./cuda_opt_flow.patch
     ]
+    ++ optionals (lib.versionOlder version "4.14.0") [
+      # Backport https://github.com/opencv/opencv_contrib/pull/4130
+      (fetchpatch {
+        name = "videostab-add-missing-include-to-fix-build-failure";
+        url = "https://github.com/opencv/opencv_contrib/commit/054007b78c8288ef2fd040e77dc0cf2e45f70c15.patch";
+        stripLen = 2;
+        extraPrefix = "opencv_contrib/";
+        hash = "sha256-vDW6kfDmwPB/tTurkDXuvViXrzXYV4njjDN6kLoIvJ4=";
+      })
+    ]
     ++ optionals (cudaPackages.cudaAtLeast "13.2") [
       # Backport https://github.com/opencv/opencv_contrib/pull/4097
       (fetchpatch {
@@ -531,7 +541,7 @@ effectiveStdenv.mkDerivation {
 
     # OpenCV respects at least three variables:
     # -DCUDA_GENERATION takes a single arch name, e.g. Volta
-    # -DCUDA_ARCH_BIN takes a semi-colon separated list of real arches, e.g. "8.0;8.6"
+    # -DCUDA_ARCH_BIN takes a semicolon-separated list of real arches, e.g. "8.0;8.6"
     # -DCUDA_ARCH_PTX takes the virtual arch, e.g. "8.6"
     (cmakeFeature "CUDA_ARCH_BIN" cmakeCudaArchitecturesString)
     (cmakeFeature "CUDA_ARCH_PTX" (last cudaCapabilities))

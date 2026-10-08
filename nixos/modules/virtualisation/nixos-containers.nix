@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  options,
   pkgs,
   utils,
   ...
@@ -201,8 +202,12 @@ let
       --notify-ready=yes \
       --kill-signal=SIGRTMIN+3 \
       --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT \
+      ${optionalString config.nix.enable "--bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT"} \
+      ${
+        optionalString (
+          config.nix.enable && config.nix.daemon.enable
+        ) "--bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT"
+      } \
       --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
       --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
       ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
@@ -991,12 +996,51 @@ in
 
       assertions =
         let
+          # Host Nix config info
+          inherit
+            (rec {
+              disabledOpts = filter (x: !x.value) [
+                options.nix.enable
+                options.nix.daemon.enable
+              ];
+              hostNixSocketEnabled = disabledOpts == [ ];
+              hostNixSocketIsDisabled =
+                if lib.length disabledOpts == 1 then
+                  "host option ${lib.head disabledOpts} is disabled"
+                else
+                  "host options ${lib.concatStringsSep " and " disabledOpts} are disabled";
+            })
+            hostNixSocketEnabled
+            hostNixSocketIsDisabled
+            ;
+
+          # Tested in: nixos/tests/containers-eval.nix
           mapper =
-            name: cfg:
+            name:
+            { cfg, opt }:
             optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != [ ]))
-              "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
+              "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces."
+            ++
+              optional (cfg.flake != null && !config.nix.enable)
+                "${options.containers}.${strings.escapeNixIdentifier name}.flake is defined, so the container is built with nix on the host, but ${options.nix.enable} is disabled"
+            ++
+              optional
+                (
+                  !hostNixSocketEnabled
+                  && opt.config.isDefined
+                  && cfg.config.nix.enable
+                  && cfg.config.nix.daemon.enable
+                )
+                "${options.containers}.${strings.escapeNixIdentifier name} has nix.daemon.enable = true, but the host does not provide a nix daemon socket, as ${hostNixSocketIsDisabled}. Disable nix.daemon.enable in the container, or enable the daemon on the host.";
         in
-        mkMerge (mapAttrsToList mapper config.containers);
+        (lib.concatMap
+          # This could be done in mapper but causes a reformat
+          (map (msg: {
+            assertion = false;
+            message = msg;
+          }))
+          (lib.attrValues (lib.modules.mapAttrsOfSubmodule mapper options.containers))
+        );
     }
 
     (mkIf (config.boot.enableContainers) (

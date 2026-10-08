@@ -7,11 +7,15 @@
   writeShellApplication,
   gnugrep,
   installShellFiles,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-cli";
   version = "1.3.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -22,9 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp tideways $out/bin/tideways
-    chmod +x $out/bin/tideways
+    installBin tideways
 
     installShellCompletion --cmd tideways \
       --bash <($out/bin/tideways completion bash) \
@@ -33,6 +35,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
 
   passthru = {
     sources = {

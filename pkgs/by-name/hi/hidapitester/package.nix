@@ -28,8 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.HIDAPITESTER_VERSION = finalAttrs.version;
 
   buildInputs = [
-    udev
     hidapi
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
   ];
 
   nativeBuildInputs = [

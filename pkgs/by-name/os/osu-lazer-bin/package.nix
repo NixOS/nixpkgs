@@ -10,18 +10,18 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2026.804.2";
+  version = "2026.1005.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.app.Apple.Silicon.zip";
-        hash = "sha256-gyqZUMrdiTls+XwbhYQpd8Hi3mjaNgtPO5c1gfJxG4g=";
+        hash = "sha256-ZxiW0ghB1ayNjRo9FqAfeBjT5dMM+j74TGDkWHCcdk8=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}-lazer/osu.AppImage";
-        hash = "sha256-0K/dyvIwrlBzcexYDCCilNknJdEZja1OTfAotP6MvjY=";
+        hash = "sha256-KEEI5lNzqDOb7spA4sFLFSjBd71s4eshQHY5+OUI2i4=";
       };
     }
     .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
@@ -29,6 +29,7 @@ let
   meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
     homepage = "https://osu.ppy.sh";
+    changelog = "https://osu.ppy.sh/home/changelog/lazer/${version}";
     license = with lib.licenses; [
       mit
       cc-by-nc-40

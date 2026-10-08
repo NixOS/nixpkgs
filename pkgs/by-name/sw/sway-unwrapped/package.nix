@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [
       c6rg0
-      yvnth
+      sotormd
     ];
     mainProgram = "sway";
   };

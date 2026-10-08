@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genact";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "genact";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-D1uecxrRR49EUa2fHm/ieQ4Gp0m5p0ncj5YiINwlvN8=";
+    sha256 = "sha256-hz+DZCoZzi4ZtGUQfQJ5f6sGqgbB32bIIdxTE2TeWrY=";
   };
 
-  cargoHash = "sha256-lX/bb6RGcsfgfjhK7SwwcY9R7USSEdG5VLK6v2LOvas=";
+  cargoHash = "sha256-1Ju44DKNFb2EhDBuwJUUPKBXMNJEHZ3Qrb4yQBXca+I=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/svenstaro/genact";
     changelog = "https://github.com/svenstaro/genact/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.novalkun ];
     mainProgram = "genact";
   };
 })

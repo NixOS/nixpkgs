@@ -150,6 +150,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace udev/99-vmware-scsi-udev.rules \
       --replace-fail "/bin/sh" "${bash}/bin/sh"
+
+    substituteInPlace lib/rpcChannel/glib_stubs.c \
+      --replace-fail "void g_free(void *p) { free(p); }" ""
   '';
 
   configureFlags = [

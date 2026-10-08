@@ -208,8 +208,9 @@ stdenv.mkDerivation {
     # Backports https://github.com/boostorg/context/pull/337 which fixes a regression that breaks
     # std::uncaught_exceptions for abandoned coroutines under libstdc++ and fcontext implementation.
     # This bug also caused subtle breakage in Nix. See https://github.com/NixOS/nix/issues/16174.
+    # The fix was merged upstream in time for 1.92.0.
     ++
-      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.93.0")
+      lib.optional (lib.versionAtLeast version "1.88.0" && lib.versionOlder version "1.92.0")
         (fetchpatch {
           url = "https://github.com/boostorg/context/commit/5883212311535a0046031d74d1568ae173c1e35b.patch";
           relative = "include";
@@ -269,7 +270,23 @@ stdenv.mkDerivation {
             hash = "sha256-0IHK55JSujYcwEVOuLkwOa/iPEkdAKQlwVWR42p/X2U=";
           }
         )
-
+    ++
+      lib.optional
+        (
+          lib.versionAtLeast version "1.91"
+          && lib.versionOlder version "1.92"
+          && stdenv.hostPlatform.isLoongArch64
+        )
+        # Fix crash in var_defines when define string is empty
+        # https://github.com/boostorg/boost/issues/1141
+        (
+          fetchpatch {
+            url = "https://github.com/boostorg/build/commit/708353cdeb6006757e7c6971283efb53f718ae25.patch";
+            stripLen = 1;
+            extraPrefix = "tools/build/";
+            hash = "sha256-uFdxuL3DXvr/jmz7jv/q76/S8JaNF//2ogTMwG/D2nY=";
+          }
+        )
     ++ lib.optionals (version == "1.87.0") [
       # Fix operator<< for shared_ptr and intrusive_ptr
       # https://github.com/boostorg/smart_ptr/issues/115

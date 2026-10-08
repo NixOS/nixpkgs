@@ -6,23 +6,22 @@
   lld,
   nodejs,
   npmHooks,
-  runCommand,
   rustPlatform,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "extism-js-core";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "extism";
     repo = "js-pdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CLyH0gDtw988cTcw4B86/kejfbYWMXEVG9Y6PKAZazE=";
+    hash = "sha256-U2C82By8JXUrtaAceZ5xr5Fb9Ltipyvd/sXG+Dsi8F8=";
   };
 
-  cargoHash = "sha256-9lFX+Q4318ClVIRT4/uCesyNYwU9H2vV+fD3553M2Dc=";
+  cargoHash = "sha256-BBhHTzG0FU4AOuUz7yjp4bpELr1vEVdwT+vyyuITagE=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
@@ -35,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # https://github.com/extism/js-pdk/pull/154
   postPatch = ''
     substituteInPlace Cargo.toml \
-      --replace-fail '1.5.1' '${finalAttrs.version}'
+      --replace-fail '1.6.1' '${finalAttrs.version}'
   '';
 
   preBuild = ''
@@ -60,22 +59,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rustPlatform.bindgenHook
   ];
 
-  # io-extras v0.18.4 uses #![feature]
-  env.RUSTC_BOOTSTRAP = 1;
-
   env.RUSTFLAGS = "-C linker=wasm-ld";
 
-  # rquickjs-sys expects the dir structure from wasi-sdk
-  # https://github.com/DelSkayn/rquickjs/blob/v0.11.0/sys/build.rs#L216-L230
-  # TODO: revisit when https://github.com/DelSkayn/rquickjs/pull/648 is released and extism updated
-  env.WASI_SDK = runCommand "wasi-sdk" { } ''
-    mkdir -p $out/bin
-    ln -s ${lib.getExe' stdenv.cc "wasm32-unknown-wasip1-clang"} $out/bin/clang
-    ln -s ${lib.getExe' stdenv.cc "wasm32-unknown-wasip1-ar"} $out/bin/ar
-    ln -s ${stdenv.cc}/nix-support $out/nix-support
-    mkdir -p $out/share
-    ln -s ${stdenv.cc.libc} $out/share/wasi-sysroot
-  '';
+  # stdenv handles setting up the appropriate env variables
+  env.RQUICKJS_SYS_NO_WASI_SDK = 1;
 
   cargoBuildFlags = [ "--package=js-pdk-core" ];
 

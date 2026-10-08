@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "livekit-cli";
-  version = "2.18.5";
+  version = "2.18.8";
 
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
@@ -19,10 +19,10 @@ buildGoModule (finalAttrs: {
     owner = "livekit";
     repo = "livekit-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zZlkBz9jXO2eSNf/c6dqSNgiAbtFiU+B4Th9rxOISGw=";
+    hash = "sha256-IuqgAaaZZblAl8a/rs2xE+zhuY4s3UNND+kmQOq/yPg=";
   };
 
-  vendorHash = "sha256-iurI0XZcsQ6TFmjM2mmPrx2ZYBW4NdQgmW8g72oqzww=";
+  vendorHash = "sha256-B/woYmWYrdtL+qFDQzvBmyXLEo2HarOjRQlEX/GcPNQ=";
 
   # Use nixpkgs portaudio package + pkg-config rather than relying on a vendored
   # git submodule, similar to the homebrew solution

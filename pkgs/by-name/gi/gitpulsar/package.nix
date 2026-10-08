@@ -16,7 +16,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitpulsar";
-  version = "1.3.2";
+  version = "1.3.3";
 
   __structuredAttrs = true;
 
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage rec {
     owner = "ilshat-apps";
     repo = "gitpulsar";
     tag = "v${version}";
-    hash = "sha256-ub+Ynrj4ywoqmwMUiOS3Vm7GTfW9XQm95CGC0tyjNVk=";
+    hash = "sha256-zjfrWmR5ZSldNPAkkE09s8XD3K9CarP169zqDERBuHM=";
   };
 
-  cargoHash = "sha256-cITAEueoahctN0I79WXIP8QiUjsOIE8wsY/Y9YBC/PU=";
+  cargoHash = "sha256-84Sq3TeGqSPdztCKGsuluN+dQHMD0CsljuU/E0iw+TQ=";
 
   nativeBuildInputs = [
     pkg-config

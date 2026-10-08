@@ -72,13 +72,13 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.16";
+  virtualboxVersion = "7.2.20";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "50356ccdaefe8f03537600ec31898b506e3a85ce79b94f26fb6cc1920c9e18eb";
+  virtualboxSha256 = "5c2138213b72f36c129b92c2c267f2a40e9c98513f4c86a584327f09f9be706d";
 
-  kvmPatchVboxVersion = "7.2.6";
-  kvmPatchVersion = "20260201";
-  kvmPatchHash = "sha256-pq4DPLwHRRAMJjmfXympDxJK9+d+LwTOxBqxAm0pl3o=";
+  kvmPatchVboxVersion = "7.2.20";
+  kvmPatchVersion = "20260930";
+  kvmPatchHash = "sha256-gqfAsW2AQFXC0MAss0NfucKYAbpxvT9eYdStYAunwbk=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -415,6 +415,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
       friedrichaltheide
+      parthy
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";

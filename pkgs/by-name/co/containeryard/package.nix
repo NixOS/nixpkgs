@@ -7,17 +7,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "containeryard";
-  version = "0.3.12";
+  version = "0.4.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mcmah309";
     repo = "containeryard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jXjr8y8QorpFamLIFVb3vJMH0FUrk2jZraxKtgdLev4=";
+    hash = "sha256-fWbrzIqn0KIHDiIrX7ZGgV9sSy2L0NQTDx8w0kCcwR0=";
   };
 
-  cargoHash = "sha256-VbIY7SF8imVTEGbQT2QI+lbPtkbfbGXJZVukVQvHX+E=";
+  cargoHash = "sha256-GPhtHezpWYzyjMEpyDDLGOan2HPkB4PoTCSM4N9BpuI=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

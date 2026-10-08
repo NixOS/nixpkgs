@@ -24,7 +24,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "exa-py";
-  version = "2.19.0";
+  version = "2.25.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "exa-labs";
     repo = "exa-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1VrVys2asOhlwXEJb6l91QQolK253fE07TYfguj/g8I=";
+    hash = "sha256-TS9Q/PXayRdVFGKLcGhNOh+j+ByBiSwK/30AZiluNwU=";
   };
 
   build-system = [

@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   llvmPackages,
   pkg-config,
+  installShellFiles,
   elfutils,
   zlib,
   zstd,
@@ -28,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
     rustPlatform.bindgenHook
     protobuf
   ];
@@ -59,9 +62,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # which is not available in the sandbox
   doCheck = false;
 
-  # we don't need these
   postInstall = ''
+    # we don't need these
     rm $out/bin/{scx_arena_selftests,vmlinux_docify,xtask}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd scxtop \
+      --bash <($out/bin/scxtop generate-completions --shell bash) \
+      --fish <($out/bin/scxtop generate-completions --shell fish) \
+      --zsh <($out/bin/scxtop generate-completions --shell zsh)
+    installShellCompletion --cmd scx_flow \
+      --bash <($out/bin/scx_flow --completions bash) \
+      --fish <($out/bin/scx_flow --completions fish) \
+      --zsh <($out/bin/scx_flow --completions zsh)
   '';
 
   __structuredAttrs = true;

@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
 
   # build-system
   cython,
@@ -34,6 +35,16 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
   };
+
+  patches = [
+    # Fix HTML display performance when user has many features
+    # https://github.com/scikit-learn/scikit-learn/pull/34362
+    # TODO: remove when updating to the next release.
+    (fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/aeadb51af96556dd0f884c0037c9dc9993449538.patch";
+      hash = "sha256-J7igLpK8pdcbgMwxFqaAGDEwm87VrLHb+ckg/pEh6IY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \

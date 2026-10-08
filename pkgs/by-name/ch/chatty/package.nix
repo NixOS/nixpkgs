@@ -11,7 +11,7 @@
   wrapGAppsHook4,
   evolution-data-server,
   feedbackd,
-  glibmm,
+  glibmm_2_4,
   libsecret,
   gnome-desktop,
   gspell,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     evolution-data-server
     feedbackd
-    glibmm
+    glibmm_2_4
     libsecret
     gnome-desktop
     gspell

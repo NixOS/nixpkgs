@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.28.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-buyBu6ZTwHmQRExsvVW7NbIxSqLGp4Zi/gPixFG2l6s=";
+    hash = "sha256-+Ti1hcYdjgdAZWu5f6myDckjp7ox0mtux7q8U1t44jo=";
   };
 
   apiDeps = fetchNpmDeps {

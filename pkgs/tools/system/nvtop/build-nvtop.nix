@@ -4,7 +4,9 @@
   fetchFromGitHub,
   cmake,
   gtest,
+  config,
   cudaPackages,
+  cudaSupport ? config.cudaSupport,
   libdrm,
   ncurses,
   versionCheckHook,
@@ -85,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
-  ++ lib.optional nvidia cudaPackages.cuda_nvml_dev
+  ++ lib.optional (nvidia && cudaSupport) cudaPackages.cuda_nvml_dev
   ++ lib.optional needDrm libdrm;
 
   # this helps cmake to find <drm.h>

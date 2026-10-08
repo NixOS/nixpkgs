@@ -14,14 +14,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libipuz";
-  version = "0.5.4";
+  version = "0.5.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jrb";
     repo = "libipuz";
     rev = finalAttrs.version;
-    hash = "sha256-rUFYPtedcNqba2OLPo9nSjyGxuc3Q3RNoOmZx+RUOcU=";
+    hash = "sha256-si+cc129oXLzD1o1MFcaxieIw8vPzWP8dbAnd4inF0Y=";
   };
 
   cargoRoot = "libipuz/rust";

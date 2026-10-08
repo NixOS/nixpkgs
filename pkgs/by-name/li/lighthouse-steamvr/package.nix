@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "Lighthouse";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ShayBox";
     repo = "Lighthouse";
     rev = finalAttrs.version;
-    hash = "sha256-c3AEoNpuPqCn37WIDVbJDX61qM6Pg/f6sMro3M/skNc=";
+    hash = "sha256-TCl3X1AmJx53Dr0A9DYbk0HkaDjW0dgD4Jssg7W4vFk=";
   };
 
-  cargoHash = "sha256-Kow/M7FDgaZiLcWU9se5ut3lrVOtAZebQTgURzSORsA=";
+  cargoHash = "sha256-1xl8X0JQbeGlM5wMdTpFQsZ2lLPndOZSU57zVc6rhe8=";
 
   nativeBuildInputs = [ pkg-config ];
 

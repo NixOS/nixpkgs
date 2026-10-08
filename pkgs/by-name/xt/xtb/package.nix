@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Semiempirical Extended Tight-Binding Program Package";
     homepage = "https://github.com/grimme-lab/xtb";
     # changelog = "https://github.com/grimme-lab/xtb/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       GaetanLepage
       sheepforce

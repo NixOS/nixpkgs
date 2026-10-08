@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "kubo";
-  version = "0.43.0"; # When updating, also check if the repo version changed and adjust repoVersion below
+  version = "0.43.1"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
   passthru.repoVersion = "18";
@@ -18,7 +18,7 @@ buildGoModule rec {
   # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
-    hash = "sha256-vP/F7ZIdOVkDN16PoE8OiPFP/xbCxARq6EyyurA9hFY=";
+    hash = "sha256-Rw+Q1VHzT/ZbUzKZ6PVe09Ly0GL9FcmY6lPQlbrD7SY=";
   };
 
   # tarball contains multiple files/directories

@@ -39,8 +39,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyside6
   ];
 
-  strictDeps = true;
-
   doCheck = false;
 
   dontWrapGApps = true;

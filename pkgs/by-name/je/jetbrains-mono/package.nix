@@ -10,6 +10,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "jetbrains-mono";
   version = "2.304";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "jetbrains";
     repo = "jetbrainsmono";

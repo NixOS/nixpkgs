@@ -10,6 +10,7 @@
   cplex,
   fatrop,
   fetchFromGitHub,
+  fetchpatch2,
   gurobi,
   highs,
   hpipm,
@@ -37,14 +38,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.8.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
     tag = finalAttrs.version;
-    hash = "sha256-kSuNOn55eSaF4admtw4aHmPpdxUS/JDF1yBMrRbPv04=";
+    hash = "sha256-GY7Dyt53QE3+/aPB5oDRfZzpRLqKTGrxrmvihq4YJ2o=";
   };
+
+  # fix python build
+  # ref. https://github.com/casadi/casadi/pull/4418 merged upstream
+  patches = lib.optionals pythonSupport [
+    (fetchpatch2 {
+      name = "add-missing-stub-guards.patch";
+      url = "https://github.com/casadi/casadi/commit/fc4b71177089c2fabbfc3a41dca8a6e40a0a81f4.patch?full_index=1";
+      hash = "sha256-/T9Fof36l/wEeKusI1teCcrax3Zg+fhpteBwnVjWr0o=";
+    })
+  ];
 
   postPatch = ''
     # fix case of hpipmConfig.cmake

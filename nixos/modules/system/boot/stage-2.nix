@@ -63,6 +63,7 @@ in
       nixStoreMountOpts = mkOption {
         type = types.listOf types.nonEmptyStr;
         default = [
+          "x-initrd.mount"
           "ro"
           "nodev"
           "nosuid"

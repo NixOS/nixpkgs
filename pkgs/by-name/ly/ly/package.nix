@@ -8,21 +8,21 @@
   stdenv,
   versionCheckHook,
   x11Support ? true,
-  zig_0_16,
+  zig_0_17,
   nix-update-script,
 }:
 let
-  zig = zig_0_16;
+  zig = zig_0_17;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ly";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromCodeberg {
     owner = "fairyglade";
     repo = "ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FiHSUqAxJurlQuXEkpglWrd2tCqKZuucB4mipFGI4II=";
+    hash = "sha256-inrfs8c9ga1IJM1xm6KVxWpp2iubHSGpEM5s5hyJdcE=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   zigDeps = zig.fetchDeps {
     inherit (finalAttrs) src pname version;
     fetchAll = true;
-    hash = "sha256-ZTGQhsDTpWfG4giM0WsfCjlDVr4htC6WWBpSGyKZUr0=";
+    hash = "sha256-ZaWJuJkQyx5eQlwOVmdz3BCrYddDNmKnP7QVYARSFp8=";
   };
 
   postConfigure = ''

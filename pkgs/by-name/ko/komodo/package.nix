@@ -29,6 +29,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # > error: doctest failed, to rerun pass `-p komodo_client --doc`
   doCheck = false;
 
+  # upstream moved to build-time versioning in moghtech/komodo#1605
+  # this sets [workspace.package] so binaries inherit/report correct version
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
+  '';
+
   # xtask is a workspace-internal build helper, not a user-facing program.
   postInstall = ''
     rm -f $out/bin/xtask

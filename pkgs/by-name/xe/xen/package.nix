@@ -201,6 +201,30 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-makefile-efi-output-directory.patch
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa509.patch";
+      hash = "sha256-Ive95ewRsPe/Oq2NpqkcgXwKAi8pKJAF4eGQ9IkgM9A=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa510.patch";
+      hash = "sha256-RxCN2TMqeXVjHZhqxLvhWE40vUkD52RDYNyd9+6K9mA=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa511.patch";
+      hash = "sha256-y7TVcoXpeJoXnMOk1ESWyW53JbBTf8urrNYpwtmft/A=";
+    })
+
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa512-1.patch";
+      hash = "sha256-Xky7ddRSd1d+Y/voEmsyiyMsU7NX/WM2/yOviaLv5gU=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa512-2.patch";
+      hash = "sha256-4LgqC1F22kFjiVWgiSb1hZazbBF2Fziiif0Scv+ynho=";
+    })
   ]
   ++ optionals (versionOlder finalAttrs.version "4.21") [
     # Patch `libxl` to search for `qemu-system-i386` properly.

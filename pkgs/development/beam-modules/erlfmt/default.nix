@@ -2,6 +2,7 @@
   fetchFromGitHub,
   lib,
   rebar3Relx,
+  erlang,
 }:
 
 rebar3Relx rec {
@@ -15,6 +16,8 @@ rebar3Relx rec {
     hash = "sha256-0guZxRStVHnUCh9+tmP+/FzgZF+TUgB2oCZu+P4FJBs=";
     tag = "v${version}";
   };
+
+  buildInputs = [ erlang ];
 
   meta = {
     homepage = "https://github.com/WhatsApp/erlfmt";

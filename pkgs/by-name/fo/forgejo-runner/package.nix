@@ -17,6 +17,8 @@ let
     "TestHandler"
     "TestClone"
     "TestRunner_ReusableWorkflowGitHubInstance"
+    "TestInitRepoIfRequired/clone"
+    "TestInitRepoIfRequired/clone_different_remote"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # listen tcp 127.0.0.1:0: bind: operation not permitted
@@ -27,17 +29,17 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "13.1.0";
+  version = "13.2.0";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0LVia4B9n2zuuHDGFnBVM1mrbI7XBhMfy25kRSN5/WQ=";
+    hash = "sha256-2P3lWzC3yxcyiBltFDC1dwwv8Xx2XxEGSa16MdjnV38=";
   };
 
-  vendorHash = "sha256-2QwltVOR6MJO8rLNgktN1ulvP0YrnqQorNnfJXzRmJs=";
+  vendorHash = "sha256-iyXO3LYTr4v1OoD9PS5ksEDIkCIq8hgwgtkLR0bzUZg=";
 
   nativeBuildInputs = [ makeWrapper ];
 

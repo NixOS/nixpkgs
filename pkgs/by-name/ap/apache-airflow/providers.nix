@@ -923,7 +923,7 @@
   };
 
   pinecone = {
-    deps = [ ];
+    deps = [ "pinecone" ];
     imports = [
       "airflow.providers.pinecone"
       "airflow.providers.pinecone.get_provider_info"

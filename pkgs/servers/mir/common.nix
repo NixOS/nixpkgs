@@ -53,6 +53,7 @@
 {
   version,
   pinned ? false,
+  broken ? false,
   hash,
   cargoHash ? null,
   patches ? [ ],
@@ -90,6 +91,10 @@ stdenv.mkDerivation (
       substituteInPlace src/miral/x11_support.cpp \
         --replace-fail '/usr/bin/Xwayland' '${lib.getExe xwayland}'
     ''
+    # MirCookie code needs cstdint header, was previously getting implicitly pulled in
+    + lib.optionalString (lib.strings.versionOlder version "2.17.0") ''
+      sed -i -e '/#define MIR_SERVER_H_/a #include <cstdint>' src/include/server/mir/server.h
+    ''
     + lib.optionalString (lib.strings.versionOlder version "2.18.0") ''
 
       # Fix paths for generating drm-formats
@@ -104,6 +109,18 @@ stdenv.mkDerivation (
         tests/unit-tests/CMakeLists.txt \
         tests/mir_test_framework/CMakeLists.txt \
         --replace-fail 'Boost::system' ""
+    ''
+    # Fix ambiguity (int/void*) of nullptr w/ gtest 1.18
+    # https://github.com/canonical/mir/commit/fae4944d3b9f3dc8431efc8aba1c79f677ae1c50
+    # https://github.com/canonical/mir/commit/fc0cac6fd6f8828f05fc4b876990641f2ae71523
+    # One hunk fails to apply
+    + lib.optionalString (lib.strings.versionOlder version "2.29.0") ''
+      substituteInPlace tests/unit-tests/console/test_linux_virtual_terminal.cpp \
+        --replace-fail ', nullptr' ', static_cast<void*>(nullptr)'
+    ''
+    # This works as-is on 2.29.0 but fails on 2.15.0, so this header must be getting pulled in from somewhere else...
+    + ''
+      sed -i -e '/#define MIR_SCENE_BASIC_TEXT_INPUT_HUB_H_/a #include <cstdint>' src/server/scene/basic_text_input_hub.h
     '';
 
     strictDeps = true;
@@ -290,6 +307,7 @@ stdenv.mkDerivation (
     };
 
     meta = {
+      inherit broken;
       description = "Display server and Wayland compositor developed by Canonical";
       homepage = "https://mir-server.io";
       changelog = "https://github.com/canonical/mir/releases/tag/v${finalAttrs.version}";

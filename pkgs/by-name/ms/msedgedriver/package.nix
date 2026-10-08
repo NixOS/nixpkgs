@@ -12,41 +12,48 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "msedgedriver";
-  version = "152.0.4191.66";
+  version = "154.0.4258.62";
 
-  src = fetchzip {
-    url = "https://msedgedriver.microsoft.com/${finalAttrs.version}/edgedriver_linux64.zip";
-    hash = "sha256-exbjxlROdxAq75gUa53mT37eQrgjpC3hbm3OwBJl5fo=";
-    stripRoot = false;
-  };
+  src =
+    let
+      driverArch =
+        {
+          aarch64-darwin = "mac64_m1";
+          x86_64-darwin = "mac64";
+          x86_64-linux = "linux64";
+        }
+        .${stdenvNoCC.hostPlatform.system};
+    in
+    fetchzip {
+      url = "https://msedgedriver.microsoft.com/${finalAttrs.version}/edgedriver_${driverArch}.zip";
+      hash =
+        {
+          mac64_m1 = "sha256-eFA5A+Nz1unvOl6GRpjUImNL/+cokrnXac4W0l9qNJo=";
+          mac64 = "sha256-iTkNzBakkPcznw/QcGtIfyEaWwpjzXZWH2Va9CkkDgc=";
+          linux64 = "sha256-nWM5lYGYiCzwyAJ0gjBMXsTrxihPHSEBdQ71gFacFLk=";
+        }
+        .${driverArch};
+      stripRoot = false;
+    };
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     glib
     libxcb
     nspr
     nss
   ];
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
-  installPhase =
-    if stdenvNoCC.hostPlatform.isDarwin then
-      ''
-        runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-        mkdir -p $out/{Applications/msedgedriver,bin}
-        cp -R . $out/Applications/msedgedriver
+    install -D msedgedriver $out/bin/msedgedriver
 
-        runHook postInstall
-      ''
-    else
-      ''
-        runHook preInstall
-
-        install -m777 -D "msedgedriver" $out/bin/msedgedriver
-
-        runHook postInstall
-      '';
+    runHook postInstall
+  '';
 
   meta = {
     homepage = "https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver";
@@ -54,7 +61,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = microsoft-edge.meta.maintainers;
-    platforms = [
+    platforms = lib.platforms.darwin ++ [
       "x86_64-linux"
     ];
     mainProgram = "msedgedriver";

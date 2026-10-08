@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-intl";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-intl";
     tag = version;
-    hash = "sha256-5Ro+UG9pwwp656fYyCsna6P4s9Gb86Tu3Qm2WUI7tsE=";
+    hash = "sha256-Q8k/XOT2s7u7IuQ85XrcARLPwMUC9Z6yeRshrIGbJdA=";
   };
 
   build-system = [

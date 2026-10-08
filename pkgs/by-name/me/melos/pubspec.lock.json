@@ -4,21 +4,21 @@
       "dependency": "transitive",
       "description": {
         "name": "_fe_analyzer_shared",
-        "sha256": "739258fc1504144e55b639fa6c6fe4c1d10ae71c20f25973c12af118699723fa",
+        "sha256": "fdcd9f70f9eb80df3bc5ed0fa67280df2595fd481948df8a9ab082e6a40ad04b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "106.0.0"
+      "version": "108.0.0"
     },
     "analyzer": {
       "dependency": "transitive",
       "description": {
         "name": "analyzer",
-        "sha256": "76c74350a63a37635d01dc2dd6850cc9642218c9f7291659d073e697e4450bc1",
+        "sha256": "a51c769bff3b6dfbe9d60199b8606d808290702a296bef0c26a4ca391d414e46",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "14.2.0"
+      "version": "14.4.0"
     },
     "ansi_styles": {
       "dependency": "transitive",
@@ -64,11 +64,11 @@
       "dependency": "transitive",
       "description": {
         "name": "build",
-        "sha256": "b94f5da9ed3d081fd4ecc426c260998b5f4f4eb2f6d89b7e5472edef0b2b2a1b",
+        "sha256": "8a5c5761af8e31748bba3c82f68925ace40f3225c3eea25be9beb57eca7cd7a8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.0.10"
+      "version": "4.0.11"
     },
     "built_collection": {
       "dependency": "transitive",
@@ -84,11 +84,11 @@
       "dependency": "transitive",
       "description": {
         "name": "built_value",
-        "sha256": "31b24be6615ec7fcf70b3aa5a7469fe35826485e639a16dd7eb83ba30e4cc6a8",
+        "sha256": "f87ea98192116f7093cb214551ce1929caae0681fdba282b3d8b4462adee7bb7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "8.12.7"
+      "version": "8.13.0"
     },
     "charcode": {
       "dependency": "transitive",
@@ -134,11 +134,11 @@
       "dependency": "transitive",
       "description": {
         "name": "cli_util",
-        "sha256": "71e43f1976c3eae2d9468a5b4d6600bf8cae61508b87f27fa1799228935d48ab",
+        "sha256": "89b8801ba49f8b593fbf2d3e59efd0f566c46cd4ba6837ae2610c72b52a0f899",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.5.2"
+      "version": "0.6.0"
     },
     "code_builder": {
       "dependency": "transitive",
@@ -464,11 +464,11 @@
       "dependency": "transitive",
       "description": {
         "name": "pub_updater",
-        "sha256": "739a0161d73a6974c0675b864fb0cf5147305f7b077b7f03a58fa7a9ab3e7e7d",
+        "sha256": "3aadeb8c68d15ef9d117b36474ddcc543b48ae1e64f7dd71407da26df66bf7c8",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.5.0"
+      "version": "0.6.0"
     },
     "pubspec_parse": {
       "dependency": "transitive",
@@ -604,31 +604,31 @@
       "dependency": "transitive",
       "description": {
         "name": "test",
-        "sha256": "0d5ba5602ec3baa28c8ce365e1efc5575969c765f45c554a3e167dc7945b9c30",
+        "sha256": "de5d145b0afff7921e5e788a880f52d7e5f3ae24068a202f6fd3b58e4ba26323",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.31.2"
+      "version": "1.32.0"
     },
     "test_api": {
       "dependency": "transitive",
       "description": {
         "name": "test_api",
-        "sha256": "475610b2aa23c19687cce2961e44b0cc57cafe220f67c2b80201231b2a07fbe7",
+        "sha256": "0a10344e901e5b2e63819567951cb6a06673ed6b84f40462188ff5a0c41f371f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.7.13"
+      "version": "0.7.14"
     },
     "test_core": {
       "dependency": "transitive",
       "description": {
         "name": "test_core",
-        "sha256": "a39c204a4fc7a7ccb04a2b985e359fda3cc37e45e0b8ac61c3fb1a05aa832132",
+        "sha256": "80f3fb49087454e07e7e07c67578cfdd156c8c3a5227d8b3f47c7b2d019c2e93",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.6.19"
+      "version": "0.6.20"
     },
     "typed_data": {
       "dependency": "transitive",
@@ -732,6 +732,6 @@
     }
   },
   "sdks": {
-    "dart": ">=3.11.0 <4.0.0"
+    "dart": ">=3.12.0 <4.0.0"
   }
 }

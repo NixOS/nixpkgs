@@ -7,13 +7,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spec-kit";
-  version = "1.0.3";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "github";
     repo = "spec-kit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TMe71eazczLdK3FLnfhkIdrrXM+CK3+39y21toD5/s4=";
+    hash = "sha256-e9/2lc80SLHVLpA1Hs7NceEflNjWACsHIamtuYTYNMQ=";
   };
 
   pyproject = true;

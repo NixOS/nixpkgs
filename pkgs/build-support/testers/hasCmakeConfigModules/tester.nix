@@ -8,7 +8,7 @@
 # Tester arguments
 {
   package,
-  moduleNames,
+  moduleNames ? package.meta.cmakeConfigModules,
   # Extra nativeBuildInputs needed to pass the cmake find_package test, e.g. pkg-config.
   nativeBuildInputs ? [ ],
   # buildInputs is used to help pass the cmake find_package test.

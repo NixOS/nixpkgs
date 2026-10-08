@@ -8,28 +8,26 @@
   wayland-protocols,
   libGL,
   vulkan-loader,
+  git,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chameleos";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "Treeniks";
     repo = "chameleos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jF4szo4+f7K+luhHVw4DQYte7E9S3A4qfnEzhN9uYyM=";
+    hash = "sha256-iIFUEUdnX+PtYAs5KRMn5c0vCuHRAkOxhP/PuveLC74=";
   };
 
-  cargoHash = "sha256-6LPu5Lvr9Gieu1l78RtsKr4WzxuPQEE3DPnR+01Luew=";
-
-  postPatch = ''
-    substituteInPlace build.rs --replace-fail '"git"' '"echo"'
-  '';
+  cargoHash = "sha256-3gy8X9QUIVFBpCtLDXL/7eDBEQHtRO8v1t8WnkzPyj4=";
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    git
   ];
 
   buildInputs = [
@@ -52,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Screen annotation tool for niri and Hyprland";
     homepage = "https://github.com/Treeniks/chameleos";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lonerOrz ];
     mainProgram = "chameleos";

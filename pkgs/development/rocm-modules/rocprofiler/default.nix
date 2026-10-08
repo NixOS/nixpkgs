@@ -21,7 +21,7 @@
   mpi,
   gtest,
   python3Packages,
-  gpuTargets ? clr.gpuTargets,
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 let
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocprofiler"
       "shared"

@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tuicr";
-  version = "0.25.0";
+  version = "0.27.0";
 
   __structuredAttrs = true;
 
@@ -17,12 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "agavra";
     repo = "tuicr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nbjvSRrbJ4LQrn8l0FJ8R5PNpq7gcQR8m78agL59zqs=";
+    hash = "sha256-kObt0MLJZYASWM1vexZTPaIeFaU2XpT9sHUSdClRz2Y=";
   };
 
-  cargoHash = "sha256-9L1G0O5kE9EOFAQ092R/C9/SC48K0YcD5D2WjEvkeK0=";
-
-  strictDeps = true;
+  cargoHash = "sha256-azgmxJP3iQO+WfJCWqfi19rCSb6D0a0luWcgEW+8Sbg=";
 
   nativeCheckInputs = [
     gitMinimal

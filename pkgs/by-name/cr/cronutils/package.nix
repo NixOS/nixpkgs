@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utilities to assist running periodic batch processing jobs";
     homepage = "https://github.com/google/cronutils";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

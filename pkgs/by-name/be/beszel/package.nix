@@ -1,22 +1,21 @@
 {
   stdenv,
-  buildGo126Module,
+  buildGo127Module,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   buildNpmPackage,
   nixosTests,
 }:
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "beszel";
-  version = "0.18.7";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pVZ1ru9++BypZ3EwoE8clqJowXj1/CMiJxKaC+UY9VE=";
+    hash = "sha256-F7N9IVqOk+pNrH1wIqkNthLNhqW+HmTkJB43RwBMWpo=";
   };
 
   webui = buildNpmPackage {
@@ -53,16 +52,7 @@ buildGo126Module (finalAttrs: {
     npmDepsHash = "sha256-mYAD8FrQwa+F/VgGxFpe8vqucfZaM0PmY+gJJqw1IKk=";
   };
 
-  vendorHash = "sha256-TVpZbK9V9/GqpVFcjF7QGD5XJJHzRgjVXZOImHQTR1k=";
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/pull/513197
-    (fetchpatch {
-      name = "fix-updater-after-system-manager-shutdown.patch";
-      url = "https://github.com/henrygd/beszel/commit/c538d1de1cf3f4664a2d98086341884a217846e7.patch";
-      hash = "sha256-voIT9b14pgfhnbJrqgoIbQtwZPU1JF0fblybjG9mzvM=";
-    })
-  ];
+  vendorHash = "sha256-rIDsv9BL4k04dMXm0Sqbdjt+W98SSGEaWYP/laBVFrk=";
 
   preBuild = ''
     mkdir -p internal/site/dist
@@ -73,14 +63,13 @@ buildGo126Module (finalAttrs: {
     let
       skippedTests = [
         "TestCollectorStartHelpers/nvtop_collector"
-        "TestApiRoutesAuthentication/GET_/update_-_shouldn't_exist_without_CHECK_UPDATES_env_var"
-        "TestConfigSyncWithTokens"
+        "TestCollectorStartHelpers/rocm-smi_collector"
+        "TestIoctlDeviceSizeFailure"
         # This subtest assumes enough host CPUs for an 8s CPU delta over 1s to stay below 100%.
         "TestServiceUpdateCPUPercent/subsequent_call_calculates_CPU_percentage"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "TestCollectorStartHelpers/nvidia-smi_collector"
-        "TestCollectorStartHelpers/rocm-smi_collector"
         "TestCollectorStartHelpers/tegrastats_collector"
         "TestNewGPUManagerPriorityNvtopFallback"
         "TestNewGPUManagerPriorityMixedCollectors"
@@ -88,11 +77,12 @@ buildGo126Module (finalAttrs: {
         "TestNewGPUManagerConfiguredCollectorsMustStart"
         "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
         "TestNewGPUManagerJetsonIgnoresCollectorConfig"
+        "TestMonitorTCPAddressFallback/first_address_fails"
       ];
     in
     [
       "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
-      "-tags=testing"
+      "-tags=testing,no_ui"
     ];
 
   postInstall = ''

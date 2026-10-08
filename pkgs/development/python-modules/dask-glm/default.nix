@@ -1,50 +1,60 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   setuptools-scm,
 
   # dependencies
   cloudpickle,
+  dask,
   distributed,
   multipledispatch,
+  numba,
+  numpy,
   scikit-learn,
   scipy,
   sparse,
-  dask,
 
   # tests
   pytest-xdist,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-glm";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-glm";
-    tag = version;
-    hash = "sha256-q98QMmw1toashimS16of54cgZgIPqkua3xGD1FZ1nTc=";
+    tag = finalAttrs.version;
+    hash = "sha256-u3KASmBamc7qU/GxGT0QBqWJ1HDk81xI0MOoRng8BzA=";
   };
 
-  # ValueError: The truth value of an empty array is ambiguous. Use `array.size > 0` to check that an array is not empty.
+  # The iprint parameter of `scipy.optimize.fmin_l_bfgs_b` was removed in 1.18.0
+  # https://github.com/scipy/scipy/blob/b881cb179463e85a74f3368f6242986d713adbdc/doc/source/release/1.18.0-notes.rst?plain=1#L291-L292
   postPatch = ''
-    substituteInPlace dask_glm/utils.py \
-      --replace-fail "if arr:" "if (arr is not None) and (arr.size > 0):"
+    substituteInPlace dask_glm/algorithms.py \
+      --replace-fail "iprint=(verbose > 0) - 1," ""
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     cloudpickle
+    dask
     distributed
     multipledispatch
+    numba
+    numpy
     scikit-learn
     scipy
     sparse
@@ -58,23 +68,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_glm" ];
 
-  disabledTests = [
-    # ValueError: <class 'bool'> can be computed for one-element arrays only.
-    "test_dot_with_sparse"
-
-    # ValueError: `shape` was not provided.
-    "test_sparse"
-  ];
-
-  # On darwin, tests saturate the entire system, even when constrained to run single-threaded
-  # Removing pytest-xdist AND setting --cores to one does not prevent the load from exploding
-  doCheck = !stdenv.hostPlatform.isDarwin;
-
   meta = {
     description = "Generalized Linear Models with Dask";
     homepage = "https://github.com/dask/dask-glm/";
-    changelog = "https://github.com/dask/dask-glm/releases/tag/${version}";
+    changelog = "https://github.com/dask/dask-glm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

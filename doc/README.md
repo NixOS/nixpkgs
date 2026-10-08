@@ -1,77 +1,67 @@
 # Contributing to the Nixpkgs manual
 
-This directory houses the source files for the Nixpkgs manual.
+This directory houses the source files for the Nixpkgs manual, including
+
+- [Getting Started](./getting-started) guides
+- [Onboarding guides](./using-nixpkgs.md) for using Nixpkgs
+- [Language frameworks](./languages-frameworks) shipped with Nixpkgs.
+
+There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/unstable/) and [latest stable release](https://nixos.org/manual/nixpkgs/stable/).
 
 > [!NOTE]
 >
 > We are actively restructuring our documentation to be more beginner friendly.
 >
 
-When writing new docs use **Progressive Disclosure**
+When writing new docs use **Progressive Disclosure:**
 
-Start simple, pick up beginners.
-Use **examples** first to show how to get something done. Keep **Explanation** lean.
+- Start simple, pick up beginners.
+- Use **examples** first to show how to get something done.
+- Keep **explanation** lean.
 
-Use our [styleguide](./styleguide.md) for more in depth guidance on writing good documentation.
-
-Documentation about Nixpkgs belongs here, this includes 'getting-started'-guides and 'onboarding-guides' for *using* Nixpkgs and the language frameworks it ships.
+Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
 
 Write **guides** task-first: lead with a working example, then explain in prose.
 Write **reference** as the specification of functions and attributes.
 
-We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with `:doc` in `nix repl`.
+We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with the `:doc` command in `nix repl`, e.g.:
+
+```
+nix-repl> :l <nixpkgs>
+nix-repl> :doc lib.mapAttrsToList
+```
 
 See [Document structure](#document-structure) for a structural template.
 
-Rendered documentation:
-- [Unstable (from master)](https://nixos.org/manual/nixpkgs/unstable/)
-- [Stable (from latest release)](https://nixos.org/manual/nixpkgs/stable/)
+## Building and navigating documentation locally
 
-The rendering tool is [nixos-render-docs](../pkgs/by-name/ni/nixos-render-docs), sometimes abbreviated `nrd`.
-
-## Contributing to this documentation
-
-You can quickly check your edits with `nix-build`:
-
-```ShellSession
-$ cd /path/to/nixpkgs
-$ nix-build doc
-```
-
-If the build succeeds, the manual will be in `./result/share/doc/nixpkgs/manual.html`.
+The Nixpkgs manual is rendered by [`nixos-render-docs`](../pkgs/by-name/ni/nixos-render-docs/).
+Its index is [`nav.json`](./nav.json).
 
 ### Development environment
 
-To reduce repetition, consider using tools from the provided development environment:
-
-Load it from the Nixpkgs documentation directory with
+Consider using the tooling in the documentation development environment.
 
 ```ShellSession
 $ cd /path/to/nixpkgs/doc
 $ nix-shell
 ```
 
-To load the development utilities automatically when entering that directory, [set up `nix-direnv`](https://nix.dev/guides/recipes/direnv).
+### Live preview
 
-Make sure that your local files aren't added to Git history by adding the following lines to `.git/info/exclude` at the root of the Nixpkgs repository:
+Within the developer environment, run [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual.
+If the `nixos-render-docs` source-code changes, `devmode` must be restarted.
 
-```
-/**/.envrc
-/**/.direnv
-```
+### Building the docs
 
-#### Live preview
-
-Run [`devmode`](../pkgs/by-name/de/devmode/README.md) for a live preview while editing the manual: it rebuilds on every change and reloads the page in your browser automatically.
-
-Changes to the renderer 'pkgs/by-name/ni/nixos-render-docs' need a manual restart. Run: `devmode` again.
+To build the documentation, run `nix-build doc`.
+A successful build is stored in `./result/share/doc/nixpkgs/manual.html`.
 
 ### Testing redirects
 
-Once you have a successful build, you can open the relevant HTML (path mentioned above) in a browser along with the anchor, and observe the redirection.
+Once you have a successful build, you can open the aforementioned path in a browser along with the anchor, and observe the redirection.
 
-Note that if you already loaded the page and *then* input the anchor, you will need to perform a reload.
-This is because browsers do not re-run client JS code when only the anchor has changed.
+To test redirects, perform a browser refresh, as browsers do not re-run client JS code when only the anchor has changed.
 
 ## Syntax
 
@@ -133,13 +123,11 @@ A few markups for other kinds of literals are also available:
 - `` {env}`XDG_DATA_DIRS` ``
 - `` {file}`/etc/passwd` ``
 - `` {option}`networking.useDHCP` ``
-- `` {var}`/etc/passwd` ``
+- `` {var}`pkgs` ``
+
+The values will be formatted as inline `<code>` elements.
 
 These literal kinds are used mostly in NixOS option documentation.
-
-This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#roles-an-in-line-extension-point).
-Though, the feature originates from [reStructuredText](https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-manpage) with slightly different syntax.
-They are handled by `myst_role` defined per renderer. <!-- reverse references in code -->
 
 #### Admonitions
 
@@ -163,7 +151,7 @@ The following are supported:
 - `example`
 
 Example admonitions require a title to work.
-If you don't provide one, the manual won't be built.
+If you don't provide one, the manual won't build.
 
 ```markdown
 ::: {.example #ex-showing-an-example}
@@ -179,11 +167,11 @@ Text for the example.
 For defining a group of terms:
 
 ```markdown
-pear
-:   green or yellow bulbous fruit
+Pear
+:   Green or yellow bulbous fruit
 
-watermelon
-:   green fruit with red flesh
+Watermelon
+:   Green fruit with red flesh
 ```
 
 ## Commit conventions
@@ -215,7 +203,7 @@ When needed, each convention explains why it exists, so you can make a decision 
 Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
 You, as the writer of documentation, are still in charge of its content.
 
-**For prose style, see the [documentation styleguide](./styleguide.md).**
+**For prose style, see the [documentation style guide](./styleguide.md).**
 
 ### Document structure
 
@@ -285,7 +273,7 @@ When changing existing content, update formatting if possible, but avoid excessi
 
 ### Examples first
 
-Put examples before detailed explanations (see the [styleguide](./styleguide.md) for the rationale).
+Put examples before detailed explanations (see the [style guide](./styleguide.md) for the rationale).
 
 Use this structure for each documented item:
 

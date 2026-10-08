@@ -13,8 +13,9 @@
   runCommand,
   python3,
   esbuild,
-  nodejs_22,
+  nodejs_24,
   node-gyp,
+  npm-lockfile-fix,
   libsecret,
   libkrb5,
   libx11,
@@ -30,32 +31,41 @@
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
 
-  esbuild' = esbuild.override {
-    buildGoModule =
-      args:
-      buildGoModule (
-        args
-        // rec {
-          version = "0.27.2";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-JbJB3F1NQlmA5d0rdsLm4RVD24OPdV4QXpxW8VWbESA=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        }
-      );
-  };
+  esbuildFor =
+    version: hash: vendorHash:
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // {
+            inherit version vendorHash;
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              inherit hash;
+            };
+          }
+        );
+    };
 
-  # replaces esbuild's download script with a binary from nixpkgs
-  patchEsbuild = path: version: ''
+  # VS Code pins esbuild independently in its build and extensions trees.
+  # The JavaScript API requires the native binary to have the exact same version.
+  esbuild_0_27_2 =
+    esbuildFor "0.27.2" "sha256-JbJB3F1NQlmA5d0rdsLm4RVD24OPdV4QXpxW8VWbESA="
+      "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+  esbuild_0_28_1 =
+    esbuildFor "0.28.1" "sha256-V+HKaWGAIs24ynFFIS9fQ0EAJJdNmlAMeL1sgDEAqWM="
+      "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+
+  # Replace esbuild's download script with a binary from nixpkgs.
+  patchEsbuild = esbuildPackage: path: ''
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
-    sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
-    ln -s -f ${lib.getExe esbuild'} ${path}/node_modules/esbuild/bin/esbuild
+    ln -s -f ${lib.getExe esbuildPackage} ${path}/node_modules/esbuild/bin/esbuild
   '';
 
   vscodeTarget =
@@ -82,18 +92,18 @@ let
   # To compute the commit when upgrading this derivation, do:
   # `$ git rev-parse <git-rev>` where <git-rev> is the git revision of the `src`
   # Example: `$ git rev-parse v4.16.1`
-  commit = "1c6fb2dc200eb57c5c7d612004e18a5e6ae8b0ed";
+  commit = "88c2b7432e938f6918f21ff8d9dbfc641cd933d0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "code-server";
-  version = "4.115.0";
+  version = "4.134.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hoi5QABYwRySGB9DNyEI6qMFYXCka3rfsE5j0Ww7Ax8=";
+    hash = "sha256-wPTFYCZiUXHTbQiDFlT+VA3c6CITDju8L6tJrV78UZ8=";
   };
 
   nodeModules =
@@ -101,11 +111,12 @@ stdenv.mkDerivation (finalAttrs: {
       {
         inherit (finalAttrs) src;
         nativeBuildInputs = finalAttrs.nativeBuildInputs ++ [
+          npm-lockfile-fix
           prefetch-npm-deps
         ];
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";
-        outputHash = "sha256-nsKsbSuIMvqKT9XVPIsEN6EgvnDvB7rAuUYZDLBBO4A=";
+        outputHash = "sha256-uCoYvSWOxGJ168sQk0ORVNUYrCX0WL4KF6rbPsp8LVE=";
         env = {
           FORCE_EMPTY_CACHE = true;
           FORCE_GIT_DEPS = true;
@@ -116,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       ''
         runPhase unpackPhase
         export HOME=$TMPDIR/home
-        mkdir $out
+        npm-lockfile-fix lib/vscode/build/rspack/package-lock.json
         for p in $(find -name package-lock.json)
         do (
           echo "Prefetching $p"
@@ -155,9 +166,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove all git calls from the VS Code build script except `git rev-parse
     # HEAD` which is replaced in postPatch with the commit.
     ./build-vscode-nogit.patch
+    # Prevent the VS Code build from downloading Node.js.
+    ./remove-node-download.patch
+    # Use npm's installed Copilot native package to keep the build offline.
+    ./use-vendored-copilot-native.patch
   ];
 
   postPatch = ''
+    # The rspack lockfile omits resolved URLs and integrity hashes for peer
+    # dependencies, which prefetch-npm-deps needs for an offline cache.
+    cp "$nodeModules/lib/vscode/build/rspack/package-lock.json" \
+      lib/vscode/build/rspack/package-lock.json
+
     export HOME=$PWD
 
     patchShebangs ./ci
@@ -245,14 +265,11 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i '/update.mode/,/\}/{s/default:.*/default: "none",/g}' \
       lib/vscode/src/vs/platform/update/common/update.config.contribution.ts
 
-    # Patch out remote download of nodejs from build script.
-    patch -p1 -i ${./remove-node-download.patch}
-
     patchShebangs .
 
     # Use esbuild from nixpkgs.
-    ${patchEsbuild "./lib/vscode/build" "0.27.2"}
-    ${patchEsbuild "./lib/vscode/extensions" "0.27.2"}
+    ${patchEsbuild esbuild_0_27_2 "./lib/vscode/build"}
+    ${patchEsbuild esbuild_0_28_1 "./lib/vscode/extensions"}
 
     # Put ripgrep binary into bin, so post-install does not try to download it.
     find -name ripgrep -type d \

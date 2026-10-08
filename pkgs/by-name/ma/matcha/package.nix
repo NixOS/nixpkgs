@@ -14,16 +14,16 @@ buildGoLatestModule (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "matcha";
-  version = "0.44.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "floatpane";
     repo = "matcha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y1YEnqTCmf+CMKpv3wN4SZsN+lUuv3T8pKmM+zu1Ipw=";
+    hash = "sha256-3RBwPxSlyqiDzJQmvP09kQqF/l5CuyUogEDsBvsrps0=";
   };
 
-  vendorHash = "sha256-cg6R4WtDORwZlo+P16rN6qc0zZMOPtnr4VyQKV9Q2nM=";
+  vendorHash = "sha256-InWPQrhWZ6Q/mtIed8eH2cp7sYbdxiWY+fxQ50D4UYg=";
   proxyVendor = true;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [

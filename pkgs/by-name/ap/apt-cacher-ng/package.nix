@@ -10,7 +10,7 @@
   xz,
   openssl,
   pkg-config,
-  systemd,
+  systemdLibs,
   tcp_wrappers,
   zlib,
   c-ares,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libevent
     xz
     openssl
-    systemd
+    systemdLibs
     tcp_wrappers
     zlib
     c-ares

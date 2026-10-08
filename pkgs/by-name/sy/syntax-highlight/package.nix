@@ -7,14 +7,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "syntax-highlight";
-  version = "2.1.30";
+  version = "2.1.32";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchzip {
     url = "https://github.com/sbarex/SourceCodeSyntaxHighlight/releases/download/${finalAttrs.version}/Syntax.Highlight.zip";
-    hash = "sha256-URjobIBo43xtc2S6Ppr88lzeTo5KdbhF2T5weUjaxsA=";
+    hash = "sha256-IZNCkUPSUddgYr+uyDgaAM3BIOTTj9fF1XsCPFXeSW8=";
     stripRoot = false;
   };
 

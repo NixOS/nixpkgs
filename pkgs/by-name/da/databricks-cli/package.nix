@@ -9,22 +9,18 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "1.11.0";
+  version = "1.18.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ViMRqQ9lfek1ETCW30NDmIlG5dtPDmNv4F1EeDwlk6k=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I0w62sVpL27gtnir8mZtGs6PbsNH8nwWc5JyCXfnlqI=";
   };
 
-  # Otherwise these tests fail asserting that the version is 0.0.0-dev
-  postPatch = ''
-    substituteInPlace bundle/deploy/terraform/init_test.go \
-      --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
-  '';
-
-  vendorHash = "sha256-LjU4cWFiCrmNwRFt9rAFDQhRw1fN2lLK03/z7wTr+E4=";
+  vendorHash = "sha256-6b++JxHIU6Zhv4357nEH4VHnCOty9KOMbwM6gVHU2qE=";
 
   subPackages = [ "." ];
 

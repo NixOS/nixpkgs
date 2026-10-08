@@ -7,10 +7,7 @@
   aws-sdk-cpp,
   boehmgc,
   callPackage,
-  fetchgit,
-  fetchFromGitHub,
   fetchFromGitea,
-  fetchpatch2,
   fetchpatch,
   rustPlatform,
   editline,
@@ -28,6 +25,7 @@
   nixos-rebuild-ng,
   colmena,
   nix-update,
+  nix-update-script,
   nix-init,
   nurl,
 
@@ -36,18 +34,12 @@
   confDir ? "/etc",
 }:
 let
-  lixMdbookPatch = fetchpatch2 {
-    name = "lix-mdbook-0.5-support.patch";
-    url = "https://git.lix.systems/lix-project/lix/commit/54df89f601b3b4502a5c99173c9563495265d7e7.patch";
-    excludes = [ "package.nix" ];
-    hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
-  };
-
   lixFunctional2TimeoutPatch = fetchpatch {
     name = "lix-f2-increase-timeouts-and-max-worker-count.patch";
     url = "https://git.lix.systems/lix-project/lix/commit/c6d22874d6dffc9646279601ad546c1d78d9a409.patch";
     hash = "sha256-V6Q9XFsdla/OPwGPvAkb8mBisdfQbkaNKqpCfL3Tk4U=";
   };
+
   makeLixScope =
     {
       attrName,
@@ -156,7 +148,6 @@ let
           };
 
           colmena = colmena.override {
-            nix = self.lix;
             inherit (self) nix-eval-jobs;
           };
 
@@ -187,52 +178,10 @@ lib.makeExtensible (
   {
     inherit makeLixScope;
 
-    lix_2_94 = self.makeLixScope {
-      attrName = "lix_2_94";
-
-      lix-args = rec {
-        version = "2.94.2";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = version;
-          hash = "sha256-Nmqsl/YCnBW5U3TUfFWHGVUbyS2/Ll655BAE3qZilC4=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
-        };
-
-        patches = [
-          lixMdbookPatch
-        ];
-      };
-    };
-
     lix_2_95 = self.makeLixScope {
       attrName = "lix_2_95";
 
-      lix-args = rec {
-        version = "2.95.2";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = version;
-          hash = "sha256-nFxJMIdcGTI9NiHAa5HZ2BmcGFLwC2pTq+V4Gjc499I=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-        };
-
+      lix-args = (import ./2.95.nix { inherit fetchFromGitea rustPlatform nix-update-script; }) // {
         patches = [
           lixFunctional2TimeoutPatch
         ];
@@ -242,23 +191,7 @@ lib.makeExtensible (
     git = self.makeLixScope {
       attrName = "git";
 
-      lix-args = rec {
-        version = "2.96.0-pre-20260408_${builtins.substring 0 12 src.rev}";
-
-        src = fetchFromGitea {
-          domain = "git.lix.systems";
-          owner = "lix-project";
-          repo = "lix";
-          rev = "bc9fb560ac2d36cd317a856ee96785ea2055fbff";
-          hash = "sha256-bONRPjhk5OZdnkQZexZNJzlvwIPg31Gy7fNiwGoX3BQ=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          name = "lix-${version}";
-          inherit src;
-          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
-        };
-      };
+      lix-args = import ./git.nix { inherit fetchFromGitea rustPlatform; };
     };
 
     latest = self.lix_2_95;
@@ -293,5 +226,6 @@ lib.makeExtensible (
     lix_2_91 = throw (removedMessage "2.91"); # added in 2025-09-11
     lix_2_92 = throw (removedMessage "2.92"); # added in 2025-09-11
     lix_2_93 = throw (removedMessage "2.93"); # added in 2026-04-19
+    lix_2_94 = throw (removedMessage "2.94"); # added in 2026-10-04
   }
 )

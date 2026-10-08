@@ -20,7 +20,7 @@
 }:
 
 let
-  wxwidgets_3_3_1 = wxwidgets_3_3.overrideAttrs (
+  wxwidgets_3_3_2 = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "3.3.2";
       src = fetchFromGitHub {
@@ -38,7 +38,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.11";
+  version = "14.12";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -f "$out"
       tryDownload "$url" "$out"
     '';
-    hash = "sha256-fn6lKM6QFIsTQ1YcpuNXCa9oK96hUx8hDJhVSjRmGcM";
+    hash = "sha256-PfSPmEIzRRJXgIIzrwsN0CXCAE662UX4YRayYRFMOk0=";
   };
 
   sourceRoot = ".";
@@ -59,14 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./Makefile.patch {
       gtk3-dev = lib.getDev gtk3;
     })
-    # Fix build with vanilla wxWidgets
-    (fetchDebianPatch {
-      pname = "freefilesync";
-      version = "13.7";
-      debianRevision = "1";
-      patch = "Disable_wxWidgets_uncaught_exception_handling.patch";
-      hash = "sha256-Fem7eDDKSqPFU/t12Jco8OmYC8FM9JgB4/QVy/ouvbI=";
-    })
+    # Fix build with vanilla wxWidgets (rebased from Debian patch)
+    ./Disable_wxWidgets_uncaught_exception_handling.patch
+    # ../../zen/string_traits.h:60:41: error: call of overloaded 'conversionType(wxCStrData)' is ambiguous
+    ./string_traits.patch
   ];
 
   postPatch = ''
@@ -87,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libssh2
     openssl
-    wxwidgets_3_3_1
+    wxwidgets_3_3_2
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -95,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_54"
     "-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_54"
     # Define libssh2 constants
+    "-DLIBSSH2_ERROR_STORE_OVERFLOW=-55"
     "-DMAX_SFTP_READ_SIZE=30000"
     "-DMAX_SFTP_OUTGOING_SIZE=30000"
   ];

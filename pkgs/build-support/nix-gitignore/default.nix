@@ -17,15 +17,13 @@ let
     head
     isList
     length
-    optionals
     optionalString
     pathExists
     readFile
     removePrefix
     replaceStrings
-    stringLength
+    stringToCharacters
     sub
-    substring
     toList
     trace
     ;
@@ -88,19 +86,11 @@ rec {
         let
           special = "^$.+{}()";
           escs = "\\*?";
-          splitString =
-            let
-              recurse =
-                str:
-                [ (substring 0 1 str) ] ++ (optionals (str != "") (recurse (substring 1 (stringLength str) str)));
-            in
-            str: recurse str;
-          chars = s: filter (c: c != "" && !isList c) (splitString s);
-          escape = s: map (c: "\\" + c) (chars s);
+          escape = s: map (c: "\\" + c) (stringToCharacters s);
         in
         replaceStrings
           (
-            (chars special)
+            (stringToCharacters special)
             ++ (escape escs)
             ++ [
               "**/"

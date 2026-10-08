@@ -46,7 +46,7 @@
   shared-mime-info,
   socat,
   replaceVars,
-  systemd,
+  systemdLibs,
   testers,
   valgrind,
   validatePkgConfig,
@@ -75,12 +75,12 @@
   withP11Kit ? lib.meta.availableOn stdenv.hostPlatform p11-kit,
   withPolkit ? lib.meta.availableOn stdenv.hostPlatform polkit,
   withSELinuxModule ? false,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flatpak";
-  version = "1.18.1";
+  version = "1.18.4";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vGg/yRbtIcBSS7Bk81jCrBhYa47IjHby9/KJh3UhYxw=";
+    hash = "sha256-uJmnoAxI0sYmy47DP+VWcgs3bCWAXXIiQwwP3KTGrI0=";
   };
 
   patches = [
@@ -226,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withGlibNetworking glib-networking
   ++ lib.optional withMalcontent malcontent
   ++ lib.optional withPolkit polkit
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
 
   # Required by flatpak.pc
   propagatedBuildInputs = [
@@ -288,7 +288,7 @@ stdenv.mkDerivation (finalAttrs: {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
     };
 
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
   };
 
   meta = {

@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import sys
 import textwrap
 import uuid
@@ -24,6 +25,7 @@ from .models import (
     GenerationJson,
     ImageVariants,
     NixOSRebuildError,
+    NixOSVersionJson,
     Profile,
     Remote,
 )
@@ -46,7 +48,6 @@ SWITCH_TO_CONFIGURATION_CMD_PREFIX: Final = [
     "NIXOS_NO_CHECK",
     "--collect",
     "--no-ask-password",
-    "--pipe",
     "--quiet",
     "--service-type=exec",
     "--unit=nixos-rebuild-switch-to-configuration",
@@ -509,37 +510,25 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
         generation_path = (
             profile.path.parent / f"{profile.path.name}-{generation.id}-link"
         )
+
+        j: NixOSVersionJson
         try:
-            nixos_version = (generation_path / "nixos-version").read_text().strip()
-        except OSError as ex:
-            logger.debug("could not get nixos-version: %s", ex)
-            nixos_version = "Unknown"
-        try:
-            kernel_version = next(
-                (generation_path / "kernel-modules/lib/modules").iterdir()
-            ).name
-        except OSError as ex:
-            logger.debug("could not get kernel version: %s", ex)
-            kernel_version = "Unknown"
-        specialisations = [
-            s.name for s in (generation_path / "specialisation").glob("*") if s.is_dir()
-        ]
-        try:
-            configuration_revision = run_wrapper(
-                [generation_path / "sw/bin/nixos-version", "--configuration-revision"],
+            result = run_wrapper(
+                [generation_path / "sw/bin/nixos-version", "--json"],
                 capture_output=True,
-            ).stdout.strip()
-        except (OSError, CalledProcessError) as ex:
+            ).stdout
+            j = json.loads(result)
+        except (OSError, CalledProcessError, json.JSONDecodeError) as ex:
             logger.debug("could not get configuration revision: %s", ex)
-            configuration_revision = "Unknown"
+            j = {}
 
         return GenerationJson(
             generation=generation.id,
             date=generation.timestamp,
-            nixosVersion=nixos_version,
-            kernelVersion=kernel_version,
-            configurationRevision=configuration_revision,
-            specialisations=specialisations,
+            nixosVersion=j.get("nixosVersion", "Unknown"),
+            kernelVersion=j.get("kernelVersion", "Unknown"),
+            configurationRevision=j.get("configurationRevision", "Unknown"),
+            specialisations=j.get("specialisations", []),
             current=generation.current,
         )
 
@@ -743,6 +732,10 @@ def switch_to_configuration(
         cmd = []
     elif os.environ.get("NIXOS_REBUILD_NO_SYSTEMD_RUN"):
         cmd = []
+    elif _systemd_run_supports_output_cat(target_host):
+        cmd = [*cmd, "--wait", "--verbose", "--output=cat"]
+    else:
+        cmd = [*cmd, "--pipe"]
 
     run_wrapper(
         [*cmd, path_to_config / "bin/switch-to-configuration", str(action)],
@@ -760,6 +753,23 @@ def switch_to_configuration(
         # its stdout to our stderr defensively.
         stdout=sys.stderr,
     )
+
+
+# TODO: remove this after release-27.05 and assume systemd 261+
+def _systemd_run_supports_output_cat(target_host: Remote | None) -> bool:
+    """Check whether the target's systemd-run supports --output=cat (systemd 261+)."""
+    try:
+        result = run_wrapper(
+            ["systemd-run", "--version"],
+            remote=target_host,
+            capture_output=True,
+        )
+    except CalledProcessError:
+        logger.debug("systemd-run version detection failed, assuming <261")
+        return False
+
+    match = re.search(r"^systemd (\d+)(?:\D|$)", result.stdout, re.MULTILINE)
+    return match is not None and int(match.group(1)) >= 261
 
 
 def upgrade_channels(

@@ -201,6 +201,10 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "--sysconfdir=/etc"
 
+    # Disable debug assertions for performance/compatibility
+    # https://gitlab.freedesktop.org/mesa/mesa/-/blob/main/docs/meson.rst?ref_type=heads#options
+    (lib.mesonBool "b_ndebug" true)
+
     # What to build
     (lib.mesonOption "platforms" (lib.concatStringsSep "," eglPlatforms))
     (lib.mesonOption "gallium-drivers" (lib.concatStringsSep "," galliumDrivers))

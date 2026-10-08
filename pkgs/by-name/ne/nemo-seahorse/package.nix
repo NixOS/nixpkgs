@@ -10,7 +10,7 @@
   nemo,
   dbus-glib,
   libcryptui,
-  gcr,
+  gcr_3,
   libnotify,
   gnupg,
   gpgme,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     gpgme
     dbus-glib
     libcryptui
-    gcr
+    gcr_3
     libnotify
     gnupg
   ];
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
 
         services.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
           nemo
-          gcr
+          gcr_3
           libcryptui
           nemo-seahorse
         ];

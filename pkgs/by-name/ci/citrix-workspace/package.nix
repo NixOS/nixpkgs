@@ -111,17 +111,17 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citrix-workspace";
-  version = "26.04.0.105";
+  version = "26.08.0.153";
 
   src = requireFile rec {
     name = "linuxx64-${finalAttrs.version}.tar.gz";
-    sha256 = "1kl6b1ldjd9gb6cmvhxf6ggvc3amq1kz0qwjlb1fp6dxx0pivwm8";
+    sha256 = "17f0nlg18bz2b6qq86i04igm551b54nym41zi13m81906fzgi4h7";
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
       the 64-bit binaries, .tar.gz from:
 
-      https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html
+      https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-for-linux.html
 
       (if you do not find version ${finalAttrs.version} there, try at
       https://www.citrix.com/downloads/workspace-app/)
@@ -230,11 +230,22 @@ stdenv.mkDerivation (finalAttrs: {
       isSelfservice = program: (builtins.match "selfservice(.*)" program) != null;
       isWfica = program: (builtins.match "wfica(.*)" program) != null;
 
+      # These helpers read ICAROOT without accepting the generic -icaroot flag.
+      isEnvOnly =
+        program:
+        builtins.elem program [
+          "util/logmgr"
+          "util/nfcui"
+          "util/sendfeedback"
+          "util/setlog"
+          "util/storebrowse"
+        ];
+
       icaFlag =
         program:
         if isSelfservice program then
           "--icaroot"
-        else if isWfica program then
+        else if isWfica program || isEnvOnly program then
           null
         else
           "-icaroot";
@@ -252,6 +263,15 @@ stdenv.mkDerivation (finalAttrs: {
           ]
         );
 
+      runtimeSetup = ''
+        export NIX_REDIRECTS="/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAROOT/timezone"
+
+        # Citrix invokes the FHS helper path; NixOS supplies the privileged wrapper here.
+        if [ -x /run/wrappers/bin/fusermount3 ]; then
+          NIX_REDIRECTS="$NIX_REDIRECTS:/usr/bin/fusermount3=/run/wrappers/bin/fusermount3"
+        fi
+      '';
+
       # Only the ICA engine needs the top-level client directory on the library
       # path. Leaving it enabled for UI helpers exposes Citrix's session-only
       # libproxy.so to the embedded web stack, which then fails to resolve CGP
@@ -263,10 +283,10 @@ stdenv.mkDerivation (finalAttrs: {
           ++ [
             ''--set ICAROOT "$ICAInstDir"''
             ''--prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules"''
-            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${gstPluginPath}"''
+            ''--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$ICAInstDir/gst-plugins:${gstPluginPath}"''
             ''--prefix LD_LIBRARY_PATH : "${ldLibraryPath program}"''
             ''--set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so"''
-            ''--set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"''
+            "--run ${lib.escapeShellArg runtimeSetup}"
           ]
           ++ lib.optionals (isWfica program) [
             # wfica is an X11 client (it runs under XWayland). On a Wayland
@@ -280,7 +300,7 @@ stdenv.mkDerivation (finalAttrs: {
         );
 
       wrap = program: ''
-        wrapProgram $out/opt/citrix-icaclient/${program} \
+        wrapProgramShell $out/opt/citrix-icaclient/${program} \
           ${wrapperArgs program}
       '';
 
@@ -290,7 +310,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
       makeBinWrapper = program: wrapperName: ''
-        makeWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
+        makeShellWrapper $out/opt/citrix-icaclient/${program} $out/bin/${wrapperName} \
           ${wrapperArgs program}
       '';
 
@@ -307,6 +327,7 @@ stdenv.mkDerivation (finalAttrs: {
         "util/conncenter"
         "util/ctx_rehash"
         "util/ctxwebhelper"
+        "util/storebrowse"
       ];
     in
     ''
@@ -332,22 +353,29 @@ stdenv.mkDerivation (finalAttrs: {
       # the tarball still contains the legacy WebKitGTK 4.0 bundle.
       rm -rf "$ICAInstDir/Webkit2gtk4.0"
 
+      # hinst installs this user unit outside the package for non-root installs.
+      mkdir -p $out/lib/systemd/user
+      sed \
+        -e '/^#/d' \
+        -e "s,###ICAROOT###,$ICAInstDir,g" \
+        -e 's,###USER###,default,' \
+        linuxx64/linuxx64.cor/ctxcwalogd.service > $out/lib/systemd/user/ctxcwalogd.service
+
       # FHS launcher hinst generates even for non-root installs; it hardcodes
       # store paths without any of the wrapper environment.
       rm -f "$ICAInstDir/wfica.sh"
-      if [ -f "$ICAInstDir/util/setlog" ]; then
-        chmod +x "$ICAInstDir/util/setlog"
-        ln -sf "$ICAInstDir/util/setlog" "$out/bin/citrix-setlog"
-      fi
+      chmod +x "$ICAInstDir/util/setlog"
       ${mkWrappers wrapLink toWrap}
       ${makeBinWrapper "wfica" "wfica"}
+      ${makeBinWrapper "util/setlog" "citrix-setlog"}
       ${mkWrappers wrap [
         "PrimaryAuthManager"
         "ServiceRecord"
         "AuthManagerDaemon"
+        "util/logmgr"
+        "util/nfcui"
+        "util/sendfeedback"
       ]}
-
-      ln -sf $ICAInstDir/util/storebrowse $out/bin/storebrowse
 
       # As explained in https://wiki.archlinux.org/index.php/Citrix#Security_Certificates
       echo "Expanding certificates..."
@@ -362,9 +390,16 @@ stdenv.mkDerivation (finalAttrs: {
       rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so} || true
       ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
       ln -sf $ICAInstDir/util/gst_read1.0 $ICAInstDir/util/gst_read
+
+      # hinst links this plugin into FHS directories; expose it through the wrapper instead.
+      mkdir -p "$ICAInstDir/gst-plugins"
+      ln -s "$ICAInstDir/util/libgstflatstm1.0.so" \
+        "$ICAInstDir/gst-plugins/libgstflatstm.so"
+
       # `hinst` disables multimedia when it cannot link into FHS plugin
       # directories. In Nix we provide the plugin path via wrappers instead.
       sed -i 's/^MultiMedia=Off$/MultiMedia=On/' "$ICAInstDir/config/module.ini"
+      grep -Fxq 'MultiMedia=On' "$ICAInstDir/config/module.ini"
 
       echo "We arbitrarily set the timezone to UTC. No known consequences at this point."
       echo UTC > "$ICAInstDir/timezone"
@@ -433,6 +468,6 @@ stdenv.mkDerivation (finalAttrs: {
       khaneliman
       flacks
     ];
-    homepage = "https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-gcc11-for-linux.html";
+    homepage = "https://www.citrix.com/downloads/workspace-app/betas-and-tech-previews/workspace-app-tp-for-linux.html";
   };
 })

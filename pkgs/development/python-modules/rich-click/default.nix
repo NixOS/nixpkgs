@@ -1,23 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  rich,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  click,
+  rich,
   typing-extensions,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "rich-click";
-  version = "1.9.8";
+  version = "1.9.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ewels";
     repo = "rich-click";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FjtwlWYFqI7vQ7JtpCtTIi90mbEkmHSKH8SROy9d+vU=";
+    hash = "sha256-vFwsaqgue5IKBnBeHMa4jXFPqT7kI/WT0NieaAgtUjM=";
   };
 
   build-system = [ setuptools ];
@@ -28,8 +36,10 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ];
 
-  # Module has no test
-  doCheck = false;
+  # No python tests
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   pythonImportsCheck = [ "rich_click" ];
 

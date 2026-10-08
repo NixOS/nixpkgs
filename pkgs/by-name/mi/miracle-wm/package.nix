@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   boost,
@@ -36,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.10.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-htFgvXYgxQXV2U3F+tXEoaTb0udc2H1aHsIg5E8nRL8=";
+    hash = "sha256-XYU2I3hFjtQJgHqwS6EyW5PDjPap7TG/92e1v/IXKQA=";
   };
 
   postPatch = ''
@@ -150,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/miracle-wm-org/miracle-wm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     mainProgram = "miracle-wm";
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

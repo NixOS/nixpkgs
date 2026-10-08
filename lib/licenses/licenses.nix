@@ -1,39 +1,6 @@
 { lib }:
 let
-  inherit (lib) optionalAttrs;
-
-  mkLicense =
-    lname:
-    {
-      shortName ? lname,
-      # Most of our licenses are Free, explicitly declare unfree additions as such!
-      free ? true,
-      deprecated ? false,
-      spdxId ? null,
-      url ? null,
-      fullName ? null,
-      redistributable ? free,
-    }@attrs:
-    {
-      inherit
-        shortName
-        free
-        deprecated
-        redistributable
-        ;
-      licenseType = "simple";
-    }
-    // optionalAttrs (attrs ? spdxId) {
-      inherit spdxId;
-      url = "https://spdx.org/licenses/${spdxId}.html";
-    }
-    // optionalAttrs (attrs ? url) {
-      inherit url;
-    }
-    // optionalAttrs (attrs ? fullName) {
-      inherit fullName;
-    };
-
+  mkLicense = shortName: license: lib.licenses.mkLicense ({ inherit shortName; } // license);
 in
 lib.mapAttrs mkLicense (
   {
@@ -736,11 +703,6 @@ lib.mapAttrs mkLicense (
       url = "https://www.schristiancollins.com/generaluser.php"; # license included in sources
     };
 
-    gfl = {
-      fullName = "GUST Font License";
-      url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-LICENSE.txt";
-    };
-
     gfsl = {
       fullName = "GUST Font Source License";
       url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
@@ -1273,6 +1235,62 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    nvidiaCudaPython = {
+      shortName = "CUDA Python License";
+      fullName = "NVIDIA Software License for NVIDIA CUDA Python";
+      url = "https://github.com/NVIDIA/cuda-python/blob/v12.9.7/cuda_bindings/LICENSE";
+      free = false;
+      redistributable = true;
+    };
+
+    nvidiaCudnn = {
+      shortName = "cuDNN EULA";
+      fullName = "cuDNN SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/deeplearning/cudnn/backend/latest/reference/eula.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCusparse_lt = {
+      shortName = "cuSPARSELt EULA";
+      fullName = "cuSPARSELt SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/cuda/cusparselt/license.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCutensor = {
+      shortName = "cuTENSOR EULA";
+      fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/cuda/cutensor/latest/license.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCutlassDsl = {
+      shortName = "CUTLASS DSLs SLA";
+      fullName = "NVIDIA Software License Agreement for the NVIDIA CUTLASS DSLs";
+      url = "https://github.com/NVIDIA/cutlass/blob/main/EULA.txt";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaTensorrt = {
+      shortName = "TensorRT EULA";
+      fullName = "TensorRT SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
+      url = "https://docs.nvidia.com/deeplearning/tensorrt/latest/reference/sla.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaMath_sdk_sla = {
+      shortName = "NVIDIA Math SDK SLA";
+      fullName = "LICENSE AGREEMENT FOR NVIDIA MATH LIBRARIES SOFTWARE DEVELOPMENT KITS";
+      url = "https://developer.download.nvidia.com/compute/mathdx/License.txt";
+      free = false;
+      redistributable = false;
+    };
+
     obsidian = {
       fullName = "Obsidian End User Agreement";
       url = "https://obsidian.md/eula";
@@ -1479,6 +1497,12 @@ lib.mapAttrs mkLicense (
       # The license a slightly modified AGPL but still considered unfree by the
       # OSI for what seem like political reasons
       redistributable = true; # Definitely redistributable though, it's an AGPL derivative
+    };
+
+    stalwart = {
+      fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
+      url = "https://github.com/stalwartlabs/cli/blob/main/LICENSES/LicenseRef-SEL.txt";
+      free = false;
     };
 
     stk = {
@@ -1764,18 +1788,6 @@ lib.mapAttrs mkLicense (
   }
   // {
     # TODO: remove legacy aliases
-    apsl10 = {
-      # deprecated for consistency with `apple-psl20`; use `apple-psl10`
-      spdxId = "APSL-1.0";
-      fullName = "Apple Public Source License 1.0";
-      deprecated = true;
-    };
-    apsl20 = {
-      # deprecated due to confusion with Apache-2.0; use `apple-psl20`
-      spdxId = "APSL-2.0";
-      fullName = "Apple Public Source License 2.0";
-      deprecated = true;
-    };
     gpl2 = {
       spdxId = "GPL-2.0";
       fullName = "GNU General Public License v2.0";

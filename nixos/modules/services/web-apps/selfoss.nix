@@ -167,6 +167,27 @@ in
           for supported values.
         '';
       };
+
+      nginx = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to configure a Nginx virtual host to serve selfoss.
+
+            Further nginx configuration can be done by adapting `services.nginx.virtualHosts.''${config.services.selfoss.nginx.virtualHost}`.
+            See [](#opt-services.nginx.virtualHosts) for further information.
+          '';
+        };
+        virtualHost = mkOption {
+          type = types.str;
+          default = "selfoss";
+          description = ''
+            Name of the nginx virtualhost to use and set up. Only relevant when
+            {option}`services.selfoss.nginx.enable` is `true`.
+          '';
+        };
+      };
     };
   };
 
@@ -215,6 +236,7 @@ in
 
     systemd.services.selfoss-update = {
       serviceConfig = {
+        Type = "oneshot";
         ExecStart = "${pkgs.php83}/bin/php ${dataDir}/cliupdate.php";
         StateDirectory = [ (baseNameOf dataDir) ];
         User = "${cfg.user}";
@@ -222,8 +244,36 @@ in
       startAt = "hourly";
       after = [ "selfoss-config.service" ];
       wantedBy = [ "multi-user.target" ];
-
     };
 
+    services.nginx = mkIf cfg.nginx.enable {
+      enable = true;
+      virtualHosts.${cfg.nginx.virtualHost} = {
+        root = dataDir;
+        locations = {
+          "~* \\ (gif|jpg|png)".extraConfig = ''
+            expires 30d;
+          '';
+          "~ ^/(favicons|thumbnails)/.*$".tryFiles = "$uri /data/$uri";
+          "~* ^/(data/logs|data/sqlite|config\\.ini)".extraConfig = ''
+            deny all;
+          '';
+          "/" = {
+            index = "index.php";
+            tryFiles = "$uri /public/$uri /index.php$is_args$args";
+          };
+          "~ \\.php$".extraConfig = ''
+            fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
+            fastcgi_index index.php;
+            include ${config.services.nginx.package}/conf/fastcgi.conf;
+          '';
+        };
+      };
+    };
+
+    systemd.services."phpfpm-${cfg.pool}" = {
+      after = [ "selfoss-config.service" ];
+      requires = [ "selfoss-config.service" ];
+    };
   };
 }

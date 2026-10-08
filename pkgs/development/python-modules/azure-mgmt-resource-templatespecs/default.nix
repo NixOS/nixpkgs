@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-resource-templatespecs";
-  version = "1.0.0b1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_resource_templatespecs";
     inherit version;
-    hash = "sha256-D55zmrQ9sq2HDq5d8bXEv6BQC76hxuWKpeLpw4X6y8U=";
+    hash = "sha256-+ww/QaNXvQCuGtvKvudPzHqqKlcAMQttqe//1Z6U6Sc=";
   };
 
   build-system = [ setuptools ];

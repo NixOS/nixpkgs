@@ -5,7 +5,7 @@
   fetchPnpmDeps,
   rustPlatform,
   nodejs,
-  pnpm_10,
+  pnpm_11,
   pnpmConfigHook,
   geist-font,
   nix-update-script,
@@ -14,15 +14,15 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_11;
 
-  version = "0.27.0";
+  version = "0.38.2";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${version}";
-    hash = "sha256-c+AJAXMX88t+zzFsEAtFJDjDY5EbhmEyMRGFL4t63nE=";
+    hash = "sha256-PNIQvTMYqcu8hS1TOiXJtVEYTmFJdRv1nu0T5nG3MlE=";
   };
 
   # The Rust CLI embeds the dashboard UI via RustEmbed at compile time.
@@ -43,8 +43,8 @@ let
       pname = "agent-browser-dashboard";
       inherit version src pnpm;
       pnpmWorkspaces = [ "dashboard" ];
-      fetcherVersion = 3;
-      hash = "sha256-ldxmXpejqVN/xuWcdLYMwNPc1VZ1rdNwRrumy8Is3N4=";
+      fetcherVersion = 4;
+      hash = "sha256-X9kDzM6/LqBMMHhR9KEw+M2xH3yUJu2y4o26WLjNdAE=";
     };
 
     pnpmWorkspaces = [ "dashboard" ];
@@ -83,7 +83,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoHash = "sha256-2u7yokHCxIVq16370Mg+n5kf03yUDYJmctFxN1fnaAA=";
+  cargoHash = "sha256-RaIiFKYBt00kqodNoz3NlC7qnko+buvYB7w7mB1cHI8=";
 
   # Place the pre-built dashboard where RustEmbed expects it
   postUnpack = ''
@@ -94,13 +94,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # `which_exists` spawns the external `which` binary at runtime to probe
   # for optional tools; pin it to an absolute store path.
   postPatch = ''
-    substituteInPlace src/doctor/helpers.rs src/install.rs --replace-fail \
+    substituteInPlace src/doctor/helpers.rs src/install.rs \
+      src/native/cdp/chrome.rs src/native/cdp/lightpanda.rs --replace-fail \
       '"which"' '"${lib.getExe which}"'
   '';
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook
   ];
+
+  # Some tests use a shared state that makes them flaky when run concurrently.
+  dontUseCargoParallelTests = true;
 
   __darwinAllowLocalNetworking = true;
 
@@ -127,7 +131,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ codgician ];
+    maintainers = with lib.maintainers; [
+      baptiste0928
+      codgician
+    ];
     mainProgram = "agent-browser";
   };
 })

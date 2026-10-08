@@ -40,6 +40,7 @@
   lomiri-schemas,
   lomiri-telephony-service,
   lomiri-thumbnailer,
+  lomiri-ui-extras,
   lomiri-ui-toolkit,
   maliit-keyboard,
   mir_2_15,
@@ -57,17 +58,18 @@
   qtsvg,
   wrapGAppsHook3,
   wrapQtAppsHook,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri";
-  version = "0.5.0";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri";
     tag = finalAttrs.version;
-    hash = "sha256-blXEfDauwtDH+0OdUx0vAR+8lnAGrREssqjsBNmvomk=";
+    hash = "sha256-bjaZj78XZntYAZn8wZUgky4m4D56AZ9JgV7B43ZCNqc=";
   };
 
   patches = [
@@ -86,11 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     # Make greeter behave nicer & more Wayland-native
-    (fetchpatch {
-      name = "2014-lomiri-greeter-wrapper-on-wayland.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/e655e14c7d420021193e37debd3e7da620b45429/debian/patches/2014_lomiri-greeter-wrapper-on-wayland.patch";
-      hash = "sha256-aEId3UDqH1iUi9gV5IpW/5S5rke93UyZVr0jWlNYnOU=";
-    })
+    # https://salsa.debian.org/ubports-team/lomiri/-/raw/e655e14c7d420021193e37debd3e7da620b45429/debian/patches/2014_lomiri-greeter-wrapper-on-wayland.patch, adjusted for 0.6.0
+    ./2014_lomiri-greeter-wrapper-on-wayland.patch
     (fetchpatch {
       name = "2015-lomiri-greeter-use-wayland.patch";
       url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/2f5acfa085c901359bf6f6cccbce36d7e2981555/debian/patches/2015_lomiri-greeter-use-wayland.patch";
@@ -100,23 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Reduce desyncing of cursor
     (fetchpatch {
       name = "1005-lomiri-cursor-always-follow-cursor-position-from-mir.patch";
-      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/f3ba943006f5469a8a7aa24f232d6383afb3bc74/debian/patches/1005_cursor-always-follow-cursor-position-from-mir.patch";
-      hash = "sha256-FYWRHt3//gm3jT9dr35tH4PlZssMMA/zBhjkszgqTYo=";
-    })
-
-    # Undo start-here integration & uglier colours for launcher
-    (fetchpatch {
-      name = "0001-lomiri-LauncherPanel-Use-Lomiri-upstream-home-logo-and-home-background-color.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/defaabfaf4818ee6b618c97b34acf5e0ed2ebb2e.patch";
-      hash = "sha256-9YRWMV+1UT+EQd9Uq1+6enNzz+HDlSt3LTPM1BKJxiE=";
-    })
-
-    # Compatibility with newer lomiri-api
-    # Remove when version > 0.5.0
-    (fetchpatch {
-      name = "0002-lomiri-Adjust-to-newer-lomiri-api.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/26cbfa458766df406ed7d2c351ec84522371b083.patch";
-      hash = "sha256-1mPDtitMpktuvLs3Zn+6pCaMGTwGvIglGBdrm4Y8QwA=";
+      url = "https://salsa.debian.org/ubports-team/lomiri/-/raw/84cde8264050d7c7995dc317a3f3d6688e80c839/debian/patches/1005_cursor-always-follow-cursor-position-from-mir.patch";
+      hash = "sha256-BDu3/XWG5GLXWleEJ1yXfuAKxzhojtyiTl2Iae01AI0=";
     })
 
     ./9901-lomiri-Disable-Wizard.patch
@@ -125,37 +109,45 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
+  postPatch =
     # Written with a different qtmir branch in mind, but different branch breaks compat with some patches
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'qt5mir2server' 'qtmirserver'
-
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'qt5mir2server' 'qtmirserver'
+    ''
     # Need to replace prefix
-    substituteInPlace data/systemd-user/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
-
+    + ''
+      substituteInPlace data/systemd-user/CMakeLists.txt \
+        --replace-fail 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir)' 'pkg_get_variable(SYSTEMD_USER_UNIT_DIR systemd systemd_user_unit_dir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+    ''
     # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
-    substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
-      --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
-
+    + ''
+      substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
+        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
+    ''
     # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
     # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
-    substituteInPlace tests/mocks/CMakeLists.txt \
-      --replace-fail 'add_subdirectory(QtMir/Application)' ""
-
+    + ''
+      substituteInPlace tests/mocks/CMakeLists.txt \
+        --replace-fail 'add_subdirectory(QtMir/Application)' ""
+    ''
     # Seems like the Debian patch that added this didn't read the lightdm greeter entry properly, so everything gets passed twice
-    substituteInPlace data/lomiri-greeter.desktop.in.in \
-      --replace-fail 'lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' 'lomiri-greeter-wrapper'
-    substituteInPlace data/lomiri-greeter-wrapper \
-      --replace-fail 'LOMIRI_BINARY:-lomiri' "LOMIRI_BINARY:-$out/bin/lomiri"
-
+    + ''
+      substituteInPlace data/lomiri-greeter.desktop.in.in \
+        --replace-fail 'lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' 'lomiri-greeter-wrapper'
+      substituteInPlace data/lomiri-greeter-wrapper \
+        --replace-fail 'LOMIRI_BINARY:-lomiri' "LOMIRI_BINARY:-$out/bin/lomiri"
+    ''
     # Look up default wallpaper in current system
-    substituteInPlace plugins/Utils/constants.cpp \
-      --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
-  ''
-  + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    patchShebangs tests/whitespace/check_whitespace.py
-  '';
+    + ''
+      substituteInPlace plugins/Utils/constants.cpp \
+        --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      patchShebangs tests/whitespace/check_whitespace.py
+    '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -201,6 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtdeclarative
     qtmir
     qtsvg
+    xwayland
 
     # QML import path
     biometryd
@@ -209,10 +202,14 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-settings-components
     lomiri-telephony-service
     lomiri-thumbnailer
+    lomiri-ui-extras
     qtmultimedia
   ];
 
-  nativeCheckInputs = [ (python3.withPackages (ps: with ps; [ python-dbusmock ])) ];
+  nativeCheckInputs = [
+    libqtdbustest
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
+  ];
 
   checkInputs = [
     libqtdbustest
@@ -226,8 +223,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
-    (lib.cmakeBool "WITH_MIR2" true)
+    (lib.strings.cmakeBool "NO_TESTS" (!finalAttrs.finalPackage.doCheck))
+    (lib.strings.cmakeBool "WITH_MIR2" true)
+    # These get embedded into systemd service files
+    (lib.strings.cmakeFeature "DUAE_BIN" (lib.getExe' dbus "dbus-update-activation-environment"))
+    (lib.strings.cmakeFeature "XWAYLAND_BIN" (lib.getExe xwayland))
   ];
 
   postInstall = ''

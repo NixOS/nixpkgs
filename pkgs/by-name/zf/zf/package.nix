@@ -66,5 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       mmlb
     ];
     mainProgram = "zf";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

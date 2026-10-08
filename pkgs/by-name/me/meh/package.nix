@@ -35,6 +35,8 @@ stdenv.mkDerivation {
     giflib
   ];
 
+  patches = [ ./gif.patch ];
+
   meta = {
     description = "Minimal image viewer using raw XLib";
     homepage = "https://www.johnhawthorn.com/meh/";

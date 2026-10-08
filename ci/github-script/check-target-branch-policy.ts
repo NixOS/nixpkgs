@@ -1,4 +1,4 @@
-import { classify, split } from './supportedBranches.js'
+import { classify, split } from './supportedBranches.ts'
 
 type TargetBranchPolicyFacts = {
   base: string

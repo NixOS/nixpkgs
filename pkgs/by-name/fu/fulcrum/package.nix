@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fulcrum";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "cculianu";
     repo = "Fulcrum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a2i6tG2PFV0nXmy5Hx17Brwe/hRSpFs3DKtEB1uy/Wk=";
+    hash = "sha256-bqT2KBZKVPykRZ4/EsV3idzSkcj+1Fh59ODUJ3Zs0po=";
   };
 
   nativeBuildInputs = [

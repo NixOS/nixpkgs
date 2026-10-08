@@ -17,6 +17,7 @@
   lz4,
   pkg-config,
   qt6,
+  rapidyaml,
   shaderc,
   soundtouch,
   strip-nondeterminism,
@@ -35,8 +36,8 @@ let
   pcsx2_patches = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2_patches";
-    rev = "39c64ed2151155a9e7b9cc41129618c1ba0ad04f";
-    hash = "sha256-C5diPrIXvzOvskKQFjYWOfjQUkb/Omw2IN3K4b3nsK4=";
+    rev = "57e7089511430020ad9a8b22c6d27a593057d50a";
+    hash = "sha256-tua44ywpqCsbMMhS8G5K4nJJyQNIUvB35EBkTf7WurI=";
   };
 
   inherit (qt6)
@@ -49,13 +50,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "pcsx2";
-  version = "2.6.3";
+  version = "2.8.2";
   src = fetchFromGitHub {
     pname = "pcsx2-source";
     owner = "PCSX2";
     repo = "pcsx2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-85PZ7ZDoannmwoFeKM7hm7fQS1X2MPxAwm6k+Sa+bGc=";
+    hash = "sha256-sXVeOTVkd/c04M6BduPl34inqSUoJwfJoWCvpFdR4VQ=";
   };
 
   patches = [
@@ -102,6 +103,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     plutovg
     plutosvg
     kddockwidgets
+    rapidyaml
     shaderc
     soundtouch
     vulkan-headers

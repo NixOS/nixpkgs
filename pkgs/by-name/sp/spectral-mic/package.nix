@@ -1,7 +1,7 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
   makeWrapper,
   libxkbcommon,
@@ -33,8 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "mmc";
     repo = "spectral";
     tag = "v${finalAttrs.version}";

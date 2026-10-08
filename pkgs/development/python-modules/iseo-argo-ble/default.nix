@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "iseo-argo-ble";
-  version = "0.9.6";
+  version = "0.9.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FezVrasta";
     repo = "iseo-argo-ble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kIdAN8OhzSNW6jqN9ZNli0/RDZr7WNHNPulNYs9+o7U=";
+    hash = "sha256-beRrJStezm9TKv1zs0VBVd4vDvkxH70N+K+Gp1T8++k=";
   };
 
   build-system = [ hatchling ];

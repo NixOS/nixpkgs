@@ -18,16 +18,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lockbook-desktop";
-  version = "26.8.4";
+  version = "26.9.17";
 
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
     tag = finalAttrs.version;
-    hash = "sha256-ge6uo54T6sWYn4z2fE3teelkTofSLjMPeBGJ84a6N5c=";
+    hash = "sha256-bcSta6j/JnzExt7NAdGMdqzMinkx3WevN+0zqL6wS/o=";
   };
 
-  cargoHash = "sha256-KPRlvkhHGiYPTOzNoZ3nDmyJ0VmMESTSLpGvQl+I6Oo=";
+  cargoHash = "sha256-Xip7nmbJO1dr6PjabEbmH9SHbgvvpLZ8zGFbaF2BFUQ=";
 
   nativeBuildInputs = [
     pkg-config
