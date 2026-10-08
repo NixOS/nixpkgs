@@ -11,6 +11,8 @@
   autoPatchelfHook,
   python3,
   openssl,
+  azure-cli,
+  runCommand,
 }:
 
 {
@@ -269,6 +271,55 @@
       pyyaml
     ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
+  };
+
+  ml = mkAzExtension rec {
+    pname = "ml";
+    version = "2.45.1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/ml-${version}-py3-none-any.whl";
+    hash = "sha256-iqUZA6bFJwR615/Ow3ZgnCaMthicLRQLhMYjUG9tdz0=";
+    description = "Microsoft Azure Command-Line Tools AzureMachineLearningWorkspaces Extension";
+    pythonRelaxDeps = [ "azure-identity" ];
+    propagatedBuildInputs = with python3Packages; [
+      # Pinned exactly by the extension, bump both together
+      (azure-ai-ml.override { marshmallow = marshmallow_3; })
+      azure-identity
+      azure-mgmt-resourcegraph
+      cryptography
+      docker
+      # Required by `az ml compute connect-ssh`
+      websockets
+    ];
+    # Check for websockets without pip, which is not available to az
+    postInstall = ''
+      file=$out/${python3.sitePackages}/azext_mlv2/manual/custom/_ssh_command.py
+      substituteInPlace $file \
+        --replace-fail \
+          'reqs = subprocess.check_output([sys.executable, "-m", "pip", "freeze"])' \
+          'import importlib.util' \
+        --replace-fail \
+          'installed_packages = [r.decode().split("==")[0] for r in reqs.split()]' \
+          'installed_packages = ["websockets"] if importlib.util.find_spec("websockets") else []'
+      # The wheel was already byte-compiled during installation
+      ${python3.pythonOnBuildForHost.interpreter} -m compileall -q -f -o 0 -o 1 $file
+    '';
+    passthru.tests.azMlHelp =
+      runCommand "test-az-ml-help"
+        {
+          nativeBuildInputs = [ (azure-cli.withExtensions [ azure-cli.extensions.ml ]) ];
+        }
+        ''
+          export HOME=$TMPDIR
+          export AZURE_EXTENSION_USE_DYNAMIC_INSTALL=no
+          az ml -h
+          az ml job create -h
+          az ml compute connect-ssh -h
+          touch $out
+        '';
+    meta = {
+      changelog = "https://github.com/Azure/azure-cli-extensions/blob/ml-${version}/src/machinelearningservices/CHANGELOG.rst";
+      maintainers = with lib.maintainers; [ bryanhonof ];
+    };
   };
 
   rdbms-connect = mkAzExtension rec {
