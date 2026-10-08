@@ -27,11 +27,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+o/2exHsunjQBGjXrNQ1pQ5TKV53++qCxIMeVyOh5QY=";
   };
 
-  postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    # Compiling the tests doesn't work for cross builds.
-    substituteInPlace lib/py/CMakeLists.txt \
-      --replace-fail 'COMMAND ''${THRIFT_COMPILER} --gen py test/test_thrift_file/TestServer.thrift' ""
-  '';
+  postPatch =
+    if finalAttrs.finalPackage.doCheck then
+      null
+    else
+      ''
+        # Compiling the tests doesn't work for cross builds.
+        substituteInPlace lib/py/CMakeLists.txt \
+          --replace-fail 'COMMAND ''${THRIFT_COMPILER} --gen py test/test_thrift_file/TestServer.thrift' ""
+      '';
 
   # Workaround to make the Python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
@@ -82,8 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     # FIXME: Fails to link in static mode with undefined reference to
     # `boost::unit_test::unit_test_main(bool (*)(), int, char**)'
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # Building tutorials requires running thrift.
-    (lib.cmakeBool "BUILD_TUTORIALS" (stdenv.buildPlatform.canExecute stdenv.hostPlatform))
+    (lib.cmakeBool "BUILD_TUTORIALS" false)
   ];
 
   disabledTests = [
