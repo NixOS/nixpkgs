@@ -63,7 +63,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Gaurav-Gosain/tuios";
     changelog = "https://github.com/Gaurav-Gosain/tuios/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kpbaks ];
+    maintainers = with lib.maintainers; [
+      kpbaks
+      adamcstephens
+    ];
     mainProgram = "tuios";
   };
 })
