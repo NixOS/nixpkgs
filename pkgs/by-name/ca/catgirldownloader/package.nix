@@ -16,7 +16,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "catgirldownloader";
   version = "0.5";
 
-  __structuredAttrs = true;
   pyproject = false;
 
   src = fetchFromGitHub {
