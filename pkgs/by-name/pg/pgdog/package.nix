@@ -45,8 +45,6 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } (finalAttrs: {
     openssl
   ];
 
-  strictDeps = true;
-
   # Several tests rely on networking
   doCheck = false;
 
