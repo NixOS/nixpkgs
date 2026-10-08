@@ -32,7 +32,6 @@ buildGoModule (finalAttrs: {
     hash = "sha256-CQOmVVTegOZVwWjGzSek6BehdJCQ5ddOR6M9seWqZRw=";
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   modRoot = "daemon";
