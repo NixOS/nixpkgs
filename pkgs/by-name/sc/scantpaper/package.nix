@@ -31,19 +31,18 @@ let
   ];
 
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "scantpaper";
-  version = "3.0.7";
+  version = "3.0.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "carygravel";
     repo = "scantpaper";
-    rev = "v${version}";
-    hash = "sha256-CKD6hggVIHNPAft+DAsF4S+uZo+u/gbUStz9VaZtDBM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6zjIEwDHdOIAIucV4T/zY10F80nQNOgnRkA+i2n7Sng=";
   };
 
-  pyproject = true;
-  strictDeps = true;
   __structuredAttrs = true;
 
   dontWrapGApps = true;
@@ -104,12 +103,23 @@ python3.pkgs.buildPythonApplication rec {
     (lib.makeBinPath runtimeExecDeps)
   ];
 
-  meta = with lib; {
+  postInstall = ''
+    install -Dm644 \
+      icons/hicolor/scalable/apps/scantpaper.svg \
+      $out/share/icons/hicolor/scalable/apps/scantpaper.svg
+
+    install -Dm444 \
+      org.scantpaper.desktop \
+      $out/share/applications/org.scantpaper.desktop
+  '';
+
+  meta = {
+    changelog = "https://github.com/carygravel/scantpaper/blob/${finalAttrs.src.tag}/changelog.md";
     description = "GUI to produce PDFs or DjVus from scanned documents";
     homepage = "https://github.com/carygravel/scantpaper";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ euxane ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ euxane ];
+    platforms = lib.platforms.linux;
     mainProgram = "scantpaper";
   };
-}
+})

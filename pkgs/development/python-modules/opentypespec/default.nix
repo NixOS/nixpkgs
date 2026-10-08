@@ -1,13 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  unittestCheckHook,
+  fetchFromGitHub,
+  pytestCheckHook,
   setuptools-scm,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "opentypespec";
   version = "1.9.2";
   pyproject = true;
@@ -17,22 +17,22 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-5j89rMDKxGLLoN88/T7+e0xE8/eOmKN3eDpWxekJGiQ=";
+  src = fetchFromGitHub {
+    owner = "simoncozens";
+    repo = "opentypespec-py";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TTZZZVtIFMJNeC1R2pvE1dcCEx+U7mBtLq+kBDkI6+Q=";
   };
 
-  nativeCheckInputs = [ unittestCheckHook ];
-  unittestFlagsArray = [
-    "-s"
-    "test"
-    "-v"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python library for OpenType specification metadata";
     homepage = "https://github.com/simoncozens/opentypespec-py";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danc86 ];
+    maintainers = with lib.maintainers; [
+      danc86
+      jopejoe1
+    ];
   };
-}
+})

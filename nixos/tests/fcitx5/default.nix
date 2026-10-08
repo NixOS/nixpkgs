@@ -37,7 +37,7 @@
         ];
         fcitx5.settings = {
           globalOptions = {
-            "Hotkey"."EnumerateSkipFirst" = "False";
+            "Hotkey"."EnumerateSkipFirst" = false;
             "Hotkey/TriggerKeys"."0" = "Control+space";
             "Hotkey/EnumerateForwardKeys"."0" = "Alt+Shift_L";
             "Hotkey/EnumerateBackwardKeys"."0" = "Alt+Shift_R";

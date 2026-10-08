@@ -26,6 +26,13 @@ buildPythonPackage rec {
     hash = "sha256-HhEtWYWdxJZOMS3dqB2VdQS7aSdpkRhq7EZCJ55n2OE=";
   };
 
+  patches = [
+    # Fix cross compilation by using PKG_CONFIG env variable instead
+    # of hardcoded binary name
+    # https://github.com/libfuse/pyfuse3/pull/148
+    ./fix_cross_parse_pkg_config.patch
+  ];
+
   build-system = [
     cython
     setuptools

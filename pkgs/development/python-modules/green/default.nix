@@ -2,19 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   colorama,
   coverage,
   unidecode,
   lxml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "green";
   version = "4.0.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "green";
+    inherit (finalAttrs) version;
     hash = "sha256-pAZ8P5/CpkTtNfU2ZJUGQzROxGLm0uu1vXS3YpcVprE=";
   };
 
@@ -25,7 +29,9 @@ buildPythonPackage rec {
       --subst-var-by green "$out/bin/green"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     colorama
     coverage
     unidecode
@@ -44,7 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python test runner";
     homepage = "https://github.com/CleanCut/green";
+    changelog = "https://github.com/CleanCut/green/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

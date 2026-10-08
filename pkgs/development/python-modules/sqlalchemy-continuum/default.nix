@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sqlalchemy_continuum";
     inherit version;
-    hash = "sha256-S+K2bFuVH9zPONpbRcVvZPRbdlb+afVjEL9yNUj2Evw=";
+    hash = "sha256-MO+qJqDGMlrHDQNIR+bpcq5wYWtlU7sBaif37S8aEAM=";
   };
 
   build-system = [ setuptools ];

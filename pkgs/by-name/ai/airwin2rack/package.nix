@@ -192,7 +192,7 @@ stdenv.mkDerivation {
     license =
       with lib.licenses;
       [ mit ]
-      ++ lib.optional enableVCVRack [
+      ++ lib.optionals enableVCVRack [
         gpl3Plus
         cc-by-nc-40
         unfreeRedistributable

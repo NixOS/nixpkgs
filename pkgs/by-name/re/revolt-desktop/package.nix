@@ -52,7 +52,7 @@
           .${stdenvNoCC.hostPlatform.system}
             or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
-        appimageContents = appimageTools.extractType2 { inherit (final) src pname version; };
+        appimageContents = appimageTools.extract { inherit (final) src pname version; };
 
         dontUnpack = true;
 

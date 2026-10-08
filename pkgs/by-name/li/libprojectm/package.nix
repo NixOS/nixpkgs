@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libprojectm";
-  version = "4.1.6";
+  version = "4.1.7";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IUVll+nRvIAOxrb16gWb9OpKzMRRuj28j/v+LvaLY5Y=";
+    hash = "sha256-g7a5Ce7dEfOBGn6wMgdwujkWSi+vLeayWHClvH5W1wY=";
     fetchSubmodules = true;
   };
 

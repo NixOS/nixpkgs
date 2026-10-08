@@ -3,6 +3,8 @@
   lib,
   vscode-utils,
   vscode-extension-update-script,
+  stdenv,
+  autoPatchelfHook,
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
@@ -11,43 +13,46 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-VZKvoTJ/IKxYsEJl0XhtglsggmrYdaRUlXCpDv/9fQ0=";
-        };
-        "x86_64-darwin" = {
-          arch = "darwin-x64";
-          hash = "sha256-jo+fET/IyOl2zI/xxYy3KwnyOegTOXFhO1hDg5QtWrQ=";
+          hash = "sha256-eo/NsznwHU4IFTKcxI4eGJrutHzmY4PLigT+2B5uklk=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-HOSKZjozJlWn++P5bSwWdK3I+fgsPtS8kyvDWHMJQAY=";
+          hash = "sha256-T+bzAp9FkHdMU4Nklo7S37q0tnC91uIbgUOYSQNCkPo=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-ABBYsSR3HQgSnnXUJXsg1DwqwFj9W6CT59/1fuqWsTc=";
+          hash = "sha256-LIPX1ri904wH7PKJE1uMHcefc1lXb1KV6TCDSph7P9o=";
         };
       };
     in
     {
       name = "visualjj";
       publisher = "visualjj";
-      version = "0.29.0";
+      version = "0.35.0";
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
   passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Jujutsu version control integration, for simpler Git workflow";
-    downloadPage = "https://www.visualjj.com";
     homepage = "https://www.visualjj.com";
+    downloadPage = "https://marketplace.visualstudio.com/items?itemName=visualjj.visualjj";
+    changelog = "https://marketplace.visualstudio.com/items/visualjj.visualjj/changelog";
     license = lib.licenses.unfree;
     platforms = [
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sandarukasa ];
   };
 }

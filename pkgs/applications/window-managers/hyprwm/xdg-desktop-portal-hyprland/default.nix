@@ -7,6 +7,7 @@
   pkg-config,
   wrapQtAppsHook,
   nix-update-script,
+  grim,
   hyprland,
   hyprland-protocols,
   hyprlang,
@@ -27,13 +28,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.12";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B7nwX0PE0KBo1/ZtuwJtA7dBG6gdPW5tSBb0skY8DHA=";
+    hash = "sha256-sRAGZVUPgwxpx19uZwaSERa86g1AbsBUQ3SxhaRPgeg=";
   };
 
   depsBuildBuild = [
@@ -67,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
+  separateDebugInfo = !debug;
 
   dontWrapQtApps = true;
 
@@ -81,7 +83,12 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${lib.makeBinPath [ (placeholder "out") ]}
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          (placeholder "out")
+          grim
+        ]
+      }
   '';
 
   passthru = {

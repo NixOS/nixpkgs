@@ -18,7 +18,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "upscaler";
-  version = "1.6.3";
+  version = "1.6.5";
 
   pyproject = false; # meson instead of pyproject
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "World";
     repo = "Upscaler";
     rev = finalAttrs.version;
-    hash = "sha256-h+m5YOnsWFmQH0FxYrGbUzGMr38HhnkHegJl4daRXAs=";
+    hash = "sha256-+u17fUdYMCuDS4vgayZCpj9KO5o/x5PaUYT2jbNmMUw=";
   };
 
   passthru.updateScript = gitUpdater { };
@@ -36,8 +36,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace upscaler/window.py \
       --replace-fail '"upscayl-bin",' '"${lib.getExe upscayl-ncnn}",'
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     wrapGAppsHook4

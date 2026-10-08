@@ -18,10 +18,15 @@ runCommand "${pname}-${version}"
   {
     inherit pname version;
     preferLocalBuild = true;
+    strictDeps = true;
     passthru = {
       isLLVM = true;
       inherit targetPrefix;
       inherit llvm lld;
+    };
+    __structuredAttrs = true;
+    meta = {
+      inherit (llvm.meta) teams;
     };
   }
   ''

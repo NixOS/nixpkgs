@@ -34,13 +34,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nix-scheduler-hook";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromCodeberg {
     owner = "lisanna";
     repo = "nix-scheduler-hook";
     tag = "v${version}";
-    hash = "sha256-r8ybbPxQK+ohsaz4+brrsivj77fCqrrHPskfyrp6R2A=";
+    hash = "sha256-QMenfkNvn6bBGdu+d6i533/CkHNS7Tmr40cgl/ks5dk=";
   };
 
   sourceRoot = "source/src";

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-qt";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     tag = "mt32emu_qt_${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-O9x+uL1QnixXNl/rTCnGwbutoCs6bI8vCmkhAWJW4Do=";
+    hash = "sha256-QuOQvKNCKl/UypTub9FCoYu3HJrMi6LksKPGaQUWfO8=";
   };
 
   postPatch =
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
       synthesis and conversion of pre-recorded SMF files to WAVE making use of
       the mt32emu library and the Qt framework.
     '';
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
   };

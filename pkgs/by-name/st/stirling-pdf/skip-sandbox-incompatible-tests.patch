@@ -1,0 +1,26 @@
+diff --git a/app/core/src/test/java/stirling/software/SPDF/controller/api/misc/ConfigControllerTest.java b/app/core/src/test/java/stirling/software/SPDF/controller/api/misc/ConfigControllerTest.java
+index 2ed6bb29f..8c48c1da2 100644
+--- a/app/core/src/test/java/stirling/software/SPDF/controller/api/misc/ConfigControllerTest.java
++++ b/app/core/src/test/java/stirling/software/SPDF/controller/api/misc/ConfigControllerTest.java
+@@ -230,4 +230,5 @@ class ConfigControllerTest {
+     @Test
++    @org.junit.jupiter.api.Disabled("requires a non-loopback network interface")
+     void resolveFrontendUrl_fallsThroughOnLoopbackHost() {
+         System sys = mock(System.class);
+         when(applicationProperties.getSystem()).thenReturn(sys);
+@@ -251,4 +252,5 @@ class ConfigControllerTest {
+     @Test
++    @org.junit.jupiter.api.Disabled("requires a non-loopback network interface")
+     void resolveFrontendUrl_usesActualPortWhenServerPortIsEphemeral() {
+         System sys = mock(System.class);
+         when(applicationProperties.getSystem()).thenReturn(sys);
+diff --git a/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java b/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java
+index 8f57e15bc..143155191 100644
+--- a/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java
++++ b/app/proprietary/src/test/java/stirling/software/proprietary/cluster/s3/S3ClientsTest.java
+@@ -16,4 +16,5 @@ class S3ClientsTest {
+     @Test
++    @org.junit.jupiter.api.Disabled("requires DNS access")
+     void validateEndpointHost_publicAwsHost_passes() {
+         assertThatCode(
+                         () ->

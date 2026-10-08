@@ -25,7 +25,7 @@
   glib,
   gtk3,
   libGL,
-  libappindicator-gtk3,
+  libappindicator,
   libdrm,
   libnotify,
   libpulseaudio,
@@ -37,7 +37,7 @@
   nss,
   pango,
   pipewire,
-  systemd,
+  systemdLibs,
   wayland,
   xdg-utils,
   libxtst,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       glib
       gtk3
       libGL
-      libappindicator-gtk3
+      libappindicator
       libdrm
       libnotify
       libpulseaudio
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
       pango
       pipewire
       stdenv.cc.cc
-      systemd
+      systemdLibs
       wayland
       libx11
       libxscrnsaver

@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication rec {
       janus
       keyring
       logbook
-      (matrix-nio.override { withOlm = true; })
+      (matrix-nio.override { withVodozemac = true; })
       peewee
       platformdirs
       prompt-toolkit
@@ -93,5 +93,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/matrix-org/pantalaimon";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ valodim ];
+    knownVulnerabilities = [
+      ''
+        pantalaimon was archived upstream, the last activity was from 4. June 2025.
+      ''
+    ];
   };
 }

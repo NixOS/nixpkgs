@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl curl unzip
 from __future__ import annotations
 
 import click
@@ -149,6 +149,7 @@ def _diff_file(filepath: str, old_version: DiscourseVersion, new_version: Discou
 
     with tempfile.NamedTemporaryFile(mode='w') as o, tempfile.NamedTemporaryFile(mode='w') as n:
         o.write(old), n.write(new)
+        o.flush(), n.flush()
         width = shutil.get_terminal_size((80, 20)).columns
         diff_proc = subprocess.run(
             ['diff', '--color=always', f'--width={width}', '-y', o.name, n.name],
@@ -236,12 +237,71 @@ def update(rev):
         with open(rubyenv_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, version.tag))
 
+    # download and copy the gems that are specified as path dependencies so bundle/bundix works
+    # currently this is only `migrations`
+    with tempfile.TemporaryDirectory() as d:
+        print("downloading discourse gems (path dependencies) for bundix")
+        subprocess.check_output(['curl',f'https://codeload.github.com/discourse/discourse/zip/refs/tags/{version.tag}','-o','discourse.zip'], cwd=d)
+        subprocess.check_output(['unzip', f'discourse.zip'], cwd=d)
+        subprocess.check_output(['mv', f'discourse-{version.version}/migrations', rubyenv_dir / 'migrations'], cwd=d)
+
+    # -- sed commands borrowed from ../../../by-name/gi/gitlab/update.py which has a similar predicament with path deps
+    # comment from that file: "Undo our gemset.nix patches so that bundix runs through"
+    subprocess.check_output(
+        ["sed", "-i", "-e", "s|\\${src}/||g", "gemset.nix"], cwd=rubyenv_dir
+    )
+    subprocess.check_output(
+        ["sed", "-i", "-e", "s|^src:[[:space:]]||g", "gemset.nix"], cwd=rubyenv_dir
+    )
+
     # work around https://github.com/nix-community/bundix/issues/8
     os.environ["BUNDLE_FORCE_RUBY_PLATFORM"] = "true"
     subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
     _remove_platforms(rubyenv_dir)
     subprocess.check_output(['bundix'], cwd=rubyenv_dir)
 
+    # -- also from gitlab pkg, see above
+    subprocess.check_output(
+        [
+            "sed",
+            "-i",
+            "-e",
+            "1c\\src: {",
+            "-e",
+            's:path = \\(migrations/[^;]*\\);:path = "${src}/\\1";:g',
+            "gemset.nix",
+        ],
+        cwd=rubyenv_dir,
+    )
+    subprocess.check_output(["rm", "-rf", "migrations"], cwd=rubyenv_dir)
+    # -- end gitlab pkg code
+
+    # update the sass-embedded override
+    # must run *after* the gemfile update!
+    dart_sass_ver = _nix_eval('discourse.rubyEnv.gemset.sass-embedded.version')
+    for platform in ["x64", "arm64"]:
+        prev_hash = _nix_eval(f'discourse.rubyEnv.dart-{platform}-hash')
+        new_hash = subprocess.check_output([
+            "nurl",
+            "--fetcher", "fetchzip",
+            "--hash",
+            f"https://github.com/sass/dart-sass/releases/download/{dart_sass_ver}/dart-sass-{dart_sass_ver}-linux-{platform}.tar.gz",
+        ], text=True).strip("\n")
+
+        if prev_hash == new_hash:
+            click.echo(f"dart-sass for {platform} up to date!")
+            continue
+
+        click.echo(f"Update vendored dart-sass for {platform} to {dart_sass_ver} (hash {prev_hash} -> {new_hash})")
+
+        with open(Path(__file__).parent / "default.nix", 'r+') as f:
+            content = f.read()
+            content = content.replace(prev_hash, new_hash)
+            f.seek(0)
+            f.write(content)
+            f.truncate()
+
+    # update the discourse package itself
     _call_nix_update('discourse', version.version)
 
     old_pnpm_hash = _nix_eval('discourse.assets.pnpmDeps.outputHash')

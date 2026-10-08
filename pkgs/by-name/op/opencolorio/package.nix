@@ -23,16 +23,24 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.5.1";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    hash = "sha256-iI32dnGZdizLBOs7IQtmLUYMPWxadvWNeqZjy49AWb0=";
+    hash = "sha256-b4tdQ9VH9M7hAD5Uuxu4QKwwpaVwroj/Bvg+Zsy0M1M=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  # This test produces an invalid multi-line array in YAML, which is rejected
+  # by yaml-cpp 0.9.0.
+  # https://github.com/AcademySoftwareFoundation/OpenColorIO/issues/2340
+  postPatch = ''
+    substituteInPlace tests/cpu/Config_tests.cpp --replace-fail \
+      'inactive_colorspaces: [cs1\t\n   \n,   \ncs2]\n' \
+      'inactive_colorspaces: [cs1\t\n   \n  ,   \n  cs2]\n'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # these tests don't like being run headless on darwin. no builtin
     # way of skipping tests so this is what we're reduced to.
     substituteInPlace tests/cpu/Config_tests.cpp \

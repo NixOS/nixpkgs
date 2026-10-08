@@ -33,6 +33,7 @@
           hardwareDecodingCodecs = {
             h264 = true;
             hevc = true;
+            hevc10bit = true;
             vp9 = true;
             hevcRExt10bit = true;
             hevcRExt12bit = true;
@@ -126,14 +127,14 @@
 
 
       def api_get(path):
-          return f"curl --fail 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{auth_header}'"
+          return f"curl --fail 'http://localhost:8096{path}' -H 'Authorization:{auth_header}'"
 
 
       def api_post(path, json_file=None):
           if json_file:
-              return f"curl --fail -X post 'http://localhost:8096{path}' -d '@{json_file}' -H Content-Type:application/json -H 'X-Emby-Authorization:{auth_header}'"
+              return f"curl --fail -X post 'http://localhost:8096{path}' -d '@{json_file}' -H Content-Type:application/json -H 'Authorization:{auth_header}'"
           else:
-              return f"curl --fail -X post 'http://localhost:8096{path}' -H 'X-Emby-Authorization:{auth_header}'"
+              return f"curl --fail -X post 'http://localhost:8096{path}' -H 'Authorization:{auth_header}'"
 
       # Test dashboard-based configuration verification
       with subtest("Dashboard configuration verification"):
@@ -148,7 +149,7 @@
           token = auth_result["AccessToken"]
 
           def api_get_with_token(path):
-              return f"curl --fail 'http://localhost:8096{path}' -H 'X-Emby-Authorization:MediaBrowser Client=\"Test\", DeviceId=\"test\", Token={token}'"
+              return f"curl --fail 'http://localhost:8096{path}' -H 'Authorization:MediaBrowser Client=\"Test\", DeviceId=\"test\", Token={token}'"
 
           # Get encoding config and verify key settings
           config = json.loads(machineWithTranscoding.succeed(api_get_with_token("/System/Configuration/encoding")))
@@ -174,7 +175,8 @@
           assert config.get("EnableIntelLowPowerH264HwEncoder") == True, f"Intel low power H264: expected True, got '{config.get('EnableIntelLowPowerH264HwEncoder')}'"
           assert config.get("EnableIntelLowPowerHevcHwEncoder") == True, f"Intel low power HEVC: expected True, got '{config.get('EnableIntelLowPowerHevcHwEncoder')}'"
 
-          # HEVC RExt color depth verification
+          # HEVC color depth verification
+          assert config.get("EnableDecodingColorDepth10Hevc") == True, f"HEVC 10bit: expected True, got '{config.get('EnableDecodingColorDepth10Hevc')}'"
           assert config.get("EnableDecodingColorDepth10HevcRext") == True, f"HEVC RExt 10bit: expected True, got '{config.get('EnableDecodingColorDepth10HevcRext')}'"
           assert config.get("EnableDecodingColorDepth12HevcRext") == True, f"HEVC RExt 12bit: expected True, got '{config.get('EnableDecodingColorDepth12HevcRext')}'"
 
@@ -277,7 +279,7 @@
 
           machine.succeed(
               "ffmpeg"
-              + f" -headers 'X-Emby-Authorization:{auth_header}'"
+              + f" -headers 'Authorization:{auth_header}'"
               + f" -i http://localhost:8096/Videos/{video}/master.m3u8?mediaSourceId={media_source_id}"
               + " /tmp/test.mkv"
           )

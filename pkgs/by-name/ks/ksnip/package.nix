@@ -36,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
   ];
 
+  postPatch = ''
+    substituteInPlace desktop/org.ksnip.ksnip.desktop \
+      --replace-fail "Exec=/usr/bin/ksnip" "Exec=ksnip"
+  '';
+
   meta = {
     homepage = "https://github.com/ksnip/ksnip";
     description = "Cross-platform screenshot tool with many annotation features";

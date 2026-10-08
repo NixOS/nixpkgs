@@ -64,6 +64,8 @@ buildGhidraExtension {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Leverage the binutils disassembler capabilities for various processors";
     homepage = "https://ghidra-sre.org/";
     downloadPage = "https://github.com/NationalSecurityAgency/ghidra/tree/master/GPL/GnuDisassembler";

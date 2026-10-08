@@ -2,23 +2,24 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  cmake,
   qt6Packages,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "openfortivpn-webview-qt";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "gm-vm";
     repo = "openfortivpn-webview";
-    rev = "v${finalAttrs.version}-electron";
-    hash = "sha256-jGDCFdqRfnYwUgVs3KO1pDr52JgkYVRHi2KvABaZFl4=";
+    rev = "v${finalAttrs.version}-qt";
+    hash = "sha256-TohrOgLzvxmUsRVV36XHgE9ul38CjU/qKF+LZOZQieE=";
   };
   sourceRoot = "${finalAttrs.src.name}/openfortivpn-webview-qt";
 
   nativeBuildInputs = [
+    cmake
     qt6Packages.wrapQtAppsHook
-    qt6Packages.qmake
   ];
   buildInputs = [ qt6Packages.qtwebengine ];
   installPhase = ''

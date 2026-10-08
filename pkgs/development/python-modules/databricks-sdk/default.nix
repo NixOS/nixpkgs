@@ -22,7 +22,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "databricks-sdk";
-  version = "0.113.0";
+  version = "0.138.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
     owner = "databricks";
     repo = "databricks-sdk-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pe7Dh9P54AnyOtnBU4a7gRwg/dyC9OSwzbKOo+9kCtY=";
+    hash = "sha256-21Y0MK6M+4vL5meByD/Na1UqD3d4n1fGXKI5mhaG/oA=";
   };
 
   build-system = [

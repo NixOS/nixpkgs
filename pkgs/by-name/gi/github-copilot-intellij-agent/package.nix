@@ -88,7 +88,6 @@ stdenv.mkDerivation rec {
     mainProgram = "copilot-agent";
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

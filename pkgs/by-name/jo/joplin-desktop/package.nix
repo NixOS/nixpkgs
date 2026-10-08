@@ -18,6 +18,7 @@
   buildPackages,
   callPackage,
   libGL,
+  libnotify,
   clang_20,
   jq,
   glib,
@@ -43,10 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     postFetch = ''
       # there's a file with a weird name that causes a hash mismatch on darwin
       rm $out/packages/app-cli/tests/support/photo*
-
-      # Remove after upstream updates to Yarn 4.14
-      # https://github.com/laurent22/joplin/blob/dev/package.json#L103
-      sed -i '/__metadata/{n;s/version: 8$/version: 9/;}' $out/yarn.lock
     '';
     inherit (releaseData) hash;
   };
@@ -70,8 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
+    libnotify
   ];
 
   nativeBuildInputs = [
@@ -103,9 +101,15 @@ stdenv.mkDerivation (finalAttrs: {
     # before we can patchShebangs additional paths (see buildPhase).
     # https://github.com/NixOS/nixpkgs/blob/3cd051861c41df675cee20153bfd7befee120a98/pkgs/by-name/ya/yarn-berry/fetcher/yarn-berry-config-hook.sh#L83
     YARN_ENABLE_SCRIPTS = 0;
+
+    # Use nixpkgs' patched offline Yarn instead of Joplin's vendored Yarn.
+    YARN_IGNORE_PATH = 1;
   };
 
   postPatch = ''
+    # Nixpkgs provides Electron; don't run Joplin's networked Electron installer.
+    sed -i "/^[[:space:]]*'installElectron',$/d" packages/app-desktop/gulpfile.ts
+
     # Don't automatically build everything
     sed -i '/postinstall/d' package.json
     # Don't install onenote-converter subpackage deps
@@ -191,7 +195,13 @@ stdenv.mkDerivation (finalAttrs: {
       done
 
       makeWrapper "$outdir"/joplin $out/bin/joplin-desktop \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libGL
+            libnotify
+          ]
+        }" \
+        --prefix PATH : "${lib.makeBinPath [ libnotify ]}" \
         --prefix XDG_DATA_DIRS : "${glib.getSchemaDataDirPath gsettings-desktop-schemas}" \
         --add-flags "--no-sandbox" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-wayland-ime --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
@@ -224,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "joplin";
       comment = "Joplin for Desktop";
       categories = [ "Office" ];
-      startupWMClass = "@joplin/app-desktop";
+      startupWMClass = "joplin-app-desktop";
       mimeTypes = [ "x-scheme-handler/joplin" ];
     })
   ];

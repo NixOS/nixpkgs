@@ -15,16 +15,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "beads";
-  version = "1.0.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "gastownhall";
     repo = "beads";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K3X67XgUl55mZS4r4V/KTbXPNqCV7fPHi8HnrDime+E=";
+    hash = "sha256-QryUnK04c9Wm9/VgWoaOJW9M2HoZVZzSDMSMBtjKiyc=";
   };
 
-  vendorHash = "sha256-Rn1MnasYUOBbIgjFx0E6R2Zak6la1VajDkHqoiFpHtw=";
+  vendorHash = "sha256-DFS9dSZX3v3q3Yk6+bfnoEN1uIULs2h8t/P9W2tk6l8=";
 
   subPackages = [ "cmd/bd" ];
 
@@ -56,6 +56,9 @@ buildGoModule (finalAttrs: {
       skippedTests = [
         # Upstream test bug: version gap 0.55.0->1.0.0 triggers "very old" warning instead of expected "ok"
         "TestCheckMetadataVersionTracking"
+        # Installs a hook with a `#!/usr/bin/env sh` shebang, then exercises it via
+        # `git worktree add`; /usr/bin/env doesn't exist in the Nix build sandbox
+        "TestInstallHooksBeads_WorktreeAccess"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Checks for /etc/passwd which isn't available in sandbox

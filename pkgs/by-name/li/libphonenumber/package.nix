@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildPackages,
   cmake,
-  enableTests ? true,
+  enableTests ? lib.meta.availableOn stdenv.buildPlatform jre,
   gtest,
   jre,
   pkg-config,
@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "9.0.31";
+  version = "9.0.39";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5LJVlcii0uolu4p+z4R9uvYnzLBIdJEQp9AUUnNB5mE=";
+    hash = "sha256-b9N3nVCTVZgGbj+OQsxu4MLnLYbnGXfWikXQrnrRLfs=";
   };
 
   patches = [

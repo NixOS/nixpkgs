@@ -46,18 +46,14 @@ outer@{
   postInstall ? "",
   meta ? null,
   nginx-doc ? outer.nginx-doc,
-  passthru ? {
-    tests = { };
-  },
+  passthru ? { },
 }:
 
 let
 
-  moduleNames = map (
-    mod:
-    mod.name
-      or (throw "The nginx module with source ${toString mod.src} does not have a `name` attribute. This prevents duplicate module detection and is no longer supported.")
-  ) modules;
+  moduleNames = map (mod: mod.pname) modules;
+
+  dynamicModules = lib.filter (mod: mod.dynamic or false) modules;
 
   mapModules =
     attrPath:
@@ -69,7 +65,7 @@ let
       if supports nginxVersion then
         mod.${attrPath} or [ ]
       else
-        throw "Module at ${toString mod.src} does not support nginx version ${nginxVersion}!"
+        throw "Module ${mod.name} does not support nginx version ${nginxVersion}!"
     );
 
 in
@@ -109,9 +105,11 @@ stdenv.mkDerivation {
     perl
   ]
   ++ buildInputs
-  ++ mapModules "inputs"
+  ++ mapModules "buildInputs"
   ++ lib.optional withGeoIP geoip
   ++ lib.optional withImageFilter gd;
+
+  dontAddStaticConfigureFlags = true;
 
   configureFlags = [
     "--sbin-path=bin/nginx"
@@ -173,8 +171,8 @@ stdenv.mkDerivation {
   ++ lib.optional (
     stdenv.buildPlatform != stdenv.hostPlatform
   ) "--crossbuild=${stdenv.hostPlatform.uname.system}::${stdenv.hostPlatform.uname.processor}"
-  ++ configureFlags
-  ++ map (mod: "--add-module=${mod.src}") modules;
+  ++ lib.optional (dynamicModules != [ ]) "--modules-path=${placeholder "out"}/modules"
+  ++ configureFlags;
 
   env = {
     NIX_CFLAGS_COMPILE = toString (
@@ -215,6 +213,20 @@ stdenv.mkDerivation {
   preConfigure = ''
     setOutputFlags=
   ''
+  # Make all modules source trees writable
+  + ''
+    addModule() {
+      local dst="$NIX_BUILD_TOP/$(basename "$2")"
+      cp --recursive "$2" "$dst"
+      chmod --recursive +w "$dst"
+      appendToVar configureFlags "$1=$dst"
+    }
+  ''
+  + lib.concatLines (
+    map (
+      mod: "addModule ${if mod.dynamic or false then "--add-dynamic-module" else "--add-module"} ${mod}"
+    ) modules
+  )
   + preConfigure
   + lib.concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
@@ -245,7 +257,7 @@ stdenv.mkDerivation {
           sha256 = "sha256-M7V3ZJfKImur2OoqXcoL+CbgFj/huWnfZ4xMCmvkqfc=";
         })
       ]
-      ++ mapModules "patches"
+      ++ mapModules "nginxPatches"
     )
     ++ extraPatches;
 
@@ -271,35 +283,57 @@ stdenv.mkDerivation {
 
   disallowedReferences = map (m: m.src) modules;
 
+  stripDebugList = [
+    "bin"
+    "sbin"
+    "lib"
+    "modules"
+  ];
+
   postInstall =
     let
       noSourceRefs = lib.concatMapStrings (
         m: "remove-references-to -t ${m.src} $(readlink -fn $out/bin/nginx)\n"
       ) modules;
+      dynamicPost = lib.optionalString (dynamicModules != [ ]) ''
+        shopt -s nullglob
+        sofiles=("$out"/modules/*.so)
+        if (( ''${#sofiles[@]} == 0 )); then
+          echo "nginx: dynamic modules were requested but no .so was produced in $out/modules" >&2
+          exit 1
+        fi
+        mkdir -p "$out/etc/nginx"
+        printf 'load_module %s;\n' "''${sofiles[@]}" > "$out/etc/nginx/dynamic-modules.conf"
+      '';
     in
-    postInstall + noSourceRefs;
+    postInstall + noSourceRefs + dynamicPost;
 
   passthru = {
-    inherit modules;
-    tests = {
-      inherit (nixosTests)
-        nginx
-        nginx-auth
-        nginx-etag
-        nginx-etag-compression
-        nginx-globalredirect
-        nginx-http3
-        nginx-proxyprotocol
-        nginx-pubhtml
-        nginx-sso
-        nginx-status-page
-        nginx-unix-socket
-        ;
-      variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
-      acme-integration = nixosTests.acme.nginx;
-      acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
-    }
-    // passthru.tests;
+    inherit modules dynamicModules;
+    tests =
+      passthru.tests or {
+        inherit (nixosTests)
+          nginx
+          nginx-auth
+          nginx-dynamic-modules
+          nginx-etag
+          nginx-etag-compression
+          nginx-globalredirect
+          nginx-http3
+          nginx-lua
+          nginx-proxyprotocol
+          nginx-pubhtml
+          nginx-sso
+          nginx-status-page
+          nginx-unix-socket
+          ;
+        variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
+        acme-integration = nixosTests.acme.nginx;
+        acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
+      };
+  }
+  // lib.optionalAttrs (passthru ? updateScript) {
+    inherit (passthru) updateScript;
   };
 
   meta =
@@ -310,14 +344,13 @@ stdenv.mkDerivation {
         description = "Reverse proxy and lightweight webserver";
         mainProgram = "nginx";
         homepage = "https://nginx.org";
-        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: m.meta.license) modules;
+        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: lib.toList m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
         platforms = lib.platforms.all;
         maintainers = with lib.maintainers; [
-          das_j
-          fpletz
           helsinki-Jo
-          raitobezarius
+          ma27
+          leona
         ];
       };
 }

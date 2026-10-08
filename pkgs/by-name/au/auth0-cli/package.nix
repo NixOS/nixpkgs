@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "auth0-cli";
-  version = "1.31.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "auth0";
     repo = "auth0-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6+AMU77eHYy0AwPsHt/tgtzTQkyPfvZZw1yzvWXQX0s=";
+    hash = "sha256-tRr0bCzijVG3+2n67jo7SNe4Oxxci0sRXhQct2645cI=";
   };
 
-  vendorHash = "sha256-MzvoHXO8gDIzNqhQGgDEd8xXWF7971JLTKWt8TCldKI=";
+  vendorHash = "sha256-ZwGIYjaCQikHMoy3bSnvNEk+REnKO6JdCiiSh8L0SDg=";
 
   ldflags = [
     "-s"

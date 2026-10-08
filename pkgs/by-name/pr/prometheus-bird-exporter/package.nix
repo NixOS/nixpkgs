@@ -7,7 +7,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "bird-exporter";
-  version = "1.4.5";
+  version = "1.6.2";
 
   __structuredAttrs = true;
 
@@ -15,10 +15,10 @@ buildGoModule (finalAttrs: {
     owner = "czerwonk";
     repo = "bird_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uR3/2ktVxzEZOy57eFopLFsAuiw03e9WZn2QC4/GNVc=";
+    hash = "sha256-V/ouf+NcJQhkSPYl5Ysisbs3cgOma8LlXezndDz36qw=";
   };
 
-  vendorHash = "sha256-seTykqpdYQiWp8CoTAJ62rzxDaLFqjWe8y5YMu8Ypm8=";
+  vendorHash = "sha256-xNqLRIn5SkEo9L2p1ThlsNuTboz4dxyBw9hEpew5+V8=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) bird; };
 

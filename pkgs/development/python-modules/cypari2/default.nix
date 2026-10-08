@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "cypari2";
-  # upgrade may break sage, please test the sage build or ping @timokau on upgrade
+  # upgrade may break sage, please test the sage build or ping the sage team on upgrade
   version = "2.2.4";
   pyproject = true;
 

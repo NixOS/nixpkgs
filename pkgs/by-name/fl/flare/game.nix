@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       aanderse
       McSinyx
     ];
-    license = [ lib.licenses.cc-by-sa-30 ];
+    license = lib.licenses.cc-by-sa-30;
     platforms = lib.platforms.unix;
   };
 })

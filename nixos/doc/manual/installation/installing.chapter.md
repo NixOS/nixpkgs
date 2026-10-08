@@ -577,12 +577,3 @@ With a partitioned disk.
 :::
 
 ## Additional installation notes {#sec-installation-additional-notes}
-
-```{=include=} sections
-installing-usb.section.md
-installing-pxe.section.md
-installing-kexec.section.md
-installing-virtualbox-guest.section.md
-installing-from-other-distro.section.md
-installing-behind-a-proxy.section.md
-```

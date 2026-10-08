@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "2.3.0";
+  version = "2.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -21,32 +21,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-OEGKjYJ3p4g0ZfeK6k8IJJPjgSBMrSlKlxsCw1OwyaI=";
+    hash = "sha256-ukGplnZz1O1Djh12COKk8FL/3rLmmWGyl0b816wRWBE=";
   };
 
   # Working around a bug in cargo that appears with cargo-auditable, see
   # https://github.com/rust-secure-code/cargo-auditable/issues/124.
   postPatch = ''
     substituteInPlace crates/arti/Cargo.toml \
-      --replace-fail '"tor-rpcbase"' '"dep:tor-rpcbase"'
+      --replace-fail '"http"' '"dep:http"' \
+      --replace-fail '"tokio-util"' '"dep:tokio-util"'
   '';
 
-  cargoHash = "sha256-OJgrIXL185W9rcQd7XZsgiqN4in74Oc2jDT1ZmcCC6E=";
+  buildAndTestSubdir = "crates/arti";
+  cargoHash = "sha256-/7sWTLeVolqliggn1Qw+kxqAeWENHgbCR6hK5Th2z+g=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
-
-  cargoBuildFlags = [
-    "--package"
-    "arti"
-  ];
-
-  cargoTestFlags = [
-    "--package"
-    "arti"
-  ];
-
   # `full` includes all stable and non-conflicting feature flags. the primary
   # downsides are increased binary size and memory usage for building, but
   # those are acceptable for nixpkgs
@@ -69,9 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # sandbox. this does NOT affect downstream users of Arti.
   env.ARTI_FS_DISABLE_PERMISSION_CHECKS = 1;
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru = {
@@ -84,10 +73,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/arti-v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = with lib.maintainers; [
       rapiteanu
       whispersofthedawn

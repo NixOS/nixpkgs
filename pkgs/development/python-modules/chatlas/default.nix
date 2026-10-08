@@ -82,6 +82,9 @@ buildPythonPackage (finalAttrs: {
     "tests/test_provider_openai.py"
     "tests/test_provider_snowflake.py"
     "tests/test_register_tool_models.py"
+
+    # Requires a DeeSeek API key and internet access
+    "tests/test_provider_deepseek.py"
   ];
 
   disabledTests = [
@@ -159,6 +162,9 @@ buildPythonPackage (finalAttrs: {
     "test_tool_yielding_with_error"
     "test_translate_model_params_openai"
     "test_unknown_tool_error_format_updated"
+
+    # Require an AWS key and internet access
+    "test_provider_instances"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in the sandbox

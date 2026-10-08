@@ -68,13 +68,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausaxs";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "AUSAXS";
     repo = "AUSAXS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-USu0/hfccEnwMccsyQDe1l2hQq9ISQe8WjdduaLJAqs=";
+    hash = "sha256-H3lozYImLNwQ7FYz3idgBX/o3miSyUxdZ+ZlJQP2Xms=";
   };
 
   patches = [ ./cmake-no-fetchcontent.patch ];

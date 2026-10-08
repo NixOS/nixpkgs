@@ -5,6 +5,7 @@
   pytestCheckHook,
   setuptools,
   setuptools-scm,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -23,6 +24,8 @@ buildPythonPackage (finalAttrs: {
     setuptools
     setuptools-scm
   ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

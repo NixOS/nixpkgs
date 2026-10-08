@@ -21,14 +21,11 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     python.pkgs.ninja
+    shiboken6-generator
     (python.pythonOnBuildForHost.withPackages (ps: [
       ps.packaging
       ps.setuptools
     ]))
-  ];
-
-  propagatedNativeBuildInputs = [
-    shiboken6-generator
   ];
 
   buildInputs = [

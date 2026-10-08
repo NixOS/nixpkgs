@@ -4,27 +4,30 @@
   fetchPypi,
   setuptools,
   msrest,
-  azure-common,
+  azure-core,
   azure-mgmt-core,
+  isodate,
+  typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "azure-mgmt-automation";
-  version = "1.0.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_automation";
     inherit (finalAttrs) version;
-    hash = "sha256-A/NYbg/gllws7cp5plM4CHKuYnwm6lNlpVuqTq1aeO8=";
+    hash = "sha256-nRVIwul58bj8PtUXc/yEo0BkVSAzU+f3v19A5YEQmRY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    msrest
-    azure-common
+    azure-core
     azure-mgmt-core
+    isodate
+    typing-extensions
   ];
 
   # has no tests

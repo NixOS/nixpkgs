@@ -1,0 +1,46 @@
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
+}:
+buildGoModule (finalAttrs: {
+  pname = "free5gc-chf";
+  version = "1.2.5";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "free5gc";
+    repo = "chf";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a1EsTS8PKJjJWVha50paHgKOEapumYV2SjXPUVw2aDM=";
+  };
+
+  vendorHash = "sha256-irPwy7v1OfceRx7i7XMyaHANUZLMMisLqdxxGnPWEe4=";
+
+  ldflags = [
+    "-X github.com/free5gc/util/version.VERSION=v${finalAttrs.version}"
+  ];
+
+  postInstall = ''
+    mv -v $out/bin/cmd $out/bin/free5gc-chf
+  '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "irrelevant"; # has no version flag, empty string didn't work
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Open source 5G core network based on 3GPP R15";
+    homepage = "https://free5gc.org/";
+    changelog = "https://github.com/free5gc/chf/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ felbinger ];
+    platforms = lib.platforms.linux;
+    mainProgram = "free5gc-chf";
+  };
+})

@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/OpenCPN.app $out/Applications
     makeWrapper $out/Applications/OpenCPN.app/Contents/MacOS/OpenCPN $out/bin/opencpn

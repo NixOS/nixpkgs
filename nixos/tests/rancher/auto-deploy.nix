@@ -104,6 +104,7 @@ let
 in
 {
   name = "${rancherPackage.name}-auto-deploy";
+  interactive.sshBackdoor.enable = true;
 
   nodes.machine =
     { pkgs, ... }:

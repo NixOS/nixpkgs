@@ -7,6 +7,7 @@
     * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via TCP/853 (DoT)
     * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/53 & UDP/53
     * running a recursive DNS resolver on a machine in the network awaiting input from clients over TCP/853 (DoT)
+    * running a recursive DNS resolver on a machine in the network awaiting input from clients over UDP/853 (DoQ)
 
   In the below test setup we are trying to implement all of those use cases.
 
@@ -100,7 +101,7 @@ in
       };
 
     # The resolver that knows that forwards (only) to the authoritative server
-    # and listens on UDP/53, TCP/53 & TCP/853.
+    # and listens on UDP/53, TCP/53, TCP/853 & UDP/853.
     resolver =
       { lib, nodes, ... }:
       {
@@ -122,7 +123,10 @@ in
           853 # DNS over TLS
           443 # DNS over HTTPS
         ];
-        networking.firewall.allowedUDPPorts = [ 53 ];
+        networking.firewall.allowedUDPPorts = [
+          53 # regular DNS
+          853 # DNS over QUIC
+        ];
 
         services.unbound = {
           enable = true;
@@ -150,6 +154,8 @@ in
               ];
               tls-service-pem = "${cert}/cert.pem";
               tls-service-key = "${cert}/key.pem";
+              quic-port = 853;
+              quic-size = "8m";
             };
             forward-zone = [
               {
@@ -306,7 +312,7 @@ in
               assert expected == out, f"Expected `{expected}` but got `{out}`"
 
 
-      def test(machine, remotes, /, doh=False, zone=zone, records=records, args=[]):
+      def test(machine, remotes, /, doh=False, doq=False, zone=zone, records=records, args=[]):
           """
           Run queries for the given remotes on the given machine.
           """
@@ -331,6 +337,15 @@ in
                           expected,
                           ["+https"] + args,
                       )
+                  if doq:
+                      query(
+                          machine,
+                          remote,
+                          query_type,
+                          zone,
+                          expected,
+                          ["+quic"] + args,
+                      )
 
 
       client.start()
@@ -348,12 +363,12 @@ in
 
       # verify that the resolver is able to resolve on all the local protocols
       with subtest("test that the resolver resolves on all protocols and transports"):
-          test(resolver, ["::1", "127.0.0.1"], doh=True)
+          test(resolver, ["::1", "127.0.0.1"], doh=True, doq=True)
 
       resolver.wait_for_unit("multi-user.target")
 
       with subtest("client should be able to query the resolver"):
-          test(client, ["${(lib.head nodes.resolver.networking.interfaces.eth1.ipv6.addresses).address}", "${(lib.head nodes.resolver.networking.interfaces.eth1.ipv4.addresses).address}"], doh=True)
+          test(client, ["${(lib.head nodes.resolver.networking.interfaces.eth1.ipv6.addresses).address}", "${(lib.head nodes.resolver.networking.interfaces.eth1.ipv4.addresses).address}"], doh=True, doq=True)
 
       # discard the client we do not need anymore
       client.shutdown()

@@ -15,7 +15,7 @@
 }:
 
 let
-  beamPackages = beam.packages.erlang_27.extend (self: super: { elixir = self.elixir_1_18; });
+  beamPackages = beam.packages.erlang_27.overrideScope (final: prev: { elixir = final.elixir_1_18; });
 in
 beamPackages.mixRelease rec {
   pname = "pleroma";
@@ -158,7 +158,7 @@ beamPackages.mixRelease rec {
           vips
           glib.dev
         ];
-        VIX_COMPILATION_MODE = "PLATFORM_PROVIDED_LIBVIPS";
+        env.VIX_COMPILATION_MODE = "PLATFORM_PROVIDED_LIBVIPS";
       };
 
       # This needs a different version (1.0.14 -> 1.0.18) to build properly with

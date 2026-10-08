@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "1.4.4";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "build";
     tag = version;
-    hash = "sha256-QprU0sXL6FL0rSVJwu8cYpcPlnYKzKAbkyDaTV778js=";
+    hash = "sha256-vm47wuSEKfU4CjonokylTyGe62jGS/5m2dhLKhY5TPc=";
   };
 
   build-system = [ flit-core ];

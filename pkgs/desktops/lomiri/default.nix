@@ -36,6 +36,8 @@ let
         # The dependency target "qmldoc" of target "doc" does not exist.
         withDocumentation = !useQt6;
       };
+      lomiri-notifications = callPackage ./qml/lomiri-notifications { };
+      lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
       lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
       qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
@@ -53,6 +55,7 @@ let
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
       lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
+      mediascanner2 = callPackage ./services/mediascanner2 { };
     }
     // lib.optionalAttrs useQt6 {
       #### Core Apps
@@ -88,8 +91,6 @@ let
       u1db-qt = callPackage ./development/u1db-qt { };
 
       #### QML / QML-related
-      lomiri-notifications = callPackage ./qml/lomiri-notifications { };
-      lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
 
       #### Services
@@ -98,7 +99,6 @@ let
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
       lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };
-      mediascanner2 = callPackage ./services/mediascanner2 { };
     };
 in
 lib.makeScope qtPackages.newScope packages

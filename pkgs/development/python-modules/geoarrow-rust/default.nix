@@ -22,20 +22,20 @@
   shapely,
 }:
 let
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "geoarrow";
     repo = "geoarrow-rs";
     tag = "py-v${version}";
-    hash = "sha256-qQGGG8aGwFR7ApLaQAE0iQSElpSBeRTtbq4+1xbTC/o=";
+    hash = "sha256-5RWhOw31yRzkBE27LeES7z3G7OgRHQZP3aYacBuPUDM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src version;
     pname = "geoarrow-rust-vendor";
     cargoRoot = "python";
-    hash = "sha256-UjLqynlt5Rkx10hlnaY76wDRhJwhNvHmkhpj04Y8/ek=";
+    hash = "sha256-HbtNzcFkqDS8RpxW6MBfOhhzy5MsaKguKkhDN5xGckY=";
   };
 
   commonMeta = {

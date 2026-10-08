@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-netapp";
-  version = "0.10.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-netapp-v${finalAttrs.version}";
-    hash = "sha256-KJviH4dofYSvZu9S7VMBSnGjH66xMUEvhcmZN7GJ4Iw=";
+    hash = "sha256-ywRS1BfK6s+gcU8QRem0cSnfZq4BUQ2ABNcgnOa01LI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-netapp";

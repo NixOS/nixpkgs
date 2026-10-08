@@ -148,8 +148,14 @@ let
 
       # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
-        overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
-          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0=";
+        (overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
+          "sha256-t8PuIYkjS0r1Gs4pJJJ8X9cz8950imQtbVBABnyMnd0="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+              self.msrest
+            ];
+          });
 
       # ImportError: cannot import name 'ConfigMap' from 'azure.mgmt.containerinstance.models'
       azure-mgmt-containerinstance = super.azure-mgmt-containerinstance.overridePythonAttrs (attrs: rec {
@@ -175,16 +181,6 @@ let
       azure-mgmt-media =
         overrideAzureMgmtPackage super.azure-mgmt-media "9.0.0" "zip"
           "sha256-TI7l8sSQ2QUgPqiE3Cu/F67Wna+KHbQS3fuIjOb95ZM=";
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.monitor.operations'
-      azure-mgmt-monitor = super.azure-mgmt-monitor.overridePythonAttrs (attrs: rec {
-        version = "7.0.0b1";
-        src = fetchPypi {
-          pname = "azure_mgmt_monitor"; # Different from src.pname in the original package.
-          inherit version;
-          hash = "sha256-WR4YZMw4njklpARkujsRnd6nwTZ8M5vXFcy9AfL9oj4=";
-        };
-      });
 
       # AttributeError: module 'azure.mgmt.rdbms.postgresql_flexibleservers.operations' has no attribute 'BackupsOperations'
       azure-mgmt-rdbms =
@@ -226,11 +222,6 @@ let
         doCheck = false;
       };
 
-      # ImportError: cannot import name 'IPRule' from 'azure.mgmt.signalr.models'
-      azure-mgmt-signalr =
-        overrideAzureMgmtPackage super.azure-mgmt-signalr "2.0.0b2" "tar.gz"
-          "sha256-05PUV8ouAKq/xhGxVEWIzDop0a7WDTV5mGVSC4sv9P4=";
-
       # ImportError: cannot import name 'AdvancedThreatProtectionName' from 'azure.mgmt.sql.models'
       azure-mgmt-sql = super.azure-mgmt-sql.overridePythonAttrs (attrs: rec {
         version = "4.0.0b22";
@@ -238,26 +229,6 @@ let
           pname = "azure_mgmt_sql"; # Different from src.pname in the original package.
           inherit version;
           hash = "sha256-ku3YN9W9Cyx4zsKxAs4k9/oeDXApzi2uqAURqa72H0k=";
-        };
-      });
-
-      # ValueError: The operation 'azure.mgmt.sqlvirtualmachine.operations#SqlVirtualMachinesOperations.begin_create_or_update' is invalid.
-      azure-mgmt-sqlvirtualmachine =
-        overrideAzureMgmtPackage super.azure-mgmt-sqlvirtualmachine "1.0.0b5" "zip"
-          "sha256-ZFgJflgynRSxo+B+Vso4eX1JheWlDQjfJ9QmupXypMc=";
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.synapse.operations._kusto_pool_attached_database_configurations_operations'
-      azure-mgmt-synapse =
-        overrideAzureMgmtPackage super.azure-mgmt-synapse "2.1.0b5" "zip"
-          "sha256-5E6Yf1GgNyNVjd+SeFDbhDxnOA6fOAG6oojxtCP4m+k=";
-
-      # ModuleNotFoundError: No module named 'azure.mgmt.web.v2024_11_01'
-      azure-mgmt-web = super.azure-mgmt-web.overridePythonAttrs (attrs: rec {
-        version = "9.0.0";
-        src = fetchPypi {
-          pname = "azure_mgmt_web";
-          inherit version;
-          hash = "sha256-RFXs07SYV3CFwZBObRcTklTjWLoH/mxINaiRu697BsI=";
         };
       });
 
@@ -270,18 +241,6 @@ let
           hash = "sha256-zZ010cwbjLC9JBrVXJG3fRTgSuc8YyraEUATX5whf+E=";
         };
       });
-
-      # ValueError: The operation 'azure.mgmt.mysqlflexibleservers.operations#LongRunningBackupOperations.begin_delete' is invalid.
-      azure-mgmt-mysqlflexibleservers =
-        super.azure-mgmt-mysqlflexibleservers.overridePythonAttrs
-          (attrs: rec {
-            version = "1.1.0b2";
-            src = fetchPypi {
-              pname = "azure_mgmt_mysqlflexibleservers";
-              inherit version;
-              hash = "sha256-yGpEFn9VOP1uSvpUCV/gYW56/5HulsCVx9wc/kWO+Ro=";
-            };
-          });
 
       # ModuleNotFoundError: No module named 'azure.mgmt.recoveryservicesbackup.activestamp'
       azure-mgmt-recoveryservicesbackup =

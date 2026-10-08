@@ -16,14 +16,12 @@
   installShellFiles,
   pipectl,
   slurp,
-  rofi,
   scdoc,
 }:
 
 let
   wl-present-binpath = lib.makeBinPath [
     pipectl
-    rofi
     slurp
     (placeholder "out")
   ];

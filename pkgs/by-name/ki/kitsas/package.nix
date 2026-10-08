@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/artoh/kitupiikki";
     license = lib.licenses.gpl3Plus;
     mainProgram = "kitsas";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.lajp ];
     platforms = lib.platforms.unix;
   };
 })

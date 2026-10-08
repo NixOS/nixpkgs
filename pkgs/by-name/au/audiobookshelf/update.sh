@@ -13,7 +13,7 @@ fi
 REPO="advplyr/audiobookshelf"
 
 NEW_VER=$(list-git-tags --url=https://github.com/$REPO | rg 'v[0-9\.]*$' | sed -e 's/^v//' | sort -V | tail -n 1)
-OLD_VER=$(nix-instantiate --eval -A audiobookshelf.version | jq --exit-status --raw-output)
+OLD_VER=$(nix-instantiate --eval --raw -A audiobookshelf.version)
 
 if [ "$NEW_VER" == "$OLD_VER" ]; then
   echo "No update needed."

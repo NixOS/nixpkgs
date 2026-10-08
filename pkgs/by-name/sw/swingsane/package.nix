@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       using both local and remote Scanner Access Now Easy (SANE) servers.
       The most powerful feature is its ability to query back-ends for scanner
       specific options which can be set by the user as a scanner profile.
-      It also has support for authentication, mutlicast DNS discovery,
+      It also has support for authentication, multicast DNS discovery,
       simultaneous scan jobs, image transformation jobs (deskew, binarize,
       crop, etc), PDF and PNG output.
     '';

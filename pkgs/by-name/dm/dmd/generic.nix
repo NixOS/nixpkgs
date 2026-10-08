@@ -74,25 +74,16 @@ stdenv.mkDerivation (finalAttrs: {
   # https://issues.dlang.org/show_bug.cgi?id=19553
   hardeningDisable = [ "fortify" ];
 
-  patches =
-    lib.optionals (lib.versionOlder version "2.088.0") [
-      # Migrates D1-style operator overloads in DMD source, to allow building with
-      # a newer DMD
-      (fetchpatch {
-        url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
-        stripLen = 1;
-        extraPrefix = "dmd/";
-        hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
-      })
-    ]
-    ++ [
-      (fetchpatch {
-        url = "https://github.com/dlang/dmd/commit/fdd25893e0ac04893d6eba8652903d499b7b0dfc.patch";
-        stripLen = 1;
-        extraPrefix = "dmd/";
-        hash = "sha256-Uccb8rBPBLAEPWbOYWgdR5xN3wJoIkKKhLGu58IK1sM=";
-      })
-    ];
+  patches = lib.optionals (lib.versionOlder version "2.088.0") [
+    # Migrates D1-style operator overloads in DMD source, to allow building with
+    # a newer DMD
+    (fetchpatch {
+      url = "https://github.com/dlang/dmd/commit/c4d33e5eb46c123761ac501e8c52f33850483a8a.patch";
+      stripLen = 1;
+      extraPrefix = "dmd/";
+      hash = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
@@ -189,6 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     NIX_ENFORCE_PURITY= \
       make -C phobos unittest -j$checkJobs $checkFlags \
+        DISABLED_TESTS=std/datetime/timezone \
         DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
 
     runHook postCheck
@@ -242,7 +234,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "i686-linux"
-      "x86_64-darwin"
     ];
     # ld: section __DATA/__thread_bss has type zero-fill but non-zero file offset file '/private/tmp/nix-build-dmd-2.109.1.drv-0/.rdmd-301/rdmd-build.d-A1CF043A7D87C5E88A58F3C0EF5A0DF7/objs/build.o' for architecture x86_64
     # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)

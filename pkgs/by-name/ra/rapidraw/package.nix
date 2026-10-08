@@ -33,29 +33,31 @@
   dbus,
   gvfs,
   libheif,
+  libgphoto2,
   glib-networking,
   nodejs_24,
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.5";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CnH8EuHzHxuXbnOry2gMU/tMqpE8++ztyNPk3HHdZqE=";
+    hash = "sha256-OSIFBX52QOez2tn93XcSLP/oP9krPy/rIEBvhINkjS8=";
   };
 
-  cargoHash = "sha256-c2MK1DyonfeZKfZAVWfwVh/In5SqKq7nnFrlz2686SM=";
+  cargoHash = "sha256-B1W6buXovnvIddQWjBLw1uOgQnoZLtJp1dX4gOg7cAQ=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-1A6b63FjNvkAbu62dRXfMjTL1y2wr2gEsZkLqYvTk0w=";
+    hash = "sha256-P1YT5agK1hMVpe7pLXkWrK99g/uAA46ovF+mUe+xVhk=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs_24
     npmHooks.npmConfigHook
     cargo-tauri.hook
+    rustPlatform.bindgenHook
     writableTmpDirAsHomeHook
   ];
 
@@ -92,14 +95,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
     libGL
     dbus
-    gvfs
     libheif
     onnxruntime
     wrapGAppsHook4
+    libgphoto2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
     libappindicator
+    gvfs
   ];
 
   cargoRoot = "src-tauri";
@@ -117,6 +121,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src-tauri/build.rs \
       --replace-fail 'if !is_valid' 'if false'
   '';
+
+  tauriBuildFlags = [
+    "--features"
+    "tethering"
+  ];
 
   dontWrapGApps = true;
 
@@ -151,6 +160,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wrapGApp "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw" \
         --set ORT_STRATEGY "system"
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Blazingly-fast, non-destructive, and GPU-accelerated RAW image editor built with performance in mind";

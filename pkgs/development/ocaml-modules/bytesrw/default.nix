@@ -21,13 +21,13 @@
 
 buildTopkgPackage rec {
   pname = "bytesrw";
-  version = "0.3.0";
+  version = "0.4.0";
 
   minimalOCamlVersion = "4.14.0";
 
   src = fetchzip {
     url = "https://erratique.ch/software/bytesrw/releases/bytesrw-${version}.tbz";
-    hash = "sha256-EFdHKBH4VrWvOqs+I6tiRW9D2s6lY8Pol4YyuB7fqh8=";
+    hash = "sha256-3ApJ0JSJulGUIA9FN/Q7gkRI5h/tC5g/l+w/J0lsLG8=";
   };
 
   buildInputs =

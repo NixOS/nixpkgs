@@ -1,5 +1,6 @@
 import ./generic.nix {
-  version = "1.10.3";
-  hash = "sha256-xf8/fHMkGGApPpKoOgpUJtttorOjf51E/S5KKguwiTM=";
-  cargoHash = "sha256-zu2uKtJnMi8En5btKQWgACs3mLkHnbrxA5XUkwLP+yc=";
+  version = "1.10.5";
+  hash = "sha256-mNdG5iPtnhwvy9PABaRPV6KQfvD+/ZKH2hC6Hfo0y48=";
+  cargoHash = "sha256-UE/jZaX/mEJUHBqsk2o0rBcocpoFg5XWAmVk4smm5mc=";
+  eolDate = "2026-08-31";
 }

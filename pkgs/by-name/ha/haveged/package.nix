@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "haveged";
-  version = "1.9.20";
+  version = "1.9.26";
 
   src = fetchFromGitHub {
     owner = "jirka-h";
     repo = "haveged";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7ymilQktEsCUTujGC2KTXN5LI2KQRbAd/4tEMxOZxpo=";
+    hash = "sha256-mt3lQYCTiZSDf8toogAxx9VGewSMwyhdalLe0W2C+DQ=";
   };
 
   strictDeps = true;

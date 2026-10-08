@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     docbook5
     docbook-xsl-ns
   ]
-  ++ lib.lists.optional withPDF [
+  ++ lib.lists.optionals withPDF [
     fop
     dblatex
   ];

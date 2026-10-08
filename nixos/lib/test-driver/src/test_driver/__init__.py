@@ -6,6 +6,7 @@ import warnings
 from pathlib import Path
 
 import ptpython.ipython
+import ptpython.repl
 from colorama import Fore, Style
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
@@ -89,6 +90,11 @@ def main() -> None:
         required=True,
     )
     arg_parser.add_argument(
+        "--test-script",
+        help="path to a test script to run, taking precedence over the one defined in the config file",
+        type=Path,
+    )
+    arg_parser.add_argument(
         "--keep-vm-state",
         help=argparse.SUPPRESS,
         dest="keep_machine_state",
@@ -162,8 +168,12 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
+    config = load_driver_configuration(args.config)
+    if args.test_script is not None:
+        config.test_script = args.test_script
+
     with Driver(
-        config=load_driver_configuration(args.config),
+        config=config,
         out_dir=output_directory,
         logger=logger,
         keep_machine_state=args.keep_machine_state,
@@ -174,6 +184,7 @@ def main() -> None:
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
+            ptpython.repl.enable_deprecation_warnings()
             ptpython.ipython.embed(
                 user_ns=driver.test_symbols(),
                 history_filename=history_path,

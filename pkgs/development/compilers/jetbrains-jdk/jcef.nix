@@ -53,15 +53,15 @@ let
   inherit (arches) depsArch projectArch targetArch;
 
   # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
-  cef-name = "cef_binary_137.0.17+gf354b0e+chromium-137.0.7151.104_${platform}_minimal";
+  cef-name = "cef_binary_144.0.15+g72717cf+chromium-144.0.7559.172_${platform}_minimal";
 
   cef-bin = cef-binary.override {
-    version = "137.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
-    gitRevision = "f354b0e";
-    chromiumVersion = "137.0.7151.104";
+    version = "144.0.15";
+    gitRevision = "72717cf";
+    chromiumVersion = "144.0.7559.172";
     srcHashes = {
-      aarch64-linux = "sha256-C9P4+TpzjyMD5z2qLbzubbrIr66usFjRx7QqiAxI2D8=";
-      x86_64-linux = "sha256-iDC3a/YN0NqjX/b2waKvUAZCaR0lkLmUPqBJphE037Q=";
+      aarch64-linux = "sha256-2w2TDj7LGjYeUjpVvojAsHb8HlqG82AwH8Arg0NxREg=";
+      x86_64-linux = "sha256-JDlZmIEg9ajjuFOL8qAr6HDVbeu3/Cg21Z57fHryfdc=";
     };
   };
 
@@ -92,11 +92,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "97d05cdf1720586ebfff5d4bc6e15a6a533eb21e";
+  rev = "fa677024a129747bd8cb05447af8918c494e4af7";
   # This is the commit number
   # Currently from the branch: https://github.com/JetBrains/jcef/tree/261
   # Run `git rev-list --count HEAD`
-  version = "1156";
+  version = "1207";
 
   nativeBuildInputs = [
     cmake
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-31WV6vYp0zIf6EkccQTeiggCRtQnDOg8/4J2q6axiGs=";
+    hash = "sha256-eYn1T4cRrHeVDSye6FKBv8X3zZPDGFurk6HJG+jPypY=";
   };
 
   # Find the hash in tools/buildtools/linux64/clang-format.sha1

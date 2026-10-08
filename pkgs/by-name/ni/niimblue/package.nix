@@ -28,7 +28,7 @@ buildNpmPackage {
 
   __structuredAttrs = true;
 
-  npmDepsHash = "sha256-+jVD0lfOrQ3hQE15yfcB0dVnPZBFo/naLXhFRiPFUGs=`";
+  npmDepsHash = "sha256-+jVD0lfOrQ3hQE15yfcB0dVnPZBFo/naLXhFRiPFUGs=";
 
   meta = {
     description = "Design and print labels with NIIMBOT printers directly from your PC or mobile web browser";

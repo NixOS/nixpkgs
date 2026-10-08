@@ -7,14 +7,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "b3sum";
-  version = "1.8.5";
+  version = "1.8.7";
 
   src = fetchCrate {
     inherit (finalAttrs) version pname;
-    hash = "sha256-odlO6J60wTrca+opzheDbz4lSDAgjDTFFUIHf6NoTXI=";
+    hash = "sha256-ZShgvrxccsaLXKl0wMF5GfpRzjlBi/ideUQSW+nQg5k=";
   };
 
-  cargoHash = "sha256-a/KGCU0bZ1gqB8EH7f8SN6qTuYZMakXdqddtTKNVDPs=";
+  cargoHash = "sha256-aPFihFEmGDkAAd5fLcHQ0elpOR+KOmhZi28QxR7aQ8Q=";
 
   nativeInstallCheckInputs = [
     versionCheckHook

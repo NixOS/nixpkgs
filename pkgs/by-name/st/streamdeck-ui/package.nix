@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pynput
       pyside6
       streamdeck
-      xlib
+      python-xlib
       importlib-metadata
       evdev
     ]

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-smf2wav";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     rev = "mt32emu_smf2wav_${lib.replaceString "." "_" finalAttrs.version}";
-    sha256 = "sha256-O9x+uL1QnixXNl/rTCnGwbutoCs6bI8vCmkhAWJW4Do=";
+    sha256 = "sha256-QuOQvKNCKl/UypTub9FCoYu3HJrMi6LksKPGaQUWfO8=";
   };
 
   postPatch =
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://munt.sourceforge.net/";
     description = "Produces a WAVE file from a Standard MIDI file (SMF)";
     mainProgram = "mt32emu-smf2wav";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.all;
   };

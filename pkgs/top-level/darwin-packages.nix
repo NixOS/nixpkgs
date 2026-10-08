@@ -69,32 +69,6 @@ makeScopeWithSplicing' {
         bintools = self.binutils-unwrapped;
       };
 
-      # x86-64 Darwin gnat-bootstrap emits assembly
-      # with MOVQ as the mnemonic for quadword interunit moves
-      # such as `movq %rbp, %xmm0`.
-      # The clang integrated assembler recognises this as valid,
-      # but unfortunately the cctools.gas GNU assembler does not;
-      # it instead uses MOVD as the mnemonic.
-      # The assembly that a GCC build emits is determined at build time
-      # and cannot be changed afterwards.
-      #
-      # To build GNAT on x86-64 Darwin, therefore,
-      # we need both the clang _and_ the cctools.gas assemblers to be available:
-      # the former to build at least the stage1 compiler,
-      # and the latter at least to be detectable
-      # as the target for the final compiler.
-      binutilsDualAs-unwrapped = buildEnv {
-        name = "${lib.getName self.binutils-unwrapped}-dualas-${lib.getVersion self.binutils-unwrapped}";
-        paths = [
-          self.binutils-unwrapped
-          (lib.getOutput "gas" cctools)
-        ];
-      };
-
-      binutilsDualAs = self.binutils.override {
-        bintools = self.binutilsDualAs-unwrapped;
-      };
-
       sourceRelease = self.callPackage ../os-specific/darwin/sourceRelease { };
 
       inherit (self.file_cmds) xattr;
@@ -166,6 +140,8 @@ makeScopeWithSplicing' {
         xcode_26_4_1_Apple_silicon
         xcode_26_5
         xcode_26_5_Apple_silicon
+        xcode_26_6
+        xcode_26_6_Apple_silicon
         xcode
         requireXcode
         ;
@@ -203,6 +179,31 @@ makeScopeWithSplicing' {
       linux-builder-x86_64 = self.linux-builder.override {
         modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
       };
+
+      # Like `linux-builder`, but runs the guest on Apple's Virtualization.framework
+      # via `vzvm`, translating x86_64-linux builds with Rosetta instead of emulating
+      # them. See doc/packages/darwin-builder.section.md
+      linux-builder-vz = lib.makeOverridable (
+        { modules }:
+        let
+          nixos = import ../../nixos {
+            configuration = {
+              imports = [
+                ../../nixos/modules/profiles/nix-builder-vz-vm.nix
+              ]
+              ++ modules;
+
+              virtualisation.host = { inherit pkgs; };
+
+              # aarch64-darwin is the only supported host, so the guest is fixed too.
+              nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+            };
+
+            system = null;
+          };
+        in
+        nixos.config.system.build.macos-builder-installer
+      ) { modules = [ ]; };
     }
   );
 }

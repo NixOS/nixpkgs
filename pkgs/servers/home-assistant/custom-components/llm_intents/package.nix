@@ -13,13 +13,13 @@
 buildHomeAssistantComponent (finalAttrs: {
   owner = "skye-harris";
   domain = "llm_intents";
-  version = "1.8.1";
+  version = "1.10.2";
 
   src = fetchFromGitHub {
     inherit (finalAttrs) owner;
     repo = "llm_intents";
     tag = finalAttrs.version;
-    hash = "sha256-KIC9rDu2AKSLlW0lNXR05AyhreAnFAhNuNRlqdZwy5w=";
+    hash = "sha256-R92E4/89EapxlxQdlKbvuHg9CcVgvNXGpcDr7tvr46E=";
   };
 
   dependencies = [
@@ -32,6 +32,12 @@ buildHomeAssistantComponent (finalAttrs: {
     pytest-freezer
     pytest-homeassistant-custom-component
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # API break
+    # HomeControlAPI._async_get_api_prompt() takes 2 positional arguments but 3 were given
+    "tests/test_home_control.py"
   ];
 
   meta = {

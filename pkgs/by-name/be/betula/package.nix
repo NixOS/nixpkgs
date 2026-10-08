@@ -5,13 +5,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "betula";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromSourcehut {
     owner = "~bouncepaw";
     repo = "betula";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8iDWWAL8JDZyKl3o0IJsWml410jh3cTPC2AoonvqiTI=";
+    hash = "sha256-P7d8qVvZQCkqavgkyJOY5WuwMzg1lURzWKt71XzThpg=";
   };
   vendorHash = "sha256-HGjaS2Sqsjk/pilt8wtx5Ect8Y8S5638PWEpXCqeZ6w=";
 

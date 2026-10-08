@@ -4,18 +4,23 @@
   mkTclDerivation,
   critcl,
   withCritcl ? true,
+  bashNonInteractive,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tcllib";
   version = "2.0";
 
   src = fetchzip {
-    url = "mirror://sourceforge/tcllib/tcllib-${version}.tar.gz";
+    url = "mirror://sourceforge/tcllib/tcllib-${finalAttrs.version}.tar.gz";
     hash = "sha256-LoY6y7p9n1dXk4eSa/HuyA4bIXa0rN7F2OGESk2tROI=";
   };
 
   nativeBuildInputs = lib.optional withCritcl critcl;
+
+  buildInputs = [
+    bashNonInteractive
+  ];
 
   buildFlags = [ "all" ] ++ lib.optional withCritcl "critcl";
 
@@ -35,4 +40,4 @@ mkTclDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

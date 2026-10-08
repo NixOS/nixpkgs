@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   replaceVars,
   meson,
   nasm,
@@ -16,8 +15,6 @@
   libGL,
   libv4l,
   libdv,
-  libavc1394,
-  libiec61883,
   libvpx,
   libdrm,
   speex,
@@ -53,6 +50,10 @@
   libxext,
   libxdamage,
   ncurses,
+  enableFireWire ? stdenv.hostPlatform.isLinux,
+  libavc1394,
+  libiec61883,
+  enableOSS ? stdenv.hostPlatform.isLinux,
   enableWayland ? stdenv.hostPlatform.isLinux,
   wayland,
   wayland-protocols,
@@ -60,6 +61,8 @@
   wavpack,
   glib,
   openssl,
+  # for passthru.gstreamerCpeParts
+  gstreamer,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -78,7 +81,7 @@ assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.26.11";
+  version = "1.28.6";
 
   outputs = [
     "out"
@@ -87,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
-    hash = "sha256-AB3rCHbV10PNNEir90onrew/2FABL8sbAJlIYb1sEUU=";
+    hash = "sha256-sMYgpLGLbukxtMQ7vxdg0whmbcN/cwp+fxrTJ+Wc4t8=";
   };
 
   patches = [
@@ -97,6 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  separateDebugInfo = true;
+
+  __structuredAttrs = true;
   strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
@@ -197,9 +203,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libv4l
     libpulseaudio
+    libgudev
+  ]
+  ++ lib.optionals enableFireWire [
     libavc1394
     libiec61883
-    libgudev
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer
@@ -211,45 +219,38 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
   ];
 
-  mesonFlags = [
-    "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Dglib_debug=disabled" # cast checks should be disabled on stable releases
-    (lib.mesonEnable "doc" enableDocumentation)
-    (lib.mesonEnable "asm" true)
-  ]
-  ++ lib.optionals (!qt5Support) [
-    "-Dqt5=disabled"
-  ]
-  ++ lib.optionals (!qt6Support) [
-    "-Dqt6=disabled"
-  ]
-  ++ lib.optionals (!gtkSupport) [
-    "-Dgtk3=disabled"
-  ]
-  ++ lib.optionals (!enableX11) [
-    "-Dximagesrc=disabled" # Linux-only
-  ]
-  ++ lib.optionals (!enableJack) [
-    "-Djack=disabled"
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Ddv1394=disabled" # Linux only
-    "-Doss4=disabled" # Linux only
-    "-Doss=disabled" # Linux only
-    "-Dpulse=disabled" # TODO check if we can keep this enabled
-    "-Dv4l2-gudev=disabled" # Linux-only
-    "-Dv4l2=disabled" # Linux-only
-  ]
-  ++ (
-    if raspiCameraSupport then
-      [
-        "-Drpi-lib-dir=${libraspberrypi}/lib"
-      ]
-    else
-      [
-        "-Drpicamsrc=disabled"
-      ]
-  );
+  mesonFlags =
+    lib.mapAttrsToList lib.mesonEnable {
+      orc = true;
+      orc-compiler = true;
+      nls = true;
+
+      tests = finalAttrs.finalPackage.doCheck;
+
+      examples = false; # requires many dependencies and probably not useful for our users
+      glib_debug = false; # cast checks should be disabled on stable releases
+      doc = enableDocumentation;
+      asm = true;
+      qt5 = qt5Support;
+      qt6 = qt6Support;
+      gtk3 = gtkSupport;
+      ximagesrc = enableX11; # Linux-only
+      jack = enableJack;
+
+      # Linux only
+      dv1394 = enableFireWire;
+      oss = enableOSS;
+      oss4 = enableOSS;
+      pulse = stdenv.hostPlatform.isLinux; # TODO check if we can keep this enabled
+      v4l2 = stdenv.hostPlatform.isLinux;
+      v4l2-gudev = stdenv.hostPlatform.isLinux;
+
+      rpicamsrc = raspiCameraSupport;
+    }
+    ++ lib.optionals raspiCameraSupport [
+      (lib.mesonOption "rpi-header-dir" "${lib.getDev libraspberrypi}/include")
+      (lib.mesonOption "rpi-lib-dir" "${lib.getLib libraspberrypi}/lib")
+    ];
 
   postPatch = ''
     patchShebangs \
@@ -259,9 +260,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     NIX_LDFLAGS =
-      # linking error on Darwin
+      # linking error on Darwin and musl systems
       # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
-      "-lncurses";
+      lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl) "-lncurses";
   };
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
@@ -270,6 +271,7 @@ stdenv.mkDerivation (finalAttrs: {
   # must be explicitly set since 5590e365
   dontWrapQtApps = true;
 
+  # Note: gst-plugins-good produces no pkg-config files unless building static libraries
   preFixup = ''
     moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
   '';
@@ -292,7 +294,7 @@ stdenv.mkDerivation (finalAttrs: {
       };
     };
 
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
   };
 
   meta = {
@@ -306,5 +308,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

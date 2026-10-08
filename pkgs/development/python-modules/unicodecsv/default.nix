@@ -1,20 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  setuptools,
 }:
 
-buildPythonPackage rec {
-  version = "0.14.1";
-  format = "setuptools";
+buildPythonPackage (finalAttrs: {
+  version = "0.14.2";
   pname = "unicodecsv";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1z7pdwkr6lpsa7xbyvaly7pq3akflbnz8gq62829lr28gl1hi301";
+  src = fetchFromGitHub {
+    owner = "jdunck";
+    repo = "python-unicodecsv";
+    tag = finalAttrs.version;
+    hash = "sha256-LBYJ7evrcKj2WsWroflyQEhFkElp6zrmG9EDrp5+onM=";
   };
 
-  # ImportError: No module named runtests
+  build-system = [ setuptools ];
+
+  # Uses unmaintained `unittest2` for testing
   doCheck = false;
 
   meta = {
@@ -23,4 +28,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ koral ];
     license = lib.licenses.bsd2WithViews;
   };
-}
+})

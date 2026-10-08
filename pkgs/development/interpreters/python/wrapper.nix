@@ -5,7 +5,7 @@
   runCommand,
   makeBinaryWrapper,
 
-  # manually pased
+  # manually passed
   python,
   requiredPythonModules,
 

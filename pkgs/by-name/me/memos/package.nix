@@ -14,12 +14,12 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "memos";
-  version = "0.29.0";
+  version = "0.30.0";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-l9jyByfVCx+z41H+RVgkggjkVSoleHq+mR6nhgk9Pj8=";
+    hash = "sha256-MXvEMJN/XyZux/qL/9qZYkbo6fQzYFeCWHxFCtN1M8o=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalWebAttrs: {
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
       inherit pnpm;
       sourceRoot = "${finalWebAttrs.src.name}/web";
       fetcherVersion = 3;
-      hash = "sha256-Ki9rC1i0gvz+4La0GZIF40mZPwv/EwzhHUaealSpU40=";
+      hash = "sha256-4oUA0z6VXL0belhK23wZgwCpGmLqDnEez3nMA/uHUTw=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -50,12 +50,25 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-6oJgxhGS7aD3I0umTQuVMLzcOhzf53g4TZcCtkKrrc8=";
+  vendorHash = "sha256-nyUBXPC8nt+7s2jFHohF0PWBGky24ZSXWtSI4XVf2kU=";
+
+  ldflags = [
+    "-X github.com/usememos/memos/internal/version.Version=${finalAttrs.version}"
+  ];
 
   preBuild = ''
     rm -rf server/router/frontend/dist
     cp -r ${finalAttrs.memos-web} server/router/frontend/dist
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestEntrypointDoesNotLoopWhenTargetUIDIsRoot" # requires root
+        "TestUserWebhookSigningSecretLifecycle" # requires internet access for example.com
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

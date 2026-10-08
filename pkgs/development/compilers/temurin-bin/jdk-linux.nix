@@ -30,11 +30,15 @@ in
   jdk-21 = common { sourcePerArch = sources.jdk.openjdk21; };
   jre-21 = common { sourcePerArch = sources.jre.openjdk21; };
 
-  jdk-25 = common { sourcePerArch = sources.jdk.openjdk25; };
+  jdk-25 = common {
+    sourcePerArch = sources.jdk.openjdk25;
+    jmodsSourcePreArch = sources.jmods.openjdk25;
+  };
   jre-25 = common { sourcePerArch = sources.jre.openjdk25; };
 
   jdk-26 = withModernDrvAttrs (common {
     sourcePerArch = sources.jdk.openjdk26;
+    jmodsSourcePreArch = sources.jmods.openjdk26;
   });
   jre-26 = withModernDrvAttrs (common {
     sourcePerArch = sources.jre.openjdk26;

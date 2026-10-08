@@ -31,6 +31,8 @@ stdenv.mkDerivation {
     patchShebangs ./scripts
     substituteInPlace ./scripts/getversion.sh \
       --replace-fail "unknown" "${branch}"
+    substituteInPlace ./Makefile \
+      --replace-fail "ar qcT" "${stdenv.cc.targetPrefix}ar qcT"
   '';
 
   makeFlags = [

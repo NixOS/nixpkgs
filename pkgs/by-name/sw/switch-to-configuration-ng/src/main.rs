@@ -6,7 +6,8 @@ use std::{
     cell::RefCell,
     collections::HashMap,
     io::{BufRead, Read, Write},
-    os::unix::{fs::PermissionsExt, process::CommandExt},
+    os::unix::fs::{MetadataExt, PermissionsExt},
+    os::unix::process::CommandExt,
     path::{Path, PathBuf},
     rc::Rc,
     str::FromStr,
@@ -211,17 +212,22 @@ fn die() -> ! {
     std::process::exit(code);
 }
 
+/// Parses the key-value pairs of `/etc/os-release`.
+/// Absence or emptiness of the file become the empty map.
+/// Failure to read returns an error Result.
 fn parse_os_release() -> Result<HashMap<String, String>> {
-    Ok(std::fs::read_to_string("/etc/os-release")
-        .context("Failed to read /etc/os-release")?
-        .lines()
-        .fold(HashMap::new(), |mut acc, line| {
-            if let Some((k, v)) = line.split_once('=') {
-                acc.insert(k.to_string(), v.to_string());
-            }
+    let contents = match std::fs::read_to_string("/etc/os-release") {
+        Ok(contents) => contents,
+        Err(err) if err.kind() == std::io::ErrorKind::NotFound => String::new(),
+        Err(err) => return Err(err).context("Failed to read /etc/os-release"),
+    };
+    Ok(contents.lines().fold(HashMap::new(), |mut acc, line| {
+        if let Some((k, v)) = line.split_once('=') {
+            acc.insert(k.to_string(), v.to_string());
+        }
 
-            acc
-        }))
+        acc
+    }))
 }
 
 fn do_pre_switch_check(command: &str, toplevel: &Path, action: &Action) -> Result<()> {
@@ -743,11 +749,6 @@ fn handle_modified_unit(
                 // This unit should be restarted instead of stopped and started.
                 units_to_restart.insert(unit.to_string(), ());
                 record_unit(&restart_list, unit);
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
             } else {
                 // If this unit is socket-activated, then stop the socket unit(s) as well, and
                 // restart the socket(s) instead of the service.
@@ -769,10 +770,17 @@ fn handle_modified_unit(
                     };
 
                     if sockets.is_empty() {
-                        sockets.push(format!("{base_name}.socket"));
+                        // For a templated instance (`foo@bar.service`), `base_name`
+                        // includes the trailing `@`; the implicitly-associated socket
+                        // is `foo.socket`, so strip it.
+                        let socket_base = base_name.strip_suffix('@').unwrap_or(base_name);
+                        sockets.push(format!("{socket_base}.socket"));
                     }
 
                     for socket in &sockets {
+                        let socket_in_new_config =
+                            toplevel.join(scope.etc_dir()).join(socket).exists();
+
                         if active_cur.contains_key(socket) {
                             // We can now be sure this is a socket-activated unit
 
@@ -783,7 +791,7 @@ fn handle_modified_unit(
                             }
 
                             // Only restart sockets that actually exist in new configuration:
-                            if toplevel.join(scope.etc_dir()).join(socket).exists() {
+                            if socket_in_new_config {
                                 if use_restart_as_stop_and_start {
                                     units_to_restart.insert(socket.to_string(), ());
                                     record_unit(&restart_list, socket);
@@ -794,12 +802,9 @@ fn handle_modified_unit(
 
                                 socket_activated = true;
                             }
-
-                            // Remove from units to reload so we don't restart and reload
-                            if units_to_reload.contains_key(unit) {
-                                units_to_reload.remove(unit);
-                                unrecord_unit(&reload_list, unit);
-                            }
+                        } else if socket_in_new_config {
+                            // Transitioning to socket activation; let the socket start it.
+                            socket_activated = true;
                         }
                     }
                 }
@@ -828,11 +833,11 @@ fn handle_modified_unit(
                 } else {
                     units_to_stop.insert(unit.to_string(), ());
                 }
-                // Remove from units to reload so we don't restart and reload
-                if units_to_reload.contains_key(unit) {
-                    units_to_reload.remove(unit);
-                    unrecord_unit(&reload_list, unit);
-                }
+            }
+
+            // Remove from units to reload so we don't restart and reload
+            if units_to_reload.remove(unit).is_some() {
+                unrecord_unit(&reload_list, unit);
             }
         }
     }
@@ -1073,14 +1078,17 @@ fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
 fn block_on_jobs(
     conn: &LocalConnection,
     submitted_jobs: &Rc<RefCell<HashMap<dbus::Path<'static>, Job>>>,
-) {
+) -> anyhow::Result<()> {
     while !submitted_jobs.borrow().is_empty() {
         log::debug!(
             "waiting for submitted jobs to finish, still have {} job(s)",
             submitted_jobs.borrow().len()
         );
-        _ = conn.process(DBUS_PROCESS_TIME);
+        _ = conn
+            .process(DBUS_PROCESS_TIME)
+            .context("Failed to process dbus messages while waiting for jobs")?;
     }
+    Ok(())
 }
 
 fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
@@ -1521,7 +1529,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             submitted_jobs.borrow_mut().insert(job_path, Job::Stop);
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     if !units_to_skip.is_empty() {
         print_units("NOT restarting", &units_to_skip);
@@ -1547,7 +1555,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&reload_list)
         .with_context(|| format!("Failed to remove {}", reload_list.display()))?;
 
@@ -1563,7 +1571,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&restart_list)
         .with_context(|| format!("Failed to remove {}", restart_list.display()))?;
 
@@ -1580,7 +1588,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             }
         }
     }
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
     remove_file_if_exists(&start_list)
         .with_context(|| format!("Failed to remove {}", start_list.display()))?;
 
@@ -1677,7 +1685,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         print_units("restarting (post-activation)", &to_restart);
         for unit in to_restart.keys() {
@@ -1691,7 +1699,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         let to_start_filtered = filter_units(&units_to_filter, &to_start);
         print_units("starting (post-activation)", &to_start_filtered);
@@ -1706,7 +1714,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                 }
             }
         }
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
 
     let finished = finished_jobs.borrow();
@@ -1999,9 +2007,9 @@ won't take effect until you reboot the system.
             // Swap entry disappeared, so turn it off.  Can't use "systemctl stop" here because
             // systemd has lots of alias units that prevent a stop from actually calling "swapoff".
             if *action == Action::DryActivate {
-                eprintln!("would stop swap device: {}", &device);
+                eprintln!("would stop swap device: {}", device);
             } else {
-                eprintln!("stopping swap device: {}", &device);
+                eprintln!("stopping swap device: {}", device);
                 let c_device = std::ffi::CString::new(device.clone())
                     .context("failed to convert device to cstring")?;
                 if unsafe { nix::libc::swapoff(c_device.as_ptr()) } != 0 {
@@ -2198,7 +2206,7 @@ won't take effect until you reboot the system.
             };
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
     }
 
     if !units_to_skip.is_empty() {
@@ -2214,7 +2222,7 @@ won't take effect until you reboot the system.
     }
 
     // Wait for all stop jobs to finish
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     let mut exit_code = 0;
 
@@ -2374,22 +2382,36 @@ won't take effect until you reboot the system.
     match logind.list_users() {
         Err(err) => {
             eprintln!("Unable to list users with logind: {err}");
-            die();
+            exit_code = 4;
         }
         Ok(users) => {
-            for (uid, name, user_dbus_path) in users {
-                let proxy = dbus_conn.with_proxy(
-                    "org.freedesktop.login1",
-                    &user_dbus_path,
-                    Duration::from_millis(5000),
-                );
-                let gid: u32 = proxy
-                    .get("org.freedesktop.login1.User", "GID")
-                    .with_context(|| format!("Failed to get GID for {name}"))?;
-
-                let runtime_path: String = proxy
-                    .get("org.freedesktop.login1.User", "RuntimePath")
-                    .with_context(|| format!("Failed to get runtime directory for {name}"))?;
+            for (uid, name, _user_dbus_path) in users {
+                // Derive GID and runtime path from the filesystem instead of querying
+                // logind via D-Bus, which races against logind's async GC of user
+                // objects (list_users snapshot → Properties::get hits UnknownObject).
+                // /run/user/<uid> exists iff the user manager is active (BindsTo= on
+                // user@.service), so stat() is an atomic, race-free liveness check.
+                let runtime_path = PathBuf::from(format!("/run/user/{uid}"));
+                let metadata = match std::fs::metadata(&runtime_path) {
+                    Ok(m) => m,
+                    Err(err) if err.kind() == std::io::ErrorKind::NotFound => {
+                        eprintln!(
+                            "skipping user {name}: {} not found \
+                             (user manager not running)",
+                            runtime_path.display()
+                        );
+                        continue;
+                    }
+                    Err(err) => {
+                        eprintln!(
+                            "warning: failed to stat {} for user {name}; \
+                             skipping: {err}",
+                            runtime_path.display()
+                        );
+                        exit_code = 4;
+                        continue;
+                    }
+                };
 
                 eprintln!("reloading user units for {name}...");
                 let myself = Path::new("/proc/self/exe")
@@ -2399,7 +2421,7 @@ won't take effect until you reboot the system.
                 log::debug!("Performing user switch for {name}");
                 let status = std::process::Command::new(&myself)
                     .uid(uid)
-                    .gid(gid)
+                    .gid(metadata.gid())
                     .env_clear()
                     .env("XDG_RUNTIME_DIR", runtime_path)
                     .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
@@ -2437,7 +2459,7 @@ won't take effect until you reboot the system.
     }
 
     // Wait for the restart job of sysinit-reactivation.service to finish
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     // Before reloading we need to ensure that the units are still active. They may have been
     // deactivated because one of their requirements got stopped. If they are inactive but should
@@ -2492,7 +2514,7 @@ won't take effect until you reboot the system.
             }
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         remove_file_if_exists(RELOAD_LIST_FILE)
             .with_context(|| format!("Failed to remove {RELOAD_LIST_FILE}"))?;
@@ -2520,7 +2542,7 @@ won't take effect until you reboot the system.
             }
         }
 
-        block_on_jobs(&dbus_conn, &submitted_jobs);
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         remove_file_if_exists(RESTART_LIST_FILE)
             .with_context(|| format!("Failed to remove {RESTART_LIST_FILE}"))?;
@@ -2553,7 +2575,7 @@ won't take effect until you reboot the system.
         }
     }
 
-    block_on_jobs(&dbus_conn, &submitted_jobs);
+    block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
     remove_file_if_exists(START_LIST_FILE)
         .with_context(|| format!("Failed to remove {START_LIST_FILE}"))?;

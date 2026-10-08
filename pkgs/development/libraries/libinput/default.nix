@@ -53,7 +53,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.31.1";
+  version = "1.31.3";
 
   outputs = [
     "bin"
@@ -61,12 +61,14 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+  propagatedBuildOutputs = [ "out" ];
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-9Ko97vJyo4a9NUF7omqHTwzVV02sJ2EqpDIh+nPeLwk=";
+    hash = "sha256-2l+YGD1AFTwJRouMg0d3nQX+2me6A4yOB4g2WE2H//g=";
   };
 
   nativeBuildInputs = [

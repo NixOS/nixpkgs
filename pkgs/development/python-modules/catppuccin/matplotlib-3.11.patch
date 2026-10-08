@@ -1,0 +1,37 @@
+From 11ab7be947064f11453f1063f63455b343b7253d Mon Sep 17 00:00:00 2001
+From: Raziman T V <razimantv@gmail.com>
+Date: Fri, 3 Jul 2026 13:36:29 +0100
+Subject: [PATCH] Fix #129 (caused by matplotlib 3.11 deprecating
+ mpl.style.core) by direct implementation
+
+---
+ catppuccin/extras/matplotlib.py | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/catppuccin/extras/matplotlib.py b/catppuccin/extras/matplotlib.py
+index 52934d1..f0ffafb 100644
+--- a/catppuccin/extras/matplotlib.py
++++ b/catppuccin/extras/matplotlib.py
+@@ -72,6 +72,7 @@
+ import matplotlib as mpl
+ import matplotlib.colors
+ import matplotlib.style
++from matplotlib import rc_params_from_file
+ 
+ from catppuccin.palette import PALETTE
+ 
+@@ -84,10 +85,10 @@
+ 
+ def _register_styles() -> None:
+     """Register the included stylesheets in the mpl style library."""
+-    catppuccin_stylesheets = mpl.style.core.read_style_directory(  # type: ignore [attr-defined]
+-        CATPPUCCIN_STYLE_DIRECTORY
+-    )
+-    mpl.style.core.update_nested_dict(mpl.style.library, catppuccin_stylesheets)  # type: ignore [attr-defined]
++    for path in Path(CATPPUCCIN_STYLE_DIRECTORY).glob(f"*.mplstyle"):
++        stylename = path.stem
++        style = rc_params_from_file(path, use_default_template=False)
++        mpl.style.library.setdefault(stylename, {}).update(style)
+ 
+ 
+ def _register_colormap_list() -> None:

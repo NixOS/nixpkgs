@@ -8,15 +8,18 @@
   libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "i7z";
   version = "0.27.4";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DimitryAndric";
     repo = "i7z";
-    rev = "v${version}";
-    sha256 = "00c4ng30ry88hcya4g1i9dngiqmz3cs31x7qh1a10nalxn1829xy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vieBgu1UWRBUgPj0MDQbv+L4bEsxPKI8gwj5DMazhAE=";
   };
 
   buildInputs = [ ncurses ] ++ lib.optional withGui libsForQt5.qtbase;
@@ -24,15 +27,15 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://salsa.debian.org/debian/i7z/raw/ad1359764ee7a860a02e0c972f40339058fa9369/debian/patches/fix-insecure-tempfile.patch";
-      sha256 = "0ifg06xjw14y4fnzzgkhqm4sv9mcdzgi8m2wffq9z8b1r0znya3s";
+      hash = "sha256-eihvP8hhoZ+wc1xUFN9vrKatScVwvv+tI54ELrsBz0U=";
     })
     (fetchpatch {
       url = "https://salsa.debian.org/debian/i7z/raw/ad1359764ee7a860a02e0c972f40339058fa9369/debian/patches/nehalem.patch";
-      sha256 = "1ys6sgm01jkqb6d4y7qc3h89dzph8jjjcfya5c5jcm7dkxlzjq8a";
+      hash = "sha256-CmH5aZ/tVCYLK8o7JqVE8P6WEBwMH0+aWXjKAOrTRvs=";
     })
     (fetchpatch {
       url = "https://salsa.debian.org/debian/i7z/raw/ad1359764ee7a860a02e0c972f40339058fa9369/debian/patches/hyphen-used-as-minus-sign.patch";
-      sha256 = "1ji2qvdyq0594cpqz0dlsfggvw3rm63sygh0jxvwjgxpnhykhg1p";
+      hash = "sha256-Nzw4PbS3P8l3lwA+r4epefD9ntO0gY8vI6kA7NvGIso=";
     })
     ./qt5.patch
   ];
@@ -61,4 +64,4 @@ stdenv.mkDerivation rec {
     # broken on ARM
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -16,7 +16,7 @@
   versionCheckHook,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprshutdown";
   version = "0.1.1";
 

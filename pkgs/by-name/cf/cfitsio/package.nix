@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.6.4";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "HEASARC";
     repo = "cfitsio";
     tag = "cfitsio-${finalAttrs.version}";
-    hash = "sha256-8AFPTr8j8f+x1h78IXOV8GHkDPWvI8w8aRxyke3Dras=";
+    hash = "sha256-k05ylMYf+hsYur3BgNAweMeDc89rsBBtie+P7bd+7qg=";
   };
 
   outputs = [

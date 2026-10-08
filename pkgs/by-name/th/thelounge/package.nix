@@ -88,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/thelounge/thelounge/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       winter
-      raitobezarius
     ];
     license = lib.licenses.mit;
     inherit (nodejs-slim.meta) platforms;

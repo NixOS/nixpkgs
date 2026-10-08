@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "wapiti";
-  version = "3.3.0";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     tag = finalAttrs.version;
-    hash = "sha256-hUkEwyIzYhlip6vtwO8EYcUsL5B/ZVnbJKpTR6osVuc=";
+    hash = "sha256-gnZdNm6XZ2QiSppFAyCqbnpMiy06+qofVnWyUIEwDMI=";
   };
 
   pythonRelaxDeps = true;

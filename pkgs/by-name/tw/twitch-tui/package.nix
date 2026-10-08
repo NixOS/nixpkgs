@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
   pkg-config,
   openssl,
 }:
@@ -26,6 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     openssl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Twitch chat in the terminal";

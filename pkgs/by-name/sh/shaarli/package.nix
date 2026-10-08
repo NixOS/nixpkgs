@@ -2,21 +2,24 @@
   lib,
   stdenv,
   fetchurl,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shaarli";
-  version = "0.16.1";
+  version = "0.16.5";
 
   src = fetchurl {
-    url = "https://github.com/shaarli/Shaarli/releases/download/v${finalAttrs.version}/shaarli-v${finalAttrs.version}-full.tar.gz";
-    sha256 = "sha256-SK9J8w8cekxiWBhz/Zp5pOfHgndfEEN5/Kcf6lXJBmA=";
+    url = "https://github.com/shaarli/Shaarli/releases/download/v${finalAttrs.version}/shaarli-v${finalAttrs.version}-full.zip";
+    sha256 = "sha256-eU4xt3y/d5VzlIbOWKHsftlhjn33qrWOj43p2xgg7Cc=";
   };
 
   outputs = [
     "out"
     "doc"
   ];
+
+  nativeBuildInputs = [ unzip ];
 
   patchPhase = ''
     substituteInPlace index.php \

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Trial Factoring program using CUDA for GIMPS";
     longDescription = ''
-      CUDA Program for trial factoring Mersenne primes. Intented for use with GIMPS through autoprimenet.py.
+      CUDA Program for trial factoring Mersenne primes. Intended for use with GIMPS through autoprimenet.py.
       Note that the mfaktc.ini file, which is in $out/share, must be symlinked to your working directory.
     '';
     homepage = "https://github.com/primesearch/mfaktc";

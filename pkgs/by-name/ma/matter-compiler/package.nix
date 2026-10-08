@@ -13,8 +13,8 @@ bundlerApp {
 
   meta = {
     description = ''
-      Matter Compiler is a API Blueprint AST Media Types to API Blueprint conversion tool.
-      It composes an API blueprint from its serialzed AST media-type.
+      Matter Compiler is an API Blueprint AST Media Types to API Blueprint conversion tool.
+      It composes an API blueprint from its serialized AST media-type.
     '';
     homepage = "https://github.com/apiaryio/matter_compiler/";
     license = lib.licenses.mit;

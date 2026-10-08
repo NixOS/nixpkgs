@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_BUNDLED_DEPS" false)
     (lib.cmakeBool "WITH_WEBSOCKETS" true)
     (lib.cmakeBool "WITH_SYSTEMD" withSystemd)
-    (lib.cmakeBool "WITH_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "WITH_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   postFixup = ''

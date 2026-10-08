@@ -1,0 +1,12 @@
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 09cc4660..109396a7 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -77,6 +77,7 @@ macro(add_test_file test_source gui_required)
+       PkgConfig::GLIB
+       PkgConfig::GOBJECT
+       PkgConfig::GSTREAMER_BASE
++      PkgConfig::GSTREAMER_APP
+       Qt${QT_VERSION_MAJOR}::Core
+       Qt${QT_VERSION_MAJOR}::Concurrent
+       Qt${QT_VERSION_MAJOR}::Network

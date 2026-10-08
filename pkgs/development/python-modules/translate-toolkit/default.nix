@@ -29,18 +29,22 @@
   addBinToPathHook,
   pytest-xdist,
   gettext,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.19.5";
+  version = "3.19.19";
   pyproject = true;
+  __structuredAttrs = true;
 
+  # nixpkgs-update: no auto update
+  # Only weblate uses this and we want to follow its version constraints
   src = fetchFromGitHub {
     owner = "translate";
     repo = "translate";
     tag = finalAttrs.version;
-    hash = "sha256-NJuhkJyXfGO2iwvcHUrfMZi55t1+89RN6jEIxHk8mcs=";
+    hash = "sha256-TWEVrZHtMgXn4oG3Wfx3LMbAoX1S770PCdRoq/qKzZE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -49,6 +53,8 @@ buildPythonPackage (finalAttrs: {
     lxml
     unicode-segmentation-rs
   ];
+
+  pythonRelaxDeps = [ "lxml" ];
 
   optional-dependencies = {
     chardet = [ charset-normalizer ];
@@ -69,6 +75,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     addBinToPathHook
     pytest-xdist
+    syrupy
     gettext
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
@@ -76,12 +83,6 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
-  ];
-
-  disabledTestPaths = [
-    # Require pytest-snapshot but there are no snapshots checked in
-    "tests/translate/tools/test_pocount.py"
-    "tests/translate/tools/test_junitmsgfmt.py"
   ];
 
   pythonImportsCheck = [ "translate" ];
@@ -92,7 +93,7 @@ buildPythonPackage (finalAttrs: {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
     changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${finalAttrs.src.tag}.html";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ erictapen ];
   };
 })

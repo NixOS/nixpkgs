@@ -6,6 +6,7 @@
   ninja,
   pkg-config,
   wrapGAppsHook3,
+  assimp,
   boost183,
   cacert,
   cereal,
@@ -27,6 +28,7 @@
   libpng,
   libsecret,
   makeFontsConf,
+  libnoise,
   mpfr,
   nanum,
   nlopt,
@@ -39,6 +41,7 @@
   webkitgtk_4_1,
   wxwidgets_3_1,
   libx11,
+  libharu,
   withSystemd ? stdenv.hostPlatform.isLinux,
   # 3D viewport blank on NVIDIA proprietary GL; routes through Mesa + zink.
   # https://github.com/NixOS/nixpkgs/issues/498311
@@ -66,13 +69,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.05.00.67";
+  version = "02.08.00.50";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jLaSUs6OmoD0yw1hOcJarYKfr1rbhB2TwRiBBU0utEI=";
+    hash = "sha256-zIizozfZkaXo5wymuBFBCUu/lu+FyYTpa4+3SoC2x7k=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    assimp
     boost183
     cereal
     cgal_5
@@ -104,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     hicolor-icon-theme
     libpng
     libsecret
+    libnoise
     mpfr
     nlopt
     opencascade-occt_7_6
@@ -113,6 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk_4_1
     wxGTK'
     libx11
+    libharu
     opencv
   ]
   ++ lib.optionals withSystemd [ systemd ]
@@ -129,7 +135,24 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/no-cereal.patch
     # Cmake 4 support
     ./patches/cmake.patch
+    # Disable nodejs
+    ./patches/no-device-web-node-download.patch
   ];
+
+  postPatch =
+    # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
+    # now seems to be integrated into the main lib.
+    ''
+      substituteInPlace cmake/modules/FindNLopt.cmake \
+        --replace-fail "nlopt_cxx" "nlopt"
+    ''
+    # Fix libharu include
+    + ''
+      substituteInPlace src/slic3r/GUI/Overview/AssemblyStepsUtils.cpp \
+        --replace-fail \
+          "#include <hpdf/hpdf.h>" \
+          "#include <hpdf.h>"
+    '';
 
   doCheck = true;
   checkInputs = [ gtest ];
@@ -156,13 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = lib.optionalString withSystemd "-ludev" + " -L${opencv}/lib -lopencv_imgcodecs";
   };
 
-  # TODO: macOS
-  prePatch = ''
-    # Since version 2.5.0 of nlopt we need to link to libnlopt, as libnlopt_cxx
-    # now seems to be integrated into the main lib.
-    sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
-  '';
-
   cmakeFlags = [
     (lib.cmakeBool "SLIC3R_STATIC" false)
     (lib.cmakeBool "SLIC3R_FHS" true)
@@ -177,6 +193,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "DEP_WX_GTK3" true)
     (lib.cmakeBool "SLIC3R_BUILD_TESTS" false)
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_LOG_DYN_LINK")
+
+    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${lib.getInclude libnoise}/include/noise")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${lib.getLib libnoise}/lib/libnoise-static.a")
   ];
 
   preFixup = ''

@@ -6,13 +6,13 @@
 
 mkYaziPlugin {
   pname = "split-tabs.yazi";
-  version = "0-unstable-2026-05-17";
+  version = "0-unstable-2026-08-18";
 
   src = fetchFromGitHub {
     owner = "terrakok";
     repo = "split-tabs.yazi";
-    rev = "da25bc0c02f669ef5d939bb03597f4ae557834ec";
-    hash = "sha256-Xb8XKEEZgNL5dZ8EAy9ELDcYGWGq2go+bwdlpydifi8=";
+    rev = "d0531f49503003d669b98ebd468f5dddb90391ba";
+    hash = "sha256-25PnsplMhF9satXHA1Ow0bZSksoLwH2zpuqrEZ2aFjQ=";
   };
 
   meta = {

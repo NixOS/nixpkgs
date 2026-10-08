@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   fetchFromGitHub,
   fixDarwinDylibNames,
   apache-orc,
@@ -80,7 +81,7 @@ let
     hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
   };
 
-  version = "23.0.0";
+  version = "24.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -90,10 +91,20 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-BluUlbtGJwvlrpN/c/KziOfFh5dvzZyuCy4JZkkFea4=";
+    hash = "sha256-qTdkzZegANNvtO7nbqXVC8hc7BexvmeFF/0l5VzRb8g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
+
+  patches = [
+    # Fix flaky test racing on (not) waiting for azurite
+    # https://github.com/apache/arrow/pull/50878
+    (fetchpatch {
+      url = "https://github.com/apache/arrow/commit/e6a89be6c7cc537b04844796bd84ac8240942050.patch";
+      hash = "sha256-hB2ebq6a64FPBZeg7aS+tSZZIzhFs3w9A3n2NK+/ob8=";
+    })
+  ];
+  patchFlags = [ "-p2" ];
 
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
@@ -305,6 +316,8 @@ stdenv.mkDerivation (finalAttrs: {
         "arrow-flight-integration-test"
         # File already exists in database: orc_proto.proto
         "arrow-orc-adapter-test"
+        # missing test fixture
+        "parquet-encryption-test"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # https://github.com/NixOS/nixpkgs/issues/460687
@@ -316,7 +329,16 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstallCheck
 
-      ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      ctestArgs=(
+        -L unittest
+        --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      )
+
+      # Match ci/scripts/cpp_test.sh to fight flakiness.
+      # https://github.com/apache/arrow/issues/40121
+      ctestArgs+=(--repeat until-pass:3)
+
+      ctest "''${ctestArgs[@]}"
 
       runHook postInstallCheck
     '';

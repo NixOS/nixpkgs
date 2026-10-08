@@ -3,6 +3,7 @@
   buildDunePackage,
   ocaml,
   alcotest,
+  crowbar,
   cstruct,
   sexplib,
 }:
@@ -15,11 +16,11 @@ else
     pname = "cstruct-sexp";
     inherit (cstruct) version src meta;
 
-    minimalOCamlVersion = "4.08";
-    duneVersion = "3";
-
     doCheck = true;
-    checkInputs = [ alcotest ];
+    checkInputs = [
+      alcotest
+      crowbar
+    ];
 
     propagatedBuildInputs = [
       cstruct

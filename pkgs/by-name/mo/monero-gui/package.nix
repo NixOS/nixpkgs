@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.18.5.0";
+  version = "0.18.5.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${version}";
-    hash = "sha256-uBZMBQ6Co1+H8DsyeL1vbjtVlKyIkJopKxHxr24BZv0=";
+    hash = "sha256-2FlenQtrsoHmRTfU+KhWtg3eVPzz9ktQ3dnOlWhOPC8=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DARCH=default"
   ]
-  ++ lib.optional trezorSupport [
+  ++ lib.optionals trezorSupport [
     # fix build on recent gcc versions
     "-DCMAKE_CXX_FLAGS=-fpermissive"
   ];

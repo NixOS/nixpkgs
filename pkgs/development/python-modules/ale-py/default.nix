@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -17,6 +18,9 @@
   opencv,
   zlib,
 
+  # nativeBuildInputs
+  cudaPackages,
+
   # dependencies
   numpy,
 
@@ -28,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ale-py";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,8 +40,16 @@ buildPythonPackage (finalAttrs: {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hFbreHk0i4h+JOyvDYcNX3TmwgvxNC5U0l5Xrqqz1zQ=";
+    hash = "sha256-1oIF45+GZFWuRzXR5Hqh60yc1DZYAlXpsGgf3WiouQE=";
   };
+
+  # disable lto on darwin, cmake cannot find llvm-ar
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/ale/CMakeLists.txt \
+      --replace-fail \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
+        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
+  '';
 
   build-system = [
     cmake
@@ -49,13 +61,10 @@ buildPythonPackage (finalAttrs: {
     jax
   ];
 
-  # disable lto on darwin, cmake cannot find llvm-ar
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/ale/CMakeLists.txt \
-      --replace-fail \
-        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
-        'set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
-  '';
+  nativeBuildInputs = lib.optionals config.cudaSupport [
+    # Required by opencv's cmake
+    cudaPackages.cuda_nvcc
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -102,7 +111,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    #
     "tests/python/test_atari_vector_xla.py"
   ];
 

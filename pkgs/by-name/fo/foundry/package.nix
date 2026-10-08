@@ -13,7 +13,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "foundry";
-  version = "1.7.1";
+  version = "1.8.1";
 
   __structuredAttrs = true;
 
@@ -21,10 +21,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "foundry-rs";
     repo = "foundry";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pS0V7AbSVowKXWfmk4TM9HyEVO1GL+FCZgdmpCfGcmM=";
+    hash = "sha256-klIOiuK9rpYtL56RMWum71XH6XlZQDWHSg347SHMcQM=";
   };
 
-  cargoHash = "sha256-Ka751S1YhUQJCJYqD8bgjSm9IZPaBNg50DNDhmROQzs=";
+  cargoHash = "sha256-u3QuzSnmj/ppOsz737jN0VtbiouCn2XQWAylH0z6OlQ=";
 
   strictDeps = true;
 

@@ -4,7 +4,6 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch,
   python314Packages,
   replaceVars,
   ffmpeg-headless,
@@ -134,15 +133,6 @@ let
         doCheck = false; # no tests
       });
 
-      openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
-        version = "2.2";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = version;
-          hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
-        };
-      });
-
       plexapi = super.plexapi.overrideAttrs (oldAttrs: rec {
         version = "4.15.16";
         src = fetchFromGitHub {
@@ -151,6 +141,11 @@ let
           tag = version;
           hash = "sha256-NwGGNN6LC3gvE8zoVL5meNWMbqZjJ+6PcU2ebJTfJmU=";
         };
+
+        # ancient pinned version requires pkg_resources
+        nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
+          self.setuptools_80
+        ];
       });
 
       # Pinned due to API changes in 0.1.0
@@ -176,17 +171,6 @@ let
           "test_async_add_tasks"
           "test_send_heartbeat"
         ];
-      });
-
-      # Pinned due to API changes >0.3.5.3
-      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.5.3";
-        src = fetchFromGitHub {
-          owner = "MatsNl";
-          repo = "pyatag";
-          rev = version;
-          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
-        };
       });
 
       pyflume = super.pyflume.overridePythonAttrs (oldAttrs: rec {
@@ -236,6 +220,7 @@ let
       });
 
       # internal python packages only consumed by home-assistant itself
+      gazetteer-matcher = self.callPackage ./python-modules/gazetteer-matcher { };
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -266,7 +251,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.5.4";
+  hassVersion = "2026.9.3";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -287,13 +272,13 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-Z5FUkljaWRr9tfBb6RXJCC86ZbyNkw0PvUcOl+bZ2cc=";
+    hash = "sha256-oqgvO3mjsHsdujlGp0lwAfH6r0dGBxf0R+lILCTueeQ=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-o5S6rnOTqzPLZpMBxgmp9IpmLlEHLvHTH68ql2EkVbI=";
+    hash = "sha256-J+G3e9jJxdmn9aw4pg9G5qD5QTVKUJkVomLw1Lz/84g=";
   };
 
   build-system = with python3Packages; [
@@ -318,22 +303,12 @@ python3Packages.buildPythonApplication rec {
     # No scaring our users about not running in a docker or a venv
     ./patches/pythonpath-is-a-venv.patch
 
+    # No scaring our users about our install method
+    ./patches/nixos-was-never-supported.patch
+
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
-    })
-
-    (fetchpatch {
-      name = "2026.5.4-shelly-tests-fix.patch";
-      url = "https://github.com/home-assistant/core/commit/072e9b51a2321b0d4489bae6f1e04f7ed845222f.patch";
-      includes = [ "tests/components/shelly/test_coordinator.py" ];
-      hash = "sha256-0XQdw2MnwzrHKYY06TotfJJem0bqremmi7k8SyVQVGA=";
-    })
-
-    (fetchpatch {
-      name = "2026.5.4-homewizard-tests-fix.patch";
-      url = "https://github.com/home-assistant/core/commit/e796d9c46744097585bfada483108a55ae16344a.patch";
-      hash = "sha256-T0Nb6LcL/21WdUm8RmczhHaVX92n5O/rpMdpqDVQ2VU=";
     })
   ];
 
@@ -342,6 +317,10 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==78.1.1" setuptools
+
+    # https://github.com/RenierM26/pyEzvizApi/commit/ae0651ea93f031e94e7286fa3439fcc12acfb001
+    substituteInPlace homeassistant/components/ezviz/switch.py \
+      --replace-fail "SupportFulldayRecord" "SupportFullDayRecord"
   '';
 
   pythonRemoveDeps = [
@@ -374,6 +353,7 @@ python3Packages.buildPythonApplication rec {
     cronsim
     cryptography
     fnv-hash-fast
+    gazetteer-matcher
     ha-ffmpeg
     hass-nabucasa
     hassil
@@ -388,6 +368,7 @@ python3Packages.buildPythonApplication rec {
     orjson
     packaging
     pillow
+    probatio
     propcache
     psutil-home-assistant
     pyjwt
@@ -436,6 +417,9 @@ python3Packages.buildPythonApplication rec {
     requests-mock
     respx
     syrupy
+    unidiff
+    # Used in tests/common.py
+    paho-mqtt
   ];
 
   nativeCheckInputs =
@@ -448,6 +432,10 @@ python3Packages.buildPythonApplication rec {
       colorlog
       # Used in tests/helpers/test_httpx_client.py
       h2
+      # Used in tests/mypy_plugins/test_enum_identity_compare.py
+      mypy
+      # Used in tests/scripts/check_requirements/test_gate.py
+      pygithub
     ])
     ++ lib.concatMap (component: getPackages component python3Packages) [
       # some components are needed even if tests in tests/components are disabled
@@ -482,13 +470,6 @@ python3Packages.buildPythonApplication rec {
     "tests/util/test_package.py::test_check_package_fragment"
     # flaky
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
-    "tests/test_test_fixtures.py::test_evict_faked_translations"
-    "tests/helpers/test_backup.py::test_async_get_manager"
-    "tests/helpers/test_trigger.py::test_platform_multiple_triggers[sync_action]"
-    # various failing after python-updates
-    "tests/helpers/test_entity_platform.py::test_platform_warn_slow_setup" # ValueError: not enough values to unpack (expected 2, got 0)
-    "tests/helpers/test_entity_component.py::test_set_scan_interval_via_config" # assert 10 == 30.0
-    "tests/helpers/test_entity_component.py::test_set_entity_namespace_via_config" # AssertionError: assert [] == ['test_domain...named_device']
   ];
 
   preCheck = ''

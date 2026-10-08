@@ -3,23 +3,23 @@
   buildNpmPackage,
   fetchFromGitHub,
   nixosTests,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nix-update-script,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "flood";
-  version = "4.14.2";
+  version = "4.15.0";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "flood";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gSjkpAGkvgRRh8WDpL/F7fS8KDxHRJUuWVqHGcFEGAc=";
+    hash = "sha256-wd+9owJi9W9pf6c1JuO0X/6JWxLq8XIypj6r4rQUemM=";
   };
 
-  nativeBuildInputs = [ pnpm_9 ];
+  nativeBuildInputs = [ pnpm_10 ];
   npmConfigHook = pnpmConfigHook;
   npmDeps = finalAttrs.pnpmDeps;
   dontNpmPrune = true;
@@ -29,9 +29,9 @@ buildNpmPackage (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_9;
-    fetcherVersion = 3;
-    hash = "sha256-Los6faQJ4it0fVqtRvPvYmyANK4qBcwHxmZBacR7Q6E=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-a1PoQ5pXw1SgyGFRa3+7AOr6vpyGyHxkMU7KQEFlZ04=";
   };
 
   passthru = {

@@ -1,10 +1,10 @@
 {
-  lib,
   buildPythonPackage,
   hatchling,
   opentelemetry-api,
   opentelemetry-instrumentation,
   opentelemetry-test-utils,
+  pytest-benchmark,
   pytestCheckHook,
 }:
 
@@ -24,7 +24,12 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     opentelemetry-test-utils
+    pytest-benchmark
     pytestCheckHook
+  ];
+
+  pytestFlags = [
+    "--benchmark-disable"
   ];
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.logging" ];

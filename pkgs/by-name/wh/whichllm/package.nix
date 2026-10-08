@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whichllm";
-  version = "0.5.7";
+  version = "0.5.16";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "Andyyyy64";
     repo = "whichllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UvhCSC9tKpdgXFCMGn0HWM0kuHhXSauEr/ys/9PUIRs=";
+    hash = "sha256-yi3XK1VvbUHpiXt0TNT0EiXdoHKl6xR9LgS+OTQvtbg=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       rich
       typer
     ]
-    ++ python3Packages.dbgpu.optional-dependencies.fuzz;
+    ++ dbgpu.optional-dependencies.fuzz;
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonImportsCheck = [ "whichllm" ];
 
   meta = {
-    description = "Find the local LLM that actually runs and performs best on your hardware. Ranked by real, recency-aware benchmarks, not parameter count. One command, run it instantly";
+    description = "Find the local LLM that actually runs and performs best on your hardware";
     homepage = "https://github.com/Andyyyy64/whichllm";
     changelog = "https://github.com/Andyyyy64/whichllm/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

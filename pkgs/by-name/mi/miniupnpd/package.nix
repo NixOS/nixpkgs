@@ -48,11 +48,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "miniupnpd";
-  version = "2.3.9";
+  version = "2.3.10";
 
   src = fetchurl {
     url = "https://miniupnp.tuxfamily.org/files/miniupnpd-${version}.tar.gz";
-    sha256 = "sha256-Zss8PWl6srs6YdPEhigWbWujKNfC2+uViY/fKjICr3s=";
+    sha256 = "sha256-+cNO02MvtgzSSN1Yl72YR5oQOnVoiwVsovBp5oqzKYc=";
   };
 
   buildInputs = [

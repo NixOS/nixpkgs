@@ -12,26 +12,34 @@
   glib,
   glib-networking,
   pkg-config,
-  cmake,
   gtk4,
   python3,
   python3Packages,
   libadwaita,
+  libportal,
+  libportal-gtk4,
   gobject-introspection,
   libsecret,
   gst_all_1,
   xdg-user-dirs,
+  gnome,
+  librsvg,
+  webp-pixbuf-loader,
+  libavif,
+  libheif,
+  versionCheckHook,
+  fontconfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nocturne";
-  version = "1.2.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Nocturne";
     tag = finalAttrs.version;
-    hash = "sha256-CfrPmpkjcmKMB66kdFL4HqVukaIWAkIzOkwtBqZ65k4=";
+    hash = "sha256-wFLsbBXbKo6z0DGxv427Vi8WkQiIE9k49ftIsVZYq5c=";
   };
 
   __structuredAttrs = true;
@@ -50,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     appstream
     glib
     pkg-config
-    cmake
     gtk4
     python3
   ];
@@ -58,12 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
+    libportal
+    libportal-gtk4
     libsecret
     python3
     glib-networking
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
   ];
 
   pythonDependencies = [
@@ -73,10 +83,22 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.syncedlyrics
     python3Packages.pycairo
     python3Packages.colorthief
-    python3Packages.favicon
     python3Packages.mpris-server
     python3Packages.pillow
   ];
+
+  preInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+          libavif
+          libheif.lib
+        ];
+      }
+    }"
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -85,8 +107,23 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  # avoid installing Navidrome at runtime if not available, incompatible with the nix store
+  patches = [ ./disable-navidrome-setup.patch ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [
+    "XDG_CACHE_HOME"
+    "FONTCONFIG_FILE"
+  ];
+  # it still errors due to lack of display, but the retcode is 0 and the version is printed
+  preInstallCheck = ''
+    export XDG_CACHE_HOME=$(mktemp -d)
+    export FONTCONFIG_FILE="${fontconfig.out}/etc/fonts/fonts.conf"
+  '';
+
   meta = {
-    description = "Adwaita Music Player and Library Manager";
+    description = "Adwaita music player for OpenSubsonic servers like Navidrome";
     homepage = "https://jeffser.com/nocturne/";
     changelog = "https://github.com/Jeffser/Nocturne/releases";
     license = lib.licenses.gpl3Plus;

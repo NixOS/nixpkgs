@@ -1,4 +1,5 @@
-async function handleReviewers({
+// @ts-nocheck
+export async function handleReviewers({
   github,
   context,
   core,
@@ -181,8 +182,4 @@ async function handleReviewers({
     users_reached.size === 0 &&
     teams_reached.size === 0
   )
-}
-
-module.exports = {
-  handleReviewers,
 }

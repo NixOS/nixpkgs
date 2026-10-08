@@ -1,7 +1,9 @@
 {
   stdenv,
   lib,
-  fetchzip,
+  fetchFromGitHub,
+  _experimental-update-script-combinators,
+  nix-update-script,
 
   # Free MASM-compatible assembler
   asmc-linux,
@@ -43,17 +45,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "26.01";
+  version = "26.02";
 
-  src = fetchzip {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
+  src = fetchFromGitHub {
+    owner = "ip7z";
+    repo = "7zip";
+    tag = finalAttrs.version;
     hash =
-      {
-        free = "sha256-52+Gg66MOFmwYUVB0OO4PAtZJtQOkoVpxV7F9xBGy58=";
-        unfree = "sha256-w0fk8EDusUYiOfrmIiUq+xevlwfQxMhjdPzfkHkOkR8=";
-      }
-      .${if enableUnfree then "unfree" else "free"};
-    stripRoot = false;
+      if enableUnfree then
+        "sha256-MmnsCM4guQ5DuWDE5MslI8QIIbkUtZnddVPgAuCRWQU="
+      else
+        "sha256-prKxsT7y7iHbzduM+xqz1yQMEbJ8IjnsmafzC2mOwr4=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
@@ -120,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
+    "lib"
   ];
 
   setupHook = ./setup-hook.sh;
@@ -128,17 +131,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
 
+  postBuild = ''
+    make $makeFlags -j $NIX_BUILD_CORES -C ../Format7zF -f ${makefile}
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
     install -Dm444 -t $out/share/doc/7zz ../../../../DOC/*.txt
 
+    mkdir -p $lib/lib
+    install -Dm555 -t $lib/lib ../Format7zF/b/*/7z.*
+
     runHook postInstall
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        attrPath = "_7zz";
+        extraArgs = [ "--use-github-releases" ];
+      })
+      (nix-update-script {
+        attrPath = "_7zz-rar";
+        extraArgs = [ "--version=skip" ];
+      })
+    ];
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "7zz --help";

@@ -23,7 +23,7 @@
   libxml2,
   nix-update-script,
   spice-protocol,
-  spice-gtk,
+  spice-glib,
   vte-gtk4,
   gcr_4,
   gtk-vnc,
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-fsrczFhoIilxgZRH2PVXC67YdkMsIjA6zTfix57TTzo=";
   };
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libvirt
     openssl
-    spice-gtk
+    spice-glib
     spice-protocol
     usbredir
     vte-gtk4

@@ -1,7 +1,7 @@
 { pkgsCross, lib }:
 let
   root = ./.;
-  pkgs' = pkgsCross.wasi32;
+  pkgs' = pkgsCross.wasm32-wasip1;
 
   call = name: override (pkgs'.callPackage (root + "/${name}") { });
   override =

@@ -54,7 +54,7 @@ ocamlPackages.buildDunePackage rec {
     nottui
     nottui-unix
     notty-community
-    ocaml_sqlite3
+    sqlite3
     ocolor
     oseq
     ppx_deriving

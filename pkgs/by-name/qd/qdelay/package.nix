@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdelay";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
     repo = "qdelay";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-CjJJYr4dQkc7N+KbTAdaX7u8vnRi+mjBx8iqrN/Pi+4=";
+    hash = "sha256-Du3zwYluSoepU+8d3ijTXjizWhUoiv8GTN7sNR9rMJI=";
   };
 
   nativeBuildInputs = [

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osinfo-db";
-  version = "20251212";
+  version = "20260812";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/osinfo-db-${finalAttrs.version}.tar.xz";
-    hash = "sha256-BjeSUMkTBsmMuXJq9E6uWQnf3VRJ+QMx6QSuEiHY1ec=";
+    url = "https://gitlab.com/api/v4/projects/libosinfo%2Fosinfo-db/packages/generic/release-assets/v${finalAttrs.version}/osinfo-db-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8T7W4eSAtSZtOcrX8AEP698CZd/EVXneL7NFQ7xrNd4=";
   };
 
   nativeBuildInputs = [

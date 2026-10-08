@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "noti";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchFromCodeberg {
     owner = "roble";
     repo = "noti";
     tag = finalAttrs.version;
-    hash = "sha256-FwOS4ifMiODIzKVQufLhkDYOcmXz9dAfWw+hM3rXT/Y=";
+    hash = "sha256-gC4vahFfphw2rogd98b5HdCSbB/QdCvC9JcEqhOVFUs=";
   };
 
   vendorHash = null;

@@ -7,16 +7,13 @@
   ptime,
 }:
 
-buildDunePackage rec {
-
+buildDunePackage (finalAttrs: {
   pname = "crunch";
-  version = "4.0.0";
-
-  minimalOCamlVersion = "4.08";
+  version = "4.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-crunch/releases/download/v${version}/crunch-${version}.tbz";
-    sha256 = "sha256-k5uNESntbGNMsPnMxvbUSqFwPNBc5gkfLuKgFilEuJs=";
+    url = "https://github.com/mirage/ocaml-crunch/releases/download/v${finalAttrs.version}/crunch-${finalAttrs.version}.tbz";
+    hash = "sha256-t3ddb7bmCUqMMf2/ISdQHZntjO6sQCcQVd1Sx5o+F+c=";
   };
 
   buildInputs = [ cmdliner ];
@@ -41,4 +38,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

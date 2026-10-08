@@ -15,7 +15,7 @@ let
     hash = "sha512-Ww/QfMgmeghthfuGfc4Plv7vUKLikLf4R+SImG6TuYg0pDJ5psuHtXQezV0BurVRm6eQ+Ori+YGK2A52tCkcfw==";
   };
 
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in

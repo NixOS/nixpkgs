@@ -76,7 +76,136 @@ makeSetupHook {
           ];
         };
 
-        # The wrapper for executable files should add path to dconf GIO module.
+        # Simple derivation containing a program and a daemon, but split over multiple outputs.
+        basic-multiple-outputs = stdenv.mkDerivation {
+          name = "basic-multiple-outputs";
+
+          src = sample-project;
+
+          outputs = [
+            "out"
+            "lib"
+          ];
+
+          strictDeps = true;
+          nativeBuildInputs = [ wrapGAppsHook3 ];
+
+          installFlags = [
+            "bin-foo"
+            "libexec-bar"
+          ];
+
+          postInstall = ''
+            mkdir -p $lib
+            mv $out/libexec $lib
+            # Wrapper will want to append this to XDG_DATA_DIRS, but should not cause a cyclic dependency;
+            # i.e. only "out" will be wrapped.
+            mkdir -p $out/share
+          '';
+        };
+
+        # Simple derivation containing a program and a daemon, but using a non-default output
+        # Executables in "bin" should be handled correctly automatically
+        basic-bin-output = stdenv.mkDerivation {
+          name = "basic-bin-output";
+
+          src = sample-project;
+
+          outputs = [
+            "bin"
+            "dev"
+            "lib"
+            "out"
+          ];
+
+          strictDeps = true;
+          nativeBuildInputs = [ wrapGAppsHook3 ];
+
+          installFlags = [
+            "bin-foo"
+            "libexec-bar"
+          ];
+
+          postInstall = ''
+            mkdir -p $lib
+            mv $out/libexec $lib
+            mkdir -p $bin
+            mv $out/bin $bin
+          '';
+        };
+
+        # Simple derivation containing a program and a daemon, but using a non-default output
+        basic-other-outputs = stdenv.mkDerivation {
+          name = "basic-other-outputs";
+
+          src = sample-project;
+
+          outputs = [
+            "dev"
+            "lib"
+            "out"
+          ];
+
+          strictDeps = true;
+          nativeBuildInputs = [ wrapGAppsHook3 ];
+
+          installFlags = [
+            "bin-foo"
+            "libexec-bar"
+          ];
+
+          wrapGAppsInOutputs = [
+            "dev"
+            "lib"
+          ];
+
+          postInstall = ''
+            mkdir -p $lib
+            mv $out/libexec $lib
+            mkdir -p $dev
+            mv $out/bin $dev
+          '';
+        };
+
+        # Simple derivation containing a program and a daemon, but using non-default outputs
+        # that are explicitly referenced via wrapGAppsInOutputs
+        basic-other-outputs-structuredattrs = stdenv.mkDerivation {
+          name = "basic-other-outputs-structuredAttrs";
+
+          __structuredAttrs = true;
+
+          src = sample-project;
+
+          outputs = [
+            "dev"
+            "lib"
+            "out"
+          ];
+
+          strictDeps = true;
+          nativeBuildInputs = [ wrapGAppsHook3 ];
+
+          installFlags = [
+            "bin-foo"
+            "libexec-bar"
+          ];
+
+          wrapGAppsInOutputs = [
+            "dev"
+            "lib"
+          ];
+
+          postInstall = ''
+            mkdir -p $lib
+            mv $out/libexec $lib
+            mkdir -p $dev
+            mv $out/bin $dev
+          '';
+        };
+
+        # Simple derivation containing a program and a daemon, but using non-default outputs
+        # that are explicitly referenced via wrapGAppsInOutputs, while structuredAttrs are enabled
+        # so that it is a proper array.
         basic-contains-dconf =
           let
             tested = basic;
@@ -87,6 +216,64 @@ makeSetupHook {
                 "${dconf.lib}/lib/gio/modules"
               }
               ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES"
+                "${dconf.lib}/lib/gio/modules"
+              }
+            ''
+          );
+
+        # The wrapper for executable files should add path to dconf GIO module.
+        basic-multiple-outputs-contains-dconf =
+          let
+            tested = basic-multiple-outputs;
+          in
+          testLib.runTest "basic-multiple-outputs-contains-dconf" (
+            testLib.skip stdenv.hostPlatform.isDarwin ''
+              ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GIO_EXTRA_MODULES"
+                "${dconf.lib}/lib/gio/modules"
+              }
+            ''
+          );
+
+        # The wrapper for executable files should add path to dconf GIO module.
+        basic-bin-output-contains-dconf =
+          let
+            tested = basic-bin-output;
+          in
+          testLib.runTest "basic-bin-output-contains-dconf" (
+            testLib.skip stdenv.hostPlatform.isDarwin ''
+              ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GIO_EXTRA_MODULES"
+                "${dconf.lib}/lib/gio/modules"
+              }
+            ''
+          );
+
+        # The wrapper for executable files should add path to dconf GIO module.
+        basic-other-outputs-contains-dconf =
+          let
+            tested = basic-other-outputs;
+          in
+          testLib.runTest "basic-other-outputs-contains-dconf" (
+            testLib.skip stdenv.hostPlatform.isDarwin ''
+              ${expectSomeLineContainingYInFileXToMentionZ "${tested.dev}/bin/foo" "GIO_EXTRA_MODULES"
+                "${dconf.lib}/lib/gio/modules"
+              }
+              ${expectSomeLineContainingYInFileXToMentionZ "${tested.lib}/libexec/bar" "GIO_EXTRA_MODULES"
+                "${dconf.lib}/lib/gio/modules"
+              }
+            ''
+          );
+
+        # The wrapper for executable files should add path to dconf GIO module.
+        basic-other-outputs-contains-dconf-structuredattrs =
+          let
+            tested = basic-other-outputs-structuredattrs;
+          in
+          testLib.runTest "basic-other-outputs-structuredattrs-contains-dconf" (
+            testLib.skip stdenv.hostPlatform.isDarwin ''
+              ${expectSomeLineContainingYInFileXToMentionZ "${tested.dev}/bin/foo" "GIO_EXTRA_MODULES"
+                "${dconf.lib}/lib/gio/modules"
+              }
+              ${expectSomeLineContainingYInFileXToMentionZ "${tested.lib}/libexec/bar" "GIO_EXTRA_MODULES"
                 "${dconf.lib}/lib/gio/modules"
               }
             ''

@@ -23,8 +23,8 @@ let
       [ ];
 in
 buildNodejs {
-  version = "22.22.3";
-  sha256 = "f3e6a578db1ab335a4a72785c1e87ad18a2cf6d2fc25747a1d741fb34af0bd0f";
+  version = "22.23.2";
+  sha256 = "bbe768df8d5815d7fa76124052985332452e0a4742d39f32027550d1aab8f6fb";
   patches =
     (
       if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
@@ -57,33 +57,30 @@ buildNodejs {
       ./use-correct-env-in-tests.patch
       ./bin-sh-node-run-v22.patch
       ./use-nix-codesign.patch
+
+      # TODO: remove when support for Ada 4.x has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/eb1a49b0aec9e05cbb59f093d38f0a92818b7de1.patch?full_index=1";
+        hash = "sha256-LmLbsRZKkOGXzqDQxNrK/B8TGIrsr4pXIUEv3P6C9Sc=";
+        excludes = [ "deps/*" ];
+      })
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/064e2eee1ec7b17c4bc6e36befc2935eee80d0f7.patch?full_index=1";
+        hash = "sha256-RcmWiTpWYwA952nNmhaiq4zw/iuVAXFnuTeuB6ltR1U=";
+        includes = [ "test/fixtures/wpt/url/resources/urltestdata.json" ];
+      })
+
+      # TODO: remove when support for OpenSSL 3.6.4 has landed upstream
+      (fetchpatch2 {
+        url = "https://github.com/nodejs/node/commit/40eac4a32f3676b286fd44435be4514962a40b79.patch?full_index=1";
+        hash = "sha256-zLMd79mQclmZpS1oiTOZ0JOPDSjKGtLl0e4itUNm4og=";
+      })
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
       # Fix builds with shared llhttp
       (fetchpatch2 {
         url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
         hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
-      })
-      # update tests for nghttp2 1.65
-      ./deprecate-http2-priority-signaling.patch
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
-        hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
-        includes = [ "test/*" ];
-      })
-      # Patch for nghttp2 1.69 support
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/ecbc22dc3709290dcaadf634a28d8307a75952ee.diff?full_index=1";
-        hash = "sha256-LwniqgKlG1IiqSzdP7UgBw3/9cn1jyz/jtx45yb6RWM=";
-        includes = [
-          "test/parallel/test-http2-misbehaving-flow-control-paused.js"
-          "test/parallel/test-http2-misbehaving-flow-control.js"
-        ];
-      })
-      (fetchpatch2 {
-        url = "https://github.com/nodejs/node/commit/4a32c00fb8dbe55c3bcf9ef43343968c9fe449e6.diff?full_index=1";
-        hash = "sha256-pex8ruwa4b/vWvfGA+nyN3JJP8NOturmwAQe4Rkd6nU=";
-        excludes = [ "tools/nix/*" ];
       })
     ];
 }

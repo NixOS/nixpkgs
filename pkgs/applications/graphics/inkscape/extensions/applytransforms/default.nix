@@ -2,23 +2,26 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
 
 stdenv.mkDerivation {
   pname = "inkscape-applytransforms";
-  version = "0.pre+unstable=2021-05-11";
+  version = "0-unstable-2021-05-11";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Klowner";
     repo = "inkscape-applytransforms";
     rev = "5b3ed4af0fb66e399e686fc2b649b56db84f6042";
-    sha256 = "XWwkuw+Um/cflRWjIeIgQUxJLrk2DLDmx7K+pMWvIlI=";
+    hash = "sha256-XWwkuw+Um/cflRWjIeIgQUxJLrk2DLDmx7K+pMWvIlI=";
   };
 
   nativeCheckInputs = [
-    python3.pkgs.inkex
-    python3.pkgs.pytestCheckHook
+    python3Packages.inkex
+    python3Packages.pytestCheckHook
   ];
 
   dontBuild = true;

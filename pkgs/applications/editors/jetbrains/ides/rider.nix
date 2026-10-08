@@ -1,49 +1,46 @@
 {
-  stdenv,
-  lib,
+  # keep-sorted start
+  dotnetCorePackages,
+  expat,
   fetchurl,
-  mkJetBrainsProduct,
-  libdbm,
   fsnotifier,
-  patchSharedLibs,
-  openssl,
-  libxcrypt,
-  lttng-ust_2_12,
-  musl,
+  jetbrains,
+  jetbrains-libdbm,
+  lib,
   libice,
   libsm,
   libx11,
-  dotnetCorePackages,
   libxcb-keysyms,
-  expat,
+  libxcrypt,
   libxml2,
+  lttng-ust_2_12,
+  musl,
+  openssl,
+  stdenv,
   xz,
+  # keep-sorted end
 }:
 let
   system = stdenv.hostPlatform.system;
   # update-script-start: urls
   urls = {
     x86_64-linux = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2.tar.gz";
-      hash = "sha256-OmysaGXGMxxAAa2qrHvX8yXIwJLU7tKG8/EBGhr55EA=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.0.1.tar.gz";
+      hash = "sha256-fpc9aJufO2Qiw7dyr1uOsMHsvBruFuX4D0KY1erpmwo=";
     };
     aarch64-linux = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2-aarch64.tar.gz";
-      hash = "sha256-xcwd4OgobMXFQ2W+SN6O5I3mud4kedVQ/0rZBWbXIGY=";
-    };
-    x86_64-darwin = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2.dmg";
-      hash = "sha256-uoOP+EYB11M99MlAFF7efZSKmCk0fwjCImFiasUQPUw=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.0.1-aarch64.tar.gz";
+      hash = "sha256-MuK1dvi3fnPdSyETPeEkW4k7hNFPkHYtaKjp/IZzdIU=";
     };
     aarch64-darwin = {
-      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.1.2-aarch64.dmg";
-      hash = "sha256-Mo6gxWatX6wlL3s8Li19F58cnKZtOtFUfNyGPrC6CtA=";
+      url = "https://download.jetbrains.com/rider/JetBrains.Rider-2026.2.0.1-aarch64.dmg";
+      hash = "sha256-q0UXuh2RuH0sC1kqbjv0QcxmLtml9v3qeLRVcjCCVuw=";
     };
   };
   # update-script-end: urls
 in
-(mkJetBrainsProduct {
-  inherit libdbm fsnotifier;
+(jetbrains.mkJetBrainsProduct {
+  inherit jetbrains-libdbm fsnotifier;
 
   pname = "rider";
 
@@ -51,32 +48,47 @@ in
   product = "Rider";
 
   # update-script-start: version
-  version = "2026.1.2";
-  buildNumber = "261.24374.190";
+  version = "2026.2.0.1";
+  buildNumber = "262.8665.385";
   # update-script-end: version
 
   src = fetchurl (urls.${system} or (throw "Unsupported system: ${system}"));
+
+  # the jdk is bundled on Darwin.
+  jdk =
+    if lib.meta.availableOn stdenv.hostPlatform jetbrains.jdk-no-jcef then
+      jetbrains.jdk-no-jcef
+    else
+      null;
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jetbrains.sharedLibsHook ];
 
   # TODO: Some of these dependencies should probably also be added on Darwin - however it seems that JetBrains bundles them all? Unclear.
   #       Somebody with a Darwin machine should investigate this.
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
+      # keep-sorted start
+      libxcb-keysyms
       libxcrypt
       lttng-ust_2_12
       musl
-      libxcb-keysyms
+      openssl
+      # keep-sorted end
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch) [
+      # keep-sorted start
       expat
       libxml2
       xz
+      # keep-sorted end
     ];
   extraLdPath = lib.optionals (stdenv.hostPlatform.isLinux) [
+    # keep-sorted start
     # Avalonia dependencies needed for dotMemory
     libice
     libsm
     libx11
+    # keep-sorted end
   ];
 
   # NOTE: meta attrs are used for the Linux desktop entries and may cause rebuilds when changed
@@ -89,6 +101,7 @@ in
       This lets you develop a wide array of applications including .NET desktop apps, services and libraries, Unity games, ASP.NET and ASP.NET Core web applications.
     '';
     maintainers = with lib.maintainers; [ raphaelr ];
+    teams = [ lib.teams.jetbrains ];
     license = lib.licenses.unfree;
     sourceProvenance =
       if stdenv.hostPlatform.isDarwin then
@@ -98,11 +111,10 @@ in
   };
 }).overrideAttrs
   (attrs: {
+    # TODO: It is not correct to bundle the .NET in nixpkgs as-is, see https://github.com/NixOS/nixpkgs/issues/489048
     postInstall =
       (attrs.postInstall or "")
       + lib.optionalString stdenv.hostPlatform.isLinux ''
-        ${patchSharedLibs}
-
         for dir in $out/rider/lib/ReSharperHost/linux-*; do
           rm -rf $dir/dotnet
           ln -s ${dotnetCorePackages.sdk_10_0-source}/share/dotnet $dir/dotnet

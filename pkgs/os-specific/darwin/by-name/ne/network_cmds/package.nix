@@ -32,17 +32,16 @@ let
         '${xnu}/libkern/firehose/firehose_types_private.h' \
         '${xnu}/libkern/firehose/tracepoint_private.h'
 
-      for dir in arm i386 kern machine; do
+      for dir in arm kern machine; do
         mkdir -p "$out/include/$dir"
         for file in '${xnuHeaders}/include/'$dir/*; do
           name=$(basename "$file")
-          # Skip copying `endian.h` because it conflicts with the SDK, breaking the build on x86_64-darwin.
+          # Skip copying `endian.h` because it conflicts with the SDK, breaking the build.
           test "$name" != endian.h && cp -r "$file" "$out/include/$dir/$name"
         done
       done
 
       unifdef -x 1 -DKERNEL_PRIVATE -o "$out/include/arm/locks.h" '${xnu}/osfmk/arm/locks.h'
-      unifdef -x 1 -DKERNEL_PRIVATE -o "$out/include/i386/locks.h" '${xnu}/osfmk/i386/locks.h'
 
       install -D -t "$out/include/net" \
         '${xnuHeaders}/include/net/bpf.h' \
@@ -118,6 +117,9 @@ let
       #include <net/if_dl.h> /* The private nd6.h depends on sockaddr_dl but fails to include if_dl.h. */
       #include <${xnuHeaders}/include/netinet6/nd6.h>
       EOF
+
+      install -D -t "$out/include/netkey" \
+        '${xnuHeaders}/include/netkey/keysock_private.h'
 
       install -D -t "$out/include/os" \
         '${xnuHeaders}/Library/Frameworks/Kernel.framework/PrivateHeaders/os/atomic_private.h' \

@@ -1,10 +1,9 @@
-# Adjusted version of https://lore.kernel.org/linux-bluetooth/20250703182908.2370130-1-hi@alyssa.is/raw
 diff --git a/Makefile.tools b/Makefile.tools
-index 2080f0978..885371de9 100644
+index 1a4e56608..a8bff6df3 100644
 --- a/Makefile.tools
 +++ b/Makefile.tools
-@@ -19,7 +19,7 @@ client_bluetoothctl_SOURCES = client/main.c \
- 					client/telephony.h client/telephony.c
+@@ -20,7 +20,7 @@ client_bluetoothctl_SOURCES = client/main.c \
+ 					client/cs.h client/cs.c
  client_bluetoothctl_LDADD = lib/libbluetooth-internal.la \
  			gdbus/libgdbus-internal.la src/libshared-glib.la \
 -			$(GLIB_LIBS) $(DBUS_LIBS) -lreadline
@@ -12,16 +11,16 @@ index 2080f0978..885371de9 100644
  endif
  
  if ZSH_COMPLETIONS
-@@ -385,7 +385,7 @@ tools_meshctl_SOURCES = tools/meshctl.c \
+@@ -389,7 +389,7 @@ tools_meshctl_SOURCES = tools/meshctl.c \
  				tools/mesh-gatt/onoff-model.c
  tools_meshctl_LDADD = gdbus/libgdbus-internal.la src/libshared-glib.la \
  				lib/libbluetooth-internal.la \
 -				$(GLIB_LIBS) $(DBUS_LIBS) -ljson-c -lreadline
 +				$(GLIB_LIBS) $(DBUS_LIBS) -ljson-c $(READLINE_LIBS)
- 
- EXTRA_DIST += tools/mesh-gatt/local_node.json tools/mesh-gatt/prov_db.json
  endif
-@@ -404,7 +404,7 @@ tools_mesh_cfgclient_SOURCES = tools/mesh-cfgclient.c \
+ 
+ bin_PROGRAMS +=  tools/mesh-cfgclient
+@@ -406,7 +406,7 @@ tools_mesh_cfgclient_SOURCES = tools/mesh-cfgclient.c \
  				mesh/crypto.h mesh/crypto.c
  
  tools_mesh_cfgclient_LDADD = lib/libbluetooth-internal.la src/libshared-ell.la \
@@ -30,7 +29,7 @@ index 2080f0978..885371de9 100644
  
  bin_PROGRAMS +=  tools/mesh-cfgtest
  
-@@ -512,7 +512,7 @@ noinst_PROGRAMS += tools/btmgmt tools/obex-client-tool tools/obex-server-tool \
+@@ -489,7 +489,7 @@ noinst_PROGRAMS += tools/btmgmt tools/obex-client-tool tools/obex-server-tool \
  tools_obex_client_tool_SOURCES = $(gobex_sources) $(btio_sources) \
  						tools/obex-client-tool.c
  tools_obex_client_tool_LDADD = lib/libbluetooth-internal.la \
@@ -39,7 +38,7 @@ index 2080f0978..885371de9 100644
  
  tools_obex_server_tool_SOURCES = $(gobex_sources) $(btio_sources) \
  						tools/obex-server-tool.c
-@@ -523,16 +523,16 @@ tools_bluetooth_player_SOURCES = tools/bluetooth-player.c client/print.c \
+@@ -500,16 +500,16 @@ tools_bluetooth_player_SOURCES = tools/bluetooth-player.c client/print.c \
  				client/player.c
  tools_bluetooth_player_LDADD = gdbus/libgdbus-internal.la \
  				src/libshared-glib.la \
@@ -59,7 +58,7 @@ index 2080f0978..885371de9 100644
  if DEPRECATED
  noinst_PROGRAMS += attrib/gatttool
  
-@@ -542,7 +542,7 @@ attrib_gatttool_SOURCES = attrib/gatttool.c attrib/att.c attrib/gatt.c \
+@@ -519,7 +519,7 @@ attrib_gatttool_SOURCES = attrib/gatttool.c attrib/att.c attrib/gatt.c \
  				attrib/utils.c src/log.c client/display.c \
  				client/display.h
  attrib_gatttool_LDADD = lib/libbluetooth-internal.la \
@@ -68,18 +67,18 @@ index 2080f0978..885371de9 100644
  
  endif
  endif
-@@ -592,5 +592,5 @@ tools/btpclient.$(OBJEXT): src/libshared-ell.la ell/internal
+@@ -575,5 +575,5 @@ client/btpclient/btpclient.$(OBJEXT): src/libshared-ell.la ell/internal
  
- tools_btpclientctl_SOURCES = tools/btpclientctl.c client/display.c
- tools_btpclientctl_LDADD = src/libshared-mainloop.la src/libshared-glib.la \
+ client_btpclient_btpclientctl_SOURCES = client/btpclient/btpclientctl.c client/display.c
+ client_btpclient_btpclientctl_LDADD = src/libshared-mainloop.la src/libshared-glib.la \
 -				lib/libbluetooth-internal.la -lreadline
 +				lib/libbluetooth-internal.la $(READLINE_LIBS)
  endif
 diff --git a/configure.ac b/configure.ac
-index 52de7d665..f110ab103 100644
+index b011e9b0a..10f1af4af 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -338,8 +338,7 @@ AC_ARG_ENABLE(client, AS_HELP_STRING([--disable-client],
+@@ -340,8 +340,7 @@ AC_ARG_ENABLE(client, AS_HELP_STRING([--disable-client],
  AM_CONDITIONAL(CLIENT, test "${enable_client}" != "no")
  
  if (test "${enable_client}" != "no" || test "${enable_mesh}" = "yes"); then

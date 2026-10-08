@@ -1,0 +1,149 @@
+From 0a1b682aaa9c4a566ebb75e8c734597eba9a6acd Mon Sep 17 00:00:00 2001
+From: fliiiix <hi@l33t.name>
+Date: Sun, 26 Jul 2026 14:51:14 +0200
+Subject: [PATCH] cmake: raise minimum version to 3.10.0 to support cmake 4
+
+---
+ CMakeLists.txt                    | 2 +-
+ dcpp/CMakeLists.txt               | 2 +-
+ dht/CMakeLists.txt                | 2 +-
+ eiskaltdcpp-cli/CMakeLists.txt    | 2 +-
+ eiskaltdcpp-daemon/CMakeLists.txt | 2 +-
+ eiskaltdcpp-gtk/CMakeLists.txt    | 2 +-
+ eiskaltdcpp-qt/CMakeLists.txt     | 2 +-
+ extra/CMakeLists.txt              | 2 +-
+ haiku/CMakeLists.txt              | 2 +-
+ json/CMakeLists.txt               | 2 +-
+ windows/install-deps.cmake        | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ae08c726..bd85ec4a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project (eiskaltdcpp)
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ set (PROJECT_NAME "EiskaltDC++")
+ set (APP_VERSION "2.4.2+devel") # Main program version (displayed in UI)
+diff --git a/dcpp/CMakeLists.txt b/dcpp/CMakeLists.txt
+index 01ed3914..d96c90f4 100644
+--- a/dcpp/CMakeLists.txt
++++ b/dcpp/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project (dcpp)
+ 
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ aux_source_directory(${PROJECT_SOURCE_DIR} dcpp_srcs)
+ file (GLOB dcpp_hdrs ${PROJECT_SOURCE_DIR}/*.h)
+diff --git a/dht/CMakeLists.txt b/dht/CMakeLists.txt
+index 9cf03102..6c1f4768 100644
+--- a/dht/CMakeLists.txt
++++ b/dht/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project (dht)
+ 
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ aux_source_directory(${PROJECT_SOURCE_DIR} dht_srcs)
+ 
+diff --git a/eiskaltdcpp-cli/CMakeLists.txt b/eiskaltdcpp-cli/CMakeLists.txt
+index cceac2b5..e47dafe8 100644
+--- a/eiskaltdcpp-cli/CMakeLists.txt
++++ b/eiskaltdcpp-cli/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(eiskaltdcpp-cli)
+ 
+-cmake_minimum_required(VERSION 3.2.0)
++cmake_minimum_required(VERSION 3.10.0)
+ 
+ if (USE_CLI_XMLRPC)
+     install (FILES cli-xmlrpc.pl DESTINATION ${BINDIR} RENAME ${PROJECT_NAME}-xmlrpc
+diff --git a/eiskaltdcpp-daemon/CMakeLists.txt b/eiskaltdcpp-daemon/CMakeLists.txt
+index 0f825adc..e77cdb4d 100644
+--- a/eiskaltdcpp-daemon/CMakeLists.txt
++++ b/eiskaltdcpp-daemon/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(eiskaltdcpp-daemon)
+ 
+-cmake_minimum_required(VERSION 3.2.0)
++cmake_minimum_required(VERSION 3.10.0)
+ # ######### General setup ##########
+ include_directories(${PROJECT_SOURCE_DIR}
+                     ${PROJECT_SOURCE_DIR}/..
+diff --git a/eiskaltdcpp-gtk/CMakeLists.txt b/eiskaltdcpp-gtk/CMakeLists.txt
+index 57b2662f..b4c55e03 100644
+--- a/eiskaltdcpp-gtk/CMakeLists.txt
++++ b/eiskaltdcpp-gtk/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project (eiskaltdcpp-gtk)
+ 
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ set (GTK2_DIR "${PROJECT_SOURCE_DIR}/cmake/")
+ 
+diff --git a/eiskaltdcpp-qt/CMakeLists.txt b/eiskaltdcpp-qt/CMakeLists.txt
+index e5750a80..4df35699 100644
+--- a/eiskaltdcpp-qt/CMakeLists.txt
++++ b/eiskaltdcpp-qt/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project (eiskaltdcpp-qt)
+ 
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ include_directories(${PROJECT_BINARY_DIR})
+ 
+diff --git a/extra/CMakeLists.txt b/extra/CMakeLists.txt
+index 9c679d8a..efa7e947 100644
+--- a/extra/CMakeLists.txt
++++ b/extra/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project (extra)
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ include_directories (${PROJECT_SOURCE_DIR}
+                      ${GETTEXT_INCLUDE_DIR}
+                      ${MINIUPNP_INCLUDE_DIR}
+diff --git a/haiku/CMakeLists.txt b/haiku/CMakeLists.txt
+index 5300e3cc..2132fcc1 100644
+--- a/haiku/CMakeLists.txt
++++ b/haiku/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(haiku)
+ 
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ if (HAIKU_PKG)
+     install (CODE "
+diff --git a/json/CMakeLists.txt b/json/CMakeLists.txt
+index 2c89ec89..075a276f 100644
+--- a/json/CMakeLists.txt
++++ b/json/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project (jsonrpcpp)
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ # ######### General setup ##########
+ 
+diff --git a/windows/install-deps.cmake b/windows/install-deps.cmake
+index 6847bdad..fa07e3af 100644
+--- a/windows/install-deps.cmake
++++ b/windows/install-deps.cmake
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.2.0)
++cmake_minimum_required (VERSION 3.10.0)
+ 
+ if (CMAKE_PREFIX_PATH MATCHES "mxe" AND NOT BUILD_STATIC)
+     set (LIBS_TARGET install-dependencies)
+-- 
+2.54.0
+

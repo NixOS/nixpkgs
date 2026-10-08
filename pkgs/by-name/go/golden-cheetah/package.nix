@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
-  version = "3.8-DEV2603";
+  version = "3.8-DEV2605";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxQ18KJfR+fegQ5Qu4vI3vqckj4mB8s9VtSdRtIQISg=";
+    hash = "sha256-umy1EcLSoSDO5XFiGxfunniDr8RruyPvRTbypMbl7xU=";
   };
 
   buildInputs =

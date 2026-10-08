@@ -6,8 +6,8 @@
   asciidoctor,
   cmake,
   nix-update-script,
-  gitUpdater,
   pkg-config,
+  portaudio,
   fftw,
   fftwFloat,
   gfortran,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wsjtx";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "WSJTX";
     repo = "wsjtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0Agm6lvzH3sgBatOBpYV3/CoyNJsO7Sw9mD/wewJ1DM=";
+    hash = "sha256-PompKWVxPpF3ie811tqy8bplnULyXdenBrR/pHvtM08=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
     hamlib_4
     libusb1
+    portaudio
     qt5.qtbase
     qt5.qtmultimedia
     qt5.qtserialport
@@ -73,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       contacts under extreme weak-signal conditions.
     '';
     homepage = "https://wsjt.sourceforge.io";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       lasandell

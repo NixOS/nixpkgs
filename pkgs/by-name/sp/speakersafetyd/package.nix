@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
     tag = finalAttrs.version;
-    hash = "sha256-tHHoVJqWcip5u/e7M9l74opdzfe0Y9Q6ItIT7w7XfA8=";
+    hash = "sha256-duIPpTzZqVSZLxF/CYlxa1PPtnzeABTCYfZZ7lomkls=";
   };
 
-  cargoHash = "sha256-v0w/eA/qd9xBivgq7BgdaGRGDdX2NA1gbRgv84cB6d4=";
+  cargoHash = "sha256-gg1VcCrXKk5QsNvU7wz039md0gpFom6SrLuW6tjNQog=";
 
   nativeBuildInputs = [
     pkg-config

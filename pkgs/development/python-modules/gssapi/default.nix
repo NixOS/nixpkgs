@@ -22,19 +22,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gssapi";
-  version = "1.10.1";
+  version = "1.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythongssapi";
     repo = "python-gssapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A1y3PD+zycKxlZT2vZ9b9p8SMr+aZA62CIAUpi4eOvo=";
+    hash = "sha256-E9rX5/7jTFR4nZ7ww2B083Tlz5vwl00yhakBQg75WZs=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "Cython == 3.1.3" Cython
+      --replace-fail "Cython == 3.2.4" Cython
     substituteInPlace setup.py \
       --replace-fail 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5-c}"'
   '';

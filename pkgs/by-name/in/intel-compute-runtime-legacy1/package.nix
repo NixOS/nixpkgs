@@ -1,11 +1,11 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   intel-gmmlib,
-  intel-graphics-compiler,
   level-zero,
   libva,
   gitUpdater,
@@ -13,6 +13,8 @@
 
 let
   inherit (lib) cmakeBool;
+  # intel-graphics-compiler >= 2.36 does no longer support 8th Gen
+  intel-graphics-compiler = callPackage ./intel-graphics-compiler.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   # https://github.com/intel/compute-runtime/blob/master/LEGACY_PLATFORMS.md

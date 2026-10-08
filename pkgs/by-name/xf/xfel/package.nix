@@ -10,6 +10,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xfel";
   version = "1.3.5";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "xboot";
     repo = "xfel";

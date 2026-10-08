@@ -19,6 +19,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
   };
 
+  patches = [
+    # https://github.com/edwardgeorge/virtualenv-clone/pull/84
+    ./fix-pyvenv-cfg-path.patch
+  ];
+
   build-system = [ setuptools ];
 
   postPatch = ''

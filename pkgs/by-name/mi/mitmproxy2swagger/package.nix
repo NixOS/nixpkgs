@@ -26,6 +26,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   dependencies = with python3.pkgs; [
     json-stream
     mitmproxy
+    msgpack
     ruamel-yaml
   ];
 

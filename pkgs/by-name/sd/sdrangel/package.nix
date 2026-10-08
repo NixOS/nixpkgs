@@ -12,16 +12,19 @@
   dsdcc,
   faad2,
   fetchFromGitHub,
-  fetchpatch,
   fftwFloat,
   flac,
+  ggmorse,
   glew,
   hackrf,
   hidapi,
   ffmpeg,
+  inmarsatc,
   libiio,
+  libogg,
   libopus,
   libpulseaudio,
+  libunwind,
   libusb1,
   limesuite,
   libbladeRF,
@@ -31,6 +34,7 @@
   pkg-config,
   qt6,
   qt6Packages,
+  rnnoise,
   rtl-sdr,
   serialdv,
   sdrplay,
@@ -39,26 +43,22 @@
   uhd,
   zlib,
   withSDRplay ? false,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.22.9";
+  version = "7.27.1";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VYSM9ldzx/8tWKQb++qGROSXdeEXIDhGqnnHUmkW4+k=";
+    hash = "sha256-rdPXqA0ySnqh/rlMlfcDLyAd6egbggWHrRQRnXeQPFM=";
   };
 
-  patches = [
-    # Fix build with Qt 6.10, remove when the commit reaches a release
-    (fetchpatch {
-      url = "https://github.com/f4exb/sdrangel/commit/fd6a8d51f8c39fd31b4e864f528bf1921ebd4260.patch";
-      hash = "sha256-S8LQbCTEgyEt1wByDsDMqqyQjK5HALtvUIODgQ1skSA=";
-    })
-  ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -80,11 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     fftwFloat
     flac
+    ggmorse
     glew
     hackrf
     hidapi
     libbladeRF
     libiio
+    libogg
     libopus
     libpulseaudio
     libusb1
@@ -101,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtspeech
     qt6Packages.qttools
     qt6Packages.qtwebsockets
-    qt6Packages.qtwebengine
+    rnnoise
     rtl-sdr
     serialdv
     sgp4
@@ -109,17 +111,24 @@ stdenv.mkDerivation (finalAttrs: {
     uhd
     zlib
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    inmarsatc
+    libunwind
+    qt6Packages.qtwayland
+    qt6Packages.qtwebengine
+  ]
   ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
-    "-DAPT_DIR=${aptdec}"
-    "-DDAB_DIR=${dab_lib}"
-    "-DSGP4_DIR=${sgp4}"
-    "-DSOAPYSDR_DIR=${soapysdr-with-plugins}"
+    (lib.cmakeFeature "APT_DIR" aptdec.outPath)
+    (lib.cmakeFeature "DAB_DIR" dab_lib.outPath)
+    (lib.cmakeFeature "SGP4_DIR" sgp4.outPath)
+    (lib.cmakeFeature "SOAPYSDR_DIR" soapysdr-with-plugins.outPath)
+    (lib.cmakeBool "ENABLE_QT6" true)
     "-Wno-dev"
-    "-DENABLE_QT6=ON"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Software defined radio (SDR) software";

@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lance-namespace-urllib3-client";
-  version = "0.7.7";
+  version = "0.13.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -26,7 +26,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance-namespace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f+jtRAq4mI6y3q9Jt2ZqAMhXhNRavld88vWKz3VypBs=";
+    hash = "sha256-Wnm9zQCVnlRECxiLZYjX46/+2rU8tpC/s/NKyoS5rO0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python/lance_namespace_urllib3_client";

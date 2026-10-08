@@ -355,7 +355,7 @@ in
         PrivateDevices = true;
         ProtectSystem = "full";
         CapabilityBoundingSet = [ "~CAP_NET_ADMIN CAP_SYS_ADMIN CAP_SYS_BOOT CAP_SYS_MODULE" ];
-        MemoryDenyWriteExecute = true;
+        MemoryDenyWriteExecute = false; # pcre2 jit
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectControlGroups = true;

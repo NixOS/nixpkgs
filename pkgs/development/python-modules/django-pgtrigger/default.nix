@@ -34,7 +34,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Opus10/django-pgtrigger/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      raitobezarius
       pyrox0
     ];
   };

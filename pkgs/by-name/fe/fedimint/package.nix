@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Federated E-Cash Mint";
     homepage = "https://github.com/fedimint/fedimint";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dpc ];
     mainProgram = "fedimint-cli";
   };

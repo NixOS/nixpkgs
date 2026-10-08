@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = ''
       This is a fork of the old sc-7.16 application with attention paid to
       reduced compiler warnings, bugfixes, and functionality improvements
-      (e.g. mouse suport, configurability via .scrc).
+      (e.g. mouse support, configurability via .scrc).
       See CHANGES-git or README.md for a full list of changes.
     '';
 

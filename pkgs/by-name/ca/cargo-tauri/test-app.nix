@@ -7,7 +7,7 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   rustPlatform,
@@ -31,10 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
 
-    fetcherVersion = 3;
-    hash = "sha256-DiRho0tmR/4XJi7cAZxesVA1iR8uiwknCfmIP2x9i5I=";
+    fetcherVersion = 4;
+    hash = "sha256-m7haAF5ZIYG5NfsPwtzVF6Z83h/I4uT0YhNBk4ZXdpo=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pkg-config
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4

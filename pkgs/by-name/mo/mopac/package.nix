@@ -39,10 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
-  '';
-
   meta = {
     description = "Semiempirical quantum chemistry";
     homepage = "https://github.com/openmopac/mopac";

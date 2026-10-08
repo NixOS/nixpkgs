@@ -12,7 +12,7 @@ let
   inherit (config) cudaSupport;
   inherit (cudaPackages)
     backendStdenv
-    cuda_cccl
+    cccl
     cuda_cudart
     cuda_nvcc
     libcublas
@@ -49,7 +49,7 @@ backendStdenv.mkDerivation {
   ];
 
   buildInputs = [
-    cuda_cccl # <nv/target>
+    cccl # <nv/target>
     cuda_cudart # driver_types.h
     cuda_nvcc # crt/host_defines.h
     libcublas # cublas_v2.h

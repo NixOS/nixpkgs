@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "joserfc";
-  version = "1.6.1";
+  version = "1.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "authlib";
     repo = "joserfc";
     tag = version;
-    hash = "sha256-druh7ybcQBjTxUFMVLUwknw/aa/fyrUdS4ftS/ftYeA=";
+    hash = "sha256-Ge1r34GVmpJ9h5GtRkPd0mkV7HuLf7D31ikuPAnpkuY=";
   };
 
   build-system = [ setuptools ];

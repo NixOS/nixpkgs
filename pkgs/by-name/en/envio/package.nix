@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "envio";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "humblepenguinn";
     repo = "envio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uiuJ3yFuU5S0e6SrD1C4tU5Ve/VBoGmyclbokESDZAw=";
+    hash = "sha256-3bcIGQ+4abdG7Xw4Sta+I8a1XllO8h7V09egwuogcxk=";
   };
 
-  cargoHash = "sha256-eECjTnqjy38jA5kHddPaBZaZ/1ErHB7uQPbZYNFBcSU=";
+  cargoHash = "sha256-QwuGpIhPS0p+TsbWdGknXcN655IP/AzE44a6m9HY8K0=";
 
   nativeBuildInputs = [
     pkg-config

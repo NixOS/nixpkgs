@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "worker-build";
-  version = "0.8.3";
+  version = "0.8.6";
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
@@ -16,11 +16,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cloudflare";
     repo = "workers-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sRKQALNYUmzxaqYJCWR8b3yvqg8e4EHe1Cm7vqRx8hU=";
+    hash = "sha256-WnAwr7wQcgRIKNnZ5xdqk+/kK/bETZBl/P1YNIqQp8s=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-enePrsTLpiTDxqnFFD38N4amOKY5oHHctPl9RFj2eRo=";
+  cargoHash = "sha256-zvwk053ly1hFtldbawrXuqaLDAo807is8dlHLo5QTl8=";
 
   buildAndTestSubdir = "worker-build";
 

@@ -7,7 +7,6 @@
   cppo,
   csexp,
   menhir,
-  odoc,
 }:
 buildDunePackage {
   pname = "ocamlmerlin-mlx";
@@ -21,7 +20,6 @@ buildDunePackage {
     merlin-lib
     csexp
     menhir
-    odoc
   ];
 
   nativeBuildInputs = [

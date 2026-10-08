@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qrupdate";
-  version = "1.1.5";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "mpimd-csc";
     repo = "qrupdate-ng";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dHxLPrN00wwozagY2JyfZkD3sKUD2+BcnbjNgZepzFg=";
+    hash = "sha256-d5bc9JJOM3Tn41yZfqq3/rPMqZQxxICJo49oELSwxjc=";
   };
 
   cmakeFlags =

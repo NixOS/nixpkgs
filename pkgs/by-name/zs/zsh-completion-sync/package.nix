@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-completion-sync";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "BronzeDeer";
     repo = "zsh-completion-sync";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GMZ0W8d0Qd5EhrwA/SkeOqDzoUchxDermcTR0iKYP8M=";
+    sha256 = "sha256-1EzK6FeTBpierHP9/rfU6ZZJN0xlzhz3QCB9Uq1sZ1k=";
   };
 
   strictDeps = true;

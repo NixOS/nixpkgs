@@ -12,6 +12,7 @@
   libx11,
   xorgproto,
   cairo,
+  pango,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "activate-linux";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "MrGlockenspiel";
     repo = "activate-linux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6XnoAoZwAs2hKToWlDqkaGqucmV1VMkEc4QO0G0xmrg=";
+    hash = "sha256-zTZZb4zFbhwZPN1B2c6ZIfiJOGxjXxxIXBBAteIWt1Q=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cairo
+    pango
     libx11
     libxext
     libxfixes
@@ -60,10 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp activate-linux $out/bin
     cp activate-linux.1 $out/share/man/man1
 
-    install -Dm444 res/icon.png $out/share/icons/hicolor/128x128/apps/activate-linux.png
+    install -Dm444 res/activate-linux.png $out/share/icons/hicolor/128x128/apps/activate-linux.png
     install -Dm444 res/activate-linux.desktop -t $out/share/applications
-    substituteInPlace $out/share/applications/activate-linux.desktop \
-      --replace-fail 'Icon=icon' 'Icon=activate-linux'
 
     runHook postInstall
   '';
@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "\"Activate Windows\" watermark ported to Linux";
     homepage = "https://github.com/MrGlockenspiel/activate-linux";
+    changelog = "https://github.com/MrGlockenspiel/activate-linux/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       alexnortung

@@ -14,7 +14,7 @@
 let
   Libc = sourceRelease "Libc";
   libplatform = sourceRelease "libplatform";
-  xnu = sourceRelease "xnu";
+  xnu = sourceRelease "xnu"; # Can’t use xnuHeaders because adv_cmds is a transitive dependency of xnuHeaders.
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "adv_cmds-deps-private-headers";
@@ -27,6 +27,9 @@ let
       install -D -m644 -t "$out/include/System/sys" \
         '${xnu}/bsd/sys/persona.h' \
         '${xnu}/bsd/sys/proc.h'
+
+      install -D -m644 -t "$out/include/sys" \
+        '${xnu}/bsd/sys/proc_private.h'
     '';
   };
 in
@@ -71,8 +74,10 @@ mkAppleDerivation {
         --replace-fail '/usr/local' "$out"
     done
   '';
-
-  env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
+  env.NIX_CFLAGS_COMPILE = lib.join " " [
+    "-I${privateHeaders}/include"
+    "-Wno-error=incompatible-pointer-types"
+  ];
 
   buildInputs = [
     libxo
@@ -93,8 +98,8 @@ mkAppleDerivation {
   meta = {
     description = "Advanced commands package for Darwin";
     license = [
-      lib.licenses.apsl10
-      lib.licenses.apsl20
+      lib.licenses.apple-psl10
+      lib.licenses.apple-psl20
     ];
   };
 }

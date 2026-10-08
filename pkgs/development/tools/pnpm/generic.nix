@@ -6,7 +6,9 @@
   pnpmConfigHook,
   fetchurl,
   installShellFiles,
-  nodejs,
+  #FIXME: remove this arg in a future version.
+  nodejs, # Should be null, unless overridden.
+  nodejs-slim,
   testers,
   buildPackages,
   bashNonInteractive,
@@ -15,9 +17,16 @@
   withNode ? true,
   version,
   hash,
+  knownVulnerabilities ? [ ],
 }:
 let
   majorVersion = lib.versions.major version;
+  nodejs-slim' =
+    #FIXME: remove this hack in a future version.
+    if nodejs == null then
+      nodejs-slim
+    else
+      lib.warn "pnpm: Override nodejs-slim instead of nodejs" nodejs;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pnpm";
@@ -30,13 +39,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     installShellFiles
-    nodejs
+    nodejs-slim'
   ];
 
   buildInputs = [
     bashNonInteractive # needed for node-gyp wrapper script
   ]
-  ++ lib.optionals withNode [ nodejs ];
+  ++ lib.optionals withNode [ nodejs-slim' ];
 
   # Remove binary files from src, we don't need them, and this way we make sure
   # our distribution is free of binaryNativeCode
@@ -56,31 +65,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cp -R . $out/libexec/pnpm
       ln -s $out/libexec/pnpm/bin/pnpm.${ext} $out/bin/pnpm
       ln -s $out/libexec/pnpm/bin/pnpx.${ext} $out/bin/pnpx
+      ln -s pnpm $out/bin/pn
+      ln -s pnpx $out/bin/pnx
 
       runHook postInstall
     '';
 
-  postInstall =
-    if lib.toInt (lib.versions.major version) < 9 then
-      ''
-        export HOME="$PWD"
-        node $out/bin/pnpm install-completion bash
-        node $out/bin/pnpm install-completion fish
-        node $out/bin/pnpm install-completion zsh
-        sed -i '1 i#compdef pnpm' .config/tabtab/zsh/pnpm.zsh
-        installShellCompletion \
-          .config/tabtab/bash/pnpm.bash \
-          .config/tabtab/fish/pnpm.fish \
-          .config/tabtab/zsh/pnpm.zsh
-      ''
-    else
-      ''
-        node $out/bin/pnpm completion bash >pnpm.bash
-        node $out/bin/pnpm completion fish >pnpm.fish
-        node $out/bin/pnpm completion zsh >pnpm.zsh
-        sed -i '1 i#compdef pnpm' pnpm.zsh
-        installShellCompletion pnpm.{bash,fish,zsh}
-      '';
+  postInstall = ''
+    node $out/bin/pnpm completion bash >pnpm.bash
+    node $out/bin/pnpm completion fish >pnpm.fish
+    node $out/bin/pnpm completion zsh >pnpm.zsh
+    sed -i '1 i#compdef pnpm' pnpm.zsh
+    installShellCompletion pnpm.{bash,fish,zsh}
+  '';
 
   passthru =
     let
@@ -109,7 +106,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               ];
             })
           );
-      inherit nodejs majorVersion;
+      nodejs-slim = nodejs-slim';
+      #FIXME: remove this in a future version.
+      nodejs = lib.warn "pnpm.nodejs: Use pnpm.nodejs-slim instead of pnpm.nodejs" nodejs-slim';
+      inherit majorVersion;
 
       tests = {
         inherit (tests) pnpm;
@@ -121,7 +121,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         set -eou pipefail
 
         curl_github() {
-            curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
+          curl -L ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$@"
         }
 
         latestTag=$(
@@ -159,5 +159,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.all;
     mainProgram = "pnpm";
+    inherit knownVulnerabilities;
   };
 })

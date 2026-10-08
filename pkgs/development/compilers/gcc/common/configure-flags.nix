@@ -8,7 +8,9 @@
   threadsCross,
   version,
 
-  apple-sdk,
+  is13,
+  apple-sdk_14,
+  apple-sdk_15,
   binutils,
   gmp,
   mpfr,
@@ -38,20 +40,13 @@
 
 assert !enablePlugin -> disableGdbPlugin;
 
-# Note [Windows Exception Handling]
-# sjlj (short jump long jump) exception handling makes no sense on x86_64,
-# it's forcibly slowing programs down as it produces a constant overhead.
-# On x86_64 we have SEH (Structured Exception Handling) and we should use
-# that. On i686, we do not have SEH, and have to use sjlj with dwarf2.
-# Hence it's now conditional on x86_32 (i686 is 32bit).
-#
-# ref: https://stackoverflow.com/questions/15670169/what-is-difference-between-sjlj-vs-dwarf-vs-seh
-
 let
   inherit (stdenv)
     hostPlatform
     targetPlatform
     ;
+
+  appleSdk = if langAda && !is13 then apple-sdk_15 else apple-sdk_14;
 
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
@@ -65,6 +60,10 @@ let
       "--with-as=${
         if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools
       }/bin/${targetPlatform.config}-as"
+    ]
+    ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
+      "--disable-sjlj-exceptions"
+      "--with-dwarf2"
     ]
     ++ (
       if withoutTargetLibc then
@@ -97,11 +96,6 @@ let
           "--disable-nls"
           # To keep ABI compatibility with upstream mingw-w64
           "--enable-fully-dynamic-string"
-        ]
-        ++ lib.optionals (crossMingw && targetPlatform.isx86_32) [
-          # See Note [Windows Exception Handling]
-          "--enable-sjlj-exceptions"
-          "--with-dwarf2"
         ]
       else
         [
@@ -159,12 +153,11 @@ let
       # gcc builds for cross-compilers (build != host) or cross-built
       # gcc (host != target) always apply the offset prefix to disentangle
       # target headers from build or host headers:
-      #     ${with_build_sysroot}${native_system_header_dir}
-      #  or ${test_exec_prefix}/${target_noncanonical}/sys-include
-      #  or ${with_sysroot}${native_system_header_dir}
+      #        ${with_sysroot}${native_system_header_dir}
+      #    and ${with_build_sysroot}${native_system_header_dir}
       # While native build (build == host == target) uses passed headers
       # path as is:
-      #    ${with_build_sysroot}${native_system_header_dir}
+      #    ${with_sysroot}${native_system_header_dir}
       #
       # Nixpkgs uses flat directory structure for both native and cross
       # cases. As a result libc headers don't get found for cross case
@@ -175,9 +168,13 @@ let
       # We pick "/" path to effectively avoid sysroot offset and make it work
       # as a native case.
       # Darwin requires using the SDK as the sysroot for `SDKROOT` to work correctly.
-      "--with-build-sysroot=${if targetPlatform.isDarwin then apple-sdk.sdkroot else "/"}"
+      "--with-build-sysroot=${if targetPlatform.isDarwin then appleSdk.sdkroot else "/"}"
       # Same with the stdlibc++ headers embedded in the gcc output
       "--with-gxx-include-dir=${placeholder "out"}/include/c++/${version}/"
+    ]
+    ++ lib.optionals (!withoutTargetLibc && targetPlatform.isDarwin && !crossDarwin) [
+      # Building on Darwin often requires --with-sysroot.
+      "--with-sysroot=${appleSdk.sdkroot}"
     ]
 
     # Basic configuration

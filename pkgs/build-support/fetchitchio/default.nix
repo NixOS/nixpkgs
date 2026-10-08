@@ -85,6 +85,8 @@ lib.extendMkDerivation {
         ]
         ++ nativeBuildInputs;
 
+        strictDeps = true;
+
         inherit preferLocalBuild;
 
         # ENV

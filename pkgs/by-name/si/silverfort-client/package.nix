@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Silverfort automatically. Please download ${name} manually and add it
       to the Nix store using `nix-prefetch-url file:///$PWD/${name}`.
       It is recommended to add this file to the garbage collector root
-      to prevent grabage collection.
+      to prevent garbage collection.
     '';
   };
 

@@ -1,10 +1,11 @@
 {
+  bintools,
   fetchurl,
   lib,
   makeWrapper,
   patchelf,
   stdenvNoCC,
-  bintools,
+  testers,
 
   # Linked dynamic libraries.
   alsa-lib,
@@ -178,13 +179,27 @@ let
   ];
 
   linux = stdenvNoCC.mkDerivation (finalAttrs: {
-    inherit pname meta passthru;
-    version = "148.0.7778.215";
+    inherit pname meta;
+    version = "153.0.8010.52";
 
-    src = fetchurl {
-      url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-IyKMotjgwLJ9AKAl+gE86DWd0GCtQoBjvbbvBiYULSQ=";
-    };
+    src =
+      let
+        debArch =
+          {
+            aarch64-linux = "arm64";
+            x86_64-linux = "amd64";
+          }
+          .${stdenvNoCC.hostPlatform.system};
+      in
+      fetchurl {
+        url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_${debArch}.deb";
+        hash =
+          {
+            amd64 = "sha256-KeDkta8BITkV/9t/TkmhGVbcX8WRFlyFr4aI3N/5B6w=";
+            arm64 = "sha256-5aHWRq9ZRWiUHjph57jt3Gk/dpt/Fmh0xx9yycuAYWU=";
+          }
+          .${debArch};
+      };
 
     # With strictDeps on, some shebangs were not being patched correctly
     # ie, $out/share/google/chrome/google-chrome
@@ -271,9 +286,6 @@ let
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
-      # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
-      patchelf --set-rpath $rpath $out/share/google/$appname/lib*GL*
-
       for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
         patchelf --set-rpath $rpath $elf
         patchelf --set-interpreter ${bintools.dynamicLinker} $elf
@@ -285,15 +297,20 @@ let
     postInstall = lib.optionalString withSymlink ''
       ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
     '';
+
+    passthru = {
+      updateScript = ./update.sh;
+      tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    };
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
-    inherit pname meta passthru;
-    version = "148.0.7778.216";
+    inherit pname meta;
+    version = "153.0.8010.53";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/ac3wy6ujyaf3yzk7hqzmyw4nopha_148.0.7778.216/GoogleChrome-148.0.7778.216.dmg";
-      hash = "sha256-NauJr7eRVb5q1s38WXijxBAhJ2RryfrrlBc9oBg5HH4=";
+      url = "https://dl.google.com/release2/chrome/advkfamzjrpin7rbc7pzjxz6wkuq_153.0.8010.53/GoogleChrome-153.0.8010.53.dmg";
+      hash = "sha256-Hi/sZoZ16hdmIdGlpbEQ7DmhmwqxblE9mzgkHLMgN2w=";
     };
 
     dontPatch = true;
@@ -326,9 +343,12 @@ let
     postInstall = lib.optionalString withSymlink ''
       ln -s $out/bin/google-chrome-stable $out/bin/google-chrome
     '';
-  });
 
-  passthru.updateScript = ./update.sh;
+    passthru = {
+      updateScript = ./update.sh;
+      tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    };
+  });
 
   meta = {
     description = "Freeware web browser developed by Google";
@@ -338,7 +358,10 @@ let
       iedame
       mdaniels5757
     ];
-    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
+    platforms = lib.platforms.darwin ++ [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "google-chrome-stable";
   };

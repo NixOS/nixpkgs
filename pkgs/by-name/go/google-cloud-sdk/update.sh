@@ -30,9 +30,6 @@ EOF
     echo -n "    x86_64-linux ="
     genMainSrc "linux" "x86_64"
 
-    echo -n "    x86_64-darwin ="
-    genMainSrc "darwin" "x86_64"
-
     echo -n "    aarch64-linux ="
     genMainSrc "linux" "arm"
 
@@ -47,4 +44,10 @@ EOF
 
 } > "${PACKAGE_DIR}/data.nix"
 
-curl "${CHANNEL_URL}/components-v${VERSION}.json" -w "\n" > "${PACKAGE_DIR}/components.json"
+# nixpkgs uses its own Python wrapper; do not generate bundled Python components.
+curl -s "${CHANNEL_URL}/components-v${VERSION}.json" | jq '
+    .components |= map(
+      select(.id | startswith("bundled-python3") | not)
+      | .dependencies = ((.dependencies // []) | map(select(startswith("bundled-python3") | not)))
+    )
+' > "${PACKAGE_DIR}/components.json"

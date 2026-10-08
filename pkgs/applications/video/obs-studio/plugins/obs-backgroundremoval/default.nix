@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-backgroundremoval";
-  version = "1.3.7";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "occ-ai";
     repo = "obs-backgroundremoval";
     tag = version;
-    hash = "sha256-bl0KixfBnBeyidZ4+RJhX4TDy33l9awo0wISMr7XUwk=";
+    hash = "sha256-ND4owZCJvJmpuyYY5svGezVvid+Pi9hgU2W8EUv597s=";
   };
 
   nativeBuildInputs = [

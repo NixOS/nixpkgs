@@ -4,7 +4,7 @@
          return false;
      }
  
-+    if (unitUrl.path().startsWith(QStringLiteral("@nixStore@"))) {
++    if (QFileInfo(unitUrl.path()).canonicalFilePath().startsWith(QStringLiteral("@nixStore@"))) {
 +        // We don't store bytecode for bare QML files in the nix store as the
 +        // paths will change every time the application updates, filling caches
 +        // endlessly with junk.

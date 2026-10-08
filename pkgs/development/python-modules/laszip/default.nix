@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "laszip-python";
+  pname = "laszip";
   version = "0.3.0";
   pyproject = true;
 

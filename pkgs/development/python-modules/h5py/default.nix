@@ -20,13 +20,13 @@ let
   mpiSupport = hdf5.mpiSupport;
 in
 buildPythonPackage rec {
-  version = "3.15.1";
+  version = "3.16.0";
   pname = "h5py";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yG4+1FxEc1ZN5VqoO2/J5erYZXh3PfvZMEc4AELia2k=";
+    hash = "sha256-oNuq15aEDMqmekwUSg0MgIAHPDTHbVppQdaBhnjvJzg=";
   };
 
   pythonRelaxDeps = [ "mpi4py" ];

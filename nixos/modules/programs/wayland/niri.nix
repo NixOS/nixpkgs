@@ -33,6 +33,14 @@ in
         services = {
           displayManager.sessionPackages = [ cfg.package ];
 
+          # GDM 50 falls back to launching "gnome-session" as the user
+          # session command when neither AccountsService nor displayManager
+          # .defaultSession pins one. On Niri-only setups that produces a
+          # login loop because gnome-session isn't installed. Pin Niri as
+          # the default so it works out of the box; users with multiple
+          # sessions can still override.
+          displayManager.defaultSession = lib.mkDefault "niri";
+
           # Recommended by upstream
           # https://github.com/YaLTeR/niri/wiki/Important-Software#portals
           gnome.gnome-keyring.enable = lib.mkDefault true;

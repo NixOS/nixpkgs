@@ -200,8 +200,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    warnings = lib.optional config.services.pulseaudio.enable "Support for Pulseaudio + gdm will be removed in NixOS 26.11";
-
     services.xserver.displayManager.lightdm.enable = false;
 
     users.users = lib.mkMerge [
@@ -423,7 +421,7 @@ in
             {
               name = "unix";
               control = "sufficient";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
             }
           ];
 
@@ -453,6 +451,22 @@ in
               control = "required";
               modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
               settings.conffile = "/etc/pam/environment";
+              settings.readenv = 0;
+            }
+            # make sure the spawned session has the same variables as `display-manager.service`
+            # https://github.com/NixOS/nixpkgs/issues/523332
+            {
+              name = "env-greeter";
+              control = "required";
+              modulePath = "${config.security.pam.package}/lib/security/pam_env.so";
+              settings.conffile =
+                let
+                  env = config.services.displayManager.generic.environment;
+                in
+                pkgs.writeText "gdm-launch-environment-env-conf" ''
+                  PATH          DEFAULT="''${PATH}:${pkgs.gnome-session}/bin"
+                  XDG_DATA_DIRS DEFAULT="''${XDG_DATA_DIRS}:${env.XDG_DATA_DIRS}"
+                '';
               settings.readenv = 0;
             }
             {
@@ -553,7 +567,7 @@ in
             {
               name = "unix";
               control = "sufficient";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
             }
           ];
 
@@ -561,9 +575,8 @@ in
             {
               name = "unix";
               control = "requisite";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
               settings.nullok = true;
-              settings.yescrypt = true;
             }
           ];
 

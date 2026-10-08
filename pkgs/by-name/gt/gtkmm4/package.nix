@@ -91,7 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://gtkmm.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };

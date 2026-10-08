@@ -2,13 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage {
   pname = "timy";
   version = "0.4.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ramonsaraiva";
@@ -17,9 +20,13 @@ buildPythonPackage {
     hash = "sha256-4Opaph8Q1tQH+C/Epur8AA26RN4vO944DjCg0zDJqxM=";
   };
 
+  build-system = [ setuptools ];
+
   nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "timy" ];
 
   meta = {
     description = "Minimalist measurement of python code time";

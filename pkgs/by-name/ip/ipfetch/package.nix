@@ -2,41 +2,38 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  bash,
   wget,
   makeWrapper,
 }:
 
 stdenv.mkDerivation {
   pname = "ipfetch";
-  version = "0-unstable-2024-02-02";
+  version = "0-unstable-2024-12-15";
 
   src = fetchFromGitHub {
     owner = "trakBan";
     repo = "ipfetch";
-    rev = "09b61e0d1d316dbcfab798dd00bc3f9ceb02431d";
-    sha256 = "sha256-RlbNIDRuf4sFS2zw4fIkTu0mB7xgJfPMDIk1I3UYXLk=";
+    rev = "a9cf53c17946fe1cfd786c5edf4cc88e903d80ce";
+    hash = "sha256-EYGVDb8FY8aOSg7AD+2YuFI8BTr9QVGqmzpLHqUw5tI=";
   };
 
   strictDeps = true;
-  buildInputs = [
-    bash
-    wget
-  ];
+
   nativeBuildInputs = [ makeWrapper ];
+
   postPatch = ''
-    patchShebangs --host ipfetch
-    # Not only does `/usr` have to be replaced but also `/flags` needs to be added because with Nix the script is broken without this. The `/flags` is somehow not needed if you install via the install script in the source repository.
-    substituteInPlace ./ipfetch --replace-fail /usr/share/ipfetch $out/usr/share/ipfetch/flags
+    patchShebangs --host ipfetch-wget
+    # The original script hard-coded "/usr/share/ipfetch/$flags", doing replace.
+    substituteInPlace ./ipfetch-wget --replace-fail /usr/share/ipfetch $out/share/ipfetch/flags
   '';
+
   installPhase = ''
     mkdir -p $out/bin
-    mkdir -p $out/usr/share/ipfetch/
-    cp -r flags $out/usr/share/ipfetch/
-    cp ipfetch $out/bin/ipfetch
+    mkdir -p $out/share/ipfetch/
+    cp -r flags $out/share/ipfetch/
+    cp ipfetch-wget $out/bin/ipfetch
     wrapProgram $out/bin/ipfetch --prefix PATH : ${
       lib.makeBinPath [
-        bash
         wget
       ]
     }
@@ -48,6 +45,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/trakBan/ipfetch";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ annaaurora ];
+    maintainers = with lib.maintainers; [
+      annaaurora
+      VZstless
+    ];
   };
 }

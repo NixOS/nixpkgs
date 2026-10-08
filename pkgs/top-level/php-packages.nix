@@ -559,7 +559,7 @@ lib.makeScope pkgs.newScope (
               # The configure script doesn't correctly add library link
               # flags, so we add them to the variable used by the Makefile
               # when linking.
-              MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
+              env.MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
               # The configure script builds a config.h which is never
               # included. Let's include it in the main header file
               # included by all .c-files.

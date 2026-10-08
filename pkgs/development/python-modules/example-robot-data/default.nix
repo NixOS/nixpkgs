@@ -27,7 +27,6 @@ toPythonModule (
     propagatedBuildInputs = [
       pinocchio
     ]
-    ++ super.propagatedBuildInputs
     ++ lib.optional buildStandalone example-robot-data;
 
     nativeCheckInputs = [

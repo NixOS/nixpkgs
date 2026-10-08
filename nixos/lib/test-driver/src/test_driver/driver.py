@@ -1,3 +1,4 @@
+import datetime as dt
 import json
 import os
 import re
@@ -7,6 +8,7 @@ import sys
 import tempfile
 import threading
 import traceback
+import warnings
 from collections.abc import Callable, Generator, Iterator
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
@@ -18,6 +20,7 @@ from colorama import Style
 from pydantic import BaseModel
 
 from test_driver.debug import DebugAbstract, DebugNop
+from test_driver.duration import as_timedelta
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import (
@@ -40,7 +43,7 @@ class DriverConfiguration(BaseModel):
     vms: dict[str, NodeConfiguration]
     containers: dict[str, NodeConfiguration]
     vlans: list[int]
-    global_timeout: int
+    global_timeout: dt.timedelta
     enable_ssh_backdoor: bool
     test_script: Path
 
@@ -166,7 +169,7 @@ class Driver:
 
     def __enter__(self) -> "Driver":
         self.race_timer = threading.Timer(
-            self.config.global_timeout, self.terminate_test
+            self.config.global_timeout.total_seconds(), self.terminate_test
         )
         tmp_dir = get_tmp_dir()
 
@@ -428,7 +431,7 @@ class Driver:
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""
         self.logger.info(
-            f"Test will time out and terminate in {self.config.global_timeout} seconds"
+            f"Test will time out and terminate in {self.config.global_timeout.total_seconds()} seconds"
         )
         self.race_timer.start()
         self.test_script()
@@ -527,18 +530,33 @@ class Driver:
         self,
         fun_: Callable | None = None,
         *,
-        seconds_interval: float = 2.0,
+        seconds_interval: float | dt.timedelta | None = None,
+        interval: dt.timedelta | None = None,
         description: str | None = None,
     ) -> Callable[[Callable], AbstractContextManager] | AbstractContextManager:
         driver = self
+
+        if seconds_interval is not None:
+            if interval is not None:
+                raise TypeError(
+                    "polling_condition() got both 'interval' and 'seconds_interval' arguments. Pass only 'interval'"
+                )
+            if not isinstance(seconds_interval, dt.timedelta):
+                warnings.warn(
+                    "polling_condition(): The 'seconds_interval' argument is deprecated. Use 'interval' instead.",
+                )
+            interval = as_timedelta(seconds_interval)
+
+        if interval is None:
+            interval = dt.timedelta(seconds=2)
 
         class Poll:
             def __init__(self, fun: Callable):
                 self.condition = PollingCondition(
                     fun,
                     driver.logger,
-                    seconds_interval,
-                    description,
+                    description=description,
+                    interval=interval,
                 )
 
             def __enter__(self) -> None:
@@ -548,7 +566,25 @@ class Driver:
                 res = driver.polling_conditions.pop()
                 assert res is self.condition
 
-            def wait(self, timeout: int = 900) -> None:
+            def wait(
+                self,
+                timeout_seconds: int | dt.timedelta | None = None,
+                timeout: dt.timedelta | None = None,
+            ) -> None:
+                if timeout_seconds is not None:
+                    if timeout is not None:
+                        raise TypeError(
+                            "wait() got both 'timeout' and 'timeout_seconds' arguments. Pass only 'timeout'"
+                        )
+                    if not isinstance(timeout_seconds, dt.timedelta):
+                        warnings.warn(
+                            "wait(): The 'timeout_seconds' argument is deprecated. Use 'timeout' instead.",
+                        )
+                    timeout = as_timedelta(timeout_seconds)
+
+                if timeout is None:
+                    timeout = dt.timedelta(minutes=15)
+
                 def condition(last: bool) -> bool:
                     if last:
                         driver.logger.info(
@@ -562,7 +598,7 @@ class Driver:
                     return ret
 
                 with driver.logger.nested(f"waiting for {self.condition.description}"):
-                    retry(condition, timeout_seconds=timeout)
+                    retry(condition, timeout=timeout)
 
         if fun_ is None:
             return Poll

@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-3nkBDLmFOfYLvG5fi2subA9zxb51c7zWlhT4GaCQo9I=";
   };
 
+  postPatch = ''
+    substituteInPlace nsw_fuel/__init__.py \
+      --replace-fail '__version__ = "0.0.0-dev"' '__version__ = "${version}"'
+  '';
+
   build-system = [
     setuptools
   ];

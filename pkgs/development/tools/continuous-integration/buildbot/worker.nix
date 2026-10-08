@@ -48,6 +48,9 @@ buildPythonPackage {
     psutil
   ];
 
+  # the date-based version of buildbot-worker doesn't align with buildbot's version
+  dontCheckPythonMetadata = true;
+
   passthru.tests = {
     smoke-test = nixosTests.buildbot;
   };

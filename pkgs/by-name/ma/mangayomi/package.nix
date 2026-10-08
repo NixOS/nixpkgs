@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  flutter341,
+  flutter347,
   rustPlatform,
   fetchFromGitHub,
   copyDesktopItems,
@@ -14,20 +14,20 @@
 
 let
   pname = "mangayomi";
-  version = "0.7.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-p2PjylbwOSCtJlPhT7sf1VOZfJx6y0CkNY6xIo2ij5I=";
+    hash = "sha256-7geEJynXq2OcCLhTtm8KxvfuCagI5grCUUQ0K7jFkcY=";
   };
 
   metaCommon = {
     changelog = "https://github.com/kodjodevf/mangayomi/releases/tag/v${version}";
     description = "Reading manga, novels, and watching animes";
     homepage = "https://github.com/kodjodevf/mangayomi";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
@@ -37,14 +37,14 @@ let
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-lKEkTHLTX6RdTxC8bU3GQm0RD2RBy4rDHzBHIiks4eg=";
+    cargoHash = "sha256-q/jlamNxHrBe4z+MIpNr4T4HJgPsJMh0x18bXr4HKtU=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
 
     meta = metaCommon;
   };
 in
-flutter341.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -86,7 +86,7 @@ flutter341.buildFlutterApplication {
 
           buildAndTestSubdir = "rust";
 
-          cargoHash = "sha256-oJOM/Tb4QrezdtU8YTyr57JZp5FkDewgwXrBqwp6cp8=";
+          cargoHash = "sha256-mS8XJNw6qn6AVdUtZmSe2xfuraHz8m8t7tQhnSlof2M=";
 
           passthru.libraryPath = "lib/libflutter_discord_rpc_fork.so";
         };
@@ -147,7 +147,14 @@ flutter341.buildFlutterApplication {
   ];
 
   postInstall = ''
-    install -Dm644 assets/app_icons/icon-red.png $out/share/pixmaps/mangayomi.png
+    install -Dm644 assets/app_icons/icon-red.png $out/share/icons/mangayomi.png
+  '';
+
+  # clang errors on the ignored fread result (-Werror=unused-result);
+  # magic is zero-initialized so a short read is harmless
+  postPatch = ''
+    substituteInPlace lib/ffi/image_decoder.cpp \
+      --replace-fail 'fread(magic, 1, 2, f);' '(void)fread(magic, 1, 2, f);'
   '';
 
   extraWrapProgramArgs = ''

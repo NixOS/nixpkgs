@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.2";
 
   src = fetchFromGitHub {
-    owner = "pekdon";
+    owner = "pekwm";
     repo = "pekwm";
     rev = "release-${finalAttrs.version}";
     hash = "sha256-rwvecE9T+/zZg0rRUDl/DEMGH9ZmuvYj/Rz6vzmMv1I=";

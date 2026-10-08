@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cython,
   setuptools,
+  stdenv,
   mpi,
   toPythonModule,
   pytest,
@@ -12,7 +13,7 @@
   mpich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mpi4py";
   version = "4.1.2";
   pyproject = true;
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-h9RZr+xLmp+cVvrPkew3AOJLE8okd4A/2oqhsSmVBXU=";
   };
 
@@ -48,9 +49,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  # skip spawn related tests for openmpi implemention
+  # skip spawn related tests for openmpi implementation
   # see https://github.com/mpi4py/mpi4py/issues/545#issuecomment-2343011460
   env.MPI4PY_TEST_SPAWN = if mpi.pname == "openmpi" then 0 else 1;
+
+  disabledTests = [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # testJoin calls socket.getaddrinfo(socket.gethostname(), ...)
+    "test_dynproc.TestDPM.testJoin"
+  ];
 
   # follow upstream's checkPhase
   # see https://github.com/mpi4py/mpi4py/blob/4.1.0/.github/workflows/ci-test.yml#L92-L95
@@ -60,7 +68,9 @@ buildPythonPackage rec {
     echo 'Testing mpi4py (np=1)'
     mpiexec -n 1 python test/main.py -v
     echo 'Testing mpi4py (np=2)'
-    mpiexec -n 2 python test/main.py -v -f -e spawn
+    mpiexec -n 2 python test/main.py -v -f -e spawn${
+      lib.concatMapStrings (test: " -x ${test}") finalAttrs.disabledTests
+    }
 
     runHook postCheck
   '';
@@ -76,8 +86,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://github.com/mpi4py/mpi4py";
-    changelog = "https://github.com/mpi4py/mpi4py/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/mpi4py/mpi4py/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

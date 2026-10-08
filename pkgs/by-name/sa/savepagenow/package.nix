@@ -10,13 +10,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "pastpages";
+    owner = "palewire";
     repo = "savepagenow";
     tag = finalAttrs.version;
     sha256 = "sha256-ztM1g71g8SN1LTyFF7sxaLhC3+nVsC9fJwfYPjkUsdE=";
   };
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
   build-system = with python3Packages; [ setuptools-scm ];
 
@@ -32,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Simple Python wrapper for archive.org's \"Save Page Now\" capturing service";
-    homepage = "https://github.com/pastpages/savepagenow";
+    homepage = "https://github.com/palewire/savepagenow";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "savepagenow";

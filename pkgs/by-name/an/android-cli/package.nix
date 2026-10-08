@@ -8,18 +8,15 @@
 }:
 
 let
+  version = "1.0.15498356";
   platformData = {
     x86_64-linux = {
-      url = "https://dl.google.com/android/cli/latest/linux_x86_64/android-cli";
-      hash = "sha256-1F9RVDPqiy60zs2CfWytKSPKeRC9KDTogw4Ml59HaeY=";
-    };
-    x86_64-darwin = {
-      url = "https://dl.google.com/android/cli/latest/darwin_x86_64/android-cli";
-      hash = "sha256-bXP9rRMSqQa3+kfUJnIeDb1LZXh2P2A6ytwunzjyfGs=";
+      url = "https://dl.google.com/android/cli/${version}/linux_x86_64/android-cli";
+      hash = "sha256-TmwLwLKqnMCxWwtX8m50KflmisfeG3PjZsBs7z9vccU=";
     };
     aarch64-darwin = {
-      url = "https://dl.google.com/android/cli/latest/darwin_arm64/android-cli";
-      hash = "sha256-r47LXmilevW0td4N+SRTR7EFnCrPBdG7G/oTUAea90Q=";
+      url = "https://dl.google.com/android/cli/${version}/darwin_arm64/android-cli";
+      hash = "sha256-E3PC0Ivf6MoYRQu56dSD/49LI8DJZhXL27/o6daH0Sg=";
     };
   };
 
@@ -30,7 +27,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "android-cli";
-  version = "1.0.15433482";
+  inherit version;
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -74,7 +71,6 @@ stdenv.mkDerivation {
     teams = with teams; [ android ];
     platforms = [
       "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "android";

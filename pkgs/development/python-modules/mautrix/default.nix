@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.21.0";
+  version = "0.21.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-4nEjKIWzXd0e/cLL4py9SS+/YIcGHq2f+cCTEY2ENmE=";
+    hash = "sha256-7N6WiIvBWWSK+cNLtKOryUiJG3aILFy3RqfmkbKbY70=";
   };
 
   build-system = [ setuptools ];

@@ -54,5 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       bosu
       martinetd
     ];
+
+    mainProgram = "pahole";
   };
 })

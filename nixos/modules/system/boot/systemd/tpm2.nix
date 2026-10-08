@@ -43,6 +43,9 @@
           "tpm2.target"
           "systemd-tpm2-setup-early.service"
           "systemd-tpm2-setup.service"
+          "systemd-pcrextend.socket"
+          "systemd-pcrextend@.service"
+          "systemd-pcrlogin@.service"
         ];
       }
     )
@@ -69,6 +72,8 @@
         boot.initrd.systemd.additionalUpstreamUnits = [
           "tpm2.target"
           "systemd-tpm2-setup-early.service"
+          "systemd-pcrextend.socket"
+          "systemd-pcrextend@.service"
         ];
 
         boot.initrd.availableKernelModules = [
@@ -81,6 +86,7 @@
           pkgs.tpm2-tss
           "${cfg.package}/lib/systemd/systemd-tpm2-setup"
           "${cfg.package}/lib/systemd/system-generators/systemd-tpm2-generator"
+          "${cfg.package}/lib/systemd/systemd-pcrextend"
         ];
       }
     )
@@ -89,7 +95,9 @@
         cfg = config.boot.initrd.systemd;
       in
       lib.mkIf (cfg.enable && cfg.tpm2.enable && cfg.tpm2.pcrphases.enable) {
-        boot.initrd.systemd.additionalUpstreamUnits = [ "systemd-pcrphase-initrd.service" ];
+        boot.initrd.systemd.additionalUpstreamUnits = [
+          "systemd-pcrphase-initrd.service"
+        ];
         boot.initrd.systemd.services.systemd-pcrphase-initrd.wantedBy = [ "initrd.target" ];
         boot.initrd.systemd.storePaths = [ "${cfg.package}/lib/systemd/systemd-pcrextend" ];
       }

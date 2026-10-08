@@ -32,7 +32,14 @@ in
         featureVersion:
         let
           openjdkLinux =
-            (callPackage ../development/compilers/openjdk/generic.nix { inherit featureVersion; })
+            (callPackage ../development/compilers/openjdk/generic.nix (
+              {
+                inherit featureVersion;
+              }
+              // lib.optionalAttrs (lib.versionOlder featureVersion "11") {
+                enableGtk = false;
+              }
+            ))
             // {
               headless = mergeMetaPlatforms openjdkLinuxHeadless openjdkDarwin;
             };

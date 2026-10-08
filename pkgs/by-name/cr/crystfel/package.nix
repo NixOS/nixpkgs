@@ -122,10 +122,10 @@ let
 
   xgandalf = stdenv.mkDerivation rec {
     pname = "xgandalf";
-    version = "c6c5003ff1086e8c0fb5313660b4f02f3a3aab7b";
+    version = "8a63600ec778b155031adc3c151424aaced6a0cc";
     src = fetchurl {
       url = "https://gitlab.desy.de/thomas.white/xgandalf/-/archive/${version}/xgandalf-${version}.tar.gz";
-      hash = "sha256-/uZlBwAINSoYqgLQFTMz8rS1Rpadu79JkO6Bu/+Nx9E=";
+      hash = "sha256-UhFbpv+4qMwxEQIJpVpMzSg46P0vm0dkEyJDzxVu6XY=";
     };
 
     nativeBuildInputs = [
@@ -138,10 +138,10 @@ let
 
   pinkIndexer = stdenv.mkDerivation rec {
     pname = "pinkindexer";
-    version = "15caa21191e27e989b750b29566e4379bc5cd21a";
+    version = "85f3883f8c1fe98a03e5f3d371f2da4fee97894e";
     src = fetchurl {
       url = "https://gitlab.desy.de/thomas.white/pinkindexer/-/archive/${version}/pinkindexer-${version}.tar.gz";
-      hash = "sha256-v/SCJiHAV05Lc905y/dE8uBXlW+lLX9wau4XORYdbQg=";
+      hash = "sha256-W4COYdeESP0S2KhB2UdaJSbxNiFm5yyapKkmICDtP0A=";
     };
 
     nativeBuildInputs = [
@@ -154,10 +154,10 @@ let
 
   fdip = stdenv.mkDerivation rec {
     pname = "fdip";
-    version = "5628fedddd79323b4b26df9b85e9543d83286d4c";
+    version = "631792e90ed2c3e226dce77bf97917305293ac66";
     src = fetchurl {
       url = "https://gitlab.desy.de/thomas.white/fdip/-/archive/${version}/fdip-${version}.tar.gz";
-      hash = "sha256-EaihnW7p//ecgMn+KKlfmBeXrnAqs+HdhN+ovuSrtiQ=";
+      hash = "sha256-nnvOPl35NgtJ13fgWWAuVhtWT/JOk2DyYmBgI0ojZ2o=";
     };
 
     nativeBuildInputs = [
@@ -221,10 +221,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.12.0";
+  version = "0.13.0";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-H/caXhsIdgsiat3UTi1QMF9J22dtyEB6YEIn9f8wWB4=";
+    sha256 = "sha256-6Fz7W8kRKlaTmnL+21t20UgkTjr3oC08IOzAGOseaQU=";
   };
   nativeBuildInputs = [
     meson
@@ -260,12 +260,6 @@ stdenv.mkDerivation rec {
     argp-standalone
   ]
   ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
-
-  patches = [
-    # on darwin at least, we need to link to a separate argp library;
-    # this patch adds a test for this and the necessary linker options
-    ./link-to-argp-standalone-if-needed.patch
-  ];
 
   # CrystFEL calls mosflm by searching PATH for it. We could've create a wrapper script that sets the PATH, but
   # we'd have to do that for every CrystFEL executable (indexamajig, crystfel, partialator). Better to just

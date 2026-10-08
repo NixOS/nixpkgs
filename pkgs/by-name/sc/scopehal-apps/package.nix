@@ -4,43 +4,41 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  gtkmm3,
-  cairomm,
+  gtk3,
   yaml-cpp,
   glfw,
+  libpng,
   libtirpc,
   liblxi,
   libsigcxx,
-  glew,
-  zstd,
+  zlib,
   wrapGAppsHook3,
   makeBinaryWrapper,
   writeDarwinBundle,
   shaderc,
   vulkan-headers,
   vulkan-loader,
-  vulkan-tools,
   glslang,
   spirv-tools,
-  ffts,
   moltenvk,
   llvmPackages,
   hidapi,
+  wayland,
+  wayland-scanner,
 }:
 
 let
-  pname = "scopehal-apps";
-  version = "0.1.1";
+  version = "0.2.2";
 in
 stdenv.mkDerivation {
   pname = "scopehal-apps";
-  version = "${version}";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "ngscopeclient";
     repo = "scopehal-apps";
     tag = "v${version}";
-    hash = "sha256-7ZXfxfRa+1fbMj2IDF/boNL/qCy4i9IyMnzIgOZunDw=";
+    hash = "sha256-LhkhSuoj6lHz3zB4U37qDkMxfV1UktIjwJvwbVGKDDM=";
     fetchSubmodules = true;
   };
 
@@ -54,6 +52,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     wrapGAppsHook3
+    wayland-scanner
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeBinaryWrapper
@@ -61,23 +60,21 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    cairomm
-    glew
     glfw
     glslang
+    hidapi
     liblxi
+    libpng
     libsigcxx
     vulkan-headers
     vulkan-loader
-    vulkan-tools
     yaml-cpp
-    zstd
-    hidapi
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    ffts
-    gtkmm3
+    gtk3
     libtirpc
+    wayland
   ]
   ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -89,16 +86,11 @@ stdenv.mkDerivation {
     "-DNGSCOPECLIENT_PACKAGE_VERSION_LONG=v${version}-0"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # error: variable 'empty_string' is uninitialized when passed as a const pointer argument here [-Werror,-Wuninitialized-const-pointer]
-    "-Wno-error=uninitialized"
-  ];
-
   patches = [
     ./remove-required-lsb-release.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ./remove-brew-molten-vk-lookup.patch
+    ./remove-macos-bundle-fixup.patch
   ];
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

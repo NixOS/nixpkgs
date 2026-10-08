@@ -20,5 +20,5 @@ mkKdeDerivation rec {
     qgpgme
   ];
 
-  meta.license = [ lib.licenses.lgpl21Plus ];
+  meta.license = lib.licenses.lgpl21Plus;
 }

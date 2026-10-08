@@ -9,23 +9,15 @@ index 56875b5..3216e79 100755
  /* DING: Desktop Icons New Generation for GNOME Shell
   *
 diff --git a/app/ding.js b/app/ding.js
-index 9a1550a..7bd25fc 100755
+index 6bf7309..923e0b6 100755
 --- a/app/ding.js
 +++ b/app/ding.js
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env gjs
 +#!@gjs@/bin/gjs
- 
+
  /* DING: Desktop Icons New Generation for GNOME Shell
   *
-@@ -18,6 +18,7 @@
-  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  */
- 'use strict';
-+imports.gi.GIRepository.Repository.dup_default().prepend_search_path('@typelib_path@');
- imports.gi.versions.Gtk = '3.0';
- const Gtk = imports.gi.Gtk;
- const Gio = imports.gi.Gio;
 diff --git a/app/fileItemMenu.js b/app/fileItemMenu.js
 index 4fae9ef..5127eff 100644
 --- a/app/fileItemMenu.js
@@ -67,26 +59,18 @@ index 94ec3c7..823dd5c 100644
          nautilusCompression = null;
      } else {
 diff --git a/extension.js b/extension.js
-index 0f8a317..c768649 100644
+index d6cb19c..ea9a93a 100644
 --- a/extension.js
 +++ b/extension.js
-@@ -17,6 +17,7 @@
-  */
- 'use strict';
- import Clutter from 'gi://Clutter'
-+import GIRepository from 'gi://GIRepository';
- import GLib from 'gi://GLib'
- import Gio from 'gi://Gio'
- import Meta from 'gi://Meta'
-@@ -396,9 +397,9 @@ export default class DING extends Extension {
+@@ -297,9 +297,9 @@ export default class DING extends Extension {
                      contents += String.fromCharCode(readData[i]);
                  }
              }
 -            let path = `gjs ${GLib.build_filenamev([this.path, 'app', 'ding.js'])}`;
 +            let path = `@gjs@/bin/gjs ${GLib.build_filenamev([this.path, 'app', 'ding.js'])}`;
              if (contents.startsWith(path)) {
--                let proc = new Gio.Subprocess({argv: ['/bin/kill', filename]});
-+                let proc = new Gio.Subprocess({argv: ['@util_linux@/bin/kill', filename]});
+-                let proc = new Gio.Subprocess({ argv: ['/bin/kill', filename] });
++                let proc = new Gio.Subprocess({ argv: ['@util_linux@/bin/kill', filename] });
                  proc.init(null);
                  proc.wait(null);
              }

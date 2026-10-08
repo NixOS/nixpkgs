@@ -104,9 +104,9 @@ let
   */
   parseExpandedIpv6 =
     addr:
-    assert lib.assertMsg (
+    assert
       length addr == ipv6Pieces
-    ) "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
+      || throw "parseExpandedIpv6: expected list of integers with ${ipv6Pieces} elements";
     let
       u16FromHexStr =
         hex:

@@ -17,7 +17,6 @@ version_x86_64_linux=$(jq -r .zoom.version <<<"$linux_data")
 echo >&2 "=== Updating package.nix ..."
 # update-source-version expects to be at the root of nixpkgs
 (cd "$nixpkgs" && update-source-version --ignore-same-version --print-changes --version-key=versions.aarch64-darwin pkgsCross.aarch64-darwin.zoom-us "$version_aarch64_darwin")
-(cd "$nixpkgs" && update-source-version --ignore-same-version --print-changes --version-key=versions.x86_64-darwin pkgsCross.x86_64-darwin.zoom-us "$version_x86_64_darwin")
 (cd "$nixpkgs" && update-source-version --ignore-same-version --print-changes --version-key=versions.x86_64-linux pkgsCross.gnu64.zoom-us "$version_x86_64_linux" --source-key=unpacked.src)
 
 echo >&2 "=== Done!"

@@ -15,7 +15,6 @@ fi
 for i in \
     "x86_64-linux linux-x86_64" \
     "aarch64-linux linux-aarch64" \
-    "x86_64-darwin macos-x86_64" \
     "aarch64-darwin macos-aarch64"; do
     set -- $i
     prefetch=$(nix-prefetch-url "https://github.com/cloud-fs/cloud-fs.github.io/releases/download/v$latestVersion/clouddrive-2-$2-$latestVersion.tgz")

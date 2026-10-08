@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "nominatim";
+  pname = "nominatim-api";
   version = "5.3.2";
   pyproject = true;
 

@@ -116,7 +116,7 @@ let
       (lib.getOutput "static" cuda_cudart) # libcudart_static.a
 
       # Headers
-      (lib.getDev cuda_cccl) # block_load.cuh
+      (lib.getDev cccl) # block_load.cuh
       (lib.getDev cuda_cudart) # cuda.h
       (lib.getDev cuda_cupti) # cupti.h
       (lib.getDev cuda_nvcc) # See https://github.com/google/jax/issues/19811

@@ -14,13 +14,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "tektoncd-cli";
-  version = "0.45.0";
+  version = "0.46.0";
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-2n/RBMy3mkG9F9PtFaZ1TCyW9MYbGF1nr6GgL+ps7ok=";
+    sha256 = "sha256-BEYwvGi/Mt/DkHRR2TU42ItLC57CVKnb7ZBy3TKBoZs=";
   };
 
   vendorHash = null;

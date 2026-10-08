@@ -23,22 +23,13 @@ let
       [ ];
 in
 buildNodejs {
-  version = "26.3.0";
-  sha256 = "319ad5d7d20cc622e55eb75b9f1a2546b77a08bd462b67030d0c89316c2c2349";
+  version = "26.9.0";
+  sha256 = "47b970d88511b429e587b740fa733176909d2a2005a29662f01b05205f58468b";
   patches =
-    (
-      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
-        [
-          ./configure-emulator.patch
-        ]
-      else
-        [
-          (fetchpatch2 {
-            url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
-            hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
-          })
-        ]
-    )
+    (lib.optional (!(stdenv.hostPlatform.emulatorAvailable buildPackages)) (fetchpatch2 {
+      url = "https://raw.githubusercontent.com/buildroot/buildroot/2f0c31bffdb59fb224387e35134a6d5e09a81d57/package/nodejs/nodejs-src/0003-include-obj-name-in-shared-intermediate.patch";
+      hash = "sha256-3g4aS+NmmUYNOYRNc6UMJKYoaTlpP5Knt9UHegx+o0Y=";
+    }))
     ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isFreeBSD) [
       # This patch is concerning.
       # https://github.com/nodejs/node/issues/54576

@@ -35,7 +35,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "dbgpu" ];
 
   meta = {
-    description = "A small, easy-to-use open source database of over 2000 GPUs with architecture, manufacturing, API support and performance details";
+    description = "Small, easy-to-use open source database of over 2000 GPUs with architecture, manufacturing, API support and performance details";
     homepage = "https://github.com/painebenjamin/dbgpu";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jaredmontoya ];

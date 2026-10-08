@@ -1,75 +1,71 @@
 {
-  autoPatchelfHook,
-  common-updater-scripts,
-  fetchzip,
   lib,
-  nixosTests,
-  stdenv,
-  stdenvNoCC,
-  writeShellScript,
+  fetchFromGitHub,
+  buildNpmPackage,
+  rustPlatform,
+  replaceVars,
+  versionCheckHook,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "silverbullet";
-  version = "2.6.1";
+  version = "2.10.0";
 
-  src =
-    finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
-
-  buildInputs = [ stdenv.cc.cc.lib ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    cp $src/silverbullet $out/bin/
-    runHook postInstall
-  '';
-
-  passthru = {
-    sources = {
-      "x86_64-linux" = fetchzip {
-        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-linux-x86_64.zip";
-        hash = "sha256-m0bQ3J99WZ9CBrA7M2i7Sh/lOI5c+z/an+9bNfQZW4c=";
-        stripRoot = false;
-      };
-      "aarch64-linux" = fetchzip {
-        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-linux-aarch64.zip";
-        hash = "sha256-BqTKMCpifX3Y5kFWQb/9exAjjTc/KeUhYtsHSR850qE=";
-        stripRoot = false;
-      };
-      "x86_64-darwin" = fetchzip {
-        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-darwin-x86_64.zip";
-        hash = "sha256-sqvB9kEpMimcH/rtOc7lBMptu3Cdu6M3z85TfD9QuZ4=";
-        stripRoot = false;
-      };
-      "aarch64-darwin" = fetchzip {
-        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-darwin-aarch64.zip";
-        hash = "sha256-K/4w4jsa+RIYQA9cW2U/oycJx7PfUzcdG6WjZswRLU0=";
-        stripRoot = false;
-      };
-    };
-
-    updateScript = writeShellScript "update-silverbullet" ''
-      NEW_VERSION="$1"
-      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        ${lib.getExe' common-updater-scripts "update-source-version"} "silverbullet" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
-      done
-    '';
-
-    tests = {
-      inherit (nixosTests) silverbullet;
-    };
+  src = fetchFromGitHub {
+    owner = "silverbulletmd";
+    repo = "silverbullet";
+    rev = finalAttrs.version;
+    hash = "sha256-tcn0NrABLnX22OWJ3PzYJ5xbTLyNH5p6JtJ6CujkpQQ=";
   };
 
+  cargoHash = "sha256-M/bX9oj76kmXGkCzvBJZMeI7/4UJ+yvz84KrysyPOLA=";
+
+  cargoBuildFlags = [
+    "-p"
+    "silverbullet"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  frontend = buildNpmPackage {
+    pname = "silverbullet-frontend";
+    inherit (finalAttrs) version src;
+
+    npmDepsHash = "sha256-We3K4jZGcC5Q1WBgEOKDKhn8M83srNLP3C36WCOX5Qs=";
+
+    patches = [
+      (replaceVars ./override-version.patch { inherit (finalAttrs) version; })
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      cp -r client_bundle version.json $out/
+
+      runHook postInstall
+    '';
+  };
+
+  preBuild = ''
+    cp -r ${finalAttrs.frontend}/client_bundle .
+    cp ${finalAttrs.frontend}/version.json .
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/website/CHANGELOG.md";
+    changelog = "https://github.com/silverbulletmd/silverbullet/blob/${finalAttrs.version}/docs/CHANGELOG.md";
     description = "Open-source, self-hosted, offline-capable Personal Knowledge Management (PKM) web application";
     homepage = "https://silverbullet.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aorith ];
+    maintainers = with lib.maintainers; [
+      aorith
+      CnTeng
+    ];
     mainProgram = "silverbullet";
-    platforms = builtins.attrNames finalAttrs.passthru.sources;
   };
 })

@@ -5,20 +5,26 @@
   zlib,
   openssl,
   libiconv,
+  autoreconfHook,
+  autoconf-archive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.49.6";
+  version = "3.50.1";
   pname = "httrack";
 
   src = fetchFromGitHub {
     owner = "xroche";
     repo = "httrack";
-    # 3.49.6 is not tagged, but corresponds to this rev.
-    rev = "748c35de7858ead963daf1393ad023d75b7820c2";
-    hash = "sha256-Iaeo6lB84I0amr2C8iZ+kQ6F8AXqyyARV6FiwpBshvA=";
+    tag = finalAttrs.version;
+    hash = "sha256-n3myEvrlICMMLvI6YHKw8BIryHZzCyadIpZylpHM9M4=";
     fetchSubmodules = true;
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+  ];
 
   buildInputs = [
     libiconv
@@ -29,7 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Easy-to-use offline browser / website mirroring utility";
     homepage = "https://www.httrack.com";
-    license = lib.licenses.gpl3;
+    changelog = "https://github.com/xroche/httrack/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ tbutter ];
     platforms = with lib.platforms; unix;
   };

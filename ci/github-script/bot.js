@@ -1,12 +1,13 @@
-module.exports = async ({ github, context, core, dry }) => {
-  const path = require('node:path')
-  const { DefaultArtifactClient } = await import('@actions/artifact')
-  const { readFile, writeFile } = require('node:fs/promises')
-  const withRateLimit = require('./withRateLimit.js')
-  const { classify } = require('../supportedBranches.js')
-  const { handleMerge } = require('./merge.js')
-  const { handleReviewers } = require('./reviewers.js')
+// @ts-nocheck
+import { readFile, writeFile } from 'node:fs/promises'
+import path from 'node:path'
+import { DefaultArtifactClient } from '@actions/artifact'
+import { handleMerge } from './merge.js'
+import { handleReviewers } from './reviewers.js'
+import { classify } from './supportedBranches.js'
+import withRateLimit from './withRateLimit.js'
 
+export default async ({ github, context, core, dry }) => {
   const artifactClient = new DefaultArtifactClient()
 
   // Detect if running in a fork (not NixOS/nixpkgs)
@@ -206,20 +207,8 @@ module.exports = async ({ github, context, core, dry }) => {
 
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
-    const merge_bot_eligible = await handleMerge({
-      github,
-      context,
-      core,
-      log,
-      dry,
-      pull_request,
-      events,
-      maintainers,
-      getTeamMembers,
-      getUser,
-    })
-
     // Check for any human reviews other than the PR author, GitHub actions and other GitHub apps.
+    // `commit { oid }` is needed by handleMerge to verify approvals are against the current head.
     const reviews = (
       await github.graphql(
         `query($owner: String!, $repo: String!, $pr: Int!) {
@@ -231,6 +220,7 @@ module.exports = async ({ github, context, core, dry }) => {
             reviews(first: 100) {
               nodes {
                 state
+                commit { oid }
                 user: author {
                   # Only get users, no bots
                   ... on User {
@@ -265,6 +255,20 @@ module.exports = async ({ github, context, core, dry }) => {
         // Also exclude author reviews, can't request their review in any case
         r.user.id !== pull_request.user?.id,
     )
+
+    const merge_bot_eligible = await handleMerge({
+      github,
+      context,
+      core,
+      log,
+      dry,
+      pull_request,
+      events,
+      reviews,
+      maintainers,
+      getTeamMembers,
+      getUser,
+    })
 
     const approvals = new Set(
       reviews
@@ -392,6 +396,13 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
         per_page: 100,
       })
+
+      // label llm-assisted PRs accordingly, retaining it if manually set
+      const assistedByPattern = /Assisted-by: (?!nix-init)/i
+      if (prCommits.some((c) => assistedByPattern.test(c.commit.message))) {
+        evalLabels['llm-assisted'] = true
+      }
+
       const commitSubjects = prCommits.map(
         (c) => c.commit.message.split('\n')[0],
       )
@@ -678,16 +689,21 @@ module.exports = async ({ github, context, core, dry }) => {
     if (context.payload.pull_request) {
       await handle({ item: context.payload.pull_request, stats })
     } else {
+      // We don't use filters here because that causes GitHub to use an often-outdated index,
+      // resulting in the cursor not being updated, and therefore causing the same PRs
+      // to use up our rate limit over and over again.
       const lastRun = (
         await github.rest.actions.listWorkflowRuns({
           ...context.repo,
           workflow_id: 'bot.yml',
-          event: 'schedule',
-          status: 'success',
-          exclude_pull_requests: true,
-          per_page: 1,
         })
-      ).data.workflow_runs[0]
+      ).data.workflow_runs.find(
+        (run) => run.event === 'schedule' && run.conclusion === 'success',
+      )
+
+      core.info(
+        `Last successful run created at: ${lastRun?.created_at ?? '<n/a>'}`,
+      )
 
       const cutoff = new Date(
         Math.max(
@@ -783,6 +799,7 @@ module.exports = async ({ github, context, core, dry }) => {
         } else {
           // No stats.artifacts++, because this does not allow passing a custom token.
           // Thus, the upload will not happen with the app token, but the default github.token.
+          core.info(`pagination-cursor: ${cursor}`)
           await artifactClient.uploadArtifact(
             'pagination-cursor',
             [uploadPath],
@@ -792,6 +809,8 @@ module.exports = async ({ github, context, core, dry }) => {
             },
           )
         }
+      } else {
+        core.info('pagination-cursor: <n/a>')
       }
 
       // Some items might be in both search results, so filtering out duplicates as well.

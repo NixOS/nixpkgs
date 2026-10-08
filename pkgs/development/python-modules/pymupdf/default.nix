@@ -7,7 +7,7 @@
   toPythonModule,
 
   # build-system
-  libclang,
+  clang,
   pipcl,
   psutil,
   setuptools,
@@ -29,6 +29,9 @@
   fonttools,
   pillow,
   pymupdf-fonts,
+
+  # update
+  nix-update-script,
 }:
 
 let
@@ -75,7 +78,7 @@ buildPythonPackage (finalAttrs: {
   '';
 
   build-system = [
-    libclang
+    clang
     pipcl
     swig
     setuptools
@@ -149,7 +152,7 @@ buildPythonPackage (finalAttrs: {
     # Do not lint code
     "tests/test_typing.py"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Trace/BPT trap: 5 when getting widget options
     "tests/test_4505.py"
     "tests/test_widgets.py"
@@ -238,6 +241,11 @@ buildPythonPackage (finalAttrs: {
     # * <https://github.com/pymupdf/PyMuPDF/blob/refs/tags/1.25.1/tests/test_pixmap.py#L425-L428>
     export PYMUPDF_SYSINSTALL_TEST=1
   '';
+
+  # Filter out `internal`, platform-specific, etc. releases
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=([\\d]+\\.[\\d]+\\.[\\d]+(\\.[\\d]+)?)" ];
+  };
 
   meta = {
     description = "Python bindings for MuPDF's rendering library";

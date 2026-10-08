@@ -2,19 +2,22 @@
   lib,
   stdenv,
   buildGoModule,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "yanic";
-  version = "1.8.3";
+  version = "1.9.0";
 
-  src = fetchFromGitHub {
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  src = fetchFromCodeberg {
     owner = "FreifunkBremen";
     repo = "yanic";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-6jGuqqUr9DJyPYAVBBHc5qtfJIbvjGndT2Y+RSLMzhY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zVe4Z/Gkhrj/Qa6oXAHDG1iJgJeEj8/STylyIBbpBoo=";
   };
 
   vendorHash = "sha256-TcmkPBHxpmTgXNW8gPkzMpjPGCQu/HrZqAu9jDpPEjo=";
@@ -36,8 +39,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Tool to collect and aggregate respondd data";
-    homepage = "https://github.com/FreifunkBremen/yanic";
-    changelog = "https://github.com/FreifunkBremen/yanic/releases/tag/${finalAttrs.src.rev}";
+    homepage = "https://freifunkbremen.codeberg.page/yanic";
+    changelog = "https://codeberg.org/FreifunkBremen/yanic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ herbetom ];
     mainProgram = "yanic";

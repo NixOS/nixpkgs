@@ -1,13 +1,9 @@
 {
   lib,
   localSystem,
-  crossSystem,
   config,
   overlays,
-  crossOverlays ? [ ],
 }:
-
-assert crossSystem == localSystem;
 
 let
   genericStdenv = import ../generic { defaultConfig = config; };

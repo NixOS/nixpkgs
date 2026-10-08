@@ -12,24 +12,28 @@
   ffmpeg,
   glib,
   libpulseaudio,
+  versionCheckHook,
+  nix-update-script,
+  pipewire,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "songrec";
-  version = "0.6.7";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "marin-m";
     repo = "songrec";
-    rev = finalAttrs.version;
-    hash = "sha256-lCwFMBQ6IimNtXYMfTnFOpwOO2qbwijOEZ+oMsQKAP0=";
+    tag = finalAttrs.version;
+    hash = "sha256-U7THM8fagZREkleH6DWiusP3KcAtu/OrAg9USdCGRec=";
   };
 
-  cargoHash = "sha256-BhDFGkvY6c8XbhJpFX1w8CSXK9IY/HiysNoooytFT9I=";
+  cargoHash = "sha256-O0YjeZCOe+cXjxUAgMT1l621rid4pexMZ3MbLDGxQsM=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -40,6 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libadwaita
     libpulseaudio
     libsoup_3
+    pipewire
   ];
 
   preFixup = ''
@@ -52,12 +57,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv packaging/rootfs/usr/share $out/share
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open-source Shazam client for Linux, written in Rust";
     homepage = "https://github.com/marin-m/SongRec";
+    changelog = "https://github.com/marin-m/SongRec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ tcbravo ];
+    maintainers = with lib.maintainers; [ tomasrivera ];
     mainProgram = "songrec";
   };
 })

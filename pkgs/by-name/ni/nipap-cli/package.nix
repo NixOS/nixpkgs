@@ -29,9 +29,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pynipap
   ];
 
-  checkInputs = with python3Packages; [
-    pythonImportsCheckHook
-  ];
   pythonImportsCheck = [
     "nipap_cli.nipap_cli"
   ];

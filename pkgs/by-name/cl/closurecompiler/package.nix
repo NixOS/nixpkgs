@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "closure-compiler";
-  version = "20260128";
+  version = "20260804";
 
   src = fetchurl {
     url = "mirror://maven/com/google/javascript/closure-compiler/v${finalAttrs.version}/closure-compiler-v${finalAttrs.version}.jar";
-    sha256 = "sha256-GlloHdQBhil/++qld8+yyYpNmCACYxjW8QW0YtPTOVk=";
+    sha256 = "sha256-DLhqS5Z2nGebT8LS3A5azQq9Df+TKUW5D74yckdGaik=";
   };
 
   dontUnpack = true;
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/share/java $out/bin
     cp ${finalAttrs.src} $out/share/java/closure-compiler-v${finalAttrs.version}.jar
     makeWrapper ${jre}/bin/java $out/bin/closure-compiler \
-      --add-flags "-jar $out/share/java/closure-compiler-v${finalAttrs.version}.jar"
+      --add-flags "\$NIX_JAVA_ARGS -jar $out/share/java/closure-compiler-v${finalAttrs.version}.jar"
   '';
 
   meta = {

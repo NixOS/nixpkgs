@@ -10,6 +10,6 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 npm i --package-lock-only codebuff@"$version"
 rm -f package.json
 
-# Update version and hases
+# Update version and hashes
 cd -
 nix-update codebuff --version "$version"

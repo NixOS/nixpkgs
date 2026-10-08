@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  arviz,
   fetchFromGitHub,
 
   # build-system
@@ -24,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-base";
-  version = "1.1.0";
+  inherit (arviz) version;
   pyproject = true;
   __structuredAttrs = true;
 
@@ -32,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "arviz-devs";
     repo = "arviz-base";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/v1LPgM2rDw9Z0en0MYGELGiRlmwQX4ILKsBEqOhhSs=";
+    hash = "sha256-viGjQrAeelzC7DBqMA4kltBllDAXJvymWdntOMYapEA=";
   };
 
   build-system = [
@@ -65,6 +66,11 @@ buildPythonPackage (finalAttrs: {
     netcdf4
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

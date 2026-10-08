@@ -2,24 +2,31 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+  setuptools,
   colorama,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crayons";
   version = "0.4.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "bd33b7547800f2cfbd26b38431f9e64b487a7de74a947b0fafc89b45a601813f";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-vTO3VHgA8s+9JrOEMfnmS0h6fedKlHsPr8ibRaYBgT8=";
   };
 
-  propagatedBuildInputs = [ colorama ];
+  build-system = [ setuptools ];
+
+  dependencies = [ colorama ];
+
+  pythonImportsCheck = [ "crayons" ];
 
   meta = {
     description = "TextUI colors for Python";
     homepage = "https://github.com/kennethreitz/crayons";
     license = lib.licenses.mit;
   };
-}
+})

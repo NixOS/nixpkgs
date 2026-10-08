@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     license = lib.licenses.zlib;
-    downloadPage = "http://matricks.github.com/bam/";
+    downloadPage = "https://matricks.github.io/bam/";
   };
 })

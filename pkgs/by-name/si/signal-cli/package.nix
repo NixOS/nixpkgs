@@ -11,6 +11,9 @@
   callPackage,
   versionCheckHook,
   signal-cli,
+  writeShellApplication,
+  curl,
+  nix-update,
 }:
 
 let
@@ -19,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "signal-cli";
-  version = "0.14.3";
+  version = "0.14.8";
 
   src = fetchFromGitHub {
     owner = "AsamK";
     repo = "signal-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qUCLubP3/JxDoLYbWhH/MRWq29H6tj3UuGr5iBfJ3jM=";
+    hash = "sha256-511hn+TzLmNfJFIsVpAqERXX0Zmr7D3Ap4JbJjt8vTQ=";
   };
 
   nativeBuildInputs = [
@@ -92,6 +95,21 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "signal-cli-update";
+      runtimeInputs = [
+        curl
+        nix-update
+      ];
+      text = ''
+        nix-update signal-cli
+        nix-update signal-cli.passthru.libsignal-jni --version "$(curl --silent --location https://github.com/AsamK/signal-cli/raw/v"$(nix-instantiate --raw --eval -A signal-cli.version)"/libsignal-version)"
+      '';
+    });
+    libsignal-jni = libsignal-jni;
+  };
 
   meta = {
     homepage = "https://github.com/AsamK/signal-cli";

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withPython "-DWITH_PYTHON=ON";
 
-  postInstall = lib.optional withPython ''
+  postInstall = lib.optionalString withPython ''
     mv $out/${python.sitePackages}/libsbml/libsbml.py $out/${python.sitePackages}/libsbml/__init__.py
   '';
 

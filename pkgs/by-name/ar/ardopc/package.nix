@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ardopc";
-  version = "unstable-2021-08-28";
+  version = "20210828";
 
   src = fetchFromGitHub {
     owner = "hamarituc";
     repo = "ardop";
-    tag = "20210828";
+    tag = finalAttrs.version;
     hash = "sha256-OUw9spFTsQLnsXksbfl3wD2NyY40JTyvlvONEIeZyWo=";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "ARDOP (Amateur Radio Digital Open Protocol) TNC implementation by John Wiseman (GM8BPQ)";
-    homepage = "https://github.com/hamarituc/ardop/ARDOPC";
+    homepage = "https://github.com/hamarituc/ardop";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ oliver-koss ];
     mainProgram = "ardopc";

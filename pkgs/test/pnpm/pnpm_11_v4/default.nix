@@ -2,7 +2,7 @@
   fetchPnpmDeps,
   lib,
   makeShellWrapper,
-  nodejs,
+  nodejs-slim,
   pnpmConfigHook,
   pnpm_11,
   stdenv,
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeShellWrapper
-    nodejs
+    nodejs-slim
     pnpm
     pnpmConfigHook
   ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 -t $out/lib/pnpm-11-test dist/index.js
 
-    makeWrapper ${lib.getExe nodejs} $out/bin/pnpm-11-test \
+    makeWrapper ${lib.getExe nodejs-slim} $out/bin/pnpm-11-test \
       --add-flags "$out/lib/pnpm-11-test"
 
     runHook postInstall

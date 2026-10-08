@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 69d8c7b..a2f3b8c 100644
+index 45deed0..a2f3b8c 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -337,14 +337,14 @@ set(CPACK_STRIP_FILES TRUE)
+@@ -353,15 +353,15 @@ set(CPACK_STRIP_FILES TRUE)
 
  # Figure out what distro version we're on
  if(LINUX)
@@ -20,3 +20,4 @@ index 69d8c7b..a2f3b8c 100644
 +		)
 
  	message(STATUS "Linux distribution target for packaging: name ${DISTRO_NAME}, version ${DISTRO_VER}")
+

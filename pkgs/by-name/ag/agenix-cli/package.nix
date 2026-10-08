@@ -9,11 +9,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agenix-cli";
   version = "0.1.2";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "cole-h";
     repo = "agenix-cli";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-eJp6t8h8uOP0YupYn8x6VAAmUbVrXypxNMGx4SK/6d8=";
+    hash = "sha256-eJp6t8h8uOP0YupYn8x6VAAmUbVrXypxNMGx4SK/6d8=";
   };
 
   cargoHash = "sha256-2xTkCdWKQVg8Sp0LDkC/LH9GYBXNpxdoLX30Ndz0muM=";

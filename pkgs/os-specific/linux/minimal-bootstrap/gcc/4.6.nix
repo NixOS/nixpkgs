@@ -110,6 +110,7 @@ bash.runCommand "${pname}-${version}"
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
+    export CFLAGS="-O2"
     export C_INCLUDE_PATH="${tinycc.libs}/include:$(pwd)/mpfr/src"
     export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 

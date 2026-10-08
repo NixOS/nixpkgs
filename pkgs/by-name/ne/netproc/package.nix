@@ -3,22 +3,25 @@
   stdenv,
   fetchFromGitHub,
   ncurses,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netproc";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "berghetti";
     repo = "netproc";
     rev = finalAttrs.version;
-    hash = "sha256-OQWlFwCga33rTseLeO8rAd+pkLHbSNf3YI5OSwrdIyk=";
+    hash = "sha256-EqCyh0WNz7B2B1SFgFQT2MFk8+OVPsy5n3EFt64HJ+E=";
   };
 
   buildInputs = [ ncurses ];
 
   installFlags = [ "prefix=$(out)" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to monitor network traffic based on processes";

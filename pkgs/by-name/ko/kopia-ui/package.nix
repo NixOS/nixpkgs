@@ -10,12 +10,12 @@
   kopia,
 }:
 let
-  version = "0.23.0";
+  version = "0.23.1";
   src = fetchFromGitHub {
     owner = "kopia";
     repo = "kopia";
     tag = "v${version}";
-    hash = "sha256-9xvgm+A8h2pAX3oHtiFSa2xNab5BDkEBEtXQZz3Fd5A=";
+    hash = "sha256-yjeLV7N/U88oVdP4iJYgSM/QJLAMREaB/2jBcbTDWkA=";
   };
 in
 buildNpmPackage {
@@ -24,7 +24,7 @@ buildNpmPackage {
 
   sourceRoot = "${src.name}/app";
 
-  npmDepsHash = "sha256-Ctp41vNZPVbycwIzWiTh+1ej3NpCf1WJCqnJsyoyxlc=";
+  npmDepsHash = "sha256-yj5+qiLfy6CjAOXIzT9OMu860Pefwn+HuJNoBAizb/0=";
   makeCacheWritable = true;
 
   nativeBuildInputs = [

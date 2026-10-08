@@ -5,7 +5,6 @@
   fetchurl,
   bash,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnupatch,
@@ -20,11 +19,11 @@
 }:
 let
   pname = "python";
-  version = "3.14.4";
+  version = "3.14.6";
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    hash = "sha256-2SPFEwPjjiSRNvwb3zVo1W7LAyFO/e9IUWF209f6rvg=";
+    hash = "sha256-FDsd3e+uw70uIeO4ObNKK3+5hCJyiDxXZCDWBenzDGM=";
   };
 
   patches = [
@@ -42,7 +41,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnupatch
@@ -80,11 +78,9 @@ bash.runCommand "${pname}-${version}"
     ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
     # Configure
-    export CC=musl-gcc
     export C_INCLUDE_PATH="${zlib}/include"
     export LIBRARY_PATH="${zlib}/lib"
-    export LDFLAGS="-Wl,-rpath,${zlib}/lib -L${zlib}/lib"
-    export LD_LIBRARY_PATH="$LIBRARY_PATH"
+    export LDFLAGS="-L${zlib}/lib"
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \

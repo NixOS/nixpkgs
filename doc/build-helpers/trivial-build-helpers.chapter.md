@@ -3,6 +3,35 @@
 Nixpkgs provides a variety of wrapper functions that help build commonly useful derivations.
 Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers creates a derivation, but the arguments passed are different (usually simpler) from those required by `stdenv.mkDerivation`.
 
+## Arguments with finalAttrs {#trivial-builder-finalAttrs}
+
+In parameters that reference this section, you may either pass the value itself,
+or a function that produces it.
+When it's a function the argument value is [`finalAttrs`] from [`mkDerivation`].
+
+Typically both the *attributes* and *script* arguments support this, simultaneously if needed.
+
+::: {.example #ex-trivial-builder-finalAttrs}
+# Using `finalAttrs` in a build helper
+
+```nix
+runCommand "hi" (finalAttrs: { passthru.exe = "${finalAttrs.finalPackage}/bin/hi"; }) ''
+  mkdir -p $out/bin
+  substitute ${./hi.foo} $out/bin/hi --replace-fail "@foo@" ${lib.getExe foo}
+''
+```
+
+This creates a package with an executable script that's in the standard `bin/` directory,
+but also convenient to interpolate without reliance on `$PATH`, e.g assuming the result of the above is in binding `hi`:
+```nix
+''
+  echo START_GREETING
+  ${hi.exe} --rude
+  echo END_GREETING
+''
+```
+
+:::
 
 ## `runCommandWith` {#trivial-builder-runCommandWith}
 
@@ -23,8 +52,10 @@ runCommandWith :: {
   name :: name;
   stdenv? :: Derivation;
   runLocal? :: Bool;
-  derivationArgs? :: { ... };
-} -> String -> Derivation
+  derivationArgs? :: { ... } | finalAttrs@{ finalPackage :: Derivation, ... } -> { ... };
+}
+  -> (String | finalAttrs@{ finalPackage :: Derivation, ... } -> String)
+  -> Derivation
 ```
 
 ### Inputs {#trivial-builder-runCommandWith-Inputs}
@@ -47,10 +78,10 @@ runCommandWith :: {
 `stdenv` (Derivation)
 :   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`.
 
-`derivationArgs` (Attribute set)
+`derivationArgs` (Attribute set *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   Additional arguments for [`mkDerivation`](#sec-using-stdenv).
 
-`buildCommand` (String)
+`buildCommand` (String *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   Shell commands to run in the derivation builder.
 
     ::: {.note}
@@ -109,10 +140,10 @@ While the type signature(s) differ from [`runCommandWith`], individual arguments
 `name` (String)
 :   The derivation's name
 
-`derivationArgs` (Attribute set)
+`derivationArgs` (Attribute set *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   Additional parameters passed to [`mkDerivation`]
 
-`buildCommand` (String)
+`buildCommand` (String *or* [function from `finalAttrs`](#trivial-builder-finalAttrs))
 :   The command(s) run to build the derivation.
 
 
@@ -165,7 +196,7 @@ They are useful for creating files from Nix expressions, and are all implemented
 Each of these functions will cause a derivation to be produced.
 When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
 
-:::: {.note}
+::: {.note}
 Some of these functions will put the resulting files within a directory inside the [derivation output](https://nixos.org/manual/nix/stable/language/derivations#attr-outputs).
 If you need to refer to the resulting files somewhere else in a Nix expression, append their path to the derivation's store path.
 
@@ -190,7 +221,7 @@ writeShellScript "evaluate-my-file.sh" ''
   cat ${my-file}/share/my-file
 ''
 ```
-::::
+:::
 
 ### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
 
@@ -902,3 +933,6 @@ produces an output path `/nix/store/<hash>-runtime-references` containing
 
 but none of `hello`'s dependencies because those are not referenced directly
 by `hi`'s output.
+
+[`finalAttrs`]: #mkderivation-recursive-attributes
+[`mkDerivation`]: #sec-using-stdenv

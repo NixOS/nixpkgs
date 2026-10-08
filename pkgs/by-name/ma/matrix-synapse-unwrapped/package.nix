@@ -14,19 +14,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.153.0";
+  version = "1.161.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-2/KzRPUMfOOmI8j8WZsVU2ubNxidTb+FW0MZF+ktSSQ=";
+    hash = "sha256-gtTgILfGLYL0ASNz6m8MJhAidQ7kTGqdiMNP6R8bH5Q=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-Cu5bXS6BprXr/dwkNXDjcP9hOfqQddoC5BxOus4rteM=";
+    hash = "sha256-PHaFsLVUpeMSgHMg05blJUNgycDLbZUiZkWSPjDT1CM=";
   };
 
   build-system =
@@ -157,7 +157,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) matrix-synapse matrix-synapse-workers; };
+    tests = { inherit (nixosTests) matrix-synapse; };
     plugins = python3Packages.callPackage ./plugins { };
     inherit (python3Packages) python;
     updateScript = nix-update-script { };
@@ -165,7 +165,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://matrix.org";
-    changelog = "https://github.com/element-hq/synapse/releases/tag/v${version}";
+    changelog = "https://github.com/element-hq/synapse/blob/v${version}/CHANGES.md";
     description = "Matrix reference homeserver";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ sumnerevans ];

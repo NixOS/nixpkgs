@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tauri";
-  version = "2.11.2";
+  version = "2.11.4";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     tag = "tauri-cli-v${finalAttrs.version}";
-    hash = "sha256-BH/tQlrmCMAab5LqQ/xl9+A5nCnN8sk6mavvAkajYHM=";
+    hash = "sha256-bYkooyO8msGlewK4zU8NSgGQwAKzc5xfboMakugukBc=";
   };
 
-  cargoHash = "sha256-QX151ckeSxbZgbFO88zhsvnNnjZffLpR5dDp1Dv1Wlo=";
+  cargoHash = "sha256-S1t4GsBQ4/ktSvLitb8FufnXwZfwVc9r8z9tCLRDy8Y=";
 
   nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) [
     pkg-config

@@ -11,14 +11,17 @@
 {
   applytransforms = callPackage ./extensions/applytransforms { };
 
-  hexmap = stdenv.mkDerivation {
+  hexmap = stdenv.mkDerivation (finalAttrs: {
     pname = "hexmap";
-    version = "unstable-2023-01-26";
+    version = "3.0pre2";
+
+    strictDeps = true;
+    __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "lifelike";
       repo = "hexmapextension";
-      rev = "241c9512d0113e8193b7cf06b69ef2c4730b0295";
+      tag = finalAttrs.version;
       hash = "sha256-pSPAupp3xLlbODE2BGu1Xiiiu1Y6D4gG4HhZwccAZ2E=";
     };
 
@@ -41,7 +44,7 @@
       maintainers = [ lib.maintainers.raboof ];
       platforms = lib.platforms.all;
     };
-  };
+  });
   inkcut = (
     runCommand "inkcut-inkscape-plugin" { } ''
       mkdir -p $out/share/inkscape/extensions

@@ -1,28 +1,28 @@
 {
   lib,
   buildGoModule,
-  cloudflare-dynamic-dns,
   fetchFromGitHub,
-  testers,
+  versionCheckHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "cloudflare-dynamic-dns";
-  version = "4.4.5";
+  version = "4.5.9";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "zebradil";
     repo = "cloudflare-dynamic-dns";
     tag = finalAttrs.version;
-    hash = "sha256-TIun4EZuk4lgtNiNRA8P0x3+hkh3UFMVMUa75YecUk0=";
+    hash = "sha256-Z2NHq8iG6t+mlm8Sm0IecBwlFJQdE108/Sa0IXIg4J0=";
   };
 
-  vendorHash = "sha256-Pu73TKBgEgLhUktnY4o/fR4KBLT2s2CUGFSf2Jo3SbQ=";
+  vendorHash = "sha256-U1UTZIqa6bPfU8iLDBAV0291+jbUD5Mqhuc/HtFxznk=";
 
   subPackages = ".";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=main.version=${finalAttrs.version}"
     "-X=main.commit=nixpkg-${finalAttrs.version}"
     "-X=main.date=1970-01-01"
@@ -30,7 +30,8 @@ buildGoModule (finalAttrs: {
 
   env.CGO_ENABLED = 0;
 
-  passthru.tests.version = testers.testVersion { package = cloudflare-dynamic-dns; };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     changelog = "https://github.com/Zebradil/cloudflare-dynamic-dns/blob/${finalAttrs.version}/CHANGELOG.md";

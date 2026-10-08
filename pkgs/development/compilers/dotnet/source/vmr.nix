@@ -2,7 +2,7 @@
   llvmPackages_20,
   lib,
   fetchurl,
-  fetchpatch,
+  fetchpatch2,
   dotnetCorePackages,
   jq,
   curl,
@@ -43,11 +43,10 @@ let
   stdenv = llvmPackages.stdenv;
 
   inherit (stdenv)
-    isLinux
-    isDarwin
     buildPlatform
     targetPlatform
     ;
+  inherit (stdenv.hostPlatform) isLinux isDarwin;
   inherit (swiftPackages) swift;
 
   releaseManifest = lib.importJSON releaseManifestFile;
@@ -68,6 +67,9 @@ stdenv.mkDerivation {
   pname = "${baseName}-vmr";
   inherit version;
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   # TODO: fix this in the binary sdk packages
   preHook = lib.optionalString stdenv.hostPlatform.isDarwin ''
     addToSearchPath DYLD_LIBRARY_PATH "${_icu}/lib"
@@ -80,6 +82,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
+    # this gets copied into the tree, but we still need the sandbox profile
+    bootstrapSdk
+    # the propagated build inputs in llvm.dev break swift compilation
+    llvmPackages.llvm.out
     ensureNewerSourcesForZipFilesHook
     jq
     curl.bin
@@ -103,13 +109,12 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals isDarwin [
     getconf
+    xcbuild
+    swift
+    sigtool
   ];
 
   buildInputs = [
-    # this gets copied into the tree, but we still need the sandbox profile
-    bootstrapSdk
-    # the propagated build inputs in llvm.dev break swift compilation
-    llvmPackages.llvm.out
     zlib
     _icu
     openssl
@@ -119,10 +124,7 @@ stdenv.mkDerivation {
     lttng-ust_2_12
   ]
   ++ lib.optionals isDarwin [
-    xcbuild
-    swift
     krb5
-    sigtool
   ];
 
   # This is required to fix the error:
@@ -153,14 +155,17 @@ stdenv.mkDerivation {
     ++ lib.optional (
       lib.versionAtLeast version "10" && lib.versionOlder version "11"
     ) ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.patch
-    ++ lib.optional (lib.versionAtLeast version "11") ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+    ++ lib.optionals (lib.versionAtLeast version "11") [
+      ./Prefer-DOTNET_ROOT-over-directory-traversal-when-fin.2.patch
+    ]
     ++ lib.optional (lib.versionAtLeast version "11" && isDarwin) ./fix-cmake-darwin.patch;
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk
+    # we purposely rename global.json first, because it can break dotnet --version
+    mv global.json{,~}
     sdk_version=$(${bootstrapSdk}/bin/dotnet --version)
-    jq '(.tools.dotnet=$dotnet)' global.json --arg dotnet "$sdk_version" > global.json~
-    mv global.json{~,}
+    jq '.tools.dotnet=$dotnet | .sdk.version=$dotnet' global.json~ --arg dotnet "$sdk_version" > global.json
 
     patchShebangs $(find -name \*.sh -type f -executable)
 
@@ -178,6 +183,16 @@ stdenv.mkDerivation {
       -s //Project -t elem -n PropertyGroup \
       -s \$prev -t elem -n NoWarn -v '$(NoWarn);NU1603' \
       src/nuget-client/src/NuGet.Core/NuGet.CommandLine.XPlat/NuGet.CommandLine.XPlat.csproj
+
+    # AD0001 crashes intermittently in source-build-reference-packages with
+    # CSC : error AD0001: Analyzer 'Microsoft.NetCore.CSharp.Analyzers.Runtime.CSharpDetectPreviewFeatureAnalyzer' threw an exception of type 'System.NullReferenceException' with message 'Object reference not set to an instance of an object.'.
+    # https://github.com/dotnet/roslyn/issues/81645
+    xmlstarlet ed \
+      --inplace \
+      -s //Project -t elem -n PropertyGroup \
+      -s \$prev -t elem -n NoWarn -v '$(NoWarn);AD0001' \
+      src/source-build-assets/src/referencePackages/Directory.Build.props
+
   ''
   + lib.optionalString (lib.versionOlder version "10") ''
     # https://github.com/microsoft/ApplicationInsights-dotnet/issues/2848
@@ -372,7 +387,7 @@ stdenv.mkDerivation {
       dotnet nuget add source "${bootstrapSdk.artifacts}"
     ''
     + ''
-      ${prepScript} $prepFlags
+      ${prepScript} "''${prepFlags[@]}"
     ''
     + lib.optionalString (!hasRuntime) ''
       mkdir .shared-components
@@ -380,7 +395,7 @@ stdenv.mkDerivation {
       chmod +w -R .shared-components/
       # zip dependencies unzipped in bootstrap installPhase, so they can be found
       find .shared-components/assets . -name \*.tar -exec gzip -f --fast {} \;
-      buildFlags+=\ --with-shared-components\ "$PWD"/.shared-components
+      buildFlags+=(--with-shared-components "$PWD"/.shared-components)
     ''
     + ''
 
@@ -395,15 +410,22 @@ stdenv.mkDerivation {
   dontConfigureNuget = true; # NUGET_PACKAGES breaks the build
   dontUseCmakeConfigure = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/38991
-  # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-  LOCALE_ARCHIVE = lib.optionalString (
-    isLinux && glibcLocales != null
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  env = {
+    # https://github.com/NixOS/nixpkgs/issues/38991
+    # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+    LOCALE_ARCHIVE = lib.optionalString (
+      isLinux && glibcLocales != null
+    ) "${glibcLocales}/lib/locale/locale-archive";
 
-  # clang: error: argument unused during compilation: '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
-  # caused by separateDebugInfo
-  NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+    # clang: error: argument unused during compilation:
+    # '-Wa,--compress-debug-sections' [-Werror,-Wunused-command-line-argument]
+    # caused by separateDebugInfo
+    NIX_CFLAGS_COMPILE = "-Wno-unused-command-line-argument";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "11") {
+    # error : supplying the --target arm64-apple-macos14.0 != arm64-apple-darwin argument to a nix-wrapped compiler may not work correctly
+    NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING = "1";
+  };
 
   buildFlags = [
     "--with-packages"
@@ -438,7 +460,7 @@ stdenv.mkDerivation {
     version= \
     CLR_CC=$(command -v clang) \
     CLR_CXX=$(command -v clang++) \
-      ./build.sh $buildFlags
+      ./build.sh "''${buildFlags[@]}"
 
     runHook postBuild
   '';
@@ -528,11 +550,7 @@ stdenv.mkDerivation {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # build deadlocks intermittently on rosetta
-    # https://github.com/dotnet/runtime/issues/111628
-    broken = stdenv.hostPlatform.system == "x86_64-darwin";
   };
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   coredns,
   installShellFiles,
   isFull ? true,
@@ -15,19 +15,19 @@
   ],
 }:
 
-buildGoModule rec {
+buildGo127Module rec {
   inherit pname;
-  version = "2.12.3";
+  version = "2.14.4";
   tags = lib.optionals enableGateway [ "gateway" ];
 
   src = fetchFromGitHub {
     owner = "kumahq";
     repo = "kuma";
-    tag = version;
-    hash = "sha256-C/q3fCcMMnqjXeoO/t/YOKHLq8HDNfF+x75nCcjwwvE=";
+    tag = "v${version}";
+    hash = "sha256-bbksijrOdruF/ZHaxS16aEnm0dKo2XoReIkOfFGngeM=";
   };
 
-  vendorHash = "sha256-KgZYKopW+FOdwBIGxa2RLiEbefZ/1vAhcsWtcYhgdFs=";
+  vendorHash = "sha256-kzUD5WK95NBOtW0jSQ+gXLjVzUyr2u7kOneqAHCGZJc=";
 
   # no test files
   doCheck = false;
@@ -55,13 +55,13 @@ buildGoModule rec {
 
   ldflags =
     let
-      prefix = "github.com/kumahq/kuma/pkg/version";
+      prefix = "github.com/kumahq/kuma/v2/pkg/version";
     in
     [
       "-s"
       "-w"
       "-X ${prefix}.version=${version}"
-      "-X ${prefix}.gitTag=${version}"
+      "-X ${prefix}.gitTag=v${version}"
       "-X ${prefix}.gitCommit=${version}"
       "-X ${prefix}.buildDate=${version}"
     ];
@@ -69,7 +69,7 @@ buildGoModule rec {
   meta = {
     description = "Service mesh controller";
     homepage = "https://kuma.io/";
-    changelog = "https://github.com/kumahq/kuma/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/kumahq/kuma/releases/tag/v${version}";
     license = lib.licenses.asl20;
   };
 }

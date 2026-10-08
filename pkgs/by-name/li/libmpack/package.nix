@@ -15,6 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0rai5djdkjz7bsn025k5489in7r1amagw1pib0z4qns6b52kiar2";
   };
 
+  preBuild = lib.optionalString stdenv.hostPlatform.isStatic ''
+    mkdir -p build/release/src build/release/test/deps/tap
+  '';
+
   makeFlags = [
     "LIBTOOL=${libtool}/bin/libtool"
     "PREFIX=$(out)"

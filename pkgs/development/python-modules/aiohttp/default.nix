@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
   isPyPy,
   pythonOlder,
 
@@ -18,7 +17,6 @@
   # dependencies
   aiohappyeyeballs,
   aiosignal,
-  async-timeout,
   attrs,
   backports-zstd,
   frozenlist,
@@ -35,12 +33,12 @@
   blockbuster,
   freezegun,
   gunicorn,
-  isa-l,
   isal,
   proxy-py,
   pytest-codspeed,
   pytest-cov-stub,
   pytest-mock,
+  pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
   re-assert,
@@ -48,16 +46,16 @@
   zlib-ng,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiohttp";
-  version = "3.13.5";
+  version = "3.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
-    tag = "v${version}";
-    hash = "sha256-bAP1/a2COHbe+39KY3GHXSo1Iq9x9xX8O2mLhmFlMlE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n8LH34N9V2Smqc23q/49gqRbP0U1glJAYiyPEGFtEmM=";
   };
 
   postPatch = ''
@@ -68,6 +66,10 @@ buildPythonPackage rec {
     # don't install Cython using pip
     substituteInPlace Makefile \
       --replace-fail "cythonize: .install-cython" "cythonize:"
+
+    # don't depend on coverage for tests
+    substituteInPlace setup.cfg \
+      --replace-fail "ignore:Couldn't import C tracer:coverage.exceptions.CoverageWarning" ""
   '';
 
   build-system = [
@@ -95,7 +97,7 @@ buildPythonPackage rec {
     propcache
     yarl
   ]
-  ++ optional-dependencies.speedups;
+  ++ finalAttrs.passthru.optional-dependencies.speedups;
 
   optional-dependencies.speedups = [
     aiodns
@@ -109,12 +111,12 @@ buildPythonPackage rec {
     blockbuster
     freezegun
     gunicorn
-    # broken on aarch64-darwin
-    (if lib.meta.availableOn stdenv.hostPlatform isa-l then isal else null)
+    isal
     proxy-py
     pytest-codspeed
     pytest-cov-stub
     pytest-mock
+    pytest-timeout
     pytest-xdist
     pytestCheckHook
     re-assert
@@ -163,10 +165,10 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    changelog = "https://docs.aiohttp.org/en/${src.tag}/changes.html";
+    changelog = "https://docs.aiohttp.org/en/${finalAttrs.src.tag}/changes.html";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = lib.licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

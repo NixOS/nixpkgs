@@ -103,6 +103,9 @@ in
               ];
               ignorePatterns = [
                 "notB"
+                # Just test that an apostrophe doesn't break the curl config
+                # commands. See: https://github.com/NixOS/nixpkgs/issues/554744
+                "apostrophe'"
               ];
             };
           };

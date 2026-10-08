@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "assertpy";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "assertpy";
     repo = "assertpy";
-    rev = version;
-    sha256 = "0hnfh45cmqyp7zasrllwf8gbq3mazqlhhk0sq1iqlh6fig0yfq2f";
+    tag = finalAttrs.version;
+    hash = "sha256-TmDnwYvOQIpjwBpMCCn+qg68HnKc0qzVP9fjygqBzkI=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

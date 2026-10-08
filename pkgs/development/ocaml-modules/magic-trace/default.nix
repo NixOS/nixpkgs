@@ -56,7 +56,7 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.alizter ];
     homepage = "https://github.com/janestreet/magic-trace";
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "magic-trace";
   };
 })

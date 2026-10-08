@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texmaker";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchurl {
     url = "https://www.xm1math.net/texmaker/texmaker-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-uMI13wzY/XcUzXDTte42MWOwJUqd6pGAeBuPDi5GyvY=";
+    hash = "sha256-Jey7FtFW7RUosxUR03ydp4WKLe8yi4fxf8h39X9ROc8=";
   };
 
   patches = [

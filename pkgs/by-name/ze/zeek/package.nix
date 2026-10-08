@@ -4,6 +4,7 @@
   callPackage,
   fetchurl,
   cmake,
+  civetweb,
   flex,
   bison,
   openssl,
@@ -19,6 +20,7 @@
   gettext,
   coreutils,
   ncurses,
+  zeromq,
 }:
 
 let
@@ -30,11 +32,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeek";
-  version = "7.2.2";
+  version = "8.2.2";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Kx3ySPlBmaFoThxGDWTPHF5J10ccK1YvlCrF++mAWJM=";
+    hash = "sha256-o7bWDva+w+sSgY/jLK7HB/m21jBT6u7pQuTsmvZNhiw=";
   };
 
   strictDeps = true;
@@ -54,12 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     broker
+    civetweb
     curl
     gperftools
     libmaxminddb
     libpcap
     ncurses
     openssl
+    zeromq
     zlib
     python
   ]
@@ -73,6 +77,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs ./ci/collect-repo-info.py
     patchShebangs ./auxil/spicy/scripts
+
+    # Broker statically includes prometheus-cpp, but uses nixpkgs' shared civetweb.
+    substituteInPlace cmake/FindPrometheusCpp.cmake \
+      --replace-fail \
+        '#set(zeekdeps ''${zeekdeps} prometheus-cpp::core prometheus-cpp::pull)' \
+        $'find_package(civetweb CONFIG REQUIRED)\nset(zeekdeps ''${zeekdeps} civetweb::civetweb-cpp)'
   '';
 
   cmakeFlags = [

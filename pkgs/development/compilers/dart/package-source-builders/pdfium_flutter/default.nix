@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  pdfium-binaries,
+  pdfium,
 }:
 
 { version, src, ... }:
@@ -13,7 +13,8 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString (lib.versionOlder version "0.2.0") ''
     substituteInPlace linux/CMakeLists.txt \
-      --replace-fail "\''${PDFIUM_DIR}/\''${PDFIUM_RELEASE}" "${pdfium-binaries}"
+      --replace-fail "set(PDFIUM_RELEASE_DIR \''${PDFIUM_DIR}/\''${PDFIUM_RELEASE})" "set(PDFIUM_RELEASE_DIR ${lib.getLib pdfium})" \
+      --replace-fail "file(COPY \''${PDFIUM_RELEASE_DIR}/include DESTINATION \''${PDFIUM_LIBS_DIR})" "file(COPY ${lib.getDev pdfium}/include DESTINATION \''${PDFIUM_LIBS_DIR})"
   '';
 
   installPhase = ''

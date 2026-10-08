@@ -18,7 +18,6 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     pygobject3
-    dbus-python
   ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];

@@ -24,7 +24,7 @@ let
   version = "1.3.4275.94";
   src = fetchFromGitHub {
     owner = "pritunl";
-    repo = "pritunl-client-electron";
+    repo = "pritunl-client";
     rev = version;
     sha256 = "sha256-a1arRI4qQy5niKV8JAyusAjheMa/LtEXPZGhngsH+TU=";
   };

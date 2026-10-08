@@ -10,10 +10,11 @@
   cubeb,
   enet,
   fetchFromGitea,
-  fetchpatch,
+  fetchFromGitHub,
   fetchurl,
   ffmpeg-headless,
-  fmt,
+  # FIXME: unpin when upstream supports fmt 12
+  fmt_11,
   frozen-containers,
   gamemode,
   glslang,
@@ -43,6 +44,7 @@
   zstd,
   writeScript,
   callPackage,
+  wrapGAppsHook3,
 }:
 
 let
@@ -53,30 +55,33 @@ let
   };
 
   nx_tzdb = callPackage ./nx_tzdb.nix { };
+
+  # eden broken by latest httplib version bump
+  # upstream likely not interested in fixes, actively looking to remove the dependency (https://git.eden-emu.dev/eden-emu/eden/issues/4194)
+  # pin httplib for now, hopefully can entirely drop in next eden release
+  httplib' = httplib.overrideAttrs (finalAttrs: {
+    version = "0.30.2";
+
+    src = fetchFromGitHub {
+      owner = "yhirose";
+      repo = "cpp-httplib";
+      rev = "v${finalAttrs.version}";
+      hash = "sha256-psVyn14QHMXG/x9SOOiR7ZBt8dHqa2A/w92WQQDukKM=";
+    };
+  });
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eden";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitea {
     domain = "git.eden-emu.dev";
     owner = "eden-emu";
     repo = "eden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Q/tJP6AHAtW9AXn9G+8dF4oTlKDfNHN4cuTKXtYq0T8=";
+    hash = "sha256-79/JmIRWysoc3psJqMFyiNc2gjTY4VhJfdNaiTvisMk=";
   };
-
-  patches = [
-    (fetchpatch {
-      # httplib uses `SameMinorVersion` compatibility for its CMake files which
-      # makes it reject the nixpkgs version which is newer
-      name = "revert-httplib-version-specification.patch";
-      url = "https://git.eden-emu.dev/eden-emu/eden/commit/9c13c71da8dcc37d03fc53bc3bc16978a65fd8f2.patch";
-      hash = "sha256-g7q40BDb9TKE8eudBS7Smajq5EYCzxSemZgsl2ialJo=";
-      revert = true;
-    })
-  ];
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -89,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     qt6.qttools
     qt6.wrapQtAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -97,10 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     cubeb
     enet
     ffmpeg-headless
-    fmt
+    fmt_11
     frozen-containers
     gamemode
-    httplib
+    httplib'
     kdePackages.quazip
     libopus
     libusb1
@@ -214,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       cc0
 
       # Vendored/incorporated libs
-      apsl20
+      asl20
       llvm-exception
       lib.licenses.boost
       bsd2

@@ -152,7 +152,7 @@ lib.makeScope pkgs.newScope (
 
     farbfeld = pluginDerivation {
       pname = "farbfeld";
-      version = "unstable-2019-08-12";
+      version = "0-unstable-2019-08-12";
 
       src = fetchFromGitHub {
         owner = "ids1024";
@@ -209,7 +209,7 @@ lib.makeScope pkgs.newScope (
         broken = gimp.apiVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
-        license = with lib.licenses; [ gpl3Plus ];
+        license = lib.licenses.gpl3Plus;
       };
     };
 
@@ -243,13 +243,13 @@ lib.makeScope pkgs.newScope (
         broken = lib.versionOlder gimp.version "3";
         description = "Suite of gimp plugins for texture synthesis";
         homepage = "https://github.com/bootchk/resynthesizer";
-        license = [ lib.licenses.gpl3Plus ];
+        license = lib.licenses.gpl3Plus;
       };
     };
 
     texturize = pluginDerivation {
       pname = "texturize";
-      version = "2.2+unstable=2021-12-03";
+      version = "2.2-unstable-2021-12-03";
       src = fetchFromGitHub {
         owner = "lmanul";
         repo = "gimp-texturize";
@@ -332,7 +332,7 @@ lib.makeScope pkgs.newScope (
     };
 
     gimplensfun = pluginDerivation {
-      version = "unstable-2018-10-21";
+      version = "0.2.4-unstable-2018-10-21";
       pname = "gimplensfun";
 
       src = fetchFromGitHub {
@@ -346,7 +346,7 @@ lib.makeScope pkgs.newScope (
         with pkgs;
         [
           lensfun
-          gexiv2
+          gexiv2_0_10
         ]
         ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
       );

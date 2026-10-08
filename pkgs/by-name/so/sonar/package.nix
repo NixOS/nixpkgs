@@ -8,13 +8,13 @@
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   pname = "sonar";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "raskrebs";
     repo = "sonar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ucOIFws3fo94o5ziJDn8ldgWkpAuiUqW8A+MQdPNy3c=";
+    hash = "sha256-CQtr+22B2a1svX3KnDdGDXQRA1gyYI0uGF8DodvCfPE=";
   };
 
   vendorHash = "sha256-komX1AmHt2NoF1x6xsNa2RFkfVzOXfYEMPhT0zwMxjw=";

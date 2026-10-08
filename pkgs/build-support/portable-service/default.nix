@@ -38,7 +38,7 @@
   contents ? [ ],
 
   # mksquashfs options
-  squashfsTools ? pkgs.squashfsTools,
+  squashfsTools ? pkgs.squashfs-tools,
   squash-compression ? "xz -Xdict-size 100%",
   squash-block-size ? "1M",
 }:

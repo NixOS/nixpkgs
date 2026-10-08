@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "deja";
-  version = "0.2.7";
+  version = "0.4.2";
   __structuredAttrs = true;
   src = fetchFromGitHub {
     owner = "Giammarco-Ferranti";
     repo = "deja";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HHD9x7oM9b0Bt9QhtMhirwobW/o/zjiCVPCFKTn838g=";
+    hash = "sha256-9AzqGDZLlv5BxpuuV3JUfJxW5a2ljZakVHnegQgdO+0=";
   };
 
-  vendorHash = "sha256-KmLdMK94cGOXMPJwWS6NgLB5OiNmJbszHdnLzauqJm8=";
+  vendorHash = "sha256-XHcZUtx82zT3yPCYzJG+a7zfARPW4clbMn77/4luskw=";
 
   ldflags = [
     "-s"
@@ -24,9 +24,9 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  doCheck = true;
+  doInstallCheck = true;
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 

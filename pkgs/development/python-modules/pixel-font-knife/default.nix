@@ -6,14 +6,13 @@
   pytestCheckHook,
   nix-update-script,
   uv-build,
-  pypng,
   unidata-blocks,
   pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "pixel-font-knife";
-  version = "0.0.21";
+  version = "0.0.25";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,13 +21,12 @@ buildPythonPackage rec {
     owner = "TakWolf";
     repo = "pixel-font-knife";
     tag = version;
-    hash = "sha256-f4jaLEPXl8oo1olWBeymMn5a8Tyl07h1TW4pZ5OItZU=";
+    hash = "sha256-KQN4FQf6PsNi+NQW0BOD4tuK4G5LkUgP6Cr2drUpLO0=";
   };
 
   build-system = [ uv-build ];
 
   dependencies = [
-    pypng
     unidata-blocks
     pyyaml
   ];

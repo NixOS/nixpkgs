@@ -32,8 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    name = "gnome-robots-${finalAttrs.version}";
+    inherit (finalAttrs) pname version src;
     hash = "sha256-T3o4zlRLQzrLexSDI9A98bubehYFwJY1zBVUUNmrc9o=";
   };
 

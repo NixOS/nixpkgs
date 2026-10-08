@@ -1,11 +1,13 @@
-{ hostPkgs, ... }:
+{ hostPkgs, lib, ... }:
 {
   name = "nixos-rebuild-target-host";
 
   # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
   #        make it a _small package instead, then remove pkgsReadOnly = false;.
   node.pkgsReadOnly = false;
-
+  defaults = {
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
+  };
   nodes = {
     deployer =
       { lib, pkgs, ... }:
@@ -116,6 +118,7 @@
             { lib, modulesPath, ... }: {
               imports = [
                 (modulesPath + "/virtualisation/qemu-vm.nix")
+                (modulesPath + "/virtualisation/guest-networking-options.nix")
                 (modulesPath + "/testing/test-instrumentation.nix")
                 (modulesPath + "/../tests/common/user-account.nix")
                 (lib.modules.importJSON ./target-configuration.json)

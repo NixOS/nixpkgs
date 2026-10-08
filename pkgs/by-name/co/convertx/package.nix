@@ -1,12 +1,12 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   fetchFromGitHub,
 
   # Build deps
   bun,
   tailwindcss_4,
-  typescript,
+  typescript_7,
   makeBinaryWrapper,
 
   # Runtime deps
@@ -43,11 +43,12 @@ let
     hash = pin.srcHash;
   };
 
-  node_modules = stdenv.mkDerivation (finalAttrs: {
+  node_modules = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "${pname}-node_modules";
     inherit version src;
 
     dontConfigure = true;
+    dontFixup = true;
 
     nativeBuildInputs = [
       bun
@@ -70,17 +71,24 @@ let
       cp package.json $out/lib
     '';
 
-    outputHash = pin."${stdenv.system}";
+    outputHash = pin."${stdenvNoCC.system}";
     outputHashMode = "recursive";
   });
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   inherit pname version src;
+
+  # tsconfig.json:13:5 - error TS5102: Option 'downlevelIteration' has been removed. Please remove it from your configuration.
+  # https://github.com/C4illin/ConvertX/pull/615
+  postPatch = ''
+    substituteInPlace tsconfig.json \
+      --replace-fail '"downlevelIteration": true,' ""
+  '';
 
   nativeBuildInputs = [
     makeBinaryWrapper
     tailwindcss_4
-    typescript
+    typescript_7
   ];
 
   dontConfigure = true;
@@ -144,7 +152,10 @@ stdenv.mkDerivation {
     description = "Self-hosted online file converter";
     homepage = "https://github.com/C4illin/ConvertX/tree/main";
     license = lib.licenses.agpl3Only;
-    platforms = lib.platforms.linux;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     changelog = "https://github.com/C4illin/ConvertX/blob/main/CHANGELOG.md";
     mainProgram = "convertx";
     maintainers = with lib.maintainers; [

@@ -13,12 +13,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "itkwasm";
-  version = "1.0b195";
+  version = "1.0b201";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-1OQ0SieMEcrWiIgWT1dQxXdk9lCbWD+1xJ0jfIr0isU=";
+    hash = "sha256-f1DRcDlGW0y8VwfIrCEWaUIhN3zrgsbWsK/SJRbtbqM=";
   };
 
   build-system = [ hatchling ];

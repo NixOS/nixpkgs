@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nullfsvfs";
-  version = "0.26";
+  version = "0.27";
 
   src = fetchFromGitHub {
     owner = "abbbi";
     repo = "nullfsvfs";
     rev = "v${version}";
-    sha256 = "sha256-gEvkl8IKekuiQjY+TVaC72vJ310k2A/kXfR5mxdvPpc=";
+    sha256 = "sha256-BvixSZN9GqFS4llaiKHfkLb21+qG74YtyNb8bUP0jdU=";
   };
 
   hardeningDisable = [ "pic" ];

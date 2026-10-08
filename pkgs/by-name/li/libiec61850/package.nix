@@ -10,16 +10,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libiec61850";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "mz-automation";
     repo = "libiec61850";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9UPXuZkAxr3SSjPN3VZRr6Hsz0GyDVJLUZEM+zZruik=";
+    hash = "sha256-KqgQxy/4vwFDkr9tVCVWDmbNuGivN6knf7rNHS+DTxc=";
   };
 
   separateDebugInfo = true;
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/CMakeLists.txt --replace-fail "-lrt" ""
+    substituteInPlace hal/CMakeLists.txt --replace-fail "-lrt" ""
+  '';
 
   cmakeFlags = lib.optionals withTls [
     "-DCONFIG_USE_EXTERNAL_MBEDTLS_DYNLIB=ON"

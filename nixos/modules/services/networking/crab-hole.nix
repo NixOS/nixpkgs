@@ -35,6 +35,12 @@ in
 
       package = lib.mkPackageOption pkgs "crab-hole" { };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Open ports in the firewall for crab-hole's DNS server.";
+      };
+
       supplementaryGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
@@ -169,6 +175,11 @@ in
         Restart = "on-failure";
         RestartSec = 1;
       };
+    };
+
+    networking.firewall = lib.mkIf cfg.openFirewall {
+      allowedUDPPorts = [ 53 ];
+      allowedTCPPorts = [ 53 ];
     };
   };
 

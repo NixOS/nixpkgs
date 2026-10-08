@@ -3,6 +3,7 @@
   stdenv,
   config,
   fetchFromGitHub,
+  symlinkJoin,
   cmake,
   llvmPackages, # openmp
   withMkl ? false,
@@ -18,6 +19,10 @@
   openblas,
   withRuy ? true,
 
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
+  rocmGpuTargets ? (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets or [ ]),
+
   # passthru tests
   libretranslate,
   wyoming-faster-whisper,
@@ -25,18 +30,49 @@
 
 let
   stdenv' = if withCUDA then cudaPackages.backendStdenv else stdenv;
+
+  rocmLibs = [
+    rocmPackages.hiprand
+    rocmPackages.hipblas
+    rocmPackages.hipcub
+    rocmPackages.rocrand
+    rocmPackages.rocblas
+    rocmPackages.rocprim
+    rocmPackages.rocthrust
+    rocmPackages.rocm-device-libs
+    rocmPackages.rocm-comgr
+    rocmPackages.rocm-runtime
+    rocmPackages.rocm-core
+  ];
+  rocmtoolkit_joined = symlinkJoin {
+    name = "rocm-merged";
+
+    paths = rocmLibs;
+  };
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
-  version = "4.7.2";
+  version = "4.8.2";
+
+  __strutcturedAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jtOfMrC5kFKQN4eFEZeawo0blWHbpMu+peM3XtTSf5w=";
+    hash = "sha256-OuN7GTfzqsALu8Qgx7GNERlyCq3cTxhpZo8UA/yDekw=";
   };
+
+  patches = [
+    # ctranslate2 uses a deprecated cmake FindCUDA cuda_select_nvcc_arch_flags()
+    # function. This function uses a regex that can not match two-digit
+    # capabilities such as 10.0 and 12.1, and it's default "Auto" fallback still
+    # targets compute_53, which CUDA 13 no longer supports, so the patch removes
+    # its arch selection, and we set CUDA_NVCC_FLAGS ourselves below.
+    ./cuda-arch-gencode-flags.patch
+  ];
 
   # Fix CMake 4 compatibility
   postPatch = ''
@@ -58,6 +94,9 @@ stdenv'.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withCUDA [
     cudaPackages.cuda_nvcc
+  ]
+  ++ lib.optionals rocmSupport [
+    rocmPackages.clr
   ];
 
   cmakeFlags = [
@@ -71,6 +110,17 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_OPENBLAS" withOpenblas)
     (lib.cmakeBool "WITH_RUY" withRuy)
     (lib.cmakeBool "WITH_MKL" withMkl)
+    (lib.cmakeBool "WITH_HIP" rocmSupport)
+  ]
+  ++ lib.optionals withCUDA [
+    (lib.cmakeFeature "CUDA_NVCC_FLAGS" (lib.concatStringsSep ";" cudaPackages.flags.gencode))
+  ]
+  ++ lib.optionals rocmSupport [
+    (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
+    (lib.cmakeFeature "CMAKE_C_COMPILER" "amdclang")
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "amdclang++")
+    (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
+    (lib.cmakeFeature "GPU_TARGETS" (builtins.concatStringsSep ";" rocmGpuTargets))
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "WITH_ACCELERATE" true)
@@ -79,12 +129,16 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_CPU_DISPATCH" false)
   ];
 
+  env = lib.optionalAttrs rocmSupport {
+    ROCM_PATH = lib.optionalString rocmSupport rocmtoolkit_joined;
+  };
+
   buildInputs =
     lib.optionals withMkl [
       mkl
     ]
     ++ lib.optionals withCUDA [
-      cudaPackages.cuda_cccl # <nv/target> required by the fp16 headers in cudart
+      cudaPackages.cccl # <nv/target> required by the fp16 headers in cudart
       cudaPackages.cuda_cudart
       cudaPackages.libcublas
       cudaPackages.libcurand
@@ -92,6 +146,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals (withCUDA && withCuDNN) [
       cudaPackages.cudnn
     ]
+    ++ lib.optionals rocmSupport rocmLibs
     ++ lib.optionals withOneDNN [
       onednn
     ]
@@ -119,6 +174,6 @@ stdenv'.mkDerivation (finalAttrs: {
       hexa
       misuzu
     ];
-    broken = !(withCuDNN -> withCUDA);
+    broken = !(withCuDNN -> withCUDA) || withCUDA && rocmSupport;
   };
 })

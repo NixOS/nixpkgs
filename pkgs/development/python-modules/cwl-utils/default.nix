@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cwl-utils";
-  version = "0.41";
+  version = "0.44";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwl-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-78Kx+LCEcPE7qsV6MFtfSY6tVj5KZhifFOib7beCU2c=";
+    hash = "sha256-SKMyzJEmQdnRlrHnvXqsSk2zRW5eQf0QyFdva5hueLg=";
   };
 
   build-system = [ hatchling ];

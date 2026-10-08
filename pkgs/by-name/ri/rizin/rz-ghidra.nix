@@ -11,17 +11,18 @@
   enableCutterPlugin ? true,
   cutter,
   qt6,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rz-ghidra";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "rizinorg";
     repo = "rz-ghidra";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uI0EnuHAuyrXYKDijh5Tg/WcQ/5yyZnW3d5MMHZxnqA=";
+    hash = "sha256-R9wPmt2WoK4wlTXb0JUX+0Fk8JQgGagb8vZQmjxLXn8=";
     fetchSubmodules = true;
   };
 
@@ -30,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pugixml
     rizin
+    zlib
   ]
   ++ lib.optionals enableCutterPlugin [
     cutter

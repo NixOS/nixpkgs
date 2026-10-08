@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu-lint";
-  version = "1.1.2";
+  version = "1.3.0";
 
   src = fetchFromCodeberg {
     owner = "wvhulle";
     repo = "nu-lint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zALlwEEzk6IapnLbqn9v/HV5QC9dvJi7VzEWgCQJT2s=";
+    hash = "sha256-QkOJFjqZtAo4GqZ/khbx0MZQDB0Hh8S3H9r4ln5AxqM=";
   };
 
-  cargoHash = "sha256-l1vbNnKqFFOUUPQJZgNajNNGYAHtd7nozF7+YQmLN/k=";
+  cargoHash = "sha256-FA9C7Li4wtXvI8+jDTmdFjqsop6cvGNPByRpOfvQPzw=";
 
   nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     # Avoids "couldn't find any valid shared libraries matching: ['libclang.dylib']" error on darwin in sandbox mode.

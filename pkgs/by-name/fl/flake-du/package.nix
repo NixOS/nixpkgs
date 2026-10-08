@@ -4,7 +4,7 @@
   fetchgit,
 }:
 let
-  version = "0.1.0";
+  version = "0.2.0";
 in
 rustPlatform.buildRustPackage {
   pname = "flake-du";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage {
   src = fetchgit {
     url = "https://github.com/kmein/flake-du";
     rev = "v${version}";
-    sha256 = "sha256-+YfQRi6QE4xNUcIcEc9HWIbnin6GCVp4SYrjvBwksys=";
+    hash = "sha256-mwSZvAEs4RKzIKErnxPhK7J7yhqo1ibDRy0FXoKlsHY=";
   };
 
   cargoHash = "sha256-DYVT9jM9WcgoVSOnoUIWWR9EmNywR1f4xZOAzkbNkCk=";

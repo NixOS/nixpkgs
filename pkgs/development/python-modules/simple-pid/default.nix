@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     "simple_pid"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     pytestCheckHook

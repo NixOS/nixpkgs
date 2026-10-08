@@ -68,6 +68,7 @@ let
 in
 {
   name = "${rancherPackage.name}-multi-node";
+  interactive.sshBackdoor.enable = true;
 
   nodes = {
     server =

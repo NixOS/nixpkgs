@@ -43,11 +43,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.42";
+  version = "2.42.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-NFKyYLuqd11udJrDuyIRF4UAP8H0RJcAJcjaJt+nWOk=";
+    hash = "sha256-Zqx8DnJSeOsrA54xBPLJERk0HZQbQbrHooXGlflAvVc=";
   };
 
   # Note: fetchpatch/fetchpatch2 cause infinite recursion with util-linuxMinimal.
@@ -58,37 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
 
-    # Fix compile of 2.42+ on Darwin.
-    # https://lore.kernel.org/util-linux/CAEUYr6ZjVX1bd-xcBGtFN_ZYwQnXDYsw7d1-7sTpF2BbgfrR+g@mail.gmail.com/T/#u
-    # Different fix than originally proposed; we just don't compile that file on Darwin now and the previous patch was able to be reverted.
-    # See: https://github.com/util-linux/util-linux/commit/6ccf20d2fd8e45eed70bd1b915c0d16f646bf133
-    (fetchurl {
-      name = "pidfd-utils-linux-only.patch";
-      url = "https://github.com/util-linux/util-linux/commit/afdade4a3d8e4e6070343c5576470c575719b81f.patch";
-      hash = "sha256-EnHsIhU6jaS4Qm+kQMP2an7Ay08nKbIO0MbU7Y2pwkU=";
-    })
+    # Build fix. Can be removed in 2.42.4 (or newer).
+    # https://github.com/util-linux/util-linux/commit/a323dddbcd1ed05a10e7e870b3e1a48b4ed44a43
+    ./libmount-build-fix.patch
 
-    # Musl does not define AT_HANDLE_FID, hard-code it if left undefined.
-    # https://github.com/util-linux/util-linux/pull/4203
-    (fetchurl {
-      name = "fix-musl-nsenter.patch";
-      url = "https://github.com/util-linux/util-linux/commit/000aff333e5c3a23967280cb0d6451fbbfc9c91b.patch";
-      hash = "sha256-6K3jRr2RsAfHnweBOlMn2F0h8hD3xjZobJ1pSlCQHw8=";
-    })
-
-    # `script` is broken with options after non-option args and has new memory leaks
-    # https://lore.kernel.org/util-linux/adi3573O-5gr9m2q@per.namespace.at/T/#t
-    # https://github.com/util-linux/util-linux/pull/4201
-    (fetchurl {
-      name = "script-fix-backwards-compat.patch";
-      url = "https://github.com/util-linux/util-linux/commit/70507ab9eaed10b8dd77b77d4ea25c11ee726bed.patch";
-      hash = "sha256-PpFtv8XOK36npCVSvdgKcxGQmkJtgdyMmlN+4yQuWS8=";
-    })
-    (fetchurl {
-      name = "script-fix-memory-leaks.patch";
-      url = "https://github.com/util-linux/util-linux/commit/2f1c12a49500ca7ed9c3d5e80664c1622925456b.patch";
-      hash = "sha256-9ZwA6sZwM1rQDoxV5x1KHLWxsFpI5CGWJqubtdEHj/I=";
-    })
+    # Fixes incomplete security fix in 2.42.3:
+    # https://github.com/util-linux/util-linux/commit/286dd3ff41526b582ef48830de239dffbaa61f90
+    ./CVE-2026-78408.patch
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -203,6 +179,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals ncursesSupport [ ncurses ]
   ++ lib.optionals systemdSupport [ systemdLibs ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postInstall = ''
@@ -261,20 +239,27 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/v${finalAttrs.version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
-    license = with lib.licenses; [
-      gpl2Only
-      gpl2Plus
-      gpl3Plus
-      lgpl21Plus
-      bsd3
-      bsdOriginalUC
-      publicDomain
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl1Plus
+        gpl2Only
+        gpl2Plus
+        gpl3Plus
+        lgpl21Plus
+        mit
+        bsd2
+        bsd3
+        eupl12
+        publicDomain
+      ];
     maintainers = with lib.maintainers; [ numinit ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;

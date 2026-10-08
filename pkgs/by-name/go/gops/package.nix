@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   writableTmpDirAsHomeHook,
   installShellFiles,
 }:
@@ -19,6 +20,8 @@ buildGoModule (finalAttrs: {
   };
 
   vendorHash = "sha256-mumni9LEUhnJz6RYp1MjjFQd9iXe7V0RjXR+S266WaE=";
+
+  passthru.updateScript = nix-update-script { };
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

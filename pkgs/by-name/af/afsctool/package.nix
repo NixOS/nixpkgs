@@ -9,14 +9,14 @@
   sparsehash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "afsctool";
   version = "1.7.3";
 
   src = fetchFromGitHub {
     owner = "RJVB";
     repo = "afsctool";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     gitConfigFile = builtins.toFile "gitconfig" ''
       [url "https://github.com/"]
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.darwin;
     homepage = "https://github.com/RJVB/afsctool";
   };
-}
+})

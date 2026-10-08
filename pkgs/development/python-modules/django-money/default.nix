@@ -12,14 +12,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "django-money";
-  version = "3.6.0";
+  version = "3.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-money";
     repo = "django-money";
     tag = finalAttrs.version;
-    hash = "sha256-VxAKTtrbDMRhiLxqjVYt7pLGl0sy9F1iwswP/hxQ01k=";
+    hash = "sha256-UHqtKav/tot+fSA5ey2R4WdheUWuDBXdOXDgFDXgjLM=";
   };
 
   build-system = [ setuptools ];

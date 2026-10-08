@@ -55,7 +55,7 @@ parser.add_argument("-v", "--verbose", action="count", default=0)
 
 def parse_derivation(
     derivation_path: PathString, nix_exe: PathString | None
-) -> dict:
+) -> dict | None:
     """Extract the content of a .drv file into a JSON dict"""
     if not Path(derivation_path).exists():
         logging.error(
@@ -63,6 +63,7 @@ def parse_derivation(
             " Cf. https://github.com/NixOS/nix/issues/9272"
             " Exiting the hook",
         )
+        return None
 
     proc = subprocess.run(
         [
@@ -86,7 +87,8 @@ def parse_derivation(
             f". Expected JSON, observed: {output_str}",
         )
         logging.error(textwrap.indent(output_str, prefix=" " * 4))
-        logging.info("Exiting the nix-required-binds hook")
+        logging.info("Exiting the nix-required-mounts hook")
+        return None
 
     [canon_drv_path] = parsed_drv.keys()
 
@@ -291,7 +293,10 @@ def entrypoint() -> None:
     with open(args.patterns, "r") as f:
         patterns = json.load(f)
 
-    parsed_drv: dict = parse_derivation(args.derivation_path, args.nix_exe)
+    parsed_drv: dict | None = parse_derivation(args.derivation_path, args.nix_exe)
+    if parsed_drv is None:
+        # Details are already logged in parse_derivation
+        return
     features: set[str] = get_required_system_features(parsed_drv)
     required_patterns: AllowedPatterns = patterns_for_features(
         patterns, features

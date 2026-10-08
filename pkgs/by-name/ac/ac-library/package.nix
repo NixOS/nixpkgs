@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  # We don't need -fno-strict-overflow because it will break UBSanitize's overflow check especially when the operation number is static definded.
+  # We don't need -fno-strict-overflow because it will break UBSanitize's overflow check especially when the operation number is static defined.
   hardeningDisable = [ "strictoverflow" ];
 
   env = {

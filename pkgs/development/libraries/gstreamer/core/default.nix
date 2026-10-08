@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
-  version = "1.26.11";
+  version = "1.28.6";
 
   outputs = [
     "bin"
@@ -52,13 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LgvRktBDjqYGpvdqlcjhZUIWdlb/7Cwrw6r27gg3+/Y=";
+    hash = "sha256-Yra58K0xR6bdZCCsZKkRgLFOmQaVvd01O5YEFhHQUso=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
+  __structuredAttrs = true;
   strictDeps = true;
   nativeBuildInputs = [
     meson
@@ -144,7 +145,27 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
-    updateScript = directoryListingUpdater { };
+    updateScript = directoryListingUpdater { odd-unstable = true; };
+
+    # From around version 1.12.0 on, there is a single CPE identifier for all of GStreamer.
+    # FIXME: Should gst-plugins-rs follow the main GStreamer versioning or its own deviating version?
+    gstreamerCpeParts =
+      let
+        commonGstreamerVersion = finalAttrs.version;
+      in
+      version:
+      lib.warnIf (version != commonGstreamerVersion)
+        ''
+          Detected mismatch between common GStreamer version (${commonGstreamerVersion}) and version used for gstreamerCpeParts (${version}).
+          Note that GStreamer uses a common CPE identifier for its components.
+          Having a deviating version is unusual, but may occur e.g. if overriding a subset of GStreamer libraries.
+        ''
+        (
+          lib.meta.cpeFullVersionWithVendor "gstreamer" version
+          // {
+            product = "gstreamer";
+          }
+        );
   };
 
   meta = {
@@ -158,5 +179,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       tmarkus
     ];
+    identifiers.cpeParts = finalAttrs.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

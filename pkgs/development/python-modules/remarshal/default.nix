@@ -9,10 +9,9 @@
   # propagates
   cbor2,
   colorama,
-  python-dateutil,
-  pyyaml,
-  rich-argparse,
   ruamel-yaml,
+  starlark,
+  termcolor,
   tomli,
   tomlkit,
   u-msgpack-python,
@@ -23,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "remarshal";
-  version = "1.3.0"; # test with `nix-build pkgs/pkgs-lib/format`
+  version = "2.1.4"; # test with `nix-build pkgs/pkgs-lib/tests -A formats`
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "remarshal-project";
     repo = "remarshal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/K8x6ij23pk5O1+XJdFHaGbZ47nFMbXzp+4UMO5dGp4=";
+    hash = "sha256-QMz8XNdoI0ZNox7ah7flr67K7573y3rjWdHgOba1Rhg=";
   };
 
   build-system = [ poetry-core ];
@@ -38,14 +37,15 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     cbor2
     colorama
-    python-dateutil
-    pyyaml
-    rich-argparse
     ruamel-yaml
+    starlark
+    termcolor
     tomli
     tomlkit
     u-msgpack-python
   ];
+
+  pythonRelaxDeps = [ "cbor2" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -8,6 +8,7 @@ let
   inherit (builtins) isList;
   inherit (lib)
     concatMapStrings
+    escapeShellArg
     literalExpression
     maintainers
     mapAttrs'
@@ -34,7 +35,7 @@ let
     else if isBool value then
       boolToString value
     else
-      toString value;
+      escapeShellArg (toString value);
 in
 {
   options.programs.bat = {

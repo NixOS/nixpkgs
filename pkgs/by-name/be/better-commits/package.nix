@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "better-commits";
-  version = "1.23.1";
+  version = "1.26.1";
 
   src = fetchFromGitHub {
     owner = "Everduin94";
     repo = "better-commits";
     tag = "v${version}";
-    hash = "sha256-4ixxgpqyjU1juU200Dc0YTSC+bvVYHpqzylCR3Yy+Yk=";
+    hash = "sha256-WSsCrjJwWYALJ0Ckldw2vAPzB5ZJ3p7xcOgQGIMHnF8=";
   };
 
-  npmDepsHash = "sha256-18fkqQ3Y0fflSGXDPaMpHW7nC0ARMoCStxBzkEXiujs=";
+  npmDepsHash = "sha256-N6B9wVxc14W7KN24bBYj0G+YRT4xSCr0X3bYs1Gusj8=";
 
   passthru.updateScript = nix-update-script { };
 

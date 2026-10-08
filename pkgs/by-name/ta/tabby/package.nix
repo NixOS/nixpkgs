@@ -188,6 +188,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "tabby";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.ghthor ];
-    broken = stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
+    broken = true;
   };
 }

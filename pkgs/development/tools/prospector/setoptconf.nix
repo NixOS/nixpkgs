@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     homepage = "https://pypi.org/project/setoptconf-tmp";
-    description = "Module for retrieving program settings from various sources in a consistant method";
+    description = "Module for retrieving program settings from various sources in a consistent method";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       kamadorueda

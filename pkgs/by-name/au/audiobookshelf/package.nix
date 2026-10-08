@@ -5,7 +5,7 @@
   runCommand,
   buildNpmPackage,
   nodejs_22,
-  ffmpeg-full,
+  ffmpeg_8-full,
   nunicode,
   util-linux,
   python3,
@@ -14,11 +14,13 @@
 }:
 
 let
+  ffmpeg-full = ffmpeg_8-full;
+
   source = {
-    version = "2.35.1";
-    hash = "sha256-31cKSjSTJyUetjCSOCDY2wnTFV+Z52LcvGrh7Emc0cM=";
-    npmDepsHash = "sha256-wmbzbMQHrbHcL9JSpPXpc+vjjj5LTNN8e6Ug3ZRQ7mo=";
-    clientNpmDepsHash = "sha256-wJdCvUVLZzCY3iW/Q7QVuRu96s49TehnuQNqbImbe0g=";
+    version = "2.36.1";
+    hash = "sha256-HBaTTfZEbhR2n/XafScZB/gX29erTQHZ+IdErwhA11A=";
+    npmDepsHash = "sha256-kp0LbSKaHTBppeyfLAFrGYnSWS3V2trO5yaZWoxVPo8=";
+    clientNpmDepsHash = "sha256-g3Y/4UU2YH/CeU8Z/NNkLP0OTeBM+4/rQfL406uVdio=";
   };
 
   src = fetchFromGitHub {
@@ -70,6 +72,8 @@ buildNpmPackage {
   npmInstallFlags = [ "--only-production" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/client
     cp -r index.js server package* node_modules $out/opt/
     cp -r ${client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
@@ -79,6 +83,8 @@ buildNpmPackage {
     echo "  exec ${nodejs_22}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
 
     chmod +x $out/bin/audiobookshelf
+
+    runHook postInstall
   '';
 
   passthru = {

@@ -12,7 +12,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "matterjs-server";
-  version = "0.7.1";
+  version = "1.4.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -20,10 +20,10 @@ buildNpmPackage (finalAttrs: {
     owner = "matter-js";
     repo = "matterjs-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iWFhpPeqY3RVfIrZa+Y2KmwWIZtMtj8EjwjoWYaA/Ao=";
+    hash = "sha256-eJSDTg00H/G2pPdVC23HiLLjPA8n1vCpqpAZgtUXl78=";
   };
 
-  npmDepsHash = "sha256-ZjznhmsLavnLsNHNzH9IlZdLRMYpbLKz1q2O9A/ut+Y=";
+  npmDepsHash = "sha256-haKiheg/+f1rgC/narKRTk3nWZgl0GMlSOz0QqzVbUo=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -32,7 +32,16 @@ buildNpmPackage (finalAttrs: {
 
   buildInputs = [ udev ];
 
+  env.CXXFLAGS = "-std=c++20";
+
   preBuild = "npm run version -- --apply";
+
+  # remove temporary build files
+  postBuild = ''
+    shopt -s globstar
+    rm node_modules/**/build/{config.gypi,Makefile,*.target.mk}
+    shopt -u globstar
+  '';
 
   dontNpmInstall = true;
 
@@ -70,7 +79,10 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/matter-js/matterjs-server";
     changelog = "https://github.com/matter-js/matterjs-server/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = with lib.maintainers; [
+      kranzes
+      marie
+    ];
     mainProgram = "matterjs-server";
     platforms = lib.platforms.linux;
   };

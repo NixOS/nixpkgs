@@ -17,7 +17,7 @@
   nodejs,
   pkg-config,
   python3,
-  typescript,
+  typescript_5,
   zip,
 
   gnome-keyring,
@@ -29,19 +29,19 @@
 
 let
   inherit (stdenv.hostPlatform.node) arch platform;
-  cacheRootHash = "sha256-OJDxq1Yep3swLU87YyJz7WfpPzpxo5ISukB4pIwxJBA=";
-  cacheAppHash = "sha256-DYUlLNxWn4sn7PBir/miJUoDVAQ2/nbOVGWSGN+IPxw=";
+  cacheRootHash = "sha256-WruQopxE9uROdbBFiMsjuQj7jlEdNrbhWym6JxGIBi8=";
+  cacheAppHash = "sha256-YlqykBZXcvWOkb07ojZsnWdJTb/OKbDeXh1VpATGS2M=";
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-desktop";
-  version = "3.5.11";
+  version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "desktop";
     repo = "desktop";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-nW+yq330lQRfo1RtxUtbkQ336WeE8BjC9jYAIibfdXo=";
+    hash = "sha256-qdfa8+v0JSdqiR7NhcQIany51Lv0l7v4MtLXUJY0o+4=";
     fetchSubmodules = true;
     postCheckout = "git -C $out rev-parse HEAD > $out/.gitrev";
   };
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     # desktop-notifications build doesn't pick up tsc from node_modules for some reason
-    typescript
+    typescript_5
     zip
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
@@ -100,9 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --cwd app/node_modules/desktop-notifications run install
 
     # use git from nixpkgs instead of an automatically downloaded one by dugite
-    makeWrapper ${lib.getExe git} app/node_modules/dugite/git/bin/git \
+    gitRoot=app/node_modules/dugite/git
+    makeWrapper ${lib.getExe git} "$gitRoot/bin/git" \
       --prefix PATH : ${lib.makeBinPath [ git-lfs ]}
 
+    mkdir -p "$gitRoot/libexec/git-core"
+
+    for script in ${git}/libexec/git-core/*; do
+      ln -s "$script" "$gitRoot/libexec/git-core/$(basename "$script")"
+    done
 
     # exception: printenvz needs `node-gyp` configure first for some reason
     pushd node_modules/printenvz

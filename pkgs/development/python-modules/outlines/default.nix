@@ -20,6 +20,7 @@
   nest-asyncio,
   numpy,
   outlines-core,
+  pillow,
   pycountry,
   pydantic,
   torch,
@@ -89,6 +90,7 @@ buildPythonPackage (finalAttrs: {
     nest-asyncio
     numpy
     outlines-core
+    pillow
     pycountry
     pydantic
     torch
@@ -131,7 +133,7 @@ buildPythonPackage (finalAttrs: {
     "test_mistral_type_adapter_input_list"
     "test_mistral_type_adapter_input_text"
 
-    # Try to dowload models from Hugging Face Hub
+    # Try to download models from Hugging Face Hub
     "test_application_callable_call"
     "test_application_generator_reuse"
     "test_application_template_call"
@@ -227,7 +229,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTestPaths = [
-    # Try to dowload models from Hugging Face Hub
+    # Try to download models from Hugging Face Hub
     "tests/backends/test_backends.py"
     "tests/backends/test_llguidance.py"
     "tests/backends/test_outlines_core.py"

@@ -11,11 +11,11 @@
   version ?
     # This is a workaround for update-source-version to be able to update this
     let
-      _version = "0-unstable-2026-03-05";
+      _version = "0-unstable-2026-07-23";
     in
     _version,
-  rev ? "d8c2f07d653520568da7cace755a87dad241b72d",
-  hash ? "sha256-3AfExm7NL5GJXyC5JCPbGC70D59doRfIZIgpt6MLy9Y=",
+  rev ? "641ace93dd9560e75e7add0d08f77b446fbb3b78",
+  hash ? "sha256-ovLx6KaORdXqnWgbsGEty10k2CHuCmTk3yEqy5//ovk=",
 }:
 
 stdenv.mkDerivation {
@@ -35,6 +35,9 @@ stdenv.mkDerivation {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     ninja

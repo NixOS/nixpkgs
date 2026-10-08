@@ -12,6 +12,7 @@
   onetbb,
   cmake,
   boost,
+  numactl,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "${adaptivecpp.pname}-tests";
@@ -24,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     onetbb
   ];
-  buildInputs = [ boost ];
+  buildInputs = [
+    boost
+    numactl
+  ];
 
   sourceRoot = "${adaptivecpp.src.name}/tests";
 

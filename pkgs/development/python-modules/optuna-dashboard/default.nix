@@ -23,18 +23,24 @@
   setuptools,
   streamlit,
   tqdm,
+  fetchPnpmDeps,
+  nodejs,
+  pnpm_11,
+  pnpmConfigHook,
 }:
-
-buildPythonPackage rec {
+let
+  pnpm = pnpm_11;
+in
+buildPythonPackage (finalAttrs: {
   pname = "optuna-dashboard";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna-dashboard";
-    tag = "v${version}";
-    hash = "sha256-pg1R8tZjfLDDzDWiLRmaU1a1mKDzeZliPC2X0UV+xEw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-NRUR35RiGR+c53s8Un7KE2aeCWhTk6oXoK3ckyE175g=";
   };
 
   dependencies = [
@@ -49,6 +55,36 @@ buildPythonPackage rec {
     scipy
     tqdm
   ];
+
+  nativeBuildInputs = [
+    nodejs
+    pnpmConfigHook
+    pnpm
+  ];
+
+  pnpmWorkspaces = [
+    "@optuna/types"
+    "@optuna/storage"
+    "@optuna/react"
+    "@optuna/optuna-dashboard"
+  ];
+
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-tMqF4tyk6Tyb5eN777B4dAwJSmzkVKfkYY43WELR24g=";
+  };
+
+  preBuild = ''
+    pnpm --filter=@optuna/types build
+
+    pnpm --filter=@optuna/storage build
+
+    pnpm --filter=@optuna/react build
+
+    pnpm --filter=@optuna/optuna-dashboard build:prd
+  '';
 
   build-system = [ setuptools ];
 
@@ -87,9 +123,9 @@ buildPythonPackage rec {
   meta = {
     description = "Real-time Web Dashboard for Optuna";
     homepage = "https://github.com/optuna/optuna-dashboard";
-    changelog = "https://github.com/optuna/optuna-dashboard/releases/tag/${src.tag}";
+    changelog = "https://github.com/optuna/optuna-dashboard/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jherland ];
     mainProgram = "optuna-dashboard";
   };
-}
+})

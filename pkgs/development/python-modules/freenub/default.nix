@@ -35,6 +35,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "cbor2" ];
+
   nativeCheckInputs = [
     busypie
     pytest-asyncio

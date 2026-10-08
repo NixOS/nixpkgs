@@ -39,9 +39,7 @@ let
     i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
     aarch64-linux = "linux-aarch64";
-    # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
-    x86_64-darwin = "mac";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
@@ -132,8 +130,8 @@ stdenv.mkDerivation {
   passthru = {
     inherit applicationName binaryName;
     libName = "firefox-bin-${version}";
-    ffmpegSupport = true;
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
     gtk3 = gtk3;
 
     # update with:

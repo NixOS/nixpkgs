@@ -325,7 +325,7 @@ in
               This can be left at `null`, only if your instance has the role `ReadOnlyReplica`.
               While it is possible to change the domain later on, it requires extra steps!
               Please consider the warnings and execute the steps described
-              [in the documentation](https://kanidm.github.io/kanidm/stable/administrivia.html#rename-the-domain).
+              [in the documentation](https://kanidm.github.io/kanidm/stable/domain_rename.html).
             '';
             example = "example.org";
             default = null;

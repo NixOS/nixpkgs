@@ -7,7 +7,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "bfetch";
-  version = "unstable-2021-05-21";
+  version = "1.0.1-unstable-2021-05-21";
 
   src = fetchFromGitHub {
     owner = "NNBnh";

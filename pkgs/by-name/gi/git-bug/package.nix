@@ -53,6 +53,7 @@ buildGoModule (finalAttrs: {
 
   postInstall = ''
     installShellCompletion \
+      --cmd git-bug \
       --bash misc/completion/bash/git-bug \
       --zsh misc/completion/zsh/git-bug \
       --fish misc/completion/fish/git-bug

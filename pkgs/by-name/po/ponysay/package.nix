@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ponysay";
-  version = "unstable-2021-03-27";
+  version = "3.0.3-unstable-2021-03-27";
 
   src = fetchFromGitHub {
     owner = "erkin";
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Cowsay reimplemention for ponies";
+    description = "Cowsay reimplementation for ponies";
     homepage = "https://github.com/erkin/ponysay";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ bodil ];

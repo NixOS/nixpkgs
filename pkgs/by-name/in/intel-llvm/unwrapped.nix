@@ -11,6 +11,7 @@
   stdenv,
   cmake,
   ninja,
+  fetchpatch,
   python3,
   pkg-config,
   zstd,
@@ -57,7 +58,18 @@ let
         cp $out/bin/clang-${llvmMajorVersion} $out/bin/clang
         cp $out/bin/clang-${llvmMajorVersion} $out/bin/clang++
       '';
-      passthru.isClang = true;
+      passthru = {
+        isClang = true;
+        langC = true;
+        langCC = true;
+
+        # cc-wrapper adds `-nostdlibinc` to every Linux clang, which makes the SYCL driver
+        # skip its `stl_wrappers` include dir, caysubg libdevice compiles then fail with
+        # `'__spirv_BuiltIn...' undeclared`. `isROCm` is cc-wrapper's only opt-out
+        # from that flag and is read nowhere else.
+        # The name is a poor fit, but it does exactly what we want.
+        isROCm = true;
+      };
     }
   );
 
@@ -151,6 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
     # they cause cycles in the outputs and break the build,
     # so we simply exclude them.
     ./sycl-jit-exclude-cmake-files.patch
+
+    # Linux removed `linux/scc.h`, which breaks building compiler-rt. Upstream LLVM has fixed it in LLVM 22 and 23.
+    # The same patch is applied in d5b6cbf (llvmPackages_{18,19,20,21}.compiler-rt: backport santizier fix for Linux)
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/3dc4fd6dd41100f051a63642f449b16324389c96.patch?full_index=1";
+      hash = "sha256-BJwFPeYCBO+PnUMMC/3GSYPgn0vczkkbdw5qcnURPbI=";
+    })
   ];
 
   postPatch = ''
@@ -176,12 +195,26 @@ stdenv.mkDerivation (finalAttrs: {
       unified-runtime/cmake/FetchLevelZero.cmake \
       sycl/CMakeLists.txt \
       sycl/cmake/modules/FetchEmhash.cmake
-
-    # `NO_CMAKE_PACKAGE_REGISTRY` prevents it from finding OpenCL, so we unset it
-    # Note that this cmake file is imported in various places, not just unified-runtime
-    # See also: https://github.com/intel/llvm/issues/19635#issuecomment-3247008981
-    substituteInPlace unified-runtime/cmake/FetchOpenCL.cmake \
-        --replace-fail "NO_CMAKE_PACKAGE_REGISTRY" ""
+  ''
+  # v7.0.0 half-applied an upstream rename of libclc's AMD target. Without this patch,
+  # The compiler builds and links fully, but the final compiler will lack the device libraries
+  # needed for compilating to AMD.
+  # Build `pkgsRocm.intel-llvm.tests.sycl-compile-amdgcn-amd-amdhsa` to check; it fails without this patch.
+  # TODO: It's likely that we can drop this on the next update.
+  + lib.optionalString rocmSupport ''
+    substituteInPlace libclc/CMakeLists.txt \
+      --replace-fail $'  amdgcn-amd-amdhsa\n' $'  amdgcn-amd-amdhsa\n  amdgcn--amdhsa\n' \
+      --replace-fail 'set( amdgcn-amd-amdhsa_devices none )' \
+        $'set( amdgcn-amd-amdhsa_devices none )\nset( amdgcn--amdhsa_devices none )'
+  ''
+  # These libdevice compiles target sm_75 (since v7.0.0), which needs PTX >= 6.3.
+  # clang picks the PTX ISA from the CUDA version it detects, if it detects nothing it falls back to `+ptx42`.
+  # `-nocudalib` only skips linking libdevice.bc, not detection, so point --cuda-path
+  # at the toolkit to get a real version and a modern PTX ISA.
+  + lib.optionalString cudaSupport ''
+    substituteInPlace libdevice/cmake/modules/SYCLLibdevice.cmake \
+      --replace-fail '"--cuda-gpu-arch=sm_75" "-nocudalib"' \
+      '"--cuda-gpu-arch=sm_75" "-nocudalib" "--cuda-path=${unified-runtime.setupVars.CUDA_PATH}"'
   '';
 
   preConfigure = ''
@@ -193,7 +226,6 @@ stdenv.mkDerivation (finalAttrs: {
         ${lib.optionalString cudaSupport "--cuda"} \
         ${lib.optionalString rocmSupport "--hip"} \
         ${lib.optionalString nativeCpuSupport "--native_cpu"} \
-        --use-lld \
         ${lib.optionalString levelZeroSupport "--l0-headers ${lib.getInclude level-zero}/include/level_zero"} \
         ${lib.optionalString levelZeroSupport "--l0-loader ${lib.getLib level-zero}/lib/libze_loader.so"} \
     )
@@ -221,6 +253,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_ENABLE_ZSTD" "FORCE_ON")
     (lib.cmakeFeature "LLVM_ENABLE_ZLIB" "FORCE_ON")
     (lib.cmakeBool "LLVM_ENABLE_THREADS" true)
+
+    # Link with lld. Not buildbot's `--use-lld` (LLVM_ENABLE_LLD=ON): xpti/xptifw
+    # re-`include(HandleLLVMOptions)`, which derives LLVM_USE_LINKER from it and then
+    # aborts on "LLVM_ENABLE_LLD and LLVM_USE_LINKER can't be set at the same time".
+    (lib.cmakeFeature "LLVM_USE_LINKER" "lld")
 
     # Intels LLVM fork does not support building shared libraries,
     # see https://github.com/intel/llvm/issues/19060
@@ -296,6 +333,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     isClang = true;
+    langC = true;
+    langCC = true;
 
     inherit unified-runtime;
 

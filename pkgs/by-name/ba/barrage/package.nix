@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "barrage";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/barrage-${finalAttrs.version}.tar.gz";
-    hash = "sha256-cGYrG7A4Ffh51KyR+UpeWu7A40eqxI8g4LefBIs18kg=";
+    hash = "sha256-9mdC7JiZPGnjj9+h4jezIY2AL0X096MxzTwlwH1zYT8=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://lgames.sourceforge.io/Barrage/";
     description = "Destructive action game";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     mainProgram = "barrage";
     maintainers = [ ];
     inherit (SDL.meta) platforms;

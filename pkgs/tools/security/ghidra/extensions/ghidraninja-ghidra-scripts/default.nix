@@ -10,13 +10,13 @@
 
 buildGhidraScripts {
   pname = "ghidraninja-ghidra-scripts";
-  version = "unstable-2020-10-07";
+  version = "0-unstable-2020-10-08";
 
   src = fetchFromGitHub {
     owner = "ghidraninja";
     repo = "ghidra_scripts";
     rev = "99f2a8644a29479618f51e2d4e28f10ba5e9ac48";
-    sha256 = "aElx0mp66/OHQRfXwTkqdLL0gT2T/yL00bOobYleME8=";
+    hash = "sha256-aElx0mp66/OHQRfXwTkqdLL0gT2T/yL00bOobYleME8=";
   };
 
   postPatch = ''

@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   boost,
   catch2_3,
   cmake,
   ninja,
   fmt,
+  llvmPackages,
   mimalloc,
   python3,
 }:
@@ -22,6 +24,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-popHzwX0qwv2POAl7/qX3e//OwJRXGtSl9xogpSn2LI=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "fmt-12.2.patch";
+      url = "https://github.com/MikePopoloski/slang/commit/5a898b4b9225d281902fcd59fe4732b1561677d2.patch";
+      excludes = [ "tests/unittests/diagnostics/WaiverTests.cpp" ];
+      hash = "sha256-Y+GG8UINWXh7eTXEweM42oPY8ByP4DQYgTjSLukz4I4=";
+    })
+  ];
+
+  patchFlags = [
+    "-p1"
+    "-F3"
+  ];
+
   cmakeFlags = [
     # fix for https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -36,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
     ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # needs the wrapped clang-scan-deps to find the C++20 module headers
+    llvmPackages.clang-tools
   ];
 
   strictDeps = true;
@@ -48,17 +68,17 @@ stdenv.mkDerivation (finalAttrs: {
     catch2_3
   ];
 
-  # TODO: a mysterious linker error occurs when building the unittests on darwin.
-  # The error occurs when using catch2_3 in nixpkgs, not when fetching catch2_3 using CMake
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  doCheck = true;
 
   meta = {
     description = "SystemVerilog compiler and language services";
     homepage = "https://github.com/MikePopoloski/slang";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sharzy ];
+    maintainers = with lib.maintainers; [
+      sharzy
+      carlossless
+    ];
     mainProgram = "slang";
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

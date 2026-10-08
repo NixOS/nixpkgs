@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   cmake,
   pkg-config,
@@ -51,6 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Pbk9SmJ64CZ+yxMj53JpxULBQye2ETDi8xNKw38cC9k=";
   };
 
+  patches = [
+    # Backport a MicroTeX fix for fontconfig >= 2.18.
+    # Remove once cadabra2 updates its MicroTeX submodule to 7944eb4 or later.
+    (fetchpatch2 {
+      name = "microtex-fix-recent-fontconfig-build.patch";
+      url = "https://github.com/kpeeters/MicroTeX/commit/7944eb496dec1b7ff8af4c13e0cfee279eea30b8.patch?full_index=1";
+      extraPrefix = "submodules/microtex/";
+      stripLen = 1;
+      hash = "sha256-mobQF8uZGF1bdddYoyAxrZ4XhbMwUuK8kLwjmVrZZh0=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'MESSAGE(FATAL_ERROR "Building with -DPACKAGING_MODE=ON also requires -DCMAKE_INSTALL_PREFIX=/usr")' ""
@@ -68,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "PACKAGING_MODE" true)
 
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   nativeBuildInputs = [

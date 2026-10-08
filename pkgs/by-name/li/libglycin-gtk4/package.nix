@@ -96,10 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C-Bindings to convert glycin frames to GDK Textures";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
-    license = with lib.licenses; [
-      mpl20 # or
-      lgpl21Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mpl20
+        lgpl21Plus
+      ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [

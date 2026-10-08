@@ -32,8 +32,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       --replace-fail "run_command('git', 'describe', '--tags', check: false).stdout().strip()" "'v${finalAttrs.version}'"
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     appstream-glib
     blueprint-compiler

@@ -7,11 +7,15 @@
   writeShellApplication,
   gnugrep,
   installShellFiles,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-cli";
-  version = "1.2.18";
+  version = "1.3.2";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -22,9 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp tideways $out/bin/tideways
-    chmod +x $out/bin/tideways
+    installBin tideways
 
     installShellCompletion --cmd tideways \
       --bash <($out/bin/tideways completion bash) \
@@ -34,23 +36,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+  doInstallCheck = true;
+
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-+TXQWaZ6+ahXcy8Kibh7VuqaclLglI3FJnW5qMjmuAg=";
+        hash = "sha256-6arHj82OD5zKY0uEzimioeuD4lRoQ99YrT/aK+S1W38=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-9/WBa6qzIc+yulPFVC6tpfdrhxCda23iLmu+Vy99HvQ=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-5s9FTA3lI6mrt34di80nrP/5oTH2lqz1BwFo2Pd8ErY=";
+        hash = "sha256-qOyRCbopaiWE0YtQgF6ocIdbCUDhid3w3X7AeA3kOlI=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-3dwFFYk2WIqQf6sFVc4Jq1Zhgb4Tvvlj0IhQlnyJ6KA=";
+        hash = "sha256-90qhY1TKhOen6+ararnVVu+cIod1luEHyC3U/z9EtJY=";
       };
     };
 

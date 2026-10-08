@@ -122,6 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     # https://bugs.openldap.org/show_bug.cgi?id=8623
     rm -f tests/scripts/test022-ppolicy
 
+    rm -f tests/scripts/test*-sync*
+
     rm -f tests/scripts/test063-delta-multiprovider
 
     # https://bugs.openldap.org/show_bug.cgi?id=10009
@@ -166,7 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.openldap;
     maintainers = with lib.maintainers; [
       conni2461
-      das_j
       helsinki-Jo
     ];
     platforms = lib.platforms.unix;

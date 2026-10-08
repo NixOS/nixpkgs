@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinygltf";
-  version = "3.0.0";
+  version = "3.0.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "syoyo";
     repo = "tinygltf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qs/7O/nPXpMbn31smMfdd3V9zRbyhAnDyjZwlduseKU=";
+    hash = "sha256-ZBKtqZMumaSiFBdc8ZYolryOutYQ/WP0JAxuoBf0eMg=";
   };
 
   nativeBuildInputs = [

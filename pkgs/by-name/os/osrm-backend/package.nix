@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://project-osrm.org/";
     description = "Open Source Routing Machine computes shortest paths in a graph. It was designed to run well with map data from the Openstreetmap Project";
     changelog = "https://github.com/Project-OSRM/osrm-backend/releases/tag/${finalAttrs.src.tag}";

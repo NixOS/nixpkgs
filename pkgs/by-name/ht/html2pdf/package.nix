@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "html2pdf";
-  version = "0.8.3";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ilaborie";
     repo = "html2pdf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JtBgM95BvCJQwF89+PXkCEdrFDlD+hdceTtI5t6KnUQ=";
+    hash = "sha256-Oc8XrDhJhbBAUHa3+ILcJvnRs2wCowh0GqJzMtYkOog=";
   };
 
-  cargoHash = "sha256-65do3FDEpGeNX/u9KS+F5yigwBfgVNUBhZImjbWFydU=";
+  cargoHash = "sha256-j94eelRqEBLUVRa8HacojGTY3zyJNlaOUmljlR5RyXY=";
 
   # Avoiding "rustfmt not found" error in auto_generate_cdp.
   # ref: https://github.com/mdrokz/auto_generate_cdp/pull/8

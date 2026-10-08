@@ -4,7 +4,6 @@
   callPackage,
   rustPlatform,
   fetchFromGitLab,
-  fetchpatch,
 
   versionCheckHook,
   installShellFiles,
@@ -14,22 +13,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y6scgbcwhg56SQ1DefNtdja+n89Gc5bJUHKHKn2EYwQ=";
+    hash = "sha256-a1ioQ+1CvC22tUeyVG8A7hciP+bXvX/UcRi0++To5Ik=";
   };
 
-  patches = [
-    # nftables: fix compilation on aarch64-linux; remove in 2.4.1
-    ./nftables-aarch64-linux-compat.patch
-  ];
-
-  cargoHash = "sha256-NAcMpASvphAqjBjbAPWLG5qZbSgdaFC3GvU25exCS3g=";
+  cargoHash = "sha256-qbhNswQW6ExkMQ+KiAr50EOLiDScwm9hILiiN9GxGWU=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -8,15 +8,18 @@
 
 buildGo126Module (finalAttrs: {
   pname = "tsgolint";
-  version = "0.23.0";
+  version = "7.0.2001";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lwOjdc+q7u1zVHynYpnyUXMDQxlfSxey/Jnry02VWYM=";
+    hash = "sha256-UU5tNa/rOxDWW7TwE1SrhzkVWvHRTe82YbK/o42+vuA=";
     fetchSubmodules = true;
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [ findutils ];
 
@@ -41,7 +44,7 @@ buildGo126Module (finalAttrs: {
     '';
 
   proxyVendor = true;
-  vendorHash = "sha256-k16zfFZNCGMg9n8btdWAy11wzg7CVntKgsSPujIJRtE=";
+  vendorHash = "sha256-YdoEXZ9M1sK/v5AlHjYS7aa8XPJXU4mFVUyVS6JFUlo=";
 
   subPackages = [ "cmd/tsgolint" ];
 
@@ -52,8 +55,12 @@ buildGo126Module (finalAttrs: {
   meta = {
     description = "Type aware linting for oxlint";
     homepage = "https://github.com/oxc-project/tsgolint";
+    changelog = "https://github.com/oxc-project/tsgolint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      jnsgruk
+      anish
+    ];
     mainProgram = "tsgolint";
   };
 })

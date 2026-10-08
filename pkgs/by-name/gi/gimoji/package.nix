@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gimoji";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "zeenix";
     repo = "gimoji";
     rev = finalAttrs.version;
-    hash = "sha256-2YalpSPG5qzIW/CHlTVnKcvBi0eqD3B5K/KXE7mJwM0=";
+    hash = "sha256-YfKMawhoLyWXy37/qegpR4EuyrKPIEBxUmnIPtuJnxU=";
   };
 
-  cargoHash = "sha256-t2SE3xvLNVra2hU+Fa81dHbopIbl7GgOcef6tUGdbTE=";
+  cargoHash = "sha256-6RJj1DwZzRVQgExg5E4izrUeHtUdRAXcNQJPAAv3ya0=";
 
   meta = {
     description = "Easily add emojis to your git commit messages";
