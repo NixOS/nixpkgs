@@ -52,6 +52,7 @@ in
         Each contract type has an `interface`: a module with the options
         `request` and `response`.
         Consumers and providers import this module into their submodule types.
+        To make the submodule type of a consumer, use `mkContract`.
 
         The contract types of nixpkgs are in `lib.contracts`.
         To add a contract type to nixpkgs, add a file in `lib/contracts/definitions/`.
@@ -61,36 +62,14 @@ in
 
         1\. Import `lib.contract.module`.
 
-        2\. Set this option to `lib.contracts`, so that the contract types of nixpkgs are available.
+        2\. Add the contract types of `lib.contracts` to this option.
+        Set only the options that a file in `lib/contracts/definitions/` sets, such as `meta` and `interface`,
+        because the other options are read-only.
 
         The NixOS module `nixos/modules/contracts/default.nix` does these two steps.
       '';
       default = { };
-      type = types.attrsOf (
-        types.submodule {
-          options = {
-            meta = mkOption {
-              description = "Information about the contract type and its maintenance.";
-              type = types.submodule {
-                options = {
-                  description = mkOption {
-                    description = "What the contract type is for.";
-                    type = types.str;
-                  };
-                  maintainers = mkOption {
-                    description = "Maintainers of the contract type.";
-                    type = types.listOf types.attrs;
-                  };
-                };
-              };
-            };
-            interface = mkOption {
-              description = "Module with the options `request` and `response`.";
-              type = types.deferredModule;
-            };
-          };
-        }
-      );
+      type = types.attrsOf lib.contract.definitionType;
     };
 
     contracts = mkOption {

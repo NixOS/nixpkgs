@@ -34,4 +34,13 @@
     ```
   */
   isInstance = v: lib.isAttrs v && v ? response;
+
+  # Type of a contract type, with the options `meta`, `interface` and `mkContract`.
+  # A contract type is not a module, for two reasons:
+  # - The consumers and the providers import `interface` into each entry.
+  #   In a module, `meta` is a definition of the option `meta`,
+  #   thus each entry must declare a `meta` option, and contains the `meta` of the contract type.
+  # - A module cannot contain functions such as `mkContract`,
+  #   because the module system does not accept attributes that it does not know.
+  definitionType = lib.types.submodule ./definition-type.nix;
 }
