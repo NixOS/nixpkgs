@@ -9,8 +9,6 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-secrets";
   version = "3.1.1";
   pyproject = true;

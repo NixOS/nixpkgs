@@ -7,8 +7,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-reorder-rack";
   version = "1.1.5";
   pyproject = true;

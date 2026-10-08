@@ -8,8 +8,6 @@
   django-polymorphic,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-lifecycle";
   version = "1.1.10";
   pyproject = true;
