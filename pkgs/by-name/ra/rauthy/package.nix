@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/frontend";
-    hash = lib.fakeHash;
+    hash = "sha256-BDXHpgQ0IXo+6EZv8AkclXOtwgYZl5F2u9xaHIrbc8s=";
   };
 
-  cargoHash = lib.fakeHash;
+  cargoHash = "sha256-uqJAfYL62R4GaDszaNloP3h1FNXZkxZfLAGBJk5zLmE=";
 
   preBuild = ''
     pushd src/wasm-modules
