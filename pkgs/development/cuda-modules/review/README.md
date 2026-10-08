@@ -72,6 +72,12 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   remain distinct, explicit compiler policies remain significant, and
   `replaceCrossStdenv` still applies. Ordinary native/cross production identities
   are unchanged by this repair and the compiler projection above.
+- `NIX_DYNAMIC_LINKER` selects one pathname, so active roles must agree,
+  including explicitly empty values. Concatenating agreeing roles produced an
+  ELF interpreter containing two pathnames that the kernel could not execute.
+  The existing singular-value helper fixes selection; native and emulated ARM
+  compile/link/runtime controls and the native GNU wrapper suite pass. This
+  subsequent core change requires new production builds.
 - Torch's installed CSR runners are now available for cross packages. Only the
   automatically executed CPU check requires BUILD to execute HOST. CPU-only
   Torch also exposes the CPU runner. The shared Python tester uses structured
