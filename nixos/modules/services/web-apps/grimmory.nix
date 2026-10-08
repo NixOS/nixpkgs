@@ -60,6 +60,7 @@ in
     booksDir = mkOption {
       description = "Path to root directory of book library.";
       default = "${cfg.stateDir}/books";
+      defaultText = "\${cfg.stateDir}/books";
       type = types.str;
       example = "/books";
     };
@@ -67,6 +68,7 @@ in
     bookdropDir = mkOption {
       description = "Path to directory where Grimmory watches for books to import. (`APP_BOOKDROP_FOLDER`)";
       default = "${cfg.stateDir}/bookdrop";
+      defaultText = "\${cfg.stateDir}/bookdrop";
       type = types.str;
       example = "/bookdrop";
     };
