@@ -100,8 +100,12 @@ stdenv.mkDerivation {
     sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
     patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
     patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
-    patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
+    if [ -e ${buildType}/libEGL.so ]; then
+      patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
+    fi
+    if [ -e ${buildType}/libGLESv2.so ]; then
+      patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
+    fi
     patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
     patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
     cp --recursive . $out
