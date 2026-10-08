@@ -15428,6 +15428,8 @@ self: super: with self; {
 
   pyln-bolt7 = callPackage ../development/python-modules/pyln-bolt7 { };
 
+  pyln-client = callPackage ../development/python-modules/pyln-client { };
+
   pyln-proto = callPackage ../development/python-modules/pyln-proto { };
 
   pylnk3 = callPackage ../development/python-modules/pylnk3 { };
