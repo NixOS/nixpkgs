@@ -10,8 +10,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "13.1.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ADScanPro";
     repo = "adscan";
