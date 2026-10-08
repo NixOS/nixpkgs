@@ -18,18 +18,20 @@
   aio-pika,
   httpx,
   feedparser,
+  fakeredis,
+  testcontainers,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "django-health-check";
-  version = "4.6.1";
+  version = "4.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "django-health-check";
     tag = finalAttrs.version;
-    hash = "sha256-ZWYLbsFeDM219rUde12tp3bXKxQpb8VjyZ4iUAJM9X8=";
+    hash = "sha256-nz6ymaUz9FsNexFfMebVZ7+a1zExXCaDRC52Ly/OgP4=";
   };
 
   build-system = [
@@ -61,6 +63,8 @@ buildPythonPackage (finalAttrs: {
     psutil
     pytest-asyncio
     libredirect.hook
+    fakeredis
+    testcontainers
   ];
 
   disabledTests = [
