@@ -42,8 +42,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
   ];
 
-  __structuredAttrs = true;
-
   passthru.tests = {
     inherit (nixosTests) pdudaemon;
   };
