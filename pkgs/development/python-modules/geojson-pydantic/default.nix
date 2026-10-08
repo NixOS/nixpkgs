@@ -8,7 +8,7 @@
   shapely,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geojson-pydantic";
   version = "2.1.1";
   pyproject = true;
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "geojson-pydantic";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-XIhlZhHcBSIPGd+fFCA3CDnEoqoYvbEVmb+VFG22m5Q=";
   };
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   checkInputs = [ shapely ];
 
   meta = {
-    changelog = "https://github.com/developmentseed/geojson-pydantic/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/developmentseed/geojson-pydantic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Suite of Pydantic models matching the GeoJSON specification RFC 7946";
     homepage = "https://github.com/developmentseed/geojson-pydantic";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ deej-io ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})
