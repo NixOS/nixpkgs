@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-  cython,
+  cython_3_2,
   ninja,
   scikit-build-core,
   rapidfuzz-cpp,
@@ -25,7 +25,7 @@ buildPythonPackage (finalAtts: {
 
   build-system = [
     cmake
-    cython
+    cython_3_2
     ninja
     scikit-build-core
   ];
