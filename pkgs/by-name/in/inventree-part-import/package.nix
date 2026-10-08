@@ -11,7 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "inventree-part-import";
   version = "1.9.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "30350n";
