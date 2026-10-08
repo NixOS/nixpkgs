@@ -63,6 +63,7 @@ in
   llvmPackages,
   makeScopeWithSplicing',
   makeSetupHook,
+  nix,
   stdenvNoCC,
   swiftPackages,
   writeShellScript,
@@ -261,9 +262,73 @@ makeScopeWithSplicing' {
     };
   f = lib.extends autoCalledPackages (
     self:
+    let
+      # Can’t be defined in `by-name` because it’s a function.
+      swiftpmDepsUpdater =
+        let
+          updateScript = writeShellScript "swiftpm-deps-updater.sh" ''
+            set -o errexit
+
+            resolve_swift_package=$1
+            source_root=$2
+
+            [[ -n "$version" ]] || version="$UPDATE_NIX_OLD_VERSION"
+            [[ -n "$attr_path" ]] || attr_path="$UPDATE_NIX_ATTR_PATH"
+
+            # The SwiftPM deps updater assumes some other updater has run and updated the version attribute.
+            new_version=$(
+              ${lib.getExe' nix "nix-instantiate"} --eval --raw --expr "with import ./. {}; lib.getVersion $attr_path"
+            )
+
+            if [ "$version" = "$new_version" ]; then
+              exit 0
+            fi
+
+            export PATH=${lib.getBin self.swift}/bin:${lib.getBin self.swiftpm}/bin:$PATH
+
+            src=$(${lib.getExe' nix "nix-instantiate"} --eval --raw -A $attr_path.src)
+            package_file=$(${lib.getExe' nix "nix-instantiate"} --eval --raw -A $attr_path.meta.position | cut -d: -f1)
+
+            if [ -n "$resolve_swift_package" ]; then
+              resolved_file=$(dirname "$package_file")/Package.resolved
+
+              scratch_dir=$(mktemp -d)
+              trap 'rm -rf -- "$scratch_dir"' EXIT
+
+              cp -r "$src/" "$scratch_dir/source/"
+              chmod -R u+w "$scratch_dir/source"
+
+              pushd "$scratch_dir/$source_root" > /dev/null
+              swift package resolve &> /dev/null
+              cp Package.resolved "$resolved_file"
+              popd > /dev/null
+              echo "done resolving" >&2
+            else
+              resolved_file=$src/Package.resolved
+            fi
+
+            deps_hash=$(${lib.getExe self.prefetch-swiftpm-deps} "$resolved_file")
+            sed -e "s|$(${lib.getExe' nix "nix-instantiate"} --eval --raw -A $attr_path.swiftpmDeps.vendorStaging.outputHash)|$deps_hash|" --in-place "$package_file"
+          '';
+        in
+        {
+          sourceRoot ? "source",
+          # Some packages do not provide `Package.resolved`. If true, one will be generated and saved next to the package.
+          resolveSwiftPackage ? false,
+        }:
+        {
+          name = "swiftpm-deps-updater";
+          command = [
+            updateScript
+            resolveSwiftPackage
+            sourceRoot
+          ];
+          supportedFeatures = [ "silent" ];
+        };
+    in
     {
       stdenv = clangStdenv;
-      inherit swift_release;
+      inherit swiftpmDepsUpdater swift_release;
     }
     // lib.optionalAttrs config.allowAliases {
       # Compatibility aliases for the old Swift packaging.

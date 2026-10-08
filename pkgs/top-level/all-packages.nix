@@ -4049,6 +4049,7 @@ with pkgs;
     swift-format
     swiftpm
     swiftpm2nix
+    swiftpmDepsUpdater
     ;
 
   swi-prolog-gui = swi-prolog.override { withGui = true; };
