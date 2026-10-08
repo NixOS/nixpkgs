@@ -1893,6 +1893,15 @@
   "module-programs-oh-my-zsh-environments": [
     "index.html#module-programs-oh-my-zsh-environments"
   ],
+  "module-programs-tlog": [
+    "index.html#module-programs-tlog"
+  ],
+  "module-programs-tlog-usage": [
+    "index.html#module-programs-tlog-usage"
+  ],
+  "module-programs-tlog-replay": [
+    "index.html#module-programs-tlog-replay"
+  ],
   "module-programs-oh-my-zsh-packaging-customizations": [
     "index.html#module-programs-oh-my-zsh-packaging-customizations"
   ],

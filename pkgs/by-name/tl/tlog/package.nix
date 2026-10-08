@@ -9,6 +9,7 @@
   curl,
   json_c,
   systemd,
+  nixosTests,
   runtimeShell,
   withJournal ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
@@ -107,6 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.tests.nixos = nixosTests.tlog.extendNixOS {
+    module.programs.tlog.package = finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "Terminal I/O recording and playback package suitable for logging to journald and Elasticsearch";
