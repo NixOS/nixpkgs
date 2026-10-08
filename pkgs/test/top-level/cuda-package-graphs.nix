@@ -16,19 +16,7 @@ let
       }
       // args
     );
-  consumer =
-    {
-      cuda_nvcc,
-      cuda_cudart,
-      stdenv,
-      label ? "default",
-    }:
-    stdenv.mkDerivation {
-      name = "cuda-scope-consumer-${label}";
-      nativeBuildInputs = [ cuda_nvcc ];
-      buildInputs = [ cuda_cudart ];
-      buildCommand = "touch $out";
-    };
+  consumer = import ./cuda-consumer.nix;
 
   # A cross-only alias override runs after the alias overlay used by .pkgs.
   # Reject the resulting mixed-version scope instead of silently accepting it.
