@@ -59,6 +59,11 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   constructors: custom raw stages cannot bypass it with three distinct
   platforms or a mismatched compiler TARGET. Same-HOST and no-CC cases retain
   their existing lazy behavior. This is not Canadian-cross support.
+  The TARGET companion also supplies runtime libraries and linkers. Zig/Arocc
+  retain their existing GNU companion for that purpose; their closed or
+  non-overridable raw recipes do not support this HOST frontend projection.
+  Rejecting the companion broke otherwise working GNU/LLVM consumers. The
+  compiler-preservation claim is restricted to the GNU/Clang constructor domain.
 - A stage introduced only by `crossOverlays` retains the native environment
   when the fully elaborated platforms are equal. Clearing its bootstrap
   overrides caused a libc/iconv/IDN dependency cycle on both master and the
@@ -95,6 +100,26 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   results can be transferred. The subsequent native-stage repair and compiler
   projection preserve all four production derivations and fourteen outputs;
   the wrapper/header work remains under investigation.
+  A stronger C++20 chrono-formatting control subsequently fails with GNU 15
+  headers and an explicitly selected GNU 14 runtime: the headers require
+  `GLIBCXX_3.4.34` helpers absent from that runtime. Matching GNU 14 headers and
+  runtime pass at both tested optimization levels. The earlier vector,
+  exception and threading probes do not establish arbitrary header/runtime ABI
+  compatibility. A candidate binds headers to the selected runtime provider;
+  native and AArch64 chrono controls pass with GNU 14 headers/runtime. CUDA
+  13.3 controls also pass CCCL, C++20 formatting and GPU SAXPY with GNU 16
+  headers/runtime and its GNU 15 frontend. These use copied installed wrappers
+  whose header maps match the candidate factory, not newly realized wrappers.
+  The candidate changes all four production derivations. It is not accepted:
+  CUDA 12.9's frontend crashes when those GNU 16 headers use `__builtin_ctzg`,
+  in both native and cross C++20 chrono controls. Header selection must satisfy
+  frontend compatibility as well as runtime API compatibility; their providers
+  cannot unconditionally be identical. The same CUDA 12.9 source compiles with
+  the original GNU 14 headers and GNU 16 runtime; its native GPU check passes.
+  The revised GNU policy retains frontend headers when the runtime is newer,
+  and uses the older runtime's headers when necessary. This relies on upstream
+  GNU release ordering and backward library compatibility, not a general proof
+  of compatibility for arbitrary compiler forks or altered version metadata.
 - Current normal wrapper/backend/NVCC factories over cached raw dependencies
   pass the package-owned NVCC runtime and CMake SAXPY builds for SM 89 and
   SM 121a. Installed native/Spark C++17/20 host/GPU math and standard-library
@@ -120,8 +145,28 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
   channel can contain the actual `-c` option. Clang's config tail changes
   argument positions; GCC specs cannot carry arbitrary driver policy. A
   `-###` probe is not a pure planner: GCC's `-truncate` and `-time` options
-  still write files. These findings remain unresolved and are not consequences
-  proved by the selection law.
+  still write files. Native driver-query prototypes cover these counterexamples;
+  production integration remains pending. The selection law does not prove
+  their operation interpretation.
+  Further controls expose boundaries of the proposed ordered interpretation.
+  A complete old invocation can obtain an option operand from a conditional
+  support file, although its primary command alone is not parseable. Requiring
+  independent, complete argument fragments therefore changes that contract.
+  Also, Clang link flags containing `--driver-mode=g++` and C++ compile flags
+  containing `-c` create a cycle if each condition reselects the other. An
+  acyclic interpretation must select personality before conditional link flags,
+  then plan the operation with the selected caller C++ compile arguments.
+  This is a redesign of that edge case, not general legacy equivalence.
+  Finally, GCC self-specs in an added default can turn a compile-only primary
+  command into a final link. Linker continuation binding and disposition of the
+  main linker policy must remain independent of the primary link decision.
+  Independent source review also refutes purity of the query prototypes:
+  GCC spec expansion can overwrite saved response files, and Clang action
+  construction can execute an offload-architecture discovery tool. Clang's
+  recursive link-action predicate additionally counts CUDA fatbinary creation
+  as a host link during `-c`. Native action metadata distinguishes those uses;
+  a native API is not automatically the correct interpretation. These
+  prototypes are not integrated or accepted production fixes.
 - At least 44 files and 4,741 added lines concern independent numerical,
   ownership, initialization, and ancillary repairs rather than the cross
   selection abstraction. Their validation does not establish that this entire
