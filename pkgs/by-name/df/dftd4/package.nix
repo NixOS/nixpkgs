@@ -94,11 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generally Applicable Atomic-Charge Dependent London Dispersion Correction";
     changelog = "https://github.com/dftd4/dftd4/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "dftd4";
-    license = with lib.licenses; [
-      lgpl3Plus
-      gpl3Plus
-    ];
-    homepage = "https://github.com/grimme-lab/dftd4";
+    license = lib.licenses.lgpl3Plus;
+    homepage = "https://github.com/dftd4/dftd4";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };
