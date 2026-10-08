@@ -7,7 +7,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cryptop";
   version = "0.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huwwp";
