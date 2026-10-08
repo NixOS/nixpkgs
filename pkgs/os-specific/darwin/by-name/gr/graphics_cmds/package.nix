@@ -2,9 +2,12 @@
   lib,
   atf,
   bashNonInteractive,
+  gavin-bc,
   coreutils,
+  exiftool,
   file,
   gnused,
+  jq,
   kyua,
   libtiff,
   oxipng,
@@ -35,15 +38,17 @@ stdenvNoCC.mkDerivation {
       --replace-fail '@oxipng@' ${lib.getExe oxipng}
 
     substitute extra-bins/tiffutil build/tiffutil \
+      --replace-fail '@bc@' ${lib.getExe' gavin-bc "bc"} \
       --replace-fail '@cp@' ${lib.getExe' coreutils "cp"} \
       --replace-fail '@cut@' ${lib.getExe' coreutils "cut"} \
       --replace-fail '@echo@' ${lib.getExe' coreutils "echo"} \
+      --replace-fail '@exiftool@' ${lib.getExe exiftool} \
+      --replace-fail '@jq@' ${lib.getExe jq} \
       --replace-fail '@tail@' ${lib.getExe' coreutils "tail"} \
       --replace-fail '@sed@' ${lib.getExe gnused} \
       --replace-fail '@tiffcp@' ${lib.getExe' libtiff "tiffcp"} \
       --replace-fail '@tiffdump@' ${lib.getExe' libtiff "tiffdump"} \
-      --replace-fail '@tiffinfo@' ${lib.getExe' libtiff "tiffinfo"} \
-      --replace-fail '@tiffset@' ${lib.getExe' libtiff "tiffset"}
+      --replace-fail '@tiffinfo@' ${lib.getExe' libtiff "tiffinfo"}
 
     chmod a+x build/*
 
