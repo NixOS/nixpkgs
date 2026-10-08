@@ -1,5 +1,6 @@
 {
   lib,
+  _experimental-update-script-combinators,
   fetchFromGitHub,
   fetchSwiftPMDeps,
   gitUpdater,
@@ -8,6 +9,7 @@
   stdenv,
   swift,
   swiftpm,
+  swiftpmDepsUpdater,
   zlib,
 }:
 
@@ -46,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (gitUpdater { })
+    (swiftpmDepsUpdater { })
+  ];
 
   meta = {
     description = "Swift toolchain installer and manager";
