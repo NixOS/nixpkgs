@@ -3,7 +3,6 @@
   buildRedist,
   callPackage,
   cuda_cudart,
-  lib,
   libcublas,
   libnvshmem,
   nccl,
