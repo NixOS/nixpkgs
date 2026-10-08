@@ -170,15 +170,12 @@ let
     };
     gr-pdu = {
       cmakeEnableFlag = "GR_PDU";
-      runtime = [
-        libiio
-        libad9361
-      ];
     };
     gr-iio = {
       cmakeEnableFlag = "GR_IIO";
       runtime = [
         libiio
+        libad9361
       ];
     };
     common-precompiled-headers = {
