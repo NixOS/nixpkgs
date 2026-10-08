@@ -67,6 +67,8 @@ buildPythonPackage rec {
       url = "https://github.com/sphinx-doc/sphinx/commit/c01b0eb640bbc3dbd8141f3ea08df9edaa78ab2c.patch?full_index=1";
       hash = "sha256-Zi2WoYMSRg2xvbocj9XhEmXPAEebBokl9XyuSEpDaF0=";
     })
+    # https://github.com/sphinx-doc/sphinx/pull/14611
+    ./pygments-2.21.0-compat.patch
   ];
 
   build-system = [ flit-core ];

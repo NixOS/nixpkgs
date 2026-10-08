@@ -31,14 +31,17 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        bwa
-        fermi2
-        ropebwt2
-      ]
-    }"
-    "--set PYTHONPATH $PYTHONPATH"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bwa
+      fermi2
+      ropebwt2
+    ])
+    "--set"
+    "PYTHONPATH"
+    "$PYTHONPATH"
   ];
 
   meta = {

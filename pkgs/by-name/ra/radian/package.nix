@@ -54,7 +54,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
       writableTmpDirAsHomeHook
     ];
 
-  makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
+  makeWrapperArgs = [
+    "--set"
+    "R_HOME"
+    "${R}/lib/R"
+  ];
 
   preCheck = ''
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${R}/lib/R/lib

@@ -401,7 +401,10 @@ python3Packages.buildPythonApplication rec {
     pyqrcode
   ];
 
-  makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
+  makeWrapperArgs = lib.optionals skipPip [
+    "--add-flags"
+    "--skip-pip"
+  ];
 
   # upstream only tests on Linux, so do we.
   doCheck = stdenv.hostPlatform.isLinux;
@@ -473,6 +476,8 @@ python3Packages.buildPythonApplication rec {
     "tests/util/test_package.py::test_check_package_fragment"
     # flaky
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
+    # [2026.9.4] orjson error message mismatch
+    "tests/helpers/test_storage.py::test_loading_corrupt_core_file"
   ];
 
   preCheck = ''

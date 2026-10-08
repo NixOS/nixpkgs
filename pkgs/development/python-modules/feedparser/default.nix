@@ -1,15 +1,16 @@
 {
   lib,
   buildPythonPackage,
+  feedparser-sgmllib,
   fetchFromGitHub,
   python,
+  requests,
   setuptools,
-  sgmllib3k,
 }:
 
 buildPythonPackage rec {
   pname = "feedparser";
-  version = "6.0.12";
+  version = "6.0.14";
   pyproject = true;
 
   __darwinAllowLocalNetworking = true;
@@ -18,12 +19,15 @@ buildPythonPackage rec {
     owner = "kurtmckee";
     repo = "feedparser";
     tag = "v${version}";
-    hash = "sha256-ZLn4Naf0CQG04iXfVJVimrBQ7TGBEPcEPCF3XMjX/Mo=";
+    hash = "sha256-b2NnirUFJ1uAqIl4h/UoAff5am/D2pIuundZyzzQFfU=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ sgmllib3k ];
+  dependencies = [
+    feedparser-sgmllib
+    requests
+  ];
 
   checkPhase = ''
     runHook preCheck

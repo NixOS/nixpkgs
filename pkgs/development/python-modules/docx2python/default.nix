@@ -4,29 +4,30 @@
   fetchFromGitHub,
   lxml,
   paragraphs,
-  setuptools,
-  setuptools-scm,
   pytestCheckHook,
   types-lxml,
   typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "docx2python";
-  version = "3.6.2";
+  version = "3.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "docx2python";
     tag = finalAttrs.version;
-    hash = "sha256-1/v8slL7EYwXM8ybcJKIdjLBKNBxHgdF4gQHDYyJg6w=";
+    hash = "sha256-ctMx5UpQr8QEzB0+CahmGN2PdbFrEzoJ4Tu8LGi3GMM=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.11.25,<0.12.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     lxml

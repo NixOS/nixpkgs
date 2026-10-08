@@ -42,15 +42,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aistore";
-  version = "1.25.0";
+  version = "1.26.0";
   pyproject = true;
   __structuredAttrs = true;
 
   # Tags on GitHub do not match
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-aslNCRSV7QKgvvDuUQPgcbUyUDdGP2kC4ryFu6IVYYE=";
+    hash = "sha256-eTbWh6ItlELF57ilQ8wOJ5A1PmX8c0suV8ms2Zh73GM=";
   };
+
+  pythonRelaxDeps = [ "xxhash" ];
 
   build-system = [
     hatchling

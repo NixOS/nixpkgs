@@ -368,6 +368,8 @@ in
       substitutions = {
         inherit pythonInterpreter pythonSitePackages;
         pythonWithPackaging = lib.getExe (pythonOnBuildForHost.withPackages (ps: [ ps.packaging ]));
+        retrieveMetadata = ./python-metadata-check-hook-retrieve.py;
+        compareMetadata = ./python-metadata-check-hook-compare.py;
       };
       meta = {
         maintainers = [ lib.maintainers.dotlambda ];

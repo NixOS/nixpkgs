@@ -9,17 +9,22 @@
 
 buildPythonPackage rec {
   pname = "allure-behave";
-  version = "2.15.3";
+  version = "2.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "allure-framework";
     repo = "allure-python";
     tag = version;
-    hash = "sha256-06SKodvyoT0mYn4RmAIryZc+VyTI79KXFK+2/zuhzQ0=";
+    hash = "sha256-IwkbrOEhPuScn/eTDevbgV3w/awPivvSauD1tmAH7Qk=";
   };
 
   sourceRoot = "${src.name}/allure-behave";
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm<10" "setuptools_scm"
+  '';
 
   build-system = [ setuptools-scm ];
 

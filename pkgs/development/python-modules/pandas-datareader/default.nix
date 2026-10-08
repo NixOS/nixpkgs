@@ -1,27 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchPypi,
-  setuptools,
-  pandas,
   lxml,
+  pandas,
   requests,
+  setuptools-scm,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandas-datareader";
-  version = "0.10.0";
+  version = "0.11.1";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.12";
-
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "9fc3c63d39bc0c10c2683f1c6d503ff625020383e38f6cbe14134826b454d5a6";
+    pname = "pandas_datareader";
+    inherit (finalAttrs) version;
+    hash = "sha256-4erbbSzKpLeodqHIG2/wMH+noItW93mYYqUCB8LmWgU=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm>=8,<9" "setuptools_scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     pandas
@@ -31,13 +38,15 @@ buildPythonPackage rec {
 
   # Tests are trying to load data over the network
   doCheck = false;
+
   pythonImportsCheck = [ "pandas_datareader" ];
 
   meta = {
     description = "Up to date remote data access for pandas, works for multiple versions of pandas";
     homepage = "https://github.com/pydata/pandas-datareader";
+    changelog = "https://github.com/pydata/pandas-datareader/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ evax ];
     platforms = lib.platforms.unix;
   };
-}
+})
