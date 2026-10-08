@@ -13,12 +13,6 @@ There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/
 > We are actively restructuring our documentation to be more beginner friendly.
 >
 
-When writing new docs use **Progressive Disclosure:**
-
-- Start simple, pick up beginners.
-- Use **examples** first to show how to get something done.
-- Keep **explanation** lean.
-
 Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
 
 Write **guides** task-first: lead with a working example, then explain in prose.
