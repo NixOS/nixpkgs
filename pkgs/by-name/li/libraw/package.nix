@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  testers,
   fetchFromGitHub,
   autoreconfHook,
   lcms2,
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     inherit imagemagick hdrmerge;
     inherit (python3.pkgs) rawkit;
   };
@@ -51,10 +53,16 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
     homepage = "https://www.libraw.org/";
+    changelog = "https://www.libraw.org/download#changelog";
     license = with lib.licenses; [
       cddl
       lgpl2Plus
     ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [
+      "libraw"
+      "libraw_r"
+    ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libraw" finalAttrs.version;
   };
 })
