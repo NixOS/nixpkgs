@@ -12,7 +12,7 @@ buildNpmPackage {
 
   sourceRoot = "${headlamp-server.src.name}/frontend";
 
-  npmDepsHash = "sha256-v8aMlOk2JD2DzcUMWTK+2QP44n1Nl0LQPcIry7W51vg=";
+  npmDepsHash = "sha256-khcVcOtzu9oGJigs6N+Za5z4Np3dkbHnylOoQiBa06g=";
 
   postPatch = ''
     chmod -R u+w ../app
