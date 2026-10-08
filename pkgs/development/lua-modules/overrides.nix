@@ -679,7 +679,8 @@ in
     };
     knownRockspec = with prev.luaffi; "${pname}-${version}.rockspec";
     meta = (old.meta or { }) // {
-      broken = luaOlder "5.1" || luaAtLeast "5.4" || isLuaJIT;
+      broken = luaOlder "5.5" || isLuaJIT;
+      badPlatforms = lib.platforms.aarch64;
     };
   });
 
