@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   R,
@@ -13,7 +14,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arf";
-  version = "0.5.3";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
@@ -21,13 +22,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "eitsupi";
     repo = "arf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ema0s5whJwYY9Bg3HSKf1XFWqANzuoJgpqSVsVKBoWg=";
+    hash = "sha256-eMmuk4g7+vVFa2VuvbsEuRAGpPzh/hv016hz3rHBnmc=";
   };
 
-  cargoHash = "sha256-yGV/JSqK03bSoHsvbDyg4d+1Zf59nsT8tg9YH4oL7Lg=";
+  cargoHash = "sha256-aVb3SwPKpgQXPRQJpSQxlor0AFVoPtXfH7bndkwHnfk=";
 
-  # The test suite spawns helper scripts with a `#!/bin/sh` shebang, which does
-  # not exist inside the build sandbox.
+  # Some tests spawn `/usr/bin/env` to relaunch arf with modified environment,
+  # which does not exist inside the build sandbox.
   postPatch = ''
     substituteInPlace \
       crates/arf-console/tests/tui/support.rs \
@@ -63,6 +64,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=history::history_menu_selection_replaces_existing_buffer"
     "--skip=external::formatter::tests::formatter_process_receives_stdin_and_expected_arguments"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # These TUI tests time out on Darwin with sandboxing enabled.
+    # The restart test also times out with sandboxing disabled.
+    "--skip=history::replacing_error_option_leaves_history_status_unavailable"
+    "--skip=restart::restart_preserves_environment_and_reconnects_ipc"
   ];
 
   doInstallCheck = true;
