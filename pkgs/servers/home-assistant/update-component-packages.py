@@ -189,23 +189,17 @@ def name_to_attr_path(req: str, packages: dict[str, dict[str, str]]) -> str | No
     if req in PKG_PREFERENCES:
         return f"{PKG_SET}.{PKG_PREFERENCES[req]}"
     attr_paths = []
-    names = [req]
-    # E.g. python-mpd2 is actually called python3.6-mpd2
-    # instead of python-3.6-python-mpd2 inside Nixpkgs
-    if req.startswith(("python-", "python_")):
-        names.append(req[len("python-") :])
-    for name in names:
-        # treat "-" and "_" equally
-        name = re.sub("[-_]", "[-_]", name)
-        # python(minor).(major)-(pname)-(version or unstable-date)
-        # we need the version qualifier, or we'll have multiple matches
-        # (e.g. pyserial and pyserial-asyncio when looking for pyserial)
-        pattern = re.compile(
-            f"^python\\d+\\.\\d+-{name}-(?:\\d|unstable-.*)", re.IGNORECASE
-        )
-        for attr_path, package in packages.items():
-            if pattern.match(package["name"]):
-                attr_paths.append(attr_path)
+    # treat "-" and "_" equally
+    name = re.sub("[-_]", "[-_]", req)
+    # python(minor).(major)-(pname)-(version or unstable-date)
+    # we need the version qualifier, or we'll have multiple matches
+    # (e.g. pyserial and pyserial-asyncio when looking for pyserial)
+    pattern = re.compile(
+        f"^python\\d+\\.\\d+-{name}-(?:\\d|unstable-.*)", re.IGNORECASE
+    )
+    for attr_path, package in packages.items():
+        if pattern.match(package["name"]):
+            attr_paths.append(attr_path)
     # Let's hope there's only one derivation with a matching name
     assert len(attr_paths) <= 1, f"{req} matches more than one derivation: {attr_paths}"
     if attr_paths:
