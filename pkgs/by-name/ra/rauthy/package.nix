@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "sebadob";
     repo = "rauthy";
     rev = "v${finalAttrs.version}";
-    hash = lib.fakeHash;
+    hash = "sha256-Q++LR9ojdpsn/fAbGnOOxz+auZb9u6TVaM750X8f1gc=";
   };
 
   nativeBuildInputs = [
