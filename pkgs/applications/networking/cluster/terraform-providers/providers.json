@@ -72,14 +72,14 @@
     "vendorHash": null
   },
   "argoproj-labs_argocd": {
-    "hash": "sha256-wU+LpsXCbarWqu0dHVR6eVJ7Czdip6zTsF907Ui3YuI=",
+    "hash": "sha256-g1CODe6zh+uBTHNW5AXopieJ7vDljm50uxSLErsJHKA=",
     "homepage": "https://registry.terraform.io/providers/argoproj-labs/argocd",
     "owner": "argoproj-labs",
     "proxyVendor": true,
     "repo": "terraform-provider-argocd",
-    "rev": "v7.17.0",
+    "rev": "v7.17.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-LvTVRhhgzePYRR98t9pqvRRHcLrZ2lPHbtdzqoxtFYo="
+    "vendorHash": "sha256-pel9JeZDAw4LVMf8+a2f9fnj1gTlYSzyLYMqIRQBECI="
   },
   "auth0_auth0": {
     "hash": "sha256-jcEII43EZeBOzr8rxX8do4b2hnPKMsCt8f1wkRTq57E=",
