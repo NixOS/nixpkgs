@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "daktari";
   version = "0.0.357";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "genio-learn";
