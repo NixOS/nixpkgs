@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pywaze";
-  version = "1.2.3";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "pywaze";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p/UU/gBc0Pc5yGwJssI706wf5ODV0Q2vW6X4vrP/Jq8=";
+    hash = "sha256-ciSbI/giSqfdCbLaaRhFi3iNy3jbxhzOSpxXZmcPLjY=";
   };
 
   nativeBuildInputs = [ pyprojectVersionPatchHook ];
