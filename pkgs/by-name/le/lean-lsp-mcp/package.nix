@@ -9,8 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.28.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "oOo0oOo";
     repo = "lean-lsp-mcp";
