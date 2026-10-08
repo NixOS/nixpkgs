@@ -8,20 +8,20 @@
   nix-update-script,
   perl,
   wasm-pack,
-  wasm-bindgen-cli_0_2_126,
+  wasm-bindgen-cli_0_2_129,
   binaryen,
   lld,
   rust-jemalloc-sys-unprefixed,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
-  version = "0-unstable-2026-09-14";
+  version = "0.37.1";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
-    rev = "5c3e2bb4f1735fd684d804eff03c98c9ef23f16e";
-    hash = "sha256-RKO4KHuzKq1k+jRL6Pl5RWMVkYx7QCstTSL7YIfnsC8=";
+    rev = "v${finalAttrs.version}";
+    hash = lib.fakeHash;
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     perl
-    wasm-bindgen-cli_0_2_126
+    wasm-bindgen-cli_0_2_129
     wasm-pack
   ];
 
@@ -40,19 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/frontend";
-    hash = "sha256-VdOJOine6UQ/muVANoOiw5F3ECQ1OXPXqCuCoA3sLEA=";
+    hash = lib.fakeHash;
   };
 
-  cargoHash = "sha256-MqLGaP+4H7UP6vuoexAnTrkxo8345lckWI6wwluwZN4=";
-
-  postPatch = ''
-        substituteInPlace src/api_types/src/users.rs \
-          --replace-fail \
-            '#[cfg_attr(debug_assertions, derive(Serialize))]
-    #[serde(rename_all = "lowercase")]' \
-            '#[derive(Serialize)]
-    #[serde(rename_all = "lowercase")]'
-  '';
+  cargoHash = lib.fakeHash;
 
   preBuild = ''
     pushd src/wasm-modules
