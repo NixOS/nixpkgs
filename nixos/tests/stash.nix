@@ -17,9 +17,9 @@ import ./make-test-python.nix (
           enable = true;
 
           username = "test";
-          passwordFile.response = config.contracts.fileSecrets.results.stash-passwordFile;
-          jwtSecretKey.response = config.contracts.fileSecrets.results.stash-jwtSecretKey;
-          sessionStoreKey.response = config.contracts.fileSecrets.results.stash-sessionStoreKey;
+          passwordFile.response = config.contracts.fileSecrets.results.stash.passwordFile;
+          jwtSecretKey.response = config.contracts.fileSecrets.results.stash.jwtSecretKey;
+          sessionStoreKey.response = config.contracts.fileSecrets.results.stash.sessionStoreKey;
 
           plugins =
             let
@@ -66,9 +66,9 @@ import ./make-test-python.nix (
         };
         contracts.fileSecrets.defaultProvider = config.contracts.fileSecrets.providers.hardcoded-secret;
         testing.hardcoded-secret.fileSecrets = {
-          stash-passwordFile.providerOptions.content = "MyPassword";
-          stash-jwtSecretKey.providerOptions.content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-          stash-sessionStoreKey.providerOptions.content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
+          stash.passwordFile.providerOptions.content = "MyPassword";
+          stash.jwtSecretKey.providerOptions.content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+          stash.sessionStoreKey.providerOptions.content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
         };
       };
 
