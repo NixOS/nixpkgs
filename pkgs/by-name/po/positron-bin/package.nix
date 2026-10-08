@@ -127,10 +127,10 @@ stdenv.mkDerivation {
           "Icon=$out/share/pixmaps/co.posit.positron.png" \
           --replace-fail \
           "Exec=/usr/share/positron/positron %F" \
-          "Exec=$out/share/positron/.positron-wrapped %F" \
+          "Exec=$out/bin/positron %F" \
           --replace-fail \
           "/usr/share/positron/positron --new-window %F" \
-          "$out/share/positron/.positron-wrapped --new-window %F"
+          "$out/bin/positron --new-window %F"
 
         # Fix libGL.so not found errors.
         wrapProgram "$out/share/positron/positron" \
