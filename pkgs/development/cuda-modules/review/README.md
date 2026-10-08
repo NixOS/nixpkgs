@@ -37,22 +37,51 @@ Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
 - Master's deleted source TensorFlow recipe stays deleted. Combining the CUDA
   license migration with the cuBLASMp header test introduced a duplicate `lib`
   argument; fresh evaluation caught it and the argument was deduplicated.
-- Fresh evaluation of the same 531 derivations and 547 outputs produces the
+- The initial rebase evaluation of 531 derivations and 547 outputs produced the
   same complete 5,751-object derivation graph, including raw derivation bytes.
-  Previous execution evidence applies to those unchanged identities; this is
-  not a new build or runtime run, nor coverage of arbitrary overrides.
-- Unresolved: selecting cross GCC 14 with its explicit `gccForLibs` provider
-  preserves that provider in the BUILD CUDA backend, but the installed HOST
-  CUDA 13.3 backend selects GCC 15 with GCC 16's runtime. GNU `postStage` in
-  `pkgs/stdenv/booter.nix` resets the compiler to the global default, and
-  `backend.nix` now consumes that synthetic selection. The generated runtime
-  library paths therefore disagree. Selection divergence is reproduced; an
-  actual link/runtime failure has not been demonstrated. The compiler-runtime
-  fixture currently exercises Clang provider preservation, not this GNU case.
-- Unresolved: Torch registers its installed CSR regression runner only when
-  BUILD can execute HOST, although constructing that runner requires no HOST
-  execution. This omits the package-owned cross tester; manually running its
-  source on HOST remains valid evidence.
+  That identity result predates the following review fixes; it does not transfer
+  execution evidence to their changed dependency graphs.
+- Compiler role rebinding now re-calls the selected GNU/LLVM constructor in the
+  HOST dependency scope instead of replacing its frontend with the global
+  default. Constructor options and `overrideAttrs` survive; graph overlays
+  supply dependencies for the new role. A closed BUILD-only dependency override
+  cannot automatically become a corresponding HOST dependency. The selected
+  TARGET libc and C++ provider remain independent of the compiler executable's
+  role, including CUDA's supported-frontend fallback. The existing wrapper
+  predicate determines whether `gccForLibs` is active; it is shared rather than
+  approximated by testing that field for null. Bintools retains the same libc.
+  `pkgs/test/top-level/compiler-runtime.nix` covers GNU, GCC-NG, LLVM 19/21,
+  explicit/implicit/null providers, libc++, frontend options and graph overlays.
+- Torch's installed CSR runners are now available for cross packages. Only the
+  automatically executed CPU check requires BUILD to execute HOST. CPU-only
+  Torch also exposes the CPU runner. The shared Python tester uses structured
+  attributes and quoted wrapper arguments to retain argument boundaries, such
+  as the single `--add-flags` value `--device cpu`.
+- The wrapper separates opaque caller C++ arguments from packaged header and
+  runtime defaults. Native drivers retain per-input language selection; caller
+  C++ channels follow driver personality and survive default suppression.
+  Permanent GCC, Clang/libstdc++ and Clang/libc++ suites pass using the current
+  wrapper factory with cached raw compiler dependencies. Current CSR runners
+  pass 2,780 CPU cases and 5,560 CPU/GPU cases against cached Torch on the native
+  GPU host and on Spark with cross-built installed runners. GNU 14 and CUDA's GNU 15 fallback also pass actual C++ exception,
+  allocation and threading compile/link/runtime checks with the selected GNU 14
+  provider: native, BUILD-to-AArch64 cross compilation, and installed AArch64
+  compilers. These use cached raw compilers with current wrappers and backend
+  selection, not full rebuilds of Torch or MAGMA. Fresh evaluation after these
+  fixes passes the same 531 derivations and 547 outputs. All 531 selected roots
+  change identity through core wrapper dependencies: previous full-build results
+  cannot be transferred to them. Of 5,751 derivation objects, 472 remain shared.
+- Current normal wrapper/backend/NVCC factories over cached raw dependencies
+  pass the package-owned NVCC runtime and CMake SAXPY builds for SM 89 and
+  SM 121a. Installed native/Spark C++17/20 host/GPU math and standard-library
+  controls pass; both SAXPY programs report zero numerical error. The nested
+  CUDA 12.9 preprocessing control omits `-arch` and emits an architecture
+  deprecation warning; actual native/cross compilation uses the requested SMs.
+- A paired `NIX_SHOW_STATS` evaluation compares the tree before these review
+  fixes with the current implementation using the same 12 NVCC/CUDART/MAGMA
+  derivation-path records (native/cross, CUDA 12.9/13.3). CPU is 0.870/0.855 s,
+  allocated bytes increase 0.044%, and maximum RSS is 484,768/482,124 KiB.
+  This single subsecond sample does not establish a speed improvement.
 - The wrapper interpretation limits are documented in the stdenv manual's
   CC Wrapper section. Selection laws do not prove operation classification or
   equivalence for opaque wrappers. Fresh shell controls verify Flang flag
