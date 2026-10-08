@@ -181,6 +181,15 @@ stdenv.mkDerivation (
         # on macOS (nothing about this _seems_ nix specific)..
         (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
       ]
+      ++ lib.optional (lib.versionOlder release_version "23") (
+        # Preserve empty quoted arguments in GNU-style response files.
+        # https://github.com/llvm/llvm-project/pull/187566
+        fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/1c55313f344ff2189500f87c89cec2a3cf2eb5c9.patch";
+          stripLen = 1;
+          hash = "sha256-yMY+sT8qfMUhLwkg/HW1SS2jKMxyxA9ngaa+AeeU/Zo=";
+        }
+      )
       ++
         lib.optional (lib.versionOlder release_version "19")
           # Add missing include headers to build against gcc-15:
