@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   python3,
+  withSpirvCrossNamespaceOverride ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,9 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isUnix [
-    (lib.cmakeBool "SPIRV_CROSS_SHARED" true)
-  ];
+  cmakeFlags =
+    lib.optionals stdenv.hostPlatform.isUnix [
+      (lib.cmakeBool "SPIRV_CROSS_SHARED" true)
+    ]
+    ++ lib.optionals (withSpirvCrossNamespaceOverride != null) [
+      (lib.cmakeFeature "SPIRV_CROSS_NAMESPACE_OVERRIDE" withSpirvCrossNamespaceOverride)
+    ];
 
   postFixup = ''
     substituteInPlace $out/lib/pkgconfig/*.pc \
