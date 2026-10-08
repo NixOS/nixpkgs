@@ -1,0 +1,132 @@
+tbox 1.8.2 does not build on Darwin: the 32-bit ARM assembly implementations
+are also compiled for arm64, where they either do not assemble (the inline
+assembly uses ARM32 mnemonics and registers) or clash with the generic C
+implementation:
+
+    src/tbox/libc/string/memmov.c:51:21: error: redefinition of 'tb_memmov_impl'
+    src/tbox/libc/string/impl/arm/strcmp.c:47:10: error: invalid operand for instruction
+
+Only include them for 32-bit ARM, which is what
+src/tbox/libc/string/impl/arm/memset.c already guards against internally.
+
+--- a/src/tbox/libc/string/memcmp.c
++++ b/src/tbox/libc/string/memcmp.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_MEMCMP
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/memcmp.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/memcmp.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/memcmp.c"
+--- a/src/tbox/libc/string/memcpy.c
++++ b/src/tbox/libc/string/memcpy.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_MEMCPY
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/memcpy.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/memcpy.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/memcpy.c"
+--- a/src/tbox/libc/string/memmov.c
++++ b/src/tbox/libc/string/memmov.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_MEMMOVE
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/memmov.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/memmov.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/memmov.c"
+--- a/src/tbox/libc/string/memset.c
++++ b/src/tbox/libc/string/memset.c
+@@ -31,7 +31,7 @@
+ #       include "impl/x86/memset.c"
+ #   elif defined(TB_ARCH_x64)
+ #       include "impl/x86/memset.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/memset.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/memset.c"
+--- a/src/tbox/libc/string/strcmp.c
++++ b/src/tbox/libc/string/strcmp.c
+@@ -27,7 +27,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_STRCMP
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/strcmp.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/strcmp.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/strcmp.c"
+--- a/src/tbox/libc/string/strcpy.c
++++ b/src/tbox/libc/string/strcpy.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_STRCPY
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/strcpy.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/strcpy.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/strcpy.c"
+--- a/src/tbox/libc/string/strlcpy.c
++++ b/src/tbox/libc/string/strlcpy.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_STRLCPY
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/strlcpy.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/strlcpy.c"
+ #   endif
+ #else
+--- a/src/tbox/libc/string/strlen.c
++++ b/src/tbox/libc/string/strlen.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_STRLEN
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/strlen.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/strlen.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/strlen.c"
+--- a/src/tbox/libc/string/strncmp.c
++++ b/src/tbox/libc/string/strncmp.c
+@@ -27,7 +27,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_STRNCMP
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/strncmp.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/strncmp.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/strncmp.c"
+--- a/src/tbox/libc/string/strncpy.c
++++ b/src/tbox/libc/string/strncpy.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_STRNCPY
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/strncpy.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/strncpy.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/strncpy.c"
+--- a/src/tbox/libc/string/strnlen.c
++++ b/src/tbox/libc/string/strnlen.c
+@@ -28,7 +28,7 @@
+ #ifndef TB_CONFIG_LIBC_HAVE_STRNLEN
+ #   if defined(TB_ARCH_x86)
+ #       include "impl/x86/strnlen.c"
+-#   elif defined(TB_ARCH_ARM)
++#   elif defined(TB_ARCH_ARM) && !defined(TB_ARCH_ARM64)
+ #       include "impl/arm/strnlen.c"
+ #   elif defined(TB_ARCH_SH4)
+ #       include "impl/sh4/strnlen.c"
