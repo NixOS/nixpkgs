@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Easy to use, general purpose Computer Algebra System, optionally with GUI";
     homepage = "http://www.yacas.org/";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
