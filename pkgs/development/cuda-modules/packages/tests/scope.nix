@@ -6,19 +6,7 @@
   runCommand,
 }:
 let
-  consumer =
-    {
-      cuda_nvcc,
-      cuda_cudart,
-      stdenv,
-      label ? "default",
-    }:
-    stdenv.mkDerivation {
-      name = "cuda-scope-consumer-${label}";
-      nativeBuildInputs = [ cuda_nvcc ];
-      buildInputs = [ cuda_cudart ];
-      buildCommand = "touch $out";
-    };
+  consumer = import ../../../../test/top-level/cuda-consumer.nix;
   individual = callPackage consumer { };
   grouped = callPackages (lib.mirrorFunctionArgs consumer (args: {
     first = consumer args;
