@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "kubesec";
-  version = "2.14.2";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "kubesec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4jVRd6XQekL4wMZ+Icoa2DEsTGzBISK2QPO+gu890kA=";
+    hash = "sha256-yWjSkIEh4KMTuPs4h/EfcRV2ChqAb0bUQesvmVVP3bA=";
   };
 
-  vendorHash = "sha256-6jXGc9tkqRTjzEiug8lGursPm9049THWlk8xY3pyVgo=";
+  vendorHash = "sha256-/3LyaHpchbuNTZ9ukLXAli7psfuqn79TDvw4TsJTqzc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
