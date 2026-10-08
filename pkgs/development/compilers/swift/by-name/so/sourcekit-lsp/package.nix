@@ -20,6 +20,7 @@
   swift-tools-protocols,
   swift-tools-support-core,
   swiftpm,
+  versionCheckHook,
   swift_release,
   swift_sources,
 }:
@@ -130,6 +131,13 @@ stdenv.mkDerivation (finalAttrs: {
         done < <(find "$output" -type f -print0)
       done
     '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgramArg = "--help";
+  preVersionCheck = "version='OVERVIEW: Language Server Protocol implementation'";
+
+  doInstallCheck = true;
 
   __structuredAttrs = true;
 
