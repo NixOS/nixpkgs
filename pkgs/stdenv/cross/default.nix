@@ -38,8 +38,11 @@ lib.init bootStages
   (
     buildPackages:
     let
+      # Stage-specific overlays can introduce a stage without changing platforms.
+      # Reuse native defaults, including cycle-breaking bootstrap overrides.
+      isNative = lib.systems.equals localSystem crossSystem;
       adaptStdenv = if crossSystem.isStatic then buildPackages.stdenvAdapters.makeStatic else lib.id;
-      stdenvNoCC = adaptStdenv (
+      crossStdenvNoCC = adaptStdenv (
         buildPackages.stdenv.override (old: rec {
           buildPlatform = localSystem;
           hostPlatform = crossSystem;
@@ -82,17 +85,17 @@ lib.init bootStages
       inherit config;
       overlays = overlays ++ crossOverlays;
       selfBuild = false;
-      inherit stdenvNoCC;
+      stdenvNoCC = if isNative then buildPackages.stdenvNoCC else crossStdenvNoCC;
       stdenv =
         let
-          inherit (stdenvNoCC) hostPlatform targetPlatform;
-          baseStdenv = stdenvNoCC.override {
+          inherit (crossStdenvNoCC) hostPlatform targetPlatform;
+          crossStdenv = crossStdenvNoCC.override {
             # Old ones run on wrong platform
             extraBuildInputs = lib.optionals hostPlatform.isDarwin [
               buildPackages.targetPackages.apple-sdk
             ];
 
-            hasCC = !stdenvNoCC.targetPlatform.isGhcjs;
+            hasCC = !crossStdenvNoCC.targetPlatform.isGhcjs;
 
             cc =
               if crossSystem.useiOSPrebuilt or false then
@@ -121,6 +124,7 @@ lib.init bootStages
                 buildPackages.gcc;
 
           };
+          baseStdenv = if isNative then buildPackages.stdenv else crossStdenv;
         in
         if config ? replaceCrossStdenv then
           config.replaceCrossStdenv { inherit buildPackages baseStdenv; }
