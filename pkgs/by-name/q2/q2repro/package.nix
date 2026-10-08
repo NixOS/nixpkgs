@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # build date and rev number is displayed in the game's console
   revCount = "4613"; # git rev-list --count ${src.rev}
-  SOURCE_DATE_EPOCH = "1790475158"; # git show -s --format=%ct ${src.rev}
+  env.SOURCE_DATE_EPOCH = "1790475158"; # git show -s --format=%ct ${src.rev}
 
   nativeBuildInputs = [
     meson
