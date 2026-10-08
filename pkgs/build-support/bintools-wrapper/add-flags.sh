@@ -3,7 +3,6 @@ var_templates_list=(
     NIX_IGNORE_LD_THROUGH_GCC
     NIX_LDFLAGS
     NIX_LDFLAGS_BEFORE
-    NIX_DYNAMIC_LINKER
     NIX_LDFLAGS_AFTER
     NIX_LDFLAGS_HARDEN
     NIX_HARDENING_ENABLE
@@ -21,6 +20,10 @@ done
 for var in "${var_templates_bool[@]}"; do
     mangleVarBool "$var" ${role_suffixes[@]+"${role_suffixes[@]}"}
 done
+
+# One executable pathname must agree across every role served by this wrapper.
+mangleVarSingle NIX_DYNAMIC_LINKER ${role_suffixes[@]+"${role_suffixes[@]}"}
+wrapper_NIX_DYNAMIC_LINKER=${wrapper_NIX_DYNAMIC_LINKER-}
 
 if [ -e @out@/nix-support/libc-ldflags ]; then
     wrapper_NIX_LDFLAGS+=" $(< @out@/nix-support/libc-ldflags)"
