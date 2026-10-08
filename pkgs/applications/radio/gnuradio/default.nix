@@ -32,8 +32,6 @@
   libunwind,
   thrift,
   cppzmq,
-  # Needed only if qt-gui is disabled, from some reason
-  icu,
   # GUI related
   gtk3,
   pango,
@@ -60,10 +58,7 @@ let
         boost
         spdlog
         mpir
-      ]
-      # when gr-qtgui is disabled, icu needs to be included, otherwise
-      # building with boost 1.7x fails
-      ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
+      ];
       pythonNative = with python.pythonOnBuildForHost.pkgs; [
         mako
       ];
