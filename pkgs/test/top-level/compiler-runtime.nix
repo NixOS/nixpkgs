@@ -233,6 +233,22 @@ let
       );
   };
   selectedLinkerCompiler = selectedLinkerPackages.targetPackages.stdenv.cc;
+  preservesResourceCompanion =
+    toolchain:
+    let
+      packages = nixpkgsFun {
+        localSystem = "x86_64-linux";
+        crossSystem = {
+          system = "aarch64-linux";
+          ${toolchain} = true;
+        };
+      };
+    in
+    packages.targetPackages.stdenv.cc.drvPath == packages.gcc.drvPath
+    && packages.gccForLibs.drvPath == packages.gcc.cc.drvPath
+    && builtins.isString packages.stdenv.cc.drvPath
+    && builtins.isString packages.hello.drvPath
+    && builtins.isString packages.llvmPackages.libllvm.drvPath;
   # Raw/custom stages can reach postStage without forcing adjacency assertions.
   # Reject unsupported compiler contexts before reinterpreting dependency roles.
   postCompiler =
@@ -275,6 +291,10 @@ let
     (builtins.tryEval compiler.recalled).success;
 
 in
+assert lib.all preservesResourceCompanion [
+  "useZig"
+  "useArocc"
+];
 assert
   postCompiler {
     hasCC = false;
