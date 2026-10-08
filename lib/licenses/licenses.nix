@@ -251,14 +251,13 @@ lib.mapAttrs mkLicense (
     };
 
     bsdAskToEndorse = {
-      #spdxId = "BSD-ask-to-endorse"; # Accepted to SPDX waiting on next SPDX release
+      spdxId = "BSD-ask-to-endorse";
       fullName = "BSD - ask to endorse";
-      url = "https://github.com/sudo-project/sudo/blob/c1307ea9ff340ce0538779f8e456501461fc44b7/plugins/sudoers/redblack.c#L24-L43";
     };
 
     bsdAxisNoDisclaimerUnmodified = {
-      fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
-      url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
+      spdxId = "BSD-Source-Code-no-disclaimer";
+      fullName = "BSD Source Code Attribution - no disclaimer";
     };
 
     bsdOriginal = {
@@ -376,8 +375,7 @@ lib.mapAttrs mkLicense (
     };
 
     cc-by-nc-30-igo = {
-      # Currently does not have a spdxID will get one in the future https://github.com/spdx/license-list-XML/issues/2845
-      # spdxId = "CC-BY-NC-3.0-IGO";
+      spdxId = "CC-BY-NC-3.0-IGO";
       fullName = "Creative Commons Attribution Non Commercial 3.0 IGO";
       free = false;
     };
@@ -929,8 +927,8 @@ lib.mapAttrs mkLicense (
     };
 
     hl3 = {
+      spdxId = "Hippocratic-3.0-core";
       fullName = "Hippocratic License v3.0";
-      url = "https://firstdonoharm.dev/version/3/0/core.txt";
       free = false;
       redistributable = true;
     };
