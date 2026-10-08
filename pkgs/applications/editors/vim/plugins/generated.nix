@@ -21067,12 +21067,12 @@ final: prev: {
 
   vim-fern = buildVimPlugin {
     pname = "vim-fern";
-    version = "1.59.2";
+    version = "1.59.3";
     src = fetchFromGitHub {
       owner = "lambdalisue";
       repo = "vim-fern";
-      tag = "v1.59.2";
-      hash = "sha256-IYjqaTbSzLSyQ1X+JOkPvIg2DpUPzWVXMXtT0+zQrts=";
+      tag = "v1.59.3";
+      hash = "sha256-eFk53nR9K6oK3+CaHXNRC7p8cjNEIHiGL0WtPZRTGYc=";
     };
     meta.homepage = "https://github.com/lambdalisue/vim-fern/";
     meta.license = getLicenseFromSpdxId "MIT";
