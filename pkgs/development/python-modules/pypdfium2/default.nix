@@ -5,7 +5,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
-  setuptools-scm,
+  packaging,
+  setuptools,
   pdfium,
   numpy,
   pillow,
@@ -15,41 +16,36 @@
 }:
 
 let
-  # They demand their own fork of ctypesgen
-  ctypesgen = buildPythonPackage rec {
-    pname = "ctypesgen";
-    version = "1.1.1+g${src.rev}"; # the most recent tag + git version
-    pyproject = true;
-
-    src = fetchFromGitHub {
-      owner = "pypdfium2-team";
-      repo = "ctypesgen";
-      rev = "3961621c3e057015362db82471e07f3a57822b15";
-      hash = "sha256-0OBY7/Zn12rG20jNYG65lANTRVRIFvE0SgUdYGFpRtU=";
-    };
-
-    build-system = [
-      setuptools-scm
-    ];
+  # Use the fork revision bundled with this release's source distribution.
+  ctypesgen = fetchFromGitHub {
+    owner = "pypdfium2-team";
+    repo = "ctypesgen";
+    rev = "4ddc2b2cdc4daefb0be450e8b5152e11337e9e3c";
+    hash = "sha256-S98kIimLZa3wJ5aKlADYOkqxsOhUlLqLHogC7Id0vVo=";
   };
-
 in
 buildPythonPackage rec {
   pname = "pypdfium2";
-  version = "5.13.0";
+  version = "5.14.0";
   pyproject = true;
 
+  # Use GitHub because the PyPI source distribution excludes the test suite.
   src = fetchFromGitHub {
     owner = "pypdfium2-team";
     repo = "pypdfium2";
     tag = version;
-    hash = "sha256-DbCbJUvYzjWIlGJyrUbJfzebHrPpRFEx60DYqs1UrkQ=";
+    hash = "sha256-KnZkIbV1ke0tL+VdUOkHElZXVrJixNBBoD0fpLPHNbY=";
   };
 
   build-system = [
-    ctypesgen
-    setuptools-scm
+    packaging
+    setuptools
   ];
+
+  postPatch = ''
+    mkdir -p deps
+    ln -s ${ctypesgen} deps/ctypesgen
+  '';
 
   nativeBuildInputs = [
     removeReferencesTo
@@ -77,6 +73,9 @@ buildPythonPackage rec {
     pillow
     pytestCheckHook
   ];
+
+  # Avoid collecting ctypesgen's tests, which also define tests.conftest.
+  enabledTestPaths = [ "tests" ];
 
   disabledTestPaths = [
     # does not work on ZFS with normalization
