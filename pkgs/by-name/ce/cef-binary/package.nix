@@ -37,6 +37,7 @@
     aarch64-linux = "sha256-gRYcEylZAUvKTOmV1zw9TyiEkv6FZ0vhVT1mLwne57k=";
     x86_64-linux = "sha256-6usxPmA53kZIVYk9KHxNXrTscSaXjqg8YWS/SiPcAXo=";
   },
+  withAngleLibs ? lib.versionOlder version "152",
 }:
 
 let
@@ -100,8 +101,10 @@ stdenv.mkDerivation {
     sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
     patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
     patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
-    patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
+    ${lib.optionalString withAngleLibs ''
+      patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
+      patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
+    ''}
     patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
     patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
     cp --recursive . $out
