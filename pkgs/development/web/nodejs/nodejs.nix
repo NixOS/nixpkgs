@@ -30,7 +30,7 @@
   zlib,
   zstd,
   icu,
-  bash,
+  bashNonInteractive,
   ninja,
   pkgconf,
   unixtools,
@@ -270,10 +270,8 @@ let
         AR_host = touchScript "${buildPackages.stdenv.cc}/bin/ar";
       };
 
-      # NB: technically, we do not need bash in build inputs since all scripts are
-      # wrappers over the corresponding JS scripts. There are some packages though
-      # that use bash wrappers, e.g. polaris-web.
-      buildInputs = [ bash ] ++ sharedLibInputs;
+      # NB: we need bash for npm (and corepack) outputs
+      buildInputs = [ bashNonInteractive ] ++ sharedLibInputs;
 
       nativeBuildInputs = [
         installShellFiles
