@@ -28,7 +28,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbt-common";
   version = "1.37.3-unstable-2026-03-27";
   pyproject = true;
@@ -86,7 +86,7 @@ buildPythonPackage rec {
     #!nix-shell -i bash -p git common-updater-scripts perl
 
     tmpdir="$(mktemp -d)"
-    git clone --depth=1 "${src.gitRepoUrl}" "$tmpdir"
+    git clone --depth=1 "${finalAttrs.src.gitRepoUrl}" "$tmpdir"
 
     pushd "$tmpdir"
 
@@ -109,4 +109,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
