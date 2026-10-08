@@ -32,6 +32,36 @@ Cross builds check compilation and linking; installed programs must also run on
 their target host. GPU execution requires a suitable machine outside the build
 sandbox. Script regressions do not establish Darwin compiler correctness.
 
+Adversarial review after rebasing onto master `cecfa8f6a07e` (2026-10-08):
+
+- Master's deleted source TensorFlow recipe stays deleted. Combining the CUDA
+  license migration with the cuBLASMp header test introduced a duplicate `lib`
+  argument; fresh evaluation caught it and the argument was deduplicated.
+- Fresh evaluation of the same 531 derivations and 547 outputs produces the
+  same complete 5,751-object derivation graph, including raw derivation bytes.
+  Previous execution evidence applies to those unchanged identities; this is
+  not a new build or runtime run, nor coverage of arbitrary overrides.
+- Unresolved: selecting cross GCC 14 with its explicit `gccForLibs` provider
+  preserves that provider in the BUILD CUDA backend, but the installed HOST
+  CUDA 13.3 backend selects GCC 15 with GCC 16's runtime. GNU `postStage` in
+  `pkgs/stdenv/booter.nix` resets the compiler to the global default, and
+  `backend.nix` now consumes that synthetic selection. The generated runtime
+  library paths therefore disagree. Selection divergence is reproduced; an
+  actual link/runtime failure has not been demonstrated. The compiler-runtime
+  fixture currently exercises Clang provider preservation, not this GNU case.
+- Unresolved: Torch registers its installed CSR regression runner only when
+  BUILD can execute HOST, although constructing that runner requires no HOST
+  execution. This omits the package-owned cross tester; manually running its
+  source on HOST remains valid evidence.
+- The wrapper interpretation limits are documented in the stdenv manual's
+  CC Wrapper section. Selection laws do not prove operation classification or
+  equivalence for opaque wrappers. Fresh shell controls verify Flang flag
+  routing and role/policy transport, not real Flang or Darwin compilation.
+- At least 44 files and 4,741 added lines concern independent numerical,
+  ownership, initialization, and ancillary repairs rather than the cross
+  selection abstraction. Their validation does not establish that this entire
+  changeset is a minimal implementation of that abstraction.
+
 See the [MAGMA test instructions](../../../by-name/ma/magma/tests/README.md) for
 the single-file `runtime.py --suite dense|sparse` runner.
 Build `-A torch.tests.tester-cppExtension` and run its
