@@ -12,6 +12,13 @@
 }:
 let
   cc = targetPackages.stdenv.cc;
+  useGccForLibs =
+    cc.useGccForLibs or (import ../../build-support/cc-wrapper/use-gcc-for-libs.nix (
+      cc
+      // {
+        targetPlatform = cc.stdenv.targetPlatform;
+      }
+    ));
   compilerName =
     if cc.isGNU then
       "gcc"
@@ -54,8 +61,9 @@ in
         # GCC supplies its own C++ runtime. Retain the current runtime so CUDA code
         # can link against packages built with the ordinary stdenv.
         selected.override {
+          inherit (cc) libcxx;
           useCcForLibs = true;
-          gccForLibs = cc.cc;
+          gccForLibs = if useGccForLibs then cc.gccForLibs else cc.cc;
         };
 
   # Resolve the backend's BUILD -> HOST splice before nesting it under cc:

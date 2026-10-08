@@ -150,14 +150,14 @@ let
     replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config
     + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
 
-  useGccForLibs =
-    useCcForLibs
-    && libcxx == null
-    && !targetPlatform.isDarwin
-    && !(targetPlatform.useLLVM or false)
-    && !(targetPlatform.useAndroidPrebuilt or false)
-    && !(targetPlatform.isiOS or false)
-    && gccForLibs != null;
+  useGccForLibs = import ./use-gcc-for-libs.nix {
+    inherit
+      useCcForLibs
+      libcxx
+      gccForLibs
+      targetPlatform
+      ;
+  };
   gccForLibs_solib =
     getLib gccForLibs + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
@@ -521,6 +521,7 @@ stdenvNoCC.mkDerivation {
       libcxx
       gccForLibs
       useCcForLibs
+      useGccForLibs
       nativeTools
       nativeLibc
       nativePrefix
