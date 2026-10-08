@@ -11,8 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "5.44.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
