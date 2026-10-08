@@ -46,6 +46,10 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
     hash = "sha256-R5V69nJLQ3/1995ezH1/WuueA6cm1vhKZdOECqbwPbU=";
   };
 
+  patches = [
+    ./xla_ffi-include-python-first.patch
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==80.10.2" "setuptools"
