@@ -189,9 +189,13 @@ let
 
   sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
 
-  copyLibHeaders = map (name: "${lib.getDev sharedLibDeps.${name}}/include/*") (
-    builtins.attrNames sharedLibDeps
-  );
+  # node-gyp expects headers for the following libs (the list is maintained upstream in tools/install.py)
+  # to be at the path given by `process.config.variables.node_prefix`, which is set to $out.
+  libHeadersForGYP = [
+    libuv
+    openssl
+    zlib
+  ];
 
   bundlesCorepack = !lib.versionAtLeast version "25.0.0";
 
@@ -551,7 +555,9 @@ let
           ]
           ++ lib.optional bundlesCorepack "corepack";
           # See PKG_CONFIG_SYSTEM_INCLUDE_PATH.
-          disallowedRequisites = map (dep: dep.dev) (lib.filter (dep: dep ? dev) sharedLibInputs);
+          disallowedRequisites = map (dep: dep.dev) (
+            lib.filter (dep: !(builtins.elem dep libHeadersForGYP) && dep ? dev) sharedLibInputs
+          );
         };
         corepack = {
           disallowedReferences = [
@@ -620,9 +626,9 @@ let
           ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
             $npm/share/bash-completion/completions/npm
 
-          # install the missing headers for node-gyp
-          # TODO: use propagatedBuildInputs instead of copying headers.
-          cp -r ${lib.concatStringsSep " " copyLibHeaders} $out/include/node
+          ln -s ${
+            lib.concatStringsSep " " (map (dep: "${lib.getDev dep}/include/*") libHeadersForGYP)
+          } $out/include/node/
 
           # assemble a static v8 library and put it in the 'libv8' output
           mkdir -p $libv8/lib
