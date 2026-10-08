@@ -196,7 +196,6 @@ let
       ed
       expat
       flex
-      gettext
       groff
       jq
       kyua
@@ -271,6 +270,7 @@ let
   sdkPackages = prevStage: {
     inherit (prevStage)
       bashNonInteractive
+      gettext
       libpng
       libxml2
       libxo
@@ -1092,7 +1092,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 file
                 findutils
                 gawk
-                gettext
                 gnumake
                 gnused
                 gnutar
