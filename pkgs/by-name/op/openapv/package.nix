@@ -5,6 +5,7 @@
   fetchFromGitHub,
   cmake,
   nix-update-script,
+  ffmpeg-headless,
 }:
 let
   # Requires an /etc/os-release file, so we override it with this.
@@ -28,7 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = nix-update-script { };
+  doCheck = true;
+
+  passthru = {
+    tests = { inherit ffmpeg-headless; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/AcademySoftwareFoundation/openapv/releases/tag/v${finalAttrs.version}";
