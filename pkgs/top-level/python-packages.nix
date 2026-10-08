@@ -10573,6 +10573,8 @@ self: super: with self; {
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
+  marshmallow_3 = callPackage ../development/python-modules/marshmallow/3.nix { };
+
   mashumaro = callPackage ../development/python-modules/mashumaro { };
 
   masky = callPackage ../development/python-modules/masky { };
