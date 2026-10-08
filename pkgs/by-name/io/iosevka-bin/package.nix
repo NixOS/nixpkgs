@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       platforms
       ;
     maintainers = with lib.maintainers; [
-      astratagem
+      montchr
     ];
   };
 

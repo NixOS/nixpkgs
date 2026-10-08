@@ -6,18 +6,20 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "tartufo";
-  version = "6.0.0";
+  version = "6.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "godaddy";
     repo = "tartufo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GWxDGsoWVKjg/2zTPx+xsMmrBp6yAC5pq5/AALmY7No=";
+    hash = "sha256-P+7BtqV4s+Z92PApuNYjTCjzAiKFUCx8sc1qkecEG4k=";
   };
 
   pythonRelaxDeps = [
     "cached-property"
+    "gitpython"
+    "pygit2"
     "tomlkit"
   ];
 

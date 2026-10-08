@@ -5,15 +5,15 @@
   oath-toolkit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pass-otp";
-  version = "1.2.0";
+  version = "unstable-2026-05-12";
 
   src = fetchFromGitHub {
     owner = "tadfisher";
     repo = "pass-otp";
-    rev = "v${version}";
-    sha256 = "0cpqrf3939hcvwg7sd8055ghc8x964ilimlri16czzx188a9jx9v";
+    rev = "7bb50dbc4b6073f12f40be66a5ee371b9652a646";
+    sha256 = "sha256-dmdZIuDZQLIF7T3crLKQeQ6bqZtb6Wd+Fd5Z7aY0Azc=";
   };
 
   buildInputs = [ oath-toolkit ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   patchPhase = ''
-    sed -i -e 's|OATH=\$(which oathtool)|OATH=${oath-toolkit}/bin/oathtool|' otp.bash
+    sed -i -e 's|OATH=\$(command -v oathtool)|OATH=${oath-toolkit}/bin/oathtool|' otp.bash
   '';
 
   installFlags = [

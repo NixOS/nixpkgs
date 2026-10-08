@@ -1798,6 +1798,13 @@ sha256 = "00qwa5vxd7yfn371qrsr9ihv2kkvs15017gdivlc3ynizwwdhgbc"
 synopsis = "Thread Utilities"
 version = "2.3.0"
 
+[tcprepl]
+dependencies = ["srfi-18"]
+license = "bsd"
+sha256 = "q9XEdyvXsdnXrmy2UpV2TsZ7gucXFUV87vaAY5Oubjs="
+synopsis = "Simple networked REPL over TCP"
+version = "6.1.0"
+
 [tick]
 dependencies = ["commands", "optimism", "simple-logger", "simple-sha1", "srfi-1", "srfi-13", "xdg-basedir"]
 license = "bsd"

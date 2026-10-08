@@ -41,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Use a plain name for the pkg-config file
     ./pkg-config.patch
+
+    # Several C-API functions with bind(C) were not declared as public in their
+    # Fortran module, leading to link errors with gfortran 16.
+    ./fix-c-api-visibility-gfortran16.patch
   ];
 
   postPatch = ''

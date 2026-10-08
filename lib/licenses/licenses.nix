@@ -1443,6 +1443,12 @@ lib.mapAttrs mkLicense (
       redistributable = true; # Definitely redistributable though, it's an AGPL derivative
     };
 
+    stalwart = {
+      fullName = "Stalwart Enterprise License 2.0 (SELv2) Agreement";
+      url = "https://github.com/stalwartlabs/cli/blob/main/LICENSES/LicenseRef-SEL.txt";
+      free = false;
+    };
+
     stk = {
       spdxId = "MIT-STK";
       fullName = "MIT-STK License";
@@ -1726,18 +1732,6 @@ lib.mapAttrs mkLicense (
   }
   // {
     # TODO: remove legacy aliases
-    apsl10 = {
-      # deprecated for consistency with `apple-psl20`; use `apple-psl10`
-      spdxId = "APSL-1.0";
-      fullName = "Apple Public Source License 1.0";
-      deprecated = true;
-    };
-    apsl20 = {
-      # deprecated due to confusion with Apache-2.0; use `apple-psl20`
-      spdxId = "APSL-2.0";
-      fullName = "Apple Public Source License 2.0";
-      deprecated = true;
-    };
     gpl2 = {
       spdxId = "GPL-2.0";
       fullName = "GNU General Public License v2.0";

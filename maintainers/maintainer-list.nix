@@ -2719,13 +2719,6 @@
     name = "Noa Virellia";
     matrix = "@mikiiki:matrix.org";
   };
-  astratagem = {
-    name = "Chris Montgomery";
-    email = "chmont@protonmail.com";
-    github = "astratagem";
-    githubId = 1757914;
-    keys = [ { fingerprint = "6460 4147 C434 F65E C306  A21F 135E EDD0 F719 34F3"; } ];
-  };
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
@@ -9455,6 +9448,12 @@
     githubId = 61166695;
     name = "Fijxu";
     keys = [ { fingerprint = "F545 E682 9D6B E6B9 2491  845C 32C1 DDF3 33ED A6A4"; } ];
+  };
+  Filippo-Galli = {
+    email = "filippo.galli.cr@gmail.com";
+    github = "Filippo-Galli";
+    githubId = 59925664;
+    name = "Filippo Galli";
   };
   fin-w = {
     email = "fin-w@tutanota.com";
@@ -18688,7 +18687,8 @@
   };
   me-and = {
     name = "Adam Dinwoodie";
-    email = "nix.thunder.wayne@post.dinwoodie.org";
+    email = "adam@dinwoodie.org";
+    matrix = "@me_and:matrix.org";
     github = "me-and";
     githubId = 1397507;
   };
@@ -19658,6 +19658,13 @@
     github = "montag451";
     githubId = 249317;
     name = "montag451";
+  };
+  montchr = {
+    name = "Chris Montgomery";
+    email = "chmont@protonmail.com";
+    github = "montchr";
+    githubId = 1757914;
+    keys = [ { fingerprint = "6460 4147 C434 F65E C306  A21F 135E EDD0 F719 34F3"; } ];
   };
   moody = {
     email = "moody@posixcafe.org";

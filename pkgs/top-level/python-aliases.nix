@@ -458,6 +458,8 @@ mapAliases {
   nonbloat-db = throw "nonbloat-db has been removed because the upstream project was archived."; # added 2025-05-16
   nptyping = throw "nptyping has been removed because it was broken, unmaintained upstream, and unused."; # added 2025-08-29
   Nuitka = throw "'Nuitka' has been renamed to/replaced by 'nuitka'"; # Converted to throw 2025-10-29
+  numpy_1 = throw "'numpy_1' has been deprecated in favor of 'numpy', as an old unmaintained version."; # added 2026-10-06
+  numpy_2 = warnAlias "'numpy_2' has been renamed to 'numpy'"; # added 2026-10-06
   oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
   objax = throw "objax has been removed because the upstream project was archived."; # Added 2025-10-04
@@ -750,7 +752,8 @@ mapAliases {
   tbats = throw "'tbats' has been removed due to lack of upstream maintenance"; # Added 2026-05-11
   tbm-utils = throw "'tbm-utils' has been removed as it is unmaintained since 2020"; # Added 2026-03-12
   tensorflow-bin_2 = throw "'tensorflow-bin_2' has been renamed to/replaced by 'tensorflow-bin'"; # Converted to throw 2025-10-29
-  tensorflow-build_2 = throw "'tensorflow-build_2' has been renamed to/replaced by 'tensorflow-build'"; # Converted to throw 2025-10-29
+  tensorflow-build = throw "'tensorflow-build' has been removed as it was broken for years and unmaintained. Use 'tensorflow-bin' instead"; # Added 2026-10-07
+  tensorflow-build_2 = throw "'tensorflow-build_2' has been removed as it was broken for years and unmaintained. Use 'tensorflow-bin' instead"; # Converted to throw 2025-10-29
   tensorflow-estimator = throw "'tensorflow-estimator' has been renamed to/replaced by 'tensorflow-estimator-bin'"; # Converted to throw 2025-10-29
   tensorflow-estimator_2 = throw "'tensorflow-estimator_2' has been renamed to/replaced by 'tensorflow-estimator'"; # Converted to throw 2025-10-29
   tensorflow-tensorboard = throw "'tensorflow-tensorboard' has been renamed to/replaced by 'tensorboard'"; # Converted to throw 2025-10-29

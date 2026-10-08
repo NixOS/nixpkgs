@@ -11,6 +11,7 @@
   libusb-compat-0_1,
   libuv,
   libzip,
+  lua,
   lz4,
   meson,
   ninja,
@@ -27,6 +28,7 @@
   zydis,
   useX11 ? false,
   rubyBindings ? false,
+  luaBindings ? false,
 }:
 let
   binaryninja = fetchFromGitHub {
@@ -104,7 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     vte
     gtk2
   ]
-  ++ lib.optionals rubyBindings [ ruby ];
+  ++ lib.optionals rubyBindings [ ruby ]
+  ++ lib.optionals luaBindings [ lua ];
 
   propagatedBuildInputs = [
     # radare2 exposes r_lib which depends on these libraries

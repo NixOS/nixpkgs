@@ -15,7 +15,7 @@
   enableDbi ? false,
   libdbi,
   enableMagnet ? false,
-  lua5_1,
+  lua5_5,
   enableMysql ? false,
   libmysqlclient,
   enableLdap ? false,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optional enableDbi libdbi
-  ++ lib.optional enableMagnet lua5_1
+  ++ lib.optional enableMagnet lua5_5
   ++ lib.optional enableMysql libmysqlclient
   ++ lib.optional enableLdap openldap
   ++ lib.optional enablePam linux-pam

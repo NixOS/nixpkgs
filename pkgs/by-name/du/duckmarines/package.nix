@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   love,
+  lua,
   makeWrapper,
   makeDesktopItem,
   strip-nondeterminism,
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     zip
   ];
   buildInputs = [
+    lua
     love
   ];
 

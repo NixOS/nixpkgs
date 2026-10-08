@@ -32,9 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Dt6xA7U4aPKFZmO2iAiYM99w5ZIZNQJ+JXzuVItIlBM=";
   };
 
+  patches = [
+    # gcc 16: C++20 drops aggregate init for structs with a defaulted ctor
+    ./fix-tape-endpoint-info-aggregate.patch
+  ];
+
   passthru.enablePluginStatus = {
     # TODO: Change back to `true` once dcap is fixed on Darwin.
-    dcap = !dcap.meta.broken;
+    dcap = !stdenv.hostPlatform.isDarwin;
     file = true;
     gridftp = false;
     # davix-copy's dependency gsoap is currently only available on Linux.

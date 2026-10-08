@@ -66,6 +66,28 @@ let
         }
     ) prev;
 
+  grammarFixesOverlay = final: prev: {
+    tree-sitter-haskell = prev.tree-sitter-haskell.overrideAttrs (oldAttrs: {
+      # Avoid GCC 16 heap corruption in the pinned Haskell scanner.
+      # https://github.com/NixOS/nixpkgs/issues/569011
+      # Remove once both Helix and Steelix include the grammar update:
+      # https://github.com/helix-editor/helix/pull/16331
+      env = oldAttrs.env // {
+        NIX_CFLAGS_COMPILE = (oldAttrs.env.NIX_CFLAGS_COMPILE or "") + " -fno-strict-aliasing";
+      };
+    });
+    tree-sitter-perl = prev.tree-sitter-perl.overrideAttrs {
+      # Avoid a collision with glibc 2.44's bsearch macro.
+      # Remove once the pinned Perl grammar includes:
+      # https://github.com/tree-sitter-perl/tree-sitter-perl/pull/220
+      postPatch = ''
+        rm src/bsearch.c
+        substituteInPlace src/tsp_unicode.h \
+          --replace-fail '#include "bsearch.c"' ""
+      '';
+    };
+  };
+
   helixTreeSitterGrammars =
     lib.filterAttrs (drvName: _: lib.hasAttr (lib.removePrefix "tree-sitter-" drvName) lockedGrammars)
       (
@@ -73,15 +95,7 @@ let
           lib.composeManyExtensions [
             lockedVersionsOverlay
             grammarsOverlay
-            (self: super: {
-              tree-sitter-perl = super.tree-sitter-perl.overrideAttrs {
-                postPatch = ''
-                  rm src/bsearch.c
-                  substituteInPlace src/tsp_unicode.h \
-                    --replace-fail '#include "bsearch.c"' ""
-                '';
-              };
-            })
+            grammarFixesOverlay
           ]
         )
       );

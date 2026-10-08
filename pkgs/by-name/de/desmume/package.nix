@@ -14,6 +14,7 @@
   libxmu,
   libpcap,
   libtool,
+  lua,
   meson,
   ninja,
   openal,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     intltool
     libtool
+    lua
     meson
     ninja
     pkg-config
