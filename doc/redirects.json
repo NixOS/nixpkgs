@@ -464,6 +464,12 @@
   "sec-inkscape": [
     "index.html#sec-inkscape"
   ],
+  "sec-java-buildJavaPackage": [
+    "index.html#sec-java-buildJavaPackage"
+  ],
+  "sec-java-buildJavaPackage-attributes": [
+    "index.html#sec-java-buildJavaPackage-attributes"
+  ],
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"
   ],
