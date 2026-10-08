@@ -16318,6 +16318,11 @@
     github = "leona-ya";
     githubId = 11006031;
     name = "Leona Maroni";
+    affiliation."flyingcircus.io" = {
+      email = "lm@flyingcircus.io";
+      contactUnresponsive = "mailto:mail@flyingcircus.io";
+      fallbackMaintainers = [ self.osnyx ];
+    };
   };
   leonardoce = {
     email = "leonardo.cecchi@gmail.com";
