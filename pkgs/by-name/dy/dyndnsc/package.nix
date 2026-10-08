@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     dnspython
     json-logging
     netifaces
+    pkg-resources-backport
     requests
     setuptools
     responses
