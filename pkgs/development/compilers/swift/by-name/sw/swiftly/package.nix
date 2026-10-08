@@ -15,18 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swiftly";
-  version = "1.1.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "swiftlang";
     repo = "swiftly";
     tag = finalAttrs.version;
-    hash = "sha256-VFgmgo69Q4Y8Je0SMdB3jKGt9lNoVYAaUhSuK3RUkFE=";
+    hash = "sha256-ijBwS74sR/gY2KXO20av8OCk40318vB1W2tm1HzOlbE=";
   };
 
   swiftpmDeps = fetchSwiftPMDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-1KfyrQXE1HaO9WsuskzgiiEZxM/oelp40Jwzr8xJEL4=";
+    hash = "sha256-YjhqIt3e808GYEgH81dh2Uq8/2BpMQ6kjY9JAwEahe0=";
   };
 
   strictDeps = true;
