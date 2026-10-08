@@ -19,6 +19,15 @@
   enablePrivateAPIUsage ? true,
 }:
 
+let
+  # SPIRV-Cross is statically linked. Use the MoltenVK custom namespace to avoid conflicts with applications
+  # that vendor SPIRV-Cross and don’t use a custom namespace.
+  # Fixes https://github.com/NixOS/nixpkgs/issues/485083
+  MVK_spirv-cross = spirv-cross.override {
+    withSpirvCrossNamespaceOverride = "MVK_spirv_cross";
+  };
+in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
   version = "1.4.2";
@@ -29,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     apple-sdk_26
     cereal
     glslang
-    spirv-cross
+    MVK_spirv-cross
     spirv-headers
     spirv-tools
     vulkan-headers
@@ -74,9 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
       # to avoid accidentally corrupting the project.
       sed -E -e '/(children|files) = /,/;/{/xcframework/d}' \
         -i "$proj/$proj.xcodeproj/project.pbxproj"
-      # Ensure the namespace used is consistent with the spirv-cross package in nixpkgs.
-      substituteInPlace "$proj/$proj.xcodeproj/project.pbxproj" \
-        --replace-fail SPIRV_CROSS_NAMESPACE_OVERRIDE=MVK_spirv_cross SPIRV_CROSS_NAMESPACE_OVERRIDE=spirv_cross
     done
     substituteInPlace MoltenVKShaderConverter/MoltenVKShaderConverter.xcodeproj/project.pbxproj \
       --replace-fail MetalGLShaderConverterTool MoltenVKShaderConverter \
