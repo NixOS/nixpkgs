@@ -20,8 +20,6 @@ buildGoModule {
 
   buildInputs = [ alsa-lib ];
 
-  strictDeps = true;
-
   meta = {
     homepage = "https://git.sixfoisneuf.fr/termsonic";
     description = "Subsonic client running in your terminal";

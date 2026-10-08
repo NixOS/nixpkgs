@@ -18,8 +18,6 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-qLyehDoZZBCzlc8X/il1+8gtX6M/nhjqUKccebuxLVE=";
 
-  strictDeps = true;
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
