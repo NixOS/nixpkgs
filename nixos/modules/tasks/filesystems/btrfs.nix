@@ -345,6 +345,9 @@ in
           "sleep.target"
         ];
 
+        # prevent problems with MemoryDenyWriteExecute
+        environment.PYTHON_JIT = "0";
+
         unitConfig.RequiresMountsFor = "%f";
 
         serviceConfig =
@@ -409,6 +412,37 @@ in
             } %f";
             # if the service is stopped before balance end, cancel it
             ExecStop = "${utils.escapeSystemdExecArg btrfsCancelCmd} %f";
+            # hardening
+            # required for starting/cancelling the balance operation
+            CapabilityBoundingSet = [
+              "CAP_SYS_ADMIN"
+              "CAP_DAC_READ_SEARCH"
+            ];
+            NoNewPrivileges = true;
+            ProtectSystem = "strict";
+            ProtectHome = "tmpfs";
+            # file system to balance needs to be mounted read-write
+            BindPaths = [ "%f" ];
+            PrivateNetwork = true;
+            ProtectHostname = true;
+            ProtectClock = true;
+            ProtectKernelTunables = true;
+            ProtectKernelModules = true;
+            ProtectKernelLogs = true;
+            ProtectControlGroups = true;
+            RestrictAddressFamilies = "none";
+            LockPersonality = true;
+            MemoryDenyWriteExecute = true;
+            RestrictRealtime = true;
+            RestrictSUIDSGID = true;
+            PrivateMounts = true;
+            SystemCallFilter = [
+              "@system-service"
+              "~@mount"
+            ];
+            SystemCallArchitectures = "native";
+            SystemCallErrorNumber = "EPERM";
+            # no User= since the balance operation fails when started by a user different from root
           };
       };
 
@@ -541,6 +575,7 @@ in
               "~@mount"
             ];
             SystemCallArchitectures = "native";
+            SystemCallErrorNumber = "EPERM";
             # no ProtectKernelTunables since /sys/fs/btrfs access is required
             # no User= since written files have to be accessible by scrub commands run manually
           };
