@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   build-system = with python3Packages; [
     setuptools

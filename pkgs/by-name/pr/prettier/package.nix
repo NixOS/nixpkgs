@@ -75,7 +75,7 @@ let
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
 
-  yarnHash = "sha256-OjJbhIVea5fnPWJsPynBYTPmPVZZz9gB/nHFmQJCAJc=";
+  yarnHash = "sha256-ItLl8OwgeVahBtMvI2z8uA9EvPgS3tNWG8Q/uHGtDy0=";
 
   prettier-oxc-wasm-parser = stdenv.mkDerivation (finalAttrs: {
     pname = "binding-wasm32-wasi";
@@ -135,13 +135,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.9.6";
+  version = "3.9.9";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-wuc6f8axnXPpdAyuH/YWgSC2HlrB4B/OATe6+lxD314=";
+    hash = "sha256-gze2a42OGrEEInH4ca9V8rcNWMiaAcDo+TZ2Wq/KYJE=";
   };
 
   missingHashes = ./missing-hashes.json;

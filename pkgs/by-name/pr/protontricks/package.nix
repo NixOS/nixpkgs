@@ -5,7 +5,6 @@
   replaceVars,
   writeShellScript,
   steam,
-  fetchpatch2,
   winetricks,
   yad,
   nix-update-script,
@@ -25,14 +24,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protontricks";
-  version = "1.14.1";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
     tag = finalAttrs.version;
-    hash = "sha256-pTBpzSBGFUmol3Osb78yhyZup2DogLpNaBg/kF0dVGI=";
+    hash = "sha256-+XD6RxQKXhrvJI3z3NBAhNP/KKHkUG+fGyvTkztH5G4=";
   };
 
   patches = [
@@ -45,12 +44,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     })
 
     # Revert vendored vdf since our vdf includes `appinfo.vdf` v29 support
-    (fetchpatch2 {
-      url = "https://github.com/Matoking/protontricks/commit/4198b7ea82369a91e3084d6e185f9b370f78eaec.patch";
-      revert = true;
-      hash = "sha256-1U/LiAliKtk3ygbIBsmoavXN0RSykiiegtml+bO8CnI=";
-    })
+    # See https://github.com/Matoking/protontricks/commit/4198b7ea82369a91e3084d6e185f9b370f78eaec
+    ./revert-vendored-vdf.patch
   ];
+
+  # Contents of vendored vdf are removed manually to reduce the size of the revert patch
+  postPatch = ''
+    rm -rf src/protontricks/_vdf
+  '';
 
   build-system = with python3Packages; [ setuptools-scm ];
 

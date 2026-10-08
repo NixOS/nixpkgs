@@ -193,6 +193,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # * https://github.com/ggml-org/llama.cpp/blob/b46812de78f8fbcb6cf0154947e8633ebc78d9ac/ggml/src/ggml-backend-reg.cpp#L480-L486
     (cmakeBool "GGML_CPU_ALL_VARIANTS" true)
     (cmakeBool "GGML_BACKEND_DL" true)
+    # Let libggml find the backends when it is loaded from another package.
+    (cmakeFeature "GGML_BACKEND_DIR" "${placeholder "out"}/bin")
   ]
   ++ optionals cudaSupport [
     (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)

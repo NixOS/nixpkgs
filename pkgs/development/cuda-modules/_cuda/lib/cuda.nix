@@ -124,8 +124,13 @@
       cudaLicenses = [
         lib.licenses.nvidiaCuda
         lib.licenses.nvidiaCudaRedist
-      ]
-      ++ lib.attrValues _cuda.lib.licenses;
+        lib.licenses.nvidiaCudnn
+        lib.licenses.nvidiaCusparse_lt
+        lib.licenses.nvidiaCutensor
+        lib.licenses.nvidiaTensorrt
+        lib.licenses.nvidiaMath_sdk_sla
+        lib.licenses.nvidiaCudaRedist
+      ];
       cudaLicenseNames = lib.map (license: license.shortName) cudaLicenses;
     in
     package:

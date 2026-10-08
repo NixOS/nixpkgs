@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "asyncmy";
-  version = "0.2.15";
+  version = "0.2.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "long2ice";
     repo = "asyncmy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wAhw2V/7N7UzxSAXzggZekP6BWW3WPGTcs3LDUi9TgA=";
+    hash = "sha256-j2rEkbjJkZ5NI9wWktOsbP4hVLg0oW1LBk3h+8tESJw=";
   };
 
   build-system = [
