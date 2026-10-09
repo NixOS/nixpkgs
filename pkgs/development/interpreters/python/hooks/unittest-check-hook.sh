@@ -4,28 +4,28 @@
 echo "Sourcing unittest-check-hook"
 
 unittestCheckPhase() {
-    echo "Executing unittestCheckPhase"
-    runHook preCheck
+  echo "Executing unittestCheckPhase"
+  runHook preCheck
 
-    local -a flagsArray=()
+  local -a flagsArray=()
 
-    # Compatibility layer to the obsolete unittestFlagsArray
-    if [[ -z "${dontUseUnittestDiscover-}" ]]; then
-      flagsArray+=("discover")
-    fi
+  # Compatibility layer to the obsolete unittestFlagsArray
+  if [[ -z "${dontUseUnittestDiscover-}" ]]; then
+    flagsArray+=("discover")
+  fi
 
-    eval "flagsArray+=(${unittestFlagsArray[*]-})"
+  eval "flagsArray+=(${unittestFlagsArray[*]-})"
 
-    concatTo flagsArray unittestFlags
+  concatTo flagsArray unittestFlags
 
-    echoCmd 'unittest flags' "${flagsArray[@]}"
-    @pythonCheckInterpreter@ -m unittest "${flagsArray[@]}"
+  echoCmd 'unittest flags' "${flagsArray[@]}"
+  @pythonCheckInterpreter@ -m unittest "${flagsArray[@]}"
 
-    runHook postCheck
-    echo "Finished executing unittestCheckPhase"
+  runHook postCheck
+  echo "Finished executing unittestCheckPhase"
 }
 
 if [[ -z "${dontUseUnittestCheck-}" ]] && [[ -z "${installCheckPhase-}" ]]; then
-    echo "Using unittestCheckPhase"
-    appendToVar preDistPhases unittestCheckPhase
+  echo "Using unittestCheckPhase"
+  appendToVar preDistPhases unittestCheckPhase
 fi
