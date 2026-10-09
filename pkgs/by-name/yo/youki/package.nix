@@ -7,7 +7,7 @@
   getconf,
   dbus,
   libseccomp,
-  systemd,
+  systemdLibs,
   stdenv,
 }:
 
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     dbus
     libseccomp
-    systemd
+    systemdLibs
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

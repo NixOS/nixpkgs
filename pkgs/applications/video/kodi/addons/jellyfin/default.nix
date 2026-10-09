@@ -6,9 +6,7 @@
   kodi,
   requests,
   dateutil,
-  six,
-  kodi-six,
-  signals,
+  typing_extensions,
   websocket,
 }:
 let
@@ -42,10 +40,8 @@ buildKodiAddon rec {
   propagatedBuildInputs = [
     requests
     dateutil
-    six
-    kodi-six
-    signals
     websocket
+    typing_extensions
   ];
 
   meta = {

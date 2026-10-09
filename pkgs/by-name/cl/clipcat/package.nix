@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clipcat";
   version = "0.26.0";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

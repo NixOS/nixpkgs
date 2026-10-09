@@ -14,7 +14,7 @@
   libxfixes,
   dbus,
   libdrm,
-  systemd,
+  systemdLibs,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spice-vdagent";
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxfixes
     dbus
-    systemd
+    systemdLibs
   ];
 
   # fix build w/ glibc-2.44

@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "26.1.1";
   src = fetchurl {
     url = "https://ltspice.analog.com/download/${finalAttrs.version}/LTspice64.msi";
-    hash = "sha256-JJ6948hOAfTOW1/3jGx1iPBJusha4WNfloz9vk9OzQM=";
+    hash = "sha256-IQxrgX5kcwhBGWlSzWj9HmkMlzwCou+EsE8k92qU9EY=";
   };
   dontUnpack = true;
   dontConfigure = true;

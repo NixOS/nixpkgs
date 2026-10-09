@@ -42,7 +42,7 @@ buildPythonPackage (finalAttrs: {
     description = "NVIDIA CUTLASS Python DSL";
     homepage = "https://github.com/NVIDIA/cutlass";
     changelog = "https://github.com/NVIDIA/cutlass/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = lib.licenses.unfreeRedistributable; # NVIDIA Proprietary
+    license = lib.licenses.nvidiaCutlassDsl;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.linux;
   };
