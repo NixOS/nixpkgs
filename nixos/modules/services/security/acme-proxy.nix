@@ -281,6 +281,91 @@ let
               this to a per-profile filename.
             '';
           };
+          contact = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
+            default = [ ];
+            example = [ "mailto:admin@example.com" ];
+            description = ''
+              Contact URIs sent with `newAccount` to the upstream
+              CA. The CA uses them for expiry warnings and policy
+              notices, so each entry should usually be a
+              `"mailto:..."` address that a human reads. Rendered as
+              `[signer.relay] contact`. The empty list (the default)
+              registers an account without any contacts.
+            '';
+          };
+          pollIntervalMs = lib.mkOption {
+            type = lib.types.int;
+            default = 2000;
+            defaultText = lib.literalExpression "2000";
+            description = ''
+              How often to poll an upstream order/authorization while
+              it resolves, in milliseconds. Rendered as
+              `[signer.relay] poll_interval_ms`.
+            '';
+          };
+          pollTimeoutSecs = lib.mkOption {
+            type = lib.types.int;
+            default = 300;
+            defaultText = lib.literalExpression "300";
+            description = ''
+              Total budget, in seconds, for one upstream issuance
+              before the local order is marked invalid. Rendered as
+              `[signer.relay] poll_timeout_secs`. The DNS-01
+              {option}`services.acme-proxy.profiles.<name>.signer.relay.dns01.propagation.delaySecs`
+              runs once per identifier in the order, so a multi-name
+              order needs this set above `delaySecs × N` plus the
+              time the upstream itself takes.
+            '';
+          };
+          eab = {
+            kid = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                External Account Binding key id issued by the
+                upstream CA's operator, used to register this
+                proxy's upstream account. Rendered as
+                `[signer.relay.eab] kid`. Empty (the default) means
+                "no configuration-file credential" — the daemon then
+                expects a `.kid` sidecar from a previous
+                registration, or one supplied through
+                `ACME_PROXY_PROFILES__<NAME>__SIGNER__RELAY__EAB__KID`
+                in one of this profile's
+                {option}`services.acme-proxy.profiles.<name>.environmentFiles`.
+                Setting `kid` non-empty requires `hmacKey` non-empty
+                too; the module asserts this at evaluation time,
+                mirroring the upstream startup error.
+              '';
+            };
+            hmacKey = lib.mkOption {
+              type = lib.types.str;
+              default = "";
+              description = ''
+                **Sensitive.** External Account Binding shared secret
+                in base64 — url-safe, unpadded url-safe, or standard
+                base64 are all accepted upstream. Rendered as
+                `[signer.relay.eab] hmac_key`. Empty (the default)
+                means "no configuration-file credential" — see `kid`
+                above for the override paths.
+
+                Prefer the env-var override mechanism — put
+                `ACME_PROXY_PROFILES__<NAME>__SIGNER__RELAY__EAB__HMAC_KEY=<base64>`
+                in one of this profile's
+                {option}`services.acme-proxy.profiles.<name>.environmentFiles`,
+                where `<NAME>` is the attribute name of this
+                profile — over hard-coding the value here, which
+                would put the secret in the Nix store. The
+                `PROFILES__<NAME>__` prefix scopes the value to
+                **this** profile only. The unscoped form
+                `ACME_PROXY_SIGNER__RELAY__EAB__HMAC_KEY=...` sets
+                the global value and is then inherited by every
+                other profile that does not override it at the same
+                path, so a credential intended for one profile
+                would register upstream accounts for all of them.
+              '';
+            };
+          };
           dns01 = {
             provider = lib.mkOption {
               type = lib.types.enum [ "rfc2136" ];
@@ -425,10 +510,10 @@ let
                 description = ''
                   Sleep before validation when `mode = "delay"`.
                   Must be less than
-                  `poll_timeout_secs` (the relay's per-attempt
-                  budget), and the delay runs once per name in the
-                  order — raise that budget accordingly for a
-                  multi-name order.
+                  {option}`services.acme-proxy.profiles.<name>.signer.relay.pollTimeoutSecs`
+                  (the relay's per-attempt budget), and the delay
+                  runs once per name in the order — raise that
+                  budget accordingly for a multi-name order.
                 '';
               };
             };
@@ -675,9 +760,27 @@ let
       relaySection = {
         directory_url = profile.signer.relay.directoryUrl;
         challenge_strategy = profile.signer.relay.challengeStrategy;
+        contact = profile.signer.relay.contact;
+        poll_interval_ms = profile.signer.relay.pollIntervalMs;
+        poll_timeout_secs = profile.signer.relay.pollTimeoutSecs;
       }
       // lib.optionalAttrs (profile.signer.relay.accountKeyPath != null) {
         account_key_path = profile.signer.relay.accountKeyPath;
+      }
+      // lib.optionalAttrs (profile.signer.relay.eab.kid != ""
+        && profile.signer.relay.eab.hmacKey != "") {
+        # Gated on both fields being non-empty — same reason the
+        # `tsig_key_secret` slot below is gated: upstream's
+        # "TOML field present (even empty) > env var" precedence
+        # would silently block the
+        # `ACME_PROXY_PROFILES__<NAME>__SIGNER__RELAY__EAB__KID` /
+        # `...__EAB__HMAC_KEY` env-var overrides otherwise. The
+        # eval-time assertion below catches the case where the
+        # user has set exactly one of the two fields.
+        eab = {
+          kid = profile.signer.relay.eab.kid;
+          hmac_key = profile.signer.relay.eab.hmacKey;
+        };
       }
       // lib.optionalAttrs (profile.signer.relay.challengeStrategy == "dns01") {
         dns01 = {
@@ -1040,7 +1143,16 @@ let
               || lib.hasPrefix "_acme-challenge." p.signer.relay.dns01.challengeAlias));
           message = ''
             services.acme-proxy: profile "${name}" sets
-            `signer.relay.dns01.challengeAlias = "${p.signer.relay.dns01.challengeAlias}"`
+            `signer.relay.dns01.challengeAlias = "${
+              # `challengeAlias` is `nullOr str`; the assertion gate only
+              # fires this message when it is non-null, but the module
+              # framework deep-force-evaluates every assertion's message
+              # when *any* assertion fails, so a raw `"${...}"` would
+              # crash with "cannot coerce null to a string" before the
+              # actual failed-assertion list is printed. Render `null`
+              # as a placeholder so the formatter always sees a string.
+              if p.signer.relay.dns01.challengeAlias == null then "<unset>" else p.signer.relay.dns01.challengeAlias
+            }"`
             but the daemon refuses to start on this value: a wildcard
             prefix (`*.`) is not allowed, and the `_acme-challenge.`
             prefix is reserved for the default label that the relay
@@ -1053,6 +1165,33 @@ let
         {
           assertion = p.signer.backend != "custom" || p.signer.custom.scriptPath != null;
           message = "services.acme-proxy: profile \"${name}\" has signer.backend = \"custom\" but signer.custom.scriptPath is unset. Set it to the absolute path of the signing script.";
+        }
+        {
+          assertion = !(p.signer.backend == "relay"
+            && (p.signer.relay.eab.kid != "") != (p.signer.relay.eab.hmacKey != ""));
+          message = ''
+            services.acme-proxy: profile "${name}" sets only one of
+            `[signer.relay.eab] kid` and `[signer.relay.eab] hmac_key`
+            (typed values: `kid = "${
+              if p.signer.relay.eab.kid == "" then "<empty>" else "<set>"
+            }"`, `hmacKey = "${
+              if p.signer.relay.eab.hmacKey == "" then "<empty>" else "<set>"
+            }"`). The daemon refuses to start when exactly one of the
+            two is configured; both must be empty (no
+            configuration-file credential) or both non-empty.
+
+            Prefer the env-var override mechanism — set
+            `ACME_PROXY_PROFILES__${name}__SIGNER__RELAY__EAB__KID`
+            and
+            `ACME_PROXY_PROFILES__${name}__SIGNER__RELAY__EAB__HMAC_KEY`
+            in one of this profile's `environmentFiles` (or in the
+            daemon-wide `services.acme-proxy.environmentFiles`) — over
+            putting them in configuration, since `hmacKey` ends up in
+            the Nix store. The `PROFILES__<NAME>__` prefix scopes
+            each value to **this** profile only; the unscoped form
+            would set the global value and be inherited by every
+            other profile that does not override it.
+          '';
         }
       ]
     ) cfg.profiles
