@@ -402,26 +402,7 @@ let
       checkFlags = [
         # Do not create __pycache__ when running tests.
         "PYTHONDONTWRITEBYTECODE=1"
-      ]
-      ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
-        # Python 3.12 introduced a warning for calling `os.fork()` in a
-        # multi‐threaded program. For some reason, the Node.js
-        # `tools/pseudo-tty.py` program used for PTY‐related tests
-        # triggers this warning on Hydra, on `x86_64-darwin` only,
-        # despite not creating any threads itself. This causes the
-        # Node.js test runner to misinterpret the warnings as part of the
-        # test output and fail. It does not reproduce reliably off Hydra
-        # on Intel Macs, or occur on the `aarch64-darwin` builds.
-        #
-        # This seems likely to be related to Rosetta 2, but it could also
-        # be some strange x86‐64‐only threading behaviour of the Darwin
-        # system libraries, or a bug in CPython, or something else
-        # haunted about the Nixpkgs/Hydra build environment. We silence
-        # the warnings in the hope that closing our eyes will make the
-        # ghosts go away.
-        "PYTHONWARNINGS=ignore::DeprecationWarning"
-      ]
-      ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
+
         "FLAKY_TESTS=skip"
         # Skip some tests that are not passing in this context
         "CI_SKIP_TESTS=${
@@ -430,13 +411,16 @@ let
               # Tests don't work in sandbox.
               "test-child-process-exec-env"
               "test-child-process-uid-gid"
-              "test-fs-write-stream-eagain"
               "test-process-euid-egid"
-              "test-process-initgroups"
-              "test-process-setgroups"
               "test-process-uid-gid"
-              # This is a bit weird, but for some reason fs watch tests fail with
-              # sandbox.
+            ]
+            ++ lib.optional (majorVersion == "22") "test-runner-watch-mode"
+            ++ lib.optionals stdenv.hostPlatform.is32bit [
+              # utime (actually utimensat) fails with EINVAL on 2038 timestamp
+              "test-fs-utimes-y2K38"
+            ]
+            ++ lib.optionals stdenv.buildPlatform.isDarwin [
+              # Disable tests that don’t work under macOS sandbox.
               "test-fs-promises-watch"
               "test-fs-watch"
               "test-fs-watch-encoding"
@@ -452,35 +436,10 @@ let
               "test-fs-watch-recursive-sync-write"
               "test-fs-watch-recursive-update-file"
               "test-fs-watchfile"
-              "test-runner-run"
-              "test-runner-watch-mode"
-              "test-watch-mode-files_watcher"
-
-              # fail on openssl 3.6.0
-              "test-http2-server-unknown-protocol"
-              "test-tls-ocsp-callback"
-            ]
-            ++ lib.optionals (!lib.versionAtLeast version "22") [
-              "test-tls-multi-key"
-            ]
-            ++ lib.optionals stdenv.hostPlatform.is32bit [
-              # utime (actually utimensat) fails with EINVAL on 2038 timestamp
-              "test-fs-utimes-y2K38"
-            ]
-            ++ lib.optionals stdenv.buildPlatform.isDarwin [
-              # Disable tests that don’t work under macOS sandbox.
-              # uv_os_setpriority returned EPERM (operation not permitted)
               "test-os"
               "test-os-process-priority"
-
-              # Debugger tests failing on macOS 15.4
-              "test-debugger-extract-function-name"
-              "test-debugger-random-port-with-inspect-port"
-              "test-debugger-launch"
-              "test-debugger-pid"
-
-              # Those are annoyingly flaky, but not enough to be marked as such upstream.
-              "test-wasi"
+              "test-runner-run"
+              "test-watch-mode-files_watcher"
 
               # This is failing on newer macOS versions, no fix has yet been provided upstream:
               "test-cluster-dgram-1"
@@ -488,17 +447,6 @@ let
             ++ lib.optionals stdenv.hostPlatform.isMusl [
               # Doesn't work in sandbox on x86_64.
               "test-dns-set-default-order"
-            ]
-            ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
-              # These tests fail on x86_64-darwin (even without sandbox).
-              # TODO: revisit at a later date.
-              "test-fs-readv"
-              "test-fs-readv-sync"
-              "test-vm-memleak"
-
-              # Those are annoyingly flaky, but not enough to be marked as such upstream.
-              "test-tick-processor-arguments"
-              "test-set-raw-mode-reset-signal"
             ]
             # These network/fetch/inspector tests fail on riscv64
             ++ lib.optionals (majorVersion == "24" && stdenv.hostPlatform.isRiscV64) [
@@ -523,18 +471,11 @@ let
               "test-wasm-web-api"
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
-            ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
             ++ lib.optional (majorVersion == "22" && stdenv.hostPlatform.isRiscV64) "test-worker-messaging"
             ++ lib.optional (majorVersion == "26" && !stdenv.buildPlatform.isDarwin) "test-net-boundsocket"
             ++ lib.optional (
               majorVersion == "22" && stdenv.buildPlatform.isDarwin
             ) "test/sequential/test-http-server-request-timeouts-mixed.js"
-            # https://github.com/NixOS/nixpkgs/pull/507974#issuecomment-4249433124
-            # OpenSSL reports different errors
-            # https://github.com/nodejs/node/pull/62629
-            # patch does not apply
-            ++ lib.optional (!lib.versionAtLeast version "24") "test-tls-junk-server"
-            ++ lib.optional (majorVersion == "22") "test-tls-alert-handling"
           )
         }"
       ];
