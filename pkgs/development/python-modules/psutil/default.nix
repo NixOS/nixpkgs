@@ -7,6 +7,7 @@
   pytestCheckHook,
   pytest-instafail,
   pytest-xdist,
+  pythonOlder,
   gitUpdater,
 }:
 
@@ -62,7 +63,13 @@ buildPythonPackage rec {
     "sensors_temperatures"
     "user"
     "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
-  ];
+  ]
+  ++
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 && pythonOlder "3.13")
+      [
+        # mmap_used is 0 on aarch64-linux
+        "test_heap_info"
+      ];
 
   preCheck = ''
     rm -rf psutil
