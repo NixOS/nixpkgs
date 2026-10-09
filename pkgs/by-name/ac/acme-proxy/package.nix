@@ -9,7 +9,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "acme-proxy";
-  version = "0.5.0";
+  version = "0.6.0";
 
   __structuredAttrs = true;
 
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "acme-proxy";
     repo = "acme-proxy";
     tag = finalAttrs.version;
-    hash = "sha256-fcDMuDQDA71Pmy3GD0oUL9PVWUgO0LtWm5fES2ht/2k=";
+    hash = "sha256-gSA312ktr1/kcSD7jGsLqcUGQsczyFOx1y5REZIvNYk=";
   };
 
-  cargoHash = "sha256-FZs90u65DlOkDebAKQtaD2htH+7VmFtA+UYLU0q4EMc=";
+  cargoHash = "sha256-VcWcUvu405tGtyEGwSimE1pIih8bR2IHq5wcIILYsok=";
 
   nativeBuildInputs = [ installShellFiles ];
 
