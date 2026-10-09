@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     unittestCheckHook
     mock
   ];
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "tests"
   ];
