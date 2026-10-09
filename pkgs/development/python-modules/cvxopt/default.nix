@@ -70,7 +70,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "tests"
   ];
