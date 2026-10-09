@@ -126,6 +126,36 @@ let
                   };
                 });
               }
+            else if
+              builtins.elem policy [
+                "compatible-build-cc"
+                "incompatible-build-cc"
+              ]
+            then
+              {
+                cc = packages.gcc14.cc.override (original: {
+                  stdenv = original.stdenv.override {
+                    cc =
+                      (if policy == "compatible-build-cc" then packages.gcc15 else packages.buildPackages.gcc15).override
+                        {
+                          extraBuildCommands = "echo selected-build-compiler > $out/nix-support/selected-build-compiler";
+                        };
+                  };
+                });
+              }
+            else if policy == "local-stdenv" then
+              {
+                cc = packages.gcc14.cc.override (original: {
+                  stdenv = packages.withCFlags [ "-DSELECTED_CONSTRUCTOR=1" ] (
+                    original.stdenv.override (old: {
+                      name = "selected-compiler-build-context";
+                      preHook = (old.preHook or "") + "\nexport SELECTED_CONSTRUCTOR=1\n";
+                      extraBuildInputs = (old.extraBuildInputs or [ ]) ++ [ packages.zlib ];
+                      extraNativeBuildInputs = (old.extraNativeBuildInputs or [ ]) ++ [ packages.pkg-config ];
+                    })
+                  );
+                });
+              }
             else if policy == "local-frontend" then
               {
                 cc =
@@ -207,6 +237,15 @@ let
       policy = "local-ng";
     }).targetPackages.stdenv.cc;
   localFrontend = (gnuPackages true { policy = "local-frontend"; }).targetPackages.stdenv.cc;
+  selectedContexts = map (cross: gnuPackages cross { policy = "local-stdenv"; }) [
+    false
+    true
+  ];
+  compatiblePackages = gnuPackages true { policy = "compatible-build-cc"; };
+  incompatiblePackages = gnuPackages true { policy = "incompatible-build-cc"; };
+  compatibleBuildCC = compatiblePackages.targetPackages.stdenv.cc.cc.stdenv.cc;
+  incompatibleBuildCC = incompatiblePackages.targetPackages.stdenv.cc.cc.stdenv.cc;
+
   withDependency = gnuPackages true {
     overlays = [
       (_: prev: {
@@ -249,6 +288,73 @@ let
     && builtins.isString packages.stdenv.cc.drvPath
     && builtins.isString packages.hello.drvPath
     && builtins.isString packages.llvmPackages.libllvm.drvPath;
+  staticPackages = nixpkgsFun { localSystem = "x86_64-linux"; };
+  staticBase = staticPackages.stdenvAdapters.makeStaticBinaries staticPackages.stdenv;
+  selectedLibc = staticPackages.glibc.overrideAttrs (_: {
+    pname = "selected-static-libc";
+  });
+  selectStaticLibc =
+    libc:
+    staticPackages.overrideCC staticBase (
+      staticPackages.stdenv.cc.override {
+        inherit libc;
+        bintools = staticPackages.stdenv.cc.bintools.override { inherit libc; };
+      }
+    );
+  staticSelected = selectStaticLibc selectedLibc;
+  missingStaticLibc = staticPackages.glibc.overrideAttrs (old: {
+    outputs = lib.remove "static" old.outputs;
+  });
+  renamedStaticLibc = staticPackages.glibc.overrideAttrs (
+    final: old: {
+      outputs = map (name: if name == "static" then "archives" else name) old.outputs;
+      postInstall = builtins.replaceStrings [ "$static" ] [ "$archives" ] old.postInstall;
+      passthru = (old.passthru or { }) // {
+        static = final.finalPackage.archives;
+      };
+    }
+  );
+  twiceStatic = staticPackages.stdenvAdapters.makeStaticBinaries staticBase;
+  staticNoCC = staticBase.override {
+    hasCC = false;
+    cc = throw "noCC must not inspect compiler";
+  };
+  staticNullLibc = staticPackages.overrideCC staticBase (
+    staticPackages.stdenv.cc.override {
+      libc = null;
+      noLibc = true;
+      nativeLibc = false;
+      bintools = staticPackages.stdenv.cc.bintools.override {
+        libc = null;
+        noLibc = true;
+        nativeLibc = false;
+      };
+    }
+  );
+  staticExplicit = staticBase.override { extraBuildInputs = [ staticPackages.zlib ]; };
+  staticCleared = staticExplicit.override { extraBuildInputs = [ ]; };
+  staticCross =
+    libc:
+    nixpkgsFun {
+      localSystem = "x86_64-linux";
+      crossSystem = {
+        system = "aarch64-linux";
+        isStatic = true;
+        inherit libc;
+      };
+    };
+  staticGlibc = staticCross "glibc";
+  staticMusl = staticCross "musl";
+  probeStatic =
+    stdenv:
+    stdenv.mkDerivation {
+      name = "static-default-resource-order";
+      buildInputs = [ staticPackages.libxml2 ];
+      propagatedBuildInputs = [ staticPackages.zlib ];
+      depsTargetTarget = [ staticPackages.gmp ];
+      buildCommand = "touch $out";
+    };
+
   # Raw/custom stages can reach postStage without forcing adjacency assertions.
   # Reject unsupported compiler contexts before reinterpreting dependency roles.
   postCompiler =
@@ -349,6 +455,48 @@ assert preservesGNU true {
   ng = true;
 };
 assert selectedLinkerCompiler.nixSupport.__spliced == "ordinary-option-data";
+assert
+  map (x: x.outPath) staticBase.extraBuildInputs
+  == [ (lib.getOutput "static" staticPackages.stdenv.cc.libc).outPath ];
+assert
+  map (x: x.outPath) staticSelected.extraBuildInputs
+  == [ (lib.getOutput "static" selectedLibc).outPath ];
+assert
+  !(builtins.tryEval (builtins.deepSeq (selectStaticLibc missingStaticLibc).extraBuildInputs true))
+  .success;
+assert
+  map (x: x.outPath) (selectStaticLibc renamedStaticLibc).extraBuildInputs
+  == [ renamedStaticLibc.archives.outPath ];
+# Adapter application composes ordered contributions; it is not idempotent.
+assert
+  map (x: x.outPath) twiceStatic.extraBuildInputs
+  == map (x: x.outPath) (staticBase.extraBuildInputs ++ staticBase.extraBuildInputs);
+assert staticNoCC.extraBuildInputs == [ ] && builtins.isString (probeStatic staticNoCC).drvPath;
+assert staticNullLibc.extraBuildInputs == [ ];
+assert
+  map (x: x.outPath) staticExplicit.extraBuildInputs == [
+    staticPackages.zlib.outPath
+    (lib.getOutput "static" staticPackages.stdenv.cc.libc).outPath
+  ];
+assert
+  map (x: x.outPath) staticCleared.extraBuildInputs == map (x: x.outPath) staticBase.extraBuildInputs;
+assert
+  map (x: x.outPath) (probeStatic staticBase).buildInputs == [ staticPackages.libxml2.dev.outPath ];
+assert
+  map (x: x.outPath) (probeStatic staticBase).propagatedBuildInputs
+  == [ staticPackages.zlib.dev.outPath ];
+assert lib.all
+  (
+    stdenv: lib.all (input: input.stdenv.hostPlatform.system == "aarch64-linux") stdenv.extraBuildInputs
+  )
+  [
+    staticGlibc.stdenv
+    staticGlibc.targetPackages.stdenv.cc.cc.stdenv
+  ];
+assert staticGlibc.stdenvNoCC.extraBuildInputs == [ ];
+assert
+  staticMusl.stdenv.extraBuildInputs == [ ]
+  && staticMusl.targetPackages.stdenv.cc.cc.stdenv.extraBuildInputs == [ ];
 assert selectedLinkerCompiler.bintools.isLLVM;
 assert
   selectedLinkerCompiler.bintools.bintools.version
@@ -357,6 +505,31 @@ assert lib.hasInfix "selected-linker" selectedLinkerCompiler.bintools.postFixup;
 assert selectedLinkerCompiler.shell == "/bin/selected-shell";
 assert selectedLinkerCompiler.bintools.shell == "/bin/selected-linker-shell";
 assert builtins.isString selectedLinkerCompiler.drvPath;
+# These are construction controls. An incompatible native compiler does not
+# acquire a different TARGET merely by changing its enclosing stdenv platforms.
+assert compatibleBuildCC.outPath == compatiblePackages.stdenv.cc.cc.stdenv.cc.outPath;
+assert lib.hasInfix "selected-build-compiler" compatibleBuildCC.postFixup;
+assert incompatibleBuildCC.outPath == incompatiblePackages.stdenv.cc.outPath;
+assert !(lib.hasInfix "selected-build-compiler" incompatibleBuildCC.postFixup);
+assert compatibleBuildCC.stdenv.hostPlatform.system == "x86_64-linux";
+assert compatibleBuildCC.stdenv.targetPlatform.system == "aarch64-linux";
+assert lib.all (
+  packages:
+  let
+    source = packages.stdenv.cc.cc;
+    target = packages.targetPackages.stdenv.cc.cc;
+  in
+  target.stdenv.name == source.stdenv.name
+  && target.env.NIX_CFLAGS_COMPILE == source.env.NIX_CFLAGS_COMPILE
+  && lib.hasInfix "SELECTED_CONSTRUCTOR=1" target.stdenv.preHook
+  &&
+    map (x: x.outPath) target.stdenv.extraBuildInputs
+    == map (x: x.outPath) source.stdenv.extraBuildInputs
+  && lib.all (
+    input: builtins.elem input.outPath (map (x: x.outPath) target.stdenv.extraNativeBuildInputs)
+  ) source.stdenv.extraNativeBuildInputs
+  && builtins.isString target.drvPath
+) selectedContexts;
 assert localNG.cc.langFortran;
 assert localNG.cc.src.name == "selected-gcc-source";
 assert lib.hasInfix "selected-build-libiberty" localNG.cc.preConfigure;
