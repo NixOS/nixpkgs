@@ -16,8 +16,10 @@
   gtksourceview5,
   imagemagick,
   lib,
+  libraw,
   librsvg,
   makeFontsConf,
+  nix-update-script,
   pkg-config,
   poppler,
   procps,
@@ -29,6 +31,7 @@
   tzdata,
   util-linux,
   wrapGAppsHook4,
+  xdg-terminal-exec,
   xdg-utils,
   xvfb-run,
   enableRar ? false,
@@ -44,6 +47,7 @@ let
     (lib.getBin fontconfig)
     (lib.getBin glib)
     imagemagick
+    (lib.getBin libraw)
     squashfs-tools
     util-linux
     xdg-utils
@@ -176,6 +180,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     CARGO_PROFILE_TEST_DEBUG = "0";
     STRATA_BUILD_KIND = "stable";
+    # Keep the resolved release commit in sync when updating the version.
     STRATA_BUILD_COMMIT = "870fec8e022ff8d29a5a5c1bf1174698bc0b6b09";
     STRATA_RELEASE_TAG = "v${finalAttrs.version}";
     STRATA_SANDBOX_GDK_PIXBUF_MODULE_FILE = "${lib.getOutput "out" librsvg}/${gdk-pixbuf.binaryDir}/loaders.cache";
@@ -191,6 +196,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeBinPath runtimeTools}
+      # Terminal selection is not a preview sandbox or trusted helper.
+      --prefix PATH : ${lib.makeBinPath [ xdg-terminal-exec ]}
       --prefix XDG_DATA_DIRS : ${shared-mime-info}/share
     )
   '';
@@ -203,6 +210,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 data/icons/scalable/apps/io.github.lgse.Strata.svg \
       "$out/share/icons/hicolor/scalable/apps/io.github.lgse.Strata.svg"
 
+    # FileManager1 is a shared bus name: retain an opt-in template only.
+    install -Dm644 data/io.github.lgse.Strata.FileManager1.service \
+      "$out/share/strata/io.github.lgse.Strata.FileManager1.service"
+    substituteInPlace "$out/share/strata/io.github.lgse.Strata.FileManager1.service" \
+      --replace-fail /usr/bin/strata "$out/bin/strata"
+
+    install -Dm644 data/portal/strata.portal \
+      "$out/share/xdg-desktop-portal/portals/strata.portal"
+    install -Dm644 data/portal/org.freedesktop.impl.portal.desktop.strata.service.in \
+      "$out/share/dbus-1/services/org.freedesktop.impl.portal.desktop.strata.service"
+    substituteInPlace "$out/share/dbus-1/services/org.freedesktop.impl.portal.desktop.strata.service" \
+      --replace-fail @STRATA_EXECUTABLE@ "$out/bin/strata"
+
     install -d "$out/share/strata"
     cat > "$out/share/strata/install-source.toml" <<'EOF'
     manager = "Nix"
@@ -213,6 +233,45 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -m644 LICENSE THIRD_PARTY_LICENSES.md data/licenses/*.txt \
       "$out/share/licenses/strata/"
   '';
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # installCheckPhase runs after fixup, so both wrapper and binary must exist.
+    test -x "$out/bin/strata"
+    test -x "$out/bin/.strata-wrapped"
+    test -x "${lib.getBin libraw}/bin/simple_dcraw"
+    test -x "${lib.getBin libraw}/bin/raw-identify"
+    test -x "${lib.getBin xdg-terminal-exec}/bin/xdg-terminal-exec"
+    grep -Fx 'Name=org.freedesktop.FileManager1' \
+      "$out/share/strata/io.github.lgse.Strata.FileManager1.service"
+    grep -Fx "Exec=$out/bin/strata --gapplication-service" \
+      "$out/share/strata/io.github.lgse.Strata.FileManager1.service"
+    grep -Fx "Exec=$out/bin/strata --portal" \
+      "$out/share/dbus-1/services/org.freedesktop.impl.portal.desktop.strata.service"
+    grep -Fx 'Name=org.freedesktop.impl.portal.desktop.strata' \
+      "$out/share/dbus-1/services/org.freedesktop.impl.portal.desktop.strata.service"
+    if grep -RE '(/usr/bin/strata|@STRATA_EXECUTABLE@|\.strata-wrapped)' \
+      "$out/share/dbus-1/services" \
+      "$out/share/strata/io.github.lgse.Strata.FileManager1.service"; then
+      echo "Unsubstituted or unwrapped D-Bus activation executable" >&2
+      exit 1
+    fi
+    if grep -RE '^Name=org\.freedesktop\.FileManager1$' "$out/share/dbus-1/services"; then
+      echo "FileManager1 must remain opt-in" >&2
+      exit 1
+    fi
+    cmp data/portal/strata.portal \
+      "$out/share/xdg-desktop-portal/portals/strata.portal"
+
+    runHook postInstallCheck
+  '';
+
+  # nix-update does not refresh STRATA_BUILD_COMMIT; update it to the release
+  # commit and review all downstream patches before accepting a version bump.
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/lgse/strata/releases/tag/v${finalAttrs.version}";
