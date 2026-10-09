@@ -30,17 +30,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings";
-  version = "1.9.0";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-fL6/e8nwqk7zJeeFX8GtG1RE5VY03RbP9e3JBbXZBgc=";
+    hash = "sha256-Zjs3WzqZOeZ+XuG7IoJhGeRUuibIPw3IdEujqsLdsR8=";
   };
 
-  cargoHash = "sha256-zk0XFCDyzliMyG40EEvgcEg0Qxkisw0dCWzlR1Tjh7I=";
+  cargoHash = "sha256-iFC5ZZOYA2fkMjvdRhjKlMYJX/k/CzHjFEFt6iepdwU=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
