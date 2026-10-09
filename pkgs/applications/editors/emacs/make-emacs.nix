@@ -488,6 +488,9 @@ stdenv.mkDerivation (finalAttrs: {
       withPackages = callPackage ./build-support/tests/with-packages.nix {
         emacs = finalAttrs.finalPackage;
       };
+      unwrapped = callPackage ./build-support/tests/unwrapped.nix {
+        emacs = finalAttrs.finalPackage;
+      };
     };
   };
 
