@@ -29,7 +29,7 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "src/zope/i18nmessageid" ];
+  unittestFlags = [ "src/zope/i18nmessageid" ];
 
   pythonImportsCheck = [ "zope.i18nmessageid" ];
 
