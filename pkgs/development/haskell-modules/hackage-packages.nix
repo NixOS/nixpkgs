@@ -701115,7 +701115,7 @@ self: {
       hydraPlatforms = lib.platforms.none;
       broken = true;
     }
-  ) { inherit (pkgs) libtensorflow; };
+  ) { libtensorflow = null; };
 
   tensorflow-core-ops = callPackage (
     {

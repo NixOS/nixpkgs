@@ -6,19 +6,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "common-proxies";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromCodeberg {
     owner = "UnifiedPush";
     repo = "common-proxies";
     rev = finalAttrs.version;
-    hash = "sha256-VRxwEsQt1LlcMIMEkGqkVtMrqJ7f4tYh3OExE9VITh4=";
+    hash = "sha256-GUZ6/GpxqhhHFsq/DIWaNhipKfJCKr4t8ptMOhZxGkc=";
   };
 
-  vendorHash = "sha256-rGsSuO7cnb9e4A1SnIwfgfz4vu18JzxKtLnDfCSQqck=";
+  vendorHash = "sha256-qIfca8ebt6+i27X2Gt0m39cmddA5ucbxQmQUyQoItd0=";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   meta = {
     description = "Set of rewrite proxies and gateways for UnifiedPush";

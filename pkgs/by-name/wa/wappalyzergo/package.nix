@@ -21,8 +21,6 @@ buildGoModule (finalAttrs: {
 
   __structuredAttrs = true;
 
-  strictDeps = true;
-
   meta = {
     description = "Implementation of the Wappalyzer Technology Detection Library";
     homepage = "https://github.com/projectdiscovery/wappalyzergo";

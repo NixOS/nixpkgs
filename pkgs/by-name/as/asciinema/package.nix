@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env.ASCIINEMA_GEN_DIR = "gendir";
 
-  strictDeps = true;
-
   nativeCheckInputs = [ python3 ];
   nativeBuildInputs = [ installShellFiles ];
 

@@ -36,6 +36,6 @@ buildRedist (finalAttrs: {
     homepage = "https://developer.nvidia.com/cutensor";
     changelog = "https://docs.nvidia.com/cuda/cutensor/latest/release_notes.html";
 
-    license = _cuda.lib.licenses.cutensor;
+    license = lib.licenses.nvidiaCutensor;
   };
 })

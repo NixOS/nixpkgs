@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "STATIC" stdenv.hostPlatform.isStatic)
   ];
 
+  env.NIX_CFLAGS_COMPILE = ''
+    -Wno-stringop-overread
+    -Wno-unused-but-set-variable
+  '';
+
   postPatch = ''
     substituteInPlace src/version.c.in \
       --replace-fail "@GIT_VERSION@" "v${finalAttrs.version}" \
@@ -60,14 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/api/action.c \
       --replace-fail "/usr/local/bin/pihole" "pihole" \
       --replace-fail "execv" "execvp"
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D pihole-FTL $out/bin/${finalAttrs.meta.mainProgram}
-
-    runHook postInstall
   '';
 
   passthru = {

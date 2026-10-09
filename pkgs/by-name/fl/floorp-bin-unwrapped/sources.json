@@ -1,17 +1,17 @@
 {
-  "version": "12.18.1",
+  "version": "12.19.0",
   "sources": {
     "aarch64-linux": {
-      "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.18.1/floorp-linux-aarch64.tar.xz",
-      "sha256": "80c5cf950098c14277e2a4c36bcfd7e583c17d217ef04891ba3086cc3f2ddd29"
+      "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.19.0/floorp-linux-aarch64.tar.xz",
+      "sha256": "60a00a5c9cffcbcad373b5fa0f262fadee45fb8e4151bc7a5505bfc0c1d8a03f"
     },
     "x86_64-linux": {
-      "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.18.1/floorp-linux-x86_64.tar.xz",
-      "sha256": "2891d016b03cee91e030231d709d572b63980780612e4ccaae8e7dca76d86edd"
+      "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.19.0/floorp-linux-x86_64.tar.xz",
+      "sha256": "010c7ae3bc7fb0d49f7f0584682abe62df7a8e7dceeff5152c6aa5fe52926081"
     },
     "aarch64-darwin": {
-      "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.18.1/floorp-macOS-universal.dmg",
-      "sha256": "1f44f59b9a2d2e7d131db99af8f32069926caf313d17e9a00d48bb69e19cb19b"
+      "url": "https://github.com/Floorp-Projects/Floorp/releases/download/v12.19.0/floorp-macOS-universal.dmg",
+      "sha256": "76507232633c6bf35fedb7e006458e26a1ca4e22e8ce1c4d795665c669e711a0"
     }
   }
 }

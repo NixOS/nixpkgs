@@ -35,7 +35,6 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  strictDeps = true;
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   subPackages = [

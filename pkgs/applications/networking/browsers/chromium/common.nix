@@ -7,6 +7,7 @@
   fetchFromGitHub,
   fetchFromGitiles,
   fetchNpmDeps,
+  fetchzip,
   rustPlatform,
   buildGoModule,
   buildPackages,
@@ -205,6 +206,21 @@ let
     ];
   };
 
+  _crubit =
+    {
+      "154" = {
+        rev = "69b85cba43f85a6439dc0be86a6fe424bb07a100";
+        hash = "sha256-hSN4ZW3LsN3cerv3h3whAYLDZuoE6YaLuR9WY48P3E0=";
+        cargoHash = "sha256-xJWYE0gfEkf0WvrkaDkXiOYwvrlQGqa7QxkosXKH6UQ=";
+      };
+      "155" = {
+        rev = "a355b02da81bc9f350925c73ec0322ce4d5140f1";
+        hash = "sha256-Z2wsYe2Tln+CeAV9naC1QRnmvrz3HZXF06cNIp1RqU4=";
+        cargoHash = "sha256-5EB6yTk+eGffjUK/TXf6ZxCU0p05Dh1nL8q3Nl6TiiY=";
+      };
+    }
+    .${lib.versions.major upstream-info.version};
+
   crubit = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "crubit";
     version = "0-unstable-2026-09-11";
@@ -212,11 +228,10 @@ let
     src = fetchFromGitiles {
       url = "https://chromium.googlesource.com/external/github.com/google/crubit.git";
       # https://chromium.googlesource.com/chromium/src/+/154.0.8037.57/tools/rust/update_rust.py#48
-      rev = "69b85cba43f85a6439dc0be86a6fe424bb07a100";
-      hash = "sha256-hSN4ZW3LsN3cerv3h3whAYLDZuoE6YaLuR9WY48P3E0=";
+      inherit (_crubit) rev hash;
     };
 
-    cargoHash = "sha256-xJWYE0gfEkf0WvrkaDkXiOYwvrlQGqa7QxkosXKH6UQ=";
+    inherit (_crubit) cargoHash;
 
     buildInputs = [
       buildPackages.rustc.llvmPackages.llvm
@@ -268,15 +283,28 @@ let
 
   # esbuild binary needs to match the version in the vendored node_modules:
   # https://chromium.googlesource.com/devtools/devtools-frontend/+/66df492aaa0129d090937e933dd44c5389ab24d2/package.json#57
+  _esbuild =
+    {
+      "154" = {
+        version = "0.25.1";
+        hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
+      };
+      "155" = {
+        version = "0.28.2";
+        hash = "sha256-I1u+9U5Oj/KzxSjCxwyitwSuDKimatkbC3R2OtaUsfM=";
+      };
+    }
+    .${lib.versions.major upstream-info.version};
+
   esbuild = buildGoModule (finalAttrs: {
     pname = "esbuild";
-    version = "0.25.1";
+    inherit (_esbuild) version;
 
     src = fetchFromGitHub {
       owner = "evanw";
       repo = "esbuild";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-vrhtdrvrcC3dQoJM6hWq6wrGJLSiVww/CNPlL1N5kQ8=";
+      inherit (_esbuild) hash;
     };
 
     vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
@@ -356,6 +384,15 @@ let
       ''
     ) chromiumDeps
   );
+
+  bidi = fetchzip {
+    # https://chromium.googlesource.com/chromium/src/+/155.0.8059.39/third_party/chromium-bidi/DEPS#64
+    # FIXME: We cannot use fetchNpmDeps here because the package-lock.json uses airlock-proxy.uplink.goog:999 a bunch of times
+    url = "https://commondatastorage.googleapis.com/chromium-nodejs/chromium-bidi/e7aab7e5ac29d62f5c023d7e8ba5eedc09a11945a88b0e174fc42f64c0820071";
+    extension = "tar.gz";
+    stripRoot = false;
+    hash = "sha256-Td9MpgNDdHTlqvmlu7v2JwkhCbN9NvSlzcbnHSSjieA=";
+  };
 
   base = rec {
     pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
@@ -613,7 +650,7 @@ let
         hash = "sha256-Ho5I33FOgtYHvKSZlWXWuBaqnSHqy4+f6EZdiL+/rRQ=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "154" && !ungoogled) [
+    ++ lib.optionals (versionRange "154" "155" && !ungoogled) [
       # Error: Cannot find module @rollup/rollup-linux-x64-gnu.
       # Essentially build-with-wasm-rollup.patch from the not yet merged PR for M154:
       # https://github.com/ungoogled-software/ungoogled-chromium/pull/3966
@@ -706,9 +743,14 @@ let
       # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=return'
       ./patches/chromium-149-llvm-22.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "153" && lib.versionOlder llvmVersion "23") [
+    ++ lib.optionals (versionRange "153" "155" && lib.versionOlder llvmVersion "23") [
       # Rebased variant of the patch above
       ./patches/chromium-153-llvm-22.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "155" && lib.versionOlder llvmVersion "23") [
+      # Extended variant of the patch above because of
+      # clang++: error: unknown argument: '-fsanitize-ignore-for-ubsan-feature=unreachable'
+      ./patches/chromium-155-llvm-22.patch
     ]
     ++ lib.optionals (chromiumVersionAtLeast "149" && stdenv.hostPlatform.isAarch64) [
       # [43731/56364] CXX obj/media/gpu/sandbox/sandbox/hardware_video_decoding_sandbox_hook_linux.o
@@ -783,7 +825,7 @@ let
         hash = "sha256-d1Zm2flZPG++ROF4CCawn9U8T7/qgZFMHTXArqIShTk=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "152") [
+    ++ lib.optionals (versionRange "152" "155") [
       # ERROR at //build/rust/crubit/BUILD.gn:31:19: Unable to load "/build/src/third_party/rust-toolchain/lib/third_party/crubit/BUILD.gn".
       #   public_deps = [ "$crubit_src_dir:cpp_api_from_rust_bindings_cpp_deps" ]
       #                   ^----------------------------------------------------
@@ -818,7 +860,7 @@ let
         hash = "sha256-+5lddQSOJz7XTZanDl3/lqQ7CQhnCVzvUMpxvE3Sz2c=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "153") [
+    ++ lib.optionals (versionRange "153" "155") [
       (fetchpatch {
         name = "chromium-153-revert-devtools-frontend-Remove-TSGO-flag.patch";
         # https://chromium-review.googlesource.com/c/devtools/devtools-frontend/+/8193297
@@ -829,7 +871,6 @@ let
         revert = true;
         hash = "sha256-Dip5axpXSJbdGmtS7t81nLCvjRPBSkAuJA4Lo6MFKLw=";
       })
-
     ];
 
     postPatch =
@@ -969,7 +1010,15 @@ let
       ''
       + lib.optionalString (chromiumVersionAtLeast "154") ''
         mkdir -p third_party/typescript/linux-amd64/src
-        ln -sv ${buildPackages.typescript}/lib/typescript third_party/typescript/linux-amd64/src/lib
+        ${
+          if chromiumVersionAtLeast "155" then "cp -rv" else "ln -sv"
+        } ${buildPackages.typescript}/lib/typescript third_party/typescript/linux-amd64/src/lib
+      ''
+      + lib.optionalString (chromiumVersionAtLeast "155") ''
+        chmod u+w -R third_party/typescript/linux-amd64/src/lib
+        patch --strip=1 --directory=third_party/typescript/linux-amd64/src --input=../3pp/patches/typescript_native_preview.patch
+      ''
+      + lib.optionalString (chromiumVersionAtLeast "154") ''
 
         mkdir -p third_party/devtools-frontend/src/third_party/esbuild
         ln -sv ${esbuild}/bin/esbuild third_party/devtools-frontend/src/third_party/esbuild/esbuild
@@ -990,6 +1039,10 @@ let
         ln -sv ${rustPlatform.rustVendorSrc} third_party/rust-toolchain/lib/rustlib/src/rust/library/vendor
 
         ${lib.getExe buildPackages.rustc} -V > third_party/rust-toolchain/VERSION
+      ''
+      + lib.optionalString (packageName == "chromedriver") ''
+        cp -r ${bidi} third_party/chromium-bidi/node_modules
+        patchShebangs third_party/chromium-bidi/node_modules
       ''
       +
         lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64)
@@ -1087,6 +1140,10 @@ let
         # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
         use_clang_modules = false;
       }
+      // lib.optionalAttrs (chromiumVersionAtLeast "155") {
+        # https://chromium-review.googlesource.com/c/v8/v8/+/8365609
+        v8_use_metagen_instance_types = false;
+      }
       // lib.optionalAttrs (chromiumVersionAtLeast "150") {
         # ERROR at //build/modules/BUILD.gn:80:23: Directory does not exist: /usr/include/
         #     system_headers += expand_directory("${sysroot}/${root_include_dir}", true)
@@ -1135,7 +1192,7 @@ let
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
-      // lib.optionalAttrs (chromiumVersionAtLeast "153") {
+      // lib.optionalAttrs (versionRange "153" "155") {
         use_typescript_go = false;
         devtools_use_typescript_go = false;
       }

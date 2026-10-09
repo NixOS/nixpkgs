@@ -48,7 +48,12 @@ buildPythonPackage (finalAttrs: {
     description = "Turn entire websites into LLM-ready markdown or structured data. Scrape, crawl and extract with a single API";
     homepage = "https://firecrawl.dev";
     changelog = "https://github.com/mendableai/firecrawl/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    license =
+      with lib.licenses;
+      AND [
+        agpl3Only
+        mit
+      ];
     maintainers = [ ];
   };
 })

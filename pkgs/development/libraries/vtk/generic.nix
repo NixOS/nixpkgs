@@ -125,6 +125,20 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vtk";
   inherit version patches;
 
+  # The vendored pegtl module creates a `pegtl` CMake target, which clashes with the `pegtl` target
+  # exported by openusd >= 26.05 when VTK::IOUSD calls find_package(pxr).
+  # Rename the module VTK::pegtl -> VTK::vtkpegtl so that its target becomes `vtkpegtl`.
+  postPatch = lib.optionalString (lib.versionOlder version "9.6") ''
+    substituteInPlace ThirdParty/pegtl/vtk.module Common/DataModel/vtk.module IO/MotionFX/vtk.module \
+      --replace-fail \
+        "VTK::pegtl" \
+        "VTK::vtkpegtl"
+    substituteInPlace ThirdParty/pegtl/vtkpegtl/CMakeLists.txt \
+      --replace-fail \
+        "target_compile_features(pegtl" \
+        "target_compile_features(vtkpegtl"
+  '';
+
   src = fetchurl {
     url = "https://www.vtk.org/files/release/${lib.versions.majorMinor finalAttrs.version}/VTK-${finalAttrs.version}.tar.gz";
     hash = sourceSha256;
@@ -259,7 +273,8 @@ stdenv.mkDerivation (finalAttrs: {
     # use system packages if possible
     (lib.cmakeBool "VTK_USE_EXTERNAL" true)
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_fast_float" false) # required version incompatible
-    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_pegtl" false) # required version incompatible
+    # required version incompatible
+    (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_${if lib.versionAtLeast version "9.6" then "vtkpegtl" else "pegtl"}" false)
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_ioss" false) # missing in nixpkgs
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_token" false) # missing in nixpkgs
     (lib.cmakeBool "VTK_MODULE_USE_EXTERNAL_VTK_fmt" false) # prefer vendored fmt

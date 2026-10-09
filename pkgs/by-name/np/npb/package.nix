@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.1.3";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "samestep";

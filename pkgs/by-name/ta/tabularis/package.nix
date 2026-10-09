@@ -29,8 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-RXkyhgicrUCuQ0Ei4mnBwPwSAEtmWA35kVn9oGQEYX0=";
   };
 
-  strictDeps = true;
-
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 

@@ -1531,6 +1531,8 @@ self: super: with self; {
 
   asyncua = callPackage ../development/python-modules/asyncua { };
 
+  asyncudp = callPackage ../development/python-modules/asyncudp { };
+
   asyncwhois = callPackage ../development/python-modules/asyncwhois { };
 
   asysocks = callPackage ../development/python-modules/asysocks { };
@@ -1990,6 +1992,10 @@ self: super: with self; {
 
   azure-mgmt-recoveryservicesbackup =
     callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup
+      { };
+
+  azure-mgmt-recoveryservicesbackup-passivestamp =
+    callPackage ../development/python-modules/azure-mgmt-recoveryservicesbackup-passivestamp
       { };
 
   azure-mgmt-redhatopenshift =
@@ -6778,6 +6784,8 @@ self: super: with self; {
   geojson = callPackage ../development/python-modules/geojson { };
 
   geojson-client = callPackage ../development/python-modules/geojson-client { };
+
+  geojson-pydantic = callPackage ../development/python-modules/geojson-pydantic { };
 
   geomet = callPackage ../development/python-modules/geomet { };
 
@@ -15688,6 +15696,10 @@ self: super: with self; {
 
   pyobjc-core = callPackage ../development/python-modules/pyobjc-core { };
 
+  pyobjc-framework-AVFoundation =
+    callPackage ../development/python-modules/pyobjc-framework-AVFoundation
+      { };
+
   pyobjc-framework-ApplicationServices =
     callPackage ../development/python-modules/pyobjc-framework-ApplicationServices
       { };
@@ -15702,7 +15714,15 @@ self: super: with self; {
     callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth
       { };
 
+  pyobjc-framework-CoreMedia =
+    callPackage ../development/python-modules/pyobjc-framework-CoreMedia
+      { };
+
   pyobjc-framework-CoreText = callPackage ../development/python-modules/pyobjc-framework-CoreText { };
+
+  pyobjc-framework-MediaPlayer =
+    callPackage ../development/python-modules/pyobjc-framework-MediaPlayer
+      { };
 
   pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
 
@@ -17861,6 +17881,8 @@ self: super: with self; {
 
   ray = callPackage ../development/python-modules/ray { };
 
+  raygeo = callPackage ../development/python-modules/raygeo { };
+
   raylib = callPackage ../development/python-modules/raylib { inherit (pkgs) raylib; };
 
   razdel = callPackage ../development/python-modules/razdel { };
@@ -18474,6 +18496,8 @@ self: super: with self; {
   ruff-api = callPackage ../development/python-modules/ruff-api { };
 
   ruff-format = callPackage ../development/python-modules/ruff-format { };
+
+  ruida-pa = callPackage ../development/python-modules/ruida-pa { };
 
   rules = callPackage ../development/python-modules/rules { };
 
@@ -22385,6 +22409,8 @@ self: super: with self; {
     }
   );
 
+  vtracer = callPackage ../development/python-modules/vtracer { };
+
   vttlib = callPackage ../development/python-modules/vttlib { };
 
   vulkan = callPackage ../development/python-modules/vulkan { };
@@ -22471,7 +22497,7 @@ self: super: with self; {
 
   wasmerPackages = lib.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
 
-  wasmtime = callPackage ../development/python-modules/wasmtime { };
+  wasmtime = callPackage ../by-name/wa/wasmtime/python.nix { };
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
 
