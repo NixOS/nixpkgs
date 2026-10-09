@@ -49,6 +49,7 @@
 
 let
   needsPangoTlottie = [
+    "64gram-unwrapped"
     "ayugram-desktop-unwrapped"
     "telegram-desktop-unwrapped"
   ];
