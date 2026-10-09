@@ -2,14 +2,17 @@
   stdenv,
   lib,
   fetchurl,
+  gitUpdater,
   nixosTests,
   makeWrapper,
-  openjdk21,
+  openjdk25,
   which,
   gawk,
   bashNonInteractive,
 }:
-
+let
+  java = openjdk25;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "neo4j";
   version = "2026.09.0";
@@ -35,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
             "$out/bin/$NEO4J_SCRIPT" \
             --prefix PATH : "${
               lib.makeBinPath [
-                openjdk21
+                java
                 which
                 gawk
               ]
             }" \
-            --set JAVA_HOME "${openjdk21}"
+            --set JAVA_HOME "${java}"
     done
 
     patchShebangs $out/share/neo4j/bin/neo4j-admin
@@ -50,7 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/neo4j-admin dbms set-initial-password neo4jadmin
   '';
 
-  passthru.tests.nixos = nixosTests.neo4j;
+  passthru = {
+    tests.nixos = nixosTests.neo4j;
+    updateScript = gitUpdater {
+      url = "https://github.com/neo4j/neo4j.git";
+      allowedVersions = "^[0-9]{4}\\.[0-9]{2}\\.[0-9]+$";
+    };
+  };
 
   meta = {
     description = "Highly scalable, robust (fully ACID) native graph database";
