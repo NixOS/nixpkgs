@@ -41,44 +41,20 @@ lib.init bootStages
       # Stage-specific overlays can introduce a stage without changing platforms.
       # Reuse native defaults, including cycle-breaking bootstrap overrides.
       isNative = lib.systems.equals localSystem crossSystem;
-      adaptStdenv = if crossSystem.isStatic then buildPackages.stdenvAdapters.makeStatic else lib.id;
+      adaptStdenv = import ./adapt-stdenv.nix {
+        inherit lib buildPackages;
+        hostPlatform = crossSystem;
+      };
       crossStdenvNoCC = adaptStdenv (
-        buildPackages.stdenv.override (old: rec {
-          buildPlatform = localSystem;
-          hostPlatform = crossSystem;
-          targetPlatform = crossSystem;
-
-          # Prior overrides are surely not valid as packages built with this run on
-          # a different platform, and so are disabled.
+        buildPackages.stdenv.override {
+          # New package stages must discard prior bootstrap package overrides
+          # and HOST defaults; adapting an explicit compiler constructor does not.
           overrides = _: _: { };
-          extraBuildInputs = [ ]; # Old ones run on wrong platform
+          extraBuildInputs = [ ];
           allowedRequisites = null;
-
           cc = null;
           hasCC = false;
-
-          extraNativeBuildInputs =
-            old.extraNativeBuildInputs
-            ++ lib.optionals (hostPlatform.isLinux && !buildPlatform.isLinux) [ buildPackages.patchelf ]
-            ++ lib.optional (
-              let
-                f =
-                  p:
-                  !p.isx86
-                  || builtins.elem p.libc [
-                    "musl"
-                    "wasilibc"
-                    "relibc"
-                  ]
-                  || p.isiOS
-                  || p.isGenode;
-              in
-              f hostPlatform && !(f buildPlatform)
-            ) buildPackages.updateAutotoolsGnuConfigScriptsHook
-            ++ lib.optional (
-              hostPlatform.isCygwin && !buildPlatform.isCygwin
-            ) buildPackages.cygwin.cygwinDllLinkHook;
-        })
+        }
       );
     in
     {
