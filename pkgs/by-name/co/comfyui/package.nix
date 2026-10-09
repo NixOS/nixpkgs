@@ -12,6 +12,7 @@
   gzip,
   nix-update,
   makeBinaryWrapper,
+  nixosTests,
   python3,
   stdenvNoCC,
   writeShellApplication,
@@ -196,6 +197,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         done < "$src/requirements.txt"
       '';
     });
+
+    tests.comfyui = nixosTests.comfyui;
   };
 
   meta = {
