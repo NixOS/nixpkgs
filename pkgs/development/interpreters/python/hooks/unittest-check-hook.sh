@@ -10,8 +10,21 @@ unittestCheckPhase() {
   local -a flagsArray=()
 
   if [[ -z "${dontUseUnittestDiscover-}" ]]; then
+
     # The `discover` sub-command must precede any other command-line argument.
     flagsArray+=("discover")
+
+    if [[ -n "${unittestStartDir-}" ]]; then
+      flagsArray+=(--start-directory="$unittestStartDir")
+    fi
+
+    if [[ -n "${unittestFilePattern-}" ]]; then
+      flagsArray+=(--pattern="$unittestFilePattern")
+    fi
+
+    if [[ -n "${unittestTopDir-}" ]]; then
+      flagsArray+=(--top-level-directory="$unittestTopDir")
+    fi
 
   else
 
