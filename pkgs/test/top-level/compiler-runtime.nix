@@ -71,6 +71,19 @@ let
     && lib.hasInfix ": selected-clang-frontend" targetCompiler.cc.postInstall
     && lib.hasInfix (builtins.unsafeDiscardStringContext "${lib.getLib compiler.cc}/lib/clang/${toString major}/include") targetCompiler.postFixup
     && compiler.bintools.bintools.version == targetCompiler.bintools.bintools.version
+    # llvm-binutils is assembled by runCommand on BUILD. Its executable
+    # platform belongs to the linked LLVM/LLD inputs, not its own stdenv.
+    &&
+      lib.all
+        (
+          tool:
+          lib.systems.equals tool.stdenv.hostPlatform packages.stdenv.hostPlatform
+          && builtins.isString tool.drvPath
+        )
+        [
+          targetCompiler.bintools.bintools.llvm
+          targetCompiler.bintools.bintools.lld
+        ]
     && compiler.libcxx.outPath == targetCompiler.libcxx.outPath
     && compiler.gccForLibs.outPath == targetCompiler.gccForLibs.outPath
     && compiler.useCcForLibs == targetCompiler.useCcForLibs
@@ -125,6 +138,34 @@ let
                     });
                   };
                 });
+              }
+            else if
+              builtins.elem policy [
+                "optional-stdenv"
+                "supplied-optional-stdenv"
+              ]
+            then
+              {
+                # An omitted role default cannot be transported from captured
+                # constructor values. This fixture models no hidden dependencies.
+                cc =
+                  lib.makeOverridable
+                    (
+                      {
+                        stdenv ? packages.gcc14.cc.stdenv,
+                      }:
+                      stdenv.mkDerivation {
+                        pname = "compiler-platform-control";
+                        version = "0";
+                        buildCommand = "touch $out";
+                        passthru.isGNU = true;
+                      }
+                    )
+                    (
+                      lib.optionalAttrs (policy == "supplied-optional-stdenv") {
+                        stdenv = packages.gcc14.cc.stdenv;
+                      }
+                    );
               }
             else if
               builtins.elem policy [
@@ -243,6 +284,12 @@ let
   ];
   compatiblePackages = gnuPackages true { policy = "compatible-build-cc"; };
   incompatiblePackages = gnuPackages true { policy = "incompatible-build-cc"; };
+  optionalMissing =
+    builtins.tryEval
+      (gnuPackages true { policy = "optional-stdenv"; })
+      .targetPackages.stdenv.cc.cc.stdenv.hostPlatform.system;
+  optionalSupplied =
+    (gnuPackages true { policy = "supplied-optional-stdenv"; }).targetPackages.stdenv.cc.cc;
   compatibleBuildCC = compatiblePackages.targetPackages.stdenv.cc.cc.stdenv.cc;
   incompatibleBuildCC = incompatiblePackages.targetPackages.stdenv.cc.cc.stdenv.cc;
 
@@ -507,6 +554,10 @@ assert selectedLinkerCompiler.bintools.shell == "/bin/selected-linker-shell";
 assert builtins.isString selectedLinkerCompiler.drvPath;
 # These are construction controls. An incompatible native compiler does not
 # acquire a different TARGET merely by changing its enclosing stdenv platforms.
+assert !optionalMissing.success;
+assert optionalSupplied.stdenv.buildPlatform.system == "x86_64-linux";
+assert optionalSupplied.stdenv.hostPlatform.system == "aarch64-linux";
+assert optionalSupplied.stdenv.targetPlatform.system == "aarch64-linux";
 assert compatibleBuildCC.outPath == compatiblePackages.stdenv.cc.cc.stdenv.cc.outPath;
 assert lib.hasInfix "selected-build-compiler" compatibleBuildCC.postFixup;
 assert incompatibleBuildCC.outPath == incompatiblePackages.stdenv.cc.outPath;
