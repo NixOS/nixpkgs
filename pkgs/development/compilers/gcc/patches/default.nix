@@ -87,6 +87,8 @@ optionals noSysDirs (
 )
 # Bind selected header providers through GCC's native default lookup.
 ++ optional atLeast14 ../common/native-default-includes.patch
+# Preserve literal newlines when GCC and collect2 exchange response files.
+++ [ ../common/libiberty-writeargv-newlines.patch ]
 # Cross-built libstdc++ uses the existing BUILD-to-TARGET compiler, which must
 # not supply its own C++ headers while compiling the new library.
 ++ optional (majorVersion == "16" && !buildIsHost) ./16/cxx23-nostdincxx.patch

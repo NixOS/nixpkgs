@@ -1,0 +1,94 @@
+From 2bed326225f6e4cae4158a67270d1ff86340ef59 Mon Sep 17 00:00:00 2001
+From: Codex <codex@openai.com>
+Date: Fri, 9 Oct 2026 00:40:38 +0000
+Subject: [PATCH] libiberty: preserve literal newlines in writeargv response
+ files
+
+buildargv removes backslash-newline as a line continuation.  writeargv
+escapes every whitespace byte, so reading its output silently removes
+literal newlines from argument values.  GCC linking through collect2
+exposes this with object filenames containing a newline.  Older writers
+also encounter it when their output is consumed by a newer native parser.
+
+Write each newline as a quoted fragment.  Leave all other output spelling
+and the parser's line-continuation rules unchanged, including the existing
+representation of empty arguments.  Add a native writer/parser round-trip
+test for whitespace, quotes, backslashes, dollar, backtick and empty values.
+---
+ libiberty/argv.c                      | 10 ++++++++
+ libiberty/testsuite/test-expandargv.c | 37 +++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
+
+diff --git a/libiberty/argv.c b/libiberty/argv.c
+index c64db28..a2fb912 100644
+--- a/libiberty/argv.c
++++ b/libiberty/argv.c
+@@ -309,4 +309,14 @@ writeargv (char * const *argv, FILE *f)
+           char c = *arg;
+ 
++          /* Backslash-newline is a line continuation for buildargv.
++             Preserve literal newlines with a quoted fragment instead.  */
++          if (c == '\n')
++            {
++              if (EOF == fputs ("\"\n\"", f))
++                return 1;
++              arg++;
++              continue;
++            }
++
+           if (ISSPACE(c) || c == '\\' || c == '\'' || c == '"')
+             if (EOF == fputc ('\\', f))
+diff --git a/libiberty/testsuite/test-expandargv.c b/libiberty/testsuite/test-expandargv.c
+index b6cdaa3..dcaf090 100644
+--- a/libiberty/testsuite/test-expandargv.c
++++ b/libiberty/testsuite/test-expandargv.c
+@@ -435,4 +435,40 @@ run_tests (const char **test_data)
+ }
+ 
++/* Check that writeargv preserves argument values when read by buildargv.  */
++static int
++test_writeargv (void)
++{
++  char *args[] = { "", "ordinary", "a b", "a\tb", "a\nb", "\n",
++                   "\\\n", "\r\n", "\v\f", "'\"\\", "$name`command`",
++                   "trailing\\", NULL };
++  FILE *f = tmpfile ();
++  char *buffer, **parsed;
++  long length;
++  int i, failed = 0;
++
++  if (f == NULL || writeargv (args, f) != 0 || fflush (f) != 0)
++    fatal_error (__LINE__, "Failed to write argv.", errno);
++  length = ftell (f);
++  if (length < 0 || fseek (f, 0, SEEK_SET) != 0)
++    fatal_error (__LINE__, "Failed to rewind argv.", errno);
++  buffer = xmalloc (length + 1);
++  if (fread (buffer, 1, length, f) != (size_t) length)
++    fatal_error (__LINE__, "Failed to read argv.", errno);
++  buffer[length] = '\0';
++  if (fclose (f) != 0)
++    fatal_error (__LINE__, "Failed to close argv.", errno);
++
++  parsed = buildargv (buffer);
++  for (i = 0; args[i] != NULL && parsed[i] != NULL; ++i)
++    if (strcmp (args[i], parsed[i]) != 0)
++      failed = 1;
++  if (args[i] != NULL || parsed[i] != NULL)
++    failed = 1;
++  printf ("%s: test-writeargv-roundtrip.\n", failed ? "FAIL" : "PASS");
++  free (buffer);
++  freeargv (parsed);
++  return failed;
++}
++
+ /* main:
+     Run tests. 
+@@ -455,4 +491,5 @@ main(int argc, char **argv)
+ 
+   fails = run_tests (test_data);
++  fails += test_writeargv ();
+   if (!fails)
+     exit (EXIT_SUCCESS);
+-- 
+2.43.0
+
