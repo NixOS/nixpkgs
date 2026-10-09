@@ -25,8 +25,6 @@ buildGoModule (finalAttrs: {
 
   ldflags = [ "-s" ];
 
-  strictDeps = true;
-
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;

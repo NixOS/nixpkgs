@@ -26,8 +26,7 @@ buildGoModule (finalAttrs: {
   };
   vendorHash = "sha256-OGavtp0vYqK0D4P+ypVyEF8GsvDvfIDQXsjlKmpKJJ4=";
 
-  strictDeps = true;
-  structuredAttrs = true;
+  __structuredAttrs = true;
 
   patches = [
     (replaceVars ./fix-paths-keybase.patch {

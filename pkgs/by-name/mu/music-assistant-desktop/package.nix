@@ -107,7 +107,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   meta = {
     description = "Official companion desktop app for Music Assistant";

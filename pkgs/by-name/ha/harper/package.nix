@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harper";
   version = "2.12.0";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Automattic";

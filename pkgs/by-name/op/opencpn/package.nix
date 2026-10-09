@@ -50,13 +50,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.14.0";
+  version = "5.14.2";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-2yCVv1wRkmRJ2FBwg1CJ9xkXUPx0TPSkRHiNZXaMJZQ=";
+    hash = "sha256-FyWrh6bwNjZVmRGenTMVcS1GBZ/aG3tQN32zPn/Qhvs=";
   };
 
   patches = [

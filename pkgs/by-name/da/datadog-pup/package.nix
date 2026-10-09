@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.19.1";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "DataDog";
