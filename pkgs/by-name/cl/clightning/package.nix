@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clightning";
-  version = "26.04.1";
+  version = "26.06.9";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${finalAttrs.version}/clightning-v${finalAttrs.version}.zip";
-    hash = "sha256-MEsZ5GPCY6q/SNO+xcktfGiCZUVgl4p7pdMOiqIqFJM=";
+    hash = "sha256-rDextsQbbGDPBt2M11APH6sEQRzy87wSaDjYyvq0U40=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool
@@ -68,20 +68,27 @@ stdenv.mkDerivation (finalAttrs: {
   # this causes some python trouble on a darwin host so we skip this step.
   # also we have to tell libwally-core to use sed instead of gsed.
   postPatch =
-    if !stdenv.hostPlatform.isDarwin then
-      ''
-        patchShebangs \
-          tools/generate-wire.py \
-          tools/update-mocks.sh \
-          tools/mockup.sh \
-          tools/fromschema.py \
-          devtools/sql-rewrite.py
-      ''
-    else
-      ''
-        substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
-        substituteInPlace external/libwally-core/configure.ac --replace gsed sed
-      '';
+    # chmod for `blockreplace.py` seems needed for all platforms
+    ''
+      chmod +x devtools/blockreplace.py
+    ''
+    + (
+      if !stdenv.hostPlatform.isDarwin then
+        ''
+          patchShebangs \
+            tools/generate-wire.py \
+            tools/update-mocks.sh \
+            tools/mockup.sh \
+            tools/fromschema.py \
+            devtools/sql-rewrite.py \
+            devtools/blockreplace.py
+        ''
+      else
+        ''
+          substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
+            substituteInPlace external/libwally-core/configure.ac --replace gsed sed
+        ''
+    );
 
   configureFlags = [ "--disable-valgrind" ];
 
@@ -99,10 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
-      c-lightning is a standard compliant implementation of the Lightning
-      Network protocol. The Lightning Network is a scalability solution for
-      Bitcoin, enabling secure and instant transfer of funds between any two
-      parties for any amount.
+      Core Lightning (CLN), previously c-lightning, is standard compliant
+      implementation of the Lightning Network protocol. The Lightning Network
+      is a scalability solution for Bitcoin, enabling secure and instant
+      transfer of funds between any two parties for any amount.
     '';
     homepage = "https://github.com/ElementsProject/lightning";
     maintainers = with lib.maintainers; [
