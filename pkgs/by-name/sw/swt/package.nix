@@ -152,7 +152,5 @@ stdenv.mkDerivation (finalAttrs: {
       lib.sourceTypes.binaryNativeCode
     ];
     platforms = lib.attrNames finalAttrs.passthru.srcMetadataByPlatform;
-    # Fails with: `java.nio.file.NoSuchFileException: ../swt.jar`
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

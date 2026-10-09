@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # build cross compilers
     "--enable-cross"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # The bounds checker has an unresolved arm64 atomic helper on Darwin.
     "--config-bcheck=no"
   ]
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # TCC cannot cross-compile x86 long double constants from aarch64-darwin.
     makeFlagsArray+=("TCC_X=i386-win32 x86_64-win32 arm arm64 arm-wince c67 riscv64 arm64-osx")
   '';

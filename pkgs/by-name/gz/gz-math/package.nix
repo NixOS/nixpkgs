@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.python
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Non-deterministic random tests fail on aarch64-darwin
     "GaussMarkovProcess_TEST.rb"
     "Rand_TEST.rb"

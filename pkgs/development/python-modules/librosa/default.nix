@@ -92,7 +92,7 @@ buildPythonPackage (finalAttrs: {
     "test_load_resample"
     "test_loadx"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError (numerical comparison fails)
     "test_beat_track_multi"
     "test_beat_track_multi_bpm_vector"

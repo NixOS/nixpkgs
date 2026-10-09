@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = "-latomic";
   };
 
-  cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Some x86 tests are interrupted by signal 10
     "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;test_x86"
   ];

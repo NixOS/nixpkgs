@@ -36,7 +36,7 @@ buildPythonPackage rec {
         --replace-fail "mappingproxy(OrderedDict({'x': <3×1 Real Variable: x>}))" "mappingproxy(OrderedDict([('x', <3×1 Real Variable: x>)]))"
     ''
     # TypeError: '<=' not supported between instances of 'ComplexAffineExpression' and 'float'
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       rm tests/ptest_quantentr.py
     '';
 

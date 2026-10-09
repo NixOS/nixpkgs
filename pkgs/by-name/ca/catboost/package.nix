@@ -135,10 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       natsukium
     ];
     mainProgram = "catboost";
-    broken =
-      # See: <https://github.com/catboost/catboost/issues/2755>
-      cudaSupport
-      # /nix/store/hzxiynjmmj35fpy3jla7vcqwmzj9i449-Libsystem-1238.60.2/include/sys/_types/_mbstate_t.h:31:9: error: unknown type name '__darwin_mbstate_t'
-      || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+    # See: https://github.com/catboost/catboost/issues/2755
+    broken = cudaSupport;
   };
 })

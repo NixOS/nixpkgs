@@ -96,13 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  # workaround for build issue, happens only x86_64-darwin, not aarch64-darwin
-  # ccan/ccan/fdpass/fdpass.c:16:8: error: variable length array folded to constant array as an extension [-Werror,-Wgnu-folding-constant]
-  #                 char buf[CMSG_SPACE(sizeof(fd))];
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-  ) "-Wno-error=gnu-folding-constant";
-
   passthru.updateScript = ./update.sh;
 
   meta = {

@@ -47,22 +47,9 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     # segfaults the testsuite
     "tests/test_emitter.py"
-    # unsupported on x86_64-darwin
     "tests/test_fsevents.py"
     # fails to stop process in teardown
     "tests/test_0_watchmedo.py::test_auto_restart_subprocess_termination"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # FileCreationEvent != FileDeletionEvent
-    "tests/test_emitter.py::test_separate_consecutive_moves"
-    "tests/test_observers_polling.py::test___init__"
-    # segfaults
-    "tests/test_delayed_queue.py::test_delayed_get"
-    "tests/test_emitter.py::test_delete"
-    # AttributeError: '_thread.RLock' object has no attribute 'key'"
-    "tests/test_skip_repeats_queue.py::test_eventlet_monkey_patching"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # segfaults
     "tests/test_delayed_queue.py::test_delayed_get"
     "tests/test_0_watchmedo.py::test_tricks_from_file"

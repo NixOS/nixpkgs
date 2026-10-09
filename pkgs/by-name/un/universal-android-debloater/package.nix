@@ -81,7 +81,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "uad-ng";
     maintainers = with lib.maintainers; [ lavafroth ];
-    broken = with stdenv.hostPlatform; isDarwin && isx86_64;
     platforms = with lib.platforms; linux ++ darwin;
   };
 })

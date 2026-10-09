@@ -128,7 +128,7 @@ buildDotnetModule (finalAttrs: {
     # needed for `uname`
     coreutils
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.autoSignDarwinBinariesHook
   ];
 

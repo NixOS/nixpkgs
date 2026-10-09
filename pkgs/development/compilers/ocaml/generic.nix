@@ -143,11 +143,7 @@ stdenv.mkDerivation (
     # does not exist. So, disable these configure flags on `aarch64-darwin`.
     # See #144785 for details.
     configurePlatforms =
-      lib.optionals
-        (
-          lib.versionAtLeast version "4.08"
-          && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-        )
+      lib.optionals (lib.versionAtLeast version "4.08" && !stdenv.hostPlatform.isDarwin)
         [
           "host"
           "target"

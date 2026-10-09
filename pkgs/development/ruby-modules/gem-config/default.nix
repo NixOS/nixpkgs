@@ -567,9 +567,7 @@ in
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin cctools
     ++ lib.optional (
-      lib.versionAtLeast attrs.version "1.53.0"
-      && stdenv.hostPlatform.isDarwin
-      && stdenv.hostPlatform.isAarch64
+      lib.versionAtLeast attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin
     ) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];

@@ -113,15 +113,10 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: assert(np.allclose(grad_u.data, grad_v.data, rtol=tolerance, atol=tolerance))
     "test_gradient_equivalence"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+
     # Numerical tests
     "test_lm_fb"
     "test_lm_ds"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Numerical error
-    "test_pow_precision"
   ];
 
   disabledTestPaths =

@@ -118,11 +118,6 @@ let
           url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel_nojdk-${version}-linux-arm64";
           hash = "sha256-wfuZLSHa77wr0A4ZLF5DqH7qyOljYNXM2a5imoS+nGQ";
         }
-      else if stdenv.hostPlatform.system == "x86_64-darwin" then
-        fetchurl {
-          url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-darwin-x86_64";
-          hash = "sha256-qAb9s6R5+EbqVfWHUT7sk1sOrbDEPv4EhgXH7nC46Zw=";
-        }
       else
         fetchurl {
           # stdenv.hostPlatform.system == "aarch64-darwin"
@@ -284,12 +279,12 @@ let
 
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
-  inherit (stdenv.hostPlatform) isDarwin isAarch64;
+  inherit (stdenv.hostPlatform) isDarwin;
 
   system = if isDarwin then "darwin" else "linux";
 
   # on aarch64 Darwin, `uname -m` returns "arm64"
-  arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
+  arch = if isDarwin then "arm64" else stdenv.hostPlatform.parsed.cpu.name;
 
   bazelRC = writeTextFile {
     name = "bazel-rc";

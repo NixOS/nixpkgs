@@ -40,7 +40,7 @@
     (lib.cmakeBool "USE_AVX_INSTRUCTIONS" avxSupport)
     (lib.cmakeBool "DLIB_USE_CUDA" cudaSupport)
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "USE_NEON_INSTRUCTIONS" false)
   ]
   ++ lib.optionals cudaSupport [

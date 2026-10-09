@@ -68,8 +68,7 @@ let
 
   metalSupport =
     assert accelIsValid;
-    (acceleration == "metal")
-    || (hostPlatform.isDarwin && hostPlatform.isAarch64 && (acceleration == null));
+    (acceleration == "metal") || (hostPlatform.isDarwin && (acceleration == null));
 
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -271,7 +270,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         mistral-rs.override { acceleration = "mkl"; }
       );
       withCuda = lib.optionalAttrs hostPlatform.isLinux (mistral-rs.override { acceleration = "cuda"; });
-      withMetal = lib.optionalAttrs (hostPlatform.isDarwin && hostPlatform.isAarch64) (
+      withMetal = lib.optionalAttrs hostPlatform.isDarwin (
         mistral-rs.override { acceleration = "metal"; }
       );
     };

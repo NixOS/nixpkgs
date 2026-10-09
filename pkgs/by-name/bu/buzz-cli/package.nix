@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   # reqwest initializes its rustls client in tests and needs a CA bundle.
   nativeCheckInputs = [ cacert ];
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Avoid nondeterministic LC_UUIDs emitted by ld64 on arm64.
     RUSTFLAGS = "-C link-arg=-Wl,-no_uuid";
   };

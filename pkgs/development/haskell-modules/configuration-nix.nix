@@ -1804,7 +1804,7 @@ builtins.intersectAttrs super {
         ''
         # Prevent erroneous references to other libraries that use Paths_ modules
         # on aarch64-darwin. Note that references to the data outputs are not removed.
-        + lib.optionalString (with pkgs.stdenv; hostPlatform.isDarwin && hostPlatform.isAarch64) ''
+        + lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
           remove-references-to -t "${self.shake.out}" "$out/bin/.nvfetcher-wrapped"
           remove-references-to -t "${self.js-jquery.out}" "$out/bin/.nvfetcher-wrapped"
           remove-references-to -t "${self.js-flot.out}" "$out/bin/.nvfetcher-wrapped"

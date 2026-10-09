@@ -154,8 +154,6 @@ let
         { ${name "lnx_intel64"} = ""; }
       else if effectiveStdenv.hostPlatform.system == "i686-linux" then
         { ${name "lnx_ia32"} = ""; }
-      else if effectiveStdenv.hostPlatform.system == "x86_64-darwin" then
-        { ${name "mac_intel64"} = ""; }
       else
         throw "ICV is not available for this platform (or not yet supported by this package)";
     dst = ".cache/ippicv";
@@ -645,13 +643,7 @@ effectiveStdenv.mkDerivation {
 
     tests = {
       inherit (gst_all_1) gst-plugins-bad;
-    }
-    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) {
-      inherit qimgv;
-      withIpp = opencv4.override { enableIpp = true; };
-    }
-    // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
-    // optionalAttrs (effectiveStdenv.buildPlatform != "x86_64-darwin") {
+
       opencv4-tests = callPackage ./tests.nix {
         inherit
           enableGStreamer
@@ -663,6 +655,11 @@ effectiveStdenv.mkDerivation {
         inherit opencv4;
       };
     }
+    // optionalAttrs (!effectiveStdenv.hostPlatform.isDarwin) {
+      inherit qimgv;
+      withIpp = opencv4.override { enableIpp = true; };
+    }
+    // optionalAttrs (!enablePython) { pythonEnabled = pythonPackages.opencv4; }
     // optionalAttrs enableCuda {
       no-libstdcxx-errors = callPackage ./libstdcxx-test.nix { attrName = "opencv4"; };
     };
