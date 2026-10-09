@@ -35,6 +35,9 @@ telegram-desktop.override {
           stellessia
         ];
         mainProgram = "materialgram";
+        knownVulnerabilities = [
+          "CVE-2026-107181: Telegram Desktop before 7.2.9 IPC Record Injection File Exfiltration via interpret: Scheme"
+        ];
       };
     }
   );
