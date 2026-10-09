@@ -1022,8 +1022,8 @@ in
       "sha256-jA+JYi8QNlcBHN594d4Iur14ytDdg7/G3pXIWdvY2Yo=";
 
   mypy-boto3-pi =
-    buildMypyBoto3Package "pi" "1.43.14"
-      "sha256-9mNS3NKDG6eBciLbBd+mweeP7FULFjl9SNLW1vrC0go=";
+    buildMypyBoto3Package "pi" "1.43.110"
+      "sha256-mPbJdqMov2OuBAqtVsBL2V/lCYMAA5u7xsC8jYkCOVM=";
 
   mypy-boto3-pinpoint =
     buildMypyBoto3Package "pinpoint" "1.43.0"
