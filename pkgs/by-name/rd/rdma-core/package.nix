@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cAaWVE6/JU8ezjx+XrxNI6Su6VKxb2Jxl29sxU/yepI=";
   };
 
+  # Only pyverbs needs Python development files; finding them together with the
+  # build-time interpreter requires matching architectures and breaks cross builds.
+  patches = [
+    ./fix-cross-python.patch
+  ];
+
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -56,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    # Pyverbs requires Cython, which this package does not provide.
+    (lib.cmakeBool "NO_PYVERBS" true)
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
     "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"

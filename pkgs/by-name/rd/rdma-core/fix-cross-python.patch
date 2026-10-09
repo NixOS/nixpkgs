@@ -1,0 +1,16 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -231,7 +231,11 @@ if (${CMAKE_VERSION} VERSION_LESS "3.12")
+         FIND_PACKAGE(PythonLibs ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR} EXACT)
+ elseif (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.12")
+         set(Python_EXECUTABLE ${PYTHON_EXECUTABLE})
+-        FIND_PACKAGE(Python 3 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
++        if(NO_PYVERBS)
++            FIND_PACKAGE(Python 3 REQUIRED COMPONENTS Interpreter)
++        else()
++            FIND_PACKAGE(Python 3 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
++        endif()
+         set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+         if(Python_Development_FOUND)
+             set(PYTHONLIBS_FOUND ${Python_Development_FOUND})
