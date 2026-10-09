@@ -16,14 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "rendercanvas";
-  version = "2.5.2";
+  version = "2.6.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "rendercanvas";
     tag = "v${version}";
-    hash = "sha256-fOjiGNxEUVI+jddrwqrlBYT+CAMDQCIPNHwGonBH4Hk=";
+    hash = "sha256-gJyNj/FYT0NVyGiTnG++9uKZ/66n9mjNLBicvhazPqg=";
   };
 
   postPatch = ''
@@ -36,6 +36,8 @@ buildPythonPackage rec {
   };
 
   build-system = [ flit-core ];
+
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
