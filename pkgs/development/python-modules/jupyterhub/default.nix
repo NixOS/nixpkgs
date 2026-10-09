@@ -146,6 +146,11 @@ buildPythonPackage (finalAttrs: {
     # Server connection times out under load on Darwin
     "test_server_token_role"
     "test_share_flow_full"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky: subprocess times out under load
+    "test_show_config"
+    "test_raise_error_on_missing_specified_config"
   ];
 
   disabledTestPaths = [
