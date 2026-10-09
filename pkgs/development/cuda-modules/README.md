@@ -38,8 +38,6 @@ not straightforward to include. These packages are:
   - `mft_oem`: unsure of purpose; contains FHS paths.
   - `mft`: unsure of purpose; contains FHS paths.
   - `nvidia_driver`: we don't use the drivers from the CUDA releases; irrelevant.
-- `cublasmp`:
-  - `libcublasmp`: `nvshmem` isn't packaged.
 - `cudnn`:
   - `cudnn_samples`: requires FreeImage, which is abandoned and not packaged.
 
