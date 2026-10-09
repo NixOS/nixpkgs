@@ -1,0 +1,29 @@
+From a3199020f114a2b1471c75f48a56540f2f50d941 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Thu, 8 Oct 2026 20:40:12 -0700
+Subject: [PATCH] clang: allow native default arguments with LLVM 19 helper
+
+The common wrapper frame appends parsed target defaults using the
+two-argument helper interface available in LLVM 20 and later. LLVM 19
+and the Swift 6.2.4 LLVM fork retain an explicit BaseArg parameter.
+
+Default that parameter to nullptr for the new caller, preserving the
+existing explicit BaseArg arguments used by native configuration and
+/clang: processing. Scope this adapter to LLVM 19 releases.
+---
+ lib/Driver/Driver.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Driver/Driver.cpp b/lib/Driver/Driver.cpp
+index f9dc8ab..ff0b833 100644
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -985,7 +985,7 @@ void Driver::CreateOffloadingDeviceToolChains(Compilation &C,
+ }
+ 
+ static void appendOneArg(InputArgList &Args, const Arg *Opt,
+-                         const Arg *BaseArg) {
++                         const Arg *BaseArg = nullptr) {
+   // The args for config files or /clang: flags belong to different InputArgList
+   // objects than Args. This copies an Arg from one of those other InputArgLists
+   // to the ownership of Args.

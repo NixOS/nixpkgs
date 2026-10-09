@@ -1,4 +1,4 @@
-From f98af0202c7ec9b5b12fc9e88c3275757987fc00 Mon Sep 17 00:00:00 2001
+From f0c0426e4c764d3045f5f66df405b2fb3d6e226f Mon Sep 17 00:00:00 2001
 From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
 Date: Thu, 8 Oct 2026 18:45:27 -0700
 Subject: [PATCH] clang: interpret wrapper frames using native argument
@@ -372,13 +372,13 @@ index 55748c0..f0d1d3f 100644
 +  auto Tokenizer = getResponseFileTokenizer(Args, ClangCLMode);
  
 diff --git a/tools/driver/driver.cpp b/tools/driver/driver.cpp
-index 9ed8d4e..e6c3e96 100644
+index 9ed8d4e..f123185 100644
 --- a/tools/driver/driver.cpp
 +++ b/tools/driver/driver.cpp
-@@ -31,2 +31,3 @@
- #include "llvm/ADT/StringSet.h"
+@@ -30,2 +30,3 @@
+ #include "llvm/ADT/SmallVector.h"
 +#include "llvm/ADT/ScopeExit.h"
- #include "llvm/Config/llvm-config.h" // for LLVM_ON_UNIX
+ #include "llvm/ADT/StringSet.h"
 @@ -53,2 +54,5 @@
  #include <memory>
 +#include <array>
