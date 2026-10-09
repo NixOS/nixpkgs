@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fermyon-spin";
-  version = "4.1.0";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "spinframework";
     repo = "spin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GeomzOM9ihGv4iPb95PEBXFre6oOsJfNKEef4MinBmg=";
+    hash = "sha256-3FskZe64sWorAm6B4Hqln43HrTDl2os5CcpQIy3FFYg=";
   };
 
-  cargoHash = "sha256-EIrbvZkWxsJTzrLDZuzmQ1UmwAbVZwTv/DhA+o0pUlY=";
+  cargoHash = "sha256-eBtHRTIDROM3r2zhyIcp1jaj2TmJ3akYeRRMwZ6B0AM=";
 
   nativeBuildInputs = [
     pkg-config
