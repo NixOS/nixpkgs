@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nugget-doom";
-  version = "5.1.0";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "MrAlaux";
     repo = "Nugget-Doom";
     tag = "nugget-doom-${finalAttrs.version}";
-    hash = "sha256-k+wuO8nGYjZ56xWhP5iRmgk02YqmZBMnxJTVzg2/cjg=";
+    hash = "sha256-m2GGGqRY49Y9hBkPxeUcdEK9JwztOr3fcT3NCPO73Wc=";
   };
 
   nativeBuildInputs = [
