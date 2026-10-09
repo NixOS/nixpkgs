@@ -21,10 +21,11 @@ mkCoqDerivation {
   inherit version;
   defaultVersion =
     let
-      case = coq: mr: out: {
+      case = coq: mr: wc: out: {
         cases = [
           coq
           mr
+          wc
         ];
         inherit out;
       };
@@ -33,9 +34,10 @@ mkCoqDerivation {
       [
         coq.coq-version
         metarocq-erasure-plugin.version
+        wasmcert.version
       ]
       [
-        (case "9.1" "1.5.1-9.1" "0.9.1+9.1")
+        (case "9.1" "1.5.1-9.1" "2.2.0" "0.9.1+9.1")
       ]
       null;
   release = {
