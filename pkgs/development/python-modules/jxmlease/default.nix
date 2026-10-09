@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "-v" ];
+  unittestFlags = [ "-v" ];
 
   meta = {
     description = "Converts between XML and intelligent Python data structures";
