@@ -24,27 +24,35 @@ let
     ;
 
   inherit (lib.strings)
-    concatMapStrings
     concatMapStringsSep
     optionalString
     ;
+
+  isMikan = Agda.meta.mainProgram == "mikan";
 
   mkLibraryFile =
     pkgs:
     let
       pkgs' = if isList pkgs then pkgs else pkgs self;
     in
-    writeText "libraries" ''
-      ${(concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs')}
-    '';
+    writeText "libraries" (concatMapStringsSep "\n" (p: "${p}/${p.libraryFile}") pkgs');
+
+  mkDefaultsFile =
+    pkgs:
+    let
+      pkgs' = if isList pkgs then pkgs else pkgs self;
+    in
+    writeText "defaults" (concatMapStringsSep "\n" (p: p.libraryName) pkgs');
 
   withPackages' =
     {
       pkgs,
       ghc ? ghcWithPackages (p: with p; [ ieee754 ]),
+      extraFlags ? [ ],
     }:
     let
       libraryFile = mkLibraryFile pkgs;
+      defaultsFile = mkDefaultsFile pkgs;
       pname = "${Agda.meta.mainProgram}WithPackages";
       version = Agda.version;
     in
@@ -57,6 +65,7 @@ let
           inherit
             withPackages
             libraryFile
+            defaultsFile
             ;
           tests = {
             inherit (nixosTests) agda;
@@ -69,8 +78,10 @@ let
       ''
         mkdir -p $out/bin
         makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
-          ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
-          --add-flags "--library-file=${libraryFile}"
+          ${lib.optionalString (ghc != null && !isMikan) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
+          --add-flags "--library-file=${libraryFile}" \
+          ${lib.optionalString isMikan ''--add-flags "--defaults-file=${defaultsFile}"''} \
+          --add-flags ${lib.escapeShellArg (lib.escapeShellArgs extraFlags)}
         if [ -e ${lib.getExe' Agda "agda-mode"} ]; then
           ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
         fi
@@ -82,6 +93,7 @@ let
     "agda"
     "agda-lib"
     "agdai"
+    "mki"
     "lagda"
     "lagda.md"
     "lagda.org"
