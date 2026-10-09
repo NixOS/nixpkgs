@@ -38,5 +38,13 @@ lib.mapAttrs (name: value: value // { inherit name; }) {
       teams = with lib.teams; [ cosmic ];
     };
   };
+  stardust-xr = {
+    prTitle =
+      oldPkgs: newPkgs:
+      "stardust-xr-*: ${oldPkgs.stardust-xr-server.version} -> ${newPkgs.stardust-xr-server.version}";
+    meta = {
+      teams = with lib.teams; [ stardust-xr ];
+    };
+  };
   # keep-sorted end
 }
