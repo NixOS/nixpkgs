@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trunk-io";
-  version = "1.3.4";
+  version = "1.3.5";
 
   strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://trunk.io/releases/launcher/${finalAttrs.version}/trunk";
-    hash = "sha256-ifvdjHtjZJ7rFHlBV1e4mJA8BB5ztJt4Ao29ZOyjCHo=";
+    hash = "sha256-cA+Lvt/SJllZmeoiArmnr3W6g5jdcR9fFZ9bu6bL8yI=";
   };
 
   dontUnpack = true;

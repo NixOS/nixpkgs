@@ -3,10 +3,13 @@
 
 Status: in development. This functionality is new in NixOS 25.11, and significant changes should be expected. We'd love to hear your feedback in <https://github.com/NixOS/nixpkgs/pull/372170>
 
-Traditionally, NixOS services were defined using sets of options *in* modules, not *as* modules. This made them non-modular, resulting in problems with composability, reuse, and portability.
+A conventional NixOS service is a module that defines options under `systemd.services.*`. The resulting configuration is non-modular, which leads to problems with composability, reuse, and portability.
 
-A configuration management framework is an application of `evalModules` with the `class` and `specialArgs` input attribute set to particular values.
-NixOS is such a configuration management framework, and so are [Home Manager](https://github.com/nix-community/home-manager) and [`nix-darwin`](https://github.com/nix-darwin/nix-darwin).
+A *modular service* splits the conventional service into two parts:
+- the modular service itself, which is a module that defines values for a core set of the service's options, like processes and config files, in a service manager-agnostic way;
+- a configuration management framework, which consumes the modular service and turns those "abstract" options into service-manager specific ones.
+
+A configuration management framework is an application of `evalModules` with the `class` and `specialArgs` input attribute set to particular values. NixOS is such a configuration management framework, and so are [Home Manager](https://github.com/nix-community/home-manager) and [nix-darwin](https://github.com/nix-darwin/nix-darwin).
 
 The service management component of a configuration management framework is the set of module options that connects Nix expressions with the underlying service (or process) manager.
 For NixOS this is the module wrapping [`systemd`](https://systemd.io/), on `nix-darwin` this is the module wrapping [`launchd`](https://en.wikipedia.org/wiki/Launchd).

@@ -107,6 +107,7 @@ let
 
 in
 pkgs.testers.runNixOSTest {
+  name = "test";
   imports = [ ./test.nix ];
   defaults.services.foo.package = mypkg;
 }
