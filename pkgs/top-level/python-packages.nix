@@ -13328,7 +13328,7 @@ self: super: with self; {
 
   paypalrestsdk = callPackage ../development/python-modules/paypalrestsdk { };
 
-  pbar = callPackage ../development/python-modules/pbar { };
+  pbar2 = callPackage ../development/python-modules/pbar2 { };
 
   pbkdf2 = callPackage ../development/python-modules/pbkdf2 { };
 
