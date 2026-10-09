@@ -23,6 +23,9 @@
   rustc,
   rustPlatform,
 
+  # gitlab-glaz
+  buildPackages,
+
   # gpgme
   pkg-config,
 
@@ -67,45 +70,56 @@ let
         buildFlags = [ "--enable-system-libraries" ];
       };
 
-      gitlab-glaz = attrs: {
-        cargoDeps = rustPlatform.fetchCargoVendor {
-          src = stdenv.mkDerivation {
-            inherit (buildRubyGem { inherit (attrs) gemName version source; })
-              name
-              src
-              unpackPhase
-              nativeBuildInputs
-              ;
-            dontBuilt = true;
-            installPhase = ''
-              cp -R ext/glaz $out
-              cp Cargo.lock $out
-            '';
+      gitlab-glaz =
+        attrs:
+        {
+          cargoDeps = rustPlatform.fetchCargoVendor {
+            src = stdenv.mkDerivation {
+              inherit (buildRubyGem { inherit (attrs) gemName version source; })
+                name
+                src
+                unpackPhase
+                nativeBuildInputs
+                ;
+              dontBuilt = true;
+              installPhase = ''
+                cp -R ext/glaz $out
+                cp Cargo.lock $out
+              '';
+            };
+            hash = "sha256-ICMSzy8go3psdHklhX4n4fqgEESht/d+D05L8CKuKAc=";
           };
-          hash = "sha256-5fGoW6TpkIQ8OIXjt2fLGzG9xhZ2TT+v2zLH1ecItII=";
+
+          dontBuild = false;
+
+          nativeBuildInputs = [
+            cargo
+            rustc
+            rustPlatform.cargoSetupHook
+            rustPlatform.bindgenHook
+          ];
+
+          disallowedReferences = [
+            rustc.unwrapped
+          ];
+
+          preInstall = ''
+            export CARGO_HOME="$PWD/../.cargo/"
+          '';
+
+          postInstall = ''
+            find $out -type f -name .rustc_info.json -delete
+          '';
+        }
+        // lib.optionalAttrs stdenv.hostPlatform.isRiscV64 {
+          # protoc-bin-vendored ships no riscv64 protoc
+          postPatch = ''
+            substituteInPlace $cargoDepsCopy/source-*/glaz-proto-*/build.rs \
+              --replace-fail 'protoc_bin_vendored::protoc_bin_path()?' \
+                'std::path::PathBuf::from(std::env::var("PROTOC")?)'
+          '';
+          PROTOC = lib.getExe' buildPackages.protobuf "protoc";
         };
-
-        dontBuild = false;
-
-        nativeBuildInputs = [
-          cargo
-          rustc
-          rustPlatform.cargoSetupHook
-          rustPlatform.bindgenHook
-        ];
-
-        disallowedReferences = [
-          rustc.unwrapped
-        ];
-
-        preInstall = ''
-          export CARGO_HOME="$PWD/../.cargo/"
-        '';
-
-        postInstall = ''
-          find $out -type f -name .rustc_info.json -delete
-        '';
-      };
 
       gitlab-glfm-markdown = attrs: {
         cargoDeps = rustPlatform.fetchCargoVendor {
@@ -123,7 +137,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-zRw3eNj17kHVazqeuXp4CxNl1FWaXufINb3yzvVcQS0=";
+          hash = "sha256-Pl2jkn4qj+v9edjrrq2TqvUhKjnBJ5qatNKTqRzLLII=";
         };
 
         dontBuild = false;
@@ -176,7 +190,7 @@ let
             cp Cargo.lock $out
           '';
 
-          hash = "sha256-v6Wd0FPgL4zyAbW9iarpU6R9d45fQMOo7yt9vccXbgc=";
+          hash = "sha256-AbGa+nUf5aEmHTbAYIyPv3+E0ldeybODZsZ4EqG6eBI=";
         };
 
         postPatch = ''
@@ -332,7 +346,7 @@ let
       SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
 
       SKIP_YARN_INSTALL = 1;
-      NODE_OPTIONS = "--max-old-space-size=8192";
+      NODE_OPTIONS = "--max-old-space-size=16384";
     };
 
     postConfigure = ''
