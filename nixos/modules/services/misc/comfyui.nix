@@ -12,6 +12,7 @@ let
 
   package = cfg.package.override (oldArgs: {
     extraPackages = ps: (oldArgs.extraPackages or (_: [ ]) ps) ++ cfg.extraPackages ps;
+    acceleration = cfg.acceleration;
   });
 
   modelDrvs = map (m: {
@@ -53,6 +54,28 @@ in
         readOnly = true;
         default = package;
         description = "The final ComfyUI package which is being used in the service.";
+      };
+
+      acceleration = lib.mkOption {
+        type = lib.types.enum [
+          "cpu"
+          "cuda"
+        ];
+        default = "cpu";
+        example = "cuda";
+        description = ''
+          Specifies the device to use for hardware acceleration.
+
+          - `"cpu"`: pass `--cpu` to the server. Not recommended for production use as it is very slow.
+          - `"cuda"`: use the prebuilt CUDA wheels and let ComfyUI select the CUDA device
+            automatically. This is Linux-only, and the wheels ship unfree NVIDIA
+            redistributables, so `nixpkgs.config.allowUnfree` has to be enabled.
+            Building torch from source is deliberately not offered: against the
+            pinned CUDA version it has no binary cache and takes hours.
+
+            The prebuilt torch does not expose the CUDA metadata that
+            `comfy-kitchen` needs, so it runs without its CUDA kernels.
+        '';
       };
 
       listen = lib.mkOption {
@@ -169,12 +192,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.comfyui.extraArgs = lib.mkBefore [
-      "--base-directory=${cfg.dataDir}"
-      "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
-      "--listen=${lib.concatStringsSep "," cfg.listen}"
-      "--port=${toString cfg.port}"
-    ];
+    services.comfyui.extraArgs = lib.mkBefore (
+      [
+        "--base-directory=${cfg.dataDir}"
+        "--database-url=sqlite:///${cfg.dataDir}/user/comfyui.db"
+        "--listen=${lib.concatStringsSep "," cfg.listen}"
+        "--port=${toString cfg.port}"
+      ]
+      ++ lib.optionals (cfg.acceleration == "cpu") [ "--cpu" ]
+    );
 
     # owner read back from the unit, not spelled out: StateDirectory= infers it, this rule has to be told
     systemd.tmpfiles.settings = lib.mkIf (!isDefaultDataDir) {
