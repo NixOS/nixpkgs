@@ -1674,6 +1674,16 @@ With `unittest discover`:
 
   The default value `null` opts out the white-listing.
 
+`disabledTests` (list of strings, default to `[ ]`)
+
+: Black-listed test name patterns.
+
+  It constructs a `-k` pattern that matches anything but the patterns listed on `disabledTests`.
+
+  ::: {.note}
+  `disabledTests` will be ignored if `enabledTests` is specified.
+  :::
+
 Without `unittest discover`:
 
 `enabledTestPaths` (non-empty list of strings, required)
