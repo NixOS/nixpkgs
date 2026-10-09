@@ -406,6 +406,8 @@ pipe
           ;
         isGNU = true;
         nativeDefaultIncludeBinding = if lib.versionAtLeast version "14" then "bundled" else null;
+        nativePrimaryQuery =
+          if hostPlatform.isUnix && lib.versionAtLeast version "14" then "fd-v3" else null;
         hardeningUnsupportedFlags =
           optional (
             !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")

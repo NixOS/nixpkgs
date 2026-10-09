@@ -1,8 +1,8 @@
-From 5771f787ed592be45a16ef58588122f3da768cbd Mon Sep 17 00:00:00 2001
-From: Connor Baker <ConnorBaker01@gmail.com>
-Date: Wed, 7 Oct 2026 16:08:02 -0700
-Subject: [PATCH] clang: bind selected C++ and libc headers at driver lookup
- sites
+From 6ff7c2fe69d99bdf3c6cfa951d9876c8de27efce Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 16:57:42 -0700
+Subject: [PATCH] clang: bind declared defaults at native header lookup
+ boundaries
 
 Replace ambient libc discovery as a block, leaving native builtin-header
 insertion unchanged. LLVM19-21 append builtin headers after libc on musl;
@@ -12,42 +12,31 @@ latter and refers to a variable outside its scope.
 
 Swift's ordering and related builtin-header adaptations are recorded in:
 https://github.com/swiftlang/llvm-project/commit/0b329781b231092b205b010b0d0a876cedd05675
+
+Keep option declarations separate because LLVM22 moved Options.td into
+clang/Options. Driver.h already includes the matching Options.h, so the
+shared implementation needs no version-specific include or copied driver
+implementation.
 ---
- include/clang/Driver/Options.td       |  7 +++
- lib/Driver/ToolChains/BoundIncludes.h | 53 ++++++++++++++++++++
+ lib/Driver/ToolChains/BoundIncludes.h | 52 ++++++++++++++++++++
  lib/Driver/ToolChains/Clang.cpp       |  9 ++++
  lib/Driver/ToolChains/Gnu.cpp         | 10 ++++
  lib/Driver/ToolChains/Linux.cpp       | 69 +++++++++++++++------------
- 5 files changed, 117 insertions(+), 31 deletions(-)
+ 4 files changed, 109 insertions(+), 31 deletions(-)
  create mode 100644 lib/Driver/ToolChains/BoundIncludes.h
 
-diff --git a/include/clang/Driver/Options.td b/include/clang/Driver/Options.td
-index 15f9ee7..fcba8f5 100644
---- a/include/clang/Driver/Options.td
-+++ b/include/clang/Driver/Options.td
-@@ -1789,2 +1789,9 @@ def fprofile_instr_use_EQ : Joined<["-"], "fprofile-instr-use=">,
-     HelpText<"Use instrumentation data for profile-guided optimization">;
-+def fdefault_include_map_EQ : Joined<["-"], "fdefault-include-map=">,
-+    Group<f_Group>, Flags<[NoArgumentUnused]>, Visibility<[ClangOption]>,
-+    MetaVarName<"<file>">,
-+    HelpText<"Bind selected target C++ and libc default headers from <file>">;
-+def idefaultsystem : JoinedOrSeparate<["-"], "idefaultsystem">,
-+  Group<clang_i_Group>, Visibility<[ClangOption]>,
-+  HelpText<"Add a suppressible toolchain default at this system include position">;
- def fprofile_remapping_file_EQ : Joined<["-"], "fprofile-remapping-file=">,
 diff --git a/lib/Driver/ToolChains/BoundIncludes.h b/lib/Driver/ToolChains/BoundIncludes.h
 new file mode 100644
-index 0000000..8d22d31
+index 0000000..b33d610
 --- /dev/null
 +++ b/lib/Driver/ToolChains/BoundIncludes.h
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,52 @@
 +// Bind only selected providers; leave job selection and suppression to Clang.
 +#ifndef LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_BOUNDINCLUDES_H
 +#define LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_BOUNDINCLUDES_H
 +
 +#include "clang/Basic/DiagnosticDriver.h"
 +#include "clang/Driver/Driver.h"
-+#include "clang/Driver/Options.h"
 +#include "llvm/ADT/SmallVector.h"
 +#include "llvm/ADT/StringRef.h"
 +#include "llvm/TargetParser/Triple.h"
@@ -95,10 +84,10 @@ index 0000000..8d22d31
 +} // namespace clang::driver::toolchains
 +#endif
 diff --git a/lib/Driver/ToolChains/Clang.cpp b/lib/Driver/ToolChains/Clang.cpp
-index 8858c31..2b301f4 100644
+index 6261332..f259ca9 100644
 --- a/lib/Driver/ToolChains/Clang.cpp
 +++ b/lib/Driver/ToolChains/Clang.cpp
-@@ -1173,2 +1173,11 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
+@@ -1041,2 +1041,11 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
        }
 +    } else if (A->getOption().matches(options::OPT_idefaultsystem)) {
 +      // Keep the default's position among system paths while honoring caller
@@ -111,14 +100,14 @@ index 8858c31..2b301f4 100644
 +      continue;
      } else if (A->getOption().matches(options::OPT_isystem_after)) {
 diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
-index 5e9a655..47eec46 100644
+index f5e2655..735f509 100644
 --- a/lib/Driver/ToolChains/Gnu.cpp
 +++ b/lib/Driver/ToolChains/Gnu.cpp
 @@ -9,2 +9,3 @@
  #include "Gnu.h"
 +#include "BoundIncludes.h"
  #include "Arch/ARM.h"
-@@ -3261,2 +3262,11 @@ void Generic_GCC::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
+@@ -3153,2 +3154,11 @@ void Generic_GCC::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
  
 +  const char Family = GetCXXStdlibType(DriverArgs) == ToolChain::CST_Libcxx
 +                          ? '2' : '1';
@@ -131,14 +120,14 @@ index 5e9a655..47eec46 100644
 +
    switch (GetCXXStdlibType(DriverArgs)) {
 diff --git a/lib/Driver/ToolChains/Linux.cpp b/lib/Driver/ToolChains/Linux.cpp
-index 35bf390..832c7a9 100644
+index 8ac8d4e..f364314 100644
 --- a/lib/Driver/ToolChains/Linux.cpp
 +++ b/lib/Driver/ToolChains/Linux.cpp
 @@ -9,2 +9,3 @@
  #include "Linux.h"
 +#include "BoundIncludes.h"
  #include "Arch/ARM.h"
-@@ -643,38 +644,44 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+@@ -647,38 +648,44 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
  
 -  // LOCAL_INCLUDE_DIR
 -  addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
