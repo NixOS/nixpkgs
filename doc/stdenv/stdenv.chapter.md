@@ -1546,12 +1546,35 @@ Selections that a later operation can still change must remain separate: libc in
 GNAT deliberately selects no C include defaults for its compiler jobs.
 C++ header and runtime flags are likewise added when interpreting the individual compiler invocation.
 Opaque `NIX_CXXSTDLIB_COMPILE` and `NIX_CXXSTDLIB_LINK` arguments belong to the invocation's C++ **driver personality**, not to individual input languages.
-The executable name (`g++` or `clang++`) supplies the initial personality; Clang’s `--driver-mode` options in the primary command override it in emission order: generic BEFORE flags, explicit arguments, generic compile flags, generic link flags when linking, and the restored positional tail after `--`.
-Clang selects this mode before parsing options, including mode-shaped tokens used as operands or positional filenames.
-Selection precedes conditional C++ arguments and late wrapper hooks; options they introduce still affect the native driver, but do not recursively change the policy already selected.
+For raw compilers advertising the native primary-argument interface, selection is acyclic.
+First, the native driver interprets the unconditional BEFORE arguments, caller arguments, and compile arguments to select its personality; the GCC language driver supplies its compiled-in personality, while Clang also interprets `--driver-mode` and its native debug rewrite.
+The wrapper selects the opaque caller C++ compile channel once, then asks that same native parser for the requested host operation and invocation-wide support-group applicability with that channel included.
+Only then does it insert suppressible defaults and conditional link channels in their original positions.
+A conditional channel or a late hook can still change the final native invocation, but cannot recursively select another wrapper policy.
+For example, a C invocation with `NIX_CFLAGS_LINK=--driver-mode=g++` and `NIX_CXXSTDLIB_COMPILE=-c` has no consistent recursive choice: selecting the link channel would select C++ compilation, which would remove the link channel.
+The primary interpretation therefore excludes the conditional link channel.
+This describes the requested host operation, not successful execution or every device-packaging job; an archive or CUDA fatbin is not a host image link.
+
+The primary request must be parseable before conditional default/link fragments and the late hook are inserted.
+An explicit caller frontend entry bypasses compiler/linker argument contributions (the selected SDK environment is retained); introducing a frontend entry through primary policy is rejected rather than discarding that policy.
+Consequently, supplying an option's missing operand only through such a fragment is outside this interface; options and operands must be supplied together.
+The wrapper retains raw caller arguments through hooks and sends ordered argument groups to the native driver for both primary interpretation and final execution.
+Clang first checks the caller's standalone native frontend entry, including caller response files, without reading policy response files or applying their quoting selectors.
+For an ordinary driver entry it interprets the original groups using the combined native response-file grammar; selected C++ compile arguments participate in the subsequent primary interpretation.
+Final execution reads the raw groups again, expands response files natively, and positions suffix arguments before a parser-recognized caller `--` boundary.
+These are separate interpretation epochs, not a promise to read each response file once or freeze its contents across hooks.
+Native unresolved `@file` fallback remains unchanged: the token can name a literal file or become a response file before final execution.
+Resources needed to parse the primary request must be available then; later changes can change final native behavior but do not retroactively select wrapper policy.
+Purity and no-native filtering apply at the native expanded-argument boundary, including final hook changes; the legacy path retains its earlier shell filtering.
+Clang's initial personality observes its native debug rewrite, and final execution applies that rewrite to its final arguments.
+Capability is bound to each exact raw executable selected by the constructor, including declared prepared entries, rather than inferred from an arbitrary executable passed to an adapter.
+Externally supplied or bootstrap compilers without that capability retain the legacy wrapper interpretation; the native-argument guarantees above do not extend to that fallback. Dynamic launchers such as ccache also retain that fallback: their compiler and prefix-command overrides do not establish the identity or behavior of one native driver.
 `-x` and `-x none` remain native per-input language selectors: `gcc -x c++` does not acquire implicit C++ runtime policy, while `g++ -x c` retains its driver policy.
 These caller channels apply to the whole invocation, so their options must be valid for every job in a mixed-language invocation; use separate compiler invocations for incompatible per-language options.
-Packaged C++ header and runtime defaults remain separate from those opaque arguments: `-nostdinc++` and `-nostdlib` suppress defaults, not explicit caller policy.
+Mutable support-file contributions remain opaque invocation groups: unqualified `-nostdinc` omits the libc group; `-nostdinc` or `-nostdinc++` omits the C++ compile group; and `-nostdlib` omits the C++ link group.
+Native options carried as operands of `-Xarch_host` or `-Xpreprocessor` do not accidentally suppress an entire group.
+Likewise, `-nodefaultlibs`, `-nostdlib++`, and `-nostdlibinc` retain opaque group additions while the native compiler applies their own per-job semantics to typed header and runtime providers.
+Explicit caller policy remains separate from these groups.
 Clang's C driver can discover C++ headers without receiving a caller's `-std=c++17`, while native default-header bindings retain per-job language selection.
 Role-indexed contributions combine pointwise; selecting one use preserves ordered combination and is a monoid homomorphism.
 Specifically, `(P <> Q)(r) = P(r) ++ Q(r)`, so evaluation at `r` preserves both concatenation and the empty contribution.
@@ -1579,7 +1602,7 @@ Clang's GNU toolchain instead selects C++ defaults in the driver: `-Xpreprocesso
 A common frontend filter would change that behavior.
 Nixpkgs' Clang `-nostdlibinc` also suppresses host-system discovery before selected headers are supplied; replacing discovery and suppressing selected defaults are different operations.
 Clang's [`-stdlib++-isystem`](https://github.com/llvm/llvm-project/blob/llvmorg-21.1.8/clang/lib/Driver/ToolChain.cpp) deliberately survives `-nostdinc` and `-nostdlibinc`, so it is not an equivalent default-header binding.
-On non-Android Linux, the Clang 19–21 wrapper supplies the same selected C++ and libc providers to a driver table keyed by normalized target triple, where missing target/library pairs mean empty providers rather than ambient fallback.
+On non-Android Linux, the Clang 19–23 wrapper supplies the same selected C++ and libc providers to a driver table keyed by normalized target triple, where missing target/library pairs mean empty providers rather than ambient fallback.
 The driver retains Clang's per-job standard-library choice and `-nostdinc`/`-nostdlibinc`/`-nostdinc++` semantics; the wrapper omits its automatic `-nostdlibinc` because the binding itself removes ambient libc discovery.
 For a selected libc++, the wrapper supplies one `-stdlib=libc++` default before caller arguments, so an explicit `-stdlib` selects the requested map family.
 Clang renders `-idefaultsystem` in place among system include options and omits it when the caller supplies `-nostdinc` or `-nostdlibinc`.
@@ -1595,7 +1618,8 @@ A synthetic directory of header symlinks can visit the original provider again t
 Binding original providers must preserve these observations; passing compilation tests or finding a native configuration option does not establish equivalence.
 
 The compiler and linker have different argument interfaces.
-The compiler emits its main linker flags in their existing positions and binds a **link continuation** around the raw driver.
+The compiler emits or deliberately omits its main linker flags according to the primary operation and binds a **link continuation** around the final raw driver.
+That residual disposition is independent of link mode: opaque final arguments can create a linker job after primary policy omitted the main flags, and the receiving linker must not introduce them again.
 The linker wrapper retains that policy and performs the remaining work: capability-specific hardening, trailing flags, emulation, RPATH discovery, build IDs, and Darwin version handling.
 Moving main flags after compiler-generated arguments would change library resolution; skipping all linker processing would lose the remaining policy.
 An unwrapped linker can still be selected because the binding adds no private command-line option.
@@ -1605,7 +1629,15 @@ The `nix-support/compiler` and `nix-support/linker` entries accept that request,
 GNAT uses program-bound entries to preserve each tool's own operation: selecting `gnatlink` does not suppress that child's subsequent compiler selection.
 Swift delegates generated compiler-driver link jobs to its adjacent public Clang wrapper.
 The native Swift driver has not selected Nix compiler or linker policy, so these jobs start fresh; their generated arguments and response files determine the operation.
-Swift's Clang importer reads the adjacent compiler's header support files directly.
+Swift's Clang importer reads the adjacent compiler's header provider configuration before explicit importer arguments.
+Its ordinary path uses Clang's driver interpreter; direct cc1 module jobs already contain lowered arguments and do not repeat that selection.
+
+The wrapper's `importerFlags` metadata names support files relative to `nix-support`.
+Its `driver` configuration is derived from the selected providers for both mapped GNU and Clang wrappers. It preserves native default-header suppression and standard-library selection in matching patched Clang driver APIs; pass it with `--config` so explicit arguments take precedence. An independently overridden, unpatched libclang does not acquire that interface from the outer compiler.
+The `libc` and `cxx` files instead expose explicit selected-provider paths for tools whose interface is a header search path, such as `CPATH`.
+Those explicit paths do not acquire native default suppression or switch providers when an independent `-stdlib` option changes.
+The original compiler support files remain mutable; importer users may customize the corresponding importer file, and ordinary `cc-cflags` remains a separate input where that consumer supports it.
+Arbitrary compiler-only additions to `libc-cflags` are not translated into another interpreter's options.
 
 The callee's interface is part of the contract.
 A prepared entry accepts selected policy; an opaque executable receives materialized arguments and environment values.

@@ -50,8 +50,20 @@ let
       # if you modify the logic to find the right clang flags, also modify rustPlatform.bindgenHook
       ''
         mkdir -p $out/bin
-        cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
-        cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"
+        ${
+          if (clang.importerFlags.driver or null) != null then
+            ''
+              cincludes="--config=${clang}/nix-support/${clang.importerFlags.driver} $(< ${clang}/nix-support/cc-cflags)"
+              cxxincludes=
+            ''
+          else
+            ''
+              cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/${
+                clang.importerFlags.libc or "libc-cflags"
+              })"
+              cxxincludes="$(< ${clang}/nix-support/${clang.importerFlags.cxx or "libcxx-cxxflags"})"
+            ''
+        }
         substitute ${./wrapper.sh} $out/bin/bindgen \
           --replace-fail "@bash@" "${bash}" \
           --replace-fail "@cxxincludes@" "$cxxincludes" \

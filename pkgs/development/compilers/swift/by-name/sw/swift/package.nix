@@ -23,13 +23,8 @@
 }:
 
 let
-  # The native Swift importer reads these legacy header-support files directly.
-  # It does not interpret the compiler wrapper's private default-header map.
-  clangForImporter = llvmPackages_upstream.clang.override (prev: {
-    cc = prev.cc // {
-      nativeDefaultIncludeBinding = null;
-    };
-  });
+  # Both importer and compiler jobs use the selected native header defaults.
+  clangForImporter = llvmPackages_upstream.clang;
 
   includeTesting = swiftc.supportsMacros && swift-testing != null;
 

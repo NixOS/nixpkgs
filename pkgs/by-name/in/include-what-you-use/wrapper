@@ -1,14 +1,15 @@
 #!/bin/sh
 
 buildcpath() {
-  local path after
+  local language=$1 path after
+  shift
   while (( $# )); do
-    case $1 in
-        -isystem)
+    case $language:$1 in
+        *:-isystem|c++:-cxx-isystem)
             shift
             path=$path${path:+':'}$1
             ;;
-        -idirafter)
+        *:-idirafter)
             shift
             after=$after${after:+':'}$1
             ;;
@@ -18,9 +19,9 @@ buildcpath() {
   echo $path${after:+':'}$after
 }
 
-export CPATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
-                                               $(<@clang@/nix-support/libc-cflags)):@clang@/resource-root/include
-export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
-                                                                                      $(<@clang@/nix-support/libcxx-cxxflags) \
-                                                                                      $(<@clang@/nix-support/libc-cflags)):@clang@/resource-root/include
+export CPATH=${CPATH}${CPATH:+':'}$(buildcpath c ${NIX_CFLAGS_COMPILE} \
+                                               $(<@libcFlags@)):@clang@/resource-root/include
+export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(buildcpath c++ ${NIX_CFLAGS_COMPILE} \
+                                                                                      $(<@cxxFlags@) \
+                                                                                      $(<@libcFlags@)):@clang@/resource-root/include
 exec -a "$0" @out@/bin/.$(basename $0)-unwrapped "$@"

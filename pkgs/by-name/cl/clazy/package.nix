@@ -30,19 +30,39 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
+    includePaths() {
+      local language=$1
+      shift
+      local -a paths=() after=()
+      while (( $# > 1 )); do
+        case $language:$1 in
+          *:-isystem|c++:-cxx-isystem) paths+=("$2"); shift ;;
+          *:-idirafter) after+=("$2"); shift ;;
+        esac
+        shift
+      done
+      paths+=("''${after[@]}")
+      local IFS=:
+      echo "''${paths[*]}"
+    }
+    libcPath=$(includePaths c $(<${llvmPackages.clang}/nix-support/${
+      llvmPackages.clang.importerFlags.libc or "libc-cflags"
+    }))
+    cxxPath=$(includePaths c++ $(<${llvmPackages.clang}/nix-support/${
+      llvmPackages.clang.importerFlags.cxx or "libcxx-cxxflags"
+    }) $(<${llvmPackages.clang}/nix-support/${llvmPackages.clang.importerFlags.libc or "libc-cflags"}))
+
     wrapProgram $out/bin/clazy \
       --suffix PATH               : "${llvmPackages.clang}/bin/"                            \
-      --suffix CPATH              : "$(<${llvmPackages.clang}/nix-support/libc-cflags)"     \
+      --suffix CPATH              : "$libcPath"                                             \
       --suffix CPATH              : "${llvmPackages.clang}/resource-root/include"           \
-      --suffix CPLUS_INCLUDE_PATH : "$(<${llvmPackages.clang}/nix-support/libcxx-cxxflags)" \
-      --suffix CPLUS_INCLUDE_PATH : "$(<${llvmPackages.clang}/nix-support/libc-cflags)"     \
+      --suffix CPLUS_INCLUDE_PATH : "$cxxPath"                                              \
       --suffix CPLUS_INCLUDE_PATH : "${llvmPackages.clang}/resource-root/include"
 
     wrapProgram $out/bin/clazy-standalone \
-      --suffix CPATH              : "$(<${llvmPackages.clang}/nix-support/libc-cflags)"     \
+      --suffix CPATH              : "$libcPath"                                             \
       --suffix CPATH              : "${llvmPackages.clang}/resource-root/include"           \
-      --suffix CPLUS_INCLUDE_PATH : "$(<${llvmPackages.clang}/nix-support/libcxx-cxxflags)" \
-      --suffix CPLUS_INCLUDE_PATH : "$(<${llvmPackages.clang}/nix-support/libc-cflags)"     \
+      --suffix CPLUS_INCLUDE_PATH : "$cxxPath"                                              \
       --suffix CPLUS_INCLUDE_PATH : "${llvmPackages.clang}/resource-root/include"
   '';
 

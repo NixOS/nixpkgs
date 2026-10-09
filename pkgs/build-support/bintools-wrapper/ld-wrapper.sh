@@ -16,6 +16,7 @@ fi
 
 source @out@/nix-support/utils.bash
 
+mainPolicyHandled=0
 expandResponseParams "$@"
 wrapperLinker=@prog@
 if [[ @wrapperMode@ == prepared ]]; then
@@ -24,6 +25,7 @@ if [[ @wrapperMode@ == prepared ]]; then
     params=("${params[@]:1}")
     set -- "${params[@]}"
 elif [[ ${NIX_WRAPPER_OPERATION:-} == link ]]; then
+    mainPolicyHandled=1
     wrapperImport link
 else
     wrapperClear
@@ -34,9 +36,9 @@ else
     fi
 fi
 
-# A link continuation records the mode selected by the compiler. We take
-# advantage of this to avoid both recalculating it, and also repeating other
-# processing cc wrapper has already done.
+# Main policy is already handled (emitted or deliberately omitted) by a link
+# continuation. Its mode is separate: if primary policy did not request a link,
+# a final linker reached through opaque policy still interprets its own argv.
 if [[ -n "${wrapper_NIX_LINK_TYPE:-}" ]]; then
     linkType=$wrapper_NIX_LINK_TYPE
 else
@@ -89,7 +91,7 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
-if [ -z "${wrapper_NIX_LINK_TYPE:-}" ]; then
+if [[ $mainPolicyHandled != 1 ]]; then
     extraAfter+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS))
     extraBefore+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS_BEFORE))
 
