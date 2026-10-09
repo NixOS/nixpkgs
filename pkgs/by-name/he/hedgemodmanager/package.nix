@@ -61,7 +61,7 @@ buildDotnetModule (finalAttrs: {
     homepage = "https://github.com/hedge-dev/HedgeModManager";
     changelog = "https://github.com/hedge-dev/HedgeModManager/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.keenanweaver ];
     platforms = lib.platforms.linux;
     mainProgram = "HedgeModManager.UI";
   };
