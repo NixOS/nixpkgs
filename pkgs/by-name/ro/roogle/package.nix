@@ -21,10 +21,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Rust API search engine which allows you to search functions by names and type signatures";
     mainProgram = "roogle";
     homepage = "https://github.com/hkmatsumoto/roogle";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 })

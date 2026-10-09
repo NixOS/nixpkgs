@@ -20,12 +20,21 @@
 let
   inherit (lib)
     assertMsg
+    concatMapStringsSep
     generators
+    isList
     licenses
     nameValuePair
     recurseIntoAttrs
     replaceString
     ;
+
+  showLicense =
+    license:
+    if isList license then
+      "[ ${concatMapStringsSep " " licenses.toSPDX license} ]"
+    else
+      licenses.toSPDX license;
 
   mkPkg = name: license: {
     pname = name;
@@ -56,7 +65,7 @@ let
     in
     assertMsg (actual.success == expected) ''
       Expected validity of package '${lib.getName pkg}' with unfree license
-      '${licenses.toSPDX pkg.meta.license}' to be ${toPretty expected}, but got
+      '${showLicense pkg.meta.license}' to be ${toPretty expected}, but got
       ${toPretty actual}
       with config:
       ${toPretty nixpkgsConfig}
@@ -136,6 +145,26 @@ let
       licenses.free
       licenses.unfree
     ])
+    [
+      licenses.free
+      (licenses.AND [
+        licenses.free
+        licenses.unfree
+      ])
+    ]
+  ];
+
+  freeLicenses = [
+    [
+      licenses.free
+      (licenses.WITH licenses.asl20 licenses.llvm-exception)
+    ]
+    [
+      (licenses.OR [
+        licenses.free
+        licenses.unfree
+      ])
+    ]
   ];
 in
 
@@ -143,9 +172,20 @@ recurseIntoAttrs (
   builtins.listToAttrs (
     map (
       license:
-      nameValuePair (replaceString " " "-" (licenses.toSPDX license)) (
+      nameValuePair (replaceString " " "-" (showLicense license)) (
         recurseIntoAttrs (mkTests (name: mkPkg name license))
       )
     ) unfreeLicenses
   )
+  // {
+    allowFreeLicenseLists = runAssertions (
+      map (
+        license:
+        assertValidity {
+          nixpkgsConfig = { };
+          pkg = mkPkg "free" license;
+        }
+      ) freeLicenses
+    );
+  }
 )

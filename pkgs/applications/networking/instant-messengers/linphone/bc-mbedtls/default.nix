@@ -73,10 +73,12 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.linphone.org/BC/public/external/mbedtls";
     changelog = "https://gitlab.linphone.org/BC/public/external/mbedtls/-/blob/${rev}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL (Linphone fork)";
-    license = with lib.licenses; [
-      asl20 # or
-      gpl2Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        gpl2Plus
+      ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ naxdy ];
   };

@@ -20,10 +20,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Template generation tool to create no_std applications targeting Espressif's chips";
     homepage = "https://github.com/esp-rs/esp-generate";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.eymeric ];
   };
 })

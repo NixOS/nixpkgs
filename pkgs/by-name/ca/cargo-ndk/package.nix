@@ -21,10 +21,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Cargo extension for building Android NDK projects";
     mainProgram = "cargo-ndk";
     homepage = "https://github.com/bbqsrc/cargo-ndk";
-    license = with lib.licenses; [
-      asl20 # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ ];
   };
 })

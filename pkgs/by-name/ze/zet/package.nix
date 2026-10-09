@@ -28,10 +28,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "zet";
     homepage = "https://github.com/yarrow/zet";
     changelog = "https://github.com/yarrow/zet/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
     maintainers = [ ];
   };
 })
