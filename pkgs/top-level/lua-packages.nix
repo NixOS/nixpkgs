@@ -111,6 +111,10 @@ rec {
     }
   ) { };
 
+  fennel = lib.dontDistribute (
+    lib.warnOnInstantiate "`luaPackages.fennel` was moved to `fennel`. Specifying a lua version for the compiler should not be necessary" pkgs.fennel
+  ); # Added 2026-10-08
+
   image-nvim = callPackage ../development/lua-modules/image-nvim { };
 
   json = callPackage ../development/lua-modules/json { };
