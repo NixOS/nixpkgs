@@ -192,16 +192,6 @@ You, as the writer of documentation, are still in charge of its content.
 
 **For prose style, see the [documentation style guide](./styleguide.md).**
 
-### One sentence per line
-
-Put each sentence in its own line.
-This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
-It also helps identifying long sentences at a glance.
-
-Not everything has been migrated to this format yet.
-Please always use it for new content.
-When changing existing content, update formatting if possible, but avoid excessive diffs.
-
 ### Examples first
 
 Put examples before detailed explanations (see the [style guide](./styleguide.md) for the rationale).
