@@ -6,7 +6,13 @@
 
 populateBindgenEnv () {
     export LIBCLANG_PATH=@libclang@/lib
-    BINDGEN_EXTRA_CLANG_ARGS="@targetFlag@ $(< @clang@/nix-support/cc-cflags) $(< @clang@/nix-support/libc-cflags) $(< @clang@/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
+    local providerFlags
+    if [[ -n "@importerDriverFlags@" ]]; then
+      providerFlags="--config=@clang@/nix-support/@importerDriverFlags@"
+    else
+      providerFlags="$(< @clang@/nix-support/@libcFlags@) $(< @clang@/nix-support/@cxxFlags@)"
+    fi
+    BINDGEN_EXTRA_CLANG_ARGS="@targetFlag@ $providerFlags $(< @clang@/nix-support/cc-cflags) $NIX_CFLAGS_COMPILE"
     export BINDGEN_EXTRA_CLANG_ARGS
 }
 

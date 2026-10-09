@@ -17,7 +17,13 @@ fi
 
 source @out@/nix-support/utils.bash
 
-expandResponseParams "$@"
+# A capable native entry expands caller responses with its own grammar. The
+# historical prepared response form can also contain the executable itself.
+if [[ @wrapperMode@ == prepared && ${1:-} == @* ]]; then
+    expandResponseParams "$@"
+else
+    params=("$@")
+fi
 if [[ @wrapperMode@ == prepared ]]; then
     wrapperImport toolchain
     wrapperCompiler=${params[0]:?missing compiler executable}
@@ -30,6 +36,17 @@ else
 fi
 
 
+# Capability belongs to the exact raw command selected by the constructor,
+# including declared prepared jobs. An opaque override cannot inherit it.
+nativePrimaryQuery=0
+if [[ -f @out@/nix-support/native-primary-programs ]]; then
+    while IFS= read -r program; do
+        if [[ $wrapperCompiler == "$program" ]]; then nativePrimaryQuery=1; break; fi
+    done < @out@/nix-support/native-primary-programs
+fi
+
+if [[ $nativePrimaryQuery == 0 ]]; then
+    expandResponseParams "${params[@]}"
 # Parse command line options and set several variables.
 # For instance, figure out if linker flags should be passed.
 # GCC prints annoying warnings when they are not needed.
@@ -92,8 +109,32 @@ if [ "@isArocc@" = 1 ]; then
     dontLink=1
 fi
 
+else
+    # Read complete selected components; native suppression selects them later.
+    # Prepared GNAT policy can deliberately contain an empty libc component.
+    dontLink=0 cc1=0 cInclude=1 cxxInclude=1 cxxLibrary=1 isCxx=0
+    positionalArgs=()
+fi
+
+if [[ @wrapperMode@ != prepared ]]; then
+    # Put compiler preparation second so libc ldflags retain their ordering.
+    source @bintools@/nix-support/add-flags.sh
+    source @out@/nix-support/add-flags.sh
+fi
+
+if [[ $nativePrimaryQuery == 1 ]]; then
+    source @out@/nix-support/primary-query.sh
+    wrapperNativePolicy
+    # Keep the existing exact -v exception without reading policy @files.
+    if [[ ${#params[@]} == 1 && ${params[0]} == -v ]]; then
+        dontLink=1
+    else
+        wrapperQueryPrimary
+    fi
+fi
+
 # Optionally filter out paths not refering to the store.
-if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
+if [[ $nativePrimaryQuery == 0 && "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     kept=()
     nParams=${#params[@]}
     declare -i n=0
@@ -121,14 +162,9 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     params=(${kept+"${kept[@]}"})
 fi
 
-if [[ @wrapperMode@ != prepared ]]; then
-    # Put compiler preparation second so libc ldflags retain their ordering.
-    source @bintools@/nix-support/add-flags.sh
-    source @out@/nix-support/add-flags.sh
-fi
 
 # Clear march/mtune=native -- they bring impurity.
-if [ "$wrapper_NIX_ENFORCE_NO_NATIVE" = 1 ]; then
+if [[ $nativePrimaryQuery == 0 && "$wrapper_NIX_ENFORCE_NO_NATIVE" = 1 ]]; then
     kept=()
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
@@ -142,10 +178,9 @@ if [ "$wrapper_NIX_ENFORCE_NO_NATIVE" = 1 ]; then
     params=(${kept+"${kept[@]}"})
 fi
 
-# Select personality from the primary command in emission order, before
-# conditional C++ policy is added. A mode inside that conditional policy or a
-# late hook cannot recursively change which policy was selected.
-if [[ "@isClang@" == 1 && "@isFlang@" != 1 ]]; then
+# Legacy compilers retain their historical mode scan, including conditional
+# link flags. Capable entries have already selected native primary policy.
+if [[ $nativePrimaryQuery == 0 && "@isClang@" == 1 && "@isFlang@" != 1 ]]; then
     primaryDriverArgs=($wrapper_NIX_CFLAGS_COMPILE_BEFORE "${params[@]}" $wrapper_NIX_CFLAGS_COMPILE)
     if [[ $dontLink != 1 ]]; then
         primaryDriverArgs+=($wrapper_NIX_CFLAGS_LINK)
@@ -213,6 +248,7 @@ fi
 # out the version number and returns exit code 0) from printing out
 # `No input files specified' and returning exit code 1.
 if [ "$*" = -v ]; then
+    primaryTarget= primaryMachine=()
     extraAfter=()
     extraBefore=()
 fi
@@ -250,10 +286,14 @@ fi
 
 export PATH="$path_backup"
 wrapperOperation=
-if [[ $dontLink != 1 && $cc1 != 1 ]]; then wrapperOperation=link; fi
+# Conditional policy or a hook may change the native final action. Even when
+# primary policy omitted main linker flags, a later linker must not add them.
+if [[ $cc1 != 1 ]]; then wrapperOperation=link; fi
 # Old bash workaround, see above.
 
-if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )) && canWriteResponseFile \
+if [[ $nativePrimaryQuery == 1 ]]; then
+    wrapperExecuteNative
+elif (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )) && canWriteResponseFile \
    ${extraBefore+"${extraBefore[@]}"} \
    ${params+"${params[@]}"} \
    ${extraAfter+"${extraAfter[@]}"}; then

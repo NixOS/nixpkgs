@@ -87,11 +87,7 @@ let
     ;
 
   # Build-tree Swift importers read the adjacent compiler's header-support files.
-  clang = llvmPackages.clang.override (prev: {
-    cc = prev.cc // {
-      nativeDefaultIncludeBinding = null;
-    };
-  });
+  clang = llvmPackages.clang;
 
   inherit (darwin) sigtool;
 

@@ -495,7 +495,10 @@ stdenvNoCC.mkDerivation {
     let
       bintools_ = optionalAttrs (bintools != null) bintools;
     in
-    (optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta [ "priority" ]))
+    # Without propagateDoc, the wrapper lacks the bintools' documentation outputs.
+    (optionalAttrs (bintools_ ? meta) (
+      removeAttrs bintools.meta ([ "priority" ] ++ optional (!propagateDoc) "outputsToInstall")
+    ))
     // {
       description =
         attrByPath [ "meta" "description" ] "System binary utilities" bintools_ + " (wrapper script)";

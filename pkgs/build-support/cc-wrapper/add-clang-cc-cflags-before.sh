@@ -1,3 +1,4 @@
+if [[ ${nativePrimaryQuery:-0} != 1 ]]; then
 targetPassed=false
 targetValue=""
 
@@ -34,6 +35,8 @@ elif [[ $0 != *cpp ]]; then
     if [[ "@explicitAbiValue@" != "" ]]; then
         extraBefore+=(-mabi=@explicitAbiValue@)
     fi
+fi
+
 fi
 
 if [[ "@darwinMinVersion@" ]] && [ "@isFlang@" != 1 ]; then
