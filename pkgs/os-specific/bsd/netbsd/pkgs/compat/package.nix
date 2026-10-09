@@ -134,6 +134,11 @@ mkDerivation (
         --subst-var-by includedir "$dev/include" \
         --subst-var-by version ${version}
     '';
+    # `compat` on NetBSD doesn't make sense, and isn't needed either: there is
+    # nothing to be compatible with, which is why the scope only pulls it in via
+    # `compatIfNeeded`.
+    meta.platforms = lib.subtractLists lib.platforms.netbsd lib.platforms.unix;
+
     extraPaths = [
       "common"
       "include"
