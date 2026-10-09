@@ -41,9 +41,10 @@ including the four SIMD lanes, and the nested output pointers remain based on
 the corresponding parent half.
 
 For nonempty partial inputs, the high-half base is computed only when that half
-contains a row. Otherwise it is a valid unused alias of the input base. Integer
-row/transform cursors become pointers only at accesses, avoiding a final unused
-stride past the allocation. Four-lane column groups always start between zero
+contains a row. Otherwise it is a valid unused alias of the input base. AoS row addresses
+are derived from the guarded logical row and half base; transform offsets
+become pointers only at accesses, avoiding a final unused stride past the
+allocation. Four-lane column groups always start between zero
 and tile-width minus four, including the overlapping final partial group. This
 review covers these four patched files and their direct real/AoS helper calls;
 it does not establish alias correctness of every NNPACK backend.
