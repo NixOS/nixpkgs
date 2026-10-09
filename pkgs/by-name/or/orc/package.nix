@@ -7,7 +7,7 @@
   meson,
   ninja,
   hotdoc,
-  buildDevDoc ? true,
+  buildDevDoc ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 
   # for passthru.tests
   gnuradio,
