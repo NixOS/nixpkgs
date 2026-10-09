@@ -1647,6 +1647,17 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 : Additional flags to append to the `python3 -m unittest` command.
 
+Without `unittest discover`:
+
+`enabledTestPaths` (non-empty list of strings, required)
+
+: A list of paths, path globs or importable module/package identifiers to discover tests in.
+
+  Path globs will be expanded before appending to the `python3 -m unittest` command.
+  A path glob that matches no paths results in build failure.
+
+  `enabledTestPaths` must be a non-empty list when `dontUseUnittestDiscover == true`, as plain `python3 -m unittest` is equivalent to `python3 -m unittest discover`.
+
 `pytest` supports test cases defined for `unittest`, making it possible to use `pytestCheckHook` instead of `unittestCheckHook` for additional features such as fine-grained test selection, but with the following caveats:
 - There are subtle difference between the behaviour of `pytest` and `unittest`.
   For example, the default filename pattern for `unittest` is `test*.py`, while `pytest` defaults to `test_*.py` or `*_test.py`.

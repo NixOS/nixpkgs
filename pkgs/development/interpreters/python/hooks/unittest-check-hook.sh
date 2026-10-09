@@ -11,6 +11,36 @@ unittestCheckPhase() {
 
   if [[ -z "${dontUseUnittestDiscover-}" ]]; then
     flagsArray+=("discover")
+
+  else
+
+    # Process enabledTestPaths
+    if [[ -z "${enabledTestPaths[*]-}" ]]; then
+      echo "ERROR: unittestCheckHook: expect non-empty enabledTestPaths when dontUseUnittestDiscover == true" >&2
+      return 1
+    fi
+    local _enabledTestPaths_Array=() _enabledTestPaths_Expanded
+    concatTo _enabledTestPaths_Array enabledTestPaths
+    _enabledTestPaths_Expanded=$(
+      @pythonCheckInterpreter@ - "${_enabledTestPaths_Array[@]}" <<EOF
+import glob
+import sys
+for path_glob in sys.argv[1:]:
+    if not len(path_glob):
+        sys.exit("ERROR: unittestCheckHook: enabledTestPaths: got an empty element.")
+    if not any(c in path_glob for c in ("*", "?", "[", "]")):
+        print(path_glob)
+        continue
+    path_expanded = sorted(glob.glob(path_glob))
+    if not len(path_expanded):
+        sys.exit("ERROR: unittestCheckHook: enabledTestPaths: glob '{}' matches no paths.".format(path_glob))
+    for path in path_expanded:
+        print(path)
+EOF
+    ) || return 1
+    readarray -t -O"${#flagsArray[@]}" flagsArray <<< "$_enabledTestPaths_Expanded"
+    unset _enabledTestPaths_Expanded _enabledTestPaths_Array
+
   fi
 
   # Compatibility layer to the obsolete unittestFlagsArray
