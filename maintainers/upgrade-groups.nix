@@ -32,5 +32,11 @@
 */
 lib.mapAttrs (name: value: value // { inherit name; }) {
   # keep-sorted start case=no numeric=no block=yes
+  cosmic = {
+    prTitle = oldPkgs: newPkgs: "Cosmic stable ${newPkgs.cosmic-comp.version}";
+    meta = {
+      teams = with lib.teams; [ cosmic ];
+    };
+  };
   # keep-sorted end
 }
