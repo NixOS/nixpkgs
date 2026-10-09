@@ -1,22 +1,16 @@
-From 0bdb436b14fdfd7c56a2b6e2b90a797af0d263a6 Mon Sep 17 00:00:00 2001
+From 05ff56a5cd74b49edbcbbd8af6fd9469f3a6efc4 Mon Sep 17 00:00:00 2001
 From: Connor Baker <ConnorBaker01@gmail.com>
-Date: Sat, 26 Sep 2026 14:29:12 -0700
-Subject: [PATCH] NNPACK: respect FFT array extents and in-place aliases
+Date: Thu, 8 Oct 2026 22:17:50 -0700
+Subject: [PATCH] NNPACK: respect FFT array extents and derive guarded row
+ addresses
 
-Add a flat scalar view to each tile union for strided psimd FFT accesses,
-preserving the existing matrix and vector views. Describe pointer arguments
-without incorrect fixed minimum extents, and form input/transform pointers
-only for actual accesses. Forward real transforms and local tile aliases
-permit the in-place use required by partial-column tiles. FFT arithmetic
-is unchanged.
-
-Based on PyTorch v2.13.0; NNPACK changes use c07e3a0400713d546e0dea2d5466dd22ea389c73.
+Preserve flat tile construction, alias-safe real helpers, and deferred pointer formation. Derive each AoS load offset from the logical row and selected half base rather than maintaining mutable integer cursors. Arithmetic and public transform signatures remain unchanged. Based on NNPACK c07e3a0400713d546e0dea2d5466dd22ea389c73.
 ---
- .../NNPACK/src/psimd/2d-fourier-16x16.c       |  73 ++++++-----
- third_party/NNPACK/src/psimd/2d-fourier-8x8.c |  57 +++++----
- third_party/NNPACK/src/psimd/fft/aos.h        | 116 +++++++++---------
- third_party/NNPACK/src/psimd/fft/real.h       |  26 ++--
- 4 files changed, 150 insertions(+), 122 deletions(-)
+ .../NNPACK/src/psimd/2d-fourier-16x16.c       | 73 ++++++++-------
+ third_party/NNPACK/src/psimd/2d-fourier-8x8.c | 57 +++++++-----
+ third_party/NNPACK/src/psimd/fft/aos.h        | 92 ++++++++-----------
+ third_party/NNPACK/src/psimd/fft/real.h       | 26 ++++--
+ 4 files changed, 126 insertions(+), 122 deletions(-)
 
 diff --git a/third_party/NNPACK/src/psimd/2d-fourier-16x16.c b/third_party/NNPACK/src/psimd/2d-fourier-16x16.c
 index c165524..9e0af5d 100644
@@ -437,7 +431,7 @@ index dd8d65e..4f97362 100644
  
  	for (size_t row = 0; row < row_count; row++) {
 diff --git a/third_party/NNPACK/src/psimd/fft/aos.h b/third_party/NNPACK/src/psimd/fft/aos.h
-index 6b8692e..f7032a4 100644
+index 6b8692e..111b5df 100644
 --- a/third_party/NNPACK/src/psimd/fft/aos.h
 +++ b/third_party/NNPACK/src/psimd/fft/aos.h
 @@ -9,9 +9,11 @@
@@ -454,16 +448,15 @@ index 6b8692e..f7032a4 100644
  	size_t stride_t,
  	uint32_t row_start, uint32_t row_count,
  	psimd_f32 f0r[restrict static 1],
-@@ -28,16 +30,17 @@ static inline void psimd_fft4_aos_f32(
+@@ -28,16 +30,15 @@ static inline void psimd_fft4_aos_f32(
  	w0r = w0i = w1r = w1i = w2r = w2i = w3r = w3i = psimd_zero_f32();
  
  	const uint32_t row_end = row_start + row_count;
-+	size_t lo_offset = 0, hi_offset = 0;
++	const uint32_t hi_start = row_start < 4 ? 4 : row_start;
  	if (row_start <= 0) {
 -		w0r = w2r = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w0r = w2r = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w0r = w2r = psimd_load_f32(t_lo + (0 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
  		}
@@ -471,19 +464,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 4 && row_end > 4) {
 -		w2r = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w2r = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w2r = psimd_load_f32(t_hi + (4 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w0r, &w2r);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
-@@ -45,15 +48,15 @@ static inline void psimd_fft4_aos_f32(
+@@ -45,15 +46,13 @@ static inline void psimd_fft4_aos_f32(
  	}
  
  	if (row_start <= 1) {
 -		w0i = w2i = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w0i = w2i = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w0i = w2i = psimd_load_f32(t_lo + (1 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
  		}
@@ -491,19 +482,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 5 && row_end > 5) {
 -		w2i = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w2i = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w2i = psimd_load_f32(t_hi + (5 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w0i, &w2i);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
-@@ -61,15 +64,15 @@ static inline void psimd_fft4_aos_f32(
+@@ -61,15 +60,13 @@ static inline void psimd_fft4_aos_f32(
  	}
  
  	if (row_start <= 2) {
 -		w1r = w3r = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w1r = w3r = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w1r = w3r = psimd_load_f32(t_lo + (2 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
  		}
@@ -511,19 +500,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 6 && row_end > 6) {
 -		w3r = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w3r = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w3r = psimd_load_f32(t_hi + (6 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w1r, &w3r);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
-@@ -77,15 +80,15 @@ static inline void psimd_fft4_aos_f32(
+@@ -77,15 +74,13 @@ static inline void psimd_fft4_aos_f32(
  	}
  
  	if (row_start <= 3) {
 -		w1i = w3i = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w1i = w3i = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w1i = w3i = psimd_load_f32(t_lo + (3 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
  		}
@@ -531,12 +518,11 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 7 && row_end > 7) {
 -		w3i = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w3i = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w3i = psimd_load_f32(t_hi + (7 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w1i, &w3i);
  		if (--row_count == 0) {
  			goto fft4_twiddle;
-@@ -124,8 +127,8 @@ fft4_twiddle:
+@@ -124,8 +119,8 @@ fft4_twiddle:
  
  static inline void psimd_ifft4_aos_f32(
  	psimd_f32 w0r, psimd_f32 w0i, psimd_f32 w1r, psimd_f32 w1i, psimd_f32 w2r, psimd_f32 w2i, psimd_f32 w3r, psimd_f32 w3i,
@@ -547,7 +533,7 @@ index 6b8692e..f7032a4 100644
  	size_t stride_t)
  {
  	/* Bit reversal */
-@@ -183,8 +186,8 @@ static inline void psimd_ifft4_aos_f32(
+@@ -183,8 +178,8 @@ static inline void psimd_ifft4_aos_f32(
  }
  
  static inline void psimd_fft8_aos_f32(
@@ -558,16 +544,15 @@ index 6b8692e..f7032a4 100644
  	size_t stride_t,
  	uint32_t row_start, uint32_t row_count,
  	psimd_f32 f0r[restrict static 1],
-@@ -209,16 +212,17 @@ static inline void psimd_fft8_aos_f32(
+@@ -209,16 +204,15 @@ static inline void psimd_fft8_aos_f32(
  	w0r = w0i = w1r = w1i = w2r = w2i = w3r = w3i = w4r = w4i = w5r = w5i = w6r = w6i = w7r = w7i = psimd_zero_f32();
  
  	const uint32_t row_end = row_start + row_count;
-+	size_t lo_offset = 0, hi_offset = 0;
++	const uint32_t hi_start = row_start < 8 ? 8 : row_start;
  	if (row_start <= 0) {
 -		w0r = w4r = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w0r = w4r = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w0r = w4r = psimd_load_f32(t_lo + (0 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -575,19 +560,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 8 && row_end > 8) {
 -		w4r = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w4r = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w4r = psimd_load_f32(t_hi + (8 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w0r, &w4r);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -226,15 +230,15 @@ static inline void psimd_fft8_aos_f32(
+@@ -226,15 +220,13 @@ static inline void psimd_fft8_aos_f32(
  	}
  
  	if (row_start <= 1) {
 -		w0i = w4i = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w0i = w4i = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w0i = w4i = psimd_load_f32(t_lo + (1 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -595,19 +578,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 9 && row_end > 9) {
 -		w4i = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w4i = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w4i = psimd_load_f32(t_hi + (9 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w0i, &w4i);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -242,15 +246,15 @@ static inline void psimd_fft8_aos_f32(
+@@ -242,15 +234,13 @@ static inline void psimd_fft8_aos_f32(
  	}
  
  	if (row_start <= 2) {
 -		w1r = w5r = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w1r = w5r = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w1r = w5r = psimd_load_f32(t_lo + (2 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -615,19 +596,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 10 && row_end > 10) {
 -		w5r = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w5r = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w5r = psimd_load_f32(t_hi + (10 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w1r, &w5r);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -258,15 +262,15 @@ static inline void psimd_fft8_aos_f32(
+@@ -258,15 +248,13 @@ static inline void psimd_fft8_aos_f32(
  	}
  
  	if (row_start <= 3) {
 -		w1i = w5i = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w1i = w5i = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w1i = w5i = psimd_load_f32(t_lo + (3 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -635,19 +614,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 11 && row_end > 11) {
 -		w5i = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w5i = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w5i = psimd_load_f32(t_hi + (11 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w1i, &w5i);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -274,15 +278,15 @@ static inline void psimd_fft8_aos_f32(
+@@ -274,15 +262,13 @@ static inline void psimd_fft8_aos_f32(
  	}
  
  	if (row_start <= 4) {
 -		w2r = w6r = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w2r = w6r = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w2r = w6r = psimd_load_f32(t_lo + (4 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -655,19 +632,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 12 && row_end > 12) {
 -		w6r = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w6r = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w6r = psimd_load_f32(t_hi + (12 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w2r, &w6r);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -290,15 +294,15 @@ static inline void psimd_fft8_aos_f32(
+@@ -290,15 +276,13 @@ static inline void psimd_fft8_aos_f32(
  	}
  
  	if (row_start <= 5) {
 -		w2i = w6i = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w2i = w6i = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w2i = w6i = psimd_load_f32(t_lo + (5 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -675,19 +650,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 13 && row_end > 13) {
 -		w6i = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w6i = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w6i = psimd_load_f32(t_hi + (13 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w2i, &w6i);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -306,15 +310,15 @@ static inline void psimd_fft8_aos_f32(
+@@ -306,15 +290,13 @@ static inline void psimd_fft8_aos_f32(
  	}
  
  	if (row_start <= 6) {
 -		w3r = w7r = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w3r = w7r = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w3r = w7r = psimd_load_f32(t_lo + (6 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -695,19 +668,17 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 14 && row_end > 14) {
 -		w7r = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w7r = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w7r = psimd_load_f32(t_hi + (14 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w3r, &w7r);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -322,15 +326,15 @@ static inline void psimd_fft8_aos_f32(
+@@ -322,15 +304,13 @@ static inline void psimd_fft8_aos_f32(
  	}
  
  	if (row_start <= 7) {
 -		w3i = w7i = psimd_load_f32(t_lo);
 -		t_lo += stride_t;
-+		w3i = w7i = psimd_load_f32(t_lo + lo_offset);
-+		lo_offset += stride_t;
++		w3i = w7i = psimd_load_f32(t_lo + (7 - row_start) * stride_t);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
  		}
@@ -715,12 +686,11 @@ index 6b8692e..f7032a4 100644
  	if (row_start <= 15 && row_end > 15) {
 -		w7i = psimd_load_f32(t_hi);
 -		t_hi += stride_t;
-+		w7i = psimd_load_f32(t_hi + hi_offset);
-+		hi_offset += stride_t;
++		w7i = psimd_load_f32(t_hi + (15 - hi_start) * stride_t);
  		psimd_butterfly_f32(&w3i, &w7i);
  		if (--row_count == 0) {
  			goto fft8_twiddle;
-@@ -420,8 +424,8 @@ fft8_twiddle:;
+@@ -420,8 +400,8 @@ fft8_twiddle:;
  static inline void psimd_ifft8_aos_f32(
  	psimd_f32 w0r, psimd_f32 w0i, psimd_f32 w1r, psimd_f32 w1i, psimd_f32 w2r, psimd_f32 w2i, psimd_f32 w3r, psimd_f32 w3i,
  	psimd_f32 w4r, psimd_f32 w4i, psimd_f32 w5r, psimd_f32 w5i, psimd_f32 w6r, psimd_f32 w6i, psimd_f32 w7r, psimd_f32 w7i,
