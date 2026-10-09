@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "simplefix" ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "test"
   ];
