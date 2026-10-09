@@ -62,6 +62,52 @@ let
     ];
   };
 
+  manifestOverrides =
+    crossSystem:
+    let
+      original = fixture {
+        inherit crossSystem;
+        config = {
+          allowUnfree = true;
+          cudaSupport = true;
+          cudaCapabilities = [ "8.0" ];
+        };
+      };
+      runtimeOf =
+        package:
+        (lib.findFirst (
+          input: (input.pname or "") == "cuda_cudart"
+        ) (throw "CUDA test: missing CUDART dependency") package.buildInputs).drvPath;
+      check =
+        name:
+        let
+          cuda = original.${name};
+          manifests = cuda.manifests // {
+            cuda = cuda.manifests.cuda // {
+              # Change a consumed field, not just an unused marker.
+              cuda_cudart = cuda.manifests.cuda.cuda_cudart // {
+                version = "${cuda.cuda_cudart.version}-test";
+              };
+            };
+          };
+          custom = cuda.override { inherit manifests; };
+          equalBuild = cuda.override { manifests = original.pkgsBuildHost.${name}.manifests; };
+        in
+        custom.cuda_cudart.drvPath != cuda.cuda_cudart.drvPath
+        && custom.pkgs.cudaPackages.manifests == manifests
+        && custom.pkgs.pkgsBuildHost.cudaPackages.manifests == manifests
+        && runtimeOf custom.pkgs.ucx == custom.cuda_cudart.drvPath
+        && runtimeOf custom.pkgs.mpi == custom.cuda_cudart.drvPath
+        && custom.pkgs.pkgsBuildHost.cudaPackages.cuda_cudart.stdenv.hostPlatform.system == "x86_64-linux"
+        && custom.cuda_cudart.stdenv.hostPlatform.system == original.stdenv.hostPlatform.system
+        # A HOST override can deliberately equal BUILD's canonical data.
+        && equalBuild.pkgs.cudaPackages.manifests == original.pkgsBuildHost.${name}.manifests;
+    in
+    lib.all check [
+      "cudaPackages_12_9"
+      "cudaPackages_13_3"
+    ];
+
   # Equal platforms can still name distinct stages, and crossOverlays must
   # remain exclusive to HOST when constructing a non-default CUDA variant.
   preservesStage =
@@ -187,6 +233,8 @@ let
         ];
 
 in
+assert lib.assertMsg (manifestOverrides null && manifestOverrides "aarch64-linux")
+  "CUDA scope: constructor manifests must reach external dependencies without leaking HOST packages into BUILD";
 assert lib.assertMsg (!conflict.success) "CUDA scope: .pkgs must reject conflicting crossOverlays";
 assert lib.assertMsg (
   !renamedConflict.success
