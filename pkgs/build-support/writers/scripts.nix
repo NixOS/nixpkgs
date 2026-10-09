@@ -1101,7 +1101,7 @@ rec {
   writeJSBin = name: writeJS "/bin/${name}";
 
   writeNginxConfig =
-    name: text:
+    gixyArgs: name: text:
     pkgs.runCommandLocal name
       {
         inherit text;
@@ -1114,7 +1114,10 @@ rec {
       ''
         printf "%s" "$text" | nginxfmt --max-empty-lines 0 - > $out
         sed -i 's/ ;/;/g' $out
-        gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
+        echo "gixy flags: ${lib.cli.toCommandLineShellGNU { } gixyArgs}"
+        gixy ${
+          lib.cli.toCommandLineShellGNU { } gixyArgs
+        } $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
   /**
