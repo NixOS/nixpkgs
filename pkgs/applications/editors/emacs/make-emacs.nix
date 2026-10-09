@@ -485,6 +485,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkgs = lib.recurseIntoAttrs (emacsPackagesFor finalAttrs.finalPackage);
     tests = {
       inherit (nixosTests) emacs-daemon;
+      nixos = nixosTests.emacs.extendNixOS {
+        module = {
+          tests.emacs.package = finalAttrs.finalPackage;
+        };
+      };
       withPackages = callPackage ./build-support/tests/with-packages.nix {
         emacs = finalAttrs.finalPackage;
       };
