@@ -35,7 +35,10 @@ buildPythonPackage rec {
     description = "Python library for the Koji build system";
     homepage = "https://pagure.io/koji/";
     changelog = "https://pagure.io/koji/blob/koji-${version}/f/docs/source/release_notes/release_notes_${version}.rst";
-    license = lib.licenses.lgpl2Plus;
+    license = with lib.licenses; [
+      lgpl21Only
+      gpl2Plus
+    ];
     maintainers = with lib.maintainers; [ caniko ];
   };
 }
