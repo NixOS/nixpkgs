@@ -5,7 +5,7 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prjoxide";
   version = "0.1-unstable-2026-07-19";
   __structuredAttrs = true;
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     postFetch = "rm -rf $out/.git";
   };
 
-  sourceRoot = "${src.name}/libprjoxide";
+  sourceRoot = "${finalAttrs.src.name}/libprjoxide";
 
   cargoPatches = [ ./fix-cargo-lock.patch ];
 
@@ -36,8 +36,6 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  strictDeps = true;
-
   meta = {
     description = "Documentation and tools for Lattice 28nm FPGA parts";
     longDescription = ''
@@ -50,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ gitRaiku ];
     platforms = lib.platforms.all;
   };
-}
+})
