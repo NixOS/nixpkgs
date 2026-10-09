@@ -9807,6 +9807,11 @@
     githubId = 44584365;
     name = "Francesco Vecchia";
   };
+  frakappa = {
+    github = "frakappa";
+    githubId = 244229423;
+    name = "Francesco Cappetti";
+  };
   franciscod = {
     github = "franciscod";
     githubId = 726447;
