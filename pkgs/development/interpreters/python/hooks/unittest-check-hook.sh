@@ -22,6 +22,9 @@ unittestCheckPhase() {
         flagsArray+=(-k"$_pattern")
       done
       unset _pattern _patterns
+    elif [[ -n "${disabledTests[*]-}" ]]; then
+      # Process disabledTests
+      flagsArray+=("-k[!($(concatStringsSep "|" disabledTests))]")
     fi
 
     if [[ -n "${unittestStartDir-}" ]]; then
