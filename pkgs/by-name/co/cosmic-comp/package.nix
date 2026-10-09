@@ -2,6 +2,7 @@
   lib,
   stdenv,
   rustPlatform,
+  just,
   fetchFromGitHub,
   libcosmicAppHook,
   pkg-config,
@@ -22,14 +23,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
-  version = "1.9.0";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-/q2SDp9Sa2MG4bMtryOizxnhPovrAgYb9GXQ35NRs6c=";
+    hash = "sha256-HkgP/1tVXDMpL47SOZibN1QkDVTRkjrhYmdFcbOc4JY=";
   };
 
   cargoHash = "sha256-WTpJuj3Xz9hHLj+kuhys0Fr8FmosAuXpbtNSK3Y5twU=";
@@ -41,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   nativeBuildInputs = [
+    just
     libcosmicAppHook
     pkg-config
   ];
@@ -55,12 +57,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional useSystemd systemd;
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "CARGO_TARGET_DIR=target/${stdenv.hostPlatform.rust.cargoShortTarget}"
+  justFlags = [
+    "--set"
+    "prefix"
+    (placeholder "out")
+    "--set"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
-
-  dontCargoInstall = true;
 
   # With Xwayland, cosmic-comp calls out to `xrdb -merge` to set
   # `Xcursor.size` and `Xcursor.theme` for X11 clients (src/xwayland.rs,
