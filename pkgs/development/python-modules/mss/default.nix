@@ -12,6 +12,7 @@
   libxrandr,
   libxfixes,
   libx11,
+  libxcb,
 
   # tests
   lsof,
@@ -36,6 +37,11 @@ buildPythonPackage rec {
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     (replaceVars ./linux-paths.patch {
       x11 = "${libx11}/lib/libX11.so";
+      xcb = "${libxcb}/lib/libxcb.so";
+      xcb-randr = "${libxcb}/lib/libxcb-randr.so";
+      xcb-render = "${libxcb}/lib/libxcb-render.so";
+      xcb-shm = "${libxcb}/lib/libxcb-shm.so";
+      xcb-xfixes = "${libxcb}/lib/libxcb-xfixes.so";
       xfixes = "${libxfixes}/lib/libXfixes.so";
       xrandr = "${libxrandr}/lib/libXrandr.so";
     })
@@ -55,9 +61,19 @@ buildPythonPackage rec {
     xvfb-run
   ];
 
+  disabledTests = [
+    "test_grab_with_tuple"
+    "test_grab_with_tuple_percents"
+    "test_resource_leaks"
+    # we always provide store path to libraries, so mocking the case where it
+    # does not exist is nonsensical
+    "test_no_xlib_library"
+    "test_no_xrandr_extension"
+  ];
+
   checkPhase = ''
     runHook preCheck
-    xvfb-run pytest -v -k "not test_grab_with_tuple and not test_grab_with_tuple_percents and not test_resource_leaks"
+    xvfb-run pytest -v -k "${lib.concatStringsSep " and " (map (t: "not ${t}") disabledTests)}"
     runHook postCheck
   '';
 
