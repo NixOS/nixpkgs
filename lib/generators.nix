@@ -164,8 +164,11 @@ rec {
     {
       mkValueString ? mkValueStringDefault { },
     }:
-    sep: k: v:
-    "${escape [ sep ] k}${sep}${mkValueString v}";
+    sep:
+    let
+      escapeSeparator = escape [ sep ];
+    in
+    k: v: "${escapeSeparator k}${sep}${mkValueString v}";
 
   ## -- FILE FORMAT GENERATORS --
 
