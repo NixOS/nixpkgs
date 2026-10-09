@@ -91,6 +91,7 @@ luaepnf,,,,,,
 luaevent,,,,,,
 luaexpat,,,,,,arobyn flosse
 luaffi,,,https://luarocks.org/dev,,,
+luaffi-tkl,,,,,,
 luafilesystem,,,,,,flosse alerque
 lualdap,,,,,,aanderse
 lualine.nvim,,,https://luarocks.org/dev,,,

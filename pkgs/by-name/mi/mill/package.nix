@@ -24,15 +24,15 @@ let
   sources = {
     aarch64-darwin = {
       suffix = "native-mac-aarch64";
-      hash = "sha256-zssJgQWY4QI0giYPGeviUbgZ2z8XtIyvkP0BoqcfRbc=";
+      hash = "sha256-QRSTbViDa64TrzpVx7hz4PNPHLufW/GKNjT9IU/4OqM=";
     };
     aarch64-linux = {
       suffix = "native-linux-aarch64";
-      hash = "sha256-dzIG8bO0vWtC/798LI0WjGIQ5PB1rgYIndz24P5dfbg=";
+      hash = "sha256-lwCt1bsYbOWIRCjphxDUub7h8onjKifdfArp0Vze3Ro=";
     };
     x86_64-linux = {
       suffix = "native-linux-amd64";
-      hash = "sha256-umDQNXc4CpBsInPMp2VoKHBeJf71GaHpJ2Vq4Wfo9kQ=";
+      hash = "sha256-p3mXy754MUvKjbAgyg4eDX9Clgv82F3NO6OkzlsbX7A=";
     };
   };
 
@@ -40,12 +40,15 @@ let
     sources.${stdenv.hostPlatform.system}
       or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mill";
-  version = "1.1.8";
+  version = "1.1.10";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
-    url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${source.suffix}/${version}/mill-dist-${source.suffix}-${version}.exe";
+    url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${source.suffix}/${finalAttrs.version}/mill-dist-${source.suffix}-${finalAttrs.version}.exe";
     inherit (source) hash;
   };
 
@@ -178,7 +181,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     homepage = "https://com-lihaoyi.github.io/mill/";
-    changelog = "https://github.com/com-lihaoyi/mill/releases/tag/${version}";
+    changelog = "https://github.com/com-lihaoyi/mill/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     description = "Build tool for Scala, Java and more";
     mainProgram = "mill";
@@ -196,4 +199,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = builtins.attrNames sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

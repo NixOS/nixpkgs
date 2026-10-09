@@ -12399,6 +12399,11 @@
     name = "Silvan Mosberger";
     keys = [ { fingerprint = "6C2B 55D4 4E04 8266 6B7D  DA1A 422E 9EDA E015 7170"; } ];
   };
+  inomish = {
+    name = "Simon";
+    github = "inomish";
+    githubId = 175155691;
+  };
   insipx = {
     email = "github@andrewplaza.dev";
     github = "insipx";
@@ -27105,11 +27110,6 @@
     email = "loic.martel@protonmail.com";
     github = "Simarra";
     githubId = 14372987;
-  };
-  Simon-Weij = {
-    name = "Simon";
-    github = "Simon-Weij";
-    githubId = 175155691;
   };
   simonchatts = {
     email = "code@chatts.net";

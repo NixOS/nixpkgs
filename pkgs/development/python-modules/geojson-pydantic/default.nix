@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "geojson-pydantic";
-  version = "2.1.1";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "geojson-pydantic";
     tag = finalAttrs.version;
-    hash = "sha256-XIhlZhHcBSIPGd+fFCA3CDnEoqoYvbEVmb+VFG22m5Q=";
+    hash = "sha256-XNSD54gNOVY7aXuw1cO0FGG3zTtecgZaWxC9KndyV9k=";
   };
 
   build-system = [ hatchling ];
