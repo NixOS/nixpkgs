@@ -147,7 +147,7 @@ stage positions stable under overlays; a changed stage count is rejected.
 
 Within the CUDA scope’s `callPackage`, the `pkgs` argument is the selected package graph with its existing splices. Explicit role references such as `pkgs.pkgsBuildHost` retain their selection; the scope does not splice that graph a second time.
 
-This selects the named release; local `overrideScope` changes and manually overridden manifests are not automatically applied to the package sets inside `.pkgs`. Use regular Nixpkgs overlays and `_cuda.extensions` when those changes must affect the complete dependency graph.
+Constructor overrides such as `cudaPackages.override { manifests = customManifests; }` also apply the supplied manifest data to `.pkgs`, recalling the CUDA constructor separately in each dependency role. Ordinary named releases retain their platform-specific manifest selections. Each custom constructor may require its own Nixpkgs variant. Local `overrideScope` changes remain local; use regular Nixpkgs overlays and `_cuda.extensions` when package changes must affect the complete dependency graph.
 
 Extensions that need packages outside CUDA should obtain them through the CUDA scope's `callPackage` or `pkgs`, for example `finalCuda.callPackage ({ ucx }: ucx) { }` or `finalCuda.pkgs.ucx`. Referring to the outer Nixpkgs overlay's `final.ucx` captures that package from the original fixed point; selecting a named CUDA scope does not rewrite captured references. The extension is also evaluated within `.pkgs`, where its outer fixed point has the selected CUDA release.
 
