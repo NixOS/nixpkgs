@@ -45,7 +45,7 @@ let
       pushd ${placeholder "out"}/${python.sitePackages}
     '';
 
-    unittestFlagsArray = [ "greenlet.tests" ];
+    unittestFlags = [ "greenlet.tests" ];
 
     postCheck = ''
       popd
