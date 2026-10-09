@@ -43,10 +43,11 @@ is not Canadian-cross support.
 
 The fresh native SM 89 and AArch64 SM 121a Torch/MAGMA builds started on
 nixos-desktop on 2026-10-08 select commit `9071eb53077f`. Subsequent native-stage,
-compiler-projection and GNU header-selection fixes preserve their four production
-derivations and fourteen outputs. The dynamic-loader repair and native compiler
-query integration change core dependencies and require separate full builds.
-Acceptance of those current changes remains pending.
+compiler-projection and GNU header-selection fixes initially preserved their four
+production derivations and fourteen outputs. The later stage-construction repair,
+dynamic-loader repair and native compiler query integration change dependency
+graphs and require separate full builds. Acceptance of those current changes
+remains pending.
 
 The native adapter review found composition defects.
 Flattening caller response files can promote their quoting selectors into the
