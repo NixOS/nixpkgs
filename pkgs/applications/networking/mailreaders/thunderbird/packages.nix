@@ -109,24 +109,10 @@ rec {
       versionSuffix = "esr";
     };
   };
-
-  thunderbird-140 = common {
-    applicationName = "Thunderbird ESR";
-
-    version = "140.16.0esr";
-    sha512 = "9844641f9c8b4e7c96445d6d6fc554fc80afd8652899de3458d183f9381a18f08233e5d2e2beedd6adf2a0a6e1331e7abb55e698765b27110ca2dafdf12ecbb7";
-
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbirdPackages.thunderbird-140";
-      versionPrefix = "140";
-      versionSuffix = "esr";
-    };
-
-    broken = true;
-  };
 }
 // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
   thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
   thunderbird-128 = throw "Thunderbird 128 support ended in August 2025";
+  thunderbird-140 = throw "Thunderbird 140 has been removed. Use thunderbird-esr instead.";
 }

@@ -4005,6 +4005,8 @@ self: super: with self; {
 
   cython_3_2 = callPackage ../development/python-modules/cython/3_2.nix { };
 
+  cython_3_3 = callPackage ../development/python-modules/cython/3_3.nix { };
+
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   cyvcf2 = callPackage ../development/python-modules/cyvcf2 { };
@@ -15414,6 +15416,8 @@ self: super: with self; {
 
   pyliebherrhomeapi = callPackage ../development/python-modules/pyliebherrhomeapi { };
 
+  pylightning = callPackage ../development/python-modules/pylightning { };
+
   pylink-square = callPackage ../development/python-modules/pylink-square { };
 
   pylint = callPackage ../development/python-modules/pylint { };
@@ -15435,6 +15439,12 @@ self: super: with self; {
   pylitejet = callPackage ../development/python-modules/pylitejet { };
 
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };
+
+  pyln-bolt7 = callPackage ../development/python-modules/pyln-bolt7 { };
+
+  pyln-client = callPackage ../development/python-modules/pyln-client { };
+
+  pyln-proto = callPackage ../development/python-modules/pyln-proto { };
 
   pylnk3 = callPackage ../development/python-modules/pylnk3 { };
 
@@ -22629,7 +22639,7 @@ self: super: with self; {
 
   wget = callPackage ../development/python-modules/wget { };
 
-  wgpu-py = callPackage ../development/python-modules/wgpu-py { };
+  wgpu = callPackage ../development/python-modules/wgpu { };
 
   whatthepatch = callPackage ../development/python-modules/whatthepatch { };
 

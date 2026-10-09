@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython,
+  cython_3_3,
   setuptools,
 
   # nativeBuildInputs
@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [
-    cython
+    cython_3_3
     setuptools
   ];
 

@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fnox";
-  version = "1.34.1";
+  version = "1.36.0";
 
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jdx";
     repo = "fnox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OZ9WVPsx6McCk6ONuUZ8Ws7f5WHlEMUOEYV457jexAs=";
+    hash = "sha256-md01KJsbDxdjjgPLKpwNwfK3LeiY7Ds+lUM1Q8inIxQ=";
   };
 
-  cargoHash = "sha256-QRRIZOjqYdVsK04vjyLRhbI1jsV2oekfORswbDYQBIg=";
+  cargoHash = "sha256-m8H4HrWSu9FF3gBDlQ1Ytl3U3UK9zpenXxHIAdlcRgo=";
 
   nativeBuildInputs = [
     perl
