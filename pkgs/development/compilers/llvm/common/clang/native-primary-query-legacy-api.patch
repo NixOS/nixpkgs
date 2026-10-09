@@ -1,0 +1,18 @@
+From 52da51dff5d9e545cd98771948444c69435a54a1 Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 19:23:32 -0700
+Subject: [PATCH] driver: use release-native override helper arity
+
+---
+ tools/driver/driver.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/driver/driver.cpp b/tools/driver/driver.cpp
+index e6c3e96..7e32999 100644
+--- a/tools/driver/driver.cpp
++++ b/tools/driver/driver.cpp
+@@ -443,3 +443,3 @@ static bool preparePrimarySegments(const char *Program, PrimarySegments &Request
+       driver::applyOverrideOptions(Selection, Override, SelectionStrings,
+-                                   "CCC_OVERRIDE_OPTIONS", nullptr);
++                                   nullptr);
+     StringRef Mode = getDriverMode(Program, ArrayRef(Selection).drop_front());
