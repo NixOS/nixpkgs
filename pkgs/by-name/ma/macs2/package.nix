@@ -7,14 +7,14 @@
 
 # pin python311 because macs2 does not support python 3.12
 # https://github.com/macs3-project/MACS/issues/598#issuecomment-1812622572
-python311.pkgs.buildPythonPackage rec {
+python311.pkgs.buildPythonPackage (finalAttrs: {
   pname = "macs2";
   version = "2.2.9.1";
   pyproject = true;
 
   src = fetchPypi {
-    pname = lib.toUpper pname;
-    inherit version;
+    pname = lib.toUpper finalAttrs.pname;
+    inherit (finalAttrs) version;
     hash = "sha256-jVa8N/uCP8Y4fXgTjOloQFxUoKjNl3ZoJwX9CYMlLRY=";
   };
 
@@ -43,7 +43,7 @@ python311.pkgs.buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "test"
   ];
@@ -54,8 +54,8 @@ python311.pkgs.buildPythonPackage rec {
     description = "Model-based Analysis for ChIP-Seq";
     mainProgram = "macs2";
     homepage = "https://github.com/macs3-project/MACS/";
-    changelog = "https://github.com/macs3-project/MACS/releases/tag/v${version}";
+    changelog = "https://github.com/macs3-project/MACS/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})
