@@ -73,13 +73,11 @@ To test redirects, perform a browser refresh, as browsers do not re-run client J
 
 ## Documentation conventions
 
-In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
-In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
-When needed, each convention explains why it exists, so you can make a decision whether to follow it or not based on your particular case.
-Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
-You, as the writer of documentation, are still in charge of its content.
+The Nixpkgs manual follows a set of conventions.
 
-**For prose style, see the [documentation style guide](./styleguide.md).**
+* prose follows the [style guide](./styleguide.md);
+* source file follows custom [markdown syntax](#syntax);
+* technical writing follows [Diátaxis](https://nix.dev/contributing/documentation/diataxis).
 
 ### Writing Function Documentation
 
