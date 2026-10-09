@@ -95,6 +95,10 @@ stdenv.mkDerivation {
       excludes = [ "opcodes/s390-opc.c" ];
     })
   ]
+  # The older VC4 fork also lacks the empty-argument behavior checked by this regression.
+  ++ lib.optional (
+    !targetPlatform.isVc4
+  ) ../../../../compilers/gcc/common/libiberty-writeargv-newlines.patch
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   ++ lib.optional stdenv.targetPlatform.isWindows ./windres-locate-gcc.patch
   ++
