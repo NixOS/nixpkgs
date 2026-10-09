@@ -246,13 +246,13 @@
     "vendorHash": "sha256-gyY3t3mkA5fd1248Xzr4R6xa9AbCS5O2U86w4rwkSX0="
   },
   "cloudscale-ch_cloudscale": {
-    "hash": "sha256-ue4Ux6TQWxVWXVqJn9PlRzHvM3k2YDn/9cFHVghy4wY=",
+    "hash": "sha256-VFpSaCMiNu0kf1F/BZYx4JQXBYPF+t9iI7msMjUSGJw=",
     "homepage": "https://registry.terraform.io/providers/cloudscale-ch/cloudscale",
     "owner": "cloudscale-ch",
     "repo": "terraform-provider-cloudscale",
-    "rev": "v5.2.0",
+    "rev": "v5.3.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-3wv9pNnl+hNaC2K/PeEXemLOBlx3c1ZDZ70i9ZM/iEg="
+    "vendorHash": "sha256-dWaD4CDIRGPTurrgFSuNQF+/XLGBDnBqvTKqFb1s4Nc="
   },
   "constellix_constellix": {
     "deleteVendor": true,
