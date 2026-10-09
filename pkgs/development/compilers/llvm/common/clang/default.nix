@@ -89,6 +89,9 @@ stdenv.mkDerivation (
     ++ lib.optional (
       hasNativeFrame && lib.versionOlder release_version "21"
     ) ./native-primary-query-legacy-api.patch
+    ++ lib.optional (
+      hasNativeFrame && lib.versions.major release_version == "19"
+    ) ./native-primary-query-19-api.patch
     ++ lib.optionals (lib.versionOlder release_version "20") [
       # https://github.com/llvm/llvm-project/pull/116476
       # prevent clang ignoring warnings / errors for unsuppored
