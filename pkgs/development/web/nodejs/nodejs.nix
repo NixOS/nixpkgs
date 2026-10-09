@@ -189,14 +189,6 @@ let
 
   sharedLibInputs = [ icu ] ++ builtins.attrValues sharedLibDeps;
 
-  # node-gyp expects headers for the following libs (the list is maintained upstream in tools/install.py)
-  # to be at the path given by `process.config.variables.node_prefix`, which is set to $out.
-  libHeadersForGYP = [
-    libuv
-    openssl
-    zlib
-  ];
-
   bundlesCorepack = !lib.versionAtLeast version "25.0.0";
 
   # Currently stdenv sets CC/LD/AR/etc environment variables to program names
@@ -555,9 +547,7 @@ let
           ]
           ++ lib.optional bundlesCorepack "corepack";
           # See PKG_CONFIG_SYSTEM_INCLUDE_PATH.
-          disallowedRequisites = map (dep: dep.dev) (
-            lib.filter (dep: !(builtins.elem dep libHeadersForGYP) && dep ? dev) sharedLibInputs
-          );
+          disallowedRequisites = map (dep: dep.dev) (lib.filter (dep: dep ? dev) sharedLibInputs);
         };
         corepack = {
           disallowedReferences = [
@@ -626,9 +616,15 @@ let
           ln -s $npm/lib/node_modules/npm/lib/utils/completion.sh \
             $npm/share/bash-completion/completions/npm
 
-          ln -s ${
-            lib.concatStringsSep " " (map (dep: "${lib.getDev dep}/include/*") libHeadersForGYP)
-          } $out/include/node/
+          ${
+            # node-gyp expects these headers in node_prefix (i.e. $out); the list matches
+            # upstream's tools/install.py. Copied rather than linked so $out does
+            # not depend on the -dev outputs (and through them zlib-static, openssl-bin).
+            ''
+              cp -R ${lib.getDev libuv}/include/* $out/include/node/
+              cp -R ${lib.getDev openssl}/include/openssl $out/include/node/
+              cp ${lib.getDev zlib}/include/{zconf,zlib}.h $out/include/node/
+            ''}
 
           # assemble a static v8 library and put it in the 'libv8' output
           mkdir -p $libv8/lib
