@@ -69,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/MrAlaux/Nugget-Doom";
     changelog = "https://github.com/MrAlaux/Nugget-Doom/releases/tag/nugget-doom-${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      bandithedoge
+      keenanweaver
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "nugget-doom";
   };
