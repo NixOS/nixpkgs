@@ -31,7 +31,7 @@ updateHash()
 
 echo "Checking for updates of Whisparr..."
 
-currentVersion=$(nix eval --raw -f "$dirname"/../../../.. whisparr.version)
+currentVersion=$(nix eval --raw -f "$dirname"/../../../.. whisparr_2.version)
 echo "Current version: \`$currentVersion\`."
 
 echo "Fetching the latest version..."
