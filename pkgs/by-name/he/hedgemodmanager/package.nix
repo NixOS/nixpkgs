@@ -8,13 +8,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "hedgemodmanager";
-  version = "8.0.0-beta4";
+  version = "8.0.0-beta7";
 
   src = fetchFromGitHub {
     owner = "hedge-dev";
     repo = "HedgeModManager";
     tag = finalAttrs.version;
-    hash = "sha256-1uwcpeyOxwKI0fyAmchYEMqStF52wXkCZej+ZQ+aFeY=";
+    hash = "sha256-+Ia35SNlzcB/udCilldPxuMRJtsrAOIFjmX3kGyH5TM=";
   };
 
   projectFile = "Source/HedgeModManager.UI/HedgeModManager.UI.csproj";
@@ -25,6 +25,7 @@ buildDotnetModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace flatpak/hedgemodmanager.desktop --replace-fail "/app/bin/HedgeModManager.UI" "HedgeModManager.UI"
+    substituteInPlace Source/HedgeModManager.UI/Program.cs --replace-fail "ThisAssembly.GitCommitId[..7]" '""'
   '';
 
   # https://github.com/hedge-dev/HedgeModManager/blob/8.0.0-beta4/flatpak/io.github.hedge_dev.hedgemodmanager.yml#L53-L55
