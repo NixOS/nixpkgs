@@ -32,7 +32,7 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs";
   version = "1.6.1";
   pyproject = true;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mkdocs";
     repo = "mkdocs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-JQSOgV12iYE6FubxdoJpWy9EHKFxyKoxrm/7arCn9Ak=";
   };
 
@@ -80,19 +80,19 @@ buildPythonPackage rec {
     unittestCheckHook
     mock
   ]
-  ++ optional-dependencies.i18n;
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.i18n;
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-v"
     "-p"
-    "'*tests.py'"
+    "*tests.py"
     "mkdocs"
   ];
 
   pythonImportsCheck = [ "mkdocs" ];
 
   meta = {
-    changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${version}";
+    changelog = "https://github.com/mkdocs/mkdocs/releases/tag/${finalAttrs.src.tag}";
     description = "Project documentation with Markdown / static website generator";
     mainProgram = "mkdocs";
     downloadPage = "https://github.com/mkdocs/mkdocs";
@@ -108,4 +108,4 @@ buildPythonPackage rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rkoe ];
   };
-}
+})
