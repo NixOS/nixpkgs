@@ -844,6 +844,7 @@ rec {
     }@args:
     v:
     let
+      recurse = toLua innerArgs;
       innerIndent = "${indent}  ";
       introSpace = if multiline then "\n${innerIndent}" else " ";
       outroSpace = if multiline then "\n${indent}" else " ";
@@ -861,7 +862,7 @@ rec {
 
       generatedBindings =
         assert badVarNames == [ ] || throw "Bad Lua var names: ${toPretty { } badVarNames}";
-        concatStrings (mapAttrsToList (key: value: "${indent}${key} = ${toLua innerArgs value}\n") v);
+        concatStrings (mapAttrsToList (key: value: "${indent}${key} = ${recurse value}\n") v);
 
       # https://en.wikibooks.org/wiki/Lua_Programming/variable#Variable_names
       matchVarName = match "[[:alpha:]_][[:alnum:]_]*(\\.[[:alpha:]_][[:alnum:]_]*)*";
@@ -876,12 +877,7 @@ rec {
     else if isPath v || isDerivation v then
       toJSON "${v}"
     else if isList v then
-      (
-        if v == [ ] then
-          "{}"
-        else
-          "{${introSpace}${concatItems (map (value: "${toLua innerArgs value}") v)}${outroSpace}}"
-      )
+      (if v == [ ] then "{}" else "{${introSpace}${concatItems (map recurse v)}${outroSpace}}")
     else if isAttrs v then
       (
         if isLuaInline v then
@@ -890,7 +886,7 @@ rec {
           "{}"
         else
           "{${introSpace}${
-            concatItems (mapAttrsToList (key: value: "[${toJSON key}] = ${toLua innerArgs value}") v)
+            concatItems (mapAttrsToList (key: value: "[${toJSON key}] = ${recurse value}") v)
           }${outroSpace}}"
       )
     else
