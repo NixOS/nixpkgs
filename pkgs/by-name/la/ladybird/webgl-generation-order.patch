@@ -1,0 +1,14 @@
+Generate GLFunctions.h before compiling LibCompositing, whose WebGL command
+headers include it. Otherwise parallel builds can compile the command sources
+before the GLFunctions generator runs.
+
+--- a/Libraries/LibCompositing/CMakeLists.txt
++++ b/Libraries/LibCompositing/CMakeLists.txt
+@@ -67,6 +67,7 @@
+ test_rust_crate(MANIFEST_PATH Rust/Cargo.toml CRATE_NAME libcompositing_rust)
+
+ ladybird_lib(LibCompositing compositing EXPLICIT_SYMBOL_EXPORT)
++add_dependencies(LibCompositing generate_GLFunctions.cpp)
+ target_link_libraries(LibCompositing PUBLIC LibWebCommon)
+ target_link_libraries(LibCompositing PRIVATE LibCore LibGfx LibIPC LibMedia LibThreading skia libcompositing_rust)
+
