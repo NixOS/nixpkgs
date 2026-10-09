@@ -61,7 +61,7 @@ buildPythonPackage rec {
     zope-configuration
   ];
 
-  unittestFlagsArray = [ "src/zope/component/tests" ];
+  unittestFlags = [ "src/zope/component/tests" ];
 
   # AssertionError: 'test_interface.IFoo' != 'zope.component.tests.test_interface.IFoo'
   preCheck = ''
