@@ -41,5 +41,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Monitoring System command-line interface";
     mainProgram = "alerta";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ eljamm ];
   };
 })

@@ -54,6 +54,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     mainProgram = "alertad";
     changelog = "https://github.com/alerta/alerta/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ eljamm ];
   };
 })
