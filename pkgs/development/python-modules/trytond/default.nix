@@ -78,7 +78,7 @@ buildPythonPackage rec {
     export DB_NAME=":memory:";
   '';
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "trytond.tests"
   ];
