@@ -192,37 +192,6 @@ You, as the writer of documentation, are still in charge of its content.
 
 **For prose style, see the [documentation style guide](./styleguide.md).**
 
-### Examples first
-
-Put examples before detailed explanations (see the [style guide](./styleguide.md) for the rationale).
-
-Use this structure for each documented item:
-
-1. Title
-2. Abstract (optional, one sentence max)
-3. Example
-4. Explanation (details, edge cases, types, defaults)
-
-Rendered example:
-
-````markdown
-## `lib.toUpper`
-
-Converts all characters in a string to uppercase.
-
-:::{.example #ex-lib-toUpper}
-# Converting a string to uppercase
-```nix
-lib.toUpper "hello"
-=> "HELLO"
-```
-
-:::
-
-Only acts on ASCII characters.
-Unicode characters are passed through unchanged.
-````
-
 ### Writing Function Documentation
 
 Function documentation is *reference documentation*, for which
