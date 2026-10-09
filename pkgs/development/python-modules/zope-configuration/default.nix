@@ -43,7 +43,7 @@ buildPythonPackage rec {
     cd $out/${python.sitePackages}/zope/
   '';
 
-  unittestFlagsArray = [ "configuration/tests" ];
+  unittestFlags = [ "configuration/tests" ];
 
   pythonNamespaces = [ "zope" ];
 
