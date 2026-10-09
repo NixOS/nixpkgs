@@ -45,7 +45,7 @@ buildPythonPackage rec {
     zope-testing
   ];
 
-  unittestFlagsArray = [ "src/zope/lifecycleevent" ];
+  unittestFlags = [ "src/zope/lifecycleevent" ];
 
   pythonNamespaces = [ "zope" ];
 
