@@ -36,7 +36,11 @@ buildPythonPackage rec {
   '';
 
   doCheck = false;
-  passthru.tests.pytest = callPackage ./tests.nix { };
+  passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
+    tests.pytest = callPackage ./tests.nix { };
+  };
 
   pythonImportsCheck = [ "pytest_asyncio" ];
 

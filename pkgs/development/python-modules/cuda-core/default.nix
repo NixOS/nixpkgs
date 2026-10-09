@@ -122,6 +122,8 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   doCheck = false;
 
   passthru = {
+    # bulk updater uses wrong tag
+    skipBulkUpdate = true;
     tests = {
       import-clean-env =
         runCommand "import-clean-env-cuda-core"
