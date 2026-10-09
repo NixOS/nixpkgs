@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyqwest";
-  version = "0.10.0";
+  version = "0.12.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -21,12 +21,12 @@ buildPythonPackage (finalAttrs: {
     owner = "curioswitch";
     repo = "pyqwest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1TngkJkiYYgPiit+jAzFVbBcHzoRCQyODHkVWLnW5dc=";
+    hash = "sha256-DEPiE69sUK0OHR8pIEZnk6AqnVhiB9CXO1UvgCyrOp4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ztlUPsqEJz1WB2pXuoUyyhmUWY6MoWI/gErgg+6Fkcg=";
+    hash = "sha256-z/+b1Xe77bGzg/X6ldmFTOlQGIIi1+y/A2N3qUibolE=";
   };
 
   # reqwest' http3 feature refuses to compile without these cfgs, which upstream
