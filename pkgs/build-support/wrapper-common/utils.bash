@@ -69,18 +69,19 @@ wrapperRun() {
 
 # Older LLVM tokenizers drop empty quoted arguments. Keep those invocations
 # as direct argv, including when an empty argument came from a wrapper hook.
-# An outer response file would also hide Clang's Windows-quoting selectors
-# from its initial scan, changing how nested response files are interpreted.
+# An outer response file would also hide native response-quoting selectors
+# from the initial scan. Decline separate forms without parsing their operands.
 canWriteResponseFile() {
     local arg
     for arg in "$@"; do
         case "$arg" in
-            ""|--rsp-quoting=windows|--driver-mode=cl) return 1 ;;
+            ""|--rsp-quoting=*|-rsp-quoting=*|--rsp-quoting|-rsp-quoting|--driver-mode=cl) return 1 ;;
         esac
     done
 }
 
 # GNU response-file syntax, shared by GCC, Clang and GNU-compatible linkers.
+# Prepared raw overrides must support this grammar when response files are used.
 # Bash %q instead emits shell-only $'...' syntax for tabs and newlines.
 writeResponseFile() {
     local arg
