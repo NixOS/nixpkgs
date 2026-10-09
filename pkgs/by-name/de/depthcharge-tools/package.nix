@@ -15,13 +15,13 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "depthcharge-tools";
-  version = "0.7.0";
+  version = "0.7.1";
   src = fetchFromGitLab {
     domain = "gitlab.postmarketos.org";
     owner = "postmarketOS";
     repo = "depthcharge-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SaTJjbIoSxNCOY2/177qexLYLVMdEkqLrD3aWvsmTaM=";
+    hash = "sha256-kwtl/hUZ57quVQRSHLWHCzSuUmhH/uOfoGkcvqvF8rQ=";
   };
 
   pyproject = true;

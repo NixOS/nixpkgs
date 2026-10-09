@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "drawio";
-  version = "31.4.5";
+  version = "31.7.0";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+AP9+kZCVIkg7WdokuMKbg8kOm4A4x3wruVi3nOxhh0=";
+    hash = "sha256-NVlG3ryjS/xoz76TI6b92j/Xclbo9Kce1rOVDv25aX8=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = fetchNpmDeps {
     src = finalAttrs.src;
-    hash = "sha256-Qgzrh7CAPq5irrVUxAJ9635cajHS8Wr8rzWZGwy4wUw=";
+    hash = "sha256-toGjhKYJt9X6xgncEGx6wco5WJh5tUwATNVLsXI3MVs=";
   };
 
   nativeBuildInputs = [
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Desktop version of draw.io for creating diagrams";
     homepage = "https://about.draw.io/";
-    license = lib.licenses.asl20;
+    license = lib.licenses.gpl3Only;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ darkonion0 ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;

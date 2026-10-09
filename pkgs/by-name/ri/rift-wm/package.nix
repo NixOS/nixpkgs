@@ -8,24 +8,24 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rift-wm";
-  version = "0.5.5";
+  version = "0.6.7";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "acsandmann";
     repo = "rift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UQodikmxw6AexlPNkBjXSADX13/wRVExml387AxQp18=";
+    hash = "sha256-LKtoNs76hY66h8cTrZa9yDgyvGMT0lhjOf1ChqrKq60=";
   };
 
   nativeBuildInputs = [
     apple-sdk
   ];
 
-  cargoHash = "sha256-wxymypJjczFqI9oivnVX/TOnR1KuupsaryQIQQVN7Gs=";
+  cargoHash = "sha256-eVJCwA4C8F5UR5grBWMwdekuBrRdyAABUaYJxNBt6t0=";
   checkFlags = [
-    # runs into: topology invalidation must resend the hidden-window frame write instead of treating the stale target as still pending: [GetVisibleWindows]
-    "--skip=actor::reactor::tests::topology_change_clears_stale_pending_hide_target_before_next_workspace_layout"
+    # runs into: a transient empty active-space WS-id result after wake must not blank windows we already know belong to the active space
+    "--skip=actor::reactor::tests::empty_active_space_membership_during_wake_race_does_not_blank_known_active_windows"
   ];
 
   passthru.updateScript = nix-update-script { };
