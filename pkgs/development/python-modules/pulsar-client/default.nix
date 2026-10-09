@@ -84,7 +84,7 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "test"
   ];
