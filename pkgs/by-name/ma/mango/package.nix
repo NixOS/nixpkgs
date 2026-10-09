@@ -27,13 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
   pname = "mango";
-  version = "0.17.5";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "mangowm";
     repo = "mango";
     tag = finalAttrs.version;
-    hash = "sha256-azXPZ57eVc5ZpUTjc4ZZwDRb5ZnZ4DQsPmzUS3YHXtk=";
+    hash = "sha256-gRe1QxNkNZ0mriIuQqS5RDCnuXNroHcNY0fJiLwGVmc=";
   };
 
   nativeBuildInputs = [
