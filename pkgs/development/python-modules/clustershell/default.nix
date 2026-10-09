@@ -14,14 +14,14 @@
   bash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clustershell";
   version = "1.10.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ClusterShell";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-snrwuqnRsQrGonKXALA+WieWyDjLtqrxkCaYImq56oo=";
   };
 
@@ -62,10 +62,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ClusterShell" ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "tests"
     "-p"
-    "'*Test.py'"
+    "*Test.py"
   ];
 
   # Many tests want to open network connections
@@ -94,4 +94,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21;
     maintainers = [ lib.maintainers.alexvorobiev ];
   };
-}
+})
