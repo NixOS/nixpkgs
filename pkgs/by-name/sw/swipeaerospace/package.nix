@@ -99,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
       "$out/Applications/SwipeAeroSpace.app"
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Switch AeroSpace workspaces by swiping";
     homepage = "https://github.com/MediosZ/SwipeAeroSpace";
