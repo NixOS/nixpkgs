@@ -16,6 +16,10 @@ least specific (the system profile)"
     (when (file-exists-p default-directory)
       (setq load-path (cons default-directory load-path))
       (normal-top-level-add-subdirs-to-load-path))))
+;; The default/standard value of `package-directory-list' depends on `load-path'.
+;; So we re-compute `package-directory-list' after modifying `load-path'.
+;; See Emacs bug https://debbugs.gnu.org/cgi/bugreport.cgi?bug=81982.
+(custom-reevaluate-setting 'package-directory-list)
 
 ;;; Set up native-comp load path.
 (when (featurep 'native-compile)
