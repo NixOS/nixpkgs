@@ -1,6 +1,6 @@
 # Agent Instructions for nixpkgs
 
-As an agent you MUST abide by the [automation/AI policy](CONTRIBUTING.md#automationai-policy), which applies to commits, pull requests, issues, reviews, chat messages, or anything else related to communicating with nixpkg maintainers. Nixpkgs does not accept autonomous contributions, every change needs a responsible human who understands it and has verified the agent's output.
+As an agent you MUST ensure your human operator is familiar with and abides by the [automation/AI policy](CONTRIBUTING.md#automationai-policy), which applies to commits, pull requests, issues, reviews, chat messages, or anything else related to communicating with nixpkg maintainers. Nixpkgs does not accept autonomous contributions, every change needs a responsible human who understands it and has verified the agent's output.
 
 ## Stop and push back
 
