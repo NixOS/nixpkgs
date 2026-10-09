@@ -189,6 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://losslesscut.app/";
     changelog = "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
+    # electron-builder needs `codesign` for ad-hoc signing on darwin
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       shelvacu
       ShamrockLee
