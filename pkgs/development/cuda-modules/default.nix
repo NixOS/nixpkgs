@@ -27,6 +27,11 @@ let
   majorName = mkVersionedName "cudaPackages" cudaMajorVersion;
   minorName = mkVersionedName "cudaPackages" cudaMajorMinorVersion;
 
+  # Compare with this role's canonical data: ordinary manifests may differ
+  # between BUILD and HOST. A custom HOST request may equal BUILD's defaults,
+  # so detect it here before selecting the shared BUILD cache.
+  customManifests = manifests != pkgs.pkgsHostTarget.${minorName}.manifests;
+
   # Make this CUDA release the default for transitive dependencies too.
   # See `Using cudaPackages.pkgs` in the manual for the coherence contract.
   pkgs' =
@@ -36,7 +41,8 @@ let
         # A stage overlay can rename the named scope as well as its aliases.
         packages.${minorName}.cudaMajorMinorVersion == cudaMajorMinorVersion
         && packages.${minorName}.manifests == packages.${majorName}.manifests
-        && packages.${minorName}.manifests == packages.cudaPackages.manifests;
+        && packages.${minorName}.manifests == packages.cudaPackages.manifests
+        && (!customManifests || packages.${minorName}.manifests == manifests);
       # Manifests are data, but ordinary attribute sets are recursively spliced.
       # Compare each unspliced role explicitly: comparing merged manifests can
       # mistake foreign component keys for differences in the selected release.
@@ -52,7 +58,9 @@ let
       pkgs
     else
       let
-        stage = pkgs.__stage.select pkgs.pkgsBuildBuild.${minorName}._pkgsVariant.pkgs;
+        stage = pkgs.__stage.select (
+          if customManifests then _pkgsVariant.pkgs else pkgs.pkgsBuildBuild.${minorName}._pkgsVariant.pkgs
+        );
       in
       assert lib.assertMsg (hasDefaultRelease stage) ''
         ${minorName}.pkgs: the CUDA aliases do not select ${minorName} consistently after extending Nixpkgs.
@@ -61,17 +69,21 @@ let
       '';
       stage;
 
-  # Share one version-rebound graph across requesting dependency roles and
-  # local scope overrides; the cache does not depend on their fixed points.
+  # Ordinary named releases share the BUILD/BUILD cache. A custom manifest
+  # constructor owns one graph, shared by its role views and scope overrides.
   # Extend the original import so stage-specific overlays retain their placement.
   _pkgsVariant = {
     # Inspecting this internal cache must not instantiate its graph.
     recurseForDerivations = false;
     pkgs = pkgs.__stage.extendGraph (
-      final: _: {
+      final: prev:
+      {
         recurseForDerivations = false;
         ${majorName} = final.${minorName};
         cudaPackages = final.${majorName};
+      }
+      // lib.optionalAttrs customManifests {
+        ${minorName} = prev.${minorName}.override { inherit manifests; };
       }
     );
   };
