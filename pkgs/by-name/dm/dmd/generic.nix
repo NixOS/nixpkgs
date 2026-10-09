@@ -235,8 +235,5 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "i686-linux"
     ];
-    # ld: section __DATA/__thread_bss has type zero-fill but non-zero file offset file '/private/tmp/nix-build-dmd-2.109.1.drv-0/.rdmd-301/rdmd-build.d-A1CF043A7D87C5E88A58F3C0EF5A0DF7/objs/build.o' for architecture x86_64
-    # clang-16: error: linker command failed with exit code 1 (use -v to see invocation)
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

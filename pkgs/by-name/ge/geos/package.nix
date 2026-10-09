@@ -23,11 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # https://github.com/libgeos/geos/issues/930
-  cmakeFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;unit-geom-Envelope"
-  ];
-
   doCheck = true;
 
   passthru.tests = {

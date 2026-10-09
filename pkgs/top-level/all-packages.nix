@@ -3553,12 +3553,7 @@ with pkgs;
 
   stack =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.stack;
 
   hlint = haskell.lib.compose.justStaticExecutables haskellPackages.hlint;
@@ -4975,12 +4970,7 @@ with pkgs;
 
   haskell-ci =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.haskell-ci;
 
   nexusmods-app-unfree = nexusmods-app.override {
@@ -5081,12 +5071,7 @@ with pkgs;
 
   shake =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.shake;
 
   shellcheck = callPackage ../development/tools/shellcheck {
@@ -5923,12 +5908,7 @@ with pkgs;
 
   matterhorn =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.matterhorn;
 
   inherit
@@ -8359,12 +8339,7 @@ with pkgs;
   hledger-ui = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-ui;
   hledger-web =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
@@ -9310,12 +9285,7 @@ with pkgs;
 
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
-    (
-      if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-        lib.id
-      else
-        haskell.lib.compose.justStaticExecutables
-    )
+    (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables)
       haskellPackages.bench;
 
   ### GAMES
@@ -10175,7 +10145,7 @@ with pkgs;
   nix-serve-ng =
     # FIXME: manually eliminate incorrect references on aarch64-darwin,
     # see https://github.com/NixOS/nixpkgs/issues/318013
-    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
+    if stdenv.hostPlatform.isDarwin then
       haskellPackages.nix-serve-ng
     else
       haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;

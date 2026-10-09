@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   # tests fail for unknown reasons on aarch64-darwin
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Example-based texture synthesis written in Rust";
