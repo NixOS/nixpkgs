@@ -161,6 +161,15 @@ Set this variable before running related tests.")
             (with-packages-eval-in-sub-emacs '(concat invocation-directory invocation-name)
                                              with-packages-unwrapped-emacs-program)))))
 
+(ert-deftest with-packages-c-source-is-available ()
+  :tags '(:shared-with-unwrapped)
+  (let ((function-to-find 'eval))
+    (ert-info ("this function is written in C")
+      (should (subr-primitive-p (symbol-function function-to-find))))
+    (ert-info ("C source code of this function can be found")
+      (should find-function-C-source-directory)
+      (should (cdr (find-function-noselect function-to-find))))))
+
 ;;;; Utils for non-batch tests
 
 (defmacro define-with-packages-non-batch-test-via-bound-and-true-p (test-name)
