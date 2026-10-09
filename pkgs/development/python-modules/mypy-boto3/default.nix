@@ -722,8 +722,8 @@ in
       "sha256-nRuz6nALSuBYT+OsbwaktaXj4g7zX6l3YopEKtwH1vo=";
 
   mypy-boto3-keyspaces =
-    buildMypyBoto3Package "keyspaces" "1.43.0"
-      "sha256-f36IwT8zw4RvLqbZgGas6euLVdKR5gJJl7eLBF8PjaE=";
+    buildMypyBoto3Package "keyspaces" "1.43.110"
+      "sha256-X/1VIwIRo/kTs6dU79xG/+P8mcnfJUjBAXYEzPsI2QY=";
 
   mypy-boto3-kinesis =
     buildMypyBoto3Package "kinesis" "1.43.101"
