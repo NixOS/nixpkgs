@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   autoconf,
   automake,
   darwin,
@@ -33,6 +34,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-AC1LS6PfieP8IjGhoIwm0WcLNIsUgULyP7V4HuvSqbg=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isi686 [
+    # test: fix i386 sizeof and platform_output
+    # https://github.com/libuv/libuv/pull/5318
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/ae6475b807818a35d88ff09ad0a949489415d222.patch";
+      excludes = [ ".github/*" ];
+      hash = "sha256-4x6dwmx6cdRqLIWyak4C1X425DqorTP7RLRz526/iMk=";
+    })
+  ];
 
   outputs = [
     "out"
