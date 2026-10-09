@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo # for makeinfo
   ];
 
+  strictDeps = true;
+
   separateDebugInfo = true;
 
   # The code won't compile in c23 mode.
@@ -72,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
     git = git.tests.withInstallCheck;
     initrd = nixosTests.systemd-initrd-simple;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/cpio/";
