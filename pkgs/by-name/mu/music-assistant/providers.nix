@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.10.5";
+  version = "2.11.0b4";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -106,26 +106,26 @@
       ps: with ps; [
         fastmcp
       ];
+    feiniu_music = ps: [
+    ];
     filesystem_google_drive =
       ps: with ps; [
         python-google-drive-api
       ];
     filesystem_local = ps: [
     ];
-    filesystem_nfs = ps: [
-    ];
     filesystem_onedrive =
       ps: with ps; [
         onedrive-personal-sdk
       ];
-    filesystem_smb = ps: [
-    ];
     fully_kiosk =
       ps: with ps; [
         python-fullykiosk
       ];
     genius_lyrics = ps: [
     ]; # missing lyricsgenius
+    global_player = ps: [
+    ];
     gpodder = ps: [
     ];
     hass =
@@ -142,6 +142,8 @@
     ]; # missing hue-entertainment
     ibroadcast = ps: [
     ]; # missing ibroadcastaio
+    iheartradio = ps: [
+    ];
     internet_archive = ps: [
     ];
     itunes_artwork = ps: [
@@ -213,8 +215,10 @@
       ];
     orf_radiothek = ps: [
     ];
-    overcast = ps: [
-    ];
+    overcast =
+      ps: with ps; [
+        segno
+      ];
     pandora = ps: [
     ];
     party = ps: [
@@ -256,6 +260,8 @@
     ];
     rain_mood = ps: [
     ];
+    raumfeld = ps: [
+    ]; # missing hassfeld
     recommendations = ps: [
     ];
     roku_media_assistant =
@@ -278,7 +284,7 @@
         soxr
       ];
     siriusxm = ps: [
-    ]; # missing sxm
+    ]; # missing aiosxm
     smart_fades =
       ps: with ps; [
         beat-this
@@ -360,6 +366,8 @@
       ps: with ps; [
         aiovban
       ];
+    vrt_max = ps: [
+    ];
     webdav = ps: [
     ];
     wiim =
@@ -383,6 +391,11 @@
       ps: with ps; [
         segno
       ]; # missing ya-passport-auth
+    yoto =
+      ps: with ps; [
+        pkce
+        yoto-api
+      ];
     yousee = ps: [
     ];
     ytmusic =

@@ -21,10 +21,10 @@ let
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
       music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.205";
+        version = "1.1.216";
 
         src = oldAttrs.src.override {
-          hash = "sha256-4pUBsUrH4mzsOvjOMHwEkfnhMfLweb+JK/v4mAimA+0=";
+          hash = "sha256-J6eWYzhCMT+JXtVJ8qMllCI0+OlU6c+UclT5cJc/doc=";
         };
       });
     }
@@ -78,7 +78,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.5";
+  version = "2.11.0b4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-zTXe3v3TqQ1NyzuUm1g3xTUGK/BJPRUjIxrIWolfET0=";
+    hash = "sha256-GgC1TmU9SaefvwD8+ahNPhU+oo0J7obPtKt7ym4OR2c=";
   };
 
   patches = [
@@ -159,7 +159,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "aiosqlite"
     "cryptography"
-    "torch"
+    "zeroconf"
   ];
 
   pythonRemoveDeps = [
@@ -185,6 +185,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       chardet
       colorlog
       cryptography
+      defusedxml
       getmac
       gql
       ifaddr
@@ -238,6 +239,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     ++ (lib.concatMap (provider: providerPackages.${provider} pythonPackages) [
       "acoustid_lookup"
       "airplay"
+      "alexa"
       "apple_music"
       "audible"
       "audiobookshelf"
@@ -250,6 +252,8 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "fully_kiosk"
       "heos"
       "jellyfin"
+      "lastfm_scrobble"
+      "listenbrainz_scrobble"
       "local_audio"
       "mpd"
       "msx_bridge"
@@ -257,6 +261,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "plex"
       "plex_connect"
       "profiler"
+      "roku_media_assistant"
       "sendspin"
       "sendspin"
       "smart_fades"
@@ -271,6 +276,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "tidal"
       "vban_receiver"
       "wiim"
+      "yoto"
       "ytmusic"
     ]);
 
@@ -285,24 +291,28 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     # provider is missing dependencies
     "tests/providers/amplipi"
-    "tests/providers/bandcamp"
     "tests/providers/bbc_sounds"
     "tests/providers/deezer"
+    "tests/providers/genius_lyrics"
     "tests/providers/hue_entertainment"
     "tests/providers/ibroadcast"
     "tests/providers/kion_music"
     "tests/providers/nicovideo"
     "tests/providers/qqmusic"
+    "tests/providers/raumfeld"
     "tests/providers/siriusxm"
-    "tests/providers/stream_limits"
     "tests/providers/yandex_music"
     "tests/providers/yandex_smarthome"
     "tests/providers/yandex_station"
     "tests/providers/yandex_ynison"
     "tests/providers/zvuk_music"
+    # dependency is unfree
+    "tests/providers/bandcamp"
     # hue_entertainment is not packaged
     "tests/controllers/config/test_setup_flows.py::test_hue_pairing_flow_retry_then_success"
-    # Our patches break this test
+    # sounds is not packaged
+    "tests/providers/stream_limits/test_stream_limits.py"
+    # Our patches break those tests
     "tests/helpers/test_util.py::TestLoadProviderModule"
     "tests/providers/airplay/test_helpers.py::test_get_cli_binary_uses_release_asset_name"
     "tests/providers/ytmusic/test_ytmusic.py::test_init_unreachable_po_token_server_is_a_retried_setup_failure"
@@ -310,13 +320,11 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/scripts/test_release_workflow.py"
     # save compute
     "tests/benchmarks/test_bench_helpers.py"
-    # timing sensitive
-    "tests/controllers/music/test_music_migrations.py::test_migrate_database_backfills_external_id_lookup"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # RuntimeError: failed to initialize QNNPACK
-    # TODO: revisit with 2.11.0
-    "tests/providers/smart_fades/test_provider.py"
+    # Timing sensitive
+    "tests/controllers/music/test_recommendations.py::test_library_row_items_thread_providers_into_underlying_query"
+    "tests/controllers/streams/test_audio_buffer.py::test_seekable_no_eviction_after_eof"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

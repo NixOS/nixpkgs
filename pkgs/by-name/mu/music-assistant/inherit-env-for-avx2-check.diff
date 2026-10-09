@@ -1,5 +1,5 @@
 diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
-index cff01821a..5e0aa0957 100644
+index a9d40851c..8c3b9cf0c 100644
 --- a/music_assistant/helpers/util.py
 +++ b/music_assistant/helpers/util.py
 @@ -480,6 +480,7 @@ async def _run_ml_inference_probe() -> int | None:
