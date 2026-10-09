@@ -1,9 +1,9 @@
 {
   actool,
-  darwin,
   fetchFromGitHub,
   fetchSwiftPMDeps,
   lib,
+  rcodesign,
   stdenv,
   swift,
   swiftpm,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     swift
     swiftpm
     actool
-    darwin.autoSignDarwinBinariesHook
+    rcodesign
   ];
 
   postPatch = ''
@@ -90,6 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
       SwipeAeroSpace/Assets.xcassets
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    rcodesign sign \
+      --code-signature-flags runtime \
+      --entitlements-xml-file ${finalAttrs.src}/SwipeAeroSpace/SwipeAeroSpace.entitlements \
+      "$out/Applications/SwipeAeroSpace.app"
   '';
 
   meta = {
