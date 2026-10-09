@@ -6,25 +6,26 @@
   ninja,
   pkg-config,
   mbedtls,
+  python3,
+  alsa-lib,
   udev,
   linuxPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libajantv2";
-  version = "17.5.0";
+  version = "18.0.0";
 
   src = fetchFromGitHub {
     owner = "aja-video";
     repo = "libajantv2";
     rev = "ntv2_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-/BfFbBScS75TpUZEeYzAHd1PtnZgnCNfGtjwYPJJjkg=";
+    hash = "sha256-SdS2cV/jqSn1OMbRlvtQesXkV4ZAL5n1BIFl43p4WKQ=";
   };
   patches = [
     ./use-system-mbedtls.patch
     ./device-info-list.patch
     ./musl.patch
-    ./demos-ntv2overlay-no-makefile.patch
   ];
 
   outputs = [
@@ -40,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     mbedtls
     udev
+    python3
+    alsa-lib
   ];
 
   cmakeFlags = [
