@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
         # glibc but 255 on musl, and musl's pthread types differ in size
         # from glibc's on some architectures (e.g. aarch64).
         # On 32-bit we also still use 32-bit time/offset.
+        # FIXME(time32)
         "sizeof"
       ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
