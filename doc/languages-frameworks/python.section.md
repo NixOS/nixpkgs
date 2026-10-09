@@ -1647,6 +1647,33 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 : Additional flags to append to the `python3 -m unittest` command.
 
+With `unittest discover`:
+
+`unittestStartDir` (string)
+
+: Directory to start test discovery.
+
+  The value will pass via `--start-directory` if specified non-empty, or `unittest` falls back to the current working directory (`.`).
+
+`unittestFilePattern` (string)
+
+: Glob pattern to match test files.
+
+  The value will pass via `--pattern` if specified non-empty, or `unittest` falls back to `test*.py`.
+
+`unittestTopDir` (string)
+
+: Top-level directory of the package to be tested.
+
+  The value will pass via `--top-level-directory` if specified non-empty.
+
+`enabledTests` (`null` or list of strings, default to `null`)
+
+: White-listed test name patterns (sub-strings or globs)
+  Each specified pattern is passed via the `-k` flag.
+
+  The default value `null` opts out the white-listing.
+
 Without `unittest discover`:
 
 `enabledTestPaths` (non-empty list of strings, required)
