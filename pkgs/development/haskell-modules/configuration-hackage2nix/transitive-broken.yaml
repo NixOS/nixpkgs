@@ -3133,7 +3133,6 @@ dont-distribute-packages:
  - servant-client-namedargs
  - servant-csharp
  - servant-db-postgresql
- - servant-ede
  - servant-examples
  - servant-js
  - servant-matrix-param
@@ -3325,7 +3324,6 @@ dont-distribute-packages:
  - sql-simple-pool
  - sql-simple-postgresql
  - sql-simple-sqlite
- - sqlc-hs
  - sqlcli-odbc
  - sqlite-simple-interpolate
  - sqlite-simple-typed
