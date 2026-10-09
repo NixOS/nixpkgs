@@ -74,7 +74,7 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
-  unittestFlagsArray = [ "-v" ];
+  unittestFlags = [ "-v" ];
 
   meta = {
     changelog = "https://github.com/Yelp/mrjob/blob/v${version}/CHANGES.txt";
