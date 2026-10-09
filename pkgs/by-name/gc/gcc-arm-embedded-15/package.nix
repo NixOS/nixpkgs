@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gcc-arm-embedded";
-  version = "15.3.rel1";
+  version = "15.3.rel2";
 
   src = fetchurl {
     url = "https://gitlab.arm.com/api/v4/projects/tooling%2Fgnu-toolchains-for-arm/packages/generic/gnu-toolchain/${finalAttrs.version}/arm-gnu-toolchain-${finalAttrs.version}-${platform}-arm-none-eabi.tar.xz";
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         aarch64-darwin = "376808a59ca209c1413236f1c6a509e33da4b29857ab28642b9927cf3048af55";
         aarch64-linux = "06979e0c8171de58e5dc2a2b2019330a290f30930f27728af98a83e1a7369b3a";
-        x86_64-linux = "563bebb2b97d53382b956d6ee1fe61e2cae26699901417234a37df505ef9b5fa";
+        x86_64-linux = "sha256-BmKy8B4M2LlR/REJEdM5w1sFmYxooSs1MLu7S/bHh04=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
