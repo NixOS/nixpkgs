@@ -89,6 +89,13 @@ optionals noSysDirs (
 ++ optional atLeast14 ../common/native-default-includes.patch
 # Preserve literal newlines when GCC and collect2 exchange response files.
 ++ [ ../common/libiberty-writeargv-newlines.patch ]
+# Interpret private invocation frames only on supported compiler hosts.
+++ optionals hostPlatform.isUnix (
+  optional atLeast14 ../common/libiberty-primary-query.patch
+  ++ optional atLeast14 ../common/native-primary-query.patch
+  ++ optional atLeast15 ./15/native-primary-query-effects.patch
+  ++ optional (lib.versionAtLeast version "16") ./16/native-primary-query-diagnostic-log.patch
+)
 # Cross-built libstdc++ uses the existing BUILD-to-TARGET compiler, which must
 # not supply its own C++ headers while compiling the new library.
 ++ optional (majorVersion == "16" && !buildIsHost) ./16/cxx23-nostdincxx.patch

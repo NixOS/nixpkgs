@@ -1,0 +1,76 @@
+From b33c1f8825c56ddac29b0f7108e8146471515cde Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 17:40:26 -0700
+Subject: [PATCH] libiberty: expose response-origin and explicit
+ scratch-directory operations
+
+Let native compiler queries preserve response argument origins through the
+existing parser and select owned scratch storage without changing TMPDIR.
+Keep this archive interface shared by monolithic and split GCC packages.
+---
+ include/libiberty.h        |  9 +++++++++
+ libiberty/argv.c           |  9 +++++++++
+ libiberty/make-temp-file.c | 13 +++++++++++++
+ 3 files changed, 31 insertions(+)
+
+diff --git a/include/libiberty.h b/include/libiberty.h
+index d4e8791..8ec1c6e 100644
+--- a/include/libiberty.h
++++ b/include/libiberty.h
+@@ -88,2 +88,8 @@ extern void expandargv (int *, char ***);
+ 
++/* As expandargv, notifying CALLBACK when one argument at INDEX is replaced
++   by COUNT arguments.  This preserves caller-owned origin metadata without
++   duplicating response parsing or resetting the expansion budget.  */
++extern void expandargv_with_callback (int *, char ***,
++                                     void (*) (void *, int, size_t), void *);
++
+ /* Write argv to an @-file, inserting necessary quoting.  */
+@@ -263,2 +269,5 @@ extern const char *choose_tmpdir (void) ATTRIBUTE_RETURNS_NONNULL;
+ 
++/* Select an explicit scratch directory before requesting temporary names.  */
++extern void set_tmpdir (const char *);
++
+ /* Choose a temporary directory to use for scratch files.  */
+diff --git a/libiberty/argv.c b/libiberty/argv.c
+index c64db28..a1bebd5 100644
+--- a/libiberty/argv.c
++++ b/libiberty/argv.c
+@@ -359,2 +359,9 @@ void
+ expandargv (int *argcp, char ***argvp)
++{
++  expandargv_with_callback (argcp, argvp, NULL, NULL);
++}
++
++void
++expandargv_with_callback (int *argcp, char ***argvp,
++                          void (*callback) (void *, int, size_t), void *data)
+ {
+@@ -444,2 +451,4 @@ expandargv (int *argcp, char ***argvp)
+ 	++file_argc;
++      if (callback)
++        callback (data, i, file_argc);
+       /* Free the original option's memory.  */
+diff --git a/libiberty/make-temp-file.c b/libiberty/make-temp-file.c
+index 01aa8cc..da311b5 100644
+--- a/libiberty/make-temp-file.c
++++ b/libiberty/make-temp-file.c
+@@ -105,2 +105,15 @@ static char *memoized_tmpdir;
+ 
++/* Select explicit scratch storage without changing the process environment.
++   Callers validate and own DIRECTORY and call this before using temporary
++   names or retaining the result of choose_tmpdir.  */
++void
++set_tmpdir (const char *directory)
++{
++  const char separator[] = { DIR_SEPARATOR, 0 };
++  char *tmpdir = concat (directory, separator, NULL);
++  free (memoized_tmpdir);
++  memoized_tmpdir = tmpdir;
++}
++
++
+ /*
+-- 
+2.43.0
+

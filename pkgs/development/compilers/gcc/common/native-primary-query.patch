@@ -1,0 +1,473 @@
+From 7db3fe26495a9839820c3d29b6d44f0c09eb9267 Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 19:14:45 -0700
+Subject: [PATCH] gcc: interpret native invocation frames before conditional
+ policy
+
+Parse raw argument groups once per command, returning only primary operation
+observations for queries. Execute final frames through the native response
+and option decoders, filtering only caller-owned parsed path and machine
+options. Empty optional allow-prefix values grant no path authority.
+
+Keep opaque support-file eligibility separate from automatic native runtime
+libraries: use native spec predicates for the existing invocation-wide
+nostdinc, nostdinc++ and nostdlib compatibility guards.
+
+Preserve the existing option-decoder ABI and defer query subprocess/output
+effects. Requires the shared libiberty response-origin and scratch API.
+The private interface is process-only and supported on Unix hosts.
+---
+ gcc/cp/g++spec.cc  |   5 +
+ gcc/gcc.cc         | 322 ++++++++++++++++++++++++++++++++++++++++++++-
+ gcc/gcc.h          |   2 +
+ gcc/opts-common.cc |  24 +++-
+ gcc/opts.h         |   8 ++
+ 5 files changed, 352 insertions(+), 9 deletions(-)
+
+diff --git a/gcc/cp/g++spec.cc b/gcc/cp/g++spec.cc
+index 165a91d..6e9bd91 100644
+--- a/gcc/cp/g++spec.cc
++++ b/gcc/cp/g++spec.cc
+@@ -24,2 +24,7 @@ along with GCC; see the file COPYING3.  If not see
+ #include "opts.h"
++#include "opt-suggestions.h"
++#include "gcc.h"
++
++static const bool registered_cxx_entry ATTRIBUTE_UNUSED
++  = driver_register_cxx_entry ();
+ 
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index 4fd87f2..04ace90 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -246,2 +246,226 @@ static int verbose_only_flag;
+ 
++/* Query the primary request with the native driver.
++   The caller supplies inherited FDs and an owned temporary directory.
++   Caller environment values remain visible to specs without modification.
++   Spec reads are retained; subprocesses and caller output effects are not.
++   This is a requested plan, not a prediction of generated-file-dependent
++   user specs.  No option grammar or standard link predicate is copied.  */
++static int primary_operation_fd = -1;
++static bool primary_link_requested;
++static bool primary_c_include;
++static bool primary_cxx_include;
++static bool primary_cxx_driver;
++static bool primary_cxx_library;
++
++/* This is a property of the linked language entry, not argv spelling.
++   Zero initialization precedes the language object's registration, which
++   depends on no other dynamically initialized state.  This identity survives
++   driver::finalize.  The private query is one per raw compiler process,
++   not an in-process request API.  */
++bool
++driver_register_cxx_entry ()
++{
++  primary_cxx_driver = true;
++  return true;
++}
++
++/* Each command interprets its raw frame once.  Query observations contain no
++   argv replay; a later execution observes its own response files and hooks.  */
++static bool primary_frame;
++static bool primary_purity;
++static bool primary_no_native;
++static const char *primary_sdk_prefix;
++static vec<const char *> primary_allowed_prefixes;
++static vec<unsigned char> primary_origins;
++
++static bool
++primary_decimal (const char *text, unsigned int *value)
++{
++  if (!*text)
++    return false;
++  unsigned int result = 0;
++  for (; *text; ++text)
++    {
++      if (*text < '0' || *text > '9'
++          || result > (INT_MAX - (unsigned int) (*text - '0')) / 10)
++        return false;
++      result = result * 10 + (*text - '0');
++    }
++  *value = result;
++  return true;
++}
++
++static bool
++read_primary_arguments (int fd, int *argc, char ***argv)
++{
++  std::string input;
++  char buffer[4096];
++  for (;;)
++    {
++      ssize_t size = read (fd, buffer, sizeof buffer);
++      if (size < 0 && errno == EINTR)
++        continue;
++      if (size < 0)
++        {
++          close (fd);
++          return false;
++        }
++      if (size == 0)
++        break;
++      input.append (buffer, size);
++    }
++  if (close (fd) != 0 || input.empty () || input.back () != '\0')
++    return false;
++  char *storage = XNEWVEC (char, input.size ());
++  memcpy (storage, input.data (), input.size ());
++  auto_vec<char *> tokens;
++  for (size_t offset = 0; offset < input.size ();)
++    {
++      tokens.safe_push (storage + offset);
++      offset += strlen (storage + offset) + 1;
++    }
++  if (tokens.length () < 11 || strcmp (tokens[0], "nix-primary-v3")
++      || (strcmp (tokens[1], "0") && strcmp (tokens[1], "1"))
++      || (strcmp (tokens[2], "0") && strcmp (tokens[2], "1"))
++      || *tokens[4])
++    return false;
++  primary_purity = !strcmp (tokens[1], "1");
++  primary_no_native = !strcmp (tokens[2], "1");
++  primary_sdk_prefix = tokens[3];
++  unsigned int counts[6];
++  size_t total = 0;
++  for (unsigned int i = 0; i < 6; ++i)
++    {
++      if (!primary_decimal (tokens[i + 5], &counts[i])
++          || counts[i] >= (size_t) INT_MAX - total)
++        return false;
++      total += counts[i];
++    }
++  /* Target-default components belong to the Clang constructor.  GCC has
++     a configured target and accepts no such component in this interface.  */
++  if (total != tokens.length () - 11 || counts[4])
++    return false;
++  char **combined = XNEWVEC (char *, total + 2);
++  unsigned int length = 0;
++  combined[length++] = (*argv)[0];
++  primary_origins.safe_push (false);
++  unsigned int token = 11;
++  for (unsigned int i = 0; i < 4; ++i)
++    for (unsigned int j = 0; j < counts[i]; ++j, ++token)
++      if (i != 3 || primary_operation_fd < 0 || primary_cxx_driver)
++        {
++          combined[length++] = tokens[token];
++          primary_origins.safe_push (i == 1);
++        }
++  for (unsigned int i = 0; i < counts[5]; ++i)
++    {
++      if (*tokens[token + i])
++        primary_allowed_prefixes.safe_push (tokens[token + i]);
++    }
++  combined[length] = NULL;
++  *argv = combined;
++  *argc = length;
++  return true;
++}
++
++/* Follow replacements in the existing response parser, including nested
++   files and empty expansions, with its one native expansion budget.  */
++static void
++replace_primary_origin (void *, int index, size_t count)
++{
++  unsigned int length = primary_origins.length ();
++  unsigned char origin = primary_origins[index];
++  if (count == 0)
++    {
++      primary_origins.ordered_remove (index);
++      return;
++    }
++  if (count > (size_t) INT_MAX - length + 1)
++    xexit (1);
++  primary_origins.safe_grow (length + count - 1);
++  memmove (primary_origins.address () + index + count,
++           primary_origins.address () + index + 1,
++           (length - index - 1) * sizeof (origin));
++  for (size_t i = 0; i < count; ++i)
++    primary_origins[index + i] = origin;
++}
++
++/* Decode owns option arity and aliasing.  Only the origin of the option
++   token selects caller policy; operands are never scanned as options.  */
++static bool
++keep_primary_option (void *, unsigned int start, unsigned int count,
++                     const cl_decoded_option *option)
++{
++  gcc_assert (start + count <= primary_origins.length ());
++  if (!primary_origins[start] || (option->errors & ~CL_ERR_WRONG_LANG)
++      || option->opt_index >= cl_options_count
++      || cl_options[option->opt_index].cl_reject_driver)
++    return true;
++
++  if (primary_no_native && option->arg
++      && !strcmp (option->arg, "native")
++      && cl_options[option->opt_index].opt_text[1] == 'm')
++    {
++      fprintf (stderr, "warning: Skipping impure flag %s because "
++               "NIX_ENFORCE_NO_NATIVE is set\n",
++               option->orig_option_with_args_text);
++      return false;
++    }
++
++  if (!primary_purity || !option->arg
++      || (option->opt_index != OPT_I && option->opt_index != OPT_L
++          && option->opt_index != OPT_isystem))
++    return true;
++  std::string path = option->arg;
++  if (!path.empty () && path[0] == '/' && *primary_sdk_prefix)
++    {
++      std::string sdk_path = primary_sdk_prefix;
++      sdk_path += '/';
++      sdk_path += path;
++      if (access (sdk_path.c_str (), F_OK) == 0)
++        path = sdk_path;
++    }
++  if (path.empty () || path[0] != '/' || path == "/dev/null")
++    return true;
++  for (unsigned int i = 0; i < primary_allowed_prefixes.length (); ++i)
++    if (startswith (path.c_str (), primary_allowed_prefixes[i]))
++      return true;
++  return false;
++}
++
++static void
++write_primary_token (const char *text)
++{
++  size_t size = strlen (text) + 1;
++  size_t offset = 0;
++  while (offset < size)
++    {
++      ssize_t written = write (primary_operation_fd, text + offset,
++                               size - offset);
++      if (written < 0 && errno == EINTR)
++        continue;
++      if (written <= 0)
++        _exit (1);
++      offset += written;
++    }
++}
++
++static void
++report_primary_operation ()
++{
++  if (primary_operation_fd < 0)
++    return;
++  char result[224];
++  snprintf (result, sizeof result,
++            "version=3\nentry=driver\nrequested_host_link=%d\nc_include=%d\ncxx_include=%d\n"
++            "cxx_personality=%d\ncxx_library=%d\n",
++            primary_link_requested, primary_c_include, primary_cxx_include,
++            primary_cxx_driver, primary_cxx_library);
++  write_primary_token ("nix-primary-v3");
++  write_primary_token (result);
++  if (close (primary_operation_fd) != 0)
++    _exit (1);
++  primary_operation_fd = -1;
++}
++
+ /* Flag indicating how to print command line options of sub-processes.  */
+@@ -2236,3 +2460,5 @@ static char *make_at_file (void)
+ 
+-  if (!save_temps_flag)
++  /* Preserve save-temps as an input to specs, but never write the query's
++     generated response file to a caller-chosen dumpbase or dumpdir.  */
++  if (primary_operation_fd >= 0 || !save_temps_flag)
+     return make_temp_file ("");
+@@ -2720,2 +2946,6 @@ delete_if_ordinary (const char *name)
+ {
++  /* The caller removes the query's private temporary directory.  A spec
++     may mark a pre-existing caller output for deletion: leave it intact.  */
++  if (primary_operation_fd >= 0)
++    return;
+   struct stat st;
+@@ -3272,2 +3502,8 @@ execute (void)
+ 
++  if (primary_operation_fd >= 0)
++    {
++      execution_count++;
++      return 0;
++    }
++
+   if (wrapper_string)
+@@ -4365,2 +4601,5 @@ driver_handle_option (struct gcc_options *opts,
+     case OPT_fdiagnostics_format_:
++      if (primary_operation_fd >= 0)
++        break;
++      else
+ 	{
+@@ -4567,2 +4806,7 @@ driver_handle_option (struct gcc_options *opts,
+     case OPT_time_:
++      if (primary_operation_fd >= 0)
++        {
++          do_save = false;
++          break;
++        }
+       if (report_times_to_file)
+@@ -8282,2 +8526,36 @@ driver::main (int argc, char **argv)
+ 
++  const char *result_fd = env.get ("NIX_CC_PRIMARY_QUERY_FD");
++  const char *args_fd = env.get ("NIX_CC_PRIMARY_ARGS_FD");
++  const char *tmpdir = env.get ("NIX_CC_PRIMARY_TMPDIR");
++  if (result_fd || args_fd || tmpdir)
++    {
++      unsigned int result = 0, input;
++      struct stat directory;
++      if (!args_fd || argc != 1
++          || !primary_decimal (args_fd, &input) || input < 3
++          || (result_fd
++              && (!primary_decimal (result_fd, &result) || result < 3
++                  || result == input || !tmpdir || !*tmpdir
++                  || stat (tmpdir, &directory) != 0
++                  || !S_ISDIR (directory.st_mode)
++                  || access (tmpdir, R_OK | W_OK | X_OK) != 0))
++          || (!result_fd && tmpdir))
++        return 1;
++      if (result_fd)
++        {
++          /* Query scratch is separate from spec-visible caller TMPDIR.
++             Ordinary frame execution retains native temporary selection.  */
++          set_tmpdir (tmpdir);
++          primary_operation_fd = result;
++        }
++      if (::unsetenv ("NIX_CC_PRIMARY_QUERY_FD") != 0
++          || ::unsetenv ("NIX_CC_PRIMARY_ARGS_FD") != 0
++          || ::unsetenv ("NIX_CC_PRIMARY_TMPDIR") != 0
++          || !read_primary_arguments (input, &argc, &argv))
++        return 1;
++      primary_frame = true;
++      if (result_fd)
++        atexit (report_primary_operation);
++    }
++
+   set_progname (argv[0]);
+@@ -8288,2 +8566,20 @@ driver::main (int argc, char **argv)
+   set_up_specs ();
++  if (primary_operation_fd >= 0)
++    {
++      /* Existing spec predicates inspect parsed, language-adjusted and
++         self-spec-adjusted switches; operands are not scanned as options.  */
++      if (do_spec_2 ("%{!nostdinc:c-include} "
++                     "%{!nostdinc:%{!nostdinc++:cxx-include}} "
++                     "%{!nostdlib:cxx-library}", NULL) < 0)
++        return get_exit_code ();
++      for (unsigned int i = 0; i < argbuf.length (); ++i)
++        {
++          if (!strcmp (argbuf[i], "c-include"))
++            primary_c_include = true;
++          else if (!strcmp (argbuf[i], "cxx-include"))
++            primary_cxx_include = true;
++          else if (!strcmp (argbuf[i], "cxx-library"))
++            primary_cxx_library = true;
++        }
++    }
+   putenv_COLLECT_AS_OPTIONS (assembler_options);
+@@ -8303,2 +8599,7 @@ driver::main (int argc, char **argv)
+ 
++  /* Help/version subcommands request information, not an output image.  */
++  if (primary_operation_fd >= 0
++      && (print_help_list || print_version || print_subprocess_help))
++    return 0;
++
+   early_exit = prepare_infiles ();
+@@ -8335,3 +8636,6 @@ driver::expand_at_files (int *argc, char ***argv) const
+ 
+-  expandargv (argc, argv);
++  if (primary_frame)
++    expandargv_with_callback (argc, argv, replace_primary_origin, NULL);
++  else
++    expandargv (argc, argv);
+ 
+@@ -8351,5 +8655,9 @@ driver::decode_argv (int argc, const char **argv)
+ 
+-  decode_cmdline_options_to_array (argc, argv,
+-				   CL_DRIVER,
+-				   &decoded_options, &decoded_options_count);
++  if (primary_frame)
++    decode_cmdline_options_to_array_with_callback
++      (argc, argv, CL_DRIVER, &decoded_options, &decoded_options_count,
++       keep_primary_option, NULL);
++  else
++    decode_cmdline_options_to_array (argc, argv, CL_DRIVER,
++                                     &decoded_options, &decoded_options_count);
+ }
+@@ -9115,3 +9423,3 @@ driver::do_spec_on_infiles () const
+ 
+-		  if (compare_files (debug_check_temp_file))
++		  if (primary_operation_fd < 0 && compare_files (debug_check_temp_file))
+ 		    this_file_error = 1;
+@@ -9290,2 +9598,4 @@ driver::maybe_run_linker (const char *argv0) const
+       linker_was_run = (tmp != execution_count);
++      if (primary_operation_fd >= 0)
++        primary_link_requested = linker_was_run;
+     }
+diff --git a/gcc/gcc.h b/gcc/gcc.h
+index 5ba6c9d..9c30e56 100644
+--- a/gcc/gcc.h
++++ b/gcc/gcc.h
+@@ -29,2 +29,4 @@ along with GCC; see the file COPYING3.  If not see
+ 
++bool driver_register_cxx_entry ();
++
+ class driver
+diff --git a/gcc/opts-common.cc b/gcc/opts-common.cc
+index 03b1a79..9cc3ed4 100644
+--- a/gcc/opts-common.cc
++++ b/gcc/opts-common.cc
+@@ -1032,2 +1032,14 @@ decode_cmdline_options_to_array (unsigned int argc, const char **argv,
+ 				 unsigned int *decoded_options_count)
++{
++  decode_cmdline_options_to_array_with_callback
++    (argc, argv, lang_mask, decoded_options, decoded_options_count, NULL, NULL);
++}
++
++void
++decode_cmdline_options_to_array_with_callback
++  (unsigned int argc, const char **argv, unsigned int lang_mask,
++   struct cl_decoded_option **decoded_options,
++   unsigned int *decoded_options_count,
++   bool (*keep) (void *, unsigned int, unsigned int,
++                 const struct cl_decoded_option *), void *data)
+ {
+@@ -1056,2 +1068,3 @@ decode_cmdline_options_to_array (unsigned int argc, const char **argv,
+     {
++      unsigned int start = i;
+       const char *opt = argv[i];
+@@ -1062,3 +1075,4 @@ decode_cmdline_options_to_array (unsigned int argc, const char **argv,
+ 	  generate_option_input_file (opt, &opt_array[num_decoded_options]);
+-	  num_decoded_options++;
++          if (!keep || keep (data, start, 1, &opt_array[num_decoded_options]))
++            num_decoded_options++;
+ 	  n = 1;
+@@ -1110,3 +1124,5 @@ decode_cmdline_options_to_array (unsigned int argc, const char **argv,
+ 					  &opt_array[num_decoded_options]);
+-	      num_decoded_options++;
++              if (!keep || keep (data, start, 1,
++                                  &opt_array[num_decoded_options]))
++                num_decoded_options++;
+ 	    }
+@@ -1119,3 +1135,5 @@ decode_cmdline_options_to_array (unsigned int argc, const char **argv,
+ 				 &opt_array[num_decoded_options]);
+-      num_decoded_options++;
++      if (!keep || keep (data, start, i - start + n,
++                          &opt_array[num_decoded_options]))
++        num_decoded_options++;
+     }
+diff --git a/gcc/opts.h b/gcc/opts.h
+index 382faab..e4d5542 100644
+--- a/gcc/opts.h
++++ b/gcc/opts.h
+@@ -377,2 +377,10 @@ extern void decode_cmdline_options_to_array (unsigned int argc,
+ 					     unsigned int *decoded_options_count);
++/* Native argument provenance consumers may omit a decoded option before
++   pruning.  START and COUNT describe its actual original argv span.  */
++extern void decode_cmdline_options_to_array_with_callback
++  (unsigned int argc, const char **argv, unsigned int lang_mask,
++   struct cl_decoded_option **decoded_options,
++   unsigned int *decoded_options_count,
++   bool (*keep) (void *, unsigned int, unsigned int,
++                 const struct cl_decoded_option *), void *data);
+ extern void init_options_once (void);
+-- 
+2.43.0
+

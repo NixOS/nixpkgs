@@ -44,12 +44,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  sourceRoot = "${finalAttrs.src.name}/libiberty";
+  sourceRoot = finalAttrs.src.name;
+
+  # Match the split driver's response-origin and explicit scratch API, as well
+  # as collect2's response-file writer. Patch from the shared source root so
+  # include/libiberty.h and the implementation stay together.
+  patches =
+    lib.optionals stdenv.hostPlatform.isUnix [
+      ../../../common/libiberty-primary-query.patch
+    ]
+    ++ lib.optional (lib.versionAtLeast release_version "14") (
+      ../../../common/libiberty-writeargv-newlines.patch
+    );
 
   preConfigure = ''
-    mkdir ../../build
-    cd ../../build
-    configureScript=../$sourceRoot/configure
+    mkdir ../build
+    cd ../build
+    configureScript=../$sourceRoot/libiberty/configure
   '';
 
   configureFlags = [

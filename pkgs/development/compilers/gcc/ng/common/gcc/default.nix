@@ -251,7 +251,18 @@ stdenv.mkDerivation (finalAttrs: {
         ];
         hash = "sha256-i+J4B5f+zrXERPqJxwjEm/JHZhDsV6Gmxx/n9+G0shM=";
       })
-    ];
+    ]
+    # Keep the monorepo headers and any locally rebuilt HOST libiberty in sync
+    # with the standalone BUILD archive seeded below.
+    ++ [ ../../../common/libiberty-writeargv-newlines.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isUnix [
+      ../../../common/libiberty-primary-query.patch
+      ../../../common/native-primary-query.patch
+      ../../../patches/15/native-primary-query-effects.patch
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isUnix && lib.versionAtLeast release_version "16") (
+      ../../../patches/16/native-primary-query-diagnostic-log.patch
+    );
 
   enableParallelBuilding = true;
 
@@ -505,6 +516,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     isGNU = true;
     nativeDefaultIncludeBinding = "external";
+    nativePrimaryQuery = if stdenv.hostPlatform.isUnix then "fd-v3" else null;
   };
 
   meta = gcc_meta // {

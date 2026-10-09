@@ -1,0 +1,68 @@
+From 27716b9fc8c4520071238d59c62b39dc959b01bd Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 16:46:34 -0700
+Subject: [PATCH] gcc: defer diagnostic environment logging during primary
+ query
+
+GCC 16 initializes GCC_DIAGNOSTICS_LOG before parsing driver options.
+Let the query initialize diagnostics without opening that sink. Ordinary
+driver and frontend initialization retains logging by default. Keep the
+environment unchanged so custom specs can still inspect the same value.
+---
+ gcc/diagnostics/context.cc | 5 +++--
+ gcc/diagnostics/context.h  | 2 +-
+ gcc/gcc.cc                 | 2 +-
+ 3 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/gcc/diagnostics/context.cc b/gcc/diagnostics/context.cc
+index 98af6ec..3110248 100644
+--- a/gcc/diagnostics/context.cc
++++ b/gcc/diagnostics/context.cc
+@@ -135,7 +135,7 @@ context::set_caret_max_width (int value)
+ /* Initialize the diagnostic message outputting machinery.  */
+ 
+ void
+-context::initialize (int n_opts)
++context::initialize (int n_opts, bool enable_log)
+ {
+   /* Allocate a basic pretty-printer.  Clients will replace this a
+      much more elaborated pretty-printer if they wish.  */
+@@ -225,7 +225,8 @@ context::initialize (int n_opts)
+     }
+   set_text_art_charset (text_art_charset);
+ 
+-  if (const char *name = getenv ("GCC_DIAGNOSTICS_LOG"))
++  if (const char *name
++        = enable_log ? getenv ("GCC_DIAGNOSTICS_LOG") : nullptr)
+     {
+       if (name[0] != '\0')
+ 	{
+diff --git a/gcc/diagnostics/context.h b/gcc/diagnostics/context.h
+index dcfb807..34184ea 100644
+--- a/gcc/diagnostics/context.h
++++ b/gcc/diagnostics/context.h
+@@ -269,7 +269,7 @@ public:
+   typedef void (*set_locations_callback_t) (const context &,
+ 					    diagnostic_info *);
+ 
+-  void initialize (int n_opts);
++  void initialize (int n_opts, bool enable_log = true);
+   void color_init (int value);
+   void urls_init (int value);
+   void set_pretty_printer (std::unique_ptr<pretty_printer> pp);
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index b72cd4d..30584b2 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -8638,7 +8638,7 @@ driver::global_initializations ()
+ 
+   gcc_init_libintl ();
+ 
+-  diagnostic_initialize (global_dc, 0);
++  global_dc->initialize (0, primary_operation_fd < 0);
+   diagnostic_color_init (global_dc);
+   diagnostic_urls_init (global_dc);
+   global_dc->push_owned_urlifier (make_gcc_urlifier (0));
+-- 
+2.43.0
+

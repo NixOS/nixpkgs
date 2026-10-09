@@ -1,0 +1,673 @@
+From f98af0202c7ec9b5b12fc9e88c3275757987fc00 Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 18:45:27 -0700
+Subject: [PATCH] clang: interpret wrapper frames using native argument
+ ownership
+
+Keep raw conditional argument groups separate until native response expansion
+and option parsing. A provisional caller-only frontend probe may only reject
+a request after expansion has established its stable leading frontend token.
+Otherwise the combined driver grammar owns response errors.
+
+Observe invocation-wide compatibility guards for opaque wrapper support
+files. These are distinct from native per-job implicit header/library use:
+only nostdlib suppresses the opaque C++ link group, while native toolchains
+retain ownership of nodefaultlibs, nostdlib++ and Xarch resource behavior.
+
+Configured machine/ABI defaults use native Xarch_host translation after
+merged target/config selection; preprocessing retains the configured target.
+---
+ include/clang/Driver/Driver.h |  14 ++
+ lib/Driver/Driver.cpp         | 217 ++++++++++++++++++++++-----
+ tools/driver/driver.cpp       | 272 +++++++++++++++++++++++++++++++++-
+ 3 files changed, 461 insertions(+), 42 deletions(-)
+
+diff --git a/include/clang/Driver/Driver.h b/include/clang/Driver/Driver.h
+index d9e328f..48ec702 100644
+--- a/include/clang/Driver/Driver.h
++++ b/include/clang/Driver/Driver.h
+@@ -23,2 +23,3 @@
+ #include "llvm/ADT/ArrayRef.h"
++#include "llvm/Support/CommandLine.h"
+ #include "llvm/ADT/STLFunctionalExtras.h"
+@@ -349,2 +350,7 @@ private:
+ public:
++  unsigned getImmediateAction(const llvm::opt::ArgList &Args) const;
++  enum class HostLinkDisposition { None, Image, Archive };
++  HostLinkDisposition getHostLinkDisposition(llvm::opt::DerivedArgList &Args,
++      const llvm::opt::InputArgList &InputArgs, types::ID InputType) const;
++
+   // getFinalPhase - Determine which compilation mode we are in and record
+@@ -847,2 +853,7 @@ public:
+   static bool getDefaultModuleCachePath(SmallVectorImpl<char> &Result);
++
++  std::optional<unsigned> PrimaryQueryFD;
++  SmallVector<const char *, 16> NativeTargetDefaults;
++  std::string NativeDefaultTarget;
++  bool PrimaryCXX = false;
+ };
+@@ -872,2 +883,5 @@ bool IsClangCL(StringRef DriverMode);
+ /// \param FS Filesystem to use when expanding files.
++llvm::cl::TokenizerCallback getResponseFileTokenizer(
++    ArrayRef<const char *> Args, bool ClangCLMode);
++
+ llvm::Error expandResponseFiles(SmallVectorImpl<const char *> &Args,
+diff --git a/lib/Driver/Driver.cpp b/lib/Driver/Driver.cpp
+index 55748c0..f0d1d3f 100644
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -1490,2 +1490,7 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
+ 
++  // Bind the configured default before native CLI/configuration discovery.
++  // Preprocessor-only requests need the same target context as compilation.
++  if (!NativeDefaultTarget.empty())
++    TargetTriple = NativeDefaultTarget;
++
+   // FIXME: What are we going to do with -V and -b?
+@@ -1512,2 +1517,31 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
+ 
++  // Configured defaults are subordinate to the native merged request.
++  if (!NativeDefaultTarget.empty()) {
++    llvm::Triple Expected(llvm::Triple::normalize(NativeDefaultTarget));
++    llvm::Triple Selected = computeTargetTriple(*this, NativeDefaultTarget, Args);
++    if (Expected.isMacOSX()) Expected.setOS(llvm::Triple::MacOSX);
++    if (Selected.isMacOSX()) Selected.setOS(llvm::Triple::MacOSX);
++    if (Expected == Selected) {
++      bool DefaultsError = false;
++      SmallVector<const char *, 32> HostDefaults;
++      for (const char *Flag : NativeTargetDefaults) {
++        HostDefaults.push_back("-Xarch_host");
++        HostDefaults.push_back(Flag);
++      }
++      InputArgList Defaults = ParseArgStrings(HostDefaults,
++          /*UseDriverMode=*/false, DefaultsError);
++      ContainsError |= DefaultsError;
++      for (auto *A : Args) appendOneArg(Defaults, A);
++      Args = std::move(Defaults);
++    } else if (!PrimaryQueryFD) {
++      int Suppress = 0;
++      if (const char *Value = ::getenv("NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING"))
++        if (StringRef(Value).getAsInteger(10, Suppress)) Suppress = 0;
++      if (Suppress < 1)
++        llvm::errs() << "warning: configured target defaults omitted for "
++                     << Selected.str() << " (configured "
++                     << NativeDefaultTarget << ")\n";
++    }
++  }
++
+   // In CL mode, look for any pass-through arguments
+@@ -1539,3 +1573,4 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
+   // Check for missing include directories.
+-  if (!Diags.isIgnored(diag::warn_missing_include_dirs, SourceLocation())) {
++  if (!PrimaryQueryFD &&
++      !Diags.isIgnored(diag::warn_missing_include_dirs, SourceLocation())) {
+     for (auto IncludeDir : Args.getAllArgValues(options::OPT_I_Group)) {
+@@ -1694,4 +1729,5 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
+   // Remove existing compilation database so that each job can append to it.
+-  if (Arg *A = Args.getLastArg(options::OPT_MJ))
+-    llvm::sys::fs::remove(A->getValue());
++  if (!PrimaryQueryFD)
++    if (Arg *A = Args.getLastArg(options::OPT_MJ))
++      llvm::sys::fs::remove(A->getValue());
+ 
+@@ -1814,4 +1850,25 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
+ 
+-  if (!HandleImmediateArgs(*C))
++  bool QueryFDText = PrimaryQueryFD.has_value();
++  auto EmitQuery = [&](bool Link) {
++    llvm::raw_fd_ostream OS(*PrimaryQueryFD, false);
++    // These guard opaque wrapper groups, not native per-job resources.
++    const auto &Args = C->getArgs();
++    OS << "nix-primary-v3" << '\0';
++    OS << "version=3\nentry=driver\nrequested_host_link=" << Link
++       << "\nc_include=" << !Args.hasArg(options::OPT_nostdinc)
++       << "\ncxx_include=" << !Args.hasArg(options::OPT_nostdinc, options::OPT_nostdincxx)
++       << "\ncxx_personality=" << PrimaryCXX
++       << "\ncxx_library=" << !Args.hasArg(options::OPT_nostdlib) << "\n";
++    OS << '\0';
++    OS.flush();
++    if (OS.has_error()) {
++      OS.clear_error();
++      C->setContainsError();
++    }
++  };
++  if (QueryFDText ? getImmediateAction(C->getArgs()) != 0
++                  : !HandleImmediateArgs(*C)) {
++    if (QueryFDText) EmitQuery(false);
+     return C;
++  }
+ 
+@@ -1830,2 +1887,16 @@ Compilation *Driver::BuildCompilation(ArrayRef<const char *> ArgList) {
+ 
++  if (QueryFDText) {
++    if (Inputs.empty() && !SuppressMissingInputWarning &&
++        !C->getArgs().hasArg(options::OPT_v, options::OPT__HASH_HASH_HASH,
++                            options::OPT_print_supported_cpus,
++                            options::OPT_print_supported_extensions,
++                            options::OPT_print_enabled_extensions))
++      Diag(diag::err_drv_no_input_files);
++    bool Link = false;
++    for (const auto &Input : Inputs)
++      Link |= getHostLinkDisposition(C->getArgs(), C->getInputArgs(), Input.first) == HostLinkDisposition::Image;
++    EmitQuery(Link);
++    return C;
++  }
++
+   // Populate the tool chains for the offloading devices, if any.
+@@ -2433,3 +2504,49 @@ void Driver::HandleAutocompletions(StringRef PassedFlags) const {
+ 
++unsigned Driver::getImmediateAction(const ArgList &Args) const {
++  if (Args.hasArg(options::OPT_dumpmachine))
++    return options::OPT_dumpmachine;
++  if (Args.hasArg(options::OPT_dumpversion))
++    return options::OPT_dumpversion;
++  if (Args.hasArg(options::OPT__print_diagnostic_categories))
++    return options::OPT__print_diagnostic_categories;
++  if (Args.hasArg(options::OPT_help) ||
++      Args.hasArg(options::OPT__help_hidden))
++    return options::OPT_help;
++  if (Args.hasArg(options::OPT__version))
++    return options::OPT__version;
++  if (Args.hasArg(options::OPT_print_resource_dir))
++    return options::OPT_print_resource_dir;
++  if (Args.hasArg(options::OPT_print_search_dirs))
++    return options::OPT_print_search_dirs;
++  if (Args.hasArg(options::OPT_print_std_module_manifest_path))
++    return options::OPT_print_std_module_manifest_path;
++  if (Args.hasArg(options::OPT_print_runtime_dir))
++    return options::OPT_print_runtime_dir;
++  if (Args.hasArg(options::OPT_print_diagnostic_options))
++    return options::OPT_print_diagnostic_options;
++  if (Args.getLastArg(options::OPT_print_file_name_EQ))
++    return options::OPT_print_file_name_EQ;
++  if (Args.getLastArg(options::OPT_print_prog_name_EQ))
++    return options::OPT_print_prog_name_EQ;
++  if (Args.getLastArg(options::OPT_autocomplete))
++    return options::OPT_autocomplete;
++  if (Args.hasArg(options::OPT_print_libgcc_file_name))
++    return options::OPT_print_libgcc_file_name;
++  if (Args.hasArg(options::OPT_print_multi_lib))
++    return options::OPT_print_multi_lib;
++  if (Args.hasArg(options::OPT_print_multi_flags))
++    return options::OPT_print_multi_flags;
++  if (Args.hasArg(options::OPT_print_multi_directory))
++    return options::OPT_print_multi_directory;
++  if (Args.hasArg(options::OPT_print_target_triple))
++    return options::OPT_print_target_triple;
++  if (Args.hasArg(options::OPT_print_effective_triple))
++    return options::OPT_print_effective_triple;
++  if (Args.hasArg(options::OPT_print_targets))
++    return options::OPT_print_targets;
++  return 0;
++}
++
+ bool Driver::HandleImmediateArgs(Compilation &C) {
++  unsigned ImmediateAction = getImmediateAction(C.getArgs());
+   // The order these options are handled in gcc is all over the place, but we
+@@ -2437,3 +2554,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_dumpmachine)) {
++  if (ImmediateAction == options::OPT_dumpmachine) {
+     llvm::outs() << C.getDefaultToolChain().getTripleString() << '\n';
+@@ -2442,3 +2559,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_dumpversion)) {
++  if (ImmediateAction == options::OPT_dumpversion) {
+     // Since -dumpversion is only implemented for pedantic GCC compatibility, we
+@@ -2449,3 +2566,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT__print_diagnostic_categories)) {
++  if (ImmediateAction == options::OPT__print_diagnostic_categories) {
+     PrintDiagnosticCategories(llvm::outs());
+@@ -2454,4 +2571,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_help) ||
+-      C.getArgs().hasArg(options::OPT__help_hidden)) {
++  if (ImmediateAction == options::OPT_help) {
+     PrintHelp(C.getArgs().hasArg(options::OPT__help_hidden));
+@@ -2460,3 +2576,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT__version)) {
++  if (ImmediateAction == options::OPT__version) {
+     // Follow gcc behavior and use stdout for --version and stderr for -v.
+@@ -2489,3 +2605,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_resource_dir)) {
++  if (ImmediateAction == options::OPT_print_resource_dir) {
+     llvm::outs() << ResourceDir << '\n';
+@@ -2494,3 +2610,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_search_dirs)) {
++  if (ImmediateAction == options::OPT_print_search_dirs) {
+     llvm::outs() << "programs: =";
+@@ -2528,3 +2644,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_std_module_manifest_path)) {
++  if (ImmediateAction == options::OPT_print_std_module_manifest_path) {
+     llvm::outs() << GetStdModuleManifestPath(C, C.getDefaultToolChain())
+@@ -2534,3 +2650,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_runtime_dir)) {
++  if (ImmediateAction == options::OPT_print_runtime_dir) {
+     if (std::optional<std::string> RuntimePath = TC.getRuntimePath())
+@@ -2542,3 +2658,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_diagnostic_options)) {
++  if (ImmediateAction == options::OPT_print_diagnostic_options) {
+     std::vector<std::string> Flags = DiagnosticIDs::getDiagnosticFlags();
+@@ -2551,3 +2667,4 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+   // know what the client would like to do.
+-  if (Arg *A = C.getArgs().getLastArg(options::OPT_print_file_name_EQ)) {
++  if (ImmediateAction == options::OPT_print_file_name_EQ) {
++    Arg *A = C.getArgs().getLastArg(options::OPT_print_file_name_EQ);
+     llvm::outs() << GetFilePath(A->getValue(), TC) << "\n";
+@@ -2556,3 +2673,4 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (Arg *A = C.getArgs().getLastArg(options::OPT_print_prog_name_EQ)) {
++  if (ImmediateAction == options::OPT_print_prog_name_EQ) {
++    Arg *A = C.getArgs().getLastArg(options::OPT_print_prog_name_EQ);
+     StringRef ProgName = A->getValue();
+@@ -2567,3 +2685,4 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (Arg *A = C.getArgs().getLastArg(options::OPT_autocomplete)) {
++  if (ImmediateAction == options::OPT_autocomplete) {
++    Arg *A = C.getArgs().getLastArg(options::OPT_autocomplete);
+     StringRef PassedFlags = A->getValue();
+@@ -2573,3 +2692,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_libgcc_file_name)) {
++  if (ImmediateAction == options::OPT_print_libgcc_file_name) {
+     ToolChain::RuntimeLibType RLT = TC.GetRuntimeLibType(C.getArgs());
+@@ -2596,3 +2715,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_multi_lib)) {
++  if (ImmediateAction == options::OPT_print_multi_lib) {
+     for (const Multilib &Multilib : TC.getMultilibs())
+@@ -2603,3 +2722,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_multi_flags)) {
++  if (ImmediateAction == options::OPT_print_multi_flags) {
+     Multilib::flags_list ArgFlags = TC.getMultilibFlags(C.getArgs());
+@@ -2614,3 +2733,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_multi_directory)) {
++  if (ImmediateAction == options::OPT_print_multi_directory) {
+     for (const Multilib &Multilib : TC.getSelectedMultilibs()) {
+@@ -2627,3 +2746,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_target_triple)) {
++  if (ImmediateAction == options::OPT_print_target_triple) {
+     llvm::outs() << TC.getTripleString() << "\n";
+@@ -2632,3 +2751,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_effective_triple)) {
++  if (ImmediateAction == options::OPT_print_effective_triple) {
+     const llvm::Triple Triple(TC.ComputeEffectiveClangTriple(C.getArgs()));
+@@ -2638,3 +2757,3 @@ bool Driver::HandleImmediateArgs(Compilation &C) {
+ 
+-  if (C.getArgs().hasArg(options::OPT_print_targets)) {
++  if (ImmediateAction == options::OPT_print_targets) {
+     llvm::TargetRegistry::printRegisteredTargetsForVersion(llvm::outs());
+@@ -4419,2 +4538,13 @@ void Driver::handleArguments(Compilation &C, DerivedArgList &Args,
+ 
++Driver::HostLinkDisposition
++Driver::getHostLinkDisposition(DerivedArgList &Args,
++                               const InputArgList &InputArgs, types::ID InputType) const {
++  const auto Phases = types::getCompilationPhases(*this, Args, InputType);
++  if (Phases.empty() || Phases.back() != phases::Link || offloadDeviceOnly() ||
++      (InputArgs.hasArg(options::OPT_hip_link) && InputArgs.hasArg(options::OPT_emit_llvm)))
++    return HostLinkDisposition::None;
++  return ShouldEmitStaticLibrary(Args) ? HostLinkDisposition::Archive
++                                     : HostLinkDisposition::Image;
++}
++
+ void Driver::BuildActions(Compilation &C, DerivedArgList &Args,
+@@ -4493,5 +4623,3 @@ void Driver::BuildActions(Compilation &C, DerivedArgList &Args,
+         // bitcode or compiling only for the offload device
+-        if (!(C.getInputArgs().hasArg(options::OPT_hip_link) &&
+-              (C.getInputArgs().hasArg(options::OPT_emit_llvm))) &&
+-            !offloadDeviceOnly())
++        if (getHostLinkDisposition(Args, C.getInputArgs(), InputType) != HostLinkDisposition::None)
+           LinkerInputs.push_back(Current);
+@@ -7167,2 +7295,21 @@ bool driver::IsClangCL(StringRef DriverMode) { return DriverMode == "cl"; }
+ 
++llvm::cl::TokenizerCallback driver::getResponseFileTokenizer(
++    ArrayRef<const char *> Args, bool ClangCLMode) {
++  enum { Default, POSIX, Windows } RSPQuoting = Default;
++  for (const char *F : Args) {
++    if (strcmp(F, "--rsp-quoting=posix") == 0)
++      RSPQuoting = POSIX;
++    else if (strcmp(F, "--rsp-quoting=windows") == 0)
++      RSPQuoting = Windows;
++  }
++
++  llvm::cl::TokenizerCallback Tokenizer;
++  if (RSPQuoting == Windows || (RSPQuoting == Default && ClangCLMode))
++    Tokenizer = &llvm::cl::TokenizeWindowsCommandLine;
++  else
++    Tokenizer = &llvm::cl::TokenizeGNUCommandLine;
++
++  return Tokenizer;
++}
++
+ llvm::Error driver::expandResponseFiles(SmallVectorImpl<const char *> &Args,
+@@ -7178,10 +7325,2 @@ llvm::Error driver::expandResponseFiles(SmallVectorImpl<const char *> &Args,
+   // response files written by clang will tokenize the same way in either mode.
+-  enum { Default, POSIX, Windows } RSPQuoting = Default;
+-  for (const char *F : Args) {
+-    if (strcmp(F, "--rsp-quoting=posix") == 0)
+-      RSPQuoting = POSIX;
+-    else if (strcmp(F, "--rsp-quoting=windows") == 0)
+-      RSPQuoting = Windows;
+-  }
+-
+   // Determines whether we want nullptr markers in Args to indicate response
+@@ -7191,7 +7330,3 @@ llvm::Error driver::expandResponseFiles(SmallVectorImpl<const char *> &Args,
+ 
+-  llvm::cl::TokenizerCallback Tokenizer;
+-  if (RSPQuoting == Windows || (RSPQuoting == Default && ClangCLMode))
+-    Tokenizer = &llvm::cl::TokenizeWindowsCommandLine;
+-  else
+-    Tokenizer = &llvm::cl::TokenizeGNUCommandLine;
++  auto Tokenizer = getResponseFileTokenizer(Args, ClangCLMode);
+ 
+diff --git a/tools/driver/driver.cpp b/tools/driver/driver.cpp
+index 9ed8d4e..e6c3e96 100644
+--- a/tools/driver/driver.cpp
++++ b/tools/driver/driver.cpp
+@@ -31,2 +31,3 @@
+ #include "llvm/ADT/StringSet.h"
++#include "llvm/ADT/ScopeExit.h"
+ #include "llvm/Config/llvm-config.h" // for LLVM_ON_UNIX
+@@ -53,2 +54,5 @@
+ #include <memory>
++#include <array>
++#include <unistd.h>
++#include <cerrno>
+ #include <optional>
+@@ -235,3 +239,238 @@ static int ExecuteCC1Tool(SmallVectorImpl<const char *> &ArgV,
+ 
++struct PrimarySegments {
++  std::array<SmallVector<const char *, 16>, 4> Args;
++  int CallerDelimiter = -1;
++  bool CXX = false, Pure = false, NoNative = false;
++  StringRef SDK, DefaultTarget;
++  SmallVector<const char *, 16> TargetDefaults, AllowedPrefixes;
++};
++
++static bool readPrimarySegments(unsigned FD, llvm::StringSaver &Saver,
++                                PrimarySegments &Request) {
++  auto Close = llvm::make_scope_exit([&] { ::close(FD); });
++  std::string Bytes;
++  char Buffer[4096];
++  while (true) {
++    ssize_t Count = ::read(FD, Buffer, sizeof(Buffer));
++    if (Count < 0 && errno == EINTR) continue;
++    if (Count < 0) return false;
++    if (!Count) break;
++    Bytes.append(Buffer, Count);
++  }
++  StringRef Rest(Bytes);
++  auto Token = [&]() -> std::optional<StringRef> {
++    size_t End = Rest.find('\0');
++    if (End == StringRef::npos) return std::nullopt;
++    StringRef Value = Rest.take_front(End);
++    Rest = Rest.drop_front(End + 1);
++    return Value;
++  };
++  auto Magic = Token();
++  if (!Magic || *Magic != "nix-primary-v3") return false;
++  auto Pure = Token(), NoNative = Token(), SDK = Token(), Target = Token();
++  if (!Pure || !NoNative || !SDK || !Target ||
++      (*Pure != "0" && *Pure != "1") ||
++      (*NoNative != "0" && *NoNative != "1")) return false;
++  Request.Pure = *Pure == "1";
++  Request.NoNative = *NoNative == "1";
++  Request.SDK = Saver.save(*SDK);
++  Request.DefaultTarget = Saver.save(*Target);
++  std::array<SmallVector<const char *, 16> *, 6> Groups{
++      &Request.Args[0], &Request.Args[1], &Request.Args[2], &Request.Args[3],
++      &Request.TargetDefaults, &Request.AllowedPrefixes};
++  std::array<unsigned, 6> Counts;
++  for (auto &Count : Counts) {
++    auto Value = Token();
++    if (!Value || Value->empty() || Value->getAsInteger(10, Count)) return false;
++  }
++  for (unsigned I = 0; I != 6; ++I)
++    for (unsigned J = 0; J != Counts[I]; ++J) {
++      auto Value = Token();
++      if (!Value) return false;
++      Groups[I]->push_back(Saver.save(*Value).data());
++    }
++  return Rest.empty();
++}
++
++// Apply caller policy using native option ownership and consumed spans.
++static void filterCallerPolicy(
++    std::array<SmallVector<const char *, 16>, 4> &Segments,
++    bool Pure, bool NoNative, ArrayRef<const char *> AllowedPrefixes,
++    StringRef SDK, unsigned Visibility = options::ClangOption) {
++  if (!Pure && !NoNative) return;
++  SmallVector<const char *, 256> Joined;
++  for (const auto &Segment : Segments) llvm::append_range(Joined, Segment);
++  llvm::opt::InputArgList Raw(Joined.data(), Joined.data() + Joined.size());
++  SmallVector<bool, 256> Keep(Joined.size(), true);
++  const unsigned Begin = Segments[0].size(), End = Begin + Segments[1].size();
++  auto BadPath = [&](StringRef Path) {
++    SmallString<256> SDKPath;
++    if (!SDK.empty()) {
++      SDKPath = SDK;
++      SDKPath += '/';
++      SDKPath += Path;
++      if (llvm::sys::fs::exists(SDKPath)) Path = SDKPath;
++    }
++    if (!Path.starts_with("/") || Path == "/dev/null") return false;
++    return llvm::none_of(AllowedPrefixes, [&](StringRef Prefix) {
++      return !Prefix.empty() && Path.starts_with(Prefix);
++    });
++  };
++  for (unsigned I = 0; I < Joined.size();) {
++    const unsigned Start = I;
++    auto Arg = getDriverOptTable().ParseOneArg(
++        Raw, I, llvm::opt::Visibility(Visibility));
++    if (!Arg || Start < Begin || Start >= End) continue;
++    const auto &Option = Arg->getOption();
++    bool Drop = Pure && (Option.matches(options::OPT_I) ||
++                        Option.matches(options::OPT_L) ||
++                        Option.matches(options::OPT_isystem)) &&
++                BadPath(Arg->getValue());
++    const bool Native = NoNative && Option.matches(options::OPT_m_Group) &&
++                        Arg->getNumValues() == 1 &&
++                        StringRef(Arg->getValue()) == "native";
++    if (Native)
++      llvm::errs() << "warning: Skipping impure flag " << Arg->getAsString(Raw)
++                   << " because NIX_ENFORCE_NO_NATIVE is set\n";
++    else if (Drop) {
++      int Debug = 0;
++      if (const char *Value = ::getenv("NIX_DEBUG"))
++        if (StringRef(Value).getAsInteger(10, Debug)) Debug = 0;
++      if (Debug >= 1) llvm::errs() << "skipping impure path " << Arg->getValue() << '\n';
++    }
++    Drop |= Native;
++    if (Drop)
++      for (unsigned J = Start; J < std::min<unsigned>(I, Joined.size()); ++J)
++        Keep[J] = false;
++  }
++  unsigned Offset = 0;
++  for (auto &Segment : Segments) {
++    SmallVector<const char *, 16> Kept;
++    for (const char *Token : Segment)
++      if (Keep[Offset++]) Kept.push_back(Token);
++    Segment = std::move(Kept);
++  }
++}
++
++static bool preparePrimarySegments(const char *Program, PrimarySegments &Request,
++                                   llvm::BumpPtrAllocator &Allocator,
++                                   SmallVectorImpl<const char *> &Args,
++                                   bool Query) {
++  // Frontend entry has standalone caller semantics and ignores all policy.
++  // This first pass observes only the native entry, not full option validity.
++  SmallVector<const char *, 256> Caller{Program};
++  llvm::append_range(Caller, Request.Args[1]);
++  auto CallerMode = getDriverMode(Program, ArrayRef(Caller).drop_front());
++  if (auto Error = expandResponseFiles(Caller, IsClangCL(CallerMode), Allocator)) {
++    // Native expansion never changes an already visited leading token.
++    // A known frontend owns its error; otherwise this was only a probe.
++    if (Caller.size() > 1 && StringRef(Caller[1]).starts_with("-cc1")) {
++      llvm::errs() << toString(std::move(Error)) << '\n';
++      return false;
++    }
++    consumeError(std::move(Error));
++  }
++  if (Caller.size() > 1 && StringRef(Caller[1]).starts_with("-cc1")) {
++    std::array<SmallVector<const char *, 16>, 4> Frontend;
++    Frontend[1].assign(Caller.begin() + 2, Caller.end());
++    if (StringRef(Caller[1]) == "-cc1" || StringRef(Caller[1]) == "-cc1as")
++      filterCallerPolicy(Frontend, Request.Pure, Request.NoNative,
++                         Request.AllowedPrefixes, Request.SDK,
++                         StringRef(Caller[1]) == "-cc1" ? options::CC1Option
++                                                       : options::CC1AsOption);
++    Args.assign({Program, Caller[1]});
++    llvm::append_range(Args, Frontend[1]);
++    return true;
++  }
++  // Driver interpretation starts from raw syntax; expanded caller tokens never
++  // become the lexical context for another interpretation.
++  auto Interpret = [&](bool IncludeCPP, bool &Frontend) {
++    SmallVector<const char *, 256> Raw{Program};
++    for (unsigned I = 0; I != (IncludeCPP ? 4u : 3u); ++I)
++      llvm::append_range(Raw, Request.Args[I]);
++    StringRef Mode = getDriverMode(Program, ArrayRef(Raw).drop_front());
++    llvm::cl::ExpansionContext Expansion(
++        Allocator, getResponseFileTokenizer(Raw, IsClangCL(Mode)));
++    auto Expanded = Request.Args;
++    if (!IncludeCPP) Expanded[3].clear();
++    auto Expand = [&](unsigned I) {
++      if (auto Error = Expansion.expandResponseFiles(Expanded[I])) {
++        llvm::errs() << toString(std::move(Error)) << '\n';
++        return false;
++      }
++      return true;
++    };
++    // A policy-selected lexer may not create a new frontend entry.
++    if (!Expand(1)) return false;
++    Frontend = !Expanded[1].empty() &&
++               StringRef(Expanded[1][0]).starts_with("-cc1");
++    if (Frontend) return false;
++    if (!Mode.empty() && Mode != "gcc" && Mode != "g++" && Mode != "cpp")
++      return false;
++    if (!Expand(0) || !Expand(2) || (IncludeCPP && !Expand(3)))
++      return false;
++    filterCallerPolicy(Expanded, Request.Pure, Request.NoNative,
++                       Request.AllowedPrefixes, Request.SDK);
++    SmallVector<const char *, 256> Joined{Program};
++    for (unsigned I = 0; I != 4; ++I)
++      llvm::append_range(Joined, Expanded[I]);
++    unsigned MissingIndex, MissingCount;
++    auto Parsed = getDriverOptTable().ParseArgs(ArrayRef(Joined).drop_front(),
++        MissingIndex, MissingCount, llvm::opt::Visibility(options::ClangOption));
++    Request.CallerDelimiter = -1;
++    if (Arg *Delimiter = Parsed.getLastArg(options::OPT__DASH_DASH)) {
++      unsigned Index = Delimiter->getIndex(), Begin = Expanded[0].size();
++      if (Index >= Begin && Index < Begin + Expanded[1].size())
++        Request.CallerDelimiter = Index - Begin;
++    }
++    size_t Split = Request.CallerDelimiter < 0 ? Expanded[1].size()
++                                              : Request.CallerDelimiter;
++    Args.assign({Program});
++    llvm::append_range(Args, Expanded[0]);
++    llvm::append_range(Args, ArrayRef(Expanded[1]).take_front(Split));
++    llvm::append_range(Args, Expanded[2]);
++    llvm::append_range(Args, Expanded[3]);
++    llvm::append_range(Args, ArrayRef(Expanded[1]).drop_front(Split));
++    return Args.size() < 2 || !StringRef(Args[1]).starts_with("-cc1");
++  };
++  bool Frontend;
++  if (!Interpret(!Query, Frontend)) return false;
++  if (Frontend) return true;
++  if (Query) {
++    SmallVector<const char *, 256> Selection(Args.begin(), Args.end());
++    llvm::StringSet<> SelectionStrings;
++    if (const char *Override = ::getenv("CCC_OVERRIDE_OPTIONS"))
++      driver::applyOverrideOptions(Selection, Override, SelectionStrings,
++                                   "CCC_OVERRIDE_OPTIONS", nullptr);
++    StringRef Mode = getDriverMode(Program, ArrayRef(Selection).drop_front());
++    if (!Mode.empty() && Mode != "gcc" && Mode != "g++" && Mode != "cpp")
++      return false;
++    Request.CXX = Mode == "g++";
++    if (Request.CXX && !Request.Args[3].empty() &&
++        !Interpret(true, Frontend)) return false;
++  }
++  return true;
++}
++
++
+ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
++  ::unsetenv("NIX_CC_PRIMARY_TMPDIR");
++  std::optional<unsigned> PrimaryQueryFD;
++  if (const char *Text = ::getenv("NIX_CC_PRIMARY_QUERY_FD")) {
++    int FD;
++    bool Invalid = StringRef(Text).getAsInteger(10, FD) || FD < 3;
++    ::unsetenv("NIX_CC_PRIMARY_QUERY_FD");
++    if (Invalid) return 1;
++    PrimaryQueryFD = FD;
++  }
++  std::optional<unsigned> PrimaryArgsFD;
++  if (const char *Text = ::getenv("NIX_CC_PRIMARY_ARGS_FD")) {
++    int FD;
++    bool Invalid = StringRef(Text).getAsInteger(10, FD) || FD < 3;
++    ::unsetenv("NIX_CC_PRIMARY_ARGS_FD");
++    if (Invalid || (PrimaryQueryFD && FD == *PrimaryQueryFD)) return 1;
++    PrimaryArgsFD = FD;
++  }
++  if ((PrimaryArgsFD || PrimaryQueryFD) && (!PrimaryArgsFD || Argc != 1)) return 1;
++  PrimarySegments Request;
+   noteBottomOfStack();
+@@ -261,2 +500,19 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+ 
++  if (PrimaryArgsFD &&
++      (!readPrimarySegments(*PrimaryArgsFD, Saver, Request) ||
++       !preparePrimarySegments(ProgName, Request, A, Args,
++                               PrimaryQueryFD.has_value()))) return 1;
++  if (PrimaryQueryFD && Args.size() >= 2 &&
++      StringRef(Args[1]).starts_with("-cc1")) {
++    llvm::raw_fd_ostream OS(*PrimaryQueryFD, false);
++    OS << "nix-primary-v3" << '\0';
++    OS << "version=3\nentry=frontend\nrequested_host_link=0\n"
++          "c_include=0\ncxx_include=0\ncxx_personality=0\ncxx_library=0\n";
++    OS << '\0';
++    OS.flush();
++    bool Failed = OS.has_error();
++    OS.clear_error();
++    return Failed;
++  }
++
+   // Handle -cc1 integrated tools.
+@@ -310,2 +566,8 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+ 
++  if (PrimaryArgsFD) {
++    StringRef Mode = getDriverMode(ProgName, ArrayRef(Args).drop_front());
++    if (!Mode.empty() && Mode != "gcc" && Mode != "g++" && Mode != "cpp")
++      return 1;
++  }
++
+   std::string Path = GetExecutablePath(ToolContext.Path, CanonicalPrefixes);
+@@ -337,3 +599,3 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+ 
+-  if (!DiagOpts->DiagnosticSerializationFile.empty()) {
++  if (!PrimaryQueryFD && !DiagOpts->DiagnosticSerializationFile.empty()) {
+     auto SerializedConsumer =
+@@ -375,4 +637,12 @@ int clang_main(int Argc, char **Argv, const llvm::ToolContext &ToolContext) {
+ 
++  TheDriver.PrimaryQueryFD = PrimaryQueryFD;
++  if (PrimaryQueryFD) TheDriver.setCheckInputsExist(false);
++  TheDriver.NativeDefaultTarget = Request.DefaultTarget.str();
++  TheDriver.NativeTargetDefaults = Request.TargetDefaults;
++  TheDriver.PrimaryCXX = Request.CXX;
+   std::unique_ptr<Compilation> C(TheDriver.BuildCompilation(Args));
+ 
++  if (PrimaryQueryFD)
++    return !C || C->containsError() || Diags.hasErrorOccurred();
++
+   Driver::ReproLevel ReproLevel = Driver::ReproLevel::OnCrash;
