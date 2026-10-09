@@ -37,7 +37,7 @@ buildPythonPackage {
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [ "june" ];
+  unittestFlags = [ "june" ];
 
   pythonImportsCheck = [ "june" ];
 
