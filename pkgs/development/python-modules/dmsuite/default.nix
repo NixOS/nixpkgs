@@ -35,7 +35,7 @@ buildPythonPackage rec {
   ];
 
   # Slight precision error probably due to different BLAS backend on Darwin
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_cheb_scaled"
   ];
 

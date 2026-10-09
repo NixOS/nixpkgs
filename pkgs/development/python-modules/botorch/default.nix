@@ -115,7 +115,7 @@ buildPythonPackage (finalAttrs: {
     # RuntimeError: required keyword attribute 'value' has the wrong type
     "test_posterior_in_trace_mode"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical error slightly above threshold
     # AssertionError: Tensor-likes are not close!
     "test_model_list_gpytorch_model"

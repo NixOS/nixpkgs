@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   protobuf,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -48,6 +47,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/svix/svix-webhooks/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ techknowlogick ];
-    broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 })

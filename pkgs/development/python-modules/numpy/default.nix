@@ -166,10 +166,6 @@ buildPythonPackage (finalAttrs: {
     "test_floor_division_errors" # FloatingPointError: invalid value encountered in floor_divide
     "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage ...>]
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
-    "test_loss_of_precision"
-  ]
   ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian) [
     # https://github.com/numpy/numpy/issues/29918
     "test_sq_cases"

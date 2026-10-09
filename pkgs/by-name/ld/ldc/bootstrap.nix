@@ -12,8 +12,7 @@
 let
   inherit (stdenv) hostPlatform;
   OS = if hostPlatform.isDarwin then "osx" else hostPlatform.parsed.kernel.name;
-  ARCH =
-    if hostPlatform.isDarwin && hostPlatform.isAarch64 then "arm64" else hostPlatform.parsed.cpu.name;
+  ARCH = if hostPlatform.isDarwin then "arm64" else hostPlatform.parsed.cpu.name;
   version = "1.42.0";
   hashes = {
     # Get these from `nix store prefetch-file https://github.com/ldc-developers/ldc/releases/download/v1.19.0/ldc2-1.19.0-osx-x86_64.tar.xz` etc..

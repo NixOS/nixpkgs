@@ -147,10 +147,6 @@ buildPythonPackage (finalAttrs: {
     "test_ycbcr2rgb"
     "test_ycbcr2bgr"
     "test_tensor2imgs"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Fatal Python error: Segmentation fault
-    "test_transform"
   ];
 
   meta = {

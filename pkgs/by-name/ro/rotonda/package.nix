@@ -26,17 +26,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=http_api_responses_multiple_gets"
     "--skip=representation::genoutput_json"
   ]
-  ++
-    lib.optionals
-      (stdenv.hostPlatform.system == "aarch64-darwin" || stdenv.hostPlatform.system == "x86_64-darwin")
-      [
-        # Attempted to create a NULL object.
-        "--skip=manager::tests::added_target_should_be_spawned"
-        # Lazy instance has previously been poisoned
-        "--skip=manager::tests::modified_settings_are_correctly_announced"
-        "--skip=manager::tests::removed_target_should_be_terminated"
-        "--skip=manager::tests::unused_unit_should_not_be_spawned"
-      ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Attempted to create a NULL object.
+    "--skip=manager::tests::added_target_should_be_spawned"
+    # Lazy instance has previously been poisoned
+    "--skip=manager::tests::modified_settings_are_correctly_announced"
+    "--skip=manager::tests::removed_target_should_be_terminated"
+    "--skip=manager::tests::unused_unit_should_not_be_spawned"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-d:release"
   ];
 
-  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace makefile \
       --replace "aarch64" "arm64"
   '';

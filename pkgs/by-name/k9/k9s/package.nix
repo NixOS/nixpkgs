@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-PkYDJK2oGl+siCG9p4R8shC0e5BhGFdJsc+ksL9J5zw=";
 
   # TODO investigate why some config tests are failing
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # For arch != x86
   # {"level":"fatal","error":"could not create any of the following paths: /homeless-shelter/.config, /etc/xdg","time":"2022-06-28T15:52:36Z","message":"Unable to create configuration directory for k9s"}

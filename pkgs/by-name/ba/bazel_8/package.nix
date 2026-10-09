@@ -36,12 +36,12 @@
 
 let
   inherit (callPackage ./build-support/patching.nix { }) addFilePatch;
-  inherit (stdenv.hostPlatform) isDarwin isAarch64;
+  inherit (stdenv.hostPlatform) isDarwin;
 
   bazelSystem = if isDarwin then "darwin" else "linux";
 
   # on aarch64 Darwin, `uname -m` returns "arm64"
-  bazelArch = if isDarwin && isAarch64 then "arm64" else stdenv.hostPlatform.parsed.cpu.name;
+  bazelArch = if isDarwin then "arm64" else stdenv.hostPlatform.parsed.cpu.name;
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";

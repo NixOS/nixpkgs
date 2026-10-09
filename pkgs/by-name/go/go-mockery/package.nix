@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   versionCheckHook,
@@ -79,12 +78,6 @@ buildGoModule (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ${
-      # TestRemoteTemplates/schema_validation_OK fails only on x86_64-darwin
-      (lib.optionalString (
-        stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86
-      ) "rm -rf e2e/test_remote_templates/")
-    }
     # run unit tests and e2e tests plus pre-gen necessary mocks
     task test.ci
 

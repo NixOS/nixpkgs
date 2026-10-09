@@ -11,8 +11,6 @@ let
       "linux"
     else if stdenv.hostPlatform.system == "x86_64-linux" then
       "linux-AMD64"
-    else if stdenv.hostPlatform.system == "x86_64-darwin" then
-      "macosx"
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       "linux-arm"
     else

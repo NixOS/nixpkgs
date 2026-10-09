@@ -53,6 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = [ ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

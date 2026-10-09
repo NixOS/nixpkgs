@@ -36,8 +36,7 @@ buildGoModule (finalAttrs: {
     "-X github.com/temporalio/cli/internal/temporalcli.Version=${finalAttrs.version}"
   ];
 
-  # Tests fail with x86 on macOS Rosetta 2
-  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+  doCheck = true;
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 

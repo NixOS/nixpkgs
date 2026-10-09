@@ -116,7 +116,7 @@ buildPythonPackage (finalAttrs: {
     # see: https://github.com/scipy/scipy/issues/25522
     "test_convergence"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # The following tests are broken on aarch64-darwin with newer compilers and library versions.
     # See https://github.com/scipy/scipy/issues/18308
     "test_a_b_neg_int_after_euler_hypergeometric_transformation"
@@ -143,7 +143,7 @@ buildPythonPackage (finalAttrs: {
     "test_support_moments_sample"
   ];
 
-  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
+  doCheck = true;
 
   preConfigure = ''
     # Helps parallelization a bit
@@ -180,7 +180,7 @@ buildPythonPackage (finalAttrs: {
   #
   #         ldr     x0, [x0, ___stack_chk_guard];momd
   #
-  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
     "stackprotector"
   ];
 

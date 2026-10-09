@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
           configureFlags = [ "--enable-donna-sse2" ];
         }
       ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      ++ lib.optionals stdenv.hostPlatform.isx86_64 [
         {
           suffix = "amd64-51-30k";
           configureFlags = [ "--enable-amd64-51-30k" ];

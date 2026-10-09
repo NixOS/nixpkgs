@@ -9,12 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "8.4.19";
 
   src =
-    if stdenvNoCC.hostPlatform.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl.darwin";
-        hash = "sha256-RuZX9TWuXBxxegLw0La0l9/6zh96V/2trJvZUoCvTKk=";
-      }
-    else if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
+    if stdenvNoCC.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/camunda/zeebe/releases/download/${finalAttrs.version}/zbctl";
         hash = "sha256-NTJqmcOzpOzHjrtOHBU2J3u0f7sESBeZMbb8kx3zR38=";

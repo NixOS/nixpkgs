@@ -7,7 +7,7 @@
   pcre,
   windows ? null,
   # Disable jit on Apple Silicon, https://github.com/zherczeg/sljit/issues/51
-  enableJit ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
+  enableJit ? !stdenv.hostPlatform.isDarwin,
   variant ? null,
 }:
 
