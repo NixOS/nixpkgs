@@ -21,10 +21,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  # snmalloc fails to compile on Darwin, and upstream doesn't use it for Linux
-  buildNoDefaultFeatures = true;
-  buildFeatures = [ "rustls" ];
-
   # the crate uses `#![deny(warnings)]`, which breaks with lints added by
   # newer rustc releases than the code was written against
   env.RUSTFLAGS = "--cap-lints warn";
