@@ -503,8 +503,8 @@ in
       "sha256-oLO6EZ4hWQSuYlQ0dML8FsTMKtxTCtGehXI1NkmLO34=";
 
   mypy-boto3-emr-serverless =
-    buildMypyBoto3Package "emr-serverless" "1.43.24"
-      "sha256-VTCKMo/iFUNS6n3Ppl7jf9YxHPx0+IpU1atVh8KOgR4=";
+    buildMypyBoto3Package "emr-serverless" "1.43.110"
+      "sha256-MBUQODDfJ90BOZ1pdlJNHNsTy/xJTwWg4Pr8ONWE/oU=";
 
   mypy-boto3-entityresolution =
     buildMypyBoto3Package "entityresolution" "1.43.74"
