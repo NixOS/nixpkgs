@@ -11,7 +11,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "hyprmoncfg";
-  version = "1.9.1";
+  version = "1.22.1";
 
   __structuredAttrs = true;
 
@@ -19,10 +19,13 @@ buildGoModule (finalAttrs: {
     owner = "crmne";
     repo = "hyprmoncfg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LCZ1F30Ix4NnWYPI3WkL03jke9XW1cB5CWxmVSrdYYI=";
+    hash = "sha256-G7H/xPfmAcrvyHID95UM9hTBAw5UHSFh3NEJjpsb+sQ=";
   };
 
   vendorHash = "sha256-gQbjvdKtO0hCXrs9RnWo1s0YeHf5W9t+8AgS2ELXlPo=";
+
+  # documentation helper, not meant to be installed
+  excludedPackages = [ "scripts/capture-fixture" ];
 
   env.CGO_ENABLED = 0;
 
@@ -45,14 +48,11 @@ buildGoModule (finalAttrs: {
   doInstallCheck = true;
 
   postPatch = ''
-    substituteInPlace internal/daemon/daemon_test.go \
-      --replace-fail '#!/bin/bash' '#!${lib.getExe bash}'
-    substituteInPlace internal/apply/apply_test.go \
-      --replace-fail '#!/bin/bash' '#!${lib.getExe bash}' \
-      --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}' \
-      --replace-fail '#!/bin/sh' '#!${lib.getExe bash}'
-    substituteInPlace internal/hypr/client_test.go \
-      --replace-fail '#!/usr/bin/env bash' '#!${lib.getExe bash}'
+    for shebang in '#!/bin/bash' '#!/usr/bin/env bash'; do
+      for f in $(grep -rlF "$shebang" --include='*_test.go' .); do
+        substituteInPlace "$f" --replace-fail "$shebang" '#!${lib.getExe bash}'
+      done
+    done
   '';
 
   preCheck = ''
