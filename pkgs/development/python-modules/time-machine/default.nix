@@ -45,7 +45,8 @@ buildPythonPackage (finalAttrs: {
     "test_destination_datetime_tzinfo_zoneinfo"
     "test_move_to_datetime_with_tzinfo_zoneinfo"
     "test_localtime_and_gmtime_match_datetime"
-  ] ++ lib.optionals stdenv.hostPlatform.is32bit [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
     # FIXME(time32)
     "distant_destination"
     "test_fuzz"
