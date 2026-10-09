@@ -125,10 +125,33 @@ let
               value;
           # Package graph references denote contexts, while unspliced explicit
           # inputs remain caller selections. Re-call each original constructor.
+          adaptStdenv = import ./cross/adapt-stdenv.nix {
+            inherit lib;
+            buildPackages = buildPackages.buildPackages;
+            inherit (buildPackages.stdenv) hostPlatform targetPlatform;
+          };
+          projectStdenv =
+            value:
+            adaptStdenv (
+              if value.hasCC then
+                let
+                  original = value.cc;
+                  selected =
+                    if
+                      original ? stdenv
+                      && lib.systems.equals original.stdenv.hostPlatform buildPackages.stdenv.buildPlatform
+                      && lib.systems.equals original.stdenv.targetPlatform buildPackages.stdenv.hostPlatform
+                    then
+                      original
+                    else
+                      cc;
+                in
+                buildPackages.overrideCC value selected
+              else
+                value
+            );
           context = {
-            stdenv = buildPackages.overrideCC buildPackages.stdenv cc;
             inherit (buildPackages)
-              stdenvNoCC
               buildPackages
               pkgsBuildTarget
               targetPackages
@@ -143,7 +166,9 @@ let
             package: f:
             package.override (
               original:
-              lib.mapAttrs (_: project) original
+              lib.mapAttrs (
+                name: value: if name == "stdenv" || name == "stdenvNoCC" then projectStdenv value else project value
+              ) original
               // lib.intersectAttrs (lib.functionArgs package.override) context
               // f original
             );
