@@ -30,6 +30,9 @@ let
       mkdir -p "$out/nix-support/operation-include"
       echo '#define OPERATION_HEADER 42' > "$out/nix-support/operation-include/operation-header.h"
       echo " -isystem $out/nix-support/operation-include" >> "$out/nix-support/libc-cflags"
+      echo ' -DWRAPPER_LIBC_GROUP=1' >> "$out/nix-support/libc-cflags"
+      echo ' -DWRAPPER_CXX_GROUP=1' >> "$out/nix-support/libcxx-cxxflags"
+      echo ' -DWRAPPER_CXX_LINK_GROUP=1' >> "$out/nix-support/libcxx-ldflags"
       ${lib.optionalString stdenv.cc.isClang ''
         mkdir -p "$out/nix-support/operation-cxx-include"
         echo '#define PACKAGED_CXX_HEADER 42' > "$out/nix-support/operation-cxx-include/packaged-cxx-header.h"
@@ -37,6 +40,9 @@ let
       ''}
       cat > "$out/nix-support/cc-wrapper-hook" <<'EOF'
       case "''${WRAPPER_TEST_ENTRY:-}" in
+        rewrite-response)
+          printf '%s\n' '-c ${./cc-main.c} -o response-after.o' > "$WRAPPER_TEST_RESPONSE"
+          ;;
         nested)
           # A hook is outside the raw compiler's linker continuation. Its
           # independent compiler must select its own defaults and current role.
@@ -57,6 +63,16 @@ let
       EOF
     '';
   });
+  nativeToolWrapper = stdenv.cc.override {
+    nativeTools = true;
+    propagateDoc = false;
+    nativePrefix = "${stdenv.cc.cc}";
+    bintools = stdenv.cc.bintools.override {
+      nativeTools = true;
+      propagateDoc = false;
+      nativePrefix = "${stdenv.cc.cc}";
+    };
+  };
   ppcHeaders = stdenv.mkDerivation {
     name = "cc-wrapper-header-provider";
     buildCommand = ''
@@ -119,6 +135,20 @@ in
     ${CC} "child-$seed.o" -o "child-$seed"
     ${emulator} ./child-$seed
   done
+
+  echo "checking response files preserve tab and newline arguments..." >&2
+  responseSource=$'response\tinput\n.c'
+  cp ${./cc-main.c} "$responseSource"
+  for response in 0 1; do
+    responseObject=$'response\tobject\n'"$response.o"
+    responseProgram=$'response\tprogram\n'"$response"
+    NIX_CC_USE_RESPONSE_FILE=$response \
+      ${CC} -c "$responseSource" -o "$responseObject"
+    NIX_CC_USE_RESPONSE_FILE=$response NIX_LD_USE_RESPONSE_FILE=$response \
+      ${CC} "$responseObject" -o "$responseProgram"
+    ${emulator} "./$responseProgram" > "response-$response.log" 2>&1
+  done
+  cmp response-0.log response-1.log
 
   echo "checking prepared compiler entry and fresh public entry..." >&2
   # A multi-driver selects its defaults once, then binds the actual terminal
@@ -307,13 +337,28 @@ in
       done
     done
 
-    if NIX_CFLAGS_LINK=--driver-mode=g++ NIX_CXXSTDLIB_LINK=-lmissing_driver_policy \
-      ${parent}/bin/${targetPrefix}cc -x c driver-language.c \
-      -DEXPECT_DRIVER_CXX_POLICY=0 -o driver-language > driver-mode-link.log 2>&1; then
-      echo "Generic link arguments did not select C++ runtime policy" >&2
-      exit 1
-    fi
-    grep -F missing_driver_policy driver-mode-link.log
+    ${
+      if (stdenv.cc.cc.nativePrimaryQuery or null) == "fd-v3" then
+        ''
+          # Conditional link arguments do not recursively select C++ policy.
+          # Otherwise LINK=g++ / CXX_COMPILE=-c has no consistent fixed point.
+          NIX_CFLAGS_LINK=--driver-mode=g++ NIX_CXXSTDLIB_COMPILE=-c \
+            NIX_CXXSTDLIB_LINK=-lmissing_driver_policy \
+            ${parent}/bin/${targetPrefix}cc -x c driver-language.c \
+            -DEXPECT_DRIVER_CXX_POLICY=0 -o driver-language
+          ${emulator} ./driver-language
+        ''
+      else
+        ''
+          if NIX_CFLAGS_LINK=--driver-mode=g++ NIX_CXXSTDLIB_LINK=-lmissing_driver_policy \
+            ${parent}/bin/${targetPrefix}cc -x c driver-language.c \
+            -DEXPECT_DRIVER_CXX_POLICY=0 -o driver-language > driver-mode-link.log 2>&1; then
+            echo "Generic link arguments did not select legacy C++ runtime policy" >&2
+            exit 1
+          fi
+          grep -F missing_driver_policy driver-mode-link.log
+        ''
+    }
 
     # The C driver needs packaged C++ headers without opaque caller flags,
     # including when a different receiver interprets the prepared request.
@@ -340,6 +385,123 @@ in
       "$BASH" ./prepare-operation ${child}/nix-support/compiler ${rawCXX} \
         operation-cxx.o -o entry-cxx
       ${emulator} ./entry-cxx
+    done
+  ''}
+
+  ${lib.optionalString ((stdenv.cc.cc.nativePrimaryQuery or null) == "fd-v3") ''
+    [[ -s ${parent}/nix-support/native-primary-programs ]]
+    # An absent build directory contributes an ignored empty purity prefix.
+    env -u NIX_BUILD_TOP NIX_ENFORCE_PURITY=1 NIX_STORE=${builtins.storeDir} \
+      ${parent}/bin/${targetPrefix}cc -E -x c /dev/null > /dev/null
+    # Hooks retain raw caller syntax; final native execution rereads it.
+    printf '%s\n' '-c ${./cc-main.c} -o response-before.o' > caller-response.rsp
+    WRAPPER_TEST_ENTRY=rewrite-response WRAPPER_TEST_RESPONSE="$PWD/caller-response.rsp" \
+      ${parent}/bin/${targetPrefix}cc @caller-response.rsp
+    [[ -f response-after.o && ! -e response-before.o ]]
+    ${lib.optionalString stdenv.cc.isClang ''
+      # Native outer quoting selectors also come from unconditional policy.
+      printf '%s\n' 'int main(void) { return 0; }' > 'response\path.c'
+      printf '%s\n' '"response\path.c" -o response-path' > 'inner\policy.rsp'
+      printf '%s\n' '@inner\policy.rsp' > windows-response.rsp
+      # The speculative caller-only GNU lexer sees a cycle; the actual
+      # unconditional Windows lexer selects the valid backslash-named file.
+      printf '%s\n' '@windows-response.rsp' > innerpolicy.rsp
+      for channel in NIX_CFLAGS_COMPILE_BEFORE NIX_CFLAGS_COMPILE; do
+        env "$channel=--rsp-quoting=windows" \
+          ${parent}/bin/${targetPrefix}cc @windows-response.rsp
+        ${emulator} ./response-path
+      done
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Mutable support files are whole invocation groups, not implicit native
+      # headers/libraries. Native per-job suppression does not erase additions.
+      cat > support-groups.cc <<'EOF'
+      #ifndef WRAPPER_LIBC_GROUP
+      #define WRAPPER_LIBC_GROUP 0
+      #endif
+      #ifndef WRAPPER_CXX_GROUP
+      #define WRAPPER_CXX_GROUP 0
+      #endif
+      #ifndef WRAPPER_CXX_LINK_GROUP
+      #define WRAPPER_CXX_LINK_GROUP 0
+      #endif
+      static_assert(WRAPPER_LIBC_GROUP == EXPECT_LIBC);
+      static_assert(WRAPPER_CXX_GROUP == EXPECT_CXX);
+      static_assert(WRAPPER_CXX_LINK_GROUP == EXPECT_LINK);
+      int group_value() { return 42; }
+      EOF
+      checkGroups() {
+        local c=$1 cxx=$2 link=$3; shift 3
+        ${parent}/bin/${targetPrefix}c++ -shared -fPIC support-groups.cc \
+          -DEXPECT_LIBC="$c" -DEXPECT_CXX="$cxx" -DEXPECT_LINK="$link" \
+          "$@" -o support-groups.so
+      }
+      checkGroups 1 1 1 -nodefaultlibs
+      checkGroups 0 0 1 -nostdinc
+      checkGroups 1 0 1 -nostdinc++
+      checkGroups 1 1 0 -nostdlib
+      ${lib.optionalString stdenv.cc.isClang ''
+        checkGroups 1 1 1 -nostdlib++
+        checkGroups 1 1 1 -nostdlibinc
+        checkGroups 1 1 1 -Xarch_host -nostdinc
+        checkGroups 1 1 1 -Xarch_host -nostdlib
+      ''}
+    ''}
+    # Exact -v bypasses argument policy, including typed machine defaults.
+    NIX_CFLAGS_COMPILE=@missing-version-policy.rsp \
+      ${parent}/bin/${targetPrefix}cc -v > primary-version.log 2>&1
+    if grep -E 'Xarch_host|missing-version-policy|unknown argument' primary-version.log; then
+      echo "Version-only invocation received compiler policy" >&2
+      exit 1
+    fi
+    ${lib.optionalString stdenv.cc.isGNU ''
+      mkdir primary-user-tmp
+      echo caller-sentinel > primary-user-tmp/selected
+      cat > primary-tmp.specs <<'EOF'
+      *self_spec:
+      %:if-exists-then-else(%:getenv(TMPDIR /selected) -c)
+      EOF
+      TMPDIR="$PWD/primary-user-tmp" NIX_CFLAGS_LINK=--invalid-primary-link-policy \
+        ${parent}/bin/${targetPrefix}cc -specs=primary-tmp.specs ${./cc-main.c} -o primary-tmp.o
+      ${CC} primary-tmp.o -o primary-tmp
+      ${emulator} ./primary-tmp
+      [[ $(< primary-user-tmp/selected) == caller-sentinel ]]
+      [[ -z $(find primary-user-tmp -mindepth 1 ! -name selected -print) ]]
+    ''}
+    ${lib.optionalString stdenv.cc.isClang ''
+      # Only the native caller entry can bypass wrapper policy. A policy-created
+      # frontend would otherwise disappear when the wrapper drops driver flags.
+      if env NIX_CFLAGS_COMPILE_BEFORE_${suffixSalt}=-cc1 \
+          ${parent}/bin/${targetPrefix}cc -fsyntax-only ${./cc-main.c} \
+          > policy-frontend.log 2>&1; then
+        echo 'policy incorrectly selected a frontend entry' >&2
+        exit 1
+      fi
+      # Packaged BEFORE defaults can precede this token; either native branch
+      # must reject it instead of treating it as the caller's frontend entry.
+      grep -E "primary policy cannot select a frontend entry|unknown argument: '-cc1'" policy-frontend.log
+      # The query must not move the ordinary driver's immediate-output effects.
+      echo owned-sentinel > immediate-compilation-database.json
+      ${parent}/bin/${targetPrefix}cc --version -MJ immediate-compilation-database.json > /dev/null
+      [[ ! -e immediate-compilation-database.json ]]
+    ''}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      # Package metadata cannot advertise a different nativePrefix executable.
+      [[ ! -e ${nativeToolWrapper}/nix-support/native-primary-programs ]]
+    ''}
+    # Native option parsing distinguishes an operand from an operation flag.
+    for operand in -c -nostdinc -nostdlib; do
+      echo '#define NATIVE_OPERAND 42' > "$operand"
+      printf '#include <stdio.h>\nint main(void) { return NATIVE_OPERAND != 42; }\n' > native-operand.c
+      ${parent}/bin/${targetPrefix}cc -include "$operand" native-operand.c -o native-operand
+      ${emulator} ./native-operand
+    done
+    # A stop action in an unconditional channel omits conditional link policy.
+    for channel in NIX_CFLAGS_COMPILE_BEFORE NIX_CFLAGS_COMPILE NIX_CXXSTDLIB_COMPILE; do
+      env "$channel=-c" NIX_CFLAGS_LINK=-lmissing_primary_link_policy \
+        ${parent}/bin/${targetPrefix}c++ -x c++ ${./cc-main.c} -o native-primary.o
+      ${parent}/bin/${targetPrefix}c++ native-primary.o -o native-primary
+      ${emulator} ./native-primary
     done
   ''}
 

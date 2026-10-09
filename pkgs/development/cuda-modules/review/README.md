@@ -48,14 +48,19 @@ derivations and fourteen outputs. The dynamic-loader repair and native compiler
 query integration change core dependencies and require separate full builds.
 Acceptance of those current changes remains pending.
 
-The native adapter review also found two unresolved composition defects.
+The native adapter review found composition defects.
 Flattening caller response files can promote their quoting selectors into the
 outer native lexer: identical flattened arguments can represent different
-requests. Opaque link policy and late hooks can select static PIE after the
+requests. The replacement carries raw argument groups to the native interpreter;
+explicit caller frontend entry retains its standalone lexical context. Bounded
+driver and wrapper checks pass; rebuilt producers remain pending.
+Opaque link policy and late hooks can select static PIE after the
 wrapper inferred a dynamic link, producing an unwanted interpreter and RUNPATH
-and a program that crashes. Bounded query or wrapper suites do not establish
-these cases; the native frame and default-resource interpretation remain under
-review.
+and a program that crashes. Native linker prototypes preserve policy origin and
+interpret defaults after final link-mode selection; end-to-end compiler and
+linker integration remains pending. Neither is established by earlier suites.
+Purity and no-native enforcement must retain caller provenance through native
+scoped translation and frontend forwarding; those paths remain under review.
 
 Package-owned regressions are the acceptance interface. Run the wrapper suites
 with actual GCC, Clang/libstdc++ and Clang/libc++ producers, then the CUDA matrix,
@@ -180,3 +185,11 @@ workload allocated 249.4/531.7 MB with median CPU 0.469/1.012 s (branch/master),
 with different derivations. Additional configuration/restricted-library caches
 saved under 0.3% allocation without stable CPU benefit and were rejected.
 These historical figures require a new matched comparison after core integration.
+
+A 2026-10-09 matched workload forced fifteen ordinary compiler, CUDA, MPI,
+Torch/MAGMA, Triton and PyCUDA derivation/output records, with three alternating
+pairs per platform. Comparing `cecfa8f6a07e` with committed `4bd11bba08c9`, native
+allocation increased 0.924% and cross allocation decreased 20.946%; all fifteen
+derivations changed on each platform. Both sides allowed broken metadata because
+master marks MAGMA broken. These whole-branch figures neither isolate scope costs
+nor validate the pending core integration; noisy CPU results establish no speedup.
