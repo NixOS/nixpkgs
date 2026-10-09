@@ -1617,7 +1617,7 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 #### Using unittestCheckHook {#using-unittestcheckhook}
 
-`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run `python -m unittest discover`:
+`unittestCheckHook` is a hook which will set up (or configure) a [`checkPhase`](#ssec-check-phase) to run either `python -m unittest discover` or `python -m unittest`:
 
 ```nix
 {
@@ -1626,6 +1626,27 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
   unittestFlags = [
     "-s"
     "tests"
+    "-v"
+  ];
+}
+```
+
+```nix
+{
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  dontUseUnittestDiscover = true;
+
+  enabledTestPaths = [
+    "tests/test_a1.py"
+    "tests/test_b*.py"
+    "tests.test_c1"
+    "tests.test_c2.TestClass1"
+    "tests.test_c2.TestClass2.test_method1"
+    "tests.test_d1.test_function1"
+  ];
+
+  unittestFlags = [
     "-v"
   ];
 }
@@ -1654,6 +1675,17 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 `unittestFlags` (list, default to `[ ]`)
 
 : Additional flags to append to the `python3 -m unittest` command.
+
+Without `unittest discover`:
+
+`enabledTestPaths` (non-empty list of strings, required)
+
+: A list of paths, path globs or importable module/function/class/method identifiers to discover tests in.
+
+  Path globs will be expanded before appending to the `python3 -m unittest` command.
+  A path glob that matches no paths results in build failure.
+
+  `enabledTestPaths` must be a non-empty list when `dontUseUnittestDiscover == true`, as plain `python3 -m unittest` is equivalent to `python3 -m unittest discover`.
 
 `pytest` supports test cases defined for `unittest`, making it possible to use `pytestCheckHook` instead of `unittestCheckHook` for additional features such as fine-grained test selection, but with the following caveats:
 - There are subtle difference between the behaviour of `pytest` and `unittest`.
