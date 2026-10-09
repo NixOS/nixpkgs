@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "src/zope/deferredimport" ];
+  unittestFlags = [ "src/zope/deferredimport" ];
 
   pythonNamespaces = [ "zope" ];
 
