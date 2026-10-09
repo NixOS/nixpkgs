@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.15.9";
+  version = "1.15.10";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LuIwFUAJOoV8Su0g1tvhvXhMEJbkpM2BCCOWzQR4JIA=";
+    hash = "sha256-9MJaeFQNBaR0TtQWYRCNOgFohUYENC+mLih73O2j8Lo=";
   };
 
   patches = [ ./fix-deps.patch ];
