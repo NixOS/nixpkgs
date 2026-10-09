@@ -470,6 +470,11 @@ let
               "test-use-env-proxy-cli-http"
               "test-wasm-web-api"
             ]
+            # Darwin sandbox only allows 127.0.0.1 and ::1 for local
+            # networking, but this test connects to 127.0.0.2.
+            ++ lib.optional (
+              stdenv.buildPlatform.isDarwin && lib.versionAtLeast version "24"
+            ) "test-dgram-connect-sync"
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22" && stdenv.hostPlatform.isRiscV64) "test-worker-messaging"
             ++ lib.optional (majorVersion == "26" && !stdenv.buildPlatform.isDarwin) "test-net-boundsocket"
