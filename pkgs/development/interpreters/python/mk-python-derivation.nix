@@ -125,6 +125,7 @@ lib.extendMkDerivation {
 
     # Deprecated arguments
     "pytestFlagsArray"
+    "unittestFlagsArray"
   ];
 
   extendDrvArgs =
@@ -474,6 +475,19 @@ lib.extendMkDerivation {
         ${if deprecatedFlagNotEmpty then "pytestFlagsArray" else null} = throw ''
           buildPythonPackage: Deprecated flag pytestFlagsArray found at ${pos.file}:${toString pos.line}
             Use pytestFlags or (enabled|disabled)(TestPaths|Tests|TestMarks) instead.
+        '';
+      }
+    )
+    // (
+      let
+        deprecatedFlagNotEmpty =
+          attrs ? unittestFlagsArray && attrs.unittestFlagsArray != null && attrs.unittestFlagsArray != [ ];
+        pos = builtins.unsafeGetAttrPos "unittestFlagsArray" attrs;
+      in
+      {
+        ${if deprecatedFlagNotEmpty then "unittestFlagsArray" else null} = throw ''
+          buildPythonPackage: Deprecated flag unittestFlagsArray found at ${pos.file}:${toString pos.line}
+            Use unittestFlags instead.
         '';
       }
     )
