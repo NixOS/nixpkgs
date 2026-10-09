@@ -57,8 +57,7 @@ let
       export DYLD_LIBRARY_PATH=$(pwd)/link-grammar/.libs
     '';
 
-    # multi-dict test randomly fails on x86_64-darwin
-    doCheck = stdenv.hostPlatform.system != "x86_64-darwin";
+    doCheck = true;
 
     passthru.tests = {
       quick =

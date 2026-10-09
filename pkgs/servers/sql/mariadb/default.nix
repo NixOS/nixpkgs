@@ -116,15 +116,10 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
-        env =
-          lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
-            # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
-            NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
-          }
-          // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-            # Detection of netdb.h doesnt work for some reason on x86_64-darwin
-            NIX_CFLAGS_COMPILE = "-DHAVE_NETDB_H";
-          };
+        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+        };
 
         patches = [
           ./patch/cmake-includedir.patch

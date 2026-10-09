@@ -43,7 +43,7 @@ buildDunePackage {
     menhir
     lem
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.sigtool
   ];
 

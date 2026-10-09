@@ -51,7 +51,7 @@ buildDotnetModule rec {
     bintools
     fixDarwinDylibNames
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     autoSignDarwinBinariesHook
   ];
 
