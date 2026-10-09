@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   fetchurl,
   callPackage,
 
@@ -43,6 +44,7 @@
     stdenv
     fetchFromGitHub
     fetchFromGitLab
+    fetchpatch
     fetchurl
     callPackage
 
