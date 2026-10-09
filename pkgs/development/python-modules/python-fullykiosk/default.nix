@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-fullykiosk";
-  version = "0.0.15";
+  version = "0.0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cgarwood";
     repo = "python-fullykiosk";
     tag = version;
-    hash = "sha256-t/o4yRIh/r6cocEJ7c9oOa/C7RE3ZltkpzsCKS/dJHY=";
+    hash = "sha256-7agAI+Kp7ApMQ7qYgVPa32yjkkrbgZNWNkNEpyR0ALw=";
   };
 
   build-system = [ setuptools ];
