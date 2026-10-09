@@ -164,12 +164,24 @@ let
           };
           recall =
             package: f:
+            let
+              args = lib.functionArgs package.override;
+            in
             package.override (
               original:
+              # Defaults absent from captured constructor values cannot be
+              # transported without replaying their defining closure.
+              assert lib.assertMsg (lib.all
+                (name: !(builtins.hasAttr name args) || builtins.hasAttr name original)
+                [
+                  "stdenv"
+                  "stdenvNoCC"
+                ]
+              ) "stdenv compiler projection requires explicitly captured stdenv/stdenvNoCC constructor arguments";
               lib.mapAttrs (
                 name: value: if name == "stdenv" || name == "stdenvNoCC" then projectStdenv value else project value
               ) original
-              // lib.intersectAttrs (lib.functionArgs package.override) context
+              // lib.intersectAttrs args context
               // f original
             );
           wrapperShell =
