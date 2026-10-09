@@ -10,7 +10,10 @@ There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/
 
 > [!NOTE]
 >
-> We are actively restructuring our documentation to be more beginner friendly.
+> The Documentation Team is working on making the documentation more accessible, coherent, and beginner-friendly.
+> Consult the [vision](https://github.com/NixOS/nix.dev/tree/master/maintainers/vision.md).
+>
+> If you would like to help, [get in touch](#getting-help) with the Documentation Team!
 >
 
 We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with the `:doc` command in `nix repl`, e.g.:
@@ -432,3 +435,5 @@ Check the [list of possible replacement patterns](https://github.com/executableb
 ## Getting help
 
 If you need documentation-specific help or reviews, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on your pull request.
+
+The official communication channels are available at the [official NixOS website](https://nixos.org/community/teams/documentation/), under `Contact`.
