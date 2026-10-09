@@ -10,18 +10,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "essh";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "matthart1983";
     repo = "essh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dK9M730LgS4CG/BAOSfvH2T06RJsEWHVFT0/VoFvt3Q=";
+    hash = "sha256-amv4//HWf928oKHiZEdhJo4EzeFDCDXSz2fy7PT0CIs=";
   };
 
   __structuredAttrs = true;
 
-  cargoHash = "sha256-2ZAvm3LJHpLF99ahLdTFKuneRMLn6XryNd+ZT2uSawE=";
+  cargoHash = "sha256-DWWzQ4T2FiOy8JzepAgsV0fr73RMSaNuoCDp55vaaJo=";
 
   nativeBuildInputs = [ pkg-config ];
 

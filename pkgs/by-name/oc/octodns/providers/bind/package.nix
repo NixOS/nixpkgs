@@ -47,6 +47,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [
+    # Ignore octoDNS deprecation warnings
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   meta = {
     description = "RFC compliant (Bind9) provider for octoDNS";
     homepage = "https://github.com/octodns/octodns-bind";

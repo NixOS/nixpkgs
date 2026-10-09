@@ -4,6 +4,7 @@
   jq,
   nodejs,
   makeWrapper,
+  runtimeShellPackage,
   stdenv,
   versionCheckHook,
   pnpmConfigHook,
@@ -12,12 +13,19 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "immich-cli";
   inherit (immich) version src pnpmDeps;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     jq
     makeWrapper
     nodejs
     pnpmConfigHook
     immich.pnpm
+  ];
+
+  buildInputs = [
+    runtimeShellPackage
   ];
 
   buildPhase = ''

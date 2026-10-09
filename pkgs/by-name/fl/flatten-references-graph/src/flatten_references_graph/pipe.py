@@ -20,7 +20,8 @@ funcs = tlz.merge(
             "split_every",
             "limit_layers",
             "remove_paths",
-            "reverse"
+            "reverse",
+            "reorder"
         ],
         lib
     ),

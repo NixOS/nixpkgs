@@ -8,14 +8,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "octomap";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "OctoMap";
     repo = "octomap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QxQHxxFciR6cvB/b8i0mr1hqGxOXhXmB4zgdsD977Mw=";
+    hash = "sha256-GlYfAZGSMO8nMQxFyvFs+ZM8vBRMlnpfiIXe6kCUJa0=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/octomap";
 
   patches = [
     (fetchpatch2 {
@@ -25,7 +27,6 @@ stdenv.mkDerivation (finalAttrs: {
       excludes = [ ".gitignore" ];
       hash = "sha256-p/qvBiqeZt93aI7p7MYG6SUwcRlchHV9AnXKVTzBhRs=";
     })
-    # fix for gcc16, merged upstream
     (fetchpatch2 {
       name = "fix-gcc16.patch";
       url = "https://github.com/OctoMap/octomap/commit/d7e54ca1c4074f88381c07bfdd685bd4fced0636.patch?full_index=1";
@@ -34,20 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # ref. https://github.com/OctoMap/octomap/pull/448 not merged yet
-  postPatch = ''
-    substituteInPlace include/octomap/OcTreeKey.h --replace-fail \
-      "#include <ciso646>" ""
-  '';
-
-  sourceRoot = "${finalAttrs.src.name}/octomap";
-
   nativeBuildInputs = [ cmake ];
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=deprecated-declarations"
-  ];
 
   strictDeps = true;
   __structuredAttrs = true;

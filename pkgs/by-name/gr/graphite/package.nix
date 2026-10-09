@@ -29,13 +29,13 @@
 }:
 
 let
-  version = "0-unstable-2026-08-25";
-  rev = "404d9f3047711d900e04573548745b869946f240";
+  version = "0-unstable-2026-10-05";
+  rev = "e38fab22455c45068fcd1eb976afb0c088fa222d";
 
-  srcHash = "sha256-FdLdro7T8hyoNUT8dCd/ilZEUARPnFxqztbtxaNk9ws=";
-  shaderHash = "sha256-9yr//4t8k8Ncdli9AyBnkB2Pz9GgNhoumpdOv2uqL3k=";
-  cargoHash = "sha256-BHuYW90vTtDbfre6br7nTFa3VWgX01AlalXKwjiSSnA=";
-  npmHash = "sha256-Rb0bLPk54QigNp7TkDkJJy/TEJXAhlXOCruckwvdXks=";
+  srcHash = "sha256-lKNJwRJRrtLh/0cQNFnBss2DYZp8UkoP0pkI1pQEB0Y=";
+  shaderHash = "sha256-SBJt5iEBvHM4cirnrBVUHtC0bnw8ZUQW9oEs6P02AKc=";
+  cargoHash = "sha256-5WhnrB+8eZSQ1dPJlG+pFffR3VF12NUkCn0AAoDByYM=";
+  npmHash = "sha256-VUNW+YfBvJc3EyigULBdv4Uqb+vKgTjrDMOAVk1DCvI=";
 
   brandingRev = "6687dc6d3d8552948458d00d35e2bee3a40ab66b";
   brandingHash = "sha256-yD4O50gz2mtby1h4o+9PqjMfYmTbBOX6XDc5Ez5fgnY=";
@@ -185,12 +185,13 @@ stdenv.mkDerivation (finalAttrs: {
     # which are licensed under the separate Graphite Branding License.
     license = with lib.licenses; [
       asl20
-      {
+      (mkLicense {
+        shortName = "graphite";
         fullName = "Graphite Branding License";
         url = "https://graphite.art/license/#branding";
         free = false;
         redistributable = true;
-      }
+      })
     ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ timon ];

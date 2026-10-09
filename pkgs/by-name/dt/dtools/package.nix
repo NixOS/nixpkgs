@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtools";
-  version = "2.112.1";
+  version = "2.113.0";
 
   src = fetchFromGitHub {
     owner = "dlang";
     repo = "tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WHgV33fu1YhRQCERVatqXKEqmfHlUvZ4IXhga/yOQ3w=";
+    hash = "sha256-loXsGNaMH93dw9U2+s9D5xQBbO1aeeAPPS/bSHLJkP4=";
     name = "dtools";
   };
 

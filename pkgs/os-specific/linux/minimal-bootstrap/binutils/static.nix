@@ -20,11 +20,18 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "binutils-static";
-  version = "2.47";
+  # TODO: need to set version to 2.46, but binutils tarball is named as
+  # "2.46.0"
+  # This is due to a mismatch between binutils-with-gold, which is
+  # named as 2.46. The top-level package follows binutils-with-gold,
+  # and the version here is asserted to be older or equal. The version
+  # comparison function from lib considers 2.46.0 to be "newer" than
+  # 2.46.
+  version = "2.46";
 
   src = fetchurl {
-    url = "mirror://gnu/binutils/binutils-${version}.tar.xz";
-    hash = "sha256-FUqyO2AHDo8nATwil38RKUJdZ9HorNbhMBDmF4EeTP8=";
+    url = "mirror://gnu/binutils/binutils-${version}.0.tar.xz";
+    hash = "sha256-11qU9Nc+ekCG91E+Z+Q56Pzcu3Jv/mP0ZhdE5iVrLPI=";
   };
 
   patches = [
@@ -93,7 +100,7 @@ bash.runCommand "${pname}-${version}"
   ''
     # Unpack
     tar xf ${src}
-    cd binutils-${version}
+    cd binutils-${version}.0
 
     # Patch
     ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}

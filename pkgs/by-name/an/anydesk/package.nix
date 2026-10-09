@@ -31,13 +31,13 @@
   libice,
   libxkbfile,
   libxcb,
+  libevdev,
   minizip,
   net-tools,
   lsb-release,
   freetype,
   fontconfig,
   polkit,
-  polkit_gnome,
   pciutils,
   copyDesktopItems,
   pulseaudio,
@@ -86,10 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     fontconfig
     polkit
-    polkit_gnome
     pulseaudio
     libxcb
     libxkbfile
+    libevdev
     libx11
     libxdamage
     libxext

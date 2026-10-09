@@ -21,7 +21,7 @@
   lomiri,
   pkg-config,
   python3,
-  systemd,
+  systemdLibs,
   vala,
   wrapGAppsHook3,
 }:
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     libpulseaudio
     libxml2
-    systemd
+    systemdLibs
   ]
   ++ (with lomiri; [
     cmake-extras

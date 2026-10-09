@@ -6,9 +6,7 @@
   kodi,
   requests,
   dateutil,
-  six,
-  kodi-six,
-  signals,
+  typing_extensions,
   websocket,
 }:
 let
@@ -17,13 +15,13 @@ in
 buildKodiAddon rec {
   pname = "jellyfin";
   namespace = "plugin.video.jellyfin";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-kodi";
     rev = "v${version}";
-    sha256 = "sha256-S5LAIeYwApyGPsj999rotFgfAZmLxnJjuJD8CE4QDro=";
+    sha256 = "sha256-TWDhCOe4EO2HJ/Px+en2++YWniiw4Y+vU3sQtxOvT8U=";
   };
 
   nativeBuildInputs = [ python ];
@@ -42,10 +40,8 @@ buildKodiAddon rec {
   propagatedBuildInputs = [
     requests
     dateutil
-    six
-    kodi-six
-    signals
     websocket
+    typing_extensions
   ];
 
   meta = {

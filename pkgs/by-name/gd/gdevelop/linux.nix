@@ -13,7 +13,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://github.com/4ian/GDevelop/releases/download/v${version}/GDevelop-5-${version}.AppImage";
-        hash = "sha256-67tg09jIs2z2atI9i6W8jhMGhbjpHsfpgKklAkuXJEw=";
+        hash = "sha256-fvCh4GVWH37mn7tpnTXMs8J0/8o03bg1H1Zw2JtpK3k=";
       }
     else
       throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";

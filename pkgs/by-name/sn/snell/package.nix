@@ -64,9 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with lib.maintainers; [
-      mlyxshi
-    ];
+    maintainers = [ ];
     mainProgram = "snell-server";
   };
 })

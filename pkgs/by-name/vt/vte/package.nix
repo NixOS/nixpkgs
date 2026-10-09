@@ -28,8 +28,8 @@
   lz4,
   icu,
   simdutf,
-  systemd,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   fast-float,
   nixosTests,
   blackbox-terminal,
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     simdutf
   ]
   ++ lib.optionals systemdSupport [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (darwinMinVersionHook "13.3")

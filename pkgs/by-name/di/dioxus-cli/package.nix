@@ -4,12 +4,13 @@
   rustPlatform,
   pkg-config,
   cacert,
+  libgit2,
   openssl,
   rustfmt,
   installShellFiles,
   makeWrapper,
   esbuild,
-  wasm-bindgen-cli_0_2_126,
+  wasm-bindgen-cli_0_2_127,
   testers,
   dioxus-cli,
   withTelemetry ? false,
@@ -33,6 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   env = {
     OPENSSL_NO_VENDOR = 1;
+    LIBGIT2_NO_VENDOR = 1;
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     openssl
   ];
 
@@ -81,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --suffix PATH : ${
         lib.makeBinPath [
           esbuild
-          wasm-bindgen-cli_0_2_126
+          wasm-bindgen-cli_0_2_127
         ]
       }
   '';
@@ -96,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       anish
+      hackcraft_
     ];
     platforms = lib.platforms.all;
     mainProgram = "dx";

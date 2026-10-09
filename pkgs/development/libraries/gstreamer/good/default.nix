@@ -61,6 +61,8 @@
   wavpack,
   glib,
   openssl,
+  # for passthru.gstreamerCpeParts
+  gstreamer,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -79,7 +81,7 @@ assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.28.6";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -88,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
-    hash = "sha256-sMYgpLGLbukxtMQ7vxdg0whmbcN/cwp+fxrTJ+Wc4t8=";
+    hash = "sha256-hyVpacgs87yFdDAfPnBEqQ3grFAKWifYujjE3eiU3Ys=";
   };
 
   patches = [
@@ -258,9 +260,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     NIX_LDFLAGS =
-      # linking error on Darwin
+      # linking error on Darwin and musl systems
       # https://github.com/NixOS/nixpkgs/pull/70690#issuecomment-553694896
-      lib.optionalString stdenv.hostPlatform.isDarwin "-lncurses";
+      lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isMusl) "-lncurses";
   };
 
   # fails 1 tests with "Unexpected critical/warning: g_object_set_is_valid_property: object class 'GstRtpStorage' has no property named ''"
@@ -306,5 +308,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

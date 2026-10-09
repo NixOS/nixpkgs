@@ -9,7 +9,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xml-marshaller";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "xml_marshaller";
     inherit (finalAttrs) version;
-    hash = "sha256-QvBALLDD8o5nZQ5Z4bembhadK6jcydWKQpJaSmGqqJM=";
+    hash = "sha256-xbi9HAURxUD/7gHVhwR/ibejHGCqdbv/TE76mCPemU4=";
   };
 
   build-system = [ setuptools ];

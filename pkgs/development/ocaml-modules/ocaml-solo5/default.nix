@@ -17,20 +17,24 @@
       throw "ocaml-solo5 does not support ${stdenv.targetPlatform.system}",
 }:
 
-assert lib.asserts.assertOneOf "ocaml-solo5's ocaml version" ocaml.version [
-  "5.4.1"
-  "5.5.0"
-];
+let
+  # check upstream patches/<name> directory names
+  allowlisted = [ "5.5" ];
+  entry =
+    if lib.elem ocaml.version allowlisted then ocaml.version else lib.versions.majorMinor ocaml.version;
+in
+
+assert lib.asserts.assertOneOf "ocaml-solo5's ocaml version" entry allowlisted;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml-solo5";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-solo5";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/xUF98MPhjv9yRWoRDx2uIkCr2Furz1qUJexIxnHhI4=";
+    hash = "sha256-ZbJoh3HHjD7XNvGK1Ehdu/uEoPFtRgVNNz8vtT7zaXI=";
   };
 
   strictDeps = true;
@@ -52,12 +56,9 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     mkdir ocaml
     tar xf ${ocaml.src} -C ocaml --strip-components=1
-    version=$(head -n1 ocaml/VERSION)
-    if test -d "patches/$version"; then
-      for p in "patches/$version"/*; do
-        patch -d ocaml -p1 < "$p"
-      done
-    fi
+    for p in patches/${entry}/*; do
+      patch -d ocaml -p1 < "$p"
+    done
   '';
 
   # stdenv exports these environment variables

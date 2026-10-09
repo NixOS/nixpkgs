@@ -1,11 +1,26 @@
 {
   # keep-sorted start
+  clion,
+  datagrip,
+  dataspell,
   fetchurl,
   fetchzip,
+  goland,
+  intellij-idea,
+  intellij-idea-oss,
   jetbrains,
+  jetbrains-gateway,
+  jetbrains-mps,
   lib,
+  phpstorm,
+  pycharm,
+  pycharm-oss,
+  rider,
+  ruby-mine,
   runCommand,
+  rust-rover,
   symlinkJoin,
+  webstorm,
   # keep-sorted end
 
   # If not set, all IDEs are tested.
@@ -15,17 +30,16 @@
 let
   ides =
     if ide == null then
-      with jetbrains;
       [
         # keep-sorted start
         clion
         datagrip
         dataspell
-        gateway
         goland
-        idea
-        idea-oss
-        mps
+        intellij-idea
+        intellij-idea-oss
+        jetbrains-gateway
+        jetbrains-mps
         phpstorm
         pycharm
         pycharm-oss

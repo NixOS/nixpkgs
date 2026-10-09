@@ -63,6 +63,15 @@ caddy.overrideAttrs (
         git
       ];
       dontUnpack = true;
+
+      env.GOTOOLCHAIN = "local";
+
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+        "GIT_PROXY_COMMAND"
+        "SOCKS_SERVER"
+        "GOPROXY"
+      ];
+
       buildPhase =
         let
           withArgs = concatMapStrings (plugin: "--with ${plugin} ") pluginsSorted;

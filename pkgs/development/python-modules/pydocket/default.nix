@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.25.0";
+  version = "0.25.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     owner = "chrisguidry";
     repo = "docket";
     tag = finalAttrs.version;
-    hash = "sha256-yVXWOoTGwIBeBmYZ6xW5SuQYzLXVNPPXZ/E2VBncivg=";
+    hash = "sha256-xiA4VHRDPv3iMil/MjFezAQCqw6rsR1nHj9fdBzHEQk=";
   };
 
   build-system = [

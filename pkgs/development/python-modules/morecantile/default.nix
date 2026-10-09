@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "morecantile";
-  version = "7.0.3";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "morecantile";
     tag = version;
-    hash = "sha256-Hx4duNbTuRfOmNBLN9J6/6URe57aPc8+3SJA7rbW5zs=";
+    hash = "sha256-RH8eO8KhxPtsD3ohOErwUpV9VFZUXlJ2fctQiUOc6L4=";
   };
 
   build-system = [ hatchling ];

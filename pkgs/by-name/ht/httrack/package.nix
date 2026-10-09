@@ -1,30 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   zlib,
   openssl,
   libiconv,
-  autoreconfHook,
-  autoconf-archive,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.49.24";
   pname = "httrack";
+  version = "3.50.3";
 
-  src = fetchFromGitHub {
-    owner = "xroche";
-    repo = "httrack";
-    tag = finalAttrs.version;
-    hash = "sha256-dfPb1h3aeoNKtj+W6ue6RqRJX8+aiCZdEPYZWsvoNRY=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/xroche/httrack/releases/download/${finalAttrs.version}/httrack-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ZE1OwOSK1ZbazX+AF7aNij8d/BQChLQStTCG59FmTp0=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    autoconf-archive
-  ];
 
   buildInputs = [
     libiconv
@@ -35,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Easy-to-use offline browser / website mirroring utility";
     homepage = "https://www.httrack.com";
-    changelog = "https://github.com/xroche/httrack/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/xroche/httrack/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ tbutter ];
     platforms = with lib.platforms; unix;

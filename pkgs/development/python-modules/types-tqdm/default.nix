@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-tqdm";
-  version = "4.70.0.20260827";
+  version = "4.70.0.20260906";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "types_tqdm";
     inherit (finalAttrs) version;
-    hash = "sha256-0+/WkkOskJPFUvHA0IG3cobWGs6WtomaFCVCVVva0tw=";
+    hash = "sha256-ZYHcmWFSqH1Rzi6haRaRh//AqW2s24rb3vKcvujB5jE=";
   };
 
   build-system = [ setuptools ];

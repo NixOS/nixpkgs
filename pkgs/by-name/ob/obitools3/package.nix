@@ -43,5 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.cecill20;
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.all;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

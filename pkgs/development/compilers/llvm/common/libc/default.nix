@@ -18,19 +18,25 @@
 let
   pname = "libc";
 
-  src' = runCommand "${pname}-src-${version}" { } (
-    ''
-      mkdir -p "$out"
-      cp -r ${monorepoSrc}/cmake "$out"
-      cp -r ${monorepoSrc}/runtimes "$out"
-      cp -r ${monorepoSrc}/llvm "$out"
-      cp -r ${monorepoSrc}/compiler-rt "$out"
-      cp -r ${monorepoSrc}/${pname} "$out"
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "21") ''
-      cp -r ${monorepoSrc}/third-party "$out"
-    ''
-  );
+  src' =
+    runCommand "${pname}-src-${version}"
+      {
+        strictDeps = true;
+        __structuredAttrs = true;
+      }
+      (
+        ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/runtimes "$out"
+          cp -r ${monorepoSrc}/llvm "$out"
+          cp -r ${monorepoSrc}/compiler-rt "$out"
+          cp -r ${monorepoSrc}/${pname} "$out"
+        ''
+        + lib.optionalString (lib.versionAtLeast release_version "21") ''
+          cp -r ${monorepoSrc}/third-party "$out"
+        ''
+      );
 
   needHdrGen = isFullBuild || lib.versionAtLeast release_version "22";
 in
@@ -49,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ (lib.optional needHdrGen python3Packages.pyyaml);
 
   buildInputs = lib.optional (isFullBuild && stdenv.hostPlatform.isLinux) linuxHeaders;
+
+  strictDeps = true;
 
   outputs = [ "out" ] ++ (lib.optional isFullBuild "dev");
 
@@ -69,15 +77,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     lib.optionalString (!isFullBuild) ''
-      substituteAll ${./libc-shim.tpl} $out/lib/libc.so
+      substitute ${./libc-shim.tpl} $out/lib/libc.so \
+        --replace-fail "@out@" "$out" \
+        --replace-fail "@libc@" "${stdenv.cc.libc}"
     ''
     # LLVM libc doesn't recognize static vs dynamic yet.
     # Treat LLVM libc as a static libc, requires this symlink until upstream fixes it.
     + lib.optionalString (isFullBuild && stdenv.hostPlatform.isLinux) ''
       ln $out/lib/crt1.o $out/lib/Scrt1.o
     '';
-
-  libc = if (!isFullBuild) then stdenv.cc.libc else null;
 
   cmakeFlags = [
     (lib.cmakeBool "LLVM_LIBC_FULL_BUILD" isFullBuild)
@@ -98,6 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     monorepoSrc = monorepoSrc;
     inherit isFullBuild;
   };
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     broken = stdenv.hostPlatform.isDarwin;

@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-container";
-  version = "2.66.0";
+  version = "2.67.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_container";
     inherit (finalAttrs) version;
-    hash = "sha256-wCKi7VNx4Rac4rlHRi641R1MzTAoxiHvaZQot2a+DNw=";
+    hash = "sha256-cndTX//X+06Xx6lDc8GxI9DH+uZ44QjexdfO1yGCxqU=";
   };
 
   build-system = [ setuptools ];

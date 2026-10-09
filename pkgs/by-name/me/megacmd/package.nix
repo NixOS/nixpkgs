@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "megacmd";
-  version = "2.5.2";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "${finalAttrs.version}_Linux";
     fetchSubmodules = true;
     postCheckout = "git -C $out/sdk rev-parse --short HEAD > $out/sdk/.gitrev";
-    hash = "sha256-RE4n4igAXhYNshnjjyeb2McmBKt5HY0oZ+U5SMMtQ2I=";
+    hash = "sha256-sqclkEm6BCyk6GhMutyt9TGsevGIwrTMGSwrPGar1nI=";
   };
 
   __structuredAttrs = true;
@@ -67,11 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "check_function_exists(aio_write, HAVE_AIO_RT)" "check_function_exists(aio_write HAVE_AIO_RT)"
 
     # cryptopp on nixpkgs has libcryptopp.pc, not libcrypto++.pc
-    # libicui18n is needed (https://github.com/meganz/sdk/pull/2769)
     substituteInPlace sdk/cmake/modules/sdklib_libraries.cmake \
-      --replace-fail "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcrypto++)" "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcryptopp)" \
-      --replace-fail "find_package(ICU COMPONENTS uc data REQUIRED)" "find_package(ICU COMPONENTS i18n uc data REQUIRED)" \
-      --replace-fail "target_link_libraries(SDKlib PRIVATE ICU::uc ICU::data)" "target_link_libraries(SDKlib PRIVATE ICU::i18n ICU::uc ICU::data)"
+      --replace-fail "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcrypto++)" "pkg_check_modules(cryptopp REQUIRED IMPORTED_TARGET libcryptopp)"
   '';
 
   enableParallelBuilding = true;

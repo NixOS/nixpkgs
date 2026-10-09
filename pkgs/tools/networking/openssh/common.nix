@@ -31,6 +31,8 @@
   etcDir ? null,
   withKerberos ? false,
   withLdns ? true,
+  withSelinux ? false,
+  libselinux,
   krb5,
   libfido2,
   libxcrypt,
@@ -99,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
   ++ lib.optional withPAM pam
+  ++ lib.optional withSelinux libselinux
   ++ lib.optionals withAudit [
     audit
     libcap_ng
@@ -151,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isOpenBSD "--with-bsd-auth"
   ++ lib.optional withLinuxMemlock "--with-linux-memlock-onfault"
   ++ lib.optional withAudit "--with-audit=linux"
+  ++ lib.optional withSelinux "--with-selinux"
   ++ extraConfigureFlags;
 
   buildFlags = [ "SSH_KEYSIGN=ssh-keysign" ];

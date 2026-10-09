@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyprobeplus";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pyprobeplus";
     tag = finalAttrs.version;
-    hash = "sha256-ezBf+ynSz/3r3UXgDOtFwLg6mT8wv+YQ6J55SSVyYUI=";
+    hash = "sha256-GdWeIuXP8AAJAQEnCItUZT+/mEyNPejoj0Y11LPhoAM=";
   };
 
   postPatch = ''

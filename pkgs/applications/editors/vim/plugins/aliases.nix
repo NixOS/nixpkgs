@@ -17,16 +17,8 @@ let
   # sets from building on Hydra.
   removeDistribute = alias: if lib.isDerivation alias then lib.dontDistribute alias else alias;
 
-  # Make sure that we are not shadowing something from
-  # all-packages.nix.
-  checkInPkgs =
-    n: alias: if builtins.hasAttr n prev then throw "Alias ${n} is still in vim-plugins" else alias;
-
   mapAliases =
-    aliases:
-    lib.mapAttrs (
-      n: alias: removeDistribute (removeRecurseForDerivations (checkInPkgs n alias))
-    ) aliases;
+    aliases: lib.mapAttrs (_: alias: removeDistribute (removeRecurseForDerivations alias)) aliases;
 
   deprecations = lib.mapAttrs (
     old: info:
@@ -41,11 +33,13 @@ mapAliases (
   {
     # keep-sorted start case=no
     blueballs-neovim = throw "'vimPlugins.blueballs-neovim' has been removed"; # Added 2025-06-17
+    cmp-tabnine = throw "'vimPlugins.cmp-tabnine' has been removed, as tabnine has been dropped"; # Added 2026-10-03
     coc-go = throw "'vimPlugins.coc-go' was removed, as it was unmaintained"; # Added 2026-02-12
     coc-rls = throw "'vimPlugins.coc-rls' has been removed, as rls has been archived since 2022. You should use coc-rust-analyzer instead, as rust-analyzer is maintained."; # Added 2025-10-01
     coc-sumneko-lua = throw "'vimPlugins.coc-sumneko-lua' was removed, as it is unmaintained and broken. You should switch to lua_ls"; # Added 2026-02-04
     coc-tsserver = throw "'vimPlugins.coc-tsserver' was removed, as it was unmaintained"; # Added 2026-02-12
     coc-vetur = throw "'vimPlugins.coc-vetur' was removed, as vetur is unmaintained by Vue. You should switch to Volar, which supports Vue 3"; # Added 2025-10-01
+    completion-tabnine = throw "'vimPlugins.completion-tabnine' has been removed, as tabnine has been dropped"; # Added 2026-10-03
     completion-treesitter = throw "'vimPlugins.completion-treesitter' has been archived since 2024-01"; # Added 2025-12-18
     ctags-lsp-nvim = throw "'vimPlugins.ctags-lsp-nvim' has been removed, upstream deleted the repository"; # Added 2026-02-14
     feline-nvim = throw "'vimPlugins.feline-nvim' has been removed: upstream deleted repository. Consider using lualine"; # Added 2025-02-09
@@ -64,15 +58,17 @@ mapAliases (
     playground = throw "'vimPlugins.playground' has been archived"; # Added 2025-12-18
     pure-lua = lib.warnOnInstantiate "Please replace 'vimPlugins.pure-lua' with 'vimPlugins.moonlight-nvim' as this name was an error" moonlight-nvim; # Added 2025-11-17
     registers-nvim = throw "'vimPlugins.registers-nvim' has been removed: the upstream repository got deleted"; # Added 2026-04-30
-    rust-tools-nvim = lib.warnOnInstantiate "'vimPlugins.rust-tools-nvim' is abandoned by upstream; you should use 'vimPlugins.rustaceanvim'" rust-tools-nvim; # Added 2026-02-04
+    rust-tools-nvim = throw "'vimPlugins.rust-tools-nvim' has been removed: abandoned by upstream. Use rustaceanvim"; # Added 2026-09-28
     Spacegray-vim = throw "'vimPlugins.Spacegray-vim' has been removed: abandoned by upstream"; # Added 2025-03-24
     SpaceVim = throw "'vimPlugins.SpaceVim' didn't work properly in vimPlugins, please use top-level 'spacevim' instead"; # Added 2024-11-27
     spacevim = throw "'vimPlugins.spacevim' was unmaintained for the last 6 years, please use top-level 'spacevim'"; # Added 2024-11-27
     sparkup = throw "'vimPlugins.sparkup' was removed: the upstream repository got deleted"; # Added 2025-08-06
     syntax-tree-surfer = throw "'vimPlugins.syntax-tree-surfer' has been archived"; # Added 2025-12-18
+    tabnine-vim = throw "'vimPlugins.tabnine-vim' has been archived"; # Added 2026-10-03
     todo-nvim = throw "'vimPlugins.todo-nvim' has been removed: abandoned by upstream"; # Added 2023-08-23
     typescript-nvim = throw "'vimPlugins.typescript-nvim' has been removed: upstream deleted repository"; # Added 2026-06-15
     vim-csharp = throw "'vimPlugins.vim-csharp' has been removed: repository deleted"; # Added 2026-05-12
+    vim-gml = throw "'vimPlugins.vim-gml' has been removed because the author deleted their GitHub account"; # Added 2026-10-02
     vim-sourcetrail = throw "'vimPlugins.vim-sourcetrail' has been removed: abandoned by upstream"; # Added 2022-08-14
     vimacs = throw "'vimPlugins.vimacs' has been removed due to lack of maintenance"; # Added 2026-07-07
     # keep-sorted end

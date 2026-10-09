@@ -1,23 +1,30 @@
 {
   lib,
-  acl,
-  udev,
-  fetchgit,
-  pkg-config,
+  fetchFromTangled,
   rustPlatform,
+  pkg-config,
+  udev,
+  acl,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "sessiond-uaccess";
-  version = "0.1.0";
+  version = "0.1.1";
 
-  cargoHash = "sha256-fdsMnG8a6+6ZCeE16vRkpX4BtJsbngvw4QTB3CNnMIM=";
-
-  src = fetchgit {
-    url = "https://tangled.org/did:plc:dkc53ch7wt7gilra4irpdqol";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-ZOXS4ZUrIKLmnXpqZ9trmR0of8daqbRSkHFKdEl+Rwg=";
+  src = fetchFromTangled {
+    did = "did:plc:vj3bxta3i3cp26nn46yideoh";
+    tag = "${finalAttrs.pname}-v${finalAttrs.version}";
+    hash = "sha256-X2ePs10hjZNOcHAJuN4J5KeBQaW24E2jMRq0biNdY3E=";
   };
+
+  cargoHash = "sha256-+ENVyHs4UFsN62rkIau1aXC2RmF3Mqtj6XWeR55rR8w=";
+
+  cargoBuildFlags = [
+    "--locked"
+    "-p"
+    "sessiond-uaccess"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeBuildInputs = [
     pkg-config
@@ -29,15 +36,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postInstall = ''
-    install -d $out/share/sessiond-uaccess
-    cp -r ${finalAttrs.src}/rules $out/share/sessiond-uaccess/
+    install -Dm644 -t $out/share/sessiond-uaccess/rules sessiond-uaccess/rules/*.lua
   '';
 
   meta = {
     description = "Dynamic device access manager";
-    homepage = "https://tangled.org/r0chd.pl/sessiond-uaccess";
+    homepage = "https://tangled.org/r0chd.pl/sessiond";
     license = lib.licenses.gpl3Only;
-    maintainers = builtins.attrValues { inherit (lib.maintainers) r0chd; };
+    maintainers = [ lib.maintainers.r0chd ];
     platforms = lib.platforms.linux;
     mainProgram = "sessiond-uaccess";
   };

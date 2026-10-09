@@ -14,7 +14,7 @@
   libxfixes,
   dbus,
   libdrm,
-  systemd,
+  systemdLibs,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "spice-vdagent";
@@ -53,8 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxinerama
     libxfixes
     dbus
-    systemd
+    systemdLibs
   ];
+
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   meta = {
     description = "Enhanced SPICE integration for linux QEMU guest";

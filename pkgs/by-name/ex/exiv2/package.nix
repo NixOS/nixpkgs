@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   doxygen,
   gettext,
@@ -36,6 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-ESRiiBBckGIhnhSOMmcF/m1PYi2sLGv1xxE0b22nl5M=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-i686-lens-rounding.patch";
+      url = "https://github.com/Exiv2/exiv2/commit/7d25da6045556c8b9a81632cffd1bd2e2a9d0977.patch";
+      hash = "sha256-wA14qgkGIM7hvYRfv4+jPcMIbbr2oE9UvdaanVm4Sy0=";
+    })
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64";
 
   nativeBuildInputs = [
     cmake

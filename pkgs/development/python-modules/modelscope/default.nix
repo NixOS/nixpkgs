@@ -47,5 +47,8 @@ buildPythonPackage (finalAttrs: {
       doronbehar
       ryan4yin
     ];
+    knownVulnerabilities = [
+      "CVE-2026-84202: Unsafe YAML Deserialization in Model Config Loading"
+    ];
   };
 })

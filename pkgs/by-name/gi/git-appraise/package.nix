@@ -8,7 +8,6 @@ buildGoModule {
   pname = "git-appraise";
   version = "0.7-unstable-2022-04-13";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   __darwinAllowLocalNetworking = true;

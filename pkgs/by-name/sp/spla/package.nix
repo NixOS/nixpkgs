@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ]
   ++ lib.optional (gpuBackend == "cuda") "-DSPLA_GPU_BACKEND=CUDA"
-  ++ lib.optional (gpuBackend == "rocm") [ "-DSPLA_GPU_BACKEND=ROCM" ];
+  ++ lib.optionals (gpuBackend == "rocm") [ "-DSPLA_GPU_BACKEND=ROCM" ];
 
   preFixup = ''
     substituteInPlace $out/lib/cmake/SPLA/SPLASharedTargets-release.cmake \

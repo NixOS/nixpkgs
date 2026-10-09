@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "chezmoi";
-  version = "2.72.0";
+  version = "2.73.0";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vnVNPf4xSw7oVNy048i7lSQQukNjE7eTYG/8wfvs5VM=";
+    hash = "sha256-AqwWZExlbPCSUM5kwzfkf/+dNVC5CRNwUK3flpbrjJw=";
   };
 
-  vendorHash = "sha256-89JSaV9hupRGhhiGsyLU7MUcDSiPE7dSX55El1SybLw=";
+  vendorHash = "sha256-/y93llHXz/pSA0BgOTmT8s83RR/EJb/wzFqguEEuy/Q=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   libxml2,
-  glibmm,
+  glibmm_2_4,
   perl,
   gnome,
   meson,
@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
     docbook5
     docbook-xsl-ns
   ]
-  ++ lib.lists.optional withPDF [
+  ++ lib.lists.optionals withPDF [
     fop
     dblatex
   ];
 
-  buildInputs = [ glibmm ];
+  buildInputs = [ glibmm_2_4 ];
 
   propagatedBuildInputs = [ libxml2 ];
 

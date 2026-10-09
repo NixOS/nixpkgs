@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.11.1";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-W3RzBYUtI32Ft1Nw5JM7Z/mgYELNAlFCJmrNa2Wnhu4=";
+    hash = "sha256-Z7pc1o6AK9XySZLYF8YNSnHyrp85nh8ZmiCw4FWCwW8=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-5W/IMa23b0afAlw5Md8KvJYQmRen8u1dfUG2RAKDOn0=";
+    npmDepsHash = "sha256-hdgWZAJstRqYtzNuCTeiRIi+rjRsogulSfWXr8EP2UI=";
 
     npmFlags = [ "--force" ];
 
@@ -122,6 +122,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
+      google-re2
       googleapis-common-protos
       hiredis
       httpx
@@ -253,7 +254,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # License history is complex: originally MIT, then a potentially problematic
     # relicensing to a modified BSD-3 clause occurred around v0.5.5/v0.6.6.
     # Due to these concerns and non-standard terms, it's treated as custom non-free.
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "openWebUI";
       fullName = "Open WebUI License";
       url = "https://github.com/open-webui/open-webui/blob/0cef844168e97b70de2abee4c076cc30ffec6193/LICENSE";
       # Marked non-free due to concerns over the MIT -> modified BSD-3 relicensing process,

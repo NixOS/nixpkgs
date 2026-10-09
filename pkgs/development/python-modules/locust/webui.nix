@@ -1,28 +1,19 @@
 {
   stdenv,
-  yarn-berry_4,
+  yarn-berry,
   nodejs,
   version,
   src,
   lib,
 }:
-let
-  yarn-berry = yarn-berry_4;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "locust-ui";
   inherit version src;
 
-  patches = [
-    # Remove after upstream updates to Yarn 4.14
-    # https://github.com/locustio/locust/blob/master/locust/webui/package.json#L89
-    ./yarn-4.14-support.patch
-  ];
-
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes patches;
-    hash = "sha256-1pAoz/fkxrTCJZsSuAnm1Pfn5qjEbup8utEUoDvYJSE=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-fjvgnXKenRxML1JkpxYIOnVuNZ7BpU9L/XgblcQV0vA=";
   };
 
   nativeBuildInputs = [

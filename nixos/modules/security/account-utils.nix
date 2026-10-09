@@ -51,7 +51,10 @@ in
       sockets.pwupdd.wantedBy = lib.optional config.users.mutableUsers "sockets.target"; # immutable users do not need password updating
       sockets.newidmapd.wantedBy = [ "sockets.target" ];
       services."pwupdd@".environment.PWUPDD_OPTS = lib.escapeShellArgs cfg.extraArgs;
-      services."pwaccessd".environment.PWACCESSD_OPTS = lib.escapeShellArgs cfg.extraArgs;
+      services."pwaccessd".environment = {
+        LD_LIBRARY_PATH = config.system.nssModules.path;
+        PWACCESSD_OPTS = lib.escapeShellArgs cfg.extraArgs;
+      };
     };
 
     environment.systemPackages = [ cfg.package ];

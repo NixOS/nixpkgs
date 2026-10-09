@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protox";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-3Bh+VDSsol2Pz3UVDSxx8KNJbzKParU/OoNcSNgVTJM=";
+    hash = "sha256-BQogOPwxCJUBnOGODPmP6fDyRSt5mKAxibsVeXMg7qU=";
   };
 
-  cargoHash = "sha256-Xcvl8c99M34sNd1R52M9eE2hh4lnbKL7vRHorlcJGss=";
+  cargoHash = "sha256-g+1k9ShdYGPoTmnR0JQoMBvL7eFW15R/BlMOFmftkWg=";
 
   buildFeatures = [ "bin" ];
 

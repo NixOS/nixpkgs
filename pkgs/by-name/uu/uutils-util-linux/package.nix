@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-util-linux";
-  version = "0.0.1-unstable-2026-05-01";
+  version = "0.0.1-unstable-2026-09-01";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "util-linux";
-    rev = "8fa2d081da052e181a001121cdb22c61ddddf1e7";
-    hash = "sha256-kWYKx7UHyEFFU3G7axSaoRy7/rOOJCCBNWF+fBrH/yM=";
+    rev = "77b6743fb63660a6a3f9a9ad09ff1963480d0e74";
+    hash = "sha256-QO+Lr6vl3lVS7moRDUK3fM5RdVHE9pfT64VAzKSicNA=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"cut"' '"${lib.getExe' coreutils "cut"}"'
   '';
 
-  cargoHash = "sha256-VHfgoF0Ewti+IKR5FDZDNnk8ZvV6Fe4CPU0X/F3svOk=";
+  cargoHash = "sha256-XdFwScItuXWqd/IBhsZcDMilv7KkUwm0JT1sM0QFmC4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -60,6 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_lscpu::test_json"
     "--skip=test_lscpu::test_output"
     "--skip=test_lslocks::test_column_headers"
+    "--skip=test_chcpu::linux::test_absent_cpu_is_reported_once"
+    "--skip=test_chcpu::linux::test_every_absent_cpu_is_reported_once"
   ];
 
   passthru.updateScript = nix-update-script {

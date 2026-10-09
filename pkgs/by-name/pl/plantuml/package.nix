@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plantuml";
-  version = "1.2026.7";
+  version = "1.2026.8";
 
   src = fetchFromGitHub {
     owner = "plantuml";
     repo = "plantuml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kvaHpE9IgqkpAUv5t70K74h02qBA09kqNR/jCLB7+7I=";
+    hash = "sha256-J/9kD96oumfqr8LQpJZ512HjIUctJtbkMj/D7NzGQmU=";
   };
 
   nativeBuildInputs = [

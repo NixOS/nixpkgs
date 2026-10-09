@@ -1,5 +1,6 @@
 {
   fetchgit,
+  fetchpatch,
   gnucap,
   installShellFiles,
   lib,
@@ -16,7 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GfMfwSZOpi/NKWLporb8pVEeNthxWV7gIxbeiebo3Fk=";
   };
   patches = [
-    ./modelgen-verilog-format.patch
+    # Make build work with `-Werror=format-security`
+    (fetchpatch {
+      name = "gnucap-modelgen-verilog-fprintf.patch";
+      url = "https://codeberg.org/gnucap/gnucap-modelgen-verilog/commit/172fc7cddb66b79febab3b87fc1b9e87bee80308.patch";
+      hash = "sha256-oURJ96qr7RnT6Pn5+GRO1k9K/8CLXfOfdoZgWYO8a58=";
+    })
   ];
 
   nativeBuildInputs = [

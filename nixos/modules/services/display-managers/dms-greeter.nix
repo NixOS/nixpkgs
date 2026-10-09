@@ -44,19 +44,17 @@ let
       makeBinPath [
         cfg.quickshell.package
         compositorPkg
+        pkgs.glib # provides gdbus, used by the fprintd hardware probe and portal reads
       ]
     }
     ${
       escapeShellArgs (
         [
-          "sh"
-          "${cfg.package}/share/quickshell/dms/Modules/Greetd/assets/dms-greeter"
+          "${cfg.package}/bin/dms-greeter"
           "--cache-dir"
           cacheDir
           "--command"
           cfg.compositor.name
-          "-p"
-          "${cfg.package}/share/quickshell/dms"
         ]
         ++ lib.optionals (cfg.compositor.customConfig != "") [
           "-C"
@@ -114,21 +112,7 @@ in
   options.services.displayManager.dms-greeter = {
     enable = mkEnableOption "DankMaterialShell greeter";
 
-    package = mkOption {
-      type = types.package;
-      default = if cfgDms.enable then cfgDms.package else pkgs.dms-shell;
-      defaultText = literalExpression ''
-        if config.programs.dms-shell.enable
-        then config.programs.dms-shell.package
-        else pkgs.dms-shell;
-      '';
-      description = ''
-        The DankMaterialShell package to use for the greeter.
-
-        Defaults to the package from `programs.dms-shell` if it is enabled,
-        otherwise defaults to `pkgs.dms-shell`.
-      '';
-    };
+    package = lib.mkPackageOption pkgs "dms-greeter" { };
 
     compositor = {
       name = mkOption {

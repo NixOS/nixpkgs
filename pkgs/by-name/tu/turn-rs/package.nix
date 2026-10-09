@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turn-rs";
-  version = "4.1.5";
+  version = "4.1.6";
 
   src = fetchFromGitHub {
     owner = "mycrl";
     repo = "turn-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GNmRf+BFn8vtAKn7pkoCM9VF8MP/ymrqWrfhKRG3hUs=";
+    hash = "sha256-b+nyQe64u8m44Ja30S9AJyEDOwDkCPRbvBQfECHYuJ0=";
   };
 
   cargoHash = "sha256-TmmVZfAe48hgeDNkCQ746lBDRnrsgfFpXD8XwJRLB1o=";
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Pure rust implemented turn server";
     homepage = "https://github.com/mycrl/turn-rs";
     changelog = "https://github.com/mycrl/turn-rs/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     mainProgram = "turn-server";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.linux;

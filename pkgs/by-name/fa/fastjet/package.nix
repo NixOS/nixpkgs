@@ -2,37 +2,32 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   python ? null,
   withPython ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastjet";
-  version = "3.4.3";
+  version = "3.5.1";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchurl {
     url = "https://fastjet.fr/repo/fastjet-${finalAttrs.version}.tar.gz";
-    hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
+    hash = "sha256-mkFUFj5yBB3uP93pyyToFGJeF4CRqHNKatU3XlNxtCM=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/fastjet/fastjet/-/commit/57ff0184c7cf578bbcdee3667aeaa64288cbae1a.diff";
-      hash = "sha256-uz8q7s+YAmbB4oXB+wyaSLo4gWSbEEPdATGDBrxT0vg=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs --build fastjet-config.in
   '';
 
-  buildInputs = lib.optional withPython python;
+  nativeBuildInputs = lib.optionals withPython [ python ];
 
   configureFlags = [
     "--enable-allcxxplugins"
   ]
-  ++ lib.optional withPython "--enable-pyext";
+  ++ lib.optionals withPython [ "--enable-pyext" ];
 
   enableParallelBuilding = true;
 

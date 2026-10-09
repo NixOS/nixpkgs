@@ -112,9 +112,8 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = slowTests ++ flakyTests;
 
-  passthru.tests.full = finalAttrs.finalPackage.overridePythonAttrs (old: {
-    pname = old.pname + "-full-tests";
-    nativeCheckInputs = old.nativeCheckInputs ++ [ polars ];
+  passthru.tests.full = finalAttrs.finalPackage.overrideAttrs (old: {
+    nativeInstallCheckInputs = old.nativeInstallCheckInputs ++ [ polars ];
     disabledTests = flakyTests;
     disabledTestPaths = [ ];
   });

@@ -117,6 +117,18 @@ in
       default = "text";
       description = "Log output format. `json` is recommended if shipping to log aggregators.";
     };
+
+    requireDatabaseEncryption = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Enforces database encryption.
+
+        WARNING: This does not encrypt an existing database. If you have an existing
+        plaintext database, you must keep this `false`, stop the service, and manually
+        run `wealthfolio-server db encrypt` against your data directory before enabling.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -144,6 +156,7 @@ in
 
       environment = {
         WF_LISTEN_ADDR = "${cfg.address}:${toString cfg.port}";
+        WF_DATA_DIR = "/var/lib/wealthfolio";
         WF_DB_PATH = "/var/lib/wealthfolio/wealthfolio.db";
         WF_AUTH_REQUIRED = lib.boolToString cfg.authRequired;
         WF_CORS_ALLOW_ORIGINS = cfg.corsAllowOrigins;
@@ -151,6 +164,7 @@ in
         WF_COOKIE_SECURE = cfg.cookieSecure;
         WF_REQUEST_TIMEOUT_MS = toString cfg.requestTimeoutMs;
         WF_LOG_FORMAT = cfg.logFormat;
+        WF_DB_REQUIRE_ENCRYPTION = lib.boolToString cfg.requireDatabaseEncryption;
       };
 
       script = ''

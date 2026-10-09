@@ -22,13 +22,14 @@
   # tests
   blackjax,
   numpyro,
+  pytest-mock,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "bambi";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -36,7 +37,7 @@ buildPythonPackage (finalAttrs: {
     owner = "bambinos";
     repo = "bambi";
     tag = finalAttrs.version;
-    hash = "sha256-eTqqcVP+ucQ2Sv9mTyMOUdmYYX0pkrsH76DGQKPGO0k=";
+    hash = "sha256-1+NtsjGjVJLVqKD84IqpOoS2btON3hpHM2YI/pqmEN8=";
   };
 
   build-system = [
@@ -70,6 +71,7 @@ buildPythonPackage (finalAttrs: {
     # bayeux-ml
     blackjax
     numpyro
+    pytest-mock
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];

@@ -100,11 +100,14 @@ buildGoModule (finalAttrs: {
     tests = {
       inherit (nixosTests)
         syncthing
+        syncthing-defaults
         syncthing-folders
         syncthing-guiPassword
         syncthing-guiPasswordFile
         syncthing-init
+        syncthing-many-devices
         syncthing-no-settings
+        syncthing-private-relay
         syncthing-relay
         ;
     };

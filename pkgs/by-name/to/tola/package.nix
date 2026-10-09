@@ -10,13 +10,13 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
   pname = "tola";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "tola-rs";
     repo = "tola-ssg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zgPKsIRXp5na2d0X7j5+9xJBGFSlvIKIRmzVVo/dcLk=";
+    hash = "sha256-nFM+EXi3njnyfUxEGYPvk4izmmVs4ZW2ebOEGCwey+I=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
   ];
 
-  cargoHash = "sha256-3Y7+UJD2QyNs+GjijvOAyTQ9ZP7lRf/MpaWThN2/e5s=";
+  cargoHash = "sha256-0cpAm4QHvgH0VlZm65/5pmD82nTBl23kHkNouiyXFyE=";
 
   # There are not any tests in source project.
   doCheck = false;

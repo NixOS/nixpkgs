@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "caldav";
-  version = "3.3.0";
+  version = "3.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FV1C8RlbkNXOTtRKSCNgiGetImW0+647JgmZtf5U+pY=";
+    hash = "sha256-G1iZ2a81DTURIODWTXji7AU6ywPDg4XqGNoQFhPIMO4=";
   };
 
   build-system = [

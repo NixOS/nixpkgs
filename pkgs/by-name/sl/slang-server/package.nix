@@ -25,7 +25,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "slang-server";
-  version = "0.2.10";
+  version = "0.3.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # slang-server vendors its dependencies via submodules
     fetchSubmodules = true;
-    hash = "sha256-hyKiEtUpLkXYbwh9KKDc26EgZbC1bvf0hV5tM8p5vVU=";
+    hash = "sha256-dXoZnlU0iuexMswvevQ+0554y0G342W1otzBN8pxVac=";
   };
 
   nativeBuildInputs = [

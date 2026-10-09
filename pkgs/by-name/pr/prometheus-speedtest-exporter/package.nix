@@ -7,16 +7,16 @@
 buildGoModule (finalAttrs: {
   __structuredAttrs = true;
   pname = "prometheus-speedtest-exporter";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "podocarp";
     repo = "speedtest_exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xXTyxwECGlYv9bBco09zvlOpF4GcHeT3yZMNUQTPPoo=";
+    hash = "sha256-ZYdQWEEn+zYp0kA6h34fdy1KxQ1PxqWpt0RpXBrd7pE=";
   };
 
-  vendorHash = "sha256-HBg44D0CUc4HYCBwGrswnrqG5o5ltA6UT8L0oWetlIc=";
+  vendorHash = "sha256-42xxNgYeRXGCyRpz6D4E68l2mm+gE2RSyOeLHOIQrjI=";
 
   meta = {
     description = "Speedtest.net Exporter for the Prometheus monitoring system";

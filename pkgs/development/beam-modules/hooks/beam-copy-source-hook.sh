@@ -13,4 +13,6 @@ beamCopySourceHook() {
   echo "Finished beamCopySourceHook"
 }
 
-postPatchHooks+=(beamCopySourceHook)
+if [ -z "${dontBeamCopySource-}" ]; then
+  postPatchHooks+=(beamCopySourceHook)
+fi

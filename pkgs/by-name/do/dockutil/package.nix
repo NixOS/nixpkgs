@@ -7,7 +7,6 @@
   swift,
   swiftpm,
   swiftpm2nix,
-  swiftPackages,
   libarchive,
   p7zip,
   # Building from source on x86_64 fails (among other things) due to:
@@ -30,7 +29,7 @@ let
     platforms = lib.platforms.darwin;
   };
 
-  buildFromSource = swiftPackages.stdenv.mkDerivation (finalAttrs: {
+  buildFromSource = stdenv.mkDerivation (finalAttrs: {
     inherit pname version meta;
 
     src = fetchFromGitHub {

@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "airbuddy";
-  version = "2.7.3";
+  version = "2.8.1-660";
 
   src = fetchurl {
     name = "AirBuddy.dmg";
-    url = "https://download.airbuddy.app/WebDownload/AirBuddy_v${finalAttrs.version}.dmg";
-    hash = "sha256-cwvSFvaREbF+JvV5Y5dFaj6fZbzdzcjBgzdQ9WDcCFY=";
+    url = "https://su.airbuddy.app/kCRSAmcjBc/AirBuddy_v${finalAttrs.version}.dmg";
+    hash = "sha256-YeO1zmPRNF46EmuRp142J9SRvWzHraWr1+VuqthJzsQ=";
   };
 
   dontPatch = true;

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   cmake,
+  abseil-cpp,
   gtest,
   lz4,
   protobuf,
@@ -13,6 +14,11 @@
 }:
 
 let
+  # This standard needs to match the version that orc uses, or compilation
+  # fails if the C++ standard version is different from the compiler's default.
+  # https://github.com/apache/orc/blob/3738b82366ba64cacae450e7e0e1702c66148afe/CMakeLists.txt#L108
+  protobuf' = protobuf.override { abseil-cpp = abseil-cpp.override { cxxStandard = "17"; }; };
+
   orc-format =
     let
       version = "1.1.1";
@@ -52,19 +58,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     lz4
-    protobuf
+    protobuf'
     snappy
     zlib
     zstd
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_JAVA" false)
     (lib.cmakeBool "STOP_BUILD_ON_WARNING" false)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
   ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # Fix (RiscV) cross-compilation
     # See https://github.com/apache/orc/issues/2334
     (lib.cmakeFeature "HAS_PRE_1970_EXITCODE" "0")
@@ -76,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     GTEST_HOME = gtest.dev;
     LZ4_HOME = lz4;
     ORC_FORMAT_URL = orc-format;
-    PROTOBUF_HOME = protobuf;
+    PROTOBUF_HOME = protobuf'.full; # Configure script expects to find both executables and headers at this path.
     SNAPPY_HOME = snappy.dev;
     ZLIB_HOME = zlib.dev;
     ZSTD_HOME = zstd.dev;

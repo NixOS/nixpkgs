@@ -185,6 +185,7 @@ let
       X86_INTEL_LPSS = yes;
       X86_INTEL_PSTATE = yes;
       X86_AMD_PSTATE = whenAtLeast "5.17" yes;
+      AMD_PMF_UTIL_SUPPORT = whenAtLeast "7.3" yes;
       # Intel DPTF (Dynamic Platform and Thermal Framework) Support
       ACPI_DPTF = yes;
 
@@ -235,6 +236,7 @@ let
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
       DAMON_STAT = whenAtLeast "6.17" yes;
+      DAMON_STAT_ENABLED_DEFAULT = whenAtLeast "6.17" no;
       # Support recovering from memory failures on systems with ECC and MCA recovery.
       MEMORY_FAILURE = yes;
 
@@ -1186,6 +1188,7 @@ let
         ];
         MODULE_COMPRESS_ALL = whenAtLeast "6.12" yes;
         MODULE_COMPRESS_XZ = yes;
+        MODULE_DECOMPRESS = whenAtLeast "6.0" yes;
 
         SYSVIPC = yes; # System-V IPC
 
@@ -1520,8 +1523,8 @@ let
             ACPI_HOTPLUG_CPU = yes;
             ACPI_HOTPLUG_MEMORY = yes;
             MEMORY_HOTPLUG = yes;
-            MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.14" yes;
-            MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.14" yes;
+            MEMORY_HOTPLUG_DEFAULT_ONLINE = whenOlder "6.12" yes;
+            MHP_DEFAULT_ONLINE_TYPE_ONLINE_AUTO = whenAtLeast "6.12" yes;
             MEMORY_HOTREMOVE = lib.mkIf (
               with stdenv.hostPlatform;
               isLoongArch64

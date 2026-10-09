@@ -133,7 +133,7 @@ stdenv.mkDerivation (
     # Without libxcrypt, Perl will still find FreeBSD's crypt functions.
     propagatedBuildInputs = lib.optional (enableCrypt && !stdenv.hostPlatform.isFreeBSD) libxcrypt;
 
-    disallowedReferences = [ stdenv.cc ];
+    outputChecks.out.disallowedReferences = [ stdenv.cc ];
 
     patches = commonPatches;
 
@@ -212,7 +212,10 @@ stdenv.mkDerivation (
       ]
       ++ lib.optional stdenv.hostPlatform.isSunOS "-Dcc=gcc"
       ++ lib.optional enableThreading "-Dusethreads"
-      ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
+      ++ lib.optionals (!enableCrypt) [
+        "-A"
+        "clear:d_crypt_r"
+      ]
       ++ lib.optionals (stdenv.hostPlatform.isFreeBSD && crossCompiling && enableCrypt) [
         # https://github.com/Perl/perl5/issues/22295
         # configure cannot figure out that we have crypt automatically, but we really do
@@ -370,6 +373,8 @@ stdenv.mkDerivation (
       wrapProgram $mini/bin/perl --prefix PERL5LIB : \
         "$mini/lib/perl5/cross_perl/${version}:$out/lib/perl5/${version}:$out/lib/perl5/${version}/$runtimeArch"
     ''; # */
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://www.perl.org/";

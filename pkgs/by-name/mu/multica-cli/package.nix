@@ -3,24 +3,26 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   __structuredAttrs = true;
+  __darwinAllowLocalNetworking = true;
 
   pname = "multica-cli";
-  version = "0.4.39";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "multica-ai";
     repo = "multica";
-    rev = "v${version}";
-    hash = "sha256-xcj0Jl/+7eiVIVLhEM2lH88SH6PTYniwep4mXa4nhk4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-I8aD9pyeTuuU2EPn2IwKomWmeAjHxdT0HmEwvo4hVSc=";
   };
 
-  sourceRoot = "${src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/server";
 
-  vendorHash = "sha256-QwVYfMtRL4eSRvQ9TuuVQyRXUHWPQXoAzdd9KX+D8lQ=";
+  vendorHash = "sha256-b6elV4j+7R6L29q8tbCI3MAOY8X63ndzlmCMv7jo7mM=";
 
   subPackages = [ "cmd/multica" ];
 
@@ -28,8 +30,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=nixpkg"
     "-X main.date=1970-01-01T00:00:00Z"
   ];
@@ -43,12 +44,15 @@ buildGoModule rec {
       --fish <($out/bin/multica completion fish)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "CLI for the Multica managed agents platform";
     homepage = "https://github.com/multica-ai/multica";
-    changelog = "https://github.com/multica-ai/multica/releases/tag/v${version}";
+    changelog = "https://github.com/multica-ai/multica/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ akosseres ];
     mainProgram = "multica";
   };
-}
+})

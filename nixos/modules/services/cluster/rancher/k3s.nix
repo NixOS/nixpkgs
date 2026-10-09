@@ -74,7 +74,7 @@ in
       '';
       description = ''
         List of derivations that provide container images.
-        All images are linked to {file}`${baseModule.paths.imageDir}` before k3s starts and are consequently imported
+        All images are linked into {file}`${baseModule.paths.imageDir}/nixos/` before k3s starts and are consequently imported
         by the k3s agent. Consider importing the k3s airgap images archive of the k3s package in
         use, if you want to pre-provision this node with all k3s container images. This option
         only makes sense on nodes with an enabled agent.

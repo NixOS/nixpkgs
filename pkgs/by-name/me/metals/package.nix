@@ -7,16 +7,18 @@
   setJavaClassPath,
   callPackage,
   testers,
+  unzip,
   extraJavaOpts ? "-XX:+UseG1GC -XX:+UseStringDeduplication -Xss4m -Xms100m",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "metals";
-  version = "1.6.8";
+  version = "1.6.9";
 
   nativeBuildInputs = [
     makeWrapper
     setJavaClassPath
+    unzip
   ];
   buildInputs = [ finalAttrs.passthru.deps ];
 
@@ -33,15 +35,17 @@ stdenv.mkDerivation (finalAttrs: {
 
       mkdir -p $out/bin
 
+      requiredVmOpts=$(unzip -p ${finalAttrs.passthru.deps}/share/java/metals_2.13-${finalAttrs.version}.jar META-INF/metals-required-vm-options.txt | tr '\n' ' ')
+
       makeWrapper ${jre}/bin/java $out/bin/metals \
         --prefix PATH : ${lib.makeBinPath [ jre ]} \
         --set JAVA_HOME ${jre.home} \
-        --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+        --add-flags "${extraJavaOpts} $requiredVmOpts -cp $CLASSPATH scala.meta.metals.Main"
 
       makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
         --prefix PATH : ${lib.makeBinPath [ jre ]} \
         --set JAVA_HOME ${jre.home} \
-        --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
+        --add-flags "${extraJavaOpts} $requiredVmOpts -cp $CLASSPATH scala.meta.metals.McpMain"
 
       runHook postInstall
     '';
@@ -76,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-LdZ6I7zOUTHgS/TTo0T6Dh+Kb3YpgJg8gK0UngsA7Gs=";
+    outputHash = "sha256-8Btwvg8HJ1SrDbZblCB3d9s97XcOUmhfGyBnek9IEBc=";
   };
 
   meta = {

@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     mainInstaller = "QuartusLiteSetup-${finalAttrs.version}-linux.run";
     # Make it a bit easier to override the download URL schema.
-    baseURL = "https://downloads.intel.com/akdlm/software/acdsinst";
+    baseURL = "https://download.altera.com/akdlm/software/acdsinst";
     # e.g. "23.1std.1.993" -> "23.1std/993"
     URLdir = "${lib.versions.majorMinor finalAttrs.version}std/${lib.elemAt (lib.splitVersion finalAttrs.version) 4}/ib_installers";
     download =
@@ -142,11 +142,15 @@ stdenv.mkDerivation (finalAttrs: {
       fetchurl {
         inherit name hash;
         url = "${finalAttrs.finalPackage.baseURL}/${finalAttrs.finalPackage.URLdir}/${name}";
+        curlOptsList = [
+          "--user-agent"
+          "Alterabot/1.0"
+        ];
       };
   };
 
   meta = {
-    homepage = "https://fpgasoftware.intel.com";
+    homepage = "https://www.altera.com/downloads/fpga-development-tools/quartus-prime-lite-current";
     description = "FPGA design and simulation software";
     mainProgram = "quartus";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -157,6 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
       kwohlfahrt
       zainkergaye
       doronbehar
+      Mop-u
     ];
   };
 })

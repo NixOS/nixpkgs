@@ -89,4 +89,6 @@ buildPythonApplication {
     echo -e "\x1b[32m## run ruff format\x1b[0m"
     ruff format --check --diff .
   '';
+
+  meta.license = lib.licenses.mit;
 }

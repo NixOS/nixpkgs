@@ -7,7 +7,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spdx-license-list";
-  version = "3.28.0";
+  version = "3.29.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -15,7 +15,7 @@ buildPythonPackage (finalAttrs: {
     owner = "JJMC89";
     repo = "spdx-license-list";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qzEWa2SY4XfW+DgAl6UNUItYWGJ/dJM6jZ/ZekoVgNc=";
+    hash = "sha256-mtNTT+kZJEdXyxEu/HkqoCMuDKiqOsv+pvaW4KMjg6M=";
   };
 
   build-system = [

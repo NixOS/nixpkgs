@@ -4,12 +4,11 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  swiftPackages,
+  stdenv,
+  swift,
 }:
 
 let
-  inherit (swiftPackages) stdenv swift;
-
   infoPlist =
     version:
     lib.generators.toPlist { escape = true; } {

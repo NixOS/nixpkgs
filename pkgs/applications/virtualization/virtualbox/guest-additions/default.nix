@@ -18,9 +18,9 @@
   libx11,
 }:
 let
-  virtualboxVersion = "7.2.16";
+  virtualboxVersion = "7.2.20";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "50356ccdaefe8f03537600ec31898b506e3a85ce79b94f26fb6cc1920c9e18eb";
+  virtualboxSha256 = "5c2138213b72f36c129b92c2c267f2a40e9c98513f4c86a584327f09f9be706d";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -98,7 +98,11 @@ stdenv.mkDerivation {
 
   # https://github.com/VirtualBox/virtualbox/issues/812
   postPatch = ''
-    substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c --replace-fail "RTLNX_VER_MIN(6,19,0)" "RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,12,103, 6,12,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999) || RTLNX_VER_MIN(6,19,0)"
+    substituteInPlace ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_fb.c \
+      --replace-fail "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0)" \
+      "RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,103, 6,13,0) || RTLNX_VER_RANGE(6,6,152, 6,6,999) || RTLNX_VER_RANGE(6,18,44, 6,18,999)"
+
+    sed -i '0,/RTLNX_VER_MIN(6,19,0)/s//RTLNX_VER_MIN(6,19,0) || RTLNX_VER_RANGE(6,12,112, 6,12,999) || RTLNX_VER_RANGE(6,18,55, 6,18,999)/' ./src/vboxguest-${virtualboxVersion}_NixOS/vboxvideo/vbox_main.c
   '';
 
   buildPhase = ''

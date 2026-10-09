@@ -152,7 +152,7 @@ buildPythonPackage (finalAttrs: {
     # Do not lint code
     "tests/test_typing.py"
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Trace/BPT trap: 5 when getting widget options
     "tests/test_4505.py"
     "tests/test_widgets.py"

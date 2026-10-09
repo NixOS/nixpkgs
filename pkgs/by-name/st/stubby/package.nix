@@ -8,7 +8,7 @@
   getdns,
   libyaml,
   openssl,
-  systemd,
+  systemdLibs,
   yq,
   stubby,
 }:
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libyaml
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
 
   postInstall = ''
     rm -r $out/share/doc

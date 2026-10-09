@@ -106,7 +106,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.18.0";
+  version = "1.18.1";
   src =
     (fetchFromGitHub {
       owner = "session-foundation";
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -rf .git
         popd
       '';
-      hash = "sha256-xulsnbC3C7n+4hFeuzRS8XzzYTO6T2vR3jBxTkxHFHE=";
+      hash = "sha256-z60TQuZHrg7PW3CkNSvsWuYKoMW5ACJNf9I/R+wR4e8=";
     }).overrideAttrs
       (oldAttrs: {
         # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050
@@ -130,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
           GIT_CONFIG_VALUE_0 = "git@github.com:";
         };
       });
+
+  # This upstream release's lockfile lacks integrity fields required by pnpm >= 10.34.1.
+  # Remove this packaging patch when updating to a source lockfile that includes them.
+  patches = [ ./add-pnpm-tarball-integrities.patch ];
 
   postPatch = ''
     # too restrictive Node version requirement
@@ -163,10 +167,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      patches
+      pname
+      src
+      version
+      ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-8z4EDHpsvM0AFbJy2JXoE4vjiLaDshTihMQsrQzXdEs=";
+    hash = "sha256-OHCiE2FtbQT0zo88n4aABnLS2gpi33rDCSMNc2FJLVc=";
   };
 
   buildPhase = ''
@@ -246,7 +255,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = true;
     description = "Onion routing based messenger";
     mainProgram = "session-desktop";
     homepage = "https://getsession.org/";

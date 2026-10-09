@@ -29,6 +29,9 @@
 
     boot.initrd.systemd.tpm2.pcrphases.enable =
       lib.mkEnableOption "systemd initrd boot phase measurements";
+
+    boot.initrd.systemd.tpm2.pcrosseparator.enable =
+      lib.mkEnableOption "systemd initrd boot phase OS userspace separator";
   };
 
   # TODO: pcrextend, pcrfs, pcrmachine
@@ -99,6 +102,18 @@
           "systemd-pcrphase-initrd.service"
         ];
         boot.initrd.systemd.services.systemd-pcrphase-initrd.wantedBy = [ "initrd.target" ];
+        boot.initrd.systemd.storePaths = [ "${cfg.package}/lib/systemd/systemd-pcrextend" ];
+      }
+    )
+    (
+      let
+        cfg = config.boot.initrd.systemd;
+      in
+      lib.mkIf (cfg.enable && cfg.tpm2.enable && cfg.tpm2.pcrosseparator.enable) {
+        boot.initrd.systemd.additionalUpstreamUnits = [
+          "systemd-pcrosseparator.service"
+        ];
+        boot.initrd.systemd.services.systemd-pcrosseparator.wantedBy = [ "initrd.target" ];
         boot.initrd.systemd.storePaths = [ "${cfg.package}/lib/systemd/systemd-pcrextend" ];
       }
     )

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   gitMinimal,
   installShellFiles,
@@ -11,7 +11,7 @@
   ghq,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "ghq";
   version = "1.10.1";
 

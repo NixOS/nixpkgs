@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo126Module,
+  buildGoModule,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   version = "3.1.673";
   pname = "ipsw";
 

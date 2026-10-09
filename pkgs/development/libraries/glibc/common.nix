@@ -50,9 +50,9 @@
 }@args:
 
 let
-  version = "2.42";
-  patchSuffix = "-84";
-  sha256 = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
+  version = "2.44";
+  patchSuffix = "-25";
+  sha256 = "sha256-N/YA8r7zxegwAUcFlWiyouQKetbMxlzpQlVtSUKcxmc=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -69,17 +69,17 @@ stdenv.mkDerivation (
       /*
         No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
          $ git fetch --all -p && git checkout origin/release/2.42/master && git describe
-         glibc-2.42-67-g4ebd33dd77
-         $ git show --minimal --reverse glibc-2.42.. ':!ADVISORIES' > 2.42-master.patch
+         glibc-2.44-25-gafd131806b
+         $ git show --minimal --reverse glibc-2.44.. ':!ADVISORIES' > 2.44-master.patch
 
         To compare the archive contents zdiff can be used.
-         $ diff -u 2.42-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.42-master.patch
+         $ diff -u 2.44-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.44-master.patch
 
         Please note that each commit has changes to the file ADVISORIES excluded since
         that conflicts with the directory advisories/ making cross-builds from
         hosts with case-insensitive file-systems impossible.
       */
-      ./2.42-master.patch
+      ./2.44-master.patch
 
       # Allow NixOS and Nix to handle the locale-archive.
       ./nix-locale-archive.patch

@@ -58,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://moosefs.com";
     description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
     platforms = lib.platforms.unix;

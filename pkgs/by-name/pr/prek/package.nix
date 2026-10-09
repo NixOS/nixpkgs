@@ -10,17 +10,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.5.2";
+  version = "0.5.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8LvrsmHTvlJ/1xrVsO/81zZBOVv6nyJ1rKeF8DCrTf8=";
+    hash = "sha256-x97puc3c46mAuXHqywmGARqbA5BF8jO14YEH1Ij/aCo=";
   };
 
-  cargoHash = "sha256-COOU7CelDvnMKxBbAPiNvo+E+GnrS+tXiyqPBdUYBMk=";
+  cargoHash = "sha256-IPeG4sgH9sOczC6gsuDWHqfLPhdYX0Hrzp5QyUbLW4I=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,9 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd prek \
-      --bash <(COMPLETE=bash $out/bin/prek) \
-      --fish <(COMPLETE=fish $out/bin/prek) \
-      --zsh <(COMPLETE=zsh $out/bin/prek)
+      --bash <($out/bin/prek util generate-shell-completion bash) \
+      --fish <($out/bin/prek util generate-shell-completion fish) \
+      --nushell <($out/bin/prek util generate-shell-completion nushell) \
+      --zsh <($out/bin/prek util generate-shell-completion zsh)
   '';
 
   doInstallCheck = true;

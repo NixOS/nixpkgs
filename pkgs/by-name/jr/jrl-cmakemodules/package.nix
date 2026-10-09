@@ -18,6 +18,7 @@
   catch2_3,
   cppad,
   gmp,
+  llvmPackages,
   matio,
   mpfr,
   python3Packages,
@@ -36,6 +37,9 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jrl-cmakemodules";
   version = "2.3.0";
+
+  __structuredAttrs = true;
+  srictDeps = true;
 
   src = fetchFromGitHub {
     owner = "jrl-umi3218";
@@ -65,6 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.pytest
     simde
     suitesparse
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # Otherwise `FindCHOLMOD` fails
+    # Could NOT find OpenMP_C (missing: OpenMP_C_FLAGS OpenMP_C_LIB_NAMES)
+    llvmPackages.openmp
   ];
 
   passthru = {

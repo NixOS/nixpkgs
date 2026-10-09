@@ -25,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "xml2rfc";
-  version = "3.34.0";
+  version = "3.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ietf-tools";
     repo = "xml2rfc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O5S1jeNOa1Lrv1wJpqpexDjghFkEiQqI9tYGGlpbRi4=";
+    hash = "sha256-9rY99oSick9kQIDTZhdsprCussljctGW0HCeHkXiHug=";
   };
 
   pythonRelaxDeps = [ "lxml" ];
@@ -88,7 +88,6 @@ buildPythonPackage (finalAttrs: {
     # http://metadata.ftp-master.debian.org/changelogs/non-free/x/xml2rfc/xml2rfc_2.9.6-1_copyright
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      vcunat
       yrashk
     ];
   };

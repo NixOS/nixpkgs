@@ -5,6 +5,8 @@
   nodes.machine =
     { lib, pkgs, ... }:
     {
+      virtualisation.memorySize = 1536;
+
       services.dawarich = {
         enable = true;
         localDomain = "localhost";

@@ -260,6 +260,8 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             )
             f.write(header2)
             for plugin, nix_expr in results:
+                # Preserved packages also need canonical license metadata.
+                nix_expr = normalize_license_metadata(nix_expr)
                 f.write(f"  {plugin.normalized_name} = {nix_expr}")
             f.write(FOOTER)
             f.flush()

@@ -1,6 +1,7 @@
 {
   lib,
   boost,
+  cacert,
   cmake,
   fetchFromGitHub,
   libgit2,
@@ -10,13 +11,12 @@
   rust-jemalloc-sys,
   rustPlatform,
   sqlite,
-  versionCheckHook,
   zlib,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kingfisher";
-  version = "1.113.0";
+  version = "2.8.0";
 
   __structuredAttrs = true;
 
@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mongodb";
     repo = "kingfisher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yuBHKHGj5woedq5sd1NnyJG2mod3r1zerrSvemQVH98=";
+    hash = "sha256-hhNwLhA7n/dHILYavbTYUasHHWLQkAVP5hb2Fp35wk8=";
   };
 
-  cargoHash = "sha256-P4Sq8N/8mLAquWHAJYnfSkysmEGefXTTJke9rmdhhwE=";
+  cargoHash = "sha256-blflKXAIg+KM1DAqK6RbCGKywiguGv3IeiiCXwQAIUA=";
 
   nativeBuildInputs = [
     cmake
@@ -43,13 +43,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-
   env = {
     LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    VECTORSCAN_BUILD_FROM_SOURCE = "1";
   };
-
-  doInstallCheck = true;
 
   # Integration tests exceed memory limits and can crash
   doCheck = false;

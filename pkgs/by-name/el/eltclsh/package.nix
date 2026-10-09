@@ -9,13 +9,13 @@
   tk,
 }:
 
-tcl.mkTclDerivation rec {
+tcl.mkTclDerivation (finalAttrs: {
   pname = "eltclsh";
   version = "1.20";
 
   src = fetchgit {
     url = "https://git.openrobots.org/robots/eltclsh.git";
-    rev = "eltclsh-${version}";
+    tag = "eltclsh-${finalAttrs.version}";
     hash = "sha256-kNUT190DkY+NNUmBwHfSxgBLbSyc0MutVDLsRh7kFDE=";
   };
 
@@ -46,4 +46,4 @@ tcl.mkTclDerivation rec {
     maintainers = with lib.maintainers; [ iwanb ];
     platforms = lib.platforms.all;
   };
-}
+})

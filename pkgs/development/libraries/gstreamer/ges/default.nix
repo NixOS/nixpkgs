@@ -14,6 +14,8 @@
   flex,
   gettext,
   gobject-introspection,
+  # for passthru.gstreamerCpeParts
+  gstreamer,
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   hotdoc,
@@ -23,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-editing-services";
-  version = "1.28.6";
+  version = "1.28.7";
 
   outputs = [
     "out"
@@ -32,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-editing-services/gst-editing-services-${finalAttrs.version}.tar.xz";
-    hash = "sha256-PRUeUJfWhsWJCudvFMV+4ZU4/WHGz2NxcfkLMJyv1Tw=";
+    hash = "sha256-b/wOXM7JCq1gkdP8Aa0px5Y3UFXhO5N4r/a44cIkaKM=";
   };
 
   separateDebugInfo = true;
@@ -93,5 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ tmarkus ];
+    identifiers.cpeParts = gstreamer.passthru.gstreamerCpeParts finalAttrs.version;
   };
 })

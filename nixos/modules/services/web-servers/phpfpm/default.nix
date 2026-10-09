@@ -47,12 +47,14 @@ let
     poolOpts:
     pkgs.runCommand "php.ini"
       {
-        inherit (poolOpts) phpPackage phpOptions;
+        inherit (poolOpts) phpOptions;
         preferLocalBuild = true;
-        passAsFile = [ "phpOptions" ];
+        __structuredAttrs = true;
       }
       ''
-        cat ${poolOpts.phpPackage}/etc/php.ini $phpOptionsPath > $out
+        ( cat ${poolOpts.phpPackage}/etc/php.ini
+          printf "%s" "$phpOptions"
+        ) > $out
       '';
 
   poolOpts =

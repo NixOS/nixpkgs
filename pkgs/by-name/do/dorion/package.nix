@@ -35,19 +35,19 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.13.0";
+  version = "6.13.2";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3AQX1q3qpu/QKqigmCvLKQJzQpsTnYgwT+1VWA+gIz0=";
+    hash = "sha256-+NG2uOGoJ4oAcsyI7F0gmhXEjuw+QJOskAANk0ynx0c=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-p/mj3BL61HlLpN3nqNkVExu0mWaMawg9I2+dKeFUOJ8=";
+  cargoHash = "sha256-V8FHnZLz4K9sShqJbYgiFwXYmTawosKulUGgTvu7Gqo=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;

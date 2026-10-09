@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libsigcxx,
+  libsigcxx_2_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsigcxx ];
+  buildInputs = [ libsigcxx_2_0 ];
 
   patches = [ ./libpar2-0.4-external-verification.patch ];
 

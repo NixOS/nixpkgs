@@ -15,6 +15,7 @@ let
       sha512,
       updateScript,
       applicationName ? "Thunderbird",
+      broken ? stdenv.buildPlatform.is32bit,
     }:
     (buildMozillaMach rec {
       pname = "thunderbird";
@@ -49,6 +50,7 @@ let
         '';
 
       meta = {
+        inherit broken;
         changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
         description = "Full-featured e-mail client";
         homepage = "https://www.thunderbird.net/";
@@ -61,7 +63,6 @@ let
           vcunat
         ];
         platforms = lib.platforms.unix;
-        broken = stdenv.buildPlatform.is32bit;
         # since Firefox 60, build on 32-bit platforms fails with "out of memory".
         # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
         license = lib.licenses.mpl20;
@@ -85,8 +86,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "155.0";
-    sha512 = "fe0247ac50d2741a49517fabe729dc990a66e7044f450e4fe6871b663096bcd15f22ed83eea0557106d38eee34e464fead5a7567d0906995ff2a945fae64b60c";
+    version = "157.0.1";
+    sha512 = "12c6151150cadce68b113720788ff6d4cdcd39ae57131152f92a272a76c2590fd929edd45faed4e81e1f32eb58d0b22ca003a37294b9daf6648d39194f09fd95";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -99,8 +100,8 @@ rec {
   thunderbird-153 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "153.1.1esr";
-    sha512 = "a0e26fb0c4c6c97ab2cc0dca0f122de9f149e70ed888010dd79192f838caa267b80bdc9e33fdcd9d8cbb3efd7ac8c63ca5b36058a5c40fe1e9f638387e7f20de";
+    version = "153.4.0esr";
+    sha512 = "93c43a75010b2edd36c58d054cd2e15a879b9e62e21f419bd8c7f97b8f7f6f29e8aed9d445ab9ccebdc1825dbf0f5e82e6e316c5f817f877d64266a2f2dbf9ec";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-153";
@@ -112,14 +113,16 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.15.0esr";
-    sha512 = "52f014fb75ac131780aba924dd973a1fb5d6a60be4f800c258dca931e2c6ad75baaad37a5ad52228e91d3d174823b6b4d38ddc2dbbf9c04b8700cc33079448bb";
+    version = "140.16.0esr";
+    sha512 = "9844641f9c8b4e7c96445d6d6fc554fc80afd8652899de3458d183f9381a18f08233e5d2e2beedd6adf2a0a6e1331e7abb55e698765b27110ca2dafdf12ecbb7";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";
       versionPrefix = "140";
       versionSuffix = "esr";
     };
+
+    broken = true;
   };
 }
 // lib.optionalAttrs config.allowAliases {

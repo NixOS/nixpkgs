@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtk";
-  version = "0.47.0";
+  version = "0.50.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rtk-ai";
     repo = "rtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qYVkFLS6G4Tf1NmD9B3kJkyb47XREoVE65EqBtbzzjs=";
+    hash = "sha256-cQq+iJ6L7YTc9oinNw1X+qt8PkDhYM/mi7tXMJf7fp8=";
   };
 
-  cargoHash = "sha256-2lwLPia3v7xagKsrCpayixZMmOqX15qrjsVP8/RQCXE=";
+  cargoHash = "sha256-COpR8TZJgim/WxRG//bEKc4tAEWy0GfkGcFK/dnpRlQ=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -47,6 +47,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     gitMinimal
     writableTmpDirAsHomeHook
+  ];
+
+  checkFlags = [
+    # Waits on a shim subprocess that never gets scheduled inside the build sandbox, so it only ever
+    # fails on its own 60s timeout.
+    "--skip=signalled_run_still_prints_captured_output"
   ];
 
   nativeInstallCheckInputs = [

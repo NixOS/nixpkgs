@@ -225,6 +225,7 @@ in
           mainProgram = "create-builder";
           description = "Create a Linux builder VM for macOS";
           platforms = lib.platforms.darwin;
+          maintainers = with lib.maintainers; [ booxter ];
         };
         passthru = {
           # Let users in the repl inspect the config

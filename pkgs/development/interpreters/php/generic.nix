@@ -147,6 +147,8 @@ let
             phpWithExtensions = symlinkJoin {
               pname = "php-with-extensions";
               inherit (php) version;
+              strictDeps = true;
+              __structuredAttrs = true;
               nativeBuildInputs = [ makeBinaryWrapper ];
               passthru = php.passthru // {
                 buildEnv = mkBuildEnv allArgs allExtensionFunctions;
@@ -292,7 +294,7 @@ let
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
             ++ lib.optional ztsSupport "--enable-zts"
             ++ lib.optional staticSupport "--enable-static"
-            ++ lib.optional (!zendSignalsSupport) [ "--disable-zend-signals" ]
+            ++ lib.optionals (!zendSignalsSupport) [ "--disable-zend-signals" ]
             ++ lib.optional zendMaxExecutionTimersSupport "--enable-zend-max-execution-timers"
 
             # Sendmail

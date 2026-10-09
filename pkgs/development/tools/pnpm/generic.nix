@@ -65,6 +65,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       cp -R . $out/libexec/pnpm
       ln -s $out/libexec/pnpm/bin/pnpm.${ext} $out/bin/pnpm
       ln -s $out/libexec/pnpm/bin/pnpx.${ext} $out/bin/pnpx
+      ln -s pnpm $out/bin/pn
+      ln -s pnpx $out/bin/pnx
 
       runHook postInstall
     '';
@@ -119,7 +121,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         set -eou pipefail
 
         curl_github() {
-            curl -L ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
+          curl -L ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} "$@"
         }
 
         latestTag=$(

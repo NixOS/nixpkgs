@@ -12,25 +12,27 @@
   seatd,
   udev,
   systemd,
+  xrdb,
   nix-update-script,
   nixosTests,
 
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withXWayland ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-comp";
-  version = "1.6.0";
+  version = "1.9.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-comp";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-6iV0ZxSSw+2t5qUvEzM/W4+/erwx03TsOwKb64P8CrE=";
+    hash = "sha256-/q2SDp9Sa2MG4bMtryOizxnhPovrAgYb9GXQ35NRs6c=";
   };
 
-  cargoHash = "sha256-b8X5X6aQZMa8X189812syMBPvjJDUbJUpx+jiar8fzQ=";
+  cargoHash = "sha256-WTpJuj3Xz9hHLj+kuhys0Fr8FmosAuXpbtNSK3Y5twU=";
 
   # Only default feature is systemd
   buildNoDefaultFeatures = !useSystemd;
@@ -59,6 +61,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   dontCargoInstall = true;
+
+  # With Xwayland, cosmic-comp calls out to `xrdb -merge` to set
+  # `Xcursor.size` and `Xcursor.theme` for X11 clients (src/xwayland.rs,
+  # upstream pop-os/cosmic-comp#1976). Without it on PATH it logs
+  # "`xrdb` not found, cannot update Xresources." and X11 clients fall back
+  # to libXcursor's screen-derived default cursor size.
+  preFixup = lib.optionalString withXWayland ''
+    libcosmicAppWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xrdb ]})
+  '';
 
   passthru = {
     tests = {

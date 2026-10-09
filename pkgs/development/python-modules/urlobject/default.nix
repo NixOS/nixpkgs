@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for manipulating URLs (and some URIs) in a more natural way";
-    homepage = "http://zacharyvoase.github.com/urlobject";
+    homepage = "https://zacharyvoase.github.io/urlobject/";
     license = lib.licenses.unlicense;
     maintainers = with lib.maintainers; [ getchoo ];
   };

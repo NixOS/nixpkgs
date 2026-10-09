@@ -52,16 +52,28 @@
     machine.screenshot("Repath-Studio-GUI-Welcome")
     machine.send_key("kp_enter") # OK
 
-    # sleep is required it needs time to dismiss the dialog
+    # move the mouse to the "Save" icon on the toolbar
+    machine.execute("su - alice -c \"DISPLAY=:0 xdotool mousemove --sync 95 65\"")
+
+    # click the save icon until the GTK save dialog appears
+    for _ in range(30):
+        status, _ = machine.execute("su - alice -c \"DISPLAY=:0 xdotool search --name 'Save File'\"")
+        if status == 0:
+            break
+        machine.execute("su - alice -c \"DISPLAY=:0 xdotool click 1\"")
+        machine.sleep(1)
+
+    # wait for the GTK dialog to focus the text input field
+    machine.sleep(3)
+    machine.send_chars("saved.rps") # avoid using absolute path here, doesn't work for some reason
+    # wait for text to be typed
     machine.sleep(2)
-    machine.send_key("ctrl-shift-s")
-    machine.sleep(2)
-    machine.send_chars("/tmp/saved.rps")
-    machine.sleep(2)
-    machine.succeed("su - alice -c 'DISPLAY=:0 xdotool mousemove --sync 975 745 click 1'") # Save file dialog
-    machine.sleep(2)
-    print(machine.succeed("cat /tmp/saved.rps"))
-    assert "${pkgs.repath-studio.version}" in machine.succeed("cat /tmp/saved.rps")
+
+    machine.execute("su - alice -c \"DISPLAY=:0 xdotool key alt+s\"") # save file
+    machine.wait_until_succeeds("ls /home/alice/saved.rps")
+
+    machine.succeed("cat /home/alice/saved.rps")
+    assert "${pkgs.repath-studio.version}" in machine.succeed("cat /home/alice/saved.rps")
 
     machine.screenshot("Repath-Studio-GUI")
   '';

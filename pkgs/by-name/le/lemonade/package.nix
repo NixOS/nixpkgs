@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "lemonade";
-  version = "unstable-2021-06-18";
+  version = "1.1.1-unstable-2021-06-18";
 
   src = fetchFromGitHub {
     owner = "lemonade-command";

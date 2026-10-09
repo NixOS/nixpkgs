@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "whisper-ctranslate2";
-  version = "0.5.7";
+  version = "0.5.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     tag = finalAttrs.version;
-    hash = "sha256-fbdvbmrZWQoqri6iZMDbElXX/sfv6gu0NDjglviLxO4=";
+    hash = "sha256-1gw72ZY9i47rKmWsJMyiy57IQpoEJLw58OrcytLp924=";
   };
 
   build-system = [ python3Packages.setuptools ];

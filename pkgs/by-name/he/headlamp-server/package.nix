@@ -6,17 +6,16 @@
   writeShellScript,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "headlamp-server";
   version = "0.43.0";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "headlamp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6TGKBKR0WR4Xv7lGCgMFVG/nc19oMOP5cJcgT0bw6Ag=";
   };
 
@@ -30,7 +29,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/kubernetes-sigs/headlamp/backend/pkg/kubeconfig.Version=${version}"
+    "-X github.com/kubernetes-sigs/headlamp/backend/pkg/kubeconfig.Version=${finalAttrs.version}"
     "-X github.com/kubernetes-sigs/headlamp/backend/pkg/kubeconfig.AppName=Headlamp"
   ];
 
@@ -51,9 +50,9 @@ buildGoModule rec {
   meta = {
     description = "An easy-to-use and extensible Kubernetes web UI";
     homepage = "https://headlamp.dev";
-    changelog = "https://github.com/kubernetes-sigs/headlamp/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes-sigs/headlamp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dylanmtaylor ];
     mainProgram = "headlamp-server";
   };
-}
+})

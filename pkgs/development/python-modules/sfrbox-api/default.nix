@@ -1,30 +1,39 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   click,
   defusedxml,
   fetchFromGitHub,
   mashumaro,
-  poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
+  uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sfrbox-api";
-  version = "0.1.1";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = "sfrbox-api";
-    tag = "v${version}";
-    hash = "sha256-hK4d9wy2+wUp8elEHW0suu9frYPNnwFUlIRvjTXfRkc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yyfCc36egn5qKZwPpWTndfq0ShacEEEV2PW8FMzjF6k=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.12.21,<0.13" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -37,20 +46,21 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "sfrbox_api" ];
 
   meta = {
     description = "Module for the SFR Box API";
     homepage = "https://github.com/hacf-fr/sfrbox-api";
-    changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/hacf-fr/sfrbox-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sfrbox-api";
   };
-}
+})

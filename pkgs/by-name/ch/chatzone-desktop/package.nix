@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation {
   desktopItems = [
     (makeDesktopItem {
       name = "chatzone";
-      exec = "chatzone-desktop";
+      exec = "chatzone-desktop %U";
       icon = "chatzone-desktop";
       terminal = false;
       desktopName = "Chatzone";
@@ -42,7 +42,10 @@ stdenvNoCC.mkDerivation {
         "Chat"
       ];
       startupWMClass = "Chatzone";
-      mimeTypes = [ "x-scheme-handler/mattermost" ];
+      mimeTypes = [
+        "x-scheme-handler/mattermost"
+        "x-scheme-handler/chatzone"
+      ];
     })
   ];
 

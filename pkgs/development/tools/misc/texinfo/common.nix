@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     ++ optional crossBuildTools ./cross-tools-flags.patch;
 
   postPatch = ''
-    patchShebangs tp/maintain/regenerate_commands_perl_info.pl
+    patchShebangs tta/maintain/regenerate_commands_perl_info.pl
   '';
 
   env = {

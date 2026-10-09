@@ -56,7 +56,7 @@ buildGoModule (finalAttrs: {
     makeWrapper
   ];
 
-  vendorHash = "sha256-I81sn+tHTny9bX5eNGQLPQtoabbaNZINMjYotCXt88A=";
+  vendorHash = "sha256-vqNxPGcxGiEtBOGr+ZJHJNts/N4RMQzAL9DOjk13v/w=";
 
   preBuild = ''
     # redirect AppDataPathStatic (/usr/lib/nordvpn) to $out/bin so that

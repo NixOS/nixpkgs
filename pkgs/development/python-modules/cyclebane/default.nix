@@ -20,7 +20,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyclebane";
-  version = "24.10.0";
+  version = "26.9.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "scipp";
     repo = "cyclebane";
     tag = finalAttrs.version;
-    hash = "sha256-vD/Ajym37GdsJ7iMuhao1SgX+Pd7aapc3b2oujwcopk=";
+    hash = "sha256-2OSDOlhAt6zHYP86+u2/J9n1muVuyA18YDNJNqP5Cg8=";
   };
 
   build-system = [

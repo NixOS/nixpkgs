@@ -93,11 +93,13 @@ flutter341.buildFlutterApplication (finalAttrs: {
       exec = "localsend_app %U";
       icon = "localsend";
       desktopName = "LocalSend";
-      startupWMClass = "localsend_app";
-      genericName = "An open source cross-platform alternative to AirDrop";
+      startupWMClass = "org.localsend.localsend_app";
+      comment = meta.description;
+      genericName = "File Transfer";
       categories = [
         "GTK"
         "FileTransfer"
+        "Network"
         "Utility"
       ];
       keywords = [

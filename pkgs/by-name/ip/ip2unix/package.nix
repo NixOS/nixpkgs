@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   yaml-cpp,
-  systemd,
+  systemdLibs,
   python313Packages,
   asciidoc,
   libxslt,
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook5
     python313Packages.pytest
     python313Packages.pytest-timeout
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 

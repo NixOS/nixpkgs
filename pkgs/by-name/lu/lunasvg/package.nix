@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake-config = testers.hasCmakeConfigModules {
       package = finalAttrs.finalPackage;
       buildInputs = [ plutovg ];
-      moduleNames = [ "lunasvg" ];
       versionCheck = true;
     };
   };
@@ -56,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.eymeric ];
     platforms = lib.platforms.all;
     pkgConfigModules = [ "lunasvg" ];
+    cmakeConfigModules = [ "lunasvg" ];
   };
 })

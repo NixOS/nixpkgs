@@ -9,16 +9,16 @@
 
 let
   pname = "tutanota-desktop";
-  version = "357.260812.1";
+  version = "359.260904.0";
 
   linuxSrc = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-linux.AppImage";
-    hash = "sha256-CnOJmmMLYyC4lCY/3WLz+WrdnC7nysDl4JWWL8KAn74=";
+    hash = "sha256-bhgKpOVkx5NdnhbfDawZp3cvE9sjdZYu0TKcUSgi6w4=";
   };
 
   darwinSrc = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/tutanota-desktop-mac.dmg";
-    hash = "sha256-RKwhWXTeVC6NICbXnsuORH3Xdp3qsX/VJPycr0Dnizs=";
+    hash = "sha256-l0M1p/9HNOS7Z0+ljnDeX0eHeyLHc6rM4//EjDsWzo4=";
   };
 
   passthru.updateScript = ./update.sh;

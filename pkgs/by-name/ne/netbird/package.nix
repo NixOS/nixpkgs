@@ -78,7 +78,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.78.1";
+  version = "0.80.0";
 
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ buildGoModule (finalAttrs: {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YWLorAu71hG5BJLXsZwtQf86o51KCn2/1wI1DRg/aCg=";
+    hash = "sha256-oZgDYmNzf8UESUEbwn0Br0CaPTNLaEpuiKR2wW5zeGw=";
   };
 
   overrideModAttrs = final: prev: {
@@ -100,7 +100,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-E8NeS88Ab5sumDxyH54y3GIWcXQQzRT0UXO+xwcQpUU=";
+  vendorHash = "sha256-2lM0KtyU3RxA7KJtM10JslMpyHmgqxQ23B1Ieq986Y8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -196,18 +196,22 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = component.versionCheckProgramArg or "version";
 
   passthru = {
-    tests = lib.attrsets.optionalAttrs (componentName == "client") {
-      nixos = nixosTests.netbird;
-      inherit
-        # make sure child packages are built by `ofborg`
-        netbird-management
-        netbird-relay
-        netbird-signal
-        netbird-ui
-        netbird-upload
-        netbird-proxy
-        ;
-    };
+    tests =
+      lib.attrsets.optionalAttrs (componentName == "client") {
+        nixos = nixosTests.netbird;
+        inherit
+          # make sure child packages are built by `ofborg`
+          netbird-management
+          netbird-relay
+          netbird-signal
+          netbird-ui
+          netbird-upload
+          netbird-proxy
+          ;
+      }
+      // lib.attrsets.optionalAttrs (componentName == "relay") {
+        nixos = nixosTests.netbird-relay;
+      };
     updateScript = nix-update-script { };
   };
 

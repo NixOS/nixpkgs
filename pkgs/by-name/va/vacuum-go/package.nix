@@ -1,22 +1,23 @@
 {
   lib,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
   testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "vacuum-go";
-  version = "0.30.1";
+  version = "0.30.6";
 
   src = fetchFromGitHub {
     owner = "daveshanley";
     repo = "vacuum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P9d24F2ij32QG7j9bOch9EEGepDV77lLMpMO3pEzMIg=";
+    hash = "sha256-27ZGWy9lblCAlvodpmgyhHaS2uHP5gpM8SDh44agdZ8=";
   };
 
-  vendorHash = "sha256-IX80z+3IpgZPqdklJzTZyOlLDM6Qbw8y1Q344r5TYpc=";
+  vendorHash = "sha256-0fKjscF77MubYr+AhvWAk8Oh0OQP948vGW8zbwAS1xw=";
 
   env.CGO_ENABLED = 0;
   ldflags = [
@@ -25,9 +26,33 @@ buildGoModule (finalAttrs: {
     "-X main.version=v${finalAttrs.version}"
   ];
 
+  tags = [ "html_report_ui" ];
+
+  preBuild = ''
+    mkdir -p html-report/ui/build/static/js
+    cp ${finalAttrs.passthru.htmlReportUI}/static/js/vacuumReport.js html-report/ui/build/static/js/
+    cp ${finalAttrs.passthru.htmlReportUI}/static/js/hydrate.js html-report/ui/build/static/js/
+  '';
+
   subPackages = [ "./vacuum.go" ];
 
   passthru = {
+    # see upstream scripts/build-ui-assets.sh
+    htmlReportUI = buildNpmPackage {
+      pname = "vacuum-html-report-ui";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "${finalAttrs.src.name}/html-report/ui";
+
+      npmDepsHash = "sha256-DU6kgafGmAi1QTcAbseSl473467YN0E2lXeGYlpUZ68=";
+
+      installPhase = ''
+        runHook preInstall
+        cp -r build "$out"
+        runHook postInstall
+      '';
+    };
+
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "vacuum version";

@@ -20,15 +20,16 @@
 assert testCudaRuntime -> cudaSupport;
 assert testRocmRuntime -> rocmSupport;
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gpuctypes";
   version = "0.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "gpuctypes";
     owner = "tinygrad";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-xUMvMBK1UhZaMZfik0Ia6+siyZGpCkBV+LTnQvzt/rw=";
   };
 
@@ -43,22 +44,29 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   postPatch = ''
     substituteInPlace gpuctypes/opencl.py \
-      --replace "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
+      --replace-fail \
+        "ctypes.util.find_library('OpenCL')" \
+        "'${lib.getLib ocl-icd}/lib/libOpenCL.so'"
   ''
   # hipGetDevicePropertiesR0600 is a symbol from rocm-6. We are currently at rocm-5.
   # We are not sure that this works. Remove when rocm gets updated to version 6.
   + lib.optionalString rocmSupport ''
     substituteInPlace gpuctypes/hip.py \
-      --replace "/opt/rocm/lib/libamdhip64.so" "${rocmPackages.clr}/lib/libamdhip64.so" \
-      --replace "/opt/rocm/lib/libhiprtc.so" "${rocmPackages.clr}/lib/libhiprtc.so" \
-      --replace "hipGetDevicePropertiesR0600" "hipGetDeviceProperties"
+      --replace-fail \
+        "/opt/rocm/lib/libamdhip64.so" \
+        "${lib.getLib rocmPackages.clr}/lib/libamdhip64.so" \
+      --replace-fail \
+        "hipGetDevicePropertiesR0600" \
+        "hipGetDeviceProperties"
 
     substituteInPlace gpuctypes/comgr.py \
-      --replace "/opt/rocm/lib/libamd_comgr.so" "${rocmPackages.rocm-comgr}/lib/libamd_comgr.so"
+      --replace-fail \
+        "/opt/rocm/lib/libamd_comgr.so" \
+        "${lib.getLib rocmPackages.rocm-comgr}/lib/libamd_comgr.so"
   '';
 
   pythonImportsCheck = [ "gpuctypes" ];
@@ -112,6 +120,7 @@ buildPythonPackage rec {
   meta = {
     description = "Ctypes wrappers for HIP, CUDA, and OpenCL";
     homepage = "https://github.com/tinygrad/gpuctypes";
+    changelog = "https://github.com/tinygrad/gpuctypes/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       GaetanLepage
@@ -119,4 +128,4 @@ buildPythonPackage rec {
       wozeparrot
     ];
   };
-}
+})

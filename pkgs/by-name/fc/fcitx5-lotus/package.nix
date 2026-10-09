@@ -2,7 +2,6 @@
   lib,
   stdenv,
   acl,
-  buildGoModule,
   cmake,
   fcitx5,
   fetchFromGitHub,
@@ -12,7 +11,6 @@
   kdePackages,
   libinput,
   librsvg,
-  libx11,
   nix-update-script,
   pkg-config,
   python3,
@@ -31,14 +29,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "3.5.7";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-IQFklfLrccVm/SW8dpcplbWfoYJNoS4nMMdkuOzOgdo=";
-    fetchSubmodules = true;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dUJO/iemfSUiSgqgdl5tsjnjIy1mKyOzqhK9H4IJXK4=";
+  };
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     fcitx5
     kdePackages.extra-cmake-modules
     libinput
-    libx11
     pythonEnv
     qt6.qtbase
     qt6.qtsvg
@@ -65,24 +65,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
   __structuredAttrs = true;
 
   dontWrapQtApps = true;
 
-  vendorDir =
-    (buildGoModule {
-      pname = "fcitx5-lotus-go-modules";
-      inherit (finalAttrs) version src;
-      modRoot = "bamboo";
-      vendorHash = "sha256-Y8sh1PqmBjXko2X9YOxwCrtrGLQ565aewrq4sRvLdpw=";
-    }).goModules;
-
   preConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH=$TMPDIR/go
-
-    rm -rf bamboo/vendor
-    cp -r $vendorDir bamboo/vendor
   '';
 
   postPatch = ''
@@ -93,9 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace server/lotus-server.cpp \
       --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5") == 0' \
                      '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 11 && strcmp(exe_path + strlen(exe_path) - 11, "/bin/fcitx5") == 0)'
-
-    substituteInPlace src/lotus-engine.cpp \
-      --replace-fail '/usr/share/icons/hicolor' '/run/current-system/sw/share/icons/hicolor'
 
     substituteInPlace settings-gui/i18n.py \
       --replace-fail 'localedir = "/usr/share/locale"' 'localedir = "'"$out"'/share/locale"'
@@ -109,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/setfacl" "${acl}/bin/setfacl"
 
     substituteInPlace $out/lib/systemd/system/fcitx5-lotus-server@.service \
-      --replace-fail "/usr/bin/setfacl" "${acl}/bin/setfacl" \
       --replace-fail "/usr/bin/fcitx5-lotus-server" "$out/bin/fcitx5-lotus-server"
   '';
 
@@ -119,14 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share"
   '';
 
-  passthru.updateScript = nix-update-script { };
-
   meta = {
     description = "Vietnamese input method engine for Fcitx5";
     homepage = "https://github.com/LotusInputMethod/fcitx5-lotus";
     license = with lib.licenses; [
       gpl3Plus
-      lgpl21Plus
     ];
     maintainers = with lib.maintainers; [
       imcvampire

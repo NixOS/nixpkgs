@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xdg-desktop-portal-generic";
-  version = "0.6.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lamco-admin";
     repo = "xdg-desktop-portal-generic";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Y7fdAbge1wG8lE0BUBSNGEbz3it2cZ8o80ayUEdFt8M=";
+    hash = "sha256-YuwIaPA2E1QtSVz4mwteDEaZEBwaUoYLdfArGsJqHn0=";
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   postPatch = ''
     substituteInPlace data/org.freedesktop.impl.portal.desktop.generic.service \
@@ -31,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/libexec/' '${placeholder "out"}/libexec/'
   '';
 
-  cargoHash = "sha256-3t2w37jqU9iLRZWldnuNZkqE4jreMe+OVl7f3ZHyGXc=";
+  cargoHash = "sha256-EVmHmeoh1THLRrqn3v1WjvHNxBFopdCz3n5C4eOBrNg=";
 
   nativeBuildInputs = [
     pkg-config

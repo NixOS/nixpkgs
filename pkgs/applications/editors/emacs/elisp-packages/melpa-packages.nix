@@ -1370,9 +1370,19 @@ let
             }
           );
 
-          # https://github.com/abo-abo/lispy/pull/683
-          # missing optional dependencies
-          lispy = addPackageRequires (mkHome super.lispy) [ self.indium ];
+          lispy = addPackageRequires (mkHome super.lispy) [
+            # MELPA no longer reads lispy-pkg.el, the only place lispy
+            # declares its dependencies
+            # https://github.com/melpa/melpa/commit/ce48c8475144800fc1150607353df958afadf2ed
+            self.ace-window
+            self.hydra
+            self.iedit
+            self.swiper
+            self.zoutline
+            # https://github.com/abo-abo/lispy/pull/683
+            # missing optional dependencies
+            self.indium
+          ];
 
           lsp-origami = ignoreCompilationError super.lsp-origami; # elisp error
 
@@ -1400,6 +1410,8 @@ let
           mu-cite = ignoreCompilationError super.mu-cite; # elisp error
 
           mu4e-alert = addPackageRequires super.mu4e-alert [ self.mu4e ];
+
+          mu4e-autotask = addPackageRequires super.mu4e-autotask [ self.mu4e ];
 
           mu4e-column-faces = addPackageRequires super.mu4e-column-faces [ self.mu4e ];
 
@@ -1514,6 +1526,9 @@ let
 
           org-pdftools = mkHome super.org-pdftools;
 
+          # elisp error when loading elnode
+          org-present-remote = ignoreCompilationError super.org-present-remote;
+
           org-projectile = super.org-projectile.overrideAttrs (
             finalAttrs: previousAttrs: {
               # https://github.com/melpa/melpa/pull/9150
@@ -1575,6 +1590,8 @@ let
                     --replace-fail '(executable-find "pdftk")' '"${lib.getExe pkgs.pdftk}"'
               '';
           });
+
+          peek-mode = ignoreCompilationError super.peek-mode; # elisp error when loading elnode
 
           pgdevenv = ignoreCompilationError super.pgdevenv; # elisp error
 

@@ -55,7 +55,6 @@ let
     cargoHash = "sha256-46IwZJI9AOs+IQFbfz89A2yIi5db7rVMVNsO9W+tn+c=";
 
     __structuredAttrs = true;
-    strictDeps = true;
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [
@@ -92,7 +91,6 @@ let
     ];
 
     __structuredAttrs = true;
-    strictDeps = true;
 
     nativeBuildInputs = [
       pkg-config

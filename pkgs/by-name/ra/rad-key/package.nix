@@ -2,17 +2,17 @@
   lib,
   stdenvNoCC,
   fetchFromRadicle,
-  zig_0_16,
+  zig_0_17,
   versionCheckHook,
 }:
 
 let
-  zig = zig_0_16;
+  zig = zig_0_17;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rad-key";
-  version = "0.2.0";
+  version = "0.2.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     seed = "radicle.defelo.de";
     repo = "zFF3JpT1VrrsDYogDPtVZMHw6P4x";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-l0PJo8unFWgBu+0NofjjryWsQx3RcT0oPHe/j2YEZW0=";
+    hash = "sha256-tHMq0nToYLg9YbcF8p5MTTTNaJK3GWuuA+bTd3qJHoU=";
   };
 
   nativeBuildInputs = [ zig ];

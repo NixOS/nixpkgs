@@ -7,17 +7,17 @@
   libtirpc,
   autoreconfHook,
   useSystemd ? true,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcbind";
-  version = "1.2.9";
+  version = "1.3.1";
 
   src = fetchgit {
     url = "git://git.linux-nfs.org/projects/steved/rpcbind.git";
     rev = "refs/tags/rpcbind-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-uiUGSCUkFTFl+hqzXgJEjl4WZCcMi+QxuAGmY0g+fs4=";
+    hash = "sha256-xHPVg/2u1GRy1s5nipKK2I5sbHRMF0Cxd+ZHMaLRxvU=";
   };
 
   patches = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnsl
     libtirpc
   ]
-  ++ lib.optional useSystemd systemd;
+  ++ lib.optional useSystemd systemdLibs;
 
   configureFlags = [
     "--with-systemdsystemunitdir=${

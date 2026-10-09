@@ -9,7 +9,7 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.44";
+  version = "4.48";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
@@ -22,10 +22,10 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
       popd
     '';
-    hash = "sha256-tpLZGPkNlT2sK+l0Ny5VLCL+563J9KZ87Hr7IZTt6Rg=";
+    hash = "sha256-c+VIgtFZTYn0aeBtx6mc9HAyQhJD/ZzQCpvDYUiFjsI=";
   };
 
-  vendorHash = "sha256-srMT+bfW11J3pnN8CWm3rrUAL+usHBy8EoHgzq/9J2w=";
+  vendorHash = "sha256-h+M0+RBqYTOUj4ALBxQyAEJkgFnaZrBbptCYqaUJYic=";
 
   nativeBuildInputs = [ installShellFiles ];
 

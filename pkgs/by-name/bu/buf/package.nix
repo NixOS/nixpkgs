@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "buf";
-  version = "1.72.0";
+  version = "1.73.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cnCwaa9vzoaqUmrFWqmHPiO/7UjeIburisIiLJZUpl4=";
+    hash = "sha256-L4d37MQL2pVpt8nV8lxWlUYqxCAkl9KRz2hmJNuOu+o=";
   };
 
-  vendorHash = "sha256-8LTi/+ODA8Tyd5mp5OeTDECjp6+bmNFFHxxCi6RtzTs=";
+  vendorHash = "sha256-3ijHv25dS62wzqw+yPxlsZ34GALNIf3Azdjm9hVenW8=";
 
   patches = [
     # Skip a test that requires networking to be available to work.

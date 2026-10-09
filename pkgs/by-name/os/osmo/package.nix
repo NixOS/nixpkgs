@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Handy personal organizer";
     mainProgram = "osmo";
-    homepage = "https://clayo.org/osmo/";
+    homepage = "https://sourceforge.net/projects/osmo-pim/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];

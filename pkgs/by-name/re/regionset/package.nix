@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     inherit version;
-    homepage = "http://linvdr.org/projects/regionset/";
+    homepage = "https://manpages.debian.org/trixie/regionset/regionset.8.en.html";
     description = "Tool for changing the region code setting of DVD players";
     mainProgram = "regionset";
     license = lib.licenses.gpl2Plus;

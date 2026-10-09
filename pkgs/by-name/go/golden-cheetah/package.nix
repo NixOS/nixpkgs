@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "golden-cheetah";
-  version = "3.8-DEV2605";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "GoldenCheetah";
     repo = "GoldenCheetah";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-umy1EcLSoSDO5XFiGxfunniDr8RruyPvRTbypMbl7xU=";
+    hash = "sha256-NGb8u2xdmDkh0Vx5kf2KHGmsojguS2Of6NVajc6iEBI=";
   };
 
   buildInputs =
@@ -114,13 +114,19 @@ stdenv.mkDerivation (finalAttrs: {
     else
       abort "unsupported platform";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=v([0-9\\.]+)"
+    ];
+  };
 
   meta = {
     description = "Performance software for cyclists, runners and triathletes. Built from source and without API tokens";
+    changelog = "https://github.com/GoldenCheetah/GoldenCheetah/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/GoldenCheetah/GoldenCheetah";
     mainProgram = "GoldenCheetah";
-    platforms = with lib.platforms; darwin ++ linux;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ adamcstephens ];
     license = lib.licenses.gpl2Plus;
   };

@@ -2,6 +2,7 @@
   fetchurl,
   lib,
   stdenv,
+  bashNonInteractive,
   expect,
   makeWrapper,
   updateAutotoolsGnuConfigScriptsHook,
@@ -13,14 +14,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/dejagnu/dejagnu-${finalAttrs.version}.tar.gz";
-    sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
+    hash = "sha256-h9rvrNeVi0pp+IxoVtvRY0JhljxBQHnQw3H1ic1mouM=";
   };
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     makeWrapper
   ];
-  buildInputs = [ expect ];
+  buildInputs = [
+    bashNonInteractive
+    expect
+  ];
+
+  strictDeps = true;
 
   # dejagnu-1.6.3 can't successfully run tests in source tree:
   #   https://wiki.linuxfromscratch.org/lfs/ticket/4871
@@ -52,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     #   https://sourceware.org/PR30052#c5
     ln -s ${expect}/bin/expect $out/bin/expect
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Framework for testing other programs";

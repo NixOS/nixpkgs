@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cacert,
   curl,
   pkg-config,
   libgit2,
@@ -11,13 +12,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxide-rs";
-  version = "0.16.0+2026032500.0.0";
+  version = "0.18.0+2026073100.0.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0zlH7Gws7Cn161whwx4myBF1wTL46fFcr0mjPrvCTmQ=";
+    hash = "sha256-zFLWqZGICGZSDFFA0Twzhoz0TXGH188OvNFxmHtpVl8=";
   };
 
   patches = [
@@ -26,6 +27,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./rm-commit-hash-in-version-output.patch
   ];
 
+  nativeCheckInputs = [ cacert ];
+
+  # rust library: reqwest panicks without a bundle present
+  preCheck = ''
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+  '';
+
   checkFlags = [
     # skip since output check includes git commit hash
     "--skip=cmd_version::version_success"
@@ -33,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_cmd_auth_debug_logging"
   ];
 
-  cargoHash = "sha256-x6jYTwrfdAKl42AleIYXxWLjnwi1IYMtWnfosueiHp0=";
+  cargoHash = "sha256-c1tTTdbj8QFfgT0gco8WAMSGZl0iHly7ykCuAlt5sfc=";
 
   cargoBuildFlags = [
     "--package=oxide-cli"

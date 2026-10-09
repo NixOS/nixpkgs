@@ -14,7 +14,7 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   writeText,
   libxcb-wm,
   xwayland,
@@ -39,13 +39,13 @@
 assert withCustomConfigH -> (configH != null);
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromCodeberg {
     owner = "dwl";
     repo = "dwl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J76L5ZOCYgfcY08wH5cSLG+UdgDrv50lQyEnJNqDkXI=";
+    hash = "sha256-PYBOi/A9n1611XBEaZW9PolSfjwe1KWoI2VbVrS2s0Q=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     wayland
     wayland-protocols
-    wlroots_0_19
+    wlroots_0_20
   ]
   ++ lib.optionals enableXWayland [
     libx11
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
       - Tied to as few external dependencies as possible
     '';
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ evanwporter ];
     inherit (wayland.meta) platforms;
     mainProgram = "dwl";
   };

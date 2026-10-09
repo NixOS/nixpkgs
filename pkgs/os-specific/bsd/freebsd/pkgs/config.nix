@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   bsdSetupHook,
   freebsdSetupHook,
@@ -32,4 +33,6 @@ mkDerivation {
     libnv
     libsbuf
   ];
+
+  meta.platforms = lib.platforms.unix;
 }

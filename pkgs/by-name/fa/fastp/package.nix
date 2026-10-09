@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastp";
-  version = "1.3.6";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenGene";
     repo = "fastp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4qx4enFm9UY2NB68QJOBVx9AGAZuoPqCpnxFDHfKL1E=";
+    hash = "sha256-PaQ3+Prc9gacZAscgo4Ub5I29J2mqOEMq0yIWniB2TQ=";
   };
 
   buildInputs = [

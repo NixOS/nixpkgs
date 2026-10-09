@@ -14,7 +14,7 @@ let
   python = python314.override {
     self = python;
     packageOverrides = final: prev: {
-      django = prev.django_6;
+      django = prev.django_6_0;
 
       django-hierarkey = prev.django-hierarkey.overrideAttrs (oldAttrs: {
         version = "2.0.1";
@@ -145,7 +145,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       psycopg2
     ];
   };
-  postBuild = ''
+
+  preBuild = ''
     # Generate all static files and translations, see
     # https://docs.pretalx.org/administrator/commands.html#python-m-pretalx-rebuild
     PYTHONPATH=$PYTHONPATH:./src python -m pretalx rebuild

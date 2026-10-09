@@ -29,7 +29,9 @@ makeTest {
         powerManagement.resumeCommands = "systemctl --no-block restart backdoor.service";
 
         virtualisation.emptyDiskImages = [ (2 * config.virtualisation.memorySize) ];
+        # virtiofs doesn't support hibernation
         virtualisation.useNixStoreImage = true;
+        virtualisation.sharedDirectories = lib.mkForce { };
 
         swapDevices = lib.mkOverride 0 [
           {

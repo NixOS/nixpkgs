@@ -5,7 +5,7 @@
   pyqt5,
   pyqt-builder,
   python,
-  qtcharts,
+  qt5,
   setuptools,
   sip,
 }:
@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sip
-    qtcharts
+    qt5.qtcharts
     setuptools
     pyqt-builder
   ];
 
-  buildInputs = [ qtcharts ];
+  buildInputs = [ qt5.qtcharts ];
 
   propagatedBuildInputs = [ pyqt5 ];
 

@@ -1,7 +1,8 @@
 {
   lib,
   buildNpmPackage,
-  typescript,
+  yq-go,
+  typescript_7,
   fetchFromGitHub,
 }:
 
@@ -16,8 +17,13 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-tRx/ZCyHnDP3BmK/xOgVKtjlKCyKUfIll8y1sSDgzV8=";
   };
 
+  postPatch = ''
+    yq -i '.compilerOptions.types = ["node"]' tsconfig.json
+  '';
+
   nativeBuildInputs = [
-    typescript
+    yq-go
+    typescript_7
   ];
 
   dontNpmPrune = true;

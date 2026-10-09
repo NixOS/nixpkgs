@@ -16,18 +16,22 @@
   nix-update-script,
   nixosTests,
   orca,
+  withLogind ? true,
+  withSystemd ? true,
+  withUpower ? true,
+  withNetworkManager ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.6.0";
+  version = "1.9.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-hDVdl2+7NVLA+YxO2HToni57IEr0i4OGTsYDc3YGTuw=";
+    hash = "sha256-XKktgBfv6oWOiEPUOkNDTEZruROxGZelDZiCwmP9DAc=";
   };
 
   postPatch = ''
@@ -35,9 +39,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/orca' '${lib.getExe orca}'
   '';
 
-  cargoHash = "sha256-vHR9go8/iVUT7oBV8h+mmBvhi2oSKNBKtV0uoDOr6go=";
+  cargoHash = "sha256-/yIwqJXQD8mZwWwSI2gcYklnVjy/47Dl5O8mPEKPqTA=";
 
-  cargoBuildFlags = [ "--all" ];
+  buildNoDefaultFeatures = true;
+
+  cargoBuildFlags = [ "--workspace" ];
+
+  buildFeatures =
+    lib.optionals withLogind [ "logind" ]
+    ++ lib.optionals withSystemd [ "systemd" ]
+    ++ lib.optionals withUpower [ "upower" ]
+    ++ lib.optionals withNetworkManager [ "networkmanager" ];
 
   separateDebugInfo = true;
   __structuredAttrs = true;

@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "code";
-  version = "0.6.171";
+  version = "0.6.181";
 
   src = fetchFromGitHub {
     owner = "just-every";
     repo = "code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cMqfmo1HtCyB9tNpGLXa80Gwt00enVzTS3MeEQ/J5VA=";
+    hash = "sha256-9ubp+PJVkV6wCb/2t7nkuFq7Iho+dlyNHwMCjXetOOU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/code-rs";

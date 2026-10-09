@@ -55,7 +55,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvino-genai";
-  version = "2026.3.1.0";
+  version = "2026.4.0.0";
 
   __structuredAttrs = true;
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "openvinotoolkit";
       repo = "openvino.genai";
       tag = finalAttrs.version;
-      hash = "sha256-iZfsOyqtpPdJXhxxzA9m17y6+TViXCI1XK19BnDDdTY=";
+      hash = "sha256-sRJbnXF7/CaHx86+dbIDv9FC1GthMW58vstQ4elf16Q=";
     };
 
   outputs = [
@@ -91,21 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-
-  patches = [
-    # gguf_utils' format() is a function template declared in gguf.hpp but
-    # defined in gguf.cpp, so instantiations from other TUs are unresolved at
-    # link time (surfaces as an ImportError on libopenvino_genai.so load).
-    # Move the definition into the header.
-    ./move-gguf-format-template-into-header.patch
-  ];
-
-  postPatch = ''
-    # pybind11 3.0 removed keep_alive support from def_property/def_readwrite.
-    # parsers is vector<shared_ptr<Parser>> so shared_ptr ref-counting is sufficient.
-    substituteInPlace src/python/py_generation_config.cpp \
-      --replace-fail ', py::keep_alive<1, 2>()' ""
-  '';
 
   cmakeFlags = [
     # Point cmake's FetchContent at pre-packaged nixpkgs sources so nothing is

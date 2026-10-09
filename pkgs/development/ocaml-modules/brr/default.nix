@@ -12,10 +12,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocaml${ocaml.version}-brr";
-  version = "0.0.8";
+  version = "0.0.9";
   src = fetchurl {
     url = "https://erratique.ch/software/brr/releases/brr-${finalAttrs.version}.tbz";
-    hash = "sha256-g4ROHy9rHlaEFi5+euyRuEKK5HwKJWPmFkdvFhdIYgg=";
+    hash = "sha256-Zuh+DRpGxB8DxrLnLyf8Ok+YJDQwWiaI59HlZKdD4Jk=";
   };
   buildInputs = [
     ocaml

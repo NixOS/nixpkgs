@@ -13,13 +13,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "nezha-theme-user";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "hamster1963";
     repo = "nezha-dash-v2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-n1q9mjheW2J500mEPhBaGHuMAEVtddxXCyLC+Au/8Ts=";
+    hash = "sha256-EK0I6O2+mfEz6QgDSVUco9cioik/9fqVFhboJKc6G5A=";
   };
 
   postPatch = ''

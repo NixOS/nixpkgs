@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-temp";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "yozhgoor";
     repo = "cargo-temp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5GTsVqQOS0HL2q++t4ms9srFx1t1DJkdyUx150H6CT0=";
+    hash = "sha256-ILkv6axwyOneJAD/gvO24vh1J1F8XtwZzmsx6WU7DJQ=";
   };
 
-  cargoHash = "sha256-wiFEsnBHFaQH7WyJv5FEEWXPiRfFFWm8NUjd0ea05Ko=";
+  cargoHash = "sha256-ziHwGU2+qENsm/UuT9ZxzPVonwn8ldG8o+iWDaZIfw0=";
 
   meta = {
     description = "CLI tool that allow you to create a temporary new Rust project using cargo with already installed dependencies";

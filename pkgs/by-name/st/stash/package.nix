@@ -110,8 +110,6 @@ buildGoModule (
       GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
     '';
 
-    strictDeps = true;
-
     passthru = {
       inherit frontend;
       updateScript = ./update.py;

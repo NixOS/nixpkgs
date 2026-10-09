@@ -1,5 +1,5 @@
 {
-  buildGo126Module,
+  buildGoModule,
   fetchFromCodeberg,
   lib,
   jq,
@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "ijq";
   version = "1.4.0";
 

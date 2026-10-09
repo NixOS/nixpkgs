@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs-slim,
@@ -12,13 +12,13 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bash-language-server";
-  version = "5.6.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "bash-lsp";
     repo = "bash-language-server";
     tag = "server-${finalAttrs.version}";
-    hash = "sha256-Pe32lQSlyWcyUbqwhfoulwNwhrnWdRcKFIl3Jj0Skac=";
+    hash = "sha256-Rhdo+sew6xUzVy0S+upP5vvoIxL2NBA2j0euS6rdC7g=";
   };
 
   pnpmWorkspaces = [ "bash-language-server" ];
@@ -29,22 +29,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-6i+1V3ZkjiJ/IXDun3JfwmfDOiemxCmAXMzS/rGT6ZU=";
+    pnpm = pnpm_12;
+    fetcherVersion = 4;
+    hash = "sha256-NIoXHWxP26sz4WJ0zcG67sB8sr/FoEj06s2foc0hqNs=";
   };
 
   nativeBuildInputs = [
     nodejs-slim
     pnpmConfigHook
-    pnpm_10
+    pnpm_12
     makeBinaryWrapper
     versionCheckHook
   ];
   buildPhase = ''
     runHook preBuild
 
-    pnpm compile server
+    # Upstream's "compile" script is `tsc -b && cp server/src/get-options.sh
+    # server/out/`. We can't just run `pnpm compile`, because `tsc -b` with
+    # no project argument builds the root tsconfig.json, which references
+    # both `server` and `vscode-client` - and the latter's dependencies
+    # aren't installed here. So build only the `server` project explicitly,
+    # and do the `cp` ourselves.
+    pnpm exec tsc -b server
+    cp server/src/get-options.sh server/out/
 
     runHook postBuild
   '';
@@ -52,7 +59,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preInstall = ''
     # remove unnecessary files
     rm node_modules/.modules.yaml
-    CI=true pnpm --ignore-scripts --prod prune
+    # `pnpm prune` doesn't support monorepos, and with pnpm 12 it also tries
+    # to verify the lockfile against supply-chain policies over the network.
+    # Reinstall production dependencies only instead, as `pnpm prune --help`
+    # recommends for monorepos.
+    rm -rf node_modules server/node_modules
+    pnpm install \
+      --offline \
+      --ignore-scripts \
+      --filter=bash-language-server \
+      --frozen-lockfile \
+      --prod
     rm -r node_modules/.pnpm/@mixmark-io*/node_modules/@mixmark-io/domino/{test,.yarn}
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645

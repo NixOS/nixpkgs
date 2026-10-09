@@ -29,14 +29,15 @@
   undmg,
   makeWrapper,
   libpulseaudio,
+  pipewire,
 }:
 let
   pname = "nextcloud-talk-desktop";
-  version = "2.2.3"; # Ensure both hashes (Linux and Darwin) are updated!
+  version = "2.3.2"; # Ensure both hashes (Linux and Darwin) are updated!
 
   hashes = {
-    linux = "sha256-6YoAlMGKPeSJoXd211cufdE/XgroojH3djwaSEwlBjs=";
-    darwin = "sha256-BpyVJXyCYC1qH4ecDobHBVLLTeVDx/MPWBsnXgrnKhE=";
+    linux = "sha256-F1PIsiMd+Ve9SX31PRB9D+cbsPZzJof6Yvq70CeqCm4=";
+    darwin = "sha256-0/Q6ybJFMxIguwppAwXVylyevdRqcK1xrI/dpwrFhmA=";
   };
 
   # Only x86_64-linux is supported with Darwin support being universal
@@ -113,6 +114,9 @@ let
 
       # Fixes input/output audio device selection
       libpulseaudio
+
+      # Electron dynamically loads PipeWire for Wayland screen sharing.
+      pipewire
     ];
 
     desktopItems = [

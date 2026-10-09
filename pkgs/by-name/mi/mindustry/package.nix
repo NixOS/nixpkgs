@@ -38,7 +38,7 @@
 
 let
   pname = "mindustry";
-  version = "159.3";
+  version = "160.6";
   buildVersion = makeBuildVersion version;
 
   jdk = jdk17;
@@ -48,21 +48,21 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     tag = "v${version}";
-    hash = "sha256-i29EbiKBVWab9YJWPWeVFQLLvRcigvHJPc7803A5e6g=";
+    hash = "sha256-B3pZQiaDJ4GSTsFCeCu/ENYfIxSWyyR+J/UHuKItXYI=";
   };
   Arc = fetchFromGitHub {
     name = "Arc-source";
     owner = "Anuken";
     repo = "Arc";
     tag = "v${version}";
-    hash = "sha256-1HEPON+cfsPYhPtYwVhj7zrc7fMdwpOA6H2r8yp4erE=";
+    hash = "sha256-sQ9QnMBqbcdVKoNLfdyUCvFsBd92f04aKystrhCfsfo=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's build.gradle
-    tag = "2026.06.01";
-    hash = "sha256-0/A3myfCYb+AMP3WH6stmXeb1eiA4dgX6H1Quj4AD9Q=";
+    tag = "2026.09.04";
+    hash = "sha256-g8ZELw+hB9x7/HnmNzvXihGTBqpigdtScvYbrhvlZVM=";
   };
 
   desktopItem = makeDesktopItem {
@@ -117,6 +117,20 @@ stdenv.mkDerivation {
     touch build/jnigen/sources/glew.zip
     touch build/jnigen/sources/sdlmingw.tar.gz
     popd
+
+    # force jnigen to use nixpkgs cc-wrapper
+    for file in \
+      Arc/arc-core/build.gradle \
+      Arc/extensions/freetype/build.gradle \
+      Arc/extensions/filedialogs/build.gradle
+    do
+      substituteInPlace "$file" \
+        --replace-fail "addLinux(x64, x86)" "addLinux(x64, x86)
+            each({it.os == Linux}){ compilerPrefix = '${stdenv.cc}/bin/' }"
+    done
+    substituteInPlace Arc/backends/backend-sdl/build.gradle \
+      --replace-fail "addLinux(x64, x86){" "addLinux(x64, x86){
+          compilerPrefix = '${stdenv.cc}/bin/'"
 
     cd Mindustry
 
@@ -221,7 +235,7 @@ stdenv.mkDerivation {
           echo "# $dep" >> $out/bin/mindustry
         done
 
-        install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+        install -Dm644 core/assets/icons/icon.png $out/share/icons/hicolor/64x64/apps/mindustry.png
       '';
       installServer = ''
         install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar

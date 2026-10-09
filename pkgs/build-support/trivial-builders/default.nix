@@ -71,7 +71,6 @@ rec {
       stdenv ? defaultStdenv,
       # whether to build this derivation locally instead of substituting
       runLocal ? false,
-      # extra arguments to pass to stdenv.mkDerivation
       derivationArgs ? { },
       # name of the resulting derivation
       name,
@@ -79,22 +78,24 @@ rec {
     }:
     buildCommand:
     stdenv.mkDerivation (
+      finalAttrs:
+      let
+        userAttrs = lib.toFunction derivationArgs finalAttrs;
+      in
       {
         enableParallelBuilding = true;
-        inherit buildCommand name;
-        passAsFile = defaultPassAsFile ++ (derivationArgs.passAsFile or [ ]);
-        ${if !derivationArgs ? meta then "pos" else null} =
+        inherit name;
+        buildCommand = lib.toFunction buildCommand finalAttrs;
+        passAsFile = defaultPassAsFile ++ (userAttrs.passAsFile or [ ]);
+        ${if !userAttrs ? meta then "pos" else null} =
           let
-            args = builtins.attrNames derivationArgs;
+            args = builtins.attrNames userAttrs;
           in
-          if builtins.length args > 0 then
-            builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
-          else
-            null;
+          if builtins.length args > 0 then builtins.unsafeGetAttrPos (builtins.head args) userAttrs else null;
         ${if runLocal then "preferLocalBuild" else null} = true;
         ${if runLocal then "allowSubstitutes" else null} = false;
       }
-      // removeAttrs derivationArgs removedNames
+      // removeAttrs userAttrs removedNames
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
@@ -108,16 +109,16 @@ rec {
 
     extendDrvArgs =
       let
-        defaultPassAsFile = [ "text" ];
         removedDerivationNames = [
-          "passAsFile"
           "meta"
           "passthru"
         ];
       in
       finalAttrs:
       {
-        name,
+        pname ? null,
+        version ? null,
+        name ? "${pname}-${version}",
         text,
         executable ? false,
         destination ? "",
@@ -127,7 +128,7 @@ rec {
         allowSubstitutes ? false,
         preferLocalBuild ? true,
         derivationArgs ? { },
-        pos ? builtins.unsafeGetAttrPos "name" args,
+        pos ? builtins.unsafeGetAttrPos (if pname != null then "pname" else "name") args,
       }@args:
       {
         inherit
@@ -139,6 +140,10 @@ rec {
           allowSubstitutes
           preferLocalBuild
           ;
+
+        ${if pname != null then "pname" else null} = pname;
+        ${if version != null then "version" else null} = version;
+
         destination =
           assert
             (destination != "" -> (hasRootPrefix destination && destination != "/"))
@@ -149,7 +154,9 @@ rec {
               Ensure that the path starts with a / and specifies at least the filename.
             '';
           destination;
-        passAsFile = defaultPassAsFile ++ derivationArgs.passAsFile or [ ];
+
+        __structuredAttrs = true;
+        strictDeps = true;
 
         buildCommand = ''
           target=$out$destination
@@ -1121,6 +1128,8 @@ rec {
     outputHash = "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=";
     outputHashMode = "recursive";
     preferLocalBuild = true;
+    strictDeps = true;
+    __structuredAttrs = true;
   } "touch $out";
 
   /**
@@ -1131,5 +1140,7 @@ rec {
     outputHashMode = "recursive";
     outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
     preferLocalBuild = true;
+    strictDeps = true;
+    __structuredAttrs = true;
   } "mkdir $out";
 }

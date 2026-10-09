@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrowcloud-theme";
-  version = "20260525";
+  version = "20260901.2";
 
   src = fetchFromGitHub {
     owner = "Arrow-Cloud";
     repo = "theme";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HrvDJ5bxVDge6SvUjFwBjy15H9sUHeKiwCX9biPw338=";
+    hash = "sha256-In+XfEHlq5UOJgaSxhosALcJ7lqnLnTf/7yevyMNOPY=";
   };
 
   postInstall = ''

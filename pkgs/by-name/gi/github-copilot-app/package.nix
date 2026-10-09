@@ -17,26 +17,26 @@
   webkitgtk_4_1,
   atk,
   libsoup_3,
-  openssl_3,
+  openssl_3_5,
   libayatana-appindicator,
 }:
 
 let
   pname = "github-copilot-app";
-  version = "1.1.14";
+  version = "1.1.23";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-x64.deb";
-      hash = "sha256-0qwltVNjJ4x+S1BTZnbagn4zYjEjMX3MXn6Vb4fgAtA=";
+      hash = "sha256-HWNnLEliPzGzq8YySicZHNJqzoUr+9PxsRWdCw3pBmM=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-linux-arm64.deb";
-      hash = "sha256-zWDArkFPGjKH9QwPSeYQ6te/tUnnSqPbd216542FA64=";
+      hash = "sha256-ah2XDAM4HE/myCdVoJ8ErCIAmpw2F8yvO87P5El9RLY=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/github/app/releases/download/v${version}/GitHub-Copilot-darwin-arm64.dmg";
-      hash = "sha256-avOISG0qdkLdmmsXA3rAfXmOnCqeUsaBCGzfRkVpi9Q=";
+      hash = "sha256-f7QvkGpuDMixBZF4DJKyK9zmaig5LgGOqcNyucqZALw=";
     };
   };
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     webkitgtk_4_1
     atk
     libsoup_3
-    openssl_3
+    openssl_3_5
     libayatana-appindicator
     stdenv.cc.cc.lib
   ];
@@ -111,7 +111,8 @@ stdenv.mkDerivation {
 
         # Update desktop file to use the new executable name
         substituteInPlace $out/share/applications/*.desktop \
-          --replace-fail "Exec=github" "Exec=github-copilot-app"
+          --replace-fail "Exec=github" "Exec=github-copilot-app" \
+          --replace-fail "StartupWMClass=github" "StartupWMClass=github-copilot-app"
       ''
   )
   + ''

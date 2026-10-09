@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/hiprand"
       "shared"

@@ -10,6 +10,14 @@ let
     "x86_64-linux"
   ];
   minbootSupported = builtins.elem localSystem.system minbootSupportedSystems;
+  checkVersion =
+    topPackage: bootPackage:
+    let
+      versionOk = lib.versionAtLeast topPackage.version bootPackage.version;
+    in
+    lib.warnIfNot versionOk
+      "stdenv stage0: minimal-bootstrap.${bootPackage.pname} ${bootPackage.version} is newer than pkgs.${topPackage.pname} ${topPackage.version}"
+      versionOk;
 in
 if minbootSupported then
   let
@@ -94,6 +102,27 @@ if minbootSupported then
       };
     };
     bash = minimal-bootstrap.bash-static;
+    checkBootstrapPackages =
+      toplevelPkgs:
+      with minimal-bootstrap;
+      (localSystem.libc == "glibc" -> checkVersion toplevelPkgs.glibc glibc)
+      && checkVersion toplevelPkgs.musl musl-static
+      && checkVersion toplevelPkgs.bash bash-static
+      && checkVersion toplevelPkgs.binutils binutils-static
+      && checkVersion toplevelPkgs.bzip2 bzip2-static
+      && checkVersion toplevelPkgs.gcc compilerPackage
+      && checkVersion toplevelPkgs.coreutils coreutils-static
+      && checkVersion toplevelPkgs.diffutils diffutils-static
+      && checkVersion toplevelPkgs.findutils findutils-static
+      && checkVersion toplevelPkgs.gawk gawk-static
+      && checkVersion toplevelPkgs.gnugrep gnugrep-static
+      && checkVersion toplevelPkgs.gnumake gnumake-static
+      && checkVersion toplevelPkgs.gnupatch gnupatch-static
+      && checkVersion toplevelPkgs.gnused gnused-static
+      && checkVersion toplevelPkgs.gnutar gnutar-static
+      && checkVersion toplevelPkgs.gzip gzip-static
+      && checkVersion toplevelPkgs.patchelf patchelf-static
+      && checkVersion toplevelPkgs.xz xz-static;
     initialPath = with minimal-bootstrap; [
       bash-static
       binutils-static
@@ -184,4 +213,7 @@ else
     bash = bootstrapTools;
     initialPath = [ bootstrapTools ];
     disallowedInFinalStdenv = [ bootstrapTools ];
+
+    # no-op. We don't have eval-time version information on bootstrap packages here.
+    checkBootstrapPackages = _: true;
   }

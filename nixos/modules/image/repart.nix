@@ -131,6 +131,7 @@ in
   ];
 
   options.image.repart = {
+    enable = lib.mkEnableOption "systemd-repart boot image";
 
     name = lib.mkOption {
       type = lib.types.str;
@@ -313,7 +314,7 @@ in
 
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     image.baseName =
       let
         version = config.image.repart.version;

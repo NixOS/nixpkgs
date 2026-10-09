@@ -16,14 +16,14 @@
 
 stdenv.mkDerivation {
   pname = "gtk-frdp";
-  version = "0-unstable-2026-04-24";
+  version = "0-unstable-2026-07-24";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gtk-frdp";
-    rev = "05919e9958b655252a0e5572c215fc9aee0aa863";
-    hash = "sha256-SGSHsuv/XOLfjESRk9B2GV64zvrG8xGoaBoHO6EeAZw=";
+    rev = "83854a24e31d1c07519f6e4393fe280d3b59e080";
+    hash = "sha256-6f0irRBkpmOYrhXkeSR6ni55SJiltOfYRiwZy5V/VrE=";
   };
 
   nativeBuildInputs = [

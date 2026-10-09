@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "abtop";
-  version = "0.5.3";
+  version = "0.5.5";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "graykode";
     repo = "abtop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LvN+q7JwmvtbroocoRBEug/J5OZTXwHEPAiaRkj16lM=";
+    hash = "sha256-8dBAdaZ6SkSSktmk/KejnTJDikEQj1jBQ2LoiK54Pzk=";
   };
 
-  cargoHash = "sha256-o5ZHURx+OAQkd7S0TzkLQG5ZsR5HMaqfl8sp639axbg=";
+  cargoHash = "sha256-EGx/k79B5ceC8/EFfVH9HtZUedkRNsV74vdyAPxh8ro=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

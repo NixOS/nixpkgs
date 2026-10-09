@@ -13,7 +13,6 @@
   matrix-tuwunel,
   # upstream tuwunel enables jemalloc by default, so we follow suit
   enableJemalloc ? true,
-  rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
   enableLdap ? true,
   liburing,
@@ -23,18 +22,19 @@
   cacert,
 }:
 let
-  rust-jemalloc-sys' = rust-jemalloc-sys.override {
-    unprefixed = !stdenv.hostPlatform.isDarwin;
-  };
   # tuwunel uses a modified version of rocksdb.  The following overrides take a lot from the
   # official flake:
   # https://github.com/matrix-construct/tuwunel/blob/main/flake.nix#L54
   rocksdb' =
     (rocksdb.override {
       inherit enableLiburing;
-      # rocksdb does not support prefixed jemalloc, which is required on darwin
-      enableJemalloc = enableJemalloc && !stdenv.hostPlatform.isDarwin;
-      jemalloc = rust-jemalloc-sys';
+
+      # RocksDB's C++ allocations reach jemalloc by symbol interposition
+      # from the unprefixed allocator the Rust build links, so it needs
+      # none of its own. A second jemalloc here would serve only the
+      # opt-in nodump allocator and malloc-stats, out of a separate heap,
+      # and tuwunel uses neither.
+      enableJemalloc = false;
     }).overrideAttrs
       (
         final: old: {
@@ -44,8 +44,8 @@ let
             # The commit on the rocksdb fork, tuwunel-changes branch referenced by the upstream
             # tuwunel flake.lock:
             # https://github.com/matrix-construct/tuwunel/blob/main/flake.lock#L557C17-L557C57
-            rev = "eb79ddeff0ea32ebb8f8b69dd1df95c557328e85";
-            hash = "sha256-7hiKaIssPpqB8UTAR4ZE19pZTp09sVGOMht7sAitZAs=";
+            rev = "d8a89161c6a53e79d61694289d2b78be36e6ca12";
+            hash = "sha256-rNSA2RalASKbbXNQi86eEmIUC8W5YELKUOy0vhEn6Rc=";
           };
           version = "tuwunel-changes";
           patches = [ ];
@@ -89,16 +89,22 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-tuwunel";
-  version = "1.9.0";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "matrix-construct";
     repo = "tuwunel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F9zmYanxCZjXBCh3GvSBiPQC6OFyugThq88MLvhLOyA=";
+    hash = "sha256-29X+iSfCLo7hMvaCC/gw2zWfavC7lp3HEqTCpcBh2a0=";
   };
 
-  cargoHash = "sha256-TT+dGr3DD9aPWYDxLTYPK0aZpQu64Ja8z+dJJmZQho8=";
+  # Integration tests require networking. Only run the unit tests.
+  cargoTestFlags = [
+    "--lib"
+    "--bins"
+  ];
+
+  cargoHash = "sha256-Oy8ymSbUNuNL8oDfnlNuZ8dUepiofE08By6hG3uLtBg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -115,7 +121,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     bzip2
     zstd
   ]
-  ++ lib.optional enableJemalloc rust-jemalloc-sys'
   ++ lib.optional enableLiburing liburing;
 
   env = {
@@ -140,7 +145,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "url_preview"
     "zstd_compression"
   ]
-  ++ lib.optional enableJemalloc [
+  ++ lib.optionals enableJemalloc [
     "jemalloc"
     "jemalloc_conf"
   ]
@@ -168,15 +173,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       export TUWUNEL_DATABASE_PATH="$(mktemp -d)/smoketest.db"
     '';
 
-  doCheck = true;
-
-  # 2026-06-24: Tuwunel has 16 integration tests. Cargo turns each of these
-  # into a separate binary that links in all 110 MB worth of tuwunel.  Linking
-  # 16 big binaries like this takes a really long time and was causing Hydra
-  # to time out the build during `checkPhase`.  So, we run the checks in the
-  # "debug" profile.  This reduces the build+test time on my machine from
-  # 44min to 12min.
-  checkType = "debug";
+  # The check phase reaches /etc/resolv.conf through libredirect, which works
+  # by LD_PRELOAD and is therefore inert in a statically linked binary. A
+  # static build would run the tests with no resolver configuration at all and
+  # fail before reaching them, so it packages without checking; the unit and
+  # integ jobs cover that code on the dynamic path.
+  doCheck = !stdenv.hostPlatform.isStatic;
 
   passthru = {
     rocksdb = rocksdb'; # make used rocksdb version available (e.g., for backup scripts)
@@ -203,5 +205,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       scvalex
     ];
     mainProgram = "tuwunel";
+    broken = stdenv.hostPlatform.isDarwin; # macos build fails with a rocksdb linker error
   };
 })

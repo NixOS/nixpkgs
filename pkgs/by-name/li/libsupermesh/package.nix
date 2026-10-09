@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsupermesh";
-  version = "2026.0";
+  version = "2026.3";
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "libsupermesh";
     tag = finalAttrs.version;
-    hash = "sha256-f/5y3XherRbN/Eq3tfivrOHByF8LAXtYN3v9Vx82m8Q=";
+    hash = "sha256-YhidGtrx7XaaypGgdXfVX7/PpGvS6ZUEIeY+88DWLNA=";
   };
 
   strictDeps = true;

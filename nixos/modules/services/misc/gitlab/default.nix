@@ -1314,6 +1314,7 @@ in
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/registry 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path}/ci_catalog_bundles 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/ci_secure_files 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/external-diffs 0750 ${cfg.user} ${cfg.group} -"
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
@@ -1800,6 +1801,7 @@ in
         Group = cfg.group;
         Slice = "system-gitlab.slice";
         ExecStart = "${gitlab-rake}/bin/gitlab-rake gitlab:backup:create";
+        Type = "oneshot";
       };
     };
 

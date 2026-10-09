@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchCrate,
-  fetchurl,
   cacert,
   gitMinimal,
   jq,
@@ -12,25 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "secretspec";
-  version = "0.20.0";
+  version = "0.21.1";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-UuXCDQ/DiC1xDs63+kbJNC01ZQfsh2j5/qRP76MVle8=";
+    hash = "sha256-VCvo+O3IHVUeZG6cxBmWy8/CEDZOwVr8IVcWxroUd00=";
   };
 
-  cargoHash = "sha256-41UxtnzpDMYpWshpopXLIXyz6rzikJkqKbvxHVua1oo=";
+  cargoHash = "sha256-cA7HmOxCrfPiBKI8xxxpRBvGLUgyl4Ts1uhoCt0bBuk=";
 
   postPatch = ''
-    mkdir -p ../tests/fixtures
-    cp ${
-      fetchurl {
-        url = "https://raw.githubusercontent.com/cachix/secretspec/v${finalAttrs.version}/tests/fixtures/bw-shim.sh";
-        hash = "sha256-wHXeJk3KYu01J73BEdll9lCcjOD4+8g8rlWUw93Cyok=";
-      }
-    } ../tests/fixtures/bw-shim.sh
-    chmod +x ../tests/fixtures/bw-shim.sh
-    patchShebangs ../tests/fixtures/bw-shim.sh
+    patchShebangs tests/fixtures/bw-shim.sh
   '';
 
   nativeCheckInputs = [

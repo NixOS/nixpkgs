@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "unifont";
-  version = "17.0.05";
+  version = "18.0.01";
 
   strictDeps = true;
 
   src = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.tar.gz";
-    hash = "sha256-8ofP+ybiJyOqNuZoSGmw8/87+4IsSwEAi9hHkR7BtjE=";
+    hash = "sha256-6rYIR6rDTIdodlzsx4Ifr1DeJjYYe0Urm1+lChKwC8M=";
   };
 
   postPatch = ''

@@ -8,15 +8,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "reticulum-go";
-  version = "1.0.2";
-  strictDeps = true;
+  version = "1.1.1";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Quad4-Software";
     repo = "Reticulum-Go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-O5imnARJhpHOr3MtfvpwO2lcUqzE0egBJXmZpNOg260=";
+    hash = "sha256-YNEVf8nmqEE3jN37jS+oKwcvFKzIe8afr/tBrZPjGRQ=";
   };
 
   vendorHash = null;
