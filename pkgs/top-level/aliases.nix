@@ -844,7 +844,6 @@ mapAliases {
   fcitx5-unikey = throw "'fcitx5-unikey' has been renamed to/replaced by 'qt6Packages.fcitx5-unikey'"; # Converted to throw 2025-10-27
   fcitx5-with-addons = throw "'fcitx5-with-addons' has been renamed to/replaced by 'qt6Packages.fcitx5-with-addons'"; # Converted to throw 2025-10-27
   fedifetcher = throw "'fedifetcher' has been removed because there is now a similar native feature in Mastodon."; # Added 2025-12-08
-  fennel = throw "'fennel' has been renamed to/replaced by 'luaPackages.fennel'"; # Converted to throw 2025-10-27
   fetchbower = throw "fetchbower has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   fetchmtn = throw "fetchmtn has been removed as it is not used in-tree and the only publically-readable Monotone network server might be now Monotone's source code itself (which is a bootstrapping problem). Use local checkouts or locally vendor/adapt a copy from an older Nixpkgs checkout."; # Added 2026-08-22
   fflogs = throw "fflogs has been removed because it stopped working on 2026-06-29 and was replaced by archon-lite"; # Added 2026-07-03
