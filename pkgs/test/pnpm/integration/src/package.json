@@ -1,5 +1,5 @@
 {
-  "name": "pnpm11test",
+  "name": "pnpm-nixpkgs-integration-test",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -16,5 +16,10 @@
   "devDependencies": {
     "@types/node": "^25.5.0",
     "typescript": "^6.0.2"
+  },
+  "optionalDependencies": {
+    "@unrs/resolver-binding-darwin-x64": "^1.12.2",
+    "@unrs/resolver-binding-linux-x64-gnu": "^1.12.2",
+    "@unrs/resolver-binding-win32-arm64-msvc": "^1.12.2"
   }
 }
