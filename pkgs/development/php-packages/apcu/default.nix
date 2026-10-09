@@ -48,6 +48,9 @@ buildPecl {
     "dev"
   ];
 
+  # Tests launch the builtin webserver.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/krakjoe/apcu/releases/tag/v${version}";
     description = "Userland cache for PHP";
