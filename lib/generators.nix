@@ -247,26 +247,31 @@ rec {
     :::
   */
   toINI =
-    {
-      mkSectionName ? (name: escape [ "[" "]" ] name),
-      mkKeyValue ? mkKeyValueDefault { } "=",
-      listsAsDuplicateKeys ? false,
-    }:
-    attrsOfAttrs:
     let
       # map function to string for each key val
       mapAttrsToStringsSep =
         sep: mapFn: attrs:
         concatStringsSep sep (mapAttrsToList mapFn attrs);
+    in
+    {
+      mkSectionName ? escape [
+        "["
+        "]"
+      ],
+      mkKeyValue ? mkKeyValueDefault { } "=",
+      listsAsDuplicateKeys ? false,
+    }:
+    let
+      toKeyValue' = toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; };
       mkSection =
         sectName: sectValues:
         ''
           [${mkSectionName sectName}]
         ''
-        + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
+        + toKeyValue' sectValues;
     in
     # map input to ini sections
-    mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
+    mapAttrsToStringsSep "\n" mkSection;
 
   /**
     Generate an INI-style config file from an attrset
