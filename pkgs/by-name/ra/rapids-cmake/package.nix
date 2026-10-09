@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   cpm-cmake,
+  rapids-logger,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -43,13 +44,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
   env.cpm = cpm-cmake;
 
+  passthru.tests = {
+    # presumably if the rapids-logger cmake check works then
+    # rapids-cmake is installed correctly
+    inherit (rapids-logger.tests) cmake-config;
+  };
+
   meta = {
     description = "CMake modules shared across RAPIDS projects";
     homepage = "https://github.com/rapidsai/rapids-cmake";
     changelog = "https://github.com/rapidsai/rapids-cmake/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
-    teams = [ lib.teams.cuda ];
     platforms = lib.platforms.all;
   };
 })
