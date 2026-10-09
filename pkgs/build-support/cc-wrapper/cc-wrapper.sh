@@ -253,10 +253,13 @@ wrapperOperation=
 if [[ $dontLink != 1 && $cc1 != 1 ]]; then wrapperOperation=link; fi
 # Old bash workaround, see above.
 
-if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )) && canWriteResponseFile \
+   ${extraBefore+"${extraBefore[@]}"} \
+   ${params+"${params[@]}"} \
+   ${extraAfter+"${extraAfter[@]}"}; then
     responseFile=$(@mktemp@ "${TMPDIR:-/tmp}/cc-params.XXXXXX")
     trap '@rm@ -f -- "$responseFile"' EXIT
-    printf "%q\n" \
+    writeResponseFile \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
        ${extraAfter+"${extraAfter[@]}"} > "$responseFile"

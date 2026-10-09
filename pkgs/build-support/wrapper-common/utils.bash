@@ -67,6 +67,30 @@ wrapperRun() {
     exec "$@"
 }
 
+# Older LLVM tokenizers drop empty quoted arguments. Keep those invocations
+# as direct argv, including when an empty argument came from a wrapper hook.
+# An outer response file would also hide Clang's Windows-quoting selectors
+# from its initial scan, changing how nested response files are interpreted.
+canWriteResponseFile() {
+    local arg
+    for arg in "$@"; do
+        case "$arg" in
+            ""|--rsp-quoting=windows|--driver-mode=cl) return 1 ;;
+        esac
+    done
+}
+
+# GNU response-file syntax, shared by GCC, Clang and GNU-compatible linkers.
+# Bash %q instead emits shell-only $'...' syntax for tabs and newlines.
+writeResponseFile() {
+    local arg
+    for arg in "$@"; do
+        arg=${arg//\\/\\\\}
+        arg=${arg//\"/\\\"}
+        printf '"%s"\n' "$arg"
+    done
+}
+
 # Accumulate suffixes for taking in the right input parameters with the `mangle*`
 # functions below. See setup-hook for details.
 accumulateRoles() {
