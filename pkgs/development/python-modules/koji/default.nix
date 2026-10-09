@@ -6,6 +6,7 @@
   python-dateutil,
   requests,
   requests-gssapi,
+  rpm,
   setuptools,
   six,
 }:
@@ -26,10 +27,20 @@ buildPythonPackage rec {
     python-dateutil
     requests
     requests-gssapi
+    rpm
     six
   ];
 
-  pythonImportsCheck = [ "koji" ];
+  postInstall = ''
+    # The PyPI distribution excludes kojihub, required by this server utility.
+    rm "$out/bin/koji-sweep-db"
+  '';
+
+  pythonImportsCheck = [
+    "koji"
+    "koji.arch"
+    "koji.rpmdiff"
+  ];
 
   meta = {
     description = "Python library for the Koji build system";

@@ -7,6 +7,7 @@
   nix-update,
   python3Packages,
   versionCheckHook,
+  wget,
   writeShellScript,
 }:
 python3Packages.buildPythonApplication rec {
@@ -35,6 +36,13 @@ python3Packages.buildPythonApplication rec {
     koji
     requests
     rich
+  ];
+
+  makeWrapperArgs = [
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ wget ])
   ];
 
   pythonImportsCheck = [ "copr_cli" ];
