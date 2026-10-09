@@ -71,8 +71,11 @@ buildPythonApplication {
     tesseract4
   ];
 
-  # containers test requires extra nix features that are not available in ofborg.
-  passthru.tests = removeAttrs nixosTests.nixos-test-driver [ "containers" ];
+  # containers tests require extra nix features that are not available in ofborg.
+  passthru.tests = removeAttrs nixosTests.nixos-test-driver [
+    "containers"
+    "nspawn-interactive"
+  ];
 
   doCheck = true;
 
