@@ -295,6 +295,7 @@ let
       timeout = int;
       knownVulnerabilities = listOf str;
       badPlatforms = platforms;
+      upgradeGroup = attrs;
 
       # Needed for Hydra to expose channel tarballs:
       # https://github.com/NixOS/hydra/blob/53335323ae79ca1a42643f58e520b376898ce641/doc/manual/src/jobs.md#meta-fields
