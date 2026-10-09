@@ -8,9 +8,12 @@
   fluidsynth,
   libebur128,
   libsndfile,
+  libspng,
   libxmp,
+  miniz,
   nix-update-script,
   openal,
+  pkg-config,
   python3,
   sdl3,
   versionCheckHook,
@@ -34,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     python3
   ];
 
@@ -42,7 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     fluidsynth
     libebur128
     libsndfile
+    libspng
     libxmp
+    miniz
     openal
     yyjson
   ]
