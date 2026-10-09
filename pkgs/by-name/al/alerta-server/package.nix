@@ -1,17 +1,19 @@
 {
   lib,
   python3,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "alerta-server";
-  version = "9.0.1";
+  version = "9.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-v4+0l5Sx9RTxmNFnKCoKrWFl1xu1JIRZ/kiI6zi/y0I=";
+  src = fetchFromGitHub {
+    owner = "alerta";
+    repo = "alerta";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-w+DSMWrutn/8WOwIYtxFrIZ7VN5/w6jPPYhKMr+/rb4=";
   };
 
   build-system = [ python3.pkgs.setuptools_80 ];
@@ -20,6 +22,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     bcrypt
     blinker
     cryptography
+    defusedxml
     flask
     flask-compress
     flask-cors
@@ -35,6 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     requests-hawk
     sentry-sdk
     setuptools
+    strenum
   ];
 
   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
@@ -46,12 +50,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     homepage = "https://alerta.io";
-    description = "Alerta Monitoring System server";
+    description = "Monitoring System server";
     mainProgram = "alertad";
+    changelog = "https://github.com/alerta/alerta/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
-    knownVulnerabilities = [
-      "CVE-2026-34400: vulnerable to SQL injection via the Postgres query parser, which built WHERE clauses by interpolating user-supplied search terms directly into SQL strings via f-strings. This issue has been patched in version 9.1.0." # 505619 in nixpkgs
-    ];
   };
 })
