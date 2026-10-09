@@ -548,6 +548,14 @@ rec {
     : The value to be pretty printed
   */
   toPretty =
+    let
+      escapeSingleline = escape [
+        "\\"
+        "\""
+        "\${"
+      ];
+      escapeMultiline = replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
+    in
     {
       allowPrettyValues ? false,
       multiline ? true,
@@ -570,12 +578,6 @@ rec {
         else if isString v then
           let
             lines = filter (v: !isList v) (split "\n" v);
-            escapeSingleline = escape [
-              "\\"
-              "\""
-              "\${"
-            ];
-            escapeMultiline = replaceStrings [ "\${" "''" ] [ "''\${" "'''" ];
             singlelineResult = "\"" + concatStringsSep "\\n" (map escapeSingleline lines) + "\"";
             multilineResult =
               let
