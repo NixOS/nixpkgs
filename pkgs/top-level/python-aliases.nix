@@ -771,6 +771,7 @@ mapAliases {
   torchtnt-nightly = throw "'torchtnt-nightly' was only needed as a test dependency for 'torcheval', but these tests are no longer run"; # added 2025-11-12
   torchtune = throw "'torchtune' was removed because it is unmaintained upstream."; # added 2026-07-02
   torrent_parser = throw "'torrent_parser' has been renamed to/replaced by 'torrent-parser'"; # Converted to throw 2025-10-29
+  tqdm-multiprocess = throw "'tqdm-multiprocess' has been removed because it was unused"; # Added 2026-10-08
   tracing = throw "'tracing' has been removed because its source code has been removed"; # Added 2025-12-17
   treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
