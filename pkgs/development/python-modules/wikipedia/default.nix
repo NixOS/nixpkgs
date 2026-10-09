@@ -29,7 +29,10 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "tests/ '*test.py'" ];
+  unittestFlags = [
+    "tests/"
+    "*test.py"
+  ];
 
   pythonImportsCheck = [ "wikipedia" ];
 
