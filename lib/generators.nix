@@ -336,21 +336,22 @@ rec {
   */
   toINIWithGlobalSection =
     {
-      mkSectionName ? (name: escape [ "[" "]" ] name),
+      mkSectionName ? escape [
+        "["
+        "]"
+      ],
       mkKeyValue ? mkKeyValueDefault { } "=",
       listsAsDuplicateKeys ? false,
     }:
+    let
+      toKeyValue' = toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; };
+      toINI' = toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; };
+    in
     {
       globalSection,
       sections ? { },
     }:
-    (
-      if globalSection == { } then
-        ""
-      else
-        (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection) + "\n"
-    )
-    + (toINI { inherit mkSectionName mkKeyValue listsAsDuplicateKeys; } sections);
+    (if globalSection == { } then "" else (toKeyValue' globalSection) + "\n") + (toINI' sections);
 
   /**
     Generate a git-config file from an attrset.
