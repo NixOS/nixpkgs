@@ -70,6 +70,8 @@ lib.extendMkDerivation {
 
       depsExtraArgs ? { },
 
+      __structuredAttrs ? true,
+
       # Needed to `pushd`/`popd` into a subdir of a tarball if this subdir
       # contains a Cargo.toml, but isn't part of a workspace (which is e.g. the
       # case for `rustfmt`/etc from the `rust-sources).
@@ -174,6 +176,7 @@ lib.extendMkDerivation {
       doCheck = args.doCheck or true;
 
       strictDeps = true;
+      inherit __structuredAttrs;
 
       meta = meta // {
         badPlatforms = meta.badPlatforms or [ ] ++ rustc.badTargetPlatforms;
