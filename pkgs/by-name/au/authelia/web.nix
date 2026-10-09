@@ -10,7 +10,7 @@
 let
   pnpm = pnpm_12;
 
-  inherit (import ./sources.nix { inherit fetchFromGitHub; })
+  inherit (import ./sources.nix { inherit stdenv fetchFromGitHub; })
     pname
     version
     src

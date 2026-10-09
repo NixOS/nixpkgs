@@ -12,6 +12,7 @@
   nixosTests,
   authelia-web ? callPackage ./web.nix {
     inherit
+      stdenv
       nodejs
       fetchPnpmDeps
       pnpmConfigHook
@@ -24,7 +25,7 @@
 let
   buildGoModule = buildGo127Module;
 
-  inherit (import ./sources.nix { inherit fetchFromGitHub; })
+  inherit (import ./sources.nix { inherit stdenv fetchFromGitHub; })
     pname
     version
     src
