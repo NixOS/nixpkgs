@@ -1193,6 +1193,16 @@ let
         use_typescript_go = false;
         devtools_use_typescript_go = false;
       }
+      // lib.optionalAttrs (chromiumVersionAtLeast "155" && stdenv.hostPlatform.isAarch64) {
+        # [48126/57357] LINK ./code_cache_generator
+        # FAILED: [code=1] code_cache_generator
+        # "python3" "../../build/toolchain/gcc_link_wrapper.py" --output="./code_cache_generator" -- clang++ [...]
+        # ld.lld: error: undefined symbol: __arm_get_current_vg
+        # >>> referenced by scale_sme.cc
+        # >>>               obj/third_party/libyuv/code_cache_generator.lto.libyuv_sme.a(scale_sme.o at 260).o:(ScaleRowDown2_SME)
+        # [...]
+        libyuv_use_sme = false;
+      }
       // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
       // (extraAttrs.gnFlags or { })
     );
