@@ -188,8 +188,9 @@ These historical figures require a new matched comparison after core integration
 
 A 2026-10-09 matched workload forced fifteen ordinary compiler, CUDA, MPI,
 Torch/MAGMA, Triton and PyCUDA derivation/output records, with three alternating
-pairs per platform. Comparing `cecfa8f6a07e` with committed `4bd11bba08c9`, native
-allocation increased 0.924% and cross allocation decreased 20.946%; all fifteen
-derivations changed on each platform. Both sides allowed broken metadata because
+pairs per platform. Comparing fetched master `c1ca1da56d31` with the rebased
+checkpoint `09ad74a25353`, native allocation increased 1.710% and cross allocation
+decreased 20.396%; all fifteen derivations changed on each platform. Both sides
+allowed broken metadata because
 master marks MAGMA broken. These whole-branch figures neither isolate scope costs
 nor validate the pending core integration; noisy CPU results establish no speedup.
