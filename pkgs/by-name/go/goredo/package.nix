@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
     cd ..
   '';
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm t/apenwarr-105-sympath.t
   '';
