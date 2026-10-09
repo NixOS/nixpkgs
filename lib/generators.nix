@@ -755,11 +755,11 @@ rec {
     : The value to be converted to Dhall
   */
   toDhall =
-    { }@args:
-    v:
     let
       concatItems = concatStringsSep ", ";
     in
+    { }@args:
+    v:
     if isAttrs v then
       "{ ${concatItems (mapAttrsToList (key: value: "${key} = ${toDhall args value}") v)} }"
     else if isList v then
