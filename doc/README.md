@@ -13,17 +13,12 @@ There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/
 > We are actively restructuring our documentation to be more beginner friendly.
 >
 
-Write **guides** task-first: lead with a working example, then explain in prose.
-Write **reference** as the specification of functions and attributes.
-
 We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with the `:doc` command in `nix repl`, e.g.:
 
 ```
 nix-repl> :l <nixpkgs>
 nix-repl> :doc lib.mapAttrsToList
 ```
-
-See [Document structure](#document-structure) for a structural template.
 
 ## Building and navigating documentation locally
 
@@ -196,62 +191,6 @@ Note that these conventions are about the **structure** of the manual (and its s
 You, as the writer of documentation, are still in charge of its content.
 
 **For prose style, see the [documentation style guide](./styleguide.md).**
-
-### Document structure
-
-Organize each chapter as guide sections first, then a single `## Reference` section.
-
-A well-structured chapter looks like this:
-
-````markdown
-# Foo {#foo}
-
-`foo` builds Foo projects from a `foo.toml`.
-
-## Package a Foo application {#foo-packaging}
-
-:::{.example #ex-foo-packaging}
-
-# Package the hello app
-
-```nix
-{ foo }:
-buildFooPackage {
-  pname = "hello";
-  version = "1.0";
-}
-```
-
-:::
-
-`buildFooPackage` needs `pname` and `version`.
-Keep explanation short, and place it after the example.
-
-## Reference {#foo-reference}
-
-### `buildFooPackage` {#foo-buildFooPackage}
-
-Builds a Foo application from source.
-
-#### Inputs {#foo-buildFooPackage-inputs}
-
-`pname` (String)
-: The program name.
-
-#### Examples {#foo-buildFooPackage-examples}
-
-See [](#ex-foo-packaging).
-````
-
-Examples live in one place: the guide owns them and the reference links to them.
-
-Guides introduce minimal working examples that are goal-oriented (typical usage).
-
-Reference may introduce additional examples that are unit-oriented. (minimal usage, edge-cases).
-If the guide example is already sufficient, just link to it from the reference.
-
-Follow this structure strictly; to deviate, ping @NixOS/documentation-team.
-
 
 ### One sentence per line
 
