@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Soothing pastel theme for SDDM based on corners theme";
     homepage = "https://github.com/khaneliman/sddm-catppuccin-corners";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ khaneliman ];
     platforms = lib.platforms.linux;
   };

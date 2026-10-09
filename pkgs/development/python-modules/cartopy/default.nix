@@ -136,7 +136,7 @@ buildPythonPackage (finalAttrs: {
     description = "Process geospatial data to create maps and perform analyses";
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     changelog = "https://github.com/SciTools/cartopy/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.lgpl3Plus;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     teams = [ lib.teams.geospatial ];
     mainProgram = "feature_download";

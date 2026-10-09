@@ -68,7 +68,7 @@ buildPythonPackage rec {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
     changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
   };
 }
