@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-randr";
-  version = "1.9.0";
+  version = "1.10.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-randr";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-Jimw6YCRouG9FDlLBp15OOCRlywBIaP/K/bXLR7trQM=";
+    hash = "sha256-HgKnDKq7jbFV8+jyiotKL+Dwk1MYdXtB1FtdBh+37oQ=";
   };
 
-  cargoHash = "sha256-QWSPj7bxxWh5/KeNEtUsfDKg+JMONLjomrMcn57j6fw=";
+  cargoHash = "sha256-h83+RBvMpVYdiLKH3flUBoyA0B2C9pwK5Gu41JVEhNw=";
 
   separateDebugInfo = true;
   __structuredAttrs = true;
