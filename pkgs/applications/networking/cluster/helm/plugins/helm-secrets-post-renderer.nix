@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "helm-secrets-post-renderer";
-  version = "4.7.7";
+  version = "4.7.9";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
     repo = "helm-secrets";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TfVKrSkr5kAwGZ6HR6m6sX3VN9LEPQYvjshYpD+R6XI=";
+    hash = "sha256-MXeuc54StPKWhflbdEoTuDh1hOx0CZeLXtpGa9Lzm/c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
