@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -51,6 +52,14 @@ buildPythonPackage rec {
   build-system = [
     hatchling
     hatch-vcs
+  ];
+
+  # Exercise cache expiry without requiring intervening I/O to finish in 100 ms.
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/fsspec/filesystem_spec/commit/00e5ca53e28c36f2140272f59a56638c474c8e76.patch";
+      hash = "sha256-yzcvZ2Mo3ItxPi9aEyV1ohLyHQsd5VGkiGahPU1qKZM=";
+    })
   ];
 
   optional-dependencies = {

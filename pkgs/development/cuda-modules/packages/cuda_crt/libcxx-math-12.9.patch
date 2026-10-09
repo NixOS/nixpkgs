@@ -1,0 +1,140 @@
+From 44752aba896636a053d19c09c4734a16118814c3 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 3 Oct 2026 07:53:17 -0700
+Subject: [PATCH] Adapt CUDA 12.9 math declarations to the libc++ 21 interface
+
+libc++ math overloads reside in std::__math, with template overloads for
+integral abs, double pow and promoted mixed arguments. Redeclare the
+existing CUDA-supported overloads there and match classification return
+types, exception specifications and preferred-overload attributes.
+
+Use libc++ classification definitions rather than declaring conflicting
+global replacements. No math function implementations are added.
+
+Prototype validated with CUDA 12.9.86, Clang 19.1.7 and libc++ 21.1.8 on
+AArch64, with GNU library controls. The CUDA compiler/platform support
+gates remain unchanged. Other libc++ releases need independent checking.
+---
+ include/crt/math_functions.h   | 56 +++++++++++++++++++++++++++++++++-
+ include/crt/math_functions.hpp |  2 +-
+ 2 files changed, 56 insertions(+), 2 deletions(-)
+
+diff --git a/include/crt/math_functions.h b/include/crt/math_functions.h
+index f82172e..6bad215 100644
+--- a/include/crt/math_functions.h
++++ b/include/crt/math_functions.h
+@@ -4607,6 +4607,32 @@ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ int isinf(float x);
+ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ int isinf(double x);
+ __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ int isinf(long double x);
+ 
++#elif defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 210000
++_LIBCPP_BEGIN_NAMESPACE_STD
++namespace __math {
++template <class>
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool signbit(float) noexcept;
++template <class>
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool signbit(double) noexcept;
++template <class>
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool signbit(long double) noexcept;
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isfinite(float) noexcept;
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isfinite(double) noexcept;
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isfinite(long double) noexcept;
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isnan(float) noexcept;
++#ifdef _LIBCPP_PREFERRED_OVERLOAD
++_LIBCPP_PREFERRED_OVERLOAD
++#endif
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isnan(double) noexcept;
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isnan(long double) noexcept;
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isinf(float) noexcept;
++#ifdef _LIBCPP_PREFERRED_OVERLOAD
++_LIBCPP_PREFERRED_OVERLOAD
++#endif
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isinf(double) noexcept;
++__DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ bool isinf(long double) noexcept;
++}
++_LIBCPP_END_NAMESPACE_STD
+ #elif defined(__GNUC__)
+ 
+ #undef signbit
+@@ -5311,10 +5337,19 @@ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl tanh(float)
+ #else /* __CUDACC_RTC__ ||
+          (!defined(_MSC_VER) || _MSC_VER < 1800) &&
+          (!defined(_LIBCPP_VERSION) || (_LIBCPP_VERSION < 1101)) */
++#if !defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 210000
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ long int __cdecl abs(long int) throw();
+ #if defined(_LIBCPP_VERSION)
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ long long int __cdecl abs(long long int) throw();
+ #endif /* defined(_LIBCPP_VERSION) */
++#endif
++#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 210000
++_LIBCPP_BEGIN_NAMESPACE_STD
++namespace __math {
++template <class> extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ int abs(int) noexcept;
++template <class> extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ long abs(long) noexcept;
++template <class> extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ long long abs(long long) noexcept;
++#endif
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl abs(float) throw();
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ double   __cdecl abs(double) throw();
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl fabs(float) throw();
+@@ -5323,7 +5358,14 @@ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl floor(float
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl sqrt(float) throw();
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl pow(float, float) throw();
+ #if defined(_LIBCPP_VERSION)
+-#if (defined (__ANDROID__) || defined(__HORIZON__)) && (_LIBCPP_VERSION >= 9000)
++#if _LIBCPP_VERSION >= 210000
++template <class>
++extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ double pow(double, double) __NV_NOEXCEPT;
++template <class _A1, class _A2,
++          std::__enable_if_t<std::is_arithmetic<_A1>::value && std::is_arithmetic<_A2>::value, int>>
++extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__
++std::__promote_t<_A1, _A2> pow(_A1, _A2) __NV_NOEXCEPT;
++#elif (defined (__ANDROID__) || defined(__HORIZON__)) && (_LIBCPP_VERSION >= 9000)
+ template <class _A1, class _A2>
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__
+ #if _LIBCPP_VERSION >= 14000
+@@ -5384,6 +5426,10 @@ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl atan(float)
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl atan2(float, float) throw();
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl tan(float) throw();
+ extern __DEVICE_FUNCTIONS_DECL__ __cudart_builtin__ float    __cdecl tanh(float) throw();
++#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 210000
++}
++_LIBCPP_END_NAMESPACE_STD
++#endif
+ #endif /* __CUDACC_RTC__ ||
+           (!defined(_MSC_VER) || _MSC_VER < 1800) &&
+           (!defined(_LIBCPP_VERSION) || (_LIBCPP_VERSION < 1101)) */
+@@ -5425,6 +5471,10 @@ __host__ __device__ __cudart_builtin__ int ilogbf(float a);
+ #else /* !(defined(__QNX__) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 8000)) */
+ #define __NV_NOEXCEPT _NOEXCEPT
+ #endif /* defined(__QNX__) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 8000) */
++#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 210000
++_LIBCPP_BEGIN_NAMESPACE_STD
++namespace __math {
++#endif
+ __host__ __device__ __cudart_builtin__ float logb(float a) __NV_NOEXCEPT;
+ __host__ __device__ __cudart_builtin__ int ilogb(float a) __NV_NOEXCEPT;
+ 
+@@ -5459,6 +5509,10 @@ __host__ __device__ __cudart_builtin__ float fdim(float a, float b) __NV_NOEXCEP
+ __host__ __device__ __cudart_builtin__ float fma(float a, float b, float c) __NV_NOEXCEPT;
+ __host__ __device__ __cudart_builtin__ float fmax(float a, float b) __NV_NOEXCEPT;
+ __host__ __device__ __cudart_builtin__ float fmin(float a, float b) __NV_NOEXCEPT;
++#if defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 210000
++}
++_LIBCPP_END_NAMESPACE_STD
++#endif
+ #if defined(__QNX__) && (!defined(_LIBCPP_VERSION) || _LIBCPP_VERSION < 8000)
+ #if defined(_LIBCPP_VERSION)
+ _LIBCPP_END_NAMESPACE_STD
+diff --git a/include/crt/math_functions.hpp b/include/crt/math_functions.hpp
+index 79e2572..3df1d6a 100644
+--- a/include/crt/math_functions.hpp
++++ b/include/crt/math_functions.hpp
+@@ -133,7 +133,7 @@ __host__ __device__ __cudart_builtin__ float     atan2(const float a, const floa
+ __host__ __device__ __cudart_builtin__ float     tan(const float in)           { return tanf(in); }
+ __host__ __device__ __cudart_builtin__ float     tanh(const float in)          { return tanhf(in); }
+ 
+-#elif defined(__GNUC__)
++#elif defined(__GNUC__) && !(defined(_LIBCPP_VERSION) && _LIBCPP_VERSION >= 210000)
+ 
+ #undef signbit
+ #undef isfinite

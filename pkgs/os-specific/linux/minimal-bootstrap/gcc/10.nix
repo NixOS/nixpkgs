@@ -9,6 +9,7 @@
   musl,
   binutils,
   gnumake,
+  gnupatch,
   gnused,
   gnugrep,
   gawk,
@@ -57,6 +58,7 @@ bash.runCommand "${pname}-${version}"
       gcc
       binutils
       gnumake
+      gnupatch
       gnused
       gnugrep
       gawk
@@ -113,6 +115,7 @@ bash.runCommand "${pname}-${version}"
     ln -s ../mpc-${mpcVersion} mpc
 
     # Patch
+    patch -Np1 -i ${../../../../development/compilers/gcc/common/libiberty-writeargv-newlines.patch}
     # doesn't recognise musl
     sed -i 's|"os/gnu-linux"|"os/generic"|' libstdc++-v3/configure.host
 

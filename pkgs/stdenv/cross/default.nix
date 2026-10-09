@@ -38,61 +38,40 @@ lib.init bootStages
   (
     buildPackages:
     let
-      adaptStdenv = if crossSystem.isStatic then buildPackages.stdenvAdapters.makeStatic else lib.id;
-      stdenvNoCC = adaptStdenv (
-        buildPackages.stdenv.override (old: rec {
-          buildPlatform = localSystem;
-          hostPlatform = crossSystem;
-          targetPlatform = crossSystem;
-
-          # Prior overrides are surely not valid as packages built with this run on
-          # a different platform, and so are disabled.
+      # Stage-specific overlays can introduce a stage without changing platforms.
+      # Reuse native defaults, including cycle-breaking bootstrap overrides.
+      isNative = lib.systems.equals localSystem crossSystem;
+      adaptStdenv = import ./adapt-stdenv.nix {
+        inherit lib buildPackages;
+        hostPlatform = crossSystem;
+      };
+      crossStdenvNoCC = adaptStdenv (
+        buildPackages.stdenv.override {
+          # New package stages must discard prior bootstrap package overrides
+          # and HOST defaults; adapting an explicit compiler constructor does not.
           overrides = _: _: { };
-          extraBuildInputs = [ ]; # Old ones run on wrong platform
+          extraBuildInputs = [ ];
           allowedRequisites = null;
-
           cc = null;
           hasCC = false;
-
-          extraNativeBuildInputs =
-            old.extraNativeBuildInputs
-            ++ lib.optionals (hostPlatform.isLinux && !buildPlatform.isLinux) [ buildPackages.patchelf ]
-            ++ lib.optional (
-              let
-                f =
-                  p:
-                  !p.isx86
-                  || builtins.elem p.libc [
-                    "musl"
-                    "wasilibc"
-                    "relibc"
-                  ]
-                  || p.isiOS
-                  || p.isGenode;
-              in
-              f hostPlatform && !(f buildPlatform)
-            ) buildPackages.updateAutotoolsGnuConfigScriptsHook
-            ++ lib.optional (
-              hostPlatform.isCygwin && !buildPlatform.isCygwin
-            ) buildPackages.cygwin.cygwinDllLinkHook;
-        })
+        }
       );
     in
     {
       inherit config;
       overlays = overlays ++ crossOverlays;
       selfBuild = false;
-      inherit stdenvNoCC;
+      stdenvNoCC = if isNative then buildPackages.stdenvNoCC else crossStdenvNoCC;
       stdenv =
         let
-          inherit (stdenvNoCC) hostPlatform targetPlatform;
-          baseStdenv = stdenvNoCC.override {
+          inherit (crossStdenvNoCC) hostPlatform targetPlatform;
+          crossStdenv = crossStdenvNoCC.override {
             # Old ones run on wrong platform
             extraBuildInputs = lib.optionals hostPlatform.isDarwin [
               buildPackages.targetPackages.apple-sdk
             ];
 
-            hasCC = !stdenvNoCC.targetPlatform.isGhcjs;
+            hasCC = !crossStdenvNoCC.targetPlatform.isGhcjs;
 
             cc =
               if crossSystem.useiOSPrebuilt or false then
@@ -121,6 +100,7 @@ lib.init bootStages
                 buildPackages.gcc;
 
           };
+          baseStdenv = if isNative then buildPackages.stdenv else crossStdenv;
         in
         if config ? replaceCrossStdenv then
           config.replaceCrossStdenv { inherit buildPackages baseStdenv; }

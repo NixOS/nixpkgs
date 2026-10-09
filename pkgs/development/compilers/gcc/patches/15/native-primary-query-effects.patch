@@ -1,0 +1,36 @@
+From cf85bddc763c80218bf9f3ba15373d9aad881b7e Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 16:36:26 -0700
+Subject: [PATCH] gcc: defer GCC 15 diagnostic and truncate effects in primary
+ query
+
+These driver operations first exist in GCC 15. Keep their guards separate
+from the common GCC 14/15/16 query so all versions retain their native
+diagnostic implementations.
+---
+ gcc/gcc.cc | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/gcc/gcc.cc b/gcc/gcc.cc
+index 31ae0fb..5b09474 100644
+--- a/gcc/gcc.cc
++++ b/gcc/gcc.cc
+@@ -4565,2 +4565,4 @@ driver_handle_option (struct gcc_options *opts,
+     case OPT_fdiagnostics_add_output_:
++      if (primary_operation_fd >= 0)
++        break;
+       handle_OPT_fdiagnostics_add_output_ (*opts, *dc, arg, loc);
+@@ -4569,2 +4571,4 @@ driver_handle_option (struct gcc_options *opts,
+     case OPT_fdiagnostics_set_output_:
++      if (primary_operation_fd >= 0)
++        break;
+       handle_OPT_fdiagnostics_set_output_ (*opts, *dc, arg, loc);
+@@ -9563,3 +9567,4 @@ driver::final_actions () const
+ 
+-  if (totruncate_file != NULL && !seen_error ())
++  if (primary_operation_fd < 0
++      && totruncate_file != NULL && !seen_error ())
+     /* Truncate file specified by -truncate.
+-- 
+2.43.0
+

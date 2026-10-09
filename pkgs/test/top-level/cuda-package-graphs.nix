@@ -1,0 +1,253 @@
+{
+  lib,
+  pkgs,
+  nixpkgsFun,
+}:
+let
+  fixture =
+    args:
+    nixpkgsFun (
+      {
+        localSystem = "x86_64-linux";
+        config = {
+          allowUnfree = true;
+          cudaCapabilities = [ "8.0" ];
+        };
+      }
+      // args
+    );
+  consumer = import ./cuda-consumer.nix;
+
+  # A cross-only alias override runs after the alias overlay used by .pkgs.
+  # Reject the resulting mixed-version scope instead of silently accepting it.
+  conflicting = fixture {
+    crossSystem = "aarch64-linux";
+    crossOverlays = [ (final: _: { cudaPackages = final.cudaPackages_13; }) ];
+  };
+  conflict = builtins.tryEval conflicting.cudaPackages_12_9.pkgs.cudaPackages.cudaMajorMinorVersion;
+
+  # CUDA 12.9 has manifest keys absent from 12.8. Comparing recursively
+  # spliced manifests can hide this mismatch in HOST while inventing one in
+  # BUILD. Selecting HOST's named release must rebind the complete graph.
+  mixed = fixture {
+    crossSystem = "aarch64-linux";
+    overlays = [
+      (final: _: {
+        cudaPackages = final.cudaPackages_12_8;
+        cudaPackages_12 = final.cudaPackages_12_8;
+      })
+    ];
+    crossOverlays = [
+      (final: _: {
+        cudaPackages = final.cudaPackages_12_9;
+        cudaPackages_12 = final.cudaPackages_12_9;
+        # Alias agreement alone must not accept a different release hidden
+        # behind the requested name in another dependency role.
+        cudaPackages_13_3 = final.cudaPackages_12_9;
+      })
+    ];
+  };
+  mixedConsumer = mixed.cudaPackages_12_9.callPackage consumer { };
+  renamedConflict = builtins.tryEval mixed.pkgsBuildHost.cudaPackages_13_3.pkgs.cudaPackages.cudaMajorMinorVersion;
+
+  # Default-release use and inspection of internal cache attributes must not
+  # instantiate a variant. Package traversal may inspect these attributes.
+  unextended = fixture {
+    overlays = [
+      (_: prev: {
+        __stage = prev.__stage // {
+          extendGraph = _: throw "CUDA scope instantiated an unused variant";
+        };
+      })
+    ];
+  };
+
+  manifestOverrides =
+    crossSystem:
+    let
+      original = fixture {
+        inherit crossSystem;
+        config = {
+          allowUnfree = true;
+          cudaSupport = true;
+          cudaCapabilities = [ "8.0" ];
+        };
+      };
+      runtimeOf =
+        package:
+        (lib.findFirst (
+          input: (input.pname or "") == "cuda_cudart"
+        ) (throw "CUDA test: missing CUDART dependency") package.buildInputs).drvPath;
+      check =
+        name:
+        let
+          cuda = original.${name};
+          manifests = cuda.manifests // {
+            cuda = cuda.manifests.cuda // {
+              # Change a consumed field, not just an unused marker.
+              cuda_cudart = cuda.manifests.cuda.cuda_cudart // {
+                version = "${cuda.cuda_cudart.version}-test";
+              };
+            };
+          };
+          custom = cuda.override { inherit manifests; };
+          equalBuild = cuda.override { manifests = original.pkgsBuildHost.${name}.manifests; };
+        in
+        custom.cuda_cudart.drvPath != cuda.cuda_cudart.drvPath
+        && custom.pkgs.cudaPackages.manifests == manifests
+        && custom.pkgs.pkgsBuildHost.cudaPackages.manifests == manifests
+        && runtimeOf custom.pkgs.ucx == custom.cuda_cudart.drvPath
+        && runtimeOf custom.pkgs.mpi == custom.cuda_cudart.drvPath
+        && custom.pkgs.pkgsBuildHost.cudaPackages.cuda_cudart.stdenv.hostPlatform.system == "x86_64-linux"
+        && custom.cuda_cudart.stdenv.hostPlatform.system == original.stdenv.hostPlatform.system
+        # A HOST override can deliberately equal BUILD's canonical data.
+        && equalBuild.pkgs.cudaPackages.manifests == original.pkgsBuildHost.${name}.manifests;
+    in
+    lib.all check [
+      "cudaPackages_12_9"
+      "cudaPackages_13_3"
+    ];
+
+  # Equal platforms can still name distinct stages, and crossOverlays must
+  # remain exclusive to HOST when constructing a non-default CUDA variant.
+  preservesStage =
+    crossSystem:
+    let
+      original = fixture {
+        inherit crossSystem;
+        overlays = [
+          (final: prev: {
+            scopeTrace = [ ];
+            # External packages close over their own package fixed point.
+            # Splicing a CUDA scope alone cannot rebind this two-hop dependency.
+            scopeCudaLeaf = final.cudaPackages.cudaMajorMinorVersion;
+            scopeCudaParent = {
+              version = final.scopeCudaLeaf;
+            };
+            _cuda = prev._cuda.extend (
+              _: prevCuda: {
+                extensions = prevCuda.extensions ++ [
+                  (finalCuda: _: {
+                    # Lexical captures stay in the outer overlay's fixed point.
+                    # Resolve external dependencies through the CUDA scope to
+                    # obtain automatic transitive release selection.
+                    scopeCaptured = final.scopeCudaParent;
+                    scopeScoped = finalCuda.callPackage ({ scopeCudaParent }: scopeCudaParent) { };
+                    scopeExplicit = finalCuda.pkgs.scopeCudaParent;
+                  })
+                ];
+              }
+            );
+            scopeDependency = final.runCommand "cuda-scope-dependency" { } ''
+              echo '${builtins.toJSON final.scopeTrace}' > "$out"
+            '';
+          })
+        ];
+        crossOverlays = [ (_: prev: { scopeTrace = prev.scopeTrace ++ [ "HOST" ]; }) ];
+        # A custom stage may have its own overlays in addition to the import's
+        # regular overlays. Extending through that stage must not promote them
+        # into regular overlays or apply them twice when reconstructing it.
+        stdenvStages =
+          args:
+          let
+            stages = import (pkgs.path + /pkgs/stdenv) args;
+          in
+          lib.imap0 (
+            index: f: previous:
+            let
+              stage = f previous;
+            in
+            stage
+            // lib.optionalAttrs (index == builtins.length stages - 3) {
+              overlays = stage.overlays ++ [
+                (_: prev: { scopeTrace = prev.scopeTrace ++ [ "NATIVE" ]; })
+              ];
+            }
+          ) stages;
+      };
+      stageConsumer =
+        { scopeDependency, stdenv }:
+        stdenv.mkDerivation {
+          name = "cuda-scope-stage-consumer";
+          buildInputs = [ scopeDependency ];
+          buildCommand = "touch $out";
+        };
+      explicitRoleConsumer =
+        { pkgs, stdenv }:
+        stdenv.mkDerivation {
+          name = "cuda-scope-explicit-role-consumer";
+          # pkgsBuildHost already selects this dependency's role. Splicing
+          # scope.pkgs again would shift it a second time into BUILD/BUILD.
+          nativeBuildInputs = [ pkgs.pkgsBuildHost.scopeDependency ];
+          buildCommand = "touch $out";
+        };
+      publicCuda = original.cudaPackages_13_3;
+      expectedExplicit = original.callPackage explicitRoleConsumer {
+        pkgs = original.pkgsHostTarget.cudaPackages_13_3.pkgs;
+      };
+      publicConsumers = [
+        (original.callPackage explicitRoleConsumer { pkgs = publicCuda.pkgs; })
+        (publicCuda.callPackage explicitRoleConsumer { })
+        (publicCuda.pkgs.callPackage explicitRoleConsumer { })
+      ];
+    in
+    lib.assertMsg (lib.all (actual: actual.drvPath == expectedExplicit.drvPath)
+      publicConsumers
+    ) "CUDA scope: all public package graph routes must preserve explicit dependency roles"
+    &&
+      lib.all
+        (
+          role:
+          let
+            source = original.${role};
+            cuda = source.cudaPackages_13_3;
+            variant = cuda.pkgs;
+            localPkgs = cuda.overrideScope (
+              _: _: {
+                pkgs = {
+                  localMarker = true;
+                };
+              }
+            );
+          in
+          variant.scopeTrace == source.scopeTrace
+          && variant.pkgsBuildHost.scopeTrace == source.pkgsBuildHost.scopeTrace
+          && variant.cudaPackages.cudaMajorMinorVersion == "13.3"
+          && source.scopeCudaParent.version == "12.9"
+          && (cuda.callPackage ({ scopeCudaParent }: scopeCudaParent) { }).version == "13.3"
+          && cuda.scopeCaptured.version == "12.9"
+          && cuda.scopeScoped.version == "13.3"
+          && cuda.scopeExplicit.version == "13.3"
+          && variant.cudaPackages.scopeCaptured.version == "13.3"
+          && (cuda.callPackage stageConsumer { }).drvPath == (source.callPackage stageConsumer { }).drvPath
+          && lib.assertMsg (
+            (cuda.callPackage explicitRoleConsumer { }).drvPath
+            == (variant.callPackage explicitRoleConsumer { pkgs = variant; }).drvPath
+          ) "CUDA scope: an explicitly selected BUILD/HOST dependency must not be spliced again"
+          && localPkgs.callPackage ({ pkgs }: pkgs.localMarker && !(pkgs ? stdenv)) { }
+        )
+        [
+          "pkgsHostTarget"
+          "pkgsBuildHost"
+          "pkgsBuildBuild"
+        ];
+
+in
+assert lib.assertMsg (manifestOverrides null && manifestOverrides "aarch64-linux")
+  "CUDA scope: constructor manifests must reach external dependencies without leaking HOST packages into BUILD";
+assert lib.assertMsg (!conflict.success) "CUDA scope: .pkgs must reject conflicting crossOverlays";
+assert lib.assertMsg (
+  !renamedConflict.success
+) "CUDA scope: matching aliases must not hide a different named release in TARGET";
+assert mixed.pkgsBuildHost.cudaPackages.cudaMajorMinorVersion == "12.8";
+assert mixed.cudaPackages_12_9.pkgs.pkgsBuildHost.cudaPackages.cudaMajorMinorVersion == "12.9";
+assert lib.versions.majorMinor (builtins.head mixedConsumer.nativeBuildInputs).version == "12.9";
+assert lib.versions.majorMinor (builtins.head mixedConsumer.buildInputs).version == "12.9";
+assert builtins.isString unextended.cudaPackages_12_9.cuda_nvcc.drvPath;
+assert !unextended.cudaPackages_12_9._pkgsVariant.recurseForDerivations;
+assert !unextended.cudaPackages_13_3._pkgsVariant.recurseForDerivations;
+assert lib.assertMsg (preservesStage "aarch64-linux")
+  "CUDA scope: cross-only overlays must remain exclusive to HOST and run once";
+assert lib.assertMsg (preservesStage "x86_64-linux")
+  "CUDA scope: equal-platform stages must retain distinct dependency scopes";
+pkgs.emptyFile

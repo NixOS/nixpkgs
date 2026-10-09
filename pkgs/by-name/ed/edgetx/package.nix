@@ -82,8 +82,18 @@ stdenv.mkDerivation (finalAttrs: {
       {
         resourceDir = "${llvmPackages.clang.cc.lib}/lib/clang/${llvmMajor}";
         libclang = "${lib.getLib llvmPackages.libclang}/lib/libclang.so";
-        libc-cflags = "${llvmPackages.clang}/nix-support/libc-cflags";
-        libcxx-cflags = "${llvmPackages.clang}/nix-support/libcxx-cxxflags";
+        libc-cflags = "${llvmPackages.clang}/nix-support/${
+          if (llvmPackages.clang.importerFlags.driver or null) != null then
+            llvmPackages.clang.importerFlags.driver
+          else
+            (llvmPackages.clang.importerFlags.libc or "libc-cflags")
+        }";
+        libcxx-cflags = "${llvmPackages.clang}/nix-support/${
+          if (llvmPackages.clang.importerFlags.driver or null) != null then
+            "cc-cflags"
+          else
+            (llvmPackages.clang.importerFlags.cxx or "libcxx-cxxflags")
+        }";
       }
     ))
   ];

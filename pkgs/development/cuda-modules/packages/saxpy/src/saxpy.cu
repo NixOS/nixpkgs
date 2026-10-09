@@ -59,8 +59,14 @@ int main(void) {
                    cudaMemcpyDeviceToHost));
 
   float maxError = 0.0f;
-  for (int i = 0; i < N; i++)
-    maxError = max(maxError, abs(yHost[i] - 4.0f));
+  for (int i = 0; i < N; i++) {
+    const float error = abs(yHost[i] - 4.0f);
+    if (!(error <= 1.0e-5f)) {
+      fprintf(stderr, "Incorrect result at %d: %f\n", i, yHost[i]);
+      return EXIT_FAILURE;
+    }
+    maxError = max(maxError, error);
+  }
   fprintf(stderr, "Max error: %f\n", maxError);
 
   CHECK(cudaFree(xDevice));

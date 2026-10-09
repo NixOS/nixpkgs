@@ -59,6 +59,12 @@ clangStdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = if debug then "Debug" else "Release";
 
   clang = if enableLibcxx then llvmPackages.libcxxClang else llvmPackages.clang;
+  libcFlags = "${finalAttrs.clang}/nix-support/${
+    finalAttrs.clang.importerFlags.libc or "libc-cflags"
+  }";
+  cxxFlags = "${finalAttrs.clang}/nix-support/${
+    finalAttrs.clang.importerFlags.cxx or "libcxx-cxxflags"
+  }";
 
   postInstall = ''
     cp $out/bin/clang-uml $out/bin/clang-uml-unwrapped

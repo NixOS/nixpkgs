@@ -129,10 +129,19 @@ rec {
             )
         );
       }
-      // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
-        extraBuildInputs = (old.extraBuildInputs or [ ]) ++ [
-          pkgs.glibc.static
-        ];
+      // {
+        extraBuildInputsFromStdenv =
+          stdenv:
+          (old.extraBuildInputsFromStdenv or (_: [ ])) stdenv
+          ++
+            lib.optional
+              (stdenv.hostPlatform.libc == "glibc" && stdenv.hasCC && stdenv.cc ? libc && stdenv.cc.libc != null)
+              (
+                assert lib.assertMsg (
+                  stdenv.cc.libc ? static
+                ) "makeStaticBinaries requires the selected libc to expose its static output";
+                stdenv.cc.libc.static
+              );
       }
     );
 

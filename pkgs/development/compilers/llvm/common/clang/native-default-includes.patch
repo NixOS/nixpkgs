@@ -1,0 +1,205 @@
+From 6ff7c2fe69d99bdf3c6cfa951d9876c8de27efce Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 16:57:42 -0700
+Subject: [PATCH] clang: bind declared defaults at native header lookup
+ boundaries
+
+Replace ambient libc discovery as a block, leaving native builtin-header
+insertion unchanged. LLVM19-21 append builtin headers after libc on musl;
+Swift's LLVM19 fork adds them before libc on every target instead. Copying
+the former insertion into the bound-provider branch both duplicates the
+latter and refers to a variable outside its scope.
+
+Swift's ordering and related builtin-header adaptations are recorded in:
+https://github.com/swiftlang/llvm-project/commit/0b329781b231092b205b010b0d0a876cedd05675
+
+Keep option declarations separate because LLVM22 moved Options.td into
+clang/Options. Driver.h already includes the matching Options.h, so the
+shared implementation needs no version-specific include or copied driver
+implementation.
+---
+ lib/Driver/ToolChains/BoundIncludes.h | 52 ++++++++++++++++++++
+ lib/Driver/ToolChains/Clang.cpp       |  9 ++++
+ lib/Driver/ToolChains/Gnu.cpp         | 10 ++++
+ lib/Driver/ToolChains/Linux.cpp       | 69 +++++++++++++++------------
+ 4 files changed, 109 insertions(+), 31 deletions(-)
+ create mode 100644 lib/Driver/ToolChains/BoundIncludes.h
+
+diff --git a/lib/Driver/ToolChains/BoundIncludes.h b/lib/Driver/ToolChains/BoundIncludes.h
+new file mode 100644
+index 0000000..b33d610
+--- /dev/null
++++ b/lib/Driver/ToolChains/BoundIncludes.h
+@@ -0,0 +1,52 @@
++// Bind only selected providers; leave job selection and suppression to Clang.
++#ifndef LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_BOUNDINCLUDES_H
++#define LLVM_CLANG_LIB_DRIVER_TOOLCHAINS_BOUNDINCLUDES_H
++
++#include "clang/Basic/DiagnosticDriver.h"
++#include "clang/Driver/Driver.h"
++#include "llvm/ADT/SmallVector.h"
++#include "llvm/ADT/StringRef.h"
++#include "llvm/TargetParser/Triple.h"
++#include "llvm/Option/ArgList.h"
++#include "llvm/Support/MemoryBuffer.h"
++#include <optional>
++#include <string>
++#include <vector>
++
++namespace clang::driver::toolchains {
++// 0 = libc, 1 = libstdc++, 2 = libc++. A present table is total: missing
++// target/family pairs denote no providers, never ambient host discovery.
++inline std::optional<std::vector<std::string>>
++lookupBoundIncludes(const llvm::opt::ArgList &Args, const Driver &D,
++                    const llvm::Triple &Triple, char Family) {
++  const llvm::opt::Arg *A = Args.getLastArg(options::OPT_fdefault_include_map_EQ);
++  if (!A)
++    return std::nullopt;
++  std::vector<std::string> Result;
++  auto Buffer = llvm::MemoryBuffer::getFile(A->getValue());
++  if (!Buffer) {
++    D.Diag(diag::err_drv_invalid_value) << A->getAsString(Args) << "unreadable file";
++    return Result;
++  }
++  llvm::SmallVector<llvm::StringRef> Lines;
++  Buffer.get()->getBuffer().split(Lines, '\n');
++  for (llvm::StringRef Line : Lines) {
++    if (Line.empty())
++      continue;
++    auto [Kind, Rest] = Line.split('\t');
++    auto [Target, Path] = Rest.split('\t');
++    if (Kind.size() != 1 || Kind[0] < '0' || Kind[0] > '2' ||
++        Target.empty() || !Path.starts_with('/') || Path.contains('\t') ||
++        Path.contains('\0')) {
++      D.Diag(diag::err_drv_invalid_value) << A->getAsString(Args)
++                                           << "invalid binding entry";
++      Result.clear();
++      return Result;
++    }
++    if (Kind[0] == Family && llvm::Triple::normalize(Target) == Triple.str())
++      Result.push_back(Path.str());
++  }
++  return Result;
++}
++} // namespace clang::driver::toolchains
++#endif
+diff --git a/lib/Driver/ToolChains/Clang.cpp b/lib/Driver/ToolChains/Clang.cpp
+index 6261332..f259ca9 100644
+--- a/lib/Driver/ToolChains/Clang.cpp
++++ b/lib/Driver/ToolChains/Clang.cpp
+@@ -1041,2 +1041,11 @@ void Clang::AddPreprocessingOptions(Compilation &C, const JobAction &JA,
+       }
++    } else if (A->getOption().matches(options::OPT_idefaultsystem)) {
++      // Keep the default's position among system paths while honoring caller
++      // suppression, unlike an ordinary explicit -isystem path.
++      A->claim();
++      if (!Args.hasArg(options::OPT_nostdinc, options::OPT_nostdlibinc)) {
++        CmdArgs.push_back("-isystem");
++        CmdArgs.push_back(A->getValue());
++      }
++      continue;
+     } else if (A->getOption().matches(options::OPT_isystem_after)) {
+diff --git a/lib/Driver/ToolChains/Gnu.cpp b/lib/Driver/ToolChains/Gnu.cpp
+index f5e2655..735f509 100644
+--- a/lib/Driver/ToolChains/Gnu.cpp
++++ b/lib/Driver/ToolChains/Gnu.cpp
+@@ -9,2 +9,3 @@
+ #include "Gnu.h"
++#include "BoundIncludes.h"
+ #include "Arch/ARM.h"
+@@ -3153,2 +3154,11 @@ void Generic_GCC::AddClangCXXStdlibIncludeArgs(const ArgList &DriverArgs,
+ 
++  const char Family = GetCXXStdlibType(DriverArgs) == ToolChain::CST_Libcxx
++                          ? '2' : '1';
++  if (auto Paths = lookupBoundIncludes(DriverArgs, getDriver(), getTriple(),
++                                       Family)) {
++    for (const std::string &Path : *Paths)
++      addSystemInclude(DriverArgs, CC1Args, Path);
++    return;
++  }
++
+   switch (GetCXXStdlibType(DriverArgs)) {
+diff --git a/lib/Driver/ToolChains/Linux.cpp b/lib/Driver/ToolChains/Linux.cpp
+index 8ac8d4e..f364314 100644
+--- a/lib/Driver/ToolChains/Linux.cpp
++++ b/lib/Driver/ToolChains/Linux.cpp
+@@ -9,2 +9,3 @@
+ #include "Linux.h"
++#include "BoundIncludes.h"
+ #include "Arch/ARM.h"
+@@ -647,38 +648,44 @@ void Linux::AddClangSystemIncludeArgs(const ArgList &DriverArgs,
+ 
+-  // LOCAL_INCLUDE_DIR
+-  addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
+-  // TOOL_INCLUDE_DIR
+-  AddMultilibIncludeArgs(DriverArgs, CC1Args);
+-
+-  // Check for configure-time C include directories.
+-  StringRef CIncludeDirs(C_INCLUDE_DIRS);
+-  if (CIncludeDirs != "") {
+-    SmallVector<StringRef, 5> dirs;
+-    CIncludeDirs.split(dirs, ":");
+-    for (StringRef dir : dirs) {
+-      StringRef Prefix =
+-          llvm::sys::path::is_absolute(dir) ? "" : StringRef(SysRoot);
+-      addExternCSystemInclude(DriverArgs, CC1Args, Prefix + dir);
++  // Bind libc providers without changing the native builtin-header order.
++  if (auto Paths = lookupBoundIncludes(DriverArgs, D, getTriple(), '0')) {
++    for (const std::string &Path : *Paths)
++      addExternCSystemInclude(DriverArgs, CC1Args, Path);
++  } else {
++    // LOCAL_INCLUDE_DIR
++    addSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/local/include"));
++    // TOOL_INCLUDE_DIR
++    AddMultilibIncludeArgs(DriverArgs, CC1Args);
++
++    // Check for configure-time C include directories.
++    StringRef CIncludeDirs(C_INCLUDE_DIRS);
++    if (CIncludeDirs != "") {
++      SmallVector<StringRef, 5> dirs;
++      CIncludeDirs.split(dirs, ":");
++      for (StringRef dir : dirs) {
++        StringRef Prefix =
++            llvm::sys::path::is_absolute(dir) ? "" : StringRef(SysRoot);
++        addExternCSystemInclude(DriverArgs, CC1Args, Prefix + dir);
++      }
++      return;
+     }
+-    return;
+-  }
+ 
+-  // On systems using multiarch and Android, add /usr/include/$triple before
+-  // /usr/include.
+-  std::string MultiarchIncludeDir = getMultiarchTriple(D, getTriple(), SysRoot);
+-  if (!MultiarchIncludeDir.empty() &&
+-      D.getVFS().exists(concat(SysRoot, "/usr/include", MultiarchIncludeDir)))
+-    addExternCSystemInclude(
+-        DriverArgs, CC1Args,
+-        concat(SysRoot, "/usr/include", MultiarchIncludeDir));
++    // On systems using multiarch and Android, add /usr/include/$triple before
++    // /usr/include.
++    std::string MultiarchIncludeDir = getMultiarchTriple(D, getTriple(), SysRoot);
++    if (!MultiarchIncludeDir.empty() &&
++        D.getVFS().exists(concat(SysRoot, "/usr/include", MultiarchIncludeDir)))
++      addExternCSystemInclude(
++          DriverArgs, CC1Args,
++          concat(SysRoot, "/usr/include", MultiarchIncludeDir));
+ 
+-  if (getTriple().getOS() == llvm::Triple::RTEMS)
+-    return;
++    if (getTriple().getOS() == llvm::Triple::RTEMS)
++      return;
+ 
+-  // Add an include of '/include' directly. This isn't provided by default by
+-  // system GCCs, but is often used with cross-compiling GCCs, and harmless to
+-  // add even when Clang is acting as-if it were a system compiler.
+-  addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/include"));
++    // Add an include of '/include' directly. This isn't provided by default by
++    // system GCCs, but is often used with cross-compiling GCCs, and harmless to
++    // add even when Clang is acting as-if it were a system compiler.
++    addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/include"));
+ 
+-  addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/include"));
++    addExternCSystemInclude(DriverArgs, CC1Args, concat(SysRoot, "/usr/include"));
++  }
+ 

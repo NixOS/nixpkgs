@@ -1,5 +1,5 @@
 {
-  backendStdenv,
+  stdenv,
   cmake,
   cccl,
   cuda_cudart,
@@ -10,7 +10,7 @@
   libcublas,
   saxpy,
 }:
-backendStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 

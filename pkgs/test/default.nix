@@ -18,6 +18,8 @@ let
   inherit (pkgs.lib.strings) toJSON;
 in
 {
+  meson = callPackage ./meson { };
+
   cc-wrapper =
     let
       pkgNames = (attrNames pkgs);
@@ -79,6 +81,9 @@ in
     in
     recurseIntoAttrs {
       default = callPackage ./cc-wrapper { };
+      setup = recurseIntoAttrs (callPackage ./cc-wrapper/setup-hooks.nix { });
+      roleProjection = callPackage ./cc-wrapper/role-projection.nix { };
+      gnat = callPackage ./cc-wrapper/gnat.nix { };
 
       supported = stdenv.mkDerivation {
         name = "cc-wrapper-supported";
@@ -133,6 +138,8 @@ in
   haskell = callPackage ./haskell { };
 
   hooks = recurseIntoAttrs (callPackage ./hooks { });
+
+  cc-wrapper-gcc-for-libs = callPackage ./cc-wrapper/gcc-for-libs.nix { };
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = pkgs.gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = pkgs.clangMultiStdenv; };

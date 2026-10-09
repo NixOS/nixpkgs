@@ -1,0 +1,23 @@
+From dc066c19cb580c12a86e6cf7714a184b77771e32 Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Thu, 8 Oct 2026 16:57:42 -0700
+Subject: [PATCH] driver: declare native default-header binding options
+
+---
+ include/clang/Options/Options.td | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/include/clang/Options/Options.td b/include/clang/Options/Options.td
+index b2b8dc5..842ff5d 100644
+--- a/include/clang/Options/Options.td
++++ b/include/clang/Options/Options.td
+@@ -1804,2 +1804,9 @@ def fprofile_instr_use_EQ : Joined<["-"], "fprofile-instr-use=">,
+     HelpText<"Use instrumentation data for profile-guided optimization">;
++def fdefault_include_map_EQ : Joined<["-"], "fdefault-include-map=">,
++    Group<f_Group>, Flags<[NoArgumentUnused]>, Visibility<[ClangOption]>,
++    MetaVarName<"<file>">,
++    HelpText<"Bind selected target C++ and libc default headers from <file>">;
++def idefaultsystem : JoinedOrSeparate<["-"], "idefaultsystem">,
++  Group<clang_i_Group>, Visibility<[ClangOption]>,
++  HelpText<"Add a suppressible toolchain default at this system include position">;
+ def fprofile_remapping_file_EQ : Joined<["-"], "fprofile-remapping-file=">,

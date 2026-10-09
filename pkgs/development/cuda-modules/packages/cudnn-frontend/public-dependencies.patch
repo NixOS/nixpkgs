@@ -1,0 +1,253 @@
+From 8532e40be5a3c4d1063255a69e042264b26ee685 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:24 -0700
+Subject: [PATCH] cmake: complete public dependency discovery for split
+ installations
+
+Build on NVIDIA/cudnn-frontend#482, whose imported CUDA dependency removes
+producer include paths from exports. Use the bundled CUDNN::cudnn target
+instead of CuDNN::CuDNN, install its finder, and share producer/consumer
+discovery. Resolve separately installed NVRTC headers and optional JSON.
+
+Respect optional and quiet package lookups, including retries after partial
+discovery, without losing required checks while building the producer.
+
+Upstream-PR: https://github.com/NVIDIA/cudnn-frontend/pull/482
+---
+ CMakeLists.txt                             | 21 +++---
+ cmake/cuDNN.cmake                          | 80 ++++++++++------------
+ cmake/cudnn_frontend-dependencies.cmake.in | 35 ++++++++++
+ cudnn_frontend-config.cmake.in             |  7 +-
+ 4 files changed, 86 insertions(+), 57 deletions(-)
+ create mode 100644 cmake/cudnn_frontend-dependencies.cmake.in
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b7701d9..ea9193e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -45,15 +45,16 @@ target_include_directories(
+     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+ )
+ 
+-# Find the cuda compiler
+-find_package(CUDAToolkit REQUIRED)
+-find_package(CUDNN REQUIRED)
+-
+-target_link_libraries(
+-    cudnn_frontend INTERFACE
+-    CUDA::toolkit
+-    CuDNN::CuDNN
+-)
++# Resolve the same imported dependencies for this build and installed consumers.
++configure_file(cmake/cudnn_frontend-dependencies.cmake.in
++               cudnn_frontend-dependencies.cmake @ONLY)
++configure_file(cmake/cuDNN.cmake CUDNNConfig.cmake COPYONLY)
++include(${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-dependencies.cmake)
++target_link_libraries(cudnn_frontend INTERFACE
++    CUDA::cudart CUDNN::cudnn cudnn_frontend::nvrtc)
++if(NOT CUDNN_FRONTEND_SKIP_JSON_LIB)
++    target_link_libraries(cudnn_frontend INTERFACE nlohmann_json::nlohmann_json)
++endif()
+ 
+ target_compile_features(cudnn_frontend INTERFACE cxx_std_17)
+ 
+@@ -115,5 +116,7 @@ configure_package_config_file(
+ )
+ install(
+     FILES "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-config.cmake"
++          "${CMAKE_CURRENT_BINARY_DIR}/cudnn_frontend-dependencies.cmake"
++          "${CMAKE_CURRENT_BINARY_DIR}/CUDNNConfig.cmake"
+     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cudnn_frontend"
+ )
+diff --git a/cmake/cuDNN.cmake b/cmake/cuDNN.cmake
+index bdcd310..72a09bc 100644
+--- a/cmake/cuDNN.cmake
++++ b/cmake/cuDNN.cmake
+@@ -1,17 +1,27 @@
+ # SPDX-FileCopyrightText: Copyright (c) 2022 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+ # SPDX-License-Identifier: Apache-2.0
+ 
+-# Check if CUDNN:: targets already exist (integrated build)
+-if(TARGET CUDNN::cudnn AND TARGET CUDNN::cudnn_all)
+-    message(STATUS "cuDNN: Using existing CMake targets")
+-    set(CUDNN_FOUND ON CACHE INTERNAL "cuDNN Library Found")
++# Check if CUDNN:: targets already exist (integrated build). A previous optional
++# lookup may have created some targets before finding a missing library.
++if(TARGET CUDNN::cudnn AND TARGET CUDNN::cudnn_all AND
++   (NOT DEFINED CUDNN_FOUND OR CUDNN_FOUND))
++    if(NOT CUDNN_FIND_QUIETLY)
++        message(STATUS "cuDNN: Using existing CMake targets")
++    endif()
++    set(CUDNN_FOUND TRUE)
+     return()
+ endif()
+ 
+ # Original behavior: search for pre-built libraries
+-message(STATUS "cuDNN: Searching for pre-built libraries")
++if(NOT CUDNN_FIND_QUIETLY)
++    message(STATUS "cuDNN: Searching for pre-built libraries")
++endif()
+ 
+-add_library(CUDNN::cudnn_all INTERFACE IMPORTED)
++if(NOT TARGET CUDNN::cudnn_all)
++    add_library(CUDNN::cudnn_all INTERFACE IMPORTED)
++endif()
++set_property(TARGET CUDNN::cudnn_all PROPERTY INTERFACE_LINK_LIBRARIES)
++set(CUDNN_REQUIRED_VARS CUDNN_INCLUDE_DIR)
+ 
+ find_path(
+     CUDNN_INCLUDE_DIR cudnn.h
+@@ -50,9 +60,7 @@ endif()
+ 
+ function(find_cudnn_library NAME)
+     if(NOT "${ARGV1}" STREQUAL "OPTIONAL")
+-        set(_cudnn_required "REQUIRED")
+-    else()
+-        set(_cudnn_required "")
++        set(CUDNN_REQUIRED_VARS ${CUDNN_REQUIRED_VARS} ${NAME}_LIBRARY PARENT_SCOPE)
+     endif()
+ 
+     if(CUDNN_STATIC)
+@@ -66,62 +74,40 @@ function(find_cudnn_library NAME)
+         NAMES_PER_DIR
+         HINTS $ENV{CUDNN_LIBRARY_PATH} ${CUDNN_LIBRARY_PATH} $ENV{CUDNN_PATH} ${CUDNN_PATH} ${Python_SITEARCH}/nvidia/cudnn ${CUDAToolkit_LIBRARY_DIR}
+         PATH_SUFFIXES lib64 lib/x64 lib
+-        ${_cudnn_required}
+     )
+ 
+     if(${NAME}_LIBRARY)
+-        add_library(CUDNN::${NAME} UNKNOWN IMPORTED)
++        if(NOT TARGET CUDNN::${NAME})
++            add_library(CUDNN::${NAME} UNKNOWN IMPORTED)
++        endif()
+         set_target_properties(
+             CUDNN::${NAME} PROPERTIES
+             INTERFACE_INCLUDE_DIRECTORIES ${CUDNN_INCLUDE_DIR}
+             IMPORTED_LOCATION ${${NAME}_LIBRARY}
+         )
+-        message(STATUS "${NAME} found at ${${NAME}_LIBRARY}.")
+-    else()
+-        message(STATUS "${NAME} not found.")
++
+     endif()
+ endfunction()
+ 
+ if(NOT CUDNN_STATIC)
+     find_cudnn_library(cudnn)
+-    set(CUDNN_LIBRARY_VAR cudnn_LIBRARY)
+ endif()
+ 
+-include (FindPackageHandleStandardArgs)
+-find_package_handle_standard_args(
+-    LIBRARY REQUIRED_VARS
+-    CUDNN_INCLUDE_DIR ${CUDNN_LIBRARY_VAR}
+-)
+-
+-if(CUDNN_INCLUDE_DIR AND (CUDNN_STATIC OR cudnn_LIBRARY))
+-
+-    message(STATUS "cuDNN: ${cudnn_LIBRARY}")
+-    message(STATUS "cuDNN: ${CUDNN_INCLUDE_DIR}")
+-
+-    set(CUDNN_FOUND ON CACHE INTERNAL "cuDNN Library Found")
+-
+-else()
+-
+-    set(CUDNN_FOUND OFF CACHE INTERNAL "cuDNN Library Not Found")
+-
+-endif()
+-
+-target_include_directories(
+-    CUDNN::cudnn_all
+-    INTERFACE
+-    $<INSTALL_INTERFACE:include>
+-    $<BUILD_INTERFACE:${CUDNN_INCLUDE_DIR}>
++set_target_properties(CUDNN::cudnn_all PROPERTIES
++    INTERFACE_INCLUDE_DIRECTORIES
++    "$<INSTALL_INTERFACE:include>;$<BUILD_INTERFACE:${CUDNN_INCLUDE_DIR}>"
+ )
+ 
+ if(CUDNN_STATIC)
+-    add_library(CUDNN::cudnn INTERFACE IMPORTED)
+-    target_link_libraries(
+-        CUDNN::cudnn
+-        INTERFACE
+-        CUDNN::cudnn_all
++    if(NOT TARGET CUDNN::cudnn)
++        add_library(CUDNN::cudnn INTERFACE IMPORTED)
++    endif()
++    set_target_properties(CUDNN::cudnn PROPERTIES
++        INTERFACE_LINK_LIBRARIES CUDNN::cudnn_all
+     )
+ 
+-    find_package(ZLIB REQUIRED)
++    find_package(ZLIB QUIET)
++    list(APPEND CUDNN_REQUIRED_VARS ZLIB_FOUND)
+ else()
+     target_link_libraries(
+         CUDNN::cudnn_all
+@@ -174,3 +160,7 @@ elseif(CUDNN_MAJOR_VERSION EQUAL 9)
+         $<$<BOOL:${CUDNN_STATIC}>:CUDA::cublasLt_static $<IF:$<TARGET_EXISTS:CUDA::nvrtc_static>,CUDA::nvrtc_static,CUDA::nvrtc> ZLIB::ZLIB>
+     )
+ endif()
++
++include(FindPackageHandleStandardArgs)
++find_package_handle_standard_args(CUDNN NAME_MISMATCHED
++    REQUIRED_VARS ${CUDNN_REQUIRED_VARS})
+diff --git a/cmake/cudnn_frontend-dependencies.cmake.in b/cmake/cudnn_frontend-dependencies.cmake.in
+new file mode 100644
+index 0000000..aaa3e81
+--- /dev/null
++++ b/cmake/cudnn_frontend-dependencies.cmake.in
+@@ -0,0 +1,35 @@
++include(CMakeFindDependencyMacro)
++# Outside find_package, preserve the producer's required dependency checks.
++set(_cudnn_frontend_required REQUIRED)
++if(CMAKE_FIND_PACKAGE_NAME STREQUAL "cudnn_frontend")
++    set(_cudnn_frontend_required "")
++endif()
++find_dependency(CUDAToolkit ${_cudnn_frontend_required})
++if(NOT TARGET CUDNN::cudnn OR
++   (TARGET CUDNN::cudnn_all AND DEFINED CUDNN_FOUND AND NOT CUDNN_FOUND))
++    find_dependency(CUDNN CONFIG ${_cudnn_frontend_required}
++                    PATHS "${CMAKE_CURRENT_LIST_DIR}" NO_DEFAULT_PATH)
++endif()
++if(NOT @CUDNN_FRONTEND_SKIP_JSON_LIB@)
++    find_dependency(nlohmann_json CONFIG ${_cudnn_frontend_required})
++endif()
++
++# FindCUDAToolkit assumes NVRTC and CUDART share an include directory. NVIDIA's
++# component packages may install them separately. Discover the public header
++# here, without exporting the producer's resolved directory to consumers.
++if(NOT TARGET cudnn_frontend::nvrtc)
++    find_path(cudnn_frontend_NVRTC_INCLUDE_DIR nvrtc.h
++              HINTS ${CUDAToolkit_INCLUDE_DIRS} ${_cudnn_frontend_required})
++    if(NOT cudnn_frontend_NVRTC_INCLUDE_DIR OR NOT TARGET CUDA::nvrtc)
++        if(_cudnn_frontend_required)
++            message(FATAL_ERROR "NVRTC headers and library are required")
++        endif()
++        set(cudnn_frontend_FOUND FALSE)
++        set(cudnn_frontend_NOT_FOUND_MESSAGE "NVRTC headers or library were not found")
++        return()
++    endif()
++    add_library(cudnn_frontend::nvrtc INTERFACE IMPORTED)
++    set_target_properties(cudnn_frontend::nvrtc PROPERTIES
++        INTERFACE_INCLUDE_DIRECTORIES "${cudnn_frontend_NVRTC_INCLUDE_DIR}"
++        INTERFACE_LINK_LIBRARIES CUDA::nvrtc)
++endif()
+diff --git a/cudnn_frontend-config.cmake.in b/cudnn_frontend-config.cmake.in
+index 9de9b89..984c742 100644
+--- a/cudnn_frontend-config.cmake.in
++++ b/cudnn_frontend-config.cmake.in
+@@ -3,8 +3,9 @@
+ 
+ @PACKAGE_INIT@
+ 
+-include(CMakeFindDependencyMacro)
+-find_dependency(CUDAToolkit)
+-find_dependency(CUDNN)
++include(${CMAKE_CURRENT_LIST_DIR}/cudnn_frontend-dependencies.cmake)
++if(DEFINED cudnn_frontend_FOUND AND NOT cudnn_frontend_FOUND)
++    return()
++endif()
+ 
+ include(${CMAKE_CURRENT_LIST_DIR}/cudnn_frontend-targets.cmake)

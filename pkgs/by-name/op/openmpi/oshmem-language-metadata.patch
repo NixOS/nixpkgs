@@ -1,0 +1,114 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nixpkgs contributors <nixpkgs@users.noreply.github.com>
+Date: Wed, 7 Oct 2026 17:27:50 -0700
+Subject: [PATCH] wrappers: match language metadata to enabled bindings
+
+Use OpenSHMEM dependencies for its C++ pkg-config module and keep Fortran include flags separate from C flags. Select OpenSHMEM Fortran bindings from the interpreted project decision, which includes the Linux default.
+
+Publish MPI and OpenSHMEM Fortran modules only when their bindings are built. Preserve installed wrappers and use the existing OpenSHMEM unsupported-language diagnostic for disabled bindings.
+---
+ config/opal_setup_wrappers.m4                       | 12 +++++-------
+ configure.ac                                        |  2 +-
+ ompi/tools/wrappers/Makefile.am                     |  4 +++-
+ oshmem/tools/wrappers/Makefile.am                   |  5 ++++-
+ oshmem/tools/wrappers/oshmem-cxx.pc.in              | 10 +++++-----
+ oshmem/tools/wrappers/shmemfort-wrapper-data.txt.in |  2 +-
+ 6 files changed, 19 insertions(+), 16 deletions(-)
+
+diff --git a/config/opal_setup_wrappers.m4 b/config/opal_setup_wrappers.m4
+index 697f465..08f8f39 100644
+--- a/config/opal_setup_wrappers.m4
++++ b/config/opal_setup_wrappers.m4
+@@ -891,9 +891,7 @@ AC_DEFUN([OPAL_SETUP_WRAPPER_FINAL],[
+        AC_SUBST([OSHMEM_WRAPPER_CXX_REQUIRED_FILE])
+
+-       if test "$OMPI_TRY_FORTRAN_BINDINGS" -gt "$OMPI_FORTRAN_NO_BINDINGS" ; then
+-          OSHMEM_WRAPPER_FORTRAN_REQUIRED_FILE=""
+-       else
+-          OSHMEM_WRAPPER_FORTRAN_REQUIRED_FILE="not supported"
+-       fi
++       AM_COND_IF([OSHMEM_BUILD_FORTRAN_BINDINGS],
++                  [OSHMEM_WRAPPER_FORTRAN_REQUIRED_FILE=""],
++                  [OSHMEM_WRAPPER_FORTRAN_REQUIRED_FILE="not supported"])
+        AC_SUBST([OSHMEM_WRAPPER_FORTRAN_REQUIRED_FILE])
+
+@@ -936,6 +934,6 @@ AC_DEFUN([OPAL_SETUP_WRAPPER_FINAL],[
+
+        AC_MSG_CHECKING([for OSHMEM pkg-config Fortran Cflags])
+-       OSHMEM_PC_CFLAGS="${OSHMEM_WRAPPER_FCFLAGS} ${OSHMEM_WRAPPER_FCFLAGS_PREFIX}"
+-       OSHMEM_PC_CFLAGS=`echo ${OSHMEM_PC_CFLAGS} | sed -e 's/@{/\${/g'`
++       OSHMEM_PC_FC_CFLAGS="${OSHMEM_WRAPPER_FCFLAGS} ${OSHMEM_WRAPPER_FCFLAGS_PREFIX}"
++       OSHMEM_PC_FC_CFLAGS=`echo ${OSHMEM_PC_FC_CFLAGS} | sed -e 's/@{/\${/g'`
+        AC_SUBST([OSHMEM_PC_FC_CFLAGS])
+        AC_MSG_RESULT([${OSHMEM_PC_FC_CFLAGS}])
+diff --git a/configure.ac b/configure.ac
+index a96ba48..89a4864 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -673,5 +673,5 @@ AM_CONDITIONAL(MAN_PAGE_BUILD_USEMPIF08_BINDINGS,
+
+ AM_CONDITIONAL(OSHMEM_BUILD_FORTRAN_BINDINGS,
+-    [test "$enable_oshmem" = "yes" && \
++    [test "$project_oshmem_amc" = "true" && \
+      test "$ompi_fortran_happy" = "1" && \
+      test "$OMPI_TRY_FORTRAN_BINDINGS" -gt "$OMPI_FORTRAN_NO_BINDINGS" && \
+diff --git a/ompi/tools/wrappers/Makefile.am b/ompi/tools/wrappers/Makefile.am
+index 1d5b24a..7f44abc 100644
+--- a/ompi/tools/wrappers/Makefile.am
++++ b/ompi/tools/wrappers/Makefile.am
+@@ -31,5 +31,5 @@ pkgconfig_DATA += ompi-cxx.pc
+ endif
+
+-if OMPI_HAVE_FORTRAN_COMPILER
++if OMPI_BUILD_ANY_FORTRAN_BINDINGS
+ pkgconfig_DATA += ompi-fort.pc
+ endif
+@@ -124,4 +124,6 @@ if OMPI_HAVE_FORTRAN_COMPILER
+ 	(cd $(DESTDIR)$(pkgdatadir); rm -f mpif77-wrapper-data.txt; $(LN_S) mpifort-wrapper-data.txt mpif77-wrapper-data.txt)
+ 	(cd $(DESTDIR)$(pkgdatadir); rm -f mpif90-wrapper-data.txt; $(LN_S) mpifort-wrapper-data.txt mpif90-wrapper-data.txt)
++endif
++if OMPI_BUILD_ANY_FORTRAN_BINDINGS
+ 	(cd $(DESTDIR)$(pkgconfigdir); rm -f ompi-f77.pc; $(LN_S) ompi-fort.pc ompi-f77.pc)
+ 	(cd $(DESTDIR)$(pkgconfigdir); rm -f ompi-f90.pc; $(LN_S) ompi-fort.pc ompi-f90.pc)
+diff --git a/oshmem/tools/wrappers/Makefile.am b/oshmem/tools/wrappers/Makefile.am
+index f026266..8f1755b 100644
+--- a/oshmem/tools/wrappers/Makefile.am
++++ b/oshmem/tools/wrappers/Makefile.am
+@@ -16,5 +16,8 @@ if PROJECT_OSHMEM
+
+ pkgconfigdir = $(libdir)/pkgconfig
+-pkgconfig_DATA = oshmem.pc oshmem-c.pc oshmem-cxx.pc oshmem-fort.pc
++pkgconfig_DATA = oshmem.pc oshmem-c.pc oshmem-cxx.pc
++if OSHMEM_BUILD_FORTRAN_BINDINGS
++pkgconfig_DATA += oshmem-fort.pc
++endif
+
+ nodist_oshmemdata_DATA =  \
+diff --git a/oshmem/tools/wrappers/oshmem-cxx.pc.in b/oshmem/tools/wrappers/oshmem-cxx.pc.in
+index 8c2ff28..a600e3f 100644
+--- a/oshmem/tools/wrappers/oshmem-cxx.pc.in
++++ b/oshmem/tools/wrappers/oshmem-cxx.pc.in
+@@ -15,7 +15,7 @@ libdir=@libdir@
+ pkgincludedir=@opalincludedir@
+
+-Libs: @OMPI_PC_LIBS@
+-Libs.private: @OMPI_PC_LIBS_PRIVATE@
+-Cflags: @OMPI_PC_CFLAGS@
+-Requires: @OMPI_PC_MODULES@
+-Requires.private: @OMPI_PC_MODULES_PRIVATE@
++Libs: @OSHMEM_PC_LIBS@
++Libs.private: @OSHMEM_PC_LIBS_PRIVATE@
++Cflags: @OSHMEM_PC_CFLAGS@
++Requires: @OSHMEM_PC_MODULES@
++Requires.private: @OSHMEM_PC_MODULES_PRIVATE@
+diff --git a/oshmem/tools/wrappers/shmemfort-wrapper-data.txt.in b/oshmem/tools/wrappers/shmemfort-wrapper-data.txt.in
+index 009cce3..8247ab4 100644
+--- a/oshmem/tools/wrappers/shmemfort-wrapper-data.txt.in
++++ b/oshmem/tools/wrappers/shmemfort-wrapper-data.txt.in
+@@ -32,5 +32,5 @@ libs_static=@OSHMEM_WRAPPER_LIBS_STATIC@
+ dyn_lib_file=liboshmem.@OPAL_DYN_LIB_SUFFIX@
+ static_lib_file=liboshmem.a
+-required_file=@OMPI_WRAPPER_FORTRAN_REQUIRED_FILE@
++required_file=@OSHMEM_WRAPPER_FORTRAN_REQUIRED_FILE@
+ includedir=${includedir}
+ libdir=${libdir}

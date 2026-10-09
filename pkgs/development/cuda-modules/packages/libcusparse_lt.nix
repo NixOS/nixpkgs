@@ -1,9 +1,11 @@
 {
   _cuda,
   buildRedist,
+  callPackage,
   cuda_cudart,
   cuda_nvrtc,
   lib,
+  libcusparse,
 }:
 buildRedist (finalAttrs: {
   redistName = "cusparselt";
@@ -22,10 +24,17 @@ buildRedist (finalAttrs: {
     "${lib.getLib cuda_nvrtc}/lib" # libnvrtc.so.%s
   ];
 
-  # NOTE: libcusparseLt does not reference libcublas at all, so it is deliberately not an input.
-  buildInputs =
-    # For some reason, the 1.4.x release of cusparselt requires the cudart library.
-    lib.optionals (lib.hasPrefix "1.4" finalAttrs.version) [ (lib.getLib cuda_cudart) ];
+  propagatedBuildInputs = [
+    cuda_cudart
+    libcusparse
+  ];
+
+  passthru.tests.headers = callPackage ./tests/public-headers.nix {
+    package = finalAttrs.finalPackage;
+    headers = [ "cusparseLt.h" ];
+    libraries = [ "cusparseLt" ];
+    symbols = [ "cusparseLtGetVersion" ];
+  };
 
   meta = {
     description = "High-performance CUDA library dedicated to general matrix-matrix operations in which at least one operand is a structured sparse matrix with 50% sparsity ratio";

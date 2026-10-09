@@ -19,62 +19,17 @@ cInclude=0
 
 source @out@/nix-support/utils.bash
 
-# Flirting with a layer violation here.
-if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+if [[ @wrapperMode@ == prepared ]]; then
+    wrapperImport toolchain
+else
+    wrapperClear
+    source @out@/nix-support/darwin-sdk-setup.bash
+    # Keep C include defaults disabled for the delegated Ada compiler.
     source @bintools@/nix-support/add-flags.sh
-fi
-
-# Put this one second so libc ldflags take priority.
-if [ -z "${NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
-fi
-
-if [ -z "${NIX_GNAT_WRAPPER_EXTRA_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-gnat-extra-flags.sh
 fi
-
-# Parse command line options and set several variables.
-# For instance, figure out if linker flags should be passed.
-# GCC prints annoying warnings when they are not needed.
-dontLink=0
-nonFlagArgs=0
-# shellcheck disable=SC2193
-
 expandResponseParams "$@"
-declare -i n=0
-nParams=${#params[@]}
-while (( "$n" < "$nParams" )); do
-    p=${params[n]}
-    p2=${params[n+1]:-} # handle `p` being last one
-    if [ "$p" = -c ]; then
-        dontLink=1
-    elif [ "$p" = -S ]; then
-        dontLink=1
-    elif [ "$p" = -E ]; then
-        dontLink=1
-    elif [ "$p" = -E ]; then
-        dontLink=1
-    elif [ "$p" = -M ]; then
-        dontLink=1
-    elif [ "$p" = -MM ]; then
-        dontLink=1
-    elif [[ "$p" = -x && "$p2" = *-header ]]; then
-        dontLink=1
-    elif [[ "$p" != -?* ]]; then
-        # A dash alone signifies standard input; it is not a flag
-        nonFlagArgs=1
-    fi
-    n+=1
-done
-
-# If we pass a flag like -Wl, then gcc will call the linker unless it
-# can figure out that it has to do something else (e.g., because of a
-# "-c" flag).  So if no non-flag arguments are given, don't pass any
-# linker flags.  This catches cases like "gcc" (should just print
-# "gcc: no input files") and "gcc -v" (should print the version).
-if [ "$nonFlagArgs" = 0 ]; then
-    dontLink=1
-fi
 
 # Optionally filter out paths not refering to the store.
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
@@ -113,7 +68,7 @@ fi
 
 
 # Clear march/mtune=native -- they bring impurity.
-if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
+if [ "$wrapper_NIX_ENFORCE_NO_NATIVE" = 1 ]; then
     rest=()
     # Old bash empty array hack
     for p in ${params+"${params[@]}"}; do
@@ -127,30 +82,31 @@ if [ "$NIX_ENFORCE_NO_NATIVE_@suffixSalt@" = 1 ]; then
     params=(${rest+"${rest[@]}"})
 fi
 
-case "$(basename $0)x" in
-    "gnatbindx")
+gnatCommand=${0##*/}
+case "${gnatCommand#@targetPrefix@}" in
+    gnatbind)
         extraBefore=()
-        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+        extraAfter=($wrapper_NIX_GNATFLAGS_COMPILE)
         ;;
-    "gnatchopx")
-        extraBefore=("--GCC=@out@/bin/gcc")
+    gnatchop)
+        extraBefore=("--GCC=@out@/nix-support/bin/gcc")
         extraAfter=()
         ;;
-    "gnatcleanx")
-        extraBefore=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+    gnatclean)
+        extraBefore=($wrapper_NIX_GNATFLAGS_COMPILE)
         extraAfter=()
         ;;
-    "gnatlinkx")
-        extraBefore=()
-        extraAfter=("--GCC=@out@/bin/gcc")
+    gnatlink)
+        extraBefore=("--GCC=@out@/nix-support/bin/gcc")
+        extraAfter=()
         ;;
-    "gnatlsx")
+    gnatls)
         extraBefore=()
-        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@)
+        extraAfter=($wrapper_NIX_GNATFLAGS_COMPILE)
         ;;
-    "gnatmakex")
-        extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink")
-        extraAfter=($NIX_GNATFLAGS_COMPILE_@suffixSalt@ -cargs $NIX_GNATMAKE_CARGS_@suffixSalt@)
+    gnatmake)
+        extraBefore=("--GCC=@out@/nix-support/bin/gcc" "--GNATBIND=@out@/nix-support/bin/gnatbind" "--GNATLINK=@out@/nix-support/bin/gnatlink")
+        extraAfter=($wrapper_NIX_GNATFLAGS_COMPILE -cargs $wrapper_NIX_GNATMAKE_CARGS)
         ;;
 esac
 
@@ -176,7 +132,7 @@ fi
 
 export PATH="$path_backup"
 # Old bash workaround, see above.
-exec @prog@ \
+wrapperRun toolchain @prog@ \
     ${extraBefore+"${extraBefore[@]}"} \
     ${params+"${params[@]}"} \
     ${extraAfter+"${extraAfter[@]}"}

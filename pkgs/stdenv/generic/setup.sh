@@ -1409,6 +1409,27 @@ patchPhase() {
 }
 
 
+fixLibtoolFinish() {
+    # Libtool installs library symlinks itself. Skip its extra ldconfig or
+    # global-library registration commands, preserving .la sysroot cleanup.
+    if grep -Fq 'if test -n "$finish_cmds$finish_eval"' "$1"; then
+        local directory mode= status=0
+        directory=$(dirname -- "$1")
+        # Out-of-source builds may seal the sources before configuring. Keep
+        # sed -i's symlink replacement semantics and restore directory permissions.
+        if [[ ! -w "$directory" ]]; then
+            mode=$(stat -L -c '%a' "$directory") || return
+            chmod u+w "$directory" || return
+        fi
+        sed -i "$1" -e 's^if test -n "$finish_cmds$finish_eval"^if false^' || status=$?
+        if [[ -n "${mode:-}" ]]; then
+            chmod "$mode" "$directory" || return
+        fi
+        return "$status"
+    fi
+}
+
+
 fixLibtool() {
     local search_path
     for flag in $NIX_LDFLAGS; do
@@ -1422,10 +1443,12 @@ fixLibtool() {
     sed -i "$1" \
         -e "s^eval \(sys_lib_search_path=\).*^\1'${search_path:-}'^" \
         -e 's^eval sys_lib_.+search_path=.*^^'
+    fixLibtoolFinish "$1"
 }
 
 
 configurePhase() {
+    local configureSourceRoot=$PWD
     runHook preConfigure
 
     # set to empty if unset
@@ -1441,6 +1464,19 @@ configurePhase() {
         find . -iname "ltmain.sh" -print0 | while IFS='' read -r -d '' i; do
             echo "fixing libtool script $i"
             fixLibtool "$i"
+        done
+
+        # Earlier phases may enter a subdirectory whose Libtool auxiliary files
+        # are in its parent. Cover the build tree, plus the original directory
+        # for interactive sources outside NIX_BUILD_TOP. Keep search-path fixes
+        # scoped to the current directory as before.
+        local libtoolSourceRoot
+        for libtoolSourceRoot in "${NIX_BUILD_TOP:-}" "$configureSourceRoot"; do
+            if [[ -d "$libtoolSourceRoot" && ! "$libtoolSourceRoot" -ef . ]]; then
+                find "$libtoolSourceRoot"/. -iname "ltmain.sh" -print0 | while IFS='' read -r -d '' i; do
+                    fixLibtoolFinish "$i"
+                done
+            fi
         done
 
         # replace `/usr/bin/file` with `file` in any `configure`

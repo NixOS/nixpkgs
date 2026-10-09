@@ -126,6 +126,9 @@ let
   ccName = removePrefix targetPrefix (getName cc);
 
   libc_bin = optionalString (libc != null) (getBin libc);
+  # libc's tools run on TARGET, while this wrapper runs on HOST. Keep the
+  # unfiltered libc_bin metadata for consumers that install TARGET paths.
+  libc_bin_for_host = optionalString (hostPlatform.canExecute targetPlatform) libc_bin;
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
   cc_solib =
@@ -147,14 +150,14 @@ let
     replaceStrings [ "-" "." ] [ "_" "_" ] targetPlatform.config
     + lib.optionalString (targetPlatform.isDarwin && targetPlatform.isStatic) "_static";
 
-  useGccForLibs =
-    useCcForLibs
-    && libcxx == null
-    && !targetPlatform.isDarwin
-    && !(targetPlatform.useLLVM or false)
-    && !(targetPlatform.useAndroidPrebuilt or false)
-    && !(targetPlatform.isiOS or false)
-    && gccForLibs != null;
+  useGccForLibs = import ./use-gcc-for-libs.nix {
+    inherit
+      useCcForLibs
+      libcxx
+      gccForLibs
+      targetPlatform
+      ;
+  };
   gccForLibs_solib =
     getLib gccForLibs + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
@@ -415,8 +418,78 @@ let
   # TODO: Drop `mangle-NIX_STORE-in-__FILE__.patch` from GCC and make
   # this unconditional once the upstream bug is fixed.
   useMacroPrefixMap = !isGNU && !isFlang;
+  nativeIncludeMode = cc.nativeDefaultIncludeBinding or null;
+  nativeGccIncludes =
+    isGNU
+    && targetPlatform.isLinux
+    && !targetPlatform.isAndroid
+    && nativeIncludeMode != null
+    && (libcxx == null || (libcxx.isGNU or false));
+  nativeClangIncludes =
+    isClang
+    && targetPlatform.isLinux
+    && !targetPlatform.isAndroid
+    && nativeIncludeMode == "driver"
+    && (libcxx == null || (libcxx.isGNU or false) || (libcxx.isLLVM or false));
+  # The provider selection is shared; each compiler interprets it at its own
+  # native default-header lookup boundary.
+  bundledCxx =
+    if nativeGccIncludes && nativeIncludeMode == "bundled" then
+      # GNU's newer runtimes retain the older header ABI, but older runtimes
+      # cannot supply symbols introduced by newer headers. Keep headers within
+      # both the frontend's release and the selected runtime's release.
+      if useGccForLibs && lib.versionOlder gccForLibs.version cc.version then gccForLibs else cc
+    else if nativeClangIncludes && useGccForLibs then
+      gccForLibs
+    else
+      null;
+  selectedCxxPaths =
+    if libcxx != null && (libcxx.isLLVM or false) then
+      [ "${getDev libcxx}/include/c++/v1" ]
+    else if libcxx != null && (libcxx.isGNU or false) then
+      [
+        "${getDev libcxx}/include-cxx"
+        "${getDev libcxx}/include-cxx/backward"
+      ]
+    else
+      # Language-specific GCC outputs can still expose g++ and its headers.
+      optionals (bundledCxx != null) [
+        "${bundledCxx}/include/c++/${bundledCxx.version}"
+        "${bundledCxx}/include/c++/${bundledCxx.version}/${targetPlatform.config}"
+        "${bundledCxx}/include/c++/${bundledCxx.version}/backward"
+      ];
+  selectedIncludeProviders =
+    map (path: {
+      kind = if libcxx != null && (libcxx.isLLVM or false) then 2 else 1;
+      inherit path;
+    }) selectedCxxPaths
+    ++ optionals (libc != null) [
+      {
+        kind = 0;
+        path = "${libc_dev}${libc.incdir or "/include"}";
+      }
+    ];
+  gccDefaultIncludes = map (
+    provider: "${toString provider.kind}\t${provider.path}"
+  ) selectedIncludeProviders;
+  hasUnsupportedGnuSuffix = hasPrefix "gnuabielfv" targetPlatform.parsed.abi.name;
+  clangCompatibleConfig =
+    if hasUnsupportedGnuSuffix then
+      removeSuffix (removePrefix "gnu" targetPlatform.parsed.abi.name) targetPlatform.config
+    else
+      targetPlatform.config;
+  explicitAbiValue = if hasUnsupportedGnuSuffix then targetPlatform.parsed.abi.abi else "";
+  clangDefaultIncludes = map (
+    provider: "${toString provider.kind}\t${clangCompatibleConfig}\t${provider.path}"
+  ) selectedIncludeProviders;
   systemIncludeFlag = if isFlang || isArocc then "-I" else "-idirafter";
-  fortifyIncludeFlag = if isFlang then "-I" else "-isystem";
+  fortifyIncludeFlag =
+    if isFlang then
+      "-I"
+    else if nativeGccIncludes || nativeClangIncludes then
+      "-idefaultsystem"
+    else
+      "-isystem";
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -440,6 +513,12 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     inherit targetPrefix suffixSalt;
+    # Relative support-file names for native Driver and explicit-path importers.
+    importerFlags = {
+      libc = "libc-cflags${optionalString (nativeClangIncludes || nativeGccIncludes) "-importer"}";
+      cxx = "libcxx-cxxflags${optionalString (nativeClangIncludes || nativeGccIncludes) "-importer"}";
+      driver = if nativeClangIncludes || nativeGccIncludes then "cc-importer.cfg" else null;
+    };
     # "cc" is the generic name for a C compiler, but there is no one for package
     # providing the linker and related tools. The two we use now are GNU
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
@@ -449,6 +528,9 @@ stdenvNoCC.mkDerivation {
       cc
       libc
       libcxx
+      gccForLibs
+      useCcForLibs
+      useGccForLibs
       nativeTools
       nativeLibc
       nativePrefix
@@ -511,21 +593,34 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin $out/nix-support
 
+    substituteAll ${./add-env-hooks.sh} "$out/nix-support/add-env-hooks.sh"
+
     wrap() {
       local dst="$1"
       local wrapper="$2"
       export prog="$3"
+      export wrapperMode=fresh
       export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
       substituteAll "$wrapper" "$out/bin/$dst"
       chmod +x "$out/bin/$dst"
+      ${optionalString
+        ((cc.nativePrimaryQuery or null) == "fd-v3" && (!nativeTools || targetPlatform.isDarwin))
+        ''
+          if [[ "$wrapper" == "${./cc-wrapper.sh}" ]]; then
+            printf '%s\n' "$prog" >> "$out/nix-support/native-primary-programs"
+          fi
+        ''
+      }
+    }
+
+    macroPrefixMap() {
+      local scrubbed="$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-''${1#"$NIX_STORE"/*-}"
+      printf -- '-fmacro-prefix-map=%s=%s\n' "$1" "$scrubbed"
     }
 
     include() {
       printf -- '%s %s\n' "$1" "$2"
-      ${lib.optionalString useMacroPrefixMap ''
-        local scrubbed="$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-''${2#"$NIX_STORE"/*-}"
-        printf -- '-fmacro-prefix-map=%s=%s\n' "$2" "$scrubbed"
-      ''}
+      ${lib.optionalString useMacroPrefixMap ''macroPrefixMap "$2"''}
     }
   ''
 
@@ -592,9 +687,21 @@ stdenvNoCC.mkDerivation {
 
   # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
   + optionalString cc.langAda or false ''
+    mkdir -p $out/nix-support/bin
+    export targetPrefix=${targetPrefix}
     for cmd in gnatbind gnatchop gnatclean gnatlink gnatls gnatmake; do
       wrap ${targetPrefix}$cmd ${./gnat-wrapper.sh} $ccPath/${targetPrefix}$cmd
+      export wrapperMode=prepared
+      substituteAll ${./gnat-wrapper.sh} $out/nix-support/bin/$cmd
+      chmod +x $out/nix-support/bin/$cmd
     done
+
+    # GNAT's compiler option accepts one executable, while the shared prepared
+    # compiler entry also takes the selected raw compiler as its first argument.
+    printf '#! %s\nexec %q %q "$@"\n' "$shell" \
+      "$out/nix-support/compiler" "$ccPath/${targetPrefix}gcc${exeSuffix}" \
+      > $out/nix-support/bin/gcc
+    chmod +x $out/nix-support/bin/gcc
 
     for cmd in gnat gnatkr gnatname gnatprep; do
       ln -s $ccPath/${targetPrefix}$cmd $out/bin/${targetPrefix}$cmd
@@ -669,6 +776,55 @@ stdenvNoCC.mkDerivation {
       touch "$out/nix-support/cc-cflags"
       touch "$out/nix-support/cc-ldflags"
     ''
+    + optionalString nativeGccIncludes ''
+      printf '%s' ${escapeShellArg (concatStringsSep "\n" gccDefaultIncludes)} > "$out/nix-support/gcc-default-includes"
+      echo "-fdefault-include-map=$out/nix-support/gcc-default-includes" >> "$out/nix-support/cc-cflags-before"
+    ''
+    + optionalString nativeClangIncludes ''
+      echo "-fdefault-include-map=$out/nix-support/clang-default-includes" >> "$out/nix-support/cc-cflags-before"
+      ${concatStringsSep "\n" (
+        map (
+          provider:
+          ''macroPrefixMap "${provider.path}" >> "$out/nix-support/${
+            if provider.kind == 0 then "libc-cflags" else "libcxx-cxxflags"
+          }"''
+        ) selectedIncludeProviders
+      )}
+    ''
+
+    # Path-only importers consume explicit provider projections. Driver-based
+    # importers use the native config below. Compiler files stay mutable.
+    + optionalString (nativeClangIncludes || nativeGccIncludes) ''
+      touch "$out/nix-support/libc-cflags-importer" "$out/nix-support/libcxx-cxxflags-importer"
+      ${optionalString (libc != null) ''
+        include "${systemIncludeFlag}" "${libc_dev}${libc.incdir or "/include"}" >> "$out/nix-support/libc-cflags-importer"
+        ${optionalString includeFortifyHeaders' ''
+          include -isystem "${fortify-headers}/include" >> "$out/nix-support/libc-cflags-importer"
+        ''}
+      ''}
+      ${concatMapStrings (path: ''
+        include -cxx-isystem "${path}" >> "$out/nix-support/libcxx-cxxflags-importer"
+      '') selectedCxxPaths}
+    ''
+
+    # Driver importers retain native language, suppression and stdlib selection.
+    # Clang config defaults precede explicit arguments even when --config is last.
+    + optionalString (nativeClangIncludes || nativeGccIncludes) ''
+      printf '%s' ${escapeShellArg (concatStringsSep "\n" clangDefaultIncludes)} > "$out/nix-support/clang-default-includes"
+      echo "-fdefault-include-map=$out/nix-support/clang-default-includes" > "$out/nix-support/cc-importer.cfg"
+      ${optionalString (selectedCxxPaths != [ ]) ''
+        echo "--start-no-unused-arguments -stdlib=${
+          if libcxx.isLLVM or false then "libc++" else "libstdc++"
+        } --end-no-unused-arguments" >> "$out/nix-support/cc-importer.cfg"
+      ''}
+      ${optionalString includeFortifyHeaders' ''
+        printf -- '-idefaultsystem %s\n' "${fortify-headers}/include" >> "$out/nix-support/cc-importer.cfg"
+        macroPrefixMap "${fortify-headers}/include" >> "$out/nix-support/cc-importer.cfg"
+      ''}
+      ${concatMapStrings (provider: ''
+        macroPrefixMap "${provider.path}" >> "$out/nix-support/cc-importer.cfg"
+      '') selectedIncludeProviders}
+    ''
 
     # Backwards compatibility for packages expecting this file, e.g. with
     # `$NIX_CC/nix-support/dynamic-linker`.
@@ -720,7 +876,7 @@ stdenvNoCC.mkDerivation {
             # 'cc.lib'. But it's a gcc package bug.
             # TODO(trofi): remove once gcc is fixed to move libraries to .lib output.
             echo "-L${gccForLibs}/${
-              optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}"
+              optionalString ((gccForLibs.targetConfig or null) != null) "/${gccForLibs.targetConfig}"
             }/lib" >> $out/nix-support/cc-ldflags
           ''
           # this ensures that when clang passes -lgcc_s to lld (as it does
@@ -756,9 +912,11 @@ stdenvNoCC.mkDerivation {
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
       + ''
-        include "${systemIncludeFlag}" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+        ${optionalString (!nativeGccIncludes && !nativeClangIncludes) ''
+          include "${systemIncludeFlag}" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+        ''}
       ''
-      + optionalString isGNU ''
+      + optionalString (isGNU && !nativeGccIncludes) ''
         for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
           include '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
         done
@@ -802,17 +960,27 @@ stdenvNoCC.mkDerivation {
     # already knows how to find its own libstdc++, and adding
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
-    + optionalString (libcxx == null && isClang && useGccForLibs && (cc.langCC or false)) ''
-      for dir in ${gccForLibs}/include/c++/*; do
-        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
-      done
-      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
-        include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
-      done
-    ''
+    +
+      optionalString
+        (libcxx == null && isClang && useGccForLibs && (cc.langCC or false) && !nativeClangIncludes)
+        ''
+          for dir in ${gccForLibs}/include/c++/*; do
+            include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+          done
+          for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
+            include -cxx-isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+          done
+        ''
+    # Native Clang selects the library per job. Put its default before caller
+    # arguments, and suppress unused diagnostics only for this default in C jobs.
     + optionalString (libcxx.isLLVM or false) ''
-      include -cxx-isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
-      echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
+      ${optionalString (!nativeClangIncludes) ''
+        include -cxx-isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      ''}
+
+      echo "${optionalString nativeClangIncludes "--start-no-unused-arguments "}-stdlib=libc++${optionalString nativeClangIncludes " --end-no-unused-arguments"}" >> $out/nix-support/${
+        if nativeClangIncludes then "cc-cflags-before" else "libcxx-ldflags"
+      }
     ''
     # This is the GCC NG case, libstdc++ is being built as a separate package.
     #
@@ -821,9 +989,12 @@ stdenvNoCC.mkDerivation {
     # include path -- and libstdc++ ships headers named after C headers
     # (`math.h`, `stdlib.h`, `stdckdint.h`, ...) that are only meant to shadow
     # the C ones in C++. A sibling directory the setup hook ignores is enough.
-    + optionalString (libcxx != null && libcxx.isGNU or false) ''
-      include -isystem "${getDev libcxx}/include-cxx" >> $out/nix-support/libcxx-cxxflags
-    ''
+    +
+      optionalString
+        (libcxx != null && (libcxx.isGNU or false) && !nativeGccIncludes && !nativeClangIncludes)
+        ''
+          include -isystem "${getDev libcxx}/include-cxx" >> $out/nix-support/libcxx-cxxflags
+        ''
 
     ##
     ## Initial CFLAGS
@@ -858,7 +1029,8 @@ stdenvNoCC.mkDerivation {
       echo "''${ccLDFlags[*]}" >> $out/nix-support/cc-ldflags
       echo "''${ccCFlags[*]}" >> $out/nix-support/cc-cflags
     ''
-    + optionalString (targetPlatform.isDarwin && (libcxx != null) && (cc.isClang or false)) ''
+    # Standalone invocations do not get this runtime's library path from stdenv.
+    + optionalString ((libcxx != null) && (cc.isClang or false)) ''
       echo "-L${libcxx_solib}" >> $out/nix-support/cc-ldflags
     ''
 
@@ -882,7 +1054,9 @@ stdenvNoCC.mkDerivation {
           && !targetPlatform.isAndroid
         )
         ''
-          echo "-nostdlibinc" >> $out/nix-support/cc-cflags
+          ${optionalString (!nativeClangIncludes) ''
+            echo "-nostdlibinc" >> $out/nix-support/cc-cflags
+          ''}
         ''
 
     ##
@@ -981,10 +1155,16 @@ stdenvNoCC.mkDerivation {
         substituteInPlace "$flags" --replace-quiet $'\n' ' '
       done
 
+      substituteAll ${./primary-query.sh} $out/nix-support/primary-query.sh
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
       substituteAll ${../wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
+      (
+        export wrapperMode=prepared prog=unused
+        substituteAll ${./cc-wrapper.sh} $out/nix-support/compiler
+        chmod +x $out/nix-support/compiler
+      )
     ''
 
     + optionalString cc.langAda or false ''
@@ -995,24 +1175,19 @@ stdenvNoCC.mkDerivation {
     ## General Clang support
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
     ##
-    + optionalString isClang (
-      let
-        hasUnsupportedGnuSuffix = hasPrefix "gnuabielfv" targetPlatform.parsed.abi.name;
-        clangCompatibleConfig =
-          if hasUnsupportedGnuSuffix then
-            removeSuffix (removePrefix "gnu" targetPlatform.parsed.abi.name) targetPlatform.config
-          else
-            targetPlatform.config;
-        explicitAbiValue = if hasUnsupportedGnuSuffix then targetPlatform.parsed.abi.abi else "";
-      in
-      ''
-        # Escape twice: once for this script, once for the one it gets substituted into.
-        export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
-        export defaultTarget=${clangCompatibleConfig}
-        export explicitAbiValue=${explicitAbiValue}
-        substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
-      ''
-    )
+    + optionalString isClang ''
+      # Escape twice: once for this script, once for the one it gets substituted into.
+      export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
+      export defaultTarget=${clangCompatibleConfig}
+      export explicitAbiValue=${explicitAbiValue}
+      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+      printf '%s\n' ${escapeShellArg clangCompatibleConfig} > "$out/nix-support/native-target"
+      : > "$out/nix-support/native-machine-flags"
+      ${optionalString (machineFlags != [ ] || explicitAbiValue != "") ''
+        printf '%s\0' ${escapeShellArgs (machineFlags ++ optional (explicitAbiValue != "") "-mabi=${explicitAbiValue}")} > "$out/nix-support/native-machine-flags"
+      ''}
+
+    ''
 
     ##
     ## Extra custom steps
@@ -1034,6 +1209,7 @@ stdenvNoCC.mkDerivation {
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    cat = if nativeTools then "cat" else lib.getExe' coreutils "cat";
     rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
     mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
     # stdenv.cc.cc should not be null and we have nothing better for now.
@@ -1041,7 +1217,12 @@ stdenvNoCC.mkDerivation {
     cc = optionalString (!nativeTools) cc;
     wrapperName = "CC_WRAPPER";
     inherit suffixSalt coreutils_bin bintools;
-    inherit libc_bin libc_dev libc_lib;
+    inherit
+      libc_bin
+      libc_bin_for_host
+      libc_dev
+      libc_lib
+      ;
     inherit darwinPlatformForCC;
     default_hardening_flags_str = toString defaultHardeningFlags;
     inherit useMacroPrefixMap;

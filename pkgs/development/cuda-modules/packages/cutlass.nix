@@ -2,6 +2,7 @@
   _cuda,
   addDriverRunpath,
   backendStdenv,
+  callPackage,
   cmake,
   cuda_cudart,
   cuda_nvcc,
@@ -37,7 +38,6 @@ let
     ;
   inherit (lib.trivial) flip;
 in
-# TODO: Tests.
 assert assertMsg (!enableTools) "enableTools is not yet implemented";
 backendStdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
@@ -135,10 +135,14 @@ backendStdenv.mkDerivation (finalAttrs: {
           ""
     '';
 
+  patches = [ ./cutlass-cuda-dependency.patch ];
+
   enableParallelBuilding = true;
 
+  # Public CUTLASS headers include CUDA runtime and CCCL headers.
+  propagatedBuildInputs = [ cuda_cudart ];
+
   buildInputs = [
-    cuda_cudart
     cuda_nvrtc
     libcurand
   ]
@@ -200,6 +204,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
+    tests.cmake = callPackage ./tests/cutlass-cmake.nix { cutlass = finalAttrs.finalPackage; };
     updateScript = gitUpdater {
       inherit (finalAttrs) pname version;
       rev-prefix = "v";

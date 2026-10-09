@@ -1,0 +1,19 @@
+From 0c6d22159359283d2294a48d0831b3339598b2e3 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:30:04 -0700
+Subject: [PATCH] [LLVM] Initialize the SFrame iterator cache
+
+Value-initialize the cached frame row before iterator copies can read it.
+---
+ include/llvm/Object/SFrameParser.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/llvm/Object/SFrameParser.h b/include/llvm/Object/SFrameParser.h
+index 2329835..a96885a 100644
+--- a/include/llvm/Object/SFrameParser.h
++++ b/include/llvm/Object/SFrameParser.h
+@@ -110,3 +110,3 @@ private:
+   uint64_t Offset;
+-  FrameRowEntry FRE;
++  FrameRowEntry FRE{};
+ };

@@ -48,11 +48,11 @@ done
 
 if [ "$extendcpath" = true ]; then
   export C_INCLUDE_PATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
-                                                          $(<@clang@/nix-support/libc-cflags))
+                                                          $(<@libcFlags@))
 
   export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(buildcpluspath ${NIX_CFLAGS_COMPILE} \
-                                                                                            $(<@clang@/nix-support/libcxx-cxxflags) \
-                                                                                            $(<@clang@/nix-support/libc-cflags))
+                                                                                            $(<@cxxFlags@) \
+                                                                                            $(<@libcFlags@))
 fi
 
 @out@/bin/$(basename $0)-unwrapped "$@"

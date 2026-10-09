@@ -24,6 +24,12 @@
   # for tests
   libclang,
 }:
+let
+  hasNativeDefaultIncludes =
+    lib.versionAtLeast release_version "19" && lib.versionOlder release_version "24";
+  # The frame uses POSIX descriptors on the compiler's execution platform.
+  hasNativeFrame = hasNativeDefaultIncludes && stdenv.hostPlatform.isUnix;
+in
 stdenv.mkDerivation (
   finalAttrs:
   {
@@ -70,6 +76,22 @@ stdenv.mkDerivation (
       # https://reviews.llvm.org/D51899
       (getVersionFile "clang/gnu-install-dirs.patch")
     ]
+    ++ lib.optionals hasNativeDefaultIncludes [
+      (
+        if lib.versionOlder release_version "22" then
+          ./native-default-options-legacy.patch
+        else
+          ./native-default-options.patch
+      )
+      ./native-default-includes.patch
+    ]
+    ++ lib.optional hasNativeFrame ./native-primary-query.patch
+    ++ lib.optional (
+      hasNativeFrame && lib.versionOlder release_version "21"
+    ) ./native-primary-query-legacy-api.patch
+    ++ lib.optional (
+      hasNativeFrame && lib.versions.major release_version == "19"
+    ) ./native-primary-query-19-api.patch
     ++ lib.optionals (lib.versionOlder release_version "20") [
       # https://github.com/llvm/llvm-project/pull/116476
       # prevent clang ignoring warnings / errors for unsuppored
@@ -216,6 +238,8 @@ stdenv.mkDerivation (
       isClang = true;
       langC = true;
       langCC = true;
+      nativePrimaryQuery = if hasNativeFrame then "fd-v3" else null;
+      nativeDefaultIncludeBinding = if hasNativeDefaultIncludes then "driver" else null;
       hardeningUnsupportedFlagsByTargetPlatform =
         targetPlatform:
         [ "fortify3" ]

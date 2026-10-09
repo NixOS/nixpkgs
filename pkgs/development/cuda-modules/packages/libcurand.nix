@@ -1,16 +1,11 @@
-{ buildRedist }:
-buildRedist {
-  redistName = "cuda";
+args@{
+  buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
+  lib,
+}:
+(import ../library.nix args) {
   pname = "libcurand";
-
-  outputs = [
-    "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
-  ];
 
   meta = {
     description = "Helper module for the cuBLASMp library that allows it to efficiently perform communications between different GPUs";

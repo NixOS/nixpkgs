@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
   ];
 
   clang = llvmPackages.clang;
+  libcFlags = "${clang}/nix-support/${clang.importerFlags.libc or "libc-cflags"}";
+  cxxFlags = "${clang}/nix-support/${clang.importerFlags.cxx or "libcxx-cxxflags"}";
 
   cmakeFlags = [ "-DCMAKE_PREFIX_PATH=${llvmPackages.llvm.dev}" ];
 

@@ -98,6 +98,9 @@ let
   bintoolsName = removePrefix targetPrefix (getName bintools);
 
   libc_bin = optionalString (libc != null) (getBin libc);
+  # Preserve TARGET's libc metadata while exposing only tools executable by
+  # the wrapper's HOST in build and user environments.
+  libc_bin_for_host = optionalString (hostPlatform.canExecute targetPlatform) libc_bin;
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
   bintools_bin = optionalString (!nativeTools) (getBin bintools);
@@ -210,10 +213,13 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin $out/nix-support
 
+    cp ${./add-env-hooks.sh} "$out/nix-support/add-env-hooks.sh"
+
     wrap() {
       local dst="$1"
       local wrapper="$2"
       export prog="$3"
+      export wrapperMode=fresh
       export use_response_file_by_default=${if isCCTools then "1" else "0"}
       substituteAll "$wrapper" "$out/bin/$dst"
       chmod +x "$out/bin/$dst"
@@ -265,6 +271,7 @@ stdenvNoCC.mkDerivation {
 
     if [ -e ''${ld:-$ldPath/${targetPrefix}ld}${exeSuffix} ]; then
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}${exeSuffix}
+      printf '%s\n' "''${ld:-$ldPath/${targetPrefix}ld}${exeSuffix}" > $out/nix-support/orig-ld
     fi
 
     for variant in $ldPath/${targetPrefix}ld.*${exeSuffix}; do
@@ -345,9 +352,7 @@ stdenvNoCC.mkDerivation {
     # install the wrapper, you get tools like objdump (same for any
     # binaries of libc).
     + optionalString (!nativeTools) ''
-      printWords ${bintools_bin} ${
-        optionalString (libc != null) libc_bin
-      } > $out/nix-support/propagated-user-env-packages
+      printWords ${bintools_bin} ${libc_bin_for_host} > $out/nix-support/propagated-user-env-packages
     ''
 
     ##
@@ -419,6 +424,11 @@ stdenvNoCC.mkDerivation {
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
       substituteAll ${../wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
+      (
+        export wrapperMode=prepared prog=unused
+        substituteAll ${./ld-wrapper.sh} $out/nix-support/linker
+        chmod +x $out/nix-support/linker
+      )
     ''
 
     ###
@@ -464,6 +474,7 @@ stdenvNoCC.mkDerivation {
     inherit
       bintools_bin
       libc_bin
+      libc_bin_for_host
       libc_dev
       libc_lib
       ;

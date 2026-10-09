@@ -1,6 +1,7 @@
 {
   autoAddDriverRunpath,
   backendStdenv,
+  cudaConfig,
   _cuda,
   cmake,
   cccl,
@@ -68,13 +69,13 @@ backendStdenv.mkDerivation (finalAttrs: {
         "$NIX_BUILD_TOP/$sourceRoot/Samples/0_Introduction/matrixMul_nvrtc/CMakeLists.txt" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/cooperative_groups" \
-          "${lib.getOutput "include" cuda_cudart}/include/cooperative_groups" \
+          "${lib.getOutput cuda_cudart.outputInclude cuda_cudart}/include/cooperative_groups" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/nv" \
-          "${lib.getOutput "include" cccl}/include/nv" \
+          "${lib.getOutput cccl.outputInclude cccl}/include/nv" \
         --replace-fail \
           "\''${CUDAToolkit_BIN_DIR}/../include/cuda" \
-          "${lib.getOutput "include" cccl}/include/cuda"
+          "${lib.getOutput cccl.outputInclude cccl}/include/cuda"
     ''
     + lib.optionalString (samplesAtLeast "13") ''
       nixLog "patching sample 0_Introduction/matrixMul_nvrtc"
@@ -82,13 +83,13 @@ backendStdenv.mkDerivation (finalAttrs: {
         "$NIX_BUILD_TOP/$sourceRoot/Samples/0_Introduction/matrixMul_nvrtc/CMakeLists.txt" \
         --replace-fail \
           "\''${CUDA_INCLUDE_DIR}/cooperative_groups" \
-          "${lib.getOutput "include" cuda_cudart}/include/cooperative_groups" \
+          "${lib.getOutput cuda_cudart.outputInclude cuda_cudart}/include/cooperative_groups" \
         --replace-fail \
           "\''${CUDA_INCLUDE_DIR}/cccl/nv" \
-          "${lib.getOutput "include" cccl}/include/nv" \
+          "${lib.getOutput cccl.outputInclude cccl}/include/nv" \
         --replace-fail \
           "\''${CUDA_INCLUDE_DIR}/cccl/cuda" \
-          "${lib.getOutput "include" cccl}/include/cuda"
+          "${lib.getOutput cccl.outputInclude cccl}/include/cuda"
     ''
     # These three samples give undefined references, like
     # nvlink error   : Undefined reference to '__cudaCDP2Free' in 'CMakeFiles/cdpBezierTessellation.dir/BezierLineCDP.cu.o'
@@ -203,7 +204,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString)
-    (lib.cmakeBool "BUILD_TEGRA" backendStdenv.hasJetsonCudaCapability)
+    (lib.cmakeBool "BUILD_TEGRA" cudaConfig.hasJetsonCudaCapability)
   ];
 
   # TODO(@connorbaker):
