@@ -15410,6 +15410,8 @@ self: super: with self; {
 
   pyliebherrhomeapi = callPackage ../development/python-modules/pyliebherrhomeapi { };
 
+  pylightning = callPackage ../development/python-modules/pylightning { };
+
   pylink-square = callPackage ../development/python-modules/pylink-square { };
 
   pylint = callPackage ../development/python-modules/pylint { };
@@ -15431,6 +15433,12 @@ self: super: with self; {
   pylitejet = callPackage ../development/python-modules/pylitejet { };
 
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };
+
+  pyln-bolt7 = callPackage ../development/python-modules/pyln-bolt7 { };
+
+  pyln-client = callPackage ../development/python-modules/pyln-client { };
+
+  pyln-proto = callPackage ../development/python-modules/pyln-proto { };
 
   pylnk3 = callPackage ../development/python-modules/pylnk3 { };
 

@@ -2595,6 +2595,8 @@ mapAliases {
   thrust = throw "'thrust' has been removed due to lack of maintenance"; # Added 2025-08-21
   thunderbird-128 = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30
   thunderbird-128-unwrapped = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30
+  thunderbird-140 = throw "Thunderbird 140 has been removed. Use thunderbird-esr instead."; # Added 2026-10-08
+  thunderbird-140-unwrapped = throw "Thunderbird 140 has been removed. Use thunderbird-esr-unwrapped instead."; # Added 2026-10-08
   tibia = throw "'tibia' has been removed from nixpkgs due to being broken and unmaintained"; # Added 2026-05-16
   ticpp = throw "'ticpp' has been removed due to being unmaintained"; # Added 2025-09-10
   tidb = throw "TiDB has been removed because of hard dependency on TiKV which is challenging to package"; # Added 2026-05-03
