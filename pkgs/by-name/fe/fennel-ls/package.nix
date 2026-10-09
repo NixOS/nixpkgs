@@ -2,14 +2,9 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  lua5_5,
+  fennel,
   pandoc,
 }:
-
-let
-  lua = lua5_5;
-  luaPackages = lua.pkgs;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fennel-ls";
   version = "0.2.4";
@@ -21,8 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-RIkwL/nF0LwQZOXlUidyQVfRWuFBO5TobNTZrUFuJ64=";
   };
   buildInputs = [
-    lua
-    luaPackages.fennel
+    fennel
   ];
   nativeBuildInputs = [ pandoc ];
   makeFlags = [ "PREFIX=$(out)" ];
@@ -37,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       luftmensch-luftmensch
       yisraeldov
     ];
-    inherit (lua.meta) platforms;
+    inherit (fennel.meta) platforms;
     mainProgram = "fennel-ls";
   };
 })
