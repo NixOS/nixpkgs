@@ -28,7 +28,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/m1stadev/pylzss/releases/tag/${src.tag}";
     description = "Python library for decoding/encoding LZSS-compressed data";
     homepage = "https://github.com/m1stadev/pylzss";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ lib.maintainers.dotlambda ];
   };
 }
