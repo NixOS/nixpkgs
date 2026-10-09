@@ -2,6 +2,7 @@
   appstream,
   callaudiod,
   dbus,
+  dconf,
   docutils,
   evince,
   evolution-data-server,
@@ -32,6 +33,7 @@
   nixosTests,
   pam,
   phoc,
+  pipewire,
   pkg-config,
   polkit,
   pulseaudio,
@@ -55,8 +57,6 @@ let
     repo = "libcall-ui";
     tag = "v0.1.5";
     hash = "sha256-4lSTwSRZditK51N/4s3tmIOgffe5+WyKxVq2IGqWRn4=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
   };
 
   # Derived from subprojects/gvc.wrap
@@ -64,15 +64,13 @@ let
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgnome-volume-control";
-    rev = "d2442f455844e5292cb4a74ffc66ecc8d7595a9f";
-    hash = "sha256-10n441b7m/mvQRdrmEsxGxqjKUWzjGvnzJy256NZN5s=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    rev = "0a4eda0cdc2deb352bebc70ec697c42af46094e4";
+    hash = "sha256-4s9S6m/rcroR38FSnLeWKZhnym4KROfibgRCjpGMKpY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.54.0";
+  version = "0.59.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -80,9 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gByZRyUe17JY5imgtRdubJl1VH1JxlzmDQkHOtEIvj8=";
-    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
-    forceFetchGit = true;
+    hash = "sha256-Cxnldwp+BtT9i57Lfjvd83i2xsy69/UlQa4o5uYfRWg=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     appstream
     callaudiod
+    dconf
     evince
     evolution-data-server
     feedbackd
@@ -119,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     networkmanager
     pam
     phoc
+    pipewire
     polkit
     pulseaudio
     qrcodegen
