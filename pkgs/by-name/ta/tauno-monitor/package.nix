@@ -17,8 +17,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   version = "0.3.0";
   pyproject = false;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "taunoe";
     repo = "tauno-monitor";

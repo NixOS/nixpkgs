@@ -7,8 +7,6 @@
   python,
 }:
 buildPythonPackage (finalAttrs: {
-  __structuredAttrs = true;
-
   pname = "netbox-inventory";
   version = "2.6.1";
   pyproject = true;

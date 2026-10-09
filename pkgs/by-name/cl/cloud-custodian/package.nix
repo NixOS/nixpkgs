@@ -10,8 +10,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   version = "0.9.52.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "cloud-custodian";
     repo = "cloud-custodian";

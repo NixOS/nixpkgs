@@ -19,7 +19,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "picard";
   version = "3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "metabrainz";

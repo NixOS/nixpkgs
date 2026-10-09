@@ -11,7 +11,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "linecast";
   version = "2.9.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ashuttl";

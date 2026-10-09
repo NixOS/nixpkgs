@@ -21,8 +21,6 @@ python313Packages.buildPythonApplication (finalAttrs: {
   version = "6.28.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-wxV+/hzsk7RrzWTXNz5HyweYdFFI1upNS508QRPCefo=";

@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sbom-compliance-tool";
   version = "0.0.11";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "software-compliance-org";

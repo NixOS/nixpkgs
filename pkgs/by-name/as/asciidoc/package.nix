@@ -320,8 +320,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     runHook postCheck
   '';
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Text-based document generation system";
     longDescription = ''

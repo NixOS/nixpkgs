@@ -24,8 +24,6 @@ let
       pname = "fernet_key";
       inherit version src;
 
-      __structuredAttrs = true;
-
       format = "other";
 
       # this would run the upstream docker makefile

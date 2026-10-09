@@ -9,7 +9,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gradlew-fdroid";
   version = "0-unstable-2026-06-06";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";

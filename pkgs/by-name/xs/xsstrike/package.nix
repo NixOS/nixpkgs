@@ -19,8 +19,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     hash = "sha256-6U0e9JkYYIt+APZ6B4+kNO/hcC3BAfrn+QXbCnLqpbs=";
   };
 
-  __structuredAttrs = true;
-
   patches = [
     (fetchpatch2 {
       # https://github.com/s0md3v/XSStrike/pull/435

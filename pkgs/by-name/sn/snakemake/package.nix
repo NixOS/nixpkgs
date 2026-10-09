@@ -13,7 +13,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
   version = "9.23.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";

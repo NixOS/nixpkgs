@@ -314,8 +314,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     };
   };
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Ticketing software that cares about your event—all the way";
     homepage = "https://github.com/pretix/pretix";
