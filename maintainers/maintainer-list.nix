@@ -61,6 +61,11 @@
    file located in the root of the Nixpkgs repo.
 */
 {
+  amanomasato = {
+    name = "amanomasato";
+    github = "amanomasato";
+    githubId = 69809826;
+  };
   # keep-sorted start case=no numeric=no block=yes
 
   "3mp3ri0r" = {
