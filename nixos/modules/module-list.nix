@@ -1780,6 +1780,7 @@
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/linkding.nix
   ./services/web-apps/linkwarden.nix
+  ./services/web-apps/loops-server.nix
   ./services/web-apps/lubelogger.nix
   ./services/web-apps/mainsail.nix
   ./services/web-apps/mastodon.nix
