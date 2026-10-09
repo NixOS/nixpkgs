@@ -16,7 +16,6 @@
   gtksourceview5,
   imagemagick,
   lib,
-  libraw,
   librsvg,
   makeFontsConf,
   pkg-config,
@@ -30,7 +29,6 @@
   tzdata,
   util-linux,
   wrapGAppsHook4,
-  xdg-terminal-exec,
   xdg-utils,
   xvfb-run,
   enableRar ? false,
@@ -46,7 +44,6 @@ let
     (lib.getBin fontconfig)
     (lib.getBin glib)
     imagemagick
-    (lib.getBin libraw)
     squashfs-tools
     util-linux
     xdg-utils
@@ -193,7 +190,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath (runtimeTools ++ [ xdg-terminal-exec ])}
+      --prefix PATH : ${lib.makeBinPath runtimeTools}
       --prefix XDG_DATA_DIRS : ${shared-mime-info}/share
     )
   '';
@@ -206,18 +203,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 data/icons/scalable/apps/io.github.lgse.Strata.svg \
       "$out/share/icons/hicolor/scalable/apps/io.github.lgse.Strata.svg"
 
-    install -Dm644 data/io.github.lgse.Strata.FileManager1.service \
-      "$out/share/dbus-1/services/io.github.lgse.Strata.FileManager1.service"
-    substituteInPlace "$out/share/dbus-1/services/io.github.lgse.Strata.FileManager1.service" \
-      --replace-fail /usr/bin/strata "$out/bin/strata"
-
-    install -Dm644 data/portal/strata.portal \
-      "$out/share/xdg-desktop-portal/portals/strata.portal"
-    install -Dm644 data/portal/org.freedesktop.impl.portal.desktop.strata.service.in \
-      "$out/share/dbus-1/services/org.freedesktop.impl.portal.desktop.strata.service"
-    substituteInPlace "$out/share/dbus-1/services/org.freedesktop.impl.portal.desktop.strata.service" \
-      --replace-fail @STRATA_EXECUTABLE@ "$out/bin/strata"
-
     install -d "$out/share/strata"
     cat > "$out/share/strata/install-source.toml" <<'EOF'
     manager = "Nix"
@@ -227,25 +212,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -d "$out/share/licenses/strata"
     install -m644 LICENSE THIRD_PARTY_LICENSES.md data/licenses/*.txt \
       "$out/share/licenses/strata/"
-  '';
-
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    test -x "$out/bin/strata"
-    test -x "${lib.getBin libraw}/bin/simple_dcraw"
-    test -x "${lib.getBin libraw}/bin/raw-identify"
-    test -x "${lib.getBin xdg-terminal-exec}/bin/xdg-terminal-exec"
-    grep -Fx "Exec=$out/bin/strata --gapplication-service" \
-      "$out/share/dbus-1/services/io.github.lgse.Strata.FileManager1.service"
-    grep -Fx "Exec=$out/bin/strata --portal" \
-      "$out/share/dbus-1/services/org.freedesktop.impl.portal.desktop.strata.service"
-    cmp data/portal/strata.portal \
-      "$out/share/xdg-desktop-portal/portals/strata.portal"
-
-    runHook postInstallCheck
   '';
 
   meta = {
