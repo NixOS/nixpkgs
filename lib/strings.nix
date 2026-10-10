@@ -1249,6 +1249,10 @@ rec {
     :::
   */
   escapeShellArg =
+    let
+      alreadyEscaped = match "[[:alnum:],._+:@%/-]+";
+      escapeQuotes = replaceString "'" "'\\''";
+    in
     arg:
     let
       string =
@@ -1260,10 +1264,7 @@ rec {
         # dependency on the entire original source.
         if isPath arg && !isStorePath arg then "${arg}" else toString arg;
     in
-    if match "[[:alnum:],._+:@%/-]+" string == null then
-      "'${replaceString "'" "'\\''" string}'"
-    else
-      string;
+    if alreadyEscaped string == null then "'${escapeQuotes string}'" else string;
 
   /**
     Quote all arguments that have special characters to be safely passed to the
