@@ -133,14 +133,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/fluxer-app-proxy
-    cp -r fluxer_app/dist/* $out/share/fluxer-app-proxy
+    mkdir -p $out/share/fluxer_app_proxy
+    cp -r fluxer_app/dist/* $out/share/fluxer_app_proxy
 
-    mv $out/share/fluxer_app_proxy $out/share/fluxer_app_proxy-unwrapped
+    mv $out/bin/fluxer_app_proxy $out/bin/fluxer_app_proxy-unwrapped
     makeWrapper \
-      $out/share/fluxer_app_proxy-unwrapped \
-      $out/share/fluxer_app_proxy \
-      --set-default FLUXER_STATIC_DIR $out/share/fluxer-app-proxy
+      $out/bin/fluxer_app_proxy-unwrapped \
+      $out/bin/fluxer_app_proxy \
+      --set-default FLUXER_STATIC_DIR $out/share/fluxer_app_proxy
   '';
 
   meta = {
