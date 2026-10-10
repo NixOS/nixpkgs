@@ -122,6 +122,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  filemarks-nvim = buildVimPlugin {
+    pname = "filemarks.nvim";
+    version = "1.6.0";
+    src = fetchFromGitHub {
+      owner = "anoopkcn";
+      repo = "filemarks.nvim";
+      tag = "1.6.0";
+      hash = "sha256-qSHHsBb7MAceNV3QnZiTFN4d1i2zH8CItlzQWsYNjno=";
+    };
+    meta.homepage = "https://github.com/anoopkcn/filemarks.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   FTerm-nvim = buildVimPlugin {
     pname = "FTerm.nvim";
     version = "0-unstable-2022-11-13";
