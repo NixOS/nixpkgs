@@ -4,20 +4,22 @@
   fetchFromGitHub,
   lib,
   mashumaro,
+  pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-google-drive-api";
-  version = "0.1.0";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "python-google-drive-api";
     tag = "v${version}";
-    hash = "sha256-3es2rmndahH+DMEEwjBxyZKd27qDZIocPbzScF7B5fA=";
+    hash = "sha256-EodSAk8p0j9YjfTLiMwbhlHRk9VL7ec5zlYMXHIkPVg=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +32,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "google_drive_api" ];
 
   nativeCheckInputs = [
+    pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
 

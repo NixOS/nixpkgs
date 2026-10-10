@@ -764,9 +764,8 @@ in
         dep = libxcrypt;
       }
     ];
-    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
-      final.bit32
-    ];
+    propagatedBuildInputs =
+      (old.propagatedBuildInputs or [ ]) ++ lib.optionals (luaOlder "5.2") [ final.bit32 ];
   });
 
   luaprompt = prev.luaprompt.overrideAttrs (old: {
