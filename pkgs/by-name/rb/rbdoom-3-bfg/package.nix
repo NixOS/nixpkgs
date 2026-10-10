@@ -55,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_SYSTEM_ZLIB=ON"
   ];
 
+  buildFlags = [ "RBDoom3BFG" ];
+
   # it caused build failure
   hardeningDisable = [ "fortify3" ];
 
