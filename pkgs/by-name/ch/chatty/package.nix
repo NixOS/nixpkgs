@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ];
 
-  preFixup = ''
+  preFixup = lib.optionalString (plugins != [ ]) ''
     gappsWrapperArgs+=(
       --prefix PURPLE_PLUGIN_PATH : ${lib.escapeShellArg (pidgin.makePluginPath plugins)}
       ${lib.concatMapStringsSep " " (p: p.wrapArgs or "") plugins}
