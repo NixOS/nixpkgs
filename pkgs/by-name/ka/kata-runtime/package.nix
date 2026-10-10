@@ -4,12 +4,14 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  openssl,
   pkg-config,
   protobuf,
   qemu_kvm,
   rustPlatform,
   stdenv,
   virtiofsd,
+  zlib,
 }:
 
 let
@@ -47,6 +49,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     protobuf
+  ];
+
+  buildInputs = [
+    openssl
+    zlib
   ];
 
   # Cargo is invoked by the upstream Makefile
