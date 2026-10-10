@@ -634,14 +634,18 @@ rec {
     :::
   */
   makeSearchPathOutput =
+    let
+      concatColons = concatStringsSep ":";
+    in
     output:
     let
       getOutput' = getOutput output;
     in
-    subDir: pkgs:
-    concatStringsSep ":" (
-      concatMap (path: if path != null then [ (getOutput' path + "/" + subDir) ] else [ ]) pkgs
-    );
+    subDir:
+    let
+      concatPaths = concatMap (path: if path != null then [ (getOutput' path + "/" + subDir) ] else [ ]);
+    in
+    paths: concatColons (concatPaths paths);
 
   /**
     Construct a library search path (such as RPATH) containing the
