@@ -23,5 +23,6 @@
   # "armv5tel-linux" is excluded because it is not bootstrapped
   "powerpc64le-linux"
   "riscv64-linux"
+  "loongarch64-linux"
   "x86_64-freebsd"
 ]
