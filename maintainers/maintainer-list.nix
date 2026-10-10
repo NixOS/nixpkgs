@@ -1659,6 +1659,11 @@
     githubId = 26391003;
     name = "Amadej Kastelic";
   };
+  amaidurova = {
+    name = "An Mai";
+    github = "amaidurova";
+    githubId = 295547583;
+  };
   aman9das = {
     email = "amandas62640@gmail.com";
     github = "Aman9das";
