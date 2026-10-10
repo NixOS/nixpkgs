@@ -618,7 +618,7 @@ in
 
   luadbi = prev.luadbi.overrideAttrs allowLua55;
 
-  luadbi-mysql = prev.luadbi-mysql.overrideAttrs (old: {
+  luadbi-mysql = (prev.luadbi-mysql.overrideAttrs allowLua55).overrideAttrs (old: {
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
