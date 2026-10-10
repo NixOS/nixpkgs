@@ -1,66 +1,15 @@
 {
   actool,
-  darwin,
   fetchFromGitHub,
+  fetchSwiftPMDeps,
   lib,
-  nix-update-script,
+  rcodesign,
   stdenv,
   swift,
+  swiftpm,
 }:
 
 let
-  blueSocket = stdenv.mkDerivation (finalAttrs: {
-    pname = "blue-socket";
-    version = "2.0.4";
-
-    strictDeps = true;
-    __structuredAttrs = true;
-
-    src = fetchFromGitHub {
-      owner = "Kitura";
-      repo = "BlueSocket";
-      tag = finalAttrs.version;
-      hash = "sha256-Bru14uTGvmAeRLjbFYhWKfRjQcj5cZzp9jzyg5o7EHs=";
-    };
-
-    nativeBuildInputs = [
-      swift
-      darwin.autoSignDarwinBinariesHook
-    ];
-
-    dontConfigure = true;
-
-    buildPhase = ''
-      runHook preBuild
-
-      buildDir="$PWD/build"
-      mkdir -p "$buildDir"
-
-      swiftc \
-        -O \
-        -swift-version 5 \
-        -emit-library \
-        -emit-module \
-        -module-name Socket \
-        -emit-module-path "$buildDir/Socket.swiftmodule" \
-        -Xlinker -install_name -Xlinker "$out/lib/libSocket.dylib" \
-        Sources/Socket/*.swift \
-        -o "$buildDir/libSocket.dylib"
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir -p "$out/lib/swift/macosx"
-      cp build/libSocket.dylib "$out/lib"
-      cp build/Socket.* "$out/lib/swift/macosx"
-
-      runHook postInstall
-    '';
-  });
-
   infoPlist =
     version:
     lib.generators.toPlist { escape = true; } {
@@ -75,7 +24,7 @@ let
       CFBundlePackageType = "APPL";
       CFBundleShortVersionString = version;
       CFBundleSupportedPlatforms = [ "MacOSX" ];
-      CFBundleVersion = "21";
+      CFBundleVersion = "25";
       LSApplicationCategoryType = "public.app-category.developer-tools";
       LSMinimumSystemVersion = "13.5";
       LSUIElement = true;
@@ -84,7 +33,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "swipeaerospace";
-  version = "0.3.3";
+  version = "0.4.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -93,47 +42,35 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MediosZ";
     repo = "SwipeAeroSpace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lEWbZ/FvxtlY4VnFRk//tDeVrW9+udyJ+hbUsG61jhI=";
+    hash = "sha256-CfdoHNE/lJ9md0Xm6Pio9P3coTgQtEoIwZ/uOeHeEgI=";
+  };
+
+  # The upstream lock file lacks BlueSocket, which our application target adds.
+  swiftpmDeps = fetchSwiftPMDeps {
+    inherit (finalAttrs) pname version src;
+    postPatch = ''
+      cp ${./Package.resolved} Package.resolved
+    '';
+    hash = "sha256-srbj9NXd7QKt8jGmLnNKf7tMoVjLk4Uv0eclunz1Pjo=";
   };
 
   nativeBuildInputs = [
     swift
+    swiftpm
     actool
-    darwin.autoSignDarwinBinariesHook
+    rcodesign
   ];
 
-  buildInputs = [ blueSocket ];
-
-  dontConfigure = true;
-
-  buildPhase = ''
-    runHook preBuild
-
-    buildDir="$PWD/build"
-    mkdir -p "$buildDir"
-
-    swiftFiles=()
-    while IFS= read -r -d "" f; do
-      swiftFiles+=("$f")
-    done < <(find SwipeAeroSpace -name '*.swift' -print0)
-
-    swiftc \
-      -I${lib.getDev blueSocket}/lib/swift/${stdenv.hostPlatform.swift.platform} \
-      -O \
-      -swift-version 5 \
-      -parse-as-library \
-      -module-name SwipeAeroSpace \
-      -Xlinker -platform_version -Xlinker macos -Xlinker 13.5 -Xlinker 26.0 \
-      -framework AppKit \
-      -framework Cocoa \
-      -framework SwiftUI \
-      -framework ServiceManagement \
-      -lSocket \
-      "''${swiftFiles[@]}" \
-      -o "$buildDir/SwipeAeroSpace"
-
-    runHook postBuild
+  postPatch = ''
+    # Upstream only provides a test harness; use our manifest to build the app.
+    cp ${./Package.swift} Package.swift
+    cp ${./Package.resolved} Package.resolved
   '';
+
+  swiftpmFlags = [
+    "--product"
+    "SwipeAeroSpace"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -141,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     app="$out/Applications/SwipeAeroSpace.app"
     mkdir -p "$app/Contents/"{MacOS,Resources}
 
-    cp build/SwipeAeroSpace "$app/Contents/MacOS/SwipeAeroSpace"
+    cp "$(swiftpmBinPath)/SwipeAeroSpace" "$app/Contents/MacOS/SwipeAeroSpace"
     printf '%s' ${lib.escapeShellArg (infoPlist finalAttrs.version)} > "$app/Contents/Info.plist"
     printf 'APPL????' > "$app/Contents/PkgInfo"
 
@@ -155,7 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  postFixup = ''
+    rcodesign sign \
+      --code-signature-flags runtime \
+      --entitlements-xml-file ${finalAttrs.src}/SwipeAeroSpace/SwipeAeroSpace.entitlements \
+      "$out/Applications/SwipeAeroSpace.app"
+  '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Switch AeroSpace workspaces by swiping";
