@@ -8,8 +8,8 @@
 
 let
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.6.15/dist/hls.min.js";
-    hash = "sha256-QTqD4rsMd+0L8L4QXVOdF+9F39mEoLE+zTsUqQE4OTg=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.7.3/dist/hls.min.js";
+    hash = "sha256-oS5+4c1kpp3NsxQVfkXa/LpwW/sLFEC3k1yyZdN0Qj4=";
   };
 in
 buildGo126Module (finalAttrs: {
