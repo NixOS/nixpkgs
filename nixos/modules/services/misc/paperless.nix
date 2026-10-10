@@ -12,6 +12,11 @@ let
   defaultUser = "paperless";
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
 
+  nginxAliases =
+    lib.optionals cfg.configureNginx
+      config.services.nginx.virtualHosts.${cfg.domain}.serverAliases;
+  nginxAliasOrigins = lib.concatMapStringsSep "," (d: "https://${d}") nginxAliases;
+
   # Don't start a redis instance if the user sets a custom redis connection
   enableRedis = !(cfg.settings ? PAPERLESS_REDIS);
   redisServer = config.services.redis.servers.paperless;
@@ -438,7 +443,10 @@ in
           virtualHosts.${cfg.domain} = {
             forceSSL = lib.mkDefault true;
             locations = {
-              "/".proxyPass = "http://paperless";
+              "/" = {
+                proxyPass = "http://paperless";
+                recommendedProxySettings = lib.mkDefault true;
+              };
               "/static/" = {
                 root = config.services.paperless.package;
                 extraConfig = ''
@@ -448,6 +456,7 @@ in
               "/ws/status" = {
                 proxyPass = "http://paperless";
                 proxyWebsockets = true;
+                recommendedProxySettings = lib.mkDefault true;
               };
             };
           };
@@ -469,6 +478,11 @@ in
         services.paperless.settings = lib.mkMerge [
           (lib.mkIf (cfg.domain != null) {
             PAPERLESS_URL = "https://${cfg.domain}";
+          })
+          (lib.mkIf (nginxAliases != [ ]) {
+            PAPERLESS_ALLOWED_HOSTS = lib.mkDefault (lib.concatStringsSep "," nginxAliases);
+            PAPERLESS_CSRF_TRUSTED_ORIGINS = lib.mkDefault nginxAliasOrigins;
+            PAPERLESS_CORS_ALLOWED_HOSTS = lib.mkDefault nginxAliasOrigins;
           })
           (lib.mkIf cfg.database.createLocally {
             PAPERLESS_DBENGINE = "postgresql";
