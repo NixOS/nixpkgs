@@ -187,9 +187,16 @@ sub pciCheck {
         push @imports, "(modulesPath + \"/hardware/network/broadcom-43xx.nix\")";
     }
 
-    # In case this is a virtio scsi device, we need to explicitly make this available.
+    # detect (QEMU) virtio devices possibly required for booting, IDs taken from:
+    # - https://github.com/qemu/qemu/blob/fa19879df1658f96ac07365fca8835b7decd6995/docs/specs/pci-ids.rst
+    # - https://github.com/qemu/qemu/blob/fa19879df1658f96ac07365fca8835b7decd6995/include/standard-headers/linux/virtio_ids.h
+    # virtio scsi devices (legacy ID & virtio Specification ID)
     if ($vendor eq "0x1af4" && ($device eq "0x1004" || $device eq "0x1048") ) {
         push @initrdAvailableKernelModules, "virtio_scsi";
+    }
+    # virtio IOMMU device (needed for pci boot devices behind it)
+    if ($vendor eq "0x1af4" && $device eq "0x1057") {
+        push @initrdAvailableKernelModules, "virtio_iommu";
     }
 
     # Can't rely on $module here, since the module may not be loaded
