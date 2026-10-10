@@ -434,7 +434,25 @@ lib.extendMkDerivation {
         ${if attrs ? stdenv then "__stdenvPythonCompatPos" else null} =
           builtins.unsafeGetAttrPos "stdenv" attrs;
       }
-      // attrs.passthru or { };
+      // attrs.passthru or { }
+      // {
+        tests =
+          let
+            tests = attrs.passthru.tests or { };
+            mergedTests =
+              optionalAttrs (isPythonModule finalAttrs.passthru) {
+                # Imports through PYTHONPATH do not detect file collisions in a combined environment.
+                pythonEnv = python.withPackages (_: [ finalAttrs.finalPackage ]);
+              }
+              // tests;
+          in
+          if isPythonModule finalAttrs.passthru && lib.isDerivation tests then
+            lib.warn
+              "${finalAttrs.name}: passthru.tests should be a set of named tests. Use passthru.tests.<name> for a single test derivation."
+              mergedTests
+          else
+            mergedTests;
+      };
 
       meta = {
         # default to python's platforms

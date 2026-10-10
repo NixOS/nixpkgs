@@ -1540,6 +1540,17 @@ However, this is done in its own phase, and not dependent on whether [`doCheck =
 This can also be useful in verifying that the package doesn't assume commonly
 present packages (e.g. `setuptools`).
 
+#### Testing Python environment construction {#testing-python-environment-construction}
+
+`buildPythonPackage` adds a `passthru.tests.pythonEnv` test that builds a
+`python.withPackages` environment containing the package and its dependencies.
+This catches file collisions that `pythonImportsCheck` does not detect. It does
+not run Python or import modules, and runs separately from the package build.
+
+For example, run `nix-build -A python3Packages.requests.tests.pythonEnv` to check
+the environment for `requests`. Packages can override this test by defining
+their own `passthru.tests.pythonEnv`.
+
 #### Using pythonRelaxDepsHook {#using-pythonrelaxdepshook}
 
 It is common for upstream to specify a range of versions for its package
