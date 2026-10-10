@@ -46,7 +46,9 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "-version";
 
   passthru = {
-    tests = { inherit (nixosTests) git-pages-modular; };
+    tests = {
+      inherit (nixosTests) git-pages git-pages-modular;
+    };
     updateScript = nix-update-script { };
     services.default = {
       imports = [
