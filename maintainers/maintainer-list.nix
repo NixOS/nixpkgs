@@ -16415,6 +16415,12 @@
     github = "lenivaya";
     githubId = 49302467;
   };
+  lennartmueh = {
+    email = "lennart@cope.cool";
+    github = "lennartmueh";
+    githubId = 43172581;
+    name = "lennart";
+  };
   lenny = {
     name = "Lenny.";
     github = "LennyPenny";
@@ -24991,12 +24997,6 @@
     github = "rinx";
     githubId = 1588935;
     name = "Rintaro Okamura";
-  };
-  riotbib = {
-    email = "lennart@cope.cool";
-    github = "riotbib";
-    githubId = 43172581;
-    name = "lennart";
   };
   ris = {
     email = "code@humanleg.org.uk";
