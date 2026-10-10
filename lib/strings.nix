@@ -1633,15 +1633,15 @@ rec {
     :::
   */
   toSentenceCase =
+    let
+      getFirstChar = substring 0 1;
+      getLastChar = substring 1 (-1); # -1 takes till the end of the string
+    in
     str:
     if !isString str then
       throw "toSentenceCase does only accepts string values, but got ${typeOf str}"
     else
-      let
-        firstChar = substring 0 1 str;
-        rest = substring 1 (-1) str; # -1 takes till the end of the string
-      in
-      toUpper firstChar + toLower rest;
+      toUpper (getFirstChar str) + toLower (getLastChar str);
 
   /**
     Converts a string to camelCase. Handles snake_case, PascalCase,
