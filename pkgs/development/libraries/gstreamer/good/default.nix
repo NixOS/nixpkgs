@@ -80,7 +80,7 @@ assert raspiCameraSupport -> hostSupportsRaspiCamera;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-good";
-  version = "1.28.7";
+  version = "1.28.8";
 
   outputs = [
     "out"
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hyVpacgs87yFdDAfPnBEqQ3grFAKWifYujjE3eiU3Ys=";
+    hash = "sha256-p2cO2QDT0DvnRNJcGHOyOYlumoLObRf4/rxv/7rulSE=";
   };
 
   patches = [
