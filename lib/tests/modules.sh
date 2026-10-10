@@ -492,6 +492,11 @@ checkConfigError 'defaultProviderName. is not of type .null or value "urlbuilder
 checkConfigError 'is not of type .signed integer.' config.contracts.number.results.app.x.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-wrong-request.nix
 checkConfigError "set .fulfill. or .fulfill'., not the two" config.both.x.request.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-two-fulfill.nix
 
+# contracts: connect a consumer and a provider in two different evaluations
+checkConfigOutput '^6$' config.consumerValue ./contracts-cross-node.nix
+checkConfigOutput '^"consumer-value"$' config.providerEntries ./contracts-cross-node.nix
+checkConfigError 'contracts.number.want.consumer-value: no provider' config.consumerOnlyValue ./contracts-cross-node.nix
+
 # contracts: a consumer can set an alias from `requestAliases`, and the provider does not get the alias
 checkConfigOutput '^6$' config.contracts.number.results.app.x.value ./contracts-request-alias.nix
 checkConfigOutput '^7$' config.consumer.request.value ./contracts-request-alias.nix

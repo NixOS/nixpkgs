@@ -379,6 +379,9 @@
   "contracts-chaining": [
     "index.html#contracts-chaining"
   ],
+  "contracts-cross-node": [
+    "index.html#contracts-cross-node"
+  ],
   "contracts-rename-request": [
     "index.html#contracts-rename-request"
   ],

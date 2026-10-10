@@ -356,6 +356,36 @@ in
 The module system evaluates options lazily, thus the order of the modules has no effect.
 If a response depends on itself, the evaluation fails with infinite recursion.
 
+## Connect nodes {#contracts-cross-node}
+
+Each NixOS node has its own [](#opt-contracts).
+If the consumer and the provider are on different nodes, connect the two nodes:
+
+- On the provider node, set `want` to the `requests` of the consumer node.
+- On the consumer node, set `defaultProvider` to the `defaultProvider` of the provider node.
+
+The consumer module and the provider module do not change.
+The response must be correct on the consumer node.
+For example, a URL can be correct, but the path of a file on the provider node is not.
+
+In a NixOS test, the module argument `nodes` contains the configuration of each node:
+
+```nix
+{
+  nodes.provider =
+    { nodes, ... }:
+    {
+      contracts.myContract.want = nodes.consumer.contracts.myContract.requests;
+    };
+
+  nodes.consumer =
+    { nodes, ... }:
+    {
+      contracts.myContract.defaultProvider = nodes.provider.contracts.myContract.defaultProvider;
+    };
+}
+```
+
 ## Rename a request option {#contracts-rename-request}
 
 To rename an option of `request`, add a module with an alias to `requestAliases` of the contract type.
