@@ -152,7 +152,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Open-source engine for Star Wars Jedi Academy game";
