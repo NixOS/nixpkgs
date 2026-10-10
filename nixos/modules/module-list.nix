@@ -2110,6 +2110,7 @@
   ./virtualisation/qemu-guest-agent.nix
   ./virtualisation/rosetta.nix
   ./virtualisation/spice-usb-redirection.nix
+  ./virtualisation/vfio.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
