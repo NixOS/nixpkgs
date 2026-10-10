@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromCodeberg,
   installShellFiles,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -36,6 +37,8 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/yanic completion fish) \
       --zsh <($out/bin/yanic completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool to collect and aggregate respondd data";
