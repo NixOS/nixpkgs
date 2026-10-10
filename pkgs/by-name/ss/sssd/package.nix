@@ -90,6 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/SSSD/sssd/commit/ba207eab76ff5253662a763b9b6e9ea42f03d31b.patch?full_index=1";
       hash = "sha256-55V8RfIcGF49GGebg+pgCLPU9MGY2S/7PaOGIqwNL0w=";
     })
+
+    # Remove once a release containing this upstream fix is packaged.
+    (fetchpatch2 {
+      name = "CVE-2026-68742.patch";
+      url = "https://github.com/SSSD/sssd/commit/db60088e31d9c0c51c12206f069c305c7f4288a4.patch?full_index=1";
+      hash = "sha256-MOchRnq7/MMEzzGFXsfo3m36ljFTo6AIccjcyPwCb+0=";
+    })
   ];
 
   postPatch = ''
