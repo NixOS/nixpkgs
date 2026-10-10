@@ -11,12 +11,12 @@
   yarnConfigHook,
 }:
 let
-  version = "5.7.0";
+  version = "6.0.4";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-/kCrh5CUFcurXpK8trdlW2kI1JDoKeD7n40vjvG/v4E=";
+    hash = "sha256-3tAH9apdBhxrwfn5+rFfs0O8YRt4RivcY4ou6opS3xQ=";
   };
 
   mail-templates = stdenv.mkDerivation {
@@ -29,7 +29,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/src/mail/yarn.lock";
-      hash = "sha256-Y+E1HhQRdmdQf9kfkL09W/R29oN8wCLNsMBDnNGx6T0=";
+      hash = "sha256-I0Cr+VIjGmvKcFSM5GJ1je0djXXf1qG58UmwXyUkMjA=";
     };
 
     nativeBuildInputs = [
@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # at the top level
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.11.9,<0.12" "uv_build"
+      --replace-fail "uv_build>=0.13.4,<0.14" "uv_build"
   ''
   # Otherwise fails with:
   # socket.gaierror: [Errno 8] nodename nor servname provided, or not known
@@ -107,6 +107,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       django-filter
       django-lasuite
       django-parler
+      django-prometheus
       django-redis
       django-silk
       django-storages
@@ -129,6 +130,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       nested-multipart-parser
       openai
       posthog
+      prometheus-client
       psycopg
       pycrdt
       pydantic-ai-slim
