@@ -103,6 +103,8 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-Wno-error=gnu-folding-constant";
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
