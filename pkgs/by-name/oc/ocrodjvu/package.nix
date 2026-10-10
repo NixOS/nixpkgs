@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch2,
   djvulibre,
   docbook-xsl-ns,
   glibcLocales,
@@ -29,6 +30,14 @@ python3Packages.buildPythonApplication rec {
     tag = version;
     hash = "sha256-/TPo8YCE8JKKKBBeV12ilgTNDmuklwfy0TPI/7dBiOs=";
   };
+
+  patches = [
+    # Fix build for python 3.14, picked from the upstream development branch
+    (fetchpatch2 {
+      url = "https://github.com/FriedrichFroebel/ocrodjvu/commit/7be01651d688a10db8dd437149f3c5382199ed3a.patch?full_index=1";
+      hash = "sha256-mt0/L6QuX1nFHkk+aISwH8R2EkEAur55Xstr/Mbobqc=";
+    })
+  ];
 
   build-system = with python3Packages; [
     setuptools
