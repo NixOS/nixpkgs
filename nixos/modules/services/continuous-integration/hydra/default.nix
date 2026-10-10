@@ -599,6 +599,11 @@ in
                   Whether builders upload to S3 themselves instead of the queue
                   runner. Requires an S3 remote store as well as substitution on
                   the builders, see {option}`forcedSubstituters`.
+
+                  Presigned URLs stop working when the credentials that signed
+                  them expire. With temporary credentials, such as instance
+                  profiles or STS, uploads can fail before
+                  `presigned-url-expiry` is reached.
                 '';
               };
 
@@ -1264,10 +1269,9 @@ in
         pkgs.jq
         hydra-package # hydra-eval-jobset
       ];
-      restartTriggers = [
-        hydraConf
-        config.environment.etc."hydra/evaluator.toml".source
-      ];
+      # Not `hydra.conf`: only the Perl the evaluator runs reads it, and that
+      # starts afresh for each evaluation.
+      restartTriggers = [ config.environment.etc."hydra/evaluator.toml".source ];
       environment = env // {
         HYDRA_DATABASE_URL = dbUrlWithAppName "hydra-evaluator";
       };
