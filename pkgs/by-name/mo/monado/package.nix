@@ -66,6 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
   version = "25.1.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
