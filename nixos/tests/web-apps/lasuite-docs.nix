@@ -32,6 +32,9 @@ in
         inherit domain;
         s3Url = "http://${s3Addr}/lasuite-docs";
 
+        yhub.settings.SOFT_MIGRATION = false;
+        collaborationServer.enable = false;
+
         settings = {
           DJANGO_SECRET_KEY_FILE = pkgs.writeText "django-secret-file" ''
             8540db59c03943d48c3ed1a0f96ce3b560e0f45274f120f7ee4dace3cc366a6b
@@ -138,7 +141,7 @@ in
       machine.wait_for_unit("garage.service")
       machine.wait_for_unit("lasuite-docs.service")
       machine.wait_for_unit("lasuite-docs-celery.service")
-      machine.wait_for_unit("lasuite-docs-collaboration-server.service")
+      machine.wait_for_unit("lasuite-docs-yhub-server.service")
 
     with subtest("Create S3 bucket"):
       machine.wait_for_open_port(3901)
