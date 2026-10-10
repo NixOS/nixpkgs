@@ -20,7 +20,7 @@
   voluptuous,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-kasa";
   version = "0.11.0.1";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-kasa";
     repo = "python-kasa";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-MrAfYXvLenj5ntJro+vEktZbOB2MnwLQyRGyU+RmYXM=";
   };
 
@@ -41,16 +41,6 @@ buildPythonPackage rec {
     mashumaro
   ];
 
-  nativeCheckInputs = [
-    pytest-asyncio
-    pytest-freezer
-    pytest-mock
-    pytest-socket
-    pytest-xdist
-    pytestCheckHook
-    voluptuous
-  ];
-
   optional-dependencies = {
     shell = [
       ptpython
@@ -61,6 +51,17 @@ buildPythonPackage rec {
       orjson
     ];
   };
+
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-freezer
+    pytest-mock
+    pytest-socket
+    pytest-xdist
+    pytestCheckHook
+    voluptuous
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pytestFlags = [ "--asyncio-mode=auto" ];
 
@@ -76,9 +77,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for TP-Link Kasa Smarthome products";
     homepage = "https://python-kasa.readthedocs.io/";
-    changelog = "https://github.com/python-kasa/python-kasa/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/python-kasa/python-kasa/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "kasa";
   };
-}
+})
