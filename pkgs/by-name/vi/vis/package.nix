@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
   makeDesktopItem,
   ncurses,
@@ -18,9 +18,12 @@ let
   lua = lua5_2_compat;
   luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs:{
   pname = "vis";
   version = "0.9-unstable-2026-10-03";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     rev = "bd0bb3449e6eef991d507689c4bfba53c14fd9c5";
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
     copyDesktopItems
   ];
 
@@ -47,8 +50,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/vis \
-      --prefix LUA_CPATH ';' "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH ';' "${luaEnv}/share/lua/${lua.luaversion}/?.lua" \
+      --prefix LUA_CPATH ';' "${lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv}" \
+      --prefix LUA_PATH ';' "${lua.pkgs.luaLib.genLuaPathAbsStr luaEnv}" \
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
@@ -58,11 +61,10 @@ stdenv.mkDerivation rec {
       exec = "vis %U";
       type = "Application";
       icon = "accessories-text-editor";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "vis";
       genericName = "Text editor";
       categories = [
-        "Application"
         "Development"
         "IDE"
       ];
@@ -86,4 +88,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "vis";
   };
-}
+})
