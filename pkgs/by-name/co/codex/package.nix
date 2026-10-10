@@ -5,18 +5,22 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  alsa-lib,
   bubblewrap,
   clang,
   cmake,
   gitMinimal,
+  gst_all_1,
   libcap,
   libclang,
+  libopus,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
   librusty_v8_src_binding ? callPackage ./librusty_v8_src_binding.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8SrcBinding;
   },
+  linkFarm,
   lld,
   nix-update-script,
   pkg-config,
@@ -29,6 +33,39 @@
   installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   _experimental-update-script-combinators,
 }:
+let
+  supportsVoice =
+    stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu);
+  voiceRuntimeRoots = [
+    (lib.getLib gst_all_1.gstreamer)
+    (lib.getLib gst_all_1.gst-plugins-base)
+    (lib.getLib gst_all_1.gst-plugins-good)
+  ];
+  # Voice loads a fixed package-relative runtime, ignoring GStreamer discovery.
+  voiceRuntime =
+    let
+      pluginDirectory = if stdenv.hostPlatform.isDarwin then "plugins" else "lib/gstreamer-1.0";
+      pluginSuffix = stdenv.hostPlatform.extensions.sharedLibrary;
+      plugin = package: name: {
+        path = "${lib.getLib package}/lib/gstreamer-1.0/libgst${name}${pluginSuffix}";
+        name = "${pluginDirectory}/libgst${name}${pluginSuffix}";
+      };
+      coreSuffix = if stdenv.hostPlatform.isDarwin then "0.dylib" else "so.0";
+    in
+    linkFarm "codex-voice-runtime" [
+      {
+        path = "${lib.getLib gst_all_1.gstreamer}/lib/libgstreamer-1.0.${coreSuffix}";
+        name = "lib/libgstreamer-1.0.${coreSuffix}";
+      }
+      (plugin gst_all_1.gstreamer "coreelements")
+      (plugin gst_all_1.gst-plugins-base "app")
+      (plugin gst_all_1.gst-plugins-base "audioconvert")
+      (plugin gst_all_1.gst-plugins-base "audioresample")
+      (plugin gst_all_1.gst-plugins-base "opus")
+      (plugin gst_all_1.gst-plugins-good "rtp")
+      (plugin gst_all_1.gst-plugins-good "rtpmanager")
+    ];
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
   version = "0.162.1";
@@ -46,6 +83,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
   cargoHash = "sha256-UTu+ws1DqL375C+1jaVI9HBqDHnTuAQr7/h1rSzsEzg=";
+  # Disable bundled Opus so OPUS_LIB_DIR selects nixpkgs' libopus.
+  cargoDeps =
+    (rustPlatform.fetchCargoVendor {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      hash = finalAttrs.cargoHash;
+    }).overrideAttrs
+      (previousAttrs: {
+        buildCommand = previousAttrs.buildCommand + ''
+          chmod +w "$out/source-registry-0/opusic-sys-0.7.5/Cargo.toml"
+          substituteInPlace "$out/source-registry-0/opusic-sys-0.7.5/Cargo.toml" \
+            --replace-fail 'default = ["bundled"]' 'default = []'
+        '';
+      });
 
   __structuredAttrs = true;
 
@@ -56,12 +111,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "codex-cli"
     "--package"
     "codex-code-mode-host"
+  ]
+  ++ lib.optionals supportsVoice [
+    "--package"
+    "codex-voice-host"
   ];
   cargoCheckFlags = [
     "--package"
     "codex-cli"
     "--package"
     "codex-code-mode-host"
+  ]
+  ++ lib.optionals supportsVoice [
+    "--package"
+    "codex-voice-host"
   ];
 
   patches = [
@@ -71,8 +134,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
       packageLinkRoots = lib.concatStringsSep ":" (
         [ (toString (lib.getBin ripgrep)) ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [ (toString (lib.getBin bubblewrap)) ]
+        ++ lib.optionals supportsVoice (map toString voiceRuntimeRoots)
       );
     })
+  ]
+  ++ lib.optionals supportsVoice [
+    # Likewise for the voice loader, independently of daemon mode.
+    (replaceVars ./nix-voice-runtime.patch {
+      voiceRuntimeRoots = lib.concatStringsSep ":" (map toString voiceRuntimeRoots);
+    })
+  ]
+  ++ [
     # https://github.com/openai/codex/issues/48195
     ./no-daemon_auto_start.patch
   ];
@@ -97,6 +169,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libclang
     openssl
   ]
+  ++ lib.optionals supportsVoice [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    libopus
+  ]
+  ++ lib.optionals (supportsVoice && stdenv.hostPlatform.isLinux) [
+    alsa-lib
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
   ];
@@ -119,6 +200,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
     RUSTY_V8_SRC_BINDING_PATH = librusty_v8_src_binding;
     STABLE_GIT_COMMIT = finalAttrs.buildCommit;
+  }
+  // lib.optionalAttrs supportsVoice {
+    OPUS_LIB_DIR = "${lib.getLib libopus}/lib";
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Link with lld on Darwin. nixpkgs' classic open-source ld64 fails to insert
@@ -161,6 +245,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -d $out/codex-resources
     ln -s ${lib.getExe bubblewrap} $out/codex-resources/bwrap
   ''
+  + lib.optionalString supportsVoice ''
+    install -d $out/codex-resources/voice/bin
+    mv $out/bin/codex-voice-host $out/codex-resources/voice/bin/
+    cp -a ${voiceRuntime}/. $out/codex-resources/voice/
+  ''
   + lib.optionalString installShellCompletions ''
     installShellCompletion --cmd codex \
       --bash <($out/bin/codex completion bash) \
@@ -185,6 +274,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru.tests = {
     app-server-daemon = callPackage ./test-app-server-daemon.nix { codex = finalAttrs.finalPackage; };
+  }
+  // lib.optionalAttrs supportsVoice {
+    voice-runtime = callPackage ./test-voice-runtime.nix { codex = finalAttrs.finalPackage; };
   };
 
   meta = {
