@@ -18,13 +18,13 @@ stdenvNoCC.mkDerivation (
   in
   {
     pname = "romm";
-    version = "5.2.0";
+    version = "5.3.1";
 
     src = fetchFromGitHub {
       owner = "rommapp";
       repo = "romm";
       tag = finalAttrs.version;
-      hash = "sha256-ixRgaDnyHzHWJjvC5yB6pD88aUgwtnkF6H7snAFODrE=";
+      hash = "sha256-ijfp4L4GdGbr4FcBo83xVnGEksXawrkK3rYe8/Is+NU=";
     };
 
     __structuredAttrs = true;
@@ -67,13 +67,17 @@ stdenvNoCC.mkDerivation (
       wrap ${pythonEnv}/bin/gunicorn romm --add-flags "main:app" \
         --set-default ROMM_HOST 127.0.0.1 \
         --set-default ROMM_PORT 8080 \
-        --run 'export GUNICORN_CMD_ARGS="--bind=''${ROMM_HOST}:''${ROMM_PORT} --worker-class uvicorn_worker.UvicornWorker --workers ''${WEB_SERVER_CONCURRENCY:-''${WEB_CONCURRENCY:-2}} --timeout ''${WEB_SERVER_TIMEOUT:-300} ''${GUNICORN_CMD_ARGS:-}"'
+        --run 'export GUNICORN_CMD_ARGS="--bind=''${ROMM_HOST}:''${ROMM_PORT} --worker-class uvicorn_worker.UvicornWorker --workers ''${WEB_SERVER_CONCURRENCY:-''${WEB_CONCURRENCY:-4}} --timeout ''${WEB_SERVER_TIMEOUT:-300} --keep-alive ''${WEB_SERVER_KEEPALIVE:-65} ''${GUNICORN_CMD_ARGS:-}"'
 
+      # --with-scheduler releases delayed jobs, e.g. the watcher's rescans
       wrap ${pythonEnv}/bin/rq romm-worker \
-        --add-flags "worker --path $out/share/romm/backend --worker-class handler.rq_worker.RomMWorker high default low"
+        --add-flags "worker --path $out/share/romm/backend --worker-class handler.rq_worker.RomMWorker --with-scheduler high default low"
 
-      wrap ${pythonEnv}/bin/rqscheduler romm-scheduler \
-        --add-flags "--path $out/share/romm/backend"
+      wrap ${pythonEnv}/bin/rq romm-scan-worker \
+        --add-flags "worker --path $out/share/romm/backend --worker-class handler.rq_worker.RomMWorker --with-scheduler scans"
+
+      wrap ${pythonEnv}/bin/rq romm-scheduler \
+        --add-flags "cron --path $out/share/romm/backend tasks.cron_config"
 
       cat > $out/bin/romm-watcher <<EOF
       #!${runtimeShell}
@@ -133,7 +137,6 @@ stdenvNoCC.mkDerivation (
           pyyaml
           redis
           rq
-          rq-scheduler
           sentry-sdk
           sqlalchemy
           starlette
@@ -155,7 +158,7 @@ stdenvNoCC.mkDerivation (
         inherit (finalAttrs) version;
         src = "${finalAttrs.src}/frontend";
 
-        npmDepsHash = "sha256-k3MYizMevOfYJGRlu650bx1ERUkMBYdvg/JctmdwATo=";
+        npmDepsHash = "sha256-x8Chw4nMoyq0M+m4XhIgqNu8Lgr4U7w38V7CYrd1zK4=";
         npmFlags = [ "--ignore-scripts" ];
         makeCacheWritable = true;
 
