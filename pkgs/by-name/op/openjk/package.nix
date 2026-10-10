@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "openjk";
-  version = "0-unstable-2025-10-09";
+  version = "0-unstable-2026-09-29";
 
   src = fetchFromGitHub {
     owner = "JACoders";
     repo = "OpenJK";
-    rev = "d1cb662f07dfa4c1999edfb5c1a86fd1c6285372";
-    hash = "sha256-XTGe/V4FnQSQA9fY6MmpECs1f2PPk+yTZkAL93UoH/I=";
+    rev = "260c59c2907187af555a676fe0cc798893bf7757";
+    hash = "sha256-hhktBFCJl4bwJ94XbuB/m+UUJo148fi8i8zYhu0jp7s=";
   };
 
   dontAddPrefix = true;
@@ -109,8 +109,8 @@ stdenv.mkDerivation {
         makeWrapper $jaPrefix/openjkded.* $openja/bin/openjkded --chdir "$jaPrefix"
         makeWrapper $joPrefix/openjo_sp.* $openjo/bin/josp --chdir "$joPrefix"
 
-        cp $src/shared/icons/OpenJK_Icon_128.png $openjo/share/icons/hicolor/128x128/apps
-        cp $src/shared/icons/OpenJK_Icon_128.png $openja/share/icons/hicolor/128x128/apps
+        cp $src/shared/icons/PNG/jo128.png $openjo/share/icons/hicolor/128x128/apps/OpenJK_Icon_128.png
+        cp $src/shared/icons/PNG/mp128.png $openja/share/icons/hicolor/128x128/apps/OpenJK_Icon_128.png
         ln -s ${jamp}/share/applications/* $openja/share/applications
         ln -s ${jasp}/share/applications/* $openja/share/applications
         ln -s ${josp}/share/applications/* $openjo/share/applications
