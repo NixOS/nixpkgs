@@ -160,6 +160,15 @@ in
   };
   testScript = ''
     start_all()
+
+    with subtest("All networkd files from systemd are installed"):
+      all_files_in_systemd = node1.succeed("ls -1 /run/current-system/systemd/lib/systemd/network").splitlines()
+      files_in_systemd = [s for s in all_files_in_systemd if not s.endswith(".example")]
+      files_in_etc = node1.succeed("ls -1 /etc/systemd/network").splitlines()
+      print(files_in_systemd)
+      print(files_in_etc)
+      t.assertTrue(set(files_in_systemd).issubset(files_in_etc))
+
     node1.systemctl("start systemd-networkd-wait-online@eth1.service")
     node1.systemctl("start systemd-networkd-wait-online.service")
     node1.wait_for_unit("systemd-networkd-wait-online@eth1.service")

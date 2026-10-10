@@ -4207,7 +4207,7 @@ let
   stage2Config =
     let
       cfg = config.systemd.network;
-      unitFiles = mkUnitFiles "" cfg;
+      unitFiles = (mkUpstreamUnitFiles "" config.systemd.package) // (mkUnitFiles "" cfg);
     in
     mkMerge [
       (commonConfig config)
@@ -4289,15 +4289,13 @@ let
 
       {
         systemd.network.enable = mkDefault config.boot.initrd.network.enable;
-        systemd.contents = mkUnitFiles "/etc/" cfg;
+        systemd.contents =
+          (mkUpstreamUnitFiles "/etc/" config.boot.initrd.systemd.package) // (mkUnitFiles "/etc/" cfg);
 
         # Networkd link files are used early by udev to set up interfaces early.
         # This must be done in stage 1 to avoid race conditions between udev and
         # network daemons.
         systemd.network.units = lib.filterAttrs (n: _: hasSuffix ".link" n) config.systemd.network.units;
-        systemd.storePaths = [
-          "${config.boot.initrd.systemd.package}/lib/systemd/network/99-default.link"
-        ];
       }
 
       (mkIf cfg.enable {
@@ -4344,6 +4342,38 @@ let
 
       })
     ];
+
+  upstreamUnits = [
+    "99-default.link"
+  ]
+  ++ lib.optionals config.systemd.package.withNetworkd [
+    "80-6rd-tunnel.link"
+    "80-6rd-tunnel.network"
+    "80-container-host0-tun.network"
+    "80-container-host0.network"
+    "80-container-vb.link"
+    "80-container-vb.network"
+    "80-container-ve.link"
+    "80-container-ve.network"
+    "80-container-vz.link"
+    "80-container-vz.network"
+    "80-namespace-ns-tun.link"
+    "80-namespace-ns-tun.network"
+    "80-namespace-ns.link"
+    "80-namespace-ns.network"
+    "80-vm-vt.link"
+    "80-vm-vt.network"
+    "80-wifi-adhoc.network"
+  ];
+
+  mkUpstreamUnitFiles =
+    prefix: systemd:
+    listToAttrs (
+      map (name: {
+        name = "${prefix}systemd/network/${name}";
+        value.source = "${systemd}/lib/systemd/network/${name}";
+      }) upstreamUnits
+    );
 
 in
 
