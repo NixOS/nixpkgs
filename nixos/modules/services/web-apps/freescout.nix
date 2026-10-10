@@ -339,10 +339,10 @@ in
     services.phpfpm.pools.${user} = {
       inherit phpPackage user group;
 
-      phpOptions = ''
-        display_errors = On
-        display_startup_errors = On
-      '';
+      phpOptions = {
+        display_errors = "On";
+        display_startup_errors = "On";
+      };
       settings = {
         "listen.owner" = user;
         "listen.group" = config.services.nginx.group;
