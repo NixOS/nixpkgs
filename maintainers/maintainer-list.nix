@@ -20595,6 +20595,11 @@
     github = "naurissteins";
     githubId = 5653746;
   };
+  naved124 = {
+    name = "Naved124";
+    github = "Naved124";
+    githubId = 86107643;
+  };
   naxdy = {
     name = "Naxdy";
     email = "naxdy@naxdy.org";
