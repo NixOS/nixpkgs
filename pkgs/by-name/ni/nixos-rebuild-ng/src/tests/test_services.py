@@ -1,7 +1,7 @@
 import argparse
 import os
 from pathlib import Path
-from subprocess import CompletedProcess
+from subprocess import CompletedProcess, CalledProcessError
 from unittest.mock import ANY, Mock, call, patch
 
 from pytest import MonkeyPatch
@@ -72,6 +72,7 @@ def test_reexec(
     mock_run.return_value = CompletedProcess([], 0, stdout="")
 
     monkeypatch.setattr(s, "EXECUTABLE", "nixos-rebuild-ng")
+    monkeypatch.setattr(s, "SYSTEM", None)
     argv = ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"]
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
@@ -116,6 +117,7 @@ def test_reexec_flake(
     mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch
 ) -> None:
     monkeypatch.setattr(s, "EXECUTABLE", "nixos-rebuild-ng")
+    monkeypatch.setattr(s, "SYSTEM", None)
     argv = ["/path/bin/nixos-rebuild-ng", "switch", "--flake"]
     args, _ = n.parse_args(argv)
     mock_build.return_value = Path("/path")
@@ -162,3 +164,88 @@ def test_reexec_skip_if_already_reexec(mock_build: Mock, mock_execve: Mock) -> N
     s.reexec(argv, args, grouped_nix_args)
     mock_build.assert_not_called()
     mock_execve.assert_not_called()
+
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("os.execve", autospec=True)
+@patch(get_qualified_name(n.nix.run_wrapper, n.nix), autospec=True)
+@patch(get_qualified_name(s.nix.build), autospec=True)
+@patch(get_qualified_name(s.nix.get_system), autospec=True)
+def test_reexec_skip_if_other_system(
+    mock_get_system: Mock,
+    mock_build: Mock,
+    mock_run: Mock,
+    mock_execve: Mock,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    mock_run.return_value = CompletedProcess([], 0, stdout="")
+    monkeypatch.setattr(s, "SYSTEM", "x86_64-linux")
+    mock_get_system.return_value = "armv7l-linux"
+    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"]
+    args, _ = n.parse_args(argv)
+
+    s.reexec(argv, args, grouped_nix_args)
+    mock_get_system.assert_called_once_with(
+        n.models.BuildAttr(ANY, ANY), {"common": True}
+    )
+    # do not build nor exec a nixos-rebuild for another system
+    mock_build.assert_not_called()
+    mock_execve.assert_not_called()
+
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("os.execve", autospec=True)
+@patch(get_qualified_name(s.nix.build_flake), autospec=True)
+@patch(get_qualified_name(s.nix.get_system_flake), autospec=True)
+def test_reexec_flake_same_system(
+    mock_get_system: Mock,
+    mock_build: Mock,
+    mock_execve: Mock,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(s, "EXECUTABLE", "nixos-rebuild-ng")
+    monkeypatch.setattr(s, "SYSTEM", "x86_64-linux")
+    mock_get_system.return_value = "x86_64-linux"
+    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--flake"]
+    args, _ = n.parse_args(argv)
+    mock_build.return_value = Path("/path/new")
+
+    s.reexec(argv, args, grouped_nix_args)
+    mock_get_system.assert_called_once_with(
+        n.models.Flake(ANY, ANY), {"flake_eval": True}
+    )
+    mock_execve.assert_called_once_with(
+        Path("/path/new/bin/nixos-rebuild-ng"),
+        ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
+        {s.NIXOS_REBUILD_REEXEC_ENV: "1"},
+    )
+
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("os.execve", autospec=True)
+@patch(get_qualified_name(s.nix.build_flake), autospec=True)
+@patch(
+    get_qualified_name(s.nix.get_system_flake),
+    autospec=True,
+    side_effect=CalledProcessError(1, "nix"),
+)
+def test_reexec_flake_unknown_system(
+    mock_get_system: Mock,
+    mock_build: Mock,
+    mock_execve: Mock,
+    monkeypatch: MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(s, "EXECUTABLE", "nixos-rebuild-ng")
+    monkeypatch.setattr(s, "SYSTEM", "x86_64-linux")
+    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--flake"]
+    args, _ = n.parse_args(argv)
+    mock_build.return_value = Path("/path/new")
+
+    s.reexec(argv, args, grouped_nix_args)
+    # keep the previous behaviour if the system can't be evaluated
+    mock_get_system.assert_called_once()
+    mock_execve.assert_called_once_with(
+        Path("/path/new/bin/nixos-rebuild-ng"),
+        ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
+        {s.NIXOS_REBUILD_REEXEC_ENV: "1"},
+    )
