@@ -15,6 +15,8 @@
 
   enableACLs ? config.rsync.enableACLs or (lib.meta.availableOn stdenv.hostPlatform acl),
   acl,
+  enableIDN ? config.rsync.enableIDN or true,
+  libidn2,
   enableLZ4 ? config.rsync.enableLZ4 or true,
   lz4,
   enableOpenSSL ? config.rsync.enableOpenSSL or true,
@@ -29,12 +31,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsync";
-  version = "3.5.0";
+  version = "3.5.1";
 
   src = fetchurl {
     # signed with key 9FEF 112D CE19 A0DC 7E88  2CB8 1BB2 4997 A853 5F6F
     url = "mirror://samba/rsync/src/rsync-${finalAttrs.version}.tar.gz";
-    hash = "sha256-x//R72U+mVQPZh5HywC3+crR7muXI5mxb5PWcmVuDTM=";
+    hash = "sha256-xV+cncEPuL7Dl7OZoP3e1TzJotjjCJG7DWNyTSXDe+8=";
   };
 
   patches = [ ];
@@ -54,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '#!/usr/bin/env python3' '#!${python3}/bin/python3'
 
     substituteInPlace \
-      testsuite/rsync-ssl-stunnel-{ca-required,hostname-check}_test.py \
+      testsuite/rsync-ssl-{stunnel-{ca-required,hostname-check},type-option}_test.py \
       --replace-fail '#!/usr/bin/env bash' '#!${stdenv.shell}'
   '';
 
@@ -70,12 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     popt
   ]
   ++ lib.optional enableACLs acl
+  ++ lib.optional enableIDN libidn2
   ++ lib.optional enableZstd zstd
   ++ lib.optional enableLZ4 lz4
   ++ lib.optional enableOpenSSL openssl
   ++ lib.optional enableXXHash xxhash;
 
   configureFlags = [
+    (lib.enableFeature enableIDN "idn")
     (lib.enableFeature enableLZ4 "lz4")
     (lib.enableFeature enableOpenSSL "openssl")
     (lib.enableFeature enableXXHash "xxhash")
