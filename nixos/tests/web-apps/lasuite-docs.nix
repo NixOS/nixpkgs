@@ -131,6 +131,8 @@ in
     };
 
   testScript = ''
+    import datetime as dt
+
     with subtest("Wait for units to start"):
       machine.wait_for_unit("dex.service")
       machine.wait_for_unit("garage.service")
@@ -148,8 +150,8 @@ in
       machine.succeed("garage bucket allow --read --write --owner lasuite-docs --key ${garageAccessKey}")
 
     with subtest("Wait for web servers to start"):
-      machine.wait_until_succeeds("curl -fs 'http://${domain}/api/v1.0/authenticate/'", timeout=120)
-      machine.wait_until_succeeds("curl -fs '${oidcAddr}/dex/auth/mock?client_id=lasuite-docs&response_type=code&redirect_uri=http://${domain}/api/v1.0/callback/&scope=openid'", timeout=120)
+      machine.wait_until_succeeds("curl -fs 'http://${domain}/api/v1.0/authenticate/'", timeout=dt.timedelta(seconds=120))
+      machine.wait_until_succeeds("curl -fs '${oidcAddr}/dex/auth/mock?client_id=lasuite-docs&response_type=code&redirect_uri=http://${domain}/api/v1.0/callback/&scope=openid'", timeout=dt.timedelta(seconds=120))
 
     with subtest("Login"):
       state, nonce = machine.succeed("curl -fs -c cjar 'http://${domain}/api/v1.0/authenticate/' -w '%{redirect_url}' | sed -n 's/.*state=\\(.*\\)&nonce=\\(.*\\)/\\1 \\2/p'").strip().split(' ')
