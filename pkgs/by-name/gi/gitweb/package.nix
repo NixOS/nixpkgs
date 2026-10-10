@@ -27,7 +27,7 @@ buildEnv {
   ignoreCollisions = true;
   paths = lib.optional gitwebTheme gitwebThemeSrc ++ [ "${git}/share/gitweb" ];
 
-  meta = git.meta // {
+  meta = removeAttrs git.meta [ "outputsToInstall" ] // {
     maintainers = [ ];
   };
 }
