@@ -11,8 +11,12 @@
   autoAddDriverRunpath,
   udevCheckHook,
   nixosTests,
-  # system deps
-  boost,
+  # system deps. Upstream's CMake requires Boost EXACT 1.89.0 (cmake/dependencies/
+  # Boost_Sunshine.cmake) and falls back to a network FetchContent download on
+  # any other version — so pin the matching versioned boost explicitly rather
+  # than the default (which is 1.91 on current nixpkgs and would trigger the
+  # download). boost189 is available across nixpkgs versions.
+  boost189,
   curl,
   libcap,
   libdrm,
@@ -42,7 +46,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "apollo";
-  version = "0.5.1";
+  version = "0.6.0";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -52,7 +56,7 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "MrOz59";
     repo = "Hermes";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9XeeJ8H+UfSpsqNmxriXbMNPlJOgUQ0G20ldi8e9ijE=";
+    hash = "sha256-lzuKKt7maZncDC4DCbT1sU6DGqrtOkZ6dk6nJezkcq0=";
     # pulls in the prebuilt FFmpeg static libs (third-party/build-deps)
     # and the vendored third-party sources
     fetchSubmodules = true;
@@ -67,7 +71,7 @@ stdenv'.mkDerivation (finalAttrs: {
     postPatch = ''
       cp ${./package-lock.json} ./package-lock.json
     '';
-    npmDepsHash = "sha256-xIjDF1uEqZmsgy+qy6XCZYrrzcqqkba7Ea8s4HmsevE=";
+    npmDepsHash = "sha256-yUFHqYxlqVubXOLvqP6naoePJuvySHceY2lyFtBmsUg=";
 
     # vite.config.js reads SUNSHINE_SOURCE_ASSETS_DIR / SUNSHINE_ASSETS_DIR;
     # with both unset it builds from src_assets/common/assets/web into
@@ -139,7 +143,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    boost189
     curl
     libcap
     libdrm
@@ -177,11 +181,16 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SUNSHINE_ASSETS_DIR" "share/${finalAttrs.pname}")
     # used in the generated systemd unit's ExecStart=
     (lib.cmakeFeature "SUNSHINE_EXECUTABLE_PATH" "${placeholder "out"}/bin/apollo")
-    # where the generated unit/udev rules/modules-load files land
+    # where the generated unit/udev rules/modules-load files land. The two
+    # new privileged brokers added in v0.6.0 (card + session, both root,
+    # both socket-activated) install *system* units, so point the system
+    # unit dir at lib/systemd/system explicitly — normally discovered via
+    # find_package(Systemd), which we remove above (see postPatch).
     (lib.cmakeBool "UDEV_FOUND" true)
     (lib.cmakeBool "SYSTEMD_FOUND" true)
     (lib.cmakeFeature "UDEV_RULES_INSTALL_DIR" "lib/udev/rules.d")
     (lib.cmakeFeature "SYSTEMD_USER_UNIT_INSTALL_DIR" "lib/systemd/user")
+    (lib.cmakeFeature "SYSTEMD_SYSTEM_UNIT_INSTALL_DIR" "lib/systemd/system")
     (lib.cmakeFeature "SYSTEMD_MODULES_LOAD_DIR" "lib/modules-load.d")
     (lib.cmakeBool "BOOST_USE_STATIC" false)
     (lib.cmakeBool "BUILD_DOCS" false)
