@@ -4,12 +4,17 @@
   buildPythonPackage,
   fetchFromGitLab,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "plum-py";
   version = "0.8.7";
   format = "setuptools";
+
+  # This package never built with Python 3.14.
+  # Some tests are failing due to diverging generated Python code.
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitLab {
     owner = "dangass";
