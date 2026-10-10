@@ -31,15 +31,21 @@ let
 in
 buildPythonPackage rec {
   pname = "imagededup";
-  version = "03.3";
+  version = "0.3.3.post2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idealo";
     repo = "imagededup";
     tag = "v${version}";
-    hash = "sha256-tm6WGf74xu3CcwpyeA7+rvO5wemO0daXpj/jvYrH19E=";
+    hash = "sha256-+/83xsfbrny8x7szVQezix+FBYvoeYXNfTA+Go18ASY=";
   };
+
+  # don't install the docs generator as a top-level `mkdocs` package
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'exclude = ["tests*"]' 'exclude = ["tests*", "mkdocs*"]'
+  '';
 
   nativeBuildInputs = [
     cython
@@ -70,6 +76,11 @@ buildPythonPackage rec {
     ln -s ${ViT} $HOME/.cache/torch/hub/checkpoints/${ViT.name}
     ln -s ${EfficientNet} $HOME/.cache/torch/hub/checkpoints/${EfficientNet.name}
   '';
+
+  disabledTests = [
+    # deletes the preloaded MobileNet checkpoint, so later tests try to download it
+    "test_import_defaults"
+  ];
 
   pythonImportsCheck = [ "imagededup" ];
 
