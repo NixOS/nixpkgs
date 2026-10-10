@@ -259,7 +259,23 @@ in
 
   options.systemd = {
 
-    package = mkPackageOption pkgs "systemd" { };
+    package = mkPackageOption pkgs "systemd" {} // {
+      # HORRIBLE HACK
+      # Put back the patch that completely broke most networkd setups.
+      # This needs to be reverted and either reinstated in the package
+      # proper, or fixed within the networkd NixOS module, but right now
+      # we just need things to stop being on fire. -K900
+      #
+      # DO NOT remove this without verifying at least
+      # nixosTests.predictable-interface-names.predictableNetworkdSystemdStage1
+      apply =
+        pkg:
+        pkg.overrideAttrs (prevAttrs: {
+          patches = prevAttrs.patches or [ ] ++ [
+            ./systemd-search-path.patch
+          ];
+        });
+    };
 
     enableStrictShellChecks = mkEnableOption "" // {
       description = ''
