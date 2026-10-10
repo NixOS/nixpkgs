@@ -1,0 +1,98 @@
+--- a/src/vpux_compiler/CMakeLists.txt
++++ b/src/vpux_compiler/CMakeLists.txt
+@@ -156,7 +156,7 @@ endif()
+ include(${PROJECT_SOURCE_DIR}/cmake/npu_compiler_version.cmake)
+ npu_compiler_configure_version(${COMPILER_LIB})
+ 
+-install_target_with_debug_files(${COMPILER_LIB} ${INSTALL_DESTINATION}/lib ${INSTALL_COMPONENT})
++install_target_with_debug_files(${COMPILER_LIB} lib ${INSTALL_COMPONENT})
+ 
+ install(TARGETS ${COMPILER_LIB}
+         ARCHIVE DESTINATION ${OV_CPACK_RUNTIMEDIR} COMPONENT ${VPUX_INTERNAL_COMPONENT}
+--- a/src/vpux_driver_compiler/CMakeLists.txt
++++ b/src/vpux_driver_compiler/CMakeLists.txt
+@@ -30,7 +30,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+ add_subdirectory(src)
+ add_subdirectory(test)
+ 
+-install(
++#[[install(
+     FILES
+         "${PROJECT_SOURCE_DIR}/src/vpux_driver_compiler/CHANGES.txt"
+     DESTINATION ${INSTALL_DESTINATION}
+@@ -40,4 +40,4 @@ install(
+     FILES
+         "${PROJECT_SOURCE_DIR}/src/vpux_driver_compiler/README.md"
+     DESTINATION ${INSTALL_DESTINATION}
+-    COMPONENT ${INSTALL_COMPONENT})
++    COMPONENT ${INSTALL_COMPONENT})]]
+--- a/src/vpux_driver_compiler/cmake/build_manifest.cmake
++++ b/src/vpux_driver_compiler/cmake/build_manifest.cmake
+@@ -48,5 +48,5 @@ configure_file(
+ 
+ install(
+     FILES ${CMAKE_CURRENT_BINARY_DIR}/build_manifest.json
+-    DESTINATION ${INSTALL_DESTINATION}
++    DESTINATION share/openvino-intel-npu-compiler
+     COMPONENT ${INSTALL_COMPONENT})
+--- a/src/vpux_driver_compiler/src/vpux_compiler_l0/CMakeLists.txt
++++ b/src/vpux_driver_compiler/src/vpux_compiler_l0/CMakeLists.txt
+@@ -63,13 +63,13 @@ add_dependencies(${TARGET_NAME} VPUXLoader)
+ ov_add_api_validator_post_build_step(TARGET ${TARGET_NAME})
+ 
+ # Install library related files to component
+-install_target_with_debug_files(${TARGET_NAME} ${INSTALL_DESTINATION}/lib ${INSTALL_COMPONENT})
++install_target_with_debug_files(${TARGET_NAME} lib ${INSTALL_COMPONENT})
+ 
+ # Install library header
+ install(
+         FILES
+             "${PROJECT_SOURCE_DIR}/src/vpux_driver_compiler/include/npu_driver_compiler.h"
+-        DESTINATION ${INSTALL_DESTINATION}
++        DESTINATION include
+         COMPONENT ${INSTALL_COMPONENT})
+ 
+ # Install the openvino_intel_npu_compiler library to the same path of mlir_compiler
+@@ -68,7 +68,7 @@
+ # Also install under include/ for standard include paths (keep root install above for backward compatibility).
+ install(
+         FILES
+             "${PROJECT_SOURCE_DIR}/src/vpux_driver_compiler/include/npu_driver_compiler.h"
+-        DESTINATION ${INSTALL_DESTINATION}/include
++        DESTINATION include
+         COMPONENT ${INSTALL_COMPONENT})
+ 
+ # Install the openvino_intel_npu_compiler library to the same path of mlir_compiler
+--- a/src/npu_interpreter_runtime/CMakeLists.txt
++++ b/src/npu_interpreter_runtime/CMakeLists.txt
+@@ -70,11 +70,11 @@
+         RUNTIME DESTINATION ${OV_CPACK_RUNTIMEDIR} COMPONENT ${VPUX_INTERNAL_COMPONENT})
+ 
+ # Install openvino_intel_npu_vm_runtime to the CID or CIP package selected by BUILD_COMPILER_FOR_DRIVER
+-install_target_with_debug_files(${TARGET_NAME} ${INSTALL_DESTINATION}/lib ${INSTALL_COMPONENT})
++install_target_with_debug_files(${TARGET_NAME} lib ${INSTALL_COMPONENT})
+ 
+ # Install npu_interpreter_runtime public header
+ install(
+     FILES
+         "${CMAKE_CURRENT_SOURCE_DIR}/include/npu_interpreter_runtime/npu_vm_runtime.hpp"
+-    DESTINATION ${INSTALL_DESTINATION}/include/npu_interpreter_runtime
++    DESTINATION include/npu_interpreter_runtime
+     COMPONENT ${INSTALL_COMPONENT})
+--- a/thirdparty/elf/cmake/lib_install.cmake
++++ b/thirdparty/elf/cmake/lib_install.cmake
+@@ -79,7 +79,7 @@ ov_add_api_validator_post_build_step(TARGET ${TARGET_NAME})
+ # loader folder | -> include/ | -> vpux_headers/ -> 1 hpp
+ #               |             | -> vpux_loader/  -> 1 hpp
+ 
+-install(DIRECTORY "${LOADER_DIR_INC}/vpux_headers"
++#[[install(DIRECTORY "${LOADER_DIR_INC}/vpux_headers"
+         DESTINATION cid/vpux_elf/loader/include/
+         COMPONENT ${CID_COMPONENT})
+ 
+@@ -221,4 +221,4 @@ install(TARGETS npu_elf
+         CONFIGURATIONS RelWithDebInfo
+         LIBRARY DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT}
+         ARCHIVE DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT}
+-        RUNTIME DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT})
++        RUNTIME DESTINATION cid/vpux_elf/lib/RelWithDebInfo COMPONENT ${CID_COMPONENT})]]
