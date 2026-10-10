@@ -21294,6 +21294,8 @@ self: super: with self; {
 
   ttn-client = callPackage ../development/python-modules/ttn-client { };
 
+  ttnn = callPackage ../development/python-modules/ttnn { inherit (pkgs) tt-metal; };
+
   ttp = callPackage ../development/python-modules/ttp { };
 
   ttp-templates = callPackage ../development/python-modules/ttp-templates { };
@@ -22363,6 +22365,8 @@ self: super: with self; {
   };
 
   vllm = callPackage ../development/python-modules/vllm { };
+
+  vllm-tt-plugin = callPackage ../development/python-modules/vllm-tt-plugin { };
 
   vmas = callPackage ../development/python-modules/vmas { };
 
