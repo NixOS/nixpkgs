@@ -404,6 +404,7 @@ let
         config = checked (removeAttrs config [ "_module" ]);
         _module = checked (config._module);
         inherit (doCollect { }) graph;
+        inherit (merged) declsByName;
         inherit extendModules type class;
       };
     in
@@ -975,7 +976,7 @@ let
         // removeAttrs rawDefinitionsByName (attrNames matchedOptions);
     in
     {
-      inherit matchedOptions;
+      inherit matchedOptions declsByName;
 
       # Transforms unmatchedDefnsByName into a list of definitions
       unmatchedDefns =
