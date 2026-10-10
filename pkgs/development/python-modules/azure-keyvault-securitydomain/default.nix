@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-securitydomain";
-  version = "1.0.0b1";
+  version = "1.0.0b4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_keyvault_securitydomain";
     inherit version;
-    hash = "sha256-MpGhked4qUfkso7QEyeJKpOu3PjgoN1nTPEWyxEEN3Y=";
+    hash = "sha256-iGx9kJCZj4eIzF3D7Cepe97SM8w7awxKhXlGOJj+yvI=";
   };
 
   build-system = [
