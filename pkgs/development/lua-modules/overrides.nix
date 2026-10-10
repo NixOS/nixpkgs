@@ -632,7 +632,7 @@ in
     ];
   });
 
-  luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (old: {
+  luadbi-postgresql = (prev.luadbi-postgresql.overrideAttrs allowLua55).overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
       (lib.getDev libpq)
     ];
