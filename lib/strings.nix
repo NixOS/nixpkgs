@@ -1440,7 +1440,11 @@ rec {
 
     :::
   */
-  escapeNixString = s: escape [ "$" ] (toJSON s);
+  escapeNixString =
+    let
+      escapeDollars = escape [ "$" ];
+    in
+    s: escapeDollars (toJSON s);
 
   /**
     Turn a string `s` into an exact regular expression
