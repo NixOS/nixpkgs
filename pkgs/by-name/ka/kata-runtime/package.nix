@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # runtime-rs is a member of the Cargo workspace at the repository root,
   # the Makefile is driven from its own subdirectory.
-  cargoHash = lib.fakeHash;
+  cargoHash = "sha256-wbMkdNZwvqjey33//iLUG7cVeO+iEexsDVmIW4gvV0o=";
 
   nativeBuildInputs = [
     pkg-config
