@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ovn-org/ovn/commit/fb3dbe3d9fb0c4e46874480b6ad30b4014b24b03.patch";
       hash = "sha256-C3nucwyyouMY+CcfZQJrwIlpqq9Oh6vwuxKDKHnsQBA=";
     })
+    # Allow systemd to supervise database servers directly.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/27d229960ae0c23683238b6a2744b8e31fa65e12.patch";
+      hash = "sha256-DT+jykJcsL9Kt0HbVk7e3X5p7S70sKMLSY6rRldZYeQ=";
+    })
     # Retry storing chassis indices and serialize concurrent allocations.
     (fetchpatch {
       url = "https://github.com/ovn-org/ovn/commit/cb3f002fcb4fa7987e63a40332bccdee96286311.patch";
