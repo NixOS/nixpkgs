@@ -71,7 +71,40 @@ let
             cargo
             rustfmt
             ;
-          typescript = buildPackages.typescript-go;
+
+          # Copy of typescript_7 (typescript-go) from unstable
+          # to include https://github.com/NixOS/nixpkgs/pull/559777
+          typescript = buildPackages.buildGoModule (finalAttrs: {
+            pname = "typescript";
+            version = "7.0.2";
+
+            src = buildPackages.fetchFromGitHub {
+              owner = "microsoft";
+              repo = "typescript";
+              tag = "v${finalAttrs.version}";
+              hash = "sha256-j1AY4sf/Jb6uwOah35lrYooc7BnSeaZ2NO6Fx1zMj60=";
+            };
+
+            modRoot = "tsc";
+
+            vendorHash = "sha256-q6dMb2ab4uZ3GTrcA7v2JzfmOM+ZzBcJN6gKOpLfM/k=";
+
+            tags = [ "noembed" ];
+
+            ldflags = [ "-s" ];
+
+            subPackages = [ "cmd/tsgo" ];
+
+            postInstall = ''
+              lib_dir="$out/lib/${finalAttrs.pname}"
+              mkdir -p "$lib_dir"
+              cp -r internal/bundled/libs/. "$lib_dir"
+
+              mv "$out/bin/tsgo" "$lib_dir/tsc"
+
+              ln -s "$lib_dir/tsc" "$out/bin/tsc"
+            '';
+          });
         };
         pkgsBuildBuild = pkgsBuildBuild // {
           inherit (pkgsBuildBuild.rustPackages_1_98) rustc;
