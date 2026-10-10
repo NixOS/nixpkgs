@@ -9614,6 +9614,8 @@ with pkgs;
     withLibglut = false;
   };
 
+  craftFonts = callPackage ../by-name/cr/craft-fonts/package.nix { };
+
   crawlTiles = callPackage ../by-name/cr/crawl/package.nix {
     tileMode = true;
   };
