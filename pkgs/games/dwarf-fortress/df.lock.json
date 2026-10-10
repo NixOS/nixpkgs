@@ -100,13 +100,14 @@
           }
         },
         "hack": {
-          "version": "0.47.05-r8",
+          "version": "0.47.05-r9",
           "git": {
-            "url": "https://github.com/DFHack/dfhack.git",
-            "revision": "0.47.05-r8",
-            "outputHash": "sha256-y5XluaNU0ewUg2uAd77+h80CYDwNr1rsxB8IslZWip8="
+            "url": "https://github.com/cizra/dfhack.git",
+            "revision": "d61235c5ad8f9de506c9f68f54680b1bbd3b7a96",
+            "outputHash": "sha256-StyOYmBw1EenxyuiPvn+eU/o3YHAvguVXaScU4Fh75M=",
+            "refType": "rev"
           },
-          "xmlRev": "afe7e908e9e7e863412e8983f9feb2b999fae498"
+          "xmlRev": "172b218857ef6b02cb9106d72052392f521bcc8f"
         }
       },
       "0.44.12": {

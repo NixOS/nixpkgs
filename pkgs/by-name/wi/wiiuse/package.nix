@@ -2,20 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   bluez,
+  nix-update-script,
 }:
-stdenv.mkDerivation (finalAttrs: {
 
-  pname = "WiiUse";
-  version = "0.15.6";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "wiiuse";
+  version = "0.15.7";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "wiiuse";
     repo = "wiiuse";
-    rev = finalAttrs.version;
-    sha256 = "sha256-l2CS//7rx5J3kI32yTSp0BDtP0T5+riLowtnxnfAotc=";
+    tag = finalAttrs.version;
+    hash = "sha256-kB/iGzpO9lin3bTDlXBwZEdEg5UOivU1mnWDj/E44k4=";
   };
 
   outputs = [
@@ -25,26 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
-  patches = [
-    # Fix `.pc` files's double prefixes:
-    #   https://github.com/wiiuse/wiiuse/pull/153
-    (fetchpatch {
-      name = "pc-prefix.patch";
-      url = "https://github.com/wiiuse/wiiuse/commit/9c774ec0b71fa5119eabed823c35e4c745f3277c.patch";
-      hash = "sha256-WEHumCiNzsWfyMl7qu9xrlsNhgNcawdi+EFXf5w8jiE=";
-    })
-  ];
-
   nativeBuildInputs = [ cmake ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   cmakeFlags = [
-    "-DBUILD_EXAMPLE_SDL=OFF"
-  ]
-  ++ [ (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic)) ];
+    (lib.cmakeBool "BUILD_EXAMPLE_SDL" false)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ];
 
   # On Darwin (and Windows), upstream's CMakeLists.txt forcibly overrides
   # CMAKE_INSTALL_LIBDIR to "lib", ignoring the value passed by the cmake
@@ -55,11 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/lib/libwiiuse* $lib/lib/
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Feature complete cross-platform Wii Remote access library";
-    mainProgram = "wiiuseexample";
-    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/wiiuse/wiiuse";
-    platforms = with lib.platforms; unix;
+    changelog = "https://github.com/wiiuse/wiiuse/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    mainProgram = "wiiuseexample";
   };
 })

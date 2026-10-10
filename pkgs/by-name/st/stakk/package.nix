@@ -1,8 +1,10 @@
 {
+  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   cacert,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -25,7 +27,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [ cacert ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd stakk \
+      --bash <($out/bin/stakk completions bash) \
+      --fish <($out/bin/stakk completions fish) \
+      --zsh <($out/bin/stakk completions zsh) \
+  '';
 
   passthru.updateScript = nix-update-script { };
   __structuredAttrs = true;

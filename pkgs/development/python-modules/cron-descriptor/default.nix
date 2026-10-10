@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cron-descriptor";
-  version = "2.1.0";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
     tag = version;
-    hash = "sha256-EdOcAuheCV1I/dQu4FpQ3DYx4TfPy5TyuSSmivQGy3w=";
+    hash = "sha256-OWafUSXupK5lrZzYquyBGGWuhn1e1Bxw1Z+YI9Fkqkw=";
   };
 
   build-system = [ setuptools ];

@@ -19,10 +19,8 @@ rec {
 
     src = gristSrc;
 
-    phases = [
-      "buildPhase"
-      "installPhase"
-    ];
+    dontUnpack = true;
+    dontFixup = true;
 
     nativeBuildInputs = [
       curl

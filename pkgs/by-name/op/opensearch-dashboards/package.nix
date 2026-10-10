@@ -22,7 +22,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensearch-dashboards";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -51,11 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       "aarch64-linux" = fetchurl {
         url = "https://artifacts.opensearch.org/releases/bundle/opensearch-dashboards/${finalAttrs.version}/opensearch-dashboards-${finalAttrs.version}-linux-arm64.tar.gz";
-        hash = "sha256-J6n9u0LmjxCHGELZWnRreHmpre0YYKNsIu+yWOpLmFs=";
+        hash = "sha256-9lC+Swdbc2gP4rvnEcv1hFj2mULxQynqJjzJOkTRd68=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://artifacts.opensearch.org/releases/bundle/opensearch-dashboards/${finalAttrs.version}/opensearch-dashboards-${finalAttrs.version}-linux-x64.tar.gz";
-        hash = "sha256-cN9Zd4e1qLt4o7by8i4Xv5VoNTzQ7uh6OPND+s/kqyw=";
+        hash = "sha256-qe4TsBbkPZflLqWWnk7a+nXHtkQm9IVGb8EBWC/s+sg=";
       };
     };
     updateScript = writeShellScript "update-opensearch-dashboards" ''

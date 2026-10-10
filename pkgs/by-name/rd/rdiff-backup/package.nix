@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchPypi,
   librsync,
@@ -26,7 +27,16 @@ pypkgs.buildPythonApplication (finalAttrs: {
 
   buildInputs = [ librsync ];
 
-  dependencies = with pypkgs; [ pyyaml ];
+  dependencies =
+    with pypkgs;
+    [
+      psutil
+      pyxattr
+      pyyaml
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pylibacl
+    ];
 
   # no tests from pypi
   doCheck = false;

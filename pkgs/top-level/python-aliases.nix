@@ -488,6 +488,7 @@ mapAliases {
   PasteDeploy = throw "'PasteDeploy' has been renamed to/replaced by 'pastedeploy'"; # Converted to throw 2025-10-29
   patator = throw "'patator' has been removed as it was dependant on removed packages and broken"; # Added 2025-12-30
   pathpy = throw "'pathpy' has been renamed to/replaced by 'path'"; # Converted to throw 2025-10-29
+  pbar = pbar2; # added 2026-10-08
   pcbnew-transition = throw "'pcbnew-transition' has been renamed to/replaced by 'pcbnewtransition'"; # Converted to throw 2025-10-29
   pcbnewtransition = throw "'pcbnewtransition' has been removed as it is unmaintained and incompatible with KiCad 10+"; # Added 2026-08-30
   pdfminer = throw "'pdfminer' has been renamed to/replaced by 'pdfminer-six'"; # Converted to throw 2025-10-29
