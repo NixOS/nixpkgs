@@ -1,0 +1,201 @@
+{
+  autoPatchelfHook,
+  bun,
+  copyDesktopItems,
+  darwin,
+  electron_44,
+  lib,
+  makeBinaryWrapper,
+  makeDesktopItem,
+  models-dev,
+  nodejs,
+  opencode2,
+  stdenv,
+  stdenvNoCC,
+  writableTmpDirAsHomeHook,
+
+  commandLineArgs ? "",
+}:
+
+let
+  electron = electron_44;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "opencode-desktop2";
+  inherit (opencode2)
+    version
+    src
+    node_modules
+    patches
+    ;
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  autoPatchelfIgnoreMissingDeps = [ "libc.musl-*.so.*" ];
+
+  postPatch =
+    # Relax Bun version check to be a warning instead of an error
+    ''
+      substituteInPlace packages/script/src/index.ts \
+        --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+                       'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+      substituteInPlace packages/desktop/scripts/utils.ts \
+        --replace-fail 'await $`codesign --force --sign - ''${dest}`' 'true'
+    ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      substituteInPlace \
+        packages/desktop/src/main/windows/appearance.ts \
+        packages/desktop/src/main/service/desktop-cli.ts \
+        --replace-fail "process.resourcesPath" "'$out/opt/opencode-desktop2/resources'"
+    '';
+
+  nativeBuildInputs = [
+    bun
+    nodejs # for patchShebangs node_modules
+    makeBinaryWrapper
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    autoPatchelfHook
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
+  ];
+
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    (lib.getLib stdenv.cc.cc)
+  ];
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    NODE_OPTIONS = "--max-old-space-size=4096";
+    OPENCODE_CHANNEL = "prod";
+    MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
+    OPENCODE_DISABLE_MODELS_FETCH = true;
+  };
+
+  configurePhase = ''
+    runHook preConfigure
+
+    cp -R ${finalAttrs.node_modules}/. .
+    patchShebangs node_modules
+    patchShebangs packages/*/node_modules
+
+    runHook postConfigure
+  '';
+
+  preBuild = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    # Patch electron-builder to skip code signing on macOS.
+    for f in $(find node_modules -path "*/app-builder-lib/out/codeSign/macCodeSign.js" -type f 2>/dev/null); do
+      substituteInPlace "$f" \
+        --replace-fail "async function getValidIdentities" \
+        "async function getValidIdentities() { return []; }; async function getValidIdentities_DISABLED"
+    done
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    cd packages/desktop
+
+    # Copy prod icons
+    mkdir -p resources/icons
+    cp -R icons/prod/* resources/icons/
+
+    export OPENCODE_CLI_DIST="$TMPDIR/desktop-cli"
+    cli_package=$(bun -e 'import { getCurrentCli } from "./scripts/utils.ts"; console.log(getCurrentCli().package.replace("@opencode/", ""))')
+    mkdir -p "$OPENCODE_CLI_DIST/$cli_package/bin"
+    cp ${lib.getExe opencode2} "$OPENCODE_CLI_DIST/$cli_package/bin/opencode"
+    echo '{"version":"${opencode2.version}"}' > "$OPENCODE_CLI_DIST/$cli_package/package.json"
+
+    # Build with electron-vite
+    bun run build
+
+    # Package with electron-builder (unpacked directory mode)
+    cp -r "${electron.dist}" $HOME/.electron-dist
+    chmod -R u+w $HOME/.electron-dist
+
+    npx electron-builder --dir \
+      --config=electron-builder.config.ts \
+      --config.electronDist="$HOME/.electron-dist" \
+      --config.electronVersion=${electron.version} \
+      ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "--config.mac.identity=null"}
+
+    cd ../..
+
+    runHook postBuild
+  '';
+
+  desktopItems = lib.optional stdenvNoCC.hostPlatform.isLinux (makeDesktopItem {
+    name = "ai.opencode.desktop2";
+    desktopName = "OpenCode 2";
+    exec = "opencode-desktop2 %U";
+    icon = "opencode-desktop2";
+    startupWMClass = "ai.opencode.desktop";
+    categories = [ "Development" ];
+    mimeTypes = [ "x-scheme-handler/opencode" ];
+  });
+
+  installPhase =
+    let
+      appDir = if stdenvNoCC.hostPlatform.isAarch64 then "linux-arm64-unpacked" else "linux-unpacked";
+    in
+    lib.concatLines [
+      ''
+        runHook preInstall
+      ''
+      (lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+        mkdir -p $out/Applications $out/bin
+        mv packages/desktop/dist/mac-*/OpenCode.app "$out/Applications/OpenCode.app"
+        ln -s "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" $out/bin/opencode-desktop2
+        ln -s opencode-desktop2 $out/bin/opencode-desktop
+      '')
+      (lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+        mkdir -p $out/opt/opencode-desktop2
+        appDir="packages/desktop/dist/${appDir}"
+        [ -d "$appDir" ] || { echo "no electron-builder output dir found: $appDir"; exit 1; }
+        cp -r "$appDir/resources" $out/opt/opencode-desktop2/
+
+        for size in 32 64 128; do
+          install -Dm644 \
+            packages/desktop/resources/icons/''${size}x''${size}.png \
+            $out/share/icons/hicolor/''${size}x''${size}/apps/opencode-desktop2.png
+        done
+        for size in 30 44 71 89 107 142 150 284 310; do
+          install -Dm644 \
+            packages/desktop/resources/icons/Square''${size}x''${size}Logo.png \
+            $out/share/icons/hicolor/''${size}x''${size}/apps/opencode-desktop2.png
+        done
+
+        makeWrapper ${lib.getExe electron} $out/bin/opencode-desktop2 \
+          --inherit-argv0 \
+          --set ELECTRON_FORCE_IS_PACKAGED 1 \
+          --add-flags $out/opt/opencode-desktop2/resources/app.asar \
+          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+          --add-flags ${lib.escapeShellArg commandLineArgs}
+        ln -s opencode-desktop2 $out/bin/opencode-desktop
+      '')
+      ''
+        runHook postInstall
+      ''
+    ];
+
+  meta = {
+    description = "AI coding agent desktop client (v2)";
+    homepage = "https://opencode.ai";
+    inherit (opencode2.meta) changelog platforms;
+    license = lib.licenses.mit;
+    mainProgram = "opencode-desktop2";
+    maintainers = with lib.maintainers; [
+      delafthi
+      DuskyElf
+      graham33
+      xiaoxiangmoe
+    ];
+    priority = 6;
+  };
+})
