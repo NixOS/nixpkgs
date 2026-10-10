@@ -25899,6 +25899,12 @@
     github = "saadndm";
     githubId = 88615188;
   };
+  sachin-sankar = {
+    name = "Sachin Sankar";
+    email = "mail.sachinsankar@gmail.com";
+    github = "sachin-sankar";
+    githubId = 73470743;
+  };
   sagikazarmark = {
     name = "Mark Sagi-Kazar";
     email = "mark.sagikazar@gmail.com";
