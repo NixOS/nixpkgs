@@ -9,12 +9,7 @@ let
 in
 test {
   name = "contracts-secrets-hardcoded-secret";
-  providerRoot = [
-    "testing"
-    "hardcoded-secret"
-    "fileSecrets"
-    "mysecret"
-  ];
+  provider = "hardcoded-secret";
   extraModules = [
     ../../../modules/testing/hardcoded-secret.nix
     (
@@ -24,7 +19,7 @@ test {
         # fails when the provider sets the owner before the user exists.
         test.owner = "secretowner";
         test.group = "secretgroup";
-        testing.hardcoded-secret.fileSecrets.mysecret.providerOptions.content = config.test.content;
+        testing.hardcoded-secret.fileSecrets.test.providerOptions.content = config.test.content;
       }
     )
   ];

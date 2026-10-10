@@ -5,12 +5,12 @@
   ...
 }:
 let
-  inherit (lib) getAttrFromPath setAttrByPath;
   inherit (lib) mkOption types;
 in
 {
   name,
-  providerRoot,
+  # Name of the provider in `contracts.fileSecrets.providers`.
+  provider,
   extraModules ? [ ],
 }:
 {
@@ -44,11 +44,15 @@ in
       };
 
       config = lib.mkMerge [
-        (setAttrByPath providerRoot {
-          request = {
-            inherit (config.test) owner group mode;
+        {
+          # Send the request through the contracts module, as a consumer does.
+          contracts.fileSecrets = {
+            defaultProvider = config.contracts.fileSecrets.providers.${provider};
+            want.test.request = {
+              inherit (config.test) owner group mode;
+            };
           };
-        })
+        }
         (lib.mkIf (config.test.owner != "root") {
           users.users.${config.test.owner}.isNormalUser = true;
         })
@@ -62,7 +66,7 @@ in
     { nodes, ... }:
     let
       cfg = nodes.machine;
-      inherit (getAttrFromPath providerRoot nodes.machine) response;
+      response = cfg.contracts.fileSecrets.results.test;
     in
     ''
       owner = machine.succeed("stat -c '%U' ${response.path}").strip()
