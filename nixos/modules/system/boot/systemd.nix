@@ -259,7 +259,7 @@ in
 
   options.systemd = {
 
-    package = mkPackageOption pkgs "systemd" {} // {
+    package = mkPackageOption pkgs "systemd" { } // {
       # HORRIBLE HACK
       # Put back the patch that completely broke most networkd setups.
       # This needs to be reverted and either reinstated in the package
