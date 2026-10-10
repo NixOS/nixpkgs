@@ -1794,6 +1794,8 @@ with pkgs;
 
   blacken-docs = with python3Packages; toPythonApplication blacken-docs;
 
+  cfait-gui = lib.addMetaAttrs { mainProgram = "cfait-gui"; } cfait.gui;
+
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
   aiovban-pyaudio = python3Packages.toPythonApplication python3Packages.aiovban-pyaudio;
