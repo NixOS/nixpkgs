@@ -20,9 +20,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "tests/python"
-    "--pattern 'bindings_test*.py'"
+    "--pattern"
+    "bindings_test*.py"
   ];
 
   pythonImportsCheck = [ "hnswlib" ];

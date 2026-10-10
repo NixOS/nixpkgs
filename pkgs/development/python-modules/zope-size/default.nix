@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ]
   ++ lib.concatAttrValues optional-dependencies;
 
-  unittestFlagsArray = [ "src/zope/size" ];
+  unittestFlags = [ "src/zope/size" ];
 
   pythonNamespaces = [ "zope" ];
 

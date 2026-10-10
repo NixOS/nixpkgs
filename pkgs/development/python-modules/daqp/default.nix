@@ -31,11 +31,11 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "test"
     "-p"
-    "'*.py'"
+    "*.py"
     "-v"
   ];
 

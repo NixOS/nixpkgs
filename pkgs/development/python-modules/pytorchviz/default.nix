@@ -33,7 +33,7 @@ buildPythonPackage {
     fsspec
   ];
 
-  unittestFlagsArray = [ "test/" ];
+  unittestFlags = [ "test/" ];
 
   pythonImportsCheck = [ "torchviz" ];
 

@@ -250,7 +250,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.unittestCheckHook
   ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "src/binding/petsc4py/test"
     "-v"
@@ -286,6 +286,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   setupHook = ./setup-hook.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Portable Extensible Toolkit for Scientific computation";

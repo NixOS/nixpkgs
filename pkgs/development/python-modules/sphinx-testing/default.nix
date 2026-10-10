@@ -27,7 +27,7 @@ buildPythonPackage rec {
     six
   ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "tests"
   ];

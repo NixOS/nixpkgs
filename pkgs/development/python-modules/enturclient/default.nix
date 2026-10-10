@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "tests/dto/" ];
+  unittestFlags = [ "tests/dto/" ];
 
   meta = {
     description = "Python library for interacting with the Entur.org API";

@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [ "src/zope/location/tests" ];
+  unittestFlags = [ "src/zope/location/tests" ];
 
   pythonNamespaces = [ "zope" ];
 

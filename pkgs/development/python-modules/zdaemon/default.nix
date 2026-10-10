@@ -35,7 +35,7 @@ buildPythonPackage rec {
     zope-testing
   ];
 
-  unittestFlagsArray = [ "src/zdaemon/tests" ];
+  unittestFlags = [ "src/zdaemon/tests" ];
 
   meta = {
     description = "Daemon process control library and tools for Unix-based systems";

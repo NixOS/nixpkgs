@@ -66,7 +66,7 @@ buildPythonPackage rec {
     rm -r src/zope/security/tests/test_zcml_functest.py
   '';
 
-  unittestFlagsArray = [ "src/zope/security/tests" ];
+  unittestFlags = [ "src/zope/security/tests" ];
 
   pythonNamespaces = [ "zope" ];
 

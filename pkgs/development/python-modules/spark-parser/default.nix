@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ click ];
 
   nativeCheckInputs = [ unittestCheckHook ];
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "test"
     "-v"

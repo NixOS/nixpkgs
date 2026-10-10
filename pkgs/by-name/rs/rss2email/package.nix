@@ -66,7 +66,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     python3Packages.unittestCheckHook
   ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "test"
   ];

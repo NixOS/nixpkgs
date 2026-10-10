@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckTarget = [ "check_install" ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "src/binding/slepc4py/test"
     "-v"
@@ -93,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
   pythonImportsCheck = [ "slepc4py" ];
 
   setupHook = ./setup-hook.sh;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Scalable Library for Eigenvalue Problem Computations";

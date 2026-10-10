@@ -42,7 +42,7 @@ buildPythonPackage rec {
     zope-schema
   ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s"
     "src/zope/copy"
   ];

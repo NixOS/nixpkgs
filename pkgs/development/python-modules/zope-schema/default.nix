@@ -40,7 +40,7 @@ buildPythonPackage rec {
     zope-i18nmessageid
   ];
 
-  unittestFlagsArray = [ "src/zope/schema/tests" ];
+  unittestFlags = [ "src/zope/schema/tests" ];
 
   pythonNamespaces = [ "zope" ];
 
