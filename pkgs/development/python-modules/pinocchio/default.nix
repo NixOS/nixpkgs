@@ -10,12 +10,19 @@
   casadi,
   matplotlib,
   pybind11,
+  pycppad,
   python,
 
+  autodiffSupport ? true,
   buildStandalone ? true,
+  codegenSupport ? true,
 }:
+
+assert codegenSupport -> autodiffSupport;
+assert codegenSupport -> pycppad.codegenSupport;
+
 toPythonModule (
-  pinocchio.overrideAttrs (super: {
+  (pinocchio.override { inherit autodiffSupport codegenSupport; }).overrideAttrs (super: {
     pname = "py-${super.pname}";
 
     cmakeFlags = super.cmakeFlags ++ [
@@ -31,6 +38,7 @@ toPythonModule (
       casadi
       coal
     ]
+    ++ lib.optional autodiffSupport pycppad
     ++ super.propagatedBuildInputs
     ++ lib.optional buildStandalone pinocchio;
 
@@ -46,5 +54,9 @@ toPythonModule (
     pythonImportsCheck = [
       "pinocchio"
     ];
+
+    passthru = {
+      inherit buildStandalone;
+    };
   })
 )

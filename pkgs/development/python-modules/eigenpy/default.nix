@@ -15,12 +15,16 @@
   # propagatedBuildInputs
   eigen,
   numpy,
+
+  # nativeCheckInputs
+  ctestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "eigenpy";
   version = "3.13.0";
   pyproject = false; # Built with cmake
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
@@ -30,15 +34,15 @@ buildPythonPackage (finalAttrs: {
   };
 
   outputs = [
+    "out"
     "dev"
     "doc"
-    "out"
   ];
 
   cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
-    "-DINSTALL_DOCUMENTATION=ON"
-    "-DBUILD_TESTING=ON"
-    "-DBUILD_TESTING_SCIPY=ON"
+    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doInstallCheck)
+    (lib.cmakeBool "BUILD_TESTING_SCIPY" finalAttrs.finalPackage.doInstallCheck)
   ];
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
@@ -58,11 +62,20 @@ buildPythonPackage (finalAttrs: {
     numpy
   ];
 
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
+
   preInstallCheck = ''
-    make test
+    ctestCheckHook
   '';
 
   pythonImportsCheck = [ "eigenpy" ];
+
+  postFixup = ''
+    moveToOutput share/ament_index "$dev"
+    moveToOutput share/eigenpy "$dev"
+  '';
 
   meta = {
     description = "Bindings between Numpy and Eigen using Boost.Python";
@@ -73,6 +86,6 @@ buildPythonPackage (finalAttrs: {
       nim65s
       wegank
     ];
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })
