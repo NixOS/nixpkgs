@@ -5737,6 +5737,10 @@ with pkgs;
     withIcu = true;
   };
 
+  hermes-cuda = hermes.override { cudaSupport = true; };
+
+  hermes-kms = linuxPackages.hermes-kms;
+
   highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 
   hunspellDicts = recurseIntoAttrs (callPackages ../by-name/hu/hunspell/dictionaries.nix { });
