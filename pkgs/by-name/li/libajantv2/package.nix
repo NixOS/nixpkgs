@@ -10,6 +10,8 @@
   alsa-lib,
   udev,
   linuxPackages,
+  enableQt ? false,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,18 +39,32 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     pkg-config
+  ]
+  ++ lib.optionals enableQt [
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     mbedtls
     udev
     python3
     alsa-lib
+  ]
+  ++ lib.optionals enableQt [
+    qt6.qtbase
+    qt6.qtmultimedia
   ];
+
+  dontWrapQtApps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "AJANTV2_BUILD_SHARED" true)
+    (lib.cmakeBool "AJA_DISABLE_QT" (!enableQt))
   ];
 
+  preFixup = lib.optionalString enableQt ''
+    wrapQtApp "$out/bin/ntv2qtmultiinput"
+    wrapQtApp "$out/bin/ntv2qtpreview"
+  '';
   postInstall = ''
     mkdir -p "$dev/lib/pkgconfig"
     cat >"$dev/lib/pkgconfig/libajantv2.pc" <<EOF
