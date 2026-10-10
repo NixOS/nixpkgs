@@ -5,7 +5,7 @@
   libogg,
   libctb,
   gsmlib,
-  lua,
+  lua5_2_compat,
   curl,
   ffmpeg,
   libmysqlclient,
@@ -16,6 +16,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
 
   mk = path: inputs: { inherit path inputs; };
 
