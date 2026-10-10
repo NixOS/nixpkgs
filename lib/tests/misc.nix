@@ -1174,7 +1174,40 @@ runTests {
     expected = "helloWorld";
   };
 
+  testToCamelCaseMultipleCapitals = {
+    expr = strings.toCamelCase "helloWORld";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseMultipleSeparators = {
+    expr = strings.toCamelCase "hello--_  _world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseSeparatorCapitals = {
+    expr = strings.toCamelCase "hello-WORld";
+    expected = "helloWorld";
+  };
+
   testToCamelCasePath = testingThrow (strings.toCamelCase ./.);
+
+  # the remaining toCamelCase tests are for weird / buggy behavior. this may not
+  # be _good_ behavior, but we shouldn't change it by accident
+  testToCamelCaseStartCapitals = {
+    expr = strings.toCamelCase "HELLOworld";
+    expected = "helloworld";
+  };
+
+  # also weird behavior
+  testToCamelCaseStartSeparator = {
+    expr = strings.toCamelCase " helloworld";
+    expected = "Helloworld";
+  };
+
+  testToCamelCaseCapitalsSeparator = {
+    expr = strings.toCamelCase "hellO-world";
+    expected = "hellOWorld";
+  };
 
   testToInt = testAllTrue [
     # Naive
