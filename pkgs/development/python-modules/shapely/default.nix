@@ -45,7 +45,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # FIXME(lf-): these logging tests are broken, which is definitely our
     # fault. I've tried figuring out the cause and failed.
     #

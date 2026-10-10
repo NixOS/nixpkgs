@@ -66,7 +66,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     autoupdate
   '';
 
-  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [
     "stackprotector"
   ];
 

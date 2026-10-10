@@ -4,7 +4,6 @@
   fetchFromGitLab,
   pkg-config,
   sqlite,
-  stdenv,
   nixosTests,
   rocksdb,
   rust-jemalloc-sys,
@@ -45,8 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   };
 
-  # tests failed on x86_64-darwin with SIGILL: illegal instruction
-  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
+  doCheck = true;
 
   passthru.tests = {
     inherit (nixosTests) matrix-conduit;

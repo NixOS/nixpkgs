@@ -36,11 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/fWXR9LuINXwVMXCAGVm4H6I+Lut1u43rz+xmV+5cVs=";
   };
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    # This benchmark times out on Hydra.nixos.org
-    sed -i '/memcpy_speed/d' testsuite/meson.build
-  '';
-
   mesonFlags = lib.mapAttrsToList lib.mesonEnable {
     examples = false;
     benchmarks = false;

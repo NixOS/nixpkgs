@@ -45,9 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     # ACPICA emits packed structs that produce unaligned pointers. Apple's
     # arm64 linker rejects these under chained fixups; opt back into the
     # legacy fixup format so the link succeeds.
-    NIX_LDFLAGS = lib.optionalString (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-    ) "-no_fixup_chains";
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-no_fixup_chains";
 
     # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
     # -Werror altogether to make this derivation less fragile to toolchain

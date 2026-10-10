@@ -106,7 +106,7 @@ with haskellLib;
           # to bogus references to some dependencies.
           overrideCabal (
             old:
-            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
@@ -2855,16 +2855,7 @@ with haskellLib;
   monad-bayes =
     # Floating point precision issues. Test suite is only checked on x86_64.
     # https://github.com/tweag/monad-bayes/issues/368
-    dontCheckIf
-      (
-        let
-          inherit (pkgs.stdenv) hostPlatform;
-        in
-        !hostPlatform.isx86_64
-        # Presumably because we emulate x86_64-darwin via Rosetta, x86_64-darwin
-        # also fails on Hydra
-        || hostPlatform.isDarwin
-      )
+    dontCheckIf (!pkgs.stdenv.hostPlatform.isx86_64)
       # Too strict bounds on brick (<2.6), vty (<6.3)
       # https://github.com/tweag/monad-bayes/issues/378
       (doJailbreak super.monad-bayes);

@@ -320,7 +320,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=move_validators::test::two_validators_move_one_where_one_is_a_duplicate"
     "--skip=move_validators::test::two_validators_move_one_with_identical_password_files"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=subnet_service::tests::attestation_service::test_subscribe_same_subnet_several_slots_apart"
     "--skip=subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip=subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"

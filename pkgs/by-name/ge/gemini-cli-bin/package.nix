@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchzip,
   nodejs,
-  sysctl,
   writableTmpDirAsHomeHook,
   nix-update-script,
   ripgrep,
@@ -72,9 +71,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     writableTmpDirAsHomeHook
-  ]
-  ++ lib.optionals (with stdenvNoCC.hostPlatform; isDarwin && isx86_64) [
-    sysctl
   ];
 
   # versionCheckHook cannot be used because it assumes the executable is hermetic,

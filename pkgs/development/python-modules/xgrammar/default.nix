@@ -61,7 +61,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   optional-dependencies = {
-    metal = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    metal = lib.optionals stdenv.hostPlatform.isDarwin [
       mlx-lm
     ];
   };

@@ -141,7 +141,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=sources::syslog::test::test_udp_syslog"
 
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails on aarch64-darwin (https://github.com/vectordotdev/vector/issues/23813)
     "--skip=sources::file::tests::file_start_position_server_restart_unfinalized"
   ];

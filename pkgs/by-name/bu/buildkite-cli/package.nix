@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
   gitMinimal,
@@ -42,11 +41,6 @@ buildGoModule (finalAttrs: {
         "TestResolvePipelinesFromPath"
         "TestPreflightCmd_Run"
         "TestSnapshotContext_CancelsPush"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-        # Expected timeout error but got none
-        "TestPollJobStatus"
-        "TestPollJobStatusTimeout"
       ];
     in
     [

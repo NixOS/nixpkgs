@@ -45,13 +45,9 @@ let
         addBuildTools [ makeWrapper ]
           # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013
           (
-            (
-              if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then
-                lib.id
-              else
-                haskell.lib.compose.justStaticExecutables
+            (if stdenv.hostPlatform.isDarwin then lib.id else haskell.lib.compose.justStaticExecutables) (
+              haskellPackages.hercules-ci-cli.override overrides
             )
-              (haskellPackages.hercules-ci-cli.override overrides)
           )
       );
 in

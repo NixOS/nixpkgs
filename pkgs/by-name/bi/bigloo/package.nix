@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault during build
+    broken = stdenv.hostPlatform.isDarwin; # segfault during build
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

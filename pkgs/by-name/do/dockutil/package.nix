@@ -9,9 +9,7 @@
   swiftpm2nix,
   libarchive,
   p7zip,
-  # Building from source on x86_64 fails (among other things) due to:
-  # error: cannot load underlying module for 'Darwin'
-  fromSource ? (stdenv.system != "x86_64-darwin"),
+  fromSource ? true,
 }:
 
 let

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -50,13 +49,6 @@ buildPythonPackage rec {
       url = "https://github.com/jmschrei/pomegranate/pull/1142/commits/9ff5d5e2c959b44e569937e777b26184d1752a7b.patch";
       hash = "sha256-BXsVhkuL27QqK/n6Fa9oJCzrzNcL3EF6FblBeKXXSts=";
     })
-  ];
-
-  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # AssertionError: Arrays are not almost equal to 6 decimals
-    "tests/distributions/test_normal_full.py::test_fit"
-    "tests/distributions/test_normal_full.py::test_from_summaries"
-    "tests/distributions/test_normal_full.py::test_serialization"
   ];
 
   disabledTests = [

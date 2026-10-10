@@ -28,7 +28,7 @@ buildNpmPackage (finalAttrs: {
   nativeBuildInputs = [
     python3
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ clang_20 ]; # clang_21 breaks gyp builds
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks gyp builds
 
   meta = {
     changelog = "https://github.com/nestjs/nest-cli/releases/tag/${finalAttrs.version}";

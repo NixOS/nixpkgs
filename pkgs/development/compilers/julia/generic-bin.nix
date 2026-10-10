@@ -53,12 +53,6 @@ let
     # Test requires network access
     "Sockets"
     "Distributed"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Test Failed at $out/share/julia/stdlib/v1.8/LinearAlgebra/test/blas.jl:702
-    "LinearAlgebra/blas"
-    # Test Failed at $out/share/julia/test/misc.jl:724
-    "misc"
   ];
 in
 stdenv.mkDerivation {
