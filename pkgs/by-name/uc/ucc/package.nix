@@ -11,6 +11,8 @@ inputs@{
   # Configuration options
   enableAvx ? stdenv.hostPlatform.avxSupport,
   enableCuda ? config.cudaSupport,
+  # NVIDIA does not ship NCCL for every CUDA platform (eg :: pre-Thor Jetson)
+  enableNccl ? enableCuda && cudaPackages.nccl.meta.available,
   enableSse41 ? stdenv.hostPlatform.sse4_1Support,
   enableSse42 ? stdenv.hostPlatform.sse4_2Support,
 }:
@@ -80,8 +82,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cccl
     cuda_cudart
     cuda_nvml_dev
-    nccl
-  ];
+  ]
+  ++ optionals enableNccl [ nccl ];
 
   # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
   # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
