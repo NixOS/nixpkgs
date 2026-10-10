@@ -25,7 +25,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "samsungtvws";
   version = "3.0.6";
   pyproject = true;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2o0CmMhlCx2yVitfwFXXjNQTrDDRlDcDV1kGv/pJxVo=";
   };
 
@@ -61,16 +61,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ optional-dependencies.async
-  ++ optional-dependencies.encrypted;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "samsungtvws" ];
 
   meta = {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
-    changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
+    changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})
