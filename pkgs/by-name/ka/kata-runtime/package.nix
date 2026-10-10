@@ -54,6 +54,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
+  # Use the system OpenSSL rather than building the vendored openssl-src
+  env.OPENSSL_NO_VENDOR = 1;
+
   # cmake is only needed by the zlib-ng build of libz-sys
   dontUseCmakeConfigure = true;
 
