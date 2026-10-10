@@ -39,6 +39,7 @@ PKG_SET = "home-assistant.python3Packages"
 # If some requirements are matched by multiple or no Python packages, the
 # following can be used to choose the correct one
 PKG_PREFERENCES = {
+    "anthropic": "anthropic",
     "av": "av",
     "fiblary3": "fiblary3-fork",  # https://github.com/home-assistant/core/issues/66466
     "fints": "fints",
