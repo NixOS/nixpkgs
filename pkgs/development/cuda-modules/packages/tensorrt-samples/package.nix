@@ -10,6 +10,8 @@
   fetchzip,
   flags,
   lib,
+  nlohmann_json,
+  python3,
   runCommand,
   stdenvNoCC,
   tensorrt,
@@ -125,6 +127,14 @@ backendStdenv.mkDerivation (finalAttrs: {
         tag = "v11.0";
         hash = "sha256-xbGMxCSDTixR0fOoOABWyEVE4S9x031L3i5KQwPu24Y=";
       };
+      "11.1.0" = {
+        tag = "v11.1";
+        hash = "sha256-b+vpN/LTTbE1N/qQ/+1u78YmaVf6vvbg1XtFjQJkwTs=";
+      };
+      "11.3.0" = {
+        tag = "v11.3";
+        hash = "sha256-U52/Pyd+94taV+yhfxseUdyY5lLwOcxBPIwDatjr6gs=";
+      };
     }
   );
 
@@ -133,31 +143,33 @@ backendStdenv.mkDerivation (finalAttrs: {
     cuda_nvcc
   ];
 
-  postPatch = ''
-    nixLog "patching $PWD/CMakeLists.txt to avoid manually setting CMAKE_CXX_COMPILER"
-    substituteInPlace "$PWD"/CMakeLists.txt \
-      --replace-fail \
-        'find_program(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++)' \
-        '# find_program(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++)'
-  ''
-  + optionalString (lib.versionOlder finalAttrs.version "11.0") ''
-    nixLog "patching $PWD/CMakeLists.txt to use find_package(CUDAToolkit) instead of find_package(CUDA)"
-    substituteInPlace "$PWD"/CMakeLists.txt \
-      --replace-fail \
-        'find_package(CUDA ''${CUDA_VERSION} REQUIRED)' \
-        'find_package(CUDAToolkit REQUIRED)'
-  ''
-  # CMakeLists.txt only started using CMAKE_CUDA_ARCHITECTURES in 10.9, and this bug was fixed by 10.12.
-  +
-    optionalString
-      (lib.versionAtLeast finalAttrs.version "10.9" && lib.versionOlder finalAttrs.version "10.12")
-      ''
-        nixLog "patching $PWD/CMakeLists.txt to fix CMake logic error"
-        substituteInPlace "$PWD"/CMakeLists.txt \
-          --replace-fail \
-            'list(APPEND CMAKE_CUDA_ARCHITECTURES SM)' \
-            'list(APPEND CMAKE_CUDA_ARCHITECTURES "''${SM}")'
-      '';
+  # CMakeLists.txt no longer sets CMAKE_CXX_COMPILER manually as of 11.3.
+  postPatch =
+    optionalString (lib.versionOlder finalAttrs.version "11.3") ''
+      nixLog "patching $PWD/CMakeLists.txt to avoid manually setting CMAKE_CXX_COMPILER"
+      substituteInPlace "$PWD"/CMakeLists.txt \
+        --replace-fail \
+          'find_program(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++)' \
+          '# find_program(CMAKE_CXX_COMPILER NAMES $ENV{CXX} g++)'
+    ''
+    + optionalString (lib.versionOlder finalAttrs.version "11.0") ''
+      nixLog "patching $PWD/CMakeLists.txt to use find_package(CUDAToolkit) instead of find_package(CUDA)"
+      substituteInPlace "$PWD"/CMakeLists.txt \
+        --replace-fail \
+          'find_package(CUDA ''${CUDA_VERSION} REQUIRED)' \
+          'find_package(CUDAToolkit REQUIRED)'
+    ''
+    # CMakeLists.txt only started using CMAKE_CUDA_ARCHITECTURES in 10.9, and this bug was fixed by 10.12.
+    +
+      optionalString
+        (lib.versionAtLeast finalAttrs.version "10.9" && lib.versionOlder finalAttrs.version "10.12")
+        ''
+          nixLog "patching $PWD/CMakeLists.txt to fix CMake logic error"
+          substituteInPlace "$PWD"/CMakeLists.txt \
+            --replace-fail \
+              'list(APPEND CMAKE_CUDA_ARCHITECTURES SM)' \
+              'list(APPEND CMAKE_CUDA_ARCHITECTURES "''${SM}")'
+        '';
 
   cmakeFlags = [
     # Use tensorrt for these components; we only really want the samples.
@@ -165,8 +177,18 @@ backendStdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_PLUGINS" false)
     (cmakeBool "BUILD_SAMPLES" true)
 
-    # Build configuration
-    (cmakeFeature "GPU_ARCHS" (replaceStrings [ ";" ] [ " " ] flags.cmakeCudaArchitecturesString))
+  ]
+  # CMakeLists.txt reads CMAKE_CUDA_ARCHITECTURES instead of GPU_ARCHS as of 11.3, and otherwise defaults to a fixed
+  # list of architectures which may not be supported by the CUDA compiler.
+  ++ (
+    if lib.versionAtLeast finalAttrs.version "11.3" then
+      [ (cmakeFeature "CMAKE_CUDA_ARCHITECTURES" flags.cmakeCudaArchitecturesString) ]
+    else
+      [ (cmakeFeature "GPU_ARCHS" (replaceStrings [ ";" ] [ " " ] flags.cmakeCudaArchitecturesString)) ]
+  )
+  # The samples fetch nlohmann_json with FetchContent as of 11.1.
+  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "11.1") [
+    (cmakeFeature "FETCHCONTENT_SOURCE_DIR_NLOHMANN_JSON" "${nlohmann_json.src}")
   ];
 
   buildInputs = [
@@ -182,6 +204,7 @@ backendStdenv.mkDerivation (finalAttrs: {
       fetchzip
       finalAttrs
       lib
+      python3
       runCommand
       stdenvNoCC
       writeShellApplication

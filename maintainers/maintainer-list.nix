@@ -4189,6 +4189,12 @@
     githubId = 86652;
     name = "Bram Duvigneau";
   };
+  brancengregory = {
+    name = "Brancen Gregory";
+    email = "brancengregory@gmail.com";
+    github = "brancengregory";
+    githubId = 13408602;
+  };
   brancz = {
     email = "frederic.branczyk@polarsignals.com";
     name = "Frederic Branczyk";
@@ -5782,6 +5788,12 @@
     githubId = 11145016;
     name = "J.C.";
   };
+  confused-engineer = {
+    email = "dpierce33100@gmail.com";
+    github = "Confused-Engineer";
+    githubId = 101591048;
+    name = "Confused-Engineer";
+  };
   confusedalex = {
     email = "alex@confusedalex.dev";
     github = "ConfusedAlex";
@@ -6793,6 +6805,11 @@
     github = "dbrock";
     githubId = 14032;
     name = "Daniel Brockman";
+  };
+  dcarrero = {
+    github = "dcarrero";
+    githubId = 195768;
+    name = "David Carrero F-B";
   };
   DCsunset = {
     email = "DCsunset@protonmail.com";
@@ -14981,6 +14998,11 @@
     name = "Keenan Weaver";
     github = "keenanweaver";
     githubId = 37268985;
+  };
+  keirlawson = {
+    name = "Keir Lawson";
+    github = "keirlawson";
+    githubId = 49213;
   };
   keksgesicht = {
     name = "Jan Braun";

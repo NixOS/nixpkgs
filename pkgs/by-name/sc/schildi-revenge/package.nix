@@ -14,20 +14,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.09.12";
+  version = "26.10.01";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8bI2cysknSHohBJky17rHPV+BO3bsTM1rjbTIRRmUQQ=";
+    hash = "sha256-5AOxfJ41/9MIvhbmUXdU2fGBT48h8dBAm77P4xlWei8=";
     fetchSubmodules = true;
   };
 
   cargoRoot = "matrix-rust-sdk";
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-cR+0Y13VJgevuwz7LlhQuLuRx50FYycj0dUnrOCgAbk=";
+    hash = "sha256-6v5VqUwiIfkGhByoZN9hVm4zANAgTWHpPBdVHGFmGNc=";
   };
 
   nativeBuildInputs = [
@@ -38,23 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustPlatform.cargoSetupHook
   ];
-  #broken entry unused entry in Cargo.toml, can probably be removed with next update
-  postUnpack = ''
-    substituteInPlace ./source/matrix-rust-sdk/Cargo.toml --replace-fail \
-      "ruma = { git = \"https://github.com/matrix-org/ruma\", rev = \"bf21677a8fcba04fd01e341809eb5991908441a2\" }" \
-      ""
-  '';
+
+  # Workaround for a Vergen related build failure
+  env = {
+    VERGEN_GIT_SHA = "0000000000000000000000000000000000000000";
+  };
 
   gradleBuildTask = "createReleaseDistributable";
 
   gradleUpdateScript = ''
     runHook preBuild
 
-    gradle composeApp:dependencies composeApp:checkRuntime composeApp:kspCommonMainKotlinMetadata --write-verification-metadata sha256
-    ##### Fallback
-    ## If the update script starts missing dependencies after an update this should still work.
-    ## Unfortunately it also unnecessarily builds the entire rust crate
-    #gradle createReleaseDistributable --write-verification-metadata sha256
+    gradle createReleaseDistributable composeApp:kspCommonMainKotlinMetadata --write-verification-metadata sha256
   '';
 
   mitmCache = gradle_9.fetchDeps {

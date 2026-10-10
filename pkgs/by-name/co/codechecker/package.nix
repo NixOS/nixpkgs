@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   fetchPypi,
   makeWrapper,
   python313Packages,
@@ -18,18 +19,19 @@
 # https://github.com/Ericsson/codechecker/issues/4773
 python313Packages.buildPythonApplication (finalAttrs: {
   pname = "codechecker";
-  version = "6.28.0";
+  version = "6.29.1";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-wxV+/hzsk7RrzWTXNz5HyweYdFFI1upNS508QRPCefo=";
+    hash = "sha256-0D8eO+UumjZXh/t00IUcBLtUUwXJINbFaUG+svkOScQ=";
   };
 
   build-system = with python313Packages; [
     setuptools
+    types-setuptools
   ];
 
   dependencies = with python313Packages; [
@@ -50,6 +52,8 @@ python313Packages.buildPythonApplication (finalAttrs: {
     types-pyyaml
     sarif-tools
     types-psutil
+    types-lxml
+    prettytable
   ];
 
   pythonRelaxDeps = true;

@@ -4,7 +4,6 @@
   autoreconfHook,
   callPackage,
   fetchFromGitHub,
-  hunspellDicts,
   ncurses,
   nix-update-script,
   readline,

@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   fetchurl,
   callPackage,
 
@@ -49,7 +50,14 @@ let
       extraBuildInputs ? [ ],
     }:
     stdenv.mkDerivation {
-      inherit patches;
+      patches =
+        patches
+        # Fix build with GCC 16
+        ++ lib.optional (lib.versionOlder version "0.14.0") (fetchpatch {
+          name = "tracy-add-missing-cstdint-include.patch";
+          url = "https://github.com/wolfpld/tracy/commit/16af373a7ead507a6dfc541e784a8a8b57e5a6b8.patch";
+          hash = "sha256-hk+o1lqYudhEDgmrdqSZCLZXkoMi5RwDpRFs/DaaIZ0=";
+        });
 
       pname = "tracy";
       inherit version;

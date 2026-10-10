@@ -1,8 +1,9 @@
 {
   lib,
-  flutter332,
+  flutter338,
   fetchFromGitHub,
   libayatana-appindicator,
+  libsodium,
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
@@ -13,62 +14,39 @@ let
   # which would also clone a whole copy of flutter
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
   desktopId = "io.ente.auth";
-  flutter = flutter332;
 in
-flutter.buildFlutterApplication rec {
+flutter338.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.17";
+  version = "4.4.25";
 
   src = fetchFromGitHub {
     owner = "ente";
     repo = "ente";
     sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-qnjOrct70TaaO91QBHcbRIkzLZGH6mbpuLAAKE9k/es=";
+    hash = "sha256-zOZg4RW7T3v/QS075KWEEdmT2+2xcMa1BlSM4In75uM=";
   };
 
-  sourceRoot = "${src.name}/mobile/apps/auth";
+  sourceRoot = "${src.name}/mobile";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
 
-  customSourceBuilders.ente_strings =
-    { version, src, ... }:
-    # There currently is no convenient way to setup the flutter SDK outside of apps
-    # and we can't move this to the app's own build phase as it would still reference
-    # the immutable source variant without the generated l10n files.
-    flutter.buildFlutterApplication {
-      inherit version src;
-      inherit (src) passthru;
-      pname = "ente_strings";
-      sourceRoot = "${src.name}/mobile/packages/strings";
-      pubspecLock = lib.importJSON ./strings.pubspec.lock.json;
-
-      buildPhase = ''
-        runHook preBuild
-
-        flutter gen-l10n
-
-        runHook postBuild
-      '';
-
-      installPhase = ''
-        runHook preInstall
-
-        # The $debug output can't be disabled for buildFlutterApplication.
-        # The $out structure must match that of ente-auth to correctly resolve
-        # the package as pubspec uses relative paths for workspace packages.
-        mkdir -p $debug $out/mobile/{apps/auth,packages}
-        rm pubspec.lock
-        cp -r . $out/mobile/packages/strings
-
-        runHook postInstall
-      '';
-    };
-
   postPatch = ''
-    rmdir assets/simple-icons
-    ln -s ${simple-icons} assets/simple-icons
+    rmdir apps/auth/assets/simple-icons
+    ln -s ${simple-icons} apps/auth/assets/simple-icons
+  '';
+
+  preBuild = ''
+    (cd packages/strings && flutter gen-l10n)
+
+    # Flutter needs this reference to find the workspace package config generated
+    # by the Dart hook. Otherwise it runs pub get and tries to download dependencies,
+    # which fails because the build sandbox has no network access.
+    mkdir -p apps/auth/.dart_tool/pub
+    echo '{"workspaceRoot":"../../../../.dart_tool/package_config.json"}' \
+      > apps/auth/.dart_tool/pub/workspace_ref.json
+    pushd apps/auth
   '';
 
   nativeBuildInputs = [
@@ -78,6 +56,7 @@ flutter.buildFlutterApplication rec {
 
   buildInputs = [
     libayatana-appindicator
+    libsodium
     # The networking client used by ente-auth (native_dio_adapter)
     # introduces a transitive dependency on Java, which technically
     # is only needed for the Android implementation.
@@ -86,16 +65,22 @@ flutter.buildFlutterApplication rec {
     jdk17_headless # JDK version used by upstream CI
   ];
 
-  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+  env = {
+    # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+    CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+    # Use the system library instead of sodium_libs' build-time download.
+    LIBSODIUM_USE_PKGCONFIG = "1";
+  };
+
+  runtimeDependencies = [ libsodium ];
 
   flutterBuildFlags = [
     # Disable update notifications and auto-update functionality
     "--dart-define=app.flavor=independent"
   ];
 
-  # Based on https://github.com/ente/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
-  # and https://github.com/ente/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
+  # Based on https://github.com/ente/ente/blob/main/mobile/apps/auth/linux/packaging/rpm/make_config.yaml
+  # and https://github.com/ente/ente/blob/main/mobile/apps/auth/linux/packaging/enteauth.appdata.xml
   desktopItems = [
     (makeDesktopItem {
       name = desktopId;
@@ -128,6 +113,9 @@ flutter.buildFlutterApplication rec {
 
     # Not required at runtime as it's only used on Android
     rm $out/app/ente-auth/lib/libdartjni.so
+
+    # Return to the workspace root so the Dart cache hook can find .dart_tool.
+    popd
   '';
 
   passthru.updateScript = ./update.sh;

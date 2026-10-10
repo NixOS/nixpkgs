@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wiim";
-  version = "0.1.9";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Linkplay2020";
     repo = "wiim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vu6Cn3wlLfHCTegAEs4shuezYCTTMFb4zla43OH7y6o=";
+    hash = "sha256-/2PfVWxnTmBQ8fsLBZU00N0uqkrpiBU8/lyz36OSisw=";
   };
 
   build-system = [ setuptools ];

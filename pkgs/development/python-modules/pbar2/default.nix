@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "pbar";
+  pname = "pbar2";
   version = "2.2.1";
   pyproject = true;
 

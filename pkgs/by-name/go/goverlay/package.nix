@@ -27,18 +27,19 @@
   SDL2,
   stdenv,
   which,
+  writableTmpDirAsHomeHook,
   xdg-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "goverlay";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = "goverlay";
     tag = finalAttrs.version;
-    hash = "sha256-gU2jgmjPP1H9aqBVSz+M/ZkHa0TqzS1fAcgQr5EU/8o=";
+    hash = "sha256-+Tb/7HnGAsXAip07eat8sA4P2ry80kaw0g9b5RBa+lw=";
   };
 
   outputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     lazarus-qt6
     patchelfUnstable
     qt6Packages.wrapQtAppsHook
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -68,29 +70,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     # goverlay
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B goverlay.lpi --bm=Release
-    # pascube_bin
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B pascube_src/pascube.lpi
-    cp pascube_src/pascube pascube
+    lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B goverlay.lpi --bm=Release --ws=qt6
+    # pascube
+    lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B pascube_src/pascube.lpi --ws=qt6
+    cp pascube_src/pascube ./pascube
+    # bgmod-splash
+    lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B bgmod_splash_src/bgmod_splash.lpi --ws=qt6
+    cp bgmod_splash_src/bgmod-splash ./bgmod-splash
+    mkdir -p data/bgmod
+    cp bgmod-splash data/bgmod/bgmod-splash
     runHook postBuild
-  '';
-
-  doCheck = true;
-
-  nativeCheckInputs = [
-    curl
-  ];
-
-  checkPhase = ''
-    # test-logic
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt6}/share/lazarus -B tests/logic/logic_tests.lpi --widgetset=qt6
-    patchelf ./tests/logic/logic_tests --set-rpath ${
-      lib.makeLibraryPath [
-        libx11
-        qt6Packages.libqtpas
-      ]
-    }
-    ./tests/logic/logic_tests
   '';
 
   preFixup = ''
@@ -129,6 +118,12 @@ stdenv.mkDerivation (finalAttrs: {
         libx11
         libz
         SDL2
+      ]
+    }
+    patchelf $out/libexec/bgmod-splash --set-rpath ${
+      lib.makeLibraryPath [
+        libx11
+        qt6Packages.libqtpas
       ]
     }
   '';

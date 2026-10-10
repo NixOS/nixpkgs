@@ -2290,10 +2290,10 @@
   };
 
   pkl = {
-    version = "0.21.0-unstable-2026-09-25";
+    version = "0.21.0-unstable-2026-10-01";
     url = "github:apple/tree-sitter-pkl";
-    rev = "c95d8284940f5e1da2cd0d8f1ee45d7ef9ef75d1";
-    hash = "sha256-dnGqTZ7Kga1sIJkzRSbqkhvIrPJMxOEhHnDKJuLyudM=";
+    rev = "c837eff683d62f3cb5e6309b44c257640f202d4b";
+    hash = "sha256-wV0UzT1GB/sWlDTGK7Sij/eIBYIu4vM7O5zKf/Qde8g=";
     meta = {
       license = lib.licenses.asl20;
       maintainers = with lib.maintainers; [
@@ -3495,10 +3495,10 @@
   };
 
   wesl = {
-    version = "0-unstable-2025-09-26";
+    version = "0.1.0-unstable-2026-10-02";
     url = "github:wgsl-tooling-wg/tree-sitter-wesl";
-    rev = "3fa2b96bf5c217dae9bf663e2051fcdad0762c19";
-    hash = "sha256-O3n65StgGhxfdwYF/QPBTdkXEGjY2ajHeLpF5JWuTc8=";
+    rev = "b600a65818e4dd7f4d32407d1427643c27f3c389";
+    hash = "sha256-hf/dSdWkvmEICrHRNq6HNz2RqOWt5bMEhd+1RUOs/W4=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
