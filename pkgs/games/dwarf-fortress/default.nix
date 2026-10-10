@@ -1,7 +1,7 @@
 {
   stdenv,
   stdenvNoCC,
-  gccStdenv,
+  gcc15Stdenv,
   lib,
   libsForQt5,
   newScope,
@@ -92,7 +92,7 @@ let
           dfhack = callPackage ./dfhack {
             inherit (perlPackages) XMLLibXML XMLLibXSLT;
             inherit dfVersion;
-            stdenv = gccStdenv;
+            stdenv = gcc15Stdenv;
           };
 
           mkDfWrapper =

@@ -11,7 +11,6 @@
   copyDesktopItems,
   makeDesktopItem,
   imagemagick,
-  nix-update-script,
 }:
 let
   yarn-berry = yarn-berry_4;
@@ -20,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "losslesscut";
-  version = "3.68.0";
+  version = "3.69.0";
 
   src = fetchFromGitHub {
     owner = "mifi";
     repo = "lossless-cut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E0Ds2Wpo+JUSfd+hBY7QdJM1cUlWgNWW4zEiB0rdh6w=";
+    hash = "sha256-N53B2qylJR163M5FEg8qLGazxTio3E7GTfGJXvvLQ9s=";
 
     # Remove after upstream updates to Yarn 4.15
     # https://github.com/mifi/lossless-cut/blob/master/package.json#L492
@@ -138,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-81pebHUkVLEAe01a5olTP9zzQkTCrGMWUvNTYBsW+Bk=";
+    hash = "sha256-Qa/m7diKJONy6BKc8InK5xqpUMqQXEMKT/sicBDPlco=";
   };
 
   postConfigure = ''
@@ -183,12 +182,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Swiss army knife of lossless video/audio editing";
     homepage = "https://losslesscut.app/";
+    changelog = "https://github.com/mifi/lossless-cut/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
+    # electron-builder needs `codesign` for ad-hoc signing on darwin
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       shelvacu
       ShamrockLee

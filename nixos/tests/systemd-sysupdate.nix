@@ -60,6 +60,8 @@ in
       };
 
       environment.etc."systemd/import-pubring.gpg".source = "${gpgKeyring}/pubkey.gpg";
+
+      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
   };
 
@@ -67,6 +69,7 @@ in
     import datetime as dt
 
     server.wait_for_unit("nginx.service")
+    target.wait_for_unit("network-online.target")
 
     def update_done(_last_try: bool) -> bool:
         info = target.get_unit_info("systemd-sysupdate-update.service")

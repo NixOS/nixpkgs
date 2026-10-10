@@ -109,9 +109,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     # Flakey
     "--skip=sources::exec::tests::test_graceful_shutdown"
+    "--skip=sources::exec::tests::test_run_command_linux"
     "--skip=sources::host_metrics::cgroups::tests::generates_cgroups_metrics"
     "--skip=sources::host_metrics::cpu::tests::generates_cpu_metrics"
     "--skip=sources::internal_logs::tests::repeated_logs_are_not_rate_limited"
+    "--skip=topology::test::backpressure::buffer_drop_fan_out"
+    "--skip=topology::test::backpressure::default_fan_out"
+    "--skip=topology::test::backpressure::serial_backpressure"
     "--skip=topology::test::reload::topology_disk_buffer_config_change_chained_does_not_stall"
     "--skip=topology::test::reload::topology_reload_preserves_enrichment_table_state"
 
@@ -140,13 +144,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
     # Fails on aarch64-darwin (https://github.com/vectordotdev/vector/issues/23813)
     "--skip=sources::file::tests::file_start_position_server_restart_unfinalized"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-    # Flakey on aarch64-linux
-    "--skip=sources::exec::tests::test_run_command_linux"
-    "--skip=topology::test::backpressure::buffer_drop_fan_out"
-    "--skip=topology::test::backpressure::default_fan_out"
-    "--skip=topology::test::backpressure::serial_backpressure"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''

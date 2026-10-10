@@ -8,7 +8,7 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "elm-watch";
-  version = "1.2.6";
+  version = "1.2.8";
 
   inherit nodejs;
 
@@ -16,11 +16,11 @@ buildNpmPackage (finalAttrs: {
     owner = "lydell";
     repo = "elm-watch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qfKXbONIqlfv9joAMhAxGMinfHaZvKEz2FL6YFl7OSI=";
+    hash = "sha256-AosI/d9sFHI/vRXNE0xNwsewYeSntfgpgAEwyu0isns=";
     fetchSubmodules = true;
   };
 
-  npmDepsHash = "sha256-ae4bUl5/GGAtYR7cc8om3C4/XjCUe8v3sWpIhIXBGV8=";
+  npmDepsHash = "sha256-zZsddyXGff3mKGAhg0az41I27mH0TApkRU38KBf8bQM=";
 
   npmFlags = [ "--ignore-scripts" ];
 

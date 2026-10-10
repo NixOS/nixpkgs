@@ -11,7 +11,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-rds20140815";
-  version = "15.9.1";
+  version = "16.0.0";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "alibabacloud_rds20140815";
     inherit (finalAttrs) version;
-    hash = "sha256-nR1TzieZC84LqDnZWEVp5iTjCwwGU/MVbGSv2n0f4Eg=";
+    hash = "sha256-thTj0+SQmDmUBdIzJ8Ny0//HYsB0xJBtaCRjAzY254Q=";
   };
 
   build-system = [ setuptools ];

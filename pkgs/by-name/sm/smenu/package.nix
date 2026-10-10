@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
       input to create a nice selection window just below the cursor. Once done,
       your selection will be sent to standard output.
     '';
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.unix;
     mainProgram = "smenu";

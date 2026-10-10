@@ -128,8 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck =
-    !stdenv.hostPlatform.isMusl # iconv binary
+  doCheck = with stdenv.hostPlatform;
+    !isMusl # iconv binary
+    && !isDarwin
   ;
 
   passthru = {

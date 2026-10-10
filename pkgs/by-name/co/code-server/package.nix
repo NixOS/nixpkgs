@@ -152,10 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxkbfile
+    libkrb5
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libsecret
-    libkrb5
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -289,11 +289,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
-    # (see issue #101229).
+    # VS Code's postinstall removes the prebuilt @parcel/watcher binary, so
+    # build it from source, as upstream's macOS release build does.
     pushd ./lib/vscode/remote/node_modules/@parcel/watcher
-    mkdir -p ./build/Release
-    mv ./prebuilds/darwin-x64/node.napi.glibc.node ./build/Release/watcher.node
+    node "$npm_config_node_gyp" rebuild
     jq "del(.scripts) | .gypfile = false" ./package.json | sponge ./package.json
     popd
   ''
@@ -372,6 +371,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "aarch64-darwin"
     ];
     mainProgram = "code-server";
   };

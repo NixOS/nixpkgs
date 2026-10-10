@@ -1,4 +1,8 @@
-{ buildRedist }:
+{
+  backendStdenv,
+  buildRedist,
+  lib,
+}:
 buildRedist {
   redistName = "nvtiff";
   pname = "libnvtiff";
@@ -9,6 +13,16 @@ buildRedist {
     "include"
     "lib"
     "static"
+  ];
+
+  # https://docs.nvidia.com/cuda/nvtiff/index.html
+  platformAssertions = [
+    {
+      message =
+        "nvTIFF supports CUDA compute capabilities 7.0 and newer"
+        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
+      assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
+    }
   ];
 
   meta = {

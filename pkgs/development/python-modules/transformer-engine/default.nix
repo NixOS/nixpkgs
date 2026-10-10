@@ -48,7 +48,8 @@
   withJax ? true,
   withNvshmem ? false,
   withCusolvermp ? false,
-  withNcclEp ? true,
+  # NCCL EP requires Hopper (9.0) or newer.
+  withNcclEp ? lib.any (lib.flip lib.versionAtLeast "9.0") cudaCapabilities,
 }:
 
 let
@@ -62,7 +63,7 @@ let
     optionalString
     optionals
     strings
-    subtractLists
+    unique
     ;
   inherit (cudaPackages) backendStdenv flags;
 
@@ -72,16 +73,23 @@ let
     else
       "none";
 
-  cudaCapabilities' = subtractLists [
-    # Compilation will fail when providing those architectures:
-    #   error: static assertion failed with "Compiled for the generic architecture, while utilizing
-    #   family-specific features.
-    #   Please compile for smXXXf architecture instead of smXXX architecture."
-    # Providing 10.0 and 12.0 respectively is enough as the CMake file will automatically add the
-    # correct compilation flags for supporting those architectures.
-    "10.3"
-    "12.1"
-  ] cudaCapabilities;
+  # Compilation will fail when providing architectures which are members of a family other than its head:
+  #   error: static assertion failed with "Compiled for the generic architecture, while utilizing
+  #   family-specific features.
+  #   Please compile for smXXXf architecture instead of smXXX architecture."
+  # Providing the head of the family (10.0 or 12.0) is enough, as the CMake file automatically adds the family- and
+  # architecture-specific targets (100a, 103a, 107a, and 120f) which support them.
+  cudaCapabilities' = unique (
+    map (
+      cudaCapability:
+      {
+        "10.3" = "10.0";
+        "10.7" = "10.0";
+        "12.1" = "12.0";
+      }
+      .${cudaCapability} or cudaCapability
+    ) cudaCapabilities
+  );
 
 in
 buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
@@ -274,7 +282,12 @@ buildPythonPackage.override { stdenv = backendStdenv; } (finalAttrs: {
     # libtransformer_engine.so gets a `DT_NEEDED` on libcuda.so.1, provided by the GPU driver at
     # run time:
     # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
-    || withNcclEp;
+    || withNcclEp
+
+    # libtransformer_engine.so links against libcudnn_engines_runtime_compiled.so, which has a `DT_NEEDED` on
+    # libcuda.so.1 since cuDNN 9.27:
+    # OSError: libcuda.so.1: cannot open shared object file: No such file or directory
+    || lib.versionAtLeast cudaPackages.cudnn.version "9.27";
 
   pythonImportsCheck = [
     "transformer_engine"

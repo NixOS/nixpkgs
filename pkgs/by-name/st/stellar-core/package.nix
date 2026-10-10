@@ -106,11 +106,21 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-  # ethnum <= 1.5.2 fails on rustc 1.97+ (TryFromIntError is no longer ZST).
-  # Protocols p21-p26 pin ethnum 1.5.0 in Cargo.lock / dep-tree expects, so keep
-  # that version and apply the upstream 1.5.3 source fix in the vendored crate.
-  # https://github.com/nlordell/ethnum-rs/pull/58
   postPatch = ''
+    # Include integer types explicitly instead of relying on transitive standard
+    # library includes, some of which were removed in GCC 16.
+    substituteInPlace \
+      lib/libmedida/src/medida/stats/snapshot.h \
+      src/invariant/test/InvariantTestUtils.h \
+      src/util/xdrquery/XDRQueryEval.h \
+      --replace-fail '#include <memory>' $'#include <cstdint>\n#include <memory>'
+    substituteInPlace src/util/DebugMetaUtils.h \
+      --replace-fail '#include <filesystem>' $'#include <cstdint>\n#include <filesystem>'
+
+    # ethnum <= 1.5.2 fails on rustc 1.97+ (TryFromIntError is no longer ZST).
+    # Protocols p21-p26 pin ethnum 1.5.0 in Cargo.lock / dep-tree expects, so keep
+    # that version and apply the upstream 1.5.3 source fix in the vendored crate.
+    # https://github.com/nlordell/ethnum-rs/pull/58
     shopt -s nullglob
     for crate in "$cargoDepsCopy"/source-registry-*/ethnum-1.5.0; do
       patch -p1 -d "$crate" < ${
