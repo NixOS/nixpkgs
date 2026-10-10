@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Apache module that embeds the Python interpreter within the server";
     mainProgram = "mod_python";
     platforms = lib.platforms.unix;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
