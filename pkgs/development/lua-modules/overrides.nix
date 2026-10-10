@@ -74,6 +74,17 @@ let
     lua
     isLuaJIT
     ;
+
+  # Only for modules tested on 5.5; drop once LuaRocks has a rockspec allowing it.
+  allowLua55 = old: {
+    meta = (old.meta or { }) // {
+      broken = false;
+    };
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace "$rockspecFilename" \
+        --replace-fail 'lua >= 5.1, < 5.5' 'lua >= 5.1, <= 5.5'
+    '';
+  };
 in
 {
   # keep-sorted start block=yes case=no newline_separated=yes
@@ -613,7 +624,9 @@ in
     '';
   });
 
-  luadbi-mysql = prev.luadbi-mysql.overrideAttrs (old: {
+  luadbi = prev.luadbi.overrideAttrs allowLua55;
+
+  luadbi-mysql = (prev.luadbi-mysql.overrideAttrs allowLua55).overrideAttrs (old: {
 
     luarocksConfig = lib.recursiveUpdate old.luarocksConfig {
       variables = {
@@ -627,13 +640,13 @@ in
     ];
   });
 
-  luadbi-postgresql = prev.luadbi-postgresql.overrideAttrs (old: {
+  luadbi-postgresql = (prev.luadbi-postgresql.overrideAttrs allowLua55).overrideAttrs (old: {
     buildInputs = old.buildInputs ++ [
       (lib.getDev libpq)
     ];
   });
 
-  luadbi-sqlite3 = prev.luadbi-sqlite3.overrideAttrs {
+  luadbi-sqlite3 = (prev.luadbi-sqlite3.overrideAttrs allowLua55).overrideAttrs {
     externalDeps = [
       {
         name = "SQLITE";
