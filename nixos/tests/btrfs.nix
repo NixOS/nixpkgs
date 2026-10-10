@@ -140,4 +140,179 @@
         run_scrub("dev-vdb")
     '';
   };
+
+  locking = runTest {
+    name = "btrfs-locking";
+    meta.maintainers = with pkgs.lib.maintainers; [
+      Deric-W
+    ];
+
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [
+          pkgs.coreutils
+          pkgs.util-linux
+          pkgs.gnused
+        ];
+        # somehow requires more free disk space that the other tests
+        virtualisation.emptyDiskImages = [ 256 ];
+        virtualisation.fileSystems."/mnt/test" = {
+          fsType = "btrfs";
+          device = "/dev/vdb";
+          autoFormat = true;
+          options = [ "X-mount.mkdir" ];
+        };
+        services.btrfs = {
+          autoScrub.enable = true;
+          autoBalance.enable = true;
+        };
+      };
+
+    testScript = ''
+      import contextlib
+
+      @contextlib.contextmanager
+      def run_service(service):
+        machine.start_job(f"'{service}'")
+        invocation_id = machine.succeed(
+          f"systemctl show --value -p InvocationID '{service}'"
+        ).rstrip()
+
+        yield invocation_id
+
+        machine.wait_until_fails(f"systemctl --quiet is-active '{service}'")
+        machine.fail(f"systemctl is-failed '{service}'")
+        output = machine.succeed(
+          f"journalctl --no-pager _SYSTEMD_INVOCATION_ID={invocation_id}"
+        )
+        t.assertNotRegex(output, "(?i)warning:|error:")
+
+      def wait_for_lock(invocation_id):
+        machine.wait_until_succeeds(
+          f"journalctl --no-pager _SYSTEMD_INVOCATION_ID={invocation_id}"
+          " | grep --quiet 'Acquiring lock on '"
+        )
+
+      start_all()
+      machine.wait_for_unit("multi-user.target")
+
+      fs = "/mnt/test"
+      escaped = "mnt-test"
+      uuid = machine.succeed(
+        f"btrfs filesystem show '{fs}' | sed -n -e '/uuid:/ {{s/^.*uuid: //;p }}'"
+      ).rstrip()
+
+      # disable timers (and possible triggered services) to prevent them
+      # from interfering with the tests
+      for service in ("scrub", "balance"):
+        machine.stop_job(f"'btrfs-{service}@{escaped}.timer'")
+        machine.stop_job(f"'btrfs-{service}@{escaped}.service'")
+
+      # create btrfs runtime directory for manual locking
+      machine.succeed("mkdir -p /run/btrfs")
+
+      for service in ("scrub", "balance"):
+        with subtest(f"Verify that {service} services wait for locks of their filesystem"):
+          lockfile = f"/run/btrfs/maintainance-{uuid}.lock"
+          _, _, pid = machine.succeed(
+            f"flock -x --no-fork '{lockfile}' sleep infinity >&2 & echo $!"
+          ).rstrip().rpartition("\n")
+          with run_service(f"btrfs-{service}@{escaped}.service") as invocation_id:
+            wait_for_lock(invocation_id)
+            machine.succeed(f"kill -SIGTERM {pid}")
+
+      for service in ("scrub", "balance"):
+        with subtest(f"Verify that {service} services ignore locks for other file systems"):
+          lockfile = "/run/btrfs/maintainance-other.lock"
+          _, _, pid = machine.succeed(
+            f"flock -x --no-fork '{lockfile}' sleep infinity >&2 & echo $!"
+          ).rstrip().rpartition("\n")
+          with run_service(f"btrfs-{service}@{escaped}.service"):
+            pass
+          machine.succeed(f"kill -SIGTERM {pid} && rm '{lockfile}'")
+
+      for service in ("scrub", "balance"):
+        with subtest(f"Verify that stopping a {service} service while waiting works"):
+          lockfile = f"/run/btrfs/maintainance-{uuid}.lock"
+          _, _, pid = machine.succeed(
+            f"flock -x --no-fork '{lockfile}' sleep infinity >&2 & echo $!"
+          ).rstrip().rpartition("\n")
+          with run_service(f"btrfs-{service}@{escaped}.service") as invocation_id:
+            wait_for_lock(invocation_id)
+            machine.stop_job(f"btrfs-{service}@{escaped}.service")
+          machine.succeed(f"kill -SIGTERM {pid}")
+    '';
+  };
+
+  no-locking = runTest {
+    name = "btrfs-no-locking";
+    meta.maintainers = with pkgs.lib.maintainers; [
+      Deric-W
+    ];
+
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [
+          pkgs.coreutils
+          pkgs.util-linux
+          pkgs.gnused
+        ];
+        # somehow requires more free disk space that the other tests
+        virtualisation.emptyDiskImages = [ 256 ];
+        virtualisation.fileSystems."/mnt/test" = {
+          fsType = "btrfs";
+          device = "/dev/vdb";
+          autoFormat = true;
+          options = [ "X-mount.mkdir" ];
+        };
+        services.btrfs = {
+          allowConcurrency = true;
+          autoScrub.enable = true;
+          autoBalance.enable = true;
+        };
+      };
+
+    testScript = ''
+      def run_service(service):
+        machine.start_job(f"'{service}'")
+        invocation_id = machine.succeed(
+          f"systemctl show --value -p InvocationID '{service}'"
+        ).rstrip()
+        machine.wait_until_fails(f"systemctl --quiet is-active '{service}'")
+        machine.fail(f"systemctl is-failed '{service}'")
+        output = machine.succeed(
+          f"journalctl --no-pager _SYSTEMD_INVOCATION_ID={invocation_id}"
+        )
+        t.assertNotRegex(output, "(?i)warning:|error:")
+
+      start_all()
+      machine.wait_for_unit("multi-user.target")
+
+      fs = "/mnt/test"
+      escaped = "mnt-test"
+      uuid = machine.succeed(
+        f"btrfs filesystem show '{fs}' | sed -n -e '/uuid:/ {{s/^.*uuid: //;p }}'"
+      ).rstrip()
+
+      # disable timers (and possible triggered services) to prevent them
+      # from interfering with the tests
+      for service in ("scrub", "balance"):
+        machine.stop_job(f"'btrfs-{service}@{escaped}.timer'")
+        machine.stop_job(f"'btrfs-{service}@{escaped}.service'")
+
+      # create btrfs runtime directory for manual locking
+      machine.succeed("mkdir -p /run/btrfs")
+
+      for service in ("scrub", "balance"):
+        with subtest(f"Verify that {service} services do not wait for locks"):
+          lockfile = f"/run/btrfs/maintainance-{uuid}.lock"
+          _, _, pid = machine.succeed(
+            f"flock -x --no-fork '{lockfile}' sleep infinity >&2 & echo $!"
+          ).rstrip().rpartition("\n")
+          run_service(f"btrfs-{service}@{escaped}.service")
+          machine.succeed(f"kill -SIGTERM {pid}")
+    '';
+  };
 }
