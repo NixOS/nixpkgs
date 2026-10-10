@@ -847,6 +847,8 @@ in
   headplane = runTest ./headplane.nix;
   headscale = runTest ./headscale.nix;
   healthchecks = runTest ./web-apps/healthchecks.nix;
+  hebbot = runTest ./matrix/hebbot.nix;
+  hebbot-module-options = pkgs.callPackage ./matrix/hebbot-module-options.nix { };
   hedgedoc = runTest ./hedgedoc.nix;
   herbstluftwm = runTest ./herbstluftwm.nix;
   # This test happens to work on x86_64-linux but not on other platforms.
