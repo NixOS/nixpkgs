@@ -22,6 +22,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-aFpXkfrl4gDOi3pOXVFbYVP/3nF1MxvQ34GkIRCK1N8=";
   };
 
+  patches = [
+    # build.sh picks "the two largest files" out of the cmake output by
+    # allocated disk blocks, which depend on the build filesystem, so it can
+    # select a soname symlink instead of libdivsufsort. Compare apparent sizes
+    # instead.
+    ./deterministic-library-selection.patch
+  ];
+
   postPatch = ''
     substituteInPlace setup.py --replace-fail /bin/bash bash
     patchShebangs build.sh
@@ -35,6 +43,8 @@ buildPythonPackage (finalAttrs: {
     cython
     numpy
   ];
+
+  pythonImportsCheck = [ "pydivsufsort" ];
 
   meta = {
     description = "Bindings to `libdivsufsort`";
