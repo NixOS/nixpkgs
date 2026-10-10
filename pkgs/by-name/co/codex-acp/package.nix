@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nix-update-script,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -38,7 +39,8 @@ buildNpmPackage (finalAttrs: {
       --set-default CODEX_PATH ${lib.getExe codex}
   '';
 
-  doCheck = true;
+  # Codex's managed preferences sync fails in the Darwin sandbox.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck
