@@ -37,8 +37,7 @@
       "description": "miscellaneous derivation-specific functions"
     },
     {
-      "id": "types",
-      "description": "module system types"
+      "id": "types"
     }
   ],
   "sources": [
