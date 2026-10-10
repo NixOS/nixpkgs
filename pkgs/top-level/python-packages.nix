@@ -4679,6 +4679,10 @@ self: super: with self; {
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
+  django-fernet-encrypted-fields =
+    callPackage ../development/python-modules/django-fernet-encrypted-fields
+      { };
+
   django-filer = callPackage ../development/python-modules/django-filer { };
 
   django-filingcabinet = callPackage ../development/python-modules/django-filingcabinet { };
@@ -8830,6 +8834,8 @@ self: super: with self; {
 
   jiwer = callPackage ../development/python-modules/jiwer { };
 
+  jmap-email = callPackage ../development/python-modules/jmap-email { };
+
   jmespath = callPackage ../development/python-modules/jmespath { };
 
   jmp = callPackage ../development/python-modules/jmp { };
@@ -9745,6 +9751,8 @@ self: super: with self; {
   libpcap = callPackage ../development/python-modules/libpcap {
     pkgsLibpcap = pkgs.libpcap; # Needs the C library
   };
+
+  libpff-python = callPackage ../development/python-modules/libpff-python { };
 
   libpulse = callPackage ../development/python-modules/libpulse { };
 
