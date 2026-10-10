@@ -19,6 +19,7 @@
   py3rijndael,
 
   # tests
+  aiointercept,
   aioresponses,
   pytest-asyncio,
   pytestCheckHook,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "3.0.5";
+  version = "3.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
     tag = "v${version}";
-    hash = "sha256-8DDxon6ZGP0dToYxa2ZkvKl+1aFpvS1Zs+w7Hsozwdw=";
+    hash = "sha256-2o0CmMhlCx2yVitfwFXXjNQTrDDRlDcDV1kGv/pJxVo=";
   };
 
   build-system = [ setuptools ];
@@ -55,6 +56,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytestCheckHook
