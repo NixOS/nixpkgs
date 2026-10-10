@@ -10,6 +10,7 @@
   ffmpeg,
   alsa-lib,
   SDL2,
+  sdl3,
   lttng-ust,
   numactl,
   libglvnd,
@@ -20,15 +21,15 @@
   nativeWayland ? false,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "osu-lazer";
-  version = "2026.920.0";
+  version = "2026.1005.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    tag = "${version}-lazer";
-    hash = "sha256-VTyOULd0pdbepCNKnVPehBnYl+Wd13IO1y9lzNA8x3s=";
+    tag = "${finalAttrs.version}-lazer";
+    hash = "sha256-CjD7urrR0+9p0UWxl28AsmbSZVLTCMHvyrTohRzpvPU=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -46,6 +47,7 @@ buildDotnetModule rec {
     ffmpeg
     alsa-lib
     SDL2
+    sdl3
     lttng-ust
     numactl
 
@@ -83,7 +85,8 @@ buildDotnetModule rec {
       install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
-    ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${finalAttrs.pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
+    ln -sft $out/lib/${finalAttrs.pname} ${sdl3}/lib/libSDL3${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
 
     runHook postFixup
   '';
@@ -109,6 +112,7 @@ buildDotnetModule rec {
   meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
+    changelog = "https://osu.ppy.sh/home/changelog/lazer/${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       cc-by-nc-40
@@ -122,4 +126,4 @@ buildDotnetModule rec {
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };
-}
+})
