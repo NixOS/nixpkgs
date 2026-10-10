@@ -372,7 +372,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit server;
+    inherit electron server;
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit (nixosTests) rstudio-server;
     };
