@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "HYPERVISOR=qemu"
     "LIBC=gnu"
     "QEMUPATH=${qemu_kvm}/bin/${qemuSystemBinary}"
-    # OpenVMM is an Azure specific integration pulling in extra dependencies
+    # OpenVMM is Azure specific, and the openvmm package is too outdated (0-unstable-2025-03-13) to be used here
     "USE_OPENVMM=false"
   ];
 
