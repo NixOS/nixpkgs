@@ -59,7 +59,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     substituteInPlace weblate/vcs/git.py \
       --replace-fail \
         '_cmd: ClassVar[str] = "git"' \
-        '_cmd: ClassVar[str] = "${lib.getExe gitSVN}"'
+        '_cmd: ClassVar[str] = "${gitSVN.out}/bin/git"'
   '';
 
   patches = [

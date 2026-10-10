@@ -116,7 +116,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JsVsKWs4wGlbJvqV9HXx0BcE0tOOc0ZcowsLL13HidM=";
   };
 
-  outputs = [ "out" ] ++ lib.optional withManual "doc";
+  # $bin is git without its perl and python commands; $out is all of git and
+  # links to $bin. bin comes first, so that "${git}" is the small one.
+  outputs = [
+    "bin"
+    "out"
+  ]
+  ++ lib.optional withManual "doc";
+  outputLib = "bin";
+  outputDoc = if withManual then "doc" else "bin";
   separateDebugInfo = true;
   __structuredAttrs = true;
 
@@ -240,7 +248,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   makeFlags = [
-    "prefix=\${out}"
+    "prefix=\${bin}"
     "ZLIB_NG=1"
   ]
   # Git does not allow setting a shell separately for building and run-time.
@@ -322,22 +330,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall =
     lib.optionalString osxkeychainSupport ''
-      mkdir -p $out/libexec/git-core
-      ln -s $out/share/git/contrib/credential/osxkeychain/git-credential-osxkeychain $out/libexec/git-core/
+      install -Dm755 -t $bin/libexec/git-core contrib/credential/osxkeychain/git-credential-osxkeychain
 
       # ideally unneeded, but added for backwards compatibility
-      mkdir -p $out/bin
-      ln -s $out/libexec/git-core/git-credential-osxkeychain $out/bin/
+      mkdir -p $bin/bin
+      ln -s $bin/libexec/git-core/git-credential-osxkeychain $bin/bin/
 
       rm -f $PWD/contrib/credential/osxkeychain/git-credential-osxkeychain.o
     ''
     + lib.optionalString withLibsecret ''
-      mkdir -p $out/libexec/git-core
-      ln -s $out/share/git/contrib/credential/libsecret/git-credential-libsecret $out/libexec/git-core/
+      install -Dm755 -t $bin/libexec/git-core contrib/credential/libsecret/git-credential-libsecret
 
       # ideally unneeded, but added for backwards compatibility
-      mkdir -p $out/bin
-      ln -s $out/libexec/git-core/git-credential-libsecret $out/bin/
+      mkdir -p $bin/bin
+      ln -s $bin/libexec/git-core/git-credential-libsecret $bin/bin/
 
       rm -f $PWD/contrib/credential/libsecret/git-credential-libsecret.o
     '';
@@ -356,11 +362,19 @@ stdenv.mkDerivation (finalAttrs: {
     make -C contrib/subtree "''${flagsArray[@]}" install ${lib.optionalString withManual "install-doc"}
     rm -rf contrib/subtree
 
+    # Everything that needs perl or python goes to $out.
+    for prog in $(sed -n 's/^SCRIPT_\(PERL\|PYTHON\) += \(.*\)\.\(perl\|py\)$/\2/p' Makefile) git-instaweb; do
+      moveToOutput libexec/git-core/$prog "$out"
+    done
+    rm $bin/bin/git-cvsserver
+    moveToOutput share/gitweb "$out"
+
     # Install contrib stuff.
-    mkdir -p $out/share/git
+    mkdir -p $bin/share/git/contrib $out/share/git
     cp -a contrib $out/share/git/
-    mkdir -p $out/share/bash-completion/completions
-    ln -s $out/share/git/contrib/completion/git-prompt.sh $out/share/bash-completion/completions/
+    mv $out/share/git/contrib/completion $bin/share/git/contrib/
+    mkdir -p $bin/share/bash-completion/completions
+    ln -s $bin/share/git/contrib/completion/git-prompt.sh $bin/share/bash-completion/completions/
 
     # Fix references to the perl, sed, awk and various coreutil binaries used by
     # shell scripts that git calls (e.g. filter-branch)
@@ -380,12 +394,12 @@ stdenv.mkDerivation (finalAttrs: {
     EOS
     )"
     perl -0777 -i -pe "$SCRIPT" \
-      $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
+      $bin/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,submodule,subtree,web--browse}
 
 
     # Also put git-http-backend into $PATH, so that we can use smart
     # HTTP(s) transports for pushing
-    ln -s $out/libexec/git-core/git-http-backend${stdenv.hostPlatform.extensions.executable} $out/bin/git-http-backend
+    ln -s $bin/libexec/git-core/git-http-backend${stdenv.hostPlatform.extensions.executable} $bin/bin/git-http-backend
   ''
   + lib.optionalString perlSupport ''
     makeWrapper $out/share/git/contrib/git-jump/git-jump $out/bin/git-jump \
@@ -394,8 +408,6 @@ stdenv.mkDerivation (finalAttrs: {
     # wrap perl commands
     makeWrapper "$out/share/git/contrib/credential/netrc/git-credential-netrc.perl" $out/libexec/git-core/git-credential-netrc \
                 --set PERL5LIB   "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
-    # ideally unneeded, but added for backwards compatibility
-    ln -s $out/libexec/git-core/git-credential-netrc $out/bin/
 
     wrapProgram $out/libexec/git-core/git-cvsimport \
                 --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath perlLibs}"
@@ -463,21 +475,21 @@ stdenv.mkDerivation (finalAttrs: {
         for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
           sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
                  -e "s|exec wish|exec '${tk}/bin/wish'|g" \
-                 "$out/$prog"
+                 "$bin/$prog"
         done
-        ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
+        ln -s $bin/share/git/contrib/completion/git-completion.bash $bin/share/bash-completion/completions/gitk
       ''
     else
       ''
         for prog in bin/gitk libexec/git-core/git-gui; do
-          rm "$out/$prog"
+          rm "$bin/$prog"
         done
       ''
   )
   + lib.optionalString osxkeychainSupport ''
     # enable git-credential-osxkeychain on darwin if desired (default)
-    mkdir -p $out/etc
-    cat > $out/etc/gitconfig << EOF
+    mkdir -p $bin/etc
+    cat > $bin/etc/gitconfig << EOF
     [credential]
       helper = osxkeychain
     EOF
@@ -629,11 +641,31 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t7815-grep-binary
   '';
 
-  postFixup = lib.optionalString withManual ''
-    grep -rlF $doc $out | xargs remove-references-to -t $doc
-  '';
+  postFixup =
+    # sample hooks are inert until renamed, so they must not pull perl into $bin.
+    lib.optionalString perlSupport ''
+      hooks=$bin/share/git-core/templates/hooks
+      substituteInPlace $hooks/fsmonitor-watchman.sample \
+        --replace-fail "#!${perlPackages.perl}/bin/perl" "#!/usr/bin/env perl"
+      substituteInPlace $hooks/prepare-commit-msg.sample $hooks/pre-rebase.sample \
+        --replace-fail "${perlPackages.perl}/bin/perl" perl
+    ''
+    # git finds the commands of $out through $PATH, not through its exec path.
+    + ''
+      mkdir -p $out/bin
+      for prog in $out/libexec/git-core/*; do
+        ln -s ../libexec/git-core/''${prog##*/} $out/bin/
+      done
+      cp -rs $bin/* $out/
+    ''
+    + lib.optionalString withManual ''
+      grep -rlF $doc $bin | xargs remove-references-to -t $doc
+    '';
 
-  outputChecks.out.disallowedRequisites = lib.optional withManual "doc";
+  outputChecks.bin.disallowedRequisites =
+    lib.optional perlSupport perlPackages.perl
+    ++ lib.optional pythonSupport python3
+    ++ lib.optional withManual "doc";
 
   stripDebugList = [
     "lib"
