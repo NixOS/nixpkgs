@@ -27796,6 +27796,11 @@
     github = "spreetin";
     githubId = 7392173;
   };
+  SPTApyo = {
+    name = "SPTApyo";
+    github = "SPTApyo";
+    githubId = 172824481;
+  };
   sputn1ck = {
     email = "kon@kon.ninja";
     github = "sputn1ck";
