@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   # The vendored pegtl module creates a `pegtl` CMake target, which clashes with the `pegtl` target
   # exported by openusd >= 26.05 when VTK::IOUSD calls find_package(pxr).
   # Rename the module VTK::pegtl -> VTK::vtkpegtl so that its target becomes `vtkpegtl`.
-  postPatch = lib.optionalString (lib.versionOlder version "9.6") ''
+  postPatch = lib.optionalString (lib.versionAtLeast version "9.6") ''
     substituteInPlace ThirdParty/pegtl/vtk.module Common/DataModel/vtk.module IO/MotionFX/vtk.module \
       --replace-fail \
         "VTK::pegtl" \
