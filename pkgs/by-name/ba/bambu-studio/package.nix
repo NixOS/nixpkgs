@@ -46,6 +46,7 @@
   # 3D viewport blank on NVIDIA proprietary GL; routes through Mesa + zink.
   # https://github.com/NixOS/nixpkgs/issues/498311
   withNvidiaGLWorkaround ? false,
+  nix-update-script,
 }:
 let
   wxGTK' =
@@ -69,13 +70,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.08.00.50";
+  version = "02.08.02.61";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zIizozfZkaXo5wymuBFBCUu/lu+FyYTpa4+3SoC2x7k=";
+    hash = "sha256-pj0oyHgREcmvu3Y+d99IatHXQH5CF53Ku6baPdWptyU=";
   };
 
   nativeBuildInputs = [
@@ -133,8 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/no-osmesa.patch
     # Don't link cereal
     ./patches/no-cereal.patch
-    # Cmake 4 support
-    ./patches/cmake.patch
     # Disable nodejs
     ./patches/no-device-web-node-download.patch
   ];
@@ -233,6 +232,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
     mv $out/README.md $out/share/BambuStudio/README.md
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "PC Software for BambuLab's 3D printers";
