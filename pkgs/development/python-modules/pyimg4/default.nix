@@ -1,6 +1,6 @@
 {
   apple-compress,
-  asn1,
+  asn1_2,
   buildPythonPackage,
   click,
   fetchFromGitHub,
@@ -37,7 +37,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    asn1
+    # upstream pins asn1<3.0.0: https://github.com/m1stadev/PyIMG4/pull/59
+    asn1_2
     click
     pycryptodome
     pylzss
@@ -66,8 +67,6 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    # https://github.com/m1stadev/PyIMG4/pull/59
-    broken = lib.versionAtLeast asn1.version "3";
     changelog = "https://github.com/m1stadev/PyIMG4/releases/tag/${src.tag}";
     description = "Python library/CLI tool for parsing Apple's Image4 format";
     homepage = "https://github.com/m1stadev/PyIMG4";
