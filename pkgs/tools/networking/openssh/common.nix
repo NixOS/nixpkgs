@@ -255,7 +255,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit withKerberos;
+    inherit withKerberos withPAM;
     tests =
       let
         withThisSsh =

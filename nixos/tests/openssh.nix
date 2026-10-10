@@ -254,9 +254,6 @@ in
           package = pkgs.opensshPackages.openssh.override {
             withPAM = false;
           };
-          settings = {
-            UsePAM = null;
-          };
         };
         users.users.root.openssh.authorizedKeys.keys = [
           snakeOilPublicKey

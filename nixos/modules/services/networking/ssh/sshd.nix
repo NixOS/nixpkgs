@@ -524,8 +524,14 @@ in
                 '';
               };
               UsePAM = lib.mkEnableOption "PAM authentication" // {
-                default = true;
                 type = lib.types.nullOr lib.types.bool;
+                default = if config.services.openssh.package.withPAM then true else null;
+                defaultText = ''
+                  if config.services.openssh.package.withPAM then
+                    true
+                  else
+                    null;
+                '';
               };
               UseDns = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
@@ -952,6 +958,10 @@ in
             != null
             -> cfgc.package.withKerberos;
           message = "cannot enable GSSAPI authentication without using a package with Kerberos support";
+        }
+        {
+          assertion = cfg.settings.UsePAM == true -> cfg.package.withPAM;
+          message = "cannot enable PAM without using a package with PAM support";
         }
         (
           let
