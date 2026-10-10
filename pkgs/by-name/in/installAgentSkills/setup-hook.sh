@@ -69,6 +69,10 @@ installSkill() {
 installSkills() {
   if [ "${dontInstallAgentSkills-}" == 1 ]; then return; fi
 
+  # Fixed-output derivations like goModules can inherit this hook through nativeBuildInputs.
+  # Installing skills there would alter the output and break its hash.
+  if [ -n "${outputHash-}" ]; then return; fi
+
   (
     shopt -s globstar nullglob
     for skill in **/SKILL.md; do
