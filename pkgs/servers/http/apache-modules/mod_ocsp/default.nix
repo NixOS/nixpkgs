@@ -9,12 +9,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mod_ocsp";
   version = "0.2.3";
 
   src = fetchurl {
-    url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
+    url = "https://redwax.eu/dist/rs/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     hash = "sha256-G+m/KdJCCTlSMeJzUnCRJkBEQ8cOQ+rJhA3NPrwh1Us=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dirkx ];
   };
-}
+})
