@@ -21,6 +21,7 @@
   installShellFiles,
   buildPackages,
   cmake,
+  validatePkgConfig,
   # dependencies for wasmSupport
   wasmtime_48,
   binaryen,
@@ -165,6 +166,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
 
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
+
   buildInputs = [
     installShellFiles
   ]
@@ -176,6 +183,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+    validatePkgConfig
     which
   ]
   ++ lib.optionals wasmSupport [
@@ -199,7 +207,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch =
-    lib.optionalString webUISupport ''
+    # tree-sitter tries to concatenate $libdir/$includedir to $prefix,
+    # having multiple outputs on different paths requires patching this.
+    ''
+      substituteInPlace lib/tree-sitter.pc.in \
+          --replace-fail 'libdir=''${prefix}/@CMAKE_INSTALL_LIBDIR@' 'libdir=@CMAKE_INSTALL_FULL_LIBDIR@' \
+          --replace-fail 'includedir=''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@' 'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+      substituteInPlace ./Makefile \
+          --replace-fail 's|@CMAKE_INSTALL_LIBDIR@|$(LIBDIR:$(PREFIX)/%=%)|' 's|@CMAKE_INSTALL_FULL_LIBDIR@|$(LIBDIR)|' \
+          --replace-fail 's|@CMAKE_INSTALL_INCLUDEDIR@|$(INCLUDEDIR:$(PREFIX)/%=%)|' 's|@CMAKE_INSTALL_FULL_INCLUDEDIR@|$(INCLUDEDIR)|'
+    ''
+    + lib.optionalString webUISupport ''
       substituteInPlace crates/xtask/src/build_wasm.rs \
           --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
     ''
@@ -224,8 +242,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (lib.cmakeBool "TREE_SITTER_FEATURE_WASM" true)
     (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_48}/include")
     (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_48}/lib/libwasmtime${stdenv.hostPlatform.extensions.library}")
-    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
-    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_FULL_INCLUDEDIR" "${placeholder "dev"}/include")
+    (lib.cmakeFeature "CMAKE_INSTALL_FULL_LIBDIR" "${placeholder "lib"}/lib")
   ];
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
@@ -238,7 +256,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    PREFIX=$out make install
+    make install PREFIX=$out LIBDIR=$lib/lib INCLUDEDIR=$dev/include
   ''
   # supply the nix paths for the Wasi SDK & `wasm-opt`: https://tree-sitter.github.io/tree-sitter/6-contributing.html#wasm-stdlib
   # lld is required for the linker phase in `tree-sitter build --wasm`
@@ -250,8 +268,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ llvmPackages.lld ]}"
   ''
   + ''
-    ${lib.optionalString (!enableShared) "rm -f $out/lib/*.so{,.*}"}
-    ${lib.optionalString (!enableStatic) "rm -f $out/lib/*.a"}
+    ${lib.optionalString (!enableShared) "rm -f $lib/lib/*.so{,.*}"}
+    ${lib.optionalString (!enableStatic) "rm -f $lib/lib/*.a"}
 
     mv docs/src/assets/schemas/config.schema.json $out/
   ''
