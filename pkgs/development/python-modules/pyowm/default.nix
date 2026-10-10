@@ -29,7 +29,6 @@ buildPythonPackage rec {
     geojson
     pysocks
     requests
-    setuptools
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
