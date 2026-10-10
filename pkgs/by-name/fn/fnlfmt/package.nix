@@ -2,13 +2,8 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  lua5_5,
+  fennel,
 }:
-
-let
-  lua = lua5_5;
-  luaPackages = lua.luaOnBuild.pkgs;
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnlfmt";
@@ -21,13 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wbeWAv4xhxh7M6tRd9qpgBRtg1/fqg0AUPvh2M5f60Q=";
   };
 
-  nativeBuildInputs = [ luaPackages.fennel ];
-
-  buildInputs = [ lua ];
+  buildInputs = [ fennel ];
 
   makeFlags = [
     "PREFIX=$(out)"
-    "FENNEL=${luaPackages.fennel}/bin/fennel"
+    "FENNEL=${fennel}/bin/fennel"
   ];
 
   doInstallCheck = true;
@@ -44,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = finalAttrs.src.meta.homepage;
     changelog = "${finalAttrs.src.meta.homepage}/tree/${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
-    platforms = lua.meta.platforms;
+    platforms = fennel.meta.platforms;
     maintainers = with lib.maintainers; [ chiroptical ];
     mainProgram = "fnlfmt";
   };

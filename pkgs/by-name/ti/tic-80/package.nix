@@ -92,7 +92,7 @@ stdenv.mkDerivation {
     giflib
     libpng
     janet
-    (lua5_3_compat.withPackages (ps: [ ps.fennel ]))
+    lua5_3_compat
     quickjs
     SDL2
   ];

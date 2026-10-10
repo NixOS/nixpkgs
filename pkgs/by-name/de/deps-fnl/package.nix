@@ -2,7 +2,7 @@
   lib,
   fetchFromGitLab,
   stdenv,
-  luaPackages,
+  fennel,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,18 +16,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-FrFeRbfK4sHd3pjiVDMrE8IpDKptZuwkTLMQ9hppVRY=";
   };
 
+  buildInputs = [ fennel ];
+
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    # deps requires argv0 to be fennel as an executable lua script
-    # skipping the luarocks wrapper is fine here
-    fennelLua=$(echo ${luaPackages.fennel}/fennel*/fennel/*/bin/fennel)
-    substitute deps $out/bin/deps \
-      --replace-fail '#!/usr/bin/env fennel' "#!$fennelLua"
-    chmod +x $out/bin/deps
+    install -Dm755 deps -t $out/bin
 
     runHook postInstall
   '';
