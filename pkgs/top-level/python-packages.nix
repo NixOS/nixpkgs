@@ -23168,6 +23168,8 @@ self: super: with self; {
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 
+  zmqtt = callPackage ../development/python-modules/zmqtt { };
+
   zodb = callPackage ../development/python-modules/zodb { };
 
   zodbpickle = callPackage ../development/python-modules/zodbpickle { };
