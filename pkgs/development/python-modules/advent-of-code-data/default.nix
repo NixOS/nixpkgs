@@ -24,7 +24,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "aocd";
+  pname = "advent-of-code-data";
   version = "2.2.0";
   pyproject = true;
 
