@@ -55,7 +55,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ostree";
-  version = "2026.2";
+  version = "2026.4";
 
   outputs = [
     "out"
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ooHy22MfNyHs1Lnid5oer1bi0D8sxHYpqfARfxIBaoM=";
+    hash = "sha256-smyQFusDu07lLMAMZC1W4A/Hmuf6rGv0qjF9dFEznvc=";
   };
 
   patches = [
