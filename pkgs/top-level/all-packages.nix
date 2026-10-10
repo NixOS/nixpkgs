@@ -292,7 +292,6 @@ with pkgs;
 
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
-  advent-of-code-data = with python3Packages; toPythonApplication advent-of-code-data;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
