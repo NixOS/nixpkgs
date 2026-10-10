@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cooldown";
-  version = "0.3.4";
+  version = "0.3.5";
   __structuredAttrs = true;
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-OpNrly+mSX/cYstewi/IbYOM/H5kQxu4U41Bqtnlu1c=";
+    hash = "sha256-knBFIncQzePHA4ByxJ1f32OemUGRJTpFyW7VPPs7S6M=";
   };
 
-  cargoHash = "sha256-MQUr/twr2vbLgGhPavrVtnBbT4N5O0c2XFwL9+FGdqE=";
+  cargoHash = "sha256-8NzNpnYRxnTDo7AUxEK7zBAoZcktMxM/8EqeiFpfBds=";
 
   # Integration tests and some unit tests require network access (crates.io registry) which breaks
   # in the Nix sandbox.
