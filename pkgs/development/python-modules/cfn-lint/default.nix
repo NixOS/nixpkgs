@@ -1,6 +1,6 @@
 {
   lib,
-  aws-sam-translator,
+  boto3,
   buildPythonPackage,
   defusedxml,
   fetchFromGitHub,
@@ -21,20 +21,19 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.43.3";
+  version = "1.57.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     tag = "v${version}";
-    hash = "sha256-tolQ7O6J/pfmtw29t8SGBDEDGiTOsJdc/mI3ulUseKo=";
+    hash = "sha256-rk7CZOg7i/hgMZFk2hoMrTc6JR5dDRZyR5pMk7wcP1A=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aws-sam-translator
     jsonpatch
     networkx
     pyyaml
@@ -54,6 +53,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    boto3
     defusedxml
     mock
     pytestCheckHook
@@ -67,15 +67,13 @@ buildPythonPackage rec {
   disabledTests = [
     # Requires git directory
     "test_update_docs"
+    # Requires network access
+    "test_update_force"
   ];
 
   disabledTestPaths = [
-    # unexpected exit code afer nodejs_24 24.16.0 update
-    "test/integration/test_quickstart_templates.py::TestQuickStartTemplates::test_templates"
-    "test/integration/test_quickstart_templates_non_strict.py::TestQuickStartTemplates::test_module_integration"
-    "test/integration/test_quickstart_templates_non_strict.py::TestQuickStartTemplates::test_templates"
-    "test/integration/test_good_templates.py::TestQuickStartTemplates::test_module_integration"
-    "test/integration/test_good_templates.py::TestQuickStartTemplates::test_templates"
+    # Requires full schemas downloaded with `cfn-lint -u`
+    "test/integration"
   ];
 
   pythonImportsCheck = [ "cfnlint" ];
@@ -85,7 +83,7 @@ buildPythonPackage rec {
     mainProgram = "cfn-lint";
     homepage = "https://github.com/aws-cloudformation/cfn-lint";
     changelog = "https://github.com/aws-cloudformation/cfn-lint/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.mit0;
     maintainers = [ ];
   };
 }
