@@ -2,50 +2,57 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  SDL2,
+  boost,
+  cmake,
+  libGL,
+  libjpeg,
+  libpng,
+  libx11,
   makeDesktopItem,
   makeWrapper,
-  cmake,
-  libjpeg,
-  zlib,
-  libpng,
-  libGL,
-  libx11,
-  SDL2,
   unstableGitUpdater,
+  versionCheckHook,
+  zlib,
 }:
 
 let
-  jamp = makeDesktopItem rec {
-    name = "jamp";
-    exec = name;
-    icon = "OpenJK_Icon_128";
-    comment = "Open Source Jedi Academy game released by Raven Software";
-    desktopName = "Jedi Academy (Multi Player)";
-    genericName = "Jedi Academy";
-    categories = [ "Game" ];
-  };
-  jasp = makeDesktopItem rec {
-    name = "jasp";
-    exec = name;
-    icon = "OpenJK_Icon_128";
-    comment = "Open Source Jedi Academy game released by Raven Software";
-    desktopName = "Jedi Academy (Single Player)";
-    genericName = "Jedi Academy";
-    categories = [ "Game" ];
-  };
-  josp = makeDesktopItem rec {
-    name = "josp";
-    exec = name;
-    icon = "OpenJK_Icon_128";
-    comment = "Open Source Jedi Outcast game released by Raven Software";
-    desktopName = "Jedi Outcast (Single Player)";
-    genericName = "Jedi Outcast";
-    categories = [ "Game" ];
+  desktopItems = {
+    jamp = makeDesktopItem {
+      name = "jamp";
+      exec = "jamp";
+      icon = "openjk";
+      comment = "Open Source Jedi Academy game released by Raven Software";
+      desktopName = "Jedi Academy (Multi Player)";
+      genericName = "Jedi Academy";
+      categories = [ "Game" ];
+    };
+    jasp = makeDesktopItem {
+      name = "jasp";
+      exec = "jasp";
+      icon = "openjk_sp";
+      comment = "Open Source Jedi Academy game released by Raven Software";
+      desktopName = "Jedi Academy (Single Player)";
+      genericName = "Jedi Academy";
+      categories = [ "Game" ];
+    };
+    josp = makeDesktopItem {
+      name = "josp";
+      exec = "josp";
+      icon = "openjo_sp";
+      comment = "Open Source Jedi Outcast game released by Raven Software";
+      desktopName = "Jedi Outcast (Single Player)";
+      genericName = "Jedi Outcast";
+      categories = [ "Game" ];
+    };
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openjk";
   version = "0-unstable-2026-09-29";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "JACoders";
@@ -54,69 +61,67 @@ stdenv.mkDerivation {
     hash = "sha256-hhktBFCJl4bwJ94XbuB/m+UUJo148fi8i8zYhu0jp7s=";
   };
 
-  dontAddPrefix = true;
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "set(GIT_TAG vUNKNOWN)" "set(GIT_TAG ${finalAttrs.version})"
+  '';
 
   nativeBuildInputs = [
-    makeWrapper
     cmake
+    makeWrapper
   ];
+
   buildInputs = [
-    libjpeg
-    zlib
-    libpng
     libGL
+    libjpeg
+    libpng
     libx11
     SDL2
+    zlib
   ];
 
-  outputs = [
-    "out"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "openjo"
-    "openja"
-  ];
-
-  # move from $out/JediAcademy to $out/opt/JediAcademy
-  preConfigure = ''
-    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$out/opt")
-  '';
   cmakeFlags = [
-    "-DBuildJK2SPEngine:BOOL=ON"
-    "-DBuildJK2SPGame:BOOL=ON"
-    "-DBuildJK2SPRdVanilla:BOOL=ON"
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/opt")
+    (lib.cmakeBool "BuildJK2SPEngine" true)
+    (lib.cmakeBool "BuildJK2SPGame" true)
+    (lib.cmakeBool "BuildJK2SPRdVanilla" true)
+    (lib.cmakeBool "BuildTests" finalAttrs.finalPackage.doCheck)
   ]
-  # Otherwise will fall with `not found <fp.h>`
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DUseInternalJPEG:BOOL=OFF"
-    "-DUseInternalPNG:BOOL=OFF"
+    (lib.cmakeBool "UseInternalJPEG" false)
+    (lib.cmakeBool "UseInternalPNG" false)
   ];
+
+  dontAddPrefix = true;
+  doCheck = true;
+  checkInputs = [ boost ];
 
   postInstall =
     if stdenv.hostPlatform.isLinux then
       ''
-        mkdir -p $out/bin $openja/bin $openjo/bin
-        mkdir -p $openja/share/applications $openjo/share/applications
-        mkdir -p $openja/share/icons/hicolor/128x128/apps $openjo/share/icons/hicolor/128x128/apps
-        mkdir -p $openja/opt $openjo/opt
-        mv $out/opt/JediAcademy $openja/opt/
-        mv $out/opt/JediOutcast $openjo/opt/
-        jaPrefix=$openja/opt/JediAcademy
-        joPrefix=$openjo/opt/JediOutcast
+        mkdir -p $out/bin
+        rm -rf $out/opt/UnitTests
+        jaPrefix=$out/opt/JediAcademy
+        joPrefix=$out/opt/JediOutcast
 
-        makeWrapper $jaPrefix/openjk.* $openja/bin/jamp --chdir "$jaPrefix"
-        makeWrapper $jaPrefix/openjk_sp.* $openja/bin/jasp --chdir "$jaPrefix"
-        makeWrapper $jaPrefix/openjkded.* $openja/bin/openjkded --chdir "$jaPrefix"
-        makeWrapper $joPrefix/openjo_sp.* $openjo/bin/josp --chdir "$joPrefix"
+        makeWrapper $jaPrefix/openjk.* $out/bin/jamp --chdir "$jaPrefix"
+        makeWrapper $jaPrefix/openjk_sp.* $out/bin/jasp --chdir "$jaPrefix"
+        makeWrapper $jaPrefix/openjkded.* $out/bin/openjkded --chdir "$jaPrefix"
+        makeWrapper $joPrefix/openjo_sp.* $out/bin/josp --chdir "$joPrefix"
 
-        cp $src/shared/icons/PNG/jo128.png $openjo/share/icons/hicolor/128x128/apps/OpenJK_Icon_128.png
-        cp $src/shared/icons/PNG/mp128.png $openja/share/icons/hicolor/128x128/apps/OpenJK_Icon_128.png
-        ln -s ${jamp}/share/applications/* $openja/share/applications
-        ln -s ${jasp}/share/applications/* $openja/share/applications
-        ln -s ${josp}/share/applications/* $openjo/share/applications
-        ln -s $openja/bin/* $out/bin
-        ln -s $openjo/bin/* $out/bin
-        rm -rf $out/opt
+        for size in 16 32 48 64 128 256 512; do
+          install -Dm644 $src/shared/icons/PNG/mp$size.png \
+            $out/share/icons/hicolor/''${size}x''${size}/apps/openjk.png
+          install -Dm644 $src/shared/icons/PNG/sp$size.png \
+            $out/share/icons/hicolor/''${size}x''${size}/apps/openjk_sp.png
+          install -Dm644 $src/shared/icons/PNG/jo$size.png \
+            $out/share/icons/hicolor/''${size}x''${size}/apps/openjo_sp.png
+        done
+
+        install -Dm644 -t $out/share/applications \
+          ${desktopItems.jamp}/share/applications/* \
+          ${desktopItems.jasp}/share/applications/* \
+          ${desktopItems.josp}/share/applications/*
       ''
     else if stdenv.hostPlatform.isDarwin then
       ''
@@ -125,7 +130,7 @@ stdenv.mkDerivation {
         mv $out/opt/JediAcademy/openjk.*.app $out/Applications/openjk.app
         mv $out/opt/JediAcademy/openjk_sp.*.app $out/Applications/openjk_sp.app
         mv $out/opt/JediAcademy/openjkded.* $out/bin/openjkded
-        rm -rf $out/opt
+        rm -r $out/opt
 
         makeWrapper $out/Applications/openjk.app/Contents/MacOS/openjk.* $out/bin/openjk \
           --chdir $out/Applications/openjk.app/Contents/MacOS/
@@ -139,14 +144,23 @@ stdenv.mkDerivation {
     else
       throw "unsupported system";
 
-  # CMake is copying libraries, but their links are needed
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/openjkded";
+  versionCheckProgramArg = "+quit";
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  preVersionCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for app in openjk openjk_sp openjo_sp; do
       pushd $out/Applications/$app.app/Contents/Frameworks/
 
       rm *.dylib
-      ln -s ${SDL2}/lib/libSDL2.dylib libSDL2-2.0.0.dylib
-      ln -s ${zlib}/lib/libz.dylib libz.dylib
+      ln -s ${lib.getLib SDL2}/lib/libSDL2.dylib libSDL2-2.0.0.dylib
+      ln -s ${lib.getLib zlib}/lib/libz.dylib libz.dylib
 
       popd
     done
@@ -158,7 +172,7 @@ stdenv.mkDerivation {
     description = "Open-source engine for Star Wars Jedi Academy game";
     homepage = "https://github.com/JACoders/OpenJK";
     license = lib.licenses.gpl2Only;
-    platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ r4v3n6101 ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
