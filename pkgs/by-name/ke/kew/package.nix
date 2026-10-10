@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   alsa-lib,
@@ -24,7 +23,7 @@
 
   withALSA ? stdenv.hostPlatform.isLinux,
   withJACK ? false,
-  withPulseaudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  withPulseaudio ? stdenv.hostPlatform.isLinux,
 }:
 
 let

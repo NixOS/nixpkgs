@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   alsa-lib,
   cmake,
   dbus,
@@ -18,7 +17,7 @@
   withJack ? stdenv.hostPlatform.isLinux,
   withMpris ? stdenv.hostPlatform.isLinux,
   withPortAudio ? stdenv.hostPlatform.isDarwin,
-  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  withPulseAudio ? stdenv.hostPlatform.isLinux,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {

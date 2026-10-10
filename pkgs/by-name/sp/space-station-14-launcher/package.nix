@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   nix-update-script,
   buildDotnetModule,
   dotnetCorePackages,
@@ -32,7 +31,7 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   jackSupport ? stdenv.hostPlatform.isLinux,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   soundfont-fluid,
 
   # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.

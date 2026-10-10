@@ -55,7 +55,7 @@
   python3,
   extensionPack ? null,
   fakeroot,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   enableHardening ? false,
   headless ? false,
