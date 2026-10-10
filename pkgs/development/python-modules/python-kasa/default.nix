@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.10.2";
+  version = "0.11.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-kasa";
     repo = "python-kasa";
     tag = version;
-    hash = "sha256-OIkqNGTnIPoHYrE5NhAxSsRCTyMGvNADvIg28EuKsEw=";
+    hash = "sha256-MrAfYXvLenj5ntJro+vEktZbOB2MnwLQyRGyU+RmYXM=";
   };
 
   build-system = [ hatchling ];
