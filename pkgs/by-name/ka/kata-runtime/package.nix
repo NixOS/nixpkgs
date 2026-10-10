@@ -1,6 +1,7 @@
 # Derived from https://github.com/colemickens/nixpkgs-kubernetes
 {
   callPackage,
+  cmake,
   fetchFromGitHub,
   lib,
   nix-update-script,
@@ -11,7 +12,6 @@
   rustPlatform,
   stdenv,
   virtiofsd,
-  zlib,
 }:
 
 let
@@ -47,14 +47,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-wbMkdNZwvqjey33//iLUG7cVeO+iEexsDVmIW4gvV0o=";
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     protobuf
   ];
 
-  buildInputs = [
-    openssl
-    zlib
-  ];
+  buildInputs = [ openssl ];
+
+  # cmake is only needed by the zlib-ng build of libz-sys
+  dontUseCmakeConfigure = true;
 
   # Cargo is invoked by the upstream Makefile
   dontCargoBuild = true;
