@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pytimeparse";
-  version = "1.1.8";
+  version = "1.1.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6GE2R3vpJNfmcGRqmFYZV+jKcwjUSEHiH13ep1dVago=";
+    hash = "sha256-HxwL7c++SBt498sR26fYEDlFWvi6AU6vxt8GDJwKsVY=";
   };
 
   build-system = [ setuptools ];
