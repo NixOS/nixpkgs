@@ -192,6 +192,16 @@ stdenv.mkDerivation (finalAttrs: {
         export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
       '';
 
+  # It happens to be that stdenv.hostPlatform.parsed.cpu.name contains the
+  # right architecturen ames for the systems we support
+  # See https://registry.khronos.org/OpenXR/specs/1.1/loader.html#architecture-identifiers
+  postInstall = ''
+    ln -s "$out/share/openxr/1/openxr_monado.json" "$out/share/openxr/1/openxr_monado.${stdenv.hostPlatform.parsed.cpu.name}.json"
+  '';
+
+  # The symlink created above has to point to the absolute store path, as multi-arch builds may be symlinkJoin-ed
+  dontRewriteSymlinks = true;
+
   passthru = {
     updateScript = nix-update-script { };
     tests.basic-service = nixosTests.monado;
@@ -202,7 +212,25 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://monado.freedesktop.org/";
     license = lib.licenses.boost;
     maintainers = with lib.maintainers; [ Scrumplex ];
-    platforms = lib.platforms.linux;
     mainProgram = "monado-cli";
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+      "armv7a-vfp-linux"
+      "armv5te-linux"
+      "mips64-linux"
+      "mips-linux"
+      "ppc64-linux"
+      "ppc64el-linux"
+      "s390x-linux"
+      "hppa-linux"
+      "alpha-linux"
+      "ia64-linux"
+      "m68k-linux"
+      "riscv64-linux"
+      "sparc64-linux"
+      "loongarch64-linux"
+    ];
   };
 })
