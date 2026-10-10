@@ -1,47 +1,39 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitLab,
-  fetchpatch,
-  writeText,
+  SDL2,
   bluez,
   cjson,
   cmake,
   config,
+  cudaPackages,
   dbus,
   doxygen,
   eigen,
-  elfutils,
+  fetchFromGitLab,
+  fetchpatch,
   glslang,
   gst_all_1,
   hidapi,
+  lib,
+  libGL,
   libbsd,
   libdrm,
-  libffi,
-  libGL,
-  libjpeg,
   librealsense,
   libsurvive,
   libunwind,
   libusb1,
-  libuv,
   libuvc,
   libv4l,
-  libxau,
+  libx11,
   libxcb,
-  libxdmcp,
-  libxext,
   libxrandr,
   nix-update-script,
+  nixosTests,
   onnxruntime,
   opencv4,
   openvr,
-  orc,
-  pcre2,
   pkg-config,
   python3,
-  SDL2,
-  shaderc,
+  stdenv,
   tracy,
   udev,
   vulkan-headers,
@@ -49,10 +41,9 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
+  writeText,
   zlib,
-  zstd,
-  nixosTests,
-  cudaPackages,
+
   enableCuda ? config.cudaSupport,
   # Set as 'false' to build monado without service support, i.e. allow VR
   # applications linking against libopenxr_monado.so to use OpenXR standalone
@@ -63,11 +54,66 @@
   # Only build client libraries to allow applications/games to connect to the
   # monado IPC socket for VR eg, for 32 bit applications/games on a 64 bit host
   clientLibOnly ? false,
+  enabledDrivers ? null,
 }:
+let
+  driverInputs = {
+    # android unsupported
+    arduino = [
+      dbus
+    ];
+    blubur_s1 = [ ];
+    daydream = [
+      dbus
+    ];
+    # depthai unsupported (https://github.com/NixOS/nixpkgs/issues/292618)
+    euroc = [ opencv4 ];
+    handtracking = [
+      opencv4
+      onnxruntime
+    ];
+    twrap = [ ];
+    hdk = [ ];
+    hydra = [ ];
+    # illixr unsupported
+    ns = [ ];
+    # ohmd unsupported
+    opengloves = [
+      bluez
+      # udev is required anyway on Linux so it's not listed here
+    ];
+    psmv = [ ];
+    pssense = [ ];
+    psvr = [ hidapi ];
+    qwerty = [ SDL2 ];
+    realsense = [ librealsense ];
+    remote = [ ];
+    rift = [ ];
+    rift_s = [ libv4l ];
+    rokid = [ libusb1 ];
+    steamvr_lighthouse = [ ];
+    survive = [ libsurvive ];
+    # ulv2 unsupported (https://github.com/NixOS/nixpkgs/issues/292624)
+    # ulv5 supported (https://github.com/NixOS/nixpkgs/issues/292624)
+    vf = [
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+    ];
+    vive = [ zlib ];
+    wmr = [ ];
+    xreal_air = [ hidapi ];
+    simulavr = [ librealsense ];
+  };
+in
 assert
   clientLibOnly
   ->
     serviceSupport || throw "monado: serviceSupport must be enabled when building with clientLibOnly";
+assert
+  clientLibOnly
+  ->
+    (enabledDrivers == null)
+    || throw "monado: enabledDrivers must be null when building with clientLibOnly";
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
   version = "25.1.0";
@@ -108,56 +154,36 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
 
   buildInputs = [
-    bluez
     cjson
-    dbus
     eigen
-    elfutils
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
-    hidapi
-    libbsd
-    libdrm
-    libffi
+    libbsd # maybe unused for client lib
     libGL
-    libjpeg
-    librealsense
-    libsurvive
-    libunwind
-    libusb1
-    libuv
-    libuvc
-    libv4l
-    libxau
-    libxcb
-    libxdmcp
-    libxext
+    libx11
     libxrandr
     openvr
-    orc
-    pcre2
-    SDL2
-    shaderc
     udev
     vulkan-headers
     vulkan-loader
+  ]
+  ++ lib.optionals (!clientLibOnly) [
+    libdrm
+    libuvc # used in state trackers; unused by drivers?
+    libxcb
+    onnxruntime
+    opencv4
     wayland
     wayland-protocols
     wayland-scanner
-    zlib
-    zstd
-  ]
-  ++ lib.optionals (!clientLibOnly) [
-    onnxruntime
-    opencv4
   ]
   ++ lib.optionals tracingSupport [
+    libunwind
     tracy
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
     cudaPackages.cuda_cudart
-  ];
+  ]
+  ++ lib.concatAttrValues (lib.getAttrs finalAttrs.enabledDrivers driverInputs);
 
   cmakeFlags = [
     (lib.cmakeBool "XRT_FEATURE_SERVICE" (serviceSupport && !clientLibOnly))
@@ -168,18 +194,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals clientLibOnly [
     (lib.cmakeBool "XRT_FEATURE_CLIENT_WITHOUT_SERVICE" true)
     (lib.cmakeBool "XRT_FEATURE_STEAMVR_PLUGIN" false)
-    (lib.cmakeBool "XRT_HAVE_LIBUVC" false)
-    (lib.cmakeBool "XRT_HAVE_LIBUSB" false)
-    (lib.cmakeBool "XRT_HAVE_JPEG" false)
-    (lib.cmakeBool "XRT_HAVE_HIDAPI" false)
-    (lib.cmakeBool "XRT_HAVE_GST" false)
-    (lib.cmakeBool "XRT_HAVE_BLUETOOTH" false)
     (lib.cmakeBool "XRT_FEATURE_DEBUG_GUI" false)
     (lib.cmakeBool "XRT_FEATURE_WINDOW_PEEK" false)
     (lib.cmakeBool "XRT_FEATURE_SLAM" false)
     (lib.cmakeBool "XRT_MODULE_MONADO_CLI" false)
     (lib.cmakeBool "XRT_MODULE_MONADO_GUI" false)
-    (lib.cmakeBool "XRT_MODULE_MERCURY_HANDTRACKING" false)
     (lib.cmakeBool "XRT_BUILD_SAMPLES" false)
   ];
 
@@ -206,6 +225,12 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
     tests.basic-service = nixosTests.monado;
   };
+
+  enabledDrivers =
+    if enabledDrivers == null then
+      (if clientLibOnly then [ ] else builtins.attrNames driverInputs)
+    else
+      enabledDrivers;
 
   meta = {
     description = "Open source XR runtime";
