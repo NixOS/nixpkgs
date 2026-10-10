@@ -19,7 +19,7 @@
   shaderc,
   nv-codec-headers-11,
   pipewire,
-  systemd,
+  systemdLibs,
   libsecret,
   libnotify,
   libopus,
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     libxkbcommon
     pipewire
-    systemd
+    systemdLibs
     polkit # For polkit-gobject
   ];
 
