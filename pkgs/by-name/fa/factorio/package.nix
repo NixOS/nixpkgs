@@ -240,6 +240,7 @@ let
         Baughn
         priegger
         lukegb
+        cholli
       ];
       platforms = [
         "x86_64-linux"
