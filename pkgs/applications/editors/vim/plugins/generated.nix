@@ -122,6 +122,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  filemarks-nvim = buildVimPlugin {
+    pname = "filemarks.nvim";
+    version = "1.6.0";
+    src = fetchFromGitHub {
+      owner = "anoopkcn";
+      repo = "filemarks.nvim";
+      tag = "1.6.0";
+      hash = "sha256-qSHHsBb7MAceNV3QnZiTFN4d1i2zH8CItlzQWsYNjno=";
+    };
+    meta.homepage = "https://github.com/anoopkcn/filemarks.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   FTerm-nvim = buildVimPlugin {
     pname = "FTerm.nvim";
     version = "0-unstable-2022-11-13";
@@ -24814,6 +24828,20 @@ final: prev: {
     };
     meta.homepage = "https://github.com/kana/vim-textobj-user/";
     meta.license = unfree;
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-textobj-xmlattr = buildVimPlugin {
+    pname = "vim-textobj-xmlattr";
+    version = "0.1.1";
+    src = fetchFromGitHub {
+      owner = "whatyouhide";
+      repo = "vim-textobj-xmlattr";
+      tag = "0.1.1";
+      hash = "sha256-EFn7Ql7SFWwcjR5WdQkl2/lJZY9qZN9ml6625lGtTzY=";
+    };
+    meta.homepage = "https://github.com/whatyouhide/vim-textobj-xmlattr/";
+    meta.license = getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
