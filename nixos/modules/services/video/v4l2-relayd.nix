@@ -187,20 +187,20 @@ in
               "video/x-raw,format=${instance.output.format}"
               "queue"
             ]
-            ++ [ "v4l2sink name=v4l2sink device=$(cat $V4L2_DEVICE_FILE)" ];
+            ++ [ "v4l2sink name=v4l2sink device=$(cat \"$V4L2_DEVICE_FILE\")" ];
           in
           ''
             exec ${pkgs.v4l2-relayd}/bin/v4l2-relayd -i "${instance.input.pipeline}" -o "${concatStringsSep " ! " outputPipeline}"
           '';
 
         preStart = ''
-          mkdir -p $(dirname $V4L2_DEVICE_FILE)
-          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl add -x 1 -n "${instance.cardLabel}" > $V4L2_DEVICE_FILE
+          mkdir -p "$(dirname "$V4L2_DEVICE_FILE")"
+          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl add -x 1 -n "${instance.cardLabel}" > "$V4L2_DEVICE_FILE"
         '';
 
         postStop = ''
-          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl delete $(cat $V4L2_DEVICE_FILE)
-          rm -rf $(dirname $V4L2_DEVICE_FILE)
+          ${kernelPackages.v4l2loopback.bin}/bin/v4l2loopback-ctl delete "$(cat "$V4L2_DEVICE_FILE")"
+          rm -rf "$(dirname "$V4L2_DEVICE_FILE")"
         '';
       };
 
