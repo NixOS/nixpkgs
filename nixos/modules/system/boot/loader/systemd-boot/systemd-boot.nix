@@ -56,6 +56,7 @@ let
       inherit (cfg)
         consoleMode
         graceful
+        relaxEspChecks
         editor
         rebootForBitlocker
         ;
@@ -415,6 +416,20 @@ in
 
         Only enable this option if `systemd-boot` otherwise fails to install, as the
         scope or implication of the `--graceful` option may change in the future.
+      '';
+    };
+
+    relaxEspChecks = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = ''
+        Invoke `bootctl install` with the `SYSTEMD_RELAX_ESP_CHECKS` variable
+        set to 1.
+
+        This can be useful when your ESP is trying to use a filesystem other
+        than vfat, or when the partition has the incorrect partition type GUID.
       '';
     };
 
