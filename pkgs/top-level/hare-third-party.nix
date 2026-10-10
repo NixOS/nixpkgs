@@ -8,6 +8,7 @@ lib.makeScope newScope (
   {
     hare-compress = callPackage ../development/hare-third-party/hare-compress { };
     hare-ev = callPackage ../development/hare-third-party/hare-ev { };
+    hare-gi = callPackage ../development/hare-third-party/hare-gi { };
     hare-http = callPackage ../development/hare-third-party/hare-http { };
     hare-json = callPackage ../development/hare-third-party/hare-json { };
     hare-ssh = callPackage ../development/hare-third-party/hare-ssh { };
