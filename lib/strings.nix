@@ -4,7 +4,29 @@
 { lib }:
 let
 
-  inherit (builtins) length;
+  inherit (builtins)
+    all
+    attrNames
+    attrValues
+    foldl'
+    isBool
+    length
+    mapAttrs
+    ;
+  inherit (lib.lists)
+    flatten
+    imap1
+    last
+    ;
+  inherit (lib.attrsets) getOutput mapAttrsToList;
+  inherit (lib.trivial)
+    boolToString
+    max
+    min
+    pipe
+    toHexString
+    warnIf
+    ;
 
   asciiTable = import ./ascii-table.nix;
 
@@ -152,7 +174,7 @@ rec {
 
     :::
   */
-  concatImapStrings = f: list: concatStrings (lib.imap1 f list);
+  concatImapStrings = f: list: concatStrings (imap1 f list);
 
   /**
     Place an element between each element of a list
@@ -188,7 +210,7 @@ rec {
       list
     else
       tail (
-        lib.concatMap (x: [
+        concatMap (x: [
           separator
           x
         ]) list
@@ -295,7 +317,7 @@ rec {
   */
   concatImapStringsSep =
     sep: f: list:
-    concatStringsSep sep (lib.imap1 f list);
+    concatStringsSep sep (imap1 f list);
 
   /**
     Like [`concatMapStringsSep`](#function-library-lib.strings.concatMapStringsSep)
@@ -332,7 +354,7 @@ rec {
   */
   concatMapAttrsStringSep =
     sep: f: attrs:
-    concatStringsSep sep (lib.attrValues (lib.mapAttrs f attrs));
+    concatStringsSep sep (attrValues (mapAttrs f attrs));
 
   /**
     Concatenate a list of strings, adding a newline at the end of each one.
@@ -427,7 +449,11 @@ rec {
 
     :::
   */
-  replicate = n: s: concatStrings (lib.lists.replicate n s);
+  replicate =
+    let
+      inherit (lib.lists) replicate;
+    in
+    n: s: concatStrings (replicate n s);
 
   /**
     Remove leading and trailing whitespace from a string `s`.
@@ -606,7 +632,7 @@ rec {
   makeSearchPathOutput =
     output:
     let
-      getOutput' = lib.getOutput output;
+      getOutput' = getOutput output;
     in
     subDir: pkgs:
     concatStringsSep ":" (
@@ -738,9 +764,7 @@ rec {
         lib.strings.normalizePath: The argument (${toString s}) is a path value, but only strings are supported.
             Path values are always normalised in Nix, so there's no need to call this function on them.''
     else
-      builtins.foldl' (x: y: if y == "/" && startsWithSlash x then x else x + y) "" (
-        stringToCharacters s
-      );
+      foldl' (x: y: if y == "/" && startsWithSlash x then x else x + y) "" (stringToCharacters s);
 
   /**
     Depending on the boolean `cond`, return either the given string
@@ -905,7 +929,7 @@ rec {
   hasInfix =
     infix:
     let
-      matchGivenInfix = builtins.match ".*${escapeRegex infix}.*";
+      matchGivenInfix = match ".*${escapeRegex infix}.*";
     in
     if isPath infix then
       # Before 23.05, paths would be copied to the store before converting them
@@ -1017,7 +1041,7 @@ rec {
 
     :::
   */
-  charToInt = c: builtins.getAttr c asciiTable;
+  charToInt = c: asciiTable.${c};
 
   /**
     Escape occurrence of the elements of `list` in `string` by
@@ -1083,7 +1107,7 @@ rec {
   escapeC =
     list:
     replaceStrings list (
-      map (c: "\\x${fixedWidthString 2 "0" (toLower (lib.toHexString (charToInt c)))}") list
+      map (c: "\\x${fixedWidthString 2 "0" (toLower (toHexString (charToInt c)))}") list
     );
 
   /**
@@ -1184,8 +1208,8 @@ rec {
       ];
       toEscape = removeAttrs asciiTable unreserved;
     in
-    replaceStrings (builtins.attrNames toEscape) (
-      lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape
+    replaceStrings (attrNames toEscape) (
+      mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (toHexString c)}") toEscape
     );
 
   /**
@@ -1336,7 +1360,7 @@ rec {
       value:
       if isAttrs value && !isStringLike value then
         "declare -A ${name}=(${
-          concatStringsSep " " (lib.mapAttrsToList (n: v: "[${escapeShellArg n}]=${escapeShellArg v}") value)
+          concatStringsSep " " (mapAttrsToList (n: v: "[${escapeShellArg n}]=${escapeShellArg v}") value)
         })"
       else if isList value then
         "declare -a ${name}=(${escapeShellArgs value})"
@@ -1376,7 +1400,7 @@ rec {
 
     :::
   */
-  toShellVars = vars: concatStringsSep "\n" (lib.mapAttrsToList toShellVar vars);
+  toShellVars = vars: concatStringsSep "\n" (mapAttrsToList toShellVar vars);
 
   /**
     Turn a string `s` into a Nix expression representing that string
@@ -1477,7 +1501,7 @@ rec {
     in
     s:
     # Regex from https://github.com/NixOS/nix/blob/d048577909e383439c2549e849c5c2f2016c997e/src/libexpr/lexer.l#L91
-    if (match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null) && (!lib.elem s nixKeywords) then
+    if (match "[a-zA-Z_][a-zA-Z0-9_'-]*" s != null) && (!elem s nixKeywords) then
       s
     else
       escapeNixString s;
@@ -1508,10 +1532,7 @@ rec {
 
     :::
   */
-  escapeXML =
-    builtins.replaceStrings
-      [ "\"" "'" "<" ">" "&" ]
-      [ "&quot;" "&apos;" "&lt;" "&gt;" "&amp;" ];
+  escapeXML = replaceStrings [ "\"" "'" "<" ">" "&" ] [ "&quot;" "&apos;" "&lt;" "&gt;" "&amp;" ];
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -1655,7 +1676,7 @@ rec {
           ]
         ) false str;
 
-        parts = lib.flatten (
+        parts = flatten (
           map (splitStringBy (
             prev: curr: match "[a-z]" prev != null && match "[A-Z]" curr != null
           ) true) separators
@@ -2117,7 +2138,7 @@ rec {
     url: sep:
     let
       components = splitString "/" url;
-      filename = lib.last components;
+      filename = last components;
       name = head (splitString sep filename);
     in
     assert name != filename;
@@ -2210,7 +2231,7 @@ rec {
   */
   cmakeBool =
     condition: flag:
-    assert (lib.isBool flag);
+    assert (isBool flag);
     cmakeOptionType "bool" condition (if flag then "TRUE" else "FALSE");
 
   /**
@@ -2276,8 +2297,8 @@ rec {
   */
   mesonOption =
     feature: value:
-    assert (lib.isString feature);
-    assert (lib.isString value);
+    assert (isString feature);
+    assert (isString value);
     "-D${feature}=${value}";
 
   /**
@@ -2313,8 +2334,8 @@ rec {
   */
   mesonBool =
     condition: flag:
-    assert (lib.isBool flag);
-    mesonOption condition (lib.boolToString flag);
+    assert (isBool flag);
+    mesonOption condition (boolToString flag);
 
   /**
     Create a `"-D<feature>={enabled,disabled}"` string that can be passed to
@@ -2349,7 +2370,7 @@ rec {
   */
   mesonEnable =
     feature: flag:
-    assert (lib.isBool flag);
+    assert (isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
   /**
@@ -2385,8 +2406,8 @@ rec {
   */
   enableFeature =
     flag: feature:
-    assert lib.isBool flag;
-    assert lib.isString feature; # e.g. passing openssl instead of "openssl"
+    assert isBool flag;
+    assert isString feature; # e.g. passing openssl instead of "openssl"
     "--${if flag then "enable" else "disable"}-${feature}";
 
   /**
@@ -2539,8 +2560,8 @@ rec {
   fixedWidthString =
     width: filler: str:
     let
-      strw = lib.stringLength str;
-      reqWidth = width - (lib.stringLength filler);
+      strw = stringLength str;
+      reqWidth = width - (stringLength filler);
     in
     assert
       strw <= width
@@ -2612,7 +2633,7 @@ rec {
       result = toString float;
       precise = float == fromJSON result;
     in
-    lib.warnIf (!precise) "Imprecise conversion from float to string ${result}" result;
+    warnIf (!precise) "Imprecise conversion from float to string ${result}" result;
 
   /**
     Check whether a list or other value `x` can be passed to `toString`.
@@ -2640,7 +2661,7 @@ rec {
         "bool"
       ];
     in
-    x: isStringLike x || elem (typeOf x) types || (isList x && lib.all isConvertibleWithToString x);
+    x: isStringLike x || elem (typeOf x) types || (isList x && all isConvertibleWithToString x);
 
   /**
     Check whether a value can be coerced to a string.
@@ -2707,7 +2728,7 @@ rec {
         # This is a workaround for https://github.com/NixOS/nix/issues/12361
         # which was needed during the experimental phase of ca-derivations and
         # should be removed once the issue has been resolved.
-        || builtins.match "/[0-9a-z]{52}" str != null
+        || match "/[0-9a-z]{52}" str != null
       )
     else
       false;
@@ -2925,7 +2946,7 @@ rec {
     if stringLength string <= 207 && okRegex string != null then
       unsafeDiscardStringContext string
     else
-      lib.pipe string [
+      pipe string [
         # Get rid of string context. This is safe under the assumption that the
         # resulting string is only used as a derivation name
         unsafeDiscardStringContext
@@ -2936,9 +2957,9 @@ rec {
         # https://github.com/NixOS/nix/blob/2242be83c61788b9c0736a92bb0b5c7bbfc40803/nix-rust/src/store/path.rs#L100-L125
         (split "[^[:alnum:]+._?=-]+")
         # Replace invalid character ranges with a "-"
-        (concatMapStrings (s: if lib.isList s then "-" else s))
+        (concatMapStrings (s: if isList s then "-" else s))
         # Limit to 211 characters (minus 4 chars for ".drv")
-        (x: substring (lib.max (stringLength x - 207) 0) (-1) x)
+        (x: substring (max (stringLength x - 207) 0) (-1) x)
         # If the result is empty, replace it with "unknown"
         (x: if stringLength x == 0 then "unknown" else x)
       ];
@@ -2982,8 +3003,8 @@ rec {
     a: b:
     let
       # Two dimensional array with dimensions (stringLength a + 1, stringLength b + 1)
-      arr = lib.genList (i: lib.genList (j: dist i j) (stringLength b + 1)) (stringLength a + 1);
-      d = x: y: lib.elemAt (lib.elemAt arr x) y;
+      arr = genList (i: genList (j: dist i j) (stringLength b + 1)) (stringLength a + 1);
+      d = x: y: elemAt (elemAt arr x) y;
       dist =
         i: j:
         let
@@ -2994,7 +3015,7 @@ rec {
         else if i == 0 then
           j
         else
-          lib.min (lib.min (d (i - 1) j + 1) (d i (j - 1) + 1)) (d (i - 1) (j - 1) + c);
+          min (min (d (i - 1) j + 1) (d i (j - 1) + 1)) (d (i - 1) (j - 1) + c);
     in
     d (stringLength a) (stringLength b);
 
@@ -3018,7 +3039,7 @@ rec {
   commonPrefixLength =
     a: b:
     let
-      m = lib.min (stringLength a) (stringLength b);
+      m = min (stringLength a) (stringLength b);
       go =
         i:
         if i >= m then
@@ -3050,7 +3071,7 @@ rec {
   commonSuffixLength =
     a: b:
     let
-      m = lib.min (stringLength a) (stringLength b);
+      m = min (stringLength a) (stringLength b);
       go =
         i:
         if i >= m then
