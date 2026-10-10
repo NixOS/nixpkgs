@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       SDL2
     ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   __structuredAttrs = true;
   strictDeps = true;
 
