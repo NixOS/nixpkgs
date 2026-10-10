@@ -23,18 +23,19 @@
   click-shell,
   syrupy,
   writableTmpDirAsHomeHook,
+  zmqtt,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "7.12.0";
+  version = "7.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-svgKXclEGIUZT61fnk0u/dV6mSJkMNuC8aXJNH+6D+k=";
+    hash = "sha256-ZOCUCMaVpn45c6ZWYv/qNQMIeC43C3JdrJGzFBYuY84=";
   };
 
   pythonRelaxDeps = [
@@ -70,6 +71,7 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     syrupy
     writableTmpDirAsHomeHook
+    zmqtt
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
