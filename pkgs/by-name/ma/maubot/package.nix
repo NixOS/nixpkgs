@@ -1,6 +1,11 @@
 {
   lib,
-  fetchPypi,
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
   fetchpatch,
   callPackage,
   runCommand,
@@ -11,14 +16,42 @@
 let
   python = python3;
 
+  frontend = stdenvNoCC.mkDerivation (finalAttrs: {
+    pname = "maubot-frontend";
+    inherit (maubot) version src;
+
+    sourceRoot = "${finalAttrs.src.name}/maubot/management/frontend";
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${finalAttrs.src}/maubot/management/frontend/yarn.lock";
+      hash = "sha256-VBPZbtqF9u63yRgk0PObhUMvV8s7UXSs6nr87cPeLz4=";
+    };
+
+    nativeBuildInputs = [
+      yarnConfigHook
+      yarnBuildHook
+      nodejs
+    ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mv build $out
+
+      runHook postInstall
+    '';
+  });
+
   maubot = python.pkgs.buildPythonApplication (finalAttrs: {
     pname = "maubot";
     version = "0.6.0";
     pyproject = true;
 
-    src = fetchPypi {
-      inherit (finalAttrs) pname version;
-      hash = "sha256-ZXwyctTjKg1ssYE6Ehc1s1DPhWyc08dIQ4MQz6EQXGg=";
+    src = fetchFromGitHub {
+      owner = "maubot";
+      repo = "maubot";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-kLToWYqnIw+lkmOrWAHOetoFF2usumg4Vf8F2tIlj+s=";
     };
 
     patches = [
@@ -66,6 +99,8 @@ let
     ];
 
     postInstall = ''
+      mkdir -p $out/${python.sitePackages}/maubot/management/frontend
+      ln -s ${frontend} $out/${python.sitePackages}/maubot/management/frontend/build
       rm $out/example-config.yaml
     '';
 
@@ -92,7 +127,7 @@ let
           '';
         };
 
-        inherit python;
+        inherit python frontend;
 
         plugins = callPackage ./plugins {
           maubot = maubot;
