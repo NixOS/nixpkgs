@@ -6,6 +6,7 @@ lib.makeScope newScope (
     inherit (self) callPackage;
   in
   {
+    hare-adwaita = callPackage ../development/hare-third-party/hare-adwaita { };
     hare-compress = callPackage ../development/hare-third-party/hare-compress { };
     hare-ev = callPackage ../development/hare-third-party/hare-ev { };
     hare-gi = callPackage ../development/hare-third-party/hare-gi { };
