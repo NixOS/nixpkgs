@@ -10,9 +10,11 @@
   hidapi,
   libappindicator,
   librsvg,
+  libnotify,
   upower,
   udevCheckHook,
   acl,
+  xvfb-run,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -52,6 +54,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libappindicator
     upower
+    libnotify
   ];
 
   propagatedBuildInputs =
@@ -75,7 +78,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     pytest-mock
     pytest-cov-stub
+    xvfb-run
   ];
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run -s '-screen 0 1280x720x24' pytest
+    runHook postCheck
+  '';
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace lib/solaar/listener.py \
