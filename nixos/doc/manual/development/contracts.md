@@ -203,6 +203,7 @@ For each contract type, [](#opt-contracts) has an option with its `meta.descript
 The type of a contract type is `lib.contract.definitionType`.
 
 To add a contract type, write its `meta` and `interface` in a new file in `lib/contracts/definitions`, and add that file to `lib/contracts/definitions/default.nix`.
+A configuration can also define a contract type in `contractTypes`, for example to use it in a test.
 
 The routing module is `lib.contract.module`.
 It does not depend on NixOS, so other module systems can also import it.
@@ -315,6 +316,35 @@ To send one entry to a different provider, set `instances` at the path of the en
 
 To connect one entry manually, as in [](#contracts-connect), set `instances` at the path of the entry to `null`.
 Then no provider gets the request of that entry from `providerRequests`, and `results` at that path is not available.
+
+## Chain contracts {#contracts-chaining}
+
+A provider of one contract type can also be a consumer of a different contract type.
+For example, a provider of database connections can request a file secret for its password, and put the path of the file in each connection string:
+
+```nix
+{ config, lib, ... }:
+let
+  credential = config.contracts.fileSecrets.results.pgProvider.credential;
+in
+{
+  options.services.pgProvider.databaseConnection = lib.mkOption {
+    type = config.contractTypes.databaseConnection.mkProviderType {
+      fulfill = request: {
+        connectionString = "postgresql:///${request.dbName}?password_file=${credential.path}";
+      };
+    };
+  };
+
+  config.contracts.fileSecrets.want.pgProvider.credential.request = {
+    owner = "postgres";
+    group = "postgres";
+  };
+}
+```
+
+The module system evaluates options lazily, thus the order of the modules has no effect.
+If a response depends on itself, the evaluation fails with infinite recursion.
 
 ## Rename a request option {#contracts-rename-request}
 

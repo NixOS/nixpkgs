@@ -376,6 +376,9 @@
   "contracts-routing": [
     "index.html#contracts-routing"
   ],
+  "contracts-chaining": [
+    "index.html#contracts-chaining"
+  ],
   "contracts-rename-request": [
     "index.html#contracts-rename-request"
   ],
