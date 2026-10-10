@@ -225,15 +225,13 @@ writeShellScript "evaluate-my-file.sh" ''
 
 ### `makeDesktopItem` {#trivial-builder-makeDesktopItem}
 
-Write an [XDG desktop file](https://specifications.freedesktop.org/desktop-entry-spec/1.4/) to the Nix store.
+Write an [XDG desktop file](https://specifications.freedesktop.org/desktop-entry-spec/latest) to the Nix store.
 
 This function is usually used to add desktop items to a package through the `copyDesktopItems` hook.
 
-`makeDesktopItem` adheres to version 1.4 of the specification.
-
 #### Inputs {#trivial-builder-makeDesktopItem-inputs}
 
-`makeDesktopItem` takes an attribute set that accepts most values from the [XDG specification](https://specifications.freedesktop.org/desktop-entry-spec/1.4/ar01s06.html).
+`makeDesktopItem` takes an attribute set that accepts most values from the [XDG specification](https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s06.html).
 
 All recognised keys from the specification are supported with the exception of the "Hidden" field. The keys are converted into camelCase format, but correspond 1:1 to their equivalent in the specification: `genericName`, `noDisplay`, `comment`, `icon`, `onlyShowIn`, `notShowIn`, `dbusActivatable`, `tryExec`, `exec`, `path`, `terminal`, `mimeTypes`, `categories`, `implements`, `keywords`, `startupNotify`, `startupWMClass`, `url`, `prefersNonDefaultGPU`.
 
