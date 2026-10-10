@@ -5,12 +5,16 @@
   pkg-config,
   rustPlatform,
   openssl,
+
+  # tests
+  cacert,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "hf-xet";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -18,7 +22,7 @@ buildPythonPackage (finalAttrs: {
     owner = "huggingface";
     repo = "xet-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SP6Z8iIkrt3FVXxXYdvjeiIAfcrVlfCPQq6C36DfhEM=";
+    hash = "sha256-7j4vClUaEKri3Uu8hv8IEqJCDar0xR8RBxPJbP1sZFg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/hf_xet";
@@ -30,7 +34,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-pvtq9mKlmwaqAq281Lin/UgVGcRe2SEvyzCa+xWSwVQ=";
+    hash = "sha256-+4n7begwEeRzUpROad/2u15CfRgqBXzp3wGUztUuzSE=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +51,11 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "hf_xet" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    cacert
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Xet client tech, used in huggingface_hub";
