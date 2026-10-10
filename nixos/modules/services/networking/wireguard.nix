@@ -326,6 +326,24 @@ let
         '';
       };
 
+      endpointCommand = mkOption {
+        default = null;
+        example = literalExpression ''
+          '''
+            echo "$(''${pkgs.dig}/bin/dig +short @1.1.1.1 example.org):51820"
+          ''''';
+        type = with types; nullOr str;
+        description = ''
+          A command that should return the peer endpoint.
+          The returned value should include the port e.g. 1.2.3.4:5432
+
+          This option can be used in advanced situations where the default
+          behaviour of resolving the peers endpoint through the systems dns
+          would not work. For example if the system has the peer configured as
+          the nameserver then dns queries would fail when the peer is down
+        '';
+      };
+
       dynamicEndpointRefreshSeconds = mkOption {
         default = null;
         defaultText = literalExpression "config.networking.wireguard.interfaces.<name>.dynamicEndpointRefreshSeconds";
@@ -505,6 +523,7 @@ let
             [ ''${wg} set ${interfaceName} peer "${peer.publicKey}"'' ]
             ++ optional (psk != null) ''preshared-key "${psk}"''
             ++ optional (peer.endpoint != null) ''endpoint "${peer.endpoint}"''
+            ++ optional (peer.endpointCommand != null) ''endpoint "$( ${peer.endpointCommand} )"''
             ++ optional (
               peer.persistentKeepalive != null
             ) ''persistent-keepalive "${toString peer.persistentKeepalive}"''
@@ -718,13 +737,16 @@ in
             message = "networking.wireguard.interfaces.${name}.generatePrivateKeyFile must not be set if networking.wireguard.interfaces.${name}.privateKey is set.";
           }) cfg.interfaces
         ))
-        ++ map (
-          { interfaceName, peer, ... }:
+        ++ concatMap ({ interfaceName, peer, ... }: [
           {
             assertion = (peer.presharedKey == null) || (peer.presharedKeyFile == null);
             message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both presharedKey and presharedKeyFile set, but only one can be used.";
           }
-        ) all_peers;
+          {
+            assertion = (peer.endpoint == null) || (peer.endpointCommand == null);
+            message = "networking.wireguard.interfaces.${interfaceName} peer «${peer.publicKey}» has both endpoint and endpointCommand set, but only one can be used.";
+          }
+        ]) all_peers;
 
       boot.extraModulePackages =
         optional (usingWg && (versionOlder kernel.kernel.version "5.6")) kernel.wireguard
