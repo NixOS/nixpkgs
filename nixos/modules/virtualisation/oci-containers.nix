@@ -219,6 +219,26 @@ let
           ];
         };
 
+        tmpFs = mkOption {
+          type = types.attrsOf (types.listOf types.str);
+          default = { };
+          description = ''
+            Attribute set of container paths to mount into a tmpfs.
+
+            Mount options for tmpfs may be passed in as a list for each path.
+            For the full list of options, refer to the
+            [docker engine documentation](https://docs.docker.com/engine/storage/tmpfs/).
+          '';
+          example = {
+            "/data" = [
+              "noxec"
+              "size=1024"
+              "mode=1777"
+            ];
+            "/defaultData" = [ ];
+          };
+        };
+
         workdir = mkOption {
           type = with types; nullOr str;
           default = null;
@@ -459,47 +479,52 @@ let
         else
           throw "Unhandled backend: ${cfg.backend}";
 
-      script = concatStringsSep " \\\n  " (
-        [
-          "exec ${cfg.backend} "
-        ]
-        ++ map escapeShellArg container.preRunExtraOptions
-        ++ [
-          "run"
-          "--name=${escapedName}"
-          "--log-driver=${container.log-driver}"
-        ]
-        ++ optional (container.entrypoint != null) "--entrypoint=${escapeShellArg container.entrypoint}"
-        ++ optional (container.hostname != null) "--hostname=${escapeShellArg container.hostname}"
-        ++ lib.optionals (cfg.backend == "podman") [
-          "--cidfile=/run/${escapedName}/ctr-id"
-          "--cgroups=enabled"
-          "--sdnotify=${container.podman.sdnotify}"
-          "-d"
-          "--replace"
-        ]
-        ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
-        ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
-        ++ map (p: "-p ${escapeShellArg p}") container.ports
-        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
-        ++ map (v: "-v ${escapeShellArg v}") container.volumes
-        ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
-        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
-        ++ optional (container.privileged) "--privileged"
-        ++ optional (container.autoRemoveOnStop) "--rm"
-        ++ mapAttrsToList (k: _: "--cap-add=${escapeShellArg k}") (
-          filterAttrs (_: v: v == true) container.capabilities
-        )
-        ++ mapAttrsToList (k: _: "--cap-drop=${escapeShellArg k}") (
-          filterAttrs (_: v: v == false) container.capabilities
-        )
-        ++ map (d: "--device=${escapeShellArg d}") container.devices
-        ++ map (n: "--network=${escapeShellArg n}") (lib.lists.unique container.networks)
-        ++ [ "--pull ${escapeShellArg container.pull}" ]
-        ++ map escapeShellArg container.extraOptions
-        ++ [ container.image ]
-        ++ map escapeShellArg container.cmd
-      );
+      script =
+        let
+          concatOptions = O: if O == [ ] then "" else ":" + (concatStringsSep "," O);
+        in
+        concatStringsSep " \\\n  " (
+          [
+            "exec ${cfg.backend} "
+          ]
+          ++ map escapeShellArg container.preRunExtraOptions
+          ++ [
+            "run"
+            "--name=${escapedName}"
+            "--log-driver=${container.log-driver}"
+          ]
+          ++ optional (container.entrypoint != null) "--entrypoint=${escapeShellArg container.entrypoint}"
+          ++ optional (container.hostname != null) "--hostname=${escapeShellArg container.hostname}"
+          ++ lib.optionals (cfg.backend == "podman") [
+            "--cidfile=/run/${escapedName}/ctr-id"
+            "--cgroups=enabled"
+            "--sdnotify=${container.podman.sdnotify}"
+            "-d"
+            "--replace"
+          ]
+          ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
+          ++ map (f: "--env-file ${escapeShellArg f}") container.environmentFiles
+          ++ map (p: "-p ${escapeShellArg p}") container.ports
+          ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
+          ++ map (v: "-v ${escapeShellArg v}") container.volumes
+          ++ (mapAttrsToList (k: v: "--tmpfs ${escapeShellArg k}${concatOptions v}") container.tmpFs)
+          ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
+          ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
+          ++ optional (container.privileged) "--privileged"
+          ++ optional (container.autoRemoveOnStop) "--rm"
+          ++ mapAttrsToList (k: _: "--cap-add=${escapeShellArg k}") (
+            filterAttrs (_: v: v == true) container.capabilities
+          )
+          ++ mapAttrsToList (k: _: "--cap-drop=${escapeShellArg k}") (
+            filterAttrs (_: v: v == false) container.capabilities
+          )
+          ++ map (d: "--device=${escapeShellArg d}") container.devices
+          ++ map (n: "--network=${escapeShellArg n}") (lib.lists.unique container.networks)
+          ++ [ "--pull ${escapeShellArg container.pull}" ]
+          ++ map escapeShellArg container.extraOptions
+          ++ [ container.image ]
+          ++ map escapeShellArg container.cmd
+        );
 
       preStop =
         if cfg.backend == "podman" then
