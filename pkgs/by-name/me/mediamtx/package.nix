@@ -4,11 +4,13 @@
   fetchFromGitHub,
   fetchurl,
   nixosTests,
+  runCommand,
 }:
 
 let
+  hlsJsVersion = "1.7.3";
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.7.3/dist/hls.min.js";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v${hlsJsVersion}/dist/hls.min.js";
     hash = "sha256-oS5+4c1kpp3NsxQVfkXa/LpwW/sLFEC3k1yyZdN0Qj4=";
   };
 in
@@ -45,6 +47,14 @@ buildGo126Module (finalAttrs: {
 
   passthru.tests = {
     inherit (nixosTests) mediamtx;
+    hlsjs-version = runCommand "mediamtx-hlsjs-version" { } ''
+      expectedVersion=$(cat ${finalAttrs.src}/internal/servers/hls/hlsjsdownloader/VERSION)
+      if [ "$expectedVersion" != "v${hlsJsVersion}" ]; then
+        echo "hls.js version mismatch: upstream requires $expectedVersion, packaged version is v${hlsJsVersion}" >&2
+        exit 1
+      fi
+      touch "$out"
+    '';
   };
 
   meta = {
