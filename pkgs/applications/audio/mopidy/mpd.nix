@@ -7,21 +7,26 @@
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-mpd";
-  version = "3.3.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) version;
-    pname = "Mopidy-MPD";
-    hash = "sha256-CeLMRqj9cwBvQrOx7XHVV8MjDjwOosONVlsN2o+vTVM=";
+    pname = "mopidy_mpd";
+    hash = "sha256-iWMEJHJROeU3YU+ollWieAGQWOIYSI+RFWQb3AGE3Nw=";
   };
 
-  build-system = [ pythonPackages.setuptools ];
+  build-system = [
+    pythonPackages.setuptools
+    pythonPackages.setuptools-scm
+  ];
 
   dependencies = [ mopidy ];
 
-  # no tests implemented
-  doCheck = false;
+  nativeCheckInputs = [
+    pythonPackages.pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "mopidy_mpd" ];
 
   meta = {
