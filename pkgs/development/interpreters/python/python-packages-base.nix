@@ -5,6 +5,12 @@
   python,
 }:
 
+let
+  inherit (lib)
+    isFunction
+    ;
+in
+
 self:
 
 let
@@ -18,10 +24,21 @@ let
   # Overridings specified through `overridePythonAttrs` will always be applied
   # before those specified by `overrideAttrs`, even if invoked after them.
   makeOverridablePythonPackage =
-    f:
+    isInitialCall: f:
     lib.mirrorFunctionArgs f (
-      origArgs:
+      origArgs':
       let
+        origArgs =
+          if isFunction origArgs' then
+            finalAttrs:
+            let
+              previousArgs = origArgs' finalAttrs;
+            in
+            if previousArgs ? disabled then handleDisabledArg previousArgs else previousArgs
+          else if isInitialCall && origArgs' ? disabled then
+            handleDisabledArg origArgs'
+          else
+            origArgs';
         result = f origArgs;
         overrideWith =
           # Preserve the plain arguments whenever possible,
@@ -46,9 +63,9 @@ let
       if lib.isAttrs result then
         result
         // {
-          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+          overridePythonAttrs = newArgs: makeOverridablePythonPackage false f (overrideWith newArgs);
           overrideAttrs =
-            newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
+            newArgs: makeOverridablePythonPackage isInitialCall (args: (f args).overrideAttrs newArgs) origArgs;
         }
       else
         result
@@ -57,7 +74,7 @@ let
       # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
       # Ensure `makeOverridablePythonPackage` is applied to the result.
       override = lib.mirrorFunctionArgs f.override (
-        newArgs: makeOverridablePythonPackage (f.override newArgs)
+        newArgs: makeOverridablePythonPackage isInitialCall (f.override newArgs)
       );
     };
 
@@ -101,6 +118,33 @@ let
       }
     );
 
+  # When buildPython* is called,
+  # convert { disabled = true; } to meta.problems.unsupportedPython
+  # and remove the disabled argument.
+  # This ensure that <pkg>.overridePythonAttrs can remediate `{ disabled = true; }`
+  # by removing `unsupportedPython` from `meta.problems`.
+  handleDisabledArg =
+    let
+      boilerplateProblems = {
+        unsupportedPython = { };
+      };
+      ignoredNames = [ "disabled" ];
+    in
+    args:
+    if args.disabled == args ? meta.problems.unsupportedPython then
+      removeAttrs args ignoredNames
+    else if args.disabled then
+      removeAttrs args ignoredNames
+      // {
+        meta = args.meta or { } // {
+          problems = args.meta.problems or { } // boilerplateProblems;
+        };
+      }
+    else
+      throw "${
+        args.name or args.pname or "buildPythonPackage"
+      }: { disabled = false; } conflicts with the presence of meta.problems.unsupportedPython";
+
   mkPythonDerivation =
     if python.isPy3k then
       ./mk-python-derivation.nix
@@ -108,7 +152,7 @@ let
       # Python 2 build infrastructure lives with its only consumers (resholve, pypy27).
       ../../misc/resholve/python2/mk-python-derivation.nix;
 
-  buildPythonPackage = makeOverridablePythonPackage (
+  buildPythonPackage = makeOverridablePythonPackage true (
     overrideStdenvCompat (
       callPackage mkPythonDerivation {
         inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
@@ -118,7 +162,7 @@ let
     )
   );
 
-  buildPythonApplication = makeOverridablePythonPackage (
+  buildPythonApplication = makeOverridablePythonPackage true (
     overrideStdenvCompat (
       callPackage mkPythonDerivation {
         namePrefix = ""; # Python applications should not have any prefix

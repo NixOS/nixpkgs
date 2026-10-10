@@ -33,7 +33,12 @@
 }:
 
 let
-  inherit (builtins) unsafeGetAttrPos;
+  inherit (builtins)
+    getEnv
+    trace
+    tryEval
+    unsafeGetAttrPos
+    ;
   inherit (lib)
     elem
     extendDerivation
@@ -52,6 +57,24 @@ let
     all
     seq
     ;
+
+  # NOTE: We cannot catch the Nix option abort-on-warn here.
+  abortOnWarn = elem (getEnv "NIX_ABORT_ON_WARN") [
+    "1"
+    "true"
+    "yes"
+  ];
+
+  warnCatchably =
+    if abortOnWarn then
+      # `abort` fails `builtins.tryEval`, use `throw` instead.
+      throw
+    else
+      # Taken from lib.warn to avoid using builtins.warn
+      # as we cannot handle the Nix option abort-on-warn.
+      # NOTE: This function will stay `warn`
+      # even when the Nix option `abort-on-warn` is `true`.
+      msg: trace "[1;35mevaluation warning:[0m ${msg}";
 
   leftPadName =
     name: against:
@@ -424,7 +447,9 @@ lib.extendMkDerivation {
           optional-dependencies
           ;
 
-        disabled = finalAttrs ? meta.problems.unsupportedPython;
+        disabled = warnCatchably ''
+          ${finalAttrs.name}: `passthru.disabled` is deprecated. Use `meta ? problems.unsupportedPython` instead.
+        '' (finalAttrs ? meta.problems.unsupportedPython);
 
         updateScript = nix-update-script { };
         # __stdenvPythonCompat[Pos] attributes are here for overrideStdenvCompat in `python-packages-base.nix` to work.
@@ -443,19 +468,46 @@ lib.extendMkDerivation {
       }
       // meta
       // {
-        problems =
-          let
-            disabled' = meta ? problems.unsupportedPython || disabled;
-          in
-          meta.problems or { }
-          // {
-            ${if disabled' then "unsupportedPython" else null} = meta.problems.unsupportedPython or { } // {
+        problems = meta.problems or { } // {
+          ${if meta ? problems.unsupportedPython then "unsupportedPython" else null} =
+            meta.problems.unsupportedPython or { }
+            // {
               kind = "broken";
               message =
                 meta.problems.unsupportedPython.message
                   or "${removePrefix namePrefix finalAttrs.name} not supported for interpreter ${python.executable}";
             };
+          # attrs.disabled must come from overridePythonPackages,
+          # since the one from buildPythonPackage has been converted and removed
+          # in python-packages-base.nix
+          ${if attrs ? disabled then "buildPythonPackage-attrs-disabled-overridePythonAttrs" else null} = {
+            kind = "broken";
+            message =
+              let
+                pos = unsafeGetAttrPos "disabled" attrs;
+                posString = lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}";
+              in
+              ''
+                buildPythonPackage: ${finalAttrs.name}: Overriding argument `disabled` with `<pkg>.overridePythonAttrs` is deprecated.
+                  Add/remove `meta.problems.unsupportedPython` instead.
+              '';
           };
+          ${
+            if
+              abortOnWarn && finalAttrs ? passthru.disabled && (tryEval finalAttrs.passthru.disabled).success
+            then
+              "buildPythonPackage-attrs-disabled-overrideAttrs"
+            else
+              null
+          } =
+            {
+              kind = "broken";
+              message = ''
+                buildPythonPackage: ${finalAttrs.name}: Overriding attribute `passthru.disabled` with `<pkg>.overrideAttrs` is deprecated.
+                  Add/remove `meta.problems.unsupportedPython` instead.
+              '';
+            };
+        };
       };
     }
     // optionalAttrs (attrs ? checkPhase) {
