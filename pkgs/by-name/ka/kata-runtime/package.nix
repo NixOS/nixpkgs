@@ -100,7 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       -e "s!$out/share/kata-containers!${kata-images}/share/kata-containers!" \
       -e "s!^virtio_fs_daemon.*!virtio_fs_daemon=\"${virtiofsd}/bin/virtiofsd\"!" \
       -e "s!^valid_virtio_fs_daemon_paths.*!valid_virtio_fs_daemon_paths=[\"${qemu_kvm}/libexec/virtiofsd\"]!" \
-      "$out/share/defaults/kata-containers/"*.toml
+      "$out/share/defaults/kata-containers/runtime-rs/"configuration-*.toml
 
     runHook postInstall
   '';
