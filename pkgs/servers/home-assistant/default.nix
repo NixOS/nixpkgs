@@ -43,6 +43,8 @@ let
         postPatch = null;
       };
 
+      anthropic = self.anthropic_0;
+
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
