@@ -19,6 +19,10 @@ test {
     (
       { config, ... }:
       {
+        # A user and group that the configuration creates, so that the test
+        # fails when the provider sets the owner before the user exists.
+        test.owner = "secretowner";
+        test.group = "secretgroup";
         testing.hardcoded-secret.mysecret.content = config.test.content;
       }
     )

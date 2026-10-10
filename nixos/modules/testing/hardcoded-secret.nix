@@ -108,20 +108,42 @@ in
   };
 
   config = {
-    system.activationScripts = mapAttrs' (
+    # Write each secret in a service and not in an activation script.
+    # An activation script can run before the owner of the secret exists:
+    # activation scripts without dependencies run in alphabetical order,
+    # and `systemd-sysusers` and `userborn` create users after activation.
+    # The services run before `sysinit.target`, thus before all services
+    # that have default dependencies, such as the consumers of the secrets.
+    systemd.services = mapAttrs' (
       n: cfg':
       let
         source = writeText "hardcodedsecret_${n}_content" cfg'.content;
 
         inherit (cfg') input output;
       in
-      nameValuePair "hardcodedsecret_${n}" ''
-        mkdir -p "$(dirname "${output.path}")"
-        touch "${output.path}"
-        chmod ${input.mode} "${output.path}"
-        chown ${input.owner}:${input.group} "${output.path}"
-        cp ${source} "${output.path}"
-      ''
+      nameValuePair "hardcodedsecret_${n}" {
+        description = "Hardcoded secret ${n}";
+        wantedBy = [ "sysinit.target" ];
+        after = [
+          "local-fs.target"
+          "systemd-sysusers.service"
+          "userborn.service"
+        ];
+        before = [
+          "sysinit.target"
+          "shutdown.target"
+        ];
+        conflicts = [ "shutdown.target" ];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+        script = ''
+          install -D -m ${input.mode} -o ${input.owner} -g ${input.group} \
+            ${source} "${output.path}"
+        '';
+      }
     ) cfg;
   };
 }
