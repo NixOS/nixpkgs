@@ -15,6 +15,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "doc"
   ];
 
+  __structuredAttrs = true;
+
   src = fetchFromGitea {
     domain = "code.ungleich.ch";
     owner = "ungleich-public";
