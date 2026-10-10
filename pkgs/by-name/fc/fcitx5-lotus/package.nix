@@ -10,7 +10,6 @@
   hicolor-icon-theme,
   kdePackages,
   libinput,
-  librsvg,
   nix-update-script,
   pkg-config,
   python3,
@@ -29,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "4.0.1";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dUJO/iemfSUiSgqgdl5tsjnjIy1mKyOzqhK9H4IJXK4=";
+    hash = "sha256-dUZrJ5mAeEVOWWjkl0g2Q3QMgJe0Tje+zeXDd7AJgZQ=";
   };
 
   passthru = {
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     go
     hicolor-icon-theme
     kdePackages.extra-cmake-modules
-    librsvg
     pkg-config
     qt6.wrapQtAppsHook
   ];
@@ -75,29 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     export GOPATH=$TMPDIR/go
   '';
 
-  postPatch = ''
-    substituteInPlace src/lotus-monitor.cpp \
-      --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5-lotus-server") == 0' \
-                     '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 24 && strcmp(exe_path + strlen(exe_path) - 24, "/bin/fcitx5-lotus-server") == 0)'
-
-    substituteInPlace server/lotus-server.cpp \
-      --replace-fail 'strcmp(exe_path, "/usr/bin/fcitx5") == 0' \
-                     '(strncmp(exe_path, "/nix/store/", 11) == 0 && strlen(exe_path) >= 11 && strcmp(exe_path + strlen(exe_path) - 11, "/bin/fcitx5") == 0)'
-
-    substituteInPlace settings-gui/i18n.py \
-      --replace-fail 'localedir = "/usr/share/locale"' 'localedir = "'"$out"'/share/locale"'
-
-    substituteInPlace settings-gui/ui/pages/dict_editor.py \
-      --replace-fail '"/usr/share/fcitx5/lotus/vietnamese.cm.dict"' '"'"$out"'/share/fcitx5/lotus/vietnamese.cm.dict"'
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/lib/udev/rules.d/99-lotus.rules \
-      --replace-fail "/usr/bin/setfacl" "${acl}/bin/setfacl"
-
-    substituteInPlace $out/lib/systemd/system/fcitx5-lotus-server@.service \
-      --replace-fail "/usr/bin/fcitx5-lotus-server" "$out/bin/fcitx5-lotus-server"
-  '';
+  cmakeFlags = [
+    "-DLOTUS_ALT_EXECUTABLE_PREFIX=/nix/store/"
+    "-DLOTUS_SETFACL_EXECUTABLE=${acl}/bin/setfacl"
+  ];
 
   postFixup = ''
     patchShebangs $out/share/fcitx5-lotus/settings-gui
