@@ -5,8 +5,14 @@
   lib,
   helix,
   helix-unwrapped,
-  grammarsOverlay ? (
-    final: prev: {
+  grammarsOverlay ? [
+    (
+      final: prev:
+      lib.attrsets.filterAttrs (k: _: k == "tree-sitter-haskell" || k == "tree-sitter-perl") (
+        helix.defaultGrammarsOverlay final prev
+      )
+    )
+    (final: prev: {
       tree-sitter-beancount = prev.tree-sitter-beancount.override {
         excludeBrokenTreeSitterJson = false;
       };
@@ -28,8 +34,8 @@
       tree-sitter-wit = prev.tree-sitter-wit.override {
         excludeBrokenTreeSitterJson = false;
       };
-    }
-  ),
+    })
+  ],
 }:
 let
   steelix-unwrapped = helix-unwrapped.overrideAttrs (
