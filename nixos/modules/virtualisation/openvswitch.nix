@@ -174,6 +174,9 @@ in
     '')
   ];
 
-  meta.maintainers = with maintainers; [ netixx ];
+  meta.maintainers = with maintainers; [
+    booxter
+    netixx
+  ];
 
 }
