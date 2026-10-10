@@ -5303,8 +5303,6 @@ with pkgs;
 
   ansi2html = with python3.pkgs; toPythonApplication ansi2html;
 
-  apollo-cuda = apollo.override { cudaSupport = true; };
-
   appstream = callPackage ../development/libraries/appstream { };
 
   argparse-manpage = with python3Packages; toPythonApplication argparse-manpage;
@@ -5738,6 +5736,10 @@ with pkgs;
     withGraphite2 = true;
     withIcu = true;
   };
+
+  hermes-cuda = hermes.override { cudaSupport = true; };
+
+  hermes-kms = linuxPackages.hermes-kms;
 
   highfive-mpi = highfive.override { hdf5 = hdf5-mpi; };
 

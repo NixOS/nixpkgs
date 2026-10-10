@@ -1170,7 +1170,6 @@
   ./services/networking/alice-lg.nix
   ./services/networking/amuled.nix
   ./services/networking/anubis.nix
-  ./services/networking/apollo.nix
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atalkd.nix
@@ -1273,6 +1272,7 @@
   ./services/networking/harmonia.nix
   ./services/networking/headplane.nix
   ./services/networking/headscale.nix
+  ./services/networking/hermes.nix
   ./services/networking/hickory-dns.nix
   ./services/networking/hostapd.nix
   ./services/networking/htpdate.nix

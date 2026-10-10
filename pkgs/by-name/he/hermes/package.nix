@@ -45,7 +45,7 @@ let
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
-  pname = "apollo";
+  pname = "hermes";
   version = "0.6.0";
 
   __structuredAttrs = true;
@@ -65,7 +65,7 @@ stdenv'.mkDerivation (finalAttrs: {
   # build the web UI separately so the CMake build doesn't need npm
   ui = buildNpmPackage {
     inherit (finalAttrs) src version;
-    pname = "apollo-ui";
+    pname = "hermes-ui";
     # upstream ships no package-lock.json; vendor one so the
     # npm-deps phase can compute a deterministic hash
     postPatch = ''
@@ -102,22 +102,22 @@ stdenv'.mkDerivation (finalAttrs: {
     substituteInPlace third-party/Simple-Web-Server/CMakeLists.txt \
       --replace-fail 'find_package(Boost 1.53.0 COMPONENTS system REQUIRED)' 'find_package(Boost 1.53.0 REQUIRED)'
 
-    # rename the executable from sunshine to apollo so it matches the
+    # rename the executable from sunshine to hermes so it matches the
     # packaged .desktop file, systemd unit and SUNSHINE_EXECUTABLE_PATH
-    sed -i '/^add_executable(sunshine/a set_target_properties(sunshine PROPERTIES OUTPUT_NAME apollo SUFFIX "")' cmake/targets/common.cmake
+    # (v0.6.0 sets VERSION on the target, which would install it as
+    # sunshine-0.6.0 + symlink — drop the versioning and rename the binary)
+    sed -i 's/set_target_properties(sunshine PROPERTIES CXX_STANDARD 23/set_target_properties(sunshine PROPERTIES OUTPUT_NAME hermes SUFFIX "" CXX_STANDARD 23/' cmake/targets/common.cmake
+    sed -i '/^        VERSION /d' cmake/targets/common.cmake
+    sed -i 's/^        SOVERSION .*$/)/' cmake/targets/common.cmake
 
-    # upstream v0.5.1 half-renamed sunshine->hermes: the .desktop Exec points
-    # at a 'hermes' systemd unit that is never installed (the unit ships as
-    # sunshine.service), so the app-menu launcher is broken. Point the desktop
-    # at the apollo binary (on PATH via environment.systemPackages, like
-    # nixpkgs does for sunshine) and brand it Apollo.
+    # upstream's .desktop Exec points at a 'hermes' systemd user unit that is
+    # never installed (the unit ships as sunshine.service), so the app-menu
+    # launcher is broken. Point the desktop at the hermes binary (on PATH via
+    # environment.systemPackages, like nixpkgs does for sunshine) and brand
+    # it Hermes.
     substituteInPlace packaging/linux/io.github.mroz59.Hermes.desktop \
-      --replace-fail 'Exec=/usr/bin/env systemctl start --user hermes' 'Exec=apollo' \
-      --replace-fail 'Name=@PROJECT_NAME@' 'Name=Apollo'
-
-    # terminal launcher: point at the apollo binary too
-    substituteInPlace packaging/linux/io.github.mroz59.Hermes.terminal.desktop \
-      --replace-fail 'Exec=hermes' 'Exec=apollo'
+      --replace-fail 'Exec=/usr/bin/env systemctl start --user hermes' 'Exec=hermes' \
+      --replace-fail 'Name=@PROJECT_NAME@' 'Name=Hermes'
   '';
 
   # the web-ui target is disabled (see above); place the prebuilt UI where
@@ -180,7 +180,7 @@ stdenv'.mkDerivation (finalAttrs: {
     # prebuilt web UI is copied into the build dir in postConfigure.
     (lib.cmakeFeature "SUNSHINE_ASSETS_DIR" "share/${finalAttrs.pname}")
     # used in the generated systemd unit's ExecStart=
-    (lib.cmakeFeature "SUNSHINE_EXECUTABLE_PATH" "${placeholder "out"}/bin/apollo")
+    (lib.cmakeFeature "SUNSHINE_EXECUTABLE_PATH" "${placeholder "out"}/bin/hermes")
     # where the generated unit/udev rules/modules-load files land. The two
     # new privileged brokers added in v0.6.0 (card + session, both root,
     # both socket-activated) install *system* units, so point the system
@@ -208,7 +208,7 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # Explicit, deterministic install check. Running `apollo` with no args
+  # Explicit, deterministic install check. Running `hermes` with no args
   # starts the streaming server and never exits (would hang CI), so check
   # `--help` instead, which prints usage and exits 0.
   installCheckPhase = ''
@@ -223,18 +223,18 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = ./updater.sh;
-    tests = { inherit (nixosTests) apollo; };
+    tests = { inherit (nixosTests) hermes; };
   };
 
   meta = with lib; {
-    description = "Apollo — self-hosted game stream host for Moonlight / Artemis / Hestia clients (the Hermes project, a maintained fork of Sunshine with low-latency KMS capture)";
+    description = "Hermes — self-hosted game stream host for Moonlight / Artemis / Hestia clients (maintained fork of Sunshine with low-latency KMS/DRM capture)";
     homepage = "https://github.com/MrOz59/Hermes";
     license = licenses.gpl3Only;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    mainProgram = "apollo";
+    mainProgram = "hermes";
     maintainers = [ lib.maintainers.NCBlizzard ];
   };
 })

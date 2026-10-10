@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Refresh the apollo derivation to the latest GitHub release tag.
+# Refresh the hermes derivation to the latest GitHub release tag.
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -15,6 +15,6 @@ sed -i "s/^  version = .*/  version = \"${TAG#v}\";/" package.nix
 sed -i "s/^    hash = .*/    hash = \"sha256-${HASH}\";/" package.nix
 
 echo "updated package.nix to ${TAG}"
-echo "verify: nix build .#apollo"
+echo "verify: nix build .#hermes"
 echo "NOTE: if the web UI changed upstream, regenerate package-lock.json"
 echo "      (npm install in a clean copy of the source) and update npmDepsHash."

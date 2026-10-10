@@ -18,31 +18,42 @@ let
     getExe
     ;
   inherit (utils) escapeSystemdExecArgs;
-  cfg = config.services.apollo;
+  cfg = config.services.hermes;
 
-  # ports are offset from a single base port (Sunshine/Apollo convention)
+  # ports are offset from a single base port (Sunshine/Hermes convention)
   generatePorts = port: offsets: map (offset: port + offset) offsets;
   defaultPort = 47989;
 
   settingsFormat = pkgs.formats.keyValue { };
-  configFile = settingsFormat.generate "apollo.conf" cfg.settings;
+  configFile = settingsFormat.generate "hermes.conf" cfg.settings;
 in
 {
-  options.services.apollo = with types; {
-    enable = mkEnableOption "Apollo (the Hermes project), a self-hosted game stream host for Moonlight / Artemis / Hestia clients";
-    package = mkPackageOption pkgs "apollo" { };
+  options.services.hermes = with types; {
+    enable = mkEnableOption "Hermes, a self-hosted game stream host for Moonlight / Artemis / Hestia clients";
+    package = mkPackageOption pkgs "hermes" { };
     virtualDisplayBackend = mkOption {
       type = enum [
         "hermes_kms"
         "evdi"
       ];
       default = "hermes_kms";
-      description = "Virtual display backend: hermes_kms (zero-copy, preferred) or evdi.";
+      description = "Virtual display backend: hermes_kms (zero-copy, preferred, requires the hermes_kms kernel module) or evdi.";
+    };
+    hermesKms = {
+      enable = mkEnableOption "the hermes_kms kernel module (virtual display driver, zero-copy capture)";
+      module = mkOption {
+        type = types.package;
+        # the module must be built against the booted kernel; the default
+        # comes from the same linuxPackages set as the current kernel
+        default = config.boot.kernelPackages.hermes-kms;
+        defaultText = lib.literalExpression "config.boot.kernelPackages.\"hermes-kms\"";
+        description = "Derivation of the hermes_kms kernel module.";
+      };
     };
     settings = mkOption {
       default = { };
       description = ''
-        Settings rendered into the Apollo configuration file. When set,
+        Settings rendered into the Hermes configuration file. When set,
         configuration through the web UI is disabled.
 
         See <https://github.com/MrOz59/Hermes> for supported keys
@@ -60,12 +71,12 @@ in
     openFirewall = mkOption {
       type = bool;
       default = false;
-      description = "Open the Apollo ports in the firewall.";
+      description = "Open the Hermes ports in the firewall.";
     };
     capSysAdmin = mkOption {
       type = bool;
       default = false;
-      description = "Give the apollo binary CAP_SYS_ADMIN (required for DRM/KMS capture).";
+      description = "Give the hermes binary CAP_SYS_ADMIN (required for DRM/KMS capture).";
     };
   };
 
@@ -85,7 +96,20 @@ in
       };
     };
 
-    security.wrappers.apollo = mkIf cfg.capSysAdmin {
+    # Hermes-KMS kernel module: the virtual display driver (the Linux
+    # equivalent of the SudoVDA driver on Windows). Without it Hermes only
+    # mirrors the primary display.
+    boot = mkIf cfg.hermesKms.enable {
+      extraModulePackages = [ cfg.hermesKms.module ];
+      kernelModules = [ "hermes_kms" ];
+      extraModprobeConfig = ''
+        # Keep the virtual connector disconnected until Hermes claims it for a
+        # stream (upstream packaging/modprobe.d/hermes-kms.conf).
+        options hermes_kms initial_enabled=0 outputs=1
+      '';
+    };
+
+    security.wrappers.hermes = mkIf cfg.capSysAdmin {
       owner = "root";
       group = "root";
       capabilities = "cap_sys_admin+p";
@@ -109,8 +133,8 @@ in
     };
 
     # user service: runs as whichever user holds the graphical session
-    systemd.user.services.apollo = {
-      description = "Apollo Game Streaming Service";
+    systemd.user.services.hermes = {
+      description = "Hermes Game Streaming Service";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       wants = [ "graphical-session.target" ];
@@ -124,10 +148,10 @@ in
 
       serviceConfig = {
         # the binary resolves SUNSHINE_ASSETS_DIR relative to the working dir
-        WorkingDirectory = "${cfg.package}/share/apollo";
+        WorkingDirectory = "${cfg.package}/share/hermes";
         ExecStart = escapeSystemdExecArgs (
           [
-            (if cfg.capSysAdmin then "${config.security.wrapperDir}/apollo" else "${getExe cfg.package}")
+            (if cfg.capSysAdmin then "${config.security.wrapperDir}/hermes" else "${getExe cfg.package}")
           ]
           ++ optionals (builtins.length (builtins.attrNames cfg.settings) > 0) [ "${configFile}" ]
         );
