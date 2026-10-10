@@ -6,8 +6,6 @@
   versionCheckHook,
   pcsclite,
   pkg-config,
-  runCommand,
-  llvmPackages,
   nix-update-script,
   nixosTests,
   stdenv,
@@ -15,18 +13,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yb";
-  version = "0.4.2";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "douzebis";
     repo = "yb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gX9s1R/75ipaPJFPTBMR2riIxMmw1KfuURx2Up6ovOM=";
+    hash = "sha256-orxQvETUKfSqV1d4vQzvOpCaHP8d7BWZyqBoVl8kVVg=";
   };
 
   cargoRoot = "rust";
 
-  cargoHash = "sha256-J91BH0eXuTtGZCSWWLYGM5KHtBjczD1Qu5PxIXAnFRI=";
+  cargoHash = "sha256-7jwkoMtWcD9RtGbJrmKQv4yUN9z+5DgdtZEUDA3MWCQ=";
 
   # Build and test only the yb crate (not the yb-piv-harness test harness,
   # which requires a virtual smart card and runs in the NixOS VM test below).
@@ -78,81 +76,50 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   doInstallCheck = true;
 
-  passthru =
-    let
-      # Fixture files needed by yb_cli_tests at VM runtime. rustPlatform vendors
-      # the entire workspace but strips non-Rust files, so the compile-time
-      # CARGO_MANIFEST_DIR path for fixtures is gone at VM time. We ship them as
-      # a separate store path and inject YB_FIXTURE_DIR in the testScript.
-      testFixtures = runCommand "yb-test-fixtures" { } ''
-        mkdir -p $out
-        cp ${finalAttrs.src}/rust/yb-core/tests/fixtures/with_key.yaml $out/with_key.yaml
-        cp ${finalAttrs.src}/rust/yb-core/tests/fixtures/default.yaml  $out/default.yaml
-      '';
+  passthru = {
+    # The tier-2 test binaries (hardware_piv_tests, yb_cli_tests), run by the
+    # NixOS VM test against a virtual smart card.  They reuse this package's
+    # source and vendored dependencies.
+    ybPivHarnessTests = rustPlatform.buildRustPackage {
+      pname = "yb-piv-harness-tests";
+      inherit (finalAttrs)
+        version
+        src
+        cargoRoot
+        cargoDeps
+        ;
 
-      # Compile the harness test binaries (--no-run: compiled but not executed
-      # here; the testScript in tests.nix invokes them directly).
-      ybPivHarnessTests = rustPlatform.buildRustPackage {
-        pname = "yb-piv-harness-tests";
-        inherit (finalAttrs)
-          version
-          src
-          cargoRoot
-          cargoHash
-          ;
+      buildAndTestSubdir = "rust/yb-piv-harness";
+      cargoBuildFlags = [
+        "--features"
+        "integration-tests"
+      ];
 
-        buildAndTestSubdir = "rust";
+      nativeBuildInputs = [
+        pkg-config
+        # littlefs2-sys (under piv-authenticator) runs bindgen.
+        rustPlatform.bindgenHook
+      ];
+      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
-        nativeBuildInputs = [
-          pkg-config
-          llvmPackages.libclang
-        ];
-        buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
-
-        env = {
-          LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-          BINDGEN_EXTRA_CLANG_ARGS = "-I${llvmPackages.libclang.lib}/lib/clang/${lib.versions.major llvmPackages.release_version}/include";
-        };
-
-        # Skip the normal build — we only want the test binaries.
-        buildPhase = ''
-          (cd rust && cargo test --no-run \
-            -p yb-piv-harness --features integration-tests \
-            --offline --release)
-        '';
-
-        doCheck = false;
-
-        installPhase = ''
-          mkdir -p $out/bin
-          (cd rust && for name in hardware_piv_tests yb_cli_tests; do
-            bin=$(find target/release/deps -maxdepth 1 -name "$name-*" ! -name "*.d" -type f)
-            if [ -z "$bin" ] || [ ! -f "$bin" ]; then
-              echo "ERROR: could not find $name binary" >&2
-              exit 1
-            fi
-            cp "$bin" $out/bin/$name
-          done)
-        '';
-      };
-    in
-    {
-      inherit ybPivHarnessTests testFixtures;
-      tests.integration = nixosTests.yb;
-      updateScript = nix-update-script { };
+      doCheck = false;
     };
+    tests.integration = nixosTests.yb;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Secure blob storage on a YubiKey";
     longDescription = ''
       Command-line tool for storing encrypted binary blobs on a YubiKey using
-      the PIV application. Uses hybrid encryption (ECDH + AES-256-GCM) with
-      hardware-backed keys, supports PIN-protected management key setup
-      (--protect), glob-pattern blob listing, and shell completions for bash,
-      zsh, and fish.
+      the PIV application. Blobs are encrypted with ECDH (the private key
+      never leaves the YubiKey) and AES-256-GCM, and signed. Includes a
+      guided setup (yb format), a health report of the YubiKey and the store
+      (yb fsck), management key rotation, glob-pattern blob selection, and
+      shell completions for bash, zsh, and fish.
     '';
     homepage = "https://github.com/douzebis/yb";
-    changelog = "https://github.com/douzebis/yb/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/douzebis/yb/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ douzebis ];
     mainProgram = "yb";
