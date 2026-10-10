@@ -20,11 +20,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vis";
-  version = "0.9";
+  version = "0.9-unstable-2026-10-03";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    hash = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
+    rev = "bd0bb3449e6eef991d507689c4bfba53c14fd9c5";
+    hash = "sha256-uRGTH5yQGo8O3LahArbSq1uLkH0LZ6rWJqa5S7P50Gg=";
     repo = "vis";
     owner = "martanne";
   };
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ncurses
-    libtermkey
     luaEnv
     tre
   ]
@@ -80,7 +79,10 @@ stdenv.mkDerivation rec {
     description = "Vim like editor";
     homepage = "https://github.com/martanne/vis";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ramkromberg ];
+    maintainers = with lib.maintainers; [
+      ramkromberg
+      es-sai-fi
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "vis";
   };
