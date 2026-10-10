@@ -2,11 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   libmpdclient,
   openssl,
-  lua5_4,
+  lua5_5,
   libid3tag,
   flac,
   pcre2,
@@ -27,13 +28,22 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-OwTYcyiRT/2K09UirhcNobXo1g9aDpz7eh5OYtA0eIo=";
   };
 
+  # Backport the Lua 5.5 dump fix until it is included in a release.
+  patches = [
+    (fetchpatch2 {
+      name = "mympd-lua55-dump-end.patch";
+      url = "https://github.com/jcorporation/myMPD/commit/47e49136e413000035ab53b4201a287ba2e5f39b.patch?full_index=1";
+      hash = "sha256-PLFvrGle7aa15FVju+Keo3sAeL5GAJ3SWqc4RKCwg6s=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     cmake
     gzip
     perl
     jq
-    lua5_4 # luac is needed for cross builds
+    lua5_5 # luac is needed for cross builds
   ];
   preConfigure = ''
     env MYMPD_BUILDDIR=$PWD/build ./build.sh createassets
@@ -41,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libmpdclient
     openssl
-    lua5_4
+    lua5_5
     libid3tag
     flac
     pcre2
