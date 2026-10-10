@@ -15210,6 +15210,11 @@
     githubId = 8798449;
     name = "kidsan";
   };
+  kihara777 = {
+    github = "Kihara777";
+    githubId = 24633616;
+    name = "Kitsunori";
+  };
   kiike = {
     email = "me@enric.me";
     github = "kiike";
