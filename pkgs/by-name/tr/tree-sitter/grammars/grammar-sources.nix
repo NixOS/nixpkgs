@@ -2099,6 +2099,7 @@
         leungbk
       ];
     };
+    excludeBrokenTreeSitterJson = true;
   };
 
   ohm = {
