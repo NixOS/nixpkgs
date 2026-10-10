@@ -589,10 +589,14 @@ rec {
     :::
   */
   makeSearchPath =
-    subDir: paths:
-    concatStringsSep ":" (
-      concatMap (path: if path != null then [ (path + "/" + subDir) ] else [ ]) paths
-    );
+    let
+      concatColons = concatStringsSep ":";
+    in
+    subDir:
+    let
+      concatPaths = concatMap (path: if path != null then [ (path + "/" + subDir) ] else [ ]);
+    in
+    paths: concatColons (concatPaths paths);
 
   /**
     Construct a Unix-style search path by appending the given
