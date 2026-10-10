@@ -2,6 +2,7 @@
   stdenv,
   lib,
   callPackage,
+  coreutils,
   fetchFromGitHub,
   fetchPypi,
   python314Packages,
@@ -207,6 +208,10 @@ python3Packages.buildPythonApplication rec {
     # Patch path to ffmpeg binary
     (replaceVars ./patches/ffmpeg-path.patch {
       ffmpeg = "${lib.getExe ffmpeg-headless}";
+    })
+
+    (replaceVars ./patches/coreutils-path.patch {
+      echo = lib.getExe' coreutils "echo";
     })
   ];
 
