@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libplist";
-  version = "2.7.0";
+  version = "2.8.0";
 
   outputs = [
     "bin"
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libimobiledevice";
     repo = "libplist";
     rev = finalAttrs.version;
-    hash = "sha256-Rc1KwJR+Pb2lN8019q5ywERrR7WA2LuLRiEvNsZSxXc=";
+    hash = "sha256-RhYF0268U/UrsnxxnDEVWDpkwBjKd01EJQ0Ml7IU760=";
   };
 
   nativeBuildInputs = [
