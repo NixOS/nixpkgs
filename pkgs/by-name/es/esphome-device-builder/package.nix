@@ -33,14 +33,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "esphome-device-builder";
-  version = "1.14.9";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "device-builder";
     tag = finalAttrs.version;
-    hash = "sha256-G2zY0ilXCAFiSkQvaSN7rdlSBH8WkjKXkkDQqvTfvI0=";
+    hash = "sha256-Rht/xC/8DlAB/IDFj7y5wWuApOnEBZFVCSLkHXFJoVc=";
   };
 
   __structuredAttrs = true;
@@ -80,6 +80,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     pytest-timeout
     pytest-xdist
     blockbuster
+    jsonschema
   ];
 
   postPatch = ''
