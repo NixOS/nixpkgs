@@ -26,6 +26,7 @@
   tcl,
   tk,
   makeWrapper,
+  removeReferencesTo,
   libiconv,
   libiconvReal,
   pkgsHostHost,
@@ -145,6 +146,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
     # searching in $PATH
     ./ssh-path.patch
+  ]
+  ++ lib.optionals withManual [
+    # Find the html manual in $XDG_DATA_DIRS, so that git does not refer to $doc
+    ./html-path-xdg-data-dirs.patch
   ];
 
   postPatch = ''
@@ -169,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ]
   ++ lib.optionals withManual [
+    removeReferencesTo
     asciidoc
     texinfo
     xmlto
@@ -623,6 +629,12 @@ stdenv.mkDerivation (finalAttrs: {
     disable_test t7815-grep-binary
   '';
 
+  postFixup = lib.optionalString withManual ''
+    grep -rlF $doc $out | xargs remove-references-to -t $doc
+  '';
+
+  outputChecks.out.disallowedRequisites = lib.optional withManual "doc";
+
   stripDebugList = [
     "lib"
     "libexec"
@@ -680,6 +692,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     teams = [ lib.teams.security-review ];
     mainProgram = "git";
+    outputsToInstall = [ "out" ] ++ lib.optional withManual "doc";
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "git-scm" finalAttrs.version;
   };
 })
