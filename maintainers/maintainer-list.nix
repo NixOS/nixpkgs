@@ -4476,6 +4476,12 @@
     githubId = 61636;
     name = "Brad Langhorst";
   };
+  by-architect = {
+    name = "byarchitect";
+    email = "byarchitect@disroot.org";
+    github = "by-architect";
+    githubId = 94618987;
+  };
   bycEEE = {
     email = "bycEEE@gmail.com";
     github = "bycEEE";
