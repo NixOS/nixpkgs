@@ -6,13 +6,13 @@
 
 buildNpmPackage rec {
   pname = "sonos-card";
-  version = "10.8.4";
+  version = "10.8.5";
 
   src = fetchFromGitHub {
     owner = "punxaphil";
     repo = "custom-sonos-card";
     tag = "v${version}";
-    hash = "sha256-i+SpCLmtq2EtaZA5RNwa5Ikl4EymOlJostdwXH5WllA=";
+    hash = "sha256-sqyaUMU4gju8O3D6hflIlr0At0LmVASi9lsRmRorH2k=";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ buildNpmPackage rec {
       --replace-fail "&& bash create-dist-maxi-media-player.sh" ""
   '';
 
-  npmDepsHash = "sha256-yrDqJdQ9LjDlcnDpQC5JmvZcloVtoOaNP0dzdiCU+7Y=";
+  npmDepsHash = "sha256-M/lox4XSZuwnoZABEyZ3AOE62oNp5f8CD5vygfSoemQ=";
 
   installPhase = ''
     runHook preInstall

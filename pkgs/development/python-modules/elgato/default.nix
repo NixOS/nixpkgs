@@ -1,59 +1,70 @@
 {
   lib,
   aiohttp,
-  aresponses,
+  aioresponses,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  rich,
+  syrupy,
+  typer,
   yarl,
+  zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elgato";
-  version = "5.1.2";
+  version = "6.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-elgato";
-    tag = "v${version}";
-    hash = "sha256-NAU4tr0oaAPPrOUZYl9WoGOM68MlrBqGewHBIiIv2XY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Dnbz3ssvxX2nR17W0UP2zW6rebbinr5JeI2tfwjl6o4=";
   };
 
-  postPatch = ''
-    # Upstream doesn't set a version for the pyproject.toml
-    substituteInPlace pyproject.toml \
-      --replace "0.0.0" "${version}"
-  '';
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    cryptography
     mashumaro
     orjson
     yarl
   ];
 
+  optional-dependencies.cli = [
+    rich
+    typer
+    zeroconf
+  ];
+
   nativeCheckInputs = [
-    aresponses
+    aioresponses
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ];
+    syrupy
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.cli;
 
   pythonImportsCheck = [ "elgato" ];
 
   meta = {
     description = "Python client for Elgato Key Lights";
     homepage = "https://github.com/frenck/python-elgato";
-    changelog = "https://github.com/frenck/python-elgato/releases/tag/v${version}";
+    changelog = "https://github.com/frenck/python-elgato/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

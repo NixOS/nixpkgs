@@ -6,7 +6,6 @@
   bleak-retry-connector,
   crc,
   ecdsa,
-  jsonpath-ng,
   protobuf6,
   pycryptodome,
   pytestCheckHook,
@@ -18,13 +17,13 @@
 buildHomeAssistantComponent rec {
   owner = "rabits";
   domain = "ef_ble";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "rabits";
     repo = "ha-ef-ble";
     tag = "v${version}";
-    hash = "sha256-ccWhF+vslBcPW8rKZKKYMcprSc/T9lsy1FNs4XP9O/A=";
+    hash = "sha256-Iq9/JqfDnB27Z8fSSKAyxFiU3swkMAeCWbJbSHVsK4A=";
   };
 
   dependencies = [

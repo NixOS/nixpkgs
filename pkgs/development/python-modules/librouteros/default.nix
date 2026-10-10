@@ -6,26 +6,26 @@
   pytest-asyncio,
   pytest-xdist,
   pytestCheckHook,
-  uv-build,
   stamina,
+  uv-build,
   toml,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "librouteros";
-  version = "4.2.0";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luqasz";
     repo = "librouteros";
     tag = finalAttrs.version;
-    hash = "sha256-Xn/mXNfgC41MR12PpYgDwMfHyn9iyKt4tSbEWI340Dc=";
+    hash = "sha256-PbRnHsZSSbr7dkVb3F+1CB5TH30wgoGGXEcRBVjuN5Y=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.8.18,<0.12.0" "uv_build"
+      --replace-fail "uv_build==0.12.*" uv_build
   '';
 
   build-system = [ uv-build ];
@@ -40,13 +40,8 @@ buildPythonPackage (finalAttrs: {
     stamina
   ];
 
-  disabledTestPaths = [
-    # Disable tests which require QEMU to run
-    "tests/integration/test_config.py"
-    "tests/integration/test_general.py"
-    "tests/integration/test_generator.py"
-    "tests/integration/test_path.py"
-  ];
+  # Disable tests which require QEMU to run
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "librouteros" ];
 

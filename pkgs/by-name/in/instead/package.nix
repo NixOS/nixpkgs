@@ -7,12 +7,13 @@
   SDL2_image,
   SDL2_mixer,
   pkg-config,
-  lua,
+  lua5_2_compat,
   zlib,
   unzip,
 }:
 
 let
+  lua = lua5_2_compat;
   # I took several games at random from https://instead.syscall.ru/games/
   games = [
     (fetchurl {

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  luaPackages,
+  lua52Packages,
   unstableGitUpdater,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  nativeCheckInputs = [ luaPackages.luacheck ];
+  nativeCheckInputs = [ lua52Packages.luacheck ];
 
   doCheck = true;
 

@@ -1,6 +1,6 @@
 {
   callPackage,
-  luaPackages,
+  lua52Packages,
   perlPackages,
   python3Packages,
 }:
@@ -21,7 +21,7 @@
   weechat-grep = callPackage ./weechat-grep { };
 
   weechat-matrix-bridge = callPackage ./weechat-matrix-bridge {
-    inherit (luaPackages) cjson luaffi;
+    inherit (lua52Packages) cjson luaffi;
   };
 
   weechat-matrix = python3Packages.callPackage ./weechat-matrix { };
