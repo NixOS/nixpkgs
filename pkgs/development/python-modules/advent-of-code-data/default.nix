@@ -28,6 +28,8 @@ buildPythonPackage (finalAttrs: {
   version = "2.2.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
