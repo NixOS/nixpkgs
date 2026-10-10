@@ -7,18 +7,16 @@
   copyDesktopItems,
   makeDesktopItem,
   ncurses,
-  libtermkey,
-  lua5_2_compat,
+  lua5_5,
   tre,
   acl,
   libselinux,
 }:
 
 let
-  lua = lua5_2_compat;
-  luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
+  luaEnv = lua5_5.withPackages (ps: [ ps.lpeg ]);
 in
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "vis";
   version = "0.9-unstable-2026-10-03";
 
@@ -50,8 +48,8 @@ stdenv.mkDerivation (finalAttrs:{
 
   postInstall = ''
     wrapProgram $out/bin/vis \
-      --prefix LUA_CPATH ';' "${lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv}" \
-      --prefix LUA_PATH ';' "${lua.pkgs.luaLib.genLuaPathAbsStr luaEnv}" \
+      --prefix LUA_CPATH ';' "${lua5_5.pkgs.luaLib.genLuaCPathAbsStr luaEnv}" \
+      --prefix LUA_PATH ';' "${lua5_5.pkgs.luaLib.genLuaPathAbsStr luaEnv}" \
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
