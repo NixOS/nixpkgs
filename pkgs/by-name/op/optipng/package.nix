@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpng ];
 
+  postPatch = ''
+    substituteInPlace ./third_party/gifread/Makefile ./third_party/minitiff/Makefile ./third_party/pnmio/Makefile \
+      --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar" \
+      --replace-fail "RANLIB = ranlib" "RANLIB = ${stdenv.cc.targetPrefix}ranlib"
+  '';
+
   # Workaround for crash in cexcept.h. See
   # https://github.com/NixOS/nixpkgs/issues/28106
   preConfigure = ''
