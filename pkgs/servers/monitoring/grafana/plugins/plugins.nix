@@ -25,6 +25,7 @@
   grafana-pyroscope-app = callPackage ./grafana-pyroscope-app { };
   grafana-sentry-datasource = callPackage ./grafana-sentry-datasource { };
   grafana-worldmap-panel = callPackage ./grafana-worldmap-panel { };
+  influxdb = callPackage ./influxdb { };
   jaeger = callPackage ./jaeger { };
   loki = callPackage ./loki { };
   marcusolsson-calendar-panel = callPackage ./marcusolsson-calendar-panel { };
