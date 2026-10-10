@@ -469,9 +469,9 @@
   };
 
   dbml = {
-    version = "0.1.0";
+    version = "1.0.0";
     url = "github:dynamotn/tree-sitter-dbml";
-    hash = "sha256-IxxUW6YYxP1hkwA9NEojEEE3c8pwvAI6juX8aF7NfMw=";
+    hash = "sha256-18pAc8tOdUDBvZiFwikwrG0mMXnHCludZM56IJXZTDw=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
