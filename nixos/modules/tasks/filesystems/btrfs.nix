@@ -21,19 +21,23 @@ let
     mapAttrsToList
     foldl'
     getExe
+    getExe'
     escape
     versionAtLeast
     versionOlder
     isInt
     filter
     concatLists
+    optionalAttrs
+    escapeShellArg
     ;
 
   inInitrd = config.boot.initrd.supportedFilesystems.btrfs or false;
   inSystem = config.boot.supportedFilesystems.btrfs or false;
 
-  cfgBalance = config.services.btrfs.autoBalance;
-  cfgScrub = config.services.btrfs.autoScrub;
+  cfg = config.services.btrfs;
+  cfgBalance = cfg.autoBalance;
+  cfgScrub = cfg.autoScrub;
 
   enableAutoBalance = cfgBalance.enable;
   enableAutoScrub = cfgScrub.enable;
@@ -89,6 +93,59 @@ let
         }) (filterAttrs (name: fs: fs.fsType == "btrfs") config.fileSystems)
       )
     );
+
+  btrfsCmd = getExe pkgs.btrfs-progs;
+  btrfsStartCmd =
+    if cfg.allowConcurrency then
+      btrfsCmd
+    else
+      getExe (
+        pkgs.writeShellApplication {
+          name = "btrfs-locked";
+          text = ''
+            FS="''${*: -1}"
+            UUID="$(${escapeShellArg btrfsCmd} filesystem show "$FS" \
+              | ${getExe pkgs.gnused} -n -e '/uuid:/ {s/^.*uuid: //;p }')"
+            LOCKFILE="$RUNTIME_DIRECTORY/maintainance-$UUID.lock"
+            echo "Acquiring lock on $LOCKFILE..."
+            exec ${escapeShellArg (getExe' pkgs.util-linux "flock")} -x --no-fork --verbose "$LOCKFILE" \
+              ${escapeShellArg btrfsCmd} "$@"
+          '';
+        }
+      );
+  btrfsCancelCmd =
+    pkgs.writers.writePython3 "btrfs-maybe-cancel"
+      {
+        flakeIgnore = [
+          # `btrfsCmd` may exceed 80-character line length for some platforms
+          "E501"
+        ];
+      }
+      ''
+        import subprocess
+        import sys
+
+        btrfs = "${escape [ "\"" "\\" ] btrfsCmd}"
+        result = subprocess.run(
+            [btrfs] + sys.argv[1:],
+            stderr=subprocess.PIPE,
+            check=False,
+            shell=False
+        )
+
+        # ignore errors if there was no running scrub or balance to cancel
+        if result.returncode == 2:
+            sys.exit(0)
+
+        sys.stderr.buffer.write(result.stderr)
+        sys.exit(result.returncode)
+      '';
+
+  additionalServiceConfig = optionalAttrs (!cfg.allowConcurrency) {
+    # contains the lockfiles, which are used by all services
+    RuntimeDirectory = "btrfs";
+    RuntimeDirectoryPreserve = true;
+  };
 in
 
 {
@@ -97,6 +154,10 @@ in
   ];
 
   options = {
+    services.btrfs.allowConcurrency = mkEnableOption ''
+      the concurrent execution of btrfs maintainance operations for the same filesystem
+    '';
+
     services.btrfs.autoBalance = {
       enable = mkEnableOption "regular btrfs balance";
 
@@ -350,68 +411,38 @@ in
 
         unitConfig.RequiresMountsFor = "%f";
 
-        serviceConfig =
-          let
-            btrfsCmd = getExe pkgs.btrfs-progs;
-            btrfsCancelCmd =
-              pkgs.writers.writePython3 "btrfs-balance-maybe-cancel"
-                {
-                  flakeIgnore = [
-                    # `btrfsCmd` may exceed 80-character line length for some platforms
-                    "E501"
-                  ];
-                }
-                ''
-                  import subprocess
-                  import sys
-
-                  btrfs = "${escape [ "\"" "\\" ] btrfsCmd}"
-                  result = subprocess.run(
-                      [btrfs, "balance", "cancel"] + sys.argv[1:],
-                      stderr=subprocess.PIPE,
-                      check=False,
-                      shell=False
-                  )
-
-                  # ignore errors if there was no running balance to cancel
-                  if result.returncode == 2:
-                      sys.exit(0)
-
-                  sys.stderr.buffer.write(result.stderr)
-                  sys.exit(result.returncode)
-                '';
-            additionalBalanceArgs =
-              let
-                mkArg =
-                  option: optionals (cfgBalance.${option} != null) [ "-${option}=${toString cfgBalance.${option}}" ];
-              in
-              concatLists (
-                map mkArg [
-                  "dusage"
-                  "musage"
-                  "dlimit"
-                  "mlimit"
-                ]
-              );
-          in
+        serviceConfig = mkMerge [
           {
             # simple and not oneshot, otherwise ExecStop is not used
             Type = "simple";
             Nice = 19;
             CPUSchedulingPolicy = "idle";
             IOSchedulingClass = "idle";
-            ExecStart = "${
-              utils.escapeSystemdExecArgs (
-                [
-                  btrfsCmd
-                  "balance"
-                  "start"
-                ]
-                ++ additionalBalanceArgs
-              )
-            } %f";
+            ExecStart =
+              let
+                mkArg =
+                  option: optionals (cfgBalance.${option} != null) [ "-${option}=${toString cfgBalance.${option}}" ];
+                additionalBalanceArgs = concatLists (
+                  map mkArg [
+                    "dusage"
+                    "musage"
+                    "dlimit"
+                    "mlimit"
+                  ]
+                );
+              in
+              "${
+                utils.escapeSystemdExecArgs (
+                  [
+                    btrfsStartCmd
+                    "balance"
+                    "start"
+                  ]
+                  ++ additionalBalanceArgs
+                )
+              } %f";
             # if the service is stopped before balance end, cancel it
-            ExecStop = "${utils.escapeSystemdExecArg btrfsCancelCmd} %f";
+            ExecStop = "${utils.escapeSystemdExecArg btrfsCancelCmd} balance cancel %f";
             # hardening
             # required for starting/cancelling the balance operation
             CapabilityBoundingSet = [
@@ -443,7 +474,9 @@ in
             SystemCallArchitectures = "native";
             SystemCallErrorNumber = "EPERM";
             # no User= since the balance operation fails when started by a user different from root
-          };
+          }
+          additionalServiceConfig
+        ];
       };
 
       systemd.timers."btrfs-balance@" = {
@@ -494,60 +527,33 @@ in
 
         unitConfig.RequiresMountsFor = "%f";
 
-        serviceConfig =
-          let
-            btrfsCmd = getExe pkgs.btrfs-progs;
-            btrfsCancelCmd =
-              pkgs.writers.writePython3 "btrfs-scrub-maybe-cancel"
-                {
-                  flakeIgnore = [
-                    # `btrfsCmd` may exceed 80-character line length for some platforms
-                    "E501"
-                  ];
-                }
-                ''
-                  import subprocess
-                  import sys
-
-                  btrfs = "${escape [ "\"" "\\" ] btrfsCmd}"
-                  result = subprocess.run(
-                      [btrfs, "scrub", "cancel"] + sys.argv[1:],
-                      stderr=subprocess.PIPE,
-                      check=False,
-                      shell=False
-                  )
-
-                  # ignore errors if there was no running scrub to cancel
-                  if result.returncode == 2:
-                      sys.exit(0)
-
-                  sys.stderr.buffer.write(result.stderr)
-                  sys.exit(result.returncode)
-                '';
-            additionalScrubArgs = optionals (cfgScrub.limit != null) [
-              "--limit"
-              cfgScrub.limit
-            ];
-          in
+        serviceConfig = mkMerge [
           {
             # simple and not oneshot, otherwise ExecStop is not used
             Type = "simple";
             Nice = 19;
             CPUSchedulingPolicy = "idle";
             IOSchedulingClass = "idle";
-            ExecStart = "${
-              utils.escapeSystemdExecArgs (
-                [
-                  btrfsCmd
-                  "scrub"
-                  "start"
-                  "-B"
-                ]
-                ++ additionalScrubArgs
-              )
-            } %f";
+            ExecStart =
+              let
+                additionalScrubArgs = optionals (cfgScrub.limit != null) [
+                  "--limit"
+                  cfgScrub.limit
+                ];
+              in
+              "${
+                utils.escapeSystemdExecArgs (
+                  [
+                    btrfsStartCmd
+                    "scrub"
+                    "start"
+                    "-B"
+                  ]
+                  ++ additionalScrubArgs
+                )
+              } %f";
             # if the service is stopped before scrub end, cancel it
-            ExecStop = "${utils.escapeSystemdExecArg btrfsCancelCmd} %f";
+            ExecStop = "${utils.escapeSystemdExecArg btrfsCancelCmd} scrub cancel %f";
             # hardening
             # required for starting/cancelling the scrub operation
             CapabilityBoundingSet = [
@@ -578,7 +584,9 @@ in
             SystemCallErrorNumber = "EPERM";
             # no ProtectKernelTunables since /sys/fs/btrfs access is required
             # no User= since written files have to be accessible by scrub commands run manually
-          };
+          }
+          additionalServiceConfig
+        ];
       };
 
       systemd.timers."btrfs-scrub@" = {
