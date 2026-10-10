@@ -22023,6 +22023,12 @@
     githubId = 20295134;
     name = "Oliver Ni";
   };
+  oliverpool = {
+    email = "git@olivier.pfad.fr";
+    github = "oliverpool";
+    githubId = 3864879;
+    name = "oliverpool";
+  };
   ollieB = {
     github = "oliverbunting";
     githubId = 1237862;
