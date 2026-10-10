@@ -1,18 +1,19 @@
 # Derived from https://github.com/colemickens/nixpkgs-kubernetes
 {
-  buildGoModule,
   callPackage,
   fetchFromGitHub,
   lib,
   nix-update-script,
+  pkg-config,
+  protobuf,
   qemu_kvm,
+  rustPlatform,
   stdenv,
   virtiofsd,
-  yq-go,
 }:
 
 let
-  version = "3.32.0";
+  version = "4.2.0";
 
   kata-images-all = callPackage ./kata-images.nix { inherit version; };
 
@@ -28,42 +29,57 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
-buildGoModule rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kata-runtime";
   inherit version;
-
-  # https://github.com/NixOS/nixpkgs/issues/25959
-  hardeningDisable = [ "fortify" ];
 
   src = fetchFromGitHub {
     owner = "kata-containers";
     repo = "kata-containers";
     rev = version;
-    hash = "sha256-dnbzjYDKeAp0wFQcO5VK71vkf7ubVK5Lh9R9jjuro28=";
+    hash = "sha256-afEm5lcXD4qC2Ezhx7wyZXD5pj4uLPoSnJrvFJL+7qU=";
   };
 
-  sourceRoot = "${src.name}/src/runtime";
+  # runtime-rs is a member of the Cargo workspace at the repository root,
+  # the Makefile is driven from its own subdirectory.
+  cargoHash = lib.fakeHash;
 
-  vendorHash = "sha256-HAWobIcqwHL7jgawpOk1ZNx6vG8NApF5Nn60eZ9Fc1c=";
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
+
+  # Cargo is invoked by the upstream Makefile
+  dontCargoBuild = true;
+  dontCargoInstall = true;
+  dontCargoCheck = true;
+
+  # https://github.com/NixOS/nixpkgs/issues/25959
+  hardeningDisable = [ "fortify" ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "DEFAULT_HYPERVISOR=qemu"
-    "HYPERVISORS=qemu"
+    "BINDIR=${placeholder "out"}/bin"
+    "HYPERVISOR=qemu"
     "QEMUPATH=${qemu_kvm}/bin/${qemuSystemBinary}"
+    # OpenVMM is an Azure specific integration pulling in extra dependencies
+    "USE_OPENVMM=false"
   ];
+
+  preBuild = ''
+    cd src/runtime-rs
+  '';
 
   buildPhase = ''
     runHook preBuild
-    mkdir -p $TMPDIR/gopath/bin
-    ln -s ${yq-go}/bin/yq $TMPDIR/gopath/bin/yq
-    HOME=$TMPDIR GOPATH=$TMPDIR/gopath make ${toString makeFlags}
+    make ${toString finalAttrs.makeFlags}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    HOME=$TMPDIR GOPATH=$TMPDIR/gopath make ${toString makeFlags} install
+    make ${toString finalAttrs.makeFlags} install
+
     ln -s $out/bin/containerd-shim-kata-v2 $out/bin/containerd-shim-kata-qemu-v2
     ln -s $out/bin/containerd-shim-kata-v2 $out/bin/containerd-shim-kata-clh-v2
 
@@ -100,4 +116,4 @@ buildGoModule rec {
       "aarch64-linux"
     ];
   };
-}
+})
