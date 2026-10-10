@@ -53,7 +53,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Desktop app for studying HTML and React flashcard decks with quizzes and progress tracking";
     homepage = "https://github.com/Naved124/riffle";
-    changelog = "https://github.com/Naved124/riffle/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Naved124/riffle/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [ naved124 ];
     mainProgram = "flashcard-viewer";
