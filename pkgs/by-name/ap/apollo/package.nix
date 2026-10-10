@@ -227,7 +227,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Apollo — self-hosted game stream host for Moonlight / Artemis / Hestia clients (Sunshine-derived, low-latency KMS capture)";
+    description = "Apollo — self-hosted game stream host for Moonlight / Artemis / Hestia clients (the Hermes project, a maintained fork of Sunshine with low-latency KMS capture)";
     homepage = "https://github.com/MrOz59/Hermes";
     license = licenses.gpl3Only;
     platforms = [

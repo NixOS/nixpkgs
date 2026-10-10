@@ -29,7 +29,7 @@ let
 in
 {
   options.services.apollo = with types; {
-    enable = mkEnableOption "Apollo, a self-hosted game stream host for Moonlight / Artemis / Hestia clients";
+    enable = mkEnableOption "Apollo (the Hermes project), a self-hosted game stream host for Moonlight / Artemis / Hestia clients";
     package = mkPackageOption pkgs "apollo" { };
     virtualDisplayBackend = mkOption {
       type = enum [
