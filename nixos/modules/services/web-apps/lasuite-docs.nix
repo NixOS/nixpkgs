@@ -774,6 +774,11 @@ in
           recommendedProxySettings = true;
         };
 
+        locations."/metrics" = {
+          proxyPass = "http://${cfg.bind}";
+          recommendedProxySettings = true;
+        };
+
         locations."/static/" = {
           alias = "${cfg.backendPackage}/share/static/";
         };

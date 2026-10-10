@@ -65,6 +65,10 @@ in
           DJANGO_CSRF_COOKIE_SECURE = false;
           DJANGO_SESSION_COOKIE_SECURE = false;
           DJANGO_CSRF_TRUSTED_ORIGINS = "http://*";
+
+          PROMETHEUS_METRICS_ENABLED = true;
+          PROMETHEUS_DB_METRICS_ENABLED = true;
+          PROMETHEUS_API_KEY = "hunter2";
         };
       };
 
@@ -172,5 +176,10 @@ in
       document_id = machine.succeed(f"curl -fs -c cjar -b cjar 'http://${domain}/api/v1.0/documents/' -X POST -H 'X-CSRFToken: {csrf_token}' -H 'Referer: http://${domain}' | jq .id -r").strip()
 
       print(f"Created document with id {document_id}")
+
+    with subtest("Prometheus metrics"):
+      metric = machine.succeed("curl -Lvi --fail 'http://${domain}/metrics' -H 'Authorization: Bearer hunter2' | grep -E '^django_db_execute_total'").splitlines()[0]
+      value = float(metric.split(' ')[-1])
+      t.assertGreaterEqual(value, 0)
   '';
 }
