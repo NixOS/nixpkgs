@@ -18,8 +18,7 @@
   withOcrad ? false,
   ocrad,
 }:
-
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ocrodjvu";
   version = "0.14";
   pyproject = true;
@@ -27,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "FriedrichFroebel";
     repo = "ocrodjvu";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/TPo8YCE8JKKKBBeV12ilgTNDmuklwfy0TPI/7dBiOs=";
   };
 
@@ -74,10 +73,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Wrapper for OCR systems that allows you to perform OCR on DjVu files";
     homepage = "https://github.com/FriedrichFroebel/ocrodjvu";
-    changelog = "https://github.com/FriedrichFroebel/ocrodjvu/blob/${version}/doc/changelog";
+    changelog = "https://github.com/FriedrichFroebel/ocrodjvu/blob/${finalAttrs.version}/doc/changelog";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ dansbandit ];
     mainProgram = "ocrodjvu";
   };
-}
+})
