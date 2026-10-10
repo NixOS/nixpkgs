@@ -1,0 +1,12 @@
+diff --git a/music_assistant/providers/spotify_connect/__init__.py b/music_assistant/providers/spotify_connect/__init__.py
+index 85305a08c..3b2b960e2 100644
+--- a/music_assistant/providers/spotify_connect/__init__.py
++++ b/music_assistant/providers/spotify_connect/__init__.py
+@@ -680,6 +680,7 @@ def _write_config(self) -> None:
+             "volume_steps": VOLUME_STEPS,
+             "initial_volume": initial_volume,
+             "zeroconf_enabled": True,
++            "zeroconf_port": int(os.environ.get("MUSIC_ASSISTANT_SPOTIFY_CONNECT_ZEROCONF_PORT", "0")),
+             "credentials": {"type": "zeroconf", "zeroconf": {"persist_credentials": True}},
+             "server": {"enabled": True, "address": "127.0.0.1", "port": self._api_port},
+         }
