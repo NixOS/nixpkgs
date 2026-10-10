@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wled";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YUe0ERXifYAOXS4snPQkYUw+ONU6WmS3UvSMhPWZOZM=";
+    hash = "sha256-0NedIhKfVusIOyh3wSPulR1KI6nFxb/lVzBUaomr/VA=";
   };
 
   postPatch = ''
