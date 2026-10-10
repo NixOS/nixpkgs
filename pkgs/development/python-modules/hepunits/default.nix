@@ -28,6 +28,8 @@ buildPythonPackage (finalAttrs: {
     pint
   ];
 
+  pythonImportsCheck = [ "hepunits" ];
+
   meta = {
     description = "Units and constants in the HEP system of units";
     homepage = "https://github.com/scikit-hep/hepunits";
