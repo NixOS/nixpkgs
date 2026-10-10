@@ -147,6 +147,11 @@ buildDotnetModule {
     "src/NzbDrone.Test.Common/Sonarr.Test.Common.csproj"
   ];
 
+  # https://github.com/NixOS/nixpkgs/pull/491217
+  dotnetTestFlags = lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    "--environment:DOTNET_SYSTEM_NET_DISABLEIPV6=1"
+  ];
+
   dotnetFlags = [
     "--property:TargetFramework=net8.0"
     "--property:EnableAnalyzers=false"
