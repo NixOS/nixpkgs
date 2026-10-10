@@ -192,7 +192,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       substituteInPlace ./Makefile \
           --replace-fail 'all: libtree-sitter.a libtree-sitter.$(SOEXT) tree-sitter.pc' 'all: libtree-sitter.a tree-sitter.pc'
-      sed -i '/^install:/,/^[^[:space:]]/ { /$(SOEXT/d; }' ./Makefile
+      sed -i '/^install:/,/^uninstall:/ { /$(SOEXT/d; }' ./Makefile
     ''
     # rquickjs-sys passes the raw rust target to clang, which does not know riscv64gc
     + lib.optionalString stdenv.hostPlatform.isRiscV64 ''
@@ -206,7 +206,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cmakeFlags = lib.optionals wasmSupport [
     (lib.cmakeBool "TREE_SITTER_FEATURE_WASM" true)
     (lib.cmakeFeature "WASMTIME_INCLUDE_DIR" "${lib.getDev wasmtime_48}/include")
-    (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_48}/lib/libwasmtime${stdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeFeature "WASMTIME_LIBRARY" "${lib.getLib wasmtime_48}/lib/libwasmtime${stdenv.hostPlatform.extensions.library}")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
   ];
