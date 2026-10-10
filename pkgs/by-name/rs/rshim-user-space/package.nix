@@ -4,6 +4,7 @@
   bashNonInteractive,
   coreutils,
   fetchFromGitHub,
+  fetchpatch,
   fuse3,
   gawk,
   gnugrep,
@@ -17,6 +18,7 @@
   procps,
   pv,
   stdenv,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
   systemd,
   util-linux,
   which,
@@ -45,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     fuse3
     libusb1
     pciutils
-    systemd
-  ];
+  ]
+  ++ lib.optionals systemdSupport [ systemd ];
 
   patches = [
     # https://github.com/Mellanox/rshim-user-space/pull/391
@@ -56,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/Mellanox/rshim-user-space/pull/363
     # Fix console handling under glibc >= 2.42 where struct termio was removed.
     ./fix-console-handling.patch
+  ]
+  # https://github.com/Mellanox/rshim-user-space/pull/451
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchpatch {
+      url = "https://github.com/Mellanox/rshim-user-space/commit/03dfebef1bc026340bd9cb57220c8b4df9585af1.patch";
+      hash = "sha256-7qTEjJD1ZG7xIQRsmcBU3y1j7NlKyCRsEvFlsj7H5b8=";
+    })
   ];
 
   prePatch = ''
@@ -91,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
           perl
           procps
           pv
-          systemd
+          (if systemdSupport then systemd else null)
           util-linux
           which
         ]
