@@ -100,7 +100,12 @@ let
       (lib.escapeShellArg ''
         if ! ( test -n "$DBUS_SESSION_BUS_ADDRESS" ); then
             dbus_tmp_dir="/run/user/$(id -u)/libreoffice-dbus"
-            if ! test -d "$dbus_tmp_dir" && test -d "/run"; then
+            # Sometimes /run exists but is not writeable, (like when running in
+            # a linux builder on darwin) giving
+            # `mkdir: cannot create directory '/run/user': Permission denied`
+            # instead of going to the next fallback.  Ensure we test with `-w`
+            # and not `-d`.
+            if ! test -d "$dbus_tmp_dir" && test -w "/run"; then
                     mkdir -p "$dbus_tmp_dir"
             fi
             if ! test -d "$dbus_tmp_dir"; then
