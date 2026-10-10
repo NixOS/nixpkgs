@@ -1,0 +1,42 @@
+From a298c877ab8ff04e4d735b63108cc0bdce5bbd7b Mon Sep 17 00:00:00 2001
+From: Connor Grady <50903811+connor-grady@users.noreply.github.com>
+Date: Tue, 6 Oct 2026 06:53:48 +0000
+Subject: [PATCH] Fix: Race in
+ should_release_all_blocked_overflow_producers_when_shutdown_starts
+
+---
+ .../MediaCoverTests/MediaCoverServiceFixture.cs   | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/src/NzbDrone.Core.Test/MediaCoverTests/MediaCoverServiceFixture.cs b/src/NzbDrone.Core.Test/MediaCoverTests/MediaCoverServiceFixture.cs
+index 97ae896edf3b0cf0b48b8217cac0cc6d7176b888..12181668074892c5164908a4de7ea38b10fcdea2 100644
+--- a/src/NzbDrone.Core.Test/MediaCoverTests/MediaCoverServiceFixture.cs
++++ b/src/NzbDrone.Core.Test/MediaCoverTests/MediaCoverServiceFixture.cs
+@@ -1181,19 +1181,20 @@ public void should_release_all_blocked_overflow_producers_when_shutdown_starts()
+                 Subject.Handle(new MovieUpdatedEvent(GivenMovie(7100 + i)));
+             }
+ 
+-            var blocked = new[]
++            var blocked = new List<Task>
+             {
+-                Task.Run(() => Subject.Handle(new MovieUpdatedEvent(GivenMovie(8000, "https://example.com/old-duplicate")))),
+-                Task.Run(() => Subject.Handle(new MovieUpdatedEvent(GivenMovie(8001)))),
+-                Task.Run(() => Subject.Handle(new MovieUpdatedEvent(GivenMovie(8000, "https://example.com/new-duplicate"))))
++                Task.Run(() => Subject.Handle(new MovieUpdatedEvent(GivenMovie(8000, "https://example.com/old-duplicate"))))
+             };
+-
+-            SpinWait.SpinUntil(() => Subject.MovieCoverQueueTest.BlockedProducerCount == blocked.Length, 5000).Should().BeTrue();
++            SpinWait.SpinUntil(() => Subject.MovieCoverQueueTest.BlockedProducerCount == 1, 5000).Should().BeTrue();
++            blocked.Add(Task.Run(() => Subject.Handle(new MovieUpdatedEvent(GivenMovie(8001)))));
++            SpinWait.SpinUntil(() => Subject.MovieCoverQueueTest.BlockedProducerCount == 2, 5000).Should().BeTrue();
++            blocked.Add(Task.Run(() => Subject.Handle(new MovieUpdatedEvent(GivenMovie(8000, "https://example.com/new-duplicate")))));
++            SpinWait.SpinUntil(() => Subject.MovieCoverQueueTest.BlockedProducerCount == 3, 5000).Should().BeTrue();
+ 
+             try
+             {
+                 Subject.Handle(new ApplicationShutdownRequested());
+-                Task.WaitAll(blocked, 1000).Should().BeTrue();
++                Task.WaitAll(blocked.ToArray(), 1000).Should().BeTrue();
+                 Subject.MovieCoverQueueTest.BlockedProducerCount.Should().Be(0);
+             }
+             finally
