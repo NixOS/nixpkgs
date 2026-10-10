@@ -168,8 +168,9 @@ in
           fixupPhase = ''
             runHook preFixup
 
-            # Remove timestamp and sort the json files
-            rm -rf $storePath/{v3,v10,v11}/tmp
+            # Get rid of impure paths
+            rm -rf $storePath/{v3,v10,v11}/{tmp,projects,links}
+
             for f in $(find $storePath -name "*.json"); do
               jq --sort-keys "del(.. | .checkedAt?)" $f | sponge $f
             done
@@ -191,10 +192,6 @@ in
                 ''}
               fi
             fi
-
-            # This folder contains symlinks to /build/source which we don't need
-            # since https://github.com/pnpm/pnpm/releases/tag/v10.27.0
-            rm -rf $storePath/{v3,v10,v11}/projects
 
             # Ensure consistent permissions
             # NOTE: For reasons not yet fully understood, pnpm might create files with
