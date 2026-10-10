@@ -32,6 +32,7 @@ from test_driver.duration import (
 from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
+from test_driver.machine.nspawn_display import NspawnVnc, NspawnVncConfiguration
 from test_driver.machine.ocr import (
     perform_ocr_on_screenshot,
     perform_ocr_variants_on_screenshot,
@@ -100,6 +101,56 @@ CHAR_TO_KEY = {
     "(": "shift-0x0A",
     ")": "shift-0x0B",
 }
+
+# send_key uses QEMU key names, with "\n" as a driver alias for Return.
+# QEMU names: https://www.qemu.org/docs/master/interop/qemu-qmp-ref.html#enum-QKeyCode
+# xdotool names: https://github.com/jordansissel/xdotool/blob/main/xdotool.pod#keyboard-commands
+# QEMU key name (or "\n") -> X11 keysym name.
+XDOTOOL_KEY_ALIASES = {
+    "\n": "Return",
+    "alt": "Alt_L",
+    "alt_r": "Alt_R",
+    "backspace": "BackSpace",
+    "delete": "Delete",
+    "down": "Down",
+    "esc": "Escape",
+    "kp_enter": "KP_Enter",
+    "left": "Left",
+    "meta_l": "Super_L",
+    "meta_r": "Super_R",
+    "ret": "Return",
+    "right": "Right",
+    "shift": "Shift_L",
+    "spc": "space",
+    "tab": "Tab",
+    "up": "Up",
+}
+
+# QEMU modifier name -> xdotool modifier name.
+XDOTOOL_MODIFIER_ALIASES = {
+    "alt": "alt",
+    "ctrl": "ctrl",
+    "meta_l": "super",
+    "meta_r": "super",
+    "shift": "shift",
+}
+
+
+def xdotool_key_sequence(key: str) -> str:
+    """Translate a QEMU-style key chord to xdotool syntax.
+
+    For example, "ctrl-alt-ret" becomes "ctrl+alt+Return".
+    """
+    parts = key.split("-")
+    modifiers = []
+    while len(parts) > 1 and parts[0] in XDOTOOL_MODIFIER_ALIASES:
+        modifiers.append(XDOTOOL_MODIFIER_ALIASES[parts.pop(0)])
+
+    base = "-".join(parts)
+    base = XDOTOOL_KEY_ALIASES.get(base, base)
+    if re.fullmatch(r"f\d+", base):
+        base = base.upper()
+    return "+".join([*modifiers, base])
 
 
 def make_command(args: list) -> str:
@@ -595,6 +646,160 @@ class BaseMachine(ABC):
 
         with self.nested(f"waiting for file '{filename}'"):
             retry(check_file, as_timedelta(timeout))
+
+    def get_window_names(self) -> list[str]:
+        return self.succeed(
+            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
+        ).splitlines()
+
+    def wait_for_window(
+        self, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
+        """
+        Wait until an X11 window has appeared whose name matches the given
+        regular expression, e.g., `wait_for_window("Terminal")`.
+        """
+        _warn_if_numeric_duration(timeout, "wait_for_window")
+        pattern = re.compile(regexp)
+
+        def window_is_visible(last_try: bool) -> bool:
+            names = self.get_window_names()
+            if last_try:
+                self.log(
+                    f"Last chance to match {regexp} on the window list,"
+                    + " which currently contains: "
+                    + ", ".join(names)
+                )
+            return any(pattern.search(name) for name in names)
+
+        with self.nested("waiting for a window to appear"):
+            retry(window_is_visible, as_timedelta(timeout))
+
+    @abstractmethod
+    def send_key(
+        self,
+        key: str,
+        delay: Duration | None = dt.timedelta(milliseconds=10),
+        log: bool | None = True,
+    ) -> None:
+        """
+        Simulate pressing a key or key chord, e.g.,
+        `send_key("ctrl-alt-delete")`.
+
+        Key names follow QEMU's sendkey vocabulary: `ret` means Enter and
+        `spc` means Space. Named keys and modifiers are case-sensitive;
+        use lowercase names, e.g. `f1` or `ctrl-alt-f1`. Literal characters
+        preserve case: `F` types uppercase F, while `f` types lowercase f.
+        See https://www.qemu.org/docs/master/interop/qemu-qmp-ref.html#enum-QKeyCode.
+
+        Portable key names include printable ASCII characters, function keys,
+        `tab`, `ret`, `esc`, `spc`, `backspace`, `delete`, `left`, `right`,
+        `up`, `down`, and `kp_enter`. Chords may use the `ctrl`, `alt`,
+        `shift`, `meta_l`, and `meta_r` modifiers. Machine backends may accept
+        additional key names.
+        """
+        ...
+
+    def send_chars(
+        self, chars: str, delay: Duration | None = dt.timedelta(milliseconds=10)
+    ) -> None:
+        r"""
+        Simulate typing a sequence of characters on the virtual keyboard,
+        e.g., `send_chars("foobar\n")` will type the string `foobar`
+        followed by the Enter key.
+        """
+        _warn_if_numeric_duration(delay, "send_chars")
+        with self.nested(f"sending keys {repr(chars)}"):
+            for char in chars:
+                self.send_key(char, delay, log=False)
+
+    @contextmanager
+    def _managed_screenshot(self) -> Generator[Path]:
+        """
+        Take a screenshot and yield the path to its PPM file.
+        The file will be deleted when leaving the generator.
+        """
+        raise MachineError(f"Screenshots are not supported by {type(self).__name__}")
+        yield Path()
+
+    def screenshot(self, filename: str) -> None:
+        """
+        Take a picture of the display of the machine, in PNG format.
+        The screenshot will be available in the derivation output.
+        """
+        if "." not in filename:
+            filename += ".png"
+        if "/" not in filename:
+            filename = os.path.join(self.out_dir, filename)
+
+        with self.nested(
+            f"making screenshot {filename}",
+            {"image": os.path.basename(filename)},
+        ):
+            with self._managed_screenshot() as screenshot_path:
+                ret = subprocess.run(
+                    f"pnmtopng '{screenshot_path}' > '{filename}'", shell=True
+                )
+                if ret.returncode != 0:
+                    raise MachineError(
+                        f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
+                    )
+
+    def get_screen_text_variants(self) -> list[str]:
+        """
+        Return a list of different interpretations of what is currently
+        visible on the machine's screen using optical character
+        recognition. The number and order of the interpretations is not
+        specified and is subject to change, but if no exception is raised at
+        least one will be returned.
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
+        with self._managed_screenshot() as screenshot_path:
+            return perform_ocr_variants_on_screenshot(screenshot_path)
+
+    def get_screen_text(self) -> str:
+        """
+        Return a textual representation of what is currently visible on the
+        machine's screen using optical character recognition.
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
+        with self._managed_screenshot() as screenshot_path:
+            return perform_ocr_on_screenshot(screenshot_path)
+
+    def wait_for_text(
+        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
+    ) -> None:
+        """
+        Wait until the supplied regular expressions matches the textual
+        contents of the screen by using optical character recognition (see
+        `get_screen_text` and `get_screen_text_variants`).
+
+        ::: {.note}
+        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
+        :::
+        """
+
+        _warn_if_numeric_duration(timeout, "wait_for_text")
+
+        def screen_matches(last_try: bool) -> bool:
+            variants = self.get_screen_text_variants()
+            for text in variants:
+                if re.search(regex, text) is not None:
+                    return True
+
+            if last_try:
+                self.log(f"Last OCR attempt failed. Text was: {variants}")
+
+            return False
+
+        with self.nested(f"waiting for {regex} to appear on screen"):
+            retry(screen_matches, as_timedelta(timeout))
 
     def wait_for_open_port(
         self,
@@ -1110,19 +1315,6 @@ class QemuMachine(BaseMachine):
             if elapsed >= timeout:
                 raise TimeoutError
 
-    def send_chars(
-        self, chars: str, delay: Duration | None = dt.timedelta(milliseconds=10)
-    ) -> None:
-        r"""
-        Simulate typing a sequence of characters on the virtual keyboard,
-        e.g., `send_chars("foobar\n")` will type the string `foobar`
-        followed by the Enter key.
-        """
-        _warn_if_numeric_duration(delay, "send_chars")
-        with self.nested(f"sending keys {repr(chars)}"):
-            for char in chars:
-                self.send_key(char, delay, log=False)
-
     def wait_for_file(
         self, filename: str, timeout: Duration = dt.timedelta(minutes=15)
     ) -> None:
@@ -1199,84 +1391,6 @@ class QemuMachine(BaseMachine):
             self.send_monitor_command(f"screendump {screenshot_path}")
             yield screenshot_path
 
-    def screenshot(self, filename: str) -> None:
-        """
-        Take a picture of the display of the virtual machine, in PNG format.
-        The screenshot will be available in the derivation output.
-        """
-        if "." not in filename:
-            filename += ".png"
-        if "/" not in filename:
-            filename = os.path.join(self.out_dir, filename)
-
-        with self.nested(
-            f"making screenshot {filename}",
-            {"image": os.path.basename(filename)},
-        ):
-            with self._managed_screenshot() as screenshot_path:
-                ret = subprocess.run(
-                    f"pnmtopng '{screenshot_path}' > '{filename}'", shell=True
-                )
-                if ret.returncode != 0:
-                    raise MachineError(
-                        f"Cannot convert screenshot (pnmtopng returned code {ret.returncode})"
-                    )
-
-    def get_screen_text_variants(self) -> list[str]:
-        """
-        Return a list of different interpretations of what is currently
-        visible on the machine's screen using optical character
-        recognition. The number and order of the interpretations is not
-        specified and is subject to change, but if no exception is raised at
-        least one will be returned.
-
-        ::: {.note}
-        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
-        :::
-        """
-        with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_variants_on_screenshot(screenshot_path)
-
-    def get_screen_text(self) -> str:
-        """
-        Return a textual representation of what is currently visible on the
-        machine's screen using optical character recognition.
-
-        ::: {.note}
-        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
-        :::
-        """
-        with self._managed_screenshot() as screenshot_path:
-            return perform_ocr_on_screenshot(screenshot_path)
-
-    def wait_for_text(
-        self, regex: str, timeout: Duration = dt.timedelta(minutes=15)
-    ) -> None:
-        """
-        Wait until the supplied regular expressions matches the textual
-        contents of the screen by using optical character recognition (see
-        `get_screen_text` and `get_screen_text_variants`).
-
-        ::: {.note}
-        This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
-        :::
-        """
-        _warn_if_numeric_duration(timeout, "wait_for_text")
-
-        def screen_matches(last_try: bool) -> bool:
-            variants = self.get_screen_text_variants()
-            for text in variants:
-                if re.search(regex, text) is not None:
-                    return True
-
-            if last_try:
-                self.log(f"Last OCR attempt failed. Text was: {variants}")
-
-            return False
-
-        with self.nested(f"waiting for {regex} to appear on screen"):
-            retry(screen_matches, as_timedelta(timeout))
-
     def wait_for_console_text(
         self, regex: str, timeout: Duration | None = None
     ) -> None:
@@ -1325,13 +1439,6 @@ class QemuMachine(BaseMachine):
         delay: Duration | None = dt.timedelta(milliseconds=10),
         log: bool | None = True,
     ) -> None:
-        """
-        Simulate pressing keys on the virtual keyboard, e.g.,
-        `send_key("ctrl-alt-delete")`.
-
-        Please also refer to the QEMU documentation for more information on the
-        input syntax: https://en.wikibooks.org/wiki/QEMU/Monitor#sendkey_keys
-        """
         _warn_if_numeric_duration(delay, "send_key")
         key = CHAR_TO_KEY.get(key, key)
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
@@ -1473,6 +1580,8 @@ class QemuMachine(BaseMachine):
         """
         _warn_if_numeric_duration(timeout, "wait_for_x")
 
+        # Keep this separate from nspawn's authenticated X probe: QEMU tests may
+        # install the session user's Xauthority cookie only after this returns.
         def check_x(_last_try: bool) -> bool:
             cmd = (
                 "journalctl -b SYSLOG_IDENTIFIER=systemd | "
@@ -1486,34 +1595,6 @@ class QemuMachine(BaseMachine):
 
         with self.nested("waiting for the X11 server"):
             retry(check_x, as_timedelta(timeout))
-
-    def get_window_names(self) -> list[str]:
-        return self.succeed(
-            r"xwininfo -root -tree | sed 's/.*0x[0-9a-f]* \"\([^\"]*\)\".*/\1/; t; d'"
-        ).splitlines()
-
-    def wait_for_window(
-        self, regexp: str, timeout: Duration = dt.timedelta(minutes=15)
-    ) -> None:
-        """
-        Wait until an X11 window has appeared whose name matches the given
-        regular expression, e.g., `wait_for_window("Terminal")`.
-        """
-        _warn_if_numeric_duration(timeout, "wait_for_window")
-        pattern = re.compile(regexp)
-
-        def window_is_visible(last_try: bool) -> bool:
-            names = self.get_window_names()
-            if last_try:
-                self.log(
-                    f"Last chance to match {regexp} on the window list,"
-                    + " which currently contains: "
-                    + ", ".join(names)
-                )
-            return any(pattern.search(name) for name in names)
-
-        with self.nested("waiting for a window to appear"):
-            retry(window_is_visible, as_timedelta(timeout))
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
         """
@@ -1607,6 +1688,7 @@ class NspawnMachine(BaseMachine):
     machine_sock_path: Path
     machine_sock: socket.socket | None
     notify_thread: threading.Thread | None
+    vnc: NspawnVnc | None
 
     @staticmethod
     def machine_name_from_start_command(start_command: str) -> str:
@@ -1623,6 +1705,7 @@ class NspawnMachine(BaseMachine):
         logger: AbstractLogger,
         callbacks: list[Callable] | None = None,
         keep_machine_state: bool = False,
+        vnc: NspawnVncConfiguration | None = None,
     ):
         # TODO: don't compute `name` from `start_command` path, instead thread it down explicitly.
         # See analogous TODO in `QemuStartCommand::machine_name`.
@@ -1636,6 +1719,8 @@ class NspawnMachine(BaseMachine):
         )
 
         self.start_command = start_command
+        self.vnc_configuration = vnc
+        self.vnc = None
         self.process = None
         self.notify_thread = None
         # State maintained by the notify-socket drainer thread (see
@@ -1646,6 +1731,79 @@ class NspawnMachine(BaseMachine):
 
         self.machine_sock_path = self.tmp_dir / f"{self.name}-nspawn.sock"
 
+    def wait_for_x(self, timeout: Duration = dt.timedelta(minutes=15)) -> None:
+        """
+        Wait until it is possible to connect to the X server.
+        """
+        _warn_if_numeric_duration(timeout, "wait_for_x")
+
+        def check_x(_last_try: bool) -> bool:
+            status, _ = self.execute("xwininfo -root >/dev/null 2>&1")
+            return status == 0
+
+        with self.nested("waiting for the X11 server"):
+            retry(check_x, as_timedelta(timeout))
+
+    def send_key(
+        self,
+        key: str,
+        delay: Duration | None = dt.timedelta(milliseconds=10),
+        log: bool | None = True,
+    ) -> None:
+        _warn_if_numeric_duration(delay, "send_key")
+        context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
+        with context:
+            # Type literal characters to avoid key syntax, e.g. "+" as a chord separator.
+            if len(key) == 1 and key.isprintable():
+                command = [
+                    "xdotool",
+                    "type",
+                    "--clearmodifiers",
+                    "--delay",
+                    0,
+                    "--",
+                    key,
+                ]
+            else:
+                command = [
+                    "xdotool",
+                    "key",
+                    "--clearmodifiers",
+                    xdotool_key_sequence(key),
+                ]
+            self.succeed(make_command(command))
+            if delay is not None:
+                time.sleep(as_seconds(delay))
+
+    @contextmanager
+    def _managed_screenshot(self) -> Generator[Path]:
+        # xwd writes inside the container and xwdtopnm reads on the host, so
+        # the intermediate files must live in their shared directory.
+        with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
+            shared_path = Path(shared_td)
+            xwd_path = shared_path / "screen.xwd"
+            ppm_path = shared_path / "screen.ppm"
+            machine_xwd_path = Path("/tmp/shared") / shared_path.name / xwd_path.name
+
+            self.succeed(
+                make_command(
+                    [
+                        "xwd",
+                        "-root",
+                        "-silent",
+                        "-out",
+                        machine_xwd_path,
+                    ]
+                )
+            )
+            with ppm_path.open("wb") as ppm:
+                ret = subprocess.run(["xwdtopnm", xwd_path], stdout=ppm)
+            if ret.returncode != 0:
+                raise MachineError(
+                    f"Cannot convert screenshot (xwdtopnm returned code {ret.returncode})"
+                )
+            yield ppm_path
+
     def ssh_backdoor_command(self) -> str:
         # documented in systemd-ssh-generator(8) and https://systemd.io/CONTAINER_INTERFACE/
         socket_path = f"/run/systemd/nspawn/unix-export/{self.name}/ssh"
@@ -1653,6 +1811,8 @@ class NspawnMachine(BaseMachine):
         return f'ssh -o User=root -o ProxyCommand="{proxy_cmd}" bash'
 
     def release(self) -> None:
+        self._stop_vnc()
+
         if self.process is None:
             return
 
@@ -1777,7 +1937,11 @@ class NspawnMachine(BaseMachine):
         # NOTE If the test calls switch-to-configuration (with a differently configured specialization)
         # this will use the /etc/profile of the new specialisation while `QemuMachine` nodes
         # will continue to use the original /etc/profile.
-        command = f"set -eo pipefail; USER=root HOME=/root source /etc/profile; set -u; {command}"
+        command = (
+            "set -eo pipefail; "
+            "export USER=root HOME=/root DISPLAY=:0.0; "
+            f"source /etc/profile; set -u; {command}"
+        )
 
         cp = subprocess.run(
             [
@@ -1896,6 +2060,18 @@ class NspawnMachine(BaseMachine):
         journal_thread = threading.Thread(target=self._stream_journal, daemon=True)
         journal_thread.start()
 
+        if self.vnc_configuration is not None:
+            if any(name in os.environ for name in ("DISPLAY", "WAYLAND_DISPLAY")):
+                self.vnc = NspawnVnc(self, self.vnc_configuration)
+                self.vnc.start()
+            else:
+                self.log("no graphical host display available; VNC viewer disabled")
+
+    def _stop_vnc(self) -> None:
+        if self.vnc is not None:
+            self.vnc.stop()
+            self.vnc = None
+
     def shutdown(self) -> None:
         """
         Shut down the container, waiting for it to exit.
@@ -1918,6 +2094,7 @@ class NspawnMachine(BaseMachine):
                 timeout=timeout.total_seconds() if timeout is not None else None
             )
             self.process = None
+            self._stop_vnc()
 
 
 class MachineDeprecationWrapper:
