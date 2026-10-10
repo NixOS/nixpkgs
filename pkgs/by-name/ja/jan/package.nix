@@ -24,7 +24,7 @@ let
   };
 
   appimageContents = appimageTools.extract {
-    pname = "Jan";
+    pname = "jan";
     inherit version;
     src = linux-src;
   };
@@ -45,7 +45,7 @@ let
   };
 
   linux = appimageTools.wrapType2 {
-    pname = "Jan";
+    pname = "jan";
     inherit version;
     src = linux-src;
 
@@ -62,7 +62,7 @@ let
   };
 
   darwin = stdenvNoCC.mkDerivation {
-    pname = "Jan";
+    pname = "jan";
     inherit version;
 
     strictDeps = true;
