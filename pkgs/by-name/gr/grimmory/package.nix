@@ -5,7 +5,7 @@
   writeShellScript,
   nix-update,
   nixosTests,
-  ## backend
+  callPackage,
   gradle_9,
   makeWrapper,
   temurin-jre-bin-25,
@@ -14,86 +14,16 @@
   libepubgen,
   ffmpeg-headless,
   kepubify,
-  ## frontend
-  nodejs_24,
-  pnpm,
-  fetchPnpmDeps,
-  pnpmConfigHook,
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
+  pname = "grimmory";
   version = "3.5.0";
-  gradle = gradle_9;
   src = fetchFromGitHub {
     owner = "grimmory-tools";
     repo = "grimmory";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j9VXtqWLc13qVn89T1OmLQcAlhTP4w8AmOZINqhtNa4=";
   };
-  meta = {
-    description = "Grimmory is a self-hosted library for your ebooks, comics and audiobooks.";
-    homepage = "https://grimmory.org";
-    maintainers = [ lib.maintainers.kraftnix ];
-    license = lib.licenses.agpl3Only;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-  };
-
-  grimmory-frontend = stdenv.mkDerivation (finalAttrs: {
-    pname = "grimmory-frontend";
-    inherit version src;
-
-    strictDeps = true;
-    __structuredAttrs = true;
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        pnpmWorkspaces
-        ;
-      inherit pnpm;
-      fetcherVersion = 4;
-      hash = "sha256-wOldjA3z+KknkGjLJKz4J0ddWnP3DN/x6jSVuKgI35I=";
-    };
-
-    nativeBuildInputs = [
-      nodejs_24
-      pnpm
-      pnpmConfigHook
-    ];
-
-    pnpmWorkspaces = [ "grimmory" ];
-
-    env.NG_CLI_ANALYTICS = "false";
-    env.CI = "1";
-
-    buildPhase = ''
-      runHook preBuild
-
-      pnpm --filter=grimmory run build:prod
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir $out
-      cp -rv frontend/dist/grimmory/browser/* $out/
-
-      runHook postInstall
-    '';
-
-    inherit meta;
-  });
-
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "grimmory";
-  inherit version src;
 
   patches = [
     # gradle.fetchDeps fetches jacoco 0.8.15 instead of 0.8.14
@@ -102,11 +32,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
+  frontend = callPackage ./frontend.nix {
+    inherit (finalAttrs) src version;
+  };
+
   strictDeps = true;
   __structuredAttrs = true;
 
   nativeBuildInputs = [
-    gradle
+    gradle_9
     makeWrapper
     jdk25_headless
   ];
@@ -118,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepubgen
   ];
 
-  mitmCache = gradle.fetchDeps {
+  mitmCache = gradle_9.fetchDeps {
     # inherit (finalAttrs) pname;
     pkg = finalAttrs.finalPackage;
     data = ./deps.json;
@@ -137,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
-    cp -r ${grimmory-frontend} frontend-dist
+    cp -r ${finalAttrs.frontend} frontend-dist
     chmod -R u+w frontend-dist
     gradleFlagsArray+=("-PfrontendDistDir=$PWD/frontend-dist")
   '';
@@ -154,11 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "--enable-native-access=ALL-UNNAMED --enable-preview -jar $out/share/grimmory/grimmory.jar"
   '';
 
-  passthru.grimmory-frontend = grimmory-frontend;
-
   passthru.updateScript = writeShellScript "update-grimmory" ''
-    ${lib.getExe nix-update} grimmory --src-only
-    ${lib.getExe nix-update} --subpackage grimmory-frontend grimmory --no-src
+    ${lib.getExe nix-update} grimmory --subpackage frontend
     $(nix-build -A grimmory.mitmCache.updateScript --no-out-link)
   '';
 
@@ -166,8 +97,16 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (nixosTests) grimmory;
   };
 
-  meta = meta // {
+  meta = {
+    description = "Grimmory is a self-hosted library for your ebooks, comics and audiobooks.";
+    homepage = "https://grimmory.org";
     mainProgram = "grimmory";
+    maintainers = [ lib.maintainers.kraftnix ];
+    license = lib.licenses.agpl3Only;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # mitm cache
