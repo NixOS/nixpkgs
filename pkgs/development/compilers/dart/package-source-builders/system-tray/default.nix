@@ -5,7 +5,7 @@
 
 { version, src, ... }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "system-tray";
   inherit version src;
   inherit (src) passthru;
