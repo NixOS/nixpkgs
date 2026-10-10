@@ -305,9 +305,9 @@ in
       };
     };
 
-    services.mysql = {
+    services.mysql = mkIf cfg.database.createLocally {
       enable = true;
-      package = pkgs.mariadb;
+      package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
         {
