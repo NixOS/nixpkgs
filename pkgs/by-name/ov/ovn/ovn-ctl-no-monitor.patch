@@ -1,0 +1,13 @@
+diff --git a/utilities/ovn-ctl b/utilities/ovn-ctl
+--- a/utilities/ovn-ctl
++++ b/utilities/ovn-ctl
+@@ -309,5 +309,8 @@ start_ovsdb__() {
+     if test X"$detach" != Xno; then
+-        set "$@" --detach --monitor
++        set "$@" --detach
++        if test X"$MONITOR" != Xno; then
++            set "$@" --monitor
++        fi
+     else
+         set exec "$@"
+     fi

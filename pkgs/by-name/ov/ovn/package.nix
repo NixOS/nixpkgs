@@ -44,6 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Vendor Patchwork patches; the site is often unavailable.
   patches = [
+    # Allow systemd to supervise database servers directly.
+    # https://patchwork.ozlabs.org/project/ovn/patch/20261010181739.97592-1-ihar.hrachyshka@gmail.com/
+    ./ovn-ctl-no-monitor.patch
     # Retry storing chassis indices and serialize concurrent allocations.
     (fetchpatch {
       url = "https://github.com/ovn-org/ovn/commit/cb3f002fcb4fa7987e63a40332bccdee96286311.patch";
