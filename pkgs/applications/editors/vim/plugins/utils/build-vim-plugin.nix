@@ -6,7 +6,7 @@
 }:
 
 {
-  addRtp = drv: lib.warn "`addRtp` is deprecated, does nothing." drv;
+  addRtp = drv: lib.throw "`addRtp` has been removed.";
 
   buildVimPlugin =
     {
