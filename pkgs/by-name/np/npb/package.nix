@@ -24,7 +24,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npb";
-  version = "1.1.3";
+  version = "1.2.1";
 
   __structuredAttrs = true;
 
@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "samestep";
     repo = "npb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8GsMAmwRGTZ9ZvDXfPmVDoOCSHJuQd/1EwIP7hmTDGo=";
+    hash = "sha256-+Cnorizn6rAgNPY5QrPhfplAwcNU0LZbUhq+dCQj/PI=";
   };
 
-  cargoHash = "sha256-apnM5aLI0bXp86yvTgkUL6LnHHCEDeVD9ltovmsQ0ak=";
+  cargoHash = "sha256-AQ3EqL3NyikwW5ck8xhI7UV3arOZUEjmXFmkkT6WUGA=";
 
   nativeBuildInputs = lib.optional buildCanExecuteHost installShellFiles;
 
