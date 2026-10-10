@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lizard";
-  version = "1.24.0";
+  version = "1.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "terryyin";
     repo = "lizard";
     tag = finalAttrs.version;
-    hash = "sha256-npxnl9QrsAMLgrSDGsmWTb17VLwJ9sYCi9dhROCblhg=";
+    hash = "sha256-vVnk/GMPiLwnFiRD8IA08u5zS2f85cTcbQTPUnc58f4=";
   };
 
   build-system = [ setuptools ];
