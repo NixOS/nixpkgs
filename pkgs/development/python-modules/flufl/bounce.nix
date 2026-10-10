@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "flufl-bounce";
-  version = "5.0.1";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "flufl";
     repo = "flufl.bounce";
     tag = finalAttrs.version;
-    hash = "sha256-NWDh8vqHCAjhQYyOUkURuFhDa2xdtEukppCBCjhxhfg=";
+    hash = "sha256-9Uy18NX6lPS+26a9sfI5+glK1NRl0rfSxORad+7YzTI=";
   };
 
   build-system = [ hatchling ];
