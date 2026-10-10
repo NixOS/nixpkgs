@@ -2,23 +2,27 @@
   lib,
   fetchFromGitHub,
   python3,
+  nix-update-script,
 
   # tests
   git,
+  jujutsu,
   mercurial,
   patch,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mozphab";
-  version = "1.9.0";
+  version = "2.15.3";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
     tag = finalAttrs.version;
-    hash = "sha256-CVpsq9YoEww47uruHYEsJk9YQ39ZFQsMdL0nBc8AHUM=";
+    hash = "sha256-QqWvwKkD0WL50E9NmgXmgxM8zATXdJTdK4l/CYk0lgk=";
   };
 
   build-system = with python3.pkgs; [
@@ -40,6 +44,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = [
     git
+    jujutsu
     mercurial
     patch
   ]
@@ -56,11 +61,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   disabledTests = [
-    # AttributeError: 'called_once' is not a valid assertion.
-    "test_commit"
-    # AttributeError: 'not_called' is not a valid assertion.
-    "test_finalize_no_evolve"
-    "test_patch"
+    # Seems to expect an older `jj` version:
+    # AssertionError: A broken `jj` config should surface a `jj git root` error.
+    "test_jj_broken_config_surfaces_error"
   ];
 
   disabledTestPaths = [
@@ -75,6 +78,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "tests/test_sentry.py"
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Phabricator CLI from Mozilla to support submission of a series of commits";
     mainProgram = "moz-phab";
@@ -85,7 +90,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://moz-conduit.readthedocs.io/en/latest/phabricator-user.html";
     license = lib.licenses.mpl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ choco98 ];
     platforms = lib.platforms.unix;
   };
 })
