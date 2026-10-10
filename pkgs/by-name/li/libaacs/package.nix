@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libaacs";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchurl {
     url = "https://get.videolan.org/libaacs/${finalAttrs.version}/libaacs-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-qIqg6+TJinf3rv/ZKrPvZKxUjGuCLoJIqLkmclvqCjk=";
+    sha256 = "sha256-GZZnOp/EXuSjZMZv+oR1Zim/OSPlI0bHNYtxvsuORBk=";
   };
 
   buildInputs = [
