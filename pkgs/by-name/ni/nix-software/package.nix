@@ -2,6 +2,9 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
+  nixosTests,
   pkg-config,
   wrapGAppsHook4,
   gettext,
@@ -15,16 +18,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-software";
-  version = "0.2.0";
+  version = "0.2.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SPTApyo";
     repo = "nix-software";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-phdbkOgp2zODwGeUtcjPWOpkPyX6ilofdrMluWt939w=";
+    hash = "sha256-x5g8O1zgqBleaKTYs8HuDmq6BbFKHkB5wZDOhYVHOKs=";
   };
 
-  cargoHash = "sha256-h1rVRH5Y2ipbb0CvgQKVSk6huxcaOIGD21LV/gAqLvk=";
+  cargoHash = "sha256-4uHYWKwBQagr4koRZv48Bzqh4b2f0oYDpTYvqI2Eg1M=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +37,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gettext
   ];
 
-  env.GETTEXT_SYSTEM = true;
+  # The gettext bundled by gettext-sys does not build with recent glibc.
+  env.GETTEXT_SYSTEM = "1";
 
   buildInputs = [
     gtk4
@@ -41,6 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gsettings-desktop-schemas
   ];
 
+  # The GUI tests need a display; the core holds the logic.
   cargoTestFlags = [
     "--package"
     "nix-software-core"
@@ -73,6 +80,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(--set NIX_SOFTWARE_LOCALEDIR "$out/share/locale")
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+        command = "nix-software-cli --version";
+      };
+      module = nixosTests.nix-software;
+    };
+  };
 
   meta = {
     description = "Declarative app store for NixOS and Home Manager, built around try first";
