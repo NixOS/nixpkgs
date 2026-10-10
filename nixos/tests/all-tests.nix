@@ -1290,6 +1290,7 @@ in
   nix-required-mounts = runTest ./nix-required-mounts;
   nix-serve = runTest ./nix-serve.nix;
   nix-serve-ssh = runTest ./nix-serve-ssh.nix;
+  nix-software = runTest ./nix-software.nix;
   nix-store-veritysetup = runTest ./nix-store-veritysetup.nix;
   nix-upgrade = handleTest ./nix/upgrade.nix {
     inherit (pkgs) nixVersions;
