@@ -98,7 +98,6 @@ in
       ''
         parsedmarc.start()
         parsedmarc.wait_for_unit("postfix.service")
-        parsedmarc.wait_for_unit("dovecot.service")
         parsedmarc.wait_for_unit("parsedmarc.service")
         parsedmarc.wait_until_succeeds(
             "curl -sS -f http://localhost:${osPort}"

@@ -56,9 +56,9 @@ in
           type = lib.types.bool;
           default = false;
           description = ''
-            Whether Postfix and Dovecot should be set up to receive
-            mail locally. parsedmarc will be configured to watch the
-            local inbox as the automatically created user specified in
+            Whether Postfix should be set up to receive mail locally.
+            parsedmarc will be configured to watch the local inbox
+            as the automatically created user specified in
             [](#opt-services.parsedmarc.provision.localMail.recipientName)
           '';
         };
@@ -219,24 +219,24 @@ in
 
           imap = {
             host = lib.mkOption {
-              type = lib.types.str;
-              default = "localhost";
+              type = lib.types.nullOr lib.types.str;
+              default = null;
               description = ''
                 The IMAP server hostname or IP address.
               '';
             };
 
             port = lib.mkOption {
-              type = lib.types.port;
-              default = 993;
+              type = lib.types.nullOr lib.types.port;
+              default = null;
               description = ''
                 The IMAP server port.
               '';
             };
 
             ssl = lib.mkOption {
-              type = lib.types.bool;
-              default = true;
+              type = lib.types.nullOr lib.types.bool;
+              default = null;
               description = ''
                 Use an encrypted SSL/TLS connection.
               '';
@@ -408,25 +408,6 @@ in
       in
       map deprecationWarning (builtins.filter hasImapOpt movedOptions);
 
-    assertions = [
-      {
-        assertion =
-          cfg.provision.localMail.enable -> lib.versionAtLeast config.services.dovecot2.package.version "2.4";
-        message = ''
-          The `services.parsedmarc.provision.localMail.enable' option
-          relies on dovecot 2.4 or newer, but you're using ${config.services.dovecot2.package.version}.
-
-          If you haven't configured dovecot manually, setting
-
-            services.dovecot2.package = pkgs.dovecot;
-
-          should suffice. If you have, you should also check out
-          https://doc.dovecot.org/latest/installation/upgrade/2.3-to-2.4.html
-          for upgrade instructions.
-        '';
-      }
-    ];
-
     services.opensearch.enable = lib.mkDefault cfg.provision.opensearch;
 
     services.geoipupdate = lib.mkIf cfg.provision.geoIp {
@@ -438,19 +419,6 @@ in
           "GeoLite2-Country"
         ];
         DatabaseDirectory = "/var/lib/GeoIP";
-      };
-    };
-
-    services.dovecot2 = lib.mkIf cfg.provision.localMail.enable {
-      enable = true;
-      enablePAM = true;
-      settings = {
-        dovecot_config_version = lib.mkDefault "2.4.3";
-        dovecot_storage_version = lib.mkDefault "2.4.3";
-        protocols.imap = true;
-        mail_driver = lib.mkDefault "maildir";
-        mail_path = lib.mkDefault "${config.services.postfix.settings.main.mail_spool_directory}/%{user}";
-        "local localhost".ssl = false;
       };
     };
 
@@ -508,12 +476,8 @@ in
         };
       })
       (lib.mkIf cfg.provision.localMail.enable {
-        imap = {
-          host = "localhost";
-          port = 143;
-          ssl = false;
-          user = cfg.provision.localMail.recipientName;
-          password = "${pkgs.writeText "imap-password" "@imap-password@"}";
+        maildir = {
+          maildir_path = "${config.services.postfix.settings.main.mail_spool_directory}/${cfg.provision.localMail.recipientName}";
         };
         mailbox = {
           watch = true;
@@ -556,7 +520,6 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "postfix.service"
-          "dovecot2.service"
           "opensearch.service"
         ];
         path = with pkgs; [
@@ -573,21 +536,14 @@ in
 
                 umask u=rwx,g=,o=
                 cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
-                chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
+                chown ${cfg.provision.localMail.recipientName} /run/parsedmarc/parsedmarc.ini
                 ${secretReplacements}
-              ''
-              + lib.optionalString cfg.provision.localMail.enable ''
-                openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
-                replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
-                echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
-                cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
               '';
             in
             "+${pkgs.writeShellScript "parsedmarc-start-pre-full-privileges" startPreFullPrivileges}";
           Type = "simple";
-          User = "parsedmarc";
-          Group = "parsedmarc";
-          DynamicUser = true;
+          User = cfg.provision.localMail.recipientName;
+          DynamicUser = !cfg.provision.localMail.enable;
           RuntimeDirectory = "parsedmarc";
           RuntimeDirectoryMode = "0700";
           CapabilityBoundingSet = "";
