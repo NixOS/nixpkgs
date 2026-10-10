@@ -1321,7 +1321,11 @@ rec {
 
     :::
   */
-  isValidPosixName = name: match "[a-zA-Z_][a-zA-Z0-9_]*" name != null;
+  isValidPosixName =
+    let
+      matchPosixName = match "[a-zA-Z_][a-zA-Z0-9_]*";
+    in
+    name: matchPosixName name != null;
 
   /**
     Translate a Nix value into a shell variable declaration, with proper escaping.
