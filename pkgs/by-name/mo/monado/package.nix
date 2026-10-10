@@ -60,8 +60,14 @@
   # https://gitlab.freedesktop.org/monado/monado/-/blob/master/doc/targets.md#xrt_feature_service-disabled
   serviceSupport ? true,
   tracingSupport ? false,
+  # Only build client libraries to allow applications/games to connect to the
+  # monado IPC socket for VR eg, for 32 bit applications/games on a 64 bit host
+  clientLibOnly ? false,
 }:
-
+assert
+  clientLibOnly
+  ->
+    serviceSupport || throw "monado: serviceSupport must be enabled when building with clientLibOnly";
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
   version = "25.1.0";
@@ -127,8 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     libxext
     libxrandr
-    onnxruntime
-    opencv4
     openvr
     orc
     pcre2
@@ -143,6 +147,10 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     zstd
   ]
+  ++ lib.optionals (!clientLibOnly) [
+    onnxruntime
+    opencv4
+  ]
   ++ lib.optionals tracingSupport [
     tracy
   ]
@@ -152,16 +160,37 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
+    (lib.cmakeBool "XRT_FEATURE_SERVICE" (serviceSupport && !clientLibOnly))
     (lib.cmakeBool "XRT_HAVE_TRACY" tracingSupport)
     (lib.cmakeBool "XRT_FEATURE_TRACING" tracingSupport)
     (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
+  ]
+  ++ lib.optionals clientLibOnly [
+    (lib.cmakeBool "XRT_FEATURE_CLIENT_WITHOUT_SERVICE" true)
+    (lib.cmakeBool "XRT_FEATURE_STEAMVR_PLUGIN" false)
+    (lib.cmakeBool "XRT_HAVE_LIBUVC" false)
+    (lib.cmakeBool "XRT_HAVE_LIBUSB" false)
+    (lib.cmakeBool "XRT_HAVE_JPEG" false)
+    (lib.cmakeBool "XRT_HAVE_HIDAPI" false)
+    (lib.cmakeBool "XRT_HAVE_GST" false)
+    (lib.cmakeBool "XRT_HAVE_BLUETOOTH" false)
+    (lib.cmakeBool "XRT_FEATURE_DEBUG_GUI" false)
+    (lib.cmakeBool "XRT_FEATURE_WINDOW_PEEK" false)
+    (lib.cmakeBool "XRT_FEATURE_SLAM" false)
+    (lib.cmakeBool "XRT_MODULE_MONADO_CLI" false)
+    (lib.cmakeBool "XRT_MODULE_MONADO_GUI" false)
+    (lib.cmakeBool "XRT_MODULE_MERCURY_HANDTRACKING" false)
+    (lib.cmakeBool "XRT_BUILD_SAMPLES" false)
   ];
 
   # Help openxr-loader find this runtime
-  setupHook = writeText "setup-hook" ''
-    export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
-  '';
+  setupHook =
+    if clientLibOnly then
+      null
+    else
+      writeText "setup-hook" ''
+        export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
+      '';
 
   passthru = {
     updateScript = nix-update-script { };
