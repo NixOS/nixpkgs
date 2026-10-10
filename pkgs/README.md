@@ -1166,10 +1166,8 @@ Reviewing process:
 - Ensure that the commit text [fits the guidelines](../CONTRIBUTING.md#commit-conventions).
 - Ensure that the package maintainers are notified.
   - The continuous integration system will make GitHub notify users based on the submitted changes, but it can happen that it misses some of the package maintainers.
-- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct:
+- Ensure that the meta field information [fits the guidelines](#meta-attributes) and is correct.
   - License can change with version updates, so it should be checked to match the upstream license.
-  - If the package has no maintainer, a maintainer must be set.
-    This can be the update submitter or a community member that accepts to take maintainership of the package.
 - Verify any change of upstream.
   - If switching from e.g. PyPi to GitHub, verify that the repo is the official one.
   - If switching to a fork, check with external sources like other package repositories for community consensus.
