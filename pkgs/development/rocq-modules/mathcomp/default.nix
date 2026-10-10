@@ -14,7 +14,7 @@
   lib,
   ncurses,
   graphviz,
-  lua,
+  lua5_2_compat,
   fetchzip,
   mkRocqDerivation,
   withDoc ? false,
@@ -27,6 +27,7 @@
 }@args:
 
 let
+  lua = lua5_2_compat;
   repo = "mathcomp";
   owner = "math-comp";
   withDoc = single && (args.withDoc or false);

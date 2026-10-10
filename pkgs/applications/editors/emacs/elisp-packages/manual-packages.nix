@@ -35,7 +35,7 @@ lib.packagesFromDirectoryRecursive {
       ;
   };
 
-  lua = callPackage ./manual-packages/lua { inherit (pkgs) lua; };
+  lua = callPackage ./manual-packages/lua { lua = pkgs.lua5_2_compat; };
 
   straight = callPackage ./manual-packages/straight { inherit (pkgs) git; };
 

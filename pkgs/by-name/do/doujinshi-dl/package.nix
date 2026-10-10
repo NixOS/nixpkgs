@@ -6,7 +6,7 @@
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
-  pname = "nhentai";
+  pname = "doujinshi-dl";
   version = "2.1.0";
   pyproject = true;
 
@@ -41,6 +41,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     changelog = "https://github.com/RicterZ/doujinshi-dl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
-    mainProgram = "nhentai";
+    mainProgram = "doujinshi-dl";
   };
 })

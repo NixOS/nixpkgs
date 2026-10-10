@@ -1,35 +1,41 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  cryptography,
   fetchFromGitHub,
-  requests,
-  setuptools,
+  hatchling,
+  cryptography,
+  pynacl,
+  websockets,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "simplepush";
-  version = "2.2.5";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simplepush";
     repo = "simplepush-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/qjGJgoyI54rP+sD/Dqr1lFh8cFRboW91GYDCZgMIlM=";
+    hash = "sha256-J/kP0D70Ry+Wq081SH/Mn9RLTjBDQ0h/UBFa8k0PMIU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
-    aiohttp
-    cryptography
-    requests
+    websockets
   ];
 
-  # Module has no tests
-  doCheck = false;
+  optional-dependencies = {
+    crypto = [ pynacl ];
+    legacy = [ cryptography ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "simplepush" ];
 
