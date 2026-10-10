@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "50.0";
+  version = "51.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7J2vmIPrkDMJEbtR5rae7YydvdVDjoZK3JDuVaX+nu0=";
+    hash = "sha256-PmT6TNGnQq40tvbY5tlhSi0+q4ihsAccEatTYX6yFMI=";
   };
 
   cargoVendorDir = "vendor";
@@ -67,8 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/meson.build --replace-fail \
-      "'cp', cargo_target / rust_target / meson.project_name()" \
-      "'cp', cargo_target / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+      "cargo_target / rust_target / meson.project_name()" \
+      "cargo_target / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
   preFixup = ''
