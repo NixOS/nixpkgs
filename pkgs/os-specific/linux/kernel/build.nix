@@ -322,7 +322,14 @@ lib.makeOverridable (
 
       # avoid leaking Rust source file names into the final binary, which adds
       # a false dependency on rust-lib-src on targets with uncompressed kernels
-      KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+      KRUSTFLAGS = lib.optionalString withRust (
+        "--remap-path-prefix ${rustPlatform.rustLibSrc}=/"
+        # Apply the equivalent of upstream commit
+        # dda135077ecc9f15c407f094dcfe7800376be867 to older versions to
+        # avoid cyclic output dependency issues when building
+        # uncompressed kernel images.
+        + lib.optionalString (lib.versionOlder version "7.0") " --remap-path-prefix=${placeholder "dev"}/lib/modules/${modDirVersion}/source/= --remap-path-scope=macro"
+      );
     };
 
     makeFlags = [
@@ -352,6 +359,16 @@ lib.makeOverridable (
     ]
     ++ commonMakeFlags;
 
+    preUnpack = ''
+      mkdir -p "$dev/lib/modules/${modDirVersion}"
+      cd "$dev/lib/modules/${modDirVersion}"
+    '';
+
+    postUnpack = ''
+      mv "$sourceRoot" source
+      sourceRoot=source
+    '';
+
     postPatch = ''
       # Set randstruct seed to a deterministic but diversified value. Note:
       # we could have instead patched gen-random-seed.sh to take input from
@@ -378,8 +395,8 @@ lib.makeOverridable (
     configurePhase = ''
       runHook preConfigure
 
-      mkdir build
-      export buildRoot="$(pwd)/build"
+      export buildRoot="$NIX_BUILD_TOP/build"
+      mkdir -- "$buildRoot"
 
       echo "manual-config configurePhase buildRoot=$buildRoot pwd=$PWD"
 
@@ -394,48 +411,58 @@ lib.makeOverridable (
       make "''${makeFlags[@]}" oldconfig
       runHook postConfigure
 
-      make "''${makeFlags[@]}" prepare
+      make "''${makeFlags[@]}" include/config/kernel.release
       actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
       if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
         echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
         exit 1
       fi
-
-      cd $buildRoot
     '';
 
     postInstall = ''
-      mkdir -p $dev
-      cp vmlinux $dev/
-    ''
-    + optionalString isModular ''
-      mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
-      # Installing from source dir instead of $buildRoot so as to omit intermediate artifacts.
-      cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
-      # Installing `constants.py` from `$buildRoot` as it's generated.
-      cp scripts/gdb/linux/constants.py $dev/lib/modules/${modDirVersion}/build/scripts/gdb/linux
+      # Keep some extra files.
+      shopt -s extglob
+      keepPaths=(
+        # Required for building external modules with BTF information.
+        "$buildRoot/vmlinux"
+        "$buildRoot/tools/bpf/resolve_btfids/resolve_btfids"
 
-      unlink $modules/lib/modules/${modDirVersion}/build
+        # Possibly not required by anything, but we kept it before,
+        # Fedora and Arch keep it around, and it seems like it might be
+        # generally useful.
+        "$buildRoot/.config"
 
-      mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
+        # Required for building external modules on some PowerPC
+        # configurations.
+        "$buildRoot/arch/powerpc/lib/crtsavres.o"
+      )
+      shopt -u extglob
 
-      # To save space, exclude a bunch of unneeded stuff when copying.
-      (cd .. && rsync --archive --prune-empty-dirs \
-          --exclude='/build/' \
-          * $dev/lib/modules/${modDirVersion}/source/)
-
-      cd $dev/lib/modules/${modDirVersion}/source
-
-      cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
-      make modules_prepare "''${makeFlags[@]}" O=$dev/lib/modules/${modDirVersion}/build
-
-      # Keep an extra file on powerpc
-      for f in arch/powerpc/lib/crtsavres.o; do
-        if [ -f "$buildRoot/$f" ]; then
-          mkdir -p "$(dirname $dev/lib/modules/${modDirVersion}/build/$f)"
-          cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+      keepRoot=$(mktemp -d)
+      for path in "''${keepPaths[@]}"; do
+        if [[ -e $path ]]; then
+          keepPath=''${path/#"$buildRoot"/"$keepRoot"}
+          mkdir -p -- "''${keepPath%/*}"
+          mv -- "$path" "$keepPath"
         fi
       done
+
+      make "''${makeFlags[@]}" clean
+
+      find -- "$buildRoot" -type d -empty -delete
+      mv -- "$buildRoot" ..
+      buildRoot="$dev/lib/modules/${modDirVersion}/build"
+      cp -a -- "$keepRoot/." "$buildRoot/"
+
+      # Ensure that `KBUILD_OUTPUT` is set correctly in the retained
+      # build tree’s Makefile; otherwise e.g. the ZFS build breaks.
+      make "''${makeFlags[@]}" outputmakefile
+
+      ln -s "$buildRoot/vmlinux" "$dev/"
+
+      if [[ -v modules ]]; then
+        unlink $modules/lib/modules/${modDirVersion}/build
+      fi
 
       # !!! No documentation on how much of the source tree must be kept
       # If/when kernel builds fail due to missing files, you can add
@@ -443,13 +470,10 @@ lib.makeOverridable (
       # from drivers/ in the future; it adds 50M to keep all of its
       # headers on 3.10 though.
 
-      chmod u+w -R ..
-      buildArchDir="$dev/lib/modules/${modDirVersion}/build/arch"
-
       # Remove unused arches
       for d in $(cd arch/; ls); do
-        if [ -d "$buildArchDir/$d" ]; then continue; fi
-        if [ -d "$buildArchDir/arm64" ] && [ "$d" = arm ]; then continue; fi
+        if [ -d "$buildRoot/arch/$d" ]; then continue; fi
+        if [ -d "$buildRoot/arch/arm64" ] && [ "$d" = arm ]; then continue; fi
         rm -rf arch/$d
       done
 
@@ -478,11 +502,15 @@ lib.makeOverridable (
       find -empty -type d -delete
     '';
 
-    preFixup = ''
-      if [ -z "''${dontStrip-}" -a -e $out/vmlinux ]; then
-        $STRIP -v -S -p $out/vmlinux
-      fi
-    '';
+    stripDebugList = [
+      "lib"
+
+      # Only relevant for `$out/vmlinux` when that target is used; this
+      # doesn’t strip `$dev/vmlinux`, as it’s a symbolic link.
+      "vmlinux"
+    ];
+
+    stripExclude = [ "lib/modules/${modDirVersion}/build/vmlinux" ];
 
     requiredSystemFeatures = [ "big-parallel" ];
 
