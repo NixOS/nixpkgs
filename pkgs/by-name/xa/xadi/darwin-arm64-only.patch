@@ -1,0 +1,33 @@
+--- a/macOS/build.sh
++++ b/macOS/build.sh
+@@ -17,12 +17,10 @@
+ rm -rf bin/libxadibase.a \
+     "$stage" \
+     "$bundle/arm64-apple-macosx" \
+-    "$bundle/x86_64-apple-macosx" \
+     out/XADIMac.artifactbundle \
+     out/XADIMac.xcframework.zip
+ mkdir -p "$stage" \
+     "$bundle/arm64-apple-macosx" \
+-    "$bundle/x86_64-apple-macosx" \
+     "$bundle/include"
+ 
+ find_runtime_libraries() {
+@@ -87,16 +85,11 @@
+         $runtime_libraries
+ }
+ 
+-build_arch x86_64 x86_64
+ build_arch aarch64 arm64
+ 
+-lipo -create "$stage/libxadibase-x86_64.a" "$stage/libxadibase-arm64.a" \
+-    -output bin/libxadibase.a
+-
++cp "$stage/libxadibase-arm64.a" bin/libxadibase.a
+ cp "$stage/libxadibase-arm64.a" \
+     "$bundle/arm64-apple-macosx/libxadibase.a"
+-cp "$stage/libxadibase-x86_64.a" \
+-    "$bundle/x86_64-apple-macosx/libxadibase.a"
+ cp Sources/XADI/include/XADI.h "$bundle/include/XADI.h"
+ cp ArtifactBundle/module.modulemap "$bundle/include/module.modulemap"
+ ./ArtifactBundle/update-info.sh "$bundle"

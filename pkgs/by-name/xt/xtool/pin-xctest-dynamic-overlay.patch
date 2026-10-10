@@ -1,0 +1,18 @@
+--- a/Package.resolved
++++ b/Package.resolved
+@@ -470,6 +470,15 @@
+       }
+     },
+     {
++      "identity" : "xctest-dynamic-overlay",
++      "kind" : "remoteSourceControl",
++      "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
++      "state" : {
++        "revision" : "d9308ad679143c26a30dec52daefe82f54af2b82",
++        "version" : "1.13.1"
++      }
++    },
++    {
+       "identity" : "xtool-core",
+       "kind" : "remoteSourceControl",
+       "location" : "https://github.com/xtool-org/xtool-core",
