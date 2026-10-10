@@ -30,38 +30,30 @@ let
     else
       "unknown";
 
-  # These files can be found in src/evaluate.h
-  nnueBigFile = "nn-c288c895ea92.nnue";
-  nnueBigHash = "sha256-wojIleqSRCnqkJLj82srPB8A8qOkx1n/flfnnjtD5Kc=";
-  nnueBig = fetchurl {
-    name = nnueBigFile;
-    url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    hash = nnueBigHash;
-  };
-  nnueSmallFile = "nn-37f18f62d772.nnue";
-  nnueSmallHash = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
-  nnueSmall = fetchurl {
-    name = nnueSmallFile;
-    url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    hash = nnueSmallHash;
+  # This file can be found in src/evaluate.h
+  nnueFile = "nn-1a298aa575a0.nnue";
+  nnueHash = "sha256-GimKpXWghUNNKQJ5eNw2hn/pxbzqk3ZlS3qOuh5S38I=";
+  nnue = fetchurl {
+    name = nnueFile;
+    url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+    hash = nnueHash;
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
-  version = "18";
+  version = "19";
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
     tag = "sf_${version}";
-    hash = "sha256-J9E0fJeUemKh1mAPJ5PjZ3kmXqAc1Ec3dG5sfzvhuGo=";
+    hash = "sha256-4sRJb8zYhbkuIsI6pOcfH6ZIotXBp7k1kHlxL8jk3vQ=";
   };
 
   postUnpack = ''
     sourceRoot+=/src
-    cp "${nnueBig}" "$sourceRoot/${nnueBigFile}"
-    cp "${nnueSmall}" "$sourceRoot/${nnueSmallFile}"
+    cp "${nnue}" "$sourceRoot/${nnueFile}"
   '';
 
   makeFlags = [
@@ -95,10 +87,8 @@ stdenv.mkDerivation rec {
         runtimeEnv = {
           PNAME = pname;
           PKG_FILE = toString ./package.nix;
-          NNUE_BIG_FILE = nnueBigFile;
-          NNUE_BIG_HASH = nnueBigHash;
-          NNUE_SMALL_FILE = nnueSmallFile;
-          NNUE_SMALL_HASH = nnueSmallHash;
+          NNUE_FILE = nnueFile;
+          NNUE_HASH = nnueHash;
         };
         text = builtins.readFile ./update.bash;
       }))
