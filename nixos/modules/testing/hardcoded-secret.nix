@@ -1,5 +1,6 @@
 {
   config,
+  options,
   lib,
   pkgs,
   ...
@@ -104,6 +105,11 @@ in
   };
 
   config = {
+    # Fulfill the requests that the contracts system sends to this provider.
+    testing.hardcoded-secret.fileSecrets =
+      config.contracts.fileSecrets.providerRequests.hardcoded-secret;
+    contracts.fileSecrets.providers.hardcoded-secret = options.testing.hardcoded-secret.fileSecrets;
+
     # Write each secret in a service and not in an activation script.
     # An activation script can run before the owner of the secret exists:
     # activation scripts without dependencies run in alphabetical order,

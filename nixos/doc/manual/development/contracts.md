@@ -12,7 +12,8 @@ Status: experimental. The interfaces can change.
 
 This chapter describes how contracts work in general.
 The examples use the file secrets contract type `lib.contracts.fileSecrets`, its consumer `services.stash` and its test provider `testing.hardcoded-secret`.
-For the `request` and `response` options of a contract type and the behavior of a provider, refer to the options of the provider, for example [](#opt-testing.hardcoded-secret.fileSecrets).
+For the `request` and `response` options of a contract type, refer to the options of that contract type in [](#opt-contracts), for example [](#opt-contracts.fileSecrets).
+For the behavior of a provider, refer to the options of the provider, for example [](#opt-testing.hardcoded-secret.fileSecrets).
 
 ## Consumers {#contracts-consumers}
 
@@ -108,3 +109,92 @@ Example, with the consumer and the provider from the examples before:
 ```
 
 To use a different provider, change these two definitions.
+[](#opt-contracts) can also make these connections, refer to [](#contracts-routing).
+
+## Contract types {#contracts-types}
+
+`lib.contracts` contains the contract types of nixpkgs.
+Each contract type has `meta.description`, `meta.maintainers` and an `interface` module.
+
+The option [](#opt-contractTypes) contains the contract types that a configuration can use.
+In NixOS, it contains each contract type in `lib.contracts`.
+For each contract type, [](#opt-contracts) has an option with its `meta.description`, and with its `request` and `response` options under `want`.
+To add a contract type, write its `meta` and `interface` in a new file in `lib/contracts/definitions`, and add that file to `lib/contracts/definitions/default.nix`.
+
+The routing module is `lib.contract.module`.
+It does not depend on NixOS, so other module systems can also import it.
+
+## Route requests to a provider {#contracts-routing}
+
+For each contract type, [](#opt-contracts) sends the requests of consumers to a provider, and sends the responses back:
+
+- `contracts.<type>.want.<name>`: an entry with a `request` from a consumer.
+  Each name must be unique for all consumers, for example `<consumer>-<option>`.
+- `contracts.<type>.providers.<provider>`: the option of the provider that has an entry for each request that the provider fulfills.
+- `contracts.<type>.defaultProvider`: the provider that gets the requests, one of `providers`.
+- `contracts.<type>.instances.<name>`: the provider that gets the entry `<name>` of `want`.
+  The default is `defaultProvider`.
+- `contracts.<type>.providerRequests.<provider>`: the requests that a provider must fulfill.
+  These are the entries of `want` that `instances` sends to the provider, and `{ }` for providers not routed to fulfill requests.
+- `contracts.<type>.results.<name>`: the `response` from the provider in `instances` for each entry in `want`.
+
+A provider reads `providerRequests.<provider>`, and sets `providers.<provider>` to its option.
+Example, the provider `testing.hardcoded-secret` of the contract type `fileSecrets`:
+
+```nix
+{ config, options, ... }:
+{
+  testing.hardcoded-secret.fileSecrets =
+    config.contracts.fileSecrets.providerRequests.hardcoded-secret;
+  contracts.fileSecrets.providers.hardcoded-secret = options.testing.hardcoded-secret.fileSecrets;
+}
+```
+
+A consumer module sends the `request` of its options to `want`.
+Example, a consumer option `services.foo.secret` of the contract type `fileSecrets`:
+
+```nix
+{ config, lib, ... }:
+let
+  cfg = config.services.foo;
+in
+{
+  options.services.foo.secret = lib.mkOption {
+    type = lib.types.submodule {
+      imports = [ lib.contracts.fileSecrets.interface ];
+    };
+  };
+
+  config.contracts.fileSecrets.want.foo-secret = {
+    inherit (cfg.secret) request;
+  };
+}
+```
+
+The consumer does not set a default for `response`, thus the user must connect each option.
+This is because a provider such as `testing.hardcoded-secret` is not safe for production.
+The user selects the provider, sets the `response` of the consumer from `results`, and sets the options of the provider for each request.
+Example, with the consumer from the example before and the provider `testing.hardcoded-secret`:
+
+```nix
+{ config, ... }:
+{
+  contracts.fileSecrets.defaultProvider = config.contracts.fileSecrets.providers.hardcoded-secret;
+  services.foo.secret.response = config.contracts.fileSecrets.results.foo-secret;
+  testing.hardcoded-secret.fileSecrets.foo-secret.providerOptions.content = "MyPassword";
+}
+```
+
+To use a different provider, change `defaultProvider`, and set the options of that provider.
+
+To send one entry to a different provider, set `instances.<name>` to that provider:
+
+```nix
+{ config, ... }:
+{
+  contracts.fileSecrets.instances.foo-secret = config.contracts.fileSecrets.providers.other-provider;
+}
+```
+
+To connect one entry manually, as in [](#contracts-connect), set `instances.<name>` to `null`.
+Then no provider gets the request of that entry from `providerRequests`, and `results.<name>` is not available.

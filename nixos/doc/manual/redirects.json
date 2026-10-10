@@ -370,6 +370,15 @@
   "contracts-connect": [
     "index.html#contracts-connect"
   ],
+  "contracts-types": [
+    "index.html#contracts-types"
+  ],
+  "contracts-routing": [
+    "index.html#contracts-routing"
+  ],
+  "module-contracts": [
+    "index.html#module-contracts"
+  ],
   "modular-service-composition": [
     "index.html#modular-service-composition"
   ],
