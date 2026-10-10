@@ -21,7 +21,14 @@
   installShellFiles,
   buildPackages,
   cmake,
+  # dependencies for wasmSupport
   wasmtime_48,
+  binaryen,
+  llvmPackages,
+  makeWrapper,
+  pkgsCross,
+  symlinkJoin,
+
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   wasmSupport ? false,
@@ -131,7 +138,16 @@ let
   );
 
   isWasi = stdenv.hostPlatform.isWasi;
-
+  # create a `TREE_SITTER_WASI_SDK_PATH` environment where
+  # `clang -> wasm32-unknown-wasip1-clang` so tree-sitter can find it
+  wasiCC = pkgsCross.wasi32.stdenv.cc;
+  wasiSdk = symlinkJoin {
+    name = "wasi-sdk";
+    paths = [ wasiCC ];
+    postBuild = ''
+      ln -s ${wasiCC.targetPrefix}clang $out/bin/clang
+    '';
+  };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tree-sitter";
@@ -164,6 +180,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals wasmSupport [
     cmake
+    makeWrapper
   ]
   ++ lib.optionals webUISupport [
     emscripten
@@ -223,8 +240,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     PREFIX=$out make install
   ''
+  # supply the nix paths for the Wasi SDK & `wasm-opt`: https://tree-sitter.github.io/tree-sitter/6-contributing.html#wasm-stdlib
+  # lld is required for the linker phase in `tree-sitter build --wasm`
   + lib.optionalString wasmSupport ''
     cmake --install $cmakeBuildDir
+    wrapProgram $out/bin/tree-sitter \
+      --set TREE_SITTER_BINARYEN_PATH "${binaryen}" \
+      --set TREE_SITTER_WASI_SDK_PATH "${wasiSdk}" \
+      --prefix PATH : "${lib.makeBinPath [ llvmPackages.lld ]}"
   ''
   + ''
     ${lib.optionalString (!enableShared) "rm -f $out/lib/*.so{,.*}"}
