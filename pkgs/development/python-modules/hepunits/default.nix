@@ -8,17 +8,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "hepunits";
-  version = "2.4.6";
+  version = "2.4.7";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vKatqTcUcWbWbp+hUlZvI3iGjXmCEcrWmQCAOZVg+jQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-376enN8mWu6hiWNSyl61BgnhXUl6A8BGa6SpIHY/Yzc=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
@@ -28,10 +28,13 @@ buildPythonPackage rec {
     pint
   ];
 
+  pythonImportsCheck = [ "hepunits" ];
+
   meta = {
     description = "Units and constants in the HEP system of units";
     homepage = "https://github.com/scikit-hep/hepunits";
+    changelog = "https://github.com/scikit-hep/hepunits/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

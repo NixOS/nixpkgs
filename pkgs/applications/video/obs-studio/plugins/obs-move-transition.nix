@@ -6,15 +6,15 @@
   obs-studio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obs-move-transition";
-  version = "3.2.1";
+  version = "3.2.1-unstable-2026-10-04";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
-    rev = version;
-    sha256 = "sha256-YA66qSCchZbA5TowOqn1FNvAtPzxREIChVJleoaImxk=";
+    rev = "64590490d87d93cc03baf0b35b90709468d9fb03";
+    hash = "sha256-GOXNUwA2ASzDHMjsXSdUYQzqOtEBwmrr3oz5TXueKjY=";
   };
 
   nativeBuildInputs = [ cmake ];

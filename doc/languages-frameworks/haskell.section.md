@@ -550,8 +550,7 @@ turtle-incremental-build
 ## Development environments {#haskell-development-environments}
 
 In addition to building and installing Haskell software, Nixpkgs can also
-provide development environments for Haskell projects. This has the obvious
-advantage that you benefit from `cache.nixos.org` and no longer need to compile
+provide development environments for Haskell projects. This has the advantage that you benefit from `cache.nixos.org` and no longer need to compile
 all project dependencies yourself. While it is often very useful, this is not
 the primary use case of our package set. Have a look at the section
 [available package versions](#haskell-available-versions) to learn which
@@ -638,7 +637,7 @@ inside the shell as expected.
 
 ### shellFor {#haskell-shellFor}
 
-Having to install tools globally is obviously not great, especially if you want
+Having to install tools globally is not great, especially if you want
 to provide a batteries-included `shell.nix` with your project. Luckily there's a
 proper tool for making development environments out of packages' build
 environments: `shellFor`, a function exposed by every haskell package set. It
