@@ -24817,6 +24817,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-textobj-xmlattr = buildVimPlugin {
+    pname = "vim-textobj-xmlattr";
+    version = "0.1.1";
+    src = fetchFromGitHub {
+      owner = "whatyouhide";
+      repo = "vim-textobj-xmlattr";
+      tag = "0.1.1";
+      hash = "sha256-EFn7Ql7SFWwcjR5WdQkl2/lJZY9qZN9ml6625lGtTzY=";
+    };
+    meta.homepage = "https://github.com/whatyouhide/vim-textobj-xmlattr/";
+    meta.license = getLicenseFromSpdxId "WTFPL";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-textobj-variable-segment = buildVimPlugin {
     pname = "vim-textobj-variable-segment";
     version = "0-unstable-2024-09-06";
