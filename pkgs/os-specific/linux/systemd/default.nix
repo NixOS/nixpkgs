@@ -5,6 +5,7 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
+  fetchpatch,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -242,6 +243,18 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+  ]
+  ++ [
+    # Reproducible recursive copying and VFAT population by systemd-repart.
+    (fetchpatch {
+      name = "systemd-repart-vfat-reproducible.patch";
+      url = "https://github.com/systemd/systemd/commit/d5d3fbce100bbbf33f1334c861643428be2b3461.patch?full_index=1";
+      hash = "sha256-GQ+cXnBoC0Mqw8edW6nF2EbQBjjtuO3vN8BKQlzIaJ4=";
+      includes = [
+        "src/shared/copy.c"
+        "src/shared/mkfs-util.c"
+      ];
+    })
   ];
 
   postPatch = ''
