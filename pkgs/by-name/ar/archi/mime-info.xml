@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-archimate">
+    <comment>ArchiMate model</comment>
+    <sub-class-of type="application/xml"/>
+    <icon name="archi"/>
+    <glob pattern="*.archimate"/>
+    <root-XML namespaceURI="http://www.archimatetool.com/archimate" localName="model"/>
+  </mime-type>
+</mime-info>
