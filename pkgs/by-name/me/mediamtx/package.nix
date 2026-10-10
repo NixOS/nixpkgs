@@ -4,27 +4,29 @@
   fetchFromGitHub,
   fetchurl,
   nixosTests,
+  runCommand,
 }:
 
 let
+  hlsJsVersion = "1.7.3";
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.6.15/dist/hls.min.js";
-    hash = "sha256-QTqD4rsMd+0L8L4QXVOdF+9F39mEoLE+zTsUqQE4OTg=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v${hlsJsVersion}/dist/hls.min.js";
+    hash = "sha256-oS5+4c1kpp3NsxQVfkXa/LpwW/sLFEC3k1yyZdN0Qj4=";
   };
 in
 buildGoModule (finalAttrs: {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.20.1";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = "mediamtx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-L9dRwOD5JCu3ZczTxeb3a6ShHMXGWNXVN5KAa/7bcjM=";
+    hash = "sha256-uunpfHEiBpcmzxAeV4GZnIy5sz06dye8glH8DK8DCic=";
   };
 
-  vendorHash = "sha256-15ERQ4TYJ+atLS3ZrOMtSq5UDWh0Q2xejepQlEJWPL4=";
+  vendorHash = "sha256-Y07FF3VLPTn1ORI/9XTsm5nVVzRea6L6gjaHUP6GvFI=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js
@@ -45,6 +47,14 @@ buildGoModule (finalAttrs: {
 
   passthru.tests = {
     inherit (nixosTests) mediamtx;
+    hlsjs-version = runCommand "mediamtx-hlsjs-version" { } ''
+      expectedVersion=$(cat ${finalAttrs.src}/internal/servers/hls/hlsjsdownloader/VERSION)
+      if [ "$expectedVersion" != "v${hlsJsVersion}" ]; then
+        echo "hls.js version mismatch: upstream requires $expectedVersion, packaged version is v${hlsJsVersion}" >&2
+        exit 1
+      fi
+      touch "$out"
+    '';
   };
 
   meta = {
