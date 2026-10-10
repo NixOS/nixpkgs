@@ -2,13 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  SDL2,
   cmake,
   directx-shader-compiler,
   ispc,
   ncurses,
+  nix-update-script,
   openal,
   rapidjson,
-  SDL2,
+  versionCheckHook,
   vulkan-headers,
   vulkan-loader,
   zlib,
@@ -18,9 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rbdoom-3-bfg";
   version = "1.6.0";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "RobertBeckebans";
-    repo = "rbdoom-3-bfg";
+    repo = "RBDOOM-3-BFG";
     tag = "v${finalAttrs.version}";
     hash = "sha256-9BZEFO+e5IG6hv9+QI9OJecQ84rLTWBDz4k0GU6SeDE=";
     fetchSubmodules = true;
@@ -48,33 +53,41 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeDir = "../neo";
+
   cmakeFlags = [
-    "-DFFMPEG=OFF"
-    "-DBINKDEC=ON"
-    "-DUSE_SYSTEM_RAPIDJSON=ON"
-    "-DUSE_SYSTEM_ZLIB=ON"
+    (lib.cmakeBool "FFMPEG" false)
+    (lib.cmakeBool "BINKDEC" true)
+    (lib.cmakeBool "USE_SYSTEM_RAPIDJSON" true)
+    (lib.cmakeBool "USE_SYSTEM_ZLIB" true)
   ];
 
   buildFlags = [ "RBDoom3BFG" ];
 
-  # it caused build failure
-  hardeningDisable = [ "fortify3" ];
-
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    install RBDoom3BFG $out/bin/RBDoom3BFG
+    install -Dm755 RBDoom3BFG -t $out/bin
 
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
+
   meta = {
-    homepage = "https://github.com/RobertBeckebans/RBDOOM-3-BFG";
     description = "Doom 3 BFG Edition with modern engine features";
-    mainProgram = "RBDoom3BFG";
+    homepage = "https://github.com/RobertBeckebans/RBDOOM-3-BFG";
+    changelog = "https://github.com/RobertBeckebans/RBDOOM-3-BFG/blob/${finalAttrs.src.tag}/RELEASE-NOTES.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ Zaechus ];
     platforms = lib.platforms.unix;
+    mainProgram = "RBDoom3BFG";
   };
 })
