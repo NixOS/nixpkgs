@@ -39,6 +39,7 @@ let
 
   commonServiceConfig = {
     RuntimeDirectory = "lasuite-docs";
+    Slice = "system-lasuite-docs.slice";
     StateDirectory = "lasuite-docs";
     WorkingDirectory = "/var/lib/lasuite-docs";
 
@@ -362,6 +363,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.slices.system-lasuite-docs = { };
     environment.systemPackages = [ manage ];
 
     # Some settings options in LaSuite has been renamed in 5.0.0
