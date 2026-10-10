@@ -9,24 +9,24 @@
   pytest-asyncio,
   pytestCheckHook,
   setuptools,
-  syrupy,
+  syrupy_6,
 }:
 
 buildPythonPackage rec {
   pname = "aioimmich";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aioimmich";
     tag = "v${version}";
-    hash = "sha256-2T92WPGyeTb0mOzbBnKMhnIbDWRc2ZSVyL3uBdG1Zhw=";
+    hash = "sha256-8xqx5iC3IMW90bucKf2M1mEu3mephX0RjVujjvXBa2g=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail setuptools==83.0.0 setuptools
+      --replace-fail setuptools==84.0.0 setuptools
   '';
 
   build-system = [ setuptools ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     aiointercept
     pytest-asyncio
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   meta = {
