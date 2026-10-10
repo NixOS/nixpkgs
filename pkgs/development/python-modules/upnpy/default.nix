@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "5kyc0d3r";
     repo = "upnpy";
     rev = "v${version}";
-    sha256 = "17rqcmmwsl0m4722b1cr74f80kqwq7cgxsy7lq9c88zf6srcgjsf";
+    hash = "sha256-TsvHsjbuI8QSpsfr/tjBHE+AHDmZhSXEIRVQzWtlOJ8=";
   };
 
   # Project has not published tests yet

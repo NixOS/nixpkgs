@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "molobrakos";
     repo = "tellduslive";
     tag = "v${version}";
-    sha256 = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
+    hash = "sha256-fWL+VSvoT+dT0jzD8DZEMxzTlqj4TYGCJPLpeui5q64=";
   };
 
   build-system = [ setuptools ];

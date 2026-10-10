@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "randy3k";
     repo = "lineedit";
     rev = "v${version}";
-    sha256 = "fq2NpjIQkIq1yzXEUxi6cz80kutVqcH6MqJXHtpTFsk=";
+    hash = "sha256-fq2NpjIQkIq1yzXEUxi6cz80kutVqcH6MqJXHtpTFsk=";
   };
 
   propagatedBuildInputs = [

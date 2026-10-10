@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jmcarp";
     repo = "nplusone";
     rev = "v${version}";
-    sha256 = "0qdwpvvg7dzmksz3vqkvb27n52lq5sa8i06m7idnj5xk2dgjkdxg";
+    hash = "sha256-r7cpXxOzF2lbPNWAiJQumIpij1h74j2+nvW38/a+vGE=";
   };
 
   propagatedBuildInputs = [

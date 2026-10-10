@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "hamiltron";
     repo = "py-simple-audio";
     rev = version;
-    sha256 = "12nypzb1m14yip4zrbzin5jc5awyp1d5md5y40g5anj4phb4hx1i";
+    hash = "sha256-MXRIFrxEWlUeIL60Wlq4nqvCZLHxr/zJjZ6EGta/3oo=";
   };
 
   patches = [ ./python312-fix.patch ];

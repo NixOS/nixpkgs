@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyRSS2Gen";
     inherit version;
-    sha256 = "1rvf5jw9hknqz02rp1vg8abgb1lpa0bc65l7ylmlillqx7bswq3r";
+    hash = "sha256-eWCu1+mY0kgr9YcWwxZQl4b1lkJvh5sF+NhOmLgsbuc=";
   };
 
   # No tests in archive

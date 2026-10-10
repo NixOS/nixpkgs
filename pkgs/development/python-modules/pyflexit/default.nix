@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "Sabesto";
     repo = "pyflexit";
     rev = version;
-    sha256 = "1ajlqr3z6zj4fyslqzpwpfkvh8xjx94wsznzij0vx0q7jp43bqig";
+    hash = "sha256-L+I1yJUHg76BjN9+zUnqsiO4p7v8fky1d0R+80fGVKo=";
   };
 
   # Project has no tests

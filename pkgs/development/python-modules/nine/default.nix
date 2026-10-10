@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NSp9/hGVO39NEoqEeuAe50sdnfyVL4Lzyx8dvUHmbKk=";
+    hash = "sha256-NSp9/hGVO39NEoqEeuAe50sdnfyVL4Lzyx8dvUHmbKk=";
   };
 
   build-system = [ poetry-core ];

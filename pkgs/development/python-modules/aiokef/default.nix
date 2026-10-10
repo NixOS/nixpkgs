@@ -18,7 +18,7 @@ buildPythonPackage (finalAttrs: {
     owner = "basnijholt";
     repo = "aiokef";
     tag = "v${finalAttrs.version}";
-    sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
+    hash = "sha256-afZbMIH3HlamGYSF66S9sVC/z7XrXrZ1KRwgeTNvQFc=";
   };
 
   build-system = [ setuptools ];

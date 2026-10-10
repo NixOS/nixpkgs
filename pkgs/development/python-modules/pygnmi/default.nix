@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "akarneliuk";
     repo = "pygnmi";
     tag = "v${version}";
-    sha256 = "sha256-2QPUyPGTtXlO6A05mmb/jofRidXfKq0xvH7lv1f9OQk=";
+    hash = "sha256-2QPUyPGTtXlO6A05mmb/jofRidXfKq0xvH7lv1f9OQk=";
   };
 
   propagatedBuildInputs = [

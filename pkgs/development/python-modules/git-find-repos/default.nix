@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "acroz";
     repo = "git-find-repos";
     rev = version;
-    sha256 = "sha256-+MiCMgIakpJaWWdN2grerlPbPAnfIXuclvRw8XQ1YiI=";
+    hash = "sha256-+MiCMgIakpJaWWdN2grerlPbPAnfIXuclvRw8XQ1YiI=";
   };
 
   build-system = [ setuptools-scm ];

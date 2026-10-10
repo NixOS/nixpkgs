@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     tag = version;
-    sha256 = "sha256-TePJeZ9SzJPjZ+oNOQXfQ2Eh133ihdHS6Rc/kJr5lgE=";
+    hash = "sha256-TePJeZ9SzJPjZ+oNOQXfQ2Eh133ihdHS6Rc/kJr5lgE=";
   };
 
   propagatedBuildInputs = [

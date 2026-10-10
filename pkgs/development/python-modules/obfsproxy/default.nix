@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.torproject.org/pluggable-transports/obfsproxy.git";
     tag = "${pname}-${version}";
-    sha256 = "04ja1cl8xzqnwrd2gi6nlnxbmjri141bzwa5gybvr44d8h3k2nfa";
+    hash = "sha256-ylkxB0SNkLyXf0XxvwIJMcu6uqXWxCda5hb/jigLShI=";
   };
 
   postPatch = ''

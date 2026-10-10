@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
     owner = "DigitaleGesellschaft";
     repo = "Anonip";
     tag = "v${finalAttrs.version}";
-    sha256 = "0cssdcridadjzichz1vv1ng7jwphqkn8ihh83hpz9mcjmxyb94qc";
+    hash = "sha256-DJO0fK+S1fQvHAjCiOzE8HJ5ng17hw9Z/LKpFjNrWjM=";
   };
 
   build-system = [ setuptools ];

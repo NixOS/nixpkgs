@@ -14,7 +14,7 @@ buildPythonPackage rec {
     repo = "itypes";
     owner = "tomchristie";
     rev = version;
-    sha256 = "1ljhjp9pacbrv2phs58vppz1dlxix01p98kfhyclvbml6dgjcr52";
+    hash = "sha256-omQmXzO0rk2Zh26idAPosdMW/r0bFQ2v2HkxddOVUNI=";
   };
 
   nativeCheckInputs = [ pytest ];

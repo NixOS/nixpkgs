@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "clarketm";
     repo = "mergedeep";
     rev = "v${version}";
-    sha256 = "1msvvdzk33sxzgyvs4fs8dlsrsi7fjj038z83s0yw5h8m8d78469";
+    hash = "sha256-yRB0GqoIFu6BHuijAaR0J+qsaUPaEb39+12PMX/bW9c=";
   };
 
   nativeCheckInputs = [ pytest ];

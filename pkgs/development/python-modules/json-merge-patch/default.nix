@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "json_merge_patch";
     inherit version;
-    sha256 = "sha256-SgItePwvCctJ2Wxkbvw4DTterStcfaviLDkowsLpxOA=";
+    hash = "sha256-SgItePwvCctJ2Wxkbvw4DTterStcfaviLDkowsLpxOA=";
   };
 
   build-system = [ setuptools ];

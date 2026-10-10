@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1e6f072ae516fc061c9442f8ca470463b53dc626f0f6a86ff3a803293f4b50dd";
+    hash = "sha256-Hm8HKuUW/AYclEL4ykcEY7U9xibw9qhv86gDKT9LUN0=";
   };
 
   # https://github.com/Azure/azure-cosmos-python/issues/183

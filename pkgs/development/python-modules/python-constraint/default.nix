@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "python-constraint";
     repo = "python-constraint";
     tag = version;
-    sha256 = "sha256-VTecK82VSDoUOkPnuC+PnQYPjPBsaPeWCqm2st6Wwvg=";
+    hash = "sha256-VTecK82VSDoUOkPnuC+PnQYPjPBsaPeWCqm2st6Wwvg=";
   };
 
   build-system = [

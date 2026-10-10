@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "trendmicro";
     repo = "telfhash";
     rev = "v${version}";
-    sha256 = "124zajv43wx9l8rvdvmzcnbh0xpzmbn253pznpbjwvygfx16gq02";
+    hash = "sha256-AuBnQnfPby7Xtf+OIuyq/3YAl2W/7rYzoqnzQbZUn4g=";
   };
 
   # The tlsh library's name is just "tlsh"

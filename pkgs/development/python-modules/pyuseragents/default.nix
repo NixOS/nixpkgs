@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "Animenosekai";
     repo = "useragents";
     rev = "v${version}";
-    sha256 = "D7Qs3vsfkRH2FDkbfakrR+FfWzQFiOCQM7q9AdJavyU=";
+    hash = "sha256-D7Qs3vsfkRH2FDkbfakrR+FfWzQFiOCQM7q9AdJavyU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

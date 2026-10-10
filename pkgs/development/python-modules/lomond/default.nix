@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "wildfoundry";
     repo = "dataplicity-${pname}";
     rev = "b30dad3cc38d5ff210c5dd01f8c3c76aa6c616d1";
-    sha256 = "0lydq0imala08wxdyg2iwhqa6gcdrn24ah14h91h2zcxjhjk4gv8";
+    hash = "sha256-aD8yJZSdfQFDgiRARYTNjT2jMORRPN86R0BRVSPAzVM=";
   };
 
   postPatch = ''

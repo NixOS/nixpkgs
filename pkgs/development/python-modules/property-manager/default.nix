@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "xolox";
     repo = "python-property-manager";
     rev = version;
-    sha256 = "1v7hjm7qxpgk92i477fjhpcnjgp072xgr8jrgmbrxfbsv4cvl486";
+    hash = "sha256-BhG6Gdl6uZ5XfVmi/Lo44D5p2YXSnUOiSPPdjk+V8Ow=";
   };
 
   propagatedBuildInputs = [
