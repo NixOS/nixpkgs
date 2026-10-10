@@ -1,5 +1,8 @@
+{ lib, ... }:
+
 {
   name = "openvswitch";
+  meta.maintainers = [ lib.maintainers.booxter ];
 
   nodes = {
     node1 = {
