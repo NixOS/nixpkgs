@@ -8,7 +8,7 @@
   xxd,
   gettext,
   intltool,
-  gtk3,
+  gtk4,
   lcms2,
   exiv2,
   libchamplain_libsoup3,
@@ -18,6 +18,9 @@
   libarchive,
   djvulibre,
   libheif,
+  libshumate,
+  libspelling,
+  ffmpeg,
   openjpeg,
   libjxl,
   libraw,
@@ -32,7 +35,7 @@
   exiftool,
   zenity,
   libnotify,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   doxygen,
   nix-update-script,
   openexr,
@@ -41,13 +44,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geeqie";
-  version = "2.9";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6g1aBeQUy9+WMlikAqvlb0NcCT7h0qgBRSsCOdRiZ/E=";
+    hash = "sha256-VS+/K7DBYXh3n39cEG/mODbWmyAzrm6l9zCfSmkNqpM=";
   };
 
   postPatch = ''
@@ -58,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     gettext
     intltool
-    wrapGAppsHook3
+    wrapGAppsHook4
     doxygen
     meson
     ninja
@@ -66,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     lcms2
     exiv2
     libchamplain_libsoup3
@@ -76,6 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
     libarchive
     djvulibre
     libheif
+    libshumate
+    libspelling
+    ffmpeg
     openjpeg
     libjxl
     libraw
