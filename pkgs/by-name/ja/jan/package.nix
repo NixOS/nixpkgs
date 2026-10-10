@@ -2,9 +2,6 @@
   lib,
   appimageTools,
   fetchurl,
-  config,
-  cudaPackages,
-  cudaSupport ? config.cudaSupport,
   stdenvNoCC,
   fetchzip,
   makeWrapper,
@@ -55,8 +52,6 @@ let
       install -Dm444 ${appimageContents}/Jan.desktop -t $out/share/applications
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
-
-    extraPkgs = pkgs: lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
     inherit passthru meta;
   };
