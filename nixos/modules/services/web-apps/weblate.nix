@@ -143,7 +143,7 @@ let
 
   # Packages needed at runtime
   weblatePath = with pkgs; [
-    gitSVN
+    gitSVN.out
     subversion
     gettext
     fontconfig

@@ -456,7 +456,7 @@ with pkgs;
 
   fetchgit =
     (callPackage ../build-support/fetchgit {
-      git = buildPackages.gitMinimal;
+      git = buildPackages.gitBootstrap;
       cacert = buildPackages.cacert;
       git-lfs = buildPackages.git-lfs;
     })

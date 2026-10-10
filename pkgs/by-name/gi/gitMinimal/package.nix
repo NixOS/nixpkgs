@@ -1,26 +1,3 @@
-{
-  git,
-  stdenv,
-  cargo,
-  curl,
-  curlMinimal,
-  ...
-}@args:
-git.override (
-  {
-    withManual = false;
-    osxkeychainSupport = false;
-    pythonSupport = false;
-    perlSupport = false;
-    rustSupport = false; # Needed for bootstrap
-    withpcre2 = false;
-    cargo = cargo.override { auditable = false; }; # Break `cargo-auditable` -> `fetch-cargo-vendor` -> `nix-prefetch-git` -> `gitMinimal` cycle`
-    curl = if stdenv.hostPlatform.isFreeBSD then curlMinimal else curl; # Needed for FreeBSD bootstrap
-  }
-  // removeAttrs args [
-    "git"
-    "cargo"
-    "curl"
-    "curlMinimal"
-  ]
-)
+# the perl and python commands of git are in its out output, so its bin
+# output is minimal. Use gitBootstrap where a dependency on rustc is a cycle.
+{ git }: git.bin
