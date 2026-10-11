@@ -1,0 +1,103 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 11aba11..be7d500 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -106,6 +106,9 @@ find_package(pugixml 1.14 CONFIG)
+ find_package(fmt 10.2.0 CONFIG)
+ find_package(SDL3 3.1.2 CONFIG)
+ find_package(VulkanHeaders 1.4.324 CONFIG)
++find_package(nlohmann_json 3.11.0 CONFIG)
++find_package(volk 1.3.270 CONFIG)
++find_package(LibArchive 3.6.0)
+ if (APPLE)
+     find_package(date 3.0.1 CONFIG)
+ endif()
+@@ -284,8 +287,8 @@ target_include_directories(BB_Launcher PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+ target_include_directories(BB_Launcher PRIVATE externals/microz/miniz)
+ 
+ target_link_libraries(BB_Launcher PRIVATE Qt6::Widgets Qt6::Network Qt6::Quick Qt6::QuickWidgets Qt6::WebView Qt6::WebSockets Qt6::Concurrent)
+-target_link_libraries(BB_Launcher PRIVATE fmt::fmt toml11::toml11 nlohmann_json::nlohmann_json pugixml::pugixml SDL3::SDL3 Vulkan::Headers volk_headers ZArchive::zarchive)
+-target_link_libraries(BB_Launcher PRIVATE qmicroz cryptopp::cryptopp liblzma archive_static)
++target_link_libraries(BB_Launcher PRIVATE fmt::fmt toml11::toml11 nlohmann_json::nlohmann_json pugixml::pugixml SDL3::SDL3 Vulkan::Headers volk::volk_headers ZArchive::zarchive)
++target_link_libraries(BB_Launcher PRIVATE qmicroz cryptopp::cryptopp LibArchive::LibArchive)
+ 
+ if (CMAKE_SYSTEM_NAME STREQUAL "Linux" AND USE_WEBENGINE)
+     target_link_libraries(BB_Launcher PRIVATE Qt6::WebEngineCore Qt6::WebEngineWidgets Qt6::WebChannel)
+diff --git a/externals/CMakeLists.txt b/externals/CMakeLists.txt
+index 2b2a8d0..0581b5a 100644
+--- a/externals/CMakeLists.txt
++++ b/externals/CMakeLists.txt
+@@ -41,17 +41,17 @@ endif()
+ # microz
+ add_subdirectory(microz)
+ 
+-# zlib from qmicroz
+-add_library(miniz_zlib STATIC microz/miniz/miniz.c)
+-target_compile_definitions(miniz_zlib PUBLIC MINIZ_NO_ZLIB_NAMESPACES)
+-add_library(ZLIB::ZLIB ALIAS miniz_zlib)
+-
+ #nlohmann json 
+-set(JSON_BuildTests OFF CACHE INTERNAL "")
+-add_subdirectory(json)
++if (NOT TARGET nlohmann_json::nlohmann_json)
++    set(JSON_BuildTests OFF CACHE INTERNAL "")
++    add_subdirectory(json)
++endif()
+ 
+ #volk
+-add_subdirectory(volk)
++if (NOT TARGET volk::volk_headers)
++    add_subdirectory(volk)
++    add_library(volk::volk_headers ALIAS volk_headers)
++endif()
+ 
+ # vulkan-headers
+ if (NOT TARGET Vulkan::Headers)
+@@ -77,6 +77,13 @@ if (NOT TARGET cryptopp::cryptopp)
+     endif()
+ endif()
+ 
++if (NOT TARGET LibArchive::LibArchive)
++
++# zlib from qmicroz
++add_library(miniz_zlib STATIC microz/miniz/miniz.c)
++target_compile_definitions(miniz_zlib PUBLIC MINIZ_NO_ZLIB_NAMESPACES)
++add_library(ZLIB::ZLIB ALIAS miniz_zlib)
++
+ # liblzma
+ set(ENABLE_NLS OFF CACHE BOOL "Disable NLS" FORCE)
+ add_subdirectory(xz)
+@@ -109,6 +116,24 @@ if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+     set(HAVE_WCSCPY 1 CACHE INTERNAL "Define to 1 if you have the wcscpy function" FORCE)
+ endif()
+ add_subdirectory(libarchive)
++add_library(LibArchive::LibArchive ALIAS archive_static)
++
++endif()
++
++# ZArchive ships no CMake config, only a pkg-config file.
++if (NOT TARGET zarchive)
++    find_package(PkgConfig QUIET)
++    if (PkgConfig_FOUND)
++        pkg_check_modules(zarchive IMPORTED_TARGET GLOBAL zarchive)
++        pkg_check_modules(libzstd IMPORTED_TARGET GLOBAL libzstd)
++    endif()
++endif()
++
++if (TARGET PkgConfig::zarchive)
++    set_property(TARGET PkgConfig::zarchive APPEND PROPERTY
++        INTERFACE_LINK_LIBRARIES PkgConfig::libzstd)
++    add_library(ZArchive::zarchive ALIAS PkgConfig::zarchive)
++else()
+ 
+ # zstd (dependency of ZArchive)
+ if (NOT TARGET libzstd_static)
+@@ -135,6 +160,8 @@ if (NOT TARGET zarchive)
+     add_library(ZArchive::zarchive ALIAS zarchive)
+ endif()
+ 
++endif()
++
+ if (APPLE)
+      # date
+     if (NOT TARGET date::date-tz)
