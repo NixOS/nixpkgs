@@ -18,6 +18,8 @@
   withZlib ? true,
   zlib,
   withIPv6 ? true,
+  withArgon ? true,
+  libargon2,
   withDebug ? false,
   testers,
 }:
@@ -53,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withTcl tcl
   ++ lib.optional withCyrus cyrus_sasl
   ++ lib.optional withUnicode icu
-  ++ lib.optional withZlib zlib;
+  ++ lib.optional withZlib zlib
+  ++ lib.optional withArgon libargon2;
 
   configureFlags = [
     (lib.enableFeature withPerl "perl")
@@ -61,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withTcl "tcl")
     (lib.withFeatureAs withTcl "tcl" "${tcl}/lib")
     (lib.enableFeature withCyrus "cyrus")
+    (lib.enableFeature withArgon "argon")
   ]
   ++ lib.optionals (!withIPv6) [ "--disable-ipv6" ]
   ++ lib.optionals withDebug [ "--enable-debug" ];
