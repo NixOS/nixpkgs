@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "robotframework-requests";
-  version = "0.9.7";
+  version = "1.0a14";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "MarketSquare";
     repo = "robotframework-requests";
     tag = "v${version}";
-    hash = "sha256-NRhf3delcqUw9vWRPL6pJzpcmRMDou2pHmUHMstF8hw=";
+    hash = "sha256-5iqrFUHC4T2mJ8voiMItmlT2gpkUlJs1Et4udTPbtCs=";
   };
 
   propagatedBuildInputs = [
