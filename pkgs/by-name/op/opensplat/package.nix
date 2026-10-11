@@ -10,6 +10,8 @@
   nanoflann,
   glm,
   cxxopts,
+  zlib,
+  zstd,
   nix-update-script,
   config,
   cudaSupport ? config.cudaSupport,
@@ -17,7 +19,6 @@
   rocmSupport ? config.rocmSupport,
   rocmPackages,
   autoAddDriverRunpath,
-  fetchpatch2,
 }:
 let
   torch = python3.pkgs.torch.override { inherit cudaSupport rocmSupport; };
@@ -27,7 +28,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "opensplat";
-  version = "1.1.4";
+  version = "1.1.5";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -36,15 +37,8 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "pierotofy";
     repo = "OpenSplat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
+    hash = "sha256-quMsTtW0NeYxxGU3DRINuzxqPo1VR4Auhq5P5+X9VTA=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/pierotofy/OpenSplat/commit/7fb96e86a43ac6cfd3eb3a7f6be190c5f2dbeb73.patch";
-      hash = "sha256-hWJWU/n1pRAAbExAYUap6CoSjIu2dzCToUmacSSpa0I=";
-    })
-  ];
 
   postPatch = lib.optionalString rocmSupport (
     # Recent PyTorch HIP builds no longer hipify the caching allocator namespace:
@@ -95,6 +89,8 @@ stdenv'.mkDerivation (finalAttrs: {
     torch.cxxdev
     torch
     opencv
+    zlib
+    zstd
   ]
   ++ lib.optionals rocmSupport [
     rocmPackages.clr
