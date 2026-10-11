@@ -52,6 +52,7 @@
   appstream,
   desktop-file-utils,
   libxpm,
+  libxcursor,
   libxmu,
   glib-networking,
   json-glib,
@@ -117,6 +118,17 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
+
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Upstream's macOS packaging job builds and installs a fixed prefix without
+    # running this test suite; nixpkgs runs these checks from a temporary build tree.
+    # Keep Script-Fu's testing path compatible with its two-directory lookup.
+    ./gimp-testing-scriptfu-path.patch
+
+    # nixpkgs's C tests run copied plug-ins from the temporary build directory, so
+    # their Darwin rpaths need patching; upstream's macOS job does not run this suite.
+    ./gimp-c-test-rpath-env.patch
   ];
 
   nativeBuildInputs = [
@@ -212,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
     gjs
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxcursor
     llvmPackages.openmp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -315,6 +328,10 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     }"
     --suffix XDG_DATA_DIRS : "${adwaita-icon-theme}/share")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Prevent GIMP from overriding the relocatable runtime paths set by Nix.
+    gappsWrapperArgs+=(--set GIMP_NO_WRAPPER 1)
   '';
 
   postFixup = ''
@@ -351,7 +368,7 @@ stdenv.mkDerivation (finalAttrs: {
       bddvlpr
     ];
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     # Build invokes built binary to convert assets, binary hangs during plugin loading on big-endian platforms (s390x, ppc64)
     # https://gitlab.gnome.org/GNOME/gimp/-/issues/12522
     broken = stdenv.hostPlatform.isBigEndian;
