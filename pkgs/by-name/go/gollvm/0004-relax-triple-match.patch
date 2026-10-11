@@ -1,0 +1,36 @@
+From 9fb01294fd5e53342fb4bfe409ac13f4fc03db40 Mon Sep 17 00:00:00 2001
+From: Boris Nagaev <bnagaev@gmail.com>
+Date: Sun, 19 Apr 2026 20:13:00 -0500
+Subject: [PATCH 4/10] driver: match triples by arch, OS, and environment
+
+The architecture table currently matches target triples by exact string.
+That is too strict for packaged toolchains: nixpkgs uses triples such as
+x86_64-pc-linux-gnu, while gollvm's table uses
+x86_64-unknown-linux-gnu. The vendor field should not affect CPU
+attribute selection.
+
+Compare the triple components that matter for this lookup instead of the
+full spelling. This keeps the existing behaviour for known targets while
+accepting equivalent triples with a different vendor component.
+---
+ driver/ArchCpuSetup.cpp | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/driver/ArchCpuSetup.cpp b/driver/ArchCpuSetup.cpp
+index bf91983..4aafcfb 100644
+--- a/driver/ArchCpuSetup.cpp
++++ b/driver/ArchCpuSetup.cpp
+@@ -37,7 +37,10 @@ bool gollvm::driver::setupArchCpu(opt::Arg *cpuarg, std::string &cpu,
+   // Locate correct entry in architectures table for this triple
+   const gollvm::arch::CpuAttrs *cpuAttrs = nullptr;
+   for (unsigned i = 0; gollvm::arch::triples[i].cpuattrs != nullptr; i += 1) {
+-    if (!strcmp(triple.str().c_str(), gollvm::arch::triples[i].triple)) {
++    Triple entryTriple(gollvm::arch::triples[i].triple);
++    if (entryTriple.getArch() == triple.getArch() &&
++        entryTriple.getOS() == triple.getOS() &&
++        entryTriple.getEnvironment() == triple.getEnvironment()) {
+       cpuAttrs = gollvm::arch::triples[i].cpuattrs;
+       break;
+     }
+-- 
+2.50.1
