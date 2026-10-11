@@ -1,7 +1,10 @@
 {
   lib,
+  bashInteractive,
   fetchFromGitHub,
+  gitMinimal,
   installShellFiles,
+  ncurses,
   nix-update-script,
   nixosTests,
   openssl,
@@ -12,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.21.0";
+  version = "18.23.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kz8qdgxg79jX3hfPi7EY9c9SmFqUK6lWnMTLb3TKDQQ=";
+    hash = "sha256-NBn7C9ssLSXYrHWv5qWM5dZ2E8URbRJZOOCvHaNgxW4=";
   };
 
-  cargoHash = "sha256-chuGpLq8XAZrCCtx2L/tVQSXNLrTgG2rnBGcCEvDjFg=";
+  cargoHash = "sha256-rkDDs8gviBpoLR4mrrKRu2eTlmlpvjICVRFu22AeOaU=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -43,6 +46,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+  ];
+
+  # e2e_pty tests drive an interactive bash (needs readline), run `clear`,
+  # and create git repositories for workspace filtering
+  nativeCheckInputs = [
+    bashInteractive
+    gitMinimal
+    ncurses
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
