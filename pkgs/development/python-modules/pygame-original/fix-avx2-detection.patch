@@ -1,0 +1,22 @@
+diff --git a/setup.py b/setup.py
+index fc9292b7..960e7404 100644
+--- a/setup.py
++++ b/setup.py
+@@ -76,7 +76,7 @@ import os
+ # just import these always and fail early if not present
+ from setuptools import setup
+ import distutils
+-
++from distutils import spawn as _distutils_spawn
+ 
+ if os.environ.get('PYGAME_DETECT_AVX2', '') != '':
+     import distutils.ccompiler
+@@ -123,7 +123,7 @@ if os.environ.get('PYGAME_DETECT_AVX2', '') != '':
+                     # filename is found, no need to search any further
+                     break
+ 
+-        distutils.ccompiler.spawn(cmd, dry_run=self.dry_run, **kwargs)
++        distutils.spawn.spawn(cmd, dry_run=self.dry_run, **kwargs)
+ 
+     distutils.ccompiler.CCompiler.__spawn = distutils.ccompiler.CCompiler.spawn
+     distutils.ccompiler.CCompiler.spawn = spawn
