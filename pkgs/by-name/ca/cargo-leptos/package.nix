@@ -4,11 +4,16 @@
   stdenv,
   rustPlatform,
   pkg-config,
+  aws-lc,
+  libgit2,
+  libz,
   openssl,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-leptos";
   version = "0.3.10";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
@@ -21,9 +26,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    aws-lc
+    libgit2
+    libz
+    openssl
+  ];
 
   env = {
+    AWS_LC_SYS_USE_SYSTEM = 1;
+    LIBGIT2_NO_VENDOR = 1;
+    LIBZ_SYS_STATIC = 0;
     OPENSSL_NO_VENDOR = 1;
   }
   // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
