@@ -18,22 +18,15 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "1.5.1";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = "json-schema-for-humans";
     tag = "v${version}";
-    hash = "sha256-k4/+ijlaS/bjLcgobPcq6l4yX84WP1FwfGgYHw+iAdE=";
+    hash = "sha256-sjk2Moq4xMIS5ZXQgEU9DSTe0QMIiNtYWLB6saHpnNA=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'markdown2 = "^2.5.0"' 'markdown2 = "^2.4.1"'
-  '';
-
-  pythonRelaxDeps = [ "dataclasses-json" ];
 
   build-system = [ poetry-core ];
 

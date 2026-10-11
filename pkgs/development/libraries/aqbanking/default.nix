@@ -16,7 +16,7 @@
 let
   inherit ((import ./sources.nix).aqbanking) hash releaseId version;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "aqbanking";
   inherit version;
 

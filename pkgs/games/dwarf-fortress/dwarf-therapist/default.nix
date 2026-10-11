@@ -14,7 +14,7 @@
   hash ? dfVersions.therapist.git.outputHash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dwarf-therapist";
 
   inherit version;
