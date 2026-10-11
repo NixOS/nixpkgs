@@ -54,37 +54,20 @@
   # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
   # which should be fixable, this is a no-rebuild workaround for GHC.
   headless ? lib.versionAtLeast featureVersion "21" && stdenv.targetPlatform.isGhcjs,
+  javaPackages,
 
   enableJavaFX ? false,
-  openjfx17,
-  openjfx21,
-  openjfx25,
   openjfx_jdk ?
-    {
-      "17" = openjfx17;
-      "21" = openjfx21;
-      "25" = openjfx25;
-    }
-    .${featureVersion} or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
+    javaPackages."openjfx${featureVersion}"
+      or (throw "JavaFX is not supported on OpenJDK ${featureVersion}"),
 
   enableGtk ? true,
   gtk3,
   glib,
 
-  temurin-bin-8,
-  temurin-bin-11,
-  temurin-bin-17,
-  temurin-bin-21,
-  temurin-bin-25,
   jdk-bootstrap ?
-    {
-      "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
-      "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
-      "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
-      "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
-      "25" = temurin-bin-25.__spliced.buildBuild or temurin-bin-25;
-    }
-    .${featureVersion},
+    javaPackages.compiler.temurin-bin."jdk-${featureVersion}".__spliced.buildBuild
+      or javaPackages.compiler.temurin-bin."jdk-${featureVersion}",
 }:
 
 assert lib.assertMsg (enableGtk -> lib.versionAtLeast featureVersion "11")
@@ -97,11 +80,56 @@ let
     featureVersionPrefix = tagPrefix + featureVersion;
   };
 
-  atLeast11 = lib.versionAtLeast featureVersion "11";
-  atLeast17 = lib.versionAtLeast featureVersion "17";
-  atLeast21 = lib.versionAtLeast featureVersion "21";
-  atLeast23 = lib.versionAtLeast featureVersion "23";
-  atLeast25 = lib.versionAtLeast featureVersion "25";
+  # Version comparison functions since we check for versions so often
+  atLeast = lib.versionAtLeast featureVersion;
+  is = major: featureVersion == major;
+  # If a JDK version is between two versions, i.e `between "8" "11"` to match versions between 8 and 11.
+  # Note this is inclusive at low end and exclusive at top end, so 8 would match the above example, but 11 will not.
+  between = old: new: (atLeast old) && (lib.versionOlder featureVersion new);
+
+  atLeast11 = atLeast "11";
+  atLeast17 = atLeast "17";
+  atLeast21 = atLeast "21";
+  atLeast23 = atLeast "23";
+  atLeast25 = atLeast "25";
+
+  allPatches = import ./patches.nix { inherit fetchurl fetchpatch; };
+
+  # Checks if a single patch object is applicable to the featureVersion being called.
+  isPatchApplicable =
+    patch:
+    let
+      a = patch.atLeast or "0";
+      # If this doesn't exist, return a number we assume JDK featureVersions will never reach
+      b = patch.before or "9999";
+    in
+    if patch ? only then (is patch.only) else (between a b);
+
+  # Filters all patches in a patchset(list of patch attrs) to find ones applicable to this version
+  findApplicable =
+    name: patchSet:
+    let
+      # Returns a single patch matching this predicate
+      patch = builtins.filter isPatchApplicable patchSet;
+    in
+    # If no patches, return an empty list.
+    # If there is a patch, construct it from the path and patch name, or function if available.
+    if patch == [ ] then
+      [ ]
+    else
+      let
+        # We only expect a single patch.
+        # TODO warn if there's more than one patch.
+        p = builtins.head patch;
+      in
+      [
+        (p.func or /${p.path}/patches/${name})
+      ];
+
+  # `patches` builder
+  # Does not encode any logic for `headless` or `enableGtk` so any patches relying on that
+  # should concat to this list below instead
+  patchesForVersion = lib.concatAttrValues (builtins.mapAttrs findApplicable allPatches);
 
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   version = lib.removePrefix "refs/tags/${tagPrefix}" source.src.rev;
@@ -143,98 +171,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (source) src;
 
-  patches = [
-    (
-      if atLeast25 then
-        ./25/patches/fix-java-home-jdk25.patch
-      else if atLeast21 then
-        ./21/patches/fix-java-home-jdk21.patch
-      else if atLeast11 then
-        ./11/patches/fix-java-home-jdk10.patch
-      else
-        ./8/patches/fix-java-home-jdk8.patch
-    )
-    (
-      if atLeast25 then
-        ./25/patches/read-truststore-from-env-jdk25.patch
-      else if atLeast11 then
-        ./11/patches/read-truststore-from-env-jdk10.patch
-      else
-        ./8/patches/read-truststore-from-env-jdk8.patch
-    )
-  ]
-  ++ lib.optionals (!atLeast23) [
-    (
-      if atLeast11 then
-        ./11/patches/currency-date-range-jdk10.patch
-      else
-        ./8/patches/currency-date-range-jdk8.patch
-    )
-  ]
-  ++ lib.optionals atLeast11 [
-    (
-      if atLeast17 then
-        ./17/patches/increase-javadoc-heap-jdk13.patch
-      else
-        ./11/patches/increase-javadoc-heap.patch
-    )
-  ]
-  ++ lib.optionals atLeast17 [
-    (
-      if atLeast21 then
-        ./21/patches/ignore-LegalNoticeFilePlugin-jdk18.patch
-      else
-        ./17/patches/ignore-LegalNoticeFilePlugin-jdk17.patch
-    )
-  ]
-  ++ lib.optionals (!atLeast21) [
-    (
-      if atLeast17 then
-        ./17/patches/fix-library-path-jdk17.patch
-      else if atLeast11 then
-        ./11/patches/fix-library-path-jdk11.patch
-      else
-        ./8/patches/fix-library-path-jdk8.patch
-    )
-  ]
-  ++ lib.optionals (atLeast17 && !atLeast23) [
-    # -Wformat etc. are stricter in newer gccs, per
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
-    # so grab the work-around from
-    # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
-    (fetchurl {
-      url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
-      sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
-    })
-  ]
-  ++ lib.optionals (featureVersion == "17") [
-    # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
-    # This is applied anywhere to prevent patchrot.
-    (fetchurl {
-      url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
-      sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
-    })
-  ]
-  ++ lib.optionals (atLeast11 && !atLeast25) [
-    # Fix build for gnumake-4.4.1:
-    #   https://github.com/openjdk/jdk/pull/12992
-    (fetchpatch {
-      name = "gnumake-4.4.1";
-      url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
-      hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
-    })
-  ]
-  ++ lib.optionals atLeast25 [
-    ./25/patches/make-4.4.1.patch
-  ]
-  ++ lib.optionals (!headless && enableGtk) [
-    (
-      if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
-    )
-  ]
-  ++ lib.optionals (featureVersion == "11") [
-    ./11/patches/fix-oopdesc-ptr-alignment-ub.patch
-  ];
+  patches =
+    patchesForVersion
+    ++ lib.optionals (!headless && enableGtk) [
+      (
+        if atLeast17 then ./17/patches/swing-use-gtk-jdk13.patch else ./11/patches/swing-use-gtk-jdk10.patch
+      )
+    ];
 
   strictDeps = true;
 
@@ -288,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
     fontconfig
   ]
-  ++ lib.optionals (atLeast11 && !atLeast21) [
+  ++ lib.optionals (between "11" "22") [
     harfbuzz
   ]
   ++ lib.optionals atLeast11 [
@@ -353,7 +296,7 @@ stdenv.mkDerivation (finalAttrs: {
         "--with-milestone=fcs"
       ]
   )
-  ++ lib.optionals (!atLeast21 && atLeast11) [
+  ++ lib.optionals (between "11" "22") [
     "--with-freetype=system"
     "--with-harfbuzz=system"
   ]
@@ -362,7 +305,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libpng=system"
     "--with-lcms=system"
   ]
-  ++ lib.optionals (featureVersion == "11") [
+  ++ lib.optionals (is "11") [
     "--disable-warnings-as-errors"
   ]
   # OpenJDK 11 cannot be built by recent versions of Clang, as far as I can tell (see
@@ -377,9 +320,7 @@ stdenv.mkDerivation (finalAttrs: {
   # This probably shouldn’t apply to OpenJDK 21; see
   # b7e68243306833845cbf92e2ea1e0cf782481a51 which removed it for
   # versions 15 through 20.
-  ++ lib.optional (
-    (featureVersion == "11" || featureVersion == "21") && stdenv.hostPlatform.isx86_64
-  ) "--with-jvm-features=zgc"
+  ++ lib.optional ((is "11" || is "21") && stdenv.hostPlatform.isx86_64) "--with-jvm-features=zgc"
   ++ lib.optional headless (if atLeast11 then "--enable-headless-only" else "--disable-headful")
   ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx_jdk}";
 
@@ -410,7 +351,7 @@ stdenv.mkDerivation (finalAttrs: {
           # `cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]`
           # when building jtreg
           [ "-Wformat" ]
-          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "11") [
+          ++ lib.optionals (stdenv.cc.isGNU && is "11") [
             # Fix build with gcc15
             "-std=gnu17"
           ]
@@ -435,7 +376,7 @@ stdenv.mkDerivation (finalAttrs: {
             "-Wno-error=int-conversion"
             "-Wno-error=incompatible-pointer-types"
           ]
-          ++ lib.optionals (stdenv.cc.isGNU && featureVersion == "8") [
+          ++ lib.optionals (stdenv.cc.isGNU && is "8") [
             # Fix build with gcc15
             "-std=gnu17"
           ]
