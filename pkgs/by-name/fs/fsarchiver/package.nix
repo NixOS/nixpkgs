@@ -62,7 +62,7 @@ stdenv.mkDerivation {
       corrupt, you just loose the current file, not the whole archive.
     '';
     homepage = "https://www.fsarchiver.org/";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "fsarchiver";
