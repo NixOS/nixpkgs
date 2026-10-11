@@ -344,7 +344,7 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ lib.optional withCoredump elfutils
-  ++ lib.optional withCryptsetup cryptsetup
+  ++ lib.optional withCryptsetup (cryptsetup.override { withSystemdTokens = false; })
   ++ lib.optional withKexectools kexec-tools
   ++ lib.optional withKmod kmod
   ++ lib.optional withLibidn2 libidn2
