@@ -293,6 +293,12 @@ rec {
         family = "sh";
       };
 
+      hppa = {
+        bits = 32;
+        significantByte = bigEndian;
+        family = "pa";
+      };
+
       powerpc = {
         bits = 32;
         significantByte = bigEndian;
