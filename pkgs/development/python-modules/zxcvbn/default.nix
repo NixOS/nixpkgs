@@ -11,8 +11,6 @@ buildPythonPackage (finalAttrs: {
   version = "4.5.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "dwolfhub";
