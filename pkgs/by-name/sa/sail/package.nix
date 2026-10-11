@@ -4,6 +4,7 @@
   fetchFromGitHub,
   protobuf,
   pkg-config,
+  libgit2,
   python3,
   nix-update-script,
   versionCheckHook,
@@ -22,6 +23,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-a0NOVMH5dObFpwUaEsB6w66XVSjnWQRiK5i/KylEgAU=";
 
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+  };
+
   cargoBuildFlags = [
     "-p"
     "sail-cli"
@@ -37,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
+    libgit2
     python3
   ];
 
