@@ -1,0 +1,25 @@
+BUILD_STATIC restricts find_library to ".a", but glibc no longer ships
+libpthread.a, so FindOpenMP fails without OpenMP_pthread_LIBRARY and
+WFA2-lib then links the absent OpenMP::OpenMP_C target.
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 28730a6..9577e5d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -54,7 +54,10 @@ endif ()
+ # ---- Dependencies
+ 
+ if(OPENMP)
++  set(_saved_find_library_suffixes "${CMAKE_FIND_LIBRARY_SUFFIXES}")
++  set(CMAKE_FIND_LIBRARY_SUFFIXES "${_saved_find_library_suffixes}" ".so")
+   include(FindOpenMP)
++  set(CMAKE_FIND_LIBRARY_SUFFIXES "${_saved_find_library_suffixes}")
+ endif(OPENMP)
+ 
+ find_package(ZLIB)
+-- 
+2.54.0
+
