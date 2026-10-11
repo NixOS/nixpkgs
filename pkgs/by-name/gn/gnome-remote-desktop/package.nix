@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Md9ij0ETVz8Tb/yNwAF2Ou1jPNhb7SHli8YfihffCR8=";
   };
 
+  patches = [
+    ./0001-pkexec-path.patch
+    ./0002-immutable-systemd.patch
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
