@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -72,13 +71,11 @@ buildPythonPackage (finalAttrs: {
     "user"
     "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
   ]
-  ++
-    lib.optionals ((pythonOlder "3.13") && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
-      [
-        # Asserts that glibc holds live mmap'ed chunks, which depends on the allocation pattern.
-        # Fails with python312 on aarch64-linux: assert 0 > 0 (mmap_used)
-        "test_heap_info"
-      ];
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Asserts that glibc holds live mmap'ed chunks, which depends on the allocation pattern.
+    # Fails on aarch64-linux: assert 0 > 0 (mmap_used)
+    "test_heap_info"
+  ];
 
   preCheck = ''
     rm -rf psutil
