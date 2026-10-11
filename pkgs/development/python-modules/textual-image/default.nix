@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "textual-image";
   version = "0.14.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "lnqs";
