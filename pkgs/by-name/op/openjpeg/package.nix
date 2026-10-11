@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   cmake,
   pkg-config,
   libpng,
@@ -48,6 +48,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-HSXGdpHUbwlYy5a+zKpcLo2d+b507Qf5nsaMghVBlZ8=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-6192.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/uclouvain/openjpeg/pull/1621.patch";
+      hash = "sha256-vc3O7Ay0VIlFPd4AV/QrdoyCtT4trcTTGGp6KeyXcnw=";
+    })
+  ];
 
   outputs = [
     "out"
