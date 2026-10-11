@@ -206,6 +206,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     '';
     license = lib.licenses.asl20;
     mainProgram = "flashinfer";
+    teams = [ lib.teams.cuda ];
     maintainers = with lib.maintainers; [
       GaetanLepage
       breakds
