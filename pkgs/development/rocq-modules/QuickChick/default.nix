@@ -25,6 +25,7 @@
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
+        (case (lib.versions.range "9.0" "9.2") lib.pred.true "2.2.0")
         (case (lib.versions.range "8.20" "9.1") lib.pred.true "2.1.1")
         (case (lib.versions.range "8.13" "8.16") lib.pred.true "1.6.5")
         (case "8.13" lib.pred.true "1.5.0")
@@ -34,6 +35,7 @@
         (case "8.9" lib.pred.true "1.1.0")
       ]
       null;
+  release."2.2.0".hash = "sha256-uVOYyl0xZXlxQthU78mQxZTy5tJfmay8KUz9koIpAFk=";
   release."2.1.1".hash = "sha256-tcZFpf8joEdVCgy1oKWdaM/9q3EMsF/jT+zz+kIsix8=";
   release."2.0.4".hash = "sha256-WD8B+n8gyGctHMO+M8201Ca3Uw8zCWYsOatSNGCf0/s=";
   release."2.0.2".hash = "sha256-xxKkwDRjB8nUiXNhein1Ppn0DP5FZ13J90xUPAnQBbs=";
