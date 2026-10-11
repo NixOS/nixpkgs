@@ -138,11 +138,17 @@ buildPythonPackage (finalAttrs: {
 
     CUDA_HOME = symlinkJoin {
       name = "cuda-redist";
-      paths = with cudaPackages; [
-        (lib.getInclude cuda_cudart) # cuda_runtime.h
-        (lib.getInclude cuda_nvrtc) # nvrtc.h
-        (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
-      ];
+      paths =
+        with cudaPackages;
+        [
+          (lib.getInclude cuda_cudart) # cuda_runtime.h
+          (lib.getInclude cuda_nvrtc) # nvrtc.h
+          (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
+        ]
+        ++ lib.optionals finalAttrs.doInstallCheck [
+          # Examples (run by tests/test_examples.py) locate <cuda/std/version> via cuda.pathfinder
+          (lib.getInclude cccl)
+        ];
     };
   };
 

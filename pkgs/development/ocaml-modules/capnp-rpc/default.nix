@@ -52,5 +52,8 @@ buildDunePackage (finalAttrs: {
     homepage = "https://github.com/mirage/capnp-rpc";
     changelog = "https://github.com/mirage/capnp-rpc/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      akirak
+    ];
   };
 })
