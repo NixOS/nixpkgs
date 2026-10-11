@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "facenet-pytorch";
   version = "2.5.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "timesler";
