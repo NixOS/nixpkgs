@@ -133,3 +133,56 @@ OpenJDK. For instance, to use the GNU Java Compiler:
 
 Here, Ant will automatically use `gij` (the GNU Java Runtime) instead of
 the OpenJRE.
+
+## Package Java libraries with `buildJavaPackage` {#sec-java-buildJavaPackage}
+
+Package Java software that does not require Maven, Gradle, or Ant:
+
+```nix
+{
+  lib,
+  buildJavaPackage,
+  fetchFromGitHub,
+  jspecify,
+}:
+
+buildJavaPackage (finalAttrs: {
+  pname = "jsoup";
+  version = "1.17.2";
+
+  src = fetchFromGitHub {
+    owner = "jhy";
+    repo = "jsoup";
+    rev = "jsoup-${finalAttrs.version}";
+    hash = "sha256-Zkq2W9p8AAgeuWxze1QJfmmzwLPz4iNm6UggW5sZmJ0=";
+  };
+
+  classpath = [ jspecify ];
+
+  meta = {
+    homepage = "https://jsoup.org/";
+    description = "Java HTML parser";
+    license = lib.licenses.mit;
+  };
+})
+```
+
+`buildJavaPackage` compiles `.java` source files with `javac`.
+It bundles compiled classes and resources into a deterministic JAR archive with `jar`.
+The builder installs `${jarName}-${version}.jar` and a `${jarName}.jar` symlink into `$out/share/java/`.
+
+### Attribute reference {#sec-java-buildJavaPackage-attributes}
+
+`buildJavaPackage` accepts standard `stdenvNoCC.mkDerivation` attributes, plus:
+
+* `jdk` (optional, default `buildPackages.jdk`): Compiler package for `nativeBuildInputs`.
+* `javaRelease` (optional, default `8`): Target Java release version passed to `javac --release`. Set to `null` to omit `--release` and pass custom `-source` and `-target` flags in `javacFlags`.
+* `encoding` (optional, default `"UTF-8"`): Source file encoding passed to `javac -encoding`.
+* `javaSourceDir` (optional, default `"src/main/java"`): Source directory relative to the repository root.
+* `resourcesDir` (optional, default `"src/main/resources"`): Resource directory to include in the JAR.
+* `excludeSourcePatterns` (optional, default `[ ]`): File patterns to exclude when compiling.
+* `jarName` (optional, default `finalAttrs.pname`): Output JAR file name without the `.jar` extension.
+* `javacFlags` (optional, default `[ ]`): Extra flags passed to `javac`.
+* `classpath` (optional, default `[ ]`): Java packages whose JAR files are added to `buildInputs` and the compilation classpath.
+* `propagatedClasspath` (optional, default `[ ]`): Java dependencies added to `propagatedBuildInputs` for downstream packages.
+* `extraClasspath` (optional, default `""`): String appended to the `-classpath` compiler argument.

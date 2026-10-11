@@ -3744,6 +3744,7 @@ with pkgs;
 
   graalvmPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
   buildGraalvmNativeImage = callPackage ../build-support/build-graalvm-native-image { };
+  buildJavaPackage = callPackage ../build-support/build-java-package { };
 
   inherit (callPackage ../development/compilers/julia { })
     julia_110-bin
