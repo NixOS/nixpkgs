@@ -3,10 +3,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
   nix-update-script,
+  nixosTests,
   numactl,
   openssl,
   pkg-config,
@@ -41,6 +43,34 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # Vendor Patchwork patches; the site is often unavailable.
+  patches = [
+    # Allow systemd to supervise database servers directly.
+    # https://patchwork.ozlabs.org/project/ovn/patch/20261010181739.97592-1-ihar.hrachyshka@gmail.com/
+    ./ovn-ctl-no-monitor.patch
+    # Retry storing chassis indices and serialize concurrent allocations.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/cb3f002fcb4fa7987e63a40332bccdee96286311.patch";
+      hash = "sha256-Ol8Qj5THNM6miWhHuk95yioHhHr/W+zRWhNtXkG2nBw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/8e66599f4c152541fa69a361969ea1b70ed1c086.patch";
+      hash = "sha256-1Et1OX2MXZ9NhcJvdvK2s5VViNORpq8UF7bn5DjSGYE=";
+    })
+    # Use the configured OVN binary directories.
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/b09bdd1aab6b73b77ca864470c00d2760892e7e7.patch";
+      hash = "sha256-ghQEaV/7Hxd4x++UR5UtoghXJJ/xr13xat3zqGTAb2U=";
+    })
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/196afaf300bcd5a50a68917ba6c96282752a2b02.patch";
+      hash = "sha256-4Mo3SWbFcm1GM5jPfqTp71YUDtDn/BzrU8gB7fzb640=";
+    })
+    # Prevent early listener FINs from interrupting ACL CT TCP tests.
+    # https://patchwork.ozlabs.org/project/ovn/patch/20261006010454.80801-1-ihar.hrachyshka@gmail.com/
+    ./ovn-acl-ct-tcp-no-shutdown.patch
+  ];
+
   outputs = [
     "out"
     "lib"
@@ -74,7 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     pushd ovs
     ./boot.sh
-    ./configure --with-dbdir=/var/lib/openvswitch ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
+    # ovn-controller uses the run directory compiled into the vendored OVS.
+    ./configure \
+      --localstatedir=/var \
+      --sharedstatedir=/var \
+      --with-dbdir=/var/lib/openvswitch \
+      ${lib.optionalString stdenv.hostPlatform.isStatic withOpensslConfigureFlag}
     make -j $NIX_BUILD_CORES
     popd
   '';
@@ -122,7 +157,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -vp $out/share/openvswitch/scripts
     ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
 
+    # ovn-ctl creates $OVN_SYSCONFDIR/ovn at runtime.
     wrapProgram $out/share/ovn/scripts/ovn-ctl \
+      --set-default OVN_SYSCONFDIR /var/lib \
       --prefix PATH : ${
         lib.makeBinPath [
           openvswitch
@@ -164,9 +201,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; };
-
     updateScript = nix-update-script { };
+    tests = callPackage ./tests.nix { ovn = finalAttrs.finalPackage; } // {
+      inherit (nixosTests.ovn)
+        basic
+        multiple-controllers
+        raft
+        ;
+    };
   };
 
   meta = {

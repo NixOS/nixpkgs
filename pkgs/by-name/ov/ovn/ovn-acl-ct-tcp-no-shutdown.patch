@@ -1,0 +1,23 @@
+--- a/tests/system-ovn.at
++++ b/tests/system-ovn.at
+@@ -21963,8 +21963,10 @@
+ check ovn-nbctl --wait=hv sync
+ check ovs-appctl dpctl/flush-conntrack
+ 
++# Keep listeners from sending FIN on stdin EOF, which can make Ncat clients
++# exit before sending all the data.
+ # Test client -> server direction.
+-NETNS_DAEMONIZE([server], [ncat -l 172.16.1.2 8080 > tcp_server.rcvd], [server.pid])
++NETNS_DAEMONIZE([server], [ncat --no-shutdown -l 172.16.1.2 8080 > tcp_server.rcvd], [server.pid])
+ NS_CHECK_EXEC([client], [ncat -w 1 172.16.1.2 8080 < datafile], [0], [ignore], [ignore])
+ 
+ OVS_WAIT_UNTIL([test -s tcp_server.rcvd])
+@@ -21974,7 +21976,7 @@
+ kill $(cat server.pid) 2>/dev/null || true
+ 
+ # Test server -> client direction.
+-NETNS_DAEMONIZE([client], [ncat -l 172.16.1.3 8081 > tcp_client.rcvd], [client.pid])
++NETNS_DAEMONIZE([client], [ncat --no-shutdown -l 172.16.1.3 8081 > tcp_client.rcvd], [client.pid])
+ NS_CHECK_EXEC([server], [ncat -w 1 172.16.1.3 8081 < datafile], [0], [ignore], [ignore])
+ 
+ OVS_WAIT_UNTIL([test -s tcp_client.rcvd])
