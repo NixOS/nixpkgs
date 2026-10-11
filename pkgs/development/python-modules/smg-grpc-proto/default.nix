@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "smg-grpc-proto";
   version = "0.4.14";
   pyproject = true;
-  __structuredAttrs = true;
 
   # No tags on GitHub
   src = fetchPypi {
