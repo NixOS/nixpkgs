@@ -10,7 +10,7 @@ buildNpmPackage {
 
   src = "${common.src}/client";
 
-  npmDepsHash = "sha256-8ojD7xMxRE9+b4O7vJdwKwrg8aYukYc3l+LF5enKFgA=";
+  npmDepsHash = "sha256-Bjkdh3qRbibhj1zabCeHG306tX46AZB3ct3ki1iIuzE=";
 
   VITE_APIURL = "/api/v1";
 
@@ -18,6 +18,5 @@ buildNpmPackage {
 
   meta = common.meta // {
     description = "Spoolman frontend";
-    mainProgram = "spoolman-frontend";
   };
 }
