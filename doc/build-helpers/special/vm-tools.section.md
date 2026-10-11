@@ -109,8 +109,8 @@ A set of functions that build a predefined set of minimal Linux distributions im
 ### Images {#vm-tools-diskImageFuns-images}
 
 * Fedora
-  * `fedora42x86_64`
   * `fedora43x86_64`
+  * `fedora44x86_64`
 * Rocky Linux
   * `rocky9x86_64`
   * `rocky10x86_64`
@@ -119,15 +119,15 @@ A set of functions that build a predefined set of minimal Linux distributions im
   * `alma10x86_64`
 * Oracle Linux
   * `oracle9x86_64`
+  * `oracle10x86_64`
 * Amazon Linux
   * `amazon2023x86_64`
 * Ubuntu
   * `ubuntu2204i386`
   * `ubuntu2204x86_64`
   * `ubuntu2404x86_64`
+  * `ubuntu2604x86_64`
 * Debian
-  * `debian11i386`
-  * `debian11x86_64`
   * `debian12i386`
   * `debian12x86_64`
   * `debian13i386`
