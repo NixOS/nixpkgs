@@ -8,18 +8,20 @@
 
 rustPlatform.buildRustPackage {
   pname = "buzz-cli";
-  version = "0.1.0-unstable-2026-09-02";
+  # The CLI crates have no releases of their own: build the workspace at Buzz
+  # Desktop releases, which ship these binaries.
+  version = "0.1.0-unstable-2026-10-06";
   __structuredAttrs = true;
   __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "buzz";
-    rev = "47d068e2109d077414cbf2f4f1c927f6d051037a";
-    hash = "sha256-sLIyStOy330KzzVF9QnIn27loT5QXCRz0U4NN9bxU40=";
+    tag = "desktop-v0.5.27";
+    hash = "sha256-h/4xEemRexKpjz4ZD9XKGSL+0vizdx5QuqmVO3oO7W4=";
   };
 
-  cargoHash = "sha256-q8FUmTHnPfy/Ub+TNs3UK3exOoX1GdZGwHkH5pDteKE=";
+  cargoHash = "sha256-e2vWeSx9JTjHqupOMkNpD+0vNCs8ubMm/lRp+RVRK78=";
   cargoBuildFlags = [ "--package=buzz-cli" ];
   cargoTestFlags = [ "--package=buzz-cli" ];
 
@@ -36,6 +38,8 @@ rustPlatform.buildRustPackage {
     export RUSTFLAGS="--remap-path-prefix=$NIX_BUILD_TOP=/build ''${RUSTFLAGS:-}"
     export NIX_CFLAGS_COMPILE="-ffile-prefix-map=$NIX_BUILD_TOP=/build ''${NIX_CFLAGS_COMPILE:-}"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Agent-first CLI for Buzz relay";
