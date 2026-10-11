@@ -401,4 +401,110 @@ lib.recurseIntoAttrs {
   };
 
   testEqualArrayOrMap = pkgs.callPackages ../testEqualArrayOrMap/tests.nix { };
+
+  testEqualEvalSet =
+    let
+      sample-single-failed = testers.testEqualEvalSet {
+        name = "testEqualEvalSet-sample-single-failed";
+        tests = {
+          test-ab-failed = {
+            expr = "ab";
+            expected = "c";
+          };
+        };
+      };
+
+      sample-build-failure = stdenvNoCC.mkDerivation {
+        name = "testEqualEvalSet-sample-build-failure";
+        buildCommand = ''
+          echo "ERROR: $name is only meant to be evaluated without building."
+          false
+        '';
+      };
+    in
+    lib.recurseIntoAttrs rec {
+      empty = testers.testEqualEvalSet {
+        name = "testEqualEvalSet-empty";
+        literalPackage = "tests.testers.testEqualEvalSet.empty";
+        tests = { };
+      };
+
+      single = testers.testEqualEvalSet {
+        name = "testEqualEvalSet-single";
+        tests = {
+          test-ab = {
+            expr = "a" + "b";
+            expected = "ab";
+          };
+        };
+      };
+
+      single-literalPackage = single.overrideAttrs {
+        name = "testEqualEvalSet-single-literalPackage";
+        literalPackage = "tests.testers.testEqualEvalSet.single-literalPackage";
+      };
+
+      single-failed = testers.testBuildFailure sample-single-failed;
+
+      single-failed-literalPackage = testers.testBuildFailure (
+        sample-single-failed.overrideAttrs {
+          name = "testEqualEvalSet-single-failed-literalPackage";
+          literalPackage = "tests.testers.testEqualEvalSet.single-failed-literalPackage";
+        }
+      );
+
+      multiple-types = testers.testEqualEvalSet {
+        name = "testEqualEvalSet-multiple-types";
+        literalPackage = "tests.testers.testEqualEvalSet.multiple-types";
+        tests = {
+          null = {
+            expr = null;
+            expected = null;
+          };
+          int = {
+            expr = 1;
+            expected = 1;
+          };
+          float = {
+            expr = 1.0;
+            expected = 1.0;
+          };
+          string = {
+            expr = "hi";
+            expected = "hi";
+          };
+          derivation = {
+            expr = emptyFile;
+            expected = emptyFile;
+          };
+          drv-path = {
+            expr = emptyFile.drvPath;
+            expected = emptyFile.drvPath;
+          };
+          out-path = {
+            expr = emptyFile.outPath;
+            expected = emptyFile.outPath;
+          };
+        };
+      };
+
+      no-build-expr = testers.testEqualEvalSet {
+        name = "testEqualEvalSet-no-build-expr";
+        literalPackage = "tests.testers.testEqualEvalSet.no-build-expr";
+        tests = {
+          derivation = {
+            expr = sample-build-failure;
+            expected = sample-build-failure;
+          };
+          drv-path = {
+            expr = sample-build-failure.drvPath;
+            expected = sample-build-failure.drvPath;
+          };
+          out-path = {
+            expr = sample-build-failure.outPath;
+            expected = sample-build-failure.outPath;
+          };
+        };
+      };
+    };
 }
