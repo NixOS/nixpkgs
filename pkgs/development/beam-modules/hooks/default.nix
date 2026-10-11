@@ -8,6 +8,10 @@
     meta.license = lib.licenses.mit;
   } ./beam-copy-source-hook.sh;
 
+  beamCopySourceToSourceRootHook = makeSetupHook {
+    name = "beam-copy-source-to-sourceRoot-hook.sh";
+  } ./beam-copy-source-to-sourceRoot-hook.sh;
+
   beamModuleInstallHook = makeSetupHook {
     name = "beam-module-install-hook.sh";
     meta.license = lib.licenses.mit;
