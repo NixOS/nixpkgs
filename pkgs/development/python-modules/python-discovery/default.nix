@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "python-discovery";
   version = "1.4.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
