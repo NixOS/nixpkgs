@@ -242,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
       )}
   '';
 
-  dontStrip = true;
+  dontStrip = isLinux;
   dontPatchELF = isDarwin;
   dontPatchShebangs = isDarwin;
 
