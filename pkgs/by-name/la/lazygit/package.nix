@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "lazygit";
-  version = "0.66.0";
+  version = "0.66.1";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazygit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2edvYQQxCkGNj3CJrLibaUgFF+uxnwULlO7G6SdgWPU=";
+    hash = "sha256-87OrUGi7xhQhAzV6S3r5evlLWt/1anheCd58v6GW42g=";
   };
 
   vendorHash = null;
