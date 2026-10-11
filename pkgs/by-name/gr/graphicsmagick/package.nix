@@ -4,7 +4,6 @@
   callPackage,
   coreutils,
   fetchurl,
-  fetchpatch2,
   fixDarwinDylibNames,
   freetype,
   ghostscript,
@@ -35,21 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${finalAttrs.version}.tar.xz";
     hash = "sha256-fvoHDcMRFrQxUGGzn4S8cYHosGC/YSFOya+FETGvnIE=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/627b5b1b2fc2.patch";
-      hash = "sha256-J9T5+nxwzWp3DgaLeEXcu9XM1SwBUpIUqGPHpyfgcgE=";
-      name = "CVE-2026-103118.patch";
-      excludes = [
-        "magick/version.h"
-        "magick/gm_messages.mc"
-        "www/*"
-        "ChangeLog"
-        "VisualMagick/*"
-      ];
-    })
-  ];
 
   outputs = [
     "out"
