@@ -6864,14 +6864,6 @@ with pkgs;
     ];
   };
 
-  sbcl_2_6_7 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.6.7"; };
-    faslExt = "fasl";
-    flags = [
-      "--dynamic-space-size"
-      "3000"
-    ];
-  };
   sbcl_2_6_8 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.6.8"; };
     faslExt = "fasl";
@@ -6880,7 +6872,15 @@ with pkgs;
       "3000"
     ];
   };
-  sbcl = sbcl_2_6_8;
+  sbcl_2_6_9 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.6.9"; };
+    faslExt = "fasl";
+    flags = [
+      "--dynamic-space-size"
+      "3000"
+    ];
+  };
+  sbcl = sbcl_2_6_9;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
