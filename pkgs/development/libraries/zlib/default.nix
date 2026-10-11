@@ -112,7 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
       );
     }
     //
-      lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      lib.optionalAttrs
+        (
+          stdenv.cc.bintools.isLLVM
+          && lib.versionAtLeast stdenv.cc.bintools.version "17"
+          && !stdenv.hostPlatform.isMinGW
+        )
         {
           # https://reviews.llvm.org/D135402
           # Without this flag configure decides that it cannot build shared libraries and does not make a libz.so
