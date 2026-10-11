@@ -8,7 +8,7 @@ wheelUnpackPhase() {
     mkdir -p dist
     cp "$src" "dist/$(stripHash "$src")"
 
-    # runHook postUnpack # Calls find...?
+    runHookDone[postUnpack]=1 # Calls find...?
     echo "Finished executing wheelUnpackPhase"
 }
 
