@@ -18,8 +18,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.0.17";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "monty";
