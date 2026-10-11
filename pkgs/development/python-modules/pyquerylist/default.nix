@@ -13,7 +13,7 @@
 }:
 buildPythonPackage {
   pname = "pyquerylist";
-  version = "0-unstable-2025-03-03";
+  version = "0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
