@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "2.26.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     pname = "spotipy";
     inherit (finalAttrs) version;
