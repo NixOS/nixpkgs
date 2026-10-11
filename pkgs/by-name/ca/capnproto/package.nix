@@ -32,14 +32,14 @@ in
 # See: https://gerrit.lix.systems/c/lix/+/1874
 clangStdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "1.4.0";
+  version = "1.5.0";
 
   # release tarballs are missing some ekam rules
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    hash = "sha256-CuhKOJwU+QG25lRR8F7ina+DV45ZlLzg/UJ2swf2tZ0=";
+    hash = "sha256-2J3FYwPAtbahHI1y1KMqU8Gn2YlKyIW8kZIJz2Ja31w=";
   };
 
   patches = [
