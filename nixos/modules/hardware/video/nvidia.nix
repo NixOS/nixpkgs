@@ -777,7 +777,7 @@ in
               })
             ];
 
-          services.acpid.enable = true;
+          services.acpid.enable = lib.mkDefault true;
 
           services.dbus.packages = lib.optional cfg.dynamicBoost.enable nvidia_x11.bin;
 
