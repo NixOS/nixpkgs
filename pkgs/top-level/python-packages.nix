@@ -4033,6 +4033,8 @@ self: super: with self; {
 
   darkdetect = callPackage ../development/python-modules/darkdetect { };
 
+  darnit-core = callPackage ../development/python-modules/darnit-core { };
+
   dartsim = toPythonModule (
     pkgs.dartsim.override {
       pythonSupport = true;
