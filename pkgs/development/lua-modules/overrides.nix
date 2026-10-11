@@ -707,6 +707,16 @@ in
     };
   });
 
+  luagobject = prev.luagobject.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [
+      pkg-config
+    ];
+    buildInputs = [
+      glib
+      gobject-introspection
+    ];
+  });
+
   lualdap = prev.lualdap.overrideAttrs (_: {
     externalDeps = [
       {
