@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eigenwallet";
-  version = "4.13.3";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "https://github.com/eigenwallet/core/releases/download/${finalAttrs.version}/eigenwallet_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-nVrl3XY6fN8lA/RUL2P/NzMaOdPUIFxsEYbROk7keTA=";
+    hash = "sha256-d8+bRmaXHGZibhLiB8srokYG+8aAbjOtKpe5GjgiErA=";
   };
 
   nativeBuildInputs = [
