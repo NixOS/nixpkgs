@@ -72,6 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ carlossless ];
     mainProgram = "packetry";
+    mainDarwinApp = "Packetry.app";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

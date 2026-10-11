@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "OpenOnLoad high performance network stack from Solarflare";
-    homepage = "https://www.openonload.org";
+    homepage = "https://github.com/Xilinx-CNS/onload";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ YorikSar ];
     # ARM64 build fails, see https://github.com/Xilinx-CNS/onload/issues/253

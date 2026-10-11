@@ -1,0 +1,30 @@
+diff --git a/app-server-daemon/src/backend/pid.rs b/app-server-daemon/src/backend/pid.rs
+index 22e34d9..298c989 100644
+--- a/app-server-daemon/src/backend/pid.rs
++++ b/app-server-daemon/src/backend/pid.rs
+@@ -732,7 +732,7 @@ async fn read_process_start_time(pid: u32) -> Result<String> {
+
+ #[cfg(unix)]
+ async fn read_process_details(pid: u32) -> Result<(String, String)> {
+-    let output = Command::new("ps")
++    let output = Command::new("@ps@")
+         .args(["-p", &pid.to_string(), "-o", "stat=", "-o", "lstart="])
+         .output()
+         .await
+diff --git a/app-server-daemon/src/prepare_install.rs b/app-server-daemon/src/prepare_install.rs
+index 290ceae..2c3c966 100644
+--- a/app-server-daemon/src/prepare_install.rs
++++ b/app-server-daemon/src/prepare_install.rs
+@@ -373,8 +373,11 @@ fn package_tree(root: &Path, destination: Option<&Path>) -> Result<String> {
+         {
+             continue;
+         }
++        let canonical = path.canonicalize()?;
++        let is_nix_package_file = std::env::split_paths("@packageLinkRoots@")
++            .any(|root| canonical.starts_with(&root) && canonical != root);
+         anyhow::ensure!(
+-            path.canonicalize()?.starts_with(&canonical_root),
++            canonical.starts_with(&canonical_root) || is_nix_package_file,
+             "package link escapes its root"
+         );
+         let metadata = path.metadata()?;
