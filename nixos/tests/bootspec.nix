@@ -166,6 +166,60 @@ in
     '';
   };
 
+  # Check that a specialisation can boot an externally-built toplevel supplied
+  # via `specialisation.<name>.toplevel`, instead of a NixOS `configuration`.
+  specialisation-toplevel =
+    let
+      # A system built outside this machine's module system, standing in for a
+      # non-NixOS system that emits its own RFC-0125 bootspec.
+      externalSystem =
+        (pkgs.nixos {
+          fileSystems."/" = {
+            device = "/dev/sda1";
+            fsType = "ext4";
+          };
+          boot.loader.grub.enable = false;
+          boot.kernelParams = [ "external_specialisation_marker" ];
+          system.stateVersion = pkgs.lib.trivial.release;
+        }).toplevel;
+    in
+    makeTest {
+      name = "bootspec-with-specialisation-toplevel";
+      meta.maintainers = with pkgs.lib.maintainers; [ aanderse ];
+
+      nodes.machine = {
+        imports = [ standard ];
+        environment.systemPackages = [ pkgs.jq ];
+        specialisation.external.toplevel = externalSystem;
+      };
+
+      testScript = ''
+        import json
+
+        machine.start()
+        machine.wait_for_unit("multi-user.target")
+
+        machine.succeed("test -e /run/current-system/boot.json")
+        machine.succeed("test -e /run/current-system/specialisation/external/boot.json")
+
+        # The specialisation symlink points at the externally-built toplevel,
+        # not at a configuration derived from this machine.
+        target = machine.succeed("readlink -f /run/current-system/specialisation/external").strip()
+        assert target == "${externalSystem}", f"specialisation points at {target}, expected ${externalSystem}"
+
+        # The external system's bootspec is embedded into the parent boot.json.
+        sp_in_parent = json.loads(machine.succeed("jq -r '.\"org.nixos.specialisation.v1\".external' /run/current-system/boot.json"))
+        sp_in_fs = json.loads(machine.succeed("cat /run/current-system/specialisation/external/boot.json"))
+        assert sp_in_parent['org.nixos.bootspec.v1'] == sp_in_fs['org.nixos.bootspec.v1'], "Bootspecs of the same specialisation are different!"
+
+        # It really is the external system: its unique kernel param is embedded
+        # for the specialisation but absent from the parent's own bootspec.
+        parent = json.loads(machine.succeed("jq -r '.\"org.nixos.bootspec.v1\"' /run/current-system/boot.json"))
+        assert "external_specialisation_marker" in sp_in_parent['org.nixos.bootspec.v1']['kernelParams']
+        assert "external_specialisation_marker" not in parent['kernelParams']
+      '';
+    };
+
   # Check that extensions are propagated.
   extensions = makeTest {
     name = "bootspec-with-extensions";
