@@ -82,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Compact, fast, general-purpose memory allocator";
     homepage = "https://github.com/microsoft/mimalloc";
