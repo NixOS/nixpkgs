@@ -49,6 +49,67 @@ let
     ) (filterNull settings);
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "dependency-track"
+      "database"
+      "type"
+    ] "Dependency track only supports postgresql since version 5")
+    # (lib.mkRemovedOptionModule [
+    #   "services"
+    #   "dependency-track"
+    #   "settings"
+    #   "alpine\.database\.mode"
+    # ] "Dependency track only supports postgresql since version 5")
+    # (lib.mkRemovedOptionModule [
+    #   "services"
+    #   "dependency-track"
+    #   "settings"
+    #   "alpine\.database\.driver"
+    # ] "Dependency track only supports postgresql since version 5")
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.data.directory" ]
+    #   [ "services" "dependency-track" "settings" "dt.data-directory" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.database.url" ]
+    #   [ "services" "dependency-track" "settings" "dt.datasource.url" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.database.username" ]
+    #   [ "services" "dependency-track" "settings" "dt.datasource.username" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.ldap.enabled" ]
+    #   [ "services" "dependency-track" "settings" "dt.ldap.enabled" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.oidc.enabled" ]
+    #   [ "services" "dependency-track" "settings" "dt.oidc.enabled" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.oidc.client.id" ]
+    #   [ "services" "dependency-track" "settings" "dt.oidc.client-id" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.oidc.issuer" ]
+    #   [ "services" "dependency-track" "settings" "dt.oidc.issuer" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.oidc.username.claim" ]
+    #   [ "services" "dependency-track" "settings" "dt.oidc.username-claim" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.oidc.user.provisioning" ]
+    #   [ "services" "dependency-track" "settings" "dt.oidc.user-provisioning" ]
+    # )
+    # (lib.mkRenamedOptionModule
+    #   [ "services" "dependency-track" "settings" "alpine.oidc.user.provisioning" ]
+    #   [ "services" "dependency-track" "settings" "dt.oidc.user-provisioning" ]
+    # )
+  ];
+
   options.services.dependency-track = {
     enable = lib.mkEnableOption "dependency-track";
 
@@ -76,7 +137,12 @@ in
 
     javaArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
+      default = [
+        "-XX:+UseG1GC"
+        "-XX:+UseStringDeduplication"
+        "-XX:+UseCompactObjectHeaders"
+        "-XX:MaxGCPauseMillis=250"
+      ];
       example = lib.literalExpression ''[ "-Xmx16G" ] '';
       description = ''
         Java options passed to JVM. Configuring this is usually not necessary, but for small systems
@@ -85,20 +151,6 @@ in
     };
 
     database = {
-      type = lib.mkOption {
-        type = lib.types.enum [
-          "h2"
-          "postgresql"
-          "manual"
-        ];
-        default = "postgresql";
-        description = ''
-          `h2` database is not recommended for a production setup.
-          `postgresql` this settings it recommended for production setups.
-          `manual` the module doesn't handle database settings.
-        '';
-      };
-
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -312,7 +364,7 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
         options = {
-          "alpine.data.directory" = lib.mkOption {
+          "dt.data-directory" = lib.mkOption {
             type = lib.types.path;
             default = "/var/lib/dependency-track";
             description = ''
@@ -321,72 +373,16 @@ in
               directories.
             '';
           };
-          "alpine.database.mode" = lib.mkOption {
-            type = lib.types.enum [
-              "server"
-              "embedded"
-              "external"
-            ];
-            default =
-              if cfg.database.type == "h2" then
-                "embedded"
-              else if cfg.database.type == "postgresql" then
-                "external"
-              else
-                null;
-            defaultText = lib.literalExpression ''
-              if config.services.dependency-track.database.type == "h2" then "embedded"
-              else if config.services.dependency-track.database.type == "postgresql" then "external"
-              else null
-            '';
-            description = ''
-              Defines the database mode of operation. Valid choices are:
-              'server', 'embedded', and 'external'.
-              In server mode, the database will listen for connections from remote hosts.
-              In embedded mode, the system will be more secure and slightly faster.
-              External mode should be used when utilizing an external database server
-              (i.e. mysql, postgresql, etc).
-            '';
-          };
-          "alpine.database.url" = lib.mkOption {
+          "dt.datasource.url" = lib.mkOption {
             type = lib.types.str;
-            default =
-              if cfg.database.type == "h2" then
-                "jdbc:h2:/var/lib/dependency-track/db"
-              else if cfg.database.type == "postgresql" then
-                "jdbc:postgresql:${cfg.database.databaseName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/run/postgresql/.s.PGSQL.5432"
-              else
-                null;
+            default = "jdbc:postgresql:${cfg.database.databaseName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/run/postgresql/.s.PGSQL.5432";
 
             defaultText = lib.literalExpression ''
-              if config.services.dependency-track.database.type == "h2" then "jdbc:h2:/var/lib/dependency-track/db"
-                else if config.services.dependency-track.database.type == "postgresql" then "jdbc:postgresql:''${config.services.dependency-track.database.name}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/run/postgresql/.s.PGSQL.5432"
-                else null
+              "jdbc:postgresql:''${config.services.dependency-track.database.name}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/run/postgresql/.s.PGSQL.5432"
             '';
             description = "Specifies the JDBC URL to use when connecting to the database.";
           };
-          "alpine.database.driver" = lib.mkOption {
-            type = lib.types.enum [
-              "org.h2.Driver"
-              "org.postgresql.Driver"
-              "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-              "com.mysql.cj.jdbc.Driver"
-            ];
-            default =
-              if cfg.database.type == "h2" then
-                "org.h2.Driver"
-              else if cfg.database.type == "postgresql" then
-                "org.postgresql.Driver"
-              else
-                null;
-            defaultText = lib.literalExpression ''
-              if config.services.dependency-track.database.type == "h2" then "org.h2.Driver"
-              else if config.services.dependency-track.database.type == "postgresql" then "org.postgresql.Driver"
-              else null;
-            '';
-            description = "Specifies the JDBC driver class to use.";
-          };
-          "alpine.database.username" = lib.mkOption {
+          "dt.datasource.username" = lib.mkOption {
             type = lib.types.str;
             default = if cfg.database.createLocally then "dependency-track" else cfg.database.username;
             defaultText = lib.literalExpression ''
@@ -395,7 +391,7 @@ in
             '';
             description = "Specifies the username to use when authenticating to the database.";
           };
-          "alpine.ldap.enabled" = lib.mkOption {
+          "dt.ldap.enabled" = lib.mkOption {
             type = lib.types.bool;
             default = false;
             description = ''
@@ -403,7 +399,7 @@ in
               alpine.ldap.* properties should be set accordingly.
             '';
           };
-          "alpine.oidc.enabled" = lib.mkOption {
+          "dt.oidc.enabled" = lib.mkOption {
             type = lib.types.bool;
             default = cfg.oidc.enable;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.enable";
@@ -412,7 +408,7 @@ in
               If enabled, alpine.oidc.* properties should be set accordingly.
             '';
           };
-          "alpine.oidc.client.id" = lib.mkOption {
+          "dt.oidc.client-id" = lib.mkOption {
             type = lib.types.str;
             default = cfg.oidc.clientId;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.clientId";
@@ -422,7 +418,7 @@ in
               and will only be used to validate ID tokens.
             '';
           };
-          "alpine.oidc.issuer" = lib.mkOption {
+          "dt.oidc.issuer" = lib.mkOption {
             type = lib.types.str;
             default = cfg.oidc.issuer;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.issuer";
@@ -434,7 +430,7 @@ in
               - <https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig>
             '';
           };
-          "alpine.oidc.username.claim" = lib.mkOption {
+          "dt.oidc.username-claim" = lib.mkOption {
             type = lib.types.str;
             default = cfg.oidc.usernameClaim;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.usernameClaim";
@@ -444,7 +440,7 @@ in
               See also: <https://openid.net/specs/openid-connect-core-1_0.html#UserInfoResponse>
             '';
           };
-          "alpine.oidc.user.provisioning" = lib.mkOption {
+          "dt.oidc.user-provisioning" = lib.mkOption {
             type = lib.types.bool;
             default = cfg.oidc.userProvisioning;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.userProvisioning";
@@ -458,7 +454,7 @@ in
               automatic provisioning only affects authentication, not authorization.
             '';
           };
-          "alpine.oidc.team.synchronization" = lib.mkOption {
+          "dt.oidc.team-synchronization" = lib.mkOption {
             type = lib.types.bool;
             default = cfg.oidc.teamSynchronization;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.teamSynchronization";
@@ -473,7 +469,7 @@ in
               authentication.
             '';
           };
-          "alpine.oidc.teams.claim" = lib.mkOption {
+          "dt.oidc.teams-claim" = lib.mkOption {
             type = lib.types.str;
             default = cfg.oidc.teams.claim;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.teams.claim";
@@ -484,7 +480,7 @@ in
               will most likely need to be configured.
             '';
           };
-          "alpine.oidc.teams.default" = lib.mkOption {
+          "dt.oidc.teams-default" = lib.mkOption {
             type = lib.types.nullOr lib.types.commas;
             default = cfg.oidc.teams.default;
             defaultText = lib.literalExpression "config.services.dependency-track.oidc.teams.default";
@@ -499,7 +495,7 @@ in
         };
       };
       default = { };
-      description = "See <https://docs.dependencytrack.org/getting-started/configuration/#default-configuration> for possible options";
+      description = "See <https://dependencytrack.github.io/docs/next/reference/configuration/properties/> for possible options";
     };
   };
 
@@ -599,28 +595,25 @@ in
           LoadCredential = [
             "db_password:${cfg.database.passwordFile}"
           ]
-          ++
-            lib.optional cfg.settings."alpine.ldap.enabled"
-              "ldap_bind_password:${cfg.ldap.bindPasswordFile}";
+          ++ lib.optional cfg.settings."dt.ldap.enabled" "ldap_bind_password:${cfg.ldap.bindPasswordFile}";
         };
         script = ''
           set -eou pipefail
           shopt -s inherit_errexit
 
-          export ALPINE_DATABASE_PASSWORD_FILE="$CREDENTIALS_DIRECTORY/db_password"
-          ${lib.optionalString cfg.settings."alpine.ldap.enabled" ''
-            export ALPINE_LDAP_BIND_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/ldap_bind_password")"
-          ''}
-
-          exec ${lib.getExe pkgs.jre_headless} ${
+          exec ${lib.getExe cfg.package.passthru.jdk} ${
             lib.escapeShellArgs (
               cfg.javaArgs
               ++ [
-                "-DdependencyTrack.logging.level=${cfg.logLevel}"
-                "-jar"
-                "${cfg.package}/share/dependency-track/dependency-track.jar"
-                "-port"
-                "${toString cfg.port}"
+                "--add-opens"
+                "java.base/java.util.concurrent=ALL-UNNAMED"
+                "--enable-native-access=ALL-UNNAMED"
+                "--sun-misc-unsafe-memory-access=allow"
+                "-Djdk.http.auth.tunneling.disabledSchemes="
+                "--class-path"
+                "${cfg.package}/share/dependency-track/dependency-track.jar:${cfg.package}/lib/*"
+                "org.dependencytrack.Application"
+                "-context /"
               ]
             )
           }
