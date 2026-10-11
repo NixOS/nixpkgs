@@ -1,24 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
   versionCheckHook,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "unpackerr";
-  version = "0.15.2";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "Unpackerr";
     repo = "unpackerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-npq0CXsaWaFa6RazQXRKVaqTyK87VhzaF/hd/d952Po=";
+    hash = "sha256-eztw5oRM2XWPg0RbJ1GDR+/7r6/10KXpNGj5ijxZzsE=";
   };
 
-  vendorHash = "sha256-v0ml1dTIhf79mhlyTrPNhIfg1Yhao27eP0pnI95OvaU=";
+  vendorHash = "sha256-qrBqpsmej/voXLmD9uOd2UJ2EZMEybrIWMFVg4pUcLQ=";
 
   excludedPackages = [ "init/config" ];
 
