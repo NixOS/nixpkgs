@@ -14,24 +14,19 @@
   killall,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "htb-toolkit";
-  version = "0-unstable-2025-12-19";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "D3vil0p3r";
+    owner = "Athena-OS";
     repo = "htb-toolkit";
     # https://github.com/D3vil0p3r/htb-toolkit/issues/3
-    rev = "4f1c6bded11d8c907c951fcbe63f1fc44568a9f9";
-    hash = "sha256-pkZ5KVSgtrWfXhJ3knmyOIArIjyAjMmm5WcrrB2pCKY=";
+    tag = finalAttrs.version;
+    hash = "sha256-i+/gAWtGCIKYJlrS9bolQOy9LDJgMapH6xHmFci5pO0=";
   };
 
   cargoHash = "sha256-ReEe8pyW66GXIPwAy6IKsFEAUjxHmzw5mj21i/h4quQ=";
-
-  # Patch to disable prompt change of the shell when a target machine is run. Needed due to Nix declarative nature
-  patches = [
-    ./disable-shell-prompt-change.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -53,6 +48,8 @@ rustPlatform.buildRustPackage {
     substituteInPlace src/vpn.rs \
       --replace-fail "arg(\"openvpn\")" "arg(\"${openvpn}/bin/openvpn\")" \
       --replace-fail "arg(\"killall\")" "arg(\"${killall}/bin/killall\")"
+    substituteInPlace src/main.rs \
+      --replace-fail 'prompt_change=true' 'prompt_change=false'
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -60,9 +57,9 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "Play Hack The Box directly on your system";
     mainProgram = "htb-toolkit";
-    homepage = "https://github.com/D3vil0p3r/htb-toolkit";
-    maintainers = [ ];
+    homepage = "https://github.com/Athena-OS/htb-toolkit";
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3Plus;
   };
-}
+})
