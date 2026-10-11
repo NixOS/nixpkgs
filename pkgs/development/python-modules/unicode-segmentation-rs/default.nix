@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "unicode-segmentation-rs";
   version = "0.3.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "WeblateOrg";
