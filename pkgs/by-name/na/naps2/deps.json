@@ -31,13 +31,13 @@
   },
   {
     "pname": "Eto.Forms",
-    "version": "2.8.3",
-    "hash": "sha256-bxWYDbgfhc/tFwUVAt1K9bGiixo8o58plQxRnaJzYgM="
+    "version": "2.11.0",
+    "hash": "sha256-VxNpNQEiO73A6IKvOk5AAr10PXNP7HZiunXGz3ze43A="
   },
   {
     "pname": "Eto.Platform.Gtk",
-    "version": "2.8.3",
-    "hash": "sha256-U78xU1QwGpCEJTmAYZS5AQJU7d2SqISqZcZ10z0UYis="
+    "version": "2.11.0",
+    "hash": "sha256-9ST2LKb2h2mbsszeul1Cwl8H0ijlGQJ+C9OtZ8JwFIM="
   },
   {
     "pname": "GdkSharp",
