@@ -213,6 +213,10 @@ stdenv.mkDerivation (finalAttrs: {
   # musl, so the fuzzcheck-asan and fuzzcheck-ubsan programs cannot be linked.
   checkFlags = lib.optionals stdenv.hostPlatform.isMusl [ "TSTRNNR_OPTS=~fuzzcheck-%san" ];
 
+  preCheck = lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.cc.isClang) ''
+    export LD_LIBRARY_PATH="${lib.getLib buildPackages.stdenv.cc.cc.libgcc}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+  '';
+
   passthru = {
     tests = {
       inherit (python3Packages) sqlalchemy;
