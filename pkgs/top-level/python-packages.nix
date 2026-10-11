@@ -10327,6 +10327,8 @@ self: super: with self; {
 
   loompy = callPackage ../development/python-modules/loompy { };
 
+  loop-rate-limiters = callPackage ../development/python-modules/loop-rate-limiters { };
+
   looptime = callPackage ../development/python-modules/looptime { };
 
   loopy = callPackage ../development/python-modules/loopy { };
@@ -13618,6 +13620,8 @@ self: super: with self; {
   pillowfight = callPackage ../development/python-modules/pillowfight { };
 
   pims = callPackage ../development/python-modules/pims { };
+
+  pin-pink = callPackage ../development/python-modules/pin-pink { };
 
   pinboard = callPackage ../development/python-modules/pinboard { };
 
