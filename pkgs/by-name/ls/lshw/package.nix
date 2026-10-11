@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lyonel";
     repo = "lshw";
-    rev = "B.${finalAttrs.version}";
+    tag = "B.${finalAttrs.version}";
     hash = "sha256-4etC7ymMgn1Q4f98DNASv8vn0AT55dYPdacZo6GRDw0=";
   };
 
