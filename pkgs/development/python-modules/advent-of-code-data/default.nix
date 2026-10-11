@@ -23,15 +23,17 @@
   tzlocal,
 }:
 
-buildPythonPackage rec {
-  pname = "aocd";
+buildPythonPackage (finalAttrs: {
+  pname = "advent-of-code-data";
   version = "2.2.0";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Oe+9Ur5O2GSRY7qB8oja7quJqEX/0yXKh4R5+N4kv7Q=";
   };
 
@@ -74,9 +76,9 @@ buildPythonPackage rec {
   meta = {
     description = "Get your Advent of Code data with a single import statement";
     homepage = "https://github.com/wimglenn/advent-of-code-data";
-    changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/${src.tag}";
+    changelog = "https://github.com/wimglenn/advent-of-code-data/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aadibajpai ];
     platforms = lib.platforms.unix;
   };
-}
+})
