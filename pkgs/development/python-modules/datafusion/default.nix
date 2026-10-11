@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   # WARNING: Ensure rerun-sdk is compatible with this version of datafusion
   version = "54.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     name = "datafusion-source";
