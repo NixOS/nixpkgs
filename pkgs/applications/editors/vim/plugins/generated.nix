@@ -20603,6 +20603,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-dadbod-manager-ui = buildVimPlugin {
+    pname = "vim-dadbod-manager-ui";
+    version = "0-unstable-2026-10-11";
+    src = fetchFromGitHub {
+      owner = "sergioia-dev";
+      repo = "vim-dadbod-manager-ui";
+      rev = "3aba12f946f72e3d0797a26786851c9759260657";
+      hash = "sha256-pqLM7r4q7QYrc+OkOAH2gGPN3AJheabscYsbddqSe5g=";
+    };
+    meta.homepage = "https://github.com/sergioia-dev/vim-dadbod-manager-ui/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-dadbod-ui = buildVimPlugin {
     pname = "vim-dadbod-ui";
     version = "0-unstable-2026-06-19";
