@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "arpa2cm";
-  version = "1.0.7";
+  version = "1.0.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "arpa2";
     repo = "arpa2cm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JkMZUXqmrVzURVi8BJRsHprD4Jz6l83qhPxnOfq4KE4=";
+    hash = "sha256-JfA+oy685y9Igd5JHwPXm+/68zrtOqbnyII+aNamJt4=";
   };
 
   nativeBuildInputs = [ cmake ];
