@@ -1077,6 +1077,7 @@ in
   lomiri-gallery-app = discoverTests (import ./lomiri-gallery-app.nix);
   lomiri-mediaplayer-app = runTest ./lomiri-mediaplayer-app.nix;
   lomiri-music-app = runTest ./lomiri-music-app.nix;
+  lomiri-printing-app = runTest ./lomiri-printing-app.nix;
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
   loops-server = runTest ./loops-server.nix;
   lorri = runTest ./lorri/default.nix;
