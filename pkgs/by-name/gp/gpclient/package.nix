@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   stdenv,
+  fetchFromGitHub,
   atk,
   autoconf,
   automake,
@@ -23,6 +24,7 @@
   makeBinaryWrapper,
   net-tools,
   nettle,
+  nix-update-script,
   openresolv,
   openssl,
   p11-kit,
@@ -35,20 +37,24 @@
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpclient";
+  version = "2.6.5";
 
-  # Keep automatic updates anchored on gpauth so the bot updates both
-  # package outputs in one PR.
-  # nixpkgs-update: no auto update
-  inherit (gpauth)
-    cargoHash
-    src
-    version
-    ;
+  src = fetchFromGitHub {
+    owner = "yuezk";
+    repo = "GlobalProtect-openconnect";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WCCSd20qkDtJ88ru+ufFZrNQZSKkCzYo5fZpbB7Sn7o=";
+    fetchSubmodules = true;
+  };
+
+  cargoHash = "sha256-6+x5SRQHIchtkdYZAZl+b28hMCaiQHrp9i3tMsN3DhE=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = gpauth.meta // {
-    # Re-anchor meta.position here so nixpkgs-update sees the opt-out above.
+    # Anchor meta.position here so nixpkgs-update targets gpclient.
     inherit (gpauth.meta) description;
   };
 
@@ -180,4 +186,4 @@ rustPlatform.buildRustPackage {
     wrapProgram "$out/bin/gpclient" \
       --prefix GIO_EXTRA_MODULES : ${glib-networking}/lib/gio/modules
   '';
-}
+})
