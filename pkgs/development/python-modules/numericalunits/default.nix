@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.28";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "sbyrnes321";
     repo = "numericalunits";
