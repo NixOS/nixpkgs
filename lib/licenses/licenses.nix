@@ -1363,6 +1363,11 @@ lib.mapAttrs mkLicense (
       fullName = "Open Software License 3.0";
     };
 
+    owl094 = {
+      fullName = "Open Works License v0.9.4";
+      url = "https://owl.apotheon.org/";
+    };
+
     paratype = {
       spdxId = "ParaType-Free-Font-1.3";
       fullName = "ParaType Free Font Licensing Agreement v1.3";
