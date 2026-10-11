@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withOpenssl [ openssl ]
     ++ lib.optionals withZstd [ zstd ];
 
+  strictDeps = true;
+
   # Don't build the regression tests because they don't build with
   # pkgsStatic and are not executed anyway.
   cmakeFlags = [ "-DBUILD_REGRESS=0" ];
