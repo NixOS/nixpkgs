@@ -75,6 +75,9 @@ lib.checkListOfEnum "tela-circle-icon-theme: color variants"
         ${lib.optionalString circularFolder "-c"} \
         ${if allColorVariants then "-a" else toString colorVariants}
 
+      # remove broken symlinks
+      find $out -xtype l -print -delete
+
       jdupes --quiet --link-soft --recurse $out/share
 
       runHook postInstall
