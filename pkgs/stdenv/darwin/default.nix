@@ -19,11 +19,11 @@
     else
       throw "Unsupported platform for the Darwin stdenv"
   ),
+  genericStdenv,
 }:
 
 let
   inherit (localSystem) system;
-  genericStdenv = import ../generic { defaultConfig = config; };
 
   llvmVersion = "21"; # This needs to be updated when the default LLVM version is changed.
   sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
