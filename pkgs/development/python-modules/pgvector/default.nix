@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector-python";
     tag = "v${version}";
-    hash = "sha256-hhI1dD/T/7m0zkH3ZoAsVbPyiZ8sQqilA05rV3Z5/t0=";
+    hash = "sha256-PseAIFks2f3VPn0oag599tI+cyQOdO3HlmTSNDXfoX4=";
   };
 
   build-system = [ setuptools ];
