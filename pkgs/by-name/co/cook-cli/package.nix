@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Build without the self-updating feature
   buildNoDefaultFeatures = true;
 
+  buildFeatures = [ "server" ];
+
   nativeBuildInputs = [
     pkg-config
     openssl
