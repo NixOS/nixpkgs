@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "protobuf";
   version = "6.33.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
