@@ -2,19 +2,21 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "big-num" = "0wj45pmiafhbj5ch7b4s41ldycps0hcj29d0z6fanhiy7ljlhk35";
-    "data" = "1jf2y9dbg1qvxkkabdkihdnr1kmznq79h18j65a7iw1hljdp8hyg";
-    "Foundation" = "0hcpc15v38l32qc2sh4gqj909b1f90knln9yz3mfiyf6xi7iy6q7";
-    "KeychainAccess" = "0m57pq1vn5qarmlx5x4kfv0yzjylafl3ipih5p60zyfsx6k5b55l";
-    "LegibleError" = "137hc96cqpiwsyybj2xawyfmqh7rmk1khqkiqp3616ql909mh99y";
-    "Path.swift" = "05qk7kwb1254zwdxc3sjc3gprccnv9fwapmy5y6ygxjz8a6jfk83";
-    "PromiseKit" = "19pkhk505pz03hqmv8h1lgm83iw5jha6j1v06fyzz0xar2ywv6vg";
-    "Rainbow" = "0iv31azny668vpsjgmldgkgn9cp8i5h9rlc6w5bs8q63nwq19wb0";
-    "swift-argument-parser" = "19b4pkcx4xf0iwg0nbr7wvkkbwl6h8sch848gid6l98728glmcw9";
-    "swift-crypto" = "020b8q4ss2k7a65r5dgh59z40i6sn7ij1allxkh8c8a9d0jzn313";
-    "swift-srp" = "0nsinkgf050z1wkzmaxaf5qkvplsgyqwps9xi9zkbcg6y7143xy1";
-    "SwiftSoup" = "14klizw8jhmxhxays1b1yh4bp0nbb3l4l1pj6sdnf0iqs0wladv8";
-    "Version" = "0s5bwr1li6dnsnalfyraq1kzhqmmn9qwp1mld4msrn3q5vvjmql9";
-    "Yams" = "11abhcfkmqm3cmh7vp7rqzvxd1zj02j2866a2pp6v9m89456xb76";
+    "AsyncHTTPNetworkService" = "sha256-eL7dTv04dwqfn4lJoEmBf1mdsHJLDsSfYpQtpgWztqg=";
+    "big-num" = "sha256-bwzfIt856NW3L+EGhJ+M7WpuBdaC2tYH4spGPSYq7pE=";
+    "data" = "sha256-z0N0m6Qw8HhUMRIFmA62v86QbYNxtqXm7BuHt1rywsk=";
+    "KeychainAccess" = "sha256-tJRVpuna+Q/MLTDeOKhT1MvvwXaT9NJpzQoXuwO+p1Q=";
+    "LegibleError" = "sha256-PiVYE0gUm2DGxXFiOMOs+UBcneeqC7m81zxezExi8Iw=";
+    "LibFido2Swift" = "sha256-s5NrUK3hkx5JRd6AVLs6O8tM+GzCNa33VNLeyIzQXO0=";
+    "Path.swift" = "sha256-H4p4SRYXnuzjE8zwnMgU+T1EzkONREVt+laa3wE78yo=";
+    "Rainbow" = "sha256-YPEUMLfDYKRX4YbRnGCJ6LJk33yN1if13cgYb78KY0c=";
+    "swift-argument-parser" = "sha256-ibNKHxIHJWpafIggyDSChvI15+YnLwsej8B10tm8ZKU=";
+    "swift-crypto" = "sha256-Iwz7JWhJIYbg7JSqIOOx2kRAfirwtZKLUWcKrQlGCwg=";
+    "swift-srp" = "sha256-wfdBwvHmsTV/ij3py7F/mt49cXGqq/onDx8U4N60UVs=";
+    "SwiftSoup" = "sha256-aDdFOdA4AmebNvIGSuhYy4K7CPRhBe1Vh71CifiPdJI=";
+    "Version" = "sha256-ieIq9y542KwrabSGy3GytWL4Z8Aqe0eV1baZSEPmq2g=";
+    "XcodesKit" = "sha256-hhTv4G6B6fP7sx9QgnpcqUCHpOc2sJ4t2idDz8/L/c4=";
+    "XcodesLoginKit" = "sha256-X71MV5jF1tTWlKyfrxOYPNFhRpblm8vp0NFVzCrMz+Q=";
+    "Yams" = "sha256-AY/fIvB7THrl9GWzGJL8eDBbkcLw27tSRTGtUqmYw8k=";
   };
 }
