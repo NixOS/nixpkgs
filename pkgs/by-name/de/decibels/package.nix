@@ -11,7 +11,7 @@
   meson,
   ninja,
   pkg-config,
-  typescript_5,
+  typescript_7,
   wrapGAppsHook4,
   gnome,
 }:
@@ -24,6 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mme6FN8jUXyEn8/ep2THOiQeWQVSmbEl6YrqsqeAGtU=";
   };
 
+  patches = [
+    ./ts7.patch
+  ];
+
   nativeBuildInputs = [
     appstream
     blueprint-compiler
@@ -31,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    typescript_5
+    typescript_7
     wrapGAppsHook4
   ];
 
