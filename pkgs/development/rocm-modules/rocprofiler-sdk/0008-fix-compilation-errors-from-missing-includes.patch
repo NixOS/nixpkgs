@@ -1,16 +1,16 @@
-From af363337240fb6e4976004900b610317ba459165 Mon Sep 17 00:00:00 2001
-From: Robin Voetter <rvoetter@amd.com>
-Date: Sat, 4 Apr 2026 21:01:33 +0000
-Subject: [PATCH] [rocprofiler-sdk] add missing stl headers
+From 3346d7d75513445c19f04a9e972216522752e469 Mon Sep 17 00:00:00 2001
+From: Anund <anundm@gmail.com>
+Date: Sun, 11 Oct 2026 17:00:20 +1100
+Subject: [PATCH 8/8] fix compilation errors from missing includes
 
-These missing includes became apparent when building with
-ROCPROFILER_BUILD_GHC_FS=OFF.
 ---
- source/lib/att-tool/att_lib_wrapper.hpp                | 2 ++
- source/lib/rocprofiler-sdk-rocpd/sql.cpp               | 1 +
- source/lib/rocprofiler-sdk/counters/metrics.cpp        | 1 +
- source/lib/rocprofiler-sdk/tests/status.cpp            | 1 +
- 4 files changed, 5 insertions(+)
+ source/lib/att-tool/att_lib_wrapper.hpp         | 2 ++
+ source/lib/att-tool/wave.hpp                    | 1 +
+ source/lib/rocprofiler-sdk-rocpd/sql.cpp        | 1 +
+ source/lib/rocprofiler-sdk/counters/metrics.cpp | 1 +
+ source/lib/rocprofiler-sdk/counters/metrics.hpp | 1 +
+ source/lib/rocprofiler-sdk/tests/status.cpp     | 1 +
+ 6 files changed, 7 insertions(+)
 
 diff --git a/source/lib/att-tool/att_lib_wrapper.hpp b/source/lib/att-tool/att_lib_wrapper.hpp
 index e7e58c5991..7dcd000a43 100644
@@ -28,6 +28,18 @@ index e7e58c5991..7dcd000a43 100644
  #include <vector>
  
  namespace rocprofiler
+diff --git a/source/lib/att-tool/wave.hpp b/source/lib/att-tool/wave.hpp
+index 1a7b1adda6..65686d8ea3 100644
+--- a/source/lib/att-tool/wave.hpp
++++ b/source/lib/att-tool/wave.hpp
+@@ -29,6 +29,7 @@
+ #include "waitcnt/analysis.hpp"
+ #include "wstates.hpp"
+ 
++#include <array>
+ #include <map>
+ #include <unordered_map>
+ #include <vector>
 diff --git a/source/lib/rocprofiler-sdk-rocpd/sql.cpp b/source/lib/rocprofiler-sdk-rocpd/sql.cpp
 index b052ec51c3..7e8742686e 100644
 --- a/source/lib/rocprofiler-sdk-rocpd/sql.cpp
@@ -41,17 +53,29 @@ index b052ec51c3..7e8742686e 100644
  #include <unordered_map>
  
 diff --git a/source/lib/rocprofiler-sdk/counters/metrics.cpp b/source/lib/rocprofiler-sdk/counters/metrics.cpp
-index 8adcf0f991..ee3391e904 100644
+index 201ae4fd25..4780a0ba31 100644
 --- a/source/lib/rocprofiler-sdk/counters/metrics.cpp
 +++ b/source/lib/rocprofiler-sdk/counters/metrics.cpp
-@@ -46,6 +46,7 @@
+@@ -45,6 +45,7 @@
  #include <dlfcn.h>  // for dladdr
  #include <cstdint>
  #include <cstdlib>
 +#include <fstream>
  #include <memory>
- #include <system_error>
  #include <vector>
+ 
+diff --git a/source/lib/rocprofiler-sdk/counters/metrics.hpp b/source/lib/rocprofiler-sdk/counters/metrics.hpp
+index 7915bc8805..a893c2c9b3 100644
+--- a/source/lib/rocprofiler-sdk/counters/metrics.hpp
++++ b/source/lib/rocprofiler-sdk/counters/metrics.hpp
+@@ -35,6 +35,7 @@
+ #include <unordered_map>
+ #include <unordered_set>
+ #include <vector>
++#include <memory>
+ 
+ namespace rocprofiler
+ {
 diff --git a/source/lib/rocprofiler-sdk/tests/status.cpp b/source/lib/rocprofiler-sdk/tests/status.cpp
 index a5a492101d..b01f511b99 100644
 --- a/source/lib/rocprofiler-sdk/tests/status.cpp
@@ -65,5 +89,5 @@ index a5a492101d..b01f511b99 100644
  
  TEST(rocprofiler_lib, error_string)
 -- 
-2.43.0
+2.55.0
 
