@@ -1,60 +1,73 @@
-# NOTE: At runtime, FlashInfer will fall back to PyTorch’s JIT compilation if a
-# requested kernel wasn’t pre-compiled in AOT mode, and JIT compilation always
-# requires the CUDA toolkit (via nvcc) to be available.
+# NOTE: Since 0.6.x, upstream no longer pre-compiles kernels here (the AOT half now lives in the
+# separate `flashinfer-jit-cache` distribution). Every kernel is therefore compiled at runtime via
+# PyTorch's JIT, which requires the CUDA toolkit (via nvcc) to be available.
 #
-# This means that if you plan to use flashinfer, you will need to set the
-# environment variable `CUDA_HOME` to `cudatoolkit`.
+# This means that if you plan to use flashinfer, you will need to set the environment variable
+# `CUDA_HOME` to `cudatoolkit`.
 {
   lib,
-  config,
   buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
   apache-tvm-ffi,
+  packaging,
   setuptools,
 
   # nativeBuildInputs
-  cmake,
   ninja,
   cudaPackages,
 
   # dependencies
   click,
+  cuda-bindings,
+  cuda-core,
+  cuda-tile,
   einops,
+  nccl4py,
   numpy,
+  nvidia-cudnn-frontend,
+  nvidia-cutlass-dsl,
   nvidia-ml-py,
   requests,
   tabulate,
   torch,
   tqdm,
+
+  # tests
+  mpi4py,
+  numba,
+  nvidia-cutlass,
+  pytestCheckHook,
+  responses,
+
+  cudaSupport ? torch.cudaSupport,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "flashinfer-python";
-  version = "0.6.4";
+  version = "0.6.17";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hq3oTeEJHRvXwThI8vc06E3Ot/FnPP0sZUfze3ISa2o=";
+    hash = "sha256-7l+NuSphSl90osaWIKWTNk3xiBYvz4QH0/0dcZCgLnc=";
   };
 
   build-system = [
     apache-tvm-ffi
+    packaging
     setuptools
   ];
 
   nativeBuildInputs = [
-    cmake
     ninja
     (lib.getBin cudaPackages.cuda_nvcc)
   ];
-
-  dontUseCmakeConfigure = true;
 
   buildInputs = with cudaPackages; [
     cccl
@@ -63,45 +76,65 @@ buildPythonPackage (finalAttrs: {
     libcurand
   ];
 
-  # FlashInfer offers two installation modes:
-  #
-  # JIT mode: CUDA kernels are compiled at runtime using PyTorch’s JIT, with
-  # compiled kernels cached for future use. JIT mode allows fast installation,
-  # as no CUDA kernels are pre-compiled, making it ideal for development and
-  # testing. JIT version is also available as a sdist in PyPI.
-  #
-  # AOT mode: Core CUDA kernels are pre-compiled and included in the library,
-  # reducing runtime compilation overhead. If a required kernel is not
-  # pre-compiled, it will be compiled at runtime using JIT. AOT mode is
-  # recommended for production environments.
-  #
-  # Here we use opt for the AOT version.
-  preConfigure = ''
-    export FLASHINFER_ENABLE_AOT=1
-    export TORCH_NVCC_FLAGS="--maxrregcount=64"
-    export MAX_JOBS="$NIX_BUILD_CORES"
-  '';
-
-  env.FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep ";" torch.cudaCapabilities;
+  env = {
+    FLASHINFER_CUDA_ARCH_LIST = lib.concatStringsSep " " torch.cudaCapabilities;
+  };
 
   pythonRemoveDeps = [
-    "nvidia-cudnn-frontend"
-    "nvidia-cutlass-dsl"
+    # `cuda-python` is a meta-package pulling in the sub-packages of github:NVIDIA/cuda-python.
+    # Only the ones flashinfer actually imports are substituted below.
+    "cuda-python"
   ];
   dependencies = [
+    apache-tvm-ffi
     click
+    cuda-bindings
+    cuda-core
+    cuda-tile
     einops
+    nccl4py
+    ninja
     numpy
+    nvidia-cudnn-frontend
+    nvidia-cutlass-dsl
     nvidia-ml-py
+    packaging
     requests
     tabulate
     torch
     tqdm
   ];
 
+  preCheck = ''
+    export FLASHINFER_WORKSPACE_BASE=$(mktemp -d)
+  '';
+  nativeCheckInputs = [
+    # nvshmem4py
+    mpi4py
+    numba
+    nvidia-cutlass # pycute
+    pytestCheckHook
+    responses
+  ];
+
+  disabledTestPaths = [
+    # Require unpackaged nvshmem4py
+    "tests/comm/test_nvshmem.py"
+    "tests/comm/test_nvshmem_allreduce.py"
+  ];
+
+  # Tests require access to a GPU
+  doCheck = false;
+  passthru.gpuCheck = finalAttrs.finalPackage.overrideAttrs {
+    requiredSystemFeatures = [ "cuda" ];
+    doInstallCheck = true;
+  };
+
   meta = {
-    broken = !torch.cudaSupport || !config.cudaSupport;
+    broken = !cudaSupport;
     homepage = "https://flashinfer.ai/";
+    downloadPage = "https://github.com/flashinfer-ai/flashinfer";
+    changelog = "https://github.com/flashinfer-ai/flashinfer/releases/tag/${finalAttrs.src.tag}";
     description = "Library and kernel generator for Large Language Models";
     longDescription = ''
       FlashInfer is a library and kernel generator for Large Language Models
@@ -111,7 +144,9 @@ buildPythonPackage (finalAttrs: {
       scenarios.
     '';
     license = lib.licenses.asl20;
+    teams = [ lib.teams.cuda ];
     maintainers = with lib.maintainers; [
+      GaetanLepage
       breakds
       daniel-fahey
     ];
