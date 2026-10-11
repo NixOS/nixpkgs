@@ -59,7 +59,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Handy utilities for building aiohttp.web applications";
     homepage = "https://github.com/sloria/aiohttp-utils";
-    changelog = "https://github.com/sloria/aiohttp-utils/tags/${finalAttrs.src.tag}";
+    changelog = "https://github.com/sloria/aiohttp-utils/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
