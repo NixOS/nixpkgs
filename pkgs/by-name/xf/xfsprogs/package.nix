@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfsprogs";
-  version = "7.1.1";
+  version = "7.2.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/xfsprogs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Bj7cMbqOhclcf6+b5GWgSJi7p8bmIv3ZsUbu1MpUFeg=";
+    hash = "sha256-UB36NjzY4ZmXpKGnH3De2IJBtF6dsjPoh1wjuAUgzIM=";
   };
 
   postPatch = ''
