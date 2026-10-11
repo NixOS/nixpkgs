@@ -4,18 +4,19 @@
   docutils,
   installShellFiles,
   python3Packages,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "goobook";
-  version = "3.5.2";
+  version = "3.5.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "goobook";
     repo = "goobook";
     tag = finalAttrs.version;
-    hash = "sha256-gWmeRlte+lP7VP9gbPuMHwhVkx91wQ0GpQFQRLJ29h8=";
+    hash = "sha256-hBO3HfRtSZ0cN+QnK33zVZlp2/Ws265ddCuZSPBOlYs=";
   };
 
   build-system = with python3Packages; [
@@ -29,14 +30,18 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "google-api-python-client"
+    "google-auth-httplib2"
     "pyxdg"
     "setuptools"
+    "simplejson"
   ];
 
   dependencies = with python3Packages; [
     google-api-python-client
+    google-auth
+    google-auth-httplib2
+    google-auth-oauthlib
     simplejson
-    oauth2client
     setuptools
     pyxdg
   ];
@@ -46,10 +51,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     installManPage goobook.1
   '';
 
-  # has no tests
-  doCheck = false;
-
   pythonImportsCheck = [ "goobook" ];
+
+  nativeCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Access your Google contacts from the command line";
