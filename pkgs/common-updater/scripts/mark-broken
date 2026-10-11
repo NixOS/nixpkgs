@@ -24,8 +24,8 @@ failMark() {
         local attr=$1
         shift 1
 
-        echo "$attr: $@" >&2
-        echo $attr >> failed-marks.txt
+        printf "%s: %s" "$attr" "$@" >&2
+        echo "$attr" >> failed-marks.txt
 }
 
 usage() {
@@ -56,23 +56,23 @@ function attemptToMarkBroken() {
         local attr=$1
 
         # skip likely to be noisy attrs
-        for badAttr in ${denyAttrList[@]};do
+        for badAttr in "${denyAttrList[@]}"; do
                 if [[ $attr =~ $badAttr ]]; then
-                        failMark $attr "attr contained $badAttr, skipped."
+                        failMark "$attr" "attr contained $badAttr, skipped."
                         return
                 fi
         done
 
-        nixFile=$(nix-instantiate --eval --json -E "with import ./. {}; (builtins.unsafeGetAttrPos \"description\" $attr.meta).file" 2>/dev/null | jq -r .)
+        nixFile=$(nix-instantiate --eval --raw --json -E "with import ./. {}; (builtins.unsafeGetAttrPos \"description\" $attr.meta).file" 2>/dev/null)
         if [[ ! -f "$nixFile" ]]; then
-            failMark $attr "Couldn't locate correct file"
+            failMark "$attr" "Couldn't locate correct file"
             return
         fi
 
         # skip files which are auto-generated
-        for filename in ${denyFileList[@]};do
-                if [[ "$filename" == $(basename $nixFile) ]]; then
-                        failMark $attr "filename matched $filename, skipped."
+        for filename in "${denyFileList[@]}"; do
+                if [[ "$filename" == $(basename "$nixFile") ]]; then
+                        failMark "$attr" "filename matched $filename, skipped."
                         return
                 fi
         done
@@ -84,7 +84,7 @@ function attemptToMarkBroken() {
 
         if cmp -s "$nixFile" "$nixFile.bak"; then
             mv "$nixFile.bak" "$nixFile"
-            failMark $attr "Does it have a meta attribute?"
+            failMark "$attr" "Does it have a meta attribute?"
             return
         fi
 
@@ -92,13 +92,13 @@ function attemptToMarkBroken() {
         markedSuccessfully=$(nix-instantiate --eval -E "with import ./. {}; $attr.meta.broken")
         if [[ "$markedSuccessfully" != "true" ]]; then
             mv "$nixFile.bak" "$nixFile"
-            failMark $attr "$attr.meta.broken doesn't evaluate to true."
+            failMark "$attr" "$attr.meta.broken doesn't evaluate to true."
             return
         fi
 
         rm -f "$nixFile.bak"
 }
 
-for attr in $@; do
-        attemptToMarkBroken $attr
+for attr in "$@"; do
+        attemptToMarkBroken "$attr"
 done
