@@ -1728,6 +1728,9 @@ with haskellLib;
   # Avoids infinite recursion
   hspec-core = dontCheck super.hspec-core;
 
+  # https://github.com/brendanhay/ede/pull/61
+  ede = dontCheck super.ede;
+
   update-nix-fetchgit =
     let
       # Deps are required during the build for testing and also during execution,
