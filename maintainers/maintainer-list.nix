@@ -10015,6 +10015,12 @@
     github = "ftsimas";
     githubId = 47324723;
   };
+  fudoge = {
+    email = "kchawoon@naver.com";
+    name = "Chaewoon Kang";
+    github = "fudoge";
+    githubId = 77766067;
+  };
   fuerbringer = {
     email = "severin@fuerbringer.info";
     github = "fuerbringer";
