@@ -37,7 +37,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tokenspeed-triton";
   version = "3.8.10.post20260920";
   pyproject = false;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     format = "wheel";
