@@ -32,6 +32,10 @@ buildGo125Module (finalAttrs: {
     hash = "sha256-gemi9t4wTjmCHEXfdXz1X9Q4gcvj/3LMtlrO5UpQ19M=";
   };
 
+  patches = [
+    ./0001-bugfix-tighten-auth-requirements-for-mustUserFromSes.patch
+  ];
+
   vendorHash = null;
 
   ldflags = [
