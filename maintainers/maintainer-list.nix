@@ -115,6 +115,12 @@
     github = "0x3fiona";
     githubId = 178507884;
   };
+  _0x48piraj = {
+    email = "hello@piyushraj.org";
+    name = "Piyush Raj";
+    github = "0x48piraj";
+    githubId = 5800726;
+  };
   _0x4A6F = {
     email = "mail-maintainer@0x4A6F.dev";
     matrix = "@0x4a6f:matrix.org";
