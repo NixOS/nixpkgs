@@ -25017,6 +25017,11 @@
     matrix = "@ricochetcode:matrix.org";
     name = "Bailey Hayes";
   };
+  ridanit-ruma = {
+    github = "ridanit-ruma";
+    githubId = 95562207;
+    name = "Ruma";
+  };
   riey = {
     email = "creeper844@gmail.com";
     github = "Riey";
