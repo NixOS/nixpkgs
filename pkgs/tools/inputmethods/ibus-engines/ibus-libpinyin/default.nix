@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   autoreconfHook,
   gettext,
   gobject-introspection,
@@ -15,35 +14,26 @@
   glib,
   gtk3,
   python3,
-  lua5_2_compat,
+  lua5_5,
   opencc,
   libsoup_3,
   json-glib,
   libnotify,
 }:
 let
-  lua = lua5_2_compat;
+  lua = lua5_5;
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.16.5";
+  version = "1.16.6";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
-    tag = version;
-    hash = "sha256-3QZHovjzGifWLFVudCnJOwMn/M3Nzfn8CZ1HpQwzUVw=";
+    tag = "v${version}";
+    hash = "sha256-uPYqMtppo+lLq035Tny0zYQA4NkfJ7H5EL0U78iSRAM=";
   };
-
-  patches = [
-    # Drop -std=c++0x, fix build with opencc >= 1.4.0 header files, which require C++17
-    (fetchpatch2 {
-      name = "fix-build-with-opencc-1.4.patch";
-      url = "https://github.com/libpinyin/ibus-libpinyin/commit/42ad7d20b803c10ce6d8921ccff5c6282bb4818c.patch?full_index=1";
-      hash = "sha256-ndAJd+EEyluvjZL1gXM8HbfgEtwQETw0Lu1WAwcou4M=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
