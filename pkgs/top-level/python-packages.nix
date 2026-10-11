@@ -2317,6 +2317,8 @@ self: super: with self; {
 
   beanhub-inbox = callPackage ../development/python-modules/beanhub-inbox { };
 
+  beanie = callPackage ../development/python-modules/beanie { };
+
   beanquery = callPackage ../development/python-modules/beanquery { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
@@ -9488,6 +9490,8 @@ self: super: with self; {
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 
+  lazy-model = callPackage ../development/python-modules/lazy-model { };
+
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
   lb-matching-tools = callPackage ../development/python-modules/lb-matching-tools { };
@@ -15575,6 +15579,8 @@ self: super: with self; {
   pymonctl = callPackage ../development/python-modules/pymonctl { };
 
   pymongo = callPackage ../development/python-modules/pymongo { };
+
+  pymongo-auth-aws = callPackage ../development/python-modules/pymongo-auth-aws { };
 
   pymongo-inmemory = callPackage ../development/python-modules/pymongo-inmemory { };
 
