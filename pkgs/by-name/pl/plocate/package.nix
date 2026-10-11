@@ -5,7 +5,7 @@
   pkg-config,
   meson,
   ninja,
-  systemd,
+  systemdLibs,
   liburing,
   zstd,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    systemd
+    systemdLibs
     liburing
     zstd
   ];

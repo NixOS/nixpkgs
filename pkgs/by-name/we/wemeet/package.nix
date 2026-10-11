@@ -17,7 +17,7 @@
   libpulseaudio,
   libgcrypt,
   dbus,
-  systemd,
+  systemdLibs,
   udev,
   libGL,
   libglvnd,
@@ -248,7 +248,7 @@ stdenv.mkDerivation {
     libpulseaudio
     libgcrypt
     dbus
-    systemd
+    systemdLibs
     udev
     libGL
     fontconfig

@@ -16,7 +16,7 @@
   glib,
   sqlite,
   zlib,
-  systemd,
+  systemdLibs,
   pam,
   p11-kit,
   dbus,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
           p11-kit
           sqlite
           zlib
-          systemd
+          systemdLibs
           dbus
         ];
         pam = lib.makeLibraryPath [ pam ];

@@ -15,11 +15,11 @@
   dbus,
   libnotify,
   sqlite,
-  systemd,
+  systemdLibs,
   testers,
 
   # Boolean flags
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     sqlite
   ]
-  ++ lib.optionals withSystemd [ systemd ];
+  ++ lib.optionals withSystemd [ systemdLibs ];
 
   configureFlags = [
     (lib.enableFeature true "notifications")

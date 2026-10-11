@@ -24,7 +24,7 @@
   #, libselinux
   rpm-sequoia,
   gettext,
-  systemd,
+  systemdLibs,
   bubblewrap,
   autoconf,
   gnupg,
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
     audit
-    systemd
+    systemdLibs
   ];
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
