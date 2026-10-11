@@ -22617,6 +22617,8 @@ self: super: with self; {
 
   webthing-ws = callPackage ../development/python-modules/webthing-ws { };
 
+  webvtt-py = callPackage ../development/python-modules/webvtt-py { };
+
   weconnect = callPackage ../development/python-modules/weconnect { };
 
   weconnect-mqtt = callPackage ../development/python-modules/weconnect-mqtt { };
