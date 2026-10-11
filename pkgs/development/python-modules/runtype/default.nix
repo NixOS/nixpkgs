@@ -8,8 +8,6 @@ buildPythonPackage (finalAttrs: {
   pname = "runtype";
   version = "0.5.3";
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "erezsh";
     repo = "runtype";
