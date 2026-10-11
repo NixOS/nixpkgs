@@ -394,6 +394,8 @@ self: super: with self; {
 
   aiointercept = callPackage ../development/python-modules/aiointercept { };
 
+  aioipp = callPackage ../development/python-modules/aioipp { };
+
   aioitertools = callPackage ../development/python-modules/aioitertools { };
 
   aiojellyfin = callPackage ../development/python-modules/aiojellyfin { };
