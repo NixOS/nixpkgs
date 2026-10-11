@@ -28701,6 +28701,11 @@
     githubId = 553443;
     name = "Remy Goldschmidt";
   };
+  taktojakuba = {
+    name = "Jakub";
+    github = "taktojakuba";
+    githubId = 112001303;
+  };
   taku0 = {
     email = "mxxouy6x3m_github@tatapa.org";
     github = "taku0";
