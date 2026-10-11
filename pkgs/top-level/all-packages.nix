@@ -1324,6 +1324,8 @@ with pkgs;
 
   foxdot = with python3Packages; toPythonApplication foxdot;
 
+  flatbuffers_23 = callPackage ../by-name/fl/flatbuffers/23.nix { };
+
   fluffychat-web = fluffychat.override { targetFlutterPlatform = "web"; };
 
   gams = callPackage ../tools/misc/gams (config.gams or { });
