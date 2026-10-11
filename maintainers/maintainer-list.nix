@@ -7300,6 +7300,11 @@
     githubId = 4490283;
     name = "diadatp";
   };
+  dialga-cmd = {
+    github = "dialga-cmd";
+    githubId = 218205956;
+    name = "dialga-cmd";
+  };
   diamond-deluxe = {
     email = "carbon_lattice@proton.me";
     github = "diamond-deluxe";
