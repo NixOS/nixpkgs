@@ -196,7 +196,7 @@ in
 
   copycat = mkTmuxPlugin {
     pluginName = "copycat";
-    version = "unstable-2020-01-09";
+    version = "3.0.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-copycat";
