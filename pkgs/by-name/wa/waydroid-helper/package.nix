@@ -19,7 +19,7 @@
   fakeroot,
   libadwaita,
   libxml2,
-  systemd,
+  systemdLibs,
   unzip,
   vte-gtk4,
   nix-update-script,
@@ -83,7 +83,7 @@ python3Packages.buildPythonApplication {
     dbus
     libadwaita
     libxml2
-    systemd
+    systemdLibs
     vte-gtk4
   ];
 

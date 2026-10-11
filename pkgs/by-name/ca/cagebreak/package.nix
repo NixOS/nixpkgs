@@ -17,7 +17,7 @@
   pixman,
   pkg-config,
   scdoc,
-  systemd,
+  systemdLibs,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-wm
     pango
     pixman
-    systemd
+    systemdLibs
     wayland
     wayland-protocols
     wlroots_0_19

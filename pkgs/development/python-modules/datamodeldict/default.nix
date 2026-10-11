@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datamodeldict";
-  version = "0.9.10";
+  version = "0.9.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "DataModelDict";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4tyf3zlzxbtHkvADP+Kmw3/XMugAGi4FNO0qM16m8DU=";
+    hash = "sha256-/wvA/CS3DKuD7kBmzaIvhElkpdEPjRA3UiJUvzCSths=";
   };
 
   postPatch = ''

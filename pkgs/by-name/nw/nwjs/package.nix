@@ -46,7 +46,7 @@
   nss,
   pango,
   sqlite,
-  systemd,
+  systemdLibs,
   udev,
 
   # update script
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R * $out/share/nwjs
     find $out/share/nwjs
 
-    ln -s ${lib.getLib systemd}/lib/libudev.so $out/share/nwjs/libudev.so.0
+    ln -s ${lib.getLib systemdLibs}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
     mkdir -p $out/bin
     ln -s $out/share/nwjs/nw $out/bin

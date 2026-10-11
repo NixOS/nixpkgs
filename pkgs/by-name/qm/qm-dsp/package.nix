@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++ library of functions for DSP and Music Informatics purposes";
-    homepage = "https://code.soundsoftware.ac.uk/projects/qm-dsp";
+    homepage = "https://github.com/c4dm/qm-dsp";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;

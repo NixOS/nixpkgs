@@ -38,7 +38,7 @@
   libxkbcommon,
   libgbm,
   vulkan-loader,
-  systemd,
+  systemdLibs,
   libGL,
   krb5,
   fontconfig,
@@ -99,7 +99,7 @@ let
     nss
     pango
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libx11
     libxscrnsaver
     libxcomposite

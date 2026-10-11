@@ -2,13 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  dee,
   gtk3,
   intltool,
-  libdbusmenu-gtk3,
-  libunity,
   pkg-config,
-  rsync,
   wrapGAppsHook3,
 }:
 
@@ -28,11 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    dee
     gtk3
-    libdbusmenu-gtk3
-    libunity
-    rsync
   ];
 
   meta = {

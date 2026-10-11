@@ -19,6 +19,7 @@
   libnotify,
   openssl,
   pciutils,
+  pulseaudio,
   wl-clipboard,
   wtype,
   which,
@@ -160,6 +161,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         (lib.makeBinPath (
           [
             libnotify
+            pulseaudio # pactl for media ducking
             which
           ]
           ++ lib.optionals vulkanSupport [
