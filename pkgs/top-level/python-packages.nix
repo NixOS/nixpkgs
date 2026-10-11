@@ -11878,6 +11878,8 @@ self: super: with self; {
 
   nanobind = callPackage ../development/python-modules/nanobind { };
 
+  nanobind-backend = callPackage ../development/python-modules/nanobind-backend { };
+
   nanobind_3 = callPackage ../development/python-modules/nanobind_3 { };
 
   nanoeigenpy = callPackage ../development/python-modules/nanoeigenpy { };
