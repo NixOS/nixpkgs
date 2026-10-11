@@ -202,10 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = {
-      command = [ ./update-hashes.sh ];
-      supportedFeatures = [ "commit" ];
-    };
     tests.nixos = nixosTests.tdarr;
   }
   // passthru;
