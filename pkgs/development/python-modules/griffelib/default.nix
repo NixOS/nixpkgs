@@ -22,14 +22,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "griffelib";
-  version = "2.3.0";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "griffe";
     tag = finalAttrs.version;
-    hash = "sha256-Rcp2bppNk8QUe/WbhmsCNfYmKjJrJINlU/zhuAom758=";
+    hash = "sha256-3W+vZbAMfUafeAqhldF06fb+vEcTN+ss3o0ix3PNww4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/griffelib";
