@@ -16,10 +16,12 @@ let
     src = fetchFromGitHub {
       owner = "basicswap";
       repo = "secp256k1";
-      rev = "fd8b63ccf8bcb48358a42c456f34e2488a55a688";
-      hash = "sha256-/bmKZRBBjirI4YqRKfzoxdAt6UVoWHmrNQQHX7l+eH8=";
+      rev = "98679b41ab5f03bcc87a0849405de7dc34be04c4";
+      hash = "sha256-09sL1lNMCDM3OfV9oBLubfgUdomhNJ5/pNjeEMViJsI=";
     };
     configureFlags = old.configureFlags ++ [
+      "--enable-build-tests=no"
+      "--enable-build-exhaustive-tests=no"
       "--enable-experimental"
       "--enable-module-ed25519"
       "--enable-module-generator"
@@ -32,12 +34,12 @@ let
       secp256k1 = secp256k1_basicswap;
     }).overrideAttrs
       {
-        version = "21.0.3";
+        version = "21.0.4";
         src = fetchFromGitHub {
           owner = "basicswap";
           repo = "coincurve";
-          tag = "basicswap_v0.3";
-          hash = "sha256-lSEdwV7jhYa5ERHEVDuLA84JGGVsbvVoOqSRXU5AbCE=";
+          tag = "basicswap_v0.4";
+          hash = "sha256-Aq/Ni6clM/OtbDK0ALwOTOZBit2bWNzVLfzkBku+X1A=";
         };
         patches = [ ];
       };
@@ -54,14 +56,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "basicswap";
-  version = "0.17.9";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JJ+Q49PaxMMiQ9ORa5enK/lprIJkW9vyw+dRnaZHf6s=";
+    hash = "sha256-2k9Jcsgb1GyN8Sx8lDS9Ql15kVjIXx7LuEeLbzNcQKc=";
   };
 
   postPatch = ''
