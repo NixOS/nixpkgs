@@ -53,5 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cosmic-viewer";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
   };
 })

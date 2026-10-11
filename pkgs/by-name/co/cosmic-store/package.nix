@@ -79,6 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "App Store for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
     platforms = lib.platforms.linux;
   };
 })

@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pop-os/cosmic-sound-theme";
     license = lib.licenses.cc-by-sa-40;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
     platforms = lib.platforms.linux;
   };
 })
