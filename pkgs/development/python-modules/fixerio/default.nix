@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "fixerio";
-  version = "1.0.0-alpha";
+  version = "0.1.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "amatellanes";
     repo = "fixerio";
     rev = "v${version}";
-    sha256 = "009h1mys175xdyznn5bl980vly40544s4ph1zcgqwg2i2ic93gvb";
+    sha256 = "sha256-systEQFieqRgKQGxTEXlwFtJd12bnCOanHfpw2TROs0=";
   };
 
   propagatedBuildInputs = [ requests ];
