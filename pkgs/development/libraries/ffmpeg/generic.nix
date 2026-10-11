@@ -1003,12 +1003,17 @@ stdenv.mkDerivation (
 
     buildFlags = [ "all" ] ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
 
-    env = lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = toString [
-        "-Wno-error=incompatible-pointer-types"
-        "-Wno-error=int-conversion"
-      ];
-    };
+    env =
+      lib.optionalAttrs stdenv.cc.isGNU {
+        NIX_CFLAGS_COMPILE = toString [
+          "-Wno-error=incompatible-pointer-types"
+          "-Wno-error=int-conversion"
+        ];
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+        # MPEG-TS demuxing exceeds musl's default 128 KiB thread stack.
+        NIX_LDFLAGS = "-z stack-size=262144";
+      };
 
     # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
     doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;
