@@ -1,0 +1,94 @@
+diff --git a/cmake/eve.cmake b/cmake/eve.cmake
+index ae24bdd..39e88c6 100644
+--- a/cmake/eve.cmake
++++ b/cmake/eve.cmake
+@@ -12,13 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-Include(FetchContent)
+-FetchContent_Declare(
+-    eve
+-    GIT_REPOSITORY https://github.com/jfalcou/eve
+-    GIT_TAG v2023.02.15
+-)
+ 
++find_package(eve REQUIRED)
+ set(EVE_BUILD_TEST OFF)
+-FetchContent_MakeAvailable(eve)
+ target_link_libraries(${SVS_LIB} INTERFACE eve::eve)
+diff --git a/cmake/fmt.cmake b/cmake/fmt.cmake
+index c6b6ba1..62688b4 100644
+--- a/cmake/fmt.cmake
++++ b/cmake/fmt.cmake
+@@ -13,10 +13,5 @@
+ 
+ set(CMAKE_POSITION_INDEPENDENT_CODE YES)
+ set(FMT_INSTALL YES)
+-FetchContent_Declare(
+-    fmt
+-    GIT_REPOSITORY https://github.com/fmtlib/fmt
+-    GIT_TAG 12.1.0
+-)
+-FetchContent_MakeAvailable(fmt)
++find_package(fmt REQUIRED)
+ target_link_libraries(${SVS_LIB} INTERFACE fmt::fmt)
+diff --git a/cmake/robin-map.cmake b/cmake/robin-map.cmake
+index 974f118..9fd880b 100644
+--- a/cmake/robin-map.cmake
++++ b/cmake/robin-map.cmake
+@@ -12,14 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-Include(FetchContent)
+-FetchContent_Declare(
+-    RobinMap
+-    GIT_REPOSITORY https://github.com/Tessil/robin-map
+-    GIT_TAG v1.4.0
+-)
+-
++find_package(tsl-robin-map REQUIRED)
+ set(TSL_ROBIN_MAP_ENABLE_INSTALL ON CACHE BOOL "Enable robin-map install logic" FORCE)
+ 
+-FetchContent_MakeAvailable(RobinMap)
+ target_link_libraries(${SVS_LIB} INTERFACE tsl::robin_map)
+diff --git a/cmake/spdlog.cmake b/cmake/spdlog.cmake
+index 263fcc8..030fd5b 100644
+--- a/cmake/spdlog.cmake
++++ b/cmake/spdlog.cmake
+@@ -29,12 +29,7 @@ set(CMAKE_CXX_STANDARD ${SVS_CXX_STANDARD})
+ set(SPDLOG_INSTALL YES CACHE BOOL "" FORCE)
+ set(SPDLOG_FMT_EXTERNAL YES CACHE BOOL "" FORCE)
+ 
+-FetchContent_Declare(
+-    spdlog
+-    GIT_REPOSITORY https://github.com/gabime/spdlog
+-    GIT_TAG v1.15.3
+-)
+-FetchContent_MakeAvailable(spdlog)
++find_package(spdlog REQUIRED)
+ target_link_libraries(${SVS_LIB} INTERFACE spdlog::spdlog)
+ 
+ set(CMAKE_CXX_STANDARD ${PRESET_CMAKE_CXX_STANDARD})
+diff --git a/cmake/toml.cmake b/cmake/toml.cmake
+index 626e221..aa42f21 100644
+--- a/cmake/toml.cmake
++++ b/cmake/toml.cmake
+@@ -21,15 +21,8 @@ include(FetchContent)
+ # This hopefully allows us to modify our CMake infrastructure after an
+ # initial configuration without the patch being applied again and failing.
+ set(TOML_PATCH "${CMAKE_CURRENT_LIST_DIR}/patches/tomlplusplus_v330.patch")
+-FetchContent_Declare(
+-    tomlplusplus
+-    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+-    GIT_TAG        v3.3.0
+-    PATCH_COMMAND
+-    ${CMAKE_CURRENT_LIST_DIR}/patches/apply_patch_toml.sh ${TOML_PATCH}
+-)
+ 
++find_package(tomlplusplus REQUIRED)
+ # Set the override variable to enable toml++ installation.
+ set(TOMLPLUSPLUS_INSTALL ON)
+-FetchContent_MakeAvailable(tomlplusplus)
+ target_link_libraries(${SVS_LIB} INTERFACE tomlplusplus::tomlplusplus)
