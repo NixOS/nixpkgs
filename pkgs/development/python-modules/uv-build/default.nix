@@ -5,6 +5,8 @@
   buildPythonPackage,
   rustPlatform,
   callPackage,
+  pkg-config,
+  pkgsHostTarget,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -22,6 +24,11 @@ buildPythonPackage (finalAttrs: {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    pkgsHostTarget.zstd
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
