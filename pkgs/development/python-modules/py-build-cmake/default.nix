@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-build-cmake";
-  version = "0.5.1";
+  version = "0.6.0a4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tttapa";
     repo = "py-build-cmake";
     tag = finalAttrs.version;
-    hash = "sha256-Dhrj0REtZJKXA6dufgXyuGReMyhd5sU9ExKCZbZavrE=";
+    hash = "sha256-ze4BwK/6SHuRZqBBOsiXCv+cZgUpUjpffp2i1Mmbqqw=";
   };
 
   postPatch = ''
