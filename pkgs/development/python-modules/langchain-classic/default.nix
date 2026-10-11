@@ -44,7 +44,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-classic";
   version = "1.0.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
