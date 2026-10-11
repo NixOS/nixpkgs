@@ -9,6 +9,12 @@
 }:
 
 let
+  # Jane Street 0.17 targets the js_of_ocaml 5.x API (virtual_dom and
+  # bonsai v0.17.0 declare js_of_ocaml >= 5.1.1 & < 5.7.0); 5.9.1 is the
+  # last release before 6.x. It declares ocaml < 5.4 and its ppx breaks
+  # with ppxlib >= 0.36 (three-argument Pexp_function), so this part of
+  # the scope only builds on package sets whose ppxlib is older, i.e.
+  # OCaml <= 5.2 (see the virtual_dom and async_js broken markers).
   js_of_ocaml-compiler = self.js_of_ocaml-compiler.override { version = "5.9.1"; };
   js_of_ocaml = self.js_of_ocaml.override { inherit js_of_ocaml-compiler; };
   gen_js_api = self.gen_js_api.override {
@@ -376,7 +382,10 @@ with self;
       async_extra
       async_rpc_websocket
       babel
-      cohttp-async
+      # bonsai.opam requires cohttp-async < 6.0.0; also avoids mixing both
+      # cohttp lines in one closure (async_rpc_websocket pulls in
+      # cohttp_async_websocket, which uses cohttp-async_5_3)
+      cohttp-async_5_3
       core_bench
       fuzzy_match
       incr_dom
@@ -1184,6 +1193,8 @@ with self;
   ppx_css = janePackage {
     pname = "ppx_css";
     hash = "sha256-mzLMVtNTy9NrVaNgsRa+oQynxXnh2qlHJCfr3FLFJ2I=";
+    # sedlex ≥ 3.5 rejects non-ASCII character-literal intervals
+    patches = [ ./ppx_css_sedlex_3_5.patch ];
     meta.description = "PPX that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [
       async
@@ -1196,7 +1207,6 @@ with self;
       sedlex
       virtual_dom
     ];
-    meta.broken = true; # Not compatible with sedlex > 3.4
   };
 
   ppx_csv_conv = janePackage {
