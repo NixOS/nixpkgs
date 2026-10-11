@@ -118,6 +118,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
     )
   '';
 
+  postInstall = ''
+    # Move man pages and desktop files to the correct place
+    mv $out/${python3Packages.python.sitePackages}/man $out/man
+    mv $out/${python3Packages.python.sitePackages}/share $out/share
+  '';
+
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
   };
