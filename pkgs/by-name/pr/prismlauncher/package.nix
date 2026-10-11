@@ -27,6 +27,7 @@
   prismlauncher-unwrapped,
   stdenv,
   symlinkJoin,
+  fontconfig,
   udev,
   vulkan-loader,
   wayland,
@@ -109,6 +110,9 @@ symlinkJoin {
         wayland
         libdecor
         libxkbcommon
+
+        # Some mods would crash if not present
+        fontconfig
 
         udev # oshi
 
