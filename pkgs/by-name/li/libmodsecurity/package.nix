@@ -11,14 +11,14 @@
   libmaxminddb,
   libxml2,
   lmdb,
-  lua5_2_compat,
+  lua5_5,
   pcre2,
   ssdeep,
   yajl,
   nixosTests,
 }:
 let
-  lua = lua5_2_compat;
+  lua = lua5_5;
 in
 
 stdenv.mkDerivation (finalAttrs: {
