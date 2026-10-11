@@ -28,6 +28,8 @@ let
             _3_7_0-x86_64-linux = "sha256-ncTXhpLnz7shUSvmBkmLknrRpxPAexho/wMEp1Sja3I=";
             _3_5_0-aarch64-linux = "sha256-m2Op1KowdxErQ9nFa1+0TIshwjBSdXdrnlsyO4mULos=";
             _3_5_0-x86_64-linux = "sha256-GH+3MhYXTwWD7WmEHzc8wecYcaOcCXsy93UWiEjh6Eo=";
+            _3_6_0-aarch64-linux = "sha256-MHt26xqayuRRfM6iJTAiC6Pe7ez7FuWiY1ZLaqEwwp8=";
+            _3_6_0-x86_64-linux = "sha256-zQkSbJ6FGR8rT1fmwLzSMsdIH1b7HWWbeTdMytIb/vk=";
           }
           .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version) + "-" + stdenv.hostPlatform.system}
             or (throw ''
@@ -54,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     preFixupHooks+=(sqliteFixupHook)
   '';
 
-  postPatch =
+  postPatch = ''
+    rm -f hook/build.dart
+  ''
+  + (
     if lib.versionAtLeast version "3.5.0" then
       ''
         substituteInPlace lib/src/hook/compile/description.dart \
@@ -67,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
       lib.optionalString (lib.versionAtLeast version "3.2.0") ''
         substituteInPlace lib/src/hook/description.dart \
           --replace-fail "return PrecompiledFromGithubAssets(LibraryType.sqlite3);" "return LookupSystem('sqlite3');"
-      '';
+      ''
+  );
 
   installPhase = ''
     runHook preInstall
