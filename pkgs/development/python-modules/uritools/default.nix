@@ -7,7 +7,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uritools";
   version = "6.1.3";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkem";
     repo = "uritools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pZzsdl/q5Piul1Q2cLPkeRmZbW12ACKuI2OYbnG+rMc=";
   };
 
@@ -31,8 +31,8 @@ buildPythonPackage rec {
   meta = {
     description = "RFC 3986 compliant, Unicode-aware, scheme-agnostic replacement for urlparse";
     homepage = "https://github.com/tkem/uritools/";
-    changelog = "https://github.com/tkem/uritools/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/tkem/uritools/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rvolosatovs ];
   };
-}
+})
