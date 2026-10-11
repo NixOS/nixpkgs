@@ -8,17 +8,17 @@
   uv-dynamic-versioning,
 
   # dependencies
-  anyio,
-  logfire-api,
-  pydantic,
-  typing-inspection,
+  genai-prices,
+  httpx,
+  json-repair,
+  pydantic-ai-slim,
 }:
 
 # Update together with pydantic-ai-slim
 # nixpkgs-update: no auto update
 
 buildPythonPackage (finalAttrs: {
-  pname = "pydantic-graph";
+  pname = "pydantic-ai-harness";
   version = "2.54.0";
   pyproject = true;
 
@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-fkE2rww4xoJgeGCF/MP4ijZySTcU411NriIVa7w6NXs=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/pydantic_graph";
+  sourceRoot = "${finalAttrs.src.name}/src/pydantic_ai_harness";
 
   build-system = [
     hatchling
@@ -39,23 +39,24 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    anyio
-    logfire-api
-    pydantic
-    typing-inspection
+    genai-prices
+    httpx
+    json-repair
+    pydantic-ai-slim
   ];
 
-  pythonImportsCheck = [
-    "pydantic_graph"
+  # remove when #567678 is merged
+  pythonRelaxDeps = [
+    "json-repair"
   ];
 
-  doCheck = false; # no tests
+  pythonImportsCheck = [ "pydantic_ai_harness" ];
 
   meta = {
-    changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
-    description = "GenAI Agent Framework, the Pydantic way";
+    description = "The official capability library and harness for Pydantic AI";
     homepage = "https://github.com/pydantic/pydantic-ai";
+    changelog = "https://github.com/pydantic/pydantic-ai/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ hexa ];
+    maintainers = with lib.maintainers; [ gaelj ];
   };
 })
