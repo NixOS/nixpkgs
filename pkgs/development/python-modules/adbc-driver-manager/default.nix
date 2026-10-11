@@ -15,7 +15,6 @@ buildPythonPackage (finalAttrs: {
   pname = "adbc-driver-manager";
   version = "1.12.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "adbc_driver_manager";
