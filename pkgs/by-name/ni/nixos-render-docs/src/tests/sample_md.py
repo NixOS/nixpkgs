@@ -65,4 +65,8 @@ deflist
 
 more stuff in same deflist
 : foo
+
+| this | is    |
+|------|-------|
+| a    | table |
 """
