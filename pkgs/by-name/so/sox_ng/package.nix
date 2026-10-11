@@ -48,13 +48,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sox";
-  version = "14.7.1.2";
+  version = "14.8.0.1";
 
   src = fetchFromCodeberg {
     owner = "sox_ng";
     repo = "sox_ng";
     tag = "sox_ng-${finalAttrs.version}";
-    hash = "sha256-yIebX0a/fbpr/NMgiK+gjDPNValf3gITpxDSJAc6eAw=";
+    hash = "sha256-dHyDbMYvydC7ayG0n+RXK59w1vMTsi6y9jsYHBppC9k=";
   };
 
   strictDeps = true;
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional enableAMR opencore-amr
     ++ lib.optional enableFLAC flac
     ++ lib.optional enableFFTW fftw
-    ++ lib.optional enableLadspa ladspa-sdk
+    ++ lib.optional (enableLadspa && stdenv.hostPlatform.isLinux) ladspa-sdk
     ++ lib.optional enableLame lame
     ++ lib.optional enableLibao libao
     ++ lib.optional enableLibid3tag libid3tag
