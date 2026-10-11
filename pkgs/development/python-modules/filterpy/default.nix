@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "filterpy";
-  version = "1.4.5-unstable-2022-08-23";
+  version = "1.4.5";
   pyproject = true;
 
   disabled = !isPy3k;
