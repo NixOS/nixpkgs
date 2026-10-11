@@ -4,22 +4,17 @@
   fetchurl,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marathi-cursive";
   version = "2.1";
 
   src = fetchurl {
-    url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${version}/MarathiCursive-${version}.tar.xz";
+    url = "https://github.com/MihailJP/MarathiCursive/releases/download/v${finalAttrs.version}/MarathiCursive-${finalAttrs.version}.tar.xz";
     hash = "sha256-C/z8ALV9bht0SaYqACO5ulSVCk1d6wBwvpVC4ZLgtek=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/marathi-cursive *.otf *.ttf
-    install -m444 -Dt $out/share/doc/${pname}-${version} README *.txt
-
-    runHook postInstall
+  postInstall = ''
+    install -m444 -Dt $out/share/doc/${finalAttrs.pname}-${finalAttrs.version} README *.txt
   '';
 
   meta = {
@@ -29,4 +24,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.mplus;
     platforms = lib.platforms.all;
   };
-}
+})
