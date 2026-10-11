@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitea,
+  nixosTests,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -51,6 +52,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) fourget;
+  };
 
   meta = {
     description = "Privacy-respecting proxy search engine";
