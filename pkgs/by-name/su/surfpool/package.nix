@@ -18,18 +18,18 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "surfpool-cli";
-  version = "1.5.0";
+  version = "1.6.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "solana-foundation";
     repo = "surfpool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DszqgmMW+hQ3wKhh3ZMioX1sAca333WzRIikKJFuyXg=";
+    hash = "sha256-rKY19f4Dh6PecbpK2DEVtcNuncA0G3q4SqBdkzmQ5Fs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-eOgPoHQVQVm+aSLsxAokjMyAyZBia/j/Bxux69WfklI=";
+  cargoHash = "sha256-rpIKpX+Z9eBiO3HdiyEHOXpTmwxrqtck3Kd48xYlUXE=";
 
   env = {
     RUSTFLAGS = "-Aunused";
