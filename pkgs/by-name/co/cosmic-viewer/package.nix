@@ -12,6 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-viewer";
   version = "1.10.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-viewer";
