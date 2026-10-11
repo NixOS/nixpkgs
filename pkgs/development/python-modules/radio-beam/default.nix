@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "radio-beam";
-  version = "0.3.9";
+  version = "0.3.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "radio_beam"; # Tarball was uploaded with an underscore in this version
-    hash = "sha256-m1/qe8ybJlQyE3hGM7MugWMMnAhVB3t6v0tGz42E5kQ=";
+    hash = "sha256-0iFPtfQEAW6K3N+R/DovVWvXeepPnzi4crC+cStHJ2o=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
