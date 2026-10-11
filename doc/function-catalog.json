@@ -35,9 +35,13 @@
     {
       "id": "derivations",
       "description": "miscellaneous derivation-specific functions"
+    },
+    {
+      "id": "types"
     }
   ],
   "sources": [
+    { "path": "lib.types", "file": "lib/types.nix", "groups": ["types"] },
     { "path": "lib.trivial", "file": "lib/trivial.nix", "groups": ["trivial"] },
     {
       "path": "lib.fixedPoints",

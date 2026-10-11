@@ -1,5 +1,13 @@
-# Definitions related to run-time type checking.  Used in particular
-# to type-check NixOS configurations.
+/**
+  Definitions related to run-time type checking.
+  Used to type-check NixOS configurations.
+
+  :::{.note}
+  Documentation for `lib.types` is currently being moved here.
+
+  See [all types](https://nixos.org/manual/nixos/stable/#sec-option-types)
+  :::
+*/
 { lib }:
 
 let
