@@ -65,7 +65,6 @@
   libglvnd,
   libnotify,
   libxcomposite,
-  libunity,
   libva,
   libxcursor,
   libxext,
@@ -118,7 +117,6 @@ let
         libnotify
         libx11
         libxcomposite
-        libunity
         libuuid
         libva
         libxcursor
