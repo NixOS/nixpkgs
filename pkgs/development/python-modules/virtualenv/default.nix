@@ -74,7 +74,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tool to create isolated Python environments";
     mainProgram = "virtualenv";
-    homepage = "http://www.virtualenv.org";
+    homepage = "https://virtualenv.pypa.io/en/latest/";
     changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];

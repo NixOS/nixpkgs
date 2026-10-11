@@ -1,6 +1,3 @@
-let
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
-in
 {
   callPackage,
   javaPackages,
@@ -8,6 +5,7 @@ in
   ...
 }:
 let
+  versions = builtins.fromJSON (builtins.readFile ./versions.json);
   latestVersion = lib.last (builtins.sort lib.versionOlder (builtins.attrNames versions));
   escapeVersion = builtins.replaceStrings [ "." ] [ "_" ];
   getJavaVersion = v: (builtins.getAttr "openjdk${toString v}" javaPackages.compiler).headless;
