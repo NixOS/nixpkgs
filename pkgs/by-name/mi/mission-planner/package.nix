@@ -3,29 +3,19 @@
   stdenv,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   unzip,
   mono,
   gitUpdater,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "mission-planner";
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    comment = "MissionPlanner GCS & Ardupilot configuration tool";
-    desktopName = "MissionPlanner";
-    genericName = "Ground Control Station";
-  };
-in
-stdenv.mkDerivation rec {
-  inherit pname;
   version = "1.3.83";
 
   src = fetchurl {
-    url = "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
+    url = "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${finalAttrs.version}.zip";
     sha256 = "sha256-/zaU96kDjK91ZUUEndeu9049DY/jWG6HqogQRXBN1vk=";
   };
 
@@ -33,6 +23,18 @@ stdenv.mkDerivation rec {
     makeWrapper
     mono
     unzip
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      icon = finalAttrs.pname;
+      comment = "MissionPlanner GCS & Ardupilot configuration tool";
+      desktopName = "MissionPlanner";
+      genericName = "Ground Control Station";
+    })
   ];
 
   # zip has no outer directory, so make one and unpack there
@@ -64,7 +66,6 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/{bin,opt/mission-planner}
     install -m 444 -D mpdesktop150.png $out/share/icons/mission-planner.png
-    cp -r ${desktopItem}/share/applications $out/share/
     mv * $out/opt/mission-planner
     makeWrapper ${mono}/bin/mono $out/bin/mission-planner \
       --add-flags $out/opt/mission-planner/MissionPlanner.exe
@@ -85,4 +86,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wucke13 ];
     platforms = lib.platforms.all;
   };
-}
+})

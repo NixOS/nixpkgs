@@ -3,6 +3,7 @@
   fetchurl,
   lib,
   makeDesktopItem,
+  copyDesktopItems,
   makeShellWrapper,
   autoPatchelfHook,
   libgcc,
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     makeShellWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -96,24 +98,24 @@ stdenv.mkDerivation rec {
 
     ln -s $out/opt/resources/assets/icons/1024x1024.png $out/share/icons/osmium.png
 
-    ln -s "$desktopItem/share/applications" $out/share
-
     runHook postInstall
   '';
 
-  desktopItem = makeDesktopItem {
-    name = "osmium";
-    exec = "osmium";
-    icon = "osmium";
-    desktopName = "Osmium";
-    genericName = "A globally distributed community messaging and voice/video platform.";
-    categories = [
-      "Network"
-      "InstantMessaging"
-    ];
-    mimeTypes = [ "x-scheme-handler/osmium" ];
-    startupWMClass = "Osmium";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "osmium";
+      exec = "osmium";
+      icon = "osmium";
+      desktopName = "Osmium";
+      genericName = "A globally distributed community messaging and voice/video platform.";
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
+      mimeTypes = [ "x-scheme-handler/osmium" ];
+      startupWMClass = "Osmium";
+    })
+  ];
 
   passthru = {
     updateScript = ./update.sh;

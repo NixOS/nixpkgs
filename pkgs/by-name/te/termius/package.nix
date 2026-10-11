@@ -4,6 +4,7 @@
   alsa-lib,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   stdenv,
   lib,
@@ -31,15 +32,17 @@ stdenv.mkDerivation rec {
     hash = "sha512-9XYNlynJqbBL1Vvf3nvNQiHUyCDV9zVcQamOkwjw5i5d/ILlkoirchfG2x7gnpbA0bkd76S6hgIyRMdbEbLD7Q==";
   };
 
-  desktopItem = makeDesktopItem {
-    categories = [ "Network" ];
-    comment = "The SSH client that works on Desktop and Mobile";
-    desktopName = "Termius";
-    exec = "termius-app";
-    genericName = "Cross-platform SSH client";
-    icon = "termius-app";
-    name = "termius-app";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      categories = [ "Network" ];
+      comment = "The SSH client that works on Desktop and Mobile";
+      desktopName = "Termius";
+      exec = "termius-app";
+      genericName = "Cross-platform SSH client";
+      icon = "termius-app";
+      name = "termius-app";
+    })
+  ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -52,6 +55,7 @@ stdenv.mkDerivation rec {
     squashfs-tools
     makeWrapper
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -73,8 +77,6 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/termius
     cp -r ./ $out/opt/termius
 
-    mkdir -p $out/share/applications
-    cp "${desktopItem}/share/applications/"* "$out/share/applications"
     install -Dm644 meta/gui/icon.png $out/share/icons/termius-app.png
 
     runHook postInstall
