@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "somweb";
-  version = "1.2.1";
+  version = "1.3.3b7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "taarskog";
     repo = "pySOMweb";
     rev = "v${version}";
-    hash = "sha256-cLKEKDCMK7lCtbmj2KbhgJUCZpPnPI5tZvO5L+ey8qI=";
+    hash = "sha256-jdqVf+XauGSr6cTVcQUZt/zNa9LWi71FlmuvFic9790=";
   };
 
   build-system = [ setuptools ];
