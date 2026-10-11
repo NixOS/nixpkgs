@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.26.2";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     tag = "lib/v${version}";
-    hash = "sha256-XqsxtFwQnAJHYMaR+uO8wzlxA+GtqfllJUCIt0l1i9o=";
+    hash = "sha256-78B6NVzaVlW7ItqaFs8UMrS+Jv/91S4N1pt1U8Zf078=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-ENWGL8N7shXYI31GDLu7SHqPhZUuIWWnYk/ziRoG9Gg=";
+    hash = "sha256-/Nk/edgOJIiL/5cwWF7sRUpzfXz/2aj31qXQd2JbSk8=";
   };
 
   buildAndTestSubdir = "crates/lib";
