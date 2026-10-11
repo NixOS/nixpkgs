@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.5.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "ida-settings";
