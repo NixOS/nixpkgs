@@ -22,10 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-uy8DIP0szpo1gCm88GR32QOHZqtIQSpuxK63UNMFsn8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0'
-  '';
+  pythonRelaxDeps = [ "asttokens" ];
 
   build-system = [ uv-build ];
 
