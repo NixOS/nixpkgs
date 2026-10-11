@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
   version = "3.2";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "ConfigUpdater";
