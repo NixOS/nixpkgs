@@ -2,6 +2,7 @@
   hello,
   patchelf,
   pcmanfm,
+  releaseTools,
   runCommand,
   stdenv,
   vmTools,
@@ -62,6 +63,27 @@ in
         mkdir $out
       ''
   );
+
+  # The .deb has to hold what `make install` installed, and nothing it merely ran.
+  buildHelloDebInDebian = releaseTools.debBuild {
+    name = "hello";
+    inherit (hello) src;
+    diskImage = diskImages.debian13x86_64;
+    diskImageFormat = "qcow2";
+    meta.description = "GNU hello, built as a .deb";
+    debName = "gnu-hello";
+    debMaintainer = "Nixpkgs <nixpkgs@example.org>";
+    postInstall = ''
+      test "$(dpkg-deb --field $out/debs/*.deb Package)" = gnu-hello
+      test "$(dpkg-deb --field $out/debs/*.deb Maintainer)" = "Nixpkgs <nixpkgs@example.org>"
+      dpkg-deb --contents $out/debs/*.deb > contents
+      grep -q '\./usr/bin/hello$' contents
+      if grep '\./nix/' contents; then
+        echo "the package picked up store paths" >&2
+        exit 1
+      fi
+    '';
+  };
 
   # RPM-based distros
   testFedora42Image = makeImageTestScript diskImages.fedora42x86_64;
