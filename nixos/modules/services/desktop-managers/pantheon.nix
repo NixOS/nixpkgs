@@ -161,6 +161,9 @@ in
       services.dbus.packages = with pkgs.pantheon; [
         switchboard-plug-power
         elementary-default-settings # accountsservice extensions
+        (switchboard-with-plugs.override {
+          plugs = cfg.extraSwitchboardPlugs;
+        })
       ];
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
@@ -359,6 +362,15 @@ in
         )
       ) config.environment.pantheon.excludePackages;
 
+      # Packages from above that ship D-Bus service files.  The D-Bus daemons
+      # do not look at the system profile, so they have to be registered
+      # explicitly.
+      services.dbus.packages = utils.removePackagesByName [
+        pkgs.pantheon.epiphany
+        pkgs.file-roller
+        pkgs.gnome-font-viewer
+      ] config.environment.pantheon.excludePackages;
+
       # needed by screenshot
       fonts.packages = [
         pkgs.pantheon.elementary-redacted-script
@@ -370,6 +382,8 @@ in
         contractor
         file-roller-contract
       ];
+
+      services.dbus.packages = [ pkgs.pantheon.contractor ];
 
       environment.pathsToLink = [
         "/share/contractor"

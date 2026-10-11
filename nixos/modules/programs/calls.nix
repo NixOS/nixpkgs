@@ -25,6 +25,7 @@ in
     ];
 
     services.dbus.packages = [
+      pkgs.calls
       pkgs.callaudiod
     ];
   };

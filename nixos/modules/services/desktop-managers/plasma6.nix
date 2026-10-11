@@ -226,6 +226,41 @@ in
       ++ lib.optional config.services.xserver.wacom.enable wacomtablet
       ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
+    # Packages from above that ship D-Bus service files.  The D-Bus daemons do
+    # not look at the system profile, so they have to be registered explicitly.
+    services.dbus.packages =
+      with kdePackages;
+      [
+        kactivitymanagerd
+        kauth
+        kded
+        kde-inotify-survey
+        kdeplasma-addons
+        drkonqi
+        kinfocenter
+        kio
+        kio-admin
+        kio-extras
+        kio-fuse
+        knighttime
+        kscreen
+        ksystemstats
+        libkscreen
+        libksysguard
+        kwallet
+        kwalletmanager
+        plasma-workspace
+      ]
+      ++ utils.removePackagesByName [
+        dolphin
+        elisa
+        khelpcenter
+        ktexteditor
+        spectacle
+      ] config.environment.plasma6.excludePackages
+      ++ lib.optional config.powerManagement.enable powerdevil
+      ++ lib.optional config.services.samba.enable kdenetwork-filesharing;
+
     environment.pathsToLink = [
       # FIXME: modules should link subdirs of `/share` rather than relying on this
       "/share"

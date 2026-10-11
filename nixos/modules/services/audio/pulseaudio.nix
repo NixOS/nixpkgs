@@ -250,6 +250,8 @@ in
 
         environment.systemPackages = [ overriddenPackage ];
 
+        services.dbus.packages = [ overriddenPackage ];
+
         environment.etc = {
           "alsa/conf.d/99-pulseaudio.conf".text = alsaConf;
 

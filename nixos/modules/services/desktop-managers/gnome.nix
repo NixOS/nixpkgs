@@ -464,6 +464,15 @@ in
           ];
         in
         mandatoryPackages ++ removeExcluded optionalPackages;
+
+      # D-Bus service files are only picked up from registered packages.
+      services.dbus.packages = [
+        pkgs.gnome-shell
+      ]
+      ++ removeExcluded [
+        pkgs.gnome-control-center
+        pkgs.gnome-tour
+      ];
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
@@ -494,6 +503,31 @@ in
         pkgs.simple-scan
         pkgs.snapshot
         pkgs.yelp
+      ];
+
+      # D-Bus service files are only picked up from registered packages.
+      services.dbus.packages = removeExcluded [
+        pkgs.baobab
+        pkgs.decibels
+        pkgs.epiphany
+        pkgs.gnome-calculator
+        pkgs.gnome-calendar
+        pkgs.gnome-characters
+        pkgs.gnome-clocks
+        pkgs.gnome-console
+        pkgs.gnome-contacts
+        pkgs.gnome-connections
+        pkgs.gnome-font-viewer
+        pkgs.gnome-logs
+        pkgs.gnome-maps
+        pkgs.gnome-music
+        pkgs.gnome-system-monitor
+        pkgs.gnome-text-editor
+        pkgs.gnome-weather
+        pkgs.loupe
+        pkgs.nautilus
+        pkgs.showtime
+        pkgs.snapshot
       ];
 
       # Enable default program modules
@@ -549,6 +583,26 @@ in
         pkgs.swell-foop
         pkgs.tali
       ];
+
+      # D-Bus service files are only picked up from registered packages.
+      services.dbus.packages = removeExcluded [
+        pkgs.five-or-more
+        pkgs.four-in-a-row
+        pkgs.gnome-2048
+        pkgs.gnome-chess
+        pkgs.gnome-klotski
+        pkgs.gnome-mahjongg
+        pkgs.gnome-mines
+        pkgs.gnome-nibbles
+        pkgs.gnome-robots
+        pkgs.gnome-sudoku
+        pkgs.gnome-taquin
+        pkgs.gnome-tetravex
+        pkgs.iagno
+        pkgs.lightsoff
+        pkgs.quadrapassel
+        pkgs.swell-foop
+      ];
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
@@ -564,6 +618,15 @@ in
         # https://github.com/NixOS/nixpkgs/issues/60908
         # pkgs.gnome-boxes
         pkgs.sysprof
+      ];
+
+      # `pkgs.sysprof` is registered by `services/misc/sysprof.nix` whenever
+      # `services.sysprof.enable` is set, which it is right below.
+      services.dbus.packages = removeExcluded [
+        pkgs.d-spy
+        pkgs.dconf-editor
+        pkgs.devhelp
+        pkgs.gnome-builder
       ];
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
