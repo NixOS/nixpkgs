@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblo";
-  version = "0.35";
+  version = "0.36";
 
   src = fetchurl {
     url = "mirror://sourceforge/liblo/liblo/${finalAttrs.version}/liblo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-msxPflok8zRy6azX5Am3vWgQpG8KHzz+7Ooi1g86rhM=";
+    hash = "sha256-wI0Ugy6Nz48GhAQFgkpPlhGgyz2u0BmJRjJsdAlByLY=";
   };
 
   nativeBuildInputs = [
