@@ -73,7 +73,6 @@ let
       sqlalchemy
       tokenizers
       torch
-      torchaudio
       torchsde
       torchvision
       tqdm
@@ -88,7 +87,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "comfyui";
-  version = "0.37.0";
+  version = "0.39.2";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -97,7 +96,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "Comfy-Org";
     repo = "ComfyUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hfpoQsu8xzKHCy2Qqw2BMGsorwizJEuhKXWjUUJzTHs=";
+    hash = "sha256-ge4lnSKznoOFCUZIRB/R/RiGcKPM2/XZPhuqSEJ4W98=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
