@@ -7,7 +7,10 @@
   auditable-bootstrap,
 }:
 lib.extendMkDerivation {
-  constructDrv = rustPlatform.buildRustPackage.override { cargo-auditable = auditable-bootstrap; };
+  constructDrv = rustPlatform.buildRustPackage.override (prev: {
+    cargo-auditable = auditable-bootstrap;
+    cargoBuildHook = prev.cargoBuildHook.bootstrap;
+  });
 
   extendDrvArgs =
     finalAttrs:
