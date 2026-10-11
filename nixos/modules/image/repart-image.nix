@@ -41,6 +41,7 @@
   sectorSize,
   mkfsEnv ? { },
   createEmpty ? true,
+  useUnshare ? true,
 }:
 
 let
@@ -130,6 +131,8 @@ let
         "zeekstd --no-progress --frame-size 2M --compression-level ${toString compression.level}";
     }
     ."${compression.algorithm}";
+
+  fakerootCommand = if useUnshare then "unshare --map-root-user fakeroot" else "fakeroot";
 in
 stdenvNoCC.mkDerivation (
   finalAttrs:
@@ -151,8 +154,10 @@ stdenvNoCC.mkDerivation (
 
     nativeBuildInputs = [
       systemd
-      util-linux
       fakeroot
+    ]
+    ++ lib.optionals useUnshare [
+      util-linux
     ]
     ++ lib.optionals (compression.enable) [
       compressionPkg
@@ -204,7 +209,7 @@ stdenvNoCC.mkDerivation (
       runHook preBuild
 
       echo "Building image with systemd-repart..."
-      unshare --map-root-user fakeroot systemd-repart \
+      ${fakerootCommand} systemd-repart \
         ''${systemdRepartFlags[@]} \
         ${baseName}.raw \
         | tee repart-output.json
