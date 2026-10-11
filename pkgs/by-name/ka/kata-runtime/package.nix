@@ -1,18 +1,21 @@
 # Derived from https://github.com/colemickens/nixpkgs-kubernetes
 {
-  buildGoModule,
   callPackage,
+  cmake,
   fetchFromGitHub,
   lib,
   nix-update-script,
+  openssl,
+  pkg-config,
+  protobuf,
   qemu_kvm,
+  rustPlatform,
   stdenv,
   virtiofsd,
-  yq-go,
 }:
 
 let
-  version = "3.32.0";
+  version = "4.2.0";
 
   kata-images-all = callPackage ./kata-images.nix { inherit version; };
 
@@ -28,42 +31,67 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
 in
-buildGoModule rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kata-runtime";
   inherit version;
-
-  # https://github.com/NixOS/nixpkgs/issues/25959
-  hardeningDisable = [ "fortify" ];
 
   src = fetchFromGitHub {
     owner = "kata-containers";
     repo = "kata-containers";
     rev = version;
-    hash = "sha256-dnbzjYDKeAp0wFQcO5VK71vkf7ubVK5Lh9R9jjuro28=";
+    hash = "sha256-afEm5lcXD4qC2Ezhx7wyZXD5pj4uLPoSnJrvFJL+7qU=";
   };
 
-  sourceRoot = "${src.name}/src/runtime";
+  # runtime-rs is a member of the Cargo workspace at the repository root,
+  # the Makefile is driven from its own subdirectory.
+  cargoHash = "sha256-wbMkdNZwvqjey33//iLUG7cVeO+iEexsDVmIW4gvV0o=";
 
-  vendorHash = "sha256-HAWobIcqwHL7jgawpOk1ZNx6vG8NApF5Nn60eZ9Fc1c=";
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    protobuf
+  ];
+
+  buildInputs = [ openssl ];
+
+  # Use the system OpenSSL rather than building the vendored openssl-src
+  env.OPENSSL_NO_VENDOR = 1;
+
+  # cmake is only needed by the zlib-ng build of libz-sys
+  dontUseCmakeConfigure = true;
+
+  # Cargo is invoked by the upstream Makefile
+  dontCargoBuild = true;
+  dontCargoInstall = true;
+  dontCargoCheck = true;
+
+  # https://github.com/NixOS/nixpkgs/issues/25959
+  hardeningDisable = [ "fortify" ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "DEFAULT_HYPERVISOR=qemu"
-    "HYPERVISORS=qemu"
+    "BINDIR=${placeholder "out"}/bin"
+    "HYPERVISOR=qemu"
+    "LIBC=gnu"
     "QEMUPATH=${qemu_kvm}/bin/${qemuSystemBinary}"
+    # OpenVMM is Azure specific, and the openvmm package is too outdated (0-unstable-2025-03-13) to be used here
+    "USE_OPENVMM=false"
   ];
+
+  preBuild = ''
+    cd src/runtime-rs
+  '';
 
   buildPhase = ''
     runHook preBuild
-    mkdir -p $TMPDIR/gopath/bin
-    ln -s ${yq-go}/bin/yq $TMPDIR/gopath/bin/yq
-    HOME=$TMPDIR GOPATH=$TMPDIR/gopath make ${toString makeFlags}
+    make ${toString finalAttrs.makeFlags}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    HOME=$TMPDIR GOPATH=$TMPDIR/gopath make ${toString makeFlags} install
+    make ${toString finalAttrs.makeFlags} install
+
     ln -s $out/bin/containerd-shim-kata-v2 $out/bin/containerd-shim-kata-qemu-v2
     ln -s $out/bin/containerd-shim-kata-v2 $out/bin/containerd-shim-kata-clh-v2
 
@@ -72,7 +100,7 @@ buildGoModule rec {
       -e "s!$out/share/kata-containers!${kata-images}/share/kata-containers!" \
       -e "s!^virtio_fs_daemon.*!virtio_fs_daemon=\"${virtiofsd}/bin/virtiofsd\"!" \
       -e "s!^valid_virtio_fs_daemon_paths.*!valid_virtio_fs_daemon_paths=[\"${qemu_kvm}/libexec/virtiofsd\"]!" \
-      "$out/share/defaults/kata-containers/"*.toml
+      "$out/share/defaults/kata-containers/runtime-rs/"configuration-*.toml
 
     runHook postInstall
   '';
@@ -100,4 +128,4 @@ buildGoModule rec {
       "aarch64-linux"
     ];
   };
-}
+})
