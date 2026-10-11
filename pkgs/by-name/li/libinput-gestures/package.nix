@@ -1,24 +1,24 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  makeWrapper,
-  libinput,
-  wmctrl,
-  python3,
-  coreutils,
-  xdotool ? null,
-  extraUtilsPath ? lib.optional (xdotool != null) xdotool,
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, libinput
+, wmctrl
+, python3
+, coreutils
+, xdotool ? null
+, extraUtilsPath ? lib.optional (xdotool != null) xdotool
+,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libinput-gestures";
-  version = "2.79";
+  version = "2.81";
 
   src = fetchFromGitHub {
     owner = "bulletmark";
     repo = "libinput-gestures";
     tag = finalAttrs.version;
-    hash = "sha256-oMteEOx2bwPBLgxB9uSE7zuR5vmuqX6J1Tk5nxefWa4=";
+    hash = "sha256-/phnm74P0LsqkI4WxRPyIx1u27HfUPvq5qNbbfMMGzA=";
   };
   patches = [
     ./0001-hardcode-name.patch
@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
+  dontBuild = true;
 
   postPatch = ''
     substituteInPlace libinput-gestures-setup --replace-fail /usr/ /
