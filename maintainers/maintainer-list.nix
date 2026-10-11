@@ -24188,6 +24188,11 @@
     githubId = 52847440;
     name = "Ryan Burns";
   };
+  r-xyz = {
+    github = "r-xyz";
+    githubId = 100710244;
+    name = "r-xyz";
+  };
   r0chd = {
     github = "r0chd";
     githubId = 100892812;
