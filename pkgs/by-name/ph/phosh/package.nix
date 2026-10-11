@@ -64,15 +64,15 @@ let
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libgnome-volume-control";
-    rev = "d2442f455844e5292cb4a74ffc66ecc8d7595a9f";
-    hash = "sha256-10n441b7m/mvQRdrmEsxGxqjKUWzjGvnzJy256NZN5s=";
+    rev = "0a4eda0cdc2deb352bebc70ec697c42af46094e4";
+    hash = "sha256-4s9S6m/rcroR38FSnLeWKZhnym4KROfibgRCjpGMKpY=";
     # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
     forceFetchGit = true;
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "phosh";
-  version = "0.54.0";
+  version = "0.58.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Phosh";
     repo = "phosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gByZRyUe17JY5imgtRdubJl1VH1JxlzmDQkHOtEIvj8=";
+    hash = "sha256-9qM3JAcmnsJ+53jmNQw0ryDjvpaTQwt55WqMYLmvfmU=";
     # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
     forceFetchGit = true;
   };
