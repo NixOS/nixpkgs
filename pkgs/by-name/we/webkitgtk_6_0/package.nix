@@ -56,6 +56,9 @@
   freetype,
   openssl,
   openxr-loader,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-volk,
   sqlite,
   gst_all_1,
   bubblewrap,
@@ -197,6 +200,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     librice
     # For ENABLE_WEBXR
     openxr-loader
+    # For USE_VULKAN
+    vulkan-volk
+    # https://bugs.webkit.org/show_bug.cgi?id=327027
+    vulkan-headers
   ]
   ++ lib.optionals withLibsecret [
     libsecret
@@ -249,6 +256,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
+  ''
+  # volk (USE_VULKAN) dlopen()s libvulkan.so.
+  + lib.optionalString (enableExperimental && clangStdenv.hostPlatform.isLinux) ''
+    patchelf --add-rpath ${lib.getLib vulkan-loader}/lib $out/lib/libwebkit*gtk-${abiVersion}.so
   '';
 
   requiredSystemFeatures = [ "big-parallel" ];
