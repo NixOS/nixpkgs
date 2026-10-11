@@ -16736,6 +16736,10 @@ self: super: with self; {
 
   pytest-retry = callPackage ../development/python-modules/pytest-retry { };
 
+  pytest-revealtype-injector = callPackage ../development/python-modules/pytest-revealtype-injector {
+    inherit (pkgs) basedpyright pyrefly;
+  };
+
   pytest-reverse = callPackage ../development/python-modules/pytest-reverse { };
 
   pytest-ruff = callPackage ../development/python-modules/pytest-ruff { };
@@ -21805,7 +21809,9 @@ self: super: with self; {
 
   types-jsonschema = callPackage ../development/python-modules/types-jsonschema { };
 
-  types-lxml = callPackage ../development/python-modules/types-lxml { };
+  types-lxml = callPackage ../development/python-modules/types-lxml {
+    inherit (pkgs) basedpyright pyrefly;
+  };
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
 
