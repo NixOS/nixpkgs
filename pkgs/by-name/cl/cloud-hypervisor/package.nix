@@ -39,6 +39,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.OPENSSL_NO_VENDOR = true;
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
+  # test_infra has no riscv64 support
+  # TODO: remove with v54 https://github.com/cloud-hypervisor/cloud-hypervisor/pull/8877/changes/3708887b57eeea120b94d4dbf2a8e99541bfb233
+  cargoBuildFlags = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "--workspace"
+    "--exclude"
+    "test_infra"
+    "--exclude"
+    "performance-metrics"
+  ];
+
   cargoTestFlags = [
     "--workspace"
     "--exclude"
@@ -47,6 +57,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    "--exclude"
+    "test_infra"
+    "--exclude"
+    "performance-metrics"
+    "--exclude"
+    "cloud-hypervisor"
+  ]
+  ++ [
     "--"
     # io_uring syscalls are blocked by the Lix sandbox
     "--skip=formats"
