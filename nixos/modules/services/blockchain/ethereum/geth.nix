@@ -126,8 +126,10 @@ let
         network = lib.mkOption {
           type = lib.types.nullOr (
             lib.types.enum [
-              "holesky"
+              "dev"
+              "hoodi"
               "sepolia"
+              "mainnet"
             ]
           );
           default = null;
@@ -215,7 +217,6 @@ in
                     port
                     maxpeers
                     ;
-                  nousb = true;
                   ipcdisable = true;
                   datadir = dataDir;
                   ${cfg.network} = true;
