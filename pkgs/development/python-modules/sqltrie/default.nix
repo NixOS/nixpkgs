@@ -3,41 +3,50 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  pygtrie,
   orjson,
+  pygtrie,
+  pyinstaller,
+  pytestCheckHook,
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqltrie";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "sqltrie";
-    tag = version;
-    hash = "sha256-D1vYXyh/i0wy7sttW117vsMbUlQJ/mq7rlxLMJWoki0=";
+    tag = finalAttrs.version;
+    hash = "sha256-sBu82SDOBqlQLONYgQ4eCw6MVFsLIs5/LfevP4cUDTo=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     orjson
     pygtrie
   ];
 
-  # nox is not available at the moment
-  doCheck = false;
+  nativeCheckInputs = [
+    pyinstaller
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sqltrie" ];
+
+  disabledTestPaths = [
+    # Ignoring benchmark tests
+    "tests/benchmarks/test_sqltrie.py"
+  ];
 
   meta = {
     description = "DVC's data management subsystem";
     homepage = "https://github.com/iterative/sqltrie";
-    changelog = "https://github.com/iterative/sqltrie/releases/tag/${version}";
+    changelog = "https://github.com/iterative/sqltrie/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
