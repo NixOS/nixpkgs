@@ -15,6 +15,7 @@
   makeBinaryWrapper,
   which,
   nix-update-script,
+  withMatrix ? true,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
@@ -33,6 +34,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoBuildFlags = [
     "--package"
     "zeroclawlabs"
+  ]
+  ++ lib.optionals withMatrix [
+    "--features"
+    "zeroclawlabs/channel-matrix"
+  ]
+  ++ [
     "--package"
     "zerocode"
   ];
