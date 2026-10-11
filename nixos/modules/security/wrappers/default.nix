@@ -12,35 +12,6 @@ let
 
   parentWrapperDir = dirOf wrapperDir;
 
-  # This is security-sensitive code, and glibc vulns happen from time to time.
-  # musl is security-focused and generally more minimal, so it's a better choice here.
-  # The dynamic linker is still a fairly complex piece of code, and the wrappers are
-  # quite small, so linking it statically is more appropriate.
-  securityWrapper =
-    sourceProg:
-    pkgs.pkgsStatic.callPackage ./wrapper.nix {
-      inherit sourceProg;
-
-      # glibc definitions of insecure environment variables
-      #
-      # We extract the single header file we need into its own derivation,
-      # so that we don't have to pull full glibc sources to build wrappers.
-      #
-      # They're taken from pkgs.glibc so that we don't have to keep as close
-      # an eye on glibc changes. Not every relevant variable is in this header,
-      # so we maintain a slightly stricter list in wrapper.c itself as well.
-      unsecvars = lib.overrideDerivation (pkgs.srcOnly pkgs.glibc) (
-        { name, ... }:
-        {
-          name = "${name}-unsecvars";
-          installPhase = ''
-            mkdir $out
-            cp sysdeps/generic/unsecvars.h $out
-          '';
-        }
-      );
-    };
-
   fileModeType =
     let
       # taken from the chmod(1) man page
@@ -51,7 +22,7 @@ let
     lib.types.strMatching mode // { description = "file mode string"; };
 
   wrapperType = lib.types.submodule (
-    { name, config, ... }:
+    { name, ... }:
     {
       options.enable = lib.mkOption {
         type = lib.types.bool;
@@ -131,19 +102,23 @@ let
       ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      : > "$metaWrapperDir/${program}"
 
       # Prevent races
-      chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}:${group} "$wrapperDir/${program}"
+      chmod 0000 "$metaWrapperDir/${program}"
+      chown ${owner}:${group} "$metaWrapperDir/${program}"
+
+      wrapperBinary="$(realpath "${source}")"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.redirect -v "''${wrapperBinary#'${builtins.storeDir}'}" "$metaWrapperDir/${program}"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.metacopy -v "" "$metaWrapperDir/${program}"
 
       # Set desired capabilities on the file plus cap_setpcap so
       # the wrapper program can elevate the capabilities set on
       # its file into the Ambient set.
-      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$wrapperDir/${program}"
+      ${pkgs.libcap.out}/bin/setcap "cap_setpcap,${capabilities}" "$metaWrapperDir/${program}"
 
       # Set the executable bit
-      chmod ${permissions} "$wrapperDir/${program}"
+      chmod ${permissions} "$metaWrapperDir/${program}"
     '';
 
   ###### Activation script for the setuid wrappers
@@ -159,13 +134,17 @@ let
       ...
     }:
     ''
-      cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+      : > "$metaWrapperDir/${program}"
+
+      wrapperBinary="$(realpath "${source}")"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.redirect -v "''${wrapperBinary#'${builtins.storeDir}'}" "$metaWrapperDir/${program}"
+      ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.metacopy -v "" "$metaWrapperDir/${program}"
 
       # Prevent races
-      chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}:${group} "$wrapperDir/${program}"
+      chmod 0000 "$metaWrapperDir/${program}"
+      chown ${owner}:${group} "$metaWrapperDir/${program}"
 
-      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
+      chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$metaWrapperDir/${program}"
     '';
 
   mkWrappedPrograms = map (
@@ -292,18 +271,6 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
-    security.apparmor.includes = lib.mapAttrs' (
-      wrapName: wrap:
-      lib.nameValuePair "nixos/security.wrappers/${wrapName}" ''
-        include "${
-          pkgs.apparmorRulesFromClosure { name = "security.wrappers.${wrapName}"; } [
-            (securityWrapper wrap.source)
-          ]
-        }"
-        mrpx ${wrap.source},
-      ''
-    ) wrappers;
-
     systemd.mounts = [
       {
         where = parentWrapperDir;
@@ -333,30 +300,48 @@ in
       ];
       serviceConfig.RestrictSUIDSGID = false;
       serviceConfig.Type = "oneshot";
-      script = ''
-        chmod 755 "${parentWrapperDir}"
+      script =
+        let
+          mount = lib.getExe' pkgs.util-linux.mount "mount";
+          umount = lib.getExe' pkgs.util-linux.mount "umount";
+        in
+        ''
+          chmod 755 "${parentWrapperDir}"
 
-        # We want to place the tmpdirs for the wrappers to the parent dir.
-        wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
-        chmod a+rx "$wrapperDir"
+          # We want to place the tmpdirs for the wrappers to the parent dir.
+          metaWrapperDirParent=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers-meta.XXXXXXXXXX)
+          ${mount} -t tmpfs tmpfs "$metaWrapperDirParent" # tmpfs can later be unmounted
+          metaWrapperDir="$metaWrapperDirParent/bin"
+          mkdir -p "$metaWrapperDir"
+          ${lib.getExe' pkgs.attr "setfattr"} -n trusted.overlay.opaque -v "y" "$metaWrapperDir"
 
-        ${lib.concatStringsSep "\n" mkWrappedPrograms}
+          ${lib.concatStringsSep "\n" mkWrappedPrograms}
 
-        if [ -L ${wrapperDir} ]; then
-          # Atomically replace the symlink
-          # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
-          old=$(readlink -f ${wrapperDir})
-          if [ -e "${wrapperDir}-tmp" ]; then
-            rm --force --recursive "${wrapperDir}-tmp"
+          wrapperDir=$(mktemp --directory --tmpdir="${parentWrapperDir}" wrappers.XXXXXXXXXX)
+          # linux 6.1 does not support meta-only layers, and opaque on the root is ignored.
+          # solution: set opaque on /bin, and mount just the subdir
+          # FIXME: This is kind of a hack which needs to be cleaned up and replaced
+          # with a proper meta-only layer after linux 6.1 goes EOL in december 2027
+          ${mount} -t overlay overlay -o "lowerdir=$metaWrapperDirParent:${builtins.storeDir},ro,metacopy=on,redirect_dir=on,X-mount.subdir=/bin" "$wrapperDir"
+          ${umount} "$metaWrapperDirParent" # overlayfs will keep the FD alive until it gets unmounted on switch/shutdown
+          rm --dir "$metaWrapperDirParent"
+
+          if [ -L ${wrapperDir} ]; then
+            # Atomically replace the symlink
+            # See https://axialcorps.com/2013/07/03/atomically-replacing-files-and-directories/
+            old=$(readlink -f ${wrapperDir})
+            if [ -e "${wrapperDir}-tmp" ]; then
+              rm --force --recursive "${wrapperDir}-tmp"
+            fi
+            ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
+            mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
+            ${umount} --quiet "$old" # quiet in case we are switching from system that had classic wrappers as C programs
+            rm --force --recursive "$old"
+          else
+            # For initial setup
+            ln --symbolic "$wrapperDir" "${wrapperDir}"
           fi
-          ln --symbolic --force --no-dereference "$wrapperDir" "${wrapperDir}-tmp"
-          mv --no-target-directory "${wrapperDir}-tmp" "${wrapperDir}"
-          rm --force --recursive "$old"
-        else
-          # For initial setup
-          ln --symbolic "$wrapperDir" "${wrapperDir}"
-        fi
-      '';
+        '';
     };
 
     ###### wrappers consistency checks
