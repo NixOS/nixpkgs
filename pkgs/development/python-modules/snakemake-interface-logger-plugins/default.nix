@@ -21,7 +21,6 @@ buildPythonPackage (finalAttrs: {
   pname = "snakemake-interface-logger-plugins";
   version = "2.1.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
