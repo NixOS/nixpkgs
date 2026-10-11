@@ -10,7 +10,7 @@
   uv-build,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devtools";
   version = "0.13.0";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-devtools";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uy8DIP0szpo1gCm88GR32QOHZqtIQSpuxK63UNMFsn8=";
   };
 
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python's missing debug print command and other development tools";
     homepage = "https://python-devtools.helpmanual.io/";
-    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/${src.tag}";
+    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jdahm ];
   };
-}
+})
