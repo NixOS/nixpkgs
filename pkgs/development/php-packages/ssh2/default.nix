@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   libssh2,
 }:
 
@@ -14,6 +15,7 @@ buildPecl rec {
   configureFlags = [ "--with-ssh2=${libssh2.dev}" ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://pecl.php.net/package-info.php?package=ssh2&version=${version}";
     description = "PHP bindings for the libssh2 library";
     license = lib.licenses.php301;

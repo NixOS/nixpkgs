@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   fetchFromGitHub,
 }:
 
@@ -20,6 +21,7 @@ buildPecl rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP extension for Pinba";
     longDescription = ''
       Pinba is a MySQL storage engine that acts as a realtime monitoring and
