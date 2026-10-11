@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "asn1tools";
-  version = "0.167.0";
+  version = "0.169.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eerimoq";
     repo = "asn1tools";
     tag = version;
-    hash = "sha256-86bdBYlAVJfd3EY8s0t6ZDRA/qZVWuHD4Jxa1n1Ke5E=";
+    hash = "sha256-zzAX56MXnAJwewpH4ZufmujgH/zWUpva75JgRxEk0wQ=";
   };
 
   build-system = [ setuptools ];
