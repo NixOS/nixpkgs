@@ -19,7 +19,6 @@ buildPythonPackage rec {
   pname = "s3torchconnectorclient";
   version = "1.5.0";
   format = "pyproject";
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "awslabs";
