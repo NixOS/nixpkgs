@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  kernels,
 
   # build-system
-  setuptools,
+  rustPlatform,
 
   # dependencies
   huggingface-hub,
@@ -14,30 +15,29 @@
   tomlkit,
 }:
 buildPythonPackage (finalAttrs: {
-  pname = "kernels";
-  version = "0.15.1";
+  pname = "kernels-data";
+  inherit (kernels) src version;
   pyproject = true;
   __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "huggingface";
-    repo = "kernels";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-NyFVWaJat5uwT8edzyIQuPfleVP+hg45an+rux6bIfo=";
+  # sourceRoot = "${finalAttrs.src.name}/kernels-data/bindings/python";
+  buildAndTestSubdir = "kernels-data/bindings/python";
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      # sourceRoot
+      ;
+    hash = "sha256-zcgxnQfEPEqBMoNe6yqFhGyfVhrgaao56Rwcm9J3Fi8=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/kernels";
-
   build-system = [
-    setuptools
+    rustPlatform.maturinBuildHook
   ];
 
   dependencies = [
-    huggingface-hub
-    kernels-data
-    packaging
-    pyyaml
-    tomlkit
   ];
 
   # Tests require pervasive internet access
