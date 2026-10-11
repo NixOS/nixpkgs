@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "av";
   version = "19.0.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
