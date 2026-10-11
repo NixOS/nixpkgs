@@ -3,36 +3,31 @@
   asttokens,
   buildPythonPackage,
   executing,
-  hatchling,
   fetchFromGitHub,
   pygments,
   pytest-mock,
   pytestCheckHook,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "devtools";
-  version = "0.12.2";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = "python-${pname}";
     tag = "v${version}";
-    hash = "sha256-1HFbNswdKa/9cQX0Gf6lLW1V5Kt/N4X6/5kQDdzp1Wo=";
+    hash = "sha256-uy8DIP0szpo1gCm88GR32QOHZqtIQSpuxK63UNMFsn8=";
   };
-
-  patches = [
-    # https://github.com/samuelcolvin/python-devtools/pull/166
-    ./fix-test-ast-expr.patch
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'asttokens>=2.0.0,<3.0.0' 'asttokens>=2.0.0'
   '';
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     asttokens
@@ -53,11 +48,6 @@ buildPythonPackage rec {
     # Sensitive to interpreter output
     "test_simple"
     "test_expr_render"
-  ];
-
-  disabledTestPaths = [
-    # pytester_pretty is not available in Nixpkgs
-    "tests/test_insert_assert.py"
   ];
 
   pythonImportsCheck = [ "devtools" ];
