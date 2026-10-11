@@ -30,6 +30,8 @@ let
       # symlink does not work here, due chroot
       cp ${cfg.package}/etc/dnsroots.global $out/servers/@;
     fi
+
+    ${cfg.postBuild}
   '';
 
 in
@@ -86,6 +88,21 @@ in
           Whether to treat root servers (for @) as caching
           servers, requesting addresses the same way a client does. This is
           needed if you want to use e.g. Google DNS as your upstream DNS.
+        '';
+      };
+
+      postBuild = lib.mkOption {
+        default = "";
+        type = lib.types.lines;
+        description = ''
+          Shell commands run after the dnscache root directory has been
+          assembled. They execute during the build of the root with the
+          directory available as `$out`, allowing extra files to be
+          created.
+
+          This is typically only useful if you've also set `package` to a
+          dnscache variant that supports additional configuration data of some
+          kind.
         '';
       };
 
