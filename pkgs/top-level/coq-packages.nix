@@ -70,6 +70,7 @@ let
       contribs = lib.recurseIntoAttrs (callPackage ../development/rocq-modules/contribs { });
 
       aac-tactics = callPackage ../development/rocq-modules/aac-tactics { };
+      actris = callPackage ../development/rocq-modules/actris { };
       addition-chains = callPackage ../development/rocq-modules/addition-chains { };
       async-test = callPackage ../development/rocq-modules/async-test { };
       atbr = callPackage ../development/rocq-modules/atbr { };

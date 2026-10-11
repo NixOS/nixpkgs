@@ -5024,6 +5024,13 @@
     githubId = 32384814;
     name = "Nikita Mitasov";
   };
+  chandradeepdey = {
+    email = "codesigning@chandradeepdey.com";
+    github = "chandradeepdey";
+    githubId = 21266577;
+    name = "Chandradeep Dey";
+    keys = [ { fingerprint = "DA8C CB12 605E BB2E C3BC  8AC6 FCA3 1140 D16C 4C37"; } ];
+  };
   changlinli = {
     email = "mail@changlinli.com";
     github = "changlinli";
