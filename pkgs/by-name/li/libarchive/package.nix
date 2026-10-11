@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
         #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
         "cpio/test/test_basic.c"
         "cpio/test/test_format_newc.c"
+        "cpio/test/test_option_c.c"
       ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
         # Locales are broken while building FreeBSD stdenv
