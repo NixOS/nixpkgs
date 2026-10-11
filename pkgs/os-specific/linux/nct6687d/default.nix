@@ -5,6 +5,7 @@
   kernel,
   kernelModuleMakeFlags,
   nix-update-script,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation {
@@ -21,6 +22,13 @@ stdenv.mkDerivation {
   setSourceRoot = ''
     export sourceRoot=$(pwd)/source
   '';
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Fred78290/nct6687d/commit/3aa3f1865b18f0dd739f6ed1abecc1e6f657074c.patch";
+      hash = "sha256-1JFwntv9TDiltm2XRVejPc+qH5JPUb2zy4kKIS7jzv8=";
+    })
+  ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
