@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "ipykernel";
   version = "7.3.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
