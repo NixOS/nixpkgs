@@ -112,7 +112,10 @@ buildNpmPackage (finalAttrs: {
     terminal = false;
   });
 
-  passthru.hasMullvadGUI = true;
+  passthru = {
+    inherit electron;
+    hasMullvadGUI = true;
+  };
 
   meta = {
     homepage = "https://mullvad.net/";
