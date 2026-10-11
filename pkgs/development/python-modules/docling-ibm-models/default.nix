@@ -32,7 +32,6 @@ buildPythonPackage (finalAttrs: {
   pname = "docling-ibm-models";
   version = "3.14.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
