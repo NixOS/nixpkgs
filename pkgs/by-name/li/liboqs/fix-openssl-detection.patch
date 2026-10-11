@@ -1,0 +1,35 @@
+From 6bdcf53de74ac2afba42deea63522939ca51f871 Mon Sep 17 00:00:00 2001
+From: Raphael Robatsch <raphael-git@tapesoftware.net>
+Date: Mon, 25 Dec 2023 16:15:29 +0000
+Subject: [PATCH] Do not forcibly set OPENSSL_ROOT_DIR.
+
+CMake can already find OpenSSL via pkg-config. Setting OPENSSL_ROOT_DIR
+forcibly to "/usr" breaks this.
+---
+ CMakeLists.txt | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0564bc8e..7b4c7f47 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -144,15 +144,6 @@ include(.CMake/compiler_opts.cmake)
+ include(.CMake/alg_support.cmake)
+ 
+ if(${OQS_USE_OPENSSL})
+-    if(NOT DEFINED OPENSSL_ROOT_DIR)
+-        if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+-            if(EXISTS "/usr/local/opt/openssl@1.1")
+-                set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl@1.1")
+-            elseif(EXISTS "/opt/homebrew/opt/openssl@1.1")
+-                set(OPENSSL_ROOT_DIR "/opt/homebrew/opt/openssl@1.1")
+-            endif()
+-        endif()
+-    endif()
+     find_package(OpenSSL 1.1.1 REQUIRED)
+ 
+     if(OQS_DLOPEN_OPENSSL)
+
+-- 
+2.42.0
+

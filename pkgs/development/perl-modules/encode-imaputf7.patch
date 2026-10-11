@@ -1,0 +1,13 @@
+diff --git a/lib/Encode/IMAPUTF7.pm b/lib/Encode/IMAPUTF7.pm
+index 07835b9..411c57f 100644
+--- a/lib/Encode/IMAPUTF7.pm
++++ b/lib/Encode/IMAPUTF7.pm
+@@ -9,6 +9,8 @@ __PACKAGE__->Define('IMAP-UTF-7', 'imap-utf-7');
+ our $VERSION = '1.05';
+ use MIME::Base64;
+ use Encode;
++use Exporter 'import';
++our @EXPORT_OK = qw(encode decode);
+ 
+ #
+ # Algorithms taken from Unicode::String by Gisle Aas

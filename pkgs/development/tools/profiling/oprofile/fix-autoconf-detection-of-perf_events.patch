@@ -1,0 +1,12 @@
+diff --git a/configure b/configure
+index cf36d5ea43..bb59613ef6 100755
+--- a/configure
++++ b/configure
+@@ -17215,6 +17215,7 @@
+ 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ #include <linux/perf_event.h>
++				#include <unistd.h>
+ 				#include <asm/unistd.h>
+ 				#include <sys/types.h>
+ 				#include <string.h>

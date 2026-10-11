@@ -1,0 +1,78 @@
+diff --git a/Makefile b/Makefile
+index e65b64c..52af5ed 100644
+--- a/Makefile
++++ b/Makefile
+@@ -41,8 +41,9 @@ all: ttmkfdir
+ .cpp.o:
+ 	libtool --mode=compile $(CXX) $(CXXFLAGS) -o $@ -c $^
+ 
++# ulgy hack for libtool to find .o files !!
+ ttmkfdir: ttmkfdir.o directory.o commandline.o ttf.o encoding.o parser.o builtin.o
+-	libtool --mode=link $(CXX) -o $@ $^ $(LDFLAGS)
++	libtool --mode=link $(CXX) -o $@ ./.libs/ttmkfdir.o ./.libs/directory.o ./.libs/commandline.o ./.libs/ttf.o ./.libs/encoding.o ./.libs/parser.o ./.libs/builtin.o $(LDFLAGS)
+ 
+ parser.cpp: encoding.l
+ 	    flex -i -8 -o$@ $<
+diff --git a/encoding.cpp b/encoding.cpp
+index 9035d35..b4e9733 100644
+--- a/encoding.cpp
++++ b/encoding.cpp
+@@ -2,7 +2,9 @@
+ #include <cstdio>
+ #include <cstdlib>
+ #include <cstring>
+-#include "freetype/freetype.h"
++#include <ft2build.h>
++#include FT_FREETYPE_H
++#include <freetype/ftsnames.h>
+ 
+ #include "ttmkfdir.h"
+ #include "encoding.h"
+diff --git a/encoding.h b/encoding.h
+index fc618bc..e01518f 100644
+--- a/encoding.h
++++ b/encoding.h
+@@ -6,7 +6,8 @@
+ #include <map>
+ #include <string>
+ 
+-#include "freetype/freetype.h"
++#include <ft2build.h>
++#include FT_FREETYPE_H
+ 
+ #include "util.h"
+ 
+diff --git a/ttf.cpp b/ttf.cpp
+index 1dda774..97b37f3 100644
+--- a/ttf.cpp
++++ b/ttf.cpp
+@@ -239,7 +239,7 @@ Face::FontFamilyName (void) const
+ 	for (i = 0; i < n; i++) {
+ 	    if ((fterror = FT_Get_Sfnt_Name (face, i, &NamePtr)) != FT_Err_Ok) {
+                     std::cout << "Warning: Can't SFNT name : " << FileName << "(" << fterror << ")" << std::endl;
+-	            return;
++	            return 0;
+             };
+             platform = NamePtr.platform_id;
+             encoding = NamePtr.encoding_id;
+diff --git a/ttf.h b/ttf.h
+index 4261ef8..c4a0f1f 100644
+--- a/ttf.h
++++ b/ttf.h
+@@ -3,13 +3,14 @@
+ #define TTF_H__
+ 
+ #include <string>
++#include <ft2build.h>
++#include FT_FREETYPE_H
+ #include "freetype/freetype.h"
+ #include "freetype/tttables.h"
+ #include "freetype/ftsnames.h"
+ #include "freetype/ttnameid.h"
+ #include "freetype/fterrors.h"
+-#include "freetype/ftmodule.h"
+-
++#include "freetype/ftmodapi.h"
+ #include "util.h"
+ #include "encoding.h"
+ 

@@ -1,0 +1,12 @@
+diff --git a/bin/dune b/bin/dune
+index 1c1e128..c3b53f8 100644
+--- a/bin/dune
++++ b/bin/dune
+@@ -7,6 +7,7 @@
+   kapla_fs
+   kapla_sqlite
+   cmdliner
++  rresult
+   miou
+   logs
+   logs.fmt

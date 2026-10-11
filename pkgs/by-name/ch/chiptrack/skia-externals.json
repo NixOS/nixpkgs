@@ -1,0 +1,7 @@
+{
+  "wuffs": {
+    "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
+    "rev": "e3f919ccfe3ef542cfc983a82146070258fb57f8",
+    "hash": "sha256-373d2F/STcgCHEq+PO+SCHrKVOo6uO1rqqwRN5eeBCw="
+  }
+}

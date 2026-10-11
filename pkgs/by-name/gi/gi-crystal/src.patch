@@ -1,0 +1,57 @@
+--- a/src/generator/main.cr	2023-07-14 18:30:47.687581729 +0300
++++ b/src/generator/main.cr	2023-07-17 07:55:24.177630085 +0300
+@@ -1,6 +1,8 @@
+ require "colorize"
+ require "log"
+ require "option_parser"
++require "file"
++require "file_utils"
+ 
+ require "./binding_config"
+ require "./error"
+@@ -43,7 +45,7 @@
+     end
+   end
+ 
+-  output_dir = Path.new(project_dir, "lib/gi-crystal/src/auto").normalize if output_dir.nil?
++  output_dir = Path.new(Dir.current, "lib/gi-crystal/src/auto").normalize if output_dir.nil?
+   extra_bindings = argv.map { |path| Path.new(path).expand.to_s }
+ 
+   {output_dir:     output_dir,
+@@ -74,11 +76,23 @@
+   end
+ end
+ 
+-private def find_bindings : Array(String)
+-  find_pattern = Path.new(project_dir, "**/binding.yml").normalize
++private def find_bindings_yml(path) : Array(String)
++  find_pattern = File.join(path, "**/binding.yml")
+   Dir[find_pattern]
+ end
+ 
++private def find_bindings : Array(String)
++  current_directory = Dir.current
++
++  bindings = find_bindings_yml(current_directory)
++  Dir.glob(File.join(current_directory, "**/*")).each do |path|
++      if File.symlink?(path)
++        bindings += find_bindings_yml(path)
++      end
++  end
++  bindings
++end
++
+ private def format_files(dir)
+   # We need to chdir into output dir since the formatter ignores everything under `lib` dir.
+   Dir.cd(dir) { `crystal tool format` }
+@@ -102,7 +116,9 @@
+   Log.info { "Generating bindings at #{options[:output_dir]}" }
+ 
+   Generator::DocRepo.disable! unless options[:doc_gen]
+-
++  
++  FileUtils.cp_r(project_dir, File.join(Dir.current, "lib/gi-crystal"))
++  
+   binding_yamls = find_bindings.concat(options[:extra_bindings])
+   binding_yamls.each do |file|
+     Log.info { "Using binding config at #{file}" }

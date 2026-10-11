@@ -1,0 +1,17 @@
+diff --git a/src/arcade/eng/common/native/init-compiler.sh b/src/arcade/eng/common/native/init-compiler.sh
+index 9a0e1f2b456..9922aff7ca5 100644
+--- a/src/arcade/eng/common/native/init-compiler.sh
++++ b/src/arcade/eng/common/native/init-compiler.sh
+@@ -78,6 +78,12 @@ $version
+ EOF
+ }
+ 
++declare -n CLR_CC_FOR_ARCH=CLR_CC_FOR_$build_arch CLR_CXX_FOR_ARCH=CLR_CXX_FOR_$build_arch
++if [[ -n "$CLR_CC_FOR_ARCH" ]]; then
++    CLR_CC="$CLR_CC_FOR_ARCH"
++    CLR_CXX="$CLR_CXX_FOR_ARCH"
++fi
++
+ if [ -z "$CLR_CC" ]; then
+ 
+     # Set default versions

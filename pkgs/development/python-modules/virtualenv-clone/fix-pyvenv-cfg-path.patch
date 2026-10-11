@@ -1,0 +1,71 @@
+From d5f6e1fead9bff210a1a1c4f92c80d48db807165 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Fri, 6 Mar 2026 16:24:20 +0100
+Subject: [PATCH] Amend the virtualenv path in pyvenv.cfg command
+
+https://github.com/pypa/virtualenv/commit/44b7bd6d103bdc19860b0ca05c238171c6283008
+
+Without this, test_clone_contents fails with virtualenv 20.38.0+:
+
+                    with open(file_in_clone, 'rb') as f:
+                        lines = f.read().decode('utf-8')
+    >                   assert venv_path not in lines,\
+                            'Found source path in cloned file %s' % file_in_clone
+    E                   AssertionError: Found source path in cloned file /tmp/tmp_lsp66c7/clone_venv/pyvenv.cfg
+    E                   assert '/tmp/tmp_lsp66c7/srs_venv' not in 'home = /usr/bin\nimplementation = CPython\nversion_info = 3.14.3.final.0\nversion = 3.14.3\nexecutable = /usr/bin/python3.14\ncommand = /.../virtualenv-clone/.tox/py314/bin/python3 -m virtualenv /tmp/tmp_lsp66c7/srs_venv\nvirtualenv = 21.1.0\ninclude-system-site-packages = false\nbase-prefix = /usr\nbase-exec-prefix = /usr\nbase-executable = /usr/bin/python3.14\n'
+    E
+    E                     '/tmp/tmp_lsp66c7/srs_venv' is contained here:
+    E                       home = /usr/bin
+    E                       implementation = CPython
+    E                       version_info = 3.14.3.final.0
+    E                       version = 3.14.3
+    E                       executable = /usr/bin/python3.14
+    E                       command = /.../virtualenv-clone/.tox/py314/bin/python3 -m virtualenv /tmp/tmp_lsp66c7/srs_venv
+    E                     ?                                                                                                   +++++++++++++++++++++++++
+    E                       virtualenv = 21.1.0
+    E                       include-system-site-packages = false
+    E                       base-prefix = /usr
+    E                       base-exec-prefix = /usr
+    E                       base-executable = /usr/bin/python3.14
+
+Fixes https://github.com/edwardgeorge/virtualenv-clone/issues/83
+---
+ clonevirtualenv.py | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/clonevirtualenv.py b/clonevirtualenv.py
+index 399b11ddaed91bf37a3df94d42ceba7a6e15a0b5..f78573c5bffe42c856c6e5e79141522fce60d525 100755
+--- a/clonevirtualenv.py
++++ b/clonevirtualenv.py
+@@ -77,6 +77,7 @@ def clone_virtualenv(src_dir, dst_dir):
+     version, sys_path = _virtualenv_sys(dst_dir)
+     logger.info('fixing scripts in bin...')
+     fixup_scripts(src_dir, dst_dir, version)
++    fixup_pyvenv_cfg(src_dir, dst_dir)
+ 
+     has_old = lambda s: any(i for i in s if _dirmatch(i, src_dir))
+ 
+@@ -132,6 +133,23 @@ def fixup_scripts(old_dir, new_dir, version, rewrite_env_python=False):
+                 rewrite_env_python=rewrite_env_python)
+ 
+ 
++def fixup_pyvenv_cfg(old_dir, new_dir):
++    filename = os.path.join(new_dir, 'pyvenv.cfg')
++    if not os.path.exists(filename):
++        return
++    with open(filename, 'rb') as f:
++        original = f.read()
++    replaced = original.replace(
++        old_dir.encode('utf-8'),
++        new_dir.encode('utf-8')
++    )
++    if original == replaced:
++        return
++    logger.info('fixing pyvenv.cfg...')
++    with open(filename, 'wb') as f:
++        f.write(replaced)
++
++
+ def fixup_script_(root, file_, old_dir, new_dir, version,
+                   rewrite_env_python=False):
+     old_shebang = '#!%s/bin/python' % os.path.normcase(os.path.abspath(old_dir))
