@@ -5,11 +5,10 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  rocm-smi,
+  amdsmi,
   rocm-core,
   pkg-config,
   clr,
-  mscclpp,
   perl,
   hipify,
   python3,
@@ -40,7 +39,7 @@ in
 # infiniband ib_peer_mem support isn't in the mainline kernel but is carried by some distros
 stdenv.mkDerivation (finalAttrs: {
   pname = "rccl${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1.0";
 
   outputs = [
     "out"
@@ -51,15 +50,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./rccl-test-missing-iomanip.diff
-    ./fix_hw_reg_hw_id_gt_gfx10.patch
   ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rccl";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-A1IQYIDWqu3JLiPQ70G52s1/0ZweQxFlgMUH81qJWmU=";
+    repo = "rocm-systems";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    sparseCheckout = [
+      "projects/rccl"
+      "shared"
+    ];
+    hash = "sha256-OkX15/P1wQ9E8QfAOklXvxmVw700kvIyi6CwdorqNhA=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rccl";
 
   requiredSystemFeatures = [ "big-parallel" ]; # Very resource intensive LTO
 
@@ -75,13 +78,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-smi
+    # CMakeLists.txt: find_package(amd_smi), gated on ROCM_VERSION >= 71100.
+    # SMI is lazily dlopen'd at runtime; headers needed for the fabric probe.
+    amdsmi
     fmt
     gtest
     roctracer
     rocprofiler
     rocprofiler-register
-    mscclpp
   ]
   ++ lib.optionals buildTests [
     chrpath
@@ -96,9 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DROCM_VERSION=${rocm-core.ROCM_LIBPATCH_VERSION}"
     "-DBUILD_BFD=OFF" # Can't get it to detect bfd.h
     "-DENABLE_MSCCL_KERNEL=ON"
-    # FIXME: this is still running a download because if(NOT mscclpp_nccl_FOUND) is commented out T_T
-    "-DENABLE_MSCCLPP=OFF"
-    #"-DMSCCLPP_ROOT=${mscclpp}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -121,10 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
   env.LDFLAGS = "${san}";
   postPatch = ''
     patchShebangs src tools
-    substituteInPlace CMakeLists.txt \
-      --replace-fail '${"\${HOST_OS_ID}"}' '"ubuntu"' \
-      --replace-fail 'target_include_directories(rccl PRIVATE ''${ROCM_SMI_INCLUDE_DIR})' \
-      'target_include_directories(rccl PRIVATE ''${ROCM_SMI_INCLUDE_DIRS})'
   '';
 
   postInstall =
