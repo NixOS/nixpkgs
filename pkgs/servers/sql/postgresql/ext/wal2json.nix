@@ -9,13 +9,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "wal2json";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "wal2json";
     tag = "wal2json_${lib.replaceString "." "_" finalAttrs.version}";
-    hash = "sha256-+QoACPCKiFfuT2lJfSUmgfzC5MXf75KpSoc2PzPxKyM=";
+    hash = "sha256-9MgrR5szMoFskiyG162AuqNw3k+YznN/sjIAScLFP/8=";
   };
 
   makeFlags = [ "USE_PGXS=1" ];
