@@ -1,24 +1,32 @@
 {
   lib,
+  callPackage,
   symlinkJoin,
-  tdarr-server,
-  tdarr-node,
 }:
 
+let
+  server = callPackage ./server.nix { };
+  node = callPackage ./node.nix { };
+in
 symlinkJoin {
-  name = "tdarr-${tdarr-server.version}";
+  name = "tdarr-${server.version}";
   pname = "tdarr";
-  inherit (tdarr-server) version;
+  inherit (server) version;
 
   paths = [
-    tdarr-server
-    tdarr-node
+    server
+    node
   ];
 
   passthru = {
-    server = tdarr-server;
-    node = tdarr-node;
-    tests = tdarr-server.tests or { } // tdarr-node.tests or { };
+    inherit server node;
+    tests = server.tests or { } // node.tests or { };
+
+    # Server and node share one version.
+    updateScript = {
+      command = [ ./update-hashes.sh ];
+      supportedFeatures = [ "commit" ];
+    };
   };
 
   meta = {
