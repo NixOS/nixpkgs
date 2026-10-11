@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   obs-studio,
 }:
@@ -16,6 +17,13 @@ stdenv.mkDerivation {
     rev = "64590490d87d93cc03baf0b35b90709468d9fb03";
     hash = "sha256-GOXNUwA2ASzDHMjsXSdUYQzqOtEBwmrr3oz5TXueKjY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/exeldro/obs-move-transition/commit/06311ee01d7f436a67b9ca562c41e3bba4f4770f.patch";
+      hash = "sha256-lIV8MBQ17Cue0tDI0vS3P+juj367bpEAFXeo47x7vws=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
