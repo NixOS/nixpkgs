@@ -8,6 +8,7 @@
   runCommand,
   makeWrapper,
   writeText,
+  linkFarm,
   ghcWithPackages,
   nixosTests,
 }:
@@ -45,6 +46,19 @@ let
     in
     writeText "defaults" (concatMapStrings (p: "${p.libraryName}\n") pkgs');
 
+  mkAgdaDir =
+    pkgs:
+    linkFarm "agda-dir" [
+      {
+        name = "libraries";
+        path = mkLibraryFile pkgs;
+      }
+      {
+        name = "defaults";
+        path = mkDefaultsFile pkgs;
+      }
+    ];
+
   withPackages' =
     {
       pkgs,
@@ -54,6 +68,7 @@ let
     let
       libraryFile = mkLibraryFile pkgs;
       defaultsFile = mkDefaultsFile pkgs;
+      agdaDir = mkAgdaDir pkgs;
       pname = "${Agda.meta.mainProgram}WithPackages";
       version = Agda.version;
     in
@@ -67,6 +82,7 @@ let
             withPackages
             libraryFile
             defaultsFile
+            agdaDir
             ;
           tests = {
             inherit (nixosTests) agda;
@@ -80,8 +96,7 @@ let
         mkdir -p $out/bin
         makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
           ${lib.optionalString (ghc != null && !isMikan) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
-          --add-flags "--library-file=${libraryFile}" \
-          ${lib.optionalString isMikan ''--add-flags "--defaults-file=${defaultsFile}"''} \
+          --set-default AGDA_DIR ${agdaDir} \
           --add-flags ${lib.escapeShellArg (lib.escapeShellArgs extraFlags)}
         if [ -e ${lib.getExe' Agda "agda-mode"} ]; then
           ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
