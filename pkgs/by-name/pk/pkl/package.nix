@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   gradle_9,
-  temurin-bin-21,
+  temurin-bin-25,
   kotlin,
   nix-update-script,
   replaceVars,
@@ -11,20 +11,20 @@
   installShellFiles,
 }:
 let
-  jdk = temurin-bin-21;
+  jdk = temurin-bin-25;
   gradle = gradle_9;
   gradleOverlay = gradle.override { java = jdk; };
   kotlinOverlay = kotlin.override { jre = jdk; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkl";
-  version = "0.31.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "apple";
     repo = "pkl";
     tag = finalAttrs.version;
-    hash = "sha256-6oY1F1I6xDq8TzYCOGi2Mc+nm/mxc13G/rvjJx4twLQ=";
+    hash = "sha256-jO18ugPyHv7NsaZyJYHFusoYRqR6SJm2JgPvVZkF/Nw=";
     leaveDotGit = true;
     postFetch = ''
       pushd $out
@@ -38,7 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix_kotlin_classpath.patch { gradle = gradle.unwrapped; })
     ./disable_gradle_codegen_tests.patch
     ./disable_bad_tests.patch
-    ./repair_org.msgpack-msgpack-core_lockfiles.patch
   ];
 
   nativeBuildInputs = [
@@ -80,7 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
     gradleFlagsArray+=(-DcommitId=$(cat .commit-hash))
   '';
 
-  env.JAVA_TOOL_OPTIONS = "-Dfile.encoding=utf-8";
+  # The dependency collector also resolves Kotlin's Bouncy Castle configuration,
+  # which uses version ranges. The fetched artifacts are pinned in deps.json.
+  preGradleUpdate = ''
+    substituteInPlace build-logic/src/main/kotlin/pklAllProjects.gradle.kts \
+      --replace-fail 'failOnDynamicVersions()' ""
+  '';
+
+  env.JAVA_TOOL_OPTIONS =
+    "-Dfile.encoding=utf-8"
+    # Java's dual-stack sockets prevent Gradle from connecting to its daemon
+    # inside the Darwin sandbox.
+    + lib.optionalString stdenv.hostPlatform.isDarwin " -Djava.net.preferIPv4Stack=true";
   __darwinAllowLocalNetworking = true;
 
   preCheck = ''
