@@ -6145,6 +6145,8 @@ self: super: with self; {
 
   firebase-messaging = callPackage ../development/python-modules/firebase-messaging { };
 
+  firecrawl-anydoc = callPackage ../development/python-modules/firecrawl-anydoc { };
+
   firecrawl-py = callPackage ../development/python-modules/firecrawl-py { };
 
   firedrake = callPackage ../development/python-modules/firedrake { };
@@ -20060,8 +20062,6 @@ self: super: with self; {
   staticmap3 = callPackage ../development/python-modules/staticmap3 { };
 
   staticvectors = callPackage ../development/python-modules/staticvectors { };
-
-  statistics = callPackage ../development/python-modules/statistics { };
 
   statmake = callPackage ../development/python-modules/statmake { };
 

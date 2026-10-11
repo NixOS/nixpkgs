@@ -24,7 +24,7 @@
   gtk3,
   libGL,
   libglvnd,
-  systemd,
+  systemdLibs,
   patchelf,
   undmg,
   makeWrapper,
@@ -110,7 +110,7 @@ let
     runtimeDependencies = [
       # Required to launch the application and proceed past the zygote_linux fork() process
       # Fixes `Zygote could not fork`
-      systemd
+      systemdLibs
 
       # Fixes input/output audio device selection
       libpulseaudio

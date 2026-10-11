@@ -401,6 +401,11 @@
     github = "a-camarillo";
     githubId = 58638902;
   };
+  a-hassanin = {
+    github = "a-hassanin";
+    name = "Ahmed Hassanin";
+    githubId = 112945643;
+  };
   a-jay98 = {
     email = "ali@jamadi.me";
     github = "A-jay98";
@@ -953,6 +958,11 @@
     matrix = "aiya:catgirl.cloud";
     name = "aiya";
   };
+  aidandenlinger = {
+    name = "Aidan Denlinger";
+    github = "aidandenlinger";
+    githubId = 47428697;
+  };
   aietes = {
     email = "stefan@standa.de";
     github = "Aietes";
@@ -1116,6 +1126,12 @@
     email = "a@akho.name";
     github = "akho";
     githubId = 104951;
+  };
+  akirak = {
+    name = "Akira Komamura";
+    email = "akira.komamura@gmail.com";
+    github = "akirak";
+    githubId = 6270544;
   };
   akkesm = {
     name = "Alessandro Barenghi";
@@ -10906,10 +10922,10 @@
   };
   grimmauld = {
     name = "Sören Bender";
-    email = "soeren@benjos.de";
-    github = "LordGrimmauld";
+    email = "grimmauld@grimmauld.de";
+    github = "GrimmTheShrimp";
     githubId = 49513131;
-    matrix = "@grimmauld:grimmauld.de";
+    matrix = "@grimmauld:m.grimmauld.de";
   };
   grindhold = {
     name = "grindhold";
@@ -17964,6 +17980,12 @@
     githubId = 34819524;
     name = "Marcel";
   };
+  marcg03 = {
+    email = "marcgrec@tuta.com";
+    github = "marcg03";
+    githubId = 134197728;
+    name = "Marc-Alexander Grec";
+  };
   MarchCraft = {
     email = "felix@dienilles.de";
     github = "MarchCraft";
@@ -20589,6 +20611,11 @@
     email = "me@naurissteins.com";
     github = "naurissteins";
     githubId = 5653746;
+  };
+  naved124 = {
+    name = "Naved124";
+    github = "Naved124";
+    githubId = 86107643;
   };
   naxdy = {
     name = "Naxdy";
@@ -24452,6 +24479,11 @@
     github = "RAVENz46";
     githubId = 86608952;
     name = "RAVENz46";
+  };
+  ravi-arnan = {
+    github = "ravi-arnan";
+    githubId = 74779667;
+    name = "Ravi Arnan Irianto";
   };
   rawkode = {
     email = "david.andrew.mckay@gmail.com";

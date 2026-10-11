@@ -64,11 +64,11 @@ let
     in
     selectKernel {
       linux = fetchzip {
-        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.tar.gz";
+        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.tar.gz";
         inherit hash;
       };
       darwin = fetchurl {
-        url = "https://download-cdn.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.dmg";
+        url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}${archSuffix}.dmg";
         inherit hash;
       };
     };

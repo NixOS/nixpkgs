@@ -104,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeFeature "Python3_EXECUTABLE" "${python.interpreter}")
     (cmakeFeature "OpenVINO_DIR" "${openvino}/runtime/cmake")
 
+    # OpenVINO and its consumers target C++17. GCC 16 defaults to C++20, which
+    # breaks this code with C++20-only changes; pin the standard to match upstream.
+    (cmakeFeature "CMAKE_CXX_STANDARD" "17")
+
     # Normalise install destinations to the standard Nix layout.
     (cmakeFeature "ARCHIVE_DESTINATION" "lib")
     (cmakeFeature "LIBRARY_DESTINATION" "lib")
@@ -183,7 +187,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./tests/cpp/tests_continuous_batching \
       --gtest_filter="-${
         lib.concatStringsSep ":" (
-          [ "GoogleTestVerification.UninstantiatedParameterizedTestSuite*" ]
+          [
+            "GoogleTestVerification.UninstantiatedParameterizedTestSuite*"
+            # Compares CPU-plugin logits against a naive matmul with a 1e-4
+            # tolerance; some CPUs exceed it.
+            "MtpModelTransforms.GraftedLogitsMatchTiedWeightMatmul"
+          ]
           ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
             "TestCacheManager.*"
             "TestLinearAttentionCacheManager.*"

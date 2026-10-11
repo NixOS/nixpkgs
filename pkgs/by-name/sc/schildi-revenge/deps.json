@@ -2748,16 +2748,6 @@
    "module": "sha256-Yr0DpoiTACCwevVi8YDE5HAZRvhjx++mITlp3IHKWDg=",
    "pom": "sha256-XESpbotbhEnKaAf2WDeod9P6waERqw+xKW37aTFk8D8="
   },
-  "io/github/kdroidfilter#knotify-compose-jvm/0.4.3": {
-   "jar": "sha256-T0fvdaCRBa56tibZ30IX1sYnSQVYx0KXKXg+ZxklSw0=",
-   "module": "sha256-g+YNmwvOxe82HhzdBtq2fHeP2Y9E5P0tmib0c6+oBaY=",
-   "pom": "sha256-2OmE0PaDMEb4botuwEH5JcBBJuk6ZI0jXBKwB/lSiFI="
-  },
-  "io/github/kdroidfilter#knotify-compose/0.4.3": {
-   "jar": "sha256-CJ4kQXv59sNO7Fcg7rssvMguooVezvkBM+sX4QedWGg=",
-   "module": "sha256-4Q1RjEtvp1D4RxJ+lN1l0BbxbG61uus3aZJwsI8a6Bc=",
-   "pom": "sha256-h6E8g7jvpSx+m/GqSWh/zotwDh2XSklxzxQ1rotH5VY="
-  },
   "io/github/kdroidfilter#knotify-jvm/0.4.3": {
    "jar": "sha256-D6hwk+QGBgzoHJPqQhhHZxJ5fzcdeTmhDsauK0bSqxI=",
    "module": "sha256-SuVFgHPhhv5xVEzQ8BPTysm5uTXdOKKfI5sUQgF5++8=",
@@ -3572,9 +3562,6 @@
   },
   "org/jetbrains/compose/desktop#desktop-jvm-linux-x64/1.12.1": {
    "pom": "sha256-UJOgkYaho+YlhH7qOrO+GB53dxrJMey7OZ+ndvD9Zjs="
-  },
-  "org/jetbrains/compose/desktop#desktop-jvm-macos-arm64/1.9.0": {
-   "pom": "sha256-JiGp36CoFnnMhSVjEflgjoMQj5zRlDvQa1F/fblo1kw="
   },
   "org/jetbrains/compose/desktop#desktop-jvm/1.12.1": {
    "jar": "sha256-ra6m7GMEIHEtz9UqNWtGrvYDEpyn92y6IEVpES+oDhw=",
@@ -4797,13 +4784,6 @@
   "org/jetbrains/skiko#skiko-awt-runtime-linux-x64/0.150.1": {
    "jar": "sha256-kgwcsDOr+3kgL59FX7hkkb7F5FwVbxhsASWxD86X4JM=",
    "pom": "sha256-2t5MaGRtWefa0ITlIK/ISAW4VnYUaFHETqyi/JzEj6g="
-  },
-  "org/jetbrains/skiko#skiko-awt-runtime-macos-arm64/0.150.1": {
-   "jar": "sha256-vRht1r+HNutpvhkBB+Gzq3vSRSrpF/qqUW71EyF6XzM=",
-   "pom": "sha256-Mky/dYNxdEwRx1CH94W1AAQyNJYE3aNOfAUlXfzBRGk="
-  },
-  "org/jetbrains/skiko#skiko-awt-runtime-macos-arm64/0.9.22.2": {
-   "pom": "sha256-sqCj8EKIL9aGPFpynw1S3TpVTWpxCYfW8PNVifDY3oY="
   },
   "org/jetbrains/skiko#skiko-awt/0.150.1": {
    "jar": "sha256-u2EK2ihQnr7jpiPARpr/NmVon77HPRGAVfPb9aNyEfU=",

@@ -3,41 +3,41 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  makeWrapper,
+  makeBinaryWrapper,
   copyDesktopItems,
   makeDesktopItem,
   ncurses,
-  libtermkey,
-  lua5_2_compat,
+  lua5_5,
   tre,
   acl,
   libselinux,
 }:
 
 let
-  lua = lua5_2_compat;
-  luaEnv = lua.withPackages (ps: [ ps.lpeg ]);
+  luaEnv = lua5_5.withPackages (ps: [ ps.lpeg ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vis";
-  version = "0.9";
+  version = "0.9-unstable-2026-10-03";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    hash = "sha256-SYM3zlzhp3NdyOjtXc+pOiWY4/WA/Ax+qAWe18ggq3g=";
+    rev = "bd0bb3449e6eef991d507689c4bfba53c14fd9c5";
+    hash = "sha256-uRGTH5yQGo8O3LahArbSq1uLkH0LZ6rWJqa5S7P50Gg=";
     repo = "vis";
     owner = "martanne";
   };
 
   nativeBuildInputs = [
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
     copyDesktopItems
   ];
 
   buildInputs = [
     ncurses
-    libtermkey
     luaEnv
     tre
   ]
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/vis \
-      --prefix LUA_CPATH ';' "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-      --prefix LUA_PATH ';' "${luaEnv}/share/lua/${lua.luaversion}/?.lua" \
+      --prefix LUA_CPATH ';' "${lua5_5.pkgs.luaLib.genLuaCPathAbsStr luaEnv}" \
+      --prefix LUA_PATH ';' "${lua5_5.pkgs.luaLib.genLuaPathAbsStr luaEnv}" \
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
@@ -59,11 +59,10 @@ stdenv.mkDerivation rec {
       exec = "vis %U";
       type = "Application";
       icon = "accessories-text-editor";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "vis";
       genericName = "Text editor";
       categories = [
-        "Application"
         "Development"
         "IDE"
       ];
@@ -80,8 +79,11 @@ stdenv.mkDerivation rec {
     description = "Vim like editor";
     homepage = "https://github.com/martanne/vis";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ ramkromberg ];
+    maintainers = with lib.maintainers; [
+      ramkromberg
+      es-sai-fi
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "vis";
   };
-}
+})

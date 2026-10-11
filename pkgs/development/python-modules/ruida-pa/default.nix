@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "ruida-pa";
-  version = "0.20.4";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ruida_pa";
     inherit version;
-    hash = "sha256-qvIdg0qkOmIn0ydapleONZHazueO6jzcB+PpsuiW02w=";
+    hash = "sha256-+O1lB9N5xPWU5EZRkj6Eo54Vvp6H4h/GdXUt1rWJesc=";
   };
 
   build-system = [ setuptools ];

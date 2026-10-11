@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "schildi-revenge";
-  version = "26.10.01";
+  version = "26.10.10";
 
   src = fetchFromGitHub {
     owner = "SchildiChat";
     repo = "schildi-revenge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5AOxfJ41/9MIvhbmUXdU2fGBT48h8dBAm77P4xlWei8=";
+    hash = "sha256-2JgS5iLAUSXBnal3HoGzuydSlCFkgNg0f1RnctiDALU=";
     fetchSubmodules = true;
   };
 

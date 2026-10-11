@@ -175,10 +175,10 @@ index 39329bc9b64..220577dbc4a 100644
  
  
 diff --git a/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx b/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx
-index 1ae37127bd1..17e79e19041 100644
+index 1ae37127bd1..9d012257a2f 100644
 --- a/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx
-@@ -9,7 +9,7 @@ import os
+@@ -9,11 +9,16 @@ import os
  
  from libc.stdint cimport uintptr_t
  
@@ -187,7 +187,16 @@ index 1ae37127bd1..17e79e19041 100644
  cimport cuda.bindings._lib.dlfcn as dlfcn
  cimport cuda.bindings._internal.runtime_ptds as ptds
  cimport cython
-@@ -50,14 +50,14 @@ include "../_lib/cyruntime/cyruntime.pxi"
+ 
++try:
++    CDLL("@libcuda@/lib/libcuda.so.1")
++except OSError:
++    pass
++
+ 
+ ###############################################################################
+ # Per-thread default stream dispatch
+@@ -50,14 +55,14 @@ include "../_lib/cyruntime/cyruntime.pxi"
  cdef cudaError_t _getLocalRuntimeVersion(int* runtimeVersion) except ?cudaErrorCallRequiresNewerDriver nogil:
      # Load cudart dynamically to read its embedded version number.
      with gil:

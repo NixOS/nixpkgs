@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sendspin";
-  version = "7.5.0";
+  version = "7.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "sendspin-cli";
     tag = finalAttrs.version;
-    hash = "sha256-Oux9hEtN5AiPf3gAqXGVinDfDIuNVugchUNuLMfMoYc=";
+    hash = "sha256-unNlx0A5Jh3mkPp4G86DY41UExA5IEwMM8E0/jfaBkY=";
   };
 
   nativeBuildInputs = [

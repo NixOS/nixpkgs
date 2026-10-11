@@ -29,8 +29,8 @@
   isNixOS ? false,
   enableXWayland ? true,
   libxcb-wm,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   trayEnabled ? systemdSupport,
 }:
 
