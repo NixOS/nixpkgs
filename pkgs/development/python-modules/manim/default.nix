@@ -190,7 +190,6 @@ buildPythonPackage (finalAttrs: {
   pname = "manim";
   version = "0.22.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
