@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bigloo";
-  version = "4.7a";
+  version = "4.7b";
 
   src = fetchurl {
     url = "https://www-sop.inria.fr/mimosa/fp/Bigloo/download/bigloo-${finalAttrs.version}.tar.gz";
-    hash = "sha256-RCXDf0meLfGnvjM0roUg/XYhRzPZ2f6XsvunHRxM9js=";
+    hash = "sha256-Biccw9pcFk1/tKXcKcRC8T1PS0gxnmPED4v6Etw58iw=";
   };
 
   nativeBuildInputs = [
