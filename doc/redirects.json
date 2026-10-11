@@ -783,6 +783,30 @@
   "sec-functions-library-derivations": [
     "index.html#sec-functions-library-derivations"
   ],
+  "sec-functions-library-types": [
+    "index.html#sec-functions-library-types"
+  ],
+  "ex-types-anything": [
+    "index.html#ex-types-anything"
+  ],
+  "ex-submodule-direct": [
+    "index.html#ex-submodule-direct"
+  ],
+  "ex-submodule-reference": [
+    "index.html#ex-submodule-reference"
+  ],
+  "ex-submodule-listof-declaration": [
+    "index.html#ex-submodule-listof-declaration"
+  ],
+  "ex-submodule-listof-definition": [
+    "index.html#ex-submodule-listof-definition"
+  ],
+  "ex-submodule-attrsof-declaration": [
+    "index.html#ex-submodule-attrsof-declaration"
+  ],
+  "ex-submodule-attrsof-definition": [
+    "index.html#ex-submodule-attrsof-definition"
+  ],
   "sec-generators": [
     "index.html#sec-generators"
   ],

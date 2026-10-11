@@ -110,5 +110,5 @@ source: @SYSTEMD_SERVICE_OPTIONS@
 
 [module]: https://nixos.org/manual/nixpkgs/stable/index.html#module-system
 <!-- TODO: more anchors -->
-[`attrsOf`]: #sec-option-types-composed
-[`submodule`]: #sec-option-types-submodule
+[`attrsOf`]: https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.types.attrsOf
+[`submodule`]: https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.types.submodule
