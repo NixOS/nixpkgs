@@ -30,7 +30,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fastai";
   version = "2.8.8";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "fastai";
