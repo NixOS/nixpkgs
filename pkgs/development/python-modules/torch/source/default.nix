@@ -294,7 +294,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   # Don't forget to update torch-bin to the same version.
   version = "2.13.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   outputs = [
     "out" # output standard python package
