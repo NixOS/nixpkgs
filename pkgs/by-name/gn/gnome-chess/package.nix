@@ -18,6 +18,7 @@
   libadwaita,
   librsvg,
   pango,
+  gnuchess,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,6 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     pango
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ gnuchess ]}")
+  '';
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-chess"; };
