@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "hepdata-validator";
   version = "0.3.6";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "HEPData";
