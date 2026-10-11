@@ -1,0 +1,11 @@
+--- a/common/structs/structs-print.c
++++ b/common/structs/structs-print.c
+@@ -63,7 +63,7 @@
+   fprintf (dest, "%sapp2_source_package: %s%s", indent, application2->app2_source_package, linesep);
+   fprintf (dest, "%sapp2_summary: %s%s", indent, application2->app2_summary, linesep);
+   fprintf (dest, "%sapp2_description: %s%s", indent, application2->app2_description, linesep);
+-  fprintf (dest, "%sapp2_spare1: %s%s", indent, application2->app2_spare1, linesep);
++  fprintf (dest, "%sapp2_class: %s%s", indent, application2->app2_class, linesep);
+   fprintf (dest, "%sapp2_spare2: %s%s", indent, application2->app2_spare2, linesep);
+   fprintf (dest, "%sapp2_spare3: %s%s", indent, application2->app2_spare3, linesep);
+   fprintf (dest, "%sapp2_spare4: %s%s", indent, application2->app2_spare4, linesep);
