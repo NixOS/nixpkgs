@@ -1,0 +1,18 @@
+diff --git a/pubspec.yaml b/pubspec.yaml
+index 91ccd51..def49e2 100644
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -70,13 +70,6 @@ dependencies:
+     path: plugins/code_forge
+   flutter_qjs:
+     path: plugins/flutter_qjs
+-dependency_overrides:
+-  # Fix compile failure: https://github.com/leanflutter/hotkey_manager/pull/66
+-  hotkey_manager_linux:
+-    git:
+-      url: https://github.com/gepbird/hotkey_manager.git
+-      path: packages/hotkey_manager_linux
+-      ref: fix-build-failure
+ dev_dependencies:
+   flutter_test:
+     sdk: flutter
