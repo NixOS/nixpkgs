@@ -183,11 +183,17 @@ in
             NoNewPrivileges = true;
 
             RestrictAddressFamilies =
-              (optionals hasUDSbind [
-                "AF_INET"
-                "AF_INET6"
-                "AF_UNIX"
-              ])
+              (
+                if hasUDSbind then
+                  [
+                    "AF_UNIX"
+                  ]
+                else
+                  [
+                    "AF_INET"
+                    "AF_INET6"
+                  ]
+              )
               ++ (optionals hasFirewall [ "AF_NETLINK" ]);
 
             RestrictNamespaces = true;
