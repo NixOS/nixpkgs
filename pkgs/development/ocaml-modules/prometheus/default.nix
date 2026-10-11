@@ -10,11 +10,11 @@
 
 buildDunePackage (finalAttrs: {
   pname = "prometheus";
-  version = "1.3";
+  version = "2.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/prometheus/releases/download/v${finalAttrs.version}/prometheus-${finalAttrs.version}.tbz";
-    hash = "sha256-4C0UzwaCgqtk5SGIY89rg0dxdrKm63lhdcOaQAa20L8=";
+    hash = "sha256-lMtelWBtX/F7TRGAHq0eoZgcBrF7CElQ16Aykz2ZGoM=";
   };
 
   propagatedBuildInputs = [
