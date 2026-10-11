@@ -5,6 +5,7 @@
   cmake,
   boost,
   eigen,
+  fmt_11,
   gtest,
   help2man,
   rapidjson,
@@ -15,6 +16,8 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "vowpal-wabbit";
   version = "9.11.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "VowpalWabbit";
@@ -35,12 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "add_library(RapidJSON INTERFACE)" ""
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     help2man
   ];
 
   buildInputs = [
+    fmt_11
     boost
     eigen
     rapidjson
@@ -73,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Machine learning system focused on online reinforcement learning";
     homepage = "https://github.com/VowpalWabbit/vowpal_wabbit/";
+    changelog = "https://github.com/VowpalWabbit/vowpal_wabbit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     longDescription = ''
       Machine learning system which pushes the frontier of machine learning with techniques such as online,
