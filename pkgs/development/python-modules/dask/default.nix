@@ -138,6 +138,10 @@ buildPythonPackage (finalAttrs: {
     # RuntimeWarning: divide by zero encountered in det
     "test_array_notimpl_function_dask"
   ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # RuntimeWarning: invalid value encountered in floor
+    "test_pandas_timestamp_overflow_pyarrow"
+  ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # https://github.com/dask/dask/issues/12042
     "test_multiple_repartition_partition_size"
