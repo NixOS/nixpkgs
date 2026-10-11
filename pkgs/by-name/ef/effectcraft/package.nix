@@ -19,7 +19,7 @@
   libxrandr,
   wayland,
   dbus,
-  craftFonts,
+  craft-fonts,
   alsa-lib,
   nix-update-script,
 }:
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   strictDeps = true;
 
   env = {
-    CRAFT_FONTS_DIR = "${craftFonts}";
+    CRAFT_FONTS_DIR = "${craft-fonts}";
     CRAFT_FONTS_REQUIRED = "1";
   };
 
@@ -114,7 +114,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     docdir=$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}
     install -d $docdir
-    for lic in ${craftFonts}/fonts/*/OFL.txt; do
+    for lic in ${craft-fonts}/fonts/*/OFL.txt; do
       install -Dm644 "$lic" "$docdir/OFL-$(basename "$(dirname "$lic")").txt"
     done
   '';
