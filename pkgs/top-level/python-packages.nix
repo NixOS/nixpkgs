@@ -240,6 +240,8 @@ self: super: with self; {
 
   aioautomower = callPackage ../development/python-modules/aioautomower { };
 
+  aioaxlevpp = callPackage ../development/python-modules/aioaxlevpp { };
+
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
   aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
