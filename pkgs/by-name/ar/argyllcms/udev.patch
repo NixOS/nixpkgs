@@ -1,0 +1,10 @@
+--- a/usb/55-Argyll.rules
++++ b/usb/55-Argyll.rules
+@@ -143,8 +143,6 @@
+ 
+ # Set ID_VENDOR and ID_MODEL acording to VID and PID
+ # usb_id and/or usb-db might be needed on older systems
+-#ENV{COLORD_SENSOR_KIND}=="*?", ENV{ID_MODEL}=="", IMPORT{program}="usb_id --export %p"
+-#ENV{COLORD_SENSOR_KIND}=="*?", TEST=="/lib/udev/usb-db", ENV{ID_MODEL_FROM_DATABASE}=="", IMPORT{program}="usb-db %p"
+ ENV{COLORD_SENSOR_KIND}=="*?", ENV{ID_MODEL}=="", IMPORT{builtin}="usb_id"
+ ENV{COLORD_SENSOR_KIND}=="*?", ENV{ID_MODEL_FROM_DATABASE}=="", IMPORT{builtin}="hwdb --subsystem=usb"
