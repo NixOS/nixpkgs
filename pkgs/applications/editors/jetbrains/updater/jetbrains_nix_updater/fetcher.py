@@ -1,5 +1,6 @@
 import dataclasses
 import sys
+from functools import cached_property
 from urllib import request
 from urllib.error import HTTPError
 
@@ -9,30 +10,33 @@ from packaging import version
 
 from jetbrains_nix_updater.config import SUPPORTED_SYSTEMS
 from jetbrains_nix_updater.ides import Ide
-from jetbrains_nix_updater.util import one_or_more
+from jetbrains_nix_updater.util import convert_hash_to_sri, one_or_more
 
 UPDATES_URL = "https://www.jetbrains.com/updates/updates.xml"
 
 
-class NoUrlForSystemException(Exception):
-    "raised when there is no URL available for a specific system"
+@dataclasses.dataclass
+class HashedUrl:
+    url: str
 
+    @cached_property
+    def sri_hash(self) -> str:
+        return convert_hash_to_sri(self.sha256)
 
-@dataclasses.dataclass(slots=True)
-class VersionInfo:
-    version: str
-    build_number: str
-    urls: dict[str, str]
-
-    def download_sha256(self, system: str) -> str:
-        url = self.urls.get(system)
-        if url is None:
-            raise NoUrlForSystemException(f"No URL available for {system}")
-        print(f"[.] Downloading sha256 for {url}")
-        url = f"{url}.sha256"
+    @cached_property
+    def sha256(self) -> str:
+        print(f"[.] Downloading sha256 for {self.url}", file=sys.stderr)
+        url = f"{self.url}.sha256"
         download_response = requests.get(url)
         download_response.raise_for_status()
         return download_response.content.decode("UTF-8").split(" ")[0]
+
+
+@dataclasses.dataclass
+class VersionInfo:
+    version: str
+    build_number: str
+    urls: dict[str, HashedUrl]
 
 
 class VersionFetcher:
@@ -82,7 +86,7 @@ class VersionFetcher:
                     version_number,
                 )
                 if download_url:
-                    download_urls[system] = download_url
+                    download_urls[system] = HashedUrl(url=download_url)
                 elif not ignore_no_url_error:
                     print(
                         f"[!] no valid URL found for '{ide.name}' for '{system}'! make sure `updater/updateInfo.json` contains an entry and is correct.",

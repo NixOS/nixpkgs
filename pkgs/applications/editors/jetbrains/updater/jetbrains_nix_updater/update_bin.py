@@ -3,11 +3,7 @@ import sys
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionInfo
 from jetbrains_nix_updater.ides import Ide
-from jetbrains_nix_updater.util import (
-    UpdateScriptBlockException,
-    convert_hash_to_sri,
-    replace_blocks,
-)
+from jetbrains_nix_updater.util import UpdateScriptBlockException, replace_blocks
 
 
 def run_bin_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
@@ -15,8 +11,8 @@ def run_bin_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
     for system, url in info.urls.items():
         urls_nix += f"""
         {system} = {{
-          url = "{url}";
-          hash = "{convert_hash_to_sri(info.download_sha256(system))}";
+          url = "{url.url}";
+          hash = "{url.sri_hash}";
         }};"""
 
     try:
