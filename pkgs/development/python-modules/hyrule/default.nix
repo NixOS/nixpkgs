@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "hyrule";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hylang";
     repo = "hyrule";
     tag = version;
-    hash = "sha256-nyB2vsXR1yiSzp1r/UCCQwM5FfIa4P8obTcWSu7JFoA=";
+    hash = "sha256-9h6Jo+etK5DBeQ5CzClnvBnaH3TvY9/9jW9zbVbEJLQ=";
   };
 
   build-system = [ setuptools ];
