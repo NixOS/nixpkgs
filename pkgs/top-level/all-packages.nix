@@ -1661,10 +1661,6 @@ with pkgs;
 
   xmlsort = perlPackages.XMLFilterSort;
 
-  mcelog = callPackage ../os-specific/linux/mcelog {
-    util-linux = util-linuxMinimal;
-  };
-
   asciidoc-full = asciidoc.override {
     enableStandardFeatures = true;
   };
