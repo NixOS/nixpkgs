@@ -16701,6 +16701,12 @@
     githubId = 142721811;
     name = "Andrey Donets";
   };
+  ligurio = {
+    email = "estetus@gmail.com";
+    github = "ligurio";
+    githubId = 1151557;
+    name = "Sergey Bronnikov";
+  };
   lihop = {
     email = "nixos@leroy.geek.nz";
     github = "lihop";
