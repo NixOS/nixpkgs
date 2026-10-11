@@ -29,6 +29,7 @@
   piccolo,
   prometheus-client,
   opentelemetry-instrumentation-asgi,
+  opentelemetry-sdk,
   pydantic-extra-types,
   pydantic,
   email-validator,
@@ -60,14 +61,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "litestar";
-  version = "2.21.1";
+  version = "2.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "litestar-org";
     repo = "litestar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dH51GecYwVTnOO+F1FJnFR2VO3IvLbpKWbxK7jssak8=";
+    hash = "sha256-Smv3uzNOBQvOIESa0LCgcodzf9RhEWux2VtgCCVO5Hk=";
   };
 
   build-system = [ hatchling ];
@@ -105,7 +106,10 @@ buildPythonPackage (finalAttrs: {
     ];
     mako = [ mako ];
     minijinja = [ minijinja ];
-    opentelemetry = [ opentelemetry-instrumentation-asgi ];
+    opentelemetry = [
+      opentelemetry-instrumentation-asgi
+      opentelemetry-sdk
+    ];
     piccolo = [ piccolo ];
     picologging = lib.optionals (pythonOlder "3.13") [ picologging ];
     prometheus = [ prometheus-client ];
