@@ -7,6 +7,7 @@
   lazarus,
   libx11,
   runCommand,
+  python3,
   _7zz,
   brotli,
   upx,
@@ -33,6 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NeFfXFsDYpRHPrIZGkJMvplYxsTw+QzQ33TJzgyDZ+c=";
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
+
+  # The upstream Pascal source uses CRLF line endings.
+  prePatch = ''
+    sed -i 's/\r$//' dev/peach.pas
+  '';
+
+  patches = [ ./system-backend-default.patch ];
 
   postPatch = ''
     # set it to use compression programs from $PATH
@@ -122,6 +130,74 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontWrapQtApps = true;
+
+  passthru.tests.system-backends =
+    runCommand "peazip-system-backends"
+      {
+        nativeBuildInputs = [
+          python3
+          _7zz
+          zstd
+        ];
+        peazip = finalAttrs.finalPackage;
+      }
+      ''
+        python3 <<'PY'
+        import os
+        from pathlib import Path
+        import shutil
+        import signal
+        import subprocess
+        import zipfile
+
+        fixtures = Path("fixtures")
+        fixtures.mkdir()
+        marker = fixtures / "marker.txt"
+        content = b"PeaZip system-backend regression\n"
+        marker.write_bytes(content)
+        with zipfile.ZipFile(fixtures / "archive.zip", "w", zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr(marker.name, content)
+        subprocess.run(["7zz", "a", "archive.7z", marker.name], cwd=fixtures, check=True)
+        subprocess.run(["zstd", "-q", "-o", str(fixtures / "marker.txt.zst"), str(marker)], check=True)
+
+        seed = None
+        for configuration in ["fresh", "truncated"]:
+            for archive in ["archive.zip", "archive.7z", "marker.txt.zst"]:
+                case = Path(configuration + "-" + archive).resolve()
+                case.mkdir()
+                shutil.copyfile(fixtures / archive, case / archive)
+                environment = os.environ.copy()
+                environment.pop("DISPLAY", None)
+                environment["QT_QPA_PLATFORM"] = "offscreen"
+                for name in ["CONFIG", "CACHE", "DATA", "RUNTIME"]:
+                    directory = case / name.lower()
+                    directory.mkdir(mode=0o700)
+                    environment["XDG_" + name + ("_DIR" if name == "RUNTIME" else "_HOME")] = str(directory)
+                config = case / "config" / "peazip" / "conf.txt"
+                if configuration == "truncated":
+                    config.parent.mkdir()
+                    config.write_text(seed.partition("[use system 7z]")[0])
+                with (case / "application.log").open("w") as log:
+                    process = subprocess.Popen(
+                        [os.environ["peazip"] + "/bin/peazip", "-ext2newfolder_", str(case / archive)],
+                        cwd=case, env=environment, stdout=log, stderr=subprocess.STDOUT,
+                        start_new_session=True,
+                    )
+                    try:
+                        assert process.wait(timeout=20) == 0
+                    finally:
+                        if process.poll() is None:
+                            os.killpg(process.pid, signal.SIGKILL)
+                            process.wait()
+                extracted = list(case.rglob(marker.name))
+                assert len(extracted) == 1 and extracted[0].read_bytes() == content, case
+                if seed is None:
+                    seed = config.read_text()
+                    assert "[use system 7z]" in seed
+                print(configuration, archive, "passed", flush=True)
+        PY
+        touch $out
+      '';
 
   meta = {
     description = "File and archive manager";
