@@ -10,7 +10,7 @@
 
 buildPythonPackage {
   pname = "hcs-utils";
-  version = "2.1.0";
+  version = "2.0";
   pyproject = true;
 
   src = fetchFromGitLab {
