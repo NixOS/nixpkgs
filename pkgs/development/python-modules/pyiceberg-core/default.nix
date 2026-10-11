@@ -19,7 +19,6 @@ buildPythonPackage (finalAttrs: {
   pname = "pyiceberg-core";
   version = "0.10.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
