@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "synchronicity";
   version = "0.12.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";
