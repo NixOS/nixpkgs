@@ -2,6 +2,11 @@
 let
   facterLib = import ../lib.nix lib;
   cfg = config.hardware.facter.detected.graphics;
+  graphicsEnableOption =
+    if lib.versionOlder lib.version "24.11pre" then
+      "hardware.opengl.enable"
+    else
+      "hardware.graphics.enable";
 in
 {
   imports = [
@@ -29,14 +34,19 @@ in
   };
 
   config = lib.mkIf (config.hardware.facter.enable && cfg.enable) (
-    {
-      boot.initrd.kernelModules = config.hardware.facter.detected.boot.graphics.kernelModules;
-    }
-    // (
-      if lib.versionOlder lib.version "24.11pre" then
-        { hardware.opengl.enable = lib.mkDefault true; }
-      else
-        { hardware.graphics.enable = lib.mkDefault true; }
-    )
+    lib.mkMerge [
+      (facterLib.mkFacterAssignment {
+        moduleName = "graphics";
+        path = "boot.initrd.kernelModules";
+        value = config.hardware.facter.detected.boot.graphics.kernelModules;
+      })
+
+      (facterLib.mkFacterAssignment {
+        moduleName = "graphics";
+        path = graphicsEnableOption;
+        value = lib.mkDefault true;
+        facterValue = true;
+      })
+    ]
   );
 }
