@@ -1,15 +1,13 @@
 {
   cctools,
-  copyDesktopItems,
-  electron_44,
   fetchFromGitHub,
+  enableDesktop ? false,
   installShellFiles,
   lib,
   libicns,
   libsecret,
   makeBinaryWrapper,
-  makeDesktopItem,
-  nix-update-script,
+  nix-update,
   node-gyp,
   nodejs,
   pkg-config,
@@ -17,6 +15,7 @@
   spdx-license-list-data,
   stdenv,
   writeDarwinBundle,
+  writeShellScript,
   xcbuild,
   fetchPnpmDeps,
   pnpm_11,
@@ -28,8 +27,6 @@
 stdenv.mkDerivation (
   finalAttrs:
   let
-    appName = "T3 Code (Alpha)";
-    electron = electron_44;
     pnpm = pnpm_11;
     desktopIcon =
       if stdenv.hostPlatform.isDarwin then
@@ -72,10 +69,7 @@ stdenv.mkDerivation (
       pnpm
       cacert
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-      pkg-config
-    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools.libtool
       libicns
@@ -141,9 +135,12 @@ stdenv.mkDerivation (
     installPhase = ''
       runHook preInstall
 
-      mkdir --parents "$out"/libexec/t3code/apps/desktop "$out"/libexec/t3code/apps/server
+      mkdir --parents "$out"/libexec/t3code/apps/server
       cp --recursive --no-preserve=mode node_modules "$out"/libexec/t3code
       cp --recursive --no-preserve=mode apps/server/{node_modules,dist} "$out"/libexec/t3code/apps/server
+    ''
+    + lib.optionalString enableDesktop ''
+      mkdir --parents "$out"/libexec/t3code/apps/desktop
       cp --recursive --no-preserve=mode \
         apps/desktop/{package.json,node_modules,dist-electron} \
         "$out"/libexec/t3code/apps/desktop
@@ -152,7 +149,7 @@ stdenv.mkDerivation (
       install --mode=444 ${desktopIcon} \
         "$out"/libexec/t3code/apps/desktop/prod-resources/icon.png
     ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+    + lib.optionalString (enableDesktop && stdenv.hostPlatform.isLinux) ''
       install -Dm755 \
         native/browser-secret/build/${stdenv.hostPlatform.node.arch}/t3-browser-secret \
         "$out"/libexec/t3code/apps/desktop/prod-resources/browser-secret/t3-browser-secret
@@ -163,10 +160,6 @@ stdenv.mkDerivation (
 
       makeWrapper ${lib.getExe nodejs} "$out"/bin/t3 \
         --add-flags "$out"/libexec/t3code/apps/server/dist/bin.mjs
-
-      makeWrapper ${lib.getExe electron} "$out"/bin/t3code-desktop \
-        --add-flags "$out"/libexec/t3code/apps/desktop \
-        --inherit-argv0
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # node-pty tries to chmod this helper at runtime, but the Nix store is
@@ -174,25 +167,8 @@ stdenv.mkDerivation (
       find "$out"/libexec/t3code \
         -path '*/node-pty/prebuilds/darwin-*/spawn-helper' \
         -exec chmod 755 {} +
-
-      mkdir --parents "$out/Applications/${appName}.app/Contents/"{MacOS,Resources}
-      png2icns \
-        "$out/Applications/${appName}.app/Contents/Resources/t3code.icns" \
-        ${desktopIcon}
-
-      # writeDarwinBundle is a shebangless bash script; run it explicitly via
-      # stdenv.shell to avoid Darwin's intermittent ENOEXEC fallback issues.
-      ${stdenv.shell} ${lib.getExe writeDarwinBundle} \
-        "$out" "${appName}" t3code-desktop t3code
     ''
     + ''
-      mkdir --parents \
-        "$out"/share/icons/hicolor/{1024x1024,scalable}/apps
-      install --mode=444 ${desktopIcon} \
-        "$out"/share/icons/hicolor/1024x1024/apps/t3code.png
-      install --mode=444 assets/prod/logo.svg \
-        "$out"/share/icons/hicolor/scalable/apps/t3code.svg
-
       runHook postInstall
     '';
 
@@ -202,24 +178,12 @@ stdenv.mkDerivation (
       done
     '';
 
-    desktopItems = [
-      (makeDesktopItem {
-        name = "t3code";
-        desktopName = appName;
-        comment = "Minimal web GUI for coding agents";
-        exec = "t3code-desktop %U";
-        terminal = false;
-        icon = "t3code";
-        startupWMClass = "t3code";
-        categories = [ "Development" ];
-      })
-    ];
-
     passthru = {
-      updateScript = nix-update-script {
-        attrPath = "t3code.unwrapped";
-        extraArgs = [ "--use-github-releases" ];
-      };
+      updateScript = writeShellScript "t3code-update" ''
+        set -eu
+        ${lib.getExe nix-update} t3code-cli.unwrapped --use-github-releases
+        ${lib.getExe nix-update} t3code-desktop.unwrapped --version=skip --no-src
+      '';
     };
 
     meta = {
@@ -232,7 +196,6 @@ stdenv.mkDerivation (
         iamanaws
         qweered
       ];
-      mainProgram = "t3code-desktop";
       inherit (nodejs.meta) platforms;
     };
   }
