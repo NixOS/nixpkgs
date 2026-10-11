@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  fetchpatch2,
   cmake,
   libsodium,
   mbedtls,
@@ -33,6 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XrS/qi4oAchdisvicrGmpe3jeDgYDACsvVU6iXQyQCM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix compilation with GCC 13.
+    (fetchpatch2 {
+      url = "https://github.com/shadowsocks/shadowsocks-c/commit/59a6aca7597c46cd1d079631d3061d952fbd0d6e.patch?full_index=1";
+      hash = "sha256-YWivyN9s1L7tZ8Fui7FprDQPOiX6j+1aG1D7UcLs4mA=";
+    })
+  ];
 
   buildInputs = [
     libsodium
