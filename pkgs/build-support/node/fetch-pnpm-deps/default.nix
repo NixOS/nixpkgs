@@ -131,6 +131,8 @@ in
                 export pnpm_config_side_effects_cache=false
 
                 export pnpm_config_update_notifier=false
+
+                export pnpm_config_force_ignores_platform=true
               else
                 pnpm config set manage-package-manager-versions false
                 pnpm config set side-effects-cache false
