@@ -27931,6 +27931,11 @@
     githubId = 7512804;
     name = "Martin Langlotz";
   };
+  stacksparrow4 = {
+    name = "Daniel Cooper";
+    github = "stacksparrow4";
+    githubId = 29905424;
+  };
   stapelberg = {
     name = "Michael Stapelberg";
     github = "stapelberg";
