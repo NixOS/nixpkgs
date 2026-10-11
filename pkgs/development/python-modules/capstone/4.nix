@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage {
-  format = "setuptools";
+  pyproject = true;
   pname = "capstone";
   inherit (capstone_4) version src;
 
