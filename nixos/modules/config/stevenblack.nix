@@ -19,14 +19,17 @@ let
 
   filterHostsFile =
     hostsFile:
-    if cfg.whitelist == [ ] then
+    if cfg.whitelist == [ ] && cfg.whitelistRegex == [ ] then
       hostsFile
     else
       let
-        pattern = lib.escape [ "." "|" ] (lib.concatStringsSep "|" cfg.whitelist);
+        # the hostfile entries are in the form of "0.0.0.0 subdomain.domain.com"
+        escapedWhitelist = lib.map (w: "^\\S+\\s${lib.escape [ "." ] w}$") cfg.whitelist;
+        escapedWhitelistRegex = lib.map (r: "^\\S+\\s${lib.removePrefix "^" r}") cfg.whitelistRegex;
+        pattern = lib.concatStringsSep "|" (escapedWhitelist ++ escapedWhitelistRegex);
       in
       pkgs.runCommand "filtered-hosts" { } ''
-        sed '/${pattern}/d' ${hostsFile} > $out
+        sed -E '/${pattern}/d' ${hostsFile} > $out
       '';
 in
 {
@@ -46,6 +49,21 @@ in
       );
       default = [ ];
       description = "Additional blocklist extensions.";
+    };
+
+    whitelistRegex = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        Domain regular expressions to exclude from blocking.
+
+        The regular expression must follows `sed`'s [ERE specs].
+
+        [ERE specs]: https://www.gnu.org/software/sed/manual/html_node/ERE-syntax.html
+      '';
+      example = lib.literalExpression ''
+        [ "^.*\\.donmai\\.us$" ]
+      '';
     };
 
     whitelist = mkOption {
