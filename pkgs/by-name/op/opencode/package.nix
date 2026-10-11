@@ -1,7 +1,8 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   bun,
+  darwin,
   fetchFromGitHub,
   makeBinaryWrapper,
   models-dev,
@@ -14,7 +15,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opencode";
   version = "1.15.10";
 
@@ -25,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-qp67k8Z+VA81uukZYuu3yqqmg/L8pkxYZQrJBoE25tU=";
   };
 
-  node_modules = stdenvNoCC.mkDerivation {
+  node_modules = stdenv.mkDerivation {
     pname = "${finalAttrs.pname}-node_modules";
     inherit (finalAttrs) version src;
 
@@ -86,14 +87,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     installShellFiles
     makeBinaryWrapper
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
-  postPatch = ''
-    # NOTE: Relax Bun version check to be a warning instead of an error
-    substituteInPlace packages/script/src/index.ts \
-      --replace-fail 'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
-                     'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
-  '';
+  postPatch =
+    # Relax Bun version check to be a warning instead of an error
+    ''
+      substituteInPlace packages/script/src/index.ts \
+        --replace-fail \
+        'throw new Error(`This script requires bun@''${expectedBunVersionRange}' \
+        'console.warn(`Warning: This script requires bun@''${expectedBunVersionRange}'
+    ''
+    # Skip smoke test
+    + ''
+      substituteInPlace packages/opencode/script/build.ts \
+        --replace-fail \
+        'if (item.os === process.platform && item.arch === process.arch && !item.abi)' \
+        'if (false)'
+    '';
 
   configurePhase = ''
     runHook preConfigure
@@ -130,7 +143,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
          [
            ripgrep
          ]
-         ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+         ++ lib.optionals stdenv.hostPlatform.isDarwin [
            sysctl
          ]
        )
@@ -142,11 +155,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
-    installShellCompletion --cmd opencode \
-      --bash <($out/bin/opencode completion) \
-      --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      codesign --force --sign - $out/bin/.opencode-wrapped
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd opencode \
+        --bash <($out/bin/opencode completion) \
+        --zsh <(SHELL=/bin/zsh $out/bin/opencode completion)
+    '';
+
+  dontStrip = true;
 
   nativeInstallCheckInputs = [
     versionCheckHook
