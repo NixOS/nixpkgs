@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ libpcap ];
 
-  checkFlagsArray = [
+  checkFlags = [
     # Test requires raw socket/packet capture
     "--skip=the_reason_flag_shows_the_packet_behind_a_verdict"
   ];

@@ -47,44 +47,48 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/usr/share/zapret/init.d/sysv
-    mkdir -p $out/usr/share/docs
+    # keep $out/usr for backwards compability
+    mkdir -p $out/share $out/usr
+    ln -s ../share $out/usr/share
+
+    mkdir -p $out/share/zapret/init.d/sysv
+    mkdir -p $out/share/docs
 
     cp $src/blockcheck.sh $out/bin/blockcheck
 
     substituteInPlace $out/bin/blockcheck \
-      --replace-fail '$(cd "$EXEDIR"; pwd)' "$out/usr/share/zapret"
+      --replace-fail '$(cd "$EXEDIR"; pwd)' "$out/share/zapret"
 
-    ln -s ../../../bin/blockcheck $out/usr/share/zapret/blockcheck
+    ln -s ../../bin/blockcheck $out/share/zapret/blockcheck
 
-    cp $src/init.d/sysv/functions $out/usr/share/zapret/init.d/sysv/functions
-    cp $src/init.d/sysv/zapret $out/usr/share/zapret/init.d/sysv/init.d
+    cp $src/init.d/sysv/functions $out/share/zapret/init.d/sysv/functions
+    cp $src/init.d/sysv/zapret $out/share/zapret/init.d/sysv/init.d
 
-    substituteInPlace $out/usr/share/zapret/init.d/sysv/functions \
-      --replace-fail "/opt/zapret" "\"$out/usr/share/zapret\""
+    substituteInPlace $out/share/zapret/init.d/sysv/functions \
+      --replace-fail "/opt/zapret" "\"$out/share/zapret\""
 
-    touch $out/usr/share/zapret/config
+    touch $out/share/zapret/config
 
-    cp -r $src/docs/* $out/usr/share/docs
+    cp -r $src/docs/* $out/share/docs
 
-    mkdir -p $out/usr/share/zapret/{common,files/fake,ipset}
+    mkdir -p $out/share/zapret/{common,files/fake,ipset}
 
-    cp $src/common/* $out/usr/share/zapret/common
-    cp $src/files/fake/* $out/usr/share/zapret/files/fake
-    cp $src/ipset/* $out/usr/share/zapret/ipset
+    cp $src/common/* $out/share/zapret/common
+    cp $src/files/fake/* $out/share/zapret/files/fake
+    cp $src/ipset/* $out/share/zapret/ipset
 
-    rm -f $out/usr/share/zapret/ipset/zapret-hosts-user-exclude.txt.default
+    rm -f $out/share/zapret/ipset/zapret-hosts-user-exclude.txt.default
 
-    mkdir -p $out/usr/share/zapret/nfq
-    ln -s ../../../../bin/nfqws $out/usr/share/zapret/nfq/nfqws
+    mkdir -p $out/share/zapret/nfq
+    ln -s ../../../bin/nfqws $out/share/zapret/nfq/nfqws
 
     for i in ip2net mdig tpws
     do
-      mkdir -p $out/usr/share/zapret/$i
-      ln -s ../../../../bin/$i $out/usr/share/zapret/$i/$i
+      mkdir -p $out/share/zapret/$i
+      ln -s ../../../bin/$i $out/share/zapret/$i/$i
     done
 
-    ln -s ../usr/share/zapret/init.d/sysv/init.d $out/bin/zapret
+    ln -s ../share/zapret/init.d/sysv/init.d $out/bin/zapret
 
     runHook postInstall
   '';
