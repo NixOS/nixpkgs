@@ -35,7 +35,6 @@ buildPythonPackage (finalAttrs: {
   pname = "librosa";
   version = "1.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librosa";
