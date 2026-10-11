@@ -124,6 +124,10 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Needs Internet access
     "test_long_img"
+  ] ++ lib.optionals onnxruntime.cudaSupport [
+    # segfault when built with cuda support but GPU is not availaible in build environment
+    "test_ort_cuda_warning"
+    "test_ort_dml_warning"
   ];
 
   doCheck =
