@@ -10,6 +10,7 @@
   git,
   versionCheckHook,
   addBinToPathHook,
+  writableTmpDirAsHomeHook,
   nixosTests,
 }:
 
@@ -23,14 +24,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "esphome";
-  version = "2026.8.0";
+  version = "2026.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = finalAttrs.version;
-    hash = "sha256-IgNE3+qqptFYL3wuFZWgkoT8bpjMMmI56nQcSMl4i/o=";
+    hash = "sha256-EqjmwBppfxh5+2edF94ZzptQveVekehZ6dBDj96Ddeg=";
   };
 
   patches = [
@@ -63,7 +64,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools==84.0.0" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.48" "wheel"
+      --replace-fail "wheel>=0.43,<0.49" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
@@ -80,6 +81,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     filelock
     freetype-py
     jinja2
+    ninja
     paho-mqtt
     pillow
     platformdirs
@@ -139,6 +141,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       git
       versionCheckHook
       addBinToPathHook
+      writableTmpDirAsHomeHook
     ];
 
   disabledTestPaths = [
@@ -183,6 +186,11 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     "test_run_platformio_cli_strips_win_long_path_prefix"
     "test_run_platformio_cli_does_not_set_pythonexepath_without_strip"
     "test_patch_file_downloader_recovers_against_real_server"
+    # 20261010: tests fail due to `AttributeError: 'NoneType' object has no attribute 'items'`
+    #  attempts to download a remote asset from github
+    "test_dynamic_widget_creates_correctly"
+    "test_dynamic_widget_type_use_define_is_registered"
+    "test_dynamic_widget_style_use_defines_are_registered"
   ];
 
   passthru = {
