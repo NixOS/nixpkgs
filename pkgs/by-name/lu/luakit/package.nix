@@ -77,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       gappsWrapperArgs+=(
         --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"
-        --prefix LUA_PATH ';' "${luaKitPath};$LUA_PATH"
-        --prefix LUA_CPATH ';' "$LUA_CPATH"
+        --prefix-unchecked LUA_PATH ';' "${luaKitPath};$LUA_PATH"
+        --prefix-unchecked LUA_CPATH ';' "$LUA_CPATH"
       )
     '';
 
