@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gccStdenv,
   fetchurl,
   perl,
   libx11,
@@ -17,6 +17,7 @@
   libxxf86vm,
   poppler,
   vlc,
+  vlc-bin,
   ghostscript,
   makeWrapper,
   tzdata,
@@ -30,9 +31,10 @@
   xz,
   zip,
   extraRuntimeDeps ? [ ],
+  # vlc currently doesn't build on darwin
+  useVlc ? if gccStdenv.hostPlatform.isDarwin then vlc-bin else vlc,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+gccStdenv.mkDerivation (finalAttrs: {
   pname = "eaglemode";
   version = "0.96.3";
 
@@ -48,6 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace makers/emPdf.maker.pm \
       --replace-fail gtk+-2.0 gtk+-3.0
+
+    substituteInPlace src/emX11/emX11ExtDynamic.cpp \
+      --replace-fail /usr/X11/lib/libXext.6.dylib ${libxext}/lib/libXext.dylib \
+      --replace-fail /usr/X11/lib/libXxf86vm.1.dylib ${libxxf86vm}/lib/libXxf86vm.dylib \
+      --replace-fail /usr/X11/lib/libXinerama.1.dylib ${libxinerama}/lib/libXinerama.dylib
   '';
 
   nativeBuildInputs = [
@@ -69,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxxf86vm
     libxext
     poppler
-    vlc
+    useVlc
     ghostscript
   ];
 
@@ -78,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext -lXinerama"
-    perl make.pl build
+    perl make.pl build continue=no
     runHook postBuild
   '';
 
@@ -106,11 +113,15 @@ stdenv.mkDerivation (finalAttrs: {
         ]
         ++ extraRuntimeDeps
       );
+      ldenv = if gccStdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
       runHook preInstall
       perl make.pl install dir=$out
-      wrapProgram $out/bin/eaglemode --set EM_DIR "$out" --prefix LD_LIBRARY_PATH : "$out/lib" --prefix PATH : "${runtimeDeps}"
+      wrapProgram $out/bin/eaglemode \
+        --set EM_DIR "$out" \
+        --prefix ${ldenv} : "$out/lib" \
+        --prefix PATH : "${runtimeDeps}"
       for i in 32 48 96; do
         mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps
         ln -s $out/res/icons/eaglemode$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/eaglemode.png
@@ -147,6 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       chuangzhu
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
+    broken = gccStdenv.hostPlatform.isDarwin;
   };
 })
