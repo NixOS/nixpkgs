@@ -53,7 +53,6 @@ buildPythonPackage (finalAttrs: {
   pname = "otter-grader";
   version = "7.0.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ucbds-infra";
