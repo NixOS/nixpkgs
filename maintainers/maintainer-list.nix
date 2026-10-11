@@ -14614,6 +14614,12 @@
     githubId = 39434424;
     name = "Felix Springer";
   };
+  junaidtitan = {
+    email = "j@junaidq.com";
+    github = "junaidtitan";
+    githubId = 23725493;
+    name = "Junaid Q";
+  };
   junestepp = {
     email = "git@junestepp.me";
     github = "junestepp";
