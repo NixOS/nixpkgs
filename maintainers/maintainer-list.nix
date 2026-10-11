@@ -19511,6 +19511,12 @@
     githubId = 3984960;
     name = "Matthias Kannwischer";
   };
+  mkapra = {
+    email = "maximilian+nix@kapra.de";
+    github = "mkapra";
+    githubId = 34742358;
+    name = "Maximilian Kapra";
+  };
   mkez = {
     email = "matias+nix@zwinger.fi";
     github = "mk3z";
