@@ -1,24 +1,20 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-
-  fetchFromGitHub,
-  fetchNpmDeps,
-  fetchurl,
-
-  cargo-tauri,
-  makeBinaryWrapper,
-  nodejs,
-  npmHooks,
-  pkg-config,
-  wrapGAppsHook3,
-
-  alsa-lib,
-  openssl,
-  webkitgtk_4_1,
-
-  nix-update-script,
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, fetchNpmDeps
+, fetchurl
+, cargo-tauri
+, makeBinaryWrapper
+, nodejs
+, npmHooks
+, pkg-config
+, wrapGAppsHook3
+, alsa-lib
+, openssl
+, webkitgtk_4_1
+, nix-update-script
+,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -89,10 +85,10 @@ rustPlatform.buildRustPackage rec {
       # https://github.com/lindera/lindera/blob/v1.5.1/lindera-cc-cedict/build.rs
 
       dict =
-        {
-          language,
-          filename,
-          hash,
+        { language
+        , filename
+        , hash
+        ,
         }:
         {
           inherit filename language;
