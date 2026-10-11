@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyimouapi";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Imou-OpenPlatform";
     repo = "Py-Imou-Open-Api";
     tag = finalAttrs.version;
-    hash = "sha256-1tP1LDrh9yLzUZfqUzckmF3Q/6aE5NbhFcU63IRJEmY=";
+    hash = "sha256-+1RtNAOjrn8puQRxAt8fDxWxmS8zej0gIW0ThfPcqpY=";
   };
 
   build-system = [ setuptools ];
