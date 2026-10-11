@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://libzip.org/";
     description = "C library for reading, creating and modifying zip archives";
