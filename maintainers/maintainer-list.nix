@@ -11637,6 +11637,11 @@
     github = "hitsmaxft";
     githubId = 352727;
   };
+  HizKz = {
+    name = "Kazushi Hizume";
+    github = "HizKz";
+    githubId = 190076537;
+  };
   hkjn = {
     email = "me@hkjn.me";
     name = "Henrik Jonsson";
