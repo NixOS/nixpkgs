@@ -134,6 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-teZ9cv8JQ2ua4tEWl3I8D9DYo8srGIBYIc2NfkgNMe4=";
       includes = [ "autotest/gcore/tiff_read.py" ];
     })
+
+    # Fix build against Poppler >= 26.08
+    # https://github.com/OSGeo/gdal/pull/14953
+    ./0007-pdf-fix-build-against-poppler-26.08.patch
   ];
 
   nativeBuildInputs = [
