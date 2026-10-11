@@ -1,0 +1,96 @@
+diff --git i/cli/Cargo.toml w/cli/Cargo.toml
+index 01b75057e..252cac863 100644
+--- i/cli/Cargo.toml
++++ w/cli/Cargo.toml
+@@ -26,6 +26,7 @@ locktick = [
+   "snarkvm/locktick"
+ ]
+ metrics = [ "dep:snarkos-node-metrics", "snarkos-node/metrics" ]
++snarkos-node-metrics = ["metrics"]
+ cuda = [
+   "snarkvm/cuda",
+   "snarkos-account/cuda",
+diff --git i/node/bft/Cargo.toml w/node/bft/Cargo.toml
+index 38994f6d9..f4215f09a 100644
+--- i/node/bft/Cargo.toml
++++ w/node/bft/Cargo.toml
+@@ -32,6 +32,7 @@ metrics = [
+   "snarkos-node-bft-events/metrics",
+   "snarkos-node-bft-ledger-service/metrics"
+ ]
++snarkos-node-metrics = ["metrics"]
+ cuda = [
+   "snarkvm/cuda",
+   "snarkos-account/cuda",
+diff --git i/node/bft/ledger-service/Cargo.toml w/node/bft/ledger-service/Cargo.toml
+index 8bcb6ea3e..75bfd82b6 100644
+--- i/node/bft/ledger-service/Cargo.toml
++++ w/node/bft/ledger-service/Cargo.toml
+@@ -22,6 +22,7 @@ ledger = [ "parking_lot", "rand", "rayon", "tokio", "tracing" ]
+ ledger-write = [ ]
+ locktick = [ "dep:locktick", "snarkvm/locktick" ]
+ metrics = [ "dep:snarkos-node-metrics", "snarkvm/metrics" ]
++snarkos-node-metrics = ["metrics"]
+ mock = [ "parking_lot", "tracing" ]
+ prover = [ ]
+ cuda = [ "snarkvm/cuda" ]
+diff --git i/node/cdn/Cargo.toml w/node/cdn/Cargo.toml
+index 1269103ed..2ea380b23 100644
+--- i/node/cdn/Cargo.toml
++++ w/node/cdn/Cargo.toml
+@@ -22,6 +22,7 @@ locktick = [ "dep:locktick", "snarkvm/locktick" ]
+ parallel = [ "rayon" ]
+ cuda = [ "snarkvm/cuda" ]
+ metrics = [ "dep:snarkos-node-metrics" ]
++snarkos-node-metrics = ["metrics"]
+ 
+ [dependencies.anyhow]
+ workspace = true
+diff --git i/node/consensus/Cargo.toml w/node/consensus/Cargo.toml
+index 49753927f..bc06a446d 100644
+--- i/node/consensus/Cargo.toml
++++ w/node/consensus/Cargo.toml
+@@ -26,6 +26,7 @@ locktick = [
+   "snarkvm/locktick"
+ ]
+ metrics = [ "dep:snarkos-node-metrics" ]
++snarkos-node-metrics = ["metrics"]
+ telemetry = [ "snarkos-node-bft/telemetry" ]
+ cuda = [ "snarkvm/cuda", "snarkos-account/cuda", "snarkos-node-bft-ledger-service/cuda" ]
+ serial = [ "snarkos-node-bft-ledger-service/serial" ]
+diff --git i/node/router/Cargo.toml w/node/router/Cargo.toml
+index 8dda700f9..5e75bb222 100644
+--- i/node/router/Cargo.toml
++++ w/node/router/Cargo.toml
+@@ -20,6 +20,7 @@ edition = "2024"
+ test = [ ]
+ locktick = [ "dep:locktick", "snarkos-node-tcp/locktick", "snarkvm/locktick" ]
+ metrics = [ "dep:snarkos-node-metrics" ]
++snarkos-node-metrics = ["metrics"]
+ cuda = [ "snarkvm/cuda", "snarkos-account/cuda" ]
+ serial = [ "snarkos-node-bft-ledger-service/serial" ]
+ 
+diff --git i/node/sync/Cargo.toml w/node/sync/Cargo.toml
+index 904455f33..29c197887 100644
+--- i/node/sync/Cargo.toml
++++ w/node/sync/Cargo.toml
+@@ -25,6 +25,7 @@ locktick = [
+ ]
+ serial = ["snarkos-node-bft-ledger-service/serial"]
+ metrics = [ "dep:snarkos-node-metrics" ]
++snarkos-node-metrics = ["metrics"]
+ cuda = [ "snarkvm/cuda", "snarkos-node-bft-ledger-service/cuda", "snarkos-node-router/cuda" ]
+ test = [ "snarkos-node-sync-locators/test" ]
+ 
+diff --git i/node/tcp/Cargo.toml w/node/tcp/Cargo.toml
+index ef237c30b..08de88d19 100644
+--- i/node/tcp/Cargo.toml
++++ w/node/tcp/Cargo.toml
+@@ -20,6 +20,7 @@ edition = "2024"
+ default = [ ]
+ locktick = [ "dep:locktick" ]
+ metrics = [ "dep:snarkos-node-metrics" ]
++snarkos-node-metrics = ["metrics"]
+ 
+ [dependencies.async-trait]
+ workspace = true
