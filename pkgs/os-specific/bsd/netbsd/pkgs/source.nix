@@ -8,5 +8,5 @@ fetchcvs {
   cvsRoot = ":pserver:anoncvs@anoncvs.NetBSD.org:/cvsroot";
   module = "src";
   tag = "netbsd-${lib.replaceStrings [ "." ] [ "-" ] version}-RELEASE";
-  hash = "sha256-+onT/ajWayaKALucaZBqoiEkvBBI400Fs2OCtMf/bYU=";
+  hash = "sha256-oI2rXIec+YEq+8WZ0Ccd8zIto7Y4+CH7Ee5vC30vSng=";
 }
