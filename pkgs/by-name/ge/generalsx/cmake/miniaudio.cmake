@@ -1,0 +1,15 @@
+# nixpkgs: use MINIAUDIO_INCLUDE_DIR (pre-built header from nixpkgs)
+if(SAGE_USE_MINIAUDIO)
+    message(STATUS "Configuring miniaudio (nixpkgs)...")
+    add_library(miniaudio_lib INTERFACE)
+    target_include_directories(miniaudio_lib INTERFACE ${MINIAUDIO_INCLUDE_DIR})
+    target_compile_definitions(miniaudio_lib INTERFACE SAGE_USE_MINIAUDIO)
+    if(APPLE)
+        target_compile_definitions(miniaudio_lib INTERFACE
+            MA_NO_WASAPI MA_NO_DSOUND MA_NO_WINMM)
+    elseif(UNIX)
+        target_compile_definitions(miniaudio_lib INTERFACE
+            MA_NO_WASAPI MA_NO_DSOUND MA_NO_WINMM MA_NO_COREAUDIO)
+    endif()
+    message(STATUS "miniaudio configured (nixpkgs): target miniaudio_lib available")
+endif()
