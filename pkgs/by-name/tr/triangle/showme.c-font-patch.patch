@@ -1,0 +1,18 @@
+diff --git a/showme.c b/showme.c
+index c0294cb..cac3da8 100644
+--- a/showme.c
++++ b/showme.c
+@@ -2272,6 +2272,13 @@ char **argv;
+     showme_foreground = white;
+   }
+   font = XLoadQueryFont(display, "9x15");
++  if (font == NULL) {
++    font = XLoadQueryFont(display, "fixed");
++  }
++  if (font == NULL) {
++    printf("Error: Cannot load font.\n");
++    exit(1);
++  }
+   fontvalues.background = black;
+   fontvalues.font = font->fid;
+   fontvalues.fill_style = FillSolid;
