@@ -1,0 +1,11 @@
+diff --git a/pre_commit/clientlib.py b/pre_commit/clientlib.py
+--- a/pre_commit/clientlib.py
++++ b/pre_commit/clientlib.py
+@@ -349,7 +349,8 @@ def _entry(modname: str) -> str:
+     """the hook `entry` is passed through `shlex.split()` by the command
+     runner, so to prevent issues with spaces and backslashes (on Windows)
+     it must be quoted here.
+     """
+-    return f'{shlex.quote(sys.executable)} -m pre_commit.meta_hooks.{modname}'
++    pythonpath = ':'.join(sys.path)
++    return f'env PYTHONPATH={shlex.quote(pythonpath)} {shlex.quote(sys.executable)} -m pre_commit.meta_hooks.{modname}'
