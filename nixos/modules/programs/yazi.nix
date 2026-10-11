@@ -103,11 +103,11 @@ in
     environment.systemPackages = [
       (cfg.package.override {
         inherit (cfg)
-          settings
           initLua
           plugins
           flavors
           ;
+        settings = lib.filterAttrs (_: value: value != { }) cfg.settings;
       })
     ];
   };
