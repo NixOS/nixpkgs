@@ -6,6 +6,7 @@
   lib,
   mlx-metal,
   python,
+  runCommand,
   stdenv,
 }:
 
@@ -82,6 +83,18 @@ buildPythonPackage (finalAttrs: {
       metalSupport = true;
       src = finalAttrs.passthru.srcs.testSource;
     }).mlxTest;
+
+  # Check that mlx and mlx-metal can be combined with python.withPackages.
+  # In 0.32.0, both wheels shipped the same Python modules, but their generated
+  # .pyc files embedded different store paths and collided when building the environment.
+  passthru.tests.pythonEnv =
+    let
+      env = python.withPackages (_: [ finalAttrs.finalPackage ]);
+    in
+    runCommand "mlx-bin-python-env" { } ''
+      test -x ${env.interpreter}
+      touch $out
+    '';
 
   meta = {
     description = "Prebuilt MLX wheel for Apple silicon with Metal runtime";
