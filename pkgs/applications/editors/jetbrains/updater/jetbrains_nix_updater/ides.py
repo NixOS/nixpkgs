@@ -17,8 +17,12 @@ class UpdateInfo(TypedDict):
 @dataclasses.dataclass
 class Ide:
     name: str
-    drv_path: Path
+    package_dir: Path
     update_info: UpdateInfo | None
+
+    @property
+    def drv_path(self) -> Path:
+        return self.package_dir / "package.nix"
 
     @cached_property
     def is_source(self) -> bool:
@@ -31,12 +35,13 @@ class Ide:
         nixpkgs_root: Path,
         name: str,
     ) -> Self:
-        drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
-        if not drv_path.exists():
-            raise MissingIdeException(f"IDE not found at {drv_path}")
+        package_dir = by_name_path(name, nixpkgs_root)
+        package_file = package_dir / "package.nix"
+        if not package_file.exists():
+            raise MissingIdeException(f"IDE not found at {package_file}")
         return cls(
             name=name,
-            drv_path=drv_path,
+            package_dir=package_dir,
             update_info=update_info.get(name),
         )
 
@@ -47,10 +52,9 @@ class Ide:
         nixpkgs_root: Path,
     ) -> Iterable[Self]:
         for name, info in update_info.items():
-            drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
             yield cls(
                 name=name,
-                drv_path=drv_path,
+                package_dir=by_name_path(name, nixpkgs_root),
                 update_info=info,
             )
 
