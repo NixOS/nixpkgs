@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "fastjet";
   version = "3.5.2.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
