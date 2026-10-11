@@ -842,6 +842,7 @@ in
             || dmConf.sx.enable
             || dmConf.startx.enable
             || config.services.greetd.enable
+            || config.services.displayManager.emptty.enable
             || config.services.displayManager.ly.enable
             || config.services.displayManager.lemurs.enable
             || config.services.displayManager.plasma-login-manager.enable
