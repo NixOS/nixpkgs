@@ -4,7 +4,7 @@
   testers,
   wrapGAppsHook3,
   fetchzip,
-  sbcl,
+  sbcl_2_4_6,
   pkg-config,
   libfixposix,
   gobject-introspection,
@@ -18,19 +18,23 @@
   webkitgtk_4_1,
   openssl,
   sqlite,
-  gstreamer,
-  gst-libav,
-  gst-plugins-base,
-  gst-plugins-good,
-  gst-plugins-bad,
-  gst-plugins-ugly,
+  gst_all_1,
   xdg-utils,
   xclip,
   wl-clipboard,
   nix-update-script,
   nixosTests,
+  dejavu_fonts,
+  makeFontsConf,
 }:
-
+let
+  sbcl = sbcl_2_4_6;
+  customFontsConf = makeFontsConf {
+    fontDirectories = [
+      dejavu_fonts
+    ];
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nyxt";
   version = "3.12.0";
@@ -41,25 +45,29 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+    pkg-config
+  ];
 
   buildInputs = [
     sbcl
-    # for groveller
-    pkg-config
     libfixposix
-    # for gappsWrapper
-    gobject-introspection
     gsettings-desktop-schemas
     glib-networking
     gtk3
-    gstreamer
-    gst-libav
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
+    webkitgtk_4_1
+    gst_all_1.gstreamer
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    dejavu_fonts
   ];
+
+  FONTCONFIG_FILE = customFontsConf;
 
   # for cffi
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [
@@ -79,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     export CL_SOURCE_REGISTRY="$(pwd)/_build//"
     export ASDF_OUTPUT_TRANSLATIONS="$(pwd):$(pwd)"
     export PREFIX="$out"
-    export NYXT_VERSION="$version"
+    export NYXT_VERSION="${finalAttrs.version}"
   '';
 
   # don't refresh from git
@@ -97,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
         wl-clipboard
       ]
     }")
+    gappsWrapperArgs+=(--set FONTCONFIG_FILE "${customFontsConf}")
   '';
 
   # prevent corrupting core in exe
