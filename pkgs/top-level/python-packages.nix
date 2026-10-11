@@ -1339,6 +1339,8 @@ self: super: with self; {
 
   ariadne = callPackage ../development/python-modules/ariadne { };
 
+  ariadne-codegen = callPackage ../development/python-modules/ariadne-codegen { };
+
   arpeggio = callPackage ../development/python-modules/arpeggio { };
 
   arpy = callPackage ../development/python-modules/arpy { };
@@ -8417,6 +8419,8 @@ self: super: with self; {
   influxdb3-python = callPackage ../development/python-modules/influxdb3-python { };
 
   inform = callPackage ../development/python-modules/inform { };
+
+  infrahub-sdk = callPackage ../development/python-modules/infrahub-sdk { };
 
   infrared-protocols = callPackage ../development/python-modules/infrared-protocols { };
 
