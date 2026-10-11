@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "einops";
   version = "0.8.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
