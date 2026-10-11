@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bacnet-stack";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "bacnet-stack";
     repo = "bacnet-stack";
     tag = "bacnet-stack-${finalAttrs.version}";
-    hash = "sha256-CJmEEIGT6u2nsnl3btWL/JJPxQM53JF6l+mLBSF+Q8Q=";
+    hash = "sha256-BfuJt879a7I1jN458bCdjNU3zcBXCj5vVcp/GCTvudk=";
   };
 
   nativeBuildInputs = [ cmake ];
