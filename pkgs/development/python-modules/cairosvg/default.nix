@@ -19,7 +19,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cairosvg";
-  version = "2.9.0";
+  version = "2.9.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "Kozea";
     repo = "CairoSVG";
     tag = finalAttrs.version;
-    hash = "sha256-WtMFOYaN/cRrL1Q4ma/UkR3kNFObNhp0Gm7i9NQAqz8=";
+    hash = "sha256-yIUuhBmq15xwHznEq8l5z8QSkhQQc3GjTbJw5L2ZX+I=";
   };
 
   build-system = [ setuptools ];
