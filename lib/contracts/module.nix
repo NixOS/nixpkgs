@@ -30,18 +30,24 @@ let
     else
       resolveProvider module.${lib.head path} (lib.tail path);
 
+  inherit (config) contractTypes;
+
   # The option `contracts.warnings`.
   # Thus a contract type cannot have the name `warnings`.
-  warningsModule = {
-    options.warnings = mkOption {
-      description = ''
-        Warnings from the aliases in `contracts`, for example from `lib.mkRenamedOptionModule`.
-        In NixOS, these warnings go to the option `warnings`.
-      '';
-      type = types.listOf types.str;
-      default = [ ];
+  warningsModule =
+    { config, ... }:
+    {
+      options.warnings = mkOption {
+        description = ''
+          Warnings from the aliases in `contracts`, for example from `lib.mkRenamedOptionModule`,
+          and the warnings of each contract type.
+          In NixOS, these warnings go to the option `warnings`.
+        '';
+        type = types.listOf types.str;
+        default = [ ];
+      };
+      config.warnings = lib.concatMap (name: config.${name}.warnings) (lib.attrNames contractTypes);
     };
-  };
 in
 {
   options = {
@@ -98,6 +104,8 @@ in
               { config, ... }:
               let
                 entryType = types.submodule { imports = [ contractType.consumerInterface ]; };
+                # The `request` of an entry, without `warnings`.
+                request = want: lib.getAttrs contractType.requestOptionNames want.request;
                 # An entry has only the keys of the interface, such as `request`.
                 # Other attribute sets are namespaces, for example `want.<consumer>`.
                 isEntry = v: v != { } && lib.isNestedAttrsLeaf lib.all entryType v;
@@ -157,10 +165,13 @@ in
                   };
 
                   requests = mkOption {
-                    description = "The `request` of each entry in `want`, at the same path.";
+                    description = ''
+                      The `request` of each entry in `want`, at the same path.
+                      It has only the `request` options of the interface.
+                    '';
                     readOnly = true;
                     type = types.attrsOf types.raw;
-                    default = mapEntries (_: want: { inherit (want) request; });
+                    default = mapEntries (_: want: { request = request want; });
                     defaultText = lib.literalMD "the `request` of each entry in `want`";
                   };
 
@@ -276,10 +287,31 @@ in
                     default = lib.mapAttrs (
                       _: provider:
                       filterMapEntries (path: instanceOf path != null && (instanceOf path).loc == provider.loc) (
-                        _: want: { inherit (want) request; }
+                        _: want: { request = request want; }
                       )
                     ) config.providers;
                     defaultText = lib.literalMD "the entries of `requests` that `instances` sends to each provider";
+                  };
+
+                  warnings = mkOption {
+                    description = ''
+                      Warnings from the aliases in `requestAliases`,
+                      for each entry in `want` that sets an alias.
+                      In NixOS, these warnings go to the option `warnings`.
+                    '';
+                    readOnly = true;
+                    type = types.listOf types.str;
+                    default = lib.concatLists (
+                      lib.collect lib.isList (
+                        mapEntries (
+                          path: want:
+                          map (
+                            warning: "contracts.${contractName}.want.${lib.showAttrPath path}.request: ${warning}"
+                          ) want.request.warnings
+                        )
+                      )
+                    );
+                    defaultText = lib.literalMD "the warnings of the `request` of each entry in `want`";
                   };
 
                   results = mkOption {
@@ -287,6 +319,7 @@ in
                       For each entry in `want`, at the same path,
                       the `request` of the entry and the `response` from the provider in `instances` in one attribute set.
                       Thus a consumer reads a request value from the same place as the response.
+                      The `request` does not have the aliases from `requestAliases`.
                       A `response` attribute takes precedence over a `request` attribute with the same name.
 
                       The user sets the `response` of a consumer option from this option:
@@ -303,7 +336,7 @@ in
                       if instanceOf path == null then
                         throw "contracts.${contractName}.want.${lib.showAttrPath path}: no provider. Set `contracts.${contractName}.defaultProvider` or `contracts.${contractName}.instances.${lib.showAttrPath path}`."
                       else
-                        want.request // (lib.getAttrFromPath path (instanceOf path).value).response
+                        request want // (lib.getAttrFromPath path (instanceOf path).value).response
                     );
                     defaultText = lib.literalMD "the `request` of each entry in `want`, with the `response` from the provider in `instances`";
                   };

@@ -225,6 +225,7 @@ For each contract type, [](#opt-contracts) sends the requests of consumers to a 
   These are the entries of `want` that `instances` sends to the provider, and `{ }` for providers not routed to fulfill requests.
 - `contracts.<type>.results.<consumer>.<option>`: for each entry in `want`, at the same path, the `request` of the entry and the `response` from the provider in `instances` in one attribute set.
   A `response` attribute takes precedence over a `request` attribute with the same name.
+- `contracts.<type>.warnings`: the warnings of the aliases that the entries in `want` set. See [](#contracts-rename-request).
 
 A provider reads `providerRequests.<provider>` into its provider option, and sets `providers.<provider>.module` to its options.
 `providers.<provider>.contract` is the path of the provider option in `module`:
@@ -314,6 +315,25 @@ To send one entry to a different provider, set `instances` at the path of the en
 
 To connect one entry manually, as in [](#contracts-connect), set `instances` at the path of the entry to `null`.
 Then no provider gets the request of that entry from `providerRequests`, and `results` at that path is not available.
+
+## Rename a request option {#contracts-rename-request}
+
+To rename an option of `request`, add a module with an alias to `requestAliases` of the contract type.
+For example, to rename the option `request.oldValue` to `request.value`:
+
+```nix
+{
+  requestAliases = [ (lib.mkRenamedOptionModule [ "oldValue" ] [ "value" ]) ];
+}
+```
+
+The paths are relative to `request`.
+Consumers can then set the old name or the new name.
+The value of `request` has only the options of `interface`, thus a consumer can forward its `request` to `want`.
+Providers get only the options of `interface`, and the `request` in `results` also has only these options.
+
+When a consumer sets the old name, the warning goes to `contracts.<type>.warnings`.
+In NixOS, these warnings go to the option `warnings`.
 
 ## Rename a contract type {#contracts-rename-type}
 

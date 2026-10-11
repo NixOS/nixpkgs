@@ -491,6 +491,17 @@ checkConfigOutput '^"postgresql://db.example.com:5432"$' config.contracts.connec
 checkConfigError 'is not of type .signed integer.' config.contracts.number.results.app.x.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-wrong-request.nix
 checkConfigError "set .fulfill. or .fulfill'., not the two" config.both.x.request.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-two-fulfill.nix
 
+# contracts: a consumer can set an alias from `requestAliases`, and the provider does not get the alias
+checkConfigOutput '^6$' config.contracts.number.results.app.x.value ./contracts-request-alias.nix
+checkConfigOutput '^7$' config.consumer.request.value ./contracts-request-alias.nix
+checkConfigOutput '^"value"$' config.providerRequestNames ./contracts-request-alias.nix
+checkConfigOutput '^"value"$' config.resultNames ./contracts-request-alias.nix
+# contracts: the warnings of the aliases, for each entry that sets an alias
+STRICT_EVAL=1 checkConfigOutput '^\["contracts.number.want.app.x.request: The option .oldValue. defined in [^"]*contracts-request-alias.nix. has been renamed to .value..","contracts.number.want.forward.old.request: The option .oldValue. defined in [^"]*contracts-request-alias.nix. has been renamed to .value.."\]$' config.contracts.number.warnings ./contracts-request-alias.nix
+# contracts: a consumer forwards its `request` to `want`, and the aliases do not apply two times
+checkConfigOutput '^8$' config.contracts.number.results.forward.old.value ./contracts-request-alias.nix
+checkConfigOutput '^4$' config.contracts.number.results.forward.new.value ./contracts-request-alias.nix
+
 # contracts: rename a contract type, and send the requests of the old name to the provider of the new name
 checkConfigOutput '^6$' config.contracts.number.results.old.x.value ./contracts-type-rename.nix
 checkConfigOutput '^2$' config.contracts.count.results.new.x.value ./contracts-type-rename.nix

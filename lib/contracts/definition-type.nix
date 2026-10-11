@@ -43,9 +43,36 @@ in
       type = types.deferredModule;
     };
 
+    requestAliases = mkOption {
+      description = ''
+        Modules that add aliases to the options of `request`,
+        for example `lib.mkRenamedOptionModule [ "oldName" ] [ "newName" ]`.
+        Consumers can set an alias.
+        Providers do not get the aliases:
+        the `request` of a consumer, and the `request` in `contracts.<type>.results`,
+        have only the `request` options of `interface`.
+        The warnings of the aliases go to `contracts.<type>.warnings`.
+        See [](#contracts-rename-request) for an example.
+      '';
+      type = types.listOf types.deferredModule;
+      default = [ ];
+    };
+
+    requestOptionNames = mkOption {
+      description = "Names of the `request` options of `interface`, without the aliases.";
+      type = types.listOf types.str;
+      internal = true;
+      readOnly = true;
+      default = lib.attrNames (subOptions "request");
+      defaultText = lib.literalMD "the names of the `request` options of `interface`";
+    };
+
     consumerInterface = mkOption {
       description = ''
         The `interface` as a consumer sees it.
+        A consumer can also set the options of `requestAliases` in `request`.
+        The value of `request` has only the `request` options of `interface` and `warnings`.
+        Thus a consumer can forward its `request` to `want`, and the aliases do not apply two times.
         `response` also has the options of `request`, as in `contracts.<type>.results`.
         A `response` option takes precedence over a `request` option with the same name.
         These options do not have the `default` and `apply` of the `request` options,
@@ -57,6 +84,19 @@ in
       readOnly = true;
       default = {
         imports = [ config.interface ];
+        options.request = mkOption {
+          type = types.submodule {
+            imports = config.requestAliases;
+            # `lib.mkRenamedOptionModule` adds its warning to this option.
+            options.warnings = mkOption {
+              description = "Warnings from the aliases in `requestAliases`.";
+              type = types.listOf types.str;
+              default = [ ];
+              internal = true;
+            };
+          };
+          apply = lib.getAttrs (config.requestOptionNames ++ [ "warnings" ]);
+        };
         options.response = mkOption {
           type = types.submodule {
             options = lib.mapAttrs (
@@ -69,7 +109,7 @@ in
           };
         };
       };
-      defaultText = lib.literalMD "`interface`, with the `request` options also in `response`";
+      defaultText = lib.literalMD "`interface`, with `requestAliases` and `warnings` in `request`, and the `request` options also in `response`";
     };
 
     mkContract = mkOption {
