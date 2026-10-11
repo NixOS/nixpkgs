@@ -763,7 +763,7 @@ in
 
   resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
-    version = "unstable-2022-05-01";
+    version = "4.0.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
