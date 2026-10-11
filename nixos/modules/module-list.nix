@@ -962,6 +962,7 @@
   ./services/misc/nzbget.nix
   ./services/misc/nzbhydra2.nix
   ./services/misc/octoprint.nix
+  ./services/misc/oikb.nix
   ./services/misc/ollama.nix
   ./services/misc/ollaya.nix
   ./services/misc/ombi.nix
