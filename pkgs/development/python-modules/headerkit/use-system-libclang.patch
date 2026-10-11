@@ -1,0 +1,78 @@
+diff --git a/headerkit/backends/libclang.py b/headerkit/backends/libclang.py
+index 12357def53..96e7e063fe 100644
+--- a/headerkit/backends/libclang.py
++++ b/headerkit/backends/libclang.py
+@@ -149,72 +149,7 @@
+     """
+     paths: list[str] = []
+ 
+-    if sys.platform == "darwin":
+-        # Homebrew on Apple Silicon (most common modern setup)
+-        paths.append("/opt/homebrew/opt/llvm/lib/libclang.dylib")
+-        # Homebrew versioned installs on Apple Silicon (sorted newest first)
+-        paths.extend(sorted(glob.glob("/opt/homebrew/Cellar/llvm/*/lib/libclang.dylib"), reverse=True))
+-        # Homebrew on Intel Macs
+-        paths.append("/usr/local/opt/llvm/lib/libclang.dylib")
+-        paths.extend(sorted(glob.glob("/usr/local/Cellar/llvm/*/lib/libclang.dylib"), reverse=True))
+-        # Xcode Command Line Tools
+-        paths.append("/Library/Developer/CommandLineTools/usr/lib/libclang.dylib")
+-        # Xcode.app (canonical path)
+-        paths.append(
+-            "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libclang.dylib"
+-        )
+-        # Xcode versioned app bundles (e.g. Xcode_16.2.app on GitHub Actions runners)
+-        paths.extend(
+-            sorted(
+-                glob.glob(
+-                    "/Applications/Xcode*.app/Contents/Developer/Toolchains"
+-                    "/XcodeDefault.xctoolchain/usr/lib/libclang.dylib"
+-                ),
+-                reverse=True,
+-            )
+-        )
+-        # xcrun-based discovery (works for any Xcode installation)
+-        paths.extend(_get_xcrun_libclang_paths())
+-
+-    elif sys.platform == "linux":
+-        # Debian/Ubuntu versioned LLVM packages (sorted newest first)
+-        paths.extend(sorted(glob.glob("/usr/lib/llvm-*/lib/libclang.so*"), reverse=True))
+-        # RHEL/Fedora/CentOS (64-bit) -- versioned names from clang-libs
+-        _add_versioned_so_paths(paths, "/usr/lib64")
+-        # Generic Linux -- also check versioned
+-        _add_versioned_so_paths(paths, "/usr/lib")
+-        paths.append("/usr/local/lib/libclang.so")
+-
+-    elif sys.platform == "win32":
+-        # Official LLVM installer (use env vars, not hardcoded paths)
+-        program_files = os.environ.get("PROGRAMFILES", r"C:\Program Files")
+-        program_files_x86 = os.environ.get("PROGRAMFILES(X86)", r"C:\Program Files (x86)")
+-        paths.append(os.path.join(program_files, "LLVM", "bin", "libclang.dll"))
+-        paths.append(os.path.join(program_files_x86, "LLVM", "bin", "libclang.dll"))
+-
+-        # Scoop package manager (per-user install)
+-        userprofile = os.environ.get("USERPROFILE", "")
+-        if userprofile:
+-            paths.append(os.path.join(userprofile, "scoop", "apps", "llvm", "current", "bin", "libclang.dll"))
+-
+-        # MSYS2 environments (default install location; MSYS2 does not expose
+-        # a reliable environment variable for its install dir outside MSYS2 shells)
+-        for msys2_env in ("mingw64", "ucrt64", "clang64"):
+-            paths.append(os.path.join("C:\\msys64", msys2_env, "bin", "libclang.dll"))
+-
+-    # pip install libclang: the PyPI package installs to site-packages/clang/native/
+-    try:
+-        import importlib.util
+-
+-        spec = importlib.util.find_spec("clang")
+-        if spec and spec.submodule_search_locations:
+-            native_dir = os.path.join(spec.submodule_search_locations[0], "native")
+-            if os.path.isdir(native_dir):
+-                lib_patterns = {"win32": "libclang*.dll", "darwin": "libclang*.dylib"}
+-                pattern = lib_patterns.get(sys.platform, "libclang*.so*")
+-                paths.extend(glob.glob(os.path.join(native_dir, pattern)))
+-    except (ImportError, ValueError):
+-        pass
++    paths.append("@libclangPath@")
+ 
+     return paths
+ 
