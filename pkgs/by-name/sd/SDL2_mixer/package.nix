@@ -59,17 +59,21 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   configureFlags = [
+    # disable dynamic loading of dependencies
     (lib.enableFeature false "music-mod-modplug-shared")
     (lib.enableFeature false "music-mp3-mpg123-shared")
     (lib.enableFeature false "music-opus-shared")
     (lib.enableFeature false "music-midi-fluidsynth-shared")
+    (lib.enableFeature false "music-ogg-vorbis-shared")
+
     (lib.enableFeature enableSdltest "sdltest")
+
     # override default path to allow MIDI files to be played
     (lib.withFeatureAs true "timidity-cfg" "${timidity}/share/timidity/timidity.cfg")
+
     # even though we have libvorbisfile from the libvorbis package, configure will default to the stb implementation
     (lib.enableFeature false "music-ogg-stb")
     (lib.enableFeature true "music-ogg-vorbis")
-    (lib.enableFeature false "music-ogg-vorbis-shared")
   ];
 
   meta = {
