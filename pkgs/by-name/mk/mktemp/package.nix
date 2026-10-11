@@ -1,35 +1,21 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch,
+  fetchgit,
   groff,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mktemp";
-  version = "1.7";
+  version = "unstable-2025-06-12";
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   env.NROFF = "${groff}/bin/nroff";
 
-  patches = [
-    # Pull upstream fix for parallel install failures.
-    (fetchpatch {
-      name = "parallel-install.patch";
-      url = "https://www.mktemp.org/repos/mktemp/raw-rev/eb87d96ce8b7";
-      hash = "sha256-cJ/0pFj8tOkByUwhlMwLNSQgTHyAU8svEkjKWWwsNmY=";
-    })
-  ];
-
-  # Don't use "install -s"
-  postPatch = ''
-    substituteInPlace Makefile.in --replace " 0555 -s " " 0555 "
-  '';
-
-  src = fetchurl {
-    url = "ftp://ftp.mktemp.org/pub/mktemp/mktemp-${finalAttrs.version}.tar.gz";
-    sha256 = "0x969152znxxjbj7387xb38waslr4yv6bnj5jmhb4rpqxphvk54f";
+  src = fetchgit {
+    url = "https://git.mktemp.org/mktemp.git";
+    rev = "315362892afbdfdde0b20780fee7e5aabe2c4ef8";
+    hash = "sha256-GeFCqU+YXeQHi4Nt0o/ooKlddDhRbgyk1hICL/cdHjw=";
   };
 
   enableParallelBuilding = true;
@@ -39,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mktemp";
     homepage = "https://www.mktemp.org";
     license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ armeenm ];
     platforms = lib.platforms.unix;
   };
 })
