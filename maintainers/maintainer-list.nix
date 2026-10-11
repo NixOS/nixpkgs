@@ -401,6 +401,11 @@
     github = "a-camarillo";
     githubId = 58638902;
   };
+  a-hassanin = {
+    github = "a-hassanin";
+    name = "Ahmed Hassanin";
+    githubId = 112945643;
+  };
   a-jay98 = {
     email = "ali@jamadi.me";
     github = "A-jay98";
