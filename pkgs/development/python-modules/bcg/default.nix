@@ -19,8 +19,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.17.0";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-gateway";
