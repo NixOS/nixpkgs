@@ -18493,6 +18493,12 @@
     githubId = 7556827;
     name = "Flo";
   };
+  maxbronnikov10 = {
+    email = "bronnikovmr@gmail.com";
+    github = "maxbronnikov10";
+    githubId = 33382129;
+    name = "Maxim Bronnikov";
+  };
   maxbrunet = {
     email = "max@brnt.mx";
     github = "maxbrunet";
