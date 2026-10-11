@@ -5,13 +5,17 @@
   pkg-config,
   wrapGAppsHook4,
   accountsservice,
+  bubblewrap,
   dbus,
   glib,
+  glycin-loaders,
   gst_all_1,
   gtk4,
+  libglycin,
   pango,
   librsvg,
   libseccomp,
+  shared-mime-info,
   nix-update-script,
 }:
 
@@ -37,6 +41,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     glib
     gtk4
+    # Static backgrounds are decoded by glycin since 0.5.0, not GStreamer
+    libglycin.setupHook
+    glycin-loaders
     gst_all_1.gstreamer # Used for animated wallpapers or video playback
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-base
@@ -44,6 +51,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     librsvg
     libseccomp
   ];
+
+  # glycin also needs the MIME database to detect the image type, and bwrap in
+  # PATH for its sandbox; a greeter session provides neither
+  # See https://github.com/NixOS/nixpkgs/issues/557002
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      --prefix PATH : "${lib.makeBinPath [ bubblewrap ]}"
+    )
+  '';
 
   passthru.updateScript = nix-update-script { };
 
