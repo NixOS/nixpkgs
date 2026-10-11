@@ -3005,7 +3005,8 @@
       ];
     "huisbaasje" =
       ps: with ps; [
-      ]; # missing inputs: energyflip-api-client
+        energyflip-api-client
+      ];
     "humidifier" =
       ps: with ps; [
       ];
@@ -8855,6 +8856,7 @@
     "huawei_lte"
     "hue"
     "hue_ble"
+    "huisbaasje"
     "humidifier"
     "humidity"
     "hunterdouglas_powerview"
