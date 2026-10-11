@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   craftos-pc,
   gnugrep,
@@ -16,7 +17,7 @@ stdenv.mkDerivation {
     mkdir $HOME/.local $HOME/.config
     export XDG_CONFIG_DIR=$HOME/.config
     export XDG_DATA_DIR=$HOME/.local
-    craftos --headless --script ${./init.lua} | grep "Hello Nixpkgs!" > /dev/null
+    ${lib.getExe craftos-pc} --headless --script ${./init.lua} | grep "Hello Nixpkgs!" > /dev/null
     touch $out
   '';
 }
