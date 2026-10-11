@@ -23,7 +23,7 @@ let
       systemCalls = [ "perf_event_open" ];
     };
     "nvidia-smi" = {
-      package = lib.getBin config.hardware.nvidia.package;
+      package = lib.getBin config.hardware.nvidia.package.driver;
       deviceAllow = [ "char-nvidia* rw" ];
     };
     "nvml" = {
@@ -253,7 +253,16 @@ in
         cfg.extraPath
         ++ lib.optionals cfg.smartmon.enable [ cfg.smartmon.package ]
         ++ lib.optionals config.boot.zfs.enabled [ config.boot.zfs.package ]
-        ++ gpuPackages;
+        ++ gpuPackages
+        ++ lib.optionals (builtins.elem "nvidia" config.services.xserver.videoDrivers) [
+          (lib.getBin config.hardware.nvidia.package.driver)
+        ]
+        ++ lib.optionals (builtins.elem "amdgpu" config.services.xserver.videoDrivers) [
+          (lib.getBin pkgs.rocmPackages.rocm-smi)
+        ]
+        ++ lib.optionals (builtins.elem "intel" config.services.xserver.videoDrivers) [
+          (lib.getBin pkgs.intel-gpu-tools)
+        ];
 
       serviceConfig = {
         ExecStart = ''

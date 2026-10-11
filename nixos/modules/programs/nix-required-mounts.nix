@@ -57,9 +57,9 @@ let
     # mesa:
     config.hardware.graphics.package
 
-    # nvidia_x11, etc:
+    # nvidia, etc:
   ]
-  ++ config.hardware.graphics.extraPackages; # nvidia_x11
+  ++ config.hardware.graphics.extraPackages; # nvidia
 
   defaults = {
     nvidia-gpu.onFeatures = package.allowedPatterns.nvidia-gpu.onFeatures;

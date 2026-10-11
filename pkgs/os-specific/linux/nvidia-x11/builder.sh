@@ -1,14 +1,3 @@
-unpackManually() {
-    skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | bsdtar xvf -
-    sourceRoot=.
-}
-
-
-unpackFile() {
-    sh $src -x || unpackManually
-}
-
 
 installPhase() {
     runHook preInstall
@@ -133,11 +122,6 @@ installPhase() {
             cp nvidia-application-profiles-*-rc $bin/share/nvidia/nvidia-application-profiles-rc
             cp nvidia-application-profiles-*-key-documentation $bin/share/nvidia/nvidia-application-profiles-key-documentation
         fi
-    fi
-
-    # Install the proprietary kernel module build files.
-    if [ -n "$modsrc" ]; then
-        cp -r kernel $modsrc
     fi
 
     if [ -n "$firmware" ]; then
