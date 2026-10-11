@@ -35,7 +35,6 @@
   libxtst,
   wayland,
   wayland-protocols,
-  xkeyboard_config,
 
   # Update script for `passthru`.
   nix-update-script,
@@ -95,8 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace src/lib/deskflow/unix/AppUtilUnix.cpp \
-        --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard_config}/share/X11/xkb/rules/evdev.xml"
       substituteInPlace deploy/linux/deploy.cmake \
         --replace-fail 'message(FATAL_ERROR "Unable to read file /etc/os-release")' 'set(RELEASE_FILE_CONTENTS "")'
     ''}
