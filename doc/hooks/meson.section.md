@@ -92,3 +92,42 @@ Meson setup hook.
 - `prefixKey`
 - `enableParallelBuilding`
 - `enableParallelChecking`
+
+## Subprojects {#meson-subprojects}
+
+`meson.fetchSubprojects` and `meson.subprojectsHook` can be used to build
+projects with [subprojects](https://mesonbuild.com/Subprojects.html#). The
+fetcher downloads all subprojects configured by the project, while the hook
+places them in the correct directory after `unpackPhase`.
+
+### Example {#meson-subprojects-example}
+
+```nix
+stdenv.mkDerivation (finalAttrs: {
+  # ...
+
+  nativeBuildInputs = [
+    meson
+    meson.subprojectsHook
+  ];
+
+  mesonSubprojects = meson.fetchSubprojects {
+    inherit (finalAttrs) pname version src;
+    hash = "...";
+  };
+
+  # ...
+})
+```
+
+### Variables controlling `meson.subprojectsHook` {#meson-subprojects-variables}
+
+#### `mesonSubprojects` {#meson-subprojects-variable}
+
+Path to a populated subprojects directory. This is usually the output of
+`meson.fetchSubprojects`.
+
+#### `mesonSubprojectsPath` {#meson-subprojects-path}
+
+Path to where the subprojects directory is located within the source. Defaults to
+`$sourceRoot/subprojects`.
