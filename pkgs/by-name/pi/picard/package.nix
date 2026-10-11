@@ -66,6 +66,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       pyobjc-core
       pyobjc-framework-Cocoa
+      pyobjc-framework-MediaPlayer
     ]
   );
 
