@@ -122,20 +122,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  filemarks-nvim = buildVimPlugin {
-    pname = "filemarks.nvim";
-    version = "1.6.0";
-    src = fetchFromGitHub {
-      owner = "anoopkcn";
-      repo = "filemarks.nvim";
-      tag = "1.6.0";
-      hash = "sha256-qSHHsBb7MAceNV3QnZiTFN4d1i2zH8CItlzQWsYNjno=";
-    };
-    meta.homepage = "https://github.com/anoopkcn/filemarks.nvim/";
-    meta.license = getLicenseFromSpdxId "MIT";
-    meta.hydraPlatforms = [ ];
-  };
-
   FTerm-nvim = buildVimPlugin {
     pname = "FTerm.nvim";
     version = "0-unstable-2022-11-13";
@@ -6059,6 +6045,20 @@ final: prev: {
       hash = "sha256-Nn7FdhrMYIFrA72lW6fNubsrKss0QfH06oveOgSIHVE=";
     };
     meta.homepage = "https://github.com/lewis6991/fileline.nvim/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
+  filemarks-nvim = buildVimPlugin {
+    pname = "filemarks.nvim";
+    version = "1.6.0";
+    src = fetchFromGitHub {
+      owner = "anoopkcn";
+      repo = "filemarks.nvim";
+      tag = "1.6.0";
+      hash = "sha256-qSHHsBb7MAceNV3QnZiTFN4d1i2zH8CItlzQWsYNjno=";
+    };
+    meta.homepage = "https://github.com/anoopkcn/filemarks.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
     meta.hydraPlatforms = [ ];
   };
@@ -20603,6 +20603,20 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-dadbod-manager-ui = buildVimPlugin {
+    pname = "vim-dadbod-manager-ui";
+    version = "0-unstable-2026-10-11";
+    src = fetchFromGitHub {
+      owner = "sergioia-dev";
+      repo = "vim-dadbod-manager-ui";
+      rev = "3aba12f946f72e3d0797a26786851c9759260657";
+      hash = "sha256-pqLM7r4q7QYrc+OkOAH2gGPN3AJheabscYsbddqSe5g=";
+    };
+    meta.homepage = "https://github.com/sergioia-dev/vim-dadbod-manager-ui/";
+    meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-dadbod-ui = buildVimPlugin {
     pname = "vim-dadbod-ui";
     version = "0-unstable-2026-06-19";
@@ -24831,20 +24845,6 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
-  vim-textobj-xmlattr = buildVimPlugin {
-    pname = "vim-textobj-xmlattr";
-    version = "0.1.1";
-    src = fetchFromGitHub {
-      owner = "whatyouhide";
-      repo = "vim-textobj-xmlattr";
-      tag = "0.1.1";
-      hash = "sha256-EFn7Ql7SFWwcjR5WdQkl2/lJZY9qZN9ml6625lGtTzY=";
-    };
-    meta.homepage = "https://github.com/whatyouhide/vim-textobj-xmlattr/";
-    meta.license = getLicenseFromSpdxId "WTFPL";
-    meta.hydraPlatforms = [ ];
-  };
-
   vim-textobj-variable-segment = buildVimPlugin {
     pname = "vim-textobj-variable-segment";
     version = "0-unstable-2024-09-06";
@@ -24856,6 +24856,20 @@ final: prev: {
     };
     meta.homepage = "https://github.com/Julian/vim-textobj-variable-segment/";
     meta.license = getLicenseFromSpdxId "MIT";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-textobj-xmlattr = buildVimPlugin {
+    pname = "vim-textobj-xmlattr";
+    version = "0.1.1";
+    src = fetchFromGitHub {
+      owner = "whatyouhide";
+      repo = "vim-textobj-xmlattr";
+      tag = "0.1.1";
+      hash = "sha256-EFn7Ql7SFWwcjR5WdQkl2/lJZY9qZN9ml6625lGtTzY=";
+    };
+    meta.homepage = "https://github.com/whatyouhide/vim-textobj-xmlattr/";
+    meta.license = getLicenseFromSpdxId "WTFPL";
     meta.hydraPlatforms = [ ];
   };
 
