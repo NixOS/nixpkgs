@@ -133,8 +133,6 @@ buildPythonPackage (finalAttrs: {
     "-Wignore::DeprecationWarning"
   ];
 
-  __structuredAttrs = true;
-
   meta = {
     description = "Anthropic's safety-first language model APIs";
     homepage = "https://github.com/anthropics/anthropic-sdk-python";
