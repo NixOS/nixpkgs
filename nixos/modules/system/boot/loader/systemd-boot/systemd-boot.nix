@@ -96,8 +96,28 @@ let
         )}
       '';
 
+      prepareExtraFiles = pkgs.writeShellScript "prepare-extra-files" ''
+        set -euo pipefail
+        ${cfg.extraPrepareCommands}
+      '';
+
       bootCountingTries = cfg.bootCounting.tries;
       bootCounting = if cfg.bootCounting.enable then "True" else "False";
+
+      ukiConfig = pkgs.writeText "systemd-boot-uki.json" (
+        builtins.toJSON {
+          inherit (cfg.uki) enable;
+          inherit (pkgs.stdenv.hostPlatform) efiArch;
+          ukify =
+            if cfg.uki.enable then
+              "${config.systemd.package.override { withUkify = true; }}/lib/systemd/ukify"
+            else
+              "";
+          inherit (cfg.uki) privateKey certificate;
+          sbsign = if cfg.uki.privateKey != null then "${pkgs.sbsigntool}/bin/sbsign" else "";
+          sbverify = if cfg.uki.privateKey != null then "${pkgs.sbsigntool}/bin/sbverify" else "";
+        }
+      );
     };
   };
 
@@ -176,6 +196,84 @@ in
       '';
     };
 
+    uki = {
+      enable = mkEnableOption "install-time unified kernel images using systemd-stub" // {
+        description = ''
+          Assemble unified kernel images from each retained generation's bootspec
+          using upstream systemd-stub and ukify during bootloader installation.
+          Generation selection, specialisations and boot counting use the existing
+          systemd-boot entries. This does not use {option}`boot.uki` build settings.
+
+          Each image contains its own kernel and initrd, including initrd secrets.
+          Allow sufficient space on the boot filesystem for all retained images
+          and in `TMPDIR` for new images and assembly scratch files. Unchanged
+          installed images are verified and reused; they do not accumulate in
+          temporary storage. Set `TMPDIR` to a larger filesystem if necessary.
+          Existing images are pruned only after new images and entries are installed.
+          Reserve free boot space for replacing every retained image after a
+          systemd update. Generate byte-reproducible extra archives to avoid
+          unnecessary image replacements.
+
+          Extra initrd paths are relative to the boot partition (XBOOTLDR if
+          configured, otherwise the ESP). Archives declared in
+          {option}`boot.loader.systemd-boot.extraFiles`
+          are read directly from that generation's source files, before copying
+          them to the boot partition. Signed UKIs require these sources to reside
+          in the Nix store; they never sign boot-partition archives. Keep secrets
+          out of these files and use {option}`boot.initrd.secrets` instead.
+
+          In unsigned mode, other extra archives must exist on the boot partition
+          before assembly. Create them with
+          {option}`boot.loader.systemd-boot.extraPrepareCommands`; the existing
+          {option}`boot.loader.systemd-boot.extraInstallCommands` hook runs after
+          assembly and menu generation.
+
+          Restore all retained generations' runtime secret inputs before disabling
+          UKIs or using an older installer. Legacy installers cannot recover
+          secrets from installed UKIs.
+        '';
+      };
+
+      privateKey = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/sbctl/keys/db/db.key";
+        description = ''
+          Runtime absolute path to a PEM private key for signing UKIs. The key
+          must be owned by root and inaccessible to other users, and must not
+          reside in the Nix store. Its resolved parent directories must be owned
+          and writable only by root. Set {option}`boot.loader.systemd-boot.uki.certificate`
+          alongside it. When null, UKIs are installed unsigned.
+
+          Signing requires an existing systemd-boot manager signed with this
+          certificate, matching {option}`systemd.package`, at both the normal
+          and fallback EFI paths. The installer verifies and
+          preserves those managers; it refuses manager upgrades. Key enrollment
+          and manager provisioning, including firmware boot entry registration,
+          are separate administrative steps. In signed mode the installer does
+          not run `bootctl install/update`, touch EFI variables or apply
+          {option}`boot.loader.systemd-boot.graceful`.
+
+          Retired runtime secrets are preserved from authenticated installed
+          UKIs. During migration, unauthenticated legacy initrd tails cannot be
+          signed: keep the runtime secret files available for the first signed
+          installation, or the non-default generation receives a pristine initrd.
+        '';
+      };
+
+      certificate = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/sbctl/keys/db/db.pem";
+        description = ''
+          Runtime absolute path to the PEM certificate matching
+          {option}`boot.loader.systemd-boot.uki.privateKey`. The certificate is
+          public and may reside in the Nix store. Certificates outside the store and their
+          parent directories must be owned and writable only by root.
+        '';
+      };
+    };
+
     sortKey = mkOption {
       default = "nixos";
       type = types.str;
@@ -241,6 +339,8 @@ in
 
         `null` means no limit i.e. all generations
         that have not been garbage collected yet.
+        With UKIs enabled, the requested default generation stays within this
+        limit even when rolling back outside the newest generations.
       '';
     };
 
@@ -250,6 +350,21 @@ in
       description = ''
         Install the devicetree blob specified by `config.hardware.deviceTree.name`
         to the ESP and instruct systemd-boot to pass this DTB to linux.
+      '';
+    };
+
+    extraPrepareCommands = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Additional shell commands run before preparing boot files and generating
+        menu entries. Create boot-partition-relative archives listed in
+        {option}`system.boot.extraInitrd.paths` before UKI assembly, including
+        during the first installation. The boot partition is XBOOTLDR when
+        configured, otherwise the ESP. These commands may change extra files
+        even if subsequent bootloader installation fails. Commands that need the
+        generated menu entries belong in
+        {option}`boot.loader.systemd-boot.extraInstallCommands` instead.
       '';
     };
 
@@ -540,6 +655,45 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
+        assertion =
+          !cfg.uki.enable
+          || lib.all (
+            path: !(hasPrefix "/" path) && !(builtins.elem ".." (lib.splitString "/" path))
+          ) config.system.boot.extraInitrd.paths;
+        message = "systemd-boot UKI extra initrd paths must be boot-partition-relative without '..'.";
+      }
+      {
+        assertion =
+          cfg.uki.privateKey == null
+          || lib.all (
+            path:
+            builtins.hasAttr path cfg.extraFiles
+            && hasPrefix "${builtins.storeDir}/" "${cfg.extraFiles.${path}}"
+          ) config.system.boot.extraInitrd.paths;
+        message = "Signed systemd-boot UKIs require extra initrds declared in extraFiles with immutable Nix store sources. Use boot.initrd.secrets for private inputs.";
+      }
+      {
+        assertion = (cfg.uki.privateKey == null) == (cfg.uki.certificate == null);
+        message = "systemd-boot UKI signing requires both privateKey and certificate.";
+      }
+      {
+        assertion = cfg.uki.privateKey == null || cfg.uki.enable;
+        message = "systemd-boot UKI signing requires uki.enable.";
+      }
+      {
+        assertion =
+          cfg.uki.privateKey == null
+          || (
+            cfg.uki.certificate != null
+            && (
+              hasPrefix "/" cfg.uki.privateKey
+              && !(hasPrefix builtins.storeDir cfg.uki.privateKey)
+              && hasPrefix "/" cfg.uki.certificate
+            )
+          );
+        message = "systemd-boot UKI signing requires absolute runtime paths and a private key outside the Nix store.";
+      }
+      {
         assertion = (hasPrefix "/" efi.efiSysMountPoint);
         message = "The ESP mount point '${toString efi.efiSysMountPoint}' must be an absolute path";
       }
@@ -646,6 +800,10 @@ in
 
     boot.bootspec.extensions."org.nixos.systemd-boot" = {
       inherit (config.boot.loader.systemd-boot) sortKey;
+      uname = config.boot.kernelPackages.kernel.modDirVersion;
+      extraInitrdSources = lib.mapAttrs (_: source: "${source}") (
+        lib.filterAttrs (name: _: builtins.elem name config.system.boot.extraInitrd.paths) cfg.extraFiles
+      );
       devicetree = lib.mkIf cfg.installDeviceTree "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
     };
 
