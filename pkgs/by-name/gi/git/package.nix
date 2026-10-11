@@ -62,6 +62,7 @@
 assert osxkeychainSupport -> stdenv.hostPlatform.isDarwin;
 assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
+assert withBreakingChanges -> rustSupport;
 
 let
   version = "2.55.0";
