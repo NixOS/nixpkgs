@@ -151,6 +151,11 @@ rec {
         family = "arm";
       };
     };
+    isCsky = {
+      cpu = {
+        family = "csky";
+      };
+    };
     isMicroBlaze = {
       cpu = {
         family = "microblaze";
@@ -425,6 +430,7 @@ rec {
         gnueabihf
         gnuabielfv1
         gnuabielfv2
+        gnuabiv2
       ];
     isMusl =
       with abis;

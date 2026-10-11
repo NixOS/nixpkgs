@@ -221,6 +221,10 @@ rec {
     config = "or1k-elf";
   };
 
+  csky = {
+    config = "csky-unknown-linux-gnuabiv2";
+  };
+
   m68k = {
     config = "m68k-unknown-linux-gnu";
   };
