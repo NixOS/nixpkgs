@@ -451,7 +451,7 @@ in
 
   ukiyo = mkTmuxPlugin {
     pluginName = "ukiyo";
-    version = "0-unstable-2026-02-02";
+    version = "2.0.0";
     src = fetchFromGitHub {
       owner = "Nybkox";
       repo = "tmux-ukiyo";
