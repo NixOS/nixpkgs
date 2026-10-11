@@ -43,9 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace distribution/posix/CMakeLists.txt \
       --replace-fail /usr/share $out/share
 
-    substituteInPlace desktop/httraqt.desktop \
-      --replace-fail Exec=httraqt Exec=$out/bin/httraqt
-
     substituteInPlace sources/main/httraqt.cpp \
       --replace-fail /usr/share/httraqt/ $out/share/httraqt
   '';
