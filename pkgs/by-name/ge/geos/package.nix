@@ -35,6 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     geos = callPackage ./tests.nix { geos = finalAttrs.finalPackage; };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
     homepage = "https://libgeos.org";
