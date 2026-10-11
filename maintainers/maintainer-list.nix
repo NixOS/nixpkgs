@@ -12363,6 +12363,11 @@
     githubId = 49095435;
     name = "imsuck";
   };
+  imTHAI = {
+    name = "imTHAI";
+    github = "imTHAI";
+    githubId = 36070606;
+  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
