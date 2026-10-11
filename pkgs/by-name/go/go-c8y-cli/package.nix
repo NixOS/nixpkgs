@@ -11,17 +11,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-c8y-cli";
-  version = "2.55.0";
+  version = "2.56.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "reubenmiller";
     repo = "go-c8y-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-swD2mFVn/N38HhdU8SCbmqcefyzWl4k/ARHkktYo2mQ=";
+    hash = "sha256-IQjPN5vkl+JK0XMpX9ILjHg8Crf5vq+caJHXMJP8UKA=";
   };
 
-  vendorHash = "sha256-1h4kdtdYUPqyCIhEDFRP2guduc2aXvvbolDIIFqrES0=";
+  vendorHash = "sha256-k9TWPmrt7dFLjuOtUMXXzEMztQo5kLjgd2RdjPPlmKM=";
 
   # subPackage cmd/gen-docs is only built here to generate man pages in
   # postInstall and is removed again in postInstall.
