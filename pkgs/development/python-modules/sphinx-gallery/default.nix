@@ -40,7 +40,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sphinx-gallery";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     owner = "sphinx-gallery";
     repo = "sphinx-gallery";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eWU2xNnguyXi2AZ/PpBp0Pv3IsgL9wQMyPuQpNbn9cY=";
+    hash = "sha256-Uxxt0eD8c3YoptUgWVHlr1VIp5zlEWh5pPiv7RhqnHc=";
   };
 
   build-system = [
