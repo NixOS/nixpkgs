@@ -347,7 +347,6 @@ in
             trusted-users = mkOption {
               type = types.listOf types.str;
               example = [
-                "root"
                 "alice"
                 "@wheel"
               ];
@@ -358,7 +357,7 @@ in
                 can also specify groups by prefixing them with
                 `@`; for instance,
                 `@wheel` means all users in the wheel
-                group.
+                group. `root` is always included.
               '';
             };
 
