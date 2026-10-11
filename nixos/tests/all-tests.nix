@@ -1396,6 +1396,7 @@ in
   openbao = runTest ./openbao.nix;
   openbao-agent = runTest ./openbao-agent.nix;
   opencloud = runTest ./opencloud.nix;
+  opengist-modular = runTest ./opengist-modular.nix;
   openldap = runTest ./openldap.nix;
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
