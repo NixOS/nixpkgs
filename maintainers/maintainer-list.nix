@@ -11,6 +11,18 @@
      email = "address@example.org";
      matrix = "@user:example.org";
      keys = [ { fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333"; } ];
+
+     # external affiliations, see ./README.md
+     affiliation = {
+       "someorg.domain" = {
+         # overrides for any of the properties above
+         email = "address@someorg.com";
+
+         # additional affiliation metadata
+         contactUnresponsive = "contacttype:address";
+         fallbackMaintainers = [ self.someOtherHandle ];
+       };
+     };
    };
    ```
 
@@ -23,6 +35,12 @@
    - `email` is your maintainer email address,
    - `matrix` is your Matrix user ID,
    - `keys` is a list of your PGP/GPG key fingerprints.
+   - `affiliation` is an attrset with:
+     - keys: specifying the affiliated organisation, freeform string or domain name
+     - TODO: keys specifiying a domain name provide a list of permitted maintainer names for verification via HTTPS
+     - values: overriding of parent maintainer metadata, or additional information as in the example
+   - `contactUnresponsive` is a hyperlink URI indicating a contact  at the affiliated organisation in case this maintainer is unresponsive
+   - `fallbackMaintainers` is a list of other nixpkgs maintainer handles from this file that may be contacted or help out if main maintainer is unresponsive
 
    Specifying a GitHub account is required, because:
    - you will get invited to the @NixOS/nixpkgs-maintainers team;
@@ -60,6 +78,8 @@
    documented at [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#commit-conventions)
    file located in the root of the Nixpkgs repo.
 */
+
+{ self }:
 {
   # keep-sorted start case=no numeric=no block=yes
 
@@ -16474,6 +16494,11 @@
     github = "leona-ya";
     githubId = 11006031;
     name = "Leona Maroni";
+    affiliation."flyingcircus.io" = {
+      email = "lm@flyingcircus.io";
+      contactUnresponsive = "mailto:mail@flyingcircus.io";
+      fallbackMaintainers = [ self.osnyx ];
+    };
   };
   leonardoce = {
     email = "leonardo.cecchi@gmail.com";
@@ -22280,6 +22305,10 @@
     github = "osnyx";
     githubId = 104593071;
     name = "Oliver Schmidt";
+    affiliation."flyingcircus.io" = {
+      contactUnresponsive = "mailto:mail@flyingcircus.io";
+      fallbackMaintainers = [ self.leona ];
+    };
   };
   ostrolucky = {
     email = "gabriel.ostrolucky@gmail.com";
