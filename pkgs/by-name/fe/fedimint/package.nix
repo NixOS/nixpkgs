@@ -1,30 +1,29 @@
 {
   lib,
   buildPackages,
+  cmake,
   fetchFromGitHub,
   openssl,
   pkg-config,
   protobuf,
   rustPlatform,
-  version ? "0.7.1",
-  hash ? "sha256-7meBYUN7sG1OAtMEm6I66+ptf4EfsbA+dm5/4P3IRV4=",
-  cargoHash ? "sha256-4cFuasH2hvrnzTBTFifHEMtXZKsBv7OVpuwPlV19GGw=",
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fedimint";
-  inherit version;
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "fedimint";
     repo = "fedimint";
     rev = "v${version}";
-    inherit hash;
+    hash = "sha256-KoEw0iigprlKMrqmECLOcxHU9mp+DOw69NuOISNcOlc=";
   };
 
-  inherit cargoHash;
+  cargoHash = "sha256-DyBewz5f/6tKNBJBmZ+qYMMcpTI0w4stypmDGUvDTWw=";
 
   nativeBuildInputs = [
+    cmake
     protobuf
     pkg-config
     rustPlatform.bindgenHook
