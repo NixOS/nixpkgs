@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "rq";
   version = "2.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "rq";
