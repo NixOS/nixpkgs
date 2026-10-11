@@ -9,13 +9,13 @@
 
 buildDunePackage (finalAttrs: {
   pname = "frei0r";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-frei0r";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eh/ymZO/3a1z6uvZdnXgma/7AU2NBVs2lddA+R/kuQA=";
+    sha256 = "sha256-h0GlsSGJX30C7S+Hu4tiyZ5z+/XPesY5aQ6ib5vY1Yk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
