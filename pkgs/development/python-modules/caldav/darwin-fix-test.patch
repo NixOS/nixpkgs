@@ -1,0 +1,13 @@
+diff -Naur caldav-3.2.1.orig/tests/test_caldav.py caldav-3.2.1/tests/test_caldav.py
+--- caldav-3.2.1.orig/tests/test_caldav.py	2026-05-28 14:32:52.000000000 +0200
++++ caldav-3.2.1/tests/test_caldav.py	2026-07-04 22:15:51.643400969 +0200
+@@ -574,7 +574,8 @@
+     and no config file is present."""
+     from unittest.mock import patch
+ 
+-    with patch.dict(os.environ, {}, clear=True):
++    fs.create_dir("/not-exist")
++    with patch.dict(os.environ, {"HOME": "/not-exist"}, clear=True):
+         result = get_davclient()
+     assert result is None
+ 
