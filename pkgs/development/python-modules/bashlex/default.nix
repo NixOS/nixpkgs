@@ -13,8 +13,6 @@ buildPythonPackage (finalAttrs: {
 
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "idank";
     repo = "bashlex";
