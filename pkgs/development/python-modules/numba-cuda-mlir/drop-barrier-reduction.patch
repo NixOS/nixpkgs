@@ -1,0 +1,37 @@
+diff --git a/cext/mlir-llvm70/lib/LLVM70Target.cpp b/cext/mlir-llvm70/lib/LLVM70Target.cpp
+index 68469e3..b2d7dd3 100644
+--- a/cext/mlir-llvm70/lib/LLVM70Target.cpp
++++ b/cext/mlir-llvm70/lib/LLVM70Target.cpp
+@@ -1817,31 +1817,8 @@ llvm::Error MLIRToLLVM70::translateBarrierOp(Operation *op) {
+   auto barrierOp = cast<NVVM::BarrierOp>(op);
+   Value barrierId = barrierOp.getBarrierId();
+   Value numThreads = barrierOp.getNumberOfThreads();
+-  Value predicate = barrierOp.getReductionPredicate();
+-  auto reductionOp = barrierOp.getReductionOp();
+ 
+-  if (reductionOp) {
+-    if (!predicate)
+-      return llvm::createStringError(llvm::inconvertibleErrorCode(),
+-                                     "barrier reduction requires a predicate");
+-
+-    llvm::StringRef opStr;
+-    switch (*reductionOp) {
+-    case NVVM::BarrierReduction::POPC: opStr = "popc"; break;
+-    case NVVM::BarrierReduction::AND:  opStr = "and";  break;
+-    case NVVM::BarrierReduction::OR:   opStr = "or";   break;
+-    }
+-
+-    std::string intrName = ("llvm.nvvm.barrier0." + opStr).str();
+-    LLVMTypeRef paramTy = b.i32Ty();
+-    LLVMTypeRef fnTy = b.funcTy(b.i32Ty(), &paramTy, 1, false);
+-    LLVMValueRef fn = b.getNamedFunction(intrName.c_str());
+-    if (!fn)
+-      fn = b.addFunction(intrName.c_str(), fnTy);
+-    LLVMValueRef predVal = lookupValue(predicate);
+-    LLVMValueRef result = b.buildCall(fn, &predVal, 1, "");
+-    mapValue(barrierOp.getRes(), result);
+-  } else if (numThreads) {
++  if (numThreads) {
+     // bar.sync barId, numThreads;
+     std::string ptx = "bar.sync $0, $1;";
+     LLVMTypeRef paramTys[2] = {b.i32Ty(), b.i32Ty()};
