@@ -7783,6 +7783,8 @@ self: super: with self; {
 
   homf = callPackage ../development/python-modules/homf { };
 
+  honcho-ai = callPackage ../development/python-modules/honcho-ai { };
+
   hoomd-blue = callPackage ../development/python-modules/hoomd-blue { };
 
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
