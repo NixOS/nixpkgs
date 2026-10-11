@@ -188,10 +188,19 @@ stdenv.mkDerivation (finalAttrs: {
     # "P0952R2: A new specification for std::generate_canonical"
     # https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p0952r2.html
     "stats_tdigest_test.*/DistributionTest.ReasonableError/*"
+
+    # https://github.com/facebook/folly/issues/2365
+    "executors_serial_executor_test.SerialExecutorTest/*.RecursiveAdd"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"
     "concurrency_cache_locality_test.CacheLocality.LinuxActual"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # very strict timing constraints, will fail under load
+    "futures_interrupt_test.Interrupt.futureWithinTimedOut"
+    "futures_interrupt_test.Interrupt.semiFutureWithinTimedOut"
+    "io_async_async_udp_socket_test.AsyncSocketIntegrationTest.PingPongNotifyMmsg"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # No idea why these fail.
