@@ -365,7 +365,7 @@ lib.makeOverridable (
     '';
 
     postUnpack = ''
-      mv "$sourceRoot" source
+      mv -Tn "$sourceRoot" source
       sourceRoot=source
     '';
 
