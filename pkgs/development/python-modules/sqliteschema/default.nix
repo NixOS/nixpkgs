@@ -10,6 +10,7 @@
   tabledata,
   typepy,
   pytestCheckHook,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     setuptools-scm
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -42,6 +44,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "sqliteschema" ];
+
+  pythonRelaxDeps = [
+    "typepy"
+  ];
 
   # Enabling tests would trigger infinite recursion due to circular
   # dependency between this package and simplesqlite.
