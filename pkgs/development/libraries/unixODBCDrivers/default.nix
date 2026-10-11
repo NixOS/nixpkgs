@@ -144,13 +144,14 @@
       "--with-sqlite3=${sqlite.dev}"
     ];
 
-    installTargets = [ "install-3" ];
+    enableParallelInstalling = false;
 
-    # move libraries to $out/lib where they're expected to be
-    postInstall = ''
+    # Will not be automatically created by the makefile 
+    preInstall = ''
       mkdir -p "$out/lib"
-      mv "$out"/*.* "$out/lib"
     '';
+
+    installTargets = [ "install-3" ];
 
     # see the top of the file for an explanation
     passthru = {
