@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.boot.tmp;
 in
@@ -60,10 +65,43 @@ in
           :::
         '';
       };
+
+      perUser = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Create per-user directories in {file}`/tmp/user/<uid>` and set
+          {env}`TMPDIR` env variable.
+
+          Many programs use {env}`TMPDIR` for storing temporary files. Not all
+          of them are good at securing the permissions of those files.
+          libpam-tmpdir sets {env}`TMPDIR` for PAM sessions and sets the
+          permissions quite tight. This helps system security by having an
+          extra layer of security, making such symlink attacks and other
+          {file}`/tmp` based attacks harder or impossible.
+
+          ::: {.note}
+          Creation of per-user directory is tied to setting {env}`TMPDIR`. If
+          {option}`security.pam.services.<name>.setEnvironment` is disabled for
+          all PAM services in a login chain, directory won't be created.
+          :::
+        '';
+      };
     };
   };
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.perUser -> config.security.enableWrappers;
+        message = "Per-user tmp directories module requires security wrappers";
+      }
+      {
+        assertion = cfg.perUser -> config.security.pam.enable;
+        message = "Per-user tmp directories module requires PAM";
+      }
+    ];
+
     # When changing remember to update /tmp mount in virtualisation/qemu-vm.nix
     systemd.mounts = lib.mkIf cfg.useTmpfs [
       {
@@ -83,5 +121,12 @@ in
     ];
 
     systemd.tmpfiles.rules = lib.optional cfg.cleanOnBoot "D! /tmp 1777 root root";
+
+    security.wrappers.pam-tmpdir-helper = lib.mkIf cfg.perUser {
+      owner = "root";
+      group = "root";
+      setuid = true;
+      source = "${pkgs.pam_tmpdir}/libexec/pam-tmpdir/pam-tmpdir-helper";
+    };
   };
 }

@@ -4,6 +4,7 @@
   fetchurl,
   autoreconfHook,
   pam,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace pam_tmpdir.c \
-      --replace-fail '/usr/libexec/pam-tmpdir/pam-tmpdir-helper' "$out/libexec/pam-tmpdir/pam-tmpdir-helper"
+      --replace-fail /usr/libexec/pam-tmpdir/pam-tmpdir-helper /run/wrappers/bin/pam-tmpdir-helper
 
     # chmod/chown fails on files in /nix/store
     sed -i -E -e '/^\s*(chmod|chown)/d' Makefile.am
@@ -32,12 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.tests.pam-tmpdir = nixosTests.pam-tmpdir;
+
   meta = {
     homepage = "https://tracker.debian.org/pkg/pam-tmpdir";
     description = "PAM module for creating safe per-user temporary directories";
     mainProgram = "pam-tmpdir-helper";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ peterhoeg ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      MrQubo
+    ];
     platforms = lib.platforms.linux;
   };
 })
