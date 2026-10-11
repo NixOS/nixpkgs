@@ -11480,6 +11480,12 @@
     githubId = 982322;
     name = "Henrik Olsson";
   };
+  henrikschristensen = {
+    email = "henrik@hsctech.eu";
+    github = "henrikschristensen";
+    githubId = 51989221;
+    name = "Henrik Christensen";
+  };
   henrikvtcodes = {
     github = "henrikvtcodes";
     githubId = 22358337;
