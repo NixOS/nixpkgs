@@ -24,14 +24,14 @@ let
 in
 buildPythonPackage rec {
   pname = "jpylyzer";
-  version = "2.2.1";
+  version = "2.3.0b1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openpreserve";
     repo = "jpylyzer";
     rev = version;
-    hash = "sha256-P42qAks8suI/Xknwd8WAkymbGE7RApRa/a11J/V4LA0=";
+    hash = "sha256-s5TxHKNZnv+KHnpZagAoJh83VepCKv8T2UOim+zcIG8=";
   };
 
   propagatedBuildInputs = [ six ];
