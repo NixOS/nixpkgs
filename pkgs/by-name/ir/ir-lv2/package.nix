@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://factorial.hu/plugins/lv2/ir";
+    homepage = "https://tomscii.sig7.se/plugins/ir.lv2/";
     description = "Low-latency, realtime, high performance signal convolver especially for creating reverb effects.";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];
