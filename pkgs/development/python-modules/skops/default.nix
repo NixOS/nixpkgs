@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "skops";
   version = "0.15";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "skops-dev";
