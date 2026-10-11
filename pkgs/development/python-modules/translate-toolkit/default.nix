@@ -36,7 +36,6 @@ buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
   version = "3.19.19";
   pyproject = true;
-  __structuredAttrs = true;
 
   # nixpkgs-update: no auto update
   # Only weblate uses this and we want to follow its version constraints
