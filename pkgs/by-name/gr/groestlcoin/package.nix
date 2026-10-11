@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   installShellFiles,
@@ -39,6 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     sha256 = "17b83jch717d91srw1yc93p8ndl894ld9gx916wyy6jis07px6xh";
   };
+
+  patches = [
+    # Fix build with boost >= 1.91; backported to Bitcoin Core 29.x
+    (fetchpatch {
+      url = "https://github.com/bitcoin/bitcoin/commit/546598b73675bd5663de6df8f4e3a23a0e7eceb7.patch";
+      hash = "sha256-labzgMLJm1ZkeN/aGgUEooqWPy+XD1t5A89G+TPebpY=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
