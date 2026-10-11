@@ -18295,6 +18295,8 @@ self: super: with self; {
 
   rkm-codes = callPackage ../development/python-modules/rkm-codes { };
 
+  rknn-toolkit-lite2 = callPackage ../development/python-modules/rknn-toolkit-lite2 { };
+
   rlax = callPackage ../development/python-modules/rlax { };
 
   rlcard = callPackage ../development/python-modules/rlcard { };
