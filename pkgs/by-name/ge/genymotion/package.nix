@@ -15,7 +15,7 @@
   libxrender,
   fontconfig,
   freetype,
-  systemd,
+  systemdLibs,
   libpulseaudio,
   cairo,
   gdk-pixbuf,
@@ -46,7 +46,7 @@ let
     libxrender
     fontconfig
     freetype
-    systemd
+    systemdLibs
     libpulseaudio
     cairo
     gdk-pixbuf

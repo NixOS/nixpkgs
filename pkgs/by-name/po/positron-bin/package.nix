@@ -2,7 +2,7 @@
   lib,
   _7zz,
   alsa-lib,
-  systemd,
+  systemdLibs,
   wrapGAppsHook4,
   autoPatchelfHook,
   blas,
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
 
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     # Needed to fix the "Zygote could not fork" error.
-    (lib.getLib systemd)
+    (lib.getLib systemdLibs)
   ];
 
   installPhase =

@@ -7,7 +7,7 @@
   hicolor-icon-theme,
   gtk3,
   glib,
-  systemd,
+  systemdLibs,
   libxtst,
   libxrender,
   libxrandr,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/lib
     ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
-    ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -s ${lib.getLib systemdLibs}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     patchelf --interpreter ${bintools.dynamicLinker} --add-needed libGL.so.1 $out/opt/StarUML/staruml
 
