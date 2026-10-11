@@ -1,41 +1,79 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
   lld,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bear";
-  version = "4.0.4";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = "bear";
     rev = finalAttrs.version;
-    hash = "sha256-/sR0kIAqXaQkksoUvgSt2q1ZMQObeiLCr3TGalYiHs0=";
+    hash = "sha256-gbDRK4M13jRBCIYWn8so4bKHqCjL2YOF15CqIB2HqIQ=";
   };
 
-  cargoHash = "sha256-rjtf+8ZnkpTX6by20QN2VydWuuLRMvkDB8OTPlDCagI=";
+  cargoHash = "sha256-BZaydfkYyYtQWvM16VwBbeIz/vyfYSa/jSIulnWBNg8=";
 
   nativeBuildInputs = [
     installShellFiles
     lld
+    makeWrapper
   ];
 
-  postPatch = ''
-    substituteInPlace bear/build.rs \
-      --replace-fail 'const DEFAULT_WRAPPER_PATH: &str = "/usr/local/libexec/bear";' \
-        "const DEFAULT_WRAPPER_PATH: &str = \"$out/libexec/bear\";" \
-      --replace-fail 'const DEFAULT_PRELOAD_PATH: &str = "/usr/local/libexec/bear/$LIB";' \
-        "const DEFAULT_PRELOAD_PATH: &str = \"$out/lib\";"
-  '';
+  # buildRustPackage sets RUST_LOG="", which bear's env_logger parses
+  # as error-only, hiding warnings the tests assert on.
+  env.RUST_LOG = "info";
+
+  checkFlags = [
+    # exec*p PATH search falls back to libc's default path, empty in the sandbox
+    "--skip"
+    "cases::intercept_posix::execlp_interception"
+    "--skip"
+    "cases::intercept_posix::execvp_interception"
+    "--skip"
+    "cases::intercept_posix::execvpe_interception"
+    "--skip"
+    "cases::intercept_posix::posix_spawnp_interception"
+
+    # sandbox /bin/sh is static busybox, LD_PRELOAD can't see its children
+    "--skip"
+    "cases::intercept_posix::popen_interception"
+    "--skip"
+    "cases::intercept_posix::system_interception"
+    "--skip"
+    "cases::hardened_intercept::hardened_popen_after_unsetenv"
+    "--skip"
+    "cases::hardened_intercept::hardened_system_after_unsetenv"
+
+    # nixpkgs gcc is a wrapper script execing real gcc, doubling the event count
+    "--skip"
+    "cases::intercept::parallel_command_interception"
+  ];
 
   postInstall = ''
-    # wrapper should not end up on path
-    install -d $out/libexec/bear
-    mv $out/bin/wrapper $out/libexec/bear/wrapper
+    install -d $out/libexec/bear/bin $out/libexec/bear/lib
+    mv $out/bin/bear-driver $out/libexec/bear/bin/
+    mv $out/bin/bear-wrapper $out/libexec/bear/bin/
+    mv $out/lib/libexec.so $out/libexec/bear/lib/
+
+    makeWrapper $out/libexec/bear/bin/bear-driver $out/bin/bear
+
+    ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      $out/bin/generate-completions completions
+      # Bear has broken zsh completions (https://github.com/clap-rs/clap/issues/6313)
+      installShellCompletion --cmd bear \
+        --bash completions/bear.bash \
+        --fish completions/bear.fish
+    ''}
+
+    rm $out/bin/generate-completions $out/bin/cdb-compare
 
     installManPage man/bear.1
   '';
