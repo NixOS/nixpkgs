@@ -80,7 +80,7 @@
   testScript = /* python */ ''
     datasets = ["boot", "data"]
 
-    machine.start(allow_reboot=True)
+    machine.start_and_allow_reboot()
 
     machine.wait_for_unit("multi-user.target")
 

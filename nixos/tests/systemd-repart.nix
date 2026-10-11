@@ -355,7 +355,7 @@ in
           sizeDiff = "+64M";
         }}
 
-        machine.start(allow_reboot=True)
+        machine.start_and_allow_reboot()
         machine.wait_for_unit("default.target")
 
         first_uuid = machine.succeed("blkid -s UUID -o value /dev/disk/by-label/state")

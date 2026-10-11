@@ -105,7 +105,7 @@
       import re
       import subprocess
 
-      machine.start(allow_reboot=True)
+      machine.start_and_allow_reboot()
 
       # Will not succeed unless ConditionFirstBoot=yes
       machine.wait_for_unit("first-boot-complete.target")
