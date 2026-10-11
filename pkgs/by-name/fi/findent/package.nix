@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "findent";
-  version = "4.3.7";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/findent/findent-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4tqLjAwZYbK8nc5MbKp5ytCSRdNjiL6h/ALE7B/YuZg=";
+    hash = "sha256-SkS1LLERxP34h1JDDSAEEVD7tbYPntrDov1RPdyW0e0=";
   };
 
   enableParallelBuilding = true;
