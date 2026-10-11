@@ -102,8 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     ${lib.concatStringsSep "\n" (
       lib.mapAttrsToList (name: src: ''
-        mkdir -p "$out/Applications/${desktopName}.app/Contents/Resources/modules/${name}"
-        extractDistro ${src} "$out/Applications/${desktopName}.app/Contents/Resources/modules/${name}"
+        mkdir -p "$out/share/${pname}/modules/${name}"
+        extractDistro ${src} "$out/share/${pname}/modules/${name}"
       '') moduleSrcs
     )}
 
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     makeWrapper "$out/Applications/${desktopName}.app/Contents/MacOS/${binaryName}" "$out/bin/${binaryName}" \
       ${lib.strings.optionalString disableUpdates "--run ${lib.getExe finalAttrs.disableBreakingUpdates}"} \
-      --run "${finalAttrs.stageModules} \"$out/Applications/${desktopName}.app/Contents/Resources/modules\"" \
+      --run "${finalAttrs.stageModules} \"$out/share/${pname}/modules\"" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall
