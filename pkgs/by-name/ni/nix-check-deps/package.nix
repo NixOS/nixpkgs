@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage {
   version = "0-unstable-2025-04-09";
 
   src = fetchFromGitHub {
-    owner = "LordGrimmauld";
+    owner = "GrimmTheShrimp";
     repo = "nix-check-deps";
     rev = "263701905ec40a19c52d23d0fdceb1126e20c99e";
     hash = "sha256-RaPk8Cd5ovskxFFvFd0+auIopCo1YHyH+6199qK+d18=";
