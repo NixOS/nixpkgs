@@ -43,27 +43,52 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparselt${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-Al/0yZPn/wqtBFQU1FcGoSquDMObk6HQ3D5sSh5biHg=";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    hash = "sha256-pJvsJv007YCXR4YiOq3qFWlcDFoGxwKovNSk0Mjxnes=";
     sparseCheckout = [
       "projects/hipsparselt"
       "projects/hipblaslt/tensilelite"
       "projects/hipblaslt/cmake"
       "projects/hipblaslt/device-library"
+      # hipsparselt configures hipBLASLt's CMakeLists (for rocisa), whose
+      # configure_file needs library/include/hipblaslt-version.h.in
+      # (248K of headers only — not the ~476M library yaml tree).
+      "projects/hipblaslt/library/include"
       "shared/origami"
+      # rocisa (tensilelite/rocisa/CMakeLists.txt) add_subdirectory's stinkytofu
+      "shared/stinkytofu"
     ];
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipsparselt";
+
+  # stinkytofu (pulled in as a rocisa sibling) unconditionally include(ClangTidy)s
+  # from the monorepo top-level cmake/ dir, which our sparseCheckout omits (lint
+  # target we never build). Drop it (same ClangTidy fix as hipBLASLt).
+  postPatch = ''
+    substituteInPlace ../../shared/stinkytofu/CMakeLists.txt \
+      --replace-fail 'include(ClangTidy)' "" \
+      --replace-fail 'add_clang_tidy_custom_target()' ""
+  '';
 
   env.CXX = compiler;
   env.ROCM_PATH = "${clr}";
   env.TENSILE_ROCM_ASSEMBLER_PATH = lib.getExe' clr "amdclang++";
   env.TENSILE_GEN_ASSEMBLY_TOOLCHAIN = lib.getExe' clr "amdclang++";
+  # tensilelite's HelperKernelCache defaults its cache dir to
+  # $HOME/.tensile/helper_cache; the Nix sandbox $HOME (/homeless-shelter) is
+  # unwritable, so store() -> mkdir raises PermissionError right after codegen
+  # (same failure as hipBLASLt). Disable the Nix-useless cross-invocation cache
+  # and point HOME at $TMPDIR belt-and-suspenders.
+  env.TENSILE_DISABLE_HELPER_CACHE = "1";
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
+
   requiredSystemFeatures = [ "big-parallel" ];
 
   __structuredAttrs = true;
