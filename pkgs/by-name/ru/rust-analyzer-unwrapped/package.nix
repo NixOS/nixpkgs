@@ -10,6 +10,7 @@
   doCheck ? true,
   nix-update-script,
   versionCheckHook,
+  rust-analyzer,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -64,8 +65,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    # FIXME: Pass overridden `rust-analyzer` once `buildRustPackage` also implements #119942
-    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
+
+    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix {
+      rust-analyzer = rust-analyzer.override {
+        rust-analyzer-unwrapped = finalAttrs.finalPackage;
+      };
+    };
   };
 
   meta = {
