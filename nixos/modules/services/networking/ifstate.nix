@@ -226,8 +226,6 @@ in
       };
 
       boot.initrd = {
-        network.udhcpc.enable = lib.mkDefault false;
-
         # automatic configuration of kernel modules of virtual interface types
         availableKernelModules =
           let
