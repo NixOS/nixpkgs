@@ -40,10 +40,12 @@ in
           hostNames = [ "server" ];
           publicKey = snakeOilPublicKey;
         };
-        extraConfig = ''
-          Host server
-            IdentityFile ${snakeOilEd25519PrivateKey}
-        '';
+        hosts = [
+          {
+            name = "server";
+            IdentityFile = toString snakeOilEd25519PrivateKey;
+          }
+        ];
       };
 
       services.duplicity = {

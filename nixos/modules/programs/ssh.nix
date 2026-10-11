@@ -35,6 +35,25 @@ let
   ]
   ++ map pkgs.copyPathToStore cfg.knownHostsFiles;
 
+  sshConfigValue = v: if builtins.isBool v then lib.boolToYesNo v else toString v;
+
+  hostsText = lib.concatMapStringsSep "\n" (
+    hostCfg:
+    "Host ${hostCfg.name}\n"
+    +
+      lib.pipe
+        [ "name" ]
+        [
+          (removeAttrs hostCfg)
+          (lib.generators.toKeyValue {
+            mkKeyValue = lib.generators.mkKeyValueDefault {
+              mkValueString = sshConfigValue;
+            } " ";
+            indent = "  ";
+          })
+        ]
+  ) cfg.hosts;
+
 in
 {
   ###### interface
@@ -121,6 +140,56 @@ in
           options will be added after a `Host *` pattern.
           See {manpage}`ssh_config(5)`
           for help.
+        '';
+      };
+
+      hosts = lib.mkOption {
+        default = [ ];
+        type = lib.types.listOf (
+          lib.types.submodule {
+            freeformType = lib.types.attrsOf (
+              lib.types.oneOf [
+                lib.types.bool
+                lib.types.int
+                lib.types.str
+              ]
+            );
+            options.name = lib.mkOption {
+              type = lib.types.str;
+              description = ''
+                The `Host` pattern for this block, as accepted by
+                {manpage}`ssh_config(5)`. Several space-separated patterns
+                can be given to apply the same block to all of them, e.g.
+                `"foo bar *.baz.org"`.
+              '';
+            };
+          }
+        );
+        description = ''
+          Per-host (or host-pattern) client configuration, as a list of
+          `Host` blocks added to {file}`ssh_config`. Every attribute of a
+          list entry besides `name` becomes a `Key Value` line inside
+          that entry's block; boolean values are rendered as `yes`/`no`.
+
+          The order of the list matters, because {manpage}`ssh_config(5)`
+          applies the *first* obtained value for each keyword.
+        '';
+        example = lib.literalExpression ''
+          [
+            {
+              name = "*.example.org";
+              ControlMaster = "auto";
+              ControlPath = "/root/.ssh/master-%r@%n:%p";
+              ControlPersist = "5m";
+            }
+            {
+              name = "jumphost";
+              User = "deploy";
+              Port = 2222;
+              IdentityFile = "/root/.ssh/id_deploy";
+              IdentitiesOnly = true;
+            }
+          ]
         '';
       };
 
@@ -342,6 +411,7 @@ in
     environment.etc."ssh/ssh_config".text = lib.concatStringsSep "\n" (
       # Custom options from `extraConfig`, to override generated options
       lib.optional (cfg.extraConfig != "") cfg.extraConfig
+      ++ lib.optional (cfg.hosts != [ ]) hostsText
       ++ [
         ''
           # Generated options from other settings
