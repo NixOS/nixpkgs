@@ -1,9 +1,7 @@
 {
   lib,
-  pkgsCross,
   buildNpmPackage,
   fetchFromGitHub,
-  linkFarm,
   versionCheckHook,
   jre_headless,
   nodejs,
@@ -11,16 +9,6 @@
   umple,
   withUmple ? true,
 }:
-let
-  # tree-sitter needs a wasi32 clang available at `bin/clang`
-  wasi32cc = lib.getExe pkgsCross.wasi32.stdenv.cc;
-  wasi-sdk = linkFarm "wasi-sdk" { "bin/clang" = wasi32cc; };
-  # tree-sitter invokes clang with `--target=wasm32-unknown-wasi`, so clang looks
-  # for an unprefixed `wasm-ld` instead of the prefixed one that the cross bintools ship
-  wasm-ld = linkFarm "wasm-ld" {
-    "bin/wasm-ld" = lib.getExe' pkgsCross.wasi32.buildPackages.llvmPackages.lld "wasm-ld";
-  };
-in
 buildNpmPackage (finalAttrs: {
   pname = "umple-lsp";
   version = "1.0.2";
@@ -46,13 +34,8 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     nodejs
-    pkgsCross.wasi32.stdenv.cc.bintools
-    tree-sitter
-    wasm-ld
+    (tree-sitter.override { wasmSupport = true; })
   ];
-
-  # Stop tree-sitter from trying to fetch its own wasi-sdk
-  env.TREE_SITTER_WASI_SDK_PATH = wasi-sdk;
 
   dontNpmBuild = true;
 
