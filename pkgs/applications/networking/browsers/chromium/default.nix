@@ -21,6 +21,7 @@
   runCommand,
   lib,
   libkrb5,
+  speechd-minimal,
   widevine-cdm,
 
   # package customization
@@ -131,6 +132,7 @@ stdenv.mkDerivation {
         gtk3
         gtk4
         libkrb5
+        speechd-minimal
       ];
 
     in
