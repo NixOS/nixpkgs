@@ -1,0 +1,57 @@
+diff --git a/buildSrc/src/main/kotlin/auto-version.gradle.kts b/buildSrc/src/main/kotlin/auto-version.gradle.kts
+deleted file mode 100644
+index 5a85a4c..0000000
+--- a/buildSrc/src/main/kotlin/auto-version.gradle.kts
++++ /dev/null
+@@ -1,8 +0,0 @@
+-import net.legacylauncher.gradle.*
+-
+-project.version = providers.of(StdOutExecValueSource::class) {
+-    parameters {
+-        args("git", "describe", "--tags", "--always", "--match", "[0-9].*")
+-        failureResult = "detached"
+-    }
+-}.get()
+diff --git a/common/build.gradle.kts b/common/build.gradle.kts
+index 64a468e..6374f9e 100644
+--- a/common/build.gradle.kts
++++ b/common/build.gradle.kts
+@@ -4,7 +4,6 @@ import org.gradle.jvm.tasks.Jar
+ plugins {
+     `java-library`
+     `jvm-test-suite`
+-    `auto-version`
+     alias(libs.plugins.lombok)
+     net.legacylauncher.brand
+ }
+diff --git a/dbus-java-transport-junixsocket/build.gradle.kts b/dbus-java-transport-junixsocket/build.gradle.kts
+index eb674f4..4ef27e4 100644
+--- a/dbus-java-transport-junixsocket/build.gradle.kts
++++ b/dbus-java-transport-junixsocket/build.gradle.kts
+@@ -1,9 +1,8 @@
+ plugins {
+     `java-library`
+-    `auto-version`
+ }
+ 
+ dependencies {
+     implementation(libs.bundles.dbus)
+     implementation(libs.junixsocket.core)
+-}
+\ No newline at end of file
++}
+diff --git a/utils/build.gradle.kts b/utils/build.gradle.kts
+index a2f3649..8bfbaed 100644
+--- a/utils/build.gradle.kts
++++ b/utils/build.gradle.kts
+@@ -3,7 +3,6 @@ import net.legacylauncher.gradle.*
+ plugins {
+     `java-library`
+     `jvm-test-suite`
+-    `auto-version`
+     alias(libs.plugins.lombok)
+ }
+ 
+-- 
+2.52.0
+
