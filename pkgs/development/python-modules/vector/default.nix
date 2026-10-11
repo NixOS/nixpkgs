@@ -25,7 +25,6 @@ buildPythonPackage (finalAttrs: {
   pname = "vector";
   version = "1.9.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
