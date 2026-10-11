@@ -56,10 +56,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-QhabuiCpDFMfcAiZN9c5MSwdGfc7/3orLVW9O7bwJ1A=",
+                    "hash": "sha256-6DljGhYdvz0QDK9F4Iz3rK76baRNnmMcOS3hBm69K+Q=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v42.11.10"
+                    "tag": "v42.11.12"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -1437,7 +1437,7 @@
         },
         "modules": "146",
         "node": "24.19.0",
-        "version": "42.11.10"
+        "version": "42.11.12"
     },
     "43": {
         "chrome": "150.0.7871.250",
@@ -1504,10 +1504,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-miOYOZYPTE1iB7aPPBiE3TvvhDBCPAp8wteSVS+EuF4=",
+                    "hash": "sha256-+73dtsqtav1M6LouBnUMceyonB+MFMR1EzXjsmABoKo=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v43.7.7"
+                    "tag": "v43.7.9"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -2823,7 +2823,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-HiwgiBW34bvgpajmz1qCrPQVd1mO5vkNVzaimloWe5Q=",
+            "hash": "sha256-8r0r7WXrM4HlS2qKMHbyxS+4zet646JKjTEtSyCTqqs=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -2893,7 +2893,7 @@
         },
         "modules": "148",
         "node": "24.21.0",
-        "version": "43.7.7"
+        "version": "43.7.9"
     },
     "44": {
         "chrome": "152.0.7977.130",
@@ -2960,10 +2960,10 @@
             },
             "src/electron": {
                 "args": {
-                    "hash": "sha256-qipLsjTjdjS/NYWXMnFGz2RI7yzFuIdtqJuX6mC2QPY=",
+                    "hash": "sha256-rSRqH31akFsn2zrFoLM2RMf9SIaWa+ePWwzkWGSAzH4=",
                     "owner": "electron",
                     "repo": "electron",
-                    "tag": "v44.5.1"
+                    "tag": "v44.7.0"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4068,10 +4068,10 @@
             },
             "src/third_party/squirrel.mac": {
                 "args": {
-                    "hash": "sha256-sNfy005jRNuT+csMhZ0ynu30EpdGSfOdgf2JvNnE7+c=",
+                    "hash": "sha256-a3tHUhcHvbSIldW+26hdLvcNE+3MzGq4/YLyvlLq650=",
                     "owner": "Squirrel",
                     "repo": "Squirrel.Mac",
-                    "rev": "8d808803bc89ec0e2aa1450474856dfee3b00c6b"
+                    "rev": "fffea30e4a339a7f7d69a3391314b72548d209bd"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4090,6 +4090,15 @@
                     "owner": "ReactiveCocoa",
                     "repo": "ReactiveObjC",
                     "rev": "74ab5baccc6f7202c8ac69a8d1e152c29dc1ea76"
+                },
+                "fetcher": "fetchFromGitHub"
+            },
+            "src/third_party/squirrel.mac/vendor/Sparkle": {
+                "args": {
+                    "hash": "sha256-Zczfh7k4zKPsHRcH4/lLGBgKziJgxWnGJCyM3TJCXc8=",
+                    "owner": "sparkle-project",
+                    "repo": "Sparkle",
+                    "rev": "79bc9e872948e47877e76f194cb0c8e0412b0b90"
                 },
                 "fetcher": "fetchFromGitHub"
             },
@@ -4303,7 +4312,7 @@
             }
         },
         "electron_yarn_data": {
-            "hash": "sha256-Qhuv4eunoVjXQks72J4+bw/y7VoYvegUDziJkHDOnfM=",
+            "hash": "sha256-o40KUJ1YYQ9ImompIMsovGQT3kuXDKJyfZHW/k7+8mE=",
             "missing_hashes": {
                 "@oxfmt/binding-android-arm-eabi@npm:0.42.0": "42c08d87ce491086843070241f8777fa2cb968f4a08f67b3f6c33a8f67e0b3eac50eae146daede743e90e3bc32326951c5188814eea02e9c3e4a9764a4b492ba",
                 "@oxfmt/binding-android-arm64@npm:0.42.0": "73e6609498d05c655c6a435af9f3e4f341137c260c7ae27fbb0377573574ca5200bd9f187aa90d442879733bbd0c4e91ae023c3b4579c9a57413a0b2922c023a",
@@ -4373,6 +4382,6 @@
         },
         "modules": "149",
         "node": "24.21.0",
-        "version": "44.5.1"
+        "version": "44.7.0"
     }
 }
