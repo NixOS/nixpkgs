@@ -1,8 +1,10 @@
 {
   lib,
   buildPythonPackage,
+  unittestCheckHook,
+  poetry-core,
   capstone,
-  fetchPypi,
+  fetchFromGitHub,
   gevent,
   keystone-engine,
   multiprocess,
@@ -15,18 +17,21 @@
   termcolor,
   unicorn,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qiling";
-  version = "1.4.6";
-  format = "setuptools";
+  version = "1.4.7";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-l3WQBlJic4lXCe5Z1FmoxaqOblE7uAaW2gG/nTn84Kc=";
+  src = fetchFromGitHub {
+    owner = "qilingframework";
+    repo = "qiling";
+    tag = finalAttrs.version;
+    hash = "sha256-B3p3Ve/mZvKZLbVlEjItS+O4tSYwJV7wSsj0gV/CZq8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     capstone
     gevent
     keystone-engine
@@ -41,18 +46,21 @@ buildPythonPackage rec {
     unicorn
   ];
 
-  # Tests are broken (attempt to import a file that tells you not to import it,
-  # amongst other things)
-  doCheck = false;
+  pythonRelaxDeps = [
+    "capstone"
+    "unicorn"
+  ];
 
   pythonImportsCheck = [ "qiling" ];
+  # to be enabled in the future, when we figure out how to exclude tests from unittestCheckHook
+  # nativeCheckInputs = [ unittestCheckHook ];
+  # doCheck = false;
 
   meta = {
     description = "Qiling Advanced Binary Emulation Framework";
     homepage = "https://qiling.io/";
-    changelog = "https://github.com/qilingframework/qiling/releases/tag/${version}";
+    changelog = "https://github.com/qilingframework/qiling/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    broken = true;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ BonusPlay ];
   };
-}
+})
