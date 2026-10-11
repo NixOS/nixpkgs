@@ -31,5 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ eveeifyeve ];
+    knownVulnerabilities = [
+      ''
+        'rustcast' is unmaintained upstream, Migrate to 'viciane', if possible
+        For more info see https://github.com/MystikoLab/rustcast/commit/5934e47366a4b9d63d0291fd36ab7cb023564801
+      ''
+    ];
   };
 })
