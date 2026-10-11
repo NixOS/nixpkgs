@@ -2,8 +2,10 @@
   lib,
   buildDunePackage,
   opam-format,
-  curl,
   patch,
+  tar,
+  checkseum,
+  decompress,
 }:
 
 buildDunePackage {
@@ -14,6 +16,9 @@ buildDunePackage {
   propagatedBuildInputs = [
     opam-format
     patch
+    tar
+    checkseum
+    decompress
   ];
 
   configureFlags = [ "--disable-checks" ];
