@@ -27,13 +27,13 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dav1d";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "videolan";
     repo = "dav1d";
     rev = finalAttrs.version;
-    hash = "sha256-E3da/LJ8HNy1osExmupovqnL8JHgVNzPUCG5F8TJKXQ=";
+    hash = "sha256-L3a9MmPWJlxmRa19glWDLvkXHev5oiM5/fxtKOBPMxI=";
   };
 
   outputs = [
