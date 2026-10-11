@@ -1,26 +1,23 @@
-{ ... }:
 {
   name = "navidrome";
 
-  nodes.machine =
-    { pkgs, ... }:
-    {
-      services.navidrome = {
-        enable = true;
-        plugins = with pkgs.pkgsCross.wasi32.navidromePlugins; [
-          # basic go plugin
-          listenbrainz-daily-playlist
-          # uses bundleName instead of pname
-          apple-music
-          # rust plugin
-          lyrics-plugin
-        ];
-        settings = {
-          # Disables all external network connections
-          EnableExternalServices = "false";
-        };
+  nodes.machine = {
+    services.navidrome = {
+      enable = true;
+      withPlugins = p: [
+        # basic go plugin
+        p.listenbrainz-daily-playlist
+        # uses bundleName instead of pname
+        p.apple-music
+        # rust plugin
+        p.lyrics-plugin
+      ];
+      settings = {
+        # Disables all external network connections
+        EnableExternalServices = "false";
       };
     };
+  };
 
   testScript = ''
     machine.wait_for_unit("navidrome")
@@ -31,5 +28,8 @@
     # Make sure the admin wrapper is working
     machine.succeed("cd ~")
     assert "--version" in machine.succeed("navidrome-cli --help")
+
+    # Make sure that the rust plugin loads
+    assert "nd-lyrics" in machine.succeed("navidrome-cli plugin list")
   '';
 }

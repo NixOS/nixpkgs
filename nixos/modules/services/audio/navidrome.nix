@@ -8,22 +8,23 @@
 let
   inherit (lib)
     literalExpression
-    mkDefault
     mkEnableOption
     mkPackageOption
     mkOption
+    mkChangedOptionModule
     maintainers
-    optionals
     optionalString
+    findFirst
+    attrValues
     ;
   inherit (lib.types)
-    addCheck
     bool
     listOf
     package
     port
     str
     submodule
+    functionTo
     ;
   inherit (pkgs)
     writeShellScriptBin
@@ -33,40 +34,55 @@ let
   settingsFormat = pkgs.formats.json { };
 in
 {
+  imports = [
+    (mkChangedOptionModule [ "services" "navidrome" "plugins" ] [ "services" "navidrome" "withPlugins" ]
+      (
+        config:
+        (
+          p:
+          (map (
+            old_plugin:
+            (findFirst (
+              new_plugin: new_plugin.name or "not-pkg" == old_plugin.name
+            ) (throw "plugin ${old_plugin} does not exist in navidromePlugins") (attrValues p))
+          ))
+            config.services.navidrome.plugins
+        )
+      )
+    )
+  ];
+
   options = {
+
     services.navidrome = {
 
       enable = mkEnableOption "Navidrome music server";
 
       package = mkPackageOption pkgs "navidrome" { };
 
-      plugins = mkOption {
-        type = listOf (
-          addCheck package (p: p.isNavidromePlugin or false)
-          // {
-            name = "navidrome plugin";
-            description = "package that is a navidrome plugin";
-          }
+      withPlugins = mkOption {
+        type = functionTo (
+          listOf (
+            package
+            // {
+              name = "navidrome plugin";
+              description = "wasm plugins loaded by Navidrome";
+            }
+          )
         );
-        default = [ ];
-        description = "List of Navidrome plugins";
+        default = _: [ ];
+        description = "Plugins to bundle with Navidrome";
         example = literalExpression ''
-          with pkgs.pkgsCross.wasi32.navidromePlugins; [
-            listenbrainz-daily-playlist
-          ];
+          p: [ p.listenbrainz-daily-playlist ];
         '';
       };
 
       finalPackage = mkOption {
         type = package;
         readOnly = true;
-        default = cfg.package.override {
-          inherit (cfg) plugins;
-        };
+        default = cfg.package.withPlugins cfg.withPlugins;
         defaultText = literalExpression ''
-          config.services.navidrome.package.override {
-            inherit (config.services.navidrome) plugins;
-          }
+          config.services.navidrome.package.withPlugins config.services.navidrome.withPlugins;
         '';
         description = "The final navidrome package including all selected plugins.";
       };
