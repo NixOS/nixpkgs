@@ -60,6 +60,7 @@ stdenv.mkDerivation {
 
   passthru.tests = {
     tinydns = nixosTests.tinydns;
+    dnscache = nixosTests.dnscache;
   };
 
   meta = {
