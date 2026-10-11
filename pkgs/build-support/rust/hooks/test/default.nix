@@ -101,4 +101,26 @@
     cargoCheckType = "release";
     doCheck = true;
   };
+
+  cargoSetupHookNoStd = stdenv.mkDerivation {
+    name = "test-cargoSetupHook-no-std";
+    src = ./example-rust-project;
+    cargoVendorDir = "hello";
+    nativeBuildInputs = [
+      rustPlatform.cargoSetupHook
+      cargo
+    ];
+    env.RUSTFLAGS = "-C link-arg=-nostartfiles";
+    buildPhase = ''
+      cargo build \
+        --profile release \
+        --target ${stdenv.hostPlatform.rust.rustcTarget} \
+        --features no-std-test \
+        --bin no_std
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/no_std $out/bin/
+    '';
+  };
 }
