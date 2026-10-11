@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl libxml2
+#!nix-shell -i bash -p curl libxml2 common-updater-scripts
 
 XML_URL="https://persistent.oaistatic.com/codex-app-prod/appcast.xml"
 
@@ -10,14 +10,13 @@ DOWNLOAD_URL=$(echo "$XML_DATA" | xmllint --xpath 'string(//item[1]/enclosure/@u
 
 HASH=$(nix-prefetch-url $DOWNLOAD_URL | xargs nix --extra-experimental-features nix-command hash convert --hash-algo sha256)
 
-SOURCE_NIX="$(dirname ${BASH_SOURCE[0]})/source.nix"
+PACKAGE_NIX="$(dirname "${BASH_SOURCE[0]}")/darwin.nix"
 
-cat > "${SOURCE_NIX}" << _EOF_
-{
-  version = "$LATEST_VERSION";
-  src = {
-    url = "$DOWNLOAD_URL";
-    hash = "$HASH";
-  };
-}
-_EOF_
+update-source-version \
+  chatgpt \
+  "$LATEST_VERSION" \
+  "$HASH" \
+  "$DOWNLOAD_URL" \
+  --system=aarch64-darwin \
+  --file="$PACKAGE_NIX" \
+  --ignore-same-version
