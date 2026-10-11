@@ -8,13 +8,13 @@
 
 buildPecl rec {
   pname = "wikidiff2";
-  version = "1.14.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "wikimedia";
     repo = "mediawiki-php-wikidiff2";
     tag = version;
-    hash = "sha256-UTOfLXv2QWdjThxfrPQDLB8Mqo4js6LzOKXePivdp9k=";
+    hash = "sha256-rBVwqeNioLXOd6Tr2I/Jw8phL7nYsWseYwk+lZDH2tw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
