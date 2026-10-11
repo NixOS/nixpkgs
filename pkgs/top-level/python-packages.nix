@@ -1403,6 +1403,8 @@ self: super: with self; {
 
   asf-search = callPackage ../development/python-modules/asf-search { };
 
+  asgi-correlation-id = callPackage ../development/python-modules/asgi-correlation-id { };
+
   asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
 
   asgi-lifespan = callPackage ../development/python-modules/asgi-lifespan { };
