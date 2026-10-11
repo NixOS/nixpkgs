@@ -4005,8 +4005,6 @@ self: super: with self; {
 
   cython_3_2 = callPackage ../development/python-modules/cython/3_2.nix { };
 
-  cython_3_3 = callPackage ../development/python-modules/cython/3_3.nix { };
-
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   cyvcf2 = callPackage ../development/python-modules/cyvcf2 { };
