@@ -36,6 +36,7 @@
   srcHashes ? {
     aarch64-linux = "sha256-gRYcEylZAUvKTOmV1zw9TyiEkv6FZ0vhVT1mLwne57k=";
     x86_64-linux = "sha256-6usxPmA53kZIVYk9KHxNXrTscSaXjqg8YWS/SiPcAXo=";
+    aarch64-darwin = "sha256-7vEhqsXSQtlZN3Ky0ZYo8vAlpeXAZAP4lgdFe90/UQA=";
   },
 }:
 
@@ -76,7 +77,7 @@ let
     attrs:
     attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cef-binary";
   inherit version;
 
@@ -84,7 +85,10 @@ stdenv.mkDerivation {
     url = "https://cef-builds.spotifycdn.com/cef_binary_${version}+g${gitRevision}+chromium-${chromiumVersion}_${
       selectSystem {
         aarch64-linux = "linuxarm64";
+        aarch64-darwin = "macosarm64";
         x86_64-linux = "linux64";
+        #TODO: 26.11: remove the support for x86_64-darwin for more info please see: https://github.com/NixOS/nixpkgs/pull/492160
+        x86_64-darwin = "macosx64";
       }
     }_minimal.tar.bz2";
     hash = selectSystem srcHashes;
@@ -94,16 +98,24 @@ stdenv.mkDerivation {
 
   dontPatchELF = true;
 
+  patchLibs =
+    if stdenv.hostPlatform.isLinux then
+      ''
+        patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
+        patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
+        patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
+        patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
+        patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
+        patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
+      ''
+    else
+      "";
+
   installPhase = ''
     runHook preInstall
 
     sed 's/-O0/-O2/' -i cmake/cef_variables.cmake
-    patchelf --set-rpath "${rpath}" --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" ${buildType}/chrome-sandbox
-    patchelf --add-needed libudev.so --set-rpath "${rpath}" ${buildType}/libcef.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libEGL.so
-    patchelf --add-needed libGL.so.1 --set-rpath "${gl_rpath}" ${buildType}/libGLESv2.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libvk_swiftshader.so
-    patchelf --set-rpath "${gl_rpath}" ${buildType}/libvulkan.so.1
+    ${finalAttrs.patchLibs}
     cp --recursive . $out
 
     runHook postInstall
@@ -117,9 +129,12 @@ stdenv.mkDerivation {
   meta = {
     description = "Simple framework for embedding Chromium-based browsers in other applications";
     homepage = "https://cef-builds.spotifycdn.com/index.html";
-    maintainers = with lib.maintainers; [ puffnfresh ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      eveeifyeve # Darwin
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
     platforms = builtins.attrNames srcHashes;
   };
-}
+})
