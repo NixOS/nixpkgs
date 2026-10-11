@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "dependency-injector";
   version = "4.49.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ets-labs";
