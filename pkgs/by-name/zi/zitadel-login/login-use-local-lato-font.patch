@@ -1,0 +1,23 @@
+--- a/apps/login/src/app/(login)/layout.tsx
++++ b/apps/login/src/app/(login)/layout.tsx
+@@ -12,13 +12,16 @@ import { getAllowedLanguages } from "@/lib/zitadel";
+ import * as Tooltip from "@radix-ui/react-tooltip";
+ import type { Metadata } from "next";
+ import { getTranslations } from "next-intl/server";
+-import { Lato } from "next/font/google";
++import localFont from "next/font/local";
+ import { headers } from "next/headers";
+ import React, { Suspense } from "react";
+ 
+-const lato = Lato({
+-  weight: ["400", "700", "900"],
+-  subsets: ["latin"],
++const lato = localFont({
++  src: [
++    { path: "./fonts/Lato-Regular.ttf", weight: "400", style: "normal" },
++    { path: "./fonts/Lato-Bold.ttf", weight: "700", style: "normal" },
++    { path: "./fonts/Lato-Black.ttf", weight: "900", style: "normal" },
++  ],
+ });
+ 
+ export async function generateMetadata(): Promise<Metadata> {
