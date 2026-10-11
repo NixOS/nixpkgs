@@ -34,6 +34,8 @@ let
 
   defaultConfigFile = iniFmt.generate "00-nixos-defaults.conf" defaultConfig;
   userConfigFile = iniFmt.generate "99-user.conf" cfg.settings;
+
+  xdgDataDirs = lib.makeSearchPath "share" ([ dmcfg.sessionData.desktops ] ++ cfg.extraPackages);
 in
 {
   options.services.displayManager.plasma-login-manager = {
@@ -51,6 +53,16 @@ in
       };
       description = "Additional settings for Plasma Login Manager (see `man plasmalogin.conf`)";
     };
+
+    extraPackages = mkOption {
+      type = lib.types.listOf lib.types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.kdePackages.breeze-icons ]";
+      description = ''
+        Extra packages to be made available to the Plasma Login Manager greeter environment.
+        Useful for custom icon themes, look-and-feel packages, cursors, and fonts.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -66,16 +78,12 @@ in
       path = [ cfg.package ];
       wantedBy = [ "graphical.target" ];
       restartIfChanged = false;
-      environment.XDG_DATA_DIRS = lib.mkIf (
-        dmcfg.sessionPackages != [ ]
-      ) "${dmcfg.sessionData.desktops}/share";
+      environment.XDG_DATA_DIRS = xdgDataDirs;
     };
 
     systemd.user.services.plasma-login = {
       overrideStrategy = "asDropin";
-      environment.XDG_DATA_DIRS = lib.mkIf (
-        dmcfg.sessionPackages != [ ]
-      ) "${dmcfg.sessionData.desktops}/share";
+      environment.XDG_DATA_DIRS = xdgDataDirs;
     };
 
     systemd.defaultUnit = "graphical.target";
