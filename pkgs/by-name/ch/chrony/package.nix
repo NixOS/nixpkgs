@@ -60,8 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   doCheck = true;
 
-  passthru.tests = {
-    inherit (nixosTests) chrony chrony-ptp;
+  passthru = {
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix { })
+      ];
+      chrony.package = finalAttrs.package;
+    };
+    tests = {
+      inherit (nixosTests) chrony chrony-ptp;
+    };
   };
 
   meta = {
