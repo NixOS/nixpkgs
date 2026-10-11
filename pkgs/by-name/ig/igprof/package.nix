@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "6.0.0";
+  version = "6.0.1";
   pname = "igprof";
 
   src = fetchFromGitHub {
     owner = "igprof";
     repo = "igprof";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RIDnilCoYlq0D9CBJKMX1zg1DBQ4RPcOlfGcZ2xosUo=";
+    hash = "sha256-0W2P1jXegTBHgLi+Qb2oYnaGRF9brlmKhKdXzWv+n2E=";
   };
 
   buildInputs = [
