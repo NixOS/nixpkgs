@@ -11,27 +11,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprof-trace-decoder";
-  version = "0.1.7";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    # No tags (yet?)
-    rev = "feeca99950c590e0b8228733405c4a1a10fa4773";
+    # rocprof-trace-decoder keeps its own 0.x version, so the rocm-systems
+    # monorepo tag cannot be derived from finalAttrs.version like sibling packages.
+    rev = "therock-10.1";
     sparseCheckout = [
       "projects/rocprof-trace-decoder"
       "shared"
     ];
-    hash = "sha256-aJhPiZf5380jj2IeCipgcTEQYogr5R19UnVwKRGnkxo=";
+    hash = "sha256-0cbkljtw/gZJwXPUpJuLXpQlXfR/MQgEGbLDsRdzpcw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/projects/rocprof-trace-decoder";
-
-  patches = [
-    ./use-system-dependencies.patch
-    # https://github.com/ROCm/rocm-systems/pull/3800
-    ./fix-test-dependency.patch
-  ];
 
   strictDeps = true;
 
@@ -44,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    # The ATT integration tests need the pyelftools python module
+    # and bundled trace-data fixtures; keep the unit tests, skip integration.
+    (lib.cmakeBool "BUILD_INTEGRATION_TESTS" false)
   ];
 
   nativeCheckInputs = [
