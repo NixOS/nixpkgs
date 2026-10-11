@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Optional configuration tool for fxlinuxprint";
-    homepage = "https://onlinesupport.fujixerox.com";
+    homepage = "https://www.support.xerox.com/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ ];

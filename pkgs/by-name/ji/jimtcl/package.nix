@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open source small-footprint implementation of the Tcl programming language";
-    homepage = "http://jim.tcl.tk/";
+    homepage = "https://msteveb.github.io/jimtcl/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
     mainProgram = "jimsh";
