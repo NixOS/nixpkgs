@@ -53,7 +53,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "quarto";
-  version = "1.10.18";
+  version = "1.10.19";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -161,16 +161,16 @@ stdenv.mkDerivation (finalAttrs: {
     sources = {
       x86_64-linux = fetchurl {
         url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-linux-amd64.tar.gz";
-        hash = "sha256-r60HG1vSLALy0wBpV0MYnTZQ4FN6Uwc+ZUtjDP8rDHM=";
+        hash = "sha256-jjjCst9qbb02nqFuFaze1olFRSWNE6Avd3+BrRj9eXM=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-linux-arm64.tar.gz";
-        hash = "sha256-9qB99o4lMwtd809l099mvKYFrM47gwxZOljpGITUz2w=";
+        hash = "sha256-u6K7Va3XTHVMMTkF30Kw9FqCUK7iEQpPzn+DAgv+G48=";
       };
       # the macOS asset is a universal binary carrying both architectures
       aarch64-darwin = fetchurl {
         url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-macos.tar.gz";
-        hash = "sha256-3danGp4ESKsV+2VbxYnhHLZYmiSOw1zNf39EE3UxaI4=";
+        hash = "sha256-xhfbVCKCTlBnUFc+qUoeJqR1Uyrf4YyP6jEIFs7Zf0c=";
       };
     };
 
