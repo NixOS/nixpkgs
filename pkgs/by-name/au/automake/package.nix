@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "automake";
-  version = "1.18.1";
+  version = "1.19";
 
   src = fetchurl {
     url = "mirror://gnu/automake/automake-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FoqjYyeDUbia9WaERI9SWlvOUHnQtoQr2RD90/FkaIc=";
+    hash = "sha256-4+LC46vzeJgTjbW2wdHcNckWDFl4vnlH0sdBcFJR1EU=";
   };
 
   strictDeps = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    branch = "1.18";
+    branch = "1.19";
     homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
     license = lib.licenses.gpl2Plus;
