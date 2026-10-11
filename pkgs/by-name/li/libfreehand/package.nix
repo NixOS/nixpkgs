@@ -15,11 +15,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfreehand";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchzip {
     url = "https://dev-www.libreoffice.org/src/libfreehand/libfreehand-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ZcvG00JP3BoFv1PIeAhZyr7t1zANhTVluBZQqEbWCvY=";
+    hash = "sha256-zIH6zx0TI+tP9odEuW5ZP42jzfXWcGCIj5XbsSibLN8=";
   };
 
   nativeBuildInputs = [
