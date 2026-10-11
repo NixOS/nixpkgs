@@ -10,7 +10,7 @@
 
 buildPecl {
   pname = "systemd";
-  version = "0.1.2-unstable-2018-06-11";
+  version = "release-0.1.2";
 
   src = fetchFromGitHub {
     owner = "systemd";
