@@ -18,6 +18,8 @@
   httpx2,
 
   # tests
+  blockbuster,
+  opentelemetry-sdk,
   pytestCheckHook,
   trio,
 
@@ -27,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "1.3.1";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "starlette";
     tag = version;
-    hash = "sha256-0eby4cDIU2bPUv+1qSTnZtfo4kkgMDIDYnZ9wp2wtoI=";
+    hash = "sha256-5/gQtC0JbQM7eSQeu2aVJtD63v4LjnbSSC0jF96e958=";
   };
 
   build-system = [ hatchling ];
@@ -51,6 +53,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    blockbuster
+    opentelemetry-sdk
     pytestCheckHook
     trio
   ]

@@ -21,14 +21,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "bittensor";
-  version = "11.0.1";
+  version = "11.1.0";
   pyproject = true;
 
   __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-gQFk+1/iw1MP/fZ8DRiOWmGIOEHPmHTZy0G5qh7P5ps=";
+    hash = "sha256-l75+nVI8o22T7dx7ljGLQqe72VErU8dXxYB6fa+0Nx0=";
   };
 
   build-system = [ hatchling ];

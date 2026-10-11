@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "bracex";
-  version = "2.6";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-mPE0fNd+Iu6NlnowrU4xCyM/d1Tb8x/z/Ot2FFukfcc=";
+    hash = "sha256-TjjjI5LkpHgP4V1kS/x8hRQFfPw4YeBgsRgUzoKcJeQ=";
   };
 
   nativeBuildInputs = [ hatchling ];

@@ -23,12 +23,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        mame-tools
-        p7zip
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      mame-tools
+      p7zip
+    ])
   ];
 
   postInstall = ''

@@ -33,7 +33,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
       packagesToBinPath = [ ffmpeg-headless ];
     in
     [
-      ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
+      "--prefix"
+      "PATH"
+      ":"
+      (lib.makeBinPath packagesToBinPath)
     ];
 
   # No tests in repository

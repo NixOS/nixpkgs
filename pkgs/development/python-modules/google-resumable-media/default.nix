@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.8.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_resumable_media";
     inherit version;
-    hash = "sha256-8RV+2LRplNYKG8QyVE22I1IEMRNoTU4DDuAud+vpoa4=";
+    hash = "sha256-Ikl1Ay3bc/ftni8PTMCO0bBodMUtSMyFM+PrcpgLIaA=";
   };
 
   build-system = [ setuptools ];

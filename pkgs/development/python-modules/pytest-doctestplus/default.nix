@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scientific-python";
     repo = "pytest-doctestplus";
     tag = "v${version}";
-    hash = "sha256-64I0K0+yYU1omGkVgfxeD9r9s9yHp0ik1HAsEc1NNtA=";
+    hash = "sha256-5vvLnvE0dvLYBNx34gsyQEcWlr7Cd063+rRjlnHM7OE=";
   };
 
   postPatch = ''

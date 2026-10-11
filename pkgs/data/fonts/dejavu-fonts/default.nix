@@ -40,6 +40,8 @@ let
       perlPackages.FontTTF
     ];
 
+    strictDeps = true;
+
     src = fetchFromGitHub {
       owner = "dejavu-fonts";
       repo = "dejavu-fonts";
@@ -53,25 +55,37 @@ let
 
     installPhase = "install -m444 -Dt $out/share/fonts/truetype build/*.ttf";
 
+    __structuredAttrs = true;
+
     inherit meta;
   };
 
   minimal = stdenv.mkDerivation {
     pname = "dejavu-fonts-minimal";
     inherit version;
+    strictDeps = true;
+
     buildCommand = ''
       install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/DejaVuSans.ttf
     '';
+
+    __structuredAttrs = true;
+
     inherit meta;
   };
 in
 stdenv.mkDerivation {
   pname = "dejavu-fonts";
   inherit version;
+  strictDeps = true;
+
   buildCommand = ''
     install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/*.ttf
     ln -s --relative --force --target-directory=$out/share/fonts/truetype ${minimal}/share/fonts/truetype/DejaVuSans.ttf
   '';
+
+  __structuredAttrs = true;
+
   inherit meta;
 
   passthru = { inherit minimal full-ttf; };

@@ -139,20 +139,29 @@ python3Packages.buildPythonApplication {
     ++ lib.optional stdenv.hostPlatform.isLinux pulsectl;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath (
-        [
-          game-music-emu
-          libayatana-appindicator
-          libopenmpt
-          pulseaudio
-        ]
-        ++ lib.optional stdenv.hostPlatform.isLinux libxcursor
-      )
-    }"
-    "--prefix PYTHONPATH : $out/share/tauon"
-    "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath (
+      [
+        game-music-emu
+        libayatana-appindicator
+        libopenmpt
+        pulseaudio
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux libxcursor
+    ))
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$out/share/tauon"
+    "--set"
+    "GI_TYPELIB_PATH"
+    "$GI_TYPELIB_PATH"
   ];
 
   postInstall = ''

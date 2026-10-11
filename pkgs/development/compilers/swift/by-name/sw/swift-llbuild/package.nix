@@ -5,6 +5,7 @@
   fixDarwinDylibNames,
   ncurses,
   ninja,
+  patchesForVersion,
   sqlite,
   stdenv,
   swift-corelibs-libdispatch,
@@ -39,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (swift_sources.swift-llbuild) hash;
   };
 
-  patches = [ ./patches/0001-gnu-install-dirs.patch ];
+  patches = patchesForVersion {
+    inherit (finalAttrs) version;
+    path = ./patches;
+  };
 
   postPatch = ''
     # Disable performance tests, which require XCTest.framework. XCTest.framework is not available.

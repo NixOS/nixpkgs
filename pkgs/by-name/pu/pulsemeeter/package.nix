@@ -46,9 +46,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gtk4
   ];
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   dontWrapGApps = true;
 

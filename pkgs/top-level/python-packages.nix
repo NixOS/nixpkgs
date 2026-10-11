@@ -3166,6 +3166,8 @@ self: super: with self; {
 
   citeproc-py = callPackage ../development/python-modules/citeproc-py { };
 
+  citeproc-py-styles = callPackage ../development/python-modules/citeproc-py-styles { };
+
   cjkwrap = callPackage ../development/python-modules/cjkwrap { };
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
@@ -4000,6 +4002,8 @@ self: super: with self; {
       { };
 
   cython_0 = callPackage ../development/python-modules/cython/0.nix { };
+
+  cython_3_2 = callPackage ../development/python-modules/cython/3_2.nix { };
 
   cython_3_3 = callPackage ../development/python-modules/cython/3_3.nix { };
 
@@ -7593,6 +7597,8 @@ self: super: with self; {
 
   hatch-sphinx = callPackage ../development/python-modules/hatch-sphinx { };
 
+  hatch-tryton = callPackage ../development/python-modules/hatch-tryton { };
+
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
@@ -9195,6 +9201,8 @@ self: super: with self; {
   kerberos = callPackage ../development/python-modules/kerberos { };
 
   kernels = callPackage ../development/python-modules/kernels { };
+
+  kernels-data = callPackage ../development/python-modules/kernels-data { };
 
   kestra = callPackage ../development/python-modules/kestra { };
 
@@ -14451,8 +14459,6 @@ self: super: with self; {
       python3Packages = self;
     }
   );
-
-  pyacaia-async = callPackage ../development/python-modules/pyacaia-async { };
 
   pyacoustid = callPackage ../development/python-modules/pyacoustid { };
 

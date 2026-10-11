@@ -458,6 +458,7 @@ in
       "initrd-udevadm-cleanup-db.service"
       "systemd-udevd-control.socket"
       "systemd-udevd-kernel.socket"
+      "systemd-udevd-varlink.socket"
       "systemd-udevd.service"
       "systemd-udev-trigger.service"
     ];

@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytest-memray";
-  version = "1.8.0";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "pytest-memray";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-73Lyy14t2Hcqo0aTlWbGMzaxJ73bKjzc4BFE/jPG99I=";
+    hash = "sha256-BDJsEtC5vdXzBFhZ31j5xY+XUDXG0IMdIo4G/TLtZck=";
   };
 
   build-system = [
@@ -50,6 +50,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Pytest plugin for easy integration of memray memory profiler";
     homepage = "https://github.com/bloomberg/pytest-memray";
+    changelog = "https://github.com/bloomberg/pytest-memray/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };

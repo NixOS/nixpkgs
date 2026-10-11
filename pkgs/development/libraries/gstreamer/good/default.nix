@@ -24,7 +24,6 @@
   libshout,
   cairo,
   gdk-pixbuf,
-  aalib,
   libcaca,
   libsoup_3,
   libpulseaudio,
@@ -154,7 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
     taglib
     cairo
     gdk-pixbuf
-    aalib
     libcaca
     libsoup_3
     libshout
@@ -236,6 +234,8 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3 = gtkSupport;
       ximagesrc = enableX11; # Linux-only
       jack = enableJack;
+
+      aalib = false;
 
       # Linux only
       dv1394 = enableFireWire;

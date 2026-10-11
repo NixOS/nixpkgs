@@ -18,15 +18,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lxml";
-  version = "6.1.1";
+  version = "6.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lxml";
     repo = "lxml";
-    tag = "lxml-${finalAttrs.version}";
-    hash = "sha256-SRJaegK4PxgK0rdILVp3J92VnjPmExiD2AuMLoGQIbA=";
+    tag = "lxml-${finalAttrs.version}-1";
+    hash = "sha256-n+MBUmoky6VTjU7H6+Gp0mxPeZIwK7uB6/RUOjvq0SU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "Cython>=3.2.9,<3.3" "Cython>=3.2.9"
+  '';
 
   build-system = [
     cython

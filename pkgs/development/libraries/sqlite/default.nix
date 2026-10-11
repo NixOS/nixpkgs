@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   # capi3c.test is a copy of capi3.test, but upstream only disabled the
   # intentional use-after-free cases in the original. They segfault with
   # allocators that return freed memory to the OS eagerly, such as musl's.
-  ${if stdenv.hostPlatform.isMusl then "postPatch" else null} = ''
+  postPatch = ''
     substituteInPlace test/capi3c.test \
       --replace-fail \
         'if {[clang_sanitize_address]==0} {' \
@@ -211,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
   # Neither GCC's libsanitizer nor compiler-rt's sanitizers are built for
   # musl, so the fuzzcheck-asan and fuzzcheck-ubsan programs cannot be linked.
-  ${if stdenv.hostPlatform.isMusl then "checkFlags" else null} = [ "TSTRNNR_OPTS=~fuzzcheck-%san" ];
+  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [ "TSTRNNR_OPTS=~fuzzcheck-%san" ];
 
   passthru = {
     tests = {

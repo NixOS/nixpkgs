@@ -25,7 +25,10 @@ python3Packages.buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ ffmpeg ]}"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ffmpeg ])
   ];
 
   doCheck = false;
