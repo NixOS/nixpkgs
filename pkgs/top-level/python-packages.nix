@@ -4454,6 +4454,8 @@ self: super: with self; {
 
   discum = callPackage ../development/python-modules/discum { };
 
+  dishka = callPackage ../development/python-modules/dishka { };
+
   diskcache = callPackage ../development/python-modules/diskcache { };
 
   diskcache-stubs = callPackage ../development/python-modules/diskcache-stubs { };
