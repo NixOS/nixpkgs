@@ -27,5 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mikilio ];
     platforms = lib.platforms.wasi;
+    # rosecd can not load providers from the nix store currently; waiting
+    # on upstream changes.
+    broken = true;
   };
 })

@@ -54,6 +54,8 @@ in
     in
     ''
       machine.wait_until_tty_matches("1", "login: ")
+      machine.succeed("su - alice -c 'mkdir -p ~/.config/rosec ~/.local/share/rosec/providers'")
+      machine.succeed("su - alice -c 'cp ${config-path} ~/.config/rosec/config.toml'")
       machine.send_chars("alice\n")
       machine.wait_until_tty_matches("1", "login: alice")
       machine.wait_until_succeeds("pgrep login")
@@ -61,8 +63,6 @@ in
       machine.send_chars("${user.password}\n")
       machine.wait_until_succeeds("pgrep -u alice bash")
 
-      machine.succeed("su - alice -c 'mkdir -p ~/.config/rosec ~/.local/share/rosec/providers'")
-      machine.succeed("su - alice -c 'cp ${config-path} ~/.config/rosec/config.toml'")
       machine.succeed("su - alice -c 'systemctl --user import-environment SSH_ASKPASS SSH_ASKPASS_REQUIRE'")
 
       with subtest("D-Bus activation starts rosecd and registers portal"):
