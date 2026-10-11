@@ -7,7 +7,6 @@
   cmake,
   rocm-cmake,
   clr,
-  diffutils,
   python3,
   tensile,
   boost,
@@ -40,7 +39,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "10.0.0";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -50,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
       "projects/rocblas"
       "shared"
     ];
-    hash = "sha256-8LdII9gSFxuBeJwfQgOW+1/M33nbuR6TwcrD4k6W0Oo=";
+    hash = "sha256-G6vo78dbgP02zQJKsAuFPoncy2rsGkenZWrfvj4mD8M=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocblas";
 
@@ -89,8 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (buildTests || buildBenchmarks) [
     gtest
     gfortran
-    # therock-10.0 rocBLAS clients switched rocm_smi -> amd_smi
-    # (clients/CMakeLists.txt: find_package(amd_smi CONFIG REQUIRED))
+    # clients/CMakeLists.txt: find_package(amd_smi CONFIG REQUIRED)
     amdsmi
   ]
   ++ lib.optionals (buildTensile || buildTests || buildBenchmarks) [
@@ -98,9 +96,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.CXXFLAGS = "-fopenmp -I${lib.getDev boost}/include -I${hipblas-common}/include -I${roctracer}/include";
-  # Fails to link tests with undefined symbol: cblas_*
+  # Fails to link tests with undefined symbol: cblas_* (cblas comes from amd-blis).
+  # cblas needs an explicit -L: rocBLAS compiles with the unwrapped rocm-toolchain
+  # clang, so buildInput lib dirs are not injected into the clang-linker-wrapper
+  # host-link path the way the nixpkgs cc-wrapper would. With LLVM 24 the rocm-cmake
+  # `rocm_check_target_ids` probe (run before find_package(BLAS)) does a full
+  # `--hip-link`, and CMake seeds CMAKE_EXE_LINKER_FLAGS from $LDFLAGS, so a bare
+  # `-lcblas` makes that probe's link fail ("unable to find library -lcblas"), which
+  # empties the supported-target list and aborts with "Unsupported target <arch>".
+  # Only builds with tests/benchmarks hit this; the Tensile shards build with them off.
   env.LDFLAGS =
-    "-Wl,--as-needed -lzstd" + lib.optionalString (buildTests || buildBenchmarks) " -lcblas";
+    "-Wl,--as-needed -lzstd"
+    + lib.optionalString (buildTests || buildBenchmarks) " -L${amd-blis}/lib -lcblas";
   env.TENSILE_ROCM_ASSEMBLER_PATH = "${stdenv.cc}/bin/clang++";
 
   cmakeFlags = [
@@ -141,16 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
   ];
 
-  # NOTE(rocm-10): dropped the GZGavinZhao "Extend rocBLAS HIP ISA compatibility"
-  # patch (49f21f3c). It was a workaround for older rocBLAS lacking explicit
-  # gfx906/gfx90c handling — it removed the gfx1011/gfx1012 cases and added a
-  # fuzzy `gfx90*→gfx900` / `gfx103*→gfx1030` fallback. therock-10.0's
-  # library/src/handle.cpp now has explicit Processor::gfx906/gfx90c/... cases
-  # (which take priority over any fuzzy fallback), so with gfx906 kept in
-  # gpuTargets, Tensile builds real gfx906 kernels — strictly better than the
-  # patch's gfx900 fallback.
-  patches = [ ];
-
   # Pass $NIX_BUILD_CORES to Tensile
   postPatch = ''
     substituteInPlace cmake/build-options.cmake \
@@ -162,12 +159,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace clients/CMakeLists.txt \
       --replace-fail "if ( NOT WIN32 )" "if(OFF)" \
       --replace-fail "else() # WIN32" "elseif(OFF)"
-  ''
-  # Fixes sh: line 1: /usr/bin/diff: No such file or directory
-  # /build/source/clients/gtest/../include/testing_logging.hpp:1117: Failure
-  + lib.optionalString buildTests ''
-    substituteInPlace clients/include/testing_logging.hpp \
-      --replace-fail "/usr/bin/diff" "${lib.getExe' diffutils "diff"}"
   '';
 
   postInstall =
@@ -188,9 +179,9 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + ''
       # The rocBLAS library output keeps no bin/ (clients live in $test /
-      # $benchmark). therock-10.0 also drops a bin/rocblas/ CTest scaffolding
-      # dir here alongside the client yaml/txt, so remove the whole bin/ tree
-      # rather than rmdir'ing (which fails on the non-empty directory).
+      # $benchmark). ROCm 10 also installs a bin/rocblas/ CTest scaffolding dir
+      # alongside the client yaml/txt, so remove the whole bin/ tree rather than
+      # rmdir'ing (which fails on the non-empty directory).
       rm -rf $out/bin
     '';
 
@@ -208,5 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+    broken = true; # this base package shouldn't be built directly
   };
 })
