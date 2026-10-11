@@ -6,6 +6,7 @@ in
 {
   imports = [
     ./amd.nix
+    ./nvidia.nix
   ];
   options.hardware.facter.detected = {
     graphics.enable = lib.mkEnableOption "Enable the Graphics module" // {
