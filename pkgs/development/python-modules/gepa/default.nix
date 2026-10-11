@@ -10,7 +10,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gepa";
   version = "0.1.4";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gepa-ai";
