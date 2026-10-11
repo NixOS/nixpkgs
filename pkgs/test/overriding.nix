@@ -12,7 +12,8 @@ let
     // tests-fetchhg
     // tests-fetchurl
     // tests-go
-    // tests-python;
+    // tests-python
+    // test-splice;
 
   tests-stdenv =
     let
@@ -552,6 +553,131 @@ let
         ];
         expected = lib.genAttrs [ "a" "b" "c" "d" ] lib.id;
       };
+    };
+
+  test-splice =
+    let
+      buildSystemName = stdenvNoCC.buildPlatform.system;
+      pkgsCrossSpliced =
+        (if buildSystemName == "x86_64-linux" then pkgs.pkgsCross.gnu32 else pkgs.pkgsCross.gnu64)
+        .__splicedPackages;
+      hostSystemName = pkgsCrossSpliced.stdenvNoCC.hostPlatform.system;
+      sample-package = pkgsCrossSpliced.hello;
+      bar-overridden-package = sample-package.overrideAttrs { bar = 2; };
+      baz-overridden-package = bar-overridden-package.overrideAttrs { baz = 3; };
+      genTestsForPackage =
+        {
+          package,
+          prefix,
+          isBarOverridden ? false,
+          isBazOverridden ? false,
+        }:
+        let
+          addPrefix = lib.mapAttrs' (
+            n: v: {
+              name = "splice-${prefix}-" + n;
+              value = v;
+            }
+          );
+          nonEmptySplicedAttrs = lib.filterAttrs (_: v: v != { }) package.__spliced;
+          barExpected = if isBarOverridden then 2 else null;
+          bazExpected = if isBazOverridden then 3 else null;
+        in
+        addPrefix {
+          is-cross = {
+            expr = buildSystemName != hostSystemName;
+            expected = true;
+          };
+          has-overrideAttrs = {
+            expr = package ? overrideAttrs;
+            expected = true;
+          };
+          overrideAttrs-overridden-empty = {
+            expr = (package.overrideAttrs (f: p: { })).drvPath;
+            expected = package.drvPath;
+          };
+          overrideAttrs-overridden-foo = {
+            expr = (sample-package.overrideAttrs { foo = 1; }).foo or null;
+            expected = 1;
+          };
+          build-system-name = {
+            expr = sample-package.stdenv.buildPlatform.system;
+            expected = buildSystemName;
+          };
+          host-system-name = {
+            expr = sample-package.stdenv.hostPlatform.system;
+            expected = hostSystemName;
+          };
+          has-spliced-attribute = {
+            expr = sample-package ? __spliced;
+            expected = true;
+          };
+          has-non-empty-spliced-attributes = {
+            expr = nonEmptySplicedAttrs != { };
+            expected = true;
+          };
+          has-significant-spliced-attributes = {
+            expr = removeAttrs nonEmptySplicedAttrs [ "hostTarget" ] != { };
+            expected = true;
+          };
+          each-non-empty-spliced-attribute-is-derivation = {
+            expr = lib.mapAttrs (n: v: lib.isDerivation v) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (n: v: true) nonEmptySplicedAttrs;
+          };
+          each-non-empty-spliced-attribute-build-system-name = {
+            expr = lib.mapAttrs (n: v: v.stdenv.buildPlatform.system) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (n: v: buildSystemName) nonEmptySplicedAttrs;
+          };
+          each-non-empty-spliced-attribute-host-system-name = {
+            expr = lib.mapAttrs (n: v: v.stdenv.hostPlatform.system) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (
+              n: v: if lib.hasPrefix "build" n then buildSystemName else hostSystemName
+            ) nonEmptySplicedAttrs;
+          };
+          each-non-empty-spliced-attribute-has-overrideAttrs = {
+            expr = lib.mapAttrs (n: v: v ? overrideAttrs) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (n: v: true) nonEmptySplicedAttrs;
+          };
+          each-non-empty-spliced-attribute-overrideAttrs-overridden-empty = {
+            expr = lib.mapAttrs (n: v: (v.overrideAttrs (f: p: { })).drvPath) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (n: v: v.drvPath) nonEmptySplicedAttrs;
+          };
+          each-non-empty-spliced-attribute-overrideAttrs-overridden-foo = {
+            expr = lib.mapAttrs (n: v: (v.overrideAttrs { foo = 1; }).foo or null) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (n: v: 1) nonEmptySplicedAttrs;
+          };
+          is-bar-overridden = {
+            expr = package.bar or null;
+            expected = barExpected;
+          };
+          each-non-empty-spliced-attribute-is-bar-overridden = {
+            expr = lib.mapAttrs (n: v: v.bar or null) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (n: v: barExpected) nonEmptySplicedAttrs;
+          };
+          is-baz-overridden = {
+            expr = package.baz or null;
+            expected = bazExpected;
+          };
+          each-non-empty-spliced-attribute-is-baz-overridden = {
+            expr = lib.mapAttrs (n: v: v.baz or null) nonEmptySplicedAttrs;
+            expected = lib.mapAttrs (n: v: bazExpected) nonEmptySplicedAttrs;
+          };
+        };
+    in
+    genTestsForPackage {
+      package = sample-package;
+      prefix = "sample";
+    }
+    // genTestsForPackage {
+      package = bar-overridden-package;
+      prefix = "bar-overridden";
+      isBarOverridden = true;
+    }
+    // genTestsForPackage {
+      package = baz-overridden-package;
+      prefix = "baz-overridden";
+      isBarOverridden = true;
+      isBazOverridden = true;
     };
 
 in
