@@ -26,7 +26,7 @@ The list of overlays is determined as follows.
 
     See the [section on `NIX_PATH`](https://nixos.org/manual/nix/stable/command-ref/env-common.html#env-NIX_PATH) in the Nix manual for more details on how to set a value for `<nixpkgs-overlays>.`
 
-3.  If one of `~/.config/nixpkgs/overlays.nix` and `~/.config/nixpkgs/overlays/` exists, then we look for overlays at that path, as described below. It is an error if both exist.
+3.  If one of `$XDG_CONFIG_HOME/nixpkgs/overlays.nix` and `$XDG_CONFIG_HOME/nixpkgs/overlays/` exists (if `$XDG_CONFIG_HOME` is unset or empty, the search falls back to `~/.config/nixpkgs/overlays.nix` or `~/.config/nixpkgs/overlays/` respectively), then we look for overlays at that path, as described below. It is an error if both exist.
 
 If we are looking for overlays at a path, then there are two cases:
 
