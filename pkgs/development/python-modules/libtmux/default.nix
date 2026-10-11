@@ -45,20 +45,28 @@ buildPythonPackage (finalAttrs: {
   enabledTestPaths = [ "tests" ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test/test_retry.py" ];
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # basename for sleep is coreutils, not sleep
-    "test_break_pane_no_name_uses_natural_name"
-    # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
-    "test_new_session_width_height"
-    # AssertionError: assert '' == '$'
-    "test_capture_pane"
-    # AssertionError: assert '' == '$'
-    "test_capture_pane_start"
-    # AssertionError: assert '' == '$'
-    "test_capture_pane_end"
-    # IndexError: list index out of range
-    "test_new_window_with_environment"
-  ];
+  disabledTests =
+    # Incompatible with tmux 3.8 (can likely remove if/when https://github.com/tmux-python/libtmux/pull/758 is merged)
+    [
+      "test_hook_set_show_unset_cycle"
+      "test_hooks_dataclass"
+      "test_new_pane_floating"
+      "test_display_popup"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # basename for sleep is coreutils, not sleep
+      "test_break_pane_no_name_uses_natural_name"
+      # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
+      "test_new_session_width_height"
+      # AssertionError: assert '' == '$'
+      "test_capture_pane"
+      # AssertionError: assert '' == '$'
+      "test_capture_pane_start"
+      # AssertionError: assert '' == '$'
+      "test_capture_pane_end"
+      # IndexError: list index out of range
+      "test_new_window_with_environment"
+    ];
 
   pythonImportsCheck = [ "libtmux" ];
 
