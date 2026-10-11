@@ -15820,7 +15820,12 @@ self: super: with self; {
 
   pyowm = callPackage ../development/python-modules/pyowm { };
 
-  pyoxigraph = callPackage ../development/python-modules/pyoxigraph { };
+  pyoxigraph = toPythonModule (
+    pkgs.oxigraph.override {
+      enablePython = true;
+      python3Packages = self;
+    }
+  );
 
   pyoxipng = callPackage ../development/python-modules/pyoxipng { };
 
