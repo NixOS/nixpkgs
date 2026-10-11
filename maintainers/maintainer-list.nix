@@ -16019,6 +16019,12 @@
     github = "kxxt";
     githubId = 18085551;
   };
+  Kyamel = {
+    name = "Lucas dos Anjos Camelo";
+    github = "Kyamel";
+    githubId = 129009324;
+    email = "lcamelo200@gmail.com";
+  };
   kybe236 = {
     name = "kybe236";
     github = "kybe236";
