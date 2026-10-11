@@ -316,6 +316,16 @@ Delete on sight:
 
 Every word must earn its place.
 
+### One sentence per line
+
+Put each sentence in its own line.
+This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
+It also helps identifying long sentences at a glance.
+
+Not everything has been migrated to this format yet.
+Please always use it for new content.
+When changing existing content, update formatting if possible, but avoid excessive diffs.
+
 ### Writing procedures
 
 One instruction per sentence. Don't pack multiple actions into one sentence.
@@ -329,6 +339,8 @@ One instruction per sentence. Don't pack multiple actions into one sentence.
 1. Navigate to your project directory.
 2. Run the command.
 3. Check the output.
+
+
 
 Don't bury the negative. Key limitations should be prominent, not a footnote after a positive description.
 

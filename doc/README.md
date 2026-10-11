@@ -10,19 +10,11 @@ There are renderings for the [rolling release](https://nixos.org/manual/nixpkgs/
 
 > [!NOTE]
 >
-> We are actively restructuring our documentation to be more beginner friendly.
+> The Documentation Team is working on making the documentation more accessible, coherent, and beginner-friendly.
+> Consult the [vision](https://github.com/NixOS/nix.dev/tree/master/maintainers/vision.md).
 >
-
-When writing new docs use **Progressive Disclosure:**
-
-- Start simple, pick up beginners.
-- Use **examples** first to show how to get something done.
-- Keep **explanation** lean.
-
-Use our [style guide](./styleguide.md) for more in depth guidance on writing good documentation.
-
-Write **guides** task-first: lead with a working example, then explain in prose.
-Write **reference** as the specification of functions and attributes.
+> If you would like to help, [get in touch](#getting-help) with the Documentation Team!
+>
 
 We are actively working to generate reference documentation from the [doc-comments](https://github.com/NixOS/rfcs/blob/master/rfcs/0145-doc-strings.md) present in code, which also lets you view it locally with the `:doc` command in `nix repl`, e.g.:
 
@@ -30,8 +22,6 @@ We are actively working to generate reference documentation from the [doc-commen
 nix-repl> :l <nixpkgs>
 nix-repl> :doc lib.mapAttrsToList
 ```
-
-See [Document structure](#document-structure) for a structural template.
 
 ## Building and navigating documentation locally
 
@@ -63,117 +53,6 @@ Once you have a successful build, you can open the aforementioned path in a brow
 
 To test redirects, perform a browser refresh, as browsers do not re-run client JS code when only the anchor has changed.
 
-## Syntax
-
-As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
-
-Additional syntax extensions are available, all of which can be used in NixOS option documentation.
-The following extensions are currently used:
-
-#### Tables
-
-Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gfm/#tables-extension-).
-
-#### Anchors
-
-Explicitly defined **anchors** on headings, to allow linking to sections.
-These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
-
-It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
-
-```markdown
-## Syntax {#sec-contributing-markup}
-```
-
-> [!Note]
-> NixOS option documentation does not support headings in general.
-
-#### Inline Anchors
-
-Allow linking to an arbitrary place in the text (e.g. individual list items, sentences…).
-
-They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
-
-```markdown
-- []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGApps*` hook will prepend it to `XDG_DATA_DIRS`.
-```
-
-#### Automatic links
-
-If you **omit a link text** for a link pointing to a section, the text will be substituted automatically.
-For example `[](#chap-contributing)`.
-
-This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
-
-
-#### HTML
-
-Inlining HTML is not allowed.
-Parts of the documentation get rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
-
-#### Roles
-
-If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``.
-The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
-Please keep the `manpage-urls.json` file alphabetically sorted.
-
-A few markups for other kinds of literals are also available:
-
-- `` {command}`rm -rfi` ``
-- `` {env}`XDG_DATA_DIRS` ``
-- `` {file}`/etc/passwd` ``
-- `` {option}`networking.useDHCP` ``
-- `` {var}`pkgs` ``
-
-The values will be formatted as inline `<code>` elements.
-
-These literal kinds are used mostly in NixOS option documentation.
-
-#### Admonitions
-
-Set off from the text to bring attention to something.
-
-It uses pandoc’s [fenced `div`s syntax](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/fenced_divs.md):
-
-```markdown
-::: {.warning}
-This is a warning
-:::
-```
-
-The following are supported:
-
-- `caution`
-- `important`
-- `note`
-- `tip`
-- `warning`
-- `example`
-
-Example admonitions require a title to work.
-If you don't provide one, the manual won't build.
-
-```markdown
-::: {.example #ex-showing-an-example}
-
-# Title for this example
-
-Text for the example.
-:::
-```
-
-#### [Definition lists](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/definition_lists.md)
-
-For defining a group of terms:
-
-```markdown
-Pear
-:   Green or yellow bulbous fruit
-
-Watermelon
-:   Green fruit with red flesh
-```
-
 ## Commit conventions
 
 - Make sure you read about the [commit conventions](../CONTRIBUTING.md#commit-conventions) common to Nixpkgs as a whole.
@@ -197,110 +76,11 @@ Watermelon
 
 ## Documentation conventions
 
-In an effort to keep the Nixpkgs manual in a consistent style, please follow the conventions below, unless they prevent you from properly documenting something.
-In that case, please open an issue about the particular documentation convention and tag it with a "needs: documentation" label.
-When needed, each convention explains why it exists, so you can make a decision whether to follow it or not based on your particular case.
-Note that these conventions are about the **structure** of the manual (and its source files), not about the content that goes in it.
-You, as the writer of documentation, are still in charge of its content.
+The Nixpkgs manual follows a set of conventions.
 
-**For prose style, see the [documentation style guide](./styleguide.md).**
-
-### Document structure
-
-Organize each chapter as guide sections first, then a single `## Reference` section.
-
-A well-structured chapter looks like this:
-
-````markdown
-# Foo {#foo}
-
-`foo` builds Foo projects from a `foo.toml`.
-
-## Package a Foo application {#foo-packaging}
-
-:::{.example #ex-foo-packaging}
-
-# Package the hello app
-
-```nix
-{ foo }:
-buildFooPackage {
-  pname = "hello";
-  version = "1.0";
-}
-```
-
-:::
-
-`buildFooPackage` needs `pname` and `version`.
-Keep explanation short, and place it after the example.
-
-## Reference {#foo-reference}
-
-### `buildFooPackage` {#foo-buildFooPackage}
-
-Builds a Foo application from source.
-
-#### Inputs {#foo-buildFooPackage-inputs}
-
-`pname` (String)
-: The program name.
-
-#### Examples {#foo-buildFooPackage-examples}
-
-See [](#ex-foo-packaging).
-````
-
-Examples live in one place: the guide owns them and the reference links to them.
-
-Guides introduce minimal working examples that are goal-oriented (typical usage).
-
-Reference may introduce additional examples that are unit-oriented. (minimal usage, edge-cases).
-If the guide example is already sufficient, just link to it from the reference.
-
-Follow this structure strictly; to deviate, ping @NixOS/documentation-team.
-
-
-### One sentence per line
-
-Put each sentence in its own line.
-This makes reviews and suggestions much easier, since GitHub's review system is based on lines.
-It also helps identifying long sentences at a glance.
-
-Not everything has been migrated to this format yet.
-Please always use it for new content.
-When changing existing content, update formatting if possible, but avoid excessive diffs.
-
-### Examples first
-
-Put examples before detailed explanations (see the [style guide](./styleguide.md) for the rationale).
-
-Use this structure for each documented item:
-
-1. Title
-2. Abstract (optional, one sentence max)
-3. Example
-4. Explanation (details, edge cases, types, defaults)
-
-Rendered example:
-
-````markdown
-## `lib.toUpper`
-
-Converts all characters in a string to uppercase.
-
-:::{.example #ex-lib-toUpper}
-# Converting a string to uppercase
-```nix
-lib.toUpper "hello"
-=> "HELLO"
-```
-
-:::
-
-Only acts on ASCII characters.
-Unicode characters are passed through unchanged.
-````
+* prose follows the [style guide](./styleguide.md);
+* source file follows custom [markdown syntax](#syntax);
+* technical writing follows [Diátaxis](https://nix.dev/contributing/documentation/diataxis).
 
 ### Writing Function Documentation
 
@@ -466,6 +246,118 @@ Checklist:
 - Nix types aren't in code spans, because they are not code
 - Nix types are capitalized, to distinguish them from the camelCase Module System types, which _are_ code and behave like functions.
 
+
+## Syntax
+
+As per [RFC 0072](https://github.com/NixOS/rfcs/pull/72), all new documentation content should be written in [CommonMark](https://commonmark.org/) Markdown dialect.
+
+Additional syntax extensions are available, all of which can be used in NixOS option documentation.
+The following extensions are currently used:
+
+#### Tables
+
+Tables, using the [GitHub-flavored Markdown syntax](https://github.github.com/gfm/#tables-extension-).
+
+#### Anchors
+
+Explicitly defined **anchors** on headings, to allow linking to sections.
+These should be always used, to ensure the anchors can be linked even when the heading text changes, and to prevent conflicts between [automatically assigned identifiers](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/auto_identifiers.md).
+
+It uses the widely compatible [header attributes](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/attributes.md) syntax:
+
+```markdown
+## Syntax {#sec-contributing-markup}
+```
+
+> [!Note]
+> NixOS option documentation does not support headings in general.
+
+#### Inline Anchors
+
+Allow linking to an arbitrary place in the text (e.g. individual list items, sentences…).
+
+They are defined using a hybrid of the link syntax with the attributes syntax known from headings, called [bracketed spans](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/bracketed_spans.md):
+
+```markdown
+- []{#ssec-gnome-hooks-glib} `glib` setup hook will populate `GSETTINGS_SCHEMAS_PATH` and then `wrapGApps*` hook will prepend it to `XDG_DATA_DIRS`.
+```
+
+#### Automatic links
+
+If you **omit a link text** for a link pointing to a section, the text will be substituted automatically.
+For example `[](#chap-contributing)`.
+
+This syntax is taken from [MyST](https://myst-parser.readthedocs.io/en/latest/using/syntax.html#targets-and-cross-referencing).
+
+
+#### HTML
+
+Inlining HTML is not allowed.
+Parts of the documentation get rendered to various non-HTML formats, such as man pages in the case of NixOS manual.
+
+#### Roles
+
+If you want to link to a man page, you can use `` {manpage}`nix.conf(5)` ``.
+The references will turn into links when a mapping exists in [`doc/manpage-urls.json`](./manpage-urls.json).
+Please keep the `manpage-urls.json` file alphabetically sorted.
+
+A few markups for other kinds of literals are also available:
+
+- `` {command}`rm -rfi` ``
+- `` {env}`XDG_DATA_DIRS` ``
+- `` {file}`/etc/passwd` ``
+- `` {option}`networking.useDHCP` ``
+- `` {var}`pkgs` ``
+
+The values will be formatted as inline `<code>` elements.
+
+These literal kinds are used mostly in NixOS option documentation.
+
+#### Admonitions
+
+Set off from the text to bring attention to something.
+
+It uses pandoc’s [fenced `div`s syntax](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/fenced_divs.md):
+
+```markdown
+::: {.warning}
+This is a warning
+:::
+```
+
+The following are supported:
+
+- `caution`
+- `important`
+- `note`
+- `tip`
+- `warning`
+- `example`
+
+Example admonitions require a title to work.
+If you don't provide one, the manual won't build.
+
+```markdown
+::: {.example #ex-showing-an-example}
+
+# Title for this example
+
+Text for the example.
+:::
+```
+
+#### [Definition lists](https://github.com/jgm/commonmark-hs/blob/master/commonmark-extensions/test/definition_lists.md)
+
+For defining a group of terms:
+
+```markdown
+Pear
+:   Green or yellow bulbous fruit
+
+Watermelon
+:   Green fruit with red flesh
+```
+
 #### Examples
 
 To define a referenceable figure use the following fencing:
@@ -543,3 +435,5 @@ Check the [list of possible replacement patterns](https://github.com/executableb
 ## Getting help
 
 If you need documentation-specific help or reviews, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on your pull request.
+
+The official communication channels are available at the [official NixOS website](https://nixos.org/community/teams/documentation/), under `Contact`.
