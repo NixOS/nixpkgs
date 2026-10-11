@@ -57,6 +57,8 @@
   cups,
   broadwaySupport ? true,
   wayland-scanner,
+  _experimental-update-script-combinators,
+  makeHardcodeGsettingsPatch,
   testers,
 }:
 
@@ -215,6 +217,14 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
   env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
+  # The patch needs build-time substitution because it hardcodes GTK's own
+  # compiled schema directory in the final $out as a fallback lookup path.
+  prePatch = ''
+    substitute ${./patches/3.0-hardcode-gsettings.patch} hardcode-gsettings.patch \
+      --subst-var-by gtk ${glib.makeSchemaPath "$out" "${finalAttrs.pname}-${finalAttrs.version}"}
+    patches="$patches $PWD/hardcode-gsettings.patch"
+  '';
+
   postPatch = ''
     # See https://github.com/NixOS/nixpkgs/issues/132259
     substituteInPlace meson.build \
@@ -273,11 +283,32 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "gtk";
-      attrPath = "gtk3";
-      freeze = true;
+    hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
+      schemaIdToVariableMapping = {
+        "org.gtk.Settings.ColorChooser" = "gtk";
+        "org.gtk.Settings.EmojiChooser" = "gtk";
+        "org.gtk.Settings.FileChooser" = "gtk";
+        "org.gtk.Demo" = "gtk";
+        "org.gtk.exampleapp" = "gtk"; # Not actually installed.
+      };
+      inherit (finalAttrs) src;
+      preferDefaultSchemaSource = true;
     };
+
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "gtk";
+          attrPath = "gtk3";
+          freeze = true;
+        };
+        updatePatch = _experimental-update-script-combinators.copyAttrOutputToFile "gtk3.hardcodeGsettingsPatch" ./patches/3.0-hardcode-gsettings.patch;
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updatePatch
+      ];
+
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
