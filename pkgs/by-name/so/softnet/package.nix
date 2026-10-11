@@ -5,11 +5,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "softnet";
-  version = "0.7.1";
+  version = "0.21.1";
 
   src = fetchurl {
-    url = "https://github.com/cirruslabs/softnet/releases/download/${finalAttrs.version}/softnet.tar.gz";
-    sha256 = "1g274x524xc85hfzxi3vb4xp720bjgk740bp6hc92d1ikmp0b664";
+    url = "https://github.com/openai/softnet/releases/download/${finalAttrs.version}/softnet.tar.gz";
+    hash = "sha256-vhxz1Hxbn/26Ie++Zbi2QLnUYlCt5YisSVDbziQRq6Y=";
   };
   sourceRoot = ".";
 
@@ -24,8 +24,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Software networking with isolation for Tart";
-    homepage = "https://github.com/cirruslabs/softnet";
-    license = lib.licenses.agpl3Plus;
+    homepage = "https://github.com/openai/softnet";
+    license = lib.licenses.fsl11Asl20;
     maintainers = with lib.maintainers; [ emilytrau ];
     platforms = [ "aarch64-darwin" ];
     # Source build will be possible after darwin SDK 12.0 bump
