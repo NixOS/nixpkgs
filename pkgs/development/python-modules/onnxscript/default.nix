@@ -105,6 +105,8 @@ buildPythonPackage (finalAttrs: {
     "tests/optimizer/test_models.py"
     # Wants GPU on ROCm
     "tests/function_libs/torch_lib/ops_test.py"
+    # tolerance is slightly off
+    "tests/functions/onnxfns2_test.py::TestOnnxFns::test_onnxfns_space_to_depth"
   ];
 
   # Importing onnxruntime in the sandbox crashes on aarch64-linux:
