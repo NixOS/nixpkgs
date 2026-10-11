@@ -102,13 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     nautilus
   ];
 
-  mesonFlags =
-    lib.optionals (!withLibsecret) [
-      "-Dkeyring=disabled"
-    ]
-    ++ lib.optionals (!supportNautilus) [
-      "-Dnautilus=false"
-    ];
+  mesonFlags = [
+    (lib.mesonEnable "keyring" withLibsecret)
+    (lib.mesonBool "nautilus" supportNautilus)
+  ];
 
   # For https://gitlab.gnome.org/GNOME/papers/-/blob/5efed8638dd4a2d5c36f59eb9a22158d69632e0b/shell/src/meson.build#L36
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -122,6 +119,20 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
       --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    appDir="$out/Applications/Papers.app/Contents"
+
+    mkdir -p "$appDir"/{MacOS,Resources}
+
+    install -Dm444 "$NIX_BUILD_TOP/$sourceRoot/build-aux/macos/Info.plist" "$appDir/Info.plist"
+    install -Dm444 "$NIX_BUILD_TOP/$sourceRoot/build-aux/macos/Papers.icns" "$appDir/Resources/Papers.icns"
+
+    substituteInPlace "$appDir/Info.plist" \
+      --replace-fail "<string>1.0</string>" "<string>${finalAttrs.version}</string>" \
+      --replace-fail "<string>1</string>" "<string>${finalAttrs.version}</string>"
+
+    ln -s "$out/bin/papers" "$appDir/MacOS/Papers"
   '';
 
   preFixup = ''
