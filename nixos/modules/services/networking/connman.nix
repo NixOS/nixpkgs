@@ -124,6 +124,7 @@ in
         Type = "dbus";
         BusName = "net.connman";
         Restart = "on-failure";
+        RuntimeDirectory = "connman";
         ExecStart = toString (
           [
             "${cfg.package}/sbin/connmand"
