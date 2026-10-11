@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  systemd,
+  systemdLibs,
   fcgi,
   autoreconfHook,
   pkg-config,
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    systemd
+    systemdLibs
     fcgi
   ];
 

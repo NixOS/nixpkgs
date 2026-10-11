@@ -4,7 +4,7 @@
   pkg-config,
   glib,
   pandoc,
-  systemd,
+  systemdLibs,
   libyaml,
   python3,
   libuuid,
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     pythonenv
-    systemd
+    systemdLibs
     glib
     libyaml
     libuuid

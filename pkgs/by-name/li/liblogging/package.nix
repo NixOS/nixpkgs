@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   pkg-config,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals withSystemd [ systemd ];
+  buildInputs = lib.optionals withSystemd [ systemdLibs ];
 
   configureFlags = [
     "--enable-rfc3195"
