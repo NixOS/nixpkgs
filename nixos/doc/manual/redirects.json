@@ -376,6 +376,9 @@
   "contracts-routing": [
     "index.html#contracts-routing"
   ],
+  "contracts-rename-type": [
+    "index.html#contracts-rename-type"
+  ],
   "module-contracts": [
     "index.html#module-contracts"
   ],

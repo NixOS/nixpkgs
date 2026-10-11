@@ -450,6 +450,15 @@ STRICT_EVAL=1 checkConfigOutput '^\["services","two","numbers"\]$' config.contra
 STRICT_EVAL=1 checkConfigOutput '^\["services","four","number"\]$' config.contracts.number.providers.four.loc ./contracts-provider-path.nix
 checkConfigError 'a provider `module` must be an option' config.contracts.number.providers.wrong.loc ./contracts-provider-path.nix ./contracts-provider-path-wrong.nix
 
+# contracts: rename a contract type, and send the requests of the old name to the provider of the new name
+checkConfigOutput '^6$' config.contracts.number.results.old.value ./contracts-type-rename.nix
+checkConfigOutput '^2$' config.contracts.count.results.new.value ./contracts-type-rename.nix
+checkConfigOutput '^"new,old"$' config.wantedNames ./contracts-type-rename.nix
+STRICT_EVAL=1 checkConfigOutput '^\["The option .number. defined in [^"]*contracts-type-rename.nix. has been renamed to .count.\."\]$' config.contracts.warnings ./contracts-type-rename.nix
+checkConfigError 'contracts.count.want.old: no provider' config.contracts.number.results.old.value ./contracts-type-rename.nix ./contracts-type-rename-no-provider.nix
+# contracts: a contract type cannot have the name `warnings`
+checkConfigError 'The option .contracts.warnings. in .* is already declared in' config.contracts.warnings ./contracts-type-name-warnings.nix
+
 # submoduleWith
 
 ## specialArgs should work

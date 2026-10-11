@@ -228,3 +228,27 @@ To send one entry to a different provider, set `instances.<name>` to that provid
 
 To connect one entry manually, as in [](#contracts-connect), set `instances.<name>` to `null`.
 Then no provider gets the request of that entry from `providerRequests`, and `results.<name>` is not available.
+
+## Rename a contract type {#contracts-rename-type}
+
+To rename a contract type, add `lib.mkRenamedOptionModule` to [](#opt-contracts).
+For example, to rename the contract type `oldContract` to `newContract`:
+
+```nix
+{
+  contracts =
+    { ... }:
+    {
+      imports = [ (lib.mkRenamedOptionModule [ "oldContract" ] [ "newContract" ]) ];
+    };
+}
+```
+
+The paths are relative to `contracts`.
+Use a function, because the module system reads an attribute set in `contracts` as values of its options, and not as a module with `imports`.
+Consumers of `oldContract` do not change: their entries in `want` go to `newContract`, and they read `results` of `newContract`.
+When a consumer sets the old name, the warning goes to `contracts.warnings`.
+In NixOS, these warnings go to the option `warnings`.
+
+In nixpkgs, rename the contract type in `lib/contracts/definitions/`, and add the module to `nixos/modules/contracts/default.nix`.
+`lib.contracts` does not keep the old name, thus a module that uses `lib.contracts.oldContract` must change to `lib.contracts.newContract`.

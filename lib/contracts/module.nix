@@ -29,6 +29,19 @@ let
       throw "contracts: a provider `module` must be an option, or a set of options with an attribute at `contract`."
     else
       resolveProvider module.${lib.head path} (lib.tail path);
+
+  # The option `contracts.warnings`.
+  # Thus a contract type cannot have the name `warnings`.
+  warningsModule = {
+    options.warnings = mkOption {
+      description = ''
+        Warnings from the aliases in `contracts`, for example from `lib.mkRenamedOptionModule`.
+        In NixOS, these warnings go to the option `warnings`.
+      '';
+      type = types.listOf types.str;
+      default = [ ];
+    };
+  };
 in
 {
   options = {
@@ -92,6 +105,7 @@ in
       '';
       default = { };
       type = types.submodule {
+        imports = [ warningsModule ];
         options = lib.mapAttrs (
           contractName: contractType:
           mkOption {
