@@ -5,6 +5,7 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
+  callPackage,
   _experimental-update-script-combinators,
   nix-update-script,
   writeShellApplication,
@@ -64,6 +65,8 @@ buildDotnetModule {
   '';
 
   passthru = {
+    tests = callPackage ./tests.nix { };
+
     # expose so that update-source-version can properly update the templates version
     inherit templatesVersion templates;
 
