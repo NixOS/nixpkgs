@@ -49,6 +49,8 @@ in
         Restart = "on-failure";
       };
       wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
+      after = [ "graphical-session.target" ];
       path = cfg.extraPackages;
     };
 
