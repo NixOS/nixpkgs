@@ -59,7 +59,10 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/superg/redumper";
     changelog = "https://github.com/superg/redumper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hughobrien ];
+    maintainers = with lib.maintainers; [
+      hughobrien
+      keenanweaver
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "redumper";
   };
