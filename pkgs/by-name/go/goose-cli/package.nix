@@ -13,6 +13,7 @@
   cacert,
   gitMinimal,
   writableTmpDirAsHomeHook,
+  writeShellScript,
   versionCheckHook,
   nix-update-script,
   llvmPackages,
@@ -36,21 +37,29 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.49.0";
+  version = "1.53.0";
 
   src = fetchFromGitHub {
     owner = "aaif-goose";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KTHfaPJ3Vf2b6efMr0k9/AAMykDaG0lgSVCUpL58fnk=";
+    hash = "sha256-NoJFwEd4kNGASEo7+E/jRG192oV0hZs3PISi5hG3Q4Q=";
   };
 
-  cargoHash = "sha256-78E/J64RIy7AkFODLVQBFy8HPUtT2ODLwNAstErRMdQ=";
+  cargoHash = "sha256-zQc2/t+KEHee7twcpRquhgVP8ZywoMz8w7uHwi9uW8U=";
 
   cargoBuildFlags = [
     "--bin"
     "goose"
   ];
+
+  # The cwd test (since upstream #11501) symlinks /bin/pwd, which the Linux
+  # sandbox doesn't have. Point it at a store script instead; coreutils' pwd
+  # won't do, as it's a multicall binary that dispatches on argv[0].
+  postPatch = ''
+    substituteInPlace crates/goose/src/providers/command_auth.rs \
+      --replace-fail '"/bin/pwd"' '"${writeShellScript "print-cwd" "pwd"}"'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -135,6 +144,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_session_id_propagation_to_llm"
     # keychain-backed dictation secret test panics on empty swap_remove
     "--skip=test_custom_dictation_secret_save_delete"
+    # goose-roaming: iroh tests segfault on aarch64-darwin
+    "--skip=trust_file_refresh_takes_effect_on_running_share"
+    "--skip=accepted_key_connects_and_streams"
+    "--skip=unaccepted_key_is_rejected"
+    "--skip=revoked_key_is_rejected"
+    "--skip=revocation_closes_live_connection"
+    "--skip=revocation_watcher_closes_live_connection_from_file"
+    "--skip=relay_to_direct_upgrade_loses_no_data"
+    "--skip=concurrent_dial_burst"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
