@@ -516,18 +516,6 @@ opts[:addons].each do |filename|
   merge result['extras'], extras
 end
 
-result['latest'] = {}
-result['packages'].each do |name, versions|
-  max_version = Gem::Version.new('0')
-  versions.each do |version, package|
-    if package['license'] == 'android-sdk-license' && Gem::Version.correct?(package['revision'])
-      package_version = Gem::Version.new(package['revision'])
-      max_version = package_version if package_version > max_version
-    end
-  end
-  result['latest'][name] = max_version.to_s
-end
-
 # As we keep the old packages in the repo JSON file, we should have
 # a strategy to remove them at some point!
 # So with this variable we claim it's okay to remove them from the
@@ -546,11 +534,19 @@ begin
                end
 
   if input_json != nil && !input_json.empty?
-    input = expire_records(JSON.parse(input_json), two_years_ago)
+    parsed_input = JSON.parse(input_json)
+    input = expire_records(parsed_input, two_years_ago)
 
     # Just create a new set of latest packages.
     prev_latest = input['latest'] || {}
     input['latest'] = {}
+
+    # Never expire the packages that the latest versions refer to,
+    # since compose-android-packages.nix resolves "latest" through them.
+    prev_latest.each do |name, version|
+      package = parsed_input.dig('packages', name, version)
+      input['packages'][name][version] = package if package
+    end
   end
 rescue JSON::ParserError => e
   STDERR.write(e.message)
@@ -562,7 +558,25 @@ fixup_result = fixup(result)
 # Regular installation of Android SDK would keep the previously installed packages even if they are not
 # in the uptodate XML files, so here we try to support this logic by keeping un-available packages,
 # therefore the old packages will work as long as the links are working on the Google servers.
-output = sort_recursively(merge(input, fixup_result))
+output = merge(input, fixup_result)
+
+# Compute the latest versions from the merged packages, so packages that are no longer
+# in the XML files (e.g. tools) keep a latest version until they expire.
+# Previous latest entries are always kept, since compose-android-packages.nix refers to them.
+output['latest'] = prev_latest.reject { |k, _| k == 'fingerprint' }
+output['packages'].each do |name, versions|
+  max_version = Gem::Version.new('0')
+  versions.each do |version, package|
+    if package['license'] == 'android-sdk-license' && Gem::Version.correct?(package['revision'])
+      package_version = Gem::Version.new(package['revision'])
+      max_version = package_version if package_version > max_version
+    end
+  end
+  next if max_version == Gem::Version.new('0') && !fixup_result['packages'].has_key?(name)
+  output['latest'][name] = max_version.to_s
+end
+
+output = sort_recursively(output)
 
 # Fingerprint the latest versions.
 fingerprint = Digest::SHA256.hexdigest(output['latest'].tap {_1.delete 'fingerprint'}.to_json)[0...16]
