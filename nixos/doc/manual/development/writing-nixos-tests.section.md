@@ -4,6 +4,9 @@ A NixOS test is a module that has the following structure:
 
 ```nix
 {
+  # optional, prevents mixing this with NixOS non-test modules
+  _class = "nixosTest";
+
   # QEMU virtual machines:
   nodes = {
     vm1 =
