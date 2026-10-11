@@ -1,0 +1,12 @@
+diff --git a/src/libserial/SerialPortConstants.h b/src/libserial/SerialPortConstants.h
+index 4f05bd5..88dca0b 100644
+--- a/src/libserial/SerialPortConstants.h
++++ b/src/libserial/SerialPortConstants.h
+@@ -33,6 +33,7 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <limits>
+ #include <stdexcept>
+ #include <string>
