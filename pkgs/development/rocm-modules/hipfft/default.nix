@@ -21,7 +21,7 @@
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "7.2.4";
+  version = "10.1.0";
 
   outputs = [
     "out"
@@ -39,13 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/hipfft"
       "shared"
     ];
     fetchSubmodules = true;
-    hash = "sha256-EtxZuxBPx6trTN9iC7uri2+UR0Eolp919Ry4U1PEqNA=";
+    hash = "sha256-QTcdNpA/xEH99DZ6rlhMGWUVpc0aitve4lKlhNiF0OM=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipfft";
 

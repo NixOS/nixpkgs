@@ -49,7 +49,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "7.2.4";
+  version = "10.1.0";
 
   outputs = [
     "out"
@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/rdc"
       "shared"
     ];
-    hash = "sha256-SmySauRxFnEQJVTjGYf4TpmQclTwZG2RZrk3u6ko5Qo=";
+    hash = "sha256-tcov375DXHX1L/HhACevulzBOhq7Gp08j8SDEuVgPYU=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rdc";
 

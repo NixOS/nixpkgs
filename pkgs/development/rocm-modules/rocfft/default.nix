@@ -20,17 +20,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/rocfft"
       "shared"
     ];
-    hash = "sha256-RjWMzLX0nBA8ClweJ8YgRTn+Nzt/VUkOoSw3jMQ3IWg=";
+    hash = "sha256-N7bqrYrrYg9p6YnG7UcvOL7qYDPD/XwKUj7Jco57/oY=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocfft";
 

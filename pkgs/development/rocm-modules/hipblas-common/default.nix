@@ -8,17 +8,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas-common";
-  version = "7.2.4";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/hipblas-common"
       "shared"
     ];
-    hash = "sha256-83LgS4I1fMSaNtWdVFf1qhYRMT7a9jVzO3XpUzEipXg=";
+    hash = "sha256-2sUJqcy/LSfKOvY1IBzlxmbKZImMxf6YGA+qQml8DLc=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipblas-common";
 

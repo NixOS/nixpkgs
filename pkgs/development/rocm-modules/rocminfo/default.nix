@@ -12,18 +12,18 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "7.2.4";
+  version = "10.1.0";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/rocminfo"
       "shared"
     ];
-    hash = "sha256-0esRBEXVibC2uzyonpc0ABNNHQ2NAWZrBmmg6p1zP0c=";
+    hash = "sha256-oK9fUtHb2qvFTpQ/9KE6LfiopDUvoreApZtsDb9aGvA=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocminfo";
 

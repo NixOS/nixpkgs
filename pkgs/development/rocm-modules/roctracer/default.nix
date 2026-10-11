@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "7.2.4";
+  version = "10.1.0";
 
   outputs = [
     "out"
@@ -34,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/roctracer"
       "shared"
     ];
-    hash = "sha256-Ps9b/MMdxXthGV96ZDg0kZGPdmn7Sy5if1a/Fjx2fEE=";
+    hash = "sha256-1pXWl8yUlfw5C3PFhrLxXPwHxscu1+AHx+lEqhl59vk=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/roctracer";
 
