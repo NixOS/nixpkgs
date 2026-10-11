@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "distributed";
   version = "2026.8.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
