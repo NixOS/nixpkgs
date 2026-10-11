@@ -27,6 +27,7 @@ let
   dataDownload = fetchurl {
     url = "https://archive.org/download/warcraft-ii-tides-of-darkness_202105/Warcess.zip";
     sha256 = "0yxgvf8xpv1w2bjmny4a38pa3xcdgqckk9abj21ilkc5zqzqmm9b";
+    meta.broken = true;
   };
 
   data =
