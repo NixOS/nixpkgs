@@ -42,7 +42,6 @@ buildPythonPackage (finalAttrs: {
   pname = "shap";
   version = "0.52.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "slundberg";
