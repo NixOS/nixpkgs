@@ -24,7 +24,6 @@ buildPythonPackage (finalAttrs: {
   pname = "connectrpc";
   version = "0.11.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "connectrpc";
