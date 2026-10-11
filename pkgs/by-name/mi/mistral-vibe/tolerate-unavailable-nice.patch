@@ -1,0 +1,16 @@
+diff --git a/pytest_vibe.py b/pytest_vibe.py
+index c174c08..c1f1dde 100644
+--- a/pytest_vibe.py
++++ b/pytest_vibe.py
+@@ -46,7 +46,10 @@ def pytest_configure(config: pytest.Config) -> None:
+     if _is_ci():
+         return
+     if nice := getattr(os, "nice", None):
+-        nice(_LOCAL_NICENESS)
++        try:
++            nice(_LOCAL_NICENESS)
++        except OSError:
++            pass
+ 
+ 
+ def _default_worker_count(cpu_count: int) -> int:
