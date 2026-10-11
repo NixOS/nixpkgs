@@ -23,26 +23,31 @@
 
 assert region == "Global" || region == "EU";
 
-let
-  kyodialog_version = "9.4";
-  date = "20240521";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups-kyodialog";
-  version = "${kyodialog_version}-${date}";
+  version = "10.1";
 
   dontStrip = true;
 
   src = fetchzip {
-    # Steps to find the release download URL:
+    # Run the update script to bump version/hash/url automatically.
+    #
+    # Kyocera's own download link isn't reproducible: its filename's
+    # embedded date has stayed "20240521" across at least two different
+    # real releases (9.4 and 10.1 both), meaning the same URL can
+    # silently serve different content later. update.sh pins an
+    # immutable Wayback Machine snapshot as the sole url instead of the
+    # live one for that reason.
+    #
+    # If that ever breaks (e.g. Kyocera restructures the download
+    # center), find the release by hand instead and edit this file
+    # directly:
     # 1. Go to https://www.kyoceradocumentsolutions.us/en/support/downloads.html
     # 2. Search for printer model, e.g. "TASKalfa 6053ci"
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
-    urls = [
-      "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
-      "https://web.archive.org/web/20260107200228/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
-    ];
-    hash = "sha256-H9n4KpaLGNk5du4+BAmMjRyLmXaHap8HdNZlX/Kia4E=";
+    # 4. Snapshot the download link at https://web.archive.org/save/<url>
+    url = "https://web.archive.org/web/20260916001212/https://www.kyoceradocumentsolutions.us/content/dam/download-center-americas-cf/us/drivers/drivers/KyoceraLinuxPackages_20240521_tar_gz.download.gz";
+    hash = "sha256-jJNTNcZiIcIkXZBEp+M012eaDbdAaa9YFUJ5msfWDy0=";
     extension = "tar.gz";
     stripRoot = false;
     postFetch = ''
@@ -64,7 +69,7 @@ stdenv.mkDerivation rec {
           or (throw "unsupported system: ${stdenv.hostPlatform.system}");
     in
     ''
-      ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${kyodialog_version}-0_${platform}.deb" data.tar.gz | tar -xz
+      ar p "$src/Debian/${region}/kyodialog_${platform}/kyodialog_${finalAttrs.version}-0_${platform}.deb" data.tar.gz | tar -xz
     '';
 
   nativeBuildInputs = [
@@ -86,7 +91,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     # allow cups to find the ppd files
     mkdir -p $out/share/cups/model
-    mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
+    mv ./usr/share/kyocera${finalAttrs.version}/ppd${finalAttrs.version} $out/share/cups/model/Kyocera
 
     # remove absolute path prefixes to filters in ppd
     find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
@@ -98,19 +103,23 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
 
-    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
+    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${finalAttrs.pname}/copyright
   ''
   + lib.optionalString withQtGui ''
     install -D usr/bin/kyoPPDWrite_H $out/bin/kyoPPDWrite_H
-    install -D usr/bin/kyodialog${kyodialog_version} $out/bin/kyodialog
+    install -D usr/bin/kyodialog${finalAttrs.version} $out/bin/kyodialog
 
-    install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/${pname}/icons/appicon_H.png
+    install -Dm444 usr/share/kyocera${finalAttrs.version}/appicon_H.png $out/share/${finalAttrs.pname}/icons/appicon_H.png
 
-    install -Dm444 usr/share/applications/kyodialog${kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
+    install -Dm444 usr/share/applications/kyodialog${finalAttrs.version}.desktop $out/share/applications/kyodialog.desktop
     substituteInPlace $out/share/applications/kyodialog.desktop \
-      --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
-      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
+      --replace Exec=\"/usr/bin/kyodialog${finalAttrs.version}\" Exec=\"$out/bin/kyodialog\" \
+      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${finalAttrs.pname}/icons/appicon_H.png
   '';
+
+  # No GitHub/GitLab/etc. release source nix-update can check, so this ships
+  # a custom script that reads the version off the download center.
+  passthru.updateScript = [ ./update.sh ];
 
   meta = {
     description = "CUPS drivers for several Kyocera printers";
@@ -123,4 +132,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})
