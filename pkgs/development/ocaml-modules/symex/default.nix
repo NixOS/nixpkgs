@@ -9,7 +9,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "symex";
-  version = "0.2";
+  version = "0.3";
 
   minimalOCamlVersion = "5.1";
 
@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
     owner = "ocamlpro";
     repo = "symex";
     tag = finalAttrs.version;
-    hash = "sha256-KX+OHiCsAHEw0kBWLUDVakIcshUNXLYjm2f2le75Mj8=";
+    hash = "sha256-4p7FnaNP4GPatkpWBwD3OZYFlkKzyNoQFf4Kdc/39wo=";
   };
 
   propagatedBuildInputs = [
