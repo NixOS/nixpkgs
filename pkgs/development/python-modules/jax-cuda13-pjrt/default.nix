@@ -47,7 +47,6 @@ buildPythonPackage (finalAttrs: {
   pname = "jax-cuda13-pjrt";
   inherit version;
   pyproject = false;
-  __structuredAttrs = true;
 
   src = fetchPypi {
     pname = "jax_cuda13_pjrt";
