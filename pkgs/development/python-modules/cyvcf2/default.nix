@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   pname = "cyvcf2";
   version = "0.34.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "brentp";
