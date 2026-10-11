@@ -414,6 +414,22 @@ stdenv.mkDerivation (
           packed="resources/app/node_modules.asar"
           unpacked="resources/app/node_modules"
           asar extract "$packed" "$unpacked"
+        ''
+        # asar does not preserve executable permissions for files marked as unpacked
+        + ''
+          if [ -d "resources/app/node_modules.asar.unpacked" ]; then
+            original="resources/app/node_modules.asar.unpacked"
+
+            find "$original" -type f -perm /111 -print0 |
+              while IFS= read -r -d ''' src; do
+                rel="''${src#"$original"/}"
+                dst="$unpacked/$rel"
+                test -f "$dst" || exit 1
+                chmod --reference="$src" "$dst"
+              done
+          fi
+        ''
+        + ''
           substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
             --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
             --replace-fail "/bin/bash" "${bash}/bin/bash"
