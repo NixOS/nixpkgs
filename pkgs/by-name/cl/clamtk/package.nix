@@ -47,12 +47,13 @@ perlPackages.buildPerlPackage rec {
 
   postPatch = ''
     # Set correct nix paths in perl scripts
+    # Point to share/icons/hicolor/128x128/apps as only clamtk.png will be used
     substituteInPlace lib/App.pm \
       --replace /usr/bin/freshclam ${lib.getBin clamav}/bin/freshclam \
       --replace /usr/bin/sigtool ${lib.getBin clamav}/bin/sigtool \
       --replace /usr/bin/clamscan ${lib.getBin clamav}/bin/clamscan \
       --replace /usr/bin/clamdscan ${lib.getBin clamav}/bin/clamdscan \
-      --replace /usr/share/pixmaps $out/share/pixmaps
+      --replace /usr/share/pixmaps $out/share/icons/hicolor/128x128/apps
 
     # We want to catch the crontab wrapper on NixOS and the
     # System crontab on non-NixOS so we don't give a full path.
@@ -67,7 +68,9 @@ perlPackages.buildPerlPackage rec {
     install -Dm755 clamtk -t $out/bin
     install -Dm444 lib/*.pm -t $out/lib/perl5/site_perl/ClamTk
     install -Dm444 clamtk.desktop -t $out/share/applications
-    install -Dm444 images/* -t $out/share/pixmaps
+    install -Dm444 images/clamtk.png -t $out/share/icons/hicolor/128x128/apps
+    install -Dm444 images/clamtk.xpm -t $out/share/icons/hicolor/32x32/apps
+    install -Dm444 images/clamtk_300x300.png $out/share/icons/hicolor/300x300/apps/clamtk.png
     install -Dm444 clamtk.1.gz -t $out/share/man/man1
     install -Dm444 {CHANGES,LICENSE,*.md} -t $out/share/doc/clamtk
 
