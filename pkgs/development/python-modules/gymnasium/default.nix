@@ -40,7 +40,6 @@ buildPythonPackage (finalAttrs: {
   pname = "gymnasium";
   version = "1.4.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
