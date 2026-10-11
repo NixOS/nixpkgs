@@ -1,0 +1,26 @@
+--- a/gtk/src/meson.build
++++ b/gtk/src/meson.build
+@@ -36,23 +36,6 @@
+     install_data(unity_asset_data, install_dir: unity_assets_dest)
+   endif
+ 
+-  # install gtk2 data
+-  gtk2_sources_dir = join_paths(flavour, 'gtk-2.0')
+-  gtk2_sources_data = run_command(
+-    'find', gtk2_sources_dir, '-name', '*rc'
+-    ).stdout().strip().split('\n')
+-
+-  gtk2_sources_dest = join_paths(theme_dir, 'gtk-2.0')
+-  install_data(gtk2_sources_data, install_dir: gtk2_sources_dest)
+-
+-  gtk2_asset_dir = join_paths(gtk2_sources_dir, 'assets')
+-  gtk2_asset_data = run_command(
+-    'find', gtk2_asset_dir, '-name', '*.png'
+-    ).stdout().strip().split('\n')
+-
+-  gtk2_assets_dest = join_paths(gtk2_sources_dest, 'assets')
+-  install_data(gtk2_asset_data, install_dir: gtk2_assets_dest)
+-
+   # build and install gtk3 data
+   foreach gtk_ver: gtk_versions
+     gtk_dir = 'gtk-@0@'.format(gtk_ver)
