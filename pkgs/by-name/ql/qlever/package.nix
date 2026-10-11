@@ -19,15 +19,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qlever";
-  version = "0.5.48";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ad-freiburg";
     repo = "qlever";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CqrwsUXjM5VwsNkLDkXgT6ZfqFZIuz2oPKVqO4z2t3A=";
+    hash = "sha256-T9EPRAt5WFaNJJi0WlX3mnLbn2WH/OGc6bs+Ig2liKk=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # TODO: remove on next release
+    ./link-boost-url-against-index.patch
+  ];
 
   strictDeps = true;
 
@@ -50,6 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     # fixes error: inlining failed in call to 'always_inline' ... :
     # function body can be overwritten at link time
     "-fno-semantic-interposition"
+
+    # GCC 16 ICEs in `pass_late_warn_uninitialized` while pretty-printing the
+    # offending expression of a `-Wmaybe-uninitialized` warning, e.g. for
+    # `src/engine/IndexScan.cpp`. The reported warnings are false positives
+    # coming from abseil and libstdc++ internals anyway.
+    "-Wno-maybe-uninitialized"
   ];
 
   cmakeFlags = [
@@ -66,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     # map external dependencies to FetchContent names
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FSST" "${fsst}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_RE2" "${re2}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_URIPARSER" "${uriparser}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_OPENTELEMETRY-CPP" "${opentelemetry-cpp}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PROMETHEUS-CPP" "${opentelemetry-cpp}/third_party/prometheus-cpp")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${googletest}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_NLOHMANN-JSON" "${nlohmann-json}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ANTLR" "${antlr}")
@@ -88,15 +102,30 @@ stdenv.mkDerivation (finalAttrs: {
       re2 = fetchFromGitHub {
         owner = "google";
         repo = "re2";
-        rev = "bc0faab533e2b27b85b8ad312abf061e33ed6b5d";
-        hash = "sha256-cKXe8r5MUag/z+seem4Zg/gmqIQjaCY7DBxiKlrnXPs=";
+        rev = "972a15cedd008d846f1a39b2e88ce48d7f166cbd";
+        hash = "sha256-oEU+dz8ax1S36+f9OysjB0GnQj8mjZx1VsZ/UgckdDI=";
+      };
+
+      uriparser = fetchFromGitHub {
+        owner = "uriparser";
+        repo = "uriparser";
+        rev = "04d8b8df5e0c6bf6c06e472540c015943a613bd2";
+        hash = "sha256-k4hRy4kfsaxUNIITPNxzqVgl+AwiR1NpKcE9DtAbwxc=";
+      };
+
+      opentelemetry-cpp = fetchFromGitHub {
+        owner = "open-telemetry";
+        repo = "opentelemetry-cpp";
+        rev = "2d80af1b1d26e300d9c0f7f51fa360f22c773523";
+        hash = "sha256-rw7N1/pQiyOZZQBqQR6nysot7Z/2cXS4k8wlW1gzvV0=";
+        fetchSubmodules = true;
       };
 
       googletest = fetchFromGitHub {
         owner = "google";
         repo = "googletest";
-        rev = "7917641ff965959afae189afb5f052524395525c";
-        hash = "sha256-Pfkx/hgtqryPz3wI0jpZwlRRco0s2FLcvUX1EgTGFIw=";
+        rev = "973323ed64a05b128418e7eab67016db5ba049df";
+        hash = "sha256-Z4W2zFRHYoTnWmhrAP4jodqpub0dec4YWgjBzhp1fgA=";
       };
 
       nlohmann-json = fetchFromGitHub {
@@ -116,15 +145,20 @@ stdenv.mkDerivation (finalAttrs: {
       range-v3 = fetchFromGitHub {
         owner = "joka921";
         repo = "range-v3";
-        rev = "42340ef354f7b4e4660268b788e37008d9cc85aa";
-        hash = "sha256-/17XLLLuEkcqeklVtqlgtu19tNTT3bLRHrU1aOPLhTw=";
+        rev = "0e2a41b61694e823df1b7d77174b139253c7ac39";
+        hash = "sha256-afdekChP8rpJZuamDSWSdcrMWzCMmALXp6nyzhnE6kI=";
+        postFetch = ''
+          pushd $out
+          patch -p1 -i ${./fix-range-v3-borrowed-range-instantiation.patch}
+          popd
+        '';
       };
 
       spatialjoin = fetchFromGitHub {
         owner = "ad-freiburg";
         repo = "spatialjoin";
-        rev = "c358e479ebb5f40df99522e69a0b52d73416020b";
-        hash = "sha256-/BQzyCx1KxnOeLLZkvqno2KN/VHAEu228zrsJaqYu/c=";
+        rev = "d1170ee08f0b932c73ca53af75338eacb3e043f6";
+        hash = "sha256-+fSugNUX5iHk+WC5j7OGVyCZqhhX73AIek+wxOExlgE=";
         fetchSubmodules = true;
       };
 
@@ -138,15 +172,15 @@ stdenv.mkDerivation (finalAttrs: {
       abseil = fetchFromGitHub {
         owner = "abseil";
         repo = "abseil-cpp";
-        rev = "93ac3a4f9ee7792af399cebd873ee99ce15aed08";
-        hash = "sha256-a18+Yj9fvDigza4b2g38L96hge5feMwU6fgPmL/KVQU=";
+        rev = "255c84dadd029fd8ad25c5efb5933e47beaa00c7";
+        hash = "sha256-TJT2Kzc64zI42FAbbGWP3Sshh1dU/D/AtEpgZrrhebg=";
       };
 
       s2 = fetchFromGitHub {
         owner = "google";
         repo = "s2geometry";
-        rev = "5b5eccd54a08ae03b4467e79ffbb076d0b5f221e";
-        hash = "sha256-VjgGcGgQlKmjUq+JU0JpyhOZ9pqwPcBUFEPGV9XoHc0=";
+        rev = "a37aba69f14af676e9605cd9515c8aca6cef8342";
+        hash = "sha256-eMwSfQ+UfM0k6uMfd9NUYY/FioHKqGL0zY51cBnHaWM=";
       };
     };
 
@@ -160,6 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Graph database implementing the RDF and SPARQL standards";
     homepage = "https://github.com/ad-freiburg/qlever";
+    changelog = "https://github.com/ad-freiburg/qlever/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "qlever";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;

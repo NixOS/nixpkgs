@@ -139,17 +139,19 @@ while read -r cmake_dep owner repo type submodules; do
 
     update_dep "$cmake_dep" "$owner" "$repo" "${type:-rev}" "${submodules:-false}"
 done <<'EOF'
-# CMAKE_DEP        OWNER         REPO                                TYPE  SUBMODULES
-fsst               cwida         fsst                                -     -
-re2                google        re2                                 -     -
-googletest         google        googletest                          -     -
-nlohmann-json      nlohmann      json                                tag   -
-antlr              antlr         antlr4                              -     -
-range-v3           joka921       range-v3                            -     -
-spatialjoin        ad-freiburg   spatialjoin                         -     true
-ctre               hanickadot    compile-time-regular-expressions    -     -
-abseil             abseil        abseil-cpp                          -     -
-s2                 google        s2geometry                          -     -
+# CMAKE_DEP        OWNER           REPO                                TYPE  SUBMODULES
+fsst               cwida           fsst                                -     -
+re2                google          re2                                 -     -
+uriparser          uriparser       uriparser                           -     -
+opentelemetry-cpp  open-telemetry  opentelemetry-cpp                   -     true
+googletest         google          googletest                          -     -
+nlohmann-json      nlohmann        json                                tag   -
+antlr              antlr           antlr4                              -     -
+range-v3           joka921         range-v3                            -     -
+spatialjoin        ad-freiburg     spatialjoin                         -     true
+ctre               hanickadot      compile-time-regular-expressions    -     -
+abseil             abseil          abseil-cpp                          -     -
+s2                 google          s2geometry                          -     -
 EOF
 
 echo ""
