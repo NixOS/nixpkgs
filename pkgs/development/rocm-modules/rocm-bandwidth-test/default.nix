@@ -8,6 +8,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-bandwidth-test";
+  # Kept at 6.3.3: rocm_bandwidth_test has no ROCm 10.x tag (newest upstream is
+  # rocm-7.2.4). Standalone diagnostic utility; updating it is a separate change.
   version = "6.3.3";
 
   src = fetchFromGitHub {
