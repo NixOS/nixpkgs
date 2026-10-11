@@ -3,14 +3,17 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  gradle,
+  gradle_8,
   jdk17,
   jre,
   makeWrapper,
   coreutils,
   gitMinimal,
 }:
-
+let
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jmeter";
   version = "5.6.3";
