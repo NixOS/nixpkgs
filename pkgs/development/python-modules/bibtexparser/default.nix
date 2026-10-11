@@ -12,8 +12,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.4.4";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "sciunto-org";
     repo = "python-${finalAttrs.pname}";
