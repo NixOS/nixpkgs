@@ -12,7 +12,8 @@
   fmt,
   gtest,
   gfortran,
-  lapack-reference,
+  blas,
+  lapack,
   buildTests ? false,
   buildBenchmarks ? false,
   gpuTargets ? (
@@ -37,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver${clr.gpuArchSuffix}";
-  version = "7.2.4";
+  version = "10.1.0";
 
   outputs = [
     "out"
@@ -52,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/rocsolver"
       "shared"
     ];
-    hash = "sha256-n+Y8RheA0UYeSfpvOw5zfwe4VAW5hsKjlCXtBceGhf0=";
+    hash = "sha256-hqCOQ5frigvHc21MBnjPJff6pQNm+JjzelwO8NR9dXo=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocsolver";
 
@@ -84,7 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ]
   ++ lib.optionals (buildTests || buildBenchmarks) [
-    lapack-reference
+    # openblas-backed wrappers, not lapack-reference (avoids the ILP64 libblas.so.3
+    # soname collision — see hipsolver).
+    blas
+    lapack
   ];
 
   cmakeFlags = [
