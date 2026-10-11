@@ -27043,6 +27043,12 @@
     matrix = "@dom:rodriguez.org.uk";
     keys = [ { fingerprint = "EB0D 45E6 D0DC 1BA1 A2B5  FC24 72DC F123 1E54 BD43"; } ];
   };
+  sidbayeck = {
+    email = "sidbayeck@outlook.com";
+    github = "XaydBayeck";
+    githubId = 47596385;
+    name = "Sid Bayeck";
+  };
   siddarthkay = {
     email = "siddarthkay@gmail.com";
     github = "siddarthkay";
