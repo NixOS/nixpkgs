@@ -767,6 +767,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  tenstorrent = {
+    github = "tenstorrent";
+  };
+
   test-driver = {
     github = "test-driver";
     enableFeatureFreezePing = true;
