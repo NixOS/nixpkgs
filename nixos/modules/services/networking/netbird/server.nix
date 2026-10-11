@@ -22,6 +22,7 @@ in
 
   # Import the separate components
   imports = [
+    ./combined.nix
     ./coturn.nix
     ./dashboard.nix
     ./management.nix
