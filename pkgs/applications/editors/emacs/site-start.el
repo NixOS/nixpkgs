@@ -16,38 +16,10 @@ least specific (the system profile)"
     (when (file-exists-p default-directory)
       (setq load-path (cons default-directory load-path))
       (normal-top-level-add-subdirs-to-load-path))))
-
-;;; Remove wrapper site-lisp from EMACSLOADPATH so it's not propagated
-;;; to any other Emacsen that might be started as subprocesses.
-(let ((wrapper-site-lisp (getenv "emacsWithPackages_siteLisp"))
-      (env-load-path (getenv "EMACSLOADPATH")))
-  (when wrapper-site-lisp
-    (setenv "emacsWithPackages_siteLisp" nil))
-  (when (and wrapper-site-lisp env-load-path)
-    (let* ((env-list (split-string env-load-path ":"))
-           (new-env-list (delete wrapper-site-lisp env-list)))
-      (setenv "EMACSLOADPATH" (when new-env-list
-                                (mapconcat 'identity new-env-list ":"))))))
-
-(let ((wrapper-site-lisp (getenv "emacsWithPackages_siteLispNative"))
-      (env-load-path (getenv "EMACSNATIVELOADPATH")))
-  (when wrapper-site-lisp
-    (setenv "emacsWithPackages_siteLispNative" nil))
-  (when (and wrapper-site-lisp env-load-path)
-    (let* ((env-list (split-string env-load-path ":"))
-           (new-env-list (delete wrapper-site-lisp env-list)))
-      (setenv "EMACSNATIVELOADPATH" (when new-env-list
-                                (mapconcat 'identity new-env-list ":"))))))
-
-(let ((wrapper-invocation-directory (getenv "emacsWithPackages_invocationDirectory")))
-  (when wrapper-invocation-directory
-    (setq invocation-directory (file-name-as-directory wrapper-invocation-directory))
-    (setenv "emacsWithPackages_invocationDirectory" nil)))
-
-(let ((wrapper-invocation-name (getenv "emacsWithPackages_invocationName")))
-  (when wrapper-invocation-name
-    (setq invocation-name wrapper-invocation-name)
-    (setenv "emacsWithPackages_invocationName" nil)))
+;; The default/standard value of `package-directory-list' depends on `load-path'.
+;; So we re-compute `package-directory-list' after modifying `load-path'.
+;; See Emacs bug https://debbugs.gnu.org/cgi/bugreport.cgi?bug=81982.
+(custom-reevaluate-setting 'package-directory-list)
 
 ;;; Set up native-comp load path.
 (when (featurep 'native-compile)
@@ -86,9 +58,7 @@ least specific (the system profile)"
   ;; TODO: We should also add the other `NIX_PROFILES' to this path.
   ;; However, these are user-specific, so we would need to discover
   ;; them dynamically after connecting via `tramp'
-  '(progn
-     (add-to-list 'tramp-remote-path "/run/current-system/sw/bin")
-     (add-to-list 'tramp-remote-path "/run/wrappers/bin")))
+  '(add-to-list 'tramp-remote-path "/run/wrappers/bin"))
 
 ;;; C source directory
 ;;;

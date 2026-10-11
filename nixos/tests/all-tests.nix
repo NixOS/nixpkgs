@@ -595,6 +595,7 @@ in
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   elk-zone = runTest ./web-apps/elk.nix;
+  emacs = runTest ./emacs;
   emacs-daemon = runTest ./emacs-daemon.nix;
   endlessh = runTest ./endlessh.nix;
   endlessh-go = runTest ./endlessh-go.nix;
