@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pytestCheckHook,
   setuptools,
   setuptools-scm,
 }:
@@ -11,15 +12,19 @@ buildPythonPackage rec {
   version = "6.1.3";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OkmOfoXvMkk0PVcQYY1kGkFNoPuubSMFOtp5du6D6l8=";
+  src = fetchFromGitHub {
+    owner = "tkem";
+    repo = "uritools";
+    tag = "v${version}";
+    hash = "sha256-pZzsdl/q5Piul1Q2cLPkeRmZbW12ACKuI2OYbnG+rMc=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
   ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "uritools" ];
 
