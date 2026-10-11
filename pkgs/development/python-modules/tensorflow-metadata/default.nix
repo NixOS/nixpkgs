@@ -16,7 +16,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tensorflow-metadata";
   version = "1.21.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
