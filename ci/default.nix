@@ -24,18 +24,19 @@ let
     allowAliases = false;
   };
 
+  fs = pkgs.lib.fileset;
+  nixpkgsFilesSrc = pkgs.lib.fileset.toSource {
+    root = ../.;
+    fileset = fs.difference ../. (fs.maybeMissing ../.git);
+  };
+
   fmt =
     let
       treefmt = pkgs.treefmt.withConfig ./treefmt.nix;
-      fs = pkgs.lib.fileset;
-      nixFilesSrc = fs.toSource {
-        root = ../.;
-        fileset = fs.difference ../. (fs.maybeMissing ../.git);
-      };
     in
     {
       pkg = treefmt;
-      check = treefmt.check nixFilesSrc;
+      check = treefmt.check nixpkgsFilesSrc;
     };
 
   # nixos-render-docs and nixos-render-docs-redirects
@@ -62,6 +63,19 @@ rec {
   };
 
   # CI jobs
+  nixpkgs-config-tests =
+    pkgs.runCommand "nixpkgs-config-tests"
+      {
+        nixpkgs = nixpkgsFilesSrc;
+        nativeBuildInputs = [ pkgs.nix-unit ];
+      }
+      ''
+        export HOME="$TMPDIR"
+        nix-unit --eval-store "$HOME" "$nixpkgs/pkgs/test/config/nix-unit.nix" \
+          --arg nixpkgsPath "$nixpkgs"
+        touch $out
+      '';
+
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
   manual-nixpkgs = (import ../doc { pkgs = docPkgs; });
