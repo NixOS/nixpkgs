@@ -29,6 +29,7 @@ tcl.mkTclDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm 755 nagelfar.tcl $out/bin/nagelfar
+    substituteInPlace $out/bin/nagelfar --replace "tclsh" "$TCLSH"
 
     runHook postInstall
   '';
