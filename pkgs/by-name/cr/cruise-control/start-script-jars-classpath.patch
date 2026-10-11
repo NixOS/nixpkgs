@@ -1,0 +1,11 @@
+--- a/kafka-cruise-control-start.sh
++++ b/kafka-cruise-control-start.sh
+@@ -23,7 +23,7 @@ copyJars() {
+   jars=(${files//,/ })
+   for usrJar in ${jars[@]};
+   do
+-    cp $usrJar "$base_dir"/cruise-control/build/dependant-libs/
++    CLASSPATH="$CLASSPATH:$usrJar"
+   done
+ }
+ 
