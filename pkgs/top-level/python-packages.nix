@@ -4202,7 +4202,15 @@ self: super: with self; {
 
   dbus-fast = callPackage ../development/python-modules/dbus-fast { };
 
+  dbus-idle = callPackage ../development/python-modules/dbus-idle { };
+
+  dbus-mediaplayer = callPackage ../development/python-modules/dbus-mediaplayer { };
+
+  dbus-networkdevices = callPackage ../development/python-modules/dbus-networkdevices { };
+
   dbus-next = callPackage ../development/python-modules/dbus-next { };
+
+  dbus-notification = callPackage ../development/python-modules/dbus-notification { };
 
   dbus-python = callPackage ../development/python-modules/dbus-python { inherit (pkgs) dbus; };
 
@@ -12371,7 +12379,11 @@ self: super: with self; {
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
+  nvitop = callPackage ../development/python-modules/nvitop { };
+
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
+
+  nvsmi = callPackage ../development/python-modules/nvsmi { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
@@ -14481,6 +14493,8 @@ self: super: with self; {
   pyalgotrade = callPackage ../development/python-modules/pyalgotrade { };
 
   pyalsaaudio = callPackage ../development/python-modules/pyalsaaudio { };
+
+  pyamdgpuinfo = callPackage ../development/python-modules/pyamdgpuinfo { };
 
   pyamg = callPackage ../development/python-modules/pyamg { };
 
@@ -22859,6 +22873,8 @@ self: super: with self; {
   xknx = callPackage ../development/python-modules/xknx { };
 
   xknxproject = callPackage ../development/python-modules/xknxproject { };
+
+  xlib-hotkeys = callPackage ../development/python-modules/xlib-hotkeys { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };
 
