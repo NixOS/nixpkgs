@@ -5,17 +5,9 @@
   meson,
   ninja,
   pkg-config,
-  check,
-  dbus,
-  xvfb-run,
   glib,
-  gtk3,
-  gettext,
-  libiconv,
-  json-glib,
-  libintl,
-  zathura,
   gitUpdater,
+  zathura,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,25 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    gettext
-    check
-    dbus
-    glib # for glib-compile-resources
   ];
 
   buildInputs = [
-    libintl
-    libiconv
-    json-glib
-  ];
-
-  propagatedBuildInputs = [
     glib
-    gtk3
-  ];
-
-  nativeCheckInputs = [
-    xvfb-run
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -64,13 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
   ];
-
-  checkPhase = ''
-    export NO_AT_BRIDGE=1
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
-  '';
 
   passthru = {
     updateScript = gitUpdater { };
@@ -87,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       that focuses on simplicity and minimalism.
     '';
     license = lib.licenses.zlib;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = [ ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })
