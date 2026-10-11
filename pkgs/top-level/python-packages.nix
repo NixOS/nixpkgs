@@ -4039,6 +4039,8 @@ self: super: with self; {
 
   darnit-gittuf = callPackage ../development/python-modules/darnit-gittuf { };
 
+  darnit-reproducibility = callPackage ../development/python-modules/darnit-reproducibility { };
+
   dartsim = toPythonModule (
     pkgs.dartsim.override {
       pythonSupport = true;
