@@ -32399,6 +32399,11 @@
     github = "ymstnt";
     githubId = 21342713;
   };
+  ynot = {
+    name = "Andrii Sultanov";
+    github = "last-genius";
+    githubId = 53952748;
+  };
   yoavlavi = {
     email = "yoav@yoavlavi.com";
     github = "yoav-lavi";
