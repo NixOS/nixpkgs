@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   makeWrapper,
+  openssl,
   python3,
 }:
 
@@ -16,6 +17,12 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-vzn+7w7RgAsCt1pOz53cvBE1F1U+NFE4c1MehwLoFeQ=";
   };
+
+  patches = [ ./state-directory.patch ];
+
+  postPatch = ''
+    patchShebangs certs/gen-self-signed-cert.sh
+  '';
 
   nativeBuildInputs = [
     makeWrapper
@@ -34,21 +41,31 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
     makeWrapper ${python3.interpreter} $out/bin/responder \
       --set PYTHONPATH "$PYTHONPATH:$out/bin/Responder.py" \
+      --prefix PATH : ${lib.makeBinPath [ openssl ]} \
       --add-flags "$out/share/Responder/Responder.py" \
-      --run "mkdir -p /tmp/Responder"
-
-    substituteInPlace $out/share/Responder/Responder.conf \
-      --replace-fail "Responder-Session.log" "/tmp/Responder/Responder-Session.log" \
-      --replace-fail "Poisoners-Session.log" "/tmp/Responder/Poisoners-Session.log" \
-      --replace-fail "Analyzer-Session.log" "/tmp/Responder/Analyzer-Session" \
-      --replace-fail "Config-Responder.log" "/tmp/Responder/Config-Responder.log" \
-      --replace-fail "Responder.db" "/tmp/Responder/Responder.db"
+      --run ${lib.escapeShellArg ''
+        export RESPONDER_STATE_DIR="''${RESPONDER_STATE_DIR:-/tmp/Responder}"
+        umask 077
+      ''}
 
     runHook postInstall
   '';
 
   meta = {
     description = "LLMNR, NBT-NS and MDNS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server";
+    longDescription = ''
+      Responder is an LLMNR, NBT-NS and MDNS poisoner with built-in rogue
+      authentication servers for several protocols.
+
+      The Nixpkgs package stores its runtime database, logs, captured
+      credentials, and generated TLS certificates in /tmp/Responder by
+      default. Set RESPONDER_STATE_DIR to use a different location, for
+      example:
+
+        sudo env RESPONDER_STATE_DIR=/var/lib/responder responder -I eth0 -v
+
+      Runtime directories are created during normal initialization.
+    '';
     homepage = "https://github.com/lgandx/Responder";
     changelog = "https://github.com/lgandx/Responder/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
