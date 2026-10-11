@@ -33,7 +33,7 @@
   svnSupport ? false,
   subversionClient,
   perlSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
-  nlsSupport ? true,
+  withGettext ? !stdenv.hostPlatform.isMusl,
   osxkeychainSupport ? stdenv.hostPlatform.isDarwin,
   guiSupport ? false,
   # Disable the manual since libxslt doesn't seem to parse the files correctly.
@@ -127,9 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     # and (2) make sure `gitman.info' isn't produced since it's broken
     # (duplicate node names).
     ./docbook2texi.patch
-    # Fix references to gettext.sh at runtime: hard-code it to
-    # ${pkgs.gettext}/bin/gettext.sh instead of assuming gettext.sh is in $PATH
-    ./git-sh-i18n.patch
     # Do not search for sendmail in /usr, only in $PATH
     ./git-send-email-honor-PATH.patch
     # The 'total N' header from ls -l is unstable on ZFS and similar
@@ -145,14 +142,18 @@ stdenv.mkDerivation (finalAttrs: {
     # Hard-code the ssh executable to ${pkgs.openssh}/bin/ssh instead of
     # searching in $PATH
     ./ssh-path.patch
-  ];
+  ]
+  # Fix references to gettext.sh at runtime: hard-code it to
+  # ${pkgs.gettext}/bin/gettext.sh instead of assuming gettext.sh is in $PATH
+  ++ lib.optional withGettext ./git-sh-i18n.patch;
 
   postPatch = ''
-    # Fix references to gettext introduced by ./git-sh-i18n.patch
-    substituteInPlace git-sh-i18n.sh \
-        --subst-var-by gettext ${gettext}
     substituteInPlace contrib/credential/libsecret/Makefile \
-        --replace-fail 'pkg-config' "$PKG_CONFIG"
+      --replace-fail 'pkg-config' "$PKG_CONFIG"
+  ''
+  + lib.optionalString withGettext ''
+    substituteInPlace git-sh-i18n.sh \
+      --subst-var-by gettext ${gettext}
   ''
   + lib.optionalString withSsh ''
     for x in connect.c git-gui/lib/remote_add.tcl ; do
@@ -253,12 +254,11 @@ stdenv.mkDerivation (finalAttrs: {
     "NO_INET_PTON="
   ]
   ++ (if stdenv.hostPlatform.isDarwin then [ "NO_APPLE_COMMON_CRYPTO=1" ] else [ "sysconfdir=/etc" ])
-  ++ lib.optionals stdenv.hostPlatform.isMusl [
+  ++ lib.optionals (!withGettext) [
     "NO_SYS_POLL_H=1"
     "NO_GETTEXT=YesPlease"
   ]
   ++ lib.optional withpcre2 "USE_LIBPCRE2=1"
-  ++ lib.optional (!nlsSupport) "NO_GETTEXT=1"
   # git-gui refuses to start with the version of tk distributed with
   # macOS Catalina. We can prevent git from building the .app bundle
   # by specifying an invalid tk framework. The postInstall step will
