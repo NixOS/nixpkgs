@@ -53,7 +53,8 @@ in
       description = "Whisparr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "WHISPARR" cfg.settings;
+      environment =
+        servarr.mkServarrSettingsEnvVars "WHISPARR" cfg.settings // servarr.commonDotnetEnvVars;
 
       serviceConfig = {
         Type = "simple";
