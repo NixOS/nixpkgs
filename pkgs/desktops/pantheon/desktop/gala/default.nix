@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gala";
-  version = "8.6.1";
+  version = "8.6.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "gala";
     tag = finalAttrs.version;
-    hash = "sha256-q2GoJSa/ECn54UM0t8Z86bdTVea6XAflotkMoEOXK0Q=";
+    hash = "sha256-M3EqQS7xJbNryQ2emJdhOZfm1l2iO6qmG0X/6cRwpN4=";
   };
 
   depsBuildBuild = [ pkg-config ];
