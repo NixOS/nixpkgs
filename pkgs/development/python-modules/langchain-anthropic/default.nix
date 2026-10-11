@@ -26,7 +26,6 @@ buildPythonPackage (finalAttrs: {
   pname = "langchain-anthropic";
   version = "1.7.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
