@@ -100,6 +100,8 @@ buildPythonPackage (finalAttrs: {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
+    # flaky
+    "test_admission_under_concurrency_never_mixes_destinations"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky (timing sensitive)

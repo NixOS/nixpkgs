@@ -20,6 +20,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [
+    "openai"
+  ];
+
   dependencies = [
     llama-index-core
     openai

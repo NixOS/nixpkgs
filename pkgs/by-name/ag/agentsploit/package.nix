@@ -50,6 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   disabledTestPaths = [
     # Tests need network access
+    "tests/unit/test_openai_adapter.py"
     "tests/integration/"
   ];
 
