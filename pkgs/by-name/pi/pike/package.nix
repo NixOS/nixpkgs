@@ -10,7 +10,7 @@
   bison,
   flex,
   gmp,
-  pcre,
+  pcre2,
   nettle,
   libjpeg,
   libpng,
@@ -120,13 +120,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pike";
-  version = "8.0.2042";
+  version = "9.0.13";
 
   src = fetchFromGitHub {
     owner = "pikelang";
     repo = "Pike";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-N/hwbH8hhG9v/PJKwvGgS/ttS4TRJeeV2zAcRNDVL4k=";
+    rev = "18030b5dc6b335cb34c9fdbab907a94a19f54de4";
+    hash = "sha256-AYvuuBnv+W3LW8lQXcQf2WgQsZXWht0N9eqlL3XeiRY=";
   };
 
   nativeBuildInputs = [
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gmp
-    pcre
+    pcre2
     nettle
     libjpeg
     libpng
@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "INSTALLARGS=--traditional" ];
 
-  passthru.updateScript = gitUpdater { allowedVersions = "^8\\..*"; };
+  passthru.updateScript = gitUpdater { allowedVersions = "^9\\..*"; };
 
   meta = {
     description = "Pike programming language";
