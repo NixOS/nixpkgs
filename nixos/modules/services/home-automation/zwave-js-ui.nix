@@ -57,6 +57,12 @@ in
             visible = false;
             readOnly = true;
           };
+
+          NODE_EXTRA_CA_CERTS = mkOption {
+            default = config.security.pki.caBundle;
+            visible = false;
+            readOnly = true;
+          };
         };
       };
 
@@ -82,6 +88,10 @@ in
         RootDirectory = "%t/zwave-js-ui";
         BindReadOnlyPaths = [
           "/nix/store"
+          "/etc/hosts"
+          "/etc/nsswitch.conf"
+          "/etc/resolv.conf"
+          "/run/systemd/resolve"
         ];
         DeviceAllow = [ cfg.serialPort ];
         DynamicUser = true;
