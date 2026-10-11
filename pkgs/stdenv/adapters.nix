@@ -129,11 +129,16 @@ rec {
             )
         );
       }
-      // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
-        extraBuildInputs = (old.extraBuildInputs or [ ]) ++ [
-          pkgs.glibc.static
-        ];
-      }
+      // (
+        let
+          libc = stdenv0.cc.libc or null;
+        in
+        lib.optionalAttrs (libc != null && libc ? static) {
+          extraBuildInputs = (old.extraBuildInputs or [ ]) ++ [
+            libc.static
+          ];
+        }
+      )
     );
 
   # Return a modified stdenv that builds static libraries instead of
