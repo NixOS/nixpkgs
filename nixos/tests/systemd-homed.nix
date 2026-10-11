@@ -126,5 +126,19 @@ in
       assert "${username}" in machine.succeed("cat /tmp/5")
       sshClient.send_chars("exit\n") # ssh
       sshClient.send_chars("exit\n") # bash
+
+    with subtest("login as homed user with fscrypt storage"):
+      machine.succeed("tune2fs -O encrypt /dev/vda")
+      machine.succeed("NEWPASSWORD=${initialPassword} homectl create test-fscrypt-user --storage=fscrypt")
+      machine.send_chars("\n")
+      machine.wait_until_tty_matches("1", "login: ")
+      machine.send_chars("test-fscrypt-user\n")
+      machine.wait_until_tty_matches("1", "Password: ")
+      machine.send_chars("${initialPassword}\n")
+      machine.wait_until_succeeds("pgrep -u test-fscrypt-user -t tty1 bash")
+      # Would fail with ENOKEY if fscrypt was not working
+      machine.send_chars("echo hello > ~/file && cat ~/file > /tmp/6\n")
+      machine.wait_for_file("/tmp/6")
+      assert "hello" in machine.succeed("cat /tmp/6")
   '';
 }
