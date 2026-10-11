@@ -1122,6 +1122,12 @@
     github = "akho";
     githubId = 104951;
   };
+  akirak = {
+    name = "Akira Komamura";
+    email = "akira.komamura@gmail.com";
+    github = "akirak";
+    githubId = 6270544;
+  };
   akkesm = {
     name = "Alessandro Barenghi";
     email = "alessandro.barenghi@tuta.io";
