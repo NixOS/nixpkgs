@@ -13,17 +13,17 @@
 # redumper is using C++ modules, this requires latest C++20 compiler and build tools
 llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   pname = "redumper";
-  version = "726";
+  version = "770";
 
   src = fetchFromGitHub {
     owner = "superg";
     repo = "redumper";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-887r4SatrybmG4tSJRLpOQNcxwvMVF0iTZoWWNQ4m8A=";
+    hash = "sha256-TW2Pf1w2nzgc8r/k+jT8AbmxLK0b+a9MBFV0oGi00XA=";
   };
 
   patches = [
-    ./remove-static-linking.patch
+    ./remove-macos-bundling.patch
   ];
 
   __structuredAttrs = true;
@@ -41,6 +41,7 @@ llvmPackages.libcxxStdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "REDUMPER_VERSION_BUILD" "${finalAttrs.src.tag}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
+    (lib.cmakeFeature "REDUMPER_LINKER_FLAGS" "")
   ];
 
   doCheck = true;
