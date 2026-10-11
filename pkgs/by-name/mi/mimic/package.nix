@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   autoreconfHook,
@@ -12,8 +11,6 @@
   libtool,
   icu,
   pcre2,
-  pulseaudioSupport ? config.pulseaudio or false,
-  libpulseaudio,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     icu
     pcre2
-  ]
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12

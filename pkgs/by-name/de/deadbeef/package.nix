@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   clangStdenv,
   fetchFromGitHub,
   autoreconfHook,
@@ -46,7 +45,7 @@
   # output plugins
   alsaSupport ? true,
   alsa-lib,
-  pulseSupport ? config.pulseaudio or true,
+  pulseSupport ? true,
   libpulseaudio,
   pipewireSupport ? true,
   pipewire,

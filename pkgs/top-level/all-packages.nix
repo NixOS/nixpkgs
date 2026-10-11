@@ -8818,7 +8818,7 @@ with pkgs;
   murmur =
     (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
-      pulseSupport = config.pulseaudio or false;
+      pulseSupport = false;
       iceSupport = config.murmur.iceSupport or true;
     }).murmur;
 

@@ -53,7 +53,7 @@
   x264,
   jackaudioSupport ? config.mplayer.jackaudioSupport or false,
   libjack2,
-  pulseSupport ? config.pulseaudio or false,
+  pulseSupport ? config.mplayer.pulseSupport or false,
   libpulseaudio,
   bs2bSupport ? config.mplayer.bs2bSupport or false,
   libbs2b,

@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchurl,
@@ -22,7 +21,7 @@
 
   jackSupport ? stdenv.hostPlatform.isLinux,
   jackLibrary ? libjack2, # Another option is "pipewire.jack"
-  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
 }:
 
