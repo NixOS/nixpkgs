@@ -137,6 +137,20 @@
     )
     machine.wait_until_succeeds(f"! test -e {state}/.runner")
 
+    # A start an ExecCondition= skips (e.g. a deliberate drain) keeps the
+    # registration.
+    machine.succeed(
+      f"for f in .credentials .credentials_rsaparams .runner; do echo '{{}}' > {state}/$f; done",
+      "mkdir -p /run/systemd/system/github-runner-test-app-reuse.service.d",
+      "printf '[Service]\\nExecCondition=+/run/current-system/sw/bin/false\\n' > /run/systemd/system/github-runner-test-app-reuse.service.d/skip.conf",
+      "systemctl daemon-reload",
+    )
+    machine.succeed("systemctl start github-runner-test-app-reuse.service || true")
+    machine.wait_until_succeeds(
+      "journalctl -u github-runner-test-app-reuse | grep -F \"Skipped due to 'exec-condition'\""
+    )
+    machine.succeed(f"test -e {state}/.runner")
+
     # `count > 1` on a single entry fans out into one unit per replica with a
     # `-<n>` suffix; there is no bare unit.
     machine.succeed("systemctl cat github-runner-test-replicas-1.service")

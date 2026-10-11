@@ -390,11 +390,13 @@
                 unregister =
                   if reuseAppRegistration then
                     # Keep the registration for the next start, unless this run
-                    # failed: then the next start registers again.
+                    # failed: then the next start registers again. A start an
+                    # `ExecCondition=` skipped did not run, so it is no failure.
                     writeScript "drop-failed-registration" ''
-                      if [[ "$SERVICE_RESULT" != success ]]; then
-                        rm -f "$1"/{.credentials,.credentials_rsaparams,.runner}
-                      fi
+                      case "$SERVICE_RESULT" in
+                        success | exec-condition) ;;
+                        *) rm -f "$1"/{.credentials,.credentials_rsaparams,.runner} ;;
+                      esac
                     ''
                   else
                     writeScript "unregister-github-app" ''
