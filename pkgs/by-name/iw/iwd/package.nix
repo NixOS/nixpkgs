@@ -12,6 +12,7 @@
   openssl,
   python3Packages,
   gitUpdater,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -125,6 +126,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = { inherit (nixosTests) iwd; };
 
   passthru.updateScript = gitUpdater {
     # No nicer place to find latest release.

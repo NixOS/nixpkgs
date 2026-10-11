@@ -931,6 +931,7 @@ in
   iscsi-root = runTest ./iscsi-root.nix;
   isolate = runTest ./isolate.nix;
   isso = runTest ./isso.nix;
+  iwd = runTest ./iwd.nix;
   jackett = runTest ./jackett.nix;
   jellyfin = runTest ./jellyfin.nix;
   jenkins = runTest ./jenkins.nix;
