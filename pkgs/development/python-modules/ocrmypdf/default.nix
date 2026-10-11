@@ -99,7 +99,7 @@ buildPythonPackage (finalAttrs: {
     pytest-xdist
     pytestCheckHook
     reportlab
-    xpdf # for pdftotext
+    (xpdf.override { enableGUI = false; }) # for pdftotext
   ];
 
   disabledTests = [
