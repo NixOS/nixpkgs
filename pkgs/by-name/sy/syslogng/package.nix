@@ -36,6 +36,7 @@
   withGrpc ? true,
   grpc,
   protobuf,
+  nixosTests,
 }:
 let
   python-deps =
@@ -140,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.nixos = nixosTests.syslog-ng;
 
   meta = {
     homepage = "https://www.syslog-ng.com";
