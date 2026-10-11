@@ -17,7 +17,7 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.84";
+  version = "0.85";
   pname = "putty";
 
   src = fetchurl {
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://the.earth.li/~sgtatham/putty/${finalAttrs.version}/putty-${finalAttrs.version}.tar.gz"
       "ftp://ftp.wayne.edu/putty/putty-website-mirror/${finalAttrs.version}/putty-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-BgV4Yq4Zjx29IZ0MdJMIDVn2BhlLtQVsVJ40KqAbaf4=";
+    hash = "sha256-E/1NspNtA7c4Eqe8wqZY5N0pzHdqVsNnCn/G8aDuivg=";
   };
 
   strictDeps = true;
