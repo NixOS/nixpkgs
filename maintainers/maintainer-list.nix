@@ -14008,6 +14008,12 @@
     githubId = 6321578;
     name = "John Rinehart";
   };
+  johnrizzo1 = {
+    email = "johnrizzo1@gmail.com";
+    github = "johnrizzo1";
+    githubId = 126500;
+    name = "John Rizzo";
+  };
   johnrtitor = {
     email = "masumrezarock100@gmail.com";
     github = "johnrtitor";
