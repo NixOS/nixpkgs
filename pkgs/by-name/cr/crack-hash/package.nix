@@ -8,7 +8,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crack-hash";
-  version = "1.1.0-unstable-2025-12-31";
+  version = "1.2.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
