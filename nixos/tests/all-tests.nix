@@ -329,6 +329,7 @@ in
   benchexec = runTest ./benchexec.nix;
   bentopdf = handleTest ./bentopdf { };
   beszel = runTest ./beszel.nix;
+  bifrost = runTest ./bifrost.nix;
   binary-cache = runTest {
     imports = [ ./binary-cache.nix ];
     _module.args.compression = "zstd";
