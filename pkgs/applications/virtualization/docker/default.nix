@@ -38,6 +38,7 @@ let
       docker-compose,
       docker-sbom,
       docker-init,
+      extraCliPlugins ? [ ],
       iptables,
       nftables,
       e2fsprogs,
@@ -261,7 +262,8 @@ let
         lib.optionals buildxSupport [ docker-buildx ]
         ++ lib.optionals composeSupport [ docker-compose ]
         ++ lib.optionals sbomSupport [ docker-sbom ]
-        ++ lib.optionals initSupport [ docker-init ];
+        ++ lib.optionals initSupport [ docker-init ]
+        ++ extraCliPlugins;
 
       dockerCliPluginsDirs = lib.strings.concatStringsSep ":" (
         map (p: "${p}/libexec/docker/cli-plugins") plugins
