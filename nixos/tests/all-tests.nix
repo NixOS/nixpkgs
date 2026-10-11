@@ -1095,6 +1095,7 @@ in
   mailhog = runTest ./mailhog.nix;
   mailman = runTest ./mailman.nix;
   mailpit = runTest ./mailpit.nix;
+  make-disk-image-reproducible = pkgs.callPackage ./make-disk-image-reproducible.nix { };
   man = runTest ./man.nix;
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix { };
   marytts = runTest ./marytts.nix;
