@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "nest-asyncio2";
   version = "1.7.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Chaoses-Ib";
