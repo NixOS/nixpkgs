@@ -11,7 +11,6 @@ buildPythonPackage (finalAttrs: {
   pname = "starlark";
   version = "0.5.0";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dbohdan";
