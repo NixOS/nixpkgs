@@ -6133,6 +6133,12 @@
     githubId = 202474;
     name = "Jens Reimann";
   };
+  cubewhy = {
+    email = "qby140326@gmail.com";
+    github = "cubewhy";
+    githubId = 61075476;
+    name = "Mingyou Chen";
+  };
   cupcakearmy = {
     name = "Niccolo Borgioli";
     email = "nix@nicco.io";
