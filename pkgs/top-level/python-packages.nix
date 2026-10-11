@@ -6145,6 +6145,8 @@ self: super: with self; {
 
   firebase-messaging = callPackage ../development/python-modules/firebase-messaging { };
 
+  firecrawl-anydoc = callPackage ../development/python-modules/firecrawl-anydoc { };
+
   firecrawl-py = callPackage ../development/python-modules/firecrawl-py { };
 
   firedrake = callPackage ../development/python-modules/firedrake { };
