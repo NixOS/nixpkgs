@@ -2260,10 +2260,6 @@ with pkgs;
 
   md2gemini = with python3.pkgs; toPythonApplication md2gemini;
 
-  mdcat = callPackage ../tools/text/mdcat {
-    inherit (python3Packages) ansi2html;
-  };
-
   mhonarc = perlPackages.MHonArc;
 
   nanoemoji = with python3Packages; toPythonApplication nanoemoji;
