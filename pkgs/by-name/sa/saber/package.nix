@@ -1,6 +1,6 @@
 {
   lib,
-  flutter344,
+  flutter347,
   fetchFromGitHub,
   gst_all_1,
   libunwind,
@@ -24,16 +24,16 @@ let
     ln -s ${zlib}/lib $out/lib
   '';
 
-  version = "1.35.0";
+  version = "1.36.1";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
     tag = "v${version}";
-    hash = "sha256-DL05jDZTUFNJE0p1uAm0zWHm85um8bF+OntXuovHueI=";
+    hash = "sha256-8g2k6J4oIBcFNsfINzGRBnC5f5TTYba+Vq0by8vI3Dk=";
   };
 in
-flutter344.buildFlutterApplication {
+flutter347.buildFlutterApplication {
   pname = "saber";
   inherit version src;
 
@@ -54,9 +54,10 @@ flutter344.buildFlutterApplication {
   ];
 
   postPatch = ''
-    patchShebangs patches/pre/remove_proprietary_dependencies.sh patches/pre/remove_dev_dependencies.sh
+    patchShebangs patches/pre/remove_permission_handler.sh patches/pre/remove_proprietary_dependencies.sh
+    patches/pre/remove_permission_handler.sh
     patches/pre/remove_proprietary_dependencies.sh
-    patches/pre/remove_dev_dependencies.sh
+    substituteInPlace pubspec.yaml --replace-fail '  golden_screenshot: ^11.0.1' ""
   '';
 
   flutterBuildFlags = [ "--dart-define=DIRTY=false" ];
