@@ -11,7 +11,7 @@
   libGLU,
   libGL,
   libpng,
-  lua5_2_compat,
+  lua5_5,
   autoconf,
   automake,
   mesa,
@@ -20,6 +20,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "gravit";
   version = "0.5.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "gak";
@@ -36,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/gak/gravit/commit/0f848834889212f16201fd404d2d5b9bb5b47d23.patch";
       hash = "sha256-k1aMIg7idMt53o6dFgIKJflOMp0Jp5NwgWEijcIwXrQ=";
     })
+    ./0001-fix-seed_random-call-math.randomseed-with-integer.patch
+    ./0002-fix-make-ball_orbit-spiral_orbit_2-use-while-loop.patch
   ];
 
   buildInputs = [
@@ -44,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     SDL_ttf
     SDL_image
-    lua5_2_compat
+    lua5_5
     libpng
     libsm
     libice

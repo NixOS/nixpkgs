@@ -1,0 +1,37 @@
+From 274c84ca1140adaf9babb1245b9e25d0a41447a1 Mon Sep 17 00:00:00 2001
+From: airone01 <airone01@proton.me>
+Date: Sat, 10 Oct 2026 20:40:16 +0200
+Subject: [PATCH 2/2] fix(make{ball_orbit,spiral_orbit_2}): use while loop
+
+Fixes `i` being a constant by default, and not being updated later.
+---
+ spawn/merging-galaxies.gravitspawn | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/spawn/merging-galaxies.gravitspawn b/spawn/merging-galaxies.gravitspawn
+index 012aebb..158e8bc 100644
+--- a/spawn/merging-galaxies.gravitspawn
++++ b/spawn/merging-galaxies.gravitspawn
+@@ -40,7 +40,8 @@ function makeball_orbit(galpos, galvel, galradius, startradius, startmass, massm
+ 	-- desity = totalmass/totalvolume
+ 	local density= (estmass-startmass) / (4/3 * math.pi * (galradius^3 - startradius^3))
+ 
+-	for i=firstparticle, endparticle do
++    local i=firstparticle
++	while i <= endparticle do
+        	    radius = randomfloat(0.1,galradius-startradius)
+ 
+ 	    if gravit_physics < PH_PROPER then
+@@ -142,7 +143,8 @@ function makespiral_orbit_2(galpos, galvel, galradius, startradius, startmass, m
+ 	local xmass_sign=mass_sign
+ 	local antirotation_mode=randomint(0,1)
+ 
+-	for i=firstparticle, endparticle do
++    local i=firstparticle
++	while i <= endparticle do
+        	    radius = randomfloat(startradius, galradius)
+             angle = randomfloat(0,2*math.pi)
+ 
+-- 
+2.55.0
+
