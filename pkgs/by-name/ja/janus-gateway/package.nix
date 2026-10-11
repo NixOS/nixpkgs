@@ -34,13 +34,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "janus-gateway";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "meetecho";
     repo = "janus-gateway";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/201zFwahtN9cH+iHqeAi5FCTXUE3Z6J1G5Xh0xzc3Q=";
+    sha256 = "sha256-Nyq+x3Zg2vI2wKBdBk24NjkKpFNuXOnxFIE37EHJzqM=";
   };
 
   nativeBuildInputs = [
