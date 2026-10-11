@@ -7,13 +7,13 @@
 wsjtx.overrideAttrs (
   finalAttrs: old: {
     pname = "wsjtz";
-    version = "2.0.18";
+    version = "2.0.9";
 
     src = fetchFromGitHub {
       owner = "sq9fve";
       repo = "wsjt-z";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-YxO4pSdKKeO0Ye7Ay/0gdjPvceLbC5eMQk1ZBh1ZHCw=";
+      hash = "sha256-3E8iyU8bNjiReYrLrN/8mlol3P5TJjmFplVVj4536Io=";
     };
 
     postInstall = ''
