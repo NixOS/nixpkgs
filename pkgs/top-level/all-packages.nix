@@ -10148,7 +10148,7 @@ with pkgs;
     enableUnfree = true;
   };
 
-  isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
+  isabelle = isabelleComponents.isabelle-bin;
 
   lean3 = lean;
 
