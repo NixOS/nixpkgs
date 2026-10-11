@@ -24,12 +24,13 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     python3
+    python3.pkgs.setuptools
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools;
 
   # Fixes `semantic-release --version` output
   postPatch = ''
-    substituteInPlace package.json --replace \
+    substituteInPlace package.json --replace-fail \
       '"version": "0.0.0-development"' \
       '"version": "${version}"'
   '';
@@ -40,7 +41,5 @@ buildNpmPackage rec {
     homepage = "https://semantic-release.gitbook.io/semantic-release/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sestrella ];
-    # https://hydra.nixos.org/job/nixpkgs/trunk/semantic-release.aarch64-linux
-    badPlatforms = [ "aarch64-linux" ];
   };
 }
