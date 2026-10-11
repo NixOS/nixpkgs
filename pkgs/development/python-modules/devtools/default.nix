@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
-    repo = "python-${pname}";
+    repo = "python-devtools";
     tag = "v${version}";
     hash = "sha256-uy8DIP0szpo1gCm88GR32QOHZqtIQSpuxK63UNMFsn8=";
   };
