@@ -14986,6 +14986,12 @@
     githubId = 26346867;
     name = "K.B.Dharun Krishna";
   };
+  kbrdn1 = {
+    email = "kylianb1@icloud.com";
+    github = "kbrdn1";
+    githubId = 94058709;
+    name = "Kylian Bardini";
+  };
   kbudde = {
     email = "kris@budd.ee";
     github = "kbudde";
