@@ -2067,6 +2067,7 @@ in
   wstunnel = runTest ./wstunnel.nix;
   xandikos = runTest ./xandikos.nix;
   xautolock = runTest ./xautolock.nix;
+  xdg-desktop-portal-termfilepickers = runTest ./xdg-desktop-portal-termfilepickers.nix;
   xfce = runTest ./xfce.nix;
   xfce-wayland = runTest ./xfce-wayland.nix;
   xinetd = runTest ./xinetd.nix;
