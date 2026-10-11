@@ -6,16 +6,18 @@
   bc,
   nukeReferences,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
+  # Use of the rtl8852bu and rlt8832bu drivers should no longer be required in Linux kernel version '7.2' and greater.
+  #
+  # See: https://github.com/morrownr/rtl8852bu-20250826/blob/b6a299b4fe95cb6a37eec27a6c3b21cbaa6abfa8/README.md?plain=1#L25
   pname = "rtl8852bu";
-  version = "${kernel.version}-unstable-2025-05-18";
+  version = "${kernel.version}-unstable-2026-10-10";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "rtl8852bu-20240418";
-    rev = "1ef537712a55400aad637f53e45b60ed5ee621d7";
-    hash = "sha256-8bO82ytorBYgIT0dNKRocOhiCrUhya7DkkMlJ1XM3Hk=";
+    repo = "rtl8852bu-20250826";
+    rev = "b6a299b4fe95cb6a37eec27a6c3b21cbaa6abfa8";
+    hash = "sha256-QgVDm7G3iVwNhRIfK+fLpx2P44XjX3Dny4cYFex5l70=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     "pic"
     "format"
+  ];
+
+  patches = [
+    ./support-linux-kernel-versions-6.1-6.7.patch
   ];
 
   postPatch = ''
@@ -63,10 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Driver for Realtek rtl8852bu and rtl8832bu chipsets, provides the 8852bu mod";
-    homepage = "https://github.com/morrownr/rtl8852bu-20240418";
+    homepage = "https://github.com/morrownr/rtl8852bu-20250826";
     license = lib.licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    broken = kernel.kernelAtLeast "6.18"; # Similar to 79c1cf6
     maintainers = with lib.maintainers; [
       lonyelon
       thtrf
