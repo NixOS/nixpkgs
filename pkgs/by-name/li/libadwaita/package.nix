@@ -40,6 +40,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1V3L10YgRnOoJud/lybfSj2AYOY0kRAJdfamJg+S1fo=";
   };
 
+  # These tests fail with appstream, as it changes some whitespace in the
+  # output format. This could be patched, but given that libadwaits is
+  # switching to ministream in 1.10, this should be fine temporarily.
+  # https://gitlab.gnome.org/GNOME/libadwaita/-/work_items/1161
+  postPatch = ''
+    substituteInPlace tests/meson.build \
+      --replace-fail "'test-about-dialog'," "" \
+      --replace-fail "'test-about-window'," ""
+  '';
+
   depsBuildBuild = [
     pkg-config
   ];
