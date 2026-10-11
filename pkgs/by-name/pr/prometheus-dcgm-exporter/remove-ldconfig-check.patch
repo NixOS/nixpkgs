@@ -1,0 +1,56 @@
+diff --git a/internal/pkg/prerequisites/dcgmlib_rule.go b/internal/pkg/prerequisites/dcgmlib_rule.go
+--- a/internal/pkg/prerequisites/dcgmlib_rule.go
++++ b/internal/pkg/prerequisites/dcgmlib_rule.go
+@@ -20,7 +20,6 @@
+ 	debugelf "debug/elf"
+ 	"fmt"
+ 	"log/slog"
+-	"strings"
+ )
+
+ const (
+@@ -34,43 +33,7 @@
+
+ // Validate checks if libdcgm.so.4 exists and matches with the machine architecture.
+ func (c dcgmLibExistsRule) Validate() error {
+-	// On Ubuntu, ldconfig is a wrapper around ldconfig.real
+-	ldconfigPath := fmt.Sprintf("/sbin/%s.real", ldconfig)
+-	if _, err := os.Stat(ldconfigPath); err != nil {
+-		ldconfigPath = "/sbin/" + ldconfig
+-	}
+-	// Get list of shared libraries. See: man ldconfig
+-	out, err := exec.Command(ldconfigPath, ldconfigParam).Output()
+-	if err != nil {
+-		return err
+-	}
+-
+-	for _, match := range rxLDCacheEntry.FindAllSubmatch(out, -1) {
+-		libName := strings.TrimSpace(string(match[1]))
+-		if libName == libdcgmco {
+-			libPath := strings.TrimSpace(string(match[2]))
+-			selfMachine, err := c.readELF(procSelfExe)
+-			if err != nil {
+-				return err
+-			}
+-			libMachine, err := c.readELF(libPath)
+-			if err != nil {
+-				// When datacenter-gpu-manager uninstalled, the ldconfig -p may return that the libdcgm.so.4 is present,
+-				// but the library file was removed.
+-				slog.Error(err.Error())
+-				return errLibdcgmNotFound
+-			}
+-
+-			if selfMachine != libMachine {
+-				return fmt.Errorf("the %s library architecture mismatch with the system; wanted: %s, received: %s",
+-					libdcgmco, selfMachine, libMachine)
+-			}
+-
+-			return nil
+-		}
+-	}
+-
+-	return errLibdcgmNotFound
++	return nil
+ }
+
+ func (c dcgmLibExistsRule) readELF(name string) (debugelf.Machine, error) {

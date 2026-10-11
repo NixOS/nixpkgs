@@ -42,6 +42,13 @@ buildGoModule rec {
     patchelf --add-needed libnvidia-ml.so "$out/bin/dcgm-exporter"
   '';
 
+  patches = [ ./remove-ldconfig-check.patch ];
+
+  postInstall = ''
+    mkdir -p $out/etc/dcgm-exporter
+    cp $src/etc/*.csv $out/etc/dcgm-exporter/
+  '';
+
   meta = {
     description = "NVIDIA GPU metrics exporter for Prometheus leveraging DCGM";
     homepage = "https://github.com/NVIDIA/dcgm-exporter";
