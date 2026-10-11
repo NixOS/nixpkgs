@@ -55,7 +55,6 @@ buildPythonPackage (finalAttrs: {
   pname = "datalab-platform";
   version = "1.2.2";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "DataLab-Platform";
