@@ -26,6 +26,7 @@
   libxmu,
   libsodium,
   libice,
+  wayland,
   wayland-scanner,
   vimPlugins,
   makeWrapper,
@@ -124,7 +125,7 @@ stdenv.mkDerivation {
     "--disable-nextaf_check"
     "--disable-carbon_check"
     "--disable-gtktest"
-    (lib.strings.enableFeature waylandSupport "wayland")
+    (lib.strings.withFeature waylandSupport "wayland")
   ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "vim_cv_toupper_broken=no"
@@ -191,6 +192,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11
   ++ lib.optional (guiSupport == "gtk3") gtk3-x11
+  ++ lib.optional waylandSupport wayland
   ++ lib.optional luaSupport lua
   ++ lib.optional pythonSupport python3
   ++ lib.optional tclSupport tcl
