@@ -1,4 +1,19 @@
 {
+  "module-services-mesh-llm": [
+    "index.html#module-services-mesh-llm"
+  ],
+  "module-services-mesh-llm-basic-usage": [
+    "index.html#module-services-mesh-llm-basic-usage"
+  ],
+  "module-services-mesh-llm-gpus": [
+    "index.html#module-services-mesh-llm-gpus"
+  ],
+  "module-services-mesh-llm-joining": [
+    "index.html#module-services-mesh-llm-joining"
+  ],
+  "module-services-mesh-llm-plugins": [
+    "index.html#module-services-mesh-llm-plugins"
+  ],
   "module-services-netbird-relay": [
     "index.html#module-services-netbird-relay"
   ],
