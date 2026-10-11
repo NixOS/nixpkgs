@@ -100,7 +100,7 @@ buildPythonPackage (finalAttrs: {
   passthru = {
     # needs manual compat testing with music-assistant (sendspin provider)
     skipBulkUpdate = true; # nixpkgs-update: no auto update
-    tests = nixosTests.music-assistant;
+    tests.music-assistant = nixosTests.music-assistant;
   };
 
   meta = {
