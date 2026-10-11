@@ -3,19 +3,23 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "uritools";
-  version = "6.0.2";
+  version = "6.1.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TWccO4yiMKXUfvpfimk/PQFTHzj09SMXApm+c0zJhRs=";
+    hash = "sha256-OkmOfoXvMkk0PVcQYY1kGkFNoPuubSMFOtp5du6D6l8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   pythonImportsCheck = [ "uritools" ];
 
