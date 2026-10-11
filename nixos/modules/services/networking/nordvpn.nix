@@ -27,10 +27,6 @@ let
             '';
           in
           extraPreBuild + (old.preBuild or "");
-
-        # postFixup wraps nordvpnd so that it can find binaries that it calls.
-        # here, instead, use systemd to update the path to those binaries.
-        postFixup = "";
       });
     in
     pkgs.symlinkJoin {
@@ -82,6 +78,12 @@ in
     # nordvpnd uses resolved to configure dns
     services.resolved.enable = true;
 
+    networking.firewall = {
+      # encrypted tunnels with the server and with other meshnet peers
+      # can trust those
+      trustedInterfaces = [ "nordlynx" ];
+    };
+
     # policy that allows nordvpnd to configure dns
     security.polkit = {
       enable = true;
@@ -115,10 +117,11 @@ in
         ++ [ nordvpn ]
       );
       serviceConfig = {
-        # nordvpnd needs CAP_NET_ADMIN to configure network interfaces
-        AmbientCapabilities = "CAP_NET_ADMIN";
-        CapabilityBoundingSet = "CAP_NET_ADMIN";
-        ExecStart = lib.getExe' nordvpn "nordvpnd";
+        # nordvpnd needs CAP_NET_ADMIN to configure network interfaces.
+        # libtelio needs CAP_NET_RAW for ping.
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_RAW";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
+        ExecStart = "${lib.getExe' nordvpn "nordvpnd"} --hosts-readonly";
         Group = cfg.group;
         KillMode = "process";
         NonBlocking = true;
