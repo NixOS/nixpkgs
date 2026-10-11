@@ -18,7 +18,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "webeep-sync";
-  version = "1.0.3-unstable-2026-03-24";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "toto04";
