@@ -166,11 +166,19 @@ in
       deluge.web = {
         enable = lib.mkEnableOption "Deluge Web daemon";
 
+        interface = lib.mkOption {
+          type = lib.types.str;
+          default = "0.0.0.0";
+          description = ''
+            IP address for Deluge web server to listen on.
+          '';
+        };
+
         port = lib.mkOption {
           type = lib.types.port;
           default = 8112;
           description = ''
-            Deluge web UI port.
+            Port for Deluge web server to listen on.
           '';
         };
 
@@ -267,6 +275,7 @@ in
           ${cfg.package}/bin/deluge-web \
             ${lib.optionalString (!isDeluge1) "--do-not-daemonize"} \
             --config ${configDir} \
+            --interface ${cfg.web.interface} \
             --port ${toString cfg.web.port}
         '';
         User = cfg.user;
