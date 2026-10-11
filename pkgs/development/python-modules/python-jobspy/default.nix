@@ -18,8 +18,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.1.82";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "Bunsly";
     repo = "JobSpy";
