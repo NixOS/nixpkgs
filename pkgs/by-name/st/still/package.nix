@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "still";
-  version = "0.0.10";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "faergeek";
     repo = "still";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4ysI2U4k93ccC8gRoA+AcgTamSIL1ficLfqS8bc8vlY=";
+    hash = "sha256-AGArWr/T8VMZpEVbr/SIvERGTOAgoREH+68PSL6k6yg=";
   };
 
   nativeBuildInputs = [
