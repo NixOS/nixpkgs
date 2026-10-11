@@ -19,7 +19,7 @@
   python3,
 }:
 
-assert !blas.isILP64 && !lapack.isILP64;
+assert blas.isILP64 == lapack.isILP64;
 assert (
   builtins.elem buildType [
     "meson"
@@ -85,6 +85,19 @@ stdenv.mkDerivation (finalAttrs: {
     multicharge
     dftd4
     simple-dftd3
+  ];
+
+  # For the Meson build, the `custom` LAPACK vendor is used with explicit
+  # library names when ILP64 is enabled, because nixpkgs always provides the
+  # BLAS library as `libblas` (regardless of the integer size).
+  mesonFlags = lib.optionals blas.isILP64 [
+    "-Dlapack=custom"
+    "-Dcustom_libraries=blas,lapack"
+  ];
+
+  # For the CMake build, tell FindLAPACK to search for the ILP64 interface.
+  cmakeFlags = lib.optionals blas.isILP64 [
+    "-DBLA_SIZEOF_INTEGER=8"
   ];
 
   outputs = [
