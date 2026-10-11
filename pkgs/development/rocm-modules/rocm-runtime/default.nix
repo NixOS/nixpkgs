@@ -6,6 +6,7 @@
   rocmUpdateScript,
   pkg-config,
   cmake,
+  python3,
   xxd,
   rocm-device-libs,
   rocprofiler-register,
@@ -17,17 +18,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "7.2.4";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       "projects/rocr-runtime"
       "shared"
     ];
-    hash = "sha256-hcyjOLMtoBX/p6r6R9Bl9635DuvI6rTn1KziHMeyYM0=";
+    hash = "sha256-fY6/ofaZe94ZK7An6bSHcLj0T92OCQCflnBk5onVzzo=";
   };
   sourceRoot = "${finalAttrs.src.name}/projects/rocr-runtime";
 
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     cmake
+    python3 # trap_handler/CMakeLists.txt: find_package(Python3 Interpreter)
     xxd # used by create_hsaco_ascii_file.sh
     llvm.rocm-toolchain
   ];
@@ -60,24 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Vendored upstream PR for fix for segfault when queue allocation fails
-    # https://github.com/ROCm/rocm-systems/pull/2850
-    ./queue-failure.patch
     (fetchpatch {
       # [PATCH] rocr: Extend HIP ISA compatibility check
       hash = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
       url = "https://github.com/GZGavinZhao/rocm-systems/commit/dcef23cf896f4dcbc7ed81abeaa4ec2208dcdd8c.patch";
       relative = "projects/rocr-runtime";
     })
-    (fetchpatch {
-      # [PATCH] kfd_ioctl: fix UB due to 1 << 31
-      url = "https://github.com/ROCm/ROCR-Runtime/commit/41bfc66aef437a5b349f71105fa4b907cc7e17d5.patch";
-      hash = "sha256-A7VhPR3eSsmjq2cTBSjBIz9i//WiNjoXm0EsRKtF+ns=";
-    })
-    # This causes a circular dependency, aqlprofile relies on hsa-runtime64
-    # which is part of rocm-runtime
-    # Worked around by having rocprofiler load aqlprofile directly
-    ./remove-hsa-aqlprofile-dep.patch
   ];
 
   postPatch = ''
