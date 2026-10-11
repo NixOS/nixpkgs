@@ -1,0 +1,139 @@
+diff --git a/AppController.h b/AppController.h
+index f067033..d64b07c 100644
+--- a/AppController.h
++++ b/AppController.h
+@@ -41,7 +41,6 @@
+   IBOutlet NSTextView*    updatesInformationTextView;
+   IBOutlet NSWindow*      whiteColorWarningWindow;
+   IBOutlet NSButton*      whiteColorWarningWindowCheckBox;
+-  IBOutlet SUUpdater*     sparkleUpdater;
+ 
+   NSBox*                  openFileTypeView;
+   NSOpenPanel*            openFileTypeOpenPanel;
+@@ -220,9 +219,6 @@
+ //LatexPalette installation
+ -(BOOL) installLatexPalette:(NSURL*)palettePath;
+ 
+-//Sparkle
+--(SUUpdater*) sparkleUpdater;
+-
+ //NSApplicationDelegate
+ -(BOOL) application:(NSApplication*)theApplication openFile:(NSString*)filename;
+ 
+diff --git a/AppController.m b/AppController.m
+index a971acf..28b726a 100644
+--- a/AppController.m
++++ b/AppController.m
+@@ -64,8 +64,6 @@
+ #include <sys/types.h>
+ #include <sys/wait.h>
+ 
+-#import <Sparkle/Sparkle.h>
+-
+ @interface MyTextAttachementCell : NSTextAttachmentCell
+ @end
+ @implementation MyTextAttachementCell
+@@ -390,11 +388,6 @@ static NSMutableDictionary* cachePaths = nil;
+ {
+   //migrate to sparkle
+   NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+-  if ([userDefaults objectForKey:Old_CheckForNewVersionsKey])
+-  {
+-    [[self sparkleUpdater] setAutomaticallyChecksForUpdates:[userDefaults boolForKey:Old_CheckForNewVersionsKey]];
+-    [userDefaults removeObjectForKey:Old_CheckForNewVersionsKey];
+-  }
+   //resolve some bindings
+   [self->whiteColorWarningWindowCheckBox bind:NSValueBinding
+     toObject:[NSUserDefaultsController sharedUserDefaultsController]
+@@ -456,12 +449,6 @@ static NSMutableDictionary* cachePaths = nil;
+ }
+ //end currentDocument
+ 
+--(SUUpdater*) sparkleUpdater
+-{
+-  return self->sparkleUpdater;
+-}
+-//end sparkleUpdater
+-
+ -(NSWindow*) whiteColorWarningWindow
+ {
+   return self->whiteColorWarningWindow;
+@@ -828,9 +815,6 @@ static NSMutableDictionary* cachePaths = nil;
+     self->shouldOpenInstallLaTeXHelp = NO;
+     [self showHelp:self section:[NSString stringWithFormat:@"\n%@\n", NSLocalizedString(@"Install LaTeX", @"")]];
+   }//end if (self->shouldOpenInstallLaTeXHelp)
+-
+-  if ([self->sparkleUpdater automaticallyChecksForUpdates])
+-    [self->sparkleUpdater checkForUpdatesInBackground];
+ }
+ //end applicationDidFinishLaunching:
+ 
+@@ -1960,17 +1944,6 @@ static NSMutableDictionary* cachePaths = nil;
+ }
+ //end openWebSite:
+ 
+-//check for updates on LaTeXiT's web site
+-//if <sender> is nil, it's considered as a background task and will only present a panel if a new version is available.
+--(IBAction) checkUpdates:(id)sender
+-{
+-  if (!sender)
+-    [self->sparkleUpdater checkForUpdatesInBackground];
+-  else
+-    [self->sparkleUpdater checkForUpdates:sender];
+-}
+-//end checkUpdates:
+-
+ -(IBAction) showHelp:(id)sender
+ {
+   BOOL ok = YES;
+diff --git a/PreferencesWindowController.h b/PreferencesWindowController.h
+index 22e1884..591ed92 100644
+--- a/PreferencesWindowController.h
++++ b/PreferencesWindowController.h
+@@ -219,9 +219,6 @@ extern NSString* PluginsToolbarItemIdentifier;
+   IBOutlet NSButton*                encapsulationsAddButton;
+   IBOutlet NSButton*                encapsulationsRemoveButton;
+   IBOutlet NSButton*                libraryVacuumButton;
+-
+-  IBOutlet NSButton* updatesCheckUpdatesButton;
+-  IBOutlet NSButton* updatesCheckUpdatesNowButton;
+   
+   IBOutlet NSTableView* pluginsPluginTableView;
+   IBOutlet NSBox*       pluginsConfigurationBox;
+diff --git a/PreferencesWindowController.m b/PreferencesWindowController.m
+index 3bbea76..a0e1894 100644
+--- a/PreferencesWindowController.m
++++ b/PreferencesWindowController.m
+@@ -61,8 +61,6 @@
+ #import "TextViewWithPlaceHolder.h"
+ #import "Utils.h"
+ 
+-#import <Sparkle/Sparkle.h>
+-
+ #define NSAppKitVersionNumber10_4 824
+ 
+ NSString* GeneralToolbarItemIdentifier     = @"GeneralToolbarItemIdentifier";
+@@ -1162,13 +1160,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
+   [self->libraryVacuumButton sizeToFit];
+   [self->libraryVacuumButton setTarget:self];
+   [self->libraryVacuumButton setAction:@selector(libraryVacuum:)];
+-
+-  //updates
+-  [self->updatesCheckUpdatesButton bind:NSValueBinding toObject:[[AppController appController] sparkleUpdater]
+-    withKeyPath:@"automaticallyChecksForUpdates"
+-    options:[NSDictionary dictionaryWithObjectsAndKeys:
+-      [BoolTransformer transformerWithFalseValue:@(NSOffState) trueValue:@(NSOnState)],
+-      NSValueTransformerBindingOption, nil]];
+       
+   //plugins
+   /* disabled for now */
+@@ -1372,9 +1363,6 @@ NSString* PluginsToolbarItemIdentifier     = @"PluginsToolbarItemIdentifier";
+   NSFontManager* fontManager = [NSFontManager sharedFontManager];
+   if ([fontManager delegate] == self)
+     [fontManager setDelegate:nil];
+-    
+-  //update from SUUpdater
+-  [self->updatesCheckUpdatesNowButton setEnabled:![[[AppController appController] sparkleUpdater] updateInProgress]];
+ }
+ //end toolbarHit:
+ 
