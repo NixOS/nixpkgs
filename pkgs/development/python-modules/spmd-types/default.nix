@@ -20,7 +20,6 @@ buildPythonPackage (finalAttrs: {
   pname = "spmd-types";
   version = "0.2.5";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
