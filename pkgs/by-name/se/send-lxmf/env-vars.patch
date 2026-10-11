@@ -1,0 +1,40 @@
+diff --git a/send_lxmf/lib.py b/send_lxmf/lib.py
+index 8312c22fd2..1b671e3bb7 100644
+--- a/send_lxmf/lib.py
++++ b/send_lxmf/lib.py
+@@ -2,17 +2,30 @@
+
+ import os
+ import time
++from pathlib import Path
+ from typing import Any, Optional
+
+ import filelock
+ import LXMF
+ import RNS
+
+-SYSTEM_IDENTITY_PATH = "/var/lib/send-lxmf/identity"
+-SYSTEM_STORAGE_PATH = "/var/lib/send-lxmf/storage"
+-SYSTEM_LOCK_PATH = "/var/lib/send-lxmf/sending.lock"
+-SYSTEM_CONFIG_PATH = "/var/lib/send-lxmf/config"
+-
++home = Path.home()
++
++state_home = os.environ.get(
++    "XDG_STATE_HOME",
++    os.path.join(home, ".local", "state"),
++)
++
++config_home = os.environ.get(
++    "XDG_CONFIG_HOME",
++    os.path.join(home, ".config"),
++)
++
++SYSTEM_STATE_PATH = os.path.join(state_home, "send-lxmf")
++SYSTEM_IDENTITY_PATH = os.path.join(SYSTEM_STATE_PATH, "identity")
++SYSTEM_STORAGE_PATH = os.path.join(SYSTEM_STATE_PATH, "storage")
++SYSTEM_LOCK_PATH = os.path.join(SYSTEM_STATE_PATH, "sending.lock")
++SYSTEM_CONFIG_PATH = os.path.join(config_home, "send-lxmf", "config")
+
+ class LXMFError(Exception):
+     """Base exception for LXMF sending errors."""
