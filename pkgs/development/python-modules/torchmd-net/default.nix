@@ -28,7 +28,6 @@ buildPythonPackage (finalAttrs: {
   pname = "torchmd-net";
   version = "3.0.3";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "torchmd";
