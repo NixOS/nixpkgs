@@ -16,8 +16,6 @@ buildPythonPackage (finalAttrs: {
   version = "1.0.1";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "pysptk";
