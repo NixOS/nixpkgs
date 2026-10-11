@@ -12,7 +12,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tzlocal";
   version = "5.4.4"; # version needs to be compatible with APScheduler
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "regebro";
