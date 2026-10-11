@@ -1,10 +1,4 @@
 { lib, stdenv }:
-
-{
-  paths,
-  disabledDefaultBackends ? [ ],
-}:
-
 let
   installSanePath = path: ''
     if [ -e "${path}/lib/sane" ]; then
@@ -35,21 +29,37 @@ let
     sed -i 's/\b${backend}\b/# ${backend} disabled by nixos config/' $out/etc/sane.d/dll.conf
   '';
 in
-stdenv.mkDerivation {
-  name = "sane-config";
-  dontUnpack = true;
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
 
-  installPhase = ''
-    function symlink () {
-      local target=$1 linkname=$2
-      if [ -e "$linkname" ]; then
-        echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
-      fi
-      ln -sfn "$target" "$linkname"
-    }
+  excludeDrvArgNames = [
+    "paths"
+    "disabledDefaultBackends"
+  ];
 
-    mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
-  ''
-  + (lib.concatMapStrings installSanePath paths)
-  + (lib.concatMapStrings disableBackend disabledDefaultBackends);
+  extendDrvArgs =
+    finalAttrs:
+    {
+      paths,
+      disabledDefaultBackends ? [ ],
+      ...
+    }:
+    {
+      name = "sane-config";
+      dontUnpack = true;
+
+      installPhase = ''
+        function symlink () {
+          local target=$1 linkname=$2
+          if [ -e "$linkname" ]; then
+            echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
+          fi
+          ln -sfn "$target" "$linkname"
+        }
+
+        mkdir -p $out/etc/sane.d $out/etc/sane.d/dll.d $out/lib/sane
+      ''
+      + (lib.concatMapStrings installSanePath paths)
+      + (lib.concatMapStrings disableBackend disabledDefaultBackends);
+    };
 }
