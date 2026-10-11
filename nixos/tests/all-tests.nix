@@ -794,6 +794,7 @@ in
   graylog = runTest ./graylog.nix;
   greenlight = runTest ./greenlight.nix;
   greetd-no-shadow = runTest ./greetd-no-shadow.nix;
+  grimmory = runTest ./grimmory.nix;
   grist = runTest ./grist.nix;
   grocy = runTest ./grocy.nix;
   grow-partition = runTest ./grow-partition.nix;
