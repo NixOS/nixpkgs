@@ -1,0 +1,25 @@
+From 874cc3bcb41c55e4ed7248803e1eaa3bdc12a4fc Mon Sep 17 00:00:00 2001
+From: Jake Hamilton <jakehamtexas@gmail.com>
+Date: Sun, 11 Oct 2026 00:19:51 -0500
+Subject: [PATCH] Add support for Linux kernel versions 6.1-6.7
+
+---
+ os_dep/linux/usb_intf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/os_dep/linux/usb_intf.c b/os_dep/linux/usb_intf.c
+index ccf42ba..9139813 100644
+--- a/os_dep/linux/usb_intf.c
++++ b/os_dep/linux/usb_intf.c
+@@ -245,7 +245,7 @@ struct rtw_usb_drv usb_drv = {
+ 	.usbdrv.reset_resume   = rtw_dev_resume,
+ #endif
+ 
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0)) || (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 19))
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0)) || (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 19))
+ 	.usbdrv.driver.shutdown = rtw_dev_shutdown,
+ #else
+ 	.usbdrv.drvwrap.driver.shutdown = rtw_dev_shutdown,
+-- 
+2.55.0
+
