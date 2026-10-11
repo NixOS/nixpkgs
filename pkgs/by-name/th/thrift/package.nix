@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "thrift";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "thrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+o/2exHsunjQBGjXrNQ1pQ5TKV53++qCxIMeVyOh5QY=";
+    hash = "sha256-ZXGxpjqQq+qlxEDM4tWOF1hHGZsy3s/K0c2bIxMky10=";
   };
 
   postPatch = lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
