@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  pip,
   pylint,
   pytestCheckHook,
 }:
@@ -23,18 +22,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    pip
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html.
-    "test_identify_old_namespace_package_protocol"
-  ];
-
-  disabledTestPaths = [
-    # requires mypy
-    "tests/test_raw_building.py"
   ];
 
   passthru.tests = {
