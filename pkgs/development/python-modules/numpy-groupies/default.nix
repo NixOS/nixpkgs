@@ -15,8 +15,6 @@ buildPythonPackage (finalAttrs: {
   version = "0.12.3";
   pyproject = true;
 
-  __structuredAttrs = true;
-
   src = fetchFromGitHub {
     owner = "ml31415";
     repo = "numpy-groupies";
