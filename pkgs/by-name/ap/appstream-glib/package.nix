@@ -26,7 +26,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream-glib";
-  version = "0.8.3";
+  version = "0.8.4";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hughsie";
     repo = "appstream-glib";
     tag = "appstream_glib_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-GjXrYV+EBduhG88LaxQWICKuUDJeeotcZgqgaG0/dqo=";
+    hash = "sha256-lad8+OAdHlKhch6oxQJOA93wGAs5KcmzggD+4N18ZXA=";
   };
 
   nativeBuildInputs = [
