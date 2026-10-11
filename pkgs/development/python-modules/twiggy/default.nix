@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "http://twiggy.wearpants.org";
+    homepage = "https://github.com/wearpants/twiggy";
     # Taken from http://i.wearpants.org/blog/meet-twiggy/
     description = "Twiggy is the first totally new design for a logger since log4j";
     license = lib.licenses.bsd3;

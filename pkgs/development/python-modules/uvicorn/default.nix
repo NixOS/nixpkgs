@@ -62,7 +62,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "https://www.uvicorn.org/";
+    homepage = "https://uvicorn.dev";
     changelog = "https://github.com/Kludex/uvicorn/blob/${src.tag}/docs/release-notes.md";
     description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";

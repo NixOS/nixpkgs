@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = "http://leather.rtfd.io";
+    homepage = "https://leather.readthedocs.io";
     description = "Python charting library";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;

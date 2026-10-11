@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-FaoEqCdMb3h93zGvc+EZ8LfYgMPY3dT/fScpRgGVeAo=";
 
   meta = {
-    homepage = "https://rustwasm.github.io/twiggy/";
+    homepage = "https://twiggy.readthedocs.io/";
     description = "Code size profiler for Wasm";
     mainProgram = "twiggy";
     license = with lib.licenses; [

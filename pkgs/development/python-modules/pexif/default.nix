@@ -16,7 +16,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Module for editing JPEG EXIF data";
-    homepage = "http://www.benno.id.au/code/pexif/";
+    homepage = "https://github.com/bennoleslie/pexif";
     license = lib.licenses.mit;
   };
 })
