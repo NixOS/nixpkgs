@@ -35,7 +35,8 @@ let
       ];
 
       adminuser = pkgs.lib.mkDefault "root";
-      adminpass = pkgs.lib.mkDefault "hunter2";
+      # This needs to be a "secure" password, since the password_policy app is enabled after installation and will forbid "simple" passwords.
+      adminpass = pkgs.lib.mkDefault "+CVpTwaOEktxsFc6";
 
       test-helpers.rclone = "${pkgs.writeShellScript "rclone" ''
         set -euo pipefail
@@ -66,9 +67,6 @@ let
               hostName = "nextcloud";
               https = false;
               database.createLocally = lib.mkDefault true;
-              config = {
-                adminpassFile = "${pkgs.writeText "adminpass" config.adminpass}"; # Don't try this at home!
-              };
             };
           };
       };
@@ -82,6 +80,9 @@ let
           ${test-helpers.provision}
           start_all()
           nextcloud.wait_for_unit("multi-user.target")
+
+          nextcloud.succeed("NC_PASS=${config.adminpass} nextcloud-occ user:add ${config.adminuser} --password-from-env")
+          nextcloud.succeed("nextcloud-occ group:adduser admin ${config.adminuser}")
 
           ${test-helpers.init}
 
@@ -133,19 +134,16 @@ let
           }
         );
     in
-    map callNextcloudTest (
-      [
-        ./basic.nix
-        ./home-bindmount.nix
-        ./home-mount.nix
-        ./with-declarative-redis-and-secrets.nix
-        ./with-mysql-and-memcached.nix
-        ./with-postgresql-and-redis.nix
-        ./with-objectstore.nix
-        ./with-mail.nix
-      ]
-      ++ (pkgs.lib.optional (version >= 32) ./without-admin-user.nix)
-    );
+    map callNextcloudTest [
+      ./basic.nix
+      ./home-bindmount.nix
+      ./home-mount.nix
+      ./with-declarative-redis-and-secrets.nix
+      ./with-mysql-and-memcached.nix
+      ./with-postgresql-and-redis.nix
+      ./with-objectstore.nix
+      ./with-mail.nix
+    ];
 in
 listToAttrs (
   concatMap genTests [
