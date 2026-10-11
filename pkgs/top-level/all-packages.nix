@@ -2660,11 +2660,6 @@ with pkgs;
 
   tabview = with python3Packages; toPythonApplication tabview;
 
-  tdarrPackages = callPackage ../tools/misc/tdarr { };
-
-  tdarr-server = tdarrPackages.server;
-  tdarr-node = tdarrPackages.node;
-
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_10_29_2
     pnpm_10_34_0
