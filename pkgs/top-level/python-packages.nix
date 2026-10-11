@@ -15238,6 +15238,8 @@ self: super: with self; {
 
   pyinfra-testgen = callPackage ../development/python-modules/pyinfra-testgen { };
 
+  pyinfra-testing = callPackage ../development/python-modules/pyinfra-testing { };
+
   pyinotify = callPackage ../development/python-modules/pyinotify { };
 
   pyinputevent = callPackage ../development/python-modules/pyinputevent { };
