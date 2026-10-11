@@ -10720,4 +10720,6 @@ with pkgs;
   };
 
   feishin-web = feishin.override { webVersion = true; };
+
+  fourget = _4get;
 }
