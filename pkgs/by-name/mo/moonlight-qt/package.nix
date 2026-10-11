@@ -2,13 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   qt6,
   pkg-config,
   vulkan-headers,
   SDL2,
   SDL2_ttf,
-  ffmpeg_8,
+  ffmpeg,
   libopus,
   libplacebo,
   openssl,
@@ -24,23 +23,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight-qt";
-  version = "6.1.0";
+  # Upstream has not tagged a release since v6.1.0 in September 2024, and that
+  # tag predates the FFmpeg 7.1 API migration, so it cannot build against
+  # current FFmpeg.
+  version = "6.1.0-unstable-2026-08-06";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-qt";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-rWVNpfRDLrWsqELPFquA6rW6/AfWV+6DNLUCPqIhle0=";
+    rev = "2e13ed9977bc31c73caf8428f08f58d793313ece";
+    hash = "sha256-kCm/YoFGcXhF/Abi5lRV5F7H1AbKJchdDOlfBVR0tRA=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix build for Xcode < 14
-    (fetchpatch {
-      url = "https://github.com/moonlight-stream/moonlight-qt/commit/76deafbd7bf868562d69061e7d6abf2612a2c7ad.patch";
-      hash = "sha256-+rXdexZQpOP6yS+oTmvYVxasWxOX16uU1udN75zNX3w=";
-    })
-  ];
 
   nativeBuildInputs = [
     qt6.qmake
@@ -52,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_ttf
-    ffmpeg_8
+    ffmpeg
     libopus
     libplacebo
     qt6.qtdeclarative
@@ -78,10 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/Applications/Moonlight.app/Contents/MacOS/Moonlight $out/bin/moonlight
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
-    changelog = "https://github.com/moonlight-stream/moonlight-qt/releases/tag/v${finalAttrs.version}";
     description = "Play your PC games on almost any device";
     homepage = "https://moonlight-stream.org";
     license = lib.licenses.gpl3Plus;
