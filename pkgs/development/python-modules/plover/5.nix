@@ -3,6 +3,7 @@
   stdenv,
   buildPackages,
   buildPythonPackage,
+  callPackage,
   fetchFromGitHub,
   versionCheckHook,
   appdirs,
@@ -154,6 +155,38 @@ buildPythonPackage (finalAttrs: {
   dontWrapQtApps = true;
 
   pythonImportsCheck = [ "plover" ];
+
+  passthru = {
+    /**
+      Take a `python3.withPackage`-constructed derivation containing Plover
+      and return a new derivation containing only the plover executables,
+      avoiding collisions while installing Plover with plugins.
+
+      Use as
+      ```nix
+      { python3 }:
+      let
+        python3Overridden = python3.override {
+          packageOverrides =
+            final: previous:
+            {
+              plover = final.plover_5;
+              plover-lapwing-aio = previous.plover-lapwing-aio.overrideAttrs { };
+            };
+        };
+      in
+      python3Overridden.pkgs.plover.wrapPloverExes (
+        python3Overridden.withPackages (ps: with ps; [
+          plover
+          plover-lapwing-aio
+        ])
+      )
+      ```
+    */
+    wrapPloverExes = callPackage ./wrap-plover-exes.nix {
+      plover = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "OpenSteno Plover stenography software";
