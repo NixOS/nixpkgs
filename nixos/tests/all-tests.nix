@@ -650,19 +650,23 @@ in
   firefox = runTest {
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox;
+    _module.args.firefoxModule = "firefox";
   };
   firefox-devedition = runTest {
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-devedition;
+    _module.args.firefoxModule = "firefox";
   };
   firefox-esr = runTest {
     # used in `tested` job
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr;
+    _module.args.firefoxModule = "firefox";
   };
   firefox-esr-153 = runTest {
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr-153;
+    _module.args.firefoxModule = "firefox";
   };
   firefox-syncserver = discoverTests (import ./firefox-syncserver.nix);
   firefox_decrypt = runTest ./firefox_decrypt.nix;
@@ -1034,6 +1038,7 @@ in
   librewolf = runTest {
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.librewolf;
+    _module.args.firefoxModule = "librewolf";
   };
   libuiohook = runTest ./libuiohook.nix;
   libvirtd = runTest ./libvirtd.nix;
