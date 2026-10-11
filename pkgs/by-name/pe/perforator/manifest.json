@@ -1,0 +1,100 @@
+{
+  "version": "0.0.1",
+  "hash": "sha256-VyMpuqMvxEB654fd9rY3pT4PHXUj/GhxTv8mRiV2YC4=",
+  "tools": {
+    "aarch64-linux": {
+      "OS_SDK_ROOT-sbr:243881345": {
+        "sbr": "243881345",
+        "url": "https://devtools-registry.s3.yandex.net/243881345",
+        "hash": "sha256-FXnRYfDA2N4SVXZQ4B788lxrAjdhqpMh7MmR2Cfq32o="
+      },
+      "YMAKE_PYTHON3-4256832079": {
+        "sbr": "7335939646",
+        "url": "https://devtools-registry.s3.yandex.net/7335939646",
+        "hash": "sha256-XSatOYcaU+7hcUpj8BnoCyqhOvtGnInMm6yDxS+RDxA="
+      },
+      "LLD_ROOT-3808007503": {
+        "sbr": "7793786096",
+        "url": "https://devtools-registry.s3.yandex.net/7793786096",
+        "hash": "sha256-ihHSnw3MnQkrU4tzR/DNRSqGy7yq8tKHoYt5qQtGiI4="
+      },
+      "GO_TOOLS-3499238102": {
+        "sbr": "6608865495",
+        "url": "https://devtools-registry.s3.yandex.net/6608865495",
+        "hash": "sha256-uZuyLUpYzqyLGv89oGyrfB9nRjvI26+qo8q1V40dogY="
+      },
+      "CLANG-2518231432": {
+        "sbr": "7599285566",
+        "url": "https://devtools-registry.s3.yandex.net/7599285566",
+        "hash": "sha256-ylTWCJZozPoJ1/oa3VMqP2Ww/RQ8K6Bd2iH4z3l01Go="
+      },
+      "CLANG-1922233694": {
+        "sbr": "4748280193",
+        "url": "https://devtools-registry.s3.yandex.net/4748280193",
+        "hash": "sha256-qC4YskNrSZuyePsVW2KQMWA5P9F78DGXBVg32Tyt0EI="
+      },
+      "PYTHON": {
+        "sbr": "2989598506",
+        "url": "https://devtools-registry.s3.yandex.net/2989598506",
+        "hash": "sha256-XJrYemKGgGDKP1qLYk1K8n24pkBpg8/OJpr22BSpBTE="
+      },
+      "YMAKE": {
+        "sbr": "7851724808",
+        "url": "https://devtools-registry.s3.yandex.net/7851724808",
+        "hash": "sha256-Y4kBIz4EEd9uZioqSrEmLqguVYtnofK0jXgG0qzRpnQ="
+      },
+      "YA": {
+        "sbr": "7903410912",
+        "url": "https://devtools-registry.s3.yandex.net/7903410912",
+        "hash": "sha256-UHilHgeySJ10V8Dr5WPbw7TiVN00RO6q+bm/9GNC6HE="
+      }
+    },
+    "x86_64-linux": {
+      "OS_SDK_ROOT-sbr:243881345": {
+        "sbr": "243881345",
+        "url": "https://devtools-registry.s3.yandex.net/243881345",
+        "hash": "sha256-FXnRYfDA2N4SVXZQ4B788lxrAjdhqpMh7MmR2Cfq32o="
+      },
+      "YMAKE_PYTHON3-4256832079": {
+        "sbr": "7336031045",
+        "url": "https://devtools-registry.s3.yandex.net/7336031045",
+        "hash": "sha256-4+jvfPbrRN1G6bLc0PUPK7llfnoV3JGysAxpGCGGZ7E="
+      },
+      "LLD_ROOT-3808007503": {
+        "sbr": "7793618601",
+        "url": "https://devtools-registry.s3.yandex.net/7793618601",
+        "hash": "sha256-qHNIW+sB49o5dOovQwBYEK4C0elSDc+/KyBrPzppXhc="
+      },
+      "GO_TOOLS-3499238102": {
+        "sbr": "6608864313",
+        "url": "https://devtools-registry.s3.yandex.net/6608864313",
+        "hash": "sha256-B5clMRfSyMcG6Mfwy6gVAXKHTCAW+R3bSF2mycLUBvU="
+      },
+      "CLANG-2518231432": {
+        "sbr": "7599469156",
+        "url": "https://devtools-registry.s3.yandex.net/7599469156",
+        "hash": "sha256-vp+/HQZvP0Th1eTrq4Tnl96QQ+htuKlkB388ir/h2PQ="
+      },
+      "CLANG-1922233694": {
+        "sbr": "4748318935",
+        "url": "https://devtools-registry.s3.yandex.net/4748318935",
+        "hash": "sha256-DTiDlfcuZP26rA1NiFfVPwcM1o3aGUt0FGaLVS8r+kk="
+      },
+      "PYTHON": {
+        "sbr": "2989598506",
+        "url": "https://devtools-registry.s3.yandex.net/2989598506",
+        "hash": "sha256-XJrYemKGgGDKP1qLYk1K8n24pkBpg8/OJpr22BSpBTE="
+      },
+      "YMAKE": {
+        "sbr": "7851726171",
+        "url": "https://devtools-registry.s3.yandex.net/7851726171",
+        "hash": "sha256-FaD1+xre8EhyZQ8sM+p6TUlISEMbgklSKtgJQKy5KJg="
+      },
+      "YA": {
+        "sbr": "7903411798",
+        "url": "https://devtools-registry.s3.yandex.net/7903411798",
+        "hash": "sha256-QIShRit37Kk7HPWvE4UFClCtgYu98K8AC1Q4YYjy7Fk="
+      }
+    }
+  }
+}
