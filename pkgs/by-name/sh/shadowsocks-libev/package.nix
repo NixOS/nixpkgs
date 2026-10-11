@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Git tag includes CMake build files which are much more convenient.
   src = fetchFromGitHub {
     owner = "shadowsocks";
-    repo = "shadowsocks-libev";
+    repo = "shadowsocks-c";
     tag = "v${finalAttrs.version}";
     hash = "sha256-XrS/qi4oAchdisvicrGmpe3jeDgYDACsvVU6iXQyQCM=";
     fetchSubmodules = true;
