@@ -3,10 +3,11 @@
   stdenv,
   darwin,
   fetchFromGitHub,
-  fetchpatch,
-  autoreconfHook,
   kyua,
   gitUpdater,
+  autoconf,
+  automake,
+  libtool,
 }:
 
 let
@@ -43,7 +44,15 @@ stdenv'.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+  ];
+
+  preConfigure = ''
+    autoreconf -i
+  '';
 
   configureFlags =
     lib.optionals stdenv.hostPlatform.isDarwin [
