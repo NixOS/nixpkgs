@@ -1,0 +1,13 @@
+diff --git i/contanki/funcs.py w/contanki/funcs.py
+index ad54c72..7fb0a2c 100644
+--- i/contanki/funcs.py
++++ w/contanki/funcs.py
+@@ -72,7 +72,7 @@ def get_config() -> dict:
+     else:
+         config.update(loaded_config)
+ 
+-    mw.addonManager.writeConfig(__name__, config)
++    # mw.addonManager.writeConfig(__name__, config)
+     return config
+ 
+ 
