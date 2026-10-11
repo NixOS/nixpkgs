@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pname = "composable_kernel_base";
-  version = "7.2.4";
+  version = "10.1.0";
 
   outputs = [
     "out"
@@ -59,12 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "rocm-${finalAttrs.version}";
+    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
     sparseCheckout = [
       projectRoot
       "shared"
     ];
-    hash = "sha256-Zs6wwPmys1kUlgDD4XzKKw273nH/Ur3HtuYxJjvjDs0=";
+    hash = "sha256-1ycnnO7ul/uFsIPAOWfg641nsx96LI/Txs79RAxaBDI=";
   };
   sourceRoot = "${finalAttrs.src.name}/${projectRoot}";
 
