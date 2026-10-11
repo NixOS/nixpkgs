@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.fceux.com";
     description = "Nintendo Entertainment System (NES) Emulator";
-    changelog = "https://github.com/TASEmulators/fceux/blob/${finalAttrs.src.rev}/changelog.txt";
+    changelog = "https://github.com/TASEmulators/fceux/releases";
     license = lib.licenses.gpl2Plus;
     mainProgram = "fceux";
     maintainers = with lib.maintainers; [ kuflierl ];
