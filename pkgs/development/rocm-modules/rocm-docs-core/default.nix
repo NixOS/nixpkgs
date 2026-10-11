@@ -24,14 +24,14 @@
 # FIXME: Move to rocmPackages_common
 buildPythonPackage (finalAttrs: {
   pname = "rocm-docs-core";
-  version = "1.34.0";
+  version = "1.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-docs-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dVX+e0nk9/GT0idXNvLwCuN8Fh/r0dWIvqToU9cxKxs=";
+    hash = "sha256-c4f4NFtRzbPoEOLnP7iiuVvcMBBWcKkS8EKDldKllDo=";
   };
 
   buildInputs = [ setuptools ];
@@ -55,6 +55,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonImportsCheck = [ "rocm_docs" ];
+  pythonRelaxDeps = [ "sphinx-book-theme" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
