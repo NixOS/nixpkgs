@@ -1,21 +1,27 @@
 {
   lib,
+  testers,
   stdenv,
   fetchFromGitHub,
   buildPackages,
   cmake,
-  enableTests ? lib.meta.availableOn stdenv.buildPlatform jre,
-  gtest,
-  jre,
   pkg-config,
-  boost,
+
   icu,
   protobuf,
+  gtest,
+
+  generateMetadata ? lib.meta.availableOn stdenv.buildPlatform jre,
+  jre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
   version = "9.0.41";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  separateDebugInfo = true;
 
   src = fetchFromGitHub {
     owner = "google";
@@ -30,12 +36,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./build-reproducibility.patch
     # Fix include directory in generated cmake files with split outputs
     ./cmake-include-dir.patch
-    # Finding `boost_system` fails because the stub compiled library of
-    # Boost.System, which has been a header-only library since 1.69, was
-    # removed in 1.89.
-    # Upstream PR: https://github.com/google/libphonenumber/pull/3903
-    ./boost-1.89.patch
   ];
+
+  # Upstream compiles a test program which is hardcoded to link against the static versions of the compiled libraries.
+  # Without this change, we can't disable building static libraries on non-static platforms.
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+    substituteInPlace cpp/CMakeLists.txt \
+      --replace-fail 'target_link_libraries (geocoding_test_program geocoding phonenumber)' 'target_link_libraries (geocoding_test_program geocoding-shared phonenumber-shared)'
+  '';
 
   outputs = [
     "out"
@@ -47,44 +55,65 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     protobuf
   ]
-  ++ lib.optionals enableTests [
+  ++ lib.optionals generateMetadata [
     jre
   ];
 
   buildInputs = [
     icu
-    protobuf
-  ]
-  ++ lib.optionals enableTests [
+  ];
+
+  checkInputs = [
     gtest
   ];
 
-  propagatedBuildInputs = lib.optionals enableTests [
-    boost
+  propagatedBuildInputs = [
+    protobuf
   ];
 
   cmakeDir = "../cpp";
 
-  doCheck = enableTests;
+  doCheck = generateMetadata;
 
   checkTarget = "tests";
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=deprecated-declarations")
-  ]
-  ++ lib.optionals (!enableTests) [
-    (lib.cmakeBool "REGENERATE_METADATA" false)
-    (lib.cmakeBool "USE_BOOST" false)
-  ]
-  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
-    (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
-  ];
+  cmakeFlags =
+    assert lib.assertMsg (
+      finalAttrs.finalPackage.doCheck -> generateMetadata
+    ) "libphonenumber tests require generateMetadata to be true";
+    lib.mapAttrsToList lib.cmakeBool {
+      REGENERATE_METADATA = generateMetadata;
 
-  strictDeps = true;
+      BUILD_GEOCODER = true;
+      USE_ALTERNATE_FORMATS = true;
+
+      # Boost is only used for missing standard library features on legacy compilers
+      # With modern libstdc++, we can simply prefer modern equivalents
+      USE_BOOST = false;
+      USE_ICU_REGEXP = true;
+      USE_STDMUTEX = true;
+      USE_STD_MAP = true;
+
+      BUILD_SHARED_LIBS = !stdenv.hostPlatform.isStatic;
+      BUILD_STATIC_LIB = stdenv.hostPlatform.isStatic;
+    }
+    ++ [
+      (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=deprecated-declarations")
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      (lib.cmakeFeature "CMAKE_CROSSCOMPILING_EMULATOR" (stdenv.hostPlatform.emulator buildPackages))
+      (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
+    ];
+
+  passthru.tests = {
+    cmake-config = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "libphonenumber" ];
+    };
+  };
 
   meta = {
-    changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
+    changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.tag}/release_notes.txt";
     description = "Google's i18n library for parsing and using phone numbers";
     homepage = "https://github.com/google/libphonenumber";
     license = lib.licenses.asl20;
