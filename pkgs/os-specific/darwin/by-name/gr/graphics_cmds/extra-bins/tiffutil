@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -eu -o pipefail
+shopt -s extglob
 
 declare compression=()
 declare cmd=usage
@@ -56,16 +57,37 @@ check_hidpi_image_set() {
     done
 }
 
-get_dimensions() {
+get_props() {
     local src=$1
-    local out=$(@tiffinfo@ "$src")
-    @tiffinfo@ "$src" | @sed@ -nE -e 's/^ *Image Width: ([0-9]+) Image Length: ([0-9]+)$/\1x\2/p'
+    # tiffdump and tiffinfo inexplicably have no way to get the rational values for XResolution and YResolution.
+    # Using exiftool is verbose, but it beats parsing the values out of their output, and it gets the rational values.
+    @exiftool@ -g1 -l -api SaveBin=1 -json -ImageWidth -ImageHeight -XResolution -YResolution "$src" \
+       | @jq@ -c '.[0] | to_entries[] | select(.key | test("^IFD[0-9]+")) | .value | map_values(.rat // .val)'
+}
+
+get_dimensions() {
+    get_props "$1" | @jq@ --raw-output '"\(.ImageWidth)x\(.ImageHeight)"'
 }
 
 get_resolutions() {
-    local src=$1
-    local out=$(@tiffinfo@ "$src")
-    @tiffinfo@ "$src" | @sed@ -nE -e 's/^ *Resolution: ([0-9]+), ([0-9]+).*$/\1x\2/p'
+    get_props "$1" | @jq@ --raw-output '"\(.XResolution)x\(.YResolution)"'
+}
+
+set_resolution() {
+    local out=$1
+    local offset=$2
+
+    local dpi_x=$3
+    local dpi_y=$4
+
+    # Using exiftool allows for rationals to be set exactly, but it doesn’t support BigTIFF.
+    if @file@ "$out" | grep -q "Big TIFF"; then
+        @tiffset@ -s 282 $(@bc@ --scale=10 -e "$dpi_x") "$out"
+        @tiffset@ -s 283 $(@bc@ --scale=10 -e "$dpi_y") "$out"
+    else
+        @exiftool@ -q -overwrite_original \
+            -IFD$offset:XResolution=$dpi_x -IFD$offset:YResolution=$dpi_y -- "$out"
+    fi
 }
 
 usage() {
@@ -189,19 +211,39 @@ case $cmd in
               dim_y=$(@cut@ -dx -f2 <<< $dim)
 
               dpi=${dpis[$idx]}
-              dpi_x=$(@cut@ -dx -f1 <<< $dpi)
-              dpi_y=$(@cut@ -dx -f2 <<< $dpi)
 
-              pts_x=$((dim_x * 7200 / dpi_x))
-              pts_y=$((dim_y * 7200 / dpi_y))
-              if [[ "${pts_x: -2}" = "00" && "${pts_x: -2}" = "00" ]]; then
-                  pts="${pts_x: 0:-2}x${pts_y: 0:-2}"
-              else
-                  pts="${pts_x: 0:-2}.${pts_x: -2}x${pts_y: 0:-2}.${pts_y: -2}"
-              fi
+              dpi_x=$(@cut@ -dx -f1 <<< $dpi)
+              dpi_x_num=$(@cut@ -d/ -f1 <<< $dpi_x)
+              dpi_x_denom=$(@cut@ -d/ -f2 <<< $dpi_x)
+
+              dpi_y=$(@cut@ -dx -f2 <<< $dpi)
+              dpi_y_num=$(@cut@ -d/ -f1 <<< $dpi_y)
+              dpi_y_denom=$(@cut@ -d/ -f2 <<< $dpi_y)
+
+              pts_x=$(@bc@ -l -e "r($dim_x * 72 * $dpi_x_denom / $dpi_x_num, 5)")
+              pts_x=${pts_x/%+(0)/}
+              pts_x=${pts_x%.}
+
+              pts_y=$(@bc@ -l -e "r($dim_y * 72 * $dpi_y_denom / $dpi_y_num, 5)")
+              pts_y=${pts_y/%+(0)/}
+              pts_y=${pts_y%.}
+
+              # Apple’s tiffutil transposes the X and Y resolutions.
+              pts="${pts_y}x${pts_x}"
 
               sizes_seen[$pts]="${sizes_seen[$pts]+${sizes_seen[$pts]-} }$pts|$dpi"
               num_images=$((num_images + 1))
+
+              # Reformat transposed values for pretty printing.
+              dpi_x=$(@bc@ -l -e "r($dpi_x, 2)")
+              dpi_x=${dpi_x/%+(0)/}
+              dpi_x=${dpi_x%.}
+
+              dpi_y=$(@bc@ -l -e "r($dpi_y, 2)")
+              dpi_y=${dpi_y/%+(0)/}
+              dpi_y=${dpi_y%.}
+
+              dpi="${dpi_y}x${dpi_x}"
 
               tiff_infos+=("Image $((idx + 1)) in file $tiff: $pts points ($dim pixels, $dpi dpi)")
           done
@@ -235,11 +277,20 @@ case $cmd in
 
       if ${options[normalize_dpi]}; then
           for idx in $(seq 0 $((num_images - 1))); do
-              # 282 and 283 are the tag numbers for XResolution and YResolution respectively.
-              @tiffset@ -d $idx -s 282 72.0 -- "$outfile"
-              @tiffset@ -d $idx -s 283 72.0 -- "$outfile"
+              set_resolution "$outfile" $idx 72/1 72/1
           done
       fi
+
+      # Implement DPI swapping bug compatibility.
+      readarray -t dpis <<< $(get_resolutions "$outfile")
+      for idx in $(seq 0 $((num_images - 1))); do
+          dpi=${dpis[$idx]}
+
+          dpi_x=$(@cut@ -dx -f1 <<< $dpi)
+          dpi_y=$(@cut@ -dx -f2 <<< $dpi)
+
+          set_resolution "$outfile" $idx $dpi_y $dpi_x
+      done
       ;;
    dump)
       for file in "${files[@]}"; do
