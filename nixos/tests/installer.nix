@@ -46,7 +46,19 @@ let
         boot.initrd.systemd.enable = ${boolToString systemdStage1};
 
         ${optionalString (bootLoader == "grub") ''
-          boot.loader.grub.extraConfig = "serial; terminal_output serial";
+          # Read GRUB from the serial console so its output can be matched
+          # deterministically with wait_for_console_text. GRUB's own "serial"
+          # terminal (8250/16550 COM ports) only exists on x86; on EFI, GRUB
+          # exposes the platform serial via the EFI SerialIO protocol as the
+          # terminfo terminal "serial_efi0", which EDK2 routes to the serial
+          # port. Use the "dumb" terminfo type so the menu is emitted as
+          # plain sequential text without cursor-address or clear-screen
+          # escape sequences.
+          boot.loader.grub.extraConfig =
+            if grubUseEfi then
+              "terminal_output serial_efi0; terminfo serial_efi0 dumb"
+            else
+              "serial; terminal_output serial; terminfo serial dumb";
           ${
             if grubUseEfi then
               ''
