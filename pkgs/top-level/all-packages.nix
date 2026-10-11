@@ -7919,6 +7919,7 @@ with pkgs;
     ubootOrangePi3
     ubootOrangePi3B
     ubootOrangePi5
+    ubootOrangePi5Ultra
     ubootOrangePi5Max
     ubootOrangePi5Plus
     ubootOrangePiPc
