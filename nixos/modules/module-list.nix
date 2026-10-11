@@ -949,6 +949,7 @@
   ./services/misc/mediatomb.nix
   ./services/misc/memos.nix
   ./services/misc/metabase.nix
+  ./services/misc/minuspod.nix
   ./services/misc/mollysocket.nix
   ./services/misc/moonraker.nix
   ./services/misc/mqtt2influxdb.nix
