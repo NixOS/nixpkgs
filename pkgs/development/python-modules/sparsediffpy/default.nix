@@ -17,7 +17,6 @@ buildPythonPackage (finalAttrs: {
   pname = "sparsediffpy";
   version = "0.6.1";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SparseDifferentiation";
