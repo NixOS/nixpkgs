@@ -1,0 +1,14 @@
+diff --git a/build.spec b/build.spec
+index 58ff4f7..b351e4c 100755
+--- a/build.spec
++++ b/build.spec
+@@ -60,6 +60,9 @@ if sys.platform == "linux":
+             "gi_typelibs",
+         )
+     )
++    datas.append((Path("@gtk3@/lib/girepository-1.0/Gtk-3.0.typelib"), "gi_typelibs"))
++    datas.append((Path("@tcl@/lib"), "_tcl_data"))
++    datas.append((Path("@tk@/lib"), "_tk_data"))
+     binaries.append((Path(f"/usr/lib/{arch}-linux-gnu/libayatana-appindicator3.so.1"), "."))
+ 
+     hiddenimports.extend([
