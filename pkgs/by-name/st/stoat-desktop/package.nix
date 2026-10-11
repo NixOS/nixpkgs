@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   makeDesktopItem,
-  desktopToDarwinBundle,
+  darwin,
   pnpmConfigHook,
   makeWrapper,
   removeReferencesTo,
@@ -12,6 +12,8 @@
   pnpm_11,
   nodejs,
   electron_43,
+  resvg,
+  libicns,
   zip,
   nix-update-script,
 }:
@@ -21,19 +23,34 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "stoat-desktop";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "stoatchat";
     repo = "for-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-UKMuMtBTfiA31K2i1buCFOtL9lf9xbv6BXVD5m4TARo=";
+    hash = "sha256-ouC+90Ulra+qbZbW4TeDS4IZraFULo+U/wKRYBwWR04=";
   };
 
   postPatch = ''
     # Disable auto-updates
     sed -i '/updateElectronApp([^)]*)/d' src/main.ts
+
+    # `@electron/fuses` tries to run `codesign` and fails, ad-hoc signing is
+    # done by autoSignDarwinBinariesHook instead
+    substituteInPlace forge.config.ts \
+      --replace-fail "version: FuseVersion.V1," "version: FuseVersion.V1, resetAdHocDarwinSignature: false,"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Compiling the Icon Composer bundle needs actool from Xcode 26, which is
+    # unavailable in the sandbox. @electron/packager falls back to the icns
+    # variant of the same basename, so render one from the svg instead.
+    for size in 16 32 128 256 512; do
+      resvg --width "$size" --height "$size" assets/desktop/icon.svg "icon-$size.png"
+    done
+    png2icns assets/desktop/icon.icns icon-*.png
+    rm -r assets/desktop/icon.icon icon-*.png
   '';
 
   strictDeps = true;
@@ -44,13 +61,17 @@ stdenv.mkDerivation (finalAttrs: {
     pnpmConfigHook
     removeReferencesTo
     makeWrapper
-    copyDesktopItems
     nodejs
     pnpm_11
     zip
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    desktopToDarwinBundle
+    darwin.autoSignDarwinBinariesHook
+    resvg
+    libicns
   ];
 
   pnpmDeps = fetchPnpmDeps {
@@ -61,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     fetcherVersion = 4;
     pnpm = pnpm_11;
-    hash = "sha256-uiKTkXU0THzW46FiAfftqMWfrnFPCfgS/30ZuWmpHMI=";
+    hash = "sha256-ETP0S3H0MSzu7+5WvqnYGup2Nt4OJxQBMPUf7so92OU=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -103,11 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = lib.concatStringsSep "\n" [
     "runHook preInstall"
-    # Make freedesktop stuff, then the convert hook should make them for Darwin
-    ''
-      install -Dm444 "assets/desktop/icon.svg" "$out/share/icons/hicolor/scalable/apps/stoat-desktop.svg"
-    ''
     (lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm444 "assets/desktop/icon.svg" "$out/share/icons/hicolor/scalable/apps/stoat-desktop.svg"
+
       # remove references to nodejs
       find out/*/resources/app/node_modules -type f -executable -exec remove-references-to -t ${nodejs} '{}' \;
 
@@ -121,8 +140,9 @@ stdenv.mkDerivation (finalAttrs: {
         --inherit-argv0
     '')
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p "$out/Applications"
-      cp -r out/*/Stoat.app
+      # electron-forge already produces a complete application bundle
+      mkdir -p "$out/Applications" "$out/bin"
+      cp -r out/*/Stoat.app "$out/Applications/"
 
       makeWrapper "$out/Applications/Stoat.app/Contents/MacOS/stoat-desktop" "$out/bin/stoat-desktop" \
         --set ELECTRON_FORCE_IS_PACKAGED 1 \
@@ -158,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
       v3rm1n0
       RossSmyth
     ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "stoat-desktop";
   };
 })
