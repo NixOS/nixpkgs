@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
   meta = {
     description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
     homepage = "https://unpackerr.zip/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ connor-grady ];
     license = lib.licenses.mit;
     mainProgram = "unpackerr";
   };
