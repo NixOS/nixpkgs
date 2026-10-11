@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swift-cmark";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "swiftlang";
     repo = "swift-cmark";
     tag = finalAttrs.version;
-    hash = "sha256-0pyZ5yQRsbiKwz2XT8N6dMwCLcmM28qQOrxHcV6uH7g=";
+    hash = "sha256-SSStMxpFtI6WpQUbVL6VJuHH+0s0fSZXstbat4J+Fdk=";
   };
 
   strictDeps = true;
