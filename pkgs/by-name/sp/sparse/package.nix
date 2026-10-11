@@ -16,12 +16,12 @@ let
 in
 stdenv.mkDerivation {
   pname = "sparse";
-  version = "0.6.4-unstable-2024-02-03";
+  version = "0.6.5-rc1-unstable-2025-12-18";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git";
-    rev = "0196afe16a50c76302921b139d412e82e5be2349";
-    hash = "sha256-Fft3hm988Xw92WIwXEoVoX7xzzkDhKy+bn9YuQIOhSk=";
+    rev = "37156835e3d725b6d750f000be33ba3814bb2310";
+    hash = "sha256-662n1ENn8ZsiBtSBx6Vr1MrRAwzvob0Y1ifnBVtfB5k=";
   };
 
   preConfigure = ''

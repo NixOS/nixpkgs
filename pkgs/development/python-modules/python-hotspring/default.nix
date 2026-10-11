@@ -11,19 +11,20 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-backoff,
+  syrupy_6,
   yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-hotspring";
-  version = "2.1.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Moustachauve";
     repo = "python-hotspring";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TE/Gp2jXHjm3iSdh6aGg9ieT+OISype5CYTp17SdVxs=";
+    hash = "sha256-nxNoP14fb/kh9IysFUA9kJFLeeryQJiiivmzRezl01Q=";
   };
 
   build-system = [ poetry-core ];
@@ -42,6 +43,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+    syrupy_6
   ];
 
   pythonImportsCheck = [ "hotspring" ];

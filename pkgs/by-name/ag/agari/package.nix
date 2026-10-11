@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agari";
-  version = "0.24.0";
+  version = "0.27.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agari-industries";
     repo = "agari";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-okJ1AJ0hVAkK9E9DXm6s+LO5moPiRdswhpDt2tDxego=";
+    hash = "sha256-rsnGwlkHhBDUlGWGDFGyl++pfSYknygcbLZlRcRjYM0=";
   };
 
-  cargoHash = "sha256-52zuMizvGVMleFHXu3rKaq+7B6PbsrJtQoPPvDUBcv8=";
+  cargoHash = "sha256-TGsKgTbCkJDme9ZQHaQiMQFR3kVf4kSccQ4FaxjYX2I=";
 
   nativeBuildInputs = [ python3 ];
 

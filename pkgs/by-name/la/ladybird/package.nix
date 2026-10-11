@@ -77,23 +77,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2026-09-18";
+  version = "0-unstable-2026-10-06";
 
   src = fetchFromGitHub {
     owner = "LadybirdBrowser";
     repo = "ladybird";
-    rev = "b90af890b56cbd51c452d929fe71abcb8adaa36f";
-    hash = "sha256-CfSC0zEn1VUZaoBHi4a91n/QLTdpapygVf9c/v44X9E=";
+    rev = "37073e789a856bcb542427cd69f3442bb22adcc8";
+    hash = "sha256-oufMcoJn09IWlDWbyjyOXw6oIKcotNkMbSyzRzTx4k8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UshQ0YBl5TLbrEanqsNVeXgONYEux2bgBhI4ISby0Qc=";
+    hash = "sha256-EvFltK5xHWcAP67iuosI4YqngiMrX+kaocl3wutM2GU=";
   };
 
   patches = [
     # https://github.com/LadybirdBrowser/ladybird/issues/11772
     ./build-information-source-archive.patch
+    # https://github.com/LadybirdBrowser/ladybird/issues/12564
+    ./webgl-generation-order.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/LadybirdBrowser/ladybird/issues/11875
@@ -103,6 +105,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i '/iconutil/d' UI/CMakeLists.txt
+
+    # Upstream suffixes its reduced FFmpeg build to coexist with system FFmpeg.
+    # Use nixpkgs' FFmpeg, which already provides the additional decoders.
+    substituteInPlace Meta/CMake/check_for_dependencies.cmake \
+      --replace-fail libavcodec-ladybird libavcodec \
+      --replace-fail libavformat-ladybird libavformat \
+      --replace-fail libavutil-ladybird libavutil \
+      --replace-fail libswresample-ladybird libswresample
 
     perl -0pi -e \
       's/find_package\(ICU 78\.[0-9]+ EXACT REQUIRED COMPONENTS data i18n uc\)/find_package(ICU ${icu78.version} EXACT REQUIRED COMPONENTS data i18n uc)/ or die "ICU dependency not found\n"' \
@@ -302,6 +312,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
+      "riscv64-linux"
       "aarch64-darwin"
     ];
     mainProgram = "Ladybird";

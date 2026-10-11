@@ -33,6 +33,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-KJgXxefAkFI6AmIkd6B2O7Iw017UPd/SV7AxV+JOkwM=";
   };
 
+  patches = [
+    # remove padding from refresh token fixture
+    ./456.patch
+  ];
+
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [ "aiohttp" ];

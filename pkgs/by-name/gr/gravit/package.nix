@@ -11,7 +11,7 @@
   libGLU,
   libGL,
   libpng,
-  lua5,
+  lua5_2_compat,
   autoconf,
   automake,
   mesa,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL
     SDL_ttf
     SDL_image
-    lua5
+    lua5_2_compat
     libpng
     libsm
     libice

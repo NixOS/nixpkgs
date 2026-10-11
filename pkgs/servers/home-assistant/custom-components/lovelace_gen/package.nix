@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "thomasloven";
   domain = "lovelace_gen";
-  version = "0.1.3";
+  version = "6";
 
   src = fetchFromGitHub {
     owner = "thomasloven";
     repo = "hass-lovelace_gen";
     tag = version;
-    hash = "sha256-YGqvdoOs9/Etfldoee3mgDQjtveLa/LovwX/IduYyjg=";
+    hash = "sha256-GYchomeY9NuQXqBWC0y1G/a+aYTIseatF6UHi/6wN9Q=";
   };
 
   dependencies = [ jinja2 ];

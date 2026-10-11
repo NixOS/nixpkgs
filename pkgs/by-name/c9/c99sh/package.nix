@@ -14,13 +14,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "c99sh";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "RhysU";
     repo = "c99sh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nLq6J1PRROTOSvScyyXUqwtj10MEfQCHC8YYNd+JxkA=";
+    hash = "sha256-USkwDu6nbk7/Iyv9yLP0E3Dn2+yDLqNDV745KgKZWH0=";
   };
 
   strictDeps = true;

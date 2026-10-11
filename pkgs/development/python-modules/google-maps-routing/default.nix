@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "google-maps-routing";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-maps-routing-v${version}";
-    hash = "sha256-vsJuqmG2/H5Lf/uGnEnkmBDBL2Mkxzk1z8gbGEpR0Eg=";
+    hash = "sha256-b0FYupZU0ZNeIL9xJIqEXgg7ToRCQLjiswJ67YzX7OI=";
   };
 
   sourceRoot = "${src.name}/packages/google-maps-routing";

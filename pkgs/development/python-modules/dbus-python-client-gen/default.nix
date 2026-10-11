@@ -10,7 +10,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dbus-python-client-gen";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "stratis-storage";
     repo = "dbus-python-client-gen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nmF6fdUgr7ACK7Pvy3ikc0Xjzfh6iTYNLc+rAf9I9Mg=";
+    hash = "sha256-O1fx/u83bP/6rblEYE6KASlV7gzIYXWMbZm5erPxCbM=";
   };
 
   build-system = [ setuptools ];

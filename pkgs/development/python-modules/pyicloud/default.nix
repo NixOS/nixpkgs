@@ -11,6 +11,7 @@
   pydantic,
   pytest-mock,
   pytest-socket,
+  pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
   requests,
@@ -25,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyicloud";
-  version = "2.6.5";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timlaing";
     repo = "pyicloud";
     tag = finalAttrs.version;
-    hash = "sha256-wlBVQPGGt8Q6EeLceORfRn+MtRKtmum+z3WAG6ZR+2Q=";
+    hash = "sha256-XQIE85fpod+Wmgg8t3PgHo8Vn2sF91h/I5hSvrCBSrk=";
   };
 
   build-system = [
@@ -66,6 +67,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-mock
     pytest-socket
+    pytest-timeout
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;

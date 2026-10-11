@@ -353,6 +353,7 @@
   ./programs/tsm-client.nix
   ./programs/turbovnc.nix
   ./programs/udevil.nix
+  ./programs/unifi-endpoint.nix
   ./programs/upki.nix
   ./programs/usbtop.nix
   ./programs/vellum.nix
@@ -1780,6 +1781,7 @@
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/linkding.nix
   ./services/web-apps/linkwarden.nix
+  ./services/web-apps/loops-server.nix
   ./services/web-apps/lubelogger.nix
   ./services/web-apps/mainsail.nix
   ./services/web-apps/mastodon.nix

@@ -8,7 +8,7 @@
   pkg-config,
   liblxi,
   readline,
-  lua,
+  lua5_2_compat,
   bash-completion,
   wrapGAppsHook4,
   glib,
@@ -21,6 +21,9 @@
   gsettings-desktop-schemas,
   withGui ? false,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "lxi-tools";
