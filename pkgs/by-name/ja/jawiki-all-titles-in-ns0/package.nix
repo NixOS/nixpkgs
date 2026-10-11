@@ -41,8 +41,5 @@ stdenvNoCC.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides a dump gz file
-    hydraPlatforms = [ ];
   };
 }

@@ -7,19 +7,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "mozcdic-ut-jawiki";
-  version = "0-unstable-2024-10-12";
+  version = "0-unstable-2026-10-02";
 
   src = fetchFromGitHub {
     owner = "utuhiro78";
     repo = "mozcdic-ut-jawiki";
-    rev = "a91b76a05c4187420e46ead1cc70c2267148004b";
-    hash = "sha256-EuMxFSiwSFkcpetsQpuQU6yjX4BhSmS1LbVuLacw4w0=";
+    rev = "57af6adefedab262c295c4bfff71a89902cbe05c";
+    hash = "sha256-UFyk0rjp+G4zGIdQy+qemg8K86XJH7WU0LcPBZbk/5I=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dt $out mozcdic-ut-jawiki.txt.tar.bz2
+    install -Dt $out mozcdic-ut-jawiki.txt.bz2
 
     runHook postInstall
   '';
@@ -40,8 +40,5 @@ stdenvNoCC.mkDerivation {
     ];
     maintainers = with lib.maintainers; [ pineapplehunter ];
     platforms = lib.platforms.all;
-    # this does not need to be separately built
-    # it only provides some zip files
-    hydraPlatforms = [ ];
   };
 }
