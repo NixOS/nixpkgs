@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   rustPlatform,
   cmake,
   ninja,
@@ -25,21 +24,13 @@
   pipewire,
   apple-sdk_15,
   darwin,
+  shelter,
+  nix-update-script,
 }:
 
 let
   webkitgtk_4_1' = webkitgtk_4_1.override {
     enableExperimental = true;
-  };
-
-  shelter = fetchurl {
-    url = "https://raw.githubusercontent.com/uwu/shelter-builds/7a1beaff4bb4ec5e8590d069549686fda4200e82/shelter.js";
-    hash = "sha256-LeZTxrGRQb0rl3BMP34UFHIEFnil4k3Fet3MTujvVB8=";
-    meta = {
-      homepage = "https://github.com/uwu/shelter";
-      sourceProvenance = [ lib.sourceTypes.binaryBytecode ]; # actually, minified JS
-      license = lib.licenses.cc0;
-    };
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -124,7 +115,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ' src-tauri/tauri.conf.json
 
     # link shelter injection
-    ln -s "${shelter}" src-tauri/injection/shelter.js
+    ln -s ${shelter}/shelter.js src-tauri/injection/shelter.js
 
     # link html/frontend data
     ln -s "$(pwd)/src" src-tauri/html
@@ -194,6 +185,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     TAURI_RESOURCE_DIR = "${placeholder "out"}/lib";
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://spikehd.github.io/projects/dorion/";
     description = "Tiny alternative Discord client";
@@ -203,10 +196,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     changelog = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/SpikeHD/Dorion/releases/tag/v${finalAttrs.version}";
-    license = [
-      lib.licenses.gpl3Only
-      shelter.meta.license
-    ];
+    license = lib.licenses.gpl3Only;
     mainProgram = "Dorion";
     maintainers = with lib.maintainers; [
       nyabinary
@@ -216,7 +206,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     sourceProvenance = [
-      lib.sourceTypes.binaryBytecode # actually, minified JS
       lib.sourceTypes.fromSource
     ];
   };
