@@ -66,7 +66,6 @@ buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
   version = "4.9.10";
   pyproject = true;
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
