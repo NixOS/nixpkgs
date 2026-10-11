@@ -13,7 +13,7 @@
 
 buildPythonPackage {
   pname = "django-rest-polymorphic";
-  version = "0.1.10";
+  version = "0.1.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
