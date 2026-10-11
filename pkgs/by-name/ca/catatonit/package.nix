@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    readelf -d $out/bin/catatonit | grep 'There is no dynamic section in this file.'
+    ${stdenv.cc.targetPrefix}readelf -d $out/bin/catatonit | grep 'There is no dynamic section in this file.'
   '';
 
   passthru.tests = { inherit (nixosTests) podman; };
