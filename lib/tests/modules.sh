@@ -464,9 +464,14 @@ checkConfigError 'a provider `module` must be an option' config.contracts.number
 checkConfigOutput '^112$' config.contracts.sum.results.c1.x.value ./contracts-nested.nix
 checkConfigOutput '^3$' config.contracts.sum.results.c2.x.value ./contracts-nested.nix
 checkConfigOutput '^6$' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix
-checkConfigOutput '^"c1:x,c2:x,c3:db"$' config.wantedEntries ./contracts-nested.nix
+checkConfigOutput '^"c1:x,c2:x,c3:db,c5:x"$' config.wantedEntries ./contracts-nested.nix
+# contracts: `results` also has the request, and a consumer option of `mkContract` type can hold it
+checkConfigOutput '^10$' config.contracts.sum.results.c1.x.a ./contracts-nested.nix
+checkConfigOutput '^22$' config.consumer.response.value ./contracts-nested.nix
+checkConfigOutput '^20$' config.consumer.response.a ./contracts-nested.nix
+checkConfigOutput '^2$' config.consumer.response.b ./contracts-nested.nix
 checkConfigError 'contracts.sum.want.c3.db.primary: no provider' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix ./contracts-nested-no-provider.nix
-checkConfigOutput '^"c1:x,c2:x"$' config.wantedEntries ./contracts-nested.nix ./contracts-nested-manual.nix
+checkConfigOutput '^"c1:x,c2:x,c5:x"$' config.wantedEntries ./contracts-nested.nix ./contracts-nested-manual.nix
 checkConfigOutput '^112$' config.contracts.sum.results.c1.x.value ./contracts-nested.nix ./contracts-nested-manual.nix
 checkConfigError 'contracts.sum.want.c3.db.primary: no provider. Set .* or `contracts.sum.instances.c3.db.primary`' config.contracts.sum.results.c3.db.primary.value ./contracts-nested.nix ./contracts-nested-manual.nix
 

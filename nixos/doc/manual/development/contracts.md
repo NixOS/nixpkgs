@@ -59,6 +59,7 @@ Example, the consumer option from the example before, with `mkContract`:
 ```
 
 `mkContract` also defines each option in the overrides as `{ }`, so that the user can omit `request` if each option of `request` has a default.
+In the type from `mkContract`, `response` also has the options of `request`, without their defaults, so that it can hold a value from `results`.
 
 The consumer reads the resource from `response`.
 In the example, the path of the secret file is `cfg.passwordFile.response.path`.
@@ -177,7 +178,8 @@ For each contract type, [](#opt-contracts) sends the requests of consumers to a 
   The default is `defaultProvider`.
 - `contracts.<type>.providerRequests.<provider>`: the requests that a provider must fulfill.
   These are the entries of `want` that `instances` sends to the provider, and `{ }` for providers not routed to fulfill requests.
-- `contracts.<type>.results.<consumer>.<option>`: the `response` from the provider in `instances` for each entry in `want`, at the same path.
+- `contracts.<type>.results.<consumer>.<option>`: for each entry in `want`, at the same path, the `request` of the entry and the `response` from the provider in `instances` in one attribute set.
+  A `response` attribute takes precedence over a `request` attribute with the same name.
 
 A provider reads `providerRequests.<provider>` into its provider option, and sets `providers.<provider>.module` to its options.
 `providers.<provider>.contract` is the path of the provider option in `module`:

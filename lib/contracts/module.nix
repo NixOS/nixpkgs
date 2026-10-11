@@ -97,7 +97,7 @@ in
             type = types.submodule (
               { config, ... }:
               let
-                entryType = types.submodule { imports = [ contractType.interface ]; };
+                entryType = types.submodule { imports = [ contractType.consumerInterface ]; };
                 # An entry has only the keys of the interface, such as `request`.
                 # Other attribute sets are namespaces, for example `want.<consumer>`.
                 isEntry = v: v != { } && lib.isNestedAttrsLeaf lib.all entryType v;
@@ -284,7 +284,10 @@ in
 
                   results = mkOption {
                     description = ''
-                      The `response` from the provider in `instances` for each entry in `want`, at the same path.
+                      For each entry in `want`, at the same path,
+                      the `request` of the entry and the `response` from the provider in `instances` in one attribute set.
+                      Thus a consumer reads a request value from the same place as the response.
+                      A `response` attribute takes precedence over a `request` attribute with the same name.
 
                       The user sets the `response` of a consumer option from this option:
 
@@ -296,13 +299,13 @@ in
                     # Lazy, so that an entry without a provider does not make the other entries fail.
                     type = types.lazyAttrsOf types.raw;
                     default = mapEntries (
-                      path: _:
+                      path: want:
                       if instanceOf path == null then
                         throw "contracts.${contractName}.want.${lib.showAttrPath path}: no provider. Set `contracts.${contractName}.defaultProvider` or `contracts.${contractName}.instances.${lib.showAttrPath path}`."
                       else
-                        (lib.getAttrFromPath path (instanceOf path).value).response
+                        want.request // (lib.getAttrFromPath path (instanceOf path).value).response
                     );
-                    defaultText = lib.literalMD "the `response` from the provider in `instances` for each entry in `want`";
+                    defaultText = lib.literalMD "the `request` of each entry in `want`, with the `response` from the provider in `instances`";
                   };
                 };
 

@@ -2,6 +2,10 @@
 { lib, config, ... }:
 let
   inherit (lib) mkOption types;
+
+  # The options in `request` or `response` of `interface`.
+  interfaceOptions = (lib.evalModules { modules = [ config.interface ]; }).options;
+  subOptions = name: removeAttrs (interfaceOptions.${name}.type.getSubOptions [ ]) [ "_module" ];
 in
 {
   options = {
@@ -26,9 +30,38 @@ in
       type = types.deferredModule;
     };
 
+    consumerInterface = mkOption {
+      description = ''
+        The `interface` as a consumer sees it.
+        `response` also has the options of `request`, as in `contracts.<type>.results`.
+        A `response` option takes precedence over a `request` option with the same name.
+        These options do not have the `default` and `apply` of the `request` options,
+        because their value comes from the request in `want`.
+        `mkContract` and the entries in `want` use this module.
+      '';
+      type = types.deferredModule;
+      internal = true;
+      readOnly = true;
+      default = {
+        imports = [ config.interface ];
+        options.response = mkOption {
+          type = types.submodule {
+            options = lib.mapAttrs (
+              _: option:
+              mkOption {
+                inherit (option) type;
+                description = option.description or null;
+              }
+            ) (removeAttrs (subOptions "request") (lib.attrNames (subOptions "response")));
+          };
+        };
+      };
+      defaultText = lib.literalMD "`interface`, with the `request` options also in `response`";
+    };
+
     mkContract = mkOption {
       description = ''
-        Make a submodule type that imports `interface`,
+        Make a submodule type that imports `consumerInterface`,
         and add the attributes in `overrides` to its options.
 
         `mkContract :: attrs -> optionType`
@@ -56,7 +89,7 @@ in
 
         ```nix
         types.submodule {
-          imports = [ lib.contracts.fileSecrets.interface ];
+          imports = [ lib.contracts.fileSecrets.consumerInterface ];
           options.request = mkOption {
             type = types.submodule {
               options.owner = mkOption {
@@ -77,7 +110,7 @@ in
       default =
         overrides:
         types.submodule {
-          imports = [ config.interface ];
+          imports = [ config.consumerInterface ];
           options = lib.mapAttrs (
             _: options:
             mkOption {

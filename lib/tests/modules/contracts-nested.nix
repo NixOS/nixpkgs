@@ -40,6 +40,12 @@ in
     );
   };
 
+  # A consumer option that holds the request and the result of an entry.
+  options.consumer = mkOption {
+    default = { };
+    type = config.contractTypes.sum.mkContract { };
+  };
+
   options.wantedEntries = mkOption {
     type = types.str;
     default = lib.concatStringsSep "," (
@@ -90,6 +96,10 @@ in
       contracts.sum.want.c2.x = { };
       # An entry at depth 3.
       contracts.sum.want.c3.db.primary.request.b = 5;
+      # A consumer sends its whole option, and reads the request and the response from `results`.
+      consumer.request.a = 20;
+      consumer.response = config.contracts.sum.results.c5.x;
+      contracts.sum.want.c5.x = config.consumer;
       # An entry that is not sent.
       contracts.sum.want.c4 = lib.mkIf false { x = { }; };
     }
