@@ -5,7 +5,7 @@
   unstableGitUpdater,
   cmake,
   kdePackages,
-  libsForQt5,
+  qt6Packages,
   mkcal,
   pkg-config,
   tzdata,
@@ -22,10 +22,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vycfq5meq+u7Ntv0n1XrcqlZfjU7flfQAi17vZId6Ww=";
   };
 
-  postPatch = ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace-fail 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}/qt5/plugins' 'DESTINATION ''${CMAKE_INSTALL_PREFIX}/${libsForQt5.qtbase.qtPluginPrefix}'
-  '';
+  postPatch =
+    # Use Qt6 things
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'QT_MIN_VERSION "5.6.0"' 'QT_MIN_VERSION "6.0.0"' \
+        --replace-fail 'libmkcal-qt5' 'libmkcal-qt6'
+
+      substituteInPlace CMakeLists.txt src/CMakeLists.txt tests/CMakeLists.txt \
+        --replace-fail 'Qt5' 'Qt6' \
+        --replace-fail 'KF5' 'KF6'
+    ''
+    # Adapt to Qt6 changes
+    + ''
+      substituteInPlace src/mkcalworker.h \
+        --replace-fail \
+          'QList<QtOrganizer::QOrganizerCollection> collections(QtOrganizer::QOrganizerManager::Error *error) const override' \
+          'QList<QtOrganizer::QOrganizerCollection> collections(QtOrganizer::QOrganizerManager::Error *error) override'
+    ''
+    + ''
+      substituteInPlace src/CMakeLists.txt \
+        --replace-fail 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}/qt5/plugins' 'DESTINATION ''${CMAKE_INSTALL_PREFIX}/${qt6Packages.qtbase.qtPluginPrefix}'
+    '';
 
   strictDeps = true;
 
@@ -36,11 +54,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    kdePackages.extra-cmake-modules
     mkcal
   ]
-  ++ (with libsForQt5; [
-    __internalKF5.kcalendarcore
+  ++ (with kdePackages; [
+    extra-cmake-modules
+    kcalendarcore
+  ])
+  ++ (with qt6Packages; [
     qtbase
     qtpim
   ]);
@@ -61,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       export QT_QPA_PLATFORM=minimal
       export QT_PLUGIN_PATH=${
-        listToQtVar libsForQt5.qtbase.qtPluginPrefix (
-          with libsForQt5;
+        listToQtVar qt6Packages.qtbase.qtPluginPrefix (
+          with qt6Packages;
           [
             qtbase
             qtpim
