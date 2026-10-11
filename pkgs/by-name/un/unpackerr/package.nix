@@ -1,7 +1,10 @@
 {
   lib,
-  fetchFromGitHub,
   buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -11,25 +14,36 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Unpackerr";
     repo = "unpackerr";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-npq0CXsaWaFa6RazQXRKVaqTyK87VhzaF/hd/d952Po=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-npq0CXsaWaFa6RazQXRKVaqTyK87VhzaF/hd/d952Po=";
   };
 
   vendorHash = "sha256-v0ml1dTIhf79mhlyTrPNhIfg1Yhao27eP0pnI95OvaU=";
 
+  excludedPackages = [ "init/config" ];
+
   ldflags = [
     "-s"
-    "-w"
-    "-X golift.io/version.Branch=main"
+    "-X 'golift.io/version.Branch=${finalAttrs.version} [nixpkgs]'"
+    "-X golift.io/version.BuildUser=nixpkgs"
     "-X golift.io/version.Version=${finalAttrs.version}"
-    "-X golift.io/version.Revision=v${finalAttrs.version}"
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    tests = { inherit (nixosTests) unpackerr; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
-    description = "Extracts downloads for Radarr, Sonarr, Lidarr - Deletes extracted files after import";
-    homepage = "https://unpackerr.zip/";
-    maintainers = with lib.maintainers; [ connor-grady ];
+    description = "Extracts downloads so Radarr, Sonarr, Lidarr or Readarr may import them";
+    homepage = "https://unpackerr.zip";
+    changelog = "https://github.com/Unpackerr/unpackerr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    maintainers = with lib.maintainers; [ connor-grady ];
     mainProgram = "unpackerr";
   };
 })
