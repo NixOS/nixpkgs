@@ -14,6 +14,10 @@
   python3,
   stdenv,
   which,
+  gnugrep,
+  gnused,
+  net-tools,
+  gawk,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,14 +38,21 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/share/man"
   ];
 
+  postPatch = ''
+    substituteInPlace check_ssl_cert --replace-fail \
+      /bin/cat \
+      cat
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/check_ssl_cert \
       --prefix PATH : "${
         lib.makeBinPath (
           [
             bc
-            bind # host and dig binary
-            coreutils # date and timeout binary
+            bind.host
+            bind.dnsutils # dig
+            coreutils # date, timeout, cat
             curl
             file
             netcat-gnu
@@ -49,6 +60,10 @@ stdenv.mkDerivation rec {
             openssl
             python3
             which
+            gnugrep
+            gnused
+            net-tools # hostname
+            gawk
           ]
           ++ lib.optional stdenv.hostPlatform.isLinux iproute2
         )
