@@ -548,6 +548,7 @@ in
         };
       };
 
+      systemd.services.etcd.unitConfig.ConditionPathExists = "${top.secretsPath}/etcd.pem";
     })
 
   ];
