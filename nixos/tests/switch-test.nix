@@ -818,6 +818,38 @@ in
               systemd.user.services.migrated.restartIfChanged = false;
             };
 
+            # A unit that NixOS masks without defining it otherwise, so
+            # /etc/systemd/user/masked.service is a link to /dev/null. The
+            # running copy comes from another search-path entry.
+            userServiceMasked.configuration = {
+              systemd.user.services.masked.enable = false;
+            };
+
+            # As above, but the running copy was in ~/.config/systemd/user, and
+            # the per-user activation removes it and stops the unit (mimicking
+            # home-manager/sd-switch dropping it).
+            userServiceMaskedFromHome.configuration = {
+              imports = [ userServiceMasked.configuration ];
+              system.userActivationScripts.fakeSdSwitch = ''
+                if [ -e "$HOME/.config/systemd/user/masked.service" ]; then
+                  rm -f "$HOME/.config/systemd/user/masked.service"
+                  ${pkgs.systemd}/bin/systemctl --user daemon-reload
+                  ${pkgs.systemd}/bin/systemctl --user stop masked.service || true
+                fi
+              '';
+            };
+
+            # As above, but the previous manager leaves the unit running.
+            userServiceMaskedFromHomeNoStop.configuration = {
+              imports = [ userServiceMasked.configuration ];
+              system.userActivationScripts.fakeSdSwitch = ''
+                if [ -e "$HOME/.config/systemd/user/masked.service" ]; then
+                  rm -f "$HOME/.config/systemd/user/masked.service"
+                  ${pkgs.systemd}/bin/systemctl --user daemon-reload
+                fi
+              '';
+            };
+
           }
           // forPart "basics" {
             no_inhibitors.configuration.system.switch.inhibitors = lib.mkForce { };
@@ -904,6 +936,29 @@ in
         Type=oneshot
         RemainAfterExit=true
         ExecStart=${pkgs.runtimeShell} -c 'echo data > %t/migrated-owner'
+      '';
+
+      # Unit file for the userServiceMasked* specialisations, placed in
+      # ~/.local/share/systemd/user or ~/.config/systemd/user. ExecStop
+      # records whether the unit was stopped with this definition.
+      maskedUnit = pkgs.writeText "masked.service" ''
+        [Service]
+        Type=oneshot
+        RemainAfterExit=true
+        ExecStart=${pkgs.runtimeShell} -c 'echo started > %t/masked-state'
+        ExecStop=${pkgs.runtimeShell} -c 'echo stopped > %t/masked-state'
+      '';
+
+      # As above, but the mask must not stop it.
+      maskedUnitNoStopOnRemoval = pkgs.writeText "masked.service" ''
+        [Unit]
+        X-StopOnRemoval=false
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=true
+        ExecStart=${pkgs.runtimeShell} -c 'echo started > %t/masked-state'
+        ExecStop=${pkgs.runtimeShell} -c 'echo stopped > %t/masked-state'
       '';
     in
     # python
@@ -2041,6 +2096,80 @@ in
           machine.succeed("sudo -u usertest rm -rf ~usertest/.config/systemd")
           user_systemctl("daemon-reload")
           user_systemctl("stop migrated.service")
+          switch_to_specialisation("${machine}", "")
+
+          # Masking a running unit that comes from a lower-priority search-path
+          # entry ($XDG_DATA_HOME here, standing in for a package's
+          # share/systemd/user) only gives /etc a link to /dev/null. That is
+          # not a definition to migrate to: the unit must be stopped before the
+          # reload, while its ExecStop still exists, and never restarted.
+          machine.succeed(
+              "sudo -u usertest mkdir -p ~usertest/.local/share/systemd/user",
+              "sudo -u usertest cp ${maskedUnit} ~usertest/.local/share/systemd/user/masked.service",
+          )
+          user_systemctl("daemon-reload")
+          user_systemctl("start masked.service")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/masked-state")
+          assert_contains(out, "started")
+          out = switch_to_specialisation("${machine}", "userServiceMasked")
+          assert_contains(out, "stopping the following user units: masked.service")
+          assert_lacks(out, "(post-activation) the following user units: masked.service")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active masked.service")
+          out = user_systemctl("show -p LoadState masked.service")
+          assert_contains(out, "LoadState=masked")
+          out = machine.succeed(f"sudo -u usertest {user_env} cat /run/user/1001/masked-state")
+          assert_contains(out, "stopped")
+          # Switching again must not touch the stopped, masked unit.
+          out = switch_to_specialisation("${machine}", "userServiceMasked")
+          assert_lacks(out, "masked.service")
+          machine.succeed("sudo -u usertest rm -rf ~usertest/.local/share/systemd")
+          switch_to_specialisation("${machine}", "")
+
+          # X-StopOnRemoval=false keeps it running, as for a unit removed
+          # from /etc.
+          machine.succeed(
+              "sudo -u usertest mkdir -p ~usertest/.local/share/systemd/user",
+              "sudo -u usertest cp ${maskedUnitNoStopOnRemoval} ~usertest/.local/share/systemd/user/masked.service",
+          )
+          user_systemctl("daemon-reload")
+          user_systemctl("start masked.service")
+          out = switch_to_specialisation("${machine}", "userServiceMasked")
+          assert_lacks(out, "masked.service")
+          user_systemctl("is-active masked.service")
+          out = user_systemctl("show -p LoadState masked.service")
+          assert_contains(out, "LoadState=masked")
+          user_systemctl("stop masked.service")
+          machine.succeed("sudo -u usertest rm -rf ~usertest/.local/share/systemd")
+          switch_to_specialisation("${machine}", "")
+
+          # The same mask while a copy in ~/.config shadows /etc, and the
+          # per-user activation removes that copy.
+          def seed_masked_home_unit():
+              machine.succeed(
+                  "sudo -u usertest mkdir -p ~usertest/.config/systemd/user",
+                  "sudo -u usertest cp ${maskedUnit} ~usertest/.config/systemd/user/masked.service",
+              )
+              user_systemctl("daemon-reload")
+              user_systemctl("start masked.service")
+              out = user_systemctl("show -p FragmentPath masked.service")
+              assert_contains(out, "/.config/systemd/user/masked.service")
+
+          # The previous manager stopped it: pass 2 must not start it.
+          seed_masked_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMaskedFromHome")
+          assert_lacks(out, "masked.service")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active masked.service")
+          out = user_systemctl("show -p LoadState masked.service")
+          assert_contains(out, "LoadState=masked")
+          switch_to_specialisation("${machine}", "")
+
+          # The previous manager left it running: pass 2 must stop it.
+          seed_masked_home_unit()
+          out = switch_to_specialisation("${machine}", "userServiceMaskedFromHomeNoStop")
+          assert_contains(out, "stopping (post-activation) the following user units: masked.service")
+          machine.fail(f"sudo -u usertest {user_env} systemctl --user is-active masked.service")
+          out = user_systemctl("show -p LoadState masked.service")
+          assert_contains(out, "LoadState=masked")
           switch_to_specialisation("${machine}", "")
     '';
 }

@@ -977,6 +977,8 @@ enum MigrationAction {
     Reload,
     Restart,
     Start,
+    /// Only for a unit whose /etc entry is a mask.
+    Stop,
 }
 
 impl MigrationAction {
@@ -1450,35 +1452,60 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     //     /etc outranks these, so only act when /etc is gaining the unit;
     //     if the previous generation already had it, leave it alone.
     // Pass 2's `now_etc` check verifies /etc actually won before acting.
-    let migration_candidates: Vec<String> = current_active_units
-        .iter()
-        .filter(|(unit, _)| new_unit_dir.join(unit).exists())
-        .filter(|(unit, unit_state)| {
-            let Ok(fragment_path) = unit_state
-                .proxy
-                .get::<String>("org.freedesktop.systemd1.Unit", "FragmentPath")
-            else {
-                return false;
-            };
-            let fragment_parent = Path::new(&fragment_path).parent();
-
-            // Already in /etc: handled by pass 1.
-            if fragment_parent == Some(fragment_dir) {
-                return false;
+    //
+    // A mask (a link to /dev/null) is not a definition to migrate to. In the
+    // second case it takes effect at the reload below, so the unit is stopped
+    // here instead, like a unit removed from /etc, while ExecStop still runs
+    // with the definition it was started with. Pass 2 handles the first case.
+    let mut migration_candidates = Vec::new();
+    for (unit, unit_state) in &current_active_units {
+        let new_unit_state = match unit_file_state(new_unit_dir.join(unit)) {
+            Ok(UnitFileState::Missing) => continue,
+            Ok(state) => state,
+            Err(err) => {
+                log::debug!("Skipping {unit}: {err:#}");
+                continue;
             }
+        };
 
-            // Loaded from ~/.config/systemd/user, which shadows /etc.
-            if let Some(dir) = &user_config_unit_dir {
-                if fragment_parent == Some(dir.as_path()) {
-                    return true;
-                }
-            }
+        let Ok(fragment_path) = unit_state
+            .proxy
+            .get::<String>("org.freedesktop.systemd1.Unit", "FragmentPath")
+        else {
+            continue;
+        };
+        let fragment_parent = Path::new(&fragment_path).parent();
 
+        // Already in /etc: handled by pass 1.
+        if fragment_parent == Some(fragment_dir) {
+            continue;
+        }
+
+        // Loaded from ~/.config/systemd/user, which shadows /etc.
+        let shadowed = user_config_unit_dir
+            .as_deref()
+            .is_some_and(|dir| fragment_parent == Some(dir));
+
+        if !shadowed {
             // Elsewhere: only act if /etc is gaining the unit this switch.
-            !old_unit_dir.join(unit).exists()
-        })
-        .map(|(unit, _)| unit.clone())
-        .collect();
+            if old_unit_dir.join(unit).exists() {
+                continue;
+            }
+
+            if new_unit_state == UnitFileState::Masked {
+                let fragment_path = Path::new(&fragment_path);
+                let stop_on_removal = parse_unit(fragment_path, fragment_path)
+                    .map(|info| parse_systemd_bool(Some(&info), "Unit", "X-StopOnRemoval", true))
+                    .unwrap_or(true);
+                if stop_on_removal {
+                    units_to_stop.insert(unit.clone(), ());
+                }
+                continue;
+            }
+        }
+
+        migration_candidates.push(unit.clone());
+    }
 
     collect_unit_changes(
         &toplevel,
@@ -1625,6 +1652,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
 
         let active_after = get_active_units(&systemd)?;
 
+        let mut to_stop = HashMap::new();
         let mut to_reload = HashMap::new();
         let mut to_restart = HashMap::new();
         let mut to_start = HashMap::new();
@@ -1634,6 +1662,9 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
             // Honour X-* directives so reloadIfChanged/restartIfChanged hold.
             let new_unit_file = new_unit_dir.join(unit);
             let new_unit_info = parse_unit(&new_unit_file, &new_unit_file)?;
+            // A mask leaves no definition to migrate to: stop the unit if it
+            // still runs, and never start it.
+            let masked = unit_file_state(&new_unit_file)? == UnitFileState::Masked;
 
             let action = match active_after.get(unit) {
                 Some(unit_state) => {
@@ -1648,13 +1679,20 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
                         // Still shadowed (or read error); leave it alone.
                         continue;
                     }
-                    MigrationAction::for_active_unit(unit, &new_unit_info)
+                    if masked {
+                        MigrationAction::Stop
+                    } else {
+                        MigrationAction::for_active_unit(unit, &new_unit_info)
+                    }
                 }
+                // Stopped by the previous manager, and masked now.
+                None if masked => continue,
                 // Stopped by the previous manager; start the /etc copy.
                 None => MigrationAction::for_stopped_unit(&new_unit_info),
             };
             match action {
                 MigrationAction::Skip => to_skip.insert(unit.clone(), ()),
+                MigrationAction::Stop => to_stop.insert(unit.clone(), ()),
                 MigrationAction::Reload => to_reload.insert(unit.clone(), ()),
                 MigrationAction::Restart => to_restart.insert(unit.clone(), ()),
                 MigrationAction::Start => to_start.insert(unit.clone(), ()),
@@ -1672,6 +1710,14 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
         if !to_skip.is_empty() {
             print_units("NOT restarting (post-activation)", &to_skip);
         }
+
+        print_units("stopping (post-activation)", &to_stop);
+        for unit in to_stop.keys() {
+            if let Ok(job_path) = systemd.stop_unit(unit, "replace") {
+                submitted_jobs.borrow_mut().insert(job_path, Job::Stop);
+            }
+        }
+        block_on_jobs(&dbus_conn, &submitted_jobs)?;
 
         print_units("reloading (post-activation)", &to_reload);
         for unit in to_reload.keys() {
