@@ -87,7 +87,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+  env = {
+    NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    # Static Cyrus SASL embeds plugins that depend on Berkeley DB and OpenSSL.
+    LIBS = "-ldb -lcrypto";
+  };
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
