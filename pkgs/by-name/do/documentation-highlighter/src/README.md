@@ -1,4 +1,4 @@
-This file was generated with pkgs/misc/documentation-highlighter/update.sh
+This file was generated with pkgs/by-name/do/documentation-highlighter/update.sh
 
 # Highlight.js CDN Assets
 
