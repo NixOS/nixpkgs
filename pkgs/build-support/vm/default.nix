@@ -764,9 +764,12 @@ let
             # (which have lots of circular dependencies) from barfing.
             echo "unpacking Debs..."
 
+            # Keep directory symlinks such as /bin -> usr/bin on merged-/usr
+            # distributions: a package that still ships ./bin/ would otherwise
+            # replace the symlink with an empty directory, taking /bin/sh with it.
             for deb in "''${debsFlat[@]}"; do
               echo "$deb..."
-              dpkg-deb --extract "$deb" /mnt
+              dpkg-deb --fsys-tarfile "$deb" | tar -x --keep-directory-symlink -C /mnt
             done
 
             # Make the Nix store available in /mnt, because that's where the .debs live.
@@ -1554,6 +1557,9 @@ let
   commonDebPackages = [
     "base-passwd"
     "dpkg"
+    # Provides update-rc.d, which the installation scripts of packages
+    # that ship a service call.
+    "init-system-helpers"
     "libc6-dev"
     "perl"
     "bash"
