@@ -116,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelChecking = false;
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Library for scalable cross-language services";
     mainProgram = "thrift";
