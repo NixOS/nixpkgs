@@ -132,6 +132,8 @@ let
       "nym-diagnostic"
     ];
 
+    env.VERGEN_DEFAULT_ON_ERROR = "1";
+
     postPatch = ''
       shopt -s nullglob
 
