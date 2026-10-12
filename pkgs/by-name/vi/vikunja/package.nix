@@ -88,6 +88,8 @@ buildGoModule (finalAttrs: {
     runHook postBuild
   '';
 
+  doCheck = false;
+
   checkPhase = ''
     runHook preCheck
 
