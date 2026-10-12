@@ -11,13 +11,9 @@ pkgs.testers.nixosTest {
   nodes.machine =
     { pkgs, ... }:
     {
-      services.pcscd = {
-        enable = true;
-        plugins = [
-          pkgs.ccid
-          pkgs.vsmartcard-vpcd
-        ];
-      };
+      services.pcscd.enable = true;
+      # The virtual reader driver the PIV tests connect their emulated card to.
+      services.vsmartcard-vpcd.enable = true;
 
       environment.systemPackages = [
         pkgs.yb
@@ -31,8 +27,9 @@ pkgs.testers.nixosTest {
 
     # Tier-2: virtual smart card PIV tests (each test gets a fresh
     # RAM-backed card via vsmartcard-vpcd). Serialised to avoid
-    # concurrent vpcd connections.
-    out = machine.succeed("hardware_piv_tests --test-threads=1 2>&1")
+    # concurrent vpcd connections. YB_REQUIRE_VSC makes a missing vpcd a
+    # failure instead of a skip.
+    out = machine.succeed("YB_REQUIRE_VSC=1 hardware_piv_tests --test-threads=1 2>&1")
     print(out)
     if "test result: ok" not in out:
       raise Exception("hardware_piv_tests failed:\n" + out)
