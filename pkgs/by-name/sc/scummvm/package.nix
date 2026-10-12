@@ -3,25 +3,46 @@
   stdenv,
   fetchFromGitHub,
   SDL2,
+  SDL2_net,
+  a52dec,
   alsa-lib,
   curl,
+  discord-rpc,
+  faad2,
   flac,
   fluidsynth,
   freetype,
+  fribidi,
+  giflib,
+  gtk3,
   libGL,
   libGLU,
   libjpeg,
   libmad,
+  libmpcdec,
   libmpeg2,
   libogg,
+  libopenmpt,
+  libpng,
   libtheora,
   libvorbis,
+  libvpx,
   libx11,
   nasm,
   nix-update-script,
   pkg-config,
+  sndio,
+  sonivox,
+  speechd-minimal,
   versionCheckHook,
   zlib,
+
+  withCloud ? true,
+  withDiscord ? true,
+  withFluidsynth ? true,
+  withGtk ? stdenv.hostPlatform.isLinux,
+  withNetworking ? true,
+  withTTS ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,38 +64,62 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libGLU
-      libGL
-    ]
-    ++ [
-      curl
-      freetype
-      flac
-      fluidsynth
-      libjpeg
-      libmad
-      libmpeg2
-      libogg
-      libtheora
-      libvorbis
-      SDL2
-      libx11
-      zlib
-    ];
+  buildInputs = [
+    SDL2
+    a52dec
+    faad2
+    flac
+    freetype
+    fribidi
+    giflib
+    libjpeg
+    libmad
+    libmpcdec
+    libmpeg2
+    libogg
+    libopenmpt
+    libpng
+    libtheora
+    libvorbis
+    libvpx
+    libx11
+    sndio
+    sonivox
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libGL
+    libGLU
+  ]
+  ++ lib.optional withCloud curl
+  ++ lib.optional withDiscord discord-rpc
+  ++ lib.optional withFluidsynth fluidsynth
+  ++ lib.optional withGtk gtk3
+  ++ lib.optional withNetworking SDL2_net
+  ++ lib.optional (withTTS && stdenv.hostPlatform.isLinux) speechd-minimal;
 
   dontDisableStatic = true;
   enableParallelBuilding = true;
 
   configureFlags = [
     "--enable-release"
-  ];
-
-  preConfigure = ''
-    PATH="${lib.getDev SDL2}/bin:$PATH"
-  '';
+    "--with-sdl-prefix=${lib.getDev SDL2}"
+  ]
+  ++ (
+    if withCloud then
+      [ "--with-libcurl-prefix=${lib.getDev curl}" ]
+    else
+      [
+        "--disable-cloud"
+        "--disable-libcurl"
+      ]
+  )
+  ++ lib.optional (!withDiscord) "--disable-discord"
+  ++ lib.optional (!withFluidsynth) "--disable-fluidsynth"
+  ++ lib.optional (!withGtk) "--disable-gtk"
+  ++ lib.optional (!withNetworking) "--disable-sdlnet"
+  ++ lib.optional (!withTTS) "--disable-tts";
 
   # They use 'install -s', that calls the native strip instead of the cross
   postConfigure = ''
