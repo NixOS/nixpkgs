@@ -10,13 +10,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ubridge";
-  version = "1.2.3";
+  # uBridge became Linux-only in version 1.2.0.
+  # https://github.com/GNS3/ubridge/releases/tag/v1.2.0
+  version = if stdenv.hostPlatform.isDarwin then "1.1.1" else "1.2.3";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-d/5E3JRel5/DGsowg10YxRX7JzcmuwtdP3Jo38GjwEc=";
+    hash =
+      if stdenv.hostPlatform.isDarwin then
+        "sha256-2kt5naxMZwYX39sGyPqjiybFb8QtZuDbyBnMPeZS9U0="
+      else
+        "sha256-d/5E3JRel5/DGsowg10YxRX7JzcmuwtdP3Jo38GjwEc=";
   };
 
   postPatch = ''
@@ -41,7 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
       package = ubridge;
       command = "ubridge -v";
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [ "--system=x86_64-linux" ];
+    };
   };
 
   meta = {
