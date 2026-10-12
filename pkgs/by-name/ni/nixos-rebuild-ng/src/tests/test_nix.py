@@ -351,7 +351,7 @@ def test_edit_flake(mock_run: Mock) -> None:
 )
 def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
     build_attr = m.BuildAttr("<nixpkgs/nixos>", None)
-    assert n.get_build_image_variants(build_attr) == {
+    assert n.get_build_image_variants(build_attr, None) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
         "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
     }
@@ -374,7 +374,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
     )
 
     build_attr = m.BuildAttr(tmp_path, "preAttr")
-    assert n.get_build_image_variants(build_attr, {"inst_flag": True}) == {
+    assert n.get_build_image_variants(build_attr, None, {"inst_flag": True}) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
         "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
     }
@@ -414,7 +414,7 @@ def test_get_build_image_variants(mock_run: Mock, tmp_path: Path) -> None:
 )
 def test_get_build_image_variants_flake(mock_run: Mock) -> None:
     flake = m.Flake("/flake.nix", "myAttr")
-    assert n.get_build_image_variants_flake(flake, {"eval_flag": True}) == {
+    assert n.get_build_image_variants_flake(flake, None, {"eval_flag": True}) == {
         "azure": "nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd",
         "vmware": "nixos-image-vmware-25.05.20250102.6df2492-x86_64-linux.vmdk",
     }
