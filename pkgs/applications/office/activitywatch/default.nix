@@ -190,13 +190,14 @@ rec {
 
     src = "${sources}/aw-server-rust";
 
-    cargoHash = "sha256-E89E/LWBPHtb6vX94swodmE+UrWMrzQnm8AO5GeyuoA=";
+    cargoHash = "sha256-x6Qp8nW3EbQbeVPrvV1UQdKMkU83qachrtNOGh30HWw=";
 
     patches = [
-      # Override version string with hardcoded value as it may be outdated upstream.
-      (replaceVars ./override-version.patch {
-        version = sources.rev;
-      })
+      # FIXME
+      # # Override version string with hardcoded value as it may be outdated upstream.
+      # (replaceVars ./override-version.patch {
+      #   version = sources.rev;
+      # })
     ];
 
     nativeBuildInputs = [
@@ -209,6 +210,10 @@ rec {
       openssl
       rust-jemalloc-sys
     ];
+
+    # FIXME aw-sync features configuration is fscked
+    cargoBuildFlags = [ "--package aw-server" ];
+    cargoTestFlags = [ "--package aw-server" ];
 
     env.AW_WEBUI_DIR = aw-webui;
 
