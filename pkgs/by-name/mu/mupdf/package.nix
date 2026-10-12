@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
     (python3.pythonOnBuildForHost.withPackages (ps: [
       ps.setuptools
       ps.clang
+      ps.pipcl
     ]))
   ]
   ++ lib.optionals enablePython [
