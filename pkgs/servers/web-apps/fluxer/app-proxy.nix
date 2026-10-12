@@ -18,6 +18,7 @@
   rustPlatform,
   runCommand,
   lib,
+  fluxerHashes,
 }:
 let
   nodejs = nodejs_26;
@@ -48,17 +49,15 @@ let
 
       ${lib.join "\n" (lib.map copyVendorDeps extra-dep-list)}
     '';
-
-  versioning = lib.importJSON ./versioning.json;
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-app-proxy";
-  inherit (versioning) version;
+  inherit (fluxerHashes) version;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    inherit (versioning) rev hash;
+    inherit (fluxerHashes) rev hash;
   };
 
   env.npm_config_nodedir = nodejs;
@@ -85,17 +84,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRootDep = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = versioning.cargoHash;
+    hash = fluxerHashes.cargo.hash;
   };
   cargoExtraDeps = [
     (rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) src;
-      hash = versioning.libfluxcoreHash;
+      hash = fluxerHashes.cargo.lib.fluxcore;
       sourceRoot = "${finalAttrs.src.name}/fluxer_app/rust/libfluxcore";
     })
     (rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) src;
-      hash = versioning.libfluxwebpHash;
+      hash = fluxerHashes.cargo.lib.fluxwebp;
       sourceRoot = "${finalAttrs.src.name}/fluxer_app/rust/libfluxwebp";
     })
   ];
@@ -114,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = versioning.appproxyPnpmHash;
+    hash = fluxerHashes.pnpm.appProxy;
   };
 
   postPatch = ''
