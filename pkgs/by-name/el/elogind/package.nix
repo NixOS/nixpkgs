@@ -135,7 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/elogind/elogind";
     description = "systemd project's 'logind', extracted to a standalone package";
     platforms = lib.platforms.linux; # probably more
-    license = lib.licenses.lgpl21Plus;
+    license = with lib.licenses; [
+      lgpl21Plus
+      publicDomain
+      cc0
+    ];
     maintainers = with lib.maintainers; [ nh2 ];
   };
 })
