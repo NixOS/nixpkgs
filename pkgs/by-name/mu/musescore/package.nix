@@ -13,7 +13,8 @@
   # buildInputs
   alsa-lib,
   alsa-plugins,
-  ffmpeg,
+  # MuseScore Studio v4.7.x does not support FFmpeg v9. Support for it is coming in v5.
+  ffmpeg_8,
   flac,
   freetype,
   qt6,
@@ -155,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
   # the /usr/lib/x86_64-linux-gnu location for any Linux (e.g aarch64 too).
   preConfigure = ''
     substituteInPlace src/framework/media/internal/ffmpegutils.cpp \
-      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg}/lib" \
-      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg}/lib" \
+      --replace-fail "/usr/lib/x86_64-linux-gnu" "${lib.getLib ffmpeg_8}/lib" \
+      --replace-fail "/opt/homebrew/lib" "${lib.getLib ffmpeg_8}/lib" \
   '';
 
   strictDeps = true;
