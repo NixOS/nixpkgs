@@ -9779,6 +9779,7 @@ with pkgs;
     lure-of-the-temptress
     mystery-house
     nippon-safes-inc
+    sfinx
     ;
 
   sgt-puzzles-mobile = callPackage ../by-name/sg/sgt-puzzles/package.nix {

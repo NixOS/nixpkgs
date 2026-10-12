@@ -237,4 +237,18 @@ in
       "IT"
     ];
   };
+
+  sfinx = generic rec {
+    plong = "Sfinx";
+    pshort = "sfinx";
+    pcode = "sfinx";
+    description = "Polish 2D point-and-click adventure game set in a fantasy kingdom";
+    version = "1.1";
+    src = fetchurl {
+      url = "https://downloads.scummvm.org/frs/extras/Sfinx/sfinx-en-v${version}.zip";
+      hash = "sha256-9RazCgRlJveMvJI9j5B9Jnq5ZMzZt3CvxyNQ6NRn7E0=";
+    };
+    docs = [ "license.txt" ];
+    files = [ "vol.*" ];
+  };
 }
