@@ -13,7 +13,7 @@
   protobufc,
   systemdSupport ? stdenv.hostPlatform.isLinux,
   systemdLibs,
-  buildPackages,
+  python3,
   epoll-shim,
   basu,
   evdev-proto,
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    (buildPackages.python3.withPackages (
+    (python3.withPackages (
       ps: with ps; [
         attrs
         jinja2
