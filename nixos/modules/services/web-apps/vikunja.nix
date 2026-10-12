@@ -90,7 +90,7 @@ in
         description = "Database name.";
       };
       path = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/vikunja/vikunja.db";
         description = "Path to the sqlite3 database file.";
       };
