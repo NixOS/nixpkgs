@@ -915,11 +915,12 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.package.passthru.cudaSupport;
+        assertion = cfg.package.passthru.cudaSupport || cfg.package.passthru.rocmSupport;
         message = ''
-          TabbyAPI requires CUDA support to function. The configured package does not have CUDA enabled.
+          TabbyAPI requires CUDA or ROCm support to function.
           Consider setting:
             services.tabbyapi.package = pkgs.pkgsCuda.tabbyapi;
+            services.tabbyapi.package = pkgs.pkgsRocm.tabbyapi;
         '';
       }
       {
