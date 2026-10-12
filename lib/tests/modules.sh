@@ -352,6 +352,9 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-if-foo-e
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-if-enable.nix
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable-if.nix
 
+# Check wholly mkIf-disabled submodule in lazyAttrsOf.
+checkConfigOutput '^"ok"$' config.result ./submoduleWith-cancel.nix
+
 # Check importApply
 checkConfigOutput '"abc"' config.value ./importApply.nix
 # importApply does not set a key.
