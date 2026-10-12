@@ -15,13 +15,13 @@
 
 let
   pname = "gitlab-ci-local";
-  version = "4.76.0";
+  version = "4.76.1";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-K03nw+8SNnqm4ouOIa3ejUmcsUdVzdGn2jMZY5bKVOI=";
+    hash = "sha256-GnNmpiNhrGrHSnk9hYdL23ONalRFIEaJtbCIiphebak=";
   };
 
   node_modules = stdenv.mkDerivation {

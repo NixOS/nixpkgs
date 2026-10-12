@@ -70,13 +70,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "qwen-code";
-  version = "0.25.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KcfXalXM1+PpSkV61c8lg0QvoYuM9FEoTpLNkxqzw3o=";
+    hash = "sha256-BEm9/J7GoskP4Uz1gayThPcnON2czQm5KzRLbdSodm0=";
   };
 
   pnpmDeps = fetchPnpmDeps {
