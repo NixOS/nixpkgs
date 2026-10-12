@@ -28,13 +28,13 @@
 }:
 
 let
-  version = "2026.12.4";
+  version = "2026.13.0";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym-vpn-client";
     tag = "nym-vpn-v${version}";
-    hash = "sha256-4zjoQRJ/IEdNoBf75B71XPDE3Kvih0lC8KiG6m7exP0=";
+    hash = "sha256-HmysMM4nt6bG6wScNF/a5XBbyJ50a25zlUpm0JGs6iE=";
   };
 
   app = rustPlatform.buildRustPackage (finalAttrs: {
@@ -44,14 +44,14 @@ let
     cargoRoot = "nym-vpn-app/src-tauri";
     buildAndTestSubdir = finalAttrs.cargoRoot;
 
-    cargoHash = "sha256-wJy6zF8SDPGP/jutCXivlNF80ML6i9R1ny0rW95dWi8=";
+    cargoHash = "sha256-FK7nx/I1yZz1BxMHbgC2abSZDCR85KltV73hJEFyeT0=";
 
     npmRoot = "nym-vpn-app";
 
     npmDeps = fetchNpmDeps {
       inherit (finalAttrs) src;
       sourceRoot = "${finalAttrs.src.name}/nym-vpn-app";
-      hash = "sha256-59MY02gMKhIulxjck5woQjvCz0s0yJHlODwIq/IYr/k=";
+      hash = "sha256-k2m8wPWwFe553tLMAQyfVqBKYzc6n8iKzZELExhrjrY=";
     };
 
     postPatch = ''
@@ -113,7 +113,7 @@ let
     cargoRoot = "nym-vpn-core";
     buildAndTestSubdir = finalAttrs.cargoRoot;
 
-    cargoHash = "sha256-CTz0OZlQYoA7J+ZzOJEj+ZV5dKpjH+C7fMgyNiKEGkY=";
+    cargoHash = "sha256-i4dx/+YPZuRN7NJqAPB65G8vbUpjOrf5Co9v57jv/d4=";
 
     cargoBuildFlags = [
       "--package"
