@@ -104,7 +104,7 @@ let
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-sycW0u0QwYXNu7a1xvyiajETpg5uL+Ti8MsVlmQitiE=";
+    hash = hashes.core;
   };
 in
 buildPythonPackage {
@@ -116,9 +116,6 @@ buildPythonPackage {
   src = fetchLibsWheel "base";
 
   pythonRemoveDeps = [
-    # Only cuda-bindings is needed
-    "cuda-python"
-
     # just a wrapper for cudaPackages.cuda_nvdisasm
     "nvidia-cuda-nvdisasm"
 
