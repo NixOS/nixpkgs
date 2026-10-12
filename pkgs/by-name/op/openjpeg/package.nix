@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional jpipLibSupport jdk;
 
+  strictDeps = true;
+
   # tests did fail on powerpc64
   doCheck = !stdenv.hostPlatform.isPower64 && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
