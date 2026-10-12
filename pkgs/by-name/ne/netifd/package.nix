@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   fetchgit,
+  fetchpatch,
   libnl-tiny,
   libubox,
   uci,
@@ -22,6 +23,14 @@ stdenv.mkDerivation {
     rev = "69a5afc9713adf31edbf3228a7a372ada7bba449";
     hash = "sha256-R/ryiFiKNM7zrIgzlalAK0lNJF/vzWL56E9CbptJtmI=";
   };
+
+  patches = [
+    # Fix build with C23 (GCC 16 default), where strchr() on a const pointer returns const
+    (fetchpatch {
+      url = "https://github.com/openwrt/netifd/commit/abfaaac659292de7359f9367bcee6a9bfdc758c1.patch";
+      hash = "sha256-YbxdwiHszdQs6y1ya7Vzimq/lRcSoIXhmm2gdueLuVo=";
+    })
+  ];
 
   buildInputs = [
     libnl-tiny
