@@ -861,7 +861,7 @@ GEM
     gitlab-experiment (2.0.0)
       activesupport (>= 3.0)
       request_store (>= 1.0)
-    gitlab-fog-azure-rm (2.5.1)
+    gitlab-fog-azure-rm (2.5.2)
       base64
       faraday (~> 2.0)
       faraday-follow_redirects (~> 0.5.0)
@@ -3052,7 +3052,7 @@ CHECKSUMS
   gitlab-duo-workflow-service-client (0.13)
   gitlab-email_handler (0.1.0)
   gitlab-experiment (2.0.0) sha256=05183dee7ddad1ef183de43c2c330e57a1457f679744c19c61f637e1135d3c76
-  gitlab-fog-azure-rm (2.5.1) sha256=87872a19bc2384ec038115f1047ea6df634b740d80de0e0fcfc8f29b5389fcb6
+  gitlab-fog-azure-rm (2.5.2) sha256=075f28509c83e717f39eaaea44c4c877ded5808e7b06150b37b99876ae50fbed
   gitlab-glaz (1.2.0) sha256=6dc4376c86dd56f660d81bcf75266424949c5a524e462abac514c35e7f4be7f1
   gitlab-glaz (1.2.0-aarch64-linux-gnu) sha256=3e2afad4dcedc1ca5c51afce5e7acaeca6262a92f7177e80333ceeb667faff85
   gitlab-glaz (1.2.0-arm64-darwin) sha256=8bd4267d7c4475e111062297018a387ceb556d7b2dce2408efce697ef98c1810

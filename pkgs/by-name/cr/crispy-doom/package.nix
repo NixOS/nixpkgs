@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crispy-doom";
-  version = "7.1";
+  version = "7.2";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "crispy-doom";
     tag = "crispy-doom-${finalAttrs.version}";
-    hash = "sha256-LJLqlPSOarmm5oqSLMilxNMJl4+uKukDl/b58NpZ8VI=";
+    hash = "sha256-OzhhiuU6IH2SqMFG8y2UeOeOvzTB4F3Uu2Vp+96VgFk=";
   };
 
   postPatch = ''

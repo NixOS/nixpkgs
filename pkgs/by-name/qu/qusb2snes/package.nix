@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qusb2snes";
-  version = "0.7.35";
+  version = "0.7.42";
 
   src = fetchFromGitHub {
     owner = "Skarsnik";
     repo = "QUsb2snes";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-521L4awWr4L2W12vAZUMheq4plXUXKYo4d3S6AfHgPA=";
+    hash = "sha256-rtxwHYT1EebmjpwSy4mBEkVTXgXt4N91DB/HSXrWK3c=";
   };
 
   nativeBuildInputs = [
