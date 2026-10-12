@@ -31,6 +31,7 @@
   nasm,
   nix-update-script,
   pkg-config,
+  python3,
   sndio,
   sonivox,
   speechd-minimal,
@@ -126,7 +127,15 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
   '';
 
-  doInstallCheck = true;
+  doCheck = true;
+  nativeCheckInputs = [ python3 ];
+  checkTarget = "test";
+
+  preCheck = ''
+    patchShebangs --build test/cxxtest/bin/cxxtestgen
+  '';
+
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckKeepEnvironment = "SDL_VIDEODRIVER";
 
