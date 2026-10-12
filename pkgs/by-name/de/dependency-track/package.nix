@@ -12,7 +12,7 @@
   nixosTests,
 }:
 let
-  version = "4.14.4";
+  version = "4.14.5";
 
   frontend = buildNpmPackage {
     pname = "dependency-track-frontend";
@@ -22,7 +22,7 @@ let
       owner = "DependencyTrack";
       repo = "frontend";
       tag = version;
-      hash = "sha256-Zt6KBqR3CstS/RqqJAVJaGkgpzf835UcblrE/8gzUWE=";
+      hash = "sha256-lvuupRL2MfYSEijZPirigE6RmlOmFGNFny1AbIPCfAg=";
     };
 
     installPhase = ''
@@ -30,7 +30,7 @@ let
       cp -R ./dist $out/
     '';
 
-    npmDepsHash = "sha256-NQY3bg3cwyIt/ing8RBOFNd3+02hzVwYcj0RXi350xk=";
+    npmDepsHash = "sha256-awQQ0Q4vLXc8SHUNJ+vb9YPxtvfcA/qGYY5+KIn5mFw=";
     forceGitDeps = true;
     makeCacheWritable = true;
 
@@ -47,7 +47,7 @@ maven.buildMavenPackage rec {
     owner = "DependencyTrack";
     repo = "dependency-track";
     tag = version;
-    hash = "sha256-tHtM5xqD7EG3CyZtaL6qsHEAa+5AstcIYRes+hIFyKk=";
+    hash = "sha256-1Ri1iEu6CSMFHFeZ7SNVtGWQk+bl6R40zTtTRGdR3jo=";
   };
 
   postPatch = ''
@@ -80,12 +80,13 @@ maven.buildMavenPackage rec {
   '';
 
   mvnJdk = jre_headless;
-  mvnHash = "sha256-903EuablhywF/2N8k8ISHOnSyZrSJ1LKC9Lx4USO0z8=";
+  mvnHash = "sha256-0nddzlzHjMnFPcxn5Ah2pIcahXTKvtFY3OhdQ9NVVqc=";
   manualMvnArtifacts = [
     "com.coderplus.maven.plugins:copy-rename-maven-plugin:1.0.1"
     # added to saticfy protobuf compiler plugin dependency resolving
     "jakarta.el:jakarta.el-api:5.0.1"
     "com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.19.1"
+    "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.2"
     "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.2"
     "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.4"
     "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1"
