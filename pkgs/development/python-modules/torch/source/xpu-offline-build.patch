@@ -1,0 +1,76 @@
+diff --git a/caffe2/CMakeLists.txt b/caffe2/CMakeLists.txt
+index e4a0454..b425885 100644
+--- a/caffe2/CMakeLists.txt
++++ b/caffe2/CMakeLists.txt
+@@ -1163,27 +1163,30 @@ if(USE_XPU)
+   set(TORCH_XPU_OPS_REPO_URL https://github.com/intel/torch-xpu-ops.git)
+   file(READ "${TORCH_ROOT}/third_party/xpu.txt" TORCH_XPU_OPS_COMMIT)
+   string(REGEX REPLACE "\n$" "" TORCH_XPU_OPS_COMMIT "${TORCH_XPU_OPS_COMMIT}")
+-  if(NOT EXISTS "${TORCH_XPU_OPS_DIR}/.git")
++  # Allow providing torch-xpu-ops sources out of band (e.g. for offline builds).
++  if(NOT EXISTS "${TORCH_XPU_OPS_DIR}/CMakeLists.txt")
++    if(NOT EXISTS "${TORCH_XPU_OPS_DIR}/.git")
++      execute_process(
++        COMMAND git clone --quiet ${TORCH_XPU_OPS_REPO_URL} ${TORCH_XPU_OPS_DIR}
++        RESULT_VARIABLE _exitcode)
++      if(NOT _exitcode EQUAL 0)
++        message(FATAL_ERROR "Fail to clone ${TORCH_XPU_OPS_REPO_URL}")
++      endif()
++    endif()
+     execute_process(
+-      COMMAND git clone --quiet ${TORCH_XPU_OPS_REPO_URL} ${TORCH_XPU_OPS_DIR}
++      COMMAND git fetch --quiet
++      WORKING_DIRECTORY ${TORCH_XPU_OPS_DIR}
+       RESULT_VARIABLE _exitcode)
+     if(NOT _exitcode EQUAL 0)
+-      message(FATAL_ERROR "Fail to clone ${TORCH_XPU_OPS_REPO_URL}")
++      message(FATAL_ERROR "Fail to fetch ${TORCH_XPU_OPS_REPO_URL}")
++    endif()
++    execute_process(
++      COMMAND git checkout --quiet ${TORCH_XPU_OPS_COMMIT}
++      WORKING_DIRECTORY ${TORCH_XPU_OPS_DIR}
++      RESULT_VARIABLE _exitcode)
++    if(NOT _exitcode EQUAL 0)
++      message(FATAL_ERROR "Fail to checkout ${TORCH_XPU_OPS_REPO_URL} to ${TORCH_XPU_OPS_COMMIT}")
+     endif()
+-  endif()
+-  execute_process(
+-    COMMAND git fetch --quiet
+-    WORKING_DIRECTORY ${TORCH_XPU_OPS_DIR}
+-    RESULT_VARIABLE _exitcode)
+-  if(NOT _exitcode EQUAL 0)
+-    message(FATAL_ERROR "Fail to fetch ${TORCH_XPU_OPS_REPO_URL}")
+-  endif()
+-  execute_process(
+-    COMMAND git checkout --quiet ${TORCH_XPU_OPS_COMMIT}
+-    WORKING_DIRECTORY ${TORCH_XPU_OPS_DIR}
+-    RESULT_VARIABLE _exitcode)
+-  if(NOT _exitcode EQUAL 0)
+-    message(FATAL_ERROR "Fail to checkout ${TORCH_XPU_OPS_REPO_URL} to ${TORCH_XPU_OPS_COMMIT}")
+   endif()
+ 
+   set(TORCH_XPU_OPS_INCLUDE_DIRS
+diff --git a/cmake/public/xpu.cmake b/cmake/public/xpu.cmake
+index ad64b55..eb17707 100644
+--- a/cmake/public/xpu.cmake
++++ b/cmake/public/xpu.cmake
+@@ -65,14 +65,13 @@ string(APPEND XPU_HOST_CXX_FLAGS " -DUSE_XPU")
+ string(APPEND XPU_HOST_CXX_FLAGS " -DSYCL_COMPILER_VERSION=${SYCL_COMPILER_VERSION}")
+ 
+ if(DEFINED ENV{XPU_ENABLE_KINETO})
+-  set(XPU_ENABLE_KINETO TRUE)
+-else()
+-  set(XPU_ENABLE_KINETO FALSE)
+-endif()
+-
+-if(WIN32)
++  # Honour an explicit setting, e.g. XPU_ENABLE_KINETO=0 to build without PTI.
++  set(XPU_ENABLE_KINETO $ENV{XPU_ENABLE_KINETO})
++elseif(WIN32)
+   if(${SYCL_COMPILER_VERSION} GREATER_EQUAL 20250101)
+     set(XPU_ENABLE_KINETO TRUE)
++  else()
++    set(XPU_ENABLE_KINETO FALSE)
+   endif()
+ else()
+   set(XPU_ENABLE_KINETO TRUE)

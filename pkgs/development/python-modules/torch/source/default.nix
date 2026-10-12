@@ -105,6 +105,13 @@
   vulkan-headers,
   vulkan-loader,
   shaderc,
+
+  # Intel GPU (XPU) dependencies
+  xpuSupport ? false,
+  intel-llvm,
+  intel-compute-runtime,
+  level-zero,
+  opencl-headers,
 }:
 
 let
@@ -174,8 +181,30 @@ let
       + strings.concatStringsSep ", " unsupported
     ) supported;
 
+  # https://github.com/intel/torch-xpu-ops/blob/main/cmake/BuildFlags.cmake (AOT_TARGETS)
+  defaultXpuTargets = [
+    "pvc"
+    "bmg"
+    "dg2"
+    "arl-h"
+    "mtl-h"
+    "lnl-m"
+    "ptl-h"
+    "ptl-u"
+  ];
+
+  # SYCL-TLA (flash attention) kernels are only built for, and only run on, these targets
+  xpuSyclTlaSupport =
+    lib.any (t: lib.elem t (if gpuTargets != [ ] then gpuTargets else defaultXpuTargets))
+      [
+        "pvc"
+        "bmg"
+        "cri"
+      ];
+
   # Create the gpuTargetString.
-  gpuTargetString = strings.concatStringsSep ";" (
+  # TORCH_XPU_ARCH_LIST is comma-separated, the CUDA/ROCm lists are semicolon-separated.
+  gpuTargetString = strings.concatStringsSep (if xpuSupport then "," else ";") (
     if gpuTargets != [ ] then
       # If gpuTargets is specified, it always takes priority.
       gpuTargets
@@ -189,9 +218,57 @@ let
         "gfx1010"
         "gfx1012"
       ] rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
+    else if xpuSupport then
+      defaultXpuTargets
     else
       throw "No GPU targets specified"
   );
+
+  # ATen XPU kernels, normally `git clone`d during the build.
+  # Must match the commit in third_party/xpu.txt (checked in postPatch).
+  torch-xpu-ops-src = fetchFromGitHub {
+    owner = "intel";
+    repo = "torch-xpu-ops";
+    rev = "bc294243807debb350dca694049ba7a806dfdceb";
+    hash = "sha256-EHnjzGneWWM+TqJsExaga/jBleUlaXrlwscsfOV1Teo=";
+  };
+
+  # oneDNN built with the SYCL GPU runtime, normally `git clone`d during the build.
+  # See GIT_TAG under USE_XPU in cmake/Modules/FindMKLDNN.cmake.
+  onednn-xpu-src = fetchFromGitHub {
+    owner = "uxlfoundation";
+    repo = "oneDNN";
+    tag = "v3.12";
+    hash = "sha256-t5+DF4/qgEYQpTY8Qox0BTfpykfs5kFqYy6HrEJaVu0=";
+  };
+
+  # See GIT_TAG in cmake/SYCLTLA.cmake of torch-xpu-ops.
+  sycl-tla-src = fetchFromGitHub {
+    owner = "intel";
+    repo = "sycl-tla";
+    tag = "v0.9";
+    hash = "sha256-1SoigLIqRCdaVmuY7bHtd6hT8dBtH+brd6Vw1zssEuM=";
+  };
+
+  # Host compiler for SYCL sources (-fsycl-host-compiler). When the cc-wrapped clang
+  # calls the cc-wrapped g++, both wrappers share a suffixSalt, so g++ would inherit
+  # clang's already-expanded flags (--gcc-toolchain, -nostdlibinc, -cxx-isystem, ...).
+  # Reset that state so the g++ wrapper recomputes its flags from NIX_CFLAGS_COMPILE.
+  sycl-host-cxx = writeShellScript "sycl-host-c++" ''
+    for var in NIX_CC_WRAPPER_FLAGS_SET NIX_CFLAGS_COMPILE NIX_CFLAGS_COMPILE_BEFORE NIX_CFLAGS_LINK NIX_CXXSTDLIB_COMPILE NIX_CXXSTDLIB_LINK; do
+      unset "''${var}_${stdenv.cc.suffixSalt}"
+    done
+    exec ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++ "$@"
+  '';
+
+  # PyTorch's open-source SYCL toolchain support looks for `dpclang`/`dpclang++`.
+  # intel-llvm ships those names, but only as unwrapped binaries; point them at the
+  # cc-wrapped clang so that libc/libstdc++ headers and the SYCL headers are found.
+  dpclang-wrapped = runCommand "dpclang-wrapped" { } ''
+    mkdir -p $out/bin
+    ln -s ${intel-llvm}/bin/clang $out/bin/dpclang
+    ln -s ${intel-llvm}/bin/clang++ $out/bin/dpclang++
+  '';
 
   # Use vendored CK as header only dep if rocmPackages' CK doesn't properly support targets
   vendorComposableKernel = rocmSupport && !rocmPackages.composable_kernel.anyMfmaTarget;
@@ -246,6 +323,9 @@ let
 
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
+    "XPU is mutually exclusive with CUDA and ROCm" = xpuSupport && (cudaSupport || rocmSupport);
+    "XPU is only supported on x86_64-linux" =
+      xpuSupport && !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux);
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
     "Unsupported CUDA version" =
       cudaSupport
@@ -342,6 +422,11 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # [ROCm] Make AOTriton bundling optional via BUILD_AOTRITON_INTO_WHEEL flag
     # https://github.com/pytorch/pytorch/pull/182030
     ./no-bundle-aotriton.patch
+  ]
+  ++ lib.optionals xpuSupport [
+    # Skip the torch-xpu-ops `git clone` when its sources are already present,
+    # and let XPU_ENABLE_KINETO=0 disable the PTI-based profiler backend.
+    ./xpu-offline-build.patch
   ];
 
   postPatch = ''
@@ -399,6 +484,44 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
   ''
+  + lib.optionalString xpuSupport ''
+    if [[ "$(< third_party/xpu.txt)" != "${torch-xpu-ops-src.rev}" ]]; then
+      echo "torch-xpu-ops-src.rev does not match third_party/xpu.txt ($(< third_party/xpu.txt))" >&2
+      exit 1
+    fi
+    cp -r --no-preserve=mode ${torch-xpu-ops-src} third_party/torch-xpu-ops
+
+    substituteInPlace third_party/torch-xpu-ops/cmake/SYCLTLA.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/intel/sycl-tla.git" "SOURCE_DIR ${sycl-tla-src}" \
+      --replace-fail "GIT_TAG        v0.9" "" \
+      --replace-fail "GIT_SHALLOW    OFF" ""
+
+    substituteInPlace cmake/Modules/FindMKLDNN.cmake \
+      --replace-fail "GIT_REPOSITORY https://github.com/uxlfoundation/oneDNN" "SOURCE_DIR ${onednn-xpu-src}" \
+      --replace-fail "GIT_TAG v3.12" "" \
+      --replace-fail 'set(DNNL_HOST_COMPILER "g++")' 'set(DNNL_HOST_COMPILER "${sycl-host-cxx}")'
+
+    substituteInPlace third_party/torch-xpu-ops/cmake/Modules/FindSYCL.cmake \
+      --replace-fail 'set(SYCL_HOST_COMPILER "''${CMAKE_CXX_COMPILER}"' 'set(SYCL_HOST_COMPILER "${sycl-host-cxx}"'
+
+    # The cc-wrapper treats `-fsycl-link` as a link and adds `-Wl,` flags, which the
+    # SYCL offloading driver counts as extra inputs ("cannot specify -o when
+    # generating multiple output files"). Device-link with the unwrapped compiler
+    # instead. (--offload-new-driver would accept the flags, but its
+    # clang-linker-wrapper ignores --offload-compress for SYCL and embeds the device
+    # images uncompressed, ~3.4GB for arl-h alone.)
+    substituteInPlace third_party/torch-xpu-ops/cmake/Modules/FindSYCL.cmake \
+      --replace-fail 'COMMAND ''${CMAKE_SYCL_COMPILER_LAUNCHER} ''${SYCL_EXECUTABLE}' \
+                     'COMMAND ''${CMAKE_SYCL_COMPILER_LAUNCHER} ${intel-llvm}/bin/clang++'
+
+    # Build AOT images only, without the spir64 JIT fallback.
+    substituteInPlace third_party/torch-xpu-ops/cmake/BuildFlags.cmake \
+      --replace-fail '-fsycl-targets=spir64_gen,spir64)' '-fsycl-targets=spir64_gen)'
+  ''
+  + lib.optionalString (xpuSupport && !xpuSyclTlaSupport) ''
+    substituteInPlace third_party/torch-xpu-ops/CMakeLists.txt \
+      --replace-fail 'set(USE_SYCLTLA ON)' 'set(USE_SYCLTLA OFF)'
+  ''
   # Remove PyTorch's FindCUDAToolkit.cmake and use CMake's default.
   # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
   # newer architectures (sm_90a). We do want to delete vendored patches, but have to keep them
@@ -442,7 +565,13 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   # causes possible redefinition of _FORTIFY_SOURCE
-  hardeningDisable = [ "fortify3" ];
+  hardeningDisable = [
+    "fortify3"
+  ]
+  # The SYCL headers trip -Werror=format-security when compiled by the g++ host compiler
+  # (sycl/ext/oneapi/experimental/builtins.hpp); torch-xpu-ops strips -Werror=format
+  # for those sources, but cc-wrapper's hardening flags add it back.
+  ++ lib.optionals xpuSupport [ "format" ];
 
   env = {
     BUILD_NAMEDTENSOR = setBool true;
@@ -509,6 +638,18 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   }
   // lib.optionalAttrs vulkanSupport {
     VULKAN_SDK = shaderc.bin;
+  }
+  // lib.optionalAttrs xpuSupport {
+    USE_XPU = setBool true;
+    # Use the open-source DPC++ compiler (intel-llvm) instead of oneAPI's icx
+    XPU_SYCL_COMPILER = "dpclang";
+    TORCH_XPU_ARCH_LIST = gpuTargetString;
+    # oneMKL's SYCL interfaces are only available in the proprietary oneAPI MKL
+    USE_ONEMKL_XPU = setBool false;
+    # oneCCL is not packaged
+    USE_XCCL = setBool false;
+    # Intel PTI (pti-gpu) is not packaged
+    XPU_ENABLE_KINETO = setBool false;
   }
   // lib.optionalAttrs rocmSupport {
     AOTRITON_INSTALLED_PREFIX = "${rocmPackages.aotriton}";
@@ -577,7 +718,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ]
   )
   ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
-  ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
+  ++ lib.optionals rocmSupport [ rocmtoolkit_joined ]
+  ++ lib.optionals xpuSupport [
+    dpclang-wrapped
+    # ocloc, for ahead-of-time compilation of the SYCL kernels
+    intel-compute-runtime
+  ];
 
   buildInputs = [
     blas
@@ -625,6 +771,12 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   ++ lib.optionals rocmSupport [
     rocmtoolkit_joined
     rocmPackages.clr # Added separately so setup hook applies
+  ]
+  ++ lib.optionals xpuSupport [
+    intel-llvm # libsycl and sycl-dpcpp-*.pc
+    level-zero
+    # The SYCL headers include <CL/cl.h>, also in TUs compiled by g++
+    opencl-headers
   ];
 
   dependencies = [
@@ -768,6 +920,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       cudaSupport
       cudaPackages
       rocmSupport
+      xpuSupport
       rocmPackages
       unroll-src
       gpuTargetString
@@ -799,7 +952,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       tscholak
     ]; # tscholak esp. for darwin-related builds
     platforms =
-      lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
+      lib.platforms.linux
+      ++ lib.optionals (!cudaSupport && !rocmSupport && !xpuSupport) lib.platforms.darwin;
     broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
   };
 })
