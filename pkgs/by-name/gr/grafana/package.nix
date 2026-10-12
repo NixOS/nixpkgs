@@ -79,7 +79,7 @@ buildGoModule (finalAttrs: {
     moreutils
     removeReferencesTo
     # required to run old node-gyp
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.distutils ]))
+    (python3.withPackages (ps: [ ps.distutils ]))
     faketty
     nodejs
     yarn-berry_4
