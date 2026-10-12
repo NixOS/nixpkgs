@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildNpmPackage,
   nodejs_22,
   nix-update-script,
@@ -25,6 +26,18 @@ buildNpmPackage (finalAttrs: {
     };
 
   nodejs = nodejs_22;
+
+  patches = [
+    # Escape track titles and external URLs on the item details page.
+    # https://github.com/jellyfin/jellyfin-web/pull/8533
+    (fetchpatch {
+      url = "https://github.com/jellyfin/jellyfin-web/commit/4cffcb7d34d3707caaad68d5a0acad0c39287971.patch";
+      # src/apps/legacy/ -> src/
+      stripLen = 4;
+      extraPrefix = "src/";
+      hash = "sha256-tLZVsnKNFznKLM7K0R2oJzZeBun3g47Fbjqp0NNtx9E=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace webpack.common.js \
