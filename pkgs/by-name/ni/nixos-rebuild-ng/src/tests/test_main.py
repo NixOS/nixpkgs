@@ -467,6 +467,159 @@ def test_execute_nix_build_vm_with_bootloader_and_specialisation(
         ),
     ]
 
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_execute_nix_build_image(mock_run: Mock, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-instantiate" and "--eval" in args:
+            return CompletedProcess(
+                [],
+                0,
+                '"nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd"',
+            )
+        elif args[0] == "nix-build":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build-image",
+            "--image-variant",
+            "azure",
+            "--no-flake",
+        ]
+    )
+
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-instantiate",
+                "--eval",
+                "--strict",
+                "--json",
+                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  builtins.attrNames set.config.system.build.images\n"
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-build",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "config.system.build.images.azure"
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-instantiate",
+                "--eval",
+                "--strict",
+                "--json",
+                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  set.config.system.build.images.azure.passthru.filePath\n"
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_execute_nix_build_image_and_specialisation(mock_run: Mock, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-instantiate" and "--eval" in args:
+            return CompletedProcess(
+                [],
+                0,
+                '"nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd"',
+            )
+        elif args[0] == "nix-build":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build-image",
+            "--image-variant",
+            "azure",
+            "--no-flake",
+            "--specialisation",
+            "custom-specialisation",
+        ]
+    )
+
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-instantiate",
+                "--eval",
+                "--strict",
+                "--json",
+                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  builtins.attrNames set.config.specialisation.custom-specialisation.configuration.system.build.images\n"
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-build",
+                "<nixpkgs/nixos>",
+                "--attr",
+                "config.specialisation.custom-specialisation.configuration.system.build.images.azure"
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix-instantiate",
+                "--eval",
+                "--strict",
+                "--json",
+                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  set.config.specialisation.custom-specialisation.configuration.system.build.images.azure.passthru.filePath\n"
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
@@ -544,6 +697,91 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
                 "eval",
                 "--json",
                 '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure.passthru.filePath',
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+    ]
+
+@patch.dict(os.environ, {}, clear=True)
+@patch("subprocess.run", autospec=True)
+def test_execute_nix_build_image_flake_and_specialisation(mock_run: Mock, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix" and "eval" in args:
+            return CompletedProcess(
+                [],
+                0,
+                '"nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd"',
+            )
+        elif args[0] == "nix":
+            return CompletedProcess([], 0, str(config_path))
+        elif args[0] == "nix-instantiate":
+            return CompletedProcess([], 1)
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        [
+            "nixos-rebuild",
+            "build-image",
+            "--image-variant",
+            "azure",
+            "--flake",
+            "/path/to/config#hostname",
+            "--specialisation",
+            "custom-specialisation",
+        ]
+    )
+
+    assert mock_run.mock_calls == [
+        call(
+            ["nix-instantiate", "--find-file", "nixos-system"],
+            check=False,
+            capture_output=True,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--json",
+                '/path/to/config#nixosConfigurations."hostname".config.specialisation.custom-specialisation.configuration.system.build.images',
+                "--apply",
+                "builtins.attrNames",
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "build",
+                "--print-out-paths",
+                '/path/to/config#nixosConfigurations."hostname".config.specialisation.custom-specialisation.configuration.system.build.images.azure',
+            ],
+            check=True,
+            stdout=PIPE,
+            **DEFAULT_RUN_KWARGS,
+        ),
+        call(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "eval",
+                "--json",
+                '/path/to/config#nixosConfigurations."hostname".config.specialisation.custom-specialisation.configuration.system.build.images.azure.passthru.filePath',
             ],
             check=True,
             stdout=PIPE,

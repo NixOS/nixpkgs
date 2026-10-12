@@ -23,7 +23,7 @@
   libinput,
   libevdev,
   features ? [ ],
-  systemd,
+  systemdLibs,
   dbus,
 }:
 
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     hicolor-icon-theme
     gsettings-desktop-schemas
     libxkbcommon
-    systemd
+    systemdLibs
     dbus
   ]
   ++ lib.optionals (hasFeature "volume") [ libpulseaudio ]

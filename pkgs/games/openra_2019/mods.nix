@@ -315,7 +315,7 @@ in
     version = "431.git.128dc53";
     title = "Red Alert Unplugged";
     meta.description = "Re-imagination of the original Command & Conquer: Red Alert game";
-    meta.homepage = "http://redalertunplugged.com/";
+    meta.homepage = "https://github.com/RAunplugged/uRA";
     src = fetchFromGitHub {
       owner = "RAunplugged";
       repo = "uRA";

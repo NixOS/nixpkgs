@@ -35,7 +35,7 @@
   libpng,
   libnotify,
   libgcrypt,
-  systemd,
+  systemdLibs,
   fontconfig,
   dbus,
   expat,
@@ -100,7 +100,7 @@ let
     pango
     pciutils
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libice
     libsm
     libx11

@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Chemical modelling, analysis and structure drawing program";
-    homepage = "https://chemaxon.com/products/marvin";
+    homepage = "https://www.certara.com/marvin/";
     maintainers = with lib.maintainers; [ fusion809 ];
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;

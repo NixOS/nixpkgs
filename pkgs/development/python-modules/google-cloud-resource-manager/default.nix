@@ -14,13 +14,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-resource-manager";
-  version = "1.18.0";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_resource_manager";
     inherit (finalAttrs) version;
-    hash = "sha256-22ifgAoUxm0EEZan+7i7iq6NyH8owpKeEBpex2axVRI=";
+    hash = "sha256-aOXSjtkJGrGt8Ep3h2sJ1VPpekQPungWP2zitf5fJVg=";
   };
 
   build-system = [ setuptools ];

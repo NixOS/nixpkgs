@@ -23,7 +23,7 @@
   dbus,
   cups,
   libexif,
-  systemd,
+  systemdLibs,
   libva,
   libGL,
   freetype,
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
     gtk3
     gdk-pixbuf
     libexif
-    systemd
+    systemdLibs
     libva
     qt6.qtbase
     qt6.qtwayland

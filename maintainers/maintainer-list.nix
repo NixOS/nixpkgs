@@ -401,6 +401,11 @@
     github = "a-camarillo";
     githubId = 58638902;
   };
+  a-hassanin = {
+    github = "a-hassanin";
+    name = "Ahmed Hassanin";
+    githubId = 112945643;
+  };
   a-jay98 = {
     email = "ali@jamadi.me";
     github = "A-jay98";
@@ -9425,6 +9430,11 @@
     githubId = 84565547;
     name = "fernvenue";
   };
+  ferris-qq = {
+    name = "heki";
+    github = "ferris-qq";
+    githubId = 186204649;
+  };
   feyorsh = {
     email = "george@feyor.sh";
     github = "Feyorsh";
@@ -10917,10 +10927,10 @@
   };
   grimmauld = {
     name = "Sören Bender";
-    email = "soeren@benjos.de";
-    github = "LordGrimmauld";
+    email = "grimmauld@grimmauld.de";
+    github = "GrimmTheShrimp";
     githubId = 49513131;
-    matrix = "@grimmauld:grimmauld.de";
+    matrix = "@grimmauld:m.grimmauld.de";
   };
   grindhold = {
     name = "grindhold";
@@ -22091,6 +22101,11 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onaips = {
+    github = "oNaiPs";
+    githubId = 374130;
+    name = "José Luis Pereira";
+  };
   onatustun = {
     email = "contact@onatustun.com";
     name = "Onat Ustun";
@@ -22384,6 +22399,13 @@
     github = "ozkutuk";
     githubId = 5948762;
     name = "Berk Özkütük";
+  };
+  ozozka = {
+    email = "ozkaya.ogzhn@gmail.com";
+    matrix = "@oguzhanozkaya:matrix.org";
+    github = "ozozka";
+    githubId = 53692091;
+    name = "Oğuzhan Özkaya";
   };
   ozturkkl = {
     email = "97kemalozturk@gmail.com";

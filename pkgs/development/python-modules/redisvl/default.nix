@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python client library and CLI for using Redis as a vector database";
-    homepage = " https://redisvl.com";
+    homepage = "https://redisvl.com";
     changelog = "https://github.com/redis/redis-vl-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "rvl";

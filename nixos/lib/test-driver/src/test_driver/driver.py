@@ -9,7 +9,7 @@ import tempfile
 import threading
 import traceback
 import warnings
-from collections.abc import Callable, Generator, Iterator
+from collections.abc import Callable, Generator
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
 from pathlib import Path
@@ -314,7 +314,7 @@ class Driver:
 
     def test_symbols(self) -> dict[str, Any]:
         @contextmanager
-        def subtest(name: str) -> Iterator[None]:
+        def subtest(name: str) -> Generator[None]:
             return self.subtest(name)
 
         general_symbols = dict(
