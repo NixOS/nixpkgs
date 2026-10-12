@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jupytext";
-  version = "1.19.5";
+  version = "1.19.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwouts";
     repo = "jupytext";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+rNSp0CKW0ZTj8szwSJniCmBYuzGatVWo097jFWBkmI=";
+    hash = "sha256-Zu06i29qOW6cRu966Q3D7uGoLyO0yQEetzrLOrwOmKc=";
   };
 
   postPatch = ''
@@ -60,7 +60,7 @@ buildPythonPackage (finalAttrs: {
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     sourceRoot = "${finalAttrs.src.name}/jupyterlab";
-    hash = "sha256-jyo7hbCYntZtpecK8cCoDOSgWT4xA+MaJu+e3N+aHUU=";
+    hash = "sha256-YXf4GJhftRdGJTtohAz/S2j0y1pufJGVTeFCvW3ZLc4=";
   };
 
   env.HATCH_BUILD_HOOKS_ENABLE = true;
