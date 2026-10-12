@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prototext";
-  version = "0.3.0";
+  version = "0.3.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "douzebis";
     repo = "prototools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ka/Pg/YMrRPYaUO4M1fdevLSPyZ+8XhWYa2EQu3Xq6o=";
+    hash = "sha256-wNeO5GUz0XkUpdiIGp4xWXf7Ol2pmfnqspCbeTAKmKs=";
   };
 
-  cargoHash = "sha256-5DgWKXYzrEB/3l2uDs2vc/VwRMlZ5trwJhor4ZnHEaw=";
+  cargoHash = "sha256-4F/ZRjvaFPTJALcRZ0j8bMwIRAaTTghf4fCbx2+6z3M=";
 
   cargoBuildFlags = [
     "-p"
