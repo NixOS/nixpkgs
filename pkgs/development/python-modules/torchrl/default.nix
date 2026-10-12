@@ -78,7 +78,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchrl";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ buildPythonPackage (finalAttrs: {
     owner = "pytorch";
     repo = "rl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ATfvAobn9MjY+PHY7xY+iPztyKBZ5YpGXL1ZCzgvQXc=";
+    hash = "sha256-axHSuYjCHmV2MR/bpqDiiJZ/c+/0POIz4rKmA4RVsT0=";
   };
 
   postPatch = ''
