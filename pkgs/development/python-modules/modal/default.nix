@@ -1,33 +1,26 @@
 {
   lib,
-  aiohttp,
   buildPythonPackage,
-  cbor2,
-  certifi,
-  click,
-  fastapi,
-  fetchFromGitHub,
-  flaky,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
   grpcio-tools,
   grpclib,
-  httpx,
   installAgentSkills,
   invoke,
   ipython,
-  mypy,
   mypy-protobuf,
-  protobuf,
-  pyjwt,
-  pytest-asyncio,
-  pytest-env,
-  pytest-markdown-docs,
-  pytest-timeout,
-  pytestCheckHook,
-  python-dotenv,
-  rich,
   ruff,
-  setuptools,
-  six,
+
+  # dependencies
+  aiohttp,
+  cbor2,
+  certifi,
+  click,
+  protobuf,
+  rich,
   synchronicity,
   toml,
   typer,
@@ -35,50 +28,67 @@
   types-toml,
   typing-extensions,
   watchfiles,
+
+  # tests
+  fastapi,
+  fetchFromGitHub,
+  flaky,
+  httpx,
+  mypy,
+  pyjwt,
+  pytest-asyncio,
+  pytest-env,
+  pytest-markdown-docs,
+  pytest-timeout,
+  pytestCheckHook,
+  python-dotenv,
+  six,
   versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "modal";
-  version = "1.5.5";
+  version = "1.6.1";
   pyproject = true;
-
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "modal-labs";
     repo = "modal-client";
     tag = "py/v${finalAttrs.version}";
-    hash = "sha256-KHk7NWfcp+xN2VHU/k6YLxJRKGUeJR5erXC7DBDgSYo=";
+    hash = "sha256-bCDWVgD61eUR2KQLnwaLsAJWbMhLeMFOGuceFOOQG+M=";
   };
   sourceRoot = "${finalAttrs.src.name}/py";
 
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail 'setuptools~=77.0.3' setuptools
-    patchShebangs protoc_plugin/plugin.py
-    inv protoc
-    inv type-stubs
-  '';
+  postPatch =
+    # On Python 3.14 (deferred annotations), `list` resolves to the `_Sandbox.list` staticmethod,
+    # which breaks `inv type-stubs`
+    ''
+      substituteInPlace modal/sandbox.py \
+        --replace-fail \
+          "-> list[tuple[str, str]]:" \
+          "-> builtins.list[tuple[str, str]]:"
+    ''
+    + ''
+      patchShebangs protoc_plugin/plugin.py
+      inv protoc
+      inv type-stubs
+    '';
 
   build-system = [
     setuptools
   ];
 
   nativeBuildInputs = [
+    grpcio-tools
+    grpclib
     installAgentSkills
     invoke
     ipython
-    grpcio-tools
-    grpclib
-    synchronicity
     mypy-protobuf
     ruff
   ]
   ++ synchronicity.optional-dependencies.compile;
-
-  pythonRelaxDeps = [
-    "protobuf"
-  ];
 
   dependencies = [
     aiohttp
@@ -155,7 +165,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python client library for Modal (serverless compute provider)";
     homepage = "https://github.com/modal-labs/modal-client";
-    changelog = "https://github.com/modal-labs/modal-client/blob/${finalAttrs.src.tag}/py/CHANGELOG.md";
+    changelog = "https://github.com/modal-labs/modal-client/blob/${finalAttrs.src.rev}/py/CHANGELOG.md";
     mainProgram = "modal";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ Kharacternyk ];
