@@ -49,6 +49,8 @@
     propagatedBuildInputs = with python3Packages; [
       jinja2
     ];
+    # pinned to jinja2~=2.10, but only uses jinja2.Template, which works with jinja2 3
+    pythonRelaxDeps = [ "jinja2" ];
     meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
