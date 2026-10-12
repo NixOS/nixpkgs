@@ -24,6 +24,7 @@
   pkg-config,
   python3,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   # tests.mpd
   meson,
   mpd,
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkgconf
+    versionCheckHook
   ]
   ++ lib.optionals (!embedSamurai) [ samurai ]
   ++ lib.optionals buildDocs [
@@ -159,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
+  versionCheckProgramArg = [ "version" ];
+  doInstallCheck = true;
+
   checkPhase = ''
     runHook preCheck
 
@@ -221,7 +226,9 @@ stdenv.mkDerivation (finalAttrs: {
       mesonToMuon = inputs: (lib.subtractLists [ meson ninja ] inputs) ++ [ muonStandalone ];
     in
     mpd.overrideAttrs (prevAttrs: {
-      nativeBuildInputs = mesonToMuon prevAttrs.nativeBuildInputs;
+      nativeBuildInputs = mesonToMuon (prevAttrs.nativeBuildInputs ++ [ versionCheckHook ]);
+
+      doInstallCheck = true;
 
       # muon needs the meson attrs
       muonAutoFeatures = prevAttrs.mesonAutoFeatures;
