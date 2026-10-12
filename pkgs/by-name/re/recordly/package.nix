@@ -120,7 +120,7 @@ buildNpmPackage (finalAttrs: {
       point Recordly at a whisper-cli executable under Caption settings.
     '';
     homepage = "https://recordly.dev";
-    changelog = "https://github.com/webadderallorg/Recordly/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/webadderallorg/Recordly/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     mainProgram = "recordly";
     maintainers = with lib.maintainers; [ bittner ];
