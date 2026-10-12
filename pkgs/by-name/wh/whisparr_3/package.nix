@@ -6,7 +6,7 @@
   lib,
   nix-update-script,
   nixosTests,
-  nodejs_24,
+  nodejs-slim_24,
   servarr-ffmpeg,
   stdenvNoCC,
   withFFmpeg ? true,
@@ -102,7 +102,7 @@ buildDotnetModule (finalAttrs: {
       strictDeps = true;
 
       nativeBuildInputs = [
-        nodejs_24
+        nodejs-slim_24
         yarnBuildHook
         yarnConfigHook
       ];
