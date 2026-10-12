@@ -465,7 +465,6 @@ in
         in
         mandatoryPackages ++ removeExcluded optionalPackages;
 
-      # D-Bus service files are only picked up from registered packages.
       services.dbus.packages = [
         pkgs.gnome-shell
       ]
@@ -505,7 +504,6 @@ in
         pkgs.yelp
       ];
 
-      # D-Bus service files are only picked up from registered packages.
       services.dbus.packages = removeExcluded [
         pkgs.baobab
         pkgs.decibels
@@ -584,7 +582,6 @@ in
         pkgs.tali
       ];
 
-      # D-Bus service files are only picked up from registered packages.
       services.dbus.packages = removeExcluded [
         pkgs.five-or-more
         pkgs.four-in-a-row

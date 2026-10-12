@@ -215,8 +215,6 @@ in
       lib.optionals (cfg.platformTheme != null) (platformPackages.${cfg.platformTheme})
       ++ lib.optionals (cfg.style != null) (stylePackages.${cfg.style});
 
-    # `kdePackages.kio` above ships D-Bus service files.  The D-Bus daemons do
-    # not look at the system profile, so it has to be registered explicitly.
     services.dbus.packages = lib.optionals (cfg.platformTheme == "kde") [
       pkgs.kdePackages.kio
     ];

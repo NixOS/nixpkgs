@@ -145,9 +145,6 @@ in
         lomiri-download-manager
       ];
 
-      # Packages from above that ship D-Bus service files.  The D-Bus daemons
-      # do not look at the system profile, so they have to be registered
-      # explicitly.
       services.dbus.packages = [
         pkgs.ubports-click
       ]

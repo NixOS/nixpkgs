@@ -224,8 +224,6 @@ in
       ++ lib.optional config.services.samba.enable kdenetwork-filesharing
       ++ lib.optional config.services.flatpak.enable flatpak-kcm;
 
-    # Packages from above that ship D-Bus service files.  The D-Bus daemons do
-    # not look at the system profile, so they have to be registered explicitly.
     services.dbus.packages =
       with kdePackages;
       [

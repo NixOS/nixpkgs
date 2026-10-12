@@ -327,8 +327,6 @@ in
 
     environment.systemPackages = [ pkgs.xpra ];
 
-    # `xpra` ships D-Bus configuration files.  The D-Bus daemons do not look at
-    # the system profile, so it has to be registered explicitly.
     services.dbus.packages = [ pkgs.xpra ];
 
     services.pulseaudio.enable = mkDefault cfg.pulseaudio;
