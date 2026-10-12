@@ -1,19 +1,19 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   glib,
 }:
 
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "gnome-shell-extension-impatience";
-  version = "0.5.3-unstable-2025-10-06";
+  version = "0.5.3-unstable-2026-03-11";
 
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gnome-shell-impatience";
-    rev = "593f9cd52ffd7875265e7cfa2d03e0309fec55b1"; # shows gnome 49 support
-    hash = "sha256-Slcd47DX1Gdl5H1kkrn19s95eDpftyS2Wn25UpYCjYQ=";
+    rev = "f3f145d33d88a46abcfd77f84665bc64b8c0e01c"; # shows gnome 50 support
+    hash = "sha256-3ejg1UZcFDakwsx4RCHqLhUtZypP/x/8pbkoQDurdlg=";
   };
 
   buildInputs = [
