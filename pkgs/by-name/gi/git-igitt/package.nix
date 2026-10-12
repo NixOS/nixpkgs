@@ -42,7 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/git-bahn/git-igitt";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ lib.maintainers.pinage404 ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      pinage404
+    ];
     mainProgram = "git-igitt";
   };
 })
