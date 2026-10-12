@@ -26,6 +26,10 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace tox.ini \
       --replace "--mypy" ""
+    # For python3.14 compatability
+    substituteInPlace aiokef/aiokef.py \
+      --replace-fail  'self._loop = loop or asyncio.get_event_loop()' \
+                      'self._loop = loop if loop is not None else asyncio.new_event_loop()'
   '';
 
   dependencies = [

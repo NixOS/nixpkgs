@@ -5,7 +5,7 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "git-of-theseus";
-  version = "0-unstable-2023-11-25";
+  version = "0.2.0";
   pyproject = true;
   __structuredAttrs = true;
 
