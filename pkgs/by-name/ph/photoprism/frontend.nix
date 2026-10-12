@@ -10,9 +10,16 @@ buildNpmPackage {
   inherit src version;
   pname = "photoprism-frontend";
 
-  npmDepsHash = "sha256-guU5vVhYo5Cv+KpNyAVNmJ1kcjSkPkAz+Be4hGe4mpM=";
+  npmDepsHash = "sha256-iU81WODu0RCoCZg8Ds/R5j0Dxa9YFzBtKCvnow+bcyE=";
 
   npmWorkspace = "frontend";
+
+  preBuild = ''
+    (
+      cd frontend
+      npm rm sass-embedded
+    )
+  '';
 
   installPhase = ''
     runHook preInstall
