@@ -180,7 +180,7 @@ stdenv.mkDerivation {
       names of other divers, and lets users rate dives and provide additional notes.
     '';
     homepage = "https://subsurface-divelog.org";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ mguentner ];
     platforms = lib.platforms.all;
   };
