@@ -39,7 +39,7 @@
     stdenvNoCC.mkDerivation {
       name = "device-tree-overlays";
       nativeBuildInputs = [
-        (python3.pythonOnBuildForHost.withPackages (ps: [ ps.libfdt ]))
+        (python3.withPackages (ps: [ ps.libfdt ]))
       ];
       buildCommand = ''
         python ${./apply_overlays.py} --source ${base} --destination $out --overlays ${writers.writeJSON "overlays.json" overlays'}
