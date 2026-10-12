@@ -258,6 +258,9 @@ stdenv.mkDerivation (finalAttrs: {
     sources = lib.importJSON ./source.json;
     source = finalAttrs.passthru.sources.${system} or (throw "chatgpt is not supported on ${system}");
     launcher = callPackage ./launcher.nix { };
+    tests = lib.optionalAttrs isLinux {
+      launcher = callPackage ./test-launcher.nix { inherit (finalAttrs.passthru) launcher; };
+    };
   };
 
   meta = {

@@ -38,13 +38,32 @@ writeShellApplication {
       fi
     done
 
-    if [[ ! -f "$resourcesPath/.complete" ]]; then
+    resourcesAreComplete() {
+      for resource in codex codex-code-mode-host cua_node native rg tectonic; do
+        [[ "$resourcesPath/$resource" -ef "$CHATGPT_RESOURCES_SOURCE/$resource" ]] || return 1
+      done
+      # Check presence, not contents: Electron legitimately edits manifests.
+      while IFS= read -r -d "" pluginFile; do
+        [[ -f "$resourcesPath/plugins/$pluginFile" ]] || return 1
+      done < <(find "$CHATGPT_RESOURCES_SOURCE/plugins" -type f -printf '%P\0')
+    }
+
+    if [[ ! -f "$resourcesPath/.complete" ]] || ! resourcesAreComplete; then
+      rm -f "$resourcesPath/.complete"
       ln -sfn -t "$resourcesPath" \
         "$CHATGPT_RESOURCES_SOURCE"/{codex,codex-code-mode-host,cua_node,native,rg,tectonic}
       mkdir -p "$resourcesPath/plugins"
       chmod -R u+w "$resourcesPath/plugins"
-      cp -RT --preserve=mode "$CHATGPT_RESOURCES_SOURCE/plugins" "$resourcesPath/plugins"
+      # Restore missing files without overwriting existing mutable manifests,
+      # including when another application instance is using this directory.
+      cp -RT --update=none --preserve=mode "$CHATGPT_RESOURCES_SOURCE/plugins" "$resourcesPath/plugins"
       chmod -R u+w "$resourcesPath/plugins"
+      # An incompatible existing file type cannot be repaired non-destructively.
+      if ! resourcesAreComplete; then
+        rm -f "$resourcesPath/.complete"
+        echo "ChatGPT bundled-plugin cache is incomplete: $resourcesPath" >&2
+        exit 1
+      fi
       sync --file-system "$resourcesPath"
       touch "$resourcesPath/.complete"
       sync --file-system "$resourcesPath"
