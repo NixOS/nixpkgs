@@ -786,6 +786,15 @@
     "spdx": "MIT",
     "vendorHash": "sha256-crDSVC0UvJ8fXoKwSgyFWHivwOA9XRO7dXoEOYLPZTo="
   },
+  "inwx_inwx": {
+    "hash": "sha256-UCoWXC53KNXG4izgB4OaThLYHUULA6rz84uewcfsS5g=",
+    "homepage": "https://registry.terraform.io/providers/inwx/inwx",
+    "owner": "inwx",
+    "repo": "terraform-provider-inwx",
+    "rev": "1.7.1",
+    "spdx": "MIT",
+    "vendorHash": "sha256-VP1fntPgaGRCEXyWSoYGx/K/9zILSyAlmMh78RXI+yk="
+  },
   "jfrog_artifactory": {
     "hash": "sha256-BSUOmqHwnDEYojtwTXBWo9oGG2FbgaODUKClZPCaK/I=",
     "homepage": "https://registry.terraform.io/providers/jfrog/artifactory",
