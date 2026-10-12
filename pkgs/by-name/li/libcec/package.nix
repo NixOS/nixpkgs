@@ -51,10 +51,19 @@ stdenv.mkDerivation (finalAttrs: {
     "-DHAVE_LINUX_API=1"
   ];
 
+  postFixup = lib.optionalString pythonSupport ''
+    moveToOutput "lib/${python3.libPrefix}" "$python"
+    moveToOutput "bin/pyCecClient" "$python_bin"
+  '';
+
   outputs = [
     "out"
     "bin"
     "dev"
+  ]
+  ++ lib.optionals pythonSupport [
+    "python"
+    "python_bin"
   ];
 
   meta = {
