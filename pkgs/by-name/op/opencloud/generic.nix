@@ -15,6 +15,7 @@
   fetchFromGitHub,
   ncurses,
   gettext,
+  gowrap,
   pigeon,
   protoc-go-inject-tag,
   libxcrypt,
@@ -206,7 +207,7 @@ buildGoModule (finalAttrs: {
   # wants testcontainers and docker, and we don't have a good way to skip tests
   # based on package name and not test name
   preCheck = ''
-    rm services/search/pkg/opensearch/*_test.go
+    rm -f services/search/pkg/{opensearch,parity}/*_test.go
   '';
 
   # The activitylog tests start a local NATS server.
@@ -218,6 +219,7 @@ buildGoModule (finalAttrs: {
     VERSION = finalAttrs.version;
     # avoids weird test failure
     AUTOMEMLIMIT = "off";
+    GOWRAP = lib.getExe gowrap;
   };
 
   excludedPackages = [ "tests/*" ];
