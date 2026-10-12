@@ -61,11 +61,31 @@ stdenv.mkDerivation (finalAttrs: {
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
-  postPatch = lib.optionalString (!useCPU) ''
-    # Bad path
-    substituteInPlace CMakeLists.txt \
-      --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
-  '';
+  # With -fopenmp the clang driver adds `<clang prefix>/../include` as a plain -I
+  # to find omp.h. In the merged rocm-toolchain that directory also holds the
+  # glibc headers, so stdlib.h is no longer a system header and clang 24 rejects
+  # mm_malloc.h's redeclaration of posix_memalign ("missing exception
+  # specification 'noexcept(true)'", glibc >= 2.44). Listing the same directory
+  # as -isystem makes clang drop the -I and treat it as system again. Only the
+  # CPU backend compiles with the toolchain's clang++ directly; the HIP backend
+  # goes through hipcc, whose prefix does not contain libc headers.
+  env = lib.optionalAttrs useCPU {
+    CXXFLAGS = "-isystem ${stdenv.cc}/include";
+  };
+
+  postPatch =
+    # The public API header api/rppdefs.h includes <half.hpp>, but HALF::half is
+    # linked PRIVATE, so targets built against rpp (the in-tree
+    # test_rpp_backend_macro) cannot find it. Export it as a PUBLIC dependency.
+    ''
+      sed -i 's|^\(set_target_properties(''${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)\)$|target_link_libraries(''${PROJECT_NAME} PUBLIC HALF::half)\n\1|' CMakeLists.txt
+      grep -q 'PUBLIC HALF::half' CMakeLists.txt
+    ''
+    + lib.optionalString (!useCPU) ''
+      # Bad path
+      substituteInPlace CMakeLists.txt \
+        --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
+    '';
 
   postBuild = lib.optionalString buildDocs ''
     python3 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
