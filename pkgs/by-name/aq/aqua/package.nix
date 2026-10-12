@@ -57,7 +57,7 @@ buildGoModule (finalAttrs: {
     inherit mainProgram;
     description = "Declarative CLI version manager";
     homepage = "https://github.com/aquaproj/aqua";
-    changelog = "https://github.com/aquaproj/aqua/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/aquaproj/aqua/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ paveg ];
     platforms = lib.platforms.unix;
