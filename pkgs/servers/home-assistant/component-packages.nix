@@ -6754,9 +6754,10 @@
         modbus-connection
         pymodbus
         serialx
+        solaredged
         tmodbus
       ]
-      ++ modbus-connection.optional-dependencies.tmodbus; # missing inputs: solaredged
+      ++ modbus-connection.optional-dependencies.tmodbus;
     "solarlog" =
       ps: with ps; [
         solarlog-cli
@@ -9362,6 +9363,7 @@
     "snooz"
     "sofar"
     "solaredge"
+    "solaredge_modbus"
     "solarlog"
     "solarman"
     "solax"
