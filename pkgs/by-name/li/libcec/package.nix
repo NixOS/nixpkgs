@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   # 1. Fix dlopen path
   # 2. Fix include directory for pkg-config: https://github.com/Pulse-Eight/libcec/pull/754
   postPatch = ''
-    substituteInPlace include/cecloader.h --replace-fail "\"libcec." "\"$lib/lib/libcec."
+    substituteInPlace include/cecloader.h --replace-fail "\"libcec." "\"$out/lib/libcec."
     substituteInPlace src/libcec/CMakeLists.txt \
       --replace-fail "\''${CMAKE_INSTALL_PREFIX}/include" "\''${CMAKE_INSTALL_INCLUDEDIR}"
   '';
@@ -53,8 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+    "bin"
     "dev"
-    "lib"
   ];
 
   meta = {
