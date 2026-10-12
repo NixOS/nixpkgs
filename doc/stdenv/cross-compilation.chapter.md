@@ -304,6 +304,12 @@ But before that, there was just `pkgs`, even though both `buildInputs` and `nati
 
 To make this work, we "splice" together the six `pkgs<theirHost><theirTarget>` package sets and have `callPackage` actually take its arguments from that. This is currently implemented in `pkgs/top-level/splice.nix`. `mkDerivation` then, for each dependency attribute, pulls the right derivation out from the splice. This splicing can be skipped when not cross-compiling as the package sets are the same, but still is a bit slow for cross-compiling. We'd like to do something better, but haven't come up with anything yet.
 
+Splicing does not automatically extend to derivations returned by function calls.
+An environment builder must preserve the platform alternatives in its result for
+`mkDerivation` to select the appropriate environment from a dependency list.
+For example, [`python.withPackages`](#python.withpackages-function) supports this,
+but other language environment builders may not.
+
 ### Bootstrapping {#ssec-bootstrapping}
 
 Each of the package sets described above come from a single bootstrapping stage. While `pkgs/top-level/default.nix`, coordinates the composition of stages at a high level, `pkgs/top-level/stage.nix` "ties the knot" (creates the fixed point) of each stage. The package sets are defined per-stage however, so they can be thought of as edges between stages (the nodes) in a graph. Compositions like `pkgsBuildTarget.targetPackages` can be thought of as paths to this graph.
