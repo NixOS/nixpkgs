@@ -186,6 +186,12 @@ clangStdenv.mkDerivation (finalAttrs: {
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
     sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/PerimeterGenerator.cpp
     sed -i 's|"libnoise/noise.h"|"noise/noise.h"|' src/libslic3r/Feature/FuzzySkin/FuzzySkin.cpp
+  ''
+  # Fix build with wxWidgets 3.3.4
+  # https://github.com/OrcaSlicer/OrcaSlicer/pull/16370
+  + ''
+    substituteInPlace src/slic3r/GUI/GUI_ObjectTable.cpp \
+      --replace-fail "wxGridCellChoiceEditor::OnComboCloseUp(evt)" "wxGridCellChoiceEditor::DismissEditor()"
   '';
 
   cmakeFlags = [
