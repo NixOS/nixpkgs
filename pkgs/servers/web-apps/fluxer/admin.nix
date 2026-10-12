@@ -4,18 +4,17 @@
   tailwindcss_4,
   cacert,
   lib,
+  fluxerHashes,
 }:
-let
-  versioning = lib.importJSON ./versioning.json;
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-admin";
-  inherit (versioning) version cargoHash;
+  inherit (fluxerHashes) version;
+  cargoHash = fluxerHashes.cargo.hash;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    inherit (versioning) rev hash;
+    inherit (fluxerHashes) rev hash;
   };
 
   nativeBuildInputs = [
