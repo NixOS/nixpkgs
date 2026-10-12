@@ -1101,6 +1101,8 @@ self: super: with self; {
 
   angr = callPackage ../development/python-modules/angr { };
 
+  angr-data = callPackage ../development/python-modules/angr-data { };
+
   angrcli = callPackage ../development/python-modules/angrcli { inherit (pkgs) coreutils; };
 
   angrop = callPackage ../development/python-modules/angrop { };
