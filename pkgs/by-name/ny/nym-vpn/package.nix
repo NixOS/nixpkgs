@@ -55,12 +55,18 @@ let
     };
 
     postPatch = ''
-      buildScript="$(echo "$cargoDepsCopy"/source-git-*/nym-network-defaults-1.21.4/build.rs)"
-      test -f "$buildScript"
+      shopt -s nullglob
 
-      cat > "$buildScript" <<'EOF'
-      fn main() {}
-      EOF
+      buildScripts=(
+        "$cargoDepsCopy"/source-git-*/nym-network-defaults-*/build.rs
+      )
+
+      if (( ''${#buildScripts[@]} != 1 )); then
+        echo "Expected exactly one nym-network-defaults build.rs" >&2
+        exit 1
+      fi
+
+      printf 'fn main() {}\n' > "''${buildScripts[0]}"
     '';
 
     nativeBuildInputs = [
@@ -127,12 +133,18 @@ let
     ];
 
     postPatch = ''
-      buildScript="$(echo "$cargoDepsCopy"/source-git-*/nym-network-defaults-1.21.4/build.rs)"
-      test -f "$buildScript"
+      shopt -s nullglob
 
-      cat > "$buildScript" <<'EOF'
-      fn main() {}
-      EOF
+      buildScripts=(
+        "$cargoDepsCopy"/source-git-*/nym-network-defaults-*/build.rs
+      )
+
+      if (( ''${#buildScripts[@]} != 1 )); then
+        echo "Expected exactly one nym-network-defaults build.rs" >&2
+        exit 1
+      fi
+
+      printf 'fn main() {}\n' > "''${buildScripts[0]}"
     '';
 
     preBuild = ''
