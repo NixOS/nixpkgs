@@ -17,11 +17,11 @@
 }:
 gccStdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.48.0";
+  version = "2.49.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    hash = "sha256-Yuj6XKE30TgYml/dbVsiBcicwmM44/Qoaro9ibScn5o=";
+    hash = "sha256-71VmR18Bfl/mxseUkH8KLPL8y/IMNLJaS6RSnl3EgiY=";
   };
 
   postPatch = ''
