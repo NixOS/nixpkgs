@@ -18271,6 +18271,11 @@
       }
     ];
   };
+  matheusbrunheroto = {
+    github = "MatheusBrunheroto";
+    githubId = 67561023;
+    name = "Matheus Brunheroto";
+  };
   mathiassven = {
     email = "github@mathiassven.com";
     github = "MathiasSven";
