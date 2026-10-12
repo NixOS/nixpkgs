@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbirds";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "clainstone";
     repo = "cbirds";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MMctTFtEUYt3xn7gFYWcMlRFLkFXW+wu6/hTtTkO6Og=";
+    hash = "sha256-c6EDQe+hyhhENRU1OGQbCg/uLCdDmaZFfNs5AxuOpUc=";
   };
 
   strictDeps = true;
