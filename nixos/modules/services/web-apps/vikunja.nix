@@ -35,17 +35,19 @@ in
         "http"
         "https"
       ];
+      default = "http";
       description = ''
         Whether the site is available via http or https.
       '';
     };
     frontendHostname = lib.mkOption {
       type = lib.types.str;
+      default = "localhost";
       description = "The Hostname under which the frontend is running.";
     };
     address = lib.mkOption {
       type = lib.types.str;
-      default = "";
+      default = "127.0.0.1";
       description = "The IP address to bind to.";
     };
     port = lib.mkOption {
