@@ -349,7 +349,7 @@ let
     '';
 
     fetchAttrs = {
-      sha256 = "sha256-TMNPis92MOPq1HvTlEZCgb3dgDaKT1bkJAgZ+1U/r5g=";
+      sha256 = "sha256-LVGQYGknsGxGqYzOXtCBFLNhnkhe6RD+pvRZI3Y5Pqs=";
       # Top-level doInstallCheck would otherwise run against the deps tarball.
       doInstallCheck = false;
       # buildBazelPackage forces allowedRequisites on the FOD; discard leftover
