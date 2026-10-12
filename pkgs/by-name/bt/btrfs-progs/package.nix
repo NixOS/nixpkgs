@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  buildPackages,
+  python3,
   pkg-config,
   zstd,
   acl,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     udevCheckHook
   ]
   ++ [
-    (buildPackages.python3.withPackages (
+    (python3.withPackages (
       ps: with ps; [
         sphinx
         sphinx-rtd-theme
