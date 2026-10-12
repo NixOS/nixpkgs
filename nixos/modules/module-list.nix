@@ -195,6 +195,7 @@
   ./programs/chromium.nix
   ./programs/chrysalis.nix
   ./programs/clash-verge.nix
+  ./programs/cloudfoundry-cli.nix
   ./programs/cnping.nix
   ./programs/comma.nix
   ./programs/command-not-found/command-not-found.nix
