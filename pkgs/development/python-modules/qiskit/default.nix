@@ -3,40 +3,46 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  callPackage,
+
+  # build
+  setuptools,
+  setuptools-rust,
   cargo,
   rustPlatform,
   rustc,
-  libiconv,
+  libiconv, # Darwin
 
-  dill,
-  matplotlib,
+  # runtime dependencies
   numpy,
-  pillow,
-  pydot,
-  pylatexenc,
-  python-constraint,
-  rustworkx,
   scipy,
-  seaborn,
-  setuptools,
-  setuptools-rust,
+  rustworkx,
+  dill,
   stevedore,
-  symengine,
-  sympy,
   typing-extensions,
+
+  # optional dependencies
+  matplotlib,
+  pydot,
+  pillow,
+  pylatexenc,
+  seaborn,
+  sympy,
   z3-solver,
+  python-constraint,
+  symengine,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qiskit";
-  version = "2.4.1";
+  version = "2.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit";
-    tag = version;
-    hash = "sha256-Y5JgapafP3lxR7PMNB7+yDoM6vFvSoMZMrpOE2jeemU=";
+    tag = finalAttrs.version;
+    hash = "sha256-pN2JatI27bX0jEw0Y6QrtFFr+WfO+WMMSBYvKbYrmMg=";
   };
 
   nativeBuildInputs = [
@@ -53,8 +59,8 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src pname version;
-    hash = "sha256-skyZSoYO9XiwQGkgSxRCB3N0+XgDMM5IM9o6KfSG35k=";
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-9pEvbSm28zTtyw20AzEvTCxobtLOPKFM/3DWA2we7S8=";
   };
 
   dependencies = [
@@ -69,8 +75,8 @@ buildPythonPackage rec {
   optional-dependencies = {
     visualization = [
       matplotlib
-      pillow
       pydot
+      pillow
       pylatexenc
       seaborn
       sympy
@@ -85,6 +91,13 @@ buildPythonPackage rec {
       symengine
       sympy
     ];
+  };
+
+  doCheck = false;
+
+  # qiskit tests depend on qiskit-aer; infinie recursion
+  passthru.tests.withAer = callPackage ./tests.nix {
+    qiskit = finalAttrs.finalPackage;
   };
 
   pythonImportsCheck = [
@@ -103,6 +116,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit/releases";
     changelog = "https://docs.quantum.ibm.com/api/qiskit/release-notes";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ chemonke ];
   };
-}
+})
