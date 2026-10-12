@@ -9,38 +9,58 @@
   hatchling,
 
   # dependencies
-  azure-identity,
-  azure-monitor-ingestion,
-  boto3,
-  dateparser,
   dnspython,
-  elasticsearch-dsl,
-  elasticsearch,
   expiringdict,
-  kafka-python,
+  httpx,
   lxml,
   mailsuite,
   maxminddb,
   nixosTests,
-  opensearch-py,
   publicsuffixlist,
-  pygelf,
+  python-dateutil,
   pyyaml,
-  requests,
   tqdm,
-  urllib3,
   xmltodict,
+
+  # optional-dependencies
+  azure-identity,
+  azure-monitor-ingestion,
+  boto3,
+  elasticsearch,
+  kafka-python,
+  microsoft-kiota-abstractions,
+  opensearch-py,
+  psycopg,
+  pygelf,
 
   # test
   iana-etc,
   libredirect,
   pytestCheckHook,
+  pytz,
 }:
 
 let
   dashboard = fetchurl {
     url = "https://raw.githubusercontent.com/domainaware/parsedmarc/77331b55c54cb3269205295bd57d0ab680638964/grafana/Grafana-DMARC_Reports.json";
     sha256 = "0wbihyqbb4ndjg79qs8088zgrcg88km8khjhv2474y7nzjzkf43i";
+  };
+
+  extras = {
+    elastic = [ elasticsearch ];
+    opensearch = [
+      opensearch-py
+      boto3
+    ];
+    kafka = [ kafka-python ];
+    s3 = [ boto3 ];
+    gelf = [ pygelf ];
+    loganalytics = [
+      azure-identity
+      azure-monitor-ingestion
+    ];
+    msgraph = mailsuite.optional-dependencies.msgraph ++ [ microsoft-kiota-abstractions ];
+    gmail = mailsuite.optional-dependencies.gmail;
   };
 in
 buildPythonPackage (finalAttrs: {
@@ -64,39 +84,32 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
-  pythonRelaxDeps = [
-    "elasticsearch"
-    "elasticsearch-dsl"
-  ];
-
   dependencies = [
-    azure-identity
-    azure-monitor-ingestion
-    boto3
-    dateparser
     dnspython
-    elasticsearch
-    elasticsearch-dsl
     expiringdict
-    kafka-python
+    httpx
     lxml
     mailsuite
     maxminddb
-    opensearch-py
     publicsuffixlist
-    pygelf
+    python-dateutil
     pyyaml
-    requests
     tqdm
-    urllib3
     xmltodict
   ]
-  ++ mailsuite.optional-dependencies.gmail
-  ++ mailsuite.optional-dependencies.msgraph;
+  ++ dnspython.optional-dependencies.doh;
+
+  optional-dependencies = extras // {
+    # upstream keeps postgresql out of `all`
+    all = lib.unique (lib.concatLists (lib.attrValues extras));
+    postgresql = [ psycopg ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
+    pytz
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   preCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     echo "nameserver 127.0.0.1" > resolv.conf
