@@ -133,9 +133,46 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "vikunja";
+        StateDirectoryMode = "0750";
         ExecStart = "${cfg.package}/bin/vikunja";
         Restart = "always";
         EnvironmentFile = cfg.environmentFiles;
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SocketBindAllow = [
+          "tcp:${toString cfg.port}"
+        ];
+        SocketBindDeny = "any";
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
 
