@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "blockbuster";
-  version = "1.5.26";
+  version = "1.5.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cbornet";
     repo = "blockbuster";
     tag = "v${version}";
-    hash = "sha256-2p1xKThna33nhT3rkp1kfZPVkzsJd42OPs3cHenizJs=";
+    hash = "sha256-RIy5xjTpw6Bsxo1oiKQ5fbrBpkL8eujOY85G2GW2lrI=";
   };
 
   build-system = [ hatchling ];
@@ -30,6 +30,8 @@ buildPythonPackage rec {
     pytest-asyncio
     requests
   ];
+
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # network access
