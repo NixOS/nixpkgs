@@ -491,6 +491,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
     USE_NVSHMEM = setBool withNvshmem;
 
+    # CMake defaults USE_MPI to ON and silently disables it when MPI isn't found; make the choice explicit.
+    USE_MPI = setBool MPISupport;
+
     # Set the correct Python library path, broken since
     # https://github.com/pytorch/pytorch/commit/3d617333e
     PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
@@ -585,6 +588,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ]
   )
   ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
+  # FindMPI locates MPI through its compiler wrappers (mpicc, mpicxx), which must be on PATH.
+  ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs = [
