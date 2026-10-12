@@ -49,6 +49,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-HSXGdpHUbwlYy5a+zKpcLo2d+b507Qf5nsaMghVBlZ8=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-6192.patch";
+      url = "https://github.com/uclouvain/openjpeg/commit/839936aa33eb8899bbbd80fda02796bb65068951.patch";
+      hash = "sha256-NrsLopVKMLdtr9HACK3Mdt+QjfpjpssjIC4tnaPCpMQ=";
+    })
+  ];
+
   outputs = [
     "out"
     "dev"
