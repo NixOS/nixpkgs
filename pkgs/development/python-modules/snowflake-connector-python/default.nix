@@ -120,7 +120,7 @@ buildPythonPackage rec {
     "test/unit/aio/test_oauth_token_async.py"
     "test/unit/aio/test_proxies_async.py"
     # aio tests that connect to the internet
-    "test/unit/aio/test_connection_async_unit.py::test_invalid_backoff_policy"
+    "test/unit/aio/test_connection_async_unit.py"
     "test/unit/aio/test_ocsp.py"
     "test/unit/aio/test_s3_util_async.py::test_download_retry_exceeded_error"
     "test/unit/aio/test_s3_util_async.py::test_accelerate_in_china_endpoint"
@@ -130,6 +130,8 @@ buildPythonPackage rec {
     # snowflake.connector.errors.ProgrammingError: 251008: 251008: Failed to load private key:
     # argument 'password': Cannot convert "<class 'int'>" instance to a buffer.
     "test/unit/aio/test_auth_keypair_async.py::test_auth_keypair"
+    # Read-only directory permission error
+    "test/unit/test_configmanager.py::test_log_debug_config_file_parent_dir_permissions"
   ];
 
   disabledTests = [
