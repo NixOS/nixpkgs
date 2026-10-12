@@ -7,7 +7,7 @@
   pkg-config,
   rustPlatform,
   scdoc,
-  testers,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -66,14 +66,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     make $makeFlags install-{man,vim}
   '';
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "syd -V";
-    };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-    updateScript = nix-update-script { };
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Seccomp-based application sandbox";
