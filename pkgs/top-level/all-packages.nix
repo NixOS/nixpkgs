@@ -1439,6 +1439,8 @@ with pkgs;
 
   clickgen = with python3Packages; toPythonApplication clickgen;
 
+  cloudfoundryCliPlugins = recurseIntoAttrs (callPackage ../by-name/cl/cloudfoundry-cli/plugins { });
+
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
 
   czkawka-full = czkawka.wrapper.override {
