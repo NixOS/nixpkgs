@@ -8,7 +8,10 @@ For new packages please briefly describe the package or provide a link to its ho
 
 ## Things done
 
-<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
+<!--
+Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers.
+However, please do not remove the template, even when nothing is checked!
+-->
 
 - Built on platform:
   - [ ] x86_64-linux
