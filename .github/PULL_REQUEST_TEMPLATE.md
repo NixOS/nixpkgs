@@ -16,12 +16,12 @@ For new packages please briefly describe the package or provide a link to its ho
   - [ ] x86_64-linux
   - [ ] aarch64-linux
   - [ ] aarch64-darwin
-- [ ] Tested basic functionality of all binary files, usually in `./result/bin/`.
 - Tested, as applicable:
+  - [ ] Basic functionality of all binary files, usually in `./result/bin/`.
+  - [ ] Ran `nixpkgs-review` on this PR. See [nixpkgs-review usage].
   - [ ] [Package tests] at `passthru.tests`.
   - [ ] [NixOS tests] in [nixos/tests].
   - [ ] Tests in [lib/tests] or [pkgs/test] for functions and "core" functionality.
-- [ ] Ran `nixpkgs-review` on this PR. See [nixpkgs-review usage].
 - Nixpkgs Release Notes
   - [ ] Package update: when the change is major or breaking.
 - NixOS Release Notes
