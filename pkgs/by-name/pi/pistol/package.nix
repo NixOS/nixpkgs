@@ -32,7 +32,7 @@ buildGoModule (finalAttrs: {
     asciidoctor
   ];
   postInstall = ''
-    asciidoctor -b manpage -d manpage README.adoc
+    make manpage
     installManPage pistol.1
   '';
 
