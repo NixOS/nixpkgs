@@ -8,6 +8,7 @@
   libkrun-efi,
   moltenvk,
   pkg-config,
+  python3,
   buildPackages,
   rustc,
   rustPlatform,
@@ -50,7 +51,7 @@ let
       meson
       ninja
       pkg-config
-      (buildPackages.python3.withPackages (ps: [ ps.pyyaml ]))
+      (python3.withPackages (ps: [ ps.pyyaml ]))
     ];
 
     mesonFlags = [
