@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "2.4.2";
+  version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "btcpayserver";
     repo = "btcpayserver";
     tag = "v${version}";
-    hash = "sha256-UeWiJv6LvKZx4LYy8LBvPTXVNKAIZI1n3qb6sIU5Dd0=";
+    hash = "sha256-zdmsEBk3qT/vaHPP3GEvXfj7H5X6envN443rViToGGo=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
@@ -29,6 +29,8 @@ buildDotnetModule rec {
   postFixup = ''
     mv $out/bin/{BTCPayServer,btcpayserver} || :
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Self-hosted, open-source cryptocurrency payment processor";
