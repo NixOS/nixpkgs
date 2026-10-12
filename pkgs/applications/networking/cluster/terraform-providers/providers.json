@@ -822,6 +822,15 @@
     "spdx": "MIT",
     "vendorHash": "sha256-ncLndxP/0V+BjpOCd57+069+JIAM2deDPpZftRwm+E8="
   },
+  "jkossis_garage": {
+    "hash": "sha256-j9rf8ynqPl0JTv/K5ouVBitH41lIRnDiMvulx7OarZE=",
+    "homepage": "https://registry.terraform.io/providers/jkossis/garage",
+    "owner": "jkossis",
+    "repo": "terraform-provider-garage",
+    "rev": "v1.0.5",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-r6WqUIatjVjvC98PlbVPm3w1/XZPhdYriG4KsoqrkgY="
+  },
   "joneshf_openwrt": {
     "hash": "sha256-z78IceF2VJtiQpVqC+rTUDsph73LZawIK+az3rEhljA=",
     "homepage": "https://registry.terraform.io/providers/joneshf/openwrt",
