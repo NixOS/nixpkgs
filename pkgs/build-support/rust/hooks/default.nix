@@ -1,5 +1,7 @@
 {
   cargo-nextest,
+  jq,
+  go-toml,
   clang,
   diffutils,
   lib,
@@ -75,7 +77,12 @@
 
   cargoSetupHook = makeSetupHook {
     name = "cargo-setup-hook.sh";
+    propagatedBuildInputs = [
+      jq
+      go-toml
+    ];
     substitutions = {
+      inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
       defaultConfig = ../fetchcargo-default-config.toml;
 
       # Specify the stdenv's `diff` by abspath to ensure that the user's build
