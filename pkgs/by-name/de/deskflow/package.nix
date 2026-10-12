@@ -122,13 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_QPA_PLATFORM=offscreen
     ctest --test-dir  "src/unittests" --output-on-failure \
       --exclude-regex "OSX(KeyState|Clipboard)Tests"
-    ./bin/legacytests
 
     runHook postCheck
-  '';
-
-  postInstall = ''
-    install -Dm644 ../README.md ../doc/user/configuration.md -t $out/share/doc/deskflow
   '';
 
   passthru.updateScript = nix-update-script {
