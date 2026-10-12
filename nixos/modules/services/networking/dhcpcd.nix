@@ -411,6 +411,10 @@ in
       /run/current-system/systemd/bin/systemctl reload dhcpcd.service
     '';
 
+    # dhcpcd runs unprivileged and sets per-link DNS via resolved's D-Bus API,
+    # which is only allowed by the polkit rules below.
+    security.polkit.enable = lib.mkIf config.services.resolved.enable (lib.mkDefault true);
+
     security.polkit.extraConfig = lib.mkMerge [
       (lib.mkIf config.services.resolved.enable ''
         polkit.addRule(function(action, subject) {
