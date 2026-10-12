@@ -75,7 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Seccomp-based application sandbox";
     homepage = "https://gitlab.exherbo.org/sydbox/sydbox";
     changelog = "https://gitlab.exherbo.org/sydbox/sydbox/-/blob/${finalAttrs.src.tag}/ChangeLog.md";
-    license = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "syd";
     platforms = lib.platforms.linux;
