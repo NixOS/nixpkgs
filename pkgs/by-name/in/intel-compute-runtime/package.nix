@@ -65,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     } \
       $out/lib/intel-opencl/libigdrcl.so
+
+    # ocloc and the Level Zero driver dlopen() libigc/libigdfcl
+    for f in $out/lib/libocloc.so $(readlink -f $out/lib/libze_intel_gpu.so.1); do
+      patchelf --add-rpath ${lib.makeLibraryPath [ intel-graphics-compiler ]} "$f"
+    done
   '';
 
   passthru = {
