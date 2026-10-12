@@ -74,8 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/projects/rdc";
 
   patches = [
-    # https://github.com/ROCm/rocm-systems/pull/2423
-    ./fix-cmake-cxxflags.patch
     # https://github.com/ROCm/rocm-systems/pull/2424
     ./fix-libcap-pkgconfig.patch
   ];
