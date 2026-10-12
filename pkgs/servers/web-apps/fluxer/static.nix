@@ -2,18 +2,17 @@
   fetchFromGitHub,
   stdenv,
   lib,
+  fluxerHashes,
 }:
-let
-  versioning = lib.importJSON ./versioning.json;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluxer-static";
-  inherit (versioning) version cargoHash;
+
+  inherit (fluxerHashes) version;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    inherit (versioning) rev hash;
+    inherit (fluxerHashes) rev hash;
   };
 
   installPhase = ''

@@ -3,19 +3,19 @@
   fetchFromGitHub,
   rustPlatform,
   lib,
+  fluxerHashes,
 }:
-let
-  versioning = lib.importJSON ./versioning.json;
-in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fluxer-users";
-  inherit (versioning) version cargoHash;
+  inherit (fluxerHashes) version;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    inherit (versioning) rev hash;
+    inherit (fluxerHashes) rev hash;
   };
+
+  cargoHash = fluxerHashes.cargo.hash;
 
   cargoBuildFlags = [
     "--features"
