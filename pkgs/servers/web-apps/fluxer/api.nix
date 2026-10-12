@@ -9,20 +9,20 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   lib,
+  fluxerHashes,
 }:
 let
   nodejs = nodejs_26;
   pnpm = pnpm_11.override { nodejs-slim = nodejs-slim_26; };
-  versioning = lib.importJSON ./versioning.json;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluxer-api";
-  inherit (versioning) version;
+  inherit (fluxerHashes) version;
 
   src = fetchFromGitHub {
     owner = "fluxerapp";
     repo = "fluxer";
-    inherit (versioning) rev hash;
+    inherit (fluxerHashes) rev hash;
   };
 
   env.npm_config_nodedir = nodejs;
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
       ;
     inherit pnpm;
     fetcherVersion = 4;
-    hash = versioning.apiPnpmHash;
+    hash = fluxerHashes.pnpm.api;
   };
 
   buildPhase = ''
