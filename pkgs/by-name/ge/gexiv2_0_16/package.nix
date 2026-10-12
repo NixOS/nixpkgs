@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     gobject-introspection
     vala
     gi-docgen
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+    (python3.withPackages (ps: [ ps.pygobject3 ]))
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
