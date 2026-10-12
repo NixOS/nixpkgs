@@ -223,7 +223,6 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
-      doronbehar
     ];
   };
 })
