@@ -6036,7 +6036,8 @@
       ];
     "rejseplanen" =
       ps: with ps; [
-      ]; # missing inputs: pyrejseplan
+        pyrejseplan
+      ];
     "remember_the_milk" =
       ps: with ps; [
         aiortm
@@ -9265,6 +9266,7 @@
     "redgtech"
     "refoss"
     "rehlko"
+    "rejseplanen"
     "remember_the_milk"
     "remote"
     "remote_calendar"
