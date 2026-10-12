@@ -183,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
-    (python3.pythonOnBuildForHost.withPackages (p: [ p.pyparsing ]))
+    (python3.withPackages (p: [ p.pyparsing ]))
     bison
     glib
     meson
