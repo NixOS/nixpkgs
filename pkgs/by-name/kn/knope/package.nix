@@ -33,7 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
   doInstallCheck = true;
-  strictDeps = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

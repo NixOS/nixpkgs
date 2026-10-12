@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioshelly";
-  version = "13.33.0";
+  version = "13.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioshelly";
     tag = finalAttrs.version;
-    hash = "sha256-9GwPTfcMPxxK7s0NWJAKWDhpUolfg5ZybwrJH8kU5C8=";
+    hash = "sha256-YG/DQma5bTJGKpx3eHvc0Nfb8iHs/gqRuhzv/LnffHs=";
   };
 
   build-system = [ setuptools ];

@@ -15,12 +15,12 @@ let
   dotnet-sdk =
     with dotnetCorePackages;
     # required sdk
-    sdk_10_0
+    sdk_11_0
     // {
       # with additional packages to minimize deps.json
       inherit
         (combinePackages [
-          sdk_9_0
+          sdk_10_0
           sdk_8_0
         ])
         packages
@@ -38,18 +38,18 @@ in
 buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.148.23-prerelease";
+  vsVersion = "11.2.14-prerelease";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${finalAttrs.vsVersion}";
-    hash = "sha256-d3RqQihalcCxTbCJZXZUf2ABZ483UhBWFzpiXwCcAuA=";
+    hash = "sha256-ROwBKlSO0kkvz79dtBucWrdlp6gCTxtvkreDFbKuQlI=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "5.11.0-1.26380.4";
+  version = "5.12.0-1.26475.2";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -63,7 +63,7 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postPatch = ''
-    # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
+    # Upstream uses rollForward = patch, which pins to an exact .NET SDK feature band.
     jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
     mv global.json.tmp global.json
   '';
@@ -164,6 +164,7 @@ buildDotnetModule (finalAttrs: {
         with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
         with-net9-sdk = with-sdk dotnetCorePackages.sdk_9_0;
         with-net10-sdk = with-sdk dotnetCorePackages.sdk_10_0;
+        with-net11-sdk = with-sdk dotnetCorePackages.sdk_11_0;
         no-sdk = with-sdk null;
         version = testers.testVersion { package = finalAttrs.finalPackage; };
       };

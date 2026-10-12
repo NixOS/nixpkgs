@@ -19,7 +19,6 @@ buildGoModule (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   nativeBuildInputs = [ findutils ];
 

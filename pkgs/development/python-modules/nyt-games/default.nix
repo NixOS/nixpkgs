@@ -1,12 +1,12 @@
 {
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
   mashumaro,
   orjson,
-  poetry-core,
+  hatchling,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -17,17 +17,17 @@
 
 buildPythonPackage rec {
   pname = "nyt-games";
-  version = "0.5.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-nyt-games";
     tag = "v${version}";
-    hash = "sha256-bpamhrTBDFp1c/RvvbVjRFXEn5HoxY+3jGH7NkfsFxo=";
+    hash = "sha256-u0Sc3q+9X47aM4mjNDO5ALqaL1vUujq8L6HFhv2snA4=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeBuildInputs = [
     pyprojectVersionPatchHook
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "nyt_games" ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

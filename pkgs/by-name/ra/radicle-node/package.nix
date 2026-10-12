@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   env.RADICLE_VERSION = finalAttrs.version;

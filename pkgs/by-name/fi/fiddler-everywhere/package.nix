@@ -8,20 +8,14 @@
 
 let
   pname = "fiddler-everywhere";
-  version = "8.0.2";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "https://downloads.getfiddler.com/linux/fiddler-everywhere-${version}.AppImage";
-    hash = "sha256-aT6gJJ/YygJw4tmpmOTdQA3ybqJYfWSdSMMTje49x0A=";
+    hash = "sha256-cP9DEnDUj0m3DJ71ASe3b3AH7ljUHOdw4bkQrHkey6I=";
   };
 
-  appimageContents = appimageTools.extract {
-    inherit pname version src;
-    postExtract = ''
-      substituteInPlace $out/fiddler-everywhere.desktop \
-        --replace-fail 'Exec=AppRun' 'Exec=fiddler-everywhere'
-    '';
-  };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
@@ -31,11 +25,12 @@ appimageTools.wrapType2 {
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/fiddler-everywhere.desktop $out/share/applications/fiddler-everywhere.desktop
-    for i in 16 24 32 48 64 96 128 256 512 1024; do
-      install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/''${i}x''${i}/apps/fiddler-everywhere.png \
-        $out/share/icons/hicolor/''${i}x''${i}/apps/fiddler-everywhere.png
-    done
+    install -m 444 -D ${appimageContents}/fiddler-everywhere.desktop \
+      $out/share/applications/fiddler-everywhere.desktop
+    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/256x256/apps/fiddler-everywhere.png \
+      $out/share/icons/hicolor/256x256/apps/fiddler-everywhere.png
+    substituteInPlace $out/share/applications/fiddler-everywhere.desktop \
+      --replace-fail 'Exec=AppRun' 'Exec=fiddler-everywhere'
     wrapProgram $out/bin/fiddler-everywhere --set DESKTOPINTEGRATION false
   '';
 
@@ -55,7 +50,7 @@ appimageTools.wrapType2 {
     description = "Web debugging proxy by Telerik";
     homepage = "https://www.telerik.com/fiddler/fiddler-everywhere";
     downloadPage = "https://www.telerik.com/download/fiddler-everywhere";
-    changelog = "https://www.telerik.com/support/whats-new/fiddler-everywhere/release-history";
+    changelog = "https://www.telerik.com/support/whats-new/fiddler-everywhere/release-history/fiddler-everywhere-v${version}";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ RoGreat ];
     mainProgram = "fiddler-everywhere";

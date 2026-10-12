@@ -13,7 +13,7 @@ proton-ge-bin.overrideAttrs (
     inherit (finalAttrs.passthru.variants.${stdenvNoCC.hostPlatform.system}) src toolName;
 
     pname = "dwproton-bin";
-    version = "dwproton-11.0-13";
+    version = "dwproton-11.0-14";
 
     passthru = {
       variants = {
@@ -21,7 +21,7 @@ proton-ge-bin.overrideAttrs (
           toolName = "${finalAttrs.version}-x86_64";
           src = fetchzip {
             url = "https://dawn.wine/dawn-winery/dwproton/releases/download/${finalAttrs.version}/${finalAttrs.version}-x86_64.tar.xz";
-            hash = "sha256-INbvpKk01gMyt72Z2jlJvov5k4LZztpFuiYgVkGBc1I=";
+            hash = "sha256-dXtOdfqIU0wWQ0OXDRbHuFTifGJ7ti+Ij4g+a/RV71Q=";
           };
         };
       };

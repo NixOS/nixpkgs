@@ -47,16 +47,24 @@
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
+let
+  needsPangoTlottie = [
+    "64gram-unwrapped"
+    "ayugram-desktop-unwrapped"
+    "kotatogram-desktop-unwrapped"
+    "telegram-desktop-unwrapped"
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "7.2.8";
+  version = "7.2.9";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hhx65dqKlsoLvh7lEWYxnIiXFFd0qrDKpYYsHdhzqnk=";
+    hash = "sha256-AeeO3Ys+2MhNNPnMmu1AP8vs4ROK3X+Wh79x+Cizc6c=";
   };
 
   nativeBuildInputs = [
@@ -95,10 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     kcoreaddons
     hunspell
   ]
-  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped" && stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals (lib.elem finalAttrs.pname needsPangoTlottie && stdenv.hostPlatform.isLinux) [
     pango
   ]
-  ++ lib.optionals (finalAttrs.pname == "telegram-desktop-unwrapped") [
+  ++ lib.optionals (lib.elem finalAttrs.pname needsPangoTlottie) [
     tlottie
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

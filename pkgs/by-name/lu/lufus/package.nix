@@ -67,7 +67,7 @@ python313Packages.buildPythonApplication (finalAttrs: {
     description = "A rufus clone written in py and designed to work with linux";
     homepage = "https://github.com/Hogjects/Lufus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Simon-Weij ];
+    maintainers = with lib.maintainers; [ inomish ];
     platforms = lib.platforms.linux;
     mainProgram = "lufus";
   };

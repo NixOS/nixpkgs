@@ -275,7 +275,7 @@ let
         homepage = "https://crystal-lang.org/";
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
-          david50407
+          davy-tw
           peterhoeg
           donovanglover
         ];

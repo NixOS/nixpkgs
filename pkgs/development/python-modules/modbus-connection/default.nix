@@ -1,7 +1,6 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   gitMinimal,
   hatchling,
   lib,
@@ -14,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "modbus-connection";
-  version = "4.10.0";
+  version = "4.12.4";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -22,17 +21,8 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "modbus-connection";
     tag = finalAttrs.version;
-    hash = "sha256-7k1JRIbxgN8EGbs6j0BxQiiqiBBq3s3OLUjJ7smd5hc=";
+    hash = "sha256-CeZKkAsQv0WrJGNBFS6mZTVCmtx6ldvCwWC1sT+i4F4=";
   };
-
-  patches = [
-    # https://github.com/home-assistant-libs/modbus-connection/pull/228
-    (fetchpatch {
-      name = "tmodbus-0.6.2-compat.patch";
-      url = "https://github.com/home-assistant-libs/modbus-connection/commit/34631716aaa0330f915ad58a351ddaaef123e7cf.patch";
-      hash = "sha256-Oi47zSOaTPTLhrErBF9LwzixLh6+UpUS5rOvGoQbL4w=";
-    })
-  ];
 
   nativeBuildInputs = [
     pyprojectVersionPatchHook

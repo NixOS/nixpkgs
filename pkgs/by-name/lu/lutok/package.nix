@@ -5,10 +5,13 @@
   atf,
   autoreconfHook,
   kyua,
-  lua,
+  lua5_2_compat,
   pkg-config,
   gitUpdater,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 lib.fix (
   drv:

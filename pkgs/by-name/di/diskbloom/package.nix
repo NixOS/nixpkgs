@@ -9,7 +9,6 @@ buildGoModule (finalAttrs: {
   version = "0.1.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Zingzy";

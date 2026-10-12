@@ -10,7 +10,7 @@ let
     self = python;
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "immich-machine-learning";
   inherit (immich) version;
   src = "${immich.src}/machine-learning";
@@ -45,6 +45,8 @@ python.pkgs.buildPythonApplication rec {
       tokenizers
       uvicorn
       rapidocr
+
+      finalAttrs.passthru.immich-models
     ]
     ++ uvicorn.optional-dependencies.standard;
 
@@ -66,7 +68,7 @@ python.pkgs.buildPythonApplication rec {
     cp -r ann $out/${python.sitePackages}/
 
     makeWrapper ${lib.getExe python.pkgs.gunicorn} "''${!outputBin}"/bin/machine-learning \
-      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}" \
+      --prefix PYTHONPATH : "$out/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}" \
       --set-default MACHINE_LEARNING_WORKERS 1 \
       --set-default MACHINE_LEARNING_WORKER_TIMEOUT 120 \
       --set-default MACHINE_LEARNING_CACHE_FOLDER /var/cache/immich \
@@ -79,8 +81,11 @@ python.pkgs.buildPythonApplication rec {
         --log-config-json $out/share/immich/log_conf.json"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) immich;
+  passthru = {
+    tests = {
+      inherit (nixosTests) immich;
+    };
+    immich-models = python.pkgs.callPackage ./immich-models.nix { };
   };
 
   meta = {
@@ -89,4 +94,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "machine-learning";
     inherit (immich.meta) license maintainers platforms;
   };
-}
+})

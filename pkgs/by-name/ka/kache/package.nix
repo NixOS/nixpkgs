@@ -2,6 +2,7 @@
   cacert,
   fetchFromGitHub,
   lib,
+  nix-update-script,
   rustPlatform,
   stdenv,
   versionCheckHook,
@@ -62,6 +63,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Let another kache on PATH recognize and skip this shim directory.
     touch "$shims/bin/.kache-shims"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Zero-copy, content-addressed build cache for Rust, C/C++ and more";

@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiomodernforms";
-  version = "0.2.0";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wonderslug";
     repo = "aiomodernforms";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KSCADrZJgoXTo6+k3fVd0eQzattKmmT8HYyEAogrGDU=";
+    hash = "sha256-kLebIcnNOj9XrP7yc5eH7vMd61s5S/JhgPmB60xoRpU=";
   };
 
   build-system = [ setuptools ];

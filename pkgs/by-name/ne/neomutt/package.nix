@@ -17,7 +17,7 @@
   libxml2,
   notmuch,
   openssl,
-  lua,
+  lua5_2_compat,
   lmdb,
   libxslt,
   docbook_xsl,
@@ -36,6 +36,9 @@
   withContrib ? true,
   withNotmuch ? true,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 assert lib.warnIf enableMixmaster
   "Support for mixmaster has been removed from neomutt since the 20241002 release"

@@ -14,16 +14,16 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "freenub";
-  version = "0.1.0";
+  version = "0.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "freenub";
-    tag = "v${version}";
-    hash = "sha256-UkW/7KUQ4uCu3cxDSL+kw0gjKjs4KnmxRIOLVP4hwyA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2yUuopr7sT2FvsiXlHnc7AnXcCAAEAyD0Rpc4j/nGmQ=";
   };
 
   build-system = [ poetry-core ];
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Fork of pubnub";
     homepage = "https://github.com/bdraco/freenub";
-    changelog = "https://github.com/bdraco/freenub/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/freenub/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

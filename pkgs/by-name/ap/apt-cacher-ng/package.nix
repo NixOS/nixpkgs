@@ -25,6 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-LkiH1ocDljNJkqzNMx4Sy6ht/vhXUy9hC7BjWo4ykA0=";
   };
 
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/aclogger.h src/ahttpurl.h
+  '';
+
   nativeBuildInputs = [
     cmake
     doxygen

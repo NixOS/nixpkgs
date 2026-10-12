@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
     tag = finalAttrs.version;
-    hash = "sha256-G1i8nFMabkg7qUbqYq/GYXsREXRcSXtDSO+RgiuulIE=";
+    hash = "sha256-Jj8IVXUm+36sE/195DdrU2l/MpaN4WJtW3ST/j8xKVU=";
   };
 
   # NKR_ELEVATION_HINT contains spaces
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     # the main package has no tests, checkPhase would only rebuild all deps without -trimpath
     doCheck = false;
 
-    vendorHash = "sha256-L189eeaYDdDKGJYT5vr412YpTgHptVfC4jpNSjNcyuk=";
+    vendorHash = "sha256-NWTXF1f9yNxhzqgF9A7eYWCmGrJ2DV/z/wKW4Yf94ZA=";
 
     nativeBuildInputs = [
       protobuf

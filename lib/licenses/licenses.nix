@@ -1235,6 +1235,14 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    nvidiaCudaPython = {
+      shortName = "CUDA Python License";
+      fullName = "NVIDIA Software License for NVIDIA CUDA Python";
+      url = "https://github.com/NVIDIA/cuda-python/blob/v12.9.7/cuda_bindings/LICENSE";
+      free = false;
+      redistributable = true;
+    };
+
     nvidiaCudnn = {
       shortName = "cuDNN EULA";
       fullName = "cuDNN SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
@@ -1255,6 +1263,14 @@ lib.mapAttrs mkLicense (
       shortName = "cuTENSOR EULA";
       fullName = "cuTENSOR SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
       url = "https://docs.nvidia.com/cuda/cutensor/latest/license.html";
+      free = false;
+      redistributable = false;
+    };
+
+    nvidiaCutlassDsl = {
+      shortName = "CUTLASS DSLs SLA";
+      fullName = "NVIDIA Software License Agreement for the NVIDIA CUTLASS DSLs";
+      url = "https://github.com/NVIDIA/cutlass/blob/main/EULA.txt";
       free = false;
       redistributable = false;
     };

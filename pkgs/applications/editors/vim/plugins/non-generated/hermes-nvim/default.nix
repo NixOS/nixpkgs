@@ -37,11 +37,11 @@ let
       cacert
       jq
     ];
-    phases = [
-      "buildPhase"
-      "installPhase"
-    ];
-    buildPhase = ''
+    dontUnpack = true;
+    dontFixup = true;
+    installPhase = ''
+      runHook preInstall
+
       mkdir -p "$out"
       jq -r '.agents[].icon | select(. != null)' \
         "${src}/src/acp/registry/registry.json" \
@@ -49,8 +49,9 @@ let
           curl -sfLo "$out/$(basename "$url")" "$url" \
             || echo "warning: failed $url" >&2
       done
+
+      runHook postInstall
     '';
-    installPhase = "true";
     outputHashMode = "recursive";
     outputHash = "sha256-N8eyv3wcohj0l/giOmwzwy3drduhHhA/klFYqffmHQ0=";
   };

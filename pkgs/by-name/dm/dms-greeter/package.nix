@@ -11,7 +11,6 @@ buildGoModule (finalAttrs: {
   version = "1.6.2";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";

@@ -28,7 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-NHWKgLvILeXVLyKxfm/uWxb2mwb1wM6Utw9vPlUPYaI=";
 
-  strictDeps = true;
   enableParallelBuilding = true;
   doCheck = true;
 

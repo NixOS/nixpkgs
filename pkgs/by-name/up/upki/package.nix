@@ -18,7 +18,6 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "upki";
   version = "1.0.0-beta.3";
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

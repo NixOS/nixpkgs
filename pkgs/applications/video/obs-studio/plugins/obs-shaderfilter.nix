@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     qt6.qtbase
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers -Wno-error=deprecated-declarations";
+
   cmakeFlags = [
     "-DBUILD_OUT_OF_TREE=On"
   ];

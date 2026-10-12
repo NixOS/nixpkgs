@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gittype";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "unhappychoice";
     repo = "gittype";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-343lPlLrfHHZEfhFEZGAXwzxGg1I2YpGQERcFU2bJZY=";
+    hash = "sha256-Ijlj0DSg12nvlvT76czR3xMvUgVpkXJWlVM4gEeWScI=";
   };
 
-  cargoHash = "sha256-tca8fV7KWd/Ab0+J3eymhjXZfGUsF6LXhgP4HKYisq4=";
+  cargoHash = "sha256-C3idJ/7wdX838fqhARWBrMNHlPKf53bM4661kGxh9XE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -62,7 +62,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   passthru.updateScript = nix-update-script { };

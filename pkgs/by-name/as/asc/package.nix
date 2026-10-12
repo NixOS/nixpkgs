@@ -13,7 +13,7 @@
   freetype,
   libjpeg,
   wxwidgets_3_2,
-  lua,
+  lua5_2_compat,
   perl,
   pkg-config,
   zlib,
@@ -27,6 +27,9 @@
   flac,
   libogg,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation {
   pname = "asc";

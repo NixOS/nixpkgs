@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.83.1";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   outputs = [
     "out"

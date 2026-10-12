@@ -1,0 +1,36 @@
+{
+    "release_date": "2026-09-22",
+    "release_label": "11.3.0",
+    "release_product": "tensorrt",
+    "tensorrt": {
+        "name": "NVIDIA TensorRT",
+        "license": "TensorRT",
+        "version": "11.3.0.99",
+        "cuda_variant": [
+            "12",
+            "13"
+        ],
+        "linux-sbsa": {
+            "cuda13": {
+                "md5": "a523847064f8fa43e08cc94341d38b83",
+                "relative_path": "tensorrt/11.3.0/tars/TensorRT-Enterprise-11.3.0.99-Linux-aarch64-cuda-13.4-Release-external.tar.zst",
+                "sha256": "27a2f2f81b0ee637be5a3e4eb0895a16a286afcd691da15d001a2da41495028a",
+                "size": "2541388642"
+            }
+        },
+        "linux-x86_64": {
+            "cuda12": {
+                "md5": "340512337b405a794065311df3a71879",
+                "relative_path": "tensorrt/11.3.0/tars/TensorRT-Enterprise-11.3.0.99-Linux-x86_64-cuda-12.9-Release-external.tar.zst",
+                "sha256": "69df36d25030bc59793fb0994b749fa01cdc3179471cccaf9f9791b276a22b67",
+                "size": "3526438942"
+            },
+            "cuda13": {
+                "md5": "cf1e93ccaa7a9b6cb79e2f5e4456b31a",
+                "relative_path": "tensorrt/11.3.0/tars/TensorRT-Enterprise-11.3.0.99-Linux-x86_64-cuda-13.4-Release-external.tar.zst",
+                "sha256": "c383126a0e51e5962afac9caf97149a3c1908bf6b4e0ccc781a6eb6d984bf0c6",
+                "size": "3721239763"
+            }
+        }
+    }
+}

@@ -8,12 +8,15 @@
   libxml2,
   libzip,
   boost,
-  lua,
+  lua5_2_compat,
   luabind,
   onetbb,
   expat,
   nixosTests,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osrm-backend";

@@ -16,7 +16,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "phpantom-lsp";
-  version = "0.10.0";
+  version = "0.11.1";
 
   __structuredAttrs = true;
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "PHPantom-dev";
     repo = "phpantom_lsp";
     tag = finalAttrs.version;
-    hash = "sha256-P5adooUaNCidGTIh/PDKzwvtIXCQ0y8tUMbLUC4sk98=";
+    hash = "sha256-OTMe7T/TK9lpQGXPQA8VIfZ+SA6/7T/2WBdwym3A+0E=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       > stubs/jetbrains/phpstorm-stubs/.commit
   '';
 
-  cargoHash = "sha256-tZh1cn7Zu47FRVXozDjcoKW4MoxaaaxPmDX5OzlxnAs=";
+  cargoHash = "sha256-PH2Q38v2eX51jwHjGEObbaiJKZdv4qf/8eup0d97Iis=";
 
   checkFlags = [
     "--test"

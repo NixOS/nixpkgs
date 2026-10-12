@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tuios";
-  version = "0.8.5";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "Gaurav-Gosain";
     repo = "tuios";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NqR6rlkTYxNrGVjL0kNwt+iJ4DB5owins8Jv86LyRC4=";
+    hash = "sha256-5R3iEWW002g9OfKpqwQz6/oSCznJQ8l2/PjXJ3VdGzU=";
   };
 
-  vendorHash = "sha256-mESjrddAANoY8wE7QNnzTLaxE6ESe5UoVfwsRU10hzM=";
+  vendorHash = "sha256-aZzPq2tbvggw9ikOI1VvqOvpE9ff2XEjnUceTFBPkUk=";
 
   ldflags = [
     "-s"
@@ -63,7 +63,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Gaurav-Gosain/tuios";
     changelog = "https://github.com/Gaurav-Gosain/tuios/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kpbaks ];
+    maintainers = with lib.maintainers; [
+      kpbaks
+      adamcstephens
+    ];
     mainProgram = "tuios";
   };
 })

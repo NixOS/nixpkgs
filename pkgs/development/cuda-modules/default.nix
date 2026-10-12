@@ -97,9 +97,10 @@ let
       inherit manifests;
 
       # Construct without relying on the fixed-point to allow the use of backendStdenv in creating CUDA package sets.
-      # For example, this allows selecting manifests by predicating on values like
-      # `backendStdenv.hasJetsonCudaCapability`, which would otherwise result in infinite recursion due to the reliance
-      # on `pkgs'`, which in turn depends on the manifests provided to this file (which can depend on `backendStdenv`).
+      # NOTE: Manifests should not be selected by predicating on values like `backendStdenv.hasJetsonCudaCapability`:
+      # the manifests of each package set are compared against those of the default package set (see `pkgs'`), so
+      # doing so forces the assertions of the default package set's backendStdenv (see
+      # `pkgs/top-level/cuda-packages.nix`).
       backendStdenv = import ./backendStdenv {
         inherit
           _cuda

@@ -6,12 +6,13 @@
   pytestCheckHook,
   requests,
   setuptools,
+  writableTmpDirAsHomeHook,
   zeep,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "onvif-python";
-  version = "0.4.1";
+  version = "0.4.4";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -20,8 +21,13 @@ buildPythonPackage (finalAttrs: {
     owner = "nirsimetri";
     repo = "onvif-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IJWgTXNKiMrRSojThtxH0Qs3sRVCrViCXgX0nTkmySM=";
+    hash = "sha256-aIsne8iHgCCKnPnB0eBOpxddyrtD0EME6GiMREbX0Ho=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "wheel>=0.48.0,<1.0.0" "wheel"
+  '';
 
   build-system = [ setuptools ];
 
@@ -30,7 +36,10 @@ buildPythonPackage (finalAttrs: {
     zeep
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "onvif" ];
 

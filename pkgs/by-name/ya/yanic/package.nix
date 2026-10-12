@@ -10,7 +10,6 @@ buildGoModule (finalAttrs: {
   pname = "yanic";
   version = "1.9.0";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromCodeberg {

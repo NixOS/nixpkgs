@@ -5,7 +5,7 @@
   pkg-config,
   libglut,
   libjpeg_turbo,
-  lua,
+  lua5_2_compat,
   libGLU,
   libGL,
   perl,
@@ -24,6 +24,9 @@
   callPackage,
   celestia-content ? callPackage ./content.nix { },
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "celestia";

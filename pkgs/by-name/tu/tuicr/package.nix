@@ -22,8 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-azgmxJP3iQO+WfJCWqfi19rCSb6D0a0luWcgEW+8Sbg=";
 
-  strictDeps = true;
-
   nativeCheckInputs = [
     gitMinimal
   ];

@@ -1210,6 +1210,27 @@
       };
     }
   ) { };
+  ebuild-mode = callPackage (
+    {
+      elpaBuild,
+      fetchurl,
+      lib,
+    }:
+    elpaBuild {
+      pname = "ebuild-mode";
+      ename = "ebuild-mode";
+      version = "1.88.0.20261001.0";
+      src = fetchurl {
+        url = "https://elpa.nongnu.org/nongnu-devel/ebuild-mode-1.88.0.20261001.0.tar";
+        sha256 = "0fhaasjlbz5vbqlb9k5w3qyxz5rr7hlhbk7ivcj9pn40kfvgrmg6";
+      };
+      packageRequires = [ ];
+      meta = {
+        homepage = "https://elpa.nongnu.org/nongnu-devel/ebuild-mode.html";
+        license = lib.licenses.free;
+      };
+    }
+  ) { };
   edit-indirect = callPackage (
     {
       elpaBuild,

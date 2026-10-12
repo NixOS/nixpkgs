@@ -7,6 +7,7 @@
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
+  paho-mqtt,
   pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-mock,
@@ -17,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "whirlpool-sixth-sense";
-  version = "1.4.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
     tag = finalAttrs.version;
-    hash = "sha256-2AF48T/yl5jKlvb8sSwiiAEDi2WSrDHB7bs+AbNt6A8=";
+    hash = "sha256-D7rI4FEBXhx4czY/JTgjga1lW1WLSCV9d+5N2js2t3E=";
   };
 
   build-system = [ setuptools ];
@@ -35,6 +36,7 @@ buildPythonPackage (finalAttrs: {
     aioconsole
     aiohttp
     async-timeout
+    paho-mqtt
     websockets
   ];
 

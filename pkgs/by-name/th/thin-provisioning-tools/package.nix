@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-hRGelBHFbyWHwV3fRecGXIEhoDzVQ+Rdj/VHGxcDH1k=";
   };
 
-  strictDeps = true;
   depsBuildBuild = [
     pkg-config
     lvm2

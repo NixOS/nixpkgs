@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  applyPatches,
   fetchFromGitHub,
   fetchpatch2,
   gnat,
@@ -11,15 +12,36 @@
 let
   version = "25.0.0";
 
-  gprConfigKbSrc = fetchFromGitHub {
-    name = "gprconfig-kb-${version}-src";
-    owner = "AdaCore";
-    repo = "gprconfig_kb";
-    rev = "v${version}";
-    sha256 = "09x1njq0i0z7fbwg0mg39r5ghy7369avbqvdycfj67lpmw17gb1r";
+  gprconfig_kb = applyPatches {
+    src = fetchFromGitHub {
+      owner = "AdaCore";
+      repo = "gprconfig_kb";
+      tag = "v${version}";
+      hash = "sha256-Oax3Aq+XHiMd823jtVUy43j4Sk7jVfD4cueDCLC0oSc=";
+    };
+
+    patches = [
+      ./gprconfig_kb-darwin.patch
+    ];
+
+    postPatch = ''
+      # Install custom compiler description which can detect nixpkgs'
+      # GNAT wrapper as a proper Ada compiler. The default compiler
+      # description expects the runtime library to be installed in
+      # the same prefix which isn't the case for nixpkgs. As a
+      # result, it would detect the unwrapped GNAT as a proper
+      # compiler which is unable to produce working binaries.
+      #
+      # Our compiler description is very similar to the upstream
+      # GNAT description except that we use a symlink in $out/nix-support
+      # created by the cc-wrapper to find the associated runtime
+      # libraries and use gnatmake instead of gnatls to find GNAT's
+      # bin directory.
+
+      install -m644 ${./nixpkgs-gnat.xml} db/nixpkgs-gnat.xml
+    '';
   };
 in
-
 stdenv.mkDerivation {
   pname = "gprbuild-boot";
   inherit version;
@@ -29,7 +51,7 @@ stdenv.mkDerivation {
     owner = "AdaCore";
     repo = "gprbuild";
     rev = "v${version}";
-    sha256 = "1mqsmc0q5bzg8223ls18kbvaz6mhzjz7ik8d3sqhhn24c0j6wjaw";
+    hash = "sha256-XEluJGBEWAixHg3NeL78sJqv9pooaDqEQO+vggGrGtc=";
   };
 
   nativeBuildInputs = [
@@ -84,22 +106,8 @@ stdenv.mkDerivation {
 
     ./bootstrap.sh \
       --with-xmlada=${xmlada.src} \
-      --with-kb=${gprConfigKbSrc} \
+      --with-kb=${gprconfig_kb} \
       --prefix=$out
-
-    # Install custom compiler description which can detect nixpkgs'
-    # GNAT wrapper as a proper Ada compiler. The default compiler
-    # description expects the runtime library to be installed in
-    # the same prefix which isn't the case for nixpkgs. As a
-    # result, it would detect the unwrapped GNAT as a proper
-    # compiler which is unable to produce working binaries.
-    #
-    # Our compiler description is very similar to the upstream
-    # GNAT description except that we use a symlink in $out/nix-support
-    # created by the cc-wrapper to find the associated runtime
-    # libraries and use gnatmake instead of gnatls to find GNAT's
-    # bin directory.
-    install -m644 ${./nixpkgs-gnat.xml} $out/share/gprconfig/nixpkgs-gnat.xml
 
     runHook postInstall
   '';
@@ -110,11 +118,5 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.sternenseemann ];
     platforms = lib.platforms.all;
-    # gprbuild-boot builds on darwin, but `gprconfig` stack overflows whenever
-    # it runs during the enumeration of available toolchains
-    # This doesn't seem to be a problem with our compiler definition `./nixpkgs-gnat.xml`
-    # as a gprbuild system without that configuration also stack faults.
-    # Maybe a linker issue?
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

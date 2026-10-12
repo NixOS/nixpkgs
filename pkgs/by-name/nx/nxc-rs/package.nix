@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  checkFlagsArray = [
+  checkFlags = [
     # Test requires raw socket/packet capture
     "--skip=providers::tests::test_provider_debug_redacts_keys"
   ];

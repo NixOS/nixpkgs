@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   nativeBuildInputs = [
     cargo-tauri.hook

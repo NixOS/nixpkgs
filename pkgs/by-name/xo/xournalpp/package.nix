@@ -25,7 +25,7 @@
   zlib,
   # plugins
   withLua ? true,
-  lua5_3,
+  lua5_5,
   nix-update-script,
 }:
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optional withLua lua5_3;
+  ++ lib.optional withLua lua5_5;
 
   buildFlags = [ "translations" ];
 

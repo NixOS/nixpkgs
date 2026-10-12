@@ -24,9 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-teh4w6pDn0HJ9W0FnqhnMYFBd6JxgK9QYfVqYHXviiI=";
   };
 
-  # Fix dlopen path
+  # 1. Fix dlopen path
+  # 2. Fix include directory for pkg-config: https://github.com/Pulse-Eight/libcec/pull/754
   postPatch = ''
-    substituteInPlace include/cecloader.h --replace-fail "\"libcec." "\"$out/lib/libcec."
+    substituteInPlace include/cecloader.h --replace-fail "\"libcec." "\"$lib/lib/libcec."
+    substituteInPlace src/libcec/CMakeLists.txt \
+      --replace-fail "\''${CMAKE_INSTALL_PREFIX}/include" "\''${CMAKE_INSTALL_INCLUDEDIR}"
   '';
 
   nativeBuildInputs = [
@@ -46,6 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DHAVE_LINUX_API=1"
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+    "lib"
   ];
 
   meta = {

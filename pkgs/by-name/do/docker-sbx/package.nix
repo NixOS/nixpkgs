@@ -93,13 +93,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       ''
         runHook preInstall
 
-        mkdir -pv $out
-        cp -rv bin libexec $out
+        mkdir -pv $out/Applications $out/bin
+        cp -rv Sbx.app $out/Applications
+        ln -sv $out/Applications/Sbx.app/Contents/MacOS/{sbx,llmman} $out/bin
 
         installShellCompletion \
-          --bash --name sbx.bash completions/bash/sbx \
-          --zsh  --name _sbx     completions/zsh/_sbx \
-          --fish --name sbx.fish completions/fish/sbx.fish
+          --bash --name sbx.bash Sbx.app/Contents/Resources/completions/bash/sbx \
+          --zsh  --name _sbx     Sbx.app/Contents/Resources/completions/zsh/_sbx \
+          --fish --name sbx.fish Sbx.app/Contents/Resources/completions/fish/sbx.fish
 
         runHook postInstall
       '';

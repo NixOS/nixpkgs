@@ -21,10 +21,13 @@
   zlib,
   SDL2,
   SDL2_image,
-  lua,
+  lua5_2_compat,
 
   nixosTests,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libresprite";

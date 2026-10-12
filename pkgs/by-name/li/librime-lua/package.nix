@@ -3,8 +3,11 @@
   stdenvNoCC,
   fetchFromGitHub,
   unstableGitUpdater,
-  lua,
+  lua5_2_compat,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenvNoCC.mkDerivation {
   pname = "librime-lua";

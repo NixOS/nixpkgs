@@ -1140,15 +1140,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2708-1";
+      version = "0.0.2711-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2708-1.rockspec";
-          sha256 = "0mlwn4jvbmq83r8wfs2ywsqcvnqsnv0s5ay22gichq3ka45bdxzp";
+          url = "mirror://luarocks/fzf-lua-0.0.2711-1.rockspec";
+          sha256 = "0wvhwis8i5a0jx3y3icjzfgha22yvwvggas8mkdhv9q74gd2pip7";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/bba13a0d260ca5e049683344ba70791c9ad8ece6.zip";
-        sha256 = "1qqza6vjyd56jmgaffrbrr6vwzsyy0x92gcy7p94ggh67pz0x8h2";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/ed0e0ead1789ee349cbf025900931fb402b1e05e.zip";
+        sha256 = "13c4csfvkpicyjr69cbh46klz8bf6bjsk5ad4ljh2ic86m0y475n";
       };
 
       disabled = luaOlder "5.1";
@@ -3411,6 +3411,39 @@ final: prev: {
 
       meta = {
         homepage = "https://github.com/facebook/luaffifb";
+        license = lib.licenses.free;
+        description = "FFI library for calling C functions from lua";
+        longDescription = "";
+      };
+    }
+  ) { };
+
+  luaffi-tkl = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "luaffi-tkl";
+      version = "1.0.5-2";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luaffi-tkl-1.0.5-2.rockspec";
+          sha256 = "1b87mqkvw36bxmdj79mqpna8ydwif23cryr574q2c6f07jaqi6jc";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "Tekenlight";
+        repo = "luaffifb";
+        tag = "v1.0.5-2";
+        hash = "sha256-6XBWjm7sNoN96uv9lC64dlF43QuF9NE2ky0bycxBkHY=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/Tekenlight/luaffifb";
         license = lib.licenses.free;
         description = "FFI library for calling C functions from lua";
         longDescription = "";

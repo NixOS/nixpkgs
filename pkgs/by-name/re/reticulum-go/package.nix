@@ -9,7 +9,6 @@
 buildGoModule (finalAttrs: {
   pname = "reticulum-go";
   version = "1.1.1";
-  strictDeps = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {

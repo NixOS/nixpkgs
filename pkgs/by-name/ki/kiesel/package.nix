@@ -7,25 +7,25 @@
   rustc,
   rustPlatform,
   stdenv,
-  zig_0_16,
+  zig_0_17,
 }:
 let
-  zig = zig_0_16;
+  zig = zig_0_17;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "kiesel";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromCodeberg {
     owner = "kiesel-js";
     repo = "kiesel";
     tag = finalAttrs.version;
-    hash = "sha256-X5KpobHnqU8LR+odxeoPyVQbWLO8Yq1Tys7gNQu8/tI=";
+    hash = "sha256-7zBgB1+6q+6af+vNWTUYPaFYe/Rxht+lHeB20jHhyt8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = "${finalAttrs.src}/pkg/zement";
-    hash = "sha256-YjbrKfkmhBxRxqg8mllK7eEsZwkFYMWL+z7u1PtjEYw=";
+    hash = "sha256-c5uLe3Ko90Kn9peqkk5vAicBGT7uj3OeRtOH33qQ/kQ=";
   };
   cargoRoot = "pkg/zement";
   deps = callPackage ./deps.nix { };

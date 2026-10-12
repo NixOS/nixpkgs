@@ -35,6 +35,9 @@ stdenv.mkDerivation {
 
   patchPhase = ''
     sed -i '/chromium-widevine/d' patches/series
+
+    substituteInPlace utils/prune_binaries.py \
+      --replace-fail "KEEP_SUFFIXES = (" "KEEP_SUFFIXES = ('.patch', "
   '';
 
   installPhase = ''

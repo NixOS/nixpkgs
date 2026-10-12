@@ -73,6 +73,11 @@ buildPythonPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
+  patches = [
+    # vllm 0.29.0 removed vllm.entrypoints.openai.engine.protocol
+    ./vllm-0.29-compat.patch
+  ];
+
   build-system = [
     setuptools
   ];

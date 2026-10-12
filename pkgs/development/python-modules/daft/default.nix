@@ -113,6 +113,11 @@ buildPythonPackage (finalAttrs: {
       --replace-fail \
         'chunks.into_remainder()' \
         'Some(chunks.into_remainder())'
+  ''
+  # PyAV in 19.0 removed the metadata_encoding argument and now always encodes as UTF8 with surrogateescape
+  + ''
+    substituteInPlace daft/file/video.py \
+      --replace-fail ', metadata_encoding="utf-8"' ""
   '';
 
   nativeBuildInputs = [

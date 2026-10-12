@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/chojs23/concord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      Simon-Weij
+      inomish
       neo
       Br1ght0ne
     ];

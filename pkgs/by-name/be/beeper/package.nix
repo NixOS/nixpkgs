@@ -14,23 +14,23 @@
 }:
 let
   pname = "beeper";
-  version = "4.3.73";
+  version = "4.3.160";
 
   inherit (stdenv.hostPlatform) system;
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
-      hash = "sha256-j6HTTqU7+z8AJ20hYgia6wOH0/n3gxrUocCpMPmgQvQ=";
+      hash = "sha256-by07u75l8YjMnuL8VZWkAUjTkGmP/qwJoopIMtJX7Tc=";
     };
     aarch64-linux = fetchurl {
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64.AppImage";
-      hash = "sha256-kWlKMZdicJ+DhGgYXCTqvSCYinI9QD0pJD4nb4yYdpI=";
+      hash = "sha256-4mUxNwPrHbJvYQmX4KdYZcEmfV2MuSOEXrQKgl7DIa0=";
     };
     aarch64-darwin = fetchurl {
       # Zip unpacks cleanly with unzip; the download API redirects to a .dmg.
       url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-arm64-mac.zip";
-      hash = "sha256-79T3pPLEt+tQQ2xoC3XBAI/xpxMdnY11qSmVA2VFiVw=";
+      hash = "sha256-XrFxN57uOXIbgL8va/tgWtAaFTDVp9IxDWGJU0Kskbs=";
     };
   };
 
@@ -97,16 +97,19 @@ let
           linuxConfigFilename=$appRoot/build/main/linux-*.mjs
           echo "export function registerLinuxConfig() {}" > $linuxConfigFilename
 
-          # Disable scheduled update checks.
-          autoUpdateConfigFilename=$(
-            grep -lF 'c=d??{},p=c.hw_acceleration??!0' $appRoot/build/main/index-*.mjs
-          )
-          substituteInPlace "$autoUpdateConfigFilename" \
-            --replace-fail 'c=d??{},p=c.hw_acceleration??!0' 'c={...(d??{}),auto_update_disabled:true},p=c.hw_acceleration??!0'
+          # Disable (no-op) updater setup and checks without removing the methods
+          updateEntryFilename=$appRoot/build/main/main-entry-*.mjs
+          for method in 'async checkForUpdates' 'async runCheck' scheduleNextAutomaticCheck; do
+            signature="$method\([^)]*\)\{"
+            [ "$(grep -oE "$signature" $updateEntryFilename | wc -l)" -eq 1 ] \
+              || (echo "Expected one $method updater method" >&2; exit 1)
+            sed -i -E "s/$signature/&return;/" $updateEntryFilename
+          done
 
-          # Disable user-triggered update checks, which ignore auto_update_disabled.
-          substituteInPlace $appRoot/build/main/main-entry-*.mjs \
-            --replace-fail 'async checkForUpdates(r=!1){' 'async checkForUpdates(r=!1){return;'
+          signature='(register\([^)]*\)\{)([^{}]*\.on\("error",this\.onError\))'
+          [ "$(grep -oE "$signature" $updateEntryFilename | wc -l)" -eq 1 ] \
+            || (echo "Expected one updater register method" >&2; exit 1)
+          sed -i -E "s/$signature/\1return;\2/" $updateEntryFilename
         '';
       };
     in

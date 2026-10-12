@@ -124,9 +124,11 @@
       cudaLicenses = [
         lib.licenses.nvidiaCuda
         lib.licenses.nvidiaCudaRedist
+        lib.licenses.nvidiaCudaPython
         lib.licenses.nvidiaCudnn
         lib.licenses.nvidiaCusparse_lt
         lib.licenses.nvidiaCutensor
+        lib.licenses.nvidiaCutlassDsl
         lib.licenses.nvidiaTensorrt
         lib.licenses.nvidiaMath_sdk_sla
         lib.licenses.nvidiaCudaRedist

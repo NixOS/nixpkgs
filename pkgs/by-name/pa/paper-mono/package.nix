@@ -7,7 +7,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "paper-mono";
-  version = "0.320";
+  version = "1.000";
   __structuredAttrs = true;
 
   outputs = [
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   src = fetchzip {
     url = "https://github.com/paper-design/paper-mono/releases/download/v${finalAttrs.version}/paper-mono-v${finalAttrs.version}.zip";
-    hash = "sha256-IF5CxmXgkf9xNjOID3BgBInRAOoyOrpPa0FhrkSAqe8=";
+    hash = "sha256-h5yTJS+Oln2r4HcuHu3gjrw41udw/Uj/rmV/niPfaEg=";
   };
 
   strictDeps = true;

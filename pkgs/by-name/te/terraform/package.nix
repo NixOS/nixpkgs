@@ -15,13 +15,13 @@
 let
   package = buildGo127Module rec {
     pname = "terraform";
-    version = "1.16.4";
+    version = "1.16.5";
 
     src = fetchFromGitHub {
       owner = "hashicorp";
       repo = "terraform";
       rev = "v${version}";
-      hash = "sha256-RfN/uQryR+mA2OYhWvaFvwK+63+LN9iZ7PoLj0YSA90=";
+      hash = "sha256-lGgwneshh+edUl2taJWTAIkst84FTn07Df9tRKNQi/s=";
     };
 
     vendorHash = "sha256-1NR5xhfZrHvG8VUwAJMgKCRvfs2AA8y5KPB/IYQiQB0=";

@@ -15,12 +15,15 @@
   glib,
   gtk3,
   python3,
-  lua,
+  lua5_2_compat,
   opencc,
   libsoup_3,
   json-glib,
   libnotify,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";

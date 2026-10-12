@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "odp-amsterdam";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-odp-amsterdam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YUO8L40FjqjdDWLcmDldQ+5hkdVgBQHvAhd1rBTfDLg=";
+    hash = "sha256-aK6BGOkkHdKkiojg56qxkyZklpdstQWNzaTLM1s8//s=";
   };
 
   postPatch = ''

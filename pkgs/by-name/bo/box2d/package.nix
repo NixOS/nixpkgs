@@ -85,6 +85,19 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # b2Hash calls get struct reinterpreted as byte array for input, results not stable across endiannesses
+    && stdenv.hostPlatform.isLittleEndian;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./bin/test
+
+    runHook postCheck
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };

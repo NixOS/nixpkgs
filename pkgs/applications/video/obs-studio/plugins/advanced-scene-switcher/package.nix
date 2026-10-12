@@ -4,6 +4,7 @@
   nix-update-script,
 
   cmake,
+  cudaPackages,
   ninja,
 
   alsa-lib,
@@ -49,7 +50,8 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-  ];
+  ]
+  ++ lib.optionals opencv.cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     alsa-lib
@@ -66,7 +68,8 @@ stdenv.mkDerivation rec {
     websocketpp
     libxscrnsaver
     libusb1
-  ];
+  ]
+  ++ lib.optionals opencv.cudaSupport [ cudaPackages.cuda_cudart ];
 
   dontWrapQtApps = true;
 

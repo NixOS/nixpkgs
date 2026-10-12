@@ -53,6 +53,7 @@ buildHomeAssistantComponent (finalAttrs: {
   ++ qrcode.optional-dependencies.pil;
 
   ignoreVersionRequirement = [
+    "py-opendisplay"
     "qrcode"
     "websocket-client"
   ];

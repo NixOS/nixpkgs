@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "annaaurora";
     repo = "colorpanes";
     rev = "v${finalAttrs.version}";
-    sha256 = "qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
+    hash = "sha256-qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
   };
 
   cargoHash = "sha256-+ltcTuLksNwe7KIt8apYNZkMoA2w4EObG5dhJliRb6Y=";

@@ -11,10 +11,11 @@
   mstore,
   toml-f,
   blas,
+  lapack,
   buildType ? "meson",
 }:
 
-assert !blas.isILP64;
+assert blas.isILP64 == lapack.isILP64;
 assert (
   builtins.elem buildType [
     "meson"
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     mstore
     toml-f
     blas
+    lapack
   ];
 
   outputs = [
@@ -76,10 +78,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Reimplementation of the DFT-D3 program";
     mainProgram = "s-dftd3";
-    license = with lib.licenses; [
-      lgpl3Only
-      gpl3Only
-    ];
+    license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/dftd3/simple-dftd3";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];

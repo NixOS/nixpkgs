@@ -2,29 +2,26 @@
   lib,
   appimageTools,
   fetchurl,
-  config,
-  cudaPackages,
-  cudaSupport ? config.cudaSupport,
   stdenvNoCC,
   fetchzip,
   makeWrapper,
 }:
 
 let
-  version = "0.8.4";
+  version = "0.8.6";
 
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
-    hash = "sha256-hK9cu9c2kJRCJ3iy0CucRP0whgDgF5K29JgR4AIKXVg=";
+    hash = "sha256-jQIY69PT+jMh3bUd2tgscKzvT/TBy8TqF6pFrsl7XAg=";
   };
 
   linux-src = fetchurl {
     url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
-    hash = "sha256-NNTIq02kisIjINS2TCh0Rb2UyRMSlJLR2+uzZmWxSVo=";
+    hash = "sha256-L+cPsIhHOnvbSZ5c4HHVpXPFR1VpFIJduYnsHdEFIGY=";
   };
 
   appimageContents = appimageTools.extract {
-    pname = "Jan";
+    pname = "jan";
     inherit version;
     src = linux-src;
   };
@@ -37,7 +34,7 @@ let
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    mainProgram = "Jan";
+    mainProgram = "Jan-Desktop";
     maintainers = with lib.maintainers; [ dfjay ];
     platforms =
       lib.platforms.darwin
@@ -45,22 +42,22 @@ let
   };
 
   linux = appimageTools.wrapType2 {
-    pname = "Jan";
+    pname = "jan";
     inherit version;
     src = linux-src;
+
+    executableName = "Jan-Desktop";
 
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/Jan.desktop -t $out/share/applications
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
 
-    extraPkgs = pkgs: lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
-
     inherit passthru meta;
   };
 
   darwin = stdenvNoCC.mkDerivation {
-    pname = "Jan";
+    pname = "jan";
     inherit version;
 
     strictDeps = true;
@@ -80,9 +77,7 @@ let
       mkdir -p $out/Applications/Jan.app
       mkdir -p $out/bin
       cp -R $src/. $out/Applications/Jan.app/
-      if [ -x "$out/Applications/Jan.app/Contents/MacOS/Jan" ]; then
-        makeWrapper "$out/Applications/Jan.app/Contents/MacOS/Jan" $out/bin/Jan
-      fi
+      makeWrapper "$out/Applications/Jan.app/Contents/MacOS/Jan-Desktop" $out/bin/Jan-Desktop
 
       runHook postInstall
     '';

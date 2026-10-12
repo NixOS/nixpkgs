@@ -35,5 +35,7 @@ buildHomeAssistantComponent rec {
     homepage = "https://github.com/Pirate-Weather/pirate-weather-ha";
     maintainers = with lib.maintainers; [ CodedNil ];
     license = lib.licenses.asl20;
+    # https://github.com/Pirate-Weather/pirate-weather-ha/issues/642
+    broken = true;
   };
 }

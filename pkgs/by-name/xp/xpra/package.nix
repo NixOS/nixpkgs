@@ -22,7 +22,7 @@
   librsvg,
   libvpx,
   libwebp,
-  systemd,
+  systemdLibs,
   lz4,
   nv-codec-headers-10,
   nvidia_x11 ? null,
@@ -185,7 +185,7 @@ effectiveBuildPythonApplication rec {
     openh264
     libyuv
     xxhash
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals withNvenc [
     nvencHeaders

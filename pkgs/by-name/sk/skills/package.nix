@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "skills";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "skills";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/B2el3+KYXohGCM4JaHl2EUx1c6mlYdUNrWiE0z/7lA=";
+    hash = "sha256-wynuiFQK0QR6bbClhGNM+tsoyAE/bsHSSwDUPVb8+gE=";
   };
 
   pnpmDeps = fetchPnpmDeps {

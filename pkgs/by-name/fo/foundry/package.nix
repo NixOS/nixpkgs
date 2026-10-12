@@ -26,8 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-1R/NQg1nLKWRciiAyQWOE5FkU9jZ8Bj181718FYV2HA=";
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     # `sha3-asm`'s build script runs cryptogams perl scripts to generate
     # Keccak assembly, so perl must be available at build time.

@@ -8,7 +8,7 @@
   fetchhg,
   buildPackages,
   icu,
-  lua,
+  lua5_2_compat,
   nixosTests,
   withDBI ? true,
   # use withExtraLibs to add additional dependencies of community modules
@@ -19,6 +19,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   luaEnv = lua.withPackages (
     p:
     with p;
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--ostype=linux"
-    "--with-lua-bin=${lib.getBin buildPackages.lua}/bin"
+    "--with-lua-bin=${lib.getBin buildPackages.lua5_2_compat}/bin"
     "--with-lua-include=${luaEnv}/include"
     "--with-lua=${luaEnv}"
     "--c-compiler=${stdenv.cc.targetPrefix}cc"

@@ -21,7 +21,6 @@ buildGoModule (finalAttrs: {
   pname = "yopass";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   vendorHash = "sha256-CFo/rI6M7pbjVK0AtL92UyehNgobfWkw61tDNvqpCLY=";
 

@@ -8,7 +8,7 @@ let
 in
 callPackage p {
   pname = "reaper-reapack-extension";
-  version = "1.2.5";
+  version = "1.2.6";
   meta = {
     description = "Package manager for REAPER";
     homepage = "https://reapack.com/";

@@ -5,7 +5,7 @@
 }:
 
 buildHomeAssistantComponent (finalAttrs: {
-  version = "1.3.3";
+  version = "1.3.4";
   domain = "econet300";
   owner = "jontofront";
 
@@ -13,7 +13,7 @@ buildHomeAssistantComponent (finalAttrs: {
     owner = "jontofront";
     repo = "ecoNET-300-Home-Assistant-Integration";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nJ0xoSGmvPNqGKl8nYoNGfL5phXRbDzFsG/0HihLRmk=";
+    hash = "sha256-tMr3sFanNL7Bz30hc0TxyOARJukWlTLG0XOWV61nIl4=";
   };
 
   meta = {

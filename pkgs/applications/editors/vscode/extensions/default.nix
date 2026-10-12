@@ -549,8 +549,8 @@ let
         mktplcRef = {
           name = "vscode-bazel";
           publisher = "bazelbuild";
-          version = "0.15.0";
-          sha256 = "sha256-A4d62d5g0IDsMPeIDZA4e7LibIin0ZQ3QXPRX0mndB0=";
+          version = "0.15.1";
+          sha256 = "sha256-mV79c8jq8xU+Yesv7VH1xJQevORvLyYDYPPhTc6tmlI=";
         };
         meta = {
           description = "Bazel support for Visual Studio Code";
@@ -1114,8 +1114,8 @@ let
         mktplcRef = {
           name = "csharpier-vscode";
           publisher = "csharpier";
-          version = "11.0.0";
-          hash = "sha256-LVGIKCW2z2Y2k0qPmJZZO66W3E9UDBtl5EnycanMPxA=";
+          version = "11.0.1";
+          hash = "sha256-2yHlrJ6Q4M0Y5IUAmm87gJQBzhCbfM61qNTD//lk8HY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/csharpier.csharpier-vscode/changelog";
@@ -1364,8 +1364,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.29.12";
-          hash = "sha256-ZTrwgdbnyqBn4CIfH3+6vTvE1AXKgNHmm7bPExakXL8=";
+          version = "2.29.14";
+          hash = "sha256-u/Up1H2yaRLq6LtNnth9E8+gTy+Gdh2O8Bh1FEu/JtY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1429,8 +1429,8 @@ let
         mktplcRef = {
           name = "dotenv-vscode";
           publisher = "dotenv";
-          version = "1.5.7";
-          hash = "sha256-urwvY5sa15HwIE0hhcogSq+G2yhc8TeB6vheNjgxw6I=";
+          version = "1.5.8";
+          hash = "sha256-rfBvCh/HWL5tL0HXnAWzCIo3zGAjbgeGYNRwwlYiJTk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/dotenv.dotenv-vscode/changelog";
@@ -5468,8 +5468,8 @@ let
         mktplcRef = {
           name = "php-debug";
           publisher = "xdebug";
-          version = "1.40.1";
-          hash = "sha256-WI4d6Kk+lEmFTYYfwSH7q32YaOeokdEquFtZQJcyyDA=";
+          version = "1.40.2";
+          hash = "sha256-F2MZk/6AAIOi/ImmeCyL9Yp5YDrSAd3/YNm1m6I0XV8=";
         };
         meta = {
           description = "PHP Debug Adapter";

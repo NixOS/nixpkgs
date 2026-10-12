@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.11.4";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-Z7pc1o6AK9XySZLYF8YNSnHyrp85nh8ZmiCw4FWCwW8=";
+    hash = "sha256-x8Mxy7KHGqC1qmOp6/UsO7ntq07l1jrKTaR9XiOK2d0=";
   };
 
   # we need datasets_3 for SpeechT5 embeddings
@@ -35,7 +35,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-hdgWZAJstRqYtzNuCTeiRIi+rjRsogulSfWXr8EP2UI=";
+    npmDepsHash = "sha256-FD433gQae9Ip5awPau83UqCezbsnyUbOgpnSka+nFng=";
 
     npmFlags = [ "--force" ];
 
@@ -142,6 +142,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       onnxruntime
       openai
       opencv-python-headless
+      openpyxl
+      opensearch-py
       opentelemetry-api
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
@@ -153,8 +155,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       opentelemetry-instrumentation-requests
       opentelemetry-instrumentation-sqlalchemy
       opentelemetry-sdk
-      openpyxl
-      opensearch-py
       orjson
       pandas
       pillow
@@ -167,6 +167,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pyjwt
       pymdown-extensions
       pymysql
+      pyotp
       pypandoc
       pypdf
       python-docx
@@ -178,6 +179,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       pytube
       pytz
       pyxlsb
+      qrcode
       rank-bm25
       rapidocr
       redis

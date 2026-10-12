@@ -34,8 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-typify"
   ];
 
-  strictDeps = true;
-
   preCheck = ''
     # cargo-typify depends on rustfmt-wrapper, which requires RUSTFMT:
     export RUSTFMT="${lib.getExe rustfmt}"

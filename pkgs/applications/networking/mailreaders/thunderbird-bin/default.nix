@@ -104,6 +104,7 @@ let
       gtk3
       ;
     binaryName = "thunderbird";
+    withFFmpeg = true;
     withGSSAPI = true;
   };
 

@@ -15,14 +15,14 @@ let
 in
 python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "waagent";
-  version = "2.15.0.1";
+  version = "2.16.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P+jxn0W8LaTxDcvKlWjCK1Z9X1l/jf1s41bO9N34N0Q=";
+    hash = "sha256-fzApVEDuxpQOxOe2MvNvzzlJefpc+HZeXSZstWEC7i0=";
   };
   patches = [
     # Suppress the following error when waagent tries to configure sshd:

@@ -6,7 +6,7 @@
   boost,
   zlib,
   libidn,
-  lua,
+  lua5_2_compat,
   pcre2,
   sqlite,
   perl,
@@ -24,6 +24,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   perlVersion = lib.getVersion perl;
 in
 

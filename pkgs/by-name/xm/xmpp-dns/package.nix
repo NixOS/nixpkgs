@@ -9,7 +9,6 @@ buildGoModule (finalAttrs: {
   pname = "xmpp-dns";
   version = "0.6.4";
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";

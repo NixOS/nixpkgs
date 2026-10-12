@@ -118,7 +118,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit (tectonic.passthru) tests;
   };
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   meta = {

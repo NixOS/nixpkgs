@@ -31,10 +31,13 @@
   brotliSupport ? true,
   brotli,
   luaSupport ? false,
-  lua5,
+  lua5_2_compat,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   systemdLibs,
 }:
+let
+  lua5 = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "apache-httpd";

@@ -97,6 +97,10 @@ in
       ''
     ) # added 2025-11-29
     (mkRemovedOptionModule [
+      "services"
+      "podgrab"
+    ] "The corresponding package was removed from nixpkgs.") # added 2026-10-02
+    (mkRemovedOptionModule [
       "programs"
       "goldwarden"
     ] "'goldwarden' has been removed from nixpkgs.")

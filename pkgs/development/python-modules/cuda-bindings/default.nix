@@ -138,11 +138,17 @@ buildPythonPackage (finalAttrs: {
 
     CUDA_HOME = symlinkJoin {
       name = "cuda-redist";
-      paths = with cudaPackages; [
-        (lib.getInclude cuda_cudart) # cuda_runtime.h
-        (lib.getInclude cuda_nvrtc) # nvrtc.h
-        (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
-      ];
+      paths =
+        with cudaPackages;
+        [
+          (lib.getInclude cuda_cudart) # cuda_runtime.h
+          (lib.getInclude cuda_nvrtc) # nvrtc.h
+          (lib.getInclude cuda_profiler_api) # cudaProfiler.h, cuda_profiler_api.h
+        ]
+        ++ lib.optionals finalAttrs.doInstallCheck [
+          # Examples (run by tests/test_examples.py) locate <cuda/std/version> via cuda.pathfinder
+          (lib.getInclude cccl)
+        ];
     };
   };
 
@@ -220,11 +226,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://nvidia.github.io/cuda-python/cuda-bindings/latest/release/${finalAttrs.version}-notes.html";
     license =
       # Relicensed from the NVIDIA Software License to Apache-2.0 in 13.4
-      if cudaAtLeast "13.4" then
-        lib.licenses.asl20
-      # NVIDIA Proprietary Software
-      else
-        lib.licenses.unfreeRedistributable;
+      if cudaAtLeast "13.4" then lib.licenses.asl20 else lib.licenses.nvidiaCudaPython;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

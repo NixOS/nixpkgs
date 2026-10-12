@@ -11,16 +11,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-igitt";
-  version = "0.1.21";
+  version = "0.2.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "git-bahn";
     repo = "git-igitt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5AVKBew+HShWFZwm4xRmRSL76N2c84Yi97jgcqsslxM=";
+    hash = "sha256-ge4QheY9dEqU4ndYJcO11TPvVwSuL7/RK6WIakHrV7c=";
   };
 
-  cargoHash = "sha256-Z+Y6h9QYszpXFmahU5qXNHvuC4uJ4wJiCd39wndxw5c=";
+  cargoHash = "sha256-XopYsa//QKeXh9yQbqLnbhxj//Umbt5Rm4XSHkAlBuc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,7 +42,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/git-bahn/git-igitt";
     license = lib.licenses.mit;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ lib.maintainers.pinage404 ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      pinage404
+    ];
     mainProgram = "git-igitt";
   };
 })

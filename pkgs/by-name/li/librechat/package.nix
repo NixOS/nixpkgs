@@ -11,13 +11,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "librechat";
-  version = "0.8.7";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-egnmkYpQS/AshMmXP5C8qhwA+7TPZYnu0ct552HFjGg=";
+    hash = "sha256-y3qxc7RgxLWBodK8KXSMh4ZI0qjkbj/b+8xutsbuEjs=";
   };
 
   patches = [
@@ -34,7 +34,7 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-U2DzvfzKCmAYLFG0FbFcng5goj1mYCjTpJuQ36fVNuA=";
+  npmDepsHash = "sha256-OZFR/tYVxIw9LrHnBNTakB5LLS9oTm1/wzEXSHTs5ls=";
 
   nativeBuildInputs = [
     pkg-config

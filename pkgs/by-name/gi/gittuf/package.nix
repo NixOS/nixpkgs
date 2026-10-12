@@ -26,7 +26,6 @@ buildGoModule (finalAttrs: {
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${finalAttrs.version}" ];
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   nativeCheckInputs = [
     git

@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "types-jsonschema";
-  version = "4.26.0.20260518";
+  version = "4.26.0.20261006";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_jsonschema";
     inherit (finalAttrs) version;
-    hash = "sha256-4d1T3JemT17M3W+pg5Zm4Ju1AKjrui22/a8XifrqgaY=";
+    hash = "sha256-PrfbYbaBnUCt39qscXPnSQcafUqaQ5TwyERZjshLJQA=";
   };
 
   build-system = [ setuptools ];

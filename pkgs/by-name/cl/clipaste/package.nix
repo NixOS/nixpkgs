@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-N2QYxyJApXAeBnG1m3kNwm4d8ZOmjjhmOFF+x6E7as4=";
 
-  strictDeps = true;
   __structuredAttrs = true;
 
   checkFlags = [

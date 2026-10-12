@@ -8,6 +8,7 @@
   qt6,
   quickshell,
   wlr-randr,
+  caelestia-shell,
   nix-update-script,
   testers,
 }:
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
           wlr-randr
         ]
       }
-      --prefix QML2_IMPORT_PATH : "$out/lib/qt6/qml"
+      --prefix QML2_IMPORT_PATH : "$out/lib/qt6/qml:${caelestia-shell.plugin}/${qt6.qtbase.qtQmlPrefix}:${caelestia-shell.m3shapesModule}/${qt6.qtbase.qtQmlPrefix}"
       --set CAELESTIA_GREETER_DIR "$out/etc/xdg/quickshell/astra-airlock"
     )
   '';

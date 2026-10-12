@@ -52,8 +52,8 @@ let
       nixosTests,
       clientOnly ? !stdenv.hostPlatform.isLinux,
       symlinkJoin,
-      withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-      systemd,
+      withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+      systemdLibs,
       withBtrfs ? stdenv.hostPlatform.isLinux,
       btrfs-progs,
       withLvm ? stdenv.hostPlatform.isLinux,
@@ -64,6 +64,8 @@ let
       versionCheckHook,
     }:
     let
+      systemdLibs' = systemdLibs.override { withCompression = true; };
+
       docker-meta = {
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
@@ -188,7 +190,7 @@ let
           ++ lib.optionals (lib.versionAtLeast version "29.0.0") [ nftables ]
           ++ lib.optionals withLvm [ lvm2 ]
           ++ lib.optionals withBtrfs [ btrfs-progs ]
-          ++ lib.optionals withSystemd [ systemd ]
+          ++ lib.optionals withSystemd [ systemdLibs' ]
           ++ lib.optionals withSeccomp [ libseccomp ];
 
           postPatch = ''

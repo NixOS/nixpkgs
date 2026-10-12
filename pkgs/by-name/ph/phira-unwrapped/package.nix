@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.8.0";
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "TeamFlos";

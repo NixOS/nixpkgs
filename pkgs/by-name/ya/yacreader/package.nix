@@ -22,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yacreader";
-  version = "10.3.1";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = "yacreader";
     tag = finalAttrs.version;
-    hash = "sha256-ZNS6tRALPDrY322kE4+xXkxuMRV0+Yxw9aZ2RPy5HiU=";
+    hash = "sha256-SQhdD/SrEuPo2uIj9BSp5h6mdmQ/kDGNzEKV+AQKSE0=";
   };
 
   patches = [

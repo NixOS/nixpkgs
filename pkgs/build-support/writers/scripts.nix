@@ -1019,7 +1019,7 @@ rec {
 
     :::
   */
-  writeLua = makeLuaWriter pkgs.lua pkgs.luaPackages buildPackages.luaPackages;
+  writeLua = makeLuaWriter pkgs.lua5_2_compat pkgs.lua52Packages buildPackages.lua52Packages;
 
   writeLuaBin = name: writeLua "/bin/${name}";
 

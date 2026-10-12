@@ -1,7 +1,7 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysmartthings";
-  version = "4.0.1";
+  version = "4.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
     owner = "andrewsayre";
     repo = "pysmartthings";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yxGrtEMWMargZ9i0b4DqxSh/x3pbK1J8unL7goGnURY=";
+    hash = "sha256-CltBrBmyNfCz0Ogpu2/NAZzH6zEk69mhBbanB4h0Abg=";
   };
 
   build-system = [ hatchling ];
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

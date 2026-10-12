@@ -9,20 +9,20 @@
   pytest-cov-stub,
   pytest-freezer,
   pytestCheckHook,
-  syrupy,
+  syrupy_6,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "energyzero";
-  version = "5.0.2";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-energyzero";
     tag = "v${version}";
-    hash = "sha256-Vkx+Exvq3gafnz/aY3Tw462rJHanPlOPh7S6oXVi07I=";
+    hash = "sha256-jEXSKg8U6I64fc7nU6FyPbJXMR/XwjGm8LrEZgwQNEE=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-freezer
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   pythonImportsCheck = [ "energyzero" ];

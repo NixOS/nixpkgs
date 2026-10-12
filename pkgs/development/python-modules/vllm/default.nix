@@ -177,8 +177,8 @@ let
       name = "FlashMLA-source";
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "a8f794d1251cbfd88a5011445dd5582289c727e4";
-      hash = "sha256-k/Mbc70U8wbP4BHnxZ/I607Dc2EnIkhWYd9iKUG740Y=";
+      rev = "0397728d511c4e3d94ea3a01d8dda8654525a611";
+      hash = "sha256-AE0VpRZSeTSqUzV+qXTAOkVGxEvfmyUOyZPbTxEokiI=";
     };
 
     dontConfigure = true;
@@ -229,8 +229,8 @@ let
     name = "FlashKDA-source";
     owner = "vllm-project";
     repo = "FlashKDA";
-    rev = "053de1b716ef3255873e02d2d28f4adf09951978";
-    hash = "sha256-ew0xOyDP3Z+2c0azRf+nESZ4wgRXe/qQIyl7K+MmgKI=";
+    rev = "ee0be888cd0e972f9409bf53756f8c38c6652173";
+    hash = "sha256-tXxHmu+LdEg6b0UT2hubn7S2qgt+mm4xQ+lPPuxasFE=";
     fetchSubmodules = true;
   };
 
@@ -255,8 +255,8 @@ let
       name = "flash-attention-source";
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "f3e1a4f74c99145c0717709860bf765de1703779";
-      hash = "sha256-/szsVNSp1LvT2Ojbj67jy6tY31RTPR1qW2XzcB31B80=";
+      rev = "06bdd47c0d0383daf6a2ff0c418faff9c6da16e5";
+      hash = "sha256-vaQLkdUQsCGUrzMlkyGfOfz8KJD3GuY0osxQSwh2gKU=";
     };
 
     patches = [
@@ -386,7 +386,7 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.28.0";
+  version = "0.29.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -394,7 +394,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ia5SB9bQ+Vxkc5wBwY7HxQo6rqYFpWlVxeQyyP55dMg=";
+    hash = "sha256-SPxnCItBgeOJk+io4R4f4JXfH2GSlqRKoIXCw+gpsqE=";
   };
 
   cargoRoot = "rust";
@@ -405,7 +405,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-CLvLAkejYfrnrPXJ78xh2mgCyRg7F56Um1LPnJtj7iw=";
+    hash = "sha256-eXCartOeDjzIq8WY/EwV7symrUEHTRkEf4uaehsiPAM=";
   };
 
   patches = [
@@ -413,6 +413,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
     ./0006-drop-rocm-extra-reqs.patch
+    # Fix MoE models on RDNA3 (gfx1100)
+    # https://github.com/vllm-project/vllm/pull/55522
+    ./0007-fix-rdna3-wna16-moe-intermediate-size.patch
   ];
 
   postPatch = ''
@@ -453,6 +456,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     "apache-tvm-ffi" # vllm does not depend on it directly, its version is only pinned for compatibility with tilelang (also removed).
     "tilelang"
     "fastsafetensors"
+    "instanttensor"
 
     # QuACK and Cutlass DSL seem to be added only for FA4
     # which in our case handles its own deps

@@ -193,6 +193,7 @@ in
     extra-python-packages = runTest ./nixos-test-driver/extra-python-packages.nix;
     lib-extend = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./nixos-test-driver/lib-extend.nix { };
     node-name = runTest ./nixos-test-driver/node-name.nix;
+    qmp-api-error = runTest ./nixos-test-driver/qmp-api-error.nix;
     busybox = runTest ./nixos-test-driver/busybox.nix;
     ssh-backdoor = runTestOn [ "x86_64-linux" ] ./nixos-test-driver/ssh-backdoor.nix;
     console-log = runTest ./nixos-test-driver/console-log.nix;
@@ -595,6 +596,7 @@ in
   ejabberd = runTest ./xmpp/ejabberd.nix;
   elk = handleTestOn [ "x86_64-linux" ] ./elk.nix { };
   elk-zone = runTest ./web-apps/elk.nix;
+  emacs = runTest ./emacs;
   emacs-daemon = runTest ./emacs-daemon.nix;
   endlessh = runTest ./endlessh.nix;
   endlessh-go = runTest ./endlessh-go.nix;
@@ -785,6 +787,7 @@ in
   gotify-server = runTest ./gotify-server.nix;
   gotosocial = runTest ./web-apps/gotosocial.nix;
   goupile = runTest ./web-apps/goupile;
+  gpauth-tls = runTest ./gpauth-tls.nix;
   grafana = import ./grafana {
     inherit runTest;
   };
@@ -1078,6 +1081,7 @@ in
   lomiri-mediaplayer-app = runTest ./lomiri-mediaplayer-app.nix;
   lomiri-music-app = runTest ./lomiri-music-app.nix;
   lomiri-system-settings = runTest ./lomiri-system-settings.nix;
+  loops-server = runTest ./loops-server.nix;
   lorri = runTest ./lorri/default.nix;
   luks = runTest ./luks.nix;
   luks-suspend = runTest ./luks-suspend.nix;
@@ -1132,6 +1136,7 @@ in
   minidlna = runTest ./minidlna.nix;
   miniflux = runTest ./miniflux.nix;
   minio = runTest ./minio.nix;
+  minuspod = runTest ./minuspod.nix;
   miracle-wm = runTest ./miracle-wm.nix;
   miriway = runTest ./miriway.nix;
   misc = runTest ./misc.nix;
@@ -1394,7 +1399,16 @@ in
   openarena = runTest ./openarena.nix;
   openbao = runTest ./openbao.nix;
   openbao-agent = runTest ./openbao-agent.nix;
-  opencloud = runTest ./opencloud.nix;
+  opencloud = runTest {
+    imports = [ ./opencloud.nix ];
+    _module.args.opencloudPackage = pkgs.opencloud;
+    _module.args.name = "opencloud";
+  };
+  opencloud-production = runTest {
+    imports = [ ./opencloud.nix ];
+    _module.args.opencloudPackage = pkgs.opencloud-production;
+    _module.args.name = "opencloud-production";
+  };
   openldap = runTest ./openldap.nix;
   openresty-lua = runTest ./openresty-lua.nix;
   opensearch = discoverTests (import ./opensearch.nix);
@@ -1502,7 +1516,6 @@ in
   plikd = runTest ./plikd.nix;
   plotinus = runTest ./plotinus.nix;
   pocket-id = runTest ./pocket-id.nix;
-  podgrab = runTest ./podgrab.nix;
   podman = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./podman/default.nix { };
   podman-tls-ghostunnel = handleTestOn [
     "aarch64-linux"
@@ -1865,6 +1878,7 @@ in
   systemd-no-tainted = runTest ./systemd-no-tainted.nix;
   systemd-nspawn = runTest ./systemd-nspawn.nix;
   systemd-nspawn-configfile = runTest ./systemd-nspawn-configfile.nix;
+  systemd-nsresourced-mountfsd = runTest ./systemd-nsresourced-mountfsd.nix;
   systemd-oomd = runTest ./systemd-oomd.nix;
   systemd-portabled = runTest ./systemd-portabled.nix;
   systemd-pstore = runTest ./systemd-pstore.nix;

@@ -20,4 +20,4 @@ echo "Updating q2repro to version $version (rev: $rev, date: $sourceDateEpoch)"
 
 update-source-version "$attr" "$version" --rev="${rev}"
 update-source-version "$attr" "$revCount" --ignore-same-hash --version-key=revCount
-update-source-version "$attr" "$sourceDateEpoch" --ignore-same-hash --version-key=SOURCE_DATE_EPOCH
+update-source-version "$attr" "$sourceDateEpoch" --ignore-same-hash --version-key=env.SOURCE_DATE_EPOCH

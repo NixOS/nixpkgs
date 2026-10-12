@@ -31,7 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
-  buildFeatures = [ "rusty-libopus" ];
+  buildFeatures = [
+    "rusty-libopus"
+    "all-backends"
+    "cover"
+  ];
 
   nativeBuildInputs = [
     pkg-config

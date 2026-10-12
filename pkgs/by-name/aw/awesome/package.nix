@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  lua,
+  lua5_2_compat,
   cairo,
   librsvg,
   cmake,
@@ -42,6 +42,9 @@
   gtk3Support ? false,
   gtk3 ? null,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 # needed for beautiful.gtk to work
 assert gtk3Support -> gtk3 != null;

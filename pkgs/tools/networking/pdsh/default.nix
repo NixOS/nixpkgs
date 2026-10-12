@@ -11,12 +11,12 @@
   slurmSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdsh";
   version = "2.36";
 
   src = fetchurl {
-    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${version}/pdsh-${version}.tar.gz";
+    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${finalAttrs.version}/pdsh-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-pmEJXOUd1fsF45jPXQ4dYxVxI5WEQfbTUSvPGn0lxRc=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # Do not use git to derive a version.
   postPatch = ''
-    sed -i 's/m4_esyscmd(\[git describe.*/[${version}])/' configure.ac
+    sed -i 's/m4_esyscmd(\[git describe.*/[${finalAttrs.version}])/' configure.ac
   '';
 
   preConfigure = ''
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -27,14 +27,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioesphomeapi";
-  version = "46.3.0"; # must track the major version that home-assistant pins
+  version = "46.6.0"; # must track the major version that home-assistant pins
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xwsNlgcYXUOJdJmpQ3/O1gtYptAeX2Vtn4ywxbdNGOM=";
+    hash = "sha256-C2bbgVjuHcGpEm6bJ6zQSm8gMJZkvURBltGMXBYjkh8=";
   };
 
   postPatch = ''

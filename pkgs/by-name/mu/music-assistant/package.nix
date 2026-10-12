@@ -78,7 +78,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.10.5";
+  version = "2.10.6";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-zTXe3v3TqQ1NyzuUm1g3xTUGK/BJPRUjIxrIWolfET0=";
+    hash = "sha256-LnHxdaTVz0GHouPGDjQFEp7JOWOoiT4+B1NFWSL9Pys=";
   };
 
   patches = [
@@ -123,11 +123,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # As providers must be configured through the nixos module, there is no gain
     # if Music Assistant tries to enable some of them without the proper dependencies.
     ./disable-default-provider.diff
-
-    # Fixes this warning on startup:
-    #  On-device ML inference capability probe was inconclusive (exit code 1); assuming this CPU is capable
-    # Music-Assistant's site-packages is injected via passthru.pythonPath, because $out cannot be used with replaceVars
-    ./inherit-env-for-avx2-check.diff
   ];
 
   postPatch = ''

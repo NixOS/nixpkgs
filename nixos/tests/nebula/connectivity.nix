@@ -20,10 +20,22 @@ let
           pkgs.dig
           pkgs.nebula
           pkgs.jq
+          pkgs.nmap # for ncat
         ];
         users.users.root.openssh.authorizedKeys.keys = [ snakeOilPublicKey ];
         services.openssh.enable = true;
         networking.firewall.enable = true; # Implicitly true, but let's make sure.
+
+        # To verify bidirectional connectivity, every node runs a UDP echo service on port 8000.
+        networking.firewall.allowedUDPPorts = [ 8000 ];
+        systemd.services.udp-echo = {
+          description = "UDP echo service";
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig = {
+            ExecStart = "${pkgs.nmap}/bin/ncat -u -l -k -p 8000 -e ${pkgs.coreutils}/bin/cat";
+            Restart = "always";
+          };
+        };
         networking.interfaces.eth1.useDHCP = false;
 
         services.nebula.networks.smoke = {
@@ -304,7 +316,7 @@ in
 
       restartAndCheckNebula = name: ip: ''
         ${name}.systemctl("restart nebula@smoke.service")
-        ${name}.wait_until_succeeds("ping -c1 -W1 ${ip}", timeout=10)
+        udp_succeeds(${name}, "${ip}")
       '';
 
       # Create a keypair on the client node, then use the public key to sign a cert on the lighthouse.
@@ -379,6 +391,18 @@ in
       '';
     in
     ''
+      def udp_reaches(src, dst_ip, attempts):
+          for _ in range(attempts):
+              if src.execute(f"(echo ncat-probe; sleep 2) | ncat -u -w3 {dst_ip} 8000 | grep -qm1 ncat-probe")[0] == 0:
+                  return True
+          return False
+
+      def udp_succeeds(src, dst_ip):
+          assert udp_reaches(src, dst_ip, 10), f"UDP from {src.name} to {dst_ip} was not received"
+
+      def udp_fails(src, dst_ip):
+          assert not udp_reaches(src, dst_ip, 3), f"UDP from {src.name} to {dst_ip} was unexpectedly received"
+
       # Create the certificate and sign the lighthouse's keys.
       ${setUpPrivateKey "lighthouse"}
       lighthouse.succeed(
@@ -393,8 +417,8 @@ in
       lighthouse.shutdown()
       lighthouse.start()
       lighthouse.wait_for_unit("nebula@smoke.service")
-      lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
-      lighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::1", timeout=10)
+      udp_succeeds(lighthouse, "10.0.100.1")
+      udp_succeeds(lighthouse, "2001:db8::1")
 
       # The tunless network starts without a tun device despite its (deliberately over-long) configured device name. pr 565501
       lighthouse.wait_for_unit("nebula@tunless.service")
@@ -429,141 +453,126 @@ in
       ${setUpPrivateKey "disabled"}
       ${signKeysFor "disabled" "10.0.100.5/24,2001:db8::5/64"}
       disabled.fail("systemctl status nebula@smoke.service")
-      disabled.fail("ping -c3 -W1 10.0.100.5")
-      disabled.fail("ping -c3 -W1 2001:db8::5")
+      udp_fails(disabled, "10.0.100.5")
+      udp_fails(disabled, "2001:db8::5")
 
-      # The lighthouse can ping allowAny and allowFromLighthouse but not disabled
-      lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      lighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      lighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      lighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
-      lighthouse.fail("ping -c3 -W1 10.0.100.5")
-      lighthouse.fail("ping -c3 -W1 2001:db8::5")
+      # The lighthouse can reach allowAny and allowFromLighthouse but not disabled
+      udp_succeeds(lighthouse, "10.0.100.2")
+      udp_succeeds(lighthouse, "2001:db8::2")
+      udp_succeeds(lighthouse, "10.0.100.3")
+      udp_succeeds(lighthouse, "2001:db8::3")
+      udp_fails(lighthouse, "10.0.100.5")
+      udp_fails(lighthouse, "2001:db8::5")
 
-      # allowAny can ping the lighthouse, but not allowFromLighthouse because of its inbound firewall
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::1", timeout=10)
-      allowAny.fail("ping -c3 -W1 10.0.100.3")
-      allowAny.fail("ping -c3 -W1 2001:db8::3")
+      # allowAny can reach the lighthouse, but not allowFromLighthouse because of its inbound firewall
+      udp_succeeds(allowAny, "10.0.100.1")
+      udp_succeeds(allowAny, "2001:db8::1")
+      udp_fails(allowAny, "10.0.100.3")
+      udp_fails(allowAny, "2001:db8::3")
       # allowAny can also resolve DNS on lighthouse
       allowAny.succeed("dig @10.0.100.1 allowToLighthouse A | grep -E 'allowToLighthouse\.\s+[0-9]+\s+IN\s+A\s+10\.0\.100\.4'")
       allowAny.succeed("dig @10.0.100.1 allowToLighthouse AAAA | grep -E 'allowToLighthouse\.\s+[0-9]+\s+IN\s+AAAA\s+2001:db8::4'")
 
-      # allowFromLighthouse can ping the lighthouse and allowAny
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::1", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      # allowFromLighthouse can reach the lighthouse and allowAny
+      udp_succeeds(allowFromLighthouse, "10.0.100.1")
+      udp_succeeds(allowFromLighthouse, "2001:db8::1")
+      udp_succeeds(allowFromLighthouse, "10.0.100.2")
+      udp_succeeds(allowFromLighthouse, "2001:db8::2")
 
       # allowAny does IPv6 -> IPv4 and IPv4 -> IPv6 switchover for the underlay network
       ${blockTrafficBetweenV4 "lighthouse" "allowAny"}
       ${blockTrafficBetweenV6 "lighthouse" "allowToLighthouse"}
       ${blockTrafficBetweenV6 "allowAny" "allowToLighthouse"}
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::1", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
+      udp_succeeds(allowAny, "10.0.100.1")
+      udp_succeeds(allowAny, "2001:db8::1")
+      udp_succeeds(allowAny, "10.0.100.4")
+      udp_succeeds(allowAny, "2001:db8::4")
       ${blockTrafficBetweenV6 "lighthouse" "allowAny"}
-      allowAny.fail("ping -c3 -W1 10.0.100.1")
-      allowAny.fail("ping -c3 -W1 2001:db8::4")
+      udp_fails(allowAny, "10.0.100.1")
+      udp_fails(allowAny, "2001:db8::4")
       ${allowTrafficBetweenV4 "lighthouse" "allowAny"}
-      allowAny.wait_until_succeeds("ping -c1 -W1 192.168.1.1", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=15)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=15)
+      # ensure allowToLighthouse reconnects to the lighthouse after the service restarts
+      udp_succeeds(allowToLighthouse, "10.0.100.1")
+      udp_succeeds(allowAny, "192.168.1.1")
+      udp_succeeds(allowAny, "10.0.100.1")
+      udp_succeeds(allowAny, "10.0.100.4")
       ${allowTrafficBetweenV6 "lighthouse" "allowAny"}
       ${allowTrafficBetweenV6 "lighthouse" "allowToLighthouse"}
       ${allowTrafficBetweenV6 "allowAny" "allowToLighthouse"}
 
       # block allowFromLighthouse <-> allowAny, and allowFromLighthouse -> allowAny should still work.
       ${blockTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
+      udp_succeeds(allowFromLighthouse, "2001:db8::2")
+      udp_succeeds(allowFromLighthouse, "10.0.100.2")
       ${allowTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      udp_succeeds(allowFromLighthouse, "10.0.100.2")
+      udp_succeeds(allowFromLighthouse, "2001:db8::2")
 
-      # allowToLighthouse can ping the lighthouse but not allowAny or allowFromLighthouse
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.1", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::1", timeout=10)
-      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
-      allowToLighthouse.fail("ping -c3 -W1 2001:db8::2")
-      allowToLighthouse.fail("ping -c3 -W1 10.0.100.3")
-      allowToLighthouse.fail("ping -c3 -W1 2001:db8::3")
-
-      # allowAny can ping allowFromLighthouse now that allowFromLighthouse pinged it first
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
+      # allowToLighthouse can reach the lighthouse but not allowAny or allowFromLighthouse
+      udp_succeeds(allowToLighthouse, "10.0.100.1")
+      udp_succeeds(allowToLighthouse, "2001:db8::1")
+      udp_fails(allowToLighthouse, "10.0.100.2")
+      udp_fails(allowToLighthouse, "2001:db8::2")
+      udp_fails(allowToLighthouse, "10.0.100.3")
+      udp_fails(allowToLighthouse, "2001:db8::3")
 
       # block allowAny <-> allowFromLighthouse, and allowAny -> allowFromLighthouse should still work.
       ${blockTrafficBetween "allowAny" "allowFromLighthouse"}
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
+      udp_succeeds(allowFromLighthouse, "10.0.100.2")
+      udp_succeeds(allowFromLighthouse, "2001:db8::2")
       ${allowTrafficBetween "allowAny" "allowFromLighthouse"}
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
+      udp_succeeds(allowFromLighthouse, "10.0.100.2")
+      udp_succeeds(allowFromLighthouse, "2001:db8::2")
 
-      # allowToLighthouse can ping allowAny if allowAny pings it first
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      # allowToLighthouse can reach allowAny if allowAny connects to it first
+      udp_succeeds(allowAny, "10.0.100.4")
+      udp_succeeds(allowAny, "2001:db8::4")
 
       # block allowToLighthouse <-> allowAny, and allowAny <-> allowToLighthouse should still work.
       ${blockTrafficBetween "allowAny" "allowToLighthouse"}
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      udp_succeeds(allowAny, "10.0.100.4")
+      udp_succeeds(allowAny, "2001:db8::4")
       ${allowTrafficBetween "allowAny" "allowToLighthouse"}
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      udp_succeeds(allowAny, "10.0.100.4")
+      udp_succeeds(allowAny, "2001:db8::4")
 
       # block lighthouse <-> allowFromLighthouse and allowAny <-> allowFromLighthouse; allowFromLighthouse won't get to allowAny
       ${blockTrafficBetween "allowFromLighthouse" "lighthouse"}
       ${blockTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.fail("ping -c3 -W1 10.0.100.2")
-      allowFromLighthouse.fail("ping -c3 -W1 2001:db8::2")
+      udp_fails(allowFromLighthouse, "10.0.100.2")
+      udp_fails(allowFromLighthouse, "2001:db8::2")
       ${allowTrafficBetween "allowFromLighthouse" "lighthouse"}
       ${allowTrafficBetween "allowFromLighthouse" "allowAny"}
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
+      udp_succeeds(allowFromLighthouse, "10.0.100.2")
+      udp_succeeds(allowFromLighthouse, "2001:db8::2")
 
       # block lighthouse <-> allowAny, allowAny <-> allowFromLighthouse, and allowAny <-> allowToLighthouse; it won't get to allowFromLighthouse or allowToLighthouse
       ${blockTrafficBetween "allowAny" "lighthouse"}
       ${blockTrafficBetween "allowAny" "allowFromLighthouse"}
       ${blockTrafficBetween "allowAny" "allowToLighthouse"}
-      allowFromLighthouse.fail("ping -c3 -W1 10.0.100.2")
-      allowFromLighthouse.fail("ping -c3 -W1 2001:db8::2")
-      allowAny.fail("ping -c3 -W1 10.0.100.3")
-      allowAny.fail("ping -c3 -W1 2001:db8::3")
-      allowAny.fail("ping -c3 -W1 10.0.100.4")
-      allowAny.fail("ping -c3 -W1 2001:db8::4")
+      udp_fails(allowFromLighthouse, "10.0.100.2")
+      udp_fails(allowFromLighthouse, "2001:db8::2")
+      udp_fails(allowAny, "10.0.100.3")
+      udp_fails(allowAny, "2001:db8::3")
+      udp_fails(allowAny, "10.0.100.4")
+      udp_fails(allowAny, "2001:db8::4")
       ${allowTrafficBetween "allowAny" "lighthouse"}
       ${allowTrafficBetween "allowAny" "allowFromLighthouse"}
       ${allowTrafficBetween "allowAny" "allowToLighthouse"}
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
-      allowFromLighthouse.wait_until_succeeds("ping -c1 -W1 2001:db8::2", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::3", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
-      allowAny.wait_until_succeeds("ping -c1 -W1 2001:db8::4", timeout=10)
+      udp_succeeds(allowFromLighthouse, "10.0.100.2")
+      udp_succeeds(allowFromLighthouse, "2001:db8::2")
+      udp_succeeds(allowAny, "10.0.100.4")
+      udp_succeeds(allowAny, "2001:db8::4")
 
       # block lighthouse <-> allowToLighthouse and allowToLighthouse <-> allowAny; it won't get to allowAny
       ${blockTrafficBetween "allowToLighthouse" "lighthouse"}
       ${blockTrafficBetween "allowToLighthouse" "allowAny"}
-      allowAny.fail("ping -c3 -W1 10.0.100.4")
-      allowAny.fail("ping -c3 -W1 2001:db8::4")
-      allowToLighthouse.fail("ping -c3 -W1 10.0.100.2")
-      allowToLighthouse.fail("ping -c3 -W1 2001:db8::2")
+      udp_fails(allowAny, "10.0.100.4")
+      udp_fails(allowAny, "2001:db8::4")
+      udp_fails(allowToLighthouse, "10.0.100.2")
+      udp_fails(allowToLighthouse, "2001:db8::2")
       ${allowTrafficBetween "allowToLighthouse" "lighthouse"}
       ${allowTrafficBetween "allowToLighthouse" "allowAny"}
-      allowAny.wait_until_succeeds("ping -c1 -W1 10.0.100.4", timeout=10)
-      allowToLighthouse.wait_until_succeeds("ping -c1 -W1 10.0.100.2", timeout=10)
+      udp_succeeds(allowAny, "10.0.100.4")
     '';
 }

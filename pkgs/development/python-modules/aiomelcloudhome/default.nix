@@ -1,31 +1,34 @@
 {
   lib,
+  aiohttp,
+  aresponses,
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  aiohttp,
   pydantic,
-  tenacity,
-  yarl,
-  aresponses,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
+  tenacity,
+  yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "aiomelcloudhome";
-  version = "0.2.3";
+  version = "0.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "aiomelcloudhome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2hNQszldugWwbow/mf5QFH0dUjZnqT6Q9EawzEgQafw=";
+    hash = "sha256-epGyC9Ur6+UnccXjlTg6JZDTA0muDbbQrf9sy4+wJJQ=";
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp

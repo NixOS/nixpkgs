@@ -96,20 +96,26 @@ def _get_system_attr(
     grouped_nix_args: GroupedNixArgs,
 ) -> str:
     match action:
-        case Action.BUILD_IMAGE if flake:
-            variants = nix.get_build_image_variants_flake(
-                flake,
-                eval_flags=grouped_nix_args.flake_eval_flags,
-            )
+        case Action.BUILD_IMAGE:
+            variants: ImageVariants = {}
+            if flake:
+                variants = nix.get_build_image_variants_flake(
+                    flake,
+                    args.specialisation,
+                    eval_flags=grouped_nix_args.flake_eval_flags,
+                )
+            elif build_attr:
+                variants = nix.get_build_image_variants(
+                    build_attr,
+                    args.specialisation,
+                    instantiate_flags=grouped_nix_args.common_flags,
+                )
+            else:
+                raise NixOSRebuildError("failed to get image variants: both `flake` and `build_attr` are None")
+
             _validate_image_variant(args.image_variant, variants)
-            return f"config.system.build.images.{args.image_variant}"
-        case Action.BUILD_IMAGE if build_attr:
-            variants = nix.get_build_image_variants(
-                build_attr,
-                instantiate_flags=grouped_nix_args.common_flags,
-            )
-            _validate_image_variant(args.image_variant, variants)
-            return f"config.system.build.images.{args.image_variant}"
+            return f"{nix.get_build_image_attr(args.specialisation)}.{args.image_variant}"
+
         case Action.BUILD_VM:
             if args.specialisation:
                 return f"config.specialisation.{args.specialisation}.configuration.system.build.vm"
@@ -261,12 +267,14 @@ def _activate_system(
                 image_name = nix.get_build_image_name_flake(
                     flake,
                     args.image_variant,
+                    args.specialisation,
                     eval_flags=grouped_nix_args.flake_eval_flags,
                 )
             else:
                 image_name = nix.get_build_image_name(
                     build_attr,
                     args.image_variant,
+                    args.specialisation,
                     instantiate_flags=grouped_nix_args.common_flags,
                 )
             disk_path = path_to_config / image_name

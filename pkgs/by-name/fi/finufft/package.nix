@@ -2,9 +2,8 @@
   lib,
   stdenv,
   config,
+  cpm-cmake,
   fetchFromGitHub,
-  fetchurl,
-  applyPatches,
 
   # nativeBuildInputs
   cmake,
@@ -23,26 +22,6 @@
 }:
 
 let
-  cpmSourceCache = applyPatches (finalAttrs: {
-    name = "cpm-cmake";
-    # grep for CPM_DOWNLOAD_VERSION in CMakeLists.txt
-    version = "0.42.0";
-    src = fetchurl {
-      url = "https://github.com/cpm-cmake/CPM.cmake/releases/download/v${finalAttrs.version}/CPM.cmake";
-      hash = "sha256-ICC0/ELbpEgXmD4GNC5oLs/D0vSEpYHxHMVzH75Nzoo=";
-    };
-    # CPM.cmake is a single file, not an archive, so unpackPhase just copies it.
-    unpackPhase = ''
-      cp $src CPM.cmake
-    '';
-    # Restructure into the layout CPM_SOURCE_CACHE expects:
-    #   <store-path>/cpm/CPM_<version>.cmake
-    postPatch = ''
-      mkdir -p cpm
-      mv CPM.cmake cpm/CPM_${finalAttrs.version}.cmake
-    '';
-  });
-
   # CPM fetches a cmake find module for FFTW (provides FindFFTW.cmake).
   # Pinned to the commit that upstream GIT_TAG "master" resolves to.
   findfftwSrc = fetchFromGitHub {
@@ -107,7 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cmakeFlags = [
-    (lib.cmakeFeature "CPM_SOURCE_CACHE" cpmSourceCache.outPath)
+    # use nixpkgs copy
+    (lib.cmakeFeature "CPM_SOURCE_CACHE" "${cpm-cmake}/share")
+    (lib.cmakeFeature "CPM_DOWNLOAD_VERSION" cpm-cmake.version)
     (lib.cmakeFeature "CPM_findfftw_SOURCE" findfftwSrc.outPath)
     (lib.cmakeFeature "CPM_xsimd_SOURCE" xsimdSrc.outPath)
 

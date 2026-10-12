@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "stackit-core";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
 
   __structuredAttrs = true;
@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "stackit_core";
     inherit (finalAttrs) version;
-    hash = "sha256-v9ItsZYLRz4DSk/xxDDHk5r/HKCVh8D0fgIKet1E01I=";
+    hash = "sha256-YWmYZbYK7Kh3hD6AcsrDgzuOP0acBDswZQfsyWYSQwE=";
   };
 
   build-system = [ hatchling ];

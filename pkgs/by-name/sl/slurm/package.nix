@@ -17,7 +17,7 @@
   libbpf,
   ncurses,
   libmysqlclient,
-  lua,
+  lua5_2_compat,
   hwloc,
   numactl,
   readline,
@@ -39,6 +39,9 @@
   symlinkJoin,
   s2n-tls,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";

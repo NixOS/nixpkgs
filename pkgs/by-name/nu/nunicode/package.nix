@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nunicode";
-  version = "1.12";
+  version = "1.18";
 
   strictDeps = true;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alekseyt";
     repo = "nunicode";
     tag = finalAttrs.version;
-    hash = "sha256-lYGO9WWywh3nJb7yryOnivw9MLYaldmPUr5/Pq5aie8=";
+    hash = "sha256-js8Dwg70mcZT2zpsjLfrP2Rk63uQxYzWQc0tIL9du3g=";
   };
 
   postPatch = ''

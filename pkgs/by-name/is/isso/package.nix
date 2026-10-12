@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Commenting server similar to Disqus";
     mainProgram = "isso";
-    homepage = "https://posativ.org/isso/";
+    homepage = "https://isso-comments.de";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
   };

@@ -8,14 +8,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "imap-tools";
-  version = "1.15.0";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AnAplrYjqy9K/GagiDgmExnOL9poEQ7Ksjyv8QdATIE=";
+    hash = "sha256-4TAO3sxsTtvF/JYpltMjM4LHGlbUZfU8P/x4LSExwFY=";
   };
 
   build-system = [ setuptools ];

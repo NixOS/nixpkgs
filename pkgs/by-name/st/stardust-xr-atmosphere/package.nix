@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   __structuredAttrs = true;
-  strictDeps = true;
 
   passthru = {
     tests.versionTest = testers.testVersion {

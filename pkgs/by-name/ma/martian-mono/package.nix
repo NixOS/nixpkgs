@@ -4,6 +4,7 @@
   fetchFromGitHub,
   installFonts,
   python3Packages,
+  gftools,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -28,7 +29,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   nativeBuildInputs = [
-    python3Packages.gftools
+    gftools
     python3Packages.fontmake
     installFonts
   ];

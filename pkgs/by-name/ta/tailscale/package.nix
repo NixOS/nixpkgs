@@ -2,7 +2,7 @@
   lib,
   stdenv,
 
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
 
   makeWrapper,
@@ -15,6 +15,9 @@
   procps,
   # runtime tooling - darwin
   lsof,
+  # check phase tooling
+  gitMinimal,
+  openssh,
   # check phase tooling - darwin
   unixtools,
 
@@ -22,9 +25,9 @@
   tailscale-nginx-auth,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "tailscale";
-  version = "1.102.5";
+  version = "1.104.1";
 
   outputs = [
     "out"
@@ -35,17 +38,21 @@ buildGoModule (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gm5NN4IqR7epks8WjncQBsPYaPsH+ooXporzpuCEac0=";
+    hash = "sha256-f80GVxstQrr8ENP1bseoIpLflQ+QYEisDF8PHzTs7Lg=";
   };
 
-  vendorHash = "sha256-amKkUPszyhG4N5ZtrB01swBACYq76raSS+SQRneLmwc=";
+  vendorHash = "sha256-f9abuyk1qvVr6MPpfmHay6p/U/+8flm1SBmHGjZa1aU=";
 
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
   ];
 
-  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+  nativeCheckInputs = [
+    # misc/git_hook/githook tests create a scratch repository
+    gitMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     unixtools.netstat
   ];
 
@@ -56,11 +63,6 @@ buildGoModule (finalAttrs: {
     "cmd/derpprobe"
     "cmd/tailscaled"
     "cmd/get-authkey"
-  ];
-
-  excludedPackages = [
-    # Exclude integration tests which fail to work and require additional tooling
-    "tstest/integration"
   ];
 
   ldflags = [
@@ -83,7 +85,7 @@ buildGoModule (finalAttrs: {
   # panic: httptest: failed to listen on a port: listen tcp6 [::1]:0: bind: operation not permitted
   __darwinAllowLocalNetworking = true;
 
-  # Tests are in the `tests` passthru derivation because they are flaky, frequently causing build failures.
+  # Tests are in the `go-*` passthru derivations because they are flaky, frequently causing build failures.
   doCheck = false;
 
   preCheck = ''
@@ -96,94 +98,21 @@ buildGoModule (finalAttrs: {
   checkFlags =
     let
       skippedTests = [
-        # dislikes vendoring
-        "TestPackageDocs" # .
-        # tries to start tailscaled
-        "TestContainerBoot" # cmd/containerboot
-
-        # just part of a tool which generates yaml for k8s CRDs
-        # requires helm
-        "Test_generate" # cmd/k8s-operator/generate
-        # self reported potentially flakey test
-        "TestConnMemoryOverhead" # control/controlbase
-
         # interacts with `/proc/net/route` and need a default route
         "TestDefaultRouteInterface" # net/netmon
         "TestRouteLinuxNetlink" # net/netmon
         "TestGetRouteTable" # net/routetable
+        "TestDeriveBindhost" # tstest/integration/vms
 
         # remote udp call to 8.8.8.8
         "TestDefaultInterfacePortable" # net/netutil
-
-        # launches an ssh server which works when provided openssh
-        # also requires executing commands but nixbld user has /noshell
-        "TestSSH" # ssh/tailssh
-        # wants users alice & ubuntu
-        "TestMultipleRecorders" # ssh/tailssh
-        "TestSSHAuthFlow" # ssh/tailssh
-        "TestSSHRecordingCancelsSessionsOnUploadFailure" # ssh/tailssh
-        "TestSSHRecordingNonInteractive" # ssh/tailssh
 
         # test for a dev util which helps to fork golang.org/x/crypto/acme
         # not necessary and fails to match
         "TestSyncedToUpstream" # tempfork/acme
 
-        # flaky: https://github.com/tailscale/tailscale/issues/11762
-        "TestTwoDevicePing"
-
-        # timeout 10m
-        "TestTaildropIntegration"
-        "TestTaildropIntegration_Fresh"
-
-        # context deadline exceeded
-        "TestPacketFilterFromNetmap" # tsnet
-
-        # tsnet tests that need a full tailscale server and hang in the sandbox
-        "TestListener_Server" # tsnet
-        "TestDialBlocks" # tsnet
-        "TestConn" # tsnet
-        "TestLoopbackLocalAPI" # tsnet
-        "TestLoopbackSOCKS5" # tsnet
-        "TestTailscaleIPs" # tsnet
-        "TestListenerCleanup" # tsnet
-        "TestStartStopStartGetsSameIP" # tsnet
-        "TestFunnel" # tsnet
-        "TestFunnelClose" # tsnet
-        "TestListenService" # tsnet
-        "TestListenerClose" # tsnet
-        "TestFallbackTCPHandler" # tsnet
-        "TestCapturePcap" # tsnet
-        "TestUDPConn" # tsnet
-        "TestUserMetricsByteCounters" # tsnet
-        "TestUserMetricsRouteGauges" # tsnet
-        "TestTUN" # tsnet
-        "TestTUNDNS" # tsnet
-        "TestListenPacket" # tsnet
-        "TestListenTCP" # tsnet
-        "TestListenTCPDualStack" # tsnet
-        "TestDialTCP" # tsnet
-        "TestDialUDP" # tsnet
-        "TestSelfDial" # tsnet
-        "TestListenUnspecifiedAddr" # tsnet
-        "TestListenMultipleEphemeralPorts" # tsnet
-
-        # flaky: https://github.com/tailscale/tailscale/issues/15348
-        "TestSafeFuncHappyPath"
-
         # Requires `go` to be installed with the `go tool` system which we don't use
         "TestGoVersion"
-
-        # Fails because we vendor dependencies
-        "TestLicenseHeaders"
-
-        # Runs `go test -race`, which requires cgo, but we build with CGO_ENABLED=0
-        "TestRaceAttributedToPassingTest" # cmd/testwrapper
-        "TestRaceSuppressesFlakyRetry" # cmd/testwrapper
-
-        # Uses testing/synctest which spawns goroutines that block on syscalls
-        # incompatible with synctest's bubble mechanism
-        "TestDNSTrampleRecovery"
-        "TestOnPolicyChangeSkipsPreAuthConns" # ssh/tailssh
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # syscall default route interface en0 differs from netstat
@@ -245,11 +174,127 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/tailscale completion zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) headscale;
-    inherit tailscale-nginx-auth;
-    tests = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
-  };
+  passthru.tests =
+    let
+      # Directories whose Go tests get a derivation of their own, mapped to
+      # attributes (or a function of the previous attributes) to override in
+      # it. A directory nested in another group is tested only by its own
+      # group. Packages in every other directory are tested by `go-other`.
+      goTestGroups = {
+        client = { };
+        cmd = {
+          # TestContainerBoot embeds these as fake tailscale{,d} binaries.
+          preCheck = ''
+            chmod +x cmd/containerboot/test_tailscale{,d}.sh
+            patchShebangs cmd/containerboot/test_tailscale{,d}.sh
+          '';
+        };
+        # TestRace* run `go test -race`, which needs cgo.
+        "cmd/testwrapper" = old: {
+          env = old.env // {
+            CGO_ENABLED = 1;
+          };
+        };
+        control = { };
+        derp = { };
+        drive = { };
+        feature = { };
+        ipn = { };
+        k8s-operator = { };
+        kube = { };
+        net = { };
+        ssh = old: {
+          # TestSSH and TestExitCodePassthrough drive the server with an ssh client.
+          nativeCheckInputs = old.nativeCheckInputs ++ [ openssh ];
+          env = old.env // {
+            # Skip the TestSSH subtests that upstream skips in its own CI;
+            # TestSSH/env expects sessions to start in $HOME, which tailssh
+            # only does if /usr/bin/true or /bin/true exists.
+            CI = "true";
+          };
+          # SSH sessions otherwise get an FHS-style default PATH, which finds
+          # nothing in the sandbox.
+          preCheck = ''
+            export TAILSCALE_SSH_DEFAULT_PATH="$PATH"
+          '';
+        };
+        tsnet = { };
+        tstest = { };
+        tsweb = { };
+        types = { };
+        util = { };
+        wgengine = { };
+      };
+      goTestDirs = lib.attrNames goTestGroups;
+
+      mkGoTests =
+        name: pattern: excludedDirs: overrides:
+        let
+          excludeRegex = "^tailscale\\.com/(${
+            lib.concatMapStringsSep "|" lib.escapeRegex ([ "tool" ] ++ excludedDirs)
+          })(/|$)";
+        in
+        finalAttrs.finalPackage.overrideAttrs (
+          old:
+          {
+            pname = "${old.pname}-go-tests-${name}";
+            outputs = [ "out" ];
+            dontBuild = true;
+            doCheck = true;
+
+            # A single `go test` invocation for the whole group, so that every
+            # failing package is reported rather than only the first.
+            checkPhase = ''
+              runHook preCheck
+              # We do not set trimpath for tests, in case they reference test assets
+              export GOFLAGS=''${GOFLAGS//-trimpath/}
+
+              tags=${lib.escapeShellArg (lib.concatStringsSep "," finalAttrs.tags)}
+              packages=$(go list -tags="$tags" ${pattern} | { grep -v -E ${lib.escapeShellArg excludeRegex} || true; })
+              if [[ -z $packages ]]; then
+                echo "error: no Go packages matched ${pattern}" >&2
+                exit 1
+              fi
+
+              go test -vet=off -p "$NIX_BUILD_CORES" -tags="$tags" \
+                -ldflags=${lib.escapeShellArg (toString finalAttrs.ldflags)} \
+                $checkFlags $packages
+
+              runHook postCheck
+            '';
+
+            installPhase = ''
+              runHook preInstall
+              touch $out
+              runHook postInstall
+            '';
+            postInstall = "";
+          }
+          // lib.toFunction overrides old
+        );
+    in
+    {
+      inherit (nixosTests) headscale;
+      inherit tailscale-nginx-auth;
+      go-other = mkGoTests "other" "./..." goTestDirs {
+        # TestLicenseHeaders and TestPackageDocs walk the source tree and
+        # would check the vendored dependencies too. `filepath.Walk` does not
+        # follow symlinks, so link the vendor directory instead of copying it.
+        preCheck = ''
+          chmod -R u+w vendor
+          rm -rf vendor
+          ln -s "$goModules" vendor
+        '';
+      };
+    }
+    // lib.mapAttrs' (
+      dir: overrides:
+      let
+        name = lib.replaceStrings [ "/" ] [ "-" ] dir;
+        nestedDirs = lib.filter (lib.hasPrefix "${dir}/") goTestDirs;
+      in
+      lib.nameValuePair "go-${name}" (mkGoTests name "./${dir}/..." nestedDirs overrides)
+    ) goTestGroups;
 
   meta = {
     homepage = "https://tailscale.com";

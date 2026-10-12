@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   writeScript,
 
   # build-system
@@ -28,7 +29,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dbt-common";
   version = "1.37.3-unstable-2026-03-27";
   pyproject = true;
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
+    "pathspec"
     "protobuf"
   ];
 
@@ -76,6 +78,11 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
     "TestFindMatching"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # KeyError: 'TestAutoRecord' / assert 5 == 6
+    "test_recorded_function_with_override_and_additional_fields"
+    "test_recorded_function_with_override_and_additional_optional_fields"
   ];
 
   pythonImportsCheck = [ "dbt_common" ];
@@ -85,7 +92,7 @@ buildPythonPackage rec {
     #!nix-shell -i bash -p git common-updater-scripts perl
 
     tmpdir="$(mktemp -d)"
-    git clone --depth=1 "${src.gitRepoUrl}" "$tmpdir"
+    git clone --depth=1 "${finalAttrs.src.gitRepoUrl}" "$tmpdir"
 
     pushd "$tmpdir"
 
@@ -108,4 +115,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

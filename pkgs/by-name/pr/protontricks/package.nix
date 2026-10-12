@@ -80,6 +80,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
     rm "$out/bin/protontricks-desktop-install"
   '';
 
+  disabledTests = [
+    # Executes ldconfig via steam-run, which relies on bubblewrap.
+    # bubblewrap requires unprivileged user namespaces, which means this fails in some environments
+    # with hardened kernels or restrictive distros, such as GitHub Actions (Ubuntu 24.04).
+    "test_get_runtime_library_paths"
+  ];
+
   pythonImportsCheck = [ "protontricks" ];
 
   passthru.updateScript = nix-update-script { };

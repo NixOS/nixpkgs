@@ -29,8 +29,6 @@ let
         cp -r dist/* $out
         runHook postInstall
       '';
-
-      passthru.updateScript = nix-update-script { };
     };
 in
 buildGoModule (finalAttrs: {
@@ -59,8 +57,11 @@ buildGoModule (finalAttrs: {
     cp -r ${frontend finalAttrs}/* $out/share/scrutiny
   '';
 
-  passthru.tests.scrutiny = nixosTests.scrutiny;
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    frontend = frontend finalAttrs;
+    tests.scrutiny = nixosTests.scrutiny;
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=frontend" ]; };
+  };
 
   meta = {
     description = "Hard Drive S.M.A.R.T Monitoring, Historical Trends & Real World Failure Thresholds";

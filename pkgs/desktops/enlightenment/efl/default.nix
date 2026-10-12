@@ -39,7 +39,7 @@
   libtiff,
   libwebp,
   libxkbcommon,
-  lua,
+  lua5_2_compat,
   lz4,
   mesa-gl-headers,
   mint-x-icons,
@@ -71,6 +71,7 @@
   directoryListingUpdater,
 }:
 let
+  lua = lua5_2_compat;
   inherit (lib)
     mesonBool
     mesonOption
