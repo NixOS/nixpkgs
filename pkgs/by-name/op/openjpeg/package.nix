@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HSXGdpHUbwlYy5a+zKpcLo2d+b507Qf5nsaMghVBlZ8=";
   };
 
@@ -126,6 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.all;
-    changelog = "https://github.com/uclouvain/openjpeg/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/uclouvain/openjpeg/blob/${finalAttrs.src.tag}/CHANGELOG.md";
   };
 })
