@@ -79,7 +79,7 @@ To test redirects, perform a browser refresh, as browsers do not re-run client J
 The Nixpkgs manual follows a set of conventions.
 
 * prose follows the [style guide](./styleguide.md);
-* source file follows custom [markdown syntax](#syntax);
+* source files can use the [supported markdown features](#syntax);
 * technical writing follows [Diátaxis](https://nix.dev/contributing/documentation/diataxis).
 
 ### Writing Function Documentation
