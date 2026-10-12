@@ -8442,6 +8442,12 @@
     githubId = 97852;
     name = "Ellis Whitehead";
   };
+  ellyxir = {
+    email = "ellyse@ellyxir.com";
+    github = "ellyxir";
+    githubId = 141240083;
+    name = "Ellyse Cedeno";
+  };
   elnudev = {
     email = "elnu@elnu.com";
     github = "ElnuDev";
