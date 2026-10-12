@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     glib
     wrapGAppsNoGuiHook
-    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
+    (python3.withPackages (p: [ p.pygobject3 ]))
   ]
   ++ lib.optionals withIntrospection [
     gobject-introspection
