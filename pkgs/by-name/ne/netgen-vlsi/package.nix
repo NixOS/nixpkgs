@@ -50,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "netgen";
     homepage = "https://github.com/RTimothyEdwards/netgen";
     license = lib.licenses.gpl1Only;
-    maintainers = [ lib.maintainers.gonsolo ];
+    maintainers = [
+      lib.maintainers.gonsolo
+      lib.maintainers.MrAbhi19
+    ];
   };
 })
