@@ -16,6 +16,7 @@
   # any other version — so pin the matching versioned boost explicitly rather
   # than the default (which is 1.91 on current nixpkgs and would trigger the
   # download). boost189 is available across nixpkgs versions.
+  avahi,
   boost189,
   curl,
   libcap,
@@ -132,6 +133,9 @@ stdenv'.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wayland-scanner
+    # referenced by appendRunpaths (below) so the avahi store path is a build
+    # dependency and libavahi-common.so.3 can be resolved at runtime
+    avahi
     # prebuilt static FFmpeg libs need these at link time
     autoPatchelfHook
   ]
@@ -207,6 +211,14 @@ stdenv'.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  # Hermes dlopen()s libavahi-common.so.3 at runtime for mDNS discovery, so
+  # the linker never records it as NEEDED and auto-patchelf would not add it
+  # to the RPATH on its own. appendRunpaths is consumed by auto-patchelf
+  # (--append-rpaths) and adds the avahi lib dir to the binary's RUNPATH.
+  appendRunpaths = [
+    "${avahi}/lib"
+  ];
 
   # Explicit, deterministic install check. Running `hermes` with no args
   # starts the streaming server and never exits (would hang CI), so check
