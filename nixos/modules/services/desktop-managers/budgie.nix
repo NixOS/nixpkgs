@@ -59,6 +59,63 @@ let
   };
 
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.budgie.excludePackages;
+
+  budgiePackages =
+    with pkgs;
+    [
+      # Budgie Desktop.
+      budgie-backgrounds
+      budgie-control-center'
+      budgie-desktop-services
+      (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
+      budgie-desktop-view
+      budgie-session
+
+      # Required by Budgie Menu.
+      gnome-menus
+
+      # Required by Budgie Control Center.
+      zenity
+
+      # Provides `gsettings`.
+      glib
+
+      # Update user directories.
+      xdg-user-dirs
+    ]
+    ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
+    ++ (utils.removePackagesByName [
+      bluejay
+      nemo
+      eom
+      pluma
+      atril
+      engrampa
+      mate-calc
+      mate-system-monitor
+      vlc
+
+      # Supplemental tooling.
+      # See budgie-desktop's with-runtime-dependencies meson option.
+      gammastep
+      grim
+      killall
+      mesa-demos # eglinfo
+      slurp
+      swaybg
+      swayidle
+      wdisplays
+      wlopm
+
+      # Desktop themes.
+      qogir-theme
+      qogir-icon-theme
+      nixos-background-info
+
+      # Default settings.
+      nixos-gsettings-overrides
+    ] config.environment.budgie.excludePackages)
+    ++ cfg.sessionPath;
 in
 {
   meta.teams = [ lib.teams.budgie ];
@@ -160,62 +217,7 @@ in
     programs.labwc.enable = mkDefault true;
     programs.gtklock.enable = mkDefault true;
 
-    environment.systemPackages =
-      with pkgs;
-      [
-        # Budgie Desktop.
-        budgie-backgrounds
-        budgie-control-center'
-        budgie-desktop-services
-        (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
-        budgie-desktop-view
-        budgie-session
-
-        # Required by Budgie Menu.
-        gnome-menus
-
-        # Required by Budgie Control Center.
-        zenity
-
-        # Provides `gsettings`.
-        glib
-
-        # Update user directories.
-        xdg-user-dirs
-      ]
-      ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
-      ++ (utils.removePackagesByName [
-        bluejay
-        nemo
-        eom
-        pluma
-        atril
-        engrampa
-        mate-calc
-        mate-system-monitor
-        vlc
-
-        # Supplemental tooling.
-        # See budgie-desktop's with-runtime-dependencies meson option.
-        gammastep
-        grim
-        killall
-        mesa-demos # eglinfo
-        slurp
-        swaybg
-        swayidle
-        wdisplays
-        wlopm
-
-        # Desktop themes.
-        qogir-theme
-        qogir-icon-theme
-        nixos-background-info
-
-        # Default settings.
-        nixos-gsettings-overrides
-      ] config.environment.budgie.excludePackages)
-      ++ cfg.sessionPath;
+    environment.systemPackages = budgiePackages;
 
     # Both budgie-desktop-view and nemo defaults to this emulator.
     programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
@@ -288,15 +290,7 @@ in
     services.gnome.gnome-settings-daemon.enable = mkDefault true;
     services.gvfs.enable = mkDefault true;
 
-    services.dbus.packages = [
-      budgie-control-center'
-      pkgs.budgie-desktop-services
-    ]
-    ++ utils.removePackagesByName (with pkgs; [
-      atril
-      engrampa
-      nemo
-    ]) config.environment.budgie.excludePackages;
+    services.dbus.packages = budgiePackages;
 
     # Shell integration for MATE Terminal.
     programs.bash.vteIntegration = true;

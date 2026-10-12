@@ -7,6 +7,46 @@
 
 let
   cfg = config.services.desktopManager.lomiri;
+
+  lomiriPackages =
+    (with pkgs; [
+      glib # XDG MIME-related tools identify it as GNOME, add gio for MIME identification to work
+      libayatana-common
+      ubports-click
+    ])
+    # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
+    ++ (with pkgs.lomiri-qt6; [
+      morph-browser
+    ])
+    ++ (with pkgs.lomiri; [
+      hfd-service
+      libusermetrics
+      lomiri
+      lomiri-calculator-app
+      lomiri-calendar-app
+      lomiri-camera-app
+      lomiri-clock-app
+      lomiri-content-hub
+      lomiri-docviewer-app
+      lomiri-download-manager
+      lomiri-filemanager-app
+      lomiri-gallery-app
+      lomiri-history-service
+      lomiri-mediaplayer-app
+      lomiri-music-app
+      lomiri-polkit-agent
+      lomiri-schemas # exposes some required dbus interfaces
+      lomiri-session # wrappers to properly launch the session
+      lomiri-sounds
+      lomiri-system-settings
+      lomiri-telephony-service
+      lomiri-terminal-app
+      lomiri-thumbnailer
+      lomiri-url-dispatcher
+      mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
+      qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
+      teleports
+    ]);
 in
 {
   options.services.desktopManager.lomiri = {
@@ -93,45 +133,7 @@ in
       services.desktopManager.lomiri.basics = true;
 
       environment = {
-        systemPackages =
-          (with pkgs; [
-            glib # XDG MIME-related tools identify it as GNOME, add gio for MIME identification to work
-            libayatana-common
-            ubports-click
-          ])
-          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
-          ++ (with pkgs.lomiri-qt6; [
-            morph-browser
-          ])
-          ++ (with pkgs.lomiri; [
-            hfd-service
-            libusermetrics
-            lomiri
-            lomiri-calculator-app
-            lomiri-calendar-app
-            lomiri-camera-app
-            lomiri-clock-app
-            lomiri-content-hub
-            lomiri-docviewer-app
-            lomiri-download-manager
-            lomiri-filemanager-app
-            lomiri-gallery-app
-            lomiri-history-service
-            lomiri-mediaplayer-app
-            lomiri-music-app
-            lomiri-polkit-agent
-            lomiri-schemas # exposes some required dbus interfaces
-            lomiri-session # wrappers to properly launch the session
-            lomiri-sounds
-            lomiri-system-settings
-            lomiri-telephony-service
-            lomiri-terminal-app
-            lomiri-thumbnailer
-            lomiri-url-dispatcher
-            mediascanner2 # TODO possibly needs to be kicked off by graphical-session.target
-            qtmir # not having its desktop file for Xwayland available causes any X11 application to crash the session
-            teleports
-          ]);
+        systemPackages = lomiriPackages;
       };
 
       hardware = {
@@ -145,20 +147,7 @@ in
         lomiri-download-manager
       ];
 
-      services.dbus.packages = [
-        pkgs.ubports-click
-      ]
-      ++ (with pkgs.lomiri; [
-        hfd-service
-        libusermetrics
-        lomiri-content-hub
-        lomiri-download-manager
-        lomiri-history-service
-        lomiri-telephony-service
-        lomiri-thumbnailer
-        lomiri-url-dispatcher
-        mediascanner2
-      ]);
+      services.dbus.packages = lomiriPackages;
 
       services.accounts-daemon.enable = true;
       services.udisks2.enable = true;
