@@ -77,6 +77,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "ttnn" ];
 
+  # Tests need access to a physical chip:
+  #   TT_FATAL: No chips detected in the cluster (assert.hpp:104)
+  doCheck = false;
+
   meta = {
     description = "Python library and operator framework for Tenstorrent devices (TT-NN)";
     homepage = "https://github.com/tenstorrent/tt-metal";
