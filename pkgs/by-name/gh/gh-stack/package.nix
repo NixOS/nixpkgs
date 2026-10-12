@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "gh-stack";
-  version = "0.1.1";
+  version = "0.2.1";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,15 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-stack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jwfqiCnCOOW0AKA52hbgvCCoLzfFX+QfM+vXABkzZgw=";
+    hash = "sha256-Mq4jAqeSHDuCiDYSa40okrq06UhC3dZGjgCXJKMbgzU=";
   };
 
-  vendorHash = "sha256-0Xtr/MOpX4u5GnbRdNxKPA0GpSzi8PIbVc9MmP05De4=";
+  vendorHash = "sha256-TC1mSXYjOQo00fb2yuGdk1rl6z6rp0WT3AmzXomPzis=";
+
+  # the go-modules derivation inherits the installAgentSkills hook but has no pname
+  overrideModAttrs = _: {
+    dontInstallAgentSkills = true;
+  };
 
   ldflags = [
     "-s"
@@ -33,6 +38,11 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeCheckInputs = [ gitMinimal ];
+
+  # some tests resolve branches through git and need to run inside a repository
+  preCheck = ''
+    git init --quiet
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

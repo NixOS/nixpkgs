@@ -8,6 +8,7 @@
 buildGoModule (finalAttrs: {
   pname = "nextcloud-spreed-signaling";
   version = "2.1.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "strukturag";
@@ -30,6 +31,10 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       hensoko
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "riscv64-linux"
+    ];
   };
 })

@@ -18446,12 +18446,12 @@ final: prev: {
 
   toggable-term-nvim = buildVimPlugin {
     pname = "toggable-term-nvim";
-    version = "0-unstable-2026-10-05";
+    version = "0-unstable-2026-10-11";
     src = fetchFromGitHub {
       owner = "sergioia-dev";
       repo = "toggable-term-nvim";
-      rev = "713633355ced060f5337e6ce5271db67367bbf16";
-      hash = "sha256-Bs3elJzzzi1WiqwP0TnXEkUdwjizO2OckaNBTX6iGRM=";
+      rev = "f16258898a1fe879ad69402edeb9915518cd691b";
+      hash = "sha256-Maco2xfRvwxCXHAZQ3bMdCbqhhOBHd+92tegEvgdrg0=";
     };
     meta.homepage = "https://github.com/sergioia-dev/toggable-term-nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
