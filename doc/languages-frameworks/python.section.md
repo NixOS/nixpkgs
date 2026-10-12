@@ -615,6 +615,22 @@ python3.withPackages (ps: [ ps.pyramid ])
 
 Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
 
+When cross-compiling, environments created by `withPackages` support
+[dependency splicing](#ssec-cross-dependency-implementation). For example, in a derivation:
+
+```nix
+{
+  nativeBuildInputs = [
+    (python3.withPackages (ps: [ ps.cffi ]))
+  ];
+}
+```
+
+This selects Python and `cffi` for the build platform. In `buildInputs`, the same
+expression selects them for the host platform. Select packages from the callback's
+`ps` argument so they match the selected interpreter; packages captured from
+outside the callback are not automatically replaced with their platform variants.
+
 As [`python.withPackages`](#python.withpackages-function) uses [`python.buildEnv`](#python.buildenv-function) under the hood, it also
 supports the `env` attribute. The `shell.nix` file from the previous section can
 thus be also written like this:
