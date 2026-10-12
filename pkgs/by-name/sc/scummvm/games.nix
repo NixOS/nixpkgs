@@ -195,4 +195,19 @@ in
     ];
     files = [ "*.vga" ];
   };
+
+  mystery-house = generic {
+    plong = "Mystery House";
+    pshort = "mysteryhouse";
+    pcode = "hires1";
+    description = "Text adventure with Apple II graphics, the first Sierra On-Line game";
+    version = "1.0";
+    src = fetchurl {
+      url = "https://downloads.scummvm.org/frs/extras/Mystery%20House/MYSTHOUS.zip";
+      hash = "sha256-raQSIooUk5RImyjGx/nrqwcitS4Ecy/QqiKUlnPPo6A=";
+    };
+    sourceRoot = ".";
+    docs = [ ];
+    files = [ "MYSTHOUS.DSK" ];
+  };
 }
