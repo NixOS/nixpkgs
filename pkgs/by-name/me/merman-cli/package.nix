@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "merman-cli";
-  version = "0.8.0";
+  version = "0.9.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "Latias94";
     repo = "merman";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-PPegdxdgT7OF5jzFskj3r5Ftwca0Z2A61q+Y2zLQuZ0=";
+    rev = "f754a3c3077d35d2a372c2fec04f9e9b87db1c3f";
+    hash = "sha256-bms+/j/DIdwnsxK+UU+mPQTDeXopv865TmPIEpHaYGQ=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "layout-elk"
     "markdown"
     "math"
+    "native-fonts"
     "network-icons"
     "parallel-markdown"
     "pdf"
@@ -43,11 +44,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "shell-completions"
     "svg"
     "system-clock"
+    "system-fonts"
     "system-random"
     "system-timezone"
     "system-timing"
   ];
   cargoBuildFlags = [
+    "--locked"
     "--package"
     "merman-cli"
     "--bin"
@@ -106,7 +109,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Headless Mermaid-compatible diagram CLI";
     homepage = "https://github.com/Latias94/merman";
-    changelog = "https://github.com/Latias94/merman/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Latias94/merman/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
