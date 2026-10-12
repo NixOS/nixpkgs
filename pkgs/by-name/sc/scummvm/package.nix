@@ -21,19 +21,18 @@
   SDL2,
   zlib,
   cctools,
-  fetchpatch,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scummvm";
-  version = "2026.3.0";
+  version = "2026.4.0";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wFEYg3hRVNVlxpw3xP8O8s4ILKy487k5hyWENaLiOlw=";
+    hash = "sha256-GBPfByKCWP4/YGRXMapM1oo0MzZZ2bAzFRu4DmZQMrI=";
   };
 
   strictDeps = true;
@@ -87,14 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace config.mk \
       --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
   '';
-
-  patches = [
-    # Nancy Drew build error. Remove after next release.
-    (fetchpatch {
-      url = "https://github.com/scummvm/scummvm/commit/e2ef63e84123c199ab55de445e406aa626147e10.patch";
-      hash = "sha256-sdabI0W6Apav/pgGBxY+usHUakxECZtYu2tdyi8gojk=";
-    })
-  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
