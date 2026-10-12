@@ -9,7 +9,7 @@
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blockbuster";
   version = "1.5.29";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cbornet";
     repo = "blockbuster";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RIy5xjTpw6Bsxo1oiKQ5fbrBpkL8eujOY85G2GW2lrI=";
   };
 
@@ -39,13 +39,15 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+  __structuredAttrs = true;
 
   pythonImportsCheck = [ "blockbuster" ];
 
   meta = {
     description = "Utility to detect blocking calls in the async event loop";
     homepage = "https://github.com/cbornet/blockbuster";
+    changelog = "https://github.com/cbornet/blockbuster/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
