@@ -9780,6 +9780,7 @@ with pkgs;
     mystery-house
     nippon-safes-inc
     sfinx
+    soltys
     ;
 
   sgt-puzzles-mobile = callPackage ../by-name/sg/sgt-puzzles/package.nix {

@@ -251,4 +251,19 @@ in
     docs = [ "license.txt" ];
     files = [ "vol.*" ];
   };
+
+  soltys = generic rec {
+    plong = "Soltys";
+    pshort = "soltys";
+    pcode = "soltys";
+    description = "Polish 2D point-and-click adventure game about a village mayor";
+    version = "1.0";
+    src = fetchurl {
+      url = "https://downloads.scummvm.org/frs/extras/Soltys/soltys-en-v${version}.zip";
+      hash = "sha256-h7ieZUuKW46+NCy0xcYEmrmkOl77R02cSbr7d9zOSPY=";
+    };
+    sourceRoot = ".";
+    docs = [ "license.txt" ];
+    files = [ "vol.*" ];
+  };
 }
