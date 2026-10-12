@@ -38,14 +38,14 @@ let
     hash = "sha256-ckZHCZV5UJicVUoi/mZDwvCJneXC3X+NA8Byp6GLE0w=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openjpeg";
   version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HSXGdpHUbwlYy5a+zKpcLo2d+b507Qf5nsaMghVBlZ8=";
   };
 
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "BUILD_JPIP_SERVER" jpipServerSupport)
     "-DBUILD_VIEWER=OFF"
     "-DBUILD_JAVA=OFF"
-    (lib.cmakeBool "BUILD_TESTING" doCheck)
+    (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
   ]
-  ++ lib.optional doCheck "-DOPJ_DATA_ROOT=${test-data}";
+  ++ lib.optional finalAttrs.finalPackage.doCheck "-DOPJ_DATA_ROOT=${test-data}";
 
   nativeBuildInputs = [
     cmake
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    incDir = "openjpeg-${lib.versions.majorMinor version}";
+    incDir = "openjpeg-${lib.versions.majorMinor finalAttrs.version}";
     tests = {
       ffmpeg = ffmpeg.override { withOpenjpeg = true; };
       imagemagick = imagemagick.override { openjpegSupport = true; };
@@ -126,6 +126,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.all;
-    changelog = "https://github.com/uclouvain/openjpeg/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/uclouvain/openjpeg/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})
