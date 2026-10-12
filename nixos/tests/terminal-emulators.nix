@@ -107,6 +107,8 @@ let
     # times out after spending many hours
     #wezterm.pkg = p: p.wezterm;
 
+    wrxvt.pkg = p: p.wrxvt;
+
     xfce4-terminal.pkg = p: p.xfce4-terminal;
 
     xterm.pkg = p: p.xterm;

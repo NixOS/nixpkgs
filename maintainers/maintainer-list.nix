@@ -11933,6 +11933,11 @@
     github = "hxtmdev";
     githubId = 7771007;
   };
+  hydrastro = {
+    name = "hydrastro";
+    github = "hydrastro";
+    githubId = 9256943;
+  };
   hythera = {
     name = "Hythera";
     github = "Hythera";
