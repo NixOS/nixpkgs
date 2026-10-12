@@ -11,7 +11,7 @@
   prometheus-cpp,
   nlohmann_json,
   nix-update-script,
-  cxxStandard ? null,
+  cxxStandard ? "20",
   enableHttp ? false,
   enableGrpc ? false,
   enablePrometheus ? false,
@@ -67,6 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  # TODO remove when https://github.com/NixOS/nixpkgs/pull/573523 is fixed
+  enableParallelChecking = false;
+
   checkInputs = [
     gtest
   ];
@@ -85,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (cxxStandard != null) [
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" cxxStandard)
-    (lib.cmakeFeature "WITH_STL" "CXX${cxxStandard}")
+    (lib.cmakeFeature "OTELCPP_WITH_STL" "CXX${cxxStandard}")
   ];
 
   outputs = [
