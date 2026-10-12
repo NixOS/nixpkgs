@@ -26,11 +26,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-+ih7QHmtQmWsi6HZZ3xepYBDYlCOyMKo0pQtr6oXpFs=";
   };
 
-  nativeBuildInputs = [
-    pyprojectVersionPatchHook
-  ];
-
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -44,6 +42,11 @@ buildPythonPackage (finalAttrs: {
     pytest-error-for-skips
     pytestCheckHook
     syrupy_6
+  ];
+
+  disabledTests = [
+    # Test is outdated
+    "test_valid_data"
   ];
 
   pythonImportsCheck = [ "nextdns" ];

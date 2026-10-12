@@ -11,12 +11,12 @@
   pixman,
   seatd,
   udev,
-  systemd,
+  systemdLibs,
   xrdb,
   nix-update-script,
   nixosTests,
 
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withXWayland ? true,
 }:
 
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     seatd
     udev
   ]
-  ++ lib.optional useSystemd systemd;
+  ++ lib.optional useSystemd systemdLibs;
 
   makeFlags = [
     "prefix=${placeholder "out"}"

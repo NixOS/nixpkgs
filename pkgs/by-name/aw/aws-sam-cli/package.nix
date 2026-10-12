@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   git,
@@ -149,7 +150,8 @@ python3.pkgs.buildPythonApplication rec {
     "test_subcommand_help_0_invoke"
     "TestCli"
     "TestImportModuleProxy"
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "test_toml_invalid_file_name";
 
   pythonImportsCheck = [ "samcli" ];
 

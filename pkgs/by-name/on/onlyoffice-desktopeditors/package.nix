@@ -192,7 +192,10 @@ buildFHSEnv {
         --replace-fail "/usr/bin/onlyoffice-desktopeditors" "$out/bin/onlyoffice-desktopeditors"
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    inherit derivation;
+  };
 
   meta = {
     description = "Office suite that combines text, spreadsheet and presentation editors allowing to create, view and edit local documents";

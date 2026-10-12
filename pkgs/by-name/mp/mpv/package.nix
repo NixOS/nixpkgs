@@ -173,9 +173,11 @@ symlinkJoin {
   meta = {
     inherit (mpv-unwrapped.meta)
       homepage
+      changelog
       description
       longDescription
       maintainers
+      license
       ;
     mainProgram = "mpv";
   };

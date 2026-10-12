@@ -1842,7 +1842,7 @@ with pkgs;
 
   cudaPackages_13 = cudaPackages_13_4;
 
-  cudaPackages = recurseIntoAttrs cudaPackages_12;
+  cudaPackages = recurseIntoAttrs cudaPackages_13;
 
   dconf2nix = callPackage ../development/tools/haskell/dconf2nix { };
 
@@ -3350,84 +3350,99 @@ with pkgs;
     }
   );
 
-  gnat14 = wrapCC (
-    gcc14.cc.override {
-      name = "gnat";
-      langC = true;
-      langCC = false;
-      langAda = true;
-      profiledCompiler = false;
-      # As per upstream instructions building a cross compiler
-      # should be done with a (native) compiler of the same version.
-      # If we are cross-compiling GNAT, we may as well do the same.
-      gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap14
-        else
-          buildPackages.gnat14;
-      stdenv =
-        if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
-          && stdenv.buildPlatform.isDarwin
-        then
-          overrideCC gccStdenv gnat-bootstrap14
-        else
-          stdenv;
+  gnat14 = wrapCCWith (
+    {
+      cc = gcc14.cc.override {
+        name = "gnat";
+        langC = true;
+        langCC = false;
+        langAda = true;
+        profiledCompiler = false;
+        # As per upstream instructions building a cross compiler
+        # should be done with a (native) compiler of the same version.
+        # If we are cross-compiling GNAT, we may as well do the same.
+        gnat-bootstrap =
+          if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+            buildPackages.gnat-bootstrap14
+          else
+            buildPackages.gnat14;
+        stdenv =
+          if
+            stdenv.hostPlatform == stdenv.targetPlatform
+            && stdenv.buildPlatform == stdenv.hostPlatform
+            && stdenv.buildPlatform.isDarwin
+          then
+            overrideCC gccStdenv gnat-bootstrap14
+          else
+            stdenv;
+      };
+    }
+    // lib.optionalAttrs stdenv.targetPlatform.isDarwin {
+      apple-sdk = apple-sdk_15;
     }
   );
 
-  gnat15 = wrapCC (
-    gcc15.cc.override {
-      name = "gnat";
-      langC = true;
-      langCC = false;
-      langAda = true;
-      profiledCompiler = false;
-      # As per upstream instructions building a cross compiler
-      # should be done with a (native) compiler of the same version.
-      # If we are cross-compiling GNAT, we may as well do the same.
-      gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap15
-        else
-          buildPackages.gnat15;
-      stdenv =
-        if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
-          && stdenv.buildPlatform.isDarwin
-        then
-          overrideCC gccStdenv gnat-bootstrap15
-        else
-          stdenv;
+  gnat15 = wrapCCWith (
+    {
+      cc = gcc15.cc.override {
+        name = "gnat";
+        langC = true;
+        langCC = false;
+        langAda = true;
+        profiledCompiler = false;
+        # As per upstream instructions building a cross compiler
+        # should be done with a (native) compiler of the same version.
+        # If we are cross-compiling GNAT, we may as well do the same.
+        gnat-bootstrap =
+          if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+            buildPackages.gnat-bootstrap15
+          else
+            buildPackages.gnat15;
+        stdenv =
+          if
+            stdenv.hostPlatform == stdenv.targetPlatform
+            && stdenv.buildPlatform == stdenv.hostPlatform
+            && stdenv.buildPlatform.isDarwin
+          then
+            overrideCC gccStdenv gnat-bootstrap15
+          else
+            stdenv;
+      };
+    }
+    // lib.optionalAttrs stdenv.targetPlatform.isDarwin {
+      apple-sdk = apple-sdk_15;
     }
   );
 
-  gnat16 = wrapCC (
-    gcc16.cc.override {
-      name = "gnat";
-      langC = true;
-      langCC = false;
-      langAda = true;
-      profiledCompiler = false;
-      # As per upstream instructions building a cross compiler
-      # should be done with a (native) compiler of the same version.
-      # If we are cross-compiling GNAT, we may as well do the same.
-      gnat-bootstrap =
-        if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
-          buildPackages.gnat-bootstrap16
-        else
-          buildPackages.gnat16;
-      stdenv =
-        if
-          stdenv.hostPlatform == stdenv.targetPlatform
-          && stdenv.buildPlatform == stdenv.hostPlatform
-          && stdenv.buildPlatform.isDarwin
-        then
-          overrideCC gccStdenv gnat-bootstrap16
-        else
-          stdenv;
+  gnat16 = wrapCCWith (
+    {
+      cc = gcc16.cc.override {
+        name = "gnat";
+        langC = true;
+        langCC = false;
+        langAda = true;
+        profiledCompiler = false;
+        # As per upstream instructions building a cross compiler
+        # should be done with a (native) compiler of the same version.
+        # If we are cross-compiling GNAT, we may as well do the same.
+        gnat-bootstrap =
+          if stdenv.hostPlatform == stdenv.targetPlatform && stdenv.buildPlatform == stdenv.hostPlatform then
+            buildPackages.gnat-bootstrap16
+          else
+            buildPackages.gnat16;
+        stdenv =
+          if
+            stdenv.hostPlatform == stdenv.targetPlatform
+            && stdenv.buildPlatform == stdenv.hostPlatform
+            && stdenv.buildPlatform.isDarwin
+          then
+            overrideCC gccStdenv gnat-bootstrap16
+          else
+            stdenv;
+      };
+    }
+    // lib.optionalAttrs stdenv.targetPlatform.isDarwin {
+      apple-sdk = apple-sdk_15;
     }
   );
 
@@ -7297,6 +7312,8 @@ with pkgs;
 
   nsdiff = perlPackages.nsdiff;
 
+  opencloud-production = callPackage ../by-name/op/opencloud/production.nix { };
+
   openresty = callPackage ../servers/http/openresty {
     zlib-ng = zlib;
     withPerl = false;
@@ -7839,6 +7856,7 @@ with pkgs;
     withImportd = false;
     withImds = false;
     withLibBPF = false;
+    vmlinux-btf = null;
     withLibidn2 = false;
     withLocaled = false;
     withLogind = false;
@@ -9736,9 +9754,7 @@ with pkgs;
 
   openraPackages = recurseIntoAttrs (callPackage ../by-name/op/openra/engines { });
 
-  papermcServers = callPackages ../games/papermc { };
-
-  papermc = papermcServers.papermc;
+  papermcServers = callPackage ../by-name/pa/papermc/versions.nix { };
 
   pokerth-server = pokerth.override { target = "server"; };
 

@@ -1,0 +1,21 @@
+Include Python.h before any glibc header in xla_ffi.cpp
+
+g++ defines _GNU_SOURCE, so glibc 2.44's features.h now defines
+_POSIX_C_SOURCE/_XOPEN_SOURCE. xla_ffi.cpp includes c_api.h (-> stdint.h ->
+features.h) before py.h/Python.h, so Python's pyconfig.h then redefines
+those macros, which the project's -Werror turns into a build failure.
+
+Include Python.h first so pyconfig.h sets the macros before features.h,
+which #undefs before redefining them.
+
+--- a/cext/xla_ffi.cpp
++++ b/cext/xla_ffi.cpp
+@@ -2,6 +2,8 @@
+ //
+ // SPDX-License-Identifier: Apache-2.0
+ 
++#include <Python.h>
++
+ #ifdef _WIN32
+ 
+ #include "xla/ffi/api/c_api.h"

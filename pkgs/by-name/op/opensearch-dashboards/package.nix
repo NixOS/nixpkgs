@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  nixosTests,
 
   # nativeBuildInputs
   makeWrapper,
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
         update-source-version "opensearch-dashboards" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
+    tests.nixos = nixosTests.opensearch-dashboards;
   };
 
   __structuredAttrs = true;

@@ -62,13 +62,16 @@
   nspr,
   nss,
   pango,
+  pciutils,
   pipewire,
   snappy,
+  speechd-minimal,
   udev,
   wayland,
   xdg-utils,
   coreutils,
   libxcb,
+  vulkan-loader,
   zlib,
   # Darwin dependencies
   undmg,
@@ -86,7 +89,6 @@
   enableVideoAcceleration ? libvaSupport,
   # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
   vulkanSupport ? false,
-  addDriverRunpath,
   enableVulkan ? vulkanSupport,
 }:
 
@@ -150,13 +152,16 @@ let
     nspr
     nss
     pango
+    pciutils # ANGLE dlopens libpci to identify GPUs, including for VA-API device selection.
     pipewire
     udev
     wayland
     libxcb
     zlib
     snappy
+    speechd-minimal # Text-to-speech through speech-dispatcher (--enable-speech-dispatcher).
     libkrb5
+    vulkan-loader # Chromium and Dawn dlopen libvulkan.so.1 by name.
     qt6.qtbase
   ]
   ++ optional pulseSupport libpulseaudio
@@ -263,6 +268,11 @@ stdenv.mkDerivation {
           ln -s $out/opt/brave.com/${optName}/product_logo_''${icon}.png $out/share/icons/hicolor/''${icon}x''${icon}/apps/${fileBase}.png
       done
 
+      # ANGLE loads this copy by absolute path; the NixOS-patched loader finds ICDs
+      # under /run/opengl-driver, the bundled one does not.
+      rm $out/opt/brave.com/${optName}/libvulkan.so.1
+      ln -s ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 $out/opt/brave.com/${optName}/libvulkan.so.1
+
       # Replace xdg-settings and xdg-mime
       ln -sf ${xdg-utils}/bin/xdg-settings $out/opt/brave.com/${optName}/xdg-settings
       ln -sf ${xdg-utils}/bin/xdg-mime $out/opt/brave.com/${optName}/xdg-mime
@@ -300,9 +310,6 @@ stdenv.mkDerivation {
         --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
-      ${optionalString vulkanSupport ''
-        --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
-      ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )
   '';

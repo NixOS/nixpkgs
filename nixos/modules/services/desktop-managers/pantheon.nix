@@ -324,12 +324,12 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      programs.evince.enable = mkDefault (notExcluded pkgs.evince);
-
       environment.systemPackages = utils.removePackagesByName (
         [
+          pkgs.epiphany
           pkgs.gnome-font-viewer
           pkgs.file-roller
+          pkgs.papers
         ]
         ++ (
           with pkgs.pantheon;
@@ -348,7 +348,6 @@ in
             elementary-tasks
             elementary-terminal
             elementary-videos
-            epiphany
           ]
           ++ lib.optionals config.services.flatpak.enable [
             # Only install appcenter if flatpak is enabled before

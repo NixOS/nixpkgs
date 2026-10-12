@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "3proxy";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "3proxy";
     repo = "3proxy";
     tag = finalAttrs.version;
-    sha256 = "sha256-JRoSCmoTIXHsUWZt9OyDVp1Veuy2w1ZPFe0rUGdJv0k=";
+    sha256 = "sha256-hLxafFU6nJ3I3NT3R24LPD7PBmQ1IZEbrVqvfmMZHIM=";
   };
 
   # They use 'install -s', that calls the native strip instead of the cross.

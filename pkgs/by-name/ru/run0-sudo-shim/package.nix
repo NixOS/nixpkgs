@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "1.4.2";
 
   src = fetchFromGitHub {
-    owner = "LordGrimmauld";
+    owner = "GrimmTheShrimp";
     repo = "run0-sudo-shim";
     tag = finalAttrs.version;
     hash = "sha256-J/I7VPXpOwNtEk9H+lbZVT+xJYBsSKgnMlwzlVIJSWk=";

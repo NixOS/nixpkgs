@@ -8,15 +8,15 @@
 
 let
   pname = "everest";
-  version = "6580";
+  version = "6623";
   phome = "$out/lib/Celeste";
 in
 stdenvNoCC.mkDerivation {
   inherit pname version;
   src = fetchzip {
-    url = "https://github.com/EverestAPI/Everest/releases/download/stable-1.6580.0/main.zip";
+    url = "https://github.com/EverestAPI/Everest/releases/download/stable-1.6623.0/main.zip";
     extension = "zip";
-    hash = "sha256-O2/VfrP53HtA7ajsrlfalAsvYvjY4ABCYWCOwUKYio0=";
+    hash = "sha256-nGQggGBSEq/NAaE3AKau6BAFrWIUtKIt4Nswi4clXOM=";
   };
   buildInputs = [
     icu

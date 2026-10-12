@@ -25,7 +25,7 @@
   pango,
   rpmextract,
   stdenv,
-  systemd,
+  systemdLibs,
   trash-cli,
   vulkan-loader,
   wrapGAppsHook3,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   ];
 
   runtimeDependencies = [
-    systemd
+    systemdLibs
     libglvnd
     vulkan-loader # may help with nvidia users
     libx11
