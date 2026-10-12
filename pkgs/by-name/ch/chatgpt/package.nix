@@ -16,6 +16,9 @@
   dpkg,
   patchelf,
   unzip,
+  python3,
+  rcodesign,
+  file,
 
   # build inputs
   alsa-lib,
@@ -242,16 +245,37 @@ stdenv.mkDerivation (finalAttrs: {
       )}
   '';
 
-  dontStrip = isLinux;
-  dontPatchELF = isDarwin;
-  dontPatchShebangs = isDarwin;
+  dontStrip = true;
+  # The vendor-signed bundle must survive installation byte for byte.
+  # The external launcher is already generated during installPhase.
+  dontPatch = isDarwin;
+  dontConfigure = isDarwin;
+  dontBuild = isDarwin;
+  dontUpdateAutotoolsGnuConfigScripts = isDarwin;
+  dontFixup = isDarwin;
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    versionCheckHook
-    writableTmpDirAsHomeHook
-  ];
+  # Inspect the signed Darwin bundle without executing it in the build sandbox.
+  # Linux still exercises the application launcher with --version.
+  nativeInstallCheckInputs =
+    lib.optionals isLinux [
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ]
+    ++ lib.optionals isDarwin [
+      python3
+      rcodesign
+      file
+    ];
   versionCheckKeepEnvironment = [ "HOME" ];
+
+  preInstallCheck = lib.optionalString isDarwin ''
+    bundle="$out/Applications/ChatGPT.app"
+    diff -r ChatGPT.app "$bundle"
+    python3 ${./check-darwin.py} "$bundle" "${finalAttrs.version}"
+    file "$bundle/Contents/MacOS/ChatGPT" | grep -F arm64
+    rcodesign verify "$bundle/Contents/MacOS/ChatGPT"
+  '';
 
   passthru = {
     updateScript = ./update.sh;
@@ -274,5 +298,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = if isDarwin then "ChatGPT" else "chatgpt";
+    mainDarwinApp = "ChatGPT.app";
   };
 })
