@@ -12,7 +12,6 @@
   bison,
   flex,
   ctestCheckHook,
-  buildPackages,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     flex
     pkg-config
-    (buildPackages.python3.withPackages (
+    (python3.withPackages (
       ps:
       with ps;
       [
