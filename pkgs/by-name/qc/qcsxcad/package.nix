@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Qt library for CSXCAD";
     homepage = "https://github.com/thliebig/QCSXCAD";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ matthuszagh ];
     platforms = lib.platforms.linux;
   };
