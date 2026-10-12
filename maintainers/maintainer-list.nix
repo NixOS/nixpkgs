@@ -3846,6 +3846,11 @@
     githubId = 23124539;
     name = "Błażej Sowa";
   };
+  bkbilly = {
+    github = "bkbilly";
+    githubId = 518494;
+    name = "bkbilly";
+  };
   bkchr = {
     email = "nixos@kchr.de";
     github = "bkchr";
