@@ -8174,6 +8174,11 @@
     github = "EdgarPost";
     githubId = 488221;
   };
+  EdgeLordKirito = {
+    name = "EdgeLordKirito";
+    github = "EdgeLordKirito";
+    githubId = 113261869;
+  };
   edlimerkaj = {
     name = "Edli Merkaj";
     email = "edli.merkaj@identinet.io";
