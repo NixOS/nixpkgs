@@ -3,6 +3,9 @@
   lib,
   fetchurl,
   buildFHSEnv,
+  symlinkJoin,
+  runCommand,
+  extraFontPackages ? [ ],
   # Alphabetic ordering below
   alsa-lib,
   at-spi2-atk,
@@ -65,8 +68,21 @@ let
   # into `~/.local/share/fonts/`, otherwise the default template fonts, and
   # things like bullet points, will not look as expected.
 
-  # TODO: Find out which of these fonts we'd be allowed to distribute along
-  #       with this package, or how to make this easier for users otherwise.
+  fonts = symlinkJoin {
+    name = "onlyoffice-fonts";
+    paths = [ noto-fonts-cjk-sans ] ++ extraFontPackages;
+  };
+
+  # OnlyOffice doesn't follow symlinks, so we have to copy them over.
+  # https://github.com/ONLYOFFICE/DocumentServer/issues/1859
+  fontsDir = runCommand "onlyoffice-fonts-dir" { } ''
+    font_regexp='.*\.\(ttf\|ttc\|otf\)?'
+    mkdir -p $out
+
+    find ${fonts} -type l -iregex "$font_regexp" -print0 | while IFS= read -r -d "" file; do
+      cp -L --update=none "$file" $out/
+    done
+  '';
 
   runtimeLibs = lib.makeLibraryPath [
     curl
@@ -172,17 +188,20 @@ in
 
 # In order to download plugins, OnlyOffice uses /usr/bin/curl so we have to wrap it.
 # Curl still needs to be in runtimeLibs because the library is used directly in other parts of the code.
-# Fonts are also discovered by looking in /usr/share/fonts, so adding fonts to targetPkgs will include them
 buildFHSEnv {
   inherit (derivation) pname version;
 
   targetPkgs = pkgs': [
     curl
     derivation
-    noto-fonts-cjk-sans
   ];
 
   runScript = "/bin/onlyoffice-desktopeditors";
+
+  extraBuildCommands = ''
+    mkdir -p $out/usr/share
+    ln -s ${fontsDir} $out/usr/share/fonts
+  '';
 
   extraInstallCommands = ''
     mkdir -p $out/share
