@@ -43,7 +43,7 @@ index 03864ddd836..4e2a705a2ae 100644
  
  
 diff --git a/cuda_bindings/cuda/bindings/_internal/driver_linux.pyx b/cuda_bindings/cuda/bindings/_internal/driver_linux.pyx
-index 6fc1ca20c77..2dde8001e9f 100644
+index 6fc1ca20c77..6090745eb4e 100644
 --- a/cuda_bindings/cuda/bindings/_internal/driver_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/driver_linux.pyx
 @@ -59,7 +59,7 @@ cdef object _cyb_symbol_lock = _cyb_threading.Lock()
@@ -55,12 +55,18 @@ index 6fc1ca20c77..2dde8001e9f 100644
  
  
  ###############################################################################
-@@ -3785,7 +3785,7 @@ cpdef _inspect_function_pointer(str name):
+@@ -3785,7 +3785,13 @@ cpdef _inspect_function_pointer(str name):
  
  
  cdef void* load_library() except* with gil:
 -    cdef uintptr_t handle = load_nvidia_dynamic_lib("cuda")._handle_uint
-+    cdef uintptr_t handle = CDLL("@libcuda@/lib/libcuda.so.1")._handle
++    # Search like the dynamic linker would for a library with the driver link in its RUNPATH: LD_LIBRARY_PATH
++    # first (e.g. a host driver exposed by nixglhost or a container runtime), then the configured path.
++    cdef uintptr_t handle
++    try:
++        handle = CDLL("libcuda.so.1")._handle
++    except OSError:
++        handle = CDLL("@libcuda@/lib/libcuda.so.1")._handle
      return <void*>handle
  
  
@@ -109,7 +115,7 @@ index 4c21693caf7..72e9b920802 100644
  
  
 diff --git a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
-index ab251a57fe1..ee16dc46525 100644
+index ab251a57fe1..a5e95f1348f 100644
 --- a/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/nvml_linux.pyx
 @@ -57,7 +57,7 @@ cdef object _cyb_symbol_lock = _cyb_threading.Lock()
@@ -121,12 +127,18 @@ index ab251a57fe1..ee16dc46525 100644
  
  
  ###############################################################################
-@@ -4171,7 +4171,7 @@ cpdef _inspect_function_pointer(str name):
+@@ -4171,7 +4171,13 @@ cpdef _inspect_function_pointer(str name):
  
  
  cdef void* load_library() except* with gil:
 -    cdef uintptr_t handle = load_nvidia_dynamic_lib("nvml")._handle_uint
-+    cdef uintptr_t handle = CDLL("@libnvml@/lib/libnvidia-ml.so")._handle
++    # Search like the dynamic linker would for a library with the driver link in its RUNPATH: LD_LIBRARY_PATH
++    # first (e.g. a host driver exposed by nixglhost or a container runtime), then the configured path.
++    cdef uintptr_t handle
++    try:
++        handle = CDLL("libnvidia-ml.so.1")._handle
++    except OSError:
++        handle = CDLL("@libnvml@/lib/libnvidia-ml.so")._handle
      return <void*>handle
  
  
@@ -175,10 +187,10 @@ index 39329bc9b64..220577dbc4a 100644
  
  
 diff --git a/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx b/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx
-index 1ae37127bd1..9d012257a2f 100644
+index 1ae37127bd1..eb7b9054cf1 100644
 --- a/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx
 +++ b/cuda_bindings/cuda/bindings/_internal/runtime_linux.pyx
-@@ -9,11 +9,16 @@ import os
+@@ -9,11 +9,19 @@ import os
  
  from libc.stdint cimport uintptr_t
  
@@ -189,14 +201,17 @@ index 1ae37127bd1..9d012257a2f 100644
  cimport cython
  
 +try:
-+    CDLL("@libcuda@/lib/libcuda.so.1")
++    CDLL("libcuda.so.1")
 +except OSError:
-+    pass
++    try:
++        CDLL("@libcuda@/lib/libcuda.so.1")
++    except OSError:
++        pass
 +
  
  ###############################################################################
  # Per-thread default stream dispatch
-@@ -50,14 +55,14 @@ include "../_lib/cyruntime/cyruntime.pxi"
+@@ -50,14 +58,14 @@ include "../_lib/cyruntime/cyruntime.pxi"
  cdef cudaError_t _getLocalRuntimeVersion(int* runtimeVersion) except ?cudaErrorCallRequiresNewerDriver nogil:
      # Load cudart dynamically to read its embedded version number.
      with gil:
