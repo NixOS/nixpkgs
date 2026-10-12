@@ -77,6 +77,96 @@ let
 
   removeExcluded =
     pkgList: utils.removePackagesByName pkgList config.environment.gnome.excludePackages;
+
+  # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
+  coreShellPackages =
+    let
+      mandatoryPackages = [
+        pkgs.gnome-shell
+      ];
+      optionalPackages = [
+        pkgs.adwaita-icon-theme
+        nixos-background-info
+        pkgs.glycin-thumbnailer # Image thumbnailers
+        pkgs.gnome-backgrounds
+        pkgs.gnome-bluetooth
+        pkgs.gnome-color-manager
+        pkgs.gnome-control-center
+        pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
+        pkgs.gnome-user-docs
+        pkgs.glib # for gsettings program
+        pkgs.gnome-menus
+        pkgs.gst-thumbnailers # Audio and video thumbnailers
+        pkgs.gtk3.out # for gtk-launch program
+        pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+        pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
+      ];
+    in
+    mandatoryPackages ++ removeExcluded optionalPackages;
+
+  coreAppsPackages = removeExcluded [
+    pkgs.baobab
+    pkgs.decibels
+    pkgs.epiphany
+    pkgs.gnome-text-editor
+    pkgs.gnome-calculator
+    pkgs.gnome-calendar
+    pkgs.gnome-characters
+    pkgs.gnome-clocks
+    pkgs.gnome-console
+    pkgs.gnome-contacts
+    pkgs.gnome-font-viewer
+    pkgs.gnome-logs
+    pkgs.gnome-maps
+    pkgs.gnome-music
+    pkgs.gnome-system-monitor
+    pkgs.gnome-tecla
+    pkgs.gnome-weather
+    pkgs.loupe
+    pkgs.nautilus
+    pkgs.papers
+    pkgs.gnome-connections
+    pkgs.showtime
+    pkgs.simple-scan
+    pkgs.snapshot
+    pkgs.yelp
+  ];
+
+  gamesPackages = removeExcluded [
+    pkgs.aisleriot
+    pkgs.atomix
+    pkgs.five-or-more
+    pkgs.four-in-a-row
+    pkgs.gnome-2048
+    pkgs.gnome-chess
+    pkgs.gnome-klotski
+    pkgs.gnome-mahjongg
+    pkgs.gnome-mines
+    pkgs.gnome-nibbles
+    pkgs.gnome-robots
+    pkgs.gnome-sudoku
+    pkgs.gnome-taquin
+    pkgs.gnome-tetravex
+    pkgs.hitori
+    pkgs.iagno
+    pkgs.lightsoff
+    pkgs.quadrapassel
+    pkgs.swell-foop
+    pkgs.tali
+  ];
+
+  developerToolsPackages = removeExcluded [
+    pkgs.dconf-editor
+    pkgs.devhelp
+    pkgs.d-spy
+    pkgs.gnome-builder
+    # boxes would make sense in this option, however
+    # it doesn't function well enough to be included
+    # in default configurations.
+    # https://github.com/NixOS/nixpkgs/issues/60908
+    # pkgs.gnome-boxes
+    pkgs.sysprof
+  ];
 in
 
 {
@@ -439,94 +529,14 @@ in
         pkgs.adwaita-fonts
       ];
 
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-48/elements/core/meta-gnome-core-shell.bst
-      environment.systemPackages =
-        let
-          mandatoryPackages = [
-            pkgs.gnome-shell
-          ];
-          optionalPackages = [
-            pkgs.adwaita-icon-theme
-            nixos-background-info
-            pkgs.glycin-thumbnailer # Image thumbnailers
-            pkgs.gnome-backgrounds
-            pkgs.gnome-bluetooth
-            pkgs.gnome-color-manager
-            pkgs.gnome-control-center
-            pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
-            pkgs.gnome-user-docs
-            pkgs.glib # for gsettings program
-            pkgs.gnome-menus
-            pkgs.gst-thumbnailers # Audio and video thumbnailers
-            pkgs.gtk3.out # for gtk-launch program
-            pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-            pkgs.xdg-user-dirs-gtk # Used to create the default bookmarks
-          ];
-        in
-        mandatoryPackages ++ removeExcluded optionalPackages;
-
-      services.dbus.packages = [
-        pkgs.gnome-shell
-      ]
-      ++ removeExcluded [
-        pkgs.gnome-control-center
-        pkgs.gnome-tour
-      ];
+      environment.systemPackages = coreShellPackages;
+      services.dbus.packages = coreShellPackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-apps.bst
     (lib.mkIf serviceCfg.core-apps.enable {
-      environment.systemPackages = removeExcluded [
-        pkgs.baobab
-        pkgs.decibels
-        pkgs.epiphany
-        pkgs.gnome-text-editor
-        pkgs.gnome-calculator
-        pkgs.gnome-calendar
-        pkgs.gnome-characters
-        pkgs.gnome-clocks
-        pkgs.gnome-console
-        pkgs.gnome-contacts
-        pkgs.gnome-font-viewer
-        pkgs.gnome-logs
-        pkgs.gnome-maps
-        pkgs.gnome-music
-        pkgs.gnome-system-monitor
-        pkgs.gnome-tecla
-        pkgs.gnome-weather
-        pkgs.loupe
-        pkgs.nautilus
-        pkgs.papers
-        pkgs.gnome-connections
-        pkgs.showtime
-        pkgs.simple-scan
-        pkgs.snapshot
-        pkgs.yelp
-      ];
-
-      services.dbus.packages = removeExcluded [
-        pkgs.baobab
-        pkgs.decibels
-        pkgs.epiphany
-        pkgs.gnome-calculator
-        pkgs.gnome-calendar
-        pkgs.gnome-characters
-        pkgs.gnome-clocks
-        pkgs.gnome-console
-        pkgs.gnome-contacts
-        pkgs.gnome-connections
-        pkgs.gnome-font-viewer
-        pkgs.gnome-logs
-        pkgs.gnome-maps
-        pkgs.gnome-music
-        pkgs.gnome-system-monitor
-        pkgs.gnome-text-editor
-        pkgs.gnome-weather
-        pkgs.loupe
-        pkgs.nautilus
-        pkgs.showtime
-        pkgs.snapshot
-      ];
+      environment.systemPackages = coreAppsPackages;
+      services.dbus.packages = coreAppsPackages;
 
       # Enable default program modules
       # Since some of these have a corresponding package, we only
@@ -559,72 +569,14 @@ in
     })
 
     (lib.mkIf serviceCfg.games.enable {
-      environment.systemPackages = removeExcluded [
-        pkgs.aisleriot
-        pkgs.atomix
-        pkgs.five-or-more
-        pkgs.four-in-a-row
-        pkgs.gnome-2048
-        pkgs.gnome-chess
-        pkgs.gnome-klotski
-        pkgs.gnome-mahjongg
-        pkgs.gnome-mines
-        pkgs.gnome-nibbles
-        pkgs.gnome-robots
-        pkgs.gnome-sudoku
-        pkgs.gnome-taquin
-        pkgs.gnome-tetravex
-        pkgs.hitori
-        pkgs.iagno
-        pkgs.lightsoff
-        pkgs.quadrapassel
-        pkgs.swell-foop
-        pkgs.tali
-      ];
-
-      services.dbus.packages = removeExcluded [
-        pkgs.five-or-more
-        pkgs.four-in-a-row
-        pkgs.gnome-2048
-        pkgs.gnome-chess
-        pkgs.gnome-klotski
-        pkgs.gnome-mahjongg
-        pkgs.gnome-mines
-        pkgs.gnome-nibbles
-        pkgs.gnome-robots
-        pkgs.gnome-sudoku
-        pkgs.gnome-taquin
-        pkgs.gnome-tetravex
-        pkgs.iagno
-        pkgs.lightsoff
-        pkgs.quadrapassel
-        pkgs.swell-foop
-      ];
+      environment.systemPackages = gamesPackages;
+      services.dbus.packages = gamesPackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-48/elements/core/meta-gnome-core-developer-tools.bst
     (lib.mkIf serviceCfg.core-developer-tools.enable {
-      environment.systemPackages = removeExcluded [
-        pkgs.dconf-editor
-        pkgs.devhelp
-        pkgs.d-spy
-        pkgs.gnome-builder
-        # boxes would make sense in this option, however
-        # it doesn't function well enough to be included
-        # in default configurations.
-        # https://github.com/NixOS/nixpkgs/issues/60908
-        # pkgs.gnome-boxes
-        pkgs.sysprof
-      ];
-
-      # `pkgs.sysprof` is registered by `services/misc/sysprof.nix` whenever
-      # `services.sysprof.enable` is set, which it is right below.
-      services.dbus.packages = removeExcluded [
-        pkgs.d-spy
-        pkgs.dconf-editor
-        pkgs.devhelp
-        pkgs.gnome-builder
-      ];
+      environment.systemPackages = developerToolsPackages;
+      services.dbus.packages = developerToolsPackages;
 
       services.sysprof.enable = notExcluded pkgs.sysprof;
     })

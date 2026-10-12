@@ -19,6 +19,86 @@ let
   };
 
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.pantheon.excludePackages;
+
+  switchboardWithPlugs = pkgs.pantheon.switchboard-with-plugs.override {
+    plugs = cfg.extraSwitchboardPlugs;
+  };
+
+  pantheonPackages =
+    (with pkgs.pantheon; [
+      elementary-session-settings
+      gala
+      gnome-settings-daemon
+      switchboardWithPlugs
+      (wingpanel-with-indicators.override {
+        indicators = cfg.extraWingpanelIndicators;
+      })
+    ])
+    ++ utils.removePackagesByName (
+      (with pkgs; [
+        desktop-file-utils
+        glib # for gsettings program
+        gnome-menus
+        adwaita-icon-theme
+        gtk3.out # for gtk-launch program
+        sound-theme-freedesktop
+        xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
+      ])
+      ++ (with pkgs.pantheon; [
+        # Artwork
+        elementary-gtk-theme
+        elementary-icon-theme
+        elementary-sound-theme
+        elementary-wallpapers
+
+        # Desktop
+        elementary-default-settings
+        elementary-dock
+        elementary-shortcut-overlay
+
+        # Services
+        elementary-bluetooth-daemon
+        elementary-capnet-assist
+        elementary-notifications
+        elementary-settings-daemon
+        pantheon-agent-geoclue2
+        pantheon-agent-polkit
+      ])
+    ) config.environment.pantheon.excludePackages;
+
+  pantheonAppsPackages = utils.removePackagesByName (
+    [
+      pkgs.epiphany
+      pkgs.gnome-font-viewer
+      pkgs.file-roller
+      pkgs.papers
+    ]
+    ++ (
+      with pkgs.pantheon;
+      [
+        elementary-calculator
+        elementary-calendar
+        elementary-camera
+        elementary-code
+        elementary-files
+        elementary-mail
+        elementary-maps
+        elementary-monitor
+        elementary-music
+        elementary-photos
+        elementary-screenshot
+        elementary-tasks
+        elementary-terminal
+        elementary-videos
+      ]
+      ++ lib.optionals config.services.flatpak.enable [
+        # Only install appcenter if flatpak is enabled before
+        # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
+        appcenter
+        sideload
+      ]
+    )
+  ) config.environment.pantheon.excludePackages;
 in
 
 {
@@ -158,13 +238,11 @@ in
       services.touchegg.package = pkgs.pantheon.touchegg;
       services.tumbler.enable = mkDefault true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
-      services.dbus.packages = with pkgs.pantheon; [
-        switchboard-plug-power
-        elementary-default-settings # accountsservice extensions
-        (switchboard-with-plugs.override {
-          plugs = cfg.extraSwitchboardPlugs;
-        })
-      ];
+      services.dbus.packages = [
+        pkgs.pantheon.switchboard-plug-power
+        pkgs.pantheon.elementary-default-settings # accountsservice extensions
+      ]
+      ++ pantheonPackages;
       services.pantheon.apps.enable = mkDefault true;
       services.pantheon.contractor.enable = mkDefault true;
       services.pantheon.parental-controls.enable = mkDefault true;
@@ -226,49 +304,7 @@ in
       };
 
       # Global environment
-      environment.systemPackages =
-        (with pkgs.pantheon; [
-          elementary-session-settings
-          gala
-          gnome-settings-daemon
-          (switchboard-with-plugs.override {
-            plugs = cfg.extraSwitchboardPlugs;
-          })
-          (wingpanel-with-indicators.override {
-            indicators = cfg.extraWingpanelIndicators;
-          })
-        ])
-        ++ utils.removePackagesByName (
-          (with pkgs; [
-            desktop-file-utils
-            glib # for gsettings program
-            gnome-menus
-            adwaita-icon-theme
-            gtk3.out # for gtk-launch program
-            sound-theme-freedesktop
-            xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
-          ])
-          ++ (with pkgs.pantheon; [
-            # Artwork
-            elementary-gtk-theme
-            elementary-icon-theme
-            elementary-sound-theme
-            elementary-wallpapers
-
-            # Desktop
-            elementary-default-settings
-            elementary-dock
-            elementary-shortcut-overlay
-
-            # Services
-            elementary-bluetooth-daemon
-            elementary-capnet-assist
-            elementary-notifications
-            elementary-settings-daemon
-            pantheon-agent-geoclue2
-            pantheon-agent-polkit
-          ])
-        ) config.environment.pantheon.excludePackages;
+      environment.systemPackages = pantheonPackages;
 
       # Settings from elementary-default-settings
       # GTK4 will try both $XDG_CONFIG_DIRS/gtk-4.0 and ${gtk4}/etc/gtk-4.0, but not /etc/gtk-4.0.
@@ -327,45 +363,9 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = utils.removePackagesByName (
-        [
-          pkgs.epiphany
-          pkgs.gnome-font-viewer
-          pkgs.file-roller
-          pkgs.papers
-        ]
-        ++ (
-          with pkgs.pantheon;
-          [
-            elementary-calculator
-            elementary-calendar
-            elementary-camera
-            elementary-code
-            elementary-files
-            elementary-mail
-            elementary-maps
-            elementary-monitor
-            elementary-music
-            elementary-photos
-            elementary-screenshot
-            elementary-tasks
-            elementary-terminal
-            elementary-videos
-          ]
-          ++ lib.optionals config.services.flatpak.enable [
-            # Only install appcenter if flatpak is enabled before
-            # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
-            appcenter
-            sideload
-          ]
-        )
-      ) config.environment.pantheon.excludePackages;
+      environment.systemPackages = pantheonAppsPackages;
 
-      services.dbus.packages = utils.removePackagesByName [
-        pkgs.pantheon.epiphany
-        pkgs.file-roller
-        pkgs.gnome-font-viewer
-      ] config.environment.pantheon.excludePackages;
+      services.dbus.packages = pantheonAppsPackages;
 
       # needed by screenshot
       fonts.packages = [

@@ -65,6 +65,6 @@ in
     ]
     ++ cfg.extraPackages;
 
-    services.dbus.packages = lib.optional (elem pkgs.dunst cfg.extraPackages) pkgs.dunst;
+    services.dbus.packages = cfg.extraPackages;
   };
 }
