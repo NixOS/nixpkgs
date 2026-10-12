@@ -127,5 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
     changelog = "https://github.com/uclouvain/openjpeg/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "uclouvain" finalAttrs.version;
   };
 })
