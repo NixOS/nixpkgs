@@ -3903,6 +3903,8 @@ self: super: with self; {
 
   cuda-tile = callPackage ../development/python-modules/cuda-tile { };
 
+  cupti-python = callPackage ../development/python-modules/cupti-python { };
+
   cupy = callPackage ../development/python-modules/cupy { };
 
   curated-tokenizers = callPackage ../development/python-modules/curated-tokenizers { };
