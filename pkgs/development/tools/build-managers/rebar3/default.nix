@@ -19,7 +19,7 @@ let
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
-    version = "3.27.1";
+    version = "3.27.3";
 
     # How to obtain `sha256`:
     # nix-prefetch-url --unpack https://github.com/erlang/rebar3/archive/${version}.tar.gz
@@ -27,7 +27,7 @@ let
       owner = "erlang";
       repo = "rebar3";
       tag = version;
-      sha256 = "sQf8kI2+vYHU9AWqnpSvmA8z2XHZz0aEJdeX/m+nvf8=";
+      sha256 = "Om6c2cpeFCdPAemeA965YxKXhasHbx3gHVgSh+jO2TI=";
     };
 
     buildInputs = [ erlang ];
