@@ -22,6 +22,14 @@
       };
     };
 
+    syslogConf = {
+      services.adguardhome = {
+        enable = true;
+
+        settings.log.file = "syslog";
+      };
+    };
+
     declarativeConf = {
       services.adguardhome = {
         enable = true;
@@ -121,6 +129,12 @@
     with subtest("Default schema_version 23 config test"):
       schemaVersionBefore23.wait_for_unit("adguardhome.service")
       schemaVersionBefore23.wait_for_open_port(3000)
+
+    with subtest("Logging to syslog test"):
+      # AdGuard is expected to fail when it cannot connect to syslog
+      # hence its sufficient to look whether the service starts at all
+      syslogConf.wait_for_unit("adguardhome.service")
+      syslogConf.wait_for_open_port(3000)
 
     with subtest("Declarative config test, DNS will be reachable"):
       declarativeConf.wait_for_unit("adguardhome.service")
