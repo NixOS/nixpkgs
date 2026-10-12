@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [
       lib.maintainers.luochen1990
-      lib.maintainers."3mp3ri0r"
+      lib.maintainers._3mp3ri0r
     ];
     mainProgram = "specify";
   };
