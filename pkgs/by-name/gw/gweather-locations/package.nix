@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     gettext
     meson
     ninja
-    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+    (python3.withPackages (ps: [ ps.pygobject3 ]))
   ];
 
   postPatch = ''
