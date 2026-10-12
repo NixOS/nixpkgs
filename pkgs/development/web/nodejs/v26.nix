@@ -50,6 +50,9 @@ buildNodejs {
 
       # https://github.com/NixOS/nixpkgs/issues/568974
       ./memcpy-climits.patch
+
+      # TODO: remove once support for libuv 1.53+ has landed upstream
+      ./fix-libuv-1.53-support.patch
     ]
     ++ gypPatches;
 }
