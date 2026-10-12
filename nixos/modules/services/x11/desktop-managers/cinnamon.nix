@@ -116,9 +116,6 @@ in
         enablePkexecWrapper = lib.mkDefault true;
       };
       services.accounts-daemon.enable = true;
-
-      # Packages from below that ship D-Bus service files.  The D-Bus daemons do
-      # not look at the system profile, so they have to be registered explicitly.
       services.dbus.packages = utils.removePackagesByName (with pkgs; [
         cinnamon
         cinnamon-settings-daemon
@@ -300,8 +297,6 @@ in
           gucharmap
         ] config.environment.cinnamon.excludePackages;
 
-      # The D-Bus daemons do not look at the system profile, so the packages
-      # above that ship D-Bus service files have to be registered explicitly.
       services.dbus.packages = utils.removePackagesByName (with pkgs; [
         # cinnamon xapp
         xed-editor

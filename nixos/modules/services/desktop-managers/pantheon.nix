@@ -361,9 +361,6 @@ in
         )
       ) config.environment.pantheon.excludePackages;
 
-      # Packages from above that ship D-Bus service files.  The D-Bus daemons
-      # do not look at the system profile, so they have to be registered
-      # explicitly.
       services.dbus.packages = utils.removePackagesByName [
         pkgs.pantheon.epiphany
         pkgs.file-roller

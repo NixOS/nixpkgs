@@ -288,8 +288,6 @@ in
     services.gnome.gnome-settings-daemon.enable = mkDefault true;
     services.gvfs.enable = mkDefault true;
 
-    # Register packages for D-Bus.  The D-Bus daemons do not look at the
-    # system profile, so these have to be registered explicitly.
     services.dbus.packages = [
       budgie-control-center'
       pkgs.budgie-desktop-services
