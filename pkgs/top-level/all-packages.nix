@@ -9778,6 +9778,7 @@ with pkgs;
     flight-of-the-amazon-queen
     lure-of-the-temptress
     mystery-house
+    nippon-safes-inc
     ;
 
   sgt-puzzles-mobile = callPackage ../by-name/sg/sgt-puzzles/package.nix {

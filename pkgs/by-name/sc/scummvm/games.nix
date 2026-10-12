@@ -210,4 +210,31 @@ in
     docs = [ ];
     files = [ "MYSTHOUS.DSK" ];
   };
+
+  nippon-safes-inc = generic rec {
+    plong = "Nippon Safes Inc";
+    pshort = "nippon";
+    pcode = "nippon";
+    description = "Comedy point-and-click adventure game set in a futuristic Japan";
+    version = "1.0";
+    src = fetchurl {
+      url = "https://downloads.scummvm.org/frs/extras/Nippon%20Safes/nippon-${version}.zip";
+      hash = "sha256-U+fixgBl5K7RkxabvNz9ERP6aNPv4cgkC6BzwOINYT8=";
+    };
+    sourceRoot = ".";
+    docs = [
+      "README"
+      "readme.txt"
+    ];
+    files = [
+      "*.CNV"
+      "*.MID"
+      "*.TAB"
+      "DISK*"
+      "EN"
+      "FR"
+      "GE"
+      "IT"
+    ];
+  };
 }
