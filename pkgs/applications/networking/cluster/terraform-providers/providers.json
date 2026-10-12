@@ -163,6 +163,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-SO3CX7pZ+q7ytz/55cxTPlW7ByY1zKhxkQxMiqAvm8o="
   },
+  "charpand_openprovider": {
+    "hash": "sha256-hrlQgjGEEn/Uuh0qe1YMzWT5lTSkSSgN0ROpPIASgaA=",
+    "homepage": "https://registry.terraform.io/providers/charpand/openprovider",
+    "owner": "charpand",
+    "repo": "terraform-provider-openprovider",
+    "rev": "v1.1.2",
+    "spdx": "MIT",
+    "vendorHash": "sha256-9Rpo8CW5djm60Fsum3maWMptoNc9VS1u6VDQ6E+oLDU="
+  },
   "checkly_checkly": {
     "hash": "sha256-rbIOAbrZ3eISHsHEqicYz8zj5oSPT5Cu3gEgJOxgMWw=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
