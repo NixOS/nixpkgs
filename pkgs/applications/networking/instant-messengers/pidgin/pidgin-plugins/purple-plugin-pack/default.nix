@@ -33,6 +33,10 @@ stdenv.mkDerivation {
     pidgin
   ];
 
+  # libpurple's PurpleCallback is declared as `void (*)()`, which takes no arguments in
+  # C23 (GCC 16 default), so passing callbacks with arguments fails to compile
+  mesonFlags = [ "-Dc_std=gnu17" ];
+
   meta = {
     homepage = "https://keep.imfreedom.org/pidgin/purple-plugin-pack";
     description = "Collection of plugins for purple-based clients such as Pidgin";
