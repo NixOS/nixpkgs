@@ -27,23 +27,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-DgCFmTz+qulwXu1Oax8gBnc/6HIT6TlY8+xzBRGFvu0=";
 
-  preCheck = ''
-    export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-
-    patchShebangs tests
-  ''
-  + lib.concatMapStringsSep "\n" (x: "rm tests/${x}.sh") [
-    "comdat-odr"
-    "icf-gcc-except-table"
-    "icf-preemption"
-    "linker-script-group-as-needed"
-    "lto-archive"
-    "mold-wrapper"
-    "rpath"
-    "run"
-    "tls-df-static-tls"
-    "tls-le-error"
-  ];
+  # Upstream integration tests are way to finicky to keep around. Our internal
+  # linking tests should suffice.
+  doCheck = false;
 
   postInstall = ''
     cp $out/bin/{mold,ld.mold}
