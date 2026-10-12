@@ -202,7 +202,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      inherit (python3Packages) rerun-sdk;
+      inherit (python3Packages) rerun-sdk rerun-notebook;
     };
   };
 
