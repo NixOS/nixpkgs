@@ -15,10 +15,17 @@ let
     inherit (cfg) apparmor;
     dbus = cfg.dbusPackage;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
-    serviceDirectories = cfg.packages;
+    serviceDirectories = map (x: x.pkg) (genericClosure {
+      startSet = map (pkg: {
+        key = "${pkg}";
+        inherit pkg;
+      }) cfg.packages;
+      operator = _: [ ];
+    });
   };
 
   inherit (lib)
+    genericClosure
     mkOption
     mkEnableOption
     mkIf
