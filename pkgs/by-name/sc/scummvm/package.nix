@@ -2,31 +2,35 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  nasm,
-  pkg-config,
+  SDL2,
   alsa-lib,
+  cctools,
   curl,
   flac,
   fluidsynth,
   freetype,
+  libGL,
+  libGLU,
   libjpeg,
   libmad,
   libmpeg2,
   libogg,
   libtheora,
   libvorbis,
-  libGLU,
-  libGL,
   libx11,
-  SDL2,
-  zlib,
-  cctools,
+  nasm,
   nix-update-script,
+  pkg-config,
+  versionCheckHook,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "scummvm";
   version = "2026.4.0";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "scummvm";
@@ -34,9 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-GBPfByKCWP4/YGRXMapM1oo0MzZZ2bAzFRu4DmZQMrI=";
   };
-
-  strictDeps = true;
-  __structuredAttrs = true;
 
   nativeBuildInputs = [
     nasm
@@ -66,13 +67,14 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   dontDisableStatic = true;
-
   enableParallelBuilding = true;
 
   configurePlatforms = [ "host" ];
   configureFlags = [
     "--enable-release"
   ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
   preConfigure = ''
     PATH="${lib.getDev SDL2}/bin:$PATH"
@@ -87,26 +89,32 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail ${stdenv.hostPlatform.config}-ranlib ${cctools}/bin/ranlib
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = "SDL_VIDEODRIVER";
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  preVersionCheck = ''
+    export SDL_VIDEODRIVER=dummy
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     longDescription = ''
-      ScummVM is a program which allows you to run a variety of classic
-      graphical point-and-click adventure games and role-playing games,
-      provided you already have their data files. It reimplements the original
+      ScummVM allows you to play classic graphic point-and-click adventure games,
+      text adventure games, and RPGs. It reimplements the original
       engines (SCUMM, SCI, AGS, and many more) so those games can be played
       on systems and hardware they were never designed for.
     '';
     homepage = "https://www.scummvm.org/";
-    changelog = "https://github.com/scummvm/scummvm/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/scummvm/scummvm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ peterhoeg ];
-    mainProgram = "scummvm";
+    maintainers = with lib.maintainers; [
+      keenanweaver
+      peterhoeg
+    ];
     platforms = lib.platforms.unix;
+    mainProgram = "scummvm";
   };
 })
