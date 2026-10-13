@@ -66,7 +66,24 @@ in
   options.services.flarum = {
     enable = mkEnableOption "Flarum discussion platform";
 
-    package = mkPackageOption pkgs "flarum" { };
+    package = mkOption {
+      type = types.package;
+      default = if versionOlder config.system.stateVersion "26.11" then pkgs.flarum_1 else pkgs.flarum_2;
+      defaultText = literalExpression ''
+        if versionOlder config.system.stateVersion "26.11" then pkgs.flarum_1 else pkgs.flarum_2
+      '';
+      relatedPackages = [
+        "flarum_1"
+        "flarum_2"
+      ];
+      description = ''
+        Flarum package to use.
+
+        Upgrading from Flarum 1.x to 2.x migrates the database and can't be
+        undone, so back up the database and make sure all extensions support
+        Flarum 2 before switching.
+      '';
+    };
 
     forumTitle = mkOption {
       type = types.str;

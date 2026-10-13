@@ -6,6 +6,8 @@
 }:
 
 php.buildComposerProject2 (finalAttrs: {
+  __structuredAttrs = true;
+
   pname = "flarum";
   version = "1.8.19";
 
@@ -21,10 +23,10 @@ php.buildComposerProject2 (finalAttrs: {
   composerLock = ./composer.lock;
   vendorHash = "sha256-EXKQ9x7E15Fc4fu/XdjlgMDCpmvg1XupBGq13WDspDI=";
 
-  passthru.tests.module = nixosTests.flarum;
+  passthru.tests.module = nixosTests.flarum_1;
 
   meta = {
-    changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";
+    changelog = "https://github.com/flarum/framework/blob/1.x/CHANGELOG.md";
     description = "Delightfully simple discussion platform for your website";
     homepage = "https://github.com/flarum/flarum";
     license = lib.licenses.mit;
