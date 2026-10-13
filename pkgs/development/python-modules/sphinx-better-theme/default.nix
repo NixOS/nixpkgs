@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "irskep";
     repo = "sphinx-better-theme";
     tag = "v${version}";
-    sha256 = "sha256-eFA1U2jMeOH7xabonYg/bV6eTAFBew6+WaK2uKWlsUc=";
+    hash = "sha256-eFA1U2jMeOH7xabonYg/bV6eTAFBew6+WaK2uKWlsUc=";
   };
 
   nativeBuildInputs = [ sphinxHook ];
