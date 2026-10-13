@@ -5,6 +5,8 @@
   libcec,
   pytestCheckHook,
   setuptools,
+  runCommand,
+  writers,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -34,6 +36,15 @@ buildPythonPackage (finalAttrs: {
     "cec"
     "pycec"
   ];
+
+  passthru.tests.propagate-cec = runCommand "test-propagate-cec" { } ''
+    ${writers.writePython3 "test-propagate-cec.py" {
+      libraries = [ finalAttrs.finalPackage ];
+      doCheck = false;
+    } "import cec"}
+
+    touch "$out"
+  '';
 
   meta = {
     description = "Python modules to access HDMI CEC devices";
