@@ -32,6 +32,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ libsodium ];
 
+  # liboqs 0.8.0 does not recognize riscv64
+  # https://github.com/open-quantum-safe/liboqs/pull/1641
+  postPatch = lib.optionalString stdenv.hostPlatform.isRiscV64 ''
+    substituteInPlace $cargoDepsCopy/*/oqs-sys-*/liboqs/CMakeLists.txt \
+      --replace-fail 'elseif(OQS_PERMIT_UNSUPPORTED_ARCHITECTURE)' \
+      'elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "riscv")
+        set(ARCH "riscv")
+    elseif(OQS_PERMIT_UNSUPPORTED_ARCHITECTURE)'
+  '';
+
   # nix defaults to building for aarch64 _without_ the armv8-a
   # crypto extensions, but liboqs depends on these
   preBuild = lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -59,6 +69,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
+      "riscv64-linux"
       "x86_64-linux"
     ];
     mainProgram = "rosenpass";
