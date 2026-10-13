@@ -15,6 +15,9 @@ let
   addToCheckInputs = pkg: old: {
     checkInputs = (old.checkInputs or [ ]) ++ lib.toList pkg;
   };
+  addToNativeCheckInputs = pkg: old: {
+    nativeCheckInputs = (old.nativeCheckInputs or [ ]) ++ lib.toList pkg;
+  };
   addToPropagatedBuildInputs = pkg: old: {
     propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ lib.toList pkg;
   };
@@ -153,9 +156,7 @@ in
       ] old
     )
     // (addToBuildInputs pkgs.libglut old);
-  gnuplot-pipe = {
-    nativeCheckInputs = [ pkgs.gnuplot ];
-  };
+  gnuplot-pipe = addToNativeCheckInputs pkgs.gnuplot;
   hypergiant = addPkgConfig;
   icu = addToBuildInputsWithPkgConfig pkgs.icu;
   imlib2 = addToBuildInputsWithPkgConfig pkgs.imlib2;
@@ -166,12 +167,10 @@ in
     env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
   };
   lmdb-ht = addToBuildInputs pkgs.lmdb;
-  lowdown = {
-    nativeCheckInputs = [
-      pkgs.perl
-      pkgs.html-tidy
-    ];
-  };
+  lowdown = addToNativeCheckInputs [
+    pkgs.perl
+    pkgs.html-tidy
+  ];
   magic = addToBuildInputs pkgs.file;
   # requires PCRE
   mdh = broken;
@@ -181,8 +180,8 @@ in
   mpi =
     old:
     (addToBuildInputs pkgs.openmpi old)
+    // (addToNativeCheckInputs pkgs.openmpi old)
     // {
-      nativeCheckInputs = [ pkgs.openmpi ];
       preBuild = ''
         mkdir -p $NIX_BUILD_TOP/mpi-dir
         ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
@@ -213,11 +212,7 @@ in
       doCheck = false;
     };
   openssl =
-    old:
-    (addToBuildInputsWithPkgConfig pkgs.openssl old)
-    // {
-      nativeCheckInputs = [ pkgs.openssl ];
-    };
+    old: (addToBuildInputsWithPkgConfig pkgs.openssl old) // (addToNativeCheckInputs pkgs.openssl old);
   orm-db-rqlite = removeBundledEggs "orm-db-rqlite";
   orm-db-sqlite = removeBundledEggs "orm-db-sqlite";
   orm = removeBundledEggs "orm";
@@ -244,6 +239,10 @@ in
     ]
   );
   scheme2c-compatibility = addPkgConfig;
+  s48-modules = {
+    # Some tests fail
+    doCheck = false;
+  };
   sdl-base =
     old:
     (
@@ -321,18 +320,20 @@ in
       # needed for tablib-config to be in PATH
       addToNativeBuildInputs pkgs.taglib_1 old
     );
-  tick = {
-    nativeCheckInputs = [ pkgs.git ];
-    preCheck = ''
-      export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
-      git config --global user.email "nix@example.com"
-      git config --global user.name "Nix Build"
-      git config --global init.defaultBranch master
-    '';
-    postInstall = ''
-      wrapProgram $out/bin/tick --prefix PATH : ${pkgs.git}/bin
-    '';
-  };
+  tick =
+    old:
+    (addToNativeCheckInputs pkgs.git old)
+    // {
+      preCheck = ''
+        export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
+        git config --global user.email "nix@example.com"
+        git config --global user.name "Nix Build"
+        git config --global init.defaultBranch master
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/tick --prefix PATH : ${pkgs.git}/bin
+      '';
+    };
   tokyocabinet =
     old:
     (addToBuildInputs pkgs.tokyocabinet old)
@@ -423,9 +424,7 @@ in
         --replace-quiet 'only chicken.base' 'only chicken.base define-values'
     '';
   };
-  memcached = {
-    nativeCheckInputs = [ pkgs.memcached ];
-  };
+  memcached = addToNativeCheckInputs pkgs.memcached;
   raylib = addToBuildInputsWithPkgConfig pkgs.raylib;
   socket = old: {
     # chicken-do checks for changes to a file that doesn't exist

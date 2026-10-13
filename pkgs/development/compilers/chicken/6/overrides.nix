@@ -15,6 +15,9 @@ let
   addToCheckInputs = pkg: old: {
     checkInputs = (old.checkInputs or [ ]) ++ lib.toList pkg;
   };
+  addToNativeCheckInputs = pkg: old: {
+    nativeCheckInputs = (old.nativeCheckInputs or [ ]) ++ lib.toList pkg;
+  };
   addPkgConfig = old: {
     nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
   };
@@ -57,20 +60,17 @@ in
   # The egg bundles the leptonica headers it needs, but not the library.
   leptonic = addToBuildInputs pkgs.leptonica;
   leveldb = addToBuildInputs pkgs.leveldb;
-  lowdown = {
-    nativeCheckInputs = [
-      pkgs.perl
-      pkgs.html-tidy
-    ];
-  };
-  memcached = {
-    nativeCheckInputs = [ pkgs.memcached ];
-  };
+  lowdown = addToNativeCheckInputs [
+    pkgs.perl
+    pkgs.html-tidy
+  ];
+  memcached = addToNativeCheckInputs pkgs.memcached;
   mpi =
     old:
     (addToBuildInputs pkgs.openmpi old)
+    // (addToNativeCheckInputs pkgs.openmpi old)
     // {
-      nativeCheckInputs = [ pkgs.openmpi ];
+
       preBuild = ''
         mkdir -p $NIX_BUILD_TOP/mpi-dir
         ln -sf ${lib.getDev pkgs.openmpi}/include $NIX_BUILD_TOP/mpi-dir/include
@@ -80,11 +80,7 @@ in
       env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
     };
   openssl =
-    old:
-    (addToBuildInputsWithPkgConfig pkgs.openssl old)
-    // {
-      nativeCheckInputs = [ pkgs.openssl ];
-    };
+    old: (addToBuildInputsWithPkgConfig pkgs.openssl old) // (addToNativeCheckInputs pkgs.openssl old);
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
 
   # fltk-config has to be on PATH: the egg runs it to get its compiler flags.
@@ -159,18 +155,20 @@ in
     doCheck = false;
   };
 
-  tick = {
-    nativeCheckInputs = [ pkgs.git ];
-    preCheck = ''
-      export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
-      git config --global user.email "nix@example.com"
-      git config --global user.name "Nix Build"
-      git config --global init.defaultBranch master
-    '';
-    postInstall = ''
-      wrapProgram $out/bin/tick --prefix PATH : ${pkgs.git}/bin
-    '';
-  };
+  tick =
+    old:
+    (addToNativeCheckInputs pkgs.git old)
+    // {
+      preCheck = ''
+        export GIT_CONFIG_GLOBAL="$NIX_BUILD_TOP/.gitconfig"
+        git config --global user.email "nix@example.com"
+        git config --global user.name "Nix Build"
+        git config --global init.defaultBranch master
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/tick --prefix PATH : ${pkgs.git}/bin
+      '';
+    };
 
   utf8 = addToCheckInputs chickenEggs.test;
 
