@@ -30,44 +30,42 @@ let
   version = if args ? version then args.version else lib.getVersion args.name;
   overrides = callPackage overridesFile { };
   override = if builtins.hasAttr pname overrides then builtins.getAttr pname overrides else lib.id;
-  # Will be merged into derivation attributes verbatim
-  extraArgs = removeAttrs args [
-    "name"
-    "pname"
-    "version"
-    "buildInputs"
-    "meta"
-    "src"
-  ];
-  commonArgs = {
-    inherit version;
-    strictDeps = true;
-    dontConfigure = true;
-    env = {
-      CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
-    }
-    // (args.env or { });
-  }
-  // extraArgs;
-  # Some eggs' tests expect the egg to already be installed so that its modules are available for
-  # importing and programs are available in PATH. This derivation thus only builds the egg and the
-  # main derivation below then pulls it in to be able to run the tests via `checkPhase`. Other than
-  # that, it merely re-exports the main output of this derivation here.
-  noCheckDrv =
+  # Some eggs' tests expect the egg to be installed already so that their modules
+  # can be imported and their programs found in PATH. The `doCheck = false`
+  # override below builds and installs the egg without running its tests, and the
+  # checked derivation takes it as an input. This builds every egg twice, but
+  # avoids duplicating the build and install logic in a second derivation.
+  self =
     (stdenv.mkDerivation (
+      finalAttrs:
       {
-        inherit src;
-        pname = "chicken-${pname}-no-check";
+        pname = "chicken-${pname}";
+        inherit version;
         propagatedBuildInputs = buildInputs;
         nativeBuildInputs = [
           chicken
           makeWrapper
         ];
-        buildInputs = [ chicken ];
-        outputs = [
-          "out"
-          "build"
+        buildInputs = [
+          chicken
+        ]
+        ++ lib.optionals finalAttrs.doCheck [
+          (self.overrideAttrs { doCheck = false; })
         ];
+        nativeCheckInputs = [
+          chicken
+        ]
+        ++ lib.optionals finalAttrs.doCheck [
+          (self.overrideAttrs { doCheck = false; })
+        ];
+
+        strictDeps = true;
+
+        env = {
+          CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
+        }
+        // (args.env or { });
+
         buildPhase = ''
           runHook preBuild
 
@@ -82,78 +80,64 @@ let
 
           chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
 
-          # Capture source + build artifcats as it's required by some tests (see main derivation below)
-          cp -r . $build
-
           runHook postBuild
+        '';
+
+        doCheck = true;
+
+        checkPhase = ''
+          runHook preCheck
+
+          if [ -e tests/run.scm ]; then
+            (
+              cd tests
+              csi -s run.scm ${pname} "${version}"
+            )
+          fi
+
+          runHook postCheck
         '';
 
         installPhase = ''
           runHook preInstall
 
-          local repo=$out/lib/chicken/${toString chicken.binaryVersion}
-          CHICKEN_INSTALL_PREFIX=$out \
-          CHICKEN_INSTALL_REPOSITORY=$repo \
+          export CHICKEN_INSTALL_PREFIX=$out
+          export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
           chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
 
           # Patching the generated .egg-info instead of the original .egg to work
           # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
           # CHICKEN 6.0.0: eggs whose .egg carries no version property are
           # installed without one.
-          csi -e "(write (cons '(version \"${version}\") (read)))" < "$repo/${pname}.egg-info" > "${pname}.egg-info.new"
-          mv "${pname}.egg-info.new" "$repo/${pname}.egg-info"
+          csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info" > "${pname}.egg-info.new"
+          mv "${pname}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info"
 
           for f in $out/bin/*
           do
             wrapProgram $f \
-              --prefix CHICKEN_REPOSITORY_PATH : "$repo:$CHICKEN_REPOSITORY_PATH" \
+              --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
               --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
               --prefix PATH : "$out/bin:${chicken}/bin"
           done
 
           runHook postInstall
         '';
+
+        dontConfigure = true;
+
+        meta = (args.meta or { }) // {
+          inherit (chicken.meta) platforms;
+          maintainers = lib.lists.unique ((args.meta.maintainers or [ ]) ++ chicken.meta.maintainers);
+        };
       }
-      // commonArgs
+      // removeAttrs args [
+        "name"
+        "pname"
+        "version"
+        "buildInputs"
+        "meta"
+      ]
     )).overrideAttrs
       override;
 in
-(stdenv.mkDerivation (
-  {
-    src = noCheckDrv.build;
-    pname = "chicken-${pname}";
-    buildInputs = [
-      chicken
-      noCheckDrv
-    ];
-    nativeCheckInputs = [
-      chicken
-      noCheckDrv
-    ];
-    dontPatch = true;
-    dontBuild = true;
-    doCheck = true;
-    dontFixup = true;
-    checkPhase = ''
-      runHook preCheck
-
-      if [ -e tests/run.scm ]; then
-        (
-          cd tests
-          csi -s run.scm ${pname} "${version}"
-        )
-      fi
-
-      runHook postCheck
-    '';
-    installPhase = ''
-      ln -s ${noCheckDrv} $out
-    '';
-    meta = (args.meta or { }) // {
-      inherit (chicken.meta) platforms;
-      maintainers = lib.lists.unique ((args.meta.maintainers or [ ]) ++ chicken.meta.maintainers);
-    };
-  }
-  // commonArgs
-)).overrideAttrs
-  override
+self
