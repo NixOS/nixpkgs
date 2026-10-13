@@ -169,6 +169,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/sonic182/aiosonic";
     changelog = "https://github.com/sonic182/aiosonic/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ geraldog ];
+    maintainers = with lib.maintainers; [
+      geraldog
+      sonic182
+    ];
   };
 })
