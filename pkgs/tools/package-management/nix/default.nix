@@ -241,7 +241,17 @@ lib.makeExtensible (
         }).appendPatches
           patches_common;
 
-      git = addTests "git" self.nixComponents_git.nix-everything;
+      git = addTests "git" (
+        self.nixComponents_git.nix-everything.overrideAttrs (old: {
+          meta = old.meta // {
+            broken = true;
+            knownVulnerabilities = [
+              "https://discourse.nixos.org/t/security-advisory-for-nix-and-lix-october-2026/80547"
+              "https://discourse.nixos.org/t/security-advisory-local-privilege-escalation-in-lix-and-nix/77407"
+            ];
+          };
+        })
+      );
 
       latest = self.nix_2_35;
 
