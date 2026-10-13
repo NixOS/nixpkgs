@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "flask-alembic";
-  version = "3.2.0";
+  version = "3.3.0";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pallets-eco";
     repo = "flask-alembic";
     tag = version;
-    hash = "sha256-g5xl5CEfSZUbZxCLYykjd94eVjxzBAkgoBcR4y7IYfM=";
+    hash = "sha256-ljhIUfdkouheKqRW6SCuqiUBN6cGdVrcpaaeRBOUJQk=";
   };
 
   build-system = [ flit-core ];
