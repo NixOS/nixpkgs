@@ -37,12 +37,12 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "26.08";
-  rev = "666c2c64d4a1772c03948f5b667438da63ddaa76";
+  version = "26.09.3";
+  rev = "29bb700b951e3f0c0cb69b77c0180fc1fe33e6ba";
 
-  srcHash = "sha256-0sqtKiMqw7MLXVFSCT1sKX/VO7q5BY63pJP5OnCE2zo=";
-  cargoHash = "sha256-LQ5uD86ZOKXy9vGbTqPBi3Q57PZEjwQkbHR94QAIVMg=";
-  yarnHash = "sha256-bOgiZImraPXR/gVk9MB3o9GScMGvLvdhc9mLAaCA4IE=";
+  srcHash = "sha256-N55F8dDDRrCmA8GYP2QtfNs6QQrKhY7D2+yJO+4pqss=";
+  cargoHash = "sha256-2atsCtbtS+0T1h+KqUXI3aGHJFQbQsIaCXSi5KFUz5E=";
+  yarnHash = "sha256-qT+N82wIv7I+gMGD86iRjQRhNbcqh9XOrnpPbLI+DXM=";
   pythonDeps =
     with python3Packages;
     [
