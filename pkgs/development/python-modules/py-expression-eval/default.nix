@@ -2,12 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "py-expression-eval";
   version = "0.3.14";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "axiacore";
@@ -15,6 +16,8 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-YxhZd8V6ofphcNdcbBbrT5mc37O9c6W1mfhsvFVC+KM=";
   };
+
+  build-system = [ setuptools ];
 
   meta = {
     homepage = "https://github.com/AxiaCore/py-expression-eval/";
