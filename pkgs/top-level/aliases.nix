@@ -2677,7 +2677,10 @@ mapAliases {
   varnish60 = throw "varnish 6.0 has been removed as it used unmaintaned dependencies. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish60Packages = throw "varnish 6.0 has been removed as it used unmaintained dependencies.  Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-29
   varnish77 = throw "varnish 7.7 is EOL. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-01
-  varnish77Packages = throw "varnish 7.7 is EOL. Please upgrade to 'varnish80' or 'vinyl-cache_9'."; # Added 2026-05-01
+  varnish80 = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnish80Packages = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnish = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
+  varnishPackages = throw "varnish 8.0 is EOL. Please upgrade to 'vinyl-cache_9'."; # Added 2026-10-13
   vaults = throw "'vaults' has been removed as it depends on 'fuse2', which is deprecated and no longer available in Nixpkgs."; # Added 2026-07-12
   vaultwarden-vault = throw "'vaultwarden-vault' has been renamed to/replaced by 'vaultwarden.webvault'"; # Converted to throw 2025-10-27
   vazir-fonts = throw "'vazir-fonts' has been renamed to 'vazirmatn'"; # Added 2026-06-15
