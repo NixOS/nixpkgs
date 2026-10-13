@@ -24,9 +24,6 @@
   pytestCheckHook,
   util-linux,
   pyglet,
-
-  # passthru
-  cuda-bindings,
 }:
 
 let
@@ -215,9 +212,9 @@ buildPythonPackage (finalAttrs: {
 
   # Tests need access to a GPU
   doCheck = false;
-  passthru.gpuCheck = cuda-bindings.overridePythonAttrs {
+  passthru.gpuCheck = finalAttrs.finalPackage.overrideAttrs {
     requiredSystemFeatures = [ "cuda" ];
-    doCheck = true;
+    doInstallCheck = true;
   };
 
   meta = {
