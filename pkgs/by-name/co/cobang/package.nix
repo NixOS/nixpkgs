@@ -14,6 +14,7 @@
   pipewire,
   pkg-config,
   wrapGAppsHook4,
+  librsvg,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
