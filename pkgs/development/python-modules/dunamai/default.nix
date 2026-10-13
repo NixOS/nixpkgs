@@ -47,6 +47,20 @@ buildPythonPackage rec {
   disabledTests = [
     # clones from github.com
     "test__version__from_git__shallow"
+  ]
+  # If Git has been compiled with breaking changes enabled, disable tests that
+  # are known to be broken in that environment while we wait for upstream
+  # fixes.
+  #
+  # https://github.com/mtkennerly/dunamai/issues/117
+  # https://github.com/NixOS/nixpkgs/issues/571330
+  ++ lib.optionals (builtins.elem "WITH_BREAKING_CHANGES=YesPlease" gitMinimal.makeFlags) [
+    "test__version__from_git__with_lightweight_tag"
+    "test__version__from_git__with_mixed_tags"
+    "test__version__from_git__with_nonchronological_commits"
+    "test__version__from_git__gitflow"
+    "test__version__from_git__exclude_decoration"
+    "test__version__from_git__broken_ref"
   ];
 
   pythonImportsCheck = [ "dunamai" ];
