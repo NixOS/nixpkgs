@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication {
 
     install -vD $pname.py $out/bin/$pname
 
-    substituteInPlace $out/bin/$pname --replace '"Coercer"' '"coercer"'
+    substituteInPlace $out/bin/$pname --replace-fail '"Coercer"' '"coercer"'
 
     runHook postInstall
   '';
@@ -41,6 +41,6 @@ python3.pkgs.buildPythonApplication {
     homepage = "https://github.com/grimlockx/ADCSKiller";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ exploitoverload ];
-    mainProgram = "ADCSKiller";
+    mainProgram = "adcskiller";
   };
 }

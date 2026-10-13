@@ -7,7 +7,7 @@
   openssl,
   curl,
   libnotify,
-  libappindicator-gtk3,
+  libappindicator,
   gst_all_1,
   gtk3,
   dconf,
@@ -17,12 +17,12 @@
   aria2Support ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uget";
   version = "2.2.3-1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/urlget/uget-${version}.tar.gz";
+    url = "mirror://sourceforge/urlget/uget-${finalAttrs.version}.tar.gz";
     sha256 = "0jchvgkkphhwp2z7vd4axxr9ns8b6vqc22b2z8a906qm8916wd8i";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     openssl
     curl
     libnotify
-    libappindicator-gtk3
+    libappindicator
     gtk3
     (lib.getLib dconf)
   ]
@@ -74,10 +74,10 @@ stdenv.mkDerivation rec {
       thinking that it "might be too powerful" because remember power is good
       and lightweight power is uGet!
     '';
-    homepage = "http://www.ugetdm.com";
+    homepage = "https://sourceforge.net/projects/urlget/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];
     mainProgram = "uget-gtk";
   };
-}
+})

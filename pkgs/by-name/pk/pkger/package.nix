@@ -5,14 +5,14 @@
 
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pkger";
   version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "markbates";
     repo = "pkger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nBuOC+uVw+hYSssgTkPRJZEBkufhQgU5D6jsZZre7Is=";
   };
 
@@ -24,8 +24,8 @@ buildGoModule rec {
     description = "Embed static files in Go binaries (replacement for gobuffalo/packr)";
     mainProgram = "pkger";
     homepage = "https://github.com/markbates/pkger";
-    changelog = "https://github.com/markbates/pkger/releases/tag/v${version}";
+    changelog = "https://github.com/markbates/pkger/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

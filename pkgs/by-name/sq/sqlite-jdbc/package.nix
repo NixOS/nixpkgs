@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "Library for accessing and creating SQLite database files in Java";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };
 }

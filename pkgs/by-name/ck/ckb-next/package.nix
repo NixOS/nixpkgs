@@ -10,7 +10,7 @@
   cmake,
   zlib,
   kmod,
-  libXdmcp,
+  libxdmcp,
   gnused,
   withPulseaudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     udev
     qt6.qtbase
     zlib
-    libXdmcp
+    libxdmcp
     qt6.qttools
     qt6Packages.quazip
     qt6.qtwayland

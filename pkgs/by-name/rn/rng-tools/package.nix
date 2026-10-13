@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       johnazoidberg
-      c0bw3b
     ];
   };
 })

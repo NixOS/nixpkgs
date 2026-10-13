@@ -5,17 +5,17 @@
   pytestCheckHook,
   setuptools,
   setuptools-scm,
-  six,
+  typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nocaselist";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+3MG9aPgRVNOc3q37L7uA5ul6br7xbXyMfYW1+khG2U=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-ut4OlqEErI3a5JwmGqfCe1ro2UNGYcbNjsFvPNXGd6E=";
   };
 
   build-system = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ six ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Case-insensitive list for Python";
     homepage = "https://github.com/pywbem/nocaselist";
-    changelog = "https://github.com/pywbem/nocaselist/blob/${version}/docs/changes.rst";
+    changelog = "https://github.com/pywbem/nocaselist/blob/${finalAttrs.version}/docs/changes.rst";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
-}
+})

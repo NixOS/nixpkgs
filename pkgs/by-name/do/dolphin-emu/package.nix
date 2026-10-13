@@ -9,7 +9,7 @@
   qt6,
   wrapGAppsHook3,
   # darwin-only
-  xcbuild,
+  re-plistbuddy,
 
   # buildInputs
   bzip2,
@@ -21,7 +21,7 @@
   glslang,
   gtest,
   hidapi,
-  libXdmcp,
+  libxdmcp,
   libpulseaudio,
   libspng,
   libusb1,
@@ -33,15 +33,15 @@
   pugixml,
   sdl3,
   sfml,
-  xxHash,
+  xxhash,
   xz,
   zlib-ng,
   # linux-only
   alsa-lib,
   bluez,
   libGL,
-  libXext,
-  libXrandr,
+  libxext,
+  libxrandr,
   libevdev,
   udev,
   vulkan-loader,
@@ -51,17 +51,18 @@
   # passthru
   testers,
   nix-update-script,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2512";
+  version = "2609a"; # Please backport to stable for netplay compat
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-VmDhYZfYyzf08FXZTeBYmdEp9P8AugUpiOxNj8aEJqw=";
+    hash = "sha256-0yQVW7Q3EKqfGihVA9I8Ucs0Hn/QVGVXuZ8ePbCZ5TQ=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -72,6 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace CMake/DolphinInjectVersionInfo.cmake \
+      --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
+  '';
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -81,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild # for plutil
+    re-plistbuddy # for plutil as well
   ];
 
   buildInputs = [
@@ -94,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     gtest
     hidapi
-    libXdmcp
+    libxdmcp
     libpulseaudio
     libspng
     libusb1
@@ -109,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtsvg
     sdl3
     sfml
-    xxHash
+    xxhash
     xz
     zlib-ng
   ]
@@ -117,8 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     bluez
     libGL
-    libXext
-    libXrandr
+    libxext
+    libxrandr
     libevdev
     # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
     #mgba # Derivation doesn't support Darwin
@@ -179,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
-        command = "dolphin-emu-nogui --version";
+        command = "${lib.getExe xvfb-run} dolphin-emu --version";
         inherit (finalAttrs) version;
       };
     };
@@ -198,10 +204,6 @@ stdenv.mkDerivation (finalAttrs: {
     branch = "master";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    badPlatforms = [
-      # error: implicit instantiation of undefined template 'std::char_traits<unsigned int>'
-      lib.systems.inspect.patterns.isDarwin
-    ];
     maintainers = with lib.maintainers; [ pbsds ];
   };
 })

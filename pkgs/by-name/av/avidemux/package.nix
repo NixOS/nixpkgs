@@ -9,14 +9,14 @@
   gettext,
   libvdpau,
   libva,
-  libXv,
+  libxv,
   sqlite,
   yasm,
   freetype,
   fontconfig,
   fribidi,
   makeWrapper,
-  libXext,
+  libxext,
   libGLU,
   alsa-lib,
   withX265 ? true,
@@ -109,13 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     libvdpau
     libva
-    libXv
+    libxv
     sqlite
     fribidi
     fontconfig
     freetype
     alsa-lib
-    libXext
+    libxext
     libGLU
   ]
   ++ lib.optional withX264 x264
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       wrapWith =
         makeWrapper: filename:
-        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+        "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libxext}/lib";
       wrapQtApp = wrapWith "wrapQtApp";
       wrapProgram = wrapWith "wrapProgram";
     in

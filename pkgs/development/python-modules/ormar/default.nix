@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.20.2";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collerek";
     repo = "ormar";
     tag = version;
-    hash = "sha256-jg1qgOJiRBJCRThhq/jaXNmSoL0FmceIOWMKNxtyGJI=";
+    hash = "sha256-DjqjHvRmlFyOQt1FlqZ9iT1zy25FdizRrXfKwMy2uI0=";
   };
 
   pythonRelaxDeps = [

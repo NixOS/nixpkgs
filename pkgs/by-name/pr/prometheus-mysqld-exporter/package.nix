@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mysqld_exporter";
-  version = "0.18.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "mysqld_exporter";
-    tag = "v${version}";
-    hash = "sha256-uHr9hVjnQx1DIr7ByaqgmR4YOvCYo49+b+Ikh+Vlh+o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EIC6jTYrYtVUSYL0VqCBmKjXrFGX3zP3SvfB6ikBfD4=";
   };
 
-  vendorHash = "sha256-fM3CqyOEKYJOFkEwBE7/yIQEKUUIbBIbmHQp12/psas=";
+  vendorHash = "sha256-tgch9lijU013k39uUN4+RtoKGVjmYQrNz00kfy65ci4=";
 
   ldflags =
     let
@@ -24,8 +24,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}.Version=${version}"
-      "-X ${t}.Revision=${src.rev}"
+      "-X ${t}.Version=${finalAttrs.version}"
+      "-X ${t}.Revision=${finalAttrs.src.rev}"
       "-X ${t}.Branch=unknown"
       "-X ${t}.BuildUser=nix@nixpkgs"
       "-X ${t}.BuildDate=unknown"
@@ -37,7 +37,7 @@ buildGoModule rec {
   ];
 
   meta = {
-    changelog = "https://github.com/prometheus/mysqld_exporter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/prometheus/mysqld_exporter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Prometheus exporter for MySQL server metrics";
     mainProgram = "mysqld_exporter";
     homepage = "https://github.com/prometheus/mysqld_exporter";
@@ -47,4 +47,4 @@ buildGoModule rec {
       globin
     ];
   };
-}
+})

@@ -20,7 +20,7 @@
   freetype,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   portmidi,
   SDL2_image,
   SDL2_mixer,
@@ -97,7 +97,7 @@ buildPythonPackage rec {
     freetype
     libjpeg
     libpng
-    libX11
+    libx11
     portmidi
     SDL2
     (SDL2_image.override { enableSTB = false; })
@@ -132,7 +132,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for games (original distribution)";
-    homepage = "https://www.pygame.org/";
+    homepage = "https://github.com/pygame/pygame";
     changelog = "https://github.com/pygame/pygame/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];

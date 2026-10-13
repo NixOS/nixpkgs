@@ -9,7 +9,7 @@
   autoconf,
   automake,
   libnotify,
-  libX11,
+  libx11,
   xf86-input-evdev,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     libpulseaudio
     glibc
     libnotify
-    libX11
+    libx11
     xf86-input-evdev
   ];
 
@@ -49,6 +49,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "";
+    homepage = "https://github.com/fernandotcl/pa-applet";
     mainProgram = "pa-applet";
     license = lib.licenses.bsd2;
     maintainers = [ ];

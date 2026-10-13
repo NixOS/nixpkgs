@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -25,25 +24,21 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlfmt";
-  version = "0.29.0";
+  version = "0.32.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "sqlfmt";
-    tag = "v${version}";
-    hash = "sha256-AeG6ga+WaBVvCCkEJbIkaJQg4rEmBcyQNmgJHEYkhrI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GM+LS1jrt7cCjkjM5T/nJEVRBdTm0Jd4ib+SvCbTAdA=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "click"
-  ];
   dependencies = [
     click
     jinja2
@@ -65,20 +60,17 @@ buildPythonPackage rec {
     versionCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  disabledTestPaths = [
-    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
-    "tests/functional_tests/test_end_to_end.py"
-    "tests/unit_tests/test_cli.py"
-  ];
+  # importlib.metadata.PackageNotFoundError: No package metadata was found for sqlfmt
+  dontCheckPythonMetadata = true;
 
   meta = {
-    description = "Sqlfmt formats your dbt SQL files so you don't have to";
+    description = "Formatter for dbt SQL files";
     homepage = "https://github.com/tconbeer/sqlfmt";
-    changelog = "https://github.com/tconbeer/sqlfmt/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tconbeer/sqlfmt/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pcboy ];
     mainProgram = "sqlfmt";
   };
-}
+})

@@ -37,12 +37,12 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dspam";
   version = "3.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dspam/dspam/dspam-${version}/dspam-${version}.tar.gz";
+    url = "mirror://sourceforge/dspam/dspam/dspam-${finalAttrs.version}/dspam-${finalAttrs.version}.tar.gz";
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
   patches = [
@@ -151,4 +151,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

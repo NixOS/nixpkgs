@@ -3,21 +3,23 @@
   biome,
   buildNpmPackage,
   fetchFromGitHub,
-  jre,
+  jdk25,
   maven,
   makeWrapper,
   unzip,
   nixosTests,
   writeText,
+  stdenv,
+  nix-update-script,
 }:
 let
-  version = "5.11.1";
+  version = "7.3.2";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
     tag = version;
-    hash = "sha256-B0ztra7j5V5Qm0DRpu4cl04tmOE1gS89NOV2kyMrzOg=";
+    hash = "sha256-AmmXM6lLGa5t9tHe4Ae8LCkIR/nkY89/4D2KIQnVcNU=";
   };
 
   frontend = buildNpmPackage {
@@ -27,7 +29,7 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-TD57bDY/7/zYT1T/HOl0+G59/hct8fzJaKaMC8/bBEI=";
+    npmDepsHash = "sha256-oh97YH9yaIqjjOqtd8iMvlZ5gc4cwJpkLrZyAZGS9Ho=";
 
     nativeBuildInputs = [ biome ];
 
@@ -53,7 +55,8 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-ipGxdX/LHEn2mQa2JhfeMTmg0esj5Z+7fJ3W2ipLfto=";
+  mvnHash = "sha256-d6sq5v+BToT1rj7AXPpuLZP9uKpXyt8F3EYWxV7uyoY=";
+  mvnJdk = jdk25;
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"
@@ -85,19 +88,29 @@ maven.buildMavenPackage {
     mkdir -p $out/bin $out/share
     unzip -d $out/share/ commafeed-server/target/commafeed-$version-h2-jvm.zip
 
-    makeWrapper ${jre}/bin/java $out/bin/commafeed \
+    makeWrapper ${jdk25}/bin/java $out/bin/commafeed \
       --add-flags "-jar $out/share/commafeed-$version-h2/quarkus-run.jar"
 
     runHook postInstall
   '';
 
-  passthru.tests = nixosTests.commafeed;
+  passthru = {
+    inherit frontend;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    };
+    tests = nixosTests.commafeed;
+  };
 
   meta = {
     description = "Google Reader inspired self-hosted RSS reader";
     homepage = "https://github.com/Athou/commafeed";
     license = lib.licenses.asl20;
     mainProgram = "commafeed";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ svrana ];
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 }

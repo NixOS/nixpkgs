@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   gtkmm3,
-  glibmm,
+  glibmm_2_4,
   libappindicator,
 }:
 stdenv.mkDerivation {
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   buildInputs = [
     libappindicator
     gtkmm3
-    glibmm
+    glibmm_2_4
   ];
 
   meta = {

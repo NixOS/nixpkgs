@@ -9,6 +9,7 @@
   makeWrapper,
   nodejs,
   yarn-berry_4,
+  substitute,
   zip,
 
   electron,
@@ -22,7 +23,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.10";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -34,9 +35,22 @@ stdenv.mkDerivation (finalAttrs: {
       cd $out
       git rev-parse HEAD > .COMMIT
       find -name .git -print0 | xargs -0 rm -rf
+
+      # Remove after upstream updates to Yarn 4.14
+      # https://github.com/ytmdesktop/ytmdesktop/blob/v2.0.11/package.json#L77
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
     '';
 
-    hash = "sha256-CA3Vb7Wp4WrsWSVtIwDxnEt1pWYb73WnhyoMVKoqvOE=";
+    hash = "sha256-48PeFM6azfPJBc3c6gNRE6mQnfYWMkMI9WQOcnFQCuA=";
   };
 
   patches = [
@@ -56,8 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-1jlnVY4KWm+w3emMkCkdwUtkqRB9ZymPPGuvgfQolrA=";
+    inherit (finalAttrs) src missingHashes patches;
+    hash = "sha256-18H8hlhMPwBptTd2oBY2pjLgAnxG9QNzcjmney4EaMc=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
     # force @electron/packager to use our electron instead of downloading it
     substituteInPlace node_modules/@electron/packager/dist/packager.js \
       --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
+
+    # electron-forge's console output is squeezed into one narrow column if unset
+    export CI="1";
 
     yarn run package
 

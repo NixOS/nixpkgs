@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/xqilla/XQilla-${finalAttrs.version}.tar.gz";
-    sha256 = "0m9z7diw7pdyb4qycbqyr2x55s13v8310xsi7yz0inpw27q4vzdd";
+    hash = "sha256-KSYxeRYx/i5+uXJzdzNQY6SPEmEdZB0Clml+DAdZAus=";
   };
 
   patches = [
@@ -28,6 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     # code uses register storage specifier
     "CXXFLAGS=-std=c++14"
   ];
+
+  enableParallelBuilding = true;
 
   buildInputs = [
     xercesc

@@ -1,0 +1,89 @@
+From 33058e85d1ee985f9b622bbb2a48199eb55afc20 Mon Sep 17 00:00:00 2001
+From: Robin Voetter <rvoetter@amd.com>
+Date: Sat, 4 Apr 2026 21:34:58 +0000
+Subject: [PATCH] [rocprofiler-sdk] fix find_package dependency scoping issues
+
+By default, find_package() packages are only made visible to the current
+scope. add_subdirectory() enters a new scope, so the packages searched for
+in external/CMakeLists.txt are not visible in any other CMake files. This
+causes dependency errors for these dependencies. find_package() packages can
+be made visible to the entire project by supplying the GLOBAL argument.
+
+The GLOBAL keyword was added in CMake version 3.24, hence the minimum required
+version is also bumped. Other projects across rocm-systems (rocprofiler-register)
+also already require CMake 3.24, so that should not cause any problems.
+
+See https://github.com/ROCm/rocm-systems/pull/1243, that change fixes the
+same problem in rocprofiler-register.
+---
+ CMakeLists.txt          | 2 +-
+ external/CMakeLists.txt | 8 ++++----
+ requirements.txt        | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 25f335afb3..0d86e05170 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
+ 
+ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR AND CMAKE_CURRENT_SOURCE_DIR STREQUAL
+                                                   CMAKE_SOURCE_DIR)
+diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
+index cab59c07bd..fcc872d118 100644
+--- a/external/CMakeLists.txt
++++ b/external/CMakeLists.txt
+@@ -64,7 +64,7 @@ if(ROCPROFILER_BUILD_TESTS)
+         mark_as_advanced(BUILD_GMOCK)
+         mark_as_advanced(GTEST_HAS_ABSL)
+     else()
+-        find_package(GTest REQUIRED)
++        find_package(GTest REQUIRED GLOBAL)
+         target_link_libraries(rocprofiler-sdk-gtest INTERFACE GTest::gtest)
+     endif()
+ endif()
+@@ -90,7 +90,7 @@ if(ROCPROFILER_BUILD_GLOG)
+         INTERFACE $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/external/glog>
+                   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/glog/src>)
+ else()
+-    find_package(glog REQUIRED)
++    find_package(glog REQUIRED GLOBAL)
+     target_link_libraries(rocprofiler-sdk-glog INTERFACE glog::glog)
+ endif()
+ 
+@@ -111,7 +111,7 @@ if(ROCPROFILER_BUILD_FMT)
+         rocprofiler-sdk-fmt SYSTEM
+         INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/fmt/include>)
+ else()
+-    find_package(fmt REQUIRED)
++    find_package(fmt REQUIRED GLOBAL)
+     target_link_libraries(rocprofiler-sdk-fmt INTERFACE fmt::fmt)
+ endif()
+ 
+@@ -147,7 +147,7 @@ if(ROCPROFILER_BUILD_YAML_CPP)
+         rocprofiler-sdk-yaml-cpp
+         INTERFACE $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/external/yaml-cpp/include>)
+ else()
+-    find_package(yaml-cpp 0.8.0 REQUIRED)
++    find_package(yaml-cpp 0.8.0 REQUIRED GLOBAL)
+     target_link_libraries(rocprofiler-sdk-yaml-cpp INTERFACE yaml-cpp::yaml-cpp)
+ endif()
+ 
+diff --git a/requirements.txt b/requirements.txt
+index de7421da0d..3eb60c088b 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,7 +1,7 @@
+ black
+ clang-format>=11.0.0,<12.0.0
+ clang-tidy>=15.0.0,<20.0.0
+-cmake>=3.21.0
++cmake>=3.24.0
+ cmake-format
+ dataclasses
+ flake8
+-- 
+2.43.0
+

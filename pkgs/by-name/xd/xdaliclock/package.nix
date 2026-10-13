@@ -29,14 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preInstall = ''
-    mkdir -vp $out/bin $out/share/man/man1 $out/share/gsettings-schemas/$name/glib-2.0/schemas $out/share/pixmaps $out/share/applications
+    mkdir -vp $out/bin $out/share/man/man1 $out/share/gsettings-schemas/$name/glib-2.0/schemas $out/share/icons/hicolor/512x512/apps $out/share/applications
 
     # https://www.jwz.org/blog/2022/08/dali-clock-2-45-released/#comment-236762
     gappsWrapperArgs+=(--set MESA_GL_VERSION_OVERRIDE 3.1)
   '';
 
   installFlags = [
-    "GTK_ICONDIR=${placeholder "out"}/share/pixmaps/"
+    "GTK_ICONDIR=${placeholder "out"}/share/icons/hicolor/512x512/apps"
     "GTK_APPDIR=${placeholder "out"}/share/applications/"
   ];
 

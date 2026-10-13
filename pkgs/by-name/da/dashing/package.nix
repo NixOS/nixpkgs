@@ -6,14 +6,14 @@
   dashing,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dashing";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "technosophos";
     repo = "dashing";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-CcEgGPnJGrTXrgo82u5dxQTB/YjFBhHdsv7uggsHG1Y=";
   };
 
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "dashing";
   };
-}
+})

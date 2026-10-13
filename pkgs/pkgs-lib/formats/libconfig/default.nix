@@ -86,20 +86,19 @@ in
               libconfig-validator,
               writeText,
             }:
-            stdenvNoCC.mkDerivation rec {
+            stdenvNoCC.mkDerivation (finalAttrs: {
               inherit name;
 
               dontUnpack = true;
               preferLocalBuild = true;
 
               json = builtins.toJSON value;
-              passAsFile = [ "json" ];
 
               strictDeps = true;
               nativeBuildInputs = [ libconfig-generator ];
               buildPhase = ''
                 runHook preBuild
-                libconfig-generator < $jsonPath > output.cfg
+                printf "%s" "$json" | libconfig-generator > output.cfg
                 runHook postBuild
               '';
 
@@ -117,8 +116,10 @@ in
                 runHook postInstall
               '';
 
-              passthru.json = writeText "${name}.json" json;
-            }
+              __structuredAttrs = true;
+
+              passthru.json = writeText "${finalAttrs.name}.json" finalAttrs.json;
+            })
           )
           {
             libconfig-generator = generator;

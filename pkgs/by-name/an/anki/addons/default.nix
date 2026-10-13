@@ -4,11 +4,17 @@
 {
   adjust-sound-volume = callPackage ./adjust-sound-volume { };
 
+  advanced-browser = callPackage ./advanced-browser { };
+
   ajt-card-management = callPackage ./ajt-card-management { };
 
   anki-connect = callPackage ./anki-connect { };
 
   anki-quizlet-importer-extended = callPackage ./anki-quizlet-importer-extended { };
+
+  crowdanki = callPackage ./crowdanki { };
+
+  fsrs4anki-helper = callPackage ./fsrs4anki-helper { };
 
   image-occlusion-enhanced = callPackage ./image-occlusion-enhanced { };
 

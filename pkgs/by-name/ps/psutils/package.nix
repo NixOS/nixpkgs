@@ -5,12 +5,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "psutils";
   version = "17";
 
   src = fetchurl {
-    url = "http://knackered.knackered.org/angus/download/psutils/psutils-p${version}.tar.gz";
+    url = "http://knackered.knackered.org/angus/download/psutils/psutils-p${finalAttrs.version}.tar.gz";
     hash = "sha256-OFPreVhLqPvieoFUJbZan38Vsljg1DoFqFa9t11YiuQ=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -8,15 +8,15 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "analog";
   version = "6.0.18";
 
   src = fetchFromGitHub {
     owner = "c-amie";
     repo = "analog-ce";
-    tag = version;
-    sha256 = "sha256-NCturEibnpl6+paUZezksHzP33WtAzfIolvBLeEHXjY=";
+    tag = finalAttrs.version;
+    hash = "sha256-NCturEibnpl6+paUZezksHzP33WtAzfIolvBLeEHXjY=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i src/anlghead.h \
       -e "s|#define DEFAULTCONFIGFILE .*|#define DEFAULTCONFIGFILE \"$out/etc/analog.cfg\"|g" \
-      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/${pname}/lang/\"|g"
+      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/analog/lang/\"|g"
     substituteInPlace src/Makefile \
       --replace-fail "gcc" "${stdenv.cc.targetPrefix}cc" \
       --replace-fail "LIBS = -lm" "LIBS = -lm -lpng -lgd -ljpeg -lz -lbz2" \
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://www.c-amie.co.uk/software/analog/";
+    homepage = "https://github.com/c-amie/analog-ce";
     license = lib.licenses.gpl2Only;
     description = "Powerful tool to generate web server statistics";
     platforms = lib.platforms.all;
     mainProgram = "analog";
   };
 
-}
+})

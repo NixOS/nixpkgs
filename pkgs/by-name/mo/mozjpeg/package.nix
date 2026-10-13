@@ -48,6 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/mozilla/mozjpeg";
     license = lib.licenses.bsd3;
+    # Houses multiple utilities but you're most likely to want to encode a JPEG
+    # with this as that's the primary purpose of the entire project: encode
+    # JPEGs better. Technically there is also `djpeg` but it's not officially
+    # supported:
+    # https://github.com/mozilla/mozjpeg/issues/309#issuecomment-440674126
+    mainProgram = "cjpeg";
     maintainers = [ ];
     platforms = lib.platforms.all;
   };

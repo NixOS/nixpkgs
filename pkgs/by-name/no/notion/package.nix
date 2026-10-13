@@ -7,12 +7,12 @@
   gettext,
   groff,
   libsm,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrandr,
-  lua,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrandr,
+  lua5_2_compat,
   makeWrapper,
   pkg-config,
   readline,
@@ -20,6 +20,9 @@
   xmessage,
   xterm,
 }:
+let
+  lua = lua5_2_compat;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
   version = "4.0.4";
@@ -51,11 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     libsm
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXrandr
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrandr
     lua
     readline
   ];
@@ -84,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
           xmessage
           xterm
         ]
-      }" \
+      }"
   '';
 
   meta = {

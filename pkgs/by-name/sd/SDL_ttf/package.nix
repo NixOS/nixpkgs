@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_ttf";
-  version = "2.0.11-unstable-2024-04-23";
+  version = "2.0.11-unstable-2026-07-05";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_ttf";
-    rev = "3c4233732b94ce08d5f6a868e597af39e13f8b23";
-    hash = "sha256-FX6Ko4CaOSCSKdpWVsJhTZXlWk1cnjbfVfMDiGG2+TU=";
+    rev = "3af6dd26174bb719c241447d1ea55e40597bb9a6";
+    hash = "sha256-OLPsLIddOnKpMjW+P9D1gEKyYC125X6sqpBbm44d8d8=";
   };
 
   buildInputs = [

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.5.2";
   pname = "genromfs";
 
   src = fetchurl {
-    url = "mirror://sourceforge/romfs/genromfs/${version}/genromfs-${version}.tar.gz";
+    url = "mirror://sourceforge/romfs/genromfs/${finalAttrs.version}/genromfs-${finalAttrs.version}.tar.gz";
     sha256 = "0q6rpq7cmclmb4ayfyknvzbqysxs4fy8aiahlax1sb2p6k3pzwrh";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "genromfs";
   };
-}
+})

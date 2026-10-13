@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  __structuredAttrs = true;
+
   # On Darwin, Zig calls std.zig.system.darwin.macos.detect during the build,
   # which parses /System/Library/CoreServices/SystemVersion.plist and
   # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the
@@ -100,7 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postBuild =
-    if lib.versionAtLeast finalAttrs.version "0.14" then
+    if lib.versionAtLeast finalAttrs.version "0.17" then
+      ''
+        ZIG_LIB_DIR=$(pwd)/stage3/lib/zig stage3/bin/zig build langref -Dversion-string=${finalAttrs.version}
+      ''
+    else if lib.versionAtLeast finalAttrs.version "0.14" then
       ''
         stage3/bin/zig build langref --zig-lib-dir $(pwd)/stage3/lib/zig
       ''
@@ -155,13 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/ziglang/zig/issues/14281#issuecomment-1624220653
     zig_default_cpu_flag = "-Dcpu=baseline";
 
-    zig_default_optimize_flag =
-      if lib.versionAtLeast finalAttrs.version "0.12" then
-        "--release=safe"
-      else if lib.versionAtLeast finalAttrs.version "0.11" then
-        "-Doptimize=ReleaseSafe"
-      else
-        "-Drelease-safe=true";
+    zig_default_optimize_flag = "--release=safe";
   };
 
   setupHook = ./setup-hook.sh;
@@ -174,8 +174,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
     homepage = "https://ziglang.org/";
     changelog = "https://ziglang.org/download/${finalAttrs.version}/release-notes.html";
+    donationPage = "https://ziglang.org/zsf/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ andrewrk ];
+    maintainers = [ ];
     teams = [ lib.teams.zig ];
     mainProgram = "zig";
     platforms = lib.platforms.unix;

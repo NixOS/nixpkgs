@@ -5,6 +5,7 @@
   diskcache,
   fetchFromGitHub,
   jinja2,
+  jq,
   packaging,
   poetry-core,
   pyparsing,
@@ -18,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysigma";
-  version = "1.1.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+YyRfEhPRZLIo9T4mpYL5a/37CwWxAcuEOF+coR7erM=";
+    hash = "sha256-7U8XoXejRV3gP31PuhlEEg03YlzRdHKkfkWkDm/zRd4=";
   };
 
   pythonRelaxDeps = [
@@ -42,6 +43,7 @@ buildPythonPackage (finalAttrs: {
     diskcache
     diskcache-stubs
     jinja2
+    jq
     packaging
     pyparsing
     pyyaml

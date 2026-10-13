@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withFlashrom finalAttrs.passthru.flashromChromeos;
 
+  # Fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   enableParallelBuilding = true;
 
   postPatch = ''

@@ -13,14 +13,14 @@
   cargo-gra,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "karlender";
   version = "0.10.11";
 
   src = fetchFromGitLab {
     owner = "floers";
     repo = "karlender";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PwXSJq4uBtgIA2aQ5AZawEMmHoVS2Z9haVHyJ2oyXUs=";
   };
 
@@ -78,4 +78,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

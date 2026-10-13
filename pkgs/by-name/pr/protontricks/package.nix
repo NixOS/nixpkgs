@@ -4,42 +4,54 @@
   fetchFromGitHub,
   replaceVars,
   writeShellScript,
-  steam-run-free,
-  fetchpatch2,
+  steam,
   winetricks,
   yad,
   nix-update-script,
   extraCompatPaths ? "",
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  steam-run =
+    (steam.override {
+      extraLibraries =
+        p: with p; [
+          # Fixes installing vcrun2022
+          # https://github.com/Matoking/protontricks/issues/461
+          freetype
+        ];
+    }).run-free;
+in
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protontricks";
-  version = "1.13.1";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
-    tag = version;
-    hash = "sha256-YJUNp+8n1LPlD7lCAy6AMNxToloPBn8ZaRfREiwS9ls=";
+    tag = finalAttrs.version;
+    hash = "sha256-+XD6RxQKXhrvJI3z3NBAhNP/KKHkUG+fGyvTkztH5G4=";
   };
 
   patches = [
     # Use steam-run to run Proton binaries
     (replaceVars ./steam-run.patch {
-      steamRun = lib.getExe steam-run-free;
+      steamRun = lib.getExe steam-run;
       bash = writeShellScript "steam-run-bash" ''
-        exec ${lib.getExe steam-run-free} bash "$@"
+        exec ${lib.getExe steam-run} bash "$@"
       '';
     })
 
     # Revert vendored vdf since our vdf includes `appinfo.vdf` v29 support
-    (fetchpatch2 {
-      url = "https://github.com/Matoking/protontricks/commit/4198b7ea82369a91e3084d6e185f9b370f78eaec.patch";
-      revert = true;
-      hash = "sha256-1U/LiAliKtk3ygbIBsmoavXN0RSykiiegtml+bO8CnI=";
-    })
+    # See https://github.com/Matoking/protontricks/commit/4198b7ea82369a91e3084d6e185f9b370f78eaec
+    ./revert-vendored-vdf.patch
   ];
+
+  # Contents of vendored vdf are removed manually to reduce the size of the revert patch
+  postPatch = ''
+    rm -rf src/protontricks/_vdf
+  '';
 
   build-system = with python3Packages; [ setuptools-scm ];
 
@@ -68,6 +80,13 @@ python3Packages.buildPythonApplication rec {
     rm "$out/bin/protontricks-desktop-install"
   '';
 
+  disabledTests = [
+    # Executes ldconfig via steam-run, which relies on bubblewrap.
+    # bubblewrap requires unprivileged user namespaces, which means this fails in some environments
+    # with hardened kernels or restrictive distros, such as GitHub Actions (Ubuntu 24.04).
+    "test_get_runtime_library_paths"
+  ];
+
   pythonImportsCheck = [ "protontricks" ];
 
   passthru.updateScript = nix-update-script { };
@@ -75,7 +94,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Simple wrapper for running Winetricks commands for Proton-enabled games";
     homepage = "https://github.com/Matoking/protontricks";
-    changelog = "https://github.com/Matoking/protontricks/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Matoking/protontricks/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [
@@ -83,4 +102,4 @@ python3Packages.buildPythonApplication rec {
       "i686-linux"
     ];
   };
-}
+})

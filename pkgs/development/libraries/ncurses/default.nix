@@ -8,7 +8,11 @@
   pkg-config,
   abiVersion ? "6",
   enableStatic ? stdenv.hostPlatform.isStatic,
-  withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt,
+  # Disabled for static FreeBSD: libc++ headers come after C library headers,
+  # breaking C++ compilation. No current consumers need the C++ bindings.
+  withCxx ?
+    !stdenv.hostPlatform.useAndroidPrebuilt
+    && !(stdenv.hostPlatform.isFreeBSD && stdenv.hostPlatform.isStatic),
   mouseSupport ? false,
   gpm,
   withTermlib ? false,
@@ -22,7 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   src = fetchurl {
-    url = "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz";
+    urls = [
+      "https://invisible-island.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
+      # invisible-island.net may be firewall blocked on some networks
+      "https://invisible-mirror.net/archives/ncurses/ncurses-${finalAttrs.version}.tar.gz"
+    ];
     hash = "sha256-NVtMu+2ICwOBoExGYXt2VuNiWF1S6c+Epn4gCbdJ/xE=";
   };
 
@@ -119,7 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  env = lib.optionalAttrs stdenv.hostPlatform.isSunOS {
+    CFLAGS = "-D_XOPEN_SOURCE_EXTENDED";
+  };
 
   strictDeps = true;
 
@@ -137,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-    configureFlagsArray+=(
+    configureFlags+=(
       "--libdir=$out/lib"
       "--includedir=$dev/include"
       "--bindir=$dev/bin"
@@ -169,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
       suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     ''
     # When building a wide-character (Unicode) build, create backward
-    # compatibility links from the the "normal" libraries to the
+    # compatibility links from the "normal" libraries to the
     # wide-character libraries (e.g. libncurses.so to libncursesw.so).
     + lib.optionalString unicodeSupport ''
       libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
@@ -249,6 +259,8 @@ stdenv.mkDerivation (finalAttrs: {
     execer cannot bin/{reset,tput,tset}
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://www.gnu.org/software/ncurses/";
     description = "Free software emulation of curses in SVR4 and more";
@@ -276,6 +288,7 @@ stdenv.mkDerivation (finalAttrs: {
       in
       base ++ lib.optionals unicodeSupport (map (p: p + "w") base);
     platforms = lib.platforms.all;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "ncurses_project" finalAttrs.version;
   };
 
   passthru = {

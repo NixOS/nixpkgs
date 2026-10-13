@@ -7,7 +7,7 @@
   libxcb-util,
   util-macros,
   libxcb,
-  gtk2,
+  gtk3,
   spice,
   spice-protocol,
 }:
@@ -33,12 +33,12 @@ stdenv.mkDerivation {
     libxcb
     libxcb-util
     util-macros
-    gtk2
+    gtk3
     spice
     spice-protocol
   ];
 
-  NIX_LDFLAGS = "-lpthread";
+  env.NIX_LDFLAGS = "-lpthread";
 
   meta = {
     description = "Enable a running X11 desktop to be available via a Spice server";

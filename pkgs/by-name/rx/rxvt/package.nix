@@ -4,9 +4,9 @@
   fetchurl,
   pkg-config,
   libtool,
-  libX11,
-  libXt,
-  libXpm,
+  libx11,
+  libxt,
+  libxpm,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     libtool
-    libX11
-    libXt
-    libXpm
+    libx11
+    libxt
+    libxpm
   ];
 
   configurePhase = ''

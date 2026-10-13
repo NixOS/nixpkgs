@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
+  stdenv, # for meta.broken
 }:
 
 rustPlatform.buildRustPackage {
@@ -27,6 +28,8 @@ rustPlatform.buildRustPackage {
   env.OPENSSL_NO_VENDOR = 1;
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Add torrents to transmission based on RSS list";
     homepage = "https://github.com/herlon214/transmission-rss";
     maintainers = with lib.maintainers; [ icewind1991 ];

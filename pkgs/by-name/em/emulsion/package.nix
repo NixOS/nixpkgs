@@ -8,11 +8,11 @@
   pkg-config,
   python3,
   libGL,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxxf86vm,
   libxcb,
   libxkbcommon,
   wayland,
@@ -20,11 +20,11 @@
 let
   rpathLibs = [
     libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxxf86vm
     libxcb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -32,18 +32,18 @@ let
     wayland
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "emulsion";
-  version = "11.0";
+  version = "12.3";
 
   src = fetchFromGitHub {
     owner = "ArturKovacs";
     repo = "emulsion";
-    rev = "v${version}";
-    sha256 = "sha256-0t+MUZu1cvkJSL9Ly9kblH8fMr05KuRpOo+JDn/VUc8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-+C4YB5usNKfNydyEyIvaScnjK0h/PKN1x8gnt7Lz2kQ=";
   };
 
-  cargoHash = "sha256-1s5kCUxn4t1A40QHuygGKaqphLmcl+EYfx++RZQmL00=";
+  cargoHash = "sha256-i+lSUSgq98iT9OzsdkZgRidLszc6mJJA1b1Jfq+yk5s=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -66,4 +66,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "emulsion";
   };
-}
+})

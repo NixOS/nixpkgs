@@ -5,7 +5,8 @@
   lame,
   lib,
   makeWrapper,
-  monkeysAudio,
+  monkeys-audio,
+  nix-update-script,
   nixosTests,
   perlPackages,
   sox,
@@ -24,7 +25,7 @@ let
       sox
       wavpack
     ]
-    ++ (lib.optional stdenv.hostPlatform.isLinux monkeysAudio)
+    ++ (lib.optional stdenv.hostPlatform.isLinux monkeys-audio)
   );
 
   libPath = lib.makeLibraryPath [
@@ -34,13 +35,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "9.0.3";
+  version = "9.1.1";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     tag = version;
-    hash = "sha256-Yc/XBINSX1JN7lJn4fin4qcTUSF8Bg+FbFe23KlYkfs=";
+    hash = "sha256-+GvP4+DdJs7NLB/V2uLq28Pa3K3M9u1Ni86k+PYECOo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -128,7 +129,12 @@ perlPackages.buildPerlPackage rec {
       inherit (nixosTests) slimserver;
     };
 
-    updateScript = ./update.nu;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "(9\\.[0-9.]+)"
+      ];
+    };
   };
 
   meta = {
@@ -143,7 +149,6 @@ perlPackages.buildPerlPackage rec {
       adamcstephens
       jecaro
     ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 }

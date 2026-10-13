@@ -10,7 +10,9 @@
   libnl,
   libxcrypt,
   pkg-config,
+  rdma-core,
   withBluez ? false,
+  withRdma ? lib.meta.availableOn stdenv.hostPlatform rdma-core,
   withRemote ? false,
 
   # for passthru.tests
@@ -24,15 +26,15 @@
   haskellPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpcap";
-  version = "1.10.6";
+  version = "1.10.7";
 
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://www.tcpdump.org/release/libpcap-${version}.tar.gz";
-    hash = "sha256-hy3REzf+GrAq2dT+4EfJ2iRNaVxt3zTi67cz79Ttiqk=";
+    url = "https://www.tcpdump.org/release/libpcap-${finalAttrs.version}.tar.gz";
+    hash = "sha256-CzlKyQ28Cpg4/5dGjgXJyaPoc97CUUzVjbZdhZ0pbjE=";
   };
 
   outputs = [
@@ -46,14 +48,15 @@ stdenv.mkDerivation rec {
     bash
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
-  ++ lib.optionals withRemote [ libxcrypt ];
+  ++ lib.optionals withRdma [ rdma-core ]
+  ++ lib.optionals withRemote [ libxcrypt ]
+  ++ lib.optionals withBluez [ bluez ];
 
   nativeBuildInputs = [
     flex
     bison
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
-  ++ lib.optionals withBluez [ bluez.dev ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
@@ -62,6 +65,9 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-universal"
+  ]
+  ++ lib.optionals withRdma [
+    "--enable-rdma"
   ]
   ++ lib.optionals withRemote [
     "--enable-remote"
@@ -102,4 +108,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.bsd3;
   };
-}
+})

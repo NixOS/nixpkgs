@@ -8,12 +8,12 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwebcam";
   version = "0.2.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/libwebcam/source/libwebcam-src-${version}.tar.gz";
+    url = "mirror://sourceforge/project/libwebcam/source/libwebcam-src-${finalAttrs.version}.tar.gz";
     sha256 = "0hcxv8di83fk41zjh0v592qm7c0v37a3m3n3lxavd643gff1k99w";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ jraygauthier ];
   };
-}
+})

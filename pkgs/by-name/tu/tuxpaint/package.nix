@@ -23,6 +23,7 @@
   SDL2_Pango,
   SDL2_ttf,
   netpbm,
+  fetchpatch,
 }:
 
 let
@@ -49,6 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
+
+  patches = [
+    # Fix build w/ glibc-2.44
+    # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=51c28b814990551897631be7a222af2d922030a9
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/tuxpaint/files/tuxpaint-0.9.35-glibc-2.43.patch?id=51c28b814990551897631be7a222af2d922030a9";
+      hash = "sha256-xkV73GoCd/epeyWfLHq2MNmRNfKaledoFsukwVKiZSI=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
@@ -91,13 +101,16 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Install desktop file
     mkdir -p $out/share/applications
-    cp hildon/tuxpaint.xpm $out/share/pixmaps
     sed -e "s+Exec=tuxpaint+Exec=$out/bin/tuxpaint+" < src/tuxpaint.desktop > $out/share/applications/tuxpaint.desktop
 
     # Install stamps
     tar xzf ${stamps}
     cd tuxpaint-stamps-*
     make install-all PREFIX=$out
+
+    mkdir -p $out/share/icons/hicolor/32x32/apps
+    magick $out/share/pixmaps/tuxpaint.png -resize 32x32 $out/share/icons/hicolor/32x32/apps/tuxpaint.png
+    rm -r $out/share/pixmaps
 
     # Requirements for tuxpaint-import
     wrapProgram $out/bin/tuxpaint-import \

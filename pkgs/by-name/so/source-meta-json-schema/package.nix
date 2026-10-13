@@ -3,23 +3,36 @@
   lib,
   fetchFromGitHub,
   cmake,
+  openssl,
 }:
-let
-  version = "14.0.3";
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "source-meta-json-schema";
-  inherit version;
+  version = "16.12.0";
 
   src = fetchFromGitHub {
     owner = "sourcemeta";
     repo = "jsonschema";
-    rev = "v${version}";
-    hash = "sha256-wRB/syj79pz5walyuefCYcfN/JoRbnxuwWHE2w3LKs8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-79onN0W+QnoJW9aj8sS6kJUTliQuR/TK3DCnMBHcMsM=";
   };
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
+    openssl
+  ];
+
+  cmakeFlags = [
+    # Force use system OPENSSL instead of build (avoid compile the CryptoKit Swift shim on Darwin)
+    (lib.cmakeBool "SOURCEMETA_CORE_CRYPTO_USE_SYSTEM_OPENSSL" true)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Upstream tries to download a clang-tidy from PyPI during configure on Darwin
+    # This only affect on Darwin
+    (lib.cmakeBool "SOURCEMETA_CORE_CLANG_TIDY" false)
   ];
 
   meta = {

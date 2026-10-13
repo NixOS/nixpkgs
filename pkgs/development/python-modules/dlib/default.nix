@@ -1,8 +1,9 @@
 {
   buildPythonPackage,
+  cmake,
   dlib,
   pytestCheckHook,
-  more-itertools,
+  setuptools,
 }:
 
 buildPythonPackage.override { inherit (dlib) stdenv; } {
@@ -17,20 +18,13 @@ buildPythonPackage.override { inherit (dlib) stdenv; } {
     meta
     ;
 
-  format = "setuptools";
-
   patches = [ ./build-cores.patch ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    more-itertools
+  pyproject = true;
+  build-system = [
+    cmake
+    setuptools
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "more-itertools<6.0.0" "more-itertools" \
-      --replace "pytest==3.8" "pytest"
-  '';
 
   # Pass CMake flags through to the build script
   preConfigure = ''
@@ -42,6 +36,10 @@ buildPythonPackage.override { inherit (dlib) stdenv; } {
   '';
 
   dontUseCmakeConfigure = true;
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   doCheck =
     !(

@@ -22,19 +22,20 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-mistralai";
-  version = "1.1.1";
+  version = "1.1.6";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-mistralai==${version}";
-    hash = "sha256-cdUl6LusttH6c0tBvaxQR5UGHjwyubKELCDv61VQ6Qo=";
+    tag = "langchain-mistralai==${finalAttrs.version}";
+    hash = "sha256-FkldUvLhbOS0FwRQaAZHebUv1jUSWMXMuIx780B6R+8=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/mistralai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/mistralai";
 
   build-system = [ hatchling ];
 
@@ -59,6 +60,9 @@ buildPythonPackage rec {
     "test__convert_dict_to_message_tool_call"
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
+    # RuntimeError: Cannot send a request, as the client has been closed.
+    # Tries to download from huggingface hub
+    "test_mistral_init"
   ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];
@@ -68,11 +72,12 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-mistralai==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with mistralai";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/mistralai";
     license = lib.licenses.mit;
@@ -80,4 +85,4 @@ buildPythonPackage rec {
       lib.maintainers.sarahec
     ];
   };
-}
+})

@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Remove unused SDL2 header that erroneously adds libX11 dependency
+    # Remove unused SDL2 header that erroneously adds libx11 dependency
     ./remove-unused-header.patch
   ];
 

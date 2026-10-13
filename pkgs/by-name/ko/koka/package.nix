@@ -9,13 +9,13 @@
 }:
 
 let
-  version = "3.2.2";
+  version = "3.2.9";
 
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
-    rev = "v${version}";
-    hash = "sha256-k1N085NoAlxewAhg5UDMo7IUf2A6gCTc9k5MWMbU0d0=";
+    tag = "v${version}";
+    hash = "sha256-A2SwpVoRXAJdLzB/1oCSSPySsGnFzHOIaPseq3QAGek=";
     fetchSubmodules = true;
   };
 
@@ -68,7 +68,7 @@ haskellPackages.mkDerivation {
     hashable
     isocline
     lens
-    lsp
+    lsp_2_8_0_0
     mtl
     network
     network-simple

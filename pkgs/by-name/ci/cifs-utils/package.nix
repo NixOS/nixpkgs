@@ -14,12 +14,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cifs-utils";
   version = "7.5";
 
   src = fetchurl {
-    url = "https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-${version}.tar.bz2";
+    url = "https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-f6zoXj0tXrXnrb0YGt7mdZCX8TWxDW+zC+jgcK9+cFQ=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;
   };
-}
+})

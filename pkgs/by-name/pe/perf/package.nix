@@ -28,12 +28,11 @@
   numactl,
   zlib,
   babeltrace,
-  withGtk ? false,
-  gtk2,
   withZstd ? true,
   zstd,
   withLibcap ? true,
   libcap,
+  withPython ? true,
   buildPackages,
 }:
 let
@@ -49,6 +48,8 @@ let
     installPhase = ''
       install -D -m 0755 -t $out/share/d3-flame-graph/ ./dist/templates/*
     '';
+
+    meta.license = lib.licenses.asl20;
   };
 in
 
@@ -85,10 +86,11 @@ stdenv.mkDerivation {
     "ASCIIDOC8=1"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "NO_GTK2=1"
   ]
-  ++ lib.optional (!withGtk) "NO_GTK2=1"
   ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
-  ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
+  ++ lib.optional (!withLibcap) "NO_LIBCAP=1"
+  ++ lib.optional (!withPython) "NO_LIBPYTHON=1";
 
   hardeningDisable = [ "format" ];
 
@@ -117,16 +119,17 @@ stdenv.mkDerivation {
     zlib
     openssl
     numactl
-    python3
     babeltrace
     libopcodes
     libpfm
-    python3.pkgs.setuptools
   ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap-unwrapped) systemtap-unwrapped
-  ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
-  ++ lib.optional withLibcap libcap;
+  ++ lib.optional withLibcap libcap
+  ++ lib.optionals withPython [
+    python3
+    python3.pkgs.setuptools
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
@@ -156,10 +159,12 @@ stdenv.mkDerivation {
     # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
       --prefix PATH : ${
-        lib.makeBinPath [
-          binutils-unwrapped
-          python3
-        ]
+        lib.makeBinPath (
+          [
+            binutils-unwrapped
+          ]
+          ++ lib.optional withPython python3
+        )
       }
   '';
 
@@ -169,5 +174,6 @@ stdenv.mkDerivation {
     mainProgram = "perf";
     maintainers = with lib.maintainers; [ tobim ];
     platforms = lib.platforms.linux;
+    inherit (linux_latest.meta) license;
   };
 }

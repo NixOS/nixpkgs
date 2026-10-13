@@ -4,12 +4,12 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jp";
   version = "0.2.1";
 
   src = fetchFromGitHub {
-    rev = version;
+    rev = finalAttrs.version;
     owner = "jmespath";
     repo = "jp";
     hash = "sha256-a3WvLAdUZk+Y+L+opPDMBvdN5x5B6nAi/lL8JHJG/gY=";
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ cransom ];
     license = lib.licenses.asl20;
   };
-}
+})

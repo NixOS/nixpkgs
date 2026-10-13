@@ -30,7 +30,6 @@ let
       );
       postBootCommands = pkgs.writeText "local-cmds" ''
         ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
       '';
     };
   };
@@ -64,6 +63,7 @@ in
       nixStoreMountOpts = mkOption {
         type = types.listOf types.nonEmptyStr;
         default = [
+          "x-initrd.mount"
           "ro"
           "nodev"
           "nosuid"

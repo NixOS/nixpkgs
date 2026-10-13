@@ -7,7 +7,6 @@
   pnpmConfigHook,
   nodejs_24,
   makeWrapper,
-  prisma-engines_6,
   ffmpeg,
   openssl,
   vips,
@@ -24,25 +23,20 @@ let
     NEXT_TELEMETRY_DISABLED = "1";
     FFMPEG_PATH = lib.getExe ffmpeg;
     FFPROBE_PATH = lib.getExe' ffmpeg "ffprobe";
-    PRISMA_SCHEMA_ENGINE_BINARY = lib.getExe' prisma-engines_6 "schema-engine";
-    PRISMA_QUERY_ENGINE_BINARY = lib.getExe' prisma-engines_6 "query-engine";
-    PRISMA_QUERY_ENGINE_LIBRARY = "${prisma-engines_6}/lib/libquery_engine.node";
-    PRISMA_INTROSPECTION_ENGINE_BINARY = lib.getExe' prisma-engines_6 "introspection-engine";
-    PRISMA_FMT_BINARY = lib.getExe' prisma-engines_6 "prisma-fmt";
   };
 
-  pnpm' = pnpm_10.override { nodejs = nodejs_24; };
+  pnpm' = pnpm_10.override { nodejs-slim = nodejs_24; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.4.1";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9+r3padIhpmLNfiL68eut7e+VemhsqhvRcJhyOdA7+k=";
+    hash = "sha256-hwkK69Tp03MNA08kk6BZhmso2iEHNqh7Imn8a3hG5fg=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -53,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm';
-    fetcherVersion = 2;
-    hash = "sha256-cYoZNalVDI1rLEYFLhJZ9pAZQCvieZL+Rj5VK7Q2/vk=";
+    fetcherVersion = 3;
+    hash = "sha256-Qoz7g9ekYBm4qFkp6X1251BY9AtIZWgcOBO13bXtCcw=";
   };
 
   buildInputs = [
@@ -75,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = environment // {
     DATABASE_URL = "dummy";
+    NODE_PATH = "${node-gyp}/lib/node_modules";
   };
 
   buildPhase = ''
@@ -83,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Force build of sharp against native libvips (requires running install scripts).
     # This is necessary for supporting old CPUs (ie. without SSE 4.2 instruction set).
     pnpm config set nodedir ${nodejs_24}
-    pnpm install --force --offline --frozen-lockfile
+    npm explore sharp -- pnpm run build
 
     pnpm build
 
@@ -98,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
+    cp -r build drizzle node_modules mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
       makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
@@ -127,7 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    prisma-engines = prisma-engines_6;
     tests = { inherit (nixosTests) zipline; };
     updateScript = nix-update-script { };
   };

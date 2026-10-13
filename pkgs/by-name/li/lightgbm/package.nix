@@ -49,8 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = lib.optionalString rLibrary "r-" + "lightgbm";
   version = "4.6.0";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
-    owner = "microsoft";
+    owner = "lightgbm-org";
     repo = "lightgbm";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
@@ -59,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix boost 1.83+ compatibility
-    # https://github.com/microsoft/LightGBM/issues/6786
+    # https://github.com/lightgbm-org/LightGBM/issues/6786
     # Patch taken from https://github.com/conda-forge/lightgbm-feedstock/pull/69
     (fetchpatch {
       name = "fix-boost-sha1";
@@ -95,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
   ++ lib.optionals openclSupport [
     opencl-headers
@@ -110,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
   ];
 
-  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit;
+  buildInputs = [ gtest ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
   propagatedBuildInputs = lib.optionals rLibrary [
     rPackages.data_table
@@ -128,6 +132,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals cudaSupport [
       (lib.cmakeBool "USE_CUDA" true)
       (lib.cmakeFeature "CMAKE_CXX_COMPILER" (lib.getExe cudaPackages.backendStdenv.cc))
+      (lib.cmakeFeature "CMAKE_CUDA_STANDARD" "14")
+      (lib.cmakeFeature "CMAKE_CUDA_ARCHITECTURES" cudaPackages.flags.cmakeCudaArchitecturesString)
+      (lib.cmakeBool "CMAKE_CUDA_RESOLVE_DEVICE_SYMBOLS" true)
     ]
     ++ lib.optionals openclSupport [
       (lib.cmakeBool "USE_GPU" true)
@@ -152,13 +159,13 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "__BUILD_FOR_PYTHON" true)
     ];
 
-  configurePhase = lib.optionals rLibrary ''
+  configurePhase = lib.optionalString rLibrary ''
     export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
   '';
 
   # set the R package buildPhase to null because lightgbm has a
   # custom builder script that builds and installs in one step
-  buildPhase = lib.optionals rLibrary "";
+  buildPhase = lib.optionalString rLibrary "";
 
   inherit doCheck;
 
@@ -219,8 +226,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Gradient boosting framework that uses tree based learning algorithms";
     mainProgram = "lightgbm";
-    homepage = "https://github.com/microsoft/LightGBM";
-    changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/lightgbm-org/LightGBM";
+    changelog = "https://github.com/lightgbm-org/LightGBM/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ nviets ];

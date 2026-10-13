@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromCodeberg,
   autoreconfHook,
   pkg-config,
   boost,
@@ -11,16 +11,25 @@
   xml-security-c,
   xml-tooling-c,
   zlib,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensaml-cpp";
-  version = "3.0.1";
+  version = "3.3.1";
 
-  src = fetchgit {
-    url = "https://git.shibboleth.net/git/cpp-opensaml.git";
-    rev = finalAttrs.version;
-    sha256 = "0ms3sqmwqkrqb92d7jy2hqwnz5yd7cbrz73n321jik0jilrwl5w8";
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "doc"
+  ];
+
+  src = fetchFromCodeberg {
+    owner = "Shibboleth";
+    repo = "cpp-opensaml";
+    tag = finalAttrs.version;
+    hash = "sha256-/9ba1/fBc1pVleGswb/UBs6bcnu1oEUb+tu+5NN9IJM=";
   };
 
   buildInputs = [
@@ -37,11 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
+  configureFlags = [
+    "--with-boost=${boost.dev}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://shibboleth.net/products/opensaml-cpp.html";
@@ -49,6 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "samlsign";
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 })

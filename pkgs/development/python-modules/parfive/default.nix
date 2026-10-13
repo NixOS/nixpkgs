@@ -23,20 +23,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "parfive";
-  version = "2.2.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Cadair";
     repo = "parfive";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DIjS2q/SOrnLspomLHk8ZJ+krdzMyQfbIpXxad30s1k=";
+    hash = "sha256-i9B860A27KDUJKlE/eQNiGVPEPvnmvmNqMjjdOeBcyY=";
   };
-
-  patches = [
-    # SyntaxError: 'return' in a 'finally' block
-    ./fix-python-3-14-compat.patch
-  ];
 
   build-system = [ setuptools-scm ];
 
@@ -57,11 +52,17 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ];
 
+  pytestFlags = [
+    # https://github.com/Cadair/parfive/issues/65
+    "-Wignore::ResourceWarning"
+  ];
+
   disabledTests = [
     # Requires network access
     "test_ftp"
     "test_ftp_pasv_command"
     "test_ftp_http"
+    "test_problematic_http_urls"
 
     # flaky comparison between runtime types
     "test_http_callback_fail"
@@ -69,6 +70,17 @@ buildPythonPackage (finalAttrs: {
 
   # Tests require local network access
   __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = [
+    # Tests that fail due to network access
+    "parfive/tests/test_downloader.py"
+    "parfive/tests/test_downloader_multipart.py"
+    # assert 1 == 0
+    "parfive/tests/test_main.py::test_run_cli_success"
+    #  aiohttp.client_exceptions.ClientResponseError: 400, message="Data after `Connection: close
+    "parfive/tests/test_utils.py::test_head_or_get"
+    "parfive/tests/test_utils.py::test_head_302"
+  ];
 
   pythonImportsCheck = [ "parfive" ];
 

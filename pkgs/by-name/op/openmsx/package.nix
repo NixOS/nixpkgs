@@ -15,7 +15,7 @@
   libpng,
   libtheora,
   libvorbis,
-  libX11,
+  libx11,
   python3,
   tcl,
   zlib,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_ttf
-    libX11
+    libx11
     alsa-lib
     freetype
     glew
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Many thanks @mthuurne from OpenMSX project for providing support to
   # Nixpkgs! :)
-  TCL_CONFIG = "${tcl}/lib/";
+  env.TCL_CONFIG = "${tcl}/lib/";
 
   meta = {
     homepage = "https://openmsx.org";

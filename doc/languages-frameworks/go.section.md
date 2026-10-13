@@ -101,6 +101,7 @@ If `true`, the intermediate fetcher downloads dependencies from the
 
 This is useful if your code depends on C code and `go mod tidy` does not include the needed sources to build or
 if any dependency has case-insensitive conflicts which will produce platform-dependent `vendorHash` checksums.
+It may also be needed if the module targets language version 1.16 or earlier, since vendoring compiles all dependencies against language version 1.16 in this case.
 
 Defaults to `false`.
 

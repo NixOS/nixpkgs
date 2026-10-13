@@ -31,6 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ] ++ lib.optionals aclSupport [ acl ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   preCheck = ''
     sed -i 's#/bin/date#${lib.getExe' coreutils "date"}#' test/*.sh
     # Exiting with 77 signals that a test is skipped, and we only place it on line 2 because the shebang is on line 1
@@ -52,7 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Rotates and compresses system logs";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.tobim ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "logrotate";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "logrotate_project" finalAttrs.version;
   };
 })

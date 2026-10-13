@@ -7,14 +7,14 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tickrs";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "tarkah";
     repo = "tickrs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JqX+PEob99O1VRYbw7RH6KGA1CXYyepkM9Uc5jkWlrM=";
   };
 
@@ -36,9 +36,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Realtime ticker data in your terminal";
     homepage = "https://github.com/tarkah/tickrs";
-    changelog = "https://github.com/tarkah/tickrs/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tarkah/tickrs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "tickrs";
   };
-}
+})

@@ -9,17 +9,17 @@
   makeWrapper,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "influxdb3";
-  version = "3.0.1";
+  version = "3.8.3";
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
-    rev = "8daccb7ee8f82ffae99b25236af9645fd60e448b";
-    hash = "sha256-tHnLD5W3KQ1cILRHNmXAi4lvQQSBVUPxYCXmXLMLwIs=";
+    rev = "73f689bb31d5ca13c4f950fefb40d5f6e6163019";
+    hash = "sha256-+eNv+/LJUBTJEL+jhkAq9sMSzFBAnuNdEaUwdWFtEMA=";
   };
 
-  cargoHash = "sha256-KnmaIbK/2tRXjCpOLHcadIX8Od7lVDOwZ+FgE+yFE+Q=";
+  cargoHash = "sha256-gICiNHbN85gKWY635zonJg6Fed5NeqDuzdQLBGkbm6g=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -43,13 +43,14 @@ rustPlatform.buildRustPackage {
     rm influxdb3_process/build.rs
   '';
 
+  env.INFLUXDB3_BUILD_VERSION = finalAttrs.version;
+
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "aws"
     "gcp"
     "azure"
     "jemalloc_replacing_malloc"
-    "system-py"
   ];
 
   postInstall = ''
@@ -83,4 +84,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ oddlama ];
     mainProgram = "influxdb3";
   };
-}
+})

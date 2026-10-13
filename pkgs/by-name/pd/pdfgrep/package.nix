@@ -9,12 +9,12 @@
   asciidoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pdfgrep";
   version = "2.2.0";
 
   src = fetchurl {
-    url = "https://pdfgrep.org/download/pdfgrep-${version}.tar.gz";
+    url = "https://pdfgrep.org/download/pdfgrep-${finalAttrs.version}.tar.gz";
     hash = "sha256-BmHlMeTA7wl5Waocl3N5ZYXbOccshKAv+H0sNjfGIMs=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     mainProgram = "pdfgrep";
   };
-}
+})

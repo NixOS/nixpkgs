@@ -5,7 +5,7 @@
 
   # nativeBuildInputs
   cmake,
-  gz-cmake,
+  gz-cmake, # currently, gz-utils is dependent on gz-cmake
   doxygen,
   graphviz,
 
@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gz-utils";
-  version = "3.1.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "gazebosim";
     repo = "gz-utils";
     tag = "gz-utils${lib.versions.major finalAttrs.version}_${finalAttrs.version}";
-    hash = "sha256-fYzysdB608jfMb/EbqiGD4hXmPxcaVTUrt9Wx0dBlto=";
+    hash = "sha256-fZonC/o5CNHdK/R3IgEoo1llehy36MwvXPQCgFnP8Ls=";
   };
 
   outputs = [

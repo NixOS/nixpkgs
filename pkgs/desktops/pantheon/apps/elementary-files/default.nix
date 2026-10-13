@@ -16,17 +16,18 @@
   libportal-gtk3,
   granite,
   pango,
+  poppler_gi,
   sqlite,
   zeitgeist,
   libcloudproviders,
   libgit2-glib,
   wrapGAppsHook3,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "7.2.0";
+  version = "7.3.3";
 
   outputs = [
     "out"
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    hash = "sha256-m6ICWL2JZoWh3myHLOhrKZ4St8zJcyVWhfozg+kdOng=";
+    hash = "sha256-Na5aiIgdAogSRwysz4v6U47tphVYVWleJ6OokXT+HMw=";
   };
 
   nativeBuildInputs = [
@@ -60,8 +61,9 @@ stdenv.mkDerivation rec {
     libhandy
     libportal-gtk3
     pango
+    poppler_gi
     sqlite
-    systemd
+    systemdLibs
     zeitgeist
   ];
 

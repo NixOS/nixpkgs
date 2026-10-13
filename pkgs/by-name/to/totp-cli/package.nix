@@ -4,17 +4,15 @@
   fetchFromGitHub,
   installShellFiles,
 }:
-let
+
+buildGoModule (finalAttrs: {
   pname = "totp-cli";
   version = "1.9.2";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "yitsushi";
     repo = "totp-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JPS4LXEgFM+RJhJG9w/SmEYmq6kILie139UrFGyZ2q0=";
   };
 
@@ -35,4 +33,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "totp-cli";
   };
-}
+})

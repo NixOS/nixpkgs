@@ -4,14 +4,11 @@
 #   2. whether the ETag header is properly generated whenever we're serving
 #      files in Nix store paths
 #   3. nginx doesn't restart on configuration changes (only reloads)
-{ pkgs, ... }:
+{ ... }:
 {
   name = "nginx";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [
-      mbbx6spp
-      danbst
-    ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {

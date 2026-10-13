@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pappl";
-  version = "1.4.9";
+  version = "1.4.12";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "pappl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XHFYwl129iD5rKC1P/roFlX+03uFE8ofwQRIEkUuOCc=";
+    hash = "sha256-WDMw8uWmUTk7LBZJbBxP6dZblNyTY4Ykt+Ab9CEondE=";
   };
 
   outputs = [

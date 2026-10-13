@@ -8,11 +8,12 @@
   openssl,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "arti";
-  version = "1.9.0";
+  version = "2.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -20,24 +21,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "core";
     repo = "arti";
     tag = "arti-v${finalAttrs.version}";
-    hash = "sha256-b5DWu38/iKwKcmp4BNgkeE5F522YRZZiev9gUZ/Rb1E=";
+    hash = "sha256-28s2BnesadPGm1gQDxzIqSgGaUd8ZgoTpKK3WXBRU9Q=";
   };
 
-  cargoHash = "sha256-SGxSZaY8//FHhySbarfgleafF5YEWJW/fUAwo3576NI=";
+  # Working around a bug in cargo that appears with cargo-auditable, see
+  # https://github.com/rust-secure-code/cargo-auditable/issues/124.
+  postPatch = ''
+    substituteInPlace crates/arti/Cargo.toml \
+      --replace-fail '"http"' '"dep:http"' \
+      --replace-fail '"tokio-util"' '"dep:tokio-util"' \
+      --replace-fail '"opentelemetry-appender-tracing",' ""
+  '';
+
+  buildAndTestSubdir = "crates/arti";
+  cargoHash = "sha256-g+t5X1t0koUzqoHpY8+lncqRobdDuZggXtD3HRk9ryE=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ sqlite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
-
-  cargoBuildFlags = [
-    "--package"
-    "arti"
-  ];
-
-  cargoTestFlags = [
-    "--package"
-    "arti"
-  ];
 
   # `full` includes all stable and non-conflicting feature flags. the primary
   # downsides are increased binary size and memory usage for building, but
@@ -61,12 +62,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # sandbox. this does NOT affect downstream users of Arti.
   env.ARTI_FS_DISABLE_PERMISSION_CHECKS = 1;
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
   passthru = {
+    tests = { inherit (nixosTests) tor; };
     updateScript = nix-update-script { extraArgs = [ "--version-regex=^arti-v(.*)$" ]; };
   };
 
@@ -75,10 +75,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "arti";
     homepage = "https://arti.torproject.org/";
     changelog = "https://gitlab.torproject.org/tpo/core/arti/-/blob/arti-v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      asl20
-      mit
+    license =
+      with lib.licenses;
+      OR [
+        asl20
+        mit
+      ];
+    maintainers = with lib.maintainers; [
+      rapiteanu
+      whispersofthedawn
     ];
-    maintainers = with lib.maintainers; [ rapiteanu ];
   };
 })

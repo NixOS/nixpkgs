@@ -21,12 +21,12 @@
 let
   python3 = python311; # needs distutils and imp
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hamlib";
   version = "3.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hamlib/hamlib-${version}.tar.gz";
+    url = "mirror://sourceforge/hamlib/hamlib-${finalAttrs.version}.tar.gz";
     sha256 = "10788mgrhbc57zpzakcxv5aqnr2819pcshml6fbh8zvnkja562y9";
   };
 
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ relrod ];
     platforms = with lib.platforms; unix;
   };
-}
+})

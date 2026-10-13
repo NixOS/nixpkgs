@@ -18,12 +18,12 @@ let
     hash = "sha256-5XoypuMd2AFBE2SJ6EdECuvq6D81HLLuu9UoA9kcKAM=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tvbrowser";
   version = "4.2.7";
 
   src = fetchzip {
-    url = "mirror://sourceforge/tvbrowser/TV-Browser%20Releases%20%28Java%20${minimalJavaVersion}%20and%20higher%29/${version}/tvbrowser_${version}_src.zip";
+    url = "mirror://sourceforge/tvbrowser/TV-Browser%20Releases%20%28Java%20${minimalJavaVersion}%20and%20higher%29/${finalAttrs.version}/tvbrowser_${finalAttrs.version}_src.zip";
     hash = "sha256-dmNfI6T0MU7UtMH+C/2hiAeDwZlFCB4JofQViZezoqI=";
   };
 
@@ -94,4 +94,4 @@ stdenv.mkDerivation rec {
       and to provide additional functionality.
     '';
   };
-}
+})

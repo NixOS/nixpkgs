@@ -8,31 +8,35 @@
   python3,
   cacert,
   versionCheckHook,
+  nodejs_24,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_24; } (finalAttrs: {
   pname = "homebridge-config-ui-x";
-  version = "5.14.0";
+  version = "5.29.0";
 
   src = fetchFromGitHub {
     owner = "homebridge";
     repo = "homebridge-config-ui-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CAdzkFuVuJtHoUUDBIRRzxRJiOtGUJFzS/lczYXTfRw=";
+    hash = "sha256-QDvgi7tHS6OAlZ0+ybLemqlMD4a09YqtDs0YBcs+3uA=";
   };
 
   # Deps hash for the root package
-  npmDepsHash = "sha256-73Xt2R3COL0WPgtqn3ZwGTmOHrNqHONrX3hQCU/v5y0=";
+  npmDepsHash = "sha256-7YhwV+IJsEVxrgir84uP+YwXgovtVxPMCk5Jt57mez8=";
 
   # Deps src and hash for ui subdirectory
   npmDeps_ui = fetchNpmDeps {
     name = "npm-deps-ui";
     src = "${finalAttrs.src}/ui";
-    hash = "sha256-xtXAeTBryQt4FMvK3oXHJ3DdB/3umrSrmqZ3IIDgq2s=";
+    hash = "sha256-DKDixaXDDovHVnlWvV16p72a3ejMdDsNWaCfUnzMSX0=";
   };
 
   # Need to also run npm ci in the ui subdirectory
   preBuild = ''
+    # Apply upstream package patch before TypeScript compilation.
+    npm run prepare
+
     # Tricky way to run npmConfigHook multiple times
     (
       source ${npmHooks.npmConfigHook}/nix-support/setup-hook
@@ -49,6 +53,8 @@ buildNpmPackage (finalAttrs: {
   # compiling node-pty on darwin
   makeCacheWritable = stdenv.hostPlatform.isDarwin;
 
+  npmInstallFlags = [ "--ignore-scripts" ];
+
   nativeBuildInputs = [
     python3
   ]
@@ -58,6 +64,8 @@ buildNpmPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Configure Homebridge, monitor and backup from a browser";

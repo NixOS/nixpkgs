@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wakelan";
   version = "1.1";
 
   src = fetchurl {
-    url = "mirror://ibiblioPubLinux/system/network/misc/wakelan-${version}.tar.gz";
+    url = "mirror://ibiblioPubLinux/system/network/misc/wakelan-${finalAttrs.version}.tar.gz";
     hash = "sha256-PfXrj4d2SHmatiPPFxjsxvhusML1HTRNjoYEQtzFzW8=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "wakelan";
   };
-}
+})

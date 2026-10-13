@@ -9,21 +9,14 @@
   libgpg-error,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.6.16";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.6.20";
   pname = "freeipmi";
 
   src = fetchurl {
-    url = "mirror://gnu/freeipmi/freeipmi-${version}.tar.gz";
-    sha256 = "sha256-W872u562gOSbSjYjV5kwrOeJn1OSWyBF/p+RrWkEER0=";
+    url = "mirror://gnu/freeipmi/freeipmi-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-nMZEUw7mKf+5TW/SCefLSouK5md/idLcRh7+2bLnCfI=";
   };
-
-  postPatch = lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace man/Makefile.in \
-      --replace-fail \
-        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man $@.pre $@' \
-        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man -o $@ $@.pre'
-  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -73,7 +66,10 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      booxter
+      raskin
+    ];
     platforms = lib.platforms.gnu ++ lib.platforms.unix;
   };
-}
+})

@@ -1,0 +1,13 @@
+diff --git a/src/response.rs b/src/response.rs
+index 25da3d3..92d6203 100644
+--- a/src/response.rs
++++ b/src/response.rs
+@@ -42,7 +42,7 @@ pub(crate) fn response_body(
+     let modified = meta
+         .modified()
+         .ok()
+-        .filter(|&t| t != std::time::UNIX_EPOCH)
++        .filter(|&t| t > (std::time::UNIX_EPOCH + std::time::Duration::from_secs(1)))
+         .map(LastModified::from);
+ 
+     match conditionals.check(modified) {

@@ -11,22 +11,23 @@
   lapack,
   config,
   guiSupport ? false,
-  libX11,
+  libx11,
   enableShared ? !stdenv.hostPlatform.isStatic, # dlib has a build system that forces the user to choose between either shared or static libraries. See https://github.com/davisking/dlib/issues/923#issuecomment-2175865174
   sse4Support ? stdenv.hostPlatform.sse4_1Support,
   avxSupport ? stdenv.hostPlatform.avxSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
+  python3Packages,
 }@inputs:
 (if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv).mkDerivation rec {
   pname = "dlib";
-  version = "20.0";
+  version = "20.0.1";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     tag = "v${version}";
-    sha256 = "sha256-VTX7s0p2AzlvPUsSMXwZiij+UY9g2y+a1YIge9bi0sw=";
+    sha256 = "sha256-Obu8054M28yoC800+p+O5sYQzm7dd2VfcRtHmitdDIk=";
   };
 
   postPatch = ''
@@ -66,7 +67,7 @@
     blas
     lapack
   ]
-  ++ lib.optionals guiSupport [ libX11 ]
+  ++ lib.optionals guiSupport [ libx11 ]
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
@@ -76,11 +77,14 @@
       libcurand
       libcusolver
       cudnn
-      cuda_cccl
+      cccl
     ]
   );
 
   passthru = {
+    tests = {
+      python-dlib = python3Packages.dlib;
+    };
     inherit
       cudaSupport
       cudaPackages

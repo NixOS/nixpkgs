@@ -5,8 +5,8 @@
 
   SDL2,
 
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 
   guiBackend ? "sdl",
 
@@ -39,8 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     [ ]
     ++ lib.optionals enableSDL [ SDL2 ]
     ++ lib.optionals enableX11 [
-      libX11
-      libXext
+      libx11
+      libxext
     ];
 
   enableParallelBuilding = true;
@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!enableSDL && !enableX11) "USE_FB=0";
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/LekKit/RVVM";
     description = "RISC-V Virtual Machine";
     license = with lib.licenses; [

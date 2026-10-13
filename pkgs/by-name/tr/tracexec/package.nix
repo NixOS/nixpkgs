@@ -13,18 +13,18 @@
   clang,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tracexec";
-  version = "0.13.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "dbb9b733370f5200df2a0de7f007312c23431480";
-    hash = "sha256-M2ZIfWupnFxQZvr5cl8V0xtLgh+xBcaHHVsHIoio7nI=";
+    rev = "c3f95dcf7714dc731f494683ef7f74e399a22515";
+    hash = "sha256-VDmBCloMTDXxRSIOt4Pu0U6GgaOU0vp2s2zLbd4j7Ds=";
   };
 
-  cargoHash = "sha256-cyzSxibLw6sb0V3ueNcp55OhFQ5jUNJWcSF8uYnzG2M=";
+  cargoHash = "sha256-YhSaRVgYnIcH1tHn8wPi/yeNnOzV0MvHyeZXn1s8jGA=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -44,20 +44,18 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--no-default-features"
     "--features=recommended"
-  ]
-  # Remove RiscV64 specialisation when this is fixed:
-  # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-  # * https://github.com/rust-vmm/seccompiler/pull/72
-  ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  ];
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests
     cargo about generate --config about.toml -o THIRD_PARTY_LICENSES.HTML about.hbs
   '';
 
-  checkFlags = [
-    "--skip=cli::test::log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
-  ];
+  # tracexec uses $XDG_DATA_HOME/tracexec for storing temporary files and logs.
+  # Set this directory to $TMPDIR because integration tests needs to access it.
+  preCheck = ''
+    export TRACEXEC_DATA="$TMPDIR"
+  '';
 
   postInstall = ''
     # Remove test binaries (e.g. `empty-argv`, `corrupted-envp`) and only retain `tracexec`
@@ -65,20 +63,22 @@ rustPlatform.buildRustPackage rec {
 
     install -Dm644 LICENSE -t "$out/share/licenses/tracexec/"
     install -Dm644 THIRD_PARTY_LICENSES.HTML -t "$out/share/licenses/tracexec/"
+    install -Dm644 themes/*.toml -t "$out/share/tracexec/themes/"
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/kxxt/tracexec/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kxxt/tracexec/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Small utility for tracing execve{,at} and pre-exec behavior";
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";
     maintainers = with lib.maintainers; [
       fpletz
+      kxxt
       nh2
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

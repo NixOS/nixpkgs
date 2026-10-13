@@ -17,11 +17,11 @@
   libGL,
   libGLU,
   libsm,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxxf86vm,
   libao,
   libpthread-stubs,
   libpulseaudio,
@@ -29,7 +29,6 @@
   mbedtls,
   miniupnpc,
   openal,
-  pcre,
   portaudio,
   readline,
   SDL2,
@@ -87,11 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libsm
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXxf86vm
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxxf86vm
     libao
     libpthread-stubs
     libpulseaudio
@@ -99,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
     miniupnpc
     openal
-    pcre
     portaudio
     qt6.qtbase
     qt6.qtsvg

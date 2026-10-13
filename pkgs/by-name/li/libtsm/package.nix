@@ -12,22 +12,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtsm";
-  version = "4.4.2";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "libtsm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DWy7kgBbXUEt2Htcugo8PaVoHE23Nu22EIrB5f6/P30=";
+    hash = "sha256-CA80Tsc6rr2NCOVnH6+vGB2fuO6jZpuoCaiz4MuJ9xM=";
   };
 
-  buildInputs = [ libxkbcommon ];
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  buildInputs = [
+    libxkbcommon
+    check
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    check
   ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
@@ -35,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Terminal-emulator State Machine";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/libtsm/";
+    changelog = "https://github.com/kmscon/libtsm/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     platforms = lib.platforms.linux;

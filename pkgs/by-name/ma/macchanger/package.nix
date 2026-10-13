@@ -54,7 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Utility for viewing/manipulating the MAC address of network interfaces";
     maintainers = with lib.maintainers; [
-      joachifm
       dotlambda
     ];
     license = lib.licenses.gpl2Plus;

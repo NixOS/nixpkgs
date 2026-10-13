@@ -8,11 +8,11 @@
   hamlib,
   libpulseaudio,
   libGL,
-  libX11,
+  libx11,
   liquid-dsp,
   pkg-config,
   soapysdr-with-plugins,
-  wxGTK32,
+  wxwidgets_3_2,
   enableDigitalLab ? false,
 }:
 
@@ -45,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     hamlib
     liquid-dsp
     soapysdr-with-plugins
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
     libGL
-    libX11
+    libx11
   ];
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ] ++ lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://cubicsdr.com";
+    homepage = "https://github.com/cjcliffe/CubicSDR";
     description = "Software Defined Radio application";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lasandell ];

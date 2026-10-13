@@ -10,19 +10,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "ente-cli";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
-    owner = "ente-io";
+    owner = "ente";
     repo = "ente";
     tag = "cli-v${finalAttrs.version}";
-    hash = "sha256-qKMFoNtD5gH0Y+asD0LR5d3mxGpr2qVWXIUzJTSezeI=";
+    hash = "sha256-sGix4XmcKDH/jU+lUYaTKRvzfe2vUIsVajjNyFQt/qQ=";
     sparseCheckout = [ "cli" ];
   };
 
   modRoot = "./cli";
 
-  vendorHash = "sha256-Gg1mifMVt6Ma8yQ/t0R5nf6NXbzLZBpuZrYsW48p0mw=";
+  vendorHash = "sha256-uUI0P2uor0UIssVdC5wos2E/3gPgigG7ozBpSKoDKEc=";
 
   env.CGO_ENABLED = 0;
 
@@ -83,8 +83,8 @@ buildGoModule (finalAttrs: {
     longDescription = ''
       The Ente CLI is a Command Line Utility for exporting data from Ente. It also does a few more things, for example, you can use it to decrypting the export from Ente Auth.
     '';
-    homepage = "https://github.com/ente-io/ente/tree/main/cli#readme";
-    changelog = "https://github.com/ente-io/ente/releases/tag/cli-v${finalAttrs.version}";
+    homepage = "https://github.com/ente/ente/tree/main/cli#readme";
+    changelog = "https://github.com/ente/ente/releases/tag/cli-v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ zi3m5f ];
     mainProgram = "ente";

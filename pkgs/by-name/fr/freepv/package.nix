@@ -8,10 +8,10 @@
   libglut,
   zlib,
   cmake,
-  libX11,
+  libx11,
   libxml2,
   libpng,
-  libXxf86vm,
+  libxxf86vm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,10 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libglut
     zlib
-    libX11
+    libx11
     libxml2
     libpng
-    libXxf86vm
+    libxxf86vm
   ];
 
   postPatch = ''
@@ -57,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open source panorama viewer using GL";
     homepage = "https://freepv.sourceforge.net/";
-    license = [ lib.licenses.lgpl21 ];
+    license = lib.licenses.lgpl21;
   };
 })

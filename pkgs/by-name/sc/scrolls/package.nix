@@ -4,9 +4,9 @@
   fetchurl,
   gcc,
   libGLU,
-  libX11,
-  libXext,
-  libXcursor,
+  libx11,
+  libxext,
+  libxcursor,
   libpulseaudio,
 }:
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Strategy collectible card game";
-    homepage = "https://scrolls.com/";
+    homepage = "https://mojang.github.io/CallersBaneSiteArchive/";
     # http://www.reddit.com/r/Scrolls/comments/2j3pxw/linux_client_experimental/
 
     platforms = [ "x86_64-linux" ];
@@ -31,9 +31,9 @@ stdenv.mkDerivation {
   libPath = lib.makeLibraryPath [
     gcc
     libGLU
-    libX11
-    libXext
-    libXcursor
+    libx11
+    libxext
+    libxcursor
     libpulseaudio
   ];
 

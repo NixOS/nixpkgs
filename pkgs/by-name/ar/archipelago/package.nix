@@ -17,10 +17,10 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "archipelago";
-  version = "0.6.6";
+  version = "0.6.8";
   src = fetchurl {
     url = "https://github.com/ArchipelagoMW/Archipelago/releases/download/${finalAttrs.version}/Archipelago_${finalAttrs.version}_linux-x86_64.AppImage";
-    hash = "sha256-mJ0bPBBou3BRqEW5QierjD0ohDBQ9J0jnoV4TCf9XOM=";
+    hash = "sha256-EoH7e5gWvZGfkHMJPOr8s7GAQUP8IGv8NLcEFwB2JA4=";
   };
 
   dontUnpack = true;
@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     zenity
   ];
 
-  appimageContents = appimageTools.extractType2 { inherit (finalAttrs) pname version src; };
+  appimageContents = appimageTools.extract { inherit (finalAttrs) pname version src; };
 
   installPhase = ''
     runHook preInstall
@@ -72,16 +72,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r ${finalAttrs.appimageContents}/usr/share/icons $out/share
 
     runHook postInstall
-  '';
-
-  preFixup = ''
-    patchelf \
-      --replace-needed libcrypto.so.1.0.0 libcrypto.so \
-      --replace-needed libssl.so.1.0.0 libssl.so \
-      $out/lib/opt/Archipelago/EnemizerCLI/System.Security.Cryptography.Native.OpenSsl.so
-
-    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so \
-      $out/lib/opt/Archipelago/EnemizerCLI/libcoreclrtraceptprovider.so
   '';
 
   passthru.updateScript = nix-update-script { };

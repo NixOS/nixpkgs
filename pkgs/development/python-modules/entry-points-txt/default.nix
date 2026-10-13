@@ -1,6 +1,5 @@
 {
   lib,
-  pythonOlder,
   pytestCheckHook,
   pytest-cov-stub,
   hatchling,

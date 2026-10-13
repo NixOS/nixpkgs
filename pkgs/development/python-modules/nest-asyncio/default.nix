@@ -20,6 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-5I5WItOl1QpyI4OXZgZf8GiQ7Jlo+SJbDicIbernaU4=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail 'version = 1.5.9' 'version = ${version}'
+  '';
+
   build-system = [
     setuptools
     setuptools-scm

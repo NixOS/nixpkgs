@@ -12,7 +12,7 @@
   withRustAnalyzer ? true,
   rust-analyzer,
   withTypescript ? true,
-  typescript,
+  typescript_5,
   abseil-cpp,
   boost,
   llvmPackages,
@@ -43,10 +43,10 @@ stdenv.mkDerivation {
     [
       abseil-cpp
       boost
-      libllvm.all
-      libclang.all
       legacy-cgi
     ]
+    ++ libllvm.all
+    ++ libclang.all
     ++ [
       jedi
       jedi-language-server
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
   ''
   + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
-    ln -sf ${typescript} $TARGET
+    ln -sf ${typescript_5} $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so
@@ -135,7 +135,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ycm-core/ycmd";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
-      lnl7
       mel
       S0AndS0
     ];

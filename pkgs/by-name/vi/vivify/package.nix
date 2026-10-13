@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vivify";
-  version = "0.12.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "jannis-baum";
     repo = "Vivify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h36kI8Pglo6Mvngg1whjMVjI0bv0v0+yPJCZTZ0BpUA=";
+    hash = "sha256-ZrSqwj40fOctN6folsN2/2z+o/PyAABjGgAgp4jcDOM=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-RPi1yS1eKSwe/w0gzLhr0BGL00tHzpWAnaN3BEs7IWc=";
+    hash = "sha256-evi/sKbQXF90HdcVKzfSnu5PYD3UaQ7xuMsnh2TAE+U=";
   };
 
   installPhase = ''
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       serve as a directory browser and let you view code files with syntax highlighting.
     '';
     homepage = "https://github.com/jannis-baum/Vivify";
-    changelog = "https://github.com/jannis-baum/Vivify/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/jannis-baum/Vivify/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ skohtv ];
     platforms = lib.platforms.linux;

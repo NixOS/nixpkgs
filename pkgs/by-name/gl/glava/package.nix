@@ -4,13 +4,13 @@
   writeScript,
   fetchFromGitHub,
   libGL,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   python3,
-  libXrandr,
-  libXrender,
+  libxrandr,
+  libxrender,
   libpulseaudio,
-  libXcomposite,
+  libxcomposite,
   enableGlfw ? false,
   glfw,
   runtimeShell,
@@ -39,19 +39,19 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.6.3";
 
   src = fetchFromGitHub {
-    owner = "wacossusca34";
+    owner = "jarcode-foss";
     repo = "glava";
     rev = "v${finalAttrs.version}";
     sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
   };
 
   buildInputs = [
-    libX11
-    libXext
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxrandr
+    libxrender
     libpulseaudio
-    libXcomposite
+    libxcomposite
   ]
   ++ optional enableGlfw glfw;
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       OpenGL audio spectrum visualizer
     '';
     mainProgram = "glava";
-    homepage = "https://github.com/wacossusca34/glava";
+    homepage = "https://github.com/jarcode-foss/glava";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [

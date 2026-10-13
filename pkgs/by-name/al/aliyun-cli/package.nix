@@ -3,32 +3,53 @@
   buildGoModule,
   fetchFromGitHub,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aliyun-cli";
-  version = "3.2.9";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "aliyun-cli";
-    tag = "v${version}";
-    hash = "sha256-6zGNPw/nVV60qkUOJZXGe1CJu2I/dMVctk5EGhvkcE0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j7WiJjsQQs2x20jv4Ec3Rbi2fm5+jSi9F7BZACKjUjs=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-hDgwZiXRjcuQOo7ezjtGS1DawtOffllW64gsGKnTFQM=";
+  vendorHash = "sha256-DfQQYSTX/aH2z7S/dO7PVCrrU5mjHX/wwtFx83xwLjw=";
 
   subPackages = [ "main" ];
+
+  # Build like upstream's release artifacts: bake the OpenAPI metadata into the binary.
+  tags = [ "aliyun_cli_packed_meta" ];
+
+  # Don't run go generate in the module fetching (preBuild runs before vendor/ exists).
+  overrideModAttrs = _: {
+    preBuild = null;
+  };
+
+  preBuild = ''
+    GOOS= GOARCH= go generate ./bundledmeta
+  '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/aliyun/aliyun-cli/v3/cli.Version=${version}"
+    "-X github.com/aliyun/aliyun-cli/v3/cli.Version=${finalAttrs.version}"
   ];
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  doInstallCheck = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   postInstall = ''
     mv $out/bin/main $out/bin/aliyun
@@ -39,7 +60,7 @@ buildGoModule rec {
   meta = {
     description = "Tool to manage and use Alibaba Cloud resources through a command line interface";
     homepage = "https://github.com/aliyun/aliyun-cli";
-    changelog = "https://github.com/aliyun/aliyun-cli/releases/tag/v${version}";
+    changelog = "https://github.com/aliyun/aliyun-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       ornxka
@@ -47,4 +68,4 @@ buildGoModule rec {
     ];
     mainProgram = "aliyun";
   };
-}
+})

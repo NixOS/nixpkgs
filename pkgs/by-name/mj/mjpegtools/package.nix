@@ -2,11 +2,10 @@
   stdenv,
   lib,
   fetchurl,
-  gtk2,
   libdv,
   libjpeg,
   libpng,
-  libX11,
+  libx11,
   pkg-config,
   SDL,
   SDL_gfx,
@@ -16,7 +15,7 @@
 # TODO:
 # - make dependencies optional
 # - libpng-apng as alternative to libpng?
-# - libXxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
+# - libxxf86dga support? checking for XF86DGAQueryExtension in -lXxf86dga... no
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mjpegtools";
@@ -46,11 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ]
   ++ lib.optionals (!withMinimal) [
-    gtk2
-    libX11
+    libx11
     SDL
     SDL_gfx
   ];
+
+  configureFlags = [ "--without-gtk" ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${lib.getDev SDL}/include/SDL";
 

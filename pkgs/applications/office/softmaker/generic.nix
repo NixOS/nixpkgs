@@ -11,11 +11,11 @@
   glib,
   gst_all_1,
   libGL,
-  libX11,
-  libXext,
-  libXmu,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxmu,
+  libxrandr,
+  libxrender,
 
   # For fixing up execution of /bin/ls, which is necessary for
   # product unlocking.
@@ -60,11 +60,11 @@ stdenv.mkDerivation {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libGL
-    libX11
-    libXext
-    libXmu
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxmu
+    libxrandr
+    libxrender
     (lib.getLib stdenv.cc.cc)
   ];
 

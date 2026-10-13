@@ -54,6 +54,6 @@ buildPythonPackage rec {
     description = "Contemporary Written Japanese dictionary";
     homepage = "https://github.com/polm/unidic-py";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ laurent-f1z1 ];
+    maintainers = [ ];
   };
 }

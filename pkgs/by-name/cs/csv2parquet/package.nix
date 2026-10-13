@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "csv2parquet";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "domoritz";
     repo = "csv2parquet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-499DC0kLvvP5Oq2WYRb9BIppTdfm41u8hwrPU8b66Zw=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ john-shaffer ];
     mainProgram = "csv2parquet";
   };
-}
+})

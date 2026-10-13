@@ -6,7 +6,7 @@
   ffmpeg,
   cmake,
   ninja,
-  v4l-utils,
+  libv4l,
   grim,
   wf-recorder,
   libdbusmenu,
@@ -23,7 +23,7 @@
   gawk,
   polkit,
   libnotify,
-  systemd,
+  systemdLibs,
   xdg-utils,
   libcprime,
   libcsys,
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtconnectivity
     libdbusmenu
     ffmpeg
-    v4l-utils
+    libv4l
     grim
     wf-recorder
     playerctl
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     gawk
     polkit
     libnotify
-    systemd
+    systemdLibs
     xdg-utils
     libcprime
     libcsys

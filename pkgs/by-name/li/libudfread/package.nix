@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libudfread";
   version = "1.1.2";
 
   src = fetchurl {
-    url = "https://code.videolan.org/videolan/libudfread/-/archive/${version}/libudfread-${version}.tar.gz";
+    url = "https://code.videolan.org/videolan/libudfread/-/archive/${finalAttrs.version}/libudfread-${finalAttrs.version}.tar.gz";
     sha256 = "1idsfxff1x264n8jd7077qrd61rycsd09fwmc4ar7l4qmhk6gw9b";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ chkno ];
     platforms = lib.platforms.all;
   };
-}
+})

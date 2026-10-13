@@ -5,13 +5,13 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alertmanager-webhook-logger";
   version = "1.0";
-  rev = "${version}";
+  rev = "${finalAttrs.version}";
 
   src = fetchFromGitHub {
-    inherit rev;
+    inherit (finalAttrs) rev;
     owner = "tomtom-international";
     repo = "alertmanager-webhook-logger";
     hash = "sha256-mJbpDiTwUsFm0lDKz8UE/YF6sBvcSSR6WWLrfKvtri4=";
@@ -30,4 +30,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jpds ];
   };
-}
+})

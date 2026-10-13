@@ -6,12 +6,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libstatgrab";
   version = "0.92.1";
 
   src = fetchurl {
-    url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/libstatgrab-${version}.tar.gz";
+    url = "https://ftp.i-scream.org/pub/i-scream/libstatgrab/libstatgrab-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-VoiqSmhVR9cXSoo3PqnY7pJ+dm48wwK97jRSPCxdbBE=";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

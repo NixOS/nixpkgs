@@ -2,25 +2,31 @@
   fetchurl,
   lib,
   stdenv,
+  bashNonInteractive,
   expect,
   makeWrapper,
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dejagnu";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://gnu/dejagnu/dejagnu-${version}.tar.gz";
-    sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
+    url = "mirror://gnu/dejagnu/dejagnu-${finalAttrs.version}.tar.gz";
+    hash = "sha256-h9rvrNeVi0pp+IxoVtvRY0JhljxBQHnQw3H1ic1mouM=";
   };
 
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
     makeWrapper
   ];
-  buildInputs = [ expect ];
+  buildInputs = [
+    bashNonInteractive
+    expect
+  ];
+
+  strictDeps = true;
 
   # dejagnu-1.6.3 can't successfully run tests in source tree:
   #   https://wiki.linuxfromscratch.org/lfs/ticket/4871
@@ -30,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  doCheck = !(with stdenv; isDarwin && isAarch64);
+  doCheck = !(with stdenv.hostPlatform; isDarwin && isAarch64);
 
   # Note: The test-suite *requires* /dev/pts among the `build-chroot-dirs' of
   # the build daemon when building in a chroot.  See
@@ -53,6 +59,8 @@ stdenv.mkDerivation rec {
     ln -s ${expect}/bin/expect $out/bin/expect
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Framework for testing other programs";
 
@@ -73,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

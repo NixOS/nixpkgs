@@ -2,13 +2,11 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools-scm,
   click,
   help2man,
   markdown-it-py,
   shtab,
-  tomli,
   pytestCheckHook,
 }:
 
@@ -31,8 +29,7 @@ buildPythonPackage rec {
     help2man
     markdown-it-py
     shtab
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

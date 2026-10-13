@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   zlib,
   curl,
   expat,
-  fuse,
   fuse3,
   openssl,
   autoreconfHook,
@@ -23,6 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-pGInhJQBhFJhft/KfB3J3S9/BVp9D8TZ+uw2CUNVC+Q=";
   };
 
+  patches = [
+    # libafflib.so fails to link due to undefined references when using GCC 16.
+    # https://github.com/sshock/AFFLIBv3/issues/60
+    (fetchpatch {
+      name = "gcc16-missing-declarations.patch";
+      url = "https://github.com/sshock/AFFLIBv3/commit/f35df6c1d2610e3233c30d50054c00e29d7d5a23.patch";
+      hash = "sha256-D7/PnePwb7ikuHIo+3MBPp4PI8uN8vNJ1rZykeXDdxU=";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     zlib
@@ -30,9 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     openssl
     python3
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ fuse3 ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fuse ];
+    fuse3
+  ];
+
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
 
   meta = {
     homepage = "http://afflib.sourceforge.net/";

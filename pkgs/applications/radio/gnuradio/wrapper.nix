@@ -27,7 +27,7 @@
   atk,
   # For Adding additional GRC blocks
   extraPackages ? [ ],
-  # For Adding additional python packaages
+  # For Adding additional python packages
   extraPythonPackages ? [ ],
   soapysdr, # For it's passthru.searchPath
   # soapysdr plugins we add by default. Ideally, we should have a
@@ -56,6 +56,7 @@
   ],
   # Allow to add whatever you want to the wrapper
   extraMakeWrapperArgs ? [ ],
+  packageOverrides ? (self: super: { }),
 }:
 
 let
@@ -74,19 +75,25 @@ let
     )
     # Add the extraPackages as python modules as well
     ++ (map unwrapped.python.pkgs.toPythonModule extraPackages)
-    ++ lib.flatten (
+    ++ lib.concatLists (
       lib.mapAttrsToList (
-        feat: info:
-        (lib.optionals (
-          (unwrapped.hasFeature feat) && (builtins.hasAttr "pythonRuntime" info)
-        ) info.pythonRuntime)
+        feat: info: lib.optionals (unwrapped.hasFeature feat) (info.pythonRuntime or [ ])
       ) unwrapped.featuresInfo
     );
-  pythonEnv = unwrapped.python.withPackages (ps: pythonPkgs);
+  pythonEnv = unwrapped.python.withPackages (_: pythonPkgs);
+
+  qtPackages = map lib.getBin (
+    [
+      unwrapped.qt.qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      unwrapped.qt.qtwayland
+    ]
+  );
 
   pname = unwrapped.pname + "-wrapped";
   inherit (unwrapped) outputs version;
-  makeWrapperArgs = builtins.concatStringsSep " " (
+  makeWrapperArgs = lib.concatStringsSep " " (
     # Emulating wrapGAppsHook3 & wrapQtAppsHook working together
     lib.optionals ((unwrapped.hasFeature "gnuradio-companion") || (unwrapped.hasFeature "gr-qtgui")) [
       "--prefix"
@@ -163,35 +170,22 @@ let
       "--prefix"
       "QT_PLUGIN_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qt.qtbase.qtPluginPrefix (
-        map lib.getBin (
-          [
-            unwrapped.qt.qtbase
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            unwrapped.qt.qtwayland
-          ]
-        )
-      )}"
+      "${lib.makeSearchPath unwrapped.qt.qtbase.qtPluginPrefix qtPackages}"
       "--prefix"
       "QML2_IMPORT_PATH"
       ":"
-      "${lib.makeSearchPath unwrapped.qt.qtbase.qtQmlPrefix (
-        map lib.getBin (
-          [
-            unwrapped.qt.qtbase
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            unwrapped.qt.qtwayland
-          ]
-        )
-      )}"
+      "${lib.makeSearchPath unwrapped.qt.qtbase.qtQmlPrefix qtPackages}"
     ]
     ++ extraMakeWrapperArgs
   );
 
   packages = import ../../../top-level/gnuradio-packages.nix {
-    inherit lib stdenv newScope;
+    inherit
+      lib
+      stdenv
+      newScope
+      packageOverrides
+      ;
     gnuradio = unwrapped;
   };
   passthru = unwrapped.passthru // {
@@ -216,22 +210,16 @@ let
           lndir
         ];
         buildCommand = ''
-          ${builtins.concatStringsSep "\n" (
-            map (output: ''
-              mkdir ''$${output}
-              lndir -silent ${unwrapped.${output}} ''$${output}
-            '') outputs
-          )}
+          ${lib.concatMapStringsSep "\n" (output: ''
+            mkdir ''$${output}
+            lndir -silent ${unwrapped.${output}} ''$${output}
+          '') outputs}
           cd $out
-          ${lib.optionalString (extraPackages != [ ]) (
-            builtins.concatStringsSep "\n" (
-              map (pkg: ''
-                if [[ -d ${lib.getBin pkg}/bin/ ]]; then
-                  lndir -silent ${pkg}/bin ./bin
-                fi
-              '') extraPackages
-            )
-          )}
+          ${lib.concatMapStringsSep "\n" (pkg: ''
+            if [[ -d ${lib.getBin pkg}/bin/ ]]; then
+              lndir -silent ${lib.getBin pkg}/bin ./bin
+            fi
+          '') extraPackages}
           for i in $out/bin/*; do
             if [[ ! -x "$i" ]]; then
               continue

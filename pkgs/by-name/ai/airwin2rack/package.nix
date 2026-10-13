@@ -175,17 +175,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  NIX_LDFLAGS = (
-    toString [
-      "-lX11"
-      "-lXext"
-      "-lXcomposite"
-      "-lXcursor"
-      "-lXinerama"
-      "-lXrandr"
-      "-lXrender"
-    ]
-  );
+  env.NIX_LDFLAGS = toString [
+    "-lX11"
+    "-lXext"
+    "-lXcomposite"
+    "-lXcursor"
+    "-lXinerama"
+    "-lXrandr"
+    "-lXrender"
+  ];
 
   meta = {
     description = "JUCE Plugin Version of Airwindows Consolidated";
@@ -194,7 +192,7 @@ stdenv.mkDerivation {
     license =
       with lib.licenses;
       [ mit ]
-      ++ lib.optional enableVCVRack [
+      ++ lib.optionals enableVCVRack [
         gpl3Plus
         cc-by-nc-40
         unfreeRedistributable

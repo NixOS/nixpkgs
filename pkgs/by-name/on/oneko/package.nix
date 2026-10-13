@@ -4,8 +4,8 @@
   fetchFromGitHub,
   imake,
   gccmakedep,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     gccmakedep
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   makeFlags = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
       When the cat is done catching the mouse, it starts sleeping.
     '';
     homepage = "https://github.com/IreneKnapp/oneko";
-    license = with lib.licenses; [ publicDomain ];
+    license = lib.licenses.publicDomain;
     maintainers = with lib.maintainers; [
       xaverdh
       irenes

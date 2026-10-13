@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyyaml-env-tag";
   version = "1.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pyyaml_env_tag";
-    inherit version;
+    inherit (finalAttrs) version;
     sha256 = "sha256-LrOLdaLSHuBHXW2X7BnGMoen4UAjHkIUlp0OrJI81/8=";
   };
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   meta = {
     description = "Custom YAML tag for referencing environment variables";
     homepage = "https://github.com/waylan/pyyaml-env-tag";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

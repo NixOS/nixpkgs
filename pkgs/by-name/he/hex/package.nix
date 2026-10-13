@@ -6,30 +6,30 @@
   hex,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hex";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "sitkevij";
     repo = "hex";
-    rev = "v${version}";
-    hash = "sha256-YctXDhCMJvDQLPsuhzdyYDUIlFE2vKltNtrFFeE7YE8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Q/h6mIjEErrDY/jJUyldd8TaNlk4Zn770ToHicP2+Ng=";
   };
 
-  cargoHash = "sha256-3lrNZyQVP+gswbF+pqQmVIHg3bjiJ22y87PtTHDwIXs=";
+  cargoHash = "sha256-t+ALA1yhaLOl8gdJRo0jgNBPv8xZ0QriNLcn9L0QxyA=";
 
   passthru.tests.version = testers.testVersion {
     package = hex;
-    version = "hx ${version}";
+    version = "hx ${finalAttrs.version}";
   };
 
   meta = {
     description = "Futuristic take on hexdump, made in Rust";
     homepage = "https://github.com/sitkevij/hex";
-    changelog = "https://github.com/sitkevij/hex/releases/tag/v${version}";
+    changelog = "https://github.com/sitkevij/hex/releases/tag/v${finalAttrs.version}";
     mainProgram = "hx";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

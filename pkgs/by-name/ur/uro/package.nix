@@ -3,7 +3,7 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "uro";
   version = "1.0.2";
   pyproject = true;
@@ -11,7 +11,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "uro";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-aDFUyWkje4TqsmxnPfQAhf2k4rFMdibxfHHvQks9yRA=";
   };
 
@@ -24,4 +24,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ lib.maintainers.michaelBelsanti ];
     mainProgram = "uro";
   };
-}
+})

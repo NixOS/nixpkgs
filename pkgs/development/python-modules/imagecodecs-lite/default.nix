@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "Block-oriented, in-memory buffer transformation, compression, and decompression functions";
     homepage = "https://www.lfd.uci.edu/~gohlke/";
-    maintainers = [ lib.maintainers.tbenst ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
   };
 }

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchgit,
-  libX11,
+  libx11,
   perl,
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ZrJAyDyvlUmNpxBC06yrzBJ7vhrZY4+GbfBDQoF+h4M=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   # remove the APM checker binary, make the sys checker
   # script the default. Rationale: checking battery status by /proc/apm is

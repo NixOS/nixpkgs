@@ -8,17 +8,24 @@
   qt6,
   pcsclite,
   gitUpdater,
+  llhttp,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
-  version = "2.4.0";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "Governikus";
-    repo = "AusweisApp2";
+    repo = "AusweisApp";
     rev = finalAttrs.version;
-    hash = "sha256-vMvCnYSj7y6ETGoudV1YJwI2bibXePSkR4nQ4T5HqTo=";
+    hash = "sha256-rxlJ2+IG0XmZ2Oyfk5n1TGDF76KhLahe8KvJ70QX5tQ=";
   };
+
+  postPatch = ''
+    # avoid runtime QML cache to fix GUI loading issues
+    substituteInPlace src/ui/qml/CMakeLists.txt src/ui/qml/modules/CMakeLists.txt \
+      --replace-fail NO_CACHEGEN ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -33,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
+    llhttp
     pcsclite
     qt6.qtscxml
     qt6.qtsvg
@@ -40,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
     qt6.qtwebsockets
   ];
+
+  env.LANG = "C.UTF-8";
 
   passthru = {
     tests.version = testers.testVersion {
@@ -51,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Official authentication app for German ID card and residence permit";
-    downloadPage = "https://github.com/Governikus/AusweisApp2/releases";
+    downloadPage = "https://github.com/Governikus/AusweisApp/releases";
     homepage = "https://www.ausweisapp.bund.de/open-source-software";
     license = lib.licenses.eupl12;
     mainProgram = "AusweisApp";

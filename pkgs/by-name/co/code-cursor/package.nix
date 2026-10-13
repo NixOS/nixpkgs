@@ -11,7 +11,6 @@
 
 let
   inherit (stdenv) hostPlatform;
-  finalCommandLineArgs = "--update=false " + commandLineArgs;
 
   sourcesJson = lib.importJSON ./sources.json;
   sources = lib.mapAttrs (
@@ -23,10 +22,16 @@ let
 
   source = sources.${hostPlatform.system};
 in
-buildVscode rec {
-  inherit useVSCodeRipgrep;
-  inherit (sourcesJson) version vscodeVersion;
-  commandLineArgs = finalCommandLineArgs;
+(buildVscode rec {
+  inherit commandLineArgs useVSCodeRipgrep;
+  inherit (sourcesJson) version;
+  # Cursor reports vscode >= 1.122 but still ships @vscode/ripgrep.
+  # Capping the build-time vscodeVersion avoids modifying the notarized app bundle on Darwin.
+  vscodeVersion =
+    if lib.versionAtLeast sourcesJson.vscodeVersion "1.122.0" then
+      "1.121.0"
+    else
+      sourcesJson.vscodeVersion;
 
   pname = "cursor";
 
@@ -60,7 +65,7 @@ buildVscode rec {
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
 
-  # Cursor has no wrapper script.
+  # Cursor ships a launcher script that resolves its own VSCODE_PATH.
   patchVSCodePath = false;
 
   meta = {
@@ -81,4 +86,24 @@ buildVscode rec {
     ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
-}
+}).overrideAttrs
+  (oldAttrs: {
+    autoPatchelfIgnoreMissingDeps =
+      (oldAttrs.autoPatchelfIgnoreMissingDeps or [ ])
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) [
+        "libc.musl-*.so.*" # musl-based node modules are not used on glibc systems
+      ];
+
+    preFixup =
+      (oldAttrs.preFixup or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        sed -i '/^Keywords=/a MimeType=application/x-cursor-workspace;' \
+          $out/share/applications/cursor.desktop
+      '';
+    postInstall =
+      (oldAttrs.postInstall or "")
+      + lib.optionalString hostPlatform.isLinux ''
+        install -Dm644 ../mime/packages/cursor-workspace.xml -t $out/share/mime/packages
+        rm -f $out/lib/cursor/resources/appimageupdatetool.AppImage
+      '';
+  })

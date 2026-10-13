@@ -2,30 +2,32 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  hwdata,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libudev-zero";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = finalAttrs.version;
-    sha256 = "sha256-NXDof1tfr66ywYhCBDlPa+8DUfFj6YH0dvSaxHFqsXI=";
+    sha256 = "sha256-kHTWoHxORizNF8614E0gfWeJgobDxqtoUpawQmEvtAQ=";
   };
 
   makeFlags = [
     "PREFIX=$(out)"
     "AR=${stdenv.cc.targetPrefix}ar"
+    "USB_IDS_PATH=${hwdata}/share/hwdata/usb.ids"
   ];
 
   # Just let the installPhase build stuff, because there's no
   # non-install target that builds everything anyway.
   dontBuild = true;
 
-  installTargets = lib.optionals stdenv.hostPlatform.isStatic "install-static";
+  installTargets = lib.optionals stdenv.hostPlatform.isStatic [ "install-static" ];
 
   passthru.tests = {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

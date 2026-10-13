@@ -1,30 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pydantic,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "enochecker-core";
-  version = "0.10.0";
-  format = "setuptools";
+  version = "0.13.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "enochecker_core";
-    hash = "sha256-N41p2XRCp55rcPXLpA4rPIARsva/dQzK8qafjzXtavI=";
+  src = fetchFromGitHub {
+    owner = "enowars";
+    repo = "enochecker_core";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bmEn+7bx4ZDqHqQKkTnUuBSuVZ6L0w6dZmWK0Po8zWk=";
   };
 
-  pythonImportsCheck = [ "enochecker_core" ];
+  build-system = [ setuptools ];
 
-  # no tests upstream
-  doCheck = false;
+  dependencies = [ pydantic ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "enochecker_core" ];
 
   meta = {
     description = "Base library for enochecker libs";
     homepage = "https://github.com/enowars/enochecker_core";
-    changelog = "https://github.com/enowars/enochecker_core/releases/tag/v${version}";
+    changelog = "https://github.com/enowars/enochecker_core/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fwc ];
   };
-}
+})

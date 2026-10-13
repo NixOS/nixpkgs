@@ -17,7 +17,7 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glib-networking";
   version = "2.80.1";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/glib-networking/${lib.versions.majorMinor version}/glib-networking-${version}.tar.xz";
+    url = "mirror://gnome/sources/glib-networking/${lib.versions.majorMinor finalAttrs.version}/glib-networking-${finalAttrs.version}.tar.xz";
     hash = "sha256-uA4odBV81VBx8bZxD6C5EdWsXeEGqe4qTJx77mF4L44=";
   };
 
@@ -101,4 +101,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-}
+})

@@ -9,6 +9,7 @@
   testresources,
   testscenarios,
   virtualenv,
+  wheel,
 }:
 
 buildPythonPackage {
@@ -38,6 +39,7 @@ buildPythonPackage {
     testresources
     testscenarios
     virtualenv
+    wheel
   ];
 
   checkPhase = ''

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "hdate";
-  version = "1.1.2";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-libhdate";
     repo = "py-libhdate";
     tag = "v${version}";
-    hash = "sha256-nM9LHcXuDpQ2j4ACF6W5H3iTJcKdbcY4bkbumIkKyeE=";
+    hash = "sha256-3MOxDVrEMuMfk/fCCo6IItqR1DMr/0KN7L4hYjMYCGM=";
   };
 
   pythonRelaxDeps = [
@@ -47,6 +47,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
   ];
+
+  pytestFlags = [ "--snapshot-warn-unused" ];
 
   enabledTestPaths = [ "tests" ];
 

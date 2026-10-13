@@ -5,9 +5,10 @@
   nlohmann_json,
   qt6,
   stdenv,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.1";
+  version = "1.1.1";
   pname = "swaymux";
 
   src = fetchFromGitea {
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "git.grimmauld.de";
     owner = "Grimmauld";
     repo = "swaymux";
-    hash = "sha256-OMJ9wKNuvD1Z9KV7Bp7aIA5gWbBl9PmTdGcGegE0vqM=";
+    hash = "sha256-pe0YrhRJdy/3GePzM1RD1vQ0fGisImNHKzGMFeYQN88=";
   };
 
   buildInputs = [
@@ -29,6 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://git.grimmauld.de/Grimmauld/swaymux/commits/branch/main";

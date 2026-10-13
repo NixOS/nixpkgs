@@ -6,7 +6,7 @@
   automake,
   boost,
   zlib,
-  libX11,
+  libx11,
   libice,
   libsm,
   libpng,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    libX11
+    libx11
     libice
     libsm
     libpng
@@ -51,10 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
     cd unix
     ./prebuild.sh
     cd ..
+    export HOME=$TMPDIR
     sed -i -e 's/^povconfuser.*/povconfuser=$(TMPDIR)\/povray/' Makefile.{am,in}
     sed -i -e 's/^povuser.*/povuser=$(TMPDIR)\/.povray/' Makefile.{am,in}
-    sed -i -e 's/^povowner.*/povowner=nobody/' Makefile.{am,in}
-    sed -i -e 's/^povgroup.*/povgroup=nogroup/' Makefile.{am,in}
   '';
 
   # https://github.com/POV-Ray/povray/issues/460

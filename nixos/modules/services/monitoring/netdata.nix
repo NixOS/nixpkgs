@@ -13,6 +13,7 @@ let
     ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
     ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
+    ln -s /run/wrappers/bin/go.d.plugin $out/libexec/netdata/plugins.d/go.d.plugin
     ln -s /run/wrappers/bin/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
     ln -s /run/wrappers/bin/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
     ln -s /run/wrappers/bin/otel-plugin $out/libexec/netdata/plugins.d/otel-plugin
@@ -75,7 +76,7 @@ in
 {
   options = {
     services.netdata = {
-      enable = lib.mkEnableOption "netdata";
+      enable = lib.mkEnableOption "Netdata";
 
       package = lib.mkPackageOption pkgs "netdata" { };
 
@@ -168,7 +169,7 @@ in
           `cfg.package` must be built with `withNdsudo = true`
           :::
         '';
-        example = ''
+        example = lib.literalExpression ''
           [
             pkgs.smartmontools
             pkgs.nvme-cli
@@ -179,7 +180,7 @@ in
       config = lib.mkOption {
         type = lib.types.attrsOf lib.types.attrs;
         default = { };
-        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        description = "Configuration for `netdata.conf` as Nix attributes, cannot be combined with `configText`.";
         example = lib.literalExpression ''
           global = {
             "debug log" = "syslog";
@@ -193,13 +194,15 @@ in
         type = lib.types.attrsOf lib.types.path;
         default = { };
         description = ''
-          Complete netdata config directory except netdata.conf.
+          Complete netdata config directory except `netdata.conf`.
           The default configuration is merged with changes
           defined in this option.
+
           Each top-level attribute denotes a path in the configuration
-          directory as in environment.etc.
+          directory as in `environment.etc`.
+
           Its value is the absolute path and must be readable by netdata.
-          Cannot be combined with configText.
+          Cannot be combined with `configText`.
         '';
         example = lib.literalExpression ''
           "health_alarm_notify.conf" = pkgs.writeText "health_alarm_notify.conf" '''
@@ -369,8 +372,10 @@ in
         # Capabilities
         CapabilityBoundingSet = [
           "CAP_DAC_OVERRIDE" # is required for freeipmi and slabinfo plugins
-          "CAP_DAC_READ_SEARCH" # is required for apps and systemd-journal plugin
-          "CAP_NET_RAW" # is required for fping app
+          "CAP_DAC_READ_SEARCH" # is required for apps, systemd-journal and go.d/filecheck collector
+          "CAP_NET_ADMIN" # is required for the go.d/wireguard collector
+          "CAP_NET_BIND_SERVICE" # is required for the go.d/snmp_traps collector
+          "CAP_NET_RAW" # is required for the go.d/ping collector
           "CAP_PERFMON" # is required for perf plugin
           "CAP_SETPCAP" # is required for apps, perf and slabinfo plugins
           "CAP_SETUID" # is required for cgroups and cgroups-network plugins
@@ -384,7 +389,10 @@ in
           "CAP_FOWNER"
           "CAP_SYS_RAWIO"
         ]
-        ++ lib.optional isThereAnyWireGuardTunnels "CAP_NET_ADMIN";
+        ++ lib.optionals cfg.package.withNdsudo [
+          "CAP_SETGID" # is required for ndsudo to fully acquire root privileges (setgid/setegid, alongside CAP_SETUID above)
+          "CAP_SYS_RAWIO" # is required for ndsudo to run S.M.A.R.T./NVMe raw-IO commands (e.g. smartctl, nvme-cli)
+        ];
         # Sandboxing
         ProtectSystem = "full";
         ProtectHome = "read-only";
@@ -425,6 +433,22 @@ in
       "debugfs.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/debugfs.plugin.org";
         capabilities = "cap_dac_read_search+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+
+      "go.d.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/godplugin";
+        # https://github.com/netdata/netdata/blob/master/src/go/plugin/go.d/README.md#required-linux-capabilities
+        capabilities =
+          lib.concatStringsSep "," [
+            "cap_dac_read_search" # is required for the go.d/filecheck collector
+            "cap_net_admin" # is required for the go.d/wireguard collector
+            "cap_net_bind_service" # is required for the go.d/snmp_traps collector
+            "cap_net_raw" # is required for the go.d/ping collector
+          ]
+          + "+eip";
         owner = cfg.user;
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";

@@ -1,65 +1,68 @@
 {
-  buildPythonPackage,
-  fetchPypi,
   lib,
-  pythonAtLeast,
+  aiohttp,
+  bottle,
+  buildPythonPackage,
+  django,
+  falcon,
+  fetchPypi,
+  flask,
   flit-core,
   marshmallow,
-  pytestCheckHook,
-  pytest-aiohttp,
-  webtest,
-  webtest-aiohttp,
-  flask,
-  django,
-  bottle,
-  tornado,
+  packaging,
+  pkg-resources-backport,
   pyramid,
-  falcon,
-  aiohttp,
-  fetchpatch,
+  pytest-aiohttp,
+  pytestCheckHook,
+  tornado,
+  webtest-aiohttp,
+  webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "webargs";
-  version = "8.7.0";
+  version = "8.7.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DGF97BntTx/2skfNc4VelJ2HBS1xkAk4tx8Mr9kvGRs=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-eZv5A5x2wj/Y3BlREHp1qeVhIDwV1q6PicHkbiNGNsE=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/marshmallow-code/webargs/commit/a6a5043ee34b0a22885b3625de6d4fdffc3b715b.patch";
-      hash = "sha256-EFe76SAklgmBjfM6K8PkB0vHMCSlZ9EKAW9AbnxKmPA=";
-    })
-  ];
 
   build-system = [ flit-core ];
 
-  dependencies = [ marshmallow ];
+  dependencies = [
+    marshmallow
+    packaging
+    pkg-resources-backport
+  ];
 
   nativeCheckInputs = [
-    pytestCheckHook
+    aiohttp
+    bottle
+    django
+    falcon
+    flask
+    pyramid
     pytest-aiohttp
+    pytestCheckHook
+    tornado
     webtest
     webtest-aiohttp
-    flask
-    django
-    bottle
-    tornado
-    pyramid
-    falcon
-    aiohttp
   ];
 
   pythonImportsCheck = [ "webargs" ];
 
+  disabledTests = [
+    # Tests is outdated
+    "test_it_should_handle_type_error_on_load_json"
+  ];
+
   meta = {
     description = "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";
     homepage = "https://github.com/marshmallow-code/webargs";
+    changelog = "https://github.com/marshmallow-code/webargs/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ cript0nauta ];
   };
-}
+})

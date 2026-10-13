@@ -8,13 +8,13 @@
   libxkbcommon,
   wayland,
   withX ? true,
-  libXi,
-  libXinerama,
-  libXft,
-  libXfixes,
-  libXtst,
-  libX11,
-  libXext,
+  libxi,
+  libxinerama,
+  libxft,
+  libxfixes,
+  libxtst,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
       wayland
     ]
     ++ lib.optionals withX [
-      libXi
-      libXinerama
-      libXft
-      libXfixes
-      libXtst
-      libX11
-      libXext
+      libxi
+      libxinerama
+      libxft
+      libxfixes
+      libxtst
+      libx11
+      libxext
     ];
 
   makeFlags = [

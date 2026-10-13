@@ -4,7 +4,7 @@
   fetchFromGitHub,
   twisted,
   qtpy,
-  pyqt5,
+  pyqt6,
 }:
 
 buildPythonPackage {
@@ -24,7 +24,7 @@ buildPythonPackage {
     qtpy
   ];
 
-  nativeCheckInputs = [ pyqt5 ];
+  nativeCheckInputs = [ pyqt6 ];
 
   pythonImportsCheck = [ "qreactor" ];
 

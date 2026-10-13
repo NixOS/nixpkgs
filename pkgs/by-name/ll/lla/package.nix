@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lla";
-  version = "0.5.3";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "chaqchase";
     repo = "lla";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AVvng3pF68bLlJBobEDBxW7/CQADTfg1Ylm/tjQFFfQ=";
+    hash = "sha256-XpnnKNTZMsbHBM6+zV04XZ29y3o4OzyJKM5ZBjuNsCQ=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Do not vendor Oniguruma
   env.RUSTONIG_SYSTEM_LIBONIG = true;
 
-  cargoHash = "sha256-SQBaUaNuPUUw/bQ9UnUNCo+HpU7VVK3wzKAtSDpmTHo=";
+  cargoHash = "sha256-g241vUK6rO53yoEKnOt3UpqtOZfvp6ajb9JzWJfd+Qw=";
 
   cargoBuildFlags = [ "--workspace" ];
 
@@ -63,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
     homepage = "https://lla.chaqchase.com";
     changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.unix;
     mainProgram = "lla";

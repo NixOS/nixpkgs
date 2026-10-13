@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yq-go";
-  version = "4.52.2";
+  version = "4.54.1";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AWWSuMrAwv+J8PK/VXyYDwJGSdv2F0/pvNRouK4slM0=";
+    hash = "sha256-XuFeCF8oyURkcBuQsv2ePjRST/nZtHh+PnLFwD/GMCM=";
   };
 
-  vendorHash = "sha256-rl7AhOJKjVRyfcu7uofniSYJMjBkaO+kCqLRmz2MsiE=";
+  vendorHash = "sha256-CaglyW5YwmukObKYXMTsTiLY31gs2bgLwyTfxJUtTdY=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles
@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   passthru = {
     tests = {
       simple = runCommand "yq-go-test" { } ''
-        echo "test: 1" | ${finalAttrs.finalPackage}/bin/yq eval -j > $out
+        echo "test: 1" | ${finalAttrs.finalPackage}/bin/yq eval -o=json > $out
         [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
       '';
     };
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://mikefarah.gitbook.io/yq/";
     changelog = "https://github.com/mikefarah/yq/raw/${finalAttrs.src.tag}/release_notes.txt";
     mainProgram = "yq";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lewo
       prince213

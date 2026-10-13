@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "acme-tiny";
-  version = "5.0.2";
+  version = "5.0.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "acme_tiny";
     inherit version;
-    hash = "sha256-s84ZVYPcLxOnxvqQBS+Ks0myMtvCZ62cv0co6u2E3dg=";
+    hash = "sha256-LV64B+JZhq69qbBJ2dFG8YW6/q1u+x6MxB1rQrm8pjw=";
   };
 
   patchPhase = ''

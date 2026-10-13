@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "python-watcherclient";
-  version = "4.9.0";
+  version = "4.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-watcherclient";
     tag = version;
-    hash = "sha256-ik//J9R9F4SCljexijcfXuSbDgDUNnMTqfpxIPd2Jm8=";
+    hash = "sha256-TYMV55uvTCvHKj5w5QA2zRqVr6pXCXh2Oc07Yo7epjs=";
   };
 
   env.PBR_VERSION = version;

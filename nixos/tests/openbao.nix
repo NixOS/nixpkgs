@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 let
   certs = import ./common/acme/server/snakeoil-certs.nix;
   domain = certs.domain;
@@ -33,6 +33,14 @@ in
             unix = {
               type = "unix";
             };
+
+            unix-custom = {
+              type = "unix";
+              address = "/run/openbao/world-accessible.sock";
+              socket_mode = "0222";
+              socket_user = "openbao";
+              socket_group = "openbao";
+            };
           };
 
           cluster_addr = "https://127.0.0.1:8201";
@@ -40,6 +48,9 @@ in
 
           storage.raft.path = "/var/lib/openbao";
         };
+
+        # Test registration of all plugins.
+        plugins = lib.filter lib.isDerivation (lib.attrValues pkgs.openbaoPlugins);
       };
 
       environment.variables = {
@@ -50,6 +61,13 @@ in
 
   testScript =
     { nodes, ... }:
+    let
+      inherit (nodes.machine.services.openbao.settings) listener;
+      # KMS plugins are not part of the plugin catalog.
+      catalogPlugins = map (
+        plugin: ''("${plugin.pluginType}", "${plugin.pluginName}", "v${plugin.version}")''
+      ) (lib.filter (plugin: plugin.pluginType != "kms") nodes.machine.services.openbao.plugins);
+    in
     ''
       import json
 
@@ -58,7 +76,15 @@ in
       with subtest("Wait for OpenBao to start up"):
         machine.wait_for_unit("openbao.service")
         machine.wait_for_open_port(8200)
-        machine.wait_for_open_unix_socket("${nodes.machine.services.openbao.settings.listener.unix.address}")
+        machine.wait_for_open_unix_socket("${listener.unix.address}")
+        machine.wait_for_open_unix_socket("${listener.unix-custom.address}")
+
+      with subtest("Check Unix Socket listeners"):
+        t.assertEqual("srwx------ openbao:openbao", machine.succeed("stat --printf '%A %U:%G' ${listener.unix.address}"))
+        machine.fail("su -l nobody -s /bin/sh -c 'curl --fail --silent --unix-socket ${listener.unix.address} localhost'")
+
+        t.assertEqual("s-w--w--w- openbao:openbao", machine.succeed("stat --printf '%A %U:%G' ${listener.unix-custom.address}"))
+        machine.succeed("su -l nobody -s /bin/sh -c 'curl --fail --silent --unix-socket ${listener.unix-custom.address} localhost'")
 
       with subtest("Check that the web UI is being served"):
         machine.succeed("curl -L --fail --show-error --silent $BAO_ADDR | grep '<title>OpenBao</title>'")
@@ -85,6 +111,20 @@ in
 
       with subtest("Login with root token"):
         machine.succeed(f"bao login {init_output["root_token"]}")
+
+      with subtest("Check that external plugins are registered"):
+        for type, name, version in [${lib.concatStringsSep ", " catalogPlugins}]:
+          info = json.loads(machine.succeed(f"bao plugin info -version {version} {type} {name}"))
+          assert info["version"] == version, info
+          assert not info["builtin"], info
+
+      with subtest("Enable external plugins"):
+        machine.succeed("bao auth enable github")
+        machine.succeed("bao secrets enable nomad")
+        machine.succeed("bao secrets enable oauthapp")
+        assert "github/" in json.loads(machine.succeed("bao auth list"))
+        secrets = json.loads(machine.succeed("bao secrets list"))
+        assert "nomad/" in secrets and "oauthapp/" in secrets, secrets
 
       with subtest("Enable userpass auth method"):
         machine.succeed("bao auth enable userpass")

@@ -7,14 +7,17 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "emhash";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ktprime";
     repo = "emhash";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dFj/QaGdTJYdcxKlS9tES6OHae8xPMnrG9ccRNM/hi8=";
+    hash = "sha256-+oJIJvtphPHXPbmRquHRV9KkI61qwuGjJw3O1hpzwIw=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -33,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ktprime/emhash/releases/tag/v${finalAttrs.version}";
     description = "Fast and memory efficient c++ flat hash map/set";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = lib.platforms.all;
   };
 })

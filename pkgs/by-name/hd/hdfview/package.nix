@@ -40,8 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     stripJavaArchivesHook
   ];
 
-  HDFLIBS = (hdf4.override { javaSupport = true; }).out;
-  HDF5LIBS = (hdf5.override { javaSupport = true; }).out;
+  env = {
+    HDFLIBS = (hdf4.override { javaSupport = true; }).out;
+    HDF5LIBS = (hdf5.override { javaSupport = true; }).out;
+  };
 
   buildPhase =
     let
@@ -55,17 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
-    name = "HDFView";
-    desktopName = name;
-    exec = name;
-    icon = name;
-    comment = finalAttrs.finalPackage.meta.description;
-    categories = [
-      "Science"
-      "DataVisualization"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "HDFView";
+      desktopName = name;
+      exec = name;
+      icon = name;
+      comment = finalAttrs.finalPackage.meta.description;
+      categories = [
+        "Science"
+        "DataVisualization"
+      ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall

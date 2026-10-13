@@ -5,23 +5,23 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "unpoller";
-  version = "2.32.0";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "unpoller";
     repo = "unpoller";
-    rev = "v${version}";
-    hash = "sha256-SEfTgLQoU8jtzFqQtj5vIei/sWHveNWvWnSfmVi7dKE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-2MYNMSaTuR0PZY8hMB1RLgwTjZHdCbgo/vLSQuN7ehQ=";
   };
 
-  vendorHash = "sha256-oOeCNizROwGS+OabpbSNq8dHOIA7U96a4lcF7ilkmb4=";
+  vendorHash = "sha256-Aa5+DwYVFPaYA6CehG2ffy2wCbZCWduLR11joA6d7KE=";
 
   ldflags = [
     "-w"
     "-s"
-    "-X golift.io/version.Version=${version}"
+    "-X golift.io/version.Version=${finalAttrs.version}"
   ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) unpoller; };
@@ -29,8 +29,8 @@ buildGoModule rec {
   meta = {
     description = "Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus";
     homepage = "https://github.com/unpoller/unpoller";
-    changelog = "https://github.com/unpoller/unpoller/releases/tag/v${version}";
+    changelog = "https://github.com/unpoller/unpoller/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Frostman ];
   };
-}
+})

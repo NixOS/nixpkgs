@@ -11,25 +11,25 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "engelsystem";
-  version = "3.6.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "engelsystem";
     repo = "engelsystem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pi+nowImUvENx2c4gsku1KkFb3pLM84oT8WevI6ImQg=";
+    hash = "sha256-G3Ejj/Hcxfd394sOlLy0Xk/CjKbJnTyUPQn5mNLH31I=";
   };
 
   inherit php;
 
   composerNoDev = true;
   composerStrictValidation = false;
-  vendorHash = "sha256-JRd5FJviNf5NUI9PwRcMqdDXYBlMoBB6o5yx7dvostE=";
+  vendorHash = "sha256-Q1Vr8AywDAI6Apb4ShyV6DhSV3Fm0rX6X0uXlnO3CZo=";
 
   yarnOfflineCache = fetchYarnDeps {
     pname = "${finalAttrs.pname}-yarn-deps";
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-nyCLM9OF2qwlW+VK38kiRMo6jMlupNFG+91N3Fb/WLY=";
+    hash = "sha256-FRwmsnRsTVphSFurgaLcfNlNvxcC8fTR79G8r6RGB5A=";
   };
 
   strictDeps = true;
@@ -66,7 +66,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://engelsystem.de";
     license = lib.licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tmarkus ];
     platforms = lib.platforms.all;
   };
 })

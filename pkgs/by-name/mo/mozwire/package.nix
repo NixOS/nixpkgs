@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "MozWire";
   version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "NilsIrl";
     repo = "MozWire";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2i8C1XgfI3MXnwXZzY6n8tIcw45G9h3vZqRlFaVoLH0=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "mozwire";
   };
-}
+})

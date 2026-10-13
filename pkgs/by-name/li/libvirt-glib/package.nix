@@ -21,7 +21,7 @@
   docbook-xsl-nons,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvirt-glib";
   version = "5.0.0";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
-    url = "https://libvirt.org/sources/glib/libvirt-glib-${version}.tar.xz";
+    url = "https://libvirt.org/sources/glib/libvirt-glib-${finalAttrs.version}.tar.xz";
     sha256 = "m/7DRjgkFqNXXYcpm8ZBsqRkqlGf2bEofjGKpDovO4s=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

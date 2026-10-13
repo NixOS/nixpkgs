@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xfce4-whiskermenu-plugin";
-  version = "2.10.0";
+  version = "2.10.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "panel-plugins";
     repo = "xfce4-whiskermenu-plugin";
     tag = "xfce4-whiskermenu-plugin-${finalAttrs.version}";
-    hash = "sha256-2FACsP6mKx0k91xG3DaVS6hdvdLrjLu9Y9rVOW6PZ3M=";
+    hash = "sha256-mSACaLwC7G2NBg7JbK59hwpkaSnQE4nsfSH1oABdOso=";
   };
 
   strictDeps = true;

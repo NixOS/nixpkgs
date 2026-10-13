@@ -14,20 +14,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gurk-rs";
-  version = "0.8.1";
+  version = "0.10.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HBqKcKPsNJQhLGGQ4X+xGPWwSABiaqubn11yyqiL0xU=";
+    hash = "sha256-H2pWF5cYpcYJaIRhghkyHspQlil3vxN+T1Bwa0NGMhU=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-oasGeNlY3c0iSxgLqPCo081g7d0fA3I+LyDJdRSiNaE=";
+  cargoHash = "sha256-m1AMNLBHZ1DGLgou3gLKhpkR8tQqUanpwSVAyfLnghQ=";
 
   nativeBuildInputs = [
     protobuf
@@ -62,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       devhell
       mattkang
       nicknb
+      faukah
     ];
   };
 })

@@ -6,13 +6,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "chuffed";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "chuffed";
     repo = "chuffed";
     tag = finalAttrs.version;
-    hash = "sha256-D4HEcCDcJi05AL9suc7Twtf/wjpwBkLEeumGY3nNi5g=";
+    hash = "sha256-4IVv1O3NM/C/34aBsBz19qT+pkIUMkkoQ1XtwDzLqFA=";
   };
 
   nativeBuildInputs = [ cmake ];

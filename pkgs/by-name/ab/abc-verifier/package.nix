@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abc-verifier";
-  version = "0.61";
+  version = "0.62";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo = "abc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-j/JmEJa29mT/XQmVL/adVbj4S+AAgpga1jbEinCN16w=";
+    hash = "sha256-T6Hj8zrr3XuI3Eh0I5rJI3+DAsuQIMtWEsaBJ8a5Cag=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tool for sequential logic synthesis and formal verification";
     homepage = "https://people.eecs.berkeley.edu/~alanmi/abc";
-    license = lib.licenses.mit;
+    license = lib.licenses.mit-modern;
     maintainers = with lib.maintainers; [
       thoughtpolice
       Luflosi

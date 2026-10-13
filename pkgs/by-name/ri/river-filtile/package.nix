@@ -5,14 +5,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "river-filtile";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "pkulak";
     repo = "filtile";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wBU4CX6KGnTvrBsXvFAlRrvDqvHHbAlVkDqTCJx90G8=";
   };
 
@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pkulak ];
     mainProgram = "filtile";
+    platforms = lib.platforms.linux;
   };
-}
+})

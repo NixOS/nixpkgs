@@ -1,0 +1,19 @@
+Description: Fix FTBFS with GCC 16
+Bug-Debian: https://bugs.debian.org/1128763
+Origin: vendor, https://src.fedoraproject.org/rpms/links/c/e1c0e9e73ba04d2512ea9307750bf0081f8379b7
+Author: Filipe Rosset <rosset.filipe@gmail.com>
+Last-Update: 2026-03-24
+
+--- a/ftp.c
++++ b/ftp.c
+@@ -768,7 +768,8 @@
+ } while (0)
+ 		A(ftp_head);
+ 		ud = stracpy(get_url_data(c->url));
+-		if (strchr(cast_const_char ud, POST_CHAR)) *strchr(cast_const_char ud, POST_CHAR) = 0;
++		char *p;
++		if ((p = (char *)strchr(cast_const_char ud, POST_CHAR))) *p = 0;
+ 		s0 = init_str();
+ 		s0l = 0;
+ 		add_conv_str(&s0, &s0l, ud, (int)strlen(cast_const_char ud), -1);
+

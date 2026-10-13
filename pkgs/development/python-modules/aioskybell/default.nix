@@ -12,7 +12,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioskybell";
   version = "23.12.0";
   pyproject = true;
@@ -20,13 +20,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "aioskybell";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5F0B5z0pJLKJPzKIowE07vEgmNXnDVEeGFbPGnJ6H9I=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'version="master",' 'version="${version}",'
+      --replace 'version="master",' 'version="${finalAttrs.version}",'
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   meta = {
     description = "API client for Skybell doorbells";
     homepage = "https://github.com/tkdrob/aioskybell";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

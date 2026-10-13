@@ -9,8 +9,8 @@
   groff,
   netpbm,
   fltk,
-  libXinerama,
-  libXpm,
+  libxinerama,
+  libxpm,
   libjpeg,
 }:
 
@@ -39,8 +39,8 @@ stdenv.mkDerivation {
 
   buildInputs = [
     fltk
-    libXinerama
-    libXpm
+    libxinerama
+    libxpm
     libjpeg
   ];
 
@@ -59,6 +59,10 @@ stdenv.mkDerivation {
       --replace-fail '"gv"' '"xdg-open"' \
       --replace-fail /usr/share/doc $out/share/doc
   '';
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
 
   enableParallelBuilding = false; # Undeclared dependencies + https://stackoverflow.com/a/19822767/1687334 for prolog.ps.
 

@@ -5,7 +5,9 @@
   stdenv,
 
   # build-system
-  setuptools,
+  cmake,
+  ninja,
+  scikit-build-core,
 
   # tests
   pytestCheckHook,
@@ -13,17 +15,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pysilero-vad";
-  version = "3.2.0";
+  version = "3.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cqjuU5JtsL+Fp3m3uzz8flrJEyn+JDUMWsXU0Ioh87U=";
+    hash = "sha256-hpo+o645odIsWPyoqf1E94xvz5a/1yH8WAxSdL4QZeo=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    cmake
+    ninja
+    scikit-build-core
+  ];
+
+  dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

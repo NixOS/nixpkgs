@@ -27,7 +27,7 @@
   nss,
   openssl,
   pango,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
   libxrandr,
   libxfixes,
@@ -129,8 +129,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/pixmaps
-    cp ${targetPath}/resources/app/resources/linux/code.png $out/share/pixmaps/azuredatastudio.png
+    install -D ${targetPath}/resources/app/resources/linux/code.png $out/share/icons/azuredatastudio.png
 
     runHook postInstall
   '';
@@ -184,7 +183,7 @@ stdenv.mkDerivation rec {
       libxkbfile
       pango
       stdenv.cc.cc
-      systemd
+      systemdLibs
     ])
     targetPath
     sqltoolsserviceRpath

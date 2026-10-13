@@ -4,17 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "neo-cowsay";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "Code-Hex";
     repo = "Neo-cowsay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-DmIjqBTIzwkQ8aJ6xCgIwjDtczlTH5AKbPKFUGx3qQ8=";
   };
 
+  __structuredAttrs = true;
   vendorHash = "sha256-gBURmodXkod4fukw6LWEY+MBxPcf4vn/f6K78UR77n0=";
 
   modRoot = "./cmd";
@@ -29,10 +30,12 @@ buildGoModule rec {
   meta = {
     description = "Cowsay reborn, written in Go";
     homepage = "https://github.com/Code-Hex/Neo-cowsay";
-    license = with lib.licenses; [
-      artistic1 # or
-      gpl3
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        artistic2
+        gpl3Only
+      ];
     mainProgram = "cowsay";
   };
-}
+})

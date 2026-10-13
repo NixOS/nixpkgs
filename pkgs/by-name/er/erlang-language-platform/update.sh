@@ -4,6 +4,10 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(readlink -f "$(dirname "$0")")"
+PACKAGE_FILE="$SCRIPT_DIR/package.nix"
+HASHES_FILE="$SCRIPT_DIR/hashes.json"
+
 curl_github() {
     curl -L ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "$@"
 }
@@ -12,7 +16,8 @@ release_json=$(curl_github https://api.github.com/repos/WhatsApp/erlang-language
 version=$(echo "$release_json" | jq -r '.tag_name')
 releases=$(echo "$release_json" | jq -r '.assets[] | select(.browser_download_url | test(".tar.gz$")) | .name + ":" + .browser_download_url')
 
-update-source-version erlang-language-platform "$version" --file=./pkgs/by-name/er/erlang-language-platform/package.nix
+# update version to latest
+sed -i -E "s/^(.*)\bversion = \".*\"/\1version = \"$version\"/" "$PACKAGE_FILE"
 
 for release in $releases; do
   IFS=: read -r name url <<< "$release"
@@ -21,4 +26,4 @@ for release in $releases; do
   hash_sri=$(nix hash to-sri --type sha256 "$hash_prefetched")
   echo "$hash_name" "$hash_sri"
 done |
-  jq -sR 'rtrimstr("\n") | split("\n") | map(split(" ") | {(.[0]): .[1]}) | add' > hashes.json
+  jq -sR 'rtrimstr("\n") | split("\n") | map(split(" ") | {(.[0]): .[1]}) | add' > "$HASHES_FILE"

@@ -6,12 +6,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mtdev";
   version = "1.1.7";
 
   src = fetchurl {
-    url = "https://bitmath.org/code/mtdev/mtdev-${version}.tar.bz2";
+    url = "https://bitmath.org/code/mtdev/mtdev-${finalAttrs.version}.tar.bz2";
     hash = "sha256-oQetrSEB/srFSsf58OCg3RVdlUGT2lXCNAyX8v8dgU4=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = with lib.platforms; freebsd ++ linux;
   };
-}
+})

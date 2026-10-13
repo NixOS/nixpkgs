@@ -5,18 +5,18 @@
   enableLTO ? true,
   nrxAlias ? true,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nrr";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "ryanccn";
     repo = "nrr";
-    rev = "v${version}";
-    hash = "sha256-/PB5m0gVjhQxYB7IeR59gs4n1vuleFc0ZLBY0a+JYWI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wkt2F7drBxi4AJhJXvlxpD/CVZuQ2M3wL6IqZ72m3vI=";
   };
 
-  cargoHash = "sha256-QaNn3CrBXbWLquXkIHs4Ba6tbYwwN1XLfysJAnG8Dgc=";
+  cargoHash = "sha256-uOPkTAypThZPof2DaBS/uGJThlV179jNj0SkSJ0X6r8=";
 
   env = lib.optionalAttrs enableLTO {
     CARGO_PROFILE_RELEASE_LTO = "fat";
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     mainProgram = "nrr";
   };
-}
+})

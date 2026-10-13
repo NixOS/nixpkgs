@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation {
   pname = "scitokens-cpp";
-  version = "1.2.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "scitokens";
     repo = "scitokens-cpp";
 
-    rev = "v1.2.0";
-    hash = "sha256-Sc3+g2MMxVnPNI4V/f8Ss8Z3SOQScC9fj8woJDm2O/A=";
+    rev = "v1.4.1";
+    hash = "sha256-qZUW+b8drIAm21baUO1+O39O9FPP2McmdjsfGTRGRfQ=";
   };
 
   nativeBuildInputs = [

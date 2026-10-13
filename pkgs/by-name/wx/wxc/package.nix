@@ -4,7 +4,7 @@
   fetchFromCodeberg,
   cmake,
   libGL,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    wxGTK32 # in nativeBuildInputs because of wx-config
+    wxwidgets_3_2 # in nativeBuildInputs because of wx-config
   ];
 
   buildInputs = [
@@ -41,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
       wxWindowsException31
     ];
     maintainers = with lib.maintainers; [ fgaz ];
-    platforms = wxGTK32.meta.platforms;
+    platforms = wxwidgets_3_2.meta.platforms;
   };
 })

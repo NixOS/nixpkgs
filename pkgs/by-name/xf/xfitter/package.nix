@@ -66,10 +66,10 @@ stdenv.mkDerivation {
                      'cmake_minimum_required(VERSION 3.10)'
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.hostPlatform.libc == "glibc"
-  ) "-I${libtirpc.dev}/include/tirpc";
-  NIX_LDFLAGS = lib.optional (stdenv.hostPlatform.libc == "glibc") "-ltirpc";
+  env = lib.optionalAttrs (stdenv.hostPlatform.libc == "glibc") {
+    NIX_CFLAGS_COMPILE = "-I${libtirpc.dev}/include/tirpc";
+    NIX_LDFLAGS = "-ltirpc";
+  };
 
   hardeningDisable = [ "format" ];
 
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Open source QCD fit framework designed to extract PDFs and assess the impact of new data";
     license = lib.licenses.gpl3;
-    homepage = "https://www.xfitter.org/xFitter";
+    homepage = "https://gitlab.cern.ch/fitters/xfitter";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };

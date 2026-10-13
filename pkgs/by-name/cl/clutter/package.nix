@@ -5,12 +5,12 @@
   pkg-config,
   libGLU,
   libGL,
-  libX11,
-  libXext,
-  libXfixes,
-  libXdamage,
-  libXcomposite,
-  libXi,
+  libx11,
+  libxext,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
+  libxi,
   libxcb,
   cogl,
   pango,
@@ -54,14 +54,14 @@ stdenv.mkDerivation {
     gobject-introspection
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
+    libx11
     libGL
     libGLU
-    libXext
-    libXfixes
-    libXdamage
-    libXcomposite
-    libXi
+    libxext
+    libxfixes
+    libxdamage
+    libxcomposite
+    libxi
     libxcb
     libinput
     libgudev
@@ -109,7 +109,7 @@ stdenv.mkDerivation {
     '';
 
     license = lib.licenses.lgpl2Plus;
-    homepage = "http://www.clutter-project.org/";
+    homepage = "https://gitlab.gnome.org/Archive/clutter";
 
     maintainers = [ ];
     platforms = lib.platforms.unix;

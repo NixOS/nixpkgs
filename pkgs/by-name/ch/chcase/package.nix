@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chcase";
-  version = "2.3.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "chcase";
     tag = finalAttrs.version;
-    hash = "sha256-3TuAnuWV3Sm1T76Go4NWe2eA55ImR1TFYoCUnqfp9DE=";
+    hash = "sha256-+aTBrsmoGw8ezYZbvYQblkiwExOKKWBi25zKEmhAAsU=";
   };
 
   nativeBuildInputs = [

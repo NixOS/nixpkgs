@@ -8,33 +8,25 @@
   oslo-i18n,
   oslo-utils,
   pbr,
-  pythonAtLeast,
   requests,
   requests-mock,
   setuptools,
   stdenv,
-  stestr,
+  stestrCheckHook,
   stevedore,
-  writeText,
 }:
 
 buildPythonPackage rec {
   pname = "osc-lib";
-  version = "4.3.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
     tag = version;
-    hash = "sha256-1mMON/aVJon7t/zfYVhFpuB78b+DmOEVhvIFaTBRqfo=";
+    hash = "sha256-GVjzDPmASEItGsZCjH+tjgP8bRf5WgEOoDr+uOhQtws=";
   };
-
-  postPatch = ''
-    # TODO: somehow bring this to upstreams attention
-    substituteInPlace pyproject.toml \
-      --replace-fail '"osc_lib"' '"osc_lib", "osc_lib.api", "osc_lib.cli", "osc_lib.command", "osc_lib.test", "osc_lib.tests", "osc_lib.tests.api", "osc_lib.tests.cli", "osc_lib.tests.command", "osc_lib.tests.utils", "osc_lib.utils"'
-  '';
 
   env.PBR_VERSION = version;
 
@@ -55,31 +47,29 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     requests-mock
-    stestr
+    stestrCheckHook
   ];
 
-  checkPhase =
-    let
-      disabledTests =
-        lib.optionals stdenv.hostPlatform.isDarwin [
-          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
-          "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
-          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
-          "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
-        ]
-        ++ lib.optionals (pythonAtLeast "3.14") [
-          # Disable test incompatible with Python 3.14+
-          # See upstream issue: https://bugs.launchpad.net/python-openstackclient/+bug/2138684
-          "osc_lib.tests.utils.test_tags.TestTagHelps"
-        ];
-    in
-    ''
-      runHook preCheck
-      stestr run -e <(echo "${lib.concatStringsSep "\n" disabledTests}")
-      runHook postCheck
-    '';
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_cloud_public"
+    "osc_lib.tests.test_shell.TestShellCli.test_shell_args_precedence"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_1"
+    "osc_lib.tests.test_shell.TestShellCliPrecedence.test_shell_args_precedence_2"
+  ];
 
-  pythonImportsCheck = [ "osc_lib" ];
+  pythonImportsCheck = [
+    "osc_lib"
+    "osc_lib.api"
+    "osc_lib.cli"
+    "osc_lib.command"
+    "osc_lib.test"
+    "osc_lib.tests"
+    "osc_lib.tests.api"
+    "osc_lib.tests.cli"
+    "osc_lib.tests.command"
+    "osc_lib.tests.utils"
+    "osc_lib.utils"
+  ];
 
   meta = {
     description = "OpenStackClient Library";

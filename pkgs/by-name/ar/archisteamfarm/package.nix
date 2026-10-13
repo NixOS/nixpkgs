@@ -21,13 +21,13 @@ in
 buildDotnetModule rec {
   pname = "archisteamfarm";
   # nixpkgs-update: no auto update
-  version = "6.3.1.6";
+  version = "6.3.10.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
-    rev = version;
-    hash = "sha256-WbzPlngp+Vjwc14qgQE5i2WVRCGvcs9N8lVv2SpfqdQ=";
+    tag = version;
+    hash = "sha256-NxbTEdcgxU/vFlbwOjqyzyImlij17tXS9at8JYkaznM=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
@@ -103,6 +103,7 @@ buildDotnetModule rec {
 
   meta = {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
+    changelog = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/tag/${src.tag}";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = lib.licenses.asl20;
     mainProgram = "ArchiSteamFarm";

@@ -6,8 +6,8 @@
   pkg-config,
   meson,
   ninja,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   passthru.updateScript = nix-update-script {
@@ -44,6 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "9menu";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = libX11.meta.platforms;
+    platforms = libx11.meta.platforms;
   };
 })

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pigeon";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "mna";
     repo = "pigeon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-rEkeB5NI51dsLOxd9RnJWmfUP78owOJl6j9t3nz277s=";
   };
 
@@ -28,6 +28,6 @@ buildGoModule rec {
     description = "PEG parser generator for Go";
     mainProgram = "pigeon";
     maintainers = with lib.maintainers; [ zimbatm ];
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
   };
-}
+})

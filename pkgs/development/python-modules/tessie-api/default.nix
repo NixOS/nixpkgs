@@ -4,6 +4,7 @@
   fetchFromGitHub,
   aiohttp,
   hatchling,
+  pyprojectVersionPatchHook,
   pytz,
   pytestCheckHook,
   pytest-asyncio,
@@ -11,15 +12,19 @@
 
 buildPythonPackage rec {
   pname = "tessie-api";
-  version = "0.1.2";
+  version = "0.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andrewgierens";
     repo = "tessie_python_api";
     tag = version;
-    hash = "sha256-uY52SSG2u4lcX9X7Ql/pn31uOwpqIy3kkuLMvsFBA3s=";
+    hash = "sha256-Ia5J7dGbcfEa6rEKyJzEnzVnMC3HyI7l5g20v7d7Gjo=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ hatchling ];
 

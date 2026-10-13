@@ -1,24 +1,21 @@
 {
   lib,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   nix-update-script,
   yt-dlp,
   python3Packages,
 }:
 
-let
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gallery-dl";
-  version = "1.31.5";
-in
-python3Packages.buildPythonApplication {
-  inherit pname version;
+  version = "1.32.14";
   pyproject = true;
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "mikf";
     repo = "gallery-dl";
-    tag = "v${version}";
-    hash = "sha256-jrTLiZs3LJaFZL40vxWS/1J9HHke9gmV9840AOUtLCU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nEzHp5LYklzEdNKcCJagphGA5U2LNR2/Vb3ZOoxNc68=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -50,15 +47,14 @@ python3Packages.buildPythonApplication {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/mikf/gallery-dl/blob/v${version}/CHANGELOG.md";
+    changelog = "https://codeberg.org/mikf/gallery-dl/src/tag/v${finalAttrs.version}/CHANGELOG.md";
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";
-    homepage = "https://github.com/mikf/gallery-dl";
+    homepage = "https://codeberg.org/mikf/gallery-dl";
     license = lib.licenses.gpl2Only;
     mainProgram = "gallery-dl";
     maintainers = with lib.maintainers; [
       dawidsowa
-      FlameFlag
-      lucasew
+      _4evy
     ];
   };
-}
+})

@@ -6,15 +6,15 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cri-tools";
-  version = "1.35.0";
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "cri-tools";
-    rev = "v${version}";
-    hash = "sha256-66UDoObxlNBTYJPpo4GoQlV66hXZRf5eLB3ji0KU/Zs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8TjS7cZXgiaSD7tEQbZmQIQUBkniIHjgAqyMEVqQrd0=";
   };
 
   vendorHash = null;
@@ -25,7 +25,7 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    make binaries VERSION=${version}
+    make binaries VERSION=${finalAttrs.version}
     runHook postBuild
   '';
 
@@ -49,4 +49,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
   };
-}
+})

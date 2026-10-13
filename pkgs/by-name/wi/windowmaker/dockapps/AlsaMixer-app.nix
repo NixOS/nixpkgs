@@ -3,9 +3,9 @@
   stdenv,
   alsa-lib,
   dockapps-sources,
-  libX11,
-  libXext,
-  libXpm,
+  libx11,
+  libxext,
+  libxpm,
   pkg-config,
 }:
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    libX11
-    libXpm
-    libXext
+    libx11
+    libxpm
+    libxext
   ];
 
   hardeningDisable = [ "fortify" ];

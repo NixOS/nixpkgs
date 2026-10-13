@@ -16,7 +16,7 @@ in
 runCommand "dub-to-nix"
   {
     pname = "dub-to-nix";
-    version = lib.trivial.version;
+    version = lib.trivial.release;
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ python3 ];
   }

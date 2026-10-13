@@ -4,16 +4,17 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kubazip";
-  version = "0.3.6";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "kuba--";
     repo = "zip";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MDRLAfTwjxYTLgg0qsYjyll3TA+jNaUhEPGVOisIsC0=";
+    hash = "sha256-phOhhNc59ALKNCCetD3lyRp6ipAlSEMpWTnKPkha3EY=";
   };
 
   postPatch = ''
@@ -37,6 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "v([0-9]+\\.[0-9]+\\.[0-9]+)"
+    ];
+  };
 
   meta = {
     description = "Portable, simple zip library written in C";

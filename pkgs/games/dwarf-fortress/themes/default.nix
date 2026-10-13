@@ -14,7 +14,8 @@ listToAttrs (
   map (v: {
     inherit (v) name;
     value = fetchFromGitHub {
-      name = "${v.name}-theme-${v.version}";
+      pname = v.name;
+      version = v.version;
       owner = "DFgraphics";
       repo = v.name;
       rev = v.version;

@@ -19,7 +19,7 @@ let
     }
   );
 in
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "cmake-language-server";
   version = "0.1.11";
   pyproject = true;
@@ -27,7 +27,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "regen100";
     repo = "cmake-language-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QxknG5NFYky6ZSjiIugLfHT4gXsyTBVbMMeULhQsmdk=";
   };
 
@@ -80,9 +80,9 @@ pythonPackages.buildPythonApplication rec {
   meta = {
     description = "CMake LSP Implementation";
     homepage = "https://github.com/regen100/cmake-language-server";
-    changelog = "https://github.com/regen100/cmake-language-server/releases/tag/${src.tag}";
+    changelog = "https://github.com/regen100/cmake-language-server/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     mainProgram = "cmake-language-server";
   };
-}
+})

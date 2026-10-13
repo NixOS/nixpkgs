@@ -20,12 +20,12 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tetraproc";
   version = "0.10.0";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/tetraproc-${version}.tar.bz2";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/tetraproc-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-rDnFyjWaFdHcEdREdIEUGK95xg1Ghpj7rADgGq5VOXw=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,30 +1,34 @@
 {
-  rustPlatform,
   lib,
+  aircrack-ng,
+  copyDesktopItems,
   fetchFromGitHub,
-  pkg-config,
-  glib,
-  pango,
   gdk-pixbuf,
+  glib,
   graphene,
   gtk4,
-  copyDesktopItems,
+  iw,
+  macchanger,
   makeDesktopItem,
+  pango,
+  pkg-config,
+  rustPlatform,
+  wireshark-cli,
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "airgorah";
-  version = "0.7.4";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "martin-olivier";
     repo = "airgorah";
-    tag = "v${version}";
-    hash = "sha256-6TH+DRDtWajZjHNmFSKL4XJK+AuDNUbWKRPRryOpSGY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gRQ596NhvOmsGscYsl4o+bhPbanx5kFOJnEeXPTVJEY=";
   };
 
-  cargoHash = "sha256-LiSaNyqsKBZ5nNP7mws1pjhVwTXNBF6e1wSUdG/qYog=";
+  cargoHash = "sha256-y9akyXjNHaqSJIvFOiYbg+AygSV9KTWJ2pBlgGaJFOs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,7 +45,18 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm644 icons/app_icon.png $out/share/icons/hicolor/1024x1024/apps/airgorah.png
+    install -Dm644 crates/gui/icons/app_icon.png $out/share/icons/airgorah.png
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${
+      lib.makeBinPath [
+        iw
+        aircrack-ng
+        wireshark-cli
+        macchanger
+      ]
+    })
   '';
 
   desktopItems = [
@@ -65,10 +80,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "WiFi security auditing software mainly based on aircrack-ng tools suite";
     homepage = "https://github.com/martin-olivier/airgorah";
-    changelog = "https://github.com/martin-olivier/airgorah/releases/tag/v${version}";
+    changelog = "https://github.com/martin-olivier/airgorah/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "airgorah";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     platforms = lib.platforms.linux;
   };
-}
+})

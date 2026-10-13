@@ -7,7 +7,6 @@
   nixosTests,
   openssl,
   systemd,
-  lua,
   luajit,
   protobuf,
   libsodium,
@@ -21,17 +20,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.3.4";
+  version = "5.4.6";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+1CoWH9LPVf4jcrMImpkxRVJkrDa/SD1uwNDVeNiRSQ=";
+    hash = "sha256-DUyf6+b5TaCu1+Bex7ZUkE+9YindU79ge2P6cHuSNoo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
-    hash = "sha256-g0Mu1+ZRQyzC4nG5ueISaDzFtmFfy+CGt063/V5lo30=";
+    hash = "sha256-uHcUCVtlVFAgi/rPD1lYlN81p7gcIXvHutKXYMVddv4=";
   };
 
   cargoRoot = "rec-rust-lib/rust";
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     openssl
     systemd
-    lua
     luajit
     libsodium
     curl
@@ -72,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://doc.powerdns.com/recursor/changelog/${lib.versions.majorMinor finalAttrs.version}.html#change-${finalAttrs.version}";
     description = "Recursive DNS server";
     homepage = "https://www.powerdns.com/";
     platforms = lib.platforms.linux;

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Open source implementation of the actor model in C++";
-    homepage = "http://actor-framework.org/";
+    homepage = "https://www.actor-framework.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     changelog = "https://github.com/actor-framework/actor-framework/raw/${finalAttrs.version}/CHANGELOG.md";

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "10.9.1";
+  version = "10.10.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "rocksdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AdYt97tcZdj4Kyq0mGl+JreOybKn04tSVvdyaFQWuy4=";
+    hash = "sha256-gszW+YY8ZZ7cRVCIXuahGopqqswNRnagZLUYYmRxzGY=";
   };
 
   patches = lib.optional (
@@ -127,7 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://rocksdb.org";
     description = "Library that provides an embeddable, persistent key-value store for fast storage";
     changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
-    license = lib.licenses.asl20;
+    license =
+      with lib.licenses;
+      OR [
+        gpl2Plus
+        asl20
+      ];
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       adev

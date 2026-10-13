@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kamp";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "vbauerster";
     repo = "kamp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-coBKVqSqYBpf0PdWKIODnbfQxbOyp5Di45+O66ZGK1Q=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "kamp";
     platforms = lib.platforms.linux;
   };
-}
+})

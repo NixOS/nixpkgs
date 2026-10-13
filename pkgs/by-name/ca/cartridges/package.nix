@@ -17,7 +17,7 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cartridges";
   version = "2.12.1";
   pyproject = false;
@@ -25,11 +25,9 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pGEh9ugDWjaAjVL8mFUVqU+WFwcpRcstc11ikDxhihI=";
   };
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     appstream
@@ -83,10 +81,10 @@ python3Packages.buildPythonApplication rec {
       You can sort and hide games or download cover art from SteamGridDB.
     '';
     homepage = "https://apps.gnome.org/Cartridges/";
-    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${version}";
+    changelog = "https://github.com/kra-mo/cartridges/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "cartridges";
     platforms = lib.platforms.linux;
   };
-}
+})

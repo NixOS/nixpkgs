@@ -13,6 +13,7 @@
   pkg-config,
   python3,
   rustc,
+  shared-mime-info,
   wrapGAppsHook4,
 
   # buildInputs
@@ -30,18 +31,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "typesetter";
-  version = "0.9.1";
+  version = "0.15.2";
+  __structuredAttrs = true;
 
   src = fetchFromCodeberg {
     owner = "haydn";
     repo = "typesetter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ryte4znAa+4K0r0WfvQP7RPZFykbvoPmpYTRiAWOF/c=";
+    hash = "sha256-ck7kW2dVBvl0zbXurTXaxQetWZ57mVSmVl1mE3zg2YE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-FCZFKn0RhyvFPpmRMNojSU6djg6pOJCIgjzRD6Wbn4M=";
+    hash = "sha256-n50EBOcwrbFPQAxfxK3fQWPSp/g6DRIbETOlS+ooWgo=";
   };
 
   strictDeps = true;
@@ -56,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     rustPlatform.cargoSetupHook
     rustc
+    shared-mime-info # update-mime-database
     wrapGAppsHook4
   ];
 
@@ -77,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Minimalist, local-first Typst editor";
     homepage = "https://codeberg.org/haydn/typesetter";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "typesetter";
   };

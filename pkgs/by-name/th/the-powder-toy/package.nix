@@ -7,7 +7,7 @@
   jsoncpp,
   lib,
   libpng,
-  libX11,
+  libx11,
   lua5_2,
   luajit,
   meson,
@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-powder-toy";
-  version = "99.3.384";
+  version = "100.1.400";
 
   src = fetchFromGitHub {
     owner = "The-Powder-Toy";
     repo = "The-Powder-Toy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vlswHNkjyxM9sZT+mwiCMfNbdAbhYyx06w+ZLfaPaEQ=";
+    hash = "sha256-1yyOA6prID4ARi3yLGSXuauRRtwDv4MuZAlWiqRmDMw=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
     jsoncpp
     libpng
-    libX11
+    libx11
     lua5_2
     luajit
     SDL2
     zlib
   ];
 
-  mesonFlags = [ "-Dworkaround_elusive_bzip2=false" ];
+  mesonFlags = [ "-Dworkaround_elusive_bzip2=none" ];
 
   installPhase = ''
     runHook preInstall

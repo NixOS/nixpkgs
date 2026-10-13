@@ -7,7 +7,7 @@
   ncurses,
   SDL2,
   libGL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     ncurses
     SDL2
     libGL
-    libX11
+    libx11
   ];
 
   postPatch = ''

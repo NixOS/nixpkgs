@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
 }:
 
@@ -12,14 +13,18 @@ in
 buildPythonPackage {
   inherit pname version;
 
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "claudep";
     repo = "translitcodec";
-    rev = "version-${version}";
+    tag = "version-${version}";
     hash = "sha256-/EKquTchx9i3fZqJ6AMzHYP9yCORvwbuUQ95WJQOQbI=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -28,7 +33,7 @@ buildPythonPackage {
   meta = {
     description = "Unicode to 8-bit charset transliteration codec";
     homepage = "https://github.com/claudep/translitcodec";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rycee ];
   };
 }

@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.9";
   pname = "fllog";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/fllog-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/fllog-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-3eJvT9PjHTrMn0/pArUDIIE7T7y1YnayG5PuGokwtRk=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "fllog";
   };
-}
+})

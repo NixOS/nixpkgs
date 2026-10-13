@@ -1,29 +1,31 @@
 {
   lib,
   stdenv,
+  config,
   fetchFromBitbucket,
-  nix-update-script,
+  dos2unix,
+  gitUpdater,
   boost,
   zlib,
   # File backends (for decoding and encoding)
-  withMp3 ? true,
+  withMp3 ? config.zxtune.withMp3 or true,
   lame,
-  withOgg ? true,
+  withOgg ? config.zxtune.withOgg or true,
   libvorbis,
-  withFlac ? true,
+  withFlac ? config.zxtune.withFlac or true,
   flac,
   # Audio backends (for playback)
-  withOpenal ? false,
+  withOpenal ? config.zxtune.withOpenal or false,
   openal,
-  withSDL ? false,
+  withSDL ? config.zxtune.withSDL or false,
   SDL,
-  withOss ? false,
-  withAlsa ? stdenv.hostPlatform.isLinux,
+  withOss ? config.zxtune.withOss or false,
+  withAlsa ? config.zxtune.withAlsa or stdenv.hostPlatform.isLinux,
   alsa-lib,
-  withPulse ? stdenv.hostPlatform.isLinux,
+  withPulse ? config.zxtune.withPulse or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   # GUI audio player
-  withQt ? true,
+  withQt ? config.zxtune.withQt or true,
   qt5,
   zip,
   makeDesktopItem,
@@ -49,7 +51,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5101";
+  version = "5112";
 
   outputs = [ "out" ];
 
@@ -57,15 +59,10 @@ stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-C+1tmQ8cKGpigWDh5p0mqv9B7/Tv8iJ4JVc835Q4y40=";
+    hash = "sha256-903dvy7XegZzoP/+0ZTWQDg3nWib6k1g+05vGRfcenI=";
   };
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "r([0-9]+)"
-    ];
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "r"; };
 
   strictDeps = true;
 
@@ -77,14 +74,30 @@ stdenv.mkDerivation rec {
 
   buildInputs = staticBuildInputs ++ dlopenBuildInputs;
 
+  prePatch = ''
+    # update-vgm.patch : Hunk #1 FAILED at 18 (different line endings)
+    find 3rdparty/vgm/ -type f -exec ${dos2unix}/bin/dos2unix {} \;
+  '';
   patches = [
+    # fix https://hydra.nixos.org/build/317966891
     ./disable_updates.patch
   ];
 
-  # Fix use of old OpenAL header path
   postPatch = ''
+    # Fix use of old OpenAL header path
     substituteInPlace src/sound/backends/gates/openal_api.h \
-      --replace "#include <OpenAL/" "#include <AL/"
+      --replace-fail \
+        "#include <OpenAL/" \
+        "#include <AL/"
+    # Fix build for gcc16 - https://hydra.nixos.org/build/347457913
+    substituteInPlace src/strings/encoding.h \
+     --replace-fail \
+       '#include "string_view.h"' \
+       $'#include "string_view.h"\n#include <cstdint>'
+    substituteInPlace src/strings/conversion.h \
+     --replace-fail \
+       '#include <charconv>' \
+       $'#include <charconv>\n#include <cstdint>'
   '';
 
   buildPhase =
@@ -157,7 +170,10 @@ stdenv.mkDerivation rec {
       desktopName = "ZXTune";
       genericName = "ZXTune";
       comment = meta.description;
-      categories = [ "Audio" ];
+      categories = [
+        "Audio"
+        "AudioVideo"
+      ];
       type = "Application";
     })
   ];
@@ -176,7 +192,10 @@ stdenv.mkDerivation rec {
     # zxtune supports mac and windows, but more work will be needed to
     # integrate with the custom make system (see platformName above)
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ EBADBEEF ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      EBADBEEF
+    ];
     mainProgram = if withQt then "zxtune-qt" else "zxtune123";
   };
 }

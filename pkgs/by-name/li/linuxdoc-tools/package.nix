@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ("--enable-docs=txt info lyx html rtf" + lib.optionalString withLatex " pdf")
   ];
 
-  LEX = "flex";
+  env.LEX = "flex";
 
   postInstall = ''
     wrapProgram $out/bin/linuxdoc \

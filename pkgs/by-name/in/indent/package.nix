@@ -9,12 +9,12 @@
   pkgsStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "indent";
   version = "2.2.13";
 
   src = fetchurl {
-    url = "mirror://gnu/indent/indent-${version}.tar.gz";
+    url = "mirror://gnu/indent/indent-${finalAttrs.version}.tar.gz";
     hash = "sha256-nmRjT8TOZ5eyBLy4iXzhT90KtIyldpb3h2fFnK5XgJU=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.mmahut ];
     platforms = lib.platforms.unix;
   };
-}
+})

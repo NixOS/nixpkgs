@@ -16,7 +16,6 @@ let
     mapAttrsToList
     filterAttrs
     unique
-    recursiveUpdate
     types
     ;
 

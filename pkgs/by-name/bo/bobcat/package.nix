@@ -5,7 +5,7 @@
   icmake,
   yodl,
   libmilter,
-  libX11,
+  libx11,
   openssl,
   readline,
   util-linux,
@@ -16,7 +16,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.11.01";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "fbb-git";
     repo = "bobcat";
     tag = finalAttrs.version;
@@ -41,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libmilter
-    libX11
+    libx11
     openssl
     readline
     util-linux

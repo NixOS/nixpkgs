@@ -16,7 +16,7 @@
   gnupg,
   gpgme,
   dbus-glib,
-  gcr,
+  gcr_3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     gnupg
     gpgme
     dbus-glib
-    gcr
+    gcr_3
   ];
   propagatedBuildInputs = [ dbus-glib ];
 

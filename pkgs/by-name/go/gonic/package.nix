@@ -15,20 +15,23 @@
   # in the configuration if you disable transcodingSupport.
   transcodingSupport ? true,
   ffmpeg,
+  # Setting this to false does not disable the jukebox feature,
+  # but avoids the dependency on mpv at least.
+  jukeboxSupport ? true,
   mpv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gonic";
-  version = "0.20.0";
+  version = "0.22.0";
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "gonic";
-    rev = "v${version}";
-    sha256 = "sha256-llNKCxVrsDmi5a33NoAPEyJu+728gFQcAItPk2IBdwo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-I0+5mzybWc8NP3yfePFyHEsSTDfniYQjIaZpe4djGGM=";
   };
 
-  vendorHash = "sha256-uVZ0Q1nrE7DLurW4fldsr3yyz80J6ONiPjLXHXHDGlg=";
+  vendorHash = "sha256-OynYgtqWNMyrUvysi9cNqL0nAfUXP8cOEx02lSP6E7E=";
 
   # TODO(Profpatsch): write a test for transcoding support,
   # since it is prone to break
@@ -40,7 +43,7 @@ buildGoModule rec {
           '`ffmpeg' \
           '`${lib.getBin ffmpeg}/bin/ffmpeg'
     ''
-    + ''
+    + lib.optionalString jukeboxSupport ''
       substituteInPlace \
         jukebox/jukebox.go \
         --replace-fail \
@@ -68,4 +71,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ autrimpo ];
     mainProgram = "gonic";
   };
-}
+})

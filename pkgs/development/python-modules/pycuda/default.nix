@@ -15,20 +15,30 @@
   python,
   mkDerivation,
   lib,
+  symlinkJoin,
 }:
 let
   compyte = import ./compyte.nix { inherit mkDerivation fetchFromGitHub; };
 
-  inherit (cudaPackages) cudatoolkit;
+  cudaRoot = symlinkJoin {
+    name = "pycuda-cuda-root";
+    paths = with cudaPackages; [
+      cuda_cudart
+      cuda_nvcc
+      (lib.getInclude cuda_profiler_api)
+      (lib.getInclude libcurand)
+      (lib.getLib libcurand)
+    ];
+  };
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2025.1.2";
+  version = "2026.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DdgpEdctjgPGMSiuROmc+3tGiQlKumzFGT2OlEcXqvo=";
+    hash = "sha256-dZUWFgYougbzLOflY+P1uSFGkdyVKKA+qZ6hBz9OFLo=";
   };
 
   preConfigure = with lib.versions; ''
@@ -36,7 +46,7 @@ buildPythonPackage rec {
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
                           --boost-python-libname=boost_python${major python.version}${minor python.version} \
-                          --cuda-root=${cudatoolkit}
+                          --cuda-root=${cudaRoot}
   '';
 
   postInstall = ''
@@ -66,7 +76,10 @@ buildPythonPackage rec {
     decorator
     appdirs
     six
-    cudatoolkit
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+    (lib.getInclude cudaPackages.cuda_profiler_api)
+    cudaPackages.libcurand
     compyte
     python
     mako

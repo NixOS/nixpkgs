@@ -2,21 +2,28 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "should-dsl";
   version = "2.1.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "should_dsl";
-    sha256 = "0ai30dxgygwzaj9sgdzyfr9p5b7gwc9piq59nzr4xy5x1zcm7xrn";
+    hash = "sha256-NvdT2Q+9+E7yt6ngeBPj76xyU3b+t6eTVJ8//3oDIyo=";
   };
+
+  build-system = [ setuptools ];
 
   # There are no tests
   doCheck = false;
+
+  pythonImportsCheck = [ "should_dsl" ];
 
   meta = {
     description = "Should assertions in Python as clear and readable as possible";
@@ -24,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];
   };
-}
+})

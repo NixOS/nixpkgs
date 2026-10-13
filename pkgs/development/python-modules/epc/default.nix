@@ -3,24 +3,38 @@
   buildPythonPackage,
   fetchPypi,
   sexpdata,
+  setuptools,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "epc";
   version = "0.0.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a14d2ea74817955a20eb00812e3a4630a132897eb4d976420240f1152c0d7d25";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-oU0up0gXlVog6wCBLjpGMKEyiX602XZCAkDxFSwNfSU=";
   };
 
-  propagatedBuildInputs = [ sexpdata ];
-  doCheck = false;
+  build-system = [ setuptools ];
+
+  dependencies = [ sexpdata ];
+
+  pythonImportsCheck = [ "epc" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # imports nose
+    "epc/tests/test_py2py.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "EPC (RPC stack for Emacs Lisp) implementation in Python";
     homepage = "https://github.com/tkf/python-epc";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Only;
   };
-}
+})

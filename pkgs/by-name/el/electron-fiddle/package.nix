@@ -1,7 +1,6 @@
 {
   buildFHSEnv,
   fetchFromGitHub,
-  fetchYarnDeps,
   electron,
   git,
   lib,
@@ -9,43 +8,75 @@
   nodejs,
   stdenvNoCC,
   util-linux,
-  yarnBuildHook,
-  yarnConfigHook,
+  yarn-berry_4,
+  substitute,
   zip,
 }:
 
 let
   pname = "electron-fiddle";
-  version = "0.37.2";
+  version = "0.40.1";
+  yarn-berry = yarn-berry_4;
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     tag = "v${version}";
-    hash = "sha256-e9PLgkqWBNLBw7uuNpPluOQ6+aGLYQLyTzcLa+LMOzs=";
+    hash = "sha256-5Pw889lHRwWoTUVbLmToPF8/bDz382qFMO9mL/EKLo0=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/electron/fiddle/blob/main/package.json#L163
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
+
+  patches = [
+    ./dont-use-initial-releases-json.patch
+    ./dont-fetch-contributors.patch
+
+    # zip extraction fails on newer nodejs versions without this fix
+    ./bump-yauzl.patch
+  ];
+
+  missingHashes = ./missing-hashes.json;
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
-    inherit version src;
+    inherit
+      version
+      src
+      patches
+      missingHashes
+      ;
 
-    patches = [ ./dont-use-initial-releases-json.patch ];
-
-    offlineCache = fetchYarnDeps {
-      inherit src;
-      hash = "sha256-mB8WG6tX204u6AJ8qLbWrA+pSN3oDihHqj0t3bWcuAI=";
+    offlineCache = yarn-berry.fetchYarnBerryDeps {
+      inherit src patches missingHashes;
+      hash = "sha256-O9zaCL0W8JPYQz8EBWOz0qGjW57Js3oMosUbz72YBc4=";
     };
 
     nativeBuildInputs = [
       git
       nodejs
       util-linux
-      yarnBuildHook
-      yarnConfigHook
+      yarn-berry
+      yarn-berry.yarnBerryConfigHook
       zip
     ];
 
-    preBuild = ''
+    buildPhase = ''
+      runHook preBuild
+
       # electron files need to be writable on Darwin
       cp -r ${electron.dist} electron-dist
       chmod -R u+w electron-dist
@@ -59,9 +90,14 @@ let
       # force @electron/packager to use our electron instead of downloading it, even if it is a different version
       substituteInPlace node_modules/@electron/packager/dist/packager.js \
         --replace-fail 'await this.getElectronZipPath(downloadOpts)' '"electron.zip"'
+
+      node --run package
+
+      runHook postBuild
     '';
 
-    yarnBuildScript = "package";
+    # electron-forge's console output is squeezed into one narrow column if unset
+    env.CI = "1";
 
     installPhase = ''
       runHook preInstall
@@ -95,6 +131,8 @@ in
 buildFHSEnv {
   inherit pname version;
   runScript = "${lib.getExe electron} ${unwrapped}/lib/electron-fiddle/resources/app.asar";
+
+  passthru = { inherit unwrapped; };
 
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
@@ -156,11 +194,8 @@ buildFHSEnv {
       # for running Electron before 4.0.0 inside
       fontconfig
 
-      # for running Electron before 3.0.0 inside
-      gnome2.GConf
-
-      # Electron 2.0.8 is the earliest working version, due to
-      # https://github.com/electron/electron/issues/13972
+      # Electron 3.0.0 is the earliest working version, since GConf was removed
+      # from Nixpkgs
     ];
 
   meta = {

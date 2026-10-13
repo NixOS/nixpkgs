@@ -1,26 +1,27 @@
 {
   lib,
-  gcc15Stdenv,
+  stdenv,
   fetchFromGitHub,
   gtk3,
   jansson,
   luajit,
   meson,
   ninja,
+  openssl,
   pkg-config,
   unstableGitUpdater,
   wrapGAppsHook3,
 }:
 
-gcc15Stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "libresplit";
-  version = "0-unstable-2026-01-22";
+  version = "0-unstable-2026-08-14";
 
   src = fetchFromGitHub {
     owner = "LibreSplit";
     repo = "LibreSplit";
-    rev = "be1ae0ea476846bb7e296613f471ba8803b1d7ff";
-    hash = "sha256-9BzzpKun8c9TFzwHHbGxFK6ThfVHRMUUqjwRiS+Lfks=";
+    rev = "2c7f6610519cb98c3a1529ab2383ae0cd50d5dea";
+    hash = "sha256-fU0ghAMXOeygKWZYPtwriw2qxGh+5pnF392+rxrIGqg=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ gcc15Stdenv.mkDerivation {
     gtk3
     jansson
     luajit
+    openssl
   ];
 
   passthru.updateScript = unstableGitUpdater { };

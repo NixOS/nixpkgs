@@ -17,14 +17,14 @@
   wrapGAppsHook3,
   file,
   inxi,
-  mate,
+  mate-panel,
   dbus,
   libdbusmenu-gtk3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xapp";
-  version = "3.2.2";
+  version = "3.2.3";
 
   outputs = [
     "out"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linuxmint";
     repo = "xapp";
     rev = finalAttrs.version;
-    hash = "sha256-xVGIrK7koqX6xKoanVHWQMBUusUjtvHzQg2OV0E0b78=";
+    hash = "sha256-WisSymt3l+bt02aUy+SaqDa5S9V+xxgy8mkFQfB+shM=";
   };
 
   # Recommended by upstream, which enables the build of xapp-debug.
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdk-pixbuf
     libxkbfile
     python3.pkgs.pygobject3 # for .pc file
-    mate.mate-panel # for gobject-introspection
+    mate-panel # for gobject-introspection
     dbus
     libdbusmenu-gtk3
   ];

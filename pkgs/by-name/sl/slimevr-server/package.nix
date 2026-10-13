@@ -99,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
       loucass003
     ];
     platforms = with lib.platforms; darwin ++ linux;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "slimevr-server";
   };
 })

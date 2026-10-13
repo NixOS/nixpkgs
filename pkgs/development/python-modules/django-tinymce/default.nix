@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   dependencies = [ django ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   checkInputs = [
     pytest-django

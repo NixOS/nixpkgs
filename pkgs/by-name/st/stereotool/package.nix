@@ -3,13 +3,15 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   alsa-lib,
   bzip2,
   zlib,
   kdePackages,
   libgcc,
+  libxfixes,
+  libjack2,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -151,11 +153,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     alsa-lib
     bzip2
     zlib
-    libXpm
+    libxpm
+    libxfixes
+    libjack2
     libgcc
   ];
 

@@ -1,33 +1,34 @@
 {
   lib,
+  python3,
   python3Packages,
   fetchFromGitHub,
   wrapGAppsHook3,
   gtk3,
   gobject-introspection,
-  libappindicator-gtk3,
+  libappindicator,
   librsvg,
   bluez,
   linuxHeaders,
-  libX11,
-  libXext,
-  libXfixes,
+  libx11,
+  libxext,
+  libxfixes,
   libusb1,
   udev,
   udevCheckHook,
   gtk-layer-shell,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sc-controller";
-  version = "0.5.5";
+  version = "0.7.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
     repo = "sc-controller";
-    tag = "v${version}";
-    hash = "sha256-IQxHa0bR8FWad9v5DfvXHskwayCgzbJm5ekzf1sjfiQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Sp7sds+FoAOaSCwJuTxCijO5ZIU4JXhL47MGbAf/k1s=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +39,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
-    libappindicator-gtk3
+    libappindicator
     librsvg
   ];
 
@@ -71,9 +72,9 @@ python3Packages.buildPythonApplication rec {
   '';
 
   env.LD_LIBRARY_PATH = lib.makeLibraryPath [
-    libX11
-    libXext
-    libXfixes
+    libx11
+    libxext
+    libxfixes
     libusb1
     udev
     bluez
@@ -92,6 +93,11 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
+  preCheck = ''
+    # Fix for tests not finding native libraries
+    ln -s build/lib.*/*.so -t .
+  '';
+
   doInstallCheck = true;
 
   meta = {
@@ -104,4 +110,4 @@ python3Packages.buildPythonApplication rec {
       rnhmjoj
     ];
   };
-}
+})

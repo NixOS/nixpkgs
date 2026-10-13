@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cppunit";
   version = "1.15.1";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/cppunit-${version}.tar.gz";
+    url = "https://dev-www.libreoffice.org/src/cppunit-${finalAttrs.version}.tar.gz";
     sha256 = "19qpqzy66bq76wcyadmi3zahk5v1ll2kig1nvg96zx9padkcdic9";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

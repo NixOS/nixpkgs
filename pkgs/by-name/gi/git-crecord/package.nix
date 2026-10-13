@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "git-crecord";
   version = "20230226.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "andrewshadura";
     repo = "git-crecord";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-zsrMAD9EU+TvkWfWl9x6WbMXuw7YEz50LxQzSFVkKdQ=";
   };
 
@@ -30,4 +30,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "git-crecord";
   };
-}
+})

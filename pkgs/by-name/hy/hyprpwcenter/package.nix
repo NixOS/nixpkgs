@@ -1,6 +1,6 @@
 {
   lib,
-  gcc15Stdenv,
+  gcc16Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -14,15 +14,15 @@
   pixman,
 }:
 
-gcc15Stdenv.mkDerivation (finalAttrs: {
+gcc16Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpwcenter";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpwcenter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Hxv5Xjlnv70Q/MGLZ4eTlhW8jYhx4gzhn3YL4oc4hN0=";
+    hash = "sha256-HrmLl4Laizh4zd55H6ETNdxrYQvUB4n1/OC6mxwD+D0=";
   };
 
   nativeBuildInputs = [

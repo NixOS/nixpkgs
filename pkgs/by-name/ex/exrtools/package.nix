@@ -8,12 +8,12 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exrtools";
   version = "0.4";
 
   src = fetchurl {
-    url = "http://scanline.ca/exrtools/exrtools-${version}.tar.gz";
+    url = "http://scanline.ca/exrtools/exrtools-${finalAttrs.version}.tar.gz";
     sha256 = "0jpkskqs1yjiighab4s91jy0c0qxcscwadfn94xy2mm2bx2qwp4z";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.juliendehos ];
   };
-}
+})

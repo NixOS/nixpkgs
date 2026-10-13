@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   pname = "9base";
   version = "6-unstable-2019-09-13";
 
+  __structuredAttrs = true;
+
   src = fetchgit {
     url = "https://git.suckless.org/9base";
     rev = "63916da7bd6d73d9a405ce83fc4ca34845667cce";
@@ -40,7 +42,7 @@ stdenv.mkDerivation {
   # the 9yacc script needs to be executed to build other items
   preBuild = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace ./yacc/9yacc \
-      --replace "../yacc/yacc" "${lib.getExe' pkgsBuildHost._9base "yacc"}"
+      --replace-fail "../yacc/yacc" "${lib.getExe' pkgsBuildHost._9base "yacc"}"
   '';
 
   enableParallelBuilding = true;

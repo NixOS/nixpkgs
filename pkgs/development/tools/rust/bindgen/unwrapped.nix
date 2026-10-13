@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
   nativeCheckInputs = [ clang ];
 
-  RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
+  env.RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
 
   preCheck = ''
     # for the ci folder, notably
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
       rust ffi declarations.
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ johntitor ];
     mainProgram = "bindgen";
     platforms = lib.platforms.unix;

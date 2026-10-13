@@ -9,15 +9,15 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easycrypt";
-  version = "2025.11";
+  version = "2026.09";
 
   src = fetchFromGitHub {
     owner = "easycrypt";
     repo = "easycrypt";
-    tag = "r${version}";
-    hash = "sha256-BLyC8AB075Nyhb5heIKVkxnWWt4Zn8Doo10ShsACJ4g=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-7ZnGZOZyV5znDGzg0c3XSsliQyOFOwJp2iyAzJtDNwk=";
   };
 
   nativeBuildInputs =
@@ -33,8 +33,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = with ocamlPackages; [
     batteries
+    bitwuzla-cxx
     dune-build-info
     dune-site
+    markdown
     pcre2
     why3
     yojson
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   postPatch = ''
-    substituteInPlace dune-project --replace-fail '(name easycrypt)' '(name easycrypt)(version ${version})'
+    substituteInPlace dune-project --replace-fail '(name easycrypt)' '(name easycrypt)(version ${finalAttrs.version})'
   '';
 
   pythonPath = with python3.pkgs; [ pyyaml ];
@@ -67,4 +69,4 @@ stdenv.mkDerivation rec {
     description = "Computer-Aided Cryptographic Proofs";
     mainProgram = "easycrypt";
   };
-}
+})

@@ -16,14 +16,14 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "centerpiece";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "friedow";
     repo = "centerpiece";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-tZNwMPL1ITWVvoywojsd5j0GIVQt6pOKFLwi7jwqLKg=";
   };
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     libxrandr
   ];
 
-  postFixup = lib.optional stdenv.hostPlatform.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     rpath=$(patchelf --print-rpath $out/bin/centerpiece)
     patchelf --set-rpath "$rpath:${
       lib.makeLibraryPath [
@@ -67,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     mainProgram = "centerpiece";
   };
-}
+})

@@ -40,6 +40,20 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./gtest.patch {
       GTEST_INCLUDE_DIRS = "${lib.getDev gtest}/include";
     })
+
+    # Remove platform and architecture detection logic
+    # Also drop arch-specific compile and optimization flags to ensure
+    # packaging friendliness.
+    # Based on https://github.com/google/libultrahdr/pull/383
+    # modified to target 1.4.0 instead of main
+    ./remove-platform-and-detection-logic.patch
+
+    # fix tests on big-endian
+    # https://github.com/google/libultrahdr/pull/396
+    (fetchpatch {
+      url = "https://github.com/google/libultrahdr/commit/13a058f452d846e43d4691f6885eeeaa8b0ea8d0.patch";
+      hash = "sha256-2ZVvBMz8wQLEThuXdRJbbx5m2ouRZpxVWoH88RLmit4=";
+    })
   ];
 
   # CMake incorrect absolute include/lib paths: https://github.com/NixOS/nixpkgs/issues/144170
@@ -53,16 +67,29 @@ stdenv.mkDerivation (finalAttrs: {
         'includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@'
   '';
 
+  # use sse2 for floating point math to fix tests
+  env = lib.optionalAttrs stdenv.hostPlatform.isi686 {
+    CFLAGS = "-mfpmath=sse -msse2";
+    CXXFLAGS = "-mfpmath=sse -msse2";
+  };
+
   cmakeFlags = [
     (lib.cmakeBool "UHDR_BUILD_TESTS" true)
+    # Build disables install target in cross-compilation mode so
+    # cross-compilation would fail on NixOS. Force flag to false.
+    # See https://github.com/google/libultrahdr/blob/8cbc983d2f6c2171af5cbcdb8801102f83fe92ab/CMakeLists.txt#L153
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" false)
   ];
 
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
-    libjpeg
+  ];
+
+  buildInputs = [
     gtest
+    libjpeg
   ];
 
   nativeCheckInputs = [

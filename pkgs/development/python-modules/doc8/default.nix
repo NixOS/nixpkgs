@@ -23,6 +23,8 @@ buildPythonPackage rec {
     hash = "sha256-EmetMnWJcfvPmRRCQXo5Nce8nlJVDnNiLg5WulXqHUA=";
   };
 
+  pythonRelaxDeps = [ "docutils" ];
+
   build-system = [
     setuptools-scm
     wheel
@@ -39,6 +41,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    "-Wignore::PendingDeprecationWarning"
+  ];
 
   pythonImportsCheck = [ "doc8" ];
 

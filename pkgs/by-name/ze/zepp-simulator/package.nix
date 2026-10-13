@@ -6,8 +6,7 @@
   copyDesktopItems,
   autoPatchelfHook,
 
-  # Upstream is officially built with Electron 18
-  # (but it works with latest Electron with minor changes, see HACK below)
+  # Upstream is built with older Electron
   electron,
   asar,
   dpkg,
@@ -40,19 +39,14 @@
 }:
 
 let
-  # CDN links for 2.0.2:
-  # MacOS: https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/ecb6ca54f4dc97a2f91e53358bbb532d.dmg
-  # Windows: https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/9db7ae1c60c26836a447a71a6fb25b3b.exe
-  # Linux ARM64: https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/02ec69e6a2f3b744d964fd7ba4f40fc3.deb
-  # Linux AMD64: https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/3e688d423cd0cd31a8a589b8325a309e.deb
   srcs = {
     x86_64-linux = {
-      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/3e688d423cd0cd31a8a589b8325a309e.deb";
-      sha256 = "sha256-ZHqaEL8FoSnRtuqGWpTyJka7D0dHtRADZthq8DG2k24=";
+      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20260717/simulator_2.1.2_linux_amd64.deb";
+      hash = "sha256-q5s1wErlsBaWX+fQUVB7W1out7XA+FBZKUwQBNK+mqA=";
     };
     aarch64-linux = {
-      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20240927/02ec69e6a2f3b744d964fd7ba4f40fc3.deb";
-      sha256 = "sha256-J5Y4wLiFOM9D2MIMiRyUtHIZ19rt65ktVCOMZQQwBCI=";
+      url = "https://upload-cdn.zepp.com/zepp-applet-and-wechat-applet/20260717/simulator_2.1.2_arm64.deb";
+      hash = "sha256-I7yklSKHwgHm4QNEVLX4O5eXaoS2+SxLMJJjA3aTFCM=";
     };
   };
 
@@ -60,7 +54,7 @@ in
 
 stdenv.mkDerivation {
   pname = "zepp-simulator";
-  version = "2.0.2";
+  version = "2.1.2";
 
   src = fetchurl srcs.${stdenv.hostPlatform.system};
 

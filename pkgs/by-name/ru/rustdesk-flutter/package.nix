@@ -8,7 +8,7 @@
   ffmpeg_7,
   gst_all_1,
   fuse3,
-  libXtst,
+  libxtst,
   libaom,
   libopus,
   libpulseaudio,
@@ -66,14 +66,14 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.4";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-o7jsVWiCkHaKFpAu27r/Lr1Q9g7uR/OYJdwsiQeDJUA=";
+    hash = "sha256-AnwdIO4TveC48uMioBCvH60xun24ckK420ONSEB9lQI=";
   };
 
   strictDeps = true;
@@ -82,7 +82,8 @@ flutter329.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl -sL https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.9/flutter/pubspec.lock | yq > pubspec.lock.json
+  # Then add flutter_test, fake_async, leak_tracker*, vm_service SDK deps manually
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
 
@@ -95,7 +96,7 @@ flutter329.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-gd2vS+p+1QtOWZcRWJWahFGo5rFG+soqxx3vJYSYJUo=";
+    hash = "sha256-HPvvsTcjSErGfdNwsHgWhs930Fe0hmK1g5J/ngtlkKM=";
   };
 
   dontCargoBuild = true;
@@ -127,7 +128,7 @@ flutter329.buildFlutterApplication rec {
     fuse3
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
-    libXtst
+    libxtst
     libaom
     libopus
     libpulseaudio
@@ -162,12 +163,12 @@ flutter329.buildFlutterApplication rec {
   postPatch = ''
     cd flutter
     if [ $cargoDepsCopy ]; then # That will be inherited to buildDartPackage and it doesn't have cargoDepsCopy
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
         --replace-fail "libayatana-appindicator3.so.1" "${lib.getLib libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
       # Disable static linking of ffmpeg since https://github.com/21pages/hwcodec/commit/1873c34e3da070a462540f61c0b782b7ab15dc84
-      sed -i 's/static=//g' $cargoDepsCopy/hwcodec-*/build.rs
-      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
-      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+      sed -i 's/static=//g' $cargoDepsCopy/*/hwcodec-*/build.rs
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+      sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
     fi
 
     substituteInPlace ../Cargo.toml --replace-fail ", \"staticlib\", \"rlib\"" ""

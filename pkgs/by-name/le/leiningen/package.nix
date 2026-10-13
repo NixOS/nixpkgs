@@ -8,24 +8,21 @@
   rlwrap,
   gnupg,
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "leiningen";
   version = "2.12.0";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchurl {
-    url = "https://codeberg.org/leiningen/leiningen/raw/tag/${version}/bin/lein-pkg";
+    url = "https://codeberg.org/leiningen/leiningen/raw/tag/${finalAttrs.version}/bin/lein-pkg";
     hash = "sha256-EqnF46JHFhnKPWSnRi+SD99xOuiVnrT81iV8IzMrWqQ=";
   };
 
   jarsrc = fetchurl {
-    url = "https://codeberg.org/leiningen/leiningen/releases/download/${version}/leiningen-${version}-standalone.jar";
+    url = "https://codeberg.org/leiningen/leiningen/releases/download/${finalAttrs.version}/leiningen-${finalAttrs.version}-standalone.jar";
     hash = "sha256-tyGlc69jF4TyfMtS5xnm0Sh9nTlRrVbTFtOPfs+oGqI=";
   };
 
-  JARNAME = "${pname}-${version}-standalone.jar";
+  env.JARNAME = "leiningen-${finalAttrs.version}-standalone.jar";
 
   dontUnpack = true;
 
@@ -71,7 +68,7 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
     platforms = jdk.meta.platforms;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     mainProgram = "lein";
   };
-}
+})

@@ -25,10 +25,14 @@
   sdl3,
 }:
 
+let
+  # Xbox Live multiplayer requires libcurl WebSocket support.
+  curlWithWebsockets = curl.override { websocketSupport = true; };
+in
 # Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.5.5-qt6";
+  version = "1.8.4-qt6";
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -36,7 +40,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-QJL2CKcP1Sv7JR2ir0XP4nZUpBeH0NX7QeyrZWPSMoI=";
+    hash = "sha256-F54XFbXB0dkssva95pmKwPjmmnjupBHCxShySClFUgY=";
   };
 
   patches = [
@@ -74,7 +78,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libxi
     libxtst
     libevdev
-    curl
+    curlWithWebsockets
     pulseaudio
     glfw
     sdl3

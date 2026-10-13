@@ -14,12 +14,12 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imagination";
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/imagination/imagination-${version}.tar.gz";
+    url = "mirror://sourceforge/imagination/imagination-${finalAttrs.version}.tar.gz";
     sha256 = "139dgb9vfr2q7bxvjskykdz526xxwrn0bh463ir8m2p7rx5a3pw5";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "imagination";
   };
-}
+})

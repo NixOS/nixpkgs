@@ -11,19 +11,19 @@
   glib,
   gtk2-x11,
   gtk3-x11,
-  lua,
+  lua5_5,
   python3,
   perl,
   tcl,
   ruby,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libsm,
-  libXpm,
-  libXt,
-  libXaw,
-  libXau,
-  libXmu,
+  libxpm,
+  libxt,
+  libxaw,
+  libxau,
+  libxmu,
   libsodium,
   libice,
   wayland-scanner,
@@ -51,6 +51,8 @@
 }:
 
 let
+  lua = lua5_5;
+
   nixosRuntimepath = writeText "nixos-vimrc" ''
     set nocompatible
     syntax on
@@ -81,7 +83,7 @@ let
     endif
   '';
 
-  common = callPackage ./common.nix { };
+  common = callPackage ./common.nix { inherit stdenv; };
 
 in
 stdenv.mkDerivation {
@@ -179,13 +181,13 @@ stdenv.mkDerivation {
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
     libsm
     libice
-    libX11
-    libXext
-    libXpm
-    libXt
-    libXaw
-    libXau
-    libXmu
+    libx11
+    libxext
+    libxpm
+    libxt
+    libxaw
+    libxau
+    libxmu
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11
   ++ lib.optional (guiSupport == "gtk3") gtk3-x11

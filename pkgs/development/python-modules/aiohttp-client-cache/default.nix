@@ -11,7 +11,7 @@
   fetchPypi,
   itsdangerous,
   motor,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
@@ -21,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-client-cache";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aiohttp_client_cache";
     inherit version;
-    hash = "sha256-r1VW9xmBSsoC22OEJxBpzsame+Maa32UN+CmqZgKSU8=";
+    hash = "sha256-Jk+n1pvNsuT+mZTn9Bq17sfLuipfXiYNRE0AL5Ym43Q=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

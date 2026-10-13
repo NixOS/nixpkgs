@@ -4,22 +4,22 @@
   stdenv,
   bash,
   ncurses,
-  neovim,
+  neovim-unwrapped,
   procps,
   scdoc,
-  lua51Packages,
   util-linux,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nvimpager";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lucc";
     repo = "nvimpager";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Au9rRZMZfU4qHi/ng6JO8FnMpySKDbKzr75SBPY3QiA=";
+    sha256 = "sha256-hwUI0DlkXveE+m4BkO8xEF/IARqSVk2E6tw07+UtnbA=";
   };
 
   buildInputs = [
@@ -36,16 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   preBuild = ''
     patchShebangs nvimpager
-    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim}'
+    substituteInPlace nvimpager --replace-fail ':-nvim' ':-${lib.getExe neovim-unwrapped}'
   '';
 
   doCheck = true;
   nativeCheckInputs = [
-    lua51Packages.busted
+    # we want to use the same version of lua as neovim because we will load
+    # part of the lua code of nvimpager during the tests
+    neovim-unwrapped.lua.pkgs.busted
     ncurses # for tput
-    neovim
+    neovim-unwrapped
     procps # for nvim_get_proc() which uses ps(1)
     util-linux
+    # Newer neovim versions seem to create the log file unconditionally so the
+    # test fail if it can not be written.
+    writableTmpDirAsHomeHook
   ];
   # filter out one test that fails in the sandbox of nix or with neovim v0.10
   # or on macOS

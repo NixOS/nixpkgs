@@ -7,12 +7,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "swaks";
   version = "20240103.0";
 
   src = fetchurl {
-    url = "https://www.jetmore.org/john/code/swaks/files/swaks-${version}.tar.gz";
+    url = "https://www.jetmore.org/john/code/swaks/files/swaks-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-DlMbTRZAWIAucmaxT03BiXCZ0Jb5MIIN4vm16wjc2+g=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
   };
 
-}
+})

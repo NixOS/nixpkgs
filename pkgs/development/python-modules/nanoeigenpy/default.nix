@@ -6,8 +6,6 @@
   python,
 
   # nativeBuildInputs
-  cmake,
-  doxygen,
   nanobind,
 
   # propagatedBuildInputs
@@ -23,16 +21,16 @@
   scipy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nanoeigenpy";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = false; # Built with cmake
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "nanoeigenpy";
-    tag = "v${version}";
-    hash = "sha256-2Lp3fYw3rQYxjkCQCeHI+N32Y4vTJ8l+PoKqLCmAXIU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FWNIZFzY7BXC3vQKsIUFIJr3dQ8V1+OOmt5mKQP9/3M=";
   };
 
   # Fix:
@@ -50,7 +48,7 @@ buildPythonPackage rec {
     "out"
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_TESTING" true)
     (lib.cmakeBool "BUILD_WITH_CHOLMOD_SUPPORT" true)
@@ -60,18 +58,11 @@ buildPythonPackage rec {
     # (lib.cmakeBool "BUILD_WITH_ACCELERATE_SUPPORT" stdenv.hostPlatform.isDarwin)
   ];
 
-  strictDeps = true;
-
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    nanobind
-  ];
-
+  buildInputs = [ jrl-cmakemodules ];
+  nativeBuildInputs = jrl-cmakemodules.docsNativeBuildInputs ++ [ nanobind ];
   propagatedBuildInputs = [
     suitesparse
     eigen
-    jrl-cmakemodules
   ];
 
   dependencies = [
@@ -98,9 +89,9 @@ buildPythonPackage rec {
   meta = {
     description = "Support library for bindings between Eigen in C++ and Python, based on nanobind";
     homepage = "https://github.com/Simple-Robotics/nanoeigenpy";
-    changelog = "https://github.com/Simple-Robotics/nanoeigenpy/releases/tag/${src.tag}";
+    changelog = "https://github.com/Simple-Robotics/nanoeigenpy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

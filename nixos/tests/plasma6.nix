@@ -12,7 +12,7 @@
     {
       imports = [ ./common/user-account.nix ];
       services.xserver.enable = true;
-      services.displayManager.sddm.enable = true;
+      services.displayManager.plasma-login-manager.enable = true;
       # FIXME: this should be testing Wayland
       services.displayManager.defaultSession = "plasmax11";
       services.desktopManager.plasma6.enable = true;

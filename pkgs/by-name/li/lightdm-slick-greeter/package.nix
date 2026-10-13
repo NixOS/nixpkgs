@@ -13,8 +13,8 @@
   pixman,
   libcanberra,
   libgnomekbd,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   linkFarm,
   lightdm-slick-greeter,
   numlockx,
@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lightdm-slick-greeter";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = finalAttrs.version;
-    hash = "sha256-zYjtd/Lb9ialq+pzOml4FMfPq9maX848Or6lzyZj4qs=";
+    hash = "sha256-WP4OsiTEmACDXq5xNbJNEm28vdA3PQ8IscGiyaeyvwk=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libcanberra
     libgnomekbd # needed by XApp.KbdLayoutController
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   pythonPath = [

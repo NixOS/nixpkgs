@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "apkinspector";
-  version = "1.3.6";
+  version = "1.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erev0s";
     repo = "apkInspector";
     tag = "v${version}";
-    hash = "sha256-xL4uUHYAn4V3cxqVb+XrIiOwK9az2VlYYTcJJt+9Cus=";
+    hash = "sha256-6efXoiyjTEzadZ5aut4lFbjth03Uyw8REIYQYjvWS/c=";
   };
 
   build-system = [ poetry-core ];

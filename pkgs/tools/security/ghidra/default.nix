@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghidra";
-  version = "12.0";
-  versiondate = "20251205";
+  version = "12.1.4";
+  versiondate = "20260921";
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
-    hash = "sha256-uNFI24UIFfoHjX/xTlr0tuVvesTuf4WkTC9NtVb8UlI=";
+    hash = "sha256-ZD4Vs1i7BMvrneAbAiOc7F9iBj64Rbom+PaVO//TzK8=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,6 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
@@ -87,6 +86,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       ck3d
       govanify
+      tbaldwin
       mic92
     ];
   };

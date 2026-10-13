@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   desktopItems = [
     (makeDesktopItem {
       name = "Wireworld";
-      exec = "wireworld";
+      exec = "Wireworld";
       comment = "";
       desktopName = "Wireworld";
       genericName = "Wireworld";
@@ -51,6 +51,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Fascinating electronics logic puzzles, game where you'll learn how to build clocks, diodes, and logic gates";
+    homepage = "https://gitlab.com/blinry/wireworld";
     mainProgram = "Wireworld";
     license = with lib.licenses; [
       mit

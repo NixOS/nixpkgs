@@ -8,20 +8,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "gotools";
-  version = "0.34.0";
+  version = "0.44.0";
 
   # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is too basic to browse
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C+P2JoD4NzSAkAQuA20bVrfLZrMHXekvXn8KPOM5Nj4=";
+    hash = "sha256-F9DyZAZdrKCrCIB6FZP0KrOwPNRLk0ZQoNMHGMHd0UY=";
   };
 
   allowGoReference = true;
   doCheck = false;
 
-  vendorHash = "sha256-UZNYHx5y+kRp3AJq6s4Wy+k789GDG7FBTSzCTorVjgg=";
+  vendorHash = "sha256-HpWkPsRJ0vCqJi9LoZcVbzeoPQ2B9ftZwuS1r47W7Sc=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -29,8 +29,6 @@ buildGoModule (finalAttrs: {
     # The gopls folder contains a Go submodule which causes a build failure
     # and lives in its own package named gopls.
     rm -r gopls
-    # cmd/auth folder is similar and is scheduled to be removed https://github.com/golang/go/issues/70872
-    rm -r cmd/auth
   '';
 
   # Set GOTOOLDIR for derivations adding this to buildInputs

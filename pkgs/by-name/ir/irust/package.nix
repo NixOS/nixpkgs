@@ -19,18 +19,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "irust";
-  version = "1.76.2";
+  version = "1.77.1";
 
   src = fetchFromGitHub {
     owner = "sigmaSd";
     repo = "IRust";
-    rev = "irust@${version}";
-    hash = "sha256-bZKFoN6hr/TLTvGAWUXS+S3RnYhdirUeGz30LYbgA7g=";
+    rev = "irust@${finalAttrs.version}";
+    hash = "sha256-wALgAmwpk3jFOyFsieyoeradh0Pyovq7YVh9DqQpyqo=";
   };
 
-  cargoHash = "sha256-lcnKiJCFN/bN/4R6VIhut2Xz3ueYPgXkr4dsYH57d9g=";
+  cargoHash = "sha256-JGuHCKdo2ZbdQipu8UdgJVikE1wQysLtSpX8yFYwMyU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -53,4 +53,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lelgenio ];
     mainProgram = "irust";
   };
-}
+})

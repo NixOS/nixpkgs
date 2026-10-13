@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm555 -t $out/bin devour
   '';
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   meta = {
     description = "Hides your current window when launching an external program";

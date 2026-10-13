@@ -12,22 +12,17 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "serigy";
-  version = "1.1";
+  version = "2.3.0";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "Serigy";
-    tag = version;
-    hash = "sha256-1PlGR7aX7Ekrbe7+Qm0E1h6yl6CzdIcV2R3MSIIeH6o=";
+    tag = finalAttrs.version;
+    hash = "sha256-EED7jPGcOfsWp8qUxu/U576+HMkOZbb2SG/dRTdC1Gs=";
   };
-
-  postPatch = ''
-    substituteInPlace src/setup_dialog.py \
-      --replace-fail "flatpak run io.github.cleomenezesjr.Serigy" "serigy"
-  '';
 
   nativeBuildInputs = [
     meson
@@ -41,8 +36,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ libadwaita ];
 
   dependencies = with python3Packages; [ pygobject3 ];
-
-  strictDeps = true;
 
   postInstallCheck = ''
     mesonCheckPhase
@@ -62,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

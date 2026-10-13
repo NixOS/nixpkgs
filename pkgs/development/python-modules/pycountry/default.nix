@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pycountry";
-  version = "24.6.1";
+  version = "26.2.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycountry";
     repo = "pycountry";
     tag = version;
-    hash = "sha256-4YVPh6OGWguqO9Ortv+vAejxx7WLs4u0SVLv8JlKSWM=";
+    hash = "sha256-VmPCQszEaDNsSnMfAo5xyDZySJcC4TiWZrmQMfebKKQ=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pycountry/pycountry";
-    changelog = "https://github.com/pycountry/pycountry/blob/${src.rev}/HISTORY.txt";
+    changelog = "https://github.com/pycountry/pycountry/blob/${src.tag}/HISTORY.txt";
     description = "ISO country, subdivision, language, currency and script definitions and their translations";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ dotlambda ];

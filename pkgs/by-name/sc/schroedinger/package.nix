@@ -9,12 +9,12 @@
   gtk-doc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "schroedinger";
   version = "1.0.11";
 
   src = fetchurl {
-    url = "https://download.videolan.org/contrib/schroedinger-${version}.tar.gz";
+    url = "https://download.videolan.org/contrib/schroedinger-${finalAttrs.version}.tar.gz";
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
 
   patchFlags = [ "-p0" ];
   patches = [
+    # force orc C backup code on RISC-V: the RVV JIT miscompiles the encoder
+    ./riscv64-orc-backup.patch
+
     (fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/master/multimedia/schroedinger/files/patch-testsuite-Makefile.am.diff";
       sha256 = "0cc8ymvgjgwy7ghca2dd8m8pxpinf27s2i8krf2m3fzv2ckq09v3";
@@ -52,4 +55,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

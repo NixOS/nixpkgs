@@ -2,21 +2,22 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  cmake,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "subxt";
-  version = "0.44.2";
+  version = "0.51.1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "subxt";
-    rev = "v${version}";
-    hash = "sha256-3yTX2H4T0nnA0Kh1Lx1/blK/Edd1ZOHQVEXiiOLxino=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/bM/GhLVpaWemrm1gCDzsvg0jU4cKvH57PFXwLHbddg=";
   };
 
-  cargoHash = "sha256-zJpzsPHK9Mq0KF0WvbBINxSQVr0m4Z5+M6/nFD8jiMg=";
+  cargoHash = "sha256-2CuEDDdnrs4zN/uvhRhbUvuVHgBJqIhl12hLBUXixgg=";
 
   # Only build the command line client
   cargoBuildFlags = [
@@ -24,20 +25,32 @@ rustPlatform.buildRustPackage rec {
     "subxt"
   ];
 
-  # Needed by wabt-sys
-  nativeBuildInputs = [ cmake ];
-
   # Requires a running substrate node
   doCheck = false;
 
+  __structuredAttrs = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # subxt exposes its version through a subcommand, not a --version flag
+  versionCheckProgramArg = "version";
+
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/paritytech/subxt";
-    description = "Submit transactions to a substrate node via RPC";
+    description = "Subxt is a CLI tool for interacting with chains in the Polkadot network";
+    changelog = "https://github.com/paritytech/subxt/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "subxt";
     license = with lib.licenses; [
       gpl3Plus
       asl20
     ];
-    maintainers = [ lib.maintainers.FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      kilyanni
+    ];
   };
-}
+})

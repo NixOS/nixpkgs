@@ -2,14 +2,17 @@
   lib,
   cmake,
   exiv2,
-  extra-cmake-modules,
   fetchFromGitLab,
   imagemagick,
+  libappimage,
   libarchive,
   libraw,
   mpv,
+  openslide,
   pkg-config,
   qt6Packages,
+  withSyntaxHighlighting ? stdenv.hostPlatform.isLinux,
+  kdePackages,
   resvg,
   stdenv,
   vips,
@@ -17,18 +20,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "previewqt";
-  version = "4.0";
+  version = "6.0";
 
   src = fetchFromGitLab {
     owner = "lspies";
     repo = "previewqt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wzMo5igLTVxUo3E8X2mRbOTuhW3CS4fISgVntgPbZlY=";
+    hash = "sha256-Bbucjh8AJmH+YmyUDs0B89jwh0YewT2O6az6yuAPo10=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     qt6Packages.wrapQtAppsHook
   ];
@@ -36,9 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     exiv2
     imagemagick
+    libappimage
     libarchive
     libraw
     mpv
+    openslide
     resvg
     vips
   ]
@@ -49,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtsvg
     qt6Packages.qttools
     qt6Packages.qtwebengine
+  ]
+  ++ lib.optionals withSyntaxHighlighting [
+    kdePackages.syntax-highlighting
   ];
 
   strictDeps = true;
@@ -56,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "WITH_DEVIL" false)
     (lib.cmakeBool "WITH_FREEIMAGE" false)
+    (lib.cmakeBool "WITH_KF6SYNTAXHIGHLIGHT" withSyntaxHighlighting)
+    (lib.cmakeBool "WITH_ADAPTSOURCE" (!withSyntaxHighlighting))
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

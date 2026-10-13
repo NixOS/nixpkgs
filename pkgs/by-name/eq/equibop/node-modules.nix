@@ -50,8 +50,8 @@ stdenvNoCC.mkDerivation {
 
   outputHash =
     {
-      x86_64-linux = "sha256-YqUAP11oSxfKifa8QL4VXGCWV5xGG2+vk60f4NdIXIA=";
-      aarch64-linux = "sha256-q7adhMY95g5BCcoiCVIwCpnqJAidE4a2cxGOjuE2YDk=";
+      x86_64-linux = "sha256-TKFL47b+Xh8ChlSyXdhRY+zmPAnkHJss2vNblBvOSmw=";
+      aarch64-linux = "sha256-S5JNtQvDLFrOT+XCSMqFltrTlcRAzWcbXbRZk4CEkrA=";
     }
     .${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");

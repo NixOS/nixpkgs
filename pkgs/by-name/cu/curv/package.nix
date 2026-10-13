@@ -5,7 +5,7 @@
   cmake,
   git,
   pkg-config,
-  boost,
+  boost188,
   eigen_5,
   glm,
   gcc,
@@ -20,20 +20,19 @@
   libxext,
   libxcursor,
   libx11,
-  ilmbase,
   llvmPackages,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5-unstable-2026-01-23";
+  version = "0.5-unstable-2026-02-26";
 
   src = fetchFromCodeberg {
     owner = "doug-moen";
     repo = "curv";
-    rev = "17d03b534c69976ed60936beb8b7cc38e8c12c13";
-    hash = "sha256-qQLcRCha01b6ClUSPO2jMBDJsN28EhqzakTLu1medAQ=";
+    rev = "bf573da133f94efacc6a42c9dc94666bfbfab6bc";
+    hash = "sha256-5tcF0vEvxd/SgNWM7lgZTujBsIF+v8t0I0g4tykBCPY=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +45,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
+    boost188
     eigen_5
     glm
     libGL
@@ -61,7 +60,6 @@ stdenv.mkDerivation {
     libxrandr
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    ilmbase
     llvmPackages.openmp
   ];
 

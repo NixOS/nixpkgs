@@ -8,7 +8,7 @@
   autoreconfHook,
   gtk-doc,
   acl,
-  systemd,
+  systemdLibs,
   glib,
   libatasmart,
   polkit,
@@ -42,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "udisks";
-  version = "2.11.0";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     tag = "udisks-${finalAttrs.version}";
-    hash = "sha256-G3qE4evcn5gtsd8Lrj6vjxCsAl/2LCdqdtaqLFFadMw=";
+    hash = "sha256-bzTposLFl8jrRr+MphV8uM60TBFPuvwEKBUgVlq1YNo=";
   };
 
   outputs = [
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgudev
     libblockdev
     acl
-    systemd
+    systemdLibs
     glib
     libatasmart
     polkit

@@ -3,42 +3,45 @@
   buildPythonPackage,
   fetchFromGitHub,
   fpyutils,
+  hatchling,
   pyfakefs,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "md-toc";
-  version = "8.2.3";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = "md-toc";
-    tag = version;
-    hash = "sha256-nKkKtLEW0pohXiMtjWl2Kzh7SRwZJ/yzhXpDyluLodc=";
+    tag = finalAttrs.version;
+    hash = "sha256-dgbAAaQDxeOkJV+XI9ZTaHPhrLUrm7v5zFr9LVT48ow=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ fpyutils ];
+  dependencies = [ fpyutils ];
 
   nativeCheckInputs = [
     pyfakefs
     pytestCheckHook
   ];
 
-  enabledTestPaths = [ "md_toc/tests/*.py" ];
+  # Only run the real unit-test module; the over-broad glob also collected
+  # md_toc/tests/fuzzer.py, which imports the unpackaged `atheris` engine.
+  # https://github.com/frnmst/md-toc/blob/9.0.0/md_toc/tests/fuzzer.py#L22
+  enabledTestPaths = [ "md_toc/tests/tests.py" ];
 
   pythonImportsCheck = [ "md_toc" ];
 
   meta = {
     description = "Table of contents generator for Markdown";
-    mainProgram = "md_toc";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
     changelog = "https://blog.franco.net.eu.org/software/CHANGELOG-md-toc.html";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "md_toc";
   };
-}
+})

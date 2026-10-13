@@ -13,7 +13,7 @@
   ghostscript,
   ncurses,
   enableX11 ? false,
-  libX11,
+  libx11,
 }:
 
 let
@@ -44,6 +44,11 @@ stdenv.mkDerivation {
         sha256 = "035f92vni0vqmgj9hq2i7vwasz7crx52wll4823vhfkm1qdv5ywc";
       };
 
+  postPatch = ''
+    substituteInPlace "src/microcode/chacha.i" \
+      --replace-fail "#define	_POSIX_C_SOURCE	200809L" ""
+  '';
+
   patches = [
     (fetchDebianPatch {
       pname = "mit-scheme";
@@ -54,7 +59,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libX11 ];
+  buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libx11 ];
 
   configurePhase = ''
     runHook preConfigure

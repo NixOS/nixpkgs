@@ -6,25 +6,25 @@
   stackql,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "stackql";
-  version = "0.9.339";
+  version = "0.10.591";
 
   src = fetchFromGitHub {
     owner = "stackql";
     repo = "stackql";
-    rev = "v${version}";
-    hash = "sha256-WuzY4Vje+Gwzf0Ep5nE5jkF1iJkFKX640ay+nqiF0Dg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-TRM51eHcnC/JTWa16Pt0cAroKaLMCzD+VTAF11/5Tqw=";
   };
 
-  vendorHash = "sha256-H8vp2yuP2/mh8GAWTsFOpNJEXfxjyLHZq4m65iyERmw=";
+  vendorHash = "sha256-LARf6NheOtq/omqK4t8j2IpPwQrIFG6QHOGsAmJGy5w=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMajorVersion=${builtins.elemAt (lib.splitVersion version) 0}"
-    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMinorVersion=${builtins.elemAt (lib.splitVersion version) 1}"
-    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildPatchVersion=${builtins.elemAt (lib.splitVersion version) 2}"
+    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMajorVersion=${builtins.elemAt (lib.splitVersion finalAttrs.version) 0}"
+    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildMinorVersion=${builtins.elemAt (lib.splitVersion finalAttrs.version) 1}"
+    "-X github.com/stackql/stackql/internal/stackql/cmd.BuildPatchVersion=${builtins.elemAt (lib.splitVersion finalAttrs.version) 2}"
     "-X github.com/stackql/stackql/internal/stackql/cmd.BuildDate=2026-01-14T07:36:20Z" # date of commit hash
     "-X stackql/internal/stackql/planbuilder.PlanCacheEnabled=true"
   ];
@@ -35,7 +35,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = stackql;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -45,4 +45,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jonochang ];
   };
-}
+})

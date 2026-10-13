@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rscw";
   version = "0.1e";
 
   src = fetchurl {
-    url = "https://www.pa3fwm.nl/software/rscw/rscw-${version}.tgz";
+    url = "https://www.pa3fwm.nl/software/rscw/rscw-${finalAttrs.version}.tgz";
     sha256 = "1hxwxmqc5jinr14ya1idigqigc8qhy1vimzcwy2vmwdjay2sqik2";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ earldouglas ];
     platforms = lib.platforms.linux;
   };
-}
+})

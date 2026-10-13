@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wabt";
-  version = "1.0.39";
+  version = "1.0.41";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
     tag = finalAttrs.version;
-    hash = "sha256-Hwfk0wQ8Oz1XI/hIzVy0G+/FyWl+iiGYoFrgLbm27Tk=";
+    hash = "sha256-WcSFrVrZBr6ITskBUuD7rQvIPOiAW6VCrhXr1QroFHg=";
     fetchSubmodules = true;
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
          binary format
        * wasm2wat: the inverse of wat2wasm, translate from the binary format
          back to the text format (also known as a .wat)
-       * wasm-objdump: print information about a wasm binary. Similiar to
+       * wasm-objdump: print information about a wasm binary. Similar to
          objdump.
        * wasm-interp: decode and run a WebAssembly binary file using a
          stack-based interpreter

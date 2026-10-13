@@ -6,7 +6,6 @@
   flex,
   pkg-config,
   darwin,
-  xcbuild,
   libsndfile,
   alsa-lib,
   libjack2,
@@ -15,14 +14,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.5.6";
+  version = "1.5.5.8";
   pname = "chuck";
 
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "chuck";
     tag = "chuck-${finalAttrs.version}";
-    hash = "sha256-KBmMpycNCjRZJPdRR3HG5nqHQhhVOENciRpiQ7buyok=";
+    hash = "sha256-GBgb7Bnq5R9Gs/chstjxO8qf+MfSXVftwCbgNW5qC5Y=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
-    xcbuild
   ];
 
   buildInputs = [
@@ -58,11 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Programming language for real-time sound synthesis and music creation";
     homepage = "http://chuck.cs.princeton.edu";
-    license = with lib.licenses; [
-      gpl2Plus
-      # or
-      mit
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        gpl2Plus
+        mit
+      ];
     platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "chuck";

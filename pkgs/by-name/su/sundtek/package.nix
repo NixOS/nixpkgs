@@ -10,7 +10,7 @@ let
     "$out/bin"
   ];
   platform =
-    with stdenv;
+    with stdenv.hostPlatform;
     if isx86_64 then
       "64bit"
     else if isi686 then
@@ -18,7 +18,7 @@ let
     else
       throw "${system} not considered in build derivation. Might still be supported.";
   sha256 =
-    with stdenv;
+    with stdenv.hostPlatform;
     if isx86_64 then
       "1jfsng5n3phw5rqpkid9m5j7m7zgj5bifh7swvba7f97y6imdaax"
     else

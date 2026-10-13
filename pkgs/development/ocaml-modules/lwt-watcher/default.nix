@@ -23,6 +23,7 @@ buildDunePackage (finalAttrs: {
 
   meta = {
     description = "One-to-many broadcast in Lwt";
+    homepage = "https://gitlab.com/nomadic-labs/lwt-watcher";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };

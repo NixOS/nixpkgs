@@ -7,7 +7,7 @@
   doxygen,
   dynarmic,
   enet,
-  fetchzip,
+  fetchFromGitHub,
   fmt,
   ffmpeg_6-headless,
   glslang,
@@ -19,6 +19,7 @@
   libusb1,
   moltenvk,
   nlohmann_json,
+  oaknut,
   openal,
   openssl,
   pipewire,
@@ -30,6 +31,7 @@
   soundtouch,
   stdenv,
   vulkan-headers,
+  vulkan-memory-allocator,
   xbyak,
   libxext,
   libx11,
@@ -46,6 +48,8 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
+  darwinMinVersionHook,
+  fetchpatch,
 }:
 let
   inherit (lib)
@@ -57,12 +61,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "azahar";
-  version = "2124.3";
+  version = "2126.1.2";
 
-  src = fetchzip {
-    url = "https://github.com/azahar-emu/azahar/releases/download/${finalAttrs.version}/azahar-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-JpqEJIKdmSJ5D9Q+a6YbHMJNTCK3+vDaSCSI23i60pk=";
+  src = fetchFromGitHub {
+    owner = "azahar-emu";
+    repo = "azahar";
+    tag = finalAttrs.version;
+    postCheckout = ''
+      git -C "$out/externals" submodule update --init \
+        teakra zstd discord-rpc spirv-headers spirv-tools sirit xxHash \
+        faad2/faad2 lodepng/lodepng dds-ktx nihstro "$out/dist/compatibility_list"
+      echo "${finalAttrs.version}" > "$out/GIT-TAG"
+      git -C "$out" rev-parse HEAD > "$out/GIT-COMMIT"
+    '';
+    hash = "sha256-XAj2T9sPHFzhUpOl9x2fmeEDmrNtMkbyrNfqyi1D/SY=";
   };
+
+  patches = [ ./quartzcore.patch ];
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -99,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     soundtouch
     SDL2
     vulkan-headers
-    xbyak
+    vulkan-memory-allocator
 
     # https://github.com/azahar-emu/azahar/issues/1283
     # spirv-tools
@@ -108,6 +123,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Azahar uses zstd_seekable which is not currently packaged in nixpkgs
     # zstd
   ]
+  ++ optionals stdenv.hostPlatform.isx86_64 [ xbyak ]
+  ++ optionals stdenv.hostPlatform.isAarch64 [ oaknut ]
   ++ optionals enableQtTranslations [ qt6.qttools ]
   ++ optionals enableCubeb [ cubeb ]
   ++ optionals useDiscordRichPresence [ rapidjson ]
@@ -120,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
+    (darwinMinVersionHook "13.4")
   ];
 
   postPatch = ''
@@ -141,14 +159,29 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "DISABLE_SYSTEM_SPIRV_HEADERS" true)
     (cmakeBool "ENABLE_QT_TRANSLATION" enableQtTranslations)
     (cmakeBool "ENABLE_CUBEB" enableCubeb)
-    (cmakeBool "USE_DISCORD_PRESENCE" useDiscordRichPresence)
+    (cmakeBool "ENABLE_DISCORD_RPC" useDiscordRichPresence)
     (cmakeBool "ENABLE_SSE42" enableSSE42)
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (cmakeBool "USE_SYSTEM_MOLTENVK" true);
+
+  installPhase = optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/Applications $out/bin
+
+    cp ./bin/Release/${finalAttrs.pname}-room $out/bin
+    cp -r ./bin/Release/${finalAttrs.pname}.app $out/Applications
+
+    runHook postInstall
+  '';
 
   preFixup = ''
     qtWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      ${optionalString stdenv.hostPlatform.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ moltenvk ]
+      }"}
     )
   '';
 

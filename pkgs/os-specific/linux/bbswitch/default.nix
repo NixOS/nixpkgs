@@ -8,15 +8,10 @@
   runtimeShell,
 }:
 
-let
-  baseName = "bbswitch";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "bbswitch";
   version = "unstable-2021-11-29";
-  name = "${baseName}-${version}-${kernel.version}";
-
-in
-
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchFromGitHub {
     owner = "Bumblebee-Project";
@@ -72,4 +67,4 @@ stdenv.mkDerivation {
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

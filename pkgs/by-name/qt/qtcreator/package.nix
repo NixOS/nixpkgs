@@ -21,10 +21,10 @@
 }:
 let
   pname = "qtcreator";
-  version = "18.0.2";
+  version = "20.0.1";
   src = fetchurl {
     url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-HP9kIjMjS23dQDidBeSQWAj5j9RDQhh/6RCSkKBJLIg=";
+    hash = "sha256-XsO8zwbumhkFqHYKyfunoShWcvFAqX4MUsniSNkFGrg=";
   };
   goModules =
     (buildGoModule {
@@ -130,6 +130,7 @@ stdenv'.mkDerivation {
     maintainers = with lib.maintainers; [
       wineee
       zatm8
+      l33tname
     ];
     platforms = lib.platforms.linux;
     mainProgram = "qtcreator";

@@ -11,32 +11,26 @@
   libGL,
   libGLU,
   libpng,
-  libsigcxx,
+  libsigcxx_2_0,
   libvorbis,
-  libX11,
+  libx11,
   lua5_2,
   libgbm,
+  openal-soft,
   SDL2,
   SDL2_image,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pioneer";
-  version = "20250501";
+  version = "20260907";
 
   src = fetchFromGitHub {
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = finalAttrs.version;
-    hash = "sha256-bQ1JGndHbBM28SuAUybo9msC/nBXu6el1UY41BKJN5A=";
+    hash = "sha256-2r8D2TbbxCiBN6CmBTT64C1Dc+/NhcZfSW7W1BfxUSE=";
   };
-
-  postPatch = ''
-    substituteInPlace contrib/lz4/CMakeLists.txt \
-      --replace-fail 'cmake_minimum_required(VERSION 3.4)' 'cmake_minimum_required(VERSION 3.13)'
-    substituteInPlace contrib/nanosockets/CMakeLists.txt \
-      --replace-fail 'cmake_minimum_required(VERSION 3.1)' 'cmake_minimum_required(VERSION 3.13)'
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -50,11 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libpng
-    libsigcxx
+    libsigcxx_2_0
     libvorbis
-    libX11
+    libx11
     lua5_2
     libgbm
+    openal-soft
     SDL2
     SDL2_image
   ];

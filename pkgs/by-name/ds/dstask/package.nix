@@ -1,17 +1,23 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dstask";
   version = "1.0.1";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   src = fetchFromGitHub {
     owner = "naggie";
     repo = "dstask";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/SXQz+HDkKWGrIArqEjti93mo6Els9haitV0FfWfVTQ=";
   };
 
@@ -24,6 +30,13 @@ buildGoModule rec {
 
   doCheck = false;
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd dstask \
+      --bash <($out/bin/dstask bash-completion) \
+      --fish <($out/bin/dstask fish-completion) \
+      --zsh <($out/bin/dstask zsh-completion)
+  '';
+
   # The ldflags reduce the executable size by stripping some debug stuff.
   # The other variables are set so that the output of dstask version shows the
   # git ref and the release version from github.
@@ -31,15 +44,17 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/naggie/dstask.VERSION=${version}"
-    "-X github.com/naggie/dstask.GIT_COMMIT=v${version}"
+    "-X github.com/naggie/dstask.VERSION=${finalAttrs.version}"
+    "-X github.com/naggie/dstask.GIT_COMMIT=v${finalAttrs.version}"
   ];
 
   meta = {
     description = "Command line todo list with super-reliable git sync";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stianlagstad ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      remidupre
+      stianlagstad
+    ];
   };
-}
+})

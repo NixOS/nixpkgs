@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-IVizzc2dKZ83dz3KBMDDiaFNdnS40cS++k8AywyvakQ=";
   };
 
-  ZSTD_SYS_USE_PKG_CONFIG = true;
+  env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
   enableParallelBuilding = true;
 

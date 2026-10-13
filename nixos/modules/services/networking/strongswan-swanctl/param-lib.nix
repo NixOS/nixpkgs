@@ -85,11 +85,9 @@ rec {
             else
               f (path ++ [ name ]) name value;
         in
-        mapAttrs'' g set;
+        concatMapAttrs g set;
     in
     recurse [ ] set;
-
-  mapAttrs'' = f: set: foldl' (a: b: a // b) { } (mapAttrsToList f set);
 
   # Extract the options from the given set of parameters.
   paramsToOptions = ps: mapParamsRecursive (_path: name: param: { ${name} = param.option; }) ps;

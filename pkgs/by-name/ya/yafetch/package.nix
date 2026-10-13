@@ -6,7 +6,7 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "yafetch";
-  version = "unstable-2022-04-20";
+  version = "0-unstable-2022-04-20";
 
   src = fetchFromGitHub {
     owner = "kira64xyz";
@@ -24,7 +24,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   '';
 
   # Fixes installation path
-  PREFIX = placeholder "out";
+  env.PREFIX = placeholder "out";
 
   meta = {
     homepage = "https://github.com/kira64xyz/yafetch";

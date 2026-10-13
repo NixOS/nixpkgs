@@ -8,9 +8,10 @@
   mypy,
   poetry-core,
   pytest-aio,
+  pytest-benchmark,
+  pytest-cov-stub,
   pytest-mypy,
   pytest-mypy-plugins,
-  pytest-subtests,
   pytestCheckHook,
   setuptools,
   trio,
@@ -19,20 +20,15 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.26.0";
+  version = "0.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dry-python";
     repo = "returns";
     tag = version;
-    hash = "sha256-VQzsa/uNTQVND0kc20d25to/6LELEiS3cqvG7a1kDw4=";
+    hash = "sha256-xCdCZtbo1AmBeKdY4CeQdK8s+23EfTyQa5o78j1+yVw=";
   };
-
-  postPatch = ''
-    sed -i setup.cfg \
-      -e '/--cov.*/d'
-  '';
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -41,21 +37,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     httpx
-    # https://github.com/dry-python/returns/issues/2224
-    (hypothesis.overrideAttrs (old: {
-      src = fetchFromGitHub {
-        owner = "HypothesisWorks";
-        repo = "hypothesis";
-        tag = "hypothesis-python-6.136.9";
-        hash = "sha256-Q1wxIJwAYKZ0x6c85CJSGgcdKw9a3xFw8YpJROElSNU=";
-      };
-    }))
+    hypothesis
     mypy
     pytestCheckHook
     pytest-aio
+    pytest-benchmark
+    pytest-cov-stub
     pytest-mypy
     pytest-mypy-plugins
-    pytest-subtests
     setuptools
     trio
   ];

@@ -36,16 +36,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jupysql";
   version = "0.11.1";
-
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "jupysql";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-7wfKvKqDf8LlUiLoevNRxmq8x5wLheOgIeWz72oFcuw=";
   };
 
@@ -62,7 +62,8 @@ buildPythonPackage rec {
     sqlalchemy
     sqlglot
     sqlparse
-  ];
+  ]
+  ++ pyspark.optional-dependencies.connect;
 
   optional-dependencies.dev = [
     duckdb
@@ -83,9 +84,12 @@ buildPythonPackage rec {
     psutil
     writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.dev;
+  ++ finalAttrs.passthru.optional-dependencies.dev;
 
   disabledTests = [
+    # ValueError: max() iterable argument is empty
+    "test_columns_with_missing_values[empty-dictionaries]"
+
     # AttributeError: 'DataFrame' object has no attribute 'frame_equal'
     "test_resultset_polars_dataframe"
 
@@ -128,11 +132,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sql" ];
 
+  # python-update-script picks up an 11-year old 0.38 over the current version
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql";
-    changelog = "https://github.com/ploomber/jupysql/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ploomber/jupysql/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ euxane ];
   };
-}
+})

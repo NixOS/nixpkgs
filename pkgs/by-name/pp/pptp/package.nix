@@ -7,12 +7,12 @@
   iproute2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pptp";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pptpclient/pptp-${version}.tar.gz";
+    url = "mirror://sourceforge/pptpclient/pptp-${finalAttrs.version}.tar.gz";
     sha256 = "1x2szfp96w7cag2rcvkdqbsl836ja5148zzfhaqp7kl7wjw2sjc2";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

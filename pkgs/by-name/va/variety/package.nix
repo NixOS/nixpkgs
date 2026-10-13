@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  gexiv2,
+  gexiv2_0_10,
   gobject-introspection,
   gtk3,
   hicolor-icon-theme,
@@ -20,7 +20,7 @@
   bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "variety";
   version = "0.9.0-b1";
   pyproject = true;
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-uDQZfWY0RuTsdD/IxpjzSTMMtNq632VAwAjB+CeUIbw=";
   };
 
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gexiv2
+    gexiv2_0_10
     gtk3
     hicolor-icon-theme
     libnotify
@@ -119,6 +119,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       p3psi
       zfnmxt
+      willfish
     ];
   };
-}
+})

@@ -6,14 +6,14 @@
   iperf3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iperf3d";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "wobcom";
     repo = "iperf3d";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pMwGoBgFRVY+H51k+YCamzHgBoaJVwEVqY0CvMPvE0w=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
       johannwagner
     ];
   };
-}
+})

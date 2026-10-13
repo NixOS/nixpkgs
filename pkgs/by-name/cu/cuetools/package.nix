@@ -41,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/svend/cuetools";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      codyopel
       jcumming
     ];
     platforms = lib.platforms.all;

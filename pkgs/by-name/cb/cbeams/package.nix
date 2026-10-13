@@ -37,7 +37,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Command-line program to draw animated colored circles in the terminal";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      oxzi
       sigmanificient
     ];
   };

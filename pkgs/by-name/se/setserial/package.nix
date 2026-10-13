@@ -6,12 +6,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "setserial";
   version = "2.17";
 
   src = fetchurl {
-    url = "mirror://sourceforge/setserial/setserial-${version}.tar.gz";
+    url = "mirror://sourceforge/setserial/setserial-${finalAttrs.version}.tar.gz";
     sha256 = "0jkrnn3i8gbsl48k3civjmvxyv9rbm1qjha2cf2macdc439qfi3y";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     mainProgram = "setserial";
     maintainers = [ lib.maintainers.mmlb ];
   };
-}
+})

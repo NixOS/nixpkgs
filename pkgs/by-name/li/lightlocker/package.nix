@@ -10,11 +10,11 @@
   glib,
   intltool,
   dbus-glib,
-  libX11,
-  libXScrnSaver,
-  libXxf86vm,
-  libXext,
-  systemd,
+  libx11,
+  libxscrnsaver,
+  libxxf86vm,
+  libxext,
+  systemdLibs,
   pantheon,
   wrapGAppsHook3,
 }:
@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
     dbus-glib
     glib
     gtk3
-    libX11
-    libXScrnSaver
-    libXext
-    libXxf86vm
-    systemd
+    libx11
+    libxscrnsaver
+    libxext
+    libxxf86vm
+    systemdLibs
   ];
 
   mesonFlags = [

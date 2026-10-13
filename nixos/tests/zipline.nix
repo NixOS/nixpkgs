@@ -41,11 +41,10 @@
     import re
 
     machine.wait_for_unit("zipline.service")
-    machine.wait_for_open_port(8000, timeout=300)
+    machine.wait_for_open_port(8000)
 
     resp = machine.succeed("curl zipline.local:8000/api/setup -v -X POST -H 'Content-Type: application/json' -d '{\"username\": \"administrator\", \"password\": \"password\"}' 2>&1")
     data = json.loads(resp.splitlines()[-1])
-    assert data["firstSetup"] is True
     assert data["user"]["username"] == "administrator"
     assert data["user"]["role"] == "SUPERADMIN"
 

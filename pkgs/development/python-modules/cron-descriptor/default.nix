@@ -9,22 +9,21 @@
 
 buildPythonPackage rec {
   pname = "cron-descriptor";
-  version = "2.0.6";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
     tag = version;
-    hash = "sha256-f7TQ3wvcHrzefZowUvxl1T0LCGeCnvpPI/IZn4XcDa4=";
+    hash = "sha256-OWafUSXupK5lrZzYquyBGGWuhn1e1Bxw1Z+YI9Fkqkw=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "cron_descriptor" ];
 

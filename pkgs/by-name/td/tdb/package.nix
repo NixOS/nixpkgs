@@ -26,12 +26,12 @@ let
       or (throw "Need pre-generated answers file to compile for ${stdenv.hostPlatform.system}");
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tdb";
   version = "1.4.15";
 
   src = fetchurl {
-    url = "mirror://samba/tdb/tdb-${version}.tar.gz";
+    url = "mirror://samba/tdb/tdb-${finalAttrs.version}.tar.gz";
     hash = "sha256-+6CdjfHxuQcq6ujniyvUPFr+8gsvbe76YzqhSjd6jdI=";
   };
 
@@ -108,4 +108,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.all;
   };
-}
+})

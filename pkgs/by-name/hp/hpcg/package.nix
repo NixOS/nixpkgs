@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://www.hpcg-benchmark.org/downloads/hpcg-${finalAttrs.version}.tar.gz";
+    url = "https://www.hpcg-benchmark.org/downloads/hpcg-${finalAttrs.version}.tar.gz";
     sha256 = "197lw2nwmzsmfsbvgvi8z7kj69n374kgfzzp8pkmk7mp2vkk991k";
   };
 

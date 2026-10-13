@@ -9,12 +9,12 @@
   rinutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "black-hole-solver";
   version = "1.14.0";
 
   src = fetchurl {
-    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/black-hole-solver-${version}.tar.xz";
+    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/black-hole-solver-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-XEe9CT27Fg9LCQ/WcKt8ErQ3HTmxezu9jGxKEpdVV8A=";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

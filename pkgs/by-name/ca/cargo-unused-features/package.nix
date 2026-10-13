@@ -8,12 +8,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-unused-features";
   version = "0.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-gdwIbbQDw/DgBV9zY2Rk/oWjPv1SS/+oFnocsMo2Axo=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "unused-features";
   };
-}
+})

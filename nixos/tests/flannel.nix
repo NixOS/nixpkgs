@@ -2,8 +2,6 @@
 {
   name = "flannel";
 
-  meta.maintainers = with lib.maintainers; [ offline ];
-
   nodes =
     let
       flannelConfig = {

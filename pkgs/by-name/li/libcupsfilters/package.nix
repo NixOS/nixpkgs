@@ -5,6 +5,7 @@
   dejavu_fonts,
   fetchFromGitHub,
   fetchpatch,
+  fetchurl,
   fontconfig,
   ghostscript,
   lcms2,
@@ -21,6 +22,12 @@
   stdenv,
 }:
 
+let
+  testpage = fetchurl {
+    url = "https://codeberg.org/raboof/cups-testpage/releases/download/v0.1/default-testpage.pdf";
+    hash = "sha256-gtR/r/tORsXLw4PlFhxm29+//YNAKTT0c4z3GsgtzNw=";
+  };
+in
 stdenv.mkDerivation {
   pname = "libcupsfilters";
   version = "2.1.1";
@@ -30,6 +37,18 @@ stdenv.mkDerivation {
     repo = "libcupsfilters";
     rev = "2.1.1";
     hash = "sha256-WEcg+NSsny/N1VAR1ejytM+3nOF3JlNuIUPf4w6N2ew=";
+  };
+
+  # Undefined symbols for architecture x86_64:
+  #   "_iconv", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  #   "_iconv_close", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  #   "_iconv_open", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  # ld: symbol(s) not found for architecture x86_64
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
   };
 
   patches = [
@@ -49,7 +68,9 @@ stdenv.mkDerivation {
       url = "https://github.com/OpenPrinting/libcupsfilters/commit/b69dfacec7f176281782e2f7ac44f04bf9633cfa.patch";
       hash = "sha256-rPUbgtTu7j3uUZrtUhUPO1vFbV6naxIWsHf6x3JhS74=";
     })
-  ];
+  ]
+  # build on platforms without execvpe
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./execve.patch;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -77,17 +98,23 @@ stdenv.mkDerivation {
     "--with-ippfind-path=${lib.getExe' cups "ippfind"}"
     "--enable-imagefilters"
     "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
-  ];
+  ]
+  # build on platforms without execvpe (path to Ghostscript must be absolute)
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gs-path=${lib.getExe ghostscript}";
   makeFlags = [
     "CUPS_SERVERBIN=$(out)/lib/cups"
     "CUPS_DATADIR=$(out)/share/cups"
     "CUPS_SERVERROOT=$(out)/etc/cups"
   ];
 
+  preBuild = ''
+    cp ${testpage} data/default-testpage.pdf
+  '';
+
   meta = {
     homepage = "https://github.com/OpenPrinting/libcupsfilters";
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }

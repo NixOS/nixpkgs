@@ -6,18 +6,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lacy";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "timothebot";
     repo = "lacy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3LFJpzuL2ULnStFwW165gH/S8Hjh49QE4R6c0NyKRSI=";
+    hash = "sha256-yPq9iW/Qm28frvpCByE5sM8+VBtM1k/GBeHVAhb6XOc=";
   };
 
   passthru.updateScript = nix-update-script { };
 
-  cargoHash = "sha256-OJW29CopdO7lbkr0F2KVnfbRGEGIf8J8Vu8YChjeElY=";
+  cargoHash = "sha256-EPoVN3S+vQ1hwxWHUbYy1XSpEkswLDbl29lXV8IVCxA=";
 
   meta = {
     description = "Fast magical cd alternative for lacy terminal navigators";

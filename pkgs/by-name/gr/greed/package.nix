@@ -1,42 +1,26 @@
 {
   lib,
-  stdenv,
   fetchFromGitLab,
-  ncurses,
-  asciidoctor,
   gitUpdater,
+  rustPlatform,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "greed";
-  version = "4.3";
+  version = "5.2";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "greed";
     tag = finalAttrs.version;
-    hash = "sha256-NmX0hYHODe55N0edhdfdm0a/Yqm/UwkU/RREjYl3ePc=";
+    hash = "sha256-zhbx+4ZtsIAVfQ99FndLwGWnqf4QeZHDBUynBDFVssM=";
   };
+
+  cargoHash = "sha256-AT7o6uMdV6NtsbZwjh/r9OUMH7glaOeFfMvMJxVwXtA=";
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "-lcurses" "-lncurses" \
-      --replace-fail "BIN=/usr/games" "BIN=$out/bin" \
-      --replace-fail "/usr/share" "$out/share" \
       --replace-fail "/usr/games/lib/greed.hs" "/var/lib/greed/greed.hs"
-  '';
-
-  buildInputs = [
-    ncurses
-  ];
-
-  nativeBuildInputs = [
-    asciidoctor
-  ];
-
-  preInstall = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man6
   '';
 
   passthru = {

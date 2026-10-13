@@ -7,7 +7,6 @@
   darwin,
   libtool,
   pkg-config,
-  pkgsStatic,
 
   # for passthru.tests
   bind,
@@ -19,19 +18,20 @@
   neovim,
   nodejs,
   ocamlPackages,
+  pkgsStatic,
   python3,
   testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.51.0";
+  version = "1.52.1";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ayTk3qkeeAjrGj5ab7wF7vpWI8XWS1EeKKUqzaD/LY0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y9Nph2LkT1qnOYTW3WCumWWwORnI4P7HxzBjUlGaL7M=";
   };
 
   outputs = [
@@ -129,7 +129,15 @@ stdenv.mkDerivation (finalAttrs: {
         # https://github.com/libuv/libuv/issues/1871
         "shutdown_close_pipe"
       ]
+      ++ lib.optionals stdenv.hostPlatform.isRiscV64 [
+        # Aborts (SIGABRT, exit 134)
+        "poll_nested_epoll"
+      ]
       ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # ENETUNREACH when performed in jailed build env
+        "tcp_connect"
+        "udp_connect"
+        "connect_unspecified"
         # EOPNOTSUPP when performed in jailed build env
         "tcp_reuseport"
         "udp_reuseport"
@@ -143,8 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     in
     lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       sed '/${tdRegexp}/d' -i test/test-list.h
-      # https://github.com/libuv/libuv/issues/4794
-      substituteInPlace Makefile.am --replace-fail -lutil "-lutil -lm"
     '';
 
   nativeBuildInputs = [
@@ -153,6 +159,8 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     pkg-config
   ];
+
+  strictDeps = true;
 
   # This is part of the Darwin bootstrap, so we don’t always get
   # `libutil.dylib` automatically propagated through the SDK.
@@ -173,6 +181,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck =
     # routinely hangs on powerpc64le
     !stdenv.hostPlatform.isPower64;
+
+  # Tests like to time out when run in parallel to large builds
+  preCheck = ''
+    export UV_TEST_TIMEOUT_MULTIPLIER=10
+  '';
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -196,12 +209,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Multi-platform support library with a focus on asynchronous I/O";
     homepage = "https://libuv.org/";
     changelog = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
     platforms = lib.platforms.all;
     license = with lib.licenses; [
       mit
@@ -210,6 +225,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       cc-by-40
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libuv" finalAttrs.version;
   };
 
 })

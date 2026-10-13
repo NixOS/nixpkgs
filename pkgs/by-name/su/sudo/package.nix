@@ -54,6 +54,18 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-sssd-lib=${sssd}/lib"
   ];
 
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "dev"
+  ];
+  # The default stdenv ./configure flags for some reason cause the upstream's
+  # Makefile to `mkdir /var/db`, which fails in the sandbox. Since we split
+  # only trivial outputs - a single header and documentation, we can safely set
+  # the following:
+  setOutputFlags = false;
+
   postConfigure = ''
     cat >> pathnames.h <<'EOF'
       #undef _PATH_MV
@@ -94,12 +106,15 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.sudo.ws/";
     # From https://www.sudo.ws/about/license/
-    license = with lib.licenses; [
-      sudo
-      bsd2
-      bsd3
-      zlib
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        isc
+        bsdAskToEndorse
+        bsd2
+        bsd3
+        zlib
+      ];
     maintainers = with lib.maintainers; [ rhendric ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd ++ lib.platforms.openbsd;
     mainProgram = "sudo";

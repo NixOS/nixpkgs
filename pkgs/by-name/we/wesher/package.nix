@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wesher";
   version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "costela";
     repo = "wesher";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-EIajvcBhS5G9dJzRgXhnD1QKOAhmzngdyCU4L7itT8U=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -31,4 +31,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "wesher";
   };
-}
+})

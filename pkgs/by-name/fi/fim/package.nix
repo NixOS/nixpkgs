@@ -30,12 +30,12 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fim";
   version = "0.7";
 
   src = fetchurl {
-    url = "mirror://savannah/fbi-improved/fim-${version}-trunk.tar.gz";
+    url = "mirror://savannah/fbi-improved/fim-${finalAttrs.version}-trunk.tar.gz";
     sha256 = "sha256-/p7bjeZM46DJOQ9sgtebhkNpBPj2RJYY3dMXhzHnNmg=";
   };
 
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

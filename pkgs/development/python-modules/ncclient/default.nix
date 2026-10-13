@@ -2,15 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
+  hatch-vcs,
   lxml,
   paramiko,
-  setuptools,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ncclient";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -25,11 +26,12 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/ncclient/_version.py
     '';
-    hash = "sha256-vSX+9nTl4r6vnP/vmavdmdChzOC8P2G093/DQNMQwS4=";
+    hash = "sha256-A1e1YE+RW6mkuhF9eEUPiMiKw3YuHqA+4pNqJpYtAJU=";
   };
 
   build-system = [
-    setuptools
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [

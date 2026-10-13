@@ -110,8 +110,6 @@ buildGoModule (
       GOFLAGS="''${GOFLAGS/-trimpath/}" go generate ./cmd/stash
     '';
 
-    strictDeps = true;
-
     passthru = {
       inherit frontend;
       updateScript = ./update.py;
@@ -131,13 +129,11 @@ buildGoModule (
       homepage = "https://stashapp.cc/";
       changelog = "https://github.com/stashapp/stash/blob/v${finalAttrs.version}/ui/v2.5/src/docs/en/Changelog/v${lib.versions.major finalAttrs.version}${lib.versions.minor finalAttrs.version}0.md";
       maintainers = with lib.maintainers; [
-        Golo300
         DrakeTDL
       ];
       platforms = [
         "x86_64-linux"
         "aarch64-linux"
-        "x86_64-darwin"
         "aarch64-darwin"
       ];
     };

@@ -20,13 +20,13 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.8.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.8.6";
   pname = "dar";
 
   src = fetchzip {
-    url = "mirror://sourceforge/dar/dar-${version}.tar.gz";
-    sha256 = "sha256-x8WTJxpYzxvcN5Y6bAKE+JQ7n9dAbPkEosVnaFe2HoA=";
+    url = "mirror://sourceforge/dar/dar-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-wO2W/iZwbaytduQE8DOGtgLXd92nm8CGafZaoygwRJY=";
   };
 
   outputs = [
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

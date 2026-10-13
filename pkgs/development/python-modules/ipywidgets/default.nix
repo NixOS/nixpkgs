@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "8.1.7";
+  version = "8.1.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FfGsBQucy+/UXcz7su9r7QAp2CeGgtVp1xuN2WvuA3Y=";
+    hash = "sha256-YflpMGuV+F+6a2mGt/5F1zEk0dnjAjqAaHENR6Iupmg=";
   };
 
   build-system = [ setuptools ];

@@ -5,13 +5,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyairports";
   version = "2.1.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PWCnJ/zk2oG5xjk+qK4LM9Z7N+zjRN/8hj90njrWK80=";
   };
 
@@ -26,4 +26,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/ozeliger/pyairports";
     license = lib.licenses.asl20;
   };
-}
+})

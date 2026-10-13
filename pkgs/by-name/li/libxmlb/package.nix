@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxmlb";
-  version = "0.3.24";
+  version = "0.3.27";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hughsie";
     repo = "libxmlb";
     rev = finalAttrs.version;
-    hash = "sha256-3Yxq0KZMV9GRmNjZ19eIqGq+UJS4PGyVPS6HBcMEbHo=";
+    hash = "sha256-5RP794gBA67DcrjzqvguDYu/Sf+1X5kfRi9yvLx9b+c=";
   };
 
   patches = [
@@ -84,6 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
       installed-tests = nixosTests.installed-tests.libxmlb;
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library to help create and query binary XML blobs";

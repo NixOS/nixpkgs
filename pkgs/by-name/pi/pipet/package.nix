@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pipet";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "pipet";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-pu+2sHdLz9TvYHBwvGTtFr/oAD+CreOR8io82YQANxc=";
   };
 
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
-    "-X main.currentSha=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.currentSha=${finalAttrs.src.rev}"
   ];
 
   doCheck = false; # Requires network
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bjesus ];
     mainProgram = "pipet";
   };
-}
+})

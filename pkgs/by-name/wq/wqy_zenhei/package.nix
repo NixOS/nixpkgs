@@ -2,22 +2,24 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wqy-zenhei";
   version = "0.9.45";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wqy/wqy-zenhei-${version}.tar.gz";
+    url = "mirror://sourceforge/wqy/wqy-zenhei-${finalAttrs.version}.tar.gz";
     hash = "sha256-5LfjBkdb+UJ9F1dXjw5FKJMMhMROqj8WfUxC8RDuddY=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
+  dontBuild = true;
+
   installPhase = ''
     runHook preInstall
-
-    install -Dm644 *.ttc -t $out/share/fonts/
-
     runHook postInstall
   '';
 
@@ -28,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ lib.maintainers.pkmx ];
     platforms = lib.platforms.all;
   };
-}
+})

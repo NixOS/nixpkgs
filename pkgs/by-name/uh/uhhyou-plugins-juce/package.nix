@@ -6,10 +6,10 @@
   freetype,
   lib,
   libGL,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
   libjack2,
   pkg-config,
   stdenv,
@@ -33,10 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     freetype
     libGL
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
     libjack2
   ];
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/ryukau/UhhyouPluginsJuce";
     description = "A collection of VST3 effect plugins";
-    license = [ lib.licenses.agpl3Only ];
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
   };

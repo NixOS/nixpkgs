@@ -9,12 +9,12 @@
   libmhash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgringotts";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/gringotts.berlios/files/libgringotts-${version}.tar.bz2";
+    url = "https://sourceforge.net/projects/gringotts.berlios/files/libgringotts-${finalAttrs.version}.tar.bz2";
     sha256 = "1ldz1lyl1aml5ci1mpnys8dg6n7khpcs4zpycak3spcpgdsnypm7";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ pSub ];
   };
-}
+})

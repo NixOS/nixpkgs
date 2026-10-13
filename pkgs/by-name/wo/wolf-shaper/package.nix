@@ -7,7 +7,7 @@
   libx11,
   liblo,
   libGL,
-  libXcursor,
+  libxcursor,
   pkg-config,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     liblo
     libGL
-    libXcursor
+    libxcursor
   ];
 
   makeFlags = [

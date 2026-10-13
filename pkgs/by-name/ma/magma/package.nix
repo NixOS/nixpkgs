@@ -71,7 +71,9 @@ let
   # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
+  rocmArches =
+    lists.map (x: strings.removePrefix "gfx" x)
+      rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -207,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lists.optionals cudaSupport (
     with cudaPackages;
     [
-      cuda_cccl # <nv/target> and <cuda/std/type_traits>
+      cccl # <nv/target> and <cuda/std/type_traits>
       cuda_cudart # cuda_runtime.h
       libcublas # cublas_v2.h
       libcusparse # cusparse.h

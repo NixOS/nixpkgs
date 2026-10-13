@@ -6,8 +6,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "material-icon-theme";
     publisher = "PKief";
-    version = "5.31.0";
-    hash = "sha256-B2+yaKX/nhBLdeFDffwt4CmeWo+Jr4oMxcWBEaAhRtg=";
+    version = "5.39.0";
+    hash = "sha256-8/2k4dYJXZQskkZ8GtbzIqdMYhYPfSl0EFjk1yaSL70=";
   };
   meta = {
     description = "Material Design Icons for Visual Studio Code";

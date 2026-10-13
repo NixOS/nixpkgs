@@ -19,18 +19,18 @@
   coreutils,
   darwin,
   x11Support ? true,
-  libX11,
+  libx11,
 
   # updater only
   writeScript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mc";
   version = "4.8.33";
 
   src = fetchurl {
-    url = "https://ftp.osuosl.org/pub/midnightcommander/mc-${version}.tar.xz";
+    url = "https://ftp.osuosl.org/pub/midnightcommander/mc-${finalAttrs.version}.tar.xz";
     hash = "sha256-yuFJ1C+ETlGF2MgdfbOROo+iFMZfhSIAqdiWtGivFkw=";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     slang
     zip
   ]
-  ++ lib.optionals x11Support [ libX11 ]
+  ++ lib.optionals x11Support [ libx11 ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     e2fsprogs
     gpm
@@ -83,21 +83,23 @@ stdenv.mkDerivation rec {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  postFixup = lib.optionalString ((!stdenv.hostPlatform.isDarwin) && x11Support) ''
-    # libX11.so is loaded dynamically so autopatch doesn't detect it
-    patchelf \
-      --add-needed ${libX11}/lib/libX11.so \
-      $out/bin/mc
-  '';
+  postFixup =
+    lib.optionalString (!stdenv.hostPlatform.isDarwin && x11Support && !stdenv.hostPlatform.isStatic)
+      ''
+        # libX11.so is loaded dynamically so autopatch doesn't detect it
+        patchelf \
+          --add-needed ${libx11}/lib/libX11.so \
+          $out/bin/mc
+      '';
 
   passthru.updateScript = writeScript "update-mc" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl pcre common-updater-scripts
+    #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
     set -eu -o pipefail
 
     # Expect the text in format of "Current version is: 4.8.27; ...".
-    new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
+    new_version="$(curl -s https://midnight-commander.org/ | pcre2grep -o1 'Current version is: (([0-9]+\.?)+);')"
     update-source-version mc "$new_version"
   '';
 
@@ -109,4 +111,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "mc";
   };
-}
+})

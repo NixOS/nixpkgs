@@ -3,13 +3,13 @@
   fetchPypi,
   lib,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mintotp";
   version = "0.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0PTbXts4p0gRIBdqUm6MKVObnoBYHdLcwYEVV9d8+tU=";
   };
 
@@ -18,9 +18,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Minimal TOTP generator";
     homepage = "https://github.com/susam/mintotp";
-    changelog = "https://github.com/susam/mintotp/raw/${version}/CHANGES.md";
+    changelog = "https://github.com/susam/mintotp/raw/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     mainProgram = "mintotp";
     maintainers = with lib.maintainers; [ provokateurin ];
   };
-}
+})

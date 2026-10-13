@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   makeWrapper,
-  wxGTK32,
+  wxwidgets_3_2,
   wxsqlite3,
   sqlite,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     wxsqlite3
     sqlite
   ];

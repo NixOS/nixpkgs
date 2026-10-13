@@ -4,27 +4,24 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zm-py";
-  version = "0.5.4";
+  version = "0.5.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "rohankapoorcom";
     repo = "zm-py";
-    tag = "v${version}";
-    hash = "sha256-n9FRX2Pnn96H0HVT4SHLJgONc0XzQ005itMNpvl9IYg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TXYfZrsrBK10gWvPLM881mSAeeV2v2dQM7sAO/z8gsE=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ requests ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -33,8 +30,8 @@ buildPythonPackage rec {
   meta = {
     description = "Loose python wrapper around the ZoneMinder REST API";
     homepage = "https://github.com/rohankapoorcom/zm-py";
-    changelog = "https://github.com/rohankapoorcom/zm-py/releases/tag/v${version}";
+    changelog = "https://github.com/rohankapoorcom/zm-py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
-}
+})

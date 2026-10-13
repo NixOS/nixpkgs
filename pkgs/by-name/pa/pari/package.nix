@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   gmp,
-  libX11,
+  libx11,
   libpthread-stubs,
   perl,
   readline,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gmp
-    libX11
+    libx11
     perl
     readline
     texliveBasic

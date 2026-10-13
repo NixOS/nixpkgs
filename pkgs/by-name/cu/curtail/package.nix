@@ -1,9 +1,10 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   wrapGAppsHook4,
   appstream-glib,
+  blueprint-compiler,
   desktop-file-utils,
   gettext,
   gtk4,
@@ -20,21 +21,22 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "curtail";
-  version = "1.14.0";
+  version = "1.16.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
-    tag = version;
-    sha256 = "sha256-AxQe7abHZp4SRp90fkFbmXf3ZQH3VmxQVkpxRcit+54=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z4XY2/24FBdvPB3MeT7PPSXprf5HHlL1OdB6rknsL/w=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook4
     appstream-glib
+    blueprint-compiler
     desktop-file-utils
     gettext
     gtk4
@@ -52,8 +54,8 @@ python3.pkgs.buildPythonApplication rec {
     libadwaita
   ];
 
-  propagatedBuildInputs = [
-    python3.pkgs.pygobject3
+  dependencies = [
+    python3Packages.pygobject3
   ];
 
   preInstall = ''
@@ -82,10 +84,11 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   meta = {
+    changelog = "https://github.com/Huluti/Curtail/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Simple & useful image compressor";
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

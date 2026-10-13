@@ -7,7 +7,7 @@
   wrapGAppsNoGuiHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "networkd-notify";
   version = "unstable-2022-11-29";
   # There is no setup.py, just a single Python script.
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitLab {
     owner = "wavexx";
-    repo = pname;
+    repo = "networkd-notify";
     rev = "c2f3e71076a0f51c097064b1eb2505a361c7cc0e";
     hash = "sha256-fanP1EWERT2Jy4OnMo8OMdR9flginYUgMw+XgmDve3o=";
   };

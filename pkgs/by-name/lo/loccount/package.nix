@@ -4,14 +4,14 @@
   fetchFromGitLab,
   python3,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "loccount";
   version = "2.16";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "loccount";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-uHX45KZO6R0tgTU10csKLiVYZZ/ea2V6BwhF6vfKKtA=";
   };
 
@@ -51,4 +51,4 @@ buildGoModule rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ calvertvl ];
   };
-}
+})

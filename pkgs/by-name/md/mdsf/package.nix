@@ -7,21 +7,19 @@
   nix-update-script,
   installShellFiles,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdsf";
-  version = "0.11.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "hougesen";
     repo = "mdsf";
-    tag = "v${version}";
-    hash = "sha256-hz28Aj4sD4/bA6T1ZUW50SzYV6dmM04vSgYwNSWyaVg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f1hNGTAQoriCWL5g6b5MXej2Qc4pVAEf3k/J9eyHjVQ=";
   };
 
-  cargoHash = "sha256-dTQucEYGpsBhKonLJRtQziXkbEGkHL+w9FMi9+iLvnw=";
+  cargoHash = "sha256-VjiJn9kvl+WtWKx7nvmw2ukAiEsO3hVCRSoR2XqjIO4=";
 
   # many tests fail for various reasons of which most depend on the build sandbox
   doCheck = false;
@@ -49,4 +47,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "mdsf";
   };
-}
+})

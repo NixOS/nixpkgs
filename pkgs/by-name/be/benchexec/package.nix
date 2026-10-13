@@ -7,14 +7,14 @@
   testers,
   benchexec,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "benchexec";
   version = "3.27";
 
   src = fetchFromGitHub {
     owner = "sosy-lab";
     repo = "benchexec";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-lokz7klAQAascij0T/T43/PrbMh6ZUAvFnIqg13pVUk=";
   };
 
@@ -67,4 +67,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     mainProgram = "benchexec";
   };
-}
+})

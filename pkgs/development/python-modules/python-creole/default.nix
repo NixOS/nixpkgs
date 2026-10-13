@@ -68,6 +68,9 @@ buildPythonPackage rec {
     # rendering mismatches, likely docutils version mismatch
     "test_headlines1"
     "test_simple_table"
+    # - <string>:5: (ERROR/3) Document or section may not begin with a transition.
+    # + <string>:5: (WARNING/2) Document or section may not begin with a transition.
+    "test_non_valid_readme"
   ];
 
   disabledTestPaths = [

@@ -91,5 +91,6 @@ makeSetupHook {
   meta = {
     description = "Setup hook for configuring and wrapping applications based on libcosmic";
     teams = [ lib.teams.cosmic ];
+    license = lib.licenses.mit;
   };
 } ./libcosmic-app-hook.sh

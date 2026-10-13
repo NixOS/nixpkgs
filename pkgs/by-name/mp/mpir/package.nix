@@ -1,10 +1,11 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   m4,
   which,
   yasm,
+  texinfo,
   autoreconfHook,
   fetchpatch,
   buildPackages,
@@ -14,18 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mpir";
   version = "3.0.0";
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  nativeBuildInputs = [
-    m4
-    which
-    yasm
-    autoreconfHook
-  ];
-
-  src = fetchurl {
-    url = "https://mpir.org/mpir-${finalAttrs.version}.tar.bz2";
-    sha256 = "1fvmhrqdjs925hzr2i8bszm50h00gwsh17p2kn2pi51zrxck9xjj";
+  src = fetchFromGitHub {
+    owner = "wbhart";
+    repo = "mpir";
+    tag = "mpir-${finalAttrs.version}";
+    hash = "sha256-Q5P3N2w6NX+s5Fu3obTDOg+tEAWnAMDgbRlzFTpolmg=";
   };
 
   patches = [
@@ -47,6 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  nativeBuildInputs = [
+    m4
+    which
+    yasm
+    texinfo
+    autoreconfHook
+  ];
+
   configureFlags = [ "--enable-cxx" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];
 
   meta = {
@@ -54,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
-    downloadPage = "https://mpir.org/downloads.html";
-    homepage = "https://mpir.org/";
+    homepage = "https://github.com/wbhart/mpir";
   };
 })

@@ -3,19 +3,19 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   xorgproto,
   writeScript,
   testers,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxxf86dga";
-  version = "1.1.6";
+  version = "1.1.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXxf86dga-${finalAttrs.version}.tar.xz";
-    hash = "sha256-vkRCdXmAj+OiF9WfUcrnVqJpE+tuTIc4zKtl/1bXmA8=";
+    hash = "sha256-s75bRE0yTLbg9LUBmklyyZ6jNsy4q3lo7M7+zZF//eY=";
   };
 
   strictDeps = true;
@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXext
+    libx11
+    libxext
     xorgproto
   ];
 

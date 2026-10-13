@@ -4,14 +4,14 @@
   fetchpatch,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "json-plot";
   version = "1.1.12";
 
   src = fetchFromGitHub {
     owner = "sgreben";
     repo = "jp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-WWARAh/CF3lGli3VLRzAGaCA8xQyryPi8WcuwvdInjk=";
   };
 
@@ -37,4 +37,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "jp";
   };
-}
+})

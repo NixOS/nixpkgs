@@ -5,26 +5,26 @@
   clang_20,
   fetchFromGitHub,
   libsecret,
-  nodejs,
+  nodejs-slim,
   pkg-config,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "azurite";
-  version = "3.35.0";
+  version = "3.37.0";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "Azurite";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sVYiHQJ3nR5vM+oPAHzr/MjuNBMY14afqCHpw32WCiQ=";
+    hash = "sha256-gqWwUpUKaMzc9TiIhgubak+NQCX9dvqLQDg6Eysaw14=";
   };
 
-  npmDepsHash = "sha256-UBHjb65Ud7IANsR30DokbI/16+dVjDEtfhqRPAQhGUw=";
+  npmDepsHash = "sha256-ZgYGURSFc/4xx6QqJA5wMFzbWSaAH39ztcfBEqCfmVg=";
 
   nativeBuildInputs = [
     pkg-config
-    nodejs.python
+    nodejs-slim.python
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
 

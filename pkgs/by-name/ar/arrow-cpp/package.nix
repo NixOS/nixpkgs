@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   fetchFromGitHub,
   fixDarwinDylibNames,
   apache-orc,
@@ -33,7 +34,6 @@
   gtest,
   libbacktrace,
   lz4,
-  minio,
   ninja,
   nlohmann_json,
   openssl,
@@ -56,8 +56,14 @@
   enableFlight ? stdenv.buildPlatform == stdenv.hostPlatform,
   # Disable also on RiscV
   # configure: error: cannot determine number of significant virtual address bits
+  # On LoongArch64, tests fail with:
+  # /build/source/cpp/src/arrow/memory_pool_test.cc:249: Failure
+  # The difference between retained - retained0 and 0 is 98304, which exceeds 40000
   enableJemalloc ?
-    !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isRiscV64,
+    !stdenv.hostPlatform.isDarwin
+    && !stdenv.hostPlatform.isAarch64
+    && !stdenv.hostPlatform.isLoongArch64
+    && !stdenv.hostPlatform.isRiscV64,
   enableS3 ? true,
   # google-cloud-cpp fails to build on RiscV
   enableGcs ? !stdenv.hostPlatform.isRiscV64,
@@ -69,8 +75,8 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "9a02925d1ba80bd493b6d4da6e8a777588d57ac4";
-    hash = "sha256-dEFCkeQpQrU61uCwJp/XB2umbQHjXtzado36BGChoc0=";
+    rev = "19dda67f485ffb3ffa92f4c6fa083576ef052d58";
+    hash = "sha256-mna6I/a5ZxMLdWN0QfCsgsre6yMeuSv4syX5ePGLhfg=";
   };
 
   parquet-testing = fetchFromGitHub {
@@ -81,7 +87,7 @@ let
     hash = "sha256-Xd6o3RT6Q0tPutV77J0P1x3F6U3RHdCBOKGUKtkQCKk=";
   };
 
-  version = "22.0.0";
+  version = "24.0.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arrow-cpp";
@@ -91,42 +97,89 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "apache";
     repo = "arrow";
     rev = "apache-arrow-${version}";
-    hash = "sha256-i4Smt43oi4sddUt3qH7ePjensBSfPW+w/ExLVcVNKic=";
+    hash = "sha256-qTdkzZegANNvtO7nbqXVC8hc7BexvmeFF/0l5VzRb8g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cpp";
 
+  patches = [
+    # Fix flaky test racing on (not) waiting for azurite
+    # https://github.com/apache/arrow/pull/50878
+    (fetchpatch {
+      url = "https://github.com/apache/arrow/commit/e6a89be6c7cc537b04844796bd84ac8240942050.patch";
+      hash = "sha256-hB2ebq6a64FPBZeg7aS+tSZZIzhFs3w9A3n2NK+/ob8=";
+    })
+  ];
+  patchFlags = [ "-p2" ];
+
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
 
-  # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
-  # collisions as well as custom build flags
-  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
-    hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
-  };
+  env =
+    lib.optionalAttrs enableJemalloc {
+      # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
+      # collisions as well as custom build flags
+      ARROW_JEMALLOC_URL = fetchurl {
+        url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
+        hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
+      };
+    }
+    // {
+      # mimalloc: arrow uses custom build flags for mimalloc
+      ARROW_MIMALLOC_URL = fetchFromGitHub {
+        owner = "microsoft";
+        repo = "mimalloc";
+        tag = "v3.1.5";
+        hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
+      };
 
-  # mimalloc: arrow uses custom build flags for mimalloc
-  ARROW_MIMALLOC_URL = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v3.1.5";
-    hash = "sha256-fk6nfyBFS1G0sJwUJVgTC1+aKd0We/JjsIYTO+IOfyg=";
-  };
+      ARROW_XSIMD_URL = fetchFromGitHub {
+        owner = "xtensor-stack";
+        repo = "xsimd";
+        tag = "14.0.0";
+        hash = "sha256-ijNoHb6xC+OHJbUB4j1PRsoHMzjrnOHVoDRe/nKguDo=";
+      };
 
-  ARROW_XSIMD_URL = fetchFromGitHub {
-    owner = "xtensor-stack";
-    repo = "xsimd";
-    tag = "13.0.0";
-    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
-  };
+      ARROW_SUBSTRAIT_URL = fetchFromGitHub {
+        owner = "substrait-io";
+        repo = "substrait";
+        tag = "v0.44.0";
+        hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
+      };
 
-  ARROW_SUBSTRAIT_URL = fetchFromGitHub {
-    owner = "substrait-io";
-    repo = "substrait";
-    tag = "v0.44.0";
-    hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
-  };
+      # apache-orc looks for things in caps
+      LZ4_HOME = lz4;
+      PROTOBUF_HOME = protobuf.full;
+      SNAPPY_HOME = snappy.dev;
+      ZSTD_HOME = zstd.dev;
+      ARROW_TEST_DATA = "${arrow-testing}/data";
+      PARQUET_TEST_DATA = "${parquet-testing}/data";
+      GTEST_FILTER =
+        let
+          # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+          filteredTests =
+            lib.optionals stdenv.hostPlatform.isAarch64 [
+              "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+              "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+              "TestCompareKernel.PrimitiveRandomTests"
+            ]
+            ++ lib.optionals enableS3 [
+              "S3OptionsTest.FromUri"
+              "S3RegionResolutionTest.NonExistentBucket"
+              "S3RegionResolutionTest.PublicBucket"
+              "S3RegionResolutionTest.RestrictedBucket"
+              "TestMinioServer.Connect"
+              "TestS3FS.*"
+              "TestS3FSGeneric.*"
+              "TestS3FSHTTPS.*" # Needs Minio
+            ]
+            ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+              # https://github.com/apache/arrow/issues/41505
+              "TestAzuriteGeneric.Empty"
+            ];
+        in
+        "-${lib.concatStringsSep ":" filteredTests}";
+    };
 
   nativeBuildInputs = [
     cmake
@@ -179,12 +232,6 @@ stdenv.mkDerivation (finalAttrs: {
     azure-sdk-for-cpp.storage-blobs
     azure-sdk-for-cpp.storage-files-datalake
   ];
-
-  # apache-orc looks for things in caps
-  env = {
-    LZ4_ROOT = lz4;
-    ZSTD_ROOT = zstd.dev;
-  };
 
   # fails tests on glibc with this enabled
   hardeningDisable = [ "glibcxxassertions" ];
@@ -254,28 +301,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  ARROW_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${arrow-testing}/data";
-  PARQUET_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${parquet-testing}/data";
-  GTEST_FILTER =
-    let
-      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-      filteredTests =
-        lib.optionals stdenv.hostPlatform.isAarch64 [
-          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-          "TestCompareKernel.PrimitiveRandomTests"
-        ]
-        ++ lib.optionals enableS3 [
-          "S3OptionsTest.FromUri"
-          "S3RegionResolutionTest.NonExistentBucket"
-          "S3RegionResolutionTest.PublicBucket"
-          "S3RegionResolutionTest.RestrictedBucket"
-          "TestMinioServer.Connect"
-          "TestS3FS.*"
-          "TestS3FSGeneric.*"
-        ];
-    in
-    lib.optionalString finalAttrs.doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
 
   __darwinAllowLocalNetworking = true;
 
@@ -284,7 +309,6 @@ stdenv.mkDerivation (finalAttrs: {
     which
     sqlite
   ]
-  ++ lib.optionals enableS3 [ minio ]
   ++ lib.optionals enableFlight [ python3 ]
   ++ lib.optionals enableAzure [ azurite ];
 
@@ -298,6 +322,8 @@ stdenv.mkDerivation (finalAttrs: {
         "arrow-flight-integration-test"
         # File already exists in database: orc_proto.proto
         "arrow-orc-adapter-test"
+        # missing test fixture
+        "parquet-encryption-test"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # https://github.com/NixOS/nixpkgs/issues/460687
@@ -309,12 +335,25 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstallCheck
 
-      ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      ctestArgs=(
+        -L unittest
+        --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+      )
+
+      # Match ci/scripts/cpp_test.sh to fight flakiness.
+      # https://github.com/apache/arrow/issues/40121
+      ctestArgs+=(--repeat until-pass:3)
+
+      ctest "''${ctestArgs[@]}"
 
       runHook postInstallCheck
     '';
 
+  __structuredAttrs = true;
+
   meta = {
+    # https://hydra.nixos.org/job/nixpkgs/unstable/arrow-cpp.x86_64-darwin/all
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     changelog = "https://arrow.apache.org/release/${finalAttrs.version}.html";

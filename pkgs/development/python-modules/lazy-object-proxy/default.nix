@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "lazy-object-proxy";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ionelmc";
     repo = "python-lazy-object-proxy";
     tag = "v${version}";
-    hash = "sha256-iOftyGx5wLxIUwlmo1lY06MXqgxfZek6RR1S5UydOEs=";
+    hash = "sha256-80+QJlm2X2u0OGEkYbEsdg8OiAXLiBwrkVXOF9NBL+I=";
   };
 
   build-system = [ setuptools-scm ];
@@ -28,6 +28,6 @@ buildPythonPackage rec {
   meta = {
     description = "Fast and thorough lazy object proxy";
     homepage = "https://github.com/ionelmc/python-lazy-object-proxy";
-    license = with lib.licenses; [ bsd2 ];
+    license = lib.licenses.bsd2;
   };
 }

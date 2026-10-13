@@ -26,13 +26,13 @@
   wrapGAppsHook4,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-tweaks";
   version = "49.0";
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-tweaks/${lib.versions.major version}/gnome-tweaks-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-tweaks/${lib.versions.major finalAttrs.version}/gnome-tweaks-${finalAttrs.version}.tar.xz";
     hash = "sha256-s5Cb3LSQW2hCfWq1geAfQ23/jlwKOJseCxRQDxiAbrs=";
   };
 
@@ -96,4 +96,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

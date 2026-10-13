@@ -11,7 +11,7 @@
   zlib,
   torsocks,
   libseccomp,
-  systemd,
+  systemdLibs,
   libcap,
   xz,
   zstd,
@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.8.22";
+  version = "0.4.9.14";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yIYg2SeKJ549In/2CXW4SqQTWSEfjs/2hgGZI7mSkzI=";
+    hash = "sha256-GCRJrByP9DJ42ie2mwIEDhHQPQMn222RJuQZDsYjXko=";
   };
 
   outputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    systemd
+    systemdLibs
     libcap
   ];
 
@@ -85,7 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
       # cross compiles correctly but needs the following
       lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ];
 
-  NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_LINK = "-lgcc_s";
+  };
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
@@ -100,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
   # disable tests on linux aarch32
   # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
+
+  # some tests (e.g. util/socketpair_ersatz) fail in the darwin sandbox otherwise.
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     mkdir -p $geoip/share/tor
@@ -126,11 +131,13 @@ stdenv.mkDerivation (finalAttrs: {
         tee = lib.getExe' coreutils "tee";
         tor = lib.getExe finalAttrs.finalPackage;
       };
+      meta.license = lib.licenses.mit;
     } ./proxy-hook.sh;
   };
 
   meta = {
     homepage = "https://www.torproject.org/";
+    donationPage = "https://donate.torproject.org/";
     description = "Anonymizing overlay network";
     longDescription = ''
       Tor helps improve your privacy by bouncing your communications around a
@@ -148,8 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tor";
     maintainers = with lib.maintainers; [
       thoughtpolice
-      joachifm
       prusnak
+      whispersofthedawn
     ];
     platforms = lib.platforms.unix;
   };

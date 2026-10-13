@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   hexdump,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     zlib
   ];
 

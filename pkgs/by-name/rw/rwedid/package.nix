@@ -7,14 +7,14 @@
   xz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rwedid";
   version = "0.3.2";
 
   src = fetchFromCodeberg {
     owner = "ral";
     repo = "rwedid";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lbZD/QLCgkD5OQZdn6oCjry9edMcJ+q9qGF7IbY36U4=";
   };
 
@@ -48,4 +48,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

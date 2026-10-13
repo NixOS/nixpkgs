@@ -8,13 +8,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pynina";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-ypbfvhXKu4pKr/DrWFnAhwMoqShJzWLqlA7/YQzJ9r4=";
+    hash = "sha256-dLY+rAGN2oO7AN+Q02YYYvB9XtdtGSyNrGiJ4fe1GOc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools >= 84.0.0" setuptools
+  '';
 
   pythonRelaxDeps = [ "aiohttp" ];
 

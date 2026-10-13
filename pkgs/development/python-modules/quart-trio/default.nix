@@ -40,10 +40,7 @@ buildPythonPackage rec {
     quart
     trio
   ]
-  ++ hypercorn.optional-dependencies.trio
-  ++ lib.optionals (pythonOlder "3.11") [
-    exceptiongroup
-  ];
+  ++ hypercorn.optional-dependencies.trio;
 
   pythonImportsCheck = [
     "quart_trio"

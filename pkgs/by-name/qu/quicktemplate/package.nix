@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "quicktemplate";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "valyala";
     repo = "quicktemplate";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "cra3LZ3Yq0KNQErQ2q0bVSy7rOLKdSkIryIgQsNRBHw=";
   };
 
@@ -22,4 +22,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "qtc";
   };
-}
+})

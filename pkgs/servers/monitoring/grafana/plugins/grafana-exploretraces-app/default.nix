@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "grafana-exploretraces-app";
-  version = "1.3.0";
-  zipHash = "sha256-7dSaO+m67oQ3WlL+SC+IsuzFeZ2GtSBJORggd4YENxU=";
+  version = "2.2.1";
+  zipHash = "sha256-c+S5X3G7bXCEMFpgsCpce81B5qYf1igzGOh3NtvcnWg=";
   meta = {
     description = "Opinionated traces app";
     license = lib.licenses.agpl3Only;

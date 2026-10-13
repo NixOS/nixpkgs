@@ -4,7 +4,7 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wbox";
   version = "5";
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://www.hping.org/wbox/wbox-${version}.tar.gz";
+    url = "http://www.hping.org/wbox/wbox-${finalAttrs.version}.tar.gz";
     sha256 = "06daxwbysppvbh1mwprw8fgsp6mbd3kqj7a978w7ivn8hdgdi28m";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "wbox";
   };
-}
+})

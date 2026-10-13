@@ -54,6 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./CMakeLists.txt --replace-fail \
       "cmake_minimum_required(VERSION 3.2 FATAL_ERROR)" \
       "cmake_minimum_required(VERSION 4.0)"
+
+    # boost 1.89 removed the boost_system stub library
+    substituteInPlace CMakeLists.txt --replace-fail ' system' ""
   '';
 
   # causes redefinition of _FORTIFY_SOURCE

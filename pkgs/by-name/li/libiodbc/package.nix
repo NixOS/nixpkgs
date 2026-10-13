@@ -8,12 +8,12 @@
   useGTK ? config.libiodbc.gtk or false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libiodbc";
   version = "3.52.16";
 
   src = fetchurl {
-    url = "mirror://sourceforge/iodbc/libiodbc-${version}.tar.gz";
+    url = "mirror://sourceforge/iodbc/libiodbc-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-OJizLQeWE2D28s822zYDa3GaIw5HZGklioDzIkPoRfo=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };
-}
+})

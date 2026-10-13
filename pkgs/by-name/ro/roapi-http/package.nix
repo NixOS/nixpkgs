@@ -1,56 +1,42 @@
 {
-  stdenv,
+  cmake,
+  fetchFromGitHub,
   lib,
-  fetchurl,
+  rustPlatform,
 }:
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "roapi-http";
   version = "0.6.0";
-  target = lib.optionalString stdenv.hostPlatform.isDarwin "apple-darwin";
-in
-# TODO build from source, currently compilation fails on darwin on snmalloc with
-#  ./mem/../ds/../pal/pal_apple.h:277:64: error: use of undeclared identifier 'kCCSuccess'
-#            reinterpret_cast<void*>(&result), sizeof(result)) != kCCSuccess)
-#
-# rustPlatform.buildRustPackage {
-#   pname = "roapi-http";
-#   inherit version;
 
-#   src = fetchFromGitHub {
-#     owner = "roapi";
-#     repo = "roapi";
-#     rev = "roapi-http-v${version}";
-#     sha256 = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
-#   };
-
-#   cargoHash = "sha256-qDJKC6MXeKerPFwJsNND3WkziFtGkTvCgVEsdPbBGAo=";
-
-#   buildAndTestSubdir = "roapi-http";
-
-#   nativeBuildInputs = [ cmake ];
-
-stdenv.mkDerivation rec {
-  inherit pname version;
-
-  src = fetchurl {
-    url = "https://github.com/roapi/roapi/releases/download/${pname}-v${version}/${pname}-${target}.tar.gz";
-    sha256 = "sha256-lv6BHg/LkrOlyq8D1udAYW8/AbZRb344YCcVnwo3ZHk=";
+  src = fetchFromGitHub {
+    owner = "roapi";
+    repo = "roapi";
+    rev = "roapi-http-v${finalAttrs.version}";
+    sha256 = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
   };
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
 
-  installPhase = ''
-    tar xvzf $src
-    mkdir -p "$out/bin"
-    cp roapi-http $out/bin
-  '';
+  cargoHash = "sha256-PlQq2zttiheQ0WFBLuH4dBSuExK+7hP22aLfmtNtLCk=";
+
+  buildAndTestSubdir = "roapi-http";
+
+  nativeBuildInputs = [ cmake ];
+
+  # snmalloc fails to compile on Darwin, and upstream doesn't use it for Linux
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "rustls" ];
+
+  # the crate uses `#![deny(warnings)]`, which breaks with lints added by
+  # newer rustc releases than the code was written against
+  env.RUSTFLAGS = "--cap-lints warn";
+
+  checkFlags = [ "--skip=test_http2" ]; # this test tries `curl` and fails
 
   meta = {
     description = "Create full-fledged APIs for static datasets without writing a single line of code";
     homepage = "https://roapi.github.io/docs/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
-    platforms = lib.platforms.darwin;
+    platforms = lib.platforms.unix;
+    mainProgram = "roapi-http";
   };
-}
+})

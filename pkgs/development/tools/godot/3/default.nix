@@ -1,41 +1,46 @@
 {
   lib,
   stdenv,
+  _experimental-update-script-combinators,
   alsa-lib,
   alsa-plugins,
   autoPatchelfHook,
   fetchFromGitHub,
   freetype,
   installShellFiles,
+  libGL,
   libGLU,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   makeWrapper,
+  nix-update-script,
   openssl,
   pkg-config,
   scons,
+  testers,
   udev,
+  writeScriptBin,
   yasm,
   zlib,
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "godot3";
-  version = "3.6.2";
+  version = "3.6.3";
   godotBuildDescription = "X11 tools";
 
   src = fetchFromGitHub {
     owner = "godotengine";
     repo = "godot";
-    rev = "${self.version}-stable";
-    hash = "sha256-loNjE+NmHniZ827Eb9MHSNo27F2LrURhWURjUq4d8xw=";
+    rev = "${finalAttrs.version}-stable";
+    hash = "sha256-5MerJVY+SAri85mo2dbqxjDftpJJXzjsMAvlwidGEs4=";
   };
 
   # Fix PIE hardening: https://github.com/godotengine/godot/pull/50737
@@ -57,14 +62,14 @@ stdenv.mkDerivation (self: {
     freetype
     libGLU
     libpulseaudio
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     openssl
     udev
     yasm
@@ -90,34 +95,34 @@ stdenv.mkDerivation (self: {
   shouldBuildTools = true;
   godotBuildTarget = "release_debug";
 
-  lto = if self.godotBuildTarget == "release" then "full" else "none";
+  lto = if finalAttrs.godotBuildTarget == "release" then "full" else "none";
 
   sconsFlags = [
     "arch=${stdenv.hostPlatform.linuxArch}"
-    "platform=${self.godotBuildPlatform}"
-    "tools=${lib.boolToString self.shouldBuildTools}"
-    "target=${self.godotBuildTarget}"
+    "platform=${finalAttrs.godotBuildPlatform}"
+    "tools=${lib.boolToString finalAttrs.shouldBuildTools}"
+    "target=${finalAttrs.godotBuildTarget}"
     "bits=${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    "lto=${self.lto}"
+    "lto=${finalAttrs.lto}"
   ];
 
-  shouldWrapBinary = self.shouldBuildTools;
-  shouldInstallManual = self.shouldBuildTools;
-  shouldPatchBinary = self.shouldBuildTools;
-  shouldInstallHeaders = self.shouldBuildTools;
-  shouldInstallShortcut = self.shouldBuildTools && self.godotBuildPlatform != "server";
+  shouldWrapBinary = finalAttrs.shouldBuildTools;
+  shouldInstallManual = finalAttrs.shouldBuildTools;
+  shouldPatchBinary = finalAttrs.shouldBuildTools;
+  shouldInstallHeaders = finalAttrs.shouldBuildTools;
+  shouldInstallShortcut = finalAttrs.shouldBuildTools && finalAttrs.godotBuildPlatform != "server";
 
   outputs = [
     "out"
   ]
-  ++ lib.optional self.shouldInstallManual "man"
-  ++ lib.optional self.shouldBuildTools "dev";
+  ++ lib.optional finalAttrs.shouldInstallManual "man"
+  ++ lib.optional finalAttrs.shouldBuildTools "dev";
 
   builtGodotBinNamePattern =
-    if self.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
+    if finalAttrs.godotBuildPlatform == "server" then "godot_server.*" else "godot.*";
 
   godotBinInstallPath = "bin";
-  installedGodotBinName = self.pname;
+  installedGodotBinName = finalAttrs.pname;
   installedGodotShortcutFileName = "org.godotengine.Godot3.desktop";
   installedGodotShortcutDisplayName = "Godot Engine 3";
 
@@ -162,7 +167,7 @@ stdenv.mkDerivation (self: {
     runHook postInstall
   '';
 
-  runtimeDependencies = lib.optionals self.shouldPatchBinary (
+  runtimeDependencies = lib.optionals finalAttrs.shouldPatchBinary (
     map lib.getLib [
       alsa-lib
       libpulseaudio
@@ -170,9 +175,43 @@ stdenv.mkDerivation (self: {
     ]
   );
 
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "(3\\..*)-stable"
+        ];
+      })
+      ./mono/update-glue-version.sh
+    ];
+
+    patch-godot-bin =
+      let
+        libPath = lib.makeLibraryPath [
+          libxcursor
+          libxinerama
+          libxext
+          libxrandr
+          libxrender
+          libx11
+          libxi
+          libGL
+        ];
+      in
+      writeScriptBin "patch-godot-bin" ''
+        patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath "${libPath}" "$1"
+      '';
+  };
+
   meta = {
     homepage = "https://godotengine.org";
-    description = "Free and Open Source 2D and 3D game engine (" + self.godotBuildDescription + ")";
+    description =
+      "Free and Open Source 2D and 3D game engine (" + finalAttrs.godotBuildDescription + ")";
     license = lib.licenses.mit;
     platforms = [
       "i686-linux"

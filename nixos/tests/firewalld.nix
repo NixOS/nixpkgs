@@ -29,6 +29,8 @@
 
     walled.wait_for_unit("firewalld")
     walled.wait_for_unit("httpd")
+    # https://github.com/firewalld/firewalld/issues/1571
+    walled.wait_until_succeeds("firewall-cmd --state")
 
     open.wait_for_unit("network.target")
 

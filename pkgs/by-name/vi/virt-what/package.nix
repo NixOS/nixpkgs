@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virt-what";
   version = "1.27";
 
   src = fetchurl {
-    url = "https://people.redhat.com/~rjones/virt-what/files/virt-what-${version}.tar.gz";
+    url = "https://people.redhat.com/~rjones/virt-what/files/virt-what-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-1Nm9nUrlkJVZdEP6xmNJUxXH60MwuHKqXwYt84rGm/E=";
   };
 
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "virt-what";
   };
-}
+})

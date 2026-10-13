@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  wxGTK32,
+  wxwidgets_3_2,
   boost186,
-  lua,
+  lua5_2_compat,
   zlib,
   bzip2,
   xylib,
@@ -13,6 +13,9 @@
   gnuplot,
   swig,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fityk";
@@ -31,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     swig
   ];
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     boost186
     lua
     zlib
@@ -42,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-wx-config=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "--with-wx-config=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

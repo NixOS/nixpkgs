@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "kytea";
   version = "0.4.7";
 
   src = fetchurl {
-    url = "http://www.phontron.com/kytea/download/kytea-${version}.tar.gz";
+    url = "http://www.phontron.com/kytea/download/kytea-${finalAttrs.version}.tar.gz";
     sha256 = "0ilzzwn5vpvm65bnbyb9f5rxyxy3jmbafw9w0lgl5iad1ka36jjk";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 
-}
+})

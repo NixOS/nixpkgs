@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blflash";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "spacemeowx2";
     repo = "blflash";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lv5bUbq5AnZVeR8V0A4pamY9ZIQAhLmvZEr+CRMPcj0=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "blflash";
   };
-}
+})

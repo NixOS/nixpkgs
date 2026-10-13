@@ -5,36 +5,23 @@
 
 {
   lib,
-  stdenvNoCC,
+  replaceVarsWith,
   perl,
   signingUtils,
+  stdenvNoCC,
   shell ? stdenvNoCC.shell,
 }:
-
-stdenvNoCC.mkDerivation {
-  name = "nuke-references";
-
-  strictDeps = true;
-  enableParallelBuilding = true;
-  dontUnpack = true;
-  dontConfigure = true;
-  dontBuild = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    substituteAll ${./nuke-refs.sh} $out/bin/nuke-refs
-    chmod a+x $out/bin/nuke-refs
-  '';
-
-  # FIXME: get rid of perl dependency.
-  env = {
-    inherit perl;
+replaceVarsWith {
+  src = ./nuke-refs;
+  replacements = {
+    inherit perl; # FIXME: get rid of perl dependency.
     inherit (builtins) storeDir;
     shell = lib.getBin shell + (shell.shellPath or "");
     signingUtils = lib.optionalString (
       stdenvNoCC.targetPlatform.isDarwin && stdenvNoCC.targetPlatform.isAarch64
     ) signingUtils;
   };
-
+  dir = "bin";
+  isExecutable = true;
   meta.mainProgram = "nuke-refs";
 }

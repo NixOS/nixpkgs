@@ -26,6 +26,6 @@ buildNpmPackage (finalAttrs: {
     description = "Snippets solution for coc.nvim";
     homepage = "https://github.com/neoclide/coc-snippets";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

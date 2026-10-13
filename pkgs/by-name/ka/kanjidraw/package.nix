@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kanjidraw";
   version = "0.2.3";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "obfusk";
     repo = "kanjidraw";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "03ag8vkbf85qww857ii8hcnn8bh5qa7rsmhka0v9vfxk272ifbyq";
   };
 
@@ -50,4 +50,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     maintainers = [ lib.maintainers.obfusk ];
   };
-}
+})

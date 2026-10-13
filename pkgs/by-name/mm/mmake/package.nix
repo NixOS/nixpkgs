@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mmake";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "tj";
     repo = "mmake";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-JPsVfLIl06PJ8Nsfu7ogwrttB1G93HTKbZFqUTSV9O8=";
   };
 
@@ -38,4 +38,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.gabesoft ];
     mainProgram = "mmake";
   };
-}
+})

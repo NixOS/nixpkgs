@@ -9,12 +9,12 @@
   intltool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdl";
   version = "3.40.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdl/${lib.versions.majorMinor version}/gdl-${version}.tar.xz";
+    url = "mirror://gnome/sources/gdl/${lib.versions.majorMinor finalAttrs.version}/gdl-${finalAttrs.version}.tar.xz";
     sha256 = "NkHU/WadHhgYrv88+f+3iH/Fw2eFC3jCjHdeukq2pVU=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

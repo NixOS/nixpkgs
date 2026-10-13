@@ -8,8 +8,8 @@
   libglut,
   libGLU,
   libGL,
-  libXi,
-  libXmu,
+  libxi,
+  libxmu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
     libglut
     libGLU
     libGL
-    libXi
-    libXmu
+    libxi
+    libxmu
   ];
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Drivers and libraries for the Xbox Kinect device on Windows, Linux, and macOS";
-    homepage = "http://openkinect.org";
+    homepage = "https://github.com/OpenKinect/libfreenect";
     license = with lib.licenses; [
       gpl2
       asl20

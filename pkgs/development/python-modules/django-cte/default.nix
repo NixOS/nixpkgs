@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-cte";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dimagi";
     repo = "django-cte";
     tag = "v${version}";
-    hash = "sha256-DPbvmxTh24gTGvqzBg1VVN1LHxhGc+r81RITCuyccfw=";
+    hash = "sha256-pXTnk3Z+6jiqq7Q2JTpHxZSNHaTRT3lAAeuHTQIuzBM=";
   };
 
   build-system = [
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dimagi/django-cte";
     changelog = "https://github.com/dimagi/django-cte/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ jopejoe1 ];
+    maintainers = [ ];
   };
 }

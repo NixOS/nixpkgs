@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, ... }:
 
 # This nixosTest is supposed to check the following:
 #
@@ -70,7 +70,7 @@ let
     ''
       print("Searching for a ${t} with id ${id}")
       configVal_${t} = machine.succeed(
-          "${pkgs.libxml2}/bin/xmllint "
+          "xmllint "
           "--xpath 'string(//${t}[@id=\"${id}\"]/@id)' ${configPath}"
       )
       print("${t}.id = {}".format(configVal_${t}))
@@ -87,7 +87,7 @@ let
     ''
       print("checking whether setting ${t}.${n} is set to ${v}")
       configVal_${t}_${n} = machine.succeed(
-          "${pkgs.libxml2}/bin/xmllint "
+          "xmllint "
           "--xpath 'string(/configuration/${t}/${n})' ${configPath}"
       )
       print("${t}.${n} = {}".format(configVal_${t}_${n}))
@@ -102,10 +102,10 @@ let
       not,
     }:
     lib.pipe IDsToDelete [
-      (lib.mapAttrsToList (
-        t: id:
+      (map (
+        obj:
         checkSettingWithId {
-          inherit t id;
+          inherit (obj) t id;
           inherit not;
         }
       ))
@@ -114,58 +114,83 @@ let
   # These IDs are added to syncthing using the API, similarly to how the
   # generated systemd unit's bash script does it. Only we add it and expect the
   # systemd unit bash script to remove them when executed.
-  IDsToDelete = {
-    # Also created using the syncthing generate command above
-    device = "LZ2CTHT-3W2M7BC-CMKDFZL-DLUQJFS-WJR73PA-NZGODWG-DZBHCHI-OXTQXAK";
-    # Intentionally this is a substring of the IDs of the 'test_folder's, as
-    # explained in: https://github.com/NixOS/nixpkgs/issues/259256
-    folder = "DeleteMe";
-  };
-  addDeviceToDeleteScript = pkgs.writers.writeBash "syncthing-add-device-to-delete.sh" ''
-    set -euo pipefail
-
-    export RUNTIME_DIRECTORY=/tmp
-
-    curl() {
-        # get the api key by parsing the config.xml
-        while
-            ! ${pkgs.libxml2}/bin/xmllint \
-                --xpath 'string(configuration/gui/apikey)' \
-                ${configPath} \
-                >"$RUNTIME_DIRECTORY/api_key"
-        do sleep 1; done
-
-        (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-
-        ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
-            --retry 5 --retry-delay 1 --retry-all-errors \
-            "$@"
+  IDsToDelete = [
+    {
+      t = "device";
+      id = "LZ2CTHT-3W2M7BC-CMKDFZL-DLUQJFS-WJR73PA-NZGODWG-DZBHCHI-OXTQXAK";
+      # Arbitrary, doesn't really matter
+      name = "DeleteThisDevice";
     }
-    curl -d ${
-      lib.escapeShellArg (
-        builtins.toJSON {
-          deviceID = IDsToDelete.device;
-          name = "DeleteMe";
-        }
-      )
-    } \
-        -X POST 127.0.0.1:8384/rest/config/devices
-    curl -d ${
-      lib.escapeShellArg (
-        builtins.toJSON {
-          id = IDsToDelete.folder;
-          path = "/var/lib/syncthing/DeleteMe";
-        }
-      )
-    } \
-        -X POST 127.0.0.1:8384/rest/config/folders
-  '';
+    # Folders' id strings also use for their path when created.
+    {
+      t = "folder";
+      id = "DeleteMe";
+    }
+    {
+      t = "folder";
+      id = "Delete Me";
+    }
+  ];
 in
 {
   name = "syncthing-many-devices";
-  meta.maintainers = with lib.maintainers; [ doronbehar ];
+  meta.maintainers = with lib.maintainers; [
+    doronbehar
+    me-and
+  ];
 
-  nodes.machine = {
+  containers.machine = { lib, pkgs, ... }: {
+    environment.systemPackages =
+      let
+        addDeviceToDeleteScript = pkgs.writers.writeBashBin "syncthing-add-device-to-delete.sh" ''
+          set -euo pipefail
+
+          export RUNTIME_DIRECTORY=/tmp
+
+          curl() {
+              # get the api key by parsing the config.xml
+              while
+                  ! xmllint \
+                      --xpath 'string(configuration/gui/apikey)' \
+                      ${configPath} \
+                      >"$RUNTIME_DIRECTORY/api_key"
+              do sleep 1; done
+
+              (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
+
+              ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
+                  --retry 5 --retry-delay 1 --retry-all-errors \
+                  "$@"
+          }
+          ${lib.concatMapStringsSep "\n" (obj: ''
+            curl -d ${
+              lib.escapeShellArg (
+                builtins.toJSON (
+                  if obj.t == "device" then
+                    {
+                      deviceID = obj.id;
+                      inherit (obj) name;
+                    }
+                  else if obj.t == "folder" then
+                    {
+                      inherit (obj) id;
+                      path = "/var/lib/syncthing/${obj.id}";
+                    }
+                  else
+                    throw "unsupported object type ${obj.t}"
+                )
+              )
+            } \
+              -X POST 127.0.0.1:8384/rest/config/${obj.t}s
+          '') IDsToDelete}
+        '';
+      in
+      [
+        pkgs.initool
+        pkgs.libxml2
+        addDeviceToDeleteScript
+      ];
+
     services.syncthing = {
       enable = true;
       overrideDevices = true;
@@ -207,14 +232,14 @@ in
   ])
   + ''
     # Run the script on the machine
-    machine.succeed("${addDeviceToDeleteScript}")
+    machine.succeed("syncthing-add-device-to-delete.sh")
   ''
   + (checkSettingsToDelete {
     not = false;
   })
   + ''
     # Useful for debugging later
-    machine.copy_from_vm("${configPath}", "before")
+    machine.copy_from_machine("${configPath}", "before")
 
     machine.systemctl("restart syncthing-init.service")
     machine.wait_for_unit("syncthing-init.service")
@@ -224,13 +249,13 @@ in
   })
   + ''
     # Useful for debugging later
-    machine.copy_from_vm("${configPath}", "after")
+    machine.copy_from_machine("${configPath}", "after")
 
     # Copy the systemd unit's bash script, to inspect it for debugging.
     mergeScript = machine.succeed(
         "systemctl cat syncthing-init.service | "
-        "${pkgs.initool}/bin/initool g - Service ExecStart --value-only"
+        "initool g - Service ExecStart --value-only"
     ).strip() # strip from new lines
-    machine.copy_from_vm(mergeScript, "")
+    machine.copy_from_machine(mergeScript, "")
   '';
 }

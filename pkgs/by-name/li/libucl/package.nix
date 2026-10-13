@@ -5,7 +5,7 @@
   pkg-config,
   autoreconfHook,
   curl,
-  lua,
+  lua5_2_compat,
   openssl,
   features ? {
     urls = false;
@@ -19,6 +19,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   featureDeps = {
     urls = [ curl ];
     signatures = [ openssl ];
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libucl";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "libucl";
     rev = finalAttrs.version;
-    sha256 = "sha256-dub829xZ10sJ5qwegYUiGoyAVLiwg44GKSzz+BMLJis=";
+    sha256 = "sha256-m6VRtFNKm6+T7pPP2u3avMkVTmye4CM6Z7wjhddVMZE=";
   };
 
   nativeBuildInputs = [

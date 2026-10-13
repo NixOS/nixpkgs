@@ -5,7 +5,7 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-listenbrainz";
   version = "0.3.0";
   pyproject = true;
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "suaviloquence";
     repo = "mopidy-listenbrainz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-kYZgG2KQMTxMR8tdwwCKkfexDcxcndXG9LSdlnoN/CY=";
   };
 
@@ -32,4 +32,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bohanubis ];
   };
-}
+})

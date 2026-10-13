@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchPypi,
   librsync,
@@ -9,13 +10,13 @@ let
   pypkgs = python3Packages;
 
 in
-pypkgs.buildPythonApplication rec {
+pypkgs.buildPythonApplication (finalAttrs: {
   pname = "rdiff-backup";
   version = "2.2.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-0HeDVyZrxlE7t/daRXCymySydgNIu/YHur/DpvCUWM8";
   };
 
@@ -26,7 +27,16 @@ pypkgs.buildPythonApplication rec {
 
   buildInputs = [ librsync ];
 
-  dependencies = with pypkgs; [ pyyaml ];
+  dependencies =
+    with pypkgs;
+    [
+      psutil
+      pyxattr
+      pyyaml
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pylibacl
+    ];
 
   # no tests from pypi
   doCheck = false;
@@ -41,4 +51,4 @@ pypkgs.buildPythonApplication rec {
     mainProgram = "rdiff-backup";
     platforms = lib.platforms.all;
   };
-}
+})

@@ -9,12 +9,12 @@
   libgcrypt ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srecord";
   version = "1.64";
 
   src = fetchurl {
-    url = "mirror://sourceforge/srecord/srecord-${version}.tar.gz";
+    url = "mirror://sourceforge/srecord/srecord-${finalAttrs.version}.tar.gz";
     sha256 = "1qk75q0k5vzmm3932q9hqz2gp8n9rrdfjacsswxc02656f3l3929";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bjornfor ];
     platforms = lib.platforms.unix;
   };
-}
+})

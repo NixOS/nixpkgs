@@ -15,26 +15,19 @@
   transformers,
 
   # optional-dependencies
-  diffusers,
-  h5py,
-  onnx,
-  onnxruntime,
-  protobuf,
-  tensorflow,
-  tf2onnx,
-  timm,
+  optimum-onnx,
 }:
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
     tag = "v${version}";
-    hash = "sha256-aeGWjzktpxY6Xym1licGCZf+Vzia9BdUnXE80Ja28jg=";
+    hash = "sha256-nA73afFr9wqJWmobBw5hOIjRvQ6I8QvVZoRJnYnXzUc=";
   };
 
   build-system = [ setuptools ];
@@ -47,33 +40,16 @@ buildPythonPackage rec {
     packaging
     torch
     transformers
-  ]
-  ++ transformers.optional-dependencies.sentencepiece;
+  ];
 
   optional-dependencies = {
+    onnx = [
+      optimum-onnx
+    ];
     onnxruntime = [
-      onnx
-      datasets
-      protobuf
-      onnxruntime
-    ];
-    exporters = [
-      onnx
-      timm
-      onnxruntime
-      protobuf
-    ];
-    exporters-tf = [
-      onnx
-      timm
-      h5py
-      tf2onnx
-      onnxruntime
-      numpy
-      datasets
-      tensorflow
-    ];
-    diffusers = [ diffusers ];
+      optimum-onnx
+    ]
+    ++ optimum-onnx.optional-dependencies.onnxruntime;
     intel = [
       # optimum-intel
     ];
@@ -90,7 +66,6 @@ buildPythonPackage rec {
       # optimum-graphcore
     ];
     habana = [
-      transformers
       # optimum-habana
     ];
     neuron = [

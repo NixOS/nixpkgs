@@ -11,7 +11,7 @@
   jre,
   gtk3,
   glib,
-  libXtst,
+  libxtst,
 }:
 
 let
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     tag = version;
-    hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=i";
+    hash = "sha256-7KpQas8ttL2DP+gFH87uLQyx4PMwVQ+FaqXpZBPWV5U=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     glib
-    libXtst
+    libxtst
   ];
 
   dontWrapGApps = true;
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
     install -Dm644 releases/${version}/jameica/jameica.jar $out/share/java/
     install -Dm644 plugin.xml $out/share/java/
-    install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
+    install -Dm644 build/jameica-icon.png $out/share/icons/hicolor/64x64/apps/jameica.png
     cp ${desktopItem}/share/applications/* $out/share/applications/
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''

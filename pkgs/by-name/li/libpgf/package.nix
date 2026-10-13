@@ -6,12 +6,12 @@
   dos2unix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpgf";
   version = "7.21.7";
 
   src = fetchzip {
-    url = "mirror://sourceforge/libpgf/libpgf/${version}/libpgf.zip";
+    url = "mirror://sourceforge/libpgf/libpgf/${finalAttrs.version}/libpgf.zip";
     hash = "sha256-TAWIuikijfyeTRetZWoMMdB/FeGAR7ZjNssVxUevlVg=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

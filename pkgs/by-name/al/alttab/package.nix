@@ -11,20 +11,20 @@
   libpng,
   uthash,
   which,
-  xnee,
   libxrender,
   libxrandr,
   libxpm,
   libxmu,
   libxft,
   libx11,
-  xprop,
+  xdotool,
   xeyes,
+  xprop,
   python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.7.1";
+  version = "1.8.0";
 
   pname = "alttab";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sagb";
     repo = "alttab";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-1+hk0OeSriXPyefv3wOgeiW781PL4VP5Luvt+RS5jmg=";
+    hash = "sha256-ICVP2kxGTLzo77DTn+5gbxdyWSO6RH9EgolfrM3cBVQ=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     procps
     python3Packages.xvfbwrapper
     which
-    xnee
+    xdotool
     xeyes
     xprop
   ];

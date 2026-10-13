@@ -8,7 +8,7 @@
   elfutils,
   file,
   jansson,
-  libbpf_0,
+  libbpf,
   libcap_ng,
   libevent,
   libmaxminddb,
@@ -36,13 +36,13 @@
 let
   libmagic = file;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "suricata";
-  version = "8.0.2";
+  version = "8.0.7";
 
   src = fetchurl {
-    url = "https://www.openinfosecfoundation.org/download/suricata-${version}.tar.gz";
-    hash = "sha256-nUUMosrb4QGZPpkDOmI0nSvanf2QpqzBvLbMbbdutVE=";
+    url = "https://www.openinfosecfoundation.org/download/suricata-${finalAttrs.version}.tar.gz";
+    hash = "sha256-qdRqnI9A6B+KbfPswsWpqOjamFh2KZEI2S2lR8ATuow=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.is64bit [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     elfutils
     jansson
-    libbpf_0
+    libbpf
     libcap_ng
     libevent
     libmagic
@@ -161,4 +161,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

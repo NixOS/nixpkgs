@@ -11,14 +11,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-smi";
-  version = "7.1.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocm_smi_lib";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-/3to1+45n+D8snwrFVhApSMWp/rIXmTFK+BiA0mcKZo=";
+    repo = "rocm-systems";
+    tag = "rocm-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/rocm-smi-lib"
+      "shared"
+    ];
+    hash = "sha256-Si8SbeVKUBtqk6h2QJ9ssQV68bLq6TvESrYXJuArHd8=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocm-smi-lib";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   propagatedBuildInputs = [
     libdrm
@@ -33,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_LIBEXECDIR=libexec"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBEXECDIR" "libexec")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ];
 
   postInstall =
@@ -55,16 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s ${libdrm.dev}/include/libdrm/ $out/include/
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
-    homepage = "https://github.com/ROCm/rocm_smi_lib";
-    license = with lib.licenses; [ mit ];
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-smi-lib";
+    changelog = "https://github.com/ROCm/rocm-systems/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    mainProgram = "rocm-smi";
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];

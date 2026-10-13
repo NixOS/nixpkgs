@@ -4,15 +4,15 @@
   fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "colorpanes";
   version = "3.0.1";
 
   src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "colorpanes";
-    rev = "v${version}";
-    sha256 = "qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-qaOH+LXNDq+utwyI1yzHWNt25AvdAXCTAziGV9ElroU=";
   };
 
   cargoHash = "sha256-+ltcTuLksNwe7KIt8apYNZkMoA2w4EObG5dhJliRb6Y=";
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ annaaurora ];
   };
-}
+})

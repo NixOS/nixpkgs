@@ -1,4 +1,8 @@
-{ stdenv, python }:
+{
+  lib,
+  stdenv,
+  python,
+}:
 
 stdenv.mkDerivation {
   pname = "python-recursive-pth-loader";
@@ -20,5 +24,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Enable recursive processing of pth files anywhere in sys.path";
+    license = lib.licenses.mit;
   };
 }

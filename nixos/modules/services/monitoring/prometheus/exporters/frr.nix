@@ -27,10 +27,10 @@ in
     };
     group = mkOption {
       type = types.str;
-      default = "frrtty";
+      default = "frrvty";
       description = ''
         Group under which the frr exporter shall be run.
-        The exporter talks to frr using a unix socket, which is owned by frrtty group.
+        The exporter talks to frr using a unix socket, which is owned by frrvty group.
       '';
     };
     enabledCollectors = mkOption {

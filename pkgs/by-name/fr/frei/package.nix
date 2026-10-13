@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "frei";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "alexcoder04";
     repo = "frei";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-QVoRiqQt4DJK07YcCPplxigpgIqjDeQVYyDK/KQ7gbo=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ infinidoge ];
     mainProgram = "frei";
   };
-}
+})

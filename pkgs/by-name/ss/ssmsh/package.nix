@@ -6,14 +6,14 @@
   ssmsh,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssmsh";
   version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "bwhaley";
     repo = "ssmsh";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UmfwDukRVyfX+DmUfRi+KepqFrPtDNImKd22/dI7ytk=";
   };
 
@@ -24,13 +24,13 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   passthru.tests = testers.testVersion {
     package = ssmsh;
     command = "ssmsh -version";
-    version = "Version ${version}";
+    version = "Version ${finalAttrs.version}";
   };
 
   meta = {
@@ -40,4 +40,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ dbirks ];
     mainProgram = "ssmsh";
   };
-}
+})

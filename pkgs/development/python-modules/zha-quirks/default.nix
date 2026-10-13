@@ -8,12 +8,13 @@
   pythonOlder,
   setuptools,
   time-machine,
+  zha,
   zigpy,
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.156";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-vVA8FmNLzatfClRTvb9pZm5SQxgSQh+iAllOl+OIo6Q=";
+    hash = "sha256-F3NUZUepNKef9fJY/eBfbO90ZJXWyzyf5uaZmonaCmc=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    zha
     zigpy
   ];
 
@@ -46,20 +48,15 @@ buildPythonPackage rec {
 
   disabledTests = [
     # AssertionError: expected call not found
-    "test_moes"
     "test_tuya_mcu_set_time"
-  ];
-
-  disabledTestPaths = [
-    # TypeError: unhashable type: 'dict'
-    "tests/test_quirks_v2.py"
+    "test_moes"
   ];
 
   pythonImportsCheck = [ "zhaquirks" ];
 
   meta = {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";
-    homepage = "https://github.com/dmulcahey/zha-device-handlers";
+    homepage = "https://github.com/zigpy/zha-device-handlers";
     changelog = "https://github.com/zigpy/zha-device-handlers/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];

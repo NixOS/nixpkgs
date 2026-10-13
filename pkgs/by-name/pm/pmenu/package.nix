@@ -5,11 +5,11 @@
   writeText,
   fontconfig,
   imlib2,
-  libX11,
-  libXext,
-  libXft,
-  libXinerama,
-  libXrender,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrender,
   conf ? null,
 }:
 
@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     imlib2
-    libX11
-    libXext
-    libXft
-    libXinerama
-    libXrender
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrender
   ];
 
   postPatch =

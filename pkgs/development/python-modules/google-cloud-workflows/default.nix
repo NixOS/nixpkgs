@@ -13,16 +13,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-workflows";
-  version = "1.20.0";
+  version = "1.24.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_workflows";
     inherit (finalAttrs) version;
-    hash = "sha256-aicI4O1m3L3gtnZ3eslGSKsFKyVTnWyr0SjNJdWxcfQ=";
+    hash = "sha256-AP3XgkAq8gqoI9gargPd+JSxu3YcfZTLsqkQWaBthCI=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

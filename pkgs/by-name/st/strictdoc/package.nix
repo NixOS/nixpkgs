@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "strictdoc";
-  version = "0.10.1";
+  version = "0.27.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
-    tag = version;
-    hash = "sha256-TXrSv6V5fMhcx4YolTfsFwgGL5qxNp67iv62KDC5H00=";
+    tag = finalAttrs.version;
+    hash = "sha256-z9e/ZkKeiuNgkn0FoAYX2fxo60TH5hqsLRzpaVvS2u4=";
   };
 
   build-system = [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   dependencies = with python3.pkgs; [
     beautifulsoup4
-    datauri
+    python-datauri
     docutils
     fastapi
     graphviz
@@ -31,7 +31,11 @@ python3.pkgs.buildPythonApplication rec {
     jinja2
     lark
     lxml
+    markdown-it-py
     openpyxl
+    orjson
+    pandas
+    plotly
     pybtex
     pygments
     python-multipart
@@ -44,9 +48,12 @@ python3.pkgs.buildPythonApplication rec {
     textx
     toml
     tree-sitter
+    tree-sitter-grammars.tree-sitter-c
     tree-sitter-grammars.tree-sitter-cpp
     tree-sitter-grammars.tree-sitter-python
+    tree-sitter-grammars.tree-sitter-rust
     uvicorn
+    watchdog
     webdriver-manager
     websockets
     xlrd
@@ -74,9 +81,12 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Software for technical documentation and requirements management";
     homepage = "https://github.com/strictdoc-project/strictdoc";
-    changelog = "https://github.com/strictdoc-project/strictdoc/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/strictdoc-project/strictdoc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      dadada
+      puzzlewolf
+    ];
     mainProgram = "strictdoc";
   };
-}
+})

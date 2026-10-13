@@ -13,11 +13,11 @@
   gtk-layer-shell,
   libcanberra-gtk3,
   libnotify,
-  libX11,
+  libx11,
   libxfce4ui,
   libxfce4util,
   sqlite,
-  systemd,
+  systemdLibs,
   xfce4-panel,
   xfconf,
   gitUpdater,
@@ -53,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libcanberra-gtk3
     libnotify
-    libX11
+    libx11
     libxfce4ui
     libxfce4util
     sqlite
-    systemd
+    systemdLibs
     xfce4-panel
     xfconf
   ];

@@ -5,28 +5,27 @@
   ffmpeg-headless,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "scdl";
-  version = "2.12.4";
+  version = "3.0.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-5+3ok7UcJEdUW45bdPGkkvk+k/NYIpEi0URNuQ6e0vk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-dThICN/QF79LemNj621gX9EW4SXOs/hqPHLh0NGLxi8=";
   };
 
   build-system = [ python3Packages.setuptools ];
 
-  dependencies = with python3Packages; [
-    docopt-ng
-    mutagen
-    termcolor
-    requests
-    tqdm
-    pathvalidate
-    soundcloud-v2
-    filelock
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      docopt-ng
+      mutagen
+      soundcloud-v2
+      yt-dlp
+    ]
+    ++ yt-dlp.optional-dependencies.curl-cffi;
 
   # Ensure ffmpeg is available in $PATH:
   makeWrapperArgs =
@@ -49,4 +48,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "scdl";
   };
-}
+})

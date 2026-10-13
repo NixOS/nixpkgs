@@ -12,7 +12,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "ocp-browser";
-  version = "1.4.0";
+  version = "1.4.1";
 
   minimalOCamlVersion = "4.08";
 
@@ -20,7 +20,7 @@ buildDunePackage (finalAttrs: {
     owner = "OCamlPro";
     repo = "ocp-index";
     tag = finalAttrs.version;
-    hash = "sha256-pv6aBJjRkibISpZEnlfyn72smcYEbZoPQoQH2p/JwH0=";
+    hash = "sha256-B8D3p9Cj67Cb+AH06jg+kJJiaM/ejnsSsQk1yHRmDqU=";
   };
 
   nativeBuildInputs = [ cppo ];

@@ -132,7 +132,7 @@ in
           description = "socket for fast remote file copy program daemon";
           conflicts = [ "rsync.service" ];
 
-          listenStreams = [ (toString cfg.port) ];
+          listenStreams = [ cfg.port ];
           socketConfig.Accept = true;
 
           wantedBy = [ "sockets.target" ];

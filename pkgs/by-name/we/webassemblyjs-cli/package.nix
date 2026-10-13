@@ -72,6 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Toolbox for WebAssembly";
     homepage = "https://webassembly.js.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

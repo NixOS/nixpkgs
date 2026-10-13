@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-json";
   version = "4.7.3";
 
   src = fetchurl {
-    url = "mirror://savannah/guile-json/guile-json-${version}.tar.gz";
+    url = "mirror://savannah/guile-json/guile-json-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-OLoEjtKdEvBbMsWy+3pReVxEi0HkA6Kxty/wA1gX84g=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXi,
-  libXt,
-  libXfixes,
-  libXext,
+  libx11,
+  libxi,
+  libxt,
+  libxfixes,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,11 +14,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "xbanish";
 
   buildInputs = [
-    libX11
-    libXi
-    libXt
-    libXfixes
-    libXext
+    libx11
+    libxi
+    libxt
+    libxfixes
+    libxext
   ];
 
   src = fetchFromGitHub {
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       The name comes from ratpoison's "banish" command that sends the cursor to the
       corner of the screen.
     '';
+    homepage = "https://github.com/jcs/xbanish";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.choochootrain ];
     platforms = lib.platforms.linux;

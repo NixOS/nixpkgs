@@ -1,6 +1,8 @@
 {
   dri-pkgconfig-stub,
   egl-wayland,
+  epoll-shim,
+  evdev-proto,
   bash,
   libepoxy,
   fetchurl,
@@ -11,18 +13,18 @@
   libei,
   libGL,
   libGLU,
-  libX11,
-  libXau,
-  libXaw,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXfont2,
-  libXmu,
-  libXpm,
-  libXrender,
-  libXres,
-  libXt,
+  libx11,
+  libxau,
+  libxaw,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxfont_2,
+  libxmu,
+  libxpm,
+  libxrender,
+  libxres,
+  libxt,
   libdrm,
   libtirpc,
   # Disable withLibunwind as LLVM's libunwind will conflict and does not support the right symbols.
@@ -39,7 +41,7 @@
   pkg-config,
   pixman,
   stdenv,
-  systemd,
+  systemdLibs,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -52,13 +54,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xwayland";
-  version = "24.1.9";
+  version = "24.1.14";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/xserver/xwayland-${version}.tar.xz";
-    hash = "sha256-8pevJ6hFCNubgNHLvMacOAHaOOtkxy87W1D1gkWa/dA=";
+    url = "mirror://xorg/individual/xserver/xwayland-${finalAttrs.version}.tar.xz";
+    hash = "sha256-Tra5jWeCmaS5YTjYhjRbKUEwaVdgNF74RZYiWoIkB4o=";
   };
 
   postPatch = ''
@@ -85,20 +87,19 @@ stdenv.mkDerivation rec {
     font-util
     libGL
     libGLU
-    libX11
-    libXau
-    libXaw
-    libXdmcp
-    libXext
-    libXfixes
-    libXfont2
-    libXmu
-    libXpm
-    libXrender
-    libXres
-    libXt
+    libx11
+    libxau
+    libxaw
+    libxdmcp
+    libxext
+    libxfixes
+    libxfont_2
+    libxmu
+    libxpm
+    libxrender
+    libxres
+    libxt
     libdrm
-    libtirpc
     libxcb
     libxkbfile
     libxshmfence
@@ -106,13 +107,20 @@ stdenv.mkDerivation rec {
     mesa-gl-headers
     openssl
     pixman
-    systemd
     wayland
     wayland-protocols
     xkbcomp
     xorgproto
     xtrans
     zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libtirpc
+    systemdLibs
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    epoll-shim
+    evdev-proto
   ]
   ++ lib.optionals withLibunwind [
     libunwind
@@ -141,6 +149,6 @@ stdenv.mkDerivation rec {
       emantor
       k900
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

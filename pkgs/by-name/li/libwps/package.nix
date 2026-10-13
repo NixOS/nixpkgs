@@ -8,12 +8,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwps";
   version = "0.4.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwps/libwps-${version}.tar.bz2";
+    url = "mirror://sourceforge/libwps/libwps-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-xVEdlAngO446F50EZcHMKW7aBvyDcTVu9Egs2oaIadE=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
   };
-}
+})

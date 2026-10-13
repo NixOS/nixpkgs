@@ -4,16 +4,14 @@
   fetchPypi,
   guiSupport ? true,
 }:
-let
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "plakativ";
   version = "0.5.3";
-in
-python3Packages.buildPythonApplication {
   pyproject = true;
-  inherit pname version;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-6TvMznd5obkn/gsQTyZ6Pc/dF55I53987EbuSNAlY58=";
   };
 
@@ -36,4 +34,4 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ marcin-serwin ];
   };
-}
+})

@@ -7,12 +7,13 @@
   funcsigs,
   requests-mock,
   pytestCheckHook,
+  setuptools_80,
 }:
 
 buildPythonPackage rec {
   pname = "mock-services";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "peopledoc";
@@ -29,7 +30,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools_80 ];
+
+  dependencies = [
     attrs
     funcsigs
     requests-mock

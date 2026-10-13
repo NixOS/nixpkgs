@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-wacom";
-  version = "8.0.1";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "switchboard-plug-wacom";
-    rev = version;
-    sha256 = "sha256-xTv3QPlLPJQ6C5t4Udy1H9IrLQGuik8prvGlpfFm1DQ=";
+    repo = "settings-wacom";
+    tag = version;
+    hash = "sha256-LA3sOY5ENaSO99AMLAqPryEfyPsKwcatzZoGOhbvCJY=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Switchboard Wacom Plug";
-    homepage = "https://github.com/elementary/switchboard-plug-wacom";
+    homepage = "https://github.com/elementary/settings-wacom";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.pantheon ];

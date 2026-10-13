@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblscp";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://download.linuxsampler.org/packages/liblscp-${version}.tar.gz";
+    url = "https://download.linuxsampler.org/packages/liblscp-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-21SjPA5emMRKEQIukhg7r3uXfnByEpNkGhCepNu09sc=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

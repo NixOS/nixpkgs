@@ -5,13 +5,13 @@
   pkg-config,
   freetype,
   fribidi,
-  libXext,
-  libXft,
-  libXpm,
-  libXrandr,
-  libXrender,
+  libxext,
+  libxft,
+  libxpm,
+  libxrandr,
+  libxrender,
   xorgproto,
-  libXinerama,
+  libxinerama,
   imlib2,
 }:
 
@@ -39,13 +39,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     fribidi
-    libXext
-    libXft
-    libXpm
-    libXrandr
-    libXrender
+    libxext
+    libxft
+    libxpm
+    libxrandr
+    libxrender
     xorgproto
-    libXinerama
+    libxinerama
     imlib2
   ];
 

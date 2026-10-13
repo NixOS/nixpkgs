@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "base16-universal-manager";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "pinpox";
     repo = "base16-universal-manager";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9KflJ863j0VeOyu6j6O28VafetRrM8FW818qCvqhaoY=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ jo1gi ];
     mainProgram = "base16-universal-manager";
   };
-}
+})

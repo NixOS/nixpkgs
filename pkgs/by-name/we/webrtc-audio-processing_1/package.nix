@@ -68,13 +68,12 @@ stdenv.mkDerivation (finalAttrs: {
       lib.intersectLists
         # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/meson.build
         (lib.platforms.darwin ++ lib.platforms.linux ++ lib.platforms.windows)
-        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
+        # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/v1.3/webrtc/rtc_base/system/arch.h
         (
           lib.platforms.arm
           ++ lib.platforms.aarch64
           ++ lib.platforms.loongarch64
           ++ lib.platforms.mips
-          ++ lib.platforms.power
           ++ lib.platforms.riscv
           ++ lib.platforms.x86
         );

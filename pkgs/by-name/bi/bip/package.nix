@@ -7,6 +7,7 @@
   bison,
   flex,
   openssl,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation {
@@ -27,9 +28,13 @@ stdenv.mkDerivation {
 
   postPatch = ''
     # Drop blanket -Werror to avoid build failure on fresh toolchains
-    # and libraries. Without the cnage build fails on gcc-13 and on
+    # and libraries. Without the change build fails on gcc-13 and on
     # openssl-3.
     substituteInPlace src/Makefile.am --replace-fail ' -Werror ' ' '
+    # Fix incompatible function pointer type for cmp in list_t
+    # The cmp function pointer is declared as taking no arguments but is
+    # used with qsort-style callback signature (const void *, const void *)
+    substituteInPlace src/util.h --replace-fail 'int (*cmp)()' 'int (*cmp)(const void *, const void *)'
   '';
 
   nativeBuildInputs = [
@@ -43,6 +48,10 @@ stdenv.mkDerivation {
   ];
 
   enableParallelBuilding = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "IRC proxy (bouncer)";

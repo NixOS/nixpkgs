@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "gmpy";
-  version = "1.17";
+  version = "2.2.2";
   pyproject = true;
 
   # Python 3.11 has finally made changes to its C API for which gmpy 1.17,
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aleaxit";
     repo = "gmpy";
-    tag = "gmpy_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-kMidOjhKJlDRu2qaiq9c+XcwD1tNAoPhRTvvGcOJe8I=";
+    tag = "v${version}";
+    hash = "sha256-joeHec/d82sovfASCU3nlNL6SaThnS/XYPqujiZ9h8s=";
   };
 
   build-system = [ setuptools ];

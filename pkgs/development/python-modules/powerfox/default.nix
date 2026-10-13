@@ -7,26 +7,31 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  syrupy,
+  syrupy_6,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "powerfox";
-  version = "2.0.0";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-powerfox";
-    tag = "v${version}";
-    hash = "sha256-ygzO4/KZ9XUBjLVq48gvyZVEVRB1VJV6DpuHGKNXP54=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-290ZCJZk/aFGlGpSpreSMh+sXBJDw+d37sANvIBhwgg=";
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     aiohttp
@@ -40,7 +45,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   pythonImportsCheck = [ "powerfox" ];
@@ -48,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Asynchronous Python client for the Powerfox devices";
     homepage = "https://github.com/klaasnicolaas/python-powerfox";
-    changelog = "https://github.com/klaasnicolaas/python-powerfox/releases/tag/${src.tag}";
+    changelog = "https://github.com/klaasnicolaas/python-powerfox/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

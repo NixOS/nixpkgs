@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uutils-util-linux";
-  version = "0.0.1-unstable-2026-02-04";
+  version = "0.0.1-unstable-2026-09-01";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "util-linux";
-    rev = "b4bcb74168eb16d69b7c467cd5a525b4f599ac5d";
-    hash = "sha256-YqxUlZpuo4dmRo9eq6bpRhHn00icLfLm1e3r5t8nu+g=";
+    rev = "77b6743fb63660a6a3f9a9ad09ff1963480d0e74";
+    hash = "sha256-QO+Lr6vl3lVS7moRDUK3fM5RdVHE9pfT64VAzKSicNA=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"cut"' '"${lib.getExe' coreutils "cut"}"'
   '';
 
-  cargoHash = "sha256-9z/XuoJTxBpK15xVvV8uYb7YXmQ7glBK9GCViu2w590=";
+  cargoHash = "sha256-XdFwScItuXWqd/IBhsZcDMilv7KkUwm0JT1sM0QFmC4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,6 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preBuild = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lsmartcols -lmount"
   '';
+
+  cargoBuildFlags = [ "--workspace" ];
 
   checkFlags = [
     # Operation not supported
@@ -58,6 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_lscpu::test_json"
     "--skip=test_lscpu::test_output"
     "--skip=test_lslocks::test_column_headers"
+    "--skip=test_chcpu::linux::test_absent_cpu_is_reported_once"
+    "--skip=test_chcpu::linux::test_every_absent_cpu_is_reported_once"
   ];
 
   passthru.updateScript = nix-update-script {

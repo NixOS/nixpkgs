@@ -7,17 +7,14 @@
   makeWrapper,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "spotlight-downloader";
   version = "1.5.0";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "ORelio";
     repo = "Spotlight-Downloader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wGblbLBfH/sjUsz+hcg7OOWFavJ0k4piU/ypBEodvpY=";
   };
 
@@ -53,4 +50,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     mainProgram = "SpotlightDownloader";
   };
-}
+})

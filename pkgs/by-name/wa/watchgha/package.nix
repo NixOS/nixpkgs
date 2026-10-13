@@ -3,13 +3,13 @@
   python3Packages,
   fetchPypi,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "watchgha";
   version = "2.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "watchgha";
     hash = "sha256-EWk/h5eusjgowj6C6h8RgAxkgqju4Ni3A/wWaeDQ3GQ=";
   };
@@ -37,8 +37,8 @@ python3Packages.buildPythonApplication rec {
     description = "Live display of current GitHub action runs";
     mainProgram = "watch_gha_runs";
     homepage = "https://github.com/nedbat/watchgha";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ purcell ];
     platforms = lib.platforms.all;
   };
-}
+})

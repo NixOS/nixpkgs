@@ -48,6 +48,10 @@ in
       };
     };
 
+    xdg = {
+      serverAutostart = lib.mkEnableOption "starting the foot server via xdg-autostart";
+    };
+
     theme = lib.mkOption {
       type = with lib.types; nullOr str;
       default = null;
@@ -71,14 +75,23 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = [ cfg.package ];
-      etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
-    };
+    environment = lib.mkMerge [
+      {
+        systemPackages = [ cfg.package ];
+        etc."xdg/foot/foot.ini" = lib.mkIf (cfg.settings != { }) {
+          source = settingsFormat.generate "foot.ini" cfg.settings;
+        };
+      }
+      (lib.mkIf cfg.xdg.serverAutostart {
+        etc."xdg/autostart/foot-server.desktop".source =
+          "${cfg.package}/share/applications/foot-server.desktop";
+      })
+    ];
+
     programs = {
-      foot.settings.main.include = lib.optionals (cfg.theme != null) [
-        "${pkgs.foot.themes}/share/foot/themes/${cfg.theme}"
-      ];
+      foot.settings.main = lib.mkIf (cfg.theme != null) {
+        include = [ "${cfg.package.themes}/share/foot/themes/${cfg.theme}" ];
+      };
       # https://codeberg.org/dnkl/foot/wiki#user-content-shell-integration
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ". ${./bashrc} # enable shell integration for foot terminal";
       fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration "source ${./config.fish} # enable shell integration for foot terminal";

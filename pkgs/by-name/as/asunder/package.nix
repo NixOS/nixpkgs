@@ -1,9 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  autoreconfHook,
+  fetchFromGitHub,
   makeWrapper,
-  gtk2,
+  gtk3,
   libcddb,
   intltool,
   pkg-config,
@@ -15,12 +16,12 @@
   flacSupport ? true,
   flac,
   opusSupport ? false,
-  opusTools,
+  opus-tools,
   wavpackSupport ? false,
   wavpack,
   #, musepackSupport ? false, TODO: mpcenc
   monkeysAudioSupport ? false,
-  monkeysAudio,
+  monkeys-audio,
   #, aacSupport ? false, TODO: neroAacEnc
 }:
 
@@ -29,27 +30,31 @@ let
     lib.optional mp3Support lame
     ++ lib.optional oggSupport vorbis-tools
     ++ lib.optional flacSupport flac
-    ++ lib.optional opusSupport opusTools
+    ++ lib.optional opusSupport opus-tools
     ++ lib.optional wavpackSupport wavpack
-    ++ lib.optional monkeysAudioSupport monkeysAudio
+    ++ lib.optional monkeysAudioSupport monkeys-audio
     ++ [ cdparanoia ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.0.1";
   pname = "asunder";
-  src = fetchurl {
-    url = "http://littlesvr.ca/asunder/releases/asunder-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-iGji4bl7ZofIAOf2EiYqMWu4V+3TmIN2jOYottJTN2s=";
+  version = "3.1.0-unstable-2025-03-24";
+
+  src = fetchFromGitHub {
+    owner = "rizalmart";
+    repo = "asunder-gtk3";
+    rev = "e3676704f7c7912e61ad7d78fe19015c102a27e1";
+    hash = "sha256-bJVrSbjOUkmrF76e6euM5VPwbvvRrA5ZLPzZGjEep98=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     intltool
     makeWrapper
     pkg-config
   ];
   buildInputs = [
-    gtk2
+    gtk3
     libcddb
   ];
 
@@ -61,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Graphical Audio CD ripper and encoder for Linux";
     mainProgram = "asunder";
-    homepage = "http://littlesvr.ca/asunder/index.php";
+    homepage = "https://github.com/rizalmart/asunder-gtk3";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ mudri ];
     platforms = lib.platforms.linux;

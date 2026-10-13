@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "silver-platter";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "silver-platter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CvFnmGMV46nX6d568pZPqmDEyLZkDnDPpTtf0dMJd4U=";
+    hash = "sha256-KafDAd457Kp2SK9ZCmslaTMd6Wx45fszQ0tzuqInT+o=";
   };
 
-  cargoHash = "sha256-nMCOEb1WTG320ozno0H/5JeZql5TqFakO8TghjbKbiQ=";
+  cargoHash = "sha256-j+zKH4ZLYdaJnHp2vU1yZXEx0k17dwb7iZmC2najFPk=";
 
   buildInputs = [
     python3

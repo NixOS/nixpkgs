@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXi,
-  libXrandr,
+  libx11,
+  libxi,
+  libxrandr,
   txt2man,
 }:
 
@@ -24,9 +24,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXi
-    libXrandr
+    libx11
+    libxi
+    libxrandr
   ];
 
   installFlags = [ "prefix=$(out)" ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xlibinput_calibrator";
     homepage = "https://github.com/kreijack/xlibinput_calibrator";
     changelog = "https://github.com/kreijack/xlibinput_calibrator/blob/${finalAttrs.src.rev}/Changelog";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ atemu ];
   };
 })

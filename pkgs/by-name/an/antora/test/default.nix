@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "Reproducible Antora test framework";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.naho ];
+    maintainers = [ lib.maintainers.noahbiewesch ];
     platforms = lib.platforms.all;
   };
 }

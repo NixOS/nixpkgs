@@ -6,14 +6,14 @@
   cbfmt,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cbfmt";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "lukas-reineke";
     repo = "cbfmt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-/ZvL1ZHXcmE1n+hHvJeSqmnI9nSHJ+zM9lLNx0VQfIE=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.stehessel ];
   };
-}
+})

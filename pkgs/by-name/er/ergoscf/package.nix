@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.8.2";
 
   src = fetchurl {
-    url = "http://www.ergoscf.org/source/tarfiles/ergo-${finalAttrs.version}.tar.gz";
+    url = "https://www.ergoscf.org/source/tarfiles/ergo-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-U0NVREEZ8HI0Q0ZcbwvZsYA76PWMh7bqgDG1uaUc01c=";
   };
 
@@ -20,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     lapack
   ];
 
-  patches = [ ./math-constants.patch ];
+  patches = [
+    ./math-constants.patch
+    # with gcc-16 pi is now a "unqualified-id"
+    ./gcc-16-pi.patch
+  ];
 
   postPatch = ''
     patchShebangs ./test
@@ -35,12 +39,13 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # Required for compilation with gcc-14
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    LDFLAGS = "-lblas -llapack";
+    LDFLAGS = toString [
+      "-lblas"
+      "-llapack"
+    ];
   };
 
   enableParallelBuilding = true;
-
-  OMP_NUM_THREADS = 2; # required for check phase
 
   # With "fortify3", there are test failures, such as:
   # Testing cnof CAMB3LYP/6-31G using FMM

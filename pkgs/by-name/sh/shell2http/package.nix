@@ -7,18 +7,18 @@
   shell2http,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "shell2http";
-  version = "1.17.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "msoap";
     repo = "shell2http";
-    rev = "v${version}";
-    hash = "sha256-CU7ENLx5C1qCO1f9m0fl/AmUzmtmj6IjMlx9WNqAnS0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-jurZHeZeocHAZdsQ6q/XNfyNq1tu3EfOZ752fXGHR2Q=";
   };
 
-  vendorHash = "sha256-K/0ictKvX0sl/5hFDKjTkpGMze0x9fJA98RXNsep+DM=";
+  vendorHash = "sha256-bksh6Kwya5kX3c6k7PtMyc560qsUKXJm4vgH3hqlPyQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -46,8 +46,8 @@ buildGoModule rec {
     description = "Executing shell commands via HTTP server";
     mainProgram = "shell2http";
     homepage = "https://github.com/msoap/shell2http";
-    changelog = "https://github.com/msoap/shell2http/releases/tag/${src.rev}";
+    changelog = "https://github.com/msoap/shell2http/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

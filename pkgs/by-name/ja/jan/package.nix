@@ -2,91 +2,87 @@
   lib,
   appimageTools,
   fetchurl,
-  config,
-  cudaPackages,
-  cudaSupport ? config.cudaSupport,
-  stdenv,
+  stdenvNoCC,
   fetchzip,
   makeWrapper,
 }:
 
 let
-  pname = "Jan";
-  version = "0.7.5";
+  version = "0.8.6";
 
   darwin-src = fetchzip {
     url = "https://github.com/janhq/jan/releases/download/v${version}/jan-mac-universal-${version}.zip";
-    hash = "sha256-stTsLKE+2gUKAVwJ2/gOckoL6Nygwr0rkugD1jGj1w4=";
+    hash = "sha256-jQIY69PT+jMh3bUd2tgscKzvT/TBy8TqF6pFrsl7XAg=";
   };
 
   linux-src = fetchurl {
-    url = "https://github.com/janhq/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
-    hash = "sha256-RIEBpeogNIDPMpoY5Gk8q4+t7jxcWJEZLPqJHWyaVk4=";
+    url = "https://github.com/janhq/jan/releases/download/v${version}/Jan_${version}_amd64.AppImage";
+    hash = "sha256-L+cPsIhHOnvbSZ5c4HHVpXPFR1VpFIJduYnsHdEFIGY=";
   };
 
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version;
+  appimageContents = appimageTools.extract {
+    pname = "jan";
+    inherit version;
     src = linux-src;
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     changelog = "https://github.com/janhq/jan/releases/tag/v${version}";
-    description = "Jan is an open source alternative to ChatGPT that runs 100% offline on your computer";
+    description = "Open source alternative to ChatGPT that runs 100% offline on your computer";
     homepage = "https://github.com/janhq/jan";
     license = lib.licenses.asl20;
-    mainProgram = "Jan";
-    maintainers = [ ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    mainProgram = "Jan-Desktop";
+    maintainers = with lib.maintainers; [ dfjay ];
     platforms =
       lib.platforms.darwin
       ++ (with lib.systems.inspect; patternLogicalAnd patterns.isLinux patterns.isx86_64);
   };
 
   linux = appimageTools.wrapType2 {
-    inherit pname version;
+    pname = "jan";
+    inherit version;
     src = linux-src;
+
+    executableName = "Jan-Desktop";
 
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/Jan.desktop -t $out/share/applications
       cp -r ${appimageContents}/usr/share/icons $out/share
     '';
 
-    extraPkgs =
-      pkgs:
-      lib.optionals cudaSupport [
-        cudaPackages.cudatoolkit
-      ];
-
-    inherit meta;
+    inherit passthru meta;
   };
 
-  darwin = stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      meta
-      ;
+  darwin = stdenvNoCC.mkDerivation {
+    pname = "jan";
+    inherit version;
+
+    strictDeps = true;
+    __structuredAttrs = true;
 
     src = darwin-src;
 
-    dontUnpack = true;
-
-    sourceRoot = "${pname}.app";
     nativeBuildInputs = [
       makeWrapper
     ];
 
+    dontUnpack = true;
+
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications/${pname}.app
+      mkdir -p $out/Applications/Jan.app
       mkdir -p $out/bin
-      cp -R $src/. $out/Applications/${pname}.app/
-      if [ -x "$out/Applications/${pname}.app/Contents/MacOS/${pname}" ]; then
-        makeWrapper "$out/Applications/${pname}.app/Contents/MacOS/${pname}" $out/bin/${pname}
-      fi
+      cp -R $src/. $out/Applications/Jan.app/
+      makeWrapper "$out/Applications/Jan.app/Contents/MacOS/Jan-Desktop" $out/bin/Jan-Desktop
 
       runHook postInstall
     '';
+
+    inherit passthru meta;
   };
 in
-if stdenv.hostPlatform.isDarwin then darwin else linux
+if stdenvNoCC.hostPlatform.isDarwin then darwin else linux

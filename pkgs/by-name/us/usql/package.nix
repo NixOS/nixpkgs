@@ -1,31 +1,35 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  unixODBC,
+  installShellFiles,
+  stdenv,
+  buildGo126Module,
+  unixodbc,
   icu,
   nix-update-script,
   testers,
   usql,
 }:
 
-buildGoModule rec {
+buildGo126Module (finalAttrs: {
   pname = "usql";
-  version = "0.20.8";
+  version = "0.21.6";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
-    tag = "v${version}";
-    hash = "sha256-oaimplnmNpr3nMGNmiXmE9L03SfifjfncI9ZPiJg6JI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GBCu2zPQNRMuP6uispht9Cuff+e1lpQuu+qG1Ndzc9M=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = [
-    unixODBC
+    unixodbc
     icu
   ];
 
-  vendorHash = "sha256-bu9vU7rpq8sg5zHcmbOhdOkO18ci4dUErsLwip0j3Jo=";
+  vendorHash = "sha256-JuM/SRYjkuGTHQmA3aqugACr7VUmxUuvd8Cl1ywb1HM=";
   proxyVendor = true;
 
   # Exclude drivers from the bad group
@@ -51,16 +55,23 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/xo/usql/text.CommandVersion=${version}"
+    "-X github.com/xo/usql/text.CommandVersion=${finalAttrs.version}"
   ];
 
   # All the checks currently require docker instances to run the databases.
   doCheck = false;
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd usql \
+      --bash <($out/bin/usql completion bash) \
+      --fish <($out/bin/usql completion fish) \
+      --zsh <($out/bin/usql completion zsh)
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = usql;
       command = "usql --version";
     };
@@ -69,7 +80,7 @@ buildGoModule rec {
   meta = {
     description = "Universal command-line interface for SQL databases";
     homepage = "https://github.com/xo/usql";
-    changelog = "https://github.com/xo/usql/releases/tag/v${version}";
+    changelog = "https://github.com/xo/usql/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "usql";
     maintainers = with lib.maintainers; [
@@ -78,4 +89,4 @@ buildGoModule rec {
     ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

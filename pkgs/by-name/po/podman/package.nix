@@ -11,8 +11,7 @@
   libapparmor,
   libseccomp,
   libselinux,
-  # TODO: investigate why changing from `systemd` to `systemdMinimal` breaks `podman logs`
-  systemd,
+  systemdLibs,
   nixosTests,
   python3,
   makeBinaryWrapper,
@@ -40,15 +39,18 @@
   coreutils,
   runtimeShell,
 }:
+let
+  systemdLibs' = systemdLibs.override { withCompression = true; };
+in
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.7.0";
+  version = "5.8.8";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "podman-container-tools";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SHIWfY8eKdimwpLfB1NtpF1DBh6qaR5KCDTU4vWAMFw=";
+    hash = "sha256-fl2/HyUh2EBbSw6O50H04Bltu2ZNF1Fay9XNNzKVpSE=";
   };
 
   patches = [
@@ -82,7 +84,7 @@ buildGoModule (finalAttrs: {
     libapparmor
     libseccomp
     libselinux
-    systemd
+    systemdLibs'
   ];
 
   env = {
@@ -134,7 +136,7 @@ buildGoModule (finalAttrs: {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
-    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemdLibs' ]}":$RPATH $out/bin/.podman-wrapped
     substituteInPlace "$out/share/systemd/user/podman-user-wait-network-online.service" \
       --replace-fail sleep '${coreutils}/bin/sleep' \
       --replace-fail /bin/sh '${runtimeShell}'
@@ -176,18 +178,19 @@ buildGoModule (finalAttrs: {
       name = "podman-helper-binary-wrapper";
 
       # this only works for some binaries, others may need to be added to `binPath` or in the modules
-      paths = [
-        gvproxy
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        aardvark-dns
-        catatonit # added here for the pause image and also set in `containersConf` for `init_path`
-        netavark
-        passt
-        conmon
-        crun
-      ]
-      ++ extraRuntimes;
+      paths =
+        lib.optionals stdenv.hostPlatform.isDarwin [
+          gvproxy
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          aardvark-dns # dns
+          catatonit # added here for the pause image and also set in `containersConf` for `init_path`
+          netavark # networking
+          passt # rootless networking
+          conmon # runtime monitor
+          crun # runtime
+        ]
+        ++ extraRuntimes;
     };
   };
 
@@ -199,9 +202,10 @@ buildGoModule (finalAttrs: {
 
       To install on NixOS, please use the option `virtualisation.podman.enable = true`.
     '';
-    changelog = "https://github.com/containers/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
+    changelog = "https://github.com/podman-container-tools/podman/blob/v${finalAttrs.version}/RELEASE_NOTES.md";
     license = lib.licenses.asl20;
     teams = [ lib.teams.podman ];
     mainProgram = "podman";
+    platforms = lib.platforms.unix;
   };
 })

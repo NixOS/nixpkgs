@@ -58,7 +58,7 @@
       with subtest("Check if various environment variables are set"):
           machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf marco)/environ | grep 'XDG_CURRENT_DESKTOP' | grep 'MATE'")
           # From mate-panel-with-applets packaging
-          machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate.mate-panel-with-applets.pname}'")
+          machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ | grep 'MATE_PANEL_APPLETS_DIR' | grep '${pkgs.mate-panel-with-applets.pname}'")
           # From the nixos/mate module
           machine.succeed("xargs --null --max-args=1 echo < /proc/$(pgrep -xf mate-panel)/environ | grep 'SSH_AUTH_SOCK' | grep 'gcr'")
 

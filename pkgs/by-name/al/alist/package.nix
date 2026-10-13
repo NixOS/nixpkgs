@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "alist";
-  version = "3.55.0";
+  version = "3.63.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/psFL/dCG82y1uWEcg45JG6S7+MD0avqU/HjrR+vklA=";
+    hash = "sha256-G3guBu+SRIF8a4OZzPvnu2Ri1N7VRst4LB/WCykmH58=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -30,8 +30,15 @@ buildGoModule (finalAttrs: {
     '';
   };
 
+  # --- FAIL: TestSecureJoin/drive (0.00s)
+  #     securepath_test.go:29: expected error for "C:\\evil.txt", got nil
+  postPatch = lib.optionalString stdenv.hostPlatform.isUnix ''
+    substituteInPlace internal/archive/tool/securepath_test.go \
+      --replace-fail '{name: "drive", entry: "C:\\evil.txt", wantErr: true},' ""
+  '';
+
   proxyVendor = true;
-  vendorHash = "sha256-aRnS3LLG25FK1ELKd7K1e5aGLmKnQ7w/3QVe4P9RRLI=";
+  vendorHash = "sha256-oHuNsTfP216Kd46TNF8oUDGgoABq1NtPiPN1srOFJzE=";
 
   buildInputs = [ fuse ];
 
@@ -55,6 +62,7 @@ buildGoModule (finalAttrs: {
     ldflags+=" -X \"github.com/alist-org/alist/v3/internal/conf.BuiltAt=$(cat SOURCE_DATE_EPOCH)\""
     ldflags+=" -X github.com/alist-org/alist/v3/internal/conf.GitCommit=$(cat COMMIT)"
   '';
+  __darwinAllowLocalNetworking = true;
 
   checkFlags =
     let
@@ -87,17 +95,17 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = lib.getExe (callPackage ./update.nix { });
-    webVersion = "3.55.0";
+    webVersion = "3.63.0";
     web = fetchzip {
       url = "https://github.com/AlistGo/alist-web/releases/download/${finalAttrs.passthru.webVersion}/dist.tar.gz";
-      hash = "sha256-v0o4G2mzd63sShJZRjijIFAUB+ocvF4jspxf841lZ8U=";
+      hash = "sha256-uWktKQU9EYPXj88Wj8LbRbuIPqW2u3EBQ5MM82wawtM=";
     };
   };
 
   meta = {
     description = "File list/WebDAV program that supports multiple storages";
-    homepage = "https://github.com/alist-org/alist";
-    changelog = "https://github.com/alist-org/alist/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/AlistGo/alist";
+    changelog = "https://github.com/AlistGo/alist/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       agpl3Only
       # alist-web

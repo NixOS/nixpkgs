@@ -7,20 +7,23 @@
   nix,
   nix-prefetch-git,
   installShellFiles,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crate2nix";
   version = "0.15.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "crate2nix";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-SUuruvw1/moNzCZosHaa60QMTL+L9huWdsCBN6XZIic=";
   };
 
-  sourceRoot = "${src.name}/crate2nix";
+  sourceRoot = "${finalAttrs.src.name}/crate2nix";
 
   cargoHash = "sha256-q/nPKNXZ1eJijeTBXA6Uuz235p+Q1uilXY5a/s8btMM=";
 
@@ -48,6 +51,9 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --bash crate2nix.bash --zsh _crate2nix --fish crate2nix.fish
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Nix build file generator for Rust crates";
     mainProgram = "crate2nix";
@@ -63,4 +69,4 @@ rustPlatform.buildRustPackage rec {
       cole-h
     ];
   };
-}
+})

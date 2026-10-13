@@ -9,7 +9,7 @@
   udevCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "autorandr";
   version = "1.15";
   pyproject = false;
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "phillipberndt";
     repo = "autorandr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8FMfy3GCN4z/TnfefU2DbKqV3W35I29/SuGGqeOrjNg";
   };
 
@@ -86,4 +86,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "autorandr";
   };
-}
+})

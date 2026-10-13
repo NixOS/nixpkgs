@@ -1,36 +1,35 @@
 {
   lib,
-  python3,
   fetchFromGitLab,
+  python3Packages,
   git,
   openssh,
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "marge-bot";
-  version = "1.0.0";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "marge-org";
     repo = "marge-bot";
-    rev = version;
-    hash = "sha256-FKUWVJqkhdxlWcOvyACQo/At0qW9Li+l25+9oCnA4nM=";
+    rev = finalAttrs.version;
+    hash = "sha256-Wg+yWkHkCbry13SRaEvULF4jjCaBI524FsVfcP/+u/k=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
+  build-system = with python3Packages; [
+    hatchling
+    uv-build
   ];
 
-  propagatedBuildInputs =
-    (with python3.pkgs; [
+  dependencies =
+    (with python3Packages; [
       configargparse
-      maya
       pyyaml
       requests
       python-gitlab
-      hatchling
     ])
     ++ [
       git
@@ -38,10 +37,11 @@ python3.pkgs.buildPythonApplication rec {
     ];
 
   nativeCheckInputs =
-    (with python3.pkgs; [
+    (with python3Packages; [
       pytest-cov-stub
       pytestCheckHook
-      pendulum
+      python-dateutil
+      time-machine
     ])
     ++ [
       git
@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Merge bot for GitLab";
     homepage = "https://gitlab.com/marge-org/marge-bot";
-    changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://gitlab.com/marge-org/marge-bot/-/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
@@ -62,4 +62,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "marge.app";
   };
-}
+})

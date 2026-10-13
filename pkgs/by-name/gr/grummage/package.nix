@@ -5,7 +5,7 @@
   grype,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "grummage";
   version = "2.0.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "popey";
     repo = "grummage";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K5/k4wSl2Ary9McPaK+T6nHqvIULuUcB3emJ7EibQrs=";
   };
 
@@ -33,9 +33,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Interactive terminal frontend to Grype";
     homepage = "https://github.com/popey/grummage";
-    changelog = "https://github.com/popey/grummage/releases/tag/${src.tag}";
+    changelog = "https://github.com/popey/grummage/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     license = lib.licenses.mit;
     mainProgram = "grummage";
   };
-}
+})

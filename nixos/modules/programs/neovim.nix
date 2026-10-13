@@ -51,13 +51,13 @@ in
 
     withRuby = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Enable Ruby provider.";
     };
 
     withPython3 = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = "Enable Python 3 provider.";
     };
 

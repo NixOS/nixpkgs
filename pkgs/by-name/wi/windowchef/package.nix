@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  libXrandr,
+  libxrandr,
   libxcb-util,
   libxcb-keysyms,
   libxcb-wm,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXrandr
+    libxrandr
     libxcb-util
     libxcb-keysyms
     libxcb-wm

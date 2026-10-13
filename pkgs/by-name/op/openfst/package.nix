@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openfst";
   version = "1.8.4";
 
   src = fetchurl {
-    url = "http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-${version}.tar.gz";
+    url = "http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-${finalAttrs.version}.tar.gz";
     hash = "sha256-qOu7bz2S0H5nFQBYdHJRjPyHy3m5plSlqKuy0OspgBY=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.dfordivam ];
     platforms = lib.platforms.unix;
   };
-}
+})

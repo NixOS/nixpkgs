@@ -98,7 +98,7 @@ gccStdenv.mkDerivation rec {
     # "--enable-march=native" # Nope, makes it not work on machines older than the builder
   ]
   ++ gambit-params.extraOptions
-  # TODO: pick an appropriate architecture to optimize on on x86-64?
+  # TODO: pick an appropriate architecture to optimize on x86-64?
   # https://gcc.gnu.org/onlinedocs/gcc-4.8.4/gcc/i386-and-x86-64-Options.html#i386-and-x86-64-Options
   # ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 "--enable-march=core-avx2"
   # Do not enable poll on darwin due to https://github.com/gambit/gambit/issues/498

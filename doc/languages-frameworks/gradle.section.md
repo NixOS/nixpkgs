@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
 })
 ```
 
-This allows you to `override` any arguments of the `pkg` used for the update script (for example, `pkg = pdftk.override { enableSomeFlag = true };)`.
+Use this to `override` any arguments of the `pkg` used for the update script (for example, `pkg = pdftk.override { enableSomeFlag = true };)`.
 
 The second is to use `finalAttrs.finalPackage` like this:
 
@@ -134,7 +134,7 @@ The update script does the following:
   will generally use instead of `pkg` or `attrPath`.
 - `pkg` - the package to be used for fetching the dependencies. Defaults
   to `getAttrFromPath (splitString "." attrPath) pkgs`.
-- `bwrapFlags` - allows you to override bwrap flags (only relevant for
+- `bwrapFlags` - overrides bwrap flags (only relevant for
   downstream, non-nixpkgs projects)
 - `data` - path to the dependencies lockfile (can be relative to the
   package, can be absolute). In nixpkgs, it's discouraged to have the

@@ -25,6 +25,8 @@ let
       "x86-32"
     else if stdenv.hostPlatform.isAarch64 then
       "armv8"
+    else if stdenv.hostPlatform.isAarch32 then
+      "armv7"
     else
       "unknown";
 
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "ARCH=${arch}"
     "CXX=${stdenv.cc.targetPrefix}c++"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
   ];
   buildFlags = [ "build" ];
 
@@ -118,9 +121,9 @@ stdenv.mkDerivation rec {
     platforms = [
       "x86_64-linux"
       "i686-linux"
-      "x86_64-darwin"
       "aarch64-linux"
       "aarch64-darwin"
+      "armv7l-linux"
     ];
     license = lib.licenses.gpl3Only;
   };

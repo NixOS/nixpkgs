@@ -15,13 +15,14 @@
   SDL2,
   SDL2_mixer,
   libopenmpt,
-  libXrandr,
-  libXext,
-  libXfixes,
-  libXcursor,
-  libXi,
-  libXScrnSaver,
+  libxrandr,
+  libxext,
+  libxfixes,
+  libxcursor,
+  libxi,
+  libxscrnsaver,
   makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     xxd
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -58,27 +60,29 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_mixer
     libopenmpt
     SDL2
-    libXrandr
-    libXext
-    libXfixes
-    libXcursor
-    libXi
-    libXScrnSaver
+    libxrandr
+    libxext
+    libxfixes
+    libxcursor
+    libxi
+    libxscrnsaver
   ];
 
   strictDeps = true;
 
   dontUseCmakeConfigure = true;
 
-  desktopItem = makeDesktopItem {
-    name = "Apotris";
-    exec = "Apotris";
-    comment = "A block stacking game";
-    desktopName = "Apotris";
-    categories = [
-      "Game"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Apotris";
+      exec = "Apotris";
+      comment = "A block stacking game";
+      desktopName = "Apotris";
+      categories = [
+        "Game"
+      ];
+    })
+  ];
 
   meta = {
     description = "Block stacking game";

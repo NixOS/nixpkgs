@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "aliyunpan";
-  version = "0.3.7";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "tickstep";
     repo = "aliyunpan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9sbAKv2SOZPKnP56vL0rfMEDhTpIV524s9sIvlWAM6o=";
+    hash = "sha256-xsDo/I40gNeDjtKRAJCpKL+2SNSKODiygMo97InMB4E=";
   };
 
-  vendorHash = "sha256-tNUXB+pU/0gJL3oG9rdk6J+SvO5ASqkuO+gVZiRdaVg=";
+  vendorHash = "sha256-PKx40HqXm1nyqjNBSJdW5ucRAkMj9w3fbQYjAGALM1k=";
 
   ldflags = [
     "-s"

@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-cnpg";
-  version = "1.28.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "cloudnative-pg";
     repo = "cloudnative-pg";
-    rev = "v${version}";
-    hash = "sha256-uIIy4zSf6ply859aHVvlujqBWpN18FLZh+Vye3fbSoY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZtIUtp4KwSxpqh97Hi9/8MnZfH3sGj3gNa0bwHF0FhM=";
   };
 
-  vendorHash = "sha256-Hl7cYZbs+rDS2+1ojgCUhLfBVGQ+ZhAApRczkUYOwVY=";
+  vendorHash = "sha256-ep8BezbZ/BM+s50v/sly+HotA9IHosHS6w3el0i4dps=";
 
   subPackages = [ "cmd/kubectl-cnpg" ];
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ devusb ];
   };
-}
+})

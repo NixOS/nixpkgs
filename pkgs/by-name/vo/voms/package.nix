@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "voms";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
     repo = "voms";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ipNgx87M/NNvAaeUf30nUDmf4Q9k5zakkgMk4/1N6VM=";
+    hash = "sha256-HSxvEwk06OFfyXej7XetcTOCq5bMMHu/sEBnKMMXEZQ=";
   };
 
   passthru = {

@@ -3,7 +3,7 @@
   lib,
   fetchzip,
   installShellFiles,
-  libX11,
+  libx11,
   ncurses,
   pkg-config,
   enableXwinGraphics ? false,
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ installShellFiles ] ++ lib.optionals (pkgConfigLibs != [ ]) [ pkg-config ];
 
   buildInputs =
-    lib.optionals enableXwinGraphics [ libX11 ] ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
+    lib.optionals enableXwinGraphics [ libx11 ] ++ lib.optionals (!enableXwinGraphics) [ ncurses ];
 
   preConfigure = ''
     cd src
@@ -98,5 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pmars";
     maintainers = with lib.maintainers; [ OPNA2608 ];
     platforms = lib.platforms.unix;
+    # pmars-x11 last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin && enableXwinGraphics;
   };
 })

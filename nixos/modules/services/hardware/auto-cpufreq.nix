@@ -24,6 +24,16 @@ in
         '';
 
         default = { };
+        example = {
+          charger = {
+            governor = "performance";
+            turbo = "auto";
+          };
+          battery = {
+            governor = "powersave";
+            turbo = "never";
+          };
+        };
         type = lib.types.submodule { freeformType = format.type; };
       };
     };

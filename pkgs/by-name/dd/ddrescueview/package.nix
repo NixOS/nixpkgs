@@ -8,9 +8,11 @@
   cairo,
   gdk-pixbuf,
   glib,
-  gtk2,
-  libX11,
+  gtk3,
+  harfbuzz,
+  libx11,
   pango,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     fpc
     lazarus
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -33,15 +36,20 @@ stdenv.mkDerivation rec {
     cairo
     gdk-pixbuf
     glib
-    gtk2
-    libX11
+    gtk3
+    harfbuzz
+    libx11
     pango
   ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  env.NIX_LDFLAGS = toString [
+    "--as-needed"
+    "-rpath"
+    (lib.makeLibraryPath buildInputs)
+  ];
 
   buildPhase = ''
-    lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi
+    lazbuild --lazarusdir=${lazarus}/share/lazarus --ws=gtk3 ddrescueview.lpi
   '';
 
   installPhase = ''

@@ -215,6 +215,8 @@ in
     ];
     security.sudo.enable = lib.mkDefault false;
 
+    security.shadow.su.package = lib.mkDefault cfg.package;
+
     security.sudo-rs.extraRules =
       let
         defaultRule =

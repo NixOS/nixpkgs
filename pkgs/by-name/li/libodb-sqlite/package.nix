@@ -8,9 +8,9 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? !enableShared,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libodb-sqlite";
-  version = "2.5.0-b.27";
+  version = "2.5.0";
 
   outputs = [
     "out"
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pkg.cppget.org/1/beta/odb/libodb-sqlite-${version}.tar.gz";
-    hash = "sha256-jpxtY/VMkh88IzqGYgedu5TZGVIbPpy/FZNvUaOMf+w=";
+    url = "https://pkg.cppget.org/1/stable/odb/libodb-sqlite-${finalAttrs.version}.tar.gz";
+    hash = "sha256-soq3OpAlVLum65um9MkJnR4Vgm3nofpPumRRpBCFb70=";
   };
 
   nativeBuildInputs = [
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ r-burns ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -110,7 +110,7 @@ in
                 default = null;
                 example = literalExpression "/etc/wpa_supplicant.conf";
                 description = ''
-                  External `wpa_supplicant.conf` configuration file.
+                  External {file}`wpa_supplicant.conf` configuration file.
                   The configuration options defined declaratively within `networking.supplicant` have
                   precedence over options defined in `configFile`.
                 '';
@@ -145,7 +145,7 @@ in
                 model_number=2015
               '';
               description = ''
-                Configuration options for `wpa_supplicant.conf`.
+                Configuration options for {file}`wpa_supplicant.conf`.
                 Options defined here have precedence over options in `configFile`.
                 NOTE: Do not write sensitive data into `extraConf` as it will
                 be world-readable in the `nix-store`. For sensitive information
@@ -226,7 +226,7 @@ in
         The value of this option is an attribute set. Each attribute configures a
         {command}`wpa_supplicant` service, where the attribute name specifies
         the name of the interface that {command}`wpa_supplicant` operates on.
-        The attribute name can be a space separated list of interfaces.
+        The attribute name can be a space-separated list of interfaces.
         The attribute names `WLAN`, `LAN` and `DBUS`
         have a special meaning. `WLAN` and `LAN` are
         configurations for universal {command}`wpa_supplicant` service that is

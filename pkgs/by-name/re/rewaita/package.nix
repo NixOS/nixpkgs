@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 let
-  version = "1.1.0";
+  version = "1.1.1";
 in
 python3Packages.buildPythonApplication {
   pname = "rewaita";
@@ -28,15 +28,13 @@ python3Packages.buildPythonApplication {
     owner = "SwordPuffin";
     repo = "Rewaita";
     tag = "v${version}";
-    hash = "sha256-B3CxtGKLvlGORae1b7vMDFbvNntVO24yrzbiHzOP28k=";
+    hash = "sha256-T9GQuhMkCEUFX2BpTTQ+zKhDpSxtVKuncITtm7nqzyY=";
   };
 
   postPatch = ''
     substituteInPlace src/window.py \
       --replace-fail 'shutil.copy(' 'shutil.copyfile('
   '';
-
-  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -54,7 +52,7 @@ python3Packages.buildPythonApplication {
     pygobject3
     pillow
     numpy
-    fortune
+    fortune-python
   ];
 
   buildInputs = [

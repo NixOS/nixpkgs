@@ -4,12 +4,8 @@
   llama-index-cli,
   llama-index-core,
   llama-index-embeddings-openai,
-  llama-index-indices-managed-llama-cloud,
-  llama-index-legacy,
   llama-index-llms-openai,
-  llama-index-multi-modal-llms-openai,
-  llama-index-readers-file,
-  llama-index-readers-llama-parse,
+  nltk,
 }:
 
 buildPythonPackage {
@@ -21,21 +17,14 @@ buildPythonPackage {
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "llama-index-core"
-    "llama-index-multi-modal-llms-openai"
-  ];
+  pythonRelaxDeps = [ "llama-index-core" ];
 
   dependencies = [
     llama-index-cli
     llama-index-core
     llama-index-embeddings-openai
-    llama-index-indices-managed-llama-cloud
-    llama-index-legacy
     llama-index-llms-openai
-    llama-index-multi-modal-llms-openai
-    llama-index-readers-file
-    llama-index-readers-llama-parse
+    nltk
   ];
 
   pythonImportsCheck = [ "llama_index" ];

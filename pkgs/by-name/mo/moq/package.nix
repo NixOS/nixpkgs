@@ -4,25 +4,25 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "moq";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "matryer";
     repo = "moq";
-    rev = "v${version}";
-    sha256 = "sha256-veAfQ9dFt6s6xQace0nkcbAirl98UekJx+0qPHnQVGg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-lIYRzDzZ/p74ZBTVViuPTfexZZgkpFK4wcjh9D/DoMc=";
   };
 
-  vendorHash = "sha256-Mwx2Z2oVFepNr911zERuoM79NlpXu13pVpXPJox86BA=";
+  vendorHash = "sha256-v1EImmEZGNE1RVT1ZRRgkcGD/gtZZky6E9LRtmRUyJM=";
 
   subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -36,4 +36,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ anpryl ];
   };
-}
+})

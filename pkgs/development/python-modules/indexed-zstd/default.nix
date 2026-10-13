@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "indexed_zstd";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i3Q3j5Rh/OqxdSFbZeHEiYZN2zS9gWBYk2pifwzKOos=";
+    hash = "sha256-DspqT15rkF6qGs09l7Gt40B4qClIOkODn1zy7+lxUPQ=";
   };
 
   nativeBuildInputs = [

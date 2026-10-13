@@ -3,7 +3,8 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  libXmu,
+  pkg-config,
+  libxmu,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -17,9 +18,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0q0hmvcjlv8arhh1pzhja2wglyj6n7z209jnpnzd281kqqv4czcs";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ libXmu ];
+  buildInputs = [ libxmu ];
+
+  # Make AC_CHECK_LIB(Xmu, XmuClientWindow) work.
+  preConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
+    configureFlagsArray+=("LIBS=$("$PKG_CONFIG" --libs xmu)")
+  '';
 
   meta = {
     description = "Tool to access the X clipboard from a console application";

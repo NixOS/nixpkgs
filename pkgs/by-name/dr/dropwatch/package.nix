@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nhorman/dropwatch";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ c0bw3b ];
+    maintainers = [ ];
   };
 })

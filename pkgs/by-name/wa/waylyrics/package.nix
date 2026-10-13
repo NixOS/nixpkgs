@@ -8,18 +8,18 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "waylyrics";
-  version = "0.3.21";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "waylyrics";
     repo = "waylyrics";
-    rev = "v${version}";
-    hash = "sha256-uXAcoy5fnnkqtmGmaEC6Ceu+dwmZKDPOFzxC4COuDbk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-CwfF6+YtcMmZGC6Y2pik6KwS7Cga/5n6fcifVbjgnFo=";
   };
 
-  cargoHash = "sha256-moB2G/QxN3oAfCoTHXjFpIOSB2wRogEUjzup+MTfR6E=";
+  cargoHash = "sha256-p6Bi1V7hC1rWboWX6Krr/5dXQbZrQkt5DtPlg0J9t8U=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::netease_lyric::get_netease_lyric" # Requires network access
   ];
 
-  WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
+  env.WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
 
   postInstall = ''
     # Install themes
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

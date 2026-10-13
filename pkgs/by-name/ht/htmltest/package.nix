@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "htmltest";
   version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "wjdp";
     repo = "htmltest";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8tkk476kGEfHo3XGu3/0r6fhX1c4vkYiUACpw0uEu2g=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # tests require network access
@@ -34,7 +34,7 @@ buildGoModule rec {
       links, images, scripts references work, your alt tags are filled in, etc.
     '';
     homepage = "https://github.com/wjdp/htmltest";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

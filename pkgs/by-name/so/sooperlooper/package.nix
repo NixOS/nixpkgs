@@ -10,8 +10,8 @@
   libxml2,
   libjack2,
   libsndfile,
-  wxGTK32,
-  libsigcxx,
+  wxwidgets_3_2,
+  libsigcxx_2_0,
   libsamplerate,
   rubberband,
   gettext,
@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libjack2
     libsndfile
-    wxGTK32
-    libsigcxx
+    wxwidgets_3_2
+    libsigcxx_2_0
     libsamplerate
     rubberband
     gettext
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # see https://bugs.gentoo.org/925275
-  CPPFLAGS = "-fpermissive";
+  env.CPPFLAGS = "-fpermissive";
 
   enableParallelBuilding = true;
 

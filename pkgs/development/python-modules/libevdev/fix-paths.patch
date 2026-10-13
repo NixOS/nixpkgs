@@ -1,20 +1,20 @@
 diff --git a/libevdev/_clib.py b/libevdev/_clib.py
-index 6e4ab2c..9db54d1 100644
+index c99fe4a..cdf94ad 100644
 --- a/libevdev/_clib.py
 +++ b/libevdev/_clib.py
-@@ -120,7 +120,7 @@ class Libevdev(_LibraryWrapper):
+@@ -133,7 +133,7 @@ class Libevdev(_LibraryWrapper):
  
      @staticmethod
-     def _cdll():
+     def _cdll() -> ctypes.CDLL:
 -        return ctypes.CDLL("libevdev.so.2", use_errno=True)
 +        return ctypes.CDLL("@libevdev@/lib/libevdev.so.2", use_errno=True)
  
      _api_prototypes = {
          # const char *libevdev_event_type_get_name(unsigned int type);
-@@ -910,7 +910,7 @@ class UinputDevice(_LibraryWrapper):
+@@ -950,7 +950,7 @@ class UinputDevice(_LibraryWrapper):
  
      @staticmethod
-     def _cdll():
+     def _cdll() -> ctypes.CDLL:
 -        return ctypes.CDLL("libevdev.so.2", use_errno=True)
 +        return ctypes.CDLL("@libevdev@/lib/libevdev.so.2", use_errno=True)
  

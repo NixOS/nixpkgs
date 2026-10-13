@@ -3,14 +3,14 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "glider";
   version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "nadoo";
     repo = "glider";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-LrIHdI1/55llENjDgFJxh2KKsJf/tLT3P9L9jhLhfS0=";
   };
 
@@ -35,4 +35,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oluceps ];
     platforms = lib.platforms.linux;
   };
-}
+})

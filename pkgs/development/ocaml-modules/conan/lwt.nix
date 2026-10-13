@@ -2,7 +2,7 @@
   buildDunePackage,
   conan,
   lwt,
-  bigstringaf,
+  bstr,
   alcotest,
   crowbar,
   fmt,
@@ -16,7 +16,7 @@ buildDunePackage {
   propagatedBuildInputs = [
     conan
     lwt
-    bigstringaf
+    bstr
   ];
 
   doCheck = true;

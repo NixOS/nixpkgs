@@ -6,15 +6,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "darkman";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitLab {
     owner = "WhyNotHugo";
     repo = "darkman";
-    rev = "v${version}";
-    hash = "sha256-Kpuuxxwn/huA5WwmnVGG0HowNBGyexDRpdUc3bNmB18=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dQyFOdJbiijbAMWR63i2sMGuQAsJk8rmM/xnmYeWfOY=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ buildGoModule rec {
       --replace-fail /usr/bin/darkman $out/bin/darkman
   '';
 
-  vendorHash = "sha256-QO+fz8m2rILKTokimf+v4x0lon5lZy7zC+5qjTMdcs0=";
+  vendorHash = "sha256-6wH2mE3pr4C4CoroNXd+OUjnOZ8xr7SrJfNCJX4t8Gs=";
   nativeBuildInputs = [ scdoc ];
 
   buildPhase = ''
@@ -56,4 +56,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "darkman";
   };
-}
+})

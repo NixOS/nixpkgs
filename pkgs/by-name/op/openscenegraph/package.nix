@@ -7,14 +7,13 @@
   cmake,
   pkg-config,
   doxygen,
-  libX11,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxinerama,
+  libxrandr,
   libGLU,
   libGL,
   glib,
   libxml2,
-  pcre,
   zlib,
   boost,
   jpegSupport ? true,
@@ -48,9 +47,9 @@
   vncSupport ? false,
   libvncserver,
   lasSupport ? false,
-  libLAS,
+  liblas,
   luaSupport ? false,
-  lua,
+  lua5_2_compat,
   sdlSupport ? false,
   SDL2,
   restSupport ? false,
@@ -59,6 +58,9 @@
   withExamples ? false,
   fltk,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openscenegraph";
@@ -79,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXinerama
-      libXrandr
+      libx11
+      libxinerama
+      libxrandr
       libGLU
       libGL
     ]
@@ -99,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional curlSupport curl
     ++ lib.optionals colladaSupport [
       collada-dom
-      pcre
     ]
     ++ lib.optional opencascadeSupport opencascade-occt
     ++ lib.optional ffmpegSupport ffmpeg
@@ -108,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional svgSupport librsvg
     ++ lib.optional pdfSupport poppler
     ++ lib.optional vncSupport libvncserver
-    ++ lib.optional lasSupport libLAS
+    ++ lib.optional lasSupport liblas
     ++ lib.optional luaSupport lua
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio

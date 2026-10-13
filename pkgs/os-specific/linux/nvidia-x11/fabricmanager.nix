@@ -7,6 +7,7 @@ nvidia_x11: sha256:
   patchelf,
   zlib,
   glibc,
+  versionCheckHook,
 }:
 
 let
@@ -27,6 +28,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share/nvidia-fabricmanager}
     for bin in nv{-fabricmanager,switch-audit};do
       ${patchelf}/bin/patchelf \
@@ -40,22 +43,50 @@ stdenv.mkDerivation rec {
         bin/$bin
     done
     mv bin/nv{-fabricmanager,switch-audit} $out/bin/.
+
+    # Install the start script used by the NixOS systemd service.
+    # FHS binary paths inside the script are patched in the NixOS module
+    # where the nvlsm package path is known.
+    install -Dm755 bin/nvidia-fabricmanager-start.sh $out/bin/nvidia-fabricmanager-start.sh
+
     for d in etc systemd share/nvidia;do
       mv $d $out/share/nvidia-fabricmanager/.
     done
     for d in include lib;do
       mv $d $out/.
     done
+
     patchShebangs $out/bin
 
-    for b in $out/bin/*;do
-      ${ldd} $b | grep -vqz "not found"
-    done
+    runHook postInstall
   '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    for b in $out/bin/*;do
+      # Skip shell scripts — ldd only applies to ELF binaries
+      if file "$b" | grep -q ELF; then
+        ${ldd} $b | grep -vqz "not found"
+      fi
+    done
+
+    runHook postCheck
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  # Default stdenv fixup shrinkings cause undefined symbols when trying to run
+  # meta.mainProgram
+  dontFixup = true;
 
   meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
-    description = "Fabricmanager daemon for NVLink intialization and control";
+    description = "Fabricmanager daemon for NVLink initialization and control";
     license = lib.licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     mainProgram = "nv-fabricmanager";

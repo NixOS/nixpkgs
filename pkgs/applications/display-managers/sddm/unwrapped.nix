@@ -7,12 +7,12 @@
   pkg-config,
   qttools,
   libxcb,
-  libXau,
+  libxau,
   pam,
   qtbase,
   qtdeclarative,
   qtquickcontrols2 ? null,
-  systemd,
+  systemdLibs,
   xkeyboard-config,
   nixosTests,
   docutils,
@@ -62,12 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXau
+    libxau
     pam
     qtbase
     qtdeclarative
     qtquickcontrols2
-    systemd
+    systemdLibs
   ];
 
   # We will wrap manually later
@@ -112,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "QML based X11 display manager";
     homepage = "https://github.com/sddm/sddm";
     maintainers = with lib.maintainers; [
-      ttuegel
       k900
     ];
     platforms = lib.platforms.linux;

@@ -3,38 +3,36 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   pkg-config,
   httplib,
   libarchive,
-  libXdmcp,
+  libxdmcp,
   libpthread-stubs,
   libxcb-keysyms,
   qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.7.2";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UvgvPeBShlBCTKbTNz3LbV2hUOGov6a66D/Cpe2I12s=";
   };
-
-  patches = [ ./qt6_10.patch ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     httplib
-    libXdmcp
+    libxdmcp
     libarchive
     libpthread-stubs
     qt6.qtbase

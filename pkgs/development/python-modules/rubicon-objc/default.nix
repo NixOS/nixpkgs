@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "rubicon-objc";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beeware";
     repo = "rubicon-objc";
     tag = "v${version}";
-    hash = "sha256-ahlsY4eU9n+BRexE4wNVXMcgSiGW7pU25zJif9lGTUs=";
+    hash = "sha256-h2KMfV6vduhO0AsMNiZ+nFJubhrrt4rNXpdngelDMpU=";
   };
 
   postPatch = ''

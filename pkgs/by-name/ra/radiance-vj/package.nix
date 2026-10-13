@@ -9,14 +9,14 @@
   stdenv,
   alsa-lib,
   wayland,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXinerama,
-  libXpresent,
-  libXfixes,
-  libXext,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxinerama,
+  libxpresent,
+  libxfixes,
+  libxext,
   libxcb,
   yt-dlp,
 }:
@@ -44,14 +44,14 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     alsa-lib
     wayland
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXinerama
-    libXpresent
-    libXfixes
-    libXext
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxinerama
+    libxpresent
+    libxfixes
+    libxext
     libxcb
   ];
 
@@ -64,14 +64,14 @@ rustPlatform.buildRustPackage rec {
       --add-rpath "${
         lib.makeLibraryPath [
           libxkbcommon
-          libX11
-          libXcursor
-          libXi
-          libXrandr
-          libXinerama
-          libXpresent
-          libXfixes
-          libXext
+          libx11
+          libxcursor
+          libxi
+          libxrandr
+          libxinerama
+          libxpresent
+          libxfixes
+          libxext
         ]
       }:$out/lib" \
       $out/bin/radiance \

@@ -10,8 +10,8 @@
   libdrm,
   libGL,
   libinput,
-  libX11,
-  libXcursor,
+  libx11,
+  libxcursor,
   libxkbcommon,
   libgbm,
   pixman,
@@ -52,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libGL
     libinput
-    libX11
-    libXcursor
+    libx11
+    libxcursor
     libxkbcommon
     libgbm
     pixman
@@ -79,5 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "louvre-views";
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Only;
   };
 })

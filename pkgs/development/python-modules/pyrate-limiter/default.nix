@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
+  uv-dynamic-versioning,
 
   # optional dependencies
   filelock,
@@ -13,30 +14,29 @@
   redis,
 
   # test
+  aiohttp,
   pytestCheckHook,
   pytest-asyncio,
   pytest-xdist,
   redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrate-limiter";
-  version = "3.9.0";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
-    tag = "v${version}";
-    hash = "sha256-CAN3OWxXQaAzrh2q6z0OxPs4i02L/g2ISYFdUMHsHpg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UUNXb4lCcZZ+BPO1t8rStuDTj69dnIMMv6wdlNH+gcI=";
   };
 
-  postPatch = ''
-    # tests cause too many connections to the postgres server and crash/timeout
-    sed -i "/create_postgres_bucket,/d" tests/conftest.py
-  '';
-
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
 
   optional-dependencies = {
     all = [
@@ -56,12 +56,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiohttp
+    filelock
     pytestCheckHook
     pytest-asyncio
     pytest-xdist
+    redis
     redisTestHook
-  ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ];
 
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine
@@ -73,15 +75,20 @@ buildPythonPackage rec {
     "tests/test_bucket_factory.py"
     "tests/test_limiter.py"
     "tests/test_multiprocessing.py"
+    "tests/test_postgres_concurrent.py"
+    "tests/test_multi_bucket.py"
   ];
+
+  # For redisTestHook
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 
   meta = {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";
     homepage = "https://github.com/vutran1710/PyrateLimiter";
-    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

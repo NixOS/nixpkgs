@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "konf";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "SimonTheLeg";
     repo = "konf-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-GSrR2uLeGodmE1egRtvTyWhJckYUnI97n7dnmjPvu3k=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ arikgrahl ];
   };
-}
+})

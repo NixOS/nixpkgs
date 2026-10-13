@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "wireless-regdb";
-  version = "2025.10.07";
+  version = "2026.09.03";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-${version}.tar.xz";
-    hash = "sha256-1MhypEFUYEyGn1hR99IdgY1JKDXTcK9/WN6IR5c4AcM=";
+    hash = "sha256-si4JASJ7ggzRwoCr5oGhW3c6UQOl4Q3EQulOuzTL9Y0=";
   };
 
   dontBuild = true;

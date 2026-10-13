@@ -1,33 +1,84 @@
 {
   lib,
   fetchFromGitHub,
+  fetchNpmDeps,
   buildNpmPackage,
-  nodejs_20,
+  nodejs,
+  npmHooks,
+  nixosTests,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "scanservjs";
-  version = "3.0.4";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "sbs20";
     repo = "scanservjs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qCJyQO/hSDF4NOupV7sepwvpNyjSElnqT71LJuIKe+A=";
+    hash = "sha256-UyNSEjwqL+DHTJWgJ6lrNXfPuNJv2H3rUtpRqdNeEkg=";
   };
 
-  npmDepsHash = "sha256-HIWT09G8gqSFt9CIjsjJaDRnj2GO0G6JOGeI0p4/1vw=";
+  appServerNpmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-app-server-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/app-server";
+    hash = "sha256-zp8gguoc+OdSABCOKUzLMuKIrnuYVX39kCD8b7ZTIgQ=";
+  };
 
-  # Build fails on node 22, presumably because of esm.
-  # https://github.com/NixOS/nixpkgs/issues/371649
-  nodejs = nodejs_20;
+  appUiNpmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-app-ui-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/app-ui";
+    hash = "sha256-/30JnlN66N3pWQHHxeGG6k0nW3miFfiYlb3Snx2BP6E=";
+  };
 
-  postInstall = ''
-    mkdir $out/bin
-    makeWrapper ${lib.getExe finalAttrs.nodejs} $out/bin/scanservjs \
-      --set NODE_ENV production \
-      --add-flags "'$out/lib/node_modules/scanservjs/app-server/src/server.js'"
+  npmDepsHash = "sha256-BNYRDVGC7wFdv7VKARZee2ea1QcLSX3iwoCGGcsVtag=";
+
+  patches = [
+    ./nix-compatibility.patch
+  ];
+
+  nativeBuildInputs = [
+    npmHooks.npmConfigHook
+  ];
+
+  preConfigure = ''
+    npmRoot=app-server npmDeps=${finalAttrs.appServerNpmDeps} npmConfigHook
+    npmRoot=app-ui npmDeps=${finalAttrs.appUiNpmDeps} npmConfigHook
   '';
+
+  postBuild = ''
+    # Install runtime dependencies
+    npm_config_cache=${finalAttrs.appServerNpmDeps} npm install \
+      --prefix ./dist \
+      --offline \
+      --production \
+      --ignore-scripts
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    rm -rf $out/lib
+
+    mkdir -p $out/lib
+    cp -r dist/* $out/lib
+
+    substituteInPlace "$out/lib/server/express-configurer.js" \
+      --replace-fail "@client@" "$out/lib/client"
+
+    mkdir -p $out/bin
+    makeWrapper ${lib.getExe nodejs} $out/bin/scanservjs \
+      --set NODE_ENV production \
+      --add-flags "$out/lib/server/server.js"
+
+    runHook postInstall
+  '';
+
+  passthru = {
+    tests.smoke-test = nixosTests.scanservjs;
+  };
 
   meta = {
     description = "SANE scanner nodejs web ui";

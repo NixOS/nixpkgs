@@ -153,12 +153,15 @@ stdenv'.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxml2";
     description = "XML parsing library for C";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     pkgConfigModules = [ "libxml-2.0" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "xmlsoft" finalAttrs.version;
     # Python limits cross-compilation to an allowlist of host OSes.
     # https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
     broken =

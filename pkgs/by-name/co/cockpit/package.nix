@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  asciidoctor,
   autoreconfHook,
   bashInteractive,
   cacert,
@@ -34,8 +35,9 @@
   pkg-config,
   polkit,
   python3Packages,
+  removeReferencesTo,
   sscg,
-  systemd,
+  systemdLibs,
   udev,
   util-linux,
   xmlto,
@@ -43,20 +45,20 @@
   withBranding ? true,
   nixos-icons,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "cockpit";
-  version = "353.1";
+  version = "368";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     tag = finalAttrs.version;
-    hash = "sha256-uJBrBsNCYkdq+13UGJ6nPr55HPD4R0BTugWCKrycaIY=";
+    hash = "sha256-2bFQwK5L0S84nLSkUeHmbNgBkjBJIxR88t/21h5jmps=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    asciidoctor
     autoreconfHook
     makeWrapper
     docbook_xml_dtd_43
@@ -70,7 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     pkg-config
     python3Packages.setuptools
-    systemd
+    removeReferencesTo
+    systemdLibs
     xmlto
   ];
 
@@ -97,11 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/tls/cockpit-certificate-helper.in \
       --replace-fail 'COCKPIT_CONFIG="@sysconfdir@/cockpit"' 'COCKPIT_CONFIG=/etc/cockpit'
 
-    substituteInPlace src/tls/cockpit-certificate-ensure.c \
-      --replace-fail '#define COCKPIT_SELFSIGNED_PATH      PACKAGE_SYSCONF_DIR COCKPIT_SELFSIGNED_FILENAME' '#define COCKPIT_SELFSIGNED_PATH      "/etc" COCKPIT_SELFSIGNED_FILENAME'
-
-    substituteInPlace src/common/cockpitconf.c \
-      --replace-fail 'const char *cockpit_config_dirs[] = { PACKAGE_SYSCONF_DIR' 'const char *cockpit_config_dirs[] = { "/etc"'
+    substituteInPlace src/Makefile.am \
+      --replace-fail '-DPACKAGE_SYSCONF_DIR=\""$(sysconfdir)"\"' '-DPACKAGE_SYSCONF_DIR=\""/etc"\"'
 
     substituteInPlace src/**/*.c \
       --replace-quiet "/bin/sh" "${lib.getExe bashInteractive}"
@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
 
     substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
-      --replace-warn libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
+      --replace-warn libsystemd.so.0 ${systemdLibs}/lib/libsystemd.so.0
 
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
       --replace-fail /usr $out
@@ -245,8 +245,33 @@ stdenv.mkDerivation (finalAttrs: {
       popd
     ''}
 
+    remove-references-to \
+      -t ${stdenv.cc.cc} \
+      -t ${lib.getDev stdenv.cc.libc} \
+      -t ${lib.getDev glib} \
+      -t ${lib.getDev json-glib} \
+      -t ${lib.getDev systemdLibs} \
+      -t ${lib.getDev gnutls} \
+      -t ${lib.getDev krb5} \
+      "$out/lib/security/pam_ssh_add.so" \
+      "$out/libexec/cockpit-certificate-ensure" \
+      "$out/libexec/cockpit-session" \
+      "$out/libexec/cockpit-tls" \
+      "$out/libexec/cockpit-ws" \
+      "$out/libexec/cockpit-wsinstance-factory"
+
     runHook postFixup
   '';
+
+  disallowedRequisites = [
+    stdenv.cc.cc
+    (lib.getDev stdenv.cc.libc)
+    (lib.getDev glib)
+    (lib.getDev json-glib)
+    (lib.getDev systemdLibs)
+    (lib.getDev gnutls)
+    (lib.getDev krb5)
+  ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
@@ -270,6 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    inherit python3Packages;
     tests = { inherit (nixosTests) cockpit; };
     updateScript = nix-update-script { };
     cockpitPath = [

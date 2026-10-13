@@ -4,15 +4,15 @@
   fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "didu";
   version = "2.5.2";
 
   src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "didu";
-    rev = "v${version}";
-    sha256 = "szYWRN1NZbfpshipwMMJSWJw/NG4w7I+aqwtmqpT0R0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-szYWRN1NZbfpshipwMMJSWJw/NG4w7I+aqwtmqpT0R0=";
   };
 
   cargoHash = "sha256-NDri4VuTI/ZsY3ZvpWmu/2I5GpmldQaoUSzyjGlq9lE=";
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "didu";
   };
-}
+})

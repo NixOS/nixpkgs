@@ -29,7 +29,7 @@ buildNpmPackage (finalAttrs: {
     description = "Streaming torrent client for Node.js with web ui";
     homepage = "https://github.com/asapach/peerflix-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "peerflix-server";
   };
 })

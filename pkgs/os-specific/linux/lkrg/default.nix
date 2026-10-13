@@ -13,13 +13,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
   pname = "lkrg";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "lkrg-org";
     repo = "lkrg";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Eb0+rgbI+gbY1NjVyPLB6kZgDsYoSCxjy162GophiMI=";
+    hash = "sha256-j/0iK/I+pj69Z39lZJFaCQ3WxzZL6663Kxy4Sf46tOo=";
   };
 
   hardeningDisable = [ "pic" ];

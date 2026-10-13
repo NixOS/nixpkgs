@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   hackrf,
   libbladeRF,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dump1090";
-  version = "10.2";
+  version = "11.1";
 
   src = fetchFromGitHub {
     owner = "flightaware";
     repo = "dump1090";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kTJ8FMugBRJaxWas/jEj4E5TmVnNpNdhq4r2YFFwgTU=";
+    hash = "sha256-A6nkct7jvpPtPZ+iM2UKVckIXgNxxq5sxhyPiw5+EZk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -36,8 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux limesuite;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";
-
   buildFlags = [
     "DUMP1090_VERSION=${finalAttrs.version}"
     "showconfig"
@@ -45,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     "view1090"
     "faup1090"
   ];
+
+  # interactive.c: error: '%5d' directive output may be truncated writing between 5 and 11 bytes into a region of size 7
+  # Upstreamed as https://github.com/flightaware/dump1090/pull/321
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   doCheck = true;
 
@@ -66,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       earldouglas
       aciceri
+      ryand56
     ];
     mainProgram = "dump1090";
   };

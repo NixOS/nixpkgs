@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast-paced, polished OpenGL demonstration by Excess";
     homepage = "https://packages.qa.debian.org/a/amoeba.html";
     license = lib.licenses.gpl2Only; # Engine is GPLv2, data files in amoeba-data nonfree
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

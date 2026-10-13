@@ -14,14 +14,22 @@ let
       platformio-core
       zlib
       git
+      libusb1
       xdg-user-dirs
       ncurses
       udev
+      # Required for esp-idf and other frameworks that manage their own
+      # Python virtual environments during the build process.
+      # See: https://github.com/NixOS/nixpkgs/issues/133185
+      cmake
+      ninja
     ])
     ++ (with python.pkgs; [
       python
       setuptools
       pip
+      wheel
+      virtualenv
       bottle
     ]);
 
@@ -37,7 +45,10 @@ buildFHSEnv {
   meta = {
     description = "Open source ecosystem for IoT development";
     homepage = "https://platformio.org";
-    maintainers = with lib.maintainers; [ mog ];
+    maintainers = with lib.maintainers; [
+      mog
+      nikp123
+    ];
     license = lib.licenses.asl20;
     platforms = with lib.platforms; linux;
   };

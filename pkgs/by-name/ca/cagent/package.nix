@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "cagent";
-  version = "1.20.0";
+  version = "1.20.6";
 
   src = fetchFromGitHub {
     owner = "docker";
-    repo = "cagent";
+    repo = "docker-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HOQibgT9R7Ic1tGtgjSB+nSWKID6TD1Yt6tr37Voa7w=";
+    hash = "sha256-jcJxzdtU0Zzov7EKvJCxgbrfwMcI4k7OgHVrb5S4fs8=";
   };
 
-  vendorHash = "sha256-8NXiIxaq+03+LrHFBaxZ4YFb0sqYikajgk5gYXTn3Rs=";
+  vendorHash = "sha256-aldMwGMRF8VhdgNwp/wrRR1kLmiGsi76rmTGcKutm7c=";
 
   # Disable tests: Networked model providers and writable cache directories are required.
   doCheck = false;
@@ -44,9 +44,9 @@ buildGoModule (finalAttrs: {
       orchestrates AI agents with specialized capabilities and tools,
       and the interactions between agents.
     '';
-    homepage = "https://github.com/docker/cagent";
-    changelog = "https://github.com/docker/cagent/releases/tag/v${finalAttrs.version}";
-    downloadPage = "https://github.com/docker/cagent/releases";
+    homepage = "https://github.com/docker/docker-agent";
+    changelog = "https://github.com/docker/docker-agent/releases/tag/v${finalAttrs.version}";
+    downloadPage = "https://github.com/docker/docker-agent/releases";
     license = lib.licenses.asl20;
     mainProgram = "cagent";
     maintainers = with lib.maintainers; [ MH0386 ];

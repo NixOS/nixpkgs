@@ -11,7 +11,7 @@
   networkmanager,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nmgui";
   version = "1.0.0";
   pyproject = false;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s-adi-dev";
     repo = "nmgui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HS/n40Ng8S5N14DtEH/upwlxdzwCoOEJA40EMdCcLw4=io";
   };
 
@@ -77,6 +77,6 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ ktechmidas ];
     mainProgram = "nmgui";
     inherit (networkmanager.meta) platforms;
-    changelog = "https://github.com/s-adi-dev/nmgui/releases/tag/v${version}";
+    changelog = "https://github.com/s-adi-dev/nmgui/releases/tag/v${finalAttrs.version}";
   };
-}
+})

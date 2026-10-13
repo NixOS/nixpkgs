@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yezz123";
     repo = "pyngo";
     tag = version;
-    hash = "sha256-vLQz4qjxOnMUZ/SCR7XSg6yCv5ms0eCpm4Azgi8AeSA=";
+    hash = "sha256-GThDsl1fnJ5oMvmJcJohs+H2GQxpacG1fp9C7JNmycs=";
   };
 
   nativeBuildInputs = [

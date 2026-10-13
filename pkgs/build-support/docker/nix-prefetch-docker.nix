@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Script used to obtain source hashes for dockerTools.pullImage";
     mainProgram = "nix-prefetch-docker";
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

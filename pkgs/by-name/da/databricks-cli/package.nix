@@ -7,36 +7,31 @@
   versionCheckHook,
   nix-update-script,
 }:
-
 buildGoModule (finalAttrs: {
   pname = "databricks-cli";
-  version = "0.285.0";
+  version = "1.20.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-hiRae4pb8WsWvQ4ucRhz6eY2+h6KIXjCkxNVOL2hUbA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RFtDUvoJskKikLQyunVo5DN0Hr5s/hlKjgl8Y+c2W48=";
   };
 
-  # Otherwise these tests fail asserting that the version is 0.0.0-dev
-  postPatch = ''
-    substituteInPlace bundle/deploy/terraform/init_test.go \
-      --replace-fail "cli/0.0.0-dev" "cli/${finalAttrs.version}"
-  '';
+  vendorHash = "sha256-moXbF1k1zg5DwVxysaK0ULYx7Ldh4V7SBt9PXI4NAdk=";
 
-  vendorHash = "sha256-PIHy5XJEx5FAWhm5i4dTGlPMf5Gnxz98xE4OeWVyvnE=";
-
-  excludedPackages = [
-    "bundle/internal"
-    "acceptance"
-    "integration"
-    "tools/testrunner"
-    "tools/testmask"
-  ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-X github.com/databricks/cli/internal/build.buildVersion=${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildTag=v${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildSummary=v${finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildMajor=${lib.versions.major finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildMinor=${lib.versions.minor finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildPatch=${lib.versions.patch finalAttrs.version}"
+    "-X github.com/databricks/cli/internal/build.buildIsSnapshot=false"
   ];
 
   postBuild = ''
@@ -49,14 +44,17 @@ buildGoModule (finalAttrs: {
       # Need network
       "TestConsistentDatabricksSdkVersion"
       "TestTerraformArchiveChecksums"
-      "TestExpandPipelineGlobPaths"
+      "TestExpandGlobPathsInPipelines"
       "TestRelativePathTranslationDefault"
       "TestRelativePathTranslationOverride"
       "TestWorkspaceVerifyProfileForHost"
       "TestWorkspaceVerifyProfileForHost/default_config_file_with_match"
       "TestWorkspaceResolveProfileFromHost"
       "TestWorkspaceResolveProfileFromHost/no_config_file"
-      "TestBundleConfigureDefault"
+      "TestWorkspaceClientNormalizesHostBeforeProfileResolution"
+      "TestClearWorkspaceClient"
+      "TestValidateFolderPermissions"
+      "TestFilesToSync"
       # Use uv venv which doesn't work with nix
       # https://github.com/astral-sh/uv/issues/4450
       "TestVenvSuccess"

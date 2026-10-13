@@ -4,12 +4,12 @@
   autoreconfHook,
   fetchFromGitHub,
   xorgproto,
-  libX11,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   ncurses,
   pixman,
   pkg-config,
@@ -26,26 +26,31 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "linuxwacom";
     repo = "xf86-input-wacom";
-    rev = "xf86-input-wacom-${finalAttrs.version}";
-    sha256 = "sha256-12m9PL28NnqIwNpGHOFqjJaNrzBaagdG3Sp/jSLpgkE=";
+    tag = "xf86-input-wacom-${finalAttrs.version}";
+    hash = "sha256-12m9PL28NnqIwNpGHOFqjJaNrzBaagdG3Sp/jSLpgkE=";
   };
+
+  preConfigure = ''
+    # See VERFILE in git-version-gen
+    echo ${finalAttrs.version} > version
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     udevCheckHook
+    util-macros
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     ncurses
     udev
-    util-macros
     pixman
     xorgproto
     xorg-server
@@ -58,6 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-sdkdir=${placeholder "out"}/include/xorg"
     "--with-xorg-conf-dir=${placeholder "out"}/share/X11/xorg.conf.d"
   ];
+
+  strictDeps = true;
 
   meta = {
     maintainers = with lib.maintainers; [ moni ];

@@ -4,9 +4,9 @@
   fetchzip,
   pkg-config,
   gpm,
-  libXext,
-  libXft,
-  libXt,
+  libxext,
+  libxft,
+  libxt,
   ncurses5,
   slang,
 }:
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     gpm
-    libXext
-    libXft
-    libXt
+    libxext
+    libxft
+    libxt
     ncurses5
     slang
   ];

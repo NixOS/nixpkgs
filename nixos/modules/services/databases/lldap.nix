@@ -61,7 +61,7 @@ in
 
     settings = mkOption {
       description = ''
-        Free-form settings written directly to the `lldap_config.toml` file.
+        Free-form settings written directly to the {file}`lldap_config.toml` file.
         Refer to <https://github.com/lldap/lldap/blob/main/lldap_config.docker_template.toml> for supported values.
       '';
 
@@ -288,6 +288,37 @@ in
         Group = "lldap";
         DynamicUser = true;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        RemoveIPC = true;
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
+        SystemCallArchitectures = "native";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        MemoryDenyWriteExecute = true;
       };
       inherit (cfg) environment;
     };

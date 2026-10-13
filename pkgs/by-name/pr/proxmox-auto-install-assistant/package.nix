@@ -9,15 +9,30 @@
   versionCheckHook,
 }:
 
+let
+  installer_src = fetchgit {
+    url = "git://git.proxmox.com/git/pve-installer.git";
+    rev = "32afcd4cd534d8e2f99ae76aa0234a0a5c697ba9";
+    hash = "sha256-mlTSkBr5glkCr21l2Z1GFICLOn02IOWjMKBy8BvkSzc=";
+  };
+
+  proxmox_crates_src = fetchgit {
+    url = "git://git.proxmox.com/git/proxmox.git";
+    rev = "b9bc28082f820dbf88f8dcc02ba2250fc999f9d0";
+    name = "proxmox";
+    hash = "sha256-NPJi2BzANBfQx995lzIcgCKthWSv+8NeD8zrYnoMye8=";
+  };
+in
 rustPlatform.buildRustPackage {
   pname = "proxmox-auto-install-assistant";
-  version = "9.1.6";
+  version = "9.2.5";
 
-  src = fetchgit {
-    url = "git://git.proxmox.com/git/pve-installer.git";
-    rev = "eab66c74a79663008ab12990bd27195a8d5c4204";
-    hash = "sha256-nMyi3GfdQv/L05hpReSIoFrvmpbs4+5t/lUXXgP0bUs=";
-  };
+  srcs = [
+    installer_src
+    proxmox_crates_src
+  ];
+
+  sourceRoot = installer_src.name;
 
   postPatch = ''
     rm -v .cargo/config.toml
@@ -26,18 +41,18 @@ rustPlatform.buildRustPackage {
     # pre-generated using `make locale-info.json`
     # depends on non-packaged perl modules and debian-specific files
     cp -v ${./locale-info.json} locale-info.json
+
+    # add necessary crates.io patches to redirect to checked-out repo
+    cat <<EOF >>Cargo.toml
+    proxmox-network-types.path = "../proxmox/proxmox-network-types"
+    proxmox-installer-types.path = "../proxmox/proxmox-installer-types"
+    proxmox-sys.path = "../proxmox/proxmox-sys"
+    EOF
   '';
 
   buildAndTestSubdir = "proxmox-auto-install-assistant";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "proxmox-io-1.2.1" = "sha256-1F5PJKJ/Ys1EfFPqpP08pRiiTKOAt9IHZ/fbeYxH7SQ=";
-      "proxmox-lang-1.5.0" = "sha256-1F5PJKJ/Ys1EfFPqpP08pRiiTKOAt9IHZ/fbeYxH7SQ=";
-      "proxmox-sys-1.0.0" = "sha256-1F5PJKJ/Ys1EfFPqpP08pRiiTKOAt9IHZ/fbeYxH7SQ=";
-    };
-  };
+  cargoLock.lockFile = ./Cargo.lock;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

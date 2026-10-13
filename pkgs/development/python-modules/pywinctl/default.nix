@@ -6,7 +6,7 @@
   ewmhlib,
   pymonctl,
   pywinbox,
-  xlib,
+  python-xlib,
   typing-extensions,
 }:
 
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     ewmhlib
     pymonctl
     pywinbox
-    xlib
+    python-xlib
     typing-extensions
   ];
 

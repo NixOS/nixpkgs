@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "xlsxwriter";
-  version = "3.2.5";
+  version = "3.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "XlsxWriter";
-    rev = "RELEASE_${version}";
-    hash = "sha256-Z384IYFQzGViJXJQe+zovXn5X+MyOqGv0NKKlktcF4o=";
+    tag = "RELEASE_${version}";
+    hash = "sha256-nr7Qw24BzQo/qEpyM9687mUaebzzHv1FAPmsBVdMekg=";
   };
 
   build-system = [ setuptools ];

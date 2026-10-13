@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "fastdotcom";
-  version = "0.0.6";
+  version = "0.0.7";
   pyproject = true;
 
   src = fetchPypi {
     pname = "fastdotcom";
     inherit version;
-    hash = "sha256-DAj5Bp8Vlg/NQSnz0yF/nHlIO7kStHlBABwvTWHVsIo=";
+    hash = "sha256-ozQ0d1CIIsMOdvK9UhRnr2c2fmIzkZcpjZrjZjfnknI=";
   };
 
   build-system = [ setuptools ];

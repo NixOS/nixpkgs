@@ -2,9 +2,9 @@
   lib,
   stdenv,
   dockapps-sources,
-  libX11,
-  libXpm,
-  libXext,
+  libx11,
+  libxpm,
+  libxext,
   libdockapp,
 }:
 
@@ -16,9 +16,9 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/wmsm.app/wmsm";
 
   buildInputs = [
-    libX11
-    libXext
-    libXpm
+    libx11
+    libxext
+    libxpm
     libdockapp
   ];
 
@@ -49,5 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.dockapps.net/wmsmapp";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 })

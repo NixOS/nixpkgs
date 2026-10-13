@@ -5,16 +5,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "jefferson";
-  version = "0.4.6";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "jefferson";
-    rev = "v${version}";
-    hash = "sha256-6eh4i9N3aArU8+W8K341pp9J0QYEojDiMrEc8yax4SY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/YZ3JvXtnjwGipZ3WlJbeUdn4cDhVoHETsrkIHHADM8=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     click
-    cstruct
+    dissect-cstruct
     lzallright
   ];
 
@@ -48,4 +48,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "jefferson";
   };
-}
+})

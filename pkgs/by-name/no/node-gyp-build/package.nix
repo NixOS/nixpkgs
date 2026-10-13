@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Build tool and bindings loader for node-gyp that supports prebuilds";
     homepage = "https://github.com/prebuild/node-gyp-build";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "node-gyp-build";
   };
 })

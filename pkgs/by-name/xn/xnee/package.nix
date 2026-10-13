@@ -7,10 +7,10 @@
   autoreconfHook,
   pkg-config,
   gtk2,
-  libX11,
-  libXext,
-  libXi,
-  libXtst,
+  libx11,
+  libxext,
+  libxi,
+  libxtst,
   texinfo,
   xorgproto,
 }:
@@ -62,10 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk2
-    libX11
-    libXext
-    libXi
-    libXtst
+    libx11
+    libxext
+    libxi
+    libxtst
     texinfo
     xorgproto
   ];
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     # `cnee' is linked without `-lXi' and as a consequence has a RUNPATH that
-    # lacks libXi.
+    # lacks libxi.
     "LDFLAGS=-lXi"
   ];
 

@@ -17,16 +17,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pynndescent";
-  version = "0.5.13";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "pynndescent";
-    tag = "release-${version}";
-    hash = "sha256-oE/oy5doHduESHlRPuPHruiw1yUZmuUTe6PrgQlT6O8=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-RfIbPPyx+Y7niuFrLjA02cUDHTSv9s5E4JiXv4ZBNEc=";
   };
 
   build-system = [ setuptools ];
@@ -39,14 +39,24 @@ buildPythonPackage rec {
     scipy
   ];
 
+  pythonImportsCheck = [ "pynndescent" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "pynndescent" ];
+  disabledTests = [
+    # AssertionError: Arrays are not almost equal to 6 decimals
+    "test_seuclidean"
+
+    # sklearn.utils._param_validation.InvalidParameterError: The 'metric' parameter of
+    # pairwise_distances must be a str among ...
+    "test_binary_check"
+    "test_sparse_binary_check"
+  ];
 
   meta = {
     description = "Nearest Neighbor Descent";
     homepage = "https://github.com/lmcinnes/pynndescent";
-    changelog = "https://github.com/lmcinnes/pynndescent/releases/tag/release-${version}";
+    changelog = "https://github.com/lmcinnes/pynndescent/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mic92 ];
     badPlatforms = [
@@ -55,4 +65,4 @@ buildPythonPackage rec {
       "aarch64-linux"
     ];
   };
-}
+})

@@ -14,7 +14,7 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "thumbdrives";
   version = "0.3.2";
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromSourcehut {
     owner = "~martijnbraam";
     repo = "thumbdrives";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Mh3NSEYscnzw6kjR9m0XbTygj07cIQwdyLcdLpfKi3Y=";
   };
 
@@ -63,4 +63,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

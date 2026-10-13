@@ -12,8 +12,8 @@
   lcms2,
   sqlite,
   udev,
-  systemd,
-  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   dbus,
   gobject-introspection,
   argyllcms,
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ]
   ++ lib.optionals enableSystemd [
-    systemd
+    systemdLibs
   ]
   ++ lib.optionals enableDaemon [
     polkit
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
     homepage = "https://www.freedesktop.org/software/colord/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     teams = [ lib.teams.freedesktop ];
     platforms = lib.platforms.linux;
   };

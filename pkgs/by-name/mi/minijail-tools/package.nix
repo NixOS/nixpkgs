@@ -1,8 +1,8 @@
 {
   lib,
+  python3,
   python3Packages,
   pkgsBuildTarget,
-  pkgsBuildHost,
   minijail,
 }:
 
@@ -11,24 +11,28 @@ let
 in
 
 python3Packages.buildPythonApplication {
-  format = "setuptools";
+  pyproject = true;
   pname = "minijail-tools";
   inherit (minijail) version src;
 
   postPatch = ''
-    substituteInPlace Makefile --replace /bin/echo echo
+    substituteInPlace Makefile --replace-fail /bin/echo echo
   '';
+
+  build-system = [
+    python3Packages.setuptools
+  ];
 
   postConfigure = ''
     substituteInPlace tools/compile_seccomp_policy.py \
-        --replace "'constants.json'" "'$out/share/constants.json'"
+        --replace-fail "'constants.json'" "'$out/share/constants.json'"
   '';
 
   preBuild = ''
     make libconstants.gen.c libsyscalls.gen.c
     ${targetClang}/bin/${targetClang.targetPrefix}cc -S -emit-llvm \
         libconstants.gen.c libsyscalls.gen.c
-    ${pkgsBuildHost.python3.interpreter} tools/generate_constants_json.py \
+    ${python3.pythonOnBuildForHost.interpreter} tools/generate_constants_json.py \
         --output constants.json \
         libconstants.gen.ll libsyscalls.gen.ll
   '';

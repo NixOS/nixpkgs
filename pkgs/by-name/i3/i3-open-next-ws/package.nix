@@ -3,12 +3,12 @@
   rustPlatform,
   fetchCrate,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3-open-next-ws";
   version = "0.1.5";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eYHCm8jEv6Ll6/h1kcYHNxWGnVWI41ZB96Jec9oZFsY=";
   };
 
@@ -22,4 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ quantenzitrone ];
     platforms = lib.platforms.linux;
   };
-}
+})

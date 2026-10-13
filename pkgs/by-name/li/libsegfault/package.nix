@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "libsegfault";
-  version = "0-unstable-2022-11-13";
+  version = "0-unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "jonathanpoelen";
     repo = "libsegfault";
-    rev = "8bca5964613695bf829c96f7a3a14dbd8304fe1f";
-    sha256 = "vKtY6ZEkyK2K+BzJCSo30f9MpERpPlUnarFIlvJ1Giw=";
+    rev = "30346f0103d6c301d5be28ec59c57396a9939931";
+    sha256 = "AlR5lVo/lQ8RPY2/mlztwhOmWqINU0hHVE6as5D2s8k=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin) "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED=1";

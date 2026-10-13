@@ -8,10 +8,37 @@ with import ../../lib/testing-python.nix { inherit system pkgs; };
 
 let
   lib = pkgs.lib;
+
+  # Generate EAP certificates on the fly (CA, server, and client certs)
+  eapCerts = pkgs.runCommand "eap-certs" { buildInputs = [ pkgs.openssl ]; } ''
+    mkdir -p $out
+
+    # Create CA certificate
+    openssl req -x509 -newkey rsa:2048 -days 365000 -nodes \
+      -keyout $out/ca.key -out $out/ca.cert \
+      -subj "/CN=ExampleCA"
+
+    # Create server certificate
+    openssl req -newkey rsa:2048 -nodes \
+      -keyout $out/server.key -out server.csr \
+      -subj "/CN=server.example.com"
+    openssl x509 -req -in server.csr -CA $out/ca.cert -CAkey $out/ca.key \
+      -days 365000 -set_serial 100 -out $out/server.cert
+
+    # Create client certificate
+    openssl req -newkey rsa:2048 -nodes \
+      -keyout $out/client1.key -out client1.csr \
+      -subj "/CN=client1.example.com"
+    openssl x509 -req -in client1.csr -CA $out/ca.cert -CAkey $out/ca.key \
+      -days 365000 -set_serial 101 -out $out/client1.cert
+  '';
+  eapWifiSsid = "NixOS EAP";
+  vwifiPort = 8212;
+  vwifiServerAddress = "192.168.1.2";
+
   # this is intended as a client test since you shouldn't use NetworkManager for a router or server
   # so using systemd-networkd for the router vm is fine in these tests.
   router = import ./router.nix { networkd = true; };
-  qemu-common = import ../../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
   clientConfig =
     extraConfig:
     lib.recursiveUpdate {
@@ -178,6 +205,344 @@ let
         client.wait_for_unit("NetworkManager.service")
         client.wait_until_succeeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'")
         client.wait_until_succeeds("ping -c 1 fd00:1234:5678:1::23")
+      '';
+    };
+    eap =
+      let
+        toBase64Blob =
+          file:
+          "data:;base64,"
+          + builtins.readFile (
+            pkgs.runCommand "base64" { } ''
+              ${pkgs.coreutils}/bin/base64 -w0 ${file} > $out
+            ''
+          );
+      in
+      {
+        name = "eap / 802.1x with secrets in blob encoding";
+        nodes = {
+          router = import ./router-eap.nix { inherit eapCerts; };
+          client = clientConfig {
+            networking.networkmanager.ensureProfiles.profiles.default = {
+              ipv4.method = "auto";
+              "802-1x" = {
+                eap = "tls";
+                identity = "client1.example.com";
+                ca-cert = toBase64Blob "${eapCerts}/ca.cert";
+                client-cert = toBase64Blob "${eapCerts}/client1.cert";
+                private-key = toBase64Blob "${eapCerts}/client1.key";
+                private-key-password-flags = "4";
+              };
+            };
+            networking.wireless = {
+              # it is a bit unfortunate that wpa-supplicant is equated with
+              # `wireless` when it also works for wired connections
+              enable = lib.mkOverride 9 true;
+              driver = "wired";
+            };
+          };
+        };
+
+        testScript = ''
+          start_all()
+          client.wait_for_unit("NetworkManager.service")
+          router.wait_for_unit("freeradius.service")
+          router.wait_for_unit("hostapd.service")
+          router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='Sent Access-Accept'")
+          router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='TLS-Client-Cert-Common-Name = \"client1.example.com\"'")
+        '';
+      };
+    eapFiles = {
+      name = "eap / 802.1x with secrets in stored in files";
+      nodes = {
+        router = import ./router-eap.nix { inherit eapCerts; };
+        client = clientConfig {
+          environment.etc = {
+            "wpa_supplicant/ca.cert" = {
+              source = "${eapCerts}/ca.cert";
+              user = "wpa_supplicant";
+              mode = "0400";
+            };
+            "wpa_supplicant/client1.cert" = {
+              source = "${eapCerts}/client1.cert";
+              user = "wpa_supplicant";
+              mode = "0400";
+            };
+            "wpa_supplicant/client1.key" = {
+              source = "${eapCerts}/client1.key";
+              user = "wpa_supplicant";
+              mode = "0400";
+            };
+          };
+          networking.networkmanager.ensureProfiles.profiles.default = {
+            ipv4.method = "auto";
+            "802-1x" = {
+              eap = "tls";
+              identity = "client1.example.com";
+              ca-cert = "/etc/wpa_supplicant/ca.cert";
+              client-cert = "/etc/wpa_supplicant/client1.cert";
+              private-key = "/etc/wpa_supplicant/client1.key";
+              private-key-password-flags = "4";
+            };
+          };
+          networking.wireless = {
+            enable = lib.mkOverride 9 true;
+            driver = "wired";
+          };
+        };
+      };
+
+      testScript = ''
+        start_all()
+        client.wait_for_unit("NetworkManager.service")
+        router.wait_for_unit("freeradius.service")
+        router.wait_for_unit("hostapd.service")
+        router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='Sent Access-Accept'")
+        router.wait_until_succeeds("journalctl -b --unit freeradius.service --grep='TLS-Client-Cert-Common-Name = \"client1.example.com\"'")
+      '';
+    };
+    eapPkcs11 = {
+      name = "eap / 802.1x over vwifi with a TPM-backed PKCS#11 private key";
+      nodes = {
+        airgap = {
+          networking = {
+            useDHCP = false;
+            interfaces.eth1.ipv4.addresses = lib.mkForce [
+              {
+                address = vwifiServerAddress;
+                prefixLength = 24;
+              }
+            ];
+          };
+          services.vwifi.server = {
+            enable = true;
+            ports.tcp = vwifiPort;
+            openFirewall = true;
+          };
+          virtualisation.vlans = [ 1 ];
+        };
+        router = {
+          imports = [
+            (import ./router-eap.nix {
+              inherit eapCerts;
+              wifi = {
+                interface = "wlan0";
+                ssid = eapWifiSsid;
+              };
+            })
+          ];
+          services.vwifi = {
+            module = {
+              enable = true;
+              macPrefix = "74:F8:F6:00:01";
+            };
+            client = {
+              enable = true;
+              serverAddress = vwifiServerAddress;
+              serverPort = vwifiPort;
+            };
+          };
+        };
+        client = clientConfig {
+          environment = {
+            etc = {
+              "wpa_supplicant/ca.cert" = {
+                source = "${eapCerts}/ca.cert";
+                user = "wpa_supplicant";
+                mode = "0400";
+              };
+              "wpa_supplicant/client1.cert" = {
+                source = "${eapCerts}/client1.cert";
+                user = "wpa_supplicant";
+                mode = "0400";
+              };
+            };
+            systemPackages = [
+              pkgs.opensc
+              pkgs.p11-kit
+            ];
+          };
+
+          networking = {
+            interfaces = lib.mkForce {
+              eth1.ipv4.addresses = [
+                {
+                  address = "192.168.1.3";
+                  prefixLength = 24;
+                }
+              ];
+            };
+            networkmanager = {
+              unmanaged = [ "eth1" ];
+              ensureProfiles.profiles.default = {
+                connection = {
+                  type = "wifi";
+                  interface-name = "wlan0";
+                };
+                wifi = {
+                  ssid = eapWifiSsid;
+                  mode = "infrastructure";
+                };
+                wifi-security.key-mgmt = "wpa-eap";
+                ipv4.method = "disabled";
+                ipv6.method = "disabled";
+                "802-1x" = {
+                  eap = "tls";
+                  identity = "client1.example.com";
+                  ca-cert = "/etc/wpa_supplicant/ca.cert";
+                  client-cert = "/etc/wpa_supplicant/client1.cert";
+                  private-key = "pkcs11:token=eap;object=client1;type=private";
+                  private-key-password = "userpin";
+                };
+              };
+            };
+            wireless = {
+              enable = lib.mkOverride 9 true;
+              driver = "nl80211";
+              pkcs11 = {
+                enable = true;
+              };
+            };
+          };
+
+          security.tpm2 = {
+            enable = true;
+            pkcs11.enable = true;
+            tctiEnvironment = {
+              enable = true;
+              deviceConf = "/dev/tpmrm-test";
+            };
+          };
+
+          services.udev.extraRules = ''
+            KERNEL=="tpmrm0", SYMLINK+="tpmrm-test"
+          '';
+
+          services.vwifi = {
+            module = {
+              enable = true;
+              macPrefix = "74:F8:F6:00:02";
+            };
+            client = {
+              enable = true;
+              serverAddress = vwifiServerAddress;
+              serverPort = vwifiPort;
+            };
+          };
+
+          systemd.services.tpm2-pkcs11-provision = {
+            description = "Provision the TPM2 PKCS#11 token for EAP-TLS";
+            requiredBy = [
+              "NetworkManager.service"
+              "wpa_supplicant.service"
+            ];
+            before = [
+              "NetworkManager.service"
+              "wpa_supplicant.service"
+            ];
+            requires = [ "dev-tpmrm0.device" ];
+            after = [
+              "dev-tpmrm0.device"
+              "systemd-tmpfiles-setup.service"
+            ];
+            path = [
+              pkgs.tpm2-pkcs11
+              pkgs.tpm2-tools
+            ];
+            environment = {
+              TPM2TOOLS_TCTI = "device:/dev/tpmrm-test";
+              TPM2_PKCS11_STORE = "/etc/tpm2_pkcs11";
+            };
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+              User = "wpa_supplicant";
+              Group = "wpa_supplicant";
+              SupplementaryGroups = [ "tss" ];
+            };
+            script = ''
+              test -c /dev/tpmrm-test
+              tpm2_ptool init \
+                --transient-parent=tpm2-tools-ecc-default \
+                --path="$TPM2_PKCS11_STORE"
+              tpm2_ptool addtoken \
+                --pid=1 \
+                --sopin=sopin \
+                --userpin=userpin \
+                --label=eap \
+                --path="$TPM2_PKCS11_STORE"
+              tpm2_ptool import \
+                --privkey=${eapCerts}/client1.key \
+                --algorithm=rsa \
+                --label=eap \
+                --key-label=client1 \
+                --userpin=userpin \
+                --path="$TPM2_PKCS11_STORE"
+            '';
+          };
+
+          virtualisation = {
+            tpm.enable = true;
+            vlans = [ 1 ];
+          };
+        };
+      };
+
+      testScript = ''
+        from datetime import timedelta
+
+        airgap.start()
+        airgap.wait_for_unit("vwifi-server.service")
+        airgap.wait_for_open_port(${toString vwifiPort})
+
+        router.start()
+        router.wait_for_unit("vwifi-client.service")
+        router.wait_for_unit("freeradius.service")
+        router.wait_for_unit("hostapd.service")
+
+        client.start()
+        client.wait_for_unit("vwifi-client.service")
+        client.wait_for_unit("tpm2-pkcs11-provision.service")
+        client.wait_for_unit("NetworkManager.service")
+        client.wait_for_unit("wpa_supplicant.service")
+
+        with subtest("The hardened supplicant can access the configured TPM device"):
+            client.succeed("systemctl cat wpa_supplicant.service | grep -F -- '-/dev/tpmrm-test'")
+            client.succeed("systemctl cat wpa_supplicant.service | grep -F 'DeviceAllow=/dev/tpmrm-test rw'")
+            client.succeed("systemctl show wpa_supplicant.service --property=SupplementaryGroups --value | grep -qw tss")
+
+        with subtest("The supplicant receives the PKCS#11 environment"):
+            client.succeed("systemctl show wpa_supplicant.service --property=Environment --value | grep -F 'OPENSSL_ENGINES='")
+            client.succeed("systemctl show wpa_supplicant.service --property=Environment --value | grep -F 'TPM2_PKCS11_TCTI=device:/dev/tpmrm-test'")
+
+        with subtest("The TPM-backed private key is available through p11-kit"):
+            client.succeed(
+                "TPM2_PKCS11_STORE=/etc/tpm2_pkcs11 "
+                "TPM2_PKCS11_TCTI=device:/dev/tpmrm-test "
+                "pkcs11-tool --module ${lib.getLib pkgs.p11-kit}/lib/p11-kit-proxy.so "
+                "--token-label=eap --login --pin=userpin --list-objects --type=privkey "
+                "| grep -F client1"
+            )
+
+        with subtest("The station connects to the hostapd access point over vwifi"):
+            client.wait_until_succeeds(
+                "journalctl -b --unit wpa_supplicant.service --grep='wlan0: CTRL-EVENT-CONNECTED'",
+                timeout=timedelta(seconds=120),
+            )
+            client.succeed(
+                "nmcli --terse --fields NAME,DEVICE connection show --active "
+                "| grep -Fx 'default:wlan0'"
+            )
+
+        with subtest("EAP-TLS authenticates with the TPM-backed private key"):
+            router.wait_until_succeeds(
+                "journalctl -b --unit freeradius.service --grep='Sent Access-Accept'",
+                timeout=timedelta(seconds=120),
+            )
+            router.wait_until_succeeds(
+                "journalctl -b --unit freeradius.service --grep='TLS-Client-Cert-Common-Name = \"client1.example.com\"'",
+                timeout=timedelta(seconds=120),
+            )
       '';
     };
   };

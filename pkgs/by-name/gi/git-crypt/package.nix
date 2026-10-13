@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # https://github.com/AGWA/git-crypt/issues/232
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DOPENSSL_API_COMPAT=0x30000000L"
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       entire repository.
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dochang ];
     platforms = lib.platforms.unix;
     mainProgram = "git-crypt";

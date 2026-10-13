@@ -12,14 +12,14 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyvo";
-  version = "1.8";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ZvSIn9jjnd30b+SYYV02FW1JT2or7FOIa68cLFQyKGE=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-08xgqj00FtIsieRloE36n1IQhf3VIozOLP/S/uOp5wk=";
   };
 
   build-system = [
@@ -39,6 +39,11 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  pytestFlags = [
+    "-o"
+    "filterwarnings=ignore::astropy.utils.exceptions.AstropyDeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # touches network
     "pyvo/dal/tests/test_datalink.py"
@@ -49,7 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Astropy affiliated package for accessing Virtual Observatory data and services";
     homepage = "https://github.com/astropy/pyvo";
+    changelog = "https://github.com/astropy/pyvo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

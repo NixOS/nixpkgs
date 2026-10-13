@@ -20,14 +20,19 @@ let
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "net-snmp";
   version = "5.9.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/net-snmp/net-snmp-${version}.tar.gz";
+    url = "mirror://sourceforge/net-snmp/net-snmp-${finalAttrs.version}.tar.gz";
     hash = "sha256-FnB3GfgzGEpLcoNdrDWa4YgSOwa15CgXwAeQ19wThL8=";
   };
+
+  patches = [
+    # https://salsa.debian.org/debian/net-snmp/-/blob/master/debian/patches/makefile_trap_needs_agent, vendored because of Anubis
+    ./link-error.patch
+  ];
 
   outputs = [
     "bin"
@@ -92,6 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.net-snmp.org/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/net-snmp/net-snmp/blob/v${version}/NEWS";
+    changelog = "https://github.com/net-snmp/net-snmp/blob/v${finalAttrs.version}/NEWS";
   };
-}
+})

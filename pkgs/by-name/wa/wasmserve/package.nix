@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wasmserve";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "hajimehoshi";
     repo = "wasmserve";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-sj2PPCuvh2RkQq5rAPQZdr96a8FG7RL5RCzWBDt2TeI=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kirillrdy ];
   };
-}
+})

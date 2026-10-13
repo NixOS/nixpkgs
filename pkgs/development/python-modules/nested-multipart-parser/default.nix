@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "nested-multipart-parser";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "remigermain";
     repo = "nested-multipart-parser";
-    tag = version;
-    hash = "sha256-9IGfYb6mVGkoE/6iDg0ap8c+0vrBDKK1DxzLRyfeWOk=";
+    tag = "v${version}";
+    hash = "sha256-FFALem8Y43tKL32VSZE1pIlOKEPh5Ryzbu509Xjd+VY=";
   };
 
   build-system = [ setuptools ];

@@ -3,21 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
 }:
-let
+buildGoModule (finalAttrs: {
   pname = "wait4x";
-  version = "3.6.0";
-in
-buildGoModule {
-  inherit pname version;
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "wait4x";
     repo = "wait4x";
-    rev = "v${version}";
-    hash = "sha256-RiF5tcnzMteXaYmw4mfQdamwV1PAyNC8pUownJzfACs=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-07+6noaevhkr9MqMFquEDpPKcNJSzHMIL2qREwX3tjM=";
   };
 
-  vendorHash = "sha256-fa3XEqLkzriMFYea3bv4FzaKgK2FsGwn5IQG48vh7+M=";
+  vendorHash = "sha256-qsVXm0W8R0xjlN4jvE70tmCr8WFScX7zMbtYR0LmJdg=";
 
   # Tests make network access
   doCheck = false;
@@ -29,4 +26,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ jfvillablanca ];
     mainProgram = "wait4x";
   };
-}
+})

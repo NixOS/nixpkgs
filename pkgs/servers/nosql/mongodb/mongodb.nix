@@ -37,9 +37,9 @@ let
   python = scons.python.withPackages (
     ps: with ps; [
       pyyaml
-      cheetah3
+      ct3
       psutil
-      setuptools
+      setuptools_80
       distutils
       packaging
       pymongo
@@ -173,9 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with lib.maintainers; [
-      offline
-    ];
+    maintainers = [ ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 })

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
   ];
 
-  ROFI_PLUGINS_DIR = "$out/lib/rofi";
+  env.ROFI_PLUGINS_DIR = "$out/lib/rofi";
 
   dontUseCmakeBuildDir = true;
 

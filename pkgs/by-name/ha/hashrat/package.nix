@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   versionCheckHook,
   nix-update-script,
 }:
@@ -16,6 +17,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-nGaOVvy8caySohCGyGdnxXsv2DuqFPRi4JJLlZy+q8o=";
   };
+
+  patches = [
+    # Upstream fix for gcc-15 build failure:
+    #   https://github.com/ColumPaget/Hashrat/pull/33
+    (fetchpatch {
+      name = "gcc-15.patch";
+      url = "https://github.com/ColumPaget/Hashrat/commit/5add4a28f34237bf49f37febcf3366d45d4cea4f.patch";
+      hash = "sha256-+ydRQJfoZx7g6VzDDs2RWKRmWs5kBNgYfFKfzsAaskE=";
+    })
+  ];
 
   configureFlags = [ "--enable-xattr" ];
 

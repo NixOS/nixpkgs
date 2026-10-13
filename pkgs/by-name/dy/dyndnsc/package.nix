@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dyndnsc";
   version = "0.6.1-unstable-2024-02-25";
   pyproject = true;
@@ -28,6 +28,7 @@ python3Packages.buildPythonApplication rec {
     dnspython
     json-logging
     netifaces
+    pkg-resources-backport
     requests
     setuptools
     responses
@@ -61,10 +62,10 @@ python3Packages.buildPythonApplication rec {
       external notification services.
     '';
     homepage = "https://github.com/infothrill/python-dyndnsc";
-    changelog = "https://github.com/infothrill/python-dyndnsc/releases/tag/${version}";
+    changelog = "https://github.com/infothrill/python-dyndnsc/blob/${finalAttrs.src.rev}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "dyndnsc";
     platforms = lib.platforms.unix;
   };
-}
+})

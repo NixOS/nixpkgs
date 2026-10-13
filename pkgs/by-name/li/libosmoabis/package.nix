@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libosmoabis";
-  version = "2.0.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-abis";
     rev = finalAttrs.version;
-    hash = "sha256-OdmegQXdbpwNBepY+7MeUjaEguVo2q9b8lSkRmlXHEc=";
+    hash = "sha256-VIUEP0fOfahGq0jCJWRiaBYd+rZRSFqjyR0i7a0Rvg0=";
   };
 
   configureFlags = [ "enable_dahdi=false" ];

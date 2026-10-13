@@ -3,10 +3,10 @@
   stdenv,
   fetchFromGitHub,
   freetype,
-  libX11,
-  libXi,
-  libXt,
-  libXft,
+  libx11,
+  libxi,
+  libxt,
+  libxft,
 }:
 
 stdenv.mkDerivation {
@@ -27,13 +27,13 @@ stdenv.mkDerivation {
       --replace "RXPATH=/usr/bin/ssh" "RXPATH=ssh"
   '';
 
-  CFLAGS = "-D_DARWIN_C_SOURCE";
+  env.CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [
-    libX11
-    libXi
-    libXt
-    libXft
+    libx11
+    libxi
+    libxt
+    libxft
   ];
   # build fails when run in parallel
   enableParallelBuilding = false;
@@ -48,6 +48,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/deadpixi/sam";
     description = "Updated version of the sam text editor";
     license = lib.licenses.lpl-102;

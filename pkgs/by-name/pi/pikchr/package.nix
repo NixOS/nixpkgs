@@ -10,12 +10,12 @@
 stdenv.mkDerivation {
   pname = "pikchr";
   # To update, use the last check-in in https://pikchr.org/home/timeline?r=trunk
-  version = "0-unstable-2025-02-28";
+  version = "0-unstable-2026-04-03";
 
   src = fetchfossil {
     url = "https://pikchr.org/home";
-    rev = "b7fbd56c4eb82ab9";
-    hash = "sha256-7oW1IYYk3YKPjOUPP6qYIdR0oGo9pRDDlyu30J4B3bI=";
+    rev = "a7f1c35bc0448daf";
+    hash = "sha256-Yxp1jvxxXQsdljsvw1ed4XfOvGwbwWIeCfYEQ6D9Zqc=";
   };
 
   # can't open generated html files
@@ -47,6 +47,8 @@ stdenv.mkDerivation {
   dontWrapTclBinaries = true;
 
   doCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "PIC-like markup language for diagrams in technical documentation";

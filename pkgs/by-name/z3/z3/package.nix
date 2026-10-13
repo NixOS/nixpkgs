@@ -29,40 +29,18 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "4.15.4";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-eyF3ELv81xEgh9Km0Ehwos87e4VJ82cfsp53RCAtuTo=";
+    hash = "sha256-F46bADHVe6ssQrj6oXPSi3KRGBaX//pXO3+4bMFi8Ag=";
   };
 
-  patches =
-    lib.optionals useCmakeBuild [
-      ./fix-pkg-config-paths.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast finalAttrs.version "4.15.4") [
-      # fix Segmentation fault. See https://github.com/Z3Prover/z3/pull/8264 and
-      # https://github.com/NixOS/nixpkgs/issues/486491
-      (fetchpatch2 {
-        name = "preserve-the-initial-state-of-the-solver.patch";
-        url = "https://github.com/Z3Prover/z3/commit/850a3236adab92f9f6f569ac66ffbb69be179f4c.patch?full_index=1";
-        hash = "sha256-C6p+dj3i3DpOnd2wr+R8ZwClHoMFfk5i5/+JRhTDNcs=";
-      })
-      # needs to include a cosmetic change to apply patch for memory corruption
-      (fetchpatch2 {
-        name = "cosmetic-changes-to-i.patch";
-        url = "https://github.com/Z3Prover/z3/commit/243694379475d983605f87578452a330f3e3b28f.patch?full_index=1";
-        includes = [ "src/api/api_polynomial.cpp" ];
-        hash = "sha256-huo5S73WrFrEEUcaP+1LDQwGwo+n2iYT4x/OjK5rmqQ=";
-      })
-      (fetchpatch2 {
-        name = "fix-memory-corruption.patch";
-        url = "https://github.com/Z3Prover/z3/commit/e7b6f3f33bcc6c88a0f2ace47ff2f09b59239433.patch?full_index=1";
-        hash = "sha256-kEEeod4s8i9SI2e2TFD2U4yd1qEPoGnJOfE0y+1Cq6M=";
-      })
-    ];
+  patches = lib.optionals useCmakeBuild [
+    ./fix-pkg-config-paths.patch
+  ];
 
   strictDeps = true;
 
@@ -113,12 +91,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "Z3_SINGLE_THREADED" (!finalAttrs.enableParallelBuilding))
     (lib.cmakeBool "Z3_BUILD_LIBZ3_SHARED" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" (placeholder "out"))
-    (lib.cmakeBool "Z3_BUILD_TEST_EXECUTABLES" finalAttrs.doCheck)
+    (lib.cmakeBool "Z3_BUILD_TEST_EXECUTABLES" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "Z3_ENABLE_EXAMPLE_TARGETS" false)
   ]
   ++ lib.optionals pythonBindings [
     (lib.cmakeFeature "CMAKE_INSTALL_PYTHON_PKG_DIR" "${placeholder "python"}/${python3Packages.python.sitePackages}")
-    (lib.cmakeFeature "Python3_EXECUTABLE" "${lib.getExe python3Packages.python}")
+    (lib.cmakeFeature "Python3_EXECUTABLE" python3Packages.python.pythonOnBuildForHost.interpreter)
   ]
   ++ lib.optionals javaBindings [
     (lib.cmakeFeature "Z3_JAVA_JNI_LIB_INSTALLDIR" "${placeholder "java"}/lib")
@@ -156,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
       ''
     )
     + lib.optionalString pythonBindings ''
+      # delete dangling symlink
+      rm -f $python/${python3Packages.python.sitePackages}/z3/libz3.so.*
       ln -sf $lib/lib $python/${python3Packages.python.sitePackages}/z3/lib
     '';
 
@@ -200,7 +180,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      ttuegel
       numinit
     ];
     pkgConfigModules = lib.optionals useCmakeBuild [ "z3" ];

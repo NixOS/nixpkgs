@@ -1,19 +1,21 @@
 {
   lib,
+  stdenv,
   python3,
-  fetchPypi,
-  khard,
-  testers,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "khard";
-  version = "0.20.1";
+  version = "0.22.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
+  src = fetchFromGitHub {
+    owner = "lucc";
+    repo = "khard";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fBfnKxluEYzlqwoXZ+hClLtayfjTzATkqc/1JN7nwIo=";
   };
 
   build-system = with python3.pkgs; [
@@ -39,19 +41,36 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   preCheck = ''
-    # see https://github.com/scheibler/khard/issues/263
+    # see https://github.com/lucc/khard/issues/263
     export COLUMNS=80
   '';
 
   pythonImportsCheck = [ "khard" ];
 
-  passthru.tests.version = testers.testVersion { package = khard; };
+  nativeCheckInputs = [
+    versionCheckHook
+    python3.pkgs.pytestCheckHook
+  ];
+
+  pytestFlags = [
+    # Nixpkgs' default is `--capture=fd`, and with it, 2 command mock tests
+    # fail, see: https://github.com/lucc/khard/issues/353
+    "--capture=no"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/lucc/khard/issues/354
+    "test/test_khard.py::TestSortContacts::test_sorting_of_korean_names"
+  ];
 
   meta = {
-    homepage = "https://github.com/scheibler/khard";
+    homepage = "https://github.com/lucc/khard";
     description = "Console carddav client";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      doronbehar
+    ];
     mainProgram = "khard";
   };
-}
+})

@@ -6,16 +6,13 @@
   autoreconfHook,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "aldo";
   version = "0.7.8";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchgit {
     url = "git://git.savannah.gnu.org/aldo.git";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0swvdq0pw1msy40qkpn1ar9kacqjyrw2azvf2fy38y0svyac8z2i";
   };
 
@@ -31,4 +28,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
     mainProgram = "aldo";
   };
-}
+})

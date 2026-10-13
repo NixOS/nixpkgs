@@ -4,13 +4,13 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "fortran-language-server";
   version = "1.12.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-7Dkh7yPX4rULkzfJFxg47YxrCaxuHk+k3TOINHS9T5A=";
   };
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     description = "FORTRAN Language Server for the Language Server Protocol";
     mainProgram = "fortls";
     homepage = "https://pypi.org/project/fortran-language-server/";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jtbl";
   version = "1.6.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = "jtbl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ILQwUpjNueaYR5hxOWd5kZSPhVoFnnS2FcttyKSTPr8=";
   };
 
@@ -30,10 +30,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "CLI tool to convert JSON and JSON Lines to terminal, CSV, HTTP, and markdown tables";
     homepage = "https://kellyjonbrazil.github.io/jtbl";
-    downloadPage = "https://github.com/kellyjonbrazil/jtbl/releases/tag/${src.rev}";
-    changelog = "https://github.com/kellyjonbrazil/jtbl/blob/${src.rev}/CHANGELOG";
+    downloadPage = "https://github.com/kellyjonbrazil/jtbl/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/kellyjonbrazil/jtbl/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ElliottSullingeFarrall ];
     mainProgram = "jtbl";
   };
-}
+})

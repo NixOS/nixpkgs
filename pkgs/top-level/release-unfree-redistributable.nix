@@ -34,7 +34,7 @@
     config = {
       allowAliases = false;
       allowUnfree = true;
-      cudaSupport = true;
+      cudaSupport = false;
       inHydra = true;
     };
 
@@ -93,7 +93,7 @@ let
     attrPath: !(lib.hasPrefix "linuxKernel" attrPath || lib.hasPrefix "linuxPackages" attrPath);
 
   # This is handled by release-cuda.nix
-  isNotCudaPackage = attrPath: !(lib.hasPrefix "cuda" attrPath);
+  isNotCudaPackage = attrPath: !(lib.hasInfix "cuda" attrPath || lib.hasInfix "nvidia" attrPath);
 
   canSubstituteSrc =
     pkg:

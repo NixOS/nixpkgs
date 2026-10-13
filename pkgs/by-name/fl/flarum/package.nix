@@ -2,6 +2,7 @@
   lib,
   php,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -18,6 +19,8 @@ php.buildComposerProject2 (finalAttrs: {
   composerLock = ./composer.lock;
   composerStrictValidation = false;
   vendorHash = "sha256-EHl+Mr6y5A51EpLPAWUGtiPkLOky6KvsSY4JWHeyO28=";
+
+  passthru.tests.module = nixosTests.flarum;
 
   meta = {
     changelog = "https://github.com/flarum/framework/blob/main/CHANGELOG.md";

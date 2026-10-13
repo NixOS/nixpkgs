@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   gettext,
   gobject-introspection,
@@ -14,12 +15,15 @@
   glib,
   gtk3,
   python3,
-  lua,
+  lua5_2_compat,
   opencc,
   libsoup_3,
   json-glib,
   libnotify,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
@@ -31,6 +35,15 @@ stdenv.mkDerivation rec {
     tag = version;
     hash = "sha256-3QZHovjzGifWLFVudCnJOwMn/M3Nzfn8CZ1HpQwzUVw=";
   };
+
+  patches = [
+    # Drop -std=c++0x, fix build with opencc >= 1.4.0 header files, which require C++17
+    (fetchpatch2 {
+      name = "fix-build-with-opencc-1.4.patch";
+      url = "https://github.com/libpinyin/ibus-libpinyin/commit/42ad7d20b803c10ce6d8921ccff5c6282bb4818c.patch?full_index=1";
+      hash = "sha256-ndAJd+EEyluvjZL1gXM8HbfgEtwQETw0Lu1WAwcou4M=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -68,6 +81,7 @@ stdenv.mkDerivation rec {
   meta = {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
+    homepage = "https://github.com/libpinyin/ibus-libpinyin";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       linsui

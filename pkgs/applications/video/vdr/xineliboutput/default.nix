@@ -10,10 +10,10 @@
   libextractor,
   libglvnd,
   libGLU,
-  libX11,
-  libXext,
-  libXrender,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrender,
+  libxrandr,
   ffmpeg,
   avahi,
   wayland,
@@ -71,10 +71,10 @@ let
       libglvnd
       libGLU
       libvdpau
-      libXext
-      libXrandr
-      libXrender
-      libX11
+      libxext
+      libxrandr
+      libxrender
+      libx11
       vdr
       xine-lib
       avahi

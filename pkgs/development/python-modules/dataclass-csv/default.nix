@@ -3,31 +3,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  distutils,
-  setuptools,
+  hatchling,
 }:
 buildPythonPackage rec {
   pname = "dataclass-csv";
-  version = "1.4.0";
+  version = "1.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dfurtado";
     repo = "dataclass-csv";
     tag = version;
-    hash = "sha256-XDvQrKUtg5ptkF36xGlykhc395pmjBP/19m0EPDyaOM=";
+    hash = "sha256-hDnuPg5xniybR2J91KnJxSlOI+dWzUPQJtYKfqsNCvw=";
   };
 
-  patches = [
-    ./deprecated_dependency.patch
-  ];
-
   build-system = [
-    setuptools
-  ];
-
-  dependencies = [
-    distutils
+    hatchling
   ];
 
   nativeCheckInputs = [

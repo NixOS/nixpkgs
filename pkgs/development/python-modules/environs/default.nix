@@ -11,21 +11,21 @@
   python-dotenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "environs";
-  version = "14.5.0";
+  version = "15.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "environs";
-    tag = version;
-    hash = "sha256-g9n4GuVSHB2VourVYlzp3zKO7MnJK4IAakbYV5tM8Uc=";
+    tag = finalAttrs.version;
+    hash = "sha256-PrUPWifWYKVtQ7izRg5D+RYf8YCHCCCRtTNNdz3CzMc=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     marshmallow
     python-dotenv
   ];
@@ -40,10 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "environs" ];
 
   meta = {
-    description = "Python modle for environment variable parsing";
+    description = "Python module for environment variable parsing";
     homepage = "https://github.com/sloria/environs";
-    changelog = "https://github.com/sloria/environs/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/sloria/environs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

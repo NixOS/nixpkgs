@@ -13,16 +13,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-vision";
-  version = "3.12.0";
+  version = "3.16.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_vision";
     inherit (finalAttrs) version;
-    hash = "sha256-MACaIsl5s7D1LBBYprYbsZo+qPJoYRRm/L8wm3T/RzQ=";
+    hash = "sha256-3L9YS3kR9zecq4j7+cMryNGfFnGPlZTX/WWvIyRrAbA=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

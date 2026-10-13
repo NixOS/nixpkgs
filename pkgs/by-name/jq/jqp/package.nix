@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jqp";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "noahgorstein";
     repo = "jqp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pCWvmX6VvcKlPoMkVGfVkPTOx+sE+v2ey39/jOhgtsg=";
   };
 
@@ -24,6 +24,6 @@ buildGoModule rec {
     mainProgram = "jqp";
     homepage = "https://github.com/noahgorstein/jqp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
-}
+})

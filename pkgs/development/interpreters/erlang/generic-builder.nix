@@ -38,9 +38,9 @@
   runtimeShell,
   stdenv,
   systemd,
-  unixODBC,
+  unixodbc,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   libx11,
   zlib,
 }:
@@ -53,12 +53,12 @@ let
 
   wxPackages2 =
     if stdenv.hostPlatform.isDarwin then
-      [ wxGTK32 ]
+      [ wxwidgets_3_2 ]
     else
       [
         libGL
         libGLU
-        wxGTK32
+        wxwidgets_3_2
         libx11
         wrapGAppsHook3
       ];
@@ -107,7 +107,7 @@ stdenv.mkDerivation {
     zlib
   ]
   ++ optionals wxSupport wxPackages2
-  ++ optionals odbcSupport [ unixODBC ]
+  ++ optionals odbcSupport [ unixodbc ]
   ++ optionals javacSupport [ openjdk11 ]
   ++ optionals enableSystemd [ systemd ];
 
@@ -130,7 +130,7 @@ stdenv.mkDerivation {
   ++ optional enableKernelPoll "--enable-kernel-poll"
   ++ optional enableHipe "--enable-hipe"
   ++ optional javacSupport "--with-javac"
-  ++ optional odbcSupport "--with-odbc=${unixODBC}"
+  ++ optional odbcSupport "--with-odbc=${unixodbc}"
   ++ optional wxSupport "--enable-wx"
   ++ optional enableSystemd "--enable-systemd"
   ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"

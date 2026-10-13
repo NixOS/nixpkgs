@@ -1,7 +1,8 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitLab,
+  buildPythonPackage,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -11,6 +12,7 @@
   lz4,
   numpy,
   ruamel-yaml,
+  safelz4,
   typing-extensions,
   zstandard,
 
@@ -44,7 +46,8 @@ buildPythonPackage rec {
     ruamel-yaml
     typing-extensions
     zstandard
-  ];
+  ]
+  ++ lib.optional (pythonAtLeast "3.14") safelz4;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

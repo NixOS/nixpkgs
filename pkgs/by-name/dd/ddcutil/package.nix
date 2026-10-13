@@ -12,15 +12,17 @@
   libdrm,
   libxrandr,
   libxext,
+  acl,
+  dbus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ddcutil";
-  version = "2.2.3";
+  version = "2.2.7";
 
   src = fetchurl {
     url = "https://www.ddcutil.com/tarballs/ddcutil-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4XvAUqYvnqhS2eOLpPHtfnNmVnoOGdvhpDnuca2+BqA=";
+    hash = "sha256-GaxmBM8Rd7pWZm+KaCWB5x6Jc70Gx8jc8DNnTkqqpkg=";
   };
 
   nativeBuildInputs = [
@@ -29,14 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    acl
+    dbus
     glib
     jansson
     libdrm
     libgudev
     libusb1
-    udev
     libxext
     libxrandr
+    udev
   ];
 
   enableParallelBuilding = true;

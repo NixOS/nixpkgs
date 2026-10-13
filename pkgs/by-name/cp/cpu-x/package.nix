@@ -1,6 +1,5 @@
 {
   lib,
-  testers,
   stdenv,
   fetchFromGitHub,
   cmake,
@@ -17,8 +16,7 @@
   vulkan-headers,
   vulkan-loader,
   glfw,
-  libXdmcp,
-  pcre,
+  libxdmcp,
   util-linux,
   libselinux,
   libsepol,
@@ -28,13 +26,17 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   gtkmm3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpu-x";
   version = "5.4.0";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "TheTumultuousUnicornOfDarkness";
@@ -69,8 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     glfw
     opencl-headers
     ocl-icd
-    libXdmcp
-    pcre
+    libxdmcp
     util-linux
     libselinux
     libsepol
@@ -80,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ];
 
   preFixup = ''
@@ -90,11 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru = {
-    tests = {
-      version = testers.testVersion { package = finalAttrs.finalPackage; };
-    };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Free software that gathers information on CPU, motherboard and more";

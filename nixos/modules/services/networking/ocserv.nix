@@ -34,8 +34,8 @@ in
         auth = "plain[passwd=./sample.passwd]"
         tcp-port = 443
         udp-port = 443
-        run-as-user = nobody
-        run-as-group = nogroup
+        run-as-user = ocserv
+        run-as-group = ocserv
         socket-file = /run/ocserv-socket
         server-cert = certs/server-cert.pem
         server-key = certs/server-key.pem

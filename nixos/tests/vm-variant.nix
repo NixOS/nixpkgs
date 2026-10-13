@@ -10,7 +10,10 @@ let
     modules = [
       {
         system.stateVersion = "25.05";
-        fileSystems."/".device = "/dev/null";
+        fileSystems."/" = {
+          device = "/dev/null";
+          fsType = "none";
+        };
         boot.loader.grub.device = "nodev";
         nixpkgs.hostPlatform = pkgs.stdenv.hostPlatform.system;
         virtualisation.vmVariant.networking.hostName = "vm";

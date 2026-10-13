@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   imlib2,
-  libX11,
+  libx11,
   pkg-config,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     imlib2
-    libX11
+    libx11
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

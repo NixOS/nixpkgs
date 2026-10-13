@@ -5,14 +5,14 @@
   libevdev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "evsieve";
   version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "KarsMulder";
     repo = "evsieve";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UV5m8DmFtkCU/DoBJNBCdvhU/jYtU5+WnnhKwxZNl9g=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tsowell ];
     platforms = lib.platforms.linux;
   };
-}
+})

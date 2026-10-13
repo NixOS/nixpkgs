@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck-cli";
-  version = "2.0.9";
+  version = "2.0.10";
 
   src = fetchurl {
     url = "https://github.com/rundeck/rundeck-cli/releases/download/v${finalAttrs.version}/rundeck-cli-${finalAttrs.version}-all.jar";
-    hash = "sha256-c6QAgwyRCtoOlS7DEmjyK3BwHV122bilL6H+Hzrv2dQ=";
+    hash = "sha256-RiGWsscenvNpKr+yOHpy2F7dPZ3M/R9SWD+EKF7nq18=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

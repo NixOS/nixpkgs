@@ -69,11 +69,17 @@ let
     ++ extraCLibs
   );
 
-  # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
+  # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc.
+  # Wrapper (not symlink) because GCC >= 16 implicitly links -latomic_asneeded,
+  # which is not on musl-gcc's library search path.
   musl-gcc = (
     runCommandCC "musl-gcc" { } ''
       mkdir -p $out/bin
-      ln -s ${lib.getDev musl}/bin/musl-gcc $out/bin/${stdenv.hostPlatform.system}-musl-gcc
+      cat > $out/bin/${stdenv.hostPlatform.system}-musl-gcc <<EOF
+        #!/bin/sh
+        exec ${lib.getDev musl}/bin/musl-gcc -fno-link-libatomic "\$@"
+      EOF
+      chmod +x $out/bin/${stdenv.hostPlatform.system}-musl-gcc
     ''
   );
   binPath = lib.makeBinPath (lib.optionals useMusl [ musl-gcc ] ++ [ stdenv.cc ]);

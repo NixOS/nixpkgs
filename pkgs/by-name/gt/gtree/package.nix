@@ -2,22 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
   gtree,
+  nix-update-script,
+  testers,
 }:
-
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gtree";
-  version = "1.13.3";
+  version = "1.14.9";
 
   src = fetchFromGitHub {
     owner = "ddddddO";
     repo = "gtree";
-    rev = "v${version}";
-    hash = "sha256-K7LFnMCx28Abj4U9glFtQWJDHPHPRrGPsP0TiCr5NKc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MD9FYigqmYwprrj5dezB3vOrV1uGOrWHI7TuptP4tjo=";
   };
 
-  vendorHash = "sha256-A/O8w56RsiS8VHzq4NpIn8dAt12sNpfl/Jf9KziZ12I=";
+  vendorHash = "sha256-Vd5VKKl79Qu5R7jOYS1CTtQuAis9vWUbpBWnEI7sgpk=";
 
   subPackages = [
     "cmd/gtree"
@@ -26,22 +26,25 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
-    "-X=main.Revision=${src.rev}"
+    "-X=main.Version=${finalAttrs.version}"
+    "-X=main.Revision=${finalAttrs.src.tag}"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = gtree;
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        package = gtree;
+      };
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Generate directory trees and directories using Markdown or programmatically";
     mainProgram = "gtree";
     homepage = "https://github.com/ddddddO/gtree";
-    changelog = "https://github.com/ddddddO/gtree/releases/tag/${src.rev}";
+    changelog = "https://github.com/ddddddO/gtree/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
   };
-}
+})

@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -11,11 +10,11 @@
   debtcollector,
   oslo-config,
   oslo-context,
+  oslo-i18n,
   oslo-serialization,
   oslo-utils,
   pbr,
   python-dateutil,
-  pyinotify,
 
   # tests
   eventlet,
@@ -25,19 +24,19 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "8.0.0";
+  version = "8.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "oslo.log";
     tag = version;
-    hash = "sha256-XCQc0ByjnXU4/ArgJ6sGgm/EO2DevDdBgma85pjhdSc=";
+    hash = "sha256-teESuCQg8fxCWPMUWTTYyBIGSn9m916Uoy3UkWArVVs=";
   };
 
   # Manually set version because prb wants to get it from the git upstream repository (and we are
   # installing from tarball instead)
-  PBR_VERSION = version;
+  env.PBR_VERSION = version;
 
   build-system = [ setuptools ];
 
@@ -45,12 +44,12 @@ buildPythonPackage rec {
     debtcollector
     oslo-config
     oslo-context
+    oslo-i18n
     oslo-serialization
     oslo-utils
     pbr
     python-dateutil
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
+  ];
 
   nativeCheckInputs = [
     eventlet
@@ -59,11 +58,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # not compatible with sandbox
-    "test_logging_handle_error"
     # Incompatible Exception Representation, displaying natively
-    "test_rate_limit"
-    "test_rate_limit_except_level"
+    "test_logging_handle_error"
+    "test_rotate_log"
+    "test_timed_rotate_log"
   ];
 
   pythonImportsCheck = [ "oslo_log" ];

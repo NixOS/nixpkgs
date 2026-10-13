@@ -8,7 +8,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.1.11";
   pname = "libmatheval";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ guile ];
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/libmatheval/libmatheval-${version}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/libmatheval/libmatheval-${finalAttrs.version}.tar.gz";
     sha256 = "474852d6715ddc3b6969e28de5e1a5fbaff9e8ece6aebb9dc1cc63e9e88e89ab";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.unix;
   };
-}
+})

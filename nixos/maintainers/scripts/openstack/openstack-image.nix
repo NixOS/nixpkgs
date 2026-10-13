@@ -31,7 +31,7 @@ in
       ;
     inherit (config.image) baseName;
     additionalSpace = "1024M";
-    pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
+    pkgs = import ../../../.. { inherit (pkgs.stdenv.hostPlatform) system; }; # ensure we use the regular qemu-kvm package
     configFile = pkgs.writeText "configuration.nix" ''
       {
         imports = [ <nixpkgs/nixos/modules/virtualisation/openstack-config.nix> ];

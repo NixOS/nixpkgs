@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "foremost";
   version = "1.5.7";
 
   src = fetchurl {
     sha256 = "0d2zxw0ijg8cd3ksgm8cf8jg128zr5x7z779jar90g9f47pm882h";
-    url = "https://foremost.sourceforge.net/pkg/foremost-${version}.tar.gz";
+    url = "https://foremost.sourceforge.net/pkg/foremost-${finalAttrs.version}.tar.gz";
   };
 
   patches = [ ./makefile.patch ];
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "foremost";
   };
-}
+})

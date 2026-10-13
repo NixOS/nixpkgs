@@ -10,8 +10,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "angusmcleod";
     repo = "discourse-events";
-    rev = "83a6ee2c36a83bdb21fc58e3ec4bbd5fd5953e2e";
-    sha256 = "sha256-QNcP32JYaon7phv3sFi1vlWZNwuL+LDzRWe6vi2FwTE=";
+    rev = "5e22962b7346dbcdb579e7c3abb13c5c965c3c42";
+    sha256 = "sha256-IZ7xJaPb44CZOtg4xA4crCe4//oZO3pjkgvXOM1lihE=";
   };
   meta = {
     homepage = "https://github.com/angusmcleod/discourse-events";

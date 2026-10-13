@@ -3,6 +3,7 @@
   stdenv,
   aiocontextvars,
   aiohttp,
+  aiothreads,
   async-timeout,
   buildPythonPackage,
   colorlog,
@@ -21,12 +22,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiomisc";
-  version = "17.10.3";
+  version = "18.0.28";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-24ka982Wx4Bk2TlWuw6pvfRLh47l8QJvHD+sc+LOxVY=";
+    hash = "sha256-SA/iJD23E6ze1TuzycDQTcW5/nLoMgTdF9qzhrBVaTQ=";
   };
 
   build-system = [
@@ -35,6 +36,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiothreads
     colorlog
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ logging-journald ];

@@ -14,16 +14,15 @@
   libsigsegv,
   gettext,
   ncurses,
-  pcre,
   zlib,
   readline,
   libffi,
   libffcall,
-  libX11,
-  libXau,
-  libXt,
-  libXpm,
-  libXext,
+  libx11,
+  libxau,
+  libxt,
+  libxpm,
+  libxext,
   xorgproto,
   coreutils,
   # build options
@@ -32,7 +31,6 @@
   dllSupport ? true,
   withModules ? [
     "asdf"
-    "pcre"
     "rawsock"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -45,12 +43,12 @@
 assert
   x11Support
   -> (
-    libX11 != null
-    && libXau != null
-    && libXt != null
-    && libXpm != null
+    libx11 != null
+    && libxau != null
+    && libxt != null
+    && libxpm != null
     && xorgproto != null
-    && libXext != null
+    && libxext != null
   );
 
 let
@@ -80,18 +78,17 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (gettext != null) gettext
   ++ lib.optional (ncurses != null) ncurses
-  ++ lib.optional (pcre != null) pcre
   ++ lib.optional (zlib != null) zlib
   ++ lib.optional (readline != null) readline
   ++ lib.optional (ffcallAvailable && (libffi != null)) libffi
   ++ lib.optional ffcallAvailable libffcall
   ++ lib.optionals x11Support [
-    libX11
-    libXau
-    libXt
-    libXpm
+    libx11
+    libxau
+    libxt
+    libxpm
     xorgproto
-    libXext
+    libxext
   ];
 
   # First, replace port 9090 (rather low, can be used)

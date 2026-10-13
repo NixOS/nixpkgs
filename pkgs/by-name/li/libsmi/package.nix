@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsmi";
   version = "0.5.0";
 
   src = fetchurl {
-    url = "https://www.ibr.cs.tu-bs.de/projects/libsmi/download/libsmi-${version}.tar.gz";
+    url = "https://www.ibr.cs.tu-bs.de/projects/libsmi/download/libsmi-${finalAttrs.version}.tar.gz";
     sha256 = "1lslaxr2qcj6hf4naq5n5mparfhmswsgq4wa7zm2icqvvgdcq6pj";
   };
 
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

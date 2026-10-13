@@ -7,11 +7,11 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libticonv";
   version = "1.1.5";
   src = fetchurl {
-    url = "mirror://sourceforge/tilp/libticonv-${version}.tar.bz2";
+    url = "mirror://sourceforge/tilp/libticonv-${finalAttrs.version}.tar.bz2";
     sha256 = "0y080v12bm81wgjm6fnw7q0yg7scphm8hhrls9njcszj7fkscv9i";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

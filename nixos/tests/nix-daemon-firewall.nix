@@ -100,6 +100,7 @@ let
       # Gives us access inside the nix sandbox
       extra-sandbox-paths = [ "${pkgs.pkgsStatic.busybox}" ];
     };
+    nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
 
     # Easy way to get files to the system
     environment.etc = {

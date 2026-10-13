@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   version = "0-unstable-2021-11-09";
 
   src = fetchFromGitHub {
-    owner = "moddevices";
+    owner = "mod-audio";
     repo = "mod-arpeggiator-lv2";
     rev = "82f3d9f159ce216454656a8782362c3d5ed48bed";
     sha256 = "sha256-1KiWMTVTTf1/iR4AzJ1Oe0mOrWN5edsZN0tQMidgnRA=";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "LV2 arpeggiator";
-    homepage = "https://github.com/moddevices/mod-arpeggiator-lv2";
+    homepage = "https://github.com/mod-audio/mod-arpeggiator-lv2";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.linux;

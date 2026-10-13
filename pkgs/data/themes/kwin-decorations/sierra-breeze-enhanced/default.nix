@@ -6,6 +6,7 @@
   wrapQtAppsHook,
   kwin,
   lib,
+  fetchpatch2,
 }:
 stdenv.mkDerivation rec {
   pname = "sierra-breeze-enhanced";
@@ -17,6 +18,13 @@ stdenv.mkDerivation rec {
     rev = if version == "2.1.1" then "V.2.1.1" else "V${version}";
     hash = "sha256-7mQnJCQr/zm9zEdg2JPr7jQn8uajyCXvyYRQZWxG+Q8=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/kupiqu/SierraBreezeEnhanced/pull/155.patch";
+      hash = "sha256-taj7AqiewiUU4wOTKPgfvua0rDuQ8ssH+/maxz/A3G8=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

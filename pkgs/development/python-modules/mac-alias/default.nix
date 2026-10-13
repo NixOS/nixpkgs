@@ -7,14 +7,18 @@
 
 buildPythonPackage rec {
   pname = "mac-alias";
-  version = "2.2.2";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "mac_alias";
     inherit version;
-    hash = "sha256-yZxyjrUS6VXBHxpiA6D/qIg7JlSeiv5ogEAxql2oVrc=";
+    hash = "sha256-HH+jZ2h9ZpefLOTRqLJxbPHJ+4EXQcqzzzyjVlVcK+s=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail "setuptools==80.9.0" "setuptools"
+  '';
 
   nativeBuildInputs = [ setuptools ];
 

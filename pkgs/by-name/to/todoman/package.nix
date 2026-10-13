@@ -8,16 +8,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "todoman";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "todoman";
-    tag = "v${version}";
-    hash = "sha256-WMIXPPtW1227iDXLqG/JIYdNp5bxHxTlqpFtcIvZ8Aw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dlTV9x8ofxffM55fIJxxavagaTWx+UseK8ECBExxf78=";
   };
 
   nativeBuildInputs = [
@@ -74,9 +74,10 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   postInstall = ''
-    installShellCompletion --bash contrib/completion/bash/_todo
-    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${lib.getExe jq} "
-    installShellCompletion --zsh contrib/completion/zsh/_todo
+    substituteInPlace contrib/completion/zsh/_todo --replace-fail "jq " "${lib.getExe jq} "
+    installShellCompletion --bash contrib/completion/bash/_todo \
+                           --zsh contrib/completion/zsh/_todo \
+                           --fish contrib/completion/fish/todo.fish
   '';
 
   disabledTests = [
@@ -111,7 +112,7 @@ python3.pkgs.buildPythonApplication rec {
       Unsupported fields may not be shown but are never deleted or altered.
     '';
     changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${
-      builtins.replaceStrings [ "." ] [ "-" ] version
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
@@ -119,4 +120,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "todo";
   };
-}
+})

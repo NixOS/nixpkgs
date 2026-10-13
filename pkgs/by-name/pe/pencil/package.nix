@@ -35,7 +35,7 @@
   libxcomposite,
   libx11,
   libxcb,
-  systemd,
+  systemdLibs,
 }:
 let
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "pencil";
 
   src = fetchurl {
-    url = "http://pencil.evolus.vn/dl/V${finalAttrs.version}.ga/pencil_${finalAttrs.version}.ga_amd64.deb";
+    url = "https://pencil.evolus.vn/dl/V${finalAttrs.version}.ga/pencil_${finalAttrs.version}.ga_amd64.deb";
     sha256 = "01ae54b1a1351b909eb2366c6ec00816e1deba370e58f35601cf7368f10aaba3";
   };
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
         $out/opt/pencil/pencil
 
       # fix missing libudev
-      ln -s ${lib.getLib systemd}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
+      ln -s ${lib.getLib systemdLibs}/lib/libudev.so.1 $out/opt/pencil/libudev.so.1
       wrapProgram $out/opt/pencil/pencil \
         --prefix LD_LIBRARY_PATH : $out/opt/pencil
     '';
@@ -146,5 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
       mrVanDalo
     ];
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "Uses Electron 6, EOL in May 2020 with many CVEs"
+    ];
   };
 })

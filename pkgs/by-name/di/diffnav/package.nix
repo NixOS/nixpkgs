@@ -1,41 +1,55 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   makeBinaryWrapper,
+  installShellFiles,
   delta,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "diffnav";
-  version = "0.6.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "diffnav";
-    tag = "v${version}";
-    hash = "sha256-pak1R2BmL3A8YADwFw7QZk7JsGQzBBS/xHzRhYlMKGo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eeNhsTT9IrSQ5dvPHJJvGL/k5ard4oLVzhqd+NV/vBw=";
   };
 
-  vendorHash = "sha256-cDA5qstTRApt4DXcakNLR5nsyh9i7z2Qrvp6q/OoYhY=";
+  vendorHash = "sha256-5A1O3QbiWx3xF8Mp3Pm1rT40UrYCBm0NuHtk/c217IE=";
 
   ldflags = [
     "-s"
     "-w"
+    "-X github.com/dlvhdr/diffnav/pkg/version.Version=${finalAttrs.version}"
   ];
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
   postInstall = ''
     wrapProgram $out/bin/diffnav \
       --prefix PATH : ${lib.makeBinPath [ delta ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd diffnav \
+     --bash <($out/bin/diffnav completion bash) \
+     --fish <($out/bin/diffnav completion fish) \
+     --zsh <($out/bin/diffnav completion zsh)
   '';
 
   meta = {
-    changelog = "https://github.com/dlvhdr/diffnav/releases/tag/${src.rev}";
+    changelog = "https://github.com/dlvhdr/diffnav/releases/tag/${finalAttrs.src.rev}";
     description = "Git diff pager based on delta but with a file tree, à la GitHub";
     homepage = "https://github.com/dlvhdr/diffnav";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ amesgen ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+    ];
     mainProgram = "diffnav";
   };
-}
+})

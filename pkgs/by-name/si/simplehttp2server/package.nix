@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "simplehttp2server";
   version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "GoogleChromeLabs";
     repo = "simplehttp2server";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "113mcfvy1m91wask5039mhr0187nlw325ac32785yl4bb4igi8aw";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ yrashk ];
     mainProgram = "simplehttp2server";
   };
-}
+})

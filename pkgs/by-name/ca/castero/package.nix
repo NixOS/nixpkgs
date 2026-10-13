@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "castero";
   version = "0.9.5";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xgi";
     repo = "castero";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6/7oCKBMEcQeJ8PaFP15Xef9sQRYCpigtzINv2M6GUY=";
   };
 
@@ -54,6 +54,8 @@ python3.pkgs.buildPythonApplication rec {
     # E  +  where '' = <castero.menus.episodemenu.EpisodeMenu object at 0x7ffff3acd0d0>.metadata
     # E  +  and   <MagicMock name='mock.metadata' id='140737279137104'> = episode1.metadata
     "test_menu_episode_metadata"
+    # flaky: segfaults on Hydra when a background DB reload thread races the test
+    "test_perspective_downloaded_draw_metadata"
   ];
 
   pythonImportsCheck = [
@@ -79,4 +81,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ keto ];
   };
-}
+})

@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "todo";
   version = "2.5";
 
   src = fetchFromGitHub {
     owner = "sioodmy";
     repo = "todo";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "oyRdXvVnCfdFM8lI1eCDHHYNWcJc0Qg0TKxQXUqNo40=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ sioodmy ];
     mainProgram = "todo";
   };
-}
+})

@@ -32,13 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
+  strictDeps = true;
+
   doCheck = true;
-  preCheck =
-    if stdenv.hostPlatform.isDarwin then "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs" else null;
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH=$(pwd)/lib/.libs
+  '';
 
   passthru.tests = {
     inherit gnutls samba qemu;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/libtasn1/";

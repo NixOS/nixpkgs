@@ -10,8 +10,8 @@
   # - Open a browser or something that plays sound. Ex: chromium
 
   name = "xrdp-with-audio-pulseaudio";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ lucasew ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {
@@ -73,7 +73,7 @@
   testScript =
     { nodes, ... }:
     let
-      user = nodes.client.config.users.users.alice;
+      user = nodes.client.users.users.alice;
     in
     ''
       start_all()

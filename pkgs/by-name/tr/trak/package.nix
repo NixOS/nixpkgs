@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "trak";
   version = "0.0.5";
   pyproject = true;
@@ -12,11 +12,11 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lcfd";
     repo = "trak";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YJMX7pNRWdNPyWNZ1HfpdYsKSStRWLcianLz6nScMa8=";
   };
 
-  sourceRoot = "${src.name}/cli";
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
   dependencies = with python3Packages; [
     questionary
@@ -32,4 +32,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ buurro ];
     mainProgram = "trak";
   };
-}
+})

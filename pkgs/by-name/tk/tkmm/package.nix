@@ -5,15 +5,15 @@
   dotnetCorePackages,
   makeDesktopItem,
   copyDesktopItems,
-  libX11,
+  libx11,
   glew,
   libGL,
   libice,
   libsm,
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "Tkmm";
@@ -47,15 +47,15 @@ buildDotnetModule (finalAttrs: {
 
   runtimeDeps = [
     # Avalonia UI
-    libX11
+    libx11
     libGL
     glew
     libice
     libsm
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libxcursor
+    libxext
+    libxi
+    libxrandr
   ];
 
   enableParallelBuilding = false;

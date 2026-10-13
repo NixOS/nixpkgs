@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation {
   pname = "hello-cpp";
-  version = lib.trivial.version;
+  version = lib.trivial.release;
   src = ./src;
   nativeBuildInputs = [
     cmake
@@ -18,5 +18,6 @@ stdenv.mkDerivation {
     platforms = lib.platforms.all;
     maintainers = stdenv.meta.maintainers or [ ];
     mainProgram = "hello-cpp";
+    license = lib.licenses.mit;
   };
 }

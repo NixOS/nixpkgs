@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     runHook postUnpack
   '';
 
-  AOT_FILES = [
+  env.AOT_FILES = toString [
     "MissionPlanner.exe"
     "MissionPlanner.*.dll"
   ];

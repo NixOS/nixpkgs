@@ -7,14 +7,14 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ssh-import-id";
   version = "5.11";
   pyproject = true;
 
   src = fetchgit {
     url = "https://git.launchpad.net/ssh-import-id";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-tYbaJGH59qyvjp4kwo3ZFVs0EaE0Lsd2CQ6iraFkAdI=";
   };
 
@@ -60,4 +60,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "ssh-import-id";
     platforms = lib.platforms.unix;
   };
-}
+})

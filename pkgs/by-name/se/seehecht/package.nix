@@ -4,14 +4,14 @@
   fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "seehecht";
   version = "3.0.3";
 
   src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "seehecht";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KIxK0JYfq/1Bn4LOn+LzWPBUvGYMvOEuqS7GMpDRvW0=";
   };
 
@@ -23,8 +23,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Tool to quickly open a markdown document with already filled out frontmatter";
+    homepage = "https://codeberg.org/annaaurora/seehecht";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ annaaurora ];
   };
-}
+})

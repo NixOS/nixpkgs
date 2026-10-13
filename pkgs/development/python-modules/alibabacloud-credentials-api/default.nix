@@ -5,14 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alibabacloud-credentials-api";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jDQAONkE8CGNchSo9AiMMZEr/PJ5ryy8fZvkiXqX3S8=";
+    pname = "alibabacloud_credentials_api";
+    inherit (finalAttrs) version;
+    hash = "sha256-jqBmimVY9pVrjSCy5WHRmoDqKcIs9WowBNQ0skqYGzY=";
   };
 
   build-system = [ setuptools ];
@@ -28,4 +29,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

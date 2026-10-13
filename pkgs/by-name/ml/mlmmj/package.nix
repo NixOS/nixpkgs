@@ -7,15 +7,15 @@
   pkg-config,
   kyua,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlmmj";
-  version = "1.5.0";
+  version = "1.8.0";
 
   src = fetchFromCodeberg {
     owner = "mlmmj";
     repo = "mlmmj";
-    tag = "RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] version;
-    hash = "sha256-kAo04onxVve3kCaM4h1APsjs3C4iePabkBFJeqvnPxo=";
+    tag = "RELEASE_" + lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version;
+    hash = "sha256-f1SiqAzFw+uu3GqsxWNCJVh5hvlbezhUFTH0YFMgUx8=";
   };
 
   nativeBuildInputs = [
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
   };
-}
+})

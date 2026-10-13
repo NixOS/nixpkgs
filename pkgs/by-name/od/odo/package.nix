@@ -6,14 +6,14 @@
   odo,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "odo";
   version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "odo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zEN8yfjW3JHf6OzPQC6Rg2/hJ+3d9d2nYhz60BdSK9s=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = odo;
     command = "odo version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -39,7 +39,7 @@ buildGoModule rec {
     mainProgram = "odo";
     license = lib.licenses.asl20;
     homepage = "https://odo.dev";
-    changelog = "https://github.com/redhat-developer/odo/releases/v${version}";
+    changelog = "https://github.com/redhat-developer/odo/releases/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ stehessel ];
   };
-}
+})

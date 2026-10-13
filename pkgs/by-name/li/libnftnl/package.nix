@@ -7,13 +7,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.3.1";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.3.2";
   pname = "libnftnl";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnftnl/files/libnftnl-${version}.tar.xz";
-    hash = "sha256-YH2ijbpm+97M+O8Tld3tkHfo0Z8plfmk1FqcLwvP+6g=";
+    url = "https://netfilter.org/projects/libnftnl/files/libnftnl-${finalAttrs.version}.tar.xz";
+    hash = "sha256-yXq8NAn4+jlrRGKyu38UejpHpN3JfPoLLxiJDJz96LA=";
   };
 
   configureFlags = lib.optional (
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

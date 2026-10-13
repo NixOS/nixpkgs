@@ -5,7 +5,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "boofuzz";
   version = "0.4.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jtpereyda";
     repo = "boofuzz";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ffZVFmfDAJ+Qn3hbeHY/CvYgpDLxB+jaYOiYyZqZ7mo=";
   };
 
@@ -51,9 +51,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Network protocol fuzzing tool";
     homepage = "https://github.com/jtpereyda/boofuzz";
-    changelog = "https://github.com/jtpereyda/boofuzz/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/jtpereyda/boofuzz/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "boo";
   };
-}
+})

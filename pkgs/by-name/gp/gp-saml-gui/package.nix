@@ -9,10 +9,12 @@
   gobject-introspection,
   openconnect,
 }:
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "gp-saml-gui";
-  version = "0.1+20240731-${lib.strings.substring 0 7 src.rev}";
-  format = "setuptools";
+  version = "0.1-unstable-2024-07-31";
+  pyproject = true;
+
+  build-system = with python3Packages; [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "dlenski";
@@ -53,4 +55,4 @@ python3Packages.buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pallix ];
   };
-}
+})

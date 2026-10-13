@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Hiragana text to Kana Kanji mixed text Japanese input method";
-    homepage = "https://anthy.osdn.jp/";
+    homepage = "https://web.archive.org/web/20250404073626/https://osdn.net/projects/anthy/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;

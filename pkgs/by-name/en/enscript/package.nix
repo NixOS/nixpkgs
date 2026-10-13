@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   meta = {
     description = "Converter from ASCII to PostScript, HTML, or RTF";
 
@@ -58,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://www.gnu.org/software/enscript/";
 
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aiyion ];
     platforms = lib.platforms.all;
     mainProgram = "enscript";
   };

@@ -9,12 +9,12 @@
   getopt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "disnixos";
   version = "0.9.4";
 
   src = fetchurl {
-    url = "https://github.com/svanderburg/disnixos/releases/download/disnixos-${version}/disnixos-${version}.tar.gz";
+    url = "https://github.com/svanderburg/disnixos/releases/download/disnixos-${finalAttrs.version}/disnixos-${finalAttrs.version}.tar.gz";
     sha256 = "0adv6dm6hszjhzkfkw48pmi37zj32plcibk80r6bm907mm7n50lj";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

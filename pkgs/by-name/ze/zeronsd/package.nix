@@ -7,24 +7,23 @@
   rustfmt,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeronsd";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "zeronsd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-TL0bgzQgge6j1SpZCdxv/s4pBMSg4/3U5QisjkVE6BE=";
   };
 
   cargoHash = "sha256-xIuMANJGRHbYBbhlVMXxIVrukW1NY7ucxO79tIdPSpI=";
 
-  strictDeps = true;
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];
 
-  RUSTFMT = "${rustfmt}/bin/rustfmt";
+  env.RUSTFMT = "${rustfmt}/bin/rustfmt";
 
   # Integration tests try to access the ZeroTier API which requires an API token.
   # https://github.com/zerotier/zeronsd/blob/v0.5.2/tests/service/network.rs#L10
@@ -36,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.dstengele ];
   };
-}
+})

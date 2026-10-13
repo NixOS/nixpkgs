@@ -46,4 +46,6 @@ stdenv.mkDerivation {
       cp ${wrapper} $out/bin/bitwig-studio
       cp -r ${bitwig-studio-unwrapped}/share $out
     '';
+
+  meta.license = bitwig-studio-unwrapped.meta.license;
 }

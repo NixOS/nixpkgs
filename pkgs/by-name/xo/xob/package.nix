@@ -8,14 +8,14 @@
   libconfig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xob";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "florentc";
     repo = "xob";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1x4aafiyd9k4y8cmvn7rgfif3g5s5hhlbj5nz71qsyqg21nn7hrw";
   };
 
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Lightweight overlay bar for the X Window System";
     longDescription = ''
       A lightweight configurable overlay volume/backlight/progress/anything bar
@@ -39,10 +41,10 @@ stdenv.mkDerivation rec {
       alternate color to account for special states (e.g. muted audio). There
       is also support for overflows (when the value exceeds the maximum).
     '';
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ florentc ];
     mainProgram = "xob";
   };
-}
+})

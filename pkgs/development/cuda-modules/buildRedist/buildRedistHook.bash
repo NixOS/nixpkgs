@@ -24,9 +24,6 @@ buildRedistHookRegistration() {
   postInstallCheckHooks+=(checkCudaNonEmptyOutputs)
   nixLog "added checkCudaNonEmptyOutputs to postInstallCheckHooks"
 
-  preFixupHooks+=(fixupPropagatedBuildOutputsForMultipleOutputs)
-  nixLog "added fixupPropagatedBuildOutputsForMultipleOutputs to preFixupHooks"
-
   postFixupHooks+=(fixupCudaPropagatedBuildOutputsToOut)
   nixLog "added fixupCudaPropagatedBuildOutputsToOut to postFixupHooks"
 
@@ -193,16 +190,6 @@ checkCudaHasStubsIffIncludeRemoveStubsFromRunpathHook() {
   return 0
 }
 
-# TODO(@connorbaker): https://github.com/NixOS/nixpkgs/issues/323126.
-# _multioutPropagateDev() currently expects a space-separated string rather than an array.
-# NOTE: Because _multioutPropagateDev is a postFixup hook, we correct it in preFixup.
-fixupPropagatedBuildOutputsForMultipleOutputs() {
-  nixLog "converting propagatedBuildOutputs to a space-separated string"
-  # shellcheck disable=SC2124
-  export propagatedBuildOutputs="${propagatedBuildOutputs[@]}"
-  return 0
-}
-
 # The multiple outputs setup hook only propagates build outputs to dev.
 # We want to propagate them to out as well, in case the user interpolates
 # the package into a string -- in such a case, the dev output is not selected
@@ -217,7 +204,7 @@ fixupCudaPropagatedBuildOutputsToOut() {
   mkdir -p "${out:?}/nix-support"
 
   # NOTE: We must use printWords to ensure the output is a single line.
-  for output in $propagatedBuildOutputs; do
+  for output in "${propagatedBuildOutputs[@]}"; do
     # Propagate the other components to the out output
     nixLog "adding ${!output:?} to propagatedBuildInputs of ${out:?}"
     printWords "${!output:?}" >>"${out:?}/nix-support/propagated-build-inputs"

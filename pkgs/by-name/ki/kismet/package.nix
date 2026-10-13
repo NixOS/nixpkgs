@@ -32,14 +32,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation (finalPackage: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kismet";
   version = "2025-09-R1";
 
   src = fetchFromGitHub {
     owner = "kismetwireless";
     repo = "kismet";
-    tag = "kismet-${finalPackage.version}";
+    tag = "kismet-${finalAttrs.version}";
     hash = "sha256-bwgeBIa5P1he0azWBu1YTXS9EGlHdJK8hS6A5Rj9XU4=";
   };
 

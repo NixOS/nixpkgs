@@ -6,13 +6,13 @@
   fdk_aac,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "fdkaac";
   version = "0.3.3";
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-fdkaac";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cTPPQKBq0EFo35eK7TXlszbodHYIg1g7v+yQ/rG7Y9I=";
   };
 
@@ -21,7 +21,7 @@ buildDunePackage rec {
 
   meta = {
     description = "OCaml binding for the fdk-aac library";
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
     license = lib.licenses.gpl2Only;
     maintainers = [
       lib.maintainers.vbgl
@@ -29,4 +29,4 @@ buildDunePackage rec {
     ];
   };
 
-}
+})

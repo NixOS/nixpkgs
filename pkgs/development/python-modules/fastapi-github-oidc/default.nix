@@ -43,13 +43,14 @@ buildPythonPackage (finalAttrs: {
 
   disabledTests = [
     "test_with_auth" # calls github api
+    "test_no_auth" # returns 401 instead of 403
   ];
 
   meta = {
     description = "FastAPI compatible middleware to authenticate Github OIDC Tokens";
     homepage = "https://github.com/atopile/fastapi-github-oidc";
     changelog = "https://github.com/atopile/fastapi-github-oidc/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 })

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafterm";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "slok";
     repo = "grafterm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-0pM36rAmwx/P1KAlmVaGoSj8eb9JucYycNC2R867dVo=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "grafterm";
   };
-}
+})

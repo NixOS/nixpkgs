@@ -37,16 +37,16 @@ runCommand "manual.epub"
       </book>
     '';
 
-    passAsFile = [ "epub" ];
+    __structuredAttrs = true;
   }
   ''
     mkdir scratch
-    xsltproc \
+    printf "%s" "$epub" | xsltproc \
       --param chapter.autolabel 0 \
       --nonet \
       --output scratch/ \
       ${docbook_xsl_ns}/xml/xsl/docbook/epub/docbook.xsl \
-      $epubPath
+      -
 
     echo "application/epub+zip" > mimetype
     zip -0Xq -b "$TMPDIR" "$out" mimetype

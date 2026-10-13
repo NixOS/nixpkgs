@@ -13,22 +13,18 @@
   filelock,
   writableTmpDirAsHomeHook,
   nix-update-script,
-  beetcamp ? null, # For `passthru.tests`.
 }:
 
-let
-  version = "0.23.0";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "beetcamp";
-  inherit version;
+  version = "0.24.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snejus";
     repo = "beetcamp";
-    tag = version;
-    hash = "sha256-8FEDpobEGZ0Lw1+JRoFIEe3AuiuX7dwsRab+P3hC3W0=";
+    tag = finalAttrs.version;
+    hash = "sha256-kKFYuTJys4j67+cak2PDmn6z2vNzVitFXIZXy2bClY8=";
   };
 
   patches = [
@@ -69,7 +65,7 @@ buildPythonPackage {
         pluginOverrides = {
           beetcamp = {
             enable = true;
-            propagatedBuildInputs = [ beetcamp ];
+            propagatedBuildInputs = [ finalAttrs.finalPackage ];
           };
         };
       };
@@ -79,10 +75,11 @@ buildPythonPackage {
   meta = {
     description = "Bandcamp autotagger source for beets (http://beets.io)";
     homepage = "https://github.com/snejus/beetcamp";
+    changelog = "https://github.com/snejus/beetcamp/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     maintainers = [
       lib.maintainers._9999years
     ];
     mainProgram = "beetcamp";
   };
-}
+})

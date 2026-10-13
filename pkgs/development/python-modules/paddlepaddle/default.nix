@@ -19,8 +19,7 @@
   numpy,
   protobuf,
   pillow,
-  decorator,
-  astor,
+  networkx,
   opt-einsum,
   rdma-core,
   safetensors,
@@ -33,7 +32,7 @@ let
   version = sources.version;
   format = "wheel";
   pyShortVersion = "cp${lib.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-  cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version}";
+  cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudaMajorMinorVersion}";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
   systemSources = sources."${stdenv.hostPlatform.system}" or throwSystem;
@@ -74,15 +73,37 @@ buildPythonPackage {
 
   buildInputs = lib.optionals cudaSupport [ rdma-core ];
 
+  pythonRelaxDeps = [
+    "opt_einsum"
+  ];
+
+  pythonRemoveDeps = lib.optionals cudaSupport [
+    "cuda-python"
+    "nvidia-cublas-cu12"
+    "nvidia-cuda-cccl-cu12"
+    "nvidia-cuda-cupti-cu12"
+    "nvidia-cuda-nvrtc-cu12"
+    "nvidia-cuda-runtime-cu12"
+    "nvidia-cudnn-cu12"
+    "nvidia-cufile-cu12"
+    "nvidia-cufft-cu12"
+    "nvidia-curand-cu12"
+    "nvidia-cusolver-cu12"
+    "nvidia-cusparse-cu12"
+    "nvidia-cusparselt-cu12"
+    "nvidia-nccl-cu12"
+    "nvidia-nvjitlink-cu12"
+    "nvidia-nvtx-cu12"
+  ];
+
   dependencies = [
     setuptools
     httpx
     numpy
     protobuf
     pillow
-    decorator
-    astor
     opt-einsum
+    networkx
     safetensors
     typing-extensions
   ];
@@ -104,8 +125,12 @@ buildPythonPackage {
           ++ lib.optionals cudaSupport (
             with cudaPackages;
             [
-              cudatoolkit.lib
-              cudatoolkit.out
+              cuda_cudart
+              cuda_nvrtc
+              libcublas
+              libcurand
+              libcusolver
+              libcusparse
               cudnn
             ]
           )

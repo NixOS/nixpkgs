@@ -17,6 +17,10 @@ stdenv.mkDerivation {
     rev = "11ab171c46cc16cc71ac6fc901d38ea88d6532a4";
     hash = "sha256-KWYgTxz32WK3MKouj1WAJtZmleKt5giCpzQPwfWruZQ=";
   };
+  patches = [
+    # FIx gcc-15 build failure: https://github.com/yangboz/sgfutils/pull/3
+    ./gcc-15.patch
+  ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
   buildPhase = ''
@@ -39,6 +43,8 @@ stdenv.mkDerivation {
       --set-default FONTCONFIG_FILE ${makeFontsConf { fontDirectories = [ ]; }}
   '';
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://homepages.cwi.nl/~aeb/go/sgfutils/html/sgfutils.html";
     description = "Command line utilities that help working with SGF files";
     longDescription = ''

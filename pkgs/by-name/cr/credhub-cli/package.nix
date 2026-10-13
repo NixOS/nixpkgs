@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "credhub-cli";
-  version = "2.9.53";
+  version = "2.9.60";
 
   src = fetchFromGitHub {
-    owner = "cloudfoundry-incubator";
+    owner = "cloudfoundry";
     repo = "credhub-cli";
-    rev = version;
-    sha256 = "sha256-MbRk0O1WGzr7YLHSub9hLYDvJJacUcCXyg29AOqssxE=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-sus0jCdRj9ZwDeAGgw85tJkWC4UAZQPzonAjUvY3sfs=";
   };
 
   # these tests require network access that we're not going to give them
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X code.cloudfoundry.org/credhub-cli/version.Version=${version}"
+    "-X code.cloudfoundry.org/credhub-cli/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -40,8 +40,8 @@ buildGoModule rec {
 
   meta = {
     description = "Provides a command line interface to interact with CredHub servers";
-    homepage = "https://github.com/cloudfoundry-incubator/credhub-cli";
+    homepage = "https://github.com/cloudfoundry/credhub-cli";
     maintainers = with lib.maintainers; [ ris ];
     license = lib.licenses.asl20;
   };
-}
+})

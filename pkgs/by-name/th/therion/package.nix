@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   perl,
@@ -15,7 +16,7 @@
   makeWrapper,
   fmt,
   proj,
-  wxGTK32,
+  wxwidgets_3_2,
   vtk,
   freetype,
   libjpeg,
@@ -30,14 +31,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "therion";
-  version = "6.3.4";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "therion";
     repo = "therion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kus5MoiUrLadpzq0wPB+J85F0RVva7NAYM6E6HX4eJ8=";
+    hash = "sha256-TiyoNYk+wWXyNytQwr5EfRSWzNc42LX3qjMV9M+dsx0=";
   };
+
+  patches = [
+    # fmt >= 12 no longer provides fmt::format via fmt/core.h
+    (fetchpatch {
+      url = "https://github.com/therion/therion/commit/6c7e3a8e82228db0f2c450b7a26c848809d24010.patch";
+      hash = "sha256-sSki7QPDWmmTd3nb97vhuxFm92nfphTrGJM4oJlX39E=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -61,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     tclPackages.tkimg
     proj
-    wxGTK32
+    wxwidgets_3_2
     vtk
     tk
     freetype

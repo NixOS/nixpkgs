@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,11 +10,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.11";
 
   src = fetchurl {
-    url = "http://henning-bekel.de/download/xchainkeys/xchainkeys-${finalAttrs.version}.tar.gz";
+    url = "https://henning-bekel.de/download/xchainkeys/xchainkeys-${finalAttrs.version}.tar.gz";
     sha256 = "1rpqs7h5krral08vqxwb0imy33z17v5llvrg5hy8hkl2ap7ya0mn";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   meta = {
     homepage = "http://henning-bekel.de/xchainkeys/";

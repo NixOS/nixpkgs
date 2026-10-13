@@ -1,35 +1,28 @@
 {
-  lib,
   buildPythonPackage,
-  fetchPypi,
   cython,
   numpy,
+  pyopengl,
   setuptools,
-  wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyopengl-accelerate";
-  version = "3.1.10";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pyopengl_accelerate";
-    inherit version;
-    hash = "sha256-gnUcg/Cm9zK4tZI5kO3CRB04F2qYdWsXGOjWxDefWnE=";
-  };
+  inherit (pyopengl) version src;
+
+  sourceRoot = "${pyopengl.src.name}/accelerate";
 
   build-system = [
     cython
     numpy
     setuptools
-    wheel
   ];
 
   meta = {
     description = "This set of C (Cython) extensions provides acceleration of common operations for slow points in PyOpenGL 3.x";
-    homepage = "https://pyopengl.sourceforge.net/";
-    maintainers = with lib.maintainers; [ laikq ];
-    license = lib.licenses.bsd3;
+    homepage = "https://github.com/mcfletch/pyopengl/tree/master/accelerate#readme";
+    inherit (pyopengl.meta) maintainers license;
   };
 }

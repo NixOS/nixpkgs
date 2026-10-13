@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   packaging,
-  tomli,
   pytestCheckHook,
   pip,
 }:
@@ -25,10 +23,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     packaging
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

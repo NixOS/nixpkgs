@@ -2,20 +2,25 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "subfinder";
-  version = "2.12.0";
+  version = "2.17.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "subfinder";
-    tag = "v${version}";
-    hash = "sha256-AqXTK+1mK5EmK/6T2+VIDD8jYzafMUEduJ/gLTqaYv8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O1Er4Ep3kiYcswaHf0bxcmG2OysHm/j58uC5BXA4qLU=";
   };
 
-  vendorHash = "sha256-ss1lcdqBni5SmHVLDQpFFVTQ3/nL8qPTl5zul1GQpBM=";
+  vendorHash = "sha256-0aHBXN/Yd8hiZcowUUQy65vZI2rvLCHCk+QihjjtZrw=";
 
   patches = [
     # Disable automatic version check
@@ -26,10 +31,18 @@ buildGoModule rec {
     "cmd/subfinder/"
   ];
 
-  ldflags = [
-    "-w"
-    "-s"
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
+
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Subdomain discovery tool";
@@ -39,7 +52,7 @@ buildGoModule rec {
       useful for bug bounties and safe for penetration testing.
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
-    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${src.tag}";
+    changelog = "https://github.com/projectdiscovery/subfinder/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       fpletz
@@ -47,4 +60,4 @@ buildGoModule rec {
     ];
     mainProgram = "subfinder";
   };
-}
+})

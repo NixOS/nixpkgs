@@ -13,15 +13,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libks";
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = "libks";
-    tag = "v${version}";
-    hash = "sha256-oLf1ECSKa6KLTA8MO0le44eEDaLmPz/RHoLa8ZSwjWs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tPhGXDEAKgeODAcM6hu4GDU83A3Zi7sIMnTQkfCGlFc=";
   };
 
   patches = [
@@ -79,4 +79,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
   };
-}
+})

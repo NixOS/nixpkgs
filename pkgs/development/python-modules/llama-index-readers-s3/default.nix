@@ -3,26 +3,28 @@
   buildPythonPackage,
   fetchPypi,
   llama-index-core,
+  llama-index-embeddings-openai,
   llama-index-readers-file,
   hatchling,
   s3fs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-readers-s3";
-  version = "0.5.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_s3";
-    inherit version;
-    hash = "sha256-Ye+B4lcwdeaAisaIZH98X2n7FA7n9/gkVVNRN1uihys=";
+    inherit (finalAttrs) version;
+    hash = "sha256-CC3cO+/ns2USy2fif9gXzHYqoFRNa8RxH29gXFhktO8=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     llama-index-core
+    llama-index-embeddings-openai
     llama-index-readers-file
     s3fs
   ];
@@ -38,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

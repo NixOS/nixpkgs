@@ -177,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = with lib.maintainers; [
-      lovek323
       artturin
     ];
     teams = [ lib.teams.gnome ];

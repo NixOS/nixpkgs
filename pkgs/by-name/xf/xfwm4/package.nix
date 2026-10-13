@@ -10,12 +10,12 @@
   dbus-glib,
   libepoxy,
   gtk3,
-  libXdamage,
+  libxdamage,
   libstartup_notification,
   libxfce4ui,
   libxfce4util,
   libwnck,
-  libXpresent,
+  libxpresent,
   xfconf,
   gitUpdater,
 }:
@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-glib
     libepoxy
     gtk3
-    libXdamage
+    libxdamage
     libstartup_notification
     libxfce4ui
     libxfce4util
     libwnck
-    libXpresent
+    libxpresent
     xfconf
   ];
 

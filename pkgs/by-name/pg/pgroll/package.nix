@@ -3,24 +3,24 @@
   fetchFromGitHub,
   lib,
   libpg_query,
-  xxHash,
+  xxhash,
   testers,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "pgroll";
-  version = "0.16.0";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "xataio";
     repo = "pgroll";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xl6mJkJbZ+N/HjrUsknC1UFOM9GFtY4UYnabXvTwkAc=";
+    hash = "sha256-J5Q5GFw/t6/FRraO7v0vF+s58zJABhRHr2wpeNlLH3c=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-j78c7pROEiJVsE0e0hxbr+0uqOmGcBsK1U0F1upgWIw=";
+  vendorHash = "sha256-9s6+EXfo5+Tn3LVo/GMzj7DnczAR2NkiiKze1EcRH1Q=";
 
   excludedPackages = [
     "dev"
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     libpg_query
-    xxHash
+    xxhash
   ];
 
   ldflags = [

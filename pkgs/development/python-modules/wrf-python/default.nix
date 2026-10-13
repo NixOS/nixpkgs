@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "wrf-python";
-  version = "1.4.0";
+  version = "1.4.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "NCAR";
     repo = "wrf-python";
     tag = "v${version}";
-    hash = "sha256-LvNorZ28j/O8fs9z6jhYWC8RcCDIwh7k5iR9iumCvnQ=";
+    hash = "sha256-4k0HsWIthFdkXQ5ld65vEcUtR1vqwKuH08lgQdcDh2E=";
   };
 
   nativeBuildInputs = [ gfortran ];

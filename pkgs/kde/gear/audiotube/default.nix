@@ -1,5 +1,6 @@
 {
   mkKdeDerivation,
+  fetchpatch,
   qtdeclarative,
   qtmultimedia,
   qtsvg,

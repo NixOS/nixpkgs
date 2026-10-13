@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "passdetective";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "aydinnyunus";
     repo = "PassDetective";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ln+nKESCYNQwTB6njNQBNUGmF+NXqgzmM1sb/d6ZBcU=";
   };
 
@@ -22,15 +22,15 @@ buildGoModule rec {
     "-w"
     "-extldflags"
     "-static"
-    "-X=main.build=${version}"
+    "-X=main.build=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Scans command history to detect mistakenly written passwords, API keys, and secrets";
     homepage = "https://github.com/aydinnyunus/PassDetective";
-    changelog = "https://github.com/aydinnyunus/PassDetective/releases/tag/${version}";
+    changelog = "https://github.com/aydinnyunus/PassDetective/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "PassDetective";
   };
-}
+})

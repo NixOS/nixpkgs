@@ -9,7 +9,7 @@
   qt5,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "opcua-client-gui";
   version = "0.8.4";
   format = "setuptools";
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
     repo = "opcua-client-gui";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0BH1Txr3z4a7iFcsfnovmBUreXMvIX2zpZa8QivQVx8=";
   };
 
@@ -64,4 +64,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "opcua-client";
   };
-}
+})

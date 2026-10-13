@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoreconfHook,
   pkg-config,
+  expat,
   freetype,
   glib,
   imagemagick,
@@ -14,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libwmf";
-  version = "0.2.13";
+  version = "0.2.16";
 
   outputs = [
     "out"
@@ -24,11 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "caolanm";
     repo = "libwmf";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vffohx57OvQKu8DfNXNBm9bPsA8KgkQWs/3mmFn7L6M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cQY0DFG+S35G7vblbBxWMTWFp8WqnpNSvjohQSLzijU=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [
     zlib
     imagemagick
@@ -37,14 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libjpeg
     libxml2
+    expat
   ];
   enableParallelBuilding = true;
 
   meta = {
+    changelog = "https://github.com/caolanm/libwmf/blob/${finalAttrs.src.tag}/ChangeLog";
     description = "WMF library from wvWare";
     homepage = "https://wvware.sourceforge.net/libwmf.html";
     downloadPage = "https://github.com/caolanm/libwmf/releases";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };
 })

@@ -1,6 +1,5 @@
 {
   lib,
-  async-timeout,
   buildPythonPackage,
   coloredlogs,
   fetchFromGitHub,
@@ -11,29 +10,28 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   voluptuous,
   zigpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "zigpy-znp";
-  version = "0.14.3";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-znp";
-    tag = "v${version}";
-    hash = "sha256-XH/nStEGI7jmhwT5JhII4Mc+uO7B9Ur3s5MLvUOFl9c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+rTos8iSyS1b6iAHYbEbStwNH00XQP7SdCwAQBVNnYM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "timeout = 20" "timeout = 300" \
       --replace-fail ', "setuptools-git-versioning<2"' "" \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ setuptools ];
@@ -43,9 +41,6 @@ buildPythonPackage rec {
     jsonschema
     voluptuous
     zigpy
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
   ];
 
   nativeCheckInputs = [
@@ -70,9 +65,9 @@ buildPythonPackage rec {
   meta = {
     description = "Library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
-    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/v${version}";
+    changelog = "https://github.com/zigpy/zigpy-znp/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ mvnetbiz ];
     platforms = lib.platforms.linux;
   };
-}
+})

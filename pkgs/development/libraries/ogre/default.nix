@@ -18,13 +18,13 @@
   libGLU,
   libice,
   libsm,
-  libX11,
-  libXaw,
-  libXmu,
-  libXrandr,
-  libXrender,
-  libXt,
-  libXxf86vm,
+  libx11,
+  libxaw,
+  libxmu,
+  libxrandr,
+  libxrender,
+  libxt,
+  libxxf86vm,
   xorgproto,
   # optional
   withNvidiaCg ? false,
@@ -86,13 +86,13 @@ let
         libGLU
         libice
         libsm
-        libX11
-        libXaw
-        libXmu
-        libXrandr
-        libXrender
-        libXt
-        libXxf86vm
+        libx11
+        libxaw
+        libxmu
+        libxrandr
+        libxrender
+        libxt
+        libxxf86vm
         xorgproto
       ]
       ++ lib.optionals withNvidiaCg [
@@ -121,11 +121,11 @@ let
 in
 {
   ogre_14 = common {
-    version = "14.5.1";
-    hash = "sha256-UTjyOeDCZy+J9qkch1g1X/6x5/K2+1MWJ2v7r0trZqY=";
-    # https://github.com/OGRECave/ogre/blob/v14.5.1/Components/Overlay/CMakeLists.txt
-    imguiVersion = "1.91.9b";
-    imguiHash = "sha256-dkukDP0HD8CHC2ds0kmqy7KiGIh4148hMCyA1QF3IMo=";
+    version = "14.6.0";
+    hash = "sha256-dgMSn3kwgcToAhFDWRfL+E8zz/4rF4qqc7lCSiyeV68=";
+    # https://github.com/OGRECave/ogre/blob/v14.6.0/Components/Overlay/CMakeLists.txt
+    imguiVersion = "1.92.9b";
+    imguiHash = "sha256-IjW+qddzKu9jOj3QCGhkChVK2UOvwl493ffUIIn/ZVQ=";
   };
 
   ogre_13 = common {

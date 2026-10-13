@@ -1,0 +1,29 @@
+diff --git a/lib/mbedtls/library/ssl_tls13_keys.c b/lib/mbedtls/library/ssl_tls13_keys.c
+index dbc703a6c124961cfe38973ed4a0cae4867ba870..51afb044ccf3892bd0d69ec06b1f0ab0d15c287d 100644
+--- a/lib/mbedtls/library/ssl_tls13_keys.c
++++ b/lib/mbedtls/library/ssl_tls13_keys.c
+@@ -80,7 +80,8 @@ struct mbedtls_ssl_tls13_labels_struct const mbedtls_ssl_tls13_labels =
+  *            the HkdfLabel structure on success.
+  */
+ 
+-static const char tls13_label_prefix[6] = "tls13 ";
++/* We need to tell the compiler that we meant to leave out the null character. */
++static const char tls13_label_prefix[6] __attribute__ ((nonstring)) = "tls13 ";
+ 
+ #define SSL_TLS1_3_KEY_SCHEDULE_HKDF_LABEL_LEN(label_len, context_len) \
+     (2                     /* expansion length           */ \
+diff --git a/lib/mbedtls/library/ssl_tls13_keys.h b/lib/mbedtls/library/ssl_tls13_keys.h
+index 14f6e4876c64b7562eef7de589f92c1fd84b190a..f6d02b522a5e3f4a6f6802ae7655dee07218f8d1 100644
+--- a/lib/mbedtls/library/ssl_tls13_keys.h
++++ b/lib/mbedtls/library/ssl_tls13_keys.h
+@@ -40,8 +40,9 @@
+ 
+ #if defined(MBEDTLS_SSL_PROTO_TLS1_3)
+ 
++/* We need to tell the compiler that we meant to leave out the null character. */
+ #define MBEDTLS_SSL_TLS1_3_LABEL(name, string)       \
+-    const unsigned char name    [sizeof(string) - 1];
++    const unsigned char name    [sizeof(string) - 1] __attribute__ ((nonstring));
+ 
+ union mbedtls_ssl_tls13_labels_union {
+     MBEDTLS_SSL_TLS1_3_LABEL_LIST

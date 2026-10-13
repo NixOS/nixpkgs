@@ -2,9 +2,12 @@
   lib,
   stdenv,
   fetchzip,
+  autoPatchelfHook,
+  makeBinaryWrapper,
+  jq,
   dotnet-runtime,
   zlib,
-  runtimeShell,
+  libzen,
 }:
 
 stdenv.mkDerivation {
@@ -17,20 +20,35 @@ stdenv.mkDerivation {
     stripRoot = false;
   };
 
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeBinaryWrapper
+    jq
+  ];
+
+  buildInputs = [
+    zlib
+    libzen
+    stdenv.cc.cc.lib
+  ];
+
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/share/avdump3 $out/bin
     mv * $out/share/avdump3
-    cat > $out/bin/avdump3 <<EOF
-    #!${runtimeShell}
-    export LD_LIBRARY_PATH="${lib.makeLibraryPath [ zlib ]}:\$LD_LIBRARY_PATH"
-    exec ${dotnet-runtime}/bin/dotnet $out/share/avdump3/AVDump3CL.dll "\$@"
-    EOF
-    chmod +x $out/bin/avdump3
+
+    # The app targets net6.0, which is EOL. Allow roll-forward to whatever
+    # major version dotnet-runtime provides.
+    jq '.runtimeOptions.rollForward = "major"' \
+      $out/share/avdump3/AVDump3CL.runtimeconfig.json > tmp.json
+    mv tmp.json $out/share/avdump3/AVDump3CL.runtimeconfig.json
+
+    makeBinaryWrapper ${dotnet-runtime}/bin/dotnet $out/bin/avdump3 \
+      --add-flags $out/share/avdump3/AVDump3CL.dll
+
     runHook postInstall
   '';
-
-  dontPatchELF = true;
 
   meta = {
     mainProgram = "avdump3";

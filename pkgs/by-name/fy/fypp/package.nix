@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "fypp";
   version = "3.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aradi";
     repo = "fypp";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-MgGVlOqOIrIVoDfBMVpFLT26mhYndxans2hfo/+jdoA=";
   };
 
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Python powered Fortran preprocessor";
     mainProgram = "fypp";
     homepage = "https://github.com/aradi/fypp";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

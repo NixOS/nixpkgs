@@ -8,7 +8,7 @@
   unixtools,
 }:
 let
-  version = "0.29.0";
+  version = "0.31.0";
 in
 buildGoModule {
   pname = "step-cli";
@@ -18,7 +18,7 @@ buildGoModule {
     owner = "smallstep";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-JUJeW9/m3fTaDfUublFDSQ3R5gT6Xvn97c5VokBvZ30=";
+    hash = "sha256-v8insc/+vnc4JVNeHeF3UU+rYdNtMeQkdWxVc+vq7ms=";
     # this file change depending on git branch status (via .gitattributes)
     # https://github.com/NixOS/nixpkgs/issues/84312
     postFetch = ''
@@ -39,7 +39,7 @@ buildGoModule {
     patchShebangs integration/openssl-jwt.sh
   '';
 
-  vendorHash = "sha256-0ZnuqyB2/fgfADCvYHj2o4PFwf0Btn6+GouXCPqzKmk=";
+  vendorHash = "sha256-UNrUy0aWl7w5SmlsxLpmx6WxI2AElHE6llAMLRLi0r0=";
 
   nativeBuildInputs = [ installShellFiles ];
   nativeCheckInputs = [

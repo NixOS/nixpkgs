@@ -7,19 +7,21 @@
   dataDir ? "/var/lib/pixelfed",
   runtimeDir ? "/run/pixelfed",
 }:
-
-php.buildComposerProject2 (finalAttrs: {
+let
+  php' = php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ffi ]));
+in
+php'.buildComposerProject2 (finalAttrs: {
   pname = "pixelfed";
-  version = "0.12.6";
+  version = "0.12.9";
 
   src = fetchFromGitHub {
     owner = "pixelfed";
     repo = "pixelfed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FxJWoFNyIGQ6o9g2Q0/jaBMyeH8UnbTgha2goHAurvY=";
+    hash = "sha256-eWNpoCyKK7vDx4kCKsZhieMyZhTDC9FS6gVqLKPzviQ=";
   };
 
-  vendorHash = "sha256-4x+vvkQUhqxBwm+9Lx7n6Ww6qvfLwqd8IXXCuCSAijE=";
+  vendorHash = "sha256-A7uHuE+9tfNMxtHhZL5+hsnW3qkJaPeKW119xB32qRM=";
 
   postInstall = ''
     chmod -R u+w $out/share

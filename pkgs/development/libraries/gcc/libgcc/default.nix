@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
         options.h \
         insn-constants.h \
   ''
-  + lib.optionalString stdenv.targetPlatform.isM68k ''
+  + lib.optionalString (stdenv.targetPlatform.isM68k || stdenv.targetPlatform.isSh4) ''
     sysroot-suffix.h \
   ''
   + lib.optionalString stdenv.targetPlatform.isAarch32 ''
@@ -151,4 +151,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}"/* "$out/lib"
     ln -s "$dev/lib/gcc/${stdenv.hostPlatform.config}/${finalAttrs.version}/include"/* "$dev/include/"
   '';
+
+  __structuredAttrs = true;
 })

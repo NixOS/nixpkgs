@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kondo";
   version = "0.9";
 
   src = fetchFromGitHub {
     owner = "tbillington";
     repo = "kondo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lbj1usgwfp7IiCNPtmHSHvX3ARGY5UpJYT89U3+kTuk=";
   };
 
@@ -34,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "kondo";
   };
-}
+})

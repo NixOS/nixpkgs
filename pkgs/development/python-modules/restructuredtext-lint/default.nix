@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "restructuredtext-lint";
-  version = "1.4.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "restructuredtext_lint";
     inherit version;
-    hash = "sha256-GyNcDJIjQatsUwOQiS656S+QubdQRgY+BHys+w8FDEU=";
+    hash = "sha256-3SUgm54Lcmkp2DBjOfr3I3NKMTfbOCvPJylPoYprxSs=";
   };
 
   nativeBuildInputs = [ setuptools ];

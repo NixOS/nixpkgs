@@ -602,7 +602,7 @@ in
       ++ lib.optionals (cfg.settings.console.tokenFile != null) [
         ''
           if [ ! -e "${cfg.settings.console.tokenFile}" ]; then
-            ${lib.getExe cscli} console enroll "$(cat ${cfg.settings.console.tokenFile})" --name ${cfg.name}
+            ${lib.getExe cscli} console enroll "$(${lib.getExe' pkgs.coreutils "cat"} ${cfg.settings.console.tokenFile})" --name ${cfg.name}
           fi
         ''
       ];
@@ -825,6 +825,7 @@ in
             RestrictSUIDSGID = true;
             ExecReload = [
               " " # This is needed to clear the ExecReload definitions from upstream
+              "${lib.getExe' pkgs.util-linux "kill"} -HUP $MAINPID"
             ];
             ExecStart = [
               " " # This is needed to clear the ExecStart definitions from upstream

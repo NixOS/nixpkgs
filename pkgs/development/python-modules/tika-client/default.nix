@@ -5,18 +5,20 @@
   anyio,
   hatchling,
   httpx,
+  niquests,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "tika-client";
-  version = "0.10.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "tika-client";
     tag = version;
-    hash = "sha256-XYyMp+02lWzE+3Txr+shVGVwalLEJHvoy988tA7SWgY=";
+    hash = "sha256-ZXtNHjdbAzur6lRZIom+wDMhXgpqQxvHPQMxjXJDwlw=";
   };
 
   build-system = [ hatchling ];
@@ -25,6 +27,12 @@ buildPythonPackage rec {
     anyio
     httpx
   ];
+
+  optional-dependencies = {
+    httpx = [ httpx ];
+    niquests = [ niquests ];
+    requests = [ requests ];
+  };
 
   pythonImportsCheck = [ "tika_client" ];
 

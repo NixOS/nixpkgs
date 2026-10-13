@@ -13,15 +13,14 @@
   freetype,
   lcms2,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXext,
-  libXpresent,
-  libXrandr,
+  libx11,
+  libxscrnsaver,
+  libxext,
+  libxpresent,
+  libxrandr,
   libarchive,
   libass,
   libbluray,
-  libbs2b,
   libcaca,
   libcdio,
   libcdio-paranoia,
@@ -37,7 +36,7 @@
   libva,
   libvdpau,
   libxkbcommon,
-  lua,
+  lua5_2_compat,
   makeBinaryWrapper,
   libgbm,
   meson,
@@ -45,7 +44,7 @@
   ninja,
   nixosTests,
   nv-codec-headers-11,
-  openalSoft,
+  openal-soft,
   pipewire,
   pkg-config,
   python3,
@@ -66,7 +65,6 @@
   alsaSupport ? stdenv.hostPlatform.isLinux,
   archiveSupport ? true,
   bluraySupport ? true,
-  bs2bSupport ? true,
   cacaSupport ? true,
   cddaSupport ? false,
   cmsSupport ? true,
@@ -92,6 +90,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -130,14 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
     ''
   ];
 
-  # Ensure we reference 'lib' (not 'out') of Swift.
-  # TODO: Remove this once the Swift wrapper doesn’t include these.
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
-  '';
-
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
+    (lib.mesonOption "sysconfdir" "/etc")
     (lib.mesonBool "libmpv" true)
     (lib.mesonEnable "manpage-build" true)
     (lib.mesonEnable "cdda" cddaSupport)
@@ -179,7 +173,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals archiveSupport [ libarchive ]
   ++ lib.optionals bluraySupport [ libbluray ]
-  ++ lib.optionals bs2bSupport [ libbs2b ]
   ++ lib.optionals cacaSupport [ libcaca ]
   ++ lib.optionals cddaSupport [
     libcdio
@@ -197,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals jackaudioSupport [ libjack2 ]
   ++ lib.optionals javascriptSupport [ mujs ]
-  ++ lib.optionals openalSupport [ openalSoft ]
+  ++ lib.optionals openalSupport [ openal-soft ]
   ++ lib.optionals pipewireSupport [ pipewire ]
   ++ lib.optionals pulseSupport [ libpulseaudio ]
   ++ lib.optionals rubberbandSupport [ rubberband ]
@@ -217,31 +210,20 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
   ]
   ++ lib.optionals x11Support [
-    libX11
-    libXext
+    libx11
+    libxext
     libGL
-    libXrandr
-    libXpresent
-    libXScrnSaver
+    libxrandr
+    libxpresent
+    libxscrnsaver
   ]
   ++ lib.optionals zimgSupport [ zimg ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
-
-  # https://github.com/mpv-player/mpv/issues/15591#issuecomment-2764797522
-  # In file included from ../player/clipboard/clipboard-mac.m:19:
-  # ./osdep/mac/swift.h:270:9: fatal error: '.../app_bridge_objc-1.pch' file not found
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
-    NIX_SWIFTFLAGS_COMPILE = "-disable-bridging-pch";
-  };
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
     python3 TOOLS/osxbundle.py -s build/mpv
     popd
-  '';
-
-  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    (allow mach-lookup (global-name "com.apple.coreservices.launchservicesd"))
   '';
 
   postInstall = ''
@@ -286,6 +268,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   doInstallCheck = true;
 
+  # On macOS, mpv --version initializes the full Cocoa app framework and
+  # connects to the window server, which hangs in a headless build environment
+  dontVersionCheck = stdenv.hostPlatform.isDarwin;
+
   passthru = {
     inherit
       # The wrapper consults luaEnv and lua.version
@@ -298,10 +284,6 @@ stdenv.mkDerivation (finalAttrs: {
       vapoursynthSupport
       vapoursynth
       ;
-
-    # Should be removed in the future. These can't be added to `pkgs/top-level/aliases.nix`.
-    scripts = throw "'mpv-unwrapped.scripts' has been removed. Please use 'mpvScripts' instead."; # Added 2025-12-29
-    wrapper = throw "'mpv-unwrapped.wrapper' has been removed. Please use 'mpv.override' instead."; # Added 2025-12-29
 
     tests = {
       inherit (nixosTests) mpv;

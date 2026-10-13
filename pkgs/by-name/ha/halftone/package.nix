@@ -14,14 +14,14 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "halftone";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "tfuxu";
     repo = "halftone";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-5hT6ulmUlOrFVL4nV0tfvgkKdYGusp+1rBINQy3ZvpI=";
   };
 
@@ -61,4 +61,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

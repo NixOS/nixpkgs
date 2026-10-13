@@ -1,77 +1,88 @@
 {
   lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  gcc-unwrapped,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  protobuf,
+  openssl,
   zlib,
+  stdenv,
+  installShellFiles,
+  testers,
+  buildPackages,
 }:
 
-let
-  system = stdenv.hostPlatform.system;
-
-  platform =
-    {
-      x86_64-linux = "linux-amd64";
-      aarch64-linux = "linux-aarch64";
-      x86_64-darwin = "macos-amd64";
-      aarch64-darwin = "macos-aarch64";
-    }
-    .${system} or (throw "Unsupported system: ${system}");
-
-  packageHashes = {
-    x86_64-linux = "sha256-B+LKXK7DFakiFNdanaqMeGxnfxoEI4caNtxnyZEcWgQ=";
-    aarch64-linux = "sha256-FMYIO1miEulnz9logtXxau2mIuR1zS8oCG04DMx0HyQ=";
-    x86_64-darwin = "sha256-I3Z1QqIu0iJBZWq6fUWouGfTYzNr/wj+0UFfq0wSy4Y=";
-    aarch64-darwin = "sha256-AL1TUJO5jSNhjfZ/rLo9Do22oqVhpLqiRdGnvVaqvog=";
-  };
-
-  packageHash = packageHashes.${system} or (throw "Unsupported system: ${system}");
-in
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fermyon-spin";
-  version = "3.5.1";
+  version = "4.2.2";
 
-  # Use fetchurl rather than fetchzip as these tarballs are built by the project
-  # and not by GitHub (and thus are stable) - this simplifies the update script
-  # by allowing it to use the output of `nix store prefetch-file`.
-  src = fetchurl {
-    url = "https://github.com/spinframework/spin/releases/download/v${finalAttrs.version}/spin-v${finalAttrs.version}-${platform}.tar.gz";
-    hash = packageHash;
+  src = fetchFromGitHub {
+    owner = "spinframework";
+    repo = "spin";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3FskZe64sWorAm6B4Hqln43HrTDl2os5CcpQIy3FFYg=";
   };
 
-  sourceRoot = ".";
+  cargoHash = "sha256-eBtHRTIDROM3r2zhyIcp1jaj2TmJ3akYeRRMwZ6B0AM=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+    installShellFiles
   ];
 
   buildInputs = [
-    gcc-unwrapped.lib
+    openssl
     zlib
   ];
 
-  installPhase = ''
-    runHook preInstall
+  env = {
+    # Spin's build.rs attempts to run rustup to compile wasm test fixtures unless disabled
+    BUILD_SPIN_EXAMPLES = "0";
 
-    mkdir -p $out/bin
-    cp ./spin $out/bin
+    # The update bot handles this automatically. For doing it manually:
+    # curl -s https://api.github.com/repos/spinframework/spin/commits/v${finalAttrs.version} | jq '{ sha: .sha[0:8], date: .commit.committer.date[0:10], ts: .commit.committer.date }'
+    VERGEN_GIT_SHA = "7ca44bed";
+    VERGEN_GIT_COMMIT_DATE = "2026-10-05";
+    VERGEN_GIT_COMMIT_TIMESTAMP = "2026-10-05T23:27:44Z";
+    VERGEN_GIT_BRANCH = "main";
+  }
+  // lib.optionalAttrs (stdenv.hostPlatform.isMusl && stdenv.buildPlatform.isLinux) {
+    # cc-rs erroneously passes -static to host C builds when CARGO_CFG_TARGET_FEATURE contains
+    # crt-static. This supplies static glibc so libsql-sqlite3-parser can link its build-time rlemon tool.
+    HOST_CFLAGS = "-L${buildPackages.glibc.static}/lib";
 
-    runHook postInstall
+    # GCC's static libstdc++.a lacks PIC relocations on x86_64, which breaks rustc's default static-pie linking.
+    "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_RUSTFLAGS" =
+      "-C relocation-model=static -C link-arg=-no-pie";
+  };
+
+  # Integration tests require network access, container engines, or wasm32-* compilation targets
+  doCheck = false;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd spin \
+      --bash <(COMPLETE=bash $out/bin/spin) \
+      --fish <(COMPLETE=fish $out/bin/spin) \
+      --zsh <(COMPLETE=zsh $out/bin/spin)
   '';
 
   passthru = {
-    inherit packageHashes; # needed by updateScript
-    updateScript = ./update.py;
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+    };
+    updateScript = ./update.sh;
   };
 
   meta = {
     description = "Framework for building, deploying, and running fast, secure, and composable cloud microservices with WebAssembly";
     homepage = "https://github.com/spinframework/spin";
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/spinframework/spin/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     mainProgram = "spin";
-    maintainers = [ ];
-    platforms = builtins.attrNames packageHashes;
+    maintainers = with lib.maintainers; [ aliheidary1381 ];
+    platforms = lib.platforms.unix;
   };
 })

@@ -10,33 +10,24 @@
 buildHomeAssistantComponent rec {
   owner = "AlexxIT";
   domain = "yandex_station";
-  version = "3.20.1";
+  version = "3.22.1";
 
   src = fetchFromGitHub {
     owner = "AlexxIT";
     repo = "YandexStation";
     tag = "v${version}";
-    hash = "sha256-AP0GAJrGZq2z0HlsARfhVZiv7yaeOKg05GjV95ljVdU=";
+    hash = "sha256-EzW+nyFTTjCsx8RBg9c193GAIRJivwrw96keSdVRIX0=";
   };
 
   dependencies = [
     zeroconf
   ];
 
-  disabledTests = [
-    # 'µg/m³' vs 'μg/m³'
-    "test_sensor_qingping"
-  ];
-
-  disabledTestPaths = [
-    # this test seems to be broken
-    "tests/test_local.py::test_track"
-  ];
   nativeCheckInputs = [
     home-assistant
     pytestCheckHook
   ]
-  ++ (home-assistant.getPackages "stream" home-assistant.python.pkgs);
+  ++ (home-assistant.getPackages "stream" home-assistant.python3Packages);
 
   meta = {
     changelog = "https://github.com/AlexxIT/YandexStation/releases/tag/${src.tag}";

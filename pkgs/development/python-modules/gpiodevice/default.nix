@@ -6,7 +6,7 @@
   fetchFromGitHub,
   hatchling,
   hatch-fancy-pypi-readme,
-  libgpiod,
+  gpiod,
   mock,
 }:
 buildPythonPackage (finalAttrs: {
@@ -27,7 +27,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
-    libgpiod
+    gpiod
   ];
 
   nativeCheckInputs = [

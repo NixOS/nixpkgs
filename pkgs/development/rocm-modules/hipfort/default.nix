@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
@@ -11,65 +10,60 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "7.1.1";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipfort";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-IVLhp8rYtKhkt8K8Mc0qyrp670oKoK0QeclnJjO36pY=";
+    tag = "rocm-${finalAttrs.version}";
+    hash = "sha256-XaB4jauCN41tgD1YHHA2td/yckwfMBemBe/iL0SCxQo=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "hipfort-fix-cmake-4.patch";
-      url = "https://github.com/ROCm/hipfort/commit/75552c7ec48e3bd6a914c57c9475ec573ccb37d9.patch";
-      hash = "sha256-S9r1V6cUo9QbKbu/NK4wIvXMV6BFv7+/n9mjCScVk40=";
-      includes = [ "bin/*" ];
-    })
-  ];
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    rocm-cmake
     gfortran
   ];
 
+  buildInputs = [
+    rocm-cmake
+  ];
+
   cmakeFlags = [
-    "-DHIPFORT_COMPILER=${gfortran}/bin/gfortran"
-    "-DHIPFORT_AR=${gfortran.cc}/bin/gcc-ar"
-    "-DHIPFORT_RANLIB=${gfortran.cc}/bin/gcc-ranlib"
+    (lib.cmakeFeature "HIPFORT_COMPILER" "${gfortran}/bin/gfortran")
+    (lib.cmakeFeature "HIPFORT_AR" "${gfortran.cc}/bin/gcc-ar")
+    (lib.cmakeFeature "HIPFORT_RANLIB" "${gfortran.cc}/bin/gcc-ranlib")
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ];
 
   postPatch = ''
     patchShebangs bin
 
     substituteInPlace bin/hipfc bin/mymcpu \
-      --replace "/bin/cat" "cat"
+      --replace-fail "/bin/cat" "cat"
 
     substituteInPlace bin/CMakeLists.txt \
-      --replace "/bin/mkdir" "mkdir" \
-      --replace "/bin/cp" "cp" \
-      --replace "/bin/sed" "sed" \
-      --replace "/bin/chmod" "chmod" \
-      --replace "/bin/ln" "ln"
+      --replace-fail "/bin/mkdir" "mkdir" \
+      --replace-fail "/bin/cp" "cp" \
+      --replace-fail "/bin/sed" "sed" \
+      --replace-fail "/bin/chmod" "chmod" \
+      --replace-fail "/bin/ln" "ln"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Fortran interfaces for ROCm libraries";
     homepage = "https://github.com/ROCm/hipfort";
-    license = with lib.licenses; [ mit ]; # mitx11
+    changelog = "https://github.com/ROCm/hipfort/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit; # mitx11
+    mainProgram = "hipfc";
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

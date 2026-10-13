@@ -8,14 +8,14 @@
   gtk4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "image-roll";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "weclaw1";
     repo = "image-roll";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-CC40TU38bJFnbJl2EHqeB9RBvbVUrBmRdZVS2GxqGu4=";
   };
 
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  libgcrypt,
   curl,
   gnutls,
   pkg-config,
@@ -24,12 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libgcrypt
     curl
     gnutls
     libiconv
     libintl
   ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Disabled because the tests can time-out.
   doCheck = false;
+
+  __structuredAttrs = true;
 
   meta =
 

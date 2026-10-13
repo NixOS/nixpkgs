@@ -6,7 +6,7 @@
   perl,
   pkg-config,
   pam,
-  libHX,
+  libhx,
   libxml2,
   pcre2,
   openssl,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     cryptsetup
-    libHX
+    libhx
     libxml2
     openssl
     pam

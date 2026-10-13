@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rman";
   version = "3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/polyglotman/${version}/rman-${version}.tar.gz";
+    url = "mirror://sourceforge/polyglotman/${finalAttrs.version}/rman-${finalAttrs.version}.tar.gz";
     sha256 = "0prdld6nbkdlkcgc2r1zp13h2fh8r0mlwxx423dnc695ddlk18b8";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "rman";
   };
-}
+})

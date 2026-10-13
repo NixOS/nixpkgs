@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   colorama,
   pytest,
@@ -9,22 +8,17 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-resource-path";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yukihiko-shinoda";
     repo = "pytest-resource-path";
-    tag = "v${version}";
-    hash = "sha256-9OBO9b02RrXilXUucerQQMTaQIRXtbcKCHqwwp9tBto=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Y/mB5Gmkt3Rt8rRBOFZrWIREnpEiSxf/MChqymXDNws=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -42,4 +36,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

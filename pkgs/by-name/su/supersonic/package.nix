@@ -19,21 +19,20 @@
   libxkbcommon,
   libglvnd,
   mpv-unwrapped,
-  waylandSupport ? false,
 }:
 
-buildGoModule rec {
-  pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
-  version = "0.20.1";
+buildGoModule (finalAttrs: {
+  pname = "supersonic";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
-    owner = "dweymouth";
+    owner = "supersonic-app";
     repo = "supersonic";
-    tag = "v${version}";
-    hash = "sha256-q9g59TVo8Y7cKdSnyrsTQEIpB+f/+pcaobBFynnAgwY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cK5iFVvu7aGtxQXdFN13EWHoxfC1CPIUqLglfdMq+Ww=";
   };
 
-  vendorHash = "sha256-x8eq1ZGitBoq+N1QOIYLZRLIta3gbfpn2xZsqkj4cGo=";
+  vendorHash = "sha256-2mbWUaHB+jJkuwYrZ0xqrl5Ndj4Kuh07t1LSz66SWO8=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -43,8 +42,7 @@ buildGoModule rec {
     desktopToDarwinBundle
   ];
 
-  # go-glfw doesn't support both X11 and Wayland in single build
-  tags = [ "migrated_fynedo" ] ++ lib.optionals waylandSupport [ "wayland" ];
+  tags = [ "migrated_fynedo" ];
 
   buildInputs = [
     libglvnd
@@ -53,15 +51,11 @@ buildGoModule rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxxf86vm
     libx11
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
     libxrandr
     libxinerama
     libxcursor
     libxi
     libxext
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
     wayland
     wayland-protocols
     libxkbcommon
@@ -71,21 +65,18 @@ buildGoModule rec {
     for dimension in 128 256 512;do
         dimensions=''${dimension}x''${dimension}
         mkdir -p $out/share/icons/hicolor/$dimensions/apps
-        cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${meta.mainProgram}.png
+        cp res/appicon-$dimension.png $out/share/icons/hicolor/$dimensions/apps/${finalAttrs.meta.mainProgram}.png
     done
-  ''
-  + lib.optionalString waylandSupport ''
-    mv $out/bin/supersonic $out/bin/${meta.mainProgram}
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = meta.mainProgram;
-      exec = meta.mainProgram;
-      icon = meta.mainProgram;
-      desktopName = "Supersonic" + lib.optionalString waylandSupport " (Wayland)";
+      name = finalAttrs.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
+      icon = finalAttrs.meta.mainProgram;
+      desktopName = "Supersonic";
       genericName = "Subsonic Client";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       type = "Application";
       categories = [
         "Audio"
@@ -95,11 +86,11 @@ buildGoModule rec {
   ];
 
   meta = {
-    mainProgram = "supersonic" + lib.optionalString waylandSupport "-wayland";
+    mainProgram = "supersonic";
     description = "Lightweight cross-platform desktop client for Subsonic music servers";
     homepage = "https://github.com/dweymouth/supersonic";
-    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${src.tag}";
-    platforms = lib.platforms.linux ++ lib.optionals (!waylandSupport) lib.platforms.darwin;
+    changelog = "https://github.com/dweymouth/supersonic/releases/tag/${finalAttrs.src.tag}";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       zane
@@ -107,4 +98,4 @@ buildGoModule rec {
       toasteruwu
     ];
   };
-}
+})

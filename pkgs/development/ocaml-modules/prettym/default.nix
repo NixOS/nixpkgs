@@ -12,12 +12,12 @@
   ptime,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "prettym";
   version = "0.0.3";
 
   src = fetchurl {
-    url = "https://github.com/dinosaure/prettym/releases/download/${version}/prettym-${version}.tbz";
+    url = "https://github.com/dinosaure/prettym/releases/download/${finalAttrs.version}/prettym-${finalAttrs.version}.tbz";
     hash = "sha256-kXDxoRref02YpYSlvlK7a5FBX5ccbnWJQzG0axi5jwk=";
   };
 
@@ -45,4 +45,4 @@ buildDunePackage rec {
     homepage = "https://github.com/dinosaure/prettym";
     maintainers = [ ];
   };
-}
+})

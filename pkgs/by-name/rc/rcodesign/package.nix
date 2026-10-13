@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcodesign";
   version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "indygreg";
     repo = "apple-platform-rs";
-    tag = "apple-codesign/${version}";
+    tag = "apple-codesign/${finalAttrs.version}";
     hash = "sha256-NyO0HkldXh94Y16E+SX1VE/OOx0zgO6VYoRLJrEQUm0=";
   };
 
@@ -70,8 +70,8 @@ rustPlatform.buildRustPackage rec {
       For more information, refer to the [documentation](https://gregoryszorc.com/docs/apple-codesign/stable/apple_codesign_rcodesign.html).
     '';
     homepage = "https://github.com/indygreg/apple-platform-rs";
-    changelog = "https://github.com/indygreg/apple-platform-rs/releases/tag/apple-codesign%2F${version}";
+    changelog = "https://github.com/indygreg/apple-platform-rs/releases/tag/apple-codesign%2F${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ euank ];
   };
-}
+})

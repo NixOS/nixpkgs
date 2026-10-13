@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "globalping-cli";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "jsdelivr";
     repo = "globalping-cli";
-    rev = "v${version}";
-    hash = "sha256-muWhiKqPdNVhy7c7MSRHACGzOn5pIVRdqSdfdCJw2CA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mzfskgv9w5jMNvALpvLTgCzHhcexyaZUnrLQi76z2gE=";
   };
 
-  vendorHash = "sha256-dJAuN5srL5EvMaRg8rHaTsurjYrdH45p965DeubpB0E=";
+  vendorHash = "sha256-HFgWH6kcCv3voyiWkcaNiK3NvnQlgop9DLC1o0xeSN0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -68,4 +68,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ xyenon ];
     mainProgram = "globalping";
   };
-}
+})

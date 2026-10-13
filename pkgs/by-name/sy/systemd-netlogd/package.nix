@@ -11,7 +11,6 @@
   pkg-config,
   pkgsCross,
   sphinx,
-  systemd,
   systemdLibs,
   testers,
   opensslSupport ? true,
@@ -88,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "systemd-netlogd";
-    inherit (systemd.meta) platforms;
+    inherit (systemdLibs.meta) platforms;
   };
 })

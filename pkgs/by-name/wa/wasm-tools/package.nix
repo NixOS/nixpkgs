@@ -2,24 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasm-tools";
-  version = "1.244.0";
+  version = "1.260.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasm-tools";
-    tag = "v${version}";
-    hash = "sha256-XZ3X+KTfiYdUP4jMlkjDpapTOGBucgTmmQoOzizPG+s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-yn8YTJXhpdzxPKv8ZELosky1BHzPjSxXd+jcxkJ3MEU=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
 
-  cargoHash = "sha256-D/oz2Ow+MehQKdiP1/2Vb7BBDt1hib6tgoL1ulWWGHU=";
+  cargoHash = "sha256-IJtoerutDHew59XR4XHv2Vxfrbvj9wdd/DNx5yp4Vo8=";
   cargoBuildFlags = [
     "--package"
     "wasm-tools"
@@ -28,13 +30,18 @@ rustPlatform.buildRustPackage rec {
     "--workspace"
     "--exclude"
     "wit-dylib"
-  ]
-  ++
-    # Due to https://github.com/bytecodealliance/wasm-tools/issues/1820
-    [
-      "--"
-      "--test-threads=1"
-    ];
+  ];
+
+  useNextest = true;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd wasm-tools \
+      --bash <($out/bin/wasm-tools completion bash) \
+      --fish <($out/bin/wasm-tools completion fish) \
+      --zsh <($out/bin/wasm-tools completion zsh)
+  '';
 
   meta = {
     description = "Low level tooling for WebAssembly in Rust";
@@ -43,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ereslibre ];
     mainProgram = "wasm-tools";
   };
-}
+})

@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-sort-derives";
-  version = "0.12.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "lusingander";
     repo = "cargo-sort-derives";
-    tag = "v${version}";
-    hash = "sha256-91sfRTMcI2/MyTrv+uJmhqfL4KUAc6//yzRR9FxvPHo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AOoltabANFWxaI0jeAR+XNk4qn6y2UujGWNFbNakfoo=";
   };
 
-  cargoHash = "sha256-kQTAYBb/xhrfO3PSJvnZrZKr6B3fgtlElf1mNCSf7eg=";
+  cargoHash = "sha256-Mwgscv6VrrVBArV05V+xGmaWuWqvr3kG8QZYO5S+vOE=";
 
   meta = {
     description = "Cargo subcommand to sort derive attributes";
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sebimarkgraf ];
   };
-}
+})

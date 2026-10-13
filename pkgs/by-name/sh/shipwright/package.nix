@@ -25,6 +25,7 @@
   nlohmann_json,
   tinyxml-2,
   spdlog,
+  stb,
   writeTextFile,
   fixDarwinDylibNames,
   applyPatches,
@@ -34,8 +35,9 @@
   libogg,
   libvorbis,
   bzip2,
-  libX11,
+  libx11,
   sdl_gamecontrollerdb,
+  fetchpatch,
 }:
 
 let
@@ -83,12 +85,6 @@ let
     '';
   };
 
-  stb' = fetchurl {
-    name = "stb_image.h";
-    url = "https://raw.githubusercontent.com/nothings/stb/0bc88af4de5fb022db643c2d8e549a0927749354/stb_image.h";
-    hash = "sha256-xUsVponmofMsdeLsI6+kQuPg436JS3PBl00IZ5sg3Vw=";
-  };
-
   stormlib' = applyPatches {
     src = fetchFromGitHub {
       owner = "ladislav-zezula";
@@ -117,12 +113,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "9.1.2";
+  version = "9.2.3";
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-kFi5yo+CGH67NU7haDAbzWCURzsUYMlRzx66XGvh0a0=";
+    hash = "sha256-jTKhvyFaP59+T85CI7IteMABggOt6WVvQJ1vbSz1ops=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -137,6 +133,16 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./darwin-fixes.patch
     ./disable-downloading-stb_image.patch
+
+    # Fix building with gcc16
+    # Remove after 9.2.3
+    (fetchpatch {
+      name = "libultraship-fix-gcc16.patch";
+      url = "https://github.com/Kenix3/libultraship/commit/42ecb8ed48e4b15c21fe2e0d7e34cb5c02efa23d.patch";
+      stripLen = 1;
+      extraPrefix = "libultraship/";
+      hash = "sha256-LuaYeBdYf+pzRxUhZfFup4/r6oYzWi0YpAZzW1SR8Wk=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -172,7 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
     libvorbis
     bzip2
-    libX11
+    libx11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -208,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     mkdir stb
-    cp ${stb'} ./stb/${stb'.name}
+    cp ${stb}/include/stb/stb_image.h ./stb/stb_image.h
     cp ${stb_impl} ./stb/${stb_impl.name}
     substituteInPlace libultraship/cmake/dependencies/common.cmake \
       --replace-fail "\''${STB_DIR}" "$(readlink -f ./stb)"
@@ -239,7 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/bin
       ln -s $out/lib/soh.elf $out/bin/soh
-      install -Dm644 ../soh/macosx/sohIcon.png $out/share/pixmaps/soh.png
+      install -Dm644 ../soh/macosx/sohIcon.png $out/share/icons/soh.png
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Recreate the macOS bundle (without using cpack)

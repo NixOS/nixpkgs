@@ -7,18 +7,18 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "enpass-cli";
-  version = "1.7.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "HazCod";
     repo = "enpass-cli";
-    tag = "v${version}";
-    hash = "sha256-SloFiV+tmdjiHjeS/SsDMLZ9gjNB/EOmgexMXpu253I=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cVPPBuluUvPnPAlF+OEMYOOTSdPGbJmI1iSRlYqveFQ=";
   };
 
-  vendorHash = "sha256-S02hHPA7WSAMLELhfD+2cmsbhxsCiXdPbikU/GGubPc=";
+  vendorHash = "sha256-U9tnzok21yCFPDZprsvqq0NaO07qPS0L+IgVtF2hpvM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -44,4 +44,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ deej-io ];
     platforms = lib.platforms.unix;
   };
-}
+})

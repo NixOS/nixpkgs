@@ -13,15 +13,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kraft";
-  version = "0.12.5";
+  version = "0.12.16";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
-    rev = "v${version}";
-    hash = "sha256-/ReHXxvn/6dDJVxk5BOvxSZrlkDkZEfr+qM5raf2a3A=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rk6FXPEtBkVzGDbjaiASg8FNYgJBXqYDiZ/TcBSgUok=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildGoModule rec {
     yajl
   ];
 
-  vendorHash = "sha256-1rdpyOJVeyzYT0WHJbeqO3aH15FN1/9iQ9bEsjWwn4c=";
+  vendorHash = "sha256-CNyBwJJIg0C1QE//BH+XaGHjSKCnslvi2Zu8JgqBEls=";
 
   ldflags = [
     "-s"
@@ -47,7 +47,7 @@ buildGoModule rec {
     "-X kraftkit.sh/internal/cli/kraft.sentryDsn="
     "-X kraftkit.sh/internal/version.buildTime=1970-01-01T00:00:00Z"
     "-X kraftkit.sh/internal/version.commit=nixpkgs"
-    "-X kraftkit.sh/internal/version.version=${version}"
+    "-X kraftkit.sh/internal/version.version=${finalAttrs.version}"
   ];
 
   tags = [
@@ -101,9 +101,8 @@ buildGoModule rec {
     homepage = "https://github.com/unikraft/kraftkit";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      dit7ya
       cloudripper
     ];
     mainProgram = "kraft";
   };
-}
+})

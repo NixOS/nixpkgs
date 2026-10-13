@@ -1,27 +1,41 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -85,7 +85,7 @@
- 	set(DLIB_USE_MKL_FFT OFF)
- 	set(DLIB_USE_FFMPEG OFF)
- 	set(CMAKE_CXX_STANDARD 17) # dlib must be compiled with C++17
--	FetchContent_MakeAvailable(dlib)
-+	add_subdirectory(dlib)
- 	set(CMAKE_CXX_STANDARD 20) # continue with C++20	
+@@ -75,7 +75,7 @@
+ 		set(DLIB_USE_MKL_FFT OFF)
+ 		set(DLIB_USE_FFMPEG OFF)
+ 		set(CMAKE_CXX_STANDARD 17) # dlib must be compiled with C++17
+-		FetchContent_MakeAvailable(dlib)
++		add_subdirectory(dlib)
+ 		set(CMAKE_CXX_STANDARD 20) # continue with C++20
+ 	endif()
  	add_compile_definitions("DLIB_AVAILABLE")
+@@ -106,7 +106,6 @@
+ 		thread_pool
+ 		GIT_REPOSITORY https://github.com/bshoshany/thread-pool
+ 	)
+-	FetchContent_MakeAvailable(thread_pool)
+ 	set(BS_THREAD_POOL_INCLUDE_DIR ${thread_pool_SOURCE_DIR}/include)
  endif()
-@@ -105,8 +105,9 @@
- 	GIT_REPOSITORY https://github.com/klytje/gcem
- )
  
--FetchContent_MakeAvailable(thread_pool GCEM backward)
--include_directories(${thread_pool_SOURCE_DIR}/include ${gcem_SOURCE_DIR}/include ${backward_SOURCE_DIR})
+@@ -121,7 +120,6 @@
+ 		gcem
+ 		GIT_REPOSITORY https://github.com/klytje/gcem
+ 	)
+-	FetchContent_MakeAvailable(GCEM)
+ 	set(GCEM_INCLUDE_DIR ${gcem_SOURCE_DIR}/include)
+ endif()
+ 
+@@ -131,7 +129,9 @@
+ )
+ unset(compile_options)
+ 
+-include_directories(${BS_THREAD_POOL_INCLUDE_DIR} ${GCEM_INCLUDE_DIR} ${BACKWARD_INCLUDE_DIR})
++include_directories(${BACKWARD_INCLUDE_DIR})
 +add_subdirectory(gcem)
-+add_subdirectory(backward)
-+include_directories(thread_pool/include gcem/include backward)
++include_directories(thread_pool/include gcem/include)
  
  ############################################
  ##           Find and link CURL           ##
-
 --- a/executable/gui/CMakeLists.txt
 +++ b/executable/gui/CMakeLists.txt
 @@ -6,7 +6,9 @@
@@ -35,20 +49,3 @@
  
  # set the path to the elements root & module path
  set(ELEMENTS_ROOT "${elements_SOURCE_DIR}")
-
---- a/tests/CMakeLists.txt
-+++ b/tests/CMakeLists.txt
-@@ -18,10 +18,10 @@
- 	GIT_TAG 914aeecfe23b1e16af6ea675a4fb5dbd5a5b8d0a
- 	GIT_PROGRESS TRUE
- )
--FetchContent_MakeAvailable(Catch2)
-+add_subdirectory(${CMAKE_SOURCE_DIR}/catch2 catch2_build)
-
- # make the tests available through CTest
--list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/catch2/extras)
- include(CTest)
- include(Catch)
-
- 

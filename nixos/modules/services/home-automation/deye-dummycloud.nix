@@ -37,7 +37,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         WorkingDirectory = "${pkgs.deye-dummycloud}/lib/node_modules/deye-dummycloud";
-        ExecStart = "${pkgs.nodejs}/bin/node app.js";
+        ExecStart = "${pkgs.lib.getExe pkgs.nodejs-slim} app.js";
         Restart = "always";
         User = "deye-dummycloud";
         DynamicUser = true;

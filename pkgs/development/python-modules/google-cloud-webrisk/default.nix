@@ -14,16 +14,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-webrisk";
-  version = "1.20.0";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_webrisk";
     inherit (finalAttrs) version;
-    hash = "sha256-XjzgGju4J1oUnYPoX1DiW16Z1/4WCQh/cMqxRKhNpZ8=";
+    hash = "sha256-jowNu8MYpDCZyavpD2RUSm5HkkuxUrDO3NOOYO8y5rM=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pokeget-rs";
   version = "1.6.7";
 
   src = fetchFromGitHub {
     owner = "talwat";
     repo = "pokeget-rs";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-kvfGtdWVeEvaKxIDs5aCZk/HBXxB67PukXHz2VvLhdw=";
     fetchSubmodules = true;
   };
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pokeget";
     maintainers = with lib.maintainers; [ aleksana ];
   };
-}
+})

@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "mpd-mpris";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "natsukagami";
     repo = "mpd-mpris";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-w8OH34JW++OYLpNIHfQvc45dFyU/wVWVa+vEwWb8VqU=";
+    hash = "sha256-EOZiOFBe5j1WsrJLj8++QsgNUZR44M6ae40KKl2Qac8=";
   };
 
   vendorHash = "sha256-ugJEw02jSsfObljDaup31zoQlf2HvwDRUljD7lp7Ys4=";

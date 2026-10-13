@@ -45,17 +45,21 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.35.1";
+  version = "0.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
     tag = "v${version}";
-    hash = "sha256-VZXf1YCIFtzuBWaeYG3A+AyqnMEAKEI2nStjuPJ8ZTk=";
+    hash = "sha256-FyXQJh4i/m9lAD2Sz45YWc+KIFMA+xQLb3ErudO9voY=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "safetensors"
+  ];
 
   dependencies = [
     filelock

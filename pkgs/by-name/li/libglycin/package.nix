@@ -15,6 +15,7 @@
   glib,
   gobject-introspection,
   glycin-loaders,
+  glycin-thumbnailer,
   libglycin-gtk4,
   fontconfig,
   libseccomp,
@@ -22,8 +23,6 @@
   gnome,
   replaceVars,
   bubblewrap,
-  jq,
-  moreutils,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -33,7 +32,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "2.0.7";
+  version = "2.1.5";
 
   outputs = [
     "out"
@@ -45,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
-    hash = "sha256-xBasKbbT7NxnuQwVU3uhKTzrevlvoQHK5nt9HTflCrA=";
+    hash = "sha256-bAl1fukGMwpgtnBXU6pWvKAHrSGblebjU3UQ1BvDQcg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UVVVjMt4vWkLob0H/MxIaW6rkBSFImu+5dezaCnc3Q8=";
+    hash = "sha256-6vCucnT3xPWSm3TSi3WzgJdiiBFHvGMpab4d53OfThg=";
   };
 
   nativeBuildInputs = [
@@ -96,12 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       build-aux/crates-version.py
+    substituteInPlace libglycin/meson.build --replace-fail \
+      "cargo_output = cargo_target_dir / rust_target" \
+      "cargo_output = cargo_target_dir / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target"
   '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
+  strictDeps = true;
 
   passthru = {
     updateScript =
@@ -140,14 +146,15 @@ stdenv.mkDerivation (finalAttrs: {
         (
           replaceVars ./patch-vendor-hook.sh {
             bwrap = "${bubblewrap}/bin/bwrap";
-            jq = "${jq}/bin/jq";
-            sponge = "${moreutils}/bin/sponge";
+            jq = "${buildPackages.jq}/bin/jq";
+            sponge = "${buildPackages.moreutils}/bin/sponge";
           }
         );
 
     tests = {
       inherit
         glycin-loaders
+        glycin-thumbnailer
         libglycin-gtk4
         ;
     };
@@ -157,15 +164,17 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sandboxed and extendable image loading library";
     homepage = "https://gitlab.gnome.org/GNOME/glycin";
     changelog = "https://gitlab.gnome.org/GNOME/glycin/-/tags/${finalAttrs.version}";
-    license = with lib.licenses; [
-      mpl20 # or
-      lgpl21Plus
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mpl20
+        lgpl21Plus
+      ];
     maintainers = [ ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "glycin-1"
+      "glycin-2"
     ];
   };
 })

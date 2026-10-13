@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "parametrize-from-file";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "parametrize_from_file";
-    hash = "sha256-t4WLNDkC/ErBnOGK6FoYIfjoL/zF9MxPThJtGM1nUL4=";
+    hash = "sha256-keKsnkMyk9du7TGvJhZXP2EpLqOKkz8vxrRzWXyGg0U=";
   };
 
   # patch out coveralls since it doesn't provide us value

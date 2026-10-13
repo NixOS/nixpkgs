@@ -4,7 +4,7 @@
   fetchFromGitLab,
   sane-backends,
   sane-frontends,
-  libX11,
+  libx11,
   gtk2,
   pkg-config,
   libpng,
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-oOg94nUsT9LLKnHocY0S5g02Y9a1UazzZAjpEI/s+yM=";
   };
 
-  # add all fedora patchs. fix gcc-14 build among other things
+  # add all fedora patches. fix gcc-14 build among other things
   # https://src.fedoraproject.org/rpms/xsane/tree/main
   patches =
     let
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb-compat-0_1
     sane-backends
     sane-frontends
-    libX11
+    libx11
     gtk2
   ]
   ++ lib.optional gimpSupport gimp;

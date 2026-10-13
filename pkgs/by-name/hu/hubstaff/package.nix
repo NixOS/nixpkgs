@@ -4,24 +4,24 @@
   fetchurl,
   unzip,
   makeWrapper,
-  libX11,
+  libx11,
   zlib,
   libsm,
   libice,
-  libXext,
+  libxext,
   freetype,
-  libXrender,
+  libxrender,
   fontconfig,
-  libXft,
-  libXinerama,
-  libXcursor,
+  libxft,
+  libxinerama,
+  libxcursor,
   cairo,
-  libXfixes,
-  libXScrnSaver,
+  libxfixes,
+  libxscrnsaver,
   libnotify,
   glib,
   gtk3,
-  libappindicator-gtk3,
+  libappindicator,
   curl,
   writeShellScript,
   common-updater-scripts,
@@ -36,25 +36,25 @@ let
   sha256 = "sha256:0cv6b5rx1bjizwa22xlzmljwgcvm1mqyng79qqrdzmd0xy7c02pi";
 
   rpath = lib.makeLibraryPath [
-    libX11
+    libx11
     zlib
     libsm
     libice
-    libXext
+    libxext
     freetype
-    libXrender
+    libxrender
     fontconfig
-    libXft
-    libXinerama
+    libxft
+    libxinerama
     stdenv.cc.cc
     libnotify
     glib
     gtk3
-    libappindicator-gtk3
+    libappindicator
     curl
-    libXfixes
-    libXScrnSaver
-    libXcursor
+    libxfixes
+    libxscrnsaver
+    libxcursor
     cairo
   ];
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
       name = "netsoft-com.netsoft.hubstaff";
       desktopName = "Hubstaff";
       exec = "HubstaffClient";
-      icon = "hubstaff";
+      icon = "hubstaff-color";
       comment = "Time tracking software";
       categories = [
         "Office"
@@ -119,6 +119,13 @@ stdenv.mkDerivation {
 
     # Why is this needed? SEGV otherwise.
     ln -s $opt/data/resources $opt/x86_64/resources
+
+    # Link icons to the standard directory
+    for dir in $opt/data/resources/hicolor/[0-9]*x[0-9]*; do
+      size=$(basename "$dir")
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      ln -s $dir/apps/hubstaff-color.png $out/share/icons/hicolor/$size/apps/hubstaff-color.png
+    done
     runHook postInstall
   '';
 

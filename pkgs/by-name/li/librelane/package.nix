@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
 
   # nativeBuildInputs
   makeWrapper,
@@ -22,14 +23,15 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "librelane";
-  version = "3.0.0.dev49";
+  version = "3.0.14";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "librelane";
     repo = "librelane";
     tag = finalAttrs.version;
-    hash = "sha256-g6bQMg9W0gbvJzVvO4ESeAtswbBoUVY3NXLK4UdOcGs=";
+    hash = "sha256-/ZzATYRi9JH6YyFWnI4lLkQ2/e2B0xa7WEI65a/ArJI=";
   };
 
   build-system = [
@@ -42,6 +44,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "click"
+    # librelane pins ciel<3; only Family.by_name/get_ciel_home/fetch()
+    # (unchanged in ciel 3.0.0) are used, so the pin is safe to relax.
+    "ciel"
   ];
 
   dependencies = with python3Packages; [
@@ -65,8 +70,13 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postInstall = ''
-    cp -r librelane/scripts $out/${python3Packages.python.sitePackages}/librelane/
-    cp -r librelane/examples $out/${python3Packages.python.sitePackages}/librelane/
+    # Create the site-packages subdirectory for librelane
+    dest="$out/${python3Packages.python.sitePackages}/librelane"
+    mkdir -p "$dest"
+
+    # Copy scripts and examples from the source into the installation
+    cp -r librelane/scripts "$dest/"
+    cp -r librelane/examples "$dest/"
   '';
 
   postFixup = ''
@@ -85,6 +95,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
         ]
       }
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^([0-9.]+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "ASIC implementation flow infrastructure";

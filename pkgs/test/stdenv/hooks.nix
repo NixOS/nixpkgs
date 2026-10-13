@@ -1,5 +1,6 @@
 {
-  bootstrapTools,
+  initialBash,
+  initialPath,
   stdenv,
   pkgs,
   lib,
@@ -29,13 +30,13 @@
         [[ -e $out/share/man/small-man.1.gz ]]
       '';
     };
-  # test based on bootstrapTools to minimize rebuilds
+  # test based on stage0 to minimize rebuilds
   make-symlinks-relative =
     (derivation {
       name = "test-make-symlinks-relative";
       system = stdenv.system;
-      builder = "${bootstrapTools}/bin/bash";
-      initialPath = "${bootstrapTools}";
+      builder = "${initialBash}/bin/bash";
+      inherit initialPath;
       outputs = [
         "out"
         "out2"

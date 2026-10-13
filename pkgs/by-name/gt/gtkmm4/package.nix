@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtkmm";
-  version = "4.20.0";
+  version = "4.22.0";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor finalAttrs.version}/gtkmm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2q2b+bcPkJdfkXgfx6ZWySOpE3QmH1dsiDzTrr1ZyDM=";
+    hash = "sha256-LoohtLByX2IOM6ruDNND7RIbUzJ1tjKJZhmxyJ6W3mc=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Tests require fontconfig.
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ ];
   };
 
@@ -89,9 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
       There's extensive documentation, including API reference and a
       tutorial.
     '';
-    homepage = "https://gtkmm.org/";
+    homepage = "https://gitlab.gnome.org/GNOME/gtkmm";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.unix;
   };

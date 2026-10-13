@@ -6,12 +6,12 @@
   jre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "riemann";
   version = "0.3.12";
 
   src = fetchurl {
-    url = "https://github.com/riemann/riemann/releases/download/${version}/riemann-${version}.tar.bz2";
+    url = "https://github.com/riemann/riemann/releases/download/${finalAttrs.version}/riemann-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-gsJMfLo7zpaVfyVmHznGFiomK6dq7yTphuc9vyp5t6Y=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ crimeminister ];
   };
-}
+})

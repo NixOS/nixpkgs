@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thud";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "donovanglover";
     repo = "thud";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-BmrJaZ1IKXjx4/QkBDZyXvTTaalfEOKsBp9ZCW8px7I=";
   };
 
@@ -44,4 +44,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "thud";
   };
-}
+})

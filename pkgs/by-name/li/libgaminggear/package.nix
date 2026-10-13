@@ -9,19 +9,18 @@
   gtk2,
   libcanberra,
   libnotify,
-  pcre,
   sqlite,
   libxdmcp,
   libpthread-stubs,
   harfbuzz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgaminggear";
   version = "0.15.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libgaminggear/libgaminggear-${version}.tar.bz2";
+    url = "mirror://sourceforge/libgaminggear/libgaminggear-${finalAttrs.version}.tar.bz2";
     sha256 = "0jf5i1iv8j842imgiixbhwcr6qcwa93m27lzr6gb01ri5v35kggz";
   };
 
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
     gtk2
     libcanberra
     libnotify
-    pcre
     sqlite
     libxdmcp
     libpthread-stubs
@@ -73,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

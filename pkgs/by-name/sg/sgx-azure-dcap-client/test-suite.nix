@@ -11,7 +11,11 @@ sgx-azure-dcap-client.overrideAttrs (old: {
   ];
 
   patches = (old.patches or [ ]) ++ [
+    # Missing `#include <array>`
     ./tests-missing-includes.patch
+
+    # gtest no longer supports c++14. Use c++17.
+    ./tests-cpp-version.patch
   ];
 
   buildFlags = [

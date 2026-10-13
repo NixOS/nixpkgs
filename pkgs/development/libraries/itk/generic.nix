@@ -21,7 +21,7 @@
   libminc,
   libtiff,
   libpng,
-  libX11,
+  libx11,
   libuuid,
   patchelf,
   python ? null,
@@ -150,14 +150,14 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libuuid
   ]
   ++ lib.optionals (lib.versionAtLeast version "5.4") [ eigen ]
   ++ lib.optionals enablePython [ python ]
   ++ lib.optionals withVtk [ vtk ];
   # Due to ITKVtkGlue=ON and the additional dependencies needed to configure VTK 9
-  # (specifically libGL and libX11 on Linux),
+  # (specifically libGL and libx11 on Linux),
   # it's now seemingly necessary for packages that configure ITK to
   # also include configuration deps of VTK, even if VTK is not required or available.
   # These deps were propagated from VTK 9 in https://github.com/NixOS/nixpkgs/pull/206935,
@@ -189,7 +189,7 @@ stdenv.mkDerivation {
 
   # remove forbidden reference to /build which occur when building the Python wrapping
   # (also remove a copy of itkTestDriver with incorrect permissions/RPATH):
-  preFixup = lib.optionals enablePython ''
+  preFixup = lib.optionalString enablePython ''
     rm $out/${python.sitePackages}/itk/itkTestDriver
     find $out/${python.sitePackages}/itk -type f -name '*.so*' -exec \
       patchelf {} --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" \;

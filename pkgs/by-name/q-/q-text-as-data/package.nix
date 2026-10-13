@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "q-text-as-data";
   version = "2.0.19";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "harelba";
     repo = "q";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "18cwyfjgxxavclyd08bmb943c8bvzp1gnqp4klkq5xlgqwivr4sv";
   };
 
@@ -47,4 +47,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "q";
   };
-}
+})

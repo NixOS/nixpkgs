@@ -12,6 +12,7 @@
   # build-system
   hatch-jupyter-builder,
   hatchling,
+  jupyter-builder,
   jupyterlab,
 
   # dependencies
@@ -23,18 +24,20 @@
   # tests
   pytest-jupyter,
   pytestCheckHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "notebook";
-  version = "7.5.0";
+  version = "7.6.3";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "notebook";
-    tag = "v${version}";
-    hash = "sha256-EKfe3uqIwb+kKmSuU7aIinNj1nkRaBvg3liV6RiR3xc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-77OGrJWMpeM4M+rsJMmBcBDDIO1Xsk+/PHflfMQnkWM=";
   };
 
   postPatch = ''
@@ -51,15 +54,15 @@ buildPythonPackage rec {
   ];
 
   missingHashes = ./missing-hashes.json;
-
   offlineCache = yarn-berry_3.fetchYarnBerryDeps {
-    inherit src missingHashes;
-    hash = "sha256-ILDTRK5NJ33T30YRTT3/g1mIE2sI8spGPwMsWyQ5UTc=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-6Ujcy5g7f+tqe8skHG9RznvsA7+kXocVQccMgQB60Xg=";
   };
 
   build-system = [
     hatch-jupyter-builder
     hatchling
+    jupyter-builder
     jupyterlab
   ];
 
@@ -74,6 +77,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-jupyter
     pytestCheckHook
+    versionCheckHook
   ];
 
   pytestFlags = [
@@ -81,6 +85,7 @@ buildPythonPackage rec {
   ];
 
   env = {
+    CI = 1; # quiet lerna progress bar
     JUPYTER_PLATFORM_DIRS = 1;
   };
 
@@ -88,11 +93,11 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/jupyter/notebook/blob/${src.tag}/CHANGELOG.md";
     description = "Web-based notebook environment for interactive computing";
     homepage = "https://github.com/jupyter/notebook";
+    changelog = "https://github.com/jupyter/notebook/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
     mainProgram = "jupyter-notebook";
   };
-}
+})

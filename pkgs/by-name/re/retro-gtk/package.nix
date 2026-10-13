@@ -16,12 +16,12 @@
   gtk-doc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "retro-gtk";
   version = "1.0.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/retro-gtk/${lib.versions.majorMinor version}/retro-gtk-${version}.tar.xz";
+    url = "mirror://gnome/sources/retro-gtk/${lib.versions.majorMinor finalAttrs.version}/retro-gtk-${finalAttrs.version}.tar.xz";
     sha256 = "1lnb7dwcj3lrrvdzd85dxwrlid28xf4qdbrgfjyg1wn1z6sv063i";
   };
 
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/retro-gtk.x86_64-darwin
   };
-}
+})

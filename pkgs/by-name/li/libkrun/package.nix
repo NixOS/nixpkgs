@@ -7,11 +7,13 @@
   pkg-config,
   glibc,
   openssl,
+  libcap_ng,
   libepoxy,
   libdrm,
   pipewire,
   virglrenderer,
   libkrunfw,
+  nix-update-script,
   rustc,
   withBlk ? false,
   withNet ? false,
@@ -33,13 +35,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun" + lib.optionalString (variant != null) "-${variant}";
-  version = "1.17.0";
+  version = "1.19.5";
 
   src = fetchFromGitHub {
-    owner = "containers";
+    owner = "libkrun";
     repo = "libkrun";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6HBSL5Zu29sDoEbZeQ6AsNIXUcqXVVGMk0AR2X6v1yU=";
+    hash = "sha256-VUV9zlegS4IIJI0fbzkxc6Lz5jvr3S3n4nEnVgF3YMQ=";
   };
 
   outputs = [
@@ -49,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-UIzbtBJH6aivoIxko1Wxdod/jUN44pERX9Hd+v7TC3Q=";
+    hash = "sha256-lLdeTZbDQEp+e2urEmsVOzQG0KTNicv/31DFhYeFxFo=";
   };
 
   # Make sure libkrunfw can be found by dlopen()
@@ -65,11 +67,19 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     rustPlatform.bindgenHook
     cargo
+    pkg-config
     rustc
-  ]
-  ++ lib.optional (variant == "sev" || variant == "tdx" || withGpu) pkg-config;
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isRiscV64 [
+    # https://github.com/libkrun/libkrun/commit/d4bb6e0
+    # Fix riscv64 non-TEE memory region setup
+    # Remove in next release (Not included in 1.19.4)
+    ./riscv64-non-tee-memory.patch
+  ];
 
   buildInputs = [
+    libcap_ng
     libkrunfw'
     glibc
     glibc.static
@@ -102,9 +112,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.OPENSSL_NO_VENDOR = true;
 
+  passthru.updateScript = nix-update-script {
+    attrPath = "libkrun";
+  };
+
   meta = {
     description = "Dynamic library providing Virtualization-based process isolation capabilities";
-    homepage = "https://github.com/containers/libkrun";
+    homepage = "https://github.com/libkrun/libkrun";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nickcao

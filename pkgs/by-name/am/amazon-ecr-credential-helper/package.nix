@@ -6,15 +6,15 @@
   amazon-ecr-credential-helper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amazon-ecr-credential-helper";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-ecr-credential-helper";
-    tag = "v${version}";
-    sha256 = "sha256-rsAhDX10eGnmWy6HYoIWn1k64yiC3AcWjCDancBe/VA=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-tx5aaz4b4IlXYpHPnMtaZLLLM4UnJnKqYd/zUOgwruc=";
   };
 
   vendorHash = null;
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/awslabs/amazon-ecr-credential-helper/ecr-login/version.Version=${version}"
+    "-X github.com/awslabs/amazon-ecr-credential-helper/ecr-login/version.Version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
@@ -39,4 +39,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "docker-credential-ecr-login";
   };
-}
+})

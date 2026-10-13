@@ -11,20 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "1.1.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
     tag = finalAttrs.version;
-    hash = "sha256-sSGoF2c5HfPM2FBrBJwJ9NvExYijGx6JH1bJp3epfe0=";
+    hash = "sha256-tUAHkCEteyFqF9XKQ7TLzYLU11Iy89Wlp251tI1w+Zw=";
   };
 
-  cargoHash = "sha256-9XbrIY1VwnHtqi/ZfS952SyjNjA/TJRdOqCsPReZI8o=";
-
-  patches = [
-    ./remove-install-paths.patch
-  ];
+  cargoHash = "sha256-9SGNhP0ccr5Spiz5B6rfnYMGGR7Q5fDivL2EZuwKwkU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,14 +30,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace speakersafetyd.service \
-      --replace-fail "User=speakersafetyd" \
-                     "" \
       --replace-fail "/usr" \
                      "$out"
 
     substituteInPlace Makefile \
       --replace-fail "target/release" \
-                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
   installFlags = [
@@ -50,7 +44,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "UNITDIR=lib/systemd/system"
     "UDEVDIR=lib/udev/rules.d"
     "SHAREDIR=share"
-    "TMPFILESDIR=lib/tmpfiles.d"
   ];
 
   dontCargoInstall = true;
@@ -68,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       flokli
       yuka
     ];
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 })

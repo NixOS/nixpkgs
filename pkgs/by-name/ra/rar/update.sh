@@ -72,6 +72,5 @@ fi
 
 updateHash "$latestVersion" x64 linux x86_64-linux
 updateHash "$latestVersion" arm macos aarch64-darwin
-updateHash "$latestVersion" x64 macos x86_64-darwin
 
 updateVersion "$latestVersion"

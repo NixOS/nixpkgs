@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "spf-engine";
   version = "3.1.0";
   pyproject = true;
 
   src = fetchurl {
-    url = "https://launchpad.net/spf-engine/${lib.versions.majorMinor version}/${version}/+download/spf-engine-${version}.tar.gz";
+    url = "https://launchpad.net/spf-engine/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.version}/+download/spf-engine-${finalAttrs.version}.tar.gz";
     hash = "sha256-HUuMxYFCqItLFgMSnrkwfmJWqgFGyI1RWgmljb+jkWk=";
   };
 
@@ -37,4 +37,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ ];
     license = lib.licenses.asl20;
   };
-}
+})

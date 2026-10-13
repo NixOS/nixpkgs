@@ -5,7 +5,7 @@
   lib,
   libice,
   libsm,
-  libX11,
+  libx11,
   stdenv,
   writeText,
 }:
@@ -58,10 +58,19 @@
           prependToVar dotnetRuntimeDeps \
             "${lib.getLib libice}" \
             "${lib.getLib libsm}" \
-            "${lib.getLib libX11}"
+            "${lib.getLib libx11}"
         '';
       }
     );
+
+  "Avalonia.BuildServices" =
+    package:
+    package.overrideAttrs (old: {
+      postPatch = ''
+        shopt -s extglob
+        rm -rf !(*.nuspec)
+      '';
+    });
 
   "SkiaSharp.NativeAssets.Linux" =
     package:
@@ -70,7 +79,10 @@
       lib.optionalAttrs stdenv.hostPlatform.isLinux {
         nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ autoPatchelfHook ];
 
-        buildInputs = old.buildInputs or [ ] ++ [ fontconfig ];
+        buildInputs =
+          old.buildInputs or [ ]
+          ++ [ fontconfig ]
+          ++ lib.optional (lib.versionAtLeast old.version "4") (lib.getLib stdenv.cc.cc);
 
         preInstall = old.preInstall or "" + ''
           cd runtimes

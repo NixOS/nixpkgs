@@ -4,9 +4,9 @@
   fetchFromGitHub,
   fontconfig,
   gpgme,
-  libX11,
-  libXinerama,
-  libXft,
+  libx11,
+  libxinerama,
+  libxft,
   pkg-config,
   zlib,
   writeText,
@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     libassuan
     libconfig
     libgpg-error
-    libX11
-    libXinerama
-    libXft
+    libx11
+    libxinerama
+    libxft
   ];
 
   preConfigure = ''

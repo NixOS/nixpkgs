@@ -10,14 +10,14 @@
   enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxsmm";
   version = "1.17";
 
   src = fetchFromGitHub {
     owner = "libxsmm";
     repo = "libxsmm";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-s/NEFU4IwQPLyPLwMmrrpMDd73q22Sk2BNid/kedawY=";
   };
 
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ chessai ];
   };
-}
+})

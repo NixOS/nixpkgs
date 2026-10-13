@@ -7,12 +7,12 @@
   poppler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poppler-data";
   version = "0.4.12";
 
   src = fetchurl {
-    url = "https://poppler.freedesktop.org/poppler-data-${version}.tar.gz";
+    url = "https://poppler.freedesktop.org/poppler-data-${finalAttrs.version}.tar.gz";
     sha256 = "yDW2QKQM41fhuDZmqr2V7f+iTd3dSbja/2OtuFHNq3Q=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free; # more free licenses combined
     inherit (poppler.meta) teams maintainers;
   };
-}
+})

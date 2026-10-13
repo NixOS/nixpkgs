@@ -9,16 +9,15 @@
   gcc,
   makeWrapper,
 }:
-let
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustlings";
   version = "6.5.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rustlings";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dUQIzNPxmKbhew9VjFIW7bY0D1IkuJ5+hRY2/CwmYhY=";
   };
 
@@ -55,4 +54,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "rustlings";
   };
-}
+})

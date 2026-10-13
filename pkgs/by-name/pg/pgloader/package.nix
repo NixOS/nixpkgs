@@ -5,7 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
-  sbcl,
+  sbcl_2_4_6,
   sqlite,
   freetds,
   libzip,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    sbcl
+    sbcl_2_4_6
     cacert
     sqlite
     sphinx

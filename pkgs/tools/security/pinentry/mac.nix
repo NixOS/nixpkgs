@@ -7,9 +7,9 @@
   libgpg-error,
   makeBinaryWrapper,
   texinfo,
-  xcbuild,
   common-updater-scripts,
   writers,
+  re-plistbuddy,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,9 +28,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gettext-0.25.patch
-
-    # Fix the build with xcbuild’s inferior `PlistBuddy(8)`.
-    ./fix-with-xcbuild-plistbuddy.patch
   ];
 
   # use pregenerated nib files because generating them requires XCode
@@ -40,6 +37,8 @@ stdenv.mkDerivation rec {
     chmod -R u+w macosx/*.nib
     # pinentry_mac requires updated macros to correctly detect v2 API support in libassuan 3.x.
     cp '${lib.getDev libassuan}/share/aclocal/libassuan.m4' m4/libassuan.m4
+    substituteInPlace macosx/copyInfoPlist.sh \
+      --replace-fail "/usr/libexec/PlistBuddy" "PlistBuddy"
   '';
 
   strictDeps = true;
@@ -47,9 +46,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     makeBinaryWrapper
     texinfo
-
-    # for `PlistBuddy(8)`
-    xcbuild
+    re-plistbuddy
   ];
 
   configureFlags = [

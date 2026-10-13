@@ -1,42 +1,3 @@
-diff --git a/panels/color/cc-color-panel.c b/panels/color/cc-color-panel.c
-index a2f90b093..7801b4a5e 100644
---- a/panels/color/cc-color-panel.c
-+++ b/panels/color/cc-color-panel.c
-@@ -587,7 +587,7 @@ gcm_prefs_calibrate_cb (CcColorPanel *prefs)
- 
-   /* run with modal set */
-   argv = g_ptr_array_new_with_free_func (g_free);
--  g_ptr_array_add (argv, g_strdup ("gcm-calibrate"));
-+  g_ptr_array_add (argv, g_build_filename ("@gcm@", "bin", "gcm-calibrate", NULL));
-   g_ptr_array_add (argv, g_strdup ("--device"));
-   g_ptr_array_add (argv, g_strdup (cd_device_get_id (prefs->current_device)));
-   g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -940,7 +940,7 @@ gcm_prefs_profile_view (CcColorPanel *prefs, CdProfile *profile)
- 
-   /* open up gcm-viewer as a info pane */
-   argv = g_ptr_array_new_with_free_func (g_free);
--  g_ptr_array_add (argv, g_strdup ("gcm-viewer"));
-+  g_ptr_array_add (argv, g_build_filename ("@gcm@", "bin", "gcm-viewer", NULL));
-   g_ptr_array_add (argv, g_strdup ("--profile"));
-   g_ptr_array_add (argv, g_strdup (cd_profile_get_id (profile)));
-   g_ptr_array_add (argv, g_strdup ("--parent-window"));
-@@ -1186,15 +1186,12 @@ gcm_prefs_device_clicked (CcColorPanel *prefs, CdDevice *device)
- static void
- gcm_prefs_profile_clicked (CcColorPanel *prefs, CdProfile *profile, CdDevice *device)
- {
--  g_autofree gchar *s = NULL;
--
-   /* get profile */
-   g_debug ("selected profile = %s",
-      cd_profile_get_filename (profile));
- 
-   /* allow getting profile info */
--  if (cd_profile_get_filename (profile) != NULL &&
--      (s = g_find_program_in_path ("gcm-viewer")) != NULL)
-+  if (cd_profile_get_filename (profile) != NULL)
-     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, TRUE);
-   else
-     gtk_widget_set_sensitive (prefs->toolbutton_profile_view, FALSE);
 diff --git a/panels/datetime/tz.h b/panels/datetime/tz.h
 index b6b7ab9d0..31f268e91 100644
 --- a/panels/datetime/tz.h
@@ -76,32 +37,6 @@ index 25cda02d3..db664bc56 100644
                              &contents,
                              &length,
                              &error))
-diff --git a/panels/keyboard/cc-input-list-box.c b/panels/keyboard/cc-input-list-box.c
-index 191207490..37e0fddc2 100644
---- a/panels/keyboard/cc-input-list-box.c
-+++ b/panels/keyboard/cc-input-list-box.c
-@@ -62,7 +62,7 @@ struct _CcInputListBox {
- };
- 
- G_DEFINE_TYPE (CcInputListBox, cc_input_list_box, GTK_TYPE_LIST_BOX)
-- 
-+
- typedef struct
- {
-   CcInputListBox *panel;
-@@ -223,10 +223,10 @@ row_layout_cb (CcInputListBox *self,
-   layout_variant = cc_input_source_get_layout_variant (source);
- 
-   if (layout_variant && layout_variant[0])
--    commandline = g_strdup_printf ("gkbd-keyboard-display -l \"%s\t%s\"",
-+    commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l \"%s\t%s\"",
- 				   layout, layout_variant);
-   else
--    commandline = g_strdup_printf ("gkbd-keyboard-display -l %s",
-+    commandline = g_strdup_printf ("@libgnomekbd@/bin/gkbd-keyboard-display -l %s",
- 				   layout);
- 
-   g_spawn_command_line_async (commandline, NULL);
 diff --git a/panels/network/connection-editor/net-connection-editor.c b/panels/network/connection-editor/net-connection-editor.c
 index 505b8ee25..62e94009f 100644
 --- a/panels/network/connection-editor/net-connection-editor.c

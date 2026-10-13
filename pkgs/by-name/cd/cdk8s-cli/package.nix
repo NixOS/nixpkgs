@@ -12,18 +12,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdk8s-cli";
-  version = "2.204.5";
+  version = "2.207.64";
 
   src = fetchFromGitHub {
     owner = "cdk8s-team";
     repo = "cdk8s-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-WZtS/X6E0/6g/XKbhgUs3Phd+EUhOAksj6m+x7nOFvI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BtaYzxENteC6U7DbbQfebL8e9BWPJl+1w0j4P1702xg=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-Y7Bsw6fmLOOjUG0i73Exp++UFFKFa2b7JL55O8Tb1mc=";
+    hash = "sha256-6Qiz1/1/OHMiXEAAG2ggt7BJmsTNUSln0SMJs2gFMgM=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command-line-interface for CDK for Kubernetes";
     homepage = "https://github.com/cdk8s-team/cdk8s-cli";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "cdk8s";
   };
 })

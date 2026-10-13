@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     saxon
   ];
 
-  CLASSPATH = "lib/saxon.jar";
+  env.CLASSPATH = "lib/saxon.jar";
 
   patches = [
     ./no-git-during-build.patch
@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       binaryBytecode # source bundles dependencies as jars
     ];
     maintainers = [ lib.maintainers.bjornfor ];
+    license = lib.licenses.bsd3;
   };
 })

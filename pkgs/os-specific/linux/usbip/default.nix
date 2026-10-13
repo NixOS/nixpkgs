@@ -11,7 +11,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "usbip-${kernel.name}";
+  pname = "usbip-${kernel.pname}";
+  version = kernel.version;
 
   src = kernel.src;
 

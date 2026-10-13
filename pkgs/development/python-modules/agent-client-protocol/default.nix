@@ -10,23 +10,28 @@
   pydantic,
 
   # optional-dependencies
+  h2,
+  httpx,
   opentelemetry-sdk,
+  websockets,
 
   # tests
   pytest-asyncio,
   pytestCheckHook,
+  uvicorn,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "agent-client-protocol";
-  version = "0.7.1";
+  version = "0.12.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "agentclientprotocol";
     repo = "python-sdk";
-    tag = version;
-    hash = "sha256-pUOs6TUc0qmY+/AWTtm5kKouHKL8cLMhJ+nZT4r+6sI=";
+    tag = finalAttrs.version;
+    hash = "sha256-GBMzhDHOiXGQDyHtDEBpGL4SH/I16Zh/QMePhiLHJSE=";
   };
 
   build-system = [
@@ -38,6 +43,11 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    http = [
+      h2
+      httpx
+      websockets
+    ];
     logfire = [
       # logfire (unpackaged)
       opentelemetry-sdk
@@ -49,18 +59,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-  ];
+    uvicorn
+  ]
+  ++ finalAttrs.passthru.optional-dependencies.http;
 
   disabledTests = [
-    # Hangs forever
+    # Agent subprocess cannot complete in the sandbox.
     "test_spawn_agent_process_roundtrip"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python SDK for ACP clients and agents";
     homepage = "https://github.com/agentclientprotocol/python-sdk";
-    changelog = "https://github.com/agentclientprotocol/python-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/agentclientprotocol/python-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

@@ -30,7 +30,7 @@ runCommand "systemtap-${systemtap-unwrapped.version}"
     stapBuild = systemtap-unwrapped;
     nativeBuildInputs = [ makeWrapper ];
     passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
-    inherit (systemtap-unwrapped) meta;
+    inherit (systemtap-unwrapped) meta version pname;
   }
   (
     ''

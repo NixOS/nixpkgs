@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ mlton ];
 
   # Set as an environment variable in all the phase scripts.
-  MLCOMP = "mlton";
+  env.MLCOMP = "mlton";
 
   buildFlags = [ "all" ];
   installFlags = [ "prefix=$(out)" ];

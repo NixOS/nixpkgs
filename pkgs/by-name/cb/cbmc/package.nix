@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cbmc";
-  version = "6.8.0";
+  version = "6.11.0";
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
     tag = "cbmc-${finalAttrs.version}";
-    hash = "sha256-PT6AYiwkplCeyMREZnGZA0BKl4ZESRC02/9ibKg7mYU=";
+    hash = "sha256-GHpgcGBE/AAhTVxGVzTPMdZ8BkuXa7/OgMumZJ8ENRc=";
   };
 
   srcglucose = fetchFromGitHub {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   srccadical =
     (cadical.override {
-      version = "2.0.0";
+      version = "3.0.0";
     }).src;
 
   nativeBuildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/ls_parse.py $out/share/cbmc/ls_parse.py
     chmod +x $out/share/cbmc/ls_parse.py
     wrapProgram $out/bin/goto-cc \
-      --prefix PATH : "$out/share/cbmc" \
+      --prefix PATH : "$out/share/cbmc"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
@@ -93,6 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=c++20-extensions"
       # fix "first argument in call to 'memset' is a pointer to non-trivially copyable type"
       "-Wno-error=nontrivial-memcall"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=unused-but-set-variable"
+      "-Wno-error=sfinae-incomplete"
+      "-Wno-error=array-bounds"
     ]
   );
 
@@ -119,7 +124,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Bounded Model Checker for C and C++ programs";
     homepage = "http://www.cprover.org/cbmc/";
     license = lib.licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ jiegec ];
+    maintainers = with lib.maintainers; [
+      jiegec
+      mkannwischer
+    ];
     platforms = lib.platforms.unix;
   };
 })

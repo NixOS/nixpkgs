@@ -9,18 +9,18 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "intelli-shell";
-  version = "3.4.0";
+  version = "3.4.6";
 
   src = fetchFromGitHub {
     owner = "lasantosr";
     repo = "intelli-shell";
-    rev = "v${version}";
-    hash = "sha256-TrT2gMc23m4xZ/fxxHqEkGpq3VBeLfkPXC9H1sSSOaQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HWoJBgNzbUYlbzX9g9W2FjJRddTJWZ/UZfpD8AGDA24=";
   };
 
-  cargoHash = "sha256-usALz3Wj3GyYjHjmEwFvjyDizXKQ66fkZ8Tb7GgT9BA=";
+  cargoHash = "sha256-5Vfreda635qyG9I9IQsp1cLLzpMJw0cKdgLc7wSV8w4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lasantosr ];
     mainProgram = "intelli-shell";
   };
-}
+})

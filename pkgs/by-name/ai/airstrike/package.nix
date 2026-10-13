@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_image
   ];
 
-  NIX_LDFLAGS = "-lm";
+  env.NIX_LDFLAGS = "-lm";
 
   installPhase = ''
     mkdir -p $out/bin

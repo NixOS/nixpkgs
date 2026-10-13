@@ -12,7 +12,7 @@
   glib,
   gtk3,
   libnotify,
-  libX11,
+  libx11,
   libxfce4ui,
   libxfce4util,
   taglib,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libnotify
-    libX11
+    libx11
     libxfce4ui
     libxfce4util
     taglib

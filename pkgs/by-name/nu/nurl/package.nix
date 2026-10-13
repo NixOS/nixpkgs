@@ -7,28 +7,34 @@
   gitMinimal,
   mercurial,
   nix,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nurl";
-  version = "0.3.13";
+  version = "0.4.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nurl";
-    rev = "v${version}";
-    hash = "sha256-rVqF+16esE27G7GS55RT91tD4x/GAzfVlIR0AgSknz0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mtMKiMwG23XWcjL9dPOeoGX0MWxIj3M1QdVaKeEioSA=";
   };
 
-  cargoHash = "sha256-OUJGxNqytwz7530ByqkanpseVJJXAea/L2GIHnuSIqk=";
+  cargoHash = "sha256-Lk2beX9/KjNtFpJuu6bA7qnChJjggRR1ZFGajG/s/w4=";
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
   ];
 
-  # tests require internet access
-  doCheck = false;
+  # disable tests that require internet access
+  checkFlags = [
+    "--skip=integration"
+    "--skip=verify_outputs"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/nurl \
@@ -47,10 +53,13 @@ rustPlatform.buildRustPackage rec {
     GEN_ARTIFACTS = "artifacts";
   };
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Command-line tool to generate Nix fetcher calls from repository URLs";
     homepage = "https://github.com/nix-community/nurl";
-    changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/nix-community/nurl/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       figsoda
@@ -58,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "nurl";
   };
-}
+})

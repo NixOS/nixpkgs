@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "geek-life";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "ajaxray";
     repo = "geek-life";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7B/4pDOVXef2MaWKvzkUZH0/KM/O1gJjI3xPjEXqc/E=";
   };
 
@@ -28,4 +28,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     mainProgram = "geek-life";
   };
-}
+})

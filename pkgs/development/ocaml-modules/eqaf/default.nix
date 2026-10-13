@@ -4,13 +4,13 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   minimalOCamlVersion = "4.07";
   pname = "eqaf";
   version = "0.10";
 
   src = fetchurl {
-    url = "https://github.com/mirage/eqaf/releases/download/v${version}/eqaf-${version}.tbz";
+    url = "https://github.com/mirage/eqaf/releases/download/v${finalAttrs.version}/eqaf-${finalAttrs.version}.tbz";
     hash = "sha256-Z9E2nFfE0tFKENAmMtReNVIkq+uYrsCJecC65YQwku4=";
   };
 
@@ -21,4 +21,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

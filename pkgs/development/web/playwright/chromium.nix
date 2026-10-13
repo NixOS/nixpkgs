@@ -5,7 +5,7 @@
   chromium,
   fetchzip,
   revision,
-  suffix,
+  browserVersion,
   system,
   throwSystem,
   lib,
@@ -41,24 +41,30 @@
   ...
 }:
 let
+  download =
+    (import ./browser-downloads.nix {
+      name = "chromium";
+      inherit revision browserVersion;
+    }).${system} or throwSystem;
+
   # Playwright expects different directory names for different architectures:
   # - linux-x64 expects: chrome-linux64
-  # - linux-arm64 expects: chrome-linux
+  # - linux-arm64 expects: chrome-linux-arm64
   chromeDir =
     {
       x86_64-linux = "chrome-linux64";
-      aarch64-linux = "chrome-linux";
+      aarch64-linux = "chrome-linux-arm64";
     }
     .${system} or throwSystem;
 
   chromium-linux = stdenv.mkDerivation {
     name = "playwright-chromium";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-r715GrQMPRIsM2/Z6SRyvo/6j4fbWXKfCCh//Cc2DGw=";
-          aarch64-linux = "sha256-bS8CstCia8dm2DG9vBKHjsfeoXkyBZStBefu0kD8c2o=";
+          x86_64-linux = "sha256-ORdMu1e4Peolr8rdfvzgeaFhC8RgBipaOsAm7e3ZeqE=";
+          aarch64-linux = "sha256-AWXksACJGsDisnp9dAUcukDf/ruMCRCX9kZNNnE0R8Q=";
         }
         .${system} or throwSystem;
     };
@@ -121,12 +127,10 @@ let
     '';
   };
   chromium-darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/chromium/${revision}/chromium-${suffix}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-kGHlIxS9Ti362XmBt+aepYV45cCZoBRqJ+YBsLasDp0=";
-        aarch64-darwin = "sha256-LwY25Ckh1ZY+L196shf8ydF4IHXUIeI83Yqp8KG+nc4=";
+        aarch64-darwin = "sha256-Zm7aHjwXL0kbucBiNoWxBM6rFdY0UmVIwcr/f8V31G8=";
       }
       .${system} or throwSystem;
   };
@@ -134,7 +138,6 @@ in
 {
   x86_64-linux = chromium-linux;
   aarch64-linux = chromium-linux;
-  x86_64-darwin = chromium-darwin;
   aarch64-darwin = chromium-darwin;
 }
 .${system} or throwSystem

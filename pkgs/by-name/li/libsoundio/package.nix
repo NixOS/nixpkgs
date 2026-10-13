@@ -45,6 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://libsound.io/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.andrewrk ];
+    maintainers = [ ];
   };
 })

@@ -5,14 +5,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bwa";
   version = "0.7.19";
 
   src = fetchFromGitHub {
     owner = "lh3";
     repo = "bwa";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-o3+7kf+49mnRn5PjtdOiAaI9VK1cyT9p5QUSQ/W4GxI=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ luispedro ];
     platforms = lib.platforms.unix;
   };
-}
+})

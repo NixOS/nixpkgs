@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcms";
   version = "1.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lcms/lcms-${version}.tar.gz";
+    url = "mirror://sourceforge/lcms/lcms-${finalAttrs.version}.tar.gz";
     sha256 = "1abkf8iphwyfs3z305z3qczm3z1i9idc1lz4gvfg92jnkz5k5bl0";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

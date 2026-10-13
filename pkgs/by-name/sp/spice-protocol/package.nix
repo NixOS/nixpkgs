@@ -6,12 +6,12 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spice-protocol";
   version = "0.14.5";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/releases/spice-protocol-${version}.tar.xz";
+    url = "https://www.spice-space.org/download/releases/spice-protocol-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-uvWESfbonRn0dYma1fuRlv3EbAPMUyM/TjnPKXj5z/c=";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };
-}
+})

@@ -6,14 +6,14 @@
   libusb1,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ecpdap";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "adamgreig";
     repo = "ecpdap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-8YmdwhRYNOSAAa0hTC9f5nm+TDg2GiMbML+qNxJP3lw=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -6,14 +6,14 @@
   installShellFiles,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tray-tui";
   version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "Levizor";
     repo = "tray-tui";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-P34tL65vTxqDfc3syOlSw+E/bMaQXNF4gen9rZDWLxg=";
   };
 
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Levizor ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -1,23 +1,23 @@
 {
-  buildGoModule,
+  buildGo126Module,
   lib,
   fetchFromGitHub,
   # doubles the binary size
   withPprof ? false,
 }:
 
-buildGoModule {
+buildGo126Module (finalAttrs: {
   pname = "swgp-go";
-  version = "1.8.0-0-unstable-2026-01-24";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "database64128";
     repo = "swgp-go";
-    rev = "12be9c3ac0ea2c39b167cde708192935f7263a76";
-    hash = "sha256-0W7yioZc86xfjrJKeCAPT4mLWyrQDaBa9QbGjrR/Tpc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H4fWOh1L99/uhME81uc5DwWBO2r3Ddo+MLxMy/sWZGM=";
   };
 
-  vendorHash = "sha256-Ghv5FwSPQSUFQ1t2zWTXpFggCA4/qrQmnVYkYBF8AQ4=";
+  vendorHash = "sha256-r6h3s84n6sbsyNwF5dX9c/vl9p355SYPNg1pEVu8adU=";
 
   ldflags = [
     "-s"
@@ -41,4 +41,4 @@ buildGoModule {
     ];
     mainProgram = "swgp-go";
   };
-}
+})

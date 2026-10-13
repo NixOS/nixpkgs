@@ -9,12 +9,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-reader";
   version = "0.6.3";
 
   src = fetchurl {
-    url = "mirror://savannah/guile-reader/guile-reader-${version}.tar.gz";
+    url = "mirror://savannah/guile-reader/guile-reader-${finalAttrs.version}.tar.gz";
     hash = "sha256-OMK0ROrbuMDKt42QpE7D6/9CvUEMW4SpEBjO5+tk0rs=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = guile.meta.platforms;
   };
-}
+})

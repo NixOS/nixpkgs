@@ -2,32 +2,27 @@
   lib,
   python3,
   fetchFromGitHub,
+  substitute,
   zlib,
   nixosTests,
   postgresqlTestHook,
   postgresql,
   yarn-berry_4,
   nodejs,
-  autoconf,
-  automake,
-  libtool,
-  libpng,
-  nasm,
-  pkg-config,
   stdenv,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.11";
-  yarnHash = "sha256-x8EbZPQxCRBfeBXJGHW1tyN3tWzTqlMGvftizspfBRw=";
+  version = "9.18";
+  yarnHash = "sha256-D9LN9+CsVTvfZKDsHrWUD1uvsa033tj34a52DNwYaDc=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-t+TdudbCq68fXJrcAzyESZTiA4qVkQgwF4efc4IJrl0=";
+    hash = "sha256-oaNheNF4e1nL45fQM9/2ZIdLDwVvKWIRJnR93KmqR3M=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -58,7 +53,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   # from Dockerfile
-  CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
+  env.CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
 
   format = "setuptools";
 
@@ -67,6 +62,7 @@ pythonPackages.buildPythonApplication rec {
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
     ./check-system-config-dir.patch
+
   ];
 
   postPatch = ''
@@ -115,10 +111,10 @@ pythonPackages.buildPythonApplication rec {
     echo Building the web frontend...
     cd web
     (
-    export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
-    yarnBerryConfigHook
+      export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
+      yarnBerryConfigHook
     )
-    yarn webpacker
+    NODE_ENV=production yarn webpacker
     cp -r * ../pip-build/pgadmin4
     # save some disk space
     rm -rf ../pip-build/pgadmin4/node_modules
@@ -161,7 +157,6 @@ pythonPackages.buildPythonApplication rec {
     flask-sqlalchemy
     flask-wtf
     flask-compress
-    passlib
     pytz
     simplejson
     sqlparse
@@ -217,7 +212,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = !postgresqlTestHook.meta.broken;
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
   # for replication testing in regression tests for PostgreSql >= 17
   env.postgresqlExtraSettings = "wal_level = logical";

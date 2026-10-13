@@ -5,7 +5,7 @@
   cmake,
   kwindowsystem,
   layer-shell-qt,
-  libXdmcp,
+  libxdmcp,
   liblxqt,
   libpthread-stubs,
   libqtxdg,
@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-session";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-session";
     rev = version;
-    hash = "sha256-5VJxRho6qdPvBFr0RkYaajvVZRwhc1emzqpII+lUyOQ=";
+    hash = "sha256-CV0g553V4qxq9Cj/RUbr5jxESrrzFjAwR80NKhwNgDU=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     kwindowsystem
     layer-shell-qt
-    libXdmcp
+    libxdmcp
     liblxqt
     libpthread-stubs
     libqtxdg

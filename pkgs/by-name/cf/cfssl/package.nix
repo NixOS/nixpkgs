@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cfssl";
   version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cfssl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-Xczpv6tLJiy2dXoGJ0QUmXwOn0p6S+lm2oz61oytQec=";
   };
 
@@ -34,7 +34,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/cloudflare/cfssl/cli/version.version=v${version}"
+    "-X github.com/cloudflare/cfssl/cli/version.version=v${finalAttrs.version}"
   ];
 
   passthru.tests = { inherit (nixosTests) cfssl; };
@@ -46,4 +46,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mbrgm ];
     mainProgram = "cfssl";
   };
-}
+})

@@ -6,11 +6,11 @@
   xxd,
   cairo,
   fluidsynth,
-  libX11,
+  libx11,
   libjack2,
   alsa-lib,
   liblo,
-  libsigcxx,
+  libsigcxx_2_0,
   libsmf,
 }:
 
@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     fluidsynth
-    libX11
+    libx11
     libjack2
     alsa-lib
     liblo
-    libsigcxx
+    libsigcxx_2_0
     libsmf
   ];
 

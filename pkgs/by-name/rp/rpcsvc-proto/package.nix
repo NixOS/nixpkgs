@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  RPCGEN_CPP = "${stdenv.cc.targetPrefix}cpp";
+  env.RPCGEN_CPP = "${stdenv.cc.targetPrefix}cpp";
 
   postPatch = ''
     # replace fallback cpp with the target prefixed cpp

@@ -12,14 +12,22 @@
 
 stdenv.mkDerivation {
   pname = "vgmplay-libvgm";
-  version = "0.51.1-unstable-2025-12-31";
+  version = "0.52.0-unstable-2026-10-07";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "e8f07455854053cb676967112c3ddf414bb8c1ea";
-    hash = "sha256-YNaswHUFcTXncj+TKXQq5AhCLrM0SZ/EaO7hXb0OQLM=";
+    rev = "cad006c8606165e13411713c06b6846a00f6c4de";
+    hash = "sha256-lKKjNSfQjs+UOLzAn2BioXaa4vjkJWCH8w+CEO1sdhU=";
   };
+
+  # We don't want text files in bindir
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'install(FILES "''${SRC}" RENAME "''${DST}" DESTINATION "''${CMAKE_INSTALL_BINDIR}")' \
+        'install(FILES "''${SRC}" RENAME "''${DST}" DESTINATION "''${CMAKE_INSTALL_DATADIR}/vgmplay")'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -31,14 +39,6 @@ stdenv.mkDerivation {
     libvgm
     inih
   ];
-
-  # https://github.com/ValleyBell/vgmplay-libvgm/issues/9
-  # Leftover that's still in use, missing documentation & integration into CMake script rn
-  env.NIX_CFLAGS_COMPILE = "-DSHARE_PREFIX=\"${placeholder "out"}\"";
-
-  postInstall = ''
-    install -Dm644 ../VGMPlay.ini $out/share/vgmplay/VGMPlay.ini
-  '';
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/ValleyBell/vgmplay-libvgm.git";

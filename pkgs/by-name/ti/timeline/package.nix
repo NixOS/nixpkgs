@@ -8,13 +8,13 @@
   wrapGAppsHook3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "timeline";
   version = "2.11.0";
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://sourceforge/thetimelineproj/timeline-${version}.zip";
+    url = "mirror://sourceforge/thetimelineproj/timeline-${finalAttrs.version}.zip";
     sha256 = "sha256-XJ5Gu3nFLtSaEedzxBZERtPydIFMWWGi5frXWmgKxVA=";
   };
 
@@ -103,4 +103,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ davidak ];
   };
-}
+})

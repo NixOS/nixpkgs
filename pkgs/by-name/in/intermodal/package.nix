@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "intermodal";
-  version = "0.1.15";
+  version = "0.1.16";
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = "intermodal";
-    rev = "v${version}";
-    hash = "sha256-dNDJHLxKsuAwQifNHTjr4qhPx+GGY0KUAeWz1qthqOo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ny/BOgLe2fWC9LQp2g2DvYAArdEujl6Rf1bvrAkSt2A=";
   };
 
-  cargoHash = "sha256-QYovc4oSnQgEwjPDjyKyoAdYy0XkRLa1K6aFn9yrX4o=";
+  cargoHash = "sha256-WfiN0b6F4TcOHOu/deh86jIClnNKi+xhytjapqLwpaU=";
 
   # include_hidden test tries to use `chflags` on darwin
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "User-friendly and featureful command-line BitTorrent metainfo utility";
     homepage = "https://github.com/casey/intermodal";
-    changelog = "https://github.com/casey/intermodal/releases/tag/v${version}";
+    changelog = "https://github.com/casey/intermodal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [
       xrelkd
     ];
     mainProgram = "imdl";
   };
-}
+})

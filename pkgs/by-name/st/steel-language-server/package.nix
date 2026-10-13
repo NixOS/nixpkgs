@@ -3,6 +3,7 @@
   rustPlatform,
   makeBinaryWrapper,
   steel,
+  openssl,
 }:
 rustPlatform.buildRustPackage {
   pname = "steel-language-server";
@@ -14,10 +15,14 @@ rustPlatform.buildRustPackage {
     postPatch
     ;
 
+  env.OPENSSL_NO_VENDOR = 1;
+
   nativeBuildInputs = [
     makeBinaryWrapper
     rustPlatform.bindgenHook
   ];
+
+  buildInputs = [ openssl ];
 
   cargoBuildFlags = [
     "--package"
@@ -27,7 +32,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   postFixup = ''
-    wrapProgram $out/bin/steel-language-server --set-default STEEL_HOME "${steel}/lib/steel"
+    wrapProgram "$out/bin/steel-language-server" --prefix STEEL_SEARCH_PATHS : "${steel}/lib/steel/cogs"
   '';
 
   meta = steel.meta // {

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "neosay";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "donuts-are-good";
     repo = "neosay";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2tFjvAobDpBh1h0ejdtqxDsC+AqyneN+xNssOJNfEbk=";
   };
 
@@ -29,4 +29,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

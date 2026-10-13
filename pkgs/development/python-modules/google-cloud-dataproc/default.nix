@@ -15,16 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.23.0";
+  version = "5.31.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_dataproc";
     inherit version;
-    hash = "sha256-lLOFvb9nt+K29TyglTrC3yGV4T4TG60TLvyGZFn2BqM=";
+    hash = "sha256-Vu3IMbQZCrtLPDuVGukO1RHh31lvCzqWQ15ceolLCRw=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

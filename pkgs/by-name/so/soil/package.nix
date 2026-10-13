@@ -3,7 +3,7 @@
   lib,
   fetchzip,
   libGL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
-    libX11
+    libx11
   ];
 
   buildPhase = ''
@@ -37,7 +37,6 @@ stdenv.mkDerivation {
       SOIL is a tiny C library used primarily for uploading textures
       into OpenGL.
     '';
-    homepage = "https://www.lonesock.net/soil.html";
     license = lib.licenses.publicDomain;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ r-burns ];

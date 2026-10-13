@@ -9,15 +9,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "morse-cli";
-  version = "1.16.4";
+  version = "1.17.8";
 
   src = fetchFromGitHub {
     owner = "MorseMicro";
     repo = "morse_cli";
-    tag = version;
-    hash = "sha256-EhrKMMbWJ6gweAt2EudyO7vHZ9ITjRYagE4k+QuUnOo=";
+    tag = finalAttrs.version;
+    hash = "sha256-K0J6iqUsEo1zuXnlPLxGUDipsMSRu2w4vW5lna/HJyU=";
   };
 
   buildInputs = [
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ govindsi ];
     platforms = lib.platforms.linux;
   };
-}
+})

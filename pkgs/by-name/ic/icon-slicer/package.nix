@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gdk-pixbuf ];
 
   meta = {
-    description = "Utility for generating icon themes and libXcursor cursor themes";
+    description = "Utility for generating icon themes and libxcursor cursor themes";
     homepage = "https://www.freedesktop.org/wiki/Software/icon-slicer/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ zaninime ];

@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mousepad";
-  version = "0.6.5";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = "mousepad";
     tag = "mousepad-${finalAttrs.version}";
-    hash = "sha256-5ywpQY4KUnjFCLSAXQo3huzZf94YHK9SLmkkNtfx4Ho=";
+    hash = "sha256-zoPzMqXfY3ir8MOYXTr+ZNmxISdMgKQEWwIgsVD9oMw=";
   };
 
   strictDeps = true;

@@ -2,49 +2,45 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   btrfs-progs,
 }:
 
-let
-  # https://github.com/kilobyte/compsize/issues/52
-  btrfs-progs' = btrfs-progs.overrideAttrs (old: rec {
-    pname = "btrfs-progs";
-    version = "6.10";
-    src = fetchurl {
-      url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-      hash = "sha256-M4KoTj/P4f/eoHphqz9OhmZdOPo18fNFSNXfhnQj4N8=";
-    };
-  });
-
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "compsize";
-  version = "1.5";
+  version = "1.5-unstable-2023-12-24";
 
   src = fetchFromGitHub {
     owner = "kilobyte";
     repo = "compsize";
-    rev = "v${version}";
-    sha256 = "sha256-OX41ChtHX36lVRL7O2gH21Dfw6GPPEClD+yafR/PFm8=";
+    rev = "d79eacf77abe3b799387bb8a4e07a18f1f1031e8";
+    sha256 = "sha256-pwHFllwTznhgZAGtGsULoLLBZlCllGt1eBmUKoJ/2wk=";
   };
 
-  buildInputs = [ btrfs-progs' ];
+  patches = [
+    ./btrfs-progs-6-10-1.patch
+  ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  buildInputs = [ btrfs-progs ];
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
   ];
-
-  preInstall = ''
-    mkdir -p $out/share/man/man8
-  '';
 
   meta = {
     description = "Find compression type/ratio on a file or set of files in the Btrfs filesystem";
     mainProgram = "compsize";
     homepage = "https://github.com/kilobyte/compsize";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sandarukasa ];
     platforms = lib.platforms.linux;
   };
 }

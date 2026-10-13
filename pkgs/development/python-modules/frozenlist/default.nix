@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "frozenlist";
-  version = "1.7.0";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "frozenlist";
     tag = "v${version}";
-    hash = "sha256-aBHX/U1L2mcah80edJFY/iXsM05DVas7lJT8yVTjER8=";
+    hash = "sha256-vkZ60qI0yQ82QSLQkBDzLnikTBQhUUuAzV+YsorrM2Q=";
   };
 
   postPatch = ''

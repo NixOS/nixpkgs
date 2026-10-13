@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.3.6";
   pname = "flwrap";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fldigi/flwrap-${version}.tar.gz";
+    url = "mirror://sourceforge/fldigi/flwrap-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-g1V7bOcgVHpD+Ndn02Nj4I3rGItuQ2qLGlrZZshfGP8=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "flwrap";
   };
-}
+})

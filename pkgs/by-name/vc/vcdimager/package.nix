@@ -10,12 +10,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcdimager";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "mirror://gnu/vcdimager/vcdimager-${version}.tar.gz";
+    url = "mirror://gnu/vcdimager/vcdimager-${finalAttrs.version}.tar.gz";
     sha256 = "0ypnb1vp49nmzp5571ynlz6n1gh90f23w3z4x95hb7c2p7pmylb7";
   };
 
@@ -42,5 +42,7 @@ stdenv.mkDerivation rec {
     description = "Full-featured mastering suite for authoring, disassembling and analyzing Video CDs and Super Video CDs";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

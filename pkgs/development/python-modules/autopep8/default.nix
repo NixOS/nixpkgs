@@ -5,9 +5,7 @@
   glibcLocales,
   pycodestyle,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
-  tomli,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ pycodestyle ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  propagatedBuildInputs = [ pycodestyle ];
 
   nativeCheckInputs = [
     glibcLocales

@@ -91,6 +91,20 @@ in
     };
     users.groups.errbot = { };
 
+    systemd.tmpfiles.settings = {
+      "10-errbot" = lib.mapAttrs' (
+        name: instanceCfg:
+        let
+          dataDir = if instanceCfg.dataDir != null then instanceCfg.dataDir else "/var/lib/errbot/${name}";
+        in
+        lib.nameValuePair "${dataDir}".d {
+          group = "errbot";
+          user = "errbot";
+          mode = "0755";
+        }
+      ) cfg.instances;
+    };
+
     systemd.services = lib.mapAttrs' (
       name: instanceCfg:
       lib.nameValuePair "errbot-${name}" (
@@ -103,12 +117,7 @@ in
           serviceConfig = {
             User = "errbot";
             Restart = "on-failure";
-            ExecStartPre = [
-              "${lib.getExe' pkgs.coreutils "mkdir"} -p ${dataDir}"
-              "${lib.getExe' pkgs.coreutils "chown"} -R errbot:errbot ${dataDir}"
-            ];
             ExecStart = "${pkgs.errbot}/bin/errbot -c ${mkConfigDir instanceCfg dataDir}/config.py";
-            PermissionsStartOnly = true;
           };
         }
       )

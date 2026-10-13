@@ -7,24 +7,20 @@
   setuptools,
   webob,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "bugsnag";
-  version = "4.8.1";
+  version = "4.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bugsnag";
     repo = "bugsnag-python";
     tag = "v${version}";
-    hash = "sha256-WXBdlgUoWdptv1weJf82qyH8TTqNCC1rYFEa972TqDY=";
+    hash = "sha256-+ZYtlvkb5J6yOcEQWaB3I6WFyctqXKOFBl4W5o8PkcM=";
   };
-
-  postPatch = ''
-    substituteInPlace tox.ini --replace-fail \
-      "--cov=bugsnag --cov-report html --cov-append --cov-report term" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -39,7 +35,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bugsnag" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   disabledTestPaths = [
     # Extra dependencies

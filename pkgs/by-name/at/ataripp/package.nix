@@ -7,8 +7,8 @@
   gcc-unwrapped,
   libice,
   libsm,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     gcc-unwrapped
     libice
     libsm
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   postFixup = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       will compile on a variety of systems (Linux, Solaris, Irix).
     '';
     maintainers = [ ];
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
 })

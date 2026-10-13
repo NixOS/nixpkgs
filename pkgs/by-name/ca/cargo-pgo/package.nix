@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-pgo";
   version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "kobzol";
     repo = "cargo-pgo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+mnpJwgu1zNnFVoA9SS9h0U1FOc3wyWjgFk8AMNNvFA=";
   };
 
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cargo subcommand for optimizing Rust binaries/libraries with PGO and BOLT";
     homepage = "https://github.com/kobzol/cargo-pgo";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dannixon ];
   };
-}
+})

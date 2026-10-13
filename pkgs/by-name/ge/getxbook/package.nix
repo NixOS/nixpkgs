@@ -5,12 +5,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "getxbook";
   version = "1.2";
 
   src = fetchurl {
-    url = "https://njw.me.uk/getxbook/getxbook-${version}.tar.xz";
+    url = "https://njw.me.uk/getxbook/getxbook-${finalAttrs.version}.tar.xz";
     sha256 = "0ihwrx4gspj8l7fc8vxch6dpjrw1lvv9z3c19f0wxnmnxhv1cjvs";
   };
 
@@ -27,10 +27,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Collection of tools to download books from Google Books";
     homepage = "https://njw.me.uk/getxbook/";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.all;
   };
-}
+})

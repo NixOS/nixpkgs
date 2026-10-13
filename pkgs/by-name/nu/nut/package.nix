@@ -47,12 +47,12 @@ let
   modbus = if withApcModbus then libmodbus' else libmodbus;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nut";
   version = "2.8.4";
 
   src = fetchurl {
-    url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/nut-${version}.tar.gz";
+    url = "https://networkupstools.org/source/${lib.versions.majorMinor finalAttrs.version}/nut-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-ATC6gup58Euk80xSSahZQ5d+/ZhO199q7BpRjVo1lPg=";
   };
 
@@ -166,4 +166,4 @@ stdenv.mkDerivation rec {
     ];
     priority = 10;
   };
-}
+})

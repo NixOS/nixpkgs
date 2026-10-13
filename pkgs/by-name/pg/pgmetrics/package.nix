@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pgmetrics";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "rapidloop";
     repo = "pgmetrics";
-    rev = "v${version}";
-    sha256 = "sha256-PvixAR6jLhwK4nbGWEAnQkjI+JtSwX2izI7/ksi7qs8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-IwPWhH55GvquVsHswy9p+V6U23UEzYFsPqInqdx6LnI=";
   };
 
-  vendorHash = "sha256-LphlFl56M8G3kncnj66u1CixgBTLvDBtWqXtUjHDY14=";
+  vendorHash = "sha256-20e4fE30DZMYOSlvhBPJLD5HoCe712NUONnJsvbfQ9g=";
 
   doCheck = false;
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   meta = {
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = [ ];
     mainProgram = "pgmetrics";
   };
-}
+})

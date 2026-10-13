@@ -14,24 +14,24 @@
   numpy,
 
   # tests
-  # brax, (unpackaged)
-  # gymnax, (unpackaged)
+  brax,
   pytestCheckHook,
   torch,
   torchvision,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "evosax";
-  version = "0.2.0";
+  version = "0.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RobertTLange";
     repo = "evosax";
-    tag = "v.${version}";
-    hash = "sha256-ye5IHM8Pn/+BXI9kcB3W281Gna9hXV8DwsaJ9Xu06fU=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-iuhqlpwU4puAxzepXAixpBrLajkGNgBxXijwoNX36+8=";
   };
 
   build-system = [ setuptools ];
@@ -47,8 +47,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "evosax" ];
 
   nativeCheckInputs = [
-    # brax
-    # gymnax
+    brax
+    # gymnax (unpackaged)
     pytestCheckHook
     torch
     torchvision
@@ -80,8 +80,8 @@ buildPythonPackage rec {
   meta = {
     description = "Evolution Strategies in JAX";
     homepage = "https://github.com/RobertTLange/evosax";
-    changelog = "https://github.com/RobertTLange/evosax/releases/tag/v.${version}";
+    changelog = "https://github.com/RobertTLange/evosax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

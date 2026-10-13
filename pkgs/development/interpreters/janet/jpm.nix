@@ -9,7 +9,6 @@ let
   platformFiles = {
     aarch64-darwin = "macos_config.janet";
     aarch64-linux = "linux_config.janet";
-    x86_64-darwin = "macos_config.janet";
     x86_64-linux = "linux_config.janet";
   };
 
@@ -18,13 +17,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jpm";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "jpm";
     rev = "v${version}";
-    sha256 = "sha256-lPB4jew6RkJlDp8xOQ4YA9MkgLBImaBHcvv4WF/sLRc=";
+    sha256 = "sha256-3WmIXJhmrZyr7SYFkEcYC3YYBJtq8Uavo6PjLVXA3Bs=";
   };
 
   # `auto-shebangs true` gives us a shebang line that points to janet inside the

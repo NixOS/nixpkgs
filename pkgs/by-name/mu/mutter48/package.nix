@@ -19,21 +19,21 @@
   libxcvt,
   libGL,
   libice,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxtst,
   libxkbfile,
   xkeyboard_config,
   libxkbcommon,
   libxcb,
-  libXrandr,
-  libXinerama,
-  libXau,
+  libxrandr,
+  libxinerama,
+  libxau,
   libinput,
   libdrm,
   libgbm,
@@ -159,21 +159,21 @@ stdenv.mkDerivation (finalAttrs: {
     # X11 client
     gtk4
     libice
-    libX11
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxtst
     libxkbfile
     xkeyboard_config
     libxkbcommon
     libxcb
-    libXrandr
-    libXinerama
-    libXau
+    libxrandr
+    libxinerama
+    libxau
 
     # for gdctl shebang
     (python3.withPackages (pp: [

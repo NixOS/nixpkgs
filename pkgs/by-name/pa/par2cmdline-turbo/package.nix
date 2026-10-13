@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "par2cmdline-turbo";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "animetosho";
     repo = "par2cmdline-turbo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ld0oTaf1IZ0U0KMF4sW7RdTmF0CNobxjwomTLQEhpIc=";
+    hash = "sha256-Cz1VXWEVU93Qt2bNscWWX+71aWb6F7997rBYtjlip1A=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

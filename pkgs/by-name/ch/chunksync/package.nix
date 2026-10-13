@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  NIX_LDFLAGS = "-lgcc_s";
+  env.NIX_LDFLAGS = "-lgcc_s";
 
   makeFlags = [
     "DESTDIR=$(out)"

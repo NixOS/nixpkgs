@@ -13,11 +13,11 @@
   glfw3,
   imgui,
   libGLU,
-  libX11,
-  libXcursor,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxi,
+  libxinerama,
+  libxrandr,
   libglut,
   xorgproto,
 
@@ -72,11 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
       IMGUI_BUILD_GLFW_BINDING = true;
     })
     libGLU
-    libX11
-    libXcursor
-    libXi
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
     libglut
     xorgproto
   ];
@@ -84,6 +84,19 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.finalPackage.doCheck)
   ];
+
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # b2Hash calls get struct reinterpreted as byte array for input, results not stable across endiannesses
+    && stdenv.hostPlatform.isLittleEndian;
+
+  checkPhase = ''
+    runHook preCheck
+
+    ./bin/test
+
+    runHook postCheck
+  '';
 
   passthru = {
     updateScript = nix-update-script { };

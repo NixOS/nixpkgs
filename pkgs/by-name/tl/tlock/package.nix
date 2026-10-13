@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tlock";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "eklairs";
     repo = "tlock";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-O6erxzanSO5BjMnSSmn89w9SA+xyHhp0SSDkCk5hp8Y=";
     fetchSubmodules = true;
   };
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/eklairs/tlock/tlock-internal/constants.VERSION=v${version}"
+    "-X github.com/eklairs/tlock/tlock-internal/constants.VERSION=v${finalAttrs.version}"
   ];
 
   meta = {
@@ -34,8 +34,8 @@ buildGoModule rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/eklairs/tlock";
     description = "Two-Factor Authentication Tokens Manager in Terminal";
-    changelog = "https://github.com/eklairs/tlock/releases/tag/v${version}";
+    changelog = "https://github.com/eklairs/tlock/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ eklairs ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,25 +5,25 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certgraph";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "lanrat";
     repo = "certgraph";
-    tag = "v${version}";
-    hash = "sha256-WlNrKmny4fODnSEkP8HUF+VzMX1/LKYMdSnm7DON8Po=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-76OqwLGg+ZMLvY281XvRTSpOq6iLPAnLRjDs/Xee2hQ=";
   };
 
-  vendorHash = "sha256-4wj96eDibGB3oX56yIr01CYLZCYMFnfoaPWaNdFH7IE=";
+  vendorHash = "sha256-AvwoQffkiaK3QsV5UXO0EwFM/Y3DxVMp0brKiFD+N7I=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-w"
     "-s"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
@@ -31,9 +31,9 @@ buildGoModule rec {
   meta = {
     description = "Intelligence tool to crawl the graph of certificate alternate names";
     homepage = "https://github.com/lanrat/certgraph";
-    changelog = "https://github.com/lanrat/certgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/lanrat/certgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "certgraph";
   };
-}
+})

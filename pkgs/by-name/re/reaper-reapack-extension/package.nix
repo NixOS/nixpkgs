@@ -8,7 +8,7 @@ let
 in
 callPackage p {
   pname = "reaper-reapack-extension";
-  version = "1.2.5";
+  version = "1.2.6";
   meta = {
     description = "Package manager for REAPER";
     homepage = "https://reapack.com/";
@@ -20,7 +20,6 @@ callPackage p {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

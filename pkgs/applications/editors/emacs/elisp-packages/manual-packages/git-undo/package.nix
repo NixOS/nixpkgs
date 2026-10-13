@@ -7,13 +7,13 @@
 
 melpaBuild {
   pname = "git-undo";
-  version = "0-unstable-2022-08-07";
+  version = "0-unstable-2025-09-22";
 
   src = fetchFromGitHub {
     owner = "jwiegley";
     repo = "git-undo-el";
-    rev = "3d9c95fc40a362eae4b88e20ee21212d234a9ee6";
-    hash = "sha256-xwVCAdxnIRHrFNWvtlM3u6CShsUiGgl1CiBTsp2x7IM=";
+    rev = "1e94d2dad39ffa168005dee182dde5694416d9c9";
+    hash = "sha256-EppewewNPWVbQN76LVoebtKu+FOFCnWDhDeUognPmAo=";
   };
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };

@@ -2,7 +2,6 @@
   lib,
   fetchurl,
   buildDunePackage,
-  ocaml,
   dune-configurator,
   optint,
   fmt,
@@ -13,15 +12,13 @@
   alcotest,
 }:
 
-buildDunePackage rec {
-  version = "0.5.2";
+buildDunePackage (finalAttrs: {
+  version = "0.5.4";
   pname = "checkseum";
 
-  minimalOCamlVersion = "4.07";
-
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
-    hash = "sha256-nl5P1EBctKi03wCHdUMlGDPgimSZ70LMuNulgt8Nr8g=";
+    url = "https://github.com/mirage/checkseum/releases/download/v${finalAttrs.version}/checkseum-${finalAttrs.version}.tbz";
+    hash = "sha256-CfltUNvXTofKRqC+XvvlP1+I2rAFTz0P+QQPgOkWp/A=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -38,7 +35,7 @@ buildDunePackage rec {
     rresult
   ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
 
   meta = {
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
@@ -47,4 +44,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
     mainProgram = "checkseum.checkseum";
   };
-}
+})

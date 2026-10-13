@@ -5,29 +5,22 @@
   openssl,
   pkg-config,
 }:
-let
-  version = "1.24.46";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "websurfx";
-  inherit version;
+  version = "1.29.9";
 
   src = fetchFromGitHub {
     owner = "neon-mmd";
     repo = "websurfx";
-    tag = "v${version}";
-    hash = "sha256-UEhnexMiMIheM5+paythCUjNdbOf9BDUN1Kd/Fn5RbM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qSgNyK9W38wAkL0EM9HIFJOilPNQWeHRNpiasGbBL0I=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ];
+  buildInputs = [ openssl ];
 
-  cargoHash = "sha256-tPOv+sXFz9wOrw9jp2UIOD1pxOhrxew1M/ZcKK40+R0=";
+  cargoHash = "sha256-oI9+nMDkmRLxN0dw/X1zchsSUrr5ZC4qQgXoBKR0AbU=";
 
   postPatch = ''
     substituteInPlace src/handler.rs \
@@ -39,8 +32,8 @@ rustPlatform.buildRustPackage {
     mkdir -p $out/etc/xdg
     mkdir -p $out/opt/websurfx
 
-    cp -r websurfx $out/etc/xdg/
-    cp -r public $out/opt/websurfx/
+    cp -r websurfx $out/etc/xdg
+    cp -r public $out/opt/websurfx
   '';
 
   meta = {
@@ -55,4 +48,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "websurfx";
   };
-}
+})

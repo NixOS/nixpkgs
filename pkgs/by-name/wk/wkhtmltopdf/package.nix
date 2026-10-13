@@ -94,6 +94,8 @@ in
 stdenv.mkDerivation (
   {
     pname = "wkhtmltopdf";
+    # required to fix eval when it's not overridden by platform below
+    version = "none";
 
     dontStrip = true;
 
@@ -120,14 +122,11 @@ stdenv.mkDerivation (
         kalbasit
       ];
       platforms = [
-        "x86_64-darwin"
         "x86_64-linux"
         "aarch64-linux"
       ];
     };
   }
   // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) darwinAttrs
-  //
-    lib.optionalAttrs (stdenv.hostPlatform.isLinux)
-      linuxAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")
+  // lib.optionalAttrs (stdenv.hostPlatform.isLinux) (linuxAttrs.${stdenv.system} or { })
 )

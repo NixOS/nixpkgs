@@ -4,12 +4,12 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "magic-mime";
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-magic-mime/releases/download/v${version}/magic-mime-${version}.tbz";
+    url = "https://github.com/mirage/ocaml-magic-mime/releases/download/v${finalAttrs.version}/magic-mime-${finalAttrs.version}.tbz";
     hash = "sha256-4CNNA2Jduh76xY5X44dnLXWl6aYh/0ms/g9gnADxOwg=";
   };
 
@@ -21,4 +21,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

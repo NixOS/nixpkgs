@@ -4,14 +4,14 @@
   fetchFromCodeberg,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dabet";
   version = "3.0.1";
 
   src = fetchFromCodeberg {
     owner = "annaaurora";
     repo = "dabet";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-BYE+GGwf84zENf+lPS98OzZQbXxd7kykWL+B3guyVNI=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "dabet";
   };
-}
+})

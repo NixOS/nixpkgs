@@ -13,16 +13,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-run";
-  version = "0.15.0";
+  version = "0.16.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_run";
     inherit (finalAttrs) version;
-    hash = "sha256-FY8mRkP5gr+k9PGPnijFbqAOqVwki8inRuFZtTivq1c=";
+    hash = "sha256-SA7N6JsY3JmqxFhASPZHfoVgAq9Neo56briUgB0BGQs=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

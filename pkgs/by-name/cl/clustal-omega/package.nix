@@ -5,12 +5,12 @@
   argtable,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.2.4";
   pname = "clustal-omega";
 
   src = fetchurl {
-    url = "http://www.clustal.org/omega/clustal-omega-${version}.tar.gz";
+    url = "http://www.clustal.org/omega/clustal-omega-${finalAttrs.version}.tar.gz";
     sha256 = "1vm30mzncwdv881vrcwg11vzvrsmwy4wg80j5i0lcfk6dlld50w6";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "clustalo";
     platforms = lib.platforms.unix;
   };
-}
+})

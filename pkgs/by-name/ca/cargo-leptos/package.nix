@@ -6,18 +6,18 @@
   pkg-config,
   openssl,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-leptos";
-  version = "0.3.4";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = "cargo-leptos";
-    rev = "v${version}";
-    hash = "sha256-OhGppUYbRnsYjuiu3Sys+073o4ZiVqMqlt8apeY7Oho=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-izVMc3q4i691B9BuI8ESESHcql3CGd9ebtSs/qG/F88=";
   };
 
-  cargoHash = "sha256-ou8swAP0W8jOab9yTvA/7mFkvI6YskXUsqLNHzIJdiY=";
+  cargoHash = "sha256-iFkpIOkj8Ems9C2DjylFwvFLFrUnGachNyld4BLwurU=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,8 +39,8 @@ rustPlatform.buildRustPackage rec {
     description = "Build tool for the Leptos web framework";
     mainProgram = "cargo-leptos";
     homepage = "https://github.com/leptos-rs/cargo-leptos";
-    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/leptos-rs/cargo-leptos/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ benwis ];
   };
-}
+})

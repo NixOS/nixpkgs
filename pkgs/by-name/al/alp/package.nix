@@ -6,19 +6,19 @@
   alp,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "alp";
-  version = "1.1.18";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "gernotfeichter";
     repo = "alp";
-    tag = version;
-    hash = "sha256-tE8qKNXLKvFcnDULVkJJ/EJyEsvATCk/3YFkZCmpHSo=";
+    tag = finalAttrs.version;
+    hash = "sha256-ITrvSKjRCNwUuFYrK0+D4bmSqEG7/7NPMLMaitxZgKM=";
   };
-  vendorHash = "sha256-AHPVhtm6La7HWuxJfpxTsS5wFTUZUJoVyebLGYhNKTg=";
+  vendorHash = "sha256-JTm40N0x5ucLbmS6fEsrGUNJy5rqjPUSOU+CXzAcGEw=";
 
-  sourceRoot = "${src.name}/linux";
+  sourceRoot = "${finalAttrs.src.name}/linux";
 
   # Executing Go commands directly in checkPhase and buildPhase below,
   # because the default testsuite runs all go tests, some of which require docker.
@@ -40,9 +40,9 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    test-version = runCommand "${pname}-test" { } ''
+    test-version = runCommand "alp-test" { } ''
       ${alp}/bin/alp version > $out
-      cat $out | grep '${version}'
+      cat $out | grep '${finalAttrs.version}'
     '';
   };
 
@@ -53,4 +53,4 @@ buildGoModule rec {
     mainProgram = "alp";
     maintainers = with lib.maintainers; [ gernotfeichter ];
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.5.1";
   pname = "libmpeg2";
 
   src = fetchurl {
-    url = "http://libmpeg2.sourceforge.net/files/libmpeg2-${version}.tar.gz";
+    url = "http://libmpeg2.sourceforge.net/files/libmpeg2-${finalAttrs.version}.tar.gz";
     sha256 = "1m3i322n2fwgrvbs1yck7g5md1dbg22bhq5xdqmjpz5m7j4jxqny";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

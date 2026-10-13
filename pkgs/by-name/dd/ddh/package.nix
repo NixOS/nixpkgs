@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ddh";
   version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "darakian";
     repo = "ddh";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "XFfTpX4c821pcTAJZFUjdqM940fRoBwkJC6KTknXtCw=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.all;
     mainProgram = "ddh";
   };
-}
+})

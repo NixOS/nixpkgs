@@ -7,7 +7,7 @@
   doxygen,
   ffmpeg,
   freetype,
-  lua,
+  lua5_2_compat,
   makeWrapper,
   SDL2,
   SDL2_mixer,
@@ -15,6 +15,9 @@
   # Update
   nix-update-script,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";

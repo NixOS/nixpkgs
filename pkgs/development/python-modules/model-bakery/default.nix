@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "model-bakery";
-  version = "1.23.2";
+  version = "1.23.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "model-bakers";
     repo = "model_bakery";
     tag = finalAttrs.version;
-    hash = "sha256-7RMFbUFYUJI8gI5GVQ6kivjb6oeHGKzYbyTukMjK+8Q=";
+    hash = "sha256-W5n/L5D64OCCZkVi1IFHNl/mIR1EW6PIVuvmM78kq78=";
   };
 
   postPatch = ''

@@ -10,13 +10,13 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scanbd";
   version = "1.5.1";
 
   src = fetchurl {
     sha256 = "0pvy4qirfjdfm8aj6x5rkbgl7hk3jfa2s21qkk8ic5dqfjjab75n";
-    url = "mirror://sourceforge/scanbd/scanbd-${version}.tgz";
+    url = "mirror://sourceforge/scanbd/scanbd-${finalAttrs.version}.tgz";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -3,18 +3,22 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  systemd,
+  systemdLibs,
 }:
 
-buildGoModule rec {
+let
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
+in
+buildGoModule (finalAttrs: {
   pname = "node-problem-detector";
-  version = "1.35.1";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "node-problem-detector";
-    rev = "v${version}";
-    sha256 = "sha256-0N1EJjULH/Tff4v6JMrvJdO3Iq8EY8gt6xbbh21D8io=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-oWnjyuhEONPgmmyZUz/CIPpKSDpeN554VsQFgyZdIxo=";
   };
 
   vendorHash = null;
@@ -34,19 +38,19 @@ buildGoModule rec {
     export CGO_ENABLED=${if stdenv.hostPlatform.isLinux then "1" else "0"}
   '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs' ];
 
   tags = lib.optionals stdenv.hostPlatform.isLinux [ "journald" ];
 
   ldflags = [
-    "-X k8s.io/node-problem-detector/pkg/version.version=v${version}"
+    "-X k8s.io/node-problem-detector/pkg/version.version=v${finalAttrs.version}"
   ];
 
   meta = {
     description = "Various problem detectors running on the Kubernetes nodes";
     homepage = "https://github.com/kubernetes/node-problem-detector";
-    changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${version}";
+    changelog = "https://github.com/kubernetes/node-problem-detector/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lbpdt ];
   };
-}
+})

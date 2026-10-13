@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "uwc";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "dead10ck";
     repo = "uwc";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Qv8vMjCMhpVxkJyH1uTsFXu2waO8oaLPuoBETaWOUqI=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ShamrockLee ];
   };
-}
+})

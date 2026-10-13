@@ -1,42 +1,42 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   poetry-core,
   aiodns,
   aiohttp,
   awesomeversion,
-  backoff,
-  cachetools,
   mashumaro,
   orjson,
-  pycountry,
+  probatio,
+  pycares,
   yarl,
-  aresponses,
+  aioresponses,
+  pycountry,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
+  syrupy_6,
 }:
 
 buildPythonPackage rec {
   pname = "radios";
-  version = "0.3.2";
+  version = "2.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-radios";
     tag = "v${version}";
-    hash = "sha256-GXiLwwjZ/pN3HquzLLWq/2EfhmrJyCXq0sovIGRB3uQ=";
+    hash = "sha256-AFeW+Pg69ZfRx8AqnfaAjQyMuGGXK6/dfGbSPqVIxjE=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
+
+  pythonRelaxDeps = [ "pycountry" ];
 
   build-system = [
     poetry-core
@@ -46,19 +46,27 @@ buildPythonPackage rec {
     aiodns
     aiohttp
     awesomeversion
-    backoff
-    cachetools
     mashumaro
     orjson
-    pycountry
+    probatio
+    pycares
     yarl
   ];
 
   nativeCheckInputs = [
-    aresponses
+    aioresponses
+    pycountry
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
+    syrupy_6
+  ];
+
+  disabledTestPaths = [
+    "tests/test_search.py::test_search_more_filters" # AssertionError: assert 'jazz%2Cblues' == 'jazz,blues'
+    "tests/test_search.py::test_search_lowercases_tags_and_languages" # AssertionError: assert 'jazz%2Cblues' == 'jazz,blues'
+    "tests/test_stations.py::test_stations_by_uuid" # AssertionError: assert <MultiDictPro...5f7b56c5ec3')> == {'uuids': '6c...35...
+    "tests/test_stations.py::test_stations_by_url" # AssertionError: assert <MultiDictPro...LPSTR09.mp3')> == {'url': 'http...TL...
   ];
 
   pythonImportsCheck = [ "radios" ];

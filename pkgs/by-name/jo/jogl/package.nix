@@ -7,7 +7,6 @@
   git,
   xmlstarlet,
   stripJavaArchivesHook,
-  xcbuild,
   udev,
   libxxf86vm,
   libxt,
@@ -76,9 +75,6 @@ stdenv.mkDerivation {
     git
     xmlstarlet
     stripJavaArchivesHook
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [

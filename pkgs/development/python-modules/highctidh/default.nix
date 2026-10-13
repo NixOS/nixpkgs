@@ -37,7 +37,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "Fork of high-ctidh as as a portable shared library with Python bindings";
+    description = "Fork of high-ctidh as a portable shared library with Python bindings";
     homepage = "https://codeberg.org/vula/highctidh";
     license = lib.licenses.publicDomain;
     teams = with lib.teams; [ ngi ];

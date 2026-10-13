@@ -9,21 +9,18 @@
   resticprofile,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "resticprofile";
-  version = "0.31.0";
+  version = "0.33.1";
 
   src = fetchFromGitHub {
     owner = "creativeprojects";
     repo = "resticprofile";
-    tag = "v${version}";
-    hash = "sha256-ezelvyroQG1EW3SU63OVHJ/T4qjN5DRllvPIXnei1Z4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-L6L1JfBa/nsrwtvIw2U++jIDLJTxxweqcXQ3SomtS1A=";
   };
 
   postPatch = ''
-    substituteInPlace schedule_jobs.go \
-        --replace-fail "os.Executable()" "\"$out/bin/resticprofile\", nil"
-
     substituteInPlace shell/command.go \
         --replace-fail '"bash"' '"${lib.getExe bash}"'
 
@@ -32,11 +29,11 @@ buildGoModule rec {
 
   '';
 
-  vendorHash = "sha256-M9S6F/Csz7HnOq8PSWjpENKm1704kVx9zDts1ieraTE=";
+  vendorHash = "sha256-dYzx27HtIME/mrtQrRg7064Ii20715FVYj5uw4Aian0=";
 
   ldflags = [
-    "-X main.version=${version}"
-    "-X main.commit=${src.rev}"
+    "-X main.version=${finalAttrs.version}"
+    "-X main.commit=${finalAttrs.src.rev}"
     "-X main.date=unknown"
     "-X main.builtBy=nixpkgs"
   ];
@@ -56,6 +53,15 @@ buildGoModule rec {
     rm user/user_test.go # expects normal environment
     rm util/tempdir_test.go # expects normal environment
   '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        # mount: fusermount: exec: "fusermount": executable file not found in $PATH
+        "TestMemFS"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   installPhase = ''
     runHook preInstall
@@ -77,7 +83,7 @@ buildGoModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/creativeprojects/resticprofile/releases/tag/v${version}";
+    changelog = "https://github.com/creativeprojects/resticprofile/releases/tag/v${finalAttrs.version}";
     description = "Configuration profiles manager for restic backup";
     homepage = "https://creativeprojects.github.io/resticprofile/";
     license = with lib.licenses; [
@@ -85,7 +91,10 @@ buildGoModule rec {
       lgpl3 # bash shell completion
     ];
     mainProgram = "resticprofile";
-    maintainers = with lib.maintainers; [ tomasajt ];
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      tomasajt
+      bbigras
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

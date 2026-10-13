@@ -29,14 +29,14 @@ let
   # We don't really want to use openjdk8 because it's unusable on HiDPI
   # and people are more likely to have a modern OpenJDK installed.
   # We use Maven to resolve these unbundled dependencies.
-  # jdk_headless is just overriden so we don't have to fetch another OpenJDK for no reason.
+  # jdk_headless is just overridden so we don't have to fetch another OpenJDK for no reason.
   soapDeps = (maven.override { jdk_headless = jre; }).buildMavenPackage {
     pname = "anyk-soap-deps";
     version = "1.0.0";
 
     src = lib.sources.sourceFilesBySuffices ./. [ "pom.xml" ];
 
-    mvnHash = "sha256-4keHPzS8pbIIwODmBUMofJt27n5WqYh+IGqE6d9od7k=";
+    mvnHash = "sha256-6pezqcTIPR5NYFQUmLZ5Y3TOd+XRcB/eRmNSAEoBmls=";
 
     installPhase = ''
       mkdir -p $out/share/java
@@ -115,6 +115,7 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
     mkdir $out
     cp -r application $out/opt
 
@@ -125,12 +126,12 @@ stdenv.mkDerivation {
     # ÁNYK has some old school dependencies that are no longer bundled with Java, put them on the classpath. The * is resolved by Java at runtime.
     makeWrapper $out/bin/anyk-java $out/bin/anyk --add-flags "-cp '${soapDeps}/share/java/*:${anykSoapPatch}:$out/opt/abevjava.jar' hu.piller.enykp.gui.framework.MainFrame"
 
-    mkdir -p $out/share/applications $out/share/pixmaps $out/share/icons
+    mkdir -p $out/share/applications
 
     copyDesktopItems
 
-    ln -s $out/opt/abevjava.png $out/share/pixmaps/anyk.png
-    ln -s $out/opt/abevjava.png $out/share/icons/anyk.png
+    install -D $out/opt/abevjava.png $out/share/icons/hicolor/32x32/apps/anyk.png
+    runHook postInstall
   '';
 
   meta = {

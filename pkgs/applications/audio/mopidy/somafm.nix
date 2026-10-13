@@ -5,13 +5,13 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-somafm";
   version = "2.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "Mopidy-SomaFM";
     sha256 = "DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
   };
@@ -34,4 +34,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.nickhu ];
   };
-}
+})

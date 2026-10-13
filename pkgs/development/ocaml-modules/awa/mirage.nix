@@ -1,7 +1,6 @@
 {
   buildDunePackage,
   awa,
-  cstruct,
   mtime,
   lwt,
   mirage-flow,
@@ -18,7 +17,6 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     awa
-    cstruct
     mtime
     lwt
     mirage-flow

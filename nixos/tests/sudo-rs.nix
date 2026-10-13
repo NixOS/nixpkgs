@@ -162,5 +162,10 @@ in
 
       with subtest("non-wheel users should be unable to run sudo thanks to execWheelOnly"):
           strict.fail('faketty -- su - noadmin -c "sudo --help"')
+
+      with subtest("su should come from sudo-rs"):
+          output = machine.succeed("grep -aoP '/nix/store/[a-z0-9]{32}-[^\\x00]+' /run/wrappers/bin/su | head -1").strip()
+          assert "sudo-rs" in output, \
+              f"su should come from sudo-rs, but points to: {output}"
     '';
 }

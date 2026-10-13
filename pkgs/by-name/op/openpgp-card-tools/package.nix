@@ -11,18 +11,18 @@
   openpgp-card-tools,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openpgp-card-tools";
-  version = "0.11.10";
+  version = "0.11.13";
 
   src = fetchFromCodeberg {
     owner = "openpgp-card";
     repo = "openpgp-card-tools";
-    rev = "v${version}";
-    hash = "sha256-1sm/zaKhUPMGdYg8sX/IXAI4vIRRZezSD89rljG4S/Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-1O0MI74aqVcbL1c+PL1a8f/t8pc2LIlQwL5IPFTihdk=";
   };
 
-  cargoHash = "sha256-S+TOSUh/sr647aUBjo+aaZgVrrOubwa+XVFcwNBOxmI=";
+  cargoHash = "sha256-uoZ3V9j1dJsGTq1t1aYqMlWB2D2ZW+enDgXQCb4NzFE=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "oct";
   };
-}
+})

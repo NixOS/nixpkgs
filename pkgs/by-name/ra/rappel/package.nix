@@ -32,6 +32,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    # last successful hydra build on aarch64-linux was in 2024
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     homepage = "https://github.com/yrp604/rappel";
     description = "Pretty janky assembly REPL";
     mainProgram = "rappel";

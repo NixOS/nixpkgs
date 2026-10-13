@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "round";
   version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = "round";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vP2q0inU5zNJ/eiAqEzwHSqril8hTtpbpNBiAkeWeSU=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ addict3d ];
     mainProgram = "round";
   };
-}
+})

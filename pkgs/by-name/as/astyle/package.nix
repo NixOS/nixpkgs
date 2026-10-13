@@ -7,13 +7,13 @@
   asLibrary ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "astyle";
-  version = "3.6.13";
+  version = "3.6.19";
 
   src = fetchurl {
-    url = "mirror://sourceforge/astyle/astyle-${version}.tar.bz2";
-    hash = "sha256-BIt0sUxuAff66OY7dn2jMwOrOdkCKv4zBVzkueVvFi0=";
+    url = "mirror://sourceforge/astyle/astyle-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-rl703fH4goi8yPbVMmZwf4CoH8xt7PTaX+XI5CCgqxw=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # upstream repo includes a build/ directory
   cmakeBuildDir = "_build";
 
-  cmakeFlags = lib.optional asLibrary [
+  cmakeFlags = lib.optionals asLibrary [
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ carlossless ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -7,20 +7,21 @@
   nix-update-script,
   testers,
   rsop,
+  stdenv, # for meta.broken
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rsop";
-  version = "0.9.3";
+  version = "0.11.5";
 
   src = fetchFromCodeberg {
     owner = "heiko";
     repo = "rsop";
-    rev = "rsop/v${version}";
-    hash = "sha256-eP3jh5TIhMHDWnttnYvBre/tfzxajLNGtInWNiFAPiw=";
+    rev = "rsop/v${finalAttrs.version}";
+    hash = "sha256-4Qw6iRGqgVCuIkqdwcY0KPe/W+kdGDV+1xAXOrhd14Y=";
   };
 
-  cargoHash = "sha256-vmxqpOABd7S/htX8bbThyvfOSBY9f1CjX0gY9NQVHss=";
+  cargoHash = "sha256-X/4Sp1zkTz6luj8IXYYXOEGraFVKUfgPjm/N14O4n8o=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,10 +40,12 @@ rustPlatform.buildRustPackage rec {
     description = "Stateless OpenPGP (SOP) based on rpgp";
     license = with lib.licenses; [
       mit
-      apsl20
+      asl20
       cc0
     ];
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "rsop";
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

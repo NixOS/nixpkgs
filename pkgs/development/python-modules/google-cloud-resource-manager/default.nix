@@ -14,16 +14,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-resource-manager";
-  version = "1.16.0";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_resource_manager";
     inherit (finalAttrs) version;
-    hash = "sha256-zJOPh8w2wmcvBiseVBZQYp4NlUxAWk2sNc7t7nDCZ8M=";
+    hash = "sha256-aOXSjtkJGrGt8Ep3h2sJ1VPpekQPungWP2zitf5fJVg=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

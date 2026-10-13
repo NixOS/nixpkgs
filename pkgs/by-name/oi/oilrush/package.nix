@@ -3,11 +3,11 @@
   stdenv,
   config,
   fetchurl,
-  libX11,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxrender,
   fontconfig,
   freetype,
   openal,
@@ -47,9 +47,9 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
-        libXext
-        libXrender
+        libx11
+        libxext
+        libxrender
         fontconfig
         freetype
       ]
@@ -62,9 +62,9 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
-        libXext
-        libXrender
+        libx11
+        libxext
+        libxrender
         fontconfig
         freetype
       ]
@@ -75,9 +75,9 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
-        libXext
-        libXrender
+        libx11
+        libxext
+        libxrender
         fontconfig
         freetype
       ]
@@ -90,20 +90,20 @@ stdenv.mkDerivation {
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
-        libXext
-        libXinerama
-        libXrandr
+        libx11
+        libxext
+        libxinerama
+        libxrandr
       ]
     }\
              libUnigine_$arch.so
     patchelf --set-rpath ${lib.getLib stdenv.cc.cc}/lib64:${
       makeLibraryPath [
         stdenv.cc.cc
-        libX11
-        libXext
-        libXinerama
-        libXrandr
+        libx11
+        libxext
+        libxinerama
+        libxrandr
       ]
     }\
              OilRush_$arch

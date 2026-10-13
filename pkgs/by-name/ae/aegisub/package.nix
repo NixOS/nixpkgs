@@ -18,6 +18,7 @@
   intltool,
   libGL,
   libass,
+  libportal-gtk3,
   libpulseaudio,
   libuchardet,
   luajit,
@@ -28,7 +29,7 @@
   python3,
   stdenv,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
   # Boolean guard flags
   alsaSupport ? stdenv.hostPlatform.isLinux,
@@ -45,13 +46,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "TypesettingTools";
     repo = "aegisub";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ho+JG570FWbiYZ86CbCKa52j6UNyPIUh8fxpM3vVU/M=";
+    hash = "sha256-Oonk/aDBB6clWeqxNcUtc923dv9eUY5uQyLsWwwVPDw=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     python3
-    wxGTK32
+    wxwidgets_3_2
     wrapGAppsHook3
   ];
 
@@ -78,9 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libass
     libuchardet
-    wxGTK32
+    wxwidgets_3_2
     zlib
   ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libportal-gtk3 ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
   ++ lib.optionals portaudioSupport [ portaudio ]
@@ -111,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   postPatch = ''
-    patchShebangs tools/respack.py
+    patchShebangs tools/combine-config.py tools/respack.py
 
     # TODO: Tests require wrapped GoogleTest; upstream support for
     # system version?

@@ -43,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
       ThirdParty/QtTesting/vtkqttesting/{pqAbstractItemViewEventTranslator,pqBasicWidgetEventTranslator}.cxx \
       --replace-fail "mouseEvent->buttons()" "static_cast<int>(mouseEvent->buttons())" \
       --replace-fail "mouseEvent->modifiers()" "static_cast<int>(mouseEvent->modifiers())"
+
+    # fix build with C++20, adapted from upstream commit 930e016d
+    # https://gitlab.kitware.com/paraview/paraview/-/commit/930e016d
+    substituteInPlace VTKExtensions/Core/vtkPVStringFormatter.cxx \
+      --replace-fail "fmt::format(formattableString)" "fmt::format(fmt::runtime(formattableString))"
   '';
 
   nativeBuildInputs = [
@@ -81,6 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "PARAVIEW_ENABLE_MOTIONFX" true)
     (lib.cmakeBool "PARAVIEW_ENABLE_OCCT" true)
     (lib.cmakeBool "PARAVIEW_ENABLE_XDMF3" true)
+    # ParaView forces C++17 by default, but abseil-cpp built with C++20
+    # (the GCC 16 default) exposes std::*_ordering through protobuf headers.
+    (lib.cmakeBool "PARAVIEW_IGNORE_CMAKE_CXX17_CHECKS" true)
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "20")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")

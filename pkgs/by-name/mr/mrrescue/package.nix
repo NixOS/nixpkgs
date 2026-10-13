@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchurl,
   love,
-  lua,
+  lua5_2_compat,
   makeWrapper,
   makeDesktopItem,
   strip-nondeterminism,
@@ -12,6 +12,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   icon = fetchurl {
     url = "http://tangramgames.dk/img/thumb/mrrescue.png";
     sha256 = "1y5ahf0m01i1ch03axhvp2kqc6lc1yvh59zgvgxw4w7y3jryw20k";
@@ -61,7 +62,7 @@ stdenv.mkDerivation {
 
     cp -v mrrescue.love $out/share/games/lovegames/mrrescue.love
 
-    makeWrapper ${love}/bin/love $out/bin/mrrescue --add-flags $out/share/games/lovegames/mrrescue.love
+    makeWrapper ${lib.getExe love} $out/bin/mrrescue --add-flags $out/share/games/lovegames/mrrescue.love
 
     chmod +x $out/bin/mrrescue
     mkdir -p $out/share/applications
@@ -70,9 +71,10 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Arcade-style fire fighting game";
+    homepage = "https://github.com/SimonLarsen/mrrescue";
     mainProgram = "mrrescue";
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = love.meta.platforms;
     license = lib.licenses.zlib;
     downloadPage = "http://tangramgames.dk/games/mrrescue";
   };

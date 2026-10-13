@@ -39,12 +39,12 @@
   libmpeg2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libextractor";
   version = "1.13";
 
   src = fetchurl {
-    url = "mirror://gnu/libextractor/libextractor-${version}.tar.gz";
+    url = "mirror://gnu/libextractor/libextractor-${finalAttrs.version}.tar.gz";
     hash = "sha256-u48xLFHSAlciQ/ETxrYtghAwGrMMuu5gT5g32HjN91U=";
   };
 
@@ -128,4 +128,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.jorsn ];
     platforms = lib.platforms.unix;
   };
-}
+})

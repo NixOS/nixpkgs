@@ -5,14 +5,16 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mmtui";
   version = "0.2.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SL-RU";
     repo = "mmtui";
-    tag = "mmt-v${version}";
+    tag = "mmt-v${finalAttrs.version}";
     hash = "sha256-ESnxy3TUWBb0akP471dK6wFQyJQSnjlIevA7ndLAjoE=";
   };
 
@@ -22,10 +24,15 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "mmt-v(.*)"
+    ];
+  };
 
   meta = {
-    changelog = "https://github.com/SL-RU/mmtui/releases/tag/v${version}";
+    changelog = "https://github.com/SL-RU/mmtui/releases/tag/mmt-v${finalAttrs.version}";
     description = "TUI disk mount manager for TUI file managers";
     homepage = "https://github.com/SL-RU/mmtui";
     license = lib.licenses.mit;
@@ -33,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mmtui";
     platforms = lib.platforms.linux;
   };
-}
+})

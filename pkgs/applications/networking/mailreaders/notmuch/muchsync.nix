@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     inherit version;
   };
   src = fetchurl {
-    url = "http://www.muchsync.org/src/${pname}-${version}.tar.gz";
+    url = "https://www.muchsync.org/src/${pname}-${version}.tar.gz";
     hash = "sha256-+D4vb80O9IE0df3cjTkoVoZlTaX0FWWh6ams14Gjvqw=";
   };
   nativeBuildInputs = [ pkg-config ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     xapian
     zlib
   ];
-  XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
+  env.XAPIAN_CONFIG = "${xapian}/bin/xapian-config";
   meta = {
     description = "Synchronize maildirs and notmuch databases";
     mainProgram = "muchsync";

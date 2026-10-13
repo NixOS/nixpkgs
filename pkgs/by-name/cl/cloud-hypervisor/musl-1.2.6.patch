@@ -1,0 +1,50 @@
+From b28ec4cda06af1afe378783bb505e1d9d62a4e4c Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Tue, 4 Aug 2026 01:45:12 +0200
+Subject: [PATCH] seccomp: allow pwritev2
+
+Since the latest release, musl preferentially uses this syscall in its
+pwrite and pwritev implementations.
+
+Signed-off-by: Alyssa Ross <hi@alyssa.is>
+(cherry picked from commit 3e8d2dac6f83ee8e741e88ac5d4298050d17693e)
+---
+ virtio-devices/src/seccomp_filters.rs | 1 +
+ vmm/src/seccomp_filters.rs            | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/virtio-devices/src/seccomp_filters.rs b/virtio-devices/src/seccomp_filters.rs
+index 75f493448..cbde59ea3 100644
+--- a/virtio-devices/src/seccomp_filters.rs
++++ b/virtio-devices/src/seccomp_filters.rs
+@@ -128,6 +128,7 @@ fn virtio_block_thread_rules() -> Vec<(i64, Vec<SeccompRule>)> {
+         (libc::SYS_pread64, vec![]),
+         (libc::SYS_preadv, vec![]),
+         (libc::SYS_pwritev, vec![]),
++        (libc::SYS_pwritev2, vec![]),
+         (libc::SYS_pwrite64, vec![]),
+         (libc::SYS_sched_getaffinity, vec![]),
+         (libc::SYS_sched_setaffinity, vec![]),
+diff --git a/vmm/src/seccomp_filters.rs b/vmm/src/seccomp_filters.rs
+index 308cfa6bf..cfbde2866 100644
+--- a/vmm/src/seccomp_filters.rs
++++ b/vmm/src/seccomp_filters.rs
+@@ -725,6 +725,7 @@ fn vmm_thread_rules(
+         (libc::SYS_prlimit64, vec![]),
+         (libc::SYS_pwrite64, vec![]),
+         (libc::SYS_pwritev, vec![]),
++        (libc::SYS_pwritev2, vec![]),
+         (libc::SYS_read, vec![]),
+         (libc::SYS_readv, vec![]),
+         #[cfg(target_arch = "x86_64")]
+@@ -934,6 +935,7 @@ fn vcpu_thread_rules(
+         (libc::SYS_openat, vec![]),
+         (libc::SYS_pread64, vec![]),
+         (libc::SYS_pwrite64, vec![]),
++        (libc::SYS_pwritev2, vec![]),
+         (libc::SYS_read, vec![]),
+         #[cfg(target_arch = "x86_64")]
+         (libc::SYS_readlink, vec![]),
+-- 
+2.55.0
+

@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-amtk";
-  version = "5.9.2";
+  version = "5.10.0";
 
   outputs = [
     "out"
@@ -31,8 +31,9 @@ stdenv.mkDerivation (finalAttrs: {
     group = "World";
     owner = "gedit";
     repo = "libgedit-amtk";
-    rev = finalAttrs.version;
-    hash = "sha256-TpPiVIsHIBrRzDG2oBwtrIYB3CYEW6SRRVow9pe2XFs=";
+    tag = finalAttrs.version;
+    forceFetchGit = true; # To avoid occasional 501 failures.
+    hash = "sha256-wA5KRA1qWJzw5JRXQL/kP2BgCQiNhf6aIe6RppBEH90=";
   };
 
   strictDeps = true;

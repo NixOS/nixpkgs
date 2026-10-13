@@ -8,14 +8,14 @@
   gambit-chess,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gambit";
   version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "maaslalani";
     repo = "gambit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RLbD9JK1yJn30WWg7KWDjJoj4WXIoy3Kb8t2F8rFPuk=";
   };
 
@@ -28,8 +28,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=v${version}"
-    "-X=main.CommitSHA=${src.rev}"
+    "-X=main.Version=v${finalAttrs.version}"
+    "-X=main.CommitSHA=${finalAttrs.src.rev}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -42,7 +42,7 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = gambit-chess;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
@@ -50,8 +50,8 @@ buildGoModule rec {
     description = "Play chess in your terminal";
     mainProgram = "gambit";
     homepage = "https://github.com/maaslalani/gambit";
-    changelog = "https://github.com/maaslalani/gambit/releases/tag/${src.rev}";
+    changelog = "https://github.com/maaslalani/gambit/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

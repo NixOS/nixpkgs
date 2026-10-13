@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rakudo";
-  version = "2025.12";
+  version = "2026.07";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "rakudo";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-rCLlLxFexk2fzuuSMrJjbwhgU+HgJNX6Ect6uCsuJmo=";
+    hash = "sha256-kdMxxUvQOmIjoJzaPVcipzIQAHsdL3J6k623FzcLJgY=";
   };
 
   postPatch = ''

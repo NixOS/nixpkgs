@@ -9,14 +9,14 @@
   wrapGAppsHook3,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nwg-bar";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-bar";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-5N+WKZ+fuHQ0lVLd95/KkNAwzg/C4ImZ4DnSuKNGunk=";
   };
 
@@ -52,4 +52,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sei40kr ];
   };
-}
+})

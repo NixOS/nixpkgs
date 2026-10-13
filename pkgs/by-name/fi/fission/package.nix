@@ -4,23 +4,23 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fission";
-  version = "1.22.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "fission";
     repo = "fission";
-    rev = "v${version}";
-    hash = "sha256-5+TyOBHHDhHtAJUtrcWUCRbewGODsut/w3chrmL+dis=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-bPGdUllKBkAA1cURBzuVjggHN1Phdyx7Hu6/HdqTg6c=";
   };
 
-  vendorHash = "sha256-y5h1lMq99gWhB9T5e8b2t9USgKc2pv+FMgl9wva8t28=";
+  vendorHash = "sha256-OIu08Wl5hcTTvMzfCcYz4JUqqhlTIDwxtdgbA5mXoRA=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X info.Version=${version}"
+    "-X info.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/fission-cli" ];
@@ -35,4 +35,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ neverbehave ];
   };
-}
+})

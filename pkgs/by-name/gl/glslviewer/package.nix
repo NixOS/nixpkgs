@@ -5,12 +5,12 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
-  libXi,
-  libXext,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
+  libxi,
+  libxext,
   libGLU,
   ffmpeg_7,
   ncurses,
@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "glslviewer";
-  version = "3.5.1";
+  version = "3.5.2";
   src = fetchFromGitHub {
     owner = "patriciogonzalezvivo";
     repo = "glslViewer";
     fetchSubmodules = true;
     tag = finalAttrs.version;
-    hash = "sha256-gQF3hkudQXxI3t1e0Iaa4dYbVc3I7lBekt5jmJLJFpI=";
+    hash = "sha256-rfiTiyCcOa5+ZTU7JrM35mmoZNRzco6M3ZyeZ+hio4w=";
   };
   nativeBuildInputs = [
     cmake
@@ -32,22 +32,31 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
-    libXi
-    libXext
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
     libGLU
     ncurses
     ffmpeg_7
     python3
   ];
+
+  # https://github.com/patriciogonzalezvivo/vera/pull/31/changes
+  patches = [ ./patches/0001-fix-miniaudio-device-id-handling.patch ];
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/glslViewer.thumbnailer \
+      --replace-fail "TryExec=glslThumbnailer" "TryExec=$out/bin/glslThumbnailer" \
+      --replace-fail "Exec=glslThumbnailer" "Exec=$out/bin/glslThumbnailer"
+  '';
+
   meta = {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.hodapp ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "glslViewer";
     # never built on aarch64-darwin since first introduction in nixpkgs

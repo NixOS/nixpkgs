@@ -8,23 +8,23 @@
   freetype,
   libice,
   libsm,
-  libX11,
-  libXcursor,
-  libXfixes,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxfixes,
+  libxrandr,
+  libxrender,
   makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "segger-ozone";
-  version = "3.40e";
+  version = "3.50a";
 
   src = fetchurl {
     url = "https://www.segger.com/downloads/jlink/Ozone_Linux_V${
       lib.replaceString "." "" finalAttrs.version
     }_x86_64.tgz";
-    hash = "sha256-UX7ZGWVtVphBMcQ0R0iiNYaDfSjYXjSpK9YMBHw2Pss=";
+    hash = "sha256-pE9uaYwE0df/bOE5kgiBEiVZjUol3lvLKHMj1cPskDc=";
   };
 
   nativeBuildInputs = [
@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libice
     libsm
-    libX11
-    libXcursor
-    libXfixes
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxfixes
+    libxrandr
+    libxrender
     (lib.getLib stdenv.cc.cc)
   ];
 

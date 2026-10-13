@@ -5,20 +5,22 @@
   ffmpeg,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "shira";
-  version = "1.7.1-unstable-2025-08-31";
+  version = "1.8.5";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "KraXen72";
     repo = "shira";
-    rev = "a7478efa434597324458441f328c1b2f84c04dbc";
-    hash = "sha256-k15GaOmS0rlQBQldnLo1SzIyCkNQux6P5b7ZG2BIa90=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SPR2Jtc6mYURwMl4c/v2fPGydBu7aOhrvetgFoBvjoM=";
   };
 
   build-system = [
-    python3Packages.flit-core
+    python3Packages.hatchling
   ];
 
   dependencies = with python3Packages; [
@@ -31,12 +33,21 @@ python3Packages.buildPythonApplication {
     ytmusicapi
   ];
 
+  # Needed because of:
+  # ytmusicapi==1.12.1 not satisfied by version 1.12.2
+  # yt-dlp==2026.3.17 not satisfied by version 2026.7.4
+  pythonRelaxDeps = [
+    "ytmusicapi"
+    "yt-dlp"
+  ];
+
   makeWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        ffmpeg
-      ]
-    }"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      ffmpeg
+    ]}"
   ];
 
   meta = {
@@ -46,4 +57,4 @@ python3Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [ thegu5 ];
     mainProgram = "shiradl";
   };
-}
+})

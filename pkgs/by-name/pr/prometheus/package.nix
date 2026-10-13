@@ -1,9 +1,13 @@
 {
   stdenv,
   lib,
+  nix-update-script,
   go,
   buildGoModule,
-  buildNpmPackage,
+  nodejs,
+  pnpmConfigHook,
+  pnpm_11,
+  fetchPnpmDeps,
   fetchFromGitHub,
   nixosTests,
   enableAWS ? true,
@@ -34,9 +38,7 @@
 }:
 
 let
-  source = import ./source.nix;
-
-  inherit (source) version vendorHash;
+  version = "3.15.0";
 
   pname = "prometheus";
 
@@ -44,16 +46,14 @@ let
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${version}";
-    hash = source.hash;
+    hash = "sha256-H0VkirdEVWoFxg86g8utf6EuCSH3pHD8iuHg6y0xOZE=";
   };
 
-  assets = buildNpmPackage {
+  assets = stdenv.mkDerivation (finalAssetsAttrs: {
     pname = "${pname}-assets";
     inherit version;
 
     src = "${src}/web/ui";
-
-    npmDepsHash = source.npmDepsHash;
 
     patches = [
       # Disable old React app as it depends on deprecated create-react-apps
@@ -61,34 +61,61 @@ let
       ./disable-react-app.diff
     ];
 
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAssetsAttrs) pname version src;
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-iSnP2zImIBklU/Ejq2NiuAYAo0SCuWtYbsAyTFHuD7Q=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm_11
+    ];
+
     env.CI = true;
+
+    __darwinAllowLocalNetworking = true;
 
     doCheck = true;
     checkPhase = ''
       runHook preCheck
 
-      npm test
+      pnpm test
 
       runHook postCheck
     '';
 
-    postInstall = ''
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm build
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/static
-      cp -r $out/lib/node_modules/prometheus-io/static/* $out/static
+      cp -r static/* $out/static
       find $out/static -type f -exec gzip -f9 {} \;
 
-      # Remove node_modules
-      rm -rf $out/lib
+      runHook postInstall
     '';
-  };
+  });
 in
 buildGoModule (finalAttrs: {
   inherit
     pname
     version
-    vendorHash
     src
     ;
+
+  vendorHash = "sha256-ax/uL+fR0dGOiEMQfEzYPh+437i6sUGFmBEBfENbEqI=";
+
+  proxyVendor = true;
 
   outputs = [
     "out"
@@ -138,7 +165,13 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then GOARCH= make -o assets plugins; fi
+    # CC and LD required to fix cross-compilation
+    # go generate -tags plugins ./plugins
+    # /nix/store/...-go-1.25.5/share/go/pkg/tool/linux_amd64/link: running riscv64-unknown-linux-gnu-gcc failed: exit status 1
+    # /nix/store/...-riscv64-unknown-linux-gnu-gcc-wrapper-15.2.0/bin/riscv64-unknown-linux-gnu-gcc -m64 -s -o $WORK/b001/exe/generate -rdynamic /build/go-link-1349994969/go.o
+    # riscv64-unknown-linux-gnu-gcc: error: unrecognized command-line option '-m64'
+    # Above log is due to https://github.com/golang/go/blob/b194f5d24a71e34f147c90e4351d80ac75be55de/src/cmd/cgo/gcc.go#L1763
+    if [[ -d vendor ]]; then GOARCH= CC="$CC_FOR_BUILD" LD="$CC_FOR_BUILD" make -o assets plugins; fi
 
     # Recreate the `make assets-compress` target here - workaround permissions
     # errors
@@ -184,6 +217,10 @@ buildGoModule (finalAttrs: {
   checkFlags = [
     # Skip for issue during TSDB compaction
     "-skip=TestBlockRanges"
+    # both are flaky and might fail when the builder is under load
+    # https://github.com/prometheus/prometheus/issues/16450
+    "-skip=TestDelayedCompaction"
+    "-skip=TestHeadCompactionWhileScraping"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "-skip=TestEvaluations/testdata/aggregators.test"
@@ -192,12 +229,17 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
+    inherit assets;
     tests = { inherit (nixosTests) prometheus; };
-    updateScript = ./update.sh;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "assets"
+      ];
+    };
   };
 
   meta = {

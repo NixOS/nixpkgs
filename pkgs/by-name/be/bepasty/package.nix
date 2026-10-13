@@ -10,6 +10,14 @@ let
   bepastyPython = python3.override {
     self = bepastyPython;
     packageOverrides = self: super: {
+      xstatic-bootstrap = super.xstatic-bootstrap.overridePythonAttrs (oldAttrs: rec {
+        version = "4.5.3.1";
+        src = oldAttrs.src.override {
+          pname = "XStatic-Bootstrap";
+          inherit version;
+          hash = "sha256-z2fSBUN7MlCKiLaafnxbviylqK5xCXORpqb1EOv9KCA=";
+        };
+      });
       xstatic-font-awesome = super.xstatic-font-awesome.overridePythonAttrs (oldAttrs: rec {
         version = "4.7.0.0";
         src = oldAttrs.src.override {

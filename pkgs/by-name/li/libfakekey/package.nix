@@ -5,9 +5,9 @@
   automake,
   autoconf,
   libtool,
-  libX11,
-  libXi,
-  libXtst,
+  libx11,
+  libxi,
+  libxtst,
   pkg-config,
   xorgproto,
 }:
@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXi
-    libXtst
+    libx11
+    libxi
+    libxtst
     xorgproto
   ];
 
-  NIX_LDFLAGS = "-lX11";
+  env.NIX_LDFLAGS = "-lX11";
 
   meta = {
     description = "X virtual keyboard library";

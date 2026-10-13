@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.3";
 
   src = fetchurl {
-    url = "http://www.openwall.com/popa3d/popa3d-${finalAttrs.version}.tar.gz";
+    url = "https://www.openwall.com/popa3d/popa3d-${finalAttrs.version}.tar.gz";
     hash = "sha256-A7hT2vnyQm/RjUENM76C7zofCcFQ0spNIhRiTU5jiLw=";
   };
 
@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-openssl.patch
     ./use-glibc-crypt.patch
     ./enable-standalone-mode.patch
+    ./fix-gcc15.patch
   ];
 
   enableParallelBuilding = true;
@@ -46,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny POP3 daemon with security as the primary goal";
     mainProgram = "popa3d";
     platforms = lib.platforms.linux;
+    license = lib.licenses.free;
   };
 })

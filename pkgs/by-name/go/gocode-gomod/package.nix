@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gocode-gomod";
   version = "1.0.0";
 
@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stamblerre";
     repo = "gocode";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "YAOYrPPKgnjCErq8+iW0Le51clGBv0MJy2Nnn7UVo/s=";
   };
 
@@ -50,4 +50,4 @@ buildGoModule rec {
       rvolosatovs
     ];
   };
-}
+})

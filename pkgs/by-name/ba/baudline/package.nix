@@ -2,22 +2,22 @@
   lib,
   stdenv,
   fetchurl,
-  libXmu,
-  libXt,
-  libX11,
-  libXext,
-  libXxf86vm,
+  libxmu,
+  libxt,
+  libx11,
+  libxext,
+  libxxf86vm,
   libjack2,
   makeWrapper,
 }:
 
 let
   rpath = lib.makeLibraryPath [
-    libXmu
-    libXt
-    libX11
-    libXext
-    libXxf86vm
+    libxmu
+    libxt
+    libx11
+    libxext
+    libxxf86vm
     libjack2
   ];
 in

@@ -125,8 +125,9 @@ buildPythonPackage {
     homepage = "http://graphiteapp.org/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      offline
       basvandijk
     ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

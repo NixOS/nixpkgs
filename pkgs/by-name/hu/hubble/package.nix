@@ -1,21 +1,21 @@
 {
   stdenv,
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "hubble";
-  version = "1.18.5";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "hubble";
     tag = "v${version}";
-    hash = "sha256-0R9Bm+8eiCOfsCs2oCBjZQR/N8z0DmkGBC/6Fy4JNyM=";
+    hash = "sha256-k6UvjNvWcLz9AaHik+np6b04A2tht4RXpgp6iY0VMYc=";
   };
 
   nativeBuildInputs = [

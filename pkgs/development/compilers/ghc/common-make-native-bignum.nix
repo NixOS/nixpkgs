@@ -301,9 +301,21 @@ stdenv.mkDerivation (
         stripLen = 1;
         extraPrefix = "libraries/unix/";
       })
+      # Fix build with gcc16 where `const` is not detected.
+      # https://github.com/haskell/unix/pull/371
+      (fetchpatch {
+        name = "unix-AC_C_CONST-drop.patch";
+        url = "https://github.com/haskell/unix/commit/1e4183114d4bde7a343803ae11ebbe6763a81ad2.patch";
+        hash = "sha256-ZeIeX4mX5qO0AwT8ASO25ZQXjcTICPfyy5MYw5CJ9sw=";
+        stripLen = 1;
+        extraPrefix = "libraries/unix/";
+      })
 
       # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129 krank:ignore-line
       ./docs-sphinx-7.patch
+
+      # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
+      ./ghc-9.4-docs-sphinx-9.patch
 
       # Correctly record libnuma's library and include directories in the
       # package db. This fixes linking whenever stdenv and propagation won't
@@ -322,7 +334,7 @@ stdenv.mkDerivation (
     # This causes GHC to fail compilation on mach-o platforms ever since we upgraded to
     # LLVM 19.
     #
-    # clang compiles the same file without issues whithout the roundtrip via assembly. Thus,
+    # clang compiles the same file without issues without the roundtrip via assembly. Thus,
     # the solution is to backport those changes from GHC 9.6 that skip the intermediate
     # assembly step.
     #
@@ -391,6 +403,13 @@ stdenv.mkDerivation (
     ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     postPatch = "patchShebangs .";
+
+    # libraries/unix/configure.ac patch requires ./configure refresh
+    postAutoreconf = ''
+      pushd libraries/unix
+      autoconf
+      popd
+    '';
 
     # GHC is a bit confused on its cross terminology.
     # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
@@ -498,6 +517,11 @@ stdenv.mkDerivation (
     configureFlags = [
       "--datadir=$doc/share/doc/ghc"
     ]
+    # ghc 9.10 and later use c17 by default. we use gnu17 on darwin for older
+    # ghc versions to match this and fix build issues with newer clang.
+    ++ lib.optionals (hostPlatform.isDarwin && lib.versionOlder version "9.10") [
+      "CFLAGS=-std=gnu17"
+    ]
     ++ lib.optionals enableTerminfo [
       "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
       "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"
@@ -536,6 +560,8 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals enableUnregisterised [
       "--enable-unregisterised"
+      # The C backend generates code incompatible with gnu23
+      "CONF_CC_OPTS_STAGE2=-std=gnu17"
     ];
 
     # Make sure we never relax`$PATH` and hooks support for compatibility.

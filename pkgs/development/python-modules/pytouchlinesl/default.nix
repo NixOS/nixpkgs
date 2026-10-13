@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pytouchlinesl";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jnsgruk";
     repo = "pytouchlinesl";
     tag = version;
-    hash = "sha256-R5XgH8A9P5KcjQL/f+E189A+iRVUIbWsmyRrnfV43v4=";
+    hash = "sha256-o9/K+0ADbU9qTtjLCGM2+aBQsQDP22qdwsgimo9oKns=";
   };
 
   build-system = [ setuptools ];

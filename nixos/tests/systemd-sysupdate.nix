@@ -56,14 +56,19 @@ in
       };
 
       environment.etc."systemd/import-pubring.gpg".source = "${gpgKeyring}/pubkey.gpg";
+
+      systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     };
   };
 
   testScript = ''
+    import datetime as dt
+
     server.wait_for_unit("nginx.service")
+    target.wait_for_unit("network-online.target")
 
     print(target.succeed("updatectl list"))
     target.succeed("updatectl update")
-    assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=5)
+    assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=dt.timedelta(seconds=5))
   '';
 }

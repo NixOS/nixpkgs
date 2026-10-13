@@ -5,10 +5,10 @@
   fetchpatch,
   pkg-config,
   cairo,
-  libX11,
+  libx11,
   libjack2,
   liblo,
-  libsigcxx,
+  libsigcxx_2_0,
   zita-resampler,
   fftwFloat,
 }:
@@ -39,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     cairo
-    libX11
+    libx11
     libjack2
     liblo
-    libsigcxx
+    libsigcxx_2_0
     zita-resampler
     fftwFloat
   ];

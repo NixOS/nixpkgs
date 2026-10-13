@@ -8,14 +8,14 @@
   staticOnly ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crc32c";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "crc32c";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0c383p7vkfq9rblww6mqxz8sygycyl27rr0j3bzb8l8ga71710ii";
     fetchSubmodules = true;
   };
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/google/crc32c";
     description = "CRC32C implementation with support for CPU-specific acceleration instructions";
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

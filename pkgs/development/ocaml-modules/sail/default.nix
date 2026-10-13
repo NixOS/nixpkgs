@@ -3,6 +3,7 @@
   stdenv,
   darwin,
   fetchurl,
+  fetchpatch,
   buildDunePackage,
   base64,
   omd,
@@ -28,7 +29,13 @@ buildDunePackage {
     hash = "sha256-uoG416pXBeBAZAE6sgwAa4DG20T5UiWsT79gQil+UOs=";
   };
 
-  minimalOCamlVersion = "4.08";
+  patches = [
+    # Compatibility with menhir ≥ 20220203
+    (fetchpatch {
+      url = "https://github.com/rems-project/sail/commit/446fb477c508853595ccc937ed60765aa685ae31.patch";
+      hash = "sha256-+j0USd0Ish11aYEzYLRiqkydhUPQoD9RPNjRhQcyX9c=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper

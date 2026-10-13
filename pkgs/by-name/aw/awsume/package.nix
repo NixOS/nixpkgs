@@ -5,19 +5,19 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "awsume";
-  version = "4.5.5";
+  version = "4.5.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "trek10inc";
     repo = "awsume";
-    tag = version;
-    hash = "sha256-lm9YANYckyHDoNbB1wytBm55iyBmUuxFPmZupfpReqc=";
+    tag = finalAttrs.version;
+    hash = "sha256-UTwqu2czo2ASql18dj0qwPGmKCF0QxVqyX7PZMWRUeg=";
   };
 
-  AWSUME_SKIP_ALIAS_SETUP = 1;
+  env.AWSUME_SKIP_ALIAS_SETUP = 1;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -54,4 +54,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "awsume";
     maintainers = with lib.maintainers; [ nilp0inter ];
   };
-}
+})

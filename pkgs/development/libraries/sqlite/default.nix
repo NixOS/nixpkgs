@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   unzip,
+  tcl,
   zlib,
   readline,
   ncurses,
@@ -25,19 +27,19 @@ let
   archiveVersion = import ./archive-version.nix lib;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.51.2";
+  version = "3.53.3";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2026/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-+9ifhmsUA7tmoUMGVEAInddhAPIjgxTZInSggtTyt7s=";
+    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion finalAttrs.version}.zip";
+    hash = "sha256-u4C/ijv/wZJBzoq6WkvHTpw5gAE8sLXw8JdqmVFpQq8=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-xuMNB8XpwSaQHFTY18kKnBo3B4JFUX8GCzxpxN5Dv10=";
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion finalAttrs.version}.zip";
+    hash = "sha256-Fo+Zhph2vPTbjZPvoqSDqcgVNlN9AZAMWM110KZ8yic=";
   };
 
   outputs = [
@@ -55,7 +57,69 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     unzip
+    tcl
   ];
+
+  patches = [
+    # Make test failures actually fail the build
+    (fetchpatch {
+      name = "0001-sqlite-testrunner-communicate-test-failure-to-make.patch";
+      url = "https://github.com/sqlite/sqlite/commit/4e4962f6b303688412746b54200ff5402c047aee.patch";
+      includes = [
+        "test/testrunner.tcl"
+      ];
+      hash = "sha256-DLV2ML2zzjd1nEVScDF1sFDdZm1CrOWt5M10rRwXYCY=";
+    })
+
+    # Fix fts3corrupt4.test failure on big-endian
+    # https://sqlite.org/forum/forumpost/40492f69f7
+    # Doesn't seem to have been submitted yet :(
+    (fetchurl {
+      url = "https://src.fedoraproject.org/rpms/sqlite/raw/faea37529752d0134154f3678443e2822a105834/f/sqlite-3.53.3-fix-fts3corrupt4-test.patch";
+      hash = "sha256-cfwBOomIjm8szInOqKZfg2lmRM9K663ujKR3wVmAtrE=";
+    })
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Add a missing `-DBUILD_sqlite` to one place in the makefile
+    #
+    # TODO(@Ericson2314): drop once a release contains it, and (before that)
+    # make unconditional (it is not cross-specific) next mass rebuild.
+    (fetchpatch {
+      url = "https://github.com/sqlite/sqlite/commit/67c202ab67398f6a27eaa6316e31254c065928cd.patch";
+      includes = [ "main.mk" ];
+      hash = "sha256-JJnIF/2SmGgPzQe7E4DmC61komZpbmjnIemggpBPLdM=";
+    })
+
+    # --with-tcl and --with-tclsh were tangled together in bad ways. These
+    # two commits untangle them, which unbreaks our cross builds. They were
+    # merged to trunk in 8364e34cbd9e.
+    #
+    # https://sqlite.org/forum/forumpost/fe9e99eb27c8c2ba
+    #
+    # TODO make it unconditional next mass rebuild, and drop it entirely
+    # once a release contains it.
+    (fetchpatch {
+      url = "https://github.com/sqlite/sqlite/commit/d501b949a39d276494c8e36cdc2b94bfe28e671c.patch";
+      includes = [ "autosetup/sqlite-config.tcl" ];
+      hash = "sha256-eTeb1o1aCjXG5jv3jK6KtSA7Lcr7lrUY+sI0iq/U8zU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/sqlite/sqlite/commit/e4e1b4a464e632fb06870114081d06ce7c53a1de.patch";
+      includes = [ "autosetup/sqlite-config.tcl" ];
+      hash = "sha256-uMhQDSP1jTj/Mz/24oOi84tE4bAINmplDoKJGxUGD1A=";
+    })
+  ];
+
+  # capi3c.test is a copy of capi3.test, but upstream only disabled the
+  # intentional use-after-free cases in the original. They segfault with
+  # allocators that return freed memory to the OS eagerly, such as musl's.
+  ${if stdenv.hostPlatform.isMusl then "postPatch" else null} = ''
+    substituteInPlace test/capi3c.test \
+      --replace-fail \
+        'if {[clang_sanitize_address]==0} {' \
+        'if {0 && [clang_sanitize_address]==0} {'
+  '';
+
   buildInputs = [
     zlib
   ]
@@ -63,6 +127,8 @@ stdenv.mkDerivation rec {
     readline
     ncurses
   ];
+
+  strictDeps = true;
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
@@ -74,11 +140,25 @@ stdenv.mkDerivation rec {
   # on a per-output basis.
   setOutputFlags = false;
 
+  env.TCLLIBDIR = "${placeholder "out"}/lib";
+
   configureFlags = [
     "--bindir=${placeholder "bin"}/bin"
     "--includedir=${placeholder "dev"}/include"
     "--libdir=${placeholder "out"}/lib"
+    (if stdenv.hostPlatform.isStatic then "--disable-tcl" else "--with-tcl=${lib.getLib tcl}/lib")
+    # Enabling limit-on-update/delete by adding -DSQLITE_ENABLE_UPDATE_DELETE_LIMIT to NIX_CFLAGS_COMPILE does not work: the lemon parser generator (built early in buildPhase) doesn't receive the flag when it's invoked, as it's not been wrapped with Nix magic.
+    "--enable-update-limit"
   ]
+  # With the patch above this names only what runs the code generators, not
+  # the library, so it is the build platform's and is orthogonal to both
+  # `--with-tcl` and `--disable-tcl`.
+  #
+  # TODO pass this unconditionally next mass rebuild: which interpreter runs
+  # the generators is not something to leave to a search of `PATH`.
+  ++ lib.optional (
+    stdenv.buildPlatform != stdenv.hostPlatform
+  ) "--with-tclsh=${lib.getExe' buildPackages.tcl "tclsh"}"
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.
   ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
@@ -95,6 +175,7 @@ stdenv.mkDerivation rec {
     "-DSQLITE_ENABLE_FTS5"
     "-DSQLITE_ENABLE_GEOPOLY"
     "-DSQLITE_ENABLE_MATH_FUNCTIONS"
+    "-DSQLITE_ENABLE_PERCENTILE"
     "-DSQLITE_ENABLE_PREUPDATE_HOOK"
     "-DSQLITE_ENABLE_RBU"
     "-DSQLITE_ENABLE_RTREE"
@@ -120,10 +201,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $doc/share/doc
     unzip $docsrc
-    mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
+    mv sqlite-doc-${archiveVersion finalAttrs.version} $doc/share/doc/sqlite
   '';
 
-  doCheck = false; # fails to link against tcl
+  # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
+  # The tests are only defined for Darwin, Linux, Windows, and OpenBSD, not any other unix-like OS.
+  doCheck = stdenv.hostPlatform.isLinux;
+  # When tcl is not available, only run test targets that don't need it.
+  checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
+  # Neither GCC's libsanitizer nor compiler-rt's sanitizers are built for
+  # musl, so the fuzzcheck-asan and fuzzcheck-ubsan programs cannot be linked.
+  ${if stdenv.hostPlatform.isMusl then "checkFlags" else null} = [ "TSTRNNR_OPTS=~fuzzcheck-%san" ];
 
   passthru = {
     tests = {
@@ -144,15 +232,21 @@ stdenv.mkDerivation rec {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
-    changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
+    changelog = "https://www.sqlite.org/releaselog/${
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.blessing;
     mainProgram = "sqlite3";
     maintainers = with lib.maintainers; [ np ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" finalAttrs.version;
   };
-}
+})

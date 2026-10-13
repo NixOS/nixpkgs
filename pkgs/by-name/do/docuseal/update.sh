@@ -29,6 +29,8 @@ sed -i "/^ruby '[0-9]\+\.[0-9]\+\.[0-9]\+'$/d" "$repo/Gemfile"
 # fix: https://github.com/nix-community/bundix/issues/88
 BUNDLE_GEMFILE="$repo/Gemfile" bundler lock --remove-platform x86_64-linux --lockfile="$repo/Gemfile.lock"
 BUNDLE_GEMFILE="$repo/Gemfile" bundler lock --remove-platform aarch64-linux --lockfile="$repo/Gemfile.lock"
+# keep generic gems available for bundlerEnv consumers
+BUNDLE_GEMFILE="$repo/Gemfile" bundler lock --add-platform ruby --lockfile="$repo/Gemfile.lock"
 # generate gemset.nix
 bundix --lock --lockfile="$repo/Gemfile.lock" --gemfile="$repo/Gemfile" --gemset="$dir/gemset.nix"
 

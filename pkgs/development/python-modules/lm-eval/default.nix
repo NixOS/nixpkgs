@@ -2,104 +2,88 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
 
   # build-system
-  setuptools-scm,
+  setuptools,
 
   # dependencies
   accelerate,
   datasets,
   dill,
   evaluate,
+  jinja2,
   jsonlines,
   more-itertools,
-  numexpr,
   peft,
-  pybind11,
   pytablewriter,
   rouge-score,
   sacrebleu,
   scikit-learn,
   sqlitedict,
   torch,
-  tqdm-multiprocess,
   transformers,
+  typing-extensions,
   word2number,
   zstandard,
 
   # optional-dependencies
-  # api
   aiohttp,
+  immutabledict,
+  langdetect,
+  librosa,
+  litellm,
+  nltk,
+  numpy,
+  optimum,
+  pandas,
+  pymorphy2,
   requests,
+  sentencepiece,
+  soundfile,
+  statsmodels,
   tenacity,
   tiktoken,
   tqdm,
-  # dscrim_eval
-  statsmodels,
-  # hf_transfer
-  hf-transfer,
-  # ifeval
-  immutabledict,
-  langdetect,
-  nltk,
-  # neuronx
-  optimum,
-  # mamba
-  causal-conv1d,
-  mamba-ssm,
-  # math
-  antlr4-python3-runtime,
-  sympy,
-  # sentencepiece
-  sentencepiece,
-  # vllm
   vllm,
-  # wandb
-  numpy,
-  pandas,
   wandb,
 
   # tests
+  pillow,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "lm-eval";
-  version = "0.4.9.2";
+  version = "0.4.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EleutherAI";
     repo = "lm-evaluation-harness";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Foz49XfIIzGJkgzjBu9P1J9cwYjl3fjAAJG9GKRwfq8=";
+    hash = "sha256-ju9DcClupxlFW1Ik7NUIJtYE+G6lFEwLYoTXCzOmwVs=";
   };
 
   build-system = [
-    setuptools-scm
+    setuptools
   ];
 
   dependencies = [
-    accelerate
     datasets
     dill
     evaluate
-    jsonlines
+    jinja2
     more-itertools
-    numexpr
-    peft
-    pybind11
     pytablewriter
     rouge-score
     sacrebleu
     scikit-learn
     sqlitedict
-    torch
-    tqdm-multiprocess
-    transformers
+    tqdm
+    typing-extensions
     word2number
-    zstandard
   ];
 
   optional-dependencies = {
@@ -110,21 +94,35 @@ buildPythonPackage (finalAttrs: {
       tiktoken
       tqdm
     ];
+    archiver = [
+      jsonlines
+      zstandard
+    ];
+    audiolm_qwen = [
+      librosa
+      soundfile
+    ];
     discrim_eval = [ statsmodels ];
-    hf_transfer = [ hf-transfer ];
+    hf = [
+      accelerate
+      peft
+      torch
+      transformers
+    ];
     ifeval = [
       immutabledict
       langdetect
       nltk
     ];
-    neuronx = [ optimum ] ++ optimum.optional-dependencies.neuronx;
-    mamba = [
-      causal-conv1d
-      mamba-ssm
+    libra = [
+      pymorphy2
     ];
-    math = [
-      antlr4-python3-runtime
-      sympy
+    litellm = [
+      aiohttp
+      litellm
+      requests
+      tenacity
+      tqdm
     ];
     optimum = [ optimum ] ++ optimum.optional-dependencies.openvino;
     sentencepiece = [ sentencepiece ];
@@ -134,9 +132,25 @@ buildPythonPackage (finalAttrs: {
       pandas
       wandb
     ];
-    # Still missing dependencies for the following:
-    # deepsparse, gptq, ibm_watsonx_ai, multilingual, promptsource, sparseml,
-    # zeno, gptqmodel, japanese_leaderboard; all = [...];
+    # Still missing dependencies for the following optional dependency groups:
+    # - acpbench
+    # - deepsparse
+    # - gptq
+    # - gptqmodel
+    # - habana
+    # - ibm_watsonx_ai
+    # - ipex
+    # - japanese_leaderboard
+    # - longbench
+    # - math
+    # - multilingual
+    # - onnxruntime-genai
+    # - ruler
+    # - sparsify
+    # - tasks
+    # - trackio
+    # - unitxt
+    # - zeno
   };
 
   pythonRelaxDeps = [ "datasets" ];
@@ -144,10 +158,13 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "lm_eval" ];
 
   nativeCheckInputs = [
+    pillow
     pytestCheckHook
+    sentencepiece
     writableTmpDirAsHomeHook
   ]
-  ++ finalAttrs.passthru.optional-dependencies.api;
+  ++ finalAttrs.passthru.optional-dependencies.api
+  ++ finalAttrs.passthru.optional-dependencies.hf;
 
   disabledTests = [
     "test_deepsparse" # deepsparse is not available
@@ -162,7 +179,6 @@ buildPythonPackage (finalAttrs: {
     "tests/models/test_bos_handling.py"
     "tests/models/test_huggingface.py"
     "tests/test_evaluator.py"
-    "tests/test_include_path.py"
     "tests/test_prompt.py"
     "tests/test_task_manager.py"
     "tests/test_tasks.py"
@@ -175,11 +191,16 @@ buildPythonPackage (finalAttrs: {
     "tests/scripts/test_zeno_visualize.py"
   ];
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?$";
+  };
+
   meta = {
     changelog = "https://github.com/EleutherAI/lm-evaluation-harness/releases/tag/${finalAttrs.src.tag}";
     description = "Framework for few-shot evaluation of language models";
     homepage = "https://github.com/EleutherAI/lm-evaluation-harness";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.booxter ];
   };
 })

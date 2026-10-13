@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-footnote";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "daviddrysdale";
     repo = "mdbook-footnote";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YFMo+gufUEvHRnA9I98fGRXHcQjSTHY7DSRo90wcSHk=";
   };
 
@@ -26,4 +26,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

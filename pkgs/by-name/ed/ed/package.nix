@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ed";
-  version = "1.22.4";
+  version = "1.22.6";
 
   src = fetchurl {
     url = "mirror://gnu/ed/ed-${finalAttrs.version}.tar.lz";
-    hash = "sha256-mHoeu7rT/PY6H/qeKbP6feBlFQ0WMZ0KSd2LV/gdPpw=";
+    hash = "sha256-PzOyITUhnDnDxpX3txccJWfT4qF8eYwKkGBzIMuyaPI=";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
       command = "ed --version";
     };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/ed/";

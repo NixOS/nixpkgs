@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/didix21/mdutils";
     changelog = "https://github.com/didix21/mdutils/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.azahi ];
+    maintainers = [ ];
   };
 }

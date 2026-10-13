@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gen-license";
   version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "nexxeln";
     repo = "license-generator";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-VOmt8JXd2+ykhkhupv/I4RfXz9P0eEesW3JGAoXStUI=";
   };
 
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ryanccn ];
   };
-}
+})

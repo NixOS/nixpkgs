@@ -5,7 +5,7 @@
 }:
 
 with python3Packages;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "tuir";
   version = "1.31.1";
   pyproject = true;
@@ -13,7 +13,7 @@ buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "Chocimier";
     repo = "tuir";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-lUK6gXwvVjiYrJXMSFlzp07Yt+nSkU933J4vBJWOLlg=";
   };
 
@@ -59,4 +59,4 @@ buildPythonApplication rec {
       brokenpip3
     ];
   };
-}
+})

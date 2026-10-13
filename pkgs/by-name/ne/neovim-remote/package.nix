@@ -7,7 +7,7 @@
   fetchpatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "neovim-remote";
   version = "2.5.1";
   pyproject = true;
@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uO5KezbUQGj3rNpuw2SJOzcP86DZqX7DJFz3BxEnf1E=";
   };
 
@@ -25,6 +25,10 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/mhinz/neovim-remote/commit/56d2a4097f4b639a16902390d9bdd8d1350f948c.patch";
       hash = "sha256-/PjE+9yfHtOUEp3xBaobzRM8Eo2wqOhnF1Es7SIdxvM=";
     })
+    # Fix nvr --version: replace deprecated pkg_resources with importlib.metadata
+    # (stdlib since Python 3.8). setuptools was correctly kept in build-system
+    # only; this avoids adding it as a spurious runtime dependency.
+    ./use-importlib-metadata.patch
   ];
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -55,4 +59,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "nvr";
   };
-}
+})

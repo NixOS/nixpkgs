@@ -5,12 +5,12 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bibutils";
   version = "7.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bibutils/bibutils_${version}_src.tgz";
+    url = "mirror://sourceforge/bibutils/bibutils_${finalAttrs.version}_src.tgz";
     sha256 = "sha256-bgKK7x6Kaz5azvCYWEp7tocI81z+dAEbNBwR/qXktcM=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.garrison ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liboggz";
   version = "1.1.3";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/liboggz/liboggz-${version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/liboggz/liboggz-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-JGbQO2fvC8ug4Q+zUtGp/9n5aRFlerzjy7a6Qpxlbi8=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };
-}
+})

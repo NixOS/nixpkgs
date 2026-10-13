@@ -13,21 +13,26 @@
   starlette,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "slowapi";
-  version = "0.1.9";
+  version = "0.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = "slowapi";
-    tag = "v${version}";
-    hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YNL/xfs8fmkAGagMhqJX3tXoltjHznZjUrF/a2RWCDs=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    # https://github.com/laurentS/slowapi/pull/279
+    ./starlette-1.0-compat.patch
+  ];
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     limits
     redis
   ];
@@ -45,6 +50,10 @@ buildPythonPackage rec {
     # AssertionError: assert '1740326049.9886339' == '1740326049'
     "test_headers_no_breach"
     "test_headers_breach"
+    # tests use @app.route() removed in Starlette 1.0
+    # https://github.com/laurentS/slowapi/issues/271
+    "test_retry_after"
+    "test_exempt_decorator"
   ];
 
   pythonImportsCheck = [ "slowapi" ];
@@ -52,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for API rate limiting";
     homepage = "https://github.com/laurentS/slowapi";
-    changelog = "https://github.com/laurentS/slowapi/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/laurentS/slowapi/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

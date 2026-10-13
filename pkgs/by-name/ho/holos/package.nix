@@ -8,14 +8,14 @@
   kustomize,
   kubernetes-helm,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "holos";
   version = "0.106.0";
 
   src = fetchFromGitHub {
     owner = "holos-run";
     repo = "holos";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-IDIqSlHzmX0rdO3frDx5S+x18OJoJKMicQPx2exIMP8=";
   };
 
@@ -23,8 +23,8 @@ buildGoModule rec {
 
   ldflags = [
     "-w"
-    "-X github.com/holos-run/holos/version.GitDescribe=v${version}"
-    "-X github.com/holos-run/holos/version.GitCommit=${src.rev}"
+    "-X github.com/holos-run/holos/version.GitDescribe=v${finalAttrs.version}"
+    "-X github.com/holos-run/holos/version.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/holos-run/holos/version.GitTreeState=clean"
     # fix time for deterministic builds
     "-X github.com/holos-run/holos/version.BuildDate=1970-01-01T00:00:00Z"
@@ -41,7 +41,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = holos;
     command = "holos --version || true";
-    version = "${version}";
+    version = "${finalAttrs.version}";
   };
 
   meta = {
@@ -51,4 +51,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ cameronraysmith ];
     mainProgram = "holos";
   };
-}
+})

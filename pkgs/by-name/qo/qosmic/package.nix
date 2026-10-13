@@ -4,13 +4,16 @@
   fetchpatch,
   libsForQt5,
   pkg-config,
-  lua,
+  lua5_2_compat,
   flam3,
   libxml2,
   libpng,
   libjpeg,
   lib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qosmic";

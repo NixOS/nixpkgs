@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   meta = {
     description = "GHDL plugin for Yosys";
     homepage = "https://github.com/ghdl/ghdl-yosys-plugin";
-    license = lib.licenses.isc;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };

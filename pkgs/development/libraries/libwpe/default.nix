@@ -7,7 +7,7 @@
   libxkbcommon,
   libGL,
   ninja,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxkbcommon
     libGL
-    libX11
+    libx11
   ];
 
   meta = {

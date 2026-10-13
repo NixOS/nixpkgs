@@ -35,6 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/oxzi/et";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 })

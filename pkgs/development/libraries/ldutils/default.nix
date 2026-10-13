@@ -2,7 +2,8 @@
   mkDerivation,
   lib,
   fetchFromGitLab,
-  libsForQt5,
+  qtcharts,
+  qtsvg,
   cmake,
 }:
 mkDerivation {
@@ -17,7 +18,7 @@ mkDerivation {
     hash = "sha256-UMDayvz9RlcR4HVJNn7tN4FKbiKAFRSPaK0osA6OGTI=";
   };
 
-  buildInputs = with libsForQt5.qt5; [
+  buildInputs = [
     qtcharts
     qtsvg
   ];
@@ -28,8 +29,10 @@ mkDerivation {
 
   qmakeFlags = [ "ldutils.pro" ];
 
-  LDUTILS_LIB = placeholder "out";
-  LDUTILS_INCLUDE = placeholder "out";
+  env = {
+    LDUTILS_LIB = placeholder "out";
+    LDUTILS_INCLUDE = placeholder "out";
+  };
 
   meta = {
     description = "Headers and link library for other ldutils projects";

@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "localstack";
-  version = "4.12.0";
+  version = "4.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
-    tag = "v${version}";
-    hash = "sha256-k5aIdfWm3Tvl/J0s1l0gTXJqnb4j5doJdIIaLLOJXg4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vagQ2+eG93ns+E9HT/aDWlDn9jhhIyE7PxBXedsgyH0=";
   };
 
   build-system = with python3.pkgs; [
@@ -73,4 +73,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "localstack";
   };
-}
+})

@@ -1,27 +1,27 @@
 {
   lib,
-  python3Packages,
+  python313Packages,
   fetchFromGitHub,
   nix-update-script,
   testers,
   icloudpd,
 }:
 
-python3Packages.buildPythonApplication rec {
+python313Packages.buildPythonApplication (finalAttrs: {
   pname = "icloudpd";
-  version = "1.32.2";
+  version = "1.32.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "icloud-photos-downloader";
     repo = "icloud_photos_downloader";
-    tag = "v${version}";
-    hash = "sha256-XwMY3OBGYDA/DKTXYgxuMV9pbamy8NbitMrEbsEmlMk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-u7fG/rPNzeru+DU84G/77BqrLHONz8yEg18xG3gsP70=";
   };
 
   pythonRelaxDeps = true;
 
-  dependencies = with python3Packages; [
+  dependencies = with python313Packages; [
     certifi
     click
     flask
@@ -42,9 +42,9 @@ python3Packages.buildPythonApplication rec {
     wheel
   ];
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python313Packages; [ setuptools ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with python313Packages; [
     freezegun
     mock
     pytest-timeout
@@ -90,7 +90,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "wheel==0.45.1" "wheel"
 
     substituteInPlace src/foundation/__init__.py \
-      --replace-fail "0.0.1" "${version}"
+      --replace-fail "0.0.1" "${finalAttrs.version}"
   '';
 
   meta = {
@@ -102,4 +102,4 @@ python3Packages.buildPythonApplication rec {
       anpin
     ];
   };
-}
+})

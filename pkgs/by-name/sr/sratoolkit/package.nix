@@ -16,16 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "sratoolkit";
 
   # NOTE: When updating make sure to update ncbi-vdb as well for versions to match
-  version = "3.2.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "ncbi";
     repo = "sra-tools";
     tag = finalAttrs.version;
-    hash = "sha256-OeM4syv9c1rZn2ferrhXyKJu68ywVYwnHoqnviWBZy4=";
+    hash = "sha256-JMdJ8F4n9WgdP2oj8MN1+QlxCSmqFzsjAovx/+RyVjk=";
   };
-
-  patches = [ ./attribute_unused.patch ];
 
   cmakeFlags = [
     "-DVDB_INCDIR=${ncbi-vdb}/include"

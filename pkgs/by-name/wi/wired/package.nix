@@ -6,6 +6,7 @@
   dbus,
   pango,
   cairo,
+  libxkbcommon,
   libxscrnsaver,
   libxrandr,
   libxi,
@@ -13,20 +14,18 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wired";
-  version = "0.10.6";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "Toqozz";
     repo = "wired-notify";
-    tag = version;
-    hash = "sha256-AWIV/+vVwDZECZ4lFMSFyuyUKJc/gb72PiBJv6lbhnc=";
+    tag = finalAttrs.version;
+    hash = "sha256-tImxEsXDbWczkZwEjR2aGz0FE/UCdzDhPDRGJ80ICpY=";
   };
 
-  cargoHash = "sha256-xE6r8l3d9WAXf4DsGbhEiaeMPs02kXY2dG9dk0/7flQ=";
-
-  strictDeps = true;
+  cargoHash = "sha256-oEyyVhA0G17GMrJQ6z/rJgopSolute/qrcC1Qpg+YQU=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -46,6 +45,12 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 -t $out/etc/wired wired.ron wired_multilayout.ron
   '';
 
+  preFixup = ''
+    patchelf $out/bin/wired \
+      --add-needed libxkbcommon-x11.so \
+      --add-rpath ${libxkbcommon}/lib
+  '';
+
   meta = {
     description = "Lightweight notification daemon written in Rust";
     homepage = "https://github.com/Toqozz/wired-notify";
@@ -54,4 +59,4 @@ rustPlatform.buildRustPackage rec {
     badPlatforms = lib.platforms.darwin;
     mainProgram = "wired";
   };
-}
+})

@@ -8,7 +8,7 @@
   genome-collector,
   matplotlib,
   numpy,
-  primer3,
+  primer3-py,
   proglog,
   pytestCheckHook,
   python-codon-tables,
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    primer3
+    primer3-py
     genome-collector
     matplotlib
     pytestCheckHook

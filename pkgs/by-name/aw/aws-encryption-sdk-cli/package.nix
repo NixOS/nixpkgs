@@ -7,13 +7,13 @@
   testers,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "aws-encryption-sdk-cli";
   version = "4.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "aws_encryption_sdk_cli";
     hash = "sha256-FfLgR7gocZ0cLV7bxqvKNI+Fs7kQF0XhR3zf6tHXwOE=";
   };
@@ -60,10 +60,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://aws-encryption-sdk-cli.readthedocs.io/";
-    changelog = "https://github.com/aws/aws-encryption-sdk-cli/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/aws/aws-encryption-sdk-cli/blob/v${finalAttrs.version}/CHANGELOG.rst";
     description = "CLI wrapper around aws-encryption-sdk-python";
     license = lib.licenses.asl20;
     mainProgram = "aws-encryption-cli";
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
-}
+})

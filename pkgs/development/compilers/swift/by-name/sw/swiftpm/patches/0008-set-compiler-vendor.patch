@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 13 Dec 2025 22:59:36 -0500
+Subject: [PATCH 08/11] set-compiler-vendor
+
+---
+ Sources/PackageModel/UserToolchain.swift | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/Sources/PackageModel/UserToolchain.swift b/Sources/PackageModel/UserToolchain.swift
+index 39d7333c5..b63997bad 100644
+--- a/Sources/PackageModel/UserToolchain.swift
++++ b/Sources/PackageModel/UserToolchain.swift
+@@ -409,13 +409,7 @@ public final class UserToolchain: Toolchain {
+     }
+ 
+     public func _isClangCompilerVendorApple() throws -> Bool? {
+-        // Assume the vendor is Apple on macOS.
+-        // FIXME: This might not be the best way to determine this.
+-        #if os(macOS)
+-        return true
+-        #else
+         return false
+-        #endif
+     }
+ 
+     /// Returns the path to lldb.
+-- 
+2.54.0
+

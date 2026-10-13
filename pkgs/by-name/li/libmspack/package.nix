@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmspack";
   version = "0.11alpha";
 
   src = fetchurl {
-    url = "https://www.cabextract.org.uk/libmspack/libmspack-${version}.tar.gz";
+    url = "https://www.cabextract.org.uk/libmspack/libmspack-${finalAttrs.version}.tar.gz";
     hash = "sha256-cN0fsvCuzDZ5G3Gh4YQOYhcweeraoIEZLRwyOg7uohs=";
   };
 
@@ -19,4 +19,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Only;
     platforms = lib.platforms.unix;
   };
-}
+})

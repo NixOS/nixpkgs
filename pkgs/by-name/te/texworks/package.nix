@@ -8,20 +8,23 @@
   qt6Packages,
   hunspell,
   withLua ? true,
-  lua,
+  lua5_2_compat,
   withPython ? true,
   python3,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texworks";
-  version = "0.6.10";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "TeXworks";
     repo = "texworks";
     rev = "release-${finalAttrs.version}";
-    sha256 = "sha256-tC3ADD35yrmwBJQ8JaXdr8trVf6WLt1r2/euzt0mvN8=";
+    sha256 = "sha256-JygsOTryLXpFodwPGbPH3Baawl8k1Qkx2StZ1naInCc=";
   };
 
   nativeBuildInputs = [

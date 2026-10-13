@@ -10,7 +10,7 @@
   plasTeX,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "plastexshowmore";
   version = "0.0.2";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     repo = "plastexshowmore";
     owner = "PatrickMassot";
-    rev = "0.0.2";
+    tag = finalAttrs.version;
     hash = "sha256-b45VHHEwFA41FaInDteix56O7KYDzyKiRRSl7heHqEA=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [ niklashh ];
     license = lib.licenses.asl20;
   };
-}
+})

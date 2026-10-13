@@ -5,7 +5,7 @@
   callPackage,
 }:
 let
-  extVersion = "1.62.0";
+  extVersion = "1.72.0";
   rescript-editor-analysis = callPackage ./rescript-editor-analysis.nix { };
 
   # Ensure the versions match
@@ -30,7 +30,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     name = "rescript-vscode";
     publisher = "chenglou92";
     inherit version;
-    hash = "sha256-yUAhysTM9FXo9ZAzrto+tnjnofIUEQAGBg3tjIainrY=";
+    hash = "sha256-2fN8bq6X1Lm9/5+wNMzL8I0bUVMFetXDWVObUJeVYbU=";
   };
 
   # For rescript-language-server

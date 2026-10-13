@@ -6,14 +6,14 @@
   gitMinimal,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "git-up";
   version = "2.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "git_up";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-SncbnK6LxsleKRa/sSCm/8dsgPw/XJGvYfkcIeWYDy4=";
   };
 
@@ -58,4 +58,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "git-up";
   };
-}
+})

@@ -3,29 +3,34 @@
   buildGoModule,
   fetchFromGitHub,
   fq,
+  installShellFiles,
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "fq";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "wader";
     repo = "fq";
-    rev = "v${version}";
-    hash = "sha256-b28zncqz0B1YIXHCjklAkVbIdXxC36bqIwJ4VrrCe18=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Prd0GkLQOdVtpjeu6Ga6dq3imOm7m4m1/kLp9g/1O0I=";
   };
 
-  vendorHash = "sha256-bF3N+cPJAxAEFmr2Gl3xdKLtv7yLkxze19NgDFWaBn8=";
+  vendorHash = "sha256-oqS6j8YTllObGKR8rFvlcFaUGnT3uouOP7pfzuTcgGk=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = "installManPage doc/fq.1";
 
   passthru.tests = testers.testVersion { package = fq; };
 
@@ -36,4 +41,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ siraben ];
   };
-}
+})

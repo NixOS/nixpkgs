@@ -14,7 +14,7 @@
   jdk,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libjpeg,
   libpng,
   libtiff,
@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sumo";
-  version = "1.25.0";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-sumo";
     repo = "sumo";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-rUa5DpoBfnviSEmzPEiVnZU0KGavAIOFoysQ74uTll0=";
+    hash = "sha256-nAQpHe6N0Wl8XeYMqvTJV8f2m9Fjq6s7HxLgYmt57ns=";
     fetchSubmodules = true;
   };
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     xercesc
     zlib
     python3
-    libX11
+    libx11
     libxcursor
     libxext
     libxfixes

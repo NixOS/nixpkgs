@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0";
 
   src = fetchurl {
-    url = "http://kyberdigi.cz/projects/mencal/files/mencal-${finalAttrs.version}.tar.gz";
+    url = "https://kyberdigi.cz/projects/mencal/files/mencal-${finalAttrs.version}.tar.gz";
     sha256 = "9328d0b2f3f57847e8753c5184531f4832be7123d1b6623afdff892074c03080";
   };
 

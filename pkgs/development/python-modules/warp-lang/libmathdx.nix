@@ -6,11 +6,34 @@
   stdenvNoCC,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
-  # NOTE: The version used should match the version Warp requires:
+let
+  cudaMajorVersion = cudaPackages.cudaMajorVersion; # only 12, 13 supported
+
+  # NOTE: The versions used should match the versions Warp requires:
   # https://github.com/NVIDIA/warp/blob/${version}/deps/libmathdx-deps.packman.xml
+  # NVIDIA no longer publishes new libmathdx releases for CUDA 12.
+  # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
+  releases = {
+    "12" = {
+      version = "0.3.1";
+      hashes = {
+        aarch64-linux = "sha256-hm7VbDNncnPxCmUoW3RglUHPiTdFWOJDSsn7XUyd47o=";
+        x86_64-linux = "sha256-soL5XwAos5iA5+dxVezQFXAJBShq/Yi9YxByiUCQ+dk=";
+      };
+    };
+    "13" = {
+      version = "0.4.1";
+      hashes = {
+        aarch64-linux = "sha256-JpLDb4AgQX4TYWVIirfF25Q8pKN48ftgQNY0LgfTjVw=";
+        x86_64-linux = "sha256-fOCytY3TT0LS2mMcFNl/YzvpcoenSMq1ewVdYRgjB00=";
+      };
+    };
+  };
+  release = releases.${cudaMajorVersion} or null;
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "libmathdx";
-  version = "0.2.3";
+  version = release.version or "unsupported";
 
   outputs = [
     "out"
@@ -20,8 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src =
     let
       baseURL = "https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx";
-      cudaMajorVersion = cudaPackages.cudaMajorVersion; # only 12, 13 supported
-      cudaVersion = "${cudaMajorVersion}.0"; # URL example: ${baseURL}/cuda12/${name}-${version}-cuda12.0.zip
+      cudaVersion = "${cudaMajorVersion}.0"; # URL example: ${baseURL}/cuda12/${name}-${version}-cuda12.0.tar.gz
       name = lib.concatStringsSep "-" [
         finalAttrs.pname
         "Linux"
@@ -29,18 +51,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         finalAttrs.version
         "cuda${cudaVersion}"
       ];
-
-      # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
-      hashes = {
-        "12" = {
-          aarch64-linux = "sha256-d/aBC+zU2ciaw3isv33iuviXYaLGLdVDdzynGk9SFck=";
-          x86_64-linux = "sha256-CHIH0s4SnA67COtHBkwVCajW/3f0VxNBmuDLXy4LFIg=";
-        };
-        "13" = {
-          aarch64-linux = "sha256-TetJbMts8tpmj5PV4+jpnUHMcooDrXUEKL3aGWqilKI=";
-          x86_64-linux = "sha256-wLJLbRpQWa6QEm8ibm1gxt3mXvkWvu0vEzpnqTIvE1M=";
-        };
-      };
     in
     lib.mapNullable (
       hash:
@@ -48,23 +58,32 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         inherit hash name;
         url = "${baseURL}/cuda${cudaMajorVersion}/${name}.tar.gz";
       }
-    ) (hashes.${cudaMajorVersion}.${stdenvNoCC.hostPlatform.system} or null);
+    ) (release.hashes.${stdenvNoCC.hostPlatform.system} or null);
 
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      extraTarFlags = toString (
+        # Starting with 0.4.0, the archive wraps its content in a top-level `libmathdx-linux-<arch>` directory
+        lib.optionals (lib.versionAtLeast finalAttrs.version "0.4.0") [
+          "--strip-components=1"
+        ]
+      );
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p "$out"
-    tar -xzf "$src" -C "$out"
+      mkdir -p "$out"
+      tar -xzf "$src" -C "$out" ${extraTarFlags}
 
-    mkdir -p "$static"
-    moveToOutput "lib/libmathdx_static.a" "$static"
+      mkdir -p "$static"
+      moveToOutput "lib/libmathdx_static.a" "$static"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = {
     description = "Library used to integrate cuBLASDx and cuFFTDx into Warp";
@@ -74,7 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # By downloading and using the software, you agree to fully
       # comply with the terms and conditions of the NVIDIA Software
       # License Agreement.
-      _cuda.lib.licenses.math_sdk_sla
+      lib.licenses.nvidiaMath_sdk_sla
 
       # Some of the libmathdx routines were written by or derived
       # from code written by Meta Platforms, Inc. and affiliates and

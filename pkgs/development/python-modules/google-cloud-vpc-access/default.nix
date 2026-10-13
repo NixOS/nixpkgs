@@ -14,16 +14,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-vpc-access";
-  version = "1.15.0";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_vpc_access";
     inherit (finalAttrs) version;
-    hash = "sha256-kO/iNVmRbMzoNErXVnarpkATXY+PwJiLVSoKpLui4Us=";
+    hash = "sha256-hBWieTmYkPFrF9j35zhJf118zOkZggN7F7mrE7ZbTtE=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core

@@ -9,18 +9,18 @@
   gsasl,
   guile,
   python3,
-  pcre,
+  pcre2,
   libffi,
   groff,
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dico";
   version = "2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/dico/dico-${version}.tar.xz";
+    url = "mirror://gnu/dico/dico-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-couJxQ4JC/+Dno97MEO1xwI/hhqSEckwSLQqtFWGavc=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     gsasl
     guile
     python3
-    pcre
+    pcre2
     libffi
     libxcrypt
   ];
@@ -47,10 +47,12 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage = "https://www.gnu.org/software/dico/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     longDescription = ''
@@ -73,4 +75,4 @@ stdenv.mkDerivation rec {
       remote dictionary servers.
     '';
   };
-}
+})

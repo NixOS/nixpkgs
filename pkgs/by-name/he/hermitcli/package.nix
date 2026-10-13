@@ -4,23 +4,23 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hermit";
-  version = "0.48.0";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "cashapp";
     repo = "hermit";
-    hash = "sha256-gV8moz9wSAt7gy2cTjl4IGOYHnm+4alBUhyKZmhgot8=";
+    hash = "sha256-yhKvRgrX4pN21kXUU0qZGnenVtWlT3tnsKWZ4Iu8wb0=";
   };
 
-  vendorHash = "sha256-KEwbADLm7oTChoLyx/0SykQX1Fy4bJxNbYcGmfEka7Q=";
+  vendorHash = "sha256-2sj1Tc+3icoOPKq1hcOxSjKarxQ7Vvvvx9iAWWrb3Xo=";
 
   subPackages = [ "cmd/hermit" ];
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.channel=stable"
   ];
 
@@ -32,4 +32,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "hermit";
   };
-}
+})

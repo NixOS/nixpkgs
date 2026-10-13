@@ -17,7 +17,7 @@ let
   csr = runWithOpenSSL "matrix.csr" ''
     openssl req \
        -new -key ${key} \
-       -out $out -subj "/CN=localhost" \
+       -out $out -subj "/CN=localhost"
   '';
   cert = runWithOpenSSL "matrix_cert.pem" ''
     openssl x509 \
@@ -118,7 +118,7 @@ in
           (pkgs.writers.writePython3Bin "create_management_room_and_invite_mjolnir"
             {
               libraries = with pkgs.python3Packages; [
-                (matrix-nio.override { withOlm = true; })
+                (matrix-nio.override { withVodozemac = true; })
               ];
             }
             ''

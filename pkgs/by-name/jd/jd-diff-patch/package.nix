@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "jd-diff-patch";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "josephburnett";
     repo = "jd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PefNgh/ASQ2hPOcWH6ThXEZk4Esd0Q+sLx3bWWnpBNM=";
+    hash = "sha256-WH6fweuntzIjoc7HodflPxEPsrJ/9t77d0z22CHjBVA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/v2";
@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
     "pack"
   ];
 
-  vendorHash = "sha256-RerzCZL2soPNtl1hHWjdeNQNQ4VMlGYz3HNn4rTJSmU=";
+  vendorHash = "sha256-qo5yG7DqScC4/bU7vWEKLqTZ/j+QMTg2vpl3WHjxLUI=";
 
   meta = {
     description = "Commandline utility and Go library for diffing and patching JSON values";

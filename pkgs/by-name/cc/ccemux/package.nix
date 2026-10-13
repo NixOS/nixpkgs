@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "unstable-2023-07-08";
+  version = "1.1.0-unstable-2023-07-08";
   rev = "989cfe52a0458b991e0a7d87edec81d3fef472ac";
 
   baseUrl = "https://emux.cc/versions/${lib.substring 0 8 rev}/CCEmuX";
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${desktopItem}/share/applications $out/share/applications
 
     install -D ${finalAttrs.src} $out/share/ccemux/ccemux.jar
-    install -D ${desktopIcon} $out/share/pixmaps/ccemux.png
+    install -D ${desktopIcon} $out/share/icons/hicolor/256x256/apps/ccemux.png
 
     makeWrapper ${jre}/bin/java $out/bin/ccemux \
       --add-flags "-jar $out/share/ccemux/ccemux.jar"

@@ -15,17 +15,17 @@
   libsm,
   libice,
   gtk2,
-  libXext,
-  libXft,
+  libxext,
+  libxft,
   fontconfig,
-  libXrender,
-  libXfixes,
-  libX11,
-  libXi,
-  libXrandr,
-  libXcursor,
+  libxrender,
+  libxfixes,
+  libx11,
+  libxi,
+  libxrandr,
+  libxcursor,
   freetype,
-  libXinerama,
+  libxinerama,
   libxcb,
   zlib,
   pciutils,
@@ -43,17 +43,17 @@ let
     libsm
     libice
     gtk2
-    libXext
-    libXft
+    libxext
+    libxft
     fontconfig
-    libXrender
-    libXfixes
-    libX11
-    libXi
-    libXrandr
-    libXcursor
+    libxrender
+    libxfixes
+    libx11
+    libxi
+    libxrandr
+    libxcursor
     freetype
-    libXinerama
+    libxinerama
     libxcb
     zlib
     stdenv.cc.cc
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "saleae-logic-${version}-64bit.zip";
-    url = "http://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
+    url = "https://downloads.saleae.com/logic/${version}/Logic%20${version}%20(64-bit).zip";
     sha256 = "0lhair2vsg8sjvzicvfcjfmvy30q7i01xj4z02iqh7pgzpb025h8";
   };
 

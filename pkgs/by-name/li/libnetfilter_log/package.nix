@@ -7,12 +7,12 @@
   libmnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnetfilter_log";
   version = "1.0.2";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_log/files/libnetfilter_log-${version}.tar.bz2";
+    url = "https://netfilter.org/projects/libnetfilter_log/files/libnetfilter_log-${finalAttrs.version}.tar.bz2";
     sha256 = "1spy9xs41v76kid5ana8n126f3mvgq6fjibbfbj4kn0larbhix73";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

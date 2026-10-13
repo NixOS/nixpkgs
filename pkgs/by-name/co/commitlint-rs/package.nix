@@ -7,18 +7,18 @@
   testers,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "commitlint-rs";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "KeisukeYamashita";
     repo = "commitlint-rs";
-    tag = "v${version}";
-    hash = "sha256-rNCMvIVJ/aOTNMyAmwX3Ir6IjHf6wxZ1XlGIWp7omkQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Z9DQfUXYjPWMfCv2jHsXwr3Fg2tEfkD5dU1t8+Kw7eA=";
   };
 
-  cargoHash = "sha256-+MPHEkL5/+yR5+aKTDTaVO9D/v2xccwSo7clo20H1G0=";
+  cargoHash = "sha256-s8prPnyiYCyaR+jMo1DXpBi9FgD/2ovF3dffZQuMNmo=";
 
   passthru = {
     tests.version = testers.testVersion { package = commitlint-rs; };
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Lint commit messages with conventional commit messages";
     homepage = "https://keisukeyamashita.github.io/commitlint-rs";
-    changelog = "https://github.com/KeisukeYamashita/commitlint-rs/releases/tag/${src.rev}";
+    changelog = "https://github.com/KeisukeYamashita/commitlint-rs/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [
       mit
       asl20
@@ -40,4 +40,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "commitlint";
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})

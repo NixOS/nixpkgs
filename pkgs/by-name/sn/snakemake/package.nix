@@ -6,18 +6,20 @@
   stress,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  snakemake,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "9.16.3";
+  version = "9.27.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
-    tag = "v${version}";
-    hash = "sha256-+eEzpRY6ZEKB3v1/AkHDg4bOcM2Y6pt4UMrdKF6soac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pRL8I8ILaSlZq7CTA+7D/d9PJQlccVQA45csJPBHppw=";
   };
 
   postPatch = ''
@@ -33,39 +35,47 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools-scm ];
 
+  pythonRelaxDeps = [
+    "docutils"
+    "packaging"
+    "sqlmodel"
+  ];
   dependencies = with python3Packages; [
-    appdirs
     conda-inject
     configargparse
     connection-pool
-    datrie
     docutils
+    dpath
     gitpython
     humanfriendly
     immutables
     jinja2
     jsonschema
     nbformat
+    packaging
+    platformdirs
     psutil
     pulp
     pygments
     pyyaml
+    referencing
     requests
-    reretry
     smart-open
-    snakemake-interface-executor-plugins
     snakemake-interface-common
+    snakemake-interface-executor-plugins
     snakemake-interface-logger-plugins
-    snakemake-interface-storage-plugins
     snakemake-interface-report-plugins
     snakemake-interface-scheduler-plugins
-    stopit
+    snakemake-interface-storage-plugins
+    sqlmodel
     tabulate
+    tenacity
     throttler
-    toposort
     wrapt
     yte
   ];
+
+  pythonImportsCheck = [ "snakemake" ];
 
   # See
   # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
@@ -81,11 +91,15 @@ python3Packages.buildPythonApplication rec {
       requests-mock
       snakemake-executor-plugin-cluster-generic
       snakemake-storage-plugin-fs
+      snakemake-storage-plugin-http
+      snakemake-storage-plugin-s3
       stress
-      versionCheckHook
       polars
     ])
-    ++ [ writableTmpDirAsHomeHook ];
+    ++ [
+      versionCheckHook
+      writableTmpDirAsHomeHook
+    ];
 
   enabledTestPaths = [
     "tests/tests.py"
@@ -97,6 +111,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTests = [
+    # AssertionError: expected file "onerror_module2.log" not produced
+    "test_module_onerror"
+
     # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
     "test_ancient"
     "test_conda_create_envs_only"
@@ -119,13 +136,6 @@ python3Packages.buildPythonApplication rec {
     "test_issue1256"
     "test_issue2574"
 
-    # Require `snakemake-storage-plugin-fs` (circular dependency)
-    "test_default_storage"
-    "test_default_storage_local_job"
-    "test_deploy_sources"
-    "test_output_file_cache_storage"
-    "test_storage"
-
     # Tries to access internet
     "test_report_after_run"
 
@@ -135,10 +145,6 @@ python3Packages.buildPythonApplication rec {
 
     # Needs unshare
     "test_nodelocal"
-
-    # Requires snakemake-storage-plugin-http
-    "test_keep_local"
-    "test_retrieve"
 
     # Requires conda
     "test_jupyter_notebook"
@@ -179,13 +185,17 @@ python3Packages.buildPythonApplication rec {
     "test_issue1331"
   ];
 
-  pythonImportsCheck = [ "snakemake" ];
+  # Circular dependencies
+  doCheck = false;
+  passthru.tests.pytest = snakemake.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     homepage = "https://snakemake.github.io";
     license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
-    changelog = "https://github.com/snakemake/snakemake/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/snakemake/snakemake/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
@@ -200,4 +210,4 @@ python3Packages.buildPythonApplication rec {
       veprbl
     ];
   };
-}
+})

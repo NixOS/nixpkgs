@@ -7,7 +7,7 @@
   gitUpdater,
   kwindowsystem,
   layer-shell-qt,
-  libXdmcp,
+  libxdmcp,
   libpthread-stubs,
   libqtxdg,
   lxqt-build-tools,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "screengrab";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "screengrab";
     tag = finalAttrs.version;
-    hash = "sha256-LORWv3qLgQF2feKodOg72g5DCfWZvB8vi0bw9jbr+tQ=";
+    hash = "sha256-WgQWFNAu+cws442o1HubuaANsg0Hxg0XLyZ/CeA3abM=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     kwindowsystem
     layer-shell-qt
-    libXdmcp
+    libxdmcp
     libpthread-stubs
     libqtxdg
     qtbase

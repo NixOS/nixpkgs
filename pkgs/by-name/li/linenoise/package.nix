@@ -3,31 +3,39 @@
   stdenv,
   fetchFromGitHub,
   validatePkgConfig,
-  fixDarwinDylibNames,
 }:
 
-stdenv.mkDerivation {
+let
+  inherit (stdenv.hostPlatform) isStatic isDarwin extensions;
+  libName = "liblinenoise${if isStatic then ".a" else extensions.sharedLibrary}";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "linenoise";
-  version = "1.0-34-g93b2db9";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "antirez";
     repo = "linenoise";
-    rev = "1.0-34-g93b2db9";
-    hash = "sha256-GsrYg16gpjHkkmpCU3yGzqNS/buZl+JoWALLvwzmT4A=";
+    tag = finalAttrs.version;
+    hash = "sha256-lqJ/ecw7Q4QyDVXVFrxHL5EbNZOHpy5WruQn4VNibNA=";
   };
 
   nativeBuildInputs = [
     validatePkgConfig
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
+  ];
 
   buildPhase = ''
     runHook preBuild
 
     $CC -c -o linenoise.o linenoise.c
-    $CC -shared -o liblinenoise.so linenoise.o
-    $AR rcs liblinenoise.a linenoise.o
+    ${
+      if isStatic then
+        "$AR rcs"
+      else
+        "$CC ${
+          if isDarwin then "-dynamiclib -install_name $out/lib/" else "-shared -Wl,-soname,"
+        }${libName} -o"
+    } ${libName} linenoise.o
 
     runHook postBuild
   '';
@@ -35,10 +43,9 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/lib/pkgconfig $out/include
-    install -m644 linenoise.h     $out/include/
-    install -m644 liblinenoise.a  $out/lib/
-    install -m644 liblinenoise.so $out/lib/
+    install -d $out/lib/pkgconfig
+    install -Dm644 linenoise.h -t $out/include
+    install -Dm${if isStatic then "644" else "755"} ${libName} -t $out/lib
     substituteAll ${./linenoise.pc.in} $out/lib/pkgconfig/linenoise.pc
 
     runHook postInstall
@@ -54,4 +61,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;
   };
-}
+})

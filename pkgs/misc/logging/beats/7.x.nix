@@ -5,22 +5,26 @@
   buildGoModule,
   libpcap,
   nixosTests,
-  systemd,
+  systemdLibs,
   config,
 }:
 
 let
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
+
   beat =
     package: extraArgs:
     buildGoModule (
-      lib.attrsets.recursiveUpdate rec {
+      finalAttrs:
+      {
         pname = package;
         version = elk7Version;
 
         src = fetchFromGitHub {
           owner = "elastic";
           repo = "beats";
-          rev = "v${version}";
+          tag = "v${finalAttrs.version}";
           hash = "sha256-TzcKB1hIHe1LNZ59GcvR527yvYqPKNXPIhpWH2vyMTY=";
         };
 
@@ -36,30 +40,30 @@ let
             dfithian
           ];
           platforms = lib.platforms.linux;
-        };
-      } extraArgs
+        }
+        // (extraArgs.meta or { });
+      }
+      // removeAttrs extraArgs [
+        "meta"
+      ]
     );
 in
 rec {
   auditbeat7 = beat "auditbeat" {
-    pos = __curPos;
     meta.description = "Lightweight shipper for audit data";
   };
   filebeat7 = beat "filebeat" {
-    pos = __curPos;
     meta.description = "Lightweight shipper for logfiles";
-    buildInputs = [ systemd ];
+    buildInputs = [ systemdLibs' ];
     tags = [ "withjournald" ];
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemd) ]} "$out/bin/filebeat"
+      patchelf --set-rpath ${lib.makeLibraryPath [ (lib.getLib systemdLibs') ]} "$out/bin/filebeat"
     '';
   };
   heartbeat7 = beat "heartbeat" {
-    pos = __curPos;
     meta.description = "Lightweight shipper for uptime monitoring";
   };
   metricbeat7 = beat "metricbeat" {
-    pos = __curPos;
     meta.description = "Lightweight shipper for metrics";
     passthru.tests = lib.optionalAttrs config.allowUnfree (
       assert metricbeat7.drvPath == nixosTests.elk.unfree.ELK-7.elkPackages.metricbeat.drvPath;
@@ -70,7 +74,6 @@ rec {
   };
   packetbeat7 = beat "packetbeat" {
     buildInputs = [ libpcap ];
-    pos = __curPos;
     meta.description = "Network packet analyzer that ships data to Elasticsearch";
     meta.longDescription = ''
       Packetbeat is an open source network packet analyzer that ships the

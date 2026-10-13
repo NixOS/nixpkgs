@@ -8,21 +8,18 @@
   openssl,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gptcommit";
-  version = "0.5.17";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "zurawiki";
     repo = "gptcommit";
-    rev = "v${version}";
-    hash = "sha256-MB78QsJA90Au0bCUXfkcjnvfPagTPZwFhFVqxix+Clw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gMu59i/Gx6NINMnX2OMHjOsRnz6mE13dEci8YJFlm+M=";
   };
 
-  cargoHash = "sha256-PFpc9z45k0nlWEyjDDKG/U8V7EwR5b8rHPV4CmkRers=";
+  cargoHash = "sha256-t+rlUBUndj1iM4Y7K03zfDEOC5Z0KEWcOcurv5SKJ3c=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -39,8 +36,8 @@ rustPlatform.buildRustPackage {
     description = "Git prepare-commit-msg hook for authoring commit messages with GPT-3";
     mainProgram = "gptcommit";
     homepage = "https://github.com/zurawiki/gptcommit";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = with lib.platforms; all;
   };
-}
+})

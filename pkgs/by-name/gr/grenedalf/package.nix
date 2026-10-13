@@ -26,19 +26,30 @@ let
       "--disable-libcurl"
       "--disable-plugins"
     ];
+    # Patches break the build
+    patches = [ ];
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grenedalf";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "lczech";
     repo = "grenedalf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DJ7nZjOvYFQlN/L+S2QcMVvH/M9Dhla4VXl2nxc22m4=";
+    hash = "sha256-RD2WYhGBPJuBmbqrjDqujKj/djnxA5ED/LFmhHYIFyE=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    ./fix-genesis-cmake.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required (VERSION 3.5 FATAL_ERROR)"
+  '';
 
   nativeBuildInputs = [
     cmake

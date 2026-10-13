@@ -6,14 +6,14 @@
   relic,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "relic";
   version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "sassoftware";
     repo = "relic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-dXvKbuAJCL+H0Gh0ZF1VvtY+7cgjq7gs8zwtenI3JuI=";
   };
 
@@ -22,8 +22,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
   ];
 
   passthru.tests = {
@@ -43,4 +43,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ strager ];
   };
-}
+})

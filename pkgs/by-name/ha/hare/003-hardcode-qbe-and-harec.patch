@@ -1,17 +1,8 @@
-diff --git a/cmd/hare/build.ha b/cmd/hare/build.ha
-index ce19af9e..8631b325 100644
---- a/cmd/hare/build.ha
-+++ b/cmd/hare/build.ha
-@@ -36,7 +36,7 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
- 		case let ncpu: size =>
- 			yield ncpu;
- 		},
--		version = build::get_version(os::tryenv("HAREC", "harec"))?,
-+		version = build::get_version(os::tryenv("HAREC", "@harec_bin@"))?,
- 		arch = arch,
- 		platform = build::get_platform(os::sysname())?,
- 		...
-@@ -143,8 +143,8 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
+diff --git i/cmd/hare/build.ha w/cmd/hare/build.ha
+index 44b6484f..ebecfd8b 100644
+--- i/cmd/hare/build.ha
++++ w/cmd/hare/build.ha
+@@ -144,8 +144,8 @@ fn build(name: str, cmd: *getopt::command) (void | error) = {
  	set_arch_tags(&ctx.ctx.tags, arch);
  
  	ctx.cmds = ["",

@@ -5,8 +5,9 @@
   gradle_8,
   jdk,
   quark-engine,
+  coreutils,
   makeBinaryWrapper,
-  imagemagick,
+  librsvg,
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
@@ -17,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.5.3";
+  version = "1.5.6";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YfA0o25A3jtqVTB8LsJGCS6+dk7zt9kWnxlzDceHjeg=";
+    hash = "sha256-qwGFMj18xJOrBudthAIeKc/PT0uUzjmTgBYovF4A/94=";
   };
 
   patches = [
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gradle
     jdk
-    imagemagick
+    librsvg
     makeBinaryWrapper
     copyDesktopItems
   ]
@@ -61,7 +62,12 @@ stdenv.mkDerivation (finalAttrs: {
       cp build/jadx/bin/$prog $out/bin
       wrapProgram $out/bin/$prog \
         --set JAVA_HOME ${jdk.home} \
-        --prefix PATH : "${lib.makeBinPath [ quark-engine ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            quark-engine
+            coreutils
+          ]
+        }"
     done
 
     for size in 16 32 48; do
@@ -71,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     for size in 64 128 256; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+      rsvg-convert --width "$size" jadx-gui/src/main/resources/logos/jadx-logo.svg > $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
     done
 
     runHook postInstall

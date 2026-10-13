@@ -9,14 +9,14 @@
   curl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sheldon";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "rossmacarthur";
     repo = "sheldon";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-zVwqVYaUY8LJhWENDiD89p/CzvsEVkpaPnYVyCJUf3s=";
   };
 
@@ -67,9 +67,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast and configurable shell plugin manager";
     homepage = "https://github.com/rossmacarthur/sheldon";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ seqizz ];
     platforms = lib.platforms.unix;
     mainProgram = "sheldon";
   };
-}
+})

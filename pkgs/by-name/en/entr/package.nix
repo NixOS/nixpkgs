@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "entr";
-  version = "5.7";
+  version = "5.9";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/entr-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kMXZQ4IMcM7zfrQaOCpupPXdf9le/vE7K1Ug0yD10Gc=";
+    hash = "sha256-DvLOfbcoFnhEqRkElEzQfHzMb9MEG4ScrYYSJNEGqEU=";
   };
 
   postPatch = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
 
-  TARGET_OS = stdenv.hostPlatform.uname.system;
+  env.TARGET_OS = stdenv.hostPlatform.uname.system;
 
   meta = {
     homepage = "https://eradman.com/entrproject/";
@@ -33,7 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       pSub
-      synthetica
     ];
     mainProgram = "entr";
   };

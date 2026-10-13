@@ -8,14 +8,14 @@
   datree,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "datree";
   version = "1.9.19";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-W1eX7eUMdPGbHA/f08xkG2EUeZmaunEAQn7/LRBe2nk=";
   };
 
@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/datreeio/datree/cmd.CliVersion=${version}"
+    "-X github.com/datreeio/datree/cmd.CliVersion=${finalAttrs.version}"
   ];
 
   tags = [ "main" ];
@@ -53,12 +53,12 @@ buildGoModule rec {
       webhook, or even as a kubectl plugin to run policies against Kubernetes
       objects.
     '';
-    homepage = "https://datree.io/";
-    changelog = "https://github.com/datreeio/datree/releases/tag/${version}";
+    homepage = "https://github.com/datreeio/datree";
+    changelog = "https://github.com/datreeio/datree/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       azahi
       jceb
     ];
   };
-}
+})

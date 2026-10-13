@@ -8,15 +8,15 @@
 
 buildDunePackage (finalAttrs: {
   pname = "synchronizer";
-  version = "0.2";
+  version = "0.3";
 
-  minimalOCamlVersion = "5.1";
+  minimalOCamlVersion = "5.2";
 
   src = fetchFromGitHub {
     owner = "OCamlPro";
     repo = "synchronizer";
     tag = finalAttrs.version;
-    hash = "sha256-0XtPHpDlyH1h8W2ZlRvJbZjCN9WP5mzk2N01WFd8eLQ=";
+    hash = "sha256-zomP15CRV6pFK3yk9hMCSDHPk11hEqXiRw8vr2Dg0CI=";
   };
 
   propagatedBuildInputs = [

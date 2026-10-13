@@ -5,12 +5,12 @@
   openssh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autossh";
   version = "1.4g";
 
   src = fetchurl {
-    url = "http://www.harding.motd.ca/autossh/autossh-${version}.tgz";
+    url = "http://www.harding.motd.ca/autossh/autossh-${finalAttrs.version}.tgz";
     sha256 = "0xqjw8df68f4kzkns5gcah61s5wk0m44qdk2z1d6388w6viwxhsz";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "autossh";
   };
-}
+})

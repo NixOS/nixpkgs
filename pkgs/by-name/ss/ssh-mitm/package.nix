@@ -6,17 +6,22 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ssh-mitm";
-  version = "5.0.1";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ssh-mitm";
     repo = "ssh-mitm";
-    tag = version;
-    hash = "sha256-FmxVhYkPRZwS+zFwuId9nRGN832LRkgCNgDYb8Pg01U=";
+    tag = finalAttrs.version;
+    hash = "sha256-fgvvqiQnuESpAvq70G6K8/tFG47QduG12rloufS4Xg8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "hatchling==1.32.0" "hatchling"
+  '';
 
   pythonRelaxDeps = [ "paramiko" ];
 
@@ -30,18 +35,26 @@ python3.pkgs.buildPythonApplication rec {
   dependencies =
     with python3.pkgs;
     [
+      aiohttp
       appimage
       argcomplete
       colored
+      lxml
+      markdown
       packaging
       paramiko
+      protobuf
+      psrpcore
+      pyte
+      python-json-logger
       pytz
       pyyaml
-      python-json-logger
+      requests
       rich
-      tkinter
       setuptools
       sshpubkeys
+      textual
+      tkinter
       wrapt
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ setuptools ];
@@ -60,8 +73,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool for SSH security audits";
     homepage = "https://github.com/ssh-mitm/ssh-mitm";
-    changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ssh-mitm/ssh-mitm/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

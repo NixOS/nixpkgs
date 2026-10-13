@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -36,14 +35,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plopp";
-  version = "25.11.0";
+  version = "26.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = finalAttrs.version;
-    hash = "sha256-3vmHRPjv7iUd6ky7XzfdChpAI++ELh6vwmtELK7dwaE=";
+    hash = "sha256-yl3GhHKtz2QItKIDOfR8xAtzeoOVPC9Ve9xnbBv2d48=";
   };
 
   build-system = [
@@ -72,11 +71,6 @@ buildPythonPackage (finalAttrs: {
     scipp
     scipy
     xarray
-  ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.14") [
-    # RuntimeError: There is no current event loop in thread 'MainThread'
-    "test_move_cut"
   ];
 
   env = {

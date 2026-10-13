@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation {
   pname = "xfs_undelete";
-  version = "unstable-2023-04-12";
+  version = "12.0-unstable-2023-04-11";
 
   src = fetchFromGitHub {
     repo = "xfs_undelete";
@@ -54,6 +54,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/ianka/xfs_undelete";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.deepfire ];
+    maintainers = [ ];
   };
 }

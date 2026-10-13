@@ -20,7 +20,7 @@ makeScopeWithSplicing' {
       directory = ./pkgs;
     }
     // {
-      version = "7.5";
+      version = "7.9";
 
       stdenvLibcMinimal = stdenvNoLibc.override (old: {
         cc = old.cc.override {

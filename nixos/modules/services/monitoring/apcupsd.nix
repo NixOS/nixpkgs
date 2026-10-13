@@ -186,7 +186,6 @@ in
     systemd.services.apcupsd = {
       description = "APC UPS Daemon";
       wantedBy = [ "multi-user.target" ];
-      preStart = "mkdir -p /run/apcupsd/";
       serviceConfig = {
         ExecStart = "${pkgs.apcupsd}/bin/apcupsd -b -f ${configFile} -d1";
         # TODO: When apcupsd has initiated a shutdown, systemd always ends up
@@ -196,6 +195,7 @@ in
         # This reduces the wait time from 90 seconds (default) to just 5. Then
         # systemd kills it with SIGKILL.
         TimeoutStopSec = 5;
+        RuntimeDirectory = "apcupsd";
       };
       unitConfig.Documentation = "man:apcupsd(8)";
     };

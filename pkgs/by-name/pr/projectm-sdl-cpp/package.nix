@@ -5,7 +5,7 @@
   cmake,
   libprojectm,
   libGL,
-  libX11,
+  libx11,
   poco,
   utf8proc,
   SDL2,
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     poco
     utf8proc
     libGL
-    libX11
+    libx11
     SDL2
   ];
 

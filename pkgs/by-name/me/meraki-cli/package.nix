@@ -4,14 +4,14 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "meraki-cli";
   version = "1.5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "meraki_cli";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-FHcKgppclc0L6yuCkpVYfr+jq8hNkt7Hq/44mpHMR20=";
   };
 
@@ -21,6 +21,11 @@ python3Packages.buildPythonApplication rec {
     "TestHelps"
     # requires running "pip install"
     "TestUpgrade"
+  ];
+
+  disabledTestPaths = [
+    # requests-mock cannot intercept meraki's httpx client
+    "tests/test_user_agent.py"
   ];
 
   build-system = with python3Packages; [
@@ -36,7 +41,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
-    requests-mock
   ];
 
   pythonImportsCheck = [
@@ -51,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     mainProgram = "meraki";
   };
-}
+})

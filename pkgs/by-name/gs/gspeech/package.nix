@@ -12,14 +12,14 @@
   librsvg,
   atk,
   libnotify,
-  libappindicator-gtk3,
+  libappindicator,
   gst_all_1,
   makeWrapper,
   picotts,
   sox,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gSpeech";
   version = "0.13.0";
   format = "setuptools";
@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mothsart";
     repo = "gSpeech";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-IR7acxstJXueIrtBqVBqznEG3Avke7m1qfv7058u59g=";
   };
 
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     atk
     gettext
     libnotify
-    libappindicator-gtk3
+    libappindicator
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -86,4 +86,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3;
     platforms = lib.platforms.unix;
   };
-}
+})

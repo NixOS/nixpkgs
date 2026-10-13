@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "picosat";
   version = "965";
 
   src = fetchurl {
-    url = "https://fmv.jku.at/picosat/picosat-${version}.tar.gz";
+    url = "https://fmv.jku.at/picosat/picosat-${finalAttrs.version}.tar.gz";
     sha256 = "0m578rpa5rdn08d10kr4lbsdwp4402hpavrz6n7n53xs517rn5hm";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
       thoughtpolice
     ];
   };
-}
+})

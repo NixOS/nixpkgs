@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xenomapper";
   version = "1.0.2";
   pyproject = true;
@@ -12,13 +12,11 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "genomematt";
     repo = "xenomapper";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mnmfzlq5mhih6z8dq5bkx95vb8whjycz9mdlqwbmlqjb3gb3zhr";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
-
-  dependencies = with python3.pkgs; [ statistics ];
 
   pythonImportsCheck = [
     "xenomapper.xenomapper"
@@ -32,4 +30,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.jbedo ];
   };
-}
+})

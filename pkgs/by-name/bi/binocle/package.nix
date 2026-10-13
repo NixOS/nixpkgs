@@ -9,16 +9,18 @@
   libxcursor,
   libx11,
   vulkan-loader,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "binocle";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "binocle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WAk7xIrCRfVofn4w+gP5E3wnSZbXm/6MZWlNmtoLm20=";
   };
 
@@ -41,14 +43,20 @@ rustPlatform.buildRustPackage rec {
       }
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Graphical tool to visualize binary data";
     mainProgram = "binocle";
     homepage = "https://github.com/sharkdp/binocle";
+    changelog = "https://github.com/sharkdp/binocle/releases/tag/v0.3.2";
     license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
-}
+})

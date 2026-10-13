@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "texture-synthesis";
   version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "embarkstudios";
     repo = "texture-synthesis";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-BJa6T+qlbn7uABKIEhFhwLrw5sG/9al4L/2sbllfPFg=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "texture-synthesis";
   };
-}
+})

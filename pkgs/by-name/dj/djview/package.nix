@@ -12,7 +12,7 @@
   libtiff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "djview";
   version = "4.12.3";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/djvu/djview-${version}.tar.gz";
+    url = "mirror://sourceforge/djvu/djview-${finalAttrs.version}.tar.gz";
     hash = "sha256-F7+5cxq4Bw4BI1OB8I5XsSMf+19J6wMYc+v6GJza9H0=";
   };
 
@@ -100,4 +100,4 @@ stdenv.mkDerivation rec {
       Has CGI-style arguments to configure the view of document (see man).
     '';
   };
-}
+})

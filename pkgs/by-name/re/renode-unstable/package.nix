@@ -1,41 +1,35 @@
 {
+  dotnetCorePackages,
   fetchFromGitHub,
-  nix-update-script,
-  renode,
   lib,
+  renode,
+  writeShellScript,
 }:
+
 let
-  normalizedVersion =
-    v:
-    let
-      parts = lib.splitString "-" v;
-      result = builtins.head parts;
-    in
-    result;
+  nugetDeps = map dotnetCorePackages.fetchNupkg (lib.importJSON ./deps.json);
 in
-renode.overrideAttrs (old: rec {
-  pname = "renode-unstable";
-  version = "1.16.0-unstable-2025-12-11";
+renode.overrideAttrs (
+  finalAttrs: old: {
+    pname = "renode-unstable";
+    version = "1.17.0-unstable-2026-10-02";
 
-  src = fetchFromGitHub {
-    owner = "renode";
-    repo = "renode";
-    rev = "e61a4063ec362b099704e6d8f9734cdf792aeeb0";
-    hash = "sha256-ucQguZZSNKa0nEOTCdcLyDlaBnRgi/7Yb6VunNG/iSg=";
-    fetchSubmodules = true;
-  };
-
-  prePatch = ''
-    sed -i 's/AssemblyVersion("%VERSION%.*")/AssemblyVersion("${normalizedVersion version}.0")/g' src/Renode/Properties/AssemblyInfo.template
-    sed -i 's/AssemblyInformationalVersion("%INFORMATIONAL_VERSION%")/AssemblyInformationalVersion("${src.rev}")/g' src/Renode/Properties/AssemblyInfo.template
-    mv src/Renode/Properties/AssemblyInfo.template src/Renode/Properties/AssemblyInfo.cs
-  '';
-
-  passthru = old.passthru // {
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version=branch"
-      ];
+    src = fetchFromGitHub {
+      owner = "renode";
+      repo = "renode";
+      rev = "b039ed10ea66198afd6f68f2ec5a041e76e5e1dc";
+      hash = "sha256-ico2g1YOPfM0wdKosUf1ul+u8JBA+N8qFHij57cmS34=";
+      fetchSubmodules = true;
     };
-  };
-})
+
+    buildInputs = lib.subtractLists old.passthru.nugetDeps old.buildInputs ++ nugetDeps;
+
+    passthru = old.passthru // {
+      inherit nugetDeps;
+      fetch-deps = writeShellScript "${finalAttrs.finalPackage.name}-fetch-deps" ''
+        exec ${old.passthru.fetch-deps} "''${1:-${toString ./deps.json}}"
+      '';
+      updateScript = ./update.sh;
+    };
+  }
+)

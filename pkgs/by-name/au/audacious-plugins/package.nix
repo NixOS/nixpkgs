@@ -24,6 +24,7 @@
   libogg,
   libopenmpt,
   libpulseaudio,
+  libresidfp,
   libsamplerate,
   libsidplayfp,
   libsndfile,
@@ -45,16 +46,18 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious-plugins";
-  version = "4.5.1";
+  version = "4.6.1";
 
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious-plugins";
     rev = "${pname}-${version}";
-    hash = "sha256-HfO59DOIYsEpBzUyaLYh/gXfz+zvH8lIY2yBVCn3wks=";
+    hash = "sha256-Gglg7ncrdlMdy8b16+CXxVeQinWrPaz0EoBebY6A8pk=";
   };
 
-  patches = [ ./0001-Set-plugindir-to-PREFIX-lib-audacious.patch ];
+  patches = [
+    ./0001-Set-plugindir-to-PREFIX-lib-audacious.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -85,6 +88,7 @@ stdenv.mkDerivation rec {
     libnotify
     libogg
     libpulseaudio
+    libresidfp
     libsamplerate
     libsidplayfp
     libsndfile

@@ -279,6 +279,7 @@ in
           locations = {
             "/" = {
               proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
+              recommendedProxySettings = true;
               root = "${config.services.zammad.package}/public/";
               extraConfig = # nginx
                 ''
@@ -422,5 +423,6 @@ in
   meta.maintainers = with lib.maintainers; [
     taeer
     netali
+    meenzen
   ];
 }

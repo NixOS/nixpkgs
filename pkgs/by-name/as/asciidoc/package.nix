@@ -140,7 +140,7 @@ let
   };
 
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname =
     "asciidoc"
     + lib.optionalString enableStandardFeatures "-full"
@@ -151,7 +151,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "asciidoc-py";
     repo = "asciidoc-py";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-td3C7xTWfSzdo9Bbz0dHW2oPaCQYmUE9H2sUFfg5HH0=";
   };
 
@@ -320,6 +320,8 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Text-based document generation system";
     longDescription = ''
@@ -337,7 +339,7 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ lib.optional _enableDitaaFilter lib.sourceTypes.binaryBytecode;
     homepage = "https://asciidoc-py.github.io/";
-    changelog = "https://github.com/asciidoc-py/asciidoc-py/blob/${version}/CHANGELOG.adoc";
+    changelog = "https://github.com/asciidoc-py/asciidoc-py/blob/${finalAttrs.version}/CHANGELOG.adoc";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -345,4 +347,4 @@ python3.pkgs.buildPythonApplication rec {
       dotlambda
     ];
   };
-}
+})

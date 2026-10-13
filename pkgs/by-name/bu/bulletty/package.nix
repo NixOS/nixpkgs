@@ -1,6 +1,7 @@
 {
   lib,
   rustPlatform,
+  cacert,
   fetchFromGitHub,
   pkg-config,
   openssl,
@@ -10,13 +11,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bulletty";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "CrociDB";
     repo = "bulletty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J4ljTQuEWwGvxDbwBaP7z0TPqpLKQCmd4YSaIpcVYvg=";
+    hash = "sha256-ZuNug06zL89D7EWh6UFLiT/Xs/bQOEKY/UiDdkU091M=";
   };
 
   patches = [
@@ -24,13 +25,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./remove-rustfmt-exec.patch
   ];
 
-  cargoHash = "sha256-yL7qYE60TBtEoj+0/ykhbEv6XBfk9JA0y8JLvRzaAHI=";
+  cargoHash = "sha256-fOuUBp5ij0ZqcRhhEIl3pAinsheIHF9VW9Uw3RB4pCI=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
 
+  checkInputs = [ cacert ];
+
   env.OPENSSL_NO_VENDOR = true;
+
+  # Upstream test binds a localhost TCP listener
+  __darwinAllowLocalNetworking = true;
+  sandboxProfile = ''
+    (allow mach-lookup
+     (global-name "com.apple.FSEvents")
+     (global-name "com.apple.SystemConfiguration.configd"))
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 

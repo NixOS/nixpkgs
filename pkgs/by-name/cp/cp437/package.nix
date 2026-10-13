@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,9 +12,18 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "keaston";
     repo = "cp437";
-    rev = "v${finalAttrs.version}";
-    sha256 = "18f4mnfnyviqclbhmbhix80k823481ypkwbp26qfvhnxdgzbggcc";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jL23/mvdwu2wEXfxeX1AZAg0AeoRrgoXZThub52txKE=";
   };
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "SYSTEM=${stdenv.hostPlatform.uname.system}"
+  ];
 
   installPhase = ''
     install -Dm755 cp437 -t $out/bin
@@ -28,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jb55 ];
     mainProgram = "cp437";
+    platforms = lib.platforms.unix;
   };
 })

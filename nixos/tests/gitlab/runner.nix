@@ -31,21 +31,6 @@ let
       path = ./runner/shell-runner.nix;
       tokenFile = "${runnerTokenDir}/token-shell.env";
     };
-
-    # The Gitlab runner which uses the Docker runner (we use podman).
-    # Features:
-    #  - Daemonizes the Nix store into a container.
-    #  - All jobs run in an unprivileged container, e.g. with image
-    #    (`local/nix`, `local/alpine`, `local/ubuntu`)
-    podman = {
-      # Only enabled on x86_64-linux: due to container images.
-      # TODO: See https://github.com/NixOS/nixpkgs/issues/474409
-      enabled = pkgs.stdenv.buildPlatform.isx86_64;
-      desc = "Podman runner (containers, shared containerized Nix store)";
-      name = "podman";
-      path = ./runner/podman-runner;
-      tokenFile = "${runnerTokenDir}/token-podman.env";
-    };
   };
 in
 {
@@ -137,14 +122,6 @@ in
   testScript =
     { nodes, ... }:
     let
-      authPayload = pkgs.writeText "auth.json" (
-        builtins.toJSON {
-          grant_type = "password";
-          username = "root";
-          password = initialRootPassword;
-        }
-      );
-
       runnerTokenEnv = pkgs.writeText "runner-token.env" ''
         CI_SERVER_URL=http://gitlab
         CI_SERVER_TOKEN=$token
@@ -162,7 +139,6 @@ in
       JQ_BINARY="${pkgs.jq}/bin/jq"
       GITLAB_STATE_PATH="${nodes.gitlab.services.gitlab.statePath}"
       RUNNER_TOKEN_ENV_FILE="${runnerTokenEnv}"
-      AUTH_PAYLOAD_FILE="${authPayload}"
       CREATE_RUNNER_PAYLOAD_FILE="${createRunnerPayload}"
 
       ${lib.readFile ./runner_test.py}

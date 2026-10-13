@@ -18,8 +18,8 @@
   libjpeg,
   pkg-config,
   wrapGAppsHook3,
-  wxGTK32,
-  wxSVG,
+  wxwidgets_3_2,
+  wxsvg,
   xine-ui,
   xmlto,
   zip,
@@ -65,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libexif
     libjpeg
-    wxSVG
-    wxGTK32
+    wxsvg
+    wxwidgets_3_2
     xine-ui
   ]
   ++ optionals dvdisasterSupport [ dvdisaster ]

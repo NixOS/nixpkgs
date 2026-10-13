@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mle";
-  version = "1.7.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "mle";
     rev = "v${finalAttrs.version}";
-    sha256 = "0rkk7mh6w5y1lrbdv7wmxdgl5cqzpzw0p26adazkqlfdyb6wbj9k";
+    sha256 = "sha256-xyelmIWqT4FmkFmI02XfdoIgkumQEso5Lf6oEaZP9yM=";
   };
 
   # Fix location of Lua 5.4 header and library

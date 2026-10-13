@@ -142,7 +142,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
-    homepage = "https://crossbar.io/autobahn";
+    homepage = "https://autobahn.readthedocs.io";
     downloadPage = "https://github.com/crossbario/autobahn-python";
     changelog = "https://github.com/crossbario/autobahn-python/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     license = lib.licenses.mit;

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lndhub-go";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "lndhub.go";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-17vvC6J0VdXouGfX4k1kCVRlkXbNSX3AT8QIY8uKDUE=";
   };
 
@@ -26,4 +26,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "lndhub.go";
   };
-}
+})

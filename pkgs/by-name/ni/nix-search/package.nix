@@ -5,14 +5,14 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nix-search";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "diamondburned";
     repo = "nix-search";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dOdcXKfSwi0THOjtgP3O/46SWoUY+T7LL9nGwOXXJfw=";
   };
 
@@ -33,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ azuwis ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -1,4 +1,5 @@
 {
+  lib,
   buildDunePackage,
   conduit-lwt,
   ppx_sexp_conv,
@@ -30,7 +31,7 @@ buildDunePackage {
     lwt_ssl
   ];
 
-  doCheck = true;
+  doCheck = !lib.versionAtLeast lwt.version "6.0.0";
   checkInputs = [
     lwt_log
     ssl

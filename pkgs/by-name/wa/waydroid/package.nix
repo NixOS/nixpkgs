@@ -22,14 +22,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.6.1";
+  version = "1.6.3";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "waydroid";
     repo = "waydroid";
     tag = version;
-    hash = "sha256-2ywAgWYMQ7N2P4x/0maNUSn3pdaRAWyATaraRAGafxI=";
+    hash = "sha256-1YYNSqIW+0vkCRZ+vemqu0CXhU6aOGvpMzdswvlAc84=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +98,10 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Container-based approach to boot a full Android system on a regular GNU/Linux system";
+    longDescription = ''
+      A container-based approach to boot a full Android system on regular GNU/Linux systems running Wayland based desktop environments.
+      To install on NixOS, please use the option `virtualisation.waydroid.enable = true`.
+    '';
     mainProgram = "waydroid";
     homepage = "https://github.com/waydroid/waydroid";
     license = lib.licenses.gpl3Only;

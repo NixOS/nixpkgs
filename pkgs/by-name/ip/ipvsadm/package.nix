@@ -8,12 +8,12 @@
   gnugrep,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ipvsadm";
   version = "1.31";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/ipvsadm/ipvsadm-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/kernel/ipvsadm/ipvsadm-${finalAttrs.version}.tar.xz";
     sha256 = "1nyzpv1hx75k9lh0vfxfhc0p2fpqaqb38xpvs8sn88m1nljmw2hs";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

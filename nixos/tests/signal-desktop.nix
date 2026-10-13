@@ -42,7 +42,7 @@ in
   testScript =
     { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
     in
     ''
       start_all()
@@ -69,7 +69,7 @@ in
       )
       # Only SQLCipher should be able to read the encrypted DB:
       machine.fail(
-          "su - alice -c 'sqlite3 ~/.config/Signal/sql/db.sqlite .tables'"
+          "su - alice -c 'sqlite3 ~/.config/Signal/sql/db.sqlite \"SELECT count(*) FROM sqlite_master\"'"
       )
       print(machine.succeed(
           "su - alice -c 'sqlcipher ~/.config/Signal/sql/db.sqlite'"

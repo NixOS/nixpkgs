@@ -1,21 +1,22 @@
 {
   lib,
+  addBinToPathHook,
   fetchFromGitHub,
   python3Packages,
   softhsm,
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "esptool";
-  version = "5.1.0";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
-    tag = "v${version}";
-    hash = "sha256-pdkL/QfrrTs/NdXlsr+2Yo+r8UTFLkxw4E6XGDAt1yE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oQdRwPQvIqK9m5h1Tah+1ltSHD4KQ4xf1rTXDhxv2+o=";
   };
 
   postPatch = ''
@@ -29,16 +30,22 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies = with python3Packages; [
-    bitstring
-    click
-    cryptography
-    intelhex
-    pyserial
-    pyyaml
-    reedsolo
-    rich-click
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      bitstring
+      click
+      cryptography
+      esp-pylib
+      intelhex
+      pyserial
+      pyyaml
+      reedsolo
+      rich-click
+    ]
+    ++ esp-pylib.optional-dependencies.cli
+    ++ esp-pylib.optional-dependencies.ide
+    ++ esp-pylib.optional-dependencies.serial;
 
   optional-dependencies = with python3Packages; {
     hsm = [ python-pkcs11 ];
@@ -77,16 +84,13 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs =
     with python3Packages;
     [
+      addBinToPathHook
       pyelftools
       pytestCheckHook
       requests
       softhsm
     ]
-    ++ lib.concatAttrValues optional-dependencies;
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
+    ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pytestFlags = [
     "-m"
@@ -102,24 +106,21 @@ python3Packages.buildPythonApplication rec {
     "test_esp_rfc2217_server_py"
   ];
 
-  postCheck = ''
+  preCheck = ''
     export SOFTHSM2_CONF=$(mktemp)
     echo "directories.tokendir = $(mktemp -d)" > "$SOFTHSM2_CONF"
     ./ci/setup_softhsm2.sh
-
-    pytest test/test_espsecure_hsm.py
   '';
 
   meta = {
-    changelog = "https://github.com/espressif/esptool/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/espressif/esptool/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      dezgeg
       dotlambda
     ];
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "esptool";
   };
-}
+})

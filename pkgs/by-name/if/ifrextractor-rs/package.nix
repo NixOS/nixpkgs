@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ifrextractor-rs";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "LongSoft";
     repo = "ifrextractor-rs";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zpoOThjkL2Hu/ytxdqWcr2GXzN4Cm8hph7PJhSF5BlU=";
   };
 
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ jiegec ];
   };
-}
+})

@@ -8,10 +8,10 @@
   ninja,
   pkg-config,
   libiconv,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
   freetype,
   fontconfig,
   libjpeg,
@@ -41,10 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    libX11
-    libXcursor
-    libXext
-    libXi
+    libx11
+    libxcursor
+    libxext
+    libxi
     freetype
     fontconfig
     libjpeg
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Full color painting software for illustration drawing";
-    homepage = "http://azsky2.html.xdomain.jp/soft/azpainter.html";
+    homepage = "https://azelpg.gitlab.io/azsky2/";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;

@@ -7,30 +7,30 @@
   alsa-lib,
   fontconfig,
   freetype,
-  libX11,
-  libXcomposite,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxcomposite,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   writableTmpDirAsHomeHook,
 
   buildVST3 ? true,
-  buildLV2 ? stdenv.isLinux,
+  buildLV2 ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdelay";
-  version = "1.0.8";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "tiagolr";
     repo = "qdelay";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-URBbXopXB3pm5vJ9Afa9H3upYdfqgT/NhujgPL54NV4=";
+    hash = "sha256-Cb77auxJVlN+R7K4SbPm8wak5gACEtmq4WodbfDfZdE=";
   };
 
   nativeBuildInputs = [
@@ -43,16 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    libX11
-    libXcomposite
-    libXcursor
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libx11
+    libxcomposite
+    libxcursor
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
   ];
 
   enableParallelBuilding = true;

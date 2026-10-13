@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jongracecox/anybadge";
     changelog = "https://github.com/jongracecox/anybadge/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fabiangd ];
+    maintainers = [ ];
   };
 }

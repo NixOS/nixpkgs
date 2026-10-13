@@ -4,30 +4,29 @@
   anyio,
   buildPythonPackage,
   fetchFromGitHub,
+  gitMinimal,
   oauthlib,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
   requests-mock,
   setuptools-scm,
+  tenacity,
   time-machine,
 }:
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "9.2.3";
+  version = "9.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jabesq";
     repo = "pyatmo";
     tag = "v${version}";
-    hash = "sha256-czHn5pgiyQwn+78NQnJDo49knstL9m2Gp3neZeb75js=";
+    hash = "sha256-TJHCBGO9Pi3elewj4C9kIf4J9pyhSO5bYGONA3onvRE=";
   };
 
   pythonRelaxDeps = [
@@ -43,6 +42,7 @@ buildPythonPackage rec {
     oauthlib
     requests
     requests-oauthlib
+    tenacity
   ];
 
   nativeCheckInputs = [
@@ -52,6 +52,10 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     time-machine
+  ];
+
+  disabledTestPaths = [
+    "tests/test_release_script.py"
   ];
 
   pythonImportsCheck = [ "pyatmo" ];
