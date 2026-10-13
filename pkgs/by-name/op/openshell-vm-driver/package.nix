@@ -26,7 +26,7 @@ pkgs.openshell.overrideAttrs (oldAttrs: {
     zstd -cf ${pkgs.openshell}/bin/openshell-sandbox > $OPENSHELL_VM_RUNTIME_COMPRESSED_DIR/openshell-sandbox.zst
   '';
 
-  # inference::tests::managed_route_resolves_default_credential_handles is flaky or broken. How can I ignore this test only?
+  # Tests are run as part of the openshell package already.
   doCheck = false;
 
   postPatch = ''
