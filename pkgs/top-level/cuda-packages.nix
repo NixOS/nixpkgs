@@ -62,7 +62,7 @@ let
       else if hostPlatform.isAarch64 then
         "10.13.0"
       else
-        "11.3.0";
+        "11.4.0";
   };
 
   cudaPackages_12_8 = mkCudaPackages {
@@ -85,7 +85,7 @@ let
       else if hostPlatform.isAarch64 then
         "10.13.0"
       else
-        "11.3.0";
+        "11.4.0";
   };
 
   cudaPackages_12_9 = mkCudaPackages {
@@ -108,7 +108,7 @@ let
       else if hostPlatform.isAarch64 then
         "10.13.0"
       else
-        "11.3.0";
+        "11.4.0";
   };
 
   cudaPackages_13_0 = mkCudaPackages {
@@ -125,7 +125,7 @@ let
     nvjpeg2000 = "0.11.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
-    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.3.0";
+    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
   };
 
   cudaPackages_13_1 = mkCudaPackages {
@@ -142,7 +142,7 @@ let
     nvjpeg2000 = "0.11.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
-    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.3.0";
+    tensorrt = if hasJetsonCudaCapability then "10.16.1" else "11.4.0";
   };
 
   cudaPackages_13_2 = mkCudaPackages {
@@ -159,7 +159,7 @@ let
     nvjpeg2000 = "0.11.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
   };
 
   cudaPackages_13_3 = mkCudaPackages {
@@ -176,7 +176,7 @@ let
     nvjpeg2000 = "0.11.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
   };
 
   cudaPackages_13_4 = mkCudaPackages {
@@ -193,7 +193,7 @@ let
     nvjpeg2000 = "0.11.0";
     nvpl = "26.5";
     nvtiff = "0.8.0";
-    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.3.0";
+    tensorrt = if hasJetsonCudaCapability then "11.1.0" else "11.4.0";
   };
 in
 {
