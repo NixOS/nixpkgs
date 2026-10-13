@@ -8,6 +8,8 @@ rustPlatform.buildRustPackage rec {
   pname = "selenium-manager";
   version = "4.40.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "SeleniumHQ";
     repo = "selenium";
