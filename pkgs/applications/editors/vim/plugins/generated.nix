@@ -9762,12 +9762,12 @@ final: prev: {
 
   markview-nvim = buildVimPlugin {
     pname = "markview.nvim";
-    version = "28.3.0";
+    version = "29.0.0";
     src = fetchFromGitHub {
       owner = "OXY2DEV";
       repo = "markview.nvim";
-      tag = "v28.3.0";
-      hash = "sha256-rqzC3RiRoglRtJ/UbWDVvvr1wNhqYJxlOj2dIoE6WfU=";
+      tag = "v29.0.0";
+      hash = "sha256-E7CBnPP3VYo/jkylhg4IGXYHwdqDdCoNrWc059hbzZw=";
       fetchSubmodules = true;
     };
     meta.homepage = "https://github.com/OXY2DEV/markview.nvim/";
