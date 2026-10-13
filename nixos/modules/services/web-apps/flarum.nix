@@ -355,7 +355,7 @@ in
       path = [ config.services.phpfpm.phpPackage ];
       script = ''
         mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
-        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
+        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,logs,sessions,views}
         cd ${cfg.stateDir}
         cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
         ln -sf ${cfg.package}/share/php/flarum/vendor .
