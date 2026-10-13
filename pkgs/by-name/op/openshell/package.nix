@@ -39,9 +39,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # fill in package version to Cargo
     substituteInPlace Cargo.toml \
       --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
-    # only build openshell-cli crate
+    # only build openshell-cli crate in addition to the server and sandbox so that the vm-driver can be built.
     substituteInPlace Cargo.toml \
-      --replace-fail 'members = ["crates/*"]' 'members = ["crates/openshell-cli"]'
+      --replace-fail 'members = ["crates/*"]' 'members = ["crates/openshell-cli", "crates/openshell-server", "crates/openshell-sandbox"]'
   '';
 
   env = {
