@@ -21,6 +21,10 @@ from jetbrains_nix_updater.util import (
 )
 
 
+class InvalidMetadataException(Exception):
+    "raised when required metadata is invalid or malformed."
+
+
 def jar_repositories(root_path: Path) -> list[str]:
     repositories = []
     with open(root_path / ".idea" / "jarRepositories.xml") as f:
@@ -65,6 +69,9 @@ def kotlin_jps_plugin_info(root_path: Path) -> tuple[str, str]:
         )
 
         return (version, convert_hash_to_sri(prefetch))
+    raise InvalidMetadataException(
+        "No KotlinJpsPluginSettings component in kotlinc.xml"
+    )
 
 
 def requested_kotlinc_version(root_path: Path) -> str:
@@ -79,6 +86,9 @@ def requested_kotlinc_version(root_path: Path) -> str:
         version = option["@value"]
 
         return version
+    raise InvalidMetadataException(
+        "No KotlinJpsPluginSettings component in kotlinc.xml"
+    )
 
 
 def prefetch_intellij_community(variant: str, version: str) -> tuple[str, Path]:
