@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   SDL2,
   SDL2_image,
   pkg-config,
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commandergenius";
-  version = "3.5.2";
+  version = "3.6.4";
 
   src = fetchFromGitLab {
     owner = "Dringgstein";
     repo = "Commander-Genius";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4WfHdgn8frcDVa3Va6vo/jZihf09vIs+bNdAxScgovE=";
+    hash = "sha256-pjSWAr3qYLWEwwu/ocXbB1smfPsJ7NAtbForPHenN9Q=";
   };
 
   buildInputs = [
@@ -55,16 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
-
-  patches = [
-    # Fixes a broken build due to a renamed inner struct of SDL_ttf.
-    # Should be removable as soon as upstream releases v. 3.5.3.
-    (fetchpatch {
-      name = "fix-sdl-ttf_font_rename.patch";
-      url = "https://github.com/gerstrong/Commander-Genius/commit/e8af0d16970d75e94392f57de0992dfddc509bc3.patch";
-      hash = "sha256-bcCzXzh9yDngwHMfQTrnvyDal4YBiBcMTtKTgt9BtDk=";
-    })
   ];
 
   postPatch = ''
