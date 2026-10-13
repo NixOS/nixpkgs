@@ -220,6 +220,8 @@ For each contract type, [](#opt-contracts) sends the requests of consumers to a 
 - `contracts.<type>.providers.<provider>`: where to find the *provider option*, the option of the provider that has an entry for each request that the provider fulfills, at the same path as in `want`.
   `module` is the options of the provider, and `contract` is the path of the provider option in `module`.
 - `contracts.<type>.defaultProvider`: the provider that gets the requests, one of `providers`.
+- `contracts.<type>.defaultProviderName`: the name of the provider in `providers` that gets the requests.
+  This sets the default of `defaultProvider`.
 - `contracts.<type>.instances.<consumer>.<option>`: the provider that gets the entry at the same path in `want`.
   The default is `defaultProvider`.
 - `contracts.<type>.providerRequests.<provider>`: the requests that a provider must fulfill.
@@ -302,7 +304,15 @@ Example, with the consumer from the example before and the provider `testing.har
 }
 ```
 
-To use a different provider, change `defaultProvider`, and set the options of that provider.
+Instead of `defaultProvider`, the user can set the name of the provider:
+
+```nix
+{
+  contracts.fileSecrets.defaultProviderName = "hardcoded-secret";
+}
+```
+
+To use a different provider, change `defaultProvider` or `defaultProviderName`, and set the options of that provider.
 
 To send one entry to a different provider, set `instances` at the path of the entry to that provider:
 

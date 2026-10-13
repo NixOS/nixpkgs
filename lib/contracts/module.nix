@@ -242,10 +242,23 @@ in
                     description = ''
                       The provider that gets the requests, one of `providers`.
                       To send an entry to a different provider, set `instances`.
+                      To select the provider by its name, set `defaultProviderName`.
                     '';
-                    default = null;
+                    default =
+                      if config.defaultProviderName == null then null else config.providers.${config.defaultProviderName};
+                    defaultText = lib.literalMD "the provider in `providers` with the name `defaultProviderName`, or `null`";
                     type = types.nullOr providerRefType;
                     example = lib.literalExpression "config.contracts.fileSecrets.providers.hardcoded-secret";
+                  };
+
+                  defaultProviderName = mkOption {
+                    description = ''
+                      The name of the provider in `providers` that gets the requests.
+                      This sets the default of `defaultProvider`.
+                    '';
+                    default = null;
+                    type = types.nullOr (types.enum (lib.attrNames config.providers));
+                    example = "hardcoded-secret";
                   };
 
                   instances = mkOption {

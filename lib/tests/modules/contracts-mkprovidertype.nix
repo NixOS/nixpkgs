@@ -114,7 +114,8 @@ in
         contract = [ ];
       };
       contracts.number.defaultProvider = config.contracts.number.providers.increment;
-      contracts.connection.defaultProvider = config.contracts.connection.providers.urlbuilder;
+      # Select the provider by its name.
+      contracts.connection.defaultProviderName = "urlbuilder";
 
       contracts.number.want.app.x.request.value = 10;
       contracts.number.want.app.db.primary.request.value = 20;

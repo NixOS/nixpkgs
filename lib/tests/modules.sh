@@ -488,6 +488,7 @@ checkConfigOutput '^6$' config.increment.direct.response.value ./contracts-mkpro
 checkConfigOutput '^21$' config.locate.a.b.response.value ./contracts-mkprovidertype.nix
 checkConfigOutput '^"b locate.a.b"$' config.locate.a.b.response.text ./contracts-mkprovidertype.nix
 checkConfigOutput '^"postgresql://db.example.com:5432"$' config.contracts.connection.results.app.db.url ./contracts-mkprovidertype.nix
+checkConfigError 'defaultProviderName. is not of type .null or value "urlbuilder"' config.contracts.connection.results.app.db.url ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-unknown-name.nix
 checkConfigError 'is not of type .signed integer.' config.contracts.number.results.app.x.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-wrong-request.nix
 checkConfigError "set .fulfill. or .fulfill'., not the two" config.both.x.request.value ./contracts-mkprovidertype.nix ./contracts-mkprovidertype-two-fulfill.nix
 
