@@ -64,13 +64,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "libnvshmem";
-  version = "3.6.5-0";
+  version = "3.7.2-0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvshmem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2E3/WGbg6srT/e3ykK0qxTy1ZlJ9JGGLlergG0ITwTY=";
+    hash = "sha256-PK/BsXBHGL0jnhVhQAC6WRZ5F8Mz3W02OCIoHlcSZg0=";
   };
 
   outputs = [ "out" ];
