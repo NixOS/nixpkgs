@@ -47,7 +47,9 @@ compiler-projection and GNU header-selection fixes initially preserved their fou
 production derivations and fourteen outputs. The later stage-construction repair,
 dynamic-loader repair and native compiler query integration change dependency
 graphs and require separate full builds. Acceptance of those current changes
-remains pending.
+remains pending. On 2026-10-13 the branch was rebased onto master
+`d78be45c53e8`, which makes CUDA 13.4 the default release and updates many CUDA
+components; nothing on the rebased graph has been built.
 
 The native adapter review found composition defects.
 Flattening caller response files can promote their quoting selectors into the
@@ -57,9 +59,10 @@ explicit caller frontend entry retains its standalone lexical context. Bounded
 driver and wrapper checks pass; rebuilt producers remain pending.
 Opaque link policy and late hooks can select static PIE after the
 wrapper inferred a dynamic link, producing an unwanted interpreter and RUNPATH
-and a program that crashes. Native linker prototypes preserve policy origin and
-interpret defaults after final link-mode selection; end-to-end compiler and
-linker integration remains pending. Neither is established by earlier suites.
+and a program that crashes. This defect remains open: a native linker prototype
+was reviewed and withdrawn, and the fix belongs in the generic tier described in
+the [wrapper design](../../../build-support/wrapper-common/README.md#link-mode-policy-at-the-linker).
+Earlier suites cover neither issue.
 Purity and no-native enforcement must retain caller provenance through native
 scoped translation and frontend forwarding; those paths remain under review.
 
@@ -189,9 +192,11 @@ These historical figures require a new matched comparison after core integration
 
 A 2026-10-09 matched workload forced fifteen ordinary compiler, CUDA, MPI,
 Torch/MAGMA, Triton and PyCUDA derivation/output records, with three alternating
-pairs per platform. Comparing fetched master `c1ca1da56d31` with the rebased
-checkpoint `09ad74a25353`, native allocation increased 1.710% and cross allocation
-decreased 20.396%; all fifteen derivations changed on each platform. Both sides
-allowed broken metadata because
-master marks MAGMA broken. These whole-branch figures neither isolate scope costs
-nor validate the pending core integration; noisy CPU results establish no speedup.
+pairs per platform. Comparing fetched master `c1ca1da56d31` with the branch
+checkpoint ending at "cc-wrapper: retain raw requests and publish native importer
+bindings", native allocation increased 1.710% and cross allocation decreased
+20.396%; all fifteen derivations changed on each platform. Both sides allowed
+broken metadata because master marks MAGMA broken. These whole-branch figures
+neither isolate scope costs nor validate the pending core integration; noisy CPU
+results establish no speedup. They predate the 2026-10-13 rebase onto master
+`d78be45c53e8` and require a new matched comparison.
