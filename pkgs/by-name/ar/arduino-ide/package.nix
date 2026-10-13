@@ -44,12 +44,15 @@ let
     ];
   };
 
+  passthru.updateScript = ./update.sh;
+
   linux = appimageTools.wrapType2 (finalAttrs: {
     inherit
       pname
       version
       src
       meta
+      passthru
       ;
 
     extraInstallCommands = ''
@@ -71,6 +74,7 @@ let
       pname
       version
       src
+      passthru
       ;
 
     meta = meta // {
