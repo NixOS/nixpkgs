@@ -137,6 +137,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     # Drop the orphaned ShardedMoE CUDA contrib op, whose ft_moe backend was removed upstream
     # Fix submitted upstream: https://github.com/microsoft/onnxruntime/pull/31139
     ./drop-orphaned-sharded-moe.patch
+
+    # Keep SM120+ real architectures for the general LLM CUDA sources (MoE GEMM, fpA_intB, ...) on
+    # non-MSVC builds. They were limited to virtual SM120+ architectures, so with only SM120+ real
+    # architectures (e.g. cudaCapabilities = [ "12.1a" ]) the library was left out and
+    # libonnxruntime_providers_cuda.so had undefined MoeGemmRunner symbols. Upstream made the same
+    # change in https://github.com/microsoft/onnxruntime/commit/f1d07f0d15d91ba4be889b7f0b02f304329bed89
+    # (included in 1.30.0), which doesn't apply to this version.
+    ./cuda-llm-sources-for-sm120-real.patch
   ];
 
   postPatch = ''

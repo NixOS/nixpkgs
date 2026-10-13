@@ -1,0 +1,27 @@
+diff --git a/cmake/onnxruntime_providers_cuda.cmake b/cmake/onnxruntime_providers_cuda.cmake
+index 62b47465..8ebf7c0a 100644
+--- a/cmake/onnxruntime_providers_cuda.cmake
++++ b/cmake/onnxruntime_providers_cuda.cmake
+@@ -521,12 +521,17 @@
+ 
+       # LLM OBJECT library: SM75+ (backward compatible with fpA_intB_gemv/gemm which support SM75).
+       # Restricts CUDA_ARCHITECTURES to avoid compiling heavy CUTLASS templates for pre-Turing GPUs.
+-      # Excludes SM120+ real (native SASS) architectures because SM120-specific kernels are already
+-      # compiled in the separate SM120 TMA OBJECT library, and compiling the general LLM code for
+-      # sm_120a triggers CCCL tcgen05 PTX headers that fail on Windows/MSVC. The virtual arch
+-      # (PTX) is kept so SM120 devices can JIT-compile the code.
++      # On MSVC, excludes SM120+ real (native SASS) architectures because compiling the general LLM
++      # code for sm_120a triggers CCCL tcgen05 PTX headers that fail there; the virtual arch (PTX)
++      # is kept so SM120 devices can JIT-compile the code. Elsewhere SM120+ real is kept: an
++      # architecture list with only SM120+ real entries would otherwise leave this library out,
++      # and with it the MoE GEMM runner instantiations, so the CUDA provider can't be loaded.
+       if(onnxruntime_cuda_llm_srcs)
+-        onnxruntime_filter_cuda_archs(_ort_llm_cuda_architectures MIN_SM 75 EXCLUDE_SM120_REAL)
++        if(MSVC)
++          onnxruntime_filter_cuda_archs(_ort_llm_cuda_architectures MIN_SM 75 EXCLUDE_SM120_REAL)
++        else()
++          onnxruntime_filter_cuda_archs(_ort_llm_cuda_architectures MIN_SM 75)
++        endif()
+         if(_ort_llm_cuda_architectures)
+           onnxruntime_add_cuda_object_library(
+             NAME onnxruntime_providers_cuda_llm
