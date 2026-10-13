@@ -13,6 +13,7 @@ Please check what applies. Note that these are not hard requirements but merely 
 However, please do not remove the template, even when nothing is checked!
 -->
 
+- [ ] This is not a duplicate of an existing PR.
 - Built on platform:
   - [ ] x86_64-linux
   - [ ] aarch64-linux
