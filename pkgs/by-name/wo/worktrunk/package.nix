@@ -54,8 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [ gitMinimal ];
 
   checkFlags = [
-    # Expects `which` on PATH
-    "--skip=output::commit_generation::tests::test_command_exists_known_command"
     # Integration tests use insta snapshots with environment-specific paths
     "--skip=integration_tests::"
     # Relies on environment-specific behavior. Notably, fails on the r-ryantm update-bot host
