@@ -390,12 +390,12 @@ final: prev: {
 
   QFEnter = buildVimPlugin {
     pname = "QFEnter";
-    version = "2.4.3-unstable-2024-05-05";
+    version = "2.4.4";
     src = fetchFromGitHub {
       owner = "yssl";
       repo = "QFEnter";
-      rev = "1e4bf00b264e0f1541401c28c4b63ace5bb3d2be";
-      hash = "sha256-oHCTJW0bfFnljR7iYIOk4A90e5PppHN4y7nKhGr3eqo=";
+      tag = "2.4.4";
+      hash = "sha256-DZrPo3hPlfiTTnPSdsdojKgo36AT7ccIss/SVl5AOcE=";
     };
     meta.homepage = "https://github.com/yssl/QFEnter/";
     meta.license = unfree;
