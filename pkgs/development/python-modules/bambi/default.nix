@@ -15,34 +15,30 @@
   matplotlib,
   pandas,
   pymc,
+  pytensor,
+  seaborn,
   sparse,
 
   # tests
   blackjax,
   numpyro,
+  pytest-mock,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "bambi";
-  version = "0.17.2";
+  version = "0.21.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
     tag = finalAttrs.version;
-    hash = "sha256-Vjv62cYDIuTLE7MxRt4Havy7DMOiMTyIixbs4LGFGGs=";
+    hash = "sha256-1+NtsjGjVJLVqKD84IqpOoS2btON3hpHM2YI/pqmEN8=";
   };
-
-  # TypeError: NDArray.record() missing 1 required keyword-only argument: 'in_warmup'
-  postPatch = ''
-    substituteInPlace bambi/backend/pymc.py \
-      --replace-fail \
-        "strace.record(point=dict(zip(varnames, value)))" \
-        "strace.record(point=dict(zip(varnames, value)), in_warmup=False)"
-  '';
 
   build-system = [
     setuptools
@@ -59,6 +55,8 @@ buildPythonPackage (finalAttrs: {
     matplotlib
     pandas
     pymc
+    pytensor
+    seaborn
     sparse
   ];
 
@@ -73,11 +71,15 @@ buildPythonPackage (finalAttrs: {
     # bayeux-ml
     blackjax
     numpyro
+    pytest-mock
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
+    # Requires `nutpie`, which is not packaged in nixpkgs
+    "test_nuts_parameter_forwarded_to_external_samplers"
+
     # ValueError: dtype attribute is not a valid dtype instance
     "test_vonmises_regression"
 
@@ -96,22 +98,29 @@ buildPythonPackage (finalAttrs: {
     "test_average_by"
     "test_ax"
     "test_basic"
+    "test_categorical_and_interactions"
     "test_censored_response"
     "test_custom_prior"
     "test_data_is_copied"
     "test_distributional_model"
     "test_elasticity"
+    "test_exclusion"
     "test_extra_namespace"
     "test_fig_kwargs"
     "test_gamma_with_splines"
     "test_group_effects"
     "test_hdi_prob"
+    "test_inplace_false"
     "test_legend"
     "test_model_with_group_specific_effects"
     "test_model_with_intercept"
     "test_model_without_intercept"
+    "test_no_offsets_when_centered_parametrization"
     "test_non_distributional_model"
     "test_normal_with_splines"
+    "test_offsets_match_sampled_offsets"
+    "test_offsets_reconstructed_with_sigma_alias"
+    "test_offsets_reconstructed_without_centering"
     "test_predict_new_groups"
     "test_predict_new_groups_fail"
     "test_predict_offset"
@@ -136,8 +145,7 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths = [
     # Tests require network access
-    "tests/test_interpret.py"
-    "tests/test_interpret_messages.py"
+    "tests/test_interpret_plots.py"
   ];
 
   pythonImportsCheck = [ "bambi" ];

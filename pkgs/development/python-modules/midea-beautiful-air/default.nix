@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "midea-beautiful-air";
-  version = "0.10.5";
+  version = "0.10.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nbogojevic";
     repo = "midea-beautiful-air";
     tag = "v${version}";
-    hash = "sha256-786Q085bv8Zsm0c55I4XalRhEfwElRTJds5qnb0cWhk=";
+    hash = "sha256-9smuLzgJPO/GoYP8NqfY9Ky9q2E3/cjEQLtWHIx7BxI=";
   };
 
   build-system = [ setuptools ];

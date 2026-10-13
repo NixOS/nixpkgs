@@ -28,8 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   __structuredAttrs = true;
 
-  strictDeps = true;
-
   cargoHash = "sha256-DNy1Hz0g0HKDdnXjiLSmDGKaI6sONaxkNXy/zoXErlk=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -39,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "WebTransport CLI";
     homepage = "https://github.com/pervrosen/wtcat";
-    changelog = "https://github.com/pervrosen/wtcat/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/pervrosen/wtcat/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "wtcat";

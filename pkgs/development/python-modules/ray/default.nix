@@ -60,6 +60,8 @@
   scipy,
   # serve
   fastapi,
+  jinja2,
+  mmh3,
   starlette,
   uvicorn,
   watchfiles,
@@ -69,12 +71,16 @@
   pyopenssl,
   # tune
   tensorboardx,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.55.0";
+  version = "2.59.0";
   format = "wheel";
+  __structuredAttrs = true;
 
   disabled = pythonAtLeast "3.15";
 
@@ -90,22 +96,22 @@ buildPythonPackage (finalAttrs: {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp311 = "sha256-UiSRRs/c92ns/+VPWyyvJVUb9up42d2JeIwKZpynabc=";
-          cp312 = "sha256-zUYL2/iopLt2iiDDixxTTYT+Y7wOXzWAxcDvcwK5hrM=";
-          cp313 = "sha256-8W3qMuXMWO1AbA7w3UvmnWDOd6B17bXwOANWpIv4WrM=";
-          cp314 = "sha256-6wpheWQbxCCmbuhcybOC5Y8i7/vTYpfjaDp5PlzcCJg=";
+          cp311 = "sha256-ZF9Gdu9v8sqBVOg+3ws4WD0iW2xvuDtgUMoWgdw6hog=";
+          cp312 = "sha256-QFWnpgKT/+5BAFq5s+2ZM+D5tdhFCyFPPAp7HeVQPw4=";
+          cp313 = "sha256-cP3FvsR8wzpPTg2bCB9mUF4Rmr2Ki8bLLF1JJkJ/zm0=";
+          cp314 = "sha256-BQeBCZzmQbfYmJbnsNecgggTUp2obJtcZey3yJQD5mc=";
         };
         aarch64-linux = {
-          cp311 = "sha256-sf1zQnCT0a7x+3vTxUMKTmhtXhD6BAiXVxY6TCpRfes=";
-          cp312 = "sha256-t39AYHKsDOkEMaxDaCjzZMGDq1e6FcOg5oinSuPC0/M=";
-          cp313 = "sha256-zu6HqIRgKqs02xCUFeaDmm6RafR1DKtye36hYQ31uR8=";
-          cp314 = "sha256-t0OQ8gHyjwXI8lAGnf7VTW1qAQn/5IJCXXbBG+gg4wk=";
+          cp311 = "sha256-5Zu+7Z/TrinjJrz3Om3GuVcCkAQjDp8eh0ZwxOOQsUc=";
+          cp312 = "sha256-CeLdi6Nn8H8YKfwuNfQenD+p9uwLq6zhPXDr4U6M9mI=";
+          cp313 = "sha256-WD8m4fGgSu/SMLkIYh3D8+HKXg0gHuCdXwQMpLgk6AA=";
+          cp314 = "sha256-bWD5t6lPwTisR6B1ZBgnaf1rbO+uBxSqdJmlU73aKUk=";
         };
         aarch64-darwin = {
-          cp311 = "sha256-JCbpxFE8tIQr+vcKrt9LntwwL7Ad5cGQb2i5tCegwkM=";
-          cp312 = "sha256-bwuN+jcWzJvl/OO1Ppv9tzzqNgJb/m8dJ5KND4TP1pU=";
-          cp313 = "sha256-Hai4dVtuT94D23i2ziu87Pz70g05uTgz0kbFFdru3zw=";
-          cp314 = "sha256-1IvEUzs7dtWe0/nqsea3MipTp83vuPZX2bRu661W2+4=";
+          cp311 = "sha256-ztzmr4ZdB40xi8P2keQVJzMdUy3KABf7gkGRyITlmiI=";
+          cp312 = "sha256-aiQLOTgZwMjAOUDRb6+VIiMAOrHZc21TKMxaX3HJXhw=";
+          cp313 = "sha256-hDv0j0JyLgwUPrpoRrWBlxa7fl4ES55HebHTrFkzBAs=";
+          cp314 = "sha256-rzEVjuj+rUEZxuS3s+DLNBRBZZnfHaLkyZ58U/pcX7M=";
         };
       };
     in
@@ -116,7 +122,7 @@ buildPythonPackage (finalAttrs: {
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 =
+      hash =
         hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
           or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
@@ -214,10 +220,14 @@ buildPythonPackage (finalAttrs: {
     serve = lib.unique (
       [
         fastapi
+        jinja2
+        mmh3
         requests
         starlette
         uvicorn
         watchfiles
+        # `ray-haproxy` (upstream, linux-only) is not packaged: it only ships an HAProxy binary, and
+        # ray falls back to `haproxy` from PATH
       ]
       ++ self.default
     );
@@ -259,11 +269,16 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "ray" ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
+    mainProgram = "ray";
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [

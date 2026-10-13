@@ -2,6 +2,7 @@
   alcotest,
   buildDunePackage,
   fetchurl,
+  fetchpatch,
   eio-ssl,
   faraday,
   h2-eio,
@@ -21,14 +22,29 @@
   eio_main,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "piaf";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "https://github.com/anmonteiro/piaf/releases/download/${version}/piaf-${version}.tbz";
+    url = "https://github.com/anmonteiro/piaf/releases/download/${finalAttrs.version}/piaf-${finalAttrs.version}.tbz";
     hash = "sha256-B/qQCaUvrqrm2GEW51AH9SebGFx7x8laq5RV8hBzcPs=";
   };
+
+  patches =
+    # Compatibility with eio 1.4
+    lib.optionals (lib.versionAtLeast eio_main.version "1.4") [
+      (fetchpatch {
+        url = "https://github.com/anmonteiro/piaf/commit/5b2f44683fb7eabdb78f43848c9e0a448e741fc3.patch";
+        includes = [ "lib/*.ml" ];
+        hash = "sha256-/Y3OQtqoA4DCgs3Ai2EPCipMb/xSwDAN7+6MTFoHKXI=";
+      })
+      (fetchpatch {
+        url = "https://github.com/anmonteiro/piaf/commit/b8f5e94deea6e653025c37131bbf6833dc4c4c85.patch";
+        includes = [ "lib/*.ml" ];
+        hash = "sha256-gazYJFlM9OeuixpJnLwANZj/DVqdc8vacd1a6v35SpM=";
+      })
+    ];
 
   propagatedBuildInputs = [
     eio-ssl
@@ -58,6 +74,6 @@ buildDunePackage rec {
     description = "HTTP library with HTTP/2 support written entirely in OCaml";
     homepage = "https://github.com/anmonteiro/piaf";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ anmonteiro ];
+    maintainers = [ ];
   };
-}
+})

@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waffle";
-  version = "1.8.1";
+  version = "1.8.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "Mesa";
     repo = "waffle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Y7GRYLqSO572qA1eZ3jS8QlZ1X9xKpDtScaySTuPK/U=";
+    sha256 = "sha256-VvkSZOddxTPukyPpngi4vxni/OqmMGJV7voiiM0uHXo=";
   };
 
   buildInputs = [
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Cross-platform C library that allows one to defer selection of an OpenGL API and window system until runtime";
     mainProgram = "wflinfo";
-    homepage = "https://www.waffle-gl.org/";
+    homepage = "https://gitlab.freedesktop.org/mesa/waffle";
     license = lib.licenses.bsd2;
     inherit (libgbm.meta) platforms;
     maintainers = with lib.maintainers; [ Flakebi ];

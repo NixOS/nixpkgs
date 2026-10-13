@@ -36,15 +36,10 @@ let
   #   - extraOpts   (types.attrs): extra configuration options to
   #                                configure the exporter with, which
   #                                are appended to the default options
-  #   - socketOpts  (types.attrs): optional config that is merged with
-  #                                the default definition of the
-  #                                exporter's systemd socket unit. When
-  #                                set, a `prometheus-${name}-exporter.socket`
-  #                                unit is created, enabling socket activation.
   #
-  #  Note that `extraOpts` and `socketOpts` are optional, but a script
-  #  for the exporter's systemd service must be provided by specifying
-  #  either `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
+  #  Note that `extraOpts` is optional, but a script for the exporter's
+  #  systemd service must be provided by specifying either
+  #  `serviceOpts.script` or `serviceOpts.serviceConfig.ExecStart`
 
   exporterOpts =
     (genAttrs
@@ -67,6 +62,7 @@ let
         "domain"
         "dovecot"
         "ebpf"
+        "elasticsearch"
         "fail2ban"
         "fastly"
         "flow"
@@ -86,10 +82,12 @@ let
         "keylight"
         "klipper"
         "knot"
+        "kvrocks"
         "libvirt"
         "lnd"
         "mail"
         "mailman3"
+        "mail-tlsa-check"
         "mikrotik"
         "modemmanager"
         "mongodb"
@@ -118,12 +116,13 @@ let
         "restic"
         "rtl_433"
         "sabnzbd"
-        "scaphandre"
         "script"
         "shelly"
         "smartctl"
         "smokeping"
         "snmp"
+        "snowflake"
+        "speedtest"
         "sql"
         "statsd"
         "storagebox"
@@ -136,6 +135,9 @@ let
         "v2ray"
         "varnish"
         "wireguard"
+        "xray"
+        "yace"
+        "zfs-siebenmann"
         "zfs"
       ]
       (
@@ -316,7 +318,6 @@ let
       name,
       conf,
       serviceOpts,
-      socketOpts,
     }:
     let
       enableDynamicUser = serviceOpts.serviceConfig.DynamicUser or true;
@@ -344,49 +345,18 @@ let
       services.udev.extraRules = mkIf (name == "smartctl") ''
         ACTION=="add", SUBSYSTEM=="nvme", KERNEL=="nvme[0-9]*", RUN+="${pkgs.acl}/bin/setfacl -m g:smartctl-exporter-access:rw /dev/$kernel"
       '';
-      systemd.services.prometheus-fail2ban-exporter-setup =
-        mkIf (config.services.fail2ban.enable && name == "fail2ban")
-          {
-            description = "Set fail2ban socket ACLs";
-            after = [ "fail2ban.service" ];
-            requires = [ "fail2ban.service" ];
-            before = [ "prometheus-fail2ban-exporter.service" ];
-            wantedBy = [ "prometheus-fail2ban-exporter.service" ];
-            path = [
-              pkgs.acl
-              pkgs.coreutils
-            ];
-            script = ''
-              while [ ! -S ${conf.fail2banSocket} ]; do
-                sleep 0.1
-              done
-
-              setfacl -m u:${conf.user}:x $(dirname ${conf.fail2banSocket})
-              setfacl -m u:${conf.user}:rwx ${conf.fail2banSocket}
-            '';
-            serviceConfig = {
-              Type = "oneshot";
-              User = "root";
-            };
-          };
       networking.firewall.extraCommands = mkIf (conf.openFirewall && !nftables) (concatStrings [
         "ip46tables -A nixos-fw ${conf.firewallFilter} "
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
-      systemd.sockets."prometheus-${name}-exporter" = mkIf (socketOpts != null) (mkMerge [
-        {
-          wantedBy = [ "sockets.target" ];
-        }
-        socketOpts
-      ]);
       systemd.services."prometheus-${name}-exporter" = mkMerge [
         {
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
           serviceConfig.Restart = mkDefault "always";
           serviceConfig.PrivateTmp = mkDefault true;
-          serviceConfig.WorkingDirectory = mkDefault /tmp;
+          serviceConfig.WorkingDirectory = mkDefault "/tmp";
           serviceConfig.DynamicUser = mkDefault enableDynamicUser;
           serviceConfig.User = mkDefault conf.user;
           serviceConfig.Group = conf.group;
@@ -530,26 +500,6 @@ in
             '';
           }
           {
-            assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
-            message = ''
-              Scaphandre only support x86_64 architectures.
-            '';
-          }
-          {
-            assertion =
-              cfg.scaphandre.enable
-              -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
-            message = ''
-              Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
-            '';
-          }
-          {
-            assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
-            message = ''
-              Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
-            '';
-          }
-          {
             assertion =
               cfg.idrac.enable -> ((cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null));
             message = ''
@@ -615,7 +565,6 @@ in
       mkExporterConf {
         inherit name;
         inherit (conf) serviceOpts;
-        socketOpts = conf.socketOpts or null;
         conf = cfg.${name};
       }
     ) exporterOpts)

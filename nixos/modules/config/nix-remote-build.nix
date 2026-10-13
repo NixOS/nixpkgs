@@ -15,7 +15,6 @@ let
     filter
     getVersion
     mkIf
-    mkMerge
     mkOption
     optional
     optionalString
@@ -160,12 +159,12 @@ in
                 '';
               };
               speedFactor = mkOption {
-                type = types.int;
+                type = types.numbers.nonnegative;
                 default = 1;
                 description = ''
-                  The relative speed of this builder. This is an arbitrary integer
-                  that indicates the speed of this builder, relative to other
-                  builders. Higher is faster.
+                  The relative speed of this builder. This is an arbitrary
+                  positive number that indicates the speed of this builder,
+                  relative to other builders. Higher is faster.
                 '';
               };
               mandatoryFeatures = mkOption {

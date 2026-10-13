@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     mainProgram = "usbredirect";
     homepage = "https://www.spice-space.org/usbredir.html";
     license = lib.licenses.lgpl21Plus;
-    maintainers = [ ];
     platforms = lib.platforms.unix;
+    teams = [ lib.teams.freedesktop ];
   };
 }

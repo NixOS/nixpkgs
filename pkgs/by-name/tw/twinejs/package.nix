@@ -14,16 +14,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "twine";
-  version = "2.11.1";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "klembot";
     repo = "twinejs";
     tag = finalAttrs.version;
-    hash = "sha256-+y25XxTRxmCKjNL74Wb3hgAkw8yQNznYNzTuDL3uIvg=";
+    hash = "sha256-zVBZ8LfrbatwfSSJSCRnx9GbjOlmYfaIWYD+abnG6HE=";
   };
 
-  npmDepsHash = "sha256-9gMdbFibt6RwMxEsBAQE7nM0rfE7PqgUxTs87+g0Ok8=";
+  npmDepsHash = "sha256-ubreU9dwZptQhRIhlXVfsFUf9mJZ9GIqroOlMhMcn4I=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";

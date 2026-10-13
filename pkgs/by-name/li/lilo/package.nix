@@ -21,7 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Workaround build failure on -fno-common toolchains:
   #   ld: identify.o:(.bss+0x0): multiple definition of `identify';
   #     common.o:(.bss+0x160): first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  # Without -std=gnu17, compilation fails with an error on incompatible pointer types
+  env.NIX_CFLAGS_COMPILE = "-fcommon -std=gnu17";
 
   makeFlags = [
     "DESTDIR=${placeholder "out"}"

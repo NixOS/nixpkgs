@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   meson,
   libtsm,
   systemdLibs,
@@ -16,12 +17,15 @@
   pkg-config,
   docbook_xsl,
   docbook_xml_dtd_42,
+  python3,
+  ncurses,
   libxslt,
   libgbm,
+  seatd,
+  dbus,
   ninja,
   check,
   bash,
-  gawk,
   inotify-tools,
   buildPackages,
   nix-update-script,
@@ -29,13 +33,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.3.3";
+  version = "10.0.4";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U9jDlZb5aBzQ7IErtLsajxcN1W5/8/eNwhGIuz7aUCw=";
+    hash = "sha256-F4XI924K4YxREEjqP0XLeFcvaW/9v5Iyuy9n75c9Osc=";
   };
 
   strictDeps = true;
@@ -57,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     systemdLibs
     libgbm
+    seatd
+    dbus
     check
     # Needed for autoPatchShebangs when strictDeps = true
     bash
@@ -69,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     libxslt # xsltproc
     docbook_xml_dtd_42
+    python3
+    ncurses
+    zlib
   ];
 
   outputs = [
@@ -76,13 +85,26 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  # remove when next release is out
   patches = [
-    ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
+    (fetchpatch2 {
+      url = "https://github.com/kmscon/kmscon/commit/153db63d679df719a99dd36505f9c2f55d9c59f6.patch?full_index=1";
+      hash = "sha256-aAH+drUZnj1wrKcdsphqacmqRRnZAKEwCNLwA2vSTmg=";
+    })
   ];
 
+  mesonFlags = [ (lib.mesonEnable "libseat" true) ];
+
+  env = {
+    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+    DESTDIR = "/";
+  };
+
+  postPatch = ''
+    patchShebangs scripts/terminfo
+  '';
+
   postFixup = ''
-    substituteInPlace $out/bin/kmscon \
-      --replace-fail "awk" "${lib.getExe gawk}"
     substituteInPlace $out/bin/kmscon-launch-gui \
       --replace-fail "inotifywait" "${lib.getExe' inotify-tools "inotifywait"}"
   '';
@@ -97,7 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
     changelog = "https://github.com/kmscon/kmscon/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [
+      mit
+      lgpl21Plus
+      ofl
+    ];
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     platforms = lib.platforms.linux;
   };

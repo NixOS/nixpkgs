@@ -7,8 +7,6 @@
   pkg-config,
   file,
   protobufc,
-  withWolfSSL ? false,
-  wolfssl,
   withGnuTLS ? false,
   gnutls,
   withJSON ? true,
@@ -45,12 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     file
     protobufc
   ]
-  ++ lib.optional withWolfSSL wolfssl
   ++ lib.optional withGnuTLS gnutls
   ++ lib.optional withJSON json_c;
 
-  configureFlags =
-    [ ] ++ lib.optional withWolfSSL "--with-tls=wolfssl" ++ lib.optional withGnuTLS "--with-tls=gnutls";
+  configureFlags = [ ] ++ lib.optional withGnuTLS "--with-tls=gnutls";
 
   doCheck = true;
   enableParallelBuilding = true;

@@ -1,6 +1,6 @@
 {
   brotli,
-  clang_18,
+  clang,
   cmake,
   fetchFromGitHub,
   flex,
@@ -58,7 +58,7 @@ postgresqlBuildExtension (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [
-    clang_18
+    clang
     cmake
     flex
     netcat

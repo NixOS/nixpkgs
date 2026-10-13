@@ -12,7 +12,7 @@
   # A derivation or a path that contains a dir `assets`.
   overrideAssets ? fetchzip {
     url = "https://github.com/TeamFlos/phira/releases/download/v${phira-unwrapped.version}/Phira-windows-x86_64-v${phira-unwrapped.version}.zip";
-    hash = "sha256-p0+o7q42caHqVWnHtgknYaCIJemG/9fNKF7pqTnRGE4=";
+    hash = "sha256-1/FBg1i8O83yusEAFlXiYWyabv04n1qkXwLgWaw8sTc=";
     stripRoot = false;
     meta.license = lib.licenses.unfree;
   },
@@ -54,6 +54,9 @@ symlinkJoin {
 
   passthru.assets = overrideAssets;
 
-  meta = phira-unwrapped.meta;
+  meta = phira-unwrapped.meta // {
+    # trick meta.position
+    description = phira-unwrapped.meta.description;
+  };
 
 }

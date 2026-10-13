@@ -9,7 +9,7 @@
 
 mkDerivation {
   pname = "qtfeedback";
-  version = "unstable-2018-09-03";
+  version = "5.0.0-beta1-unstable-2018-03-29";
 
   outputs = [
     "out"

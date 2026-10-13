@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mkdocstrings";
-  version = "1.0.3";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     tag = finalAttrs.version;
-    hash = "sha256-uiw2jNdzmq0kM6GxAzJs8TMTBjuk25kvuIMXxIa28VQ=";
+    hash = "sha256-FBDzTArJGKoJOmOLiYNTA9kshHWqD7zV1nR3sG4sOMk=";
   };
 
   postPatch = ''

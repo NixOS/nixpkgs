@@ -16,15 +16,14 @@ let
       inherit tiling_wm;
     };
   stableVersion = {
-    version = "2024.2.2.13";
-    # this seems to be a fuckup on google's side
-    versionPrefix = "Ladybug%20Feature%20Drop";
-    sha256Hash = "sha256-yMUTWOpYHa/Aizrgvs/mbofrDqrbL5bJYjuklIdyU/0=";
+    version = "2025.3.2.6";
+    versionPrefix = "Panda%202";
+    sha256Hash = "sha256-mAJPmDSoE9STOh45u0dIejL4TyR8CIqcGMhiixIFIWc=";
   };
   canaryVersion = {
-    version = "2024.3.1.9";
-    versionPrefix = "canary-meerkat";
-    sha256Hash = "sha256-j5KEwHbc+0eFi3GZlD5PMuM/RWw2MJ1PaXZrPMvhCik=";
+    version = "2026.1.2.1";
+    versionPrefix = "canary-Quail%202";
+    sha256Hash = "sha256-UYj+6CSmtxC11HVjPxc+m9r6b5RrXXFOzpDfSkx4mw4=";
   };
 in
 {

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.25.6";
+  version = "1.26.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = "jc";
     tag = "v${version}";
-    hash = "sha256-nq5RyCnsWwFfnrlgmWEZg0gqTaJO9RBHTvtF7mBQ9i4=";
+    hash = "sha256-y0N/8bX9huORpHmiQpOj73+UKyOE/irrVJstIodVVyU=";
   };
 
   propagatedBuildInputs = [

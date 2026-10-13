@@ -29,8 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libevent ];
 
+  # K&R-style function pointer declarations break under gcc 15's C23 default.
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   meta = {
-    homepage = "http://monkey.org/~marius/nylon";
     description = "Proxy server, supporting SOCKS 4 and 5, as well as a mirror mode";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ edwtjo ];

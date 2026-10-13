@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch2,
+  fetchpatch,
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
@@ -22,24 +22,24 @@
 
 buildPythonPackage rec {
   pname = "scikit-build";
-  version = "0.18.1";
+  version = "0.19.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
-    hash = "sha256-pBUqxaCE1JnCineXvgYo2DZsM24vsOGgY+sy5V78uOc=";
+    hash = "sha256-uajQf8otXRDZMiC8V6aFFh1yrx/HYoXVXFZN2qhi5YQ=";
   };
 
   patches = [
-    (fetchpatch2 {
-      name = "setuptools-75.0-compat.patch";
-      url = "https://github.com/scikit-build/scikit-build/commit/3992485c67331097553ec8f54233c4c295943f70.patch";
-      hash = "sha256-U34UY+m6RE3c3UN/jGHuR+sRUqTGmG7dT52NWCY7nIE=";
+    # Recent CMake versions normalize paths, changing some /./foo.txt to
+    # /foo.txt in some tests.
+    # https://github.com/scikit-build/scikit-build/pull/1205
+    (fetchpatch {
+      name = "test-cmake4-install-path-normalization.patch";
+      url = "https://github.com/scikit-build/scikit-build/commit/c73be45c664349554fcbc5ab3919b74b33c3bc1e.patch";
+      hash = "sha256-ekuOVj6dfPYkNRCFnvLJqW1WL7KnbCVBBmq0+zlH7YY=";
     })
-
-    # <https://github.com/scikit-build/scikit-build/pull/1160>
-    ./fix-cmake-4.patch
   ];
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:

@@ -5,29 +5,33 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
+
 buildGoModule (finalAttrs: {
   pname = "turso-cli";
-  version = "1.0.19";
+  version = "1.0.34";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-A0stg1w3nlrybqRcMROlWF3PnvYEYqy8KskjIXXA7Rk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cMEFInZqQOIWrfZVE7D/csdelMk7OkVSZl8MPhW7Y9I=";
   };
 
-  vendorHash = "sha256-Cb4/KA9jfI/pNHbJqLWtm9oEXfMHGBS46J9o3lL4/Tk=";
+  vendorHash = "sha256-wutbVEWWoTdgwtG6IXgCYEGn/rdmaPbLGcFeCTS2VNE=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
-    "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${finalAttrs.version}"
+    "-s"
+    "-X=github.com/tursodatabase/turso-cli/internal/cmd.version=v${finalAttrs.version}"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd turso \
@@ -36,11 +40,16 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/turso completion zsh)
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI for Turso";
-    homepage = "https://turso.tech";
+    homepage = "https://github.com/tursodatabase/turso-cli";
+    changelog = "https://github.com/tursodatabase/turso-cli/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "turso";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

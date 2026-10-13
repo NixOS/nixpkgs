@@ -1,0 +1,12 @@
+diff --git a/thrift/lib/cpp2/CMakeLists.txt b/thrift/lib/cpp2/CMakeLists.txt
+index dc4dd4e13f..66c50d0f60 100644
+--- a/thrift/lib/cpp2/CMakeLists.txt
++++ b/thrift/lib/cpp2/CMakeLists.txt
+@@ -102,6 +102,7 @@
+   any_rep-cpp2-target
+   protocol-cpp2-target
+   protocol_detail-cpp2-target
++  type-cpp2-target
+   type_id-cpp2-target
+   type_system-cpp2-target
+   schema-cpp2-target

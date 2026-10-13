@@ -68,12 +68,8 @@ with lib.maintainers;
 
   bazel = {
     members = [
-      mboes
       cbley
-      olebedev
       groodt
-      aherrmann
-      ylecornec
       boltzmannrain
     ];
     scope = "Bazel build tool & related tools https://bazel.build/";
@@ -95,6 +91,10 @@ with lib.maintainers;
     shortName = "Blockchains";
   };
 
+  boot-security = {
+    github = "boot-security";
+  };
+
   budgie = {
     members = [
       bobby285271
@@ -108,7 +108,6 @@ with lib.maintainers;
     members = [
       lopsided98
       mic92
-      zowoq
     ];
     scope = "Maintain Buildbot CI framework";
     shortName = "Buildbot";
@@ -292,6 +291,10 @@ with lib.maintainers;
     github = "freedesktop";
   };
 
+  gaming = {
+    github = "gaming";
+  };
+
   gcc = {
     members = [
       vcunat
@@ -325,13 +328,7 @@ with lib.maintainers;
   };
 
   gnome-circle = {
-    members = [
-      aleksana
-      getchoo
-      michaelgrahamevans
-    ];
-    scope = "Maintain GNOME Circle applications.";
-    shortName = "GNOME Circle";
+    github = "gnome-circle";
   };
 
   golang = {
@@ -358,7 +355,6 @@ with lib.maintainers;
   home-assistant = {
     members = [
       dotlambda
-      fab
       hexa
     ];
     scope = "Maintain the Home Assistant ecosystem";
@@ -407,6 +403,7 @@ with lib.maintainers;
       GaetanLepage
       natsukium
       thomasjm
+      haansn08
     ];
     scope = "Maintain Jupyter and related packages.";
     shortName = "Jupyter";
@@ -436,6 +433,7 @@ with lib.maintainers;
   libretro = {
     members = [
       aanderse
+      igorcafe
       thiagokokada
     ];
     scope = "Maintain Libretro, RetroArch and related packages.";
@@ -510,12 +508,12 @@ with lib.maintainers;
   matrix = {
     members = [
       ma27
-      mguentner
-      dandellion
       nickcao
       teutat3s
+      transcaffeine
+      skowalak
     ];
-    scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
+    scope = "Maintain the foundational packages of the Matrix ecosystem.";
     shortName = "Matrix";
   };
 
@@ -523,7 +521,6 @@ with lib.maintainers;
     members = [
       alejandrosame
       aleksi
-      artturin
       emilytrau
       ericson2314
       jk
@@ -555,6 +552,7 @@ with lib.maintainers;
       dotlambda
       ma27
       provokateurin
+      staticdev
     ];
     scope = "Maintain Nextcloud, its tests and the integration of applications.";
     shortName = "Nextcloud";
@@ -567,7 +565,6 @@ with lib.maintainers;
       ethancedwards8
       phanirithvij
       prince213
-      wegank
     ];
     scope = "Maintain NGI-supported software.";
     shortName = "NGI";
@@ -659,10 +656,19 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  pulumi = {
+    scope = "Maintains the Pulumi IaC tool and its language-specific SDKs";
+    shortName = "Pulumi";
+    members = [
+      nicoo
+      tie
+      untio11
+    ];
+  };
+
   python = {
     members = [
       hexa
-      natsukium
     ];
     scope = "Maintain the Python interpreter and related packages.";
     shortName = "Python";
@@ -691,6 +697,10 @@ with lib.maintainers;
     github = "radicle";
   };
 
+  redis = {
+    github = "redis";
+  };
+
   rocm = {
     github = "rocm";
   };
@@ -702,7 +712,6 @@ with lib.maintainers;
 
   sage = {
     members = [
-      timokau
       raskin
       collares
     ];
@@ -717,6 +726,15 @@ with lib.maintainers;
 
   security-review = {
     github = "security-review";
+  };
+
+  stardust-xr = {
+    members = [
+      pandapip1
+      technobaboo
+    ];
+    scope = "Maintain Stardust XR packages";
+    shortName = "StardustXR";
   };
 
   stdenv = {
@@ -736,13 +754,13 @@ with lib.maintainers;
 
   swift = {
     members = [
-      dduan
+      reckenrode
       samasaur
       stephank
-      trepetti
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
+    enableFeatureFreezePing = true;
   };
 
   systemd = {
@@ -750,10 +768,8 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  tests = {
-    members = [ tfc ];
-    scope = "Maintain the NixOS VM test runner.";
-    shortName = "NixOS tests";
+  test-driver = {
+    github = "test-driver";
     enableFeatureFreezePing = true;
   };
 

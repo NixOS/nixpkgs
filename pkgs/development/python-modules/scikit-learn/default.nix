@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
 
   # build-system
   cython,
@@ -16,8 +17,9 @@
   llvmPackages,
   pytestCheckHook,
   pytest-xdist,
-  pillow,
   joblib,
+  narwhals,
+  pillow,
   threadpoolctl,
 }:
 
@@ -25,23 +27,33 @@ buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-m8y7O0Dj3hA1H49QaOEF0PQIOxpl+ge2Y0+8QBpih/0=";
+    hash = "sha256-iDMmaYnTpREBeKn64weDZ1Rgck0OHvsTsUkB0sZgxVc=";
   };
+
+  patches = [
+    # Fix HTML display performance when user has many features
+    # https://github.com/scikit-learn/scikit-learn/pull/34362
+    # TODO: remove when updating to the next release.
+    (fetchpatch {
+      url = "https://github.com/scikit-learn/scikit-learn/commit/aeadb51af96556dd0f884c0037c9dc9993449538.patch";
+      hash = "sha256-J7igLpK8pdcbgMwxFqaAGDEwm87VrLHb+ckg/pEh6IY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail \
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
     substituteInPlace pyproject.toml \
-      --replace-fail "meson-python>=0.17.1,<0.19.0" meson-python \
-      --replace-fail "numpy>=2,<2.4.0" numpy \
-      --replace-fail "scipy>=1.10.0,<1.17.0" scipy
+      --replace-fail "meson-python>=0.17.1,<0.20.0" meson-python \
+      --replace-fail "numpy>=2,<2.5.0" numpy \
+      --replace-fail "scipy>=1.10.0,<1.18.0" scipy
   '';
 
   buildInputs = [
@@ -64,14 +76,10 @@ buildPythonPackage rec {
 
   dependencies = [
     joblib
+    narwhals
     numpy
     scipy
     threadpoolctl
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
-    "scipy"
   ];
 
   nativeCheckInputs = [
@@ -116,7 +124,6 @@ buildPythonPackage rec {
   preCheck = ''
     cd $TMPDIR
     export HOME=$TMPDIR
-    export OMP_NUM_THREADS=1
   '';
 
   pythonImportsCheck = [ "sklearn" ];

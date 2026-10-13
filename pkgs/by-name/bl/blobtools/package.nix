@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace Makefile \
-      --replace-fail "CC=g++" "CC=c++"
+      --replace-fail "CC=g++" "CC=${stdenv.cc.targetPrefix}c++"
   '';
 
   installPhase = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/AndroidRoot/BlobTools";
-    description = "Tools for modifiying ASUS Transformer firmware";
+    description = "Tools for modifying ASUS Transformer firmware";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ungeskriptet ];
     mainProgram = "blobpack";

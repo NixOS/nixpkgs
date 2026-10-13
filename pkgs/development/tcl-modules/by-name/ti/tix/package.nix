@@ -60,5 +60,6 @@ tcl.mkTclDerivation {
       bsd2 # tix
       gpl2 # patches from portage
     ];
+    broken = tcl.isTcl9;
   };
 }

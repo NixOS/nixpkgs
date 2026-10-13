@@ -46,8 +46,8 @@ buildPythonPackage rec {
     pydantic
   ]
   ++ optional-dependencies.coincurve
-  ++ lib.optional (!isPyPy) eth-hash.optional-dependencies.pysha3
-  ++ lib.optional isPyPy eth-hash.optional-dependencies.pycryptodome;
+  ++ lib.optionals (!isPyPy) eth-hash.optional-dependencies.pysha3
+  ++ lib.optionals isPyPy eth-hash.optional-dependencies.pycryptodome;
 
   pythonImportsCheck = [ "eth_keys" ];
 

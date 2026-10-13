@@ -20,6 +20,7 @@
   icu63,
   nss,
   minizip,
+  pipewire,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
-  version = "15.74.3";
+  version = "15.81.5";
 
   src =
     let
@@ -38,11 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${finalAttrs.version}_amd64.deb";
-        hash = "sha256-7QQlGzIr3BBFaur8ycGY0VuYz21cJI+EfCsRuCAr8XA=";
+        hash = "sha256-Wf0MmfOi5ryXWGOpqenZUu3kmQgJCaqt/fE6Z/brMeI=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${finalAttrs.version}_arm64.deb";
-        hash = "sha256-prz3RaeMykgLrK9ai3/ivzRsUFT1dyWP1xymEl3s4eA=";
+        hash = "sha256-eut46sFd/c/3RxsTJ1MHMGKIqJNSO0BD4uTYkayOoOE=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -131,6 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
         libxfixes
         dbus
         icu63
+        # dlopen'd by TeamViewer_Desktop for the Wayland ScreenCast portal
+        pipewire
       ]
     }"
   ];

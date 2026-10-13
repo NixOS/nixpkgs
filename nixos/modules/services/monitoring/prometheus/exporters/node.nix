@@ -39,7 +39,6 @@ in
       '';
     };
   };
-
   serviceOpts = {
     serviceConfig = {
       DynamicUser = false;
@@ -48,7 +47,7 @@ in
         ${pkgs.prometheus-node-exporter}/bin/node_exporter \
           ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
           ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
-          --web.systemd-socket ${concatStringsSep " " cfg.extraFlags}
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} ${concatStringsSep " " cfg.extraFlags}
       '';
       RestrictAddressFamilies =
         optionals (collectorIsEnabled "logind" || collectorIsEnabled "systemd") [
@@ -67,9 +66,5 @@ in
       # Allow space monitoring under /home
       ProtectHome = true;
     };
-  };
-
-  socketOpts = {
-    socketConfig.ListenStream = "${cfg.listenAddress}:${toString cfg.port}";
   };
 }

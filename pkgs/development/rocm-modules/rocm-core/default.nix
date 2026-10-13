@@ -17,12 +17,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-core";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocm-core"
       "shared"
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Utility for getting the ROCm release version";
     homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-core";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

@@ -17,6 +17,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-9PV/RpK/rOI9jpTDy0FmkXY2Cf54vve6j1kM5dcZgV8=";
   };
 
+  postPatch = ''
+    substituteInPlace pyNfsClient/__info__.py \
+      --replace-fail '__version__ = "0.1.5"' '__version__ = "${finalAttrs.version}"'
+  '';
+
   build-system = [ setuptools ];
 
   # Module has no tests

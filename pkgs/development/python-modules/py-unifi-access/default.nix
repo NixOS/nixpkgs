@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-unifi-access";
-  version = "1.1.5";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imhotep";
     repo = "py-unifi-access";
     tag = finalAttrs.version;
-    hash = "sha256-TGAZpvqX5H+kaSJb3rraDfXnekPGCMb092NF2ilNdHM=";
+    hash = "sha256-FLbZPeuF6QazBhuOz107+H2rAdbyuV7XJZziLDJajks=";
   };
 
   build-system = [ setuptools ];

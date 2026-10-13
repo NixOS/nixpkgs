@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension rec {
   pname = "pg_topn";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = "postgresql-topn";
     tag = "v${version}";
-    hash = "sha256-lP6Iil/BUv4ga+co+oBpKv1FBqFuBGfNjueEolM6png=";
+    hash = "sha256-cQW3aGCN0BZB0gmwnUtQHz+Rjt1V38eGXsTNNm9o28U=";
   };
 
   meta = {

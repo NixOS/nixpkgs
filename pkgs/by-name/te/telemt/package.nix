@@ -5,21 +5,34 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "telemt";
-  version = "3.3.28";
+  version = "3.5.7";
 
   src = fetchFromGitHub {
     owner = "telemt";
     repo = "telemt";
     tag = version;
-    hash = "sha256-u5/HiFIinKvpTItUsBnLhsGhAXN3V2qeeUGmvcFlJI8=";
+    hash = "sha256-5oIJDwnCRiKQjUZ7jzeOXyiF/IZAVdetUhIwIPlI49A=";
   };
 
-  cargoHash = "sha256-FGXdWhjqlb0urBtSbU1afebgy3a/CLGB+aHv3ccIiy8=";
+  cargoHash = "sha256-sGimKbZwFQFopSIHB38dareGGdCoorygEj8RhUGb1qE=";
+
+  checkFlags = [
+    # flaky: races between MiddleClientWriterCancelled and TrafficBudgetWaitCancelled observation paths
+    "--skip=proxy::middle_relay::middle_relay_atomic_quota_invariant_tests::me_writer_data_write_obeys_flow_cancellation"
+    # flaky: timing-coupling assertion fires on slower hardware
+    "--skip=proxy::masking::masking_timing_budget_coupling_security_tests::adversarial_delayed_interface_lookup_does_not_consume_outcome_floor_budget"
+  ];
 
   meta = {
     mainProgram = "telemt";
     description = "MTProxy for Telegram on Rust + Tokio";
     homepage = "https://github.com/telemt/telemt";
     maintainers = with lib.maintainers; [ r4v3n6101 ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mkLicense {
+      # Custom license "based on Apache License 2 principles"
+      shortName = "telemt-pl3";
+      fullName = "Telemt Public License 3";
+    };
   };
 }

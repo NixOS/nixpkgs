@@ -2,23 +2,26 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   pyusb,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "temperusb";
   version = "1.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-PwKHT1zzVn+nmxO/R+aK+029WaaHBo7FyVV4eQtHhbM=";
   };
 
-  propagatedBuildInputs = [ pyusb ];
+  build-system = [ setuptools ];
 
-  # Module has no tests which are shipped and source is not tagged
-  doCheck = false;
+  dependencies = [ pyusb ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "temperusb" ];
 
@@ -28,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

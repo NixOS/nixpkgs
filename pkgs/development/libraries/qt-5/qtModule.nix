@@ -97,10 +97,13 @@ mkDerivation (
           done
       fi
 
+      ${lib.optionalString (lib.hasAttr "devTools" args) ''devTools="${lib.concatStringsSep " " args.devTools}"''}
       moveQtDevTools
 
       ${args.postFixup or ""}
     '';
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://www.qt.io";
@@ -113,7 +116,6 @@ mkDerivation (
       ];
       maintainers = with maintainers; [
         qknight
-        ttuegel
         bkchr
       ];
       platforms = platforms.unix;

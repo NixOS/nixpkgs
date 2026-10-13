@@ -1,54 +1,48 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # dependencies
-  typing-extensions,
-
-  # optional-dependencies
-  fastapi,
-  httpx,
-  python-multipart,
-  starlette,
-  django,
-  flask,
-  werkzeug,
-  sanic,
   aiohttp,
-  yarl,
-  quart,
+  buildPythonPackage,
   chalice,
+  django,
+  fastapi,
+  fetchFromGitHub,
+  flask,
+  hatchling,
+  httpx,
   litestar,
-  sanic-testing,
-
-  # tests
+  pyprojectVersionPatchHook,
   pytest-asyncio,
+  pytest-django,
   pytestCheckHook,
+  python-multipart,
+  quart,
+  sanic-testing,
+  sanic,
+  starlette,
+  typing-extensions,
+  werkzeug,
+  yarl,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "cross-web";
-  version = "0.4.1";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usecross";
     repo = "cross-web";
     rev = finalAttrs.version;
-    hash = "sha256-CH7SKePJcBgLPrdb3/qoim0Wzdx78+rNpJFWDHO7JWA=";
+    hash = "sha256-JxwzTU17jCQMFNCtmcZVAZQnwDZjHNxCGNdKhkCMoPs=";
   };
 
-  build-system = [
-    hatchling
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
   ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  build-system = [ hatchling ];
+
+  dependencies = [ typing-extensions ];
 
   optional-dependencies = {
     integrations = [
@@ -71,13 +65,23 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-django
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
-  pythonImportsCheck = [
-    "cross_web"
+  pytestFlags = [
+    # Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    "-Wignore::starlette.exceptions.StarletteDeprecationWarning"
   ];
+
+  pythonImportsCheck = [ "cross_web" ];
+
+  preCheck = ''
+    export PYTHONPATH="$PYTHONPATH:$PWD/tests"
+  '';
+
+  env.DJANGO_SETTINGS_MODULE = "testing._django_settings";
 
   meta = {
     description = "Universal web framework adapter for Python";

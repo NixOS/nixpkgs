@@ -10,6 +10,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "beedii";
   version = "1.0.0";
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   src = fetchzip {
     url = "https://github.com/webkul/beedii/releases/download/v${finalAttrs.version}/beedii.zip";
     hash = "sha256-MefkmWl7LdhQiePpixKcatoIeOTlrRaO3QA9xWAxJ4Q=";

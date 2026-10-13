@@ -1,14 +1,18 @@
 {
+  lib,
   rustPlatform,
   testers,
   hwdata,
+  pkg-config,
   libdrm,
+  libglvnd,
+  vulkan-loader,
   coolercontrol,
   runtimeShell,
   addDriverRunpath,
   python3Packages,
   liquidctl,
-  protobuf,
+  which,
 }:
 
 {
@@ -22,12 +26,17 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-rFwbHsGkKLD9UgkdTbxMIjARmU0Ewal1NIwlbzRL/vc=";
+  cargoHash = "sha256-tbGNVyYrTRmxOqVM7mjNgwZXXcUY205mKuFjrptr+m4=";
 
-  buildInputs = [ libdrm ];
+  buildInputs = [
+    hwdata
+    libdrm
+    libglvnd
+    vulkan-loader
+  ];
 
   nativeBuildInputs = [
-    protobuf
+    pkg-config
     addDriverRunpath
     python3Packages.wrapPython
   ];
@@ -42,10 +51,6 @@ rustPlatform.buildRustPackage {
     # Hardcode a shell
     substituteInPlace daemon/src/repositories/utils.rs \
       --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
-
-    # This is supposed to be a "nix-compatible file path", but there is nothing that actually does the substitution
-    substituteInPlace daemon/src/repositories/hwmon/pci_ids.rs \
-      --replace-fail '@hwdata@' '${hwdata}'
   '';
 
   postInstall = ''
@@ -57,8 +62,21 @@ rustPlatform.buildRustPackage {
   postFixup = ''
     addDriverRunpath "$out/bin/coolercontrold"
 
+    patchelf --add-rpath ${
+      lib.strings.makeLibraryPath [
+        # could instead patch out dynamic_loading for libdrm_amdgpu_sys in daemon/Cargo.toml,
+        # but we have to add other libraries to the search path anyway
+        libdrm
+
+        # Finding GPUs for stress-testing
+        libglvnd
+        vulkan-loader
+      ]
+    } $out/bin/coolercontrold
+
     buildPythonPath "''${pythonPath[*]}"
     wrapProgram "$out/bin/coolercontrold" \
+      --prefix PATH : ${lib.makeBinPath [ which ]} \
       --prefix PATH : $program_PATH \
       --prefix PYTHONPATH : $program_PYTHONPATH
   '';

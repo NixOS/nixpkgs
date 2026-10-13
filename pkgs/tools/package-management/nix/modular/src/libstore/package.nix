@@ -4,6 +4,7 @@
   mkMesonLibrary,
 
   unixtools,
+  freebsd,
 
   nix-util,
   boost,
@@ -17,12 +18,24 @@
   sqlite,
 
   busybox-sandbox-shell ? null,
+  pkgsStatic,
 
   # Configuration Options
 
   version,
 
   embeddedSandboxShell ? stdenv.hostPlatform.isStatic,
+
+  withSandboxShell ?
+    stdenv.hostPlatform.isLinux
+    || (lib.versionAtLeast version "2.35pre" && stdenv.hostPlatform.isFreeBSD),
+  sandboxShell ?
+    if stdenv.hostPlatform.isLinux then
+      "${busybox-sandbox-shell}/bin/busybox"
+    else if stdenv.hostPlatform.isFreeBSD then
+      "${pkgsStatic.bash}/bin/bash"
+    else
+      null,
 
   withAWS ?
     # Default is this way because there have been issues building this dependency
@@ -45,6 +58,9 @@ mkMesonLibrary (finalAttrs: {
     curl
     sqlite
   ]
+  ++ lib.optional (
+    lib.versionAtLeast version "2.35pre" && stdenv.hostPlatform.isFreeBSD
+  ) freebsd.libjail
   ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
   # There have been issues building these dependencies
   ++
@@ -57,6 +73,9 @@ mkMesonLibrary (finalAttrs: {
     nlohmann_json
   ];
 
+  # Don't use the default name "build": that conflicts with an existing directory.
+  mesonBuildDir = "meson-build-dir";
+
   mesonFlags = [
     (lib.mesonEnable "seccomp-sandboxing" stdenv.hostPlatform.isLinux)
     (lib.mesonBool "embedded-sandbox-shell" embeddedSandboxShell)
@@ -64,8 +83,8 @@ mkMesonLibrary (finalAttrs: {
   ++ lib.optional (lib.versionAtLeast (lib.versions.majorMinor version) "2.33") (
     lib.mesonEnable "s3-aws-auth" withAWS
   )
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
+  ++ lib.optionals withSandboxShell [
+    (lib.mesonOption "sandbox-shell" sandboxShell)
   ];
 
   meta = {

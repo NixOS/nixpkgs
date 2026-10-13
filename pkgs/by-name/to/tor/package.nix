@@ -11,7 +11,7 @@
   zlib,
   torsocks,
   libseccomp,
-  systemd,
+  systemdLibs,
   libcap,
   xz,
   zstd,
@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.9.6";
+  version = "0.4.9.14";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qJq6lwUumWOmVLQN8tRr4H6Ka24k5UN5F/2BrNkKcBc=";
+    hash = "sha256-GCRJrByP9DJ42ie2mwIEDhHQPQMn222RJuQZDsYjXko=";
   };
 
   outputs = [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
-    systemd
+    systemdLibs
     libcap
   ];
 
@@ -103,6 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
   # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
 
+  # some tests (e.g. util/socketpair_ersatz) fail in the darwin sandbox otherwise.
+  __darwinAllowLocalNetworking = true;
+
   postInstall = ''
     mkdir -p $geoip/share/tor
     mv $out/share/tor/geoip{,6} $geoip/share/tor
@@ -128,11 +131,13 @@ stdenv.mkDerivation (finalAttrs: {
         tee = lib.getExe' coreutils "tee";
         tor = lib.getExe finalAttrs.finalPackage;
       };
+      meta.license = lib.licenses.mit;
     } ./proxy-hook.sh;
   };
 
   meta = {
     homepage = "https://www.torproject.org/";
+    donationPage = "https://donate.torproject.org/";
     description = "Anonymizing overlay network";
     longDescription = ''
       Tor helps improve your privacy by bouncing your communications around a
@@ -151,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       thoughtpolice
       prusnak
+      whispersofthedawn
     ];
     platforms = lib.platforms.unix;
   };

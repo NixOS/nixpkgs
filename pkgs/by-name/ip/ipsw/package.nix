@@ -2,21 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGo126Module,
+  buildGoModule,
 }:
 
-buildGo126Module (finalAttrs: {
-  version = "3.1.671";
+buildGoModule (finalAttrs: {
+  version = "3.1.673";
   pname = "ipsw";
 
   src = fetchFromGitHub {
     owner = "blacktop";
     repo = "ipsw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Grh0WeeslpebG+ryacUPXD3OPIbJtA1zDejothKmdxQ=";
+    hash = "sha256-oK1pEqYTA+XQObjuf9QSvXOXFR3iQH6ZwvpD0M/IIJY=";
   };
 
-  vendorHash = "sha256-J4S5VsGZEeDdiNNl0LlqIPG53Vg0xKuW1wsmrULetgQ=";
+  vendorHash = "sha256-PELTN64zUUEQ3JhICRPWxAEM8j321T2h3q3lXb5qRQc=";
 
   ldflags = [
     "-s"

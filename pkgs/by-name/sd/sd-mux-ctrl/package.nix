@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   version = "2020-02-17";
 
   src = fetchgit {
-    url = "https://git.tizen.org/cgit/tools/testlab/sd-mux";
+    url = "git://git.tizen.org/tools/testlab/sd-mux";
     rev = "9dd189d973da64e033a0c5c2adb3d94b23153d94";
     hash = "sha256-b0uoxVPfSrqNt0wJoQho9jlpQQUjofgFm93P+UNFtDs=";
   };

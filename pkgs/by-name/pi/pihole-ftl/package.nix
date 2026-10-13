@@ -5,7 +5,7 @@
   lib,
   libidn2,
   libunistring,
-  mbedtls,
+  mbedtls_4,
   ncurses,
   nettle,
   nix-update-script,
@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pihole-ftl";
-  version = "6.4.1";
+  version = "6.7.1";
 
   src = fetchFromGitHub {
     owner = "pi-hole";
     repo = "FTL";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OpbBd+HS/gwcWNe/6VB3glout1sifJ8o5EnKuXfyZ/o=";
+    hash = "sha256-TP4HFgZKAbrLaMeIkY4MKAAs86cAALXbgPwd8oc0BrA=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     libidn2
     libunistring
-    mbedtls
+    mbedtls_4
     ncurses
     nettle
     readline
@@ -45,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "STATIC" stdenv.hostPlatform.isStatic)
   ];
+
+  env.NIX_CFLAGS_COMPILE = ''
+    -Wno-stringop-overread
+    -Wno-unused-but-set-variable
+  '';
 
   postPatch = ''
     substituteInPlace src/version.c.in \
@@ -60,14 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/api/action.c \
       --replace-fail "/usr/local/bin/pihole" "pihole" \
       --replace-fail "execv" "execvp"
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D pihole-FTL $out/bin/${finalAttrs.meta.mainProgram}
-
-    runHook postInstall
   '';
 
   passthru = {

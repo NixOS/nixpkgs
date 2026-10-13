@@ -2,17 +2,21 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   autoreconfHook,
+  autoconf-archive,
   libestr,
   json_c,
   zlib,
   docutils,
   libfastjson,
+  withLibyaml ? true,
+  libyaml,
   withKrb5 ? true,
   libkrb5,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   withJemalloc ? true,
   jemalloc,
   withMysql ? true,
@@ -60,18 +64,32 @@
   nixosTests,
 }:
 
+let
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
-  version = "8.2512.0";
+  version = "8.2608.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/rsyslog-${finalAttrs.version}.tar.gz";
-    hash = "sha256-k8UAJdkLbHlfo1DVaj2DK/zkUEPqm9aCQNnCqTlLxik=";
+    hash = "sha256-49YMg0BSaMQi+V/ux0BFWhzEuRHQC9hCTV0ScrxQmxo=";
   };
+
+  patches = [
+    # Remove with the first rsyslog release containing this fix.
+    (fetchpatch {
+      name = "CVE-2026-78002.patch";
+      url = "https://github.com/rsyslog/rsyslog/commit/667e3f61aec5ee02c5c2ee6f0f8accf6fe4301a9.patch";
+      hash = "sha256-QsxOJCvr6VBbLbXzednwgvCfisSvNm6zfxPaMFxXVT0=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
+    autoconf-archive
     docutils
   ];
 
@@ -81,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     json_c
     zlib
   ]
+  ++ lib.optional withLibyaml libyaml
   ++ lib.optional withKrb5 libkrb5
   ++ lib.optional withJemalloc jemalloc
   ++ lib.optional withPostgres libpq
@@ -104,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withHiredis hiredis
   ++ lib.optional withMaxminddb libmaxminddb
   ++ lib.optional withMysql libmysqlclient
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs';
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -112,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemdsystemunitdir=\${out}/etc/systemd/system"
     (lib.enableFeature true "largefile")
     (lib.enableFeature true "regexp")
+    (lib.enableFeature withLibyaml "libyaml")
     (lib.enableFeature withKrb5 "gssapi-krb5")
     (lib.enableFeature true "klog")
     (lib.enableFeature true "kmsg")
@@ -157,6 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature false "imsolaris")
     (lib.enableFeature true "imptcp")
     (lib.enableFeature true "impstats")
+    (lib.enableFeature false "impstats-push")
     (lib.enableFeature true "omprog")
     (lib.enableFeature withNet "omudpspoof")
     (lib.enableFeature true "omstdout")
@@ -182,9 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_LINK = "-lz";
 
-  passthru.tests = {
-    nixos-rsyslogd = nixosTests.rsyslogd;
-  };
+  passthru.tests = nixosTests.rsyslogd;
 
   meta = {
     homepage = "https://www.rsyslog.com/";

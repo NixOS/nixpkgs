@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-store-mongodb";
-  version = "0.2.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langgraph-store-mongodb/v${finalAttrs.version}";
-    hash = "sha256-IXISxo3mC0/FkjGdHTmin6z/fk71ecto+L+VZ6VFdeE=";
+    hash = "sha256-0cL28QpwcvjOQmaH1lpZZpqcThGN2fZVryWEzrN9Mrc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langgraph-store-mongodb";
@@ -46,8 +46,8 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = nix-update-script {
       extraArgs = [
-        "-vr"
-        "libs/langgraph-store-mongodb/v(.*)"
+        "--version-regex"
+        "libs/langgraph-store-mongodb/v(.+)"
       ];
     };
   };

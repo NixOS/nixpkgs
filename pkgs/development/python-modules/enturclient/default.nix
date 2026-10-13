@@ -8,17 +8,19 @@
   unittestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "enturclient";
-  version = "0.2.4";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hfurubotten";
     repo = "enturclient";
-    rev = "v${version}";
-    hash = "sha256-Y2sBPikCAxumylP1LUy8XgjBRCWaNryn5XHSrRjJIIo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-83ui1BYqiRr+IwaJeXNppMnOTQCF9uJD5Kus93CDsUA=";
   };
+
+  pythonRelaxDeps = [ "async_timeout" ];
 
   build-system = [ poetry-core ];
 
@@ -27,24 +29,17 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  pythonRelaxDeps = [
-    "async_timeout"
-  ];
-
   pythonImportsCheck = [ "enturclient" ];
 
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
-  unittestFlagsArray = [
-    "tests/dto/"
-  ];
+  unittestFlagsArray = [ "tests/dto/" ];
 
   meta = {
     description = "Python library for interacting with the Entur.org API";
     homepage = "https://github.com/hfurubotten/enturclient";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/hfurubotten/enturclient/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

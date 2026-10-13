@@ -12,13 +12,13 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "camilladsp";
-  version = "4.0.1";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "HEnquist";
     repo = "camilladsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PedaOmrvvE9Kxux0XwwDJfKq0fncsV/sUzZhnAp++DM=";
+    hash = "sha256-/OnD607xSPXM4AjVOZjaZQJpo7Q847Z8mq6elHmEwAU=";
   };
 
   cargoLock = {
@@ -50,8 +50,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/HEnquist/camilladsp";
     changelog = "https://github.com/HEnquist/camilladsp/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ paepcke ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      paepcke
+      stepbrobd
+    ];
     mainProgram = "camilladsp";
   };
 })

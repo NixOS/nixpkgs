@@ -22,8 +22,8 @@ diff --git a/Makefile b/Makefile
 index 41eb38d..df3abb7 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -57,17 +57,17 @@ _VAR     = $(DESTDIR)$(TLP_VAR)
- 
+@@ -70,16 +70,16 @@
+
  SED = sed \
  	-e "s|@TLPVER@|$(TLPVER)|g" \
 -	-e "s|@TLP_SBIN@|$(TLP_SBIN)|g" \
@@ -41,11 +41,10 @@ index 41eb38d..df3abb7 100644
 -	-e "s|@TLP_CONFDEF@|$(TLP_CONFDEF)|g" \
 -	-e "s|@TLP_CONFREN@|$(TLP_CONFREN)|g" \
 -	-e "s|@TLP_CONFDPR@|$(TLP_CONFDPR)|g" \
--	-e "s|@TLP_CONF@|$(TLP_CONF)|g" \
 +	-e "s|@TLP_CONFDEF@|$(_CONFDEF)|g" \
 +	-e "s|@TLP_CONFREN@|$(_CONFREN)|g" \
 +	-e "s|@TLP_CONFDPR@|$(_CONFDPR)|g" \
-+	-e "s|@TLP_CONF@|$(_CONF)|g" \
+ 	-e "s|@TLP_SDSL@|$(TLP_SDSL)|g" \
  	-e "s|@TLP_RUN@|$(TLP_RUN)|g"   \
  	-e "s|@TLP_VAR@|$(TLP_VAR)|g"
  

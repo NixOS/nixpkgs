@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "nss-dev";
+    owner = "mozilla";
     repo = "nss";
     rev = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
     inherit hash;
@@ -75,6 +75,9 @@ stdenv.mkDerivation rec {
     done
 
     substituteInPlace coreconf/config.gypi --replace "/usr/bin/grep" "${buildPackages.coreutils}/bin/env grep"
+  ''
+  + lib.optionalString (lib.versionAtLeast version "3.129") ''
+    substituteInPlace build.sh --replace "\$obj_dir/lib/pkgconfig/nspr.pc" "${nspr.dev}/lib/pkgconfig/nspr.pc"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace coreconf/Darwin.mk --replace '@executable_path/$(notdir $@)' "$out/lib/\$(notdir \$@)"
@@ -260,7 +263,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS";
     description = "Set of libraries for development of security-enabled client and server applications";
-    changelog = "https://github.com/nss-dev/nss/blob/master/doc/rst/releases/nss_${underscoreVersion}.rst";
+    changelog = "https://github.com/mozilla/nss/blob/master/doc/src/releases/nss_${underscoreVersion}.md";
     maintainers = with lib.maintainers; [
       hexa
       ajs124

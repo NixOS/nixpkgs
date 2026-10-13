@@ -40,8 +40,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "\${qtWrapperArgs[@]}"
   ];
 
-  propagatedBuildInputs = [
-    (with python3.pkgs; [
+  propagatedBuildInputs = (
+    with python3.pkgs;
+    [
       psutil
       pyside6
       pysocks
@@ -51,8 +52,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       setproctitle
       setuptools
       yt-dlp
-    ])
-  ];
+    ]
+  );
 
   meta = {
     description = "Download manager GUI written in Python";

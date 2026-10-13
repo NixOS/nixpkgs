@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "penelope";
-  version = "0.19.1";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brightio";
     repo = "penelope";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-72HFPByH4FBRIYaTeEWaZ2dW43Q1OjosT3qAOMiu5t4=";
+    hash = "sha256-pBC8qiZBPTwe7BLBLcAFPCb7Lu+7TzZoAzri160/un0=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

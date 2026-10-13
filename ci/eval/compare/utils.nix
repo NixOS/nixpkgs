@@ -1,7 +1,6 @@
 { lib, ... }:
 rec {
-  # Borrowed from https://github.com/NixOS/nixpkgs/pull/355616
-  uniqueStrings = list: builtins.attrNames (builtins.groupBy lib.id list);
+  inherit (lib) uniqueStrings;
 
   /*
     Converts a `packagePlatformPath` into a `packagePlatformAttr`

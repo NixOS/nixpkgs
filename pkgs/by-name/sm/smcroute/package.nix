@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "smcroute";
-  version = "2.5.7";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "smcroute";
     rev = finalAttrs.version;
-    sha256 = "sha256-b1FsaDw5wAZkOwc6Y7TsMwyfxIRQ2rNUTK+knEzOn7w=";
+    sha256 = "sha256-UaIiYtPD6nsk5ZnqoWJ6SOsvmM3xIcu/ImqG5ESPOo0=";
   };
 
   nativeBuildInputs = [

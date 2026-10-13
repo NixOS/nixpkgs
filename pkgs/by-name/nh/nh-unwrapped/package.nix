@@ -3,6 +3,7 @@
   lib,
   rustPlatform,
   installShellFiles,
+  sqlite,
   fetchFromGitHub,
   nix-update-script,
   buildPackages,
@@ -11,15 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nh-unwrapped";
-  version = "4.3.1";
+  version = "4.4.2";
+
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8W7devMLhnnQcb2C8TDA6FoXlPR2RRN/zpB6C4ZIa3E=";
+    hash = "sha256-6wwzxJNcArC4i1vH3xJlT9wVUw7vQ+q1u11h3tRu/X4=";
   };
 
-  strictDeps = true;
+  __structuredAttrs = true;
 
   cargoBuildFlags = [
     "-p"
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
   ];
+
+  buildInputs = [ sqlite ];
 
   # pkgs.sudo is not available on the Darwin platform, and thus breaks build
   # if added to nativeCheckInputs. We must manually disable the tests that
@@ -100,11 +104,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm $out/bin/xtask
     '';
 
-  cargoHash = "sha256-TpfxtTVZJhbJtPTPaTrUTTZmB+ZMdcB67kqid87vlOY=";
+  cargoHash = "sha256-aAIBwCMQONQ+odceLzD675i8Y1KRaukSVvndbdjaf8s=";
 
   passthru.updateScript = nix-update-script { };
 
-  env.NH_REV = finalAttrs.src.tag;
+  env = {
+    NH_REV = finalAttrs.src.tag;
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = 1;
+  };
 
   meta = {
     changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.tag}/CHANGELOG.md";

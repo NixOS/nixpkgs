@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "twitch-dl";
-  version = "3.3.1";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
     tag = finalAttrs.version;
-    hash = "sha256-scGTGlAt1k6eS8O3thrlJpVv3vZe2lKNBxtDYIBWOPg=";
+    hash = "sha256-c9vWmpaq6A6njl72TAQFVgBFjwWVfZPUwHvOaJyJY3w=";
   };
 
   nativeBuildInputs = [

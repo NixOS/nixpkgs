@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   rustPlatform,
 
   # tests
@@ -13,24 +14,26 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cramjam";
-  version = "2.12.0";
+  version = "2.13.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "milesgranger";
     repo = "cramjam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vGT57ou9nnCVCw8LR+w+5MV54EqwT2R+ww9acRQk8Lc=";
+    hash = "sha256-sdmIcRSy2nJcqV9NGzBYt0J6R9Qs7zkVfXFG9CqoMs4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-evXYLbv+GwSBUJBb0upjQTFtMPdQbKka8KfJltMUmDs=";
+    hash = "sha256-L+OsrsAlA0B42wgAPAPFHI8ebGx6SYZlEkMLWQQFGxA=";
   };
 
-  nativeBuildInputs = with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    rustPlatform.maturinBuildHook
+    pyprojectVersionPatchHook
   ];
 
   nativeCheckInputs = [
@@ -62,7 +65,7 @@ buildPythonPackage (finalAttrs: {
     description = "Thin Python bindings to de/compression algorithms in Rust";
     homepage = "https://github.com/milesgranger/pyrus-cramjam";
     changelog = "https://github.com/milesgranger/cramjam/releases/tag/${finalAttrs.src.tag}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 })

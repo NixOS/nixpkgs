@@ -9,13 +9,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acpica-tools";
-  version = "20260408";
+  version = "20260930";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
-    owner = "acpica";
+    owner = "open-acpica";
     repo = "acpica";
     tag = finalAttrs.version;
-    hash = "sha256-m6xugPmjwa/67IB8GiOd0Rasfry/vMbX0lC6OIEbyvU=";
+    hash = "sha256-sUSikZrofGXMjiYG/5/bQCbtT9uSvM/0eeawZrLrm5M=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
       "-O3"
     ];
 
+    # ACPICA emits packed structs that produce unaligned pointers. Apple's
+    # arm64 linker rejects these under chained fixups; opt back into the
+    # legacy fixup format so the link succeeds.
+    NIX_LDFLAGS = lib.optionalString (
+      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+    ) "-no_fixup_chains";
+
     # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
     # -Werror altogether to make this derivation less fragile to toolchain
     # updates.
@@ -46,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # We can handle stripping ourselves.
     # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
-    INSTALLFLAGS = lib.optionals (!stdenv.hostPlatform.isDarwin) "-m 555";
+    INSTALLFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-m 555";
   };
 
   enableParallelBuilding = true;
@@ -58,8 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
+    changelog = "https://github.com/open-acpica/acpica/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [
-      iasl
       gpl2Only
       bsd3
     ];

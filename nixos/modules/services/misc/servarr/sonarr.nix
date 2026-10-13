@@ -74,7 +74,7 @@ in
       description = "Sonarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings;
+      environment = servarr.mkServarrSettingsEnvVars "SONARR" cfg.settings // servarr.commonDotnetEnvVars;
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -124,6 +124,7 @@ in
       // lib.optionalAttrs (cfg.dataDir == "/var/lib/sonarr/.config/NzbDrone") {
         StateDirectory = "sonarr";
       };
+      unitConfig.RequiresMountsFor = [ cfg.dataDir ];
     };
 
     networking.firewall = lib.mkIf cfg.openFirewall {

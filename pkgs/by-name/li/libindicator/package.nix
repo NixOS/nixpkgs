@@ -5,13 +5,11 @@
   file,
   pkg-config,
   glib,
-  gtkVersion ? "3",
-  gtk2,
   gtk3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libindicator-gtk${gtkVersion}";
+  pname = "libindicator";
   version = "12.10.1";
 
   src = fetchurl {
@@ -26,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
   ];
 
-  buildInputs = [ (if gtkVersion == "2" then gtk2 else gtk3) ];
+  buildInputs = [ gtk3 ];
 
   postPatch = ''
     substituteInPlace configure \
@@ -41,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS=-Wno-error"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-gtk=${gtkVersion}"
+    "--with-gtk=3"
   ];
 
   installFlags = [

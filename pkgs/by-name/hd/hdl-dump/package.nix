@@ -6,7 +6,10 @@
 
 stdenv.mkDerivation {
   pname = "hdl-dump";
-  version = "unstable-2022-09-19";
+  version = "47-unstable-2022-09-19";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ps2homebrew";
@@ -18,7 +21,9 @@ stdenv.mkDerivation {
   makeFlags = [ "RELEASE=yes" ];
 
   installPhase = ''
+    runHook preInstall
     install -Dm755 hdl_dump -t $out/bin
+    runHook postInstall
   '';
 
   meta = {

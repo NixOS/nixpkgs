@@ -4,6 +4,8 @@
   fetchPypi,
   setuptools,
   protobuf,
+  grpcio,
+  grpcio-tools,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +22,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ protobuf ];
+  dependencies = [
+    protobuf
+    grpcio
+    grpcio-tools
+  ];
 
   pythonImportsCheck = [ "nominal_api_protos" ];
 

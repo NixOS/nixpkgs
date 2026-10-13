@@ -2,7 +2,6 @@
   gitMinimal,
   pre-commit,
   runCommand,
-  testers,
 }:
 {
   check-meta-hooks =
@@ -38,8 +37,4 @@
         pre-commit run --all-files
         touch $out
       '';
-
-  version = testers.testVersion {
-    package = pre-commit;
-  };
 }

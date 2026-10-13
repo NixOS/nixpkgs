@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Thu, 13 Aug 2026 20:26:09 -0400
+Subject: [PATCH 2/2] =?UTF-8?q?Don=E2=80=99t=20include=20<sys/cdefs>=20on?=
+ =?UTF-8?q?=20Musl?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Nixpkgs includes `sys/cdefs.h` from Alpine, which causes the
+`__has_header` check to pass. This would be harmless, but the `#warning`
+at the top of `sys/cdefs.h` is turned into an error by `-Werror`.
+---
+ os/generic_unix_base.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/os/generic_unix_base.h b/os/generic_unix_base.h
+index b77d2ad..95ffd80 100644
+--- a/os/generic_unix_base.h
++++ b/os/generic_unix_base.h
+@@ -25,7 +25,7 @@
+ #endif
+ #include <sys/param.h>
+ 
+-#if __has_include(<sys/cdefs.h>)
++#if __has_include(<sys/cdefs.h>) && (!defined(__linux__) || defined(__GLIBC__))
+ #include <sys/cdefs.h>
+ #endif
+ 
+-- 
+2.54.0
+

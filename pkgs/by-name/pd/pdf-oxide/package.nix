@@ -3,21 +3,22 @@
   fetchFromGitHub,
   rustPlatform,
   nix-update-script,
+  python3Packages,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pdf-oxide";
-  version = "0.3.32";
+  version = "0.3.78";
 
   src = fetchFromGitHub {
     owner = "yfedoseev";
     repo = "pdf_oxide";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z6dc+GWOovF31yhZIJsg/0FWmSHizk+BpipdrJmoxwI=";
+    hash = "sha256-g4jyj7GPzdxZHi6Kmt4AiIucovW4g6gDcZJ1RMhSy24=";
   };
 
-  cargoHash = "sha256-0GCBraW4m7/3xUbt8wLrEle/9vn1nOtyNqIwfn19vN8=";
+  cargoHash = "sha256-xW5rSB3PAn95LYNZfv5zun+Ai/ddy0GmM33WDMdhYBM=";
   __structuredAttrs = true;
 
   cargoBuildFlags = [
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    python-bindings = python3Packages.pdf-oxide;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fastest PDF library for text extraction, image extraction, and markdown conversion";

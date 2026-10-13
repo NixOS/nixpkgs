@@ -12,16 +12,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cantus";
-  version = "0.6.4";
+  version = "0.6.8";
 
   src = fetchFromGitHub {
     owner = "CodedNil";
     repo = "cantus";
     tag = finalAttrs.version;
-    hash = "sha256-C/djQKG25azM/Vfw6UurPhgIyHGhWcMwM8FXQt+alko=";
+    hash = "sha256-TRqWhoRlinNzLdxODs4bR5IgJR6ELKs4SOOpvtoFNFA=";
   };
 
-  cargoHash = "sha256-qg7YeIJVDzrAmUNUjfIB7eoZYUTMNu69L7dlZ6D9nLU=";
+  cargoHash = "sha256-YUXEgeZn0UXh34RnCaqLhhK0QSPz3Y8XJuR2oMa4rIU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   runtimeDependencies = [
     libxkbcommon
     vulkan-loader
+    wayland
   ];
 
   buildInputs = [
     stdenv.cc.cc.lib
-    wayland
   ];
 
   passthru.updateScript = nix-update-script { };

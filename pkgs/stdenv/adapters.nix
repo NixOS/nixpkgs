@@ -13,7 +13,10 @@
 let
   # N.B. Keep in sync with default arg for stdenv/generic.
   defaultMkDerivationFromStdenv =
-    stdenv: (import ./generic/make-derivation.nix { inherit lib config; } stdenv).mkDerivation;
+    let
+      makeDerivationFile = import ./generic/make-derivation.nix lib config;
+    in
+    stdenv: (makeDerivationFile stdenv).mkDerivation;
 
   # Low level function to help with overriding `mkDerivationFromStdenv`. One
   # gives it the old stdenv arguments and a "continuation" function, and
@@ -92,15 +95,29 @@ rec {
             (mkDerivationSuper args).overrideAttrs (
               args:
               (
-                if (args.__structuredAttrs or false) || (args ? env.NIX_CFLAGS_LINK) then
-                  {
-                    env = (args.env or { }) // {
-                      NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -static";
-                    };
-                  }
+                # OpenBSD's rcrt0 expects the linker-provided _DYNAMIC symbol
+                # emitted for static PIE executables.
+                if (args ? NIX_CFLAGS_LINK) then
+                  lib.warn
+                    (
+                      "NIX_CFLAGS_LINK is an environment variable and should be defined inside `env`"
+                      + lib.optionalString (args ? pname) " for package ${args.pname}"
+                      + lib.optionalString (args ? version) "-${args.version}"
+                    )
+                    {
+                      NIX_CFLAGS_LINK =
+                        toString (args.NIX_CFLAGS_LINK or "")
+                        + " -static"
+                        + lib.optionalString stdenv.hostPlatform.isOpenBSD " -pie";
+                    }
                 else
                   {
-                    NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+                    env = (args.env or { }) // {
+                      NIX_CFLAGS_LINK =
+                        toString (args.env.NIX_CFLAGS_LINK or "")
+                        + " -static"
+                        + lib.optionalString stdenv.hostPlatform.isOpenBSD " -pie";
+                    };
                   }
               )
               // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
@@ -169,7 +186,7 @@ rec {
   # Puts all the other ones together
   makeStatic =
     stdenv:
-    lib.foldl (lib.flip lib.id) stdenv (
+    lib.foldl' (lib.flip lib.id) stdenv (
       lib.optional stdenv.hostPlatform.isDarwin makeStaticDarwin
 
       ++ [
@@ -346,16 +363,29 @@ rec {
     if !stdenv.targetPlatform.isLinux then
       throw "Wild only supports building Linux ELF files from Linux hosts."
     else
-      stdenv.override (prev: {
-        allowedRequisites = null;
-        cc = prev.cc.override {
-          bintools = prev.cc.bintools.override {
-            extraBuildCommands = ''
-              ln -fs ${pkgs.buildPackages.wild}/bin/* "$out/bin"
-            '';
+      stdenv.override (
+        prev:
+        {
+          allowedRequisites = null;
+          cc = prev.cc.override {
+            bintools = prev.cc.bintools.override {
+              extraBuildCommands = ''
+                ln -fs ${pkgs.buildPackages.wild}/bin/* "$out/bin"
+              '';
+            };
           };
-        };
-      });
+        }
+        //
+          lib.optionalAttrs
+            (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "16"))
+            {
+              mkDerivationFromStdenv = extendMkDerivationArgs prev (args: {
+                env = (args.env or { }) // {
+                  NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -fuse-ld=wild";
+                };
+              });
+            }
+      );
 
   /*
     Modify a stdenv so that it builds binaries optimized specifically

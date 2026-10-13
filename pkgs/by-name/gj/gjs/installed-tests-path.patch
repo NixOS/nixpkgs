@@ -1,5 +1,3 @@
-diff --git a/installed-tests/js/meson.build b/installed-tests/js/meson.build
-index 98475f7d..942d9eca 100644
 --- a/installed-tests/js/meson.build
 +++ b/installed-tests/js/meson.build
 @@ -10,7 +10,7 @@ jsunit_resources_files = gnome.compile_resources('jsunit-resources',
@@ -20,7 +18,7 @@ index 98475f7d..942d9eca 100644
      }
      configure_file(configuration: test_description_subst,
          input: '../minijasmine.test.in',
-@@ -122,7 +122,7 @@ foreach test : dbus_tests
+@@ -122,7 +122,7 @@ endif
  
  dbus_test_description_subst = {
      'name': 'testGDBus.js',
@@ -29,7 +27,7 @@ index 98475f7d..942d9eca 100644
  }
  configure_file(
      configuration: dbus_test_description_subst,
-@@ -159,7 +159,7 @@ foreach test : modules_tests
+@@ -166,7 +166,7 @@ foreach test : modules_tests
  
      esm_test_description_subst = {
          'name': 'test@0@.js'.format(test),
@@ -37,9 +35,7 @@ index 98475f7d..942d9eca 100644
 +        'installed_tests_execdir': installed_tests_execdir,
      }
      configure_file(configuration: esm_test_description_subst,
-         input: '../minijasmine-module.test.in',
-diff --git a/installed-tests/meson.build b/installed-tests/meson.build
-index 7a7c48ab..52508c2c 100644
+         input: '../minijasmine-legacy-importer.test.in',
 --- a/installed-tests/meson.build
 +++ b/installed-tests/meson.build
 @@ -34,7 +34,7 @@ foreach test : simple_tests
@@ -51,7 +47,7 @@ index 7a7c48ab..52508c2c 100644
      }
      configure_file(configuration: test_description_subst,
          input: 'script.test.in', output: 'test@0@.sh.test'.format(test),
-@@ -123,7 +123,7 @@ foreach test : debugger_tests
+@@ -88,7 +88,7 @@ foreach test : debugger_tests
  
      test_description_subst = {
          'name': '@0@.debugger'.format(test),
@@ -60,19 +56,15 @@ index 7a7c48ab..52508c2c 100644
      }
      configure_file(configuration: test_description_subst,
          input: 'debugger.test.in',
-diff --git a/installed-tests/script.test.in b/installed-tests/script.test.in
-index debefc4c..96a91b88 100644
---- a/installed-tests/script.test.in
-+++ b/installed-tests/script.test.in
-@@ -3,5 +3,5 @@
+@@ -122,7 +122,7 @@ foreach test : module_debugger_tests
  
- [Test]
- Type=session
--Exec=sh @prefix@/@installed_tests_execdir@/scripts/@name@
-+Exec=sh @installed_tests_execdir@/scripts/@name@
- Output=TAP
-diff --git a/meson.build b/meson.build
-index bbfe8bc8..e6f87dc3 100644
+     test_description_subst = {
+         'name': '@0@.debugger'.format(filename),
+-        'installed_tests_execdir': prefix / installed_tests_execdir,
++        'installed_tests_execdir': installed_tests_execdir,
+     }
+     configure_file(configuration: test_description_subst,
+         input: 'debugger.test.in',
 --- a/meson.build
 +++ b/meson.build
 @@ -25,8 +25,8 @@ datadir = get_option('datadir')
@@ -86,7 +78,7 @@ index bbfe8bc8..e6f87dc3 100644
  
  ### Check for conflicting build options ########################################
  
-@@ -577,9 +577,9 @@ install_data('installed-tests/extra/gjs.supp', install_dir: gjsjsdir / 'valgrind
+@@ -605,9 +605,9 @@ install_data('installed-tests/extra/gjs.supp', install_dir: gjsjsdir / 'valgrind
  install_data('installed-tests/extra/lsan.supp', install_dir: gjsjsdir / 'lsan')
  
  if get_option('installed_tests')
@@ -98,8 +90,6 @@ index bbfe8bc8..e6f87dc3 100644
  endif
  
  ### Generate pkg-config file ###################################################
-diff --git a/meson_options.txt b/meson_options.txt
-index fe425efd..29325756 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -24,3 +24,5 @@ option('skip_gtk_tests', type: 'boolean', value: false,

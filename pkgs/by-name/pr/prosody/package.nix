@@ -8,7 +8,7 @@
   fetchhg,
   buildPackages,
   icu,
-  lua,
+  lua5_2_compat,
   nixosTests,
   withDBI ? true,
   # use withExtraLibs to add additional dependencies of community modules
@@ -19,6 +19,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   luaEnv = lua.withPackages (
     p:
     with p;
@@ -37,11 +38,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prosody";
-  version = "13.0.3"; # also update communityModules
+  version = "13.0.6"; # also update communityModules
 
   src = fetchurl {
     url = "https://prosody.im/downloads/source/prosody-${finalAttrs.version}.tar.gz";
-    hash = "sha256-pR7T6+VMGazWOO5fVAFKs2lsEvmf/HWsKT1p8vD/3As=";
+    hash = "sha256-7GlvnPViw69KBLB9P7NqHO3MTmmjkv3c/FJLxn2TBQ8=";
   };
 
   # The following community modules are necessary for the nixos module
@@ -56,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "ce716e5e0fee";
-    hash = "sha256-jjsHL9+lLwhFXO61h6SmQjwEdRJQ/zKgc1PDnH+wHxs=";
+    rev = "15a7749c7acb";
+    hash = "sha256-RvhPV6YMdwxxIeHhpqXPfBh6087PAPAQV8D+stpXmBs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -72,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--ostype=linux"
-    "--with-lua-bin=${lib.getBin buildPackages.lua}/bin"
+    "--with-lua-bin=${lib.getBin buildPackages.lua5_2_compat}/bin"
     "--with-lua-include=${luaEnv}/include"
     "--with-lua=${luaEnv}"
     "--c-compiler=${stdenv.cc.targetPrefix}cc"

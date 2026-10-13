@@ -3,27 +3,35 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pyyaml,
   requests,
   setuptools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-fsutil";
-  version = "0.16.1";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-fsutil";
     tag = finalAttrs.version;
-    hash = "sha256-/KlnQdN8R95qjxMGui0SofLFZl10vq6ufl05JuVuhDw=";
+    hash = "sha256-i8kHB8kKS9pvBazztUBvn0MVLWkhP+q3V0qizW8BRo8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ requests ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  optional-dependencies = {
+    yaml = [ pyyaml ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTests = [
     # Tests require network access

@@ -29,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-web";
-  version = "5.0.2";
+  version = "5.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "web-${finalAttrs.version}";
-    hash = "sha256-rAku3oHcmzFNA/MP/64382gCTgqopwjjy4S4HTEFZiY=";
+    hash = "sha256-PEQZlQIM8WVmF8d3LBKoVrFoIwdf0FY85p4jpoPQyyg=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/web";

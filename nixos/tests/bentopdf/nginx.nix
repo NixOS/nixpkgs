@@ -18,7 +18,7 @@ import ../make-test-python.nix (
     testScript = ''
       machine.wait_for_unit("nginx.service")
       machine.wait_for_open_port(80)
-      assert "<title>BentoPDF - The Privacy First PDF Toolkit</title>" in machine.succeed("curl --fail --show-error --silent --location --insecure http://localhost:80/")
+      assert "<title>PDF Tools</title>" in machine.succeed("curl --fail --show-error --silent --location --insecure http://localhost:80/")
     '';
   }
 )

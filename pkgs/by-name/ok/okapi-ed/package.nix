@@ -5,6 +5,7 @@
   ripgrep,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
@@ -31,12 +32,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Find lines across files by regex and edit them all at once with your $EDITOR";
     homepage = "https://github.com/nk9/okapi";
+    changelog = "https://github.com/nk9/okapi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "okapi";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ toelke ];
+    maintainers = with lib.maintainers; [
+      toelke
+      nadir-ishiguro
+    ];
   };
 })

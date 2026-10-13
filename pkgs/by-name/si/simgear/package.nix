@@ -27,18 +27,16 @@
   curl,
   c-ares,
 }:
-let
-  version = "2024.1.5";
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "simgear";
-  inherit version;
+  version = "2024.1.7";
 
   src = fetchFromGitLab {
     owner = "flightgear";
     repo = "simgear";
     tag = finalAttrs.version;
-    hash = "sha256-WONlVdfDWIcoj/UfcFA4Vw5edlgr0vlT/fjIPDti7fk=";
+    hash = "sha256-GC8cAUREtdXZHgx6pxxbU3MhhMe3mhpGeO4ieS8XibI=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
@@ -8,19 +8,18 @@
   withVlAgent ? false,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "VictoriaLogs";
-  version = "1.49.0";
+  version = "1.53.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaLogs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7qpI9EjHh5XddXXx4QuGt+h5Rwcj6Me+mpZDbnCGbio=";
+    hash = "sha256-vNoXwez+NIpFGGaTrYQ8rqM1MloFWN31hqAXhcr7VC8=";
   };
 
   vendorHash = null;
-  env.CGO_ENABLED = 0;
 
   subPackages =
     lib.optionals withServer [

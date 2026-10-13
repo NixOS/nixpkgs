@@ -1,13 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   cmake,
   pkg-config,
   protobuf,
   python3,
-  ffmpeg,
+  ffmpeg_8,
   libopus,
   SDL2,
   libevdev,
@@ -26,7 +25,7 @@
   shaderc,
   lcms2,
   libdovi,
-  xxHash,
+  xxhash,
   kdePackages,
 }:
 
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_8
     libopus
     kdePackages.qtbase
     kdePackages.qtmultimedia
@@ -79,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     shaderc
     lcms2
     libdovi
-    xxHash
+    xxhash
   ];
 
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";

@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "Pipe command-line programs to seashells.io";
     mainProgram = "seashells";
     longDescription = ''
-      Official cient for seashells.io, which allows you to view
+      Official client for seashells.io, which allows you to view
       command-line output on the web, in real-time.
     '';
     license = lib.licenses.mit;

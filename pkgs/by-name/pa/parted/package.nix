@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "parted";
-  version = "3.7";
+  version = "3.8";
 
   src = fetchurl {
     url = "mirror://gnu/parted/parted-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-AI3ldWGk88JaBkjmbtEeezC+STiJtkM0ptcPLBlR73s=";
+    sha256 = "sha256-oreBH0ew3bH3sdCqRW98EnDacHCM4jHC/gVMcZnq+mM=";
   };
 
   outputs = [
@@ -38,23 +38,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libuuid
-  ]
-  ++ lib.optional (readline != null) readline
-  ++ lib.optional (gettext != null) gettext
-  ++ lib.optional (lvm2 != null) lvm2;
+    readline
+    gettext
+    lvm2
+  ];
 
   nativeBuildInputs = [
     pkg-config
   ];
-  configureFlags =
-    (if (readline != null) then [ "--with-readline" ] else [ "--without-readline" ])
-    ++ lib.optional (lvm2 == null) "--disable-device-mapper"
-    ++ lib.optional enableStatic "--enable-static";
+  configureFlags = lib.optional enableStatic "--enable-static";
 
   enableParallelBuilding = true;
 
-  # Tests were previously failing due to Hydra running builds as uid 0.
-  # That should hopefully be fixed now.
   doCheck = !stdenv.hostPlatform.isMusl; # translation test
   nativeCheckInputs = [
     check

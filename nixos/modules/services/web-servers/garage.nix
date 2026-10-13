@@ -133,7 +133,7 @@ in
             # if data_dir is a list, the actual path will in in the `path` attribute of each item
             # see https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/#data_dir
             ++ lib.optional (lib.isList data_dir) (map (item: item.path) data_dir)
-            ++ lib.optional (lib.isString data_dir) [ data_dir ]
+            ++ lib.optionals (lib.isString data_dir) [ data_dir ]
           );
           isDefault = lib.hasPrefix "/var/lib/garage";
           isDefaultStateDirectory = lib.any isDefault paths;

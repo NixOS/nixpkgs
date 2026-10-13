@@ -13,10 +13,11 @@
   libxinerama,
   libxext,
   libx11,
+  pillow,
+  gdk-pixbuf,
+  gtk3-x11,
   pytestCheckHook,
   glibc,
-  gtk2-x11,
-  gdk-pixbuf,
   fontconfig,
   freetype,
   ffmpeg-full,
@@ -27,7 +28,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.12";
+  version = "2.1.16";
   pname = "pyglet";
   pyproject = true;
 
@@ -35,7 +36,7 @@ buildPythonPackage rec {
     owner = "pyglet";
     repo = "pyglet";
     tag = "v${version}";
-    hash = "sha256-stzz7sxPH6cduhG2ySw/Zg+wdTE/Y0ZeBU90D0Aa2oU=";
+    hash = "sha256-Wnpl2sqaK4AX6v70OjA10B9vMXQoC5QU1BP0UkYnJmU=";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     let
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       cat > pyglet/lib.py <<EOF
       import ctypes
       def load_library(*names, **kwargs):
@@ -63,7 +64,7 @@ buildPythonPackage rec {
               elif name == 'X11':
                   path = '${libx11}/lib/libX11${ext}'
               elif name == 'gdk-x11-2.0':
-                  path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
+                  path = '${gtk3-x11}/lib/libgdk-3${ext}'
               elif name == 'gdk_pixbuf-2.0':
                   path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
               elif name == 'Xext':
@@ -95,7 +96,7 @@ buildPythonPackage rec {
           raise Exception("Could not load library {}".format(names))
       EOF
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       cat > pyglet/lib.py <<EOF
       import os
       import ctypes
@@ -126,6 +127,8 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
+  dependencies = [ pillow ];
+
   # needs GL set up which isn't really possible in a build environment even in headless mode.
   # tests do run and pass in nix-shell, however.
   doCheck = false;
@@ -133,7 +136,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = # libEGL only available on Linux (despite meta.platforms on libGL)
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       export PYGLET_HEADLESS=True
     '';
 

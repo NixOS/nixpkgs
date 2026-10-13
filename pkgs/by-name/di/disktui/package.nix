@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "disktui";
   version = "1.3.0";
   src = fetchFromGitHub {
-    owner = "Maciejonos";
+    owner = "mkbula";
     repo = "disktui";
     tag = "v${finalAttrs.version}";
     hash = "sha256-C0skZF7fP7Qx5o+q9bUitgnBB9tBh1J4JdGyn8oQ/Rc=";
@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "TUI for disk management on Linux";
-    homepage = "https://github.com/Maciejonos/disktui";
+    homepage = "https://github.com/mkbula/disktui";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Inarizxc ];
     platforms = lib.platforms.linux;

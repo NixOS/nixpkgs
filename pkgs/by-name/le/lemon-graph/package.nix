@@ -30,13 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     # fix C++20 compatibility. vendored from https://github.com/The-OpenROAD-Project/lemon-graph/commit/f871b10396270cfd09ffddc4b6ead07722e9c232
     ./update_cxx20.patch
+
+    # fix C++20 compatibility of ListPath, submitted to OpenROAD's fork in https://github.com/The-OpenROAD-Project/lemon-graph/pull/5
+    ./fix_path_allocator.patch
   ];
 
   meta = {
     homepage = "https://lemon.cs.elte.hu/trac/lemon";
     description = "Efficient library for combinatorial optimization tasks on graphs and networks";
     license = lib.licenses.boost;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = with lib.maintainers; [ hzeller ];
     platforms = lib.platforms.all;
   };
 })

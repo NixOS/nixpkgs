@@ -68,7 +68,7 @@ stdenvNoCC.mkDerivation {
     dontInstall = true;
 
     outputHashAlgo = "sha256";
-    outputHash = "sha256-78RL0hYnnlWFxBZO4pvR9eSVR4hRD2FK+C0Th2QPYlc=";
+    outputHash = "sha256-uUjBzZX+T1AKURTyTJlWpqrwDjl97+U+0J6kJ7tQsRI=";
     outputHashMode = "recursive";
   };
 

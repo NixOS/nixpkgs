@@ -11,27 +11,28 @@
   responses,
   setuptools,
   setuptools-scm,
+  sybil,
   syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "tldextract";
-  version = "5.3.1";
+  version = "5.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "john-kurkowski";
     repo = "tldextract";
     tag = finalAttrs.version;
-    hash = "sha256-WPf996EVVEKxD+ZFDB8nIrrd1Sxr+IOI8I19J+KMPRg=";
+    hash = "sha256-gNunyZgj9KghNOSDgvdo+zNmhHEdXdeBJ7Z0j2bExcM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     filelock
     idna
     requests
@@ -42,6 +43,7 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
     pytestCheckHook
     responses
+    sybil
     syrupy
   ];
 

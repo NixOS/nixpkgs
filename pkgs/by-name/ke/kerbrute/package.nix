@@ -21,7 +21,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     impacket
   ];
 
-  installChechPhase = ''
+  installCheckPhase = ''
     $out/bin/kerbrute --version
   '';
 

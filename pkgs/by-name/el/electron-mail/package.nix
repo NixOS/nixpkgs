@@ -2,28 +2,23 @@
   appimageTools,
   lib,
   fetchurl,
-  nix-update-script,
   stdenvNoCC,
   makeWrapper,
-  undmg,
+  _7zz,
 }:
 
 let
   pname = "electron-mail";
-  version = "5.3.6";
+  version = "5.3.10";
 
   sources = {
     x86_64-linux = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-      hash = "sha256-3BWrVMlSUMMmuj6EAmqVtlHGCcminuVHkyPnc3TvgpM=";
+      hash = "sha256-dzWp1HsFHGurzxqzLcNsUvcSEFcuushcwtUL+ogOoAg=";
     };
     aarch64-darwin = fetchurl {
       url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-arm64.dmg";
-      hash = "sha256-z7j5WrU1F+iX8UDLWS5sXLwHjobPKJZFKXTcHTOQ/Eo=";
-    };
-    x86_64-darwin = fetchurl {
-      url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-mac-x64.dmg";
-      hash = "sha256-7i0p7mBkzViXGdUrHXTrDDGdIy81p2YIei5Qsk8G5GU=";
+      hash = "sha256-eGOpOBZ/6CSBaFFXxD0tYdhWPCTwR9n+/stsEH7vR2U=";
     };
   };
 
@@ -45,7 +40,6 @@ let
     platforms = [
       "x86_64-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };
@@ -58,6 +52,8 @@ let
       meta
       ;
 
+    passthru.updateScript = ./update.sh;
+
     extraInstallCommands = ''
       install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
       substituteInPlace $out/share/applications/${pname}.desktop \
@@ -67,10 +63,8 @@ let
 
     extraPkgs = pkgs: [
       pkgs.libsecret
-      pkgs.libappindicator-gtk3
+      pkgs.libappindicator
     ];
-
-    passthru.updateScript = nix-update-script { };
   };
 
   darwin = stdenvNoCC.mkDerivation {
@@ -81,9 +75,11 @@ let
       meta
       ;
 
+    passthru.updateScript = ./update.sh;
+
     sourceRoot = ".";
     nativeBuildInputs = [
-      undmg
+      _7zz
       makeWrapper
     ];
 

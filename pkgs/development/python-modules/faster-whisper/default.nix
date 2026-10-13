@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -28,6 +29,13 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-pWVYxC1h0kIhhBxAt9oT2USuvoarlcwwYmaLUJlZZwY=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/SYSTRAN/faster-whisper/commit/2ce7f9d7a9fbe315a5804a33bf7224d42e101174.patch";
+      hash = "sha256-+TEilM56PcOS+P3i9+KnG8Hnngljywb+E44gMaCys+A=";
+    })
+  ];
 
   build-system = [
     setuptools

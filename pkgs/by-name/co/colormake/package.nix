@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Simple wrapper around make to colorize the output";
-    homepage = "https://bre.klaki.net/programs/colormake/";
+    homepage = "https://github.com/pagekite/Colormake";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };

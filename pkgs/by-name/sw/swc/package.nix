@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/swc-project/swc";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      dit7ya
       kashw2
     ];
   };

@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "SQL / SQLI tokenizer parser analyzer";
     homepage = "https://github.com/client9/libinjection";
     license = lib.licenses.bsd3;

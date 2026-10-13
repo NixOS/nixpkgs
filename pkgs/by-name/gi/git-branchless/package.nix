@@ -6,6 +6,8 @@
   openssl,
   pkg-config,
   rustPlatform,
+  libgit2,
+  libz,
   sqlite,
   stdenv,
   versionCheckHook,
@@ -13,35 +15,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-branchless";
-  version = "0.10.0";
+  version = "0.11.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8uv+sZRr06K42hmxgjrKk6FDEngUhN/9epixRYKwE3U=";
+    hash = "sha256-V769kYbmUe6JtVoo83ejxUsegyiBh07tMYPVhJiFNgs=";
   };
 
-  # Patch the vendored esl01-indexedlog crate.
-  # This is necessary to fix the build for rust 1.89. See:
-  # - https://github.com/NixOS/nixpkgs/issues/437051
-  # - https://github.com/arxanas/git-branchless/issues/1585
-  # - https://github.com/facebook/sapling/issues/1119
-  # The patch is derived from:
-  # - https://github.com/facebook/sapling/commit/9e27acb84605079bf4e305afb637a4d6801831ac
-  postPatch = ''
-    (
-      cd $cargoDepsCopy/*/esl01-indexedlog-*/
-      patch -p1 < ${./fix-esl01-indexedlog-for-rust-1_89.patch}
-    )
-  '';
+  cargoHash = "sha256-5uygCOzPNqHjKJfq2LFTfaRT/N++/AY/PwlBJ8j8QwM=";
 
-  cargoHash = "sha256-i7KpTd4fX3PrhDjj3R9u98rdI0uHkpQCxSmEF+Gu7yk=";
+  env = {
+    LIBGIT2_NO_VENDOR = 1;
+    LIBZ_SYS_STATIC = 0;
+  };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     ncurses
+    libgit2
+    libz
     openssl
     sqlite
   ];

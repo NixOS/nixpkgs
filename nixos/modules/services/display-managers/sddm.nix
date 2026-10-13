@@ -442,7 +442,7 @@ in
             {
               name = "unix";
               control = "sufficient";
-              modulePath = "${config.security.pam.package}/lib/security/pam_unix.so";
+              modulePath = config.security.pam.pam_unixModulePath;
             }
           ];
 
@@ -583,6 +583,10 @@ in
           "systemd-user-sessions.service"
           "plymouth-quit.service"
           "systemd-logind.service"
+        ];
+        # sddm stores state in this directory, which should be mounted.
+        unitConfig.RequiresMountsFor = [
+          config.users.users.sddm.home
         ];
       };
     };

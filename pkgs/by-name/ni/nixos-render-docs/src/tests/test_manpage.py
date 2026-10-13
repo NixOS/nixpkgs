@@ -41,6 +41,18 @@ def test_full() -> None:
     assert c._render(sample1) == """\
 .sp
 .RS 4
+\\fBNote\\fP
+.br
+This is a \\fIGFM\\fR note\\&.
+.sp
+.RS 4
+\\fBCaution\\fP
+.br
+This is a \\fBnested\\fR GFM alert\\&.
+.RE
+.RE
+.sp
+.RS 4
 \\fBWarning\\fP
 .br
 foo

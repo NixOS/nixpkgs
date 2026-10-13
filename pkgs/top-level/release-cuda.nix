@@ -25,6 +25,9 @@ in
   nixpkgsArgs ? {
     config = {
       allowUnfreePredicate = cudaLib.allowUnfreeCudaPredicate;
+      # [CVE-2026-24188](https://github.com/NixOS/nixpkgs/issues/522570):
+      # OOB write
+      allowInsecurePredicate = p: lib.getName p == "tensorrt";
       "${variant}Support" = true;
       inHydra = true;
 
@@ -129,7 +132,7 @@ let
         cupy = linux;
         faiss = linux;
         faster-whisper = linux;
-        flashinfer = linux;
+        flashinfer-python = linux;
         flax = linux;
         gpt-2-simple = linux;
         grad-cam = linux;

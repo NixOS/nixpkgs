@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpgmepp";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgmepp/gpgmepp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1HlgScBnCKJvMJb3SO8JU0fho8HlcFYXAf6VLD9WU4I=";
+    hash = "sha256-ZlHF9/gBVD1bZ2cZ35/sgFOwpvWrpAuYyg0r7hETbzA=";
   };
 
   postPatch = ''

@@ -2,21 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   six,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "srptools";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "srptools";
+    inherit (finalAttrs) version;
     hash = "sha256-f6QzclahVC6PW7S+0Z4dmuqY/l/5uvdmkzQqHdasfJY=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -26,8 +32,8 @@ buildPythonPackage rec {
     description = "Module to implement Secure Remote Password (SRP) authentication";
     mainProgram = "srptools";
     homepage = "https://github.com/idlesign/srptools";
-    changelog = "https://github.com/idlesign/srptools/blob/v${version}/CHANGELOG";
+    changelog = "https://github.com/idlesign/srptools/blob/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

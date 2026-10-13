@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -68,14 +69,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "sentry-sdk";
-  version = "2.58.0";
+  version = "2.70.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     tag = finalAttrs.version;
-    hash = "sha256-SdGzHeniLwP8i7iIax5FtCd/qNDLLtg9luWbwpKIoz8=";
+    hash = "sha256-8BpCtmzlW7eO6KKeFiqWZhjQBgaU4EnZtKuHTsf9Ea8=";
   };
 
   postPatch = ''
@@ -219,6 +220,13 @@ buildPythonPackage (finalAttrs: {
     # KeyError: 'sentry.release'
     "test_logs_attributes"
     "test_logger_with_all_attributes"
+    "test_span_templates_ai_dicts"
+    "test_span_templates_ai_objects"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13" && stdenv.hostPlatform.isDarwin) [
+    # profiler_id not populated on darwin
+    "test_profile_stops_when_segment_ends"
+    "test_segment_span_has_profiler_id"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];

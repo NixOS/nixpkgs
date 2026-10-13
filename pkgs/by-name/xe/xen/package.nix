@@ -16,6 +16,7 @@
   dev86,
   e2fsprogs,
   flex,
+  json_c,
   libnl,
   libuuid,
   lzo,
@@ -36,7 +37,7 @@
   withIPXE ? true,
   ipxe,
   withOVMF ? true,
-  OVMF,
+  OVMF-xen,
   withSeaBIOS ? true,
   seabios-qemu,
 
@@ -71,22 +72,37 @@ let
     genAttrs
     getExe
     getExe'
-    licenses
     optionalString
     optionals
-    systems
     teams
+    versionAtLeast
     versionOlder
-    versions
     warn
+    withFeature
+    withFeatureAs
     ;
-  inherit (systems.inspect.patterns) isLinux isAarch64;
-  inherit (licenses)
+  inherit (lib.systems.inspect.patterns) isLinux isAarch64;
+  inherit (lib.versions) majorMinor;
+  inherit (lib.licenses)
     cc-by-40
     gpl2Only
     lgpl21Only
     mit
     ;
+
+  # Xen has a ternary system for enabling and disabling optional firmwares.
+  # - If we want a built-in firmware, then the correct flag to use is
+  #   '--enable-X', or (withXenFeature true "X" null).
+  # - If we want Xen to use a system firmware, then the correct to use is
+  #   '--with-system-X=/path/to/firmware', or (withXenFeature true "X" drv).
+  # - If we do not want Xen to use any firmware, then the correct flag to use is
+  #   '--disable-X', or (withXenFeature false "X" null).
+  withXenFeature =
+    bool: key: value:
+    if (bool && !isNull value) then
+      (withFeatureAs bool "system-${key}" value)
+    else
+      (enableFeature bool key);
 
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.17";
@@ -173,9 +189,9 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xen";
-  version = "4.20.2";
+  version = "4.22.0";
 
-  # This attribute can be overriden to correct the file paths in
+  # This attribute can be overridden to correct the file paths in
   # `passthru` when building an unstable Xen.
   upstreamVersion = finalAttrs.version;
   # Useful for further identifying downstream Xen variants. (i.e. Qubes)
@@ -186,31 +202,32 @@ stdenv.mkDerivation (finalAttrs: {
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
 
-    # XSA #477
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa477.patch";
-      hash = "sha256-c9i61GvHPiLwMGvd+5IKgUwyu/NPub+mtnxUPHW/HhI=";
+      url = "https://xenbits.xenproject.org/xsa/xsa509.patch";
+      hash = "sha256-Ive95ewRsPe/Oq2NpqkcgXwKAi8pKJAF4eGQ9IkgM9A=";
     })
 
-    # XSA #479
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa479.patch";
-      hash = "sha256-2o6RYyT4Nrg1le6BUOQ3AwedorCvxvKao2uMYWrUV1Y=";
+      url = "https://xenbits.xenproject.org/xsa/xsa510.patch";
+      hash = "sha256-RxCN2TMqeXVjHZhqxLvhWE40vUkD52RDYNyd9+6K9mA=";
     })
 
-    # XSA #480
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa480.patch";
-      hash = "sha256-mHoY+Y8klwLYOo4LZCwYcNsB1BcBbSa1nQOn3NueDdI=";
+      url = "https://xenbits.xenproject.org/xsa/xsa511.patch";
+      hash = "sha256-y7TVcoXpeJoXnMOk1ESWyW53JbBTf8urrNYpwtmft/A=";
     })
 
-    # XSA #481
     (fetchpatch {
-      url = "https://xenbits.xenproject.org/xsa/xsa481.patch";
-      hash = "sha256-QpRXS4rFuML2TawH7yhUmg8U4C1ATt4xiLLs91duuO8=";
+      url = "https://xenbits.xenproject.org/xsa/xsa512-1.patch";
+      hash = "sha256-Xky7ddRSd1d+Y/voEmsyiyMsU7NX/WM2/yOviaLv5gU=";
     })
-
-    # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
+    (fetchpatch {
+      url = "https://xenbits.xenproject.org/xsa/xsa512-2.patch";
+      hash = "sha256-4LgqC1F22kFjiVWgiSb1hZazbBF2Fziiif0Scv+ynho=";
+    })
+  ]
+  ++ optionals (versionOlder finalAttrs.version "4.21") [
+    # Patch `libxl` to search for `qemu-system-i386` properly.
     (fetchpatch {
       url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
       hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
@@ -223,13 +240,14 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
     "dev"
     "boot"
+    "ocaml"
   ];
 
   src = fetchFromGitHub {
     owner = "xen-project";
     repo = "xen";
-    tag = "RELEASE-4.20.2";
-    hash = "sha256-ZDPjsEAEH5bW0156MVvOKUeqg+mwdce0GFdUTBH39Qc=";
+    tag = "RELEASE-${finalAttrs.version}";
+    hash = "sha256-airf4+QjornWQ9aH+cCpKzgVoLbsNduurXySDAv8clY=";
   };
 
   strictDeps = true;
@@ -244,11 +262,12 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     perl
     pkg-config
-
-    # oxenstored
-    ocamlPackages.findlib
-    ocamlPackages.ocaml
   ]
+  ++ (with ocamlPackages; [
+    findlib
+    ocaml
+    ocamlbuild
+  ])
   ++ (with python3Packages; [
     python
     setuptools
@@ -269,15 +288,16 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ]
   ++ optionals withFlask [ checkpolicy ]
-  ++ optionals (versionOlder finalAttrs.version "4.19") [ systemd ];
+  ++ optionals (versionOlder finalAttrs.version "4.19") [ systemd ]
+  ++ optionals (versionAtLeast finalAttrs.version "4.21") [ json_c ];
 
   configureFlags = [
-    "--enable-systemd"
-    "--disable-qemu-traditional"
-    "--with-system-qemu"
-    (if withSeaBIOS then "--with-system-seabios=${seabios-qemu.firmware}" else "--disable-seabios")
-    (if withOVMF then "--with-system-ovmf=${OVMF.mergedFirmware}" else "--disable-ovmf")
-    (if withIPXE then "--with-system-ipxe=${ipxe.firmware}" else "--disable-ipxe")
+    (enableFeature true "systemd")
+    (withFeature true "system-qemu")
+    (withFeatureAs true "systemd-sleep" "$out/lib/systemd/system-sleep")
+    (withXenFeature withSeaBIOS "seabios" seabios-qemu.firmware)
+    (withXenFeature withOVMF "ovmf" OVMF-xen.mergedFirmware)
+    (withXenFeature withIPXE "ipxe" ipxe.firmware)
     (enableFeature withFlask "xsmpolicy")
   ];
 
@@ -312,15 +332,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=maybe-uninitialized"
-    "-Wno-error=array-bounds"
-  ];
-
   dontUseCmakeConfigure = true;
-
-  # Remove in-tree QEMU sources, we don't need them in any circumstance.
-  prePatch = "rm -rf tools/qemu-xen tools/qemu-xen-traditional";
 
   installPhase = ''
     runHook preInstall
@@ -328,10 +340,37 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out $out/share $boot
     cp -prvd dist/install/nix/store/*/* $out/
     cp -prvd dist/install/etc $out
-    # Decompresses the multiboot binary so it's present for bootloaders such as Limine
-    # The find command is used instead of a simple file glob so we skip processing symlinks
+  ''
+  # Decompresses the multiboot binary so it's present for bootloaders such as Limine
+  # The find command is used instead of a simple file glob so we skip processing symlinks
+  + ''
     find dist/install/boot -type f -name '*.gz' -print -exec gunzip -k '{}' ';'
     cp -prvd dist/install/boot $boot
+  ''
+  # Copy the xsd_glue OCaml plugin interface to the ocaml output.
+  # This allows other derivations (namely oxenstored) to depend on the
+  # canonical plugin interface without pulling in the entire xen package,
+  # and avoiding issues that arise when the plugin interface is built twice,
+  # once in this package, and again in the oxenstored package, leading to
+  # a mismatch in hash between the two interfaces and the plugin not being
+  # able to load in oxenstored.
+  + ''
+    mkdir -p $ocaml/lib/ocaml
+    if [ -d $out/lib/ocaml/*/site-lib/xsd_glue ]; then
+      ocamlVersion=$(ls $out/lib/ocaml/)
+      mkdir -p $ocaml/lib/ocaml/$ocamlVersion/site-lib
+      cp -prvd $out/lib/ocaml/$ocamlVersion/site-lib/xsd_glue $ocaml/lib/ocaml/$ocamlVersion/site-lib/
+    fi
+  ''
+  # Also provide the canonical plugin_interface_v1 source files so
+  # downstream packages can build ABI-compatible OCaml modules against
+  # the versions built in the xen derivation. The dependency on the Xen
+  # package in this way also keeps the plugin, interface, oxenstored
+  # and xen packages coupled.
+  + ''
+    mkdir -p $ocaml/share/xen/ocaml/xsd_glue
+    cp -v tools/ocaml/libs/xsd_glue/plugin_interface_v1.ml $ocaml/share/xen/ocaml/xsd_glue/
+    cp -v tools/ocaml/libs/xsd_glue/plugin_interface_v1.mli $ocaml/share/xen/ocaml/xsd_glue/
 
     runHook postInstall
   '';
@@ -378,6 +417,7 @@ stdenv.mkDerivation (finalAttrs: {
           "xenguest"
           "xenhypfs"
           "xenlight"
+          "xenmanage"
           "xenstat"
           "xenstore"
           "xentoolcore"
@@ -390,7 +430,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    branch = versions.majorMinor finalAttrs.version;
+    branch = majorMinor finalAttrs.version;
 
     description = "Type-1 hypervisor intended for embedded and hyperscale use cases";
     longDescription = ''

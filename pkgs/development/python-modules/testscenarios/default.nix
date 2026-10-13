@@ -5,7 +5,6 @@
 
   # build-system
   pbr,
-  setuptools,
 
   # dependencies
   testtools,
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pbr
-    setuptools
   ];
 
   propagatedBuildInputs = [

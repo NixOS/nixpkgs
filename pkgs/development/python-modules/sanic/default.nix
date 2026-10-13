@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "25.12.0";
+  version = "25.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic";
     tag = "v${version}";
-    hash = "sha256-ygMTULkavd/5Mqxn/iS1TC29hfFcF6q3/kT8S7V1Xdo=";
+    hash = "sha256-0P5UyLi9W5maoR1EpRxfhysckDWpjgmqndgxsVHm47c=";
   };
 
   # test compat for testing with pytest-asyncio

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rt";
-  version = "5.0.8";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     repo = "rt";
     rev = "rt-${finalAttrs.version}";
     owner = "bestpractical";
-    hash = "sha256-4/iC1PjLgLAp7XWTafe8HW3bTkDWWQxtSEIOs8wluzE=";
+    hash = "sha256-wmYBeHb/aGKzbDD7mbSMpz0eEZHRq+Jr5+hDK0Hl9+s=";
   };
 
   patches = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
           BusinessHours
           CGIEmulatePSGI
           CGIPSGI
+          CSSInliner
           CSSMinifierXS
           CSSSquish
           ConvertColor
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
           DateExtract
           DateManip
           DateTimeFormatNatural
+          DateTimeSet
           DevelGlobalDestruction
           EmailAddress
           EmailAddressList
@@ -71,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
           GDGraph
           GnuPGInterface
           GraphViz2
+          HashMerge
+          HashMergeExtra
           HTMLFormatExternal
           HTMLFormatTextWithLinks
           HTMLFormatTextWithLinksAndTables
@@ -80,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
           HTMLQuoted
           HTMLRewriteAttributes
           HTMLScrubber
+          Imager
           IPCRun
           IPCRun3
           JSON
@@ -176,6 +181,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    homepage = "https://github.com/bestpractical/rt";
     platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
   };
 })

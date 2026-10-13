@@ -14,15 +14,18 @@
   buildNpmPackage,
   removeReferencesTo,
   xcbuild,
+  tor,
+  xray,
+  obfs4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z-library-desktop";
-  version = "3.1.0";
+  version = "3.2.1";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20260301212456/https://s3proxy-alp.cdn-zlib.sk/swfs_second_public_files/soft/desktop/Z-Library_3.1.0_amd64.deb";
-    hash = "sha256-m1axR0HrqHfoz+1tvhCOr1xq0lVkHjxrrf2KnTA7ZVg=";
+    url = "https://web.archive.org/web/20260927191559/https://dln1.ncdn.ec/general-files/soft/desktop/Z-Library_3.2.1_amd64.deb";
+    hash = "sha256-1zmcFIoZWuKUgS4YhyYrsIYISEFD1diEqtNbZvs4lC4=";
   };
 
   nativeBuildInputs = [
@@ -49,10 +52,32 @@ stdenv.mkDerivation (finalAttrs: {
     phome=$out/opt/Z-Library
     mkdir -p $phome/resources
     cp -r opt/Z-Library/resources/app $phome/resources
+    app=$phome/resources/app
+
+    rm -rf $app/dist-electron/{configs,tor,xray}
+
+    # Looks for bundled binaries under process.resourcesPath,
+    # which is not correct if we are not using upstream bundled Electron.
+    substituteInPlace $app/dist-electron/main.js \
+      --replace-fail 'path.join(process.resourcesPath, "proxies"' \
+      'path.join(app.getAppPath(), "proxies"' \
+      --replace-fail 'LD_PRELOAD: path.join(dirname, "./linux-64/libevent-2.1.so.7"),' \
+      '...process.env,'
+
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Supports tor and xray on linux only, where binaries are searched in fixed dirs.
+      # Use shipped config files and nixpkgs packaged binaries.
+      mkdir -p $app/proxies/{torProxy/{configs,linux-64/pluggable_transports},xray-proxy/xray/linux-64}
+      cp {opt/Z-Library/resources,$app}/proxies/torProxy/configs/torrc_template
+      cp -r {opt/Z-Library/resources,$app}/proxies/xray-proxy/xray/configs
+      ln -s ${lib.getExe tor} $app/proxies/torProxy/linux-64/tor
+      ln -s ${lib.getExe obfs4} $app/proxies/torProxy/linux-64/pluggable_transports/lyrebird
+      ln -s ${lib.getExe xray} $app/proxies/xray-proxy/xray/linux-64/xray
+    ''}
 
     makeWrapper ${lib.getExe electron} $out/bin/Z-Library \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags $phome/resources/app \
+      --add-flags $app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
@@ -83,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.unfree; # Maintainers on AUR emailed the dev to confirm: https://pastebin.com/ss4Nr8pW
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ulysseszhan ];
+    sourceProvenance = with lib.sourceTypes; [ obfuscatedCode ];
     mainProgram = "Z-Library";
   };
 })

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.1";
 
   src = fetchgit {
-    url = "https://git.gnunet.org/messenger-cli.git";
+    url = "https://git-www.taler.net/messenger-cli.git";
     tag = "v${finalAttrs.version}";
     hash = "sha256-8Iby3IZXEZJ1dqVV62xDzXx/qq7JKhVtn6ZLb697ZSw=";
   };
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Decentralized, privacy-preserving networking framework for secure peer-to-peer communication";
-    homepage = "https://git.gnunet.org/messenger-cli.git";
+    homepage = "https://git-www.taler.net/messenger-cli.git";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     teams = with lib.teams; [ ngi ];

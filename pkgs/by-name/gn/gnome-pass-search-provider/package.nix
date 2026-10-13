@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-pass-search-provider";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "jle64";
     repo = "gnome-pass-search-provider";
     rev = finalAttrs.version;
-    hash = "sha256-PDR8fbDoT8IkHiTopQp0zd4DQg7JlacA6NdKYKYmrWw=";
+    hash = "sha256-AJyfvA7PrBwQROHcczvQjL+UxI/61mRir1HmCr3BwDY=";
   };
 
   nativeBuildInputs = [

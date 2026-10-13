@@ -7,6 +7,7 @@
   aiohttp,
   attrs,
   defusedxml,
+  serialx,
   pytest-asyncio_0,
   pytest-aiohttp,
   pytest-mock,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "2.1.1";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "arcam_fmj";
     tag = version;
-    hash = "sha256-Oa/uCktLITzh3ZNW8RSCt6lYax0VmbAGW+coGnoiTpo=";
+    hash = "sha256-LHNJSvXcc14SJtPckqnZRaRl06po8vZoaIuP+W/jT5k=";
   };
 
   build-system = [ setuptools ];
@@ -31,6 +32,7 @@ buildPythonPackage rec {
     aiohttp
     attrs
     defusedxml
+    serialx
   ];
 
   nativeCheckInputs = [

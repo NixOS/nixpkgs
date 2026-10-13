@@ -2,7 +2,6 @@
   lib,
   anki-utils,
   fetchFromGitHub,
-  nix-update-script,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "recolor";
@@ -24,8 +23,6 @@ anki-utils.buildAnkiAddon (finalAttrs: {
     # readonly with Nix.
     ./only-update-config-version-when-migration-happens.patch
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "ReColor your Anki desktop to whatever aesthetic you like";

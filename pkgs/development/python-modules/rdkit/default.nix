@@ -137,7 +137,7 @@ buildPythonPackage rec {
       External/pubchem_shape/Wrap/CMakeLists.txt \
       --replace-fail \
         "find_package(Python3 COMPONENTS Interpreter Development.Module NumPy" \
-        "find_package(Python3 COMPONENTS Interpreter Development NumPy" \
+        "find_package(Python3 COMPONENTS Interpreter Development NumPy"
   '';
 
   nativeBuildInputs = [ cmake ];

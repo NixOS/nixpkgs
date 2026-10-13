@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goeland";
-  version = "0.23.0";
+  version = "0.29.2";
 
   src = fetchFromGitHub {
     owner = "slurdge";
     repo = "goeland";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-s1h7kZGnDrF9gd9MP+TTsvtUj9goMVjlOB4AhCXuUXc=";
+    sha256 = "sha256-U9n7qCUlft27GzGGBDmKmajWVl3v+v9WQmOB1/84KtQ=";
   };
 
-  vendorHash = "sha256-gz1NoEaPfRTyDDDgvWbpnwIpYS1jJRnOPNibVrXqgG0=";
+  vendorHash = "sha256-lBHX6reFEEbKcnf+TzuT5l7SsyVWoCA6HbkkL9UPwrg=";
 
   ldflags = [
     "-s"
@@ -34,7 +34,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://github.com/slurdge/goeland";
     changelog = "https://github.com/slurdge/goeland/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sweenu ];
   };
 })

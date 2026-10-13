@@ -1,7 +1,9 @@
 {
   stdenv,
   lib,
-  fetchzip,
+  fetchFromGitHub,
+  _experimental-update-script-combinators,
+  nix-update-script,
 
   # Free MASM-compatible assembler
   asmc-linux,
@@ -43,17 +45,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "26.00";
+  version = "26.04";
 
-  src = fetchzip {
-    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
+  src = fetchFromGitHub {
+    owner = "ip7z";
+    repo = "7zip";
+    tag = finalAttrs.version;
     hash =
-      {
-        free = "sha256-p914FrQPb+h1a+7YIL8ms2YoIfoS1hTCeLLeBF4DjwY=";
-        unfree = "sha256-CIgPhjRSE9A0ABQQx1YTZgO+DNb3BDxRo5xOQmuzBuI=";
-      }
-      .${if enableUnfree then "unfree" else "free"};
-    stripRoot = false;
+      if enableUnfree then
+        "sha256-JLLbkrptKzC4UuEaA0X9rXBFPH5v4n6a2jSF2E3yEv8="
+      else
+        "sha256-DDe8nMgzzciZ+SroHYqaEtOXg/MoT3RYnXvN1YC1Znc=";
     # remove the unRAR related code from the src drv
     # > the license requires that you agree to these use restrictions,
     # > or you must remove the software (source and binary) from your hard disks
@@ -65,11 +67,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
-      --replace windres.exe ${stdenv.cc.targetPrefix}windres
+      --replace-fail windres.exe ${stdenv.cc.targetPrefix}windres
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.isDarwin [
+    [
+      # GCC 16 fails due to what is ostensibly an out-of-bounds read, but it is
+      # introduced by GCC's own optimizations; building with -O0 or -fno-inline
+      # does not trigger a failure. Possibly related GCC bug:
+      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122197
+      "-Wno-error=array-bounds"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Wno-deprecated-copy-dtor"
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
@@ -120,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "doc"
+    "lib"
   ];
 
   setupHook = ./setup-hook.sh;
@@ -128,17 +138,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = "cd CPP/7zip/Bundles/Alone2";
 
+  postBuild = ''
+    make $makeFlags -j $NIX_BUILD_CORES -C ../Format7zF -f ${makefile}
+  '';
+
   installPhase = ''
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
     install -Dm444 -t $out/share/doc/7zz ../../../../DOC/*.txt
 
+    mkdir -p $lib/lib
+    install -Dm555 -t $lib/lib ../Format7zF/b/*/7z.*
+
     runHook postInstall
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script {
+        attrPath = "_7zz";
+        extraArgs = [ "--use-github-releases" ];
+      })
+      (nix-update-script {
+        attrPath = "_7zz-rar";
+        extraArgs = [ "--version=skip" ];
+      })
+    ];
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
       command = "7zz --help";
@@ -148,6 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Command line version of the 7-Zip archiver utility";
     homepage = "https://7-zip.org";
+    changelog = "https://7-zip.org/history.txt";
     license =
       with lib.licenses;
       # 7zip code is largely lgpl2Plus
@@ -167,5 +194,11 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = with lib.platforms; unix ++ windows;
     mainProgram = "7zz";
+    identifiers.cpeParts = {
+      vendor = "7-zip";
+      product = "7-zip";
+      inherit (finalAttrs) version;
+      update = "*";
+    };
   };
 })

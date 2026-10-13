@@ -18,14 +18,14 @@
   yojson,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lambdapi";
   version = "3.0.0";
 
   minimalOCamlVersion = "4.14";
 
   src = fetchurl {
-    url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
+    url = "https://github.com/Deducteam/lambdapi/releases/download/${finalAttrs.version}/lambdapi-${finalAttrs.version}.tbz";
     hash = "sha256-EGau0mGP2OakAMUUfb9V6pd86NP+LlGKxnhcZ3WhuL4=";
   };
 
@@ -64,7 +64,7 @@ buildDunePackage rec {
     homepage = "https://github.com/Deducteam/lambdapi";
     description = "Proof assistant based on the λΠ-calculus modulo rewriting";
     license = lib.licenses.cecill21;
-    changelog = "https://github.com/Deducteam/lambdapi/raw/${version}/CHANGES.md";
+    changelog = "https://github.com/Deducteam/lambdapi/raw/${finalAttrs.version}/CHANGES.md";
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

@@ -57,7 +57,7 @@
   wrapGAppsHook4,
   writeScript,
   xdg-utils,
-  xxHash,
+  xxhash,
   yyjson,
   zix,
   zstd,
@@ -152,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     soxr
     vamp-plugin-sdk
     xdg-utils
-    xxHash
+    xxhash
     yyjson
     zix
     zstd
@@ -217,5 +217,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
     license = lib.licenses.agpl3Plus;
+    mainProgram = "zrythm";
   };
 })

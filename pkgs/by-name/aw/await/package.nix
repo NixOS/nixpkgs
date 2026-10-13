@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "await";
-  version = "2.4.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "slavaGanzin";
     repo = "await";
     tag = finalAttrs.version;
-    hash = "sha256-MpdP4OJvxjF8zbKQ1YGVrtcC8RKxDNHDA90tWvLDQbU=";
+    hash = "sha256-j8MuqU/Fv/bFJeNNkgMlWwmXlWGai9d54AeOyMhJ89I=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Small binary that runs a list of commands in parallel and awaits termination";
     homepage = "https://github.com/slavaGanzin/await";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ chewblacka ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "await";
   };

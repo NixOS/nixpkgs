@@ -153,6 +153,8 @@ stdenv'.mkDerivation (finalAttrs: {
     };
   };
 
+  __structuredAttrs = true;
+
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/libxml2";
     description = "XML parsing library for C";

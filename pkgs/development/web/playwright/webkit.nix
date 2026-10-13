@@ -11,6 +11,7 @@
   brotli,
   at-spi2-atk,
   cairo,
+  enchant_2,
   flite,
   fontconfig,
   freetype,
@@ -19,9 +20,11 @@
   gst_all_1,
   harfbuzz,
   harfbuzzFull,
+  hyphen,
   icu74,
   lcms,
   libavif,
+  libbacktrace,
   libdrm,
   libepoxy,
   libevent,
@@ -29,6 +32,7 @@
   libgcrypt,
   libgpg-error,
   libjpeg8,
+  libmanette,
   libopus,
   libpng,
   libsoup_3,
@@ -38,7 +42,7 @@
   libwpe,
   libwpe-fdo,
   libxkbcommon,
-  libxml2,
+  libxml2_13,
   libxslt,
   libgbm,
   sqlite,
@@ -77,6 +81,13 @@ let
         hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
         fetchSubmodules = true;
       };
+
+      # override split output shenanigans from the main package
+      outputs = [
+        "out"
+        "dev"
+      ];
+
       patches = [
         # Add missing <atomic> content to fix gcc compilation for RISCV architecture
         # https://github.com/libjxl/libjxl/pull/2211
@@ -119,8 +130,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-Ei08TuR+WedVAfKRSeRQq7ZhULgxXQIV0bQPcNFYhr4=";
-          aarch64-linux = "sha256-/+tven7ksYhXQxPYfazyZhNsgvE8rr3A28fZPwL4c9s=";
+          x86_64-linux = "sha256-My6nSOMD2NfPGUmOJKZgWpkjktEsj+P+CPeVmKy1VAQ=";
+          aarch64-linux = "sha256-5CCcWiZN1lVoiiSEO1OvxLcuKhSOIQrD5GH1TYr7XIY=";
         }
         .${system} or throwSystem;
     };
@@ -133,6 +144,7 @@ let
     buildInputs = [
       at-spi2-atk
       cairo
+      enchant_2
       flite
       fontconfig.lib
       freetype
@@ -144,16 +156,19 @@ let
       gst_all_1.gstreamer
       harfbuzz
       harfbuzzFull
+      hyphen
       icu74
       lcms
       libavif
+      libbacktrace
       libdrm
       libepoxy
       libevent
-      libgcc.lib
+      libgcc
       libgcrypt
       libgpg-error
       libjpeg8
+      libmanette
       libopus
       libpng
       libsoup_3
@@ -162,7 +177,7 @@ let
       libwpe
       libwpe-fdo
       libvpx'
-      libxml2
+      libxml2_13
       libxslt
       libgbm
       sqlite
@@ -182,25 +197,16 @@ let
       # remove bundled libs
       rm -rf $out/minibrowser-wpe/sys
 
-      # TODO: still fails on ubuntu trying to find libEGL_mesa.so.0
       wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
         --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/" \
         --prefix LD_LIBRARY_PATH ":" $out/minibrowser-wpe/lib
-
-    '';
-
-    preFixup = ''
-      # Fix libxml2 breakage. See https://github.com/NixOS/nixpkgs/pull/396195#issuecomment-2881757108
-      mkdir -p "$out/lib"
-      ln -s "${lib.getLib libxml2}/lib/libxml2.so" "$out/lib/libxml2.so.2"
     '';
   };
   webkit-darwin = fetchzip {
     inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-An3sdw8HltgHQ6YASsxyhoK1fd8PxZ0BBCMpnOORkv8=";
-        aarch64-darwin = "sha256-suXPCuXLMz3xoFxE5+Yjd9OXxLfNDDJiU6O1Ic0PsOI=";
+        aarch64-darwin = "sha256-EjI0TdmQfB2qT2bBtbJFpsa+bplkJ5YyyVxNoOgsnZc=";
       }
       .${system} or throwSystem;
   };
@@ -208,7 +214,6 @@ in
 {
   x86_64-linux = webkit-linux;
   aarch64-linux = webkit-linux;
-  x86_64-darwin = webkit-darwin;
   aarch64-darwin = webkit-darwin;
 }
 .${system} or throwSystem

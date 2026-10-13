@@ -124,11 +124,9 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     installBin Starfox64Recompiled
-    install -Dm644 -t $out/share ../recompcontrollerdb.txt
+    install -Dm644 -t $out/share/starfox64recomp ../recompcontrollerdb.txt
     install -Dm644 ../icons/512.png $out/share/icons/hicolor/512x512/apps/Starfox64Recompiled.png
-    cp -r ../assets $out/share/
-    ln -s $out/share/recompcontrollerdb.txt $out/bin/recompcontrollerdb.txt
-    ln -s $out/share/assets $out/bin/assets
+    cp -r ../assets $out/share/starfox64recomp/
 
     install -Dm644 -t $out/share/licenses/starfox64recompiled/N64ModernRuntime ../lib/N64ModernRuntime/COPYING
     install -Dm644 -t $out/share/licenses/starfox64recompiled/RmlUi ../lib/RmlUi/LICENSE.txt
@@ -144,9 +142,8 @@ llvmPackages_19.stdenv.mkDerivation (finalAttrs: {
      )
   '';
 
-  # The game will segfault when not run from the same directory as the binary.
   postFixup = ''
-    wrapProgram $out/bin/Starfox64Recompiled --chdir "$out/bin/"
+    wrapProgram $out/bin/Starfox64Recompiled --chdir "$out/share/starfox64recomp"
   '';
 
   meta = {

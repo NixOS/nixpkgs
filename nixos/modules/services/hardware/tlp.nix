@@ -27,7 +27,7 @@ in
       };
 
       pd = {
-        enable = lib.mkEnableOption "the power-rofiles-daemon like DBus interface for TLP";
+        enable = lib.mkEnableOption "the power-profiles-daemon like DBus interface for TLP";
 
         package = lib.mkPackageOption pkgs "tlp-pd" { };
       };

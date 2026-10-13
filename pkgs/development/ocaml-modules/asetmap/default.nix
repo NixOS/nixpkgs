@@ -1,4 +1,5 @@
 {
+  lib,
   fetchurl,
   buildDunePackage,
   topkg,
@@ -27,5 +28,8 @@ buildDunePackage (finalAttrs: {
 
   inherit (topkg) buildPhase installPhase;
 
-  meta = { inherit (ocaml.meta) platforms; };
+  meta = {
+    inherit (ocaml.meta) platforms;
+    license = lib.licenses.isc;
+  };
 })

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eigenmath";
-  version = "350";
+  version = "351";
 
   src = fetchFromGitHub {
     owner = "georgeweigt";
     repo = "eigenmath";
     tag = finalAttrs.version;
-    hash = "sha256-Depc6mzPK6FEGTUo2BmXoWlyzjQDU8Hiodp5UjxKlQE=";
+    hash = "sha256-V8HNzbNg/YfE9KPPBEeXw5oOkG97AgQcBKDzAAjFvnA=";
   };
 
   checkPhase =

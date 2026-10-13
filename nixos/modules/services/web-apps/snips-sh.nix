@@ -29,9 +29,7 @@ in
   options.services.snips-sh = {
     enable = mkEnableOption "snips.sh";
 
-    package = mkPackageOption pkgs "snips-sh" {
-      example = "pkgs.snips-sh.override {withTensorflow = true;}";
-    };
+    package = mkPackageOption pkgs "snips-sh" { };
 
     stateDir = mkOption {
       type = types.path;

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "notus-scanner";
-  version = "22.7.2";
+  version = "23.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "notus-scanner";
     tag = "v${version}";
-    hash = "sha256-JKDnqgEBzEIOI3WIh+SOycACFaYZoZHy7tPFirltDiM=";
+    hash = "sha256-OgfJyQPmkV1nRYIQZJpyptbPdf7L6amuLP9pIz0Btbk=";
   };
 
   pythonRelaxDeps = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Helper to create results from local security checks";
     homepage = "https://github.com/greenbone/notus-scanner";
     changelog = "https://github.com/greenbone/notus-scanner/releases/tag/${src.tag}";
-    license = with lib.licenses; [ agpl3Plus ];
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -23,8 +23,13 @@ stdenv.mkDerivation {
     zlib
     libjpeg
     SDL2
-    libx11
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libx11 ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace makefile.inc \
+      --replace-fail '$(SDLCONFIG_STATICLIBS)' '$(SDLCONFIG_LIBS)'
+  '';
 
   buildFlags = [ "release" ];
 
@@ -38,12 +43,18 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postFixup = ''
-    patchelf \
-      --add-needed ${libvorbis}/lib/libvorbisfile.so \
-      --add-needed ${libvorbis}/lib/libvorbis.so \
-      $out/bin/darkplaces
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf \
+        --add-needed ${libvorbis}/lib/libvorbisfile.so \
+        --add-needed ${libvorbis}/lib/libvorbis.so \
+        $out/bin/darkplaces
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      ${stdenv.cc.targetPrefix}install_name_tool \
+        -add_rpath ${lib.getLib libvorbis}/lib \
+        $out/bin/darkplaces
+    '';
 
   meta = {
     homepage = "https://www.icculus.org/twilight/darkplaces/";
@@ -56,6 +67,6 @@ stdenv.mkDerivation {
     '';
     maintainers = with lib.maintainers; [ necrophcodr ];
     license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

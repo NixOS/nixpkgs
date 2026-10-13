@@ -51,7 +51,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/Edu4rdSHL/unimap";
     changelog = "https://github.com/Edu4rdSHL/unimap/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      sheeeng
+    ];
     mainProgram = "unimap";
   };
 })

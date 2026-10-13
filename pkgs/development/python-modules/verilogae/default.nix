@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   nix-update-script,
   setuptools-rust,
   rustPlatform,
@@ -17,27 +16,32 @@
 
 buildPythonPackage.override { stdenv = llvmPackages.stdenv; } rec {
   pname = "verilogae";
-  version = "24.0.0mob-unstable-2025-07-21";
+  version = "24.0.0mob-unstable-2026-08-01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OpenVAF";
     repo = "OpenVAF-Reloaded";
-    rev = "d878f5519b1767b64c6ebeb4d67e29e7cd46e60b";
-    hash = "sha256-TDE2Ewokhm2KSKe+sunUbV8KD3kaTSd5dB3CLCWGJ9U=";
+    rev = "3369a83f9c626f6d298f9f881379f561ce432e27";
+    hash = "sha256-+7Ni75QPkgHm1jh7ppiP0oRtDhmzV3OpNqpPWtGhVF4=";
   };
 
-  # segfault in pythonImportsCheckPhase
-  disabled = pythonAtLeast "3.14";
+  # upstream's ./configure is an LLVM auto-detection script, not autotools
+  dontConfigure = true;
 
   postPatch = ''
     substituteInPlace openvaf/osdi/build.rs \
       --replace-fail "-fPIC" ""
+
+    # upstream no longer defaults to an LLVM version; select the one we build with
+    substituteInPlace setup.py \
+      --replace-fail "binding=Binding.NoBinding," \
+        'binding=Binding.NoBinding, features=["llvm${lib.versions.major llvmPackages.llvm.version}"],'
   '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-5SLrVL3h6+tptHv3GV7r8HUTrYQC9VdF68O2/Uct3xA=";
+    hash = "sha256-+jvaiBCmjd3RrlES+Sc1SskEMOtO1ykOdInMTH/Gazo=";
   };
 
   nativeBuildInputs = [

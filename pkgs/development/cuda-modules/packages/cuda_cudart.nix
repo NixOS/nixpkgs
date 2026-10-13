@@ -4,7 +4,7 @@
   _cuda,
   addDriverRunpath,
   buildRedist,
-  cuda_cccl,
+  cccl,
   cuda_compat,
   cuda_crt,
   cuda_nvcc,
@@ -47,7 +47,7 @@ buildRedist (finalAttrs: {
     # Add the dependency on CCCL's include directory.
     # - nv/target
     # TODO(@connorbaker): Check that the dependency offset for this is correct.
-    ++ [ (lib.getOutput "include" cuda_cccl) ]
+    ++ [ (lib.getOutput "include" cccl) ]
     # NOTE: cuda_compat may be null or unavailable
     ++ lib.optionals (cuda_compat.meta.available or false) [ cuda_compat ];
 

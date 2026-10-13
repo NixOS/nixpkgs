@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weatherflow4py";
-  version = "1.5.2";
+  version = "1.5.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "weatherflow4py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cfQWdQhjW6KjBLQWO9BSAVZ2btRCMjx1CpUifoOwPsU=";
+    hash = "sha256-QpZgy7mKx6bmHu+0fLSMxqRCAkU/M+Fg2eC9KPQTSQA=";
   };
 
   build-system = [ hatchling ];

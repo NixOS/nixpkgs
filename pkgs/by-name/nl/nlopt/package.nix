@@ -41,13 +41,13 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "nlopt";
-  version = "2.10.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "stevengj";
     repo = "nlopt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i+Cd2VLMbI4PUSXennR8jgF+/ZkzKX9WkVTPtayr8vs=";
+    hash = "sha256-ooZv75xkg07w+8ZlP1+1hqVwhOuDBSBNfhFscsLLu1I=";
   };
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
@@ -88,7 +88,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "NLOPT_MATLAB" false)
     (lib.cmakeBool "NLOPT_GUILE" false)
     (lib.cmakeBool "NLOPT_LUKSAN" (!withoutLuksanSolvers))
-    (lib.cmakeBool "NLOPT_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "NLOPT_TESTS" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optional withPython (
     lib.cmakeFeature "Python_EXECUTABLE" "${buildPythonBindingsEnv.interpreter}"

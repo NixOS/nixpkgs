@@ -7,15 +7,16 @@
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "alerta";
   version = "8.5.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-ePvT2icsgv+io5aDDUr1Zhfodm4wlqh/iqXtNkFhS10=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    six
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     click
     requests
     requests-hawk
@@ -23,7 +24,17 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     tabulate
   ];
 
-  doCheck = false;
+  doCheck = true;
+
+  pythonImportsCheck = [ "alertaclient" ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    requests-mock
+  ];
+
+  # AlertTestCases attempt to connect to alerta api
+  disabledTests = [ "AlertTestCase" ];
 
   meta = {
     homepage = "https://alerta.io";

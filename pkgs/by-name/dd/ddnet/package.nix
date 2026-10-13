@@ -15,7 +15,6 @@
   libogg,
   libx11,
   opusfile,
-  pcre,
   python3,
   SDL2,
   sqlite,
@@ -32,18 +31,18 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.8";
+  version = "20.1.1";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-CpzmKJ8W0uh/3x6/YSEs4SpJoSwYfCZxLDo7wvw96KU=";
+    hash = "sha256-C9N0l8wdPduHGHDWtHiTFc634r/6Qz3fT+G963V6iso=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
+    hash = "sha256-n+1SlgmjSe0ul/iuK3kjTGSvyYwdxwcRrCAnZyavZA8=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +61,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     libnotify
-    pcre
     python3
     sqlite
   ]
@@ -132,6 +130,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       Scrumplex
       sirseruju
+      emp
     ];
     mainProgram = "DDNet${lib.optionalString (!buildClient) "-Server"}";
   };

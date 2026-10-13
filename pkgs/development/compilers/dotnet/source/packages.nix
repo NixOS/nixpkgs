@@ -7,6 +7,7 @@
   strip-nondeterminism,
   zip,
   nugetPackageHook,
+  systemToDotnetRid,
   baseName ? "dotnet",
   fallbackTargetPackages ? { },
 }:
@@ -28,16 +29,17 @@ let
             (allow mach-lookup (global-name "com.apple.SecurityServer")
                               (global-name "com.apple.system.opendirectoryd.membership"))
           '';
+          passthru = args.passthru or { } // {
+            inherit (vmr) icu hasCrossTargetBug;
+          };
         }
       )
     );
-  inherit (vmr) targetRid releaseManifest;
+  inherit (vmr) hostRid releaseManifest;
+  targetRid = systemToDotnetRid stdenvNoCC.targetPlatform.system;
   sdkVersion = releaseManifest.sdkVersion;
   runtimeVersion = releaseManifest.runtimeVersion;
   aspnetcoreVersion = releaseManifest.aspNetCoreVersion or releaseManifest.runtimeVersion;
-
-  # TODO: do this properly
-  hostRid = targetRid;
 
   mkPackage =
     pname: version:
@@ -57,7 +59,7 @@ let
 
         mkdir -p "$out"
 
-        pushd "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}
+        pushd "$src"/lib/Private.SourceBuilt.Artifacts.*.${hostRid}
         pushd ${pname}.${version}.nupkg
 
         xmlstarlet \
@@ -106,19 +108,19 @@ let
   ++ targetPackages.${targetRid};
 
   targetPackages = fallbackTargetPackages // {
-    ${targetRid} = [
-      (mkPackage "Microsoft.AspNetCore.App.Runtime.${targetRid}" aspnetcore.version)
-      (mkPackage "Microsoft.NETCore.App.Host.${targetRid}" runtime.version)
-      (mkPackage "Microsoft.NETCore.App.Runtime.${targetRid}" runtime.version)
-      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
+    ${hostRid} = [
+      (mkPackage "Microsoft.AspNetCore.App.Runtime.${hostRid}" aspnetcore.version)
+      (mkPackage "Microsoft.NETCore.App.Host.${hostRid}" runtime.version)
+      (mkPackage "Microsoft.NETCore.App.Runtime.${hostRid}" runtime.version)
+      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetAppHost" runtime.version)
     ]
     ++ lib.optionals (lib.versionOlder runtime.version "9") [
-      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHost" runtime.version)
-      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
-      (mkPackage "runtime.${targetRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
+      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHost" runtime.version)
+      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHostPolicy" runtime.version)
+      (mkPackage "runtime.${hostRid}.Microsoft.NETCore.DotNetHostResolver" runtime.version)
     ]
     ++ lib.optionals (lib.versionAtLeast runtime.version "10") [
-      (mkPackage "Microsoft.NETCore.App.Runtime.NativeAOT.${targetRid}" runtime.version)
+      (mkPackage "Microsoft.NETCore.App.Runtime.NativeAOT.${hostRid}" runtime.version)
     ];
   };
 
@@ -144,7 +146,7 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src"/lib/dotnet-sdk-${sdkVersion}-${targetRid} "$out"/share/dotnet
+      cp -r "$src"/lib/dotnet-sdk-${sdkVersion}-${hostRid} "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
@@ -155,7 +157,7 @@ let
     + ''
 
       mkdir -p "$artifacts"
-      cp -r "$src"/lib/Private.SourceBuilt.Artifacts.*.${targetRid}/* "$artifacts"/
+      cp -r "$src"/lib/Private.SourceBuilt.Artifacts.*.${hostRid}/* "$artifacts"/
       chmod +w -R "$artifacts"
 
       local package
@@ -184,8 +186,6 @@ let
 
     passthru = {
       inherit (vmr)
-        icu
-        targetRid
         hasILCompiler
         ;
 
@@ -213,17 +213,13 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/lib/dotnet-runtime-${runtimeVersion}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${runtimeVersion}-${hostRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
       runHook postInstall
     '';
-
-    passthru = {
-      inherit (vmr) icu;
-    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";
@@ -241,20 +237,16 @@ let
       runHook preInstall
 
       mkdir -p "$out"/share
-      cp -r "$src/lib/dotnet-runtime-${runtime.version}-${targetRid}" "$out"/share/dotnet
+      cp -r "$src/lib/dotnet-runtime-${runtime.version}-${hostRid}" "$out"/share/dotnet
       chmod +w "$out"/share/dotnet/shared
       mkdir "$out"/bin
       ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
 
-      cp -Tr "$src/lib/aspnetcore-runtime-${aspnetcoreVersion}-${targetRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
+      cp -Tr "$src/lib/aspnetcore-runtime-${aspnetcoreVersion}-${hostRid}"/shared/Microsoft.AspNetCore.App "$out"/share/dotnet/shared/Microsoft.AspNetCore.App
       chmod +w "$out"/share/dotnet/shared
 
       runHook postInstall
     '';
-
-    passthru = {
-      inherit (vmr) icu;
-    };
 
     meta = vmr.meta // {
       mainProgram = "dotnet";

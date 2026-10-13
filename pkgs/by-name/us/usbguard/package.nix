@@ -65,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-polkit"
   ];
 
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail '-std=c++17' '-std=c++20'
+  '';
+
   enableParallelBuilding = true;
 
   postInstall = ''

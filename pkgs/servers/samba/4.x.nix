@@ -21,7 +21,7 @@
   zlib,
   liburing,
   gnutls,
-  systemd,
+  systemdLibs,
   samba,
   talloc,
   jansson,
@@ -81,11 +81,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "samba";
-  version = "4.23.5";
+  version = "4.23.10";
 
   src = fetchurl {
     url = "https://download.samba.org/pub/samba/stable/samba-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WTpD3dDVeQIjffp2iI97Ast/x3RxETacsx4SbbSDa58=";
+    hash = "sha256-50s/SV1+SOZxC1Aas4HIDd88uZxmBHMtNgQCZdnK9FI=";
   };
 
   outputs = [
@@ -97,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./4.x-no-persistent-install.patch
     ./4.x-no-persistent-install-dynconfig.patch
-    ./4.x-fix-makeflags-parsing.patch
     ./4.x-fix-systemd-detection.patch
     (fetchpatch {
       # workaround for https://bugzilla.samba.org/show_bug.cgi?id=14164
@@ -168,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isLinux [
     liburing
-    systemd
+    systemdLibs
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ]
   ++ optionals enableLDAP [
@@ -204,6 +203,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "s,\(XML_CATALOG_FILES=\"\),\1$XML_CATALOG_FILES ,g" buildtools/wafsamba/wafsamba.py
 
     patchShebangs ./buildtools/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The discard_const macro casts through uintptr_t, which newer clang
+    # rejects as non-constant in static initializers. Use a direct cast.
+    substituteInPlace lib/replace/replace.h --replace-fail \
+      '#define discard_const(ptr) ((void *)((uintptr_t)(ptr)))' \
+      '#define discard_const(ptr) ((void *)(ptr))'
   ''
   + lib.optionalString isCross ''
     substituteInPlace wscript source3/wscript nsswitch/wscript_build lib/replace/wscript source4/ntvfs/sysdep/wscript_configure --replace-fail 'sys.platform' '"${stdenv.hostPlatform.parsed.kernel.name}"'
@@ -279,6 +285,9 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.dnspython
     python3Packages.markdown
     tdb
+  ]
+  ++ lib.optionals enableDomainController [
+    python3Packages.cryptography
   ];
 
   strictDeps = true;
@@ -312,16 +321,27 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --shrink-rpath "\$BIN";
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -id \$BIN \$BIN
-    for old_rpath in \$(otool -L \$BIN | grep /private/tmp/ | awk '{print \$1}'); do
-      new_rpath=\$(find \$SAMBA_LIBS -name \$(basename \$old_rpath) | head -n 1)
-      install_name_tool -change \$old_rpath \$new_rpath \$BIN
+    if [[ "\$BIN" == *.dylib || "\$BIN" == *.so ]]; then
+      install_name_tool -id "\$BIN" "\$BIN" || true
+    fi
+    BUILD_TOP_CANONICAL="\$(realpath "\$NIX_BUILD_TOP" 2>/dev/null || echo "\$NIX_BUILD_TOP")"
+    for old_rpath in \$(otool -L "\$BIN" 2>/dev/null | awk '{print \$1}' | grep -F -e "\$NIX_BUILD_TOP" -e "\$BUILD_TOP_CANONICAL"); do
+      new_rpath=\$(find \$SAMBA_LIBS -name "\$(basename "\$old_rpath")" | head -n 1)
+      if [ -n "\$new_rpath" ]; then
+        install_name_tool -change "\$old_rpath" "\$new_rpath" "\$BIN"
+      fi
     done
   ''
   + ''
     EOF
     find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
     find $out/bin -type f -exec $SHELL -c "$SCRIPT" \;
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    find $out -type f -name '*.so' -exec $SHELL -c "$SCRIPT" \;
+    find $out/libexec -type f -exec $SHELL -c "$SCRIPT" \;
+  ''
+  + ''
 
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms
@@ -341,6 +361,13 @@ stdenv.mkDerivation (finalAttrs: {
     version = testers.testVersion {
       command = "${finalAttrs.finalPackage}/bin/smbd -V";
       package = finalAttrs.finalPackage;
+    };
+  }
+  // lib.optionalAttrs enableDomainController {
+    versionSambaTool = testers.testVersion {
+      command = "${lib.getExe' finalAttrs.finalPackage "samba-tool"} --version";
+      package = finalAttrs.finalPackage;
+      version = finalAttrs.version;
     };
   };
 

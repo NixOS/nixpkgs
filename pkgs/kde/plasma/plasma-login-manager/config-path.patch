@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1a1d9a3..fb2c9af 100644
+index be80162e..d6bd3cde 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -82,8 +82,8 @@ set(RUNTIME_DIR                 "${RUNTIME_DIR_DEFAULT}"
+@@ -84,8 +84,8 @@ set(RUNTIME_DIR                 "${RUNTIME_DIR_DEFAULT}"
  set(SESSION_COMMAND             "${DATA_INSTALL_DIR}/scripts/Xsession"              CACHE PATH      "Script to execute when starting the X11 desktop session")
  set(WAYLAND_SESSION_COMMAND     "${DATA_INSTALL_DIR}/scripts/wayland-session"       CACHE PATH      "Script to execute when starting the Wayland desktop session")
  
@@ -13,3 +13,17 @@ index 1a1d9a3..fb2c9af 100644
  set(SYSTEM_CONFIG_DIR           "${CMAKE_INSTALL_PREFIX}/lib/plasmalogin/plasmalogin.conf.d"      CACHE PATH      "Path of the system plasmalogin config directory")
  set(LOG_FILE                    "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/plasmalogin.log"  CACHE PATH      "Path of the plasmalogin log file")
  set(DBUS_CONFIG_FILENAME        "org.freedesktop.DisplayManager.conf"               CACHE STRING    "Name of the plasmalogin config file")
+diff --git a/src/frontend/settings/CMakeLists.txt b/src/frontend/settings/CMakeLists.txt
+index d77b6fdd..916ee28d 100644
+--- a/src/frontend/settings/CMakeLists.txt
++++ b/src/frontend/settings/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ set(PLASMALOGIN_SYSTEM_CONFIG_FILE  "${CMAKE_INSTALL_PREFIX}/lib/plasmalogin/defaults.conf"      CACHE PATH  "Path of the system plasma-login config file")
+ set(PLASMALOGIN_SYSTEM_CONFIG_DIR   "${CMAKE_INSTALL_PREFIX}/lib/plasmalogin/plasmalogin.conf.d" CACHE PATH  "Path of the system plasma-login config directory")
+-set(PLASMALOGIN_CONFIG_FILE         "${CMAKE_INSTALL_FULL_SYSCONFDIR}/plasmalogin.conf"          CACHE PATH  "Path of the plasma-login config file")
+-set(PLASMALOGIN_CONFIG_DIR          "${CMAKE_INSTALL_FULL_SYSCONFDIR}/plasmalogin.conf.d"        CACHE PATH  "Path of the plasma-login config directory")
++set(PLASMALOGIN_CONFIG_FILE         "/etc/plasmalogin.conf"          CACHE PATH  "Path of the plasma-login config file")
++set(PLASMALOGIN_CONFIG_DIR          "/etc/plasmalogin.conf.d"        CACHE PATH  "Path of the plasma-login config directory")
+ 
+ configure_file(config.h.in config.h IMMEDIATE @ONLY)
+ 

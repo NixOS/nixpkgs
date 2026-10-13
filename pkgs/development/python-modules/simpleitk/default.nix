@@ -28,6 +28,11 @@ buildPythonPackage rec {
     swig
     scikit-build
   ];
+
+  cmakeFlags = [
+    "-DSimpleITK_BUILD_DISTRIBUTE=ON"
+  ];
+
   propagatedBuildInputs = [
     elastix
     itk

@@ -51,7 +51,7 @@ in
         with pkgs; [ swaylock foot dmenu ];
       '';
       example = lib.literalExpression ''
-        with pkgs; [ termite rofi light ]
+        with pkgs; [ alacritty rofi light ]
       '';
       description = ''
         Extra packages to be installed system wide. See

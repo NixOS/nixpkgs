@@ -100,9 +100,37 @@ in
 
     security.pam.services = {
       ly = {
-        startSession = true;
-        unixAuth = true;
-        enableGnomeKeyring = lib.mkDefault config.services.gnome.gnome-keyring.enable;
+        useDefaultRules = false;
+        rules = {
+          auth = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          account = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+          password = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "substack";
+              modulePath = "login";
+            }
+          ];
+          session = utils.pam.autoOrderRules [
+            {
+              name = "login";
+              control = "include";
+              modulePath = "login";
+            }
+          ];
+        };
       };
     }
     // optionalAttrs dmcfg.autoLogin.enable {
@@ -113,12 +141,12 @@ in
             {
               name = "nologin";
               control = "requisite";
-              modulePath = "pam_nologin.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_nologin.so";
             }
             {
               name = "ly-normal-user";
               control = "required";
-              modulePath = "pam_succeed_if.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_succeed_if.so";
               settings.quiet = true;
               args = lib.mkBefore [
                 "uid"
@@ -129,7 +157,7 @@ in
             {
               name = "permit";
               control = "required";
-              modulePath = "pam_permit.so";
+              modulePath = "${config.security.pam.package}/lib/security/pam_permit.so";
             }
           ];
 

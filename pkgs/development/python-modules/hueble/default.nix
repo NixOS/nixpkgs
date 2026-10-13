@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "hueble";
-  version = "2.2.1";
+  version = "2.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flip-dots";
     repo = "HueBLE";
     tag = "v${version}";
-    hash = "sha256-JbihHDG44PeS6rxUOXSRF9NlH/smUGz3/JrCmXqTT5s=";
+    hash = "sha256-YWBwJHCvPMRgkB8ssTeJacMG9nEGVDWfwYY52T4E07E=";
   };
 
   build-system = [ setuptools ];

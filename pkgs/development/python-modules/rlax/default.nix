@@ -22,16 +22,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rlax";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "rlax";
-    tag = "v${version}";
-    hash = "sha256-E/zYFd5bfx58FfA3uR7hzRAIs844QzJA8TZTwmwDByk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-CDHoRY6QcgedudojID4Cxw7RWb/LCT5FvZ1dOVDWGMA=";
   };
 
   build-system = [
@@ -82,8 +83,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library of reinforcement learning building blocks in JAX";
     homepage = "https://github.com/deepmind/rlax";
-    changelog = "https://github.com/google-deepmind/rlax/releases/tag/${src.tag}";
+    changelog = "https://github.com/google-deepmind/rlax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

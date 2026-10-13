@@ -2,50 +2,90 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ctestCheckHook,
   libGLU,
   libunarr,
-  libsForQt5,
-  pkg-config,
+  expat,
+  libdeflate,
+  lerc,
+  xz,
+  libwebp,
+  qtwebapp,
+  pipewire,
+  qt6Packages,
+  onlyServer ? false,
 }:
-
+let
+  qtPackages = qt6Packages;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yacreader";
-  version = "9.16.3";
+  version = "10.3.2";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = "yacreader";
     tag = finalAttrs.version;
-    hash = "sha256-3mLmH6HJnH+LH/NkqI4G8Si5od3YiWnQ/kv5rmPFhlE=";
+    hash = "sha256-SQhdD/SrEuPo2uIj9BSp5h6mdmQ/kDGNzEKV+AQKSE0=";
   };
 
   patches = [
-    # make the unarr backend logic use pkg-config even on Darwin
-    ./darwin-unarr-use-pkg-config.patch
+    # Devendor qtwebapp, use pkg-config instead
+    ./qtwebapp-devendor.patch
   ];
 
-  qmakeFlags = [
+  # Ensure devendor works
+  postPatch = ''
+    rm -rf third_party/QtWebApp
+  '';
+
+  # Pipewire is dlopen'd, so we must tell it where to look
+  # So is qtwebapp on macOS
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      qtWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ pipewire ]}")
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      qtWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ qtwebapp ]}")
+    '';
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  cmakeFlags = [
     # force unarr backend on all platforms
-    "CONFIG+=unarr"
+    (lib.cmakeBool "BUILD_SERVER_STANDALONE" onlyServer)
+    (lib.cmakeFeature "DECOMPRESSION_BACKEND" "unarr")
   ];
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.qttools # for translations
-    libsForQt5.wrapQtAppsHook
+    cmake
     pkg-config
+    qtPackages.wrapQtAppsHook
   ];
 
   buildInputs = [
     libGLU
-    libsForQt5.poppler
-    libsForQt5.qtgraphicaleffects # imported, but not declared as a dependency
-    libsForQt5.qtmultimedia
-    libsForQt5.qtquickcontrols2
     libunarr
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libsForQt5.qtmacextras # can be removed when using qt6
+    expat
+    libdeflate
+    lerc
+    xz
+    libwebp
+    qtwebapp
+    qtPackages.qtbase
+    qtPackages.qttools
+    qtPackages.qtmultimedia
+    qtPackages.qtspeech
+    qtPackages.poppler
+    qtPackages.qt5compat
+  ];
+
+  doCheck = true;
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
 
   # custom Darwin install instructions taken from the upstream compileOSX.sh script
@@ -53,20 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out"/Applications
+    mkdir -p "$out/Applications/YACReader.app/Contents/MacOS/languages"
+    mkdir -p "$out/Applications/YACReaderLibrary.app/Contents/MacOS/languages"
+    mkdir -p "$out/Applications/YACReaderLibraryServer.app/Contents/MacOS/languages"
 
-    cp -r YACReader/YACReader.app "$out"/Applications/
-    cp -r YACReaderLibrary/YACReaderLibrary.app "$out"/Applications/
-    cp -r YACReaderLibraryServer/YACReaderLibraryServer.app "$out"/Applications/
+    cp -r bin/YACReader.app "$out"/Applications/
+    cp -r bin/YACReaderLibrary.app "$out"/Applications/
+    cp -r bin/YACReaderLibraryServer.app "$out"/Applications/
 
-    cp -r release/server "$out"/Applications/YACReaderLibrary.app/Contents/MacOS/
-    cp -r release/server "$out"/Applications/YACReaderLibraryServer.app/Contents/MacOS/
-    cp -r release/languages "$out"/Applications/YACReader.app/Contents/MacOS/
-    cp -r release/languages "$out"/Applications/YACReaderLibrary.app/Contents/MacOS/
-    cp -r release/languages "$out"/Applications/YACReaderLibraryServer.app/Contents/MacOS/
-
-    makeWrapper "$out"/Applications/YACReader.app/Contents/MacOS/YACReader "$out/bin/YACReader"
-    makeWrapper "$out"/Applications/YACReaderLibrary.app/Contents/MacOS/YACReaderLibrary "$out/bin/YACReaderLibrary"
-    makeWrapper "$out"/Applications/YACReaderLibraryServer.app/Contents/MacOS/YACReaderLibraryServer "$out/bin/YACReaderLibraryServer"
+    find . -name "*.qm" ! -name "*_source.qm" -exec cp {} "$out/Applications/YACReader.app/Contents/MacOS/languages/" \;
+    find . -name "*.qm" ! -name "*_source.qm" -exec cp {} "$out/Applications/YACReaderLibrary.app/Contents/MacOS/languages/" \;
+    find . -name "*.qm" ! -name "*_source.qm" -exec cp {} "$out/Applications/YACReaderLibraryServer.app/Contents/MacOS/languages/" \;
 
     runHook postInstall
   '';

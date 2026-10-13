@@ -3,56 +3,48 @@
   buildPythonPackage,
   fetchPypi,
   pbr,
-  setuptools,
-  importlib-metadata,
+  webob,
   simplegeneric,
   netaddr,
+  importlib-metadata,
   # Test inputs
-  flask,
-  flask-restful,
+  transaction,
   pecan,
   sphinx,
-  transaction,
+  flask,
+  flask-restful,
   webtest,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "wsme";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "WSME";
+    pname = "wsme";
     inherit (finalAttrs) version;
-    hash = "sha256-m36yJErzxwSskUte0iGVS7aK3QqLKy84okSwZ7M3mS0=";
+    hash = "sha256-W/MgEO2UPs+z8IeVpGAuJoPfXV6ozHHq8evj9EnzmDM=";
   };
 
-  build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pbr ];
+  build-system = [ pbr ];
 
   dependencies = [
-    importlib-metadata
+    webob
     simplegeneric
     netaddr
+    importlib-metadata
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    flask
-    flask-restful
+    transaction
     pecan
     sphinx
-    transaction
+    flask
+    flask-restful
     webtest
-  ];
-
-  enabledTestPaths = [
-    "wsme/tests"
-    "tests/pecantest"
-    "tests/test_sphinxext.py"
-    "tests/test_flask.py"
+    pytestCheckHook
   ];
 
   meta = {

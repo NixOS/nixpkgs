@@ -62,10 +62,9 @@ in
     bazelVendorDepsFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-MRm+Pm5mDXys8erQLKHRSClFzxWIYU7Y/otKxl5sJQg=";
-          aarch64-linux = "sha256-cJuNZapJ8LvfPRdv5V9iuy0xxCxLFI5uWTLtAa6bE/w=";
-          x86_64-darwin = "sha256-fOLRQIiRq7BATULy7W90bQ/DrW3Fn7vLut6fKFSoQDA=";
-          x86_64-linux = "sha256-nSe0ywhsTJz6ycqTZaUKfnOvpJOmwip8hYXck9HtW2Q=";
+          aarch64-darwin = "sha256-eWWo7AiZSPSnWNaK3f8rCnu7uGiq6zoYT2YYTLrEMXY";
+          aarch64-linux = "sha256-AFG9Xyru6/m5bZrO4FPCMRnVuq4kpj2OqangxdHQXXM=";
+          x86_64-linux = "sha256-qviZ9GVXA3t3DihlBthpaMO01/oxotDlXSRYF/w/zvY=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
@@ -100,10 +99,9 @@ in
     bazelRepoCacheFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
-          aarch64-linux = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
-          x86_64-darwin = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
-          x86_64-linux = "sha256-Yk+Y3XxlmE48RCYqmSfeBtElCGlVVdJvqRtuIMWbxrk=";
+          aarch64-darwin = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
+          aarch64-linux = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
+          x86_64-linux = "sha256-CbA4Kcn6656xnK6DkN4TZ7u1/mizA49Im9hRCU86TGs=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";
@@ -139,10 +137,9 @@ in
     bazelVendorDepsFOD = {
       outputHash =
         {
-          aarch64-darwin = "sha256-6rUV8UMjFZXA053BXIruK8+OEturmtz+YeAlkivePdA=";
-          aarch64-linux = "sha256-/mv7HVsx97RLzYl12WwsI2gYf0qBr+78B5NiEpTRyrc=";
-          x86_64-darwin = "sha256-BpQFhalV5AfYSjWQp+9lxOnfbaD/NADtvrNMqznEojM=";
-          x86_64-linux = "sha256-uutDUAHYecqDYmS90jZfZ8IrhSzpWB6WgcsZPlRJVaM=";
+          aarch64-darwin = "sha256-sO+LN53wkSpC8XYHzIKveWANhz1znOciS/F7muu7Vp0=";
+          aarch64-linux = "sha256-Ed5asDMPeSODDFzMN+kyYfwxVovRLqkUpWXyyaRPLtQ=";
+          x86_64-linux = "sha256-vU7cvmWvD/nyN8VKX66PWePw5yA/teRjUSlCcjXC+Rw=";
         }
         .${stdenv.hostPlatform.system};
       outputHashAlgo = "sha256";

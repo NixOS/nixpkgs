@@ -1,20 +1,21 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  versionCheckHook,
-  nix-update-script,
+  git,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jarl";
-  version = "0.4.0";
+  version = "0.6.0-unstable-2026-08-30"; # TODO revert unstable with next version
 
   src = fetchFromGitHub {
     owner = "etiennebacher";
     repo = "jarl";
-    tag = finalAttrs.version;
-    hash = "sha256-96ekjR0lcNhcmkEILYZd/QpeJl1pXJ2OBP4WyJ3AX90=";
+    rev = "0abcc17f335010419fa9cae463d746ad1343477e";
+    hash = "sha256-zUOCHL/AKDzOmWbnpP6BccEJ+tmtRvI1vQ+T/sCnXvY=";
   };
 
   postPatch = ''
@@ -24,7 +25,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
                    '(?:/nix)?/(?:build)/(?:nix[\-0-9]+/)?'
   '';
 
-  cargoHash = "sha256-FfoYed147pR8fa2176vvFJmAiXMTGE/UVtT57rKuj9s=";
+  cargoHash = "sha256-TnpkGOs8/IFJ1trzMijOTmX3BR2P3GsBhyv0GVCwHsc=";
+
+  # integrations test require git at build time (jarl >= 0.5.0)
+  nativeBuildInputs = [
+    git
+    installShellFiles
+  ];
 
   # Don't run integration_tests for jarl-lsp, because it doesn't see
   # the CARGO_BIN_EXE_jarl env var even if exported in preCheck
@@ -36,15 +43,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # "--test integration_tests"
   ];
 
-  nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  # TODO: Upstream also provides Elvish and PowerShell completions,
+  # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
   postInstall = ''
     rm $out/bin/xtask_codegen
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jarl \
+      --bash <(COMPLETE=bash $out/bin/jarl) \
+      --fish <(COMPLETE=fish $out/bin/jarl) \
+      --zsh <(COMPLETE=zsh $out/bin/jarl) \
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Just another R linter";

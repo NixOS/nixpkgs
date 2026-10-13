@@ -11,17 +11,17 @@
   meson,
   ninja,
   pkg-config,
-  typescript,
+  typescript_5,
   wrapGAppsHook4,
   gnome,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "decibels";
-  version = "49.0";
+  version = "49.6.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/decibels/${lib.versions.major finalAttrs.version}/decibels-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KbebouKWfmkUHjnwrSxnfjj+P/ufug+lx1MflNP2c8o=";
+    hash = "sha256-mme6FN8jUXyEn8/ep2THOiQeWQVSmbEl6YrqsqeAGtU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    typescript
+    typescript_5
     wrapGAppsHook4
   ];
 

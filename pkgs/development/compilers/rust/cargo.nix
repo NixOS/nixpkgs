@@ -80,9 +80,9 @@ rustPlatform.buildRustPackage.override
       if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
         ''
           installShellCompletion --cmd cargo \
-            --bash <(CARGO_COMPLETE=bash cargo) \
-            --fish <(CARGO_COMPLETE=fish cargo) \
-            --zsh <(CARGO_COMPLETE=zsh cargo)
+            --bash <(CARGO_COMPLETE=bash $out/bin/cargo) \
+            --fish <(CARGO_COMPLETE=fish $out/bin/cargo) \
+            --zsh <(CARGO_COMPLETE=zsh $out/bin/cargo)
         ''
       else
         ''
@@ -108,6 +108,15 @@ rustPlatform.buildRustPackage.override
       ${stdenv.cc.targetPrefix}readelf -a $out/bin/.cargo-wrapped | grep -F 'Shared library: [libcurl.so'
       runHook postInstallCheck
     '';
+
+    # Make sure our build rustc/cargo never make it into our runtime closure
+    disallowedReferences = [
+      rustPlatform.rust.cargo
+      rustPlatform.rust.rustc
+      rustPlatform.rust.rustc.unwrapped
+    ];
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://crates.io";

@@ -21,9 +21,11 @@
   python3,
   readline,
   ruby,
+  versionCheckHook,
   vte,
-  xxHash,
+  xxhash,
   zlib,
+  zydis,
   useX11 ? false,
   rubyBindings ? false,
   luaBindings ? false,
@@ -39,26 +41,26 @@ let
   sdb = fetchFromGitHub {
     owner = "radareorg";
     repo = "sdb";
-    tag = "2.4.2"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
-    hash = "sha256-JN27SkDqHtX83d1CPUF9hbVKwE/dwhDgn5MlCX9RPrc=";
+    tag = "2.5.0"; # https://github.com/radareorg/radare2/blob/master/subprojects/sdb.wrap
+    hash = "sha256-TSZGAzryZcVHJPnCx7zrP1+nschsOm1zmkCJyqA4kbk=";
   };
 
   qjs = fetchFromGitHub {
     owner = "quickjs-ng";
     repo = "quickjs";
-    rev = "e2b100e8c5fa7131e9fb22b8a0e9ca0f16eb9892"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
-    hash = "sha256-vq+K93MuvFC+JKw4623gKs53ngw1097l5Kf/RBGU+mA=";
+    rev = "9d15fb60b67c45fd0de413bb49e48f8dacebac16"; # https://github.com/radareorg/radare2/blob/master/subprojects/qjs.wrap
+    hash = "sha256-TH139/44X2FPUTqEdqB09QSUE+QJhudnA+dQF8f8BN0=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.1.2";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
-    owner = "radare";
+    owner = "radareorg";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-YiKbXKKwbeAUkeq4LcUwOxTHU1Hua4YhcwDULiHVmrQ=";
+    hash = "sha256-7BCNdPWzsjUuVftbxUZ6iChR5KDp2yKVjKi+1oHt9O8=";
   };
 
   mesonFlags = [
@@ -68,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "use_sys_openssl" true)
     (lib.mesonBool "use_sys_xxhash" true)
     (lib.mesonBool "use_sys_zip" true)
+    (lib.mesonBool "use_sys_zydis" true)
     (lib.mesonBool "use_sys_zlib" true)
     (lib.mesonOption "r2_gittap" finalAttrs.version)
   ];
@@ -96,6 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     readline
     zlib
+    zydis
   ]
   ++ lib.optionals useX11 [
     gtkdialog
@@ -109,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     # radare2 exposes r_lib which depends on these libraries
     file # for its list of magic numbers (`libmagic`)
     libzip
-    xxHash
+    xxhash
   ];
 
   postUnpack = ''
@@ -132,6 +136,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset";
@@ -163,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       mic92
       raskin
     ];
-    mainProgram = "radare2";
+    mainProgram = "r2";
     platforms = lib.platforms.unix;
   };
 })

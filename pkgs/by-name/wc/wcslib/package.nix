@@ -7,12 +7,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wcslib";
-  version = "8.6";
+  version = "8.10";
 
   src = fetchurl {
     url = "ftp://ftp.atnf.csiro.au/pub/software/wcslib/wcslib-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-4DBCNgWhme8JD+dCvJAagtnms6d+AQ4hHN1tLNBnzVo=";
+    hash = "sha256-s5TTMG2ppSQQ8FYTaRFJblmbXEjxz/LyIVY2lwd7vY0=";
   };
+
+  # error: call to undeclared library function 'snprintf'
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-include stdio.h";
 
   nativeBuildInputs = [ flex ];
 

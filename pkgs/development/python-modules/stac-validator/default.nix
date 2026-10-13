@@ -7,6 +7,7 @@
   setuptools,
   # runtime deps
   click,
+  fastjsonschema,
   jsonschema,
   pyyaml,
   requests,
@@ -14,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "stac-validator";
-  version = "4.1.0";
+  version = "4.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "stac-utils";
+    owner = "StacLabs";
     repo = "stac-validator";
     tag = "v${version}";
-    hash = "sha256-qO1DRYpPn+zarHTj2mZQ2LJ2uhmS1bax6Yxy035ZEUA=";
+    hash = "sha256-H4vhinsfOY4kM2YRGJrl8+9Wj91gKo5aj8sTZV/LHX0=";
   };
 
   build-system = [ setuptools ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
+    fastjsonschema
     jsonschema
     pyyaml
     requests
@@ -42,7 +44,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Validator for the SpatioTemporal Asset Catalog (STAC) specification";
-    homepage = "https://github.com/stac-utils/stac-validator";
+    homepage = "https://github.com/StacLabs/stac-validator";
     license = lib.licenses.asl20;
     teams = [ lib.teams.geospatial ];
   };

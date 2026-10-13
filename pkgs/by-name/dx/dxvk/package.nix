@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (
           enableMoltenVKCompat = true;
         }
       else
-        pkgsCross.mingw32.dxvk_2.override { stdenv = mingw32Stdenv; };
+        pkgsCross.mingw32.dxvk_3.override { stdenv = mingw32Stdenv; };
 
     dxvk64 =
       if stdenvNoCC.hostPlatform.isDarwin then
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (
           enableMoltenVKCompat = true;
         }
       else
-        pkgsCross.mingwW64.dxvk_2.override { stdenv = mingwW64Stdenv; };
+        pkgsCross.mingwW64.dxvk_3.override { stdenv = mingwW64Stdenv; };
   in
   {
     pname = "dxvk";
@@ -84,7 +84,6 @@ stdenvNoCC.mkDerivation (
       maintainers = [ lib.maintainers.reckenrode ];
       license = lib.licenses.zlib;
       platforms = [
-        "x86_64-darwin"
         "i686-linux"
         "x86_64-linux"
       ];

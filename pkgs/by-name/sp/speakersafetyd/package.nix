@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "speakersafetyd";
-  version = "1.1.2-unstable-2026-03-28";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "speakersafetyd";
-    rev = "a97c341e39e3f89e99f65d2a35d4e060b3b0168a";
-    hash = "sha256-FWpO2cp8licwevpAP25fmiIUEehkQp61E4A7RmsKJH0=";
+    tag = finalAttrs.version;
+    hash = "sha256-tUAHkCEteyFqF9XKQ7TLzYLU11Iy89Wlp251tI1w+Zw=";
   };
 
-  cargoHash = "sha256-xcCnzDN/U3sp12UwznaYjalzcKxo8Eo4vHnO/Sf++Zk=";
+  cargoHash = "sha256-9SGNhP0ccr5Spiz5B6rfnYMGGR7Q5fDivL2EZuwKwkU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     substituteInPlace Makefile \
       --replace-fail "target/release" \
-                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType" \
+                     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
   '';
 
   installFlags = [
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       flokli
       yuka
     ];
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 })

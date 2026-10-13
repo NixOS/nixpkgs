@@ -12,7 +12,7 @@
   libsm,
   libxext,
   glibc,
-  lua,
+  lua5_2_compat,
   luabind,
   glfw,
   libgccjit,
@@ -20,6 +20,7 @@
   makeWrapper,
 }:
 let
+  lua = lua5_2_compat;
   lpath = lib.makeLibraryPath [
     libxmu
     libxi

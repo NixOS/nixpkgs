@@ -53,6 +53,11 @@ rustPlatform.buildRustPackage rec {
     description = "Configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
     license = lib.licenses.elastic20;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = [ lib.maintainers.bbigras ];
   };
 }

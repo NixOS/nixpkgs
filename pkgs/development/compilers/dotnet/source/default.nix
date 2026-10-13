@@ -12,7 +12,7 @@
   bootstrapSdkFile ? dir + "/bootstrap-sdk.nix",
   bootstrapSdk ? null,
   depsFile ? dir + "/deps.json",
-  pkgsBuildHost,
+  pkgsBuildBuild,
   buildDotnetSdk,
   withBinary ? true,
   combinePackages,
@@ -42,7 +42,7 @@ let
     artifactsHash
     ;
 
-  artifacts = stdenvNoCC.mkDerivation {
+  artifacts = pkgsBuildBuild.stdenvNoCC.mkDerivation {
     name = lib.nameFromURL artifactsUrl ".tar.gz";
 
     src = fetchurl {
@@ -65,7 +65,7 @@ let
           releaseManifestFile
           tarballHash
           ;
-        bootstrapSdk = bootstrapSdk.unwrapped;
+        inherit bootstrapSdk;
         hasRuntime = false;
       }
     else
@@ -75,11 +75,13 @@ let
           tarballHash
           depsFile
           ;
-        bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
-          passthru = old.passthru or { } // {
-            inherit artifacts;
-          };
-        });
+        bootstrapSdk =
+          (pkgsBuildBuild.dotnetCorePackages.buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs
+            (old: {
+              passthru = old.passthru or { } // {
+                inherit artifacts;
+              };
+            });
       };
 
   fallbackSdk = binary.${"sdk_${suffix.sdk}"};

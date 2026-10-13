@@ -19,7 +19,9 @@
             privateNetwork = true;
             hostAddress = "192.168.${subnet}.1";
             localAddress = "192.168.${subnet}.2";
-            config = { };
+            config = {
+              nix.enable = false; # disabled by default on the test's host. See all-tests.nix / tag(no-nix-by-default)
+            };
           };
 
         in

@@ -19,7 +19,11 @@ let
         nodes.machine =
           { pkgs, ... }:
           {
-            environment.systemPackages = [ (pkgs.pg-dump-anon.override { postgresql = package; }) ];
+            users.users.anon_dumper = {
+              isSystemUser = true;
+              group = "anon_dumper";
+            };
+            users.groups.anon_dumper = { };
             services.postgresql = {
               inherit package;
               enable = true;
@@ -44,6 +48,13 @@ let
                     insert into player(id,name,points) values (2,'Bar',42);
                     security label for anon on column player.name is 'MASKED WITH FUNCTION anon.fake_last_name()';
                     security label for anon on column player.points is 'MASKED WITH VALUE NULL';
+                    create role anon_dumper login;
+                    alter role anon_dumper set anon.transparent_dynamic_masking = true;
+                    security label for anon on role anon_dumper is 'MASKED';
+                    grant pg_read_all_data to anon_dumper;
+                    create role player_owner;
+                    alter table player owner to player_owner;
+                    grant select on table anon.last_name to player_owner;
                   ''}"
               )
 
@@ -54,20 +65,18 @@ let
 
           def check_anonymized_row(row, id, original_name):
               t.assertEqual(row[0], id)
-              t.assertNotEqual(row[1], original_name)
-              t.assertFalse(bool(row[2]))
+              t.assertNotIn(row[1], (original_name, "", "\\N"))
+              t.assertIn(row[2], ("", "\\N"))
 
           def find_xsv_in_dump(dump, sep=','):
               """
-              Expecting to find a CSV (for pg_dump_anon) or TSV (for pg_dump) structure, looking like
+              Expecting to find pg_dump's COPY block, looking like
 
                   COPY public.player ...
-                  1,Shields,
-                  2,Salazar,
+                  <tab-separated rows, NULL written as \\N>
                   \\.
 
-              in the given dump (the commas are tabs in case of pg_dump).
-                    Extract the CSV lines and split by `sep`.
+              in the given dump. Extract the data lines and split by `sep`.
               """
 
               try:
@@ -100,12 +109,13 @@ let
                   sep='\t'
               ))
               check_anonymized_rows(find_xsv_in_dump(
-                  machine.succeed("sudo -u postgres pg_dump_anon -U postgres -h /run/postgresql -d demo"),
-                  sep=','
+                  machine.succeed("sudo -u anon_dumper pg_dump demo --no-security-labels --extension plpgsql"),
+                  sep='\t'
               ))
 
           with subtest("Anonymize"):
-              machine.succeed("sudo -u postgres psql -d demo --command 'select anon.anonymize_database();'")
+              # anon.nosuperuser forbids masking as a superuser
+              machine.succeed("sudo -u postgres psql -d demo --command 'set role player_owner; select anon.anonymize_database();'")
               check_anonymized_rows(get_player_table_contents())
         '';
       }

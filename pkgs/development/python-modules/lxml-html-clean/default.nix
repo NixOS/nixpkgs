@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "lxml-html-clean";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fedora-python";
     repo = "lxml_html_clean";
     tag = version;
-    hash = "sha256-pMZgECts7QqddI76EHnEDhQ0IoR/yioQXTqcg1npCOA=";
+    hash = "sha256-mToWK2Cc2cfBmEqcL5z61WydQUb78TWZDGGLR9kNliA=";
   };
 
   build-system = [ setuptools ];

@@ -10,17 +10,19 @@
   callPackage,
   jre,
   testers,
-  scala-cli,
+  runCommand,
+  zsh,
+  fish,
 }:
 
 let
   pname = "scala-cli";
   sources = lib.importJSON ./sources.json;
-  inherit (sources) version assets;
+  inherit (sources) repo version assets;
 
   platforms = builtins.attrNames assets;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
   nativeBuildInputs = [
     installShellFiles
@@ -43,8 +45,8 @@ stdenv.mkDerivation {
           or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
     in
     fetchurl {
-      url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
-      sha256 = asset.sha256;
+      url = "https://github.com/${repo}/releases/download/v${version}/${asset.asset}";
+      inherit (asset) hash;
     };
   unpackPhase = ''
     runHook preUnpack
@@ -77,27 +79,59 @@ stdenv.mkDerivation {
 
       installShellCompletion --cmd scala-cli \
         --bash <(scala-cli completions bash) \
-        --zsh <(scala-cli completions zsh)
+        --zsh <(scala-cli completions zsh) \
+        --fish <(scala-cli completions fish)
     '';
 
   meta = {
     homepage = "https://scala-cli.virtuslab.org";
+    changelog = "https://github.com/${repo}/releases/tag/v${version}";
     downloadPage = "https://github.com/VirtusLab/scala-cli/releases/v${version}";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     mainProgram = "scala-cli";
     maintainers = with lib.maintainers; [
-      kubukoz
       agilesteel
+      kubukoz
     ];
     inherit platforms;
   };
 
-  passthru.updateScript = callPackage ./update.nix { } { inherit platforms pname version; };
+  passthru = {
+    updateScript = {
+      command = lib.getExe (callPackage ./update.nix { });
+      supportedFeatures = [ "commit" ];
+    };
 
-  passthru.tests.version = testers.testVersion {
-    package = scala-cli;
-    command = "scala-cli version --offline";
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "scala-cli version --offline";
+    };
+
+    tests.completions =
+      runCommand "${pname}-completions"
+        {
+          nativeBuildInputs = [
+            zsh
+            fish
+          ];
+        }
+        ''
+          share=${finalAttrs.finalPackage}/share
+
+          bash -n "$share/bash-completion/completions/scala-cli.bash"
+          zsh -n "$share/zsh/site-functions/_scala-cli"
+          fish -n "$share/fish/vendor_completions.d/scala-cli.fish"
+
+          # postFixup generates these by running the binary, which puts $0 in the
+          # output; without the PATH dance there, these would name a store path.
+          if grep -r /nix/store "$share"; then
+            echo "the completions above name a store path instead of scala-cli" >&2
+            exit 1
+          fi
+
+          touch $out
+        '';
   };
-}
+})

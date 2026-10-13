@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.7.0";
 
   src =
-    with stdenv;
+    with stdenv.hostPlatform;
     fetchurl (
       if isx86_64 && isLinux then
         {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
         throw "only linux and mac x86_64 are currently supported"
     );
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     install -m755 -D bin/NuSMV $out/bin/NuSMV
@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ mgttlinger ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
   };
 })

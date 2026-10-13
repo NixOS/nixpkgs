@@ -156,7 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
       buildInputs = [
         blas # needed here because -lblas is added to RUSTFLAGS
       ];
-      strictDeps = true;
 
       cargoHash = "sha256-GC0BHLWRKw6ThQiIfFQoOcGq9Xm0I9rt8uhwyalCa2I=";
 

@@ -1,34 +1,117 @@
 {
   callPackage,
+  lib,
   makeFontsConf,
   buildFHSEnv,
+  stdenv,
   tiling_wm ? false,
 }:
 
 let
   mkStudio =
     opts:
-    callPackage (import ./common.nix opts) {
-      fontsConf = makeFontsConf {
-        fontDirectories = [ ];
+    let
+      inherit (opts) channel pname;
+      meta = {
+        description = "Official IDE for Android (${channel} channel)";
+        longDescription = ''
+          Android Studio is the official IDE for Android app development, based on
+          IntelliJ IDEA.
+        '';
+        homepage =
+          if channel == "stable" then
+            "https://developer.android.com/studio/index.html"
+          else
+            "https://developer.android.com/studio/preview/index.html";
+        license = with lib.licenses; [
+          asl20
+          unfree
+        ]; # The code is under Apache-2.0, but:
+        # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
+        # "Android Studio includes proprietary code subject to separate license,
+        # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
+        # IDEA Community Edition (www.jetbrains.com/idea)."
+        # Also: For actual development the Android SDK is required and the Google
+        # binaries are also distributed as proprietary software (unlike the
+        # source-code itself).
+        platforms = [
+          "x86_64-linux"
+          "aarch64-darwin"
+        ];
+        maintainers =
+          rec {
+            stable = with lib.maintainers; [
+              alapshin
+            ];
+            beta = stable;
+            canary = stable;
+            dev = stable;
+          }
+          ."${channel}";
+        teams =
+          rec {
+            stable = with lib.teams; [
+              android
+            ];
+            beta = stable;
+            canary = stable;
+            dev = stable;
+          }
+          ."${channel}";
+        mainProgram = pname;
+        sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
-      inherit buildFHSEnv;
-      inherit tiling_wm;
-    };
+      builder = if stdenv.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix;
+    in
+    callPackage (import builder (opts // { inherit meta; })) (
+      if stdenv.hostPlatform.isDarwin then
+        { }
+      else
+        {
+          inherit buildFHSEnv tiling_wm;
+          fontsConf = makeFontsConf {
+            fontDirectories = [ ];
+          };
+        }
+    );
   stableVersion = {
-    version = "2025.3.3.7"; # "Android Studio Panda 3 | 2025.3.3 Patch 1"
-    sha256Hash = "sha256-FTAJ9rZPwLgIA/uPKl4d9haBxLL4O2Z+H8sY6RqaeOA=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.3.7/android-studio-panda3-patch1-linux.tar.gz";
+    version = "2026.2.1.8"; # "Android Studio Rabbit 1 | 2026.2.1"
+    sources = {
+      x86_64-linux = {
+        sha256Hash = "sha256-+HdcZ8+JnZEzcSotfuPvcjHgf7FtvgVExH5fW6vVkxs=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.1.8/android-studio-rabbit1-linux.tar.gz";
+      };
+      aarch64-darwin = {
+        sha256Hash = "sha256-FtSg+KUkE7UYafwY1b3N+c7NOGFc17t88U1RuZ0v71Q=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.1.8/android-studio-rabbit1-mac_arm.dmg";
+      };
+    };
   };
   betaVersion = {
-    version = "2025.3.4.5"; # "Android Studio Panda 4 | 2025.3.4 RC 1"
-    sha256Hash = "sha256-NiNq1j+rzPU4KsLKYymfi5/Vx2Bn3hK8I3OVIUFloX0=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.5/android-studio-panda4-rc1-linux.tar.gz";
+    version = "2026.2.1.7"; # "Android Studio Rabbit 1 | 2026.2.1 RC 2"
+    sources = {
+      x86_64-linux = {
+        sha256Hash = "sha256-wI2hdMhYl2zPg8SU3+D413ygFqrBQfYMb1yjOsDQ1aA=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.1.7/android-studio-rabbit1-rc2-linux.tar.gz";
+      };
+      aarch64-darwin = {
+        sha256Hash = "sha256-j7ccJ6D+uWOEqpUVEuulv1jjnBqOj2OS/SAhjyVRdso=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.1.7/android-studio-rabbit1-rc2-mac_arm.dmg";
+      };
+    };
   };
   latestVersion = {
-    version = "2025.3.4.4"; # "Android Studio Panda 4 | 2025.3.4 Canary 4"
-    sha256Hash = "sha256-sPGJuOm5T7EZV5hhOJsZc7P8CTXyv9A6k82hM1GZGpY=";
-    url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2025.3.4.4/android-studio-panda4-canary4-linux.tar.gz";
+    version = "2026.2.2.3"; # "Android Studio Rabbit 2 | 2026.2.2 Canary 3"
+    sources = {
+      x86_64-linux = {
+        sha256Hash = "sha256-I1BUkbgkEQjoxzhRBUeZvz+gG4EMxgr4FZKJy7m062E=";
+        url = "https://edgedl.me.gvt1.com/android/studio/ide-zips/2026.2.2.3/android-studio-rabbit2-canary3-linux.tar.gz";
+      };
+      aarch64-darwin = {
+        sha256Hash = "sha256-Z6mDdui46xm3K1Tr1mogfU28VCh6T1AvJn9xVVEKc8E=";
+        url = "https://edgedl.me.gvt1.com/android/studio/install/2026.2.2.3/android-studio-rabbit2-canary3-mac_arm.dmg";
+      };
+    };
   };
 in
 {

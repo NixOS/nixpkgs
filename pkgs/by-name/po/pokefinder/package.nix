@@ -13,19 +13,45 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pokefinder";
-  version = "4.3.1";
+  version = "4.3.2";
 
   src = fetchFromGitHub {
     owner = "Admiral-Fish";
     repo = "PokeFinder";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-tItPvA0f2HnY7SUSnb7A5jGwbRs7eQoS4vibBomZ9pw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-viObYX9W1bUzwGyf7rI1gQeB9OHlLfj5Uny0js/1f6M=";
     fetchSubmodules = true;
   };
 
   patches = [
     ./set-desktop-file-name.patch
   ];
+
+  postPatch = ''
+        substituteInPlace CMakeLists.txt \
+          --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64")' ""
+        substituteInPlace Core/CMakeLists.txt \
+          --replace-fail 'if (APPLE)' 'if (FALSE)'
+        substituteInPlace Core/RNG/SHA1.cpp \
+          --replace-fail '#include "SHA1.hpp"' '#include "SHA1.hpp"
+    #include <algorithm>'
+
+        mkdir -p Core/Resources/compression
+        touch Core/Resources/compression/__init__.py
+        cat <<EOF > Core/Resources/compression/zstd.py
+    import zstandard as zstd
+
+    def compress(data, level=3):
+        cctx = zstd.ZstdCompressor(level=level)
+        return cctx.compress(data)
+
+    def decompress(data):
+        dctx = zstd.ZstdDecompressor()
+        return dctx.decompress(data)
+    EOF
+  '';
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch "-flax-vector-conversions";
 
   installPhase = ''
     runHook preInstall

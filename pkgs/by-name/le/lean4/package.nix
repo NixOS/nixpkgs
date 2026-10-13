@@ -2,35 +2,36 @@
   lib,
   stdenv,
   cmake,
+  cctools,
   fetchFromGitHub,
-  git,
+  fetchpatch,
+  gitMinimal,
   gmp,
   cadical,
+  leangz,
+  makeWrapper,
+  openssl,
   pkg-config,
   libuv,
   enableMimalloc ? true,
   perl,
-  testers,
+  versionCheckHook,
 }:
-
+let
+  cadical' = cadical.override { version = "2.1.3"; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lean4";
-  version = "4.29.1";
+  version = "4.34.1";
 
-  # Using a vendored version rather than nixpkgs' version to match the exact version required by
-  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
-  mimalloc-src = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    tag = "v2.2.3";
-    hash = "sha256-B0gngv16WFLBtrtG5NqA2m5e95bYVcQraeITcOX9A74=";
-  };
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pdhRPjSic2H8zPJXLmyfN8umKDoafjmSo4OQSRxIbyE=";
+    hash = "sha256-JO1pCqWeotC4zjiIQZccEPXfVHnuDQC0DugyuJvIMRs=";
   };
 
   postPatch =
@@ -38,56 +39,71 @@ stdenv.mkDerivation (finalAttrs: {
       pattern = "\${LEAN_BINARY_DIR}/../mimalloc/src/mimalloc";
     in
     ''
-      substituteInPlace src/CMakeLists.txt \
-        --replace-fail 'set(GIT_SHA1 "")' 'set(GIT_SHA1 "${finalAttrs.src.tag}")'
-
-      # Remove tests that fails in sandbox.
-      # It expects `sourceRoot` to be a git repository.
-      rm -rf src/lake/examples/git/
+      substituteInPlace \
+        src/CMakeLists.txt \
+        src/runtime/CMakeLists.txt \
+        stage0/src/CMakeLists.txt \
+        stage0/src/runtime/CMakeLists.txt \
+        --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
     ''
-    + (lib.optionalString enableMimalloc ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'MIMALLOC-SRC' '${finalAttrs.mimalloc-src}'
-      for file in stage0/src/CMakeLists.txt stage0/src/runtime/CMakeLists.txt src/CMakeLists.txt src/runtime/CMakeLists.txt; do
-        substituteInPlace "$file" \
-          --replace-fail '${pattern}' '${finalAttrs.mimalloc-src}'
-      done
-    '');
+    # Remove tests that fails in sandbox.
+    # It expects `sourceRoot` to be a git repository.
+    + ''
+      rm -rf src/lake/examples/git/
+    '';
 
   preConfigure = ''
     patchShebangs stage0/src/bin/ src/bin/
   '';
 
   nativeBuildInputs = [
+    cadical'
     cmake
     pkg-config
+    makeWrapper
+    leangz # Provides leantar
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
   ];
 
   buildInputs = [
     gmp
     libuv
-    cadical
+    openssl
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/lean \
+      --prefix PATH : ${cadical'}/bin
+  '';
+
   nativeCheckInputs = [
-    git
+    gitMinimal
     perl
   ];
 
-  patches = [ ./mimalloc.patch ];
+  # Using a vendored version rather than nixpkgs' version to match the exact version required by
+  # Lean.  Apparently, even a slight version change can impact greatly the final performance.
+  mimalloc-src = fetchFromGitHub {
+    owner = "microsoft";
+    repo = "mimalloc";
+    tag = "v3.4.5";
+    hash = "sha256-vNVZw2YsDkf0GcdFTNb/fXMQLQYvoc8P425LupPShpo=";
+  };
 
   cmakeFlags = [
-    "-DUSE_GITHASH=OFF"
-    "-DINSTALL_LICENSE=OFF"
-    "-DUSE_MIMALLOC=${if enableMimalloc then "ON" else "OFF"}"
+    (lib.cmakeBool "USE_GITHASH" false)
+    (lib.cmakeBool "INSTALL_LICENSE" false)
+    (lib.cmakeBool "INSTALL_CADICAL" false)
+    (lib.cmakeBool "USE_MIMALLOC" enableMimalloc)
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MIMALLOC" finalAttrs.mimalloc-src.outPath)
   ];
 
-  passthru.tests = {
-    version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      version = "v${finalAttrs.version}";
-    };
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Automatic and interactive theorem prover";
@@ -99,6 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       danielbritten
       jthulhu
       nadja-y
+      niklashh
     ];
     mainProgram = "lean";
   };

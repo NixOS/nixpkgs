@@ -1,5 +1,6 @@
 {
   aiohttp,
+  awesomeversion,
   buildPythonPackage,
   fetchFromGitLab,
   hatchling,
@@ -12,20 +13,21 @@
 
 buildPythonPackage rec {
   pname = "lunatone-rest-api-client";
-  version = "0.7.2";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "lunatone-public";
     repo = "lunatone-rest-api-client";
     tag = "v${version}";
-    hash = "sha256-x9L65L5wEbJMOGlNBoQfPjS8/Ijr+fzaISoDD+cMWzU=";
+    hash = "sha256-3yb1D3MTYKyL2EjzRqKTNhVCaYqzkxrj9Lfy9FFTdaw=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
+    awesomeversion
     pydantic
   ]
   ++ aiohttp.optional-dependencies.speedups;

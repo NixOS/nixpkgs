@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
 
   buildPythonApplication,
   colorama,
@@ -10,6 +11,7 @@
   ptpython,
   pydantic,
   python,
+  ovmfvartool,
   remote-pdb,
   ruff,
   ty,
@@ -17,8 +19,6 @@
   netpbm,
   vhost-device-vsock,
   nixosTests,
-  qemu_pkg ? qemu_test,
-  qemu_test,
   setuptools,
   socat,
   systemd,
@@ -48,6 +48,7 @@ buildPythonApplication {
     junit-xml
     ptpython
     pydantic
+    ovmfvartool
     remote-pdb
   ]
   ++ extraPythonPackages python.pkgs;
@@ -55,10 +56,11 @@ buildPythonApplication {
   propagatedBuildInputs = [
     coreutils
     netpbm
-    qemu_pkg
     socat
     util-linux
     vde2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     vhost-device-vsock
   ]
   ++ lib.optionals enableNspawn [
@@ -87,4 +89,6 @@ buildPythonApplication {
     echo -e "\x1b[32m## run ruff format\x1b[0m"
     ruff format --check --diff .
   '';
+
+  meta.license = lib.licenses.mit;
 }

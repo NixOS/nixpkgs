@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K3VSFaqcZEomF7kROJz+AwxdW1MmxxEFDaRnWnzcw54=";
   };
 
+  patches = [
+    # Fix missing `UINT64_C` when building with GCC on Linux
+    ./0001-fix-build-with-gcc.patch
+  ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 

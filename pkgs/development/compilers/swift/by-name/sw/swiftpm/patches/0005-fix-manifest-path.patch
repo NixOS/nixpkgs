@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Sat, 13 Dec 2025 22:58:33 -0500
+Subject: [PATCH 05/11] fix-manifest-path
+
+---
+ Sources/PackageModel/UserToolchain.swift | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/Sources/PackageModel/UserToolchain.swift b/Sources/PackageModel/UserToolchain.swift
+index 7f21304c6..39d7333c5 100644
+--- a/Sources/PackageModel/UserToolchain.swift
++++ b/Sources/PackageModel/UserToolchain.swift
+@@ -956,6 +956,14 @@ public final class UserToolchain: Toolchain {
+             }
+         }
+ 
++        // The manifest and plugin paths should be in the store if they’re nowhere else.
++        if let storeLibraryPath = try? Basics.AbsolutePath(validating: "@out@/lib/swift/pm") {
++            return .init(
++                manifestLibraryPath: storeLibraryPath.appending("ManifestAPI"),
++                pluginLibraryPath: storeLibraryPath.appending("PluginAPI")
++            )
++        }
++
+         // we are using a SwiftPM outside a toolchain, use the compiler path to compute the location
+         return .init(swiftCompilerPath: swiftCompilerPath)
+     }
+-- 
+2.54.0
+

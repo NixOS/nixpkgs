@@ -1,11 +1,8 @@
-{ pkgs, lib, ... }:
-{
+_: {
   name = "nginx-njs";
 
   nodes.machine =
     {
-      config,
-      lib,
       pkgs,
       ...
     }:
@@ -21,15 +18,24 @@
             export default {hello};
           ''};
         '';
-        virtualHosts."localhost".locations."/".extraConfig = ''
-          js_content http.hello;
-        '';
+        virtualHosts."localhost".locations = {
+          "/njs".extraConfig = ''
+            js_content http.hello;
+          '';
+          "/qjs".extraConfig = ''
+            js_engine qjs;
+            js_content http.hello;
+          '';
+        };
       };
     };
   testScript = ''
     machine.wait_for_unit("nginx")
 
-    response = machine.wait_until_succeeds("curl -fvvv -s http://127.0.0.1/")
+    response = machine.wait_until_succeeds("curl -fvvv -s http://127.0.0.1/njs")
+    assert "Hello world!" == response, f"Expected 'Hello world!', got '{response}'"
+
+    response = machine.wait_until_succeeds("curl -fvvv -s http://127.0.0.1/qjs")
     assert "Hello world!" == response, f"Expected 'Hello world!', got '{response}'"
   '';
 }

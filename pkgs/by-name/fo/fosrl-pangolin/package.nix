@@ -5,15 +5,23 @@
   buildNpmPackage,
   makeWrapper,
   formats,
-  inter,
   databaseType ? "sqlite",
+  edition ? "oss",
   environmentVariables ? { },
   nixosTests,
+  nodejs_22,
+  nix-update-script,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
   "sqlite"
   "pg"
+];
+
+assert lib.assertOneOf "edition" edition [
+  "enterprise"
+  "oss"
+  "saas"
 ];
 
 let
@@ -29,46 +37,44 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.17.0";
+  version = "1.24.0";
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-E0GfYznHj4CKsRWQm6zHTAJ8hJw9ieFoKIOT9tcumYQ=";
+    hash = "sha256-EYyqT7yDz1KpkCyb1niOZcSNxkRMJ6LXjuAcXPhemgM=";
   };
 
-  npmDepsHash = "sha256-DyPfylne9Ku7sEUNN0LLlN0EOnCjcklsh+F6YP+rXv4=";
+  nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-nWlIy+1m6IJuGaXV3U1ampTL9Xvxj7jONuJ0ecGAU3g=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # dependency resolution is borked
-  npmFlags = [ "--legacy-peer-deps" ];
-
-  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
-  # Based on pkgs.nextjs-ollama-llm-ui.
-  postPatch = ''
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Inter } from \"next/font/google\"" \
-      "localFont from \"next/font/local\""
-
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "const inter = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
-      "const inter = localFont({ src: './Inter.ttf' });"
-
-    substituteInPlace server/lib/consts.ts --replace-fail \
-      'export const APP_VERSION = "1.17.0";' \
-      'export const APP_VERSION = "${finalAttrs.version}";'
-
-    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+  # remove the proprietary code
+  postUnpack = lib.optionalString (edition == "oss") ''
+    rm -rf server/private
   '';
+
+  # upstream inconsistently updates this
+  # so leaving this here in case it's needed
+  # postPatch = ''
+  #   substituteInPlace server/lib/consts.ts --replace-fail \
+  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+  #     'export const APP_VERSION = "${finalAttrs.version}";'
+  # '';
 
   preBuild = ''
     npm run set:${db false}
-    npm run set:oss
+    npm run set:${edition}
     npm run db:generate
   '';
 
@@ -165,13 +171,14 @@ buildNpmPackage (finalAttrs: {
   passthru = {
     inherit databaseType;
     tests = { inherit (nixosTests) pangolin; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Tunneled reverse proxy server with identity and access control";
     homepage = "https://github.com/fosrl/pangolin";
     changelog = "https://github.com/fosrl/pangolin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = [ lib.licenses.agpl3Only ] ++ lib.optional (edition != "oss") lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jackr
       water-sucks

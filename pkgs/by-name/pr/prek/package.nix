@@ -4,34 +4,26 @@
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  git,
-  uv,
-  python312,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.3.9";
+  version = "0.5.5";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gfWaJxcT44+yEkZtDSQwKP1oILMUsF4apYeety+XESM=";
+    hash = "sha256-x97puc3c46mAuXHqywmGARqbA5BF8jO14YEH1Ij/aCo=";
   };
 
-  cargoHash = "sha256-dKSsH4IUWLdlthvAmS+MmuAVicCCKefy1D4YleRO0fI=";
+  cargoHash = "sha256-IPeG4sgH9sOczC6gsuDWHqfLPhdYX0Hrzp5QyUbLW4I=";
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  nativeCheckInputs = [
-    git
-    python312
-    uv
   ];
 
   # many tests just do not work, as they require network access
@@ -40,9 +32,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd prek \
-      --bash <(COMPLETE=bash $out/bin/prek) \
-      --fish <(COMPLETE=fish $out/bin/prek) \
-      --zsh <(COMPLETE=zsh $out/bin/prek)
+      --bash <($out/bin/prek util generate-shell-completion bash) \
+      --fish <($out/bin/prek util generate-shell-completion fish) \
+      --nushell <($out/bin/prek util generate-shell-completion nushell) \
+      --zsh <($out/bin/prek util generate-shell-completion zsh)
   '';
 
   doInstallCheck = true;
@@ -55,7 +48,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Better `pre-commit`, re-engineered in Rust ";
     mainProgram = "prek";
     changelog = "https://github.com/j178/prek/blob/${finalAttrs.src.tag}/CHANGELOG.md";
-    license = [ lib.licenses.mit ];
-    maintainers = [ lib.maintainers.knl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.thunze ];
   };
 })

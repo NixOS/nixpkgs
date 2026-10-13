@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Run a command inside of a new PAM user session";
-    homepage = "https://sr.ht/~kennylevinsen/autologin";
+    homepage = "https://git.sr.ht/~kennylevinsen/autologin";
     changelog = "https://git.sr.ht/~kennylevinsen/autologin/refs/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

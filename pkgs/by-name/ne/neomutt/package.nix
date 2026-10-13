@@ -17,7 +17,7 @@
   libxml2,
   notmuch,
   openssl,
-  lua,
+  lua5_2_compat,
   lmdb,
   libxslt,
   docbook_xsl,
@@ -36,6 +36,9 @@
   withContrib ? true,
   withNotmuch ? true,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 assert lib.warnIf enableMixmaster
   "Support for mixmaster has been removed from neomutt since the 20241002 release"
@@ -43,13 +46,13 @@ assert lib.warnIf enableMixmaster
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20260105";
+  version = "20260616";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-rdnk1wESnnoaxctkR6WvWpq+DUg86PbH9f1EtpSL5uk=";
+    hash = "sha256-MRFJ6y2XC3I0/IIWW/J09tW/IZpLcNy7hki0rqOB9RQ=";
   };
 
   buildInputs = [

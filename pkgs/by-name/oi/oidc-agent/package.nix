@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "oidc-agent";
-  version = "5.3.5";
+  version = "5.3.8";
 
   src = fetchFromGitHub {
     owner = "indigo-dc";
     repo = "oidc-agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BGslxBQWXS65wNs6HEbH7yqxt0+3isAiP51wrGhqKLk=";
+    hash = "sha256-n88PQgFqsYiFwngaz1LGicVszoiepafshZa5/DiNw3I=";
   };
 
   nativeBuildInputs = [

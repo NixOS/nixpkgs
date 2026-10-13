@@ -2,38 +2,46 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   cmake,
   libuuid,
+  gettext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "biblesync";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "karlkleinpaste";
     repo = "biblesync";
     tag = finalAttrs.version;
-    sha256 = "0prmd12jq2cjdhsph5v89y38j7hhd51dr3r1hivgkhczr3m5hf4s";
+    sha256 = "sha256-8CPP0ndrnJrGhNR7Y3lX3td5jXNE8VuwEiD8C2D4K5I=";
   };
 
-  patches = [
-    # Fix cmake-4 support
-    (fetchpatch {
-      name = "cmake-4.patch";
-      url = "https://github.com/karlkleinpaste/biblesync/commit/4b00f9fd3d0c858947eee18206ef44f9f6bd2283.patch?full_index=1";
-      hash = "sha256-CVYhYBDneLN3Ogvye01EQCc9zxjSwaKBzk1fBaKINug=";
-    })
-  ];
+  # `bind` is pulled from std::bind because of `using namespace std;`, so we
+  # pin that here.
+  # On Darwin, uuid/uuid.h and uuid_generate() are provided by the system
+  # (libSystem). The bundled FindUUID.cmake would otherwise locate uuid/uuid.h
+  # in the Apple SDK and add the SDK's include root as a plain -I path, which
+  # breaks libc++'s header search order. Skip the lookup entirely.
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/biblesync.cc \
+      --replace-fail "if (bind(server_fd" "if (::bind(server_fd"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'FIND_PACKAGE(UUID REQUIRED)' "" \
+      --replace-fail 'INCLUDE_DIRECTORIES("''${UUID_INCLUDE_DIRS}")' "" \
+      --replace-fail 'TARGET_LINK_LIBRARIES(biblesync "''${UUID_LIBRARIES}")' ""
+  '';
 
   nativeBuildInputs = [
     pkg-config
     cmake
   ];
-  buildInputs = [ libuuid ];
+  buildInputs =
+    lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
+    ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isDarwin) gettext;
 
   meta = {
     homepage = "https://wiki.crosswire.org/BibleSync";
@@ -49,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.publicDomain;
     maintainers = [ ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 })

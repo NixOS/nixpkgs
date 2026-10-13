@@ -6,6 +6,8 @@
   libgit2,
   zlib,
   cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "AmrDeveloper";
     repo = "GQL";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-fTmCL8b9Yp0DwgatGd7ODpq3z9b3Rqg/skqvjQkZvOU=";
   };
 
@@ -31,12 +33,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "SQL like query language to perform queries on .git files";
     homepage = "https://github.com/AmrDeveloper/GQL";
-    changelog = "https://github.com/AmrDeveloper/GQL/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/AmrDeveloper/GQL/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "gitql";
   };
 })

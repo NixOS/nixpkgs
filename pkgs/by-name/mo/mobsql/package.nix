@@ -40,7 +40,7 @@ buildGoModule (finalAttrs: {
       source GTFS feed archives into a SQLite database.
       Its internal SQLite schema mirrors GTFS's spec but adds a feed_id field
       to each table (thus allowing multiple feeds to be loaded
-      to the database simulatenously).
+      to the database simultaneously).
     '';
     homepage = "https://git.sr.ht/~mil/mobsql";
     license = lib.licenses.gpl3Plus;

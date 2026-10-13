@@ -3,8 +3,6 @@
   stdenv,
   fetchurl,
   pkg-config,
-  autoconf,
-  automake116x,
   zlib,
   shadow,
   capabilitiesSupport ? stdenv.hostPlatform.isLinux,
@@ -43,30 +41,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "util-linux" + lib.optionalString isMinimal "-minimal";
-  version = "2.41.3";
+  version = "2.42.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/util-linux-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MzDYc/D861VguJp9wU5PMoi72IDpaQPtm1DsK1eZ5Ys=";
+    hash = "sha256-Zqx8DnJSeOsrA54xBPLJERk0HZQbQbrHooXGlflAvVc=";
   };
 
+  # Note: fetchpatch/fetchpatch2 cause infinite recursion with util-linuxMinimal.
+  # Prefer fetchurl for the below instead of vendoring patches; it will work.
   patches = [
     # Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
     # which isn't valid on NixOS (and a compatibility link on most other modern
     # distros anyway).
     ./rtcwake-search-PATH-for-shutdown.patch
 
-    # pam_lastlog2: link with libpam
-    # see https://github.com/NixOS/nixpkgs/issues/493934
-    ./pam_lastlog2-add-lpam-to-Makemodule.am.patch
+    # Build fix. Can be removed in 2.42.4 (or newer).
+    # https://github.com/util-linux/util-linux/commit/a323dddbcd1ed05a10e7e870b3e1a48b4ed44a43
+    ./libmount-build-fix.patch
 
-    # bits: only build when cpu_set_t is available
-    # Otherwise, the build fails on macOS
-    (fetchurl {
-      name = "bits-only-build-when-cpu_set_t-is-available.patch";
-      url = "https://lore.kernel.org/util-linux/20250501075806.88759-1-hi@alyssa.is/raw";
-      hash = "sha256-G7Cdv8636wJEjgt9am7PaDI8bpSF8sO9bFWEIiAL25A=";
-    })
+    # Fixes incomplete security fix in 2.42.3:
+    # https://github.com/util-linux/util-linux/commit/286dd3ff41526b582ef48830de239dffbaa61f90
+    ./CVE-2026-78408.patch
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -116,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   # root...
   configureFlags = [
     "--localstatedir=/var"
+    "--sysconfdir=/etc"
     "--disable-use-tty-group"
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid"
@@ -161,8 +158,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake116x
     installShellFiles
     pkg-config
   ]
@@ -179,6 +174,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals capabilitiesSupport [ libcap_ng ]
   ++ lib.optionals ncursesSupport [ ncurses ]
   ++ lib.optionals systemdSupport [ systemdLibs ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -221,13 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # "For development purpose only. Don't execute on production system!"
 
   passthru = {
-    updateScript = gitUpdater {
-      # No nicer place to find latest release.
-      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
-      rev-prefix = "v";
-      ignoredVersions = "(-rc).*";
-    };
-
     # encode upstream assumption to be used in man-db
     # https://github.com/util-linux/util-linux/commit/8886d84e25a457702b45194d69a47313f76dc6bc
     hasCol = stdenv.hostPlatform.libc == "glibc";
@@ -235,22 +225,37 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit (nixosTests) pam-lastlog;
     };
+  }
+  // lib.optionalAttrs (!isMinimal) {
+    updateScript = gitUpdater {
+      # No nicer place to find latest release.
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git";
+      rev-prefix = "v";
+      ignoredVersions = "(-rc|-start|-devel).*";
+    };
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
     description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor finalAttrs.version}/v${finalAttrs.version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
-    license = with lib.licenses; [
-      gpl2Only
-      gpl2Plus
-      gpl3Plus
-      lgpl21Plus
-      bsd3
-      bsdOriginalUC
-      publicDomain
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        gpl1Plus
+        gpl2Only
+        gpl2Plus
+        gpl3Plus
+        lgpl21Plus
+        mit
+        bsd2
+        bsd3
+        eupl12
+        publicDomain
+      ];
     maintainers = with lib.maintainers; [ numinit ];
     teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;

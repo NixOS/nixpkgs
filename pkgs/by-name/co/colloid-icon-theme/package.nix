@@ -44,13 +44,13 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-02-09";
+    version = "2026-08-10";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
       tag = version;
-      hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
+      hash = "sha256-JNnTcHIvRf9Ymox2POjatY2gYvkPD6+nd/cN48tC6X4=";
     };
 
     nativeBuildInputs = [
@@ -84,6 +84,11 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
       jdupes --quiet --link-soft --recurse $out/share
 
       runHook postInstall
+    '';
+
+    # Drop dangling symlinks from the upstream icon set.
+    postFixup = ''
+      find $out/share/icons -xtype l -delete
     '';
 
     passthru.updateScript = gitUpdater { };

@@ -20,6 +20,7 @@
   ];
 
   testScript = ''
+    import json
     from lxml import etree
 
     machine.wait_for_unit("multi-user.target")
@@ -29,7 +30,7 @@
 
     # enable Title-Wrap extension
     tree = etree.HTML(response)
-    csrf = tree.xpath("/html/body/header/nav/form/input/@value")[0]
+    csrf = json.loads(tree.xpath('//script[@id="jsonVars"]/text()')[0])["context"]["csrf"]
     machine.succeed(f"curl --fail-with-body --silent 'http://localhost:80/i/?c=extension&a=enable&e=Title-Wrap' -d '_csrf={csrf}'")
     # verify that the Title-Wrap css is accessible.
     machine.succeed("curl --fail-with-body --silent 'http://localhost:80/ext.php?1=&f=xExtension-TitleWrap/static/title_wrap.css'")

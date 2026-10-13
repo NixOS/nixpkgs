@@ -1,14 +1,20 @@
 {
   fetchFromGitHub,
+  fetchPnpmDeps,
   lib,
+  fetchurl,
   makeBinaryWrapper,
   nodejs,
+  pnpmConfigHook,
+  pnpm_11,
   stdenv,
   versionCheckHook,
   yarn-berry,
   plugins ? [ ],
 }:
 let
+  pnpm = pnpm_11;
+
   ## Blame NodeJS
   exportRelativePathOf =
     let
@@ -68,23 +74,83 @@ let
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
+
+  yarnHash = "sha256-La05mhMuChvjSPFjOXPJqCaXx7BvE6Ixdjc9OHIP6y0=";
+
+  prettier-oxc-wasm-parser = stdenv.mkDerivation (finalAttrs: {
+    pname = "binding-wasm32-wasi";
+    version = "0.139.0";
+
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@oxc-parser/${finalAttrs.pname}/-/${finalAttrs.pname}-${finalAttrs.version}.tgz";
+      sha256 = "sha256-mQYWVK52hHi3gsXKpPxK7liQEg16wxKjY2hjkX9NPZE=";
+    };
+
+    nativeBuildInputs = [
+      nodejs
+      pnpmConfigHook
+      pnpm
+    ];
+
+    patches = [
+      ./pnpm-lock_prettier-oxc-wasm-parser.patch
+    ];
+
+    pnpmDeps = fetchPnpmDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        patches
+        ;
+
+      inherit pnpm;
+      fetcherVersion = 4;
+      hash = "sha256-Vv6iiYCr/DS6sdQXaykeoPRbbqOVaVq2l8PK72mFjvo=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir $out
+      cp -r . $out/
+
+      runHook postInstall
+    '';
+
+    doCheck = false;
+    doInstallCheck = false;
+
+    meta = {
+      description = "Oxc Parser Node API";
+      homepage = "https://oxc.rs/docs/guide/usage/parser";
+      license = lib.licenses.mit;
+    };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.6.2";
+  version = "3.9.10";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-uMLRFBZP7/42R6nReONcb9/kVGCn3yGHLcLFajMZLmQ=";
+    hash = "sha256-Pass0h0ghhULy4eMuILfBlRnQsOKIdhBrVrCDPthKek=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
+
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-dpxzbtWyXsHS6tH6DJ9OqSsUSc+YqYeAPJYb95Qy5wQ=";
+    hash = yarnHash;
+
   };
 
   nativeBuildInputs = [
@@ -96,7 +162,20 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    yarn config unset yarnPath
     yarn install --immutable
+
+    mkdir -p .tmp/prettier-oxc-wasm-parser/node_modules/@oxc-parser
+
+    cp -r ${prettier-oxc-wasm-parser.out} .tmp/prettier-oxc-wasm-parser/node_modules/@oxc-parser/binding-wasm32-wasi
+
+    find .tmp/prettier-oxc-wasm-parser -type f -exec chmod u+w {} \;
+    find .tmp/prettier-oxc-wasm-parser -type d -exec chmod u+w {} \;
+
+    sed --in-place --expression '/^\s\+const installDirectory = await install(version);$/ {
+      s#await install(version)#new URL("../../../.tmp/prettier-oxc-wasm-parser", import.meta.url)#;
+    }' scripts/build/hacks/build-oxc-wasm-parser.js
+
     yarn build --clean
 
     mkdir -p $out/lib/node_modules

@@ -68,19 +68,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.5.7";
+  version = "1.5.9";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = finalAttrs.version;
-    hash = "sha256-JrkfLwEL7iTL9P/4UDM4hFQtRL1JYH47dgZ1d+Mphqw=";
+    hash = "sha256-qJixjywcmJwq1B8kYTIevBk6MMZ/YgOt92VBPag3kiw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Szy2mSTriMwMViVTbI+0XaizcQBKh1Ncipf84moDREI=";
+    hash = "sha256-b7YwZGsqPT58b8aArZMwJs1r7CRttjvn2wF/+yL6Ytg=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -111,6 +112,10 @@ buildPythonPackage (finalAttrs: {
       sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
     '';
 
+  pythonRemoveDeps = [
+    "build"
+  ];
+
   pythonRelaxDeps = [
     "fastapi"
     "posthog"
@@ -133,7 +138,6 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     bcrypt
-    build
     fastapi
     grpcio
     httpx
@@ -184,7 +188,7 @@ buildPythonPackage (finalAttrs: {
 
   # Disable on aarch64-linux due to broken onnxruntime
   # https://github.com/microsoft/onnxruntime/issues/10038
-  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "chromadb" ];
+  pythonImportsCheck = lib.optionals finalAttrs.finalPackage.doCheck [ "chromadb" ];
 
   # Test collection breaks on aarch64-linux
   doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
@@ -263,6 +267,11 @@ buildPythonPackage (finalAttrs: {
     "chromadb/test/test_client.py::test_http_client_with_inconsistent_host_settings[async_client]"
     "chromadb/test/test_client.py::test_http_client_with_inconsistent_port_settings[async_client]"
     "chromadb/test/test_client.py::test_http_client[async_client]"
+
+    # ValueError: Could not connect to a Chroma server.
+    "chromadb/test/property/test_add_mcmr.py::test_add_small[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_medium[single-region]"
+    "chromadb/test/property/test_add_mcmr.py::test_add_large[single-region]"
   ];
 
   __darwinAllowLocalNetworking = true;

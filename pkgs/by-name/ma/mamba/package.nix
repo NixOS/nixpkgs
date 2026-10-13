@@ -10,7 +10,7 @@
   libjack2,
   alsa-lib,
   liblo,
-  libsigcxx,
+  libsigcxx_2_0,
   libsmf,
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjack2
     alsa-lib
     liblo
-    libsigcxx
+    libsigcxx_2_0
     libsmf
   ];
 

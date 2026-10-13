@@ -7,7 +7,7 @@
   cmake,
   boost,
   bzip2,
-  ffmpeg,
+  ffmpeg_8,
   fftwSinglePrec,
   hdf5,
   muparser,
@@ -18,17 +18,18 @@
   imagemagick,
   copyDesktopItems,
   nix-update-script,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovito";
-  version = "3.15.2";
+  version = "3.16.0";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A7TE84B63JG2X4iBUxQiahLSYTlu7y+x92NTii26pmg=";
+    hash = "sha256-NN5q+qh84w7myBYiRAsBxDDV/82AmIz8j2yk6JiEHcY=";
     fetchSubmodules = true;
   };
 
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6Packages.wrapQtAppsHook
+    wrapGAppsHook3
     imagemagick
     copyDesktopItems
   ];
@@ -47,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     bzip2
-    ffmpeg
+    ffmpeg_8
     fftwSinglePrec
     hdf5
     muparser
@@ -61,6 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
     # needed to run natively on wayland
     qt6Packages.qtwayland
   ];
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # manually create a desktop file
   desktopItems = [

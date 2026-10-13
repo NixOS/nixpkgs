@@ -1,29 +1,35 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromCodeberg,
   autoreconfHook,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "log4shib";
-  version = "1.0.9";
+  version = "2.0.1";
 
-  src = fetchgit {
-    url = "https://git.shibboleth.net/git/cpp-log4shib.git";
-    rev = "a1afe19b7b49c32fcb03e6d72809501b8965cf85";
-    sha256 = "06rrc5l6qxlc8abzim2jcxwz2c577qrjqx15cbfqq1zfqagj9hix";
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  src = fetchFromCodeberg {
+    owner = "Shibboleth";
+    repo = "cpp-log4shib";
+    tag = finalAttrs.version;
+    hash = "sha256-EoVg+u8t8h8HZrXHg+854+Az0tN9shPPyl6oTSjKqYg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  env.CXXFLAGS = "-std=c++11";
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Forked version of log4cpp that has been created for the Shibboleth project";
-    mainProgram = "log4shib-config";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drawbu ];
     license = lib.licenses.lgpl21;
-    homepage = "http://log4cpp.sf.net";
+    homepage = "https://codeberg.org/Shibboleth/cpp-log4shib";
   };
-}
+})

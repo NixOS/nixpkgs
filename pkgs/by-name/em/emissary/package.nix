@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "0.3.1";
 
   src = fetchFromGitHub {
-    owner = "altonen";
+    owner = "eepnet";
     repo = "emissary";
     tag = "v${finalAttrs.version}";
     hash = "sha256-fLhvMzdxXAuEB99NgIfTLxYezIIZVaC8Z6snK9UUEl0=";
@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://github.com/altonen/emissary/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/eepnet/emissary/releases/tag/${finalAttrs.version}";
     description = "Rust implementation of the I2P protocol stack";
     homepage = "https://altonen.github.io/emissary/";
-    license = lib.licenses.mit; # https://github.com/altonen/emissary/blob/master/LICENSE (found an apache2 as well but thats for https://github.com/altonen/emissary/commit/c4a1c849ebfceba892adce53f512f1f099721de2)
+    license = lib.licenses.mit; # https://github.com/eepnet/emissary/blob/master/LICENSE (found an apache2 as well but thats for https://github.com/eepnet/emissary/commit/c4a1c849ebfceba892adce53f512f1f099721de2)
     mainProgram = "emissary-cli";
     maintainers = [ lib.maintainers.N4CH723HR3R ];
   };

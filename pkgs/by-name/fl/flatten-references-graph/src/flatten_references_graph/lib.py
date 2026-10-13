@@ -327,3 +327,25 @@ def remove_paths(paths, graph):
 @curry
 def reverse(iterator):
     return reversed(list(iterator))
+
+
+@curry
+def reorder(keys, graph):
+    """Reorder the keys of a dict of graphs, controlling the traversal order
+    when followed by flatten(). Keys absent from the graph are ignored;
+    keys present in the graph but not in `keys` are appended at the end in
+    their original insertion order.
+
+    Example: after subcomponent_out the result is {"main": ..., "rest": ...}
+    and flatten() yields main before rest. Use reorder(["rest", "main"]) to
+    put rest-layers first without the double-reverse workaround.
+
+    Also works for split_paths which returns {"main", "common", "rest"}:
+    reorder(["rest", "common", "main"]) puts shared deps (common) before the
+    split-off paths (main).
+    """
+    if not isinstance(graph, dict):
+        return graph
+    ordered = {k: graph[k] for k in keys if k in graph}
+    remainder = {k: v for k, v in graph.items() if k not in ordered}
+    return {**ordered, **remainder}

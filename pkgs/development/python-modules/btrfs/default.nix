@@ -2,29 +2,34 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "btrfs";
   version = "15";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-FBmRT/FB3+nhb9BHfZVI1L6nM+zXdYjoy3JVzhetoQs=";
   };
 
-  # no tests (in v12)
+  build-system = [ setuptools ];
+
+  # currently no tests
   doCheck = false;
+
   pythonImportsCheck = [ "btrfs" ];
 
   meta = {
     description = "Inspect btrfs filesystems";
     homepage = "https://github.com/knorrie/python-btrfs";
+    changelog = "https://github.com/knorrie/python-btrfs/blob/v${finalAttrs.version}/CHANGES";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       Luflosi
     ];
   };
-}
+})

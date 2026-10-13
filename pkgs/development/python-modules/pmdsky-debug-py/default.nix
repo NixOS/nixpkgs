@@ -12,6 +12,7 @@ buildPythonPackage rec {
   pyproject = true;
   # SkyTemple specifically require this version. This is used when patching the binary,
   # and risk to be a bit problematic if using the latest version, given it doesn’t follow semver.
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "SkyTemple";

@@ -67,7 +67,8 @@ rec {
         php
         predictable-interface-names
         proxy
-        simple
+        simple-container
+        simple-vm
         ;
       latestKernel = {
         inherit (nixos'.tests.latestKernel)
@@ -165,7 +166,8 @@ rec {
           "nixos.tests.predictable-interface-names.unpredictable"
           "nixos.tests.predictable-interface-names.unpredictableNetworkd"
           "nixos.tests.proxy"
-          "nixos.tests.simple"
+          "nixos.tests.simple-container"
+          "nixos.tests.simple-vm"
           "nixpkgs.jdk"
           "nixpkgs.tests.stdenv.tests-stdenv-gcc-stageCompare"
           "nixpkgs.opensshTest"

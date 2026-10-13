@@ -11,20 +11,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jh2";
-  version = "5.0.11";
+  version = "5.0.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "h2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k69U8O0c7z1TJASOWcndZA/LYTsX7nVfelhaS6FlN5g=";
+    hash = "sha256-fwLrH/tTYUSss5OkjlIzfegKJjkgCN1JeEW3igwvOzE=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-ELZD3CIAv70DGoCgdK8T2yVLtib9ylSvoZPFOge6nIQ=";
+    hash = "sha256-CtyFRhDfnjIvRMJvg8Ppu7nZjePMP7VFtPXoR4I/LB8=";
   };
 
   build-system = [

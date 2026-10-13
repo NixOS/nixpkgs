@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "rimgo";
-  version = "1.4.1";
+  version = "1.4.2";
 
   src = fetchFromCodeberg {
     owner = "rimgo";
     repo = "rimgo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0P2+U4wXiFybpGzV7IB1DXZWC+qIdeQtR6mtiYrrih0=";
+    hash = "sha256-ZdGPZFhjn7jsqHcj8neOocpDweB5TeYXNPfrDw2m7uY=";
   };
 
-  vendorHash = "sha256-unqml6T50BTBzYXXGcL4cc+q9qJJ9W2b2flPBPheBpk=";
+  vendorHash = "sha256-/aflGVI3M1dy6/5/CkQo1wPA59cb7m1XJcoF8nTm35Y=";
 
   nativeBuildInputs = [ tailwindcss_4 ];
 

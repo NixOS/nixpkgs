@@ -81,7 +81,11 @@
 
         machine.wait_until_succeeds(f"[ `{cmd} | wc -l` -eq 1 ]")
         output = machine.succeed(cmd)
-        ip = re.search(r"inet6 ([0-9a-f:]{2,})/", output).group(1)
+        matches: re.Match | None = re.search(r"inet6 ([0-9a-f:]{2,})/", output)
+        if matches is None:
+            raise Exception(f"Can't match IP out of output: {output}")
+
+        ip = matches.group(1)
 
         if temporary:
             scope = scope + " temporary"

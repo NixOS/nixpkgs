@@ -15,6 +15,6 @@
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_open_port(80)
     response = machine.succeed("curl --fail-with-body --silent http://localhost:80/i/")
-    assert '<title> · FreshRSS</title>' in response, "FreshRSS stream page didn't load successfully"
+    assert '<title>FreshRSS</title>' in response, "FreshRSS stream page didn't load successfully"
   '';
 }

@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1pp1hvidpilq37skkmbgba4lvzi01rasy04y0cnas9ck0canv00s";
   };
 
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
   buildInputs = [
     texinfo
     allegro

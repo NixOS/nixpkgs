@@ -14,7 +14,7 @@
   withTeXLive ? false,
   texliveSmall,
   withLua ? false,
-  lua,
+  lua5_2_compat,
   withCaca ? false,
   libcaca,
   libx11,
@@ -32,15 +32,16 @@
 }:
 
 let
+  lua = lua5_2_compat;
   withX = !aquaterm && !stdenv.hostPlatform.isDarwin;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnuplot";
-  version = "6.0.4";
+  version = "6.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/gnuplot-${finalAttrs.version}.tar.gz";
-    hash = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
+    hash = "sha256-cyN/N/AzBtaL+uEzqaUNXpNBOE4ZjVqzfuypq1NN7tg=";
   };
 
   nativeBuildInputs = [

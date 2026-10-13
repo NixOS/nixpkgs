@@ -57,7 +57,7 @@ pub fn get_url(url: &Url) -> Result<Body, anyhow::Error> {
         && let Ok(tokens) = serde_json::from_str::<Map<String, Value>>(&npm_tokens)
         && let Some(token) = tokens.get(host).and_then(serde_json::Value::as_str)
     {
-        info!("Found NPM token for {host}. Adding authorization header to request.");
+        info!("Found npm token for {host}. Adding authorization header to request.");
         request = request.header("Authorization", format!("Bearer {token}"));
     }
 

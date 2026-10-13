@@ -7,6 +7,9 @@ let
   inherit (lib.lists)
     filter
     ;
+  inherit (lib.attrsets)
+    catAttrs
+    ;
   inherit (lib.trivial)
     showWarnings
     ;
@@ -192,7 +195,7 @@ rec {
   checkAssertWarn =
     assertions: warnings: val:
     let
-      failedAssertions = map (x: x.message) (filter (x: !x.assertion) assertions);
+      failedAssertions = catAttrs "message" (filter (x: !x.assertion) assertions);
     in
     if failedAssertions != [ ] then
       throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"

@@ -18,6 +18,7 @@
   n64recomp,
   directx-shader-compiler,
   bk_rom_compressor,
+  fetchpatch,
 }:
 
 let
@@ -42,18 +43,29 @@ in
 
 llvmPackages_21.stdenv.mkDerivation (finalAttrs: {
   pname = "banjorecomp";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "BanjoRecomp";
     repo = "BanjoRecomp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QIiSjwA0iyoGTaeKANah6WhTUwPGXv1qR26kTdg7OqU=";
+    hash = "sha256-GGV3L60Z0ivkWOoJnqK2Hx5q1EVUsbE2D5jHPAW3Cy0=";
     fetchSubmodules = true;
   };
 
   strictDeps = true;
   __structuredAttrs = true;
+
+  patches = [
+    # Fix building with gcc16
+    (fetchpatch {
+      name = "rmlui-cstdint.patch";
+      url = "https://github.com/mikke89/RmlUi/commit/8c27b0a5cb601a3c57ecddc6ce8769ca93a97cb8.patch";
+      stripLen = 1;
+      extraPrefix = "lib/RecompFrontend/recompui/lib/RmlUi/";
+      hash = "sha256-G4Qzawd2HkBh19B3jpIp4QZcrQDnUCvkXlw23nkBKHo=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -115,11 +127,9 @@ llvmPackages_21.stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     installBin BanjoRecompiled
-    install -Dm644 -t $out/share ../recompcontrollerdb.txt
+    install -Dm644 -t $out/share/banjorecomp ../recompcontrollerdb.txt
     install -Dm644 ../icons/app.png $out/share/icons/hicolor/512x512/apps/BanjoRecompiled.png
-    cp -r ../assets $out/share/
-    ln -s $out/share/recompcontrollerdb.txt $out/bin/recompcontrollerdb.txt
-    ln -s $out/share/assets $out/bin/assets
+    cp -r ../assets $out/share/banjorecomp/
 
     install -Dm644 -t $out/share/licenses/banjorecomp ../COPYING
     install -Dm644 -t $out/share/licenses/banjorecomp/N64ModernRuntime ../lib/N64ModernRuntime/COPYING
@@ -134,9 +144,8 @@ llvmPackages_21.stdenv.mkDerivation (finalAttrs: {
      )
   '';
 
-  # The game will segfault when not run from the same directory as the binary.
   postFixup = ''
-    wrapProgram $out/bin/BanjoRecompiled --chdir "$out/bin/"
+    wrapProgram $out/bin/BanjoRecompiled --chdir "$out/share/banjorecomp"
   '';
 
   meta = {

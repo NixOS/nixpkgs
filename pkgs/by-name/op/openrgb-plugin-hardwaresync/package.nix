@@ -7,17 +7,18 @@
   lm_sensors,
   pkg-config,
   qt6Packages,
+  git,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-hardwaresync";
-  version = "1.0rc2";
+  version = "1.0";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBHardwareSyncPlugin";
-    tag = "release_candidate_${finalAttrs.version}";
-    hash = "sha256-t5NPlmCg0btHpD/hpHSwDRl8LjVoOiT89WoOm3PmhXA=";
+    tag = "release_${finalAttrs.version}";
+    hash = "sha256-aqcx3E3t7WEvOPtS7nfvn9jUURE5MhRcL6+HrkZIY6o=";
     fetchSubmodules = true;
   };
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     qt6Packages.qmake
     qt6Packages.wrapQtAppsHook
+    git
   ];
 
   meta = {

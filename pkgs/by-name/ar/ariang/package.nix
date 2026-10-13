@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nodejs_22,
   buildNpmPackage,
   copyDesktopItems,
   imagemagick,
@@ -10,16 +11,18 @@
 
 buildNpmPackage rec {
   pname = "ariang";
-  version = "1.3.13";
+  version = "1.3.15";
 
   src = fetchFromGitHub {
     owner = "mayswind";
     repo = "AriaNg";
     tag = version;
-    hash = "sha256-u4MnjGMvnnb9EGHwK2QYpW7cuX1e1+6z2/1X1baR8iA=";
+    hash = "sha256-YgT5lUwer5tkP2gHYkTY1LhPJN51nZjSztp7oq0mgXw=";
   };
 
-  npmDepsHash = "sha256-kxoSEdM8H7M9s6U2dtCdfuvqVROEk35jAkO7MgyVVRg=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-7c2hA1E1sXzrlkqZLl2EHj0yLQCeIuyeVns6aVkX0hE=";
 
   makeCacheWritable = true;
 

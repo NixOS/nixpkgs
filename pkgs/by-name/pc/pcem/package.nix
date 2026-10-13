@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withALSA "--enable-alsa";
 
   # Fix GCC 14 build
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -std=gnu17";
 
   meta = {
     description = "Emulator for IBM PC computers and clones";

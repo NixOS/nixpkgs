@@ -36,7 +36,7 @@ buildPythonPackage (finalAttrs: {
     substituteInPlace src/sphinx_last_updated_by_git.py \
       --replace-fail "'git', 'ls-tree'" " '${lib.getExe gitMinimal}', 'ls-tree'" \
       --replace-fail "'git', 'log'" "'${lib.getExe gitMinimal}', 'log'" \
-      --replace-fail "'git', 'rev-parse'" "'${lib.getExe gitMinimal}', 'rev-parse'" \
+      --replace-fail "'git', 'rev-parse'" "'${lib.getExe gitMinimal}', 'rev-parse'"
   '';
 
   propagatedBuildInputs = [ gitMinimal ];
@@ -55,7 +55,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/mgeier/sphinx-last-updated-by-git/blob/${finalAttrs.version}/NEWS.rst";
     description = "Get the last updated time for each Sphinx page from Git";
     homepage = "https://github.com/mgeier/sphinx-last-updated-by-git";
     license = lib.licenses.bsd2;

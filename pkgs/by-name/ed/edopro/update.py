@@ -1,20 +1,37 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python -p nix-prefetch-github python3Packages.githubkit
+#! nix-shell -i python -p nix-prefetch-github python3Packages.githubkit python3Packages.packaging
 import json
 import subprocess
 import sys
 
 from githubkit import GitHub, UnauthAuthStrategy
-from githubkit.versions.latest.models import (
-    Commit,
-    ContentSubmodule,
-    Tag,
-)
+from githubkit.versions.latest.models import Commit, ContentSubmodule, Tag
+from packaging.version import InvalidVersion, Version
 
 DEPS_PATH: str = "./pkgs/by-name/ed/edopro/deps.nix"
 
+
+def parse_tag(parsed_tag_data) -> Version | None:
+    # The GitHub REST API does not guarantee that tags are returned newest-first,
+    # and it also returns non-version tags such as "old-core" from 2015. Parse each
+    # tag as a version so we can drop the ones that aren't versions and sort the rest.
+    try:
+        return Version(parsed_tag_data.name)
+    except InvalidVersion:
+        return None
+
+
 with GitHub(UnauthAuthStrategy()) as github:
-    edopro: Tag = github.rest.repos.list_tags("edo9300", "edopro").parsed_data[0]
+    edopro_tags: list[Tag] = github.rest.repos.list_tags(
+        "edo9300", "edopro"
+    ).parsed_data
+    versioned_tags: list[Tag] = [
+        tag for tag in edopro_tags if parse_tag(tag) is not None
+    ]
+    if not versioned_tags:
+        print("Error: No valid version tags found.", file=sys.stderr)
+        exit(3)
+    edopro: Tag = max(versioned_tags, key=lambda tag: Version(tag.name))
 
     # This dep is not versioned in any way and is why we check below to see if this is a new version.
     irrlicht: Commit = github.rest.repos.list_commits(

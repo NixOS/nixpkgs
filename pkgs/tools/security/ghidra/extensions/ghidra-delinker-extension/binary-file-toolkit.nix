@@ -3,24 +3,24 @@
   fetchFromGitHub,
   maven,
 }:
-maven.buildMavenPackage rec {
+maven.buildMavenPackage (finalAttrs: {
   pname = "binary-file-toolkit";
-  version = "0.5.1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "boricj";
     repo = "binary-file-toolkit";
-    tag = "v${version}";
-    hash = "sha256-HMzRh/Q06Ik33mEkmh5U6qLiWk7ZCEstYq3Ll/pFhXM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dhWBnieXVsFyBoaCBzQIVo7iLWrO6l5y0v1KK1xC/es=";
   };
 
-  mvnHash = "sha256-Ek2qulMSHd1ZJfEloo6fIe+QMqub/Ftna/TzTt01ky8=";
+  mvnHash = "sha256-GwdpwwAhSb0uHWiExVPBZgOmB8LOEQk6uKgSAs/uw7k=";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/
-    cp dist/* $out/
+    mkdir -p "$out/"
+    cp bft-*/target/*.jar "$out/"
 
     runHook postInstall
   '';
@@ -32,4 +32,4 @@ maven.buildMavenPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ timschumi ];
   };
-}
+})

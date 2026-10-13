@@ -12,6 +12,7 @@
   pandas,
   pomegranate,
   pyfaidx,
+  pyparsing,
   pysam,
   reportlab,
   rPackages,
@@ -22,29 +23,31 @@
   pytestCheckHook,
 
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cnvkit";
-  version = "0.9.12";
+  version = "0.9.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "etal";
     repo = "cnvkit";
-    tag = "v${version}";
-    hash = "sha256-ZdE3EUNZpEXRHTRKwVhuj3BWQWczpdFbg4pVr0+AHiQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6W0rJUeHO7m3zacgkL3WzyFVmdet1zJAGyafsQv1AXE=";
   };
 
   patches = [
+    # test: update a call to --smooth-bootstrap[=int, now]
     (fetchpatch {
-      name = "fix-numpy2-compat";
-      url = "https://github.com/etal/cnvkit/commit/5cb6aeaf40ea5572063cf9914c456c307b7ddf7a.patch";
-      hash = "sha256-VwGAMGKuX2Kx9xL9GX/PB94/7LkT0dSLbWIfVO8F9NI=";
+      url = "https://github.com/etal/cnvkit/commit/c5c7c06b7fb873ed7ae44593c11a91d45f433e54.patch";
+      hash = "sha256-H9Nr4JL7bc9CQ/BmXkOAwjbr/ykvbnjyyWrVSrVH9kg=";
     })
   ];
 
   pythonRelaxDeps = [
     # https://github.com/etal/cnvkit/issues/815
     "pomegranate"
+    # https://github.com/etal/cnvkit/pull/1048
+    "pyparsing"
   ];
 
   nativeBuildInputs = [
@@ -59,13 +62,8 @@ buildPythonPackage rec {
     let
       rscript = lib.getExe' R "Rscript";
     in
-    # Numpy 2 compatibility
-    ''
-      substituteInPlace skgenome/intersect.py \
-        --replace-fail "np.string_" "np.bytes_"
-    ''
     # Patch shebang lines in R scripts
-    + ''
+    ''
       substituteInPlace cnvlib/segmentation/flasso.py \
         --replace-fail "#!/usr/bin/env Rscript" "#!${rscript}"
 
@@ -73,7 +71,7 @@ buildPythonPackage rec {
         --replace-fail "#!/usr/bin/env Rscript" "#!${rscript}"
 
       substituteInPlace cnvlib/segmentation/__init__.py \
-        --replace-fail 'rscript_path="Rscript"' 'rscript_path="${rscript}"'
+        --replace-fail 'rscript_path: str = "Rscript"' 'rscript_path="${rscript}"'
 
       substituteInPlace cnvlib/commands.py \
         --replace-fail 'default="Rscript"' 'default="${rscript}"'
@@ -87,6 +85,7 @@ buildPythonPackage rec {
     pandas
     pomegranate
     pyfaidx
+    pyparsing
     pysam
     reportlab
     rPackages.DNAcopy
@@ -134,8 +133,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://cnvkit.readthedocs.io";
     description = "Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
-    changelog = "https://github.com/etal/cnvkit/releases/tag/v${version}";
+    changelog = "https://github.com/etal/cnvkit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.jbedo ];
   };
-}
+})

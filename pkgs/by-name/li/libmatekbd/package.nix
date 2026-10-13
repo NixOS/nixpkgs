@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Keyboard management library for MATE";
     homepage = "https://github.com/mate-desktop/libmatekbd";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.mate ];
   };

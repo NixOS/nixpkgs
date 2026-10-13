@@ -62,7 +62,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     )
   '';
 
-  passthru.tests.standalone = nixosTests.lomiri-system-settings;
+  passthru.tests = {
+    inherit (lomiri-system-settings-unwrapped.passthru.tests) pkg-config;
+    standalone = nixosTests.lomiri-system-settings;
+  };
 
   meta = lomiri-system-settings-unwrapped.meta // {
     description = "System Settings application for Lomiri (wrapped)";

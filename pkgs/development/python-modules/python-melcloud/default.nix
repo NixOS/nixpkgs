@@ -7,6 +7,7 @@
   mashumaro,
   orjson,
   poetry-core,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -29,6 +30,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "poetry-core>=1.5,<2.0" poetry-core
   '';
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ poetry-core ];
 

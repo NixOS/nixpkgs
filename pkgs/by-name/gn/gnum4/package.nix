@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   gnulib,
+  texinfo,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -12,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnum4";
-  version = "1.4.20";
+  version = "1.4.21";
 
   src = fetchurl {
     url = "mirror://gnu/m4/m4-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-rGmJ7l0q7YFzl4BjDMLOCX4qZUb+uWpKVNs31GoUUuQ=";
+    hash = "sha256-3Eh+EdLwyeAVVbsa8mvk6umD7I8HJnRlBbQycYbrIfw=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isCygwin gnulib.patches.memcpy-fix-backport-250512;
@@ -46,6 +47,25 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-syscmd-shell=${stdenv.shell}"
   ]
   ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
+
+  __structuredAttrs = true;
+
+  # Separate derivation due bootstrapping and cyclic dependencies.
+  passthru.doc = stdenv.mkDerivation {
+    # Mimic look and feel of multiple outputs.
+    name = "${finalAttrs.pname}-${finalAttrs.version}-doc";
+    inherit (finalAttrs) src;
+    dontConfigure = true;
+
+    nativeBuildInputs = [ texinfo ];
+    buildPhase = ''
+      makeinfo --html --no-split doc/m4.texi
+    '';
+
+    installPhase = ''
+      install -Dm644 ./m4.html $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/index.html
+    '';
+  };
 
   meta = {
     description = "GNU M4, a macro processor";

@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "ASCII art graphics library";
+    homepage = "https://aa-project.sourceforge.net/aalib/";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl2;
   };

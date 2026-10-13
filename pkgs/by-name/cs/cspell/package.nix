@@ -30,8 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspaces
       ;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-EKnczZ/7O2ZMaSlIFfLk9WXyf/ubynhmecs+IyIoTHw=";
+    fetcherVersion = 3;
+    hash = "sha256-eQ9KiRSwWmfhCinYVP4ulQdAG6SOd9yyyOUWSwc5TV8=";
   };
 
   nativeBuildInputs = [

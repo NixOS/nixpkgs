@@ -4,12 +4,15 @@
   fetchFromGitHub,
   fetchurl,
   love,
-  lua,
+  lua5_2_compat,
   makeWrapper,
   makeDesktopItem,
   strip-nondeterminism,
   zip,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "duckmarines";
@@ -74,6 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Duck-themed action puzzle video game";
+    homepage = "https://github.com/SimonLarsen/duckmarines";
     platforms = love.meta.platforms;
     hydraPlatforms = [ ];
     license = with lib.licenses; [

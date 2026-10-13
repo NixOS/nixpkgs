@@ -21,4 +21,5 @@ lib.makeScope newScope (self: {
   Cli = self.callPackage ../development/lean-modules/Cli { };
   importGraph = self.callPackage ../development/lean-modules/importGraph { };
   mathlib = self.callPackage ../development/lean-modules/mathlib { };
+  inherit (self.mathlib.passthru) mathlib__archive;
 })

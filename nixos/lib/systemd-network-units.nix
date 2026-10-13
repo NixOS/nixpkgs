@@ -413,6 +413,10 @@ in
       [QuickFairQueueingClass]
       ${attrsToSection def.quickFairQueueingConfigClass}
     ''
+    + optionalString (def.mobileNetworkConfig != { }) ''
+      [MobileNetwork]
+      ${attrsToSection def.mobileNetworkConfig}
+    ''
     + flip concatMapStrings def.bridgeVLANs (x: ''
       [BridgeVLAN]
       ${attrsToSection x}

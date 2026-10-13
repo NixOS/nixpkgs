@@ -1,9 +1,11 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   deepdiff,
+  fastmcp,
   fetchFromGitHub,
   hatchling,
   pycognito,
@@ -18,14 +20,16 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylitterbot";
-  version = "2025.3.2";
+  version = "2025.6.6";
   pyproject = true;
+
+  __darwinAllowLocalNetworking = true;
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bFJ6v27yfzMPqZijWCOlgdVS19IKIMqZcq2FjAyMnqo=";
+    tag = finalAttrs.version;
+    hash = "sha256-JcxqhMuSolYBXD55mYOUv49wh32GON3oM8GVzmNdrUk=";
   };
 
   build-system = [
@@ -34,8 +38,10 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiointercept
     aiohttp
     deepdiff
+    fastmcp
     pycognito
     pyjwt
   ];

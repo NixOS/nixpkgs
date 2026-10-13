@@ -172,7 +172,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = lib.optionalString doWrap ''
     mv "$out/bin/vcpkg" "$out/bin/.vcpkg-wrapped"
-    printf "%s" "$vcpkgWrapper" | install -Dm555 /dev/stdin "$out/bin/vcpkg"
+    printf "%s" "$vcpkgWrapper" > "$out/bin/vcpkg"
+    chmod 555 "$out/bin/vcpkg"
   '';
 
   passthru.tests = lib.optionalAttrs doWrap {

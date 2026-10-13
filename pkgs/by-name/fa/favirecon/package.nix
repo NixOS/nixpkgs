@@ -2,25 +2,27 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "favirecon";
-  version = "1.0.3";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "favirecon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K8SISs94SRxLAW38GT/mOOvuBktg+y9vKh9BjoJKELM=";
+    hash = "sha256-LgwwkHKKsGMOTi6VX/Fc4+vAYUc044i1CrxQO3Ci7nQ=";
   };
 
-  vendorHash = "sha256-PA27sDdM8/qTEUo2fYbVowP8R50cPebVPn2SXUH1VHw=";
+  vendorHash = "sha256-KRNzKPYCcOOvi7kP6fRMh7LBkMwSssmvUoRlH+jZPu8=";
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to detect technologies, WAF, exposed panels and known services";

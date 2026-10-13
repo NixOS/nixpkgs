@@ -6,16 +6,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "imap-tools";
-  version = "1.12.0";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ikvk";
     repo = "imap_tools";
-    tag = "v${version}";
-    hash = "sha256-EUAt1M9ez5T/y02xHbyl/U/dkBHri92C6hTxY8iCplc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4TAO3sxsTtvF/JYpltMjM4LHGlbUZfU8P/x4LSExwFY=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +30,10 @@ buildPythonPackage rec {
     "test_folders"
     "test_idle"
     "test_live"
+    # broken on Python 3.14.7
+    # reported upstream: https://github.com/ikvk/imap_tools/issues/271
+    "test_login_quotes_plain_username"
+    "test_login_quotes_username_with_special_chars"
   ];
 
   pythonImportsCheck = [ "imap_tools" ];
@@ -37,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Work with email and mailbox by IMAP";
     homepage = "https://github.com/ikvk/imap_tools";
-    changelog = "https://github.com/ikvk/imap_tools/blob/${src.tag}/docs/release_notes.rst";
+    changelog = "https://github.com/ikvk/imap_tools/blob/${finalAttrs.src.tag}/docs/release_notes.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

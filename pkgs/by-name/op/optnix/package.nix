@@ -9,12 +9,12 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "optnix";
-  version = "0.3.1";
+  version = "0.3.2";
   src = fetchFromSourcehut {
     owner = "~watersucks";
     repo = "optnix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fjEtC0GlTsxS6cMNJgaXkI5ik8fZPoPFy43XLIEUUPI=";
+    hash = "sha256-FLp+/X0r6NANPYzlj2si8JNmwd5iJPcOdQIJ9f5LLUg=";
   };
 
   vendorHash = "sha256-g/H91PiHWSRRQOkaobw2wAYX/07DFxWTCTlKzf7BT1Y=";

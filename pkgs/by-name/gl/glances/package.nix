@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "glances";
-  version = "4.5.3.2";
+  version = "4.5.7";
   pyproject = true;
 
   disabled = python3Packages.isPyPy;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QMKi37+uuRkZxK1qcRIUDAElLU7njjGYUoSecBdbCO0=";
+    hash = "sha256-4SaIrvudjK2NGe13PscO3+5EYr2zgzb1mhRvTlEAZyg=";
   };
 
   build-system = with python3Packages; [ setuptools ];

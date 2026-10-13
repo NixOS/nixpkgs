@@ -9,22 +9,30 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xfr";
-  version = "0.9.6";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "lance0";
     repo = "xfr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wYhwDSL9C4rtWgkhaXimk3u03c9UHj2O9eEe8pRlj6c=";
+    hash = "sha256-WjW4Uup9/JEckUOdMQFdqhYoEeRPOYhD0DT+NCSt+sY=";
   };
 
-  cargoHash = "sha256-f8m5vFNk62iXyK1Sh3Dda0pV6rUNErymS6QxiCuZ8DA=";
+  cargoHash = "sha256-Bpq6RY2d4Vm9pQdp+6rcMgtPIvveKirGTMm7UI3Ivas=";
 
   nativeBuildInputs = [
     installShellFiles
     versionCheckHook
   ];
+
   doInstallCheck = true;
+
+  # opt ouf of default features to deselect the update-check feature
+  buildNoDefaultFeatures = true;
+
+  buildFeatures = [
+    "discovery"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd xfr \
@@ -42,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Modern iperf3 alternative with a live TUI, multi-client server, and QUIC support.";
     mainProgram = "xfr";
-    homepage = "https://github.com/lance0/xfs";
+    homepage = "https://github.com/lance0/xfr";
     changelog = "https://github.com/lance0/xfr/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       _0x4A6F

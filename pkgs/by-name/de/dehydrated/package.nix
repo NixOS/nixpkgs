@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.7.2";
 
   src = fetchFromGitHub {
-    owner = "lukas2511";
+    owner = "dehydrated-io";
     repo = "dehydrated";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-xDDYqP6oxJt0NPgHtHV1xQKUxVc8JQxWekXwxezggtE=";

@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ibtool";
-  version = "1.1.4";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "ibtool";
     tag = finalAttrs.version;
-    hash = "sha256-D0AzcLBmcqdEZy1Td96CnJGgRID7FnbNeqKJ7xQUvlE=";
+    hash = "sha256-08NqHIzAqdJ9O3t6hBCN9m00/RV2rqfXtoyjH2Vxd04=";
   };
 
   build-system = with python3Packages; [
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Apple's ibtool reimplementation";
     homepage = "https://github.com/viraptor/ibtool";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "ibtool";
     maintainers = [ lib.maintainers.viraptor ];
   };

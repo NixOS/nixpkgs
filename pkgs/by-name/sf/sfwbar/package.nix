@@ -16,6 +16,7 @@
   makeWrapper,
   docutils,
   wayland-scanner,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,12 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
     wayland-scanner
+    wrapGAppsHook3
   ];
-
-  postFixup = ''
-    wrapProgram $out/bin/sfwbar \
-      --suffix XDG_DATA_DIRS : $out/share
-  '';
 
   meta = {
     homepage = "https://github.com/LBCrion/sfwbar";

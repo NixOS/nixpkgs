@@ -79,13 +79,13 @@ in
     mkAttrsOfParams
       {
 
-        version = mkIntParam 0 ''
+        version = mkIntParam 2 ''
           IKE major version to use for connection.
 
           - 1 uses IKEv1 aka ISAKMP,
-          - 2 uses IKEv2.
-          - A connection using the default of 0 accepts both IKEv1 and IKEv2 as
-            responder, and initiates the connection actively with IKEv2.
+          - 2 uses IKEv2 (the default).
+          - A connection using 0 accepts both IKEv1 and IKEv2 as responder,
+            and initiates the connection actively with IKEv2.
         '';
 
         local_addrs = mkCommaSepListParam [ ] ''

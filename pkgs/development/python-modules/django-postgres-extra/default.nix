@@ -27,6 +27,10 @@ buildPythonPackage rec {
     hash = "sha256-/2qoXZ2f3un2cgJFAGMnQWBraJ7urkb0kHtcKKJsh6w=";
   };
 
+  postPatch = ''
+    echo '__version__ = "${version}"' > psqlextra/_version.py
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [

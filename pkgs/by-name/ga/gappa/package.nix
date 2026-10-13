@@ -5,26 +5,39 @@
   gmp,
   mpfr,
   boost,
+  flex,
+  bison,
   versionCheckHook,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gappa";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1ux5ImKR8edXyvL21w3jY2o4/fATEjO2SMzS8B0o8Ok=";
+    hash = "sha256-dA1gOwRkW7lEo04bMldFHX0Chs8gMbd0Yl4/HhYK4qo";
   };
 
   strictDeps = true;
+
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   buildInputs = [
     gmp
     mpfr
     boost.dev
   ];
+
+  # For darwin sandboxed builds
+  postPatch = ''
+    substituteInPlace remake.cpp \
+      --replace 'tempnam(NULL, "rmk-")' 'tempnam(".", "rmk-")'
+  '';
 
   buildPhase = ''
     runHook preBuild

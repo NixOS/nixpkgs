@@ -33,7 +33,8 @@ def find_latest_version(arch):
     for package in packages.split("\n\n"):
         matches = version_selector.search(package)
         matched_version = matches.group('version') if matches and matches.group('version') else "0"
-        parsed_version = version.parse(matched_version)
+        try: parsed_version = version.parse(matched_version)
+        except version.InvalidVersion: continue
         if parsed_version > last_version:
             path = path_selector.search(package).group('path')
             sha256 = hash_selector.search(package).group('sha256')

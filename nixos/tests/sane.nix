@@ -78,11 +78,11 @@ in
     with subtest("debugging: /dev/video0 works"):
       machine.succeed("v4l2-ctl --all >&2")
       machine.succeed("fswebcam --no-banner /tmp/webcam.jpg")
-      machine.copy_from_vm("/tmp/webcam.jpg", "webcam")
+      machine.copy_from_machine("/tmp/webcam.jpg", "webcam")
 
     # scan with the webcam
     machine.succeed("scanimage -o /tmp/scan.png >&2")
-    machine.copy_from_vm("/tmp/scan.png", "scan")
+    machine.copy_from_machine("/tmp/scan.png", "scan")
 
     # the image should contain "${text}"
     output = machine.succeed("tesseract /tmp/scan.png -")

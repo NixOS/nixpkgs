@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kerf";
-  version = "unstable-2022-08-05";
+  version = "0-unstable-2022-07-24";
 
   src = fetchFromGitHub {
     owner = "kevinlawler";
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       used for local analytics, timeseries, logfile processing,
       and more.
     '';
-    license = with lib.licenses; [ bsd2 ];
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/kevinlawler/kerf1";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];

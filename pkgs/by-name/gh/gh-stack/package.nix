@@ -4,11 +4,13 @@
   buildGoModule,
   versionCheckHook,
   nix-update-script,
+  gitMinimal,
+  installAgentSkills,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gh-stack";
-  version = "0.0.1";
+  version = "0.2.1";
 
   __structuredAttrs = true;
 
@@ -16,16 +18,26 @@ buildGoModule (finalAttrs: {
     owner = "github";
     repo = "gh-stack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-om7ekHez08X1YjP0W+3p0PxmjU/za6+/gHX5GPakKAw=";
+    hash = "sha256-Mq4jAqeSHDuCiDYSa40okrq06UhC3dZGjgCXJKMbgzU=";
   };
 
-  vendorHash = "sha256-s85Lz6yfY1TiIFPolU1qESDyw8XoBORyuOMdiHj6Grc=";
+  vendorHash = "sha256-TC1mSXYjOQo00fb2yuGdk1rl6z6rp0WT3AmzXomPzis=";
 
   ldflags = [
     "-s"
-    "-w"
     "-X=github.com/github/gh-stack/cmd.Version=${finalAttrs.version}"
   ];
+
+  nativeBuildInputs = [
+    installAgentSkills
+  ];
+
+  nativeCheckInputs = [ gitMinimal ];
+
+  # some tests resolve branches through git and need to run inside a repository
+  preCheck = ''
+    git init --quiet
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -38,7 +50,10 @@ buildGoModule (finalAttrs: {
     downloadPage = "https://github.com/github/gh-stack/";
     changelog = "https://github.com/github/gh-stack/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    maintainers = with lib.maintainers; [
+      antoineco
+      ethancedwards8
+    ];
     mainProgram = "gh-stack";
   };
 })

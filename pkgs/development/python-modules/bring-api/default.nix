@@ -11,28 +11,24 @@
   python-dotenv,
   setuptools,
   syrupy,
-  yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bring-api";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "bring-api";
-    tag = version;
-    hash = "sha256-BslU1ekbQIZh1f1zRYXbZdbOepB2+NWIuWZI4L/oxSg=";
+    tag = finalAttrs.version;
+    hash = "sha256-EwOb+AkjpJSpINFmfWNDqRPF7MDpwDa0LK3LFj7U/sY=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    # https://github.com/miaucl/bring-api/blob/1.0.0/requirements.txt
-    # pyproject.toml is out of sync
     aiohttp
-    yarl
     mashumaro
     orjson
   ];
@@ -50,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to access the Bring! shopping lists API";
     homepage = "https://github.com/miaucl/bring-api";
-    changelog = "https://github.com/miaucl/bring-api/releases/tag/${src.tag}";
+    changelog = "https://github.com/miaucl/bring-api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

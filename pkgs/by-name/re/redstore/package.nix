@@ -8,16 +8,27 @@
   zlib,
   librdf_raptor2,
   librdf_rasqal,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redstore";
   version = "0.5.4";
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchurl {
     url = "https://www.aelius.com/njh/redstore/redstore-${finalAttrs.version}.tar.gz";
-    sha256 = "0hc1fjfbfvggl72zqx27v4wy84f5m7bp4dnwd8g41aw8lgynbgaq";
+    hash = "sha256-WL1l/aOIq0Aeatw2ctepxRHkOdlHdPzFoe9tt5x0gUE=";
   };
+
+  # source code tries to use `true` as a variable
+  # despite it being a reserved keyword
+  postPatch = ''
+    substituteInPlace ./src/redhttp/server.c --replace-fail \
+      'true' 'opt'
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -34,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
       "CFLAGS=-D_XOPEN_SOURCE=600 -I${librdf_raptor2}/include/raptor2 -I${librdf_rasqal}/include/rasqal"
     )
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "HTTP interface to Redland RDF store";

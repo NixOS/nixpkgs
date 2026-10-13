@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postUnpack = ''
-    rm source/{dumpifs,exMifsLzo,uuu,zzz}
+    rm ${finalAttrs.src.name}/{dumpifs,exMifsLzo,uuu,zzz}
   '';
 
   patches = [ ./package.patch ];
@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/askac/dumpifs";
     platforms = lib.platforms.unix;
     mainProgram = "dumpifs";
+    license = lib.licenses.unfree;
   };
 })

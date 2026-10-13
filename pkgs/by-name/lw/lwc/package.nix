@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "lwc";
-  version = "unstable-2022-07-26";
+  version = "0.4.5-unstable-2022-07-26";
 
   src = fetchFromGitHub {
     owner = "timdp";

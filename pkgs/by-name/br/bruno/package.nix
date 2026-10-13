@@ -21,13 +21,13 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "3.2.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-lDsgAOCUrxhmlmYgObDwUR6gbms/q/rNIkTEwJckMyA=";
+    hash = "sha256-M4oNx3nSe8hSAtZMVyXIW0qQIQkaOeQgpPsfjmmJ30E=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
@@ -36,13 +36,13 @@ buildNpmPackage rec {
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-vz2I+0+eQk6A4SsiACipTGrYF8LtvWfGhgxqu7mChLE=";
+  npmDepsHash = "sha256-Jrlpztg1JxuPaLD4O9elOaU1eFH3dmr6oWwi4Ch9Zv8=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
+  ++ lib.optional stdenv.hostPlatform.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems
@@ -77,6 +77,10 @@ buildNpmPackage rec {
     # fix version reported in sidebar and about page
     ${jq}/bin/jq '.version |= "${version}"' packages/bruno-electron/package.json | ${moreutils}/bin/sponge packages/bruno-electron/package.json
     ${jq}/bin/jq '.version |= "${version}"' packages/bruno-app/package.json | ${moreutils}/bin/sponge packages/bruno-app/package.json
+
+    # disable remote image download to prevent network calls to comply with build sandboxing
+    substituteInPlace packages/bruno-app/plugins/remote-images/loader.cjs \
+      --replace-fail 'const urls = findRemoteImageUrls(source, domains);' 'const urls = [];'
   '';
 
   postConfigure = ''
@@ -196,9 +200,7 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [
       gepbird
       kashw2
-      lucasew
       mattpolzin
-      redyf
       water-sucks
       starsep
     ];

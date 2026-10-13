@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  substitute,
   zlib,
   nixosTests,
   postgresqlTestHook,
@@ -14,14 +15,14 @@
 
 let
   pname = "pgadmin";
-  version = "9.14";
-  yarnHash = "sha256-j/5qoCrhC7xBPaS6NhZFFQtJ7ThL/wkFXoCtyreLHco=";
+  version = "9.18";
+  yarnHash = "sha256-D9LN9+CsVTvfZKDsHrWUD1uvsa033tj34a52DNwYaDc=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-NQe1ZN8jQEJE5qSpL5MjgLwWLGrGXCIHaCd8zLpsx3s=";
+    hash = "sha256-oaNheNF4e1nL45fQM9/2ZIdLDwVvKWIRJnR93KmqR3M=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -61,6 +62,7 @@ pythonPackages.buildPythonApplication rec {
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
     ./check-system-config-dir.patch
+
   ];
 
   postPatch = ''
@@ -109,10 +111,10 @@ pythonPackages.buildPythonApplication rec {
     echo Building the web frontend...
     cd web
     (
-    export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
-    yarnBerryConfigHook
+      export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
+      yarnBerryConfigHook
     )
-    yarn webpacker
+    NODE_ENV=production yarn webpacker
     cp -r * ../pip-build/pgadmin4
     # save some disk space
     rm -rf ../pip-build/pgadmin4/node_modules
@@ -155,7 +157,6 @@ pythonPackages.buildPythonApplication rec {
     flask-sqlalchemy
     flask-wtf
     flask-compress
-    passlib
     pytz
     simplejson
     sqlparse

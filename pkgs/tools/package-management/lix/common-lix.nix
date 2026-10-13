@@ -10,6 +10,7 @@
   docCargoDeps ? null,
   patches ? [ ],
   knownVulnerabilities ? [ ],
+  updateScript ? null,
 }@args:
 
 assert lib.assertMsg (
@@ -39,6 +40,7 @@ assert lib.assertMsg (
   darwin,
   doxygen,
   editline,
+  fetchpatch2,
   flex,
   git,
   gtest,
@@ -121,10 +123,11 @@ let
           [project options]
           builtin-dep-closure = @deps@
         '';
-        passAsFile = [ "input" ];
+        __structuredAttrs = true;
       }
       ''
-        substitute $inputPath $out --replace-fail @deps@ "$(cat ${deps})"
+        printf "%s" "$input" > $out
+        substituteInPlace $out --replace-fail @deps@ "$(cat ${deps})"
       '';
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
@@ -285,10 +288,17 @@ stdenv.mkDerivation (finalAttrs: {
         "${finalAttrs.cargoDeps}/source-registry-0"
       else
         "lix: no `MESON_PACKAGE_CACHE_DIR`, set `cargoDeps`";
+
+    # Defense-in-depth: never inherit an executable stack from a dependency.
+    # It does happen: https://github.com/NixOS/nixpkgs/issues/567777.
+    # ELF only: Apple's ld64 rejects `-z`, and Mach-O stacks are already
+    # non-executable unless linked with `-allow_stack_execute`.
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isElf "-z,noexecstack";
   };
 
   propagatedBuildInputs = [
     boehmgc
+    boost
     nlohmann_json
   ];
 
@@ -460,8 +470,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   installCheckPhase = ''
     runHook preInstallCheck
-    flagsArray=($mesonInstallCheckFlags "''${mesonInstallCheckFlagsArray[@]}")
-    meson test --no-rebuild "''${flagsArray[@]}"
+
+    (
+      unset -v preCheck preCheckHooks postCheck postCheckHooks
+      mesonCheckFlags=("''${mesonInstallCheckFlags[@]}")
+      mesonCheckPhase
+    )
+
     runHook postInstallCheck
   '';
   hardeningDisable = [
@@ -480,6 +495,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit aws-sdk-cpp boehmgc;
+    inherit updateScript;
     tests = {
       misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
       installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
@@ -501,6 +517,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.lix ];
+    maintainers = [ lib.maintainers.tyceherrman ];
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";

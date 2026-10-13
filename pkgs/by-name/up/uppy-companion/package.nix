@@ -3,6 +3,7 @@
   stdenv,
   nodejs,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
 }:
 
@@ -14,7 +15,23 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "transloadit";
     repo = "uppy";
     tag = "@uppy/companion@${finalAttrs.version}";
-    hash = "sha256-FF5I4D9obRVJqyjucemnxZiPcNHdQdo3S0z/h96Fe6c=";
+    hash = "sha256-4Xbw4d0SaLPk4mmvG9QWkUuVX/SM1SmGtuaK85rLihU=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/transloadit/uppy/blob/main/package.json#L38
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   nativeBuildInputs = [
@@ -31,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-euKvBI3Y15SmBoVOEbS8GIJT/kIOhayLKGVSd8JztqI=";
+    hash = "sha256-MQTaNbeJuvWDtRajJQYRtuxiMrLGKtlasyB6sKeOIgs=";
   };
 
   buildPhase = ''
@@ -46,19 +63,23 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/packages/@uppy
-    mkdir $out/bin
-    mv packages/@uppy/companion $out/lib/packages/@uppy/companion
-    # Remove extra files
-    rm -rf $out/lib/packages/@uppy/companion/{*.md,LICENSE,Makefile,.*ignore,infra/,output/,test/,__mocks__/,*/json}
-    # Remove dev dependencies
-    rm -rf $out/lib/packages/@uppy/companion/node_modules/{.bin,webpack*,update*,tyepscript,jest*,eslint*,{@,}esbuild,{@,}rollup,terser,@types,execa,http-proxy,nock,supertest,vite*}
+    export yarnTmpDir=$(mktemp -d)
+    export yarnPack=$yarnTmpDir/yarn-pack.tgz
 
-    # Link final binary
-    ln -s $out/lib/packages/@uppy/companion/bin/companion $out/bin/companion
+    mkdir -p $out/lib/node_modules/@uppy/companion $out/bin
 
-    patchShebangs $out/bin/companion
+    pushd packages/@uppy/companion
 
+    yarn pack -o $yarnPack
+    tar xvf $yarnPack -C $out/lib/node_modules/@uppy/companion --strip-components 1 package/
+
+    rm -rf node_modules
+    yarn workspaces focus --production
+    find node_modules -maxdepth 1 -type d -empty -delete
+    cp -r node_modules $out/lib/node_modules/@uppy/companion/node_modules
+    popd
+
+    ln -s $out/lib/node_modules/@uppy/companion/bin/companion $out/bin/companion
     runHook postInstall
   '';
 
@@ -66,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
-    changelog = "https://github.com/transloadit/uppy/releases/tag/%2540uppy%252Fcompanion%2540${finalAttrs.version}";
+    changelog = "https://github.com/transloadit/uppy/releases/tag/%40uppy%2Fcompanion%40${finalAttrs.version}";
     description = "Server integration for Uppy file uploader";
     homepage = "https://uppy.io/";
     license = lib.licenses.mit;

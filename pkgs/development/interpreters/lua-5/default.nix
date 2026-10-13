@@ -4,6 +4,8 @@
   lib,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
+  applyPatches,
   makeBinaryWrapper,
 }:
 
@@ -111,8 +113,8 @@ in
 rec {
   lua5_5 = callPackage ./interpreter.nix {
     self = lua5_5;
-    version = "5.5.0";
-    hash = "sha256-V8zDK7vQBcq3W8xSREBSU1r2kXiduiuQFtXFBkDWiz0=";
+    version = "5.5.1";
+    hash = "sha256-HEtAaNZwYfKiIxrStUIud6zqFIfqmJD2Mgr2FPQ3Pc4=";
     makeWrapper = makeBinaryWrapper;
     inherit passthruFun;
 
@@ -199,6 +201,13 @@ rec {
 
   luajit_openresty = import ../luajit/openresty.nix {
     self = luajit_openresty;
-    inherit callPackage fetchFromGitHub passthruFun;
+    inherit
+      callPackage
+      fetchFromGitHub
+      fetchpatch2
+      applyPatches
+      stdenv
+      passthruFun
+      ;
   };
 }

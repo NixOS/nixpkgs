@@ -41,6 +41,5 @@ if echo "$api_response" | jq -e '.packages | select(length == 1) | .any' > /dev/
 else
     update "linux-amd64" "x86_64-linux"
     update "linux-arm64" "aarch64-linux"
-    update "darwin-amd64" "x86_64-darwin"
     update "darwin-arm64" "aarch64-darwin"
 fi

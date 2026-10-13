@@ -1,0 +1,13 @@
+diff --git a/launcher/game/distribute.rpy b/launcher/game/distribute.rpy
+index bece65c63..831c405f8 100644
+--- a/launcher/game/distribute.rpy
++++ b/launcher/game/distribute.rpy
+@@ -863,7 +863,7 @@ fix_dlc("renios", "renios")
+                             )
+ 
+             for fn in os.listdir(directory):
+-                walk(fn, os.path.join(directory, fn))
++                walk(fn, os.path.join(directory, "renpy-dist" if fn == "renpy" else fn))
+ 
+         def merge_file_lists(self):
+             """

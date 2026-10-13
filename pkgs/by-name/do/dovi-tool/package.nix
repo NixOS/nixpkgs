@@ -17,16 +17,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dovi-tool";
-  version = "2.3.2";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "quietvoid";
     repo = "dovi_tool";
     tag = finalAttrs.version;
-    hash = "sha256-8UG3p84wjuPpnwcz65dyDbLDaoFXtokxNvnldBZHqwc=";
+    hash = "sha256-CDAyfW3Yed9Vxn7f0XE1kLOPQrvH1IIvz7MSE8YSZ5Y=";
   };
 
-  cargoHash = "sha256-nr2F+QZurNN/iCFW62LZaheZkuCGId4TSRuYd1yYH88=";
+  cargoHash = "sha256-x9WS7XLljDkePC4TXegT8invNxB+SVtBw/xC0Iw51VE=";
 
   nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pkg-config
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     fontconfig
   ];
 
-  preCheck = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+  preCheck = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Fontconfig error: Cannot load default config file: No such file: (null)
     export FONTCONFIG_FILE="${fontsConf}"
     # Fontconfig error: No writable cache directories
@@ -54,7 +54,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/dovi_tool";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(?!libdovi-)(.*)$"
+    ];
+  };
 
   meta = {
     description = "CLI tool combining multiple utilities for working with Dolby Vision";

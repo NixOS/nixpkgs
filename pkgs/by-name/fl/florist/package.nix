@@ -1,7 +1,7 @@
 {
   stdenv,
-  gnat13,
-  gnat13Packages,
+  gnat,
+  gnatPackages,
   fetchFromGitHub,
   lib,
 }:
@@ -20,14 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--enable-shared" ];
 
   nativeBuildInputs = [
-    gnat13
-    gnat13Packages.gprbuild
+    gnat
+    gnatPackages.gprbuild
   ];
 
   meta = {
     description = "Posix Ada Bindings";
     homepage = "https://github.com/adacore/florist";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lutzberger ];
     platforms = lib.platforms.linux;
   };

@@ -21,10 +21,13 @@
   zlib,
   SDL2,
   SDL2_image,
-  lua,
+  lua5_2_compat,
 
   nixosTests,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libresprite";
@@ -87,6 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
       dst="$out"/share/icons/hicolor/"$size"x"$size"
       install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
     done
+
+    if [ -f $out/share/thumbnailers/libresprite.thumbnailer ]; then
+      substituteInPlace $out/share/thumbnailers/libresprite.thumbnailer \
+        --replace-fail "TryExec=libresprite-thumbnailer" "TryExec=$out/bin/libresprite-thumbnailer" \
+        --replace-fail "Exec=libresprite-thumbnailer" "Exec=$out/bin/libresprite-thumbnailer"
+    fi
   '';
 
   passthru.tests = {

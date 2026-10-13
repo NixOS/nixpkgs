@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "asha-pipewire-sink";
-  version = "0-unstable-2024-10-22";
+  version = "0-unstable-2025-05-20";
 
   src = fetchFromGitHub {
     owner = "thewierdnut";
     repo = "asha_pipewire_sink";
-    rev = "bbf665b9a3b90fcdbaeb092799ea3c5ba4347e31";
-    hash = "sha256-PuJ6lBV7s5OqGe1X4wD7T+8LVMCFpgvM1pnMjXYr8gs=";
+    rev = "16a9c1cfba2d9aaa2cedbd86b4aa4f8e556736ae";
+    hash = "sha256-9nfcFB37rBvgu0usySxovbxwQLrGCKDg6dk5kBU50C4=";
   };
 
   nativeBuildInputs = [

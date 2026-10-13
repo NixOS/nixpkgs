@@ -13,9 +13,7 @@ buildPythonPackage {
 
   postPatch = ''
     substituteInPlace ../mitmproxy-rs-*-vendor/*/aya-build-*/src/lib.rs \
-      --replace-fail '"+nightly",' "" \
-      --replace-fail '"-Z",' "" \
-      --replace-fail '"build-std=core",' ""
+      --replace-fail 'cmd.args(["-Z", "build-std=core"]);' ""
 
     substituteInPlace mitmproxy-linux-ebpf/.cargo/config.toml \
       --replace-fail 'build-std = ["core"]' ""

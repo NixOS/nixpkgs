@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "antora";
-  version = "3.1.14";
+  version = "3.1.15";
 
   src = fetchFromGitLab {
     owner = "antora";
     repo = "antora";
     tag = "v${version}";
-    hash = "sha256-9x80aBm2ZBj389kX2wioe7BtaNjR7p9aEZg7o49v0vY=";
+    hash = "sha256-Ok9KuDiyKEY8ggo1TnlME91zj4zvv4CWR1hldDheVgs=";
   };
 
-  npmDepsHash = "sha256-s/f6/PxvSIlhFsCbsD25MPrk67vKXrnDqbfbW72Tr4I=";
+  npmDepsHash = "sha256-AuYEi2T+yLtJyJIJIzTol+cs+9Terqe3bQalVnq2XR4=";
 
   # This is to stop tests from being ran, as some of them fail due to trying to query remote repositories
   # Also disable the postbuild lint step which tries to download @biomejs/biome at build time
@@ -46,7 +46,7 @@ buildNpmPackage rec {
 
     maintainers = with lib.maintainers; [
       ehllie
-      naho
+      noahbiewesch
     ];
 
     platforms = lib.platforms.all;

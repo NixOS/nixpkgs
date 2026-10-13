@@ -13,16 +13,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "snippetexpanderd";
-  version = "1.0.3";
+  version = "1.1.2";
 
   src = fetchFromSourcehut {
     owner = "~ianmjones";
     repo = "snippetexpander";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NIMuACrq8RodtjeBbBY42VJ8xqj7fZvdQ2w/5QsjjJI=";
+    hash = "sha256-L+3Zn4z48ZqoVH38oxKg2BkhCTGynsIofQqMDzkfha4=";
   };
 
-  vendorHash = "sha256-2nLO/b6XQC88VXE+SewhgKpkRtIHsva+fDudgKpvZiY=";
+  vendorHash = "sha256-1ofkbbitCzrLxugi769jbjOD2iN0Z6kYC5d7X2GYNIg=";
 
   proxyVendor = true;
 

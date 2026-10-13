@@ -19,12 +19,6 @@ let
     "debug" = 7;
   };
   logLevel = lib.getAttr cfg.logLevel logLevelMappings;
-  # Use correct iptables for otbr-firewall (legacy vs nf-compat)
-  iptables =
-    let
-      inherit (config.networking) firewall;
-    in
-    if firewall.backend == "iptables" then firewall.package else pkgs.iptables;
 in
 {
   meta.maintainers = with lib.maintainers; [
@@ -181,6 +175,9 @@ in
     # ot-ctl can be used to query the router instance
     environment.systemPackages = [ cfg.package ];
 
+    # Shared by the agent and web interface for the OpenThread control socket.
+    users.groups.otbr = { };
+
     # Make sure we have ipv6 support, and that forwarding is enabled
     networking.enableIPv6 = true;
     networking.firewall.allowedTCPPorts =
@@ -203,15 +200,6 @@ in
       ]) cfg.backboneInterfaces
     );
 
-    # OTBR uses avahi for mDNS service publishing
-    services.avahi = {
-      enable = lib.mkDefault true;
-      publish = {
-        enable = lib.mkDefault true;
-        userServices = lib.mkDefault true;
-      };
-    };
-
     # The upstream service files (src/agent/otbr-agent.service.in, src/web/otbr-web.service.in) use
     # EnvironmentFile and CMake-substituted platform scripts that don't translate to NixOS, so the
     # services are rebuilt here from typed module options instead.
@@ -226,7 +214,7 @@ in
           THREAD_IF = cfg.interfaceName;
         };
         serviceConfig = {
-          ExecStartPre = "${utils.escapeSystemdExecArg (lib.getExe' cfg.package "otbr-firewall")} start";
+          Group = "otbr";
           ExecStart = lib.concatStringsSep " " (
             lib.concatLists [
               [
@@ -247,7 +235,6 @@ in
               (map utils.escapeSystemdExecArg cfg.extraArgs)
             ]
           );
-          ExecStopPost = "${utils.escapeSystemdExecArg (lib.getExe' cfg.package "otbr-firewall")} stop";
           KillMode = "mixed";
           Restart = "on-failure";
           RestartSec = 5;
@@ -278,17 +265,13 @@ in
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          UMask = "0077";
+          UMask = "0007";
 
           CapabilityBoundingSet = [
             "CAP_NET_ADMIN"
             "CAP_NET_RAW"
           ];
         };
-        path = [
-          pkgs.ipset
-          iptables
-        ];
       };
 
       # Sync with: src/web/otbr-web.service.in
@@ -297,6 +280,7 @@ in
         after = [ "otbr-agent.service" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
+          Group = "otbr";
           ExecStart = lib.concatStringsSep " " (
             lib.concatLists [
               [

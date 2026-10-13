@@ -44,14 +44,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dask";
-  version = "2026.3.0";
+  version = "2026.8.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = finalAttrs.version;
-    hash = "sha256-JfCiABGSCJKKSz2/r8fvpVwdQSZqvoQICe+lDvuNhoM=";
+    hash = "sha256-DFPd46cBirwztmZJvRKS8u5qvYMEIWfy90QR2AeBu3c=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''

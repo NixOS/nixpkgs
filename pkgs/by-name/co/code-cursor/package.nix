@@ -24,7 +24,14 @@ let
 in
 (buildVscode rec {
   inherit commandLineArgs useVSCodeRipgrep;
-  inherit (sourcesJson) version vscodeVersion;
+  inherit (sourcesJson) version;
+  # Cursor reports vscode >= 1.122 but still ships @vscode/ripgrep.
+  # Capping the build-time vscodeVersion avoids modifying the notarized app bundle on Darwin.
+  vscodeVersion =
+    if lib.versionAtLeast sourcesJson.vscodeVersion "1.122.0" then
+      "1.121.0"
+    else
+      sourcesJson.vscodeVersion;
 
   pname = "cursor";
 
@@ -81,6 +88,12 @@ in
   };
 }).overrideAttrs
   (oldAttrs: {
+    autoPatchelfIgnoreMissingDeps =
+      (oldAttrs.autoPatchelfIgnoreMissingDeps or [ ])
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) [
+        "libc.musl-*.so.*" # musl-based node modules are not used on glibc systems
+      ];
+
     preFixup =
       (oldAttrs.preFixup or "")
       + lib.optionalString hostPlatform.isLinux ''

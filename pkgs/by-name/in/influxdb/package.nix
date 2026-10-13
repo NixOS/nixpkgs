@@ -13,7 +13,7 @@ let
   libflux_version = "0.196.1";
 
   # This is copied from influxdb2 with the required flux version
-  flux = rustPlatform.buildRustPackage rec {
+  flux = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "libflux";
     version = libflux_version;
     src = fetchFromGitHub {
@@ -32,7 +32,7 @@ let
       substituteInPlace flux-core/src/lib.rs \
         --replace-fail "deny(warnings, missing_docs))]" "deny(warnings), allow(dead_code, mismatched_lifetime_syntaxes, unused_assignments))]"
     '';
-    sourceRoot = "${src.name}/libflux";
+    sourceRoot = "${finalAttrs.src.name}/libflux";
 
     cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -44,26 +44,28 @@ let
       Cflags: -I/out/include
       Libs: -L/out/lib -lflux -lpthread
     '';
-    passAsFile = [ "pkgcfg" ];
     postInstall = ''
       mkdir -p $out/include $out/pkgconfig
       cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+      printf "%s" "$pkgcfg" > $out/pkgconfig/flux.pc
+      substituteInPlace $out/pkgconfig/flux.pc \
         --replace-fail /out $out
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
     '';
-  };
+
+    __structuredAttrs = true;
+  });
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "influxdb";
   version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Q05mKmAXxrk7IVNxUD8HHNKnWCxmNCdsr6NK7d7vOHM=";
   };
 
@@ -87,7 +89,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   excludedPackages = "test";
@@ -104,4 +106,4 @@ buildGoModule rec {
       zimbatm
     ];
   };
-}
+})

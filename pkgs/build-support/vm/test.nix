@@ -2,12 +2,12 @@
   hello,
   patchelf,
   pcmanfm,
+  runCommand,
   stdenv,
   vmTools,
 }:
 let
   inherit (vmTools)
-    buildRPM
     diskImages
     makeImageTestScript
     runInLinuxImage
@@ -46,6 +46,23 @@ in
     })
   );
 
+  # Sanity check to ensure the dpkg --install commands have run
+  checkPerlInstalledInDebian = runInLinuxImage (
+    runCommand "check-perl"
+      {
+        diskImage = diskImages.debian13x86_64;
+        diskImageFormat = "qcow2";
+        memSize = 512;
+      }
+      ''
+        echo Check if perl is present
+        perl -v
+        echo Check if perl is installed
+        dpkg -l | grep 'ii *perl'
+        mkdir $out
+      ''
+  );
+
   # RPM-based distros
   testFedora42Image = makeImageTestScript diskImages.fedora42x86_64;
   testFedora43Image = makeImageTestScript diskImages.fedora43x86_64;
@@ -66,4 +83,5 @@ in
   testUbuntu2204i386Image = makeImageTestScript diskImages.ubuntu2204i386;
   testUbuntu2204x86_64Image = makeImageTestScript diskImages.ubuntu2204x86_64;
   testUbuntu2404x86_64Image = makeImageTestScript diskImages.ubuntu2404x86_64;
+  testUbuntu2604x86_64Image = makeImageTestScript diskImages.ubuntu2604x86_64;
 }

@@ -9,8 +9,8 @@
   lzo,
   openssl,
   pam,
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   update-systemd-resolved,
   pkcs11Support ? false,
   pkcs11helper,
@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.19";
+  version = "2.6.23";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-E3AlJvaHwYslQMGj8uGJGHuqplIR7c9/9ncvpp8FNs8=";
+    hash = "sha256-QEHHCRYr7BMlq/WqjPJ6JVzEd8Y0sV7jEEEccB/ECpY=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnl
     pam
   ]
-  ++ optional useSystemd systemd
+  ++ optional useSystemd systemdLibs
   ++ optional pkcs11Support pkcs11helper;
 
   configureFlags =

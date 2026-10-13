@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "walker";
-  version = "2.16.0";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ugacgbPxYM68pAcQRceuSlCWtUEuddltMUzAWrnWlHA=";
+    hash = "sha256-QS+ApYWt51tRsW38JrlJn718FgUyLPTRc5ElVvQGR4I=";
   };
 
-  cargoHash = "sha256-MPjMB5TsrJd28QuEoIDRJjM+SE0cTNCO5PRW+I+/CHE=";
+  cargoHash = "sha256-woHcuyvfoQgpg/ehWu/SZGPjBarp9pscKQuIPhh1EK4=";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -64,7 +64,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      adamcstephens
       donovanglover
       saadndm
     ];

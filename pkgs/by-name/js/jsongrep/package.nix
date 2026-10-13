@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jsongrep";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "micahkepe";
     repo = "jsongrep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A4cBHIRXmjpRSJtUNNPGOfSOFQG4om5QFa9xw4MeYj8=";
+    hash = "sha256-ui5mHYu8CCeJf5hfUMAZe0MiIqB8IskxxUsy77aDNZc=";
   };
 
-  cargoHash = "sha256-RQLMQ2jEtqh7km4FWhBaWuw9QY4B4O50DbPdBO+hcW4=";
+  cargoHash = "sha256-MK4NtLZK3uzyEEQpGXJuoXLRitIpiZKSzkBqDXzbcY8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

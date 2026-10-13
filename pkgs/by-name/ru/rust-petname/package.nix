@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-petname";
-  version = "3.0.0";
+  version = "3.2.0";
 
   src = fetchCrate {
     inherit (finalAttrs) version;
     crateName = "petname";
-    hash = "sha256-RKOW0SDRlMRPlsmWvk+teB14Tdf3tgrP35Glvn/wJBE=";
+    hash = "sha256-5uPOgb89boLelqgbnLR9ojT5iouN0Znrujs69X/9mnE=";
   };
 
-  cargoHash = "sha256-LMlfYVL6Hk+b7v6qvz0Y1y2awxvcH35+vCvBMvCUEv4=";
+  cargoHash = "sha256-Cs0vigT5dbBmqZ0DTwjnxkrQnsmqqA7cLPLYwZzlnH4=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

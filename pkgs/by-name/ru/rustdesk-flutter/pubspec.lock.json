@@ -10,6 +10,12 @@
       "source": "hosted",
       "version": "85.0.0"
     },
+    "_macros": {
+      "dependency": "transitive",
+      "description": "dart",
+      "source": "sdk",
+      "version": "0.3.3"
+    },
     "after_layout": {
       "dependency": "transitive",
       "description": {
@@ -513,6 +519,16 @@
       "source": "hosted",
       "version": "1.0.3"
     },
+    "fake_async": {
+      "dependency": "transitive",
+      "description": {
+        "name": "fake_async",
+        "sha256": "6a95e56b2449df2273fd8c45a662d6947ce1ebb7aafe80e550a3f68297f3cacc",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.3.2"
+    },
     "ffi": {
       "dependency": "direct main",
       "description": {
@@ -796,6 +812,12 @@
       "source": "hosted",
       "version": "2.2.1"
     },
+    "flutter_test": {
+      "dependency": "direct dev",
+      "description": "flutter",
+      "source": "sdk",
+      "version": "0.0.0"
+    },
     "flutter_web_plugins": {
       "dependency": "transitive",
       "description": "flutter",
@@ -1052,6 +1074,36 @@
       "source": "hosted",
       "version": "4.9.0"
     },
+    "leak_tracker": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker",
+        "sha256": "c35baad643ba394b40aac41080300150a4f08fd0fd6a10378f8f7c6bc161acec",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "10.0.8"
+    },
+    "leak_tracker_flutter_testing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker_flutter_testing",
+        "sha256": "f8b613e7e6a13ec79cfdc0e97638fddb3ab848452eff057653abd3edba760573",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.9"
+    },
+    "leak_tracker_testing": {
+      "dependency": "transitive",
+      "description": {
+        "name": "leak_tracker_testing",
+        "sha256": "6ba465d5d76e67ddf503e1161d1f4a6bc42306f9d66ca1e8f079a47290fb06d3",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.1"
+    },
     "lints": {
       "dependency": "transitive",
       "description": {
@@ -1071,6 +1123,16 @@
       },
       "source": "hosted",
       "version": "1.3.0"
+    },
+    "macros": {
+      "dependency": "transitive",
+      "description": {
+        "name": "macros",
+        "sha256": "1d9e801cd66f7ea3663c45fc708450db1fa57f988142c64289142c9b7ee80656",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "0.1.3-main.0"
     },
     "matcher": {
       "dependency": "transitive",
@@ -1899,6 +1961,16 @@
       },
       "source": "hosted",
       "version": "0.4.0+2"
+    },
+    "vm_service": {
+      "dependency": "transitive",
+      "description": {
+        "name": "vm_service",
+        "sha256": "0968250880a6c5fe7edc067ed0a13d4bae1577fe2771dcf3010d52c4a9d3ca14",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "14.3.1"
     },
     "wakelock_plus": {
       "dependency": "direct main",

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   hatchling,
   hatch-vcs,
   pydantic,
@@ -19,6 +20,15 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-9T7ScIf5jJBbldNwLHEchrctr3V4LmqxNGhor6QIzO4=";
   };
+
+  patches = [
+    # Pull test fixes for Pydantic 2.13+ from https://github.com/richard-gyiko/json-schema-to-pydantic/pull/46
+    (fetchpatch {
+      name = "pydantic-2.13-test-compat.patch";
+      url = "https://github.com/richard-gyiko/json-schema-to-pydantic/commit/acfacd19f282011cfb96b8901d72867a39f57bff.patch";
+      hash = "sha256-+dDFF/eloYuc+ANTjlr9tvI5ycX21o8G1xJOjGlrmTg=";
+    })
+  ];
 
   build-system = [
     hatchling

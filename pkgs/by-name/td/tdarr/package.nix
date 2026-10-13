@@ -18,6 +18,7 @@ symlinkJoin {
   passthru = {
     server = tdarr-server;
     node = tdarr-node;
+    tests = tdarr-server.tests or { } // tdarr-node.tests or { };
   };
 
   meta = {
@@ -27,7 +28,6 @@ symlinkJoin {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     maintainers = with lib.maintainers; [ mistyttm ];

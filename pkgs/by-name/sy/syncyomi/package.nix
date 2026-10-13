@@ -6,7 +6,7 @@
   libredirect,
   buildGoModule,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   esbuild,
@@ -28,13 +28,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "syncyomi";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "SyncYomi";
     repo = "SyncYomi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ot8c7+a/YLhjt9HkcI8QZ2ICgtBj3VGJhxtnhWC0f+0=";
+    hash = "sha256-Dk6s5NXa9NY33/d4F9GDB5T1nKu8/OSEOY5cpIXz7ZA=";
   };
 
   vendorHash = "sha256-7AySGQBQHaTp2M1uj5581ZqcpzgexI1KvanWMOc6rx0=";
@@ -51,15 +51,15 @@ buildGoModule (finalAttrs: {
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
-      fetcherVersion = 3;
-      hash = "sha256-paCYfh7tjDuPm8JCpzhCNjL1ZsyQTNxofW8UNIKjqmE=";
+      pnpm = pnpm_10;
+      fetcherVersion = 4;
+      hash = "sha256-i4ji/NjK6/hpqrma+DJ2x5kKq/YEN3Cy8mKQLy1M+dU=";
     };
 
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
+      pnpm_10
     ];
 
     env.ESBUILD_BINARY_PATH = lib.getExe lockedEsbuild;

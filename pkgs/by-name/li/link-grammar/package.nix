@@ -5,17 +5,18 @@
   pkg-config,
   python3,
   flex,
-  sqlite,
   libedit,
+  pcre2,
+  sqlite,
   runCommand,
   dieHook,
 }:
 
 let
 
-  link-grammar = stdenv.mkDerivation rec {
+  link-grammar = stdenv.mkDerivation (finalAttrs: {
     pname = "link-grammar";
-    version = "5.10.5";
+    version = "5.13.0";
 
     outputs = [
       "bin"
@@ -25,8 +26,8 @@ let
     ];
 
     src = fetchurl {
-      url = "http://www.abisource.com/downloads/link-grammar/${version}/link-grammar-${version}.tar.gz";
-      sha256 = "sha256-MkcQzYEyl1/5zLU1CXMvdVhHOxwZ8XiSAAo97bhhiu0=";
+      url = "https://www.gnucash.org/link-grammar/downloads/${finalAttrs.version}/link-grammar-${finalAttrs.version}.tar.gz";
+      hash = "sha256-5qDJBd+xdfNZefA1CgzzxnyzimgZ2fK3PGhN/nKpQd8=";
     };
 
     nativeBuildInputs = [
@@ -36,15 +37,28 @@ let
     ];
 
     buildInputs = [
-      sqlite
       libedit
+      sqlite
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pcre2
     ];
 
     configureFlags = [
       "--disable-java-bindings"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # multi-dict and multi-threads crash when built with pcre2
+      # https://github.com/opencog/link-grammar/issues/1514
+      "--disable-pcre2"
     ];
 
-    doCheck = true;
+    preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export DYLD_LIBRARY_PATH=$(pwd)/link-grammar/.libs
+    '';
+
+    # multi-dict test randomly fails on x86_64-darwin
+    doCheck = stdenv.hostPlatform.system != "x86_64-darwin";
 
     passthru.tests = {
       quick =
@@ -64,13 +78,13 @@ let
 
     meta = {
       description = "Grammar Checking library";
-      homepage = "https://www.abisource.com/projects/link-grammar/";
-      changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${version}/ChangeLog";
+      homepage = "https://opencog.github.io/link-grammar-website/";
+      changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${finalAttrs.version}/ChangeLog";
       license = lib.licenses.lgpl21Only;
       maintainers = with lib.maintainers; [ jtojnar ];
       platforms = lib.platforms.unix;
     };
-  };
+  });
 
 in
 link-grammar

@@ -1,5 +1,4 @@
 {
-  fetchpatch,
   fetchurl,
   lib,
   stdenv,
@@ -24,6 +23,7 @@
   dtach,
   openssl,
   bash,
+  fetchpatch,
   gdb,
   man,
   git,
@@ -42,6 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://notmuchmail.org/releases/notmuch-${finalAttrs.version}.tar.xz";
     hash = "sha256-S0MUu/HCAp/feTY35se7FcGxcw0ivpqgSAPJjFu8RG8=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/notmuch/notmuch/commit/f5e58cdb9b93b10ac32379b36b452532a32b8ece.patch";
+      hash = "sha256-x+WHarE752IQzic/CTT26YuSi5Oox3lcQJP1FYNR6AE=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -80,6 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace emacs/notmuch-emacs-mua \
       --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
       --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # The configure script runs the minimal test program
+    # when checking support for address and thread sanitizer (asan and tsan).
+    # On Darwin the minimal test program hangs when compiled
+    # with the asan and tsan compile options.
+    # Since asan and tsan are supported on Darwin the runtime
+    # check is skipped as follows:
+    substituteInPlace configure \
+      --replace './minimal' 'true'
   '';
 
   configureFlags = [
@@ -214,7 +231,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Mail indexer";
     homepage = "https://notmuchmail.org/";
-    changelog = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${finalAttrs.version}";
+    changelog = "https://notmuchmail.org/news/release-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       flokli

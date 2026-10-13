@@ -8,15 +8,15 @@
   qdrant-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-vector-stores-qdrant";
-  version = "0.10.0";
+  version = "0.10.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_vector_stores_qdrant";
-    inherit version;
-    hash = "sha256-FzhV/4L//t2lskwlYfim3NnaJDGBQxiN6FRw9mZ6hOo=";
+    inherit (finalAttrs) version;
+    hash = "sha256-S3t/6kLcpFNhbHbo/LcsyqctVSf1N3SlSVdJJ/PDzyY=";
   };
 
   build-system = [ hatchling ];
@@ -35,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

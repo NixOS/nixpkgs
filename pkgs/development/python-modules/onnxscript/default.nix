@@ -15,7 +15,8 @@
   onnx-ir,
   packaging,
   typing-extensions,
-  pynvml,
+  # cuda-only:
+  nvidia-ml-py,
 
   # tests
   onnxruntime,
@@ -30,14 +31,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "onnxscript";
-  version = "0.6.2";
+  version = "0.7.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxscript";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-raeNa/OY9c8g+kHNxSAdLxhj+iwaMf/wrjUaKfW4E2s=";
+    hash = "sha256-Fd7nQ4KZECgUUfLrCo54NiUVcx1IdhGfUdYWXEo7D8o=";
   };
 
   env = {
@@ -57,7 +59,7 @@ buildPythonPackage (finalAttrs: {
     typing-extensions
   ]
   ++ lib.optionals cudaSupport [
-    pynvml
+    nvidia-ml-py
   ];
 
   pythonImportsCheck = [ "onnxscript" ];
@@ -89,6 +91,11 @@ buildPythonPackage (finalAttrs: {
     # onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented: [ONNXRuntimeError] : 9 :
     # NOT_IMPLEMENTED : Could not find an implementation for SplitToSequence(11) node with name '_inlfunc_aten_split_with_sizes_n0'
     "test_output_match_opinfo__split_with_sizes_cpu_bool"
+
+    # AssertionError: Not equal to tolerance rtol=1e-05, atol=0
+    # The SpaceToDepth test function only implements the DCR mode, but is checked against every SpaceToDepth test case
+    # shipped by onnx, which include test_spacetodepth_crd_mode_example since onnx 1.23.
+    "test_onnxfns_space_to_depth"
   ];
 
   disabledTestPaths = [

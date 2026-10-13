@@ -2,37 +2,28 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  cmake,
-  asciidoc,
-  libxslt,
+  scdoc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kpack";
 
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "kpack";
     rev = finalAttrs.version;
-    sha256 = "1l6bm2j45946i80qgwhrixg9sckazwb5x4051s76d3mapq9bara8";
+    sha256 = "sha256-QIi960hlS+aE3DRMtHOndWlehVfD59ybAaO/Dl/qiyQ=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    asciidoc
-    cmake
-    libxslt.bin
-  ];
+  nativeBuildInputs = [ scdoc ];
 
   hardeningDisable = [ "fortify" ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = "https://knightos.org/";

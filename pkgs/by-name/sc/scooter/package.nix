@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scooter";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AcHPJu8aDvrQVEXvvwj7f4v1vQ0dinA6da940zTOsYg=";
+    hash = "sha256-cUnHwwJHi/m/xm8fMMmdm4IkcC648BHPzK/QvKadz5o=";
   };
 
-  cargoHash = "sha256-DNsQGbZSlNK7O4KcCtHAabe/XotlHykvSP6FI2+KFqQ=";
+  cargoHash = "sha256-ktrGw48yzcjqbNgK48iPjYZMsUEPrXvyWMVS62Xt1rA=";
 
   # Ensure that only the `scooter` package is built (excluding `xtask`)
   cargoBuildFlags = [

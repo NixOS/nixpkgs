@@ -55,7 +55,7 @@ buildGoModule {
 
   tags = [ "embedui" ];
 
-  doCheck = false; # tries to modify filesytem
+  doCheck = false; # tries to modify filesystem
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -82,6 +82,6 @@ buildGoModule {
     homepage = "https://github.com/SmilyOrg/photofield";
     license = lib.licenses.mit;
     mainProgram = "photofield";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 }

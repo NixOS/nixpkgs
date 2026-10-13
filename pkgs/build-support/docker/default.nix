@@ -7,6 +7,7 @@
   coreutils,
   devShellTools,
   e2fsprogs,
+  pkgsBuildBuild,
   proot,
   fakeNss,
   fakeroot,
@@ -70,9 +71,7 @@ let
       # A user is required by nix
       # https://github.com/NixOS/nix/blob/9348f9291e5d9e4ba3c4347ea1b235640f54fd79/src/libutil/util.cc#L478
       export USER=nobody
-      ${lib.getExe' buildPackages.nix "nix-store"} --load-db < ${
-        closureInfo { rootPaths = contentsList; }
-      }/registration
+      nix-store --load-db < ${closureInfo { rootPaths = contentsList; }}/registration
       # Reset registration times to make the image reproducible
       ${lib.getExe buildPackages.sqlite} nix/var/nix/db/db.sqlite "UPDATE ValidPaths SET registrationTime = ''${SOURCE_DATE_EPOCH}"
 
@@ -429,6 +428,7 @@ rec {
       keepContentsDirlinks ? false,
       # Additional commands to run on the layer before it is tar'd up.
       extraCommands ? "",
+      nativeBuildInputs ? [ ],
       uid ? 0,
       gid ? 0,
     }:
@@ -440,7 +440,8 @@ rec {
           jshon
           rsync
           tarsum
-        ];
+        ]
+        ++ nativeBuildInputs;
       }
       ''
         mkdir layer
@@ -655,9 +656,12 @@ rec {
       checked =
         lib.warnIf (contents != null)
           "in docker image ${name}: The contents parameter is deprecated. Change to copyToRoot if the contents are designed to be copied to the root filesystem, such as when you use `buildEnv` or similar between contents and your packages. Use copyToRoot = buildEnv { ... }; or similar if you intend to add packages to /bin."
-          lib.throwIf
-          (contents != null && copyToRoot != null)
-          "in docker image ${name}: You can not specify both contents and copyToRoot.";
+          (
+            if (contents != null && copyToRoot != null) then
+              throw "in docker image ${name}: You can not specify both contents and copyToRoot."
+            else
+              x: x
+          );
 
       rootContents = if copyToRoot == null then contents else copyToRoot;
 
@@ -701,6 +705,7 @@ rec {
               uid
               gid
               ;
+            nativeBuildInputs = optionals includeNixDB [ nix ];
             extraCommands = extraCommandsWithDB;
             copyToRoot = rootContents;
           }
@@ -1030,11 +1035,12 @@ rec {
       debug ? false,
     }:
     assert (
-      lib.assertMsg (layeringPipeline == null -> maxLayers > 1)
-        "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})"
+      (layeringPipeline == null -> maxLayers > 1)
+      || throw "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})"
     );
     assert (
-      lib.assertMsg (enableFakechroot -> !stdenv.hostPlatform.isDarwin) ''
+      (enableFakechroot -> !stdenv.hostPlatform.isDarwin)
+      || throw ''
         cannot use `enableFakechroot` because `proot` is not portable to Darwin. Workarounds:
               - use `fakeRootCommands` with the restricted `fakeroot` environment
               - cross-compile your packages
@@ -1077,6 +1083,9 @@ rec {
         ]
         ++ optionals enableFakechroot [
           proot
+        ]
+        ++ optionals includeNixDB [
+          nix
         ];
         postBuild = ''
           mv $out old_out
@@ -1242,7 +1251,7 @@ rec {
               # take images can know in advance how the image is supposed to be used.
               isExe = true;
             };
-            nativeBuildInputs = [ makeWrapper ];
+            nativeBuildInputs = [ pkgsBuildBuild.makeWrapper ];
             inherit meta;
           }
           ''
@@ -1271,11 +1280,11 @@ rec {
       command ? null,
       run ? null,
     }:
-    assert lib.assertMsg (!(drv.drvAttrs.__structuredAttrs or false))
-      "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
-    assert lib.assertMsg (
-      command == null || run == null
-    ) "streamNixShellImage: Can't specify both command and run";
+    assert
+      !(drv.drvAttrs.__structuredAttrs or false)
+      || throw "streamNixShellImage: Does not work with the derivation ${drv.name} because it uses __structuredAttrs";
+    assert
+      command == null || run == null || throw "streamNixShellImage: Can't specify both command and run";
     let
 
       # A binary that calls the command to build the derivation

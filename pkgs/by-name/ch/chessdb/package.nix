@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://chessdb.sourceforge.net/";
     description = "Free chess database";
     platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 })

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-sesame";
-  version = "3.2.4";
+  version = "3.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "django-sesame";
     tag = version;
-    hash = "sha256-q9LvsPyFEbaE/TEOlQ5WodVvzAiv4x7C4vaiz1RJLu4=";
+    hash = "sha256-avvt1GWhucoxY/ER0sxEQCmNdWFHiMKcCuD/ZCacwNo=";
   };
 
   nativeBuildInputs = [ poetry-core ];

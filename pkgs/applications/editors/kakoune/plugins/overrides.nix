@@ -12,7 +12,7 @@
   git,
   guile,
   kakoune-unwrapped,
-  lua5_3,
+  lua5_5,
   plan9port,
   rustPlatform,
 }:
@@ -47,13 +47,13 @@ self: super: {
 
   kak-ansi = stdenv.mkDerivation (finalAttrs: {
     pname = "kak-ansi";
-    version = "0.2.4";
+    version = "0.3.0";
 
     src = fetchFromGitHub {
       owner = "eraserhd";
       repo = "kak-ansi";
       rev = "v${finalAttrs.version}";
-      sha256 = "kFjTYFy0KF5WWEHU4hHFAnD/03/d3ptjqMMbTSaGImE=";
+      sha256 = "sha256-Tp+cKZxDESlpks6l+6J0H/1BvHyfQSqCxeutUcsZrEc=";
     };
 
     installPhase = ''
@@ -198,13 +198,9 @@ self: super: {
       sha256 = "0y1g3zpa2ql8l9rl5i2w84bka8a09kig9nq9zdchaff5pw660mcx";
     };
 
-    buildInputs = [ lua5_3 ];
-
-    installPhase = ''
-      mkdir -p $out/share/kak/autoload/plugins/
-      cp quickscope.* $out/share/kak/autoload/plugins/
-      # substituteInPlace does not like the pipe
-      sed -e 's,[|] *lua,|${lua5_3}/bin/lua,' quickscope.kak >$out/share/kak/autoload/plugins/quickscope.kak
+    postInstall = ''
+      substituteInPlace $out/share/kak/autoload/plugins/quickscope-kak/quickscope.kak \
+        --replace-fail '|lua ' '|${lib.getExe lua5_5} '
     '';
 
     meta = {
@@ -230,7 +226,7 @@ self: super: {
       homepage = "https://github.com/catppuccin/kakoune/";
       license = lib.licenses.mit;
       platforms = lib.platforms.all;
-      maintainers = with lib.maintainers; [ philipwilk ];
+      maintainers = with lib.maintainers; [ jadewilk ];
     };
   };
 }

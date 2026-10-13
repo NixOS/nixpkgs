@@ -18,6 +18,11 @@ stdenv.mkDerivation {
   };
 
   sourceRoot = ".";
+
+  patches = [
+    ./fix-gcc15.patch
+  ];
+
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
   buildPhase = ''
     g++ Pers.cpp -O3 -fpermissive -o perseus

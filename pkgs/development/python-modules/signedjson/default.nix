@@ -3,25 +3,32 @@
   buildPythonPackage,
   canonicaljson,
   fetchPypi,
+  setuptools,
   pynacl,
   pytestCheckHook,
   setuptools-scm,
   unpaddedbase64,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "signedjson";
   version = "1.1.4";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "signedjson";
+    inherit (finalAttrs) version;
     hash = "sha256-zZHFavU/Fp7wMsYunEoyktwViGaTMxjQWS40Yts9ZJI=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     canonicaljson
     unpaddedbase64
     pynacl
@@ -37,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

@@ -25,8 +25,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
-
   dependencies = [
     geoarrow-pyarrow
     geoarrow-types

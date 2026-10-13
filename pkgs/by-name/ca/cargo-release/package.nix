@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-release";
-  version = "1.1.2";
+  version = "1.1.6";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xil5k+AyJHpDLVvSbtPJOuADRXvdLrHLlC7GRSE4z4s=";
+    hash = "sha256-w+7kvJQBlb40W+vRAXmySOaL513501fj25PkWI8lQTw=";
   };
 
-  cargoHash = "sha256-WLDRJQvzkL1FxD0eXsJmH5wh9QkReaQBBxe7ZFQMWUM=";
+  cargoHash = "sha256-rU8HQBrK/0aRCz5hvUQCMxRCbP2N98S+0gvVNqkap7s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,6 +38,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [
     git
+  ];
+
+  checkFlags = [
+    # Skip tests that require internet connection
+    "--skip=publish::unpublished_git_dependency"
+    "--skip=publish::unpublished_workspace_dependency"
   ];
 
   # disable vendored-libgit2 and vendored-openssl

@@ -11,13 +11,14 @@
   gitMinimal,
   jq,
   nix-update,
-  pup,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongodb-ce";
-  version = "8.2.6";
+  version = "8.3.11";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -49,23 +50,24 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/mongod";
 
+  # Apple's LibreSSL tries to read this while running `mongod --version`
+  sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    (allow file-read* (literal "/private/etc/ssl/openssl.cnf"))
+  '';
+
   passthru = {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-VjFKDwqBI42XQwL7/+eGLv6WlMSY6tYqC8qSy1laDfA=";
+        hash = "sha256-qKpPddwPKmarQhUpuxRSSFIixsmJCbBHqY2QmBw06r4=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2404-${finalAttrs.version}.tgz";
-        hash = "sha256-jqpQ0gjoLfnv+kYqbFyyAKZbA3+hGK8BU/cBzhzqtCI=";
-      };
-      "x86_64-darwin" = fetchurl {
-        url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${finalAttrs.version}.tgz";
-        hash = "sha256-Oba6gK0hrRyo29mJ1/6Bpgql9BR160LUJH/kB0AGLz0=";
+        hash = "sha256-UlQL+x3nrUFVJMalEX1DT82E8k8j49tW5xl36f7Sjy4=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${finalAttrs.version}.tgz";
-        hash = "sha256-74MB0FzbRoZ3Wu4d3OORtfHNZ83GEXnC0h2rJGosTxs=";
+        hash = "sha256-tYbDlyiA/N6pBpCm0iwizSYLCXLecXynEMC8d8ZLA54=";
       };
     };
     updateScript =
@@ -79,15 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
             gitMinimal
             jq
             nix-update
-            pup
           ];
 
           text = ''
-            # Get latest version string from Github
-            NEW_VERSION=$(curl -s "https://api.github.com/repos/mongodb/mongo/tags?per_page=1000" | jq -r 'first(.[] | .name | select(startswith("r8.2")) | select(contains("rc") | not) | .[1:])')
-
-            # Check if the new version is available for download, if not, exit
-            curl -s https://www.mongodb.com/try/download/community-edition/releases | pup 'h3:not([id]) text{}' | grep "$NEW_VERSION"
+            # Pick the newest production (non-RC) release within the current major version from
+            # MongoDB's official release feed. Major upgrades are left as a deliberate manual change.
+            # A version only shows up in the feed once its binaries are published, so no separate
+            # download-availability check is needed.
+            NEW_VERSION=$(curl -s https://downloads.mongodb.org/current.json \
+              | jq -r --arg major "${lib.versions.major finalAttrs.version}" \
+                '[.versions[] | select(.production_release and (.release_candidate | not)) | .version | select(startswith($major + "."))] | sort_by(split(".") | map(tonumber)) | last')
 
             if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
                 echo "The new version same as the old version."
@@ -110,17 +113,19 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/8.2/";
+    changelog = "https://www.mongodb.com/docs/upcoming/release-notes/${lib.versions.majorMinor finalAttrs.version}/";
     description = "MongoDB is a general purpose, document-based, distributed database";
     homepage = "https://www.mongodb.com/";
-    license = with lib.licenses; [ sspl ];
+    license = lib.licenses.sspl;
     longDescription = ''
       MongoDB CE (Community Edition) is a general purpose, document-based, distributed database.
       It is designed to be flexible and easy to use, with the ability to store data of any structure.
       This pre-compiled binary distribution package provides the MongoDB daemon (mongod) and the MongoDB Shard utility
       (mongos).
     '';
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      wrbbz
+    ];
     platforms = lib.attrNames finalAttrs.passthru.sources;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

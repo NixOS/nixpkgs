@@ -32,9 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     qt6.wrapQtAppsHook
   ];
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "\"Release\"")
-  ];
+
+  # This string must have quotes around Release or the package will break!
+  # See https://github.com/NixOS/nixpkgs/issues/563621
+  cmakeBuildType = "\"Release\"";
 
   dontWrapGApps = true;
 

@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "4.0.17.2952";
+  version = "4.0.19.2979";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,7 +29,7 @@ let
       owner = "Sonarr";
       repo = "Sonarr";
       tag = "v${version}";
-      hash = "sha256-nOpCKQqX6lHBcLtIC18CZ0nCrhXTjpEPcO0L2/kcNEo=";
+      hash = "sha256-hYO7I1zaBSYgobd8GvIx/sWyRzflXMFjnnPB21pm4wQ=";
     };
     postPatch = ''
       mv src/NuGet.Config NuGet.Config
@@ -39,6 +39,20 @@ let
         --replace-fail 'IPNetwork' 'Microsoft.AspNetCore.HttpOverrides.IPNetwork'
     '';
     patches = lib.optionals (lib.versionOlder version "5.0") [
+      # Prerequisite for .NET 8 patches, some commits
+      # touching the same files have to be reverted
+      (fetchpatch {
+        name = "revert-ffprobe-bump";
+        url = "https://github.com/Sonarr/Sonarr/commit/34761ca2162eb45d1f207a097f0d546239665bfa.patch";
+        revert = true;
+        hash = "sha256-8DNXrWtaTwNthI4tCXIf9a3xF2dBwo7IPdbtGStFX50=";
+      })
+      (fetchpatch {
+        name = "revert-mailkit-bump";
+        url = "https://github.com/Sonarr/Sonarr/commit/0718ba00041bf2d74749dc246bc02ad0540ec24e.patch";
+        revert = true;
+        hash = "sha256-+S4bt5Ult48nwXXOhZ57UIOYg0sInZDlvBWeySZfGyY=";
+      })
       # See https://github.com/Sonarr/Sonarr/issues/7442 and
       # https://github.com/Sonarr/Sonarr/pull/7443.
       # Unfortunately, the .NET 8 upgrade was only merged into the v5 branch,
@@ -62,6 +76,8 @@ buildDotnetModule {
   pname = "sonarr";
   inherit version src;
 
+  # Upstream expects to be ran from a "bin" directory
+  installPath = "${placeholder "out"}/lib/sonarr/bin";
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
@@ -87,12 +103,18 @@ buildDotnetModule {
     yarn --offline run build --env production
   '';
   postInstall =
+    let
+      packageInfo = writers.writeText "package_info" ''
+        PackageVersion=${version}
+        PackageAuthor=[NixOS](https://nixos.org)
+      '';
+    in
     lib.optionalString withFFmpeg ''
-      rm -- "$out/lib/sonarr/ffprobe"
-      ln -s -- "$ffprobe" "$out/lib/sonarr/ffprobe"
+      ln -sf -- "$ffprobe" "$out/lib/sonarr/bin/ffprobe"
     ''
     + ''
-      cp -a -- _output/UI "$out/lib/sonarr/UI"
+      cp -a -- _output/UI "$out/lib/sonarr/bin/UI"
+      ln -s ${packageInfo} $out/lib/sonarr/package_info
     '';
   # Add an alias for compatibility with Sonarr v3 package.
   postFixup = ''
@@ -200,6 +222,7 @@ buildDotnetModule {
       tie
       niklaskorz
       karaolidis
+      nyanloutre
     ];
     mainProgram = "Sonarr";
     # platforms inherited from dotnet-sdk.

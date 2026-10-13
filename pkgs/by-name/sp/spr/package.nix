@@ -1,6 +1,7 @@
 {
   fetchCrate,
   lib,
+  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
@@ -17,9 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-cQsxRrs/pBe/xmqpp5vi1VRJo8jCAufYJrMigxs/tWY=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   meta = {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";

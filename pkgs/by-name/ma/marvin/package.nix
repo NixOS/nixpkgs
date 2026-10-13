@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marvin";
-  version = "25.5.0";
+  version = "26.1.1";
 
   src = fetchurl {
     name = "marvin-${finalAttrs.version}.deb";
     url = "https://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
-    hash = "sha256-+fTO6cEJL4QRFpLQ9CXZFt7Jg3otR3ZMWN5vH+3QXmA=";
+    hash = "sha256-s52e/J6ohtUv5mSfEXaOGeC1FKkjwgFUH7wLSGqZRFM=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Chemical modelling, analysis and structure drawing program";
-    homepage = "https://chemaxon.com/products/marvin";
+    homepage = "https://www.certara.com/marvin/";
     maintainers = with lib.maintainers; [ fusion809 ];
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;

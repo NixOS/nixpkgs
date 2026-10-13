@@ -1,4 +1,4 @@
-From f9dfacc4b92faa7b60ae37489aa58520b4da95d7 Mon Sep 17 00:00:00 2001
+From cb4a928db740de48d84d47c21705786bb141af02 Mon Sep 17 00:00:00 2001
 From: OPNA2608 <opna2608@protonmail.com>
 Date: Sun, 5 Oct 2025 14:34:43 +0200
 Subject: [PATCH] app/CMakeLists.txt: Drop explicit dependency on rlottie
@@ -11,7 +11,7 @@ Subject: [PATCH] app/CMakeLists.txt: Drop explicit dependency on rlottie
  1 file changed, 1 deletion(-)
 
 diff --git a/app/CMakeLists.txt b/app/CMakeLists.txt
-index c1f0b85..7a59db5 100644
+index c1f0b852..7a59db59 100644
 --- a/app/CMakeLists.txt
 +++ b/app/CMakeLists.txt
 @@ -1,7 +1,6 @@
@@ -23,5 +23,5 @@ index c1f0b85..7a59db5 100644
  
  #"qtdclient.cpp" "qtdthread.cpp" "qml.qrc"
 -- 
-2.51.0
+2.51.2
 

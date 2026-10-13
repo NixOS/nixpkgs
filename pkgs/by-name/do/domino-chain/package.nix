@@ -8,7 +8,7 @@
   gettext,
   imagemagick,
   libpng,
-  lua,
+  lua5_2_compat,
   pkg-config,
   povray,
   SDL2,
@@ -17,6 +17,9 @@
   SDL2_ttf,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "domino-chain";

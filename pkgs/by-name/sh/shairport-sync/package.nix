@@ -23,9 +23,9 @@
   libao,
   libsoundio,
   mosquitto,
+  nix-update-script,
   pipewire,
   soxr,
-  alac,
   sndio,
   enableAvahi ? true,
   enableAirplay2 ? false,
@@ -43,7 +43,6 @@
   enableMqttClient ? true,
   enableDbus ? stdenv.hostPlatform.isLinux,
   enableSoxr ? true,
-  enableAlac ? true,
   enableConvolution ? true,
   enableLibdaemon ? false,
   enableTinySVCmDNS ? true,
@@ -55,13 +54,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "5.0.2";
+  version = "5.5.2";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-tmnAVO9XpVNOwS8ze/23v4TV5Gq+goaVNnA9INf17wk=";
+    hash = "sha256-mSPuvUzfvm/kZS0LDJhve7SAB35jSH7hhOcOxPXuLww=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     # mkDerivation's splicing logic from kicking in.
     "${glib.dev}"
   ]
-  ++ optional enableAirplay2 [
+  ++ optionals enableAirplay2 [
     libplist.bin
     unixtools.xxd
   ];
@@ -95,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableJack libjack2
   ++ optional enableSoundio libsoundio
   ++ optional enableSoxr soxr
-  ++ optional enableAlac alac
   ++ optional enableConvolution libsndfile
   ++ optionals enableAirplay2 [
     libplist
@@ -129,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional enableStdout "--with-stdout"
   ++ optional enablePipe "--with-pipe"
   ++ optional enableSoxr "--with-soxr"
-  ++ optional enableAlac "--with-apple-alac"
   ++ optional enableConvolution "--with-convolution"
   ++ optional enableDbus "--with-dbus-interface"
   ++ optional enableMetadata "--with-metadata"
@@ -141,13 +138,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  passthru.updateScript = nix-update-script {
+    # ignore -dev tagged releases
+    extraArgs = [ "--version-regex=^([0-9\\.]+)$" ];
+  };
+
   meta = {
     homepage = "https://github.com/mikebrady/shairport-sync";
     description = "Airtunes server and emulator with multi-room capabilities";
     license = lib.licenses.mit;
     mainProgram = "shairport-sync";
     maintainers = with lib.maintainers; [
-      lnl7
       jordanisaacs
     ];
     platforms = lib.platforms.unix;

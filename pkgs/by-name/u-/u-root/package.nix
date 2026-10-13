@@ -54,7 +54,11 @@ buildGoModule (finalAttrs: {
       };
       allowImportFromDerivation = true;
     };
-    updateScript = nix-update-script { };
+    # Upstream carries legacy tags v1.0.0 up to v7.0.0 pointing at ancient commits.
+    # Restrict to the v0.x.y.
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex=^v(0\\.\\d+\\.\\d+)$" ];
+    };
     tests.u-root-cmds = u-root-cmds;
   };
 

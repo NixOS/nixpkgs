@@ -23,5 +23,4 @@ mkDerivation {
   '';
 
   meta.mainProgram = "su";
-  meta.platforms = lib.platforms.freebsd;
 }

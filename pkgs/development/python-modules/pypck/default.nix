@@ -11,19 +11,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pypck";
-  version = "0.9.11";
+  version = "0.9.15a3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
     tag = finalAttrs.version;
-    hash = "sha256-XULSgnVp7uIob/tL8zqszTBTdxMY4QIeIBruO2Augnc=";
+    hash = "sha256-ep/D0MWHnmoorCYhWxlyd/iEBiSIrWL4aEPPn4uRgDI=";
   };
-
-  postPatch = ''
-    echo "${finalAttrs.version}" > VERSION
-  '';
 
   build-system = [ setuptools ];
 
@@ -43,7 +39,7 @@ buildPythonPackage (finalAttrs: {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
     changelog = "https://github.com/alengwenus/pypck/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.epl20;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

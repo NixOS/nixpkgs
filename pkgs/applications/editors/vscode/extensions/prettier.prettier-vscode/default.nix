@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchNpmDeps,
   libsecret,
-  nodejs,
   nodejs-slim,
   npmHooks,
   pkg-config,
@@ -32,19 +31,20 @@ let
       hash = "sha256-vktxhQA2a+D9Nr4vhbmGCnNdGzt0U89K50g0SgiV5SE=";
     };
 
-    buildInputs = lib.optionals stdenv.isLinux [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       libsecret
     ];
 
     nativeBuildInputs = [
-      nodejs
+      nodejs-slim
+      nodejs-slim.npm
       nodejs-slim.python
       npmHooks.npmConfigHook
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       pkg-config
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       clang_20 # clang_21 breaks @vscode/vsce's optional dependency keytar
     ];
 

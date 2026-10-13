@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
+  dontWrapGApps = true;
+
   makeWrapperArgs = [
     "--prefix PATH ':' ${
       lib.makeBinPath [
@@ -85,6 +87,7 @@ stdenv.mkDerivation rec {
       ]
     }"
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
+    "\${gappsWrapperArgs[@]}"
   ];
 
   postFixup = ''

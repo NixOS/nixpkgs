@@ -20,14 +20,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lineax";
-  version = "0.1.0";
+  version = "0.1.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "lineax";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oUqJRp4pge3t9g7o/9PCZTb7e4EPkBEGLclHMIdUqiw=";
+    hash = "sha256-qclL/IE/+gLeBL4huy07npXR3sDlbrTlFfib3qVKupk=";
   };
 
   build-system = [ hatchling ];

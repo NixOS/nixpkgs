@@ -1,28 +1,32 @@
 {
   lib,
-  gcc14Stdenv,
+  clangStdenv,
   fetchFromGitHub,
+  makeBinaryWrapper,
 
   nixosTests,
   alsa-lib,
   boost,
+  cli11,
   cmake,
   cryptopp,
-  game-music-emu,
-  glslang,
   ffmpeg,
-  flac,
-  fluidsynth,
   fmt,
+  freetype,
   half,
+  httplib,
   jack2,
   libdecor,
-  libGL,
+  libpng,
   libpulseaudio,
   libunwind,
   libusb1,
-  libvorbis,
-  libxmp,
+  magic-enum,
+  minimp3,
+  miniupnpc,
+  miniz,
+  nlohmann_json,
+  python3,
   libgbm,
   libx11,
   libxcb,
@@ -32,14 +36,14 @@
   libxrandr,
   libxscrnsaver,
   libxtst,
-  magic-enum,
-  mpg123,
   pipewire,
   pkg-config,
   pugixml,
   rapidjson,
   renderdoc,
   robin-map,
+  sdl3,
+  sdl3-mixer,
   sndio,
   stb,
   toml11,
@@ -48,32 +52,51 @@
   vulkan-loader,
   vulkan-memory-allocator,
   xbyak,
-  xxHash,
-  zlib-ng,
-  zydis,
+  xxhash,
+  zarchive,
+  zstd,
+  zlib,
   nix-update-script,
+
+  withRpc ? true,
 }:
 
-# relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
-gcc14Stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.13.0";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-zc3zhFTphty/vwioFEOfhgXttpD9MG2F7+YJYcW0H2w=";
-    fetchSubmodules = true;
+    hash = "sha256-idlvgqiM+aBtAKRqcmQ1TnhnU2EPJYO9CPvAnKc6pMM=";
 
-    leaveDotGit = true;
-    postFetch = ''
-      cd "$out"
-      git rev-parse --short=8 HEAD > $out/COMMIT
-      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
-      find "$out" -name .git -print0 | xargs -0 rm -rf
+    postCheckout = ''
+      git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
+      date -u -d "@$(git -C "$out" log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
+
+      git -C "$out/externals" submodule update --init --recursive \
+        abseil-cpp \
+        glslang \
+        zydis \
+        sirit \
+        tracy \
+        libusb \
+        discord-rpc \
+        hwinfo \
+        openal-soft \
+        imgui \
+        LibAtrac9 \
+        aacdec/fdk-aac \
+        spdlog \
+        libressl \
+        ImGuiFileDialog \
+        protobuf
     '';
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace src/common/scm_rev.cpp.in \
@@ -82,27 +105,43 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
       --replace-fail @GIT_BRANCH@ ${finalAttrs.version} \
       --replace-fail @GIT_DESC@ nixpkgs \
       --replace-fail @BUILD_DATE@ $(cat SOURCE_DATE_EPOCH)
+
+    sed -i '3i #include <fmt/format.h>' src/core/loader/elf.cpp
+
+    sed -i '3i #include <cstring>' src/video_core/amdgpu/regs.cpp
+    sed -i '/#pragma once/a #include <cstring>' src/video_core/amdgpu/resource.h
   '';
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
+
+    # System Zstd is not linked by default
+    NIX_LDFLAGS = "-lzstd";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeBinaryWrapper
+    python3
+  ];
 
   buildInputs = [
     alsa-lib
     boost
+    cli11
     cryptopp
-    game-music-emu
-    glslang
     ffmpeg
-    flac
-    fluidsynth
     fmt
+    freetype
     half
+    httplib
     jack2
     libdecor
-    libGL
+    libpng
     libpulseaudio
     libunwind
     libusb1
-    libvorbis
-    libxmp
     libx11
     libxcb
     libxcursor
@@ -111,14 +150,19 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     libxrandr
     libxscrnsaver
     libxtst
-    libgbm
     magic-enum
-    mpg123
+    minimp3
+    miniupnpc
+    miniz
+    libgbm
+    nlohmann_json
     pipewire
     pugixml
     rapidjson
     renderdoc
     robin-map
+    sdl3
+    sdl3-mixer
     sndio
     stb
     toml11
@@ -127,33 +171,31 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
     vulkan-memory-allocator
     xbyak
-    xxHash
-    zlib-ng
-    zydis
-  ];
-
-  nativeBuildInputs = [
-    cmake
-    pkg-config
+    xxhash
+    zarchive
+    zstd
+    zlib
   ];
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_DISCORD_RPC" withRpc)
+    (lib.cmakeBool "ENABLE_TESTS" false)
     (lib.cmakeBool "ENABLE_UPDATER" false)
+    (lib.cmakeBool "ENABLE_SYSTEM_LIBRARIES" true)
   ];
 
   # Still in development, help with debugging
   cmakeBuildType = "RelWithDebugInfo";
   dontStrip = true;
 
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/bin shadps4
-    install -Dm644 $src/.github/shadps4.png $out/share/icons/hicolor/512x512/apps/net.shadps4.shadPS4.png
-    install -Dm644 -t $out/share/applications $src/dist/net.shadps4.shadPS4.desktop
-    install -Dm644 -t $out/share/metainfo $src/dist/net.shadps4.shadPS4.metainfo.xml
-
-    runHook postInstall
+  postInstall = ''
+    wrapProgram $out/bin/shadps4 \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpulseaudio
+          pipewire
+        ]
+      }
   '';
 
   runtimeDependencies = [
@@ -173,7 +215,9 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Early in development PS4 emulator";
-    homepage = "https://github.com/shadps4-emu/shadPS4";
+    homepage = "https://shadps4.net";
+    downloadPage = "https://shadps4.net/downloads";
+    donationPage = "https://ko-fi.com/shadps4";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       ryand56

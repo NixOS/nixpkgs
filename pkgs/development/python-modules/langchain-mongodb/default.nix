@@ -36,14 +36,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langchain-mongodb";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-mongodb";
     tag = "libs/langchain-mongodb/v${finalAttrs.version}";
-    hash = "sha256-dO0dASjyNMxnbxZ/ry8lcJxedPdrv6coYiTjOcaT8/0=";
+    hash = "sha256-cNrVB2YKS6vP6O+gA47G3cAlxEiOrI8soL44G/BQYMM=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/langchain-mongodb";
@@ -85,6 +86,7 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated
     "-Wignore::DeprecationWarning"
+    "-Wignore::PendingDeprecationWarning"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14
@@ -98,6 +100,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "libs/langchain-mongodb/v";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

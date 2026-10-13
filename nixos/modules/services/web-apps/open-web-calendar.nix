@@ -13,8 +13,6 @@ let
     mkPackageOption
     mkDefault
     types
-    concatMapStringsSep
-    generators
     ;
   cfg = config.services.open-web-calendar;
 

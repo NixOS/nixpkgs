@@ -25,9 +25,18 @@ let
         result = f origArgs;
         overrideWith =
           if lib.isFunction origArgs then
-            newArgs: lib.extends (_: lib.toFunction newArgs) origArgs
+            newArgs: lib.extends (lib.toExtension newArgs) origArgs
           else
-            newArgs: origArgs // lib.toFunction newArgs origArgs;
+            newArgs:
+            # origAttrs is a plain set here.
+            # Only build a fixed-point when newArgs is an extension
+            # to reduce allocation/GC.
+            if !(lib.isFunction newArgs) then
+              origArgs // newArgs
+            else if !(lib.isFunction (newArgs origArgs)) then
+              origArgs // newArgs origArgs
+            else
+              finalAttrs: origArgs // newArgs finalAttrs origArgs;
       in
       if lib.isAttrs result then
         result
@@ -47,62 +56,27 @@ let
       );
     };
 
-  overrideStdenvCompat =
-    f:
-    lib.fix (
-      f':
-      lib.mirrorFunctionArgs f (
-        args:
-        let
-          result = f args;
-          getName = x: x.pname or (lib.getName (x.name or "<unnamed>"));
-          applyMsgStdenvArg =
-            name:
-            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
-              ${name}: Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
-                buildPythonPackage.override { stdenv = customStdenv; } { }
-            '';
-        in
-        if lib.isFunction args && result ? __stdenvPythonCompat then
-          # Less reliable, as constructing with the wrong `stdenv` might lead to evaluation errors in the package definition.
-          f'.override { stdenv = applyMsgStdenvArg (getName result) result.__stdenvPythonCompat; } (
-            finalAttrs: removeAttrs (args finalAttrs) [ "stdenv" ]
-          )
-        else if (!lib.isFunction args) && (args ? stdenv) then
-          # More reliable, but only works when args is not `(finalAttrs: { })`
-          f'.override { stdenv = applyMsgStdenvArg (getName args) args.stdenv; } (
-            removeAttrs args [ "stdenv" ]
-          )
-        else
-          result
-      )
-      // {
-        # Preserve the effect of overrideStdenvCompat when calling `buildPython*.override`.
-        override = lib.mirrorFunctionArgs f.override (newArgs: overrideStdenvCompat (f.override newArgs));
-      }
-    );
-
   mkPythonDerivation =
-    if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
+    if python.isPy3k then
+      ./mk-python-derivation.nix
+    else
+      # Python 2 build infrastructure lives with its only consumers (resholve, pypy27).
+      ../../misc/resholve/python2/mk-python-derivation.nix;
 
   buildPythonPackage = makeOverridablePythonPackage (
-    overrideStdenvCompat (
-      callPackage mkPythonDerivation {
-        inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
-        inherit toPythonModule; # Libraries provide modules
-        inherit (python) stdenv;
-      }
-    )
+    callPackage mkPythonDerivation {
+      inherit namePrefix; # We want Python libraries to be named like e.g. "python3.6-${name}"
+      inherit toPythonModule; # Libraries provide modules
+      inherit (python) stdenv;
+    }
   );
 
   buildPythonApplication = makeOverridablePythonPackage (
-    overrideStdenvCompat (
-      callPackage mkPythonDerivation {
-        namePrefix = ""; # Python applications should not have any prefix
-        toPythonModule = x: x; # Application does not provide modules.
-        inherit (python) stdenv;
-      }
-    )
+    callPackage mkPythonDerivation {
+      namePrefix = ""; # Python applications should not have any prefix
+      toPythonModule = x: x; # Application does not provide modules.
+      inherit (python) stdenv;
+    }
   );
 
   # Check whether a derivation provides a Python module.
@@ -167,7 +141,6 @@ in
 {
   inherit lib pkgs stdenv;
   inherit (python.passthru)
-    isPy27
     isPy311
     isPy312
     isPy313

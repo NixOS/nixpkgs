@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://sourceforge/perfmon2/libpfm4/libpfm-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-0YuXdkx1VSjBBR03bjNUXQ62DG6/hWgENoE/pbBMw9E=";
+    hash = "sha256-0YuXdkx1VSjBBR03bjNUXQ62DG6/hWgENoE/pbBMw9E=";
   };
 
   # Don't install libpfm.so on windows as it doesn't exist
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   # See: https://github.com/NixOS/nixpkgs/pull/252982#discussion_r1314346216
   postPatch = ''
     substituteInPlace config.mk examples/Makefile \
-      --replace '($(SYS),WINDOWS)' '($(SYS),Windows)'
+      --replace-fail '($(SYS),WINDOWS)' '($(SYS),Windows)'
   '';
 
   makeFlags = [
@@ -33,10 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
     "SYS=${stdenv.hostPlatform.uname.system}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
-  env.CONFIG_PFMLIB_SHARED = if enableShared then "y" else "n";
+  env = {
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    CONFIG_PFMLIB_SHARED = if enableShared then "y" else "n";
+  };
 
   buildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.libgnurx;
+
+  strictDeps = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Helper library to program the performance monitoring events";

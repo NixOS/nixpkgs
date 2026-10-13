@@ -1,9 +1,8 @@
 {
-  buildGoModule,
+  buildGo127Module,
   buildPackages,
   fetchFromGitHub,
   fetchNpmDeps,
-  fetchpatch,
   lib,
   nodejs_24,
   npmHooks,
@@ -16,41 +15,33 @@
   nix-update-script,
   ffmpegSupport ? true,
   versionCheckHook,
+  plugins ? [ ],
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "navidrome";
-  version = "0.61.1";
+  version = "0.64.2";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BRMJCBQl38AqsCI2UYQ9X36U57pg9uuiHsx8sHpVBKE=";
+    hash = "sha256-6667wi23YSPdF/LL5k7VmYEAM5rxQYjqlvAtg5vJzj4=";
   };
 
   patches = [
-    # https://github.com/navidrome/navidrome/pull/5276 (waiting on release)
-    (fetchpatch {
-      name = "regenerate-package-lock-json";
-      url = "https://github.com/navidrome/navidrome/compare/v0.61.1...33a05ef662760fd9feb0a3ae43c7fe149eda610b.patch";
-      hash = "sha256-IQ0wJ7vsSaLjBZS/fKIApNM8UV8oj6L2taCQIPhHvwg=";
-    })
+    # remove once version > 0.64.2
+    ./6221.patch
   ];
 
-  vendorHash = "sha256-iVXJPP41rIpC6Tu1P/jWcePYCQ2Z9lEoTOrDLN26kTU=";
+  vendorHash = "sha256-/3NhF/OHDxWrciN5GdROiO1yhjjdm5F5ntW7h6tzFGc=";
 
   npmRoot = "ui";
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src patches;
-    # Remove after https://github.com/navidrome/navidrome/pull/5276 is released
-    # patches are applied after we run npmDeps without inheriting patches here
-    # so we have to get out of the sourceRoot to apply it then get back in to it
-    prePatch = "cd ..";
-    postPatch = "cd ui";
+    inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
-    hash = "sha256-iXey2XmDwsTR1/bIrBLzm6uvVGzPgQFcDLUtNy8robI=";
+    hash = "sha256-uRF9cf6HZE0gyCvGTEZ520d2gMsxmccEYLJBgc47pMg=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +50,8 @@ buildGoModule (finalAttrs: {
     npmHooks.npmConfigHook
     pkg-config
   ];
+
+  runtimeInputs = plugins;
 
   overrideModAttrs = oldAttrs: {
     nativeBuildInputs = lib.filter (drv: drv != npmHooks.npmConfigHook) oldAttrs.nativeBuildInputs;
@@ -91,6 +84,16 @@ buildGoModule (finalAttrs: {
     make buildjs
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/plugins/
+    ${lib.concatMapStringsSep "\n" (plugin: ''
+      find ${plugin}/share/ \
+        -type f \
+        -name "*.ndp" \
+        -exec ln -s {} $out/share/plugins/${plugin.bundleName or plugin.pname}.ndp \;
+    '') plugins}
+  '';
+
   tags = [
     "netgo"
     "sqlite_fts5"
@@ -105,6 +108,7 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru = {
+    inherit plugins;
     tests.navidrome = nixosTests.navidrome;
     updateScript = nix-update-script { };
   };
@@ -118,6 +122,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       aciceri
       tebriel
+      RossSmyth
     ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;

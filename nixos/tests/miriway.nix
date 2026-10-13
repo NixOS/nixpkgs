@@ -33,12 +33,11 @@
           add-wayland-extensions=all
           enable-x11=
 
-          ctrl-alt=t:foot --maximized
-          ctrl-alt=a:env WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY= alacritty --option window.startup_mode=\"maximized\"
-
-          shell-component=dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY
-
           shell-component=foot --maximized
+        '';
+        settings = ''
+          command_ctrl_alt=t:foot --maximized
+          command_ctrl_alt=a:env WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY= alacritty --option window.startup_mode=\"maximized\"
         '';
       };
 
@@ -59,8 +58,9 @@
         etc."xdg/foot/foot.ini".source = (pkgs.formats.ini { }).generate "foot.ini" {
           main = {
             font = "inconsolata:size=16";
+            initial-color-theme = "light";
           };
-          colors = rec {
+          colors-light = rec {
             foreground = "000000";
             background = "ffffff";
             regular2 = foreground;
@@ -108,7 +108,7 @@
       machine.wait_for_text(r"(alice|machine)")
       machine.send_chars("test-wayland\n")
       machine.wait_for_file("/tmp/test-wayland-exit-ok")
-      machine.copy_from_vm("/tmp/test-wayland.out")
+      machine.copy_from_machine("/tmp/test-wayland.out")
       machine.screenshot("foot_wayland_info")
 
       # please actually register that we want to close the window
@@ -128,7 +128,7 @@
       machine.wait_for_text(r"(alice|machine)")
       machine.send_chars("test-x11\n")
       machine.wait_for_file("/tmp/test-x11-exit-ok")
-      machine.copy_from_vm("/tmp/test-x11.out")
+      machine.copy_from_machine("/tmp/test-x11.out")
       machine.screenshot("alacritty_glinfo")
 
       # please actually register that we want to close the window

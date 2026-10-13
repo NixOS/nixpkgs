@@ -14,7 +14,7 @@
   libxmu,
   libpcap,
   libtool,
-  lua,
+  lua5_2_compat,
   meson,
   ninja,
   openal,
@@ -23,13 +23,16 @@
   tinyxml,
   zlib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "desmume";
   version = "0.9.13";
 
   src = fetchFromGitHub {
-    owner = "TASVideos";
+    owner = "TASEmulators";
     repo = "desmume";
     rev = "release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-vmjKXa/iXLTwtqnG+ZUvOnOQPZROeMpfM5J3Jh/Ynfo=";
@@ -87,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://www.github.com/TASVideos/desmume/";
+    homepage = "https://www.github.com/TASEmulators/desmume/";
     description = "Open-source Nintendo DS emulator";
     longDescription = ''
       DeSmuME is a freeware emulator for the NDS roms & Nintendo DS Lite games

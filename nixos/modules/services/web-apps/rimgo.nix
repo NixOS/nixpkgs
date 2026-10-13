@@ -10,7 +10,6 @@ let
     mkOption
     mkEnableOption
     mkPackageOption
-    mkDefault
     mkIf
     types
     literalExpression

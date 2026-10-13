@@ -94,7 +94,7 @@ buildFHSEnv {
         openxr-loader
         pipewire
         pulseaudio
-        systemd
+        systemdLibs
         vulkan-loader
         x264
       ])

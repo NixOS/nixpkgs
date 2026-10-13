@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "QSCINTILLA_INCLUDE_DIR" "${lib.getDev qt'.qscintilla}/include")
   ];
 
-  postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Copy the icon file to the app bundle
     target="$(find . -name "*.app")"
     mkdir -p "$target/Contents/Resources/"

@@ -6,22 +6,23 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "human-readable";
-  version = "2.0.2";
+  version = "2.0.3";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "human_readable";
-    inherit version;
-    hash = "sha256-I2s/hqxUexK2yizqiJt4HF5yceR7mM3ieV862ZaDs84=";
+    inherit (finalAttrs) version;
+    hash = "sha256-P4Ef1W7oZpVyyy7J+FK1PuBwB0jlPDaVcx/9mrT8Uks=";
   };
 
-  pyproject = true;
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
+
+  pythonImportsCheck = [ "human_readable" ];
 
   meta = {
     description = "Library to make data intended for machines, readable to humans";
@@ -29,4 +30,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mkg20001 ];
   };
-}
+})

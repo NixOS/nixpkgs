@@ -9,7 +9,7 @@ ceph-python.withPackages (
     ceph-python-common
 
     # build time
-    cython_0
+    cython
 
     # debian/control
     bcrypt
@@ -42,6 +42,9 @@ ceph-python.withPackages (
     # src/pybind/mgr/requirements-required.txt
     cryptography
     jsonpatch
+
+    # src/pybind/mgr/dashboard/services/sso.py
+    python3-saml
 
     # src/tools/cephfs/shell/setup.py
     cmd2

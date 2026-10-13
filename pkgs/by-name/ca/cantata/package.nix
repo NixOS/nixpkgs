@@ -5,8 +5,8 @@
   cmake,
   pkg-config,
   qt6,
+  kdePackages,
   perl,
-  fetchpatch2,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
   # default for now until I (or someone else) figure it out.
@@ -163,13 +163,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cantata";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "nullobsi";
     repo = "cantata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4lkfY+87lEE2A863JogG5PtO5SyGn7Hb8shQljSqq3Q=";
+    hash = "sha256-jwIsuNgsd1TFb1Zkyen/AulGQfVY2RWKfAJaWvg4WMI=";
   };
 
   patches = [
@@ -177,18 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     # patchShebangs the playlists scripts, making that unnecessary (perl will
     # always be available because it's a dependency)
     ./dont-check-for-perl-in-PATH.diff
-
-    # remove following patches in next release
-    (fetchpatch2 {
-      name = "fix-build-with-qt-610-qfile-open.patch";
-      url = "https://github.com/nullobsi/cantata/pull/89.patch";
-      hash = "sha256-c7hdecX2oo9jTlLc6zd7LVjgZj4w89zN+eEw7ol/hmI=";
-    })
-    (fetchpatch2 {
-      name = "fix-build-with-qt-610-invalidateFilter-deprecated.patch";
-      url = "https://github.com/nullobsi/cantata/pull/90.patch";
-      hash = "sha256-dMxbC/p5mD/TQZEXORbvNON7Zzbvq0khaIR89lU5cO4=";
-    })
   ];
 
   postPatch = ''
@@ -199,6 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtsvg
     qt6.qtwayland
+    kdePackages.karchive
+    kdePackages.kitemviews
     (perl.withPackages (ppkgs: with ppkgs; [ URI ]))
   ]
   ++ lib.flatten (builtins.catAttrs "pkgs" (builtins.filter (e: e.enable) options));

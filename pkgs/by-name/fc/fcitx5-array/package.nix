@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fmt,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   gettext,
   fcitx5,
   sqlite,
@@ -12,22 +12,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-array";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "ray2501";
     repo = "fcitx5-array";
     tag = finalAttrs.version;
-    hash = "sha256-IIsmldCqXgVJZXS0GcxxYiwpuqPw0GdABvk94q850pQ=";
+    hash = "sha256-dEfkJDVGi0+e1jqSJAas/P6ImnJZko/mKRuO9l0HpqY=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     gettext
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     fmt
     fcitx5
     sqlite

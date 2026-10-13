@@ -27,16 +27,19 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "mcp"
   ];
 
-  dependencies = with python3Packages; [
-    markitdown
-    mcp
-  ];
+  dependencies =
+    with python3Packages;
+    [
+      markitdown
+      mcp
+    ]
+    ++ markitdown.optional-dependencies.all;
 
   pythonImportsCheck = [
     "markitdown_mcp"
   ];
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "MCP server for the markitdown library";

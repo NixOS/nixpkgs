@@ -13,22 +13,22 @@
   intltool,
   libayatana-common,
   librda,
-  lomiri,
+  lomiri-qt6,
   mate-settings-daemon,
   pkg-config,
-  systemd,
+  systemdLibs,
   wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-session";
-  version = "24.5.1";
+  version = "26.6.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-session";
     tag = finalAttrs.version;
-    hash = "sha256-jqcgQTsC4VBit3wwtKKTdEG71CUPJpeMtpzikE4IGhE=";
+    hash = "sha256-rrjtLiZ+qaqB1QowGqp3SfWsgzqIYHYEzEzAERiLLBs=";
   };
 
   postPatch = ''
@@ -48,12 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    lomiri.cmake-extras
+    lomiri-qt6.cmake-extras
     glib
     gsettings-desktop-schemas
     libayatana-common
     librda
-    systemd
+    systemdLibs
 
     # TODO these bloat the closure size alot, just so the indicator doesn't have the potential to crash.
     # is there a better way to give it access to DE-specific schemas as needed?

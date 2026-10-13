@@ -5,7 +5,7 @@
   autoreconfHook,
   wxwidgets_3_2,
   boost186,
-  lua,
+  lua5_2_compat,
   zlib,
   bzip2,
   xylib,
@@ -13,6 +13,9 @@
   gnuplot,
   swig,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fityk";

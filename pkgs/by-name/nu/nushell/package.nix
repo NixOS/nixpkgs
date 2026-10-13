@@ -17,6 +17,7 @@
   curlMinimal,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -24,16 +25,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.112.2";
+  version = "0.116.1";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nushell";
     tag = finalAttrs.version;
-    hash = "sha256-wc7mfbwkJO5gq9mwsiTVx74+btqU6Ox8tPhnXkfmXRU=";
+    hash = "sha256-b62ICCP7Li88obcju4xBNVw7D+6TtRURrOUvzqcjHis=";
   };
 
-  cargoHash = "sha256-KBDgICbdYcqgMLtUXWQsMPe1fO7zT4NcavAyS2i0cDc=";
+  cargoHash = "sha256-+81FRwTlR5NSJuoaH7KCK6Qy1DiU5/JKNqfaAhZmMes=";
 
   nativeBuildInputs = [
     pkg-config
@@ -67,6 +68,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "repl::test_config_path::test_default_config_path"
         "repl::test_config_path::test_xdg_config_bad"
         "repl::test_config_path::test_xdg_config_empty"
+
+        # https://github.com/nushell/nushell/pull/18716 added `| table` to these cases;
+        # the Nix build sandbox has no PTY, so nu-table's width detection panics on 0x0 width.
+        # Known upstream issue: https://github.com/nushell/nushell/issues/15328
+        "eval::eval_rendered_matches::case_3_literal_range"
+        "eval::eval_rendered_matches::case_4_literal_list"
+        "eval::eval_rendered_matches::case_5_literal_record"
+        "eval::eval_rendered_matches::case_6_literal_table"
+        "eval::eval_rendered_matches::case_8_call_spread"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "plugins::config::some"
@@ -102,6 +112,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     shellPath = "/bin/nu";
     updateScript = nix-update-script { };
+
+    withPlugins = plugins: callPackage ./with-plugins.nix { inherit plugins; };
+    tests = {
+      withPlugins = callPackage ./plugins/test-with-plugins.nix { };
+      pluginCompat = callPackage ./plugins/test-plugin-compat.nix { };
+    };
   };
 
   meta = {
@@ -112,6 +128,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       johntitor
       joaquintrinanes
       ryan4yin
+      koffydrop
     ];
     mainProgram = "nu";
   };

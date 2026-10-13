@@ -71,7 +71,7 @@ let
         downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
         license = with lib.licenses; if edition == "" then unfree else agpl3Only;
         platforms = lib.platforms.all;
-        maintainers = with lib.maintainers; [ das_j ];
+        maintainers = [ ];
       };
     };
 in

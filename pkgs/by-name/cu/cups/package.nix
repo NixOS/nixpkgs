@@ -2,8 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   removeReferencesTo,
+  testers,
   zlib,
   libjpeg,
   libpng,
@@ -23,20 +25,46 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cups";
-  version = "2.4.16";
+  version = "2.4.19";
 
   src = fetchurl {
-    url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    hash = "sha256-AzlYcgS0+UKN0FkuswHewL+epuqNzl2WkNVr5YWrqS0=";
+    url = "https://github.com/OpenPrinting/cups/releases/download/v${finalAttrs.version}/cups-${finalAttrs.version}-source.tar.gz";
+    hash = "sha256-ggmEsSpn+YcFeFquLdE0f+CsCXgoAB1Fg/9kV0rtY4k=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   outputs = [
     "out"
     "lib"
     "dev"
     "man"
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-87875.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/2b1dc178a2d2325135b855142e384f4e8c42d8e4.patch";
+      excludes = [ "CHANGES.md" ];
+      hash = "sha256-WHw/UWyUuYEBC6TRADpw+BBCaCts9Nd0jS9qsQHTBMo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/cups/commit/76b515154ce6264dae6d7cc44915d85e0e5fa0f4.patch";
+      hash = "sha256-KtwcB4KrFmsLbtAz6u593qxbnozW2Vb/I9yX36gZTd0=";
+    })
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/cups/commit/526adb34fe87f7f0cf5f63ae26751c1afa36a5d6.patch";
+      hash = "sha256-Pg2xbCXalbvDvv5iI19MrjpOTW03XLKfEHN+lhImG1U=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-87876.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/88e67c00c130a45f3a1edf36686f7a0b2982fef8.patch";
+      excludes = [ "CHANGES.md" ];
+      hash = "sha256-gohcRO93JE2ldF5uPbR0re9NYxb13AeVn4b/qYsQGaE=";
+    })
   ];
 
   postPatch = ''
@@ -174,6 +202,11 @@ stdenv.mkDerivation rec {
       printing-service-notcp
       printing-socket-notcp
       ;
+
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
   };
 
   meta = {
@@ -182,5 +215,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "cups" ];
   };
-}
+})

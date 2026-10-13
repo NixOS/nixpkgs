@@ -25,7 +25,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = {
-    description = "Notion Desktop builds with Notion Enhancer for Windows, MacOS and Linux";
+    description = "Notion Desktop builds with Notion Enhancer for Windows, macOS and Linux";
     homepage = "https://github.com/notion-enhancer/desktop";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ sei40kr ];

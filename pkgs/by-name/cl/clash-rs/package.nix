@@ -6,25 +6,44 @@
   versionCheckHook,
   cmake,
   pkg-config,
+  nodejs,
+  fetchNpmDeps,
+  npmHooks,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.7";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-26OoAy/IiTEqESABqjLMI9zsmHgBbwmIazzoP8Au4nM=";
+    hash = "sha256-RmxAi+0tgCAubwUTWv9w77yBdeIoEvYVxxyeHAe4Nbo=";
   };
 
-  cargoHash = "sha256-UPCXc0uB0pg4ioBIpYQKwtyTWsMH/248WDyO9qB2jwA=";
+  patches = [
+    # Remove the `npm ci` call in build.rs as it fails.
+    ./skip-npm-ci.patch
+  ];
+
+  cargoHash = "sha256-lJh/m6Ibgny1qFeeo3SDFJWXbZ/BX12/LX/m6g6RJZE=";
+
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/clash-dashboard";
+    hash = "sha256-WZjV7wcuQKCfe9aRN06wuId2Ql9wLB97e1SOCeLMIKo=";
+  };
+
+  npmRoot = "clash-dashboard";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     rustPlatform.bindgenHook
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   nativeInstallCheckInputs = [
@@ -33,8 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
+    # requires nightly features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
+    # if_let_guard is stable since Rust 1.95.0, but some deps still carry
+    # the stale #![feature(if_let_guard)] attribute.
+    RUSTFLAGS = "-A stable-features";
   };
 
   buildFeatures = [ "plus" ];

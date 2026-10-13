@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = "http://www.hammerlab.org/docs/sosa/master/index.html";
+    homepage = "https://github.com/hammerlab/sosa";
     description = "Sane OCaml String API";
     license = lib.licenses.isc;
     maintainers = [ ];

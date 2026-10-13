@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ libsndfile ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   doCheck = false; # fails with "../build-scripts/test-driver: line 107: -Mstrict: command not found"
 
   meta = {
@@ -36,7 +38,7 @@ stdenv.mkDerivation {
       code and portions of LAME.
     '';
     homepage = "https://www.twolame.org/";
-    license = with lib.licenses; [ lgpl2Plus ];
+    license = lib.licenses.lgpl2Plus;
     platforms = with lib.platforms; unix;
     maintainers = [ ];
   };

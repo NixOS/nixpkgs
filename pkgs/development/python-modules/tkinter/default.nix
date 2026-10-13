@@ -21,12 +21,14 @@ buildPythonPackage {
   src = python.src;
 
   prePatch = ''
-    mkdir $NIX_BUILD_TOP/tkinter
+    python_src=$PWD
+    tkinter_src=$PWD/../tkinter
+    mkdir -p "$tkinter_src"
 
     # copy the module bits and pieces from the python source
-    cp -v  Modules/{_tkinter.c,tkinter.h} ../tkinter/
-    cp -rv Modules/clinic ../tkinter/
-    cp -rv Lib/tkinter ../tkinter/
+    cp -v  Modules/{_tkinter.c,tkinter.h} "$tkinter_src"
+    cp -rv Modules/clinic "$tkinter_src"
+    cp -rv Lib/tkinter "$tkinter_src"
 
     # install our custom pyproject.toml
     cp ${
@@ -34,11 +36,11 @@ buildPythonPackage {
         python_version = python.version;
         python_internal_dir = "${python}/include/${python.libPrefix}/internal";
       }
-    } $NIX_BUILD_TOP/tkinter/pyproject.toml
+    } "$tkinter_src"/pyproject.toml
 
   ''
   + lib.optionalString (pythonOlder "3.13") ''
-    substituteInPlace "$NIX_BUILD_TOP/tkinter/tkinter/tix.py" --replace-fail \
+    substituteInPlace "$tkinter_src/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
       "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
   '';
@@ -47,7 +49,7 @@ buildPythonPackage {
   patches = lib.optional (pythonOlder "3.12") ./fix-ttk-notebook-test.patch;
 
   preConfigure = ''
-    pushd $NIX_BUILD_TOP/tkinter
+    cd "$tkinter_src"
   '';
 
   build-system = [ setuptools ];
@@ -73,8 +75,12 @@ buildPythonPackage {
   nativeCheckInputs = lib.optional stdenv.hostPlatform.isLinux xvfb-run;
 
   preCheck = ''
-    cd $NIX_BUILD_TOP/Python-*/Lib
+    cd "$python_src"/Lib
     export HOME=$TMPDIR
+
+    # fix test that ignores PYTHONPATH and can't find tkinter
+    substituteInPlace test/support/script_helper.py \
+      --replace-fail "__cached_interp_requires_environment = None" "__cached_interp_requires_environment = True"
   ''
   + lib.optionalString (pythonAtLeast "3.13" && pythonOlder "3.15") ''
     # https://github.com/python/cpython/pull/143570
@@ -86,7 +92,7 @@ buildPythonPackage {
       test/test_tkinter/support.py \
         --replace-fail \
           "support.get_resource_value('wantobjects')" \
-          "0"
+          "1"
   '';
 
   checkPhase =

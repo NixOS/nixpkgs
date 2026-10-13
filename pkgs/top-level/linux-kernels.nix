@@ -25,22 +25,7 @@ let
     packagesFor
     packageAliases
     vanillaPackages
-    rpiPackages
     ;
-
-  markBroken =
-    drv:
-    drv.overrideAttrs (
-      {
-        meta ? { },
-        ...
-      }:
-      {
-        meta = meta // {
-          broken = true;
-        };
-      }
-    );
 in
 {
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
@@ -58,27 +43,12 @@ in
         # New vendor kernels should go to nixos-hardware instead.
         # e.g. https://github.com/NixOS/nixos-hardware/tree/master/microsoft/surface/kernel
 
-        linux_5_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "5.10";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_5_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "5.15";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
         linux_6_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "6.1";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.libbpf_C23_compat
           ];
         };
 
@@ -106,16 +76,8 @@ in
           ];
         };
 
-        linux_6_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.19";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_7_0 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "7.0";
+        linux_7_2 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "7.2";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -180,6 +142,8 @@ in
 
         linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11";
         linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11";
+        linux_5_10 = throw "linux 5.10 was removed because it will reach its end of life within 26.11";
+        linux_5_15 = throw "linux 5.15 was removed because it will reach its end of life within 26.11";
         linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
         linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
         linux_6_11 = throw "linux 6.11 was removed because it has reached its end of life upstream";
@@ -188,6 +152,9 @@ in
         linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream";
         linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream";
         linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
+        linux_6_19 = throw "linux 6.19 was removed because it has reached its end of life upstream";
+        linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream";
+        linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -213,55 +180,10 @@ in
 
         linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
 
-        # Remove warning added on 2026-04-01
-        linux_rpi1 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 1;
-              }
-            );
-        linux_rpi2 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 2;
-              }
-            );
-        linux_rpi3 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 3;
-              }
-            );
-        linux_rpi4 =
-          lib.warnOnInstantiate
-            "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
-            (
-              callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-                kernelPatches = with kernelPatches; [
-                  bridge_stp_helper
-                  request_key_helper
-                ];
-                rpiVersion = 4;
-              }
-            );
+        linux_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
+        linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware.";
       }
     )
   );
@@ -284,6 +206,21 @@ in
       {
         inherit callPackage;
         kernel = kernel_;
+
+        # vmlinux.h derived from this kernel's BTF, for BPF consumers such as
+        # systemd's nsresourced/mountfsd.
+        # This derivation requires CONFIG_DEBUG_INFO_BTF-built kernel (this is
+        # the case in nixpkgs), otherwise it will fail.
+        ebpf-headers = callPackage ../os-specific/linux/kernel/ebpf-headers.nix {
+          inherit kernel;
+        };
+
+        # systemd compiled against this kernel's BTF, so its BPF programs
+        # (nsresourced/mountfsd, networkd) match the kernel that will run.
+        systemd = pkgs.systemd.override {
+          vmlinux-btf = self.ebpf-headers;
+        };
+
         inherit (kernel) stdenv; # in particular, use the same compiler by default
 
         # to help determine module compatibility
@@ -353,25 +290,21 @@ in
           inherit kernel;
         };
 
+        ethercat = callPackage pkgs.ethercat.kernelModule { };
+
         evdi = callPackage ../os-specific/linux/evdi { };
 
         fanout = callPackage ../os-specific/linux/fanout { };
 
         framework-laptop-kmod = callPackage ../os-specific/linux/framework-laptop-kmod { };
 
-        fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
-
         gasket = callPackage ../os-specific/linux/gasket { };
 
         gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
 
-        hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
+        gtp5g = callPackage ../os-specific/linux/gtp5g { };
 
-        e1000e =
-          if lib.versionOlder kernel.version "4.10" then
-            callPackage ../os-specific/linux/e1000e { }
-          else
-            null;
+        hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
         iio-utils =
           if lib.versionAtLeast kernel.version "4.1" then
@@ -386,6 +319,8 @@ in
             null;
 
         ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers { };
+
+        ipu7-drivers = callPackage ../os-specific/linux/ipu7-drivers { };
 
         ivsc-driver = callPackage ../os-specific/linux/ivsc-driver { };
 
@@ -482,8 +417,6 @@ in
 
         rtl8821au = callPackage ../os-specific/linux/rtl8821au { };
 
-        rtl8821ce = callPackage ../os-specific/linux/rtl8821ce { };
-
         rtl88x2bu = callPackage ../os-specific/linux/rtl88x2bu { };
 
         rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
@@ -576,7 +509,7 @@ in
         veikk-linux-driver = callPackage ../os-specific/linux/veikk-linux-driver { };
         vendor-reset = callPackage ../os-specific/linux/vendor-reset { };
 
-        vhba = callPackage ../applications/emulators/cdemu/vhba.nix { };
+        vhba = callPackage ../by-name/cd/cdemu-daemon/vhba.nix { };
 
         virtio_vmmci = callPackage ../os-specific/linux/virtio_vmmci { };
 
@@ -593,12 +526,6 @@ in
         vmm_clock = callPackage ../os-specific/linux/vmm_clock { };
 
         vmware = callPackage ../os-specific/linux/vmware { };
-
-        wireguard =
-          if lib.versionOlder kernel.version "5.6" then
-            callPackage ../os-specific/linux/wireguard { }
-          else
-            null;
 
         x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
@@ -640,9 +567,9 @@ in
 
         hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
 
-        drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
+        drbd = callPackage ../by-name/dr/drbd/driver.nix { };
 
-        nullfs = callPackage ../os-specific/linux/nullfs { };
+        nullfsvfs = callPackage ../os-specific/linux/nullfsvfs { };
 
         msi-ec = callPackage ../os-specific/linux/msi-ec { };
 
@@ -660,6 +587,7 @@ in
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
+        rtl8821ce = throw "rtl8821ce has been removed due to lack of maintenance"; # Added 2026-07-22
         vm-tools = self.mm-tools;
         xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
         amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
@@ -668,28 +596,29 @@ in
         system76-power = lib.warnOnInstantiate "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
         system76-scheduler = lib.warnOnInstantiate "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
+        nullfs = self.nullfsvfs; # Added 2026-05-16
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
         nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
         nvidia_dc_535 = throw "nvidiaPackages.dc_535 removed, soon reaches end of life, see https://endoflife.date/nvidia"; # added 2026-03-08
+        fwts-efi-runtime = throw "fwts-efi-runtime has been replaced by efi_test starting with kernel version 4.8, see https://bugs.launchpad.net/fwts/+bug/2138473"; # added 2026-05-16
       }
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
-    linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
-    linux_6_19 = recurseIntoAttrs (packagesFor kernels.linux_6_19);
-    linux_7_0 = recurseIntoAttrs (packagesFor kernels.linux_7_0);
+    linux_7_2 = recurseIntoAttrs (packagesFor kernels.linux_7_2);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
     linux_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
+    linux_5_10 = throw "linux 5.10 was removed because it will reach its end of life within 26.11"; # Added 2026-10-05
+    linux_5_15 = throw "linux 5.15 was removed because it will reach its end of life within 26.11"; # Added 2026-10-05
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
     linux_6_11 = throw "linux 6.11 was removed because it reached its end of life upstream"; # Added 2025-03-23
@@ -698,18 +627,13 @@ in
     linux_6_15 = throw "linux 6.15 was removed because it reached its end of life upstream"; # Added 2025-08-23
     linux_6_16 = throw "linux 6.16 was removed because it reached its end of life upstream"; # Added 2025-10-22
     linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
-  };
-
-  rpiPackages = {
-    linux_rpi1 = packagesFor kernels.linux_rpi1;
-    linux_rpi2 = packagesFor kernels.linux_rpi2;
-    linux_rpi3 = packagesFor kernels.linux_rpi3;
-    linux_rpi4 = packagesFor kernels.linux_rpi4;
+    linux_6_19 = throw "linux 6.19 was removed because it reached its end of life upstream"; # Added 2026-04-23
+    linux_7_0 = throw "linux 7.0 was removed because it has reached its end of life upstream"; # Added 2026-06-27
+    linux_7_1 = throw "linux 7.1 was removed because it has reached its end of life upstream"; # Added 2026-09-02
   };
 
   packages = recurseIntoAttrs (
     vanillaPackages
-    // rpiPackages
     // {
 
       # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -742,6 +666,11 @@ in
       linux_hardened = throw "linux_hardened has been removed due to lack of maintenance";
       linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages";
 
+      linux_rpi1 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi2 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi3 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+      linux_rpi4 = throw "linux-rpi series has been removed, please change to use nixos-hardware"; # Added 2026-09-18
+
       linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
       linux_rt_5_10 = throw "linux_rt_5_10 has been removed due to lack of maintenance";
       linux_rt_5_15 = throw "linux_rt_5_15 has been removed due to lack of maintenance";
@@ -753,7 +682,7 @@ in
   packageAliases = {
     linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_7_0;
+    linux_latest = packages.linux_7_2;
   }
   // lib.optionalAttrs config.allowAliases {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";

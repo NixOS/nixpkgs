@@ -11,8 +11,7 @@
   makeWrapper,
   net-tools,
   nixosTests,
-  nodejs_20,
-  replace,
+  nodejs_22,
   ruby_3_3,
   stdenv,
   tzdata,
@@ -23,6 +22,9 @@
   cargo,
   rustc,
   rustPlatform,
+
+  # gitlab-glaz
+  buildPackages,
 
   # gpgme
   pkg-config,
@@ -67,6 +69,58 @@ let
         buildInputs = [ file ];
         buildFlags = [ "--enable-system-libraries" ];
       };
+
+      gitlab-glaz =
+        attrs:
+        {
+          cargoDeps = rustPlatform.fetchCargoVendor {
+            src = stdenv.mkDerivation {
+              inherit (buildRubyGem { inherit (attrs) gemName version source; })
+                name
+                src
+                unpackPhase
+                nativeBuildInputs
+                ;
+              dontBuilt = true;
+              installPhase = ''
+                cp -R ext/glaz $out
+                cp Cargo.lock $out
+              '';
+            };
+            hash = "sha256-ICMSzy8go3psdHklhX4n4fqgEESht/d+D05L8CKuKAc=";
+          };
+
+          dontBuild = false;
+
+          nativeBuildInputs = [
+            cargo
+            rustc
+            rustPlatform.cargoSetupHook
+            rustPlatform.bindgenHook
+          ];
+
+          disallowedReferences = [
+            rustc.unwrapped
+          ];
+
+          preInstall = ''
+            export CARGO_HOME="$PWD/../.cargo/"
+          '';
+
+          postInstall = ''
+            find $out -type f -name .rustc_info.json -delete
+          '';
+        }
+        // lib.optionalAttrs stdenv.hostPlatform.isRiscV64 {
+          # protoc-bin-vendored ships no riscv64 protoc
+          postPatch = ''
+            substituteInPlace $cargoDepsCopy/source-*/glaz-proto-*/build.rs \
+              --replace-fail 'protoc_bin_vendored::protoc_bin_path()?' \
+                'std::path::PathBuf::from(std::env::var("PROTOC")?)'
+          '';
+          PROTOC = lib.getExe' buildPackages.protobuf "protoc";
+        };
+
       gitlab-glfm-markdown = attrs: {
         cargoDeps = rustPlatform.fetchCargoVendor {
           src = stdenv.mkDerivation {
@@ -83,7 +137,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-ikizLu1B+stdk+HDGjrACOpgptg0jfbHcoqfrJtUpEY=";
+          hash = "sha256-Pl2jkn4qj+v9edjrrq2TqvUhKjnBJ5qatNKTqRzLLII=";
         };
 
         dontBuild = false;
@@ -124,7 +178,7 @@ let
             '';
           };
 
-          # GitLab publishes a Cargo.lock for gitlab_query_lanaguage that does not contain the `source` attribute
+          # GitLab publishes a Cargo.lock for gitlab_query_language that does not contain the `source` attribute
           # for the `glql` dependency. This is an intentional choice by them that is documented in the README.
           # This code refetches this hash and exposes the lockfile, so that it can be used in later stages.
           nativeBuildInputs = [ cargo ];
@@ -136,7 +190,7 @@ let
             cp Cargo.lock $out
           '';
 
-          hash = "sha256-YQEldpT1pCJe5hBJmLTVyvOjnilH10mGhgYfKDSOY3k=";
+          hash = "sha256-AbGa+nUf5aEmHTbAYIyPv3+E0ldeybODZsZ4EqG6eBI=";
         };
 
         postPatch = ''
@@ -197,7 +251,7 @@ let
               cp Cargo.lock $out
             '';
           };
-          hash = "sha256-7jqaf5RIsc9gq98WBCe3Dd3Fv2X+4echdXU1FSK/xnE=";
+          hash = "sha256-pEgmtBnvLjc2xG26hdLQnJOJDFv8YaYlOW/OYqJL98I=";
         };
 
         nativeBuildInputs = [
@@ -266,7 +320,7 @@ let
     nativeBuildInputs = [
       rubyEnv.wrappedRuby
       rubyEnv.bundler
-      nodejs_20
+      nodejs_22
       git
       cacert
       yarnConfigHook
@@ -292,7 +346,7 @@ let
       SKIP_FRONTEND_ISLANDS_BUILD = lib.optionalString (!gitlabEnterprise) "true";
 
       SKIP_YARN_INSTALL = 1;
-      NODE_OPTIONS = "--max-old-space-size=8192";
+      NODE_OPTIONS = "--max-old-space-size=16384";
     };
 
     postConfigure = ''
@@ -334,6 +388,12 @@ let
       pushd node_modules/vue-demi
       yarn run postinstall
       popd
+
+      # Apply node_modules patches
+      node scripts/frontend/postinstall.js
+
+      # Creates a `infection_scanner.json` needed for the assets compiler to succeed.
+      node scripts/frontend/infection_scanner/infection_scanner.mjs
 
       bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production SKIP_YARN_INSTALL=true
 
@@ -392,10 +452,10 @@ stdenv.mkDerivation {
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
     # state directory.
-    ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
-    ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
-    ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
-    ${replace}/bin/replace-literal -f -r -e 'require_relative "/home/git/gitlab/lib/gitlab/puma/error_handler"' "require_relative '$out/share/gitlab/lib/gitlab/puma/error_handler'" config
+    find config -type f -exec sed -i -e "s|\.\./\.\./lib|$out/share/gitlab/lib|" {} +
+    find config -type f -exec sed -i -e "s|\.\./lib|$out/share/gitlab/lib|" {} +
+    find config -type f -exec sed -i -e "s|require_relative 'application'|require_relative '$out/share/gitlab/config/application'|" {} +
+    find config -type f -exec sed -i -e "s|require_relative \"/home/git/gitlab/lib/gitlab/puma/error_handler\"|require_relative \"$out/share/gitlab/lib/gitlab/puma/error_handler\"|" {} +
   '';
 
   buildPhase = ''

@@ -11,18 +11,18 @@
   perl,
   pkg-config,
   stdenv,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mptcpd";
-  version = "0.13";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "multipath-tcp";
     repo = "mptcpd";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-gPXtYmCLJ8eL6VfCi3kpDA7lNn38WB6J4FXefdu2D7M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AjgdF+52FyxjKJaoUnPaBDc6eWgY4wHGGXyYh/T/yJs=";
   };
 
   outputs = [
@@ -47,7 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = "doxygen -u";
 
   configureFlags = [
+    "--sysconfdir=/etc"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ];
+
+  installFlags = [
+    # The NixOS module generates /etc/mptcpd/mptcpd.conf declaratively.
+    "pkgsysconfdir=$out/etc/mptcpd"
   ];
 
   # fix: 'Fontconfig error: Cannot load default config file: No such file: (null)'
@@ -55,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     ell
-    systemd
+    systemdLibs
   ];
 
   # fix: 'Fontconfig error: No writable cache directories'

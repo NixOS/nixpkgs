@@ -11,13 +11,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "assetripper";
-  version = "1.3.12";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "AssetRipper";
     repo = "AssetRipper";
     tag = finalAttrs.version;
-    hash = "sha256-pBza6yuMdExKqzhds8Ib5SzRzXRdD5TdEN/Yz7V+zGA=";
+    hash = "sha256-8IYbpR94lgan3DSSywy/Q5PlbeH4z6fHrH2IWxcFnNs=";
   };
 
   buildInputs = [
@@ -73,6 +73,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     description = "Tool for extracting assets from Unity serialized files and asset bundles";
     homepage = "https://github.com/AssetRipper/AssetRipper";
+    changelog = "https://github.com/AssetRipper/AssetRipper/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     mainProgram = "AssetRipper";
     maintainers = with lib.maintainers; [

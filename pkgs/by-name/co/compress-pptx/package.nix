@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "compress-pptx";
-  version = "1.3.1";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slhck";
     repo = "compress-pptx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+67EdAEWsRY11Pkie6AOz7Sl7MSTMGxZoQYS+M2x07Y=";
+    hash = "sha256-DTN/R8ioSp63txLB4ac8P0k3CXQN1ikr9qgYeP2dQSM=";
   };
 
   patches = [

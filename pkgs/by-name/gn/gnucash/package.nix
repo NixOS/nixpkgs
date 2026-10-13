@@ -37,12 +37,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnucash";
-  version = "5.15";
+  version = "5.17";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${finalAttrs.version}/gnucash-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-sL1K9Dtr3jRUIn1LOY6ex6Db1RQ0acE3P8gkw8qrCQk=";
+    hash = "sha256-PRioj1uCMPAeBMLS1zv5Xn3NO/jYzub/pUuyTe5YuF8=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DWITH_PYTHON=\"ON\""
-    "-DPYTHON_SYSCONFIG_BUILD=\"$out\""
+    (lib.cmakeBool "WITH_PYTHON" true)
+    (lib.cmakeFeature "PYTHON_SYSCONFIG_BUILD" "$out")
   ];
 
   env = {
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "Gnucash";
         repo = "gnucash-docs";
         tag = finalAttrs.version;
-        hash = "sha256-EI/By0Ek3qDCmi6svX96Wg78UnmsDZzQLRSqErPUuxA=";
+        hash = "sha256-vCuulyhAk64QYdD3ceCESFNTpHm4Y4K6RxB9fh6ZXf0=";
       };
 
       nativeBuildInputs = [ cmake ];

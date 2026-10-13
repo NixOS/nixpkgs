@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   arrow-cpp,
+
   # nativeBuildInputs
   binaryen,
   lld,
@@ -12,6 +13,7 @@
   protobuf,
   rustfmt,
   nasm,
+
   # buildInputs
   freetype,
   glib,
@@ -19,7 +21,10 @@
   libxkbcommon,
   openssl,
   vulkan-loader,
+  # linux-only:
+  udev,
   wayland,
+
   versionCheckHook,
   # passthru
   nix-update-script,
@@ -30,12 +35,15 @@
   # More information can be found in there README:
   # https://raw.githubusercontent.com/rerun-io/rerun/5a9794990c4903c088ad77174e65eb2573162d97/crates/utils/re_analytics/README.md
   buildWebViewerFeatures ? [
+    "audio"
     "map_view"
   ],
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rerun";
-  version = "0.31.3";
+  version = "0.39.0";
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -46,7 +54,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rerun-io";
     repo = "rerun";
     tag = finalAttrs.version;
-    hash = "sha256-ApGrW3E7r5lulBNB89HCP/WKBtwV7OABueQxqElF6rs=";
+    hash = "sha256-P3v+GhCBZfaym/yWnm9WP2y/0LSoW7wLYT6W5G4ZKF4=";
   };
 
   # The path in `build.rs` is wrong for some reason, so we patch it to make the passthru tests work
@@ -55,7 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '"rerun_sdk/rerun_cli/rerun"' '"rerun_sdk/rerun"'
   '';
 
-  cargoHash = "sha256-JpYKJ8LRAMTy8TPQ2tk5o9b6Z2sgTkSVwULoCO3fYSk=";
+  cargoHash = "sha256-18fYxWQA68e1LNxtpT0HwsQ3pNykxk5nemHYvne71OQ=";
 
   cargoBuildFlags = [
     "--package"
@@ -83,19 +91,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Note that cargoBuildFeatures reference what buildFeatures is set to in stdenv.mkDerivation,
   # so that user can easily create an overlay to set cargoBuildFeatures to what he needs
   preBuild = ''
-    if [[ " $cargoBuildFeatures " == *" web_viewer "* ]]; then
-      # transform the environment variable that is a space separated list into a comma separated list
-      buildWebViewerFeatures=$(echo $buildWebViewerFeatures | tr ' ' ',')
-      # Create the features option only if there are features to pass
-      buildWebViewerFeaturesCargoOption=""
-      if [[ ! -z "$buildWebViewerFeatures" ]]; then
-        buildWebViewerFeaturesCargoOption="--features $buildWebViewerFeatures"
-        echo "Features passed to the web viewer build: $buildWebViewerFeatures"
-      else
-        echo "No features will be passed to the web viewer build"
-      fi
+    if [[ " ''${cargoBuildFeatures[*]} " == *" web_viewer "* ]]; then
+      # join the bash array into a comma-separated list for cargo's --features flag
+      buildWebViewerFeaturesJoined=$(IFS=,; echo "''${buildWebViewerFeatures[*]}")
+      echo "Features passed to the web viewer build: '$buildWebViewerFeaturesJoined'"
       echo "Building the wasm web viewer for rerun's web_viewer feature"
-      cargo run -p re_dev_tools -- build-web-viewer --no-default-features $buildWebViewerFeaturesCargoOption --release -g
+      # `--features` replaces re_viewer's default web features (`analytics,default_web`).
+      # Always pass it (even empty) so that analytics does not get enabled.
+      cargo run -p re_dev_tools -- build-web-viewer --features "$buildWebViewerFeaturesJoined" --release -g
     else
       echo "web_viewer feature not enabled, skipping web viewer build."
     fi
@@ -136,11 +139,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     freetype
     glib
     gtk3
-    (lib.getDev openssl)
     libxkbcommon
+    openssl
     vulkan-loader
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+    (lib.getLib wayland)
+  ];
 
   propagatedBuildInputs = [ arrow-cpp ];
 
@@ -159,7 +165,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     while IFS= read -r -d $'\0' path ; do
       elfHasDynamicSection "$path" || continue
-      for dep in $addDlopenRunpaths ; do
+      for dep in "''${addDlopenRunpaths[@]}" ; do
         patchelf "$path" --add-rpath "$dep"
       done
     done < <(
@@ -196,7 +202,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      inherit (python3Packages) rerun-sdk;
+      inherit (python3Packages) rerun-sdk rerun-notebook;
     };
   };
 

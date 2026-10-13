@@ -10,6 +10,7 @@
   lib,
   pkgsBuildBuild,
   replaceVars,
+  fetchpatch,
 }:
 
 qtModule {
@@ -36,10 +37,18 @@ qtModule {
     # add version specific QML import path
     ./use-versioned-import-path.patch
 
-    # Backport of https://codereview.qt-project.org/c/qt/qtdeclarative/+/704031
-    # Fixes common Plasma crash
-    # FIXME: remove in 6.10.3
-    ./another-crash-fix.patch
+    # revert codesigning change on Darwin that doesn't work with our signing tools
+    (fetchpatch {
+      url = "https://github.com/qt/qtdeclarative/commit/a7084abd9778b955d80e7419e82f6f7b92f7978d.diff";
+      hash = "sha256-ESy35OlmsvI4yFQ/rFT8oelOUBCwCmlcbQJvwcTrCig=";
+      revert = true;
+    })
+
+    # backport fix recommended by KDE
+    (fetchpatch {
+      url = "https://codereview.qt-project.org/changes/qt%2Fqtdeclarative~768697/revisions/4/patch?download&raw";
+      hash = "sha256-HiHAWbLr2MaZpw+yaA+JIveYory5cWkL2ZNf3zveYX4=";
+    })
   ];
 
   cmakeFlags = [

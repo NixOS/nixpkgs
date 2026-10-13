@@ -14,13 +14,12 @@ let
       hash = "sha256-CTcyv10Xz9G2LqHh4qOW9tKBEcB+rztE2R7xJIU4QBQ=";
     };
 
-    x86_64-darwin = {
+    aarch64-darwin = {
       url = "https://www.sdrplay.com/software/SDRplayAPI-macos-installer-universal-3.15.1.pkg";
       hash = "sha256-XRSM7aH653XS0t9bP89G3uJ7YiLiU1xMBjwvLqL3rMM=";
     };
 
     aarch64-linux = x86_64-linux;
-    aarch64-darwin = x86_64-darwin;
   };
 
   platforms = lib.attrNames sources;

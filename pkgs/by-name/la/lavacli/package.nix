@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lavacli";
-  version = "2.7";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "lava";
     repo = "lavacli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UiAqZJU7+x8f53myMY0gUwQ5PYNzKmO6kYWEqs1QvG4=";
+    hash = "sha256-iTv787OeUU/KMenvtOa8o+ls5QsjUDXytnNAjkuD52I=";
   };
 
   build-system = with python3.pkgs; [

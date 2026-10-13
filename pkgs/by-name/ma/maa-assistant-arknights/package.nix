@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals cudaSupport (
     with cudaPackages;
     [
-      cuda_cccl # cub/cub.cuh
+      cccl # cub/cub.cuh
       libcublas # cublas_v2.h
       libcurand # curand.h
       libcusparse # cusparse.h

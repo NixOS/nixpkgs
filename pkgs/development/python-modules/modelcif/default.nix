@@ -7,16 +7,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "modelcif";
-  version = "1.6";
+  version = "1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihmwg";
     repo = "python-modelcif";
-    tag = version;
-    hash = "sha256-01tCE7uClUEpCFkdAvvjG18SwKypJ+oeQ9SbJZF3RVU=";
+    tag = finalAttrs.version;
+    hash = "sha256-4iAFXL+3/HOP2wmO0SoXAGPRrkoaITStDQKvhKAOjTA=";
   };
 
   build-system = [
@@ -39,8 +39,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for handling ModelCIF mmCIF and BinaryCIF files";
     homepage = "https://github.com/ihmwg/python-modelcif";
-    changelog = "https://github.com/ihmwg/python-modelcif/blob/${src.tag}/ChangeLog.rst";
+    changelog = "https://github.com/ihmwg/python-modelcif/blob/${finalAttrs.src.tag}/ChangeLog.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };
-}
+})

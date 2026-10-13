@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch,
   config,
   callPackages,
   lib,
@@ -30,7 +29,6 @@
   nix-update-script,
   oniguruma,
   openldap,
-  openssl_1_1,
   openssl,
   pam,
   pcre2,
@@ -417,7 +415,10 @@ lib.makeScope pkgs.newScope (
           #
           # These will be passed as arguments to mkExtension above.
           extensionData = [
-            { name = "bcmath"; }
+            {
+              name = "bcmath";
+              env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+            }
             {
               name = "bz2";
               buildInputs = [ bzip2 ];
@@ -558,7 +559,7 @@ lib.makeScope pkgs.newScope (
               # The configure script doesn't correctly add library link
               # flags, so we add them to the variable used by the Makefile
               # when linking.
-              MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
+              env.MYSQLND_SHARED_LIBADD = "-lz -lssl -lcrypto";
               # The configure script builds a config.h which is never
               # included. Let's include it in the main header file
               # included by all .c-files.
@@ -717,7 +718,10 @@ lib.makeScope pkgs.newScope (
             }
             { name = "sysvmsg"; }
             { name = "sysvsem"; }
-            { name = "sysvshm"; }
+            {
+              name = "sysvshm";
+              configureFlags = [ "CFLAGS=-std=gnu17" ];
+            }
             {
               name = "tidy";
               configureFlags = [ "--with-tidy=${html-tidy}" ];

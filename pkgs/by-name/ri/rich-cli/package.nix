@@ -9,34 +9,26 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rich-cli";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mV5b/J9wX9niiYtlmAUouaAm9mY2zTtDmex7FNWcezQ=";
+    hash = "sha256-z1Ea8f8QNgy2CWGyQWgY2Y/tpg269R5n9Qrs1YhCHa8=";
   };
-
-  patches = [
-    # Update dependencies, https://github.com/Textualize/rich-cli/pull/94
-    (fetchpatch {
-      name = "update-dependencies.patch";
-      url = "https://github.com/Textualize/rich-cli/pull/94/commits/1e9a11af7c1c78a5a44a207b1e0dce4c4b3c39f0.patch";
-      hash = "sha256-cU+s/LK2GDVWXLZob0n5J6sLjflCr8w10hRLgeWN5Vg=";
-    })
-    (fetchpatch {
-      name = "markdown.patch";
-      url = "https://github.com/Textualize/rich-cli/pull/94/commits/0a8e77d724ace88ce88ee9d68a46b1dc8464fe0b.patch";
-      hash = "sha256-KXvRG36Qj5kCj1RiAJsNkoJY7t41zUfJFgHeCtc0O4w=";
-    })
-  ];
 
   pythonRelaxDeps = [
     "rich"
     "textual"
+    "rich-rst"
   ];
+
+  postPatch = ''
+    substituteInPlace src/rich_cli/__main__.py \
+      --replace-fail 'VERSION = "1.8.0"' 'VERSION = "1.8.1"'
+  '';
 
   build-system = with python3Packages; [
     poetry-core

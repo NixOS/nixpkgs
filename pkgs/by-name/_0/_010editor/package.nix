@@ -91,11 +91,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-M1D2Bmi45sYiB0Ci+0X0AxyIeR+On60xt4jP1Jsy5tA=";
     };
 
-    x86_64-darwin = fetchurl {
-      url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-vsI0VgcJGleJTQ5C1JaiCkELfWfwgFhyCx+6j5mldIk=";
-    };
-
     aarch64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
       hash = "sha256-+yU5JdPNS2BfiZLsBLyyC+ieVNqbIWba3teBlTIDWtk=";
@@ -124,7 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ eljamm ];
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

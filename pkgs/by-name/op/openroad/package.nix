@@ -18,7 +18,7 @@
   versionCheckHook,
 
   # buildInputs
-  boost,
+  boost192,
   cbc,
   cimg,
   clp,
@@ -29,7 +29,6 @@
   lemon-graph,
   libjpeg,
   or-tools,
-  pcre,
   python3,
   re2,
   readline,
@@ -67,7 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost
+    # boost 1.91 + gcc16 segfaults in dbSta's Boost.JSON cell-usage report; fixed in 1.92.
+    # Drop this override once the default boost is bumped to 1.92 (see #571409).
+    boost192
     cbc
     cimg
     clp
@@ -82,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtdeclarative
     libsForQt5.qtsvg
     or-tools
-    pcre
     python3
     re2
     readline
@@ -153,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CMAKE_RULE_MESSAGES" false)
     (lib.cmakeFeature "TCL_HEADER" "${tcl}/include/tcl.h")
     (lib.cmakeFeature "TCL_LIBRARY" "${tcl}/lib/libtcl${stdenv.hostPlatform.extensions.sharedLibrary}")
-    (lib.cmakeFeature "BOOST_ROOT" "${boost}")
+    (lib.cmakeFeature "BOOST_ROOT" "${boost192}")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED -Wno-error=deprecated-declarations")
@@ -183,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     mainProgram = "openroad";
     maintainers = with lib.maintainers; [
-      trepetti
       hzeller
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

@@ -13,7 +13,12 @@
   lld,
   clang-tools,
   useWildLinker,
+  makeRustPlatform,
+  rustc,
+  cargo,
+  fd,
   hello,
+  taplo,
 }:
 let
   # These wrappers are REQUIRED for the Wild test suite to pass
@@ -103,6 +108,10 @@ in
       stdenv.cc.libc.static
     ];
 
+    nativeCheckInputs = [
+      taplo
+    ];
+
     # https://github.com/davidlattimore/wild/discussions/832#discussioncomment-14482948
     checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
       "--skip=integration_test::program_name_71___unresolved_symbols_object_c__"
@@ -146,6 +155,16 @@ in
   adapter-llvm = helloTest "adapter-llvm" (
     hello.override (_: {
       stdenv = useWildLinker clangStdenv;
+    })
+  );
+
+  # Test the adapter works with a Rust package
+  adapter-rust = helloTest "adapter-rust" (
+    fd.override (_: {
+      rustPlatform = makeRustPlatform {
+        inherit rustc cargo;
+        stdenv = useWildLinker stdenv;
+      };
     })
   );
 }
