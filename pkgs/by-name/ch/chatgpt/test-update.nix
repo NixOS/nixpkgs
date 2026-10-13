@@ -6,6 +6,7 @@
   dpkg,
   gzip,
   gnused,
+  gawk,
   jq,
   libxml2,
   nix,
@@ -19,6 +20,7 @@ runCommand "chatgpt-updater-test"
       dpkg
       gzip
       gnused
+      gawk
       jq
       libxml2
       nix

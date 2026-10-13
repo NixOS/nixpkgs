@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gzip jq libxml2 dpkg
+#!nix-shell -i bash -p curl gzip jq libxml2 dpkg gawk
 # shellcheck shell=bash
 
 set -o errexit
@@ -39,7 +39,29 @@ get_field() {
   local field="$1"
   local metadata="$2"
 
-  sed -n "s/^$field: //p" <<< "$metadata" | head -n 1
+  local value
+  value=$(sed -n "s/^$field: //p" <<< "$metadata")
+  [[ -n "$value" && "$value" != *$'\n'* ]] || fail "missing or duplicate $field field"
+  printf '%s\n' "$value"
+}
+
+select_linux_metadata() {
+  # Keep every field within one matching Debian control paragraph.
+  awk -v architecture="$1" '
+    BEGIN { RS = ""; FS = "\n" }
+    {
+      package = arch = ""
+      for (i = 1; i <= NF; i++) {
+        if ($i ~ /^Package: /) package = substr($i, 10)
+        if ($i ~ /^Architecture: /) arch = substr($i, 15)
+      }
+      if (package == "chatgpt" && arch == architecture) {
+        print $0
+        matches++
+      }
+    }
+    END { if (matches != 1) exit 1 }
+  '
 }
 
 fetch_linux_metadata() {
@@ -62,7 +84,8 @@ for pair in \
   "x86_64-linux amd64" \
   "aarch64-linux arm64"; do
   read -r system architecture <<< "$pair"
-  metadata=$(fetch_linux_metadata "$architecture")
+  metadata=$(fetch_linux_metadata "$architecture" | select_linux_metadata "$architecture") \
+    || fail "expected one chatgpt record for $architecture"
 
   [[ $(get_field Package "$metadata") == chatgpt ]]
   [[ $(get_field Architecture "$metadata") == "$architecture" ]]
@@ -101,6 +124,8 @@ if [[ -f "$SOURCE_JSON" ]] && jq -e \
   --arg arm64_hash "$ARM64_EXPECTED_HASH" \
   '.["aarch64-darwin"].version == $darwin_version
     and .["aarch64-darwin"].src.url == $darwin_url
+    and (.["aarch64-darwin"].src.hash | type) == "string"
+    and (.["aarch64-darwin"].src.hash | test("^sha256-[A-Za-z0-9+/]{43}=$"))
     and .["x86_64-linux"].version == $amd64_version
     and .["x86_64-linux"].src.url == $amd64_url
     and .["aarch64-linux"].version == $arm64_version

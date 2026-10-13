@@ -52,6 +52,7 @@ class UpdateTests(unittest.TestCase):
         self.source.write_text('{"original": true}\n')
         self.mapping = {}
         self.metadata = {}
+        self.index_overrides = {}
         for architecture in ["amd64", "arm64"]:
             self.set_linux_artifact(architecture, debian_archive(architecture))
         darwin = self.root / "darwin.zip"
@@ -109,12 +110,12 @@ if '--print-path' in sys.argv: print(path)
             f'<rss xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"><channel><item><sparkle:shortVersionString>{VERSION}</sparkle:shortVersionString><enclosure url="{darwin_url or self.darwin_url}" length="{size}"/></item></channel></rss>'
         )
         self.mapping[f"{BASE_URL}/appcast.xml"] = str(appcast)
-        for architecture, fields in self.metadata.items():
+        for architecture in self.metadata:
             index = self.root / f"{architecture}.gz"
             index.write_bytes(
                 gzip.compress(
-                    "".join(
-                        f"{key}: {value}\n" for key, value in fields.items()
+                    self.index_overrides.get(
+                        architecture, self.metadata_text(architecture)
                     ).encode()
                 )
             )
@@ -145,6 +146,54 @@ if '--print-path' in sys.argv: print(path)
             self.assertEqual(self.source.read_text(), '{"original": true}\n')
         self.assertEqual(list(self.root.glob(".chatgpt-source.*")), [])
         return result
+
+    def metadata_text(self, architecture):
+        return "".join(
+            f"{key}: {value}\n" for key, value in self.metadata[architecture].items()
+        )
+
+    def test_unrelated_package_paragraph_is_ignored(self):
+        self.index_overrides["amd64"] = (
+            "Package: unrelated\nArchitecture: amd64\nVersion: 1.0\n\n"
+            + self.metadata_text("amd64")
+        )
+        self.run_update()
+        self.assertEqual(
+            json.loads(self.source.read_text())["x86_64-linux"]["version"], VERSION
+        )
+
+    def test_ambiguous_matching_paragraphs_are_rejected(self):
+        record = self.metadata_text("amd64")
+        self.index_overrides["amd64"] = record + "\n" + record
+        self.run_update(success=False)
+
+    def test_duplicate_metadata_field_is_rejected(self):
+        self.index_overrides["amd64"] = self.metadata_text("amd64") + "Version: 1.0\n"
+        self.run_update(success=False)
+
+    def test_missing_field_is_not_borrowed_from_another_package(self):
+        self.metadata["amd64"].pop("SHA256")
+        self.index_overrides["amd64"] = (
+            self.metadata_text("amd64")
+            + "\nPackage: unrelated\nArchitecture: amd64\n"
+            + "SHA256: "
+            + "0" * 64
+            + "\n"
+        )
+        self.run_update(success=False)
+
+    def test_malformed_darwin_hash_pin_is_refreshed(self):
+        self.run_update()
+        data = json.loads(self.source.read_text())
+        data["aarch64-darwin"]["src"].pop("hash")
+        self.source.write_text(json.dumps(data))
+        (self.root / "prefetch.log").unlink()
+        self.run_update()
+        self.assertEqual(
+            json.loads(self.source.read_text())["aarch64-darwin"]["src"]["hash"],
+            digest((self.root / "darwin.zip").read_bytes()),
+        )
+        self.assertTrue((self.root / "prefetch.log").exists())
 
     def test_valid_update(self):
         self.run_update()
