@@ -19,7 +19,7 @@
   libgee,
   libgtop,
   libx11,
-  linuxPackages,
+  nvidiaPackages,
   live-chart,
   pciutils,
   udisks,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
     libgtop
     libx11
-    linuxPackages.nvidia_x11.settings.libXNVCtrl
+    nvidiaPackages.stable.settings.libXNVCtrl
     live-chart
     pciutils
     udisks

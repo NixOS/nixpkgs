@@ -14,7 +14,7 @@
   libdazzle,
   libappindicator,
   libnotify,
-  linuxPackages,
+  nvidiaPackages,
 }:
 
 let
@@ -34,7 +34,7 @@ let
       setuptools
     ]
   );
-  nvidia_x11 = linuxPackages.nvidia_x11;
+  nvidia = nvidiaPackages.stable;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gwe";
@@ -83,8 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${
         builtins.concatStringsSep ":" [
           (lib.makeBinPath [
-            nvidia_x11
-            nvidia_x11.settings
+            nvidia.driver
+            nvidia.settings
           ])
           "/run/wrappers/bin"
         ]
