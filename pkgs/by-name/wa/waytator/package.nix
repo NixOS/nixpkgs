@@ -8,6 +8,7 @@
   pkg-config,
   libadwaita,
   makeWrapper,
+  wl-clipboard,
   fetchFromGitHub,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/waytator \
-      --prefix PATH : ${lib.makeBinPath [ tesseract ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          tesseract
+          wl-clipboard
+        ]
+      }
   '';
 
   mesonBuildType = "release";
