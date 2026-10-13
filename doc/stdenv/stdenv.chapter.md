@@ -1539,7 +1539,7 @@ Caller-facing flag variables, including salted inputs, are not overwritten with 
 The shared functions in `pkgs/build-support/wrapper-common/utils.bash` represent policy as scalar variables in a reserved `wrapper_` namespace.
 Preparation selects inputs and adds defaults; interpreting a continuation never selects inputs again, including Darwin deployment targets.
 Delegation exports that record directly, and the receiving wrapper removes its export attributes before running hooks.
-After recording the delegated link mode, transport preserves every present field, including empty values, without a second encoding or a field registry; an absent field remains absent.
+After recording the link mode for which the compiler rendered its main linker flags, transport preserves every present field, including empty values, without a second encoding or a field registry; an absent field remains absent.
 A fresh invocation clears the record and selects its own policy from the unchanged caller inputs.
 Lists retain their order, boolean inputs combine by disjunction, and singular inputs must agree across active roles, including the distinction between unset and explicitly empty values.
 Selections that a later operation can still change must remain separate: libc include defaults are retained independently so a delegated compiler can honor its own `-nostdinc` without deleting a caller-provided include option.
@@ -1623,7 +1623,11 @@ The compiler emits or deliberately omits its main linker flags according to the 
 That residual disposition is independent of link mode: opaque final arguments can create a linker job after primary policy omitted the main flags, and the receiving linker must not introduce them again.
 The linker wrapper retains that policy and performs the remaining work: capability-specific hardening, trailing flags, emulation, RPATH discovery, build IDs, and Darwin version handling.
 Moving main flags after compiler-generated arguments would change library resolution; skipping all linker processing would lose the remaining policy.
-An unwrapped linker can still be selected because the binding adds no private command-line option.
+The compiler renders the dynamic loader and `NIX_LDFLAGS` for the link mode visible in the driver's arguments, which excludes a mode selected in a response file or in opaque link flags.
+The linker wrapper classifies the output from its own arguments, after the driver has translated the actual mode: GCC and Clang pass `-pie` with `--no-dynamic-linker` for a static PIE, and select static linking before their inputs.
+It removes the rendered loader from a static executable, and also the rendered RPATH entries from a static PIE; equal caller arguments remain.
+A fresh linker invocation renders its own policy for the classified mode.
+An unwrapped linker can still be selected because the binding adds no private command-line option; such a link keeps the policy rendered for the visible mode.
 
 Multi-job drivers bind a **toolchain request** and choose an interpreter at each actual job boundary.
 The `nix-support/compiler` and `nix-support/linker` entries accept that request, a raw executable, and its arguments; they expand response files before interpreting the job when the response-file helper is available (it can be omitted during bootstrapping).

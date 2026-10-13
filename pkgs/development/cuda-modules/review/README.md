@@ -59,10 +59,14 @@ explicit caller frontend entry retains its standalone lexical context. Bounded
 driver and wrapper checks pass; rebuilt producers remain pending.
 Opaque link policy and late hooks can select static PIE after the
 wrapper inferred a dynamic link, producing an unwanted interpreter and RUNPATH
-and a program that crashes. This defect remains open: a native linker prototype
-was reviewed and withdrawn, and the fix belongs in the generic tier described in
-the [wrapper design](../../../build-support/wrapper-common/README.md#link-mode-policy-at-the-linker).
-Earlier suites cover neither issue.
+and a program that crashes. The ld-wrapper now classifies the output from the
+final linker arguments and removes that policy. Links that reach an unwrapped
+linker are an accepted limit; see the
+[wrapper design](../../../build-support/wrapper-common/README.md#link-mode-policy-at-the-linker).
+The fix passes bounded wrapper checks over cached toolchains; rebuilt producers
+remain pending.
+Earlier suites covered neither issue. The cc-wrapper suite now covers static and
+static-PIE modes selected through opaque link flags.
 Purity and no-native enforcement must retain caller provenance through native
 scoped translation and frontend forwarding; those paths remain under review.
 
