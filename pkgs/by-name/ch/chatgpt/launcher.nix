@@ -1,6 +1,7 @@
 # Electron rewrites bundled plugin manifests, so they need a writable copy.
 {
   coreutils,
+  findutils,
   flock,
   writeShellApplication,
 }:
@@ -10,6 +11,7 @@ writeShellApplication {
 
   runtimeInputs = [
     coreutils
+    findutils
     flock
   ];
 

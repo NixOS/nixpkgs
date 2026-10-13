@@ -19,6 +19,8 @@ class LauncherTests(unittest.TestCase):
         self.root = Path(self.temporary.name)
         self.source = self.root / "resources"
         self.source.mkdir()
+        empty_path = self.root / "empty-path"
+        empty_path.mkdir()
         for resource in ["codex", "codex-code-mode-host", "rg"]:
             (self.source / resource).write_text("fixture")
         for resource in ["cua_node", "native", "tectonic"]:
@@ -46,6 +48,7 @@ if os.environ.get('HOLD_APP'):
         app.chmod(0o755)
         self.env = {
             **os.environ,
+            "PATH": str(empty_path),
             "HOME": str(self.root / "home"),
             "XDG_CACHE_HOME": str(self.root / "cache"),
             "CHATGPT_EXECUTABLE": str(app),
