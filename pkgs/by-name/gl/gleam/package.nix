@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  rustPlatform,
+  rustPackages_1_98,
 
   fetchFromGitHub,
   git,
@@ -15,7 +15,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_98.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
   version = "1.19.2";
 
