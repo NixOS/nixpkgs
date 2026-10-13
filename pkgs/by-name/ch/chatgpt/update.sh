@@ -41,7 +41,11 @@ get_field() {
 
   local value
   value=$(awk -v field="$field" '
-    index($0, field ": ") == 1 { count++; value = substr($0, length(field) + 3) }
+    index($0, field ":") == 1 {
+      count++
+      value = substr($0, length(field) + 2)
+      sub(/^[ \t]+/, "", value)
+    }
     END {
       if (count != 1 || value == "") exit 1
       print value
