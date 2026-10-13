@@ -40,6 +40,7 @@ buildDotnetModule {
   ];
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_10_0;
   dotnetBuildFlags = [
     "--property:OpenApiGenerateDocuments=false"
   ];
@@ -51,5 +52,6 @@ buildDotnetModule {
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.kfears ];
+    mainProgram = "sockseek";
   };
 }
