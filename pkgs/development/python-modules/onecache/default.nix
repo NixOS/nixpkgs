@@ -51,6 +51,9 @@ buildPythonPackage rec {
     description = "Python LRU and TTL cache for sync and async code";
     license = lib.licenses.mit;
     homepage = "https://github.com/sonic182/onecache";
-    maintainers = with lib.maintainers; [ geraldog ];
+    maintainers = with lib.maintainers; [
+      geraldog
+      sonic182
+    ];
   };
 }
