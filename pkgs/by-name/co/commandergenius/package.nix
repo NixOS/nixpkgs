@@ -43,13 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
-    "-DSHAREDIR=${placeholder "out"}/share"
+    (lib.cmakeFeature "APPDIR" "bin")
+    (lib.cmakeFeature "SHAREDIR" "${placeholder "out"}/share")
   ];
 
-  makeFlags = [
-    "DESTDIR=${placeholder "out"}"
-  ];
+  postInstall = ''
+    for icon in $out/share/icons/hicolor/*/apps/cg.*.png; do
+      mv "$icon" "$(dirname "$icon")/cg.png"
+    done
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -58,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(sdl2-config --cflags)"
-    sed -i 's,APPDIR games,APPDIR bin,' src/install.cmake
   '';
 
   meta = {
