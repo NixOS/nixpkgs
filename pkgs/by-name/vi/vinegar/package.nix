@@ -23,6 +23,7 @@
   libx11,
   symlinkJoin,
   nix-update-script,
+  gettext,
 }:
 let
   # Based on wine 11.0
@@ -104,21 +105,22 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "vinegar";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0MNUkfhbsvOJdN89VGTuf3zHUFhimiCNuoY47V03Cgo=";
+    hash = "sha256-5RwRiHVOYxMBL92Z8H+0VxJtz6Y7yXpv70UqesLINCk=";
   };
 
-  vendorHash = "sha256-gzy7Lw7AP1evPSDSzMQb/yzn+8uVtyk8TOBL2fjE3R8=";
+  vendorHash = "sha256-kS8awIGI5xHY4i7hvKMLcZKdMiFaoirokd3TSpMbC8c=";
 
   nativeBuildInputs = [
     glib
     makeBinaryWrapper
     pkg-config
+    gettext
   ];
 
   buildInputs = [
@@ -143,9 +145,8 @@ buildGoModule (finalAttrs: {
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail 'gtk-update-icon-cache' '${lib.getExe' gtk4 "gtk4-update-icon-cache"}'
-    substituteInPlace internal/config/values.go \
-      --replace-fail 'return dirs.WinePath' 'return "${wine}"' \
-      --replace-fail '"github.com/vinegarhq/vinegar/internal/dirs"' ""
+    substituteInPlace internal/config/config.go \
+      --replace-fail 'cfg.Studio.WineRoot = dirs.WinePath' 'cfg.Studio.WineRoot = "${wine}"'
   '';
 
   buildPhase = ''
