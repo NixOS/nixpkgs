@@ -1,0 +1,35 @@
+Vendored from https://github.com/NVIDIA/cutlass/pull/3744 (open), commit 0da587a179827cec76a44a51e01fa37b5aa526d2.
+
+From 0da587a179827cec76a44a51e01fa37b5aa526d2 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Tue, 13 Oct 2026 20:14:50 -0700
+Subject: [PATCH] [Tests] Import running_on_ci from where pytest 9 defines it
+
+pytest 9 moved running_on_ci from _pytest.assertion.util to _pytest.compat,
+so importing test/utils/test_sharding.py fails with pytest 9 (for example
+when test/examples/CuTeDSL/conftest.py loads it). The copy in
+cutlass_cicd/pytest/plugins already imports it from _pytest.compat, but it
+requires pytest >= 9; this copy has no such requirement, so try the pytest 9
+location first and fall back to the old one.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ test/utils/test_sharding.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/test/utils/test_sharding.py b/test/utils/test_sharding.py
+index ab2f05fead..20025ee0d7 100644
+--- a/test/utils/test_sharding.py
++++ b/test/utils/test_sharding.py
+@@ -37,7 +37,10 @@
+ import sys
+ 
+ import pytest
+-from _pytest.assertion.util import running_on_ci
++try:
++    from _pytest.compat import running_on_ci  # pytest >= 9
++except ImportError:
++    from _pytest.assertion.util import running_on_ci
+ 
+ 
+ # The dict class to record the default SMs for all subtests under certain directory.
