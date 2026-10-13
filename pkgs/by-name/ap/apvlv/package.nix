@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/naihe2010/apvlv/blob/v${finalAttrs.version}/NEWS";
     description = "PDF viewer with Vim-like behaviour";
     homepage = "https://naihe2010.github.io/apvlv/";
-    license = lib.licenses.lgpl2;
+    license = lib.licenses.gpl2Plus;
     longDescription = ''
       apvlv is a PDF/DJVU/UMD/TXT Viewer Under Linux/WIN32
       with Vim-like behaviour.
