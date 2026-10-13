@@ -98,6 +98,11 @@ in
           {file}`«pkg»/etc/dbus-1/session.d`
           {file}`«pkg»/share/dbus-1/session.d`
           {file}`«pkg»/share/dbus-1/services`
+
+          The system bus only reads system services and policy from these
+          packages. Session services are found through
+          {env}`XDG_DATA_DIRS`, so they also work when installed through
+          {option}`environment.systemPackages` or a user profile.
         '';
       };
 
@@ -127,6 +132,10 @@ in
 
       environment.etc."dbus-1".source = configDir;
 
+      # The session bus finds services through XDG_DATA_DIRS, so user
+      # profiles keep working and registered packages need to be linked in.
+      environment.pathsToLink = [ "/share/dbus-1" ];
+
       users.users.messagebus = {
         uid = config.ids.uids.messagebus;
         description = "D-Bus system message bus daemon user";
@@ -140,6 +149,11 @@ in
       # Install dbus for dbus tools even when using dbus-broker
       environment.systemPackages = [
         cfg.dbusPackage
+        (pkgs.buildEnv {
+          name = "dbus-session-services";
+          paths = cfg.packages;
+          pathsToLink = [ "/share/dbus-1/services" ];
+        })
       ];
 
       # You still need the dbus reference implementation installed to use dbus-broker
