@@ -5,6 +5,8 @@
   libcec,
   pytestCheckHook,
   setuptools,
+  runCommand,
+  writers,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -34,6 +36,22 @@ buildPythonPackage (finalAttrs: {
     "cec"
     "pycec"
   ];
+
+  # Ideally, failures to propagate cec as an implicit dependency of
+  # pycec would be caught by pythonImportsCheckPhase, but the way it's
+  # currently designed to read the ambient $PYTHONPATH instead of
+  # deriving $PYTHONPATH from $out/nix-support/propagated-build-inputs
+  # may lead to false positives.
+  #
+  # See https://github.com/NixOS/nixpkgs/pull/573303
+  passthru.tests.propagate-cec = runCommand "test-propagate-cec" { } ''
+    ${writers.writePython3 "test-propagate-cec.py" {
+      libraries = [ finalAttrs.finalPackage ];
+      doCheck = false;
+    } "import cec"}
+
+    touch "$out"
+  '';
 
   meta = {
     description = "Python modules to access HDMI CEC devices";
