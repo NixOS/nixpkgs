@@ -40,14 +40,10 @@ class VersionInfo:
 
 
 class VersionFetcher:
-    # Cached updates.xml content
-    _channels: dict | None = None
-
-    @property
+    @cached_property
     def channels(self) -> dict:
-        if self._channels is None:
-            self._channels = self.download_channels()
-        return self._channels
+        "updates.xml content"
+        return self.download_channels()
 
     def latest_version_info(
         self, ide: Ide, ignore_no_url_error=False
