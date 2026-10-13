@@ -7506,6 +7506,11 @@
     githubId = 997543;
     name = "Dmitry Malikov";
   };
+  dmfrpro = {
+    github = "dmfrpro";
+    githubId = 45668671;
+    name = "Dmitry Alekhine";
+  };
   DMills27 = {
     github = "DMills27";
     githubId = 5251658;
@@ -29263,6 +29268,7 @@
   };
   thegu5 = {
     name = "Gus";
+    email = "gus+nix@gu5.org";
     matrix = "@gus:gu5.org";
     github = "thegu5";
     githubId = 58223632;
