@@ -57,7 +57,11 @@ in
       default = false;
       description = ''
         Whether to open required ports for the configured providers.
-        Currently airplay and sendspin need port to be opened to function.
+        Currently AirPlay, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
+
+        ::: {.note}
+        AirPlay and Spotify Connect must open all random high UDP or TCP ports respectively to function.
+        :::
       '';
     };
 
