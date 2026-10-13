@@ -27,10 +27,10 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(11\\.7\\.[0-9]+)$";
-    version = "11.7.11";
-    srcHash = "sha256-C0t/PITQ1R4VRHQk+bQE8GPfdy5GjxLsHtRgYq6qgSw=";
-    vendorHash = "sha256-V63mY8za59WOI7dk8wMuHxWs2cs2rfZ9Ubpm5O+KMYU=";
-    npmDepsHash = "sha256-mK5wrX9dWDC+8dn/J7E1EOiwHekAzt5yQCJ8xqfKa3g=";
+    version = "11.7.12";
+    srcHash = "sha256-j8ZpLnQ74mDW8mqwO3yhaxkmMEhMPYEHCbKNuPPup3E=";
+    vendorHash = "sha256-SUKDVVnHAuS1SDdVXn5onU/0fx6IEc48yrWr+zOeZng=";
+    npmDepsHash = "sha256-hjNOWUmqRkkSofEMXkOuJt9tStqc24/z3GD2JfYSRlM=";
     lockfileOverlay = ''
       .packages["node_modules/rollup"] |= (del(.resolved, .integrity) | .version = "2.80.0")
     '';
