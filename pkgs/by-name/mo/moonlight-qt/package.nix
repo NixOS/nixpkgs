@@ -2,13 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   qt6,
   pkg-config,
   vulkan-headers,
   SDL2,
   SDL2_ttf,
-  ffmpeg_8,
+  ffmpeg,
   libopus,
   libplacebo,
   openssl,
@@ -24,23 +23,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight-qt";
-  version = "6.1.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-stream";
     repo = "moonlight-qt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rWVNpfRDLrWsqELPFquA6rW6/AfWV+6DNLUCPqIhle0=";
+    hash = "sha256-s6b3L51jCNuYJS0dvx2tkNvzNzrsSzzdSfTgM+IR1kg=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Fix build for Xcode < 14
-    (fetchpatch {
-      url = "https://github.com/moonlight-stream/moonlight-qt/commit/76deafbd7bf868562d69061e7d6abf2612a2c7ad.patch";
-      hash = "sha256-+rXdexZQpOP6yS+oTmvYVxasWxOX16uU1udN75zNX3w=";
-    })
-  ];
 
   nativeBuildInputs = [
     qt6.qmake
@@ -52,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     SDL2_ttf
-    ffmpeg_8
+    ffmpeg
     libopus
     libplacebo
     qt6.qtdeclarative
