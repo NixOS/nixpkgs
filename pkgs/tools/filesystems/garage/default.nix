@@ -5,7 +5,6 @@
   fetchpatch2,
   installShellFiles,
   libsodium,
-  openssl,
   pkg-config,
   protobuf,
   sqlite,
@@ -47,7 +46,6 @@ let
 
       buildInputs = [
         libsodium
-        openssl
         sqlite
         zstd
       ];
@@ -57,7 +55,6 @@ let
       ];
 
       env = {
-        OPENSSL_NO_VENDOR = true;
         SODIUM_USE_PKG_CONFIG = true;
         LIBSQLITE3_SYS_USE_PKG_CONFIG = true;
         ZSTD_SYS_USE_PKG_CONFIG = true;
