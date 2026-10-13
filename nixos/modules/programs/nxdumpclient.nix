@@ -12,7 +12,6 @@
 
   config = lib.mkIf config.programs.nxdumpclient.enable {
     environment.systemPackages = [ pkgs.nxdumpclient ];
-    services.dbus.packages = [ pkgs.nxdumpclient ];
     services.udev.packages = [ pkgs.nxdumpclient ];
   };
 }

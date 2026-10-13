@@ -15,7 +15,6 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.ladybird ];
-    services.dbus.packages = [ pkgs.ladybird ];
     fonts.fontDir.enable = true;
   };
 }

@@ -20,7 +20,6 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.geary ];
-    services.dbus.packages = [ pkgs.geary ];
     programs.dconf.enable = true;
     services.gnome.gnome-keyring.enable = true;
     services.gnome.gnome-online-accounts.enable = true;

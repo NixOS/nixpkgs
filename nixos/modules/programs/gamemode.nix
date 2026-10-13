@@ -59,8 +59,6 @@ in
       etc."gamemode.ini".source = configFile;
     };
 
-    services.dbus.packages = [ cfg.package ];
-
     security = {
       polkit = {
         enable = true;
