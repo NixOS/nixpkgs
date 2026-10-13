@@ -2548,17 +2548,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-resty-openidc";
-      version = "1.9.1-1";
+      version = "1.9.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-openidc-1.9.1-1.rockspec";
-          sha256 = "1irh9c1v10yx0zdxplbypy2zv2717mh5j2qxsdv5hvwvrp3h2rf4";
+          url = "mirror://luarocks/lua-resty-openidc-1.9.2-1.rockspec";
+          sha256 = "09dx5p00s9snin4w5q9zz1bp0ixn8pig4f45mr8s98jlgi6i2xvj";
         }).outPath;
       src = fetchFromGitHub {
         owner = "zmartzone";
         repo = "lua-resty-openidc";
-        tag = "v1.9.1";
-        hash = "sha256-98b+FmBq+yMnTpnimkLSUEkA0WWO0Ob1h25xwRjBvJY=";
+        tag = "v1.9.2";
+        hash = "sha256-Cjo/CuAk1/moMspwY81kzWh8dnYMGG1nqqtZPTWYjXo=";
       };
 
       disabled = luaOlder "5.1";
