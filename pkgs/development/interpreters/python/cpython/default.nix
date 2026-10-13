@@ -36,6 +36,7 @@
 
   # platform-specific dependencies
   bashNonInteractive,
+  gettext,
   windows,
 
   # optional dependencies
@@ -275,6 +276,10 @@ let
       ncurses
       xz
       zlib
+    ]
+    # darwin libc does not provide gettext functions
+    ++ optionals (stdenv.hostPlatform.isDarwin && !withMinimalDeps) [
+      gettext
     ]
     ++ optionals withLibxcrypt [
       libxcrypt
