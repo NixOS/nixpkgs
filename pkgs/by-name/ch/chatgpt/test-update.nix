@@ -1,4 +1,5 @@
 {
+  lib,
   runCommand,
   python3,
   bash,
@@ -23,7 +24,7 @@ runCommand "chatgpt-updater-test"
       gawk
       jq
       libxml2
-      nix
+      (lib.getBin nix)
     ];
   }
   ''
