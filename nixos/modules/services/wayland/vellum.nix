@@ -31,7 +31,7 @@ in
       default = { };
       description = ''
         Configuration options for vellum.
-        See available options at <https://github.com/greyxp1/vellum/blob/master/docs/configuration.md>.
+        See available options at <https://github.com/greyxp1/vellum/blob/master/default-config.toml>.
       '';
       example = {
         default_tool = "arrow";
