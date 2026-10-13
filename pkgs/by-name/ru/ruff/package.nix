@@ -8,6 +8,8 @@
   rust-jemalloc-sys,
   buildPackages,
   versionCheckHook,
+  pkg-config,
+  zstd,
 
   # passthru
   nixosTests,
@@ -31,10 +33,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-rwI+8VxGo7W5ol6FfhKaxRjogbwx6tcYlHEgEuMJXCs=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     rust-jemalloc-sys
+    zstd
   ];
 
   postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
