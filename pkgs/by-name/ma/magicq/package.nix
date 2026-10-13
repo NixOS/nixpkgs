@@ -110,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "magicq";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ panakotta00 ];
+    maintainers = with lib.maintainers; [
+      panakotta00
+      letgamer
+    ];
   };
 })
