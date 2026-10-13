@@ -13,7 +13,6 @@
   libxml2,
   llvmPackages,
   llvm_libtool,
-  ninja,
   ninja_1_11,
   patchesForVersion,
   perl,
@@ -94,12 +93,7 @@ let
   # Can reproduce using `nix --option cores 2 build -f . swift`.
   # Until we find out the exact cause, pin ninja to version 1.11.1.
   # Note: While upstream is pinned to a newer version of Ninja now, it still has this problem.
-  # TODO(@reckenrode): Make unconditional on staging after staging-next merge.
-  ninja' =
-    if lib.versions.majorMinor swift_release == "6.3" && stdenv.hostPlatform.isLinux then
-      ninja_1_11
-    else
-      ninja;
+  ninja = ninja_1_11;
 
   doCheck = false; # TODO: Implement tests per https://github.com/swiftlang/swift/blob/main/docs/Testing.md.
 
@@ -323,7 +317,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    ninja'
+    ninja
     perl # For pod2man
     python3
     swift
