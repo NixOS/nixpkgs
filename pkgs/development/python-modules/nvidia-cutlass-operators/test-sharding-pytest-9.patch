@@ -1,0 +1,21 @@
+pytest 9 moved running_on_ci from _pytest.assertion.util to _pytest.compat.
+
+From https://github.com/ConnorBaker/cutlass/tree/test-sharding-pytest-9
+(commit 0da587a179827cec76a44a51e01fa37b5aa526d2); not yet submitted upstream.
+
+diff --git a/test/utils/test_sharding.py b/test/utils/test_sharding.py
+index ab2f05fe..20025ee0 100644
+--- a/test/utils/test_sharding.py
++++ b/test/utils/test_sharding.py
+@@ -37,7 +37,10 @@ import re
+ import sys
+ 
+ import pytest
+-from _pytest.assertion.util import running_on_ci
++try:
++    from _pytest.compat import running_on_ci  # pytest >= 9
++except ImportError:
++    from _pytest.assertion.util import running_on_ci
+ 
+ 
+ # The dict class to record the default SMs for all subtests under certain directory.
