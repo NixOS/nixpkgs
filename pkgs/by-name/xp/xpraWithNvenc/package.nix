@@ -1,8 +1,8 @@
 {
   xpra,
-  linuxPackages,
+  nvidiaPackages,
 }:
 xpra.override {
   withNvenc = true;
-  nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
+  nvidia_x11 = nvidiaPackages.stable.driver.override { libsOnly = true; };
 }
