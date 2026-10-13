@@ -1,45 +1,68 @@
 {
   lib,
   stdenv,
-  fetchzip,
-  fltk,
-  zlib,
-  xdg-utils,
-  libxinerama,
-  libjpeg,
+  fetchFromGitHub,
+  cairo,
+  cmake,
+  fltk_1_4,
+  libGL,
   libGLU,
+  libjpeg,
+  libpng,
+  libx11,
+  libxpm,
+  wrapGAppsHook3,
+  xdg-utils,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eureka-editor";
-  version = "1.27b";
+  version = "2.1.0";
 
-  src = fetchzip {
-    url = "mirror://sourceforge/eureka-editor/Eureka/${lib.versions.majorMinor finalAttrs.version}/eureka-${finalAttrs.version}-source.tar.gz";
-    sha256 = "075w7xxsgbgh6dhndc1pfxb2h1s5fhsw28yl1c025gmx9bb4v3bf";
+  src = fetchFromGitHub {
+    owner = "ioan-chera";
+    repo = "eureka-editor";
+    tag = "eureka-${finalAttrs.version}";
+    hash = "sha256-MwFa/AKFj+jV3W9YUuao4gqQbBuuyeS9dkS1IoPb0+4=";
   };
 
-  buildInputs = [
-    fltk
-    zlib
+  nativeBuildInputs = [
+    cmake
+    wrapGAppsHook3
     xdg-utils
-    libjpeg
-    libxinerama
-    libGLU
   ];
 
-  enableParallelBuilding = true;
+  buildInputs = [
+    cairo
+    fltk_1_4
+    libGL
+    libGLU
+    libjpeg
+    libpng
+    libx11
+    libxpm
+    zlib
+  ];
 
-  postPatch = ''
-    substituteInPlace src/main.cc --replace /usr/local $out
-    substituteInPlace Makefile    --replace /usr/local $out
-  '';
+  cmakeFlags = [
+    (lib.cmakeFeature "BIN_DIR" "bin")
+    (lib.cmakeBool "ENABLE_UNIT_TESTS" false)
+    (lib.cmakeBool "USE_SYSTEM_FLTK" true)
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev cairo}/include/cairo";
 
   preInstall = ''
-    mkdir -p $out/bin $out/share/applications $out/share/icons $out/man/man6
-    cp misc/eureka.desktop $out/share/applications
-    cp misc/eureka.ico $out/share/icons
-    cp misc/eureka.6 $out/man/man6
+    export XDG_DATA_HOME=$out/share HOME=$TMPDIR
+  '';
+
+  postInstall = ''
+    install -Dm644 ../misc/eureka.6 -t $out/share/man/man6
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(--add-flags "--install $out/share/eureka")
   '';
 
   meta = {
