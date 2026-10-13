@@ -1,4 +1,9 @@
-{ buildRedist }:
+{
+  buildRedist,
+  cudaMajorMinorVersion,
+  cudaOlder,
+  lib,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "cuda_opencl";
@@ -9,6 +14,12 @@ buildRedist {
     "include"
     "lib"
   ];
+
+  # NVIDIA corrected the library's case in the CUDA 13.4 metadata.
+  postPatch = lib.optionalString (cudaOlder "13.4") ''
+    substituteInPlace share/pkgconfig/opencl-${cudaMajorMinorVersion}.pc \
+      --replace-fail '-lopencl' '-lOpenCL'
+  '';
 
   meta = {
     description = "Low-level API for heterogeneous computing that runs on CUDA-powered GPUs";

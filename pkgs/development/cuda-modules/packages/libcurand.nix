@@ -1,16 +1,11 @@
-{ buildRedist }:
-buildRedist {
-  redistName = "cuda";
+args@{
+  buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
+  lib,
+}:
+(import ../library.nix args) {
   pname = "libcurand";
-
-  outputs = [
-    "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
-  ];
 
   meta = {
     description = "GPU-accelerated random number generation library";

@@ -1,16 +1,11 @@
-{ buildRedist }:
-buildRedist {
-  redistName = "cuda";
+args@{
+  buildRedist,
+  cuda_cudart,
+  cudaMajorMinorVersion,
+  lib,
+}:
+(import ../library.nix args) {
   pname = "libnvjpeg";
-
-  outputs = [
-    "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
-  ];
 
   meta = {
     description = "Provides high-performance, GPU accelerated JPEG decoding functionality for image formats commonly used in deep learning and hyperscale multimedia applications";

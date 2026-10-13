@@ -1,0 +1,26 @@
+From f374e2dc39c3d87ab94b9cb085df1d1711753773 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:12 -0700
+Subject: [PATCH] Read tensorpipe availability from the configured build
+
+TensorPipe is linked statically into Torch's shared libraries. The wheel keeps
+its headers but does not package the static archives, so its standalone CMake
+targets would refer to files that do not exist.
+
+Based on PyTorch v2.13.0.
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index bcadb7a..31ac873 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1209,7 +1209,6 @@ def main() -> None:
+         "share/cmake/Caffe2/Modules_CUDA_fix/upstream/*.cmake",
+         "share/cmake/Caffe2/Modules_CUDA_fix/upstream/FindCUDA/*.cmake",
+         "share/cmake/Gloo/*.cmake",
+-        "share/cmake/Tensorpipe/*.cmake",
+         "share/cmake/Torch/*.cmake",
+         "utils/benchmark/utils/*.cpp",
+         "utils/benchmark/utils/valgrind_wrapper/*.cpp",

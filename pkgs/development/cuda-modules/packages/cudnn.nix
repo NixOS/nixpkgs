@@ -1,7 +1,9 @@
 {
   _cuda,
-  backendStdenv,
+  cudaConfig,
   buildRedist,
+  callPackage,
+  cuda_cudart,
   lib,
   libcublas,
   cuda_nvrtc,
@@ -11,7 +13,7 @@
 buildRedist (
   finalAttrs:
   let
-    inherit (backendStdenv) cudaCapabilities;
+    inherit (cudaConfig) cudaCapabilities;
     cudnnAtLeast = lib.versionAtLeast finalAttrs.version;
     cudnnOlder = lib.versionOlder finalAttrs.version;
   in
@@ -34,6 +36,15 @@ buildRedist (
       (lib.getLib libcublas)
       zlib
     ];
+
+    propagatedBuildInputs = [ cuda_cudart ];
+
+    passthru.tests.headers = callPackage ./tests/public-headers.nix {
+      package = finalAttrs.finalPackage;
+      headers = [ "cudnn.h" ];
+      libraries = [ "cudnn" ];
+      symbols = [ "cudnnGetVersion" ];
+    };
 
     # Tell autoPatchelf about runtime dependencies. *_infer* libraries only
     # exist in CuDNN 8.

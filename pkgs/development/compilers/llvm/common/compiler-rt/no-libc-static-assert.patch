@@ -1,0 +1,27 @@
+From 778aad47e1a45638c6e1be807822c6f0ac96d93b Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:30:18 -0700
+Subject: [PATCH] [compiler-rt] Use internal compile-time assertions for CPU
+ features
+
+The freestanding CPU model implementation cannot rely on assert.h to
+provide static_assert. Use the existing internal compile-time helper.
+---
+ lib/builtins/cpu_model/x86.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/builtins/cpu_model/x86.c b/lib/builtins/cpu_model/x86.c
+index 3877e4e..7d9b468 100644
+--- a/lib/builtins/cpu_model/x86.c
++++ b/lib/builtins/cpu_model/x86.c
+@@ -1157,8 +1157,8 @@ int CONSTRUCTOR_ATTRIBUTE __cpu_indicator_init(void) {
+   unsigned Vendor;
+   unsigned Model, Family;
+   unsigned Features[(CPU_FEATURE_MAX + 31) / 32] = {0};
+-  static_assert(sizeof(Features) / sizeof(Features[0]) == 4, "");
+-  static_assert(sizeof(__cpu_features2) / sizeof(__cpu_features2[0]) == 3, "");
++  COMPILE_TIME_ASSERT(sizeof(Features) / sizeof(Features[0]) == 4);
++  COMPILE_TIME_ASSERT(sizeof(__cpu_features2) / sizeof(__cpu_features2[0]) == 3);
+ 
+   // This function needs to run just once.
+   if (__cpu_model.__cpu_vendor)

@@ -2,10 +2,12 @@
   _cuda,
   autoAddDriverRunpath,
   backendStdenv,
+  cudaConfig,
   cccl,
   cuda_cudart,
   cuda_nvcc,
   cudaAtLeast,
+  cudaMajorMinorVersion,
   cudaNamePrefix,
   fetchFromGitHub,
   flags,
@@ -23,8 +25,10 @@
   withRdmaCore ? true,
 }:
 let
+  # Compiler paths embedded in strings bypass nativeBuildInputs splicing.
+  buildNvcc = cuda_nvcc.__spliced.buildHost or cuda_nvcc;
   inherit (_cuda.lib) _mkMetaBadPlatforms;
-  inherit (backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
+  inherit (cudaConfig) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
   inherit (lib)
     all
     flip
@@ -93,17 +97,23 @@ backendStdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs = [
-    (getInclude cuda_nvcc)
-    cccl
-    cuda_cudart
-  ];
+  buildInputs = [ cccl ];
+
+  # nccl.h includes cuda_runtime.h. Keep this public header dependency in
+  # both the stdenv and standalone pkg-config interfaces.
+  propagatedBuildInputs = [ cuda_cudart ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
 
   postPatch = ''
     patchShebangs ./src/device/generate.py
     patchShebangs ./src/device/symmetric/generate.py
+
+    substituteInPlace ./src/nccl.pc.in \
+      --replace-fail 'Cflags:' $'Requires: cudart-${cudaMajorMinorVersion}\nCflags:'
+
+    substituteInPlace ./src/Makefile \
+      --replace-fail 'ar cr $@' '$(AR) cr $@'
 
     nixLog "patching $PWD/makefiles/common.mk to remove NVIDIA's ccbin declaration"
     substituteInPlace ./makefiles/common.mk \
@@ -124,10 +134,9 @@ backendStdenv.mkDerivation (finalAttrs: {
     patchShebangs ./src/misc/generate_git_version.py
   '';
 
-  # TODO: This would likely break under cross; need to delineate between build and host packages.
   makeFlags = [
     "CXXSTD=-std=c++17"
-    "CUDA_HOME=${getBin cuda_nvcc}"
+    "CUDA_HOME=${getBin buildNvcc}"
     "CUDA_INC=${getInclude cuda_cudart}/include"
     "CUDA_LIB=${getLib cuda_cudart}/lib"
     "NVCC_GENCODE=${flags.gencodeString}"
@@ -147,7 +156,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   # This string makes cuda_nvcc a runtime dependency of nccl.
   # See https://github.com/NixOS/nixpkgs/pull/457803
   + ''
-    remove-references-to -t "${lib.getBin cuda_nvcc}" \
+    remove-references-to -t "${lib.getBin buildNvcc}" \
       ''${!outputLib}/lib/libnccl.so.* \
       ''${!outputStatic}/lib/*.a
   ''
@@ -162,7 +171,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   '';
 
   # C.f. remove-references-to above. Ensure *all* references to cuda_nvcc are removed
-  disallowedRequisites = [ (lib.getBin cuda_nvcc) ];
+  disallowedRequisites = [ (lib.getBin buildNvcc) ];
 
   passthru = {
     platformAssertions = [

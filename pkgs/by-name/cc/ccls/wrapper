@@ -1,8 +1,8 @@
 #! @shell@ -e
 
 printf -v extraArgs ',\"%s\"' \
-  $(cat @clang@/nix-support/libc-cflags \
-        @clang@/nix-support/libcxx-cxxflags) \
+  @defaultArgs@ \
+  $(cat @clang@/nix-support/cc-cflags) \
   ${NIX_CFLAGS_COMPILE}
 initString="--init={\"clang\":{\"extraArgs\":[${extraArgs:1}],\"resourceDir\":\"@clang@/resource-root\"}}"
 

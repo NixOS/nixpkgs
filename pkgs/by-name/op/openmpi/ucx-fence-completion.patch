@@ -1,0 +1,199 @@
+From ed3f2fd2ec19c0515044bd91195d905de4e42496 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:28:46 -0700
+Subject: [PATCH] Synchronize UCX fence completion through PMIx locks
+
+Use the existing PMIx lock and wakeup primitives instead of unsynchronized
+volatile polling. Share submission handling between the legacy callback
+and lock-based callers, retaining singleton, immediate-completion, and
+submission-error behavior. Destroy locks after all completion paths.
+
+The source-derived lifecycle fixture exercises inline and asynchronous
+callbacks, immediate completion, errors, and singleton operation.
+
+Upstream-Status: Pending
+---
+ opal/mca/common/ucx/common_ucx.c         | 66 ++++++++++++------------
+ opal/mca/common/ucx/common_ucx.h         | 13 +++++
+ oshmem/mca/spml/ucx/spml_ucx_component.c | 11 ++--
+ 3 files changed, 54 insertions(+), 36 deletions(-)
+
+diff --git a/opal/mca/common/ucx/common_ucx.c b/opal/mca/common/ucx/common_ucx.c
+index b88e24f..9115f68 100644
+--- a/opal/mca/common/ucx/common_ucx.c
++++ b/opal/mca/common/ucx/common_ucx.c
+@@ -369,6 +369,12 @@ static void opal_common_ucx_mca_fence_complete_cb(int status, void *fenced)
+     *(int *) fenced = 1;
+ }
+ 
++static void opal_common_ucx_mca_fence_lock_complete_cb(int status, void *fenced)
++{
++    opal_pmix_lock_t *lock = (opal_pmix_lock_t *) fenced;
++    OPAL_PMIX_WAKEUP_THREAD(lock);
++}
++
+ #if HAVE_DECL_UCM_TEST_EVENTS
+ static ucs_status_t opal_common_ucx_mca_test_external_events(int events)
+ {
+@@ -413,31 +419,38 @@ void opal_common_ucx_mca_proc_added(void)
+ #endif
+ }
+ 
+-OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence_nb(int *fenced)
++static int opal_common_ucx_mca_pmix_fence_start(pmix_op_cbfunc_t callback, void *fenced)
+ {
+     int ret;
+-    
+-    /* Singleton processes don't need PMIx fence */
++
++    /* Singleton processes don't need PMIx fence. */
+     if (opal_process_info.is_singleton) {
+-        *fenced = 1;
++        callback(PMIX_SUCCESS, fenced);
+         return OPAL_SUCCESS;
+     }
+-    
+-    ret = PMIx_Fence_nb(NULL, 0, NULL, 0, opal_common_ucx_mca_fence_complete_cb, (void *) fenced);
+-    
++
++    ret = PMIx_Fence_nb(NULL, 0, NULL, 0, callback, fenced);
+     if (PMIX_OPERATION_SUCCEEDED == ret) {
+-        /* Fence completed immediately, callback will not be invoked by PMIx.
+-         * We need to call it explicitly */
+-        opal_common_ucx_mca_fence_complete_cb(PMIX_SUCCESS, (void *) fenced);
++        /* PMIx will not invoke the callback for an immediately completed fence. */
++        callback(PMIX_SUCCESS, fenced);
+         return OPAL_SUCCESS;
+     }
+-    
+     return ret;
+ }
+ 
++OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence_nb(int *fenced)
++{
++    return opal_common_ucx_mca_pmix_fence_start(opal_common_ucx_mca_fence_complete_cb, fenced);
++}
++
++OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence_nb_lock(opal_pmix_lock_t *fenced)
++{
++    return opal_common_ucx_mca_pmix_fence_start(opal_common_ucx_mca_fence_lock_complete_cb, fenced);
++}
++
+ OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence(ucp_worker_h worker)
+ {
+-    volatile int fenced = 0;
++    opal_pmix_lock_t fenced;
+     int ret;
+ 
+     /* Singleton processes don't need PMIx fence */
+@@ -445,28 +458,17 @@ OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence(ucp_worker_h worker)
+         return OPAL_SUCCESS;
+     }
+ 
+-    ret = PMIx_Fence_nb(NULL, 0, NULL, 0, opal_common_ucx_mca_fence_complete_cb,
+-                        (void *) &fenced);
+-    
+-    if (PMIX_OPERATION_SUCCEEDED == ret) {
+-        /* Fence completed immediately, callback will not be invoked by PMIx.
+-         * We need to call it explicitly to maintain the contract. */
+-        opal_common_ucx_mca_fence_complete_cb(PMIX_SUCCESS, (void *) &fenced);
+-        return OPAL_SUCCESS;
+-    }
+-    
+-    if (PMIX_SUCCESS != ret) {
+-        return ret;
+-    }
+-
+-    /* PMIX_SUCCESS means operation is in progress, callback will be invoked */
+-    MCA_COMMON_UCX_PROGRESS_LOOP(worker) {
+-        if(fenced) {
+-            break;
++    OPAL_PMIX_CONSTRUCT_LOCK(&fenced);
++    ret = opal_common_ucx_mca_pmix_fence_nb_lock(&fenced);
++    if (PMIX_SUCCESS == ret) {
++        MCA_COMMON_UCX_PROGRESS_LOOP(worker) {
++            if (opal_common_ucx_mca_pmix_fence_completed(&fenced)) {
++                break;
++            }
+         }
+     }
+-
+-    return OPAL_SUCCESS;
++    OPAL_PMIX_DESTRUCT_LOCK(&fenced);
++    return ret;
+ }
+ 
+ static void opal_common_ucx_wait_all_requests(void **reqs, int count, ucp_worker_h worker)
+diff --git a/opal/mca/common/ucx/common_ucx.h b/opal/mca/common/ucx/common_ucx.h
+index 13e6989..a24d329 100644
+--- a/opal/mca/common/ucx/common_ucx.h
++++ b/opal/mca/common/ucx/common_ucx.h
+@@ -26,6 +26,7 @@
+ #include "opal/include/opal/constants.h"
+ #include "opal/mca/mca.h"
+ #include "opal/runtime/opal_progress.h"
++#include "opal/mca/pmix/pmix-internal.h"
+ #include "opal/util/output.h"
+ 
+ BEGIN_C_DECLS
+@@ -120,7 +121,19 @@ OPAL_DECLSPEC opal_common_ucx_support_level_t opal_common_ucx_support_level(ucp_
+ OPAL_DECLSPEC void opal_common_ucx_mca_proc_added(void);
+ OPAL_DECLSPEC void opal_common_ucx_empty_complete_cb(void *request, ucs_status_t status);
+ OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence(ucp_worker_h worker);
++/* Legacy flag API: synchronization is the caller's responsibility. */
+ OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence_nb(int *fenced);
++OPAL_DECLSPEC int opal_common_ucx_mca_pmix_fence_nb_lock(opal_pmix_lock_t *fenced);
++
++/* Keep progressing UCX while the PMIx progress thread completes the fence. */
++static inline bool opal_common_ucx_mca_pmix_fence_completed(opal_pmix_lock_t *fenced)
++{
++    bool completed;
++    opal_mutex_lock(&fenced->mutex);
++    completed = !fenced->active;
++    opal_mutex_unlock(&fenced->mutex);
++    return completed;
++}
+ OPAL_DECLSPEC int opal_common_ucx_del_procs(opal_common_ucx_del_proc_t *procs, size_t count,
+                                             size_t my_rank, size_t max_disconnect,
+                                             ucp_worker_h worker);
+diff --git a/oshmem/mca/spml/ucx/spml_ucx_component.c b/oshmem/mca/spml/ucx/spml_ucx_component.c
+index a57c987..ea53ca3 100644
+--- a/oshmem/mca/spml/ucx/spml_ucx_component.c
++++ b/oshmem/mca/spml/ucx/spml_ucx_component.c
+@@ -465,7 +465,7 @@ static void mca_spml_ucx_ctx_fini(mca_spml_ucx_ctx_t *ctx)
+ 
+ static int mca_spml_ucx_component_fini(void)
+ {
+-    volatile int fenced = 0;
++    opal_pmix_lock_t fenced;
+     int i;
+     int ret = OSHMEM_SUCCESS;
+ 
+@@ -497,14 +497,15 @@ static int mca_spml_ucx_component_fini(void)
+     }
+ 
+ 
+-    ret = opal_common_ucx_mca_pmix_fence_nb(&fenced);
++    OPAL_PMIX_CONSTRUCT_LOCK(&fenced);
++    ret = opal_common_ucx_mca_pmix_fence_nb_lock(&fenced);
+     if (ret != PMIX_SUCCESS) {
+         SPML_UCX_WARN("pmix fence failed: %s", PMIx_Error_string(ret));
+         /* In case of pmix fence failure just continue cleanup */
+-        fenced = 1;
++        OPAL_PMIX_WAKEUP_THREAD(&fenced);
+     }
+ 
+-    while (!fenced) {
++    while (!opal_common_ucx_mca_pmix_fence_completed(&fenced)) {
+         for (i = 0; i < mca_spml_ucx.active_array.ctxs_count; i++) {
+             ucp_worker_progress(mca_spml_ucx.active_array.ctxs[i]->ucp_worker[0]);
+         }
+@@ -522,6 +523,8 @@ static int mca_spml_ucx_component_fini(void)
+         }
+     }
+ 
++    OPAL_PMIX_DESTRUCT_LOCK(&fenced);
++
+     for (i = 0; i < mca_spml_ucx.active_array.ctxs_count; i++) {
+         mca_spml_ucx_ctx_fini(mca_spml_ucx.active_array.ctxs[i]);
+     }

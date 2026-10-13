@@ -18,6 +18,8 @@
   which,
 }:
 let
+  # Compiler paths embedded in strings bypass nativeBuildInputs splicing.
+  buildNvcc = cuda_nvcc.__spliced.buildHost or cuda_nvcc;
   inherit (_cuda.lib) _mkMetaBroken;
   inherit (lib) licenses maintainers teams;
   inherit (lib.attrsets) getBin getInclude getLib;
@@ -60,10 +62,9 @@ backendStdenv.mkDerivation (finalAttrs: {
   ++ optionals mpiSupport [ mpi ];
 
   # NOTE: CUDA_HOME is expected to have the bin directory
-  # TODO: This won't work with cross-compilation since cuda_nvcc will come from hostPackages by default (aka pkgs).
   makeFlags = [
     "CXXSTD=-std=c++17"
-    "CUDA_HOME=${getBin cuda_nvcc}"
+    "CUDA_HOME=${getBin buildNvcc}"
     "CUDA_INC=${getInclude cuda_cudart}/include"
     "CUDA_LIB=${getLib cuda_cudart}/lib"
     "NVCC_GENCODE=${flags.gencodeString}"

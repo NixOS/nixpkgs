@@ -85,6 +85,25 @@ optionals noSysDirs (
     ."${majorVersion}" or [ ]
   )
 )
+# Bind selected header providers through GCC's native default lookup.
+++ optional atLeast14 ../common/native-default-includes.patch
+# Preserve literal newlines when GCC and collect2 exchange response files.
+++ [ ../common/libiberty-writeargv-newlines.patch ]
+# Interpret private invocation frames only on supported compiler hosts.
+++ optionals hostPlatform.isUnix (
+  optional atLeast14 ../common/libiberty-primary-query.patch
+  ++ optional atLeast14 ../common/native-primary-query.patch
+  ++ optional atLeast15 ./15/native-primary-query-effects.patch
+  ++ optional (lib.versionAtLeast version "16") ./16/native-primary-query-diagnostic-log.patch
+)
+# Cross-built libstdc++ uses the existing BUILD-to-TARGET compiler, which must
+# not supply its own C++ headers while compiling the new library.
+++ optional (majorVersion == "16" && !buildIsHost) ./16/cxx23-nostdincxx.patch
+# Share the standalone runtime's full-int UID buffer bound. The no-libc
+# cross compiler disables libgomp.
+++ optional (
+  lib.versionAtLeast version "16" && (hostIsTarget || !withoutTargetLibc)
+) ../ng/16/libgomp/uid-buffer-size.patch
 # Pass CFLAGS on to gnat
 ++ optional langAda ./gnat-cflags-11.patch
 ++

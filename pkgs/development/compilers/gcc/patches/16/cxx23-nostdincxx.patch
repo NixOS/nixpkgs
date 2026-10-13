@@ -1,0 +1,45 @@
+From e4afe910bef7d058864e6bc92898371080a8b5c8 Mon Sep 17 00:00:00 2001
+From: Erik Wierich <erik@riscstar.com>
+Date: Fri, 19 Jun 2026 09:49:49 +0000
+Subject: [PATCH] libstdc++: Add -nostdinc++ for c++23 sources
+
+The compiler building libstdc++ must use the library's explicit build-tree
+headers, not its own installed C++ headers. Shared wrapper include guards
+otherwise suppress the actual libc fenv.h when building the std modules.
+
+Unmerged upstream proposal, reproduced against GCC 16.2.0:
+https://gcc.gnu.org/pipermail/gcc-patches/2026-June/720909.html
+This follows the C++17 fix for PR100017.
+
+Signed-off-by: Erik Wierich <erik@riscstar.com>
+---
+ libstdc++-v3/src/c++23/Makefile.am | 2 +-
+ libstdc++-v3/src/c++23/Makefile.in | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/libstdc++-v3/src/c++23/Makefile.am b/libstdc++-v3/src/c++23/Makefile.am
+index 92691c5..873fd56 100644
+--- a/libstdc++-v3/src/c++23/Makefile.am
++++ b/libstdc++-v3/src/c++23/Makefile.am
+@@ -135,7 +135,7 @@ std.compat.o: std.compat.cc std.o
+ # OPTIMIZE_CXXFLAGS on the compile line so that -O2 can be overridden
+ # as the occasion calls for it.
+ AM_CXXFLAGS = \
+-	-std=gnu++23 \
++	-std=gnu++23 -nostdinc++ \
+ 	$(glibcxx_lt_pic_flag) $(glibcxx_compiler_shared_flag) \
+ 	$(XTEMPLATE_FLAGS) $(VTV_CXXFLAGS) \
+ 	$(WARN_CXXFLAGS) $(OPTIMIZE_CXXFLAGS) $(CONFIG_CXXFLAGS) \
+diff --git a/libstdc++-v3/src/c++23/Makefile.in b/libstdc++-v3/src/c++23/Makefile.in
+index 0ce93f8..e0a3a15 100644
+--- a/libstdc++-v3/src/c++23/Makefile.in
++++ b/libstdc++-v3/src/c++23/Makefile.in
+@@ -492,7 +492,7 @@ MODULES_FLAGS = -isystem ${glibcxx_srcdir}/include/backward -fmodules \
+ # OPTIMIZE_CXXFLAGS on the compile line so that -O2 can be overridden
+ # as the occasion calls for it.
+ AM_CXXFLAGS = \
+-	-std=gnu++23 \
++	-std=gnu++23 -nostdinc++ \
+ 	$(glibcxx_lt_pic_flag) $(glibcxx_compiler_shared_flag) \
+ 	$(XTEMPLATE_FLAGS) $(VTV_CXXFLAGS) \
+ 	$(WARN_CXXFLAGS) $(OPTIMIZE_CXXFLAGS) $(CONFIG_CXXFLAGS) \

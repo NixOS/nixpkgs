@@ -1,0 +1,52 @@
+From c6bcee2712da89de651aceba2ef70bb8572ac22b Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:12 -0700
+Subject: [PATCH] Decode current cuDNN versions in configuration diagnostics
+
+Display cuDNN version components instead of decoding its changing integer format.
+
+Based on PyTorch v2.13.0.
+---
+ aten/src/ATen/cuda/detail/CUDAHooks.cpp | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/aten/src/ATen/cuda/detail/CUDAHooks.cpp b/aten/src/ATen/cuda/detail/CUDAHooks.cpp
+index 5f81407..6644502 100644
+--- a/aten/src/ATen/cuda/detail/CUDAHooks.cpp
++++ b/aten/src/ATen/cuda/detail/CUDAHooks.cpp
+@@ -453,16 +453,21 @@ std::string CUDAHooks::showConfig() const {
+ #if AT_CUDNN_ENABLED()
+ 
+ 
+-  auto printCudnnStyleVersion = [&](size_t v) {
+-    oss << (v / 1000) << '.' << (v / 100 % 10);
+-    if (v % 100 != 0) {
+-      oss << '.' << (v % 100);
++  auto printCudnnStyleVersion = [&](int major, int minor, int patch) {
++    oss << major << '.' << minor;
++    if (patch != 0) {
++      oss << '.' << patch;
+     }
+   };
+ 
+   size_t cudnnVersion = cudnnGetVersion();
+   oss << "  - CuDNN ";
+-  printCudnnStyleVersion(cudnnVersion);
++  // Query components directly: cuDNN 9 changed the packed integer encoding.
++  int major = 0, minor = 0, patch = 0;
++  AT_CUDNN_CHECK(cudnnGetProperty(MAJOR_VERSION, &major));
++  AT_CUDNN_CHECK(cudnnGetProperty(MINOR_VERSION, &minor));
++  AT_CUDNN_CHECK(cudnnGetProperty(PATCH_LEVEL, &patch));
++  printCudnnStyleVersion(major, minor, patch);
+   size_t cudnnCudartVersion = cudnnGetCudartVersion();
+   if (cudnnCudartVersion != CUDART_VERSION) {
+     oss << "  (built against CUDA ";
+@@ -472,7 +477,7 @@ std::string CUDAHooks::showConfig() const {
+   oss << '\n';
+   if (cudnnVersion != CUDNN_VERSION) {
+     oss << "    - Built with CuDNN ";
+-    printCudnnStyleVersion(CUDNN_VERSION);
++    printCudnnStyleVersion(CUDNN_MAJOR, CUDNN_MINOR, CUDNN_PATCHLEVEL);
+     oss << '\n';
+   }
+ #endif

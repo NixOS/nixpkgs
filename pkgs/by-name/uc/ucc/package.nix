@@ -89,9 +89,9 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   env.LDFLAGS = toString (
     optionals enableCuda [
       # Fake libcuda.so (the real one is deployed impurely)
-      "-L${getOutput "stubs" cuda_cudart}/lib/stubs"
+      "-L${getOutput cuda_cudart.outputStubs cuda_cudart}/lib/stubs"
       # Fake libnvidia-ml.so (the real one is deployed impurely)
-      "-L${getOutput "stubs" cuda_nvml_dev}/lib/stubs"
+      "-L${getOutput cuda_nvml_dev.outputStubs cuda_nvml_dev}/lib/stubs"
     ]
   );
 

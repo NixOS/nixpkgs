@@ -64,6 +64,9 @@ let
 
       extraNativeBuildInputs ? [ ],
       extraBuildInputs ? [ ],
+      # Bind default resources against the final constructor, after overrides
+      # such as overrideCC have selected its compiler and target libc.
+      extraBuildInputsFromStdenv ? (_: [ ]),
       __stdenvImpureHostDeps ? [ ],
       __extraImpureHostDeps ? [ ],
       stdenvSandboxProfile ? "",
@@ -107,7 +110,7 @@ let
       defaultNativeBuildInputs =
         extraNativeBuildInputs ++ defaultNativeBuildInputs0 ++ lib.optionals hasCC [ cc ];
 
-      defaultBuildInputs = extraBuildInputs;
+      defaultBuildInputs = extraBuildInputs ++ extraBuildInputsFromStdenv stdenv;
 
       stdenv = (stdenv-overridable argsStdenv);
 
@@ -193,10 +196,10 @@ let
         };
 
       inherit buildPlatform hostPlatform targetPlatform;
+      extraBuildInputs = defaultBuildInputs;
 
       inherit
         extraNativeBuildInputs
-        extraBuildInputs
         __extraImpureHostDeps
         extraSandboxProfile
         ;

@@ -77,6 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
       # it. See <https://gcc.gnu.org/PR111527>.
       ./mangle-NIX_STORE-in-__FILE__.patch
 
+      # Let cc-wrapper bind target headers as compiler defaults.  The
+      # -idefaultsystem option also keeps fortify's position among dependency paths
+      # while allowing the frontend to honor forwarded -nostdinc.
+      ../../../common/native-default-includes.patch
+
       # `rs6000/sysv4.h` builds its own `INCLUDE_DEFAULTS` for musl, testing
       # `LOCAL_INCLUDE_DIR` before the `#undef` above is reached, so
       # `/usr/local/include` survives there without this.
@@ -246,7 +251,18 @@ stdenv.mkDerivation (finalAttrs: {
         ];
         hash = "sha256-i+J4B5f+zrXERPqJxwjEm/JHZhDsV6Gmxx/n9+G0shM=";
       })
-    ];
+    ]
+    # Keep the monorepo headers and any locally rebuilt HOST libiberty in sync
+    # with the standalone BUILD archive seeded below.
+    ++ [ ../../../common/libiberty-writeargv-newlines.patch ]
+    ++ lib.optionals stdenv.hostPlatform.isUnix [
+      ../../../common/libiberty-primary-query.patch
+      ../../../common/native-primary-query.patch
+      ../../../patches/15/native-primary-query-effects.patch
+    ]
+    ++ lib.optional (stdenv.hostPlatform.isUnix && lib.versionAtLeast release_version "16") (
+      ../../../patches/16/native-primary-query-diagnostic-log.patch
+    );
 
   enableParallelBuilding = true;
 
@@ -499,6 +515,8 @@ stdenv.mkDerivation (finalAttrs: {
       langGo
       ;
     isGNU = true;
+    nativeDefaultIncludeBinding = "external";
+    nativePrimaryQuery = if stdenv.hostPlatform.isUnix then "fd-v3" else null;
   };
 
   meta = gcc_meta // {

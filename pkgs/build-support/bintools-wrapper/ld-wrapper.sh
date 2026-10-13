@@ -16,27 +16,113 @@ fi
 
 source @out@/nix-support/utils.bash
 
-source @out@/nix-support/darwin-sdk-setup.bash
-
-if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
+mainPolicyHandled=0
+expandResponseParams "$@"
+wrapperLinker=@prog@
+if [[ @wrapperMode@ == prepared ]]; then
+    wrapperImport toolchain
+    wrapperLinker=${params[0]:?missing linker executable}
+    params=("${params[@]:1}")
+    set -- "${params[@]}"
+elif [[ ${NIX_WRAPPER_OPERATION:-} == link ]]; then
+    mainPolicyHandled=1
+    wrapperImport link
+else
+    wrapperClear
+    source @out@/nix-support/darwin-sdk-setup.bash
     source @out@/nix-support/add-flags.sh
+    if [[ "@darwinMinVersion@" ]]; then
+        mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
+    fi
 fi
 
+# Classify the output from the final linker arguments. The driver has already
+# translated its link mode here, including a mode selected in a response file
+# or opaque link flags that the compiler wrapper could not see. The argument at
+# index $1 is skipped. Option operands that cannot select a mode are skipped too.
+linkerLinkType() {
+    local -i skip=$1 n=0 nParams=${#params[@]} pie=0 static=0 noLoader=0 library=0
+    local -a states=()
+    local p
+    while (( n < nParams )); do
+        p=${params[n]}
+        if (( n++ == skip )); then continue; fi
+        case "$p" in
+            -o | -L | -l | -m | -z | -T | -e | -u | -y | -h | -R | -soname \
+                | -rpath | -rpath-link | -plugin | -plugin-opt)
+                n+=1 ;;
+            -dynamic-linker | --dynamic-linker | -I) noLoader=0; n+=1 ;;
+            -dynamic-linker=* | --dynamic-linker=* | -I?*) noLoader=0 ;;
+            -no-dynamic-linker | --no-dynamic-linker) noLoader=1 ;;
+            -pie | --pie | -pic-executable | --pic-executable) pie=1 ;;
+            -no-pie | --no-pie | -no-pic-executable | --no-pic-executable) pie=0 ;;
+            -shared | --shared | -Bshareable | -r | --relocatable | -i | -Ur) library=1 ;;
+            # A driver selects static linking before its inputs and leaves it
+            # selected. Callers restore dynamic linking after static libraries.
+            -static | --static | -Bstatic | -dn | -non_shared) static=1 ;;
+            -Bdynamic | -dy | -call_shared) static=0 ;;
+            -push-state | --push-state) states+=("$static") ;;
+            -pop-state | --pop-state)
+                if (( ${#states[@]} )); then static=${states[-1]}; unset 'states[-1]'; fi ;;
+        esac
+    done
+    if (( library )); then
+        echo dynamic
+    elif (( pie && noLoader )); then
+        echo static-pie
+    elif (( static && !pie )); then
+        echo static
+    else
+        echo dynamic
+    fi
+}
 
-# Optionally filter out paths not refering to the store.
-expandResponseParams "$@"
+# A link continuation already rendered main linker policy for the compiler
+# wrapper's guess, which only saw the driver's visible arguments. Its loader
+# follows the driver's own mode arguments, so it must not decide the output.
+renderedLoader=-1
+if [[ $mainPolicyHandled == 1 && ${wrapper_NIX_LINK_TYPE:-} == dynamic
+        && -n ${wrapper_NIX_DYNAMIC_LINKER:-} ]]; then
+    for n in "${!params[@]}"; do
+        if [[ ${params[n]} == "-dynamic-linker=$wrapper_NIX_DYNAMIC_LINKER" ]]; then
+            renderedLoader=$n
+            break
+        fi
+    done
+fi
+linkType=$(linkerLinkType "$renderedLoader")
 
-# NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take
-# advantage of this to avoid both recalculating it, and also repeating other
-# processing cc wrapper has already done.
-if [[ -n "${NIX_LINK_TYPE_@suffixSalt@:-}" ]]; then
-    linkType=$NIX_LINK_TYPE_@suffixSalt@
-else
-    linkType=$(checkLinkType "${params[@]}")
+# Remove the first occurrence of each RPATH the compiler wrapper rendered from
+# main policy. An equal caller argument remains.
+removeRenderedRpaths() {
+    local -a policy=($wrapper_NIX_LDFLAGS_BEFORE $wrapper_NIX_LDFLAGS)
+    local -i n i
+    for (( n = 0; n + 1 < ${#policy[@]}; n++ )); do
+        [[ ${policy[n]} == -rpath ]] || continue
+        n+=1
+        for (( i = 0; i + 1 < ${#params[@]}; i++ )); do
+            if [[ ${params[i]} == -rpath && ${params[i+1]} == "${policy[n]}" ]]; then
+                params=("${params[@]:0:i}" "${params[@]:i+2}")
+                break
+            fi
+        done
+    done
+}
+
+# Remove rendered policy that the actual static output cannot use. lld records
+# a loader even in a static executable, and a glibc static PIE with an RPATH
+# crashes at startup.
+if [[ $mainPolicyHandled == 1 && $linkType != dynamic ]]; then
+    if (( renderedLoader >= 0 )); then
+        params=("${params[@]:0:renderedLoader}" "${params[@]:renderedLoader+1}")
+    fi
+    if [[ $linkType == static-pie && ${wrapper_NIX_LINK_TYPE:-} != static-pie ]]; then
+        removeRenderedRpaths
+    fi
 fi
 
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
-        && ( -z "$NIX_IGNORE_LD_THROUGH_GCC_@suffixSalt@" || -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ) ]]; then
+        && ( -z "$wrapper_NIX_IGNORE_LD_THROUGH_GCC" || -z "${wrapper_NIX_LINK_TYPE:-}" ) ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
@@ -81,22 +167,22 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
-if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
-    extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@))
-    extraBefore+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@))
+if [[ $mainPolicyHandled != 1 ]]; then
+    extraAfter+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS))
+    extraBefore+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS_BEFORE))
 
     # By adding dynamic linker to extraBefore we allow the users set their
     # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
-    if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
-        extraBefore+=("-dynamic-linker" "$NIX_DYNAMIC_LINKER_@suffixSalt@")
+    if [[ "$linkType" == dynamic && -n "$wrapper_NIX_DYNAMIC_LINKER" ]]; then
+        extraBefore+=("-dynamic-linker" "$wrapper_NIX_DYNAMIC_LINKER")
     fi
 fi
 
-extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_AFTER_@suffixSalt@))
+extraAfter+=($(filterRpathFlags "$linkType" $wrapper_NIX_LDFLAGS_AFTER))
 
 # These flags *must not* be pulled up to -Wl, flags, so they can't go in
 # add-flags.sh. They must always be set, so must not be disabled by
-# NIX_LDFLAGS_SET.
+# the compiler having already emitted the main linker flags.
 if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
     source @out@/nix-support/add-local-ldflags-before.sh
 fi
@@ -116,8 +202,8 @@ declare -i relocatable=0 link32=0
 linkerOutput="a.out"
 
 if
-    [ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 ] \
-        || [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] \
+    [ "$wrapper_NIX_DONT_SET_RPATH" != 1 ] \
+        || [ "$wrapper_NIX_SET_BUILD_ID" = 1 ] \
         || [ -e @out@/nix-support/dynamic-linker-m32 ]
 then
     prev=
@@ -194,7 +280,7 @@ if [[ "$link32" == "1" && "$linkType" == dynamic && -e "@out@/nix-support/dynami
 fi
 
 # Add all used dynamic libraries to the rpath.
-if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; then
+if [[ "$wrapper_NIX_DONT_SET_RPATH" != 1 && "$linkType" != static-pie ]]; then
     # For each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
@@ -252,43 +338,46 @@ fi
 #
 # Note: `lld` interprets `--build-id` to mean `--build-id=fast`; GNU ld defaults
 # to SHA1.
-if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
+if [ "$wrapper_NIX_SET_BUILD_ID" = 1 ] && ! (( "$relocatable" )); then
     extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
 # if a ld-wrapper-hook exists, run it.
 if [[ -e @out@/nix-support/ld-wrapper-hook ]]; then
-    linker=@prog@
+    linker=$wrapperLinker
     source @out@/nix-support/ld-wrapper-hook
 fi
 
 # Optionally print debug info.
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see above.
-    echo "extra flags before to @prog@:" >&2
+    echo "extra flags before to $wrapperLinker:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2
-    echo "original flags to @prog@:" >&2
+    echo "original flags to $wrapperLinker:" >&2
     printf "  %q\n" ${params+"${params[@]}"} >&2
-    echo "extra flags after to @prog@:" >&2
+    echo "extra flags after to $wrapperLinker:" >&2
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
 fi
 
-PATH="$path_backup"
+export PATH="$path_backup"
 # Old bash workaround, see above.
 
-if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )) && canWriteResponseFile \
+   ${extraBefore+"${extraBefore[@]}"} \
+   ${params+"${params[@]}"} \
+   ${extraAfter+"${extraAfter[@]}"}; then
     responseFile=$(@mktemp@ "${TMPDIR:-/tmp}/ld-params.XXXXXX")
     trap '@rm@ -f -- "$responseFile"' EXIT
-    printf "%q\n" \
+    writeResponseFile \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
        ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
-    @prog@ "@$responseFile"
+    (wrapperRun "" "$wrapperLinker" "@$responseFile")
 else
-    @prog@ \
+    (wrapperRun "" "$wrapperLinker" \
         ${extraBefore+"${extraBefore[@]}"} \
         ${params+"${params[@]}"} \
-        ${extraAfter+"${extraAfter[@]}"}
+        ${extraAfter+"${extraAfter[@]}"})
 fi
 
 if [ -e "@out@/nix-support/post-link-hook" ]; then

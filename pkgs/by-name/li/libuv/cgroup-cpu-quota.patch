@@ -1,0 +1,30 @@
+From e3b09200580cc775e46fcc307a96bb7ea98410f2 Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 3 Oct 2026 10:47:11 -0700
+Subject: [PATCH] linux: return the minimum hierarchical CPU quota
+
+The cgroup v2 walk records the smallest finite quota but leaves the
+output at the last finite ancestor. Publish the accumulated minimum
+after traversal so a less restrictive parent cannot discard a child
+limit. Leave the no-finite-quota result unchanged.
+---
+ src/unix/linux.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/unix/linux.c b/src/unix/linux.c
+index 1109648..88d8143 100644
+--- a/src/unix/linux.c
++++ b/src/unix/linux.c
+@@ -2368,6 +2368,9 @@ next:
+     *last_slash = '\0';
+   }
+ 
++  if (min_quota != LLONG_MAX)
++    *quota = min_quota;
++
+   return 0;
+ }
+ 
+-- 
+2.43.0
+

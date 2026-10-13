@@ -1,28 +1,28 @@
 {
-  backendStdenv,
   buildRedist,
   cudaAtLeast,
+  cudaConfig,
   cudaMajorMinorVersion,
   cudaOlder,
   e2fsprogs,
   elfutils,
-  flags,
   gst_all_1,
   lib,
   libjpeg8,
   qt5 ? null,
   qt6 ? null,
   rdma-core,
+  stdenv,
   ucx,
 }:
 let
   archDir =
     {
-      aarch64-linux = "linux-" + (if flags.isJetsonBuild then "v4l_l4t" else "desktop") + "-t210-a64";
+      aarch64-linux =
+        "linux-" + (if cudaConfig.hasJetsonCudaCapability then "v4l_l4t" else "desktop") + "-t210-a64";
       x86_64-linux = "linux-desktop-glibc_2_11_3-x64";
     }
-    .${backendStdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${backendStdenv.hostPlatform.system}");
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 buildRedist (
   finalAttrs:
@@ -56,7 +56,7 @@ buildRedist (
       qtwebview
       rdma-core
     ]
-    ++ lib.optionals (cudaMajorMinorVersion == "12.0" && backendStdenv.hostPlatform.isAarch64) [
+    ++ lib.optionals (cudaMajorMinorVersion == "12.0" && stdenv.hostPlatform.isAarch64) [
       libjpeg8
     ]
     ++ lib.optionals (cudaAtLeast "12.1" && cudaOlder "12.4") [
@@ -93,11 +93,13 @@ buildRedist (
       wrapQtApp "''${!outputBin}/bin/host/${archDir}/ncu-ui.bin"
     ''
     # NOTE(@connorbaker): No idea what this platform is or how to patchelf for it.
-    + lib.optionalString (flags.isJetsonBuild && cudaAtLeast "11.8" && cudaOlder "12.9") ''
-      nixLog "Removing QNX 700 target directory for Jetson builds"
-      rm -rfv "''${!outputBin}/bin/target/qnx-700-t210-a64"
-    ''
-    + lib.optionalString (flags.isJetsonBuild && cudaAtLeast "12.8") ''
+    +
+      lib.optionalString (cudaConfig.hasJetsonCudaCapability && cudaAtLeast "11.8" && cudaOlder "12.9")
+        ''
+          nixLog "Removing QNX 700 target directory for Jetson builds"
+          rm -rfv "''${!outputBin}/bin/target/qnx-700-t210-a64"
+        ''
+    + lib.optionalString (cudaConfig.hasJetsonCudaCapability && cudaAtLeast "12.8") ''
       nixLog "Removing QNX 800 target directory for Jetson builds"
       rm -rfv "''${!outputBin}/bin/target/qnx-800-tegra-a64"
     '';

@@ -17,7 +17,7 @@
 # stages. The latter is used for cross compiling and custom
 # stdenvs. Additionally, certain options should by default apply only to the
 # last stage, whatever it may be. By delaying the creation of stage package sets
-# until the final fold, we prevent these options from inhibiting composition.
+# until the stage graph is constructed, we prevent these options from inhibiting composition.
 #
 # The fourth and final goal is debugging. Normal packages should only source
 # their dependencies from the current stage. But for the sake of debugging, it
@@ -29,73 +29,29 @@
 
 # Type:
 #   [ pkgset -> (args to stage/default.nix) or ({ __raw = true; } // pkgs) ]
-#   -> pkgset
+#   -> [ pkgset ]
 #
 # In English: This takes a list of function from the previous stage pkgset and
-# returns the final pkgset. Each of those functions returns, if `__raw` is
+# returns the stage package sets, final stage first. Each stage returns, if `__raw` is
 # undefined or false, args for this stage's pkgset (the most complex and
 # important arg is the stdenv), or, if `__raw = true`, simply this stage's
 # pkgset itself.
 #
-# The list takes stages in order, so the final stage is last in the list. In
-# other words, this does a foldr not foldl.
+# The input lists stages in bootstrap order; the final stage comes last.
 stageFuns:
 let
 
-  /*
-    "dfold" a ternary function `op' between successive elements of `list' as if
-    it was a doubly-linked list with `lnul' and `rnul` base cases at either
-    end. In precise terms, `dfold op lnul rnul [x_0 x_1 x_2 ... x_n-1]` is the
-    same as
-
-      let
-        f_-1  = lnul f_0;
-        f_0   = op f_-1   x_0  f_1;
-        f_1   = op f_0    x_1  f_2;
-        f_2   = op f_1    x_2  f_3;
-        ...
-        f_n   = op f_n-1  x_n  f_n+1;
-        f_n+1 = rnul f_n;
-      in
-        f_0
-  */
-  dfold =
-    op: lnul: rnul: list:
+  # Construct one stage with its neighboring package sets. Positions count
+  # backward from the final stage, which defaults to allowing custom overrides.
+  bootStage =
+    index: stageFun:
     let
-      len = builtins.length list;
-      go =
-        pred: n:
-        if n == len then
-          rnul pred
-        else
-          let
-            # Note the cycle -- call-by-need ensures finite fold.
-            cur = op pred (builtins.elemAt list n) succ;
-            succ = go cur (n + 1);
-          in
-          cur;
-      lapp = lnul cur;
-      cur = go lapp 0;
-    in
-    cur;
-
-  # Take the list and disallow custom overrides in all but the final stage,
-  # and allow it in the final flag. Only defaults this boolean field if it
-  # isn't already set.
-  withAllowCustomOverrides = lib.lists.imap1 (
-    index: stageFun: prevStage:
-    # So true by default for only the first element because one
-    # 1-indexing. Since we reverse the list, this means this is true
-    # for the final stage.
-    { allowCustomOverrides = index == 1; } // (stageFun prevStage)
-  ) (lib.lists.reverseList stageFuns);
-
-  # Adds the stdenv to the arguments, and sticks in it the previous stage for
-  # debugging purposes.
-  folder =
-    nextStage: stageFun: prevStage:
-    let
-      args = stageFun prevStage;
+      nextStage = if index == 1 then postStage pkgs else builtins.elemAt bootedStages (index - 2);
+      prevStage = if index == builtins.length stageFuns then { } else builtins.elemAt bootedStages index;
+      args = {
+        allowCustomOverrides = index == 1;
+      }
+      // (stageFun prevStage);
       args' = args // {
         stdenv = args.stdenv // {
           # For debugging
@@ -107,7 +63,7 @@ let
         if args.__raw or false then
           args'
         else
-          allPackages (
+          allPackages index (
             (removeAttrs args' [ "selfBuild" ])
             // {
               adjacentPackages =
@@ -136,24 +92,157 @@ let
     in
     thisStage;
 
-  # This is a hack for resolving cross-compiled compilers' run-time
-  # deps. (That is, compilers that are themselves cross-compiled, as
-  # opposed to used to cross-compile packages.)
+  # Compiler recipes use this final companion for TARGET runtime and linker
+  # dependencies. For GNU/Clang it also provides the selected HOST frontend;
+  # other toolchains retain the existing GNU resource-provider fallback.
   postStage = buildPackages: {
     __raw = true;
     stdenv.cc =
       if buildPackages.stdenv.hasCC then
-        if
-          buildPackages.stdenv.cc.isClang or false
-        # buildPackages.clang checks targetPackages.stdenv.cc (i. e. this
-        # attribute) to get a sense of the its set's default compiler and
-        # chooses between libc++ and libstdc++ based on that. If we hit this
-        # code here, we'll cause an infinite recursion. Since a set with
-        # clang as its default compiler always means libc++, we can infer this
-        # decision statically.
-        then
-          buildPackages.pkgsBuildTarget.llvmPackages.libcxxClang
+        let
+          cc = buildPackages.stdenv.cc;
+          isClang = cc.isClang or false;
+          isGNU = cc.isGNU or false;
+          # The selected constructor was called in (B,B,H). Retain its
+          # selections while supplying the corresponding (B,H,H) role table.
+          # Only derivations carry this internal table; ordinary option sets
+          # (and explicit unspliced dependency pins) are not reinterpreted.
+          project =
+            value:
+            if lib.isDerivation value && value ? __spliced then
+              let
+                s = value.__spliced;
+              in
+              (buildPackages.splicePackages {
+                pkgsBuildBuild.value = s.buildBuild;
+                pkgsBuildHost.value = s.buildTarget;
+                pkgsBuildTarget.value = s.buildTarget;
+                pkgsHostHost.value = s.targetTarget;
+                pkgsHostTarget.value = s.targetTarget;
+                pkgsTargetTarget.value = s.targetTarget;
+              }).value
+            else
+              value;
+          # Package graph references denote contexts, while unspliced explicit
+          # inputs remain caller selections. Re-call each original constructor.
+          adaptStdenv = import ./cross/adapt-stdenv.nix {
+            inherit lib;
+            buildPackages = buildPackages.buildPackages;
+            inherit (buildPackages.stdenv) hostPlatform targetPlatform;
+          };
+          projectStdenv =
+            value:
+            adaptStdenv (
+              if value.hasCC then
+                let
+                  original = value.cc;
+                  selected =
+                    if
+                      original ? stdenv
+                      && lib.systems.equals original.stdenv.hostPlatform buildPackages.stdenv.buildPlatform
+                      && lib.systems.equals original.stdenv.targetPlatform buildPackages.stdenv.hostPlatform
+                    then
+                      original
+                    else
+                      cc;
+                in
+                buildPackages.overrideCC value selected
+              else
+                value
+            );
+          context = {
+            inherit (buildPackages)
+              buildPackages
+              pkgsBuildTarget
+              targetPackages
+              callPackage
+              ;
+            _systemInfo = {
+              buildIsHost = lib.systems.equals buildPackages.stdenv.buildPlatform buildPackages.stdenv.hostPlatform;
+              hostIsTarget = lib.systems.equals buildPackages.stdenv.hostPlatform buildPackages.stdenv.targetPlatform;
+            };
+          };
+          recall =
+            package: f:
+            let
+              args = lib.functionArgs package.override;
+            in
+            package.override (
+              original:
+              # Defaults absent from captured constructor values cannot be
+              # transported without replaying their defining closure.
+              assert lib.assertMsg (lib.all
+                (name: !(builtins.hasAttr name args) || builtins.hasAttr name original)
+                [
+                  "stdenv"
+                  "stdenvNoCC"
+                ]
+              ) "stdenv compiler projection requires explicitly captured stdenv/stdenvNoCC constructor arguments";
+              lib.mapAttrs (
+                name: value: if name == "stdenv" || name == "stdenvNoCC" then projectStdenv value else project value
+              ) original
+              // lib.intersectAttrs args context
+              // f original
+            );
+          wrapperShell =
+            original:
+            lib.optionalAttrs
+              (
+                original ? runtimeShell
+                && original ? stdenvNoCC
+                && original.runtimeShell == original.stdenvNoCC.shell
+              )
+              {
+                inherit (buildPackages) runtimeShell;
+              };
+          raw = recall cc.cc (_: { });
+          linkerRaw = recall cc.bintools.bintools (_: { });
+          linker = recall cc.bintools (
+            original:
+            wrapperShell original
+            // {
+              bintools = linkerRaw;
+              inherit (cc) libc;
+            }
+          );
+          useGccForLibs =
+            cc.useGccForLibs or (import ../build-support/cc-wrapper/use-gcc-for-libs.nix (
+              cc
+              // {
+                targetPlatform = cc.stdenv.targetPlatform;
+              }
+            ));
+        in
+        if lib.systems.equals cc.stdenv.hostPlatform buildPackages.stdenv.hostPlatform then
+          cc
+        else if isGNU || isClang then
+          assert lib.assertMsg (
+            lib.systems.equals cc.stdenv.buildPlatform buildPackages.stdenv.buildPlatform
+            && lib.systems.equals cc.stdenv.hostPlatform buildPackages.stdenv.buildPlatform
+            && lib.systems.equals cc.stdenv.targetPlatform buildPackages.stdenv.hostPlatform
+            && lib.systems.equals buildPackages.stdenv.hostPlatform buildPackages.stdenv.targetPlatform
+          ) "stdenv compiler projection requires (BUILD,BUILD,HOST) -> (BUILD,HOST,HOST) contexts";
+          recall cc (
+            original:
+            wrapperShell original
+            // {
+              cc = raw;
+              bintools = linker;
+              inherit (cc)
+                libc
+                libcxx
+                gccForLibs
+                useCcForLibs
+                ;
+            }
+            // lib.optionalAttrs (isGNU && cc.libcxx == null && !useGccForLibs) {
+              gccForLibs = cc.cc;
+              useCcForLibs = true;
+            }
+          )
         else
+          # This supplies runtime resources, not the selected toolchain's HOST
+          # executable. Its constructors need not support the projection above.
           buildPackages.gcc
       else
         # This will blow up if anything uses it, but that's OK. The `if
@@ -162,9 +251,10 @@ let
         buildPackages.stdenv.cc;
   };
 
-  pkgs = dfold folder postStage (_: { }) withAllowCustomOverrides;
+  # The list is ordered from the final stage back through bootstrap stages.
+  # Bind it recursively so both adjacent stages share these same lazy values.
+  bootedStages = lib.lists.imap1 bootStage (lib.lists.reverseList stageFuns);
+  pkgs = builtins.head bootedStages;
 
 in
-# Return the spliced package set, so that consumers of the nixpkgs top-level
-# attributes, like NixOS, don't break when cross-compiling.
-pkgs.__splicedPackages
+bootedStages

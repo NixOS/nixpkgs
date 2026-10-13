@@ -1,0 +1,30 @@
+From 6cb93fe9e46ae139f4c5c0aa050046c3d26486cb Mon Sep 17 00:00:00 2001
+From: Connor Baker <ConnorBaker01@gmail.com>
+Date: Sat, 26 Sep 2026 14:29:12 -0700
+Subject: [PATCH] Honor shell-quoted CMAKE_ARGS during Python builds
+
+Based on PyTorch v2.13.0.
+---
+ tools/setup_helpers/cmake.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/setup_helpers/cmake.py b/tools/setup_helpers/cmake.py
+index da48473..25a33e8 100644
+--- a/tools/setup_helpers/cmake.py
++++ b/tools/setup_helpers/cmake.py
+@@ -8,6 +8,7 @@ import multiprocessing
+ import os
+ import platform
+ import re
++import shlex
+ import shutil
+ import sys
+ import sysconfig
+@@ -333,6 +334,7 @@ class CMake:
+         # Reference:
+         # 1. https://cmake.org/cmake/help/latest/manual/cmake.1.html#synopsis
+         # 2. https://stackoverflow.com/a/27169347
++        args.extend(shlex.split(my_env.get("CMAKE_ARGS", "")))
+         args.append(base_dir)
+         self.run(args, env=my_env)
+ 

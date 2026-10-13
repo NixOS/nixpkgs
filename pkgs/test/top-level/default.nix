@@ -3,6 +3,11 @@ let
   nixpkgsFun = import ../../top-level;
 in
 lib.recurseIntoAttrs {
+  stageProjection = import ./stage-projection.nix { inherit lib pkgs nixpkgsFun; };
+  cudaPackageGraphs = import ./cuda-package-graphs.nix { inherit lib pkgs nixpkgsFun; };
+  splicedPackageGraphs = import ./spliced-package-graphs.nix { inherit lib pkgs nixpkgsFun; };
+  compilerRuntime = import ./compiler-runtime.nix { inherit lib pkgs nixpkgsFun; };
+
   platformEquality =
     let
       configsLocal = [

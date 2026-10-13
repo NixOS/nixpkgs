@@ -7,6 +7,7 @@
   src ? null,
   monorepoSrc ? null,
   runCommand,
+  callPackage,
   cmake,
   ninja,
   python3,
@@ -60,6 +61,10 @@ let
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
   inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
+  noLibcAssertPatches = [
+    ./no-libc-assert.patch
+  ]
+  ++ lib.optional (lib.versionOlder release_version "22") ./no-libc-static-assert.patch;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -102,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     # See: https://github.com/NixOS/nixpkgs/pull/186575
     ./darwin-plistbuddy-workaround.patch
   ]
+  ++ lib.optionals (!haveLibc) noLibcAssertPatches
   ++ [
     (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
   ]
@@ -140,11 +146,9 @@ stdenv.mkDerivation (finalAttrs: {
         "-DSCUDO_DEFAULT_OPTIONS=delete_size_mismatch=false:dealloc_type_mismatch=false"
       ]
       ++ lib.optionals (!haveLibc) [
-        # The compiler got stricter about this, and there is a usellvm patch below
-        # which patches out the assert include causing an implicit definition of
-        # assert. It would be nicer to understand why compiler-rt thinks it should
-        # be able to #include <assert.h> in the first place; perhaps it's in the
-        # wrong, or perhaps there is a way to provide an assert.h.
+        # Keep the bootstrap allowance for missing libc declarations, including
+        # Windows int_util.c's abort() after postPatch removes stdlib.h.
+        # Assertions use compiler-rt's internal utilities instead.
         "-Wno-error=implicit-function-declaration"
       ]
     );
@@ -265,17 +269,6 @@ stdenv.mkDerivation (finalAttrs: {
             substituteInPlace lib/builtins/cpu_model/aarch64.c \
               --replace-fail "#elif defined(__linux__)" "#elif defined(__linux__) && __has_include(<sys/auxv.h>)"
           ''
-      + (lib.optionalString (!stdenv.hostPlatform.isFreeBSD)
-        # On FreeBSD, assert/static_assert are macros and allowing them to be implicitly declared causes link errors.
-        # see description above for why we're nuking assert.h normally but that doesn't work here.
-        # instead, we add the freebsd.include dependency explicitly
-        ''
-          substituteInPlace lib/builtins/clear_cache.c \
-            --replace-fail "#include <assert.h>" ""
-          substituteInPlace lib/builtins/cpu_model/x86.c \
-            --replace-fail "#include <assert.h>" ""
-        ''
-      )
     )
     +
       lib.optionalString (lib.versionAtLeast release_version "19")
@@ -332,6 +325,17 @@ stdenv.mkDerivation (finalAttrs: {
         ln -s $out/lib/*/${atomicLibrary} ${runtimeDirectory}/
       ''
     );
+
+  passthru.tests =
+    lib.optionalAttrs (!haveLibc && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86)
+      {
+        assertions = callPackage ./tests.nix {
+          compiler-rt = finalAttrs.finalPackage;
+          noLibcCompiler = stdenv.cc;
+          inherit (finalAttrs) src;
+          patches = noLibcAssertPatches;
+        };
+      };
 
   __structuredAttrs = true;
 
