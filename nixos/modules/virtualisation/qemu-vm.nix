@@ -340,7 +340,14 @@ let
         lib.concatStringsSep " " (
           lib.mapAttrsToList (
             tag: share:
-            "${tag}:${share.source}:${share.cache}:${if share.writable then "writeback" else "readonly"}"
+            "${tag}:${share.source}:${share.cache}:${
+              if !share.writable then
+                "readonly"
+              else if share.writeback then
+                "writeback"
+              else
+                "readwrite"
+            }"
           ) cfg.sharedDirectories
         )
       } \
@@ -593,6 +600,17 @@ in
           };
           options.writable = lib.mkEnableOption "" // {
             description = "Whether the directory is writable on the host and guest.";
+          };
+          options.writeback = lib.mkEnableOption "" // {
+            description = ''
+              Whether to enable writeback caching for a writable directory.
+
+              This speeds up writes from the guest, but makes the guest ignore changes to file size and modification time made on the host.
+              Only enable it if the guest is the only one writing to the directory.
+
+              Effective on Linux hosts only.
+              Ignored when using VirtFS (9P) (the default on non-Linux hosts).
+            '';
           };
           options.cache = mkOption {
             type = types.enum [
