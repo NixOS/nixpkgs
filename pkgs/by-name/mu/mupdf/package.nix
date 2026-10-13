@@ -60,6 +60,13 @@ let
         --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)"
     '';
   });
+
+  pythonForWrappers = python3.pythonOnBuildForHost.withPackages (
+    pkgs: with pkgs; [
+      clang
+      pipcl
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   version = "1.28.5";
@@ -169,7 +176,7 @@ stdenv.mkDerivation rec {
 
   postBuild = lib.optionalString (enableCxx || enablePython) ''
     for dir in build/*; do
-      ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString enableCxx "01"}${lib.optionalString enablePython "23"}
+      ${lib.getExe pythonForWrappers} ./scripts/mupdfwrap.py -d "$dir" -b ${lib.optionalString enableCxx "01"}${lib.optionalString enablePython "23"}
     done
   '';
 
