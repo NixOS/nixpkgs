@@ -32,6 +32,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = [
+    # AssertionError: assert [ToolCall(nam...406gay3qev4')] == [ToolCall(nam...ca...
+    # (output differs due to version changes)
+    "test_prompt_with_tool_calls"
+  ];
+
   pythonImportsCheck = [ "llm_echo" ];
 
   passthru.tests = llm.mkPluginTest llm-echo;

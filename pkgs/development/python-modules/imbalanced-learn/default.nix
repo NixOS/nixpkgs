@@ -29,6 +29,10 @@ buildPythonPackage rec {
     hash = "sha256-uWln6+r9QsGnH4I4JQm2/y80zTQkAflVPlIN9KQNzy0=";
   };
 
+  postPatch = ''
+    echo '${version}' > imblearn/VERSION.txt
+  '';
+
   build-system = [
     setuptools
     setuptools-scm

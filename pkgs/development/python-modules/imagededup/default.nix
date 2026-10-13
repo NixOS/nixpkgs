@@ -31,7 +31,7 @@ let
 in
 buildPythonPackage rec {
   pname = "imagededup";
-  version = "03.3";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {

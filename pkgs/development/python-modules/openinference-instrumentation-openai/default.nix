@@ -72,6 +72,11 @@ buildPythonPackage (finalAttrs: {
     "test_tool_calls"
   ];
 
+  disabledTestPaths = [
+    # want to connect to OpenAI's API
+    "tests/openinference/instrumentation/openai/test_instrumentor.py"
+  ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {

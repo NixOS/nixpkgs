@@ -11,29 +11,32 @@
   filetype,
   fsspec,
   hatchling,
-  jsonpath-ng,
+  httpx,
   llama-index-workflows,
   nest-asyncio,
   networkx,
-  nltk-data,
   nltk,
+  nltk-data,
   numpy,
   openai,
-  pandas,
   pillow,
+  platformdirs,
+  pydantic,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pyvis,
   pyyaml,
   requests,
-  spacy,
+  setuptools,
   sqlalchemy,
   tenacity,
-  tinytag,
   tiktoken,
+  tinytag,
+  tqdm,
   tree-sitter,
+  typing-extensions,
   typing-inspect,
+  wrapt,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -64,11 +67,6 @@ buildPythonPackage (finalAttrs: {
     cp -r ${nltk-data.punkt}/tokenizers/punkt/* llama_index/core/_static/nltk_cache/tokenizers/punkt/
   '';
 
-  pythonRelaxDeps = [
-    "setuptools"
-    "tenacity"
-  ];
-
   build-system = [ hatchling ];
 
   dependencies = [
@@ -80,27 +78,31 @@ buildPythonPackage (finalAttrs: {
     dirtyjson
     filetype
     fsspec
-    jsonpath-ng
+    httpx
     llama-index-workflows
     nest-asyncio
     networkx
     nltk
     numpy
-    openai
-    pandas
     pillow
-    pyvis
+    platformdirs
+    pydantic
     pyyaml
     requests
-    spacy
+    setuptools
     sqlalchemy
     tenacity
-    tinytag
     tiktoken
+    tinytag
+    tqdm
+    typing-extensions
     typing-inspect
-  ];
+    wrapt
+  ]
+  ++ sqlalchemy.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
+    openai
     tree-sitter
     pytest-asyncio
     pytest-mock

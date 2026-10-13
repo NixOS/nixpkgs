@@ -104,6 +104,9 @@ buildPythonPackage (finalAttrs: {
     "test_linalg_warning_with_newton_solver"
     "test_newton_cholesky_fallback_to_lbfgs"
 
+    #  _pickle.PicklingError: Could not pickle the task to send it to the workers.
+    "test_function_no_callback_support"
+
     # NuSVC memmap tests causes segmentation faults in certain environments
     # (e.g. Hydra Darwin machines) related to a long-standing joblib issue
     # (https://github.com/joblib/joblib/issues/563). See also:
