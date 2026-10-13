@@ -22,13 +22,14 @@ class NoUrlForSystemException(Exception):
 class VersionInfo:
     version: str
     build_number: str
-    urls: dict[str, str | None]
+    urls: dict[str, str]
 
     def download_sha256(self, system: str) -> str:
-        if self.urls[system] is None:
+        url = self.urls.get(system)
+        if url is None:
             raise NoUrlForSystemException(f"No URL available for {system}")
-        print(f"[.] Downloading sha256 for {self.urls[system]}")
-        url = f"{self.urls[system]}.sha256"
+        print(f"[.] Downloading sha256 for {url}")
+        url = f"{url}.sha256"
         download_response = requests.get(url)
         download_response.raise_for_status()
         return download_response.content.decode("UTF-8").split(" ")[0]
@@ -80,14 +81,13 @@ class VersionFetcher:
                     version_or_build_number,
                     version_number,
                 )
-                if not download_url and not ignore_no_url_error:
+                if download_url:
+                    download_urls[system] = download_url
+                elif not ignore_no_url_error:
                     print(
                         f"[!] no valid URL found for '{ide.name}' for '{system}'! make sure `updater/updateInfo.json` contains an entry and is correct.",
                         file=sys.stderr,
                     )
-                    download_urls[system] = None
-                else:
-                    download_urls[system] = download_url
             return VersionInfo(
                 version=new_version,
                 build_number=new_build_number,
