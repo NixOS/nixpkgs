@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  rustPlatform,
+  rustPackages_1_98,
 
   fetchFromGitHub,
   git,
@@ -15,18 +15,18 @@
   writableTmpDirAsHomeHook,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_98.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gleam";
-  version = "1.18.1";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = "gleam";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-974B+22Lvd7KB9M0yuuxkolLtRmg42NrAX5CIrIc3Ac=";
+    hash = "sha256-L7M1/nGDiB4D+yX1cjQ7mqNQ7YuC1BctLXEvnNjPz7A=";
   };
 
-  cargoHash = "sha256-as+2oyOpGA71oPDGTuZhfPccr8AjsUZJFtnRLYRxFOI=";
+  cargoHash = "sha256-ZyxYe7O+XDcSuWGBACv3F8FNmdCfHwVUrwx34E1a5es=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   checkFlags = [
     # These tests make network requests
-    "--skip=tests::echo::echo_dict"
+    "--skip=tests::output::echo_dict"
     "--skip=tests::escript_success_with_dependency"
     # checks files that would be gitignored, but we're not in a git repo
     "--skip=tests::all_files_have_copyright_notice"
@@ -59,21 +59,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Snapshot tests fail because a warning is shown on stdout
     # warn: CPU lacks AVX support, strange crashes may occur. Reinstall Bun or use *-baseline build:
     #   https://github.com/oven-sh/bun/releases/download/bun-v1.3.1/bun-darwin-x64-baseline.zip
-    "--skip=tests::echo::echo_bitarray"
-    "--skip=tests::echo::echo_bool"
-    "--skip=tests::echo::echo_charlist"
-    "--skip=tests::echo::echo_circular_reference"
-    "--skip=tests::echo::echo_custom_type"
-    "--skip=tests::echo::echo_float"
-    "--skip=tests::echo::echo_function"
-    "--skip=tests::echo::echo_importing_module_named_inspect"
-    "--skip=tests::echo::echo_int"
-    "--skip=tests::echo::echo_list"
-    "--skip=tests::echo::echo_nil"
-    "--skip=tests::echo::echo_singleton"
-    "--skip=tests::echo::echo_string"
-    "--skip=tests::echo::echo_tuple"
-    "--skip=tests::echo::echo_with_message"
+    "--skip=tests::output::echo_bitarray"
+    "--skip=tests::output::echo_bool"
+    "--skip=tests::output::echo_charlist"
+    "--skip=tests::output::echo_circular_reference"
+    "--skip=tests::output::echo_custom_type"
+    "--skip=tests::output::echo_float"
+    "--skip=tests::output::echo_function"
+    "--skip=tests::output::echo_importing_module_named_inspect"
+    "--skip=tests::output::echo_int"
+    "--skip=tests::output::echo_list"
+    "--skip=tests::output::echo_nil"
+    "--skip=tests::output::echo_singleton"
+    "--skip=tests::output::echo_string"
+    "--skip=tests::output::echo_tuple"
+    "--skip=tests::output::echo_with_message"
   ];
 
   doInstallCheck = true;
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Statically typed language for the Erlang VM";
+    description = "Statically typed language for the Erlang VM and JavaScript";
     mainProgram = "gleam";
     homepage = "https://gleam.run/";
     changelog = "https://github.com/gleam-lang/gleam/blob/v${finalAttrs.version}/changelog/v${lib.versions.majorMinor finalAttrs.version}.md";
@@ -90,6 +90,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       philtaken
       llakala
+      ginkogruen
     ];
     teams = [ lib.teams.beam ];
   };
