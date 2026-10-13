@@ -1422,9 +1422,9 @@
   };
 
   inko = {
-    version = "0.5.1";
+    version = "0.9.0";
     url = "github:inko-lang/tree-sitter-inko";
-    hash = "sha256-bt/T6O/7of8r9DrA6DU8pM4vWlBCgWWzw89GZbDyJnw=";
+    hash = "sha256-thSOSJLxRztyp3krxS2yGUTCof42JotCcFmK08/Lb4M=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
