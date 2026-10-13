@@ -3427,17 +3427,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaffi-tkl";
-      version = "1.0.5-2";
+      version = "1.0.5-3";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaffi-tkl-1.0.5-2.rockspec";
-          sha256 = "1b87mqkvw36bxmdj79mqpna8ydwif23cryr574q2c6f07jaqi6jc";
+          url = "mirror://luarocks/luaffi-tkl-1.0.5-3.rockspec";
+          sha256 = "12cvf4dzklh0v3j5a480kzqdlbn6i0nv42b6dkz27xxhy8mdk6fz";
         }).outPath;
       src = fetchFromGitHub {
         owner = "Tekenlight";
         repo = "luaffifb";
-        tag = "v1.0.5-2";
-        hash = "sha256-6XBWjm7sNoN96uv9lC64dlF43QuF9NE2ky0bycxBkHY=";
+        tag = "v1.0.5-3";
+        hash = "sha256-o183qSWCabF0Z5uUwUK6v4hGah7KcNCkBOTN16H2fSI=";
       };
 
       disabled = luaOlder "5.1";
