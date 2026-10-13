@@ -38,7 +38,6 @@ buildDotnetModule rec {
     changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${version}/Changelog.md";
     maintainers = with lib.maintainers; [
       kcalvinalvin
-      erikarvstedt
     ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
