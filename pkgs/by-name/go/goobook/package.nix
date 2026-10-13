@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "google-api-python-client"
     "pyxdg"
     "setuptools"
+    "simplejson"
   ];
 
   dependencies = with python3Packages; [
