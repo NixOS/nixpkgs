@@ -5,7 +5,7 @@
   cmake,
   libx11,
   libxrandr,
-  linuxPackages,
+  nvidiaPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libx11
     libxrandr
-    linuxPackages.nvidia_x11.settings.libXNVCtrl
+    nvidiaPackages.stable.settings.libXNVCtrl
   ];
 
   meta = {

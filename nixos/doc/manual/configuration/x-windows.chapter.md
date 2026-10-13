@@ -216,9 +216,9 @@ If you have an older card, you may have to use one of the legacy drivers:
 
 ```nix
 {
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_390;
-  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_340;
+  hardware.nvidia.package = pkgs.nvidiaPackages.legacy_470;
+  hardware.nvidia.package = pkgs.nvidiaPackages.legacy_390;
+  hardware.nvidia.package = pkgs.nvidiaPackages.legacy_340;
 }
 ```
 
