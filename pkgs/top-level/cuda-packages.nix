@@ -181,7 +181,7 @@ let
 
   cudaPackages_13_4 = mkCudaPackages {
     cublasmp = "0.10.0";
-    cuda = "13.4.2";
+    cuda = "13.4.3";
     cudnn = "9.27.0";
     cudss = "0.8.0";
     cuquantum = "26.09.0";

@@ -1243,6 +1243,14 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    nvidiaCuptiPython = {
+      shortName = "CUPTI Python License";
+      fullName = "NVIDIA Software License Agreement for CUPTI Python";
+      url = "https://docs.nvidia.com/cupti-python/nvidia-cupti-python-license.html";
+      free = false;
+      redistributable = false;
+    };
+
     nvidiaCudnn = {
       shortName = "cuDNN EULA";
       fullName = "cuDNN SUPPLEMENT TO SOFTWARE LICENSE AGREEMENT FOR NVIDIA SOFTWARE DEVELOPMENT KITS";
