@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-constraint";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-constraint";
     repo = "python-constraint";
     tag = version;
-    sha256 = "sha256-VTecK82VSDoUOkPnuC+PnQYPjPBsaPeWCqm2st6Wwvg=";
+    sha256 = "sha256-cDnYRD9JBXkriVIh57TESBIZHxtLLDJvR1USP/YJJss=";
   };
 
   build-system = [
