@@ -23,14 +23,14 @@
   pkg-config,
   unzip,
   wayland,
-  linuxPackages,
+  nvidiaPackages,
   spdlog,
   libxkbcommon,
   glfw,
   libxrandr,
   x11Support ? true,
   waylandSupport ? true,
-  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform linuxPackages.nvidia_x11.settings.libXNVCtrl,
+  nvidiaSupport ? lib.meta.availableOn stdenv.hostPlatform nvidiaPackages.stable.settings.libXNVCtrl,
   gamescopeSupport ? true,
   mangoappSupport ? gamescopeSupport,
   mangohudctlSupport ? gamescopeSupport,
@@ -98,7 +98,7 @@ let
     };
   };
 
-  libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+  libXNVCtrl = nvidiaPackages.stable.settings.libXNVCtrl;
   mangohud32 = pkgsi686Linux.mangohud;
 
 in
