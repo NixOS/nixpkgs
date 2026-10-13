@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cytoolz";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytoolz";
     repo = "cytoolz";
     tag = finalAttrs.version;
-    hash = "sha256-beOEhm7+Nq7oA7iDcdORz03D1InHmypqsYUDUXEUPC0=";
+    hash = "sha256-dIrhekZTxfdaxwcQYc00gIt45GAzH/qiHpVXHc9x3Pw=";
   };
 
   postPatch = ''

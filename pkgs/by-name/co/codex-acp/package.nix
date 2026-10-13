@@ -5,6 +5,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   nix-update-script,
+  stdenv,
   versionCheckHook,
 }:
 
@@ -21,7 +22,14 @@ buildNpmPackage (finalAttrs: {
 
   npmDepsHash = "sha256-7v7QE0cmYsd3JGu0VoT53yZ1rb9wYB+tXt05G1EEvz8=";
 
+  patches = [
+    # https://github.com/agentclientprotocol/codex-acp/pull/609
+    ./test-codex-path.patch
+  ];
+
   nativeBuildInputs = [ makeBinaryWrapper ];
+
+  env.CODEX_PATH = lib.getExe codex;
 
   postInstall = ''
     # Use the source-built Nixpkgs package instead of npm's bundled Codex binaries.
@@ -31,7 +39,8 @@ buildNpmPackage (finalAttrs: {
       --set-default CODEX_PATH ${lib.getExe codex}
   '';
 
-  doCheck = true;
+  # Codex's managed preferences sync fails in the Darwin sandbox.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck

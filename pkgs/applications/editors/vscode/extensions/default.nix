@@ -515,8 +515,8 @@ let
         mktplcRef = {
           publisher = "banacorn";
           name = "agda-mode";
-          version = "0.10.3";
-          hash = "sha256-z1s4edXz1Wx29v/iSyxyEae5dygYuMsfawkGBMBeb94=";
+          version = "0.10.5";
+          hash = "sha256-S4kSXd8kdRZBsXiUQLt8kmPocbwguhLKkdW+qkOfqMI=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/banacorn.agda-mode/changelog";
@@ -1192,8 +1192,8 @@ let
         mktplcRef = {
           publisher = "DanielSanMedium";
           name = "dscodegpt";
-          version = "3.24.76";
-          hash = "sha256-8HwYwCtROlU8txNVREr45Jx1tpCI2a50uHfAb6iT7V8=";
+          version = "3.24.77";
+          hash = "sha256-JoGkp2+X3vmBY9xmWQRZ21ifsycFPaWUE4IgVinZtH8=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DanielSanMedium.dscodegpt/changelog";
@@ -1778,8 +1778,8 @@ let
         mktplcRef = {
           name = "vscode-jest-runner";
           publisher = "firsttris";
-          version = "0.4.149";
-          hash = "sha256-bGDU3/5Pysagt8aoEJJH6VVvR4Oy8IU12AmaAvnKnY8=";
+          version = "0.4.151";
+          hash = "sha256-5r1TRPf0ONr/csRywlQy0UV5jf1arsHq0EJh1RRx1Pc=";
         };
         meta = {
           description = "Simple way to run or debug a single (or multiple) tests from context-menu";
@@ -2049,8 +2049,8 @@ let
         mktplcRef = {
           name = "gitlab-workflow";
           publisher = "gitlab";
-          version = "6.92.0";
-          hash = "sha256-DR0g4aHAWePu46IHNPvxrFDBHoYmHMmiEm4z4AvB4mQ=";
+          version = "7.2.0";
+          hash = "sha256-kIse70FkeQKYuwZuUSQJUaujQIt/Azynp0kyd3J+4eQ=";
         };
         meta = {
           description = "GitLab extension for Visual Studio Code";
@@ -3881,8 +3881,8 @@ let
         mktplcRef = {
           name = "prisma";
           publisher = "Prisma";
-          version = "31.12.10";
-          hash = "sha256-2046raHx9ZV/yrHzY3dMDsOIGCL0R6jgaisFDa9Z5Tk=";
+          version = "31.12.15";
+          hash = "sha256-YKug6Px1w0upIj9nCvle6efd8+WDrTZeyymiTLHWl1g=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Prisma.prisma/changelog";

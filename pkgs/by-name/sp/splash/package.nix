@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Interactive visualisation and plotting tool using kernel interpolation, mainly used for Smoothed Particle Hydrodynamics simulations";
     inherit (finalAttrs.src.meta) homepage;
-    license = lib.licenses.lgpl3Plus;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.all;
   };

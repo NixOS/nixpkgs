@@ -23,6 +23,8 @@ python313Packages.buildPythonApplication (finalAttrs: {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [ "pyluwen" ];
+
   dependencies = with python313Packages; [
     pyluwen
     tt-tools-common

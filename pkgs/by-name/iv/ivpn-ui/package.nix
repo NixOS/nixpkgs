@@ -11,18 +11,18 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "ivpn-ui";
-  version = "3.15.15";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "ivpn";
     repo = "desktop-app";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CQOmVVTegOZVwWjGzSek6BehdJCQ5ddOR6M9seWqZRw=";
+    hash = "sha256-sbi4B9gNzgipsqgTxbPrZRNjB5ulwp0gmCwjYyyYj6o=";
   };
 
   sourceRoot = "source/ui";
 
-  npmDepsHash = "sha256-n6O8yNGeYApew694jA26EGil9qdnwSd2ymfo2fIIrxU=";
+  npmDepsHash = "sha256-fQQEhTa9m0ixcv1DlIQaldFFLkvhbWCXoDge/U5xtDU=";
 
   nativeBuildInputs = [
     copyDesktopItems

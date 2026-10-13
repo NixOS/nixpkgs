@@ -6,7 +6,7 @@ atf_test_case none_writes_out_tiff_with_no_compression
 none_writes_out_tiff_with_no_compression_body() {
     expected_message="1 image written to out.tiff.\n"
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -none "$(atf_get_srcdir)/data/input-test-file.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-compression-none.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-compression-none.tiff" out.tiff
 }
 
 atf_test_case none_with_too_many_filenames_fails_with_an_error
@@ -19,7 +19,7 @@ atf_test_case lzw_writes_out_tiff_with_lzw_compression
 lzw_writes_out_tiff_with_lzw_compression_body() {
     expected_message="1 image written to out.tiff.\n"
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -lzw "$(atf_get_srcdir)/data/input-test-file.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-compression-lzw.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-compression-lzw.tiff" out.tiff
 }
 
 atf_test_case lzw_with_too_many_filenames_fails_with_an_error
@@ -32,7 +32,7 @@ atf_test_case packbits_writes_out_tiff_with_packbits_compression
 packbits_writes_out_tiff_with_packbits_compression_body() {
     expected_message="1 image written to out.tiff.\n"
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -packbits "$(atf_get_srcdir)/data/input-test-file.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-compression-packbits.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-compression-packbits.tiff" out.tiff
 }
 
 atf_test_case packbits_with_too_many_filenames_fails_with_an_error
@@ -41,11 +41,19 @@ packbits_with_too_many_filenames_fails_with_an_error_body() {
     atf_check -s exit:1 -o inline:"$expected_message" tiffutil -packbits a.tiff b.tiff
 }
 
+atf_test_case cat_implements_buggy_dpi_handling
+cat_implements_buggy_dpi_handling_body() {
+    expected_message="1 image written to out.tiff.\n"
+    atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
+        "$(atf_get_srcdir)/data/input-test-file-weird-dpi.tiff"
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-buggy-dpi-image.tiff" out.tiff
+}
+
 atf_test_case cat_with_one_file_writes_out_tiff_with_copy_of_file
 cat_with_one_file_writes_out_tiff_with_copy_of_file_body() {
     expected_message="1 image written to out.tiff.\n"
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat "$(atf_get_srcdir)/data/input-test-file.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/input-test-file.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/input-test-file.tiff" out.tiff
 }
 
 atf_test_case cat_with_multiple_files_writes_out_tiff_with_images_combined_in_one_file
@@ -55,7 +63,7 @@ cat_with_multiple_files_writes_out_tiff_with_images_combined_in_one_file_body() 
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-cat-file.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-cat-file.tiff" out.tiff
 }
 
 atf_test_case cat_with_multiple_files_and_multiple_images_writes_out_tiff_with_images_combined_in_one_file
@@ -64,7 +72,7 @@ cat_with_multiple_files_and_multiple_images_writes_out_tiff_with_images_combined
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/expected-cat-file.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-multi-image-cat-file.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-multi-image-cat-file.tiff" out.tiff
 }
 
 atf_test_case cat_with_multiple_files_issues_warning_if_all_not_same_dimensions
@@ -77,16 +85,16 @@ cat_with_multiple_files_issues_warning_if_all_not_same_dimensions_body() {
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file-4x4.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-multi-image-different-size-cat-file.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-multi-image-different-size-cat-file.tiff" out.tiff
 }
 
 atf_test_case cat_with_multiple_files_does_not_issue_warning_if_point_sizes_are_the_same
-cat_with_multiple_files_issues_warning_if_all_not_same_dimensions_body() {
+cat_with_multiple_files_does_not_issue_warning_if_point_sizes_are_the_same_body() {
     expected_message="2 images written to out.tiff.\n"
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file@3.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-multi-image-hidpi.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-multi-image-hidpi.tiff" out.tiff
 }
 
 atf_test_case cat_with_multiple_files_warning_calculates_points_based_on_72_dpi
@@ -99,7 +107,33 @@ cat_with_multiple_files_warning_calculates_points_based_on_72_dpi_body() {
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file-100dpi.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-multi-image-different-dpi-cat-file.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-multi-image-different-dpi-cat-file.tiff" out.tiff
+}
+
+atf_test_case cat_with_multiple_files_warning_handles_different_x_and_y_dpi
+cat_with_multiple_files_warning_handles_different_x_and_y_dpi_body() {
+    expected_message="Warning: Sizes of concatenated images are not the same; this will lead to problems in choosing the appropriate image in some cases.
+ Image 1 in file $(atf_get_srcdir)/data/input-test-file.tiff: 64x64 points (64x64 pixels, 72x72 dpi)
+ Image 1 in file $(atf_get_srcdir)/data/input-test-file-weird-dpi.tiff: 46.08x64 points (64x64 pixels, 100x72 dpi)
+2 images written to out.tiff.
+"
+    atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
+        "$(atf_get_srcdir)/data/input-test-file.tiff" \
+        "$(atf_get_srcdir)/data/input-test-file-weird-dpi.tiff"
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-multi-image-weird-dpi-file.tiff" out.tiff
+}
+
+atf_test_case cat_with_multiple_files_warning_handles_noninteger_dpi
+cat_with_multiple_files_warning_handles_noninteger_dpi_body() {
+    expected_message="Warning: Sizes of concatenated images are not the same; this will lead to problems in choosing the appropriate image in some cases.
+ Image 1 in file $(atf_get_srcdir)/data/input-test-file.tiff: 64x64 points (64x64 pixels, 72x72 dpi)
+ Image 1 in file $(atf_get_srcdir)/data/input-test-file-decimal-dpi.tiff: 6.78735x37.32685 points (64x64 pixels, 678.91x123.45 dpi)
+2 images written to out.tiff.
+"
+    atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
+        "$(atf_get_srcdir)/data/input-test-file.tiff" \
+        "$(atf_get_srcdir)/data/input-test-file-decimal-dpi.tiff"
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-multi-image-decimal-dpi-file.tiff" out.tiff
 }
 
 atf_test_case cat_with_hidpi_mode_writes_image_with_normalized_dpi
@@ -108,7 +142,7 @@ cat_with_hidpi_mode_writes_image_with_normalized_dpi_body() {
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cathidpicheck \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file@2.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-hidpi-image.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-hidpi-image.tiff" out.tiff
 }
 
 atf_test_case cat_with_hidpi_mode_issues_warning_when_images_do_not_meet_requirement
@@ -122,7 +156,7 @@ cat_with_hidpi_mode_issues_warning_when_images_do_not_meet_requirement_body() {
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cathidpicheck \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file@3.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-hidpi-failed_requirements.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-hidpi-failed_requirements.tiff" out.tiff
 }
 
 atf_test_case cat_with_hidpi_mode_issues_warning_when_too_few_images
@@ -134,7 +168,7 @@ cat_with_hidpi_mode_issues_warning_when_too_few_images_body() {
 "
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cathidpicheck \
         "$(atf_get_srcdir)/data/input-test-file@3.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-hidpi-single-image.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-hidpi-single-image.tiff" out.tiff
 }
 
 atf_test_case cat_with_hidpi_mode_issues_warning_when_too_many_images
@@ -150,7 +184,7 @@ cat_with_hidpi_mode_issues_warning_when_too_many_images_body() {
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file@2.tiff" \
         "$(atf_get_srcdir)/data/input-test-file@3.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-hidpi-too-many-images.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-hidpi-too-many-images.tiff" out.tiff
 }
 
 atf_test_case cat_with_size_check_suppressed_does_not_issue_warning
@@ -159,7 +193,7 @@ cat_with_size_check_suppressed_does_not_issue_warning_body() {
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -catnosizecheck \
         "$(atf_get_srcdir)/data/input-test-file.tiff" \
         "$(atf_get_srcdir)/data/input-test-file-4x4.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-multi-image-different-size-cat-file.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-multi-image-different-size-cat-file.tiff" out.tiff
 }
 
 atf_test_case dump_displays_verbatim_info_about_one_image
@@ -347,7 +381,7 @@ extract_writes_image_at_offset_to_file_body() {
     expected_message="1 image written to out.tiff.\n"
     atf_check -s exit:0 -o inline:"$expected_message" tiffutil -extract 1 \
         "$(atf_get_srcdir)/data/expected-hidpi-too-many-images.tiff"
-    atf_check -s exit:0 -o file:"$(atf_get_srcdir)/data/expected-extracted-file.tiff" cat out.tiff
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-extracted-file.tiff" out.tiff
 }
 
 atf_test_case info_displays_directory_of_file_with_one_image
@@ -556,6 +590,14 @@ no_args_displays_usage_body() {
     atf_check -s exit:1 -o inline:"$expected_message" tiffutil
 }
 
+atf_test_case supports_big_tiff
+supports_big_tiff_body() {
+    expected_message="1 image written to out.tiff.\n"
+    atf_check -s exit:0 -o inline:"$expected_message" tiffutil -cat \
+        "$(atf_get_srcdir)/data/input-test-file-bigtiff.tiff"
+    atf_check -s exit:0 -o ignore tiffcmp "$(atf_get_srcdir)/data/expected-bigtiff-image.tiff" out.tiff
+}
+
 atf_init_test_cases() {
     atf_add_test_case none_writes_out_tiff_with_no_compression
     atf_add_test_case none_with_too_many_filenames_fails_with_an_error
@@ -570,10 +612,14 @@ atf_init_test_cases() {
     atf_add_test_case cat_with_hidpi_mode_issues_warning_when_images_do_not_meet_requirement
     atf_add_test_case cat_with_hidpi_mode_issues_warning_when_too_few_images
     atf_add_test_case cat_with_hidpi_mode_issues_warning_when_too_many_images
+    atf_add_test_case cat_with_multiple_files_does_not_issue_warning_if_point_sizes_are_the_same
 
+    atf_add_test_case cat_implements_buggy_dpi_handling
     atf_add_test_case cat_with_multiple_files_and_multiple_images_writes_out_tiff_with_images_combined_in_one_file
+    atf_add_test_case cat_with_multiple_files_warning_handles_noninteger_dpi
     atf_add_test_case cat_with_multiple_files_issues_warning_if_all_not_same_dimensions
     atf_add_test_case cat_with_multiple_files_warning_calculates_points_based_on_72_dpi
+    atf_add_test_case cat_with_multiple_files_warning_handles_different_x_and_y_dpi
     atf_add_test_case cat_with_multiple_files_writes_out_tiff_with_images_combined_in_one_file
     atf_add_test_case cat_with_size_check_suppressed_does_not_issue_warning
 
@@ -595,4 +641,6 @@ atf_init_test_cases() {
 
     atf_add_test_case missing_out_filename_treats_out_as_filename
     atf_add_test_case no_args_displays_usage
+
+    atf_add_test_case supports_big_tiff
 }
