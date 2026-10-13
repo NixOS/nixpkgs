@@ -1,6 +1,6 @@
 {
-    "release_date": "2026-09-16",
-    "release_label": "13.4.2",
+    "release_date": "2026-10-13",
+    "release_label": "13.4.3",
     "release_product": "cuda",
     "cccl": {
         "name": "CXX Core Compute Libraries",
@@ -750,30 +750,30 @@
         "name": "CUDA cuSOLVER",
         "license": "CUDA Toolkit",
         "license_path": "libcusolver/LICENSE.txt",
-        "version": "12.3.4.7",
+        "version": "12.3.5.3",
         "linux-x86_64": {
-            "relative_path": "libcusolver/linux-x86_64/libcusolver-linux-x86_64-12.3.4.7-archive.tar.xz",
-            "sha256": "dd89888e75628ada3fece05eb642d8e492667fdf3714c4659104c9636863f6ec",
-            "md5": "4a565bd60a009f99ff87815e1678c3bd",
-            "size": "397811276"
+            "relative_path": "libcusolver/linux-x86_64/libcusolver-linux-x86_64-12.3.5.3-archive.tar.xz",
+            "sha256": "6ad119d1d1e8cb377fe7f90cc3f6d53381b94c63ae4d7fba27aa2fce6954b572",
+            "md5": "66b762a6eee087b68b944f68f3c0dc4c",
+            "size": "397840600"
         },
         "linux-sbsa": {
-            "relative_path": "libcusolver/linux-sbsa/libcusolver-linux-sbsa-12.3.4.7-archive.tar.xz",
-            "sha256": "8217d8129f46313d95d6d04acff38f625ddc03f5f377e7d1029b18a3fc37fd59",
-            "md5": "3f46446b9408a9e1d15df2bd28500d7e",
-            "size": "444287132"
+            "relative_path": "libcusolver/linux-sbsa/libcusolver-linux-sbsa-12.3.5.3-archive.tar.xz",
+            "sha256": "1cc92fdd9142bfc70c6cccb15a3e8720c8f12fa3cb4ffd849bec725d96a16d1f",
+            "md5": "77ebd62ab70c7522695904fcf6b2c32f",
+            "size": "443755860"
         },
         "windows-x86_64": {
-            "relative_path": "libcusolver/windows-x86_64/libcusolver-windows-x86_64-12.3.4.7-archive.zip",
-            "sha256": "1d3bb145a2d81ddd94a2a22d923bfdb2b59662f85be5e430ad1cb0b9d587a4b9",
-            "md5": "bdf6be67580fa45625d735df440c25dd",
-            "size": "261457719"
+            "relative_path": "libcusolver/windows-x86_64/libcusolver-windows-x86_64-12.3.5.3-archive.zip",
+            "sha256": "0ac06a5aaaf5909872f1845c1db3187adf2164ea2b0f4c5a0e4d828cc371e2c8",
+            "md5": "f7539ced93fa21f00871a3856f0009c4",
+            "size": "261469095"
         },
         "windows-arm64": {
-            "relative_path": "libcusolver/windows-arm64/libcusolver-windows-arm64-12.3.4.7-archive.zip",
-            "sha256": "574999b5e43a3e5d92860a274a1cd65b501fca5394a555137234200d12cacd84",
-            "md5": "b0e762b92d527b5679417074af07293e",
-            "size": "71368583"
+            "relative_path": "libcusolver/windows-arm64/libcusolver-windows-arm64-12.3.5.3-archive.zip",
+            "sha256": "c6ffe5181f306d85cbf31545c2ffb5c02a663d490b0116f0472b7e55fdc656d9",
+            "md5": "b577f447b3114767d4f6e89345a22a9b",
+            "size": "71369398"
         }
     },
     "libcusparse": {

@@ -157,36 +157,30 @@ lib.makeExtensible (
     {
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.31.5";
+          version = "2.31.6";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
+            hash = "sha256-yAvNBedw4FB+Z5myhfGsnRT8F1QqeEoXGbm7EmTW/Og=";
           };
         }).appendPatches
-          (
-            lib.optionals stdenv.hostPlatform.isDarwin [
-              # Avoid recursive arch probes when libnixstore is preloaded by Cachix.
-              # https://github.com/NixOS/nixpkgs/issues/562481
-              ./detect-rosetta-via-runtime-file.patch
-            ]
-          );
+          [ ];
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
       nixComponents_2_34 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.34.8";
+          version = "2.34.9";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_34";
           src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-Rvy1PmIUMGI0IS/kwDwmf/VrorU8v1iZYejssSVu1rY=";
+            hash = "sha256-ZJwg/qG4M1Impy774HKMZ3Hsq7vlBJy7sXl1fI9QDXI=";
           });
         }).appendPatches
           [ ];
@@ -195,14 +189,14 @@ lib.makeExtensible (
 
       nixComponents_2_35 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.35.2";
+          version = "2.35.3";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_35";
           src = removeFunctionalTests commonDisabledTests (fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-C/YEm/5IPiAMxQH5aHlkwgQMkLqK7NVsudEWdlzBZAA=";
+            hash = "sha256-qtlx8ywd1qj2ToZTNBunXE7JUajLtw44ja3r7+d47D4=";
           });
         }).appendPatches
           [ ];
@@ -214,12 +208,12 @@ lib.makeExtensible (
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "979a87c97bef7b96cd4ec4b142188089851e47ad";
-            hash = "sha256-B9oFHwWHisWIvsjo7jeoke0OzxRYZYFhpBm/ancphUk=";
+            rev = "07fd28bdb5c9474768a52f1072bd3f70525c789c";
+            hash = "sha256-2FZ5ACZiycNosv537iLBdDWLYvMZrI90oOBa1/z+9N4=";
           };
         in
         (nixDependencies.callPackage ./modular/packages.nix {
-          version = "2.36pre20261010_${lib.substring 0 8 src.rev}";
+          version = "2.36pre20261013_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = removeFunctionalTests commonDisabledTests src;
