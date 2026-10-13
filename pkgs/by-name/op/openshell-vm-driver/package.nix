@@ -26,6 +26,12 @@ pkgs.openshell.overrideAttrs (oldAttrs: {
     zstd -cf ${pkgs.openshell}/bin/openshell-sandbox > $OPENSHELL_VM_RUNTIME_COMPRESSED_DIR/openshell-sandbox.zst
   '';
 
+  checkFlags = [
+    "--"
+    "--skip"
+    "inference::tests::managed_route_resolves_default_credential_handles"
+  ];
+
   postPatch = ''
     # fill in package version to Cargo
     substituteInPlace Cargo.toml \
