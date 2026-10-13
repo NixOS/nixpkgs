@@ -38,6 +38,6 @@ buildPythonPackage (finalAttrs: {
     description = "PyTorch architecture support for super-resolution, restoration, and inpainting models";
     homepage = "https://github.com/chaiNNer-org/spandrel";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ caniko ];
+    maintainers = with lib.maintainers; [ ];
   };
 })

@@ -184,7 +184,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       GaetanLepage
-      caniko
     ];
   };
 })

@@ -173,7 +173,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
       lib.platforms.linux ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       GaetanLepage
-      caniko
       junjihashimoto
     ];
   };

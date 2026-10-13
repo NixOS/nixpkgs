@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     description = ".gitlab-ci.yml lint helper tool";
     homepage = "https://gitlab.com/orobardet/gitlab-ci-linter";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ caniko ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "gitlab-ci-linter";
   };
 })

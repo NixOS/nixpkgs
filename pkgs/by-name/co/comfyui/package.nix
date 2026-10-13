@@ -187,7 +187,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "comfyui";
     maintainers = with lib.maintainers; [
-      caniko
       SuperSandro2000
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

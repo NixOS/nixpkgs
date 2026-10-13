@@ -155,7 +155,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       thardin
       brittonr
       miniharinn
-      caniko
     ];
     platforms = [
       "x86_64-linux"
