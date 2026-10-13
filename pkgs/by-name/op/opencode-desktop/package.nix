@@ -71,6 +71,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     OPENCODE_CHANNEL = "prod";
     MODELS_DEV_API_JSON = "${models-dev}/dist/_api.json";
     OPENCODE_DISABLE_MODELS_FETCH = true;
+    OPENCODE_VERSION = finalAttrs.version;
   };
 
   configurePhase = ''
