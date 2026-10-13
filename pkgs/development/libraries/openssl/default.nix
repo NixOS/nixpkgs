@@ -251,13 +251,6 @@ let
         # conflicting flags.
         "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
       ]
-      # llvm-rc (acting as windres) searches PATH for an unprefixed `clang` to
-      # preprocess .rc files, which finds the unwrapped compiler lacking the
-      # mingw-w64 include paths. Point it at the wrapped cross compiler instead.
-      ++ lib.optional (stdenv.hostPlatform.isMinGW && stdenv.cc.bintools.isLLVM) (
-        "RCFLAGS=--preprocessor=${stdenv.cc.targetPrefix}clang"
-        + " --preprocessor-arg=-E --preprocessor-arg=-xc --preprocessor-arg=-DRC_INVOKED"
-      )
       # tests are not being installed, it makes no sense
       # to build them if check is disabled, e.g. on cross.
       ++ lib.optional (!finalAttrs.finalPackage.doCheck) "disable-tests";
