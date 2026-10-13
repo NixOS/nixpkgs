@@ -127,9 +127,9 @@
 
   azure-devops = mkAzExtension rec {
     pname = "azure-devops";
-    version = "1.0.8";
+    version = "1.0.9";
     url = "https://github.com/Azure/azure-cli-extensions/releases/download/azure-devops-${version}/azure_devops-${version}-py2.py3-none-any.whl";
-    hash = "sha256-uQzJx2TLZrBj6LXUBxY/PnqUS7UM9d18SC9K4Zj5Nk4=";
+    hash = "sha256-60k73FESyFUzgsEPSW4DTcnYkhpFA9qj+JgxQ5nj/MU=";
     description = "Tools for managing Azure DevOps";
     propagatedBuildInputs = with python3Packages; [ distro ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
