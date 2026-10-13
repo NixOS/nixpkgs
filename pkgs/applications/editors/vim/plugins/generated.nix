@@ -16565,12 +16565,12 @@ final: prev: {
 
   smart-splits-nvim = buildVimPlugin {
     pname = "smart-splits.nvim";
-    version = "2.1.0-unstable-2026-09-07";
+    version = "3.0.0";
     src = fetchFromGitHub {
       owner = "smart-splits-nvim";
       repo = "smart-splits.nvim";
-      rev = "ec76708f1617ef9e2ac353357fe52d2c997a0f06";
-      hash = "sha256-wTNNFmVARLSbhYvr7dkPc+9jJBLEeRah0JB3j4W/7uM=";
+      tag = "v3.0.0";
+      hash = "sha256-IWkFxNGmxwHx9KFg9z9EnWhy3yp+kNMXKDmB0Qhxuic=";
     };
     meta.homepage = "https://github.com/smart-splits-nvim/smart-splits.nvim/";
     meta.license = getLicenseFromSpdxId "MIT";
