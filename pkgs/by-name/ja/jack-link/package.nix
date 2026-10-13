@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jack-link";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "rncbc";
     repo = "jack_link";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FaFFKcTB70UDWtst7A2JeqzSgVGDkkaRhZS3II56ndU=";
+    hash = "sha256-tEUYq8YF+VDBq8q/d43xg7rzduEzozWKdZqJB1zMqPU=";
     fetchSubmodules = true;
   };
 
