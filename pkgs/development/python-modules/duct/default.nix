@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "duct-py";
+  pname = "duct";
   version = "1.0.1";
   pyproject = true;
 
