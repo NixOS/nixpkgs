@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/erikarvstedt/extra-container/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.erikarvstedt ];
+    maintainers = [ lib.maintainers.stevelr ];
     mainProgram = "extra-container";
   };
 })
