@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -18,6 +19,10 @@ buildPythonPackage (finalAttrs: {
   };
 
   build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "py_expression_eval" ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
 
   meta = {
     homepage = "https://github.com/AxiaCore/py-expression-eval/";
