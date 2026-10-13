@@ -14,7 +14,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "fhir-py";
+  pname = "fhirpy";
   version = "2.2.0";
   pyproject = true;
 
