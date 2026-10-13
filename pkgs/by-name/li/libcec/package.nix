@@ -36,7 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
   ]
-  ++ lib.optional pythonSupport swig;
+  ++ lib.optionals pythonSupport [
+    swig
+    python3.pkgs.wrapPython
+  ];
+
   buildInputs = [
     libcec_platform
   ]
@@ -51,9 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
     "-DHAVE_LINUX_API=1"
   ];
 
+  # pyCecClient uses incorrect import path since:
+  # https://github.com/Pulse-Eight/libcec/pull/655/changes
+  #
+  # Apparently the change was intended to fix ubuntu & windows
+  # packages, so we manually revert it for our use case
   postFixup = lib.optionalString pythonSupport ''
     moveToOutput "lib/${python3.libPrefix}" "$python"
     moveToOutput "bin/pyCecClient" "$python_bin"
+    substituteInPlace "$python_bin/bin/pyCecClient" \
+      --replace-fail 'from cec import cec' 'import cec'
+    wrapPythonProgramsIn "$python_bin" "$python"
   '';
 
   outputs = [
