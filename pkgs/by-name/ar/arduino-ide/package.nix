@@ -44,6 +44,8 @@ let
     ];
   };
 
+  passthru.updateScript = ./update.sh;
+
   linux =
     let
       appimageContents = appimageTools.extract { inherit pname version src; };
@@ -54,6 +56,7 @@ let
         version
         src
         meta
+        passthru
         ;
 
       extraInstallCommands = ''
@@ -71,7 +74,12 @@ let
     };
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
-    inherit pname version src;
+    inherit
+      pname
+      version
+      src
+      passthru
+      ;
 
     meta = meta // {
       mainDarwinApp = "Arduino IDE.app";
