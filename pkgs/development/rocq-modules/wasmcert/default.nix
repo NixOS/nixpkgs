@@ -30,7 +30,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (lib.versions.range "9.0" "9.2") (lib.versions.range "2.4" "2.6") "2.2.1")
+        (case (lib.versions.range "9.2" "9.2") (lib.versions.range "2.4" "2.6") "2.2.1") # wasmcert 2.2.1 also supports Rocq 9.1 but would break CertiRocq
         (case (lib.versions.range "8.20" "9.1") (lib.versions.range "2.4" "2.5") "2.2.0")
       ]
       null;
