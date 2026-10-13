@@ -19,6 +19,8 @@ let
   toml = pkgs.formats.toml { };
 in
 {
+  imports = [ (lib.mkRenamedOptionModule [ "programs" "vellum" ] [ "services" "vellum" ]) ];
+
   options.services.vellum = {
     enable = mkEnableOption "vellum, a live screen annotation overlay for Wayland";
 
