@@ -29,6 +29,8 @@ pkgs.openshell.overrideAttrs (oldAttrs: {
   # Tests are run as part of the openshell package already.
   doCheck = false;
 
+  versionCheckHook = false;
+
   postPatch = ''
     # fill in package version to Cargo
     substituteInPlace Cargo.toml \
