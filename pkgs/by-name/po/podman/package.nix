@@ -11,7 +11,6 @@
   libapparmor,
   libseccomp,
   libselinux,
-  # TODO: investigate why changing from `systemd` to `systemdMinimal` breaks `podman logs`
   systemdLibs,
   nixosTests,
   python3,
