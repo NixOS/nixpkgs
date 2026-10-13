@@ -1,8 +1,8 @@
-{ buildGoModule, callPackage }:
+{ buildGo127Module, callPackage }:
 let
   common = callPackage ./common.nix { };
 in
-buildGoModule {
+buildGo127Module {
   pname = "woodpecker-agent";
   inherit (common)
     version
