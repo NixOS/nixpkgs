@@ -29,7 +29,7 @@ pkgs.openshell.overrideAttrs (oldAttrs: {
   # Tests are run as part of the openshell package already.
   doCheck = false;
 
-  versionCheckHook = false;
+  doInstallCheck = false;
 
   postPatch = ''
     # fill in package version to Cargo
