@@ -8,6 +8,8 @@
   libhandy,
   gettext,
   stdenv,
+  runCommand,
+  xvfb-run,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -51,9 +53,39 @@ python3Packages.buildPythonApplication (finalAttrs: {
   # incompatible with wrapGAppsHook3
   strictDeps = false;
   dontWrapGApps = true;
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+    "--unset PYTHONPATH"
+    "--unset PYTHONHOME"
+  ];
 
   doCheck = false; # no tests
+
+  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    python-environment =
+      runCommand "pdfarranger-python-environment"
+        {
+          nativeBuildInputs = [
+            finalAttrs.finalPackage
+            xvfb-run
+          ];
+          meta.timeout = 60;
+        }
+        ''
+          HOME=$(mktemp -d)
+          export HOME
+          mkdir foreign-python
+          echo 'raise RuntimeError("Imported pikepdf from the inherited Python environment")' > foreign-python/pikepdf.py
+
+          xvfb-run -a pdfarranger --help | grep -F -- '--version'
+          for variable in PYTHONPATH PYTHONHOME; do
+            env "$variable=$PWD/foreign-python" xvfb-run -a pdfarranger --help \
+              | grep -F -- '--version'
+          done
+
+          touch "$out"
+        '';
+  };
 
   meta = {
     inherit (finalAttrs.src.meta) homepage;
