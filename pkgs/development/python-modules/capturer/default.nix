@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "xolox";
     repo = "python-capturer";
     rev = version;
-    sha256 = "0fwrxa049gzin5dck7fvwhdp1856jrn0d7mcjcjsd7ndqvhgvjj1";
+    hash = "sha256-Qcr94MbNnqYlk6yeBmyWpqBwG+TbnclasfG/RIDqmTs=";
   };
 
   patches = [

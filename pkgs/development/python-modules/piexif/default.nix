@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "hMatoba";
     repo = "Piexif";
     rev = version;
-    sha256 = "1akmaxq1cjr8wghwaaql1bd3sajl8psshl58lprgfsigrvnklp8b";
+    hash = "sha256-C1067c4vavfypahQqPVFVCo92goUK8Xh4yhLFnBXdao=";
   };
 
   patches = [

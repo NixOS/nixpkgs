@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "gkhayes";
     repo = "mlrose";
     rev = "v${version}";
-    sha256 = "1dn43k3rcypj58ymcj849b37w66jz7fphw8842v6mlbij3x0rxfl";
+    hash = "sha256-1PUM+pBx0Wq2IAhxeN350hh+xkoESVY9KvJ6lsccxLY=";
   };
 
   patches = [

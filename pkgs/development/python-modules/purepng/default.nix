@@ -17,7 +17,7 @@ buildPythonPackage {
     owner = "Scondo";
     repo = "purepng";
     rev = "449aa00e97a8d7b8a200eb9048056d4da600a345";
-    sha256 = "105p7sxn2f21icfnqpah69mnd74r31szj330swbpz53k7gr6nlsv";
+    hash = "sha256-W1Nr8jtzlH8X12AM+XUYmZxmazJQXWwdi0E4Ybs+t4A=";
   };
 
   patches = [
