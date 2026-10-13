@@ -40,7 +40,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "shap";
-  version = "0.52.0";
+  version = "0.53.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     owner = "slundberg";
     repo = "shap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/U/FdJlsLcu4m1X4R5rr4S7Q79L57Q6MKIVQppW/LR0=";
+    hash = "sha256-2+DYKw+kXf9E7r/6dbRHO4Aq/m2X6UVAG0N92avBkxU=";
   };
 
   build-system = [
