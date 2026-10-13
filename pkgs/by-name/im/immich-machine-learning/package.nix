@@ -46,7 +46,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
       uvicorn
       rapidocr
 
-      finalAttrs.passthru.immich-models
+      finalAttrs.passthru.immich-model
     ]
     ++ uvicorn.optional-dependencies.standard;
 
@@ -85,7 +85,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     tests = {
       inherit (nixosTests) immich;
     };
-    immich-models = python.pkgs.callPackage ./immich-models.nix { };
+    immich-model = python.pkgs.callPackage ./immich-model.nix { };
   };
 
   meta = {

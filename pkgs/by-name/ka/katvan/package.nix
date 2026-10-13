@@ -10,6 +10,7 @@
   rustPlatform,
   rustc,
   cargo,
+  wrapGAppsHook3,
 
   # buildInputs
   qt6,
@@ -19,11 +20,14 @@
 
   # checkInputs
   gtest,
+
+  # passthru
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katvan";
-  version = "0.12.1";
+  version = "0.14.0";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -31,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "IgKh";
     repo = "katvan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WyPiRj/5So/1vjAytnXoldwYMG++tuLl0B0v31BeJxY=";
+    hash = "sha256-bbVwnvJgirdXE8zvAH5B7txxMpv+Wgvj9EIThR2s1AA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -41,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       cargoRoot
       ;
-    hash = "sha256-p5cMFCuDy17uMoy99R8l+e6iQcbNXSavFj0sBRRsMwo=";
+    hash = "sha256-xgujm9umsl6tZ/c7enXKZNcAUnV7UsMS3L+O/kEERdk=";
   };
 
   # The CMakeLists files used by upstream issue a `cargo install` command to
@@ -66,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages (ps: [
       ps.mistletoe
     ]))
+    wrapGAppsHook3 # needed for file dialogs
   ];
 
   buildInputs = [
@@ -86,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "bare-bones editor for Typst files, with a bias for Right-to-Left editing";

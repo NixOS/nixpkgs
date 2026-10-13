@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "pakus";
     repo = "captive-browser";
     rev = "ca6f74e132ecf298c87936d4c946fd551aefbbf7";
-    sha256 = "sha256-wojx28GFg9whfkNxUbOVDVNHp8M7SLsmRBTP/Jh8nLQ=";
+    hash = "sha256-wojx28GFg9whfkNxUbOVDVNHp8M7SLsmRBTP/Jh8nLQ=";
   };
 
   vendorHash = "sha256-8FMFgCJUTalJ45GR5UnyXqN6s0gVFtiy6zjugbngDYQ=";

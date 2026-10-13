@@ -44,15 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
       marcin-serwin
     ];
     platforms = with lib.platforms; linux;
-    license = with lib.licenses; [
-      # Code
-      gpl2Only
-      # or
-      gpl3Only
-
-      # Metadata
-      cc0
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        (OR [
+          gpl2Only
+          gpl2Plus
+        ])
+        cc0
+      ];
     mainProgram = "Li-ri";
   };
 })

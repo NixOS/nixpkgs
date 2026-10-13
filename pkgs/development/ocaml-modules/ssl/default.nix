@@ -9,17 +9,17 @@
   pkg-config,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ssl";
-  version = "0.7.0";
+  version = "0.8.0";
 
-  duneVersion = "3";
+  minimalOCamlVersion = "4.12";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ssl";
-    rev = "v${version}";
-    hash = "sha256-gi80iwlKaI4TdAVnCyPG03qRWFa19DHdTrA0KMFBAc4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bju77cRwfzxer1VlRN+GLt0wkKbjPIsIQcOTT4zpgU8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -27,12 +27,8 @@ buildDunePackage rec {
   propagatedBuildInputs = [ openssl ];
 
   __darwinAllowLocalNetworking = true;
-  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  doCheck = lib.versionAtLeast ocaml.version "4.14";
   checkInputs = [ alcotest ];
-  preCheck = ''
-    mkdir -p _build/default/tests/
-    cp tests/digicert_certificate.pem _build/default/tests/
-  '';
 
   meta = {
     homepage = "https://www.liquidsoap.info/ocaml-ssl/ssl/index.html";
@@ -45,4 +41,4 @@ buildDunePackage rec {
       dandellion
     ];
   };
-}
+})

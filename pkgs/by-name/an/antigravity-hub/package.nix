@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "antigravity";
       categories = [ "Development" ];
       mimeTypes = [ "x-scheme-handler/antigravity" ];
-      startupWMClass = "Antigravity";
+      startupWMClass = "antigravity";
     })
   ];
 
