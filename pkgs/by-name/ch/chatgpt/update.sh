@@ -40,8 +40,13 @@ get_field() {
   local metadata="$2"
 
   local value
-  value=$(sed -n "s/^$field: //p" <<< "$metadata")
-  [[ -n "$value" && "$value" != *$'\n'* ]] || fail "missing or duplicate $field field"
+  value=$(awk -v field="$field" '
+    index($0, field ": ") == 1 { count++; value = substr($0, length(field) + 3) }
+    END {
+      if (count != 1 || value == "") exit 1
+      print value
+    }
+  ' <<< "$metadata") || fail "missing or duplicate $field field"
   printf '%s\n' "$value"
 }
 

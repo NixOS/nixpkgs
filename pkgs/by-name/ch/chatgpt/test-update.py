@@ -171,6 +171,14 @@ if '--print-path' in sys.argv: print(path)
         self.index_overrides["amd64"] = self.metadata_text("amd64") + "Version: 1.0\n"
         self.run_update(success=False)
 
+    def test_empty_duplicate_metadata_field_is_rejected(self):
+        for field in self.metadata["amd64"]:
+            with self.subTest(field=field):
+                self.index_overrides["amd64"] = (
+                    self.metadata_text("amd64") + f"{field}: \n"
+                )
+                self.run_update(success=False)
+
     def test_missing_field_is_not_borrowed_from_another_package(self):
         self.metadata["amd64"].pop("SHA256")
         self.index_overrides["amd64"] = (
