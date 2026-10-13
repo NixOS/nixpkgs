@@ -1925,7 +1925,6 @@
   ./services/web-servers/tusd.nix
   ./services/web-servers/unit/default.nix
   ./services/web-servers/uwsgi.nix
-  ./services/web-servers/varnish/default.nix
   ./services/web-servers/vinyl-cache/default.nix
   ./services/x11/clight.nix
   ./services/x11/colord.nix
