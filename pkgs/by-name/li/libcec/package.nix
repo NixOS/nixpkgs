@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  pythonSupport ? false,
+  pythonSupport ? true,
   python3,
   swig,
   udev,
