@@ -12,6 +12,9 @@
   pytestCheckHook,
   pytest-cov-stub,
   hypothesis,
+  # optional-dependencies
+  antspyx,
+  matplotlib,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -45,6 +48,11 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [
     "intensity_normalization"
   ];
+
+  optional-dependencies = {
+    ants = [ antspyx ];
+    plot = [ matplotlib ];
+  };
 
   meta = {
     homepage = "https://github.com/jcreinhold/intensity-normalization";
