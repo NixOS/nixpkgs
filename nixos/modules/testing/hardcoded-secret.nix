@@ -37,6 +37,12 @@ in
         while this module set runtime permissions on the file.
         This makes the tests more accurate, ensuring the permissions
         set by the contract consumer are correct.
+
+        For each entry, a service writes `providerOptions.content` to `response.path`,
+        with the `mode`, `owner` and `group` from `request`.
+        The service runs after `systemd-sysusers` or `userborn`, and before `sysinit.target`,
+        thus the file exists before the services that use it start.
+        The content is also in the Nix store, where each user can read it.
       '';
       example = lib.literalExpression ''
         {
