@@ -44,18 +44,12 @@ buildDotnetModule (finalAttrs: {
 
   # UVtools.Core reaches OpenCV through Emgu.CV, whose native half upstream
   # vendors in build/platforms and also pulls in as Emgu.CV.runtime.mini.*
-  # NuGet packages. Drop both and use the libcvextern.so built from source,
-  # which is the counterpart of the managed Emgu.CV 4.13.0.5924 assembly: the
-  # vendored copy predates it and is missing entry points it declares, such as
-  # cveBackgroundSubtractorApply1 and cveEstimateTranslation2D.
+  # NuGet packages. Drop both and use the libcvextern.so built from source
   postPatch = ''
     # libcvextern.so and the managed Emgu.CV assembly have to come from the
-    # same Emgu CV release, or P/Invoke entry points go missing at runtime, on
-    # whichever code path happens to need them. Fail the build rather than let
-    # the two pins drift apart on an update.
+    # same Emgu CV release to be compatible
     if ! grep -q 'Include="Emgu.CV" Version="${emgucv.version}\.' UVtools.Core/UVtools.Core.csproj; then
-      echo "Emgu.CV no longer matches emgucv ${emgucv.version};" \
-        "the emgucv package needs updating alongside this one." >&2
+      echo "Emgu.CV does not match emgucv ${emgucv.version}; the emgucv package needs updating alongside this one." >&2
       exit 1
     fi
 
@@ -146,7 +140,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     description = "MSLA/DLP file analysis, calibration, repair and conversion tool";
     homepage = "https://github.com/sn4k3/UVtools";
-    changelog = "https://github.com/sn4k3/UVtools/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/sn4k3/UVtools/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Plus;
     mainProgram = "UVtools";
     maintainers = with lib.maintainers; [ kanagawamarcos ];

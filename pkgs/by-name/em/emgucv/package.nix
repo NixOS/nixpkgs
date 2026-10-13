@@ -59,13 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "FIND_PACKAGE(CSharp REQUIRED)" "FIND_PACKAGE(CSharp)"
 
     # Don't let the build look at which distribution the host runs. It probes
-    # /etc/os-release, lsb_release and uname, and on Ubuntu or RHEL hosts that
-    # turns the missing .NET SDK into a hard error and moves the output
-    # directory, so the result would depend on the builder rather than the
-    # inputs.
+    # /etc/os-release, lsb_release and uname, and on Ubuntu or RHEL hosts
+    # and moves the output directory somewhere else
     substituteInPlace cmake/modules/CheckPlatform.cmake \
       --replace-fail "IF (UNIX AND NOT APPLE)" \
-        "IF (FALSE) # Nixpkgs: the result must not depend on the build machine"
+        "IF (FALSE)"
   '';
 
   nativeBuildInputs = [
@@ -85,16 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Follows platforms/ubuntu/24.04/cmake_configure's "mini" profile, the one
-  # upstream publishes as the Emgu.CV.runtime.mini.* NuGet packages: OpenCV is
-  # linked statically into libcvextern.so and the modules below are left out.
+  # upstream publishes as the Emgu.CV.runtime.mini.* NuGet packages.
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" false)
     (lib.cmakeBool "CMAKE_POSITION_INDEPENDENT_CODE" true)
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
     (lib.cmakeBool "EMGU_CV_WITH_FREETYPE" false)
     (lib.cmakeBool "EMGU_CV_WITH_TESSERACT" false)
-    # Skip the managed assemblies, which are consumed from NuGet instead and
-    # would need a .NET SDK with network access to build.
+    # Skip the managed assemblies, which are consumed from NuGet instead
     (lib.cmakeBool "EMGU_CV_BUILD" false)
     (lib.cmakeBool "EMGU_CV_EXAMPLE_BUILD" false)
 
@@ -116,8 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_opencv_python3" false)
     (lib.cmakeBool "BUILD_opencv_ts" false)
 
-    # Link the image codecs from Nixpkgs rather than building OpenCV's
-    # vendored copies, which is what the portable upstream binary does.
+    # Link the image codecs from Nixpkgs rather than building OpenCV's vendored copies
     (lib.cmakeBool "BUILD_JPEG" false)
     (lib.cmakeBool "BUILD_OPENJPEG" false)
     (lib.cmakeBool "BUILD_PNG" false)
@@ -133,8 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # OpenCV falls back to a vendored copy of Jasper when OpenJPEG is disabled.
     (lib.cmakeBool "WITH_JASPER" false)
-    # Only used by the dnn module, which the mini profile leaves out. Keeping
-    # it on builds OpenCV's vendored protobuf for nothing.
+    # Only used by the dnn module, which the mini profile leaves out
     (lib.cmakeBool "WITH_PROTOBUF" false)
     # Would be fetched during the build.
     (lib.cmakeBool "WITH_IPP" false)
@@ -154,9 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # The build writes into libs/, under a subdirectory named after the detected
   # target on some architectures, so look the artifacts up by name.
-  # Upstream's own smoke test exercises the vector and quaternion helpers,
-  # matchTemplate and the UMat code path, and prints the OpenCV build
-  # configuration.
   doCheck = true;
   checkPhase = ''
     runHook preCheck
@@ -203,9 +194,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       update-source-version emgucv "$version"
 
-      # The opencv submodule has to move along with the version, since
-      # Emgu.CV.Extern is built against that tree. Read the revision the tag
-      # records, without fetching the submodule itself.
       checkout=$(mktemp --directory)
       trap 'rm -rf "$checkout"' EXIT
       git clone --quiet --filter=blob:none --no-checkout --depth 1 \
@@ -214,8 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
       oldRev=$(nix-instantiate --eval --strict -A emgucv.opencvSrc.rev | tr -d '"')
       newRev=$(git -C "$checkout" rev-parse HEAD:opencv)
 
-      # Only touch it when it actually moved: asking update-source-version to
-      # replace a revision with itself leaves a bogus hash behind.
       if [[ "$newRev" != "$oldRev" ]]; then
         update-source-version emgucv \
           --ignore-same-version \
