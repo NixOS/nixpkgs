@@ -9,14 +9,14 @@
   installShellFiles,
   darwin,
   boost,
+  capnproto,
   libevent,
   zeromq,
   zlib,
-  db53,
   sqlite,
   qrencode,
   libsystemtap,
-  qt5,
+  qt6,
   python3,
   versionCheckHook,
   withGui ? true,
@@ -32,20 +32,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  version = "29.0";
+  version = "31.0";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${finalAttrs.version}";
-    sha256 = "17b83jch717d91srw1yc93p8ndl894ld9gx916wyy6jis07px6xh";
+    sha256 = "sha256-R0AvPqv15sQo1bTfZmfrnOe9m4zyrsIreUf8AWOQTZM=";
   };
 
   patches = [
-    # Fix build with boost >= 1.91; backported to Bitcoin Core 29.x
+    # Fix build with boost >= 1.91
     (fetchpatch {
-      url = "https://github.com/bitcoin/bitcoin/commit/546598b73675bd5663de6df8f4e3a23a0e7eceb7.patch";
-      hash = "sha256-labzgMLJm1ZkeN/aGgUEooqWPy+XD1t5A89G+TPebpY=";
+      url = "https://github.com/bitcoin/bitcoin/commit/0bc9d354dfd8074d1c36a891a69b6585a8775c65.patch";
+      hash = "sha256-xMJiqoxKqlGW+SjMLBFuxRcxtEDLywWgbrRnWbeZZA8=";
     })
   ];
 
@@ -57,23 +57,26 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ]
-  ++ lib.optionals withGui [ qt5.wrapQtAppsHook ];
+  ++ lib.optionals withGui [ qt6.wrapQtAppsHook ];
 
   buildInputs = [
     boost
+    capnproto
     libevent
-    zeromq
+    # like bitcoin: no CURVE, so the binaries don't link libsodium without an RPATH to it
+    (zeromq.override {
+      enableCurve = false;
+      enableDrafts = false;
+      libsodium = null;
+    })
     zlib
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libsystemtap ]
-  ++ lib.optionals withWallet [
-    db53
-    sqlite
-  ]
+  ++ lib.optionals withWallet [ sqlite ]
   ++ lib.optionals withGui [
     qrencode
-    qt5.qtbase
-    qt5.qttools
+    qt6.qtbase
+    qt6.qttools
   ];
 
   postInstall = ''
@@ -114,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   # QT_PLUGIN_PATH needs to be set when executing QT, which is needed when testing Groestlcoin's GUI.
   # See also https://github.com/NixOS/nixpkgs/issues/24256
-  ++ lib.optional withGui "QT_PLUGIN_PATH=${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}";
+  ++ lib.optional withGui "QT_PLUGIN_PATH=${qt6.qtbase}/${qt6.qtbase.qtPluginPrefix}";
 
   enableParallelBuilding = true;
 
