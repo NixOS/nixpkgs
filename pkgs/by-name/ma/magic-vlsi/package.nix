@@ -99,8 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "VLSI layout tool written in Tcl";
     homepage = "http://opencircuitdesign.com/magic/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ 
-      thoughtpolice 
+    maintainers = with lib.maintainers; [
+      thoughtpolice
       MrAbhi19
     ];
   };
