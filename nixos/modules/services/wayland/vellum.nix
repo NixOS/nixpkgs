@@ -6,22 +6,22 @@
 }:
 
 let
-  cfg = config.programs.vellum;
+  cfg = config.services.vellum;
 
   inherit (lib)
     getExe
-    literalExpression
     mkEnableOption
     mkIf
     mkOption
     mkPackageOption
     ;
-  inherit (lib.types) separatedString;
 
   toml = pkgs.formats.toml { };
 in
 {
-  options.programs.vellum = {
+  imports = [ (lib.mkRenamedOptionModule [ "programs" "vellum" ] [ "services" "vellum" ]) ];
+
+  options.services.vellum = {
     enable = mkEnableOption "vellum, a live screen annotation overlay for Wayland";
 
     package = mkPackageOption pkgs "vellum" { };
@@ -31,25 +31,22 @@ in
       default = { };
       description = ''
         Configuration options for vellum.
-        See available options at <https://github.com/greyxp1/vellum/blob/master/docs/configuration.md>.
+        See available options at <https://github.com/greyxp1/vellum/blob/master/default-config.toml>.
       '';
-      example = literalExpression ''
-        {
-          default_tool = "arrow";
-          remember_last_tool = false;
-          feedback_duration_ms = 250;
-        }
-      '';
-    };
-
-    extraOptions = mkOption {
-      type = separatedString " ";
-      default = "";
-      description = ''
-        Extra command-line options to pass to
-        the {command}`vellum` daemon.
-      '';
-      example = "--force-backend vulkan";
+      example = {
+        default_tool = "arrow";
+        remember_last_tool = false;
+        default_fill_shapes = true;
+        feedback_duration_ms = 250;
+        tools.pen.opacity = 0.75;
+        palette = [
+          "#FF6B6B"
+          "#FFD93D"
+          "#6BCB77"
+          "#4D96FF"
+          "#845EC2"
+        ];
+      };
     };
   };
 
@@ -69,13 +66,17 @@ in
       wantedBy = [ "graphical-session.target" ];
       restartTriggers = [ config.environment.etc."xdg/vellum/config.toml".source ];
       serviceConfig = {
-        ExecStart = "${getExe cfg.package} ${cfg.extraOptions}";
+        ExecStart = getExe cfg.package;
+        Type = "exec";
         Restart = "on-failure";
       };
     };
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ poz ];
+    maintainers = with lib.maintainers; [
+      greyxp1
+      poz
+    ];
   };
 }
