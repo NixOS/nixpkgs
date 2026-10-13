@@ -4,22 +4,23 @@
   fetchFromGitLab,
   SDL2,
   SDL2_image,
-  pkg-config,
-  libvorbis,
-  libGL,
-  boost,
-  cmake,
-  zlib,
-  curl,
   SDL2_mixer,
   SDL2_ttf,
-  python3,
+  boost,
+  cmake,
+  curl,
   libx11,
+  nix-update-script,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "commandergenius";
   version = "3.6.4";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitLab {
     owner = "Dringgstein";
@@ -28,18 +29,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-pjSWAr3qYLWEwwu/ocXbB1smfPsJ7NAtbForPHenN9Q=";
   };
 
+  postPatch = ''
+    export NIX_CFLAGS_COMPILE+=" $(${lib.getDev SDL2}/bin/sdl2-config --cflags)"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
   buildInputs = [
     SDL2
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-    libGL
     boost
-    libvorbis
-    zlib
     curl
-    python3
     libx11
+    zlib
   ];
 
   cmakeFlags = [
@@ -53,14 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ];
-
-  postPatch = ''
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(sdl2-config --cflags)"
-  '';
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Modern Interpreter for the Commander Keen Games";
@@ -71,9 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
       made for it. All of the original data files
       are required to do so
     '';
-    homepage = "https://github.com/gerstrong/Commander-Genius";
-    maintainers = with lib.maintainers; [ hce ];
+    homepage = "https://clonekeenplus.sourceforge.io/";
+    changelog = "https://gitlab.com/Dringgstein/Commander-Genius/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ hce ];
     platforms = lib.platforms.linux;
+    mainProgram = "CGeniusExe";
   };
 })
