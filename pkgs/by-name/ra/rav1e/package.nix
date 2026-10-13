@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rav1e";
   version = "0.8.1";
 
+  __structuredAttrs = true;
+
   src = fetchCrate {
     inherit (finalAttrs) pname version;
     hash = "sha256-GCfh2v3w5C8h4GuPKkTMUAhPspT1W0drrRpELCJWeTI=";
