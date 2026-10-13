@@ -46,7 +46,7 @@
 # rocprofiler-sdk is the home of rocprofv3
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-sdk";
-  version = "7.2.3";
+  version = "7.2.4";
 
   outputs = [
     "out"
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocm-systems";
     tag = "rocm-${finalAttrs.version}";
-    hash = "sha256-SQjV1FnAgnK1LS5SiApgfvDSjB3AKpucja+PBZSmLvQ=";
+    hash = "sha256-7XCxu917Mgp3SQAKlTWj3ympgwOYW3aJFcOv/GhPk1c=";
     fetchSubmodules = true;
     sparseCheckout = [
       "projects/rocprofiler-sdk"
@@ -103,38 +103,40 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (fetchpatch {
-      # [rocprofiler-sdk] Improve build with system libraries.
-      # https://github.com/ROCm/rocm-systems/pull/2319
-      # Merged in develop branch, but not yet in ROCm 7.2.1.
-      url = "https://github.com/ROCm/rocm-systems/commit/86ee7b2eb2273adaf1181ef9a6b2091465c6f0c7.patch";
-      hash = "sha256-PRmv8SI90jmO6MgJmk1DWf/WVmFy18nUTZClfOvI6a8=";
-      excludes = [ "external/fmt" ];
-      relative = "projects/rocprofiler-sdk";
-    })
-    (fetchpatch {
-      # Users/mkuriche/rocprofiler sdk fmt build fix memory header
-      url = "https://github.com/ROCm/rocm-systems/commit/36d9d33d90879bfbd406498011070ebd929a56b1.patch";
-      hash = "sha256-yRy5pmCX9hd4eeZIz/g3B5VFCL9idkEaGK+S5+2sOsk=";
-      relative = "projects/rocprofiler-sdk";
-    })
-    (fetchpatch {
       # Fix missing amd_comgr linkage in pc-sampling integration test
       url = "https://github.com/ROCm/rocm-systems/commit/94a4595a5d02bc066f7a32e1b2134a99a5231213.patch";
       hash = "sha256-86Fx0bKL0pvXTwVN8QJL+yzCbMYkmMaKzcU4PYcW6ig=";
       relative = "projects/rocprofiler-sdk";
     })
-    # See https://github.com/ROCm/rocm-systems/pull/4721
-    # First change is separate and required to make the patches from that pull request
-    # apply cleanly. Its something that was changed on the develop branch, but requires
-    # more effort to backport.
-    ./0001-rocprofiler-sdk-rename-consumer-test-for-dependent-c.patch
-    ./0002-rocprofiler-sdk-add-missing-stl-headers.patch
-    ./0003-rocprofiler-sdk-add-missing-rocprofiler-sdk-rocprofi.patch
-    ./0004-rocprofiler-sdk-fix-find_package-dependency-scoping-.patch
-    ./0005-rocprofiler-sdk-allow-using-system-elfio-dependency.patch
-    ./0006-rocprofiler-sdk-allow-using-system-otf2-dependency.patch
-    ./0007-rocprofiler-sdk-Allow-using-system-json-dependency.patch
-    ./0008-rocprofiler-sdk-stop-manually-setting-warning-flags-.patch
+  ]
+  ++ [
+    # Just the missing CPackComponent reference sourced from this commit:
+    # https://github.com/ROCm/rocm-systems/commit/86ee7b2eb2273adaf1181ef9a6b2091465c6f0c7
+    ./0001-fix-missing-CPackComponent-cmake-include.patch
+  ]
+  ++ [
+    # Can be removed when a release contains the changes found in this pr:
+    # https://github.com/ROCm/rocm-systems/pull/4721
+    ./0002-allow-using-system-yaml-dependency.patch
+    ./0003-allow-using-system-elfio-dependency.patch
+    ./0004-allow-using-system-otf2-dependency.patch
+    ./0005-allow-using-system-json-dependency.patch
+    ./0006-fix-amd-comgr-resolution.patch
+  ]
+  ++ [
+    # Sourced from several commits that address issues with fmt, dropping conflicting changes no longer needed to build
+    # https://github.com/ROCm/rocm-systems/commit/36d9d33d90879bfbd406498011070ebd929a56b1
+    # https://github.com/ROCm/rocm-systems/commit/e2f588592ecfb0653ed5b3078753186325adf70a
+    # https://github.com/ROCm/rocm-systems/commit/86ee7b2eb2273adaf1181ef9a6b2091465c6f0c7 (just the fmt changes)
+    ./0007-fix-missing-includes-and-api-changes-with-fmt-v12.2..patch
+  ]
+  ++ [
+    # One new import failure added to source commit:
+    # https://github.com/ROCm/rocm-systems/pull/4721/changes/f7f24a54cbe55425fbefc87c7a3d0f4c85224948
+    # which is also part of https://github.com/ROCm/rocm-systems/pull/4721
+    ./0008-fix-compilation-errors-from-missing-includes.patch
+  ]
+  ++ [
     # Prevent a segfault on `import torch` (and other consumers that link
     # librocprofiler-sdk for tracing) when OpenMP auto-discovers our
     # ompt_start_tool before glog is initialized. Upstream incidentally fixes
@@ -142,12 +144,6 @@ stdenv.mkDerivation (finalAttrs: {
     # "[rocprofiler-sdk] Migrate from glog to Abseil Logging (#4668)", which
     # is too invasive (40 files + new abseil submodule) to backport.
     ./0009-rocprofiler-sdk-guard-ompt-auto-start.patch
-
-    # fmt v12.2.0 changed the structure of fmt/core.h, so this switches uses of
-    # fmt/core.h to fmt/format.h. backport of the relevant parts of
-    # https://github.com/ROCm/rocm-systems/commit/e2f588592ecfb0653ed5b3078753186325adf70a
-    # as upstream has changed significantly since 7.2.3.
-    ./0010-fmt-12.2.0-format.h.patch
   ];
 
   postPatch = ''
@@ -196,6 +192,9 @@ stdenv.mkDerivation (finalAttrs: {
     # building tests or samples.
     (lib.cmakeFeature "GPU_TARGETS" (lib.concatStringsSep ";" gpuTargets))
   ];
+  cxxCMakeFlags = [
+    "-Wno-unused-variable"
+  ];
 
   doCheck = false; # Requires GPU
 
@@ -221,6 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ROCm GPU performance analysis SDK";
     homepage = "https://github.com/ROCm/rocprofiler-sdk";
     license = lib.licenses.mit;
+    teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
 })
