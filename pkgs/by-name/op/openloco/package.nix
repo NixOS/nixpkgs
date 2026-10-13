@@ -8,6 +8,8 @@
   libpng,
   libx11,
   libzip,
+  llvmPackages,
+  makeBinaryWrapper,
   openal,
   pkg-config,
   sdl3,
@@ -48,11 +50,21 @@ stdenv.mkDerivation (finalAttrs: {
     # prefetch openloco-objects
     substituteInPlace CMakeLists.txt \
       --replace-fail '${finalAttrs.passthru.objects.url}' '${finalAttrs.passthru.objects}'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # the app bundle's Info.plist takes its version from the git-derived cmake variables
+    substituteInPlace cmake/OpenLocoVersion.cmake \
+      --replace-fail 'set(OPENLOCO_VERSION_TAG "unknown")' 'set(OPENLOCO_VERSION_TAG "${finalAttrs.version}")' \
+      --replace-fail 'set(OPENLOCO_BRANCH "unknown")' 'set(OPENLOCO_BRANCH "master")' \
+      --replace-fail 'set(OPENLOCO_COMMIT_SHA1_SHORT "unknown")' 'set(OPENLOCO_COMMIT_SHA1_SHORT "${finalAttrs.passthru.commit}")'
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeBinaryWrapper
   ];
 
   buildInputs = [
@@ -62,16 +74,45 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     yaml-cpp
     fmt_11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "OPENLOCO_BUILD_TESTS" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # used for LSMinimumSystemVersion in Info.plist
+    (lib.cmakeFeature "MACOSX_DEPLOYMENT_TARGET" stdenv.hostPlatform.darwinMinVersion)
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=null-dereference";
+
+  # upstream builds with -fexperimental-library on darwin for std::execution::par.
+  # The SDK's libc++ headers select the libdispatch PSTL backend, whose out-of-line
+  # parts live in libc++experimental.a, which nixpkgs does not ship for darwin
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    $CXX -std=c++20 -fexperimental-library -O2 -c \
+      ${llvmPackages.libcxx.src}/libcxx/src/pstl/libdispatch.cpp -o "$NIX_BUILD_TOP/libdispatch.o"
+    $AR rcs "$NIX_BUILD_TOP/libc++experimental.a" "$NIX_BUILD_TOP/libdispatch.o"
+    export NIX_LDFLAGS+=" -L$NIX_BUILD_TOP"
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications $out/bin
+    mv $out/OpenLoco.app $out/Applications/
+    makeWrapper $out/Applications/OpenLoco.app/Contents/MacOS/OpenLoco $out/bin/OpenLoco
+  '';
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  # the user directory under ~/Library is created on startup, even for --version,
+  # and Foundation ignores $HOME when resolving it
+  preInstallCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export CFFIXED_USER_HOME="$(mktemp -d)"
+  '';
+  versionCheckKeepEnvironment = lib.optionals stdenv.hostPlatform.isDarwin [ "CFFIXED_USER_HOME" ];
 
   passthru = {
     commit = "ec72a7d";
@@ -99,9 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       icewind1991
+      iedame
       keenanweaver
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "OpenLoco";
   };
 })
