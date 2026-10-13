@@ -42,9 +42,9 @@ in
           };
           "nvidia-smi-command" = mkOption {
             type = types.str;
-            default = "${config.hardware.nvidia.package.bin}/bin/nvidia-smi";
+            default = "${config.hardware.nvidia.package.driver.bin}/bin/nvidia-smi";
             defaultText = lib.literalExpression ''
-              "''${config.hardware.nvidia.package.bin}/bin/nvidia-smi"
+              "''${config.hardware.nvidia.package.driver.bin}/bin/nvidia-smi"
             '';
             description = "Path or command to be used for the nvidia-smi executable.";
           };

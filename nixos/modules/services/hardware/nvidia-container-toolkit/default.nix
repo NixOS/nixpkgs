@@ -258,7 +258,7 @@
 
         nvidia-container-toolkit.mounts =
           let
-            nvidia-driver = config.hardware.nvidia.package;
+            nvidia-driver = config.hardware.nvidia.package.driver;
           in
           (lib.mkMerge [
             [
@@ -346,7 +346,7 @@
                   extraArgs
                   ;
                 nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
-                nvidia-driver = config.hardware.nvidia.package;
+                nvidia-driver = config.hardware.nvidia.package.driver;
               };
             in
             lib.getExe script;
