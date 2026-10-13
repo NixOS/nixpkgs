@@ -7,8 +7,8 @@
     any resolution.
 
     The background gradient is fitted to the original PNG:
-      colour(t) = #3a4ba0 + (rgb(79.38, 117.82, 181.64) - #3a4ba0) * (1 - t)^3.55
-      with t = distance from the centre / 614
+      colour(t) = #3a4ba0 + (rgb(78.7, 118.31, 182.44) - #3a4ba0) * (1 - t)^3.66
+      with t = distance from the centre / 626
 
     "NixOS Logomark" (nixos-logomark-white-flat-none) by Simon Frankau,
     Tim Cuthbertson and Daniel Baker (maintained by the NixOS Marketing Team),
@@ -17,26 +17,25 @@
     Changes: scaled, centred and knocked out of a white disc.
   -->
   <defs>
-    <radialGradient id="background" gradientUnits="userSpaceOnUse" cx="960" cy="540" r="614">
+    <radialGradient id="background" gradientUnits="userSpaceOnUse" cx="960" cy="540" r="626">
       <stop offset="0.0000" stop-color="#4f76b6"/>
       <stop offset="0.0417" stop-color="#4c70b3"/>
-      <stop offset="0.0833" stop-color="#4a6ab0"/>
-      <stop offset="0.1250" stop-color="#4766ad"/>
-      <stop offset="0.1667" stop-color="#4561ab"/>
-      <stop offset="0.2083" stop-color="#435ea9"/>
-      <stop offset="0.2500" stop-color="#425aa8"/>
-      <stop offset="0.2917" stop-color="#4058a6"/>
+      <stop offset="0.0833" stop-color="#496ab0"/>
+      <stop offset="0.1250" stop-color="#4766ae"/>
+      <stop offset="0.1667" stop-color="#4561ac"/>
+      <stop offset="0.2083" stop-color="#435daa"/>
+      <stop offset="0.2500" stop-color="#415aa8"/>
+      <stop offset="0.2917" stop-color="#4057a6"/>
       <stop offset="0.3333" stop-color="#3f55a5"/>
       <stop offset="0.3750" stop-color="#3e53a4"/>
       <stop offset="0.4167" stop-color="#3d51a3"/>
       <stop offset="0.4583" stop-color="#3c50a2"/>
-      <stop offset="0.5000" stop-color="#3c4fa2"/>
-      <stop offset="0.5417" stop-color="#3b4ea1"/>
+      <stop offset="0.5000" stop-color="#3c4ea2"/>
+      <stop offset="0.5417" stop-color="#3b4da1"/>
       <stop offset="0.5833" stop-color="#3b4da1"/>
       <stop offset="0.6250" stop-color="#3b4ca1"/>
       <stop offset="0.6667" stop-color="#3a4ca0"/>
-      <stop offset="0.7083" stop-color="#3a4ca0"/>
-      <stop offset="0.7500" stop-color="#3a4ba0"/>
+      <stop offset="0.7083" stop-color="#3a4ba0"/>
     </radialGradient>
     <g id="logomark" transform="translate(960 540) scale(0.04774306)">
       <polygon points="-624.0 249.4153162899184 -496.0 27.712812921102 63.99999999999994 997.6612651596733 -192.00000000000006 997.6612651596733 -320.00000000000017 775.9587617908571 -448.00000000000034 997.6612651596732 -576.0000000000003 997.6612651596732 -640.0000000000003 886.8100134752651 -448.0000000000001 554.2562584220408"/>
@@ -51,8 +50,8 @@
       <use href="#logomark" fill="#000"/>
     </mask>
     <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur"/>
-      <feFlood flood-color="#000" flood-opacity="0.18"/>
+      <feGaussianBlur in="SourceAlpha" stdDeviation="7.1" result="blur"/>
+      <feFlood flood-color="#000" flood-opacity="0.15"/>
       <feComposite in2="blur" operator="in"/>
       <feMerge>
         <feMergeNode/>
@@ -62,6 +61,6 @@
   </defs>
   <rect width="1920" height="1080" fill="url(#background)"/>
   <g filter="url(#shadow)">
-    <circle cx="960" cy="540" r="66" fill="#fff" mask="url(#cutout)"/>
+    <circle cx="960" cy="540" r="66.2" fill="#fff" mask="url(#cutout)"/>
   </g>
 </svg>
