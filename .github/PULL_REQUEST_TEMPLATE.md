@@ -13,26 +13,26 @@ Please check what applies. Note that these are not hard requirements but merely 
 However, please do not remove the template, even when nothing is checked!
 -->
 
+- [ ] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and other READMEs.
+- [ ] Follows the [automation/AI policy].
 - Built on platform:
   - [ ] x86_64-linux
   - [ ] aarch64-linux
   - [ ] aarch64-darwin
 - Tested, as applicable:
-  - [ ] [NixOS tests] in [nixos/tests].
+  - [ ] Basic functionality of all binary files, usually in `./result/bin/`.
+  - [ ] Ran `nixpkgs-review` on this PR. See [nixpkgs-review usage].
   - [ ] [Package tests] at `passthru.tests`.
+  - [ ] [NixOS tests] in [nixos/tests].
   - [ ] Tests in [lib/tests] or [pkgs/test] for functions and "core" functionality.
-- [ ] Ran `nixpkgs-review` on this PR. See [nixpkgs-review usage].
-- [ ] Tested basic functionality of all binary files, usually in `./result/bin/`.
 - Nixpkgs Release Notes
   - [ ] Package update: when the change is major or breaking.
 - NixOS Release Notes
   - [ ] Module addition: when adding a new NixOS module.
   - [ ] Module update: when the change is significant.
-- [ ] Fits [CONTRIBUTING.md], [pkgs/README.md], [maintainers/README.md] and other READMEs.
-- [ ] Follows the [automation/AI policy].
 
-[NixOS tests]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
 [Package tests]: https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests
+[NixOS tests]: https://nixos.org/manual/nixos/unstable/index.html#sec-nixos-tests
 [nixpkgs-review usage]: https://github.com/Mic92/nixpkgs-review#usage
 
 [CONTRIBUTING.md]: https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md
