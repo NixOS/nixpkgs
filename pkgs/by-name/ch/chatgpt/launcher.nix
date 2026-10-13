@@ -1,5 +1,6 @@
 # Electron rewrites bundled plugin manifests, so they need a writable copy.
 {
+  lib,
   coreutils,
   flock,
   writeShellApplication,
@@ -7,11 +8,6 @@
 
 writeShellApplication {
   name = "chatgpt-launcher";
-
-  runtimeInputs = [
-    coreutils
-    flock
-  ];
 
   text = ''
     : "''${CHATGPT_EXECUTABLE:?}"
@@ -22,15 +18,15 @@ writeShellApplication {
     cacheRoot="$cacheHome/chatgpt/bundled-plugins-v2"
     resourcesPath="$cacheRoot/$CHATGPT_RESOURCES_CACHE_KEY"
 
-    mkdir -p "$cacheRoot"
+    ${lib.getExe' coreutils "mkdir"} -p "$cacheRoot"
     exec {initLockFd}> "$cacheRoot.lock"
-    flock --exclusive "$initLockFd"
+    ${lib.getExe flock} --exclusive "$initLockFd"
 
     # tmpfiles may remove the directory before its lock is acquired.
     while true; do
-      mkdir -p "$resourcesPath"
+      ${lib.getExe' coreutils "mkdir"} -p "$resourcesPath"
       if exec {resourcesLockFd}< "$resourcesPath"; then
-        flock --shared "$resourcesLockFd"
+        ${lib.getExe flock} --shared "$resourcesLockFd"
         [[ "$resourcesPath" -ef "/proc/self/fd/$resourcesLockFd" ]] && break
         exec {resourcesLockFd}>&-
       else
@@ -39,15 +35,15 @@ writeShellApplication {
     done
 
     if [[ ! -f "$resourcesPath/.complete" ]]; then
-      ln -sfn -t "$resourcesPath" \
+      ${lib.getExe' coreutils "ln"} -sfn -t "$resourcesPath" \
         "$CHATGPT_RESOURCES_SOURCE"/{codex,codex-code-mode-host,cua_node,native,rg,tectonic}
-      mkdir -p "$resourcesPath/plugins"
-      chmod -R u+w "$resourcesPath/plugins"
-      cp -RT --preserve=mode "$CHATGPT_RESOURCES_SOURCE/plugins" "$resourcesPath/plugins"
-      chmod -R u+w "$resourcesPath/plugins"
-      sync --file-system "$resourcesPath"
-      touch "$resourcesPath/.complete"
-      sync --file-system "$resourcesPath"
+      ${lib.getExe' coreutils "mkdir"} -p "$resourcesPath/plugins"
+      ${lib.getExe' coreutils "chmod"} -R u+w "$resourcesPath/plugins"
+      ${lib.getExe' coreutils "cp"} -RT --preserve=mode "$CHATGPT_RESOURCES_SOURCE/plugins" "$resourcesPath/plugins"
+      ${lib.getExe' coreutils "chmod"} -R u+w "$resourcesPath/plugins"
+      ${lib.getExe' coreutils "sync"} --file-system "$resourcesPath"
+      ${lib.getExe' coreutils "touch"} "$resourcesPath/.complete"
+      ${lib.getExe' coreutils "sync"} --file-system "$resourcesPath"
     fi
     exec {initLockFd}>&-
 
