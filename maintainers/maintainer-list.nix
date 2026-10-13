@@ -63,12 +63,6 @@
 {
   # keep-sorted start case=no numeric=no block=yes
 
-  "3mp3ri0r" = {
-    email = "christoforus@xendit.co";
-    github = "3mp3ri0r";
-    githubId = 3140815;
-    name = "Christoforus Surjoputro";
-  };
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
@@ -266,6 +260,12 @@
     email = "3jl0y_pycckui@riseup.net";
     github = "3JlOy-PYCCKUi";
     githubId = 46464602;
+  };
+  _3mp3ri0r = {
+    email = "christoforus@xendit.co";
+    github = "3mp3ri0r";
+    githubId = 3140815;
+    name = "Christoforus Surjoputro";
   };
   _3noch = {
     email = "eacameron@gmail.com";
@@ -3821,6 +3821,12 @@
     name = "bitbloxhub";
     github = "bitbloxhub";
     githubId = 45184892;
+  };
+  bittner = {
+    email = "peter@painless.software";
+    github = "bittner";
+    githubId = 665072;
+    name = "Peter Bittner";
   };
   bizmyth = {
     email = "andrew.p.council@gmail.com";
@@ -8173,6 +8179,11 @@
     email = "github@edgarpost.com";
     github = "EdgarPost";
     githubId = 488221;
+  };
+  EdgeLordKirito = {
+    name = "EdgeLordKirito";
+    github = "EdgeLordKirito";
+    githubId = 113261869;
   };
   edlimerkaj = {
     name = "Edli Merkaj";
@@ -19874,6 +19885,12 @@
     githubId = 72991726;
     name = "Mr-Stoneman";
   };
+  MrAbhi19 = {
+    email = "abhilashmaddineni2006@gmail.com";
+    github = "MrAbhi19";
+    githubId = 214151262;
+    name = "Abhilash M";
+  };
   mrbenjadmin = {
     email = "mrbenjadmin@gmail.com";
     github = "mrbenjadmin";
@@ -22723,6 +22740,12 @@
     github = "paumr";
     name = "Michael Bergmeister";
     githubId = 53442728;
+  };
+  paveg = {
+    email = "pavegy@gmail.com";
+    github = "paveg";
+    githubId = 12677991;
+    name = "Ryota Ikezawa";
   };
   pawelchcki = {
     email = "pawel.chcki@gmail.com";

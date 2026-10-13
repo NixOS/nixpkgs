@@ -7,11 +7,11 @@
   pkg-config,
   glib,
   inih,
-  lua5_2_compat,
+  lua5_5,
   bash-completion,
 }:
 let
-  lua = lua5_2_compat;
+  lua = lua5_5;
 in
 
 stdenv.mkDerivation (finalAttrs: {

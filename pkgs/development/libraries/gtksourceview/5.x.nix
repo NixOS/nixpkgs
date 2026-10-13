@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       GTK_A11Y=none \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus}/share/dbus-1/session.conf \
-        meson test --no-rebuild --print-errorlogs
+        meson test --no-rebuild --print-errorlogs --timeout-multiplier=0
 
     runHook postCheck
   '';
