@@ -1631,7 +1631,13 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 }
 ```
 
-`pytest` is compatible with `unittest`, so in most cases you can use `pytestCheckHook` instead.
+`pytest` supports test cases defined for `unittest`, making it possible to use `pytestCheckHook` instead of `unittestCheckHook` for additional features such as fine-grained test selection, but with the following caveats:
+- There are subtle difference between the behaviour of `pytest` and `unittest`.
+  For example, the default filename pattern for `unittest` is `test*.py`, while `pytest` defaults to `test_*.py` or `*_test.py`.
+- `pytest` and `unittest` has different command-line interface.
+  Upstream-provided flags for `unittest` needs manual translation.
+- `pytest` is a third-party Python package that depends on other Python packages, while `unittest` is part of the Python standard library.
+  Beware of circular dependencies.
 
 #### Using sphinxHook {#using-sphinxhook}
 
