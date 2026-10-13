@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "pushbullet.py";
-    sha256 = "917883e1af4a0c979ce46076b391e0243eb8fe0a81c086544bcfa10f53e5ae64";
+    hash = "sha256-kXiD4a9KDJec5GB2s5HgJD64/gqBwIZUS8+hD1PlrmQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
