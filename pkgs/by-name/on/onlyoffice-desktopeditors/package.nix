@@ -25,6 +25,7 @@
   gst_all_1,
   gtk2,
   gtk3,
+  libGL,
   libnotify,
   libpulseaudio,
   libudev0-shim,
@@ -194,6 +195,7 @@ buildFHSEnv {
   targetPkgs = pkgs': [
     curl
     derivation
+    libGL
   ];
 
   runScript = "/bin/onlyoffice-desktopeditors";
