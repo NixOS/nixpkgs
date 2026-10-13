@@ -3,18 +3,39 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+
+  mysqlSupport ? true,
+  postgresqlSupport ? true,
+  sqliteSupport ? true,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "ergo";
-  version = "2.17.0";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
     owner = "ergochat";
     repo = "ergo";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ajLecAgE74Et7XRGtpGoA9DAcSzBEtRzLm47nHn1Amo=";
+    sha256 = "sha256-yzGLOpECalSOv1zBpVkyDlHGaHSsQNsAoNa2jgLpsgM=";
   };
+
+  tags = [
+    "i18n"
+  ]
+  ++ lib.optional mysqlSupport "mysql"
+  ++ lib.optional postgresqlSupport "postgresql"
+  ++ lib.optional sqliteSupport "sqlite";
+
+  patches = [
+    # Fix systemd reload notifications
+    ./0001-Fix-systemd-reload.patch
+  ];
+
+  ldflags = [
+    "-X main.commit=${finalAttrs.src.rev}"
+    "-X main.version=${finalAttrs.version}"
+  ];
 
   vendorHash = null;
 
