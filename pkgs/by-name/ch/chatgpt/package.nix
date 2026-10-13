@@ -225,9 +225,13 @@ stdenv.mkDerivation (finalAttrs: {
           bubblewrap
           coreutils
           gitMinimal
-          lsb-release
           nodejs-slim
           nodejs-slim.npm
+        ]
+      } \
+      --suffix PATH : ${
+        lib.makeBinPath [
+          lsb-release
           xdg-utils
         ]
       } \
