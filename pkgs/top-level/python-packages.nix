@@ -12385,6 +12385,8 @@ self: super: with self; {
 
   nvidia-ml-py = callPackage ../development/python-modules/nvidia-ml-py { };
 
+  nvidia-resiliency-ext = callPackage ../development/python-modules/nvidia-resiliency-ext { };
+
   nvmath-python = callPackage ../development/python-modules/nvmath-python { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
@@ -20268,6 +20270,8 @@ self: super: with self; {
   sumtypes = callPackage ../development/python-modules/sumtypes { };
 
   sunpy = callPackage ../development/python-modules/sunpy { };
+
+  suntime = callPackage ../development/python-modules/suntime { };
 
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };
 
