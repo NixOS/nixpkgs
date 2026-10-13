@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri-punto";
-  version = "0.3.9";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "qam1s";
     repo = "niri-punto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-twPWIjaM/NfkaLzucUWe/gQ+hzpW53MPtGs7+7Vtz0k=";
+    hash = "sha256-Q4Jtkyh44OM/4PmeLCEq01Y5QDPpvaylygcjukybWNk=";
   };
 
-  cargoHash = "sha256-Wqnv0fgMcixsKVuZlnHnwAN0lFD8FCaqgFndNW8RERQ=";
+  cargoHash = "sha256-snbTF9WvFM5v3zrGi3H18QKz0nMZ4vvuMuJ+VhDo8gs=";
 
   __structuredAttrs = true;
 
