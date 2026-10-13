@@ -64,9 +64,10 @@ in
       after = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       wantedBy = [ "graphical-session.target" ];
-      restartTriggers = [ "/etc/xdg/vellum/config.toml" ];
+      restartTriggers = [ config.environment.etc."xdg/vellum/config.toml".source ];
       serviceConfig = {
         ExecStart = getExe cfg.package;
+        Type = "exec";
         Restart = "on-failure";
       };
     };
