@@ -23,6 +23,7 @@
   sentencepiece,
   soundfile,
   unidecode,
+  writableTmpDirAsHomeHook,
 
   # passthru
   torchaudio,
@@ -112,6 +113,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     librosa
     requests
     soundfile
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
