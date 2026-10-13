@@ -52,7 +52,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
+    # This is coming additionally from the server.
     "--skip=inference::tests::managed_route_resolves_default_credential_handles"
+    # These two need internet access to resolve google.
+    "--skip=proxy::tests::test_forward_public_ip_allowed_without_allowed_ips"
+    "--skip=proxy::tests::test_resolve_check_allowed_ips_rejects_outside_allowlist"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
