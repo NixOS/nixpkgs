@@ -248,8 +248,6 @@ in
         variables.JACK_PROMISCUOUS_SERVER = "jackaudio";
       };
 
-      services.dbus.packages = [ cfg.jackd.package ];
-
       services.udev.extraRules = ''
         ACTION=="add", SUBSYSTEM=="sound", ATTRS{id}!="Loopback", TAG+="systemd", ENV{SYSTEMD_WANTS}="jack.service"
       '';

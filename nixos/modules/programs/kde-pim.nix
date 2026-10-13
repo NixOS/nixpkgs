@@ -51,13 +51,5 @@ in
           akonadi-contacts
         ]
       );
-
-    services.dbus.packages =
-      with pkgs.kdePackages;
-      [
-        akonadi
-      ]
-      ++ lib.optional cfg.kmail kmail
-      ++ lib.optional cfg.kontact kontact;
   };
 }

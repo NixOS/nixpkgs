@@ -64,7 +64,5 @@ in
       pkgs.wmderlandc
     ]
     ++ cfg.extraPackages;
-
-    services.dbus.packages = cfg.extraPackages;
   };
 }

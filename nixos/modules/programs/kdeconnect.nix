@@ -30,9 +30,6 @@
       ];
       # digitizer plugin requires uinput
       hardware.uinput.enable = lib.mkDefault true;
-      services.dbus.packages = lib.optionals (cfg.package != null) [
-        cfg.package
-      ];
       networking.firewall = rec {
         allowedTCPPortRanges = [
           {

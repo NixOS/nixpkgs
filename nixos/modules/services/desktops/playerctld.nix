@@ -17,7 +17,6 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-    services.dbus.packages = [ cfg.package ];
     systemd.user.services.playerctld = {
       description = "Playerctld daemon to track media player activity";
       wantedBy = [ "default.target" ];

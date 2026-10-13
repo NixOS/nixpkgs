@@ -214,9 +214,5 @@ in
     environment.systemPackages =
       lib.optionals (cfg.platformTheme != null) (platformPackages.${cfg.platformTheme})
       ++ lib.optionals (cfg.style != null) (stylePackages.${cfg.style});
-
-    services.dbus.packages = lib.optionals (cfg.platformTheme == "kde") [
-      pkgs.kdePackages.kio
-    ];
   };
 }
