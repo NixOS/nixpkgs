@@ -18,7 +18,8 @@ Status as of 2026-10-13:
 - A native linker prototype was reviewed and withdrawn; see
   [Consequences for in-progress work](#consequences-for-in-progress-work).
 - The [generic contract](#decision-generic-contract-native-refinement) is
-  accepted but not implemented.
+  accepted. Of its mechanisms, only link-mode classification in the ld-wrapper
+  is implemented; see [Link-mode policy at the linker](#link-mode-policy-at-the-linker).
 
 ## The problem
 
@@ -218,38 +219,63 @@ channel supplied it.
 
 - For `-static-pie`, Clang passes `-static -pie --no-dynamic-linker -z text`.
 - GCC 15.2's built-in spec passes `-Bstatic -pie --no-dynamic-linker -z text`.
+- For `-static`, Clang passes `-static`, and GCC 15.3 and 16.2 for
+  `aarch64-unknown-linux-gnu` pass `-Bstatic`.
 
-The common signal is `-pie` together with `--no-dynamic-linker`; `-Bstatic` alone
-is a per-library toggle, not a mode.
+The common static-PIE signal is `-pie` together with `--no-dynamic-linker`.
+`-Bstatic` is a per-library toggle, but a driver selects it before its inputs
+and leaves it selected, while callers restore `-Bdynamic` after their static
+libraries. The final toggle state therefore identifies a static executable.
 
-In both lld (`getDynamicLinker`) and GNU ld (`parse_args` in `ld/lexsup.c`), the
-last of `-dynamic-linker` and `--no-dynamic-linker` wins.
+The linkers agree on precedence but not on static output:
+
+- In both lld (`getDynamicLinker`) and GNU ld (`parse_args` in `ld/lexsup.c`),
+  the last of `-dynamic-linker` and `--no-dynamic-linker` wins.
+- Given a loader, GNU ld omits it from a static executable, but lld records it,
+  and the executable crashes.
+- A glibc static PIE with any RPATH crashes at startup. In a static non-PIE
+  executable an RPATH has no effect.
+- Neither linker records a loader in a shared library.
 
 A loader the compiler wrapper passes through `-Wl` reaches the linker after the
 driver's own `--no-dynamic-linker`, so it wins; that is the static-PIE defect.
-Emitting the loader only in the ld-wrapper would lose it for links that reach an
-unwrapped linker, for example `-fuse-ld=lld` with an unwrapped lld on `PATH`,
-which the contract supports. The generic fix therefore lets the driver emit the
-loader, conditioned on its own link mode:
+The RPATH entries it renders from `NIX_LDFLAGS` have the same problem, and
+stdenv's `setup.sh` adds `-rpath $out/lib` there in every build unless
+`NIX_NO_SELF_RPATH` is set.
 
-- **GCC:** a specs file appends `%{!static:%{!static-pie:%{!shared:-dynamic-linker
-  <loader>}}}` to the link spec. A `%{m32:…}` alternative selects the 32-bit
-  loader. Still to verify: that the appended spec reaches the linker after
-  GCC's built-in loader and before caller `-Wl` options.
-- **Clang:** the driver already emits `-dynamic-linker` only for dynamic links
-  (`clang/lib/Driver/ToolChains/Gnu.cpp`). With `--dyld-prefix=<libc>`, that
-  path points into the selected libc; Nixpkgs' 64-bit glibc provides the `lib64`
-  symlink that Clang's x86-64 path expects. Clang derives the loader name
-  itself, so an arbitrary `NIX_DYNAMIC_LINKER` cannot be expressed this way, and
-  the recorded interpreter path changes (`lib64` rather than `lib` on x86-64).
-- **ld-wrapper:** classifies the final mode from the linker's own arguments
-  (`-pie` with `--no-dynamic-linker` means static PIE) instead of inheriting
-  the compiler wrapper's guess (`wrapper_NIX_LINK_TYPE`), drops policy RPATH
-  entries for static outputs, and keeps placing its own loader before the
-  driver's arguments.
+**Implemented in the ld-wrapper.** The ld-wrapper classifies the output from
+its own arguments, ignoring the loader the compiler wrapper rendered.
 
-The compiler wrapper stops passing its own loader for drivers that emit one
-this way.
+- On a link continuation, it removes that loader from a static executable, and
+  also the rendered `NIX_LDFLAGS` RPATH entries from a static PIE. Equal caller
+  arguments remain.
+- A fresh invocation renders its own policy for the classified mode.
+- The compiler wrapper's guess (`wrapper_NIX_LINK_TYPE`) now only records what
+  the compiler wrapper rendered.
+
+**Accepted limit: links that reach an unwrapped linker**, for example
+`-fuse-ld=lld` with an unwrapped lld on `PATH`, which the contract supports.
+These still follow the compiler wrapper's guess, so a static mode it cannot see
+still receives the loader and RPATH entries. Failing this way requires both an
+unwrapped linker and a hidden static mode. The limit was accepted on 2026-10-13;
+revisit it if a package needs that combination. Candidate fixes:
+
+- **GCC specs.** A specs file appending
+  `%{!static:%{!static-pie:%{!shared:-dynamic-linker <loader>}}}` to the link
+  spec reaches the linker after GCC's built-in loader and before caller `-Wl`
+  options (verified with GCC 15.3 and 16.2). A `%{m32:…}` alternative selects
+  the 32-bit loader. A file in `nix-support` cannot carry per-invocation
+  `NIX_LDFLAGS` RPATH entries or an overridden `NIX_DYNAMIC_LINKER`, so those
+  would need a file written per invocation.
+- **Clang.** Nixpkgs builds Clang with `purity.patch`, which removes the
+  driver's loader entirely, so it has no driver-conditioned loader. An unpatched
+  Clang emits `-dynamic-linker` only for dynamic links
+  (`clang/lib/Driver/ToolChains/Gnu.cpp`), and `--dyld-prefix=<libc>` points
+  it into the selected libc. That cannot express an arbitrary
+  `NIX_DYNAMIC_LINKER`, and it records `lib64` rather than `lib` on x86-64.
+- **Dry run.** `-###` shows the link job's mode arguments for either family,
+  so the compiler wrapper could apply the same classification before rendering.
+  It costs one extra driver execution per link.
 
 #### Executable-carried policy
 
@@ -292,8 +318,9 @@ These still require native cooperation:
 
   The same labels carried caller-aware purity and no-native filtering for
   Clang's native path, and that refinement was withdrawn with it.
-- **The static-PIE defect should be fixed in the generic tier**, by letting
-  the driver emit the loader as described above.
+- **The static-PIE defect is fixed for links that reach a wrapped linker.**
+  Links that reach an unwrapped linker are an accepted limit; see
+  [Link-mode policy at the linker](#link-mode-policy-at-the-linker).
 - **The legacy shell classification should be replaced** for GCC- and
   Clang-family drivers by driver-interpreted channels, with or without `-###`.
 - **The native and generic paths must agree on ordinary inputs.** Known
@@ -302,7 +329,9 @@ These still require native cooperation:
 ### Open questions
 
 - Whether `-###` is needed, or driver-interpreted channels and the linker
-  boundary suffice.
+  boundary suffice. For link mode they do not suffice on their own: Nixpkgs'
+  Clang has no driver-conditioned loader, and per-invocation RPATH entries do
+  not fit a packaged specs file.
 - How a constructor identifies a GCC- or Clang-family driver. The existing
   `isGNU` and `isClang` metadata covers Nixpkgs-built compilers; vendor forks
   need an explicit declaration.

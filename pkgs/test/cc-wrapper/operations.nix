@@ -678,6 +678,37 @@ in
       ${CC} operation-main.c -loperation-shared -o operation-shared
     ${emulator} ./operation-shared
   ''}
+  ${lib.optionalString
+    (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc == "glibc" && !stdenv.hostPlatform.isStatic
+    )
+    ''
+      echo "checking link-mode policy follows the final linker arguments..." >&2
+      # The compiler wrapper cannot see a mode selected in opaque link flags.
+      # lld records a loader in a static executable, and a glibc static PIE
+      # with an RPATH crashes at startup.
+      modes=(static)
+      ${lib.optionalString (
+        stdenv.cc.isGNU && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "8.0.0"
+      ) "modes+=(static-pie)"}
+      for mode in "''${modes[@]}"; do
+        printf '%s\n' "-$mode" > "opaque-$mode.rsp"
+        NIX_CFLAGS_LINK="@$PWD/opaque-$mode.rsp" \
+          NIX_LDFLAGS="-rpath ${builtins.storeDir}/unused-policy" \
+          ${CC} ${staticLibc} ${./cc-main.c} -o "opaque-$mode"
+        ${stdenv.cc.bintools}/bin/${targetPrefix}readelf -ld "opaque-$mode" > "opaque-$mode.headers"
+        if [[ $mode == static-pie ]] && grep -E 'RPATH|RUNPATH' "opaque-$mode.headers"; then
+          echo "The $mode executable retained a policy RPATH" >&2
+          exit 1
+        fi
+        if grep -F 'INTERP' "opaque-$mode.headers"; then
+          echo "The $mode executable retained the policy loader" >&2
+          exit 1
+        fi
+        ${emulator} "./opaque-$mode"
+      done
+    ''
+  }
   ${lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic) ''
     if [[ -f ${stdenv.cc.bintools}/nix-support/dynamic-linker ]]; then
       echo "checking dynamic linker agreement across roles..." >&2

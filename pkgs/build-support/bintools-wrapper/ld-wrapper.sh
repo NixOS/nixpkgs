@@ -36,13 +36,89 @@ else
     fi
 fi
 
-# Main policy is already handled (emitted or deliberately omitted) by a link
-# continuation. Its mode is separate: if primary policy did not request a link,
-# a final linker reached through opaque policy still interprets its own argv.
-if [[ -n "${wrapper_NIX_LINK_TYPE:-}" ]]; then
-    linkType=$wrapper_NIX_LINK_TYPE
-else
-    linkType=$(checkLinkType "${params[@]}")
+# Classify the output from the final linker arguments. The driver has already
+# translated its link mode here, including a mode selected in a response file
+# or opaque link flags that the compiler wrapper could not see. The argument at
+# index $1 is skipped. Option operands that cannot select a mode are skipped too.
+linkerLinkType() {
+    local -i skip=$1 n=0 nParams=${#params[@]} pie=0 static=0 noLoader=0 library=0
+    local -a states=()
+    local p
+    while (( n < nParams )); do
+        p=${params[n]}
+        if (( n++ == skip )); then continue; fi
+        case "$p" in
+            -o | -L | -l | -m | -z | -T | -e | -u | -y | -h | -R | -soname \
+                | -rpath | -rpath-link | -plugin | -plugin-opt)
+                n+=1 ;;
+            -dynamic-linker | --dynamic-linker | -I) noLoader=0; n+=1 ;;
+            -dynamic-linker=* | --dynamic-linker=* | -I?*) noLoader=0 ;;
+            -no-dynamic-linker | --no-dynamic-linker) noLoader=1 ;;
+            -pie | --pie | -pic-executable | --pic-executable) pie=1 ;;
+            -no-pie | --no-pie | -no-pic-executable | --no-pic-executable) pie=0 ;;
+            -shared | --shared | -Bshareable | -r | --relocatable | -i | -Ur) library=1 ;;
+            # A driver selects static linking before its inputs and leaves it
+            # selected. Callers restore dynamic linking after static libraries.
+            -static | --static | -Bstatic | -dn | -non_shared) static=1 ;;
+            -Bdynamic | -dy | -call_shared) static=0 ;;
+            -push-state | --push-state) states+=("$static") ;;
+            -pop-state | --pop-state)
+                if (( ${#states[@]} )); then static=${states[-1]}; unset 'states[-1]'; fi ;;
+        esac
+    done
+    if (( library )); then
+        echo dynamic
+    elif (( pie && noLoader )); then
+        echo static-pie
+    elif (( static && !pie )); then
+        echo static
+    else
+        echo dynamic
+    fi
+}
+
+# A link continuation already rendered main linker policy for the compiler
+# wrapper's guess, which only saw the driver's visible arguments. Its loader
+# follows the driver's own mode arguments, so it must not decide the output.
+renderedLoader=-1
+if [[ $mainPolicyHandled == 1 && ${wrapper_NIX_LINK_TYPE:-} == dynamic
+        && -n ${wrapper_NIX_DYNAMIC_LINKER:-} ]]; then
+    for n in "${!params[@]}"; do
+        if [[ ${params[n]} == "-dynamic-linker=$wrapper_NIX_DYNAMIC_LINKER" ]]; then
+            renderedLoader=$n
+            break
+        fi
+    done
+fi
+linkType=$(linkerLinkType "$renderedLoader")
+
+# Remove the first occurrence of each RPATH the compiler wrapper rendered from
+# main policy. An equal caller argument remains.
+removeRenderedRpaths() {
+    local -a policy=($wrapper_NIX_LDFLAGS_BEFORE $wrapper_NIX_LDFLAGS)
+    local -i n i
+    for (( n = 0; n + 1 < ${#policy[@]}; n++ )); do
+        [[ ${policy[n]} == -rpath ]] || continue
+        n+=1
+        for (( i = 0; i + 1 < ${#params[@]}; i++ )); do
+            if [[ ${params[i]} == -rpath && ${params[i+1]} == "${policy[n]}" ]]; then
+                params=("${params[@]:0:i}" "${params[@]:i+2}")
+                break
+            fi
+        done
+    done
+}
+
+# Remove rendered policy that the actual static output cannot use. lld records
+# a loader even in a static executable, and a glibc static PIE with an RPATH
+# crashes at startup.
+if [[ $mainPolicyHandled == 1 && $linkType != dynamic ]]; then
+    if (( renderedLoader >= 0 )); then
+        params=("${params[@]:0:renderedLoader}" "${params[@]:renderedLoader+1}")
+    fi
+    if [[ $linkType == static-pie && ${wrapper_NIX_LINK_TYPE:-} != static-pie ]]; then
+        removeRenderedRpaths
+    fi
 fi
 
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
