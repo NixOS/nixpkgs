@@ -3,7 +3,7 @@
   boost,
   libx11,
   libxext,
-  linuxPackages,
+  nvidiaPackages,
   openssl,
   tuxclocker-plugins,
 }:
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
     boost
     libx11
     libxext
-    linuxPackages.nvidia_x11
-    linuxPackages.nvidia_x11.settings.libXNVCtrl
+    nvidiaPackages.stable.driver
+    nvidiaPackages.stable.settings.libXNVCtrl
     openssl
   ];
 
