@@ -749,12 +749,12 @@ in
 
   prefix-highlight = mkTmuxPlugin {
     pluginName = "prefix-highlight";
-    version = "unstable-2021-03-30";
+    version = "0-unstable-2025-03-01";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-prefix-highlight";
-      rev = "15acc6172300bc2eb13c81718dc53da6ae69de4f";
-      hash = "sha256-9LWRV0Hw8MmDwn5hWl3DrBuYUqBjLCO02K9bbx11MyM=";
+      rev = "06cbb4ecd3a0a918ce355c70dc56d79debd455c7";
+      hash = "sha256-wkMm2Myxau24E0fbXINPuL2dc8E4ZYe5Pa6A0fWhiw4=";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-prefix-highlight";
