@@ -2505,17 +2505,18 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-resty-jwt";
-      version = "0.3.2-1";
+      version = "0.4.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-jwt-0.3.2-1.rockspec";
-          sha256 = "0r870630jzpdr41gyc1myn6zn1qpid4whx2abn0v8qaqyg0j825y";
+          url = "mirror://luarocks/lua-resty-jwt-0.4.0-1.rockspec";
+          sha256 = "05bd2phh37y0a67v8lv9c9z0wif5qfa6b5kb3a4924vxkn4zd1dx";
         }).outPath;
       src = fetchFromGitHub {
         owner = "cdbattags";
         repo = "lua-resty-jwt";
-        rev = "3973e402d835631de292c6e4cca52e728f02c24a";
-        hash = "sha256-KJvHwN8R2t8aJS/wMdVDJh5Mld1fF3FhYAOPk2njTu8=";
+        rev = "v0.4.0";
+        fetchSubmodules = true;
+        hash = "sha256-71Y88ZvmvysgTmY19eogLO1xNaY0WMjhZ//r18dFPdw=";
       };
 
       disabled = luaOlder "5.1";
@@ -2526,10 +2527,9 @@ final: prev: {
         license = lib.licenses.asl20;
         description = "JWT for ngx_lua and LuaJIT.";
         longDescription = ''
-          This library requires an nginx build
-              with OpenSSL, the ngx_lua module,
-              the LuaJIT 2.0, the lua-resty-hmac,
-              and the lua-resty-string,
+          JWS and JWE (JWT) signing, verification, encryption and decryption
+              for OpenResty. Requires OpenResty (ngx_lua and LuaJIT) built with
+              OpenSSL, and lua-resty-openssl.
         '';
       };
     }
