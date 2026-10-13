@@ -8680,6 +8680,12 @@
     githubId = 39096810;
     name = "Eduardo Quiros";
   };
+  equwal = {
+    email = "truex@equwal.com";
+    github = "equwal";
+    githubId = 13551856;
+    name = "Spenser Truex";
+  };
   eqyiel = {
     email = "ruben@maher.fyi";
     github = "eqyiel";
