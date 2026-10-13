@@ -1,0 +1,30 @@
+--- a/nvMatmulHeuristics/nvMatmulHeuristics.py
++++ b/nvMatmulHeuristics/nvMatmulHeuristics.py
+@@ -562,6 +562,27 @@
+             hardware_descriptor if hardware_descriptor else self.nullptr
+         )
+ 
++    def estimateRuntime(self, problem, kernel_config, hardware_descriptor=None):
++        """Estimate the runtime of a kernel configuration for a given problem.
++
++        Args:
++            - problem: Problem configuration
++            - kernel_config: Kernel configuration
++            - hardware_descriptor: Optional hardware descriptor
++
++        Returns:
++            Estimated runtime in seconds
++        """
++        target = ctypes.c_int(self.target)
++        return self.nvMatmulHeuristicsEstimateRuntime(
++            self.handle,
++            self.precision.encode('ascii'),
++            target,
++            ctypes.byref(problem),
++            ctypes.byref(kernel_config),
++            hardware_descriptor if hardware_descriptor else self.nullptr
++        )
++
+     def createHardwareDescriptor(self):
+         """Creates a hardware descriptor"""
+         descriptor = ctypes.POINTER(self.nvmmhHardwareDescriptor)()
