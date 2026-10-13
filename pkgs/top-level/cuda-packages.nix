@@ -33,6 +33,16 @@ let
   #   - TensorRT 11.x has no linux-sbsa build for CUDA 12 and dropped JetPack support with 11.2.1, so Jetson devices use
   #     TensorRT 10.x with CUDA 12 and CUDA 13.0 and 13.1, and TensorRT 11.1.0 (which supports Orin and Thor with
   #     CUDA 13.2 and later) with CUDA 13.2 and later.
+  # - cublas: each package set selects the newest standalone release patching the cuBLAS shipped with its CUDA release
+  #   (same major and minor version), and libcublas uses whichever of the two is newer. Standalone releases have no
+  #   linux-aarch64 (pre-Thor Jetson) builds, so those always use CUDA's. As of writing:
+  #   - CUDA 12.6 (cuBLAS 12.6.4.1): no standalone release.
+  #   - CUDA 12.8 (cuBLAS 12.8.5.5): standalone 12.8.5.7 is newer.
+  #   - CUDA 12.9 (cuBLAS 12.9.2.10): standalone 12.9.2.7 is older.
+  #   - CUDA 13.0 (cuBLAS 13.1.1.3): standalone 13.1.1.2 is older.
+  #   - CUDA 13.1 (cuBLAS 13.2.2.2): standalone 13.2.2.2 is the same.
+  #   - CUDA 13.2 (cuBLAS 13.4.1.3), 13.3 (13.6.0.2), and 13.4 (13.8.0.4): standalone 13.4.2.4, 13.6.2.16, and 13.8.1.7
+  #     are newer.
   # - cublasdx (MathDx): 25.06.1 is the last release for CUDA 12, and 26.x requires CUDA 13.
   # - cudnn:
   #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 12 after 9.20.0, so we keep 9.20.0 for Jetson with
@@ -68,6 +78,7 @@ let
   };
 
   cudaPackages_12_8 = mkCudaPackages {
+    cublas = "12.8.5";
     cublasdx = "25.06.1";
     cublasmp = "0.10.0";
     cuda = "12.8.2";
@@ -92,6 +103,7 @@ let
   };
 
   cudaPackages_12_9 = mkCudaPackages {
+    cublas = "12.9.2";
     cublasdx = "25.06.1";
     cublasmp = "0.10.0";
     cuda = "12.9.2";
@@ -116,6 +128,7 @@ let
   };
 
   cudaPackages_13_0 = mkCudaPackages {
+    cublas = "13.1.1";
     cublasdx = "26.06.1";
     cublasmp = "0.10.0";
     cuda = "13.0.3";
@@ -134,6 +147,7 @@ let
   };
 
   cudaPackages_13_1 = mkCudaPackages {
+    cublas = "13.2.2";
     cublasdx = "26.06.1";
     cublasmp = "0.10.0";
     cuda = "13.1.2";
@@ -152,6 +166,7 @@ let
   };
 
   cudaPackages_13_2 = mkCudaPackages {
+    cublas = "13.4.2";
     cublasdx = "26.06.1";
     cublasmp = "0.10.0";
     cuda = "13.2.2";
@@ -170,6 +185,7 @@ let
   };
 
   cudaPackages_13_3 = mkCudaPackages {
+    cublas = "13.6.2";
     cublasdx = "26.06.1";
     cublasmp = "0.10.0";
     cuda = "13.3.1";
@@ -188,6 +204,7 @@ let
   };
 
   cudaPackages_13_4 = mkCudaPackages {
+    cublas = "13.8.1";
     cublasdx = "26.06.1";
     cublasmp = "0.10.0";
     cuda = "13.4.3";
