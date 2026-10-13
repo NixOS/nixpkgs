@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
       url = "https://www.nomachine.com/licensing/nomachine-end-user-license-agreement";
       free = false;
     };
-    maintainers = with lib.maintainers; [ talyz ];
+    maintainers = with lib.maintainers; [ danc86 ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
