@@ -39,6 +39,7 @@ writeShellApplication {
     done
 
     resourcesAreComplete() {
+      [[ -d "$CHATGPT_RESOURCES_SOURCE/plugins" ]] || return 1
       for resource in codex codex-code-mode-host cua_node native rg tectonic; do
         [[ "$resourcesPath/$resource" -ef "$CHATGPT_RESOURCES_SOURCE/$resource" ]] || return 1
       done
@@ -49,13 +50,18 @@ writeShellApplication {
     }
 
     if [[ ! -f "$resourcesPath/.complete" ]] || ! resourcesAreComplete; then
+      # Repair only with no running app reading or rewriting this resource tree.
+      # Do not wait indefinitely for an application to exit while holding initLock.
+      if ! flock --exclusive --nonblock "$resourcesLockFd"; then
+        echo "ChatGPT bundled-plugin cache needs repair but is in use; close the running app and retry." >&2
+        exit 1
+      fi
       rm -f "$resourcesPath/.complete"
       ln -sfn -t "$resourcesPath" \
         "$CHATGPT_RESOURCES_SOURCE"/{codex,codex-code-mode-host,cua_node,native,rg,tectonic}
       mkdir -p "$resourcesPath/plugins"
       chmod -R u+w "$resourcesPath/plugins"
-      # Restore missing files without overwriting existing mutable manifests,
-      # including when another application instance is using this directory.
+      # Restore missing files without overwriting existing mutable manifests.
       cp -RT --update=none --preserve=mode "$CHATGPT_RESOURCES_SOURCE/plugins" "$resourcesPath/plugins"
       chmod -R u+w "$resourcesPath/plugins"
       # An incompatible existing file type cannot be repaired non-destructively.
@@ -67,6 +73,8 @@ writeShellApplication {
       sync --file-system "$resourcesPath"
       touch "$resourcesPath/.complete"
       sync --file-system "$resourcesPath"
+      # The launched app retains a shared lock so tmpfiles skips its resources.
+      flock --shared "$resourcesLockFd"
     fi
     exec {initLockFd}>&-
 

@@ -2,6 +2,7 @@
 
 import json
 import os
+import selectors
 import subprocess
 import sys
 import tempfile
@@ -127,6 +128,66 @@ if os.environ.get('HOLD_APP'):
                     command.kill()
                 command.wait()
 
+    def wait_for_app(self, command):
+        # A failed or deadlocked launcher must not leave this test blocked on read.
+        with selectors.DefaultSelector() as selector:
+            selector.register(command.stdout, selectors.EVENT_READ)
+            self.assertTrue(
+                selector.select(timeout=10), "launcher did not start the app"
+            )
+        self.assertEqual(
+            json.loads(command.stdout.readline())["resources"], str(self.cache)
+        )
+
+    def test_runtime_aliases_and_user_additions_survive_repair(self):
+        self.launch()
+        addition = self.cache / "plugins/local-addition"
+        addition.write_text("keep this file")
+        alias = self.cache / "plugins/latest"
+        alias.symlink_to("browser")
+        (self.cache / "plugins" / self.service).unlink()
+        self.launch()
+        self.assertEqual(addition.read_text(), "keep this file")
+        self.assertEqual(os.readlink(alias), "browser")
+
+    def test_repair_refuses_active_cache_then_succeeds_after_exit(self):
+        command = subprocess.Popen(
+            [str(LAUNCHER)],
+            env={**self.env, "HOLD_APP": "1"},
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        try:
+            self.wait_for_app(command)
+            missing = self.cache / "plugins" / self.service
+            missing.unlink()
+            manifest = self.cache / "plugins" / self.manifest
+            manifest.write_text('{"modified": true}\n')
+            result = subprocess.run(
+                [str(LAUNCHER)],
+                env=self.env,
+                capture_output=True,
+                text=True,
+                timeout=10,
+                check=False,
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("cache needs repair but is in use", result.stderr)
+            self.assertFalse(missing.exists())
+            self.assertTrue((self.cache / ".complete").is_file())
+            self.assertEqual(manifest.read_text(), '{"modified": true}\n')
+            command.communicate(input="x", timeout=10)
+            self.assertEqual(command.returncode, 0)
+            self.launch()
+            self.assertTrue(missing.is_file())
+            self.assertEqual(manifest.read_text(), '{"modified": true}\n')
+        finally:
+            if command.poll() is None:
+                command.kill()
+            command.wait()
+
     def test_running_application_holds_cleanup_lock(self):
         command = subprocess.Popen(
             [str(LAUNCHER)],
@@ -137,9 +198,7 @@ if os.environ.get('HOLD_APP'):
             text=True,
         )
         try:
-            self.assertEqual(
-                json.loads(command.stdout.readline())["resources"], str(self.cache)
-            )
+            self.wait_for_app(command)
             result = subprocess.run(
                 ["flock", "--exclusive", "--nonblock", str(self.cache), "true"],
                 timeout=10,
