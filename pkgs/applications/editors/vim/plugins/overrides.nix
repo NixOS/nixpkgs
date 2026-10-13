@@ -262,11 +262,17 @@ assertNoAdditions {
   };
 
   atlas-nvim = super.atlas-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Requires Diffview plugin initialization to populate DiffviewGlobal.
+      "atlas.pulls.diff.diffview.keymaps"
+    ];
     runtimeDeps = [
       curl
       gitMinimal
     ];
     checkInputs = with self; [
+      codediff-nvim
+      diffview-nvim
       fzf-lua
       snacks-nvim
     ];
