@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "class-registry";
+  pname = "phx-class-registry";
   version = "5.1.1";
   pyproject = true;
 
