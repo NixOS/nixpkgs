@@ -58,6 +58,11 @@ writeShellApplication {
         echo "ChatGPT bundled-plugin cache needs repair but is in use; close the running app and retry." >&2
         exit 1
       fi
+      # flock conversion can release the old lock; tmpfiles may replace the tree.
+      [[ "$resourcesPath" -ef "/proc/self/fd/$resourcesLockFd" ]] || {
+        echo "ChatGPT bundled-plugin cache changed during locking; retry launch." >&2
+        exit 1
+      }
       rm -f "$resourcesPath/.complete"
       ln -sfn -t "$resourcesPath" \
         "$CHATGPT_RESOURCES_SOURCE"/{codex,codex-code-mode-host,cua_node,native,rg,tectonic}
@@ -77,6 +82,10 @@ writeShellApplication {
       sync --file-system "$resourcesPath"
       # The launched app retains a shared lock so tmpfiles skips its resources.
       flock --shared "$resourcesLockFd"
+      [[ "$resourcesPath" -ef "/proc/self/fd/$resourcesLockFd" ]] || {
+        echo "ChatGPT bundled-plugin cache changed during locking; retry launch." >&2
+        exit 1
+      }
     fi
     exec {initLockFd}>&-
 
