@@ -24026,6 +24026,11 @@
     githubId = 12017109;
     name = "Rabindra Dhakal";
   };
+  qam1s = {
+    name = "Ilya";
+    github = "qam1s";
+    githubId = 161213394;
+  };
   qb114514 = {
     name = "qb114514";
     email = "GNUqb114514@outlook.com";

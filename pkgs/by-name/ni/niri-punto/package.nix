@@ -17,6 +17,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-Wqnv0fgMcixsKVuZlnHnwAN0lFD8FCaqgFndNW8RERQ=";
 
+  __structuredAttrs = true;
+
   postInstall = ''
     install -Dm644 contrib/70-niri-punto.rules $out/lib/udev/rules.d/70-niri-punto.rules
     install -Dm644 contrib/niri-punto.service $out/lib/systemd/user/niri-punto.service
@@ -28,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Keyboard layout corrector for the niri Wayland compositor";
     homepage = "https://github.com/qam1s/niri-punto";
     license = licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = [ maintainers.qam1s ];
     mainProgram = "niri-punto";
     platforms = platforms.linux;
   };
