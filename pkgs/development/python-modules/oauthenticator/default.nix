@@ -81,5 +81,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    teams = with lib.teams; [ jupyter ];
   };
 }
