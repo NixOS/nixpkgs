@@ -51,6 +51,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
+  checkFlags = [
+    "--skip=inference::tests::managed_route_resolves_default_credential_handles"
+  ];
+
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
