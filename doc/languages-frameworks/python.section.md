@@ -1631,6 +1631,22 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 }
 ```
 
+`unittestCheckHook` recognizes the following attributes:
+
+`dontUseUnittestCheck` (boolean, default to `false`)
+
+: Whether to opt out the default `unittestCheckPhase` execution.
+
+`dontUseUnittestDiscover` (boolean, default to `false`)
+
+: Whether to opt out the `unittest`'s test file discovery feature, i.e., invoke `python3 -m unittest path1 [path2 ...]` instead of `python3 -m unittest discover`.
+
+  Default to `false` as most projects uses `pytest discover`.
+
+`unittestFlags` (list, default to `[ ]`)
+
+: Additional flags to append to the `python3 -m unittest` command.
+
 `pytest` supports test cases defined for `unittest`, making it possible to use `pytestCheckHook` instead of `unittestCheckHook` for additional features such as fine-grained test selection, but with the following caveats:
 - There are subtle difference between the behaviour of `pytest` and `unittest`.
   For example, the default filename pattern for `unittest` is `test*.py`, while `pytest` defaults to `test_*.py` or `*_test.py`.
