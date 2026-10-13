@@ -15,17 +15,18 @@
   nixosTests,
   librsvg,
   nix-update-script,
+  fetchurl,
 }:
 
 let
-  version = "260728-bbde8f452";
+  version = "260919-28c46a116";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = "photoprism";
     repo = "photoprism";
-    rev = version;
-    hash = "sha256-NRVaTrYrYpOdeNLM+GY6Ae7jXR3uNpAVjhLWWoHCdyc=";
+    tag = version;
+    hash = "sha256-+3zLhHTpNlDoYYD1ljDii/BhzP+72y+SCec7pa/1VNs=";
   };
 
   backend = callPackage ./backend.nix { inherit src version; };
@@ -38,6 +39,16 @@ let
       extension = "zip";
       url = "https://dl.photoprism.app/tensorflow/${name}.zip?${version}";
       stripRoot = false;
+    };
+
+  fetchOnnxModel =
+    { name, hash }:
+    {
+      inherit name;
+      file = fetchurl {
+        inherit hash;
+        url = "https://dl.photoprism.app/onnx/models/${name}?${version}";
+      };
     };
 
   # NB: needs to be a derivation with a src attribute so the update script
@@ -72,6 +83,16 @@ let
     hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
   };
 
+  sface = fetchOnnxModel {
+    name = "face_recognition_sface_2021dec.onnx";
+    hash = "sha256-C6n7+gG1JwyWYnxO94TahZkx4C8EQZyCnoNIQIfDTnk=";
+  };
+
+  yunet = fetchOnnxModel {
+    name = "face_detection_yunet_2026may.onnx";
+    hash = "sha256-66/OTjwRjWVUY0vlwnqzM7TAR6mow/rx18+TEBwi8PA=";
+  };
+
   assets_path = "$out/share/photoprism";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -104,13 +125,17 @@ stdenv.mkDerivation (finalAttrs: {
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}
     rm ${assets_path}/models
-    mkdir -p ${assets_path}/models
+    mkdir -p ${assets_path}/models/{sface,yunet}
     ln -s ${frontend}/assets/models/* ${assets_path}/models/
 
     # install tensorflow models
     ln -s ${nasnet}/nasnet ${assets_path}/models/
     ln -s ${nsfw}/nsfw ${assets_path}/models/
     ln -s ${facenet}/facenet ${assets_path}/models/
+
+    # install onnx models
+    ln -s ${sface.file} ${assets_path}/models/sface/${sface.name}
+    ln -s ${yunet.file} ${assets_path}/models/yunet/${yunet.name}
 
     runHook postInstall
   '';
@@ -121,6 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
     facenet = wrapModelForUpdate facenet;
     nasnet = wrapModelForUpdate nasnet;
     nsfw = wrapModelForUpdate nsfw;
+    sface = wrapModelForUpdate sface.file;
+    yunet = wrapModelForUpdate yunet.file;
 
     tests = {
       version = testers.testVersion { package = finalAttrs.finalPackage; };
@@ -139,6 +166,10 @@ stdenv.mkDerivation (finalAttrs: {
         "nasnet"
         "--subpackage"
         "nsfw"
+        "--subpackage"
+        "sface"
+        "--subpackage"
+        "yunet"
       ];
     };
   };
