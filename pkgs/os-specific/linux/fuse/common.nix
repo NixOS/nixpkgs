@@ -15,10 +15,14 @@
   autoreconfHook,
   runtimeShell,
   udevCheckHook,
+  freebsd,
 }:
 
 let
   isFuse3 = lib.hasPrefix "3" version;
+  su = if stdenv.hostPlatform.isFreeBSD then freebsd.su else shadow;
+  mount = if stdenv.hostPlatform.isFreeBSD then freebsd.mount else util-linux;
+  umount = if stdenv.hostPlatform.isFreeBSD then freebsd.umount else util-linux;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fuse";
@@ -64,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
         ninja
         pkg-config
       ]
-      ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ udevCheckHook ] # inf rec on musl, so skip
+      ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl) [ udevCheckHook ] # inf rec on musl, so skip
     else
       [
         autoreconfHook
@@ -72,12 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
       ];
 
   outputs = [
-    "bin"
     "out"
     "dev"
+  ]
+  # libfuse on *BSD calls `mount_fusefs` from the base system, not its own tool
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "bin"
     "man"
   ]
-  ++ lib.optional isFuse3 "udev";
+  ++ lib.optional (stdenv.hostPlatform.isLinux && isFuse3) "udev";
 
   mesonFlags = lib.optionals isFuse3 [
     "-Dudevrulesdir=/udev/rules.d"
@@ -89,12 +96,20 @@ stdenv.mkDerivation (finalAttrs: {
   # Ensure that FUSE calls the setuid wrapper, not
   # $out/bin/fusermount. It falls back to calling fusermount in
   # $PATH, so it should also work on non-NixOS systems.
-  env.NIX_CFLAGS_COMPILE = ''-DFUSERMOUNT_DIR="/run/wrappers/bin"'';
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      NIX_CFLAGS_COMPILE = ''-DFUSERMOUNT_DIR="/run/wrappers/bin"'';
+    }
+    //
+      lib.optionalAttrs (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+        {
+          NIX_LDFLAGS = "--undefined-version";
+        };
 
   preConfigure = ''
     substituteInPlace lib/mount_util.c \
-      --replace-fail "/bin/mount" "${lib.getBin util-linux}/bin/mount" \
-      --replace-fail "/bin/umount" "${lib.getBin util-linux}/bin/umount"
+      --replace-fail "/bin/mount" "${lib.getExe' mount "mount"}" \
+      --replace-fail "/bin/umount" "${lib.getExe' umount "umount"}"
     substituteInPlace util/mount.fuse.c \
       --replace-fail "/bin/sh" "${runtimeShell}"
   ''
@@ -108,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     # This is for `setuid=`, and needs root permission anyway.
     # No need to use the SUID wrapper.
     substituteInPlace util/mount.fuse.c \
-      --replace-fail '"su"' '"${lib.getBin shadow.su}/bin/su"'
+      --replace-fail '"su"' '"${lib.getExe' su "su"}"'
   '';
 
   # v2: no tests, v3: all tests get skipped in a sandbox
@@ -117,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Drop `/etc/fuse.conf` because it is a no-op config and
   # would conflict with our fuse module.
-  postInstall = lib.optionalString isFuse3 ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.isLinux && isFuse3) ''
     rm $out/etc/fuse.conf
     mkdir $udev
     mv $out/etc $udev
@@ -138,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/libfuse/libfuse";
     changelog = "https://github.com/libfuse/libfuse/releases/tag/fuse-${version}";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     license = with lib.licenses; [
       gpl2Only
       lgpl21Only
