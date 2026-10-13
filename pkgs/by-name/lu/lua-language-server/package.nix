@@ -156,7 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/luals/lua-language-server";
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gepbird ];
+    maintainers = with lib.maintainers; [
+      gepbird
+      yvnth
+    ];
     mainProgram = "lua-language-server";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
