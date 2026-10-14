@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  writeText,
 
   cmake,
   pkg-config,
@@ -20,29 +19,28 @@
   libXcursor,
   libvncserver,
   libfakekey,
+  pipewire,
 }:
 
-let
-  # Replace CONTRIBUTOR list with link to upstream
-  # This avoids generating contibutor list at build-time
-  contributors = writeText "CONTRIBUTORS" ''
-    https://github.com/veyon/veyon/contributors
-  '';
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "veyon";
-  version = "4.9.6.1";
+  version = "4.11.3";
 
   src = fetchFromGitHub {
     owner = "veyon";
     repo = "veyon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/s2t89lOeJPwhUEtXp5llFEdsUF6roa8xUZqehdl8mA=";
+    hash = "sha256-k2/QOehw1wvt5auoyDV5TsiXaMZDOcCB7oDUrBUNM6M=";
     fetchSubmodules = true; # kldap, x11vnc and qthttpserver get built from source
   };
 
-  patches = [ ./fix-install-perms.patch ];
+  patches = [
+    # we are not allowed to set suid during the build
+    # the NixOS module provides veyon-auth-helper and veyon-input-helper with suid as a security wrapper
+    ./install-disable-setuid.patch
+  ];
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -70,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXcursor
     libvncserver
     libfakekey
+    pipewire
   ];
 
   cmakeFlags = [
@@ -77,15 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     # veyon's build steps only work if this is relative
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "SYSTEMD_SERVICE_INSTALL_DIR" "lib/systemd/system")
-    (lib.cmakeFeature "CONTRIBUTORS" "${contributors}")
   ];
-
-  # Some executables need to access the other ones
-  qtWrapperArgs = [ "--prefix PATH : ${placeholder "out"}/bin" ];
 
   meta = {
     changelog = "https://github.com/veyon/veyon/releases/tag/v${finalAttrs.version}";
-    description = "A free and open source software for monitoring and controlling computers across multiple platforms";
+    description = "Cross-platform computer monitoring and classroom management software";
     homepage = "https://veyon.io";
     license = lib.licenses.gpl2Only;
     mainProgram = "veyon-master";
