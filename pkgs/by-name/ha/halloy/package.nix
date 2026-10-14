@@ -94,6 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+    install -Dm644 assets/linux/org.squidowl.halloy.appdata.xml -t $out/share/metainfo
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_DIR="$out/Applications/Halloy.app/Contents"
