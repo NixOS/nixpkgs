@@ -49,6 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -Dt $out/share/icons/hicolor/scalable/apps/ assets/satty.svg
+    install -Dm644 org.satty.Satty.metainfo.xml -t $out/share/metainfo
 
     installShellCompletion --cmd satty \
       --bash completions/satty.bash \
