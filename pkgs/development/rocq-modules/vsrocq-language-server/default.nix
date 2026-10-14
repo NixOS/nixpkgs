@@ -25,14 +25,12 @@ let
     repo = "vsrocq";
   };
   fetch = metaFetch {
-    release."2.3.0".rev = "v2.3.0";
     release."2.3.0".sha256 = "sha256-BZLxcCmSGFf04eUmlJXnyxmg4hTwpFaPaIik4VD444M=";
-    release."2.3.3".rev = "v2.3.3";
     release."2.3.3".sha256 = "sha256-wgn28wqWhZS4UOLUblkgXQISgLV+XdSIIEMx9uMT/ig=";
-    release."2.3.4".rev = "v2.3.4";
     release."2.3.4".sha256 = "sha256-v1hQjE8U1o2VYOlUjH0seIsNG+NrMNZ8ixt4bQNyGvI=";
-    release."2.4.3".rev = "v2.4.3";
     release."2.4.3".sha256 = "sha256-R/fpTiYZ9uvtKQcWD4jwUZPvUrcdvHc/wpoTrdkEQoQ=";
+    releaseRev = v: "v${v}";
+
     inherit location;
   };
   fetched = fetch (if version != null then version else defaultVersion);
