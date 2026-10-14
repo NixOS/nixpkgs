@@ -22,6 +22,13 @@ buildPythonPackage (finalAttrs: {
     owner = "NVIDIA";
     repo = "cuda-python";
     tag = "cuda-pathfinder-v${finalAttrs.version}";
+    # GitHub expands the export-subst'd .git_archival.txt when generating the tarball. Its ref-names line lists every
+    # branch pointing at the tagged commit, so the hash changes when e.g. a release branch moves on, even though the tag
+    # did not. Keep only the tag, which setuptools-scm still resolves to the right version.
+    postFetch = ''
+      sed -i 's/^ref-names: .*$/ref-names: tag: cuda-pathfinder-v${finalAttrs.version}/' "$out/.git_archival.txt"
+      grep -qx 'ref-names: tag: cuda-pathfinder-v${finalAttrs.version}' "$out/.git_archival.txt"
+    '';
     hash = "sha256-QpfjtVZpNAa8R5ZyGJO7W0PGorWE/wnpUKCEyBQbYI8=";
   };
 
