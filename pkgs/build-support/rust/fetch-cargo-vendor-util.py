@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import threading
 import tomllib
 from concurrent.futures import FIRST_EXCEPTION, Future, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
@@ -15,8 +16,8 @@ from pathlib import Path
 from typing import Any, cast
 from urllib.parse import unquote
 
-import requests
 import tomli_w
+from requests import Session
 from requests.adapters import HTTPAdapter, Retry
 
 # Constants for controlling how the crates are downloaded from the registries via `requests`
@@ -190,20 +191,29 @@ def load_lockfile(path: Path) -> Lockfile:
     return Lockfile(lockfile_version, sources, packages)
 
 
-def create_http_session() -> requests.Session:
+_local = threading.local()
+
+
+def get_session() -> Session:
+    if hasattr(_local, "session"):
+        return _local.session
+
     retries = Retry(
         total=RETRY_COUNT,
         backoff_factor=BACKOFF_FACTOR,
         status_forcelist=[500, 502, 503, 504]
     )
-    session = requests.Session()
+    session = Session()
     session.headers["User-Agent"] = USER_AGENT
     session.mount('http://', HTTPAdapter(max_retries=retries))
     session.mount('https://', HTTPAdapter(max_retries=retries))
+
+    _local.session = session
     return session
 
 
-def download_file_with_checksum(session: requests.Session, url: str, destination_path: Path) -> str:
+def download_file_with_checksum(url: str, destination_path: Path) -> str:
+    session = get_session()
     sha256_hash = hashlib.sha256()
     with session.get(url, stream=True, timeout=TIMEOUT) as response:
         response.raise_for_status()
@@ -220,7 +230,7 @@ def download_file_with_checksum(session: requests.Session, url: str, destination
 
 # Fetch the config.json file and get the .dl key from it
 # See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
-def fetch_dl_for_registry_source(source: RegistrySource, session: requests.Session) -> str:
+def fetch_dl_for_registry_source(source: RegistrySource) -> str:
     # We hardcode the .dl value for crates-io registries to avoid having to clone the git repo, saving a few seconds
     if source.ind == 0:
         return "https://static.crates.io/crates"
@@ -235,6 +245,7 @@ def fetch_dl_for_registry_source(source: RegistrySource, session: requests.Sessi
             "Accept": "application/json",
         }
 
+        session = get_session()
         with session.get(url, headers=headers, timeout=TIMEOUT) as response:
             response.raise_for_status()
             registry_config: dict[str, str] = response.json()
@@ -280,11 +291,11 @@ def make_download_url_for_tarball(pkg: RegistryPackage, dl: str) -> str:
     return url
 
 
-def download_crate_tarball(session: requests.Session, url: str, out_path: Path, expected_checksum: str) -> None:
+def download_crate_tarball(url: str, out_path: Path, expected_checksum: str) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     eprint(f"Fetching {url} -> {out_path}")
-    calculated_checksum = download_file_with_checksum(session, url, out_path)
+    calculated_checksum = download_file_with_checksum(url, out_path)
 
     if calculated_checksum != expected_checksum:
         raise Exception(f"Hash mismatch! File fetched from {url} had checksum {calculated_checksum}, expected {expected_checksum}.")
@@ -336,11 +347,9 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
     for source in git_sources:
         download_git_tree(source.url, source.git_sha_rev, out_dir)
 
-    session = create_http_session()
-
     raw_registry_source_to_dl: dict[str, str] = {}
     for source in registry_sources:
-        dl = fetch_dl_for_registry_source(source, session)
+        dl = fetch_dl_for_registry_source(source)
         eprint(f'Using .dl value of "{dl}" for registry "{source.raw}"')
         raw_registry_source_to_dl[source.raw] = dl
 
@@ -354,7 +363,7 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
 
             out_path = out_dir / make_tarball_relpath(pkg)
 
-            future = executor.submit(download_crate_tarball, session, url, out_path, pkg.checksum)
+            future = executor.submit(download_crate_tarball, url, out_path, pkg.checksum)
             futures.append(future)
 
         # fail early if a worker raises an exception
