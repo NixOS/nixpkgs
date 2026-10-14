@@ -441,6 +441,15 @@ checkConfigOutput '^"hello"$' config.packageInvalidIdentifier.pname ./declare-mk
 checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifier.defaultText.text ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.\\"123\\"\.\\"with\\\\\\"quote\\"\.hello"$' options.packageInvalidIdentifierExample.example.text ./declare-mkPackageOption.nix
 
+# contracts: find the provider option from `module` and `contract`
+checkConfigOutput '^11$' config.contracts.number.results.a.value ./contracts-provider-path.nix
+checkConfigOutput '^12$' config.contracts.number.results.b.value ./contracts-provider-path.nix
+checkConfigOutput '^13$' config.contracts.number.results.c.value ./contracts-provider-path.nix
+checkConfigOutput '^14$' config.contracts.number.results.d.value ./contracts-provider-path.nix
+STRICT_EVAL=1 checkConfigOutput '^\["services","two","numbers"\]$' config.contracts.number.providers.two.loc ./contracts-provider-path.nix
+STRICT_EVAL=1 checkConfigOutput '^\["services","four","number"\]$' config.contracts.number.providers.four.loc ./contracts-provider-path.nix
+checkConfigError 'a provider `module` must be an option' config.contracts.number.providers.wrong.loc ./contracts-provider-path.nix ./contracts-provider-path-wrong.nix
+
 # submoduleWith
 
 ## specialArgs should work

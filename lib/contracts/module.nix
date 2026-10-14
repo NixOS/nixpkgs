@@ -5,15 +5,30 @@
 let
   inherit (lib) mkOption types;
 
-  # A provider option, for example `options.testing.hardcoded-secret.fileSecrets`.
-  # Routing compares two provider options by their `loc`, and not by their values,
+  # A reference to a provider: an entry of `contracts.<type>.providers`.
+  # Routing compares two references by their `loc`, and not by their values,
   # because the value of a provider option depends on the requests that it gets.
-  providerOptionType = types.mkOptionType {
-    name = "providerOption";
-    description = "provider option";
-    check = lib.isOption;
+  providerRefType = types.mkOptionType {
+    name = "providerRef";
+    description = "provider reference";
+    check = v: lib.isAttrs v && v ? module && v ? loc;
     merge = lib.mergeOneOption;
   };
+
+  # Find the provider option from `module` and `contract`.
+  # In a set of options, the first attribute of the path selects an attribute.
+  # At an option, the remaining path is in the value of the option.
+  resolveProvider =
+    module: path:
+    if lib.isOption module then
+      {
+        loc = module.loc ++ path;
+        value = lib.getAttrFromPath path module.value;
+      }
+    else if path == [ ] then
+      throw "contracts: a provider `module` must be an option, or a set of options with an attribute at `contract`."
+    else
+      resolveProvider module.${lib.head path} (lib.tail path);
 in
 {
   options = {
@@ -123,21 +138,64 @@ in
                   providers = mkOption {
                     description = ''
                       Providers of this contract type.
-                      Each provider is the option in which the provider gets its requests
+                      Each provider has a *provider option*, in which the provider gets its requests
                       from `providerRequests.<provider>`.
-                      The value of this option has an entry with a `response`
+                      The value of the provider option has an entry with a `response`
                       for each request that the provider gets, with the same name.
 
-                      A provider module adds its option here.
+                      A provider module adds itself here with `module` and `contract`.
                       Thus the module takes `options` in its arguments:
 
                       ```nix
-                      contracts.${contractName}.providers."<provider>" = options.services."<provider>".${contractName};
+                      contracts.${contractName}.providers."<provider>".module = options.services."<provider>";
                       ```
+
+                      `module` gives the other options of the provider,
+                      for example to make a configuration form for the provider.
                     '';
                     default = { };
-                    type = types.attrsOf providerOptionType;
-                    example = lib.literalExpression "{ hardcoded-secret = options.testing.hardcoded-secret.fileSecrets; }";
+                    type = types.attrsOf (
+                      types.submodule (provider: {
+                        options = {
+                          module = mkOption {
+                            description = ''
+                              The options of the provider: an option, or a set of options.
+                              The provider option is at the path `contract` in `module`.
+                            '';
+                            type = types.raw;
+                            example = lib.literalExpression "options.testing.hardcoded-secret";
+                          };
+                          contract = mkOption {
+                            description = ''
+                              The path of the provider option in `module`.
+                              Set it to `[ ]` if `module` is the provider option.
+                              If the path gets to an option before its end,
+                              the remaining path is in the value of that option.
+                            '';
+                            type = types.listOf types.str;
+                            default = [ contractName ];
+                            defaultText = lib.literalExpression ''[ "<type>" ]'';
+                          };
+                          loc = mkOption {
+                            description = "The `loc` of the provider option.";
+                            readOnly = true;
+                            internal = true;
+                            type = types.listOf types.str;
+                            default = (resolveProvider provider.config.module provider.config.contract).loc;
+                            defaultText = lib.literalMD "the `loc` of the option at `contract` in `module`";
+                          };
+                          value = mkOption {
+                            description = "The value of the provider option.";
+                            readOnly = true;
+                            internal = true;
+                            type = types.raw;
+                            default = (resolveProvider provider.config.module provider.config.contract).value;
+                            defaultText = lib.literalMD "the `value` of the option at `contract` in `module`";
+                          };
+                        };
+                      })
+                    );
+                    example = lib.literalExpression "{ hardcoded-secret.module = options.testing.hardcoded-secret; }";
                   };
 
                   defaultProvider = mkOption {
@@ -146,7 +204,7 @@ in
                       To send an entry to a different provider, set `instances`.
                     '';
                     default = null;
-                    type = types.nullOr providerOptionType;
+                    type = types.nullOr providerRefType;
                     example = lib.literalExpression "config.contracts.fileSecrets.providers.hardcoded-secret";
                   };
 
@@ -166,7 +224,7 @@ in
                         config.contracts.${contractName}.providers."<other-provider>";
                       ```
                     '';
-                    type = types.attrsOf (types.nullOr providerOptionType);
+                    type = types.attrsOf (types.nullOr providerRefType);
                   };
 
                   providerRequests = mkOption {

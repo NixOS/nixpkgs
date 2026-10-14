@@ -130,7 +130,8 @@ For each contract type, [](#opt-contracts) sends the requests of consumers to a 
 
 - `contracts.<type>.want.<name>`: an entry with a `request` from a consumer.
   Each name must be unique for all consumers, for example `<consumer>-<option>`.
-- `contracts.<type>.providers.<provider>`: the option of the provider that has an entry for each request that the provider fulfills.
+- `contracts.<type>.providers.<provider>`: where to find the *provider option*, the option of the provider that has an entry for each request that the provider fulfills.
+  `module` is the options of the provider, and `contract` is the path of the provider option in `module`.
 - `contracts.<type>.defaultProvider`: the provider that gets the requests, one of `providers`.
 - `contracts.<type>.instances.<name>`: the provider that gets the entry `<name>` of `want`.
   The default is `defaultProvider`.
@@ -138,7 +139,19 @@ For each contract type, [](#opt-contracts) sends the requests of consumers to a 
   These are the entries of `want` that `instances` sends to the provider, and `{ }` for providers not routed to fulfill requests.
 - `contracts.<type>.results.<name>`: the `response` from the provider in `instances` for each entry in `want`.
 
-A provider reads `providerRequests.<provider>`, and sets `providers.<provider>` to its option.
+A provider reads `providerRequests.<provider>` into its provider option, and sets `providers.<provider>.module` to its options.
+`providers.<provider>.contract` is the path of the provider option in `module`:
+
+- By convention, the provider option is an option in `module` with the name of the contract type, for example `options.testing.hardcoded-secret.fileSecrets`.
+  The default of `contract`, `[ "<type>" ]`, finds this provider option, thus the provider does not set `contract`.
+- If the provider option has a different name, or is in a nested set of options, set `contract` to its path in `module`.
+- If `module` is the provider option, set `contract` to `[ ]`.
+- If the path gets to an option before its end, the remaining path is in the value of that option.
+
+Use the convention if possible: then the provider option of each provider has the same path in its options.
+With `module`, a tool can find the other options of the provider, for example to make a configuration form for the provider.
+In such a form, the options in `module` apply to the full provider, and the options in `providerOptions` of the provider option apply to one entry.
+
 Example, the provider `testing.hardcoded-secret` of the contract type `fileSecrets`:
 
 ```nix
@@ -146,7 +159,22 @@ Example, the provider `testing.hardcoded-secret` of the contract type `fileSecre
 {
   testing.hardcoded-secret.fileSecrets =
     config.contracts.fileSecrets.providerRequests.hardcoded-secret;
-  contracts.fileSecrets.providers.hardcoded-secret = options.testing.hardcoded-secret.fileSecrets;
+  contracts.fileSecrets.providers.hardcoded-secret.module = options.testing.hardcoded-secret;
+}
+```
+
+Example, a provider with the provider option at `services.bar.secrets.files`:
+
+```nix
+{ options, ... }:
+{
+  contracts.fileSecrets.providers.bar = {
+    module = options.services.bar;
+    contract = [
+      "secrets"
+      "files"
+    ];
+  };
 }
 ```
 
