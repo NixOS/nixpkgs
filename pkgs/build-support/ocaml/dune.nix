@@ -48,11 +48,15 @@ lib.extendMkDerivation {
         # OCaml libraries, and the dependencies they propagate, are only needed
         # to build other packages. Unless the package chooses its outputs,
         # those are installed into "dev", rather than "out", to minimize the
-        # "out" runtime closure.
-        outputs = args.outputs or [
-          "out"
-          "dev"
-        ];
+        # "out" runtime closure. Man pages and documentation go to "man" and
+        # "doc".
+        outputs =
+          args.outputs or [
+            "out"
+            "dev"
+            "man"
+            "doc"
+          ];
 
         # The findlib setup hook always points OCAMLFIND_DESTDIR at $out, so
         # override it after all setup hooks have run.
@@ -88,8 +92,10 @@ lib.extendMkDerivation {
              ''} ${lib.optionalString (lib.versionAtLeast Dune.version "3.0") ''
                --bindir "''${!outputBin}/bin" --datadir "$out/share"
              ''}
-            # Libraries without executables or docs don't install anything into $out.
-            mkdir -p "$out"
+            # Not every package installs something into each output.
+            for output in $(getAllOutputNames); do
+              mkdir -p "''${!output}"
+            done
             runHook postInstall
           '';
 
@@ -105,8 +111,17 @@ lib.extendMkDerivation {
         # scripts shipped by dune packages are hand-written and reject them.
         setOutputFlags = args.setOutputFlags or false;
 
-        meta = (args.meta or { }) // {
-          platforms = args.meta.platforms or ocaml.meta.platforms;
-        };
+        meta =
+          let
+            meta = args.meta or { };
+            # meta is often copied from another package, which may have other
+            # outputs. Keep the default if none of them are left.
+            outputsToInstall = lib.intersectLists finalAttrs.outputs (meta.outputsToInstall or [ ]);
+          in
+          removeAttrs meta [ "outputsToInstall" ]
+          // {
+            platforms = meta.platforms or ocaml.meta.platforms;
+          }
+          // lib.optionalAttrs (outputsToInstall != [ ]) { inherit outputsToInstall; };
       };
 }
