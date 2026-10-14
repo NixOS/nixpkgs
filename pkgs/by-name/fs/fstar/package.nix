@@ -21,6 +21,9 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "fstar";
   version = "2026.03.24";
 
+  # The custom installPhase installs everything into $out.
+  outputs = [ "out" ];
+
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
