@@ -52,6 +52,7 @@
   pybind11,
   pkg-config,
   removeReferencesTo,
+  rdma-core,
 
   # buildInputs
   openssl,
@@ -491,6 +492,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
     USE_NVSHMEM = setBool withNvshmem;
 
+    # CMake defaults USE_MPI to ON and silently disables it when MPI isn't found; make the choice explicit.
+    USE_MPI = setBool MPISupport;
+
     # Set the correct Python library path, broken since
     # https://github.com/pytorch/pytorch/commit/3d617333e
     PYTHON_LIB_REL_PATH = "${placeholder "out"}/${python.sitePackages}";
@@ -585,6 +589,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     ]
   )
   ++ lib.optionals isCudaJetson [ cudaPackages.autoAddCudaCompatRunpath ]
+  # FindMPI locates MPI through its compiler wrappers (mpicc, mpicxx), which must be on PATH.
+  ++ lib.optionals MPISupport [ mpi ]
   ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs = [
@@ -755,11 +761,16 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   #
   # This is a quick hack to add `libnvrtc` to the runpath so that torch can find
   # it when it is needed at runtime.
-  extraRunpaths = lib.optionals cudaSupport [ "${lib.getLib cudaPackages.cuda_nvrtc}/lib" ];
+  extraRunpaths =
+    lib.optionals cudaSupport [ "${lib.getLib cudaPackages.cuda_nvrtc}/lib" ]
+    # TensorPipe (torch.distributed.rpc) dlopens libibverbs.so.1 for its InfiniBand transport (TP_ENABLE_IBV) and, with
+    # CUDA, its GPUDirect RDMA channel (TP_ENABLE_CUDA_GDR); both are built by default on Linux and are silently
+    # unavailable when the library can't be found.
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ "${lib.getLib rdma-core}/lib" ];
   postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "postPatchelfPhase" ];
   postPatchelfPhase = ''
     while IFS= read -r -d $'\0' elf ; do
-      for extra in $extraRunpaths ; do
+      for extra in "''${extraRunpaths[@]}" ; do
         echo patchelf "$elf" --add-rpath "$extra" >&2
         patchelf "$elf" --add-rpath "$extra"
       done

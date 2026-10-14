@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uEvUfr1PM1BAMgvQ6Q6IVjZd0q40ZUXqhojlDUB3tvQ=";
+    hash = "sha256-myWmiBc6TuoVuS10TLqWZoCmPJdzynDJS7ImwkHP5Lk=";
   };
 
   postPatch = ''

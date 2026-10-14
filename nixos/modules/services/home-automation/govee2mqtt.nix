@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -37,6 +38,16 @@ in
         See upstream documentation <https://github.com/wez/govee2mqtt/blob/main/docs/CONFIG.md>.
       '';
     };
+
+    extraArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [ "--http-port=9876" ];
+      description = ''
+        Extra arguments to pass to `govee serve`.
+        See {command}`govee serve --help` for available arguments.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -63,9 +74,16 @@ in
           "GOVEE_CACHE_DIR=/var/cache/govee2mqtt"
         ];
         EnvironmentFile = cfg.environmentFile;
-        ExecStart =
-          "${lib.getExe cfg.package} serve --govee-iot-key=/var/lib/govee2mqtt/iot.key --govee-iot-cert=/var/lib/govee2mqtt/iot.cert"
-          + " --amazon-root-ca=${pkgs.cacert.unbundled}/etc/ssl/certs/Amazon_Root_CA_1:66c9fcf99bf8c0a39e2f0788a43e696365bca.crt";
+        ExecStart = utils.escapeSystemdExecArgs (
+          [
+            (lib.getExe cfg.package)
+            "serve"
+            "--govee-iot-key=/var/lib/govee2mqtt/iot.key"
+            "--govee-iot-cert=/var/lib/govee2mqtt/iot.cert"
+            "--amazon-root-ca=${pkgs.cacert.unbundled}/etc/ssl/certs/Amazon_Root_CA_1:66c9fcf99bf8c0a39e2f0788a43e696365bca.crt"
+          ]
+          ++ cfg.extraArgs
+        );
         Group = cfg.group;
         Restart = "on-failure";
         StateDirectory = "govee2mqtt";

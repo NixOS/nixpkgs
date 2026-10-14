@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -18,7 +17,7 @@
   libsamplerate ? null,
   ossSupport ? false,
   alsa-oss ? null,
-  pulseaudioSupport ? config.pulseaudio or false,
+  pulseaudioSupport ? false,
   libpulseaudio ? null,
   sndioSupport ? false,
   sndio ? null,

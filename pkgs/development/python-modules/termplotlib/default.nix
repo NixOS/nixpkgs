@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nschloe";
     repo = "termplotlib";
     rev = "v${version}";
-    sha256 = "1qfrv2w7vb2bbjvd5lqfq57c23iqkry0pwmif1ha3asmz330rja1";
+    hash = "sha256-QckMxvhVq6FgcLHyC3yeOA7BTsEO09K2XEusfbjY2eE=";
   };
 
   nativeBuildInputs = [ setuptools ];

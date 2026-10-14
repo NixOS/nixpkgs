@@ -21,7 +21,7 @@ buildPythonPackage (finalAttrs: {
     owner = "adobe-type-tools";
     repo = "psautohint";
     tag = "v${finalAttrs.version}";
-    sha256 = "125nx7accvbk626qlfar90va1995kp9qfrz6a978q4kv2kk37xai";
+    hash = "sha256-UfUz5hR7EoxOUuZnh9OdJaWgNkhZOYqNMHNtxtTptog=";
     fetchSubmodules = true; # data dir for tests
   };
 

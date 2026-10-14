@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "tomasbasham";
     repo = "ratelimit";
     rev = "v${version}";
-    sha256 = "04hy3hhh5xdqcsz0lx8j18zbj88kh5ik4wyi5d3a5sfy2hx70in2";
+    hash = "sha256-wkZwOhTe6aJGK9FzMmOBEyG5PgoSdQq+Zrj1AiEcHhI=";
   };
 
   nativeCheckInputs = [
