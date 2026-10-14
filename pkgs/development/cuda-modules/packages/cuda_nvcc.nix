@@ -96,6 +96,8 @@ buildRedist (finalAttrs: {
         nixLog "moving $PWD/nvvm to ''${!outputBin:?} and renaming lib64 to lib"
         moveToOutput "nvvm" "''${!outputBin:?}"
         mv --verbose --no-clobber "${newNvvmDir}/lib64" "${newNvvmDir}/lib"
+        # nvlink loads ../nvvm/lib64/libnvvm.so for device link-time optimization (-dlto).
+        ln -sv lib "${newNvvmDir}/lib64"
       ''
       # NVVM is unpacked and made top-level; we cannot make a symlink to it because build systems (like CMake)
       # may take the target and do relative path operations to it.
