@@ -5,6 +5,7 @@
   fetchPypi,
   python,
   cudaPackages,
+  runCommand,
 
   # nativeBuildInputs
   autoAddDriverRunpath,
@@ -107,7 +108,7 @@ let
     hash = hashes.core;
   };
 in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "nvidia-cutlass-dsl-libs-base";
   inherit version;
   format = "wheel";
@@ -163,6 +164,16 @@ buildPythonPackage {
           "    nvidia_root = None" \
           "    nvidia_root = Path(\"$out/${python.sitePackages}/nvidia_cutlass_dsl\")"
     ''
+    # `base_dsl/compiler.py` appends its own directory to `sys.path`, making every `base_dsl` module importable as a
+    # top-level module: e.g., when torch isn't installed, `importlib.util.find_spec("torch")` finds `base_dsl/torch.py`,
+    # and importing it fails.
+    # cutedsl-no-base-dsl-sys-path.patch is the commit (d29ad98f) of https://github.com/NVIDIA/cutlass/pull/3743,
+    # generated with `git format-patch`; the wheel installs python/CuTeDSL/cutlass as dsl_packages/cutlass.
+    # TODO: Drop once the fix is in a release.
+    + ''
+      patch -p3 -d "$out/${python.sitePackages}/nvidia_cutlass_dsl/dsl_packages" \
+        -i ${./cutedsl-no-base-dsl-sys-path.patch}
+    ''
     # The wheels ship `cutlass` and `iket` nested under `nvidia_cutlass_dsl/dsl_packages/`, exposed
     # at the top level via `nvidia_cutlass_dsl_packages.pth`.
     # Python only processes `.pth` files in directories registered as site dirs by `site.py`, not in
@@ -182,6 +193,29 @@ buildPythonPackage {
   # No tests in the Pypi archive
   doCheck = false;
 
+  passthru.tests.no-top-level-base-dsl-modules =
+    runCommand "${finalAttrs.finalPackage.name}-no-top-level-base-dsl-modules"
+      {
+        nativeBuildInputs = [ (python.withPackages (_: [ finalAttrs.finalPackage ])) ];
+      }
+      ''
+        python3 - <<'EOF'
+        import importlib.util
+        import os
+        import sys
+
+        import cutlass.base_dsl.compiler
+
+        base_dsl = [p for p in sys.path if os.path.basename(p) == "base_dsl"]
+        assert not base_dsl, f"base_dsl is on sys.path: {base_dsl}"
+
+        # torch isn't a dependency, so it must not be found, in particular not as base_dsl/torch.py.
+        spec = importlib.util.find_spec("torch")
+        assert spec is None, f"found torch at {spec.origin}"
+        EOF
+        touch "$out"
+      '';
+
   meta = {
     description = "Bundled MLIR/CUDA runtime libraries and Python sources for the NVIDIA CUTLASS DSL";
     homepage = "https://github.com/NVIDIA/cutlass";
@@ -191,4 +225,4 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.linux;
   };
-}
+})
