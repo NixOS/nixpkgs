@@ -35,8 +35,7 @@ buildPythonPackage rec {
     pytest-django
   ];
 
-  # pythonImportsCheck fails with:
-  # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_META_PRECEDENCE_ORDER, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
+  pythonImportsCheck = [ "ipware" ];
 
   meta = {
     description = "Django application to retrieve user's IP address";
