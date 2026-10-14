@@ -20,7 +20,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sby";
-  version = "0.69";
+  version = "0.70";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
