@@ -125,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
               xdotool
               stdenv.cc.cc
               openssl
+              gtk3 # For IME support
             ]
           }"
 
