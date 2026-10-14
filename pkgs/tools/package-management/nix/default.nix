@@ -208,8 +208,8 @@ lib.makeExtensible (
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "07fd28bdb5c9474768a52f1072bd3f70525c789c";
-            hash = "sha256-2FZ5ACZiycNosv537iLBdDWLYvMZrI90oOBa1/z+9N4=";
+            rev = "a9f38ea0ee89f550616f342386f45e896f4abd18";
+            hash = "sha256-jUzXXzi1x8Ub4kdBCMcrz1LoCuElBq4mFjOw59rFPCE=";
           };
         in
         (nixDependencies.callPackage ./modular/packages.nix {

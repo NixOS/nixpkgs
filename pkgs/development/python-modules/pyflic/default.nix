@@ -13,7 +13,7 @@ buildPythonPackage rec {
     owner = "soldag";
     repo = "pyflic";
     rev = version;
-    sha256 = "sha256-K1trMBZfc1aHSNSddq0v//Gv8ySgT/ONQYgrKWzw2qs=";
+    hash = "sha256-K1trMBZfc1aHSNSddq0v//Gv8ySgT/ONQYgrKWzw2qs=";
   };
 
   # Project thas no tests

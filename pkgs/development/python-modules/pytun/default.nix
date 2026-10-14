@@ -13,7 +13,7 @@ buildPythonPackage rec {
     rev = "v${version}";
     owner = "montag451";
     repo = "pytun";
-    sha256 = "sha256-DZ7CoLi6LPhuc55HF9dtek+/N4A29ecnZn7bk7jweuI=";
+    hash = "sha256-DZ7CoLi6LPhuc55HF9dtek+/N4A29ecnZn7bk7jweuI=";
   };
 
   # Test directory contains examples, not tests.

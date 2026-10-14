@@ -203,7 +203,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     mv -v "$out"/{changelog,git_commit.txt,License.txt,version.txt} "$out/share/"
 
     moveToOutput "bin/examples" "$samples"
-    moveToOutput "bin/perftest" "$tests"
+    moveToOutput "bin/perftest" "$test"
   '';
 
   # These are all dlopen'd by bare soname, so buildInputs alone never reaches a RUNPATH. The contrast

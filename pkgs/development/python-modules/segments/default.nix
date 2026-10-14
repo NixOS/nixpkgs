@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "cldf";
     repo = "segments";
     rev = "v${version}";
-    sha256 = "sha256-XhJH87Bb9wGNPpPymRjgPYLv2zr4hGAyIAbTMk0uCU0=";
+    hash = "sha256-XhJH87Bb9wGNPpPymRjgPYLv2zr4hGAyIAbTMk0uCU0=";
   };
 
   nativeBuildInputs = [ setuptools ];

@@ -12,7 +12,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-filter";
-  version = "26.1";
+  version = "26.2";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -20,7 +20,7 @@ buildPythonPackage (finalAttrs: {
     owner = "carltongibson";
     repo = "django-filter";
     tag = finalAttrs.version;
-    hash = "sha256-Sls/imzl2dzUfVcJTUqpCQTDRH9H09uxx27TnU0R0WI=";
+    hash = "sha256-gEYt4FoWoUt3itaP7N7fG335RoWAk2yS/PCRg+d+Keo=";
   };
 
   build-system = [ flit-core ];

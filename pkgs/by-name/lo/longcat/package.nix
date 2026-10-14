@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.0.20";
+  version = "0.0.21";
 in
 buildGoModule {
   pname = "longcat";
@@ -16,7 +16,7 @@ buildGoModule {
     owner = "mattn";
     repo = "longcat";
     tag = "v${version}";
-    hash = "sha256-PSEi5AfgP4PvAmqCvnAEfdSg5NKKjKgq4GoytZ7XR1w=";
+    hash = "sha256-2SldcqugPr1muJgSr2JfSro6wtItaXX13w/IsJHZz4Y=";
   };
 
   vendorHash = "sha256-dgQhSZEWWhS3ee9rhXVdB8toj6mGWbp3pIB2PEasy28=";
