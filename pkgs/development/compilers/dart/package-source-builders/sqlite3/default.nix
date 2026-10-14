@@ -28,6 +28,8 @@ let
             _3_7_0-x86_64-linux = "sha256-ncTXhpLnz7shUSvmBkmLknrRpxPAexho/wMEp1Sja3I=";
             _3_5_0-aarch64-linux = "sha256-m2Op1KowdxErQ9nFa1+0TIshwjBSdXdrnlsyO4mULos=";
             _3_5_0-x86_64-linux = "sha256-GH+3MhYXTwWD7WmEHzc8wecYcaOcCXsy93UWiEjh6Eo=";
+            _3_5_2-aarch64-linux = "sha256-LMKxM9hJXdCGytVuYSro3iYbMuDwDk6fcqvzVYHD7s0=";
+            _3_5_2-x86_64-linux = "sha256-RdsYQ+ujyR16Ip72A7u2o7uavqtDC72V26pAJAxxOAk=";
           }
           .${"_" + (lib.replaceStrings [ "." ] [ "_" ] version) + "-" + stdenv.hostPlatform.system}
             or (throw ''
