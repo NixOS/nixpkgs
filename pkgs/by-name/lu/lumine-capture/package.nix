@@ -1,0 +1,82 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  nasm,
+  onnxruntime,
+  pipewire,
+  libxkbcommon,
+  openssl,
+  versionCheckHook,
+  nix-update-script,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "lumine-capture";
+  version = "0.4.0";
+  __structuredAttrs = true;
+
+  src = fetchFromGitHub {
+    owner = "Netflate";
+    repo = "LumineCapture";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-n43QYkngao96tnVLnNtHJUlS5Nw1gJqEoqSA6ij5ejU=";
+  };
+
+  cargoHash = "sha256-W1oALMPSqfMLv8uhVAz8FWR8bGPMML3v6FgVB1op2dg=";
+
+  nativeBuildInputs = [
+    pkg-config
+    nasm
+    rustPlatform.bindgenHook
+  ];
+
+  # rav1e assembly for faster AVIF encoding
+  buildFeatures = [ "asm" ];
+
+  buildInputs = [
+    onnxruntime
+    pipewire
+    libxkbcommon
+    openssl
+  ];
+
+  # link to onnxruntime from nixpkgs to prevent ort-sys from downloading a prebuilt one
+  env = {
+    ORT_LIB_LOCATION = "${lib.getLib onnxruntime}/lib";
+    ORT_PREFER_DYNAMIC_LINK = "1";
+  };
+
+  postInstall = ''
+    # ort's copy-dylibs creates a copy of onnxruntime next to the binary
+    rm -r $out/lib
+
+    # KWin only allows org.kde.KWin.ScreenShot2 for the executable named in Exec=
+    # of a .desktop file with X-KDE-DBUS-Restricted-Interfaces, so it must be the store path
+    install -Dm644 assets/lumine-capture.desktop -t $out/share/applications
+    substituteInPlace $out/share/applications/lumine-capture.desktop \
+      --replace-fail /usr/bin/lumine-capture $out/bin/lumine-capture
+    mkdir -p $out/share/icons
+    cp -r assets/hicolor $out/share/icons/
+  '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Screenshot and annotation tool for Wayland with built-in OCR";
+    homepage = "https://github.com/Netflate/LumineCapture";
+    changelog = "https://github.com/Netflate/LumineCapture/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [
+      mit
+      asl20
+      ofl
+    ];
+    mainProgram = "lumine-capture";
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ netflate ];
+  };
+})
