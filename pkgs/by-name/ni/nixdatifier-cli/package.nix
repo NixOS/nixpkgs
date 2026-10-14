@@ -52,10 +52,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/package";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     makeWrapper
     installShellFiles
   ];
+
+  # patchShebangs of the shell helpers
+  buildInputs = [ bash ];
 
   dontConfigure = true;
   dontBuild = true;

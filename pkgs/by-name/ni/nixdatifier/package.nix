@@ -36,6 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/standalone";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
@@ -43,31 +46,34 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    # patchShebangs of the shell helpers
+    bash
     qt6.qtbase
     qt6.qtdeclarative
     qt6.qtsvg
   ];
 
   qtWrapperArgs = [
-    "--suffix PATH : ${
-      lib.makeBinPath [
-        bash
-        jq
-        git
-        curl
-        coreutils
-        util-linux
-        findutils
-        gnugrep
-        gnused
-        gawk
-        inotify-tools
-        libnotify
-        direnv
-        fzf
-        chafa
-      ]
-    }"
+    "--suffix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      bash
+      jq
+      git
+      curl
+      coreutils
+      util-linux
+      findutils
+      gnugrep
+      gnused
+      gawk
+      inotify-tools
+      libnotify
+      direnv
+      fzf
+      chafa
+    ])
   ];
 
   postInstall = ''
