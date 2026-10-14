@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   python,
   toPythonModule,
 
@@ -62,6 +63,12 @@ buildPythonPackage (finalAttrs: {
   patches = [
     # `conftest.py` tries to run `pip install` to install test dependencies.
     ./conftest-dont-pip-install.patch
+    # CVE-2026-82035
+    (fetchpatch {
+      name = "extract_objects(): avoid path escape from directory";
+      url = "https://github.com/pymupdf/PyMuPDF/commit/b2c8f3a859fed35c379a44df566f770dc3e18605.patch";
+      hash = "sha256-YW1UtGhDJh69YKPCtZS7MqsisbltEKZeGMFU3RUQVHw=";
+    })
   ];
 
   # swig is not wrapped as Python package
