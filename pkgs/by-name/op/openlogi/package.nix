@@ -65,6 +65,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # EPERM before the binary runs. Strip it — tests don't need the bundle.
     substituteInPlace .cargo/config.toml \
       --replace-fail 'runner = "scripts/cargo-run-macos.sh"' ""
+  ''
+  # cargo-bundle 0.12 rejects the flat osx_* keys.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace crates/openlogi-gui/Cargo.toml \
+      --replace-fail 'osx_minimum_system_version = "13.0"' "" \
+      --replace-fail 'osx_url_schemes = ["openlogi"]' ""
+    cat >> crates/openlogi-gui/Cargo.toml <<'EOF'
+
+    [package.metadata.bundle.osx]
+    minimum_system_version = "13.0"
+    url_schemes = ["openlogi"]
+    EOF
   '';
 
   nativeBuildInputs = [
