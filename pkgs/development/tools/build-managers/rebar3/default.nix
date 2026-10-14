@@ -16,20 +16,18 @@
 }:
 
 let
-  version = "3.27.0";
-  owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
-    inherit version erlang;
+    version = "3.27.3";
 
     # How to obtain `sha256`:
     # nix-prefetch-url --unpack https://github.com/erlang/rebar3/archive/${version}.tar.gz
     src = fetchFromGitHub {
-      inherit owner;
-      repo = pname;
-      rev = version;
-      sha256 = "+va3wHlAfVtl3aK6+DVkN/EgpiMxwAGUyNywaWiKTJQ=";
+      owner = "erlang";
+      repo = "rebar3";
+      tag = version;
+      sha256 = "Om6c2cpeFCdPAemeA965YxKXhasHbx3gHVgSh+jO2TI=";
     };
 
     buildInputs = [ erlang ];

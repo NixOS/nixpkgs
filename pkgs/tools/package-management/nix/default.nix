@@ -155,8 +155,8 @@ lib.makeExtensible (
   (
     {
       nix_2_28 = commonMeson {
-        version = "2.28.7";
-        hash = "sha256-Fq4+7uYz6bdE1HvPqn+qZcYX1rNilVKT7YAAPLA8170=";
+        version = "2.28.8";
+        hash = "sha256-3U4zdKfzSMhHxv7HLyHTQNO+stqWcWrlM0dobQxwBoM=";
         self_attribute_name = "nix_2_28";
         patches = patches_common ++ [
           lowdown30PatchOld
@@ -165,14 +165,14 @@ lib.makeExtensible (
 
       nixComponents_2_30 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.30.5";
+          version = "2.30.6";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-tGiV71RxtCNcUNX86ZwmOIghG4pLwm5nlRKd89er7Gk=";
+            hash = "sha256-tMjXktG7VmhBGI4e5E7GOLGVCLOXvqPGHbBAQ2zjgxs=";
           };
         }).appendPatches
           (patches_common ++ [ lowdown30PatchOld ]);
@@ -181,14 +181,14 @@ lib.makeExtensible (
 
       nixComponents_2_31 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.31.5";
+          version = "2.31.6";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-b7fhCXxl9qKTNPQvG8T/+nOxB95kalt9/aSY+ZSRctk=";
+            hash = "sha256-yAvNBedw4FB+Z5myhfGsnRT8F1QqeEoXGbm7EmTW/Og=";
           };
         }).appendPatches
           [ ];
@@ -197,14 +197,14 @@ lib.makeExtensible (
 
       nixComponents_2_34 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.34.8";
+          version = "2.34.9";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_34";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-Rvy1PmIUMGI0IS/kwDwmf/VrorU8v1iZYejssSVu1rY=";
+            hash = "sha256-ZJwg/qG4M1Impy774HKMZ3Hsq7vlBJy7sXl1fI9QDXI=";
           };
         }).appendPatches
           patches_common;
@@ -213,14 +213,14 @@ lib.makeExtensible (
 
       nixComponents_2_35 =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.35.2";
+          version = "2.35.3";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_2_35";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
             tag = version;
-            hash = "sha256-C/YEm/5IPiAMxQH5aHlkwgQMkLqK7NVsudEWdlzBZAA=";
+            hash = "sha256-qtlx8ywd1qj2ToZTNBunXE7JUajLtw44ja3r7+d47D4=";
           };
         }).appendPatches
           [ ];
@@ -229,14 +229,14 @@ lib.makeExtensible (
 
       nixComponents_git =
         (nixDependencies.callPackage ./modular/packages.nix rec {
-          version = "2.35pre20260504_${lib.substring 0 8 src.rev}";
+          version = "2.36pre20261013_${lib.substring 0 8 src.rev}";
           inherit teams;
           otherSplices = generateSplicesForNixComponents "nixComponents_git";
           src = fetchFromGitHub {
             owner = "NixOS";
             repo = "nix";
-            rev = "53ab7375a110825814837005aaf5a256edea6eae";
-            hash = "sha256-ILPe+2GSPjmsZvEegUh0lJ1yWSsQnU1eJvfvIdJ8ins=";
+            rev = "07fd28bdb5c9474768a52f1072bd3f70525c789c";
+            hash = "sha256-2FZ5ACZiycNosv537iLBdDWLYvMZrI90oOBa1/z+9N4=";
           };
         }).appendPatches
           patches_common;

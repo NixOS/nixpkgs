@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo127Module,
   callPackage,
   installShellFiles,
   lib,
@@ -8,7 +8,7 @@
 let
   common = callPackage ./common.nix { };
 in
-buildGoModule {
+buildGo127Module {
   pname = "woodpecker-cli";
   inherit (common)
     version
