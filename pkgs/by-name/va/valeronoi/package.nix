@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ccoors/Valeronoi/";
     description = "WiFi mapping companion app for Valetudo";
     license = lib.licenses.gpl3Only;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       nova-madeline
       maeve
