@@ -1,12 +1,11 @@
-import sys
-
-from subprocess import CalledProcessError
-from typing import Iterable, TypedDict
-
 import dataclasses
+from collections.abc import Iterable
 from pathlib import Path
+from typing import TypedDict
 
-from jetbrains_nix_updater.util import run_command
+
+class MissingIdeException(Exception):
+    "Raised when an IDE is not found"
 
 
 class UpdateInfo(TypedDict):
@@ -31,10 +30,12 @@ def is_source_ide(ide_name: str):
     return ide_name.endswith("-oss")
 
 
-def get_single_ide(update_info: dict[str, UpdateInfo], nixpkgs_root: Path, name: str) -> Ide:
+def get_single_ide(
+    update_info: dict[str, UpdateInfo], nixpkgs_root: Path, name: str
+) -> Ide:
     drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
     if not drv_path.exists():
-        raise Exception(f"IDE not found at {drv_path}")
+        raise MissingIdeException(f"IDE not found at {drv_path}")
     return Ide(
         name=name,
         drv_path=drv_path,
@@ -43,12 +44,14 @@ def get_single_ide(update_info: dict[str, UpdateInfo], nixpkgs_root: Path, name:
     )
 
 
-def get_all_ides(update_info: dict[str, UpdateInfo], nixpkgs_root: Path) -> Iterable[Ide]:
-    for name, update_info in update_info.items():
+def get_all_ides(
+    update_info: dict[str, UpdateInfo], nixpkgs_root: Path
+) -> Iterable[Ide]:
+    for name, info in update_info.items():
         drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
         yield Ide(
             name=name,
             drv_path=drv_path,
             is_source=is_source_ide(name),
-            update_info=update_info,
+            update_info=info,
         )

@@ -1,6 +1,5 @@
-import sys
-
 import dataclasses
+import sys
 from urllib import request
 from urllib.error import HTTPError
 
@@ -15,6 +14,10 @@ from jetbrains_nix_updater.util import one_or_more
 UPDATES_URL = "https://www.jetbrains.com/updates/updates.xml"
 
 
+class NoUrlForSystemException(Exception):
+    "raised when there is no URL available for a specific system"
+
+
 @dataclasses.dataclass(slots=True)
 class VersionInfo:
     version: str
@@ -23,7 +26,7 @@ class VersionInfo:
 
     def download_sha256(self, system: str) -> str:
         if self.urls[system] is None:
-            raise Exception("No URL available")
+            raise NoUrlForSystemException(f"No URL available for {system}")
         print(f"[.] Downloading sha256 for {self.urls[system]}")
         url = f"{self.urls[system]}.sha256"
         download_response = requests.get(url)
@@ -90,7 +93,7 @@ class VersionFetcher:
                 build_number=new_build_number,
                 urls=download_urls,
             )
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001 -- Intentional safety net for unhandled fetch exceptions
             print(
                 f"[!] exception while trying to fetch version: {e} - skipping!",
                 file=sys.stderr,
