@@ -14897,6 +14897,10 @@ self: super: with self; {
 
   pydantic-monty = callPackage ../development/python-modules/pydantic-monty { };
 
+  pydantic-monty-client = callPackage ../development/python-modules/pydantic-monty-client { };
+
+  pydantic-monty-runtime = callPackage ../development/python-modules/pydantic-monty-runtime { };
+
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
