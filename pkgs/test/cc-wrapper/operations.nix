@@ -485,6 +485,22 @@ in
       ${parent}/bin/${targetPrefix}cc --version -MJ immediate-compilation-database.json > /dev/null
       [[ ! -e immediate-compilation-database.json ]]
     ''}
+    ${lib.optionalString (stdenv.cc.isClang && stdenv.hostPlatform.isx86_64) ''
+      # -m32 selects a variant of the configured target and keeps its machine
+      # defaults. Only an explicitly different target omits them.
+      NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING=0 ${parent}/bin/${targetPrefix}cc \
+        -m32 -v -E -x c /dev/null -o /dev/null > target-m32.log 2>&1
+      if grep 'configured target defaults omitted' target-m32.log; then
+        echo '-m32 omitted the configured target defaults' >&2
+        exit 1
+      fi
+      if grep -q -a -- -mtls-dialect=gnu2 ${parent}/nix-support/native-machine-flags; then
+        grep -q -- -enable-tlsdesc target-m32.log
+      fi
+      NIX_CC_WRAPPER_SUPPRESS_TARGET_WARNING=0 ${parent}/bin/${targetPrefix}cc \
+        --target=i686-unknown-linux-gnu -v -E -x c /dev/null -o /dev/null > target-other.log 2>&1
+      grep 'configured target defaults omitted for i686-unknown-linux-gnu' target-other.log
+    ''}
     ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Package metadata cannot advertise a different nativePrefix executable.
       [[ ! -e ${nativeToolWrapper}/nix-support/native-primary-programs ]]
