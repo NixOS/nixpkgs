@@ -17,6 +17,7 @@
   xcbuild,
   faketty,
   nodejs,
+  withSourceMaps ? false,
 }:
 
 buildGoModule (finalAttrs: {
@@ -140,6 +141,9 @@ buildGoModule (finalAttrs: {
     cp -r public conf $out/share/grafana/
     find "$out/share/grafana/public" -type d -name node_modules -prune -exec rm -rf {} +
     find "$out/share/grafana/public" -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.snap" \) -delete
+  ''
+  + lib.optionalString (!withSourceMaps) ''
+    find "$out/share/grafana/public" -type f -name "*.js.map" -delete
   '';
 
   postFixup = ''
