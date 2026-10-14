@@ -71,6 +71,14 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   # Manually inject the library version
   + ''
     echo "${finalAttrs.version}" >src/cuda/tile/VERSION
+  ''
+  # Use tileiras from Nixpkgs instead of searching for it in /usr/local/cuda*, which is the last place cuTile looks
+  # (after the nvidia-cuda-tileiras Python package, PATH, and $CUDA_HOME/bin).
+  + lib.optionalString cudaPackages.cuda_tileiras.meta.available ''
+    substituteInPlace src/cuda/tile/_compile.py \
+      --replace-fail \
+        "for toolkit_path in _get_default_cuda_toolkit_paths():" \
+        "for toolkit_path in [\"${lib.getBin cudaPackages.cuda_tileiras}\"]:"
   '';
 
   build-system = [
@@ -95,13 +103,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   dependencies = [
     typing-extensions
   ];
-
-  optional-dependencies = {
-    tileiras = [
-      # unpackaged as it doesn't make sense to have it in nixpkgs
-      # cuda-toolkit
-    ];
-  };
 
   pythonImportsCheck = [ "cuda.tile" ];
 
