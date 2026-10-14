@@ -6028,6 +6028,12 @@ self: super: with self; {
 
   fastmcp-slim = callPackage ../development/python-modules/fastmcp-slim { };
 
+  fastmcp-slim_3 = callPackage ../development/python-modules/fastmcp-slim/3.nix { };
+
+  fastmcp-tasks = callPackage ../development/python-modules/fastmcp-tasks { };
+
+  fastmcp_3 = callPackage ../development/python-modules/fastmcp/3.nix { };
+
   fastmri = callPackage ../development/python-modules/fastmri { };
 
   fastnlo-toolkit = toPythonModule (
