@@ -70,15 +70,18 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litellm";
   version = "1.105.1";
   pyproject = true;
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hkCEJRiR01YJFakhPQfV60RssgP4ugqWBRapQeAnFbQ=";
   };
 
@@ -90,7 +93,7 @@ buildPythonPackage rec {
   cargoRoot = "litellm-rust";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -227,8 +230,8 @@ buildPythonPackage rec {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
+    changelog = "https://github.com/BerriAI/litellm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})
