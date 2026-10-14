@@ -6000,6 +6000,12 @@ self: super: with self; {
 
   fastmcp-slim = callPackage ../development/python-modules/fastmcp-slim { };
 
+  fastmcp-slim_4 = callPackage ../development/python-modules/fastmcp-slim/4.nix { };
+
+  fastmcp-tasks = callPackage ../development/python-modules/fastmcp-tasks { };
+
+  fastmcp_4 = callPackage ../development/python-modules/fastmcp/4.nix { };
+
   fastmri = callPackage ../development/python-modules/fastmri { };
 
   fastnlo-toolkit = toPythonModule (
