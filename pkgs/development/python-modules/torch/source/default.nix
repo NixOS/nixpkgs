@@ -264,10 +264,29 @@ let
   # PyTorch's open-source SYCL toolchain support looks for `dpclang`/`dpclang++`.
   # intel-llvm ships those names, but only as unwrapped binaries; point them at the
   # cc-wrapped clang so that libc/libstdc++ headers and the SYCL headers are found.
+  # Fortify hardening is disabled for SYCL sources: _FORTIFY_SOURCE turns small
+  # memcpys in device code (e.g. c10::Half bit casts) into __memcpy_chk calls, which
+  # can't be resolved on the GPU and make IGC take hours and tens of GB per kernel.
+  # The cc-wrapper re-adds -D_FORTIFY_SOURCE after user flags, so -U doesn't work.
+  # Filter both variables: the wrapper appends NIX_HARDENING_ENABLE to the salted one.
+  # The host pass (sycl-host-cxx) inherits this, so it's built without fortify too.
+  mkDpclang =
+    name:
+    writeShellScript "dp${name}" ''
+      for var in NIX_HARDENING_ENABLE NIX_HARDENING_ENABLE_${stdenv.cc.suffixSalt}; do
+        [[ -v $var ]] || continue
+        hardening=()
+        for flag in ''${!var}; do
+          [[ $flag == fortify || $flag == fortify3 ]] || hardening+=("$flag")
+        done
+        export "$var=''${hardening[*]}"
+      done
+      exec ${intel-llvm}/bin/${name} "$@"
+    '';
   dpclang-wrapped = runCommand "dpclang-wrapped" { } ''
     mkdir -p $out/bin
-    ln -s ${intel-llvm}/bin/clang $out/bin/dpclang
-    ln -s ${intel-llvm}/bin/clang++ $out/bin/dpclang++
+    ln -s ${mkDpclang "clang"} $out/bin/dpclang
+    ln -s ${mkDpclang "clang++"} $out/bin/dpclang++
   '';
 
   # Use vendored CK as header only dep if rocmPackages' CK doesn't properly support targets
