@@ -182,6 +182,7 @@ stdenv.mkDerivation (finalAttrs: {
         vcunat
         lblasc
       ];
+      identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "luajit" finalAttrs.version;
     }
     // extraMeta;
 })
