@@ -8,6 +8,7 @@
   lapack,
   metis,
   fixDarwinDylibNames,
+  removeReferencesTo,
   gmp,
   mpfr,
   config,
@@ -49,6 +50,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableCuda [
     cudaPackages.cuda_nvcc
+    removeReferencesTo
   ];
 
   # Use compatible indexing for lapack and blas used
@@ -124,6 +126,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       component=$(basename $(dirname "$dir"))
       find "$dir" -name '*.pdf' -exec cp {} "$docdir/" \;
     done
+  ''
+  # nvcc leaves its library and host compiler paths in the device code, see cudaPackages.nccl.
+  + lib.optionalString enableCuda ''
+    remove-references-to \
+      -t ${lib.getBin cudaPackages.cuda_nvcc} \
+      -t ${effectiveStdenv.cc.cc} \
+      -t ${gfortran.cc} \
+      "$out"/lib/*.{so.*,a}
   '';
 
   meta = {
