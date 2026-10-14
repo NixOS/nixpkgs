@@ -11,7 +11,7 @@
   copyDesktopItems,
 }:
 let
-  version = "2.69.0";
+  version = "2.69.2";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-sLZ5907hsiYerYDKOWrBfnoNueqg7lbff0e1Eh4ia0g=";
+    hash = "sha256-Zf4Vjcp731AZOeHi+S9hJRkoVMf6wbSv0bZoY93ZEzI=";
   };
 
   patches = [ ./dark-theme-wxpython-4.2-compat.patch ];
