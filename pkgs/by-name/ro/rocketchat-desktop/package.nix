@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "rocketchat-desktop";
       exec = "rocketchat-desktop";
       terminal = false;
-      startupWMClass = "Rocket.Chat";
+      startupWMClass = "rocket-chat";
       mimeTypes = [ "x-scheme-handler/rocketchat" ];
     })
   ];
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
     changelog = "https://github.com/RocketChat/Rocket.Chat.Electron/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mynacol ];
+    maintainers = with lib.maintainers; [ chvp ];
     platforms = lib.platforms.linux;
   };
 })
