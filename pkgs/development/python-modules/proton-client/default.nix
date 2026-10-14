@@ -51,10 +51,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = [
-    #ValueError: Invalid modulus
-    "test_modulus_verification"
-  ];
+  # GnuPG needs a writable home directory to import the SRP modulus key
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   pythonImportsCheck = [ "proton" ];
 
