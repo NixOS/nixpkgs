@@ -50,7 +50,7 @@ stdenv.mkDerivation {
       PowerUser64
       l1npengtul
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
     mainProgram = "jack-passthru";
   };
 }
