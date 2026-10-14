@@ -94,6 +94,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     webkitgtk_4_1
   ];
 
+  postInstall = ''
+    install -Dm644 flatpak/com.kesomannen.gale.metainfo.xml -t $out/share/metainfo
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
