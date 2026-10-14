@@ -24,6 +24,13 @@
   "HOSTLD=${lib.getExe' buildPackages.stdenv.cc.bintools "${buildPackages.stdenv.cc.targetPrefix}ld"}"
   "ARCH=${stdenv.hostPlatform.linuxArch}"
   "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+
+  # Override the kernel module signing rule to use kmodigest instead.
+  # This works for both in‐tree and external modules. Because not every
+  # external module package has structured attributes enabled yet, we
+  # need to use the Kbuild `$(space)` variable to keep this from
+  # splitting into multiple arguments.
+  "cmd_sign=${lib.getExe buildPackages.kmodigest}$(space)$@"
 ]
 # Add the built in headers the kernel needs
 ++ lib.optionals (stdenv.cc.isClang) (
