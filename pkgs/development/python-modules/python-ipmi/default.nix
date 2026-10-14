@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-ipmi";
-  version = "0.5.8";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kontron";
     repo = "python-ipmi";
     tag = version;
-    hash = "sha256-9xPnLNyHKvVebRM/mIoEVzhT2EwmgJxCTztLSZrnXVc=";
+    hash = "sha256-yCMT0HRpRFoC8yv5f/VKtbRdf0JuwqJRbraLPaniTek=";
   };
 
   postPatch = ''
