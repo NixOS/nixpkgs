@@ -7,7 +7,6 @@
   lazarus,
   libx11,
   runCommand,
-  python3,
   _7zz,
   brotli,
   upx,
@@ -135,67 +134,45 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "peazip-system-backends"
       {
         nativeBuildInputs = [
-          python3
           _7zz
           zstd
         ];
         peazip = finalAttrs.finalPackage;
       }
       ''
-        python3 <<'PY'
-        import os
-        from pathlib import Path
-        import shutil
-        import signal
-        import subprocess
-        import zipfile
+        mkdir fixtures
+        echo 'PeaZip system-backend regression' > fixtures/marker.txt
+        (cd fixtures; 7zz a archive.zip marker.txt; 7zz a archive.7z marker.txt)
+        zstd -q -o fixtures/marker.txt.zst fixtures/marker.txt
 
-        fixtures = Path("fixtures")
-        fixtures.mkdir()
-        marker = fixtures / "marker.txt"
-        content = b"PeaZip system-backend regression\n"
-        marker.write_bytes(content)
-        with zipfile.ZipFile(fixtures / "archive.zip", "w", zipfile.ZIP_DEFLATED) as archive:
-            archive.writestr(marker.name, content)
-        subprocess.run(["7zz", "a", "archive.7z", marker.name], cwd=fixtures, check=True)
-        subprocess.run(["zstd", "-q", "-o", str(fixtures / "marker.txt.zst"), str(marker)], check=True)
-
-        seed = None
-        for configuration in ["fresh", "truncated"]:
-            for archive in ["archive.zip", "archive.7z", "marker.txt.zst"]:
-                case = Path(configuration + "-" + archive).resolve()
-                case.mkdir()
-                shutil.copyfile(fixtures / archive, case / archive)
-                environment = os.environ.copy()
-                environment.pop("DISPLAY", None)
-                environment["QT_QPA_PLATFORM"] = "offscreen"
-                for name in ["CONFIG", "CACHE", "DATA", "RUNTIME"]:
-                    directory = case / name.lower()
-                    directory.mkdir(mode=0o700)
-                    environment["XDG_" + name + ("_DIR" if name == "RUNTIME" else "_HOME")] = str(directory)
-                config = case / "config" / "peazip" / "conf.txt"
-                if configuration == "truncated":
-                    config.parent.mkdir()
-                    config.write_text(seed.partition("[use system 7z]")[0])
-                with (case / "application.log").open("w") as log:
-                    process = subprocess.Popen(
-                        [os.environ["peazip"] + "/bin/peazip", "-ext2newfolder_", str(case / archive)],
-                        cwd=case, env=environment, stdout=log, stderr=subprocess.STDOUT,
-                        start_new_session=True,
-                    )
-                    try:
-                        assert process.wait(timeout=20) == 0
-                    finally:
-                        if process.poll() is None:
-                            os.killpg(process.pid, signal.SIGKILL)
-                            process.wait()
-                extracted = list(case.rglob(marker.name))
-                assert len(extracted) == 1 and extracted[0].read_bytes() == content, case
-                if seed is None:
-                    seed = config.read_text()
-                    assert "[use system 7z]" in seed
-                print(configuration, archive, "passed", flush=True)
-        PY
+        unset DISPLAY
+        export QT_QPA_PLATFORM=offscreen
+        for configuration in fresh truncated; do
+          for archive in archive.zip archive.7z marker.txt.zst; do
+            caseDir="$PWD/$configuration-$archive"
+            mkdir -p "$caseDir"
+            cp "fixtures/$archive" "$caseDir/"
+            export XDG_CONFIG_HOME="$caseDir/config"
+            export XDG_CACHE_HOME="$caseDir/cache"
+            export XDG_DATA_HOME="$caseDir/data"
+            export XDG_RUNTIME_DIR="$caseDir/runtime"
+            mkdir -m 700 "$XDG_CONFIG_HOME" "$XDG_CACHE_HOME" "$XDG_DATA_HOME" "$XDG_RUNTIME_DIR"
+            config="$XDG_CONFIG_HOME/peazip/conf.txt"
+            if [ "$configuration" = truncated ]; then
+              mkdir "$XDG_CONFIG_HOME/peazip"
+              sed '/^\[use system 7z\]$/,$d' seed-conf.txt > "$config"
+            fi
+            timeout --kill-after=1 20 "$peazip/bin/peazip" \
+              -ext2newfolder_ "$caseDir/$archive" > "$caseDir/application.log" 2>&1
+            test "$(find "$caseDir" -name marker.txt -type f | wc -l)" = 1
+            cmp fixtures/marker.txt "$(find "$caseDir" -name marker.txt -type f)"
+            if [ ! -f seed-conf.txt ]; then
+              grep -Fx '[use system 7z]' "$config"
+              cp "$config" seed-conf.txt
+            fi
+            echo "$configuration $archive passed"
+          done
+        done
         touch $out
       '';
 
