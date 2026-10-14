@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = lib.optionals enableNixImport [
-    nixVersions.nix_2_31
+    nixVersions.nix_2_34
     boost
   ];
 
