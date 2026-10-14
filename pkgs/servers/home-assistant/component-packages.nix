@@ -8409,7 +8409,8 @@
       ];
     "zonneplan" =
       ps: with ps; [
-      ]; # missing inputs: pyzonneplan
+        pyzonneplan
+      ];
     "zwave_js" =
       ps: with ps; [
         aiohasupervisor
@@ -9608,6 +9609,7 @@
     "zodiac"
     "zone"
     "zoneminder"
+    "zonneplan"
     "zwave_js"
     "zwave_me"
   ];
