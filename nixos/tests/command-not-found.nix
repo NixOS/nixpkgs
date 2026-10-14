@@ -42,7 +42,7 @@
       programs.command-not-found.dbPath = lib.toFile "fake-db" "";
     };
 
-  testScript = _: /* python */ ''
+  testScript = /* python */ ''
     machine.start()
     stdout = machine.fail("command-not-found 2>&1 this-command-doesnt-exist")
     assert "this-command-doesnt-exist: command not found" in stdout
