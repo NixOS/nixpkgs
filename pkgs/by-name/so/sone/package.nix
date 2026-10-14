@@ -72,6 +72,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
+  postInstall = ''
+    install -Dm644 data/io.github.lullabyX.sone.metainfo.xml -t $out/share/metainfo
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
