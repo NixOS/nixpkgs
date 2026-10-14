@@ -5,6 +5,13 @@
   python,
 }:
 
+let
+  inherit (lib)
+    isFunction
+    toExtension
+    ;
+in
+
 self:
 
 let
@@ -24,19 +31,19 @@ let
       let
         result = f origArgs;
         overrideWith =
-          if lib.isFunction origArgs then
-            newArgs: lib.extends (lib.toExtension newArgs) origArgs
+          newArgs:
+          # Only build a fixed-point when origArgs or newArgs are functions
+          # to reduce allocation/GC.
+          if isFunction origArgs || isFunction newArgs then
+            # In-lined `lib.extends`.
+            finalAttrs:
+            let
+              previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
+              updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
+            in
+            previousArgs // updatingArgs
           else
-            newArgs:
-            # origAttrs is a plain set here.
-            # Only build a fixed-point when newArgs is an extension
-            # to reduce allocation/GC.
-            if !(lib.isFunction newArgs) then
-              origArgs // newArgs
-            else if !(lib.isFunction (newArgs origArgs)) then
-              origArgs // newArgs origArgs
-            else
-              finalAttrs: origArgs // newArgs finalAttrs origArgs;
+            origArgs // newArgs;
       in
       if lib.isAttrs result then
         result
