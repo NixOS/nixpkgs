@@ -260,6 +260,7 @@ mapAliases {
   fasttext-predict = throw "'fasttext-predict' has been removed as the only consumer searxng removed its usage"; # Added 2026-03-11
   fb-re2 = throw "fb-re2 has been removed since it is unmaintained upstream, consider google-re2 instead"; # added 2025-10-18
   fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
+  fhir-py = fhirpy; # added 2026-10-13
   filebrowser_safe = throw "'filebrowser_safe' has been renamed to/replaced by 'filebrowser-safe'"; # Converted to throw 2025-10-29
   filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
   fints_4 = throw "fints_4 has been removed, migrate to fints"; # added 2026-06-04
