@@ -31,6 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.TZDIR = "${tzdata}/share/zoneinfo";
 
   postInstall = ''
+    integrationdir=$out/share/starship/shell-integration
+    mkdir -p "$integrationdir"
+    for shell in bash zsh fish nu; do
+      install -m644 "src/init/starship.$shell" "$integrationdir/starship.$shell.in"
+    done
+
     presetdir=$out/share/starship/presets/
     mkdir -p $presetdir
     cp docs/public/presets/toml/*.toml $presetdir
@@ -57,6 +63,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   passthru = {
+    shellIntegration = "${finalAttrs.finalPackage}/share/starship/shell-integration";
     jsonschema = {
       config = "${finalAttrs.finalPackage}/share/starship/config-schema.json";
     };
