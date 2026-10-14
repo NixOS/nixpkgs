@@ -63,8 +63,8 @@ buildPythonPackage rec {
   ]
   ++ dask.optional-dependencies.dataframe;
 
-  # python-datareader is disabled on Python 3.12+ and is require only for checks.
-  doCheck = !pandas-datareader.disabled;
+  # python-datareader is unsupported on Python 3.12+ and is require only for checks.
+  doCheck = !pandas-datareader ? meta.problems.unsupportedPython;
 
   nativeCheckInputs = [
     pytestCheckHook
