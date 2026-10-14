@@ -209,8 +209,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     teams = [ lib.teams.cuda ];
     maintainers = with lib.maintainers; [
       GaetanLepage
-      breakds
-      daniel-fahey
     ];
   };
 })
