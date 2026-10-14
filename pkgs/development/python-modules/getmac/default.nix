@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "getmac";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GhostofGoes";
     repo = "getmac";
     tag = version;
-    hash = "sha256-ZbTCbbASs7+ChmgcDePXSbiHOst6/eCkq9SiKgYhFyM=";
+    hash = "sha256-dyuu2P7I4Ce5KJtreTGWYIv0UnSn9b4Y6JfcsBDeD/0=";
   };
 
   build-system = [ setuptools ];
