@@ -4,9 +4,12 @@
   yq,
   python3Packages,
   fetchFromCodeberg,
+  rustPlatform,
   ethtool,
   iproute2,
   libbpf,
+  installShellFiles,
+  versionCheckHook,
   nixosTests,
   withBpf ? false,
   withConfigValidation ? true,
@@ -14,13 +17,41 @@
 }:
 
 let
-  version = "2.4.2";
+  version = "2.5.1";
   src = fetchFromCodeberg {
     owner = "routerkit";
     repo = "ifstate";
     tag = version;
-    hash = "sha256-CcqIVdqyPdTVdhyCpKpbmjYeutidpnYCVtDoZkuq4c4=";
+    hash = "sha256-wRIFQQYSCsEmK7epFponyVEh9BrkjJWW8t34tDz7Ofg=";
   };
+  mainProgram = "ifstatecli";
+
+  libifstate-rs = python3Packages.buildPythonApplication (finalAttrs: {
+    pname = "libifstate-rs";
+    version = "0.4.2";
+
+    src = fetchFromCodeberg {
+      owner = "routerkit";
+      repo = "libifstate-rs";
+      tag = finalAttrs.version;
+      hash = "sha256-PrF6Kxvd76DIyaoGg5kJyaAZN+3tgeyjOYT17xQ9wQY=";
+    };
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit (finalAttrs) src;
+      hash = "sha256-s8gWx7+dV3NX0dmeohhpq4X5RbT3KV/LoML9oRu3Drc=";
+    };
+
+    pyproject = true;
+
+    nativeBuildInputs = with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ];
+
+    pythonImportsCheck = [ "libifstate_rs" ];
+  });
+
   docs = stdenv.mkDerivation {
     pname = "ifstate-docs";
 
@@ -54,26 +85,37 @@ let
       runHook postBuild
     '';
   };
-  self = python3Packages.buildPythonApplication rec {
+
+  self = python3Packages.buildPythonApplication (finalAttrs: {
     pname = "ifstate";
     inherit version src;
 
     pyproject = true;
 
     postPatch = ''
-      substituteInPlace libifstate/routing/__init__.py \
+      substituteInPlace src/libifstate/paths.py \
+        --replace-fail "/usr/sbin/ethtool" "${lib.getExe ethtool}" \
         --replace-fail '/usr/share/iproute2' '${iproute2}/share/iproute2'
 
-      substituteInPlace libifstate/link/base.py \
-        --replace-fail "/usr/sbin/ethtool" "${lib.getExe ethtool}"
+      substituteInPlace src/libifstate/hook/wrapper.sh \
+        --replace-fail ' ip ' ' ${lib.getExe' iproute2 "ip"} '
+
+      # https://codeberg.org/routerkit/ifstate/pulls/241
+      substituteInPlace src/libifstate/__init__.py \
+        --replace-fail '2.5.0' '2.5.1'
     ''
     + lib.optionalString withBpf ''
-      substituteInPlace libifstate/bpf/ctypes.py \
+      substituteInPlace src/libifstate/bpf/ctypes.py \
         --replace-fail 'libbpf.so.1' '${libbpf}/lib/libbpf.so.1'
     '';
 
     build-system = with python3Packages; [
-      setuptools
+      uv-build
+    ];
+
+    nativeBuildInputs = [
+      installShellFiles
+      python3Packages.shtab
     ];
 
     dependencies =
@@ -82,19 +124,38 @@ let
         pyroute2
         pyyaml
         setproctitle
+        libifstate-rs
       ]
       ++ lib.optional withConfigValidation jsonschema
       ++ lib.optional withShellColor pygments;
 
-    pythonRemoveDeps = lib.optional (!withConfigValidation) "jsonschema";
+    nativeCheckInputs = with python3Packages; [
+      pytestCheckHook
+      pytest-timeout
+      pytest-cov-stub
+      pytest-asyncio
+    ];
 
-    # has no unit tests
-    doCheck = false;
+    disabledTestPaths = [
+      # e2e tests, need mount etc.
+      # normal tests are in src
+      "./tests"
+    ];
+
+    pythonRemoveDeps = lib.optional (!withConfigValidation) "jsonschema";
 
     pythonImportsCheck = [
       "libifstate"
       "ifstate"
     ];
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+
+    postInstall = ''
+      installShellCompletion --cmd ${mainProgram} \
+        --bash <(shtab --shell bash --prog ${mainProgram} ifstate.ifstate.get_parser) \
+        --zsh <(shtab --shell zsh --prog ${mainProgram} ifstate.ifstate.get_parser)
+    '';
 
     passthru = {
       tests = nixosTests.ifstate;
@@ -105,7 +166,7 @@ let
           withShellColor
           ;
       };
-      # needed for access in schema validaten in module
+      # needed for access in schema validation in module
       jsonschema = "${self}/${python3Packages.python.sitePackages}/libifstate/schema/2/ifstate.conf.schema.json";
       inherit docs;
     };
@@ -113,12 +174,12 @@ let
     meta = {
       description = "Manage host interface settings in a declarative manner";
       homepage = "https://ifstate.net";
-      changelog = "https://codeberg.org/liske/ifstate/src/tag/${src.tag}/CHANGELOG.md";
+      changelog = "https://codeberg.org/routerkit/ifstate/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
       platforms = lib.platforms.linux;
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ marcel ];
-      mainProgram = "ifstatecli";
+      inherit mainProgram;
     };
-  };
+  });
 in
 self
