@@ -5310,7 +5310,7 @@ self: super: with self; {
 
   duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
 
-  duct-py = callPackage ../development/python-modules/duct-py { };
+  duct = callPackage ../development/python-modules/duct { };
 
   duden = callPackage ../development/python-modules/duden { };
 
