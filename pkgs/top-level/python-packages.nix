@@ -594,6 +594,8 @@ self: super: with self; {
 
   aiothreads = callPackage ../development/python-modules/aiothreads { };
 
+  aiothreema = callPackage ../development/python-modules/aiothreema { };
+
   aiotools = callPackage ../development/python-modules/aiotools { };
 
   aiotractive = callPackage ../development/python-modules/aiotractive { };
