@@ -732,7 +732,7 @@ in
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2024-05-12";
+    version = "1.0";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
