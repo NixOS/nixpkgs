@@ -100,6 +100,7 @@ buildNpmPackage (finalAttrs: {
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--no-sandbox";
 
   desktopItems = lib.singleton (makeDesktopItem {
     name = "mullvad-vpn";
