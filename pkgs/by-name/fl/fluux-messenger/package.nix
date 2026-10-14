@@ -85,7 +85,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preCheck = "export buildAndTestSubdir=${finalAttrs.cargoRoot}";
   # tauriInstallHook only works when we are in cargoRoot
   preInstall = "pushd $buildAndTestSubdir";
-  postInstall = "popd";
+  postInstall = ''
+    popd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 packaging/flatpak/net.processone.fluux.metainfo.xml -t $out/share/metainfo
+  '';
 
   # Stripping the Share Extension executable invalidates its bundle signature.
   stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "FluuxShare" ];
