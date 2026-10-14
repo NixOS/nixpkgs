@@ -116,7 +116,35 @@ let
         ) x86_64DarwinDeprecationMessage
       );
 
-  localSystem = lib.systems.elaborate args.localSystem;
+  configGpu =
+    lib.optionalAttrs config.cudaSupport {
+      cuda = {
+        capabilities = config.cudaCapabilities;
+      };
+    }
+    // lib.optionalAttrs config.rocmSupport {
+      rocm = { };
+    };
+
+  elaborateWithConfigGpu =
+    system:
+    let
+      attrs = lib.systems.systemToAttrs system;
+      gpu = attrs.gpu or { };
+    in
+    lib.systems.elaborate (
+      if configGpu == { } then
+        system
+      else
+        attrs
+        // {
+          gpu =
+            gpu
+            // lib.mapAttrs (name: value: if gpu.${name} or null == null then value else gpu.${name}) configGpu;
+        }
+    );
+
+  localSystem = elaborateWithConfigGpu args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
   #
@@ -132,7 +160,7 @@ let
   # inferred from the system double in `localSystem`.
   crossSystem =
     let
-      system = lib.systems.elaborate crossSystem0;
+      system = elaborateWithConfigGpu crossSystem0;
     in
     if crossSystem0 == null || lib.systems.equals system localSystem then localSystem else system;
 
