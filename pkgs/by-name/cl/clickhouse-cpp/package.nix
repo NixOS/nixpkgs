@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  pkgConfigCheckHook,
   abseil-cpp,
 }:
 
@@ -37,6 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/pkgconfig
     substituteAll ${./clickhouse-cpp.pc.in} $out/lib/pkgconfig/clickhouse-cpp.pc
   '';
+
+  nativeInstallCheckInputs = [ pkgConfigCheckHook ];
+  pkgConfigModules = [
+    "clickhouse-cpp"
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "C++ client library for ClickHouse";
