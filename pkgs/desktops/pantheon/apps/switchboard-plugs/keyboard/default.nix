@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "settings-keyboard";
     rev = version;
-    sha256 = "sha256-JuFx0PkbB6ctXhqtORlgtSq9oigaLL2N4IKX7NQgHcU=";
+    hash = "sha256-JuFx0PkbB6ctXhqtORlgtSq9oigaLL2N4IKX7NQgHcU=";
   };
 
   patches = [
