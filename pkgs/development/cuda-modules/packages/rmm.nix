@@ -14,21 +14,11 @@
   gtest,
   lib,
   ninja,
+  nvtx,
   rapids-cmake,
   rapids-logger,
   testers,
 }:
-let
-  # TODO(@ethancedwards8):
-  # the redist for cuda_nvtx doesnt ship the cmake config package, but github does
-  # so this is why we're vendoring
-  nvtxSrc = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "NVTX";
-    tag = "v3.2.0";
-    hash = "sha256-uB1HHLVoOO0rWOcOqfypdiveagnjDcQQZNP7xBHhCwE=";
-  };
-in
 backendStdenv.mkDerivation (finalAttrs: {
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "rmm";
@@ -58,7 +48,9 @@ backendStdenv.mkDerivation (finalAttrs: {
     (lib.getOutput "static" cuda_cudart)
   ];
 
+  # The installed CMake package configuration finds both.
   propagatedBuildInputs = [
+    nvtx
     rapids-logger
   ];
 
@@ -67,7 +59,6 @@ backendStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_BENCHMARKS" false)
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeFeature "CPM_GTest_SOURCE" gtest.src.outPath)
-    (lib.cmakeFeature "CPM_nvtx3_SOURCE" nvtxSrc.outPath)
     # The installed `*-header-search.cmake` files resolve `<prefix>/${CMAKE_INSTALL_INCLUDEDIR}`
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
