@@ -22,6 +22,7 @@ buildPecl {
   internalDeps = with php.extensions; [ session ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/phpredis/phpredis/releases/tag/${version}";
     description = "PHP extension for interfacing with Redis";
     license = lib.licenses.php301;

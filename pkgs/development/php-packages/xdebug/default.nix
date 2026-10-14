@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   fetchFromGitHub,
 }:
 
@@ -24,6 +25,7 @@ buildPecl {
   zendExtension = true;
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     changelog = "https://github.com/xdebug/xdebug/releases/tag/${version}";
     description = "Provides functions for function traces and profiling";
     homepage = "https://xdebug.org/";
