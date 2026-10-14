@@ -11,8 +11,6 @@
   patches ? [ ],
   knownVulnerabilities ? [ ],
   updateScript ? null,
-  useMimalloc ? false,
-  useLicxxbridge ? false,
 }@args:
 
 assert lib.assertMsg (
@@ -34,7 +32,6 @@ assert lib.assertMsg (
   brotli,
   busybox-sandbox-shell,
   bzip2,
-  cacert,
   callPackage,
   capnproto,
   cargo,
@@ -59,7 +56,6 @@ assert lib.assertMsg (
   lsof,
   mercurial,
   mdbook,
-  mdbook-linkcheck2,
   nlohmann_json,
   ninja,
   openssl,
@@ -73,7 +69,6 @@ assert lib.assertMsg (
   rapidcheck,
   sqlite,
   systemtap-sdt,
-  mimalloc,
   util-linuxMinimal,
   removeReferencesTo,
   xz,
@@ -120,10 +115,6 @@ let
   parseToYAML = lib.versionAtLeast version "2.93";
   usesCapnp = lib.versionAtLeast version "2.94";
 
-  cxxLinker = ccStdenv: lib.getExe' ccStdenv.cc "${ccStdenv.cc.targetPrefix}c++";
-  hostCargoEnvVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
-  buildCargoEnvVar = stdenv.buildPlatform.rust.cargoEnvVarTarget;
-
   mesonCrossFile =
     deps:
     runCommand "lix-cross-file.conf"
@@ -138,30 +129,6 @@ let
         printf "%s" "$input" > $out
         substituteInPlace $out --replace-fail @deps@ "$(cat ${deps})"
       '';
-
-  # Lix ≥ 2.96 builds the Rust<->C++ bridge once and let Meson reuse it instead
-  # of re-running `cargo build ` inside the build.
-  licxxbridge =
-    if useLicxxbridge then
-      buildPackages.rustPlatform.buildRustPackage {
-        pname = "licxxbridge";
-        version = "0-unstable-${version}";
-
-        inherit src cargoDeps;
-
-        cargoBuildFlags = [
-          "-p"
-          "licxxbridge"
-        ];
-        cargoTestFlags = [
-          "-p"
-          "licxxbridge"
-        ];
-
-        meta.mainProgram = "licxxbridge";
-      }
-    else
-      null;
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -171,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lix";
 
   version = "${version}${suffix}";
+  env.VERSION_SUFFIX = suffix;
 
   inherit src patches;
 
@@ -242,9 +210,6 @@ stdenv.mkDerivation (finalAttrs: {
         p.tappy
         p.ruff
       ]
-      ++ lib.optionals (finalAttrs.doInstallCheck && lib.versionAtLeast version "2.96") [
-        p.mistletoe
-      ]
       ++ lib.optionals usesCapnp [ p.pycapnp ]
     ))
     pkg-config
@@ -274,10 +239,6 @@ stdenv.mkDerivation (finalAttrs: {
     mdbook
     doxygen
   ]
-  ++ lib.optionals (enableDocumentation && lib.versionAtLeast version "2.96") [
-    mdbook-linkcheck2
-    cacert
-  ]
   ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
   ++ lib.optionals pastaFod [ passt ]
   ++ lib.optionals parseToYAML [ yq ]
@@ -286,8 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (lib.versionAtLeast version "2.94") [ zstd ]
   ++ lib.optionals (withPlugins && finalAttrs.doInstallCheck) [
     curl
-  ]
-  ++ lib.optionals useLicxxbridge [ licxxbridge ];
+  ];
 
   buildInputs = [
     boost
@@ -315,14 +275,11 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
   ++ lib.optionals withLibseccomp [ libseccomp ]
   ++ lib.optionals withAWS [ aws-sdk-cpp ]
-  ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ]
-  ++ lib.optionals useMimalloc [ mimalloc ];
+  ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ];
 
   inherit cargoDeps;
 
   env = {
-    VERSION_SUFFIX = suffix;
-
     # Meson allows referencing a /usr/share/cargo/registry shaped thing for subproject sources.
     # Turns out the Nix-generated Cargo dependencies are named the same as they
     # would be in a Cargo registry cache.
@@ -337,12 +294,6 @@ stdenv.mkDerivation (finalAttrs: {
     # ELF only: Apple's ld64 rejects `-z`, and Mach-O stacks are already
     # non-executable unless linked with `-allow_stack_execute`.
     NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isElf "-z,noexecstack";
-  }
-  // lib.optionalAttrs (lib.versionAtLeast version "2.96") {
-    "CARGO_TARGET_${hostCargoEnvVar}_LINKER" = cxxLinker stdenv;
-  }
-  // lib.optionalAttrs (lib.versionAtLeast version "2.96" && hostCargoEnvVar != buildCargoEnvVar) {
-    "CARGO_TARGET_${buildCargoEnvVar}_LINKER" = cxxLinker buildPackages.clangStdenv;
   };
 
   propagatedBuildInputs = [
@@ -393,7 +344,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "enable-tests" true)
     (lib.mesonBool "enable-docs" enableDocumentation)
     (lib.mesonEnable "internal-api-docs" enableDocumentation)
-    (lib.mesonEnable "mimalloc" useMimalloc)
     (lib.mesonBool "enable-embedded-sandbox-shell" (
       stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
     ))
@@ -454,9 +404,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--${
       if stdenv.hostPlatform != stdenv.buildPlatform then "cross" else "native"
     }-file=${mesonCrossFile finalAttrs.builtinDeps}"
-  ]
-  ++ lib.optionals useLicxxbridge [
-    "-Dlicxxbridge=${lib.getExe licxxbridge}"
   ];
 
   ninjaFlags = [ "-v" ];
