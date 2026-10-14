@@ -21,6 +21,9 @@ assert lib.assertMsg (
 assert lib.assertMsg (
   lib.versionAtLeast version "2.92" -> cargoDeps != null
 ) "`cargoDeps` must be set for Lix ≥ 2.92";
+assert lib.assertMsg (
+  lib.versionOlder version "2.96" -> !useMimalloc
+) "`useMimalloc` is only supported on Lix >= 2.96";
 
 {
   stdenv,
@@ -393,10 +396,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "enable-tests" true)
     (lib.mesonBool "enable-docs" enableDocumentation)
     (lib.mesonEnable "internal-api-docs" enableDocumentation)
-    (lib.mesonEnable "mimalloc" useMimalloc)
     (lib.mesonBool "enable-embedded-sandbox-shell" (
       stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
     ))
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.96") [
+    (lib.mesonEnable "mimalloc" useMimalloc)
   ]
   ++ lib.optionals (lib.versionAtLeast version "2.95") [
     (lib.mesonBool "enable-contrib-plugins" withPlugins)
