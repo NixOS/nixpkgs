@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-ipware";
-  version = "3.0.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-ipware";
     tag = "v${version}";
-    hash = "sha256-S8/HbRztYGzrpLQRTHcvO7Zv3mNn/0+y5PNBYLpd++E=";
+    hash = "sha256-PYWOihNMHaYAnDeLQ2T5RnS5N9T1E5skv33EANgVdX8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
