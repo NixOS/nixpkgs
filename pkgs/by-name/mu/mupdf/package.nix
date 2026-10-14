@@ -84,6 +84,8 @@ stdenv.mkDerivation rec {
     # Upstream C++ wrap script only defines fixed-sized integers on macOS but
     # this is required on aarch64-linux too.
     ./fix-cpp-build.patch
+    # 1.28.5 dropped pipcl.py and now tries to install it with pip.
+    ./disable-autovenv.patch
   ];
 
   postPatch = ''
