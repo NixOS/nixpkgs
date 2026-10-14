@@ -3038,9 +3038,9 @@
   };
 
   t32 = {
-    version = "9.0.2";
+    version = "9.0.3";
     url = "github:xasc/tree-sitter-t32";
-    hash = "sha256-hs0JHC4SOC4LvBQTMv/kKDQnW590p6waPHuO58CUaUw=";
+    hash = "sha256-tM0xN+boHCJzK16jRZKQYk/KkwEBut7KGZxj8KDHMMg=";
     meta = {
       maintainers = with lib.maintainers; [
         aciceri
