@@ -7,33 +7,33 @@
   lib,
   logs,
   mdx,
-  memtrace,
   psq,
+  uri,
   uutf,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "cascade";
-  version = "0-unstable-2026-06-26";
+  version = "1.1.0";
   minimalOCamlVersion = "5.2";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "samoht";
     repo = "cascade";
-    rev = "434c07be7ec1a63213a234946d57937e4d080feb";
-    hash = "sha256-6g8UKsXdR0PxihrOiMVC36q7+bomMByPDbmuISL7h4U=";
+    tag = finalAttrs.version;
+    hash = "sha256-JxlD8wVqbc3tuT/Utwy8K2kEXtf6aeWPMVA246e6lLw=";
   };
 
   propagatedBuildInputs = [
     dune-build-info
     logs
     psq
+    uri
     uutf
   ];
   buildInputs = [
     lambdasoup
-    memtrace
   ];
 
   nativeCheckInputs = [ mdx.bin ];

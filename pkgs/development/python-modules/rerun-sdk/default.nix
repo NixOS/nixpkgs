@@ -4,7 +4,6 @@
   pkgs,
   buildPythonPackage,
   rerun,
-  python,
 
   # nativeBuildInputs
   rustPlatform,
@@ -97,16 +96,6 @@ buildPythonPackage {
 
   buildAndTestSubdir = "rerun_py";
 
-  # https://github.com/NixOS/nixpkgs/issues/289340
-  #
-  # Alternatively, one could
-  # dontUsePythonImportsCheck = true;
-  # dontUsePytestCheck = true;
-  postInstall = ''
-    rm $out/${python.sitePackages}/rerun_sdk.pth
-    ln -s rerun_sdk/rerun $out/${python.sitePackages}/rerun
-  '';
-
   pythonImportsCheck = [ "rerun" ];
 
   nativeCheckInputs = [
@@ -149,7 +138,6 @@ buildPythonPackage {
     "test_batch_shape"
     "test_isolated_streams"
     "test_roundtrip_parity"
-    "test_save_screenshot"
     "test_send_dataframe_roundtrip"
     "test_server_ephemeral_port"
     "test_server_failed_table_creation_does_not_leak_entry"
@@ -157,7 +145,6 @@ buildPythonPackage {
     "test_server_with_dataset_files"
     "test_server_with_dataset_prefix"
     "test_server_with_multiple_datasets"
-    "test_viewer_dies_on_client_close"
 
     # AttributeError: 'datetime.datetime' object has no attribute 'value'
     "test_lenses_time_extraction"
@@ -179,6 +166,9 @@ buildPythonPackage {
 
     # ConnectionError: Connection: connecting to server: transport error
     "rerun_py/tests/integration/test_dataloader_video_codecs.py"
+
+    # The headless viewer panics: "No graphics adapter was found for the enabled graphics backends"
+    "rerun_py/tests/integration/test_headless_viewer.py"
 
     # ValueError: Failed to read a metadata table: Parquet error: Invalid Parquet file. The
     # LeRobot fixture's .parquet files are Git LFS pointer files, not real binaries (rerun.src is

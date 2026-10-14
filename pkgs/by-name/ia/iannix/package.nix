@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     description = "Graphical open-source sequencer";
     mainProgram = "iannix";
     homepage = "https://www.iannix.org/";
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };

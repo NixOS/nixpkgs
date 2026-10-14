@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   cython,
   isPyPy,
   ipython,
@@ -11,17 +11,18 @@
   ubelt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "line-profiler";
-  version = "5.0.0";
+  version = "5.0.2";
   format = "setuptools";
 
   disabled = isPyPy;
 
-  src = fetchPypi {
-    pname = "line_profiler";
-    inherit version;
-    hash = "sha256-qA8K+wW6DSddnd3F/5fqtjdHEWf/Pmbcx9E1dVBZOYw=";
+  src = fetchFromGitHub {
+    owner = "pyutils";
+    repo = "line_profiler";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GWByg1TxFWmLm6hDjaMk2kJE6VgX1kxoVT4OH3XA0GI=";
   };
 
   nativeBuildInputs = [
@@ -30,17 +31,19 @@ buildPythonPackage rec {
     scikit-build
   ];
 
-  optional-dependencies = {
-    ipython = [ ipython ];
-  };
-
   nativeCheckInputs = [
     pytestCheckHook
     ubelt
-  ]
-  ++ optional-dependencies.ipython;
+    ipython
+  ];
 
   dontUseCmakeConfigure = true;
+
+  # Remove, as it breaks some tests
+  postPatch = ''
+    substituteInPlace tests/test_explicit_profile.py \
+      --replace-fail "env['PYTHONPATH'] = os.getcwd()" ""
+  '';
 
   preBuild = ''
     rm -f _line_profiler.c
@@ -51,13 +54,19 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  # Disabled because files are not shipped via pypi and it tries installing a subpackage via pip
+  disabledTests = [
+    "test_recover_cython_source"
+    "test_profile_cython_source"
+  ];
+
   pythonImportsCheck = [ "line_profiler" ];
 
   meta = {
     description = "Line-by-line profiler";
     mainProgram = "kernprof";
     homepage = "https://github.com/pyutils/line_profiler";
-    changelog = "https://github.com/pyutils/line_profiler/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/pyutils/line_profiler/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
   };
-}
+})

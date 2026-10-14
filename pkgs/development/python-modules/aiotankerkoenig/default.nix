@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
@@ -16,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiotankerkoenig";
-  version = "0.5.3";
+  version = "0.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiotankerkoenig";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0s0wapqMb0R/0aa7jlJLHgs7cXhLrqUjMiwZj2kUGEw=";
+    hash = "sha256-5lYWoqQo/Ur+dV/e8GU209hYVYnjeIFOM7APG0ScBwc=";
   };
 
   postPatch = ''
@@ -41,6 +42,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-cov-stub

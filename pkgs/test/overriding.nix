@@ -522,6 +522,16 @@ let
           overridePythonAttrsFlagP1 = 2;
         };
       };
+
+      overridePythonAttrs-deprecated-arg-stdenv = {
+        expr =
+          (package-stub-gcc.overridePythonAttrs {
+            stdenv = pkgs.clangStdenv;
+          })
+            ? meta.problems.buildPythonPackage-internal-stdenv;
+        expected = true;
+      };
+
       overrideAttrs-overridePythonAttrs-test-overrideAttrs = {
         expr = {
           inherit (applyOverridePythonAttrs (overrideAttrsFooBar package-stub))

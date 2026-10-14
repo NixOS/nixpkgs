@@ -90,6 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/swiftlang/swift-package-manager/commit/e1910f814cc1be40c709c3987a29488b9bee2f92.patch?full_index=1";
       hash = "sha256-4Ew/cKlk+Zn8cIQvh0jQy4Fz+xGYBYwch4+SBu1nKpI=";
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Include the Darwin testing helper in the CMake-built package.
+    ./patches/0012-darwin-testing-helper.patch
   ];
 
   postPatch = ''

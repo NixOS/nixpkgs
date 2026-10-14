@@ -67,11 +67,18 @@ in
     };
 
     theme = {
-      package = lib.mkPackageOption pkgs "gnome-themes-extra" { } // {
-        description = ''
-          The package that provides the theme given in the name option.
-        '';
-      };
+      package =
+        lib.mkPackageOption pkgs "GTK theme" {
+          nullable = true;
+          default = null;
+        }
+        // {
+          description = ''
+            The package that provides the theme given in the name option. Not needed
+            for `Adwaita`, `Adwaita-dark`, `HighContrast` and `HighContrastInverse`,
+            which GTK4 provides itself.
+          '';
+        };
 
       name = lib.mkOption {
         type = lib.types.str;
@@ -140,8 +147,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      cfg.theme.package
+    environment.systemPackages = lib.optional (cfg.theme.package != null) cfg.theme.package ++ [
       cfg.iconTheme.package
       cfg.cursorTheme.package
     ];

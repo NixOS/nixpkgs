@@ -10,7 +10,7 @@ let
 in
 {
   name = "iosched";
-  meta.maintainers = with pkgs.lib.maintainers; [ mvs ];
+  meta.maintainers = [ ];
 
   nodes.machine = {
     virtualisation.qemu.options = [

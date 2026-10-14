@@ -55,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C/C++ client-server indexer based on clang";
     homepage = "https://github.com/andersbakken/rtags";
     license = lib.licenses.gpl3Plus;
-    platforms = with lib.platforms; x86_64 ++ aarch64;
+    platforms = with lib.platforms; x86_64 ++ aarch64 ++ loongarch64 ++ riscv64;
   };
 })

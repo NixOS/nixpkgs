@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   buildNpmPackage,
+  callPackage,
   fetchFromGitHub,
   lib,
   libuv,
@@ -98,7 +99,18 @@ buildNpmPackage (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    desktop = callPackage ./desktop.nix {
+      inherit (finalAttrs)
+        meta
+        nodejs
+        npmDeps
+        src
+        version
+        ;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Orchestrate multiple coding agents from desktop and mobile";

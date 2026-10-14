@@ -49,7 +49,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "7.2.3";
+  version = "7.2.4";
 
   outputs = [
     "out"

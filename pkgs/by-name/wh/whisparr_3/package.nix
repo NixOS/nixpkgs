@@ -6,7 +6,7 @@
   lib,
   nix-update-script,
   nixosTests,
-  nodejs_24,
+  nodejs-slim_24,
   servarr-ffmpeg,
   stdenvNoCC,
   withFFmpeg ? true,
@@ -16,22 +16,17 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "whisparr";
-  version = "3.6.2-release.1727";
+  version = "3.6.4-release.1865";
 
   src = fetchFromGitHub {
     owner = "Whisparr";
     repo = "Whisparr-Eros";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y/ro1r8ES9cLW2RsljPeIEQCoI0V1dpeDurh/lpMYPY=";
+    hash = "sha256-PCEzbJykKOr3hFzdxB4VMDKhtX89uSdFt/Q2Khvn4Eg=";
   };
 
   __structuredAttrs = true;
   strictDeps = true;
-
-  patches = [
-    # https://github.com/Whisparr/Whisparr-Eros/pull/947
-    ./fix-media-cover-shutdown-test-race.patch
-  ];
 
   postPatch = "mv src/NuGet.config NuGet.Config";
 
@@ -107,17 +102,15 @@ buildDotnetModule (finalAttrs: {
       strictDeps = true;
 
       nativeBuildInputs = [
-        nodejs_24
+        nodejs-slim_24
         yarnBuildHook
         yarnConfigHook
       ];
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = "${finalAttrs.src}/yarn.lock";
-        hash = "sha256-nL36qET7Zhej9Ar+69XeK8wRC13fTMN7r34z/7L3KJM=";
+        hash = "sha256-ROqqIz31tnmkpKUZmKsx3FDYzFluUMH5S3srktwcMCM=";
       };
-
-      yarnBuildFlags = [ "--env=production" ];
 
       installPhase = ''
         runHook preInstall

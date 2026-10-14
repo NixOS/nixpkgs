@@ -321,16 +321,27 @@ stdenv.mkDerivation (finalAttrs: {
     patchelf --shrink-rpath "\$BIN";
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -id \$BIN \$BIN
-    for old_rpath in \$(otool -L \$BIN | grep /private/tmp/ | awk '{print \$1}'); do
-      new_rpath=\$(find \$SAMBA_LIBS -name \$(basename \$old_rpath) | head -n 1)
-      install_name_tool -change \$old_rpath \$new_rpath \$BIN
+    if [[ "\$BIN" == *.dylib || "\$BIN" == *.so ]]; then
+      install_name_tool -id "\$BIN" "\$BIN" || true
+    fi
+    BUILD_TOP_CANONICAL="\$(realpath "\$NIX_BUILD_TOP" 2>/dev/null || echo "\$NIX_BUILD_TOP")"
+    for old_rpath in \$(otool -L "\$BIN" 2>/dev/null | awk '{print \$1}' | grep -F -e "\$NIX_BUILD_TOP" -e "\$BUILD_TOP_CANONICAL"); do
+      new_rpath=\$(find \$SAMBA_LIBS -name "\$(basename "\$old_rpath")" | head -n 1)
+      if [ -n "\$new_rpath" ]; then
+        install_name_tool -change "\$old_rpath" "\$new_rpath" "\$BIN"
+      fi
     done
   ''
   + ''
     EOF
     find $out -type f -regex '.*\${stdenv.hostPlatform.extensions.sharedLibrary}\(\..*\)?' -exec $SHELL -c "$SCRIPT" \;
     find $out/bin -type f -exec $SHELL -c "$SCRIPT" \;
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    find $out -type f -name '*.so' -exec $SHELL -c "$SCRIPT" \;
+    find $out/libexec -type f -exec $SHELL -c "$SCRIPT" \;
+  ''
+  + ''
 
     # Fix PYTHONPATH for some tools
     wrapPythonPrograms

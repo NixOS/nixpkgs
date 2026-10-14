@@ -203,6 +203,15 @@ import ../make-test-python.nix (
           pid = rootful.succeed("podman run --rm --init busybox readlink /proc/self").strip()
           assert pid == "2"
 
+      with subtest("podman logs can read compressed journal files"):
+          rootful.succeed(
+              "podman run --name=journald --log-driver=journald busybox echo podman-journald-test"
+          )
+          rootful.wait_until_succeeds(
+              "podman logs journald | grep podman-journald-test", timeout=30
+          )
+          rootful.succeed("podman rm journald")
+
       with subtest("aardvark-dns"):
           dns.succeed("tar cv --files-from /dev/null | podman import - scratchimg")
           dns.succeed(

@@ -10,7 +10,7 @@ buildNpmPackage {
   inherit src version;
   pname = "photoprism-frontend";
 
-  npmDepsHash = "sha256-8vi5ETVO2t7evJRPge2Ck7iMNAOIbArNHZ8R8Nrx0o8=";
+  npmDepsHash = "sha256-guU5vVhYo5Cv+KpNyAVNmJ1kcjSkPkAz+Be4hGe4mpM=";
 
   npmWorkspace = "frontend";
 

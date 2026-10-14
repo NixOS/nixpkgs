@@ -19,7 +19,7 @@
 }:
 
 let
-  version = "4.7.1";
+  version = "4.8.0";
 
   inherit (stdenv.hostPlatform) system;
 
@@ -38,47 +38,47 @@ let
   hashes = {
     base = {
       x86_64-linux = {
-        cp311 = "sha256-Qx42SLhK1KgajTsfp+RFMmy1pSTmT2witNGRp2RVvfk=";
-        cp312 = "sha256-wrZ9rKv8kF5NEyeE/khIZH9AsLl7HN3jzkpIJkJTa4Q=";
-        cp313 = "sha256-YQl8XDVeHkL4Ux79To6tC6Ya4atrC5rPy/LKZls9rlo=";
-        cp314 = "sha256-B3ZQb2ZuHGg0qKkZXvICmXM64BPSNHJoKVZb5dhQmUI=";
+        cp311 = "sha256-zjrsTDe2iIDoWn8/dj+P5NBQP0lRbMhVyAAS4PrfkuA=";
+        cp312 = "sha256-W9yAmJsPu6w9WJYAV+dOLOhnb6+na4UtlCK5xLm3S90=";
+        cp313 = "sha256-XjZ3N0j1qAYa/pmSZPHD3Mxf8Y7JVIqcdp2OcmMsiwA=";
+        cp314 = "sha256-coq/G8Bl+pUK1PRQaSgwDX4y8xSDErk/g/Py6PdWMpo=";
       };
       aarch64-linux = {
-        cp311 = "sha256-KY5zrQ8bBITkuEOOnarjhzKmytyfQCNHXlsMKGiYWro=";
-        cp312 = "sha256-6GxVpQEKft/AZ2SKdcsp0MW9Z9dSEBaM9Qew0OTRW6c=";
-        cp313 = "sha256-BmWOaR6xBHyDvki6UBv3Py6n7N2MHuX58m21h5COQ+0=";
-        cp314 = "sha256-NhkrTQ9yxPR7Od7yD0/acQWABWF7cgQ5VXB2iCdSSYI=";
+        cp311 = "sha256-BN4Djgr2WLZEQhxN9MePFhodPCz55bzf9jskxyfc2Vw=";
+        cp312 = "sha256-Ov/K77Wal2/1GV3Sv/TBNZQjPLSUFUC3TjcrY+SX0/I=";
+        cp313 = "sha256-TSbdKEiy+gOVQVHP1tqSt54vQXXYf01mHu3HfDa3oFQ=";
+        cp314 = "sha256-dS8XFdUKSvRwSqLxmZhrmWU7QN+1dN0MaqXPJk3dyAA=";
       };
     };
     cu12 = {
       x86_64-linux = {
-        cp311 = "sha256-83/L2UqtZrAW3OpIPbUN2w/Kq3EwxTjfIO8p3e64uoU=";
-        cp312 = "sha256-yKD5OhzeQUBGlrMZTdH1icbzp7QmvKvpeEX4/pb5SfU=";
-        cp313 = "sha256-s0qTPN4eXPLfHzz9eO+9VITqM90Ml74gHAV+For3nBA=";
-        cp314 = "sha256-BvU99K2hQEO0WZk6bcRp0FBa2aFE0QG19ARhpYqOgOM=";
+        cp311 = "sha256-Xax675f8Ud+IK2hiDhxDDntDYtCsoX0iByfadoHwYd8=";
+        cp312 = "sha256-I3TP3/Y1zq9+LFvRe0vrQQgwQgpP1lsSt/JLXVy7nUw=";
+        cp313 = "sha256-oG6mpCySHsZrGQ8UhJ4VKpWkXyiBkhRIi5sKo0Fo2jM=";
+        cp314 = "sha256-iJkYwy/mytBHrnGDQ/7bN0qcQnWQO0qy2PQugRpqDaw=";
       };
       aarch64-linux = {
-        cp311 = "sha256-SdVW8r4YjXWBD6jFR60V26QGhROKwn1UQYRBgqxJVak=";
-        cp312 = "sha256-9Xo5VcF7fc1UcqpHxGUT5fORThMl/DCK/KG5BjqPiXs=";
-        cp313 = "sha256-d2hKhhkRlbLW619wiLub8l5F21jOtEqcAv+weHu5X7k=";
-        cp314 = "sha256-03CLeLm3DcGynJpIpwMNFKGowXtS8/LQiNs9c8YDvsg=";
+        cp311 = "sha256-b4iuUtbirttKNP2jLJdKo1QwZM/u0/p+lhI8MkAv8so=";
+        cp312 = "sha256-MnZoR6vjvvcR62BSq3jA8kwJDt0fgzIvbnRTHTmegRc=";
+        cp313 = "sha256-CK8rifMwgd9ptkvhytEz+fdnJ0szZpiCy+5qX6NcX8w=";
+        cp314 = "sha256-QfnUkIfxggDEUW4Aq63mf1QnlfNjx/GVu1NAS4GoZvg=";
       };
     };
     cu13 = {
       x86_64-linux = {
-        cp311 = "sha256-gT7hn4yLbTkoSiSumd2am0lrM8mScLLPlUjnn0kXhAU=";
-        cp312 = "sha256-IMFOFhJcuONryZR6nwpXpmD0RlE2Uze5EchKveSWf18=";
-        cp313 = "sha256-L4b+jRp+9RC4U6OADL8yRAGhL9x3DMz0rF4gqdDH0b0=";
-        cp314 = "sha256-Z9NjqWA869uEdpi8b8GLwUupT1wPRcILETijFuBox74=";
+        cp311 = "sha256-GGZVnI2lw8CBUEeh+0FOF0X0cGmxS6xRaIhXhbhVPcI=";
+        cp312 = "sha256-RjzX8MRS/+7stTChWusbEMu9LI2mxaov7PZfg2JYpzI=";
+        cp313 = "sha256-QTeM+pTvPnQITVFXBk6oB6kglhI9N4aXotWL29WCJAo=";
+        cp314 = "sha256-CdF1JKVfQN9BFhancbdTe+juBWYSaBq8cFQk7rswuo4=";
       };
       aarch64-linux = {
-        cp311 = "sha256-eq9DgKM4rjbFNRL2a4lHDebuHwTzgWOonNJebe6S/oc=";
-        cp312 = "sha256-5nW/BNxskffE1VQGmbegMfK4tEzSaHsywgiS8RL34Nk=";
-        cp313 = "sha256-odI870RnXmOCXD9ddz57QiiALKFV6rYcC8XlUcrzWtI=";
-        cp314 = "sha256-QlZ2czwaF1Hl/U/E3dTsb75nYNYxzhLtKH3WPPjDZG4=";
+        cp311 = "sha256-uh7G1nHwCBUuc5hok1CWdtDgECqyQtUzSRgUzeXI50E=";
+        cp312 = "sha256-1h6+JBbK6KLVN3iJVJ35y1AIrwBqFpLX0AbY90fmLmw=";
+        cp313 = "sha256-V0Gng9wJ4pTa2mhEybjfj/FPzBnbIL5IIFWRGk+5tz8=";
+        cp314 = "sha256-u9srFKdKNdOCowvubxfjH68Kq7bYeQmyuZx9E0psrBA=";
       };
     };
-    core = "sha256-xlZiq8mrGP2ZfFdUeJVzaSjlWfRiS74qoaqRQY6gFMo=";
+    core = "sha256-sycW0u0QwYXNu7a1xvyiajETpg5uL+Ti8MsVlmQitiE=";
   };
 
   fetchLibsWheel =
@@ -104,7 +104,7 @@ let
     format = "wheel";
     python = "py3";
     dist = "py3";
-    hash = "sha256-xlZiq8mrGP2ZfFdUeJVzaSjlWfRiS74qoaqRQY6gFMo=";
+    hash = hashes.core;
   };
 in
 buildPythonPackage {
@@ -116,9 +116,6 @@ buildPythonPackage {
   src = fetchLibsWheel "base";
 
   pythonRemoveDeps = [
-    # Only cuda-bindings is needed
-    "cuda-python"
-
     # just a wrapper for cudaPackages.cuda_nvdisasm
     "nvidia-cuda-nvdisasm"
 

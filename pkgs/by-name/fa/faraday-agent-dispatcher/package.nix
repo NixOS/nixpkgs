@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "faraday-agent-dispatcher";
-  version = "3.9.1";
+  version = "3.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     tag = finalAttrs.version;
-    hash = "sha256-uf1oXE8pFvIPTDgcHXRbZDz8NZn9NecPe1eYuYhb1Xw=";
+    hash = "sha256-naSAobcw0BNEZLM5w+Ulvy6oJG8T6dCQMh14ttMcd2w=";
   };
 
   postPatch = ''

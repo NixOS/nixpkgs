@@ -17,7 +17,7 @@
   multicharge,
 }:
 
-assert !blas.isILP64 && !lapack.isILP64;
+assert blas.isILP64 == lapack.isILP64;
 assert (
   builtins.elem buildType [
     "meson"
@@ -73,8 +73,22 @@ stdenv.mkDerivation (finalAttrs: {
     multicharge
   ];
 
+  mesonFlags = [
+    "-Dilp64=${if blas.isILP64 then "true" else "false"}"
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-Dlapack=custom"
+    "-Dcustom_libraries=blas,lapack"
+  ];
+
   cmakeFlags = [
     (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "WITH_ILP64" blas.isILP64)
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-DBLAS_LIBRARIES=${lib.getLib blas}/lib/libblas${
+      if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary
+    }"
   ];
 
   outputs = [

@@ -128,8 +128,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "7f500a1ed64fdef0173e1a69548e898b0d23c581",
-        "resolved-ref": "7f500a1ed64fdef0173e1a69548e898b0d23c581",
+        "ref": "ebdf69a7bdd03d410bfdfc700add08eed0de161d",
+        "resolved-ref": "ebdf69a7bdd03d410bfdfc700add08eed0de161d",
         "url": "https://github.com/edde746/background_downloader"
       },
       "source": "git",
@@ -390,11 +390,11 @@
       "dependency": "direct main",
       "description": {
         "name": "dart_discord_presence",
-        "sha256": "6860826f809517d354e2af14e504e46809afde11c43ff3685c7438073d226211",
+        "sha256": "8b1c4b4a75e14e090292a2cb53bc5c205d5f03d6cf43d8386a49ed704f7a99bb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.2.0"
+      "version": "1.2.1"
     },
     "dart_style": {
       "dependency": "transitive",
@@ -1787,11 +1787,11 @@
       "dependency": "direct main",
       "description": {
         "name": "win_http",
-        "sha256": "ebc4d37e2c0e6800cc200e40d289d3bac22fc17d40fce3ae7909d49a20da77bc",
+        "sha256": "82a9270dccdffcda42e162e036079f522fec319227d18c9049cfa7a4f958408f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.2"
+      "version": "0.2.3"
     },
     "window_manager": {
       "dependency": "direct main",

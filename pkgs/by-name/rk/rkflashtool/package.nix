@@ -1,43 +1,60 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  coreutils,
   libusb1,
+  makeWrapper,
   pkg-config,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rkflashtool";
-  version = "6.1";
+  version = "0-unstable-2025-09-30";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/rkflashtool/rkflashtool-${finalAttrs.version}-src.tar.bz2";
-    hash = "sha256-K8DsWAyqeQsK7mNDiKkRCkKbr0uT/yxPzj2atYP1Ezk=";
+  src = fetchFromGitHub {
+    owner = "linux-rockchip";
+    repo = "rkflashtool";
+    rev = "fc2181c577ef3fb1e821818dfd07e0dac0575b74";
+    hash = "sha256-uXjMK07dIa/LUbaokLViJXQHkthGjpdXQLQEYN2v6VE=";
   };
 
   postPatch = ''
-    # Fix cross compilation
     substituteInPlace Makefile \
       --replace-fail "pkg-config" "$PKG_CONFIG"
   '';
 
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    udevCheckHook
+  ];
+
   buildInputs = [ libusb1 ];
-  nativeBuildInputs = [ pkg-config ];
 
   makeFlags = [
     "CROSSPREFIX=${stdenv.cc.targetPrefix}"
+    "PREFIX=${placeholder "out"}"
   ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp rkunpack rkcrc rkflashtool rkparameters rkparametersblock rkunsign rkmisc $out/bin
+  postInstall = ''
+    echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="2207", MODE="0666"' > 51-rockchip.rules
+    install -Dm444 51-rockchip.rules -t $out/lib/udev/rules.d
+
+    for f in rkunsign rkparametersblock rkmisc rkpad rkparameters; do
+      wrapProgram $out/bin/$f \
+        --prefix PATH : ${lib.makeBinPath [ coreutils ]} \
+        --prefix PATH : $out/bin
+    done
   '';
 
   meta = {
-    homepage = "https://sourceforge.net/projects/rkflashtool/";
     description = "Tools for flashing Rockchip devices";
-    platforms = lib.platforms.linux;
-    maintainers = [ ];
+    homepage = "https://github.com/linux-rockchip/rkflashtool";
     license = lib.licenses.bsd2;
+    mainProgram = "rkflashtool";
+    maintainers = with lib.maintainers; [ dmfrpro ];
+    platforms = lib.platforms.linux;
   };
 })

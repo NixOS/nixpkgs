@@ -202,6 +202,13 @@ stdenv.mkDerivation (
       done
     '';
 
+    postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Electron's Node runtime does not provide libstdc++ for the bundled node-pty prebuild
+      for module in "$out"/libexec/t3code/node_modules/.pnpm/node-pty@*/node_modules/node-pty/prebuilds/linux-${stdenv.hostPlatform.node.arch}/pty.node; do
+        patchelf --add-rpath ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]} "$module"
+      done
+    '';
+
     desktopItems = [
       (makeDesktopItem {
         name = "t3code";

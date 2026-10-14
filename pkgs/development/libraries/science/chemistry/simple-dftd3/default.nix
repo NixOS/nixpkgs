@@ -11,10 +11,11 @@
   mstore,
   toml-f,
   blas,
+  lapack,
   buildType ? "meson",
 }:
 
-assert !blas.isILP64;
+assert blas.isILP64 == lapack.isILP64;
 assert (
   builtins.elem buildType [
     "meson"
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     mstore
     toml-f
     blas
+    lapack
   ];
 
   outputs = [

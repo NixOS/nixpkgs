@@ -81,6 +81,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # Upstream looks for the CA store using lstat(), which doesn't accept the
+    # symlinks NixOS uses under /etc/ssl/certs.
+    services.mympd.settings.ca_cert_store = lib.mkDefault config.security.pki.caBundle;
+
     systemd.services.mympd = {
       # upstream service config: https://github.com/jcorporation/myMPD/blob/master/contrib/initscripts/mympd.service.in
       after = [ "mpd.service" ];

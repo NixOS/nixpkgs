@@ -318,7 +318,10 @@ in
                 "x"
               ];
             in
-            "lpadmin ${toLpadminArgs argsDpx} ${toLpadminArgs argsWoDpx}";
+            ''
+              # shellcheck disable=SC2016
+              lpadmin ${toLpadminArgs argsDpx} ${toLpadminArgs argsWoDpx}
+            '';
 
         in
         ''

@@ -2,62 +2,76 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
+  ninja,
   pkg-config,
   udevCheckHook,
   udev,
-  libsForQt5,
+  qt6,
   alsa-lib,
   ola,
   libftdi1,
-  libusb-compat-0_1,
+  libusb1,
   libsndfile,
-  libmad,
+  fftw,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qlcplus";
-  version = "5.0.0";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    hash = "sha256-gEwcTIJhY78Ts0lUn4MVciV7sPIBkqlxPMa9I1nTHO0=";
+    hash = "sha256-e8KyuCnzTUz/f6cfT7LyUQ9snaFBnE5WTc4FP7jhdRY=";
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
+    cmake
+    ninja
     pkg-config
     udevCheckHook
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
     udev
-    libsForQt5.qtmultimedia
-    libsForQt5.qtscript
-    libsForQt5.qtserialport
-    libsForQt5.qtwebsockets
     alsa-lib
     ola
     libftdi1
-    libusb-compat-0_1
+    libusb1
     libsndfile
-    libmad
-  ];
-
-  qmakeFlags = [ "INSTALLROOT=$(out)" ];
+    fftw
+  ]
+  ++ (with qt6; [
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    qtserialport
+    qtsvg
+    qttools
+    qtwebsockets
+    qt3d
+  ]);
 
   postPatch = ''
     patchShebangs .
-    sed -i -e '/unix:!macx:INSTALLROOT += \/usr/d' \
-            -e "s@\$\$LIBSDIR/qt4/plugins@''${qtPluginPrefix}@" \
-            -e "s@/etc/udev/rules.d@''${out}/lib/udev/rules.d@" \
-      variables.pri
 
-    # Fix gcc-13 build failure by removing blanket -Werror.
-    fgrep Werror variables.pri
-    substituteInPlace variables.pri --replace-fail "QMAKE_CXXFLAGS += -Werror" ""
+    # Drop -Werror; newer Qt/compilers emit new warnings (e.g. [[nodiscard]] QFile::open)
+    substituteInPlace variables.cmake --replace-fail 'set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} -Werror")' ""
+
+    # Drop hardcoded "/usr" prefix so files install to $out instead of $out/usr
+    substituteInPlace variables.cmake --replace-fail 'set(INSTALLROOT "/usr")' 'set(INSTALLROOT "")'
   '';
+
+  cmakeFlags = [
+    # Use the QML UI instead of the legacy Qt Widgets UI
+    (lib.cmakeBool "qmlui" true)
+    # Install prefix, prepended to INSTALLROOT and paths like the udev rules dir
+    (lib.cmakeFeature "INSTALL_ROOT" (placeholder "out"))
+    # Keep libdir relative, otherwise INSTALLROOT doubles up the absolute $out/lib
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
 
   enableParallelBuilding = true;
 
@@ -69,7 +83,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free and cross-platform software to control DMX or analog lighting systems like moving heads, dimmers, scanners etc";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      giomf
+    ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     homepage = "https://www.qlcplus.org/";

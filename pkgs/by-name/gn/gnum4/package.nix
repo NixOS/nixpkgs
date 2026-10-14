@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   gnulib,
+  texinfo,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -48,6 +49,23 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isMinGW "CFLAGS=-fno-stack-protector";
 
   __structuredAttrs = true;
+
+  # Separate derivation due bootstrapping and cyclic dependencies.
+  passthru.doc = stdenv.mkDerivation {
+    # Mimic look and feel of multiple outputs.
+    name = "${finalAttrs.pname}-${finalAttrs.version}-doc";
+    inherit (finalAttrs) src;
+    dontConfigure = true;
+
+    nativeBuildInputs = [ texinfo ];
+    buildPhase = ''
+      makeinfo --html --no-split doc/m4.texi
+    '';
+
+    installPhase = ''
+      install -Dm644 ./m4.html $out/share/doc/${finalAttrs.pname}-${finalAttrs.version}/index.html
+    '';
+  };
 
   meta = {
     description = "GNU M4, a macro processor";

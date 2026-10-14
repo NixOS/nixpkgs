@@ -96,9 +96,13 @@ in
             type = nullOr (either str path);
             default = null;
             description = ''
-              Path to an environment file, containing the `TOKEN` environment
-              variable, that holds a token to register at the configured
+              Path to a file containing a token to register at the configured
               Gitea/Forgejo instance.
+
+              For backwards compatibility, the file may instead be a
+              systemd-style environment file containing a `TOKEN` assignment,
+              but this format is deprecated: a warning is emitted at runtime,
+              and support will be removed in the future.
             '';
           };
 
@@ -130,6 +134,14 @@ in
 
             type = types.submodule {
               freeformType = settingsFormat.type;
+
+              options.cache.external_secret_file = mkOption {
+                type = nullOr (either str path);
+                default = null;
+                description = ''
+                  Path to a file containing the shared secret for an external cache server.
+                '';
+              };
             };
 
             default = { };
@@ -190,7 +202,18 @@ in
             wantsHost = hasHostScheme instance;
             wantsDocker = wantsContainerRuntime && config.virtualisation.docker.enable;
             wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
-            configFile = settingsFormat.generate "config.yaml" instance.settings;
+            configFile =
+              let
+                credentialsDirectory = "/run/credentials/gitea-runner-${escapeSystemdPath name}.service";
+              in
+              settingsFormat.generate "config.yaml" (
+                if instance.settings.cache.external_secret_file != null then
+                  lib.recursiveUpdate instance.settings {
+                    cache.external_secret_file = "${credentialsDirectory}/external-secret";
+                  }
+                else
+                  instance.settings
+              );
           in
           nameValuePair "gitea-runner-${escapeSystemdPath name}" {
             inherit (instance) enable;
@@ -200,23 +223,23 @@ in
               "network-online.target"
             ]
             ++ optionals wantsDocker [
-              "docker.service"
+              "docker.socket"
             ]
             ++ optionals wantsPodman [
-              "podman.service"
+              "podman.socket"
             ];
             wantedBy = [
               "multi-user.target"
             ];
             environment =
-              optionalAttrs (instance.token != null) {
-                TOKEN = "${instance.token}";
-              }
-              // optionalAttrs wantsPodman {
+              optionalAttrs wantsPodman {
                 DOCKER_HOST = "unix:///run/podman/podman.sock";
               }
               // {
                 HOME = "/var/lib/gitea-runner/${name}";
+                INSTANCE_DIR = "/var/lib/gitea-runner/${name}";
+                TOKEN_HASH_FILE = "/var/lib/gitea-runner/${name}/.token-hash";
+                LABELS_FILE = "/var/lib/gitea-runner/${name}/.labels";
               };
             path =
               with pkgs;
@@ -227,8 +250,11 @@ in
             serviceConfig = {
               DynamicUser = true;
               User = "gitea-runner";
-              StateDirectory = "gitea-runner";
-              WorkingDirectory = "-/var/lib/gitea-runner/${name}";
+              StateDirectory = [
+                "gitea-runner"
+                "gitea-runner/${name}"
+              ];
+              WorkingDirectory = "/var/lib/gitea-runner/${name}";
 
               # gitea-runner might fail when gitea is restarted during upgrade.
               Restart = "on-failure";
@@ -236,15 +262,20 @@ in
 
               ExecStartPre = [
                 (pkgs.writeShellScript "gitea-register-runner-${name}" ''
-                  export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
-                  mkdir -vp "$INSTANCE_DIR"
-                  cd "$INSTANCE_DIR"
-
                   # force reregistration on changed token or labels
-                  export TOKEN_HASH_FILE="$INSTANCE_DIR/.token-hash"
-                  export TOKEN_HASH_CURRENT="$(printf '%s' "$TOKEN" | sha256sum | cut -d' ' -f1)"
+
+                  if grep -q -m1 -E '^[[:space:]]*TOKEN=' "$CREDENTIALS_DIRECTORY/token"; then
+                    echo "gitea-actions-runner: providing 'tokenFile' as an environment file with a TOKEN= assignment is deprecated." >&2
+                    echo "please provide the raw token as the file's content instead." >&2
+
+                    sed -n -E 's/^[[:space:]]*TOKEN=//p' "$CREDENTIALS_DIRECTORY/token" | tail -n1 > "$RUNTIME_DIRECTORY/token"
+                    export TOKEN_FILE="$RUNTIME_DIRECTORY/token"
+                  else
+                    export TOKEN_FILE="$CREDENTIALS_DIRECTORY/token"
+                  fi
+
+                  export TOKEN_HASH_CURRENT="$(sha256sum "$TOKEN_FILE" | cut -d' ' -f1)"
                   export TOKEN_HASH_STORED="$(cat "$TOKEN_HASH_FILE" 2>/dev/null || echo "")"
-                  export LABELS_FILE="$INSTANCE_DIR/.labels"
                   export LABELS_WANTED="$(echo ${escapeShellArg (concatStringsSep "\n" instance.labels)} | sort)"
                   export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
@@ -255,7 +286,7 @@ in
                     # perform the registration
                     ${getExe cfg.package} register --no-interactive \
                       --instance ${escapeShellArg instance.url} \
-                      --token "$TOKEN" \
+                      --token-file "$TOKEN_FILE" \
                       --name ${escapeShellArg instance.name} \
                       --labels ${escapeShellArg (concatStringsSep "," instance.labels)} \
                       --config ${configFile}
@@ -275,9 +306,21 @@ in
                 ++ optionals wantsPodman [
                   "podman"
                 ];
-            }
-            // optionalAttrs (instance.tokenFile != null) {
-              EnvironmentFile = instance.tokenFile;
+
+              LoadCredential =
+                let
+                  tokenCredentialSource =
+                    if instance.tokenFile != null then
+                      instance.tokenFile
+                    else
+                      pkgs.writeText "gitea-runner-${name}-token" instance.token;
+                in
+                [ "token:${tokenCredentialSource}" ]
+                ++ optionals (instance.settings.cache.external_secret_file != null) [
+                  "external-secret:${instance.settings.cache.external_secret_file}"
+                ];
+              RuntimeDirectory = "gitea-runner/${name}";
+              RuntimeDirectoryMode = "0700";
             };
           };
       in

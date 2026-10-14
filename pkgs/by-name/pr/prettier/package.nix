@@ -75,7 +75,7 @@ let
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
       '' throw "${plugin.pname}: does not provide parse-able entry point";
 
-  yarnHash = "sha256-ItLl8OwgeVahBtMvI2z8uA9EvPgS3tNWG8Q/uHGtDy0=";
+  yarnHash = "sha256-La05mhMuChvjSPFjOXPJqCaXx7BvE6Ixdjc9OHIP6y0=";
 
   prettier-oxc-wasm-parser = stdenv.mkDerivation (finalAttrs: {
     pname = "binding-wasm32-wasi";
@@ -129,19 +129,19 @@ let
     meta = {
       description = "Oxc Parser Node API";
       homepage = "https://oxc.rs/docs/guide/usage/parser";
-      license = "MIT";
+      license = lib.licenses.mit;
     };
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
-  version = "3.9.9";
+  version = "3.9.10";
 
   src = fetchFromGitHub {
     owner = "prettier";
     repo = "prettier";
     tag = finalAttrs.version;
-    hash = "sha256-gze2a42OGrEEInH4ca9V8rcNWMiaAcDo+TZ2Wq/KYJE=";
+    hash = "sha256-Pass0h0ghhULy4eMuILfBlRnQsOKIdhBrVrCDPthKek=";
   };
 
   missingHashes = ./missing-hashes.json;

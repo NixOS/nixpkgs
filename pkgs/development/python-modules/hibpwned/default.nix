@@ -31,7 +31,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python API wrapper for haveibeenpwned.com";
     homepage = "https://github.com/plasticuproject/hibpwned";
     changelog = "https://github.com/plasticuproject/hibpwned/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

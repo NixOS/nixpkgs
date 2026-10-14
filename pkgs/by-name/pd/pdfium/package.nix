@@ -422,10 +422,16 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $dev/include $out/lib
+    mkdir -p $dev/include $dev/lib/cmake/PDFium $out/lib
 
     cp -r ../../public $dev/include/
     install -m0644 libpdfium${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
+
+    substitute ${./PDFiumConfig.cmake.in} $dev/lib/cmake/PDFium/PDFiumConfig.cmake \
+      --subst-var-by version ${finalAttrs.passthru.fullVersion} \
+      --subst-var-by dev "$dev" \
+      --subst-var-by out "$out" \
+      --subst-var-by sharedLibrary ${stdenv.hostPlatform.extensions.sharedLibrary}
 
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id \
@@ -456,6 +462,9 @@ stdenv.mkDerivation (finalAttrs: {
         cross = pkgsCross.aarch64-multiplatform.pdfium;
       }
       // lib.optionalAttrs canRunTests {
+        cmake = pkgsBuildHost.callPackage ./tests/cmake.nix {
+          pdfium = finalAttrs.finalPackage;
+        };
         integration = pkgsBuildHost.callPackage ./tests {
           pdfium = finalAttrs.finalPackage;
         };

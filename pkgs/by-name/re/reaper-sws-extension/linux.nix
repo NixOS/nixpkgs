@@ -41,4 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" "17")
   ];
 
+  postInstall = ''
+    # This is excluded from the standard build for some reason, but we want this
+    cmake --install . --component grooves
+  '';
 })

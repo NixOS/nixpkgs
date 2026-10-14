@@ -52,7 +52,7 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "ctranslate2";
-  version = "4.8.2";
+  version = "4.8.3";
 
   __strutcturedAttrs = true;
   strictDeps = true;
@@ -62,7 +62,7 @@ stdenv'.mkDerivation (finalAttrs: {
     repo = "CTranslate2";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-OuN7GTfzqsALu8Qgx7GNERlyCq3cTxhpZo8UA/yDekw=";
+    hash = "sha256-ZuZshOtTbAajs3+KRWvpXCFtH+v4FWjwlH9FeANgLDI=";
   };
 
   patches = [

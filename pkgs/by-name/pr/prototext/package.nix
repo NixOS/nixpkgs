@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prototext";
-  version = "0.3.0";
+  version = "0.3.3";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "douzebis";
     repo = "prototools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ka/Pg/YMrRPYaUO4M1fdevLSPyZ+8XhWYa2EQu3Xq6o=";
+    hash = "sha256-SDgv/vrm7mJs1fjKPsn5zrp9s7rDj3W5qPdNt5OU/PE=";
   };
 
-  cargoHash = "sha256-5DgWKXYzrEB/3l2uDs2vc/VwRMlZ5trwJhor4ZnHEaw=";
+  cargoHash = "sha256-DXbYSztud6x+xWDM2dgwkHr88p1MtBR+122Jxe8axls=";
 
   cargoBuildFlags = [
     "-p"
@@ -44,14 +44,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash <(PROTOTEXT_COMPLETE=bash $out/bin/prototext) \
       --zsh <(PROTOTEXT_COMPLETE=zsh $out/bin/prototext) \
       --fish <(PROTOTEXT_COMPLETE=fish $out/bin/prototext)
-    $out/bin/prototext-gen-man $out/share/man/man1
+    PROTOTEXT_GEN_MAN=$out/share/man/man1 $out/bin/prototext
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  # Only v-prefixed release tags: the repository also has workshop tags
-  # (grehack2026-*), which are not versions.
+  # Only v-prefixed release tags
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"

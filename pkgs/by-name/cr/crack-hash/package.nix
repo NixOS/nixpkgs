@@ -8,18 +8,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crack-hash";
-  version = "1.1.0-unstable-2025-12-31";
+  version = "1.2.0";
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "kOaDT";
     repo = "crack-hash";
-    # https://github.com/kOaDT/crack-hash/issues/2
-    rev = "887bedec144b59488b93dbe33a6f781f83360ea7";
-    hash = "sha256-h2NEuyEX5JEpSmtT7Pn/TJkKeMx+dupLQo4iLHcw3AY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TfGjv/WDqqKHGp1EXa9416YhnItoOd2bLY/V5BdXqfA=";
   };
 
-  cargoHash = "sha256-mD/3pWY8jf8QCgtYYtPxyVD6SheYi76tNhoJ4uyJ0WU=";
+  cargoHash = "sha256-Duv1179DFPS066pd/l6Y2FYN+aLz8jYHDObAlBqlaKw=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -30,8 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Hash cracking tool";
     homepage = "https://github.com/kOaDT/crack-hash";
-    # https://github.com/kOaDT/crack-hash/issues/1
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "crack-hash";
   };

@@ -70,6 +70,32 @@ in
       ];
       description = ''
         List of provider names for which dependencies will be installed.
+
+        Providers that need shared service credentials (`spotify`, `qobuz`, `apple_music`,
+        `theaudiodb`, `fanarttv`) do not work out of the box. Register your own credentials
+        with the service and pass them to Music Assistant through the matching `MASS_APP_VAR_*`
+        environment variable:
+
+        ```nix
+        services.music-assistant.providers = [ "spotify" ];
+
+        systemd.services.music-assistant.environment = {
+          MASS_APP_VAR_SPOTIFY_CLIENT_ID = "your-client-id";
+        };
+        ```
+
+        To pass multiple values at once, point Music Assistant at a JSON map of app variables
+        with the `MASS_APP_VARS_FILE` environment variable. The upstream
+        [app_vars.py](https://github.com/music-assistant/server/blob/dev/music_assistant/helpers/app_vars.py)
+        file lists the supported variables and the provider documentation (for example
+        <https://www.music-assistant.io/music-providers/spotify/>) describes the setup steps.
+        Qobuz and Tidal cannot be configured this way, and Spotify restricts apps registered
+        by third parties.
+
+        Nixpkgs does not ship these credentials: they are bundled only in the official Music
+        Assistant release builds, are not covered by the Apache-2.0 license of the source code
+        and may not be redistributed (see the upstream
+        [NOTICE file](https://github.com/music-assistant/server/blob/dev/NOTICE)).
       '';
     };
   };

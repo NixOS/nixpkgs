@@ -1016,6 +1016,9 @@ mapAliases {
   gh-copilot = throw "'gh-copilot' has been removed since it has been deprecated and archived upstream. Consider using 'github-copilot-cli' instead"; # Added 2026-01-20
   gImageReader = gimagereader; # Added 2026-02-08
   gImageReader-qt = gimagereader-qt; # Added 2026-02-08
+  gimp2 = throw "'gimp2' has been removed as it depended on the deprecated GTK2 engine and is unmaintained by the GIMP developers. Consider using 'gimp' instead."; # Added 2026-08-14
+  gimp2-with-plugins = throw "'gimp2-with-plugins' has been removed as it depended on the deprecated GTK2 engine and is unmaintained by the GIMP developers. Consider using 'gimp-with-plugins' instead."; # Added 2026-08-14
+  gimp2Plugins = throw "'gimp2Plugins' has been removed as it depended on the deprecated GTK2 engine and is unmaintained by the GIMP developers. Consider using 'gimp3' plus 'gimpPlugins' instead."; # Added 2026-08-14
   gimp3 = gimp; # Added 2025-10-03
   gimp3-with-plugins = gimp-with-plugins; # Added 2025-10-03
   gimp3Plugins = gimpPlugins; # Added 2025-10-03
@@ -1720,9 +1723,7 @@ mapAliases {
   marwaita-yellow = throw "'marwaita-yellow' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   massif-visualizer = throw "'massif-visualizer' has been removed due to outdated KF5 dependencies."; # Added 2026-05-01
   mastodon-bot = throw "'mastodon-bot' has been removed because it was archived by upstream in 2021."; # Added 2025-11-07
-  materia-theme = throw "'materia-theme' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   material-kwin-decoration = throw "'material-kwin-decoration' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
-  matheria-theme-transparent = throw "'matheria-theme-transparent' has been removed because it depended on 'gtk-engine-murrine', which was removed because it was unmaintained upstream and depended on GTK 2."; # Added 2026-07-22
   mathlibtools = throw "mathlibtools has been removed as it was archived upstream in 2023"; # Added 2025-07-09
   matomo_5 = throw "'matomo_5' has been renamed to/replaced by 'matomo'"; # Converted to throw 2025-10-27
   matrix-appservice-discord = throw "'matrix-appservice-discord' has been removed as it is no longer actively maintained upstream. Use the actively-maintained puppeting bridge 'mautrix-discord' instead"; # Added 2026-06-08
@@ -1790,6 +1791,7 @@ mapAliases {
   moralerspace-hwnf = throw "moralerspace-hwnf has been removed, use moralerspace-hw instead."; # Added 2025-08-30
   moralerspace-nf = throw "moralerspace-nf has been removed, use moralerspace instead."; # Added 2025-08-30
   morty = throw "morty has been removed, as searxng removed support for it and it was unmaintained."; # Added 2025-09-26
+  motrix-next = throw "motrix-next has been renamed to rayburst, no tasks or history will be migrated"; # Added 2026-09-24
   mouse-actions-gui = throw "'mouse-actions-gui' has been removed as it depended on webkitgtk 4.0 and libsoup 2.4"; # Added 2026-06-07
   move-mount-beneath = throw "move-mount-beneath has been removed, it is now superseded by util-linux's mount"; # Added 2026-05-19
   moz-phab = throw "'moz-phab' has been renamed to/replaced by 'mozphab'"; # Converted to throw 2025-10-27
@@ -2574,6 +2576,7 @@ mapAliases {
   tegaki-zinnia-japanese = throw "'tegaki-zinnia-japanese' has been removed due to lack of maintenance"; # Added 2025-09-10
   telepathy-haze = throw "'telepathy-haze' has been removed due to being unmaintained and broken since 2023"; # Added 2025-11-04
   teleport_16 = throw "teleport 16 has been removed as it is EOL. Please upgrade to Teleport 17 or later"; # Added 2025-11-10
+  teleport_17 = throw "teleport 17 has been removed as it is EOL. Please upgrade to Teleport 18"; # Added 2026-10-12
   temporalite = throw "'temporalite' has been removed as it is obsolete and unmaintained, please use 'temporal-cli' instead (with `temporal server start-dev`)"; # Added 2025-06-26
   temurin-bin-23 = throw "Temurin 23 has been removed as it has reached its end of life"; # Added 2025-11-04
   temurin-bin-24 = throw "Temurin 24 has been removed as it has reached its end of life"; # Added 2025-10-04
@@ -2643,6 +2646,7 @@ mapAliases {
   transmission_4-qt5 = lib.warnOnInstantiate "'transmission_4-qt5' has been removed in favour of 'transmission_4-qt'" transmission_4-qt; # Added 2026-06-25
   transmission_4-qt6 = lib.warnOnInstantiate "'transmission_4-qt6' has been renamed to 'transmission_4-qt'" transmission_4-qt; # Added 2026-06-25
   travis = throw "'travis' has been removed because upstream has stopped maintaining it, and it contains dependencies with security vulnerabilities."; # Added 2026-02-14
+  trayer = throw "'trayer' has been removed as it depended on the deprecated GTK2 engine."; # Added 2026-10-07
   treefmt2 = throw "'treefmt2' has been renamed to/replaced by 'treefmt'"; # Converted to throw 2025-10-27
   tremor = throw "'tremor' has been removed because it is unmaintained"; # Added 2026-08-27
   tremor-language-server = throw "'tremor-language-server' has been removed because it is unmaintained"; # Added 2025-11-17

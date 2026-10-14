@@ -34,21 +34,19 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's/m4_esyscmd(\[git describe.*/[${finalAttrs.version}])/' configure.ac
   '';
 
-  preConfigure = ''
-    configureFlagsArray=(
-      "--infodir=$out/share/info"
-      "--mandir=$out/share/man"
-      "--with-machines=/etc/pdsh/machines"
-      ${if readline == null then "--without-readline" else "--with-readline"}
-      ${if ssh == null then "--without-ssh" else "--with-ssh"}
-      ${if rsh == false then "--without-rsh" else "--with-rsh"}
-      ${if slurmSupport then "--with-slurm" else "--without-slurm"}
-      "--with-dshgroups"
-      "--with-xcpu"
-      "--disable-debug"
-      '--with-rcmd-rank-list=ssh,krb4,exec,xcpu,rsh'
-    )
-  '';
+  configureFlags = [
+    "--infodir=$out/share/info"
+    "--mandir=$out/share/man"
+    "--with-machines=/etc/pdsh/machines"
+    (if readline == null then "--without-readline" else "--with-readline")
+    (if ssh == null then "--without-ssh" else "--with-ssh")
+    (if rsh == false then "--without-rsh" else "--with-rsh")
+    (if slurmSupport then "--with-slurm" else "--without-slurm")
+    "--with-dshgroups"
+    "--with-xcpu"
+    "--disable-debug"
+    "--with-rcmd-rank-list=ssh,krb4,exec,xcpu,rsh"
+  ];
 
   meta = {
     homepage = "https://github.com/chaos/pdsh";

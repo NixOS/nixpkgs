@@ -11,13 +11,13 @@ in
 
 stdenvNoCC.mkDerivation {
   pname = "librime-lua";
-  version = "0-unstable-2026-08-31";
+  version = "0-unstable-2026-09-30";
 
   src = fetchFromGitHub {
     owner = "hchunhui";
     repo = "librime-lua";
-    rev = "ad1e4a6c98abf634dd34242a747f9b1d5d069fbe";
-    hash = "sha256-Zi5VyFyLk4n34+TEDvV2HEYQKL60mEiVVLFKb6hWFdE=";
+    rev = "6f30968058a3ca83c47949308ef0ddc51a11a264";
+    hash = "sha256-drq6xHgcXXyEAUdR3p+5OvJememQGOrI1a5WfJ0+oLU=";
   };
 
   propagatedBuildInputs = [ lua ];

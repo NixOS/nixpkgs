@@ -3110,10 +3110,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1dpwi59rpwn8rw7hxpl01ms4nqyzlrz09w8mh41yr113phcjm1w7";
+      sha256 = "1vgva2p7d65r6w5ia1kvis0dbpkpr3249smakvrigrw3ki82hpq7";
       type = "gem";
     };
-    version = "2.5.1";
+    version = "2.5.2";
   };
   gitlab-glaz = {
     dependencies = [

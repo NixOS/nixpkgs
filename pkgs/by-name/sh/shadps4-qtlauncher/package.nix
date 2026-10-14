@@ -17,13 +17,13 @@
 }:
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "shadps4-qtlauncher";
-  version = "0-unstable-2026-08-18";
+  version = "0-unstable-2026-10-05";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadps4-qtlauncher";
-    rev = "a30486c3e0a17460c44cf1caf15559c6f3331e57";
-    hash = "sha256-uVTy+0JvJUREY0qt+hkggSjyN1swGdG9aAYQvWNiNs4=";
+    rev = "29de8facf2348a1ffd461aa52b25cc23a488e255";
+    hash = "sha256-my3nLALEDIDNVu9qahxI+9E6aVBsAufAp4m+Uv8HNb0=";
 
     postCheckout = ''
       git -C "$out" rev-parse --short=8 HEAD > $out/COMMIT
@@ -40,11 +40,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   __structuredAttrs = true;
 
-  patches = [
-    ./qt-paths.patch
-    # https://github.com/shadps4-emu/shadps4-qtlauncher/pull/335
-    ./version-directory.patch
-  ];
+  patches = [ ./qt-paths.patch ];
 
   postPatch = ''
     substituteInPlace src/common/scm_rev.cpp.in \

@@ -20,7 +20,7 @@ let
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation (finalAttrs: {
     pname = "rebar3";
-    version = "3.27.1";
+    version = "3.27.3";
 
     __structuredAttrs = true;
     strictDeps = true;
@@ -31,7 +31,7 @@ let
       owner = "erlang";
       repo = "rebar3";
       tag = finalAttrs.version;
-      sha256 = "sQf8kI2+vYHU9AWqnpSvmA8z2XHZz0aEJdeX/m+nvf8=";
+      sha256 = "Om6c2cpeFCdPAemeA965YxKXhasHbx3gHVgSh+jO2TI=";
     };
 
     nativeBuildInputs = [
