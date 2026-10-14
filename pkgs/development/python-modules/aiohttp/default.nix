@@ -108,7 +108,6 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    blockbuster
     freezegun
     gunicorn
     isal
