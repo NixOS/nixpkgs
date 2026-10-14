@@ -11,6 +11,7 @@ in
       {
         services.litellm = {
           enable = true;
+          environment.LITELLM_MASTER_KEY = "sk-nixos-test";
         };
       };
   };
