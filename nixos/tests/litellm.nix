@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, ... }:
 let
   mainPort = "8080";
 in
@@ -23,6 +23,6 @@ in
   '';
 
   meta = {
-    maintainers = [ ];
+    inherit (pkgs.litellm.meta) maintainers;
   };
 }
