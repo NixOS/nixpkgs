@@ -42,6 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -D ./assets/amdgpu_top.desktop -t $out/share/applications/
     install -D ./assets/amdgpu_top-tui.desktop -t $out/share/applications/
+    install -Dm644 ./assets/io.github.umio_yasuno.amdgpu_top.metainfo.xml -t $out/share/metainfo
   '';
 
   postFixup = ''
