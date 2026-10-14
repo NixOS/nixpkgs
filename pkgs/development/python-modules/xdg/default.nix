@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  clikit,
   poetry-core,
 }:
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [ clikit ];
 
   # sdist has no tests
   doCheck = false;

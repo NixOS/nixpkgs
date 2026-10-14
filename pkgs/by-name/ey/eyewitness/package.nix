@@ -35,7 +35,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       selenium
       fuzzywuzzy
       pyvirtualdisplay
-      pylev
       netaddr
       pydevtool
     ]
