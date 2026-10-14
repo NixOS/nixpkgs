@@ -2,7 +2,7 @@
   lib,
   stdenvNoLibc,
   buildPackages,
-  fetchurl,
+  fetchFromGitHub,
   gitUpdater,
   linuxHeaders,
   libiconvReal,
@@ -71,9 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
   version = "1.0.59";
 
-  src = fetchurl {
-    url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hsbxWXG/sUFWhQ8uNpBtrFpp33s+aIIW0a6gnS21QXQ=";
+  src = fetchFromGitHub {
+    owner = "wbx-github";
+    repo = "uclibc-ng";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x5uQlzxkO+sRBYQCYX016iGT0VgjYu0U1vHlnS3it50=";
   };
 
   configurePhase = ''
@@ -124,10 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     # link to.
     libiconv = libiconvReal;
 
-    updateScript = gitUpdater {
-      url = "https://git.uclibc-ng.org/git/uclibc-ng.git";
-      rev-prefix = "v";
-    };
+    updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
