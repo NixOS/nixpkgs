@@ -4266,6 +4266,12 @@
     github = "brendanreis";
     githubId = 10686906;
   };
+  brennercruvinel = {
+    email = "brenner@hoffresearch.com";
+    github = "brennercruvinel";
+    githubId = 6767715;
+    name = "Brenner Cruvinel";
+  };
   bretek = {
     email = "josephmadden999@gmail.com";
     github = "bretek";
