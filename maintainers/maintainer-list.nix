@@ -11786,6 +11786,12 @@
     githubId = 1064477;
     name = "Hannes Hornwall";
   };
+  hosea = {
+    email = "hoseajovel@gmail.com";
+    github = "hosea-joveldy";
+    githubId = 193266906;
+    name = "Hosea";
+  };
   hougo = {
     name = "Hugo Renard";
     email = "hugo.renard@proton.me";
