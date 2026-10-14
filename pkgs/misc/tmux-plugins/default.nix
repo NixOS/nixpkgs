@@ -632,7 +632,7 @@ in
 
   open = mkTmuxPlugin {
     pluginName = "open";
-    version = "unstable-2019-12-02";
+    version = "3.0.0";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-open";
