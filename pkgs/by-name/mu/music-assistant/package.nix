@@ -19,7 +19,8 @@ let
       # TODO: package properly when no longer using a fork
       aiolibdatachannel = final.callPackage ./aiolibdatachannel.nix { };
 
-      # mcp v2 breaks fastmcp-slim
+      # mcp v2 breaks fastmcp-slim 3, and fastmcp 4 requires mcp v2
+      fastmcp = final.fastmcp_3;
       mcp = final.mcp_1;
 
       music-assistant-frontend = final.callPackage ./frontend.nix { };
