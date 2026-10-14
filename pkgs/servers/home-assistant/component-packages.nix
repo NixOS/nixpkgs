@@ -7237,6 +7237,7 @@
       ps: with ps; [
         aioesphomeapi
         aiohasupervisor
+        aiopowerwall
         aioruuvigateway
         aioshelly
         aiousbwatcher
@@ -7263,7 +7264,7 @@
         tesla-fleet-api
         teslemetry-stream
         zeroconf
-      ]; # missing inputs: aiopowerwall
+      ];
     "tessie" =
       ps: with ps; [
         tesla-fleet-api
@@ -9438,6 +9439,7 @@
     "template"
     "tesla_fleet"
     "tesla_wall_connector"
+    "teslemetry"
     "tessie"
     "text"
     "thermobeacon"
