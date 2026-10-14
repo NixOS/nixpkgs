@@ -10222,6 +10222,8 @@ self: super: with self; {
 
   llm-perplexity = callPackage ../development/python-modules/llm-perplexity { };
 
+  llm-sandbox = callPackage ../development/python-modules/llm-sandbox { };
+
   llm-sentence-transformers = callPackage ../development/python-modules/llm-sentence-transformers { };
 
   llm-templates-fabric = callPackage ../development/python-modules/llm-templates-fabric { };
