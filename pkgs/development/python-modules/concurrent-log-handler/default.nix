@@ -4,6 +4,8 @@
   fetchFromGitHub,
   hatchling,
   portalocker,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -24,7 +26,10 @@ buildPythonPackage (finalAttrs: {
 
   pythonImportsCheck = [ "concurrent_log_handler" ];
 
-  doCheck = false; # upstream has no tests
+  nativeCheckInputs = [
+    pytest-mock
+    pytestCheckHook
+  ];
 
   meta = {
     changelog = "https://github.com/Preston-Landers/concurrent-log-handler/blob/${finalAttrs.src.tag}/CHANGELOG.md";
