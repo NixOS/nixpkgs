@@ -64,6 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -Dm644 $src/data/assets/icon.svg $out/share/icons/hicolor/scalable/apps/tangara-companion.svg
+    install -Dm644 $src/data/zone.cooltech.tangara.Companion.metainfo.xml -t $out/share/metainfo
   '';
 
   meta = {
