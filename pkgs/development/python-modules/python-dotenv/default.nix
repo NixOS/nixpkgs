@@ -1,5 +1,6 @@
 {
   lib,
+  addBinToPathHook,
   buildPythonPackage,
   click,
   fetchFromGitHub,
@@ -9,7 +10,7 @@
   sh,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-dotenv";
   version = "1.2.4";
   pyproject = true;
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "theskumar";
     repo = "python-dotenv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nwGqNdc34SblZXamtzpZKVUJNbgXlGSnPFfYOsxqMWU=";
   };
 
@@ -26,24 +27,21 @@ buildPythonPackage rec {
   optional-dependencies.cli = [ click ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     ipython
     pytestCheckHook
     sh
   ]
-  ++ lib.concatAttrValues optional-dependencies;
-
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "dotenv" ];
 
   meta = {
-    changelog = "https://github.com/theskumar/python-dotenv/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/theskumar/python-dotenv/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Add .env support to your django/flask apps in development and deployments";
     mainProgram = "dotenv";
     homepage = "https://github.com/theskumar/python-dotenv";
     license = lib.licenses.bsdOriginal;
     maintainers = with lib.maintainers; [ erikarvstedt ];
   };
-}
+})
