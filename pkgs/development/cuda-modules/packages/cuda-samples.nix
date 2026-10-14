@@ -8,7 +8,7 @@
   cuda_cudart,
   cuda_nvcc,
   cuda_nvrtc,
-  cuda_nvtx,
+  nvtx,
   cuda_profiler_api,
   cudaAtLeast,
   cudaNamePrefix,
@@ -187,7 +187,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     cccl
     cuda_cudart
     cuda_nvrtc
-    cuda_nvtx
+    nvtx
     cuda_profiler_api
     libcublas
     libcufft
