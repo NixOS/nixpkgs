@@ -2170,6 +2170,15 @@
   "sec-option-types-unions": [
     "index.html#sec-option-types-unions"
   ],
+  "module-services-ghorg": [
+    "index.html#module-services-ghorg"
+  ],
+  "module-services-ghorg-basic-usage": [
+    "index.html#module-services-ghorg-basic-usage"
+  ],
+  "module-services-ghorg-multiple-jobs-and-credentials": [
+    "index.html#module-services-ghorg-multiple-jobs-and-credentials"
+  ],
   "sec-option-types-sums": [
     "index.html#sec-option-types-sums"
   ],
