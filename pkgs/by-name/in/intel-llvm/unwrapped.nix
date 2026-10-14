@@ -331,6 +331,15 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "lib/clang/${llvmMajorVersion}" "$lib"
     substituteInPlace "$dev/include/clang/Config/config.h" \
       --replace-fail "../lib/clang/${llvmMajorVersion}" "$lib/lib/clang/${llvmMajorVersion}"
+
+    # The SYCL driver only looks for its device libraries (libsycl-*.bc) under
+    # <bindir>/../lib/dpcpp-<major>/sycl, but they're installed into $lib.
+    # Without them it silently skips linking them, leaving unresolved calls
+    # (e.g. bf16 conversions, cmath) in device code.
+    mkdir -p $out/lib
+    for dir in $lib/lib/dpcpp-*; do
+      ln -s "$dir" "$out/lib/$(basename "$dir")"
+    done
   '';
 
   passthru = {
