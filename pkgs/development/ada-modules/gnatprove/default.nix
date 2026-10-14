@@ -98,16 +98,18 @@ let
     };
   };
 
-  thisSpark =
-    spark2014.${gnat_version}
-      or (throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
+  # null if gnatprove has not been packaged for this GNAT version yet, see meta.problems
+  thisSpark = spark2014.${gnat_version} or null;
+
+  latestSupportedGnat = lib.last (lib.sort lib.versionOlder (lib.attrNames spark2014));
 
 in
 stdenvNoCC.mkDerivation {
   pname = "gnatprove";
-  version = "fsf-${gnat_version}_${thisSpark.commit_date}";
+  version =
+    "fsf-${gnat_version}" + lib.optionalString (thisSpark != null) "_${thisSpark.commit_date}";
 
-  src = thisSpark.src;
+  src = thisSpark.src or null;
 
   patches = thisSpark.patches or [ ];
 
@@ -179,5 +181,14 @@ stdenvNoCC.mkDerivation {
     maintainers = [ lib.maintainers.jiegec ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
+    problems = lib.optionalAttrs (thisSpark == null) {
+      unsupported-gnat-version = {
+        kind = "broken";
+        message = ''
+          GNATprove depends on a specific GNAT version and has not been packaged for GNAT ${gnat_version} yet.
+          Use gnat${latestSupportedGnat}Packages.gnatprove (together with gnat${latestSupportedGnat} and gnat${latestSupportedGnat}Packages.gprbuild) instead.
+        '';
+      };
+    };
   };
 }
