@@ -6,17 +6,18 @@
   pkg-config,
   fuse3,
   mbedtls,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dislocker";
-  version = "0.7.3-unstable-2025-09-07";
+  version = "0.7.3-unstable-2026-08-31";
 
   src = fetchFromGitHub {
     owner = "Aorimn";
     repo = "dislocker";
-    rev = "4ff070f0ea9e56948ab316fb76b91f54dd6727aa";
-    hash = "sha256-hrIt5D9YjBWs0Q9chWGQM2bo1SZ7qLCd898zFHWWcqA=";
+    rev = "0706462db88efe8df88150e4c3e4332b808f4581";
+    hash = "sha256-lH2BdMcseZDw5gtzY5V0Gyy4MS0I8Vlyb0uZkkZdcbM=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "Read BitLocker encrypted partitions in Linux";
