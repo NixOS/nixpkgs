@@ -24,7 +24,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gopher64";
-  version = "1.1.34";
+  version = "1.1.42";
 
   __structuredAttrs = true;
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     repo = "gopher64";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-RbP+dBJezQanqsUoM3shyCFK1JUt5uOGEp+/H5IXL4c=";
+    hash = "sha256-kVX0lcdo9tuUr5rFyipeXh6Ru6RngUHgYz44CMWxses=";
   };
 
   cargoPatches = [
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./no-homebrew.patch
   ];
 
-  cargoHash = "sha256-KONuRVpV2D6ciiI+x8ijy9B0NiDtMhPkNI4XF3OdjxU=";
+  cargoHash = "sha256-JFTe2Tpiej3G56rRfyn62pAA7PK8C/fQEcgQwChz2mw=";
 
   # don't use lld on aarch64-linux
   postPatch = ''
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/gopher64 target/release/gopher64
 
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
 
     mkdir -p $out/Applications $out/bin
     mv $app_path $out/Applications/
