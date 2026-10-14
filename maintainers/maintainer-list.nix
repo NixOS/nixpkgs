@@ -9464,6 +9464,11 @@
     github = "ferris-qq";
     githubId = 186204649;
   };
+  fexiven = {
+    github = "Fexiven";
+    githubId = 48439988;
+    name = "Fexiven";
+  };
   feyorsh = {
     email = "george@feyor.sh";
     github = "Feyorsh";
