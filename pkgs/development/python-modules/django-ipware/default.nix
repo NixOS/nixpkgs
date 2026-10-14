@@ -3,39 +3,37 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
+  hatchling,
   python-ipware,
-  setuptools,
   pytestCheckHook,
   pytest-django,
 }:
 
 buildPythonPackage rec {
   pname = "django-ipware";
-  version = "7.0.1";
+  version = "8.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "django-ipware";
     tag = "v${version}";
-    hash = "sha256-jLEHhJ6oNT1tsSqMbfPw1tb2Z/iQa8V6LpbT4ChLKI4=";
+    hash = "sha256-T+9AUpxe7VrB6UzS9sWYaMtti6cz35S0nKJbYWLSF2c=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     django
     python-ipware
   ];
 
-  env.DJANGO_SETTINGS_MODULE = "ipware.tests.testsettings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-django
   ];
-
-  enabledTestPaths = [ "ipware/tests/tests*.py" ];
 
   # pythonImportsCheck fails with:
   # django.core.exceptions.ImproperlyConfigured: Requested setting IPWARE_META_PRECEDENCE_ORDER, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings.
