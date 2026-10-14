@@ -4,7 +4,7 @@
   airplay-cli,
   python3Packages,
   fetchFromGitHub,
-  ffmpeg_7-headless,
+  ffmpeg_9-headless,
   nixosTests,
   openssl,
   replaceVars,
@@ -21,10 +21,10 @@ let
       music-assistant-frontend = final.callPackage ./frontend.nix { };
 
       music-assistant-models = prev.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.216";
+        version = "1.1.223";
 
         src = oldAttrs.src.override {
-          hash = "sha256-J6eWYzhCMT+JXtVJ8qMllCI0+OlU6c+UclT5cJc/doc=";
+          hash = "sha256-mfIlsK4v9nKjl5zWJxndYAlq3XIZvV+M0ML1G10ys7o=";
         };
       });
     }
@@ -78,7 +78,7 @@ assert
 
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "music-assistant";
-  version = "2.11.0b4";
+  version = "2.11.0b5";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -86,13 +86,13 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "music-assistant";
     repo = "server";
     tag = finalAttrs.version;
-    hash = "sha256-GgC1TmU9SaefvwD8+ahNPhU+oo0J7obPtKt7ym4OR2c=";
+    hash = "sha256-/PHqEJ9Wh2fckGAdgiTR1VUNSsK4VjYjyppKVAqy7To=";
   };
 
   patches = [
     (replaceVars ./ffmpeg.patch {
-      ffmpeg = lib.getExe' ffmpeg_7-headless "ffmpeg";
-      ffprobe = lib.getExe' ffmpeg_7-headless "ffprobe";
+      ffmpeg = lib.getExe' ffmpeg_9-headless "ffmpeg";
+      ffprobe = lib.getExe' ffmpeg_9-headless "ffprobe";
     })
 
     # Look up librespot from PATH at runtime
@@ -238,6 +238,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
       "apple_music"
       "audible"
       "audiobookshelf"
+      "bandcamp"
       "bluesound"
       "chromecast"
       "dlna"
@@ -288,6 +289,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/amplipi"
     "tests/providers/bbc_sounds"
     "tests/providers/deezer"
+    "tests/providers/filesystem_yandex_disk"
     "tests/providers/genius_lyrics"
     "tests/providers/hue_entertainment"
     "tests/providers/ibroadcast"
@@ -301,8 +303,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     "tests/providers/yandex_station"
     "tests/providers/yandex_ynison"
     "tests/providers/zvuk_music"
-    # dependency is unfree
-    "tests/providers/bandcamp"
     # hue_entertainment is not packaged
     "tests/controllers/config/test_setup_flows.py::test_hue_pairing_flow_retry_then_success"
     # sounds is not packaged
@@ -310,7 +310,6 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     # Our patches break those tests
     "tests/helpers/test_util.py::TestLoadProviderModule"
     "tests/providers/airplay/test_helpers.py::test_get_cli_binary_uses_release_asset_name"
-    "tests/providers/ytmusic/test_ytmusic.py::test_init_unreachable_po_token_server_is_a_retried_setup_failure"
     # We do not have a full git repo to work with
     "tests/scripts/test_release_workflow.py"
     # save compute

@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.11.0b4";
+  version = "2.11.0b5";
   builtins = [
     "builtin"
     "coverartarchive"
@@ -118,6 +118,8 @@
       ps: with ps; [
         onedrive-personal-sdk
       ];
+    filesystem_yandex_disk = ps: [
+    ]; # missing yadisk
     fully_kiosk =
       ps: with ps; [
         python-fullykiosk
@@ -196,6 +198,8 @@
     musicme = ps: [
     ];
     neteasecloudmusic = ps: [
+    ];
+    neteasecloudmusic_scrobble = ps: [
     ];
     nicovideo =
       ps: with ps; [
@@ -328,10 +332,8 @@
       ps: with ps; [
         soundcloudpy
       ];
-    spotify =
-      ps: with ps; [
-        pkce
-      ];
+    spotify = ps: [
+    ];
     spotify_connect = ps: [
     ];
     squeezelite =
@@ -349,6 +351,8 @@
     sync_group = ps: [
     ];
     teddycloud = ps: [
+    ];
+    telmore = ps: [
     ];
     test = ps: [
     ];
@@ -393,7 +397,6 @@
       ]; # missing ya-passport-auth
     yoto =
       ps: with ps; [
-        pkce
         yoto-api
       ];
     yousee = ps: [
