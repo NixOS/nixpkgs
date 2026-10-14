@@ -2,21 +2,18 @@
   lib,
   buildPythonPackage,
   commonmark,
+  docutils,
   fetchFromGitHub,
   markdown,
-  pydash,
   pytestCheckHook,
   pyyaml,
-  recommonmark,
-  setuptools,
   sphinx,
-  unify,
-  yapf,
+  uv-build,
 }:
 
 buildPythonPackage {
   pname = "sphinx-markdown-parser";
-  version = "0.2.4";
+  version = "0.2.4-unstable-2026-08-13";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -24,33 +21,34 @@ buildPythonPackage {
     repo = "sphinx-markdown-parser";
     # Upstream maintainer currently does not tag releases
     # https://github.com/clayrisser/sphinx-markdown-parser/issues/35
-    rev = "2fd54373770882d1fb544dc6524c581c82eedc9e";
-    sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
+    rev = "f7229b8fe778321e192161150e8ad1db75248281";
+    hash = "sha256-clMAzCpiRQI03h01j4jWc/5B6zUVqMZaGPxtwKDTXlk=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.18,<0.10.0" "uv_build"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ uv-build ];
+
+  pythonRelaxDeps = [ "sphinx" ];
+
+  dependencies = [
     commonmark
+    docutils
     markdown
-    pydash
     pyyaml
-    recommonmark
-    unify
-    yapf
+    sphinx
   ];
-
-  buildInputs = [ sphinx ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sphinx_markdown_parser" ];
 
   disabledTests = [
-    # AssertionError
-    "test_heading"
-    "test_headings"
-    "test_integration"
+    # fixture was generated with docutils 0.21, newer versions no longer escape quotes
+    "test_kitchen_sink"
   ];
 
   meta = {
