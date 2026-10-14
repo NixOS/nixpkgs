@@ -512,7 +512,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     # images uncompressed, ~3.4GB for arl-h alone.)
     substituteInPlace third_party/torch-xpu-ops/cmake/Modules/FindSYCL.cmake \
       --replace-fail 'COMMAND ''${CMAKE_SYCL_COMPILER_LAUNCHER} ''${SYCL_EXECUTABLE}' \
-                     'COMMAND ''${CMAKE_SYCL_COMPILER_LAUNCHER} ${intel-llvm}/bin/clang++'
+                     'COMMAND ''${CMAKE_SYCL_COMPILER_LAUNCHER} ${intel-llvm.unwrapped}/bin/clang++'
 
     # Build AOT images only, without the spir64 JIT fallback.
     substituteInPlace third_party/torch-xpu-ops/cmake/BuildFlags.cmake \
