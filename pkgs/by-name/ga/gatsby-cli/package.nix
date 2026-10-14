@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/gatsbyjs/gatsby/releases/tag/gatsby%2540${finalAttrs.version}";
+    changelog = "https://github.com/gatsbyjs/gatsby/releases/tag/gatsby@${finalAttrs.version}";
     description = "The Gatsby command line interface";
     homepage = "https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-cli#readme";
     license = lib.licenses.mit;
