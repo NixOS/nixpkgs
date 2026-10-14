@@ -25,16 +25,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pydocket";
-  version = "0.25.2";
+  version = "0.27.0";
   pyproject = true;
   __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "chrisguidry";
     repo = "docket";
-    tag = finalAttrs.version;
-    hash = "sha256-xiA4VHRDPv3iMil/MjFezAQCqw6rsR1nHj9fdBzHEQk=";
+    tag = "python/v${finalAttrs.version}";
+    hash = "sha256-q29yK+Kr2Acz9pn6TCi8Zuv6Kr5/T/29TKHIvEpaUxI=";
   };
+
+  # The repository became a uv workspace, with the Python package in `python/`
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   build-system = [
     hatch-vcs
