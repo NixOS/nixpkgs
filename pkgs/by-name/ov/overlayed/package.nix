@@ -70,6 +70,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       apps/desktop/src-tauri/tauri.conf.json | sponge apps/desktop/src-tauri/tauri.conf.json
   '';
 
+  postInstall = ''
+    install -Dm644 distribution/dev.overlayed.Overlayed.metainfo.xml -t $out/share/metainfo
+  '';
+
   meta = {
     description = "Modern discord voice chat overlay";
     homepage = "https://github.com/overlayeddev/overlayed";
