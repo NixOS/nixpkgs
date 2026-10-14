@@ -60,7 +60,7 @@ in
                 # Explanation: updating all extensions using the same `src` set by `gitUpdater`
                 # to avoid any extension ending up using a `src` no longer matching
                 # the files generated in `pkgs/by-name/bo/bonfire-${extension}/deps{.nix,/}`,
-                # which can happen, and did happened when upstream releases a new version
+                # which can happen, and did happened when upstream released a new version
                 # during the (long) update of a extension,
                 # which is likely since each extension update can easily last one hour.
                 (lib.concatMapStringsSep "\n" (
