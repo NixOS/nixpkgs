@@ -68,6 +68,8 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "luajit";
   inherit version src;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   luaversion = "5.1";
 
