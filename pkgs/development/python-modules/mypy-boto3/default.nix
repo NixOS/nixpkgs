@@ -1146,8 +1146,8 @@ in
       "sha256-4DYUxjIUCC/NHV5BRkeUNXC8wVF1rUJCDO3VWxubtjk=";
 
   mypy-boto3-route53domains =
-    buildMypyBoto3Package "route53domains" "1.43.4"
-      "sha256-F1xhitFa4Eac9VlCpfqjCObUH+YvLz7TYDYfI/bPYbc=";
+    buildMypyBoto3Package "route53domains" "1.43.113"
+      "sha256-bzrjXjAj2Xwr/l8uEqr0SZuEZkmfN/avh9zbokZl4TQ=";
 
   mypy-boto3-route53resolver =
     buildMypyBoto3Package "route53resolver" "1.43.102"
