@@ -9,7 +9,7 @@
   pytest-django,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-ipware";
   version = "8.0.0";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "django-ipware";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-T+9AUpxe7VrB6UzS9sWYaMtti6cz35S0nKJbYWLSF2c=";
   };
 
@@ -40,8 +40,8 @@ buildPythonPackage rec {
   meta = {
     description = "Django application to retrieve user's IP address";
     homepage = "https://github.com/un33k/django-ipware";
-    changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/un33k/django-ipware/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
