@@ -73,6 +73,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/rclone-ui \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libappindicator ]}
+
+    install -Dm644 src-tauri/flatpak.metainfo.xml $out/share/metainfo/com.rcloneui.RcloneUI.metainfo.xml
   '';
 
   checkFlags = [
