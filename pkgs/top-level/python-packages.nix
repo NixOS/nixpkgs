@@ -4452,6 +4452,8 @@ self: super: with self; {
 
   discord-protos = callPackage ../development/python-modules/discord-protos { };
 
+  discord-py-self = callPackage ../development/python-modules/discord-py-self { };
+
   discord-webhook = callPackage ../development/python-modules/discord-webhook { };
 
   discordpy = callPackage ../development/python-modules/discordpy { };
