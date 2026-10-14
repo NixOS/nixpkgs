@@ -14808,6 +14808,8 @@ self: super: with self; {
 
   pydantic-monty = callPackage ../development/python-modules/pydantic-monty { };
 
+  pydantic-monty_1 = callPackage ../development/python-modules/pydantic-monty/1.nix { };
+
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
