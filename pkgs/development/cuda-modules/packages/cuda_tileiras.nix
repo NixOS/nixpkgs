@@ -29,18 +29,13 @@ buildRedist (finalAttrs: {
   '';
 
   meta = {
-    description = "CUDA TileIR Assembler";
+    description = "CUDA Tile IR optimizing assembler";
     longDescription = ''
-      NVIDIA® CUDA® Tile is a tile-based GPU programming model that targets
-      portability for NVIDIA Tensor Cores. CUDA Tile unlocks peak GPU
-      performance with a programming model that simplifies the creation of
-      optimized, tile-based kernels across NVIDIA platforms.
-
-      Tile IR offers a high-level yet explicit target for code generation that
-      abstracts away generation-specific hardware details while exposing the
-      massive parallelism of the GPU for next-generation compute frameworks in
-      a stable and versioned manner.
+      `tileiras` compiles CUDA Tile IR bytecode, as produced by frontends like cuTile Python, into a cubin for the GPU
+      architecture specified with `--gpu-name`. From CUDA 13.4, the package also provides `tileirdisasm`, which
+      disassembles CUDA Tile IR bytecode into a human-readable form.
     '';
     homepage = "https://developer.nvidia.com/cuda/tile";
+    mainProgram = "tileiras";
   };
 })
