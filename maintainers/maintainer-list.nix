@@ -26685,6 +26685,12 @@
     name = "Serval";
     keys = [ { fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C"; } ];
   };
+  servitacto = {
+    email = "developer@servitacto.com";
+    github = "servitacto";
+    githubId = 325018291;
+    name = "ServiTacto";
+  };
   sestrella = {
     email = "sestrella.me@gmail.com";
     github = "sestrella";
