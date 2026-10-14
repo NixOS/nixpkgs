@@ -4,6 +4,7 @@
   rustPlatform,
   pkg-config,
   openssl,
+  zstd,
   distributed ? false,
 }:
 
@@ -30,6 +31,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [
     openssl
+    zstd
   ];
 
   # Tests fail because of client server setup which is not possible inside the
