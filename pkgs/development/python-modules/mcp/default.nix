@@ -40,6 +40,9 @@
   requests,
 }:
 
+let
+  common = import ./common.nix { inherit lib; };
+in
 buildPythonPackage (finalAttrs: {
   pname = "mcp";
   version = "1.29.0";
@@ -157,11 +160,7 @@ buildPythonPackage (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = {
+  meta = common.meta // {
     changelog = "https://github.com/modelcontextprotocol/python-sdk/releases/tag/${finalAttrs.src.tag}";
-    description = "Official Python SDK for Model Context Protocol servers and clients";
-    homepage = "https://github.com/modelcontextprotocol/python-sdk";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bryanhonof ];
   };
 })

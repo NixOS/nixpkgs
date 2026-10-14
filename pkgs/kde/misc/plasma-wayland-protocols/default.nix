@@ -5,11 +5,11 @@
 }:
 mkKdeDerivation rec {
   pname = "plasma-wayland-protocols";
-  version = "1.21.0";
+  version = "1.23.0";
 
   src = fetchurl {
     url = "mirror://kde/stable/plasma-wayland-protocols/plasma-wayland-protocols-${version}.tar.xz";
-    hash = "sha256-aYp7KLcRJwMU45biSK6GCHz+rtATcgCQY5lb5uHchbo=";
+    hash = "sha256-FsWtkXveLteVlC2sunZlSBndxqFWaEIyXvNOC1U+8Tg=";
   };
 
   meta.license = with lib.licenses; [
