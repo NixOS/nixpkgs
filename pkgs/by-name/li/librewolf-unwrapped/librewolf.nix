@@ -35,8 +35,8 @@ rec {
       patch -p1 < ${source}/$patch_name
     done <${source}/assets/patches.txt
 
-    sed -i 's/5bc8c9bbe8c0eabe408d9a7cd7a8e6e09eee0ead817607643882b38a36d07c91/bddacbe056ce7458663a39dc99d5bb3434099aa69cae793cf0c57d4e54f5a6a4/g' third_party/rust/glean-core/.cargo-checksum.json
-    sed -i 's/c20989b1aa336b0849e96ec1b2beea1eab825ffd192c2c3a636e20f830b811d0/0b43fbc5f86c6c247c5189af58be425a829c3b09018c6b26589661eec9a5ad24/g' third_party/rust/glean-core/.cargo-checksum.json
+    sed -i 's/ada8f059f0fa8a3a82315606318429d3a70200bbb2886d1a1bcaad2856a6303b/70a4a176b6494fce419e590180bc9c631945282ded0ab05bc1591bdd37b65093/g' third_party/rust/glean-core/.cargo-checksum.json
+    sed -i 's/1753c69b71ae24a9b339d98e9b71166740a15506cfc46245251eb63c0222568f/af3ae3d026bd2e26fd9cc7c710847ac4f853b0c899412ddc9ee7e0ef1027de87/g' third_party/rust/glean-core/.cargo-checksum.json
 
     rm toolkit/components/ml/content/backends/OpenAIPipeline.mjs
     rm -rf toolkit/components/ml/vendor/openai
