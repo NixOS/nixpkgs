@@ -6,7 +6,6 @@
   fcitx5,
   fetchFromGitHub,
   gettext,
-  go,
   hicolor-icon-theme,
   kdePackages,
   libinput,
@@ -28,13 +27,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "5.0.0";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dUZrJ5mAeEVOWWjkl0g2Q3QMgJe0Tje+zeXDd7AJgZQ=";
+    hash = "sha256-zhlo+MEKkgCPAmaM70R9n1I6z8CK53AIA8ecQb7wuRo=";
   };
 
   passthru = {
@@ -44,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gettext
-    go
     hicolor-icon-theme
     kdePackages.extra-cmake-modules
     pkg-config
@@ -67,11 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   dontWrapQtApps = true;
-
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH=$TMPDIR/go
-  '';
 
   cmakeFlags = [
     "-DLOTUS_ALT_EXECUTABLE_PREFIX=/nix/store/"
