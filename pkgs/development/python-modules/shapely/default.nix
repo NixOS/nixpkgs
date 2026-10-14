@@ -4,36 +4,45 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pyprojectVersionPatchHook,
 
+  # build deps
   cython,
+  meson-python,
+  pkg-config,
+
+  # runtime deps
   geos,
   numpy,
   oldest-supported-numpy,
-  setuptools,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "shapely";
-  version = "2.1.2";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "shapely";
     repo = "shapely";
     tag = version;
-    hash = "sha256-tnnOJsAI3v52ngFOIUIkeDuRIu2JlZGuHreVv4W8LeE=";
+    hash = "sha256-ddBbNAahYK1/+VtCYVqjrhOfRAtZERv7axTHrYlYBfA=";
   };
 
   nativeBuildInputs = [
-    cython
-    geos # for geos-config
-    oldest-supported-numpy
-    setuptools
-    wheel
+    pyprojectVersionPatchHook
+    pkg-config
   ];
 
-  buildInputs = [ geos ];
+  build-system = [
+    meson-python
+    cython
+  ];
+
+  buildInputs = [
+    oldest-supported-numpy
+    geos
+  ];
 
   dependencies = [ numpy ];
 
