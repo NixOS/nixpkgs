@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dns-collector";
-  version = "3.1.0";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "dmachard";
     repo = "dns-collector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W0fCI/1aiSbKiFQ/DwNuc2+NSGs+QwN+Gv9OUu5rLOY=";
+    hash = "sha256-OM+qaXXySNmA8cn47UNcfjBL8E5dpaA/7Dw5SwOodQA=";
   };
 
   subPackages = [ "." ];
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     "-X=github.com/prometheus/common/version.Version=${finalAttrs.version}"
   ];
 
-  vendorHash = "sha256-6GMoyJy9HtuGjur1VwtgP3G9CXBKiJZlK/4YNPxhIgo=";
+  vendorHash = "sha256-JINwqSvvt1gRCXeWSnEedvmLVgbgUx3OxC2XBvPIKpg=";
 
   passthru.updateScript = nix-update-script { };
 
