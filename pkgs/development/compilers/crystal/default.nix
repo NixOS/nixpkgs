@@ -343,8 +343,16 @@ rec {
   };
 
   crystal_1_19 = generic {
-    version = "1.19.1";
-    sha256 = "sha256-vMS2GJb6c6RvflDSS2EWHsERJ0rvzZMVm50gaTXRs4Y=";
+    version = "1.19.2";
+    sha256 = "sha256-+ZOZbcj0SgRoWslMZjjzBIbgNi8TP4GuFYD56yN66A8=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal_1_20 = generic {
+    version = "1.20.3";
+    sha256 = "sha256-MSVX0TO9SqXKzradL9McNCBHKpk3Evd+tXED87zEEqo=";
     binary = binaryCrystal_1_10;
     llvmPackages = llvmPackages_22;
     doCheck = false;
@@ -358,5 +366,5 @@ rec {
     doCheck = false;
   };
 
-  crystal = crystal_1_19;
+  crystal = crystal_1_20;
 }

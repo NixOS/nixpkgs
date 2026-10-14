@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
@@ -25,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ];
 
@@ -34,6 +35,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=timer::tests::test_icon_path_creation"
     "--skip=timer::tests::test_notification_icon_config"
     "--skip=integration::"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Apple's plutil is unavailable in the Nix build sandbox.
+    "--skip=service::tests::launchd_service_is_a_valid_plist"
   ];
 
   postInstall = ''
@@ -52,6 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jolars ];
     mainProgram = "tomat";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
