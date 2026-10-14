@@ -67,7 +67,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   preCheck = "export buildAndTestSubdir=${finalAttrs.cargoRoot}";
   # tauriInstallHook only works when we are in cargoRoot
   preInstall = "pushd $buildAndTestSubdir";
-  postInstall = "popd";
+  postInstall = ''
+    popd
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 packaging/flatpak/com.processone.fluux.metainfo.xml -t $out/share/metainfo
+  '';
 
   meta = {
     description = "XMPP client for communities and organizations";
