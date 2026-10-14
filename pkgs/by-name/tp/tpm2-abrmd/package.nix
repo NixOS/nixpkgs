@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tpm2-abrmd";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = "tpm2-abrmd";
     rev = finalAttrs.version;
-    sha256 = "sha256-l0ncCMsStaeFACRU3Bt6F1zyiOTGY6wOHewA4AD58Ww=";
+    sha256 = "sha256-o58emkp6jiOLZSqtz+C2l7F+EaZ3sa2/i8aDzBAxxiI=";
   };
 
   nativeBuildInputs = [
