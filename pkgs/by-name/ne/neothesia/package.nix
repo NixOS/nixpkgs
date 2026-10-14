@@ -66,6 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm 644 flatpak/com.github.polymeilex.neothesia.desktop $out/share/applications/com.github.polymeilex.neothesia.desktop
     install -Dm 644 flatpak/com.github.polymeilex.neothesia.png $out/share/icons/hicolor/256x256/apps/com.github.polymeilex.neothesia.png
     install -Dm 644 default.sf2 $out/share/neothesia/default.sf2
+    install -Dm 644 flatpak/com.github.polymeilex.neothesia.metainfo.xml -t $out/share/metainfo
   '';
 
   meta = {
