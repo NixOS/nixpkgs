@@ -18,8 +18,14 @@
   dlpack,
 
   # tests
+  cupy,
+  numba-cuda,
+  numpy,
+  pytest-benchmark,
+  pytest-env,
   pytestCheckHook,
   torch,
+  writableTmpDirAsHomeHook,
 
   # passthru
   cuda-tile,
@@ -107,9 +113,19 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs
   pythonImportsCheck = [ "cuda.tile" ];
 
   nativeCheckInputs = [
+    cupy
+    numba-cuda
+    numpy
+    pytest-benchmark
+    pytest-env
     pytestCheckHook
     torch
+    # cuTile fails to compile kernels if it cannot create its cache directory in $HOME
+    writableTmpDirAsHomeHook
   ];
+
+  # Run the benchmarks once as tests, without timing them
+  pytestFlags = [ "--benchmark-disable" ];
 
   # Tests require access to a physical GPU
   doCheck = false;
