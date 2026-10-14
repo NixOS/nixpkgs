@@ -78,6 +78,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       install -Dm444 "frame-app/resources/app-icons/$file" \
         "$out/share/icons/hicolor/''${size}x''${size}/apps/frame.png"
     done
+
+    install -Dm644 packaging/flathub/io.github._66HEX.Frame.metainfo.xml -t $out/share/metainfo
   '';
 
   postFixup = ''
