@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "filelock";
-  version = "3.32.4";
+  version = "4.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "filelock";
     tag = finalAttrs.version;
-    hash = "sha256-pYtfPduGEkE1cbyDn72SqAnLIg63+BwARpI10agdTIc=";
+    hash = "sha256-0JHYz1HSr8oZcJ6/70mmO74vvlG0LvmalG8MZ9rGn7M=";
   };
 
   build-system = [
@@ -45,7 +45,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/tox-dev/filelock/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/tox-dev/filelock/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     description = "Platform independent file lock for Python";
     homepage = "https://github.com/benediktschmitt/py-filelock";
     license = lib.licenses.mit;
