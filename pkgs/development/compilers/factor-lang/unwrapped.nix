@@ -21,17 +21,31 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "factor-lang";
 
   inherit src version;
+  __structuredAttrs = true;
+  strictDeps = true;
 
   patches = [
     # Use full path to image while bootstrapping
     ./staging-command-line-0.99-pre.patch
     # Point work vocabulary root to a writable location
     ./workdir-0.99-pre.patch
-    # Patch hard-coded FHS paths
-    ./adjust-paths-in-unit-tests.patch
-    # Avoid using /sbin/ldconfig
-    ./ld.so.cache-from-env.patch
-  ];
+  ]
+  ++ (
+    if (versionOlder finalAttrs.version "0.102") then
+      [
+        # Patch hard-coded FHS paths
+        ./adjust-paths-in-unit-tests.patch
+        # Avoid using /sbin/ldconfig
+        ./ld.so.cache-from-env.patch
+      ]
+    else
+      [
+        # Patch hard-coded FHS paths
+        ./adjust-paths-in-unit-tests-0.102.patch
+        # Avoid using /sbin/ldconfig
+        ./ld.so.cache-from-env-0.102.patch
+      ]
+  );
 
   nativeBuildInputs = [
     git
@@ -41,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    sed -ie '4i GIT_LABEL = heads/master-'$(< git-id) GNUmakefile
+    sed -i -e '/GIT_LABEL :=/c GIT_LABEL := heads/master-'$(< git-id) GNUmakefile
     # Some other hard-coded paths to fix:
     substituteInPlace extra/tzinfo/tzinfo.factor \
       --replace-fail '/usr/share/zoneinfo' '${tzdata}/share/zoneinfo'
