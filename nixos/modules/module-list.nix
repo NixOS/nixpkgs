@@ -758,6 +758,7 @@
   ./services/hardware/usbrelayd.nix
   ./services/hardware/vdr.nix
   ./services/hardware/watt.nix
+  ./services/hardware/x1ctl.nix
   ./services/home-automation/deye-dummycloud.nix
   ./services/home-automation/ebusd.nix
   ./services/home-automation/esphome.nix
