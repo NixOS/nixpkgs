@@ -1,5 +1,4 @@
 {
-  config,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -57,7 +56,7 @@
   wirelesstools ? null,
   nvidiaSupport ? false,
   libXNVCtrl ? null,
-  pulseSupport ? config.pulseaudio or false,
+  pulseSupport ? false,
   libpulseaudio ? null,
 
   curlSupport ? true,

@@ -8,7 +8,7 @@
   nix-update-script,
 
   chromecastSupport ? config.chromecast or stdenv.hostPlatform.isLinux,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pulseSupport ? stdenv.hostPlatform.isLinux,
 
   avahi,
   curl,

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   alsa-lib,
   cmake,
   dbus,
@@ -54,8 +53,7 @@
   libusbSupport ? stdenv.hostPlatform.isLinux,
   openglSupport ? lib.meta.availableOn stdenv.hostPlatform libGL,
   pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
-  pulseaudioSupport ?
-    config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  pulseaudioSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
   traySupport ? true,
   vulkanSupport ? true,
