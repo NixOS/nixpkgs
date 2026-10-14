@@ -78,6 +78,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     --set-key="Categories" --set-value="Game" \
     --set-key="Keywords" --set-value="nrc;minecraft;mc;" \
     $out/share/applications/NoRisk\ Launcher.desktop
+
+    install -Dm644 packaging/gg.norisk.NoRiskClientLauncherV3.metainfo.xml -t $out/share/metainfo
   '';
 
   passthru.updateScript = nix-update-script { };
