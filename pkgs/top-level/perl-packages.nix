@@ -17474,6 +17474,9 @@ with self;
       TestNoWarnings
     ];
     propagatedBuildInputs = [ pkgs.zlib ];
+    # -ffast-math makes GCC emit libmvec calls (e.g. _ZGVbN2v_cos), so link libm
+    # explicitly to pull in libmvec through glibc's AS_NEEDED linker script.
+    NIX_LDFLAGS = "-lm";
     makeMakerFlags = [
       "--with-jpeg-includes=${pkgs.libjpeg.dev}/include"
       "--with-jpeg-libs=${pkgs.libjpeg.out}/lib"
