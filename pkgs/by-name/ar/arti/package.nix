@@ -6,6 +6,7 @@
   pkg-config,
   sqlite,
   openssl,
+  zstd,
   versionCheckHook,
   nix-update-script,
   nixosTests,
@@ -36,9 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildAndTestSubdir = "crates/arti";
   cargoHash = "sha256-g+t5X1t0koUzqoHpY8+lncqRobdDuZggXtD3HRk9ryE=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ sqlite ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
+  buildInputs = [
+    sqlite
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   # `full` includes all stable and non-conflicting feature flags. the primary
   # downsides are increased binary size and memory usage for building, but
