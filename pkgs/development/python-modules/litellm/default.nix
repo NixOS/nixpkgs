@@ -33,7 +33,6 @@
   jinja2,
   jsonschema,
   langfuse,
-  maturin,
   mcp,
   openai,
   opentelemetry-api,
@@ -71,7 +70,7 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "litellm";
   version = "1.106.2";
   pyproject = true;
@@ -79,7 +78,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WZP27aJWtGpvCTHQShE/ufqp/MerqTM2dTTVj1T9EfI=";
   };
 
@@ -91,7 +90,7 @@ buildPythonPackage rec {
   cargoRoot = "litellm-rust";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
@@ -107,7 +106,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "maturin==1.15.0" "maturin==${maturin.version}"
+      --replace-fail "maturin==1.15.0" "maturin>=1.0,<2.0"
   '';
 
   dependencies = [
@@ -229,8 +228,8 @@ buildPythonPackage rec {
     description = "Use any LLM as a drop in replacement for gpt-3.5-turbo. Use Azure, OpenAI, Cohere, Anthropic, Ollama, VLLM, Sagemaker, HuggingFace, Replicate (100+ LLMs)";
     mainProgram = "litellm";
     homepage = "https://github.com/BerriAI/litellm";
-    changelog = "https://github.com/BerriAI/litellm/releases/tag/${src.tag}";
+    changelog = "https://github.com/BerriAI/litellm/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})
