@@ -1738,6 +1738,8 @@ self: super: with self; {
 
   azure-ai-agents = callPackage ../development/python-modules/azure-ai-agents { };
 
+  azure-ai-contentsafety = callPackage ../development/python-modules/azure-ai-contentsafety { };
+
   azure-ai-documentintelligence =
     callPackage ../development/python-modules/azure-ai-documentintelligence
       { };
