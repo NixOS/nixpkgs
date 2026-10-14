@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -D data/com.tomiyou.ivyTerm.desktop -t $out/share/applications
     install -D data/com.tomiyou.ivyTerm.svg -t $out/share/icons
+    install -Dm644 data/com.tomiyou.ivyTerm.metainfo.xml -t $out/share/metainfo
   '';
 
   passthru = {
