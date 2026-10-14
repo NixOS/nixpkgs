@@ -62,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "TPM2 resource manager, accessible via D-Bus";
     mainProgram = "tpm2-abrmd";
-    homepage = "https://github.com/tpm2-software/tpm2-tools";
+    homepage = "https://github.com/tpm2-software/tpm2-abrmd";
+    changelog = "https://github.com/tpm2-software/tpm2-abrmd/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
