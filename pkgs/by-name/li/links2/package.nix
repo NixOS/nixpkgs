@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "links2";
 
   src = fetchurl {
-    url = "http://links.twibright.com/download/links-${finalAttrs.version}.tar.bz2";
+    url = "https://links.twibright.com/download/links-${finalAttrs.version}.tar.bz2";
     hash = "sha256-xGMca1oRUnzcPLeHL8I7fyslwrAh1Za+QQ2ttAMV8WY=";
   };
 
@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     bzip2
   ];
+
+  patches = [ ./gcc-16.patch ];
 
   configureFlags = [
     "--with-ssl"

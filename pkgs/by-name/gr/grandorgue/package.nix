@@ -9,7 +9,7 @@
   alsa-lib,
   zlib,
   wavpack,
-  wxGTK32,
+  wxwidgets_3_2,
   udev,
   jackaudioSupport ? false,
   libjack2,
@@ -22,14 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grandorgue";
-  version = "3.16.3-1";
+  version = "3.17.2-1";
 
   src = fetchFromGitHub {
     owner = "GrandOrgue";
     repo = "grandorgue";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-A6Gc9kCtohz1nWj/fmYsyXM0X3uJxEmDK2N2Dr5CW1U=";
+    hash = "sha256-4stkpV6aQ0HJHuqgTibx39wGIuMXfhxNWWNx4ODiFSI=";
   };
 
   patches = [ ./darwin-fixes.patch ];
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftwFloat
     zlib
     wavpack
-    wxGTK32
+    wxwidgets_3_2
     yaml-cpp
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [

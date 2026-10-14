@@ -5,10 +5,7 @@
   setuptools,
   fuseSupport ? false,
   fusepy,
-  tuiSupport ? false,
-  urwid,
-  urwid-readline,
-  pygments,
+  qemu-qmp,
 }:
 
 buildPythonPackage {
@@ -31,18 +28,12 @@ buildPythonPackage {
     fi
   '';
 
-  buildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs =
-    [ ]
-    ++ lib.optionals fuseSupport [ fusepy ]
-    ++ lib.optionals tuiSupport [
-      urwid
-      urwid-readline
-      pygments
-    ];
+  dependencies = [ qemu-qmp ] ++ lib.optionals fuseSupport [ fusepy ];
 
-  # Project requires avocado-framework for testing, therefore replacing check phase
+  # Project now uses pytest instead of avocado-framework for testing but does not perform functional testing.
+  # let's keep it this way.
   checkPhase = ''
     for bin in $out/bin/*; do
       $bin --help
@@ -51,13 +42,11 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "qemu" ];
 
-  preFixup =
-    (lib.optionalString (!tuiSupport) ''
-      rm $out/bin/qmp-tui
-    '')
-    + (lib.optionalString (!fuseSupport) ''
+  preFixup = (
+    lib.optionalString (!fuseSupport) ''
       rm $out/bin/qom-fuse
-    '');
+    ''
+  );
 
   meta = {
     homepage = "https://www.qemu.org/";

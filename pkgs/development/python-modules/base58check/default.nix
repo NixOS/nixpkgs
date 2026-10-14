@@ -2,18 +2,23 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  setuptools,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "base58check";
   version = "1.0.2";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
+
+  build-system = [ setuptools ];
 
   src = fetchFromGitHub {
     owner = "joeblackwaslike";
     repo = "base58check";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Tig6beLRDsXC//x4+t/z2BGaJQWzcP0J+QEKx3D0rhs=";
   };
 
@@ -27,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

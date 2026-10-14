@@ -140,6 +140,7 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = {
         HOME = cfg.dataDir;
+        PYTHONUNBUFFERED = "1"; # ensure stdout is logged to journal
       };
       serviceConfig = lib.mkMerge [
         {

@@ -16,14 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner = "STEllAR-GROUP";
+    owner = "TheHPXProject";
     repo = "hpx";
     rev = "v${finalAttrs.version}";
     hash = "sha256-AhByaw1KnEDuRfKiN+/vQMbkG0BJ6Z3+h+QT8scFzAY=";
   };
 
   patches = [
-    # https://github.com/STEllAR-GROUP/hpx/pull/6731
+    # https://github.com/TheHPXProject/hpx/pull/6731
     # Fix build with asio >= 1.34.0
     ./remove_deprecated_asio_features.patch
   ];
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "C++ standard library for concurrency and parallelism";
-    homepage = "https://github.com/STEllAR-GROUP/hpx";
+    homepage = "https://github.com/TheHPXProject/hpx";
     license = lib.licenses.boost;
     platforms = [ "x86_64-linux" ]; # lib.platforms.linux;
     maintainers = with lib.maintainers; [ bobakker ];

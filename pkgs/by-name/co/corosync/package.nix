@@ -9,7 +9,7 @@
   nss,
   nspr,
   libqb,
-  systemd,
+  systemdLibs,
   dbus,
   rdma-core,
   libstatgrab,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.1.9";
 
   src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/corosync-${finalAttrs.version}.tar.gz";
+    url = "https://build.clusterlabs.org/corosync/releases/corosync-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     nspr
     libqb
-    systemd.dev
+    systemdLibs.dev
   ]
   ++ optional enableDbus dbus
   ++ optional enableInfiniBandRdma rdma-core

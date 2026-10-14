@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "isd";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kainctl";
     repo = "isd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MEfjE0zRxSuBwBkjAz9cKhodS+I4CjjtuvbO+WwL9SM=";
+    hash = "sha256-aIVZvsmIZRHKg7267wxWzmcwAqleu4i7z5GHSNJi260=";
   };
 
   build-system = with python3Packages; [

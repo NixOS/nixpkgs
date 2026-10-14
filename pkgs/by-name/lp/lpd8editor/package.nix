@@ -1,6 +1,6 @@
 {
   lib,
-  qt5,
+  qt6Packages,
   stdenv,
   gitMinimal,
   fetchFromGitHub,
@@ -10,24 +10,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lpd8editor";
-  version = "0.0.16";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "charlesfleche";
     repo = "lpd8editor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lRp2RhNiIf1VrryfKqYFSbKG3pktw3M7B49fXVoj+C8=";
+    hash = "sha256-ru6uyoBWWab/D1YLfJ8qXlFOazSJXQER7jgOgjHYrvc=";
   };
 
   buildInputs = [
-    qt5.qttools
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    qt6Packages.qttools
     alsa-lib
   ];
 
   nativeBuildInputs = [
     cmake
     gitMinimal
-    qt5.wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   meta = {

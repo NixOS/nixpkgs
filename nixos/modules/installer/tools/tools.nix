@@ -30,15 +30,20 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     replacements = {
-      perl = "${
+      perl = lib.getExe (
         pkgs.perl.withPackages (p: [
           p.FileSlurp
           p.ConfigIniFiles
         ])
-      }/bin/perl";
+      );
       hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
-      detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
-      btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
+      detectvirt = lib.getExe' config.systemd.package "systemd-detect-virt";
+      bcachefs =
+        if pkgs.bcachefs-tools.meta.broken then
+          lib.getExe' pkgs.coreutils "false"
+        else
+          lib.getExe pkgs.bcachefs-tools;
+      btrfs = lib.getExe pkgs.btrfs-progs;
       inherit (config.system.nixos-generate-config) configuration desktopConfiguration flake;
       xserverEnabled = config.services.xserver.enable;
     };
@@ -48,13 +53,27 @@ let
   nixos-version = makeProg {
     name = "nixos-version";
     src = ./nixos-version.sh;
-    replacements = {
+    replacements = rec {
       inherit (pkgs) runtimeShell;
       inherit (config.system.nixos) version codeName revision;
       inherit (config.system) configurationRevision;
+      kernelVersion =
+        if config.boot.kernel.enable then
+          # modDirVersion returns 6.18.54-xanmod1 instead of 6.18.54
+          config.boot.kernelPackages.kernel.modDirVersion or config.boot.kernelPackages.kernel.version
+        else
+          null;
+      specialisations = lib.escapeShellArg (
+        lib.concatStringsSep " " (lib.attrNames config.specialisation)
+      );
+
       json = builtins.toJSON (
         {
           nixosVersion = config.system.nixos.version;
+          specialisations = lib.attrNames config.specialisation;
+        }
+        // lib.optionalAttrs (kernelVersion != null) {
+          inherit kernelVersion;
         }
         // lib.optionalAttrs (config.system.nixos.revision != null) {
           nixpkgsRevision = config.system.nixos.revision;
@@ -76,10 +95,10 @@ let
     {
       inputs = {
         # This is pointing to an unstable release.
-        # If you prefer a stable release instead, you can this to the latest number shown here: https://nixos.org/download
+        # If you prefer a stable release instead, you can change the word unstable to the latest number shown here: https://nixos.org/download
         # i.e. nixos-24.11
         # Use `nix flake update` to update the flake to the latest revision of the chosen release channel.
-        nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+        nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.zst";
       };
       outputs = inputs\@{ self, nixpkgs, ... }: {
         # NOTE: '${options.networking.hostName.default}' is the default hostname
@@ -287,7 +306,7 @@ in
         {
           options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
             default = config.nix.enable && !config.system.disableInstallerTools;
-            defaultText = "config.nix.enable && !config.system.disableInstallerTools";
+            defaultText = lib.literalExpression "config.nix.enable && !config.system.disableInstallerTools";
           };
 
           config = lib.mkIf config.system.tools.${name}.enable {
@@ -314,6 +333,27 @@ in
         name = "nixos-rebuild";
         package = config.system.build.nixos-rebuild;
       })
+      (
+        { config, ... }:
+        {
+          options.system.tools.nixos-rebuild.enableRun0Elevation = lib.mkEnableOption ''
+            support for being targeted by `nixos-rebuild --elevate=run0
+            --ask-elevate-password`.
+
+            This enables polkit and adds {command}`polkit-stdin-agent` to
+            {option}`environment.systemPackages` so that a deploying host
+            can find a target-architecture agent at
+            {file}`<toplevel>/sw/bin/polkit-stdin-agent` after copying the
+            closure (which is required for cross-architecture deploys and
+            mismatched nixpkgs revisions to work).
+          '';
+
+          config = lib.mkIf config.system.tools.nixos-rebuild.enableRun0Elevation {
+            security.run0.enable = lib.mkDefault true;
+            environment.systemPackages = [ pkgs.polkit-stdin-agent ];
+          };
+        }
+      )
       (mkToolModule {
         name = "nixos-version";
         package = nixos-version;

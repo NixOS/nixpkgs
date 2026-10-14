@@ -10,7 +10,6 @@
   # available.
   enchantAspellDicts ? with aspellDicts; [
     en
-    en-computers
   ],
 }:
 

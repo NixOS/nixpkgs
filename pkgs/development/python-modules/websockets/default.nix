@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   unittestCheckHook,
+  pyprojectVersionPatchHook,
   pythonAtLeast,
   setuptools,
   werkzeug,
@@ -11,15 +12,17 @@
 
 buildPythonPackage rec {
   pname = "websockets";
-  version = "15.0.1";
+  version = "16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aaugustin";
     repo = "websockets";
     tag = version;
-    hash = "sha256-DC1nK+TvCoCqchyWJOyT4Ul4gkTYXixu7XmTqvytqEo=";
+    hash = "sha256-YbiDoL4edb6QGDOBRBJliRhEOs5UvZUgWO9f+ooyBcc=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ setuptools ];
 

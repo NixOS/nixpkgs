@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lightning-loop";
-  version = "0.31.5-beta";
+  version = "0.35.0-beta";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "loop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-pmZturc7b3wd+qgSQPNzeY0LoMTF82dqUgOe8NfPeZw=";
+    hash = "sha256-HPYL+89XQ21tWTm8BEKi+6rplQIy2nmBwTOUDZPnuRA=";
   };
 
-  vendorHash = "sha256-X/+yi04FkN8hauqeFytagIdfigb6EGTvv8tVrlm7MGw=";
+  vendorHash = "sha256-gD1ElkrNND51Twtl30esW6iwtnIoTpq9r6Z2gm1RmA8=";
 
   subPackages = [
     "cmd/loop"

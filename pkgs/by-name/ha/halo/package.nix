@@ -8,10 +8,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "halo";
-  version = "2.22.14";
+  version = "2.26.1";
   src = fetchurl {
     url = "https://github.com/halo-dev/halo/releases/download/v${finalAttrs.version}/halo-${finalAttrs.version}.jar";
-    hash = "sha256-8AAiR8EVG/3mHpRr85O6zRcrxu5/P+VK2+QaV9ARAJ8=";
+    hash = "sha256-eh1uoIAOiUBnKquZpzKLe9lSDil2dxaVlDKABKQZkbw=";
   };
 
   nativeBuildInputs = [

@@ -2,11 +2,13 @@
   lib,
   aenum,
   aiohttp,
+  blinker,
   buildPythonPackage,
   fetchPypi,
   flatdict,
   jwcrypto,
   pycryptodomex,
+  pydantic,
   pydash,
   pyfakefs,
   pyjwt,
@@ -14,7 +16,9 @@
   pytest-mock,
   pytest-recording,
   pytestCheckHook,
+  python-dateutil,
   pyyaml,
+  requests,
   setuptools,
   xmltodict,
   yarl,
@@ -22,12 +26,12 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.13";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jY6SZ1G3+NquF5TfLsGw6T9WO4smeBYT0gXLnRDoN+8=";
+    hash = "sha256-7ZYDrup+HJxlrOmSBGsWD4Ku8HRlQR4E68olWQtcazg=";
   };
 
   build-system = [ setuptools ];
@@ -35,12 +39,16 @@ buildPythonPackage rec {
   dependencies = [
     aenum
     aiohttp
+    blinker
     flatdict
     jwcrypto
     pycryptodomex
+    pydantic
     pydash
     pyjwt
+    python-dateutil
     pyyaml
+    requests
     xmltodict
     yarl
   ];

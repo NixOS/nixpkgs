@@ -64,13 +64,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "inxi";
-  version = "3.3.40-1";
+  version = "3.3.41-1";
 
   src = fetchFromCodeberg {
     owner = "smxi";
     repo = "inxi";
     tag = finalAttrs.version;
-    hash = "sha256-GpXfLLJhM4L9TB8Qw38uaCCwtCmBYg9nrVC001kDckc=";
+    hash = "sha256-JIBBYLpWKawmAEOVr7YoC6oBQdtlYuQcLFlt/ltswpc=";
   };
 
   nativeBuildInputs = [
@@ -109,7 +109,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://codeberg.org/smxi/inxi/src/tag/${finalAttrs.version}/inxi.changelog";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     mainProgram = "inxi";
   };
 })

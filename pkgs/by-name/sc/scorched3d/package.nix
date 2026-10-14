@@ -6,9 +6,9 @@
   libGL,
   glew,
   pkg-config,
-  openalSoft,
+  openal-soft,
   freealut,
-  wxGTK32,
+  wxwidgets_3_2,
   libogg,
   freetype,
   libvorbis,
@@ -32,9 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libGL
     glew
-    openalSoft
+    openal-soft
     freealut
-    wxGTK32
+    wxwidgets_3_2
     libogg
     freetype
     libvorbis

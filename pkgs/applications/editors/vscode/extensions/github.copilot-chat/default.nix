@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "github";
     name = "copilot-chat";
-    version = "0.37.6";
-    hash = "sha256-tCrrF2Emr/rNJola58ExWKfLuAyOvPqszPLd5SRVcac=";
+    version = "0.48.1";
+    hash = "sha256-eFLfYMFxvgtZtmwLsxfneMjD4jOg8/Uk0Eu/6+A6odY=";
   };
 
   meta = {
@@ -16,6 +16,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat";
     homepage = "https://github.com/features/copilot";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.laurent-f1z1 ];
+    maintainers = [ ];
   };
 }

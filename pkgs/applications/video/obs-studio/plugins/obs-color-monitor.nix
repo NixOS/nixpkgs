@@ -4,24 +4,24 @@
   fetchFromGitHub,
   cmake,
   obs-studio,
-  qtbase,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-color-monitor";
-  version = "0.9.3";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "norihiro";
     repo = "obs-color-monitor";
     tag = finalAttrs.version;
-    hash = "sha256-TwsEIOgQjj1wza7i8nne63oBM3FB6GmMjCq8/PuiWHs=";
+    hash = "sha256-2TjkPsudGwB2TNdfVnRqMiUQquAnCdBEmG9N9JLfewo=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     obs-studio
-    qtbase
+    qt6.qtbase
   ];
 
   postInstall = ''

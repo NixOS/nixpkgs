@@ -1,0 +1,11 @@
+--- result/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ ./CMakeLists.txt	2026-10-02 01:44:39.238936270 +0200
+@@ -249,7 +250,7 @@
+ endif()
+ 
+ # Enable C++-17
+-set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ 
+ # Enable compile commands export for vscode

@@ -27,7 +27,13 @@ buildPythonPackage rec {
   patches = [
     # https://github.com/iroco-co/aioimaplib/issues/125
     ./event-loop.patch
+    # https://github.com/iroco-co/aioimaplib/pull/138
+    ./python3.14.7-compat.patch
   ];
+
+  postPatch = ''
+    sed -i "/crypto.X509Extension/,+1d" tests/ssl_cert.py
+  '';
 
   build-system = [ poetry-core ];
 
@@ -43,6 +49,7 @@ buildPythonPackage rec {
   disabledTests = [
     # TimeoutError
     "test_idle_start__exits_queue_get_without_timeout_error"
+    "test_client_can_connect_to_server_over_ssl"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Comparison to magic strings

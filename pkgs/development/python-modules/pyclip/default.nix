@@ -39,8 +39,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  # Tests require `pbcopy` and `pbpaste` on darwin, which are dependencies that are not
+  # available in the build environment.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform clipboard utilities supporting both binary and text data";
     mainProgram = "pyclip";
     homepage = "https://github.com/spyoungtech/pyclip";

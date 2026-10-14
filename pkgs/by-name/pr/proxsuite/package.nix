@@ -7,15 +7,12 @@
   pythonSupport ? false,
   python3Packages,
 
-  # nativeBuildInputs
-  cmake,
-  doxygen,
-  graphviz,
+  # buildInputs
+  jrl-cmakemodules,
 
   # propagatedBuildInputs
   cereal,
   eigen,
-  jrl-cmakemodules,
   simde,
 
   # nativeCheckInputs
@@ -27,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxsuite";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "simple-robotics";
     repo = "proxsuite";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-1+a5tFOlEwzhGZtll35EMFceD0iUOOQCbwJd9NcFDlk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qJZQV9vNLQ/rtPMRdAfjwrYExyyDC2OP8uVeywkQ56Y=";
   };
 
   patches = [
@@ -41,19 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-cmake-python-version.patch
   ];
 
-  # ref. https://github.com/Simple-Robotics/proxsuite/pull/408 merged upstream
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "cmake_minimum_required(VERSION 3.10)" \
-      "cmake_minimum_required(VERSION 3.22)"
-  '';
-
   outputs = [
     "doc"
     "out"
   ];
 
-  cmakeFlags = [
+  cmakeFlags = jrl-cmakemodules.docsCmakeFlags ++ [
     (lib.cmakeBool "BUILD_DOCUMENTATION" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
@@ -61,20 +51,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    graphviz
-  ]
-  ++ lib.optionals pythonSupport [
-    python3Packages.python
-    python3Packages.pythonImportsCheckHook
-  ];
+  nativeBuildInputs =
+    jrl-cmakemodules.docsNativeBuildInputs
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pythonImportsCheckHook
+    ];
+
+  buildInputs = [ jrl-cmakemodules ];
 
   propagatedBuildInputs = [
     cereal
     eigen
-    jrl-cmakemodules
     simde
   ]
   ++ lib.optionals pythonSupport [ python3Packages.nanobind ];

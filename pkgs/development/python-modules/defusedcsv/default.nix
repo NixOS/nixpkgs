@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "defusedcsv";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "defusedcsv";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-OEDZbltnh2tAM58Kk852W0so7oOSv7S+S046MjIOMfY=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "defusedcsv.csv" ];
 
@@ -29,4 +34,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

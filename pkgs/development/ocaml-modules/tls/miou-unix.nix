@@ -3,7 +3,7 @@
   crowbar,
   hxd,
   miou,
-  mirage-crypto-rng-miou-unix,
+  mirage-crypto-rng,
   ohex,
   ptime,
   rresult,
@@ -25,7 +25,7 @@ buildDunePackage {
   checkInputs = [
     crowbar
     hxd
-    mirage-crypto-rng-miou-unix
+    mirage-crypto-rng
     ohex
     ptime
     rresult

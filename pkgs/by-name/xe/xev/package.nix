@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xev";
-  version = "1.2.6";
+  version = "1.2.7";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/xev-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YeHF4AismXOsp83d826d90EOdwg7Aw6wT03HN8UYB9c=";
+    hash = "sha256-lRZ4lZJN5Y40sQE7KwyEdukNCIjGw5566bw146GdugQ=";
   };
 
   strictDeps = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/xorg/app/xev";
     license = lib.licenses.x11;
     mainProgram = "xev";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aiyion ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  installShellFiles,
   libxcb,
   makeBinaryWrapper,
   nix-update-script,
@@ -10,16 +11,15 @@
   xwayland,
   withSystemd ? true,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwayland-satellite";
-  version = "0.8";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Qz1WvGdawnoz4dG3JtCtlParmdQHM5xu6osnXeVOqYI=";
+    hash = "sha256-eFEjCCniMCKeWU0PcZNv+tDYe08SLFPjRplyPY8OFt4=";
   };
 
   postPatch = ''
@@ -27,9 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
-  cargoHash = "sha256-HGrMjNIsUqh8AFtSABk615x4B9ygrVEn26V0G1kX/nA=";
+  cargoHash = "sha256-gMGFvnbxM3hD5fmkSimaFd87GEf6BXFe/MGjoS6VNVU=";
 
   nativeBuildInputs = [
+    installShellFiles
     makeBinaryWrapper
     pkg-config
     rustPlatform.bindgenHook
@@ -43,10 +44,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional withSystemd "systemd";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   # All integration tests require a running display server
   doCheck = false;
 
-  postInstall = lib.optionalString withSystemd ''
+  postInstall = ''
+    installManPage --name xwayland-satellite.1 xwayland-satellite.man
+  ''
+  + lib.optionalString withSystemd ''
     install -Dm0644 resources/xwayland-satellite.service -t $out/lib/systemd/user
   '';
 
@@ -69,6 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       if-loop69420
       sodiboo
       getchoo
+      mithicspirit
     ];
     mainProgram = "xwayland-satellite";
     platforms = lib.platforms.linux;

@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_argparse";
     inherit version;
-    hash = "sha256-5TUvj6iUtvtv2gSYuiip+NQ1lx70u8GmycZBTnZE8DI=";
+    hash = "sha256-0HK7Z91SspQ3Xw7twgPLjlDQMpkQ2862dk6Thr/5Tp0=";
   };
 
   build-system = [ flit-core ];

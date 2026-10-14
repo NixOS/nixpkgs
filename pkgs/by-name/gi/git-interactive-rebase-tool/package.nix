@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";
     description = "Native cross platform full feature terminal based sequence editor for git interactive rebase";
     changelog = "https://github.com/MitMaro/git-interactive-rebase-tool/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       SuperSandro2000
       zowoq

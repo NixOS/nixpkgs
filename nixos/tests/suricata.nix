@@ -23,6 +23,7 @@
 
       services.suricata = {
         enable = true;
+        reloadOnRulesetUpdate = true;
         settings = {
           vars.address-groups.HOME_NET = "192.168.1.0/24";
           unix-command.enabled = true;
@@ -66,7 +67,7 @@
     # check that configuration has been applied correctly with suricatasc
     with subtest("suricata configuration test"):
         ids.wait_for_unit("suricata.service")
-        assert '1' in ids.succeed("suricatasc -c 'iface-list' | ${pkgs.jq}/bin/jq .message.count")
+        assert '1' in ids.wait_until_succeeds("suricatasc -c 'iface-list' | ${pkgs.jq}/bin/jq .message.count", 5)
 
     # test detection of events based on a static ruleset (output of id command)
     with subtest("suricata rule test"):
@@ -75,5 +76,9 @@
 
         ids.succeed("curl http://192.168.1.1/id/")
         assert "id check returned root [**] [Classification: Potentially Bad Traffic]" in ids.succeed("tail -n 1 /var/log/suricata/fast.log"), "Suricata didn't detect the output of id comment"
+
+    with subtest("suricata blocking reload test"):
+      ids.wait_for_unit("suricata.service")
+      assert ids.systemctl("start suricata-blocking-reload.service")[0] == 0
   '';
 }

@@ -20,9 +20,67 @@
       path = ../18;
     }
   ];
-  "llvm/gnu-install-dirs.patch" = [
+  "lldb/backport-ParseTrieEntries-fixes.patch" = [
+    {
+      before = "22";
+      path = ../18;
+    }
     {
       after = "22";
+      before = "23";
+      path = ../22;
+    }
+  ];
+  "lldb/gnu-install-dirs.patch" = [
+    {
+      before = "23";
+      path = ../18;
+    }
+    {
+      after = "23";
+      path = ../23;
+    }
+  ];
+  "llvm/backport-darwin-triple-parsing.patch" = [
+    {
+      after = "18";
+      before = "21";
+      path = ../18;
+    }
+    {
+      after = "21";
+      path = ../21;
+    }
+  ];
+  "llvm/backport-minimal-arm64e_x1-support.patch" = [
+    {
+      after = "18";
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "20";
+      path = ../19;
+    }
+    {
+      after = "20";
+      before = "22";
+      path = ../20;
+    }
+    {
+      after = "22";
+      path = ../22;
+    }
+  ];
+  "llvm/gnu-install-dirs.patch" = [
+    {
+      after = "23";
+      path = ../23;
+    }
+    {
+      after = "22";
+      before = "23";
       path = ../22;
     }
     {
@@ -101,31 +159,6 @@
       path = ../18;
     }
   ];
-  "libclc/use-default-paths.patch" = [
-    {
-      after = "20";
-      path = ../20;
-    }
-    {
-      after = "19";
-      before = "20";
-      path = ../19;
-    }
-    {
-      after = "20";
-      path = ../20;
-    }
-  ];
-  "libclc/gnu-install-dirs.patch" = [
-    {
-      before = "21";
-      path = ../18;
-    }
-    {
-      after = "21";
-      path = ../21;
-    }
-  ];
   "mlir/mlir-add-include-cstdint.patch" = [
     {
       after = "18";
@@ -136,6 +169,41 @@
       after = "19";
       before = "20";
       path = ../19;
+    }
+  ];
+  "mlir/mlir-tablegen-imported-target.patch" = [
+    {
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "21";
+      path = ../19;
+    }
+    {
+      after = "21";
+      path = ../21;
+    }
+  ];
+  "flang/warn-on-fbuiltin-and-fno-builtin.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/accept-and-ignore-some-gfortran-optimization-flags.patch" = [
+    {
+      after = "20";
+      before = "22";
+      path = ../21;
+    }
+  ];
+  "flang/use-xflang-in-diagnostics.patch" = [
+    {
+      after = "20";
+      path = ../21;
     }
   ];
 }

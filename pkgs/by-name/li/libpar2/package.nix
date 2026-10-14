@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libsigcxx,
+  libsigcxx_2_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,11 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsigcxx ];
+  buildInputs = [ libsigcxx_2_0 ];
 
   patches = [ ./libpar2-0.4-external-verification.patch ];
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = "-std=c++11";
+  };
 
   meta = {
     homepage = "https://parchive.sourceforge.net/";

@@ -11,32 +11,28 @@
 
 haskellPackages.mkDerivation rec {
   pname = "echidna";
-  version = "2.2.7";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     tag = "v${version}";
-    sha256 = "sha256-rDtxyUpWfdMvS5BY1y8nydkQk/eCdmtjCqGJ+I4vy0I=";
+    sha256 = "sha256-Zopkqc01uUccJzdjP+qmHHZzB2iXK0U0fQi6EhgCRKg=";
   };
 
   isExecutable = true;
 
-  patches = [
-    # Fix build with GHC 9.10
-    # https://github.com/crytic/echidna/pull/1446
-    (fetchpatch {
-      url = "https://github.com/crytic/echidna/commit/1b498bdb8c86d8297aa34de8f48b6dce2f4dd84d.patch";
-      hash = "sha256-JeKPv2Q2gIt1XpI81XPFu80/x8QcOI4k1QN/mTf+bqk=";
-    })
-  ];
-
   buildTools = with haskellPackages; [
     hpack
+    makeWrapper
   ];
 
+  prePatch = ''
+    hpack
+  '';
+
   executableHaskellDepends = with haskellPackages; [
-    # base dependencies
+    # package.yml/dependencies
     aeson
     base
     containers
@@ -45,9 +41,9 @@ haskellPackages.mkDerivation rec {
     MonadRandom
     mtl
     text
-    # library dependencies
+    # package.yml/library.dependencies
     ansi-terminal
-    async
+    array
     base16-bytestring
     binary
     brick
@@ -58,11 +54,14 @@ haskellPackages.mkDerivation rec {
     exceptions
     extra
     filepath
+    Glob
     hashable
     html-conduit
     html-entities
     http-conduit
     ListLike
+    mcp-server
+    mustache
     optics
     optics-core
     process
@@ -71,19 +70,22 @@ haskellPackages.mkDerivation rec {
     semver
     signal
     split
+    stm
     strip-ansi-escape
     time
     unliftio
+    unliftio-core
     utf8-string
     vector
     vty
     vty-crossplatform
     wai-extra
     warp
+    wreq
     word-wrap
     xml-conduit
     yaml
-    # executable dependencies
+    # package.yml/ecutable.echidna.dependencies
     code-page
     filepath
     hashable
@@ -91,14 +93,6 @@ haskellPackages.mkDerivation rec {
     time
     with-utf8
   ];
-
-  executableToolDepends = [
-    makeWrapper
-  ];
-
-  prePatch = ''
-    hpack
-  '';
 
   postInstall =
     with haskellPackages;
@@ -127,6 +121,4 @@ haskellPackages.mkDerivation rec {
   ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna";
-  # Fails to build since https://hydra.nixos.org/build/313316669/nixlog/2
-  broken = true;
 }

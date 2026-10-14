@@ -23,6 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-pZdZzCAPfAVucuiV/q/ROY3cz/wxQWep6dCTGNn2fSo=";
   };
 
+  patches = [
+    # https://github.com/devkitPro/wiiload/pull/4
+    ./fix-gcc15.patch
+  ];
+
   preConfigure = "./autogen.sh";
 
   meta = {

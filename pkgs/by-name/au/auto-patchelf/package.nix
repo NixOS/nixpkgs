@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ pythonEnv ];
 
+  strictDeps = true;
+
   src = ./source;
 
   buildPhase = ''
@@ -33,11 +35,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Automatically patch ELF binaries using patchelf";
     mainProgram = "auto-patchelf";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Scrumplex ];
+    maintainers = with lib.maintainers; [
+      Scrumplex
+      layus
+    ];
   };
 }

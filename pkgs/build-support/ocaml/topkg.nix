@@ -7,7 +7,6 @@
   topkg,
   ocamlbuild,
   cmdliner,
-  odoc,
   b0,
 }:
 
@@ -19,11 +18,10 @@
   ...
 }@args:
 
-lib.throwIf (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion)
-  "${pname}-${version} is not available for OCaml ${ocaml.version}"
-
-  stdenv.mkDerivation
-  (
+if (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion) then
+  throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
+else
+  stdenv.mkDerivation (
     {
 
       dontAddStaticConfigureFlags = true;

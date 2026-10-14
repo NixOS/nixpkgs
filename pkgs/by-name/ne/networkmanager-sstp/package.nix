@@ -78,6 +78,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "NetworkManager's sstp plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
+    knownVulnerabilities = [
+      "CVE-2026-91838"
+    ];
     license = lib.licenses.gpl2Plus;
   };
 }

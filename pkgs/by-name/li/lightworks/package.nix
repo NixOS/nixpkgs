@@ -27,6 +27,7 @@
   gmp,
   libdrm,
   libpulseaudio,
+  sndio,
 }:
 let
   fullPath = lib.makeLibraryPath [
@@ -53,18 +54,19 @@ let
     gmp
     libdrm
     libpulseaudio
+    sndio
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "2025.1";
-    rev = "148287";
+    version = "2025.2";
+    rev = "56356";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
-          sha256 = "sha256-opYbWzZYim5wqSaxDeGmc10XxFkkE521PDB8OULh7Jc=";
+          url = "https://cdn.lwks.com/releases/${version}/Lightworks-${version}-${rev}.deb";
+          sha256 = "sha256-MQsXl10I85qHiOosBEpdrLPq3iIiFlzumQv2R2sXNn8=";
         }
       else
         throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
@@ -125,6 +127,7 @@ buildFHSEnv {
       antonxy
       vojta001
       kashw2
+      tombert
     ];
     platforms = [ "x86_64-linux" ];
   };

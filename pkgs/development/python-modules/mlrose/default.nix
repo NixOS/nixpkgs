@@ -1,6 +1,5 @@
 {
   lib,
-  isPy27,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -14,13 +13,12 @@ buildPythonPackage rec {
   pname = "mlrose";
   version = "1.3.0";
   pyproject = true;
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "gkhayes";
     repo = "mlrose";
     rev = "v${version}";
-    sha256 = "1dn43k3rcypj58ymcj849b37w66jz7fphw8842v6mlbij3x0rxfl";
+    hash = "sha256-1PUM+pBx0Wq2IAhxeN350hh+xkoESVY9KvJ6lsccxLY=";
   };
 
   patches = [
@@ -46,6 +44,11 @@ buildPythonPackage rec {
 
   # Fix random seed during tests
   pytestFlags = [ "--randomly-seed=0" ];
+
+  disabledTests = [
+    # mimic optimizer fails to converge under current numpy
+    "test_mimic_discrete_max_fast"
+  ];
 
   meta = {
     description = "Machine Learning, Randomized Optimization and SEarch";

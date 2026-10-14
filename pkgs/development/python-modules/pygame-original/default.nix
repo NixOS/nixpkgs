@@ -132,7 +132,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python library for games (original distribution)";
-    homepage = "https://www.pygame.org/";
+    homepage = "https://github.com/pygame/pygame";
     changelog = "https://github.com/pygame/pygame/releases/tag/${src.tag}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ emilytrau ];

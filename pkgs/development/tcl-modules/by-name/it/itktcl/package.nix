@@ -7,12 +7,12 @@
   incrtcl,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "itk-tcl";
   version = "4.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itk${version}.tar.gz";
+    url = "mirror://sourceforge/incrtcl/%5BIncr%20Tcl_Tk%5D-source/3.4/itk${finalAttrs.version}.tar.gz";
     hash = "sha256-2mRhmSIu/cTYyZWThjyNKHRC6lqGh/lUYNbp5yQxycc=";
   };
 
@@ -30,10 +30,10 @@ mkTclDerivation rec {
 
   postInstall = ''
     rmdir $out/bin
-    mv $out/lib/itk${version}/* $out/lib
-    ln -s libitk${version}${stdenv.hostPlatform.extensions.sharedLibrary} \
-      $out/lib/libitk${lib.versions.major version}${stdenv.hostPlatform.extensions.sharedLibrary}
-    rmdir $out/lib/itk${version}
+    mv $out/lib/itk${finalAttrs.version}/* $out/lib
+    ln -s libitk${finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary} \
+      $out/lib/libitk${lib.versions.major finalAttrs.version}${stdenv.hostPlatform.extensions.sharedLibrary}
+    rmdir $out/lib/itk${finalAttrs.version}
   '';
 
   outputs = [
@@ -49,4 +49,4 @@ mkTclDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

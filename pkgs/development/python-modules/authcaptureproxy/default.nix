@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.3.3";
+  version = "1.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
     tag = "v${version}";
-    hash = "sha256-H5Dl1incS5+lmZaLZXMCOqEIGTcTr4A5J3r3ngpDGtY=";
+    hash = "sha256-3osyh4Er0bZ8dvOtDV1w66zOWuzECIWeL8M90gqi+D8=";
   };
 
   nativeBuildInputs = [ poetry-core ];

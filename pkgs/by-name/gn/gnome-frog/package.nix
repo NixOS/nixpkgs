@@ -89,11 +89,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://getfrog.app/";
+    homepage = "https://github.com/TenderOwl/Frog";
     description = "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = lib.licenses.mit;
     mainProgram = "frog";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.axodentally ];
     platforms = lib.platforms.linux;
   };
 })

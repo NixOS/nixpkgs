@@ -4,16 +4,16 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "checkpwn";
-  version = "0.5.6";
+  version = "0.6.2";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-M0Jb+8rKn4KVuumNSsM6JEbSOoBOFy9mmXiCnUnDgak=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-QofPCfdOurEBGY1mwj5pQXtWA0+EJaEsjnHCXFjW1L8=";
   };
 
-  cargoHash = "sha256-8ALu1Ij4o2fdsRWhlWu6rOIfHZjIIC+fHJ07XIbH66s=";
+  cargoHash = "sha256-U5EXX8EzZC3uJ0cWzB5dT9sGDqIc9GsAbstts9PtjQ0=";
 
   # requires internet access
   checkFlags = [
@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Check Have I Been Pwned and see if it's time for you to change passwords";
     homepage = "https://github.com/brycx/checkpwn";
-    changelog = "https://github.com/brycx/checkpwn/releases/tag/${version}";
+    changelog = "https://github.com/brycx/checkpwn/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "checkpwn";
   };
-}
+})

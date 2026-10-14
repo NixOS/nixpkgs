@@ -61,7 +61,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.nodePackages.peerflix-server}/bin/peerflix-server";
+        ExecStart = "${pkgs.peerflix-server}/bin/peerflix-server";
         User = "peerflix";
       };
     };

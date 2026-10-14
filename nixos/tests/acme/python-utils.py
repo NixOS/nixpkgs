@@ -84,6 +84,11 @@ def check_domain(node, cert_name, domain, fail=False) -> None:
     cmd = f"openssl x509 -noout -checkhost '{domain}' -in /var/lib/acme/{cert_name}/cert.pem"
     run(node, cmd, fail=fail)
 
+# Ensures the provided ip address matches with the given cert
+def check_ip(node, cert_name, ip_address, fail=False) -> None:
+    cmd = f"openssl x509 -noout -checkip '{ip_address}' -in /var/lib/acme/{cert_name}/cert.pem"
+    run(node, cmd, fail=fail)
+
 # Ensures the required values for OCSP stapling are present
 # Pebble doesn't provide a full OCSP responder, so just checks the URL
 def check_stapling(node, cert_name, ca_domain, fail=False):

@@ -21,33 +21,25 @@
 # A pure Rust build would lack the Prettier plugin functionality.
 stdenv.mkDerivation (finalAttrs: {
   pname = "oxfmt";
-  version = "0.27.0";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
     tag = "oxfmt_v${finalAttrs.version}";
-    hash = "sha256-EAM1DxA/TqnIRN5Tlvg5/jvbyOUtSuwQ4RCBeO9esCw=";
+    hash = "sha256-BqBI+xOFDcsw4muiyh6TypA8msJfwTsQ/nC4B6AtiLE=";
   };
-
-  # Remove patchedDependencies from both workspace and lockfile
-  # to avoid LOCKFILE_CONFIG_MISMATCH error
-  postPatch = ''
-    substituteInPlace pnpm-workspace.yaml pnpm-lock.yaml \
-      --replace-fail "patchedDependencies:" "_patchedDependencies:"
-  '';
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-okwkhcT6mekIvo52T8eSrXUcp/LQhcEYvHyIc5CLdrE=";
+    hash = "sha256-1raDjWN2IvtschMmLgs9Twlxc4+XVIEZ+7pqkVUDOR8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-GOsSTfM93VgGhVlgzXhJIJG9MSf306cEnRru/aTA+oY=";
-    prePnpmInstall = finalAttrs.postPatch;
+    fetcherVersion = 3;
+    hash = "sha256-A4HpPjyL5UTMlpQ7hT/f2zbbW3GOKBFXWpZNdPRM6/s=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +57,22 @@ stdenv.mkDerivation (finalAttrs: {
   dontUseCmakeConfigure = true;
 
   env.OXC_VERSION = finalAttrs.version;
+
+  # @napi-rs/cli >= 3.8 reads the process start time and machine identity via
+  # host binaries while acquiring its filesystem reconciliation lock. The
+  # Darwin build sandbox denies those execs; Node raises them as synchronous
+  # `spawn EPERM` from execFile, which escapes napi's callback-based error
+  # handling. Point the lookups at a store no-op so the sandbox allows them.
+  # Empty output is treated as unverifiable identity and only disables stale
+  # lock detection.
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for cli in node_modules/.pnpm/@napi-rs+cli@*/node_modules/@napi-rs/cli/dist/cli.js; do
+      substituteInPlace "$cli" \
+        --replace-fail '"/bin/ps"' '":"' \
+        --replace-fail '"/usr/sbin/ioreg"' '":"' \
+        --replace-fail '"/usr/sbin/sysctl"' '":"'
+    done
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -102,8 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "JavaScript formatter with Prettier integration";
-    homepage = "https://github.com/oxc-project/oxc";
+    description = "High-performance formatter for the JavaScript ecosystem";
+    homepage = "https://oxc.rs/docs/guide/usage/formatter";
+    downloadPage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/blob/${finalAttrs.src.tag}/apps/oxfmt/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];

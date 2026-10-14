@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   patches = [
     # python3.14 introduced a breaking change which caused a test to fail. A
-    # fix has been commited upstream in a pull request by the author, but has
+    # fix has been committed upstream in a pull request by the author, but has
     # since been kept unmerged
     # https://github.com/neithere/argh/pull/240
     ./pr240-699568ad-06-01-2025-test_integration.patch
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "argh" ];
 
   meta = {
-    changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGES";
+    changelog = "https://github.com/neithere/argh/blob/v${version}/CHANGELOG.rst";
     homepage = "https://github.com/neithere/argh";
     description = "Unobtrusive argparse wrapper with natural syntax";
     license = lib.licenses.lgpl3Plus;

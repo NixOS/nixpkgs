@@ -2,30 +2,32 @@
   lib,
   fetchFromGitHub,
   fetchYarnDeps,
-  php,
+  php85,
   yarn,
   fixup-yarn-lock,
   nixosTests,
 }:
-
+let
+  php = php85;
+in
 php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
-  version = "4.5.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MnN6TIkNZWT+pAQf0+z5l3hj/7K/d3BfI7VAaUEKG8s=";
+    hash = "sha256-WhGXMQfc8yHc2B8YBuoVhGjj33Uj8NOdM1hG48bPBrg=";
   };
 
   # Upstream composer.json file is missing the name, description and license fields
   composerStrictValidation = false;
-  vendorHash = "sha256-11+NIZX8i9uwcImwSE0HAeMc/WOCsecpMRqiba1mkrs=";
+  vendorHash = "sha256-mxZcRga2mUyZPyvy77H5INF8tDr/UEj4hw+DhIL9o6M=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Q+9hUxIfNrfdok39h04rz5I63RxOJ0qk3XlwvD1TcqI=";
+    hash = "sha256-NnAhw53Ojh0VGWOkwlOoN8mm7/BOUutgV87/Z14dfxg=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +59,10 @@ php.buildComposerProject2 (finalAttrs: {
     rm -r $out/share
   '';
 
-  passthru.tests = { inherit (nixosTests) grocy; };
+  passthru = {
+    phpPackage = php;
+    tests = { inherit (nixosTests) grocy; };
+  };
 
   meta = {
     license = lib.licenses.mit;

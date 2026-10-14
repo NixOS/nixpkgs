@@ -32,6 +32,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/marshmallow-code/marshmallow-oneofschema/blob/${version}/CHANGELOG.rst";
     homepage = "https://github.com/marshmallow-code/marshmallow-oneofschema";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ivan-tkatchev ];
+    maintainers = [ ];
   };
 }

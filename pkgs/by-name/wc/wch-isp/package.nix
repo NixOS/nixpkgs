@@ -3,21 +3,25 @@
   stdenv,
   fetchFromSourcehut,
   pkg-config,
+  scdoc,
   libusb1,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wch-isp";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~jmaselbas";
     repo = "wch-isp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JB7cvZPzRhYJ8T3QJkguHOzZFrLOft5rRz0F0sVav/k=";
+    hash = "sha256-4IY3obL/Udw+e3m7LWkRZxVzZxl+hTc4B8ui4dmWOCE=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    scdoc
+  ];
   buildInputs = [ libusb1 ];
 
   installFlags = [

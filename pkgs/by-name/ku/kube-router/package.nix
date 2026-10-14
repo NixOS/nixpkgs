@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kube-router";
-  version = "2.7.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
     repo = "kube-router";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xtqzUnQxNwk6Qp2RQ94LqDQ0eJXPtrYEe9MK6OUZYAE=";
+    hash = "sha256-lTc3uo30byCu+Bm/Yy9OTgx1KLGncIEiQ9iweLIFC0k=";
   };
 
-  vendorHash = "sha256-s7In0uv8C+H1xkQxfjnH4+PXO3NPZU/NYdg00EVH4us=";
+  vendorHash = "sha256-XdCqwOfOUAjiNeNNto/x2KqjfdW/mjzSIiHNAdLfFiw=";
 
   env.CGO_ENABLED = 0;
 

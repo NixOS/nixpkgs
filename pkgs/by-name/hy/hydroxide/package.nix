@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "hydroxide";
-  version = "0.2.31";
+  version = "0.2.32";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hydroxide";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-92eyt+s+kEXRuIXPRmbIQG5Mth7wJFCruqTN3wL5DhI=";
+    sha256 = "sha256-3cSJkNTD5+L3VXO5I/1xo1tp9+H4/Z/tc2f8B63lGrc=";
   };
 
-  vendorHash = "sha256-CjvvVFjYRlykZwEqHtuD9qc/MsHZsJtKy2G6e2N7K0M=";
+  vendorHash = "sha256-BIHvURCgqEzhl4NsVB7vBwLqMPxkM3CQgHmIcSTdOE4=";
 
   doCheck = false;
 

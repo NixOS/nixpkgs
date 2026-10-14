@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "errbot";
-  version = "6.2.0";
+  version = "6.2.1";
 
   pyproject = true;
 
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "errbotio";
     repo = "errbot";
     rev = finalAttrs.version;
-    hash = "sha256-UdqzBrlcb9NkuVo8ChADJmaKevadoGLyZUrckStb5ko=";
+    hash = "sha256-ufJUcQUn+BbfnYRXqLlThis70sY5VLdsZlag6390wqs=";
   };
 
   build-system = with python3.pkgs; [

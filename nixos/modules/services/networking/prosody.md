@@ -56,7 +56,7 @@ certificate by leveraging the ACME
 [extraDomainNames](#opt-security.acme.certs._name_.extraDomainNames) module option.
 
 Provided the setup detailed in the previous section, you'll need the following acme configuration to generate
-a TLS certificate for the three endponits:
+a TLS certificate for the three endpoints:
 ```nix
 {
   security.acme = {

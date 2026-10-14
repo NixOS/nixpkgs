@@ -40,5 +40,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://github.com/NixOS/hydra-ant-logger";
     platforms = lib.platforms.unix;
+    license = lib.licenses.unfree;
   };
 }

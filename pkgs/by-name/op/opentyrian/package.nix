@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   fetchzip,
@@ -42,7 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = ''Open source port of the game "Tyrian"'';
     mainProgram = "opentyrian";
     homepage = "https://github.com/opentyrian/opentyrian";
-    # This does not account of Tyrian data.
-    # license = lib.licenses.gpl2;
+    license =
+      with lib.licenses;
+      AND [
+        gpl2Plus # opentyrian
+        unfree # First-party assets we bundle
+      ];
   };
 })

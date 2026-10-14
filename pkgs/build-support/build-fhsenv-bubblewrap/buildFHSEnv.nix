@@ -64,7 +64,7 @@ let
 
   # base packages of the fhsenv
   # these match the host's architecture, glibc_multi is used for multilib
-  # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
+  # builds. glibcLocales must be before glibc or glibc_multi as otherwise
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
   baseTargetPaths = with pkgs; [
     glibcLocales

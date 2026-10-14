@@ -3,17 +3,41 @@
   pkgs,
   lib,
   options,
+  utils,
   ...
 }:
-
 let
   cfg = config.services.firefox-syncserver;
   opt = options.services.firefox-syncserver;
   defaultDatabase = "firefox_syncserver";
   defaultUser = "firefox-syncserver";
 
+  dbIsMySQL = cfg.database.type == "mysql";
+  dbIsPostgreSQL = cfg.database.type == "postgresql";
+
   dbIsLocal = cfg.database.host == "localhost";
-  dbURL = "mysql://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}${lib.optionalString dbIsLocal "?socket=/run/mysqld/mysqld.sock"}";
+
+  dbURL =
+    if dbIsMySQL then
+      "mysql://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}${lib.optionalString dbIsLocal "?socket=/run/mysqld/mysqld.sock"}"
+    else if dbIsLocal then
+      # Use Unix socket connection with peer authentication by default.
+      "postgres:///${cfg.database.name}?host=/run/postgresql&user=${cfg.database.user}"
+    else
+      "postgres://${cfg.database.user}@${cfg.database.host}/${cfg.database.name}";
+
+  # postgresql.target waits for postgresql-setup.service (which runs
+  # ensureDatabases / ensureUsers) to complete, avoiding race conditions
+  # where the syncserver starts before its database and role exist.
+  dbService = if dbIsMySQL then "mysql.service" else "postgresql.target";
+
+  syncserver =
+    if cfg.package != null then
+      cfg.package
+    else if dbIsMySQL then
+      pkgs.syncstorage-rs-mysql
+    else
+      pkgs.syncstorage-rs-pgsql;
 
   format = pkgs.formats.toml { };
   settings = {
@@ -22,7 +46,7 @@ let
       database_url = dbURL;
     };
     tokenserver = {
-      node_type = "mysql";
+      node_type = if dbIsMySQL then "mysql" else "postgres";
       database_url = dbURL;
       fxa_email_domain = "api.accounts.firefox.com";
       fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
@@ -41,44 +65,75 @@ let
     };
   };
   configFile = format.generate "syncstorage.toml" (lib.recursiveUpdate settings cfg.settings);
-  setupScript = pkgs.writeShellScript "firefox-syncserver-setup" ''
-    set -euo pipefail
-    shopt -s inherit_errexit
 
-    schema_configured() {
-      mysql ${cfg.database.name} -Ne 'SHOW TABLES' | grep -q services
-    }
+  setupScript =
+    let
+      dbSpecific =
+        if dbIsMySQL then
+          {
+            listTables = "mysql ${cfg.database.name} -Ne 'SHOW TABLES'";
+            execSql = "mysql ${cfg.database.name}";
+            upsertSql = ''
+              BEGIN;
 
-    update_config() {
-      mysql ${cfg.database.name} <<"EOF"
-        BEGIN;
+              INSERT INTO `services` (`id`, `service`, `pattern`)
+                VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+                ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
+              INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
+                                   `capacity`, `downed`, `backoff`)
+                VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+                0, ${toString cfg.singleNode.capacity}, 0, 0)
+                ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
 
-        INSERT INTO `services` (`id`, `service`, `pattern`)
-          VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
-          ON DUPLICATE KEY UPDATE service='sync-1.5', pattern='{node}/1.5/{uid}';
-        INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
-                             `capacity`, `downed`, `backoff`)
-          VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
-          0, ${toString cfg.singleNode.capacity}, 0, 0)
-          ON DUPLICATE KEY UPDATE node = '${cfg.singleNode.url}', capacity=${toString cfg.singleNode.capacity};
+              COMMIT;
+            '';
+          }
+        else
+          {
+            listTables = "psql -d ${cfg.database.name} -tAc \"SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'\"";
+            execSql = "psql -d ${cfg.database.name}";
+            upsertSql = ''
+              BEGIN;
 
-        COMMIT;
-    EOF
-    }
+              INSERT INTO services (id, service, pattern)
+                VALUES (1, 'sync-1.5', '{node}/1.5/{uid}')
+                ON CONFLICT (id) DO UPDATE SET service = 'sync-1.5', pattern = '{node}/1.5/{uid}';
+              INSERT INTO nodes (id, service, node, available, current_load,
+                                 capacity, downed, backoff)
+                VALUES (1, 1, '${cfg.singleNode.url}', ${toString cfg.singleNode.capacity},
+                0, ${toString cfg.singleNode.capacity}, 0, 0)
+                ON CONFLICT (id) DO UPDATE SET node = '${cfg.singleNode.url}', capacity = ${toString cfg.singleNode.capacity};
 
+              COMMIT;
+            '';
+          };
+    in
+    pkgs.writeShellScript "firefox-syncserver-setup" ''
+      set -euo pipefail
+      shopt -s inherit_errexit
 
-    for (( try = 0; try < 60; try++ )); do
-      if ! schema_configured; then
-        sleep 2
-      else
-        update_config
-        exit 0
-      fi
-    done
+      schema_configured() {
+        ${dbSpecific.listTables} | grep -q services
+      }
 
-    echo "Single-node setup failed"
-    exit 1
-  '';
+      update_config() {
+        ${dbSpecific.execSql} <<'EOF'
+      ${dbSpecific.upsertSql}
+      EOF
+      }
+
+      for (( try = 0; try < 60; try++ )); do
+        if ! schema_configured; then
+          sleep 2
+        else
+          update_config
+          exit 0
+        fi
+      done
+
+      echo "Single-node setup failed"
+      exit 1
+    '';
 in
 
 {
@@ -88,25 +143,49 @@ in
         the Firefox Sync storage service.
 
         Out of the box this will not be very useful unless you also configure at least
-        one service and one nodes by inserting them into the mysql database manually, e.g.
+        one service and one nodes by inserting them into the database manually, e.g.
         by running
 
         ```
-          INSERT INTO `services` (`id`, `service`, `pattern`) VALUES ('1', 'sync-1.5', '{node}/1.5/{uid}');
-          INSERT INTO `nodes` (`id`, `service`, `node`, `available`, `current_load`,
-              `capacity`, `downed`, `backoff`)
-            VALUES ('1', '1', 'https://mydomain.tld', '1', '0', '10', '0', '0');
+          INSERT INTO services (id, service, pattern) VALUES (1, 'sync-1.5', '{node}/1.5/{uid}');
+          INSERT INTO nodes (id, service, node, available, current_load,
+              capacity, downed, backoff)
+            VALUES (1, 1, 'https://mydomain.tld', 1, 0, 10, 0, 0);
         ```
 
         {option}`${opt.singleNode.enable}` does this automatically when enabled
       '';
 
-      package = lib.mkPackageOption pkgs "syncstorage-rs" { };
+      package = lib.mkOption {
+        type = lib.types.nullOr lib.types.package;
+        default = null;
+        defaultText = lib.literalExpression ''
+          if config.${opt.database.type} == "mysql" then
+            pkgs.syncstorage-rs-mysql
+          else
+            pkgs.syncstorage-rs-pgsql
+        '';
+        description = ''
+          Syncstorage server package to use. When `null`, the package is
+          selected automatically based on {option}`${opt.database.type}`.
+        '';
+      };
+
+      database.type = lib.mkOption {
+        type = lib.types.enum [
+          "mysql"
+          "postgresql"
+        ];
+        description = ''
+          Which database backend to use for storage.
+          ::: {.note}
+          `"postgresql"` is recommended for new deployments. `"mysql"` is the
+          backend used by legacy installations.
+          :::
+        '';
+      };
 
       database.name = lib.mkOption {
-        # the mysql module does not allow `-quoting without resorting to shell
-        # escaping, so we restrict db names for forward compaitiblity should this
-        # behavior ever change.
         type = lib.types.strMatching "[a-z_][a-z0-9_]*";
         default = defaultDatabase;
         description = ''
@@ -117,9 +196,15 @@ in
 
       database.user = lib.mkOption {
         type = lib.types.str;
-        default = defaultUser;
+        default = if dbIsPostgreSQL then defaultDatabase else defaultUser;
+        defaultText = lib.literalExpression ''
+          if database.type == "postgresql" then "${defaultDatabase}" else "${defaultUser}"
+        '';
         description = ''
-          Username for database connections.
+          Username for database connections.  When using PostgreSQL with
+          `createLocally`, this defaults to the database name so that
+          `ensureDBOwnership` works (it requires user and database names
+          to match).
         '';
       };
 
@@ -137,7 +222,8 @@ in
         default = true;
         description = ''
           Whether to create database and user on the local machine if they do not exist.
-          This includes enabling unix domain socket authentication for the configured user.
+          This includes enabling the configured database service and setting up
+          authentication for the configured user.
         '';
       };
 
@@ -237,7 +323,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    services.mysql = lib.mkIf cfg.database.createLocally {
+    services.mysql = lib.mkIf (cfg.database.createLocally && dbIsMySQL) {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -250,17 +336,34 @@ in
       ];
     };
 
+    services.postgresql = lib.mkIf (cfg.database.createLocally && dbIsPostgreSQL) {
+      enable = true;
+      ensureDatabases = [ cfg.database.name ];
+      ensureUsers = [
+        {
+          name = cfg.database.user;
+          ensureDBOwnership = true;
+        }
+      ];
+    };
+
     systemd.services.firefox-syncserver = {
       wantedBy = [ "multi-user.target" ];
-      requires = lib.mkIf dbIsLocal [ "mysql.service" ];
-      after = lib.mkIf dbIsLocal [ "mysql.service" ];
+      requires = lib.mkIf dbIsLocal [ dbService ];
+      after = lib.mkIf dbIsLocal [ dbService ];
       restartTriggers = lib.optional cfg.singleNode.enable setupScript;
       environment.RUST_LOG = cfg.logLevel;
       serviceConfig = {
-        User = defaultUser;
-        Group = defaultUser;
-        ExecStart = "${cfg.package}/bin/syncserver --config ${configFile}";
+        ExecStart = utils.escapeSystemdExecArgs [
+          (lib.getExe syncserver)
+          "--config"
+          configFile
+        ];
+        User = cfg.database.user;
+        Group = cfg.database.user;
         EnvironmentFile = lib.mkIf (cfg.secrets != null) "${cfg.secrets}";
+        Restart = "on-failure";
+        RestartSec = "5s";
 
         # hardening
         RemoveIPC = true;
@@ -303,10 +406,21 @@ in
 
     systemd.services.firefox-syncserver-setup = lib.mkIf cfg.singleNode.enable {
       wantedBy = [ "firefox-syncserver.service" ];
-      requires = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
-      after = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal "mysql.service";
-      path = [ config.services.mysql.package ];
-      serviceConfig.ExecStart = [ "${setupScript}" ];
+      requires = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal dbService;
+      after = [ "firefox-syncserver.service" ] ++ lib.optional dbIsLocal dbService;
+      path =
+        if dbIsMySQL then [ config.services.mysql.package ] else [ config.services.postgresql.package ];
+      serviceConfig = {
+        ExecStart = [ "${setupScript}" ];
+      }
+      // lib.optionalAttrs dbIsPostgreSQL {
+        # Peer authentication maps the system user to the database role of the
+        # same name, which owns the database (ensureDBOwnership), so no
+        # superuser access is required.
+        User = cfg.database.user;
+        Group = cfg.database.user;
+        DynamicUser = true;
+      };
     };
 
     services.nginx.virtualHosts = lib.mkIf cfg.singleNode.enableNginx {

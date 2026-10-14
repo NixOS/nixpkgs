@@ -12,11 +12,11 @@
 stdenv.mkDerivation (finalAttrs: {
 
   pname = "ocaml${ocaml.version}-b0";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchurl {
     url = "https://erratique.ch/software/b0/releases/b0-${finalAttrs.version}.tbz";
-    sha256 = "sha256-ty04JQcP4RCme/VQw0ko2IBebWWX5cBU6nRTTeV1I/I=";
+    hash = "sha256-FscuTlKqZ7fGJk0+aln6lvNtF7Ghph64A4ZVqCUE9ZM=";
   };
 
   strictDeps = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       * Software configuration, build and testing.
       * Source and binary deployments.
       * Software life-cycle procedures.
-      B0 also provides the B00 build library which provides abitrary build
+      B0 also provides the B00 build library which provides arbitrary build
       abstraction with reliable and efficient incremental rebuilds. The B00
       library can be – and has been – used on its own to devise domain specific
       build systems.
@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (ocaml.meta) platforms;
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.Julow ];
-    broken = !(lib.versionAtLeast ocaml.version "4.08");
+    broken = !lib.versionAtLeast ocaml.version "4.14";
   };
 })

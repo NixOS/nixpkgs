@@ -19,16 +19,17 @@ in
         lib.types.oneOf [
           lib.types.str
           lib.types.int
+          lib.types.bool
         ]
       );
       default = { };
       example = {
         SERVER_PORT = 8080;
-        INSTALL_BOOK_AND_ADVANCED_HTML_OPS = "true";
+        INSTALL_BOOK_AND_ADVANCED_HTML_OPS = true;
       };
       description = ''
         Environment variables for the stirling-pdf app.
-        See <https://github.com/Stirling-Tools/Stirling-PDF#customisation> for available options.
+        See <https://docs.stirlingpdf.com/Configuration/> for available options.
       '';
     };
 
@@ -44,14 +45,16 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.stirling-pdf = {
-      environment = lib.mapAttrs (_: toString) cfg.environment;
+      environment = lib.mapAttrs (
+        _: v: if (builtins.isBool v) then (lib.boolToString v) else (toString v)
+      ) cfg.environment;
 
       # following https://docs.stirlingpdf.com/Installation/Unix%20Installation
       path =
         with pkgs;
         [
           # `which` is used to test command availability
-          # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L42
+          # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/app/core/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L262
           which
           unpaper
           libreoffice
@@ -76,11 +79,18 @@ in
       serviceConfig = {
         BindReadOnlyPaths = [ "${pkgs.tesseract}/share/tessdata:/usr/share/tessdata" ];
         CacheDirectory = "stirling-pdf";
-        Environment = [ "HOME=%S/stirling-pdf" ];
+        CacheDirectoryMode = "0700";
+        Environment = [
+          "HOME=%S/stirling-pdf"
+          # DynamicUser state/cache mounts are noexec; PDFium needs an executable native cache.
+          "JDK_JAVA_OPTIONS=-Djpdfium.native.cacheDir=%t/stirling-pdf/jpdfium"
+        ];
         EnvironmentFile = cfg.environmentFiles;
         ExecStart = lib.getExe cfg.package;
         RuntimeDirectory = "stirling-pdf";
+        RuntimeDirectoryMode = "0700";
         StateDirectory = "stirling-pdf";
+        StateDirectoryMode = "0700";
         SuccessExitStatus = 143;
         User = "stirling-pdf";
         WorkingDirectory = "/var/lib/stirling-pdf";
@@ -91,6 +101,7 @@ in
         LockPersonality = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateTmp = true;
         PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
@@ -117,5 +128,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ DCsunset ];
+  meta.maintainers = with lib.maintainers; [
+    DCsunset
+    timhae
+  ];
 }

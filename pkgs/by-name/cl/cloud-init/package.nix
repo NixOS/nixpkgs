@@ -50,8 +50,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   postInstall = ''
-    install -D -m755 ./tools/write-ssh-key-fingerprints $out/libexec/write-ssh-key-fingerprints
-    for i in $out/libexec/*; do
+    install -D -m755 ./tools/write-ssh-key-fingerprints $out/libexec/cloud-init/write-ssh-key-fingerprints
+    for i in $out/libexec/cloud-init/*; do
       wrapProgram $i --prefix PATH : "${lib.makeBinPath [ openssh ]}"
     done
   '';

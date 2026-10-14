@@ -49,6 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DZLIB_STATIC=off"
   ];
 
+  patches = [
+    ./ssw-stdbool.patch
+  ];
+
   postPatch = ''
     # Fix missing pthread dependency for the main binary.
     substituteInPlace src/sortmerna/CMakeLists.txt \

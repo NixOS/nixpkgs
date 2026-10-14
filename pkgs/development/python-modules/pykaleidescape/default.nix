@@ -10,21 +10,21 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykaleidescape";
-  version = "1.1.1";
+  version = "1.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pykaleidescape";
-    tag = "v${version}";
-    hash = "sha256-HhHlgQ94aPac6zRgXBSsHxXuAj2OnGdWkJHMOqTwKcI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-irXm1kX9gy6XU1PWvFKG2IeUE7raKI2C0I6Vge1ZKsI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dnspython
   ];
@@ -44,13 +44,15 @@ buildPythonPackage rec {
     # stuck in EpollSelector.poll()
     "test_manual_disconnect"
     "test_concurrency"
+    "test_reconnect_calls_on_reconnect"
+    "test_refresh_after_reconnect"
   ];
 
   meta = {
     description = "Module for controlling Kaleidescape devices";
     homepage = "https://github.com/SteveEasley/pykaleidescape";
-    changelog = "https://github.com/SteveEasley/pykaleidescape/releases/tag/${src.tag}";
+    changelog = "https://github.com/SteveEasley/pykaleidescape/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

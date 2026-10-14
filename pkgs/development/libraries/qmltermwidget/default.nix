@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "qmltermwidget";
-  version = "unstable-2022-01-09";
+  version = "0.2.0-unstable-2022-01-09";
 
   src = fetchFromGitHub {
     owner = "Swordfish90";

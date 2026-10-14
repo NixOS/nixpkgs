@@ -429,6 +429,90 @@ def test_admonitions() -> None:
               children=None, content='', markup=':::', info='', meta={}, block=True, hidden=False)
     ]
 
+@pytest.mark.parametrize(
+    ("alert", "kind"),
+    [
+        ("NOTE", "note"),
+        ("TIP", "tip"),
+        ("IMPORTANT", "important"),
+        ("WARNING", "warning"),
+        ("CAUTION", "caution"),
+    ],
+)
+def test_gfm_alert_kinds(alert: str, kind: str) -> None:
+    c = Converter({})
+    assert c._parse(f"> [!{alert}]\n> body") == [
+        Token(type='admonition_open', tag='div', markup='>', meta={'kind': kind}, nesting=1, map=[0, 2], block=True),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[0, 2], level=1, block=True),
+        Token(type='inline', tag='', nesting=0, map=[0, 2], level=2, block=True, content='body', children=[
+            Token(type='text', tag='', nesting=0, content='body'),
+        ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, level=1, block=True),
+        Token(type='admonition_close', tag='div', nesting=-1, markup='>', block=True)
+    ]
+
+def test_gfm_alert_basic_structure_preserved() -> None:
+    c = Converter({})
+    tokens = c._parse("> [!NOTE]\n> body text")
+    assert any(t.type == "inline" for t in tokens)
+
+@pytest.mark.parametrize(
+    "md",
+    [
+        "> # [!NOTE]",
+        "> - [!NOTE]",
+        "> - [!WARNING] body",
+        "> ### [!TIP]",
+        "> ```\n> [!NOTE]\n> ```",
+        "> This is not [!NOTE] an alert",
+        "> [!NOTE] with trailing text is ignored",
+    ],
+)
+def test_gfm_alert_rejected(md: str) -> None:
+    c = Converter({})
+    tokens = c._parse(md)
+    assert all(t.type != "admonition_open" for t in tokens)
+    assert tokens[0].type == "blockquote_open"
+    assert tokens[-1].type == "blockquote_close"
+
+def test_gfm_alert_multi_paragraph() -> None:
+    c = Converter({})
+    assert c._parse(
+        "> [!NOTE]\n"
+        "> line 1\n"
+        ">\n"
+        "> line 2"
+    ) == [
+        Token(type='admonition_open', tag='div', markup='>', meta={'kind': 'note'}, nesting=1, map=[0, 4], block=True),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[0, 2], level=1, block=True),
+        Token(type='inline', tag='', nesting=0, map=[0, 2], level=2, block=True, content='line 1', children=[
+            Token(type='text', tag='', nesting=0, content='line 1'),
+        ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, level=1, block=True),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[3, 4], level=1, block=True),
+        Token(type='inline', tag='', nesting=0, map=[3, 4], level=2, block=True, content='line 2', children=[
+            Token(type='text', tag='', nesting=0, content='line 2')
+        ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, level=1, block=True),
+        Token(type='admonition_close', tag='div', markup='>', block=True, nesting=-1),
+    ]
+
+def test_gfm_alert_whitespace_tolerant() -> None:
+    c = Converter({})
+    tokens = c._parse("> [!NOTE]   \n> body")
+    assert tokens[0].type == "admonition_open"
+    assert tokens[0].meta["kind"] == "note"
+
+def test_gfm_alert_empty_body_allowed() -> None:
+    c = Converter({})
+    assert c._parse("> [!NOTE]\n>") == [
+        Token(type='admonition_open', tag='div', markup='>', meta={'kind': 'note'}, nesting=1, map=[0, 2], block=True),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[0, 1], level=1, block=True),
+        Token(type='inline', tag='', nesting=0, map=[0, 1], level=2, block=True, children=[]),
+        Token(type='paragraph_close', tag='p', nesting=-1, level=1, block=True),
+        Token(type='admonition_close', tag='div', markup='>', nesting=-1, block=True),
+    ]
+
 def test_example() -> None:
     c = Converter({})
     assert c._parse("::: {.example}\n# foo") == [

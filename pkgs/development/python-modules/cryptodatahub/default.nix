@@ -6,23 +6,23 @@
   buildPythonPackage,
   fetchFromGitLab,
   pyfakefs,
+  pytestCheckHook,
   python-dateutil,
   setuptools,
   setuptools-scm,
-  unittestCheckHook,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cryptodatahub";
-  version = "1.0.2";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "coroner";
     repo = "cryptodatahub";
-    tag = "v${version}";
-    hash = "sha256-DQspaa9GsnRjETKUca2i91iBPbT4qATmKiL8M0nBP/A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iXM3LV/obJu3Rvl57ny7/BJINxK2b+qTgBCyu3BDris=";
   };
 
   build-system = [
@@ -40,23 +40,33 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beautifulsoup4
     pyfakefs
-    unittestCheckHook
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "cryptodatahub" ];
 
-  preCheck = ''
+  disabledTests = [
+    # fails due to certificate expiry
+    # see https://gitlab.com/coroner/cryptodatahub/-/work_items/38
+    "test_validity"
+    # pytest incorrectly collects abstract base classes
+    "TestClasses"
+  ];
+
+  disabledTestPaths = [
     # failing tests
-    rm test/updaters/test_common.py
+    "test/updaters/test_common.py"
     # Tests require network access
-    rm test/common/test_utils.py
-  '';
+    "test/common/test_utils.py"
+  ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Repository of cryptography-related data";
     homepage = "https://gitlab.com/coroner/cryptodatahub";
-    changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.mpl20;
     teams = with lib.teams; [ ngi ];
   };
-}
+})

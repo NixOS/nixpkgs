@@ -4,20 +4,22 @@
   fetchFromGitHub,
   lib,
   mashumaro,
+  pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-google-weather-api";
-  version = "0.0.4";
+  version = "0.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "python-google-weather-api";
     tag = "v${version}";
-    hash = "sha256-5ljKaIwG78oufb0iRaqTY46wxelAiuQUvhmRbZWo5Fk=";
+    hash = "sha256-1vTE1fOYi8/bAuDX4RRVEthjRW0ADZCh8skvcspU/I4=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +32,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "google_weather_api" ];
 
   nativeCheckInputs = [
+    pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
 

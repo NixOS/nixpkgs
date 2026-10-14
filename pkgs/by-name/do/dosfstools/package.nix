@@ -17,8 +17,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dosfstools";
     repo = "dosfstools";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
   };
 
   patches = [
@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Utilities for creating and checking FAT and VFAT file systems";
     homepage = "https://github.com/dosfstools/dosfstools";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.quantenzitrone ];
   };
 })

@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "High-quality Japanese font based on M+ fonts and IPA fonts";
-    homepage = "http://mix-mplus-ipa.osdn.jp/migmix";
+    homepage = "https://itouhiro.github.io/mixfont-mplus-ipa/migmix/";
     license = lib.licenses.ipa;
     maintainers = [ lib.maintainers.mikoim ];
   };

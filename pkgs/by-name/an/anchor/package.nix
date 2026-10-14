@@ -6,31 +6,39 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anchor";
-  version = "0.31.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
-    owner = "coral-xyz";
+    owner = "otter-sec";
     repo = "anchor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pvD0v4y7DilqCrhT8iQnAj5kBxGQVqNvObJUBzFLqzA=";
+    hash = "sha256-C8e0ELa0q8xOat1F8Br8+XPimxgUZ0sBu2MH8cVlzME=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-fjhLA+utQdgR75wg+/N4VwASW6+YBHglRPj14sPHmGA=";
+  cargoHash = "sha256-0Eq3/WOO869fmk+N6o4/ZgXnpNPV5VFNxdaGStT6Zb4=";
 
-  checkFlags = [
-    # the following test cases try to access network, skip them
-    "--skip=tests::test_check_and_get_full_commit_when_full_commit"
-    "--skip=tests::test_check_and_get_full_commit_when_partial_commit"
-    "--skip=tests::test_get_anchor_version_from_commit"
+  # Only build the anchor-cli package
+  cargoBuildFlags = [
+    "-p"
+    "anchor-cli"
+  ];
+
+  # Only run tests for the anchor-cli
+  cargoTestFlags = [
+    "-p"
+    "anchor-cli"
   ];
 
   meta = {
     description = "Solana Sealevel Framework";
-    homepage = "https://github.com/coral-xyz/anchor";
-    changelog = "https://github.com/coral-xyz/anchor/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/otter-sec/anchor";
+    changelog = "https://github.com/otter-sec/anchor/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ Denommus ];
+    maintainers = with lib.maintainers; [
+      Denommus
+      _0xgsvs
+    ];
     mainProgram = "anchor";
   };
 })

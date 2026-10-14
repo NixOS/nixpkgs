@@ -1,0 +1,22 @@
+From 838bedb814a20d0e0b3df98f6708610281560f48 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Sun, 7 Jun 2026 18:09:39 +0530
+Subject: [PATCH] fix null strings
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ src/hooks/useLiveWallpapers.ts | Bin 4054 -> 4056 bytes
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+
+diff --git a/src/hooks/useLiveWallpapers.ts b/src/hooks/useLiveWallpapers.ts
+index 4e5010833591915738e8aa8305956df107611187..f4b7a8e3f3494cd0698c7496cecc4a98b124e1de 100644
+GIT binary patch
+delta 23
+ccmca6e?xwQB|B4$!DcJ=HbxMAkVBLm0AH;K3;+NC
+
+delta 21
+ccmca1e@%XaB|9U-W^48~Mn;CshdD&q0ZhyV^#A|>
+
+-- 
+2.54.0
+

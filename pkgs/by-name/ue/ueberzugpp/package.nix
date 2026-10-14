@@ -23,7 +23,7 @@
   enableOpencv ? stdenv.hostPlatform.isLinux,
   opencv,
   enableWayland ? stdenv.hostPlatform.isLinux,
-  extra-cmake-modules,
+  kdePackages,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ueberzugpp";
-  version = "2.9.8";
+  version = "2.9.10";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
+    hash = "sha256-YrMFSbNQLamqT7asVxDz8JYgjYNdbdbR7axeopgWTMk=";
   };
 
   strictDeps = true;
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
   ]
   ++ lib.optionals enableWayland [
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     wayland
     wayland-protocols
   ]

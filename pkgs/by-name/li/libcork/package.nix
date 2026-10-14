@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/dcreager/libcork";
     description = "Simple, easily embeddable cross-platform C library";
     mainProgram = "cork-hash";

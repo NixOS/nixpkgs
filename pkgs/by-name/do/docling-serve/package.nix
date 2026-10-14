@@ -4,7 +4,6 @@
   withUI ? false,
   withTesserocr ? false,
   withRapidocr ? false,
-  withCPU ? false,
 }:
 
 (python3Packages.toPythonApplication (
@@ -13,7 +12,6 @@
       withUI
       withTesserocr
       withRapidocr
-      withCPU
       ;
   }
 ))

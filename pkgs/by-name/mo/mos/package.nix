@@ -2,21 +2,20 @@
   lib,
   stdenvNoCC,
   fetchurl,
-  undmg,
-  nix-update-script,
+  unzip,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mos";
-  version = "3.5.0";
+  version = "4.2.1";
 
   src = fetchurl {
-    url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}.dmg";
-    hash = "sha256-o2H4cfMudjoQHfKeV4ORiO9/szoomFP0IP6D6ecMAI4=";
+    url = "https://github.com/Caldis/Mos/releases/download/${finalAttrs.version}/Mos.Versions.${finalAttrs.version}-20260531.1.zip";
+    hash = "sha256-LqaelvCS5E2tqTpVvaHN2rMynFJ7vV8G4A37eOlTlgo=";
   };
   sourceRoot = ".";
 
   nativeBuildInputs = [
-    undmg
+    unzip
   ];
 
   installPhase = ''
@@ -25,8 +24,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r *.app $out/Applications
     runHook postInstall
   '';
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Smooths scrolling and set mouse scroll directions independently on macOS";

@@ -18,7 +18,7 @@ postgresqlBuildExtension {
   makeFlags = [ "USE_PGXS=1" ];
 
   meta = {
-    description = "Compute similary of any one-dimensional arrays";
+    description = "Compute similarity of any one-dimensional arrays";
     homepage = "http://sigaev.ru/git/gitweb.cgi?p=smlar.git";
     platforms = postgresql.meta.platforms;
     license = lib.licenses.bsd2;

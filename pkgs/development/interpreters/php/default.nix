@@ -1,21 +1,96 @@
 {
+  lib,
   callPackage,
+  fetchurl,
   stdenv,
   llvmPackages,
   pcre2,
 }:
 
 let
-  commonArgs = {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-    pcre2 = pcre2.override {
-      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
-    };
-  };
+  mkPhp =
+    {
+      version,
+      hash ? null,
+      phpSrc ? null,
+    }:
+    let
+      base = callPackage ./generic.nix {
+        stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+        inherit version hash phpSrc;
+      };
+    in
+    base.withExtensions (
+      { all, ... }:
+      with all;
+      [
+        bcmath
+        calendar
+        curl
+        ctype
+        dom
+        exif
+        fileinfo
+        filter
+        ftp
+        gd
+        gettext
+        gmp
+        iconv
+        intl
+        ldap
+        mbstring
+        mysqli
+        mysqlnd
+        openssl
+        pcntl
+        pdo
+        pdo_mysql
+        pdo_odbc
+        pdo_pgsql
+        pdo_sqlite
+        pgsql
+        posix
+        readline
+        session
+        simplexml
+        sockets
+        soap
+        sodium
+        sysvsem
+        sqlite3
+        tokenizer
+        xmlreader
+        xmlwriter
+        zip
+        zlib
+      ]
+      ++ lib.optionals (lib.versionOlder version "8.4") [ all.imap ]
+      ++ lib.optionals (lib.versionOlder version "8.5") [ all.opcache ]
+    );
 in
 {
-  php82 = callPackage ./8.2.nix commonArgs;
-  php83 = callPackage ./8.3.nix commonArgs;
-  php84 = callPackage ./8.4.nix commonArgs;
-  php85 = callPackage ./8.5.nix commonArgs;
+  php82 = mkPhp {
+    version = "8.2.34";
+    hash = "sha256-BGfWOoGQFoEdNf0U9zR2SBOrFJdQN5eQY0KUxyPNdWI=";
+  };
+  php83 = mkPhp {
+    version = "8.3.35";
+    hash = "sha256-4nnZ7JDZvKuQDRRoFuWxHT6JJLgOK6NsfX2ufXHcvy0=";
+  };
+  php84 = mkPhp {
+    version = "8.4.26";
+    hash = "sha256-QglpTXsPY8RaN3PgfNwrv8cSSSZaXZUbH/U+EUftxco=";
+  };
+  php85 = mkPhp {
+    version = "8.5.11";
+    hash = "sha256-3JQHFqjHPlMcAHjuy5VdWV0yHsLMnUcUnPAInqbhj2Q=";
+  };
+  php86 = mkPhp rec {
+    version = "8.6.0RC3";
+    phpSrc = fetchurl {
+      url = "https://downloads.php.net/~svpernova09/php-${version}.tar.xz";
+      hash = "sha256-Ex+Hoga92QwXjY5E6AJDrgwzPEzuhTH2PRyqms3YaWo=";
+    };
+  };
 }

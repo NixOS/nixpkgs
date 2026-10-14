@@ -5,13 +5,13 @@
   mopidy,
 }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-jellyfin";
   version = "1.0.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "mopidy_jellyfin";
     hash = "sha256-IKCPypMuluR0+mMALp8lB1oB1pSw4rN4rOl/eKn+Qvo=";
   };
@@ -34,4 +34,4 @@ pythonPackages.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.pstn ];
   };
-}
+})

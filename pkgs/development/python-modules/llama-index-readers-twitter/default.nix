@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-twitter";
-  version = "0.4.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_twitter";
     inherit version;
-    hash = "sha256-e4zYwopM7b1WiNINHU3DhnY1DPo7nMcIM/BymS1j0qQ=";
+    hash = "sha256-WguqvAbb6xbuTZDL55Qyv35DdJ7DjqrnvtyxMYe9Tkc=";
   };
 
   build-system = [ hatchling ];

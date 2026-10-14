@@ -14,6 +14,7 @@
   pytest-socket,
   pytestCheckHook,
   python-dateutil,
+  pythonAtLeast,
   requests,
   requests-mock,
   rich,
@@ -24,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "aocd";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wimglenn";
     repo = "advent-of-code-data";
     tag = "v${version}";
-    hash = "sha256-xR9CfyOUsKSSA/1zYi6kCK3oAaX6Kd625mKMWI+ZFMA=";
+    hash = "sha256-Oe+9Ur5O2GSRY7qB8oja7quJqEX/0yXKh4R5+N4kv7Q=";
   };
 
   build-system = [ setuptools ];
@@ -61,6 +62,11 @@ buildPythonPackage rec {
 
   enabledTestPaths = [
     "tests/"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # argparse prog detection changed in 3.14
+    "test_main_user_ambiguous"
   ];
 
   pythonImportsCheck = [ "aocd" ];

@@ -11,28 +11,24 @@
 
 buildGoLatestModule (finalAttrs: {
   pname = "gopls";
-  version = "0.21.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     tag = "gopls/v${finalAttrs.version}";
-    hash = "sha256-D/HBqFy5pNSOhMxx/G102HuL+l+oPljsG8rPNLZjUCs=";
+    hash = "sha256-GTRZ0tS2a7Cx4qRf6PfxhkGVPYRoLYOmE+W/2x9Pttk=";
   };
 
   modRoot = "gopls";
-  vendorHash = "sha256-hT0rvmTyniUdZx1ZVd80nJgsWUpOMKkb9VaCAlKM4lk=";
+  vendorHash = "sha256-rvm33C3z3T6moeEQ4C7aG+dT8ROqmpBFehIpwGFZMrU=";
 
   # https://github.com/golang/tools/blob/9ed98faa/gopls/main.go#L27-L30
   ldflags = [ "-X main.version=v${finalAttrs.version}" ];
 
   doCheck = false;
 
-  # Only build gopls & modernize, not the integration tests or documentation generator.
-  subPackages = [
-    "."
-    "internal/analysis/modernize/cmd/modernize"
-  ];
+  subPackages = [ "." ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

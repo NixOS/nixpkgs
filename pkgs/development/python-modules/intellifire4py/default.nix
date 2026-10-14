@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "intellifire4py";
-  version = "4.4.0";
+  version = "4.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "intellifire4py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WmjsbxeAAD5b88WDIWasfNkzoY+QO1hbvTVyFLQ7uBk=";
+    hash = "sha256-y+KotOo5ODD01q3tZLLU+b9NxvUMZk5/Z+XNIGZy8KI=";
   };
 
   build-system = [ hatchling ];

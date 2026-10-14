@@ -1,0 +1,12 @@
+diff --git a/src/contour/platform/CMakeLists.txt b/src/contour/platform/CMakeLists.txt
+index 11b46c61..12aed902 100644
+--- a/src/contour/platform/CMakeLists.txt
++++ b/src/contour/platform/CMakeLists.txt
+@@ -71,6 +71,7 @@ target_link_libraries(contour_platform PUBLIC
+     Qt6::Core
+     Qt6::DBus
+     Qt6::Gui
++    Qt6::Quick
+     Qt6::Multimedia
+ )
+ 

@@ -13,29 +13,35 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "merve";
-  version = "1.0.1";
+  version = "1.2.2";
+
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "merve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IqUpvnrbnsXlI//xRLbcseMFVLQrwdDCyW1oud3+Ekk=";
+    hash = "sha256-CrdQNAAUbV9k15IFEQjYiMpwbj3iE7imjnN6HloTk40=";
   };
 
   doCheck = true;
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!static))
     (lib.cmakeBool "MERVE_TESTING" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "MERVE_USE_SIMDUTF" true)
-  ];
+  ]
+  ++ lib.optional (simdutf != null) (lib.cmakeBool "MERVE_USE_SIMDUTF" true);
 
   nativeBuildInputs = [
     cmake
     validatePkgConfig
   ];
-  buildInputs = [
-    simdutf
-  ];
+  buildInputs = lib.optional (simdutf != null) simdutf;
   checkInputs = [
     gtest
   ];

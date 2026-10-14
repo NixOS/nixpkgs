@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   pytestCheckHook,
   autoconf,
   automake,
@@ -17,16 +16,14 @@
 }:
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "3.1.1";
+  version = "4.1.0";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     tag = version;
-    sha256 = "sha256-gwbEDo/LewCb0wTtkw/bF3XSAiSu1ITYHAnuvpNsfs0=";
+    hash = "sha256-TePJeZ9SzJPjZ+oNOQXfQ2Eh133ihdHS6Rc/kJr5lgE=";
   };
 
   propagatedBuildInputs = [

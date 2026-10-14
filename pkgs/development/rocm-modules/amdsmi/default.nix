@@ -15,19 +15,24 @@ let
   esmi_ib_src = fetchFromGitHub {
     owner = "amd";
     repo = "esmi_ib_library";
-    rev = "esmi_pkg_ver-4.2";
+    tag = "esmi_pkg_ver-4.2";
     hash = "sha256-czF9ezkAO0PuDkXh8y639AcOZH+KVcWiXPX74H5W/nw=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "7.1.1";
+  version = "7.2.4";
   src = fetchFromGitHub {
-    owner = "rocm";
-    repo = "amdsmi";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-BGe3+8YFwu41ZVAF+VtN5Cn9pfzGxmCg/Rpq8qWOEoM=";
+    owner = "ROCm";
+    repo = "rocm-systems";
+    tag = "rocm-${finalAttrs.version}";
+    sparseCheckout = [
+      "projects/amdsmi"
+      "shared"
+    ];
+    hash = "sha256-TFi+3txemvV6K827e8S3hZOd9jcj4Qzop6V9CdKrpLg=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/amdsmi";
 
   postPatch = ''
     substituteInPlace goamdsmi_shim/CMakeLists.txt \
@@ -77,16 +82,12 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf $out/libexec/amdsmi_cli/amdsmi_cli.py $out/bin/amd-smi
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
-    homepage = "https://github.com/ROCm/rocm_smi_lib";
-    license = with lib.licenses; [ mit ];
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/amdsmi";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];

@@ -1,0 +1,19 @@
+--- a/src/firewall-applet.in
++++ b/src/firewall-applet.in
+@@ -59,14 +59,8 @@
+ 
+ NM_CONNECTION_EDITOR = ""
+ for binary in [
+-    "/usr/bin/systemsettings",
+-    "/bin/systemsettings",
+-    "/usr/bin/nm-connection-editor",
+-    "/bin/nm-connection-editor",
+-    "/usr/bin/kde5-nm-connection-editor",
+-    "/bin/kde5-nm-connection-editor",
+-    "/usr/bin/kde-nm-connection-editor",
+-    "/bin/kde-nm-connection-editor",
++    "/run/current-system/sw/bin/systemsettings",
++    "/run/current-system/sw/bin/nm-connection-editor",
+ ]:
+     if os.path.exists(binary):
+         NM_CONNECTION_EDITOR = binary

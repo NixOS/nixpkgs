@@ -31,10 +31,10 @@ stdenv.mkDerivation (
     luaversion = lib.versions.majorMinor finalAttrs.version;
 
     plat =
-      if (stdenv.hostPlatform.isLinux && lib.versionOlder self.luaversion "5.4") then
-        "linux"
-      else if (stdenv.hostPlatform.isLinux && self.luaversion == "5.4") then
+      if (stdenv.hostPlatform.isLinux && self.luaversion == "5.4") then
         "linux-readline"
+      else if stdenv.hostPlatform.isLinux then
+        "linux"
       else if stdenv.hostPlatform.isDarwin then
         "macosx"
       else if stdenv.hostPlatform.isMinGW then
@@ -55,8 +55,10 @@ stdenv.mkDerivation (
         " -DLUA_COMPAT_ALL"
       else if (lib.versionOlder self.luaversion "5.4") then
         " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
+      else if (lib.versionOlder self.luaversion "5.5") then
+        " -DLUA_COMPAT_5_3"
       else
-        " -DLUA_COMPAT_5_3";
+        " -DLUA_COMPAT_MATHLIB";
   in
 
   {
@@ -81,6 +83,8 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ readline ];
+
+    strictDeps = true;
 
     inherit patches;
 
@@ -216,6 +220,8 @@ stdenv.mkDerivation (
           override pkgsTargetTarget.${luaAttr}
         );
       };
+
+    __structuredAttrs = true;
 
     meta = {
       homepage = "https://www.lua.org";

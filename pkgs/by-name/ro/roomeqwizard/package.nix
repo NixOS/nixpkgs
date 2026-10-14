@@ -6,6 +6,7 @@
   jdk8,
   lib,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   stdenv,
   writeScript,
@@ -13,27 +14,29 @@
   recommendedUdevRules ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "roomeqwizard";
   version = "5.31.3";
 
   src = fetchurl {
     url = "https://www.roomeqwizard.com/installers/REW_linux_no_jre_${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.sh";
     sha256 = "sha256-qaGkKVoiBJ2UWVKAMqbuqNFi6FGcblMxAbYwhf/71CY=";
   };
 
   dontUnpack = true;
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = pname;
-    icon = pname;
-    desktopName = "REW";
-    genericName = "Software for audio measurements";
-    categories = [ "AudioVideo" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      icon = finalAttrs.pname;
+      desktopName = "REW";
+      genericName = "Software for audio measurements";
+      categories = [ "AudioVideo" ];
+    })
+  ];
 
   responseFile = writeTextFile {
     name = "response.varfile";
@@ -54,7 +57,10 @@ stdenv.mkDerivation rec {
     SUBSYSTEM=="usb", ATTR{idVendor}=="2752", ATTR{idProduct}=="0007", TAG+="uaccess"
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -86,15 +92,14 @@ stdenv.mkDerivation rec {
         ]
       }
 
-    cp -r "$desktopItem/share/applications" $out/share/
-    cp $out/share/roomeqwizard/.install4j/roomeqwizard.png "$out/share/icons/hicolor/256x256/apps/${pname}.png"
+    cp $out/share/roomeqwizard/.install4j/roomeqwizard.png "$out/share/icons/hicolor/256x256/apps/${finalAttrs.pname}.png"
 
     ${lib.optionalString recommendedUdevRules ''echo "$udevRules" > $out/lib/udev/rules.d/90-roomeqwizard.rules''}
 
     runHook postInstall
   '';
 
-  passthru.updateScript = writeScript "${pname}-update.sh" ''
+  passthru.updateScript = writeScript "${finalAttrs.pname}-update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl common-updater-scripts nixpkgs-fmt coreutils perl
 
@@ -102,14 +107,14 @@ stdenv.mkDerivation rec {
 
     perlexpr='if (/current version.{1,10}v(\d+)\.(\d+)\.(\d+)/i) { print "$1.$2.$3"; break; }'
 
-    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
+    oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${finalAttrs.pname}" | tr -d '"')"
     latestVersion="$(curl -sS https://www.roomeqwizard.com/index.html | perl -ne "$perlexpr")"
 
     if [ ! "$oldVersion" = "$latestVersion" ]; then
-      update-source-version ${pname} "$latestVersion" --version-key=version --print-changes
+      update-source-version ${finalAttrs.pname} "$latestVersion" --version-key=version --print-changes
       nixpkgs-fmt "pkgs/applications/audio/roomeqwizard/default.nix"
     else
-      echo "${pname} is already up-to-date"
+      echo "${finalAttrs.pname} is already up-to-date"
     fi
   '';
 
@@ -127,4 +132,4 @@ stdenv.mkDerivation rec {
     '';
     mainProgram = "roomeqwizard";
   };
-}
+})

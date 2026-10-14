@@ -49,6 +49,7 @@ buildPythonPackage {
   ];
 
   meta = {
+    broken = lib.versionAtLeast pyopenssl.version "26.3";
     description = "Simple CertificateAuthority and host certificate creation, useful for man-in-the-middle HTTPS proxy";
     mainProgram = "certauth";
     homepage = "https://github.com/ikreymer/certauth";

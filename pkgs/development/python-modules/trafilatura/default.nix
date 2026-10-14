@@ -16,30 +16,31 @@
   urllib3,
 
   # tests
+  addBinToPathHook,
   pytestCheckHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trafilatura";
-  version = "2.0.0";
+  version = "2.3.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "adbar";
     repo = "trafilatura";
-    tag = "v${version}";
-    hash = "sha256-Cf1W3JEGSMkVmRZVTXYsXzZK/Nt/aDG890Sf0/0OZAA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VcS0x7lU7bHIyJJm+tQVa8Eypyu5cvXjZ+i3tG/N7z0=";
   };
-
-  postPatch = ''
-    # nixify path to the trafilatura binary in the test suite
-    substituteInPlace tests/cli_tests.py \
-      --replace-fail 'trafilatura_bin = "trafilatura"' \
-                     'trafilatura_bin = "${placeholder "out"}/bin/trafilatura"'
-  '';
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "charset_normalizer"
+    "lxml"
+    "urllib3"
+  ];
   dependencies = [
     certifi
     charset-normalizer
@@ -50,18 +51,13 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    addBinToPathHook # tests need to execute the trafilatura binary
+    pytestCheckHook
+    versionCheckHook
+  ];
 
   disabledTests = [
-    # TypeError: argument of type 'NoneType' is not iterable
-    # https://github.com/adbar/trafilatura/issues/805
-    "test_external"
-    "test_extract"
-
-    # AttributeError: 'NoneType' object has no attribute 'find'
-    # https://github.com/adbar/trafilatura/issues/805
-    "test_table_processing"
-
     # Disable tests that require an internet connection
     "test_cli_pipeline"
     "test_crawl_page"
@@ -75,21 +71,19 @@ buildPythonPackage rec {
     "test_queue"
     "test_redirection"
     "test_whole"
-
-    # AssertionError: assert ['deflate', 'gzip', 'zstd'] == ['deflate', 'gzip']
-    # https://github.com/adbar/trafilatura/issues/823
-    "test_config"
   ];
 
   pythonImportsCheck = [ "trafilatura" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Python package and command-line tool designed to gather text on the Web";
     homepage = "https://trafilatura.readthedocs.io";
-    changelog = "https://github.com/adbar/trafilatura/blob/v${version}/HISTORY.md";
+    changelog = "https://github.com/adbar/trafilatura/blob/${finalAttrs.src.tag}/HISTORY.md";
     downloadPage = "https://github.com/adbar/trafilatura";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "trafilatura";
   };
-}
+})

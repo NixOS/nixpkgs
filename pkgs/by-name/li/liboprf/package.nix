@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liboprf";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "stef";
     repo = "liboprf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Toja0rR0321i7L1dsB9YxrwNJwKUzuSfK5LLR3tex7U=";
+    hash = "sha256-CQF7feBL83iN2I6GfWjJ2Xe6fLm7D2yEUb6KgioXWkw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./no-static.patch
   ];
+
+  # strip: error: option is not supported for MachO
+  postPatch = lib.optionalString stdenv.hostPlatform.isMacho ''
+    substituteInPlace makefile \
+      --replace-fail "--strip-unneeded" ""
+  '';
 
   strictDeps = true;
 

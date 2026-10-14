@@ -10,16 +10,13 @@
   colorama,
   cryptography,
   dataset,
-  frida-python,
   loguru,
-  matplotlib,
   asn1crypto,
   click,
   mutf8,
   pyyaml,
   pydot,
   ipython,
-  oscrypto,
   pyqt5,
   pytestCheckHook,
   python-magic,
@@ -35,14 +32,14 @@ assert lib.warnIf (!doCheck) "python3Packages.androguard: doCheck is deprecated"
 
 buildPythonPackage rec {
   pname = "androguard";
-  version = "4.1.3";
+  version = "4.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "androguard";
     owner = "androguard";
     tag = "v${version}";
-    sha256 = "sha256-qz6x7UgYXal1DbQGzi4iKnSGEn873rKibKme/pF7tLk=";
+    hash = "sha256-WajRUquDEzs0NanOLpb0gxnreqM8Jm/SxI2LYEifWxg=";
   };
 
   build-system = [
@@ -58,20 +55,15 @@ buildPythonPackage rec {
     colorama
     cryptography
     dataset
-    frida-python
     ipython
     loguru
     lxml
-    matplotlib
     mutf8
     networkx
-    oscrypto
     pydot
     pygments
     pyyaml
   ]
-  ++ networkx.optional-dependencies.default
-  ++ networkx.optional-dependencies.extra
   ++ lib.optionals withGui [
     pyqt5
   ];

@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "2.501";
 
   src = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg${
+    url = "https://www.gust.org.pl/projects/e-foundry/tex-gyre/whole/tg${
       lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }otf.zip";
     hash = "sha256-mRPI/rDsx1vDVItG7h29I7VNPYqgSPqChXS6/gVgfNc=";
@@ -35,6 +35,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.gust.org.pl/projects/e-foundry/tex-gyre/index_html#Readings";
     license = lib.licenses.lppl13c;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ bergey ];
+    maintainers = [ ];
   };
 })

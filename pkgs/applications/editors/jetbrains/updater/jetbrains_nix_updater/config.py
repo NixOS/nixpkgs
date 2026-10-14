@@ -3,7 +3,7 @@ import os
 import dataclasses
 from pathlib import Path
 
-SUPPORTED_SYSTEMS = ["x86_64-linux", "aarch64-linux", "x86_64-darwin", "aarch64-darwin"]
+SUPPORTED_SYSTEMS = ["x86_64-linux", "aarch64-linux", "aarch64-darwin"]
 
 
 def find_nixpkgs(current_path: Path) -> Path:
@@ -24,6 +24,7 @@ class UpdaterConfig:
     no_bin: bool
     no_src: bool
     no_maven_deps: bool
+    dry_run: bool
 
     def __init__(self, argparse_result):
         self.nixpkgs_root = (
@@ -47,3 +48,4 @@ class UpdaterConfig:
         self.no_bin = argparse_result.no_bin
         self.no_src = argparse_result.no_src
         self.no_maven_deps = argparse_result.no_maven_deps
+        self.dry_run = argparse_result.dry_run

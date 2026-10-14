@@ -7,7 +7,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ixgbevf-${version}-${kernel.version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "ixgbevf";
   version = "4.6.1";
 
   src = fetchurl {

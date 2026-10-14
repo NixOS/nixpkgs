@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sirit";
-  version = "1.0.4";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "eden-emulator";
     repo = "sirit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ThyUaoVmnYz9eQ1a19BbLhqfOpPxRjSovBl2wvlfRoI=";
+    hash = "sha256-CW7Wh02EVdnQcKSiBw2OAoba4XAfafBStuhMAkijKwM=";
   };
 
   nativeBuildInputs = [

@@ -2,6 +2,7 @@
   buildPecl,
   fetchFromGitHub,
   lib,
+  php,
   pkg-config,
   dlib,
 }:
@@ -23,8 +24,9 @@ buildPecl {
   buildInputs = [ (dlib.override { guiSupport = true; }) ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP extension for Dlib";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     homepage = "https://github.com/goodspb/pdlib";
     teams = [ lib.teams.php ];
   };

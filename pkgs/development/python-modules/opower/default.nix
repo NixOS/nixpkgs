@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "opower";
-  version = "0.17.0";
+  version = "0.22.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "opower";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A3x16hYZ0UHikPTsADC9JZ22ZfaIrgCgUOP8PTnaQHI=";
+    hash = "sha256-JqCKQSMzrShQkpkeNROm9oRVw4xuAZ83YmBSn6Nb00I=";
   };
 
   build-system = [ setuptools ];

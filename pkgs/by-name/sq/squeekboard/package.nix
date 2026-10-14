@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/Phosh/squeekboard";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ artturin ];
+    mainProgram = "squeekboard";
     platforms = lib.platforms.linux;
   };
 }

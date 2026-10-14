@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     linuxHeaders
   ];
 
-  CFLAGS = [ "-I${linuxHeaders}/include" ];
+  env.CFLAGS = toString [ "-I${linuxHeaders}/include" ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -7,7 +7,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flask-paginate";
   version = "2024.4.12";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lixxu";
     repo = "flask-paginate";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YaAgl+iuoXB0eWVzhmNq2UTOpM/tHfDISIb9CyaXiuA=";
   };
 
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   meta = {
     description = "Pagination support for Flask";
     homepage = "https://github.com/lixxu/flask-paginate";
-    changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${version}";
+    changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

@@ -7,16 +7,16 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asteval";
-  version = "1.0.8";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "asteval";
-    tag = version;
-    hash = "sha256-qENmfqWaKhNKMTTYg2QrhL1eqhda8dUOP8b0Wcq4Ats=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z30H1bSud/VbYnHqRYzyJnDufFM4uBhPcMtVmZ1Sl94=";
   };
 
   build-system = [ setuptools-scm ];
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "AST evaluator of Python expression using ast module";
     homepage = "https://github.com/lmfit/asteval";
-    changelog = "https://github.com/lmfit/asteval/releases/tag/${src.tag}";
+    changelog = "https://github.com/lmfit/asteval/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

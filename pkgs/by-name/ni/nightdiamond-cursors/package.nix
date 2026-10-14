@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "nightdiamond-cursors";
-  version = "0-unstable-2025-09-23";
+  version = "0-unstable-2026-05-11";
 
   src = fetchFromGitHub {
-    owner = "santoshxshrestha";
+    owner = "vimlinuz";
     repo = "NightDiamond-cursors";
-    rev = "3ff3c0486430a4901b4d5cbbee87a370aa2b8ce9";
-    hash = "sha256-huruHo5w7Qrte1+nIiz+P1xPNDGrv5/eByHwaSlZYwQ=";
+    rev = "49650765c3396ccee9ffb796608845d4660d5692";
+    hash = "sha256-Ue6dDvNMq1pGfzudt1O8h0pawfKj4FskTGLnpyEp0CM=";
   };
 
   installPhase = ''
@@ -23,10 +23,10 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/santoshxshrestha/NightDiamond-cursors";
+    homepage = "https://github.com/vimlinuz/NightDiamond-cursors";
     description = "NightDiamond cursor themes";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ santosh ];
+    maintainers = with lib.maintainers; [ vimlinuz ];
   };
 }

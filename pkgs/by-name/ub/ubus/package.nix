@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "ubus";
-  version = "unstable-202-10-17";
+  version = "0-unstable-2025-10-17";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/ubus.git";

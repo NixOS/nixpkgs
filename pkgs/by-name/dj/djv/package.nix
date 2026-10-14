@@ -4,30 +4,21 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  bzip2,
   feather-tk,
   ffmpeg_7,
   freetype,
   glfw,
   imath,
   libGL,
-  libjpeg,
-  libtiff,
-  libpng,
   lunasvg,
   minizip-ng,
   nativefiledialog-extended,
   nlohmann_json,
   opencolorio,
-  openexr_2,
-  openssl,
   opentimelineio,
   plutovg,
   SDL2,
   tlrender,
-  xz,
-  zlib,
-  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.1.1";
 
   src = fetchFromGitHub {
-    owner = "darbyjohnston";
+    owner = "grizzlypeak3d";
     repo = "djv";
     tag = finalAttrs.version;
     hash = "sha256-/SakJ23mi/dz8eUt2UtcgfLtFZiCHy1ME+jWdNS8+Fw=";
@@ -48,36 +39,30 @@ stdenv.mkDerivation (finalAttrs: {
         " ${tlrender}/etc/tlRender/LICENSE_"
   '';
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
   buildInputs = [
-    bzip2
     feather-tk
     ffmpeg_7
     freetype
     glfw
     imath
     tlrender
-    libjpeg
     libGL
-    libpng
-    libtiff
     lunasvg
     minizip-ng
     nativefiledialog-extended
     nlohmann_json
     opencolorio
-    openexr_2
-    openssl
     opentimelineio
     plutovg
     SDL2
-    xz
-    zlib
-    zstd
   ];
 
   # GLFW requires a working X11 session.

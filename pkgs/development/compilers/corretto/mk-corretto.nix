@@ -1,12 +1,15 @@
 {
-  jdk,
-  version,
-  src,
+  majorVersion, # jdk wording is "featureVersion"
+  jdk11,
+  jdk17,
+  jdk21,
+  jdk25,
   lib,
+  fetchurl,
   stdenv,
   gradle,
+  nixpkgs-openjdk-updater,
   extraConfig ? [ ],
-  extraNativeBuildInputs ? [ ],
   rsync,
   runCommand,
   testers,
@@ -23,27 +26,72 @@
 # See https://github.com/corretto/corretto-17/blob/release-17.0.8.8.1/build.gradle#L40
 # "major.minor.security.build.revision"
 let
-  majorVersion = builtins.head (lib.strings.splitString "." version); # same as "featureVersion" for OpenJDK
+  sourceFile = ./. + "/${majorVersion}/source.json";
+  source = nixpkgs-openjdk-updater.openjdkSource {
+    inherit sourceFile;
+    featureVersionPrefix = majorVersion;
+  };
+  version = lib.removePrefix "refs/tags/" source.src.rev; # "17.0.8.8.1"
+  jdk =
+    {
+      "11" = jdk11;
+      "17" = jdk17;
+      "21" = jdk21;
+      "25" = jdk25;
+    }
+    .${majorVersion};
+  is11 = majorVersion == "11";
+  is17 = majorVersion == "17";
+  is21 = majorVersion == "21";
+  is25 = majorVersion == "25";
   pname = "corretto${majorVersion}";
 in
 jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
-    inherit pname version src;
+    inherit pname version;
+    inherit (source) src;
 
-    nativeBuildInputs =
-      oldAttrs.nativeBuildInputs
-      ++ [
-        jdk
-        gradle
-        rsync
-      ]
-      ++ extraNativeBuildInputs;
+    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
+      jdk
+      gradle
+      rsync
+    ];
 
     dontConfigure = true;
+
+    patches =
+      if is11 then
+        (oldAttrs.patches or [ ])
+        ++ [
+          ./11/gradle8.patch
+        ]
+      else if is17 then
+        # Corretto17 has incorporated this patch already so it fails to apply.
+        # We thus skip it here.
+        # See https://github.com/corretto/corretto-17/pull/158
+        lib.remove (fetchurl {
+          url = "https://git.alpinelinux.org/aports/plain/community/openjdk17/FixNullPtrCast.patch?id=41e78a067953e0b13d062d632bae6c4f8028d91c";
+          sha256 = "sha256-LzmSew51+DyqqGyyMw2fbXeBluCiCYsS1nCjt9hX6zo=";
+        }) (oldAttrs.patches or [ ])
+        ++ [ ./17/gradle8.patch ]
+      else if is21 then
+        (oldAttrs.patches or [ ])
+        ++ [
+          ./21/gradle8.patch
+        ]
+      else if is25 then
+        (oldAttrs.patches or [ ])
+        ++ [
+          # See patches in openjdk/generic.nix.
+          ./25/remove_removal_of_wformat_during_test_compilation.patch
+        ]
+      else
+        (oldAttrs.patches or [ ]);
 
     postPatch =
       let
         extra_config = builtins.concatStringsSep " " extraConfig;
+        jdk_configure_flags = "'" + builtins.concatStringsSep "', '" oldAttrs.configureFlags + "'";
       in
       (oldAttrs.postPatch or "")
       + ''
@@ -70,6 +118,12 @@ jdk.overrideAttrs (
           substituteInPlace $file --replace-warn "workingDir '/usr/bin'" "workingDir '.'"
         done
 
+        # Prepend corresponding OpenJDK flags to Corretto's own configure flags.
+        # This will provide us with the version-specific fixes (see
+        # openjdk/generic.nix) while giving Corretto's flags precedence.
+        # Note that the OpenJdK flags contain "--with-boot-jdk=..."!
+        substituteInPlace build.gradle --replace-fail "correttoCommonFlags = [" "correttoCommonFlags = [${jdk_configure_flags} ,"
+        # Finally, *append* nix-corretto-version specific flags.
         gradleFlagsArray+=(-Pcorretto.extra_config="${extra_config}")
       '';
 
@@ -130,14 +184,12 @@ jdk.overrideAttrs (
         };
       };
 
-    # Some of the OpenJDK derivation set their `pos` by hand. We need to
-    # overwrite this in order to point to Corretto, not OpenJDK.
-    pos = __curPos;
     meta = oldAttrs.meta // {
       homepage = "https://aws.amazon.com/corretto";
       license = lib.licenses.gpl2Only;
       description = "Amazon's distribution of OpenJDK";
       maintainers = with lib.maintainers; [ rollf ];
+      platforms = lib.platforms.linux;
       teams = [ ];
     };
   }

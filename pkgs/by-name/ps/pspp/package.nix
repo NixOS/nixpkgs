@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pspp";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/pspp-${version}.tar.gz";
-    sha256 = "sha256-jtuw8J6M+AEMrZ4FWeAjDX/FquRyHHVsNQVU3zMCTAA=";
+    sha256 = "sha256-teVQk3vfpmoebKcpGVJy6OXmaz4EaGstg/suZtTvFMM=";
   };
 
   nativeBuildInputs = [
@@ -55,9 +55,18 @@ stdenv.mkDerivation rec {
     iconv
   ];
 
-  C_INCLUDE_PATH =
-    "${libxml2.dev}/include/libxml2/:" + lib.makeSearchPathOutput "dev" "include" buildInputs;
-  LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+  patches = [
+    ./fix-glibc-2.42.patch
+  ];
+
+  env = {
+    C_INCLUDE_PATH =
+      "${libxml2.dev}/include/libxml2/:" + lib.makeSearchPathOutput "dev" "include" buildInputs;
+    LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+
+    # fix build w/ glibc-2.44
+    NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+  };
 
   doCheck = false;
 

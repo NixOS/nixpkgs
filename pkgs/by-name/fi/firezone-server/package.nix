@@ -4,7 +4,7 @@
   fetchFromGitHub,
   beam27Packages,
   gitMinimal,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -34,10 +34,10 @@ beam27Packages.mixRelease rec {
 
   pnpmDeps = fetchPnpmDeps {
     inherit pname version;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     src = "${src}/apps/web/assets";
-    fetcherVersion = 1;
-    hash = "sha256-40vtQIBhJNnzdxkAOVAcPN57IuD0IB6LFxGICo68AbQ=";
+    fetcherVersion = 4;
+    hash = "sha256-Uq6dAYYWT8G6upYcNEzVc8Gb2HUj8SaWRD0/w0quaRE=";
   };
   pnpmRoot = "apps/web/assets";
 
@@ -63,7 +63,7 @@ beam27Packages.mixRelease rec {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     nodejs
   ];
 

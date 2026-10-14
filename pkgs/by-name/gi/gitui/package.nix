@@ -9,21 +9,20 @@
   cmake,
   xclip,
   nix-update-script,
-  fetchpatch,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitui";
-  version = "0.28.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
-    owner = "extrawurst";
+    owner = "gitui-org";
     repo = "gitui";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-B3Cdhhu8ECfpc57TKe6u08Q/Kl4JzUlzw4vtJJ1YAUQ=";
+    hash = "sha256-IyDms4ke5evtSjFZrWEy0AascA0g9rG/a9RjbBNzZwg=";
   };
 
-  cargoHash = "sha256-dq5F7NJ0XcJ9x6hVWOboQQn8Liw8n8vkFgQSmTYIkSw=";
+  cargoHash = "sha256-LMw5TRNe9OK6ygOOMBpniMsmrK8K3qdkQ+SmaLJa+w0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -63,9 +62,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/extrawurst/gitui/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/gitui-org/gitui/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Blazing fast terminal-ui for Git written in Rust";
-    homepage = "https://github.com/extrawurst/gitui";
+    homepage = "https://github.com/gitui-org/gitui";
     license = lib.licenses.mit;
     mainProgram = "gitui";
     maintainers = with lib.maintainers; [

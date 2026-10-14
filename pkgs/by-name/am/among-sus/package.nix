@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "~martijnbraam";
     repo = "among-sus";
     rev = "554e60bf52e3fa931661b9414189a92bb8f69d78";
-    sha256 = "0j1158nczhvy5i1ykvzvhlv4ndhibgng0dq1lw2bmi8q6k1q1s0w";
+    hash = "sha256-HOiAwzQYxboEpwE38OxbETZLNoX77+lDLH7DzywqIUg=";
   };
 
   patchPhase = ''

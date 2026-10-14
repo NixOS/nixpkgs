@@ -147,10 +147,6 @@ lib.makeScope pkgs'.newScope (
         # EXWM is not tagged very often, prefer it from elpa devel.
         inherit (elpaDevelPackages) exwm;
 
-        # Telega uploads packages incompatible with stable tdlib to melpa
-        # Prefer the one from melpa stable
-        inherit (melpaStablePackages) telega;
-
       }
     )
   ) { }

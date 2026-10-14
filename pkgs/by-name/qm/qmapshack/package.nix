@@ -6,6 +6,8 @@
   qt6,
   qt6Packages,
   alglib,
+  asmjit,
+  blend2d,
   gdal,
   proj,
   routino,
@@ -13,14 +15,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmapshack";
-  version = "1.20.0";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "Maproom";
     repo = "qmapshack";
     tag = "V_${finalAttrs.version}";
-    hash = "sha256-OazG5BkgofNXWKoTpKEoyZ+Ew1u2w2i1Y/ovTYNrl+w=";
+    hash = "sha256-mayPiVV9F6yxDnRyNLrZSiDSPsIRILsaF53Qm7SISg0=";
   };
+
+  patches = [ ./dont_fetch_dependencies.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -30,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alglib
+    asmjit
+    blend2d
     gdal
     proj
     routino

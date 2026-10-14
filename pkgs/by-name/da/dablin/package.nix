@@ -8,7 +8,6 @@
   SDL2,
   gtkmm3,
   faad2,
-  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     mpg123
     SDL2
     gtkmm3
-    pcre
   ];
 
   meta = {

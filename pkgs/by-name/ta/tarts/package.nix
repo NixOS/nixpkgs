@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tarts";
-  version = "0.1.24";
+  version = "0.1.26";
 
   src = fetchFromGitHub {
     owner = "oiwn";
     repo = "tarts";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-whkDHgxrHkmYX6hji+z8mc964lQxllaidV8clJhvDqw=";
+    hash = "sha256-IhK74R43ylJqT7eESY/ko/0+PfvJeJav/lERrVM0ZOA=";
   };
 
-  cargoHash = "sha256-IZyjwbx7V0kPkmD9r8qrqp4nrJg8g6tepw5bvWlLZBE=";
+  cargoHash = "sha256-gMifRr9cTLIOz6jbjYDUS/JQJL/lOfYzt8w0PT9+Q+M=";
 
   meta = {
     description = "Screen saves and visual effects for your terminal";

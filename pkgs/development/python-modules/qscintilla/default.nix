@@ -2,26 +2,37 @@
   lib,
   stdenv,
 
-  pythonPackages,
-  qmake,
-  qscintilla,
-  qtbase,
-  qtmacextras ? null,
+  buildPythonPackage,
+  isPy3k,
+  python,
+  pyqt-builder,
+  pyqt5,
+  pyqt6,
+  setuptools,
+  sip,
+
+  libsForQt5,
+  qt6Packages,
+
+  useQt6 ? true,
 }:
 
 let
-  qtVersion = lib.versions.major qtbase.version;
-  pyQtPackage = pythonPackages."pyqt${qtVersion}";
+  qtPackages = if useQt6 then qt6Packages else libsForQt5;
 
-  inherit (pythonPackages)
-    isPy3k
-    python
-    sip
-    pyqt-builder
+  inherit (qtPackages)
+    qmake
+    qscintilla
+    qtbase
     ;
+
+  qtVersion = lib.versions.major qtbase.version;
+  pyQtPackage = if useQt6 then pyqt6 else pyqt5;
 in
-pythonPackages.buildPythonPackage {
-  pname = "qscintilla-qt${qtVersion}";
+buildPythonPackage {
+  # Matches the `name` declared in Python/pyproject-qt${qtVersion}.toml upstream,
+  # which is inconsistent between Qt5 ("QScintilla") and Qt6 ("PyQt6-QScintilla").
+  pname = if qtVersion == "5" then "qscintilla" else "pyqt${qtVersion}-qscintilla";
   version = qscintilla.version;
   src = qscintilla.src;
   pyproject = true;
@@ -33,7 +44,7 @@ pythonPackages.buildPythonPackage {
     qmake
     pyqt-builder
     qscintilla
-    pythonPackages.setuptools
+    setuptools
   ];
 
   buildInputs = [ qtbase ];
@@ -41,7 +52,7 @@ pythonPackages.buildPythonPackage {
   propagatedBuildInputs = [
     pyQtPackage
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ];
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && !useQt6) [ libsForQt5.qtmacextras ];
 
   dontWrapQtApps = true;
 

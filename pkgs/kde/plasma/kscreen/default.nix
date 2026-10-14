@@ -3,8 +3,8 @@
   pkg-config,
   qtsensors,
   qtwayland,
-  dbus,
   wayland-protocols,
+  dbus,
 }:
 mkKdeDerivation {
   pname = "kscreen";
@@ -14,6 +14,7 @@ mkKdeDerivation {
   extraBuildInputs = [
     qtsensors
     qtwayland
+
     wayland-protocols
   ];
 

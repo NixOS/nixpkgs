@@ -19,7 +19,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.09.20";
+  version = "2026.01.12";
 
   src = fetchurl {
     urls = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-TrUneCGaJJxC+GgL1ZZ/ZcONeqDH05Bp44/3lkCs9tg=";
+    hash = "sha256-LFTC4JAGWEnQq4zHsGlC9OZt3hfyoMgK4guQfVYsk34=";
   };
 
   patches = [
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
     #!nix-shell -i bash -p curl common-updater-scripts
 
     # Expect the text in format of '2025.05.24:'
-    new_version="$(curl -s http://www.live555.com/liveMedia/public/changelog.txt |
+    new_version="$(curl -s ${finalAttrs.meta.changelog} |
       head -n1 | tr -d ':')"
     update-source-version live555 "$new_version"
   '';
@@ -148,9 +148,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.live555.com/liveMedia/";
     description = "Set of C++ libraries for multimedia streaming, using open standard protocols (RTP/RTCP, RTSP, SIP)";
-    changelog = "http://www.live555.com/liveMedia/public/changelog.txt";
-    license = with lib.licenses; [ lgpl21Plus ];
+    changelog = "https://download.live555.com/changelog.txt";
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

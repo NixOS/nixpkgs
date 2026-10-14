@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  setuptools-scm,
 
   # dependencies
   pytz,
@@ -15,17 +16,20 @@
 
 buildPythonPackage rec {
   pname = "pyrfc3339";
-  version = "2.0.1";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kurtraschke";
     repo = "pyRFC3339";
     tag = "v${version}";
-    hash = "sha256-iLzWm2xt7EuzqU0G+66sXTTvWTv1cf0BmTDciSL68+A=";
+    hash = "sha256-pNtv60ecJ7kceS+dDMuKVCQGARf0SbNVBLqqTIzHDj0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [ pytz ];
 

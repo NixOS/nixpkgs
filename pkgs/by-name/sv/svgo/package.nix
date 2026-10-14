@@ -4,33 +4,39 @@
   makeWrapper,
   nodejs,
   stdenv,
-  yarn-berry_3,
+  pnpm_11,
+  fetchPnpmDeps,
+  pnpmBuildHook,
+  pnpmConfigHook,
 }:
 
 let
-  yarn-berry = yarn-berry_3;
+  pnpm = pnpm_11;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "svgo";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "svg";
     repo = "svgo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eSttRNHxcZquIxrTogk+7YS7rhp083qnOwJI71cmO20=";
+    hash = "sha256-fwSuYPv9y16r6fCmxzqynTaq4FdrplNRrNH30tagJgI=";
   };
 
-  missingHashes = ./missing-hashes.json;
-
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src missingHashes;
-    hash = "sha256-DrIbnm0TWviCfylCI/12XYsx7YOIk7JFVV18Q4dImwU=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname src version;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-Gu0Pi+WW485VpKU/QAiyUVnsPGpeypXJmVFLBiK1f2o=";
   };
 
   nativeBuildInputs = [
+    nodejs
+    pnpm
+    pnpmConfigHook
+    pnpmBuildHook
     makeWrapper
-    yarn-berry.yarnBerryConfigHook
   ];
 
   installPhase = ''

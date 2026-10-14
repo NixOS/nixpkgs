@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pypiserver";
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypiserver";
     repo = "pypiserver";
     tag = "v${version}";
-    hash = "sha256-tbBSZdkZJGcas3PZ3dj7CqAYNH2Mt0a4aXl6t7E+wNY=";
+    hash = "sha256-nqoAT3g32srJ0c3sGNFQBznLsnymDPUfL7kcON+BP0k=";
   };
 
   postPatch = ''

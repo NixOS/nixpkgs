@@ -12,13 +12,13 @@
 
 let
   version = "0.23a";
-  debianRevision = "12";
+  debianRevision = "16";
   debianPatch =
     patchname: hash:
     fetchpatch {
       name = "${patchname}.patch";
       url = "https://sources.debian.org/data/main/r/rrootage/${version}-${debianRevision}/debian/patches/${patchname}.patch";
-      sha256 = hash;
+      inherit hash;
     };
 
 in
@@ -26,22 +26,24 @@ stdenv.mkDerivation {
   pname = "rrootage";
   inherit version;
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/rrootage/rRootage-${version}.tar.gz";
-    sha256 = "01zzg4ih3kmbhsn1p9zr7g8srv1d2dhrp8cdd86y9qq233idnkln";
+    url = "https://downloads.sourceforge.net/rrootage/rRootage-${version}.tar.gz";
+    hash = "sha256-lk7b4hgC4+QNao2hm2ETLeys0Tv5pxushqvOASN5/wc=";
   };
 
   patches = [
-    (debianPatch "01_makefile" "0wgplznx9kgb82skwqplpydbpallgrby3w662h52wky5zl0pyijj")
-    (debianPatch "02_data_dir" "12vw60s94by3f6k8pk45k555h4y7gzlqfds0a96nrrryammpgnq3")
-    (debianPatch "03_texture_filename" "1qxkxy6821xvanacf25mi43wj8nf40c1qiyavhc8av798xprpkjh")
-    (debianPatch "04_home" "0s15b0liv40jzjd9l4zsq688ky1yp9b1gmb1xhi3bih4y7q9awdz")
-    (debianPatch "05_gcc" "06ihgbfrklabs7cb6216w1jjb9sglv86iagzhhmyydwyph4fb782")
-    (debianPatch "06_rrootage_highres" "0ifjmh236yiv3g896nfwwydgcnq3njdb8ldah7s3jxp3xkpvwcga")
-    (debianPatch "07_use_system_bulletml" "1sxsl1yzx3msvz8mf0jk1vnahqb1ahq9drm391idgh0afy77l6j7")
-    (debianPatch "08_windowed_mode" "0knx4g445ngilsz4dvdkq69f5f8i2xv2fnmdmq037xd5rhfg0b23")
-    (debianPatch "09_rootage_make_highres_default" "1zqz8s54rl8jmqmvdi9c3ayfcma6qkbfkx5vw0fzyn268wcs022p")
-    (debianPatch "10_deg_out_of_range" "1wr76az4rlv1gaj9xdknzqcjazw6h8myqw6y3753q259hxbq4cah")
+    (debianPatch "01_makefile" "sha256-UkZ/Af3FTy4KFMbw4Vd+lKq7mr/0Yj61QOvN1O2n93E=")
+    (debianPatch "02_data_dir" "sha256-A9t3a1U+52xNUkA3h+l/xxNYSpmFzIumccMvkjQwfIs=")
+    (debianPatch "03_texture_filename" "sha256-UM6bb0fpbIUY3MpHHBggziLJB4m1CMeUVbsHgYzvs+M=")
+    (debianPatch "04_home" "sha256-v3GV8PEExjUi7GHVF1a6PviJkMH6E5qa/BKQHSlYJWg=")
+    (debianPatch "05_gcc" "sha256-Ap3lCLyeN+8rhP+paNCmT6clZeAmCLPY0UvRmd16MBo=")
+    (debianPatch "06_rrootage_highres" "sha256-6jG+7+zjdjn0gapRtJq0A1v2mufcWZPQGzt6MwSs0kU=")
+    (debianPatch "07_use_system_bulletml" "sha256-Rxp6jncKwNdiSKPmljBUYWGo7A5TAlfR37qO/n2guus=")
+    (debianPatch "08_windowed_mode" "sha256-QyzwHMyl9TMArq1aJ3YXEbniksGz7Ua+pvHZQsgj3U4=")
+    (debianPatch "09_rootage_make_highres_default" "sha256-VwigGUdGWP8d4Lv06dbERlXmvBosxbYrrhLRTIpGH/8=")
+    (debianPatch "10_deg_out_of_range" "sha256-UDGCV4epCDzKGd5w7CuChn8lGf52tp6kemHTTL4yJ/M=")
+    (debianPatch "11_gcc_15" "sha256-CQSZh+7u8yocn7hn18u9FCFHARhuGeY3YDR13vNPW+A=")
   ];
+
   postPatch = ''
     substituteInPlace "src/screen.c" --replace "/usr/share/games/rrootage" "$out/share/games/rrootage"
     substituteInPlace "src/soundmanager.c" --replace "/usr/share/games/rrootage" "$out/share/games/rrootage"
@@ -55,16 +57,20 @@ stdenv.mkDerivation {
     SDL_mixer
     bulletml
   ];
+
   makeFlags = [
     "-C src"
     "-f makefile.lin"
   ];
+
   hardeningDisable = [
     "stackprotector"
     "fortify"
   ]; # buffer overflow without this
 
   installPhase = ''
+    runHook preInstall
+
     install -d "$out"/share/games
     cp -r rr_share "$out"/share/games/rrootage
     install -D src/rrootage "$out"/bin/rrootage
@@ -75,6 +81,8 @@ stdenv.mkDerivation {
     install -D -m 644 readme.txt "$out"/share/doc/rrootage/README.jp
     install -m 644 readme_e.txt "$out"/share/doc/rrootage/README.en
     install -m 644 readme_linux "$out"/share/doc/rrootage/README
+
+    runHook postInstall
   '';
 
   meta = {

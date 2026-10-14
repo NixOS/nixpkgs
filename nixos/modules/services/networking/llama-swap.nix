@@ -7,13 +7,39 @@
 let
   cfg = config.services.llama-swap;
   settingsFormat = pkgs.formats.yaml { };
-  configFile = settingsFormat.generate "config.yaml" cfg.settings;
+  unvalidatedConfigFile = settingsFormat.generate "llama-swap-config.yaml" cfg.settings;
+
+  # similar to writeNginxConfig
+  validateLlamaSwapConfig =
+    file:
+    pkgs.runCommandLocal "llama-swap-validated-config.yaml"
+      {
+        inherit file;
+        __structuredAttrs = true;
+        nativeBuildInputs = [
+          cfg.package
+        ];
+      } # sh
+      ''
+        llama-swap -validate -config $file
+        cp $file $out
+      '';
+
+  configFile =
+    if cfg.validateConfigFile then
+      validateLlamaSwapConfig unvalidatedConfigFile
+    else
+      unvalidatedConfigFile;
 in
 {
   options.services.llama-swap = {
     enable = lib.mkEnableOption "the llama-swap service";
 
     package = lib.mkPackageOption pkgs "llama-swap" { };
+
+    validateConfigFile = lib.mkEnableOption "validating configuration with `llama-swap -validate`" // {
+      default = true;
+    };
 
     listenAddress = lib.mkOption {
       type = lib.types.str;
@@ -113,6 +139,11 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      environment = rec {
+        XDG_CACHE_HOME = "/var/cache/${config.systemd.services.llama-swap.serviceConfig.CacheDirectory}";
+        LLAMA_CACHE = "${XDG_CACHE_HOME}/huggingface/hub";
+      };
+
       serviceConfig = {
         Type = "exec";
         ExecStart = "${lib.getExe cfg.package} ${
@@ -129,6 +160,8 @@ in
         }";
         Restart = "on-failure";
         RestartSec = 3;
+
+        CacheDirectory = "llama-swap";
 
         # for GPU acceleration
         PrivateDevices = false;
@@ -166,7 +199,6 @@ in
         SystemCallErrorNumber = "EPERM";
         ProtectProc = "invisible";
         ProtectHostname = true;
-        ProcSubset = "pid";
         WorkingDirectory = "/tmp";
       };
     };

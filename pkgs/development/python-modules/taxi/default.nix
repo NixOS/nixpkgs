@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "taxi";
-  version = "6.3.2";
+  version = "6.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sephii";
     repo = "taxi";
     rev = version;
-    hash = "sha256-zhBjULAPd1rGvTMdy7TJ3XoDDMGnoL6fyZFTVIHDvDI=";
+    hash = "sha256-FeAfat5/Dq0y/XHFbZnOEgFix2z+dP5GXvAANLTPFP8=";
   };
 
   build-system = [ flit-core ];

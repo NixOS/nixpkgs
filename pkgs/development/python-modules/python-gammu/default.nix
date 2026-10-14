@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-gammu";
-  version = "3.2.4";
+  version = "3.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "gammu";
     repo = "python-gammu";
     rev = version;
-    hash = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
+    hash = "sha256-5brp1i/061dchPX1w50CCwYnAs6SRM3+ifowvEJ7zVs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for Gammu";
     homepage = "https://github.com/gammu/python-gammu/";
-    license = with lib.licenses; [ gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

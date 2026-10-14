@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   pkg-config,
   autoPatchelfHook,
   autoreconfHook,
@@ -28,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guacamole-server";
-  version = "1.6.0-unstable-2025-06-29";
+  version = "1.6.0-unstable-2026-08-16";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "guacamole-server";
-    rev = "f3f5b9d76649ccc24f551cb166c81078f4b5e236";
-    hash = "sha256-OjTwAQzKUuXfwZXLsL9XjrJc/0be38CmAGG+CoCeNwk=";
+    rev = "d3b7828977c63a5b197158d6cbbdaf1846b579fb";
+    hash = "sha256-sxZLzF6m35EtfLRHb1+aqR3RF+piOuvPT9w9Hs3cor0=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString [

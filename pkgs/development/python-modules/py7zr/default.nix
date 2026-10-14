@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "py7zr";
-  version = "1.0.0";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miurahr";
     repo = "py7zr";
     tag = "v${version}";
-    hash = "sha256-uV4zBQZlHfHgM/NiVSjI5I9wJRk9i4ihJn4B2R6XRuM=";
+    hash = "sha256-/sorvv5/kwlY/DtxW33ytHhyrR06p6aNgGW9oH+lpUw=";
   };
 
   build-system = [
@@ -49,6 +49,12 @@ buildPythonPackage rec {
     pyppmd
     pyzstd
     texttable
+  ];
+
+  pythonRelaxDeps = [
+    "pyppmd"
+    "pybcj"
+    "inflate64"
   ];
 
   nativeCheckInputs = [

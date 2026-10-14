@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     description = "Digital revival of the Brygada serif typeface";
-    homepage = "https://brygada1918.eu/";
+    homepage = "https://github.com/kosmynkab/Brygada-1918";
     license = lib.licenses.ofl;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ oidro ];

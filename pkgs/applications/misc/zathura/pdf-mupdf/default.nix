@@ -24,14 +24,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "2026.02.03";
+  version = "2026.07.18";
   pname = "zathura-pdf-mupdf";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-pdf-mupdf";
     tag = finalAttrs.version;
-    hash = "sha256-pNaawaExmBYDJbry/Ek/EpP2mojHp3MZw3cR6ku2jeg=";
+    hash = "sha256-zHqs+7Pu6ps4+PV/3rW1FETQVcat2QlPpUvwQXPHgV8=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })

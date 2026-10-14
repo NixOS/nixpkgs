@@ -2,20 +2,25 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   bleach,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "bleach-allowlist";
   version = "1.0.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
     hash = "sha256-VuIghgeaDmoxAK6Z5NuvIOslhUhlmOsOmUAIoRQo2ps=";
   };
 
-  propagatedBuildInputs = [ bleach ];
+  build-system = [ setuptools ];
+
+  dependencies = [ bleach ];
 
   # No tests
   doCheck = false;

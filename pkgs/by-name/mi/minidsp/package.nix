@@ -30,6 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/mrene/minidsp-rs";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    mainProgram = "minidsp";
     maintainers = [
       lib.maintainers.adamcstephens
       lib.maintainers.mrene

@@ -36,6 +36,8 @@ mkKdeDerivation {
     "-DPOSTGRES_PATH=${lib.getBin libpq}/bin"
   ];
 
+  hasPythonBindings = true;
+
   extraNativeBuildInputs = [
     qttools
     shared-mime-info
@@ -51,7 +53,6 @@ mkKdeDerivation {
   ++ lib.optionals (backend == "sqlite") [ sqlite ];
 
   # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically
-
   postFixup = ''
     mkdir -p $out/nix-support
   ''

@@ -6,40 +6,48 @@
   setuptools,
   # dependencies
   emoji,
+  huggingface-hub,
   networkx,
   numpy,
+  orjson,
   peft,
+  platformdirs,
   protobuf,
   requests,
   torch,
   tqdm,
   transformers,
+  udtools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "stanza";
-  version = "1.11.0";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = "stanza";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zY2+8QuPJTX/HSkE/gKMCWpSanKpYSGZeeYgb4eFuuw=";
+    hash = "sha256-MmkAlXVfU7o6rXspQtnCQ2FAYgHAue7/JGSRh6CYl7Y=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     emoji
+    huggingface-hub
     networkx
     numpy
+    orjson
     peft
+    platformdirs
     protobuf
     requests
     torch
     tqdm
     transformers
+    udtools
   ];
 
   # Most tests require resources from the network (models). Many of the ones that do run are slow
@@ -57,7 +65,7 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/stanfordnlp/stanza/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      riotbib
+      lennartmueh
       Stebalien
     ];
   };

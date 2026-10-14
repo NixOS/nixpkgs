@@ -18,12 +18,23 @@ struct Config(HashMap<String, String>);
 /// Reads the JSON config for the systemd generator environment and prints it in KEY=VALUE format
 /// to stdout. This makes the configured environment variables available for all systemd
 /// generators.
+///
+/// In case of the PATH variable, it extends the PATH read from the environment with the one from
+/// the config.
 fn env_generator_impl() -> Result<()> {
     let content = fs::read(CONFIG_PATH).with_context(|| format!("Failed to read {CONFIG_PATH}"))?;
     let config: Config = serde_json::from_slice(&content).context("Failed to parse config")?;
 
     let mut buffer = Vec::new();
-    for (key, value) in config.0 {
+    for (key, mut value) in config.0 {
+        // If the config contains the PATH env variable, read the current PATH and extend it with
+        // the one from the config.
+        if key == "PATH"
+            && let Some(current_path) = std::env::var("PATH").ok()
+        {
+            value.push(':');
+            value.push_str(&current_path);
+        }
         writeln!(&mut buffer, "{key}=\"{value}\"").context("Failed to write to buffer")?;
     }
 

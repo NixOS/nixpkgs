@@ -36,8 +36,6 @@ python3Packages.buildPythonApplication {
       --replace-fail 'shutil.copy(' 'shutil.copyfile('
   '';
 
-  strictDeps = true;
-
   nativeBuildInputs = [
     meson
     ninja
@@ -54,7 +52,7 @@ python3Packages.buildPythonApplication {
     pygobject3
     pillow
     numpy
-    fortune
+    fortune-python
   ];
 
   buildInputs = [

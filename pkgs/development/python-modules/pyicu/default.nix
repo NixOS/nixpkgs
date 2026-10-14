@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.15.3";
+  version = "2.16.2";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "main";
     repo = "pyicu";
     tag = "v${version}";
-    hash = "sha256-vbrl6n7X85sQIdgj+Z0Xr6x/L8roK5Z/mNj53zyWQGs=";
+    hash = "sha256-JCevXAL6+G+EXx4ikOANgFiI9YPhjY5fDFLFBmEs8Ro=";
   };
 
   postPatch = ''

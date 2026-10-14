@@ -2,36 +2,39 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "bomber-go";
-  version = "0.4.7";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "devops-kung-fu";
     repo = "bomber";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q3x3duXc2++BvVul2a5fBTcPHWrOHpPOGHBUXL08syg=";
+    hash = "sha256-D3xs8lVhrRKVVQYzHN7CQNw5NTC+AxgsWvJxnV0lwGY=";
   };
 
-  vendorHash = "sha256-jVdrvc48/Vt240EYk5PtZCjNGipX7M1qF8OJdpu/qI4=";
+  vendorHash = "sha256-mhGnuNuvMvX4WsqnS7QkWcrPfWEyaQsSKDUOpg9YrO8=";
 
-  ldflags = [
-    "-w"
-    "-s"
-  ];
+  ldflags = [ "-s" ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   checkFlags = [
-    "-skip=TestEnrich" # Requires network access
+    # Requires network access
+    "-skip=TestEnrich|TestScanner_enrichVulnerabilities"
   ];
+
+  doInstallCheck = true;
 
   meta = {
     description = "Tool to scans Software Bill of Materials (SBOMs) for vulnerabilities";
     homepage = "https://github.com/devops-kung-fu/bomber";
-    changelog = "https://github.com/devops-kung-fu/bomber/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/devops-kung-fu/bomber/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
-    mainProgram = "bomber";
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "bomber";
   };
 })

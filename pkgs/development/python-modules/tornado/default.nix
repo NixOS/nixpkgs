@@ -18,21 +18,24 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tornado";
-  version = "6.5.2";
+  version = "6.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tornadoweb";
     repo = "tornado";
-    tag = "v${version}";
-    hash = "sha256-jy/HnMY459yZX3HW9V61/ZSSanCJEZakBU/2pocGc/s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iE0Tf95zmPoZJhw7FDLzTmv8HaWds3ZU5xzZSMvxFH4=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # To allow tests to pass on slower/high-load machines
+  env.ASYNC_TEST_TIMEOUT = 30;
 
   disabledTestPaths = [
     # additional tests that have extra dependencies, run slowly, or produce more output than a simple pass/fail
@@ -60,9 +63,10 @@ buildPythonPackage rec {
   };
 
   meta = {
+    changelog = "https://www.tornadoweb.org/en/stable/releases/${finalAttrs.src.tag}.html";
     description = "Web framework and asynchronous networking library";
     homepage = "https://www.tornadoweb.org/";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

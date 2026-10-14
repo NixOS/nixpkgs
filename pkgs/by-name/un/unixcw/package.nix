@@ -43,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  CFLAGS = "-lasound -lpulse-simple";
+  env.CFLAGS = toString [
+    "-lasound"
+    "-lpulse-simple"
+  ];
 
   meta = {
     description = "Sound characters as Morse code on the soundcard or console speaker";

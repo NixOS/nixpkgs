@@ -1,56 +1,88 @@
 {
   lib,
-  stdenv,
-  buildNpmPackage,
-  fetchFromGitHub,
-  unzip,
+  stdenvNoCC,
   vscodium,
   vscode-extensions,
+  nodejs-slim,
+  makeBinaryWrapper,
+  unzip,
+  runCommandLocal,
 }:
 
-buildNpmPackage rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
+  inherit (vscodium) version src;
   pname = "vscode-langservers-extracted";
-  version = "4.10.0";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner = "hrsh7th";
-      repo = "vscode-langservers-extracted";
-      rev = "v${version}";
-      hash = "sha256-3m9+HZY24xdlLcFKY/5DfvftqprwLJk0vve2ZO1aEWk=";
-    })
-    vscodium.src
+  sourceRoot =
+    if stdenvNoCC.hostPlatform.isDarwin then
+      "VSCodium.app/Contents/Resources/app/extensions"
+    else
+      "resources/app/extensions";
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  # The Darwin release is a zip.
+  # stdenv unpacks the Linux tarball (tar.gz) natively.
+  # FIXME: update vscodium.src to use fetchTarball & fetchZip
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    unzip
   ];
 
-  sourceRoot = "source";
+  __structuredAttrs = true;
+  strictDeps = true;
+  dontConfigure = true;
+  dontBuild = true;
 
-  npmDepsHash = "sha256-XGlFtmikUrnnWXsAYzTqw2K7Y2O0bUtYug0xXFIASBQ=";
+  installPhase = ''
+    runHook preInstall
 
-  nativeBuildInputs = [ unzip ];
+    for language in css html json; do
+      server="$language-language-features/server/dist/node/''${language}ServerMain.js"
+      install -Dm644 "$server" \
+        "$out/lib/extensions/$server"
+      makeBinaryWrapper ${lib.getExe nodejs-slim} "$out/bin/vscode-$language-language-server" \
+        --add-flag "$out/lib/extensions/$server"
+    done
 
-  buildPhase =
-    let
-      extensions =
-        if stdenv.hostPlatform.isDarwin then
-          "../VSCodium.app/Contents/Resources/app/extensions"
-        else
-          "../resources/app/extensions";
-    in
-    ''
-      npx babel ${extensions}/css-language-features/server/dist/node \
-        --out-dir lib/css-language-server/node/
-      npx babel ${extensions}/html-language-features/server/dist/node \
-        --out-dir lib/html-language-server/node/
-      npx babel ${extensions}/json-language-features/server/dist/node \
-        --out-dir lib/json-language-server/node/
-      cp -r ${vscode-extensions.dbaeumer.vscode-eslint}/share/vscode/extensions/dbaeumer.vscode-eslint/server/out \
-        lib/eslint-language-server
-    '';
+    server="eslint-language-features/server/out/eslintServer.js"
+    install -Dm644 "${vscode-extensions.dbaeumer.vscode-eslint}/share/vscode/extensions/dbaeumer.vscode-eslint/server/out/eslintServer.js" \
+      "$out/lib/extensions/$server"
+    makeBinaryWrapper ${lib.getExe nodejs-slim} "$out/bin/vscode-eslint-language-server" \
+      --add-flag "$out/lib/extensions/$server"
+
+    # Use VSCodium bundled TypeScript
+    mkdir -p "$out/lib/extensions/node_modules"
+    cp -a node_modules/typescript "$out/lib/extensions/node_modules/typescript"
+
+    runHook postInstall
+  '';
+
+  passthru.tests.initialization =
+    runCommandLocal "vscode-langservers-extracted-initialization"
+      {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      }
+      ''
+        request() {
+          init_request='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"processId":null,"rootUri":null,"capabilities":{}}}'
+          content_length=''${#init_request}
+          printf "Content-Length: %d\r\n\r\n%s" "$content_length" "$init_request"
+          sleep 1
+        }
+
+        for language in css html json eslint; do
+          echo "Checking $language language server"
+          response=$(request | timeout 3 "vscode-$language-language-server" --stdio) || true
+          grep -q '"capabilities"' <<< "$response"
+        done
+
+        touch $out
+      '';
 
   meta = {
+    inherit (vscodium.meta) license platforms;
     description = "HTML/CSS/JSON/ESLint language servers extracted from vscode";
-    homepage = "https://github.com/hrsh7th/vscode-langservers-extracted";
-    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lord-valen ];
   };
-}
+})

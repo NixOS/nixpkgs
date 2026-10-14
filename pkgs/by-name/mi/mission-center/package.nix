@@ -65,20 +65,20 @@ let
   nvtop = fetchFromGitHub {
     owner = "Syllo";
     repo = "nvtop";
-    rev = "339ee0b10a64ec51f43d27357b0068a40f16e9e4";
-    hash = "sha256-QxGP6lHbjS7GAQGWUnxFdrYgxBVhtuk5CzS2EUVFjOs=";
+    rev = "3d4a953da02bc18886734613bb9f60ff80669de7";
+    hash = "sha256-yBCJZt23NIjXYXLQAY9Go3bcwzxyUnL+3TP9kyFthr0=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mission-center";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "mission-center-devs";
     repo = "mission-center";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-KETaCjKTxEvh3tgLzJw5PLJHAQivqXhGYcluvFhGGd8=";
+    hash = "sha256-RJdIyDcmOBlKTjqzNOsSN6I6v7Nx7qjgNLgd+bc2vME=";
   };
 
   postPatch =
@@ -92,8 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
       SRC_DIR=$NIX_BUILD_TOP/source
       SRC_MAGPIE_DIR=$SRC_DIR/subprojects/magpie
       SRC_NVTOP_DIR=$SRC_MAGPIE_DIR/platform-linux/3rdparty/nvtop
-
-      # Patch references in nvtop.json to match the name we inject manually
+    ''
+    # Patch references in nvtop.json to match the name we inject manually
+    + ''
       substituteInPlace "$SRC_NVTOP_DIR/nvtop.json" \
         --replace-fail "nvtop-${nvtop.rev}" "nvtop-src"
 
@@ -104,8 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       pushd "$DEST_NVTOP_DIR"
       mkdir -p include/libdrm
+    ''
+    # Upstream's platform-linux/build.rs applies these patches without checking `patch`'s exit
+    # status, so it silently tolerates hunks that no longer apply.
+    + ''
       for patchfile in "$SRC_NVTOP_DIR"/patches/nvtop*.patch; do
-        patch -p1 < "$patchfile"
+        patch -p1 --forward < "$patchfile" || true
       done
       popd
     ''
@@ -119,21 +124,38 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "udevadm" "${lib.getExe' systemdMinimal "udevadm"}"
     '';
 
-  cargoDeps = symlinkJoin {
-    name = "cargo-vendor-dir";
-    paths = [
-      (rustPlatform.fetchCargoVendor {
+  cargoDeps =
+    let
+      missionCenterCargoDeps = rustPlatform.fetchCargoVendor {
         inherit (finalAttrs) pname version src;
-        hash = "sha256-XS+/gpCMIqDgFR6AjuT2q+p+85GklUuRhKWzaBfQjZg=";
-      })
-      (rustPlatform.fetchCargoVendor {
+        hash = "sha256-G48wiOa82hCX/xl6DQeWxLNZ6PAfzqfxzl/Srra004E=";
+      };
+      magpieCargoDeps = rustPlatform.fetchCargoVendor {
         pname = "${finalAttrs.pname}-magpie";
         inherit (finalAttrs) version src;
         sourceRoot = "${finalAttrs.src.name}/subprojects/magpie";
-        hash = "sha256-9YZ2dgIaq0AtS8QsIC/0cJlELIy/UbOvulgZFL/qRRs=";
-      })
-    ];
-  };
+        hash = "sha256-WwUyPgP47O5i8+1XZciH/FCLAWz9/LRmJtgkhSPJwiY=";
+      };
+    in
+    symlinkJoin {
+      name = "cargo-vendor-dir";
+      # `missionCenterCargoDeps` must come first: symlinkJoin keeps the first path's file on a
+      # collision, and cargoSetupHook checks the merged vendor's top-level `Cargo.lock` against the
+      # main source's `Cargo.lock` (not magpie's), so the main one has to win.
+      paths = [
+        missionCenterCargoDeps
+        magpieCargoDeps
+      ];
+      # symlinkJoin keeps only one of the two `.cargo/config.toml` files, which would drop the
+      # git-source replacement blocks that only the magpie vendor defines (e.g. the `upower_dbus`
+      # dependency pulled from dbus-settings-bindings).
+      # Without them cargo tries to fetch those crates over the network at build time.
+      # magpie's config is a superset of the main one so use it for the merged vendor directory.
+      postBuild = ''
+        rm -f $out/.cargo/config.toml
+        cp ${magpieCargoDeps}/.cargo/config.toml $out/.cargo/config.toml
+      '';
+    };
 
   nativeBuildInputs = [
     cmake
@@ -204,7 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Monitor your CPU, Memory, Disk, Network and GPU usage";
     homepage = "https://gitlab.com/mission-center-devs/mission-center";
-    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/v${finalAttrs.version}";
+    changelog = "https://gitlab.com/mission-center-devs/mission-center/-/releases/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage

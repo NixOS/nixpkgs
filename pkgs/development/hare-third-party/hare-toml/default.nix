@@ -9,22 +9,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-toml";
-  version = "0.1.2";
+  version = "0.2.1";
 
   src = fetchFromCodeberg {
     owner = "lunacb";
     repo = "hare-toml";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-MfflJElDMu15UBuewssqhCEsNtzmN/H421H4HV+JCWc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PAXK7BHPzmZaTm3PIbTTn0ZB/8l6HzOkJ2prARxD9UE=";
   };
-
-  patches = [
-    # Update strconv module functions for 0.24.2
-    (fetchpatch {
-      url = "https://codeberg.org/lunacb/hare-toml/commit/9849908ba1fd3457abd6c708272ecb896954d2bc.patch";
-      hash = "sha256-herJZXJ8uusTO2b7Ddby2chIvDRuAPDFOPEt+wotTA0=";
-    })
-  ];
 
   nativeBuildInputs = [
     scdoc

@@ -6,7 +6,7 @@
   # build-system
   cmake,
   ninja,
-  pybind11,
+  nanobind,
   scikit-build-core,
 
   # dependencies
@@ -18,18 +18,18 @@
 
 buildPythonPackage rec {
   pname = "mapbox-earcut";
-  version = "1.0.3";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skogler";
     repo = "mapbox_earcut_python";
     tag = "v${version}";
-    hash = "sha256-2dUZ78yWSudjozV2zIRNQgUeaNrkL+NXnF51q4T+dRU=";
+    hash = "sha256-R5YDJbfDNf6jAvG3VJQMYay6i8dw616SUs0tPgrJt6I=";
   };
 
   build-system = [
-    pybind11
+    nanobind
     scikit-build-core
   ];
 
@@ -43,6 +43,10 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    rm -rf mapbox_earcut
+  '';
 
   pythonImportsCheck = [ "mapbox_earcut" ];
 

@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "aks-mcp-server";
-  version = "0.0.14";
+  version = "0.0.20";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "aks-mcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-di5T7GKMLl42+GyRCyMStbT1XfDTAbH9zK+4qO0Bf7I=";
+    hash = "sha256-K0BVDH0HT4kQBGMpVDtLihDCPlpcVpdGEF7f5DY8SvQ=";
   };
 
-  vendorHash = "sha256-d27ffScJukUyBd6C8VgEUqK5rHKxQv7vEvt1zsRjhKE=";
+  vendorHash = "sha256-EdDiLibw3OXtTmAaD6PIi6xiW7+x8TUeAezdjpu8IjY=";
 
   subPackages = [ "cmd/aks-mcp" ];
 
@@ -29,10 +29,9 @@ buildGoModule (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  # Disable CGO and set environment variables
   env.CGO_ENABLED = "0";
 
-  tags = [ "withoutebpf" ];
+  tags = lib.optionals stdenv.hostPlatform.isDarwin [ "withoutebpf" ];
 
   ldflags = [
     "-s"
@@ -49,9 +48,12 @@ buildGoModule (finalAttrs: {
     "-skip=TestClient"
   ];
 
+  # ebpf is a linux only feature
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export GOFLAGS="$GOFLAGS -tags=withoutebpf"
+  '';
+
   postInstall = ''
-
-
     wrapProgram $out/bin/aks-mcp \
       --set-default AKS_MCP_COLLECT_TELEMETRY false \
       --prefix PATH : ${
@@ -73,7 +75,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/Azure/aks-mcp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ priyaananthasankar ];
-    platforms = lib.platforms.unix; # Now supports both Linux and macOS with withoutebpf
+    platforms = lib.platforms.unix;
     mainProgram = "aks-mcp";
   };
 })

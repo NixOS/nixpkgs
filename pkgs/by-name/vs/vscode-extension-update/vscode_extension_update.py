@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p nix python3 python3Packages.loguru nodePackages.semver vsce nix-update gitMinimal coreutils common-updater-scripts
+#! nix-shell -i python3 -p nix python3 python3Packages.loguru python3Packages.semver vsce nix-update gitMinimal coreutils common-updater-scripts
 
 import argparse
 import json
@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Optional
 
 from loguru import logger
+from semver.version import Version
 
 
 class VSCodeExtensionUpdater:
@@ -238,6 +239,21 @@ class VSCodeExtensionUpdater:
             logger.exception(e)
             sys.exit(1)
 
+    def _version_passed_validation(self, version_info: dict) -> bool:
+        """
+        Returns False when the marketplace reports a validation failure for this
+        version (e.g. virus scan). Such versions are hidden from the marketplace
+        UI and have no VsixSignature asset, so we must not select them.
+        """
+        message = version_info.get("validationResultMessage")
+        if not message:
+            return True
+        try:
+            results = json.loads(message).get("results", [])
+        except (json.JSONDecodeError, AttributeError):
+            return False
+        return not any(r.get("status") == "failure" for r in results)
+
     def find_compatible_extension_version(
         self, extension_versions: list, target_platform: str
     ) -> str:
@@ -249,6 +265,12 @@ class VSCodeExtensionUpdater:
             if candidate_platform is not None and candidate_platform != target_platform:
                 continue
             candidate_version = version_info.get("version")
+            if not self._version_passed_validation(version_info):
+                logger.debug(
+                    f"Skipping version {candidate_version} ({candidate_platform}): "
+                    "marketplace validation failed"
+                )
+                continue
             candidate_pre_release = next(
                 (
                     prop.get("value")
@@ -275,16 +297,12 @@ class VSCodeExtensionUpdater:
                 engine_version_constraint = self.replace_version_symbol(
                     engine_version_constraint
                 )
-                try:
-                    self.execute_command([
-                        "semver",
-                        self.target_vscode_version,
-                        "-r",
-                        engine_version_constraint,
-                    ])
+                if Version.parse(self.target_vscode_version).match(
+                    engine_version_constraint
+                ):
                     logger.info(f"Compatible version found: {candidate_version}")
                     return candidate_version
-                except (ValueError, subprocess.CalledProcessError):
+                else:
                     logger.debug(
                         f"Version {candidate_version} is not compatible with VSCode {self.target_vscode_version} (constraint: {engine_version_constraint})."
                     )
@@ -412,14 +430,7 @@ class VSCodeExtensionUpdater:
             available_versions,
             self.get_target_platform(self.nix_vscode_extension_platforms[0]),
         )
-        try:
-            self.execute_command([
-                "semver",
-                self.current_version,
-                "-r",
-                f"<{self.new_version}",
-            ])
-        except subprocess.CalledProcessError:
+        if not Version.parse(self.current_version).match(f"<{self.new_version}"):
             logger.info("Already up to date or new version is older!")
             sys.exit(0)
         for i, system in enumerate(self.nix_vscode_extension_platforms):

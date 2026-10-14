@@ -8,13 +8,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "jump";
-  version = "0.67.0";
+  version = "0.69.0";
 
   src = fetchFromGitHub {
     owner = "gsamokovarov";
     repo = "jump";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/vMQIbpfnEzBhyCUgSd4XpeC9cEX/+AYIRDTOqgmCec=";
+    hash = "sha256-IXLL7HoPZ3zZ6RvgjxbkUgqPbvzeD8ZWkouSsxxG4t4=";
   };
 
   vendorHash = "sha256-nMUqZWdq//q/DNthvpKiYLq8f95O0QoItyX5w4vHzSA=";

@@ -68,7 +68,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   version = "0.1.1-unstable-2019-11-20";
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "facebookarchive";
     repo = "xcbuild";
     rev = "dbaee552d2f13640773eb1ad3c79c0d2aca7229c";
     hash = "sha256-7mvSuRCWU/LlIBdmnC59F4SSzJPEcQhlmEK13PNe1xc=";
@@ -168,7 +168,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Xcode-compatible build tool";
-    homepage = "https://github.com/facebook/xcbuild";
+    homepage = "https://github.com/facebookarchive/xcbuild";
     license = with lib.licenses; [
       bsd2
       bsd3

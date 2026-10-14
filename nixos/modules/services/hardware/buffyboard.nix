@@ -10,8 +10,8 @@
 # Desktop users are recommended to either:
 # 1. Stop buffyboard once your DE is started.
 #   e.g. `services.buffyboard.unitConfig.Conflicts = [ "my-de.service" ];`
-# 2. Configure your DE to ignore input events from buffyboard (product-id=25209; vendor-id=26214; name=rd)
-#   e.g. `echo 'input "26214:25209:rd" events disabled' > ~/.config/sway/config`
+# 2. Configure your DE to ignore input events from buffyboard (product-id=0; vendor-id=0; name=buffyboard)
+#   e.g. `echo 'input "0:0:buffyboard" events disabled' > ~/.config/sway/config`
 
 {
   config,
@@ -67,6 +67,24 @@ in
         '';
         type = types.submodule {
           freeformType = ini.type;
+
+          options.keyboard.haptic_feedback = mkOption {
+            type = types.nullOr types.bool;
+            default = null;
+            description = ''
+              Enable or disable vibrations when pressing keys.
+            '';
+          };
+
+          options.keyboard.sticky_shift = mkOption {
+            type = types.nullOr types.bool;
+            default = null;
+            description = ''
+              Changes shift key behavior. When true, the keyboard remains in uppercase mode until
+              the shift key is pressed again (sticky). When false, the keyboard switches back to
+              lowercase mode and the shift key deactivates after a non-modifier key is pressed.
+            '';
+          };
 
           options.input.pointer = mkOption {
             type = types.nullOr types.bool;

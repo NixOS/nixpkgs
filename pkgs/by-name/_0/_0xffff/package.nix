@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
   libusb-compat-0_1,
   versionCheckHook,
@@ -19,7 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   buildInputs = [ libusb-compat-0_1 ];
+
+  makeFlags = [
+    "CC=cc"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   installFlags = [
     "DESTDIR=$(out)"

@@ -128,7 +128,7 @@ in
         To support uploading of images for avatars and document attachments an
         s3-compatible storage can be provided. AWS S3 is recommended for
         redundancy however if you want to keep all file storage local an
-        alternative such as [minio](https://github.com/minio/minio)
+        alternative such as [garage](https://garagehq.deuxfleurs.fr/)
         can be used.
         Local filesystem storage can also be used.
 
@@ -139,7 +139,7 @@ in
         {
           accessKey = "...";
           secretKeyFile = "/somewhere";
-          uploadBucketUrl = "https://minio.example.com";
+          uploadBucketUrl = "https://garage.example.com";
           uploadBucketName = "outline";
           region = "us-east-1";
         }
@@ -836,13 +836,17 @@ in
           ${
             if (cfg.databaseUrl == "local") then
               ''
-                DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+                if [ -z "''${DATABASE_URL:-}" ]; then
+                  DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+                fi
                 export DATABASE_URL
-                export PGSSLMODE=disable
+                export PGSSLMODE="''${PGSSLMODE:-disable}"
               ''
             else
               ''
-                DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+                if [ -z "''${DATABASE_URL:-}" ]; then
+                  DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+                fi
                 export DATABASE_URL
               ''
           }

@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "kubernetes-polaris";
-  version = "10.1.4";
+  version = "10.2.5";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
     repo = "polaris";
-    rev = finalAttrs.version;
-    sha256 = "sha256-OwKW8a7bka6YYI8xIRaxcNvrFOjuf+0jG3CSQGVCRPM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SY7w7ltpoQNEA76ONqSSsDmkcK5s82NIpB/g3DQoCqs=";
   };
 
-  vendorHash = "sha256-gqMeXzPqQ0RBtjx+fS0+b7KhfJh1Ss0mC3djzOR84dU=";
+  vendorHash = "sha256-MRNqMINPdc1ifhl6fiLb6sO34m50/QsBrCEjy8CiMdA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -26,6 +26,11 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X main.Version=${finalAttrs.version}"
     "-X main.Commit=${finalAttrs.version}"
+  ];
+
+  # These tests don't work in the build sandbox.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "-skip=^TestConfig(FromURL|NoServerError)$"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -49,7 +54,7 @@ buildGoModule (finalAttrs: {
     description = "Validate and remediate Kubernetes resources to ensure configuration best practices are followed";
     mainProgram = "polaris";
     homepage = "https://www.fairwinds.com/polaris";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ longer ];
   };
 })

@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
   python3,
   ttfautohint-nox,
 }:
@@ -16,7 +17,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-ajieKhTeH6yv2qiE2xqnHFoMS65//4ZKiccAlC2PXGQ=";
   };
 
+  outputs = [
+    "out"
+    "webfont"
+  ];
+
   nativeBuildInputs = [
+    installFonts
     (python3.withPackages (p: [ p.fontforge ]))
     ttfautohint-nox
   ];
@@ -32,13 +39,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  # installFonts adds a hook to `postInstall` that installs fonts
+  # into the correct directories
   installPhase = ''
     runHook preInstall
-
-    install -Dm644 build/*.ttf  -t $out/share/fonts/truetype
-    install -Dm644 build/*.otf  -t $out/share/fonts/opentype
-    install -Dm644 build/*.woff -t $out/share/fonts/woff
-
     runHook postInstall
   '';
 

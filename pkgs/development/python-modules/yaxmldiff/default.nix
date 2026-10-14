@@ -34,7 +34,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Yet Another XML Differ";
     homepage = "https://github.com/latk/yaxmldiff.py";
-    changelog = "https://https://github.com/latk/yaxmldiff.py/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/latk/yaxmldiff.py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };

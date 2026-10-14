@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: winston <hey@winston.sh>
+Date: Wed, 7 Oct 2026 10:16:00 +0200
+Subject: [PATCH] restrict ar-solaris to sunos systems
+
+---
+ src/script/runtime/toolchains.meson | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/script/runtime/toolchains.meson b/src/script/runtime/toolchains.meson
+index 97682251..77ea39cb 100644
+--- a/src/script/runtime/toolchains.meson
++++ b/src/script/runtime/toolchains.meson
+@@ -71,6 +71,9 @@ toolchain.register_archiver(
+ toolchain.register_archiver(
+     'ar-solaris',
+     exe: 'ar',
++    detect: func(_ str) -> int
++        return build_machine.system() == 'sunos' ? 100 : 0
++    endfunc,
+     handlers: {
+         'version': ['-V'],
+         'base': ['-csr'],

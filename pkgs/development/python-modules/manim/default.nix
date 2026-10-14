@@ -5,7 +5,7 @@
   texliveInfraOnly,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # buildInputs
   cairo,
@@ -42,6 +42,7 @@
   # optional-dependencies
   jupyterlab,
   notebook,
+  typst,
 
   # tests
   ffmpeg,
@@ -185,26 +186,39 @@ let
     ]
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manim";
+  version = "0.21.0";
   pyproject = true;
-  version = "0.19.2";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
-    tag = "v${version}";
-    hash = "sha256-sM2IQdrqWVopo5Yzjmv6/KTHkgb/7Fma+plAc+gGwaM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-K6+U+ri/bBf760JmyhpkzQsQqp+ofve5zBByZPVdc1w=";
   };
-
-  build-system = [
-    hatchling
-  ];
 
   patches = [ ./pytest-report-header.patch ];
 
+  postPatch =
+    # nixpkgs still ships uv-build < 0.12.1
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail \
+          "uv_build>=0.12.1,<0.13.0" \
+          "uv_build"
+    '';
+
+  build-system = [
+    uv-build
+  ];
+
   buildInputs = [ cairo ];
 
+  pythonRelaxDeps = [
+    "skia-pathops"
+  ];
   dependencies = [
     av
     beautifulsoup4
@@ -236,10 +250,6 @@ buildPythonPackage rec {
     audioop-lts
   ];
 
-  pythonRelaxDeps = [
-    "skia-pathops"
-  ];
-
   optional-dependencies = {
     jupyterlab = [
       jupyterlab
@@ -247,6 +257,9 @@ buildPythonPackage rec {
     ];
     # TODO package dearpygui
     # gui = [ dearpygui ];
+    typst = [
+      typst
+    ];
   };
 
   makeWrapperArgs = [
@@ -265,10 +278,11 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-xdist
     pytestCheckHook
+    typst
     versionCheckHook
   ];
 
-  # about 55 of ~600 tests failing mostly due to demand for display
+  # about 45 of ~1050 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
 
   pythonImportsCheck = [ "manim" ];
@@ -282,7 +296,7 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
-    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -290,4 +304,4 @@ buildPythonPackage rec {
       ivyfanchiang
     ];
   };
-}
+})

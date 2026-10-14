@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
-  CFLAGS = "-D_GLIBCXX_USE_NANOSLEEP";
+  env.CFLAGS = "-D_GLIBCXX_USE_NANOSLEEP";
   patches = [
     ./01-fix-sleep_for.patch
   ];

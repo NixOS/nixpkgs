@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.tntnet.org/cxxtools.html";
+    homepage = "https://github.com/maekitalo/cxxtools";
     description = "Comprehensive C++ class library for Unix and Linux";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;

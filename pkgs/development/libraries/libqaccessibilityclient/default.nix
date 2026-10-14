@@ -4,7 +4,7 @@
   fetchurl,
   cmake,
   qtbase,
-  extra-cmake-modules,
+  kdePackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
   ];
   buildInputs = [ qtbase ];
-  cmakeFlags = [ "-DQT_MAJOR_VERSION=${lib.versions.major qtbase.version}" ];
+  cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ];
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = {
-    description = "Accessibilty tools helper library, used e.g. by screen readers";
+    description = "Accessibility tools helper library, used e.g. by screen readers";
     homepage = "https://github.com/KDE/libqaccessibilityclient";
     maintainers = with lib.maintainers; [ artturin ];
     license = with lib.licenses; [

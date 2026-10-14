@@ -8,7 +8,7 @@
   libx11,
   libjack2,
   liblo,
-  libsigcxx,
+  libsigcxx_2_0,
   zita-resampler,
   fftwFloat,
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
     libjack2
     liblo
-    libsigcxx
+    libsigcxx_2_0
     zita-resampler
     fftwFloat
   ];

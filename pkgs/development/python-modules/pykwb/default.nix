@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   pyserial,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykwb";
-  version = "0.0.10";
-  format = "setuptools";
+  version = "0.0.21";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-mor2TKhq08w4HzaUaspWOMEFwJaAKjXKoNAaoZJqWPQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-53or6KOjZujOIq9yZ30Ph704I8T93AX/EoJZeVS3ihI=";
   };
 
-  propagatedBuildInputs = [ pyserial ];
+  build-system = [ setuptools ];
+
+  dependencies = [ pyserial ];
 
   # Module has no tests
   doCheck = false;
@@ -25,7 +28,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interacting with KWB Easyfire Pellet Central Heating Units";
     homepage = "https://github.com/bimbar/pykwb";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

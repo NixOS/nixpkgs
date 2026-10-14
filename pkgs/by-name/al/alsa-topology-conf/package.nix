@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
-  name = "alsa-topology-conf-${version}";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "alsa-topology-conf";
   version = "1.2.5.1";
 
   src = fetchurl {
-    url = "mirror://alsa/lib/${name}.tar.bz2";
+    url = "mirror://alsa/lib/alsa-topology-conf-${finalAttrs.version}.tar.bz2";
     hash = "sha256-98W64VRavNc4JLyX9OcsNA4Rq+oYi6DxwG9eCtd2sXk=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.roastiek ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
-}
+})

@@ -28,30 +28,8 @@
     patch = ./request-key-helper.patch;
   };
 
-  hardened =
-    let
-      mkPatch =
-        kernelVersion:
-        {
-          version,
-          sha256,
-          patch,
-        }:
-        let
-          src = patch;
-        in
-        {
-          name = lib.removeSuffix ".patch" src.name;
-          patch = fetchurl (lib.removeAttrs src [ "extra" ]);
-          extra = src.extra;
-          inherit version sha256;
-        };
-      patches = lib.importJSON ./hardened/patches.json;
-    in
-    lib.mapAttrs mkPatch patches;
-
-  export-rt-sched-migrate = {
-    name = "export-rt-sched-migrate";
-    patch = ./export-rt-sched-migrate.patch;
+  libbpf_C23_compat = {
+    name = "c23-compat-libbpf";
+    patch = ./C23-compat-6.1.patch;
   };
 }

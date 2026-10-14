@@ -3,6 +3,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   elmPackages,
+  fetchpatch,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -12,11 +13,13 @@ buildNpmPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "stoeffel";
     repo = "elm-verify-examples";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-HUmIrwmJyGvkCRHRiA069Aj25WBIGtJ7DJxwwF6OvWU=";
+    # Using more recent commit to fix elm 0.19.2 support
+    # tag = "v${finalAttrs.version}";
+    rev = "63b84eca9642f6d0de37d6e35e0d8bc6edca19c6";
+    hash = "sha256-tZ/XT/gZKu8iDmJPxYlLXCRCeOs7ZZiqWpYcyScfqVg=";
   };
 
-  npmDepsHash = "sha256-frNCo97GOwiClzQwRXHpqqjimJrmipsBebAshJqGZco=";
+  npmDepsHash = "sha256-Puz7AVXaUy/7wflTcqbrQhTwSeeiG3jkfXYJ7NXhXQ0=";
 
   nativeBuildInputs = [
     elmPackages.elm

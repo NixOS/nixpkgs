@@ -10,13 +10,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "gnome-shell-extension-forge";
-  version = "49.3-development";
+  version = "50.1-development";
 
   src = fetchFromGitHub {
     owner = "forge-ext";
     repo = "forge";
-    rev = "a2fabeb5102d3b96661cde0e332c288bea21a1a5";
-    hash = "sha256-nk2olkhNX7dIKO9xYR1yWaaKHjxtMv7mPvmUf2sCDD8=";
+    rev = "0319a7125db1088556b159a69bbec77e111afca7";
+    hash = "sha256-IyjHjL1RqxZZZgMnRlmavnae3OqZvRT6aSwKouQRopc=";
   };
 
   nativeBuildInputs = [ glib ];

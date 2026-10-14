@@ -44,8 +44,8 @@ in
       ACTION=="add|change", KERNEL=="event*", ATTRS{name}=="CrossMacro Virtual Input Device", ENV{LIBINPUT_ATTR_POINTER_ACCEL}="0"
     '';
 
-    environment.etc."polkit-1/actions/org.crossmacro.policy".source =
-      "${cfg.daemonPackage}/share/polkit-1/actions/org.crossmacro.policy";
+    environment.etc."polkit-1/actions/io.github.alper_han.crossmacro.policy".source =
+      "${cfg.daemonPackage}/share/polkit-1/actions/io.github.alper_han.crossmacro.policy";
 
     environment.etc."polkit-1/rules.d/50-crossmacro.rules".source =
       "${cfg.daemonPackage}/share/polkit-1/rules.d/50-crossmacro.rules";
@@ -64,9 +64,9 @@ in
       // {
         crossmacro = {
           isSystemUser = true;
-          group = "input";
+          group = "crossmacro";
           extraGroups = [
-            "crossmacro"
+            "input"
             "uinput"
           ];
           description = "CrossMacro Input Daemon User";
@@ -93,12 +93,12 @@ in
       serviceConfig = {
         Type = "notify";
         User = "crossmacro";
-        Group = "input";
+        Group = "crossmacro";
         ExecStart = lib.getExe cfg.daemonPackage;
         Restart = "always";
         RestartSec = 5;
         RuntimeDirectory = "crossmacro";
-        RuntimeDirectoryMode = "0755";
+        RuntimeDirectoryMode = "0750";
         CapabilityBoundingSet = [
           "CAP_SYS_ADMIN"
           "CAP_SETUID"

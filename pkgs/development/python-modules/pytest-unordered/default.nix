@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-unordered";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utapyngo";
     repo = "pytest-unordered";
     tag = "v${version}";
-    hash = "sha256-JmP2zStxIt+u7sgfRKlnBwM5q5R0GfXtiE7ZgHKtg94=";
+    hash = "sha256-0Zh58qWKJIUL/7ELiZmyFNVKUyiJeckpYTQBnqKROo4=";
   };
 
   build-system = [ setuptools ];

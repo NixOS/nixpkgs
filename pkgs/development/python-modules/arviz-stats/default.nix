@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  arviz,
   fetchFromGitHub,
 
   # build-system
@@ -38,14 +39,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-stats";
-  version = "0.8.0";
+  inherit (arviz) version;
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz-stats";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FAZXnKxNb/DPkcpIRJRIzSbthS8Djf75hd5WMxegdhY=";
+    hash = "sha256-Kg112pr5Jx3SDYOsrPL6AhRuzSPiUnRw4xpuANfF02Y=";
   };
 
   build-system = [

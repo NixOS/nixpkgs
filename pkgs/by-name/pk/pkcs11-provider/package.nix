@@ -16,6 +16,7 @@
   pkg-config,
   valgrind,
   python3,
+  xxd,
   nix-update-script,
 }:
 
@@ -24,14 +25,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkcs11-provider";
-  version = "1.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "latchset";
+    owner = "openssl-projects";
     repo = "pkcs11-provider";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-QXEwDl6pk8G5ba8lD4uYw2QuD3qS/sgd1od8crHct2s=";
+    hash = "sha256-//sVGWSXCRc7zimD78ykoyJ0gQk/LFrdf+A6yKJkxGs=";
   };
 
   buildInputs = [
@@ -54,8 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     openssl.bin
     expect
-    valgrind
+    xxd
     pkcs11ProviderPython3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    valgrind
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # softokn and kryoptic are OK; softhsm is pretty flaky.
@@ -69,12 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     KRYOPTIC = "${lib.getLib kryoptic}/lib";
   };
 
-  # Fix a typo in the Kryoptic test (remove this in v1.2).
+  # Need to search $KRYOPTIC for the path to the actual Kryoptic library.
   postPatch = ''
     patchShebangs --build .
     substituteInPlace tests/kryoptic-init.sh \
-      --replace-fail /usr/local/lib/kryoptic "\\''${KRYOPTIC}" \
-      --replace-fail "libkryoptic_pkcs11so" libkryoptic_pkcs11.so
+      --replace-fail /usr/local/lib/kryoptic "\\''${KRYOPTIC}"
   '';
 
   preInstall = ''
@@ -92,12 +95,15 @@ stdenv.mkDerivation (finalAttrs: {
   # Frequently fails due to a race condition.
   enableParallelInstalling = false;
 
+  # Tests bind to localhost.
+  __darwinAllowLocalNetworking = true;
+
   doCheck = true;
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "v(\\d\\.\\d)"
+      "v(\\d+\\.\\d+\\.\\d+)"
     ];
   };
 

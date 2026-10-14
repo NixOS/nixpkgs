@@ -137,6 +137,7 @@ in
 
           services.${systemdName} = {
             inherit description;
+            path = [ config.programs.ssh.package ];
 
             serviceConfig = {
               Type = "oneshot";

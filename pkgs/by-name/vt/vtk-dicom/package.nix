@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
   ]
-  ++ lib.optional finalAttrs.finalPackage.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     # vtkBool does not accept TRUE, we have to use STRING "ON"
     (lib.cmakeFeature "BUILD_TESTING" "ON")
   ];

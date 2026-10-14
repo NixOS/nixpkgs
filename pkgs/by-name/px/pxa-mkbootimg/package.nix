@@ -17,11 +17,16 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional stdenv.cc.isGNU [
+    lib.optionals stdenv.cc.isGNU [
       # Required with newer GCC
       "-Wno-error=stringop-overflow"
     ]
   );
+
+  makeFlags = [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "CC=cc"
+  ];
 
   # Upstream has an install target, but doesn't install all required binaries
   installPhase = ''

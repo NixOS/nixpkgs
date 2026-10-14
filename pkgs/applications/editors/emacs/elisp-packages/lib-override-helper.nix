@@ -32,12 +32,17 @@ rec {
 
   externalSrc =
     pkg: epkg:
-    pkg.overrideAttrs (previousAttrs: {
+    pkg.overrideAttrs {
       inherit (epkg) src version;
-      propagatedUserEnvPkgs = previousAttrs.propagatedUserEnvPkgs or [ ] ++ [ epkg ];
-    });
+    };
 
-  fix-rtags = pkg: dontConfigure (externalSrc pkg pkgs.rtags);
+  fix-rtags =
+    pkg:
+    dontConfigure (
+      (externalSrc pkg pkgs.rtags).overrideAttrs (previousAttrs: {
+        propagatedUserEnvPkgs = previousAttrs.propagatedUserEnvPkgs or [ ] ++ [ pkgs.rtags ];
+      })
+    );
 
   fixRequireHelmCore =
     pkg:

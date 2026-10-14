@@ -1,11 +1,11 @@
 {
-  version = "4.6-stable";
-  hash = "sha256-lK9KQsmrNZLx7yP3PwbN93otwkWq2H+nWt85WH/u8oI=";
+  version = "4.6.3-stable";
+  hash = "sha256-BNivdlGk1jTOR68U0Mhs53xp7jhvR90xKaoIBT7ixaE=";
   default = {
-    exportTemplatesHash = "sha256-OzCsjBdy8l9d+l9lkiyrCpDnuWAXaJEjfFdyUV68zEY=";
+    exportTemplatesHash = "sha256-P74sDi3snVN6ueyXvPjakdzyM1f8UfZwkt0GjYOSkKg=";
   };
   mono = {
-    exportTemplatesHash = "sha256-RgVug5TNHx+FzPqr3f/Bpn9ZW/2Z+9ps1ir6dR2/xRk=";
+    exportTemplatesHash = "sha256-ZDb0dO4IX7CpTT0pa5ghc2vdZjtukbIij993Bm8dFAA=";
     nugetDeps = ./deps.json;
   };
 }

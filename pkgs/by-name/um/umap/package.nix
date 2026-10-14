@@ -4,7 +4,6 @@
   fetchFromGitHub,
   writeShellScript,
   makeWrapper,
-  umap,
   postgresql,
   postgresqlTestHook,
   playwright-driver,
@@ -16,17 +15,20 @@ let
       django = prev.django_5.override { withGdal = true; };
     };
   };
+
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "umap";
-  version = "3.6.1";
+  version = "3.8.1";
   pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "umap-project";
     repo = "umap";
-    rev = version;
-    hash = "sha256-uCi2PDVBB10kPsBXV58noAGFmDztg/W5MLs6gaGyX3o=";
+    tag = finalAttrs.version;
+    hash = "sha256-uhWa8CqNjqUAaPALWq6YiOFHahNmw4AVQWhAyfs18CU=";
   };
 
   build-system = [
@@ -41,6 +43,7 @@ python.pkgs.buildPythonApplication rec {
       django-environ
       django-probes
       django-storages
+      httpx
       pillow
       psycopg
       pydantic
@@ -69,7 +72,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    pythonPath = "${umap}/${python.sitePackages}:${python.pkgs.makePythonPath dependencies}";
+    pythonPath = "${finalAttrs.finalPackage}/${python.sitePackages}:${python.pkgs.makePythonPath finalAttrs.passthru.dependencies}";
   };
 
   nativeBuildInputs = [
@@ -78,6 +81,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
+      pythonPath = python.pkgs.makePythonPath finalAttrs.passthru.dependencies;
       start_script = writeShellScript "umap-serve" ''
         ${lib.getExe python3.pkgs.uvicorn} "$@" umap.asgi:application;
       '';
@@ -85,13 +89,14 @@ python.pkgs.buildPythonApplication rec {
     ''
       makeWrapper ${start_script} $out/bin/umap-serve \
         --prefix PYTHONPATH : "$out/${python.sitePackages}" \
-        --prefix PYTHONPATH : "${python.pkgs.makePythonPath dependencies}";
+        --prefix PYTHONPATH : "${pythonPath}"
     '';
 
   nativeCheckInputs =
     with python.pkgs;
     [
       pytest
+      pytest-asyncio
       pytest-django
       pytest-playwright
       pytest-xdist
@@ -119,10 +124,22 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # The proxy_request tests require network
+    # Needs network: umap.utils.validate_url resolves the target hostname to
+    # reject private IPs, so every AjaxProxy test fails DNS in the sandbox.
     "proxy_request_with"
-    "test_good_request_passes"
     "test_valid_proxy_request"
+    "test_invalid_ttl_is_coerced_to_default"
+    "test_proxy_caches_response"
+    "test_proxy_clears_stale_semaphore"
+    "test_proxy_does_not_cache_upstream_error"
+    "test_proxy_falls_back_when_no_content_type"
+    "test_proxy_fast_path_ignores_held_semaphore"
+    "test_proxy_long_url_does_not_exceed_filename_limit"
+    "test_proxy_long_urls_with_common_prefix_do_not_collide"
+    "test_proxy_sets_nosniff"
+    "test_proxy_tolerates_raw_spaces_in_url"
+    # Needs network: fetches a real URL
+    "test_good_request_passes"
   ];
 
   meta = {
@@ -139,4 +156,4 @@ python.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "umap";
   };
-}
+})

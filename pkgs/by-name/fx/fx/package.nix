@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "fx";
-  version = "39.2.0";
+  version = "40.0.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = "fx";
     tag = finalAttrs.version;
-    hash = "sha256-sQnawn5My511IsxBMh6r06R2aLKGmF0ndP1alr/Y8vw=";
+    hash = "sha256-cMnRjjg/O5zemzXygIvhGn5Jx4oD3WK1+uH6NVuNUI4=";
   };
 
-  vendorHash = "sha256-C4TqFRECIFzc6TyAJ2yj97t2BVHXBovIV3iIjNhm7ek=";
+  vendorHash = "sha256-YDx+g45AkZ149sBM610F4u7pJaFnUJnrdLU85gMp474=";
 
   ldflags = [ "-s" ];
 
@@ -31,6 +31,11 @@ buildGoModule (finalAttrs: {
       --fish <($out/bin/fx --comp fish) \
       --zsh <($out/bin/fx --comp zsh)
   '';
+
+  checkFlags = lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # flaky only on x86_64 darwin, https://hydra.nixos.org/build/319903711
+    "-skip=^TestSearchCaching"
+  ];
 
   nativeInstallCheckInputs = [
     versionCheckHook

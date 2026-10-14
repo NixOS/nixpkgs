@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  CXXFLAGS = "-std=c++98";
+  env.CXXFLAGS = "-std=c++98";
 
   buildInputs = [
     freetype

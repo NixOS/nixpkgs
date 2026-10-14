@@ -27,7 +27,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "sip-4-python3-11.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/python3-11.patch?h=sip4&id=67b5907227e68845cdfafcf050fedb89ed653585";
-      sha256 = "sha256-cmuz2y5+T8EM/h03G2oboSnnOwrUjVKt2TUQaC9YAdE=";
+      hash = "sha256-cmuz2y5+T8EM/h03G2oboSnnOwrUjVKt2TUQaC9YAdE=";
     })
   ];
 
@@ -62,8 +62,7 @@ buildPythonPackage rec {
     mainProgram = "sip";
     homepage = "https://riverbankcomputing.com/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [
-      lovek323
+    maintainers = [
     ];
     platforms = lib.platforms.all;
   };

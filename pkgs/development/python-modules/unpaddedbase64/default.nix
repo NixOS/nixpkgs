@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "matrix-org";
     repo = "python-${pname}";
     tag = "v${version}";
-    sha256 = "1n6har8pxv0mqb96lanzihp1xf76aa17jw3977drb1fgz947pnmz";
+    hash = "sha256-v9p7SPrPhZXbOWlweYJS5rgeLozfKmrSwhXsflFW0Ng=";
   };
 
   nativeBuildInputs = [ poetry-core ];

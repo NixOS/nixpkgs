@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gnome-extensions-cli";
-  version = "0.10.8";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "gnome_extensions_cli";
     inherit (finalAttrs) version;
-    hash = "sha256-Tnf8BbW9u7d19ZtGTdMVHa6azbKekYRGOPEPNiB+y00=";
+    hash = "sha256-5OL0ma17rXA+USDATVQXO3ORWDAwoGB3x85BSIsRapY=";
   };
 
   nativeBuildInputs = [

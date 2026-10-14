@@ -104,7 +104,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       archPlatforms =
         {
           "aarch64-darwin" = "aarch64-apple-darwin";
-          "x86_64-darwin" = "x86_64-apple-darwin";
           "aarch64-linux" = "aarch64-unknown-linux-gnu";
           "x86_64-linux" = "x86_64-unknown-linux-gnu";
         }
@@ -138,13 +137,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       popd
     '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/yaak-app \
-      --inherit-argv0 \
-      --set-default WEBKIT_DISABLE_DMABUF_RENDERER 1 \
-      --set-default WEBKIT_DISABLE_COMPOSITING_MODE 1
-  '';
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -157,7 +149,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
   };

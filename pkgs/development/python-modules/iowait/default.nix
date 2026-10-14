@@ -1,4 +1,8 @@
-{ buildPythonPackage, fetchPypi }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+}:
 
 buildPythonPackage rec {
   pname = "iowait";
@@ -7,11 +11,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16djvxd9sxm7cr57clhqkyrq3xvdzgwj803sy5hwyb62hkmw46xb";
+    hash = "sha256-qxvC64TCLM9h8XoAJPn7bfeBs58YUnZKZqd2nVrfspk=";
   };
 
   meta = {
     description = "Platform-independent module for I/O completion events";
     homepage = "https://launchpad.net/python-iowait";
+    license = lib.licenses.lgpl3Only;
   };
 }

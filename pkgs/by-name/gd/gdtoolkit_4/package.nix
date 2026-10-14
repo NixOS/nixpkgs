@@ -28,7 +28,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "gdtoolkit";
   version = "4.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Scony";
@@ -37,8 +37,12 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-Jam7Txm+Fq5zEkJZMmbWW5Ok4ThsPyi6NIeawQot0RE=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
-    docopt
+  build-system = with python.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python.pkgs; [
+    docopt-ng
     lark
     pyyaml
     radon

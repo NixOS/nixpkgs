@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "hello-wayland";
-  version = "0-unstable-2024-03-04";
+  version = "0-unstable-2026-04-14";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = "hello-wayland";
-    rev = "5f3a35def81116f0a74fcaf5a421d66c6700482d";
-    hash = "sha256-gcLR8gosQlPPgFrxqmRQ6/59RjAfJNX6CcsYP+L+A58=";
+    rev = "14231ae0a7f12e0041e81f749ae509d07e88fbe5";
+    hash = "sha256-9ciyfNnjBY3hg+UB7/xS7B30q9m3vvOc1emxi8qJTRE=";
   };
 
   separateDebugInfo = true;

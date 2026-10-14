@@ -11,7 +11,7 @@
   pydocstyle,
   pyflakes,
   vulture,
-  setuptools,
+  setuptools_80,
   pylint,
   pytestCheckHook,
 }:
@@ -20,8 +20,7 @@ let
   pylama = buildPythonPackage rec {
     pname = "pylama";
     version = "8.4.1";
-
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "klen";
@@ -34,16 +33,19 @@ let
       (replaceVars ./paths.patch {
         git = "${lib.getBin git}/bin/git";
       })
+      ./pytest-9.1-compat.patch
+      ./setuptools-82-compat.patch
     ];
 
-    propagatedBuildInputs = [
+    build-system = [ setuptools_80 ];
+
+    dependencies = [
       eradicate
       mccabe
       mypy
       pycodestyle
       pydocstyle
       pyflakes
-      setuptools
       vulture
     ];
 

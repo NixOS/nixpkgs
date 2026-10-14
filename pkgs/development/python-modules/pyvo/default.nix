@@ -39,6 +39,11 @@ buildPythonPackage (finalAttrs: {
     requests-mock
   ];
 
+  pytestFlags = [
+    "-o"
+    "filterwarnings=ignore::astropy.utils.exceptions.AstropyDeprecationWarning"
+  ];
+
   disabledTestPaths = [
     # touches network
     "pyvo/dal/tests/test_datalink.py"

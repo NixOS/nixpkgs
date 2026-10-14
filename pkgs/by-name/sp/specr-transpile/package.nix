@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "specr-transpile";
   version = "0.1.25";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-yB4b7VaZ22zk8jhQijBOWRks22TV19q9IQNlVXyBlss=";
   };
 
@@ -25,4 +25,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = [ ];
   };
-}
+})

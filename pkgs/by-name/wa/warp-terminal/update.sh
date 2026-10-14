@@ -53,10 +53,10 @@ get_version() {
     echo "$1" | grep -oP -m 1 '(?<=/v)[\d.\w]+(?=/)'
 }
 
-# nix-prefect-url seems to be uncompressing the archive then taking the hash
+# nix-prefetch-url seems to be uncompressing the archive then taking the hash
 # so just get the hash from fetchurl
 sri_get() {
-    local ouput sri
+    local output sri
     output=$(nix-build  --expr \
         "with import $nixpkgs {};
          fetchurl {

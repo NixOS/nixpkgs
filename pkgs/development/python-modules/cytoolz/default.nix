@@ -6,19 +6,18 @@
   cython,
   setuptools,
   toolz,
-  python,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "cytoolz";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytoolz";
     repo = "cytoolz";
     tag = finalAttrs.version;
-    hash = "sha256-beOEhm7+Nq7oA7iDcdORz03D1InHmypqsYUDUXEUPC0=";
+    hash = "sha256-dIrhekZTxfdaxwcQYc00gIt45GAzH/qiHpVXHc9x3Pw=";
   };
 
   postPatch = ''
@@ -27,15 +26,18 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
   ];
 
-  propagatedBuildInputs = [ toolz ];
+  dependencies = [ toolz ];
 
+  # tests are located in cytoolz/tests, but we need to prevent import from the cytoolz source
   preCheck = ''
-    cd $out/${python.sitePackages}
+    mv cytoolz/tests tests
+    rm -rf cytoolz
+    sed -i "/testpaths/d" pyproject.toml
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];

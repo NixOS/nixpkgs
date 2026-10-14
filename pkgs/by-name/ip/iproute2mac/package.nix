@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iproute2mac";
-  version = "1.6.0";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "brona";
     repo = "iproute2mac";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aemeZnZlnmIKdLz5Myjn51dYTvfovFPQeytJbNxbI4E=";
+    hash = "sha256-EmuMF1hvS8wqhimBZ+Nyo+ChPG5FtbbGciquHl54j8k=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -39,15 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     install -D -m 755 src/iproute2mac.py $out/libexec/iproute2mac.py
     install -D -m 755 src/ip.py $out/libexec/ip
     install -D -m 755 src/bridge.py $out/libexec/bridge
+    install -D -m 755 src/ss.py $out/libexec/ss
     makeWrapper $out/libexec/ip $out/bin/ip
     makeWrapper $out/libexec/bridge $out/bin/bridge
+    makeWrapper $out/libexec/ss $out/bin/ss
 
     runHook postInstall
   '';
 
   meta = {
     homepage = "https://github.com/brona/iproute2mac";
-    description = "CLI wrapper for basic network utilites on Mac OS X inspired with iproute2 on Linux systems - ip command";
+    description = "CLI wrapper for basic network utilities on Mac OS X inspired with iproute2 on Linux systems - ip command";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jiegec ];
     platforms = lib.platforms.darwin;

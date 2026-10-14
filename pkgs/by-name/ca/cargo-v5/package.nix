@@ -7,21 +7,18 @@
   udev,
   openssl,
 }:
-
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-v5";
-  version = "0.8.2";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "vexide";
     repo = "cargo-v5";
-    rev = "9d5f6e014c80838ff2b0cca401bcbd518c1e9274";
-    hash = "sha256-bXzJvlhG/IJOu+D1iluJD3wDoiJXWzXYJ+ZUG6xMCeA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uIJcl1WfL96tvJ5QebbqnsP4nQqW7aCp4XYXgfu7CuY=";
   };
 
-  cargoHash = "sha256-nOcwHy+aji1LgR/VBZDRFDgM+b2ScpVE+H3W5HKEM5o=";
-
-  buildFeatures = [ "full" ];
+  cargoHash = "sha256-D7zRkzJwh0jBTUFJhggG7Bc5ixMZ4YLtaqZihEQN6hM=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -37,4 +34,4 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ max-niederman ];
   };
-}
+})

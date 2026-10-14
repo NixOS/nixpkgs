@@ -6,7 +6,7 @@
   google-auth,
   google-auth-oauthlib,
   pytest-vcr,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   strenum,
 }:
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-vcr
-    pytestCheckHook
+    pytest8_3CheckHook
   ];
 
   pythonImportsCheck = [ "gspread" ];

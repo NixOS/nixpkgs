@@ -7,6 +7,7 @@
   zlib,
   xz,
   expat,
+  bashNonInteractive,
   boost,
   curl,
   pkg-config,
@@ -26,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mstflint";
-  version = "4.34.1-3";
+  version = "4.37.0-1";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
     repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GvUCNPB8BJY8RhIT4/a5NXOG6jjFUs04NmBn7Np+lAM=";
+    hash = "sha256-E6Z/MkDdWH9jQFB/fFPsEz4kxU6DCGnO/4DU6RPu7dM=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optionals (!onlyFirmwareUpdater) [
+    bashNonInteractive
     boost
     curl
     expat
@@ -74,29 +76,27 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # Remove patch for regex check, after https://github.com/Mellanox/mstflint/pull/871
   # got merged.
-  prePatch = [
-    ''
-      patchShebangs eval_git_sha.sh
-      substituteInPlace configure.ac \
-          --replace "build_cpu" "host_cpu"
-      substituteInPlace common/compatibility.h \
-          --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
-      substituteInPlace configure.ac \
-          --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
-    ''
-    (lib.optionals (!onlyFirmwareUpdater) ''
-      substituteInPlace common/python_wrapper.sh \
-        --replace \
-        'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
-        'export PATH=$PATH:${
-          lib.makeBinPath [
-            (placeholder "out")
-            pciutils
-            busybox
-          ]
-        }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
-    '')
-  ];
+  prePatch = ''
+    patchShebangs eval_git_sha.sh
+    substituteInPlace configure.ac \
+        --replace "build_cpu" "host_cpu"
+    substituteInPlace common/compatibility.h \
+        --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
+    substituteInPlace configure.ac \
+        --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
+  ''
+  + lib.optionalString (!onlyFirmwareUpdater) ''
+    substituteInPlace common/python_wrapper.sh \
+      --replace \
+      'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
+      'export PATH=$PATH:${
+        lib.makeBinPath [
+          (placeholder "out")
+          pciutils
+          busybox
+        ]
+      }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
+  '';
 
   configureFlags = [
     "--enable-xml2"

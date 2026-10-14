@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "plow";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "six-ddc";
     repo = "plow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q9k5GzhYPOP8p8VKrqpoHc3B9Qak+4DtZAZZuFlkED0=";
+    hash = "sha256-0/nMF9fqRMzN4bfK6EsTi5MW+OUG/dv4UKr5j/AhRoM=";
   };
 
-  vendorHash = "sha256-KfnDJI6M6tzfoI7krKId5FXUw27eV6cEoz3UaNrlXWk=";
+  vendorHash = "sha256-nGAPuyS95bHPkQMdHdtbdVWQ+MBOOHnHPh7bkSHji4E=";
 
   ldflags = [
     "-s"

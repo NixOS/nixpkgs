@@ -28,7 +28,7 @@ buildPythonPackage rec {
   # Disabling tests, they rely on Nose which is outdated and not supported
   doCheck = false;
 
-  passthru.updateScripts = gitUpdater { };
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Mocking framework for Python, influenced by JMock";

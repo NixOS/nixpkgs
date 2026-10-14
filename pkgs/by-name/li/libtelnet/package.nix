@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   buildInputs = [ zlib ];
 
   meta = {
-    description = "Simple RFC-complient TELNET implementation as a C library";
+    description = "Simple RFC-compliant TELNET implementation as a C library";
     homepage = "https://github.com/seanmiddleditch/libtelnet";
     license = lib.licenses.publicDomain;
     maintainers = [ lib.maintainers.tomberek ];

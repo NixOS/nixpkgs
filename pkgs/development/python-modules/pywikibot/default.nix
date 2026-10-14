@@ -8,14 +8,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywikibot";
-  version = "10.7.4";
+  version = "11.7.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-/hHfZRLoEgaPKZLus9x/d5O62GnwU/1A7PAsebGj634=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-vX9MW1miCEPkbNVUCgPZKSL120bJ1hXOAJztVqHvaDs=";
   };
 
   build-system = [ setuptools ];
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python MediaWiki bot framework";
-    mainProgram = "pwb";
     homepage = "https://www.mediawiki.org/wiki/Manual:Pywikibot";
     changelog = "https://doc.wikimedia.org/pywikibot/master/changelog.html";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomodachi94 ];
+    mainProgram = "pwb";
   };
-}
+})

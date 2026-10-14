@@ -2,32 +2,36 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytestCheckHook,
   requests,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oasatelematics";
-  version = "0.3";
-  format = "setuptools";
+  version = "0.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "panosmz";
     repo = "oasatelematics";
-    rev = "v${version}";
-    hash = "sha256-3O7XbNVj1S3ZwheklEhm0ivw16Tj7drML/xYC9383Kg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pqjzvLeVGW5rC3lK/9WnYdCLyF1fM7GGwzEG5h2lKPA=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
 
-  # Module has no tests
-  doCheck = false;
+  dependencies = [ requests ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "oasatelematics" ];
 
   meta = {
     description = "Python wrapper for the OASA Telematics API";
     homepage = "https://github.com/panosmz/oasatelematics";
+    changelog = "https://github.com/panosmz/oasatelematics/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -25,17 +25,27 @@
   xxhash,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "uproot";
-  version = "5.7.1";
+  version = "5.7.7";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
-    tag = "v${version}";
-    hash = "sha256-06pMcL2o5hHZLEbi8vdYhAAs5BBkHAskNHUB1o48KDU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uEFX5VRG6baA0NPubjTQLJo3zxOrc+rISiQUAKRDbjw=";
   };
+
+  # shutil.copy preserves the read-only permissions of the test files from the nix store,
+  # which then cannot be opened in update mode.
+  postPatch = ''
+    substituteInPlace tests/test_1687_rntuple_update.py tests/test_1690_ttree_inplace.py \
+      --replace-fail \
+        "shutil.copy(" \
+        "shutil.copyfile("
+  '';
 
   build-system = [
     hatch-vcs
@@ -94,6 +104,7 @@ buildPythonPackage rec {
     # Tests that try to download files
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
+    "tests/test_1610_read_TMatrixTSym_from_ttree.py"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -103,8 +114,8 @@ buildPythonPackage rec {
   meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
-    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
+    changelog = "https://github.com/scikit-hep/uproot5/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

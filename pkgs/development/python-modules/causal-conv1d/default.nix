@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "causal-conv1d";
-  version = "1.5.4";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Dao-AILab";
     repo = "causal-conv1d";
     tag = "v${version}";
-    hash = "sha256-ELuvnKP2g1I2SuaWWiibXh/oDzp4n0vXkm4oeNPOdIw=";
+    hash = "sha256-hFaF/oMdScDpdq+zq8WppWe9GONWppEEx2pIcnaALiI=";
   };
 
   build-system = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
       with cudaPackages;
       [
         cuda_cudart # cuda_runtime.h, -lcudart
-        cuda_cccl
+        cccl
         libcusparse # cusparse.h
         libcusolver # cusolverDn.h
         cuda_nvcc

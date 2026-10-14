@@ -2,19 +2,19 @@
   lib,
   buildLua,
   fetchFromGitHub,
-  luaPackages,
+  lua55Packages,
   unstableGitUpdater,
 }:
 
 buildLua {
   pname = "mpv-webm";
-  version = "0-unstable-2025-07-14";
+  version = "0-unstable-2026-09-14";
 
   src = fetchFromGitHub {
     owner = "ekisu";
     repo = "mpv-webm";
-    rev = "e15234567d2064791319df1e6193fcb433602d08";
-    hash = "sha256-C1N+fY5Xv6Y6tG3mTdymSlLlLYaA7XUvM0PZtkBTS4k=";
+    rev = "395a5835909df26b556b4e929498d93f95638270";
+    hash = "sha256-hWX7RySnvzVBz3d/MnJuex4ZJ7Z/RnyNIAr2YaecmqY=";
   };
   passthru.updateScript = unstableGitUpdater {
     # only "latest" tag pointing at HEAD
@@ -22,7 +22,7 @@ buildLua {
   };
 
   dontBuild = false;
-  nativeBuildInputs = [ luaPackages.moonscript ];
+  nativeBuildInputs = [ lua55Packages.moonscript ];
   scriptPath = "build/webm.lua";
 
   meta = {

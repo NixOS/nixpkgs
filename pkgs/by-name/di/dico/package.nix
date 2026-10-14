@@ -9,7 +9,7 @@
   gsasl,
   guile,
   python3,
-  pcre,
+  pcre2,
   libffi,
   groff,
   libxcrypt,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsasl
     guile
     python3
-    pcre
+    pcre2
     libffi
     libxcrypt
   ];
@@ -47,10 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Flexible dictionary server and client implementing RFC 2229";
     homepage = "https://www.gnu.org/software/dico/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

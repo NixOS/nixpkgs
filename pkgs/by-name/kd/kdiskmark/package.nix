@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kdiskmark";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "jonmagon";
     repo = "kdiskmark";
     rev = finalAttrs.version;
-    hash = "sha256-b42PNUrG10RyGct6dPtdT89oO222tEovkSPoRcROfaQ=";
+    hash = "sha256-cdKkOe5BbzF8K+buwctsSMlw4ko0DrNHZ2HwJA9Det4=";
     fetchSubmodules = true;
   };
 

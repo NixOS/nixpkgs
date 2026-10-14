@@ -126,8 +126,6 @@ buildGoModule (finalAttrs: {
     aaaaxy = nixosTests.aaaaxy;
   };
 
-  strictDeps = true;
-
   meta = {
     description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
     mainProgram = "aaaaxy";

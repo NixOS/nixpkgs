@@ -14,7 +14,6 @@
   libGL,
   glib,
   libxml2,
-  pcre,
   zlib,
   boost,
   jpegSupport ? true,
@@ -50,7 +49,7 @@
   lasSupport ? false,
   liblas,
   luaSupport ? false,
-  lua,
+  lua5_2_compat,
   sdlSupport ? false,
   SDL2,
   restSupport ? false,
@@ -59,6 +58,9 @@
   withExamples ? false,
   fltk,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openscenegraph";
@@ -99,7 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional curlSupport curl
     ++ lib.optionals colladaSupport [
       collada-dom
-      pcre
     ]
     ++ lib.optional opencascadeSupport opencascade-occt
     ++ lib.optional ffmpegSupport ffmpeg

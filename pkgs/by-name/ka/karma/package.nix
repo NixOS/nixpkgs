@@ -10,20 +10,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "karma";
-  version = "0.115";
+  version = "0.125";
 
   src = fetchFromGitHub {
     owner = "prymitive";
     repo = "karma";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SW/nmJcSk/LmoKLuD5stsSaRGaJctl6hVSODNCT9i64=";
+    hash = "sha256-/Iv7/CUwY/RlunXOd9H5xu4AzL/iXUEu+extyqinJ7M=";
   };
 
-  vendorHash = "sha256-Y55AaB8KRV+Tq/Trg1BOOwziyt+yJ2b3iVYA6bDebQY=";
+  vendorHash = "sha256-O+f8drIs+XOvLo8ifB/SHkBBxj0KPg2H1MAcCyJvLe4=";
 
   npmDeps = fetchNpmDeps {
     src = "${finalAttrs.src}/ui";
-    hash = "sha256-/L+eU0xwaopL2im9epiZiZ23dUqJ+3OwhWw/rIZC6hI=";
+    hash = "sha256-wcQ6QWoRm+aQRf1L7xkmQIbYnfN+Fr/D0LeRlEK5nbE=";
   };
 
   npmRoot = "ui";
@@ -65,6 +65,9 @@ buildGoModule (finalAttrs: {
     mainProgram = "karma";
     homepage = "https://karma-dashboard.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ nukaduka ];
+    maintainers = with lib.maintainers; [
+      nukaduka
+      kraftnix
+    ];
   };
 })

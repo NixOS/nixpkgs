@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 let
@@ -70,7 +71,7 @@ let
       hash,
       description,
     }:
-    stdenvNoCC.mkDerivation rec {
+    stdenvNoCC.mkDerivation {
       inherit pname version;
 
       src = fetchzip {
@@ -79,14 +80,10 @@ let
         inherit hash;
       };
 
-      installPhase = ''
-        runHook preInstall
+      nativeBuildInputs = [ installFonts ];
 
-        mkdir -p $out/share/{fonts/opentype,doc/${pname}}
-        mv *.otf                -t "$out/share/fonts/opentype"
-        mv *.{odt,ods,pdf,xlsx}       -t "$out/share/doc/${pname}"  || true  # install docs if any
-
-        runHook postInstall
+      postInstall = ''
+        install -Dm644 *.{odt,ods,pdf,xlsx} -t "$out/share/doc/${pname}" || true  # install docs if any
       '';
 
       meta = {

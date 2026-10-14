@@ -19,6 +19,7 @@
   freetype,
   irrlicht,
   libevent,
+  libdecor,
   libgit2,
   libGL,
   libGLU,
@@ -232,7 +233,7 @@ let
     # (can't use --prebuilt-core or let it build a core on its own without making core updates impossible)
     postPatch = ''
       substituteInPlace premake5.lua \
-        --replace-fail 'flags "LinkTimeOptimization"' 'removeflags "LinkTimeOptimization"'
+        --replace-fail 'flags "LinkTimeOptimization"' 'linktimeoptimization "Off"'
 
       substituteInPlace gframe/game.cpp \
         --replace-fail 'ocgcore = LoadOCGcore(Utils::GetWorkingDirectory())' 'ocgcore = LoadOCGcore("${lib.getLib ocgcore}/lib/")'
@@ -276,6 +277,7 @@ let
         --prefix PATH : ${lib.makeBinPath [ mono ]} \
         --prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
+            libdecor
             libGL
             libx11
             libxkbcommon

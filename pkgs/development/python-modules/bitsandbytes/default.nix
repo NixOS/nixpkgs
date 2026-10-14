@@ -9,6 +9,7 @@
   cmake,
 
   # build-system
+  ninja,
   scikit-build-core,
   setuptools,
 
@@ -26,9 +27,6 @@
 }:
 
 let
-  pname = "bitsandbytes";
-  version = "0.49.1";
-
   brokenConditions = lib.attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
@@ -42,18 +40,21 @@ let
 
   # NOTE: torchvision doesn't use cudnn; torch does!
   #   For this reason it is not included.
-  cuda-common-redist = with cudaPackages; [
-    (lib.getDev cuda_cccl) # <thrust/*>
-    (lib.getDev libcublas) # cublas_v2.h
-    (lib.getLib libcublas)
-    (lib.getInclude libcublas) # cublasLt.h
-    libcurand
-    libcusolver # cusolverDn.h
-    (lib.getDev libcusparse) # cusparse.h
-    (lib.getLib libcusparse) # cusparse.h
-    (lib.getInclude libcusparse) # cusparse.h
-    (lib.getDev cuda_cudart) # cuda_runtime.h cuda_runtime_api.h
-  ];
+  cuda-common-redist =
+    with cudaPackages;
+    [
+      (lib.getDev cccl) # <thrust/*>
+      (lib.getDev libcublas) # cublas_v2.h
+      (lib.getLib libcublas)
+      (lib.getInclude libcublas) # cublasLt.h
+      libcurand
+      libcusolver # cusolverDn.h
+      (lib.getDev libcusparse) # cusparse.h
+      (lib.getLib libcusparse) # cusparse.h
+      (lib.getInclude libcusparse) # cusparse.h
+      (lib.getDev cuda_cudart) # cuda_runtime.h cuda_runtime_api.h
+    ]
+    ++ lib.optionals cudaPackages.cuda_crt.meta.available [ cuda_crt ];
 
   cuda-native-redist = symlinkJoin {
     name = "cuda-native-redist-${cudaMajorMinorVersion}";
@@ -73,15 +74,16 @@ let
     paths = cuda-common-redist;
   };
 in
-buildPythonPackage {
-  inherit pname version;
+buildPythonPackage (finalAttrs: {
+  pname = "bitsandbytes";
+  version = "0.49.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
-    tag = version;
-    hash = "sha256-nNhxDJITXNIZMXuZdzpF5dl1K1kFEVQ0gbTqZnOf/sI=";
+    tag = finalAttrs.version;
+    hash = "sha256-Z7C159ZpdthQppXibzA06rAglfM3Hmwd7LX4bPjk1Eo=";
   };
 
   patches = [
@@ -123,6 +125,7 @@ buildPythonPackage {
   ];
 
   build-system = [
+    ninja
     scikit-build-core
     setuptools
   ];
@@ -163,11 +166,14 @@ buildPythonPackage {
 
     (lib.cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ];
-  CUDA_HOME = lib.optionalString cudaSupport "${cuda-native-redist}";
-  NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
-    "-I${cuda-native-redist}/include"
-    "-L${cuda-native-redist}/lib"
-  ];
+
+  env = lib.optionalAttrs cudaSupport {
+    CUDA_HOME = cuda-native-redist;
+    NVCC_PREPEND_FLAGS = toString [
+      "-I${cuda-native-redist}/include"
+      "-L${cuda-native-redist}/lib"
+    ];
+  };
 
   preBuild = ''
     make -j $NIX_BUILD_CORES
@@ -201,11 +207,11 @@ buildPythonPackage {
   meta = {
     description = "8-bit CUDA functions for PyTorch";
     homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
-    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
+    changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       bcdarwin
       jk
     ];
   };
-}
+})

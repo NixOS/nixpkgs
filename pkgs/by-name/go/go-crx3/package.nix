@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-crx3";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "mmadfox";
     repo = "go-crx3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XNUOnm898GtCIojWR4tCHZNDHhh+DfJvvBvTDBI8Wzg=";
+    hash = "sha256-2AuVcQIurylmxAT/QUhYvymACWDeUBUn0ukSSn5IzWA=";
   };
 
-  vendorHash = "sha256-LEIB/VZA3rqTeH9SesZ/jrfVddl6xtmoRWHP+RwGmCk=";
+  vendorHash = "sha256-00NpGn0moeDhP8oP7hueRyVnB1enS8iN2fTDfTckIqY=";
 
   ldflags = [
     "-s"

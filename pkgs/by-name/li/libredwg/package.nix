@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libredwg";
-  version = "0.13.3";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = "libredwg";
     tag = finalAttrs.version;
-    hash = "sha256-FlBHwNsqVSBE8dTDewoKkCbs8Jd/4d69MPpEFzg6Ruc=";
+    hash = "sha256-851VivSnXs0rAUE/z32/G9EYvn6LHkyxbhL4bNh+Alo=";
     fetchSubmodules = true;
   };
 

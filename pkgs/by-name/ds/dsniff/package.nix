@@ -103,8 +103,20 @@ stdenv.mkDerivation (finalAttrs: {
     libnsl
     libnl
   ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc -lnl-3 -lnl-genl-3";
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+
+  env = {
+    NIX_CFLAGS_LINK = toString [
+      "-lglib-2.0"
+      "-lpthread"
+      "-ltirpc"
+      "-lnl-3"
+      "-lnl-genl-3"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${libtirpc.dev}/include/tirpc"
+      "-std=gnu17"
+    ];
+  };
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch

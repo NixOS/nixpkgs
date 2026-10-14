@@ -151,3 +151,62 @@ class Test(
                 ([], ["A", "B"])
             ]
         )
+
+    def test_reorder_rest_before_main(self):
+        # Verify that ["reorder" ["rest" "main"]] puts the rest-graph layers
+        # before the main (split-off) layers, equivalent to the double-reverse
+        # workaround but expressed directly.
+        #
+        # Graph: Root -> A -> B -> D
+        #                  -> C
+        # Split off B and its deps; rest should come first.
+        graph = directed_graph(
+            [
+                ("Root", "A"),
+                ("A", "B"),
+                ("A", "C"),
+                ("B", "D"),
+            ]
+        )
+
+        # Without reorder: main (B+D) comes before rest (Root, A, C)
+        result_without = list(pipe(
+            [
+                ["subcomponent_out", ["B"]],
+                ["flatten"],
+            ],
+            graph
+        ))
+        # main graph contains B and D
+        main_names = set(result_without[0].vs["name"])
+        self.assertIn("B", main_names)
+
+        # With reorder: rest (Root, A, C) comes before main (B+D)
+        result_with = list(pipe(
+            [
+                ["subcomponent_out", ["B"]],
+                ["reorder", ["rest", "main"]],
+                ["flatten"],
+            ],
+            graph
+        ))
+        rest_names = set(result_with[0].vs["name"])
+        self.assertIn("A", rest_names)
+        self.assertNotIn("B", rest_names)
+
+    def test_reorder_three_keys_split_paths(self):
+        # split_paths returns {"main", "common", "rest"} — verify reorder
+        # can express "rest, common, main" ordering for stable shared layers first.
+        graph = make_test_graph()
+        result = list(pipe(
+            [
+                ["split_paths", ["B"]],
+                ["reorder", ["rest", "common", "main"]],
+                ["flatten"],
+                ["limit_layers", 3],
+            ],
+            graph
+        ))
+        # rest should be first: contains Root1, A, C (no B or its exclusive deps)
+        first_names = set(result[0].vs["name"])
+        self.assertNotIn("B", first_names)

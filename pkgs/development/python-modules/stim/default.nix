@@ -22,15 +22,20 @@
 
 buildPythonPackage rec {
   pname = "stim";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quantumlib";
     repo = "Stim";
     tag = "v${version}";
-    hash = "sha256-Wls7dJkuV/RXnMizwrYOJOKopWEf1r21FKoKHjmpEQ0=";
+    hash = "sha256-M6NtGjbj4tyIR87N6i4JSM4HEOS9sGOvdIm74lEIHAs=";
   };
+
+  patches = [
+    # Fix measure_kickback lambda return type deduction under pybind11 3.0.
+    ./fix-measure-kickback-lambda-return-type.patch
+  ];
 
   postPatch = ''
     # asked to relax this in https://github.com/quantumlib/Stim/issues/623

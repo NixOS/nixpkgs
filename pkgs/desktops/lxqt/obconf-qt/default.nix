@@ -8,7 +8,6 @@
   libpthread-stubs,
   lxqt-build-tools,
   openbox,
-  pcre,
   pkg-config,
   qtbase,
   qttools,
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     libxdmcp
     libpthread-stubs
     openbox
-    pcre
     qtbase
     qtwayland
   ];

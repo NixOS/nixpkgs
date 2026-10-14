@@ -121,6 +121,9 @@ in
         Path to file which contains the master key.
         By doing so, all routes will be protected and will require a key to be accessed.
         If no master key is provided, all routes can be accessed without requiring any key.
+
+        You can generate a master key by running `openssl rand -base64 36`.
+        Alternatively, you can start Meilisearch without a master key and use the pre-generated key from the service's logs that can be obtained by `journalctl -u meilisearch | grep -- --master-key`.
       '';
       default = null;
       type = lib.types.nullOr lib.types.path;
@@ -181,7 +184,7 @@ in
       no_analytics = lib.mkDefault true;
 
       # allow updating without manual intervention
-      experimental_dumpless_upgrade = lib.mkDefault true;
+      upgrade_db = lib.mkDefault true;
     };
 
     # used to restore dumps
@@ -191,15 +194,6 @@ in
       description = "Meilisearch daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-
-      preStart = lib.mkMerge [
-        ''
-          install -m 700 '${configFile}' "$RUNTIME_DIRECTORY/config.toml"
-        ''
-        (lib.mkIf (cfg.masterKeyFile != null) ''
-          ${lib.getExe pkgs.replace-secret} '${master-key-placeholder}' "$CREDENTIALS_DIRECTORY/master_key" "$RUNTIME_DIRECTORY/config.toml"
-        '')
-      ];
 
       environment = builtins.listToAttrs (
         map (secret: {
@@ -220,6 +214,12 @@ in
             secret: lib.mkIf (secret.setting != null) [ "${secret.name}:${secret.setting}" ]
           ) secrets-with-path
         );
+        ExecStartPre = [
+          "${lib.getExe' pkgs.coreutils "install"} -m 700 '${configFile}' \"\${RUNTIME_DIRECTORY}/config.toml\""
+        ]
+        ++ lib.optionals (cfg.masterKeyFile != null) [
+          "${lib.getExe pkgs.replace-secret} '${master-key-placeholder}' \"\${CREDENTIALS_DIRECTORY}/master_key\" \"\${RUNTIME_DIRECTORY}/config.toml\""
+        ];
         ExecStart = "${lib.getExe cfg.package} --config-file-path \${RUNTIME_DIRECTORY}/config.toml";
         StateDirectory = "meilisearch";
         WorkingDirectory = "%S/meilisearch";

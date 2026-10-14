@@ -41,7 +41,7 @@ buildGoModule (finalAttrs: {
   '';
 
   meta = {
-    description = "Virtual microphone device with noise supression for PulseAudio";
+    description = "Virtual microphone device with noise suppression for PulseAudio";
     homepage = "https://github.com/noisetorch/NoiseTorch";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

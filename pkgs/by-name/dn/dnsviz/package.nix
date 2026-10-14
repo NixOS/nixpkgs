@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "dnsviz";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dnsviz";
     repo = "dnsviz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JlPikEvRPFhHcTyRJ2ZgmQOrrc6qzhbAO6+NtiN+Wqo=";
+    hash = "sha256-K31HLIDPCoQLKnsevXylspvFTc8Z4Qa9OP0J9fT5OcY=";
   };
 
   patches = [
@@ -50,6 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
       This tool suite powers the Web-based analysis available at https://dnsviz.net/
     '';
+    homepage = "https://github.com/dnsviz/dnsviz";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ jojosch ];
   };

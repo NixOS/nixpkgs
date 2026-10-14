@@ -106,7 +106,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/quietvoid/hdr10plus_tool";
     changelog = "https://github.com/quietvoid/hdr10plus_tool/releases/tag/${hdr10plus_tool.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     pkgConfigModules = [ "hdr10plus-rs" ];
   };
 })

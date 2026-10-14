@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   preBuild = ''
-    substituteInPlace src/Makefile --replace "CC=gcc" "CC?=gcc"
+    substituteInPlace src/Makefile --replace-fail "CC=gcc" "CC?=gcc"
     cd src
   '';
 
@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.aescrypt.com/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      lovek323
       qknight
     ];
     platforms = lib.platforms.all;

@@ -1,33 +1,33 @@
 {
   stdenv,
-  gnat13,
-  gnat13Packages,
+  gnat,
+  gnatPackages,
   fetchFromGitHub,
   lib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "florist";
-  version = "24.2";
+  version = "26.1";
 
   src = fetchFromGitHub {
     owner = "adacore";
     repo = "florist";
     rev = "refs/heads/${finalAttrs.version}";
-    hash = "sha256-EFGmcQfWpxEWfsAoQrHegTlizl6siE8obKx+fCpVwUQ=";
+    hash = "sha256-83bfO7RTVs3b7nEzjxnr2eRXggoMjTLIa9agwYKgP9g=";
   };
 
   configureFlags = [ "--enable-shared" ];
 
   nativeBuildInputs = [
-    gnat13
-    gnat13Packages.gprbuild
+    gnat
+    gnatPackages.gprbuild
   ];
 
   meta = {
     description = "Posix Ada Bindings";
     homepage = "https://github.com/adacore/florist";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ lutzberger ];
     platforms = lib.platforms.linux;
   };

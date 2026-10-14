@@ -20,14 +20,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pycrdt";
-  version = "0.12.46";
+  version = "0.14.8";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "pycrdt";
     tag = finalAttrs.version;
-    hash = "sha256-rL6heeHg5uhLFt3qY+NKIEA4FLIR/MtwEqleq29DPA8=";
+    hash = "sha256-HnmufoV91CA/036BkTGo62je7cKFDytrU6FgVjI/dEI=";
   };
 
   postPatch = ''

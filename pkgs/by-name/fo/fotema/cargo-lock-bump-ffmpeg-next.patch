@@ -1,0 +1,193 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -428,7 +428,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "993776b509cfb49c750f11b8f07a46fa23e0a1386ffc01fb1e7d343efc387895"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "cexpr",
+  "clang-sys",
+  "itertools 0.13.0",
+@@ -454,9 +454,9 @@
+ 
+ [[package]]
+ name = "bitflags"
+-version = "2.10.0"
++version = "2.11.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "812e12b5285cc515a9c72a5c1d3b6d46a19dac5acfef5265968c166106e31dd3"
++checksum = "c4512299f36f043ab09a583e57bceb5a5aab7a73db1805848e8fef3c9e8c78b3"
+ 
+ [[package]]
+ name = "bitreader"
+@@ -555,7 +555,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b01fe135c0bd16afe262b6dea349bd5ea30e6de50708cec639aae7c5c14cc7e4"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "cairo-sys-rs",
+  "glib",
+  "libc",
+@@ -1132,20 +1132,20 @@
+ 
+ [[package]]
+ name = "ffmpeg-next"
+-version = "8.0.0"
++version = "8.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d658424d233cbd993a972dd73a66ca733acd12a494c68995c9ac32ae1fe65b40"
++checksum = "f7c4bd5ab1ac61f29c634df1175d350ded29cf74c3c6d4f7030431a5ae3c7d5d"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "ffmpeg-sys-next",
+  "libc",
+ ]
+ 
+ [[package]]
+ name = "ffmpeg-sys-next"
+-version = "8.0.1"
++version = "8.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9bca20aa4ee774fe384c2490096c122b0b23cf524a9910add0686691003d797b"
++checksum = "a314bc0e022a33a99567ed4bd2576bd58ffd8fcff7891c29194cfecc26a62547"
+ dependencies = [
+  "bindgen",
+  "cc",
+@@ -1709,7 +1709,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "16de123c2e6c90ce3b573b7330de19be649080ec612033d397d72da265f1bd8b"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "futures-channel",
+  "futures-core",
+  "futures-executor",
+@@ -1796,7 +1796,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "6e9b31c7fa5ccb9d91317c956e767daef59be9fee3ae9df30468470368678482"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "gufo-common",
+  "half",
+  "memmap2",
+@@ -1816,7 +1816,7 @@
+ checksum = "7dfec0cd29d5ecfb1dd723868e22e2c49441020f35d5f14307018ff0a1679e2f"
+ dependencies = [
+  "async-lock",
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "blocking",
+  "env_logger",
+  "futures-util",
+@@ -2819,7 +2819,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3d0b95e02c851351f877147b7deea7b1afb1df71b63aa5f8270716e0c5720616"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "libc",
+ ]
+ 
+@@ -2829,7 +2829,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "0e5310a2c5b6ffbc094b5f70a2ca7b79ed36ad90e6f90994b166489a1bce3fcc"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "libc",
+  "libseccomp-sys",
+  "pkg-config",
+@@ -3190,7 +3190,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "74523f3a35e05aba87a1d978330aef40f67b0304ac79c1c00b294c9830543db6"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "cfg-if",
+  "cfg_aliases",
+  "libc",
+@@ -3422,7 +3422,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "08838db121398ad17ab8531ce9de97b244589089e290a384c900cb9ff7434328"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "cfg-if",
+  "foreign-types 0.3.2",
+  "libc",
+@@ -3631,7 +3631,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "60769b8b31b2a9f263dae2776c37b1b28ae246943cf719eb6946a1db05128a61"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "crc32fast",
+  "fdeflate",
+  "flate2",
+@@ -3996,7 +3996,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "ed2bf2547551a7053d6fdfafda3f938979645c44812fbfcda098faae3f1a362d"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+ ]
+ 
+ [[package]]
+@@ -4242,7 +4242,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "165ca6e57b20e1351573e3729b958bc62f0e48025386970b6e4d29e7a7e71f3f"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "chrono",
+  "fallible-iterator",
+  "fallible-streaming-iterator",
+@@ -4323,7 +4323,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "146c9e247ccc180c1f61615433868c99f3de3ae256a30a43b49f67c2d9171f34"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "errno",
+  "libc",
+  "linux-raw-sys",
+@@ -4465,7 +4465,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "897b2245f0b511c87893af39b033e5ca9cce68824c4d7e7630b5a1d339658d02"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "core-foundation 0.9.4",
+  "core-foundation-sys",
+  "libc",
+@@ -4478,7 +4478,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "b3297343eaf830f66ede390ea39da1d462b6b0c1b000f420d0a83f898bbbe6ef"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "core-foundation 0.10.1",
+  "core-foundation-sys",
+  "libc",
+@@ -4844,7 +4844,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "a13f3d0daba03132c0aa9767f98351b3488edc2c100cda2d2ec2b04f3d8d3c8b"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "core-foundation 0.9.4",
+  "system-configuration-sys 0.6.0",
+ ]
+@@ -5205,7 +5205,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d4e6559d53cc268e5031cd8429d05415bc4cb4aefc4aa5d6cc35fbf5b924a1f8"
+ dependencies = [
+- "bitflags 2.10.0",
++ "bitflags 2.11.1",
+  "bytes",
+  "futures-util",
+  "http 1.4.0",

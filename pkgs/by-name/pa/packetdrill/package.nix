@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   bison,
   flex,
   cmake,
@@ -10,33 +9,19 @@
 }:
 stdenv.mkDerivation {
   pname = "packetdrill";
-  version = "unstable-2020-08-22";
+  version = "2.0-unstable-2026-04-29";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "packetdrill";
-    rev = "68a34fa73cf221e5f52d6fa4f203bcd93062be1b";
-    sha256 = "0djkwb6l2959f44d98vwb092rghf0qmii8391vrpxqb99j6pv4h6";
+    rev = "faa0dfb54065118625e169d3111ce09c65b20229";
+    hash = "sha256-+9qfNT2veOsShj9JvLiBm7i842zFhUiPmrt8QA/ZuKs=";
   };
-  patches = [
-    # Upstream fix for -fno-common toolchains
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/google/packetdrill/commit/c08292838de81a71ee477d5bf9d95b1130a1292b.patch";
-      sha256 = "1irbar1zkydmgqb12r3xd80dwj2jfxnxayxpb4nmbma8xm7knb10";
-      stripLen = 3;
-    })
-  ];
 
   setSourceRoot = ''
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=unused-result"
-    "-Wno-error=stringop-truncation"
-    "-Wno-error=address-of-packed-member"
-  ];
   nativeBuildInputs = [
     bison
     flex

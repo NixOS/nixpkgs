@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm444 -t $out/share/pixmaps/ nwg-icon-picker.svg
+    install -Dm444 -t $out/share/icons/hicolor/scalable/apps/ nwg-icon-picker.svg
     install -Dm444 -t $out/share/applications/ nwg-icon-picker.desktop
   '';
 

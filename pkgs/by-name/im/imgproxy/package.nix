@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "imgproxy";
-  version = "3.30.1";
+  version = "3.31.3";
 
   src = fetchFromGitHub {
     owner = "imgproxy";
     repo = "imgproxy";
-    hash = "sha256-UaJ02TQ8jbebRDF5K3zFy+4ho+dt1o/o3cEDzUQY3iU=";
+    hash = "sha256-sfxHtg6vpMuUeMA8/mh+x6Mrn3tzGYBsggAS6IhTpKo=";
     rev = "v${finalAttrs.version}";
   };
 
-  vendorHash = "sha256-0NIsaSMOBenDCGvnGdLB60sp08EaC/CezWogxTrcDdY=";
+  vendorHash = "sha256-coHlsBh+ujEU9D/RloONAl+TDaxEJMdvvaNEuWe4SP8=";
 
   __darwinAllowLocalNetworking = true;
 

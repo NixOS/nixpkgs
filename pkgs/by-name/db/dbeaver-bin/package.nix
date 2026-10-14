@@ -19,23 +19,21 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.3.4";
+  version = "26.2.2";
 
   src =
     let
       inherit (stdenvNoCC.hostPlatform) system;
       selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
       suffix = selectSystem {
-        x86_64-linux = "linux.gtk.x86_64.tar.gz";
-        aarch64-linux = "linux.gtk.aarch64.tar.gz";
-        x86_64-darwin = "macos-x86_64.dmg";
+        x86_64-linux = "linux-x86_64.tar.gz";
+        aarch64-linux = "linux-aarch64.tar.gz";
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-iqbpvXSn0jsHNdsn6/C1RV28Xc54o2XnvtG8WujpJFE=";
-        aarch64-linux = "sha256-fku9iDSyM5COrCAy9sIBZUCo7E8/2nIQmlhKAtBbmcw=";
-        x86_64-darwin = "sha256-DJpME9xxFSlRIgJuLtemIdnaskim7S1wPWLlrF0doxo=";
-        aarch64-darwin = "sha256-q/IZHXSAV7TR3EjKoxoB06zLnhEvb6A5TywgEK9uL8o=";
+        x86_64-linux = "sha256-J7Oaeaaexw+flcbuO2hRT8x2d6zvkyh+jfjhPMUzhNU=";
+        aarch64-linux = "sha256-xkQBpy1r0AGoKAlBknBGU81RvHXBS2AuN7mj/Q6ksK0=";
+        aarch64-darwin = "sha256-f0dXm8WDVxygzO+f3OfWzFb4S3SETk5wCrekbR5QHsU=";
       };
     in
     fetchurl {
@@ -144,7 +142,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     maintainers = with lib.maintainers; [
       gepbird
       mkg20001

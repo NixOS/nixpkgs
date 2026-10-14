@@ -12,9 +12,9 @@
 }:
 
 let
-  secp256k1_anonswap = secp256k1.overrideAttrs (old: {
+  secp256k1_basicswap = secp256k1.overrideAttrs (old: {
     src = fetchFromGitHub {
-      owner = "tecnovert";
+      owner = "basicswap";
       repo = "secp256k1";
       rev = "fd8b63ccf8bcb48358a42c456f34e2488a55a688";
       hash = "sha256-/bmKZRBBjirI4YqRKfzoxdAt6UVoWHmrNQQHX7l+eH8=";
@@ -27,24 +27,20 @@ let
       "--enable-module-ecdsaotves"
     ];
   });
-  coincurve-anonswap =
+  coincurve-basicswap =
     (python3Packages.coincurve.override {
-      secp256k1 = secp256k1_anonswap;
+      secp256k1 = secp256k1_basicswap;
     }).overrideAttrs
-      (old: {
+      {
+        version = "21.0.3";
         src = fetchFromGitHub {
-          owner = "tecnovert";
+          owner = "basicswap";
           repo = "coincurve";
-          rev = "932366c9d4d8e487162b5c1b2a2d9693e24e0483";
-          hash = "sha256-zOekPmP1zR/S+zxq/7OrEz24k8SInlsB+wJ8kPlmqe4=";
+          tag = "basicswap_v0.3";
+          hash = "sha256-lSEdwV7jhYa5ERHEVDuLA84JGGVsbvVoOqSRXU5AbCE=";
         };
         patches = [ ];
-        preCheck = ''
-          rm -rf src/coincurve
-          # don't run benchmark tests
-          rm tests/test_bench.py
-        '';
-      });
+      };
   bindir = linkFarm "bindir" (
     lib.mapAttrs (_: p: "${lib.getBin p}/bin") {
       particl = particl-core;
@@ -58,14 +54,14 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "basicswap";
-  version = "0.14.4";
+  version = "0.17.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "basicswap";
     repo = "basicswap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UhuBTbGULImqRSsbg0QNb3yvnN7rnSzycweDLbqrW+8=";
+    hash = "sha256-JJ+Q49PaxMMiQ9ORa5enK/lprIJkW9vyw+dRnaZHf6s=";
   };
 
   postPatch = ''
@@ -80,16 +76,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   dependencies = with python3Packages; [
-    coincurve-anonswap
+    coincurve-basicswap
     wheel
     pyzmq
-    protobuf
-    sqlalchemy_1_4
     python-gnupg
     jinja2
     pycryptodome
     pysocks
-    mnemonic
+    websocket-client
   ];
 
   postInstall = ''

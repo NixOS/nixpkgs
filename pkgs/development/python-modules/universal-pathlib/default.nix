@@ -5,17 +5,18 @@
   setuptools,
   setuptools-scm,
   fsspec,
+  pathlib-abc,
 }:
 
 buildPythonPackage rec {
   pname = "universal-pathlib";
-  version = "0.2.6";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchPypi {
     pname = "universal_pathlib";
     inherit version;
-    hash = "sha256-UIF6rqqfQWPLHnb1vfhCB/oFznKLI/13lHmzRi5UMKw=";
+    hash = "sha256-6tK2W8o99uEcO3yzb8mEY0C8PC2071cTFVAmBCKwo+g=";
   };
 
   build-system = [
@@ -23,7 +24,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ fsspec ];
+  dependencies = [
+    fsspec
+    pathlib-abc
+  ];
 
   pythonImportsCheck = [ "upath" ];
 

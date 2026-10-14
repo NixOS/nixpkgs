@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Lightweight and robust POSIX compliant regexp matching library";
-    homepage = "https://laurikari.net/tre/";
+    homepage = "https://github.com/laurikari/tre";
     changelog = "https://github.com/laurikari/tre/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     mainProgram = "agrep";

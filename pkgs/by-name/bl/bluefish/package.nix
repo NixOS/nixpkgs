@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluefish";
-  version = "2.2.19";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/bluefish/bluefish-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-tXTHwSiX3c73Pxmfr6H5i/w2asdvCr5/l6emLIB/kq4=";
+    hash = "sha256-smQfn/gDNxngLFGcXdtL2tvX/3PvJS6Sh9USxHcDd8U=";
   };
 
   nativeBuildInputs = [

@@ -7,31 +7,37 @@
   fido2,
   keyring,
   keyrings-alt,
+  protobuf,
+  pydantic,
   pytest-mock,
   pytest-socket,
+  pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
   requests,
-  setuptools,
+  rich,
+  setuptools_80,
   setuptools-scm,
   srp,
+  tinyhtml,
+  typer,
   tzlocal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyicloud";
-  version = "2.3.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timlaing";
     repo = "pyicloud";
-    tag = version;
-    hash = "sha256-sejOJOzgZD531U5tHMoTwDH0ZkAi0sZ/nPp7uQDIZvU=";
+    tag = finalAttrs.version;
+    hash = "sha256-XQIE85fpod+Wmgg8t3PgHo8Vn2sF91h/I5hSvrCBSrk=";
   };
 
   build-system = [
-    setuptools
+    setuptools_80
     setuptools-scm
   ];
 
@@ -41,16 +47,30 @@ buildPythonPackage rec {
     fido2
     keyring
     keyrings-alt
+    protobuf
+    pydantic
     requests
     srp
+    tinyhtml
     tzlocal
   ];
+
+  pythonRelaxDeps = [ "tzlocal" ];
+
+  optional-dependencies = {
+    cli = [
+      rich
+      typer
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-mock
     pytest-socket
+    pytest-timeout
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "pyicloud" ];
 
@@ -63,8 +83,8 @@ buildPythonPackage rec {
     description = "Module to interact with iCloud webservices";
     mainProgram = "icloud";
     homepage = "https://github.com/timlaing/pyicloud";
-    changelog = "https://github.com/timlaing/pyicloud/releases/tag/${src.tag}";
+    changelog = "https://github.com/timlaing/pyicloud/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mic92 ];
   };
-}
+})

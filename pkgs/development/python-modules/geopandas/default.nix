@@ -2,15 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
 
+  # dependencies
   packaging,
   pandas,
   pyogrio,
   pyproj,
-  rtree,
   shapely,
 
   # optional-dependencies
@@ -23,30 +23,27 @@
   pyarrow,
   sqlalchemy,
   xyzservices,
+
+  # tests
+  pytestCheckHook,
+  rtree,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geopandas";
-  version = "1.1.1";
+  version = "1.1.4";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    tag = "v${version}";
-    hash = "sha256-7ZsO4jresikA17M8cyHskdcVnTscGHxTCLJv5p1SvfI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7XWPPLuJjc6x+Vb16z0bEjYe1lX710vz5Rwjg/WFHH0=";
   };
 
   build-system = [ setuptools ];
-
-  patches = [
-    # fix tests for geos 3.14
-    # see https://github.com/geopandas/geopandas/pull/3645
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/geopandas/geopandas/pull/3645.patch";
-      hash = "sha256-TLJixFRR+g739PLgwhTGuwYTVJ4SRr2BMGD14CLgmcY=";
-    })
-  ];
 
   dependencies = [
     packaging
@@ -79,12 +76,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
+    writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.all;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Requires network access
@@ -98,8 +92,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/geopandas/geopandas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

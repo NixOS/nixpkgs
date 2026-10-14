@@ -6,7 +6,7 @@
   cython,
   expat,
   fixDarwinDylibNames,
-  fetchFromGitHub,
+  klayout,
   libpng,
   qt6,
   setuptools,
@@ -15,17 +15,11 @@
   zlib,
 }:
 
-buildPythonPackage (finalAttrs: {
+buildPythonPackage {
   pname = "klayout";
-  version = "0.30.5";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "KLayout";
-    repo = "klayout";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-WigRictn6CxOPId2YitlEm43vEw+dSRWdoareD9HtMc=";
-  };
+  inherit (klayout) version src;
 
   build-system = [
     cython
@@ -76,4 +70,4 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ fbeffa ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-})
+}

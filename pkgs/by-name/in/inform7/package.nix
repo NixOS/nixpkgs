@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     mainProgram = "i7";
     homepage = "http://inform7.com/";
     license = lib.licenses.artistic2;
-    maintainers = with lib.maintainers; [ mbbx6spp ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken =

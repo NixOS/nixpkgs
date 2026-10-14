@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildPythonPackage,
 
   # build-system
@@ -22,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "beets-alternatives";
-  version = "0.14.0";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "beets-alternatives";
     owner = "geigerzaehler";
     tag = "v${version}";
-    hash = "sha256-leZYXf6Oo/jAKbnJbP+rTnuRsh9P1BQXYAbthMNT60A=";
+    hash = "sha256-jRVzKqvGvAKn3D3s1KEqF7uh9S28Yw4TarMRVRBB6ug=";
   };
 
   build-system = [

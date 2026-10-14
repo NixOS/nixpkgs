@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "mushroom";
-  version = "5.0.11";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "piitaya";
     repo = "lovelace-mushroom";
     rev = "v${version}";
-    hash = "sha256-6TPfHpaHoM7k60A9XhitToiwn8wlNuN3deIjjPZqRwc=";
+    hash = "sha256-ujK7xMcfNjTzPYZ5wfwcGPbPlFGrhZkcACcE/g442bA=";
   };
 
-  npmDepsHash = "sha256-BaIjzW/puRi+GXtp3dJ8b/daZxafhMRxJTQQFj0Tfcw=";
+  npmDepsHash = "sha256-5tiG9Daxk2souekAgsVVo8P2wlT+RAVaH0RrP2X8N5s=";
 
   installPhase = ''
     runHook preInstall

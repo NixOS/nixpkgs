@@ -21,7 +21,6 @@ let
       "x86_64-linux"
       "i686-linux"
       "aarch64-darwin"
-      "x86_64-darwin"
     ];
     mainProgram = "hamrs";
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

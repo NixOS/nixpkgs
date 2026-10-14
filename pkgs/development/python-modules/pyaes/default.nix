@@ -11,8 +11,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02c1b1405c38d3c370b085fb952dd8bea3fadcee6411ad99f312cc129c536d8f";
+    hash = "sha256-AsGxQFw408NwsIX7lS3YvqP63O5kEa2Z8xLMEpxTbY8=";
   };
+
+  patches = [
+    # https://github.com/ricmoo/pyaes/issues/56
+    # https://blog.trailofbits.com/2026/02/18/carelessness-versus-craftsmanship-in-cryptography/
+    ./default-iv.patch
+  ];
 
   meta = {
     description = "Pure-Python AES";

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pluginlib";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rockhopper-Technologies";
     repo = "pluginlib";
     tag = version;
-    hash = "sha256-mt3VE8iJPCmbws8bAdYMK9to446z8FQtsMZOlkLVUIU=";
+    hash = "sha256-KaexWmRSipwX+tg4Fh03XqhWm2XtZnmy4IEscJDRY/E=";
   };
 
   build-system = [

@@ -1,0 +1,12 @@
+--- a/dbc.pc.in
++++ b/dbc.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: @CPACK_PACKAGE_DESCRIPTION_SUMMARY@

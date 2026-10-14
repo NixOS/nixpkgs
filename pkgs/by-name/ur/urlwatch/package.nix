@@ -19,7 +19,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
-    aioxmpp
     beautifulsoup4
     cssbeautifier
     cssselect

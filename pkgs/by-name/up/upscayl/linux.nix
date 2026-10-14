@@ -9,7 +9,7 @@
 }:
 
 let
-  appimageContents = appimageTools.extractType2 {
+  appimageContents = appimageTools.extract {
     inherit pname version src;
   };
 in
@@ -31,10 +31,8 @@ appimageTools.wrapType2 {
   ];
 
   extraInstallCommands = ''
-    mkdir -p $out/share/{applications,pixmaps}
-
-    cp ${appimageContents}/upscayl.desktop $out/share/applications/upscayl.desktop
-    cp ${appimageContents}/upscayl.png $out/share/pixmaps/upscayl.png
+    install -D ${appimageContents}/upscayl.desktop -t $out/share/applications
+    install -D ${appimageContents}/upscayl.png -t $out/share/icons/hicolor/512x512/apps
 
     substituteInPlace $out/share/applications/upscayl.desktop \
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=upscayl'

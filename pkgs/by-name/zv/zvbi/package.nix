@@ -7,18 +7,19 @@
   libintl,
   stdenv,
   testers,
+  tzdata,
   validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zvbi";
-  version = "0.2.44";
+  version = "0.2.45";
 
   src = fetchFromGitHub {
     owner = "zapping-vbi";
     repo = "zvbi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-knc9PejugU6K4EQflfz91keZr3ZJqZu2TKFQFFJrxiI=";
+    hash = "sha256-Nkg/Y7tHYAEi3ndbiJwwutVrGCOIE5RUCNQW3j12BkM=";
   };
 
   configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
@@ -36,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  nativeCheckInputs = [
+    tzdata
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -43,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    && !stdenv.hostPlatform.isDarwin
+    &&
+      # musl does not support TZDIR, used by the tzdata setup hook.
+      !stdenv.hostPlatform.isMusl;
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -54,15 +66,20 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/zapping-vbi/zvbi";
     changelog = "https://github.com/zapping-vbi/zvbi/blob/${finalAttrs.src.rev}/ChangeLog";
     pkgConfigModules = [ "zvbi-0.2" ];
-    license = with lib.licenses; [
-      bsd2
-      bsd3
-      gpl2
-      gpl2Plus
-      lgpl21Plus
-      lgpl2Plus
-      mit
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        bsd2
+        (OR [
+          bsd3
+          gpl2Plus
+        ])
+        gpl2Only
+        gpl2Plus
+        lgpl21Plus
+        lgpl2Plus
+        mit
+      ];
     maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

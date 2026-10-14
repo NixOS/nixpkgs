@@ -10,18 +10,29 @@
 
 buildGoModule (finalAttrs: {
   pname = "gosmee";
-  version = "0.28.3";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "gosmee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-97Z/q0cOX4zPGYaeAKqxm3sb7WfJ1fpUcMhuqHsPG1c=";
+    hash = "sha256-Qdp36Z6p+4mSafPjJjF/gswpWpglzinYsMyApGd3k3Q=";
   };
 
   vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
+
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestRunExecCommand"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postPatch = ''
     printf ${finalAttrs.version} > gosmee/templates/version

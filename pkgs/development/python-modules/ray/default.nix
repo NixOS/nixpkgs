@@ -60,6 +60,8 @@
   scipy,
   # serve
   fastapi,
+  jinja2,
+  mmh3,
   starlette,
   uvicorn,
   watchfiles,
@@ -69,17 +71,18 @@
   pyopenssl,
   # tune
   tensorboardx,
+
+  # tests
+  versionCheckHook,
 }:
 
-let
+buildPythonPackage (finalAttrs: {
   pname = "ray";
-  version = "2.53.0";
-in
-buildPythonPackage rec {
-  inherit pname version;
+  version = "2.59.0";
   format = "wheel";
+  __structuredAttrs = true;
 
-  disabled = pythonAtLeast "3.14";
+  disabled = pythonAtLeast "3.15";
 
   src =
     let
@@ -93,33 +96,33 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-TbtfzhNkdj8pdBBV9Qq+M89yY5cUH5zA6EXdPMlj5FU=";
-          cp311 = "sha256-6wAMF/cwEHH90VxExM06wPeVO7THwifmFxn+cEgZW80=";
-          cp312 = "sha256-FPRjY+m0zwwci02GI+wzfFvUCDd4MbXltQBnkwE3u8o=";
-          cp313 = "sha256-c9u6p5Yqf144qoz5SD4OmBcgXpiao9yFnHOMKvGuAd8=";
+          cp311 = "sha256-ZF9Gdu9v8sqBVOg+3ws4WD0iW2xvuDtgUMoWgdw6hog=";
+          cp312 = "sha256-QFWnpgKT/+5BAFq5s+2ZM+D5tdhFCyFPPAp7HeVQPw4=";
+          cp313 = "sha256-cP3FvsR8wzpPTg2bCB9mUF4Rmr2Ki8bLLF1JJkJ/zm0=";
+          cp314 = "sha256-BQeBCZzmQbfYmJbnsNecgggTUp2obJtcZey3yJQD5mc=";
         };
         aarch64-linux = {
-          cp310 = "sha256-QQgoDYocuQ19aOXJVMNeY7i7mkuhX4jF59oOICVkdxI=";
-          cp311 = "sha256-oLu5iwsPJaPuB1yhAXHhJg5wtrxpDNUJ7NfOEiivhU0=";
-          cp312 = "sha256-ZeLOWNPca6o89Fgk2InBlo695WXuVN/YCpivjzGvjko=";
-          cp313 = "sha256-cZblNY38yCEb6GT0Xm3+SCcgLfKUrzx6dv+PvAgOBSI=";
+          cp311 = "sha256-5Zu+7Z/TrinjJrz3Om3GuVcCkAQjDp8eh0ZwxOOQsUc=";
+          cp312 = "sha256-CeLdi6Nn8H8YKfwuNfQenD+p9uwLq6zhPXDr4U6M9mI=";
+          cp313 = "sha256-WD8m4fGgSu/SMLkIYh3D8+HKXg0gHuCdXwQMpLgk6AA=";
+          cp314 = "sha256-bWD5t6lPwTisR6B1ZBgnaf1rbO+uBxSqdJmlU73aKUk=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-TbkUoKbdYI+knAZpKaEoJ0Wi29c8ruZ9e4D+aEymW90=";
-          cp311 = "sha256-vT7Ew0J3bdrCOuKxCMZPWTn0F8zEh1kA1YbHyXhGMmk=";
-          cp312 = "sha256-2LldBH2UdJOAP7hBeuoxIl3KzasVr9x1uKI4kBlJ1Fc=";
-          cp313 = "sha256-hbRyq2+48RifjO+BkT/ZGyTdabP6fcyn4USCe9kk9sA=";
+          cp311 = "sha256-ztzmr4ZdB40xi8P2keQVJzMdUy3KABf7gkGRyITlmiI=";
+          cp312 = "sha256-aiQLOTgZwMjAOUDRb6+VIiMAOrHZc21TKMxaX3HJXhw=";
+          cp313 = "sha256-hDv0j0JyLgwUPrpoRrWBlxa7fl4ES55HebHTrFkzBAs=";
+          cp314 = "sha256-rzEVjuj+rUEZxuS3s+DLNBRBZZnfHaLkyZ58U/pcX7M=";
         };
       };
     in
     fetchPypi {
-      inherit pname version;
+      inherit (finalAttrs) pname version;
       format = "wheel";
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
       platform = platforms.${stdenv.hostPlatform.system} or { };
-      sha256 =
+      hash =
         hashes.${stdenv.hostPlatform.system}.${pyShortVersion}
           or (throw "No hash specified for '${stdenv.hostPlatform.system}.${pyShortVersion}'");
     };
@@ -217,10 +220,14 @@ buildPythonPackage rec {
     serve = lib.unique (
       [
         fastapi
+        jinja2
+        mmh3
         requests
         starlette
         uvicorn
         watchfiles
+        # `ray-haproxy` (upstream, linux-only) is not packaged: it only ships an HAProxy binary, and
+        # ray falls back to `haproxy` from PATH
       ]
       ++ self.default
     );
@@ -262,11 +269,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ray" ];
 
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+
   meta = {
     description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
-    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
+    changelog = "https://github.com/ray-project/ray/releases/tag/ray-${finalAttrs.version}";
     license = lib.licenses.asl20;
+    mainProgram = "ray";
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
@@ -275,4 +287,4 @@ buildPythonPackage rec {
       "x86_64-linux"
     ];
   };
-}
+})

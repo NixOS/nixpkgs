@@ -40,14 +40,16 @@ buildBazelPackage' rec {
   removeRulesCC = false;
   removeLocalConfigCC = false;
 
-  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
 
   fetchAttrs = {
     preInstall = ''
       rm -rv "$bazelOut/external/host_platform"
     '';
 
-    hash = "sha256-CekpXINZSr6Hysa4qrVkdchBla9pgBwRtqBiuUGPNq0=";
+    hash = "sha256-znkwUs984vbinz/BLo1uxQ+PvxkpXo719lJu4TD1Vmg=";
   };
 
   buildAttrs.installPhase = ''
@@ -56,6 +58,8 @@ buildBazelPackage' rec {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Protobuf plugin for generating JavaScript code";
     mainProgram = "protoc-gen-js";
     homepage = "https://github.com/protocolbuffers/protobuf-javascript";

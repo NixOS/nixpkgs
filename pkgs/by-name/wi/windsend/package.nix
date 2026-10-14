@@ -1,29 +1,58 @@
 {
   lib,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
+  cmake,
   copyDesktopItems,
   makeDesktopItem,
+  libx11,
+  libxcursor,
+  libxinerama,
+  libxi,
+  libxext,
+  libxrandr,
+  libxtst,
+  sqlite,
+  wayland-scanner,
 }:
 
-flutter338.buildFlutterApplication rec {
+flutter344.buildFlutterApplication (finalAttrs: {
   pname = "windsend";
-  version = "1.6.0";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
-    tag = "v${version}";
-    hash = "sha256-KCtYV7z+QqufXiHzuEoX8XVIPfNPBdp0F1FLiPq+PDM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-nsiCPaJlB6APxnmNMLaognwSrAyaDxPVa4L5Fwr2sKA=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = lib.importJSON ./git-hashes.json;
 
-  sourceRoot = "${src.name}/flutter/wind_send";
+  sourceRoot = "${finalAttrs.src.name}/flutter/wind_send";
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    cmake
+    copyDesktopItems
+    wayland-scanner
+  ];
+
+  buildInputs = [
+    libx11
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
+    libxext
+    libxtst
+    sqlite
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   desktopItems = [
     (makeDesktopItem {
@@ -44,8 +73,8 @@ flutter338.buildFlutterApplication rec {
     description = "Quickly and securely sync clipboard, transfer files and directories between devices";
     homepage = "https://github.com/doraemonkeys/WindSend";
     mainProgram = "WindSend";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

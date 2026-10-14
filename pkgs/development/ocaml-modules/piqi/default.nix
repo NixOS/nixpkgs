@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "https://piqi.org";
+    homepage = "https://github.com/alavrik/piqi";
     description = "Universal schema language and a collection of tools built around it";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.maurer ];

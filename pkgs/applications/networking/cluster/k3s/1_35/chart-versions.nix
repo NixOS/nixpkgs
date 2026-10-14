@@ -1,10 +1,10 @@
 {
   traefik-crd = {
-    url = "https://k3s.io/k3s-charts/assets/traefik-crd/traefik-crd-38.0.201+up38.0.2.tgz";
-    sha256 = "1fxkdmk859nwn0x9iq0abdwb16njsang7257ppaj9s1if06fsncd";
+    url = "https://k3s.io/k3s-charts/assets/traefik-crd/traefik-crd-40.1.5+up40.1.0.tgz";
+    sha256 = "12dlph0qlc6mcv5xqm1x3j4fdm2k20hqx2sp4j80q92k9dl7d5kl";
   };
   traefik = {
-    url = "https://k3s.io/k3s-charts/assets/traefik/traefik-38.0.201+up38.0.2.tgz";
-    sha256 = "16kzjy8dgswn4jfx62dn2ihmgpkzcfvjv6ync9zdi397fz32mqjv";
+    url = "https://k3s.io/k3s-charts/assets/traefik/traefik-40.1.5+up40.1.0.tgz";
+    sha256 = "0y5p0085hcyvza5wmwy9kyk7jcgv3jdcxpwasdr06cad50cfil6l";
   };
 }

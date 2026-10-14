@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "mmdbctl";
-  version = "1.4.8";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "ipinfo";
     repo = "mmdbctl";
     tag = "mmdbctl-${version}";
-    hash = "sha256-9s/dyORfv3lNf9W6oE1PHhaTgJFdeFa46pf54c/cwH0=";
+    hash = "sha256-trKOMoTZqzzwiFjxM0l7+/IZucTyESi2RQ7EmsPjlvE=";
   };
 
-  vendorHash = "sha256-4T3HEzRerC4KrGQnMNSW3OVzChUIf4yJ7qS9v8mWIX4=";
+  vendorHash = "sha256-vWb0K79p6F2r/qUgVDh9BBaKix2VM6hv4sK9oHIrHT4=";
 
   ldflags = [
     "-s"

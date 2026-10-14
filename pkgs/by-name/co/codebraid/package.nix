@@ -40,7 +40,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       with support for rich output like plots.
     '';
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     mainProgram = "codebraid";
   };
 })

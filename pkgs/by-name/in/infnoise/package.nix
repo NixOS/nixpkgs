@@ -27,9 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  GIT_COMMIT = finalAttrs.src.rev;
-  GIT_VERSION = finalAttrs.version;
-  GIT_DATE = "2023-02-14";
+  env = {
+    GIT_COMMIT = finalAttrs.src.rev;
+    GIT_VERSION = finalAttrs.version;
+    GIT_DATE = "2023-02-14";
+  };
 
   buildInputs = [ libftdi ];
 

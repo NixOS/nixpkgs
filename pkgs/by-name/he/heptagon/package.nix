@@ -3,10 +3,12 @@
   stdenv,
   fetchFromGitLab,
   makeWrapper,
-  ocamlPackages,
+  ocaml-ng,
   fetchpatch,
 }:
-
+let
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heptagon";
   version = "1.05.00";

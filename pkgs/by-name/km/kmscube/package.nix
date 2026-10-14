@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation {
   pname = "kmscube";
-  version = "unstable-2023-09-25";
+  version = "0-unstable-2023-09-25";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     description = "Example OpenGL app using KMS/GBM";
     homepage = "https://gitlab.freedesktop.org/mesa/kmscube";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

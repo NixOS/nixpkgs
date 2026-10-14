@@ -64,10 +64,19 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         Restart = "on-failure";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-        ];
+        RestrictAddressFamilies =
+          let
+            logType = lib.attrByPath [ "settings" "queryLog" "type" ] "" cfg;
+          in
+          (lib.optional (lib.elem logType [
+            "mysql"
+            "postgresql"
+            "timescale"
+          ]) "AF_UNIX")
+          ++ [
+            "AF_INET"
+            "AF_INET6"
+          ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RuntimeDirectory = "blocky";

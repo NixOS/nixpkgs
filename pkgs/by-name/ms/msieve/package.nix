@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ecm
   ];
 
-  ECM = if ecm == null then "0" else "1";
+  env.ECM = if ecm == null then "0" else "1";
 
   # Doesn't hurt Linux but lets clang-based platforms like Darwin work fine too
   makeFlags = [
@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "C library implementing a suite of algorithms to factor large integers";
     mainProgram = "msieve";
     license = lib.licenses.publicDomain;

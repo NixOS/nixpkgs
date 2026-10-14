@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  pyprojectVersionPatchHook,
   typing-extensions,
 }:
 
@@ -19,6 +20,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [ typing-extensions ];
 

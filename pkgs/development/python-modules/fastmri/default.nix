@@ -22,12 +22,14 @@
 
   # tests
   pytestCheckHook,
+  requests,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "fastmri";
   version = "0.3.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "facebookresearch";
@@ -65,7 +67,10 @@ buildPythonPackage (finalAttrs: {
     pandas
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    requests
+  ];
 
   disabledTests = lib.optionals (pythonAtLeast "3.14") [
     # AttributeError: '...' object has no attribute '__annotations__'.

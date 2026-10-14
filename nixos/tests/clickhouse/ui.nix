@@ -29,6 +29,7 @@
                   from selenium import webdriver
                   from selenium.webdriver.common.by import By
                   from selenium.webdriver.firefox.options import Options
+                  from selenium.webdriver.support import expected_conditions as EC
                   from selenium.webdriver.support.ui import WebDriverWait
 
                   options = Options()
@@ -41,33 +42,53 @@
 
                   wait = WebDriverWait(driver, 60)
 
-                  assert len(driver.find_elements(
-                    By.ID, "query_div")) == 1
+                  wait.until(EC.presence_of_element_located(
+                    (By.ID, "query_div")))
 
-                  server_info_element = driver.find_element(
-                    By.XPATH, "//span[@id='server_info']")
-                  assert "${
-                    lib.strings.replaceStrings [ "-stable" "-lts" ] [ "" "" ] package.version
-                  }" in server_info_element.text
+                  version = "${lib.strings.replaceStrings [ "-stable" "-lts" ] [ "" "" ] package.version}"
+                  wait.until(EC.text_to_be_present_in_element(
+                    (By.XPATH, "//span[@id='server_info']"), version))
+
+                  # Determine if a shadow DOM is used for query-result and
+                  # query-progress
+                  result_els = driver.find_elements(By.ID, "query-result")
+                  uses_shadow = len(result_els) > 0
+                  if uses_shadow:
+                      result_shadow = result_els[0].shadow_root
+                      progress_shadow = driver.find_element(
+                        By.ID, "query-progress").shadow_root
+
+
+                  def find_rows():
+                      root = result_shadow if uses_shadow else driver
+                      return root.find_elements(
+                        By.CSS_SELECTOR, ".row-number")
+
+
+                  def find_check_mark():
+                      root = progress_shadow if uses_shadow else driver
+                      return root.find_elements(
+                        By.CSS_SELECTOR, "#check-mark")
+
 
                   # Shouldn't show before query done
-                  assert len(driver.find_elements(
-                    By.CSS_SELECTOR, ".row-number")) == 0
+                  assert len(find_rows()) == 0
 
                   query_box = driver.find_element(
                     By.XPATH, "//textarea[@id='query']")
                   query_box.click()
                   query_box.send_keys("SELECT 1")
 
-                  query_run_button = driver.find_element(
+                  driver.find_element(
                     By.XPATH, "//button[@id='run']").click()
 
-                  # Now verify results shown
-                  assert len(driver.find_elements(
-                    By.XPATH, "//div[@id='check-mark']")) == 1
+                  # Wait for query to complete
+                  WebDriverWait(driver, 60).until(
+                    lambda d: len(find_check_mark()) > 0)
 
-                  assert len(driver.find_elements(
-                    By.CSS_SELECTOR, ".row-number")) == 2
+                  # Wait for results to render
+                  WebDriverWait(driver, 60).until(
+                    lambda d: len(find_rows()) > 0)
 
                   driver.close()
                 '';

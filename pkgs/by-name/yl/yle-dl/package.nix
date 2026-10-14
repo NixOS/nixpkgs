@@ -8,13 +8,13 @@
 }:
 
 let
-  version = "20250730";
+  version = "20260716";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     tag = "releases/${version}";
-    hash = "sha256-85Dj+r6heusvT3+y3SNYBBa5h/tje0G4XHmfJpCwkMY=";
+    hash = "sha256-UU1IWvg6uwsjnnBcv1WgQMxcraBZQwDYVAQ+58DrzFo=";
   };
 in
 python3Packages.buildPythonApplication {
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication {
     homepage = "https://aajanki.github.io/yle-dl/";
     changelog = "https://github.com/aajanki/yle-dl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "yle-dl";
   };

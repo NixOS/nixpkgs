@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation {
   pname = "keyleds";
-  version = "unstable-2021-04-08";
+  version = "1.1.1-unstable-2021-03-27";
 
   src = fetchFromGitHub {
     owner = "keyleds";
@@ -34,6 +34,11 @@ stdenv.mkDerivation {
       sha256 = "sha256-i2N3D/K++34JVqJloNK2UcN473NarIjdjAz6PUhXcNY=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace {,{keyledsd/plugins,keyledsd,keyledsctl,libkeyleds}/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0)" "cmake_minimum_required (VERSION 3.10)"
+  '';
 
   strictDeps = true;
 

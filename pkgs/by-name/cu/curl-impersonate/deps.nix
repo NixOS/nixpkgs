@@ -2,9 +2,9 @@
 { fetchurl }:
 
 {
-  "curl-8_15_0.tar.gz" = fetchurl {
-    url = "https://github.com/curl/curl/archive/curl-8_15_0.tar.gz";
-    hash = "sha256-KTfK3eAHqjpSoXwhrJFT6gVHAPN5JtHZZgK/B+iIyEc=";
+  "curl-8_21_0.tar.gz" = fetchurl {
+    url = "https://github.com/curl/curl/archive/curl-8_21_0.tar.gz";
+    hash = "sha256-7HU6pvQIo8qfDW1fendBeuzRVE2xPAOuXUQ2Er82c2Q=";
   };
 
   "brotli-1.2.0.tar.gz" = fetchurl {
@@ -12,9 +12,9 @@
     hash = "sha256-gWyW6Ojxk7QBUdrX6P83sSIdAZ28ucNc0/rb/mR33+w=";
   };
 
-  "boringssl-673e61fc215b178a90c0e67858bbf162c8158993.zip" = fetchurl {
-    url = "https://github.com/google/boringssl/archive/673e61fc215b178a90c0e67858bbf162c8158993.zip";
-    hash = "sha256-7bfWHo3j95EHAXJyPuQfvFUPtVCAzbGHu0oF5g4FmiI=";
+  "boringssl-156c7b75ae9b8c3b3f847acf264f17594c3859fb.zip" = fetchurl {
+    url = "https://github.com/google/boringssl/archive/156c7b75ae9b8c3b3f847acf264f17594c3859fb.zip";
+    hash = "sha256-RQ4WmyhGl8bq/lI8t2efQiH74aCZP3c6VmwzsYh2KEQ=";
   };
 
   "nghttp2-1.63.0.tar.bz2" = fetchurl {
@@ -22,14 +22,14 @@
     hash = "sha256-YHsXRVTSKoKLxTLR1zT+D3KbXV7SB/LxLpamLoPynFU=";
   };
 
-  "ngtcp2-1.11.0.tar.bz2" = fetchurl {
-    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v1.11.0/ngtcp2-1.11.0.tar.bz2";
-    hash = "sha256-122s6G/Docj84codTLsf3pu6k81fKGEdVbypukPjF7w=";
+  "ngtcp2-1.20.0.tar.bz2" = fetchurl {
+    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v1.20.0/ngtcp2-1.20.0.tar.bz2";
+    hash = "sha256-hx7JethoA88xKQGww5Ow7nAWPiWofJsolNEjQ0HOTpc=";
   };
 
-  "nghttp3-1.9.0.tar.bz2" = fetchurl {
-    url = "https://github.com/ngtcp2/nghttp3/releases/download/v1.9.0/nghttp3-1.9.0.tar.bz2";
-    hash = "sha256-TTCmjxfnKhOStghdr6qfxzLaHX0m7sVUuyFnCDMvzxo=";
+  "nghttp3-1.15.0.tar.bz2" = fetchurl {
+    url = "https://github.com/ngtcp2/nghttp3/releases/download/v1.15.0/nghttp3-1.15.0.tar.bz2";
+    hash = "sha256-xsSRpSgEgUCY5EZjDm78RZr8DT2nlS/+bL3As/mbK2I=";
   };
 
   "zlib-1.3.1.tar.gz" = fetchurl {
@@ -37,14 +37,9 @@
     hash = "sha256-mpOyt9/ax3zrpaVYpYDnRmfdb+3kWFuR7vtg8Dty3yM=";
   };
 
-  "zstd-1.5.6.tar.gz" = fetchurl {
-    url = "https://github.com/facebook/zstd/releases/download/v1.5.6/zstd-1.5.6.tar.gz";
-    hash = "sha256-jCngbPQqrMHq/EB3ri7Gxvy5amJhV+BZPV6Co0/UA8E=";
-  };
-
-  "libunistring-1.1.tar.gz" = fetchurl {
-    url = "https://ftp.gnu.org/gnu/libunistring/libunistring-1.1.tar.gz";
-    hash = "sha256-oiUr7uyDCsREufaNazitiD2xmRnbNbUiIs+CfDhb22o=";
+  "zstd-1.5.7.tar.gz" = fetchurl {
+    url = "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz";
+    hash = "sha256-6zPlH0mhXgI5UM14Jcp0pKK0Pbg1SCWsJPwbfuCeb6M=";
   };
 
   "libidn2-2.3.7.tar.gz" = fetchurl {

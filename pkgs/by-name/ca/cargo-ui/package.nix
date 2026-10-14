@@ -16,12 +16,12 @@
   libxcb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-ui";
   version = "0.3.3";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-M/ljgtTHMSc7rY/a8CpKGNuOSdVDwRt6+tzPPHdpKOw=";
   };
 
@@ -61,10 +61,12 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "GUI for Cargo";
     mainProgram = "cargo-ui";
     homepage = "https://github.com/slint-ui/cargo-ui";
-    changelog = "https://github.com/slint-ui/cargo-ui/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/slint-ui/cargo-ui/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       asl20
@@ -74,4 +76,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

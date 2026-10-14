@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-responses";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "pytest-responses";
     tag = version;
-    hash = "sha256-6QAiNWCJbo4rmaByrc8VNw39/eF3uqFOss3GJuCvpZg=";
+    hash = "sha256-sn11MX5nab6dDhgZkV/cy4yGnOhB2MyrC+l/RGKEU/8=";
   };
 
   build-system = [ setuptools ];

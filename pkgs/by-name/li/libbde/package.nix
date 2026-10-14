@@ -2,7 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  fuse,
+  fuse3,
+  macfuse-stubs,
+  pkg-config,
   ncurses,
   python3,
   nix-update-script,
@@ -17,10 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-La6rzBOfyBIXDn78vXb8GUt8jgQkzsqM38kRZ7t3Fp0=";
   };
 
+  nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
-    fuse
     ncurses
     python3
+    (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3)
   ];
 
   preInstall = ''

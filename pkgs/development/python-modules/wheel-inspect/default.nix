@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "wheel-inspect";
-  version = "1.7.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "wheel-inspect";
     tag = "v${version}";
-    hash = "sha256-Mdw9IlY/2qDlb5FumNH+VHmg7vrUzo3vn+03QsUGgo8=";
+    hash = "sha256-yECgJLShCLiEyZmw9azNP5lwLeas10AfRu/RVMQGejg=";
   };
 
   pythonRelaxDeps = [

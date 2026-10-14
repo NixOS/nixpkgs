@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "navicat-premium";
   version = "17.3.7";
 
-  src = appimageTools.extractType2 {
+  src = appimageTools.extract {
     inherit (finalAttrs) pname version;
     src =
       {

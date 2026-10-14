@@ -69,10 +69,14 @@ buildEnv {
     touch $out/.octave_packages
     for path in ${lib.concatStringsSep " " packages}; do
         if [ -e $path/*.tar.gz ]; then
+           # Glob-match here so that we grab the paths of all tarballs produced
+           # by "octave build" in buildOctavePackage's buildPhase. We can then
+           # Use this list later.
+           pkg_tarballs=($path/*.tar.gz)
            $out/bin/octave-cli --eval "pkg local_list $out/.octave_packages; \
                                        pkg prefix $out/${octave.octPkgsPath} $out/${octave.octPkgsPath}; \
                                        pfx = pkg (\"prefix\"); \
-                                       pkg install -nodeps -local $path/*.tar.gz"
+                                       pkg install -nodeps -local $pkg_tarballs"
         fi
     done
 

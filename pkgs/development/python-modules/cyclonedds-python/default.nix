@@ -8,26 +8,33 @@
   rich-click,
 
   pytestCheckHook,
+  pytest-asyncio,
   pytest-mock,
   pytest-cov-stub,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedds-python";
-  version = "0.10.5";
+  version = "11.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds-python";
     tag = version;
-    hash = "sha256-MN3Z5gqsD+cr5Awmsia9+uCHL/a2KQP2uMS13rVc1Hw=";
+    hash = "sha256-kHAk2cJOMkCcP4Zje28Ew0B1/dHCJsz5KC5SJqXJj2o=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
         --replace-fail "pytest-cov" ""
   '';
+
+  disabledTests = lib.optionals (!pythonOlder "3.13") [
+    "test_dynamic_subscribe_complex"
+    "test_dynamic_publish_complex"
+  ];
 
   build-system = [ setuptools ];
 
@@ -36,12 +43,18 @@ buildPythonPackage rec {
   dependencies = [ rich-click ];
 
   env.CYCLONEDDS_HOME = "${cyclonedds.out}";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-mock
     pytest-cov-stub
   ];
+
+  disabled = (!pythonOlder "3.14");
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Python binding for Eclipse Cyclone DDS";

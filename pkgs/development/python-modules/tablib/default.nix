@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "tablib";
-  version = "3.8.0";
+  version = "3.10.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lNi83GWnFaACSm1bcBpfMeRb0VkmnmLHNzHeefBI2ys=";
+    hash = "sha256-eBz6mkLejzPFKv+Ff9CgTkg95P0cU+qqmmrqxiutEd4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

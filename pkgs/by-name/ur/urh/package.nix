@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   postInstall = ''
-    install -Dm644 data/icons/appicon.png $out/share/pixmaps/urh.png
+    install -Dm644 data/icons/appicon.png $out/share/icons/hicolor/512x512/apps/urh.png
   '';
 
   meta = {

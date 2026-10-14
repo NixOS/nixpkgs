@@ -6,12 +6,12 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "movine";
   version = "0.11.4";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-wa2GfV2Y8oX8G+1LbWnb2KH/+QbUYL9GXgOOVHpzbN8=";
   };
 
@@ -49,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     '';
     maintainers = with lib.maintainers; [ netcrns ];
   };
-}
+})

@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "cnquery";
-  version = "12.22.0";
+  version = "12.23.1";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
-    repo = "cnquery";
+    repo = "mql";
     tag = "v${version}";
-    hash = "sha256-RauEf78cTRPHSmisDus/5XoROZp5VpZL0mKPXbRoPCw=";
+    hash = "sha256-CTg2jfpCLTYuRx5R+9Si0Ig1NT1ZGXMFbcPPa8CbMKY=";
   };
 
   subPackages = [ "apps/cnquery" ];
 
-  vendorHash = "sha256-Hh6dsxelPuuU7ISa2E396iUUrYdttG2HdxnBxYlXcis=";
+  vendorHash = "sha256-yL34BgWzDrd4SxJvij56cmnfY51uJ/ax+ENtdUxS0aw=";
 
   ldflags = [
     "-w"
@@ -32,7 +32,7 @@ buildGoModule rec {
       accounts, Kubernetes, containers, services, VMs, APIs, and more.
     '';
     homepage = "https://mondoo.com/cnquery";
-    changelog = "https://github.com/mondoohq/cnquery/releases/tag/v${version}";
+    changelog = "https://github.com/mondoohq/mql/releases/tag/v${version}";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [ mariuskimmina ];
   };

@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pgit";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "picosh";
     repo = "pgit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-81ZiaY973+mGnYbDX+6fhe9NTYjQhWsvdpW0v42pasw=";
+    hash = "sha256-W+vnlplSVV1oZYQ4Fw4gfm0c1CP3fj9tXmqUmk5EhrI=";
   };
 
   vendorHash = "sha256-in8GVcOlGsvmcbegJmYwvE0AVJhVJ83x1v3ymV0uTpg=";
@@ -32,8 +32,7 @@ buildGoModule (finalAttrs: {
         echo "Read me please" > README
         ${lib.getExe git} add README
         ${lib.getExe git} commit -m "First commit"
-        ${lib.getExe pgit} -desc "The description" -revs smoke -repo . -out ./public
-        grep "The description" ./public/index.html
+        ${lib.getExe pgit} -revs smoke -repo . -out ./public
         grep "First commit" ./public/logs/smoke/index.html
         grep "Read me please" ./public/tree/smoke/item/README.html
         touch $out

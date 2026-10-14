@@ -1,11 +1,12 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   intel-gmmlib,
-  intel-graphics-compiler,
   level-zero,
   libva,
   gitUpdater,
@@ -13,6 +14,8 @@
 
 let
   inherit (lib) cmakeBool;
+  # intel-graphics-compiler >= 2.36 does no longer support 8th Gen
+  intel-graphics-compiler = callPackage ./intel-graphics-compiler.nix { };
 in
 stdenv.mkDerivation (finalAttrs: {
   # https://github.com/intel/compute-runtime/blob/master/LEGACY_PLATFORMS.md
@@ -41,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://github.com/intel/compute-runtime/pull/879
     ./add-cstdint-include-gcc15.patch
+    # https://github.com/intel/compute-runtime/commit/c1eb6c1a183c2f69e0d6e9ed5aa042fac2201217
+    (fetchpatch {
+      url = "https://github.com/intel/compute-runtime/commit/c1eb6c1a183c2f69e0d6e9ed5aa042fac2201217.patch";
+      hash = "sha256-O8ZJaxIr4TF73T+fyEbNjEYFbgwLxIUWoYnorxh8ZTo=";
+    })
   ];
 
   cmakeFlags = [

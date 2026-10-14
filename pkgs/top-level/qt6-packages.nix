@@ -42,6 +42,7 @@ makeScopeWithSplicing' {
     // {
 
       # LIBRARIES
+      accounts-qml-module = callPackage ../development/libraries/accounts-qml-module { };
       accounts-qt = callPackage ../development/libraries/accounts-qt { };
       appstream-qt = callPackage ../development/libraries/appstream/qt.nix { };
 
@@ -53,7 +54,7 @@ makeScopeWithSplicing' {
 
       fcitx5-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-qt.nix { };
 
-      fcitx5-skk-qt = callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { enableQt = true; };
+      fcitx5-skk-qt = pkgs.fcitx5-skk.override { enableQt = true; };
 
       fcitx5-unikey = callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
 
@@ -67,6 +68,8 @@ makeScopeWithSplicing' {
       futuresql = callPackage ../development/libraries/futuresql { };
       kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
 
+      ktactilefeedback = kdePackages.callPackage ../development/libraries/ktactilefeedback { };
+
       libiodata = callPackage ../development/libraries/libiodata { };
 
       libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
@@ -75,16 +78,24 @@ makeScopeWithSplicing' {
 
       libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
-      libquotient = callPackage ../development/libraries/libquotient { };
-      mlt = pkgs.mlt.override {
-        qt = qt6;
+      libqtdbusmock = callPackage ../development/libraries/libqtdbusmock {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
       };
+
+      libqtdbustest = callPackage ../development/libraries/libqtdbustest {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
+
+      libquotient = callPackage ../development/libraries/libquotient { };
+      mlt = callPackage ../by-name/ml/mlt/package.nix { };
+
+      mapbox-gl-qml = callPackage ../development/libraries/mapbox-gl-qml { };
 
       maplibre-native-qt = callPackage ../development/libraries/maplibre-native-qt { };
 
-      qca = callPackage ../development/libraries/qca {
-        inherit (qt6) qtbase qt5compat;
-      };
+      pyotherside = callPackage ../development/libraries/pyotherside { };
+
+      qca = callPackage ../development/libraries/qca { };
       qcoro = callPackage ../development/libraries/qcoro { };
       qcustomplot = callPackage ../development/libraries/qcustomplot { };
       qgpgme = callPackage ../development/libraries/qgpgme { };
@@ -92,11 +103,13 @@ makeScopeWithSplicing' {
       qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
       packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
+      qmenumodel = callPackage ../development/libraries/qmenumodel {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
+
       qodeassist-plugin = callPackage ../development/libraries/qodeassist-plugin { };
 
       qt6ct = callPackage ../tools/misc/qt6ct { };
-
-      qt6gtk2 = callPackage ../tools/misc/qt6gtk2 { };
 
       qt-color-widgets = callPackage ../development/libraries/qt-color-widgets { };
 
@@ -118,10 +131,6 @@ makeScopeWithSplicing' {
 
       qtspell = callPackage ../development/libraries/qtspell { };
 
-      qwlroots = callPackage ../development/libraries/qwlroots {
-        wlroots = pkgs.wlroots_0_18;
-      };
-
       qwt = callPackage ../development/libraries/qwt/default.nix { };
 
       qxlsx = callPackage ../development/libraries/qxlsx { };
@@ -138,8 +147,8 @@ makeScopeWithSplicing' {
         callPackage ../development/libraries/sailfish-access-control-plugin
           { };
 
-      sddm-unwrapped = kdePackages.callPackage ../applications/display-managers/sddm/unwrapped.nix { };
-      sddm = kdePackages.callPackage ../applications/display-managers/sddm { };
+      sddm-unwrapped = callPackage ../applications/display-managers/sddm/unwrapped.nix { };
+      sddm = callPackage ../applications/display-managers/sddm { };
 
       sierra-breeze-enhanced =
         kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced
@@ -149,9 +158,18 @@ makeScopeWithSplicing' {
 
       timed = callPackage ../applications/system/timed { };
 
-      waylib = callPackage ../development/libraries/waylib { };
-
       wayqt = callPackage ../development/libraries/wayqt { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      qt6gtk2 = throw "'qt6Packages.qt6gtk2' has been removed, as it relies on gtk2 libraries"; # Added 2026-09-21
+      qwlroots = throw ''
+        'qt6Packages.qwlroots' has been removed because it has been merged into treeland upstream.
+        The upstream no longer provides it as a standalone development library.
+      ''; # Added 2025-02-07
+      waylib = throw ''
+        'qt6Packages.waylib' has been removed because it has been merged into treeland upstream.
+        The upstream no longer provides it as a standalone development library.
+      ''; # Added 2025-02-07
     }
   );
 }

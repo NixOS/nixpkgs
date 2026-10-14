@@ -6,7 +6,6 @@
 
   cmake,
   openssl,
-  pcre,
   util-linux,
   libselinux,
   libsepol,
@@ -33,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "symless";
-    repo = "synergy-core";
-    rev = finalAttrs.version;
+    repo = "synergy";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
     fetchSubmodules = true;
   };
@@ -42,6 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
     ./darwin-non-static-openssl.patch
+
+    # This missing include broke the build on GCC 15
+    # This can be removed once we switch to a newer version
+    ./include_cstdint.patch
   ];
 
   postPatch = ''
@@ -65,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libsForQt5.qttools # Used for translations even when not building the GUI
     openssl
-    pcre
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux
@@ -138,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Share one mouse and keyboard between multiple computers";
     homepage = "https://symless.com/synergy";
-    changelog = "https://github.com/symless/synergy-core/blob/${finalAttrs.version}/ChangeLog";
+    changelog = "https://github.com/symless/synergy/blob/${finalAttrs.version}/ChangeLog";
     mainProgram = lib.optionalString (!withGUI) "synergyc";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ talyz ];

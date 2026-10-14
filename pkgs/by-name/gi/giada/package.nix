@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "giada";
-  version = "1.3.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = "giada";
     tag = finalAttrs.version;
-    hash = "sha256-MIGDaZLSwSIIZ2vXYuhGur0Ya1HX2yhrhafAawqU/+A=";
+    hash = "sha256-AceH2FO75WF/Cmk3wd6u495M277iuZp/21nBl3K4jHU=";
     fetchSubmodules = true;
   };
 
@@ -44,6 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-w"
     "-Wno-error"
   ];
+
+  # fmt 12.2.0 made <fmt/core.h> a shim for <fmt/base.h>, which no longer
+  # declares fmt::format.
+  patches = [ ./fmt-12-format-header.patch ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_BINDIR=bin"

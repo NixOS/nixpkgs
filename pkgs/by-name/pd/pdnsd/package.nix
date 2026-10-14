@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--enable-ipv6" ];
 
   # fix ipv6 on darwin
-  CPPFLAGS = "-D__APPLE_USE_RFC_3542";
+  env.CPPFLAGS = "-D__APPLE_USE_RFC_3542";
 
   meta = {
     description = "Permanent DNS caching";

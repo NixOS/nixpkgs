@@ -1,0 +1,10 @@
+--- a/src/cartridge.cpp
++++ b/src/cartridge.cpp
+@@ -7,6 +7,7 @@
+ #include <cstring>
+ #include <algorithm>
+ #include <memory>
++#include <cstdint>
+ 
+ const uint32_t CARTRIDGE_NB_PAGES = 32;
+ const uint32_t CARTRIDGE_PAGE_SIZE = 16*1024;

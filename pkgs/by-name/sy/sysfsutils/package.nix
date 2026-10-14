@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://linux-diag.sourceforge.net/Sysfsutils.html";
     longDescription = ''
-      These are a set of utilites built upon sysfs, a new virtual
+      These are a set of utilities built upon sysfs, a new virtual
       filesystem in Linux kernel versions 2.5+ that exposes a system's
       device tree.
     '';

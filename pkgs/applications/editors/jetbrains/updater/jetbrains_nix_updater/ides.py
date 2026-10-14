@@ -22,43 +22,33 @@ class Ide:
     update_info: UpdateInfo | None
 
 
-def is_source_ide(drv_path: Path):
-    assert " " not in str(drv_path)
-    try:
-        return (
-            run_command(
-                [
-                    "nix-instantiate",
-                    "--eval",
-                    "-E",
-                    f'builtins.hasAttr "mkJetBrainsSource" (builtins.functionArgs (import {drv_path}))',
-                ]
-            )
-            == "true"
-        )
-    except CalledProcessError as ex:
-        print(f"Failed to eval {drv_path}: {ex.stderr}", file=sys.stderr)
-        exit(1)
+def by_name_path(ide_name: str, nixpkgs_root: Path) -> Path:
+    by_name_stem = ide_name[0:2]
+    return nixpkgs_root / "pkgs" / "by-name" / by_name_stem / ide_name
 
 
-def get_single_ide(update_info: dict[str, UpdateInfo], jb_root: Path, name: str) -> Ide:
-    drv_path = jb_root / "ides" / f"{name}.nix"
+def is_source_ide(ide_name: str):
+    return ide_name.endswith("-oss")
+
+
+def get_single_ide(update_info: dict[str, UpdateInfo], nixpkgs_root: Path, name: str) -> Ide:
+    drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
     if not drv_path.exists():
         raise Exception(f"IDE not found at {drv_path}")
     return Ide(
         name=name,
         drv_path=drv_path,
-        is_source=is_source_ide(drv_path),
+        is_source=is_source_ide(name),
         update_info=update_info.get(name),
     )
 
 
-def get_all_ides(update_info: dict[str, UpdateInfo], jb_root: Path) -> Iterable[Ide]:
-    for file in sorted((jb_root / "ides").iterdir()):
-        if file.suffix == ".nix":
-            yield Ide(
-                name=file.stem,
-                drv_path=file,
-                is_source=is_source_ide(file),
-                update_info=update_info.get(file.stem),
-            )
+def get_all_ides(update_info: dict[str, UpdateInfo], nixpkgs_root: Path) -> Iterable[Ide]:
+    for name, update_info in update_info.items():
+        drv_path = by_name_path(name, nixpkgs_root) / "package.nix"
+        yield Ide(
+            name=name,
+            drv_path=drv_path,
+            is_source=is_source_ide(name),
+            update_info=update_info,
+        )

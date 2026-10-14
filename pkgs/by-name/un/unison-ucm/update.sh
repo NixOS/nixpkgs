@@ -28,7 +28,6 @@ sed -i "s/version = \"$current_version\";/version = \"$version\";/" package.nix
 # Define platforms and their corresponding URL suffixes
 declare -A platforms=(
     ["aarch64-darwin"]="ucm-macos-arm64.tar.gz"
-    ["x86_64-darwin"]="ucm-macos-x64.tar.gz"
     ["aarch64-linux"]="ucm-linux-arm64.tar.gz"
     ["x86_64-linux"]="ucm-linux-x64.tar.gz"
 )

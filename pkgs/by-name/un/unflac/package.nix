@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "~ft";
     repo = "unflac";
     rev = finalAttrs.version;
-    sha256 = "sha256-1Mpo1eBjfAudl7Lc6DUstEnWlY6G4ZFT9jm9JoWxPlk=";
+    hash = "sha256-1Mpo1eBjfAudl7Lc6DUstEnWlY6G4ZFT9jm9JoWxPlk=";
   };
 
   vendorHash = "sha256-rq+qfUiR8WJRyoLH/UQVKAorDmrbhHfNYRz6bL4uub4=";

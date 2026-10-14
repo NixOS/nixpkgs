@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "--with-gtk3"
   ];
 
-  CFLAGS = [
+  env.CFLAGS = toString [
     "-DSCM_DEBUG_TYPING_STRICTNESS=2"
   ];
 

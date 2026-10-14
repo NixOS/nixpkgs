@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  pbr,
+  hatchling,
+  hatch-vcs,
   fixtures,
   testtools,
   pytestCheckHook,
@@ -11,23 +11,19 @@
 
 buildPythonPackage rec {
   pname = "testresources";
-  version = "2.0.2";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "testing-cabal";
     repo = "testresources";
     tag = version;
-    hash = "sha256-cdZObOgBOUxYg4IGUUMb6arlpb6NTU7w+EW700LKH4Y=";
+    hash = "sha256-CLo0b0V1fXQQFHDn/rYAmZy4ifzMEnFv26opmvn6TdQ=";
   };
 
   build-system = [
-    setuptools
-    pbr
-  ];
-
-  dependencies = [
-    pbr
+    hatchling
+    hatch-vcs
   ];
 
   nativeCheckInputs = [
@@ -35,8 +31,6 @@ buildPythonPackage rec {
     testtools
     pytestCheckHook
   ];
-
-  env.PBR_VERSION = version;
 
   meta = {
     description = "Pyunit extension for managing expensive test resources";

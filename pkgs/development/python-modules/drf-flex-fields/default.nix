@@ -39,7 +39,10 @@ buildPythonPackage rec {
     hash = "sha256-+9ToxCEIDpsA+BK8Uk0VueVjoId41/S93+a716EGvCU=";
   };
 
-  patches = [ ./django4-compat.patch ];
+  patches = [
+    ./django4-compat.patch
+    ./drf-3.17-compat.patch
+  ];
 
   build-system = [ setuptools ];
 

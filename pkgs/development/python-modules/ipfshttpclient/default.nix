@@ -4,7 +4,7 @@
   fetchFromGitHub,
   flit-core,
   python,
-  py-multiaddr,
+  multiaddr,
   requests,
   pytestCheckHook,
   pytest-cov-stub,
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
-    py-multiaddr
+    multiaddr
     requests
   ];
 

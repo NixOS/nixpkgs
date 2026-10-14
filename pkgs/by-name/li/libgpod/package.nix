@@ -15,10 +15,7 @@
   gdk-pixbuf,
   taglib,
   libimobiledevice,
-  monoSupport ? false,
-  mono,
   udevCheckHook,
-  gtk-sharp-2_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,10 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-hal"
     "--enable-udev"
     "--with-udev-dir=${placeholder "out"}/lib/udev"
-  ]
-  ++ lib.optionals monoSupport [ "--with-mono" ];
-
-  dontStrip = monoSupport;
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -72,16 +66,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ (with perlPackages; [
     perl
     XMLParser
-  ])
-  ++ lib.optional monoSupport mono;
+  ]);
 
   buildInputs = [
     libxml2
     sg3_utils
     sqlite
     taglib
-  ]
-  ++ lib.optional monoSupport gtk-sharp-2_0;
+  ];
 
   propagatedBuildInputs = [
     gdk-pixbuf

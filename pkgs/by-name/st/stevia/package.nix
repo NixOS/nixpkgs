@@ -20,19 +20,22 @@
   json-glib,
   libhandy,
   libxkbcommon,
-  systemd,
+  systemdLibs,
   nix-update-script,
+  dconf,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "stevia";
-  version = "0.52.1";
+  version = "0.54.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World/Phosh";
     repo = "stevia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GdAKy7F8SRGtfmN6as6AAg6p/WJrcDPp338OHUXoORM=";
+    hash = "sha256-eCM2PSn0sDnL7iDbgt6phQsGmdeBfkVjOkxt42WxyXo=";
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/485701
+    forceFetchGit = true;
   };
 
   mesonFlags = [
@@ -66,7 +69,8 @@ stdenv.mkDerivation (finalAttrs: {
     json-glib
     libhandy
     libxkbcommon
-    systemd
+    systemdLibs
+    dconf
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -75,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "User friendly on screen keyboard for Phosh";
     homepage = "https://gitlab.gnome.org/World/Phosh/stevia";
     changelog = "https://gitlab.gnome.org/World/Phosh/stevia/-/releases/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       ungeskriptet

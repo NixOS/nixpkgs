@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     description = "Pseudorandom Number Sequence Test Program";
     homepage = "https://www.fourmilab.ch/random/";
     platforms = lib.platforms.all;
-    license = lib.licenses.publicDomain;
+    license = lib.licenses.cc-by-sa-40;
     mainProgram = "ent";
   };
 }

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vokoscreen-ng";
-  version = "4.8.3";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "vkohaupt";
     repo = "vokoscreenNG";
     tag = finalAttrs.version;
-    hash = "sha256-D2E4G6rq6kFZbwjYhoccl/aROCdpuS8UJu0JKGc8wKU=";
+    hash = "sha256-Sp6MHX9+VHdWEG/lspoTnJCPr+J3rAHgSPgvTR+xqqQ=";
   };
 
   qmakeFlags = [ "src/vokoscreenNG.pro" ];

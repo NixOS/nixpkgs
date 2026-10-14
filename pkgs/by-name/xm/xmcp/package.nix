@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   version = "0-unstable-2020-10-10";
 
   src = fetchFromGitHub {
-    owner = "blblapco";
+    owner = "glblapco";
     repo = "xmcp";
     rev = "ee56225f1665f9edc04fe5c165809f2fe160a420";
     sha256 = "sha256-B3YkYrVEg6UJ2ApaVook4N2XvrCboxDMUG5CN9I79Sg=";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tiny color picker for X11";
-    homepage = "https://github.com/blblapco/xmcp";
+    homepage = "https://github.com/glblapco/xmcp";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;

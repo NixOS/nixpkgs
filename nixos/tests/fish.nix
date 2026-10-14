@@ -7,7 +7,9 @@
     {
       programs.fish.enable = true;
       environment.systemPackages = with pkgs; [
-        coreutils
+        # coreutils-full (not coreutils) so that man pages are available
+        # for completion generation
+        coreutils-full
         procps # kill collides with coreutils' to test https://github.com/NixOS/nixpkgs/issues/56432
       ];
 
@@ -19,7 +21,7 @@
     #python
     ''
       start_all()
-      machine.wait_for_file("/etc/fish/generated_completions/coreutils.fish")
+      machine.wait_for_file("/etc/fish/generated_completions/chmod.fish")
       machine.wait_for_file("/etc/fish/generated_completions/kill.fish")
       machine.succeed(
           "fish -ic 'echo $fish_complete_path' | grep -q '/share/fish/vendor_completions.d /etc/fish/generated_completions /root/.cache/fish/generated_completions$'"

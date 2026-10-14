@@ -10,7 +10,7 @@
   lxqt-build-tools,
   lxqt-globalkeys,
   muparser,
-  pcre,
+  pcre2,
   pkg-config,
   qtbase,
   qtsvg,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxqt-runner";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-runner";
     rev = version;
-    hash = "sha256-h+pZiSuCdQknsyfUb9Ve1yxVyOUqNgYhIpO7kD5z3pQ=";
+    hash = "sha256-L/9STKrYTZP/Ey1BCLaZFRdeipBAWdKkXIoiHvd3vq4=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libqtxdg
     lxqt-globalkeys
     muparser
-    pcre
+    pcre2
     qtbase
     qtsvg
     qtwayland

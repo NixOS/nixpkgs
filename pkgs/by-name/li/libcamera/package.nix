@@ -10,6 +10,7 @@
   libdrm,
   libevent,
   libyaml,
+  libyuv,
   gst_all_1,
   gtest,
   graphviz,
@@ -18,21 +19,26 @@
   python3Packages,
   udev,
   libpisp,
+  libglvnd,
   withTracing ? lib.meta.availableOn stdenv.hostPlatform lttng-ust,
   lttng-ust, # withTracing
-  withQcam ? false,
-  qt6, # withQcam
-  libtiff, # withQcam
+  withSoftispGPU ? true, # software ISP GPU acceleration
+  withQcam ? false, # cannot be enabled per default as it causes infinite recursion
+  # withQcam
+  qt6,
+  libjpeg,
+  libtiff,
+  SDL2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-zGcbzL1Q2hUaj/s9NjBlp7hVjmSFb0GF8CnCoDS82Tw=";
+    hash = "sha256-vhFkeT1j2KKm+CVvGrtH5BEYJSEdaX7N7DRdA0a9EWk=";
   };
 
   outputs = [
@@ -80,6 +86,8 @@ stdenv.mkDerivation rec {
     # pycamera
     python3Packages.pybind11
 
+    libyuv
+
     # yamlparser
     libyaml
 
@@ -87,10 +95,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch [ libpisp ]
   ++ lib.optionals withTracing [ lttng-ust ]
+  ++ lib.optionals withSoftispGPU [ libglvnd ]
   ++ lib.optionals withQcam [
+    libjpeg
     libtiff
     qt6.qtbase
     qt6.qttools
+    SDL2
   ];
 
   nativeBuildInputs = [
@@ -109,25 +120,36 @@ stdenv.mkDerivation rec {
   ++ lib.optional withQcam qt6.wrapQtAppsHook;
 
   mesonFlags = [
-    "-Dv4l2=true"
+    (lib.mesonEnable "v4l2" true)
     (lib.mesonEnable "tracing" withTracing)
     (lib.mesonEnable "qcam" withQcam)
-    "-Dlibunwind=disabled"
-    "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
+    (lib.mesonEnable "apps-output-dng" withQcam)
+    (lib.mesonEnable "cam-output-sdl2" withQcam)
+    (lib.mesonEnable "cam-jpeg" withQcam)
+    (lib.mesonEnable "softisp-gpu" withSoftispGPU)
+    (lib.mesonEnable "libunwind" false)
+    (lib.mesonEnable "libdw" false)
+    (lib.mesonEnable "lc-compliance" false) # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
-    "-Dwerror=false"
+    (lib.mesonBool "werror" false)
     # Documentation breaks binary compatibility.
     # Given that upstream also provides public documentation,
     # we can disable it here.
-    "-Ddocumentation=disabled"
+    (lib.mesonEnable "documentation" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch [
+    # we don't have tensorflow-lite to build this
+    (lib.mesonEnable "rpi-awb-nn" false)
   ];
 
-  # Fixes error on a deprecated declaration
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env = {
+    # Fixes error on a deprecated declaration
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+    # Silence fontconfig warnings about missing config
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  };
 
   meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";

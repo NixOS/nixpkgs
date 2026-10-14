@@ -217,7 +217,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 `buildArgs` (Attribute Set)
 
 : The argument passed to `buildImage` itself.
-  This allows you to inspect all attributes specified in the argument, as described above.
+  This exposes all attributes specified in the argument, as described above.
 
 `layer` (Attribute Set)
 
@@ -228,7 +228,7 @@ Similarly, if you encounter errors similar to `Error_Protocol ("certificate has 
 
 : The tag of the generated image.
   This is useful if no tag was specified in the attributes of the argument to `buildImage`, because an automatic tag will be used instead.
-  `imageTag` allows you to retrieve the value of the tag used in this case.
+  `imageTag` contains the value of the tag used in this case.
 
 ### Examples {#ssec-pkgs-dockerTools-buildImage-examples}
 
@@ -657,7 +657,7 @@ This allows the function to produce reproducible images.
 
 : The tag of the generated image.
   This is useful if no tag was specified in the attributes of the argument to the function, because an automatic tag will be used instead.
-  `imageTag` allows you to retrieve the value of the tag used in this case.
+  `imageTag` contains the value of the tag used in this case.
 
 ### Examples {#ssec-pkgs-dockerTools-streamLayeredImage-examples}
 

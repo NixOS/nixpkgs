@@ -2,50 +2,58 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   cmake,
   pkg-config,
   docutils,
   pandoc,
-  ethtool,
-  iproute2,
   libnl,
   udev,
   udevCheckHook,
   python3,
   perl,
+  withManPages ? !stdenv.hostPlatform.isi686,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "61.0";
+  version = "65.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5CmQvS1M3zJryJu4hAf8JrCOPTkmxJijmLEnrWzH+d4=";
+    hash = "sha256-cAaWVE6/JU8ezjx+XrxNI6Su6VKxb2Jxl29sxU/yepI=";
   };
 
+  __structuredAttrs = true;
   strictDeps = true;
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals withManPages [
     "man"
+  ]
+  ++ [
     "dev"
+    "scripts"
   ];
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ lib.optionals withManPages [
     docutils
     pandoc
+  ]
+  ++ [
     pkg-config
     python3
     udevCheckHook
   ];
 
   buildInputs = [
-    ethtool
-    iproute2
     libnl
     perl
     udev
@@ -54,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_INSTALL_RUNDIR=/run"
     "-DCMAKE_INSTALL_SHAREDSTATEDIR=/var/lib"
+    "-DSYSUSERS_DIR=${placeholder "out"}/lib/sysusers.d"
+  ]
+  ++ lib.optionals (!withManPages) [
+    "-DNO_MAN_PAGES=1"
   ];
 
   postPatch = ''
@@ -63,25 +75,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     # cmake script is buggy, move file manually
-    mkdir -p $out/${perl.libPrefix}
-    mv $out/share/perl5/* $out/${perl.libPrefix}
+    mkdir -p $scripts/${perl.libPrefix}
+    mv $out/share/perl5/* $scripts/${perl.libPrefix}
   '';
 
   postFixup = ''
-    for pls in $out/bin/{ibfindnodesusing.pl,ibidsverify.pl}; do
+    for pls in ibfindnodesusing.pl ibidsverify.pl check_lft_balance.pl; do
       echo "wrapping $pls"
-      substituteInPlace $pls --replace \
-        "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
+      substituteInPlace $out/bin/$pls \
+        --replace-fail "${perl}/bin/perl" "${perl}/bin/perl -I $scripts/${perl.libPrefix}"
+      moveToOutput bin/$pls "$scripts"
     done
   '';
 
   doInstallCheck = true;
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
+  outputChecks.out.disallowedRequisites = [
+    perl
+  ];
 
   meta = {
     description = "RDMA Core Userspace Libraries and Daemons";
     homepage = "https://github.com/linux-rdma/rdma-core";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
     maintainers = [ lib.maintainers.markuskowa ];
   };
 })

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   boost,
   gtest,
@@ -11,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lucene++";
-  version = "3.0.9";
+  version = "3.0.9-unstable-2026-01-25";
 
   src = fetchFromGitHub {
     owner = "luceneplusplus";
     repo = "LucenePlusPlus";
-    rev = "rel_${version}";
-    hash = "sha256-VxEV45OXHRldFdIt2OC6O7ey5u98VQzlzeOb9ZiKfd8=";
+    rev = "f11e0895cf1dd7d6a68a0a736f13414f1e37ef7a";
+    hash = "sha256-3q1iRWTbd+PHIBM5mCfJ1h5ssxBeyao/CkRhyvApND8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,38 +31,7 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ENABLE_TEST" doCheck)
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "fix-build-with-boost-1_85_0.patch";
-      url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/76dc90f2b65d81be018c499714ff11e121ba5585.patch";
-      hash = "sha256-SNAngHwy7yxvly8d6u1LcPsM6NYVx3FrFiSHLmkqY6Q=";
-    })
-    (fetchpatch {
-      name = "fix-install-path-for-liblucene_pc.patch";
-      url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/f40f59c6e169b4e16b7a6439ecb26a629c6540d1.patch";
-      hash = "sha256-YtZMqh/cnkGikatcgRjOWXj570M5ZOnCqgW8/K0/nVo=";
-    })
-    (fetchpatch {
-      name = "migrate-to-boost_asio_io_context.patch";
-      url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/e6a376836e5c891577eae6369263152106b9bc02.patch";
-      hash = "sha256-0mdVvrS0nTxSJXRzVdx2Zb/vm9aVxGfARG/QliRx7tA=";
-    })
-    (fetchpatch {
-      name = "Bump-minimum-required-cmake-version-to-3_10.patch";
-      url = "https://github.com/luceneplusplus/LucenePlusPlus/commit/2857419531c45e542afdc52001a65733f4f9b128.patch";
-      hash = "sha256-qgXnDhJIa32vlw3MRLbOWsBMj67d9n+ZFLn+yHpU9Hk=";
-    })
-  ];
-
-  # Don't use the built in gtest - but the nixpkgs one requires C++14.
-  postPatch = ''
-    substituteInPlace src/test/CMakeLists.txt \
-      --replace-fail "add_subdirectory(gtest)" ""
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
-  '';
-
-  # FIXME: Stuck for several hours after passing 1472 tests
+  # FIXME: 7 tests fail, https://github.com/luceneplusplus/LucenePlusPlus/issues/212
   doCheck = false;
 
   checkPhase = ''

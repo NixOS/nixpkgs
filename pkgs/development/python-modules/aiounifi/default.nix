@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   orjson,
+  pyotp,
   pytest-aiohttp,
   pytest-asyncio,
   pytest-cov-stub,
@@ -15,9 +16,9 @@
   trustme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiounifi";
-  version = "88";
+  version = "97";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -25,14 +26,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "aiounifi";
-    tag = "v${version}";
-    hash = "sha256-nMx2mygHn27Y1LbTZR30lQ5p4LmEt5FxOAKr6rF82JI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dOY+Tps7l/9TybTOzff4DpaA1BvSMYAXDMCySDtX038=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel==0.46.1" "wheel"
+      --replace-fail "setuptools==84.0.0" "setuptools" \
+      --replace-fail "wheel==0.48.0" "wheel"
   '';
 
   build-system = [ setuptools ];
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     orjson
+    pyotp
     segno
   ];
 
@@ -52,14 +54,16 @@ buildPythonPackage rec {
     trustme
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "aiounifi" ];
 
   meta = {
     description = "Python library for communicating with Unifi Controller API";
     homepage = "https://github.com/Kane610/aiounifi";
-    changelog = "https://github.com/Kane610/aiounifi/releases/tag/${src.tag}";
+    changelog = "https://github.com/Kane610/aiounifi/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "aiounifi";
   };
-}
+})

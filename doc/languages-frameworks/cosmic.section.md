@@ -1,36 +1,40 @@
 # COSMIC {#sec-language-cosmic}
 
-## Packaging COSMIC applications {#ssec-cosmic-packaging}
-
 COSMIC (Computer Operating System Main Interface Components) is a desktop environment developed by
 System76, primarily for the Pop!_OS Linux distribution. Applications in the COSMIC ecosystem are
-written in Rust and use libcosmic, which builds on the Iced GUI framework. This section explains
-how to properly package and integrate COSMIC applications within Nix.
+written in Rust and use libcosmic, which builds on the Iced GUI framework.
 
-### libcosmicAppHook {#ssec-cosmic-libcosmic-app-hook}
+## Packaging COSMIC applications {#ssec-cosmic-packaging}
 
-The `libcosmicAppHook` is a setup hook that helps with this by automatically configuring
-and wrapping applications based on libcosmic. It handles many common requirements like:
+### Add the hook to a package {#ssec-cosmic-libcosmic-app-hook}
 
-- Setting up proper linking for libraries that may be dlopen'd by libcosmic/iced apps
-- Configuring XDG paths for settings schemas, icons, and other resources
-- Managing Vergen environment variables for build-time information
-- Setting up Rust linker flags for specific libraries
-
-To use the hook, simply add it to your package's `nativeBuildInputs`:
+Add the hook to `nativeBuildInputs`:
 
 ```nix
 {
-  lib,
   rustPlatform,
+  fetchFromGitHub,
   libcosmicAppHook,
 }:
-rustPlatform.buildRustPackage {
-  # ...
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "cosmic-ext-calculator";
+  version = "0.2.1";
+
+  src = fetchFromGitHub {
+    owner = "cosmic-utils";
+    repo = "calculator";
+    tag = finalAttrs.version;
+    hash = "sha256-t8xuM0B2eh2AbAhDgSOGapTwmmm9eC+wHsqwq4Jn5yU=";
+  };
+
+  cargoHash = "sha256-a4WckNyKXS71dT0uYbO7tUUmD0Dw8vSzrPp29O4aiAk=";
+
   nativeBuildInputs = [ libcosmicAppHook ];
-  # ...
-}
+})
 ```
+
+The hook wraps every executable in the output, sets the search paths
+libcosmic reads at runtime, and links the libraries that libcosmic and Iced load with `dlopen`.
 
 ### Settings fallback {#ssec-cosmic-settings-fallback}
 
@@ -61,8 +65,9 @@ rustPlatform.buildRustPackage {
 }
 ```
 
-Note that `cosmic-settings` is a separate application and not a part of the libcosmic settings
-system itself. It's included by default in `libcosmicAppHook` only to provide these fallback theme
+> [!Note]
+> `cosmic-settings` is a separate application and not a part of the libcosmic settings
+> system itself. It's included by default in `libcosmicAppHook` only to provide these fallback theme
 settings.
 
 ### Icons {#ssec-cosmic-icons}

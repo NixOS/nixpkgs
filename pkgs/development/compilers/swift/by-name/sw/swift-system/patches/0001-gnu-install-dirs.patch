@@ -1,0 +1,23 @@
+From ab44a593012e8092bd17c63aba77641993624f12 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Wed, 17 Dec 2025 20:59:10 -0500
+Subject: [PATCH] gnu-install-dirs
+
+---
+ Sources/CSystem/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Sources/CSystem/CMakeLists.txt b/Sources/CSystem/CMakeLists.txt
+index faf730e..0860dbc 100644
+--- a/Sources/CSystem/CMakeLists.txt
++++ b/Sources/CSystem/CMakeLists.txt
+@@ -16,5 +16,5 @@ install(FILES
+   include/CSystemLinux.h
+   include/CSystemWindows.h
+   include/module.modulemap
+-  DESTINATION include/CSystem)
++  DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+ set_property(GLOBAL APPEND PROPERTY SWIFT_SYSTEM_EXPORTS CSystem)
+-- 
+2.50.1
+

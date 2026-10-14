@@ -14,6 +14,7 @@
   pkg-config,
   callPackage,
   applyPatches,
+  installShellFiles,
 }:
 let
   tusVersion = "0.0.16";
@@ -70,13 +71,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "terminusdb";
-  version = "12.0.2";
+  version = "12.0.6";
 
   src = fetchFromGitHub {
     owner = "terminusdb";
     repo = "terminusdb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l573Drc76KSUXxhdleU/IBscDTul8VtgkZdrRPvNuNc=";
+    hash = "sha256-TxLTPwESQ9pGrm/piWyyTwKlYtVogXRdQjnppvjX8F8=";
     leaveDotGit = true;
     postFetch = ''
       # Will be used for `TERMINUSDB_GIT_HASH`
@@ -89,26 +90,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-zF506S4SiWx/uYyN2Trm4XPVUIU2K/qoNSjfKthLVuw=";
+    hash = "sha256-WymXMJaUKz/IT2gDgQYagin1Sfg1akqCU+mkYUs40Ic=";
   };
 
-  # TODO: remove if/when merged upstream https://github.com/terminusdb/terminusdb/pull/2360
-  patches = [
-    # Avoid building bundled GMP/MPFR/MPC in gmp-mpfr-sys during the Rust build
-    (fetchpatch2 {
-      url = "https://github.com/terminusdb/terminusdb/commit/b84dc6b28ef3fd0ef76db2cf7f69537b95af07cc.patch?full_index=1";
-      hash = "sha256-L3U/MHZgMSoXIy6j+1+gKKY2+2obKgaJ3HdJOoMe2Sw=";
-    })
-  ];
+  postPatch = ''
+    # Fix MAKEFLAGS order in vendored tikv-jemalloc-sys
+    # TODO: remove when tikv-jemalloc-sys 0.6.2+ is released
+    # equivalent to https://github.com/tikv/jemallocator/pull/152
+    substituteInPlace $cargoDepsCopy/*/tikv-jemalloc-sys-*/build.rs \
+      --replace-fail 'format!("{orig_makeflags} {makeflags}")' \
+                     'format!("{makeflags} {orig_makeflags}")'
+
+    # Hardcode terminus_home to a Nix store path that will exist both
+    # at compile time (via the symlink in preBuild) and at runtime.
+    substituteInPlace src/load_paths.pl \
+      --replace-fail "top_level_directory(TopDir)," \
+                     "TopDir = '$out/share/terminusdb',"
+  '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    (with rustPlatform; [
-      cargoSetupHook
-      bindgenHook # provides libclang
-    ])
+    rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook # provides libclang
     cargo
+    installShellFiles
     protobuf
     swi-prologWithDeps
   ];
@@ -120,11 +126,16 @@ stdenv.mkDerivation (finalAttrs: {
     libmpc
   ];
 
-  # Darwin: gmp-mpfr-sys (use-system-libs) runs raw `$CC ... -lgmp` probes without
-  # propagating `CFLAGS`/`CPPFLAGS`, so we must provide include/lib paths via
-  # compiler-native env vars
-  # https://gitlab.com/tspiteri/gmp-mpfr-sys/-/blob/v1.5.3/build.rs#L187
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = {
+    # Use system GMP/MPFR/MPC
+    # Overrides FEATURES ?= in Makefile.rust
+    FEATURES = "--features terminusdb-community/use-system-gmp";
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Darwin: gmp-mpfr-sys (use-system-libs) runs raw `$CC ... -lgmp` probes without
+    # propagating `CFLAGS`/`CPPFLAGS`, so we must provide include/lib paths via
+    # compiler-native env vars
+    # https://gitlab.com/tspiteri/gmp-mpfr-sys/-/blob/v1.5.3/build.rs#L187
     C_INCLUDE_PATH = lib.makeSearchPath "include" [
       (lib.getDev gmp)
       (lib.getDev mpfr)
@@ -146,6 +157,11 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     export TERMINUSDB_GIT_HASH=$(cat $src/COMMIT)
     export TERMINUSDB_JWT_ENABLED=true
+
+    # Point terminus_home at the build directory during compilation
+    # so the Rust dylib and Prolog sources are findable.
+    mkdir -p $out/share/terminusdb
+    ln --symbolic --force --no-target-directory $PWD/src $out/share/terminusdb/src
   '';
 
   # Required for Prolog initialisation
@@ -153,7 +169,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 terminusdb -t $out/bin
+    installBin terminusdb
+    installManPage $src/docs/terminusdb.1
+
+    # Replace with the Nix store source so schema files are findable
+    # at runtime (the build directory no longer exists).
+    ln --symbolic --force --no-target-directory $src/src $out/share/terminusdb/src
     runHook postInstall
   '';
 

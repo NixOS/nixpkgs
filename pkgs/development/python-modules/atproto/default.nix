@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "atproto";
-  version = "0.0.65";
+  version = "0.0.69";
   pyproject = true;
 
   # use GitHub, pypi does not include tests
@@ -33,10 +33,10 @@ buildPythonPackage rec {
     owner = "MarshalX";
     repo = "atproto";
     tag = "v${version}";
-    hash = "sha256-0NogKxYO+lCtNhK2ZWwRLQTV7rHU5Oz+lnE4awsoPsM=";
+    hash = "sha256-BA8gnGVR+vgfwgKHBgq+EDcmycYAVBGu/WWDVMI7gkw=";
   };
 
-  POETRY_DYNAMIC_VERSIONING_BYPASS = version;
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = version;
 
   build-system = [
     poetry-core

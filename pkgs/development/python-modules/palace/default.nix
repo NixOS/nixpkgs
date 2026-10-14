@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "~cnx";
     repo = "palace";
     rev = version;
-    sha256 = "1z0m35y4v1bg6vz680pwdicm9ssryl0q6dm9hfpb8hnifmridpcj";
+    hash = "sha256-kt0Wc3XRQrSug6k2gwH1WetUWWz8AmT+Nm+FTXwZFfw=";
   };
 
   # Nix uses Release CMake configuration instead of what is assumed by palace.

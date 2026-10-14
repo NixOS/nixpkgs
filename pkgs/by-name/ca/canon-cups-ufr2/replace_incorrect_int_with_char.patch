@@ -1,5 +1,5 @@
---- ./cnrdrvcups-lb-6.00/cngplp/cngplpmod/execjob.c	2024-01-08 04:18:42.000000000 +0100
-+++ ./cnrdrvcups-lb-6.00/cngplp/cngplpmod/execjob.c	2024-08-06 17:13:52.234522912 +0200
+--- ./cnrdrvcups-lb-6.20/cngplp/cngplpmod/execjob.c	2024-01-08 04:18:42.000000000 +0100
++++ ./cnrdrvcups-lb-6.20/cngplp/cngplpmod/execjob.c	2024-08-06 17:13:52.234522912 +0200
 @@ -1161,7 +1161,7 @@
  			ptr_param += num;
  			list_num += num;

@@ -20,9 +20,3 @@ get upgraded along with your host system when you run `nixos-rebuild`,
 which is often not what you want. By contrast, in the imperative
 approach, containers are configured and updated independently from the
 host system.
-
-```{=include=} sections
-imperative-containers.section.md
-declarative-containers.section.md
-container-networking.section.md
-```

@@ -8,10 +8,10 @@
   SDL2,
   xercesc,
   openal,
-  lua,
+  lua5_2_compat,
   libvlc,
   libjpeg,
-  wxGTK32,
+  wxwidgets_3_2,
   cppunit,
   ftgl,
   glew,
@@ -35,6 +35,7 @@
   fetchpatch,
 }:
 let
+  lua = lua5_2_compat;
   version = "3.13.0";
   lib-env = buildEnv {
     name = "megaglest-lib-env";
@@ -57,7 +58,7 @@ let
       stdenv.cc.cc
       glew
       libGLU
-      wxGTK32
+      wxwidgets_3_2
     ];
   };
   path-env = buildEnv {
@@ -127,7 +128,7 @@ stdenv.mkDerivation {
     libpng
     libjpeg
     libvlc
-    wxGTK32
+    wxwidgets_3_2
     glib
     cppunit
     fontconfig

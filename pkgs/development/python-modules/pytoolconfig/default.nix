@@ -32,7 +32,7 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  PDM_PEP517_SCM_VERSION = version;
+  env.PDM_PEP517_SCM_VERSION = version;
 
   nativeBuildInputs = [
     pdm-backend

@@ -7,22 +7,15 @@
 
 buildPythonPackage rec {
   pname = "hatch-regex-commit";
-  version = "0.0.3";
+  version = "0.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frankie567";
     repo = "hatch-regex-commit";
     tag = "v${version}";
-    hash = "sha256-E0DIBBaDmTCsZQ41NcjcbzgJ16BwhdexlrGWBdf77oA=";
+    hash = "sha256-xdt3qszigdCudt2+EpUZPkJzL+XQ6TnVEAMm0sV3zwY=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'dynamic = ["version"]' 'version = "${version}"' \
-      --replace-fail ', "hatch-regex-commit"' "" \
-      --replace-fail " --cov-report=term-missing --cov-config=pyproject.toml --cov=hatch_regex_commit --cov=tests" ""
-  '';
 
   build-system = [ hatchling ];
 

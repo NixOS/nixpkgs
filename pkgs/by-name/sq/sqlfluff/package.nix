@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlfluff";
-  version = "4.0.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
     tag = finalAttrs.version;
-    hash = "sha256-hXiy3PGoBe6O9FaACN31Tss3xMBfiw4YuVLxbGi+/tA=";
+    hash = "sha256-Z58+idvOCmNMgfrMnd3wjudDb7BseOZk4ismbwXD57E=";
   };
 
   pythonRelaxDeps = [ "click" ];

@@ -15,7 +15,7 @@ let
     mapAttrsToList
     ;
 
-  portable-lib = import ../portable/lib.nix { inherit lib; };
+  portable-lib = lib.services;
 
   dash =
     before: after:

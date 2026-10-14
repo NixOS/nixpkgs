@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
-  version = "12.26.0";
+  version = "12.28.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_storage_blob";
     inherit version;
-    hash = "sha256-XdfXgkIk994Av+sDJ1NgHJgmVRcwYeJC8Tvm4m141x8=";
+    hash = "sha256-59mOoQgljSmqDvv9WRsuIHX6FyKi+uhpnws8neEe/0E=";
   };
 
   build-system = [ setuptools ];

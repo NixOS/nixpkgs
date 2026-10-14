@@ -11,7 +11,6 @@ let
     mkDefault
     mkIf
     optional
-    readFile
     ;
 in
 
@@ -117,7 +116,8 @@ in
 
   users.groups.google-sudoers = mkIf config.users.mutableUsers { };
 
-  boot.extraModprobeConfig = readFile "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
+  environment.etc."modprobe.d/gce-blacklist.conf".source =
+    "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
 
   environment.etc."sysctl.d/60-gce-network-security.conf".source =
     "${pkgs.google-guest-configs}/etc/sysctl.d/60-gce-network-security.conf";

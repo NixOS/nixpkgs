@@ -9,7 +9,7 @@ appimageTools.wrapAppImage rec {
   pname = "badlion-client";
   version = "4.5.4";
 
-  src = appimageTools.extractType2 {
+  src = appimageTools.extract {
     inherit pname version;
     src = fetchurl {
       name = "badlion-client-linux";
@@ -23,7 +23,7 @@ appimageTools.wrapAppImage rec {
 
   extraInstallCommands = ''
     install -Dm444 ${src}/BadlionClient.desktop $out/share/applications/BadlionClient.desktop
-    install -Dm444 ${src}/BadlionClient.png -t $out/share/icons/hicolor/1024x1024/apps
+    install -Dm444 ${src}/BadlionClient.png -t $out/share/icons
     substituteInPlace $out/share/applications/BadlionClient.desktop \
       --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=badlion-client"
     wrapProgram $out/bin/badlion-client \

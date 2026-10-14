@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   # Allow users set their own list of patches
   inherit patches;
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildInputs = [
     libxcb
     libxcb-keysyms

@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Library to generate text, XML, JSON, and HTML";
+    homepage = "https://github.com/Juniper/libxo";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.reckenrode ];
     platforms = lib.platforms.unix;

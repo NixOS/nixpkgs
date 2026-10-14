@@ -2,20 +2,23 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "ycwd";
-  version = "0-unstable-2025-07-09";
+  version = "0-unstable-2026-05-10";
 
   src = fetchFromGitHub {
     owner = "blinry";
     repo = "ycwd";
-    rev = "5676dafe3700ac76e071424a47407186a08d1c77";
-    hash = "sha256-HFRS+cNHKloASKXB/Tlrvpsmbg78V4lrNx9WehyzMxE=";
+    rev = "6e8b14be2ee1bf6194f69f9e127d21113656c345";
+    hash = "sha256-7NwMeH2QWNOUna/Zu0RGcfLzX/103rN+3xqyQXx+62c=";
   };
 
-  cargoHash = "sha256-HTlIcrn/QtyY2vLxfeC2RXD1mniWYE7m/rV1QBI4PZc=";
+  cargoHash = "sha256-gZpLBsS6b7l5EkPvn5CHqlwfZvKKLIZFMEC51T9GQFU=";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Helps replace xcwd on Wayland compositors";

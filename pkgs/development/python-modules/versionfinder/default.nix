@@ -43,6 +43,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests are out-dated
     "TestFindPipInfo"
+    # Looks for pkg_resources … good luck, bro
+    "test_find_pkg_info"
   ];
 
   pythonImportsCheck = [ "versionfinder" ];

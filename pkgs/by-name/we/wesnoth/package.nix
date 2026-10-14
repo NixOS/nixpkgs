@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  stdenvNoCC,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,7 +8,11 @@
   SDL2_image,
   SDL2_mixer,
   SDL2_net,
+  makeBinaryWrapper,
   SDL2_ttf,
+  sdl3,
+  sdl3-image,
+  sdl3-mixer,
   pango,
   gettext,
   boost186,
@@ -17,18 +20,35 @@
   fribidi,
   dbus,
   libpng,
-  pcre,
   openssl,
   icu,
   lua5_4,
   curl,
   nix-update-script,
+  versionCheckHook,
   enableDevel ? false,
 }:
 
 let
   boost = boost186;
   suffix = lib.optionalString enableDevel "-devel";
+
+  sdl =
+    if enableDevel then
+      [
+        sdl3
+        sdl3-image
+        sdl3-mixer
+      ]
+    else
+      [
+        SDL2
+        SDL2_image
+        SDL2_mixer
+        SDL2_net
+        SDL2_ttf
+      ];
+
   # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
   lua = lua5_4.override {
     postConfigure = ''
@@ -39,7 +59,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth${suffix}";
-  version = if enableDevel then "1.19.20" else "1.18.6";
+  version = if enableDevel then "1.19.28" else "1.18.8";
 
   src = fetchFromGitHub {
     owner = "wesnoth";
@@ -47,22 +67,24 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableDevel then
-        "sha256-G0MsCXZRwryGjl6h9KVtMBsQiljYVInPz6wxSQ0jSyw="
+        "sha256-5S2kgqn+HZIPguQP+FYaK79Cvx0IRnmcGSeWPQflt/g="
       else
-        "sha256-y2ceN7rX8j+pNlaajw32ZxwFrUxqAuILADZvum03NhU=";
+        "sha256-Tgp3y120j5nqoBrDo7D9C0FcVO3TH5lf+/SoCjR+ikc=";
   };
+
+  strictDeps = true;
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/wesnothd${suffix}";
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
   buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_net
-    SDL2_ttf
     pango
     gettext
     boost
@@ -70,15 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
     dbus
     libpng
-    pcre
     openssl
     icu
     lua
     curl
-  ];
+  ]
+  ++ sdl;
 
   cmakeFlags = [
-    "-DENABLE_SYSTEM_LUA=ON"
+    (lib.cmakeBool "ENABLE_SYSTEM_LUA" true)
     "-DBINARY_SUFFIX=${suffix}"
   ];
 
@@ -110,25 +132,24 @@ stdenv.mkDerivation (finalAttrs: {
     echo "APPL????" > "$app_contents/PkgInfo"
     mv $out/bin "$app_contents/MacOS"
     mv $out/share/wesnoth "$app_contents/Resources"
+
     pushd ../projectfiles/Xcode
-    substitute Info.plist "$app_contents/Info.plist" \
-      --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth${suffix} \
-      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth${suffix} \
-      --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
-    cp -r Resources/SDLMain.nib "$app_contents/Resources/"
-    install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
+      substitute Info.plist "$app_contents/Info.plist" \
+        --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth${suffix} \
+        --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth${suffix} \
+        --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
+
+      cp -r Resources/SDLMain.nib "$app_contents/Resources/"
+      install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
     popd
 
     # Make the game and dedicated server binary available for shell users
     mkdir -p "$out/bin"
     ln -s "$app_contents/MacOS/wesnothd${suffix}" "$out/bin/wesnothd${suffix}"
+
     # Symlinking the game binary is unsifficient as it would be unable to
     # find the bundle resources
-    cat << EOF > "$out/bin/wesnoth${suffix}"
-    #!${stdenvNoCC.shell}
-    open -na "$app_bundle" --args "\$@"
-    EOF
-    chmod +x "$out/bin/wesnoth${suffix}"
+    makeBinaryWrapper "$app_bundle/Contents/MacOS/wesnoth${suffix}" "$out/bin/wesnoth${suffix}"
   '';
 
   passthru.updateScript = nix-update-script {
@@ -154,11 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
       reclaim the throne of Wesnoth, or take hand in any number of other
       adventures.
     '';
-
     homepage = "https://www.wesnoth.org/";
     changelog = "https://github.com/wesnoth/wesnoth/blob/${finalAttrs.version}/changelog.md";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      niklaskorz
+      iedame
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "wesnoth${suffix}";
   };

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   makeDesktopItem,
+  copyDesktopItems,
   makeWrapper,
   patchelf,
   fontconfig,
@@ -18,19 +19,20 @@
   libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "IPMIView";
   version = "2.21.0";
   buildVersion = "221118";
 
   src = fetchurl {
-    url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
+    url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${finalAttrs.version}_build.${finalAttrs.buildVersion}_bundleJRE_Linux_x64.tar.gz";
     hash = "sha256-ZN0vadGbjGj9U2wPqvHLjS9fsk3DNCbXoNvzUfnn8IM=";
   };
 
   nativeBuildInputs = [
     patchelf
     makeWrapper
+    copyDesktopItems
   ];
   buildPhase =
     let
@@ -61,21 +63,21 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
-    name = "IPMIView";
-    exec = "IPMIView";
-    desktopName = name;
-    genericName = "Supermicro BMC manager";
-    categories = [ "Network" ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "IPMIView";
+      exec = "IPMIView";
+      desktopName = name;
+      genericName = "Supermicro BMC manager";
+      categories = [ "Network" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
     cp -R . $out/
-
-    ln -s ${desktopItem}/share $out/share
 
     # LD_LIBRARY_PATH: fontconfig is used from java code
     # PATH: iputils is used for ping, and psmisc is for killall
@@ -111,4 +113,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "IPMIView";
   };
-}
+})

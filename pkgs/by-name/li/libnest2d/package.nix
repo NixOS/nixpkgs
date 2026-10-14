@@ -37,7 +37,8 @@ stdenv.mkDerivation {
   ];
   nativeBuildInputs = [ cmake ];
 
-  CLIPPER_PATH = "${clipper.out}";
+  env.CLIPPER_PATH = clipper.out;
+
   cmakeFlags = [ "-DLIBNEST2D_HEADER_ONLY=OFF" ];
 
   meta = {

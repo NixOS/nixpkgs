@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tarantool";
-  version = "3.6.0";
+  version = "3.8.1";
 
   src = fetchFromGitHub {
     owner = "tarantool";
     repo = "tarantool";
     tag = finalAttrs.version;
-    hash = "sha256-fkAjzAS7LV+bME8FeImg1OXNfNhXTH6qb53TzHz4SFY=";
+    hash = "sha256-ZdGbBOp34H+n0DHn+Ocbj2T5Kzta+mQSEhu7pRrQy64=";
     fetchSubmodules = true;
   };
 
@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.tarantool.io/";
     license = lib.licenses.bsd2;
     mainProgram = "tarantool";
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = [ ];
   };
 })

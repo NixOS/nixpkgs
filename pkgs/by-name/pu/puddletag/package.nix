@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
   libsForQt5,
@@ -7,7 +8,6 @@
 
 let
   qt = libsForQt5;
-
 in
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "puddletag";
@@ -33,10 +33,17 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       --replace-fail share/pixmaps share/icons
   '';
 
-  buildInputs = with qt; [
-    qtbase
-    qtwayland
-  ];
+  buildInputs =
+    with qt;
+    [
+      qtbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # Note: after puddletag releases with Qt6,
+      # `qtwayland` can be safely dropped.
+      # Reason: https://github.com/NixOS/nixpkgs/pull/450591
+      qtwayland
+    ];
 
   nativeBuildInputs = with qt; [
     wrapQtAppsHook
@@ -75,6 +82,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       peterhoeg
       dschrempf
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

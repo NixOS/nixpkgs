@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "quart";
-  version = "0.20.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "quart";
     tag = version;
-    hash = "sha256-NApev3nRBS4QDMGq8++rSmK5YgeljkaVAsdezsTbZr4=";
+    hash = "sha256-1rwkrxxk79EB8gkeXNvT2hR37it4H6RqewPxYny/VIs=";
   };
 
   build-system = [ flit-core ];
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
-    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/pallets/quart/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hexa ];
   };

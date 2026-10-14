@@ -8,7 +8,7 @@
   flex,
   libarchive,
   pam,
-  unixODBC,
+  unixodbc,
   jsoncons,
   curl,
   systemdLibs,
@@ -41,7 +41,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libarchive
     pam
-    unixODBC
+    unixodbc
     jsoncons
     curl
     systemdLibs

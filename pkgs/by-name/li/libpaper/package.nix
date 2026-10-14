@@ -6,26 +6,26 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.1.29";
+  version = "2.2.8";
   pname = "libpaper";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/libp/libpaper/libpaper_${finalAttrs.version}.tar.gz";
-    hash = "sha256-JjMOIemjEkZY1RX9hQsM3lRv9C2JsllqUmTF8Wd/BUc=";
+    url = "https://github.com/rrthomas/libpaper/releases/download/v${finalAttrs.version}/libpaper-${finalAttrs.version}.tar.gz";
+    hash = "sha256-HjMFcWkBkYdOykFex2iJ3RG6uYh6IwLWo2Zc0IHE13s=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+
+  strictDeps = true;
 
   # The configure script of libpaper is buggy: it uses AC_SUBST on a headerfile
   # to compile sysconfdir into the library. Autoconf however defines sysconfdir
   # as "${prefix}/etc", which is not expanded by AC_SUBST so libpaper will look
   # for config files in (literally, without expansion) '${prefix}/etc'. Manually
   # setting sysconfdir fixes this issue.
-  preConfigure = ''
-    configureFlagsArray+=(
-      "--sysconfdir=$out/etc"
-    )
-  '';
+  configureFlags = [
+    "--sysconfdir=${placeholder "out"}/etc"
+  ];
 
   # Set the default paper to letter (this is what libpaper uses as default as well,
   # if you call getdefaultpapername()).
@@ -35,10 +35,18 @@ stdenv.mkDerivation (finalAttrs: {
     echo letter > $out/etc/papersize
   '';
 
+  __structuredAttrs = true;
+
   meta = {
+    changelog = "https://github.com/rrthomas/libpaper/releases/tag/v${finalAttrs.version}";
     description = "Library for handling paper characteristics";
-    homepage = "http://packages.debian.org/unstable/source/libpaper";
-    license = lib.licenses.gpl2;
+    homepage = "https://github.com/rrthomas/libpaper";
+    license = with lib.licenses; [
+      gpl2Only
+      gpl3Plus
+      mit
+      publicDomain
+    ];
     platforms = lib.platforms.unix;
   };
 })

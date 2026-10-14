@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.0";
 
   src = fetchgit {
-    url = "https://git.taler.net/merchant.git";
+    url = "https://git-www.taler.net/merchant.git";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-nrXokwZ0IFXAH3B12/FDAhhyE6JAiiJ59cuWLwLM684=";
@@ -112,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       course, this applies mostly for digital goods, as the merchant does not need
       to know the customer's physical address.
     '';
-    homepage = "https://taler.net/";
-    changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
+    homepage = "https://www.taler.net/en/";
+    changelog = "https://git-www.taler.net/merchant.git/tree/ChangeLog?h=v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
     teams = with lib.teams; [ ngi ];

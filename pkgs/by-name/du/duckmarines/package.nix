@@ -4,12 +4,15 @@
   fetchFromGitHub,
   fetchurl,
   love,
-  lua,
+  lua5_2_compat,
   makeWrapper,
   makeDesktopItem,
   strip-nondeterminism,
   zip,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation rec {
   pname = "duckmarines";
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
 
     cp -v duckmarines.love $out/share/games/lovegames/duckmarines.love
 
-    makeWrapper ${love}/bin/love $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
+    makeWrapper ${lib.getExe love} $out/bin/duckmarines --add-flags $out/share/games/lovegames/duckmarines.love
 
     chmod +x $out/bin/duckmarines
     mkdir -p $out/share/applications
@@ -74,7 +77,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Duck-themed action puzzle video game";
-    platforms = lib.platforms.linux;
+    homepage = "https://github.com/SimonLarsen/duckmarines";
+    platforms = love.meta.platforms;
     hydraPlatforms = [ ];
     license = with lib.licenses; [
       # code

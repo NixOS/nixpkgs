@@ -4,35 +4,35 @@
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
-  attrs,
   click,
   click-default-group,
+  cloudpickle,
+  git,
+  msgspec,
+  nbmake,
   networkx,
   optree,
   packaging,
+  pexpect,
   pluggy,
+  pytest-xdist,
+  pytestCheckHook,
   rich,
   sqlalchemy,
-  universal-pathlib,
-  pytestCheckHook,
-  cloudpickle,
-  nbmake,
-  pexpect,
-  pytest-xdist,
   syrupy,
-  git,
+  universal-pathlib,
 }:
 
 buildPythonPackage rec {
   pname = "pytask";
-  version = "0.5.7";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytask-dev";
     repo = "pytask";
     tag = "v${version}";
-    hash = "sha256-qXqmI3IRJUTTsTdLlkjHc5+Vdct4j4MJYgnrRx3gTR8=";
+    hash = "sha256-l7jQAUBb8iW5S8Am2cMCgqYcvtLq8UgEhrCNnSx9N1E=";
   };
 
   build-system = [
@@ -41,27 +41,34 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    attrs
     click
     click-default-group
-    networkx
+    msgspec
     optree
     packaging
     pluggy
     rich
     sqlalchemy
     universal-pathlib
-  ];
+  ]
+  ++ msgspec.optional-dependencies.toml;
+
+  optional-dependencies = {
+    dag = [ networkx ];
+  };
 
   nativeCheckInputs = [
-    pytestCheckHook
     cloudpickle
     git
     nbmake
     pexpect
     pytest-xdist
+    pytestCheckHook
     syrupy
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [ "--snapshot-warn-unused" ];
 
   # The test suite runs the installed command for e2e tests
   preCheck = ''
@@ -73,12 +80,12 @@ buildPythonPackage rec {
     "test_download_file"
     # Racy
     "test_more_nested_pytree_and_python_node_as_return_with_names"
-    # Without uv, subprocess unexpectedly doesn't fail
-    "test_pytask_on_a_module_that_uses_the_functional_api"
     # Timeout
     "test_pdb_interaction_capturing_twice"
     "test_pdb_interaction_capturing_simple"
   ];
+
+  pythonImportsCheck = [ "pytask" ];
 
   meta = {
     description = "Workflow management system that facilitates reproducible data analyses";

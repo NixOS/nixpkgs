@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.13.0";
+  version = "0.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "madpah";
     repo = "requirements-parser";
     tag = "v${version}";
-    hash = "sha256-AwsLcHjPfP+cYpKCQVgIcyzUhnqeIBJ92QLR48E6EtI=";
+    hash = "sha256-Hti1r/OLYHue+c7/TDDRzBgKxJazobZG+aFxK2ok70g=";
   };
 
   build-system = [ poetry-core ];

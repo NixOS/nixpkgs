@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -42,14 +41,39 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.23.2";
+  version = "0.23.8";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-u9wswlFkGpPgJaBwSddnpv49wBAmkKRwWFO5jQ9/twA=";
+    hash = "sha256-bVy/C6ZQdY7LmMW3vxxM5PCEtY/hBqrNsIdGcEulagU=";
   };
+
+  postPatch =
+    # Fix boost 1.89 compatibility
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          "find_package(Boost COMPONENTS thread filesystem system program_options date_time chrono timer serialization REQUIRED)" \
+          "find_package(Boost COMPONENTS thread filesystem program_options date_time chrono timer serialization REQUIRED)"
+    ''
+    # Install headers under CMAKE_INSTALL_INCLUDEDIR so they land in dev, and
+    # the exported targets point there rather than at a stale $out/include.
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          "set(INSTALL_INCLUDE_DIR include/" \
+          "set(INSTALL_INCLUDE_DIR \''${CMAKE_INSTALL_INCLUDEDIR}/"
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -90,8 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions";
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${pcl'}/include/pcl-${lib.versions.majorMinor pcl'.version}")
+    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${lib.getDev pcl'}/include/pcl-${lib.versions.majorMinor pcl'.version}")
   ];
+
+  postInstall = ''
+    moveToOutput "lib/*/*.cmake" "''${!outputDev}"
+  '';
 
   passthru = {
     updateScript = gitUpdater { };
@@ -100,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Real-Time Appearance-Based 3D Mapping";
     homepage = "https://introlab.github.io/rtabmap/";
-    changelog = "https://github.com/introlab/rtabmap/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/introlab/rtabmap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ marius851000 ];
     platforms = with lib.platforms; linux;

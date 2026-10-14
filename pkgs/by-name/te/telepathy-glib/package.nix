@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchurl {
-    url = "${finalAttrs.meta.homepage}/releases/telepathy-glib/telepathy-glib-${finalAttrs.version}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-glib/telepathy-glib-${finalAttrs.version}.tar.gz";
     sha256 = "sKN013HN0IESXzjDq9B5ZXZCMBxxpUPVVeK/IZGSc/A=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-vala-bindings"
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   enableParallelBuilding = true;
 

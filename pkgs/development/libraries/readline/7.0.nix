@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "readline";
-  version = "7.0p${toString (builtins.length upstreamPatches)}";
+  version = "7.0p${toString (builtins.length finalAttrs.upstreamPatches)}";
 
   src = fetchurl {
-    url = "mirror://gnu/readline/readline-${meta.branch}.tar.gz";
+    url = "mirror://gnu/readline/readline-${finalAttrs.meta.branch}.tar.gz";
     sha256 = "0d13sg9ksf982rrrmv5mb6a2p4ys9rvg9r71d6il0vr8hmql63bm";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       patch =
         nr: sha256:
         fetchurl {
-          url = "mirror://gnu/readline/readline-${meta.branch}-patches/readline70-${nr}";
+          url = "mirror://gnu/readline/readline-${finalAttrs.meta.branch}-patches/readline70-${nr}";
           inherit sha256;
         };
     in
@@ -43,9 +43,13 @@ stdenv.mkDerivation rec {
     ./link-against-ncurses.patch
     ./no-arch_only-6.3.patch
   ]
-  ++ upstreamPatches;
+  ++ finalAttrs.upstreamPatches;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Library for interactive line editing";
@@ -74,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     branch = "7.0";
   };
-}
+})

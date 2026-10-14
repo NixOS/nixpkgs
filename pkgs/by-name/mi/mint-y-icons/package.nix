@@ -3,25 +3,23 @@
   lib,
   stdenvNoCC,
   adwaita-icon-theme,
-  gnome-icon-theme,
   hicolor-icon-theme,
   gtk3,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-y-icons";
-  version = "1.9.1";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-y-icons";
     rev = version;
-    hash = "sha256-YciWUzvu+2krbSGz5mqpCVRE22T8/gl4Ln4rILB5Tq8=";
+    hash = "sha256-R/q89ShfQkt2YoI08Yvbr6Fy69MxENSjJoiFuLuSPE8=";
   };
 
   propagatedBuildInputs = [
     adwaita-icon-theme
-    gnome-icon-theme
     hicolor-icon-theme
   ];
 

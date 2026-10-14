@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
+  versionCheckHook,
   nixosTests,
   openssh,
 }:
@@ -28,7 +29,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zrepl/zrepl/version.zreplVersion=${finalAttrs.version}"
+    "-X github.com/zrepl/zrepl/internal/version.zreplVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -39,6 +40,10 @@ buildGoModule (finalAttrs: {
     wrapProgram $out/bin/zrepl \
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   passthru.tests = {
     inherit (nixosTests) zrepl;

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~mcepl";
     repo = "gen-oath-safe";
     tag = finalAttrs.version;
-    sha256 = "1914z0jgj7lni0nf3hslkjgkv87mhxdr92cmhmbzhpjgjgr23ydp";
+    hash = "sha256-t/kh8pNPXvhXhZWJlFuH9aA9n5xUw+EsiJYe+ST4JKQ=";
   };
   nativeBuildInputs = [ makeWrapper ];
 

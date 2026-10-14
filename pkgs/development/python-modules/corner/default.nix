@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  writableTmpDirAsHomeHook,
 
   # build-system
   hatch-vcs,
@@ -13,6 +12,7 @@
 
   # optional-dependencies
   arviz,
+  arviz-base,
   ipython,
   myst-nb,
   pandoc,
@@ -23,27 +23,19 @@
 
   # tests
   pytestCheckHook,
-  corner,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "corner";
-  version = "2.2.3";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dfm";
     repo = "corner.py";
-    tag = "v${version}";
-    hash = "sha256-gK2yylteI3VLVJ0p7NB7bR7cirCo2BvFKnYIH3kfyh4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-H59IVXKPT4CLApn4kUuSuiYA9EWdOaH88Rd4YXf0VlQ=";
   };
-
-  nativeBuildInputs = [
-    # During `pythonImportsCheck`, `corner` imports `arviz` which wants to write a stamp file to the
-    # homedir. It then needs to be writable.
-    # https://github.com/arviz-devs/arviz/commit/4db612908f588d89bb5bfb6b83a08ada3d54fd02
-    writableTmpDirAsHomeHook
-  ];
 
   build-system = [
     hatch-vcs
@@ -53,9 +45,13 @@ buildPythonPackage rec {
   dependencies = [ matplotlib ];
 
   optional-dependencies = {
-    arviz = [ arviz ];
+    arviz = [
+      arviz
+      arviz-base
+    ];
     docs = [
       arviz
+      arviz-base
       ipython
       myst-nb
       pandoc
@@ -71,10 +67,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "corner" ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ corner.optional-dependencies.test;
+  nativeCheckInputs = [
+    arviz
+    pytestCheckHook
+    scipy
+  ];
 
-  # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
   disabledTests = [
+    # matplotlib.testing.exceptions.ImageComparisonFailure: images not close
     "test_1d_fig_argument"
     "test_arviz"
     "test_basic"
@@ -103,6 +103,8 @@ buildPythonPackage rec {
     "test_title_quantiles_raises"
     "test_titles1"
     "test_titles2"
+    "test_titles_fmt_multi"
+    "test_titles_fmt_single"
     "test_top_ticks"
     "test_truths"
   ];
@@ -110,8 +112,8 @@ buildPythonPackage rec {
   meta = {
     description = "Make some beautiful corner plots";
     homepage = "https://github.com/dfm/corner.py";
-    changelog = "https://github.com/dfm/corner.py/releases/tag/v${version}";
+    changelog = "https://github.com/dfm/corner.py/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

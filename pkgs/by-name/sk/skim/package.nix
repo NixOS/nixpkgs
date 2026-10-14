@@ -1,17 +1,19 @@
 {
   lib,
-  tmux,
+  zellij,
+  ncurses,
+  hexdump,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   runtimeShell,
   rustPlatform,
-  skim,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "2.0.2";
+  version = "5.7.3";
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -23,20 +25,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-V6ZIGPeGWTeNzOA9FDhARx63L3CVpUUpCILwIGg8NOY=";
+    hash = "sha256-sG7nfBfsJWQFo/uS6nJ5VPBG7q3YBF4+5T8E9UmurME=";
   };
 
   postPatch = ''
-    sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
+    substituteInPlace plugin/skim.vim \
+      --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-xtrqY8jBB43Dpj4nOr2b0FziRvPjtRpWevAM8FeHqwc=";
+  cargoHash = "sha256-QyqAAJhEqJnajwras4/ipsf93B04NXq98j+9T5LTibY=";
 
   nativeBuildInputs = [ installShellFiles ];
-  nativeCheckInputs = [ tmux ];
-
-  # frizbee requires nightly features
-  env.RUSTC_BOOTSTRAP = 1;
+  nativeCheckInputs = [
+    zellij
+    ncurses
+    hexdump
+  ];
 
   postBuild = ''
     cat <<SCRIPT > sk-share
@@ -63,37 +67,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   useNextest = true;
 
-  checkPhase =
-    let
-      skippedTests = [
-        # Assertion Error: Insta: Code output doesn't match the expected snapshot
-        "opt_replstr"
-        "opt_with_nth_preview"
-        "preview_offset_expr"
-        "preview_navigation"
-        "preview_offset_fixed"
-        "preview_nul_char"
-        "preview_nowrap"
-        "preview_offset_fixed_and_expr"
-        "preview_plus"
-        "preview_preserve_quotes"
-        "preview_pty_linux"
-        "preview_wrap"
-        "preview_window_down"
-        "preview_window_left"
-        "preview_window_up"
-      ];
-      filterExpr =
-        "not ("
-        + (builtins.concatStringsSep " or " (map (testName: "test(${testName})") skippedTests))
-        + ")";
-    in
-    ''
-      cargo nextest run --features test-utils --release --offline -E '${filterExpr}'
-    '';
+  checkPhase = ''
+    cargo nextest run --release --offline --lib --bins --examples --tests --profile ci
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests.version = testers.testVersion { package = skim; };
     updateScript = nix-update-script { };
   };
 

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   mkDerivation,
+  cmake,
   extra-cmake-modules,
   kdoctools,
   qttools,
@@ -38,6 +39,7 @@
 mkDerivation {
   pname = "kio";
   nativeBuildInputs = [
+    cmake
     extra-cmake-modules
     kdoctools
   ];

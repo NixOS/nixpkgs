@@ -27,6 +27,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "irc"
+    "ruamel.yaml"
+    "mautrix"
   ];
 
   dependencies = with python3.pkgs; [

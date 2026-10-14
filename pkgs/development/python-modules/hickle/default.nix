@@ -1,8 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
+  fetchFromGitHub,
   h5py,
   numpy,
   dill,
@@ -16,22 +15,15 @@
 
 buildPythonPackage rec {
   pname = "hickle";
-  version = "5.0.3";
+  version = "5.0.3-unstable-2026-07-25";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-An5RzK0nnRaBI6JEUl5shLrA22RgWzEbC9NJiRvgxT4=";
+  src = fetchFromGitHub {
+    owner = "telegraphic";
+    repo = "hickle";
+    rev = "cd92308f564223be999230aeb708988cfb14c2e7";
+    hash = "sha256-+W2svifU1yY4RfxX8zC+8g0h7pjP2hIP6DW4AJSfrVg=";
   };
-
-  patches = [
-    # fixes support for numpy 2.x, the PR is not yet merged https://github.com/telegraphic/hickle/pull/186
-    # FIXME: Remove this patch when the numpy 2.x support arrives
-    ./numpy-2.x-support.patch
-    # fixes test failing with numpy 2.3 as ndarray.tostring was deleted
-    # FIXME: delete once https://github.com/telegraphic/hickle/pull/187 is merged
-    ./numpy-2.3-ndarray-tostring.patch
-  ];
 
   build-system = [ setuptools ];
 

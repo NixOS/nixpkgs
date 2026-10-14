@@ -7,25 +7,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-verge-service-ipc";
-  version = "2.0.21";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service-ipc";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9c9fM1l31NbY//Ri50Ql60BWWgISjMWj72ABixRaXvM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/kr0C+4bhal7DqKudtZvhPYUyn6xbxQw57g6ieJV64w=";
   };
 
-  postPatch = ''
-    # set socket path for service and test respectively
-    substituteInPlace src/lib.rs \
-      --replace-fail "/tmp/verge/clash-verge-service.sock" "/run/clash-verge-rev/service.sock" \
-      --replace-fail "/tmp/verge/clash-verge-service-test.sock" "$sourceRoot/clash-verge-service-test.sock"
-    substituteInPlace tests/test_start_permissions.rs \
-      --replace-fail "owner_perm | group_perm | other_perm" "0o0755"
-  '';
+  patches = [
+    # Let the NixOS module's RuntimeDirectory/Group own socket access policy.
+    # Upstream defaults target installer-managed /tmp paths and broad fallback
+    # permissions, which do not fit the hardened systemd service.
+    ./patch-service-directory.patch
+  ];
 
-  cargoHash = "sha256-UbNN3uFu5anQV+3KMFPNnGrCDQTGb4uC9K83YghfQgY=";
+  cargoHash = "sha256-2/lFfhP2414iiH+zG2TvNy6uaCzDldoo7sIfhKrQaFg=";
 
   buildFeatures = [
     "standalone"
@@ -34,9 +32,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeCheckInputs = [
     procps
   ];
-  # build mock_binary for tests
+  # build test helper binaries for tests
   preCheck = ''
-    cargo build --features=test
+    cargo build --features=standalone,test
   '';
   checkFeatures = [
     "standalone"

@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "uniex";
-  version = "0.1.28";
+  version = "0.1.31";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "uniex";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9/B6SVPvHT7l8Y5rY7ax09B30ra3doCUDCtTZUgwcZo=";
+    hash = "sha256-OOu8AveAsxl9RBNmBxP5MxsQv7g6lUsneBIVdwybuSg=";
   };
 
-  vendorHash = "sha256-YZ4WbKSa3hFVqIkZGye0UN5WSezPuAPdNdcA5opaWi4=";
+  vendorHash = "sha256-UIzfdK573jKHCulmP/6YH9TeYd5xkopvwJzLa7QkOVg=";
 
   ldflags = [
     "-s"

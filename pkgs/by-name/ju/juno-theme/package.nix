@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  gtk-engine-murrine,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,8 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   sourceRoot = ".";
-
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     runHook preInstall

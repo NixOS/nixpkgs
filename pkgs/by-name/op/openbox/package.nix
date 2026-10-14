@@ -15,8 +15,10 @@
   libsm,
   imlib2,
   pango,
+  bashNonInteractive,
   libstartup_notification,
   makeWrapper,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,10 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     makeWrapper
+    python3
     python3.pkgs.wrapPython
   ];
 
   buildInputs = [
+    bashNonInteractive
     libxml2
     libxinerama
     libxcursor
@@ -47,17 +51,19 @@ stdenv.mkDerivation (finalAttrs: {
     imlib2
   ];
 
+  strictDeps = true;
+
   pythonPath = with python3.pkgs; [
     pyxdg
   ];
 
   src = fetchurl {
-    url = "http://openbox.org/dist/openbox/openbox-${finalAttrs.version}.tar.gz";
+    url = "https://openbox.org/dist/openbox/openbox-${finalAttrs.version}.tar.gz";
     sha256 = "1xvyvqxlhy08n61rjkckmrzah2si1i7nmc7s8h07riqq01vc0jlb";
   };
 
   setlayoutSrc = fetchurl {
-    url = "http://openbox.org/dist/tools/setlayout.c";
+    url = "https://openbox.org/dist/tools/setlayout.c";
     sha256 = "1ci9lq4qqhl31yz1jwwjiawah0f7x0vx44ap8baw7r6rdi00pyiv";
   };
 
@@ -87,7 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/openbox-gnome-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
+
+    substituteInPlace "$out/libexec/openbox-autostart" \
+      --replace-fail "$out/etc/xdg/openbox/autostart" "/etc/xdg/openbox/autostart"
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "X window manager for non-desktop embedded systems";

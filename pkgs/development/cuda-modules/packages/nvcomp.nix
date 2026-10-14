@@ -1,4 +1,8 @@
-{ buildRedist }:
+{
+  backendStdenv,
+  buildRedist,
+  lib,
+}:
 buildRedist {
   redistName = "nvcomp";
   pname = "nvcomp";
@@ -9,6 +13,16 @@ buildRedist {
     "include"
     "lib"
     "static"
+  ];
+
+  # https://docs.nvidia.com/cuda/nvcomp/installation.html
+  platformAssertions = [
+    {
+      message =
+        "nvCOMP supports CUDA compute capabilities 7.0 and newer"
+        + " (found ${builtins.toJSON backendStdenv.cudaCapabilities})";
+      assertion = lib.all (lib.flip lib.versionAtLeast "7.0") backendStdenv.cudaCapabilities;
+    }
   ];
 
   meta = {

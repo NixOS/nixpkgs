@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Immutable infrastructure for the desktop";
     homepage = "https://github.com/fossable/goldboot";
     changelog = "https://github.com/fossable/goldboot/releases/tag/goldboot-v${finalAttrs.version}";
-    license = lib.licenses.agpl3Plus;
+    license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ cilki ];
   };

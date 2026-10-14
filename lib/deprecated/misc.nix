@@ -6,26 +6,20 @@ let
     any
     attrByPath
     attrNames
-    compare
     concat
-    concatMap
     elem
     filter
     foldl
     foldr
-    genericClosure
     head
     imap1
-    init
     isAttrs
     isFunction
     isInt
     isList
-    lists
     listToAttrs
     mapAttrs
     mergeAttrs
-    meta
     nameValuePair
     tail
     toList
@@ -247,7 +241,7 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/194391 for details.
   closePropagationFast =
     list:
-    map (x: x.val) (
+    builtins.catAttrs "val" (
       builtins.genericClosure {
         startSet = map (x: {
           key = x.outPath;

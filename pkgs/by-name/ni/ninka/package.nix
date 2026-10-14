@@ -40,7 +40,7 @@ perlPackages.buildPerlPackage {
   meta = {
     description = "Sentence based license detector";
     mainProgram = "ninka";
-    homepage = "http://ninka.turingmachine.org/";
+    homepage = "https://github.com/dmgerman/ninka";
     license = lib.licenses.gpl2;
     maintainers = [ ];
     platforms = lib.platforms.all;

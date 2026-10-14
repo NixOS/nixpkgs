@@ -1,16 +1,14 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pythonAtLeast,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   aiohttp,
-  dataclasses-json,
   httpx-sse,
   langchain-classic,
   langchain-core,
@@ -24,11 +22,9 @@
 
   # tests
   blockbuster,
-  duckdb,
-  duckdb-engine,
-  httpx,
   langchain-tests,
   lark,
+  mypy-extensions,
   pandas,
   pytest-asyncio,
   pytest-mock,
@@ -44,19 +40,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-community";
     tag = "libs/community/v${version}";
-    hash = "sha256-N92YDmej2shQQlktr0veFOKyGFWemFj0hdJIYu1rYSc=";
+    hash = "sha256-I9xULsg+tlXM3Brh6Xa5xvFENx8zn4FRZ1/evNEh8UY=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   # Only needed for mixed python 3.12/3.13 builds
   pythonRelaxDeps = [
@@ -65,7 +61,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    dataclasses-json
     httpx-sse
     langchain-classic
     langchain-core
@@ -82,11 +77,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     blockbuster
-    duckdb
-    duckdb-engine
-    httpx
     langchain-tests
     lark
+    mypy-extensions
     pandas
     pytest-asyncio
     pytest-mock
@@ -122,10 +115,15 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # depends on Pydantic v1 notations, will not load
     "tests/unit_tests/document_loaders/test_gitbook.py"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    # https://docs.pytest.org/en/stable/deprecations.html#applying-a-mark-to-a-fixture-function
+    "tests/unit_tests/document_loaders/test_hugging_face.py"
+    "tests/unit_tests/indexes/test_sql_record_manager.py"
   ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "libs/community/v";
+    ignoredVersions = "a|b|dev|rc";
   };
 
   meta = {

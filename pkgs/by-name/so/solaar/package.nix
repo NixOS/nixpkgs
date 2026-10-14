@@ -1,16 +1,20 @@
 {
   fetchFromGitHub,
   lib,
+  stdenv,
   gobject-introspection,
   gtk3,
   python3Packages,
   wrapGAppsHook3,
   gdk-pixbuf,
+  hidapi,
   libappindicator,
   librsvg,
+  libnotify,
   upower,
   udevCheckHook,
   acl,
+  xvfb,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -18,15 +22,17 @@
 # instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "solaar";
-  version = "1.1.19";
+  version = "1.1.20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pwr-Solaar";
     repo = "Solaar";
     tag = finalAttrs.version;
-    hash = "sha256-Z3rWGmFQmfJvsWiPgxQmfXMPHXAAiFneBaoSVIXnAV8=";
+    hash = "sha256-h/uiy0TtMicKch2cdXHur5DkvQun2sAw2HpFI7Qstqg=";
   };
+
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -37,35 +43,46 @@ python3Packages.buildPythonApplication (finalAttrs: {
     gdk-pixbuf
     gobject-introspection
     wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     udevCheckHook
   ];
 
   buildInputs = [
-    libappindicator
     librsvg
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libappindicator
     upower
+    libnotify
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    evdev
-    dbus-python
-    gtk3
-    hid-parser
-    psutil
-    pygobject3
-    pyudev
-    pyyaml
-    typing-extensions
-    xlib
-  ];
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      gtk3
+      hid-parser
+      psutil
+      pygobject3
+      pyudev
+      pyyaml
+      typing-extensions
+      python-xlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      evdev
+      dbus-python
+    ];
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-mock
     pytest-cov-stub
+    pytest-xvfb
+    xvfb
   ];
 
-  preConfigure = ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace lib/solaar/listener.py \
       --replace-fail getfacl "${lib.getExe' acl "getfacl"}"
   '';
@@ -82,7 +99,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : '${lib.makeLibraryPath [ hidapi ]}')
   '';
+
+  env.DYLD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin (
+    lib.makeLibraryPath [ hidapi ]
+  );
 
   pythonImportsCheck = [
     "solaar"
@@ -102,13 +126,16 @@ python3Packages.buildPythonApplication (finalAttrs: {
       This tool requires either to be run with root/sudo or alternatively to have the udev rules files installed. On NixOS this can be achieved by setting `hardware.logitech.wireless.enable`.
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
+    changelog = "https://github.com/pwr-Solaar/Solaar/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     mainProgram = "solaar";
     maintainers = with lib.maintainers; [
       spinus
       ysndr
       oxalica
+      ilkecan
+      Svenum
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

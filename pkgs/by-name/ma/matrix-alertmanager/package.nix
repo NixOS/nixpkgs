@@ -3,17 +3,18 @@
   buildNpmPackage,
   fetchFromGitHub,
   jq,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
   pname = "matrix-alertmanager";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "jaywink";
     repo = "matrix-alertmanager";
     rev = "v${version}";
-    hash = "sha256-t5e9UfRtt1OzxEXuMkPLW352BbAVSLEt26fo5YppQQc=";
+    hash = "sha256-kdz5KyT0ZIbiq6MMVAQBPjz2QP1kcNWtEv10/RzH/14=";
   };
 
   postPatch = ''
@@ -21,9 +22,11 @@ buildNpmPackage rec {
     mv package.json.tmp package.json
   '';
 
-  npmDepsHash = "sha256-4UYX9ndqecr06/gZeouzrDss6568jBXY1ypcVX7DEVk=";
+  npmDepsHash = "sha256-r1OvxCk6dgVAb3NKxveTr/1PTRFYQVDhQmBHbikzALE=";
 
   dontNpmBuild = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/jaywink/matrix-alertmanager/blob/${src.rev}/CHANGELOG.md";

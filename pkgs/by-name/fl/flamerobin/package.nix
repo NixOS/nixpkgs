@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wxGTK32,
+  wxwidgets_3_2,
   boost,
   firebird,
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     boost
     firebird
   ];

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "osmapi";
-  version = "4.3.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "metaodi";
     repo = "osmapi";
     tag = "v${version}";
-    hash = "sha256-m1D+UtoULOKQ5+f/LNN11grp7vks2qEHDP345wahvXY=";
+    hash = "sha256-troBx/rTRWmKm/KV49D3ZE4pAnP5TLlJk0LDaznXqw0=";
   };
 
   build-system = [ setuptools ];

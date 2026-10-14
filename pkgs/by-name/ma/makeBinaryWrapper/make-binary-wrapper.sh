@@ -6,6 +6,8 @@ set -euo pipefail
 # assertExecutable FILE
 assertExecutable() {
     local file="$1"
+    [[ -e "$file" ]] || \
+        die "Cannot wrap '$file' because it does not exist"
     [[ -f "$file" && -x "$file" ]] || \
         die "Cannot wrap '$file' because it is not an executable file"
 }
@@ -261,6 +263,7 @@ setEnvPrefix() {
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_prefix(\"$env\", \"$sep\", \"$val\");"
     assertValidEnvName "$1"
+    assertNoEmptySegment "--prefix" "$1" "$2" "$3"
 }
 
 # suffix ENV SEP VAL
@@ -271,6 +274,7 @@ setEnvSuffix() {
     val=$(escapeStringLiteral "$3")
     printf '%s' "set_env_suffix(\"$env\", \"$sep\", \"$val\");"
     assertValidEnvName "$1"
+    assertNoEmptySegment "--suffix" "$1" "$2" "$3"
 }
 
 # setEnv KEY VALUE
@@ -323,6 +327,20 @@ assertValidEnvName() {
     esac
 }
 
+assertNoEmptySegment() {
+    local flag="$1" env="$2" sep="$3" val="$4"
+    [ -n "$sep" ] || return 0
+    case "$env" in
+        # In Lua the loader will substitute the default paths or just ignore the empty segment
+        # https://github.com/lua/lua/blob/v5.5.1/loadlib.c#L274
+        # https://github.com/lua/lua/blob/v5.5.1/loadlib.c#L475
+        LUA_PATH|LUA_CPATH|LUA_PATH_*|LUA_CPATH_*) return 0 ;;
+    esac
+    if [[ "$sep$val$sep" == *"$sep$sep"* ]]; then
+        printf '\n%s\n' "#error $flag $env would introduce an empty PATH-like segment (empty, or a leading/trailing/doubled \`$sep\`). This is interpreted as \"search the current directory\" by shells, execvp() and the dynamic linker, see https://github.com/NixOS/nixpkgs/security/advisories/GHSA-p7v3-pr2c-8584. Guard the value with e.g. lib.optionalString (list != [])."
+    fi
+}
+
 setSepSurroundCheck() {
     printf '%s' "\
 int is_surrounded_by_sep(char *env, char *ptr, unsigned long len, char *sep) {
@@ -364,10 +382,10 @@ void set_env_prefix(char *env, char *sep, char *prefix) {
         return;
       }
       unsigned long sep_len = strlen(sep);
-      int n_before = existing_prefix - existing_env;
+      int n_before = existing_prefix - existing_env - sep_len;
       assert_success(asprintf(&val, \"%s%s%.*s%s\", prefix, sep,
                               n_before, existing_env,
-                              existing_prefix + prefix_len + sep_len));
+                              existing_prefix + prefix_len));
     } else {
       assert_success(asprintf(&val, \"%s%s%s\", prefix, sep, existing_env));
     }

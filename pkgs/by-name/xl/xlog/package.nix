@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # glib-2.62 deprecations
-  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS -Wno-old-style-definition";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

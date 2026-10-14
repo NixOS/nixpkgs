@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "tolstislon";
     repo = "pytest-pytestrail";
     rev = version;
-    sha256 = "sha256-y34aRxQ8mu6b6GBRMFVzn1shMVc7TumdjRS3daMEZJM=";
+    hash = "sha256-y34aRxQ8mu6b6GBRMFVzn1shMVc7TumdjRS3daMEZJM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Pytest plugin for interaction with TestRail";
     homepage = "https://github.com/tolstislon/pytest-pytestrail";
     changelog = "https://github.com/tolstislon/pytest-pytestrail/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aanderse ];
   };
 }

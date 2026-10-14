@@ -16,7 +16,6 @@
 
   # passthru
   blis,
-  numpy_1,
   gitUpdater,
 }:
 
@@ -87,11 +86,6 @@ buildPythonPackage rec {
   ];
 
   passthru = {
-    tests = {
-      numpy_1 = blis.overridePythonAttrs (old: {
-        numpy = numpy_1;
-      });
-    };
     updateScript = gitUpdater {
       rev-prefix = "release-v";
     };

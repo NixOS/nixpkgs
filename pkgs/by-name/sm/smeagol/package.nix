@@ -2,22 +2,43 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  libz,
+  zstd,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "smeagol";
-  version = "0.5.0";
+  version = "0.5.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "AustinWise";
     repo = "smeagol";
     tag = finalAttrs.version;
-    hash = "sha256-ILZ4TRL5yRGZuyyNPIpMgnlBGQAwbtTFlTaN3UYb5ls=";
+    hash = "sha256-9TjYiVqz+Lxp0VaeQB3p/wpeRWbMFCJLGnQPMGafSyc=";
   };
 
-  cargoHash = "sha256-5OSrxm+NpuimE8Jwl5/VScKjuYNROX50KNiyBMZqCOw=";
+  cargoHash = "sha256-cd8PotJPNdwpXKpuHbMQ4aJeNewDhyRvctAHimVdLS8=";
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libgit2
+    libz
+    zstd
+  ];
+
+  env = {
+    LIBGIT2_NO_VENDOR = "1";
+    LIBZ_SYS_STATIC = "0";
+    ZSTD_SYS_USE_PKG_CONFIG = "1";
+  };
 
   nativeInstallCheckInputs = [
     versionCheckHook

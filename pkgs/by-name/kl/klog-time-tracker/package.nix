@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "klog-time-tracker";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "jotaen";
     repo = "klog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lr9MLEodp+lZSXvRRGnEC74ws3pyxVWxjKgguy3ydZ8=";
+    hash = "sha256-sqHtxaArJ+gStZwZ/bE/luJa7JphbrNgAES0nTKFYTE=";
   };
 
-  vendorHash = "sha256-zaQzDmF9m7pHpOzYxcrQ8loIclM2bWv5W3/9icgvUEY=";
+  vendorHash = "sha256-TyUGsJNWNEMPGg35oXorNFQ1Hjy9u3qRUVYXeabKDAM=";
 
   meta = {
     description = "Command line tool for time tracking in a human-readable, plain-text file format";

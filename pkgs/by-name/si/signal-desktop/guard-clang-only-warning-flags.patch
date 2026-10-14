@@ -1,0 +1,24 @@
+diff --git a/ringrtc/rffi/BUILD.gn b/ringrtc/rffi/BUILD.gn
+index 0419237ad109deb88a2d73afd3e7db72da51d05e..4bca6ecb323a10bbbc4cafa3660d6548660e23a5 100644
+--- a/ringrtc/rffi/BUILD.gn
++++ b/ringrtc/rffi/BUILD.gn
+@@ -25,11 +25,14 @@
+ config("ringrtc_rffi_config") {
+   include_dirs = [ ".." ]
+   defines = [ "ENABLE_RINGRTC" ]
+-  cflags = [
+-    "-Wmissing-prototypes",
+-    "--warning-suppression-mappings=" +
+-      rebase_path("suppression_mappings.txt", root_build_dir)
+-  ]
++  cflags = [ "-Wmissing-prototypes" ]
++
++  if (is_clang) {
++    cflags += [
++      "--warning-suppression-mappings=" +
++        rebase_path("suppression_mappings.txt", root_build_dir)
++    ]
++  }
+ }
+ 
+ if (is_android) {

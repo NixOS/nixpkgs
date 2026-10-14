@@ -34,5 +34,8 @@ regular@{
       # only a stripped down version is built which takes a lot less resources to build
       requiredSystemFeatures = [ ];
     };
+
+    # https://github.com/NixOS/nix/issues/16180
+    boost = pkgs.boost189;
   };
 }

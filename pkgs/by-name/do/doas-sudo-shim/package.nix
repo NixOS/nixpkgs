@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "doas-sudo-shim";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "jirutka";
     repo = "doas-sudo-shim";
     rev = "v${version}";
-    sha256 = "sha256-jgakKxglJi4LcxXsSE4mEdY/44kPxVb/jF7CgX7dllA=";
+    sha256 = "sha256-USSakVUzCbUY1DJLmDCiwdq/xjOwwnm3VtXBBeXeV1A=";
   };
 
   nativeBuildInputs = [

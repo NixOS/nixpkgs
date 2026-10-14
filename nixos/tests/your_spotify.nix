@@ -6,6 +6,7 @@
   };
 
   nodes.machine = {
+    services.mongodb.package = pkgs.mongodb-ce;
     services.your_spotify = {
       enable = true;
       spotifySecretFile = pkgs.writeText "spotifySecretFile" "deadbeef";

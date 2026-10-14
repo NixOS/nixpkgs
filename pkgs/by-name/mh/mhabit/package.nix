@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter338,
+  flutter341,
   sqlite,
   libsecret,
   _experimental-update-script-combinators,
@@ -12,16 +12,16 @@
 }:
 
 let
-  version = "1.23.6+145";
+  version = "1.26.7+180";
 
   src = fetchFromGitHub {
     owner = "FriesI23";
     repo = "mhabit";
     tag = "v${version}";
-    hash = "sha256-9+UXMOogySW3f9LPaj0YSfov1cSgLb3I+jWvAV8yEsM=";
+    hash = "sha256-QRPgtzMRdfuflw36okY8DiXqPC+EJLjz8HQ3iL2Yxh8=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "mhabit";
   inherit version src;
 
@@ -35,7 +35,7 @@ flutter338.buildFlutterApplication {
   ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   postInstall = ''
     install -Dm644 flatpak/io.github.friesi23.mhabit.desktop --target-directory=$out/share/applications

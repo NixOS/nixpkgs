@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   setuptools,
-  isPy27,
   fetchPypi,
   pkg-config,
   dbus,
@@ -17,7 +16,6 @@
   enableVerbose ? true,
   withConnectivity ? false,
   withMultimedia ? false,
-  withWebKit ? false,
   withWebSockets ? false,
   withLocation ? false,
   withSerialPort ? false,
@@ -30,8 +28,6 @@ buildPythonPackage rec {
   pname = "pyqt5";
   version = "5.15.10";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchPypi {
     pname = "PyQt5";
@@ -98,7 +94,7 @@ buildPythonPackage rec {
     '';
 
   enableParallelBuilding = true;
-  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # HACK: parallelize compilation of make calls within pyqt's setup.py
   # pkgs/stdenv/generic/setup.sh doesn't set this for us because
   # make gets called by python code and not its build phase
   # format=pyproject means the pip-build-hook hook gets used to build this project
@@ -139,7 +135,6 @@ buildPythonPackage rec {
     ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withMultimedia qtmultimedia
-    ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
@@ -156,7 +151,6 @@ buildPythonPackage rec {
       pyqt-builder
     ]
     ++ lib.optional withConnectivity qtconnectivity
-    ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
     ++ lib.optional withSerialPort qtserialport
@@ -170,7 +164,6 @@ buildPythonPackage rec {
   passthru = {
     inherit sip pyqt5-sip;
     multimediaEnabled = withMultimedia;
-    webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;
     connectivityEnabled = withConnectivity;
     locationEnabled = withLocation;
@@ -191,7 +184,6 @@ buildPythonPackage rec {
     "PyQt5.QtGui"
   ]
   ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-  ++ lib.optional withWebKit "PyQt5.QtWebKit"
   ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
   ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
   ++ lib.optional withLocation "PyQt5.QtPositioning"

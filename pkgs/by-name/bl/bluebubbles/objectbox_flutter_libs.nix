@@ -19,11 +19,11 @@ let
   };
 
   objectbox-c = fetchzip {
-    name = "objectbox-linux-4.0.2";
-    url = "https://github.com/objectbox/objectbox-c/releases/download/v4.0.2/objectbox-linux-${arch}.tar.gz";
+    name = "objectbox-linux-5.3.1";
+    url = "https://github.com/objectbox/objectbox-c/releases/download/v5.3.1/objectbox-linux-${arch}.tar.gz";
     hash = selectSystem {
-      x86_64-linux = "sha256-v51/m+v/FjryZuJphVb35jKgQk6DtEu+uHEzUzmeKMo=";
-      aarch64-linux = "sha256-trpF71hpJA6+DFQ3cTKOyyjtLKf8aFHf6JWb6Jxm4eo=";
+      x86_64-linux = "sha256-Avd5y6Y6NCCQokzxwfBpkipt+JxF/M46MCLcDpqv8Kk=";
+      aarch64-linux = "sha256-S6/QbqRhIm3f51e3AcEfuq56cde3aQb0ITN6qPuWCps=";
     };
     stripRoot = false;
     meta.license = lib.licenses.unfree; # the release tarball has a proprietary shared library
@@ -48,5 +48,5 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta.sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+  meta.sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
 }

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "rstcheck";
-  version = "6.2.5";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rstcheck";
     repo = "rstcheck";
     tag = "v${version}";
-    hash = "sha256-ajevEHCsPvr5e4K8I5AfxFZ+Vo1quaGUKFIEB9Wlobc=";
+    hash = "sha256-EjTJ4QukFGfiWCzwv3p8xOi6mib7+8gQCpVb4GGEqh4=";
   };
 
   build-system = [

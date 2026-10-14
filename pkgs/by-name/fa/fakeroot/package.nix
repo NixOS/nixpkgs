@@ -1,39 +1,41 @@
 {
   lib,
-  coreutils,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
-  getopt,
-  libcap,
-  gnused,
-  nixosTests,
-  testers,
   autoreconfHook,
   po4a,
+  libcap,
+  getopt,
+  gnused,
+  coreutils,
+  versionCheckHook,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.37.2";
+  version = "1.38.1";
   pname = "fakeroot";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitLab {
+    domain = "salsa.debian.org";
     owner = "clint";
     repo = "fakeroot";
-    rev = "upstream/${finalAttrs.version}";
-    domain = "salsa.debian.org";
-    hash = "sha256-TU/9oltd+2wYums8EEDUhaIVzwPeQvW13laCrJqb5A4=";
+    # The upstream/1.38.1 tag has been rewritten twice (gbp re-imports),
+    # so pin the commit it currently points to instead of the tag.
+    rev = "225d248bdacff1240e27a4473a736326aac940f5"; # upstream/1.38.1
+    hash = "sha256-1Xmb8OPZSVP4xtSBGuwwKwdVQXixEugMgQfvAJueJAg=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isLinux [
-    ./einval.patch
-  ];
+  patches = lib.optionals stdenv.hostPlatform.isLinux [ ./einval.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
     po4a
   ];
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux libcap;
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
   postUnpack = ''
     sed -i \
@@ -51,11 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-      };
       # A lightweight *unit* test that exercises fakeroot and fakechroot together:
       nixos-etc = nixosTests.etc.test-etc-fakeroot;
     };

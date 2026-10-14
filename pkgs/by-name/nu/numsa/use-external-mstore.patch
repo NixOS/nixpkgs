@@ -1,0 +1,30 @@
+diff --git a/test/meson.build b/test/meson.build
+index c60e4a4..7da0216 100644
+--- a/test/meson.build
++++ b/test/meson.build
+@@ -14,20 +14,21 @@
+ # You should have received a copy of the GNU Lesser General Public License
+ # along with numsa.  If not, see <https://www.gnu.org/licenses/>.
+ 
+-# Create mstore as subproject for testing
+-mstore_prj = subproject(
++# Find the molecular structure store, preferring an external installation
++# (e.g. via pkg-config) and falling back to building it as a subproject
++mstore_dep = dependency(
+   'mstore',
+   version: '>=0.1',
++  fallback: ['mstore', 'mstore_dep'],
+   required: not meson.is_subproject(),
+   default_options: [
+     'default_library=static',
+   ],
+ )
+ # If we do not find mstore and are a subproject, we just skip testing
+-if not mstore_prj.found()
++if not mstore_dep.found()
+    subdir_done()
+ endif
+-mstore_dep = mstore_prj.get_variable('mstore_dep')
+ 
+ tests = [
+   'surface',

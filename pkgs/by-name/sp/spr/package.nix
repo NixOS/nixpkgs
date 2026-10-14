@@ -1,25 +1,31 @@
 {
   fetchCrate,
   lib,
+  libgit2,
   openssl,
   pkg-config,
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spr";
   version = "1.3.7";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-YmmPxsDoV1sYmqY0Jfqm3xTPmu7WWuIUQyOaICu3stM=";
   };
 
   cargoHash = "sha256-cQsxRrs/pBe/xmqpp5vi1VRJo8jCAufYJrMigxs/tWY=";
 
+  env.LIBGIT2_NO_VENDOR = 1;
+
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   meta = {
     description = "Submit pull requests for individual, amendable, rebaseable commits to GitHub";
@@ -28,4 +34,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ spacedentist ];
   };
-}
+})

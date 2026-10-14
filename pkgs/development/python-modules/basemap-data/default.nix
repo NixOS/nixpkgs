@@ -1,15 +1,18 @@
 {
   lib,
   buildPythonPackage,
+  setuptools,
   basemap,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "basemap-data";
-  format = "setuptools";
+  pyproject = true;
   inherit (basemap) version src;
 
-  sourceRoot = "${src.name}/data/basemap_data";
+  build-system = [ setuptools ];
+
+  sourceRoot = "${finalAttrs.src.name}/data/basemap_data";
 
   # no tests
   doCheck = false;
@@ -25,4 +28,4 @@ buildPythonPackage rec {
     ];
     teams = [ lib.teams.geospatial ];
   };
-}
+})

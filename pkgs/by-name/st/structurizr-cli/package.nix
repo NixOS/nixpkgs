@@ -93,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r build/install/structurizr-cli $out/lib/structurizr-cli
 
     makeBinaryWrapper $out/lib/structurizr-cli/bin/structurizr-cli $out/bin/structurizr-cli \
+      --set JAVA_HOME "${jre.home}" \
       --prefix PATH : "${
         lib.makeBinPath [
           coreutils

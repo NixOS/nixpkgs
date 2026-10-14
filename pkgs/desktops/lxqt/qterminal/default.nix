@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qterminal";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "qterminal";
     rev = version;
-    hash = "sha256-HwWgVcO9swywei8Z3ifoGJjZ785gdF2A/kBHm4zgzFc=";
+    hash = "sha256-8Bp4ZZ/oi4p6pAo/vRAmeSu0tfWZBvTBZTrm4ppJwFU=";
   };
 
   nativeBuildInputs = [

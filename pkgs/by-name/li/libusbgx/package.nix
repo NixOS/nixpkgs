@@ -8,7 +8,7 @@
 }:
 stdenv.mkDerivation {
   pname = "libusbgx";
-  version = "unstable-2021-10-31";
+  version = "0-unstable-2021-10-31";
   src = fetchFromGitHub {
     owner = "linux-usb-gadgets";
     repo = "libusbgx";
@@ -22,6 +22,7 @@ stdenv.mkDerivation {
   buildInputs = [ libconfig ];
   meta = {
     description = "C library encapsulating the kernel USB gadget-configfs userspace API functionality";
+    homepage = "https://github.com/linux-usb-gadgets/libusbgx";
     license = with lib.licenses; [
       lgpl21Plus # library
       gpl2Plus # examples

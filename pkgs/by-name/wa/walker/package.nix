@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "walker";
-  version = "2.14.2";
+  version = "2.17.1";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-y1jBFFO0u+V21y3YldHZozrDwVJVrdC+o3c4M8/rasU=";
+    hash = "sha256-QS+ApYWt51tRsW38JrlJn718FgUyLPTRc5ElVvQGR4I=";
   };
 
-  cargoHash = "sha256-7QQdHbkwjVcZCd2FaBxLL5BUSoWjTsH1GuDhzh7DuRY=";
+  cargoHash = "sha256-woHcuyvfoQgpg/ehWu/SZGPjBarp9pscKQuIPhh1EK4=";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -60,6 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Wayland-native application runner";
     homepage = "https://github.com/abenz1267/walker";
+    changelog = "https://github.com/abenz1267/walker/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

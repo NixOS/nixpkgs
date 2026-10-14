@@ -1,31 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   morphys,
   pytestCheckHook,
   python-baseconv,
+  setuptools,
   six,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "py-multibase";
-  version = "1.0.3";
-  format = "setuptools";
+  version = "2.0.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0oog78u2Huwo9VgnoL8ynHzqgP/9kzrsrqauhDEmf+Q=";
+  src = fetchFromGitHub {
+    owner = "multiformats";
+    repo = "py-multibase";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k5vQqrSe1glT2YIcD+FIhQTpCZQvx5D4z1n7omuypcI=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "[pytest]" "" \
-      --replace "python_classes = *TestCase" ""
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     morphys
     python-baseconv
     six
@@ -38,8 +35,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for distinguishing base encodings and other simple string encodings";
     homepage = "https://github.com/multiformats/py-multibase";
-    changelog = "https://github.com/multiformats/py-multibase/blob/v${version}/HISTORY.rst";
+    changelog = "https://github.com/multiformats/py-multibase/blob/${finalAttrs.src.tag}/HISTORY.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

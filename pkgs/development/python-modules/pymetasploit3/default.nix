@@ -9,13 +9,13 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymetasploit3";
   version = "1.0.6";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-y4YBQo6va+/NEuE+CWeueo0aEIHEnEZYBr1WH90qHxQ=";
   };
 
@@ -41,4 +41,4 @@ buildPythonPackage rec {
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

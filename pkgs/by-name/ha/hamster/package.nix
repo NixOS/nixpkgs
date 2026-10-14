@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Time tracking application";
     mainProgram = "hamster";
-    homepage = "http://projecthamster.org/";
+    homepage = "https://github.com/projecthamster/hamster";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.fabianhauser ];

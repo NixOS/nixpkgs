@@ -1,27 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  poetry-core,
-  fetchFromGitHub,
-  pytestCheckHook,
   click,
+  fetchFromCodeberg,
+  hatchling,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kml2geojson";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "mrcagney";
+  src = fetchFromCodeberg {
+    owner = "araichev";
     repo = "kml2geojson";
-    rev = version;
-    hash = "sha256-iJEcXpvy+Y3MkxAF2Q1Tkcx8GxUVjeVzv6gl134zdiI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zNvV42dRSQLZnOr65SuJIVOjOKmlF1fQZkCs7SXSokI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [ click ];
+  dependencies = [ click ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -29,9 +29,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Library to convert KML to GeoJSON";
-    mainProgram = "k2g";
-    homepage = "https://github.com/mrcagney/kml2geojson";
+    homepage = "https://codeberg.org/araichev/kml2geojson";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "k2g";
   };
-}
+})

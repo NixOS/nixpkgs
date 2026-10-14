@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Various code metrics for Python code";
-    homepage = "https://radon.readthedocs.org";
+    homepage = "https://radon.readthedocs.io";
     changelog = "https://github.com/rubik/radon/blob/v${version}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ t4ccer ];

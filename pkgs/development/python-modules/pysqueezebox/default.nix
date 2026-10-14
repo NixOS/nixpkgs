@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rajlaud";
     repo = "pysqueezebox";
     tag = "v${version}";
-    hash = "sha256-1kkvqmmO197IjIcUlnmnKoeOq+0njbrgwogDU+ivIqw=";
+    hash = "sha256-aJKUgFTAfBZzzhtzklzOCgknk4Yk2i8YPqeVR6/444Q=";
   };
 
   build-system = [ setuptools ];

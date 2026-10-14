@@ -6,10 +6,6 @@ in
 {
   name = "pgbackrest-sftp";
 
-  meta = {
-    maintainers = with lib.maintainers; [ wolfgangwalther ];
-  };
-
   nodes.primary =
     {
       pkgs,
@@ -33,7 +29,12 @@ in
           sftp-host-key-hash-type = "sha256";
           sftp-host-user = "backup";
           sftp-private-key-file = "/var/lib/pgbackrest/sftp_key";
+          # speedup for transferring the 970 files in this test
+          bundle = true;
         };
+
+        # speedup for the test
+        settings.start-fast = true;
 
         stanzas.default.jobs.future = {
           schedule = "3000-01-01";
@@ -73,7 +74,7 @@ in
         HOME="/var/lib/pgbackrest"
         cat ${snakeOilPrivateKey} > ~/sftp_key
         chown -R pgbackrest:pgbackrest ~/sftp_key
-        chmod 770 ~
+        chmod 640 ~/sftp_key
       """))
 
       with subtest("backup/restore works with local instance/remote repo (SFTP)"):

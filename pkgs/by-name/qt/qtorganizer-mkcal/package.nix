@@ -4,7 +4,7 @@
   fetchFromGitHub,
   unstableGitUpdater,
   cmake,
-  extra-cmake-modules,
+  kdePackages,
   libsForQt5,
   mkcal,
   pkg-config,
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qtorganizer-mkcal";
-  version = "0-unstable-2025-04-24";
+  version = "0-unstable-2026-06-06";
 
   src = fetchFromGitHub {
     owner = "dcaliste";
     repo = "qtorganizer-mkcal";
-    rev = "45906b1df8ad758a824369873f423d9e0c457fbf";
-    hash = "sha256-sgYCO8LxBFhMkjGnKVvOx2d4hyw9Oa5lbu6LKhuwl8s=";
+    rev = "6efa089553ccc3c44ada8fd2fe1349a004d4f619";
+    hash = "sha256-vycfq5meq+u7Ntv0n1XrcqlZfjU7flfQAi17vZId6Ww=";
   };
 
   postPatch = ''
@@ -31,15 +31,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
   ];
 
   buildInputs = [
+    kdePackages.extra-cmake-modules
     mkcal
   ]
   ++ (with libsForQt5; [
-    kcalendarcore
+    __internalKF5.kcalendarcore
     qtbase
     qtpim
   ]);

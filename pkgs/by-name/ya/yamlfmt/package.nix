@@ -47,7 +47,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/google/yamlfmt";
     changelog = "https://github.com/google/yamlfmt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
     mainProgram = "yamlfmt";
   };
 })

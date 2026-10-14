@@ -1,23 +1,26 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   git,
   versionCheckHook,
   replaceVars,
   nix-update-script,
 }:
-
-buildGoModule (finalAttrs: {
+# garble has strict go version requirements; we should pin the go version
+# directly prior to the first unsupported version as described in the
+# `goVersionOK()` function
+# https://github.com/burrowers/garble/blob/v0.17.0/main.go#L536
+buildGo126Module (finalAttrs: {
   pname = "garble";
-  version = "0.14.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "burrowers";
     repo = "garble";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zS/K2kOpWhJmr0NuWSjEjNXV8ILt81yLIQWSPDuMwt8=";
+    hash = "sha256-yIdyvKxqlrYp77biXUiCrvMyTFStafkB+y5QF1M0CEg=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -32,12 +35,20 @@ buildGoModule (finalAttrs: {
     })
   ];
 
-  checkFlags = [
-    "-skip"
-    "TestScript/gogarble"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        # tries to mess with the installed go toolchain
+        "TestScript/gotoolchain"
+        # requires parts of a 32-bit glibc on some platforms
+        "TestScript/atomic"
+        # passes an `-arch` flag to gcc which does not exist
+        "TestScript/crossbuild"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  vendorHash = "sha256-xxG1aQrALVuJ7oVn+Z+sH655eFQ7rcYFmymGCUZD1uU=";
+  vendorHash = "sha256-F0Jc15ulA+qRDZu5W3FU9dZ+oXq8lGXP4dQeWnZwYbk=";
 
   # Used for some of the tests.
   nativeCheckInputs = [

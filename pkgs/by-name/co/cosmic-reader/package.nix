@@ -19,16 +19,21 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-reader";
-  version = "0-unstable-2026-02-11";
+  version = "0-unstable-2026-09-15";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-reader";
-    rev = "3fbecec478a7988f218c16d54fb7470e5f50a83f";
-    hash = "sha256-Dg9XUWNz+sgh9QqhA3OwAffV7p9lh8FSuGs2aWnVWCw=";
+    rev = "9a34cc93c817f07be9b3540faa5d146c2a891e64";
+    hash = "sha256-Jo4vXuWPb5ex/YEl+8jLzX8oMIjDSRt22aPBBXcp7YA=";
   };
 
-  cargoHash = "sha256-p0dg5RNXkzbi+/RB5k+jr34RNOp+Irahj0BiFUddfnk=";
+  cargoHash = "sha256-DPGpGWzAgdpHp3qzksLtLnfqk+DJsaukdT2ekFFiGaM=";
+
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  env.VERGEN_GIT_SHA = finalAttrs.src.rev;
 
   nativeBuildInputs = [
     just
@@ -61,7 +66,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  env.VERGEN_GIT_SHA = finalAttrs.src.rev;
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/com.system76.CosmicReader.thumbnailer \
+      --replace-fail "TryExec=cosmic-reader" "TryExec=$out/bin/cosmic-reader" \
+      --replace-fail "Exec=cosmic-reader" "Exec=$out/bin/cosmic-reader"
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [

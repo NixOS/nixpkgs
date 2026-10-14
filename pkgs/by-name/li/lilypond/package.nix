@@ -45,15 +45,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lilypond";
-  version = "2.24.4";
+  version = "2.26.0";
   outputs = [
     "out"
     "man"
   ];
 
   src = fetchzip {
-    url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor finalAttrs.version}/lilypond-${finalAttrs.version}.tar.gz";
-    hash = "sha256-UYdORvodrVchxslOxpMiXrAh7DtB9sWp9yqZU/jeB9Y=";
+    url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor finalAttrs.version}/lilypond-${finalAttrs.version}.tar.gz";
+    hash = "sha256-HUkPhaWNZ4UKbmlEyLXepHCFcgrdoRSDtjZMriO68RM=";
   };
 
   postInstall = ''
@@ -131,6 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
   # documentation makefile uses "out" for different purposes, hence we explicitly set it to an empty string
   makeFlags = [ "out=" ];
 
+  __structuredAttrs = true;
+
   meta = {
     description = "Music typesetting system";
     homepage = "https://lilypond.org/";
@@ -141,13 +143,17 @@ stdenv.mkDerivation (finalAttrs: {
       ofl # mf/
     ];
     maintainers = with lib.maintainers; [
-      marcweber
+      eclairevoyant
       yurrriq
     ];
     platforms = lib.platforms.all;
   };
 
-  FONTCONFIG_FILE = lib.optional stdenv.hostPlatform.isDarwin (makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
-  });
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    FONTCONFIG_FILE = (
+      makeFontsConf {
+        fontDirectories = [ freefont_ttf ];
+      }
+    );
+  };
 })

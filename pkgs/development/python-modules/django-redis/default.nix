@@ -16,34 +16,34 @@
   pytest-django,
   pytest-mock,
   pytest-xdist,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-redis";
-  version = "6.0.0";
+  version = "7.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-redis";
-    tag = version;
-    hash = "sha256-QfiyeeDQSRp/TkOun/HAQaPbIUY9yKPoOOEhKBX9Tec=";
+    tag = finalAttrs.version;
+    hash = "sha256-4YNhNsa0J1tTtaeJTHnwT8WwYs6QQuxnjVl1mAYNePI=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     django
-    lz4
-    msgpack
-    pyzstd
     redis
   ];
 
   optional-dependencies = {
     hiredis = [ redis ] ++ redis.optional-dependencies.hiredis;
+    lz4 = [ lz4 ];
+    msgpack = [ msgpack ];
+    pyzstd = [ pyzstd ];
   };
 
   pythonImportsCheck = [ "django_redis" ];
@@ -57,17 +57,13 @@ buildPythonPackage rec {
     pytest-django
     pytest-mock
     pytest-xdist
-    pytestCheckHook
+    pytest8_3CheckHook
     redisTestHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # https://github.com/jazzband/django-redis/issues/777
   dontUsePytestXdist = true;
-
-  pytestFlags = [
-    "-Wignore::DeprecationWarning"
-  ];
 
   disabledTests = [
     # AttributeError: <asgiref.local._CVar object at 0x7ffff57ed950> object has no attribute 'default'
@@ -79,8 +75,8 @@ buildPythonPackage rec {
   meta = {
     description = "Full featured redis cache backend for Django";
     homepage = "https://github.com/jazzband/django-redis";
-    changelog = "https://github.com/jazzband/django-redis/releases/tag/${version}";
+    changelog = "https://github.com/jazzband/django-redis/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

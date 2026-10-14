@@ -19,6 +19,9 @@ buildDunePackage rec {
     hash = "sha256-0U61y41CA0YaoNk9Hsj7j6eb2V6Ku3MAjW9lMEimiC0=";
   };
 
+  # Compatibility with menhir ≥ 20260203
+  patches = [ ./menhir.patch ];
+
   nativeBuildInputs = [ menhir ];
 
   buildInputs = [ js_of_ocaml ];

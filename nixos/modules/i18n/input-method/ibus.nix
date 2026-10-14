@@ -25,7 +25,9 @@ let
       Type=Application
       Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
       # GNOME will launch ibus using systemd
-      NotShowIn=GNOME;
+      # ibus complains loudly when launched from this autoStart file under KDE
+      # KDE will launch ibus from kwin if enabled in keyboard -> virtual keyboard
+      NotShowIn=GNOME;KDE;
     '';
   };
 in

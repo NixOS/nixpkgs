@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "writedisk";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchCrate {
     inherit (finalAttrs) version;
     pname = "writedisk";
-    hash = "sha256-MZFnNb8rJMu/nlH8rfnD//bhqPSkhyXucbTrwsRM9OY=";
+    hash = "sha256-Weu2rUZYvKMQIwxDQsCW30NAjb6Dar2926r/tyREDoo=";
   };
 
-  cargoHash = "sha256-2Vc0vCQJY2enwTAgaRgqLdCTtF5znrF3xaCTvF44XX0=";
+  cargoHash = "sha256-W1IuK6/gkvfaHsivgfF0J+SisX8nPKLR7qFZ2Ia+LEc=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -24,6 +24,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/nicholasbishop/writedisk";
     platforms = lib.platforms.linux;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ devhell ];
+    maintainers = with lib.maintainers; [
+      devhell
+      lukas-sgx
+    ];
   };
 })

@@ -50,11 +50,6 @@
     "hash": "sha256-MvxivGjYerXcr70JpWe9CCXO6MU9QQgCkmZfjZCFdJM="
   },
   {
-    "pname": "Avalonia.ReactiveUI",
-    "version": "11.2.4",
-    "hash": "sha256-LqwLUDCIbJowol6BNTTsK7a7KjcLLbCM3y3KKvuHRGw="
-  },
-  {
     "pname": "Avalonia.Remote.Protocol",
     "version": "11.2.4",
     "hash": "sha256-mKQVqtzxnZu6p64ZxIHXKSIw3AxAFjhmrxCc5/1VXfc="
@@ -93,11 +88,6 @@
     "pname": "DynamicData",
     "version": "8.4.1",
     "hash": "sha256-r+haH5VlmZFJTEJ3UedsYybw+oddn/CSvfm6x7PrrQ4="
-  },
-  {
-    "pname": "Fody",
-    "version": "6.6.4",
-    "hash": "sha256-Xe9sGzIdQ970f0RwxD3KhdfqvGUoTpim2u2oqYHkDcI="
   },
   {
     "pname": "Fody",
@@ -205,19 +195,9 @@
     "hash": "sha256-jwsuS+Kp+sD31S41tTHv/zkFqnzxnGOEty2iZVmBb6E="
   },
   {
-    "pname": "ReactiveUI",
-    "version": "20.1.1",
-    "hash": "sha256-p9l2GMzBRchKb4gW9pQ3DIKhs2O9fX3t/V7jDDztBqE="
-  },
-  {
-    "pname": "ReactiveUI.Fody",
-    "version": "18.4.26",
-    "hash": "sha256-ucLfi/HB3cJIdmNssfazZAXPC8QJ35YVA+GtWKVU6UQ="
-  },
-  {
     "pname": "Robust.Natives",
-    "version": "0.2.3",
-    "hash": "sha256-EwaSVnPsDSjY61vBIHaRSs/xpigGPqRStjYLcz+xaB0="
+    "version": "0.2.5",
+    "hash": "sha256-XHTGa14j5A/rycs7Y7iEOmDFpbyG8abVH0pBYmvtk00="
   },
   {
     "pname": "Robust.Natives.Angle",
@@ -246,8 +226,8 @@
   },
   {
     "pname": "Robust.Natives.Sdl3",
-    "version": "0.1.1-sdl3.2.20",
-    "hash": "sha256-dQPO/zME+e/Hsmic32hn5YIy4+LKfjDk064o6N7PKvM="
+    "version": "0.1.3-sdl3.4.8",
+    "hash": "sha256-jPwa4krPM9I3zbYtWcs4JIOBDlolNKZSUfioo+X1c/k="
   },
   {
     "pname": "Robust.Natives.Swnfd",
@@ -321,8 +301,8 @@
   },
   {
     "pname": "Splat",
-    "version": "15.1.1",
-    "hash": "sha256-WipAVaUx2HrYNQ9LcYm496LndmSpVbuzJxzP9FA6Ohg="
+    "version": "15.3.1",
+    "hash": "sha256-1MlkqywOtLr5TbQ+zAqzw0l92LK9+9h2+sJgmfV32RU="
   },
   {
     "pname": "SQLitePCLRaw.bundle_e_sqlite3",
@@ -345,11 +325,6 @@
     "hash": "sha256-Zdj676VT6j6k9ZCL2hYVl4F8bi4TK/ldvQBPmW0oDi0="
   },
   {
-    "pname": "System.ComponentModel.Annotations",
-    "version": "5.0.0",
-    "hash": "sha256-0pST1UHgpeE6xJrYf5R+U7AwIlH3rVC3SpguilI/MAg="
-  },
-  {
     "pname": "System.Net.Http.WinHttpHandler",
     "version": "8.0.0",
     "hash": "sha256-wSK5KtWvlDp8WLNddCmAM66uGyj9/KfJyCh8ht1PD1M="
@@ -358,11 +333,6 @@
     "pname": "System.Reactive",
     "version": "6.0.0",
     "hash": "sha256-hXB18OsiUHSCmRF3unAfdUEcbXVbG6/nZxcyz13oe9Y="
-  },
-  {
-    "pname": "System.Reactive",
-    "version": "6.0.1",
-    "hash": "sha256-Lo5UMqp8DsbVSUxa2UpClR1GoYzqQQcSxkfyFqB/d4Q="
   },
   {
     "pname": "TerraFX.Interop.Windows",

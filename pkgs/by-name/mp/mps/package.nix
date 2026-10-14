@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Flexible memory management and garbage collection library";
-    homepage = "https://www.ravenbrook.com/project/mps";
+    homepage = "https://github.com/Ravenbrook/mps";
     license = lib.licenses.sleepycat;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.thoughtpolice ];

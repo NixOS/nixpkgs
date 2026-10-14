@@ -8,7 +8,7 @@
 }:
 let
   pname = "sqlcipher3";
-  version = "0.6.0";
+  version = "0.6.3";
 in
 buildPythonPackage {
   inherit pname version;
@@ -16,8 +16,16 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o1GuYwvWFMLBDtiYtCD3vIF+Q4FT9oP4g0jERdazqbE=";
+    hash = "sha256-/Lt4RmPSEhNWPz+9o5L/tfnXuE3/A9PRFL5rtUM4oa4=";
   };
+
+  postPatch = ''
+    # Remove conan from build dependencies; it is used upstream to fetch
+    # OpenSSL at build time, but we provide it via buildInputs instead.
+    # setup.py already handles the missing conan case gracefully.
+    substituteInPlace pyproject.toml \
+      --replace-fail '"conan>=2.0",' ""
+  '';
 
   build-system = [
     setuptools

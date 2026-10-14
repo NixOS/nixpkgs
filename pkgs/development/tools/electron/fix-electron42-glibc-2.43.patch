@@ -1,0 +1,67 @@
+From 83a9ccb1265dcdeeb8bf17205e00b751f86641d3 Mon Sep 17 00:00:00 2001
+From: Ho Cheung <hocheung@chromium.org>
+Date: Tue, 21 Apr 2026 08:19:53 -0700
+Subject: [PATCH] [sandbox] Fix SYS_SECCOMP conflict with newer glibc
+
+glibc now exposes SYS_SECCOMP in signal headers, which conflicts with
+Chromium's fallback macro in linux_seccomp.h.
+
+Stop defining SYS_SECCOMP in the public compat header and use a local
+fallback in trap.cc instead.
+
+Test: Tested on an Ubuntu 26.04 container using use_sysroot = false.
+Bug: 456218403
+Change-Id: I73ddfa85453dd9d524b64b4c1bca4f95b82c9f2b
+Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/7781604
+Reviewed-by: Elly <ellyjones@chromium.org>
+Commit-Queue: Aaron Teo <hocheung@chromium.org>
+Cr-Commit-Position: refs/heads/main@{#1618207}
+---
+
+diff --git a/sandbox/linux/seccomp-bpf/trap.cc b/sandbox/linux/seccomp-bpf/trap.cc
+index 1316786d..212e80e 100644
+--- a/sandbox/linux/seccomp-bpf/trap.cc
++++ b/sandbox/linux/seccomp-bpf/trap.cc
+@@ -29,6 +29,12 @@
+ 
+ namespace {
+ 
++#if defined(SYS_SECCOMP)
++constexpr int kSigsysSeccompCode = SYS_SECCOMP;
++#else
++constexpr int kSigsysSeccompCode = 1;
++#endif
++
+ struct arch_sigsys {
+   // RAW_PTR_EXCLUSION: Points to a code address given to us by the kernel.
+   RAW_PTR_EXCLUSION void* ip;
+@@ -151,7 +157,7 @@
+   // Various sanity checks to make sure we actually received a signal
+   // triggered by a BPF filter. If something else triggered SIGSYS
+   // (e.g. kill()), there is really nothing we can do with this signal.
+-  if (nr != LINUX_SIGSYS || info->si_code != SYS_SECCOMP || !ctx ||
++  if (nr != LINUX_SIGSYS || info->si_code != kSigsysSeccompCode || !ctx ||
+       info->si_errno <= 0 ||
+       static_cast<size_t>(info->si_errno) > trap_array_size_) {
+     // ATI drivers seem to send SIGSYS, so this cannot be FATAL.
+@@ -162,7 +168,6 @@
+     return;
+   }
+ 
+-
+   // Obtain the siginfo information that is specific to SIGSYS.
+   struct arch_sigsys sigsys;
+ #if defined(si_call_addr)
+diff --git a/sandbox/linux/system_headers/linux_seccomp.h b/sandbox/linux/system_headers/linux_seccomp.h
+index 8690a96..8ebf4045 100644
+--- a/sandbox/linux/system_headers/linux_seccomp.h
++++ b/sandbox/linux/system_headers/linux_seccomp.h
+@@ -214,8 +214,4 @@
+ #define SECCOMP_RET_INVALID 0x00010000U  // Illegal return value
+ #endif
+ 
+-#ifndef SYS_SECCOMP
+-#define SYS_SECCOMP                   1
+-#endif
+-
+ #endif  // SANDBOX_LINUX_SYSTEM_HEADERS_LINUX_SECCOMP_H_

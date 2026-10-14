@@ -5,6 +5,8 @@
   rustPlatform,
   buildPackages,
   installShellFiles,
+  pkg-config,
+  zstd,
   writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
@@ -12,7 +14,8 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.51.1";
+  version = "0.61.1";
+  __structuredAttrs = true;
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -21,16 +24,29 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dprint";
     repo = "dprint";
     tag = finalAttrs.version;
-    hash = "sha256-jj9SsVWCw2Fzoj1ome2rJ9bADFgREUdQf0jfOpt8PkU=";
+    hash = "sha256-MEcz5dmCp7pzxJOlU/2+1+60KB2XkFN7dtBMZaEpvVk=";
   };
 
-  cargoHash = "sha256-zjk2LrljubzfNk20y4XTcnqiQQsBlc2aRwAhH8wpv3Q=";
+  cargoHash = "sha256-Dha+M4WbGPx3WXSD9LLIjgL6HAxRFklafSgb9m7Fbow=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
-  # Adding "libunwind" in buildInputs did not resolve it.
-  env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
+  buildInputs = [
+    zstd
+  ];
+
+  env = {
+    # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
+    # Adding "libunwind" in buildInputs did not resolve it.
+    RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
+
+  # Avoiding utils::url::test::* failures in the Darwin sandbox
+  __darwinAllowLocalNetworking = true;
 
   cargoBuildFlags = [
     "--package=dprint"
@@ -78,7 +94,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      # Follow upstream's release policy. Git tags are not enough for this package:
+      # https://github.com/dprint/dprint/issues/1113
+      extraArgs = [ "--use-github-releases" ];
+    };
   };
 
   meta = {
@@ -92,7 +112,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://dprint.dev";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      khushraj
       kachick
       phanirithvij
     ];

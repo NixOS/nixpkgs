@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "docker-credential-env";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "isometry";
     repo = "docker-credential-env";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PnLylYDuDg+FSZ4CUSoQ5gMk4p08FP4OKBxkeIMa+tY=";
+    hash = "sha256-KsOLY1XDJVrsm2rnDCffPqtlD2yw+arWsJaItwoOyUQ=";
   };
 
-  vendorHash = "sha256-uALgz1TXTIk8UlxTaqYOXvCg9121hMIFfJoYC0jxohk=";
+  vendorHash = "sha256-Qr6T7NJaJcFD0EYuPS7mWJi0tjyut1aQ+Wbarc0tpGY=";
 
   ldflags =
     let

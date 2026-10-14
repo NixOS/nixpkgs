@@ -6,7 +6,7 @@
   python3Packages,
   glibcLocales,
   intltool,
-  gexiv2,
+  gexiv2_0_10,
   pango,
   gobject-introspection,
   wrapGAppsHook3,
@@ -23,7 +23,7 @@
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
-  version = "6.0.6";
+  version = "6.0.8";
   pname = "gramps";
   pyproject = true;
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "gramps-project";
     repo = "gramps";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+sWO+c7haKXH42JVT6Zpz70cHdGC/TPgBUMSD+0+/JI=";
+    hash = "sha256-Kq+QyhghBmUzl+ooCYSl2yNMvrBDnQS6Zg3nBI1jbRo=";
   };
 
   patches = [
@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   buildInputs = [
     gtk3
     pango
-    gexiv2
+    gexiv2_0_10
   ]
   # Map support
   ++ lib.optionals enableOSM [

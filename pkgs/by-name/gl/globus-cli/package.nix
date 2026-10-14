@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   build-system = with python3Packages; [
-    setuptools
+    flit-core
     ruamel-yaml
     flit-core
   ];
@@ -31,6 +31,11 @@ python3Packages.buildPythonApplication rec {
     packaging
     typing-extensions
     requests
+  ];
+
+  pythonRelaxDeps = [
+    "globus-sdk"
+    "jmespath"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -50,10 +55,6 @@ python3Packages.buildPythonApplication rec {
 
     pytestCheckHook
     versionCheckHook
-  ];
-
-  pythonRelaxDeps = [
-    "globus-sdk"
   ];
 
   versionCheckProgramArg = "version";

@@ -27,8 +27,6 @@
   libuuid,
   libxkbcommon,
   lv2,
-  pcre,
-  pcre2,
   pkg-config,
   python3,
   sqlite,
@@ -82,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libxkbcommon
     lv2
-    pcre
-    pcre2
     python3
     sqlite
   ];
@@ -127,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/jatinchowdhury18/AnalogTapeModel";
     description = "Physical modelling signal processing for analog tape recording. LV2, VST3, CLAP, and standalone";
-    license = with lib.licenses; [ gpl3Only ];
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ magnetophon ];
     platforms = lib.platforms.linux;
     # error: 'vvtanh' was not declared in this scope; did you mean 'tanh'?

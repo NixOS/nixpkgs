@@ -10,17 +10,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pyrefly";
-  version = "0.53.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "pyrefly";
     tag = finalAttrs.version;
-    hash = "sha256-tw4VQw0liyPjZBZxP7U79JLdJcSuitMr53lVdtje5KE=";
+    hash = "sha256-Uid4IpymX9+3TtLlLjl1B1nqAczgfgjphe0cuk0neVE=";
   };
 
   buildAndTestSubdir = "pyrefly";
-  cargoHash = "sha256-+LwF0PHBU+do+eg84PGMEt3ri9LjMD+e2p82i2icwh4=";
+
+  cargoHash = "sha256-snm1x7OKC5Sz12C8MyAf7ph0O01ghFWWlk6lpHujR7c=";
 
   buildInputs = [ rust-jemalloc-sys ];
 
@@ -37,10 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export TMPDIR=$(mktemp -d)
   '';
 
-  # requires unstable rust features
-  env.RUSTC_BOOTSTRAP = 1;
-
-  passthru.updateScript = nix-update-script { };
+  # avoid autoupdates for *-dev.* tags
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^([\\d.]+)$" ];
+  };
 
   meta = {
     description = "Fast type checker and IDE for Python";

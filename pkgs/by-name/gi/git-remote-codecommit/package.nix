@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  awscli2,
+  awscli,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [ botocore ];
 
   nativeCheckInputs = [
-    awscli2
+    awscli
   ]
   ++ (with python3Packages; [
     pytestCheckHook

@@ -2,11 +2,17 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
   pname = "oswald";
   version = "4.103";
+
+  outputs = [
+    "out"
+    "webfont"
+  ];
 
   src = fetchFromGitHub {
     owner = "googlefonts";
@@ -15,12 +21,12 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-yoUduWHuuKDQaJnQ+CgeMw1vp2lgn/OVPokSDzEU7yk=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
+  preInstall = "rm -r legacy/";
+
   installPhase = ''
     runHook preInstall
-
-    install -Dm444 fonts/ttf/*.ttf -t $out/share/fonts/truetype
-    install -Dm444 fonts/variable/*.ttf -t $out/share/fonts/variable
-
     runHook postInstall
   '';
 

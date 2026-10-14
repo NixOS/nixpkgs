@@ -10,7 +10,7 @@
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
 */
 {
-  supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
+  supportedSystems ? builtins.fromJSON (builtins.readFile ./release-supported-systems.json),
 }:
 
 let
@@ -66,9 +66,7 @@ let
     ghc948
     ghc967
     ghc984
-    ghc9102
     ghc9103
-    ghc9122 # TODO(@sternenseemann): drop
     ghc9123
   ];
 
@@ -187,17 +185,6 @@ let
 
   recursiveUpdateMany = builtins.foldl' lib.recursiveUpdate { };
 
-  # Remove multiple elements from a list at once.
-  #
-  # removeMany
-  #   :: [a]  -- list of elements to remove
-  #   -> [a]  -- list of elements from which to remove
-  #   -> [a]
-  #
-  # > removeMany ["aarch64-linux" "x86_64-darwin"] ["aarch64-linux" "x86_64-darwin" "x86_64-linux"]
-  # ["x86_64-linux"]
-  removeMany = itemsToRemove: list: lib.foldr lib.remove list itemsToRemove;
-
   # Recursively remove platforms from the values in an attribute set.
   #
   # removePlatforms
@@ -206,11 +193,11 @@ let
   #   -> AttrSet
   #
   # > attrSet = {
-  #     foo = ["aarch64-linux" "x86_64-darwin" "x86_64-linux"];
+  #     foo = ["aarch64-linux" "aarch64-darwin" "x86_64-linux"];
   #     bar.baz = ["aarch64-linux" "x86_64-linux"];
-  #     bar.quux = ["aarch64-linux" "x86_64-darwin"];
+  #     bar.quux = ["aarch64-linux" "aarch64-darwin"];
   #   }
-  # > removePlatforms ["aarch64-linux" "x86_64-darwin"] attrSet
+  # > removePlatforms ["aarch64-linux" "aarch64-darwin"] attrSet
   # {
   #   foo = ["x86_64-linux"];
   #   bar = {
@@ -221,7 +208,7 @@ let
   removePlatforms =
     platformsToRemove: packageSet:
     lib.mapAttrsRecursive (
-      _: val: if lib.isList val then removeMany platformsToRemove val else val
+      _: val: if lib.isList val then lib.subtractLists platformsToRemove val else val
     ) packageSet;
 
   jobs = recursiveUpdateMany [
@@ -255,7 +242,6 @@ let
         cachix
         # carp broken on 2024-04-09
         changelog-d
-        cedille
         client-ip-echo
         cornelis
         codd
@@ -296,6 +282,7 @@ let
         hlint
         hpack
         hscolour
+        hugs
         icepeak
         ihaskell
         jacinda
@@ -375,11 +362,13 @@ let
             "aarch64-linux"
 
             # musl only supports linux, not darwin.
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
-            haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler;
+            haskell.compiler = packagePlatforms (
+              # hugs doesn't build on musl yet
+              lib.filterAttrs (name: _: !(lib.hasPrefix "microhs" name)) pkgs.pkgsMusl.haskell.compiler
+            );
 
             # Get some cache going for MUSL-enabled GHC.
             haskellPackages = {
@@ -400,7 +389,6 @@ let
             "aarch64-linux" # times out on Hydra
 
             # Static doesn't work on darwin
-            "x86_64-darwin"
             "aarch64-darwin"
           ]
           {
@@ -499,7 +487,6 @@ let
               # Testing cross from x86_64-linux
               "aarch64-darwin"
               "aarch64-linux"
-              "x86_64-darwin"
             ]
             {
               haskellPackages = {
@@ -528,25 +515,25 @@ let
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
         # time < 1.13 conflicts with time == 1.14.*
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
-      Cabal_3_16_0_0 = released;
+      Cabal_3_16_1_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      haskell-debugger = [
+        compilerNames.ghc9141
+      ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
-        compilerNames.ghc9102
-        compilerNames.ghc9103
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       hpack = released;
       hsdns = released;
+      iserv-proxy = released;
       jailbreak-cabal = released;
       language-nix = released;
       nix-paths = released;
@@ -555,26 +542,74 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       ghc-source-gen = lib.subtractLists [
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       ghc-tags = lib.subtractLists [
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
       hashable = released;
       primitive = released;
+      scrod = [
+        compilerNames.ghc9141
+      ];
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
         compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
-        compilerNames.ghc9102
-        compilerNames.ghc9103
-        compilerNames.ghc9122
         compilerNames.ghc9123
       ] released;
+
+      # MicroHs core packages
+      ghc-compat = [
+        compilerNames.microhs
+      ];
+      MicroCabal = [
+        compilerNames.microhs
+      ];
+
+      # MicroHs-specific replacement packages
+      array = [
+        compilerNames.microhs
+      ];
+
+      # GHC boot packages known to be compatible with MicroHs
+      containers = [
+        compilerNames.microhs
+      ];
+      exceptions = [
+        compilerNames.microhs
+      ];
+      filepath = [
+        compilerNames.microhs
+      ];
+      mtl = [
+        compilerNames.microhs
+      ];
+      os-string = [
+        compilerNames.microhs
+      ];
+      parsec = [
+        compilerNames.microhs
+      ];
+      terminfo = [
+        compilerNames.microhs
+      ];
+      time = [
+        compilerNames.microhs
+      ];
+      transformers = [
+        compilerNames.microhs
+      ];
+
+      # MicroHs upstream tested
+      hscolour = [
+        compilerNames.microhs
+      ];
+      random = [
+        compilerNames.microhs
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {

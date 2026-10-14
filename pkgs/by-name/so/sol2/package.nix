@@ -3,8 +3,11 @@
   lib,
   stdenv,
   cmake,
-  lua,
+  lua5_2_compat,
 }:
+let
+  lua = lua5_2_compat;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sol2";
   version = "3.5.0";

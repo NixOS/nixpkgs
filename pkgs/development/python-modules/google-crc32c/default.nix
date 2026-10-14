@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "google-crc32c";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-crc32c";
     tag = "v${version}";
-    hash = "sha256-YXXoEXnJckF1kqpLXbIbJEcW+le6aeKyc6Y6xmf0SSw=";
+    hash = "sha256-bNTWyOWie1tPiptJ6NPCyC5kzcCpgOZ0w5hKVw07iwc=";
   };
 
   build-system = [ setuptools ];
@@ -41,8 +41,8 @@ buildPythonPackage rec {
   meta = {
     description = "Wrapper the google/crc32c hardware-based implementation of the CRC32C hashing algorithm";
     homepage = "https://github.com/googleapis/python-crc32c";
-    changelog = "https://github.com/googleapis/python-crc32c/blob/v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/googleapis/python-crc32c/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

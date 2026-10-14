@@ -11,11 +11,6 @@ buildDunePackage {
 
   dontAddPrefix = true;
 
-  preBuild = ''
-    rm -rf vendor/csexp
-    rm -rf vendor/pp
-  '';
-
   propagatedBuildInputs = [ dyn ];
 
   meta = {

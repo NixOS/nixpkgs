@@ -43,6 +43,8 @@ in
       }
     );
     environment.systemPackages = [ cfg.package ];
+
+    programs.fuse.enable = true;
   };
 
   meta.maintainers = with lib.maintainers; [

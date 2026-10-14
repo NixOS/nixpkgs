@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ron-lsp";
-  version = "0.1.1";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "jasonjmcghee";
     repo = "ron-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-c+cJrXINuoK+NR1rMSrOeZqZzrEcg/brSTKSTu5mNr4=";
+    hash = "sha256-7mmwoAvUVf86xxTXuI6Zc44nrPJ4yRz+rmwJ61/Wil8=";
   };
 
-  cargoHash = "sha256-eEoxgnfc9s59b0SNozEIj/1wHv+OWDmd4bniBbGsgSQ=";
+  cargoHash = "sha256-oysc13+FNF+IHVGYFV5MP5smaK9TtXXgDOhn7QmMPqs=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       based on Rust type annotations
     '';
     homepage = "https://github.com/jasonjmcghee/ron-lsp";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Dietr1ch
     ];

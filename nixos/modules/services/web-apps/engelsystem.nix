@@ -116,7 +116,7 @@ in
 
     services.phpfpm.pools.engelsystem = {
       user = "engelsystem";
-      settings = {
+      settings = lib.mapAttrs (_: v: lib.mkDefault v) {
         "listen.owner" = config.services.nginx.user;
         "pm" = "dynamic";
         "pm.max_children" = 32;

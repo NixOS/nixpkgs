@@ -9,15 +9,13 @@
   logs,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "happy-eyeballs";
-  version = "2.0.1";
-
-  minimalOCamlVersion = "4.08";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "https://github.com/roburio/happy-eyeballs/releases/download/v${version}/happy-eyeballs-${version}.tbz";
-    hash = "sha256-slVFiDApMbqF4Yhh5hCjraeCNJbU1JoZXpU1VsNR0mk=";
+    url = "https://github.com/roburio/happy-eyeballs/releases/download/v${finalAttrs.version}/happy-eyeballs-${finalAttrs.version}.tbz";
+    hash = "sha256-C9yLKA8FtciilZgjgvCX1MtxP/BV9pPP1/5kqN5t3Yw=";
   };
 
   propagatedBuildInputs = [
@@ -37,4 +35,4 @@ buildDunePackage rec {
       ulrikstrid
     ];
   };
-}
+})

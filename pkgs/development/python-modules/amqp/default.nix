@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "amqp";
-  version = "5.3.1";
+  version = "5.4.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zdwAxyVElSICO62Un3D/97SPCxredNFwpvEKsERzlDI=";
+    hash = "sha256-qqM5h9y2p4k5VdO09TfF1HVa3c4QCZKeY+XRjBtRoKc=";
   };
 
   propagatedBuildInputs = [ vine ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "amqp" ];
 
   meta = {
-    description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
+    description = "Python client for the Advanced Message Queuing Protocol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
     homepage = "https://github.com/celery/py-amqp";
     changelog = "https://github.com/celery/py-amqp/releases/tag/v${version}";
     license = lib.licenses.bsd3;

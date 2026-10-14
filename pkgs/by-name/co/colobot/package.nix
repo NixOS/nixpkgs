@@ -47,6 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'find_package(Boost COMPONENTS system filesystem regex REQUIRED)' \
+                     'find_package(Boost COMPONENTS filesystem regex REQUIRED)'
+  '';
+
   nativeBuildInputs = [
     cmake
     xmlstarlet

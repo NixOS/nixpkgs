@@ -7,16 +7,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "it87-${version}-${kernel.version}";
-  version = "unstable-2024-06-09";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "it87";
+  version = "unstable-2026-08-25";
 
   # Original is no longer maintained.
   # This is the same upstream as the AUR uses.
   src = fetchFromGitHub {
     owner = "frankcrawford";
     repo = "it87";
-    rev = "a82899557b4779b87d444a43caf126615e03bb4a";
-    hash = "sha256-aMMK3QoeXr6mPbo4SDXE8UuWc/oJ3lpgyK7wyEDKaEM=";
+    rev = "c567739c639533177abd66894a6a8d561337285f";
+    hash = "sha256-MvaqqiwUA15lqJXgRapABqSUrOfeP9bkEdb7IEZuUOE=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -41,5 +42,9 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "i686-linux"
     ];
+    # upstream it87.c uses the single-argument class_create(), which requires
+    # Linux 6.4+ (the owner parameter was removed in 6.4), and
+    # DEFINE_SIMPLE_DEV_PM_OPS which does not exist on 5.10.
+    broken = lib.versionOlder kernel.version "6.4";
   };
 }

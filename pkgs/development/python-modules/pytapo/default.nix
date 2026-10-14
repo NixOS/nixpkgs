@@ -12,12 +12,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pytapo";
-  version = "3.4.9";
+  version = "3.4.19";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-A4nZLEWUonwLekVuQ18Qe9oPAUScp6s/ZgPuo44+nWo=";
+    hash = "sha256-iwF7f5pwcYFBw6mPQw2YgRIcElqrcTMpzGCNJsttJY8=";
   };
 
   build-system = [ setuptools ];

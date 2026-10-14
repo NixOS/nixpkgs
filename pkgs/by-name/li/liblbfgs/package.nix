@@ -14,7 +14,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    # last successful hydra build on darwin was in 2024
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "Library of Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)";
     homepage = "http://www.chokkan.org/software/liblbfgs/";
     license = lib.licenses.mit;

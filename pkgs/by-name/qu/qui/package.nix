@@ -1,25 +1,25 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   stdenvNoCC,
   nixosTests,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_11,
   fetchPnpmDeps,
   pnpmConfigHook,
-  typescript,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "qui";
-  version = "1.13.1";
+  version = "1.31.1";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "qui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zpOz5X3Okig5PNdzwa1nS6HaldSXEFIQ/Aj0dQczabs=";
+    hash = "sha256-NaJSVOkmzvnE6/kKYsRF/6Gf0vTge7hvEHQ/+dHRchk=";
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
@@ -29,8 +29,7 @@ buildGoModule (finalAttrs: {
     nativeBuildInputs = [
       nodejs
       pnpmConfigHook
-      pnpm_9
-      typescript
+      pnpm_11
     ];
 
     sourceRoot = "${finalAttrs.src.name}/web";
@@ -42,9 +41,9 @@ buildGoModule (finalAttrs: {
         src
         sourceRoot
         ;
-      pnpm = pnpm_9;
-      fetcherVersion = 2;
-      hash = "sha256-3TAB5StrKBmgit02J7GiMfk6EDl8oiLvcOAnCJ9ian4=";
+      pnpm = pnpm_11;
+      fetcherVersion = 4;
+      hash = "sha256-F+B1rj9fcgaDfPYC+8hUZfpNQNiiK9TnT/Ld68fW/WA=";
     };
 
     postBuild = ''
@@ -56,7 +55,7 @@ buildGoModule (finalAttrs: {
     '';
   });
 
-  vendorHash = "sha256-F4P+hpbAFWCrk+lSleOQFTsR3kfZoWkMbybeKPzMv20=";
+  vendorHash = "sha256-DZ1JAC485qDOlk6+bSp/5HY30MclP6cINWmDJ8mEZ4Y=";
 
   preBuild = ''
     cp -r ${finalAttrs.qui-web}/* web/dist
@@ -65,6 +64,23 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-X github.com/autobrr/qui/internal/buildinfo.Version=${finalAttrs.version}"
     "-X main.PolarOrgID="
+  ];
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
+  # some season-pack tests use non-existent source paths (e.g. /media/...) and
+  # assert on a same-filesystem check that resolves them up to /. go's
+  # t.TempDir honours $TMPDIR, which defaults to /build. so just point it to
+  # something sane
+  preCheck = ''
+    export TMPDIR=/tmp
+  '';
+
+  checkFlags = [
+    # broken in sandbox for some reason
+    "-skip=TestRollback"
   ];
 
   nativeInstallCheckInputs = [

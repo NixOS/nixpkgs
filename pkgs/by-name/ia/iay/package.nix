@@ -5,26 +5,29 @@
   rustPlatform,
   openssl,
   pkg-config,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iay";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "aaqaishtyaq";
     repo = "iay";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-oNUK2ROcocKoIlAuNZcJczDYtSchzpB1qaYbSYsjN50=";
+    hash = "sha256-H0h3ChS+B8+Pnet8rNQIkpr4k/t7P2hYrS06dademUU=";
   };
 
-  cargoHash = "sha256-QO9gzJKSBMs5s1fCfpBuyHDK9uE1B148bMjp8RjH4nY=";
+  cargoHash = "sha256-66bhmIk/YCweL9GquPpObkkl2Sn45IlU2HqnKn43294=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
   ];
+
+  nativeCheckInputs = [ gitMinimal ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = toString [

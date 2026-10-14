@@ -3,19 +3,17 @@
   buildPythonPackage,
   fetchPypi,
   requests,
-  isPy27,
 }:
 
 buildPythonPackage rec {
   pname = "update-checker";
   version = "0.18.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchPypi {
     pname = "update_checker";
     inherit version;
-    sha256 = "6a2d45bb4ac585884a6b03f9eade9161cedd9e8111545141e9aa9058932acb13";
+    hash = "sha256-ai1Fu0rFhYhKawP56t6RYc7dnoERVFFB6aqQWJMqyxM=";
   };
 
   propagatedBuildInputs = [ requests ];

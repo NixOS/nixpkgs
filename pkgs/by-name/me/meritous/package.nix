@@ -28,6 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/meritous/meritous/-/commit/68029f02ccaea86fb96d6dd01edb269ac3e6eff0.patch";
       hash = "sha256-YRV0cEcn6nEJUdHF/cheezNbsgZmjy0rSUw0tuhUYf0=";
     })
+
+    # https://gitlab.com/meritous/meritous/-/merge_requests/6
+    ./gcc15-fix.patch
   ];
 
   prePatch = ''

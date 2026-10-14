@@ -7,6 +7,8 @@
 let
   cfg = config.services.mosquitto;
 
+  pluginLibDir = "${lib.getLib cfg.package}/lib";
+
   # note that mosquitto config parsing is very simplistic as of may 2021.
   # often times they'll e.g. strtok() a line, check the first two tokens, and ignore the rest.
   # there's no escaping available either, so we have to prevent any being necessary.
@@ -239,8 +241,8 @@ let
         options = lib.mkOption {
           type = attrsOf optionType;
           description = ''
-            Options for the auth plugin. Each key turns into a `auth_opt_*`
-             line in the config.
+            Options for the plugin. Each key turns into a `plugin_opt_*`
+            line in the config.
           '';
           default = { };
         };
@@ -257,12 +259,13 @@ let
   formatAuthPlugin =
     plugin:
     [
-      "auth_plugin ${plugin.plugin}"
+      "plugin ${plugin.plugin}"
       "auth_plugin_deny_special_chars ${optionToString plugin.denySpecialChars}"
     ]
-    ++ formatFreeform { prefix = "auth_opt_"; } plugin.options;
+    ++ formatFreeform { prefix = "plugin_opt_"; } plugin.options;
 
   freeformListenerKeys = {
+    accept_protocol_versions = 1;
     allow_anonymous = 1;
     allow_zero_length_clientid = 1;
     auto_id_prefix = 1;
@@ -274,13 +277,18 @@ let
     "ciphers_tls1.3" = 1;
     crlfile = 1;
     dhparamfile = 1;
+    disable_client_cert_date_checks = 1;
+    enable_proxy_protocol = 1;
     http_dir = 1;
     keyfile = 1;
+    listener_allow_anonymous = 1;
+    listener_auto_id_prefix = 1;
     max_connections = 1;
     max_qos = 1;
     max_topic_alias = 1;
     mount_point = 1;
     protocol = 1;
+    proxy_protocol_v2_require_tls = 1;
     psk_file = 1;
     psk_hint = 1;
     require_certificate = 1;
@@ -292,6 +300,7 @@ let
     use_identity_as_username = 1;
     use_subject_as_username = 1;
     use_username_as_clientid = 1;
+    websockets_origin = 1;
   };
 
   listenerOptions =
@@ -378,14 +387,31 @@ let
     ++ userAsserts prefix listener.users
     ++ lib.imap0 (i: v: authAsserts "${prefix}.authPlugins.${toString i}" v) listener.authPlugins;
 
+  makeACLFile =
+    idx: listener:
+    pkgs.writeText "mosquitto-acl-${toString idx}.conf" (
+      lib.concatStringsSep "\n" (
+        lib.flatten [
+          listener.acl
+          (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
+        ]
+      )
+    );
+
   formatListener =
     idx: listener:
     [
       "listener ${toString listener.port} ${toString listener.address}"
-      "acl_file /etc/mosquitto/acl-${toString idx}.conf"
     ]
-    ++ lib.optional (!listener.omitPasswordAuth) "password_file ${cfg.dataDir}/passwd-${toString idx}"
     ++ formatFreeform { } listener.settings
+    ++ [
+      "plugin ${pluginLibDir}/mosquitto_acl_file.so"
+      "plugin_opt_acl_file ${cfg.dataDir}/acl-${toString idx}.conf"
+    ]
+    ++ lib.optionals (!listener.omitPasswordAuth) [
+      "plugin ${pluginLibDir}/mosquitto_password_file.so"
+      "plugin_opt_password_file ${cfg.dataDir}/passwd-${toString idx}"
+    ]
     ++ lib.concatMap formatAuthPlugin listener.authPlugins;
 
   freeformBridgeKeys = {
@@ -402,7 +428,11 @@ let
     bridge_outgoing_retain = 1;
     bridge_protocol_version = 1;
     bridge_psk = 1;
+    bridge_receive_maximum = 1;
+    bridge_reload_type = 1;
     bridge_require_ocsp = 1;
+    bridge_session_expiry_interval = 1;
+    bridge_tls_use_os_certs = 1;
     bridge_tls_version = 1;
     cleansession = 1;
     idle_timeout = 1;
@@ -501,6 +531,9 @@ let
     autosave_on_changes = 1;
     check_retain_source = 1;
     connection_messages = 1;
+    enable_control_api = 1;
+    global_max_clients = 1;
+    global_max_connections = 1;
     log_facility = 1;
     log_timestamp = 1;
     log_timestamp_format = 1;
@@ -623,6 +656,13 @@ let
   globalAsserts =
     prefix: cfg:
     lib.flatten [
+      {
+        assertion = lib.versionAtLeast cfg.package.version "2.1";
+        message = ''
+          ${prefix}.package must be at least version 2.1, since the generated
+          configuration relies on the acl-file and password-file plugins.
+        '';
+      }
       (assertKeysValid "${prefix}.settings" freeformGlobalKeys cfg.settings)
       (lib.imap0 (n: l: listenerAsserts "${prefix}.listener.${toString n}" l) cfg.listeners)
       (lib.mapAttrsToList (n: b: bridgeAsserts "${prefix}.bridge.${n}" b) cfg.bridges)
@@ -762,31 +802,12 @@ in
         UMask = "0077";
       };
       preStart = lib.concatStringsSep "\n" (
-        lib.imap0 (
-          idx: listener:
-          makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"
-        ) cfg.listeners
+        lib.imap0 (idx: listener: ''
+          ${makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}"}
+          install -m 0700 ${makeACLFile idx listener} ${cfg.dataDir}/acl-${toString idx}.conf
+        '') cfg.listeners
       );
     };
-
-    environment.etc = lib.listToAttrs (
-      lib.imap0 (idx: listener: {
-        name = "mosquitto/acl-${toString idx}.conf";
-        value = {
-          user = config.users.users.mosquitto.name;
-          group = config.users.users.mosquitto.group;
-          mode = "0400";
-          text = (
-            lib.concatStringsSep "\n" (
-              lib.flatten [
-                listener.acl
-                (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
-              ]
-            )
-          );
-        };
-      }) cfg.listeners
-    );
 
     users.users.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon owner";

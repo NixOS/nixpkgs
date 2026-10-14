@@ -1,34 +1,71 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
-  yarnConfigHook,
-  yarnBuildHook,
+  substitute,
+  yarn-berry_4,
   nodejs,
   jq,
+  makeWrapper,
+  pkg-config,
+  python3,
 }:
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "eas-cli";
-  version = "16.32.0";
-
+let
+  version = "24.8.0";
   src = fetchFromGitHub {
     owner = "expo";
     repo = "eas-cli";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-FP3vZKiJeQmIh2zEMWJcgsJJfUI+YhB9IyQlfnbl7ys=";
-  };
+    rev = "v${version}";
+    hash = "sha256-HypTLf16HxL2Jile5ACulNJw8L6Xr+Bxgt6eNFRWYo8=";
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = finalAttrs.src + "/yarn.lock"; # Point to the root lockfile
-    hash = "sha256-IG13BEOH7BUi1HTcXebMQjXZJgIaWJ7hgX3GcmRB8hA=";
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/expo/eas-cli/blob/main/package.json#L38
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
+  };
+  missingHashes = ./missing-hashes.json;
+in
+# cc is necessary because of building an npm package without a prebuilt binary
+#  for ARM. See comment in nativeBuildInputs below.
+stdenv.mkDerivation (finalAttrs: {
+  pname = "eas-cli";
+  inherit
+    src
+    version
+    missingHashes
+    ;
+
+  yarnOfflineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit src missingHashes;
+    hash = "sha256-oSy6t6vDeFVfkUp6Dw5PNt1+6MXx2FQIEnzJCPW0ufw=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
     nodejs
     jq
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # The version of utf-8-validate -> node-gyp -> bufferutil that this package
+    #  uses not have pre-built binary for ARM. It appears that this should be
+    #  fixed by the version of utf-8-validate that this depends on, so there
+    #  may be some underlying transitive dependency causing this.
+    #  https://github.com/websockets/utf-8-validate/issues/106
+    pkg-config
+    python3
   ];
 
   postPatch = ''
@@ -36,6 +73,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tmpfile="$(mktemp)"
     jq '.useNx = false' lerna.json > "$tmpfile"
     mv "$tmpfile" lerna.json
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+
+    runHook postBuild
   '';
 
   # yarnInstallHook strips out build outputs within packages/eas-cli resulting in most commands missing from eas-cli.
@@ -52,6 +97,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postFixup = ''
     mkdir -p $out/bin
     ln -sf $out/lib/node_modules/eas-cli-root/packages/eas-cli/bin/run $out/bin/eas
+    wrapProgram $out/bin/eas --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
   meta = {

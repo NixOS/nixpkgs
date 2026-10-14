@@ -10,7 +10,8 @@
   pygraphviz,
   plasTeX,
 }:
-buildPythonPackage {
+
+buildPythonPackage (finalAttrs: {
   pname = "plastexdepgraph";
   version = "0.0.5";
   pyproject = true;
@@ -18,8 +19,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     repo = "plastexdepgraph";
     owner = "PatrickMassot";
-    rev = "0.0.4";
-    hash = "sha256-Q13uYYZe1QgZHS4Nj8ugr+Fmhva98ttJj3AlXTK6XDw=";
+    tag = finalAttrs.version;
+    hash = "sha256-GOTQmcWrmEZ2DkAMcE1ZknLOyVorGC87+qhO8jxcGJ4=";
   };
 
   build-system = [ setuptools ];
@@ -29,10 +30,13 @@ buildPythonPackage {
     plasTeX
   ];
 
+  pythonImportsCheck = [ "plastexdepgraph" ];
+
   meta = {
     description = "PlasTeX plugin allowing to build dependency graphs";
     homepage = "https://github.com/PatrickMassot/plastexdepgraph";
+    changelog = "https://github.com/PatrickMassot/plastexdepgraph/releases/tag/${finalAttrs.src.tag}";
     maintainers = with lib.maintainers; [ niklashh ];
     license = lib.licenses.asl20;
   };
-}
+})

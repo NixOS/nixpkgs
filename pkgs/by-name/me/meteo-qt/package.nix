@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "lrelease-pro-qt6" "${qt6.qttools}/libexec/lrelease-pro"
+      --replace-fail "lrelease-pro-qt6" "${qt6.qttools}/bin/lrelease-pro"
   '';
 
   nativeBuildInputs = [

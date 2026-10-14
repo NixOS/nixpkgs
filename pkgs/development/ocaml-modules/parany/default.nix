@@ -5,7 +5,7 @@
   cpu,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "parany";
   version = "14.0.1";
 
@@ -13,8 +13,8 @@ buildDunePackage rec {
 
   src = fetchFromGitHub {
     owner = "UnixJunkie";
-    repo = pname;
-    rev = "v${version}";
+    repo = "parany";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QR3Rq30iKhft+9tVCgJLOq9bwJe7bcay/kMTXjjCLjE=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.bcdarwin ];
     license = lib.licenses.lgpl2;
   };
-}
+})

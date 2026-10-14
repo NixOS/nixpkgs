@@ -1,0 +1,33 @@
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -578,6 +578,14 @@ config("compiler") {
+     }
+   }
+-
++
++  # TODO(crbug.com/40192287): Investigate why/if this should be needed.
++  # Keep this outside the Clang-only block so GCC uses the same behavior.
++  if (is_win) {
++    cflags += [ "/clang:-ffp-contract=off" ]
++  } else {
++    cflags += [ "-ffp-contract=off" ]
++  }
++
+   # Clang-specific compiler flags setup.
+   # ------------------------------------
+   if (is_clang) {
+@@ -644,13 +652,6 @@ config("compiler") {
+       }
+     }
+-
+-    # TODO(crbug.com/40192287): Investigate why/if this should be needed.
+-    if (is_win) {
+-      cflags += [ "/clang:-ffp-contract=off" ]
+-    } else {
+-      cflags += [ "-ffp-contract=off" ]
+-    }
+-
++
+     # Enable ELF CREL (see crbug.com/357878242) for all platforms that use ELF.
+     # TODO(crbug.com/376278218): This causes segfault on Linux ARM builds.
+     # It also causes segfault on Linux s390x:

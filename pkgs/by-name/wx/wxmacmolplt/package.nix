@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  wxGTK32,
+  wxwidgets_3_2,
   libGL,
   libGLU,
   pkg-config,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     libGL
     libGLU
     libx11

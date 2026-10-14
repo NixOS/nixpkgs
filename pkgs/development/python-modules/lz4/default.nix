@@ -11,19 +11,17 @@
   setuptools-scm,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "lz4";
-  version = "4.4.4-unstable-2025-10-21";
+  version = "4.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-lz4";
     repo = "python-lz4";
-    rev = "59b2d8176072bdee50d38cc68ec65c33b928a980";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2D30n5j5r4+gcrjEXPu+WpZ4QsugCPyC1xCZuJIPcI0=";
   };
-
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "4.4.4";
 
   build-system = [
     pkgconfig
@@ -54,9 +52,10 @@ buildPythonPackage {
   '';
 
   meta = {
+    changelog = "https://github.com/python-lz4/python-lz4/releases/tag/${finalAttrs.src.tag}";
     description = "LZ4 Bindings for Python";
     homepage = "https://github.com/python-lz4/python-lz4";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

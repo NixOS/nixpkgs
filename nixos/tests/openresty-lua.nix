@@ -1,12 +1,4 @@
-{ pkgs, lib, ... }:
-let
-  luaLibs = [
-    pkgs.lua.pkgs.markdown
-  ];
-
-  getLuaPath = lib: "${lib}/share/lua/${pkgs.lua.luaversion}/?.lua";
-  luaPath = lib.concatStringsSep ";" (map getLuaPath luaLibs);
-in
+{ pkgs, ... }:
 {
   name = "openresty-lua";
   meta = with pkgs.lib.maintainers; {
@@ -15,7 +7,7 @@ in
 
   nodes = {
     webserver =
-      { pkgs, lib, ... }:
+      { pkgs, ... }:
       {
         networking = {
           extraHosts = ''
@@ -27,9 +19,10 @@ in
           enable = true;
           package = pkgs.openresty;
 
-          commonHttpConfig = ''
-            lua_package_path '${luaPath};;';
-          '';
+          lua = {
+            enable = true;
+            extraPackages = p: [ p.markdown ];
+          };
 
           virtualHosts."default.test" = {
             default = true;
@@ -96,7 +89,7 @@ in
       webserver.succeed("mkdir -p /var/web")
       webserver.succeed("chown nginx:nginx /var/web")
       webserver.succeed("$(curl -vvv http://sandbox.test/test2-write)")
-      assert "404 Not Found" in machine.succeed(
+      assert "404 Not Found" in webserver.succeed(
           "curl -vvv -s http://sandbox.test/test2-read/bar.txt"
       )
     '';

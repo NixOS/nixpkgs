@@ -7,6 +7,7 @@
   pygobject3,
   pyserial,
   pytestCheckHook,
+  pythonOlder,
   pyzmq,
   setuptools,
   setuptools-scm,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "urwid";
-  version = "3.0.4";
+  version = "3.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "urwid";
     repo = "urwid";
     tag = version;
-    hash = "sha256-mKBLAoEBiqr//1Gl8DAmpUJ9woq6Zf2HhbYEirAoi2M=";
+    hash = "sha256-9ajcpyQTSASz8A4eM78vPjL+9Rk07Q30JmIrSx0Crpo=";
   };
 
   postPatch = ''
@@ -44,12 +45,10 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    curses = [ ];
     glib = [ pygobject3 ];
     tornado = [ tornado ];
-    trio = [
-      exceptiongroup
-      trio
-    ];
+    trio = [ trio ] ++ lib.optionals (pythonOlder "3.11") [ exceptiongroup ];
     twisted = [ twisted ];
     zmq = [ pyzmq ];
     serial = [ pyserial ];

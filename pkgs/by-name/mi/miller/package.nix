@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "miller";
-  version = "6.16.0";
+  version = "6.22.0";
 
   src = fetchFromGitHub {
     owner = "johnkerl";
     repo = "miller";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WQn0vynf+eNbPHuPI2J5CA9R3ptAShPMErJQ/W3UybQ=";
+    sha256 = "sha256-VIdX7yO45jjaYApNCays4knwLIjRG8GNkWeNGXKIs6M=";
   };
 
   outputs = [
@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
     "man"
   ];
 
-  vendorHash = "sha256-pBl0WfgXgMlUFzIDL7vgTkh9OXoetyRSf769UcVW+uQ=";
+  vendorHash = "sha256-9ioeIPtEWmC3vY3rIPdRl3+0a2cKpH7VhmLVi7ioQK8=";
 
   postInstall = ''
     mkdir -p $man/share/man/man1

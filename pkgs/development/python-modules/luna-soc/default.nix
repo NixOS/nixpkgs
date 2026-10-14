@@ -26,6 +26,14 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools-git-versioning<2"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+
+    # Read CSR field annotations from the class, not the instance, so amaranth-soc
+    # works on Python 3.14 (PEP 649). https://github.com/greatscottgadgets/luna-soc/issues/48
+    substituteInPlace luna_soc/gateware/vendor/amaranth_soc/csr/reg.py \
+      --replace-fail 'if hasattr(self, "__annotations__"):' \
+                     'if getattr(type(self), "__annotations__", None):' \
+      --replace-fail 'filter_fields(self.__annotations__)' \
+                     'filter_fields(type(self).__annotations__)'
   '';
 
   build-system = [

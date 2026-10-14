@@ -11,18 +11,22 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-websecurityscanner";
-  version = "1.19.0";
+  version = "1.22.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_websecurityscanner";
-    inherit version;
-    hash = "sha256-ZNPoAbzhytetU1XauosOQ4jpjJd+AkEZC70gPfnZ6OY=";
+    inherit (finalAttrs) version;
+    hash = "sha256-ibD8vmyXBQgGoRB3stczbrR2vY1m4OwIsFf42AgJPOk=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
@@ -45,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Cloud Web Security Scanner API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-websecurityscanner";
-    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-websecurityscanner-v${version}/packages/google-cloud-websecurityscanner";
+    changelog = "https://github.com/googleapis/google-cloud-python/tree/google-cloud-websecurityscanner-v${finalAttrs.version}/packages/google-cloud-websecurityscanner";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

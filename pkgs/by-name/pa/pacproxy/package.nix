@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "pacproxy";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "williambailey";
     repo = "pacproxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oDSptPihrDIiTCgcP4t2J3vJBNGMViyPAAmBv4ynLNU=";
+    hash = "sha256-GgNNWHiIWArNH6+OWOEM5U/HRgnX11qoGVNjZIt4j38=";
   };
 
-  vendorHash = "sha256-0Go+xwzaT1qt+cJfcPkC8ft3eB/OZCvOi2Pnn/A/rtQ=";
+  vendorHash = "sha256-I3wI7Z/Gcp7fdOYXkl98EBMwQEEdlHyrq2I1E3KMVME=";
 
   meta = {
     description = "No-frills local HTTP proxy server powered by a proxy auto-config (PAC) file";

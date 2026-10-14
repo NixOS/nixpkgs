@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "milc";
-  version = "1.9.1";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "clueboard";
     repo = "milc";
     tag = version;
-    hash = "sha256-byj2mcDxLl7rZEFjAt/g1kHllnVxiTIQaTMG24GeSVc=";
+    hash = "sha256-zy62VjtoNhl5hXywJO1p9rO19YAJeKOg+NkfCfgn1Xs=";
   };
 
   postPatch = ''

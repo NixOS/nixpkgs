@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   version = "1.8.7";
 
   src = fetchFromGitHub {
-    owner = "alvatip";
+    owner = "MolassesLover";
     repo = "Nordzy-icon";
     rev = version;
     sha256 = "sha256-r/WYGcHRAFX7TennestobjcJhwu3GE8aQXxnaeokQM0=";
@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = {
     description = "Icon theme using the Nord color palette, based on WhiteSur and Numix icon themes";
-    homepage = "https://github.com/alvatip/Nordzy-icon";
+    homepage = "https://github.com/MolassesLover/Nordzy-icon";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ alexnortung ];

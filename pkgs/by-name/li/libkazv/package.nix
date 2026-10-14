@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchgit,
   boost,
   catch2_3,
   cmake,
@@ -12,21 +12,20 @@
   libhttpserver,
   libmicrohttpd,
   nlohmann_json,
-  olm,
+  vodozemac-bindings-cpp,
   pkg-config,
   zug,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkazv";
-  version = "0.7.0";
+  version = "0.8.0";
 
-  src = fetchFromGitLab {
-    domain = "lily-is.land";
-    owner = "kazv";
-    repo = "libkazv";
+  # Heavily mirrored. Click "Clone" at https://iron.lily-is.land/diffusion/L/ to see all mirrors
+  src = fetchgit {
+    url = "https://iron.lily-is.land/diffusion/L/libkazv.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bKujiuAR5otF7nc/BdVWVaEW9fSxdh2bcAgsQ5UO1Aw=";
+    hash = "sha256-rXQLbYPmD9UH0iXXqrAQSPF3KgIvjEyZ/97Q+/tl9Ec=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     libcpr_1_10_5
     libhttpserver
     libmicrohttpd
-    olm
     nlohmann_json
+    vodozemac-bindings-cpp
     zug
   ];
 

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "convimg";
-  version = "9.4";
+  version = "10.3";
 
   src = fetchFromGitHub {
     owner = "mateoconlechuga";
     repo = "convimg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5insJ391Usef8GF3Yh74PEqE534zitQg9udFRPcz69g=";
+    hash = "sha256-osLtxnugSYmIyepQzvQAOt06vTtTHd1ft9EOPuBUkXU=";
     fetchSubmodules = true;
   };
 
@@ -42,5 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "convimg";
+    broken = true;
   };
 })

@@ -8,21 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "jid";
-  version = "0.7.6";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "simeji";
     repo = "jid";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fZzEbVNGsDNQ/FhII+meQvKeyrgxn3wtFW8VfNmJz5U=";
+    hash = "sha256-5Bi9nPOASxuZoxVxt6i3AQxvyWfe1B3JDSjXyuOPUHk=";
   };
 
-  vendorHash = "sha256-Lq8ouTjPsGhqDwrCMpqkSU7FEGszYwAkwl92vAEZ68w=";
-
-  patches = [
-    # Run go mod tidy
-    ./go-mod.patch
-  ];
+  vendorHash = "sha256-ZqnIBmziPX45wqiEzD9mq4jLLW69mgGYhDSOTj20auQ=";
 
   ldflags = [
     "-s"

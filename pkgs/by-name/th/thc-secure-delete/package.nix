@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   installShellFiles,
   pkg-config,
 }:
@@ -16,6 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-hvWuxFkzhOSCplPtyjRtn36bIk6KdPBcpr3lAmiAyfE=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/signal-handler-fix.patch?h=thc-secure-delete&id=ca83e2c6a548aaba56a0499180d15d61c75b6acd";
+      hash = "sha256-MGCl5wXHuDr0Z4MlBGlSAUrv5VeQ8FjWCNsTOnS7Evw=";
+      extraPrefix = "";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

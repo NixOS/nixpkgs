@@ -4,9 +4,12 @@
   fetchFromGitHub,
   pkg-config,
   gtk3,
-  lua,
+  lua5_2_compat,
   glib,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation {
   pname = "pinsel";

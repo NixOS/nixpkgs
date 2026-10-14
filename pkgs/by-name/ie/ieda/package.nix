@@ -28,11 +28,11 @@
 let
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "0.1.0-unstable-2025-12-16";
+    version = "0.1.0-unstable-2025-12-23";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "b73be0f1909294b56b2dbb27dba04b6cd9e0070d";
-      sha256 = "sha256-bvSHfQXDk7caTELtjgpSZhJdYfRzfk9VmFm2iBW2lRw=";
+      rev = "59662dcd768165f3957003522cb929d42b252023";
+      sha256 = "sha256-LaFGp9U7K+HmvHW1XK6HyUB/WM5O3y/tngul+cdbCP4=";
     };
 
     patches = [
@@ -44,6 +44,12 @@ let
         hash = "sha256-YJnY+r9A887WT0a/H/Zf++r1PpD7t567NpkesDmIsD0=";
       })
     ];
+
+    postPatch = ''
+      # Patch for boost1.89, should be removed after upstream update: https://gitee.com/oscc-project/iEDA/pulls/92
+      sed -i '1i find_package(Boost REQUIRED)' src/operation/iPA/test/CMakeLists.txt
+      sed -i 's/boost_system/Boost::headers/g' src/operation/iPA/test/CMakeLists.txt
+    '';
 
     dontBuild = true;
     dontFixup = true;
@@ -75,11 +81,9 @@ stdenv.mkDerivation {
     (lib.cmakeBool "CMD_BUILD" true)
     (lib.cmakeBool "SANITIZER" false)
     (lib.cmakeBool "BUILD_STATIC_LIB" false)
+    (lib.cmakeOptionType "filepath" "CMAKE_RUNTIME_OUTPUT_DIRECTORY" "${placeholder "out"}/bin")
+    (lib.cmakeOptionType "filepath" "CMAKE_LIBRARY_OUTPUT_DIRECTORY" "${placeholder "out"}/lib")
   ];
-
-  preConfigure = ''
-    cmakeFlags+=" -DCMAKE_RUNTIME_OUTPUT_DIRECTORY:FILEPATH=$out/bin -DCMAKE_LIBRARY_OUTPUT_DIRECTORY:FILEPATH=$out/lib"
-  '';
 
   buildInputs = [
     rustpkgs.iir-rust
@@ -124,7 +128,8 @@ stdenv.mkDerivation {
 
   doInstallCheck = !stdenv.hostPlatform.isAarch64; # Tests will fail on aarch64-linux, wait for upstream fix: https://github.com/microsoft/onnxruntime/issues/10038
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
+  __structuredAttrs = true;
 
   passthru.updateScript = ./update.sh;
 

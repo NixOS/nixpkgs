@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Plugin enabling dbt to work with Amazon Redshift";
     homepage = "https://github.com/dbt-labs/dbt-redshift";
-    changelog = "https://github.com/dbt-labs/dbt-redshift/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-redshift/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
   };
 }

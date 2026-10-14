@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "fabric-ai";
-  version = "1.4.404";
+  version = "1.4.518";
 
   src = fetchFromGitHub {
     owner = "danielmiessler";
     repo = "fabric";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RkcbKRSXKsW4nyAtSD63fwZDoaDpqg1LgTRTICD4INs=";
+    hash = "sha256-qR/teG2HLw511f0YtaB1BVmN0c5ECPaCkmZ5vzmX2VY=";
   };
 
-  vendorHash = "sha256-dG4RPmsAB7yqZyJNBt1N+S9vwhgxdO6p3TeAdIJKMBk=";
+  vendorHash = "sha256-7kQEAjfZTGGO4bB/51gO4zMzEHbdtxBsBYa4EUsTjYc=";
 
   # Fabric introduced plugin tests that fail in the nix build sandbox.
   doCheck = false;

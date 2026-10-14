@@ -14,7 +14,7 @@
   networkmanager,
   openresolv,
   glib,
-  systemd,
+  systemdLibs,
   tpm2-tss,
   libxml2,
   pam,
@@ -122,13 +122,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "strongswan";
-  version = "6.0.4"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "6.1.0"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchFromGitHub {
     owner = "strongswan";
     repo = "strongswan";
     tag = finalAttrs.version;
-    hash = "sha256-KRfEH7puwn+PgQvOrkTEowPnGzCtXdsUqg7wBNMypkQ=";
+    hash = "sha256-Uqyyju7mi/ERQLo4oAAxX2FzpHzulyrManX8NN4ESAo=";
   };
 
   patches = [
@@ -151,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (features.eap-sim-pcsc or false) pcsclite
     ++ lib.optional (features.openssl or false) openssl
     ++ lib.optional (features.curl or false) curl
-    ++ lib.optional (features.systemd or false) systemd
+    ++ lib.optional (features.systemd or false) systemdLibs
     ++ lib.optional (features.tnc-ifmap or false) libxml2
     ++ lib.optional (features.xauth-pam or false) pam
     ++ lib.optional (features.forecast or false || features.connmark or false) iptables
@@ -192,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "OpenSource IPsec-based VPN solution";
     homepage = "https://www.strongswan.org/";
-    changelog = "https://github.com/strongswan/strongswan/blob/${finalAttrs.src.rev}/ChangeLog";
+    changelog = "https://github.com/strongswan/strongswan/blob/${finalAttrs.src.rev}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "swanctl";

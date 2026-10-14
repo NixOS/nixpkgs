@@ -8,10 +8,9 @@ Subject: [PATCH] libgfortran: Force regular include/lib dir
  1 file changed, 5 insertions(+), 8 deletions(-)
 
 diff --git a/libgfortran/Makefile.am b/libgfortran/Makefile.am
-index 21b35c76a06..3d38cde5b42 100644
 --- a/libgfortran/Makefile.am
 +++ b/libgfortran/Makefile.am
-@@ -42,14 +42,13 @@ extra_darwin_ldflags_libgfortran += -Wc,-nodefaultrpaths
+@@ -42,8 +42,7 @@
  extra_darwin_ldflags_libgfortran += -Wl,-rpath,@loader_path
  endif
  
@@ -21,6 +20,9 @@ index 21b35c76a06..3d38cde5b42 100644
  
  LTLDFLAGS = $(shell $(SHELL) $(top_srcdir)/../libtool-ldflags $(LDFLAGS)) \
  	    $(lt_host_flags)
+@@ -58,8 +57,8 @@
+ 	      -I../libbacktrace
+ endif
  
 -toolexeclib_LTLIBRARIES = libgfortran.la
 -toolexeclib_DATA = libgfortran.spec
@@ -28,8 +30,8 @@ index 21b35c76a06..3d38cde5b42 100644
 +toolexeclib_DATA = libgfortran.spec # needs "exec" in name
  libgfortran_la_LINK = $(LINK) $(libgfortran_la_LDFLAGS)
  libgfortran_la_LDFLAGS = -version-info `grep -v '^\#' $(srcdir)/libtool-version` \
- 	$(LTLDFLAGS) $(LIBQUADLIB) ../libbacktrace/libbacktrace.la \
-@@ -58,16 +57,14 @@ libgfortran_la_LDFLAGS = -version-info `grep -v '^\#' $(srcdir)/libtool-version`
+ 	$(LTLDFLAGS) $(LIBQUADLIB) $(LIBBACKTRACE_LIB) \
+@@ -68,16 +67,14 @@
  	$(version_arg) -Wc,-shared-libgcc
  libgfortran_la_DEPENDENCIES = $(version_dep) libgfortran.spec $(LIBQUADLIB_DEP)
  
@@ -50,4 +52,3 @@ index 21b35c76a06..3d38cde5b42 100644
  ## io.h conflicts with a system header on some platforms, so
 -- 
 2.47.2
-

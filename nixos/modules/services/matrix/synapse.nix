@@ -1494,7 +1494,7 @@ in
             PrivateDevices = true;
             PrivateTmp = true;
             PrivateUsers = true;
-            ProcSubset = "pid";
+            ProcSubset = "all"; # pid breaks most process metrics
             ProtectClock = true;
             ProtectControlGroups = true;
             ProtectHome = true;

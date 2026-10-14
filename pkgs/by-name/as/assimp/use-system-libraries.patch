@@ -1,0 +1,86 @@
+diff --git a/code/CMakeLists.txt b/code/CMakeLists.txt
+index b7b08de3b7..1c07aee928 100644
+--- a/code/CMakeLists.txt
++++ b/code/CMakeLists.txt
+@@ -1117,13 +1117,7 @@
+   hunter_add_package(pugixml)
+   find_package(pugixml CONFIG REQUIRED)
+ ELSEIF(NOT TARGET pugixml::pugixml)
+-  SET( Pugixml_SRCS
+-    ../contrib/pugixml/src/pugiconfig.hpp
+-    ../contrib/pugixml/src/pugixml.cpp
+-    ../contrib/pugixml/src/pugixml.hpp
+-  )
+-  INCLUDE_DIRECTORIES("../contrib/pugixml/src")
+-  SOURCE_GROUP( Contrib\\Pugixml FILES ${Pugixml_SRCS})
++  find_package(pugixml REQUIRED)
+ ENDIF()
+ 
+ # utf8
+@@ -1131,7 +1125,7 @@
+   hunter_add_package(utf8)
+   find_package(utf8cpp CONFIG REQUIRED)
+ ELSE()
+-  INCLUDE_DIRECTORIES("../contrib/utf8cpp/source")
++  find_package(utf8cpp REQUIRED)
+ ENDIF()
+ 
+ # polyclipping
+@@ -1287,7 +1281,8 @@
+   hunter_add_package(RapidJSON)
+   find_package(RapidJSON CONFIG REQUIRED)
+ ELSE()
+-  INCLUDE_DIRECTORIES("../contrib/rapidjson/include")
++  find_package(RapidJSON CONFIG REQUIRED)
++  include_directories(${RapidJSON_INCLUDE_DIRS})
+   ADD_DEFINITIONS( -DRAPIDJSON_HAS_STDSTRING=1)
+   option( ASSIMP_RAPIDJSON_NO_MEMBER_ITERATOR "Suppress rapidjson warning on MSVC (NOTE: breaks android build)" ON )
+   if(ASSIMP_RAPIDJSON_NO_MEMBER_ITERATOR)
+@@ -1353,7 +1348,7 @@
+   ${ASSIMP_EXPORTER_SRCS}
+ 
+   ${FBX_COMMON_SRCS}
+-  
++
+   # Third-party libraries
+   ${unzip_compile_SRCS}
+   ${Poly2Tri_SRCS}
+@@ -1497,13 +1492,11 @@
+     target_link_libraries(assimp PRIVATE ${draco_LIBRARIES})
+   endif()
+ ELSE()
+-  TARGET_LINK_LIBRARIES(assimp ${ZLIB_LIBRARIES} ${OPENDDL_PARSER_LIBRARIES})
++  TARGET_LINK_LIBRARIES(assimp PRIVATE ${ZLIB_LIBRARIES} ${OPENDDL_PARSER_LIBRARIES})
+   if (ASSIMP_BUILD_DRACO)
+     target_link_libraries(assimp ${draco_LIBRARIES})
+   endif()
+-  if(TARGET pugixml::pugixml)
+-    target_link_libraries(assimp pugixml::pugixml)
+-  endif()
++  target_link_libraries(assimp PRIVATE pugixml utf8::cpp)
+ ENDIF()
+ 
+ if(ASSIMP_ANDROID_JNIIOSYSTEM)
+@@ -1608,7 +1601,7 @@
+ 
+ # Add RT-extension library for glTF importer with Open3DGC-compression.
+ IF (RT_FOUND AND ASSIMP_IMPORTER_GLTF_USE_OPEN3DGC)
+-  TARGET_LINK_LIBRARIES(assimp rt)
++  TARGET_LINK_LIBRARIES(assimp PRIVATE rt)
+ ENDIF ()
+ 
+ IF(ASSIMP_INSTALL)
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 362a43be05..368b52b126 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -263,7 +263,8 @@
+   hunter_add_package(RapidJSON)
+   find_package(RapidJSON CONFIG REQUIRED)
+ ELSE()
+-  INCLUDE_DIRECTORIES("../contrib/rapidjson/include")
++  find_package(RapidJSON CONFIG REQUIRED)
++  include_directories(${RapidJSON_INCLUDE_DIRS})
+   ADD_DEFINITIONS( -DRAPIDJSON_HAS_STDSTRING=1)
+   option( ASSIMP_RAPIDJSON_NO_MEMBER_ITERATOR "Suppress rapidjson warning on MSVC (NOTE: breaks android build)" ON )
+   if(ASSIMP_RAPIDJSON_NO_MEMBER_ITERATOR)

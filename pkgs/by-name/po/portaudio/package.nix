@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.portaudio.com/";
     # Not exactly a bsd license, but alike
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lovek323 ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 

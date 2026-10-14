@@ -124,6 +124,8 @@ lib.extendMkDerivation {
       cargoPgrxFlags' = lib.escapeShellArgs cargoPgrxFlags;
     in
     {
+      __structuredAttrs = true;
+
       buildInputs = (args.buildInputs or [ ]);
 
       nativeBuildInputs =
@@ -176,9 +178,11 @@ lib.extendMkDerivation {
         runHook postInstall
       '';
 
-      PGRX_PG_SYS_SKIP_BINDING_REWRITE = "1";
-      CARGO_BUILD_INCREMENTAL = "false";
-      RUST_BACKTRACE = "full";
+      env = args.env or { } // {
+        PGRX_PG_SYS_SKIP_BINDING_REWRITE = "1";
+        CARGO_BUILD_INCREMENTAL = "false";
+        RUST_BACKTRACE = "full";
+      };
 
       checkNoDefaultFeatures = true;
       checkFeatures =

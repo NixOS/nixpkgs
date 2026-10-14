@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -16,10 +17,14 @@ buildGoModule (finalAttrs: {
   vendorHash = null;
   subPackages = ".";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Table cat";
     homepage = "https://github.com/rsc/tcat";
-    maintainers = with lib.maintainers; [ mmlb ];
+    maintainers = [
+      lib.maintainers.mmlb
+    ];
     license = lib.licenses.bsd3;
     mainProgram = "tcat";
   };

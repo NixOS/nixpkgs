@@ -7,8 +7,8 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation {
-  version = "3.7.7";
+stdenv.mkDerivation (finalAttrs: {
+  version = "3.7.8";
   pname = "taktuk";
 
   nativeBuildInputs = [
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
     domain = "gitlab.inria.fr";
     owner = "taktuk";
     repo = "taktuk";
-    rev = "dcd763e389a414f540b43674cbc63752176f1ce3"; # does not tag releases
-    hash = "sha256-CerOBn1VDiKFLaW2WXv6wLxfcqy1H3dlF70lrequbog=";
+    tag = "version-${finalAttrs.version}";
+    hash = "sha256-/Xr2Jl3WbL68ZunBpko7jLbgAbDkERnrtuJnS0m59qY=";
   };
 
   preBuild = ''
@@ -53,4 +53,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };
-}
+})

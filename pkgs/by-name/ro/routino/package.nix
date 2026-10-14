@@ -46,7 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  CLANG = lib.optionalString stdenv.cc.isClang "1";
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CLANG = "1";
+  };
 
   makeFlags = [ "prefix=$(out)" ];
 

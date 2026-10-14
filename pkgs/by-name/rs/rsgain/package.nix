@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsgain";
-  version = "3.6";
+  version = "3.8";
 
   src = fetchFromGitHub {
     owner = "complexlogic";
     repo = "rsgain";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dqvaPLVpNnbN2W0TOphS7QU6MDh5pxFJoUDGvkat164=";
+    hash = "sha256-BhjsTGSxemFX0MYSDUgKqX9W8ScLyq8Y6OhagMO6m70=";
   };
 
   nativeBuildInputs = [

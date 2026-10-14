@@ -7,14 +7,14 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "xattr";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pkyOIe/xvhQ6zPgP07j94+KKR4w32imHQq9kesPl4Kc=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-MEOfq9feB4eyfppuHVacWVmFTLMi9kznOA/tv6UDUDY=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,8 @@ buildPythonPackage rec {
     description = "Python wrapper for extended filesystem attributes";
     mainProgram = "xattr";
     homepage = "https://github.com/xattr/xattr";
-    changelog = "https://github.com/xattr/xattr/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/xattr/xattr/blob/v${finalAttrs.version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

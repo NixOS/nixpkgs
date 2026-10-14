@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Collection of tools to download books from Google Books";
     homepage = "https://njw.me.uk/getxbook/";
     license = lib.licenses.isc;

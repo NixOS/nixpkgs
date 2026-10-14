@@ -6,7 +6,6 @@
   pkg-config,
   libubox-nossl,
   ssl_implementation,
-  additional_buildInputs ? [ ],
 }:
 
 stdenv.mkDerivation {
@@ -35,7 +34,7 @@ stdenv.mkDerivation {
     cmake
     pkg-config
   ];
-  buildInputs = [ ssl_implementation ] ++ additional_buildInputs;
+  buildInputs = [ ssl_implementation ];
 
   passthru = {
     inherit ssl_implementation;

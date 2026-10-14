@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-session";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-session";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-KBNX1jbQ2yv+5rymoB9/w5V3bRZhBdZIJoysp9cNgn4=";
+    hash = "sha256-MqFZ/0Xe2EXVzbhviNSO3gbZK8R+wLGQOoVkJDA6/Eg=";
   };
 
   outputs = [

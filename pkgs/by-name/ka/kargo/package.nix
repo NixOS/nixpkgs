@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kargo";
-  version = "1.8.6";
+  version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "akuity";
     repo = "kargo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sBUgoR3Eqv2OQRnXR9IaB4QcZ+awJb3ah7ySZ0XsaYA=";
+    hash = "sha256-Z3Gtza2mLa/ii4a9/D+AwBzixFVV7wuHJQABplXD90Y=";
   };
 
-  vendorHash = "sha256-ZB1Eq8xQ/oF5sm750K9yJyBpwCIcCqmFL8FWpNsiXfo=";
+  vendorHash = "sha256-G0YMzEZdMueR9u/xi5J7Ne2TM2kkDk9BEZrT0cMR7fk=";
 
   subPackages = [ "cmd/cli" ];
 

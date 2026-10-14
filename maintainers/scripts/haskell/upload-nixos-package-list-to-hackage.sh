@@ -36,7 +36,7 @@ if test -z "$CABAL_DIR"; then
   fi
 fi
 
-package_list="$(nix-build -A haskell.package-list)/nixos-hackage-packages.csv"
+package_list="$(nix-build --arg config '{ allowAliases = false; }' -A haskell.package-list)/nixos-hackage-packages.csv"
 username=$(grep "^username:" "$CABAL_DIR/config" | sed "s/^username: //")
 password_command=$(grep "^password-command:" "$CABAL_DIR/config" | sed "s/^password-command: //")
 curl -u "$username:$($password_command | head -n1)" --digest -H "Content-type: text/csv" -T "$package_list" https://hackage.haskell.org/distro/NixOS/packages.csv

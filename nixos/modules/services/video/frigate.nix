@@ -348,6 +348,10 @@ in
               proxy_set_header X-Forwarded-Groups $http_x_forwarded_groups;
               proxy_set_header X-Forwarded-Email $http_x_forwarded_email;
               proxy_set_header X-Forwarded-Preferred-Username $http_x_forwarded_preferred_username;
+              proxy_set_header X-Auth-Request-User $http_x_auth_request_user;
+              proxy_set_header X-Auth-Request-Groups $http_x_auth_request_groups;
+              proxy_set_header X-Auth-Request-Email $http_x_auth_request_email;
+              proxy_set_header X-Auth-Request-Preferred-Username $http_x_auth_request_preferred_username;
               proxy_set_header X-authentik-username $http_x_authentik_username;
               proxy_set_header X-authentik-groups $http_x_authentik_groups;
               proxy_set_header X-authentik-email $http_x_authentik_email;
@@ -361,6 +365,10 @@ in
             extraConfig = nginxAuthRequest + ''
               aio threads;
               vod hls;
+
+              # Use fMP4 (fragmented MP4) instead of MPEG-TS for better performance
+              # Smaller segments, faster generation, better browser compatibility
+              vod_hls_container_format fmp4;
 
               secure_token $args;
               secure_token_types application/vnd.apple.mpegurl;
@@ -397,7 +405,9 @@ in
             extraConfig = nginxAuthRequest + ''
               types {
                   video/mp4 mp4;
-                  image/jpeg jpg;
+                  image/jpeg jpg jpeg;
+                  image/png png;
+                  image/webp webp;
               }
 
               expires 7d;
@@ -485,19 +495,6 @@ in
                 }
               '';
           };
-          # frontend uses this to fetch the version
-          "/api/go2rtc/api" = {
-            proxyPass = "http://frigate-go2rtc/api";
-            recommendedProxySettings = true;
-            extraConfig =
-              nginxAuthRequest
-              + nginxProxySettings
-              + ''
-                limit_except GET {
-                    deny  all;
-                }
-              '';
-          };
           # integrationn uses this to add webrtc candidate
           "/api/go2rtc/webrtc" = {
             proxyPass = "http://frigate-go2rtc/api/webrtc";
@@ -507,7 +504,7 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
-                limit_except GET {
+                limit_except POST {
                     deny  all;
                 }
               '';
@@ -533,6 +530,7 @@ in
                 expires off;
 
                 proxy_cache frigate_api_cache;
+                proxy_cache_key "$scheme$proxy_host$request_uri|$role|$groups|$user";
                 proxy_cache_lock on;
                 proxy_cache_use_stale updating;
                 proxy_cache_valid 200 5s;
@@ -550,6 +548,23 @@ in
 
                 location /api/login {
                     auth_request off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
+                location /api/logout {
+                    auth_request off;
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
+                location /api/auth/first_time_login {
+                    auth_request off;
+                    limit_except GET {
+                        deny all;
+                    }
                     rewrite ^/api(/.*)$ $1 break;
                     proxy_pass http://frigate-api;
                     ${nginxProxySettings}
@@ -575,6 +590,14 @@ in
               '';
           };
           "/assets/" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              expires 1y;
+              add_header Cache-Control "public";
+            '';
+          };
+          "/fonts" = {
             root = cfg.package.web;
             extraConfig = ''
               access_log off;
@@ -614,6 +637,7 @@ in
           listen 127.0.0.1:5000;
 
           # vod settings
+          vod_hls_version 6;
           vod_base_url "";
           vod_segments_base_url "";
           vod_mode mapped;
@@ -623,6 +647,8 @@ in
           vod_manifest_segment_durations_mode accurate;
           vod_ignore_edit_list on;
           vod_segment_duration 10000;
+
+          # MPEG-TS settings (not used when fMP4 is enabled, kept for reference)
           vod_hls_mpegts_align_frames off;
           vod_hls_mpegts_interleave_frames on;
 
@@ -718,19 +744,25 @@ in
         ]
         ++ optionals (!stdenv.hostPlatform.isAarch64) [
           # not available on aarch64-linux
-          intel-gpu-tools
           rocmPackages.rocminfo
         ];
       serviceConfig = {
         ExecStartPre = [
           (pkgs.writeShellScript "frigate-clear-cache" ''
-            shopt -s extglob
-            rm --recursive --force /var/cache/frigate/!(model_cache)
+            ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
             cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
           '')
+        ]
+        ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
+          # Extract libavformat version to enable version-dependent flags in ffmpeg
+          (pkgs.writeShellScript "frigate-libavformat-major-version" ''
+            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | ${lib.getExe pkgs.gnugrep} -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
+            echo "Detected $(cat /run/frigate/ffmpeg-env)"
+          '')
         ];
+        EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
@@ -739,11 +771,10 @@ in
         Group = "frigate";
         SupplementaryGroups = [ "render" ] ++ optionals withCoral [ "coral" ];
 
-        AmbientCapabilities = optionals (elem cfg.vaapiDriver [
-          "i965"
-          "iHD"
-        ]) [ "CAP_PERFMON" ]; # for intel_gpu_top
+        # No capabilities
+        CapabilityBoundingSet = [ "" ];
 
+        # Allow delegating access
         UMask = "0027";
 
         StateDirectory = "frigate";
@@ -751,6 +782,7 @@ in
 
         # Caches
         PrivateTmp = true;
+        TemporaryFileSystem = "/dev/shm:mode=1777,nosuid,nodev";
         CacheDirectory = [
           "frigate"
           # https://github.com/blakeblackshear/frigate/discussions/18129
@@ -760,7 +792,59 @@ in
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+        RemoveIPC = true;
+
+        # Reduce visible process scope to cgroup
+        ProtectProc = "invisible";
+
+        # Allow wide /proc inspection, e.g. for cpuinfo
+        ProcSubset = "all";
+
+        # Protect various system locations/interfaces
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+
+        # No JIT compilation
+        MemoryDenyWriteExecute = true;
+
+        # No ABI personality changes
+        LockPersonality = true;
+
+        # Only IP/Unix sockets
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+
+        # Deny namespace creation
+        RestrictNamespaces = true;
+
+        # No privilege escalation
+        NoNewPrivileges = true;
+        RestrictSUIDSGID = true;
+
+        # No realtime schedulign
+        RestrictRealtime = true;
+
+        # Restrict allowed syscalls
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        SystemCallArchitectures = "native";
+        SystemCallErrorNumber = "EPERM";
       };
+    };
+
+    systemd.tmpfiles.settings."frigate" = {
+      # prevent gc of multiprocessing forkserver socket due to default systemd tmpfiles rules
+      "/tmp/systemd-private-%b-${config.systemd.services.frigate.name}-*/tmp/pymp-*".x = { };
     };
   };
 }

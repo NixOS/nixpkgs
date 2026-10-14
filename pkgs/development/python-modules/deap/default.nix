@@ -2,25 +2,34 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  matplotlib,
+  setuptools,
+  moocore,
   numpy,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "deap";
-  version = "1.4.3";
-  format = "setuptools";
+  version = "1.4.4";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-fJcIj7BYNb3CVb7EdcsOd43itD5Ey++/K81lWu7IZf0=";
+    inherit (finalAttrs) version;
+    pname = "deap";
+    hash = "sha256-UNS9kk/KWhaj26i/2xFApV6cJM5QgWq09Wg9LzHC1zQ=";
   };
 
-  propagatedBuildInputs = [
-    matplotlib
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    moocore
     numpy
   ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
@@ -32,4 +41,4 @@ buildPythonPackage rec {
       psyanticy
     ];
   };
-}
+})

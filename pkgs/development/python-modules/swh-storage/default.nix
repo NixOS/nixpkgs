@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -30,9 +31,9 @@
   swh-journal,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-storage";
-  version = "4.1.1";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -40,18 +41,13 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-storage";
-    tag = "v${version}";
-    hash = "sha256-AY2IcRJG19oSy2usI9JZTEKYLI3SEiLpNisqD7zus8A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l9ElZtpJBryFvBLtXQZ7NiYH6FvyarmoWzTkTg7E8gw=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-  ];
-
-  pythonRelaxDeps = [
-    # we patched click 8.2.1
-    "click"
   ];
 
   dependencies = [
@@ -73,6 +69,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "swh.storage" ];
+
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     postgresql
@@ -102,10 +101,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-storage/-/tags/${src.tag}";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-storage/-/tags/${finalAttrs.src.tag}";
     description = "Abstraction layer over the archive, allowing to access all stored source code artifacts as well as their metadata";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-storage";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

@@ -32,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.55";
 
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "DavidGriffith";
     repo = "frotz";
     tag = finalAttrs.version;
@@ -84,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://davidgriffith.gitlab.io/frotz/";
-    changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${finalAttrs.version}/NEWS";
+    changelog = "https://gitlab.com/DavidGriffith/frotz/-/raw/${finalAttrs.version}/ChangeLog";
     description = "Z-machine interpreter for Infocom games and other interactive fiction (${frontend})";
     mainProgram = progName;
     platforms = lib.platforms.unix;

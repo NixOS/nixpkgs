@@ -1,7 +1,5 @@
 const path = require('path')
 
-// This has to match the logic in pkgs/development/tools/yarn2nix-moretea/yarn2nix/lib/urlToName.js
-// so that fixup_yarn_lock produces the same paths
 const urlToName = url => {
   const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
 

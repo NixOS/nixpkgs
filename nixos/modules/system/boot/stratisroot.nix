@@ -34,6 +34,7 @@ in
           thin_repair = "${pkgs."thin-provisioning-tools"}/bin/thin_repair";
           thin_metadata_size = "${pkgs."thin-provisioning-tools"}/bin/thin_metadata_size";
           stratis-min = "${pkgs.stratisd}/bin/stratis-min";
+          cryptsetup = "${pkgs.cryptsetup}/bin/cryptsetup";
         };
         services = lib.attrsets.mapAttrs' (mountPoint: fileSystem: {
           name = "stratis-setup-${fileSystem.stratis.poolUuid}";
@@ -76,7 +77,6 @@ in
       ]
       ++ [
         "aes"
-        "aes_generic"
         "blowfish"
         "twofish"
         "serpent"

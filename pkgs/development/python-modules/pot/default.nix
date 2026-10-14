@@ -1,40 +1,63 @@
 {
   lib,
-  autograd,
   buildPythonPackage,
   fetchFromGitHub,
-  cvxopt,
+
+  # build-system
   cython,
+  numpy,
+  setuptools,
+
+  # dependencies
+  scipy,
+
+  # optional-dependencies
+  # backend-jax
   jax,
   jaxlib,
-  matplotlib,
-  numpy,
+  # backend-tf
+  tensorflow,
+  # backend-torch
+  torch,
+  # cvxopt
+  cvxopt,
+  # dr
+  scikit-learn,
   pymanopt,
+  autograd,
+  # plot
+  matplotlib,
+
+  # tests
   pytestCheckHook,
   pytest-cov-stub,
-  scikit-learn,
-  scipy,
-  setuptools,
-  tensorflow,
-  torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pot";
-  version = "0.9.5";
+  version = "0.9.6.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PythonOT";
     repo = "POT";
-    tag = version;
-    hash = "sha256-sEK3uhZtjVJGEN1Gs8N0AMtiEOo9Kpn/zOSWUfGc/qE=";
+    tag = finalAttrs.version;
+    hash = "sha256-db4fKXqvg9DEmbI/RTQWcOdw+3ccPk74ME0VDsXZlsQ=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail " --durations=20" "" \
+      --replace-fail " --junit-xml=junit-results.xml" ""
+
+    # we don't need setup.py to find the macos sdk for us
+    sed -i '/sdk_path/d' setup.py
+  '';
+
   build-system = [
-    setuptools
     cython
     numpy
+    setuptools
   ];
 
   dependencies = [
@@ -62,34 +85,12 @@ buildPythonPackage rec {
       # torch-geometric
     ];
     plot = [ matplotlib ];
-    all =
-      with optional-dependencies;
-      (
-        backend-numpy
-        ++ backend-jax
-        ++ backend-cupy
-        ++ backend-tf
-        ++ backend-torch
-        ++ optional-dependencies.cvxopt
-        ++ dr
-        ++ gnn
-        ++ plot
-      );
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --durations=20" "" \
-      --replace " --junit-xml=junit-results.xml" ""
-
-    # we don't need setup.py to find the macos sdk for us
-    sed -i '/sdk_path/d' setup.py
-  '';
 
   # need to run the tests with the built package next to the test directory
   preCheck = ''
@@ -99,6 +100,7 @@ buildPythonPackage rec {
 
   postCheck = ''
     popd
+    rm -rf ot
   '';
 
   disabledTests = [
@@ -125,8 +127,18 @@ buildPythonPackage rec {
     "test_wasserstein_1d_type_devices"
     "test_wasserstein"
     "test_weak_ot_bakends"
+
     # TypeError: Only integers, slices...
     "test_emd1d_device_tf"
+
+    # ValueError: setting an array element with a sequence
+    "test_fully_relaxed_path"
+    "test_pointwise_gromov"
+    "test_semi_relaxed_path"
+
+    # ValueError: Unknown Distance Metric: sokalmichener
+    "test_dist"
+    "test_dist_vs_cdist"
   ];
 
   pythonImportsCheck = [
@@ -137,7 +149,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python Optimal Transport Library";
     homepage = "https://pythonot.github.io/";
+    downloadPage = "https://github.com/PythonOT/POT";
+    changelog = "https://github.com/PythonOT/POT/blob/${finalAttrs.src.tag}/RELEASES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yl3dy ];
   };
-}
+})

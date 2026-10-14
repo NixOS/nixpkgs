@@ -1,54 +1,47 @@
 {
   lib,
-  fetchFromGitHub,
-  rustPlatform,
-  pkg-config,
-  glib,
-  pango,
-  gdk-pixbuf,
-  gtk4,
-  libadwaita,
+  stdenv,
+  fetchgit,
+  cmake,
+  qt6,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lsfg-vk-ui";
-  version = "1.0.0";
+  version = "2.0.0";
 
-  src = fetchFromGitHub {
-    owner = "PancakeTAS";
-    repo = "lsfg-vk";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-nIyVOil/gHC+5a+sH3vMlcqVhixjJaGWqXbyoh2Nqyw=";
+  src = fetchgit {
+    url = "https://git.lsfg-vk.dev/lsfg-vk.git";
+    tag = finalAttrs.version;
+    hash = "sha256-vp0/adJdVV73C2RFjcEE90KjWiZJQhiqqOlYQ89RG+Y=";
   };
 
-  cargoHash = "sha256-hIQRS/egIDU5Vu/1KWHtpt4S26h+9GadVr+lBAG2LDg=";
-
-  sourceRoot = "source/ui";
-
   nativeBuildInputs = [
-    pkg-config
-    glib
+    cmake
+    qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    pango
-    gdk-pixbuf
-    gtk4
-    libadwaita
+  buildInputs = [ qt6.qtdeclarative ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "LSFGVK_MANAGED" true)
+    (lib.cmakeBool "LSFGVK_BUILD_LAYER" false)
+    (lib.cmakeBool "LSFGVK_BUILD_UI" true)
+    (lib.cmakeBool "LSFGVK_BUILD_CLI" false)
   ];
 
-  postInstall = ''
-    install -Dm444 $src/ui/rsc/gay.pancake.lsfg-vk-ui.desktop $out/share/applications/gay.pancake.lsfg-vk-ui.desktop
-    install -Dm444 $src/ui/rsc/icon.png $out/share/icons/hicolor/256x256/apps/gay.pancake.lsfg-vk-ui.png
-  '';
+  __structuredAttrs = true;
+  strictDeps = true;
 
   meta = {
     description = "Graphical configuration interface for lsfg-vk";
-    homepage = "https://github.com/PancakeTAS/lsfg-vk/";
-    changelog = "https://github.com/PancakeTAS/lsfg-vk/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.mit;
+    homepage = "https://lsfg-vk.dev/";
+    license = lib.licenses.cc-by-nc-nd-40;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pabloaul ];
+    maintainers = with lib.maintainers; [
+      Gliczy
+      pabloaul
+    ];
     mainProgram = "lsfg-vk-ui";
   };
 })

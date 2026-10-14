@@ -57,7 +57,7 @@
         # Still on main page
         machine.succeed("xdotool mousemove 500 740 click 1")
         machine.sleep(2)
-        machine.wait_for_text(r"(Date|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|All day|Name|Details|More)")
+        machine.wait_for_text(r"(Date|January|February|March|April|May|June|July|August|September|October|November|December|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|All day|Name|Details|More)")
         machine.screenshot("lomiri-calendar_newevent")
 
         # On New Event page

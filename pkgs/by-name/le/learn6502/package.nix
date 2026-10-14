@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  substitute,
   yarn-berry_4,
   nodejs,
   meson,
@@ -24,24 +25,45 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "learn6502";
-  version = "0.6.3";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "JumpLink";
     repo = "Learn6502";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MR4QslG1DnnYLLn7esXGit0HG1cW37ECUE2hgOegudw=";
+    hash = "sha256-b91b+H5avQDYknDaKUSPGG+Vq6sxSwuJgSiVzdqlbh8=";
+
+    # Remove when updating since upstream migrated to gjsify
+    # https://github.com/JumpLink/Learn6502/commit/1ae86c179aede8c5785aeda66db334a29d02a7c0
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry_4.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
+
+  patches = [
+    ./get-yarn-from-path.patch
+  ];
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-y1Xyb2ipUx9gcfnub6gjABBSjBXQmSp6Kim0ZtUso38=";
+    hash = "sha256-BIP2L6EQXKzpiYrA8qpqQEQ/NnjFrQSyHlmFg7vg1Xk=";
   };
 
   nativeBuildInputs = [
     nodejs
+    yarn-berry
     yarn-berry.yarnBerryConfigHook
     meson
     ninja

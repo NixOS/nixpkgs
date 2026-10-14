@@ -12,7 +12,7 @@
   lib,
   libGLU,
   libpsl,
-  libsForQt5,
+  qt5,
   libredirect,
   libx11,
   lz4,
@@ -55,8 +55,8 @@ stdenv.mkDerivation {
     gtk3
     nghttp2
     libpsl
-    libsForQt5.qtbase
-    libsForQt5.qt5.qtwayland
+    qt5.qtbase
+    qt5.qtwayland
   ];
 
   installPhase = ''
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
       $out/share/mime/packages/ideamaker.xml
 
     install -D usr/share/ideamaker/icons/ideamaker-icon.png \
-      $out/share/pixmaps/ideamaker.png
+      $out/share/icons/hicolor/128x128/apps/ideamaker.png
 
     ln -sf $out/usr/lib/x86_64-linux-gnu/ideamaker/ideamaker $out/bin/ideamaker
 

@@ -23,6 +23,12 @@ buildPythonPackage rec {
     hash = "sha256-K0m+rM0dcosAOl5jYdh9CSRrL/Vuk1ATWHPQJbLxvRw=";
   };
 
+  # The sdist's nested .cargo/config makes maturin >= 1.13.0 skip adding
+  # `-undefined dynamic_lookup` but cargo never reads it, dropping the flag
+  postPatch = ''
+    rm -r minify-html-python/.cargo
+  '';
+
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook

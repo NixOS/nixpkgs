@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "BMAP Tools";
     homepage = "https://github.com/yoctoproject/bmaptool";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "bmaptool";
   };

@@ -1,30 +1,34 @@
 {
   lib,
   aiohttp,
+  aiointercept,
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
   setuptools,
-  syrupy,
+  syrupy_6,
   tenacity,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "nextdns";
-  version = "5.0.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nextdns";
     tag = finalAttrs.version;
-    hash = "sha256-jZ+ULAlqaOnVWEHDPzIxIFjx+4eC3jMlXyX0QhfZUYM=";
+    hash = "sha256-+ih7QHmtQmWsi6HZZ3xepYBDYlCOyMKo0pQtr6oXpFs=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     aiohttp
@@ -32,11 +36,17 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    aiointercept
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
-    syrupy
+    syrupy_6
+  ];
+
+  disabledTests = [
+    # Test is outdated
+    "test_valid_data"
   ];
 
   pythonImportsCheck = [ "nextdns" ];

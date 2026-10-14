@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "${minorVersion}.${patchVersion}";
 
   src = fetchurl {
-    url = "http://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
+    url = "https://selenium-release.storage.googleapis.com/${minorVersion}/selenium-server-standalone-${version}.jar";
     sha256 = "1jzkx0ahsb27zzzfvjqv660x9fz2pbcddgmhdzdmasxns5vipxxc";
   };
 
@@ -42,9 +42,7 @@ stdenv.mkDerivation rec {
     description = "Selenium Server for remote WebDriver";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      coconnor
-    ];
+    maintainers = [ ];
     mainProgram = "selenium-server";
     platforms = lib.platforms.all;
   };

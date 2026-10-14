@@ -19,7 +19,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   version = "1.3.3";
 
   src = fetchFromGitHub {
-    owner = "phantom-code";
+    owner = "psycha0s";
     repo = "airwave";
     tag = finalAttrs.version;
     hash = "sha256-mvT0b0auKiu1T8cbR9RoBT94hKSnXDamqkIQPnUqVq0=";
@@ -55,7 +55,7 @@ multiStdenv.mkDerivation (finalAttrs: {
   # shrinking.
   dontPatchELF = true;
 
-  # Cf. https://github.com/phantom-code/airwave/issues/57
+  # Cf. https://github.com/psycha0s/airwave/issues/57
   hardeningDisable = [ "format" ];
 
   cmakeFlags = [ "-DVSTSDK_PATH=${vst2-sdk}" ];
@@ -78,7 +78,7 @@ multiStdenv.mkDerivation (finalAttrs: {
       protocol to correctly embed the plugin editor into the host
       window.
     '';
-    homepage = "https://github.com/phantom-code/airwave";
+    homepage = "https://github.com/psycha0s/airwave";
     license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ michalrus ];

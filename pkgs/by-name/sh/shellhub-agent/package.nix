@@ -12,18 +12,18 @@
 
 buildGoModule (finalAttrs: {
   pname = "shellhub-agent";
-  version = "0.21.5";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0adBDz9oHb+Wo1/BucMPavX/4xZidjQYNVA3O475JEo=";
+    hash = "sha256-JN8taYPj8GOCeDw08c2fLZmQr4IACWum5whfycaG9go=";
   };
 
   modRoot = "./agent";
 
-  vendorHash = "sha256-zBT3kQhn6RhgcP/5FBEhKo1oPl9GgFQqWGsBUgrDwW4=";
+  vendorHash = "sha256-iuXGBYvcNK91RmbfKfMyiMbW4LmBpVI5oE8EEyP7jps=";
 
   ldflags = [
     "-s"

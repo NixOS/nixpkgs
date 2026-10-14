@@ -8,16 +8,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "iina";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://github.com/iina/iina/releases/download/v${finalAttrs.version}/IINA.v${finalAttrs.version}.dmg";
-    hash = "sha256-F3rUaeoSm+2VqCrFm1+1jQoGw1NC/KejfbohSogh+Eg=";
+    hash = "sha256-j61QR5sQ4JZFBTRXzsRr1T0FTO0iQs/mj3RYZzWiDcc=";
   };
 
   nativeBuildInputs = [ undmg ];
 
   sourceRoot = "IINA.app";
+
+  # Patching shebangs in the app bundle invalidates its code signature.
+  dontPatchShebangs = true;
 
   installPhase = ''
     mkdir -p $out/{bin,Applications/IINA.app}
@@ -34,7 +37,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       arkivm
-      FlameFlag
+      _4evy
+      kinnrai
       stepbrobd
     ];
     mainProgram = "iina";

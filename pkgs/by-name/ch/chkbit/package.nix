@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "chkbit";
-  version = "6.5.0";
+  version = "6.6.0";
 
   src = fetchFromGitHub {
     owner = "laktak";
     repo = "chkbit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zf5UNpTsdTRym9B2xfuRIBl4Mpv97K+4VVbVPTEWFms=";
+    hash = "sha256-mdcksmbwEYNtY+2Hl1Lg1OG7OjG5tW1KYNVmPEhEnDE=";
   };
 
   vendorHash = "sha256-hiXn7LmO4bYti9iufonQSLM1G0BZGB8u0QRqSYBvxNc=";

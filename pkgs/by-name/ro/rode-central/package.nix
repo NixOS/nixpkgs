@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Companion app for configuring compatible RØDE devices, unlocking advanced features, enabling or disabling functions and updating firmware";
     homepage = "https://rode.com/en-us/apps/rode-central";
     changelog = "https://rode.com/en-us/release-notes/rode-central";
-    license = [ lib.licenses.unfree ];
+    license = lib.licenses.unfree;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = lib.platforms.darwin;

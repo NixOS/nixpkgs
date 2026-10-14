@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "pyu2f";
     tag = version;
-    sha256 = "0mx7bn1p3n0fxyxa82wg3c719hby7vqkxv57fhf7zvhlg2zfnr0v";
+    hash = "sha256-G2TrvngU7n8cdKfsPvE+fsEUDhuPC6S67w7YcYNdp1c=";
   };
 
   propagatedBuildInputs = [ six ];

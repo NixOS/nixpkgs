@@ -9,7 +9,18 @@ let
   # In case it ever shows up in the VM, we could OCR for it instead
   wallpaperText = "Lorem ipsum";
 
-  # tmpfiles setup to make OCRing on terminal output more reliable
+  # setup to make OCRing on terminal output more reliable
+  terminalTextColour = {
+    r = 91;
+    g = 113;
+    b = 102;
+  };
+  terminalTextColourString =
+    lib:
+    let
+      toHex = component: lib.optionalString (component < 16) "0" + lib.trivial.toHexString component;
+    in
+    "#${toHex terminalTextColour.r}${toHex terminalTextColour.g}${toHex terminalTextColour.b}";
   terminalOcrTmpfilesSetup =
     {
       pkgs,
@@ -18,7 +29,7 @@ let
     }:
     let
       white = "255, 255, 255";
-      black = "0, 0, 0";
+      foreground = "${toString terminalTextColour.r}, ${toString terminalTextColour.g}, ${toString terminalTextColour.b}";
       colorSection = color: {
         Color = color;
         Bold = true;
@@ -27,9 +38,9 @@ let
       terminalColors = pkgs.writeText "customized.colorscheme" (
         lib.generators.toINI { } {
           Background = colorSection white;
-          Foreground = colorSection black;
-          Color2 = colorSection black;
-          Color2Intense = colorSection black;
+          Foreground = colorSection foreground;
+          Color2 = colorSection foreground;
+          Color2Intense = colorSection foreground;
         }
       );
       terminalConfig = pkgs.writeText "terminal.ubports.conf" (
@@ -69,14 +80,68 @@ let
 
   lomiriWallpaperDconfSettings = pkgs: {
     settings = {
+      "com/lomiri/shell" = {
+        background-picture-uri = "file://${wallpaperFile pkgs}";
+      };
+      "com/lomiri/shell/greeter" = {
+        background-picture-uri = "file://${wallpaperFile pkgs}";
+      };
+      # Fallback
       "org/gnome/desktop/background" = {
         picture-uri = "file://${wallpaperFile pkgs}";
       };
     };
   };
 
-  sharedTestFunctions = ''
+  sharedMachineConfig =
+    {
+      config,
+      pkgs,
+      lib,
+      ...
+    }:
+    {
+      imports = [
+        ./common/auto.nix
+        ./common/user-account.nix
+      ];
+
+      virtualisation.memorySize = 2047;
+
+      users.users.${user} = {
+        inherit description password;
+      };
+
+      test-support.displayManager.auto = {
+        enable = true;
+        inherit user;
+      };
+
+      # Help with OCR
+      fonts.packages = [ pkgs.inconsolata ];
+
+      # To control mouse via scripting
+      programs.ydotool.enable = true;
+
+      services.desktopManager.lomiri.enable = true;
+      services.displayManager.defaultSession = "lomiri";
+
+      environment = {
+        etc."${wallpaperName}".source = wallpaperFile pkgs;
+        variables = {
+          LOMIRI_RUNNING_IN_VM = "1";
+        };
+      };
+
+      # Help with OCR
+      systemd.tmpfiles.settings = {
+        "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+      };
+    };
+
+  sharedTestFunctions = lib: ''
     from collections.abc import Callable
+    import datetime
     import tempfile
     import subprocess
 
@@ -120,7 +185,51 @@ let
             )
       return check_for_color_continued_presence_retry
 
-    def ensure_lomiri_running() -> None:
+    def ensure_terminal_running() -> None:
+      """
+      Ensure that lomiri-terminal-app has finished starting up.
+      """
+
+      terminalTextColor: str = "${terminalTextColourString lib}"
+      with machine.nested("Waiting for the screen to have terminalTextColor {} on it:".format(terminalTextColor)):
+        retry(check_for_color(terminalTextColor))
+      with machine.nested("Ensuring terminalTextColor {} stays present on the screen:".format(terminalTextColor)):
+        retry(fn=check_for_color_continued_presence(terminalTextColor), timeout=datetime.timedelta(seconds=5))
+
+    def change_tty_back_forth(ttynumMain: int, ttynumDiff: int) -> None:
+      """
+      A qtmir bump made the image get stuck, a tty switch back and forth fixes it.
+      """
+
+      machine.send_key(f"ctrl-alt-f{ttynumDiff}")
+      machine.sleep(datetime.timedelta(seconds=10))
+      machine.send_key(f"ctrl-alt-f{ttynumMain}")
+      machine.sleep(datetime.timedelta(seconds=10))
+
+    def ensure_greeter_launched() -> None:
+      """
+      Ensure that Lomiri (in greeter mode) has started up and is responsive.
+      Execution will stop at the user selection.
+      """
+
+      machine.wait_for_unit("display-manager.service")
+      machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
+
+      # Start page shows current time
+      wait_for_text(r"(AM|PM)")
+
+      # Display "hangs" since qtmir bump? Not sure why. Switch to a different tty and back, and ensure that time is still shown
+      # Greeter runs on: tty1
+      change_tty_back_forth(1, 2)
+      wait_for_text(r"(AM|PM)")
+      machine.screenshot("lomiri_greeter_launched")
+
+      # Advance to user selection, to make sure display really isn't stuck anymore
+      machine.send_key("ret")
+      wait_for_text("${description}")
+      machine.screenshot("lomiri_greeter_login")
+
+    def ensure_lomiri_running(ttynumMain: int = 1, ttynumDiff: int = 2) -> None:
       """
       Ensure that Lomiri has finished starting up.
       """
@@ -128,16 +237,22 @@ let
       # Process runs
       machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
 
-      # Output rendering from Lomiri has started when it starts printing performance diagnostics
-      machine.wait_for_console_text("Last frame took")
-
       # One of the last UI elements that loads is the clock. In the past, we could OCR for AM/PM to ensure it's there. That is now flaky.
       # The next best thing is to look for the launcher button, and ensure it stays around for awhile (DE doesn't crash).
       launcherColor: str = "#5277C3"
       with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
         retry(check_for_color(launcherColor))
       with machine.nested("Ensuring launcherColor {} stays present on the screen:".format(launcherColor)):
-        retry(fn=check_for_color_continued_presence(launcherColor), timeout_seconds=30)
+        retry(fn=check_for_color_continued_presence(launcherColor), timeout=datetime.timedelta(seconds=30))
+
+      # Display "hangs" since qtmir bump? Not sure why. Switch to a different tty and back, and ensure that launcher button is still shown
+      change_tty_back_forth(ttynumMain, ttynumDiff)
+      with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
+        retry(check_for_color(launcherColor))
+
+      # First input seems to get dropped while Mir registers the new input device. Send a key that does nothing, to get that out of the way, and sleep a tiny bit for registration to finish.
+      machine.send_key("left")
+      machine.sleep(datetime.timedelta(seconds=3))
 
       machine.screenshot("lomiri_launched")
 
@@ -146,7 +261,7 @@ let
       Wait for on-screen text, and try to optimise retry count for slow hardware.
       """
 
-      machine.sleep(30)
+      machine.sleep(datetime.timedelta(seconds=30))
       machine.wait_for_text(text)
 
     def toggle_maximise() -> None:
@@ -159,9 +274,9 @@ let
       # For some reason, Lomiri in these VM tests very frequently opens the starter menu a few seconds after sending the above.
       # Because this isn't 100% reproducible all the time, and there is no command to await when OCR doesn't pick up some text,
       # the best we can do is send some Escape input after waiting some arbitrary time and hope that it works out fine.
-      machine.sleep(5)
+      machine.sleep(datetime.timedelta(seconds=5))
       machine.send_key("esc")
-      machine.sleep(5)
+      machine.sleep(datetime.timedelta(seconds=5))
 
     def mouse_click(xpos, ypos) -> None:
       """
@@ -170,11 +285,11 @@ let
 
       # Move
       machine.execute(f"ydotool mousemove --absolute -- {xpos} {ypos}")
-      machine.sleep(2)
+      machine.sleep(datetime.timedelta(seconds=2))
 
       # Click (C0 - left button: down & up)
       machine.execute("ydotool click 0xC0")
-      machine.sleep(2)
+      machine.sleep(datetime.timedelta(seconds=2))
 
     def open_starter() -> None:
       """
@@ -183,7 +298,6 @@ let
 
       # Using the keybind has a chance of instantly closing the menu again? Just click the button
       mouse_click(15, 15)
-
   '';
 
   makeIndicatorTest =
@@ -207,37 +321,17 @@ let
 
         nodes.machine =
           { config, ... }:
-          {
-            imports = [
-              ./common/auto.nix
-              ./common/user-account.nix
+          lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
+            programs.dconf.profiles.user.databases = [
+              (lomiriWallpaperDconfSettings pkgs)
             ];
-
-            virtualisation.memorySize = 2047;
-
-            users.users.${user} = {
-              inherit description password;
-            };
-
-            test-support.displayManager.auto = {
-              enable = true;
-              inherit user;
-            };
-
-            # To control mouse via scripting
-            programs.ydotool.enable = true;
-
-            services.desktopManager.lomiri.enable = lib.mkForce true;
-            services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-            # Not setting wallpaper, as it breaks indicator OCR(?)
           };
 
         enableOCR = true;
 
         testScript =
           { nodes, ... }:
-          sharedTestFunctions
+          (sharedTestFunctions lib)
           + ''
             start_all()
             machine.wait_for_unit("multi-user.target")
@@ -308,50 +402,42 @@ in
 
       nodes.machine =
         { config, ... }:
-        {
-          imports = [ ./common/user-account.nix ];
+        lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
+          # Want to enter greeter
+          test-support.displayManager.auto.enable = false;
 
-          virtualisation.memorySize = 2047;
-
-          users.users.${user} = {
-            inherit description password;
-          };
-
+          # Testing *just* the greeter
           services.xserver.enable = true;
+          services.desktopManager.lomiri.enable = false;
           services.xserver.windowManager.icewm.enable = true;
           services.xserver.displayManager.lightdm = {
             enable = true;
             greeters.lomiri.enable = true;
           };
           services.displayManager.defaultSession = lib.mkForce "none+icewm";
+
+          programs.dconf.profiles.user.databases = [
+            (lomiriWallpaperDconfSettings pkgs)
+          ];
         };
 
       enableOCR = true;
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
 
           # Lomiri in greeter mode should work & be able to start a session
           with subtest("lomiri greeter works"):
-              machine.wait_for_unit("display-manager.service")
-              machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
-
-              # Start page shows current time
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_greeter_launched")
-
-              # Advance to login part
-              machine.send_key("ret")
-              wait_for_text("${description}")
-              machine.screenshot("lomiri_greeter_login")
+              ensure_greeter_launched()
 
               # Login
               machine.send_chars("${password}\n")
               machine.wait_for_x()
+              machine.sleep(datetime.timedelta(seconds=10))
               machine.screenshot("session_launched")
         '';
     }
@@ -368,32 +454,7 @@ in
 
       nodes.machine =
         { config, ... }:
-        {
-          imports = [
-            ./common/auto.nix
-            ./common/user-account.nix
-          ];
-
-          virtualisation.memorySize = 2047;
-
-          users.users.${user} = {
-            inherit description password;
-          };
-
-          test-support.displayManager.auto = {
-            enable = true;
-            inherit user;
-          };
-
-          # To control mouse via scripting
-          programs.ydotool.enable = true;
-
-          services.desktopManager.lomiri.enable = lib.mkForce true;
-          services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-          # Help with OCR
-          fonts.packages = [ pkgs.inconsolata ];
-
+        lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
           environment = {
             # Help with OCR
             etc."xdg/alacritty/alacritty.toml".source = (pkgs.formats.toml { }).generate "alacritty.toml" {
@@ -414,8 +475,6 @@ in
                 };
               };
             };
-
-            etc."${wallpaperName}".source = wallpaperFile pkgs;
 
             systemPackages = with pkgs; [
               # Forcing alacritty to run as an X11 app when opened from the starter menu
@@ -440,18 +499,13 @@ in
           programs.dconf.profiles.user.databases = [
             (lomiriWallpaperDconfSettings pkgs)
           ];
-
-          # Help with OCR
-          systemd.tmpfiles.settings = {
-            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
-          };
         };
 
       enableOCR = true;
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
@@ -463,7 +517,7 @@ in
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
               machine.send_key("ctrl-alt-t")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.screenshot("terminal_opens")
               machine.send_key("alt-f4")
 
@@ -474,7 +528,7 @@ in
 
               # Just try the terminal again, we know that it should work
               machine.send_chars("Terminal\n")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.send_key("alt-f4")
 
           # We want support for X11 apps
@@ -486,16 +540,15 @@ in
               machine.send_key("alt-f4")
 
           # Morph is how we go online
-          # Qt5 qtwebengine is not secure: https://github.com/NixOS/nixpkgs/pull/435067
-          # with subtest("morph browser works"):
-          #     open_starter()
-          #     machine.send_chars("Morph\n")
-          #     wait_for_text(r"(Bookmarks|address|site|visited any)")
-          #     machine.screenshot("morph_open")
-          #
-          #     # morph-browser has a separate VM test to test its basic functionalities
-          #
-          #     machine.send_key("alt-f4")
+          with subtest("morph browser works"):
+              open_starter()
+              machine.send_chars("Morph\n")
+              wait_for_text(r"(Bookmarks|address|site|visited any)")
+              machine.screenshot("morph_open")
+
+              # morph-browser has a separate VM test to test its basic functionalities
+
+              machine.send_key("alt-f4")
 
           # LSS provides DE settings
           with subtest("system settings open"):
@@ -522,57 +575,13 @@ in
 
       nodes.machine =
         { config, ... }:
-        {
-          imports = [
-            ./common/auto.nix
-            ./common/user-account.nix
-          ];
-
-          virtualisation.memorySize = 2047;
-
+        lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
           users.users.${user} = {
-            inherit description password;
             # polkit agent test
             extraGroups = [ "wheel" ];
           };
 
-          test-support.displayManager.auto = {
-            enable = true;
-            inherit user;
-          };
-
-          # To control mouse via scripting
-          programs.ydotool.enable = true;
-
-          services.desktopManager.lomiri.enable = lib.mkForce true;
-          services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-          # Help with OCR
-          fonts.packages = [ pkgs.inconsolata ];
-
           environment = {
-            # Help with OCR
-            etc."xdg/alacritty/alacritty.yml".text = lib.generators.toYAML { } {
-              font = rec {
-                normal.family = "Inconsolata";
-                bold.family = normal.family;
-                italic.family = normal.family;
-                bold_italic.family = normal.family;
-                size = 16;
-              };
-              colors = rec {
-                primary = {
-                  foreground = "0x000000";
-                  background = "0xffffff";
-                };
-                normal = {
-                  green = primary.foreground;
-                };
-              };
-            };
-
-            etc."${wallpaperName}".source = wallpaperFile pkgs;
-
             variables = {
               # So we can test what lomiri-content-hub is working behind the scenes
               LOMIRI_CONTENT_HUB_LOGGING_LEVEL = "2";
@@ -587,18 +596,13 @@ in
           programs.dconf.profiles.user.databases = [
             (lomiriWallpaperDconfSettings pkgs)
           ];
-
-          # Help with OCR
-          systemd.tmpfiles.settings = {
-            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
-          };
         };
 
       enableOCR = true;
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
@@ -610,7 +614,7 @@ in
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
               machine.send_key("ctrl-alt-t")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.screenshot("terminal_opens")
 
               # for the LSS lomiri-content-hub test to work reliably, we need to kick off peer collecting
@@ -620,13 +624,13 @@ in
 
               # Doing this here, since we need an in-session shell & separately starting a terminal again wastes time
               with subtest("polkit agent works"):
-                  machine.send_chars("pkexec touch /tmp/polkit-test\n")
+                  machine.send_chars("run0 touch /tmp/polkit-test\n")
                   # There's an authentication notification here that gains focus, but we struggle with OCRing it
                   # Just hope that it's up after a short wait
-                  machine.sleep(10)
+                  machine.sleep(datetime.timedelta(seconds=10))
                   machine.screenshot("polkit_agent")
                   machine.send_chars("${password}")
-                  machine.sleep(2) # Hopefully enough delay to make sure all the password characters have been registered? Maybe just placebo
+                  machine.sleep(datetime.timedelta(seconds=2)) # Hopefully enough delay to make sure all the password characters have been registered? Maybe just placebo
                   machine.send_chars("\n")
                   machine.wait_for_file("/tmp/polkit-test", 10)
 
@@ -668,7 +672,7 @@ in
               machine.screenshot("settings_lomiri-content-hub_peers")
 
               # Select Gallery as content source
-              mouse_click(460, 80)
+              mouse_click(540, 80)
 
               # Expect Gallery to be brought into the foreground, with its sharing page open
               wait_for_text("Photos")
@@ -683,7 +687,7 @@ in
               machine.send_key("tab")
               machine.send_key("ret")
 
-              machine.sleep(2) # sleep a tiny bit so gallery can close & the focus can return to LSS
+              machine.sleep(datetime.timedelta(seconds=2)) # sleep a tiny bit so gallery can close & the focus can return to LSS
               machine.send_key("alt-f4")
         '';
     }
@@ -705,21 +709,14 @@ in
 
         nodes.machine =
           { config, ... }:
-          {
-            imports = [ ./common/user-account.nix ];
-
-            virtualisation.memorySize = 2047;
-
+          lib.attrsets.recursiveUpdate (sharedMachineConfig { inherit config pkgs lib; }) {
             users.users.${user} = {
-              inherit description;
+              # Need different password to test keymap differences
               password = lib.mkForce pwOutput;
             };
 
-            services.desktopManager.lomiri.enable = lib.mkForce true;
-            services.displayManager.defaultSession = lib.mkForce "lomiri";
-
-            # Help with OCR
-            fonts.packages = [ pkgs.inconsolata ];
+            # Want to enter greeter
+            test-support.displayManager.auto.enable = false;
 
             services.xserver.xkb.layout = lib.strings.concatStringsSep "," [
               # Start with a non-QWERTY keymap to test keymap patch
@@ -728,52 +725,35 @@ in
               "us"
             ];
 
-            environment.etc."${wallpaperName}".source = wallpaperFile pkgs;
-
             programs.dconf.profiles.user.databases = [
               (lomiriWallpaperDconfSettings pkgs)
             ];
-
-            # Help with OCR
-            systemd.tmpfiles.settings = {
-              "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
-            };
           };
 
         enableOCR = true;
 
         testScript =
           { nodes, ... }:
-          sharedTestFunctions
+          (sharedTestFunctions lib)
           + ''
             start_all()
             machine.wait_for_unit("multi-user.target")
 
             # Lomiri in greeter mode should use the correct keymap
             with subtest("lomiri greeter keymap works"):
-                machine.wait_for_unit("display-manager.service")
-                machine.wait_until_succeeds("pgrep -u lightdm -f 'lomiri --mode=greeter'")
-
-                # Start page shows current time
-                # And the greeter *actually* renders our wallpaper!
-                wait_for_text(r"(AM|PM|Lorem|ipsum)")
-                machine.screenshot("lomiri_greeter_launched")
-
-                # Advance to login part
-                machine.send_key("ret")
-                wait_for_text("${description}")
-                machine.screenshot("lomiri_greeter_login")
+                ensure_greeter_launched()
 
                 # Login
                 machine.send_chars("${pwInput}\n")
 
                 # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
-                ensure_lomiri_running()
+                # When going lomiri(greeter) -> lomiri(desktop), we run on tty2
+                ensure_lomiri_running(2, 1)
 
             # Lomiri in desktop mode should use the correct keymap
             with subtest("lomiri session keymap works"):
                 machine.send_key("ctrl-alt-t")
-                wait_for_text(r"(${user}|machine)")
+                ensure_terminal_running()
                 machine.screenshot("terminal_opens")
 
                 machine.send_chars("touch ${pwInput}\n")
@@ -785,9 +765,9 @@ in
                 machine.wait_for_console_text('SET KEYMAP "us"')
 
                 # Handle keybind fallout
-                machine.sleep(10) # wait for everything to settle
+                machine.sleep(datetime.timedelta(seconds=10)) # wait for everything to settle
                 machine.send_key("esc") # close launcher in case it was opened
-                machine.sleep(2) # wait for animation to finish
+                machine.sleep(datetime.timedelta(seconds=2)) # wait for animation to finish
                 # Make sure input leaks are gone
                 machine.send_key("backspace")
                 machine.send_key("backspace")
@@ -850,8 +830,9 @@ in
       name = "power";
       left = 2;
       ocr = [
-        "Charge"
-        "Battery"
+        "Keep screen"
+        "screen on"
+        "Battery settings"
       ];
     }
     {

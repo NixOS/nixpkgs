@@ -5,7 +5,7 @@
   fetchpatch,
   gradle,
   autoPatchelfHook,
-  jetbrains, # Requird by upstream due to JCEF dependency
+  jetbrains, # Required by upstream due to JCEF dependency
   fontconfig,
   libxinerama,
   libxrandr,
@@ -37,7 +37,7 @@
   libkate,
   librsvg,
   libxpm,
-  libsForQt5,
+  qt5,
   libupnp,
   aalib,
   libcaca,
@@ -113,23 +113,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "5.2.0";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eP1v/o9qUk8qG+n1cJRmlgu2l06hFZLeUN/X06qAVpY=";
+    hash = "sha256-mDUl1RpTIFBHdYst6R16iVljiUNOYh6mNUtOLBSuOE0=";
     fetchSubmodules = true;
   };
 
-  # CefLog.init(jcefConfig.cefSettings) is being comment out due to compile error
   postPatch = ''
     echo "kotlin.native.ignoreDisabledTargets=true" >> local.properties
     sed -i "s/^version.name=.*/version.name=${finalAttrs.version}/" gradle.properties
     sed -i "s/^package.version=.*/package.version=${finalAttrs.version}/" gradle.properties
-    substituteInPlace app/shared/app-platform/src/desktopMain/kotlin/platform/AniCefApp.kt \
-      --replace-fail 'CefLog.init(jcefConfig.cefSettings)' '//CefLog.init(jcefConfig.cefSettings)'
   '';
 
   gradleBuildTask = "createReleaseDistributable";
@@ -144,10 +141,13 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jetbrains.jdk;
+  env = {
+    JAVA_HOME = jetbrains.jdk-21;
+    ANDROID_SDK_HOME = "$(pwd)";
+  };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jetbrains.jdk}"
+    "-Dorg.gradle.java.home=${jetbrains.jdk-21}"
   ];
 
   nativeBuildInputs = [
@@ -175,9 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     libkate
     librsvg
     libxpm
-    libsForQt5.qt5.qtsvg
-    libsForQt5.qt5.qtbase
-    libsForQt5.qt5.qtx11extras
+    qt5.qtsvg
+    qt5.qtbase
+    qt5.qtx11extras
     libupnp
     aalib
     libcaca
@@ -234,6 +234,11 @@ stdenv.mkDerivation (finalAttrs: {
     libxdamage
   ];
 
+  patches = [
+    # Builtin updater will never work on NixOS, so we made a patch to disable updater
+    ./0001-no-update-checker.patch
+  ];
+
   dontWrapQtApps = true;
 
   doCheck = false;
@@ -257,8 +262,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf ${libvlc}/lib $out/lib/app/resources/
   '';
 
-  ANDROID_SDK_HOME = "$(pwd)";
-
   passthru.updateScript = writeShellScript "update-animeko" ''
     ${lib.getExe nix-update} animeko
     $(nix-build -A animeko.mitmCache.updateScript)
@@ -279,5 +282,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
     ];
+    # Mark broken due to a breaking change in JetBrains JCEF
+    # https://github.com/NixOS/nixpkgs/pull/485812#issuecomment-4211365591
+    broken = true;
   };
 })

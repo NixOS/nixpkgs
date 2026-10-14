@@ -35,9 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -d "$out/opt/jxplorer" "$out/bin" "$out/share/pixmaps"
+    install -d "$out/opt/jxplorer" "$out/bin"
     cp -r ./. "$out/opt/jxplorer"
-    install -Dm644 images/JX128.png "$out/share/pixmaps/jxplorer.png"
+    install -Dm644 images/JX16.png "$out/share/icons/hicolor/16x16/apps/jxplorer.png"
+    install -Dm644 images/JX32.png "$out/share/icons/hicolor/32x32/apps/jxplorer.png"
+    install -Dm644 images/JX48.png "$out/share/icons/hicolor/48x48/apps/jxplorer.png"
+    install -Dm644 images/JX128.png "$out/share/icons/hicolor/128x128/apps/jxplorer.png"
     runHook postInstall
   '';
 

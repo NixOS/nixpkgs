@@ -23,7 +23,7 @@
 
   : See compressDrv for details.
 
-  `extraFormats` ([ String ])
+  `extraFormats` ([String])
 
   : Extra extensions to compress in addition to `formats`.
 
@@ -34,7 +34,7 @@
   # Type
 
   ```
-  compressDrvWeb :: Derivation -> { formats :: [ String ]; extraFormats :: [ String ]; compressors :: { ${fileExtension} :: String; } } -> Derivation
+  compressDrvWeb :: Derivation -> { formats :: [String]; extraFormats :: [String]; compressors :: { ${fileExtension} :: String; } } -> Derivation
   ```
 
   # Examples

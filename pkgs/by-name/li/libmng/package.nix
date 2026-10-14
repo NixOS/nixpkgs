@@ -33,9 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Reference library for reading, displaying, writing and examining Multiple-Image Network Graphics";
-    homepage = "http://www.libmng.com";
+    homepage = "https://sourceforge.net/projects/libmng/";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 })

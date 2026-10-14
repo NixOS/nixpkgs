@@ -2,17 +2,20 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chacha20poly1305";
   version = "0.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-8vAFx89GOP+k/wbALHh0gGi2QpFnlcbRbHzF41XnDt8=";
   };
+
+  build-system = [ setuptools ];
 
   # Module has no tests
   doCheck = false;
@@ -22,7 +25,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module that implements ChaCha20Poly1305";
     homepage = "https://github.com/ph4r05/py-chacha20poly1305";
-    license = lib.licenses.mit;
+    license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
-}
+})

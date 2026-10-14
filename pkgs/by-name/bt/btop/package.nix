@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "btop";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "aristocratos";
     repo = "btop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-h472rcXzpBkPYAEy9JaVlanaavaz0WcdkhmwsVdDRdo=";
+    hash = "sha256-3gECGBSWcGTYQkUlD4X2zrxZVvH2x2xfh5zdZ2jJbDQ=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
   # fix build on darwin (see https://github.com/NixOS/nixpkgs/pull/422218#issuecomment-3039181870 and https://github.com/aristocratos/btop/pull/1173)
   cmakeFlags = [
     (lib.cmakeBool "BTOP_LTO" (!stdenv.hostPlatform.isDarwin))
+    (lib.cmakeBool "BTOP_STATIC" (stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BTOP_FORTIFY" (!stdenv.hostPlatform.isStatic))
   ];
+
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isStatic [ "fortify" ];
 
   postInstall = ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)

@@ -27,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9EbaME3kw2ptCWpaV9CnM0j5HOof264s5iFoOTcjwNg=";
   };
 
+  patches = [
+    # Remove when https://github.com/asb2m10/dexed/pull/523 merged & in release
+    ./dexed-fix-min-macos-version.patch
+  ];
+
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE INTERNAL "")' '# Not forcing output archs'
@@ -122,6 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://asb2m10.github.io/dexed";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = [ ];
   };
 })

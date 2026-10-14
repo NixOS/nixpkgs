@@ -8,7 +8,7 @@
   pkg-config,
   wrapGAppsHook3,
   gtk3,
-  gtksourceview,
+  gtksourceview3,
   gtkspell3,
   webkitgtk_4_1,
   pandoc,
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gtk3
-    gtksourceview
+    gtksourceview3
     gtkspell3
     webkitgtk_4_1
     pandoc
@@ -55,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fabiocolacio.github.io/Marker/";
     description = "Markdown editor for the Linux desktop made with GTK3";
     maintainers = with lib.maintainers; [
-      trepetti
       aleksana
     ];
     license = lib.licenses.gpl3Plus;

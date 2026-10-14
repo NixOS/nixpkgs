@@ -2,7 +2,7 @@
 
 {
   name = "sysfs";
-  meta.maintainers = with lib.maintainers; [ mvs ];
+  meta.maintainers = [ ];
 
   nodes.machine = {
     boot.kernel.sysfs = {

@@ -7,18 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "nextcloud-spreed-signaling";
-  version = "2.1.0";
+  version = "2.1.1";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "nextcloud-spreed-signaling";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WEA5sbQzcsnHGVeog3lZXF3/veJxw39rF1++ejS4aWA=";
+    hash = "sha256-thXTIvaEufGOYWFMiqZxUcqhZbXRQgTj2FeZ2s/gqaI=";
   };
 
-  vendorHash = "sha256-osxQW5nR37bLKHOuC7jAWNjSgJZy8KzWDgC2Mo36ovA=";
-
-  strictDeps = true;
+  vendorHash = "sha256-qLyehDoZZBCzlc8X/il1+8gtX6M/nhjqUKccebuxLVE=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -32,6 +31,10 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       hensoko
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "riscv64-linux"
+    ];
   };
 })

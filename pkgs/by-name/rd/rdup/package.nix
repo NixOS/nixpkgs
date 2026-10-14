@@ -5,28 +5,37 @@
   pkg-config,
   autoreconfHook,
   glib,
-  pcre,
+  pcre2,
+  coreutils,
 }:
 
 stdenv.mkDerivation {
   pname = "rdup";
-  version = "1.1.15";
+  version = "1.1.16-unstable-2024-03-05";
+
+  strictDeps = true;
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "miekg";
     repo = "rdup";
-    rev = "d66e4320cd0bbcc83253baddafe87f9e0e83caa6";
-    sha256 = "0bzyv6qmnivxnv9nw7lnfn46k0m1dlxcjj53zcva6v8y8084l1iw";
+    rev = "fa1c753a107c12b3797204c41779ce2c8d5da45a";
+    hash = "sha256-k+386SrXE0IULP02/aOa5E/F/HWhnD/ttGzFStric5M=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    glib
   ];
+
   buildInputs = [
     glib
-    pcre
+    pcre2
   ];
+
+  installFlags = [ "INSTALL=${coreutils}/bin/install" ];
 
   meta = {
     description = "Only backup program that doesn't make backups";

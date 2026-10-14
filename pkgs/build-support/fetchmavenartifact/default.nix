@@ -84,6 +84,10 @@ in
 stdenv.mkDerivation {
   inherit pname version meta;
   dontUnpack = true;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
   # By moving the jar to $out/share/java we make it discoverable by java
   # packages packages that mention this derivation in their buildInputs.
   installPhase = ''

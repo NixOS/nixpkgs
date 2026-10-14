@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pybigwig";
-  version = "0.3.25";
+  version = "0.3.26";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "deeptools";
     repo = "pyBigWig";
     tag = version;
-    hash = "sha256-Vq/QdJg2qObJ49lHZ4RjULfI0f7pScLRWGW8NBZoMAw=";
+    hash = "sha256-JQ1A4wY1EwTXeSOeXy3YzLv45mdHUngjk01bf7slAzw=";
   };
 
   buildInputs = [ zlib ];

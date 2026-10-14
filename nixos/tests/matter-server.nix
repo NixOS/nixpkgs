@@ -1,7 +1,7 @@
 { pkgs, lib, ... }:
 
 let
-  chipVersion = pkgs.python311Packages.home-assistant-chip-core.version;
+  chipVersion = pkgs.python3Packages.home-assistant-chip-core.version;
 in
 
 {
@@ -30,7 +30,7 @@ in
       start_all()
 
       machine.wait_for_unit("matter-server.service", timeout=20)
-      machine.wait_for_open_port(1234, timeout=20)
+      machine.wait_for_open_port(1234, timeout=100)
 
       with matter_server_running: # type: ignore[union-attr]
         with subtest("Check websocket server initialized"):

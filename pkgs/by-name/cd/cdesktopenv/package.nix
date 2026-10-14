@@ -110,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # https://sourceforge.net/p/cdesktopenv/tickets/193/
+  hardeningDisable = [ "fortify" ];
+
   # Can probably remove after next release
   # https://sourceforge.net/p/cdesktopenv/code/ci/f0154141b1f1501490bac8e0235214bf8f00f715/
   env.NIX_CFLAGS_COMPILE = "-std=gnu17";

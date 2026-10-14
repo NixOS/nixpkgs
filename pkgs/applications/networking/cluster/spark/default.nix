@@ -8,7 +8,7 @@
   RSupport ? true,
   R,
   nixosTests,
-  # needeed in situations where hadoop's jdk version is too old
+  # needed in situations where hadoop's jdk version is too old
   jdk21_headless,
 }:
 

@@ -4,7 +4,7 @@
   stdenv,
   fetchurl,
   autoPatchelfHook,
-  undmg,
+  _7zz,
   zstd,
   alsa-lib,
   curl,
@@ -18,6 +18,7 @@
   libxcursor,
   libx11,
   libxcb,
+  xz, # liblzma
   zlib,
   makeWrapper,
   waylandSupport ? false,
@@ -57,6 +58,7 @@ let
       fontconfig
       (lib.getLib stdenv.cc.cc) # libstdc++.so libgcc_s.so
       zlib
+      xz
     ];
 
     runtimeDependencies = [
@@ -105,7 +107,13 @@ let
 
     sourceRoot = ".";
 
-    nativeBuildInputs = [ undmg ];
+    # Warp.dmg is APFS formatted, which is unsupported by undmg
+    nativeBuildInputs = [ _7zz ];
+
+    # Warp.app ships signed and notarized. Rewriting the shebang of
+    # Contents/Resources/bin/oz breaks the code signature seal, so macOS
+    # refuses to launch the app. /bin/bash always exists on darwin anyway.
+    dontPatchShebangs = true;
 
     installPhase = ''
       runHook preInstall
@@ -120,11 +128,13 @@ let
   meta = {
     description = "Rust-based terminal";
     homepage = "https://www.warp.dev";
-    license = lib.licenses.unfree;
+    license = with lib.licenses; [
+      mit
+      agpl3Only
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [
-      imadnyc
-      FlameFlag
+      _4evy
       johnrtitor
       logger
     ];

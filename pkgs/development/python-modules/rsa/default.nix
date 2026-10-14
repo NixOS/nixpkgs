@@ -5,7 +5,6 @@
   poetry-core,
   pyasn1,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,10 +18,6 @@ buildPythonPackage rec {
     rev = "version-${version}";
     hash = "sha256-PwaRe+ICy0UoguXSMSh3PFl5R+YAhJwNdNN9isadlJY=";
   };
-
-  preConfigure = lib.optionalString (pythonOlder "3.7") ''
-    substituteInPlace setup.py --replace "open('README.md')" "open('README.md',encoding='utf-8')"
-  '';
 
   nativeBuildInputs = [ poetry-core ];
 

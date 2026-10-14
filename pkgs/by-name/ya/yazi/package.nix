@@ -9,7 +9,7 @@
     jq
     poppler-utils
     _7zz
-    ffmpeg
+    ffmpeg-headless
     fd
     ripgrep
     fzf
@@ -27,7 +27,7 @@
   jq,
   poppler-utils,
   _7zz,
-  ffmpeg,
+  ffmpeg-headless,
   fd,
   ripgrep,
   fzf,
@@ -93,14 +93,26 @@ let
 in
 runCommand yazi-unwrapped.name
   {
-    inherit (yazi-unwrapped) pname version meta;
+    inherit (yazi-unwrapped) pname version;
+
+    meta = {
+      inherit (yazi-unwrapped.meta)
+        description
+        homepage
+        license
+        maintainers
+        mainProgram
+        changelog
+        ;
+    };
 
     nativeBuildInputs = [ makeWrapper ];
   }
   ''
     mkdir -p "$out/bin"
     ln -s "${yazi-unwrapped}/share" "$out/share"
-    ln -s ${lib.getExe' yazi-unwrapped "ya"} "$out/bin/ya"
+    makeWrapper ${lib.getExe' yazi-unwrapped "ya"} "$out/bin/ya" \
+      --prefix PATH : ${lib.makeBinPath runtimePaths}
     makeWrapper ${lib.getExe' yazi-unwrapped "yazi"} "$out/bin/yazi" \
       --prefix PATH : ${lib.makeBinPath runtimePaths} \
       ${lib.optionalString (configHome != null) "--set YAZI_CONFIG_HOME ${configHome}"}

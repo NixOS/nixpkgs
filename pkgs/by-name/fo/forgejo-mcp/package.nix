@@ -1,38 +1,49 @@
 {
   lib,
   buildGoModule,
-  fetchFromCodeberg,
+  fetchgit,
   nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "forgejo-mcp";
-  version = "2.9.1";
+  version = "3.2.0";
 
-  src = fetchFromCodeberg {
-    owner = "goern";
-    repo = "forgejo-mcp";
+  # Plain git fetch: upstream's Forgejo instance has source-archive
+  # downloads disabled, so fetchFromForgejo (tarball-based) cannot be used.
+  src = fetchgit {
+    url = "https://git.b4mad.industries/agentic-forges/forgejo-mcp.git";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9++EewwF2zxdYCwDdNVX/7liiHZNR1rmM0Z7w5r4v5k=";
+    hash = "sha256-dZ7k2c0abejHuwdRkXcOMKCnDeY193PYkIg0LVzbvII=";
   };
 
-  vendorHash = "sha256-THdbGlinpH6ZtVveFEN/wy8ITG6pC+Zs6Leyx+2/hqI=";
+  vendorHash = "sha256-3RFWaohlUd6RpU531/DQH5wgVtjOi/Lh19Hyget7Bhw=";
 
   ldflags = [
     "-s"
     "-X main.Version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Model Context Protocol (MCP) server for interacting with the Forgejo REST API";
-    longDescription = "This Model Context Protocol (MCP) server provides tools and resources for interacting with the Forgejo (specifically Codeberg.org) REST API";
-    homepage = "https://codeberg.org/goern/forgejo-mcp";
-    changelog = "https://codeberg.org/goern/forgejo-mcp/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
+    longDescription = "This Model Context Protocol (MCP) server provides tools and resources for interacting with the Forgejo REST API";
+    homepage = "https://git.b4mad.industries/agentic-forges/forgejo-mcp";
+    changelog = "https://git.b4mad.industries/agentic-forges/forgejo-mcp/src/tag/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ malik ];
+    maintainers = with lib.maintainers; [
+      malik
+      byteflavour
+    ];
     mainProgram = "forgejo-mcp";
   };
 })

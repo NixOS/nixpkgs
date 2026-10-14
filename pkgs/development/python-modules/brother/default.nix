@@ -4,18 +4,19 @@
   fetchFromGitHub,
   freezegun,
   dacite,
+  pyprojectVersionPatchHook,
   pysnmp,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
   pythonOlder,
   setuptools,
-  syrupy,
+  syrupy_6,
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "6.0.0";
+  version = "6.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -24,8 +25,12 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "brother";
     tag = version;
-    hash = "sha256-kvR4891kaZFHKZhtgrrgtGJZUIwoYE5CsGUEQM7eKvs=";
+    hash = "sha256-VMdKcm8XUqNL3W02G9fclBUYkNKHQQb1bq1ZhpiRYs8=";
   };
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -39,7 +44,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   pythonImportsCheck = [ "brother" ];

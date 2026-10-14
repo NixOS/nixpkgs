@@ -15,14 +15,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hcn6h38qplfcmq392cs58r01k16k202bqyap4br02376pr4ik7a";
+    hash = "sha256-6sxI8jVnCJAXucrjJYCYJswAMiqaiTRwZY5ejAY0lsE=";
     extension = "zip";
   };
 
   meta = {
     homepage = "https://github.com/moshez/rfc7464";
     description = "RFC 7464 is a proposed standard for streaming JSON documents";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ shlevy ];
   };
 }

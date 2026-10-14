@@ -21,7 +21,7 @@ buildNpmPackage {
 
   npmDepsHash = "sha256-zXhWtPuiu+CRk712KskuHP4vglogJmFoCak6qWczPFM=";
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 

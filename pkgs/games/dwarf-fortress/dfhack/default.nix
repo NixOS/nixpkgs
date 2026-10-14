@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitHub,
+  fetchgit,
   fetchpatch,
   cmake,
   fmt,
@@ -108,13 +108,19 @@ stdenv.mkDerivation {
   inherit version;
 
   # Beware of submodules
-  src = fetchFromGitHub {
-    owner = "DFHack";
-    repo = "dfhack";
-    tag = release.git.revision;
-    hash = release.git.outputHash;
-    fetchSubmodules = true;
-  };
+  src = fetchgit (
+    {
+      inherit (release.git) url;
+      hash = release.git.outputHash;
+      fetchSubmodules = true;
+    }
+    // (
+      if (release.git.refType or "tag") == "rev" then
+        { rev = release.git.revision; }
+      else
+        { tag = release.git.revision; }
+    )
+  );
 
   patches =
     optional (versionOlder version "0.44.12-r3") (fetchpatch {
@@ -145,8 +151,19 @@ stdenv.mkDerivation {
     # Use SDL_GetPrefPath since this takes XDG_DATA_HOME into account (which is correct).
     ++ optional (versionAtLeast version "52.02-r2") ./use-df-linux-dir.patch;
 
-  # gcc 11 fix
-  CXXFLAGS = optionalString (versionOlder version "0.47.05-r3") "-fpermissive";
+  env = {
+    # gcc 11 fix
+    CXXFLAGS = optionalString (versionOlder version "0.47.05-r3") "-fpermissive";
+
+    NIX_CFLAGS_COMPILE = toString (
+      [
+        "-Wno-error=deprecated-enum-enum-conversion"
+      ]
+      ++ optionals (versionOlder version "0.47") [
+        "-fpermissive"
+      ]
+    );
+  };
 
   nativeBuildInputs = [
     cmake
@@ -199,11 +216,6 @@ stdenv.mkDerivation {
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=${fetchOverrides}"
   ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=deprecated-enum-enum-conversion"
-  ]
-  ++ optionals (versionOlder version "0.47") [ "-fpermissive" ];
 
   preFixup = ''
     # Wrap dfhack scripts.
@@ -261,6 +273,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [
       robbinch
       a1russell
+      cizra
       numinit
     ];
   };

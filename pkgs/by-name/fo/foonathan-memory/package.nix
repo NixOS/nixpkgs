@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   doctest,
 }:
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     # do not download doctest, use the system doctest instead
     # originally from: https://sources.debian.org/data/main/f/foonathan-memory/0.7.3-2/debian/patches/0001-Use-system-doctest.patch
     ./0001-Use-system-doctest.patch.patch
+
+    (fetchpatch2 {
+      # Fix build under clang on Darwin
+      # https://github.com/foonathan/memory/pull/192
+      name = "size-suffixes-cannot-have-a-space.patch";
+      url = "https://github.com/foonathan/memory/commit/0f5ebe9f4ac2d2ad106d596c993d13e107b27820.patch?full_index=1";
+      hash = "sha256-RtLGDe6ZQ4CQD25pjS20+SZLhxGSrm/A7cO6VUgPbfo=";
+    })
   ];
 
   outputs = [

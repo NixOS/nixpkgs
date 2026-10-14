@@ -4,7 +4,6 @@
   autoreconfHook,
   callPackage,
   fetchFromGitHub,
-  hunspellDicts,
   ncurses,
   nix-update-script,
   readline,
@@ -14,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hunspell";
-  version = "1.7.2";
+  version = "1.7.3";
 
   outputs = [
     "bin"
@@ -27,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hunspell";
     repo = "hunspell";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
+    hash = "sha256-NoLlH+4Hb6w+HYl2fSBzroav1Pb3GojFSTJGBxlteBM=";
   };
 
   patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];

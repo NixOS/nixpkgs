@@ -35,7 +35,6 @@ postgresqlBuildExtension (finalAttrs: {
       postgresqlTestHook
       (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
     ];
-    passAsFile = [ "sql" ];
     sql = ''
       CREATE EXTENSION pgtap;
 
@@ -47,10 +46,13 @@ postgresqlBuildExtension (finalAttrs: {
     '';
     checkPhase = ''
       runHook preCheck
+      sqlPath=$TMPDIR/test.sql
+      printf "%s" "$sql" > $sqlPath
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath
       runHook postCheck
     '';
     installPhase = "touch $out";
+    __structuredAttrs = true;
   };
 
   meta = {

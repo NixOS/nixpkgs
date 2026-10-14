@@ -20,15 +20,20 @@
 
 buildPythonPackage rec {
   pname = "django-countries";
-  version = "8.2.0";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SmileyChris";
     repo = "django-countries";
     tag = "v${version}";
-    hash = "sha256-MtRlZFrTlY7t0n08X0aYN5HRGZUGLHkcU1gaZCtj07Q=";
+    hash = "sha256-LR6mD3i/1e6c3DXqBgKqv2BhR0VbXzyskGHkPSXD3Gg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.6,<0.10.0" uv_build
+  '';
 
   build-system = [ uv-build ];
 

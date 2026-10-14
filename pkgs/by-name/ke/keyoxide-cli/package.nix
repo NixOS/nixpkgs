@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command-line interface to locally verify decentralized identities";
     homepage = "https://codeberg.org/keyoxide/keyoxide-cli";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ lib.maintainers.pyrox0 ];
+    maintainers = [ ];
     mainProgram = "keyoxide";
   };
 })

@@ -2,21 +2,26 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  poetry-core,
+  uv-build,
   prompt-toolkit,
 }:
 
 buildPythonPackage rec {
   pname = "noneprompt";
-  version = "0.1.9";
+  version = "0.1.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M4uLuJqNIu818d7bOqfBsijPE5lzvcQ8X/w+72RFfbk=";
+    hash = "sha256-aCJpGPKhVDqjgMqtpcOArlyjj1cpInjFv9O3KJ8axts=";
   };
 
-  build-system = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build >=0.8.3, <0.9.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ prompt-toolkit ];
 

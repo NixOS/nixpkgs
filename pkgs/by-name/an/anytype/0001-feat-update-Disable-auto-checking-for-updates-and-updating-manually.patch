@@ -1,18 +1,8 @@
-From d236396b1da80a7233168e01e8164256e7f69cc1 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?David=20Chocholat=C3=BD?= <chocholaty.david@protonmail.com>
-Date: Fri, 25 Apr 2025 12:29:37 +0200
-Subject: [PATCH] feat(update): Disable auto checking for updates and updating
- manually
-
----
- electron/js/update.js | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/electron/js/update.js b/electron/js/update.js
-index 0e34efa..9386c90 100644
---- a/electron/js/update.js
-+++ b/electron/js/update.js
-@@ -29,7 +29,8 @@ class UpdateManager {
+diff --git a/electron/ts/update.ts b/electron/ts/update.ts
+index 8d63cb8eb7..ea2dadf0c9 100644
+--- a/electron/ts/update.ts
++++ b/electron/ts/update.ts
+@@ -31,7 +31,8 @@ class UpdateManager {
  		autoUpdater.autoInstallOnAppQuit = false;
  		autoUpdater.channel = channel;
  
@@ -22,16 +12,13 @@ index 0e34efa..9386c90 100644
  
  		autoUpdater.on('checking-for-update', () => {
  			Util.log('info', 'Checking for update');
-@@ -93,6 +94,9 @@ class UpdateManager {
+@@ -79,6 +80,9 @@ class UpdateManager {
  	};
  
- 	isAllowed () {
+ 	isAllowed (): boolean {
 +		// PATCH(update): Always disallow update check, even when requested by the user manually or when Anytype starts.
 +		return false;
 +
  		const { config } = ConfigManager;
  
  		if (config.updateDisabled) {
--- 
-2.49.0
-

@@ -26,5 +26,6 @@ python3Packages.buildPythonApplication {
     description = "Grep program configured the way I like it";
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.sjagoe ];
+    license = lib.licenses.bsd3;
   };
 }

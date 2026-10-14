@@ -39,6 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./clap-option.diff
   ];
 
+  # fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   postPatch = ''
     # see https://github.com/NixOS/nixpkgs/pull/149487#issuecomment-991747333
     export XDG_DOCUMENTS_DIR=$(mktemp -d)
@@ -96,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "LV2, VST3 & CLAP synthesizer plug-in (previously released as Vember Audio Surge)";
     homepage = "https://surge-synthesizer.github.io";
     license = lib.licenses.gpl3;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     maintainers = with lib.maintainers; [
       magnetophon
       mrtnvgr

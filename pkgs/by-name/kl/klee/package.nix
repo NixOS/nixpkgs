@@ -1,8 +1,9 @@
 {
   lib,
-  llvmPackages_18,
+  llvmPackages_19,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   python3,
   z3,
@@ -51,8 +52,9 @@ let
   # Python used for KLEE tests.
   kleePython = python3.withPackages (ps: with ps; [ tabulate ]);
 
-  # The LLVM we're using. Note that KLEE doesn't yet support 18 but this is the minimum in nixpkgs.
-  llvmPackages = llvmPackages_18;
+  # The LLVM we're using. Note that KLEE only has partial support for LLVM 19
+  # but this is the minimum in Nixpkgs.
+  llvmPackages = llvmPackages_19;
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "klee";
@@ -64,6 +66,14 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-8DofxLyTV8Al7ys8vSJpzf6qQV3sw940lGIZBvZqe2c=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "missing-cstdint-include.patch";
+      url = "https://github.com/klee/klee/commit/efa1e0529499f954885489d30210dfc7a3697258.patch";
+      hash = "sha256-mhnyTG36iyVrCFxvP+2PWcacmRjZvGczMTto8xSrfhw=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -120,9 +130,12 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   env.LIT_XFAIL = lib.concatStringsSep ";" [
     "KLEE :: ArrayOpt/test_expr_arbitrary.c"
+    "KLEE :: CXX/ArrayNew.cpp"
+    "KLEE :: CXX/New.cpp"
     "KLEE :: CXX/SimpleVirtual.cpp"
     "KLEE :: CXX/StaticConstructor.cpp"
     "KLEE :: CXX/StaticDestructor.cpp"
+    "KLEE :: CXX/symex/basic_c++/reinterpret_cast.cpp"
     "KLEE :: Concrete/ConstantExpr.ll"
     "KLEE :: Concrete/OverlappingPhiNodes.ll"
     "KLEE :: Concrete/UnorderedPhiNodes.ll"
@@ -131,12 +144,14 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "KLEE :: DeterministicAllocation/use-after-free-loh.c"
     "KLEE :: DeterministicAllocation/use-after-free.c"
     "KLEE :: Dogfood/ImmutableSet.cpp"
+    "KLEE :: Feature/Alias.c"
     "KLEE :: Feature/Atomic.c"
     "KLEE :: Feature/DivCheck.c"
     "KLEE :: Feature/ExtCall.c"
     "KLEE :: Feature/ExtCallWarnings.c"
     "KLEE :: Feature/FunctionAlias.c"
     "KLEE :: Feature/FunctionAliasExit.c"
+    "KLEE :: Feature/GlobalVariable.ll"
     "KLEE :: Feature/LargeArrayBecomesSym.c"
     "KLEE :: Feature/LowerSwitch.c"
     "KLEE :: Feature/MakeSymbolicName.c"
@@ -212,6 +227,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     "KLEE :: VectorInstructions/memset.c"
     "KLEE :: VectorInstructions/oob-write.c"
     "KLEE :: VectorInstructions/shuffle_element.c"
+    "KLEE :: klee-stats/KleeStats.c"
     "KLEE :: klee-stats/KleeStatsTermClasses.c"
     "KLEE :: regression/2008-03-11-free-of-malloc-zero.c"
     "KLEE :: regression/2014-07-04-unflushed-error-report.c"

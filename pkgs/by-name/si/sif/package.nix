@@ -2,33 +2,42 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "sif";
-  version = "0-unstable-2026-02-13";
+  version = "0-unstable-2026-10-05";
 
   src = fetchFromGitHub {
     owner = "vmfunc";
     repo = "sif";
-    rev = "03bfe70cff2249cef6e52679aba3d411916a4dd1";
-    hash = "sha256-tIV9h5kaXq4CKDDexSxiDXcWD2l510qXt5BBxwFV8Nw=";
+    rev = "89665d77a95c7cadb67c9814b05af735ce4d7f4e";
+    hash = "sha256-4r9NXeexcTBSuN9xmpHjadzPBuCsUPvMJyjGMxQG3/I=";
   };
 
-  vendorHash = "sha256-kbFNnPf8A4dtTnk/XBArgM6yOE2gbW6mXR5oevkQ6Ms=";
+  vendorHash = "sha256-AS+nZSM0Fnv4vs08OMLCM8jZXeE9bH4Vj/V+sfpbqRE=";
 
   subPackages = [ "cmd/sif" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
+    # upstream stamps the lowercase main.version, see cmd/sif/main.go
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # network-dependent tests
   doCheck = false;
+
+  postInstall = ''
+    installManPage man/sif.1
+  '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
@@ -44,4 +53,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ vmfunc ];
     mainProgram = "sif";
   };
-}
+})

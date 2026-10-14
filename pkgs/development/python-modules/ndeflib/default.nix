@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+  pytest8_3CheckHook,
   pythonAtLeast,
   setuptools,
 }:
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest8_3CheckHook ];
 
   pythonImportsCheck = [ "ndef" ];
 

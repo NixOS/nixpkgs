@@ -1,10 +1,8 @@
 {
   lib,
   stdenv,
-  gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -36,33 +34,19 @@
   cudaPackages ? { },
 
 }:
-let
-  stdenvTarget = if cudaSupport then gcc13Stdenv else stdenv;
-in
-buildPythonPackage.override { stdenv = stdenvTarget; } rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-cpp-python";
-  version = "0.3.16";
+  version = "0.3.36";
+  __structuredAttrs = true;
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
-    tag = "v${version}";
-    hash = "sha256-EUDtCv86J4bznsTqNsdgj1IYkAu83cf+RydFTUb2NEE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OYmCvd3hvdc7JjmfD5Nxp8l1xFk0vNI7HZsYUBfsnzI=";
     fetchSubmodules = true;
   };
-  # src = /home/gaetan/llama-cpp-python;
-
-  patches = [
-    # Fix test failure on a machine with no metal devices (e.g. nix-community darwin builder)
-    # https://github.com/ggml-org/llama.cpp/pull/15531
-    (fetchpatch {
-      url = "https://github.com/ggml-org/llama.cpp/pull/15531/commits/63a83ffefe4d478ebadff89300a0a3c5d660f56a.patch";
-      stripLen = 1;
-      extraPrefix = "vendor/llama.cpp/";
-      hash = "sha256-9LGnzviBgYYOOww8lhiLXf7xgd/EtxRXGQMredOO4qM=";
-    })
-  ];
 
   dontUseCmakeConfigure = true;
   cmakeFlags = [
@@ -75,7 +59,6 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
     #
     # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
     (lib.cmakeBool "GGML_NATIVE" false)
-    (lib.cmakeFeature "GGML_BUILD_NUMBER" "1")
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "GGML_CUDA" true)
@@ -103,7 +86,7 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
     with cudaPackages;
     [
       cuda_cudart # cuda_runtime.h
-      cuda_cccl # <thrust/*>
+      cccl # <thrust/*>
       libcublas # cublas_v2.h
     ]
   );
@@ -125,6 +108,12 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
     # tries to download model from huggingface-hub
     "test_real_model"
     "test_real_llama"
+    "test_recurrent_model_prompt_cache_reset"
+    "test_hybrid_model_prompt_cache_reset"
+    "test_exact_cached_prompt_reuse_matches_fresh"
+    "test_loaded_exact_cached_prompt_reuse_matches_fresh"
+    "test_ram_cache_exact_prompt_hit_matches_fresh"
+    "test_shorter_prompt_prefix_reuse_matches_fresh"
   ];
 
   pythonImportsCheck = lib.optionals (!cudaSupport) [
@@ -140,7 +129,7 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
       rev-prefix = "v";
       allowedVersions = "^[.0-9]+$";
     };
-    tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       withCuda = llama-cpp-python.override {
         cudaSupport = true;
       };
@@ -150,11 +139,11 @@ buildPythonPackage.override { stdenv = stdenvTarget; } rec {
   meta = {
     description = "Python bindings for llama.cpp";
     homepage = "https://github.com/abetlen/llama-cpp-python";
-    changelog = "https://github.com/abetlen/llama-cpp-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/abetlen/llama-cpp-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       booxter
       kirillrdy
     ];
   };
-}
+})

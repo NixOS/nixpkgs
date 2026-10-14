@@ -119,7 +119,6 @@ in
         );
         forceLuksSupportInInitrd = true;
       };
-      # TODO: systemd stage 1
       postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
         concatMapStrings (
           dev:

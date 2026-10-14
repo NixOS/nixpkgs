@@ -57,17 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
-    name = "HDFView";
-    desktopName = name;
-    exec = name;
-    icon = name;
-    comment = finalAttrs.finalPackage.meta.description;
-    categories = [
-      "Science"
-      "DataVisualization"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "HDFView";
+      desktopName = name;
+      exec = name;
+      icon = name;
+      comment = finalAttrs.finalPackage.meta.description;
+      categories = [
+        "Science"
+        "DataVisualization"
+      ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   meta = {
     homepage = "http://abook.sourceforge.net/";
     description = "Text-based addressbook program designed to use with mutt mail client";

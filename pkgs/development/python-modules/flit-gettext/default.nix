@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "flit-gettext";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "flit-gettext";
     rev = version;
-    hash = "sha256-rCIMwAiXXCJ+PH26/hoPWsuKd68crWStBErAOh9wzUg=";
+    hash = "sha256-jm7EQDoI+v4u/MiBk+yaVFF1f3yMFUsdOPA3tFghLwM=";
   };
 
   patches = [

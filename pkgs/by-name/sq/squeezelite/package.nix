@@ -28,7 +28,7 @@
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib) optional optionalString;
 
   pulseSupport = audioBackend == "pulse";
 
@@ -39,13 +39,13 @@ stdenv.mkDerivation {
   pname = binName;
   # versions are specified in `squeezelite.h`
   # see https://github.com/ralph-irving/squeezelite/issues/29
-  version = "2.0.0.1556";
+  version = "2.0.0.1609";
 
   src = fetchFromGitHub {
     owner = "ralph-irving";
     repo = "squeezelite";
-    rev = "6d571de8fa6dfff23a5a0cbb2c81b402d2c30c31";
-    hash = "sha256-rwiRZaadku4xAAQiloghnmMtRlflgGJ8prEUQJsuR8c=";
+    rev = "ab20df3dff76122b9e4f426cffd0346e752b93da";
+    hash = "sha256-i+NaneClJNBCoXlHKU1UWpgnaDUbttGI03hApYbW3LM=";
   };
 
   buildInputs = [
@@ -72,23 +72,31 @@ stdenv.mkDerivation {
       --replace "<opusfile.h>" "<opus/opusfile.h>"
   '';
 
-  EXECUTABLE = binName;
+  env = {
+    EXECUTABLE = binName;
 
-  OPTS = [
-    "-DLINKALL"
-    "-DGPIO"
-  ]
-  ++ optional dsdSupport "-DDSD"
-  ++ optional (!faad2Support) "-DNO_FAAD"
-  ++ optional ffmpegSupport "-DFFMPEG"
-  ++ optional opusSupport "-DOPUS"
-  ++ optional portaudioSupport "-DPORTAUDIO"
-  ++ optional pulseSupport "-DPULSEAUDIO"
-  ++ optional resampleSupport "-DRESAMPLE"
-  ++ optional sslSupport "-DUSE_SSL"
-  ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI";
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { LDADD = "-lportaudio -lpthread"; };
+    OPTS = toString (
+      [
+        "-DLINKALL"
+        "-DGPIO"
+      ]
+      ++ optional dsdSupport "-DDSD"
+      ++ optional (!faad2Support) "-DNO_FAAD"
+      ++ optional ffmpegSupport "-DFFMPEG"
+      ++ optional opusSupport "-DOPUS"
+      ++ optional portaudioSupport "-DPORTAUDIO"
+      ++ optional pulseSupport "-DPULSEAUDIO"
+      ++ optional resampleSupport "-DRESAMPLE"
+      ++ optional sslSupport "-DUSE_SSL"
+      ++ optional (stdenv.hostPlatform.isAarch32 or stdenv.hostPlatform.isAarch64) "-DRPI"
+    );
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LDADD = toString [
+      "-lportaudio"
+      "-lpthread"
+    ];
+  };
 
   installPhase = ''
     runHook preInstall

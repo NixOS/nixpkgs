@@ -2,33 +2,28 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   graphviz,
   imagemagick,
   inkscape,
   jinja2,
-  poetry-core,
+  hatchling,
   pytestCheckHook,
   round,
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.24.4";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = "diagrams";
     tag = "v${version}";
-    hash = "sha256-N4JGrtgLgGUayFR6/xTf3GZEZjtxC/4De3ZCfRZbi6M=";
+    hash = "sha256-uDBmQSEn9LMT2CbR3VDhxW1ec4udXN5wZ1H1+RX/K0U=";
   };
 
   patches = [
-    # Add build-system, https://github.com/mingrammer/diagrams/pull/1089
-    ./0001-Add-build-system-section.patch
-    # Fix poetry include, https://github.com/mingrammer/diagrams/pull/1128
-    ./0002-Fix-packaging-Ensure-resources-are-included.patch
     ./remove-black-requirement.patch
   ];
 
@@ -41,7 +36,7 @@ buildPythonPackage rec {
     ./autogen.sh
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files

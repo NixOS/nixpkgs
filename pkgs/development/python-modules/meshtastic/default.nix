@@ -33,20 +33,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "meshtastic";
-  version = "2.7.7";
+  version = "2.7.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
     tag = finalAttrs.version;
-    hash = "sha256-dpO5mYdEagJ/dDiKV7vJMRdQAZN0GY7/Sf6/kkHRpCM=";
+    hash = "sha256-jHtGbG5W4KoX4pYr9WfrY56tlr2nhvhM0DeDddMOvis=";
   };
 
   pythonRelaxDeps = [
     "bleak"
     "packaging"
     "protobuf"
+    "tabulate"
   ];
 
   build-system = [ poetry-core ];
@@ -124,7 +125,7 @@ buildPythonPackage (finalAttrs: {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/python";
     changelog = "https://github.com/meshtastic/python/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.asl20;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
 })

@@ -1,0 +1,25 @@
+--- a/gdk-pixbuf-loader/meson_install.py
++++ b/gdk-pixbuf-loader/meson_install.py
+@@ -13,6 +13,22 @@ if __name__ == '__main__':
+     argparse.add_argument('--cache-file', type=Path, metavar="PATH", help="module cache file to write")
+     argparse.add_argument('--show-cross-message', action='store_true', help="tell the user to run query-loaders manually")
+     args = argparse.parse_args()
++    if sys.platform in ['darwin', 'ios']:
++        modulepath = Path(args.moduledir).resolve()
++        prefix = modulepath.parent.parent.parent
++        location = modulepath
++        if 'DESTDIR' in os.environ:
++            location = Path(os.environ['DESTDIR']) / modulepath.relative_to('/')
++        oldfilepath = location / 'libpixbufloader_svg.dylib'
++        newfilename = 'libpixbufloader-svg.so'
++        newfilepath = location / newfilename
++        installfilepath = modulepath / 'libpixbufloader-svg.so'
++        librsvgpath = prefix / 'librsvg-2.2.dylib'
++        os.rename(oldfilepath.as_posix(), newfilepath.as_posix())
++        subprocess.run(
++            ['install_name_tool', '-id', installfilepath.as_posix(), newfilepath.as_posix()])
++        subprocess.run(
++            ['install_name_tool', '-change', '@rpath/librsvg-2.2.dylib', librsvgpath.as_posix(), newfilepath.as_posix()])
+ 
+     if not(args.show_cross_message or (args.queryloaders and args.moduledir and args.cache_file)):
+         argparse.print_help()

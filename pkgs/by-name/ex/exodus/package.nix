@@ -4,7 +4,7 @@
   requireFile,
   unzip,
   glib,
-  systemd,
+  systemdLibs,
   nss,
   nspr,
   gtk3-x11,
@@ -40,12 +40,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exodus";
-  version = "25.28.4";
+  version = "26.1.5";
 
   src = requireFile {
     name = "exodus-linux-x64-${finalAttrs.version}.zip";
     url = "https://downloads.exodus.com/releases/exodus-linux-x64-${finalAttrs.version}.zip";
-    hash = "sha256-AGeFsMHSywC32iaIGI9/VY2YC3gR5bHu33rOWJlyFFM=";
+    hash = "sha256-BClWuL4dTc1lESyEXuDtpGp1K/AxICbpQIaWYLrme1M=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
         at-spi2-core
         cups.lib
         libpulseaudio
-        systemd
+        systemdLibs
         vivaldi-ffmpeg-codecs
         libxkbcommon
         libgbm
