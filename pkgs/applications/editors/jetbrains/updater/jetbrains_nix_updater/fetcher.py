@@ -1,5 +1,6 @@
 import dataclasses
 import sys
+from functools import cached_property
 from urllib import request
 from urllib.error import HTTPError
 
@@ -9,40 +10,40 @@ from packaging import version
 
 from jetbrains_nix_updater.config import SUPPORTED_SYSTEMS
 from jetbrains_nix_updater.ides import Ide
-from jetbrains_nix_updater.util import one_or_more
+from jetbrains_nix_updater.util import convert_hash_to_sri, one_or_more
 
 UPDATES_URL = "https://www.jetbrains.com/updates/updates.xml"
 
 
-class NoUrlForSystemException(Exception):
-    "raised when there is no URL available for a specific system"
+@dataclasses.dataclass
+class HashedUrl:
+    url: str
 
+    @cached_property
+    def sri_hash(self) -> str:
+        return convert_hash_to_sri(self.sha256)
 
-@dataclasses.dataclass(slots=True)
-class VersionInfo:
-    version: str
-    build_number: str
-    urls: dict[str, str | None]
-
-    def download_sha256(self, system: str) -> str:
-        if self.urls[system] is None:
-            raise NoUrlForSystemException(f"No URL available for {system}")
-        print(f"[.] Downloading sha256 for {self.urls[system]}")
-        url = f"{self.urls[system]}.sha256"
+    @cached_property
+    def sha256(self) -> str:
+        print(f"[.] Downloading sha256 for {self.url}", file=sys.stderr)
+        url = f"{self.url}.sha256"
         download_response = requests.get(url)
         download_response.raise_for_status()
         return download_response.content.decode("UTF-8").split(" ")[0]
 
 
-class VersionFetcher:
-    # Cached updates.xml content
-    _channels: dict | None = None
+@dataclasses.dataclass
+class VersionInfo:
+    version: str
+    build_number: str
+    urls: dict[str, HashedUrl]
 
-    @property
+
+class VersionFetcher:
+    @cached_property
     def channels(self) -> dict:
-        if self._channels is None:
-            self._channels = self.download_channels()
-        return self._channels
+        "updates.xml content"
+        return self.download_channels()
 
     def latest_version_info(
         self, ide: Ide, ignore_no_url_error=False
@@ -80,14 +81,13 @@ class VersionFetcher:
                     version_or_build_number,
                     version_number,
                 )
-                if not download_url and not ignore_no_url_error:
+                if download_url:
+                    download_urls[system] = HashedUrl(url=download_url)
+                elif not ignore_no_url_error:
                     print(
                         f"[!] no valid URL found for '{ide.name}' for '{system}'! make sure `updater/updateInfo.json` contains an entry and is correct.",
                         file=sys.stderr,
                     )
-                    download_urls[system] = None
-                else:
-                    download_urls[system] = download_url
             return VersionInfo(
                 version=new_version,
                 build_number=new_build_number,

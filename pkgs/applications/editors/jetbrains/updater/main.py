@@ -6,7 +6,7 @@ import sys
 
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionFetcher
-from jetbrains_nix_updater.ides import get_all_ides, get_single_ide
+from jetbrains_nix_updater.ides import Ide
 from jetbrains_nix_updater.update_bin import run_bin_update
 from jetbrains_nix_updater.update_src import run_src_update
 
@@ -52,9 +52,9 @@ def main():
     version_fetcher = VersionFetcher()
 
     ides_to_run_for = (
-        [get_single_ide(update_info, config.nixpkgs_root, config.ide)]
+        [Ide.get(update_info, config.nixpkgs_root, config.ide)]
         if config.ide is not None
-        else list(get_all_ides(update_info, config.nixpkgs_root))
+        else list(Ide.get_all(update_info, config.nixpkgs_root))
     )
 
     print(f"[.] found IDEs to update: {', '.join(ide.name for ide in ides_to_run_for)}")
