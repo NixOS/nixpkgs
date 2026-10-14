@@ -6079,7 +6079,7 @@ self: super: with self; {
 
   ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
-  fhir-py = callPackage ../development/python-modules/fhir-py { };
+  fhirpy = callPackage ../development/python-modules/fhirpy { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
@@ -6394,6 +6394,8 @@ self: super: with self; {
   flexparser = callPackage ../development/python-modules/flexparser { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
+
+  flightradarapi = callPackage ../development/python-modules/flightradarapi { };
 
   flipr-api = callPackage ../development/python-modules/flipr-api { };
 

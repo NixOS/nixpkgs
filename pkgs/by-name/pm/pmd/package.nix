@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Extensible cross-language static code analyzer";
     homepage = "https://pmd.github.io/";
-    changelog = "https://pmd.github.io/pmd-${finalAttrs.version}/pmd_release_notes.html";
+    changelog = "https://docs.pmd-code.org/pmd-doc-${finalAttrs.version}/pmd_release_notes.html";
     platforms = lib.platforms.unix;
     license = with lib.licenses; [
       bsdOriginal
