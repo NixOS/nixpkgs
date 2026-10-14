@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "Aitum";
     repo = "obs-vertical-canvas";
     rev = version;
-    sha256 = "sha256-F28AqKOvBfalo5kG/pNzZ8lz4rcd7LRxdqq9g0lv+hA=";
+    hash = "sha256-F28AqKOvBfalo5kG/pNzZ8lz4rcd7LRxdqq9g0lv+hA=";
   };
 
   nativeBuildInputs = [ cmake ];
