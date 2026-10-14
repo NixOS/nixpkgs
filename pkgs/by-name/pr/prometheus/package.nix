@@ -9,6 +9,9 @@
   pnpm_11,
   fetchPnpmDeps,
   fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  lightningcss,
   nixosTests,
   enableAWS ? true,
   enableAzure ? true,
@@ -49,6 +52,49 @@ let
     hash = "sha256-H0VkirdEVWoFxg86g8utf6EuCSH3pHD8iuHg6y0xOZE=";
   };
 
+  # rolldown and lightningcss do not publish riscv64-linux & loongarch64-linux bindings on npm.
+  needsSourceBindings = stdenv.hostPlatform.isRiscV64 || stdenv.hostPlatform.isLoongArch64;
+  bindingSuffix =
+    with stdenv.hostPlatform;
+    "${node.platform}-${node.arch}-${if isMusl then "musl" else "gnu"}";
+  rolldown-binding = rustPlatform.buildRustPackage (finalAttrs: {
+    pname = "rolldown-binding";
+    version = "1.2.7";
+
+    src = fetchFromGitHub {
+      owner = "rolldown";
+      repo = "rolldown";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-mO+L2/PepT/4jvAnTArFthdPmgvSXB/dmalxRg+VHjM=";
+    };
+
+    cargoHash = "sha256-Og9ymUaqp91m9j9/QMD+zrV7Z5o9NC9TKdj9Y8MCCQA=";
+
+    nativeBuildInputs = [ cmake ];
+    dontUseCmakeConfigure = true;
+
+    cargoBuildFlags = [ "--package=rolldown_binding" ];
+    doCheck = false;
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm444 target/*/release/librolldown_binding.so $out/lib/rolldown-binding.node
+      runHook postInstall
+    '';
+  });
+
+  lightningcss-node = lightningcss.overrideAttrs {
+    pname = "lightningcss-node";
+    cargoBuildFeatures = [ ];
+    cargoBuildFlags = [ "--package=lightningcss_node" ];
+    doCheck = false;
+    installPhase = ''
+      runHook preInstall
+      install -Dm444 target/*/release/liblightningcss_node.so $out/lib/lightningcss.node
+      runHook postInstall
+    '';
+  };
+
   assets = stdenv.mkDerivation (finalAssetsAttrs: {
     pname = "${pname}-assets";
     inherit version;
@@ -86,6 +132,17 @@ let
 
       runHook postCheck
     '';
+
+    preBuild =
+      if needsSourceBindings then
+        ''
+          cp ${rolldown-binding}/lib/rolldown-binding.node \
+            node_modules/.pnpm/rolldown@${rolldown-binding.version}/node_modules/rolldown/dist/shared/rolldown-binding.${bindingSuffix}.node
+          cp ${lightningcss-node}/lib/lightningcss.node \
+            node_modules/.pnpm/lightningcss@${lightningcss.version}/node_modules/lightningcss/lightningcss.${bindingSuffix}.node
+        ''
+      else
+        null;
 
     buildPhase = ''
       runHook preBuild
