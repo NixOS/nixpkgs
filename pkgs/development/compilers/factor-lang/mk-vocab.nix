@@ -20,6 +20,10 @@ drvArgs:
   }@attrs:
   {
     inherit vocabName vocabRoot;
+
+    __structuredAttrs = true;
+    strictDeps = true;
+
     installPhase =
       # Default installer
       # 1. If lib/factor/<vocabRoot>/<vocabName> exists, copy all vocab roots

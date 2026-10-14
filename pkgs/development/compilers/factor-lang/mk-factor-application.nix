@@ -127,6 +127,7 @@ in
       '';
 
     __structuredAttrs = true;
+    strictDeps = true;
 
     installPhase =
       attrs.installPhase or /* bash */ ''

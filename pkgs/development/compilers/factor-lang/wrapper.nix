@@ -13,10 +13,12 @@
   freealut,
   gdk-pixbuf,
   glib,
-  gtk2-x11,
-  gtkglext,
+  gtk2-x11, # to be retired with <= 0.101
+  gtkglext, # to be retired with <= 0.101
   libGL,
   libGLU,
+  gtk4,
+  libepoxy,
   librsvg,
   graphviz,
   libogg,
@@ -24,7 +26,7 @@
   openal,
   openssl,
   pango,
-  pcre,
+  pcre2,
   udis86,
   zlib,
   # Enable factor GUI support
@@ -53,7 +55,7 @@ let
     libvorbis
     openal
     openssl
-    pcre
+    pcre2
     udis86
     zlib
   ];
@@ -62,19 +64,31 @@ let
     defaultLibs
     ++ extraLibs
     ++ binPackages
-    ++ (lib.flatten (map (v: v.extraLibs or [ ]) extraVocabs))
-    ++ optionals guiSupport [
-      cairo
-      freealut
-      gdk-pixbuf
-      glib
-      gtk2-x11
-      gtkglext
-      libGL
-      libGLU
-      pango
-    ];
-  bins = binPackages ++ defaultBins ++ (lib.flatten (map (v: v.extraPaths or [ ]) extraVocabs));
+    ++ (builtins.concatMap (v: v.extraLibs or [ ]) extraVocabs)
+    ++ optionals guiSupport (
+      [
+        cairo
+        freealut
+        gdk-pixbuf
+        glib
+        libGL
+        libGLU
+        pango
+      ]
+      ++ (
+        if (versionOlder factor-unwrapped.version "0.102") then
+          [
+            gtk2-x11
+            gtkglext
+          ]
+        else
+          [
+            gtk4
+            libepoxy
+          ]
+      )
+    );
+  bins = binPackages ++ defaultBins ++ (builtins.concatMap (v: v.extraPaths or [ ]) extraVocabs);
   vocabTree = buildEnv {
     name = "${factor-unwrapped.pname}-vocabs";
     ignoreCollisions = true;
@@ -96,6 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
   buildInputs = optional guiSupport gdk-pixbuf;
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   dontUnpack = true;
 
