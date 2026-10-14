@@ -26,81 +26,68 @@
   gettext,
 }:
 let
-  # Based on wine 11.0
+  # Based on wine 11.19
   kombuchaPatches = fetchFromGitHub {
     name = "kombucha";
     owner = "vinegarhq";
     repo = "kombucha";
-    rev = "05927db95b427cc5e57856087325806cb20a0124";
-    hash = "sha256-gyyf/TVKrc6/cGP9fNKr5+qMo7ucg8l/VIklhVP8kLg=";
+    rev = "f72e02afb19b400d29958fde0cf2b183a92bb300";
+    hash = "sha256-FLFKL9h+8LUCVTk6aG3UY7M0EhdhOtdSCcObPpGvi94=";
     meta.license = lib.licenses.lgpl21Only;
   };
 
   wine =
-    (wine64Packages.stable.override {
+    (wine64Packages.unstable.override {
       dbusSupport = true;
       embedInstallers = true;
       pulseaudioSupport = true;
       x11Support = true;
       waylandSupport = true;
+      alsaSupport = false;
     }).overrideAttrs
       (oldAttrs: {
-        # https://github.com/vinegarhq/kombucha/blob/80f87fdbaae2a42bd66e41319054798fdf30fbe6/.github/workflows/wine.yml
-        # --with-wayland is added by waylandSupport = true;
-        configureFlags = oldAttrs.configureFlags or [ ] ++ [
+        # https://github.com/vinegarhq/kombucha/blob/f72e02afb19b400d29958fde0cf2b183a92bb300/.github/workflows/build.yml
+        configureFlags = lib.remove "--enable-win64" (oldAttrs.configureFlags or [ ]) ++ [
+          "--disable-dxdiagn"
+          "--disable-mscoree"
+          "--disable-mshtml"
           "--disable-tests"
           "--disable-win16"
-          "--with-dbus"
-          "--with-pulse"
-          "--with-x"
-          "--without-oss"
-          "--without-capi"
-          "--without-cups"
-          "--without-gphoto"
-          "--without-gssapi"
-          "--without-gstreamer"
-          "--without-krb5"
-          "--without-netapi"
-          "--without-opencl"
-          "--without-pcap"
-          "--without-sane"
-          "--without-v4l2"
+          "--disable-winedbg"
+          "--disable-winemenubuilder"
+          "--enable-archs=x86_64"
+          "--with-mingw"
+          "--without-alsa"
         ];
 
         patches =
           oldAttrs.patches or [ ]
-          ++ map (name: "${kombuchaPatches}/patches/${name}") [
-            /*
-              We can't apply these because they have binary content:
-
-              "0001-fonts-Add-Liberation-Sans-as-an-Arial-replacement.-v.patch"
-              "0002-fonts-Add-Liberation-Serif-as-an-Times-New-Roman-rep.patch"
-              "0003-fonts-Add-Liberation-Mono-as-an-Courier-New-replacem.patch"
-              "0004-fonts-Add-WenQuanYi-Micro-Hei-as-a-Microsoft-Yahei-r.patch"
-              "0005-Add-licenses-for-fonts-as-separate-files.patch"
-            */
-            "0006-winecfg-Add-staging-tab-for-CSMT.patch"
-            "0007-winecfg-Add-checkbox-to-enable-disable-vaapi-GPU-dec.patch"
-            "0008-winecfg-Add-checkbox-to-enable-disable-EAX-support.patch"
-            "0009-winecfg-Add-checkbox-to-enable-disable-HideWineExpor.patch"
-            "0010-winecfg-Add-option-to-enable-disable-GTK3-theming.patch"
-            "0011-winecfg-Move-input-config-options-to-a-dedicated-tab.patch"
-            "0012-winex11-Always-create-the-HKCU-configuration-registr.patch"
-            "0013-winex11-Write-supported-keyboard-layout-list-in-regi.patch"
-            "0014-winecfg-Add-a-keyboard-layout-selection-config-optio.patch"
-            "0015-winex11-Use-the-user-configured-keyboard-layout-if-a.patch"
-            "0016-winecfg-Add-a-keyboard-scancode-detection-toggle-opt.patch"
-            "0017-winex11-Use-scancode-high-bit-to-set-KEYEVENTF_EXTEN.patch"
-            "0018-winex11-Support-fixed-X11-keycode-to-scancode-conver.patch"
-            "0019-winex11-Disable-keyboard-scancode-auto-detection-by-.patch"
-            "0020-win32u-Don-t-load-bitmap-only-TTF-fonts-without-bitm.patch"
-            "0021-winex11-Move-Xfixes-extension-query-to-process_attac.patch"
-            "0022-winex11-Add-Xwayland-check.patch"
-            "0023-winex11-Use-XFixes-to-hide-cursor-before-warping-it.patch"
-            "0024-winex11-Always-ignore-MotionNotify-event-after-SetCu.patch"
-            "0025-winedbg-Disable.patch"
-            "0026-wine.inf-Disable-unused-services.patch"
+          ++ map (name: "${kombuchaPatches}/patches/stable/${name}") [
+            "0001-explorer-Enable-virtual-desktop-shell-by-default.patch"
+            "0002-ntdll-Add-kombucha_hacks.patch"
+            "0003-ntdll-Keep-more-LFH-block-groups-alive.patch"
+            "0004-ntdll-HACK-Search-for-ucrtbase-using-common-rules.patch"
+            "0005-ntdll-Use-default-loadorder-for-DXVK-DLLs.patch"
+            "0006-server-Force-persistence-to-0-seconds.patch"
+            "0007-server-Notify-if-ntsync-is-unavailable.patch"
+            "0008-win32u-Apply-work-area-changes-to-virtual-desktop-mo.patch"
+            "0009-explorer-Account-for-the-actual-size-of-the-taskbar-.patch"
+            "0010-explorer-Update-system-work-area-rect-to-exclude-tas.patch"
+            "0011-win32u-Don-t-load-bitmap-only-TTF-fonts-without-bitm.patch"
+            "0012-wine.inf-Add-KombuchaOverrides.patch"
+            "0013-wineboot-Add-WINEBOOT_HIDE_DIALOG-environment-variab.patch"
+            "0014-winewayland-Add-warning-regarding-experimental-statu.patch"
+            "0015-winex11.drv-Move-Xfixes-extension-query-to-process_a.patch"
+            "0016-winex11-Use-XFixes-to-hide-cursor-before-warping-it.patch"
+            "0017-winex11-Don-t-hide-cursor-under-X11-sessions.patch"
+            "0018-winex11-Raise-hidden-windows-above-siblings-in-virtu.patch"
+            "0019-server-print-tag-and-wine-commit-to-stdout.patch"
           ];
+
+        postPatch = (oldAttrs.postPatch or "") + ''
+          substituteInPlace server/main.c \
+            --replace-fail 'using TAG, built from WINE_COMMIT.' 'using stable+20261009201837, built from Wine ${oldAttrs.version}.'
+        '';
       });
 in
 buildGoModule (finalAttrs: {
