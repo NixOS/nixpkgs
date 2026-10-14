@@ -460,7 +460,15 @@ stdenv.mkDerivation (finalAttrs: {
   # that trip up clang with format security enabled.
   hardeningDisable = [ "format" ];
 
-  doCheck = false; # fails 20 out of 58 tests, expensive
+  doCheck = true;
+
+  disabledTests = [
+    "elements_dashsink"
+    "elements_rtpsrc"
+    "elements_rtpsink"
+    "elements_srtp"
+    "elements_webrtcbin"
+  ];
 
   preFixup = ''
     moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
