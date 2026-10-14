@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "hackercowboy";
     repo = "python-${pname}";
     rev = "V${version}";
-    sha256 = "10k61gfpnqljf3p3qxr97xq7j67a9cr4ivd9v72hdni0znrbx6ym";
+    hash = "sha256-1Zu+sv0g2gbF2antSDJL6hh5cD8pdzzucJJie90LZoI=";
   };
 
   postPatch = ''

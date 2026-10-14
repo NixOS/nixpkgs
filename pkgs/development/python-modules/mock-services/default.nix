@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "peopledoc";
     repo = "mock-services";
     rev = version;
-    sha256 = "1rqyyfwngi1xsd9a81irjxacinkj1zf6nqfvfxhi55ky34x5phf9";
+    hash = "sha256-ycFbOhl+lhJhd9tha9wPctrIVJc5BqRS0z3EZ7nzHuc=";
   };
 
   patches = [

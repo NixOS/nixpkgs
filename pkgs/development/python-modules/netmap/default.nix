@@ -19,7 +19,7 @@ buildPythonPackage (finalAttrs: {
     owner = "home-assistant-libs";
     repo = "python-nmap";
     tag = finalAttrs.version;
-    sha256 = "1a44zz9zsxy48ahlpjjrddpyfi7cnfknicfcp35hi588qm430mag";
+    hash = "sha256-T1UwSMUIlQjLuMyxaKez7ETnb2tZykuhQsR3/dP/hKg=";
   };
 
   build-system = [

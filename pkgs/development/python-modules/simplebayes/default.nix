@@ -18,7 +18,7 @@ buildPythonPackage {
     owner = "hickeroar";
     # NOTE: This is actually 1.5.8 but the tag is wrong!
     rev = "1.5.7";
-    sha256 = "0mp7rvfdmpfxnka4czw3lv5kkh6gdxh6dm4r6hcln1zzfg9lxp4h";
+    hash = "sha256-kNxO03P/B0sZNJnUZmBvz8A5y6aDf0bUtN3d2tzO51Y=";
   };
 
   nativeCheckInputs = [
