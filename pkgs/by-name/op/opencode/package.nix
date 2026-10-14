@@ -161,16 +161,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 dist/opencode-*/bin/opencode $out/bin/opencode
     wrapProgram $out/bin/opencode \
-     --prefix PATH : ${
-       lib.makeBinPath (
-         [
-           ripgrep
-         ]
-         ++ lib.optionals stdenv.hostPlatform.isDarwin [
-           sysctl
-         ]
-       )
-     } \
+     --suffix PATH : ${lib.makeBinPath [ ripgrep ]} \
+     ${lib.optionalString stdenv.hostPlatform.isDarwin "--prefix PATH : ${lib.makeBinPath [ sysctl ]}"} \
     --set OPENCODE_DISABLE_AUTOUPDATE true \
     --run '
       # NOTE: Once this workaround is removed we should switch back to using
