@@ -27,8 +27,20 @@ let
   makeOverridablePythonPackage =
     f:
     lib.mirrorFunctionArgs f (
-      origArgs:
+      origArgs':
       let
+        # Transparently transition `disabled` -> `meta.problems.unsupportedPython`
+        origArgs =
+          if isFunction origArgs' then
+            finalAttrs:
+            let
+              fixedOrigArgs' = origArgs' finalAttrs;
+            in
+            if fixedOrigArgs' ? disabled then handleDisabledArg fixedOrigArgs' else fixedOrigArgs'
+          else if origArgs' ? disabled then
+            handleDisabledArg origArgs'
+          else
+            origArgs';
         result = f origArgs;
         overrideWith =
           newArgs:
@@ -62,6 +74,33 @@ let
         newArgs: makeOverridablePythonPackage (f.override newArgs)
       );
     };
+
+  # When buildPython* is called,
+  # convert { disabled = true; } to meta.problems.unsupportedPython
+  # and remove the disabled argument.
+  # This ensure that <pkg>.overridePythonAttrs can remediate `{ disabled = true; }`
+  # by removing `unsupportedPython` from `meta.problems`.
+  handleDisabledArg =
+    let
+      boilerplateProblems = {
+        unsupportedPython = { };
+      };
+      ignoredNames = [ "disabled" ];
+    in
+    args:
+    if args.disabled == args ? meta.problems.unsupportedPython then
+      removeAttrs args ignoredNames
+    else if args.disabled then
+      removeAttrs args ignoredNames
+      // {
+        meta = args.meta or { } // {
+          problems = args.meta.problems or { } // boilerplateProblems;
+        };
+      }
+    else
+      throw "${
+        args.name or args.pname or "buildPythonPackage"
+      }: { disabled = false; } conflicts with the presence of meta.problems.unsupportedPython";
 
   mkPythonDerivation =
     if python.isPy3k then

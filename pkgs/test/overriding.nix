@@ -476,6 +476,20 @@ let
         }
       ) { };
 
+      package-stub-disabled-finalAttrs = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage (finalAttrs: {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+          disabled = true;
+        })
+      ) { };
+
       package-stub-unsupportedPython = pkgs.python3Packages.callPackage (
         {
           buildPythonPackage,
@@ -488,6 +502,20 @@ let
           src = emptyDirectory;
           meta.problems.unsupportedPython = { };
         }
+      ) { };
+
+      package-stub-unsupportedPython-finalAttrs = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage (finalAttrs: {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+          meta.problems.unsupportedPython = { };
+        })
       ) { };
 
       applyOverridePythonAttrs =
@@ -579,6 +607,43 @@ let
           overridePythonAttrsFlagP1 = 2;
         };
       };
+
+      # Even if buildPythonPackage takes `{ disabled = true }` instead of `{ meta.problems.unsupportedPython = { }; }`
+      # <pkg>.overridePythonAttrs should still be able to remove attribute `unsupportedPython` from `meta.problems`
+      # and remediate the problem.
+      overridePythonAttrs-unsupportedPython-remediation =
+        let
+          packageStubs = {
+            unsupportedPython = package-stub-unsupportedPython;
+            disabled = package-stub-disabled;
+          };
+          newArgsCandidates = rec {
+            plainFunction =
+              previousArgs:
+              previousArgs
+              // {
+                meta = previousArgs.meta or { } // {
+                  problems = removeAttrs previousArgs.problems or { } [ "unsupportedPython" ];
+                };
+              };
+            extension = finalAttrs: plainFunction;
+          };
+        in
+        {
+          expr = lib.concatMapAttrs (
+            packageStubName: package-stub:
+            lib.mapAttrs' (newArgsName: newArgs: {
+              name = "${packageStubName}-${newArgsName}";
+              value = (package-stub.overridePythonAttrs newArgs) ? meta.problems.unsupportedPython;
+            }) newArgsCandidates
+          ) packageStubs;
+          expected = {
+            unsupportedPython-plainFunction = false;
+            unsupportedPython-extension = false;
+            disabled-plainFunction = false;
+            disabled-extension = false;
+          };
+        };
 
       overridePythonAttrs-deprecated-arg-stdenv = {
         expr =
