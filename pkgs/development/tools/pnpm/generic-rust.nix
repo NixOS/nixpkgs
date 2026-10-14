@@ -3,6 +3,9 @@
   fetchFromGitHub,
   installShellFiles,
   makeWrapper,
+  pkg-config,
+  aws-lc,
+  sqlite,
   nodejs-slim,
   rustPlatform,
   stdenv,
@@ -32,6 +35,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    aws-lc
+    sqlite
   ];
 
   postPatch = ''

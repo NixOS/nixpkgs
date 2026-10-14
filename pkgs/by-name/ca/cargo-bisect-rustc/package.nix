@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  libgit2,
   openssl,
   runCommand,
   patchelf,
@@ -45,7 +46,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    libgit2
+    openssl
+  ];
 
   cargoHash = "sha256-kJ/mLHBrp67U5RkVZrkCyFjWLLwHvuLTCSxDmG1n9l0=";
 

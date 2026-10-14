@@ -2,7 +2,11 @@
   lib,
   rustPlatform,
   fetchFromGitLab,
-  perl,
+  pkg-config,
+  aws-lc,
+  openssl,
+  sqlite,
+  zstd,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,8 +23,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-zNo7HI+p5grdTayXDehMwAeEq4aOPYGSPb06c4ib95s=";
 
-  nativeBuildInputs = [
-    perl
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    aws-lc
+    openssl
+    sqlite
+    zstd
   ];
 
   passthru.updateScript = nix-update-script { };

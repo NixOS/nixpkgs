@@ -5,6 +5,8 @@
   pkg-config,
   curl,
   openssl,
+  libgit2,
+  sqlite,
   stdenv,
   libiconv,
   rav1e,
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (lib.getDev curl)
   ];
   buildInputs = [
+    sqlite
+    libgit2
     openssl
     curl
   ]

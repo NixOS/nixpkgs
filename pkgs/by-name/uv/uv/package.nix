@@ -5,10 +5,13 @@
   fetchFromGitHub,
 
   # buildInputs
+  aws-lc,
   rust-jemalloc-sys,
+  zstd,
 
   # nativeBuildInputs
   installShellFiles,
+  pkg-config,
 
   buildPackages,
   versionCheckHook,
@@ -31,10 +34,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-fGSkvK12wafGRSH2vmXrTncENwFNw0jTbKRXTwtnO9s=";
 
   buildInputs = [
+    aws-lc
     rust-jemalloc-sys
+    zstd
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   cargoBuildFlags = [
     "--package"
