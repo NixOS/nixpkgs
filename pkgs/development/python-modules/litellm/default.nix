@@ -4,6 +4,7 @@
   aiohttp,
   anthropic,
   apscheduler,
+  azure-ai-contentsafety,
   azure-identity,
   azure-keyvault-secrets,
   azure-storage-blob,
@@ -13,6 +14,7 @@
   buildPythonPackage,
   click,
   cryptography,
+  detect-secrets,
   expression,
   fastapi,
   fastapi-sso,
@@ -33,6 +35,7 @@
   jinja2,
   jsonschema,
   langfuse,
+  llm-sandbox,
   mcp,
   openai,
   opentelemetry-api,
@@ -52,6 +55,7 @@
   python-dotenv,
   python-multipart,
   pyyaml,
+  redisvl,
   resend,
   restrictedpython,
   rich,
@@ -172,16 +176,16 @@ buildPythonPackage (finalAttrs: {
       google-cloud-kms
       prisma
       psycopg
-      # FIXME package redisvl
+      redisvl
       resend
     ];
 
     proxy-runtime = [
       anthropic
-      # FIXME package azure-ai-contentsafety
+      azure-ai-contentsafety
       azure-storage-file-datalake
       # FIXME package ddtrace
-      # FIXME package detect-secrets
+      detect-secrets
       # FIXME package google-cloud-aiplatform
       google-cloud-speech
       google-genai
@@ -191,11 +195,13 @@ buildPythonPackage (finalAttrs: {
       opentelemetry-api
       opentelemetry-exporter-otlp
       opentelemetry-sdk
-      # FIXME package llm-sandbox
+      llm-sandbox
       prometheus-client
       pypdf
       sentry-sdk
-    ];
+    ]
+    # litellm's skills executor uses the default docker backend
+    ++ llm-sandbox.optional-dependencies.docker;
   };
 
   pythonImportsCheck = [ "litellm" ];
