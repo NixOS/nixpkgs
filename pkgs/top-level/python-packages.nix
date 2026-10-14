@@ -14947,6 +14947,14 @@ self: super: with self; {
     inherit (pkgs) zstd;
   };
 
+  pydantic-monty-client = callPackage ../development/python-modules/pydantic-monty-client { };
+
+  pydantic-monty-runtime = callPackage ../development/python-modules/pydantic-monty-runtime {
+    inherit (pkgs) zstd;
+  };
+
+  pydantic-monty_1 = callPackage ../development/python-modules/pydantic-monty_1 { };
+
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
   pydantic-settings = callPackage ../development/python-modules/pydantic-settings { };
