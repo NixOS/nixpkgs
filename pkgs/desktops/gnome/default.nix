@@ -20,9 +20,6 @@ lib.makeScope pkgs.newScope (
     #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
     gvfs = pkgs.gvfs.override { gnomeSupport = true; };
-
-    nixos-gsettings-overrides = callPackage ./nixos/gsettings-overrides { };
-
   }
 )
 // lib.optionalAttrs config.allowAliases {
@@ -126,6 +123,7 @@ lib.makeScope pkgs.newScope (
   networkmanager-l2tp = throw "The ‘gnome.networkmanager-l2tp’ was moved to top-level. Please use ‘pkgs.networkmanager-l2tp’ directly."; # Added on 2024-08-31.
   networkmanager-iodine = throw "The ‘gnome.networkmanager-iodine’ was moved to top-level. Please use ‘pkgs.networkmanager-iodine’ directly."; # Added on 2024-08-31.
   nautilus-python = throw "The ‘gnome.nautilus-python’ was moved to top-level. Please use ‘pkgs.nautilus-python’ directly."; # Added on 2024-06-13.
+  nixos-gsettings-overrides = throw "The ‘gnome.nixos-gsettings-overrides’ was moved to top-level. Please use ‘gnome-gsettings-overrides’ directly."; # Added on 2026-10-14.
   polari = throw "The ‘gnome.polari’ was moved to top-level. Please use ‘pkgs.polari’ directly."; # Added on 2024-08-11.
   pomodoro = throw "The ‘gnome.pomodoro’ was moved to top-level. Please use ‘pkgs.gnome-pomodoro’ directly."; # Added on 2024-06-22.
   quadrapassel = throw "The ‘gnome.quadrapassel’ was moved to top-level. Please use ‘pkgs.quadrapassel’ directly."; # Added on 2024-08-11.
