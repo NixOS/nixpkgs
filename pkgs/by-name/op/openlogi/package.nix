@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  git,
   cargo-bundle,
   fontconfig,
   freetype,
@@ -11,7 +12,6 @@
   libxkbcommon,
   makeBinaryWrapper,
   nix-update-script,
-  openssl,
   pkg-config,
   versionCheckHook,
   vulkan-loader,
@@ -19,22 +19,19 @@
 }:
 
 let
-  # crates/openlogi-gui/build.rs embeds gpui-component's themes, which live at
-  # that repo's root rather than inside the crate, so cargo vendoring drops them.
-  # Fetch the rev Cargo.lock pins and point build.rs's OPENLOGI_THEMES_DIR
-  # escape hatch at it. This pin follows Cargo.lock rather than openlogi's
-  # version, and nix-update does not maintain it.
+  # build.rs embeds gpui-kit's themes/, which cargo vendoring drops.
+  # Must match Cargo.lock (checked in postPatch); nix-update does not bump it.
   gpuiComponentThemes = fetchFromGitHub {
-    owner = "longbridge";
-    repo = "gpui-component";
-    rev = "031555662e99a1b5a549990b47f246d475b8288a";
-    hash = "sha256-yOXdgxQgfvGN2/+OdDnl1pYti0DoGFvS3Tyqvj3Bkng=";
+    owner = "AprilNEA";
+    repo = "gpui-kit";
+    rev = "1ac69bd51f744f3664361d9abd609bfc16de489f";
+    hash = "sha256-up6s9rM5brgtiBQq9CSQRf8vJ4vE2ZhY4d8wRE1nfDk=";
   };
 in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openlogi";
-  version = "0.6.25";
+  version = "0.8.13";
 
   __structuredAttrs = true;
 
@@ -42,36 +39,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AprilNEA";
     repo = "OpenLogi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JziSstP3TdPVuqpZHtStT5fEy431tdFW7nB6bZvMyVA=";
+    hash = "sha256-1c8a6QDMajiFqUc9dc8dmlWuzO8Pxsq1parD79iSGWQ=";
   };
 
-  cargoHash = "sha256-MVmPZ2IDss6+HmHKGdg4Q3g4W/fJgaQRGKoeUKDiEFU=";
+  cargoHash = "sha256-V6EhwbblXRePcfVZ0DgMR9YRHlKp06Xfo4N3fE9pcLk=";
 
   postPatch = ''
-    grep -q 'gpui-component?rev=${gpuiComponentThemes.rev}' Cargo.lock || {
+    grep -q 'gpui-kit?rev=${gpuiComponentThemes.rev}' Cargo.lock || {
       echo "ERROR: gpui-component revision needs update (must match Cargo.lock)"
       exit 1
     }
 
-    # gpui-component generates its IconName enum from a sibling assets directory,
-    # but cargo vendoring stores gpui-component-assets as a separate package.
-    for component in "$cargoDepsCopy"/source-git-*/gpui-component-[0-9]*; do
-      component_parent=$(dirname "$component")
-      ln -s "$component_parent"/gpui-component-assets-* "$component_parent/assets"
-    done
-
-    # Dev-only cargo runner wraps test binaries in a throwaway .app bundle;
-    # the Nix darwin sandbox refuses to exec it, so cargo test aborts with
-    # EPERM before the binary runs. Strip it — tests don't need the bundle.
+    # Drop the dev-only macOS cargo runner; it re-bundles test binaries and fails in the sandbox.
     substituteInPlace .cargo/config.toml \
-      --replace-fail 'runner = "scripts/cargo-run-macos.sh"' ""
+      --replace-fail 'runner = ".cargo/run-macos.sh"' ""
   ''
-  # cargo-bundle 0.12 rejects the flat osx_* keys.
+  # cargo-bundle 0.12 rejects the flat osx_* keys. Drop on the next bump
+  # (removed upstream in AprilNEA/OpenLogi@b98fa46).
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace crates/openlogi-gui/Cargo.toml \
+    substituteInPlace crates/openlogi-desktop/Cargo.toml \
       --replace-fail 'osx_minimum_system_version = "13.0"' "" \
       --replace-fail 'osx_url_schemes = ["openlogi"]' ""
-    cat >> crates/openlogi-gui/Cargo.toml <<'EOF'
+    cat >> crates/openlogi-desktop/Cargo.toml <<'EOF'
 
     [package.metadata.bundle.osx]
     minimum_system_version = "13.0"
@@ -96,19 +85,44 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libGL
     libxcb
     libxkbcommon
-    openssl
     vulkan-loader
     wayland
   ];
 
+  # Name the binaries, or the dev-only openlogi-agent-mock is built too.
   cargoBuildFlags = [
     "--package=openlogi"
-    "--package=openlogi-gui"
+    "--bin=openlogi"
+    "--package=openlogi-desktop"
+    "--bin=openlogi-desktop"
     "--package=openlogi-agent"
+    "--bin=openlogi-agent"
+    "--package=openlogi-overlay"
+    "--bin=openlogi-overlay"
   ];
 
-  cargoTestFlags = [ "--workspace" ];
+  cargoTestFlags = [
+    "--workspace"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Upstream runs openlogi-desktop's tests on macOS only.
+    "--exclude=openlogi-desktop"
+  ];
 
+  # Need a macOS desktop session (WindowServer, HIServices, powerd), absent in the sandbox.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=activity_macos::tests::the_spi_reports_a_running_cpu_and_accepts_a_subscription"
+    "--skip=macos::tests::tap_callback_suppresses_normally_and_passes_through_panics"
+    "--skip=macos::translate::tests::a_key_openlogi_posted_is_not_translated"
+    "--skip=inject::macos::keyboard_layout::tests::"
+    # Hangs rather than fails.
+    "--skip=inject::macos::tests::posted_key_edges_carry_the_synthetic_tag"
+  ];
+
+  # xtask's release tests `git init` throwaway repositories.
+  nativeCheckInputs = [ git ];
+
+  # Otherwise build.rs compiles the Metal shaders with Xcode's `xcrun metal`.
   buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [
     "gpui_platform/runtime_shaders"
   ];
@@ -121,45 +135,70 @@ rustPlatform.buildRustPackage (finalAttrs: {
     release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv "$release_target/openlogi-gui" target/release/openlogi-gui
+    mv "$release_target/openlogi-desktop" target/release/openlogi-desktop
 
-    pushd crates/openlogi-gui
+    pushd crates/openlogi-desktop
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
     popd
 
     mkdir -p "$out/Applications" "$out/bin"
     mv "$app_path" "$out/Applications/"
+    app="$out/Applications/OpenLogi.app"
 
-    # The GUI can only auto-start the agent from a login-item helper nested in
-    # its own bundle, resolved relative to its own executable (the layout
-    # upstream's `xtask macos bundle` assembles for the DMG).
-    helper="$out/Applications/OpenLogi.app/Contents/Library/LoginItems/OpenLogiAgent.app"
+    # Mirrors upstream's `xtask macos bundle`, minus code signing and Assets.car.
+    install -Dm755 "$release_target/openlogi" "$app/Contents/MacOS/openlogi"
+    ln -s "$app/Contents/MacOS/openlogi" "$out/bin/openlogi"
 
-    install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
-    install -Dm755 "$release_target/openlogi-agent" "$helper/Contents/MacOS/openlogi-agent"
-    ln -s "$helper/Contents/MacOS/openlogi-agent" "$out/bin/openlogi-agent"
+    # The GUI finds its login-item helpers relative to its own executable.
+    install_helper() {
+      local name=$1 binary=$2 template=$3
+      local helper="$app/Contents/Library/LoginItems/$name.app"
+      install -Dm755 "$release_target/$binary" "$helper/Contents/MacOS/$binary"
+      install -Dm644 "crates/openlogi-desktop/bundle/$template/Info.plist" \
+        "$helper/Contents/Info.plist"
+      substituteInPlace "$helper/Contents/Info.plist" \
+        --replace-fail "<string>0.0.0</string>" "<string>${finalAttrs.version}</string>"
+      install -Dm644 crates/openlogi-desktop/icon/AppIcon.icns \
+        "$helper/Contents/Resources/AppIcon.icns"
+    }
+    install_helper "OpenLogi Agent" openlogi-agent agent-release
+    install_helper "OpenLogi Overlay" openlogi-overlay overlay-release
+    ln -s "$app/Contents/Library/LoginItems/OpenLogi Agent.app/Contents/MacOS/openlogi-agent" \
+      "$out/bin/openlogi-agent"
 
-    # Upstream's own packaging inputs, installed verbatim rather than
-    # re-authored here (they are what `xtask macos bundle` puts in the DMG).
-    install -Dm644 crates/openlogi-gui/bundle/agent-release/Info.plist \
-      "$helper/Contents/Info.plist"
+    # Bundled launch agent, registered through SMAppService.
+    mkdir -p "$app/Contents/Library/LaunchAgents"
+    cat > "$app/Contents/Library/LaunchAgents/org.openlogi.agent.service.plist" <<'EOF'
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+      <key>BundleProgram</key>
+      <string>Contents/Library/LoginItems/OpenLogi Agent.app/Contents/MacOS/openlogi-agent</string>
+      <key>KeepAlive</key>
+      <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+      </dict>
+      <key>Label</key>
+      <string>org.openlogi.agent.service</string>
+    </dict>
+    </plist>
+    EOF
 
-    # The plist ships a 0.0.0 version sentinel (xtask stamps it at bundle
-    # time); stamp the package version instead.
-    substituteInPlace "$helper/Contents/Info.plist" \
-      --replace-fail "<string>0.0.0</string>" "<string>${finalAttrs.version}</string>"
-
-    install -Dm644 crates/openlogi-gui/icon/AppIcon.icns \
-      "$helper/Contents/Resources/AppIcon.icns"
+    # The webcam preview needs a camera usage description, or macOS terminates
+    # the app on first access.
+    substituteInPlace "$app/Contents/Info.plist" \
+      --replace-fail "<key>CFBundleIdentifier</key>" \
+      "<key>NSCameraUsageDescription</key><string>OpenLogi previews your Logitech webcam locally. Video never leaves your Mac.</string><key>CFBundleIdentifier</key>"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
-    install -Dm755 "$release_target/openlogi-gui" "$out/bin/openlogi-gui"
+    install -Dm755 "$release_target/openlogi-desktop" "$out/bin/openlogi-desktop"
     install -Dm755 "$release_target/openlogi-agent" "$out/bin/openlogi-agent"
+    install -Dm755 "$release_target/openlogi-overlay" "$out/bin/openlogi-overlay"
 
-    # Upstream's own packaging inputs, installed verbatim rather than
-    # re-authored here (they are what the .deb/.rpm ship).
     install -Dm644 packaging/linux/udev/70-openlogi.rules \
       "$out/lib/udev/rules.d/70-openlogi.rules"
     install -Dm644 packaging/linux/desktop/openlogi.desktop \
@@ -167,14 +206,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 packaging/linux/systemd/openlogi-agent.service \
       "$out/share/systemd/user/openlogi-agent.service"
 
-    # The unit hardcodes /usr/bin (upstream's install.sh rewrites it for a
-    # custom PREFIX); point it at the store path instead.
     substituteInPlace "$out/share/systemd/user/openlogi-agent.service" \
       --replace-fail "ExecStart=/usr/bin/openlogi-agent" \
                      "ExecStart=$out/bin/openlogi-agent"
 
     install -Dm644 design/icon/openlogi.png \
       "$out/share/icons/hicolor/1024x1024/apps/openlogi.png"
+    # A stock hicolor index stops at 512x512, so install the indexed sizes too.
+    for size in 512 256 128 64 48 32 16; do
+      install -Dm644 "design/icon/openlogi-$size.png" \
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/openlogi.png"
+    done
   ''
   + ''
     runHook postInstall
@@ -183,16 +225,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # GPUI (Blade) dlopen()s its Vulkan/Wayland/GL backends at runtime, so they
   # are invisible to the linker and must be on the wrapper's search path.
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram "$out/bin/openlogi-gui" \
-      --suffix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libGL
-          libxcb
-          libxkbcommon
-          vulkan-loader
-          wayland
-        ]
-      }"
+    for program in openlogi-desktop openlogi-overlay; do
+      wrapProgram "$out/bin/$program" \
+        --suffix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libGL
+            vulkan-loader
+            wayland
+          ]
+        }"
+    done
   '';
 
   doInstallCheck = true;
