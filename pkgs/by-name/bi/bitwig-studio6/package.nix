@@ -31,6 +31,7 @@
   stdenv,
   vulkan-loader,
   wrapGAppsHook3,
+  writeScript,
   writeShellScript,
   xcb-imdkit,
   zlib,
@@ -133,6 +134,30 @@ stdenv.mkDerivation (finalAttrs: {
       install -D ${wrapper} "$out"/bin/bitwig-studio
       wrapProgram "$out"/bin/bitwig-studio \
         --prefix PATH : ${lib.makeBinPath [ bubblewrap ]}
+    '';
+
+  passthru.updateScript =
+    let
+      currentMajorVersion = lib.versions.major finalAttrs.version;
+      nextMajorVersion = toString (lib.toInt currentMajorVersion + 1);
+    in
+    writeScript "update-bitwig-studio" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl common-updater-scripts
+
+      set -euo pipefail
+
+      bitwig_studio_version=$(curl -Ls https://bitwig.com/download | grep -oE '/[^/a-zA-Z][0-9.]+/' | head -n1 | tr -d '/')
+
+      if [[ ''${bitwig_studio_version/.*/} -gt ${currentMajorVersion} ]]; then
+        echo "Bitwig Studio ${currentMajorVersion} has stopped receiving updates due to ${nextMajorVersion} being out." >&2
+        echo "The latest version is: $bitwig_studio_version" >&2
+        exit 1
+      fi
+
+      pkg_hash=$(nix-prefetch-url https://bitwig.com/dl/Bitwig%20Studio/"$bitwig_studio_version"/installer_linux)
+      pkg_hash=$(nix --extra-experimental-features nix-command hash convert "sha256:$pkg_hash")
+      update-source-version bitwig-studio6 "$bitwig_studio_version" "$pkg_hash" --system=x86_64-linux --ignore-same-version
     '';
 
   meta = {
