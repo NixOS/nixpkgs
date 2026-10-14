@@ -3,6 +3,7 @@
   nodejs,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
   redocly,
   testers,
 }:
@@ -50,6 +51,13 @@ buildNpmPackage rec {
 
   passthru = {
     tests.version = testers.testVersion { package = redocly; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "@redocly/cli@(.*)"
+        "--use-github-releases"
+      ];
+    };
   };
 
   meta = {
@@ -58,6 +66,9 @@ buildNpmPackage rec {
     homepage = "https://github.com/Redocly/redocly-cli";
     license = lib.licenses.mit;
     mainProgram = "redocly";
-    maintainers = with lib.maintainers; [ szlend ];
+    maintainers = with lib.maintainers; [
+      szlend
+      tembleking
+    ];
   };
 }

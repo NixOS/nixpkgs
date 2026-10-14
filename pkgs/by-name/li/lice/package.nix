@@ -17,7 +17,8 @@ python3Packages.buildPythonPackage rec {
 
   build-system = [ python3Packages.setuptools ];
 
-  dependencies = [ python3Packages.setuptools ]; # pkg_resources
+  # pkg_resources was removed from setuptools
+  dependencies = [ python3Packages.pkg-resources-backport ];
 
   nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 

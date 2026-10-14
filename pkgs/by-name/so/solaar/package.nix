@@ -10,9 +10,11 @@
   hidapi,
   libappindicator,
   librsvg,
+  libnotify,
   upower,
   udevCheckHook,
   acl,
+  xvfb,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -50,6 +52,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libappindicator
     upower
+    libnotify
   ];
 
   propagatedBuildInputs =
@@ -73,6 +76,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pytestCheckHook
     pytest-mock
     pytest-cov-stub
+    pytest-xvfb
+    xvfb
   ];
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''

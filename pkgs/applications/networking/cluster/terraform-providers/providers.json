@@ -119,13 +119,13 @@
     "vendorHash": null
   },
   "bpg_proxmox": {
-    "hash": "sha256-oHctMNdM3ZqVwzyae1GpfwZwQeSnkf/aSxFrwKdVKKc=",
+    "hash": "sha256-OP4nakf1inxZDfMKYFwKMAq1cLfIxr5cJrraW9LuJQw=",
     "homepage": "https://registry.terraform.io/providers/bpg/proxmox",
     "owner": "bpg",
     "repo": "terraform-provider-proxmox",
-    "rev": "v0.114.0",
+    "rev": "v0.116.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-gF8B3VmoaO5a1XJBkDOLbGAm9CjQo+EOo63IC52xFi4="
+    "vendorHash": "sha256-xzatI7lBMkGqWobZzhSkVzu/3YvHD0QhB2A3JR7Rplo="
   },
   "brightbox_brightbox": {
     "hash": "sha256-bvwdtiwzXElhsXLmftXZQ567ExcC0E0L/5OeqIdp1SQ=",
@@ -751,13 +751,13 @@
     "vendorHash": null
   },
   "ibm-cloud_ibm": {
-    "hash": "sha256-pY89jjLeGTRmF9IGRckr3HmMXvXrzdGNWqmXI2bMoxU=",
+    "hash": "sha256-Mh2feSelvYQT5i3dNAsiFyh3OR4HRmEkTnQ+kTOu1PI=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v2.6.2",
+    "rev": "v2.7.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-+M87BX2FBbqL1AGCIE9uk5E6ySjYLIIxc+E5GYYDODo="
+    "vendorHash": "sha256-FOw2SvrfJOTzNu5nLHilbvFNHHbZP+iGiXeqZlXFEXA="
   },
   "icinga_icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -1238,13 +1238,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "selectel_selectel": {
-    "hash": "sha256-0h2ZkImCnCrfloCi7JgKMofOMiplTcyx9lCZb0ZcRJY=",
+    "hash": "sha256-PaVs2+gIamLDhLC2V4+NsXmayAHaj6ojPLTHIrAngmM=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v8.6.0",
+    "rev": "v9.2.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Wrtxx3sigeHguKumfbN2a4B0NEBDZTQv5sgOCfQxY7M="
+    "vendorHash": "sha256-k/e2vElAwFISt2E3KWc7qTZKzCF4R7p2QmUKKcD3kGI="
   },
   "siderolabs_talos": {
     "hash": "sha256-G5ZueJ0bS6PTxn429hKQuKsgFvg8nMk5RZUR72jtj+A=",
@@ -1535,13 +1535,13 @@
     "vendorHash": "sha256-fbFpENa1/8Qs6RnTUMi0LDATho8+WuKhj4i8S/dG3Yg="
   },
   "vultr_vultr": {
-    "hash": "sha256-hK4/Pzj0UtWDLQS3cRMC73ZRr20HCWqI+jUlTUHcHaw=",
+    "hash": "sha256-y76HGl3SDYlgyr4j4pa5DYfqM7OVfYCbxgYUxqtuiG8=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.32.0",
+    "rev": "v2.33.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-av/hIjHWw64WIJv3LVyVDu6IMUKCsM4VOLFZKB0IXjU="
+    "vendorHash": "sha256-mqiAWh4XM6mvze90/pMgM40X5SHcJOeSjOMWqEaVfUw="
   },
   "wgebis_mailgun": {
     "hash": "sha256-cz+KSvlm1mFe+NXn4IhiWYWT0/U+UAAA8SCNJgXvIKc=",

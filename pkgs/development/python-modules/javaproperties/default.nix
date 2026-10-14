@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "jwodder";
     repo = "javaproperties";
     tag = "v${version}";
-    sha256 = "sha256-8Deo6icInp7QpTqa+Ou6l36/23skxKOYRef2GbumDqo=";
+    hash = "sha256-8Deo6icInp7QpTqa+Ou6l36/23skxKOYRef2GbumDqo=";
   };
 
   build-system = [ hatchling ];
