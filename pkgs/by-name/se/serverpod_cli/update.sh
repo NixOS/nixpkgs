@@ -1,56 +1,93 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils jq yq-go git nix-prefetch-github common-updater-scripts dart
+#!nix-shell -i bash -p curl jq dart yq-go nix
 
-set -euo pipefail
+set -e
 
-PACKAGE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-NIX_FILE="$PACKAGE_DIR/package.nix"
+# Get the directory where this script is located
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "Checking for latest serverpod version..."
-latest_version=$(git ls-remote --tags https://github.com/serverpod/serverpod.git | \
-    grep -v "\^{}" | \
-    cut -f2 | \
-    sed 's/refs\/tags\///' | \
-    grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | \
-    sort -V | \
-    tail -n 1)
+# Fetch the latest tags from GitHub
+echo "Fetching latest tags from GitHub..." >&2
+tags=$(curl -s ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/serverpod/serverpod/tags?per_page=100")
 
-current_version=$(sed -n 's/^[[:space:]]*version = "\(.*\)";/\1/p' "$NIX_FILE")
-
-if [[ "$latest_version" == "$current_version" ]]; then
-    echo "serverpod_cli is already up to date ($current_version)"
-    exit 0
+if [ -z "$tags" ]; then
+  echo "Error: Failed to fetch tags from GitHub" >&2
+  exit 1
 fi
 
-echo "Updating serverpod_cli from $current_version to $latest_version"
+# Extract the latest stable version tag (skip dev versions, etc)
+# Tags are like "4.0.3"
+latest_release=$(echo "$tags" | jq -r '.[].name | select(test("^[0-9]+\\.[0-9]+\\.[0-9]+$"))' | head -1)
 
-echo "Prefetching source for $latest_version..."
-PREFETCH_OUT=$(nix-prefetch-github serverpod serverpod --rev "$latest_version")
-echo "Prefetch output: $PREFETCH_OUT"
-new_hash=$(echo "$PREFETCH_OUT" | jq -r .hash)
-echo "New hash: $new_hash"
-
-update-source-version serverpod_cli "$latest_version" "$new_hash" --version-key=version --file="$NIX_FILE"
-
-echo "Generating fresh pubspec.lock.json..."
-TMPDIR=$(mktemp -d)
-trap 'rm -rf "$TMPDIR"' EXIT
-
-src=$(nix-build --no-link . -A serverpod_cli.src)
-
-cp -r "$src/tools/serverpod_cli/"* "$TMPDIR/"
-chmod -R +w "$TMPDIR"
-cd "$TMPDIR"
-
-# Remove dependency_overrides as in the nix build
-yq -i 'del(.dependency_overrides)' pubspec.yaml
-
-# Generate lockfile because it's not included in the source
-if ! test -f pubspec.lock; then
-  dart pub get
+if [ -z "$latest_release" ]; then
+  echo "Error: Could not find any stable release tags" >&2
+  exit 1
 fi
 
-# Convert to JSON
-yq -o=json . pubspec.lock > "$PACKAGE_DIR/pubspec.lock.json"
+new_version=${latest_release}
 
-echo "Update complete: $current_version -> $latest_version"
+# Get current version from package.nix
+current_version=$(grep 'version = ' "$script_dir/package.nix" | head -1 | sed 's/.*version = "\(.*\)".*/\1/')
+
+echo "Current version: $current_version" >&2
+echo "Latest version: $new_version" >&2
+
+if [ "$new_version" = "$current_version" ]; then
+  echo "Already at latest version" >&2
+  exit 0
+fi
+
+# Create a temporary directory
+tmpdir=$(mktemp -d)
+trap "rm -rf $tmpdir" EXIT
+
+echo "Downloading serverpod ${latest_release} from GitHub..." >&2
+archive_url="https://github.com/serverpod/serverpod/archive/refs/tags/${latest_release}.tar.gz"
+archive_path="$tmpdir/serverpod.tar.gz"
+
+if ! curl -sL -o "$archive_path" "$archive_url"; then
+  echo "Error: Failed to download archive" >&2
+  exit 1
+fi
+
+echo "Extracting archive..." >&2
+tar -xzf "$archive_path" -C "$tmpdir"
+
+extracted_dir=$(tar -tzf "$archive_path" | head -1 | cut -d/ -f1)
+source_dir="$tmpdir/$extracted_dir"
+
+# Compute the hash from the downloaded and unpacked archive
+echo "Computing source hash..." >&2
+new_hash=$(nix-hash --type sha256 --sri "$source_dir")
+if [ -z "$new_hash" ]; then
+  echo "Error: Failed to compute source hash" >&2
+  exit 1
+fi
+
+echo "Generating pubspec.lock..." >&2
+cd "$source_dir/tools/serverpod_cli"
+sed -i '/resolution: workspace/d' pubspec.yaml
+dart pub get
+
+echo "Converting to JSON..." >&2
+yq eval --output-format=json --prettyPrint pubspec.lock > "$tmpdir/pubspec.lock.json"
+
+cp "$tmpdir/pubspec.lock.json" "$script_dir/pubspec.lock.json"
+echo "Updated pubspec.lock.json" >&2
+
+# Update version in package.nix
+sed -i "s/version = \"[^\"]*\";/version = \"${new_version}\";/" "$script_dir/package.nix"
+echo "Updated version to ${new_version}" >&2
+
+# Update hash in package.nix
+sed -i "s|hash = \"[^\"]*\";|hash = \"${new_hash}\";|" "$script_dir/package.nix"
+echo "Updated hash" >&2
+
+# Output commit message
+printf '{
+  "attrPath": "serverpod_cli",
+  "oldVersion": "%s",
+  "newVersion": "%s",
+  "files": ["pubspec.lock.json", "package.nix"],
+  "commitMessage": "serverpod_cli: %s -> %s"
+}' "$current_version" "$new_version" "$current_version" "$new_version"
