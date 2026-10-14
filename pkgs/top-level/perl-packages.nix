@@ -39353,28 +39353,46 @@ with self;
     };
   };
 
-  XMLTwig = buildPerlPackage {
-    pname = "XML-Twig";
-    version = "3.52";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.52.tar.gz";
-      hash = "sha256-/vdYJsJPK4d9Cg0mRSEvxPuXVu1NJxFhSsFcSX6GgK0=";
-    };
-    postInstall = ''
-      mkdir -p $out/bin
-      cp tools/xml_grep/xml_grep $out/bin
-    '';
-    propagatedBuildInputs = [ XMLParser ];
-    doCheck = false; # requires lots of extra packages
-    meta = {
-      description = "Perl module for processing huge XML documents in tree mode";
-      license = with lib.licenses; [
-        artistic1
-        gpl1Plus
-      ];
-      mainProgram = "xml_grep";
-    };
-  };
+  XMLTwig = buildPerlPackage (
+    {
+      pname = "XML-Twig";
+      version = "3.52";
+      src = fetchurl {
+        url = "mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.52.tar.gz";
+        hash = "sha256-/vdYJsJPK4d9Cg0mRSEvxPuXVu1NJxFhSsFcSX6GgK0=";
+      };
+      postInstall = ''
+        mkdir -p $out/bin
+        cp tools/xml_grep/xml_grep $out/bin
+      '';
+      propagatedBuildInputs = [ XMLParser ];
+      doCheck = false; # requires lots of extra packages
+      meta = {
+        description = "Perl module for processing huge XML documents in tree mode";
+        license = with lib.licenses; [
+          artistic1
+          gpl1Plus
+        ];
+        mainProgram = "xml_grep";
+      };
+      passthru.tests.runtimeInterpreter =
+        buildPackages.runCommand "xml-twig-runtime-interpreter-check"
+          { nativeBuildInputs = [ buildPackages.python3 ]; }
+          ''
+            python3 ${../development/perl-modules/xml-twig/check_runtime_interpreter.py} \
+              --script ${XMLTwig}/bin/xml_grep \
+              --interpreter ${perl}/bin/perl
+            touch "$out"
+          '';
+    }
+    // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
+      # The source script was patched for build-time miniperl. Refresh its
+      # installed shebang using the host interpreter, preserving its arguments.
+      postFixup = ''
+        patchShebangs --host --update "$out/bin/xml_grep"
+      '';
+    }
+  );
 
   XMLValidatorSchema = buildPerlPackage {
     pname = "XML-Validator-Schema";
