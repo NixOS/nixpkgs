@@ -3,6 +3,8 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  pkg-config,
+  zstd,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,6 +24,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   cargoHash = "sha256-ZW0/JQ9RECxfDn479ww4bO4ixoMGaM+GtGUOCWy2Cyg=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ zstd ];
 
   cargoBuildFlags = [
     "-p"
