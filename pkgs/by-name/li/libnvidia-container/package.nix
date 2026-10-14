@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FlHMGMyKkqqtIAl/T5nGkfZNsurcoltKwxn2lSIOq7g=";
   };
 
+  outputs = [
+    "out"
+    "debug"
+  ];
+
   patches = [
     # Locations of nvidia driver libraries are not resolved via ldconfig which
     # doesn't get used on NixOS.
@@ -160,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     ''
       remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.${finalAttrs.version}
+      moveToOutput lib/debug "$debug"
       wrapProgram $out/bin/nvidia-container-cli --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
   disallowedReferences = [ go ];
