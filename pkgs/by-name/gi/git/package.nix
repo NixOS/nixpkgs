@@ -39,7 +39,7 @@
   guiSupport ? false,
   # Disable the manual since libxslt doesn't seem to parse the files correctly.
   withManual ? !stdenv.hostPlatform.useLLVM,
-  pythonSupport ? true,
+  pythonSupport ? lib.meta.availableOn stdenv.hostPlatform python3,
   withpcre2 ? true,
   sendEmailSupport ? perlSupport,
   nixosTests,
