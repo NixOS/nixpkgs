@@ -7365,7 +7365,8 @@
       ];
     "threema" =
       ps: with ps; [
-      ]; # missing inputs: aiothreema
+        aiothreema
+      ];
     "threshold" =
       ps: with ps; [
       ];
@@ -9444,6 +9445,7 @@
     "thermopro"
     "thethingsnetwork"
     "thread"
+    "threema"
     "threshold"
     "tibber"
     "tile"
