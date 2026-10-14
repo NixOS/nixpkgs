@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "daanzu";
     repo = "kaldi-active-grammar";
     tag = "v${version}";
-    sha256 = "sha256-VyVshIEVp/ep4Ih7Kj66GF02JEZ4nwgJOtgR2DarzdY=";
+    hash = "sha256-VyVshIEVp/ep4Ih7Kj66GF02JEZ4nwgJOtgR2DarzdY=";
   };
 
   env = {

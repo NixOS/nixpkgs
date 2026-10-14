@@ -7,14 +7,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "openrgb-python";
-  version = "0.3.7";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jath03";
     repo = "openrgb-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Xvx0gl0kPC1/yJrSO9STPEPxw5lRlV8sLNwCUsvIGvI=";
+    hash = "sha256-AncGoP4M++lkjGUw+3wGx2bGajqeCPB7hZWf0dAcCSE=";
   };
 
   build-system = [ setuptools ];

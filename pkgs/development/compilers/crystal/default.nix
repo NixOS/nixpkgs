@@ -25,6 +25,7 @@
   pcre2,
   pkg-config,
   installShellFiles,
+  asciidoctor,
   readline,
   tzdata,
   which,
@@ -100,6 +101,7 @@ let
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
+      __structuredAttrs = true;
       inherit buildFlags doCheck version;
 
       src = fetchFromGitHub {
@@ -180,7 +182,8 @@ let
         pkg-config
         llvmPackages.llvm
         installShellFiles
-      ];
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "1.21") [ asciidoctor ];
       buildInputs = [
         boehmgc
         pcre2
@@ -237,7 +240,14 @@ let
 
         installShellCompletion --cmd ${finalAttrs.meta.mainProgram} etc/completion.*
 
-        installManPage man/crystal.1
+        ${lib.optionalString (lib.versionAtLeast version "1.21") ''
+          mkdir -p man
+          for adoc in doc/man/*.adoc; do
+            asciidoctor -a crystal_version=${version} -b manpage \
+              -o man/$(basename "$adoc" .adoc).1 "$adoc"
+          done
+        ''}
+        installManPage man/*.1
 
         install -Dm644 -t $out/share/licenses/crystal LICENSE README.md
 
@@ -335,6 +345,14 @@ rec {
   crystal_1_19 = generic {
     version = "1.19.1";
     sha256 = "sha256-vMS2GJb6c6RvflDSS2EWHsERJ0rvzZMVm50gaTXRs4Y=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_22;
+    doCheck = false;
+  };
+
+  crystal_1_21 = generic {
+    version = "1.21.0";
+    sha256 = "sha256-QnFj6JIWdfkTLKvqT3R9LwdImwunkLz+YTDVmPtKSzk=";
     binary = binaryCrystal_1_10;
     llvmPackages = llvmPackages_22;
     doCheck = false;

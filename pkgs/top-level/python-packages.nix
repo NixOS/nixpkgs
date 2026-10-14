@@ -8718,6 +8718,8 @@ self: super: with self; {
 
   j2lint = callPackage ../development/python-modules/j2lint { };
 
+  jack-client = callPackage ../development/python-modules/jack-client { };
+
   jaconv = callPackage ../development/python-modules/jaconv { };
 
   jalali-core = callPackage ../development/python-modules/jalali-core { };
@@ -14948,8 +14950,6 @@ self: super: with self; {
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
-  pyembroidery = callPackage ../development/python-modules/pyembroidery { };
-
   pyemby = callPackage ../development/python-modules/pyemby { };
 
   pyemd = callPackage ../development/python-modules/pyemd { };
@@ -15981,8 +15981,6 @@ self: super: with self; {
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
 
-  pyqt3d = callPackage ../development/python-modules/pyqt3d { };
-
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { inherit (pkgs) mesa; };
 
   pyqt5-multimedia = self.pyqt5.override { withMultimedia = true; };
@@ -16440,6 +16438,8 @@ self: super: with self; {
   pystemmer = callPackage ../development/python-modules/pystemmer { };
 
   pystiebeleltron = callPackage ../development/python-modules/pystiebeleltron { };
+
+  pystitch = callPackage ../development/python-modules/pystitch { };
 
   pystray = callPackage ../development/python-modules/pystray { };
 

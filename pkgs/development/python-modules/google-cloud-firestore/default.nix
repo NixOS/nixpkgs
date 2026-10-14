@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "google-cloud-firestore";
-  version = "2.31.0";
+  version = "2.34.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
     tag = "google-cloud-firestore-v${finalAttrs.version}";
-    hash = "sha256-kDtGHIc6UDqBomO39ZEe6fF/eZ/Ved9/0bvykVvcvag=";
+    hash = "sha256-3mW9h+eIJbSqhWM/AHeGb+AKK2SH+rNXU/JKDmkXlWc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-firestore";

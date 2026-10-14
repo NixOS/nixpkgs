@@ -4,7 +4,7 @@
 }:
 {
   version = "13.4.3";
-  sourceHash = "sha256-U6n4qBnL3Nvd6BuTqeshpkLh9alPlkbuyuaJR3J/UPk=";
+  sourceHash = "sha256-16NibQw7HZT+Kh7tM3ovi/MQybfmU3vQ30tI8h3gKsc=";
 
   nvidiaLibsPatch = replaceVars ./patch-nvidia-libs-paths_13_4.patch {
     inherit (cudaLibPaths)
