@@ -1,0 +1,143 @@
+--- a/egg-environment.scm
++++ b/egg-environment.scm
+@@ -110,9 +110,9 @@
+       (error "CHICKEN_INSTALL_PREFIX must be an absolute pathname" var2))))
+ 
+ (define (destination-repository mode #!optional run)
+-  (if (eq? 'target mode)
+-      (if run target-run-repo target-repo)
+-      (or (get-environment-variable "CHICKEN_INSTALL_REPOSITORY")
++  (or (get-environment-variable "CHICKEN_INSTALL_REPOSITORY")
++      (if (eq? 'target mode)
++          (if run target-run-repo target-repo)
+           host-repo)))
+ 
+ (define (probe-dir dir)           
+--- a/chicken-install.scm
++++ b/chicken-install.scm
+@@ -116,7 +116,8 @@
+ 
+ (define (repo-path)
+   (if (and cross-chicken (not host-extension))
+-      (##sys#split-path (destination-repository 'target))
++      (append (##sys#split-path (destination-repository 'target))
++              (##sys#split-path (or (get-environment-variable "NIX_CHICKEN_TARGET_REPOSITORY_PATH") "")))
+       (repository-path)))
+ 
+ (define (install-path)
+--- a/egg-compile.scm
++++ b/egg-compile.scm
+@@ -105,10 +105,10 @@
+ ;; this one overrides "destination-repository" in egg-environment to allow use of
+ ;; CHICKEN_INSTALL_PREFIX (via "override-prefix")
+ (define (effective-destination-repository mode #!optional run)
+-   (if (eq? 'target mode)
+-       (if run target-run-repo target-repo)
+-       (or (get-environment-variable "CHICKEN_INSTALL_REPOSITORY")
+-           (override-prefix (string-append "/lib/chicken/" (number->string binary-version))
++   (or (get-environment-variable "CHICKEN_INSTALL_REPOSITORY")
++       (override-prefix (string-append "/lib/chicken/" (number->string binary-version))
++                        (if (eq? 'target mode)
++                            (if run target-run-repo target-repo)
+                             host-repo))))
+ 
+ ;;; topological sort with cycle check
+@@ -139,9 +139,7 @@
+     (if (irregex-search '(: bos ".." ("\\/")) dest*)
+         (error "destination must be relative to CHICKEN install prefix" dest)
+         (normalize-pathname
+-         (make-pathname (if (eq? mode 'target)
+-                            default-prefix
+-                            (override-prefix "/" host-prefix))
++         (make-pathname (override-prefix "/" (if (eq? mode 'target) default-prefix host-prefix))
+                         dest*)))))
+ 
+ 
+@@ -314,9 +312,7 @@
+             (for-each compile-data/include (cddr info))
+             (checkfiles files target)
+             (let* ((dest (or (and dest (normalize-destination dest mode))
+-                             (if (eq? mode 'target)
+-                                 default-sharedir
+-                                 (override-prefix "/share" host-sharedir))))
++                             (override-prefix "/share" (if (eq? mode 'target) default-sharedir host-sharedir))))
+                    (dest (normalize-pathname (conc dest "/"))))
+               (addfiles (map (cut conc dest <>) files)))
+             (set! data
+@@ -344,9 +340,7 @@
+             (for-each compile-data/include (cddr info))
+             (checkfiles files target)
+             (let* ((dest (or (and dest (normalize-destination dest mode))
+-                             (if (eq? mode 'target)
+-                                 default-incdir
+-                                 (override-prefix "/include" host-incdir))))
++                             (override-prefix "/include" (if (eq? mode 'target) default-incdir host-incdir))))
+                    (dest (normalize-pathname (conc dest "/"))))
+               (addfiles (map (cut conc dest <>) files)))
+             (set! cinc
+@@ -360,9 +354,7 @@
+             (for-each compile-data/include (cddr info))
+             (checkfiles files target)
+             (let* ((dest (or (and dest (normalize-destination dest mode))
+-                             (if (eq? mode 'target)
+-                                 default-sharedir
+-                                 (override-prefix "/share" host-sharedir))))
++                             (override-prefix "/share" (if (eq? mode 'target) default-sharedir host-sharedir))))
+                    (dest (normalize-pathname (conc dest "/"))))
+               (addfiles (map (cut conc dest <>) files)))
+             (set! scminc
+@@ -381,9 +373,7 @@
+                       (oname #f)
+                       (opts opts))
+             (for-each compile-extension/program (cddr info))
+-            (let ((dest (if (eq? mode 'target)
+-                            default-bindir
+-                            (override-prefix "/bin" host-bindir)))
++            (let ((dest (override-prefix "/bin" (if (eq? mode 'target) default-bindir host-bindir)))
+                   ;; Respect install-name if specified
+                   (rtarget (or oname target)))
+               (addfiles (list (conc dest "/" rtarget exeext)))
+@@ -1029,9 +1019,7 @@
+          (ext (executable-extension platform))
+          (sname (prefix srcdir name))
+          (out (qs* (target-file (conc sname ext) mode)))
+-         (dest (if (eq? mode 'target)
+-                   default-bindir
+-                   (override-prefix "/bin" host-bindir)))
++         (dest (override-prefix "/bin" (if (eq? mode 'target) default-bindir host-bindir)))
+          (dfile (qs* dest))
+          (ddir (shell-variable "DESTDIR"))
+          (destf (qs* (conc dest "/" output-file ext))))
+@@ -1096,19 +1084,13 @@
+ (define ((install-data name #!key files destination mode)
+          srcdir platform)
+   (install-random-files (or destination
+-                            (if (eq? mode 'target)
+-                                default-sharedir
+-                                (override-prefix "/share"
+-                                                 host-sharedir)))
++                            (override-prefix "/share" (if (eq? mode 'target) default-sharedir host-sharedir)))
+                         files mode srcdir platform))
+ 
+ (define ((install-c-include name #!key deps files destination mode)
+          srcdir platform)
+   (install-random-files (or destination
+-                            (if (eq? mode 'target)
+-                                default-incdir
+-                                (override-prefix "/include"
+-                                                 host-incdir)))
++                            (override-prefix "/include" (if (eq? mode 'target) default-incdir host-incdir)))
+                         files mode srcdir platform))
+ 
+ ;; manage dependency-targets
+@@ -1205,7 +1187,9 @@
+ 	      str)))
+ 
+ (define (target-file fname mode)
+-  (if (eq? mode 'target) (string-append fname ".target") fname))
++  (if (and (eq? mode 'target) (not (irregex-search "\\.o(bj)?$" fname)))
++      (string-append fname ".target")
++      fname))
+ 
+ (define (joins strs platform)
+   (string-intersperse (map qs* strs) " "))
