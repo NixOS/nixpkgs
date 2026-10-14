@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
+  python,
   onnxruntime,
   autoPatchelfHook,
 
@@ -79,6 +80,16 @@ buildPythonPackage {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ openvino ]
   );
+
+  # Point the bundled copies at onnxruntime's, which is already a runtime dependency.
+  postInstall = ''
+    for lib in "$out/${python.sitePackages}"/onnxruntime/capi/libonnxruntime*; do
+      native="${lib.getLib onnxruntime}/lib/$(basename "$lib")"
+      if [[ -f $native ]]; then
+        ln -sf "$native" "$lib"
+      fi
+    done
+  '';
 
   dependencies = [
     coloredlogs
