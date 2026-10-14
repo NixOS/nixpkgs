@@ -39,12 +39,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas${clr.gpuArchSuffix}";
-  version = "10.1.0";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    rev = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    rev = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocblas"
       "shared"

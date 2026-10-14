@@ -19,13 +19,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpp-${if useCPU then "cpu" else "hip"}";
 
-  version = "10.1.0";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     # rpp lives in the rocm-libraries monorepo since ROCm 10
     repo = "rocm-libraries";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rpp"
       "shared"

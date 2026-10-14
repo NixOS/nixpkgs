@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
-  version = "10.1.0";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-cmake";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     hash = "sha256-im6UO0crO0Jc27zkTsdvJYPHit8IGlw/vDPGrmP1XqY=";
   };
 

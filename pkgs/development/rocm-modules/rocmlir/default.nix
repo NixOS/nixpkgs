@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "10.1.0";
+  version = "10.1";
 
   outputs = [
     "out"

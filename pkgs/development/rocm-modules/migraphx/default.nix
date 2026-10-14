@@ -65,7 +65,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "10.1.0";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -80,8 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "AMDMIGraphX";
-    # AMDMIGraphX's ROCm 10 tags are two-component (rocm-10.1), not rocm-X.Y.Z.
-    tag = "rocm-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-NusXF2BrmLrAbImnBh4zGKrsBs2O8E6R0kMmPN5S858=";
   };
 

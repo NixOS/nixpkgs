@@ -43,12 +43,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparselt${clr.gpuArchSuffix}";
-  version = "10.1.0";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     hash = "sha256-pJvsJv007YCXR4YiOq3qFWlcDFoGxwKovNSk0Mjxnes=";
     sparseCheckout = [
       "projects/hipsparselt"

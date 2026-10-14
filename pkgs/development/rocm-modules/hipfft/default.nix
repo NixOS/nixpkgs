@@ -21,7 +21,7 @@
 # Can also use cuFFT
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfft";
-  version = "10.1.0";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/hipfft"
       "shared"

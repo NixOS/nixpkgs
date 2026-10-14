@@ -49,7 +49,7 @@ let
   # nixpkgs nlohmann_json 3.12.0 switch(...) default labels. -isystem the
   # nlohmann headers so its header warnings are not treated as MIOpen -Werror errors.
   cFlags = "-Wno-documentation-pedantic -Wno-covered-switch-default --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -isystem ${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "10.1.0";
+  version = "10.1";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/miopen"
       "shared"

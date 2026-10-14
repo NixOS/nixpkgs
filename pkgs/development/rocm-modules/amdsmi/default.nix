@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdsmi";
-  version = "10.1.0";
+  version = "10.1";
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-systems";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/amdsmi"
       "shared"

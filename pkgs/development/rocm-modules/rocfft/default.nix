@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "10.1.0";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocfft"
       "shared"

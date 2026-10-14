@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "10.1.0";
+  version = "10.1";
 
   outputs = [
     "out"
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     # ROCdbgapi lives in the rocm-systems monorepo since ROCm 10
     repo = "rocm-systems";
-    tag = "therock-${lib.versions.majorMinor finalAttrs.version}";
+    tag = "therock-${finalAttrs.version}";
     sparseCheckout = [
       "projects/rocdbgapi"
       "shared"

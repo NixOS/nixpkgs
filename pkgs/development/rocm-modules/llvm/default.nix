@@ -42,9 +42,9 @@
 }:
 
 let
-  version = "10.1.0";
+  version = "10.1";
   # ROCm/TheRock two-component tag (therock-<major>.<minor>) for all monorepo/llvm sources
-  srcTag = "therock-${lib.versions.majorMinor version}";
+  srcTag = "therock-${version}";
   # major version of this should be the clang version ROCm forked from
   rocmLlvmVersion = "24.0.0-rocm";
   # The base's own libllvm is used only to bootstrap (LTO is off, see withLto),
