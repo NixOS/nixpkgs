@@ -10,7 +10,9 @@ stdenv.mkDerivation {
   inherit (src) passthru;
 
   postPatch = ''
+    pushd ${src.passthru.packageRoot}
     cp ${./CMakeLists.txt} linux/CMakeLists.txt
+    popd
   '';
 
   installPhase = ''
