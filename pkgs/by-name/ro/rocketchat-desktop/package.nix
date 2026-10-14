@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
       icon = "rocketchat-desktop";
       exec = "rocketchat-desktop";
       terminal = false;
-      startupWMClass = "Rocket.Chat";
+      startupWMClass = "rocket-chat";
       mimeTypes = [ "x-scheme-handler/rocketchat" ];
     })
   ];
