@@ -1,5 +1,5 @@
 diff --git a/make/config.mk b/make/config.mk
-index 5b592d82..86481a21 100644
+index 020024e4..f1020ed7 100644
 --- a/make/config.mk
 +++ b/make/config.mk
 @@ -20,11 +20,6 @@ LLVM_VERSIONS = 19 18 17 16 15
@@ -15,7 +15,7 @@ index 5b592d82..86481a21 100644
  findLLVMTool = $(call detect,$(1),$(abspath llvm-build/bin/$(1)) $(foreach ver,$(LLVM_VERSIONS),$(call toolSearchPathsVersion,$(1),$(ver))) $(1))
  CLANG ?= $(call findLLVMTool,clang)
 diff --git a/make/release.mk b/make/release.mk
-index 89dc4c9e..b43bf814 100644
+index bf2e0f09..4ea9e581 100644
 --- a/make/release.mk
 +++ b/make/release.mk
 @@ -1,9 +1,8 @@
@@ -29,7 +29,7 @@ index 89dc4c9e..b43bf814 100644
  	@mkdir -p build/release/tinygo/lib/CMSIS/CMSIS
  	@mkdir -p build/release/tinygo/lib/macos-minimal-sdk
  	@mkdir -p build/release/tinygo/lib/mingw-w64/mingw-w64-crt/crt
-@@ -27,7 +26,6 @@ ifneq ($(USE_SYSTEM_BINARYEN),1)
+@@ -29,7 +28,6 @@ ifneq ($(USE_SYSTEM_BINARYEN),1)
  	@cp -p  build/wasm-opt$(EXE)         build/release/tinygo/bin
  endif
  	@cp -rp lib/bdwgc/*                  build/release/tinygo/lib/bdwgc
@@ -37,10 +37,10 @@ index 89dc4c9e..b43bf814 100644
  	@cp -rp lib/CMSIS/CMSIS/Include      build/release/tinygo/lib/CMSIS/CMSIS
  	@cp -rp lib/CMSIS/README.md          build/release/tinygo/lib/CMSIS
  	@cp -rp lib/macos-minimal-sdk/*      build/release/tinygo/lib/macos-minimal-sdk
-@@ -120,8 +118,7 @@ endif
- 	@cp -rp lib/wasi-libc/libc-top-half/musl/src/unistd             build/release/tinygo/lib/wasi-libc/libc-top-half/musl/src
+@@ -125,8 +123,7 @@ endif
  	@cp -rp lib/wasi-libc/libc-top-half/sources                     build/release/tinygo/lib/wasi-libc/libc-top-half
  	@cp -rp lib/wasi-cli/wit                                        build/release/tinygo/lib/wasi-cli/wit
+ 	@cp -rp lib/xtensa/include                                      build/release/tinygo/lib/xtensa
 -	@cp -rp ${LLVM_PROJECTDIR}/compiler-rt/lib/builtins build/release/tinygo/lib/compiler-rt-builtins
 -	@cp -rp ${LLVM_PROJECTDIR}/compiler-rt/LICENSE.TXT  build/release/tinygo/lib/compiler-rt-builtins
 +	@cp -rp lib/compiler-rt-builtins     build/release/tinygo/lib/compiler-rt-builtins
