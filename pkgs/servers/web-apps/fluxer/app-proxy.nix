@@ -9,7 +9,7 @@
   lld,
   brotli,
   buildWasmBindgenCli,
-  makeBinaryWrapper,
+  makeWrapper,
   pnpmConfigHook,
   pkg-config,
   fetchPnpmDeps,
@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.BUNDLE_LOCAL_ASSETS = true;
 
   nativeBuildInputs = [
-    makeBinaryWrapper
+    makeWrapper
     nodejs
     pnpm
     pnpmConfigHook
