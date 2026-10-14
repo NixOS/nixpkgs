@@ -5,6 +5,7 @@
   fetchFromGitHub,
   isPyPy,
   pythonOlder,
+  writableTmpDirAsHomeHook,
 
   # build-system
   cython,
@@ -33,7 +34,6 @@
   blockbuster,
   freezegun,
   gunicorn,
-  isal,
   proxy-py,
   pytest-codspeed,
   pytest-cov-stub,
@@ -44,6 +44,12 @@
   re-assert,
   trustme,
   zlib-ng,
+
+  # Tests with ISA-L.
+  # Excluded by default to avoided making thousands of python packages dependant on ISA-L.
+  withIsalTests ? false,
+  isal,
+  aiohttp,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -108,10 +114,11 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+
     blockbuster
     freezegun
     gunicorn
-    isal
     proxy-py
     pytest-codspeed
     pytest-cov-stub
@@ -122,6 +129,9 @@ buildPythonPackage (finalAttrs: {
     re-assert
     trustme
     zlib-ng
+  ]
+  ++ lib.optionals withIsalTests [
+    isal
   ];
 
   disabledTests = [
@@ -156,13 +166,17 @@ buildPythonPackage (finalAttrs: {
     # aiohttp in current folder shadows installed version
     rm -r aiohttp
     touch tests/data.unknown_mime_type # has to be modified after 1 Jan 1990
-
-    export HOME=$(mktemp -d)
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
   '';
+
+  passthru.tests = {
+    with-isal = aiohttp.override {
+      withIsalTests = true;
+    };
+  };
 
   meta = {
     changelog = "https://docs.aiohttp.org/en/${finalAttrs.src.tag}/changes.html";
