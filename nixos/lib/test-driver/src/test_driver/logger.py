@@ -78,11 +78,14 @@ class JunitXMLLogger(AbstractLogger):
             self.stdout = ""
             self.stderr = ""
             self.failure = False
+            self.total_secs = 0.0
+            self.nested_secs = 0.0
 
     def __init__(self, outfile: Path) -> None:
         self.testsuite = JunitXMLLogger.TestCaseState()
         self.tests: dict[str, JunitXMLLogger.TestCaseState] = {}
         self.currentSubtest = None
+        self.timestamp = time.monotonic()
         self.outfile: Path = outfile
         self._print_serial_logs = True
         self._log_level = LogLevel.INFO
@@ -99,7 +102,12 @@ class JunitXMLLogger(AbstractLogger):
         self.tests.setdefault(name, self.TestCaseState())
         self.currentSubtest = name
 
+        timestamp = time.monotonic()
         yield
+        time_difference = time.monotonic() - timestamp
+        self.tests[self.currentSubtest].total_secs = time_difference
+        if old_test:
+            self.tests[old_test].nested_secs += time_difference
 
         self.currentSubtest = old_test
 
@@ -149,14 +157,18 @@ class JunitXMLLogger(AbstractLogger):
         self._log_level = level
 
     def close(self) -> None:
+        timestamp = time.monotonic()
         with open(self.outfile, "w") as f:
             test_cases = []
             if len(self.tests) == 0:
                 self.tests.setdefault("main", self.TestCaseState())
                 self.tests["main"].failure = self.testsuite.failure
+                self.tests["main"].total_secs = timestamp - self.timestamp
             for name, test_case_state in self.tests.items():
+                elapsed_sec = test_case_state.total_secs - test_case_state.nested_secs
                 tc = TestCase(
                     name,
+                    elapsed_sec=elapsed_sec,
                     stdout=test_case_state.stdout,
                     stderr=test_case_state.stderr,
                 )
