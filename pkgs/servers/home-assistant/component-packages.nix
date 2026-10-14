@@ -8069,7 +8069,8 @@
       ];
     "willow" =
       ps: with ps; [
-      ]; # missing inputs: pywillow
+        pywillow
+      ];
     "window" =
       ps: with ps; [
       ];
@@ -9565,6 +9566,7 @@
     "wiffi"
     "wiim"
     "wilight"
+    "willow"
     "window"
     "wirelesstag"
     "withings"
