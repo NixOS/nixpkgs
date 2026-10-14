@@ -109,10 +109,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=services::provider::tests::update_current_claude_provider_syncs_live_when_proxy_takeover_detected_without_backup"
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p "$out/bin"
-    makeWrapper "$out/Applications/CC Switch.app/Contents/MacOS/cc-switch" "$out/bin/cc-switch"
-  '';
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/bin"
+      makeWrapper "$out/Applications/CC Switch.app/Contents/MacOS/cc-switch" "$out/bin/cc-switch"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 flatpak/com.ccswitch.desktop.metainfo.xml -t $out/share/metainfo
+    '';
 
   passthru.updateScript = nix-update-script { };
 
