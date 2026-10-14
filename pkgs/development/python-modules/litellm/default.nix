@@ -18,12 +18,16 @@
   fastapi-sso,
   fastuuid,
   fetchFromGitHub,
+  filelock,
   google-cloud-iam,
   google-cloud-kms,
+  google-cloud-speech,
   google-genai,
   grpcio,
   gunicorn,
   httpx,
+  httpx2,
+  huggingface-hub,
   importlib-metadata,
   inquirerpy,
   jinja2,
@@ -36,6 +40,7 @@
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
   orjson,
+  packaging,
   polars,
   prisma,
   prometheus-client,
@@ -58,6 +63,7 @@
   tiktoken,
   tokenizers,
   tomlkit,
+  typing-extensions,
   uvicorn,
   uvloop,
   websockets,
@@ -67,14 +73,14 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.102.1";
+  version = "1.106.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
     tag = "v${version}";
-    hash = "sha256-Mb5K0AmvS8N+Bya+i3BZTQtu4BWYcdgk3UieJ8xET7w=";
+    hash = "sha256-WZP27aJWtGpvCTHQShE/ufqp/MerqTM2dTTVj1T9EfI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -91,8 +97,13 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-zbDWVIg0ly+VP9t9eA/md0CxUKCKBJWHLgG13EUZ4rY=";
+    hash = "sha256-jOR+k7iKF+/TTx2qc7vLBvIoew+bPY8c/tXeFGBywgM=";
   };
+
+  patches = [
+    # fix import race when offline
+    ./model-cost-map-retry-wait-for-import.patch
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -104,17 +115,23 @@ buildPythonPackage rec {
     boto3
     click
     fastuuid
+    filelock
     httpx
+    huggingface-hub
     importlib-metadata
     jinja2
     jsonschema
     openai
+    packaging
     pydantic
     pydantic-settings
     python-dotenv
+    pyyaml
     tiktoken
     tokenizers
-  ];
+    typing-extensions
+  ]
+  ++ httpx.optional-dependencies.http2;
 
   optional-dependencies = {
     proxy = [
@@ -127,6 +144,7 @@ buildPythonPackage rec {
       fastapi
       fastapi-sso
       gunicorn
+      httpx2
       inquirerpy
       # FIXME package litellm-enterprise
       # FIXME package litellm-proxy-extras
@@ -166,6 +184,7 @@ buildPythonPackage rec {
       # FIXME package ddtrace
       # FIXME package detect-secrets
       # FIXME package google-cloud-aiplatform
+      google-cloud-speech
       google-genai
       grpcio
       langfuse
