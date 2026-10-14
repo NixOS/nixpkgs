@@ -124,7 +124,7 @@ buildNpmPackage (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "kando";
+      name = "menu.kando.Kando";
       exec = "kando %U";
       icon = "kando";
       desktopName = "Kando";
