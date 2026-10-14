@@ -8,6 +8,7 @@
 let
   inherit (lib)
     isFunction
+    recursiveUpdate
     toExtension
     ;
 in
@@ -25,6 +26,13 @@ let
   # Overridings specified through `overridePythonAttrs` will always be applied
   # before those specified by `overrideAttrs`, even if invoked after them.
   makeOverridablePythonPackage =
+    let
+      boilerplateProblems = {
+        # Handle `<pkg>.overridePythonAttrs` taking argument `disabled`
+        meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs = { };
+      };
+      boilerplateDisabledAttrNames = [ "disabled" ];
+    in
     f:
     lib.mirrorFunctionArgs f (
       origArgs':
@@ -45,15 +53,23 @@ let
         overrideWith =
           newArgs:
           # Only build a fixed-point when origArgs or newArgs are functions
+          # or when we need to handle the `disabled` argument taken by `<pkg>.overridePyhtonAttrs`
           # to reduce allocation/GC.
-          if isFunction origArgs || isFunction newArgs then
-            # In-lined `lib.extends`.
+          if isFunction origArgs || isFunction newArgs || newArgs ? disabled then
+            # In-lined `lib.extends` with custom filter logic.
             finalAttrs:
             let
               previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
               updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
             in
-            previousArgs // updatingArgs
+            if updatingArgs ? disabled then
+              # Remove disabled from newArgs
+              # and add `meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs`.
+              recursiveUpdate (
+                previousArgs // removeAttrs updatingArgs boilerplateDisabledAttrNames
+              ) boilerplateProblems
+            else
+              previousArgs // updatingArgs
           else
             origArgs // newArgs;
       in

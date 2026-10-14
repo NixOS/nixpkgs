@@ -645,6 +645,75 @@ let
           };
         };
 
+      overridePythonAttrs-deprecated-disabled =
+        let
+          packageStubs = {
+            unsupportedPython = package-stub-unsupportedPython;
+            disabled = package-stub-disabled;
+          };
+          newArgsCandidatesDisabled = rec {
+            plainAttrsDisabled = {
+              disabled = false;
+            };
+            plainFunctionDisabled = previousArgs: plainAttrsDisabled;
+            extensionDisabled = finalAttrs: plainFunctionDisabled;
+          };
+          newArgsCandidatesId = {
+            plainAttrsId = { };
+            plainFunctionDisabled = previousArgs: { };
+            extensionDisabled = finalAttrs: previousArgs: { };
+          };
+          applyOverridingWith =
+            newArgsCandidates: packageStubs:
+            lib.concatMapAttrs (
+              packageStubName: package-stub:
+              lib.mapAttrs' (newArgsName: newArgs: {
+                name = "${packageStubName}-${newArgsName}";
+                value = package-stub.overridePythonAttrs newArgs;
+              }) newArgsCandidates
+            ) packageStubs;
+        in
+        {
+          expr =
+            lib.mapAttrs
+              # Whether the problem buildPythonPackage-internal-disabled-overridePythonAttrs is present
+              (_: package: package ? meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs)
+              (
+                # .overridePythonAttrs { disabled = false; }
+                applyOverridingWith newArgsCandidatesDisabled packageStubs
+                # Nested overriding.
+                // applyOverridingWith newArgsCandidatesDisabled (
+                  applyOverridingWith newArgsCandidatesId packageStubs
+                )
+                // applyOverridingWith newArgsCandidatesId (
+                  applyOverridingWith newArgsCandidatesDisabled packageStubs
+                )
+                // applyOverridingWith newArgsCandidatesDisabled (
+                  applyOverridingWith newArgsCandidatesDisabled packageStubs
+                )
+              );
+          expected = lib.genAttrs (lib.crossLists (p: s: p + "-" + s) [
+            # { "${packageStudName}-${newArgsCandidateName}" = true; }
+            (lib.attrNames packageStubs)
+            # { "${packageStudName}-${newArgsCandidateName1}-${newArgsCandidateName2}" = true; }
+            (
+              (lib.attrNames newArgsCandidatesDisabled)
+              ++ (lib.crossLists (p: s: p + "-" + s) [
+                (lib.attrNames newArgsCandidatesDisabled)
+                (lib.attrNames newArgsCandidatesId)
+              ])
+              ++ (lib.crossLists (p: s: p + "-" + s) [
+                (lib.attrNames newArgsCandidatesId)
+                (lib.attrNames newArgsCandidatesDisabled)
+              ])
+              ++ (lib.crossLists (p: s: p + "-" + s) [
+                (lib.attrNames newArgsCandidatesDisabled)
+                (lib.attrNames newArgsCandidatesDisabled)
+              ])
+            )
+          ]) (_: true);
+        };
+
       overridePythonAttrs-deprecated-arg-stdenv = {
         expr =
           (package-stub-gcc.overridePythonAttrs {
