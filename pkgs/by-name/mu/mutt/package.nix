@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Avoid build-only references embedding into 'mutt -v' output.
     ./no-build-only-refs.patch
+    # Fix for https://nvd.nist.gov/vuln/detail/cve-2026-107570
+    ./CVE-2026-107570.patch
   ]
   ++ lib.optional smimeSupport (fetchpatch {
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
