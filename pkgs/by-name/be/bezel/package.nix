@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     install -Dm644 config.toml.example \
-      $out/share/bezel/config.toml.example
+      $out/share/doc/bezel/config.toml.example
   '';
 
   passthru.updateScript = nix-update-script { };
