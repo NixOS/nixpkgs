@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_97,
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpm_11,
@@ -20,7 +20,7 @@
 let
   pnpm = pnpm_11;
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_97.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
   version = "1.27.0";
 
