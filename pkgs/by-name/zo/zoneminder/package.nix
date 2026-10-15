@@ -81,7 +81,7 @@ let
   perlBin = "${perl}/bin/perl";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zoneminder";
   version = "1.36.39+git20261015_41b48ee";
 
