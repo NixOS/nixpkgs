@@ -1140,15 +1140,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2711-1";
+      version = "0.0.2719-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2711-1.rockspec";
-          sha256 = "0wvhwis8i5a0jx3y3icjzfgha22yvwvggas8mkdhv9q74gd2pip7";
+          url = "mirror://luarocks/fzf-lua-0.0.2719-1.rockspec";
+          sha256 = "0xnkw1ng8z8y6hizv1p8sgb4mrs5yi6i5shmhxh893danbraj556";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/ed0e0ead1789ee349cbf025900931fb402b1e05e.zip";
-        sha256 = "13c4csfvkpicyjr69cbh46klz8bf6bjsk5ad4ljh2ic86m0y475n";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/3868dcc78d2c2766c9510ab18b6d3815071b389e.zip";
+        sha256 = "0ps9snlkxl26s1a3ig6qycfr10n4gc4yb8h5na1qnxr7skh9gjv4";
       };
 
       disabled = luaOlder "5.1";
