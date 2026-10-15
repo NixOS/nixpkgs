@@ -15,7 +15,7 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devolo-plc-api";
   version = "1.6.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GOX4rU26ghmrbx6cKomuW/FzjWuTy3lRmrtiwWuktFE=";
   };
 
@@ -62,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Devolo PLC devices";
     homepage = "https://github.com/2Fake/devolo_plc_api";
-    changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/v${version}";
+    changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
