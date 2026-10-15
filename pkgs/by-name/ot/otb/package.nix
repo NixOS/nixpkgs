@@ -27,18 +27,18 @@
 
   # otb modules
   enableFFTW ? false,
-  enableFeatureExtraction ? true,
-  enableHyperspectral ? true,
-  enableLearning ? true,
-  enableMiscellaneous ? true,
+  enableFeatureExtraction ? false,
+  enableHyperspectral ? false,
+  enableLearning ? false,
+  enableMiscellaneous ? false,
   enableOpenMP ? false,
   enablePython ? true,
   extraPythonPackages ? ps: [ ],
-  enableRemote ? true,
+  enableRemote ? false,
   enableShark ? true,
-  enableSAR ? true,
-  enableSegmentation ? true,
-  enableStereoProcessing ? true,
+  enableSAR ? false,
+  enableSegmentation ? false,
+  enableStereoProcessing ? false,
   enableThirdParty ? true,
 }:
 let
@@ -60,17 +60,6 @@ let
     "fftw"
   ];
   itkIsInDepsToRemove = dep: builtins.elem dep.name itkDepsToRemove;
-
-  # remove after https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2451
-  otbSwig = swig.overrideAttrs (oldArgs: {
-    version = "4.2.1";
-    src = fetchFromGitHub {
-      owner = "swig";
-      repo = "swig";
-      tag = "v4.2.1";
-      hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
-    };
-  });
 
   # override the ITK version with OTB version
   # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/SuperBuild/CMake/External_itk.cmake?ref_type=heads#L145
@@ -227,13 +216,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "otb";
-  version = "10.0-unstable-2025-12-11";
+  version = "10.0.0-rc1";
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "otb";
-    rev = "2dd72c102a0a95794c0cc3e7da1843bc67537f6e";
-    hash = "sha256-dLphF4h/QkO/lSVEmVUPuRRGDU5SRhNLoxXxHWpINbU=";
+    tag = finalAttrs.version;
+    hash = "sha256-c8o1iGPacaceZ8VnG5gzN7lnCTLS5Nkb1jajtLBfzmw=";
   };
 
   patches = [
@@ -245,13 +234,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Modules/Core/Wrappers/SWIG/src/python/CMakeLists.txt \
       --replace-fail ''\'''${ITK_INCLUDE_DIRS}' "${otb-itk}/include/ITK-${itkMajorMinorVersion}"
-  ''
-  # Add the header file "vcl_legacy_aliases.h", which defines the legacy vcl_* functions.
-  # This patch fixes the unreproducible build of OTB.
-  # See https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2484.
-  + ''
-    sed -i '/#include "vcl_compiler.h"/a #include "vcl_legacy_aliases.h"' Modules/Core/Mosaic/include/otbMosaicFunctors.h
   '';
+
+  # Some core targets include ITK headers indirectly through otbMacro.h without declaring
+  # OTBITK as a module dependency, so its include directory is missing during compilation.
+  env.NIX_CFLAGS_COMPILE = "-I${otb-itk}/include/ITK-${itkMajorMinorVersion}";
 
   nativeBuildInputs = [
     cmake
@@ -262,6 +249,8 @@ stdenv.mkDerivation (finalAttrs: {
   # https://www.orfeo-toolbox.org/CookBook/CompilingOTBFromSource.html#native-build-with-system-dependencies
   # activates all modules and python by default
   cmakeFlags = [
+    # Let OTB use LD_LIBRARY_PATH when running build-time tools; Nix adds the final RPATHs during fixup.
+    (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
     (lib.cmakeBool "OTBGroup_Core" true)
     (lib.cmakeBool "OTB_BUILD_FeaturesExtraction" enableFeatureExtraction)
     (lib.cmakeBool "OTB_BUILD_Hyperspectral" enableHyperspectral)
@@ -296,7 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals enablePython (
     [
       python3
-      otbSwig
+      swig
     ]
     ++ pythonInputs
   )
