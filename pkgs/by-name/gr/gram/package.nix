@@ -129,10 +129,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $release_target/gram target/release/gram
 
     pushd crates/gram
-    # Note that this is GNU sed, while Gram's bundle-mac uses BSD sed
-    sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+    # Select the stable bundle and migrate its macOS keys to cargo-bundle 0.12's schema.
+    substituteInPlace Cargo.toml \
+          --replace-fail '[package.metadata.bundle-stable]' '[package.metadata.bundle]' \
+          --replace-fail 'osx_minimum_system_version' 'osx.minimum_system_version' \
+          --replace-fail 'osx_info_plist_exts' 'osx.info_plist_exts' \
+          --replace-fail 'osx_url_schemes' 'osx.url_schemes'
     export CARGO_BUNDLE_SKIP_BUILD=true
-    app_path=$(cargo bundle --release | xargs)
+    app_path=$(cargo bundle --release --format osx | xargs)
     popd
 
     mkdir -p $out/Applications $out/bin

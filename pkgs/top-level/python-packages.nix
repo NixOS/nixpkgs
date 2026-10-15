@@ -20279,6 +20279,8 @@ self: super: with self; {
 
   sunpy = callPackage ../development/python-modules/sunpy { };
 
+  sunsynk-api-client = callPackage ../development/python-modules/sunsynk-api-client { };
+
   suntime = callPackage ../development/python-modules/suntime { };
 
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };

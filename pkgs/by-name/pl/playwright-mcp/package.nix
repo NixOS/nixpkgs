@@ -9,16 +9,16 @@
 buildNpmPackage rec {
   pname = "playwright-mcp";
   # nixpkgs-update: no auto update
-  version = "0.0.80";
+  version = "0.0.83";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright-mcp";
     tag = "v${version}";
-    hash = "sha256-pIePGuIxBaHqvP6QVLzGSef0uarYE+X/rs3LWZEU22U=";
+    hash = "sha256-Pkm4kmnWgLX7wmPjL3hM3LWfkPwIVUoW3Wp/RHjX/hA=";
   };
 
-  npmDepsHash = "sha256-3T4XNZSUL5sbcHmWfn9Dfigu635FACVEZ/EHSKYu1+8=";
+  npmDepsHash = "sha256-+uDq8oXkxQK4SNXBNZFtd4zrun1MGeSMeiLHViaNqHY=";
 
   nativeBuildInputs = [ makeWrapper ];
 
