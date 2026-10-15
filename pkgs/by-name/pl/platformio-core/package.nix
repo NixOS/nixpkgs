@@ -38,7 +38,7 @@ in
 with python3Packages;
 buildPythonApplication rec {
   pname = "platformio";
-  version = "6.1.19";
+  version = "6.2.0";
   pyproject = true;
 
   # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
@@ -46,7 +46,7 @@ buildPythonApplication rec {
     owner = "platformio";
     repo = "platformio-core";
     tag = "v${version}";
-    hash = "sha256-9pv2fbShddfYqBFxsQEj7nU1e772gUQEQINXRO/RMcQ=";
+    hash = "sha256-R2HZeKKknFoDzYNIVucgKl/2FftD7xABAzF+I91yv6Q=";
   };
 
   outputs = [
