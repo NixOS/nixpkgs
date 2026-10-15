@@ -31,13 +31,13 @@ let
 
   cudaLibPaths = {
     libcuda =
-      # Use cuda_compat to provide libcuda.so on pre-Thor Jetsons
+      # Use cuda_compat to provide libcuda.so from its `compat` directory
       if (cudaPackages.cuda_compat.meta.available or false) then
-        cudaPackages.cuda_compat
+        "${cudaPackages.cuda_compat}/compat"
 
       # Else, use the host CUDA driver library
       else
-        addDriverRunpath.driverLink;
+        "${addDriverRunpath.driverLink}/lib";
     libcudart = lib.getLib cudaPackages.cuda_cudart;
     # libcudla is only available on Xavier and Orin Jetson devices
     libcudla =
@@ -112,12 +112,12 @@ buildPythonPackage (finalAttrs: {
       substituteInPlace cuda/bindings/_internal/nvjitlink_linux.pyx \
         --replace-fail \
           "handle = dlopen('libcuda.so.1'" \
-          "handle = dlopen('${cudaLibPaths.libcuda}/lib/libcuda.so.1'"
+          "handle = dlopen('${cudaLibPaths.libcuda}/libcuda.so.1'"
 
       substituteInPlace cuda/bindings/_bindings/cydriver.pyx.in \
         --replace-fail \
           "path = 'libcuda.so.1'" \
-          "path = '${cudaLibPaths.libcuda}/lib/libcuda.so.1'"
+          "path = '${cudaLibPaths.libcuda}/libcuda.so.1'"
     ''
     + (versionSpecificAttrs.postPatch or "");
 
