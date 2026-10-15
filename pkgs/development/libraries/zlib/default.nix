@@ -62,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'ARFLAGS="-o"' 'ARFLAGS="-r"'
     substituteInPlace win32/zlib.def \
       --replace-fail 'gzopen_w' ""
+    substituteInPlace zlib.pc.in \
+      --replace-fail 'Libs: -L''${libdir} -L''${sharedlibdir} -lz' 'Libs: -L''${${lib.optionalString shared "shared"}libdir} -lz'
   '';
 
   strictDeps = true;
