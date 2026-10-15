@@ -16,7 +16,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dunamai";
   version = "1.26.2";
   pyproject = true;
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "dunamai";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pP0KeQ1tThvBomQIlrWNCVzB8ghR9rfaLm5NeBKwiuE=";
   };
 
@@ -55,8 +55,8 @@ buildPythonPackage rec {
     description = "Dynamic version generation";
     mainProgram = "dunamai";
     homepage = "https://github.com/mtkennerly/dunamai";
-    changelog = "https://github.com/mtkennerly/dunamai/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/mtkennerly/dunamai/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jmgilman ];
   };
-}
+})
