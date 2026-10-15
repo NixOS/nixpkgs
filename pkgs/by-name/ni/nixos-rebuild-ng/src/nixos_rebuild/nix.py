@@ -5,7 +5,6 @@ import re
 import sys
 import textwrap
 import uuid
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
@@ -472,7 +471,11 @@ def get_generations(
     )
 
 
-def list_generations(profile: Profile, elevate: Elevator) -> list[GenerationJson]:
+def list_generations(
+    profile: Profile,
+    target_host: Remote | None = None,
+    elevate: Elevator = NO_ELEVATOR,
+) -> list[GenerationJson]:
     """Get all NixOS generations from profile, including extra information.
 
     Includes OS information like the commit, kernel version, configuration
@@ -492,6 +495,8 @@ def list_generations(profile: Profile, elevate: Elevator) -> list[GenerationJson
             result = run_wrapper(
                 [generation_path / "sw/bin/nixos-version", "--json"],
                 capture_output=True,
+                remote=target_host,
+                elevate=elevate,
             ).stdout
             j = json.loads(result)
         except (OSError, CalledProcessError, json.JSONDecodeError) as ex:
@@ -508,15 +513,16 @@ def list_generations(profile: Profile, elevate: Elevator) -> list[GenerationJson
             current=generation.current,
         )
 
-    if generations := get_generations(profile=profile, elevate=elevate):
-        # This can be surprisingly slow, especially with lots of generations,
-        # but it is basically IO work so we can run in parallel
-        with ThreadPoolExecutor() as executor:
-            return sorted(
-                executor.map(get_generation_info, generations),
-                key=lambda x: x["generation"],
-                reverse=True,
-            )
+    if generations := get_generations(
+        profile=profile,
+        target_host=target_host,
+        elevate=elevate,
+    ):
+        return sorted(
+            map(get_generation_info, generations),
+            key=lambda x: x["generation"],
+            reverse=True,
+        )
     else:
         raise NixOSRebuildError(
             f"could not find generations for profile '{profile.name}'"
