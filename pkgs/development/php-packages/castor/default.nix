@@ -3,6 +3,7 @@
   fetchFromGitHub,
   installShellFiles,
   php,
+  stdenv,
   nix-update-script,
   versionCheckHook,
   writableTmpDirAsHomeHook,
@@ -26,12 +27,15 @@ php.buildComposerProject2 (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  # install shell completions
-  postInstall = ''
+  # castor loads castor.php from the working directory, so generate the
+  # completions outside the source tree to prevent it
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    pushd "$(mktemp -d)"
     installShellCompletion --cmd castor \
       --bash <(php $out/bin/castor completion bash) \
       --fish <(php $out/bin/castor completion fish) \
       --zsh <(php $out/bin/castor completion zsh)
+    popd
   '';
 
   doInstallCheck = true;
