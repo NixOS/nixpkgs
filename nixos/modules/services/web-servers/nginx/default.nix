@@ -195,6 +195,8 @@ let
         error_log ${cfg.logError};
         daemon off;
 
+        worker_processes ${cfg.workerProcesses};
+
         # load_module is a main-context directive that must precede events{}/http{}.
         ${optionalString (
           (cfg.package.dynamicModules or [ ]) != [ ]
@@ -717,6 +719,14 @@ in
         example = "20s";
         description = ''
           Change the uwsgi related timeouts in recommendedUwsgiSettings.
+        '';
+      };
+
+      workerProcesses = mkOption {
+        type = types.either types.ints.positive (types.enum [ "auto" ]);
+        default = "auto";
+        description = ''
+          Defines the number of worker processes.
         '';
       };
 
