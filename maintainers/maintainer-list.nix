@@ -14408,8 +14408,8 @@
     keys = [ { fingerprint = "4C68 56EE DFDA 20FB 77E8  9169 1964 2151 C218 F6F5"; } ];
   };
   jthulhu = {
-    name = "Adrien Mathieu";
-    email = "adrien.lc.mathieu@gmail.com";
+    name = "jthulhu";
+    email = "jthulhu@2mon.ad";
     github = "jthulhu";
     githubId = 23179762;
   };
