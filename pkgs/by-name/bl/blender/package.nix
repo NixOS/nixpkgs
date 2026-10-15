@@ -165,8 +165,9 @@ stdenv'.mkDerivation (finalAttrs: {
                 '${lib.getLib brotli}/lib/libbrotlidec.dylib'
   '')
   + (lib.optionalString rocmSupport ''
-    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"/opt/rocm/hip/lib/libamdhip64.so.${lib.versions.major rocmPackages.clr.version}"' '"${rocmPackages.clr}/lib/libamdhip64.so"'
-    substituteInPlace extern/hipew/src/hipew.c --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
+    substituteInPlace extern/hipew/src/hipew.c \
+      --replace-fail '"libamdhip64.so"' '"${rocmPackages.clr}/lib/libamdhip64.so"' \
+      --replace-fail '"opt/rocm/hip/bin"' '"${rocmPackages.clr}/bin"'
   '')
   + (lib.optionalString oneapiSupport ''
     substituteInPlace intern/cycles/kernel/device/oneapi/CMakeLists.txt \
