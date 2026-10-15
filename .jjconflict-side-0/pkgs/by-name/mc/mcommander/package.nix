@@ -32,6 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "mcommander";
   version = "6.1.0";
 
+  # New packages must opt in (nixpkgs-vet NPV-164 / NPV-166):
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchurl {
     url = "https://github.com/blue-panels/mcommander/releases/download/v${finalAttrs.version}/mcommander-${finalAttrs.version}.tar.gz";
     hash = "sha256-MvozvoFvm7QHBQaK57Rowq1kDerY2jeKh4ZWVi1Z/Yg=";
