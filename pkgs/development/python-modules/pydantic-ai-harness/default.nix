@@ -45,11 +45,6 @@ buildPythonPackage (finalAttrs: {
     pydantic-ai-slim
   ];
 
-  # remove when #567678 is merged
-  pythonRelaxDeps = [
-    "json-repair"
-  ];
-
   pythonImportsCheck = [ "pydantic_ai_harness" ];
 
   meta = {
