@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "Mopidy-Scrobbler";
-    sha256 = "11vxgax4xgkggnq4fr1rh2rcvzspkkimck5p3h4phdj3qpnj0680";
+    hash = "sha256-ABkg7cVDNngJHLdMVuOcV//NsoA5ZEewfW++Trp6fYc=";
   };
 
   build-system = [

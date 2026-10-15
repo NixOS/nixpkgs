@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "Mopidy-SomaFM";
-    sha256 = "DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
+    hash = "sha256-DC0emxkoWfjGHih2C8nINBFByf521Xf+3Ks4JRxNPLM=";
   };
 
   build-system = [

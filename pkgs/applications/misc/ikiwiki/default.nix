@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://debian/pool/main/i/ikiwiki/ikiwiki_${version}.orig.tar.xz";
-    sha256 = "0skrc8r4wh4mjfgw1c94awr5sacfb9nfsbm4frikanc9xsy16ksr";
+    hash = "sha256-WU8TvO6JWTVjdqQu7WxajildMlckscCfk5VATjJieWo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "Catch-up-to-highlight-4.0-API-change";
       url = "http://source.ikiwiki.branchable.com/?p=source.git;a=patch;h=9ea3f9dfe7c0341f4e002b48728b8139293e19d0";
-      sha256 = "16s4wvsfclx0a5cm2awr69dvw2vsi8lpm0d7kyl5w0kjlmzfc7h9";
+      hash = "sha256-CR7mfqVyAl6on6eBeimKegu+WzKZK1FZUaBT5vTmRJs=";
     })
   ];
 

@@ -127,12 +127,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://tobiasmelcher.github.io/acejumpeclipse/features/acejump.feature_${version}.jar";
-      sha256 = "1szswjxp9g70ibfbv3p8dlq1bngq7nc22kp657z9i9kp8309md2d";
+      hash = "sha256-TbSawEB3ppj+KeZOIZg9+NkVMG3ojr3ciuC8dLvk+us=";
     };
 
     srcPlugin = fetchurl {
       url = "https://tobiasmelcher.github.io/acejumpeclipse/plugins/acejump_${version}.jar";
-      sha256 = "1cn64xj2bm69vnn9db2xxh6kq148v83w5nx3183mrqb59ym3v9kf";
+      hash = "sha256-bqY9qk9l4VwHCqPbwgfaiAQ8DexdrJas3cnUJWQnxrI=";
     };
 
     meta = {
@@ -173,7 +173,7 @@ rec {
 
     src = fetchurl {
       url = "https://www.antlr.org/download/${pname}-${version}.jar";
-      sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
+      hash = "sha256-k7ygjsmVyuqvYL34ADWgvoUH/Nq9PCYY/Yxaq0REp1I=";
     };
 
     buildCommand = ''
@@ -197,7 +197,7 @@ rec {
 
     src = fetchurl {
       url = "https://www.antlr.org/download/${pname}-${version}.jar";
-      sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
+      hash = "sha256-Q1FtGb6uNZCeBNBq9sDFjBe8lOAHDIXo3JkpymQNyR0=";
     };
 
     buildCommand = ''
@@ -244,12 +244,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://github.com/cypher256/eclipse-encoding-plugin/raw/master/eclipse.encoding.updatesite.snapshot/features/eclipse.encoding.plugin.feature_${version}.jar";
-      sha256 = "1m8ypsc1dwz0y6yhjgxsdi9813d38jllv7javgwvcd30g042a3kx";
+      hash = "sha256-fQ4lCHhgNLb520qeTalEo42AUmy6Pwm98eDzFpi+HtU=";
     };
 
     srcPlugin = fetchurl {
       url = "https://github.com/cypher256/eclipse-encoding-plugin/raw/master/eclipse.encoding.updatesite.snapshot/plugins/mergedoc.encoding_${version}.jar";
-      sha256 = "1n2rzybfcwp3ss2qi0fhd8vm38vdwav8j837lqiqlfcnvzwsk86m";
+      hash = "sha256-1aCp+d+WOYojpmcgibbibaNRN2rQgYiF1uNy5pb/Wdg=";
     };
 
     meta = {
@@ -289,7 +289,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/8.7.0/net.sf.eclipsecs-updatesite_${version}.zip";
-      sha256 = "07fymk705x4mwq7vh2i6frsf67jql4bzrkdzhb4n74zb0g1dib60";
+      hash = "sha256-wKzYwgPrk2PJgr/N/BehWB7jdHYmCrgP5pX0As6s3h0=";
     };
 
     meta = {
@@ -308,12 +308,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://eclipse-color-theme.github.io/update/features/com.github.eclipsecolortheme.feature_${version}.jar";
-      sha256 = "128b9b1cib5ff0w1114ns5mrbrhj2kcm358l4dpnma1s8gklm8g2";
+      hash = "sha256-4qFK50M6qGpvIxSVUdkUEuaVa9GWhBA4cK6syMJKC4k=";
     };
 
     srcPlugin = fetchurl {
       url = "https://eclipse-color-theme.github.io/update/plugins/com.github.eclipsecolortheme_${version}.jar";
-      sha256 = "0wz61909bhqwzpqwll27ia0cn3anyp81haqx3rj1iq42cbl42h0y";
+      hash = "sha256-HkBB6GKC4BhkHh0rGND1Vg3LgIpHUMrx/RzDlUAK5nM=";
     };
 
     meta = {
@@ -332,18 +332,18 @@ rec {
 
     srcFeature = fetchurl {
       url = "http://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
-      sha256 = "13nnsf0cqg02z3af6xg45rhcgiffsibxbx6h1zahjv7igvqgkyna";
+      hash = "sha256-yvr58H7xbAnVD9D01VfUzsXHYC7kdePU+AI8zIDT1o4=";
     };
 
     srcPlugins = [
       (fetchurl {
         url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version_}.jar";
-        sha256 = "0kif8kivrysprva1pxzajm88gi967qf7idhb6ga2xpvsdcris91j";
+        hash = "sha256-MiQdM2t63y7UMwu2eBw+JsWHUJXq9xvUzlf7vONELk4=";
       })
 
       (fetchurl {
         url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
-        sha256 = "022phbrsny3gb8npb6sxyqqxacx138q5bd7dq3gqxh3kprx5chbl";
+        hash = "sha256-dEFWer5zwI7fwO20VTAaoTPVMfZdm3UtWm94q/OCVwg=";
       })
     ];
 
@@ -390,7 +390,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = "mirror://sourceforge/project/eclemma/01_EclEmma_Releases/2.3.2/eclemma-2.3.2.zip";
-      sha256 = "0w1kwcjh45p7msv5vpc8i6dsqwrnfmjama6vavpnxlji56jd3c43";
+      hash = "sha256-g7DRpClR0m7vVtuoqmR1NnOsm4mI3V22rucWAiXjM3A=";
     };
 
     meta = {
@@ -408,12 +408,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "http://findbugs.cs.umd.edu/eclipse/features/edu.umd.cs.findbugs.plugin.eclipse_${version}.jar";
-      sha256 = "1m9fav2xlb9wrx2d00lpnh2sy0w5yzawynxm6xhhbfdzd0vpfr9v";
+      hash = "sha256-O2V3N2i/uQVhN7Vbz9X3hQOvBbSXAtBEzzwt2sVWLtU=";
     };
 
     srcPlugin = fetchurl {
       url = "http://findbugs.cs.umd.edu/eclipse/plugins/edu.umd.cs.findbugs.plugin.eclipse_${version}.jar";
-      sha256 = "10p3mrbp9wi6jhlmmc23qv7frh605a23pqsc7w96569bsfb5wa8q";
+      hash = "sha256-GCleltMrmWISP0zjO4QqwMDszsZDsFoplCbydFeu44I=";
     };
 
     meta = {
@@ -431,7 +431,7 @@ rec {
 
     src = fetchzip {
       url = "https://github.com/ddekany/jbosstools-freemarker/releases/download/v${version}/freemarker.site-${version}.zip";
-      sha256 = "1qrhi300vk07gi14r445wvy0bvghbjd6c4k7q09pqpaxv6raiczn";
+      hash = "sha256-9rOostldXXwTwGcSZppc8O0F/OaFkExCfAfMDcCIMOM=";
       stripRoot = false;
     };
 
@@ -449,7 +449,7 @@ rec {
     src = fetchzip {
       stripRoot = true;
       url = "https://github.com/eclipse-embed-cdt/eclipse-plugins/archive/v${version}.zip";
-      sha256 = "sha256-0wHRIls48NGDQzD+wuX79Thgiax+VVYVPJw2Z6NEzsg=";
+      hash = "sha256-0wHRIls48NGDQzD+wuX79Thgiax+VVYVPJw2Z6NEzsg=";
     };
 
     meta = {
@@ -469,7 +469,7 @@ rec {
 
     srcFeature = fetchurl {
       url = "https://boothen.github.io/Json-Eclipse-Plugin/features/jsonedit-feature_${version}.jar";
-      sha256 = "0zkg8d8x3l5jpfxi0mz9dn62wmy4fjgpwdikj280fvsklmcw5b86";
+      hash = "sha256-Bq3CWaVTbweQkDM2fp90xFcujG3pVxC7u7LQ0VFDb34=";
     };
 
     srcPlugins =
@@ -529,12 +529,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "http://oss.opensagres.fr/jdt-codemining/snapshot/features/jdt-codemining-feature_${version}.jar";
-      sha256 = "1vy30rsb9xifn4r1r2n84d48g6riadzli1xvhfs1mf5pkm5ljwl6";
+      hash = "sha256-hnJJS523uBq0g7uHSH9TMZuHSCPIihwysS72tHQGw+8=";
     };
 
     srcPlugin = fetchurl {
       url = "http://oss.opensagres.fr/jdt-codemining/snapshot/plugins/org.eclipse.jdt.codemining_${version}.jar";
-      sha256 = "0qdzlqcjcm2i4mwhmcdml0am83z1dayrcmf37ji7vmw6iwdk1xmp";
+      hash = "sha256-t/YwG4+G132iPMNVlr1q4Q9UFaC1sQp5JVFUJhmmv2E=";
     };
 
     meta = {
@@ -556,7 +556,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
-      sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
+      hash = "sha256-16dCmtBMlo51nXomfeScn3yK4kfHnS1cWwSGdoQk0vU=";
       postFetch = ''
         mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
       '';
@@ -578,7 +578,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/spotbugs/spotbugs/releases/download/${version}/eclipsePlugin.zip";
-      sha256 = "0aanqwx3gy1arpbkqd846381hiy6272lzwhfjl94x8jhfykpqqbj";
+      hash = "sha256-cmF8p3dQok4SlQ7yT8URxkcY0DAENTzXzSr4NzrHVik=";
     };
 
     meta = {
@@ -623,7 +623,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = "https://github.com/${owner}/${repo}/releases/download/${version}/vrapper_${version}_${date}.zip";
-      sha256 = "0nyirf6km97q211cxfy01kidxac20m8ba3kk9xj73ykrhsk3cxjp";
+      hash = "sha256-V3Y2poZ5+nFkT3MOtVAFgqne4gzAu85CEPikOo3L0Vs=";
     };
 
     meta = {
@@ -642,12 +642,12 @@ rec {
 
     srcFeature = fetchurl {
       url = "http://dadacoalition.org/yedit/features/org.dadacoalition.yedit.feature_${version}-RELEASE.jar";
-      sha256 = "0rps73y19gwlrdr8jjrg3rhcaaagghnmri8297inxc5q2dvg0mlk";
+      hash = "sha256-k1bwdhO4sG7jSQLFXC18TynFYB4vS4lyy5S/FPw4+mY=";
     };
 
     srcPlugin = fetchurl {
       url = "http://dadacoalition.org/yedit/plugins/org.dadacoalition.yedit_${version}-RELEASE.jar";
-      sha256 = "1wpyw4z28ka60z36f8m71kz1giajcm26wb9bpv18sjiqwdgx9v0z";
+      hash = "sha256-H+zUX+M4So3CvistbkRlUsUX/gynImfGB0ZNJD7h/vI=";
     };
 
     meta = {
@@ -665,7 +665,7 @@ rec {
 
     src = fetchurl {
       url = "http://archive.eclipse.org/tools/gef/downloads/drops/${version}/R201408150207/GEF-${pname}-${version}.zip";
-      sha256 = "01scn7cmcrjcp387spjm8ifgwrwwi77ypildandbisfvhj3qqs7m";
+      hash = "sha256-9WiMh4Tb6biaVY3G68+JnGf+XERVXn3QuExmVtmxTAc=";
     };
 
     meta = {

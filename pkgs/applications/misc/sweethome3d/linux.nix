@@ -40,11 +40,11 @@ let
   icons = {
     "32x32" = fetchurl {
       url = "http://sweethome3d.cvs.sourceforge.net/viewvc/sweethome3d/SweetHome3D/deploy/SweetHome3DIcon32x32.png";
-      sha256 = "1r2fhfg27mx00nfv0qj66rhf719s2g1vhdis7bdc9mqk9x0mb0ir";
+      hash = "sha256-OYJVQU8T18TaOjo2uMMTOoXjYDZGYrCdBaDXI56DTuQ=";
     };
     "48x48" = fetchurl {
       url = "http://sweethome3d.cvs.sourceforge.net/viewvc/sweethome3d/SweetHome3D/deploy/SweetHome3DIcon48x48.png";
-      sha256 = "1ap6d75dyqqvx21wddvn8vw2apq3v803vmbxdriwd0dw9rq3zn4g";
+      hash = "sha256-j9g/cE68gcZjbn3VPQDaA18l+EZ2t8aD6Btj38pp5qo=";
     };
   };
 

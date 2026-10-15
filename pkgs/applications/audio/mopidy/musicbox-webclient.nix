@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
     owner = "pimusicbox";
     repo = "mopidy-musicbox-webclient";
     tag = "v${finalAttrs.version}";
-    sha256 = "1lzarazq67gciyn6r8cdms0f7j0ayyfwhpf28z93ydb280mfrrb9";
+    hash = "sha256-aeXsKkBiNT/SR8JdyJ33CsjjgK6NoWysj+wdg7/K6tM=";
   };
 
   build-system = [

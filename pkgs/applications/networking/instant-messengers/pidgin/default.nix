@@ -50,7 +50,7 @@ let
 
     src = fetchurl {
       url = "mirror://sourceforge/pidgin/pidgin-${version}.tar.bz2";
-      sha256 = "sha256-D/yZlN7xAmD5ilXNEy3u+o3EqYNUUcwOmCdHvUWOI1Y=";
+      hash = "sha256-D/yZlN7xAmD5ilXNEy3u+o3EqYNUUcwOmCdHvUWOI1Y=";
     };
 
     nativeBuildInputs = [

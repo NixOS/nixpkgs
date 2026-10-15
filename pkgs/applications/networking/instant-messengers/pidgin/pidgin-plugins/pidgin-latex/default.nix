@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin-latex/pidgin-latex_${version}.tar.bz2";
-    sha256 = "9c850aee90d7e59de834f83e09fa6e3e51b123f06e265ead70957608ada95441";
+    hash = "sha256-nIUK7pDX5Z3oNPg+CfpuPlGxI/BuJl6tcJV2CK2pVEE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

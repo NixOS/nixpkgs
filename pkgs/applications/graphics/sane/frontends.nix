@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://alioth-archive.debian.org/releases/sane/${finalAttrs.pname}/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "1ad4zr7rcxpda8yzvfkq1rfjgx9nl6lan5a628wvpdbh3fn9v0z7";
+    hash = "sha256-54OdrBtwtbs5EkYVq6ihNvUnXQ54uv09Uu12lk/+pKk=";
   };
 
   # add all fedora patches. fix gcc-14 build among other things

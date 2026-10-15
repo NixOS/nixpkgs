@@ -1026,7 +1026,7 @@ assertNoAdditions {
       (fetchpatch {
         name = "fix-deprecated-function-call.patch";
         url = "https://github.com/zbirenbaum/copilot-cmp/commit/06430ebf99834ebc5d86c63816e409f4cb51fe79.patch";
-        sha256 = "sha256-YOJPFC+qbyURFU58tAiAqbamQLmi7ovnJGkOeOTUPH0=";
+        hash = "sha256-YOJPFC+qbyURFU58tAiAqbamQLmi7ovnJGkOeOTUPH0=";
       })
     ];
   };
@@ -1155,12 +1155,12 @@ assertNoAdditions {
       (fetchpatch {
         name = "drop_python2_pt1.patch";
         url = "https://github.com/JazzCore/ctrlp-cmatcher/commit/3abad6ea155a7f6e138e1de3ac5428177bfb0254.patch";
-        sha256 = "sha256-fn2puqYeJdPTdlTT4JjwVz7b3A+Xcuj/xtP6TETlB1U=";
+        hash = "sha256-fn2puqYeJdPTdlTT4JjwVz7b3A+Xcuj/xtP6TETlB1U=";
       })
       (fetchpatch {
         name = "drop_python2_pt2.patch";
         url = "https://github.com/JazzCore/ctrlp-cmatcher/commit/385c8d02398dbb328b1a943a94e7109fe6473a08.patch";
-        sha256 = "sha256-yXKCq8sqO0Db/sZREuSeqKwKO71cmTsAvWftoOQehZo=";
+        hash = "sha256-yXKCq8sqO0Db/sZREuSeqKwKO71cmTsAvWftoOQehZo=";
       })
     ];
     buildInputs = with python3.pkgs; [
@@ -4826,7 +4826,7 @@ assertNoAdditions {
     let
       unicode-data = fetchurl {
         url = "http://www.unicode.org/Public/UNIDATA/UnicodeData.txt";
-        sha256 = "16b0jzvvzarnlxdvs2izd5ia0ipbd87md143dc6lv6xpdqcs75s9";
+        hash = "sha256-SZejGW63m00Na4OEVg9q60agYmk/Cr1bpzarv/eXYJk=";
       };
     in
     super.unicode-vim.overrideAttrs (old: {
@@ -5205,7 +5205,7 @@ assertNoAdditions {
       (fetchpatch {
         # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
         url = "https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch";
-        sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
+        hash = "sha256-pCvinZM9+yK9tZqOY5NAjXA/4oL71vAybm92U9ZSHXQ=";
       })
     ];
     meta = old.meta // {

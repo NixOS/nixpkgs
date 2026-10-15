@@ -14,13 +14,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "MBdistortion";
     rev = "V${finalAttrs.version}";
-    sha256 = "0mdzaqmxzgspfgx9w1hdip18y17hwpdcgjyq1rrfm843vkascwip";
+    hash = "sha256-N3Km1dyDoOpyDtjLx9rl8ASPwo0NBp76c1e/3ytWv1U=";
   };
 
   patches = [
     (fetchpatch {
       url = "https://github.com/magnetophon/MBdistortion/commit/10e35084b88c559f1b63760cf40fd5ef5a6745a5.patch";
-      sha256 = "0hwjl3rzvn3id0sr0qs8f37jdmr915mdan8miaf78ra0ir3wnk76";
+      hash = "sha256-5kzLR45AZXScihVZ1WoJKdcmz3BIY5A1aHHY/fOgkkM=";
     })
   ];
 

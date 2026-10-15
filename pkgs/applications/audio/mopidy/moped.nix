@@ -14,7 +14,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "Mopidy-Moped";
-    sha256 = "15461174037d87af93dd59a236d4275c5abf71cea0670ffff24a7d0399a8a2e4";
+    hash = "sha256-FUYRdAN9h6+T3VmiNtQnXFq/cc6gZw//8kp9A5moouQ=";
   };
 
   env.LC_ALL = "en_US.UTF-8";

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://bitlbee/src/bitlbee-${version}.tar.gz";
-    sha256 = "0zhhcbcr59sx9h4maf8zamzv2waya7sbsl7w74gbyilvy93dw5cz";
+    hash = "sha256-nxXeRvKbRr8eOfxQvfRRXnGxf1UfOVUJTF2nktliEH4=";
   };
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optional doCheck check;
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     # This should be dropped once the issue is fixed upstream.
     (fetchpatch {
       url = "https://github.com/bitlbee/bitlbee/commit/6ff651b3ec93e5fd74f80766d5e9714d963137bc.diff";
-      sha256 = "144dpm4kq7c268fpww1q3n88ayg068n73fbabr5arh1zryw48qfv";
+      hash = "sha256-22FEuM8/wKxKXmq5cSwy4HmFkB04cH4dMoIdPEm9jZA=";
     })
   ];
 

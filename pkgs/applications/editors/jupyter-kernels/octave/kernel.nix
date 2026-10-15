@@ -14,7 +14,7 @@ buildPythonPackage (finalAttrs: {
   src = fetchPypi {
     pname = "octave_kernel";
     inherit (finalAttrs) version;
-    sha256 = "sha256-5ki2lekfK7frPsmPBIzYQOfANCUY9x+F2ZRAQSdPTxo=";
+    hash = "sha256-5ki2lekfK7frPsmPBIzYQOfANCUY9x+F2ZRAQSdPTxo=";
   };
 
   propagatedBuildInputs = [

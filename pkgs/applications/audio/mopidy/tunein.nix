@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   src = fetchPypi {
     inherit (finalAttrs) version;
     pname = "Mopidy-TuneIn";
-    sha256 = "01y1asylscr73yqx071imhrzfzlg07wmqqzkdvpgm6r35marc2li";
+    hash = "sha256-kQqWVS0jm/rubvNjXPkBj373M6wxHNCxHyczTb1WwQc=";
   };
 
   build-system = [

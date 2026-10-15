@@ -54,7 +54,7 @@ in
       repo = "vdr-plugin-vnsiserver";
       owner = "vdr-projects";
       rev = version;
-      sha256 = "sha256-EFPY1Pt79reL05Tdu14HYE9E+CnT9mdUYifGzTsNpMA=";
+      hash = "sha256-EFPY1Pt79reL05Tdu14HYE9E+CnT9mdUYifGzTsNpMA=";
     };
 
     meta = {
@@ -75,7 +75,7 @@ in
       repo = "vdr-plugin-text2skin";
       owner = "vdr-projects";
       rev = "8f7954da2488ced734c30e7c2704b92a44e6e1ad";
-      sha256 = "19hkwmaw6nwak38bv6cm2vcjjkf4w5yjyxb98qq6zfjjh5wq54aa";
+      hash = "sha256-SpGCeYFSum8wRml1L33hxE0p2RaVmb3QmIpbw1XlE6Y=";
     };
 
     buildInputs = [

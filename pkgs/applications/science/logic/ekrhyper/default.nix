@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://userpages.uni-koblenz.de/~bpelzer/ekrhyper/ekrh_${version}.tar.gz";
-    sha256 = "sha256-fEe0DIMGj7wO+79/BZf45kykgyTXpbZJsyFSt31XqpM=";
+    hash = "sha256-fEe0DIMGj7wO+79/BZf45kykgyTXpbZJsyFSt31XqpM=";
   };
 
   strictDeps = true;
