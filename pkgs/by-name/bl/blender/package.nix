@@ -24,8 +24,12 @@
   gettext,
   glew,
   gmp,
+  intel-compute-runtime,
+  intel-graphics-compiler,
+  intel-llvm,
   jackaudioSupport ? false,
   jemalloc,
+  level-zero,
   lib,
   libdecor,
   libepoxy,
@@ -53,8 +57,10 @@
   mesa,
   meshoptimizer,
   nix-update-script,
+  oneapiSupport ? false,
   onetbb,
   openal,
+  opencl-headers,
   opencolorio,
   openexr,
   openimagedenoise,
@@ -86,12 +92,6 @@
   waylandSupport ? stdenv.hostPlatform.isLinux,
   zlib,
   zstd,
-  level-zero,
-  intel-compute-runtime,
-  intel-llvm,
-  intel-graphics-compiler,
-  oneapiSupport ? false,
-  opencl-headers,
 }:
 
 let
@@ -220,11 +220,11 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_CYCLES_CUDA_BINARIES" true)
   ]
   ++ lib.optionals oneapiSupport [
-    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
+    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
     (lib.cmakeFeature "LEVEL_ZERO_ROOT_DIR" "${level-zero}")
     (lib.cmakeFeature "OCLOC_INSTALL_DIR" "${intel-compute-runtime}")
-    (lib.cmakeFeature "IGC_INSTALL_DIR" "${intel-graphics-compiler}")
     (lib.cmakeFeature "SYCL_CPP_FLAGS" "--verbose")
+    (lib.cmakeFeature "SYCL_ROOT_DIR" "${intel-llvm}")
   ]
   ++ lib.optionals rocmSupport [
     (lib.cmakeBool "WITH_CYCLES_DEVICE_HIPRT" false)
