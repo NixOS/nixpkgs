@@ -18,14 +18,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dunamai";
-  version = "1.26.2";
+  version = "1.26.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "dunamai";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pP0KeQ1tThvBomQIlrWNCVzB8ghR9rfaLm5NeBKwiuE=";
+    hash = "sha256-8R9ASAkn7cBWC1ZI4/k9b9rISpAEgyL9NJQDvQnbj+o=";
   };
 
   build-system = [ poetry-core ];
