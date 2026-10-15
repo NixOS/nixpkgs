@@ -11,18 +11,19 @@
   withOmemo ? true,
   libomemo-c,
   withEncryption ? true,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qxmpp";
-  version = "1.16.1";
+  version = "1.17.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "qxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JuGSLi0oqlUTbJnjlqd9qo0Dk2yCY1hfryQy0CuEjLo=";
+    hash = "sha256-ahuOGVofKI3u35BgplHBI7xXnZYGWFR0PQwxE5Gqi5Q=";
   };
 
   nativeBuildInputs = [
@@ -59,9 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   nativeCheckInputs = [ ctestCheckHook ];
   disabledTests = [
-    "tst_QXmppIceConnection"
-    "tst_QXmppTransferManager"
+    "tst_IceConnection"
+    "tst_FileSharing"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform C++ XMPP client and server library";
