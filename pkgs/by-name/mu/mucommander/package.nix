@@ -13,20 +13,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mucommander";
-  version = "1.5.2-1";
+  version = "1.6.2-1";
 
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
     rev = finalAttrs.version;
-    sha256 = "sha256-J1paBXlAGe2eKMg4wvaXTzMIiSMFIJ1XIAaKrfOwQLc=";
+    sha256 = "sha256-G57bcG/W0vcnanNMxbDc70X6Tdbd+cPk2M8QmU7pjnI=";
   };
 
   postPatch = ''
     # there is no .git anyway
     substituteInPlace build.gradle \
-      --replace "git = grgit.open(dir: project.rootDir)" "" \
-      --replace "revision = git.head().id" "revision = '${finalAttrs.version}'"
+      --replace-fail "git = grgit.open(dir: project.rootDir)" "git = null" \
+      --replace-fail "git.head().id.substring(0, 7)" "'${finalAttrs.version}'"
   '';
 
   nativeBuildInputs = [
