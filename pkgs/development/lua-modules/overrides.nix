@@ -1135,6 +1135,11 @@ in
   };
 
   rocks-nvim = prev.rocks-nvim.overrideAttrs (oa: {
+    # Inserting keys during pairs() traversal can omit the WARN log level.
+    postPatch = (oa.postPatch or "") + ''
+      substituteInPlace lua/rocks/log.lua \
+        --replace-fail 'pairs(log_levels)' 'pairs(vim.log.levels)'
+    '';
 
     nativeCheckInputs = [
       final.nlua
