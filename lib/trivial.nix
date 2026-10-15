@@ -1186,10 +1186,14 @@ in
     let
       fArgs = functionArgs f;
     in
-    g: {
-      __functor = self: g;
-      __functionArgs = fArgs;
-    };
+    g:
+    if isAttrs g then
+      g // { __functionArgs = fArgs; }
+    else
+      {
+        __functor = self: g;
+        __functionArgs = fArgs;
+      };
 
   /**
     Turns any non-callable values into constant functions.
