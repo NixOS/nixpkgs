@@ -20795,6 +20795,8 @@ self: super: with self; {
 
   timecop = callPackage ../development/python-modules/timecop { };
 
+  timed-threads = callPackage ../development/python-modules/timed-threads { };
+
   timelength = callPackage ../development/python-modules/timelength { };
 
   timelib = callPackage ../development/python-modules/timelib { };
