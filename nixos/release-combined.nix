@@ -205,6 +205,8 @@ rec {
         (onFullSupported "nixos.tests.shadow.login")
         (onFullSupported "nixos.tests.simple-container")
         (onFullSupported "nixos.tests.simple-vm")
+        (onFullSupported "nixos.tests.systemd-nsresourced-mountfsd")
+        (onFullSupported "nixos.tests.latestKernel.systemd-nsresourced-mountfsd")
         (onFullSupported "nixos.tests.sway")
         (onFullSupported "nixos.tests.switchTest")
         (onFullSupported "nixos.tests.switchTest-basics")
