@@ -1,0 +1,19 @@
+diff --git a/backend/gradle.lockfile b/backend/gradle.lockfile
+index 588e26912..2ddad7fb5 100644
+--- a/gradle.lockfile
++++ b/gradle.lockfile
+@@ -91,10 +91,10 @@ org.hibernate.models:hibernate-models:1.1.2=productionRuntimeClasspath,runtimeCl
+ org.hibernate.orm:hibernate-core:7.4.8.Final=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+ org.hibernate.orm:hibernate-platform:7.4.8.Final=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+ org.hibernate.validator:hibernate-validator:9.1.3.Final=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+-org.jacoco:org.jacoco.agent:0.8.14=jacocoAgent,jacocoAnt
+-org.jacoco:org.jacoco.ant:0.8.14=jacocoAnt
+-org.jacoco:org.jacoco.core:0.8.14=jacocoAnt
+-org.jacoco:org.jacoco.report:0.8.14=jacocoAnt
++org.jacoco:org.jacoco.agent:0.8.15=jacocoAgent,jacocoAnt
++org.jacoco:org.jacoco.ant:0.8.15=jacocoAnt
++org.jacoco:org.jacoco.core:0.8.15=jacocoAnt
++org.jacoco:org.jacoco.report:0.8.15=jacocoAnt
+ org.jboss.logging:jboss-logging:3.6.3.Final=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+ org.jetbrains.kotlin:kotlin-stdlib:2.3.21=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
+ org.jetbrains:annotations:13.0=compileClasspath,productionRuntimeClasspath,runtimeClasspath,testCompileClasspath,testRuntimeClasspath
