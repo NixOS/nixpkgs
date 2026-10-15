@@ -201,7 +201,12 @@ lib.makeExtensible (
     git = self.makeLixScope {
       attrName = "git";
 
-      lix-args = import ./git.nix { inherit fetchFromGitea rustPlatform; };
+      lix-args = (import ./git.nix { inherit fetchFromGitea rustPlatform; }) // {
+        patches = [
+          ./lix-rs-tests-whole-archive.patch
+          ./lix-plugin-zngur-header.patch
+        ];
+      };
     };
 
     latest = self.lix_2_95;

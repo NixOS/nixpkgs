@@ -1,0 +1,11 @@
+diff --git a/contrib/plugins/meson.build b/contrib/plugins/meson.build
+--- a/contrib/plugins/meson.build
++++ b/contrib/plugins/meson.build
+@@ -1,6 +1,7 @@
+ plugin_mtls_store = shared_module(
+   'plugin_mtls_store',
+   'plugin_mtls_store.cc',
++  lixrs_zngur_bridge[1],
+   # don't link liblix* into plugins (host process provides them at runtime).
+   # Explicitly link curl so it binds to Nix-store libcurl, not /usr/lib/libcurl.
+   dependencies : [
