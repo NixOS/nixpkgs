@@ -14,7 +14,7 @@ build-idris-package {
     owner = "HuwCampbell";
     repo = "idris-lens";
     rev = "421aa76c19607693ac2f23003dc0fe82c1a3760a";
-    sha256 = "1q6lmhrwd1qg18s253sim4hg2a2wk5439p3izy1f9ygi6pv4a6mk";
+    hash = "sha256-sxpF9jXx+eSC/3HcNEiZXCjxIKlRjyI0Cg+HxjOs1OA=";
   };
 
   meta = {

@@ -14,7 +14,7 @@ build-idris-package {
     owner = "jameshaydon";
     repo = "smproc";
     rev = "b292d6c94fe005bcd984b8e5134b6f99933aa0af";
-    sha256 = "02gqa2a32dwrvgz6pwsg8bniszbzwxlkzm53fq81sz3l9ja8ax1n";
+    hash = "sha256-NnSFlEx0fB0QdqPUP2nnf30d7UJP82v+25k3MZRQ+Ak=";
   };
 
   meta = {
