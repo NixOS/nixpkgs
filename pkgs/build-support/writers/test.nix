@@ -36,6 +36,7 @@ let
     writeJSBin
     writeJSON
     writeLua
+    writeLuaBin
     writeNim
     writeNimBin
     writeNu
@@ -438,7 +439,14 @@ recurseIntoAttrs {
 
     luaNoLibs = expectSuccess (
       writeLua "test-writers-lua-no-libs" { } ''
+        assert(_VERSION == "Lua 5.5")
         print("success")
+      ''
+    );
+
+    luaInvalidSyntax = testers.testBuildFailure (
+      writeLuaBin "test-writers-lua-invalid-syntax" { } ''
+        local =
       ''
     );
 
