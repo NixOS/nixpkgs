@@ -9,6 +9,7 @@
     ```
   */
   redistNames = [
+    "cublasdx" # NOTE: MathDx; no manifests are published, so ours are made by hand
     "cublasmp"
     "cuda"
     "cudnn"

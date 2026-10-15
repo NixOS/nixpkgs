@@ -1,0 +1,15 @@
+{
+  "release_label": "25.06.1",
+  "release_product": "mathdx",
+  "mathdx": {
+    "name": "NVIDIA MathDx",
+    "license": "MathDx",
+    "version": "25.06.1",
+    "linux-all": {
+      "md5": "bb5e013e92bd8b8d443ec4f2453ea617",
+      "relative_path": "cublasdx/cuda12/nvidia-mathdx-25.06.1-cuda12.tar.gz",
+      "sha256": "d4952f6e1a7864d29d9ec4e01c21628d84086e941cf4a3da2df1e11ba5f13f84",
+      "size": "35931874"
+    }
+  }
+}
