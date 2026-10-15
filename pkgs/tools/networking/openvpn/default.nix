@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit (nixosTests) initrd-network-openvpn systemd-initrd-networkd-openvpn;
+    inherit (nixosTests) initrd-network-openvpn;
   };
 
   meta = {

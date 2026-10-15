@@ -444,14 +444,6 @@ in
 
     boot.kernelParams = lib.mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
-    boot.initrd.extraUdevRulesCommands =
-      lib.mkIf (!config.boot.initrd.systemd.enable && config.boot.initrd.services.udev.rules != "")
-        ''
-          cat <<'EOF' > $out/99-local.rules
-          ${config.boot.initrd.services.udev.rules}
-          EOF
-        '';
-
     boot.initrd.services.udev.rules = nixosInitrdRules;
 
     boot.initrd.systemd.additionalUpstreamUnits = [

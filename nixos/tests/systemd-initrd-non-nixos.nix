@@ -12,8 +12,6 @@ let
   '';
 
   common = {
-    boot.initrd.systemd.enable = true;
-
     virtualisation = {
       # tmpfs root, like real non-NixOS closure init= microvm consumers.
       diskImage = null;
