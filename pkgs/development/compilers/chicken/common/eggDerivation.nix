@@ -30,114 +30,115 @@ let
   version = if args ? version then args.version else lib.getVersion args.name;
   overrides = callPackage overridesFile { };
   override = if builtins.hasAttr pname overrides then builtins.getAttr pname overrides else lib.id;
-  # Some eggs' tests expect the egg to be installed already so that their modules
-  # can be imported and their programs found in PATH. The `doCheck = false`
-  # override below builds and installs the egg without running its tests, and the
-  # checked derivation takes it as an input. This builds every egg twice, but
-  # avoids duplicating the build and install logic in a second derivation.
-  self =
-    (stdenv.mkDerivation (
-      finalAttrs:
-      {
-        pname = "chicken-${pname}";
-        inherit version;
-        propagatedBuildInputs = buildInputs;
-        nativeBuildInputs = [
-          chicken
-          makeWrapper
-        ];
-        buildInputs = [
-          chicken
-        ]
-        ++ lib.optionals finalAttrs.doCheck [
-          (self.overrideAttrs { doCheck = false; })
-        ];
-        nativeCheckInputs = [
-          chicken
-        ]
-        ++ lib.optionals finalAttrs.doCheck [
-          (self.overrideAttrs { doCheck = false; })
-        ];
-
-        strictDeps = true;
-
-        env = {
-          CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
-        }
-        // (args.env or { });
-
-        buildPhase = ''
-          runHook preBuild
-
-          # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
-          # when building an egg from the current directory, and the cache defaults
-          # to a location under HOME, which is not writable in the sandbox. The
-          # cache itself stays empty: with -cached, chicken-install builds the
-          # unpacked egg in place. The install phase runs in the same shell, so it
-          # inherits this.
-          export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
-          mkdir -p "$CHICKEN_EGG_CACHE"
-
-          chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
-
-          runHook postBuild
-        '';
-
-        doCheck = true;
-
-        checkPhase = ''
-          runHook preCheck
-
-          if [ -e tests/run.scm ]; then
-            (
-              cd tests
-              csi -s run.scm ${pname} "${version}"
-            )
-          fi
-
-          runHook postCheck
-        '';
-
-        installPhase = ''
-          runHook preInstall
-
-          export CHICKEN_INSTALL_PREFIX=$out
-          export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
-          chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
-
-          # Patching the generated .egg-info instead of the original .egg to work
-          # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
-          # CHICKEN 6.0.0: eggs whose .egg carries no version property are
-          # installed without one.
-          csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info" > "${pname}.egg-info.new"
-          mv "${pname}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info"
-
-          for f in $out/bin/*
-          do
-            wrapProgram $f \
-              --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
-              --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
-              --prefix PATH : "$out/bin:${chicken}/bin"
-          done
-
-          runHook postInstall
-        '';
-
-        dontConfigure = true;
-
-        meta = (args.meta or { }) // {
-          inherit (chicken.meta) platforms;
-          maintainers = lib.lists.unique ((args.meta.maintainers or [ ]) ++ chicken.meta.maintainers);
-        };
-      }
-      // removeAttrs args [
-        "name"
-        "pname"
-        "version"
-        "buildInputs"
-        "meta"
-      ]
-    )).overrideAttrs
-      override;
 in
-self
+(stdenv.mkDerivation (
+  finalAttrs:
+  let
+    # Some eggs' tests expect the egg to be installed already so that their modules
+    # can be imported and their programs found in PATH. The `doCheck = false`
+    # override below builds and installs the egg without running its tests, and the
+    # checked derivation takes it as an input. This builds every egg twice, but
+    # avoids duplicating the build and install logic in a second derivation.
+    noCheckDrv = finalAttrs.finalPackage.overrideAttrs { doCheck = false; };
+  in
+  {
+    pname = "chicken-${pname}";
+    inherit version;
+    propagatedBuildInputs = buildInputs;
+    nativeBuildInputs = [
+      chicken
+      makeWrapper
+    ];
+    buildInputs = [
+      chicken
+    ]
+    ++ lib.optionals finalAttrs.doCheck [
+      noCheckDrv
+    ];
+    nativeCheckInputs = [
+      chicken
+    ]
+    ++ lib.optionals finalAttrs.doCheck [
+      noCheckDrv
+    ];
+
+    strictDeps = true;
+
+    env = {
+      CSC_OPTIONS = lib.concatStringsSep " " cscOptions;
+    }
+    // (args.env or { });
+
+    buildPhase = ''
+      runHook preBuild
+
+      # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
+      # when building an egg from the current directory, and the cache defaults
+      # to a location under HOME, which is not writable in the sandbox. The
+      # cache itself stays empty: with -cached, chicken-install builds the
+      # unpacked egg in place. The install phase runs in the same shell, so it
+      # inherits this.
+      export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
+      mkdir -p "$CHICKEN_EGG_CACHE"
+
+      chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
+
+      runHook postBuild
+    '';
+
+    doCheck = true;
+
+    checkPhase = ''
+      runHook preCheck
+
+      if [ -e tests/run.scm ]; then
+        (
+          cd tests
+          csi -s run.scm ${pname} "${version}"
+        )
+      fi
+
+      runHook postCheck
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      export CHICKEN_INSTALL_PREFIX=$out
+      export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
+      chicken-install -cached -host ${lib.escapeShellArgs chickenInstallFlags}
+
+      # Patching the generated .egg-info instead of the original .egg to work
+      # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
+      # CHICKEN 6.0.0: eggs whose .egg carries no version property are
+      # installed without one.
+      csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info" > "${pname}.egg-info.new"
+      mv "${pname}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info"
+
+      for f in $out/bin/*
+      do
+        wrapProgram $f \
+          --prefix CHICKEN_REPOSITORY_PATH : "$out/lib/chicken/${toString chicken.binaryVersion}:$CHICKEN_REPOSITORY_PATH" \
+          --prefix CHICKEN_INCLUDE_PATH : "$CHICKEN_INCLUDE_PATH:$out/share" \
+          --prefix PATH : "$out/bin:${chicken}/bin"
+      done
+
+      runHook postInstall
+    '';
+
+    dontConfigure = true;
+
+    meta = (args.meta or { }) // {
+      inherit (chicken.meta) platforms;
+      maintainers = lib.lists.unique ((args.meta.maintainers or [ ]) ++ chicken.meta.maintainers);
+    };
+  }
+  // removeAttrs args [
+    "name"
+    "pname"
+    "version"
+    "buildInputs"
+    "meta"
+  ]
+)).overrideAttrs
+  override
