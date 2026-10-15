@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "3.0.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-pvoutput";
     tag = "v${version}";
-    hash = "sha256-qCODRfE+fM3Cwgz8sOUTJ8AXQSlr3I4Q0I+gJmMaDjM=";
+    hash = "sha256-eRk6lWeVga23G+eyiyKIww9R7hYJ+AYlcmXms+nwq5M=";
   };
 
   postPatch = ''
