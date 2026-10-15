@@ -174,10 +174,8 @@ let
         hash = "sha256-uDIUHbauAmzCfaqx6aswnkUHcmgJi4X2OdMPyn4NeYU=";
       })
 
-      # litellm >= 1.101.0 exports the new VectorStoreSearchError exception at
-      # top level, which trips the strict audit in LiteLLMExceptions._load()
-      # (same failure mode as the two patches above)
-      ./add-vector-store-search-error.patch
+      # add exceptions exported by newer litellm
+      ./add-litellm-exceptions.patch
     ];
 
     disabledTestPaths = [

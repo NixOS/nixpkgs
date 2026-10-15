@@ -1,0 +1,20 @@
+diff --git a/aider/exceptions.py b/aider/exceptions.py
+--- a/aider/exceptions.py
++++ b/aider/exceptions.py
+@@ -33,6 +33,7 @@
+     ExInfo("InternalServerError", True, "The API provider's servers are down or overloaded."),
+     ExInfo("InvalidRequestError", True, None),
+     ExInfo("JSONSchemaValidationError", True, None),
++    ExInfo("ModelNotMappedError", False, None),
+     ExInfo("NotFoundError", False, None),
+     ExInfo(
+         "PermissionDeniedError",
+@@ -49,6 +50,8 @@
+     ExInfo("ServiceUnavailableError", True, "The API provider's servers are down or overloaded."),
+     ExInfo("UnprocessableEntityError", True, None),
+     ExInfo("UnsupportedParamsError", True, None),
++    ExInfo("VectorStoreSearchError", False, None),
++    ExInfo("ZoneInfoNotFoundError", False, None),
+     ExInfo(
+         "Timeout",
+         True,
