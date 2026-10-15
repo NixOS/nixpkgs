@@ -60,7 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withVtk vtk;
 
-  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+  env.NIX_CFLAGS_COMPILE = toString (
+    [ "-fpermissive" ]
+    # GCC 16 IPA-CP cloning miscompiles BRepClass3d_SClassifier::Perform, so classifying a point on an edge segfaults
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=127917
+    # OCCT 8 walks the tree iteratively and is not affected
+    ++ lib.optional (
+      stdenv.cc.isGNU
+      && lib.versionAtLeast stdenv.cc.version "16"
+      && lib.versionOlder finalAttrs.version "8"
+    ) "-fno-ipa-cp-clone"
+  );
   cmakeFlags = [
     (lib.cmakeBool "USE_RAPIDJSON" true)
     # Enable exception handling for release builds.
