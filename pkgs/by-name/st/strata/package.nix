@@ -82,8 +82,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   patches = [
     # Validate the store permissions and retain the GApps wrapper during setup.
     ./desktop.patch
-    # GStreamer plugin discovery must survive the sandbox's clearenv.
-    ./sandbox.patch
     # Trusted helper lookup otherwise only searches fixed FHS directories.
     ./trusted-helper-path.patch
     # Nix installs are package-managed, but must not use the AUR updater.
@@ -203,9 +201,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     STRATA_BUILD_COMMIT = "0a086aa3bdb251842a1e8413e2a6b35970d0b409";
     STRATA_RELEASE_TAG = "v${finalAttrs.version}";
     STRATA_SANDBOX_GDK_PIXBUF_MODULE_FILE = "${lib.getOutput "out" librsvg}/${gdk-pixbuf.binaryDir}/loaders.cache";
-    STRATA_SANDBOX_GST_PLUGIN_PATH = lib.makeSearchPath "lib/gstreamer-1.0" (
-      map (lib.getOutput "out") gstPlugins
-    );
     STRATA_SANDBOX_PATH = lib.makeBinPath runtimeTools;
     STRATA_SANDBOX_ROOT = "/nix/store";
     STRATA_SANDBOX_PRLIMIT = "${lib.getBin util-linux}/bin/prlimit";
