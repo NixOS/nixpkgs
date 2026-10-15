@@ -8,6 +8,8 @@
   nix-update-script,
   nixosTests,
   openssl,
+  zstd,
+  sqlite,
   pkg-config,
   rustPlatform,
   stdenv,
@@ -46,6 +48,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    zstd
+    sqlite
   ];
 
   # e2e_pty tests drive an interactive bash (needs readline), run `clear`,

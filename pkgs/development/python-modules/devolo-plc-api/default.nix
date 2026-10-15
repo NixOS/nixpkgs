@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   httpx,
   protobuf,
   pytest-asyncio_0,
@@ -16,29 +15,17 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "devolo-plc-api";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_plc_api";
-    tag = "v${version}";
-    hash = "sha256-bmZcjvqZwVJzDsdtSbQvJpry2QSSuB6/jOTWG1+jyV4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GOX4rU26ghmrbx6cKomuW/FzjWuTy3lRmrtiwWuktFE=";
   };
-
-  patches = [
-    # Add Python 3.14 support
-    (fetchpatch {
-      url = "https://github.com/2Fake/devolo_plc_api/commit/3b1c167e2df5909910e97bf1626de88b17fb94d1.patch";
-      hash = "sha256-oaLYMvRl2Zcum9XkFQ1Dm1/F/BhURLGKrwh6FguVL9Y=";
-    })
-    (fetchpatch {
-      url = "https://github.com/2Fake/devolo_plc_api/pull/224.patch";
-      hash = "sha256-fDGYhjA/tMFKQnEtix1no8Wf+cp9Ph7keXRq1+sH6YA=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -75,8 +62,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module to interact with Devolo PLC devices";
     homepage = "https://github.com/2Fake/devolo_plc_api";
-    changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/v${version}";
+    changelog = "https://github.com/2Fake/devolo_plc_api/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
