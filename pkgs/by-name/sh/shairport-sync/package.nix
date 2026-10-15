@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   autoreconfHook,
   pkg-config,
   openssl,
@@ -13,7 +12,7 @@
   libdaemon,
   libsodium,
   libgcrypt,
-  ffmpeg,
+  ffmpeg-headless,
   libuuid,
   unixtools,
   popt,
@@ -58,22 +57,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shairport-sync";
-  version = "5.5.2";
+  version = "5.6";
 
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
     tag = finalAttrs.version;
-    hash = "sha256-mSPuvUzfvm/kZS0LDJhve7SAB35jSH7hhOcOxPXuLww=";
+    hash = "sha256-w0MPdlPNxLjBoVdGsFbK8MQlj6YRG/FuSaE8Hbl0fNI=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "decode-classic-l16-uncompressed-pcm-in-ffmpeg-builds.patch";
-      url = "https://github.com/mikebrady/shairport-sync/commit/be30b6b2cc08fb679bbe9a1bff3f76068736952d.patch";
-      hash = "sha256-1mLRp4tH7DZQ3HFDXI7Rm99g2jJp+aIkY1tsov9Yi38=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -88,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     popt
     libconfig
+    ffmpeg-headless
   ]
   ++ optional enableAvahi avahi
   ++ optional enableLibdaemon libdaemon
@@ -106,13 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     libsodium
     libgcrypt
     libuuid
-    ffmpeg
   ]
   ++ optional (enableDbus || enableMpris) glib;
 
   postPatch = lib.optionalString enableSessionBus ''
-    sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c
-    sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' mpris-service.c
+    substituteInPlace dbus/dbus-service.c --replace-fail 'G_BUS_TYPE_SYSTEM' 'G_BUS_TYPE_SESSION'
+    substituteInPlace dbus/mpris-service.c --replace-fail 'G_BUS_TYPE_SYSTEM' 'G_BUS_TYPE_SESSION'
   '';
 
   enableParallelBuilding = true;
