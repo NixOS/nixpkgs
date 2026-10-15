@@ -4,6 +4,7 @@
   fetchFromGitHub,
   kernel,
   kernelModuleMakeFlags,
+  pahole,
 }:
 
 let
@@ -20,6 +21,8 @@ stdenv.mkDerivation {
     rev = "0889d3ea54655eaa88de552b334911ce7375952f";
     hash = "sha256-mI6Ob9BmNfwqT3nndWf3jkz8f7tV10odkTnfApsNo+A=";
   };
+
+  nativeBuildInputs = [ pahole ];
 
   makeFlags = kernelModuleMakeFlags;
 
