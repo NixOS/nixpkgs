@@ -1,4 +1,5 @@
 {
+  lib,
   replaceVarsWith,
   perl,
 
@@ -38,12 +39,19 @@ let
         exit 1
       '';
     };
+
+  withMeta = lib.addMetaAttrs {
+    mainProgram = "command-not-found";
+    hydraPlatforms = [ ];
+  };
 in
 
-if builtins.pathExists dbPath then
-  (command-not-found dbPath)
-else
-  failWithMessage
-    # We have to give the derivation a fake path string, otherwise the invalid path will be forced.
-    # This derivation will never build, the goal is to move the eval error as a realisation error.
-    (command-not-found "@invalid_db_path@")
+withMeta (
+  if builtins.pathExists dbPath then
+    (command-not-found dbPath)
+  else
+    failWithMessage
+      # We have to give the derivation a fake path string, otherwise the invalid path will be forced.
+      # This derivation will never build, the goal is to move the eval error as a realisation error.
+      (command-not-found "@invalid_db_path@")
+)
