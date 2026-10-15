@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "wlroots";
     repo = "wlr-protocols";
     rev = "4264185db3b7e961e7f157e1cc4fd0ab75137568";
-    sha256 = "Ztc07RLg+BZPondP/r6Jo3Fw1QY/z1QsFvdEuOqQshA=";
+    hash = "sha256-Ztc07RLg+BZPondP/r6Jo3Fw1QY/z1QsFvdEuOqQshA=";
   };
 
   strictDeps = true;
