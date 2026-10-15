@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosh";
-  version = "0.4.0";
+  version = "0.4.1";
 
   __structuredAttrs = true;
 
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "tomhrr";
     repo = "cosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5BZgSTKb2Mj20JSyYEYUAgCc6cuImI0Yw0BGx8rSRp0=";
+    hash = "sha256-Yx+6tuaASCUrUcnq++JvkufH1DZB1gwnVtS2YVfEOuM=";
   };
 
-  cargoHash = "sha256-TkplRyPkJLcj4ynGB1BfOHdpk2U+MkHV6ctVsLO5Nuw=";
+  cargoHash = "sha256-UeqgD7gQXllkIUXKTVtXi/NTBhRNNkHSesFECR+vbrs=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
