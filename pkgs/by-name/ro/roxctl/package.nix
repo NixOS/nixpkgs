@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "stackrox";
     repo = "stackrox";
     rev = finalAttrs.version;
-    sha256 = "sha256-lkZNiYJ5yclUCAubpxCPttwERellRtOJDABupdTGg8g=";
+    hash = "sha256-lkZNiYJ5yclUCAubpxCPttwERellRtOJDABupdTGg8g=";
   };
 
   vendorHash = "sha256-aT/EMCmWB1aInXukLmeLNHBBHUuFEGQ/OYBZhc4g9Js=";

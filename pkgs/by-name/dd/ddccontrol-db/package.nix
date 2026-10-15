@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ddccontrol";
     repo = "ddccontrol-db";
     tag = finalAttrs.version;
-    sha256 = "sha256-yMHZOF7At/pizuL9MeOFqua3BINT9kH83Htbk99Wgcw=";
+    hash = "sha256-yMHZOF7At/pizuL9MeOFqua3BINT9kH83Htbk99Wgcw=";
   };
 
   nativeBuildInputs = [

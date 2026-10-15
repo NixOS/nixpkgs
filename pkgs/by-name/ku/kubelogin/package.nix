@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "Azure";
     repo = "kubelogin";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-s9W5wvA4L0Qbn5vimLU03oqx10XqCybE3YvC9gV3y7A=";
+    hash = "sha256-s9W5wvA4L0Qbn5vimLU03oqx10XqCybE3YvC9gV3y7A=";
   };
 
   patches = [

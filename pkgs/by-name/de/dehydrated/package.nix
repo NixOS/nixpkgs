@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dehydrated-io";
     repo = "dehydrated";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xDDYqP6oxJt0NPgHtHV1xQKUxVc8JQxWekXwxezggtE=";
+    hash = "sha256-xDDYqP6oxJt0NPgHtHV1xQKUxVc8JQxWekXwxezggtE=";
   };
 
   nativeBuildInputs = [

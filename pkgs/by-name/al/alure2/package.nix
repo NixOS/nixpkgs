@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "kcat";
     repo = "alure";
     rev = "50f92fe528e77da82197fd947d1cf9b0a82a0c7d";
-    sha256 = "1gmc1yfhwaj6lik0vn7zv8y23i05f4rw25v2jg34n856jcs02svx";
+    hash = "sha256-fWsBNJOmIEvGk2IXwTNxBcQhPNr/2A1mpEYqDp0PrL4=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "nickjj";
     repo = "rolespec";
     rev = "d9ee530cd709168882059776c482fc37f46cb743";
-    sha256 = "1jkidw6aqr0zfqwmcvlpi9qa140z2pxcfsd43xm5ikx6jcwjdrzl";
+    hash = "sha256-9OcmOZOmz1hqH6Rpx/oVH5CgcIqXblY5dh9krAxvcco=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

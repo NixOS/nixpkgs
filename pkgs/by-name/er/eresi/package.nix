@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "thorkill";
     repo = "eresi";
     rev = finalAttrs.version;
-    sha256 = "0a5a7mh2zw9lcdrl8n1mqccrc0xcgj7743l7l4kslkh722fxv625";
+    hash = "sha256-RZjdnRAHTqonoYcOco58rAOWGcM1WERzYzTxL2A9qig=";
   };
 
   patches = [

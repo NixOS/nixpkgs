@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "mvisonneau";
     repo = "gitlab-ci-pipelines-exporter";
     rev = "v${version}";
-    sha256 = "sha256-r/6tRecbLN9bX2+HYyk4tT0uNiAqtZwMoMMQUJ7niJI=";
+    hash = "sha256-r/6tRecbLN9bX2+HYyk4tT0uNiAqtZwMoMMQUJ7niJI=";
   };
 
   subPackages = [ "cmd/gitlab-ci-pipelines-exporter" ];

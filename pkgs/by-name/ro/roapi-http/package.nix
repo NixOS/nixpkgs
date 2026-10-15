@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "roapi";
     repo = "roapi";
     rev = "roapi-http-v${finalAttrs.version}";
-    sha256 = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
+    hash = "sha256-qHAO3h+TTCQQ7vdd4CoXVGfKZ1fIxTWKqbUNnRsJaok=";
   };
 
   cargoHash = "sha256-PlQq2zttiheQ0WFBLuH4dBSuExK+7hP22aLfmtNtLCk=";

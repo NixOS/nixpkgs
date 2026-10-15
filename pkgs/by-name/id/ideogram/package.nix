@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cassidyjames";
     repo = "ideogram";
     rev = finalAttrs.version;
-    sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
+    hash = "sha256-4aYD7Uco47R0iUMHRLcxP0YY/O+zCazHKxZOIUA/ef4=";
   };
 
   nativeBuildInputs = [

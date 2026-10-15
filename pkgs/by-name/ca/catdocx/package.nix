@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "jncraton";
     repo = "catdocx";
     rev = "04fa0416ec1f116d4996685e219f0856d99767cb";
-    sha256 = "1sxiqhkvdqn300ygfgxdry2dj2cqzjhkzw13c6349gg5vxfypcjh";
+    hash = "sha256-ULLrXd/lvUSGYSPwP6H8mAnZhM+tP/c8AMPitifEses=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

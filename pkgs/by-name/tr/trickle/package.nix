@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "mariusae";
     repo = "trickle";
     rev = "09a1d955c6554eb7e625c99bf96b2d99ec7db3dc";
-    sha256 = "sha256-cqkNPeTo+noqMCXsxh6s4vKoYwsWusafm/QYX8RvCek=";
+    hash = "sha256-cqkNPeTo+noqMCXsxh6s4vKoYwsWusafm/QYX8RvCek=";
   };
 
   patches = [

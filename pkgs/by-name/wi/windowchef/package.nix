@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tudurom";
     repo = "windowchef";
     rev = "v${finalAttrs.version}";
-    sha256 = "1m4vly7w2f28lrj26rhh3x9xsp3d97m5cxj91fafgh5rds4ygyhp";
+    hash = "sha256-F/rniW65wOeUC0l2VupJbVzdUx8QZiNkpkg4wY+nm9Q=";
   };
 
   buildInputs = [

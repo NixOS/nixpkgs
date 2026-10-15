@@ -498,7 +498,7 @@ let
           owner = "kaveh808";
           repo = "kons-9";
           rev = "08770e7fbb839b91fd035f1cd4a50ecc81b42d57";
-          sha256 = "sha256-Tit/qmOU5+zp43/ecIXGbh4CtgWzltWM7tHdVWkga0k=";
+          hash = "sha256-Tit/qmOU5+zp43/ecIXGbh4CtgWzltWM7tHdVWkga0k=";
         };
         systems = [
           "kons-9"

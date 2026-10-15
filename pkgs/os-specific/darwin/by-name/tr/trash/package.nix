@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "ali-rantakari";
     repo = "trash";
     rev = "v${version}";
-    sha256 = "1d3rc03vgz32faj7qi18iiggxvxlqrj9lsk5jkpa9r1mcs5d89my";
+    hash = "sha256-vibUimY15KTulGVqmmTGtO/+XowoRHykcmL8twdgebQ=";
   };
 
   buildInputs = [

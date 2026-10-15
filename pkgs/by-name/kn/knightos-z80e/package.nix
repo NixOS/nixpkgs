@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KnightOS";
     repo = "z80e";
     rev = finalAttrs.version;
-    sha256 = "sha256-OJgz6tF5LsGVQ4sDy6Uww1CHH6g9r8Ve9ceguceVZP8=";
+    hash = "sha256-OJgz6tF5LsGVQ4sDy6Uww1CHH6g9r8Ve9ceguceVZP8=";
   };
 
   nativeBuildInputs = [ cmake ];

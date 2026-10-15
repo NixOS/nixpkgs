@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "greatscottgadgets";
     repo = "ubertooth";
     rev = finalAttrs.version;
-    sha256 = "11r5ag2l5xn4pr7ycicm30w9c3ldn9yiqj1sqnjc79csxl2vrcfw";
+    hash = "sha256-3LG8Be2apcOkxTpIHH2yjQ6WOBiVReZPvsT2QsVTJYc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/host";

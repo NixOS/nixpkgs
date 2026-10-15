@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "pwnfoo";
     repo = "NTLMRecon";
     tag = "v-${finalAttrs.version}";
-    sha256 = "0rrx49li2l9xlcax84qxjf60nbzp3fgq77c36yqmsp0pc9i89ah6";
+    hash = "sha256-BqqEYmIXXF2xN4Odg58b9y8LjJMdE9QVoz1REWkiPWc=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

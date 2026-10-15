@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rockymadden";
     repo = "somafm-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "1h5p9qsczgfr450sklh2vkllcpzb7nicbs8ciyvkavh3d7hds0yy";
+    hash = "sha256-3gPd4GkDbjW3jwzpxaI9619G6dwC0qlBIdm9zzROt8A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

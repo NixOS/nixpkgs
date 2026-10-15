@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "yaml";
     repo = "libyaml";
     rev = finalAttrs.version;
-    sha256 = "18zsnsxc53pans4a01cs4401a2cjk3qi098hi440pj4zijifgcsb";
+    hash = "sha256-S7PnooyfyAsIiRAlEPGYkgkVACGaBaCItuqOwrq2+qM=";
   };
 
   outputs = [

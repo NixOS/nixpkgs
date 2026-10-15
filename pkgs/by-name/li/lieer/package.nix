@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "gauteh";
     repo = "lieer";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-U3+Y634oGmvIrvcbSKrrJ8PzLRsMoN0Fd/+d9WE1Q7U=";
+    hash = "sha256-U3+Y634oGmvIrvcbSKrrJ8PzLRsMoN0Fd/+d9WE1Q7U=";
   };
 
   build-system = with python3Packages; [

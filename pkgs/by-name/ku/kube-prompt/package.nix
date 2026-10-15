@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "c-bata";
     repo = "kube-prompt";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9OWsITbC7YO51QzsRwDWvojU54DiuGJhkSGwmesEj9w=";
+    hash = "sha256-9OWsITbC7YO51QzsRwDWvojU54DiuGJhkSGwmesEj9w=";
   };
 
   vendorHash = "sha256-wou5inOX8vadEBCIBccwSRjtzf0GH1abwNdUu4JBvyM=";

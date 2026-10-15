@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mruby";
     repo = "mruby";
     rev = finalAttrs.version;
-    sha256 = "sha256-7CDTRQncpjY0HO0S1lM57aUvV6ZseEp+/nxXp4ZuuQs=";
+    hash = "sha256-7CDTRQncpjY0HO0S1lM57aUvV6ZseEp+/nxXp4ZuuQs=";
   };
 
   nativeBuildInputs = [ rake ];

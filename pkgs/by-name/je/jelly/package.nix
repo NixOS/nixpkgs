@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication {
     owner = "DennisMitchell";
     repo = "jellylanguage";
     rev = "70c9fd93ab009c05dc396f8cc091f72b212fb188";
-    sha256 = "1rpclqagvigp5qhvgnjavvy463f1drshnc1mfxm6z7ygzs0l0yz6";
+    hash = "sha256-5ntAgf7Pn29qdzUwC3VuwQ1D/N5K2rchLvfF/RSm7OY=";
   };
 
   build-system = [ python3Packages.setuptools ];

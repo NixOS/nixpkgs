@@ -21,7 +21,7 @@ let
             owner = "yoriyuki";
             repo = "camomile";
             rev = version;
-            sha256 = "00i910qjv6bpk0nkafp5fg97isqas0bwjf7m6rz11rsxilpalzad";
+            hash = "sha256-TX2qLo1d5xB+NvU4yRfQCut40nPlOjUtmHeZLTEIKQI=";
           };
 
           nativeBuildInputs = [ cppo ];

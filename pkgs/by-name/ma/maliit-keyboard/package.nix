@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     owner = "maliit";
     repo = "keyboard";
     rev = "cbb0bbfa67354df76c25dbc3b1ea99a376fd15bb";
-    sha256 = "sha256-6ITlV/RJkPDrnsFyeWYWaRTYTaY6NAbHDqpUZGGKyi4=";
+    hash = "sha256-6ITlV/RJkPDrnsFyeWYWaRTYTaY6NAbHDqpUZGGKyi4=";
   };
 
   postPatch = ''

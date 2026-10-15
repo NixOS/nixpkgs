@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "varlink";
     repo = "libvarlink";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-MO5wfmPAm90AD+Y+vYqZynB4A18/XtJ1cys+lIIwbTY=";
+    hash = "sha256-MO5wfmPAm90AD+Y+vYqZynB4A18/XtJ1cys+lIIwbTY=";
   };
 
   nativeBuildInputs = [

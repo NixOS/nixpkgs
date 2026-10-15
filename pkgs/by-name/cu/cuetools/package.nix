@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "svend";
     repo = "cuetools";
     rev = finalAttrs.version;
-    sha256 = "02ksv1ahf1v4cr2xbclsfv5x17m9ivzbssb5r8xjm97yh8a7spa3";
+    hash = "sha256-Q119FIL+pCo7ymVpvf6OqZ7Qy3aastVFZmQHB1XYego=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

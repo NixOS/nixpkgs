@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pasky";
     repo = "speedread";
     rev = "93acfd61a1bf4482537ce5d71b9164b8446cb6bd";
-    sha256 = "1h94jx3v18fdlc64lfmj2g5x63fjyqb8c56k5lihl7bva0xgdkxd";
+    hash = "sha256-rc/2OlB7HQojLdMUhhb20g3TyxOyOkoMo82hsEeXJME=";
   };
 
   buildInputs = [ perl ];

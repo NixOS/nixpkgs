@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "pest-parser";
     repo = "pest-ide-tools";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xksPMErUWAoNvteFV387zgh/yzpmw0SUpn3mPIcIV4s=";
+    hash = "sha256-xksPMErUWAoNvteFV387zgh/yzpmw0SUpn3mPIcIV4s=";
   };
 
   passthru = {

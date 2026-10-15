@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "Guitarbum722";
     repo = "align";
     tag = "v${finalAttrs.version}";
-    sha256 = "17gs3417633z71kc6l5zqg4b3rjhpn2v8qs8rnfrk4nbwzz4nrq3";
+    hash = "sha256-A2dL/ufLkpmdzUhjtIW9UOaxyMO/UMNmOH8McwIZ+p0=";
   };
 
   vendorHash = null;

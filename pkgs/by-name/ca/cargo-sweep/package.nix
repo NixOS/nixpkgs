@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "holmgr";
     repo = "cargo-sweep";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/a7quBIX3gr9vVwQfDHdfkt4Xt7UYpjMNiyqivhOvBQ=";
+    hash = "sha256-/a7quBIX3gr9vVwQfDHdfkt4Xt7UYpjMNiyqivhOvBQ=";
   };
 
   cargoHash = "sha256-6J512mezcMn82z7qN+ppy66v4tzqMFyqDXU6H9+xyaQ=";

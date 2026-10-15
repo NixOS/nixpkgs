@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication {
     owner = "itkach";
     repo = "xdxf2slob";
     rev = "6831b93c3db8c73200900fa4ddcb17350a677e1b";
-    sha256 = "0m3dnc3816ja3kmik1wabb706dkqdf5sxvabwgf2rcrq891xcddd";
+    hash = "sha256-rTXWQ0I4syzc40vtrotreDYDzlqKhxnrHEqagAazbVQ=";
   };
 
   build-system = with python3Packages; [ setuptools ];

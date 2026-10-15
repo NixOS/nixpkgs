@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mheily";
     repo = "libkqueue";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hT7/0Cy4UCKN16Rlwyjj1AAYC4/n1+170xsnYrjiglQ=";
+    hash = "sha256-hT7/0Cy4UCKN16Rlwyjj1AAYC4/n1+170xsnYrjiglQ=";
   };
 
   nativeBuildInputs = [ cmake ];

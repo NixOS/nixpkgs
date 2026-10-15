@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "hyasynthesized";
     repo = "Hackertyper";
     rev = "8d08e3200c65817bd8c5bd0baa5032919315853b";
-    sha256 = "0shri0srihw9fk027k61qkxr9ikwkn28aaamrhps6lg0vpbqpx2w";
+    hash = "sha256-XPSL193gUaMvzFUphYSdfMaU+8TBzCPAdInDmDWIGWo=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

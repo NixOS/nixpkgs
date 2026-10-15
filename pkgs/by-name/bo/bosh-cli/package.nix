@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "cloudfoundry";
     repo = "bosh-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-MNXmSjkUNFWh0OQNefHAQEeD3TzoLJdLW/1WM9sxJK4=";
+    hash = "sha256-MNXmSjkUNFWh0OQNefHAQEeD3TzoLJdLW/1WM9sxJK4=";
   };
   vendorHash = null;
 

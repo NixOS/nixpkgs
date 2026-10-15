@@ -10,7 +10,7 @@ mkDiscoursePlugin {
     owner = "discourse";
     repo = "discourse-docs";
     rev = "89bae0e929387ed5697fd3c5eedf9b3dbe85bead";
-    sha256 = "sha256-ycDyYRi7uab4vxHY8K2kUytWBmTuFTFHYGD1AHpzC+0=";
+    hash = "sha256-ycDyYRi7uab4vxHY8K2kUytWBmTuFTFHYGD1AHpzC+0=";
   };
   meta = {
     homepage = "https://github.com/discourse/discourse-docs";

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "pop-os";
     repo = "keyboard-configurator";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Nb/N/tfyRucxRHyvlwET3O+JShyO/zxPg3+OuALFBpM=";
+    hash = "sha256-Nb/N/tfyRucxRHyvlwET3O+JShyO/zxPg3+OuALFBpM=";
   };
 
   nativeBuildInputs = [

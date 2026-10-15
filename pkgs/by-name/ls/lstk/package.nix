@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "localstack";
     repo = "lstk";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-VmfqtkTQQpONPz7ls3vUuu0pEUsRVqBHlBmPudxAuIY=";
+    hash = "sha256-VmfqtkTQQpONPz7ls3vUuu0pEUsRVqBHlBmPudxAuIY=";
   };
 
   vendorHash = "sha256-5pN2n3gwO7NrREs8fccyAFZS3ZPF+mFR11IB9My3+zs=";

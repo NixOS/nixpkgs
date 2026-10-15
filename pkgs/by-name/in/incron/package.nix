@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "ar-";
     repo = "incron";
     rev = "${pname}-${version}";
-    sha256 = "11d5f98cjafiv9h9zzzrw2s06s2fvdg8gp64km7mdprd2xmy6dih";
+    hash = "sha256-MDbjaxct31ZPncTch17bTmgDtOD5/59g2tEpyVBypYU=";
   };
 
   patches = [ ./default_path.patch ];

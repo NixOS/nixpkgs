@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "slackhq";
     repo = "go-audit";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Si8OuvQOyRN17DJC3mvFS7xkpbID8zcAD8n44VSLsTA=";
+    hash = "sha256-Si8OuvQOyRN17DJC3mvFS7xkpbID8zcAD8n44VSLsTA=";
   };
 
   vendorHash = "sha256-eUuLLpF8p7nTiddRy0hlqZ+n+OyvyJ1D20X1jvqKVC8=";

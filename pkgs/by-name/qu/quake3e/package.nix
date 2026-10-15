@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ec-";
     repo = "Quake3e";
     tag = finalAttrs.version;
-    sha256 = "sha256-3Ij0GEPXdl7Lhp9o1Zdwg1tcLgFEay686QjhSlh8iAo=";
+    hash = "sha256-3Ij0GEPXdl7Lhp9o1Zdwg1tcLgFEay686QjhSlh8iAo=";
   };
 
   nativeBuildInputs = [

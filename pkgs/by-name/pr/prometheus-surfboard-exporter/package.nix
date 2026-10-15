@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     rev = finalAttrs.version;
     owner = "ipstatic";
     repo = "surfboard_exporter";
-    sha256 = "11qms26648nwlwslnaflinxcr5rnp55s908rm1qpnbz0jnxf5ipw";
+    hash = "sha256-/MbiupXgL3txqBmBpEu5NpfMuo3UKUs1p9wiYozQFYc=";
   };
 
   patches = [

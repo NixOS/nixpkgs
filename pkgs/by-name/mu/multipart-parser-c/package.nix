@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "iafonov";
     repo = "multipart-parser-c";
     rev = "772639cf10db6d9f5a655ee9b7eb20b815fab396";
-    sha256 = "056r63vj8f1rwf3wk7jmwhm8ba25l6h1gs6jnkh0schbwcvi56xl";
+    hash = "sha256-tJsSN+MLMg3gtNLoF6ChRaiFKuRVnsmH4zk4JPcw2RQ=";
   };
 
   buildPhase = ''

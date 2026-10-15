@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "neeasade";
     repo = "colort";
     rev = "8470190706f358dc807b4c26ec3453db7f0306b6";
-    sha256 = "10n8rbr2h6hz86hcx73f86pjbbfiaw2rvxsk0yfajnma7bpxgdxw";
+    hash = "sha256-vLfX7zqqWqmcB1P3nQVX0a0lr0FunM6gQR8aKPLKyII=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "jirutka";
     repo = "doas-sudo-shim";
     rev = "v${version}";
-    sha256 = "sha256-USSakVUzCbUY1DJLmDCiwdq/xjOwwnm3VtXBBeXeV1A=";
+    hash = "sha256-USSakVUzCbUY1DJLmDCiwdq/xjOwwnm3VtXBBeXeV1A=";
   };
 
   nativeBuildInputs = [

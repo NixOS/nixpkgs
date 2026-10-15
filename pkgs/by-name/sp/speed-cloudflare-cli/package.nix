@@ -15,7 +15,7 @@ buildNpmPackage {
       owner = "KNawm";
       repo = "speed-cloudflare-cli";
       rev = "8eb34f4bd4f63493fbd93b1659389b9a1e5e4a36";
-      sha256 = "sha256-kJ//zXBW2IQ5V5dJfAm8iGxf9QILH0uloNYiwG3pTe4=";
+      hash = "sha256-kJ//zXBW2IQ5V5dJfAm8iGxf9QILH0uloNYiwG3pTe4=";
     };
 
     # Applies the following PR:

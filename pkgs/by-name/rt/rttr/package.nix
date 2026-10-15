@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rttrorg";
     repo = "rttr";
     rev = "v${finalAttrs.version}";
-    sha256 = "1yxad8sj40wi75hny8w6imrsx8wjasjmsipnlq559n4b6kl84ijp";
+    hash = "sha256-V0aC6DSL2FQKpvZGXaVWkqOuc42GI29hOZEDIjVqqvs=";
   };
 
   nativeBuildInputs = [

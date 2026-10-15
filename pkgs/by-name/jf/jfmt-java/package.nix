@@ -16,7 +16,7 @@ maven_4.buildMavenPackage (finalAttrs: {
     owner = "bmarwell";
     repo = "jfmt";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-wynVkOUFS8MMBp+Go7VUA3j4xsb1UJDeNR2PAmkZAYA=";
+    hash = "sha256-wynVkOUFS8MMBp+Go7VUA3j4xsb1UJDeNR2PAmkZAYA=";
   };
   mvnHash = "sha256-JOo+tcTn4w/Vy5t2HK+MSc/DCHYGy0Ja3oY+nZJaRt4=";
 

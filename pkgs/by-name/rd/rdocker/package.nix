@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "dvddarias";
     repo = "rdocker";
     rev = "949377de0154ade2d28c6d4c4ec33b65ea813b5a";
-    sha256 = "1mwg9zh144q4fqk9016v2d347vzch8sxlixaxrz0ci9dxvs6ibd4";
+    hash = "sha256-pK1o9O4tRQZ+7qpH2jWC7O9DRhPbBJAmdgQTEuBPj9c=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

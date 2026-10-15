@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "bordaigorl";
     repo = "rmview";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-yae86PR/TZKApqrMP7MdS8941J9wqlKzkOnFyIhUk4o=";
+    hash = "sha256-yae86PR/TZKApqrMP7MdS8941J9wqlKzkOnFyIhUk4o=";
   };
 
   nativeBuildInputs = with python3Packages; [

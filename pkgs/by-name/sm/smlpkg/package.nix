@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "diku-dk";
     repo = "smlpkg";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-zdWObV/W6fmQ6bFznEVEtp95D8t2YZd45sIC15XQwYM=";
+    hash = "sha256-zdWObV/W6fmQ6bFznEVEtp95D8t2YZd45sIC15XQwYM=";
   };
 
   enableParallelBuilding = true;

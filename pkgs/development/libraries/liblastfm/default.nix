@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "lastfm";
     repo = "liblastfm";
     rev = "2ce2bfe1879227af8ffafddb82b218faff813db9";
-    sha256 = "1crih9xxf3rb109aqw12bjqv47z28lvlk2dpvyym5shf82nz6yd0";
+    hash = "sha256-oHnzrUAO6lK937eJSTdF4h+ysVwicKwSCCsP13uCMbM=";
   };
 
   patches = [

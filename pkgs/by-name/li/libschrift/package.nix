@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tomolt";
     repo = "libschrift";
     rev = "v" + finalAttrs.version;
-    sha256 = "01hgvkcb46kr9jzc4ah0js0jy9kr0ll18j2k0c5zil55l3a9rqw1";
+    hash = "sha256-geOc1KCl0PgLA1NIFCgFeSYvgZYAKsK+THkastjcDwY=";
   };
 
   postPatch = ''

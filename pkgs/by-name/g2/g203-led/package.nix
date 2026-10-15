@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "smasty";
     repo = "g203-led";
     rev = "f9d10ba3aa8f9359f928bbab0a2ea00cefc69f4b";
-    sha256 = "1fhaimci80xmihg84bgrml61zr56pi9rkxfbs13vvw9dwjf031k0";
+    hash = "sha256-YIYBnOQt8b1H0Mv1mVO8puQfDK35LYIejLUDFFmNCro=";
   };
 
   buildInputs = [

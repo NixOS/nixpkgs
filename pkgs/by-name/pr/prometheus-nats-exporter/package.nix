@@ -15,7 +15,7 @@ buildGoModule rec {
     owner = "nats-io";
     repo = "prometheus-nats-exporter";
     rev = "v${version}";
-    sha256 = "sha256-+5X4qWlVMMbsyHZgVeRaxpyOsyfSYXgdWv2cNu9PMRQ=";
+    hash = "sha256-+5X4qWlVMMbsyHZgVeRaxpyOsyfSYXgdWv2cNu9PMRQ=";
   };
 
   vendorHash = "sha256-07cltrtsiSzIh9C5exVApbm8QtKqD2RK7w753e34pCE=";

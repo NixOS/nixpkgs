@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "seanmiddleditch";
     repo = "libtelnet";
     rev = "45f2d5cfcf383312280e61c85b107285fed260cf";
-    sha256 = "1lp6gdbndsp2w8mhy88c2jknxj2klvnggvq04ln7qjg8407ifpda";
+    hash = "sha256-ql0XDyDoSXwsJQDv9+ymU8hupxQMIQ8r4uLqZld75tI=";
   };
 
   nativeBuildInputs = [

@@ -17,7 +17,7 @@ buildDunePackage (finalAttrs: {
     owner = "pdonadeo";
     repo = "ocaml-lens";
     rev = "v${finalAttrs.version}";
-    sha256 = "1k23n7pa945fk6nbaq6nlkag5kg97wsw045ghz4gqp8b9i2im3vn";
+    hash = "sha256-do8aRUwLXfzIh68QwDU/6c3y1KTWYLWsma6QpO6xQ8w=";
   };
 
   minimalOCamlVersion = "4.10";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "berarma";
     repo = "new-lg4ff";
     tag = "v${version}";
-    sha256 = "sha256-nh5J89S3z0odzh2fDsAVVY1X6lr4ZUwoyu3UVOYQiq8=";
+    hash = "sha256-nh5J89S3z0odzh2fDsAVVY1X6lr4ZUwoyu3UVOYQiq8=";
   };
 
   preBuild = ''

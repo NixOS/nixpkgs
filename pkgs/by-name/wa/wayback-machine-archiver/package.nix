@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "agude";
     repo = "wayback-machine-archiver";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-FrMssgfqR+7mCo18DjaimJK4JREdXIG2dRJjOtAgB9k=";
+    hash = "sha256-FrMssgfqR+7mCo18DjaimJK4JREdXIG2dRJjOtAgB9k=";
   };
 
   build-system = with python3Packages; [ setuptools ];

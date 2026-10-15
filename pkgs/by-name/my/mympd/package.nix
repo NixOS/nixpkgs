@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-r1TFf5dvuiFbItx+TXc070PnXHi78/fIx9CNC/mheTc=";
+    hash = "sha256-r1TFf5dvuiFbItx+TXc070PnXHi78/fIx9CNC/mheTc=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "domoritz";
     repo = "csv2parquet";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-499DC0kLvvP5Oq2WYRb9BIppTdfm41u8hwrPU8b66Zw=";
+    hash = "sha256-499DC0kLvvP5Oq2WYRb9BIppTdfm41u8hwrPU8b66Zw=";
   };
 
   cargoHash = "sha256-hZ4qdaR3dvcBBvZqfMQVk4hryhxfeAszv56WPNVhQiY=";

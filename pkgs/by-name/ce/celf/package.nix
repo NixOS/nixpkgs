@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "clf";
     repo = "celf";
     rev = "d61d95900ab316468ae850fa34a2fe9488bc5b59";
-    sha256 = "0slrwcxglp0sdbp6wr65cdkl5wcap2i0fqxbwqfi1q3cpb6ph6hq";
+    hash = "sha256-GBp4zbps4BAd5qtjB6K4ivFCZ2PFZG7uahpc+jrjmWo=";
   };
 
   buildInputs = [ smlnj-legacy ];

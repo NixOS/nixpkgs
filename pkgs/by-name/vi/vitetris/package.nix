@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vicgeralds";
     repo = "vitetris";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Rbfa2hD67RGmInfWwYD4SthL8lm5bGSBi3oudV5hAao=";
+    hash = "sha256-Rbfa2hD67RGmInfWwYD4SthL8lm5bGSBi3oudV5hAao=";
   };
 
   hardeningDisable = [ "format" ];

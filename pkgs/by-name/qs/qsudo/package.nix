@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "project-trident";
     repo = "qsudo";
     tag = "v${finalAttrs.version}";
-    sha256 = "06kg057vwkvafnk69m9rar4wih3vq4h36wbzwbfc2kndsnn47lfl";
+    hash = "sha256-1NFDrNXNTsHc4n9xMyDBe8DISVY51WSmdWpPvk8Bbxo=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src-qt5";

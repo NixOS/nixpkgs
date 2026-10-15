@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "VladimirMarkelov";
     repo = "ttdl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tHK8R+FFgQRbwBBWaeNAxCXtzEhrTVIq6vl8j3YvnDk=";
+    hash = "sha256-tHK8R+FFgQRbwBBWaeNAxCXtzEhrTVIq6vl8j3YvnDk=";
   };
 
   cargoHash = "sha256-/IE64OeMwmOHGnGJXvDdAUzIVggzNk54Nh4qIuYwOj4=";

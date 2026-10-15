@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "UCIS";
     repo = "QuickTun";
     rev = "2d0c6a9cda8c21f921a5d1197aeee92e9568ca39";
-    sha256 = "1ydvwasj84qljfbzh6lmhyzjc20yw24a0v2mykp8afsm97zzlqgx";
+    hash = "sha256-/WH6/0lVO4Xu9FVsoIjgHggmv4eVGviXkxQTJLXiu/k=";
   };
 
   patches = [ ./tar-1.30.diff ]; # quicktun master seems not to need this

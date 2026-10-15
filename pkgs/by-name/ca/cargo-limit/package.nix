@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "cargo-limit";
     repo = "cargo-limit";
     tag = finalAttrs.version;
-    sha256 = "sha256-joWDB9fhCsYVZFZdr+Gfm4JaRlm5kj+CHp34Sx5iQYk=";
+    hash = "sha256-joWDB9fhCsYVZFZdr+Gfm4JaRlm5kj+CHp34Sx5iQYk=";
   };
 
   cargoHash = "sha256-+qXw4svnftjVL7STl1mPfJiYQQkmitHsNm1JT+0HSEk=";

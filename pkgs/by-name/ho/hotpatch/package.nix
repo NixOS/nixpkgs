@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vikasnkumar";
     repo = "hotpatch";
     rev = "4b65e3f275739ea5aa798d4ad083c4cb10e29149";
-    sha256 = "169vdh55wsbn6fl58lpzqx64v6ifzh7krykav33x1d9hsk98qjqh";
+    hash = "sha256-EEuM0tQwtdDH2Gr6PA/8LppNTMf/UlSoM3ZpXgpsO5k=";
   };
 
   doCheck = true;

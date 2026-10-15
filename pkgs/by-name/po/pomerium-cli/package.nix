@@ -20,7 +20,7 @@ buildGoModule (finalAttrs: {
     owner = "pomerium";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-tXB7iEg29Wzp/CHrWCWrxwwdp22wtFlt2oX1pp5xtYE=";
+    hash = "sha256-tXB7iEg29Wzp/CHrWCWrxwwdp22wtFlt2oX1pp5xtYE=";
   };
 
   vendorHash = "sha256-Jr+sGTjFB/6cNggdbCL3PqwVaHqr/hWrVLLjdPbL82Y=";

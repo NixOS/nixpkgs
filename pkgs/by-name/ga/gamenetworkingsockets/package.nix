@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ValveSoftware";
     repo = "GameNetworkingSockets";
     rev = "v${finalAttrs.version}";
-    sha256 = "12741wmpvy7mcvqqmjg4a7ph75rwliwgclhk4imjijqf2qkvsphd";
+    hash = "sha256-DV69JxYOyyhrJBNS9nikPJcD71HkyYrxZvX4fSsP5Ig=";
   };
 
   nativeBuildInputs = [

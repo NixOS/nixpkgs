@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "jselbie";
     repo = "stunserver";
     rev = "cfadf9c3836d5ae63a682913de24ba085df924f3";
-    sha256 = "1gcx4zj44f0viddnn5klkmq0dgd29av5p06iyf9f1va4a3lk0cbg";
+    hash = "sha256-bzEw6VBE7eCS89GAW7ZKor0GcJ10Fmtbixs4QuQnnb0=";
   };
 
   buildInputs = [

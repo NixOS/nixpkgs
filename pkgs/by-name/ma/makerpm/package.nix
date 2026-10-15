@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ivan-tkatchev";
     repo = "makerpm";
     rev = finalAttrs.version;
-    sha256 = "089dkbh5705ppyi920rd0ksjc0143xmvnhm8qrx93rsgwc1ggi1y";
+    hash = "sha256-PsT3AuNP55F6xqhCu2sfJAAm9QQtA5Giv7eAU+CaLSE=";
   };
 
   meta = {

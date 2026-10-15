@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpbarrette";
     repo = "curlpp";
     rev = "v${finalAttrs.version}";
-    sha256 = "1b0ylnnrhdax4kwjq64r1fk0i24n5ss6zfzf4hxwgslny01xiwrk";
+    hash = "sha256-M/PYA/CW6sc7JO67b7QulogIpguZGCz5JF01mK2lHqw=";
   };
 
   patches = [

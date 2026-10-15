@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "jgaeddert";
     repo = "liquid-dsp";
     rev = "v${version}";
-    sha256 = "sha256-QRCPdngQCpC+o8fCLVoixPsZ25yI1ZEo8ePreC2S0Yk=";
+    hash = "sha256-QRCPdngQCpC+o8fCLVoixPsZ25yI1ZEo8ePreC2S0Yk=";
   };
 
   patches = [

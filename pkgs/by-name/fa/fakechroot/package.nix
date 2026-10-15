@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dex4er";
     repo = "fakechroot";
     rev = finalAttrs.version;
-    sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
+    hash = "sha256-Br16wWCda+eHr8/ADFXfGNLRtbGtyw5GfeTlmr/i9nU=";
   };
 
   # Use patch from https://github.com/dex4er/fakechroot/pull/46 , remove once merged!

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "susam";
     repo = "vimer";
     rev = finalAttrs.version;
-    sha256 = "01qhr3i7wasbaxvms39c81infpry2vk0nzh7r5m5b9p713p0phsi";
+    hash = "sha256-UcML7gjnplVqyQd+C+YWPl9nY0AsDV13V0srfuLIEAc=";
   };
 
   installPhase = ''

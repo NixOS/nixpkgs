@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KnightOS";
     repo = "mktiupgrade";
     rev = finalAttrs.version;
-    sha256 = "15y3rxvv7ipgc80wrvrpksxzdyqr21ywysc9hg6s7d3w8lqdq8dm";
+    hash = "sha256-tSHcMEV8tKPNg4lpz30QGfv2u54378wBYu/Gs3fPw5c=";
   };
 
   strictDeps = true;

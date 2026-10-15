@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "Yubico";
     repo = "yubico-c-client";
     rev = "ad9eda6aac4c3f81784607c30b971f4a050b5c2e";
-    sha256 = "01b19jgv2lypih6lhw9yjjsfl8q1ahl955vhr2ai8ccshh0050yj";
+    hash = "sha256-0oMCAISaMRSVyHCXkihUASPqtJQ+cUgNjNdTsZ9MYQU=";
   };
 
   nativeBuildInputs = [

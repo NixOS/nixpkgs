@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "noonien-d";
     repo = "pidgin-xmpp-receipts";
     rev = "release_${version}";
-    sha256 = "13kwaymzkymjsdv8q95byd173i4vanj211vgx9cm0y8ag2r3cjsb";
+    hash = "sha256-S0s2sngKeVBZ6m+HIKRVm8RxQvOrJIx207L6+atXfI4=";
   };
 
   buildInputs = [ pidgin ];

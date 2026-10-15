@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kaldi-asr";
     repo = "kaldi";
     rev = "e02e35f0254bb033fab73d1df99fc34123e31d56";
-    sha256 = "sha256-ZnVSQTETrMeU+pkqy50ldAe8g1pbnG7VS1utcUy28ls=";
+    hash = "sha256-ZnVSQTETrMeU+pkqy50ldAe8g1pbnG7VS1utcUy28ls=";
   };
 
   postPatch = ''

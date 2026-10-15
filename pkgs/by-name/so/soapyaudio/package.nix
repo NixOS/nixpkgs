@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pothosware";
     repo = "SoapyAudio";
     rev = "soapy-audio-${finalAttrs.version}";
-    sha256 = "0minlsc1lvmqm20vn5hb4im7pz8qwklfy7sbr2xr73xkrbqdahc0";
+    hash = "sha256-gEHV8Mqzj5O7yEsf7+jkGP17aiQLFruBqLhuGpimNlY=";
   };
 
   nativeBuildInputs = [

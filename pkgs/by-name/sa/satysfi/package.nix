@@ -15,7 +15,7 @@ let
       owner = "gfngfn";
       repo = "camlpdf";
       rev = "v2.3.1+satysfi";
-      sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
+      hash = "sha256-E4xbaZIYMBKXwcQRs0PbM6Lf8LCQHiOZ21QFOhtmHOk=";
     };
     nativeBuildInputs = [ which ] ++ o.nativeBuildInputs;
   });
@@ -26,7 +26,7 @@ let
       owner = "gfngfn";
       repo = "yojson-with-position";
       rev = "v1.4.2+satysfi";
-      sha256 = "17s5xrnpim54d1apy972b5l08bph4c0m5kzbndk600fl0vnlirnl";
+      hash = "sha256-1OZI7QbUAWBms+vPUgEj8C4EaFniJH9VaKTUeG3uRZ8=";
     };
     nativeBuildInputs = [ ocamlPackages.cppo ];
     propagatedBuildInputs = [ ocamlPackages.biniou ];

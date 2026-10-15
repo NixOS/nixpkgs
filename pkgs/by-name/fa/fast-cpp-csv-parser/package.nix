@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "ben-strasser";
     repo = "fast-cpp-csv-parser";
     rev = "75600d0b77448e6c410893830df0aec1dbacf8e3";
-    sha256 = "04kalwgsr8khqr1j5j13vzwaml268c5dvc9wfcwfs13wp3snqwf2";
+    hash = "sha256-wnFs9bh8BO04czyx3QpDRtCq+N8jyCJDxnCirB+nahI=";
   };
 
   installPhase = ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ugetdm";
     repo = "uget-integrator";
     rev = "v${finalAttrs.version}";
-    sha256 = "0bfqwbpprxp5sy49p2hqcjdfj7zamnp2hhcnnyccffkn7pghx8pp";
+    hash = "sha256-96IO3z12OseYt5ZBKK6t6h/pmmQYipuI1+X2fO/i2C0=";
   };
 
   nativeBuildInputs = [

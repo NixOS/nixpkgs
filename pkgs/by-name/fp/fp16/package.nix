@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Maratyszcza";
     repo = "FP16";
     rev = "98b0a46bce017382a6351a19577ec43a715b6835";
-    sha256 = "sha256-aob776ZGjnH4k/xfsdIcN9+wiuDreUoRBpyzrWGuxKk=";
+    hash = "sha256-aob776ZGjnH4k/xfsdIcN9+wiuDreUoRBpyzrWGuxKk=";
   };
 
   nativeBuildInputs = [

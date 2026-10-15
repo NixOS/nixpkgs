@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "andrewrk";
     repo = "libsoundio";
     rev = finalAttrs.version;
-    sha256 = "12l4rvaypv87vigdrmjz48d4d6sq4gfxf5asvnc4adyabxb73i4x";
+    hash = "sha256-ncRxVl/KN0WY3VoV190jWJtGGiJf1txe3Aft69XOhIo=";
   };
 
   # cmake 4 compatibility

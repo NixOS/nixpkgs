@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "tobiohlala";
     repo = "lightdm-tiny-greeter";
     rev = version;
-    sha256 = "08azpj7b5qgac9bgi1xvd6qy6x2nb7iapa0v40ggr3d1fabyhrg6";
+    hash = "sha256-5mXol3KhjfweIBuoq+JZVnTjsWm7h/hWYurhso68XyE=";
   };
 
   nativeBuildInputs = [

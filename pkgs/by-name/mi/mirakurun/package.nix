@@ -20,7 +20,7 @@ buildNpmPackage rec {
     owner = "Chinachu";
     repo = "Mirakurun";
     rev = version;
-    sha256 = "sha256-Qg+wET5H9t3Mv2Hv0iT/C85/SEaQ+BHSBL3JjMQW5+Q=";
+    hash = "sha256-Qg+wET5H9t3Mv2Hv0iT/C85/SEaQ+BHSBL3JjMQW5+Q=";
   };
 
   patches = [

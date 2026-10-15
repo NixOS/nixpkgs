@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "adammck";
     repo = "terraform-inventory";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gkSDxcBoYmCBzkO8y1WKcRtZdfl8w5qVix0zbyb4Myo=";
+    hash = "sha256-gkSDxcBoYmCBzkO8y1WKcRtZdfl8w5qVix0zbyb4Myo=";
   };
 
   vendorHash = "sha256-pj9XLzaGU1PuNnpTL/7XaKJZUymX+i8hFMroZtHIqTc=";

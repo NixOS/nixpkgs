@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "buhman";
     repo = "capture";
     rev = "80dd9e7195aad5c132badef610f19509f3935b24";
-    sha256 = "0zyyg4mvrny7cc2xgvfip97b6yc75ka5ni39rwls93971jbk83d6";
+    hash = "sha256-pg00lwwnjaQpz2lEW9Qsh3mzTrrR7dcFY8fbvCt53n8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

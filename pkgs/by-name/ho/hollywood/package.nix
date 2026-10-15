@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     owner = "dustinkirkland";
     repo = "hollywood";
     rev = "35275a68c37bbc39d8b2b0e4664a0c2f5451e5f6";
-    sha256 = "sha256-faIm1uXERvIDZ6SK6uarVkWGNJskAroHgq5Cg7nUZc4=";
+    hash = "sha256-faIm1uXERvIDZ6SK6uarVkWGNJskAroHgq5Cg7nUZc4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

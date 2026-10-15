@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "vinniefalco";
     repo = "LuaBridge";
     rev = version;
-    sha256 = "sha256-pHJU9FxG1/vAakaXxJeXFDdDbOvmgL9/88jM6CWXzjg=";
+    hash = "sha256-pHJU9FxG1/vAakaXxJeXFDdDbOvmgL9/88jM6CWXzjg=";
   };
 
   dontConfigure = true;

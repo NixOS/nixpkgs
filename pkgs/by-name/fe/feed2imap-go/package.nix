@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "Necoro";
     repo = "feed2imap-go";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7ce2G2t+7P+7Ga+BLyGF4lW4BB2yaE9rV/dxBFvdPEU=";
+    hash = "sha256-7ce2G2t+7P+7Ga+BLyGF4lW4BB2yaE9rV/dxBFvdPEU=";
   };
 
   ldflags = [

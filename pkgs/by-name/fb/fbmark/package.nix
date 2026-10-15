@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "caramelli";
     repo = "fbmark";
     rev = "v${finalAttrs.version}";
-    sha256 = "0n2czl2sy1k6r5ri0hp7jgq84xcwrx4x43bqvw1b4na99mqhyahn";
+    hash = "sha256-FioPcU1JWbIC33gN0knPnHWC8JPnQhBzyWYGrwX9TFg=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpcima";
     repo = "stone-phaser";
     rev = "v${finalAttrs.version}";
-    sha256 = "180b32z8h9zi8p0q55r1dzxfckamnngm52zjypjjvvy7qdj3mfcd";
+    hash = "sha256-jbk6ZMPH7y3l9fKLUp+1VU3m+m8hl4LBRfEniL4YC6A=";
     fetchSubmodules = true;
   };
 

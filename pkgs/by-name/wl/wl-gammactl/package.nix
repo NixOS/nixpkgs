@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "mischw";
     repo = "wl-gammactl";
     rev = "e2385950d97a3baf1b6e2f064dd419ccec179586";
-    sha256 = "8iMJK4O/sNIGPOBZQEfK47K6OjT6sxYFe19O2r/VSr8=";
+    hash = "sha256-8iMJK4O/sNIGPOBZQEfK47K6OjT6sxYFe19O2r/VSr8=";
   };
 
   strictDeps = true;

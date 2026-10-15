@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "pop-os";
     repo = "icon-theme";
     rev = "v${version}";
-    sha256 = "sha256-4Ae06/ywjZUk6zHAk7CpYcK3Y2xSX+Rae/QZOE1ZT3I=";
+    hash = "sha256-4Ae06/ywjZUk6zHAk7CpYcK3Y2xSX+Rae/QZOE1ZT3I=";
   };
 
   nativeBuildInputs = [

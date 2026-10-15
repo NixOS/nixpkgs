@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MusicPlayerDaemon";
     repo = "ncmpc";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-POeMWDpN0tXo/8NpDVHv9MGAe5O6fukVph3rfmjACZY=";
+    hash = "sha256-POeMWDpN0tXo/8NpDVHv9MGAe5O6fukVph3rfmjACZY=";
   };
 
   buildInputs = [

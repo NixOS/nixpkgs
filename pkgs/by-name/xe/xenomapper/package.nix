@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "genomematt";
     repo = "xenomapper";
     rev = "v${finalAttrs.version}";
-    sha256 = "0mnmfzlq5mhih6z8dq5bkx95vb8whjycz9mdlqwbmlqjb3gb3zhr";
+    hash = "sha256-Gf6x3lgS07o4pq2mz7yEHK1dUp+r4Ia+gRHWgul31VY=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

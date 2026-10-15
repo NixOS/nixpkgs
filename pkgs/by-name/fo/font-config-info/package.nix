@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "derat";
     repo = "font-config-info";
     rev = "v${finalAttrs.version}";
-    sha256 = "14z7hg9c7q8wliyqv68kp080mmk2rh6kpww6pn87hy7lwq20l2b7";
+    hash = "sha256-ZwkKBOb0eHiQvYbzOw3MYtYKELgTmY19pBzhw9KD55M=";
   };
 
   nativeBuildInputs = [

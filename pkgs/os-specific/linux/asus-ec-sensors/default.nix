@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "zeule";
     repo = "asus-ec-sensors";
     rev = "0e73cd165c4d1baf8ce841604722c6981b7ba9d6";
-    sha256 = "sha256-qX+HmtBdm9bOJRnlpI/Ru0OCcUi8MQ29Y731yM9JEi0=";
+    hash = "sha256-qX+HmtBdm9bOJRnlpI/Ru0OCcUi8MQ29Y731yM9JEi0=";
   };
 
   hardeningDisable = [ "pic" ];

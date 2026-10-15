@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "BBVA";
     repo = "kapow";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-HUZ1Uf8Z2YbYvqKEUHckKAZ5q+C83zafi3UjemqHFM4=";
+    hash = "sha256-HUZ1Uf8Z2YbYvqKEUHckKAZ5q+C83zafi3UjemqHFM4=";
   };
 
   vendorHash = "sha256-vvC9l/6b7AIEmCMVdeKMyi9ThIcAzjtV+uaQ4oSJZuU=";

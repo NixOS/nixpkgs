@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "benmcollins";
     repo = "libjwt";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0gFMeSW4gfbI6MUctcN8UuKhMDswaT8BzHTV2VuwZzc=";
+    hash = "sha256-0gFMeSW4gfbI6MUctcN8UuKhMDswaT8BzHTV2VuwZzc=";
   };
 
   buildInputs = [

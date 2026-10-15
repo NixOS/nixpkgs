@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "xolox";
     repo = "python-rotate-backups";
     rev = version;
-    sha256 = "0r4dyd7hj403rksgp3vh1azp9n4af75r3wq3x39wxcqizpms3vkx";
+    hash = "sha256-fe6h6/0Rs87T6APzkctxith0vwpwj/v0zAMQCU/zjWQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

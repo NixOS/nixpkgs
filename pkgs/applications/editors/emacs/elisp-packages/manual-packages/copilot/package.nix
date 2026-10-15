@@ -18,7 +18,7 @@ melpaBuild (finalAttrs: {
     owner = "copilot-emacs";
     repo = "copilot.el";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-x2Lzhz8Yi3/EsahkJZ/pJoaJuVb1xIHgNt50qi0ndeo=";
+    hash = "sha256-x2Lzhz8Yi3/EsahkJZ/pJoaJuVb1xIHgNt50qi0ndeo=";
   };
 
   files = ''(:defaults "dist")'';

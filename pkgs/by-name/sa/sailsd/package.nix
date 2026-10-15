@@ -11,7 +11,7 @@ let
     owner = "sails-simulator";
     repo = "libsailing";
     rev = "9b2863ff0c539cd23d91b0254032a7af9c840574";
-    sha256 = "06rcxkwgms9sxqr1swnnc4jnvgs0iahm4cksd475yd1bp5p1gq6j";
+    hash = "sha256-0uAXbrkrNF8OaXoyUqGKQL9tJWHWch0y7jrp+vjsLBs=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sails-simulator";
     repo = "sailsd";
     rev = finalAttrs.version;
-    sha256 = "1s4nlffp683binbdxwwzbsci61kbjylbcr1jf44sv1h1r5d5js05";
+    hash = "sha256-BWhZWskBhq0JcTJktqiXawYTmV6f896WjWsgc52jlug=";
   };
 
   nativeBuildInputs = [ pkg-config ];

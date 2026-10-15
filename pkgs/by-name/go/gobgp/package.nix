@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "osrg";
     repo = "gobgp";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sCTC7qJdkuxbJV/U6rMDCo5NO9yukGjqGPGHZvPKO7A=";
+    hash = "sha256-sCTC7qJdkuxbJV/U6rMDCo5NO9yukGjqGPGHZvPKO7A=";
   };
 
   vendorHash = "sha256-eqI8JtTYANJziTOl2rAB8CZZft0MqXgowSwh8K1+ejI=";

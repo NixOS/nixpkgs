@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "wavexx";
     repo = "facedetect";
     rev = "v${version}";
-    sha256 = "0mddh71cjbsngpvjli406ndi2x613y39ydgb8bi4z1jp063865sd";
+    hash = "sha256-TReDhgFXhk/iQus1n4YfwXQRmzWARCr3fVYvycKBrVU=";
   };
 
   patches = [

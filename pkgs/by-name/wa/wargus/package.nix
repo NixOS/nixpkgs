@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "wargus";
     repo = "wargus";
     tag = "v${version}";
-    sha256 = "sha256-rU2uMhk7Hx9hrLR/iH2tHkJ2z4cVmJB3ISlvY6dfQKU=";
+    hash = "sha256-rU2uMhk7Hx9hrLR/iH2tHkJ2z4cVmJB3ISlvY6dfQKU=";
   };
   patches = [
     (fetchpatch {

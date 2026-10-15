@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "metamath";
     repo = "metamath-exe";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
+    hash = "sha256-Cg1dgz+uphDlGhKH3mTywtAccWinC5+pwNv4TB3YAnI=";
   };
 
   meta = {

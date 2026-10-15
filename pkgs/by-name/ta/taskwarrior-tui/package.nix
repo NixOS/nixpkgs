@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8Gpf8D7XocdcHuJKLqfT1QeqkIa7cQHEAoTkKIl/RrU=";
+    hash = "sha256-8Gpf8D7XocdcHuJKLqfT1QeqkIa7cQHEAoTkKIl/RrU=";
   };
 
   cargoHash = "sha256-u0W1qVj0SRYVtnoWMqxeuBC9QvibogL4quiQLxzM8LM=";

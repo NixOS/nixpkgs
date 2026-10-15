@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "lhvy";
     repo = "pipes-rs";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7FdC/VY1ZO4E/qDdeKzsIai8h5ZgMrSr1C+Ny4fYh38=";
+    hash = "sha256-7FdC/VY1ZO4E/qDdeKzsIai8h5ZgMrSr1C+Ny4fYh38=";
   };
 
   cargoHash = "sha256-TIVWl/9xSFsSXD9XzOHBvc/1HvI/radas00p4fZ/AzM=";

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Ogq8aTOZvZTfceJuQ1vSjl5Lm5Ww/8jTUZwcXkDDaxI=";
+    hash = "sha256-Ogq8aTOZvZTfceJuQ1vSjl5Lm5Ww/8jTUZwcXkDDaxI=";
   };
 
   nativeBuildInputs = [

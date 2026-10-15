@@ -15,13 +15,13 @@ let
     owner = "bazelbuild";
     repo = "bazel-central-registry";
     rev = "722299976c97e5191045c8016b7c8532189fc3f6";
-    sha256 = "sha256-hi5BKI94am2LCXD93GBeT0gsODxGeSsd0OrhTwpNAgM=";
+    hash = "sha256-hi5BKI94am2LCXD93GBeT0gsODxGeSsd0OrhTwpNAgM=";
   };
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "examples";
     rev = "9d6a2e67d29b8b6208d22d70cb22880345bb6803";
-    sha256 = "sha256-NQqXsmX7hyTqLINkz1rnavx15jQTdIKpotw42rGc5mc=";
+    hash = "sha256-NQqXsmX7hyTqLINkz1rnavx15jQTdIKpotw42rGc5mc=";
   };
 in
 {

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kivikakk";
     repo = "comrak";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-BCBnCwEJSHBQZ7Sa6nbn4USfI+L79a8LtkVb81W8rqw=";
+    hash = "sha256-BCBnCwEJSHBQZ7Sa6nbn4USfI+L79a8LtkVb81W8rqw=";
   };
 
   cargoHash = "sha256-1yW3rGZujuVgNzm+mN9oig3YP89JXE2No70RW01per4=";

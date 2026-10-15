@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "andrewrk";
     repo = "liblaxjson";
     rev = finalAttrs.version;
-    sha256 = "01iqbpbhnqfifhv82m6hi8190w5sdim4qyrkss7z1zyv3gpchc5s";
+    hash = "sha256-ujDI7hvb//CP1jN7TGpsunCQAorQVIE2dNFhC9ddOAY=";
   };
 
   nativeBuildInputs = [ cmake ];

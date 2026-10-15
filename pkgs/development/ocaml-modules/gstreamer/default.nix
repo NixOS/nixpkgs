@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
     owner = "savonet";
     repo = "ocaml-gstreamer";
     rev = "v${finalAttrs.version}";
-    sha256 = "0y8xi1q0ld4hrk96bn6jfh9slyjrxmnlhm662ynacp3yzalp8jji";
+    hash = "sha256-UUp0qfp+XKasF8ZUSG3tWXqqE3TS2GXSzJA0CnCIHXk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

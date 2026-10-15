@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "hifi";
     repo = "heisenbridge";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Aan3dtixy1xT9kPU/XxgbUvri9NS/WKiO/atmpPY/m8=";
+    hash = "sha256-Aan3dtixy1xT9kPU/XxgbUvri9NS/WKiO/atmpPY/m8=";
   };
 
   postPatch = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "darkk";
     repo = "redsocks";
     rev = "release-${finalAttrs.version}";
-    sha256 = "170cpvvivb6y2kwsqj9ppx5brgds9gkn8mixrnvj8z9c15xhvplm";
+    hash = "sha256-ld4NewksfSS3zT1WZOdLur28Sr83Saz5FN6sHfe+DJw=";
   };
 
   installPhase = ''

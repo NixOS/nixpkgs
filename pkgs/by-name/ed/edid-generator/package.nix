@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     owner = "akatrevorjay";
     repo = "edid-generator";
     rev = "476a016d8b488df749bf6d6efbf7b9fbfb2e3cb8";
-    sha256 = "sha256-UGxze273VB5cQDWrv9X/Lam6WbOu9U3bro8GcVbEvws=";
+    hash = "sha256-UGxze273VB5cQDWrv9X/Lam6WbOu9U3bro8GcVbEvws=";
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Qucs";
     repo = "adms";
     rev = "release-${finalAttrs.version}";
-    sha256 = "0i37c9k6q1iglmzp9736rrgsnx7sw8xn3djqbbjw29zsyl3pf62c";
+    hash = "sha256-TBh3B/X6J8HlWli2YTvi+nSrX85mnHR/pS8GbGZiZ0Q=";
   };
 
   patches = [

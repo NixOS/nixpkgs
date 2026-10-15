@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BatchDrake";
     repo = "SigDigger";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dS+Fc0iQz7GIlGaR556Ur/EQh3Uzhqm9uBW42IuEqoE=";
+    hash = "sha256-dS+Fc0iQz7GIlGaR556Ur/EQh3Uzhqm9uBW42IuEqoE=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "OrancheloTeam";
     repo = "oranchelo-icon-theme";
     rev = "v${version}";
-    sha256 = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
+    hash = "sha256-IDsZj/X9rFSdDpa3bL6IPEPCRe5GustPteDxSbfz+SA=";
   };
 
   nativeBuildInputs = [

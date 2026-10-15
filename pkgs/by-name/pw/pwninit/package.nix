@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "io12";
     repo = "pwninit";
     rev = finalAttrs.version;
-    sha256 = "sha256-Gy7W2caZSD/fXzcGpYEzpotEAmYF48UeDUNWN4rbOTs=";
+    hash = "sha256-Gy7W2caZSD/fXzcGpYEzpotEAmYF48UeDUNWN4rbOTs=";
   };
 
   buildInputs = [

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libmtp";
     repo = "libmtp";
     rev = "libmtp-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    sha256 = "sha256-FlPj9PEeOAWabU11dFTzDgY9TBbgmJclbeL0iULYw6A=";
+    hash = "sha256-FlPj9PEeOAWabU11dFTzDgY9TBbgmJclbeL0iULYw6A=";
   };
 
   outputs = [

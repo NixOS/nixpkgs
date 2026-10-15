@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "vmware";
     repo = "pinniped";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-lJEdVMLF3SlGsInTsAZgNTLiSp9MUqlUHzamBErT0S8=";
+    hash = "sha256-lJEdVMLF3SlGsInTsAZgNTLiSp9MUqlUHzamBErT0S8=";
   };
 
   subPackages = "cmd/pinniped";

@@ -28,7 +28,7 @@ maven.buildMavenPackage rec {
     owner = "developersu";
     repo = "ns-usbloader";
     rev = "v${version}";
-    sha256 = "sha256-nZfAZ+IjoYXEWwH9oOhOQ5TOYUNiAGAqhHRhskyx/Vo=";
+    hash = "sha256-nZfAZ+IjoYXEWwH9oOhOQ5TOYUNiAGAqhHRhskyx/Vo=";
   };
 
   patches = [

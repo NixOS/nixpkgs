@@ -14,7 +14,7 @@ python312Packages.buildPythonApplication rec {
     owner = "cab404";
     repo = "SL1toPhoton";
     rev = "7edc6ea99818622f5d49ac7af80ddd4916b8c19f";
-    sha256 = "sha256-ssFfjlBMi3FHosDBUA2gs71VUIBkEdPVcV3STNxmOIM=";
+    hash = "sha256-ssFfjlBMi3FHosDBUA2gs71VUIBkEdPVcV3STNxmOIM=";
   };
 
   pythonPath = with python312Packages; [

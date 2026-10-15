@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sailfishos";
     repo = "libglibutil";
     rev = finalAttrs.version;
-    sha256 = "sha256-pdS44uDYhxE++qH/1fkGYOZlHXPEgjgU6Hcr40luD0U=";
+    hash = "sha256-pdS44uDYhxE++qH/1fkGYOZlHXPEgjgU6Hcr40luD0U=";
   };
 
   outputs = [

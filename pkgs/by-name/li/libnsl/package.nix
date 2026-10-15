@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "thkukuk";
     repo = "libnsl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bCToqXVE4RZcoZ2eTNZcVHyzKlWyIpSAssQCOZcfmEA=";
+    hash = "sha256-bCToqXVE4RZcoZ2eTNZcVHyzKlWyIpSAssQCOZcfmEA=";
   };
 
   outputs = [

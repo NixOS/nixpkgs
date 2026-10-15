@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "rowhammer-test";
     rev = "c1d2bd9f629281402c10bb10e52bc1f1faf59cc4";
-    sha256 = "1fbfcnm5gjish47wdvikcsgzlb5vnlfqlzzm6mwiw2j5qkq0914i";
+    hash = "sha256-kYQE8MRFCh55NfV/ih21uyz6n2Yz7sYPgTrKV6plbrk=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-Wno-error=format";

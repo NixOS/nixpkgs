@@ -16,7 +16,7 @@ let
           owner = "pyparsing";
           repo = "pyparsing";
           rev = "pyparsing_${version}";
-          sha256 = "14pfy80q2flgzjcx8jkracvnxxnr59kjzp3kdm5nh232gk1v6g6h";
+          hash = "sha256-0Dyzw3xiCGhLbXPcL2cq2fZuN1N5StSZ/I86gQHy7pI=";
         };
         nativeBuildInputs = [ super.setuptools ];
       };
@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "yandex";
     repo = "gixy";
     rev = "v${version}";
-    sha256 = "sha256-Ak2UTP0gDKoac/rR2h1XCUKld1b41O466ogZNQ1yQN0=";
+    hash = "sha256-Ak2UTP0gDKoac/rR2h1XCUKld1b41O466ogZNQ1yQN0=";
   };
 
   patches = [

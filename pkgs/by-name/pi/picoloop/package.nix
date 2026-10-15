@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "picoloop";
     owner = "yoyz";
     rev = "picoloop-${finalAttrs.version}";
-    sha256 = "0i8j8rgyha3ara6d4iis3wcimszf2csxdwrm5yq0wyhg74g7cvjd";
+    hash = "sha256-TW52HjkPeg6wLzXz1jUT7usaGR86RtKMymoo6F9GEkU=";
   };
 
   buildInputs = [

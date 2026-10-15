@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "dominikh";
     repo = "go-tools";
     tag = finalAttrs.version;
-    sha256 = "sha256-wellofnfLW4lQy68UQyFJfvrKCfrZ/EllLODX1g9taY=";
+    hash = "sha256-wellofnfLW4lQy68UQyFJfvrKCfrZ/EllLODX1g9taY=";
   };
 
   vendorHash = "sha256-3no4wPqFG0RfSsWB0z8EYxeoZ30t+Zf7ZayzFCLEm2A=";

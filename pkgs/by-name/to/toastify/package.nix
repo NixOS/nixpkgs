@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "hoodie";
     repo = "toastify";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hSBh1LTfe3rQDPUryo2Swdf/yLYrOQ/Fg3Dz7ZqV3gw=";
+    hash = "sha256-hSBh1LTfe3rQDPUryo2Swdf/yLYrOQ/Fg3Dz7ZqV3gw=";
   };
 
   cargoHash = "sha256-xnmns0YXsKuoNxxax3St5pLiFwu6BD0iIYHNi9N9mO0=";

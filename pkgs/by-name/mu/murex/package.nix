@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "lmorg";
     repo = "murex";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ua5KEtT1HXRCqW4MwB0dYCd03DBrliEfgiSmcp+vZS8=";
+    hash = "sha256-Ua5KEtT1HXRCqW4MwB0dYCd03DBrliEfgiSmcp+vZS8=";
   };
 
   vendorHash = "sha256-MaBBi2Qi7s9lfRWmnYkyr7PtwzC7ZL0jmyUXzISOXVg=";

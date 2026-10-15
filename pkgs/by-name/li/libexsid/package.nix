@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsidplayfp";
     repo = "exsid-driver";
     rev = finalAttrs.version;
-    sha256 = "1qbiri549fma8c72nmj3cpz3sn1vc256kfafnygkmkzg7wdmgi7r";
+    hash = "sha256-+cRXGz/vzzqft065aYpgO1g9/mVDVisOQ6q6RErMceE=";
   };
 
   patches = [

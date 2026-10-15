@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ingydotnet";
     repo = "git-subrepo";
     rev = finalAttrs.version;
-    sha256 = "sha256-Fwh4haGXVDsLexe/1kjUhY4lF6u5cTrAwivZiOkPig0=";
+    hash = "sha256-Fwh4haGXVDsLexe/1kjUhY4lF6u5cTrAwivZiOkPig0=";
   };
 
   nativeBuildInputs = [

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "librsync";
     repo = "librsync";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fiOby8tOhv0KJ+ZwAWfh/ynqHlYC9kNqKfxNl3IhzR8=";
+    hash = "sha256-fiOby8tOhv0KJ+ZwAWfh/ynqHlYC9kNqKfxNl3IhzR8=";
   };
 
   nativeBuildInputs = [ cmake ];

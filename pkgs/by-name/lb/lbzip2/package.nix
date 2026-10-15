@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kjn";
     repo = "lbzip2";
     rev = "v${finalAttrs.version}";
-    sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
+    hash = "sha256-aMsis2p8Mnblg7Jsw+0RA3ZzFs4mgm4+nOY6ozYPYsA=";
   };
 
   patches = [

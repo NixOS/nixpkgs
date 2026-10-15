@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "persiancal";
     repo = "jcal";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vJc5uijZlvohEtiS03LYlqtswVE38S9/ejlHrmZ0wqA=";
+    hash = "sha256-vJc5uijZlvohEtiS03LYlqtswVE38S9/ejlHrmZ0wqA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

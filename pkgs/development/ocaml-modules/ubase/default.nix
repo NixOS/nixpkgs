@@ -14,7 +14,7 @@ buildDunePackage rec {
     owner = "sanette";
     repo = "ubase";
     tag = version;
-    sha256 = "sha256-zmYjWEk0r1h87RczCJu2tYlS79F/pAiBt16BplPmA7c=";
+    hash = "sha256-zmYjWEk0r1h87RczCJu2tYlS79F/pAiBt16BplPmA7c=";
   };
 
   doCheck = true;

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "client9";
     repo = "libinjection";
     tag = "v${finalAttrs.version}";
-    sha256 = "0chsgam5dqr9vjfhdcp8cgk7la6nf3lq44zs6z6si98cq743550g";
+    hash = "sha256-D5QyyMEMpajNN/oTgulw1ih65mPosgad3CnjVqp6GjI=";
   };
 
   nativeBuildInputs = [ python3 ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "floooh";
     repo = "sokol";
     rev = "38e4c9a516f8808d706343a5c525acfe7007fe67";
-    sha256 = "sha256-g4JMCbG9is7uBFv6cTBTCmRYfKWMruagtYQjYZnOFn4=";
+    hash = "sha256-g4JMCbG9is7uBFv6cTBTCmRYfKWMruagtYQjYZnOFn4=";
   };
 
   dontBuild = true;

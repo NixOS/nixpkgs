@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "stepchowfun";
     repo = "toast";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bhKIJ1x4WQAPAMEyw12NmmDbnDYbucIz0U3/MdTfmP0=";
+    hash = "sha256-bhKIJ1x4WQAPAMEyw12NmmDbnDYbucIz0U3/MdTfmP0=";
   };
 
   cargoHash = "sha256-zo+KTtCJkCjG9j/VgUcnTZfRyJLj0C3BvKRREAjyeb8=";

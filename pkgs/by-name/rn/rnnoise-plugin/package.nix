@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "werman";
     repo = "noise-suppression-for-voice";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
+    hash = "sha256-sfwHd5Fl2DIoGuPDjELrPp5KpApZJKzQikCJmCzhtY8=";
   };
 
   nativeBuildInputs = [

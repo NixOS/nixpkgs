@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "lyrebird-voice-changer";
     repo = "lyrebird";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-VIYcOxvSpzRvJMzEv2i5b7t0WMF7aQxB4Y1jfvuZN/Y=";
+    hash = "sha256-VIYcOxvSpzRvJMzEv2i5b7t0WMF7aQxB4Y1jfvuZN/Y=";
   };
 
   propagatedBuildInputs = with python3Packages; [

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libxsmm";
     repo = "libxsmm";
     rev = finalAttrs.version;
-    sha256 = "sha256-s/NEFU4IwQPLyPLwMmrrpMDd73q22Sk2BNid/kedawY=";
+    hash = "sha256-s/NEFU4IwQPLyPLwMmrrpMDd73q22Sk2BNid/kedawY=";
   };
 
   # Fixes /build references in the rpath

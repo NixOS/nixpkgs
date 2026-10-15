@@ -18,7 +18,7 @@ let
       # for 1.8.4.2 the tag is at the wrong commit (they fixed stuff
       # afterwards and didn't move the tag), hence reference by commitid
       rev = "c2c4eb5388a02169400cba7a67be325caabdcc37";
-      sha256 = "0bkzxggbqx7sql3sp46bqham6r457in0vrgh3ai3lw2jrw79pwmh";
+      hash = "sha256-sPKbDs9ScDqiGvDlDWw8hWRTFcTLkKsHxfp0vN7rfy4=";
     };
 
     meta = {

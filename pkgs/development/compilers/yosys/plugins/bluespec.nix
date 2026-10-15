@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "thoughtpolice";
     repo = "yosys-bluespec";
     rev = "f6f4127a4e96e18080fd5362b6769fa3e24c76b1";
-    sha256 = "sha256-3cNFP/k4JsgLyUQHWU10Htl2Rh0staAcA3R4piD6hDE=";
+    hash = "sha256-3cNFP/k4JsgLyUQHWU10Htl2Rh0staAcA3R4piD6hDE=";
   };
 
   # yosys >=0.67 headers require C++20; the Makefile otherwise pins c++17.

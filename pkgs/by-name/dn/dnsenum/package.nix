@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SparrowOchon";
     repo = "dnsenum2";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I4I+HNQC7xqIF2P7NBy2Ophh3znl5qy9fSicJKIBUis=";
+    hash = "sha256-I4I+HNQC7xqIF2P7NBy2Ophh3znl5qy9fSicJKIBUis=";
   };
 
   patchPhase = ''

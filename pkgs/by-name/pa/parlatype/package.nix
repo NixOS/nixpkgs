@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gkarsay";
     repo = "parlatype";
     tag = "v${finalAttrs.version}";
-    sha256 = "1kjsbwr08k1kzaan555zjk37r3l5qhpgrvjb1p57dnygk2g3hsm2";
+    hash = "sha256-omo4npjP23bKDUvu/C7EhY58xpS/lGKV+jNMBDJfWs4=";
   };
 
   nativeBuildInputs = [

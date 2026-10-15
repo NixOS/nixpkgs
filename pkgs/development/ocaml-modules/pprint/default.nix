@@ -14,7 +14,7 @@ buildDunePackage (finalAttrs: {
     owner = "fpottier";
     repo = "pprint";
     rev = finalAttrs.version;
-    sha256 = "sha256-avf71vAgCL1MU8O7Q3FNN3wEdCDtbNZP0ipETnn8AqA=";
+    hash = "sha256-avf71vAgCL1MU8O7Q3FNN3wEdCDtbNZP0ipETnn8AqA=";
   };
 
   meta = {

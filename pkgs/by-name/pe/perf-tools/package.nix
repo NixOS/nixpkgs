@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "brendangregg";
     repo = "perf-tools";
     rev = "98d42a2a1493d2d1c651a5c396e015d4f082eb20";
-    sha256 = "09qnss9pd4kr6qadvp62m2g8sfrj86fksi1rr8m8w4314pzfb93c";
+    hash = "sha256-bKTl/iVhEI4qyjlEPZ1BMjuNnqjC3N0UNnmSdpPWFic=";
   };
 
   buildInputs = [ perl ];

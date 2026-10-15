@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mrkite";
     repo = "minutor";
     tag = finalAttrs.version;
-    sha256 = "sha256-w6BsNPtXyyyKi+VdjBm6fD2Dz10lq9QrMbtENkbE3f0=";
+    hash = "sha256-w6BsNPtXyyyKi+VdjBm6fD2Dz10lq9QrMbtENkbE3f0=";
   };
 
   preConfigure = ''

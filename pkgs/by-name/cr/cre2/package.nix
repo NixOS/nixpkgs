@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "marcomaggi";
     repo = "cre2";
     rev = "v${finalAttrs.version}";
-    sha256 = "1h9jwn6z8kjf4agla85b5xf7gfkdwncp0mfd8zwk98jkm8y2qx9q";
+    hash = "sha256-OHUsPKpTojT5R81VcJnlbbp3XC+rIEWfIk5O9I3lMsE=";
   };
 
   patches = [

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "testssl";
     repo = "testssl.sh";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mZBERNCgLga13+BtzkpXNurDz9ZI6p9flfr+W7WoTiU=";
+    hash = "sha256-mZBERNCgLga13+BtzkpXNurDz9ZI6p9flfr+W7WoTiU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

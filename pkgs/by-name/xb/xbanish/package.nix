@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jcs";
     repo = "xbanish";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jwCoJ2shFGuJHhmXmlw/paFpMl5ARD6e5zDnDZHlsoo=";
+    hash = "sha256-jwCoJ2shFGuJHhmXmlw/paFpMl5ARD6e5zDnDZHlsoo=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

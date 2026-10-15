@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "zpaq";
     repo = "zpaq";
     rev = finalAttrs.version;
-    sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
+    hash = "sha256-5F8xrR+PFsY4XuXpf2YbVN2LKMUMUpHfI4zvlx7NhGw=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "muellan";
     repo = "clipp";
     rev = "v${finalAttrs.version}";
-    sha256 = "0rq80ba2krwzvcg4r2g1al88453c7lz6ziri2s1ygv8inp9r775s";
+    hash = "sha256-upyT07UR7eeDFjHHbz49bBSCEFXhiUwe25/nKdQCCGc=";
   };
 
   installPhase = ''

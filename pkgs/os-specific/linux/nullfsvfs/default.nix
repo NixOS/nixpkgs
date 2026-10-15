@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "abbbi";
     repo = "nullfsvfs";
     rev = "v${version}";
-    sha256 = "sha256-BvixSZN9GqFS4llaiKHfkLb21+qG74YtyNb8bUP0jdU=";
+    hash = "sha256-BvixSZN9GqFS4llaiKHfkLb21+qG74YtyNb8bUP0jdU=";
   };
 
   hardeningDisable = [ "pic" ];

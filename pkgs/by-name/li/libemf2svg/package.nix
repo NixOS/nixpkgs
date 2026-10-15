@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kakwa";
     repo = "libemf2svg";
     rev = finalAttrs.version;
-    sha256 = "04g6dp5xadszqjyjl162x26mfhhwinia65hbkl3mv70bs4an9898";
+    hash = "sha256-KKFkFdELnF0HnQsWo6KNHEJXjejCBCq9xF831ctt5hE=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -12,7 +12,7 @@ buildGoModule {
     owner = "slashdoom";
     repo = "aruba_exporter";
     rev = "ca30cd687f949c9b0ac4e451c17583e6a9eb835a";
-    sha256 = "sha256-U4J+j3AGNwniA+YmeWopAus/pxQIe6WIZWQJgO/0uJE=";
+    hash = "sha256-U4J+j3AGNwniA+YmeWopAus/pxQIe6WIZWQJgO/0uJE=";
   };
 
   vendorHash = "sha256-1XYwrajzKoWOPg4aKE5rJVjWZ9RWBKD/kANOZHtWJCk=";

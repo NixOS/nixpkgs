@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "dhobsd";
     repo = "castty";
     rev = "333a2bafd96d56cd0bb91577ae5ba0f7d81b3d99";
-    sha256 = "0p84ivwsp8ds4drn0hx2ax04gp0xyq6blj1iqfsmrs4slrajdmqs";
+    hash = "sha256-GtcmVaaa6Fy1wzFIugz2HdxHQFeiQ2BzI7qhq/mOBF0=";
   };
 
   buildInputs = [

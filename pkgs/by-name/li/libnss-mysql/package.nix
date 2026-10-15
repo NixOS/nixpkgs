@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "saknopper";
     repo = "libnss-mysql";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/oeUe94NfOzKrHhiIEW0cMXP5pAqPHulRO82JwPrv5I=";
+    hash = "sha256-/oeUe94NfOzKrHhiIEW0cMXP5pAqPHulRO82JwPrv5I=";
   };
 
   nativeBuildInputs = [

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "jandelgado";
     repo = "rabtap";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1cNwNqbvF+i5GgzRD3RyFesGjA4/kJWFotPjJC+r/7g=";
+    hash = "sha256-1cNwNqbvF+i5GgzRD3RyFesGjA4/kJWFotPjJC+r/7g=";
   };
 
   vendorHash = "sha256-fp605VqspavEFQESP7yY6VG80ZpV6h33uhj2hoQiDKk=";

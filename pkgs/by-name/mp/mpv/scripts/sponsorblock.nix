@@ -16,7 +16,7 @@ buildLua {
     owner = "po5";
     repo = "mpv_sponsorblock";
     rev = "7785c1477103f2fafabfd65fdcf28ef26e6d7f0d";
-    sha256 = "sha256-iUXaTWWFEdxhxClu2NYbQcThlvYty3A2dEYGooeAVAQ=";
+    hash = "sha256-iUXaTWWFEdxhxClu2NYbQcThlvYty3A2dEYGooeAVAQ=";
   };
 
   patches = [

@@ -13,7 +13,7 @@ buildGoModule {
     owner = "himananiito";
     repo = "livedl";
     rev = "a8720f1e358e5b0ade6fdeb8aacc00781e6cc504";
-    sha256 = "1zax215jp6sl47m8ahssyyrbzn96dh74srq9g61jc76sq10xg329";
+    hash = "sha256-SYzXQcDaHCaDeQlnTQ5sJtm/svdaQ4XqIVSbK0sQXf0=";
   };
 
   modRoot = "src";

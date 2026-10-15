@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "morgant";
     repo = "mlvwm";
     rev = finalAttrs.version;
-    sha256 = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
+    hash = "sha256-ElKmi+ANuB3LPwZTMcr5HEMESjDwENbYnNIGdRP24d0=";
   };
 
   postPatch = ''

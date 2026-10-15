@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "emikulic";
     repo = "darkhttpd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-d5pDUY1EbVjykb4in4hhbgbjIXJtj133nRAQ84ASicQ=";
+    hash = "sha256-d5pDUY1EbVjykb4in4hhbgbjIXJtj133nRAQ84ASicQ=";
   };
 
   enableParallelBuilding = true;

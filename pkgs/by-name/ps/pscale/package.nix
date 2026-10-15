@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "planetscale";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eROK3Bqp72rhUTUUZZlIUbMLTNmjEUXw2TBSsNVLONQ=";
+    hash = "sha256-eROK3Bqp72rhUTUUZZlIUbMLTNmjEUXw2TBSsNVLONQ=";
   };
 
   vendorHash = "sha256-IkqXij3i3nUCHfu36yS7e4+5PM6ZHmPuYbgVo7Uv0X8=";

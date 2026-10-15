@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nfc-tools";
     repo = "mfoc";
     rev = "mfoc-${finalAttrs.version}";
-    sha256 = "0hbg1fn4000qdg1cfc7y8l0vh1mxlxcz7gapkcq54xp2l6kk1z65";
+    hash = "sha256-xfwwp6HidlIwm1e981mnvQa4AUX+MMfCaxgAQKwLb0E=";
   };
 
   patches = [

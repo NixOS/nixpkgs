@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit owner;
     repo = "cargo-llvm-cov";
     rev = "v${version}";
-    sha256 = "sha256-tPW36leXKuJCaZYOXF0mTd+WYHfGnHNg8foSQ2N+8kU=";
+    hash = "sha256-tPW36leXKuJCaZYOXF0mTd+WYHfGnHNg8foSQ2N+8kU=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back

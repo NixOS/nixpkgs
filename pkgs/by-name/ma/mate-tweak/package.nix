@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "ubuntu-mate";
     repo = "mate-tweak";
     rev = version;
-    sha256 = "emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
+    hash = "sha256-emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
   };
 
   nativeBuildInputs = [

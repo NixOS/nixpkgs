@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "skk-dev";
     repo = "skktools";
     rev = "skktools-${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "1zway8jsm18279xq8zlpr84iqiw373x3v0ysay74n9bjqxbl234a";
+    hash = "sha256-igxBV8dyJUuOV9qDPfo4g0ccCcqXfoR7OgKFqiXyiv8=";
   };
   # # See "12.2. Package naming"
   # name = "skktools-unstable-${finalAttrs.version}";

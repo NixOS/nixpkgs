@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "logological";
     repo = "gpp";
     rev = "96c5dd8905384ea188f380f51d24cbd7fd58f642";
-    sha256 = "0bvhnx3yfhbfiqqhhz6k2a596ls5rval7ykbp3jl5b6062xj861b";
+    hash = "sha256-KxgkuzDArELluGv6Q9XORVOTihLTfAgxjm5B50e3cC8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

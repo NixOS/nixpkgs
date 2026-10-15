@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "machinezone";
     repo = "tcpkali";
     rev = "v${version}";
-    sha256 = "09ky3cccaphcqc6nhfs00pps99lasmzc2pf5vk0gi8hlqbbhilxf";
+    hash = "sha256-rtMI18IUovjA3MVdwX7Viqak7wVAO2gNwwxexRgbfiY=";
   };
   postPatch = ''
     sed -i -e '/sys\/sysctl\.h/d' src/tcpkali_syslimits.c

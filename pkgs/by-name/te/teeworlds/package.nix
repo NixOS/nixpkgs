@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "teeworlds";
     repo = "teeworlds";
     rev = finalAttrs.version;
-    sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
+    hash = "sha256-n+PVbFqiF6/OnjTuV+yhOIR/IPRTAy//R8u8GqueKdA=";
     fetchSubmodules = true;
   };
 

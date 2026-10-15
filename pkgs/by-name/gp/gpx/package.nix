@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "markwal";
     repo = "GPX";
     rev = finalAttrs.version;
-    sha256 = "1izs8s5npkbfrsyk17429hyl1vyrbj9dp6vmdlbb2vh6mfgl54h8";
+    hash = "sha256-CJJCn6sGbrEWbXWb25Jc2e9APUyCnDC9zm7Na4tG+sc=";
   };
 
   meta = {

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Vifon";
     repo = "deer";
     rev = "v${finalAttrs.version}";
-    sha256 = "1xnbnbi0zk2xsyn8dqsmyxqlfnl36pb1wwibnlp0dxixw6sfymyl";
+    hash = "sha256-1FfvtOE99gYutStyHtY1g1pHcfdV44as113MD+Kyy/Y=";
   };
 
   strictDeps = true;

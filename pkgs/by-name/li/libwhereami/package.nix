@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.5.0";
 
   src = fetchFromGitHub {
-    sha256 = "05fc28dri2h858kxbvldk5b6wd5is3fjcdsiqj3nxf95i66bb3xp";
+    hash = "sha256-t4+1jIkluW6HxFE3Jt3QsTRuVpmN7tUnKgiKmBsSzBU=";
     rev = finalAttrs.version;
     repo = "libwhereami";
     owner = "puppetlabs";

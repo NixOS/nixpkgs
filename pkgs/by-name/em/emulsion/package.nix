@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ArturKovacs";
     repo = "emulsion";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+C4YB5usNKfNydyEyIvaScnjK0h/PKN1x8gnt7Lz2kQ=";
+    hash = "sha256-+C4YB5usNKfNydyEyIvaScnjK0h/PKN1x8gnt7Lz2kQ=";
   };
 
   cargoHash = "sha256-i+lSUSgq98iT9OzsdkZgRidLszc6mJJA1b1Jfq+yk5s=";

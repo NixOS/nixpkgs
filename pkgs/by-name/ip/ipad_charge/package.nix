@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2015-02-03";
 
   src = fetchFromGitHub {
-    sha256 = "0f40hqx1dbqpwrhyf42h5982jwqv8j5zp5hwwakz6600hyqvnnz7";
+    hash = "sha256-51u7sYcAGPOn4hyW+4tEG3MpUCpQEOdh5hevFjqGgDg=";
     rev = "bb24e1c3a79016cfdffb9d28189485766d655ec6";
     repo = "ipad_charge";
     owner = "mkorenkov";

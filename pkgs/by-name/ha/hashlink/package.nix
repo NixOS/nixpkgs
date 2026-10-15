@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "HaxeFoundation";
     repo = "hashlink";
     rev = version;
-    sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
+    hash = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
   # backport of https://github.com/HaxeFoundation/hashlink/pull/767

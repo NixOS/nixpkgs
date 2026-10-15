@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "vadimi";
     repo = "grpc-client-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7tkVEgxYd41uk2zUOVu/pjAOlrZsmRsZb/qCp3w3M4A=";
+    hash = "sha256-7tkVEgxYd41uk2zUOVu/pjAOlrZsmRsZb/qCp3w3M4A=";
   };
 
   vendorHash = "sha256-bZI96h+hHSWBrexM41tPpcc1cPFbY2/s0+ZiO38sycw=";

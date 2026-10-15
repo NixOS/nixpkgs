@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "nab138";
     repo = "iloader";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-97CTooLPAhYt9tzPGWyJNyJcUqvomR1eaSpWnKleMh4=";
+    hash = "sha256-97CTooLPAhYt9tzPGWyJNyJcUqvomR1eaSpWnKleMh4=";
   };
 
   nodeModules = stdenv.mkDerivation {

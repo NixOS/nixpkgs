@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bmc";
     repo = "daemonize";
     rev = "release-${finalAttrs.version}";
-    sha256 = "1e6LZXf/lK7sB2CbXwOg7LOi0Q8IBQNAa4d7rX0Ej3A=";
+    hash = "sha256-1e6LZXf/lK7sB2CbXwOg7LOi0Q8IBQNAa4d7rX0Ej3A=";
   };
 
   patches = [

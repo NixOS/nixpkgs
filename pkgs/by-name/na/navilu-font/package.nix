@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "aravindavk";
     repo = "Navilu";
     rev = "v${version}";
-    sha256 = "1vm6n04siaa0zf6jzp5s2gzgr2qxs3vdnmcmg4dcy07py2kd2fla";
+    hash = "sha256-ijrRpvD3AM8aeZVV2/bQHYv8/hO63C+N+0CpqAmwpu4=";
   };
 
   nativeBuildInputs = [ fontforge ];

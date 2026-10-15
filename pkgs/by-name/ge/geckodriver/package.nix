@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "mozilla";
     repo = "geckodriver";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-LnfJmiV4SJpFBXDAJmwbHKv6RvO40e7/3Lm6Jc6YA40=";
+    hash = "sha256-LnfJmiV4SJpFBXDAJmwbHKv6RvO40e7/3Lm6Jc6YA40=";
   };
 
   cargoHash = "sha256-zNwlQ2CsDHQnFog59jKFAxVaNK0/8hUts6NRkFVKCGk=";

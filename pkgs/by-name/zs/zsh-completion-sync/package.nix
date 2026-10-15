@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "BronzeDeer";
     repo = "zsh-completion-sync";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1EzK6FeTBpierHP9/rfU6ZZJN0xlzhz3QCB9Uq1sZ1k=";
+    hash = "sha256-1EzK6FeTBpierHP9/rfU6ZZJN0xlzhz3QCB9Uq1sZ1k=";
   };
 
   strictDeps = true;

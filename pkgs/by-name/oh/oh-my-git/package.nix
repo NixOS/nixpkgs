@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "git-learning-game";
     repo = "oh-my-git";
     rev = version;
-    sha256 = "sha256-XqxliMVU55D5JSt7Yo5btvZnnTlagSukyhXv6Akgklo=";
+    hash = "sha256-XqxliMVU55D5JSt7Yo5btvZnnTlagSukyhXv6Akgklo=";
   };
 
   nativeBuildInputs = [

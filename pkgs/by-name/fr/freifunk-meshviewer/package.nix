@@ -16,7 +16,7 @@ buildNpmPackage (finalAttrs: {
     owner = "freifunk";
     repo = "meshviewer";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ni5Ln9K+Bqq88oi+nwOyCqibJz3TesVreHDWEec6Xzk=";
+    hash = "sha256-ni5Ln9K+Bqq88oi+nwOyCqibJz3TesVreHDWEec6Xzk=";
   };
 
   npmDepsHash = "sha256-gdGaJSwT5EYcrL/VBId4c6VFmyEbQ9v2LEJP1jc8yO8=";

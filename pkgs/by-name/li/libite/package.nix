@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "troglobit";
     repo = "libite";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hm3cd7UnskfwEvcMRGHei8KLt0k+WlCzB1LMnZdYo+g=";
+    hash = "sha256-hm3cd7UnskfwEvcMRGHei8KLt0k+WlCzB1LMnZdYo+g=";
   };
 
   nativeBuildInputs = [

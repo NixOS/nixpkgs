@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jeffmhubbard";
     repo = "multilockscreen";
     rev = "v${finalAttrs.version}";
-    sha256 = "1bfpbazvhaz9x356nsghz0czysh9b75g79cd9s35v0x0rrzdr9qj";
+    hash = "sha256-Eqfcfs6gg12GTo2l88pZCWr/GfjwaWvK6OkruL9a160=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

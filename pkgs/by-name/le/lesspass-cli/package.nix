@@ -23,7 +23,7 @@ buildPythonApplication (finalAttrs: {
     owner = repo;
     repo = repo;
     rev = finalAttrs.version;
-    sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
+    hash = "sha256-sIkPd5+zrGSaBp9/NRPh9D20tj9CopUmFicnjYiY34g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cli";

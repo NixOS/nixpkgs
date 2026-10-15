@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "SKS-Keyserver";
     repo = "sks-keyserver";
     rev = "c3ba6d5abb525dcb84745245631c410c11c07ec1";
-    sha256 = "0fql07sc69hv6jy7x5svb19977cdsz0p1j8wv53k045a6v7rw1jw";
+    hash = "sha256-XAaezzaqEDBH2RzJcMHXjZ2TUlhbl368NBsmw/QBFDs=";
   };
 
   # pkgs.db provides db_stat, not db$major.$minor_stat

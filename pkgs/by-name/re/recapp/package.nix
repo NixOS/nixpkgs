@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "amikha1lov";
     repo = "RecApp";
     rev = "v${finalAttrs.version}";
-    sha256 = "08bpfcqgw0lj6j7y5b2i18kffawlzp6pfk4wdpmk29vwmgk9s9yc";
+    hash = "sha256-zCed5qt8JzHrbZxMd839lCvnJgpRrOKPNJIC/jBzdyE=";
   };
 
   postPatch = ''

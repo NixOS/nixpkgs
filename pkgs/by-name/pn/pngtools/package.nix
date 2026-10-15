@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "mikalstill";
     repo = "pngtools";
     rev = "1ccca3a0f3f6882661bbafbfb62feb774ca195d1";
-    sha256 = "sha256-W1XofOVTyfA7IbxOnTkWdOOZ00gZ4e0GOYl7nMtLIJk=";
+    hash = "sha256-W1XofOVTyfA7IbxOnTkWdOOZ00gZ4e0GOYl7nMtLIJk=";
   };
 
   buildInputs = [ libpng12 ];

@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenIDC";
     repo = "cjose";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vDvCxMpgCdteGvNxy2HCNRaxbhxOuTadL0nM2wkFHtk=";
+    hash = "sha256-vDvCxMpgCdteGvNxy2HCNRaxbhxOuTadL0nM2wkFHtk=";
   };
 
   patches = [

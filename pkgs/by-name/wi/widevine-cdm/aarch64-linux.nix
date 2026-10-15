@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AsahiLinux";
     repo = "widevine-installer";
     rev = "7a3928fe1342fb07d96f61c2b094e3287588958b";
-    sha256 = "sha256-XI1y4pVNpXS+jqFs0KyVMrxcULOJ5rADsgvwfLF6e0Y=";
+    hash = "sha256-XI1y4pVNpXS+jqFs0KyVMrxcULOJ5rADsgvwfLF6e0Y=";
   };
 
   src = fetchurl {

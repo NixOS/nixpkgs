@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flann-lib";
     repo = "flann";
     rev = finalAttrs.version;
-    sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
+    hash = "sha256-TD4z3PJL99qLSA3TY2IayGwCvIxrByMDUUkX+ZVNj44=";
   };
 
   patches = [

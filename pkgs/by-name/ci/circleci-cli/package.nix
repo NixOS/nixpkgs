@@ -16,7 +16,7 @@ buildGo127Module (finalAttrs: {
     owner = "CircleCI-Public";
     repo = "circleci-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UzstpYb1YJ9LRk4FzL43suIUSJbZkUo9KlOb1h2CNhk=";
+    hash = "sha256-UzstpYb1YJ9LRk4FzL43suIUSJbZkUo9KlOb1h2CNhk=";
   };
 
   vendorHash = "sha256-JhQkQi9JLHqo6gW9gvdwPqb0XRBw0XH/b3oUcZC5giw=";

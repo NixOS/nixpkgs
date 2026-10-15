@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Mange";
     repo = "tydra";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
+    hash = "sha256-bH/W54b7UHdkbgLXAd+l5I6UAKjWDMW+I5mfwT4yEEY=";
   };
 
   cargoHash = "sha256-sFNrpddhsqxy7HtCXV78oacyNzrTeM0rUcL7qgeJTcM=";

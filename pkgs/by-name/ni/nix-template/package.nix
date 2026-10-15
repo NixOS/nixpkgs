@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "jonringer";
     repo = "nix-template";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
+    hash = "sha256-42u5FmTIKHpfQ2zZQXIrFkAN2/XvU0wWnCRrQkQzcNI=";
   };
 
   cargoHash = "sha256-cLSGWOyBQLv235TeYqSVg/f0Zmcnpj+RshINN69JYEU=";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "louisdx";
     repo = "cxx-prettyprint";
     inherit rev;
-    sha256 = "1bp25yw8fb0mi432f72ihfxfj887gi36b36fpv677gawm786l7p1";
+    hash = "sha256-4R5q0KlcvXPMvs6MZUZ8ByHpuoNRHCcGiRUsh7gv4q4=";
   };
 
   installPhase = ''

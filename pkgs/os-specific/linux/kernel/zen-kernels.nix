@@ -27,7 +27,7 @@ buildLinux (
       owner = "zen-kernel";
       repo = "zen-kernel";
       rev = "v${version}-${suffix}";
-      sha256 = "10l5sx18l4kim1fs3jfqxywxp3xz7x4wvd7n632vldjscwwsf430";
+      hash = "sha256-YBCnOWdaNrrFMPa0zUk/v4/bue/YyaFdqHESikLXhYI=";
     };
 
     # This is based on the following source:

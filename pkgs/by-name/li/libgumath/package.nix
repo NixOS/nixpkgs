@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "xnd-project";
     repo = "libgumath";
     rev = "360ed454105ac5615a7cb7d216ad25bc4181b876";
-    sha256 = "1wprkxpmjrk369fpw8rbq51r7jvqkcndqs209y7p560cnagmsxc6";
+    hash = "sha256-hnVdn7IMmHKPT0Bo3CybeMuTQ8ErI35dMmNmWW+f+fI=";
   };
 
   buildInputs = [
