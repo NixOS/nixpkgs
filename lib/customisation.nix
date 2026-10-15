@@ -8,30 +8,29 @@ let
     ;
   inherit (lib)
     all
-    attrValues
-    functionArgs
-    isFunction
-    mirrorFunctionArgs
-    isAttrs
-    setFunctionArgs
-    optionalAttrs
     attrNames
-    filter
-    elemAt
+    attrValues
     concatStringsSep
-    sortOn
-    take
-    length
+    deepSeq
+    elemAt
+    extends
+    filter
+    flatten
+    functionArgs
     head
-    pipe
+    id
+    isAttrs
     isDerivation
+    isFunction
+    length
     listToAttrs
     mapAttrs
+    mirrorFunctionArgs
+    optionalAttrs
+    pipe
     seq
-    flatten
-    deepSeq
-    extends
-    id
+    sortOn
+    take
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -193,8 +192,9 @@ rec {
           }
         else if isFunction result then
           # Transform the result into a functor while propagating its arguments
-          setFunctionArgs result (functionArgs result)
-          // {
+          {
+            __functor = self: result;
+            __functionArgs = functionArgs result;
             override = overrideArgs;
           }
         else
