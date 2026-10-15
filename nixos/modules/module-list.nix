@@ -982,6 +982,7 @@
   ./services/misc/polaris.nix
   ./services/misc/portunus.nix
   ./services/misc/pufferpanel.nix
+  ./services/misc/pulsarr.nix
   ./services/misc/pykms.nix
   ./services/misc/radicle.nix
   ./services/misc/realmd.nix

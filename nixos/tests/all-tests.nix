@@ -1586,6 +1586,7 @@ in
   pt2-clone = runTest ./pt2-clone.nix;
   public-inbox = runTest ./public-inbox.nix;
   pufferpanel = runTest ./pufferpanel.nix;
+  pulsarr = runTest ./pulsarr.nix;
   pulseaudio = discoverTests (import ./pulseaudio.nix);
   pulseaudio-tcp = runTest ./pulseaudio-tcp.nix;
   pumpkin = runTest ./pumpkin.nix;

@@ -8,6 +8,7 @@
   cctools,
   darwin,
   rcodesign,
+  nixosTests,
 }:
 let
   platforms = {
@@ -60,6 +61,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests = lib.optionalAttrs stdenvNoCC.hostPlatform.isLinux {
+      inherit (nixosTests) pulsarr;
+    };
     sources = lib.mapAttrs (
       system: platform:
       fetchurl {
