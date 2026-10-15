@@ -355,6 +355,7 @@ in
   };
 
   meta = {
+    doc = ./wanderer.md;
     maintainers = with lib.maintainers; [
       charludo
       maartenbehn
