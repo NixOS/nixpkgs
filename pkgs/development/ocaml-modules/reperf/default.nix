@@ -14,7 +14,7 @@ buildDunePackage {
     owner = "bryphe";
     repo = "reperf";
     rev = "68ef2f96899c09e6ac7d929b0375f7a806aee067";
-    sha256 = "sha256-ASujTsH4eDAYLNalB9Xt1p3C8x+FI0kMldZBYaXMCWc=";
+    hash = "sha256-ASujTsH4eDAYLNalB9Xt1p3C8x+FI0kMldZBYaXMCWc=";
   };
 
   postPatch = ''

@@ -10,7 +10,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/Chris00/ocaml-csv/releases/download/${finalAttrs.version}/csv-${finalAttrs.version}.tbz";
-    sha256 = "13m9n8mdss6jfbiw7d5bybxn4n85vmg4zw7dc968qrgjfy0w9zhk";
+    hash = "sha256-E/7EgXfyZYxMYu3wT17dBVli+/KrtMPjctJo3SqyqY4=";
   };
 
   preConfigure = ''

@@ -23,7 +23,7 @@ let
           owner = "garrigue";
           repo = "lablgtk";
           rev = version;
-          sha256 = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
+          hash = "sha256-69Svno0qLaUifMscnVuPUJlCo9d8Lee+1qiYx34G3Po=";
         };
         env = { };
         buildInputs = [ camlp-streams ];
@@ -33,7 +33,7 @@ let
         version = "2.18.5";
         src = fetchurl {
           url = "https://forge.ocamlcore.org/frs/download.php/1627/lablgtk-2.18.5.tar.gz";
-          sha256 = "0cyj6sfdvzx8hw7553lhgwc0krlgvlza0ph3dk9gsxy047dm3wib";
+          hash = "sha256-K/JR2yHAd/3SbANeoD7dj+YJGH+QjlIOh6j/3Zw20jM=";
         };
         # Workaround build failure on -fno-common toolchains like upstream
         # gcc-10. Otherwise build fails as:

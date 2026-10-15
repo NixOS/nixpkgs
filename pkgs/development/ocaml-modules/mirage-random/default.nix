@@ -13,7 +13,7 @@ buildDunePackage (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-random/releases/download/v${finalAttrs.version}/mirage-random-v${finalAttrs.version}.tbz";
-    sha256 = "sha256-Sf4/KB1kMMwXI+yr5H/JuOmynYPNXwlk9dAA+gFAZs8=";
+    hash = "sha256-Sf4/KB1kMMwXI+yr5H/JuOmynYPNXwlk9dAA+gFAZs8=";
   };
 
   propagatedBuildInputs = [ cstruct ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "gjaldon";
     repo = "simple_diff";
     rev = "v${version}";
-    sha256 = "sha256-OaKECUBCCt9KfdRJf3HcXTUJVxKKdYtnzOHpMPOllrk=";
+    hash = "sha256-OaKECUBCCt9KfdRJf3HcXTUJVxKKdYtnzOHpMPOllrk=";
   };
 
   nativeBuildInputs = [

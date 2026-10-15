@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "savonet";
     repo = "ocaml-faad";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3ayKZhgJAgsoOqn0InSrM5f3TImRHOQMtWETICo4t3o=";
+    hash = "sha256-3ayKZhgJAgsoOqn0InSrM5f3TImRHOQMtWETICo4t3o=";
   };
 
   nativeBuildInputs = [ pkg-config ];

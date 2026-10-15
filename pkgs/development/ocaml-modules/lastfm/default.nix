@@ -16,7 +16,7 @@ buildDunePackage (finalAttrs: {
     owner = "savonet";
     repo = "ocaml-lastfm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1te9B2+sUmkT/i2K5ueswWAWpvJf9rXob0zR4CMOJlg=";
+    hash = "sha256-1te9B2+sUmkT/i2K5ueswWAWpvJf9rXob0zR4CMOJlg=";
   };
 
   propagatedBuildInputs = [

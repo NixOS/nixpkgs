@@ -17,7 +17,7 @@ buildDunePackage rec {
     owner = "xapi-project";
     repo = "ocaml-xenstore-clients";
     rev = "v${version}";
-    sha256 = "sha256-tnz+dZ3EdzDVTGAe4y7OveXuVEUSh1aJxJabHM4zHTI=";
+    hash = "sha256-tnz+dZ3EdzDVTGAe4y7OveXuVEUSh1aJxJabHM4zHTI=";
   };
 
   propagatedBuildInputs = [
