@@ -15,6 +15,7 @@
   timeslot,
   click,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
   gitUpdater,
 }:
 
@@ -63,12 +64,10 @@ buildPythonPackage rec {
     "platformdirs"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    # Fake home folder for tests that write to $HOME
-    export HOME="$TMPDIR"
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "aw_core" ];
 
