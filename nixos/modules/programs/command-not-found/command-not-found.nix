@@ -61,20 +61,20 @@ in
   config = lib.mkIf cfg.enable {
     programs.bash.interactiveShellInit = ''
       command_not_found_handle() {
-        '${cfg.package}/bin/command-not-found' "$@"
+        '${lib.getExe cfg.package}' "$@"
       }
     '';
 
     programs.zsh.interactiveShellInit = ''
       command_not_found_handler() {
-        '${cfg.package}/bin/command-not-found' "$@"
+        '${lib.getExe cfg.package}/bin/command-not-found' "$@"
       }
     '';
 
     # NOTE: Fish by itself checks for nixos command-not-found, let's instead makes it explicit.
     programs.fish.interactiveShellInit = ''
       function fish_command_not_found
-         "${cfg.package}/bin/command-not-found" $argv
+         "${lib.getExe cfg.package}/bin/command-not-found" $argv
       end
     '';
 
