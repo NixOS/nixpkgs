@@ -36,7 +36,7 @@ in
     package = lib.mkPackageOption pkgs "command-not-found" {
       extraDescription = ''
         The package used by `command-not-found' module.
-        You can use a command-not-found that has a different dbPath if you with, for example.
+        For example, you can use a `command-not-found` that has a different `dbPath` if you wish.
       '';
     };
 
