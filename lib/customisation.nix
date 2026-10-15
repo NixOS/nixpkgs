@@ -166,7 +166,7 @@ rec {
           # Re-call the function but with different arguments
           overrideArgs = mirrorArgs (
             /**
-                    Change the arguments with which a certain function is called.
+              Change the arguments with which a certain function is called.
 
               In some cases, you may find a list of possible attributes to pass in this function's `__functionArgs` attribute, but it will not be complete for an original function like `args@{foo, ...}: ...`, which accepts arbitrary attributes.
 
