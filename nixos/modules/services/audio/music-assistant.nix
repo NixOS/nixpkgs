@@ -57,7 +57,11 @@ in
       default = false;
       description = ''
         Whether to open required ports for the configured providers.
-        Currently airplay and sendspin need port to be opened to function.
+        Currently AirPlay, Sendspin, Snapcast, Squeezelite and Spotify Connect need port(s) to be opened to properly function.
+
+        ::: {.note}
+        AirPlay and Spotify Connect must open all random high UDP or TCP ports respectively to function.
+        :::
       '';
     };
 
@@ -104,8 +108,14 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts =
         lib.optional cfg.enable 8097 # Music Assistant stream port
-        ++ lib.optional (lib.elem "airplay" cfg.providers) 7000
+        # https://github.com/music-assistant/server/blob/dev/music_assistant/providers/airplay/pairing.py#L191
+        ++ lib.optionals (lib.elem "airplay" cfg.providers) [
+          5000 # AirPlay 1/RAOP
+          7000 # AirPlay 2
+        ]
+        # https://www.music-assistant.io/player-support/sendspin/#connecting-external-sendspin-clients
         ++ lib.optional (lib.elem "sendspin" cfg.providers) 8927
+        # https://www.music-assistant.io/player-support/snapcast/#known-issues--notes
         ++ lib.optional (lib.elem "snapcast" cfg.providers) 1780
         ++ lib.optionals (lib.elem "squeezelite" cfg.providers) [
           # https://lyrion.org/reference/slimproto-protocol/
@@ -113,6 +123,15 @@ in
           # https://lyrion.org/reference/cli/using-the-cli/
           9000 # Slimproto JSON-RPC
           9090 # Slimproto CLI
+        ];
+      allowedTCPPortRanges =
+        # Music Assistant does not configure the zeroconf_port, so all ephemeral ports are used
+        # https://github.com/devgianlu/go-librespot#example-minimal-zeroconf-configuration
+        lib.optionals (lib.elem "spotify_connect" cfg.providers) [
+          {
+            from = 32768;
+            to = 65535;
+          }
         ];
       allowedUDPPorts = lib.optionals (lib.elem "squeezelite" cfg.providers) [
         # https://lyrion.org/reference/slimproto-protocol/
