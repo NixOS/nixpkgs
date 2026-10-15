@@ -2531,6 +2531,16 @@
     };
   };
 
+  rake = {
+    version = "0.7.0";
+    url = "github:rakelang/tree-sitter-rake/v0.7.0";
+    hash = "sha256-PQyaIoEMzWZoSf6fvzSOZoltzpxDdCNUmMpWjmz7rho=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ kaistarkk ];
+    };
+  };
+
   razor = {
     version = "0-unstable-2026-04-20";
     url = "github:tris203/tree-sitter-razor";
