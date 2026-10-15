@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -38,18 +39,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Disable upstream's rustflags overrides to avoid linker and CPU target issues
   postPatch = ''
     rm .cargo/config.toml
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # gpui_ce_apple generates Metal shader bindings from its sibling gpui
+    # directory, but cargo vendoring stores that crate as gpui-ce-<version>.
+    for apple in "$cargoDepsCopy"/source-git-*/gpui_ce_apple-[0-9]*; do
+      apple_parent=$(dirname "$apple")
+      ln -s "$apple_parent"/gpui-ce-[0-9]* "$apple_parent/gpui"
+    done
   '';
 
   nativeBuildInputs = [
     pkg-config
     desktop-file-utils
     makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Required by gpui_ce_media, which generates CoreMedia bindings with bindgen
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     fontconfig
     freetype
     zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxcb
     libxkbcommon
   ];
@@ -91,24 +106,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  postFixup = ''
-    patchelf $out/bin/gitcomet --add-rpath ${
-      lib.makeLibraryPath [
-        libGL
-        vulkan-loader
-        wayland
-      ]
-    }
-
-    wrapProgram $out/bin/gitcomet \
-      --prefix PATH : "${
-        lib.makeBinPath [
-          git
-          xdg-utils
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf $out/bin/gitcomet --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          vulkan-loader
+          wayland
         ]
-      }" \
-      --set-default GITCOMET_NO_UPDATE_CHECK 1
-  '';
+      }
+
+    ''
+    + ''
+      wrapProgram $out/bin/gitcomet \
+        --prefix PATH : "${
+          lib.makeBinPath ([ git ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xdg-utils ])
+        }" \
+        --set-default GITCOMET_NO_UPDATE_CHECK 1
+    '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -144,6 +159,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       havunen
     ];
     mainProgram = "gitcomet";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
