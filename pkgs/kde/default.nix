@@ -101,7 +101,7 @@ let
       }
       // (lib.optionalAttrs config.allowAliases {
         kgamma = throw "kdePackages.kgamma was removed as it only worked in the X11 session, which is EOL upstream";
-        kwin-x11 = throw "kdePackages.kgamma was removed as it is EOL upstream";
+        kwin-x11 = throw "kdePackages.kwin-x11 was removed as it is EOL upstream";
         wacomtablet = throw "kdePackages.wacomtablet was removed as it only worked in the X11 session, which is EOL upstream";
       })
     );

@@ -82,13 +82,13 @@
     "vendorHash": "sha256-pel9JeZDAw4LVMf8+a2f9fnj1gTlYSzyLYMqIRQBECI="
   },
   "auth0_auth0": {
-    "hash": "sha256-jcEII43EZeBOzr8rxX8do4b2hnPKMsCt8f1wkRTq57E=",
+    "hash": "sha256-VALASnJ+uoHJHs6HyVJZ8NvN1YAPgurQykWQtpWj+HU=",
     "homepage": "https://registry.terraform.io/providers/auth0/auth0",
     "owner": "auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v1.58.1",
+    "rev": "v1.59.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-Exa05oF9tplBq/m7rfLPOJQkoarw8MW7GcvHe6SSE24="
+    "vendorHash": "sha256-g0Xf5x0vp7eEZxC++3wMofpuvUPE0oGPJBuKL7BwGus="
   },
   "aviatrixsystems_aviatrix": {
     "hash": "sha256-46djOfAj/5kfeoKLQHbeKefzdGbmlBATR+uN/IaAn8I=",

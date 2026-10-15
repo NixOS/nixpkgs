@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "netgen";
-  version = "1.5.324";
+  version = "1.5.325";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "netgen";
     tag = finalAttrs.version;
-    hash = "sha256-CxM2NBrkPUaeWWczsh9h+09AbXBGSukntul/TYb355A=";
+    hash = "sha256-kIf9ctMaP2GZQob5dRTbynKU4/cRBJ+wK0wf5nAepGM=";
   };
 
   strictDeps = true;
