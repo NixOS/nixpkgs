@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   autoreconfHook,
   pkg-config,
   dpdk,
@@ -18,27 +17,22 @@
   elfutils,
   jansson,
   libnl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "odp-dpdk";
-  version = "1.46.0.0_DPDK_22.11";
+  version = "1.50.0.0_DPDK_24.11";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "OpenDataPlane";
     repo = "odp-dpdk";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9stWGupRSQwUXOdPEQ9Rhkim22p5BBA5Z+2JCYS7Za0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q1xJ5JCrR/RH5Mxnrs6+gR3D7I2BpmPDki0yJ+5N/UE=";
   };
-
-  patches = [
-    ./odp-dpdk_25.03.patch
-    # Fix gcc 15 -Wunterminated-string-initialization errors in test code.
-    (fetchpatch2 {
-      url = "https://github.com/OpenDataPlane/odp-dpdk/commit/56c6bdbe8fe9db4c0441162ec269ef4e1ebd1a6a.patch";
-      hash = "sha256-aj4HuGb0BUxsKtFS3X3gXqBoRVRnKEBNxa/4heWhBlE=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -46,11 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    (dpdk.overrideAttrs {
-      patches = [
-        ./dpdk_25.03.patch
-      ];
-    })
+    dpdk
     intel-ipsec-mb
     libconfig
     libpcap
@@ -70,11 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open Data Plane optimized for DPDK";
     homepage = "https://www.opendataplane.org";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.abuibrahim ];
+    maintainers = with lib.maintainers; [
+      abuibrahim
+      stepbrobd
+    ];
   };
 })
