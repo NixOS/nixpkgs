@@ -7,6 +7,7 @@
   fish,
   zsh,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -61,6 +62,8 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     rm -rf "$out/share/fish"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Shell extension that manages your environment";
