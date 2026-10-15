@@ -241,6 +241,13 @@ stdenv.mkDerivation {
     # macdeployqt fixes
     # FIXME: these should probably be a wrapper
     ./macdeployqt-fixes.patch
+
+    # backport touchpad scrolling fix
+    # FIXME: remove in 6.12.1
+    (fetchpatch {
+      url = "https://github.com/qt/qtbase/commit/ddf0f49dc949beab8485b3bfb8e88616e4bd8076.diff";
+      hash = "sha256-fWTHLU0IQxOknxPitqhHN8VVVPz/tLQlGzF2t7rYdFc=";
+    })
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
