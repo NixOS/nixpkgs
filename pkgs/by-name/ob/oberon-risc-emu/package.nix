@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "pdewacht";
     repo = "oberon-risc-emu";
     rev = "26c8ac5737c71811803c87ad51f1f0d6e62e71fe";
-    sha256 = "1iriix3cfcpbkjb5xjb4ysh592xppgprwzp3b6qhwcx44g7kdvxq";
+    hash = "sha256-uO82zyOkMw6xWeN+nu+7t4tUoPZkyV6WnOsyx0aPMcc=";
   };
 
   buildInputs = [ SDL2 ];

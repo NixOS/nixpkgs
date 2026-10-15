@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "juliosueiras";
     repo = "terraform-lsp";
     rev = "v${finalAttrs.version}";
-    sha256 = "111350jbq0dp0qhk48j12hrlisd1fwzqpcv357igrbqf6ki7r78q";
+    hash = "sha256-GJ184jQOr/ziKWOziz93oelIMxRBIjIhBrcBvCQoI4Q=";
   };
 
   vendorHash = null;

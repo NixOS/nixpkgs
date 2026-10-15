@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "arx";
     repo = "ArxLibertatis";
     rev = finalAttrs.version;
-    sha256 = "GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
+    hash = "sha256-GBJcsibolZP3oVOTSaiVqG2nMmvXonKTp5i/0NNODKY=";
   };
 
   nativeBuildInputs = [

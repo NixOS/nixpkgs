@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Unidata";
     repo = "netcdf-cxx4";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GZ6n7dW3l8Kqrk2Xp2mxRTUWWQj0XEd2LDTG9EtrfhY=";
+    hash = "sha256-GZ6n7dW3l8Kqrk2Xp2mxRTUWWQj0XEd2LDTG9EtrfhY=";
   };
 
   patches = [

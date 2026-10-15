@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nix-community";
     repo = "nix-bundle";
     rev = "v${finalAttrs.version}";
-    sha256 = "0js8spwjvw6kjxz1i072scd035fhiyazixvn84ibdnw8dx087gjv";
+    hash = "sha256-W76DQG+I27YiQXb3+JWP0JUBGtPigBh+l9PwLfnVSEs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

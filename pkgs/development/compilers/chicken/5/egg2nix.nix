@@ -10,7 +10,7 @@ eggDerivation {
     owner = "corngood";
     repo = "egg2nix";
     rev = "chicken-5";
-    sha256 = "1vfnhbcnyakywgjafhs0k5kpsdnrinzvdjxpz3fkwas1jsvxq3d1";
+    hash = "sha256-oQ3ct5ZBKz7d+LfLtr+N2TZ9Z5lAQ6fk434qb9mC1u0=";
   };
 
   pname = "egg2nix";

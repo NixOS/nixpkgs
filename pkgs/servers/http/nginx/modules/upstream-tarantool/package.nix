@@ -14,7 +14,7 @@ mkNginxPlugin (finalAttrs: {
     owner = "tarantool";
     repo = "nginx_upstream_module";
     tag = "v${finalAttrs.version}";
-    sha256 = "0ya4330in7zjzqw57djv4icpk0n1j98nvf0f8v296yi9rjy054br";
+    hash = "sha256-eZECvMwpepPERg64bVGSwYJ5WSRbtlM4/vIfG8EYRHk=";
   };
 
   buildInputs = [

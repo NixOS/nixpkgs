@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "vdr-projects";
     repo = "vdr-plugin-streamdev";
     rev = version;
-    sha256 = "sha256-l+0JHjzuCx/UDbrDz+PSarG6IIwlUcPTgXUDypM4tds=";
+    hash = "sha256-l+0JHjzuCx/UDbrDz+PSarG6IIwlUcPTgXUDypM4tds=";
   };
 
   # configure don't accept argument --prefix

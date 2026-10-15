@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "epasveer";
     repo = "seer";
     rev = "v${version}";
-    sha256 = "sha256-QXVsjTJYGE/7nTKldlOGN6AnW8OthrBJruVbb/HiPdg=";
+    hash = "sha256-QXVsjTJYGE/7nTKldlOGN6AnW8OthrBJruVbb/HiPdg=";
   };
 
   preConfigure = ''

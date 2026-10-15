@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "NIFTI-Imaging";
     repo = "gifti_clib";
     rev = "5eae81ba1e87ef3553df3b6ba585f12dc81a0030";
-    sha256 = "0gcab06gm0irjnlrkpszzd4wr8z0fi7gx8f7966gywdp2jlxzw19";
+    hash = "sha256-KfDfqRS3cf+MSceh/k504KPMSftf35mplTmC+gxYij0=";
   };
 
   cmakeFlags = [

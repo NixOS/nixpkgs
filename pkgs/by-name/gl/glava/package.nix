@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jarcode-foss";
     repo = "glava";
     rev = "v${finalAttrs.version}";
-    sha256 = "0kqkjxmpqkmgby05lsf6c6iwm45n33jk5qy6gi3zvjx4q4yzal1i";
+    hash = "sha256-MVD1PcGky/1HfMbjMuUYtpDKo2HGaVqAX69OfGuXE08=";
   };
 
   buildInputs = [

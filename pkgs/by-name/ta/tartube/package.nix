@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     owner = "axcore";
     repo = "tartube";
     tag = "v${version}";
-    sha256 = "sha256-eeVzDvQn4uBD1lceEHq1fTEDS8cVi92z/ECY8OG4SbI=";
+    hash = "sha256-eeVzDvQn4uBD1lceEHq1fTEDS8cVi92z/ECY8OG4SbI=";
   };
 
   nativeBuildInputs = [

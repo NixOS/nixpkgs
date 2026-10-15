@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "riscv-software-src";
     repo = "riscv-isa-sim";
     rev = "d140cbc0ae4ef4fc64ad323f3f175ff15f6dca56";
-    sha256 = "sha256-chyTl7v7pZUGcRczzrawLOYxSYbbk7eWohcbduU7VBU=";
+    hash = "sha256-chyTl7v7pZUGcRczzrawLOYxSYbbk7eWohcbduU7VBU=";
     # Pulls in ucb-bar/berkeley-softfloat-3
     fetchSubmodules = true;
   };

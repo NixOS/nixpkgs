@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "timescale";
     repo = "timescaledb-tune";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fQx+c6kdA8we1hrlIhiQjxOGKSbHqjWzNWLxX7xT3dU=";
+    hash = "sha256-fQx+c6kdA8we1hrlIhiQjxOGKSbHqjWzNWLxX7xT3dU=";
   };
 
   vendorHash = "sha256-S48WxFXxuKz7gp+a7I8l2UKBxQ1AAs9VAxv6l0YnRhg=";

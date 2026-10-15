@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "danijel3";
     repo = "Phonetisaurus";
     tag = "kaldi";
-    sha256 = "sha256-dPAVasGSD2j8xmUQsWE0tjAXvCBNOuXLq+ayttA5r2Q=";
+    hash = "sha256-dPAVasGSD2j8xmUQsWE0tjAXvCBNOuXLq+ayttA5r2Q=";
   };
 
   strictDeps = true;

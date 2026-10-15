@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "capstone-engine";
     repo = "capstone";
     rev = finalAttrs.version;
-    sha256 = "sha256-XMwQ7UaPC8YYu4yxsE4bbR3leYPfBHu5iixSLz05r3g=";
+    hash = "sha256-XMwQ7UaPC8YYu4yxsE4bbR3leYPfBHu5iixSLz05r3g=";
   };
 
   nativeBuildInputs = [

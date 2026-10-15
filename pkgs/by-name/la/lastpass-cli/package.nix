@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "lastpass";
     repo = "lastpass-cli";
     rev = "v${version}";
-    sha256 = "sha256-ZMdjY5YmKNWQ07oFAnnw/fRKIzlnTvxH0qkQtDsSbU0=";
+    hash = "sha256-ZMdjY5YmKNWQ07oFAnnw/fRKIzlnTvxH0qkQtDsSbU0=";
   };
 
   nativeBuildInputs = [

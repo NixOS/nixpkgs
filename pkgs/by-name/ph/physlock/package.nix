@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xyb3rt";
     repo = "physlock";
     rev = "v${finalAttrs.version}";
-    sha256 = "1mz4xxjip5ldiw9jgfq9zvqb6w10bcjfx6939w1appqg8f521a7s";
+    hash = "sha256-+qggikMP36sCTyOZ7iRbIHCz8P4JuycTj42WG2Xv5Nc=";
   };
 
   buildInputs = [

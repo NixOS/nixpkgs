@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "x42";
     repo = "ltc-tools";
     rev = "v${finalAttrs.version}";
-    sha256 = "0vp25b970r1hv5ndzs4di63rgwnl31jfaj3jz5dka276kx34q4al";
+    hash = "sha256-VBFMRp/mCDVb+XJI5WQY1PKXh4mN6N9s2TBkcNIq4m4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

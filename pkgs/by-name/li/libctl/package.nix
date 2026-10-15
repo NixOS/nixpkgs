@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "NanoComp";
     repo = "libctl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2Z/zFFhH2l+FDDhBCqPnvRYHUsNlfg7el+900hl6E8A=";
+    hash = "sha256-2Z/zFFhH2l+FDDhBCqPnvRYHUsNlfg7el+900hl6E8A=";
   };
 
   nativeBuildInputs = [

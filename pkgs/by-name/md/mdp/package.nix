@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "visit1985";
     repo = "mdp";
     rev = finalAttrs.version;
-    sha256 = "sha256-qMxuhq6LqS1o5TqQAbmGYgISWzmcocaHEYTASUN6S2c=";
+    hash = "sha256-qMxuhq6LqS1o5TqQAbmGYgISWzmcocaHEYTASUN6S2c=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "cctz";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
+    hash = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
   };
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation";

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gpsbabel";
     repo = "gpsbabel";
     rev = "gpsbabel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "sha256-0w8LsO+HwqZF8SQmwd8bCKma9PCM0hAzXhzWR4DgAHs=";
+    hash = "sha256-0w8LsO+HwqZF8SQmwd8bCKma9PCM0hAzXhzWR4DgAHs=";
   };
 
   patches = map fetchurl (import ./debian-patches.nix);

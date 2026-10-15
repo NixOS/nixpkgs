@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "olilarkin";
     repo = "Tambura";
     rev = "v${finalAttrs.version}";
-    sha256 = "1w80cmiyzca1wirf5gypg3hcix1ky777id8wnd3k92mn1jf4a24y";
+    hash = "sha256-nghFnAy2ijRHsxy1eM7xM/TI4HjXv+Jy5EGx72NlAPE=";
   };
 
   buildInputs = [

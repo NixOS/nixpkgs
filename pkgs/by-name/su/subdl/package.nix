@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "alexanderwink";
     repo = "subdl";
     rev = "4cf5789b11f0ff3f863b704b336190bf968cd471";
-    sha256 = "0kmk5ck1j49q4ww0lvas2767kwnzhkq0vdwkmjypdx5zkxz73fn8";
+    hash = "sha256-yLpxfp+/9Ha9rJO3DfCE3/J5zBFabQo4JzgRGSYrs04=";
   };
 
   buildInputs = [ python3 ];

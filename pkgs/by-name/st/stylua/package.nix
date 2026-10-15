@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "johnnymorganz";
     repo = "stylua";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-kaJXpW3dGICg1S180OY9eqHwVZUfvhMdV2yYwEWdSdI=";
+    hash = "sha256-kaJXpW3dGICg1S180OY9eqHwVZUfvhMdV2yYwEWdSdI=";
   };
 
   cargoHash = "sha256-zHPzpbBKCcZt3M5hdJYurdbmcAs7KMm5k59GNJ6U3cA=";

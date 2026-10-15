@@ -41,7 +41,7 @@ let
         owner = "ptomato";
         repo = "ratify";
         rev = "f4d2d60ec73d5588e953650b3879e69a727f30ca";
-        sha256 = "eRh/9pYvdfbdbdJQ7pYMLq5p91I+rtyb/AqEGfakjKs=";
+        hash = "sha256-eRh/9pYvdfbdbdJQ7pYMLq5p91I+rtyb/AqEGfakjKs=";
       };
       nativeBuildInputs = [
         meson
@@ -68,7 +68,7 @@ let
         owner = "chimara";
         repo = "Chimara";
         rev = "9934b142af508c75c0f1eed597990f39495b1af4";
-        sha256 = "aRz1XX8XaSLTBIrMIIMS3QNMm6Msi+slrZ6+KYlyRMo=";
+        hash = "sha256-aRz1XX8XaSLTBIrMIIMS3QNMm6Msi+slrZ6+KYlyRMo=";
       };
       nativeBuildInputs = [
         meson
@@ -107,7 +107,7 @@ stdenv.mkDerivation {
     repo = "inform7-ide";
     # build from revision in the GTK3 branch as mainline requires webkit-1.0
     rev = "c37e045c159692aae2e4e79b917e5f96cfefa66a";
-    sha256 = "Q4xoITs3AYXhvpWaABRAvJaUWTtUl8lYQ1k9zX7FrNw=";
+    hash = "sha256-Q4xoITs3AYXhvpWaABRAvJaUWTtUl8lYQ1k9zX7FrNw=";
   };
   nativeBuildInputs = [
     meson

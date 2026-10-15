@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "caprice32";
     rev = "v${finalAttrs.version}";
     owner = "ColinPitrat";
-    sha256 = "0hng5krwgc1h9bz1xlkp2hwnvas965nd7sb3z9mb2m6x9ghxlacz";
+    hash = "sha256-nyna4UvdVLFq+mPp02wxSattORR30h7+SjCwx/Msz0I=";
   };
 
   nativeBuildInputs = [

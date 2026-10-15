@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "svn-all-fast-export";
     repo = "svn2git";
     rev = version;
-    sha256 = "sha256-ALZ9wGEM2woELUdCxG1SSzIhOCHERsnrSnCVN2MH9Lo=";
+    hash = "sha256-ALZ9wGEM2woELUdCxG1SSzIhOCHERsnrSnCVN2MH9Lo=";
   };
 
   nativeBuildInputs = [

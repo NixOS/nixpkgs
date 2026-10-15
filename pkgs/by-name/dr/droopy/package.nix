@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "stackp";
     repo = "Droopy";
     rev = "7a9c7bc46c4ff8b743755be86a9b29bd1a8ba1d9";
-    sha256 = "03i1arwyj9qpfyyvccl21lbpz3rnnp1hsadvc0b23nh1z2ng9sff";
+    hash = "sha256-zun0rPgB2iEWYLspDcO1No9/Fw2CMra9dxcn6XlWIQ4=";
   };
 
   patches = [

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nats-io";
     repo = "nats.c";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9W7CMM52SblvB560dwtRAKgrYHDuWYryc0a2fWeVC5s=";
+    hash = "sha256-9W7CMM52SblvB560dwtRAKgrYHDuWYryc0a2fWeVC5s=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "fetchinson";
     repo = "kwakd";
     rev = "acdf0e1491204ae30622a60fde0bcae4769f78be";
-    sha256 = "1inf9ngrbxmkkdhqf1xday12nf0hxjxlx1810phkmivyyp6fl3nj";
+    hash = "sha256-0g7qzPV+xzrhBQGFTrvsEDgrgletB4dhm7P2lZ9NzsY=";
   };
 
   postInstall = ''

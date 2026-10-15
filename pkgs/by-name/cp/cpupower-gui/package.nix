@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     owner = "vagnum08";
     repo = "cpupower-gui";
     tag = "v${version}";
-    sha256 = "05lvpi3wgyi741sd8lgcslj8i7yi3wz7jwl7ca3y539y50hwrdas";
+    hash = "sha256-WrXMISg+jeKHYodyeT4f0Z+IJNXsUdR0ICf6x0e8mxY=";
   };
 
   patches = [

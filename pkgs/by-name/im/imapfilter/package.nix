@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lefcha";
     repo = "imapfilter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-7dwfFZJekVReNZSqeS++G48RwXNyeQl5DkMimKtpF0w=";
+    hash = "sha256-7dwfFZJekVReNZSqeS++G48RwXNyeQl5DkMimKtpF0w=";
   };
   makeFlags = [
     "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt"

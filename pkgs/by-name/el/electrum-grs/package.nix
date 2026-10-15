@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     tag = "v${version}";
-    sha256 = "1k078jg3bw4n3kcxy917m30x1skxm679w8hcw8mlxb94ikrjc66h";
+    hash = "sha256-0Bgm84wkrU4r4gwino6pferQwagnJN/ZHJbwNZ5EB8w=";
   };
 
   nativeBuildInputs = lib.optionals enableQt [ qt5.wrapQtAppsHook ];

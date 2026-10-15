@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vasi";
     repo = "pixz";
     rev = "v${finalAttrs.version}";
-    sha256 = "163axxs22w7pghr786hda22mnlpvmi50hzhfr9axwyyjl9n41qs2";
+    hash = "sha256-QuNAbKLSe95Vyg5+CEqs+1JbhVANGnQyfPdwIXTvapg=";
   };
   preConfigure = ''
     ./autogen.sh

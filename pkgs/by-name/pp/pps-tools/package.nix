@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "redlab-i";
     repo = "pps-tools";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-eLLFHrCgOQzOtVxlAsZ5X91KK+vZiKMGL7zbQFiIZtI=";
+    hash = "sha256-eLLFHrCgOQzOtVxlAsZ5X91KK+vZiKMGL7zbQFiIZtI=";
   };
 
   outputs = [

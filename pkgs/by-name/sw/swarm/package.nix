@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "nimble-code";
     repo = "swarm";
     rev = "4b36ed83c8fbb074f2dc5777fe1c0ab4d73cc7d9";
-    sha256 = "18zwlwsiiksivjpg6agmbmg0zsw2fl9475ss66b6pgcsya2q4afs";
+    hash = "sha256-2imChfKavWuWMVqXQxJ1gusPXl31KfOu3FHPGDWn/KM=";
   };
 
   installPhase = ''

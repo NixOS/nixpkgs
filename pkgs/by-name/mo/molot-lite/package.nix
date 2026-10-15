@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "molot-lite";
     rev = finalAttrs.version;
-    sha256 = "sha256-0tmobsdCNon6udbkbQw7+EYQKBg2oaXlHIgNEf9U3XE=";
+    hash = "sha256-0tmobsdCNon6udbkbQw7+EYQKBg2oaXlHIgNEf9U3XE=";
   };
 
   nativeBuildInputs = [ pkg-config ];

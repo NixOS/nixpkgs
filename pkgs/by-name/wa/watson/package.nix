@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "jazzband";
     repo = "Watson";
     rev = finalAttrs.version;
-    sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
+    hash = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 
   patches = [

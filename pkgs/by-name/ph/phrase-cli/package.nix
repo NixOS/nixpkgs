@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "phrase";
     repo = "phrase-cli";
     rev = finalAttrs.version;
-    sha256 = "sha256-3KW38bkGx0s0RjBxTXgvQjPto4+OKQTET0rpzjGUURA=";
+    hash = "sha256-3KW38bkGx0s0RjBxTXgvQjPto4+OKQTET0rpzjGUURA=";
   };
 
   vendorHash = "sha256-6Oz1hAhAdKX63v7XW1AFWyHlTVkbW6oK/NLViSRXiUs=";

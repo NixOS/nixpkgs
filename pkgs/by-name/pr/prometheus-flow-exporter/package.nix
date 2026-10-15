@@ -12,7 +12,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "neptune-networks";
     repo = "flow-exporter";
-    sha256 = "sha256-6FqupoYWRvex7XhM7ly8f7ICnuS9JvCRIVEBIJe+64k=";
+    hash = "sha256-6FqupoYWRvex7XhM7ly8f7ICnuS9JvCRIVEBIJe+64k=";
   };
 
   vendorHash = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";

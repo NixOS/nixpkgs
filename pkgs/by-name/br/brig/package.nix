@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "sahib";
     repo = "brig";
     rev = "v${finalAttrs.version}";
-    sha256 = "0gi39jmnzqrgj146yw8lcmgmvzx7ii1dgw4iqig7kx8c0jiqi600";
+    hash = "sha256-AJiIowQM9XlexJHw10KMp/9dX2UUcW9IkC/jb6tMIz4=";
   };
 
   vendorHash = null;

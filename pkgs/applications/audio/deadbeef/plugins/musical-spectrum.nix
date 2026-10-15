@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     owner = "cboxdoerfer";
     repo = "ddb_musical_spectrum";
     rev = "a97fd4e1168509911ab43ba32d815b5489000a06";
-    sha256 = "0p33wyqi27y0q1mvjv5nn6l3vvqlg6b8yd6k2l07bax670bl0q3g";
+    hash = "sha256-b2BAFzimq3UAFdM0j5Z5FO89qLG2bLlrwMAfEbHnY1w=";
   };
 
   nativeBuildInputs = [ pkg-config ];

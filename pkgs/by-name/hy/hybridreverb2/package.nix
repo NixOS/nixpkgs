@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     inherit owner;
     repo = "HybridReverb2-impulse-response-database";
     rev = "v${DBversion}";
-    sha256 = "sha256-PyGrMNhrL2cRjb2UPPwEaJ6vZBV2sDG1mKFCNdfqjsI=";
+    hash = "sha256-PyGrMNhrL2cRjb2UPPwEaJ6vZBV2sDG1mKFCNdfqjsI=";
   };
 
   src = fetchFromGitHub {

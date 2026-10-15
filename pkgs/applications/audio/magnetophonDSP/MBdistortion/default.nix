@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "MBdistortion";
     rev = "V${finalAttrs.version}";
-    sha256 = "0mdzaqmxzgspfgx9w1hdip18y17hwpdcgjyq1rrfm843vkascwip";
+    hash = "sha256-N3Km1dyDoOpyDtjLx9rl8ASPwo0NBp76c1e/3ytWv1U=";
   };
 
   patches = [

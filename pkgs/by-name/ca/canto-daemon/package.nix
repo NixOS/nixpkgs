@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "themoken";
     repo = "canto-next";
     rev = "v${finalAttrs.version}";
-    sha256 = "0fmsdn28z09bvivdkqcla5bnalky7k744iir25z70bv4pz1jcvnk";
+    hash = "sha256-024mw79kL3B+ETlGQs48flJlV1GU4dl23CuBj4Rtujo=";
   };
 
   build-system = with python3Packages; [ setuptools ];

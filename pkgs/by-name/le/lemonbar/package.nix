@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "LemonBoy";
     repo = "bar";
     rev = "v${version}";
-    sha256 = "sha256-OLhgu0kmMZhjv/VST8AXvIH+ysMq72m4TEOypdnatlU=";
+    hash = "sha256-OLhgu0kmMZhjv/VST8AXvIH+ysMq72m4TEOypdnatlU=";
   };
 
   buildInputs = [

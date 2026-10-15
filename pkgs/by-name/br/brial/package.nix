@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BRiAl";
     repo = "BRiAl";
     tag = finalAttrs.version;
-    sha256 = "sha256-I8p2jdc2/oq9piy1QvNl+N0+MHDE5Xv1kawkRTjrWSU=";
+    hash = "sha256-I8p2jdc2/oq9piy1QvNl+N0+MHDE5Xv1kawkRTjrWSU=";
   };
 
   patches = [

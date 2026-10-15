@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rafael2k";
     repo = "darkice";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-THsw7N80hkcKQmU3spUhTEuCHbGw+pkh3MPp5Isnk7c=";
+    hash = "sha256-THsw7N80hkcKQmU3spUhTEuCHbGw+pkh3MPp5Isnk7c=";
   };
   sourceRoot = "source/darkice/trunk";
 

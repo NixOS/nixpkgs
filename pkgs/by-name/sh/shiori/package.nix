@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "go-shiori";
     repo = "shiori";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-oycD/Tyl3+CGW9EO0O4RHKONLt3mw2lzPEYELYNG0gw=";
+    hash = "sha256-oycD/Tyl3+CGW9EO0O4RHKONLt3mw2lzPEYELYNG0gw=";
   };
 
   ldflags = [

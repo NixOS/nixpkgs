@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "YouROK";
     repo = "TorrServer";
     tag = "MatriX.${version}";
-    sha256 = "sha256-d/uRWZWCz5aQpSNHDJM1vnLtNxAY0AXUCITWFHg99H8=";
+    hash = "sha256-d/uRWZWCz5aQpSNHDJM1vnLtNxAY0AXUCITWFHg99H8=";
   };
   vendorHash = "sha256-x67fp19mWBEQUcR+QWyP4MFNVzHqeM9P20xz+H687kM=";
 

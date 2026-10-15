@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bchretien";
     repo = "tcptrack";
     rev = "2b096ac103af2884bbd7648cff8adcbadbda9394";
-    sha256 = "0084g9s0ynv1az67j08q9nz4p07bqqz9k6w5lprzj3ljlh0x10gj";
+    hash = "sha256-8oHQAaSSDvnzpYWbmT7G64BLvk0YAXnMV2FbD3R6BAE=";
   };
 
   patches = [

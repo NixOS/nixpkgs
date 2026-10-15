@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "cfcohen";
     repo = "openbrf";
     rev = "4bdc66e38def5e5184f5379c84a7558b7484c70a";
-    sha256 = "16254cnr60ihcn7bki7wl1qm6gkvzb99cn66md1pnb7za8nvzf4j";
+    hash = "sha256-kri/LVL/LHtDq8ZYltL6ez5TcaD8xLmOZTACky0jRZg=";
   };
 
   patches = [

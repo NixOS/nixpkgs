@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OLSR";
     repo = "olsrd";
     rev = "v${finalAttrs.version}";
-    sha256 = "1xk355dm5pfjil1j4m724vkdnc178lv6hi6s1g0xgpd59avbx90j";
+    hash = "sha256-EqS+tkql3dfBC9pEaDZFJzDb5ibiVCIDjdLdUlspY/Y=";
   };
 
   patches = [

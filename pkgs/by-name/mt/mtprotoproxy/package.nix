@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "alexbers";
     repo = "mtprotoproxy";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/T3NtjDHnEOc/90mCp7NF9J+Bvd1YOTknkq73MQ9KxU=";
+    hash = "sha256-/T3NtjDHnEOc/90mCp7NF9J+Bvd1YOTknkq73MQ9KxU=";
   };
 
   nativeBuildInputs = with python3Packages; [ wrapPython ];

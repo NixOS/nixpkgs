@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "homeport";
     repo = "dyff";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4d6FP6k1atqCRw4rB1l1N9x8G1MFJiNCfyun85KY4FI=";
+    hash = "sha256-4d6FP6k1atqCRw4rB1l1N9x8G1MFJiNCfyun85KY4FI=";
   };
 
   vendorHash = "sha256-NJ/ekcYUT2DUdQygg41tnPRMWtZwNGrZDxbsp2tih9w=";

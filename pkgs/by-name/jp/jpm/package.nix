@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "janet-lang";
     repo = "jpm";
     rev = "v${version}";
-    sha256 = "sha256-3WmIXJhmrZyr7SYFkEcYC3YYBJtq8Uavo6PjLVXA3Bs=";
+    hash = "sha256-3WmIXJhmrZyr7SYFkEcYC3YYBJtq8Uavo6PjLVXA3Bs=";
   };
 
   # `auto-shebangs true` gives us a shebang line that points to janet inside the

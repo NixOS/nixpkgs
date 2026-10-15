@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "nextdns";
     repo = "nextdns";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-kBmLVBwzt+oqM3Hx8qeyMuOw9bNU+r2FDueUTWWae8Q=";
+    hash = "sha256-kBmLVBwzt+oqM3Hx8qeyMuOw9bNU+r2FDueUTWWae8Q=";
   };
 
   vendorHash = "sha256-sDofbS1kq3nQDufxiYse4uxcPE1oTSITsI6RU7pFFSM=";

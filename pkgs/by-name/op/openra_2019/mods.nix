@@ -22,7 +22,7 @@ in
       owner = "Inq8";
       repo = "CAmod";
       rev = "fc3cf0baf2b827650eaae9e1d2335a3eed24bac9";
-      sha256 = "15w91xs253gyrlzsgid6ixxjazx0fbzick6vlkiay0znb58n883m";
+      hash = "sha256-dSBkUVn2A6/ipNtMFv9yoH8le4+mxac/zf6NInQPiZc=";
     };
     engine = {
       version = "b8a7dd5";
@@ -30,7 +30,7 @@ in
         owner = "Inq8";
         repo = "CAengine";
         rev = "b8a7dd52ff893ed8225726d4ed4e14ecad748404";
-        sha256 = "0dyk861qagibx8ldshz7d2nrki9q550f6f0wy8pvayvf1gv1dbxj";
+        hash = "sha256-sq8W9gtue7Uv8hw440ApOMWZrWjnQ90o6is+hYNB0zc=";
         name = "engine";
         inherit postFetch;
       };
@@ -46,7 +46,7 @@ in
       owner = "OpenRA";
       repo = "d2";
       rev = "69a4aa708e2c26376469c0048fac13592aa452ca";
-      sha256 = "1mfch4s6c05slyqvxllklbxpqq8dqcbx3515n3gyylyq43gq481r";
+      hash = "sha256-OSCC3yDYU+/fsCWU0RfDDWF8+6KT0r6xp7oAZjSBzNU=";
     };
     engine = rec {
       version = "release-20181215";
@@ -59,7 +59,7 @@ in
         owner = "OpenRA";
         repo = "OpenRA";
         rev = version;
-        sha256 = "0p0izykjnz7pz02g2khp7msqa00jhjsrzk9y0g29dirmdv75qa4r";
+        hash = "sha256-mShczm41x5bEAz7Nn7WEEgCFdT0XTvEE+Pd8K6f/EVw=";
         name = "engine";
         inherit postFetch;
       };
@@ -79,7 +79,7 @@ in
       owner = "drogoganor";
       repo = "DarkReign";
       rev = "ffcd6ba72979e5f77508136ed7b0efc13e4b100e";
-      sha256 = "07g4qw909649s3i1yhw75613mpwfka05jana5mpp5smhnf0pkack";
+      hash = "sha256-k6l5gbOw6nJvLcoqWYCajt86gimHQx/i0ImYBBLH5B0=";
     };
     engine = {
       version = "DarkReign";
@@ -87,7 +87,7 @@ in
         owner = "drogoganor";
         repo = "OpenRA";
         rev = "f91d3f2603bbf51afaa89357e4defcdc36138102";
-        sha256 = "05g900ri6q0zrkrk8rmjaz576vjggmi2y6jm0xz3cwli54prn11w";
+        hash = "sha256-PASbLymRcjZ+B1UaL2J9T25zyleyZjTzzB9gEzMA6RU=";
         name = "engine";
         inherit postFetch;
       };
@@ -103,7 +103,7 @@ in
       owner = "MustaphaTR";
       repo = "Generals-Alpha";
       rev = "4f5e11d916e4a03d8cf1c97eef484ce2d77d7df2";
-      sha256 = "1wnl4qrlhynnlahgdlxwhgsdba5wgdg9yrv9f8hkgi69j60szypd";
+      hash = "sha256-7fqvgZHJxDchcmlnn157vKjV9IO80/agotZ6SDMm1PI=";
     };
     engine = rec {
       version = "gen-20190128_3";
@@ -111,7 +111,7 @@ in
         owner = "MustaphaTR";
         repo = "OpenRA";
         rev = version;
-        sha256 = "1x6byz37s8qcpqj902zvkvbv95rv2mv2kj35c12gbpyc92xkqkq0";
+        hash = "sha256-AE88u0jM3/VEYGXIKXYVO5e01577C5Akvgwjfcb3y/Q=";
         name = "generals-alpha-engine";
         inherit postFetch;
       };
@@ -132,7 +132,7 @@ in
         owner = "IceReaper";
         repo = "KKnD";
         rev = "5530babcb05170e0959e4cf2b079161e9fedde4f";
-        sha256 = "07jczrarmgm6zdk0myzwgq200x19yvpjyxrnhdac08mjgyz75zk1";
+        hash = "sha256-Yf5yvn+yIsBUgzZ3L+/2KXQABH78+wpm+6a+mlX+TB4=";
       };
       engine = {
         version = "4e8eab4ca00d1910203c8a103dfd2c002714daa8";
@@ -141,7 +141,7 @@ in
           repo = "OpenRA";
           # commit does not exist on any branch on the target repository
           rev = "4e8eab4ca00d1910203c8a103dfd2c002714daa8";
-          sha256 = "1yyqparf93x8yzy1f46gsymgkj5jls25v2yc7ighr3f7mi3igdvq";
+          hash = "sha256-eLcXR6zHjQxfPMyLXYSmssj5qtfPEBf896iP5LK62Ps=";
           name = "engine";
           inherit postFetch;
         };
@@ -163,7 +163,7 @@ in
       owner = "CombinE88";
       repo = "Medieval-Warfare";
       rev = "c9be8f2a6f1dd710b1aedd9d5b00b4cf5020e2fe";
-      sha256 = "09fp7k95jd6hjqdasbspbd43z5670wkyzbbgqkll9dfsrv0sky0v";
+      hash = "sha256-G/ipwc7atUTpxG+t7ycHx5Q/SFtXL60altA0WdI81yU=";
     };
     engine = {
       version = "MedievalWarfareEngine";
@@ -171,7 +171,7 @@ in
         owner = "CombinE88";
         repo = "OpenRA";
         rev = "52109c0910f479753704c46fb19e8afaab353c83";
-        sha256 = "0ga3855j6bc7h81q03cw6laiaiz12915zg8aqah1idvxbzicfy7l";
+        hash = "sha256-9HjH4l99txigwgq9X0IS4UcVFTWcDYADgoctI0tBQz0=";
         name = "engine";
         inherit postFetch;
       };
@@ -187,7 +187,7 @@ in
       owner = "OpenRA";
       repo = "ra2";
       rev = "2f7c700d6d63c0625e7158ef3098221fa6741569";
-      sha256 = "11vnzwczn47wjfrq6y7z9q234p27ihdrcl5p87i6h2xnrpwi8b6m";
+      hash = "sha256-1SwU+c22C2jiQbdQlhuMR1wyBE7/eIOzk/wQ+xn/doc=";
     };
     engine = rec {
       version = "release-20180923";
@@ -195,7 +195,7 @@ in
         owner = "OpenRA";
         repo = "OpenRA";
         rev = version;
-        sha256 = "1pgi3zaq9fwwdq6yh19bwxscslqgabjxkvl9bcn1a5agy4bfbqk5";
+        hash = "sha256-ZeLlFvFPFRUsW4nu2eVSD1PNdOcrBegNbpy7hNUf8d0=";
         name = "engine";
         inherit postFetch;
       };
@@ -215,7 +215,7 @@ in
       owner = "OpenRA";
       repo = "raclassic";
       rev = "c76c13e9f0912a66ddebae8d05573632b19736b2";
-      sha256 = "1cnr3ccvrkjlv8kkdcglcfh133yy0fkva9agwgvc7wlj9n5ydl4g";
+      hash = "sha256-j9Dmi02S8sP2408ltacD3o8RoGP0sTYn2lTOvBkb2bI=";
     };
     engine = rec {
       version = "release-20190314";
@@ -223,7 +223,7 @@ in
         owner = "OpenRA";
         repo = "OpenRA";
         rev = version;
-        sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
+        hash = "sha256-mW0Zo1O9LmR/80X8Vu6fvDT1bEPf6fvy+ha80Vmx+5Y=";
         name = "engine";
         inherit postFetch;
       };
@@ -239,7 +239,7 @@ in
       owner = "MustaphaTR";
       repo = "Romanovs-Vengeance";
       rev = "9230e6f1dd9758467832aee4eda115e18f0e635f";
-      sha256 = "0bwbmmlhp1kh8rgk2nx1ca9vqssj849amndacf318d61gksc1w9n";
+      hash = "sha256-NvHA9HzBNBSGY6rZqhJBUmu8k2KhWzFfRnCGC2mtiy8=";
     };
     engine = {
       version = "f3873ae";
@@ -248,7 +248,7 @@ in
         owner = "AttacqueSuperior";
         repo = "Engine";
         rev = "f3873ae242803051285994d77eb26f4b951594b5";
-        sha256 = "02rv29wja0p5d083pd087daz7x7pp5b9ym7sci2fhg3mrnaqgwkp";
+        hash = "sha256-d/KHlc11POhEZPpUn1a59/TzVTsItDsQaOUCJXkSOws=";
         name = "engine";
         inherit postFetch;
       };
@@ -268,7 +268,7 @@ in
       owner = "ABrandau";
       repo = "OpenRAModSDK";
       rev = "ac000cc15377cdf6d3c2b72c737d692aa0ed8bcd";
-      sha256 = "16mzs5wcxj9nlpcyx2c87idsqpbm40lx0rznsccclnlb3hiwqas9";
+      hash = "sha256-SSvMIxyLWsoY0/Zn0CkgdV2sWzyIie7ZpTbJznjRv5o=";
     };
     engine = {
       version = "SP-22-04-19";
@@ -280,7 +280,7 @@ in
         owner = "ABrandau";
         repo = "OpenRA";
         rev = "bb0930008a57c07f3002421023f6b446e3e3af69";
-        sha256 = "1jvgpbf56hd02ikhklv49br4d1jiv5hphc5kl79qnjlaacnj222x";
+        hash = "sha256-XQghLVOKSovTobMweGHZUYZG8kpk0wlnFKBBU9y6b8s=";
         name = "engine";
         inherit postFetch;
       };
@@ -296,7 +296,7 @@ in
       owner = "MustaphaTR";
       repo = "sole-survivor";
       rev = "23e1f3e5d8b98c936797b6680d95d56a69a9e2ab";
-      sha256 = "104clmxphchs7r8y7hpmw103bychayz80bqj98bp89i64nv9d89x";
+      hash = "sha256-PaGWtiUmJnQXShIvgL5XkPk1QOD1wuNRPhoyeHuljIA=";
     };
     engine = {
       version = "6de92de";
@@ -304,7 +304,7 @@ in
         owner = "OpenRA";
         repo = "OpenRA";
         rev = "6de92de8d982094a766eab97a92225c240d85493";
-        sha256 = "0ps9x379plrrj1hnj4fpr26lc46mzgxknv5imxi0bmrh5y4781ql";
+        hash = "sha256-FAd0iC8w1wVir7FsO/v71RBGjcjXEWlhkDnTm87oSV8=";
         name = "engine";
         inherit postFetch;
       };
@@ -320,7 +320,7 @@ in
       owner = "RAunplugged";
       repo = "uRA";
       rev = "128dc53741fae923f4af556f2293ceaa0cf571f0";
-      sha256 = "1mhr8kyh313z52gdrqv31d6z7jvdldiajalca5mcr8gzg6mph66p";
+      hash = "sha256-1xh4q3n/ocxqUYwqqWKjbcvzTQtj49yeKH+EAf1EGdY=";
     };
     engine = rec {
       version = "unplugged-cd82382";
@@ -328,7 +328,7 @@ in
         owner = "RAunplugged";
         repo = "OpenRA";
         rev = version;
-        sha256 = "1p5hgxxvxlz8480vj0qkmnxjh7zj3hahk312m0zljxfdb40652w1";
+        hash = "sha256-gYtiAFnNdUk/qCKMCRUc8h8ou60TA7kBIujTvnt/sNw=";
         name = "engine";
         inherit postFetch;
       };
@@ -344,7 +344,7 @@ in
       owner = "cookgreen";
       repo = "yr";
       rev = "5b8b952dbe21f194a6d00485f20e215ce8362712";
-      sha256 = "0hxzrqnz5d7qj1jjr20imiyih62x1cnmndf75nnil4c4sj82f9a6";
+      hash = "sha256-RiUnkNSEERqtLcc1Wy0LXRgYfawRiCxlkPi08i3Ov0M=";
     };
     engine = rec {
       version = "release-20190314";
@@ -352,7 +352,7 @@ in
         owner = "OpenRA";
         repo = "OpenRA";
         rev = version;
-        sha256 = "15pvn5cx3g0nzbrgpsfz8dngad5wkzp5dz25ydzn8bmxafiijvcr";
+        hash = "sha256-mW0Zo1O9LmR/80X8Vu6fvDT1bEPf6fvy+ha80Vmx+5Y=";
         name = "engine";
         inherit postFetch;
       };

@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "yktoo";
     repo = "indicator-sound-switcher";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Benhlhz81EgL6+pmjzyruKBOS6O7ce5PPmIIzk2Zong=";
+    hash = "sha256-Benhlhz81EgL6+pmjzyruKBOS6O7ce5PPmIIzk2Zong=";
   };
 
   postPatch = ''

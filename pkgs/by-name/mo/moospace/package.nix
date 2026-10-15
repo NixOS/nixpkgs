@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "modularev";
     repo = "mooSpace";
     rev = "e5440407ea6ef9f7fcca838383b2b9a388c22874";
-    sha256 = "10vsbddf6d7i06040850v8xkmqh3bqawczs29kfgakair809wqxl";
+    hash = "sha256-tGOeAMpRTfXcTEJ/xhVeA+I6O9qgIECAAfE041pbeoM=";
   };
 
   buildInputs = [

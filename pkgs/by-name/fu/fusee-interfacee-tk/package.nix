@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nh-server";
     repo = "fusee-interfacee-tk";
     rev = "V${finalAttrs.version}";
-    sha256 = "0ngwbwsj999flprv14xvhk7lp51nprrvcnlbnbk6y4qx5casm5md";
+    hash = "sha256-rZaqFSsdE2/msotatnO+NpRLz4S7k7DzpS6lJDVf/Fk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

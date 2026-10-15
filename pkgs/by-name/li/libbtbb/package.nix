@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "greatscottgadgets";
     repo = "libbtbb";
     rev = finalAttrs.version;
-    sha256 = "1byv8174xam7siakr1p0523x97wkh0fmwmq341sd3g70qr2g767d";
+    hash = "sha256-7ZjzRMbgvNF0IANXXh2Ak5/UhyjghjxV1KeqTk5A268=";
   };
 
   nativeBuildInputs = [ cmake ];

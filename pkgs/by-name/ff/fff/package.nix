@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dylanaraps";
     repo = "fff";
     rev = finalAttrs.version;
-    sha256 = "14ymdw6l6phnil0xf1frd5kgznaiwppcic0v4hb61s1zpf4wrshg";
+    hash = "sha256-D+rMibs/6GAWJBuwyO7lUdn/ZmnZBdcBjRZeQw1v1ZM=";
   };
 
   pathAdd = lib.makeSearchPath "bin" [

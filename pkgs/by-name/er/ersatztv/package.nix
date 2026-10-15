@@ -15,7 +15,7 @@ buildDotnetModule rec {
     owner = "ErsatzTV";
     repo = "legacy";
     rev = "v${version}";
-    sha256 = "sha256-q2eZn6TPCt/F4QV3Yde7Fy4J62CQjJam1LaEZvIrNtc=";
+    hash = "sha256-q2eZn6TPCt/F4QV3Yde7Fy4J62CQjJam1LaEZvIrNtc=";
   };
   postPatch = ''
     # Remove config of development tools that don't end up in

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "tagtime";
     repo = "TagTime";
     rev = "59343e2cbe451eb16109e782c194ccbd0ee4196d";
-    sha256 = "1xpmra3f9618b0gajfxqh061r4phkiklvcgpglsyx82bhmgf9n1f";
+    hash = "sha256-LtjkXoVLoO41ffexTWec8JIcDIC4O6keWCiY5IbK9fY=";
   };
 
   buildInputs = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "jrprice";
     repo = "oclgrind";
     tag = "v${version}";
-    sha256 = "sha256-skly0JVwbqsC3YVwR+rUNlhNN2IdrcMsnTYh6HRE22s=";
+    hash = "sha256-skly0JVwbqsC3YVwR+rUNlhNN2IdrcMsnTYh6HRE22s=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rtomayko";
     repo = "shocco";
     rev = finalAttrs.version;
-    sha256 = "1nkwcw9fqf4vyrwidqi6by7nrmainkjqkirkz3yxmzk6kzwr38mi";
+    hash = "sha256-saKR+Z9m/tr9+DPHieW0UdVsj18m4hZ59ps47BJnfNo=";
   };
 
   prePatch = ''

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "Eliot00";
     repo = "commit-formatter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hXpHEtPj6lrYBAzz8ZrhK+L3RBB2K1VIAi81kFlFgxY=";
+    hash = "sha256-hXpHEtPj6lrYBAzz8ZrhK+L3RBB2K1VIAi81kFlFgxY=";
   };
 
   cargoHash = "sha256-rqIBDzZghz+fj96im+SNwnLV9jCRjRmh3Wd48z07XH0=";

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lainsce";
     repo = "emulsion";
     rev = finalAttrs.version;
-    sha256 = "sha256-xG7yZKbbNao/pzFhdTMof/lw9K12NKZi47YRaEd65ok=";
+    hash = "sha256-xG7yZKbbNao/pzFhdTMof/lw9K12NKZi47YRaEd65ok=";
   };
 
   nativeBuildInputs = [

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "OpenSC";
     repo = "libp11";
     rev = "${pname}-${version}";
-    sha256 = "sha256-Tqc9PJsVBmq1Qy+YQVmSiD2Yb7ppif5pJ7uRHyTlqQ8=";
+    hash = "sha256-Tqc9PJsVBmq1Qy+YQVmSiD2Yb7ppif5pJ7uRHyTlqQ8=";
   };
 
   configureFlags = [

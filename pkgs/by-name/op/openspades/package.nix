@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "yvt";
     repo = "openspades";
     rev = "v${version}";
-    sha256 = "1fvmqbif9fbipd0vphp57pk6blb4yp8xvqlc2ppipk5pjv6a3d2h";
+    hash = "sha256-ULShzJa3zBvvFYzi3dH1ZNFl5j3lwrtBu3G55OLCdbs=";
   };
 
   nativeBuildInputs = [

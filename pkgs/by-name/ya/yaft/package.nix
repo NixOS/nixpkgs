@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "uobikiemukot";
     repo = "yaft";
     rev = "v${finalAttrs.version}";
-    sha256 = "0l1ig8wm545kpn4l7186rymny83jkahnjim290wsl7hsszfq1ckd";
+    hash = "sha256-bbKA3dcaHqo5SKJGaaGaciBvq88GhUOJvbOQUjl6MVA=";
   };
 
   buildInputs = [ ncurses ];

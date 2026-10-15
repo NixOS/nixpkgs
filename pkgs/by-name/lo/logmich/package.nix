@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "logmich";
     repo = "logmich";
     rev = "c73c7b7d6cd050d1bcc42d522ce80a2eb86da5c8";
-    sha256 = "sha256-e8k/ZzPAfLgNF30wmXHDX5ovK/msTH6sgzxWKzZhtOY=";
+    hash = "sha256-e8k/ZzPAfLgNF30wmXHDX5ovK/msTH6sgzxWKzZhtOY=";
   };
 
   nativeBuildInputs = [ cmake ];

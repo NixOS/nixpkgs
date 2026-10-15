@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation {
     owner = "thameera";
     repo = "vimv";
     rev = "4152496c1946f68a13c648fb7e583ef23dac4eb8";
-    sha256 = "1fsrfx2gs6bqx7wk7pgcji2i2x4alqpsi66aif4kqvnpqfhcfzjd";
+    hash = "sha256-TX7HoMPXbjyJi8qYqC+minQRRZTs3TP56XgZ/UR3Wbs=";
   };
 
   installPhase = ''

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mateoconlechuga";
     repo = "convbin";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-k0hwBdjOweFoAE6jzhlRFZsMOVDDpi4R4LHA7SwO3os=";
+    hash = "sha256-k0hwBdjOweFoAE6jzhlRFZsMOVDDpi4R4LHA7SwO3os=";
     fetchSubmodules = true;
   };
 

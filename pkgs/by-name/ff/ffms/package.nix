@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "FFMS";
     repo = "ffms2";
     rev = finalAttrs.version;
-    sha256 = "sha256-Ildl8hbKSFGh4MUBK+k8uYMDrOZD9NSMdPAWIIaGy4E=";
+    hash = "sha256-Ildl8hbKSFGh4MUBK+k8uYMDrOZD9NSMdPAWIIaGy4E=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-fPIC";

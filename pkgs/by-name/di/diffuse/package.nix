@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "MightyCreak";
     repo = "diffuse";
     rev = "v${finalAttrs.version}";
-    sha256 = "vQVtvQrs8oPevvrC75T2YcdYuT5XYDiAFDTduTkICBk=";
+    hash = "sha256-vQVtvQrs8oPevvrC75T2YcdYuT5XYDiAFDTduTkICBk=";
   };
 
   pyproject = false;

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lojban";
     repo = "jbofihe";
     rev = "v${finalAttrs.version}";
-    sha256 = "1xx7x1256sjncyzx656jl6jl546vn8zz0siymqalz6v9yf341p98";
+    hash = "sha256-KN1AhvNpm08Vrj5q8D+y25BCpaHSFNO/Z1ZqU0Top/c=";
   };
 
   patches = [

@@ -28,7 +28,7 @@ let
           owner = "skk-dev";
           repo = "dict";
           rev = "0a164e6b990c5eb5b59eb7d8789f08865dc2f644";
-          sha256 = "sha256-xKMtHB54kVSwwwr+v248ewa7dwuavYVmc6KHrZwSdnM=";
+          hash = "sha256-xKMtHB54kVSwwwr+v248ewa7dwuavYVmc6KHrZwSdnM=";
         };
 
         nativeBuildInputs = lib.optionals useUtf8 [ nkf ];

@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "dtolnay";
     repo = "cxx";
     tag = finalAttrs.version;
-    sha256 = "sha256-PIeF9VuyJOIs1x02YETKIP0+nCG3RZXLMJdFNlgAFzo=";
+    hash = "sha256-PIeF9VuyJOIs1x02YETKIP0+nCG3RZXLMJdFNlgAFzo=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

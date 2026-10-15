@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "mjambon";
     repo = "ocamlscript";
     rev = "v${version}";
-    sha256 = "sha256:10xz8jknlmcgnf233nahd04q98ijnxpijhpvb8hl7sv94dgkvpql";
+    hash = "sha256-FN89XyNp60MhWvtCGW+3MqKECWhQ2TGEs49VaqdEv4M=";
   };
 
   nativeBuildInputs = [

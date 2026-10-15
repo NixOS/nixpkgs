@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication {
     owner = "Tigge";
     repo = "antfs-cli";
     rev = "85a6cc6fe6fc0ec38399f5aa30fb39177c565b52";
-    sha256 = "0v8y64kldfbs809j1g9d75dd1vxq7mfxnp4b45pz8anpxhjf64fy";
+    hash = "sha256-3hHjJOzXKvRvIYtc2109uO/QWjktvSATQHq5RicxHm0=";
   };
 
   build-system = [ python3Packages.setuptools ];

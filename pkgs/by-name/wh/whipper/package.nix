@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "whipper-team";
     repo = "whipper";
     rev = "v${finalAttrs.version}";
-    sha256 = "00cq03cy5dyghmibsdsq5sdqv3bzkzhshsng74bpnb5lasxp3ia5";
+    hash = "sha256-RcVxu1a0LHsXOc9qqOGff42Nmy5YN71ihc+34tkAmAE=";
   };
 
   patches = [

@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "babashka";
     repo = "bbin";
     rev = "v${version}";
-    sha256 = "sha256-kkW95GKQIoWTlAhZ+MKQMmZ1MfYgYbp6gn9RHSrIpYs=";
+    hash = "sha256-kkW95GKQIoWTlAhZ+MKQMmZ1MfYgYbp6gn9RHSrIpYs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

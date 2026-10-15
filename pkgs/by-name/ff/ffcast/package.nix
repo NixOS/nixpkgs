@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ropery";
     repo = "FFcast";
     rev = finalAttrs.version;
-    sha256 = "sha256-kxqwDGEguFTFHkQzXctXqxslt0+bYnfUdQ8C/8+eTXo=";
+    hash = "sha256-kxqwDGEguFTFHkQzXctXqxslt0+bYnfUdQ8C/8+eTXo=";
   };
 
   nativeBuildInputs = [

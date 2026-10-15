@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BioPP";
     repo = "bppsuite";
     rev = "v${finalAttrs.version}";
-    sha256 = "1wdwcgczqbc3m116vakvi0129wm3acln3cfc7ivqnalwvi6lrpds";
+    hash = "sha256-ut1MTdycKot3PMyxYSlTo/IkAoh7qm1CqIMt/NljvPE=";
   };
 
   nativeBuildInputs = [

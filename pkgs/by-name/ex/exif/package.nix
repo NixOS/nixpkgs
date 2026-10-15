@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libexif";
     repo = "exif";
     rev = "exif-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}-release";
-    sha256 = "1xlb1gdwxm3rmw7vlrynhvjp9dkwmvw23mxisdbdmma7ah2nda3i";
+    hash = "sha256-cahmBVRH1dpW07HXIfiufLZ05YbWZ7oPr3nUztsLi/Y=";
   };
 
   patches = [

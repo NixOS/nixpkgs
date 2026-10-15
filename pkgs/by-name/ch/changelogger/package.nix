@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "MarkusFreitag";
     repo = "changelogger";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-Glup2Y3sGO2hNKFeZXOrffHct2F4Ebn9+f6yOy3pekY=";
+    hash = "sha256-Glup2Y3sGO2hNKFeZXOrffHct2F4Ebn9+f6yOy3pekY=";
   };
 
   vendorHash = "sha256-f6ojMri3m3pwLXbLnNbS/Xl2lqo0eEHLGbbT5KR1Clc=";

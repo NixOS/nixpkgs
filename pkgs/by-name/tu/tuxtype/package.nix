@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tux4kids";
     repo = "tuxtype";
     rev = "upstream/${finalAttrs.version}";
-    sha256 = "1i33rhi9gpzfml4hd73s18h6p2s8zcr26va2vwf2pqqd9fhdwpsg";
+    hash = "sha256-T1/eoEsN4ysc30JtIzL7SItrIAp6nAYJre7flyLMY8Q=";
   };
 
   postPatch = ''

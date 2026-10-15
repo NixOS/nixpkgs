@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "harry-cpp";
     repo = "code-nautilus";
     rev = "8ea0ce78f3f1f7a6af5f9e9cf93fc3e70015f61e";
-    sha256 = "u10laS3BwUVCJYlQ6WivU7o/sFFv6cTeV+uxBEdD7oA=";
+    hash = "sha256-u10laS3BwUVCJYlQ6WivU7o/sFFv6cTeV+uxBEdD7oA=";
   };
 
   buildInputs = [

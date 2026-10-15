@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "troglobit";
     repo = "xplugd";
     rev = "v${finalAttrs.version}";
-    sha256 = "11vjr69prrs4ir9c267zwq4g9liipzrqi0kmw1zg95dbn7r7zmql";
+    hash = "sha256-FNd/8rGrlfR+4HWCiPO/MdL0COb/GMFSjkTnfJPJcoc=";
   };
 
   buildInputs = [

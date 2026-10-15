@@ -67,7 +67,7 @@ let
         owner = "webmproject";
         repo = finalAttrs.pname;
         rev = "v${finalAttrs.version}";
-        sha256 = "sha256-9SFFE2GfYYMgxp1dpmL3STTU2ea1R5vFKA1L0pZwIvQ=";
+        hash = "sha256-9SFFE2GfYYMgxp1dpmL3STTU2ea1R5vFKA1L0pZwIvQ=";
       };
     }
   );

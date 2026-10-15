@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "linuxkit";
     repo = "linuxkit";
     rev = "v${version}";
-    sha256 = "sha256-0W3YWj6amNI6jr10FfLAqF1kEUwx4BU5+gjkg4iqX1Q=";
+    hash = "sha256-0W3YWj6amNI6jr10FfLAqF1kEUwx4BU5+gjkg4iqX1Q=";
   };
 
   vendorHash = null;

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "md-raid-utilities";
     repo = "ledmon";
     rev = "v${finalAttrs.version}";
-    sha256 = "1lz59606vf2sws5xwijxyffm8kxcf8p9qbdpczsq1b5mm3dk6lvp";
+    hash = "sha256-d1Mz26i1rID1Z7ctnC5yrE9UnfNdRt6L5lq4bYBJ5dM=";
   };
 
   nativeBuildInputs = [

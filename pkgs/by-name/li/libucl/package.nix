@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vstakhov";
     repo = "libucl";
     rev = finalAttrs.version;
-    sha256 = "sha256-Y46z3dlcu4gHDqs+Fi5QfC58j6ImmMKZkW19v3/yGwc=";
+    hash = "sha256-Y46z3dlcu4gHDqs+Fi5QfC58j6ImmMKZkW19v3/yGwc=";
   };
 
   nativeBuildInputs = [

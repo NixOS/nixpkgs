@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "dwijnand";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "yJZ509OU7bZzG22BxEt3bs71Vlhz+9oOi13RWVhqE2M=";
+    hash = "sha256-yJZ509OU7bZzG22BxEt3bs71Vlhz+9oOi13RWVhqE2M=";
   };
 
   dontBuild = true;

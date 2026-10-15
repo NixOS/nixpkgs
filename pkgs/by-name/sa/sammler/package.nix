@@ -13,7 +13,7 @@ buildGoModule rec {
     owner = "redcode-labs";
     repo = "Sammler";
     inherit rev;
-    sha256 = "1gsv83sbqc9prkigbjvkhh547w12l3ynbajpnbqyf8sz4bd1nj5c";
+    hash = "sha256-rEgb2iJfI+fxsleqZf2gIvBDCoRzy/XizDcxvPRAW78=";
   };
 
   vendorHash = "sha256-0ZBPLONUZyazZ22oLO097hdX5xuHx2G6rZCAsCwqq4s=";

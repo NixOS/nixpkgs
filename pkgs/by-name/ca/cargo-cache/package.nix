@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "matthiaskrgr";
     repo = "cargo-cache";
     tag = finalAttrs.version;
-    sha256 = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
+    hash = "sha256-q9tYKXK8RqiqbDZ/lTxUI1Dm/h28/yZR8rTQuq+roZs=";
   };
 
   cargoHash = "sha256-cwTHJ5Cd17ur8AhEQb8FTS0mcgqg83VGjvCQP00JY6s=";

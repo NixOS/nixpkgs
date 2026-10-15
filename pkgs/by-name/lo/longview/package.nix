@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linode";
     repo = "longview";
     rev = "v${finalAttrs.version}";
-    sha256 = "1i9lli8iw8sb1bd633i82fzhx5gz85ma9d1hra41pkv2p3h823pa";
+    hash = "sha256-6g6B4LhizxuIyjC0pGpB/5UOvxMojmHaCksjHlGkNMU=";
   };
 
   patches = [

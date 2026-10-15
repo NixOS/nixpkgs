@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "xorg62";
     repo = "wmfs";
-    sha256 = "1m7dsmmlhq2qipim659cp9aqlriz1cwrrgspl8baa5pncln0gd5c";
+    hash = "sha256-rLQHLGX2FqUWole/nDkLP2aKVbosFVPjjVhgSGvV7dQ=";
     rev = "b7b8ff812d28c79cb22a73db2739989996fdc6c2";
   };
 

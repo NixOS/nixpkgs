@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "transmission";
     repo = "libutp";
     rev = "fda9f4b3db97ccb243fcbed2ce280eb4135d705b";
-    sha256 = "CvuZLOBksIl/lS6LaqOIuzNvX3ihlIPjI3Eqwo7YJH0=";
+    hash = "sha256-CvuZLOBksIl/lS6LaqOIuzNvX3ihlIPjI3Eqwo7YJH0=";
   };
 
   # Compatibility with CMake < 3.5 has been removed from CMake.

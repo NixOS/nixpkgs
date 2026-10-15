@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     owner = "meowrch";
     repo = "rofi-network-manager";
     rev = "90302dd1c0ea2d460a3455a208c10dff524469cd";
-    sha256 = "sha256-D8/Lh5a5rAUOhCXbjmL65PFzgmj3uu2mwCtxakHTefM=";
+    hash = "sha256-D8/Lh5a5rAUOhCXbjmL65PFzgmj3uu2mwCtxakHTefM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

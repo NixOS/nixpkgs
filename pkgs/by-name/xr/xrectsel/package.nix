@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ropery";
     repo = "xrectsel";
     rev = finalAttrs.version;
-    sha256 = "0prl4ky3xzch6xcb673mcixk998d40ngim5dqc5374b1ls2r6n7l";
+    hash = "sha256-9FiThaZhkTMKw63U+CwgDaU0e2R1HLNYN5D9PvwkNF8=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

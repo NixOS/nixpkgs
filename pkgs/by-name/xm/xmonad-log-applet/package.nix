@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kalj";
     repo = "xmonad-log-applet";
     rev = "a1b294cad2f266e4f18d9de34167fa96a0ffdba8";
-    sha256 = "042307grf4zvn61gnflhsj5xsjykrk9sjjsprprm4iij0qpybxcw";
+    hash = "sha256-nPXlLwYyRlLzzVdLqdPM00vdi9SQOvuCsfsTl98BQxA=";
   };
 
   buildInputs = [

@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rfjakob";
     repo = "systembus-notify";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WzuBw7LXW54CCMgFE9BSJ2skxaz4IA2BcBny63Ihtt0=";
+    hash = "sha256-WzuBw7LXW54CCMgFE9BSJ2skxaz4IA2BcBny63Ihtt0=";
   };
 
   buildInputs = [ systemd ];

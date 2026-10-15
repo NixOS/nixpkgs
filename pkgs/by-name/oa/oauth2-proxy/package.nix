@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     repo = "oauth2-proxy";
     owner = "oauth2-proxy";
-    sha256 = "sha256-MKKJol0nK/isXqYwemvASI/DPIhGKvCUHrFfT3Y+LQM=";
+    hash = "sha256-MKKJol0nK/isXqYwemvASI/DPIhGKvCUHrFfT3Y+LQM=";
     rev = "v${version}";
   };
 

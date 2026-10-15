@@ -12,7 +12,7 @@ buildTileSet {
     owner = "jmz-b";
     repo = "UndeadPeopleTileset";
     rev = "f7f13b850fafe2261deee051f45d9c611a661534";
-    sha256 = "0r06srjr7rq51jk9yfyxz80nfgb98mkn86cbcjfxpibgbqvcp0zm";
+    hash = "sha256-9YPLNl5vxdudZIsZZGdFaT1nAfrdO5+mDAXnk2XWBmQ=";
   };
 
   modRoot = "MSX++UnDeadPeopleEdition";

@@ -15,7 +15,7 @@ ocamlPackages.buildDunePackage {
     owner = "talex5";
     repo = "wayland-proxy-virtwl";
     rev = "aa515e518a9e0de117d3b77b7e9db91aea7dcfbc";
-    sha256 = "sha256-VIm6jr9SfACtCQjrmELy64wECpuTjxQ3WlTQBL64rXI=";
+    hash = "sha256-VIm6jr9SfACtCQjrmELy64wECpuTjxQ3WlTQBL64rXI=";
   };
 
   minimalOCamlVersion = "5.0";

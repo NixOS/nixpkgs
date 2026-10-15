@@ -22,7 +22,7 @@ let
     owner = "garyttierney";
     repo = "me3";
     tag = "v${version}";
-    sha256 = "sha256-OgAJGzjt+VDjbyY3uOjX3M5HajXbdoF1YJFAgwiZ03o=";
+    hash = "sha256-OgAJGzjt+VDjbyY3uOjX3M5HajXbdoF1YJFAgwiZ03o=";
   };
 
   cargoHash = "sha256-e6tytA15kY58efmG3mIgZpTTa11Ijwl8u+NIBdYmha8=";

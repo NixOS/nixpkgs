@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "makew0rld";
     repo = "gemget";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-P5+yRaf2HioKOclJMMm8bJ8/BtBbNEeYU57TceZVqQ8=";
+    hash = "sha256-P5+yRaf2HioKOclJMMm8bJ8/BtBbNEeYU57TceZVqQ8=";
   };
 
   vendorHash = "sha256-l8UwkFCCNUB5zyhlyu8YC++MhmcR6midnElCgdj50OU=";

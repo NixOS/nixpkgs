@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "SR-G";
     repo = "sleep-on-lan";
     rev = "${finalAttrs.version}-RELEASE";
-    sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
+    hash = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

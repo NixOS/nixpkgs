@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-SFVQQzWOG8vdxiWV9lFnz9niVJB5QaclWGENzGgqZCk=";
+    hash = "sha256-SFVQQzWOG8vdxiWV9lFnz9niVJB5QaclWGENzGgqZCk=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ buildDotnetModule rec {
     owner = "fxsth";
     repo = "audiothekar";
     tag = "v${version}";
-    sha256 = "sha256-DZ4E8numXJdkvX5WYM6cioW5J89YuD9Hi8NfK+Z39cY=";
+    hash = "sha256-DZ4E8numXJdkvX5WYM6cioW5J89YuD9Hi8NfK+Z39cY=";
   };
 
   projectFile = "Audiothekar.sln";

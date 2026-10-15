@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "klange";
     repo = "nyancat";
     rev = finalAttrs.version;
-    sha256 = "1mg8nm5xzcq1xr8cvx24ym2vmafkw53rijllwcdm9miiz0p5ky9k";
+    hash = "sha256-M/lZLvgx1lQb45TKmEfh06m6RfVE9M1Q7gGz30u16NU=";
   };
 
   postPatch = ''

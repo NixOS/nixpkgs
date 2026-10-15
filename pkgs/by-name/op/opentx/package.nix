@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "opentx";
     repo = "opentx";
     rev = "release/${version}";
-    sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
+    hash = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
   patches = [

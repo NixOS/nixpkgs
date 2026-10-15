@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "ent";
     repo = "ent";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pkD8MYyinvuKCtSpHGfFE9y8GRP40qdeyjhB32yeiK4=";
+    hash = "sha256-pkD8MYyinvuKCtSpHGfFE9y8GRP40qdeyjhB32yeiK4=";
   };
 
   vendorHash = "sha256-FpyDGBT5uu2ibYz9grjmyHjP5GiOAKpnqLW90zf1OE4=";

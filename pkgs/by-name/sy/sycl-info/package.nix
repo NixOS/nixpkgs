@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "codeplaysoftware";
     repo = "sycl-info";
     rev = "b47d498ee2d6b77ec21972de5882e8e12efecd6c";
-    sha256 = "0fy0y1rcfb11p3vijd8wym6xkaicav49pv2bv2l18rma929n1m1m";
+    hash = "sha256-NdRgk0iqZhSo2Evsm8hWLKrZTfUcNRn3uCEsx3LwwDs=";
   };
 
   patches = [

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "jaalto";
     repo = "project--copyright-update";
     rev = "release/${version}";
-    sha256 = "sha256-FeKWCgCDA77iJ/cWtfx6hXSyWxwmlkW4EidPxy1W9VY=";
+    hash = "sha256-FeKWCgCDA77iJ/cWtfx6hXSyWxwmlkW4EidPxy1W9VY=";
   };
 
   buildInputs = [ perl ];

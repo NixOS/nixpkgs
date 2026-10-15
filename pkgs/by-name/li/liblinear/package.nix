@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cjlin1";
     repo = "liblinear";
     rev = "v${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}";
-    sha256 = "sha256-so7uCc/52NdN0V2Ska8EUdw/wSegaudX5AF+c0xe5jk=";
+    hash = "sha256-so7uCc/52NdN0V2Ska8EUdw/wSegaudX5AF+c0xe5jk=";
   };
 
   makeFlags = [

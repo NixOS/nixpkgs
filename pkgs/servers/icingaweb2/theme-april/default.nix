@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "Mikesch-mp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i1js2k47llzgmc77q9frvcmr02mqlhg0qhswx1486fvm6myxg0g";
+    hash = "sha256-D7zuq6nbGURC5xpi8CDFVYBc2c4u4XNYfZ/SQ6bQMkQ=";
   };
 
   installPhase = ''

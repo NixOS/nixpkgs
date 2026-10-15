@@ -15,7 +15,7 @@ buildPythonApplication rec {
     owner = "tinyfpga";
     repo = "TinyFPGA-Bootloader";
     rev = "97f6353540bf7c0d27f5612f202b48f41da75299";
-    sha256 = "0zbrvvb957z2lwbfd39ixqdsnd2w4wfjirwkqdrqm27bjz308731";
+    hash = "sha256-YRwExpfriIpzw5PnKB0nXDSrG+4xjeYWp+KfktbeeX0=";
   };
 
   sourceRoot = "${src.name}/programmer";

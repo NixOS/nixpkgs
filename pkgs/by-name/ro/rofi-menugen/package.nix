@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "octotep";
     repo = "menugen";
     rev = "168efd2608fdb88b1aff3e0244bda8402169f207";
-    sha256 = "09fk9i6crw772qlc5zld35pcff1jq4jcag0syial2q000fbpjx5m";
+    hash = "sha256-tXR5lwMAYEFV9Bo8xSTBMjjHbhmN/sIoFufwzExM0yU=";
   };
 
   postPatch = ''

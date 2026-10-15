@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "OpenCL-CLHPP";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-VrI6cufrIXUizV2exKnQ5B1zjKzWsX5imp3ON39BkSw=";
+    hash = "sha256-VrI6cufrIXUizV2exKnQ5B1zjKzWsX5imp3ON39BkSw=";
   };
 
   nativeBuildInputs = [

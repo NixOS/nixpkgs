@@ -27,7 +27,7 @@ lib.checkListOfEnum "${pname}: variant"
       owner = "sachnr";
       repo = "gruvbox-kvantum-themes";
       rev = "f47670be407c1f07c64890ad53884ee9977a7db1";
-      sha256 = "sha256-u2J4Zf9HuMjNCt3qVpgEffkytl/t277FzOvWL8Nm8os=";
+      hash = "sha256-u2J4Zf9HuMjNCt3qVpgEffkytl/t277FzOvWL8Nm8os=";
     };
 
     installPhase = ''

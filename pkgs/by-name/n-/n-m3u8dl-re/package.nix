@@ -11,7 +11,7 @@ buildDotnetModule (finalAttrs: {
     owner = "nilaoda";
     repo = "N_m3u8DL-RE";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-YqLlrQ5D16J9i/smEUaAsKeEvk7L+NhCBBPO0l5Y5Qo=";
+    hash = "sha256-YqLlrQ5D16J9i/smEUaAsKeEvk7L+NhCBBPO0l5Y5Qo=";
   };
 
   patches = [

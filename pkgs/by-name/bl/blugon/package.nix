@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jumper149";
     repo = "blugon";
     tag = finalAttrs.version;
-    sha256 = "1i67v8jxvavgax3dwvns200iwwdcvgki04liq0x64q52lg0vrh7m";
+    hash = "sha256-9cC8waOiYGI6wJESEOfbrHEeARDabt5GV2+r3SXax8Q=";
   };
 
   buildInputs = [

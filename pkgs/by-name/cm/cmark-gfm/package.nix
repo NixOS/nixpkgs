@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "github";
     repo = "cmark-gfm";
     rev = finalAttrs.version;
-    sha256 = "sha256-HiSGtRsSbW03R6aKoMVVFOLrwP5aXtpeXUC/bE5M/qo=";
+    hash = "sha256-HiSGtRsSbW03R6aKoMVVFOLrwP5aXtpeXUC/bE5M/qo=";
   };
 
   # Fix the build with CMake 4.

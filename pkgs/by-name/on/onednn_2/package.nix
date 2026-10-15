@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "uxlfoundation";
     repo = "oneDNN";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-oMPBORAdL2rk2ewyUrInYVHYBRvuvNX4p4rwykO3Rhs=";
+    hash = "sha256-oMPBORAdL2rk2ewyUrInYVHYBRvuvNX4p4rwykO3Rhs=";
   };
 
   # Substituting for CMake 4 compat.

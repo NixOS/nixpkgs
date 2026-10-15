@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sirjaren";
     repo = "redoflacs";
     rev = "4ca544cbc075d0865884906208cb2b8bc318cf9e";
-    sha256 = "19lcl09d4ngz2zzwd8dnnxx41ddvznhar6ggrlf1xvkr5gd7lafp";
+    hash = "sha256-1yl62it57h4cze+ZrKD9u7VAere2ocb/F/9Z0hKgjKY=";
   };
 
   dontBuild = true;

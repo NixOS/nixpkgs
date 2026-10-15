@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "magnetophon";
     repo = "CompBus";
     rev = "V${finalAttrs.version}";
-    sha256 = "0yhj680zgk4dn4fi8j3apm72f3z2mjk12amf2a7p0lwn9iyh4a2z";
+    hash = "sha256-XygCfUyWU3CPEq4qEaas4g8nTr1qSBQdsY3M9wEyEno=";
   };
 
   buildInputs = [

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "golang";
     repo = "protobuf";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-AfyZ6xlqmrsVqtoKV1XMEo/Vba9Kpu1EgwfF6pPSZ64=";
+    hash = "sha256-AfyZ6xlqmrsVqtoKV1XMEo/Vba9Kpu1EgwfF6pPSZ64=";
   };
 
   vendorHash = "sha256-jGAWUgW0DA7EwmlzVxnBmtbf2dp+P4Qwcb8mTAEhUi4=";

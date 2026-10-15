@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lcp";
     repo = "mokutil";
     rev = finalAttrs.version;
-    sha256 = "sha256-1UNIy1zw3H2FPU1qAb1hn08TQ+EkMeR4wMbicXnsU2A=";
+    hash = "sha256-1UNIy1zw3H2FPU1qAb1hn08TQ+EkMeR4wMbicXnsU2A=";
   };
 
   nativeBuildInputs = [

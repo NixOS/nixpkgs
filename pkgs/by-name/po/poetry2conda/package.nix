@@ -16,7 +16,7 @@ buildPythonApplication (finalAttrs: {
     owner = "dojeda";
     repo = "poetry2conda";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UqNoEGgStvqtxhYwExk7wO4SvATaM2kGaFbB5ViJa7U=";
+    hash = "sha256-UqNoEGgStvqtxhYwExk7wO4SvATaM2kGaFbB5ViJa7U=";
   };
 
   patches = [

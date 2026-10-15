@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "fedeinthemix";
     repo = "chez-mit";
     rev = "v${version}";
-    sha256 = "sha256-TmoLA0zLETKE+PsrGS5dce9xLQUIKwSNixRSVjbrOlk=";
+    hash = "sha256-TmoLA0zLETKE+PsrGS5dce9xLQUIKwSNixRSVjbrOlk=";
   };
 
   buildInputs = [

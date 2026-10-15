@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "wordgrinder";
     owner = "davidgiven";
     rev = finalAttrs.version;
-    sha256 = "124d1bnn2aqs6ik8pdazzni6a0583prz9lfdjrbwyb97ipqga9pm";
+    hash = "sha256-9Sb18I0nLc9Xls3R9PMdqABlov1ftYtmNBorYe0KjYg=";
   };
 
   makeFlags = [

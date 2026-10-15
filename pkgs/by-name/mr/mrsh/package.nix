@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "emersion";
     repo = "mrsh";
     rev = "9f9884083831ea1f94bdda5151c5df3888932849";
-    sha256 = "0vvdwzw3fq74lwgmy6xxkk01sd68fzhsw84c750lm1dma22xhjci";
+    hash = "sha256-kUnYhVC1hUpBOYwgruF3yDQdwJy9G18fp+RgN/jnbW8=";
   };
 
   strictDeps = true;

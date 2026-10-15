@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "cloudflare";
     repo = "cfssl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Xczpv6tLJiy2dXoGJ0QUmXwOn0p6S+lm2oz61oytQec=";
+    hash = "sha256-Xczpv6tLJiy2dXoGJ0QUmXwOn0p6S+lm2oz61oytQec=";
   };
 
   subPackages = [

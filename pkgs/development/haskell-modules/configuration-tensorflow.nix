@@ -12,7 +12,7 @@ let
     owner = "tensorflow";
     repo = "haskell";
     rev = "555d90c43202d5a3021893013bfc8e2ffff58c97";
-    sha256 = "uOuIeD4o+pcjvluTqyVU3GJUQ4e1+p3FhINJ9b6oK+k=";
+    hash = "sha256-uOuIeD4o+pcjvluTqyVU3GJUQ4e1+p3FhINJ9b6oK+k=";
     fetchSubmodules = true;
   };
 

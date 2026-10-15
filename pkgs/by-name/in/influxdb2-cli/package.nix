@@ -14,7 +14,7 @@ let
     owner = "influxdata";
     repo = "influx-cli";
     tag = "v${version}";
-    sha256 = "sha256-4bXA7d3DXiUQNBNEYMK+6RzlsKwAjl9ju6qHTL4qP8E=";
+    hash = "sha256-4bXA7d3DXiUQNBNEYMK+6RzlsKwAjl9ju6qHTL4qP8E=";
   };
 
 in

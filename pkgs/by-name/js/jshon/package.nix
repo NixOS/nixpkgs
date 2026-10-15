@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "keenerd";
     repo = "jshon";
     rev = "d919aeaece37962251dbe6c1ee50f0028a5c90e4";
-    sha256 = "1x4zfmsjq0l2y994bxkhx3mn5vzjxxr39iib213zjchi9h6yxvnc";
+    hash = "sha256-zO7uDUwRMvlHECvGNHLv8u9i6+hw9kVS8oICLHV1n/Q=";
   };
 
   buildInputs = [ jansson ];

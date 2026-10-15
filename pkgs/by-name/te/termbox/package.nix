@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "termbox";
     repo = "termbox";
     rev = "v${finalAttrs.version}";
-    sha256 = "075swv6ajx8m424dbmgbf6fs6nd5q004gjpvx48gkxmnf9spvykl";
+    hash = "sha256-dPp9dXK29vkQ6fvKRwDApVmjnXHr1dWIIBV1qczmuhw=";
   };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];

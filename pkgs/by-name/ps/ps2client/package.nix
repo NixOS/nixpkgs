@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "ps2dev";
     repo = "ps2client";
     rev = "92fcaf18aabf74daaed40bd50d428cce326a87c0";
-    sha256 = "1rlmns44pxm6dkh6d3cz9sw8v7pvi53r7r5r3kgwdzkhixjj0cdg";
+    hash = "sha256-rzEgZY9w/sbfHLnkk0eJ+56NuE6fjWbgbKb2S4i2leY=";
   };
 
   patchPhase = ''

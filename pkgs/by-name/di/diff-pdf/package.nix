@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "vslavik";
     repo = "diff-pdf";
     rev = "v${version}";
-    sha256 = "sha256-Cx1gp7wazaXB/LcUTe7Pas8iLl4TU1Jyt/1AeTu6YEA=";
+    hash = "sha256-Cx1gp7wazaXB/LcUTe7Pas8iLl4TU1Jyt/1AeTu6YEA=";
   };
 
   nativeBuildInputs = [

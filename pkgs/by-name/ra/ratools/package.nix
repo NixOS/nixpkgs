@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danrl";
     repo = "ratools";
     rev = "v${finalAttrs.version}";
-    sha256 = "07m45bn9lzgbfihmxic23wqp73nxg5ihrvkigr450jq6gzvgwawq";
+    hash = "sha256-mCv+9n8GS1BIfnHuDGN53Y5zMR+CxV5hdOt9muwqpB4=";
   };
 
   makeFlags = [

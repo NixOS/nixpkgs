@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dseagrav";
     repo = "ld";
     rev = finalAttrs.version;
-    sha256 = "02m43fj9dzc1i1jl01qwnhjiq1rh03jw1xq59sx2h3bhn7dk941x";
+    hash = "sha256-PZA027FwDSi6TgX3wOUAMAccJbQcB0BliIH9lqQbpAo=";
   };
 
   patches = [ ./fix-implicit-int.patch ];

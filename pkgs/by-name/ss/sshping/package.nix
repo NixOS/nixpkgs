@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "spook";
     repo = "sshping";
     rev = "v${finalAttrs.version}";
-    sha256 = "0p1fvpgrsy44yvj44xp9k9nf6z1fh0sqcjvy75pcb9f5icgms815";
+    hash = "sha256-JSBdH4vFpcVuOX5LhjWALnzjbJrpdkLk9oR4nd/dLlw=";
   };
 
   buildInputs = [ libssh ];

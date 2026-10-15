@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
     owner = "dsanson";
     repo = "termpdf.py";
     rev = "e7bd0824cb7d340b8dba7d862e696dba9cb5e5e2";
-    sha256 = "HLQZBaDoZFVBs4JfJcwhrLx8pxdEI56/iTpUjT5pBhk=";
+    hash = "sha256-HLQZBaDoZFVBs4JfJcwhrLx8pxdEI56/iTpUjT5pBhk=";
   };
 
   propagatedBuildInputs = [

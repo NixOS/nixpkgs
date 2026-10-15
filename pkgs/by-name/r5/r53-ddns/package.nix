@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "fleaz";
     repo = "r53-ddns";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+vJrcRxckAISYjab6kVT2mpChra1D3NflOqNWCch15I=";
+    hash = "sha256-+vJrcRxckAISYjab6kVT2mpChra1D3NflOqNWCch15I=";
   };
 
   vendorHash = "sha256-ImV/jxCYIWObN+jCSbXhuzR4TuRc/EgQ8SIV6x+wEpA=";

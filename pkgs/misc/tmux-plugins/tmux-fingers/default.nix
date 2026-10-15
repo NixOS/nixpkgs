@@ -13,7 +13,7 @@ let
       owner = "Morantron";
       repo = "tmux-fingers";
       rev = "${version}";
-      sha256 = "sha256-4aA60127Pv1jk7jzEhlU3NmPDmUbp9nE/8yYKkcMUb4=";
+      hash = "sha256-4aA60127Pv1jk7jzEhlU3NmPDmUbp9nE/8yYKkcMUb4=";
     };
 
     shardsFile = ./shards.nix;

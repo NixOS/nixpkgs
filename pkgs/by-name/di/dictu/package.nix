@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dictu-lang";
     repo = "dictu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Tahi2K8Q/KPc9MN7yWhkqp/MzXfzJzrGSsvnTCyI03U=";
+    hash = "sha256-Tahi2K8Q/KPc9MN7yWhkqp/MzXfzJzrGSsvnTCyI03U=";
   };
 
   nativeBuildInputs = [ cmake ];

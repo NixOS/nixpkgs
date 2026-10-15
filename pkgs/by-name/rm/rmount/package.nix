@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "Qubasa";
     repo = "rmount";
-    sha256 = "0j1ayncw1nnmgna7vyx44vwinh4ah1b0l5y8agc7i4s8clbvy3h0";
+    hash = "sha256-AA6/F2VIk3jYU8gXClaAikAb+Sak+32UfdXawJn1Kkg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

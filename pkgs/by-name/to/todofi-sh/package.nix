@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hugokernel";
     repo = "todofi.sh";
     rev = "v${finalAttrs.version}";
-    sha256 = "1gmy5inlghycsxiwnyyjyv81jn2fmfk3s9x78kcgyf7khzb5kwvj";
+    hash = "sha256-cvNZ1ofzOP/YRKcnPaarTlgZ0PbSe8tj18zDR20svr4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

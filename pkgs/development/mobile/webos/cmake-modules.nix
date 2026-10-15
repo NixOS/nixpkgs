@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "openwebos";
     repo = "cmake-modules-webos";
     rev = "submissions/${version}";
-    sha256 = "1l4hpcmgc98kp9g1642sy111ki5qyk3q7j10xzkgmnvz8lqffnxp";
+    hash = "sha256-t1vnMEV/2/rm7yDIg8f0uMQZQvBaEBNeuhMl9iq7kNA=";
   };
 
   nativeBuildInputs = [ cmake ];

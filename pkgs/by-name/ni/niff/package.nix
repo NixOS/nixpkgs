@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "FRidh";
     repo = "niff";
     rev = "v${version}";
-    sha256 = "1ziv5r57jzg2qg61izvkkyq1bz4p5nb6652dzwykfj3l2r3db4bi";
+    hash = "sha256-cZHVRhZ0SDc9/00UY5Ytl/wVsJ9z/xjMw+J9eUouO/4=";
   };
 
   buildInputs = [ python3 ];

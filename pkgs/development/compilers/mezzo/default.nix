@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     owner = "protz";
     repo = "mezzo";
     rev = "m8";
-    sha256 = "0yck5r6di0935s3iy2mm9538jkf77ssr789qb06ms7sivd7g3ip6";
+    hash = "sha256-5sbxTttRH10NWDihk7U+x02JRkm1Ch+HLiOB2Ewuk3k=";
   };
 
   strictDeps = true;

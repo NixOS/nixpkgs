@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "airspy";
     repo = "airspyone_host";
     tag = "v${finalAttrs.version}";
-    sha256 = "1v7sfkkxc6f8ny1p9xrax1agkl6q583mjx8k0lrrwdz31rf9qgw9";
+    hash = "sha256-iT+cXA7jN54zBRN1WQcq2ND5VOgq93SDt8gZ1ud0+uw=";
   };
 
   patches = [

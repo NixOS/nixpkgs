@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "j-lentz";
     repo = "iwgtk";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/Nxti4PfYVLnIiBgtAuR3KGI8dULszuSdTp+2DzBfbs=";
+    hash = "sha256-/Nxti4PfYVLnIiBgtAuR3KGI8dULszuSdTp+2DzBfbs=";
   };
 
   # patch systemd service to pass necessary environments and use absolute paths

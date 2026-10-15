@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "Clever";
     repo = "microplane";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TwNwXMQGsD9Kx5uH+kAOGlwCF1t1oAefVCbKmRtZ4Vc=";
+    hash = "sha256-TwNwXMQGsD9Kx5uH+kAOGlwCF1t1oAefVCbKmRtZ4Vc=";
   };
 
   vendorHash = "sha256-fF1tHhOtw1ms6447lna40NrZT3ItpiQu31Y0psXt1/Y=";

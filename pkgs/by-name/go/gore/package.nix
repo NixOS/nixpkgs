@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "x-motemen";
     repo = "gore";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0J+FnR2hFpoRV4+5NvU4Sp9YT+bNIXftruBDXPe9MIw=";
+    hash = "sha256-0J+FnR2hFpoRV4+5NvU4Sp9YT+bNIXftruBDXPe9MIw=";
   };
 
   vendorHash = "sha256-oS5LJfLFrmHEwayoD+HygfamZpmerIL1i4QtoRL4Om4=";

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kostassoid";
     repo = "lethe";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-YDPD+7ZWNWL+/3o6BfIxAkzuXFlqjur6cNJlMgKKERA=";
+    hash = "sha256-YDPD+7ZWNWL+/3o6BfIxAkzuXFlqjur6cNJlMgKKERA=";
   };
 
   cargoHash = "sha256-7YQ+fBdz10HT5/AlxWSC7uMMlV4hCiY29bKgjUSgc44=";

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "lwfinger";
     repo = "rtl8723ds";
     rev = "52e593e8c889b68ba58bd51cbdbcad7fe71362e4";
-    sha256 = "sha256-SszvDuWN9opkXyVQAOLjnNtPp93qrKgnGvzK0y7Y9b0=";
+    hash = "sha256-SszvDuWN9opkXyVQAOLjnNtPp93qrKgnGvzK0y7Y9b0=";
   };
 
   hardeningDisable = [ "pic" ];

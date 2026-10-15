@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
     owner = "mrworf";
     repo = "iceshelf";
     rev = "5380c49e3f7f3df04b61a494b2d94db2f2c65e25";
-    sha256 = "hiJZX6HG6a9kUr8R7DdkPBcuH3tmVJthWXrPtCaVayU=";
+    hash = "sha256-hiJZX6HG6a9kUr8R7DdkPBcuH3tmVJthWXrPtCaVayU=";
   };
 
   propagatedBuildInputs = [

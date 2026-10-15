@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "mikeryan";
     repo = "crackle";
     rev = "d83b4b6f4145ca53c46c36bbd7ccad751af76b75";
-    sha256 = "sha256-Dy4s/hr9ySrogltyk2GVsuAvwNF5+b6CDjaD+2FaPHA=";
+    hash = "sha256-Dy4s/hr9ySrogltyk2GVsuAvwNF5+b6CDjaD+2FaPHA=";
   };
 
   buildInputs = [ libpcap ];

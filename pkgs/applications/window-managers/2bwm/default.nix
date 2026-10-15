@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "venam";
     repo = "2bwm";
     rev = "v${version}";
-    sha256 = "1xwib612ahv4rg9yl5injck89dlpyp5475xqgag0ydfd0r4sfld7";
+    hash = "sha256-p1GnSQbNNQ+eeriXQ8r1l7aEJpM2FurTy2RDJYJZkfc=";
   };
 
   # Allow users set their own list of patches

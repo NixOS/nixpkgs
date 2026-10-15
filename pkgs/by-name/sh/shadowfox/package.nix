@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "arguablykomodo";
     repo = "shadowfox-updater";
     rev = "v${finalAttrs.version}";
-    sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
+    hash = "sha256-5ukk3EqulFlvrr8Jhd+t5jYZgDhnw6zMIHe1KMHhtYg=";
   };
 
   patches = [

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "dlbeer";
     repo = "mspdebug";
     rev = "v${version}";
-    sha256 = "sha256-4TisC0Nm3lYMWCJ3TtaHDAfLDejMQZJIruh2f7fCndU=";
+    hash = "sha256-4TisC0Nm3lYMWCJ3TtaHDAfLDejMQZJIruh2f7fCndU=";
   };
 
   enableParallelBuilding = true;

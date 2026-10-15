@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "maxscheurer";
     repo = "cppe";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
+    hash = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
   };
 
   patches = [

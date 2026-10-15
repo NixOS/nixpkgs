@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "thliebig";
     repo = "CSXCAD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
+    hash = "sha256-SSV5ulx3rCJg99I/oOQbqe+gOSs+BfcCo6UkWHVhnSs=";
   };
 
   patches = [

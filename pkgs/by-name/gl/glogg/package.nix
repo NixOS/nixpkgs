@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "nickbnf";
     repo = "glogg";
     rev = "v${version}";
-    sha256 = "0hf1c2m8n88frmxmyn0ndr8129p7iky49nq565sw1asaydm5z6pb";
+    hash = "sha256-65pfavNKq8B1MQXbRPyM5yYRUG4WWF97zQ4hi6pgwUE=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

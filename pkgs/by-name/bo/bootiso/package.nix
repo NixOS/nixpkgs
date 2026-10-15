@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "jsamr";
     repo = "bootiso";
     rev = "v${version}";
-    sha256 = "1l09d543b73r0wbpsj5m6kski8nq48lbraq1myxhidkgl3mm3d5i";
+    hash = "sha256-sbRR66Bvtgi7rwGrvCgi2KI49TS1SH0XB3mcNUhpCdA=";
   };
 
   patches = [

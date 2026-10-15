@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "love2d";
     repo = "love";
     tag = finalAttrs.version;
-    sha256 = "sha256-wZktNh4UB3QH2wAIIlnYUlNoXbjEDwUmPnT4vesZNm0=";
+    hash = "sha256-wZktNh4UB3QH2wAIIlnYUlNoXbjEDwUmPnT4vesZNm0=";
   };
 
   nativeBuildInputs = [

@@ -18,7 +18,7 @@ buildGoModule (finalAttrs: {
     owner = "bettercap";
     repo = "bettercap";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-oiJPZW0ywrRlKq9kfKilCxbq9WN5VhhY2T/5iDe78RM=";
+    hash = "sha256-oiJPZW0ywrRlKq9kfKilCxbq9WN5VhhY2T/5iDe78RM=";
   };
 
   vendorHash = "sha256-ssNGy40KMJ9P33uEGyYOer92QRS2T6DQlKaf/3XMFwQ=";

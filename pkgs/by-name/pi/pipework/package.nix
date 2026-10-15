@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "jpetazzo";
     repo = "pipework";
     rev = "ae42f1b5fef82b3bc23fe93c95c345e7af65fef3";
-    sha256 = "0c342m0bpq6ranr7dsxk9qi5mg3j5aw9wv85ql8gprdb2pz59qy8";
+    hash = "sha256-yONU/hWr5fsQxQVtnrgqcrxaIk6z63ayVdngu0AVZDA=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''

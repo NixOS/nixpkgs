@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nB7f6VTxRidymi9RV7W1x9JbWi9Eoa/CYzYmekYDVOo=";
+    hash = "sha256-nB7f6VTxRidymi9RV7W1x9JbWi9Eoa/CYzYmekYDVOo=";
   };
 
   nativeBuildInputs = [

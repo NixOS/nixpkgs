@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rime";
     repo = "librime";
     rev = finalAttrs.version;
-    sha256 = "sha256-HhmLA5W4+8BVGTozKCWCNhrXOIlRlLN/FiOBHKvUGcM=";
+    hash = "sha256-HhmLA5W4+8BVGTozKCWCNhrXOIlRlLN/FiOBHKvUGcM=";
   };
 
   nativeBuildInputs = [

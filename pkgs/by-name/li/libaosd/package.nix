@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "atheme-legacy";
     repo = "libaosd";
     rev = finalAttrs.version;
-    sha256 = "1cn7k0n74p6jp25kxwcyblhmbdvgw3mikvj0m2jh4c6xccfrgb9a";
+    hash = "sha256-Kq2XHWPdMAKlqEDuGevgb7dVIV2e8T6LuNJcciyYx7I=";
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MCRedstoner2004";
     repo = "imagelol";
     tag = "v${finalAttrs.version}";
-    sha256 = "0978zdrfj41jsqm78afyyd1l64iki9nwjvhd8ynii1b553nn4dmd";
+    hash = "sha256-rTZi7ShlhRitRw1uyW2KMxJDQ/PeKXQq1jIQ6XL76CQ=";
     fetchSubmodules = true;
   };
 

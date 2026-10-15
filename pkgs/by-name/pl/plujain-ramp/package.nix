@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "Houston4444";
     repo = "plujain-ramp";
     rev = "1bc1fed211e140c7330d6035122234afe78e5257";
-    sha256 = "1k7qpr8c15d623c4zqxwdklp98amildh03cqsnqq5ia9ba8z3016";
+    hash = "sha256-JoDxkVpJxYKx1ZgNABuNVaF06Wy840/YEKaVwFC++Mw=";
   };
 
   buildInputs = [

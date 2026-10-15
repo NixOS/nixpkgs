@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "sjau";
     repo = "easysnap";
     rev = "5f961442315a6f7eb8ca5b705bd52fe1e6d7dc42";
-    sha256 = "sha256-jiKdpwuw0Oil0sxUr/3KJ6Nbfxh8DvBei0yy0nRM+Vs=";
+    hash = "sha256-jiKdpwuw0Oil0sxUr/3KJ6Nbfxh8DvBei0yy0nRM+Vs=";
   };
 
   installPhase = ''

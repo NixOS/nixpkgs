@@ -11,7 +11,7 @@ callPackage ./build.nix rec {
     owner = "mighty-gerbils";
     repo = "gerbil";
     rev = "23c30a6062cd7e63f9d85300ce01585bb9035d2d";
-    sha256 = "15fh0zqkmnjhan1mgymq5fgbjsh5z9d2v6zjddplqib5zd2s3z6k";
+    hash = "sha256-0/yhRftlRUxva/KbLVr6BWq5niu4+leDVVDaOvEH0JU=";
     fetchSubmodules = true;
   };
   inherit gambit-support;

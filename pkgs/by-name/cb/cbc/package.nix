@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "coin-or";
     repo = "Cbc";
     tag = "releases/${finalAttrs.version}";
-    sha256 = "sha256-0Sz4/7CRKrArIUy/XxGIP7WMmICqDJ0VxZo62thChYQ=";
+    hash = "sha256-0Sz4/7CRKrArIUy/XxGIP7WMmICqDJ0VxZo62thChYQ=";
   };
 
   # or-tools has a hard dependency on Cbc static libraries, so we build both

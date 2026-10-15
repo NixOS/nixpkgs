@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "bojand";
     repo = "ghz";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hfHhsargP/odmpbfO24aDXr5m9VeDNOYyi1n9ji2trU=";
+    hash = "sha256-hfHhsargP/odmpbfO24aDXr5m9VeDNOYyi1n9ji2trU=";
   };
 
   vendorHash = "sha256-eu0YPKddYfjbOkF0yrUPu2PsjsyIn2pBm9+CDrRlB2k=";

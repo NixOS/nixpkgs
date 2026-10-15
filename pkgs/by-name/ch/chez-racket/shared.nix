@@ -22,7 +22,7 @@ stdenv.mkDerivation (
       owner = "racket";
       repo = "ChezScheme";
       rev = "8846c96b08561f05a937d5ecfe4edc96cc99be39";
-      sha256 = "IYJQzT88T8kFahx2BusDOyzz6lQDCbZIfSz9rZoNF7A=";
+      hash = "sha256-IYJQzT88T8kFahx2BusDOyzz6lQDCbZIfSz9rZoNF7A=";
       fetchSubmodules = true;
     };
 

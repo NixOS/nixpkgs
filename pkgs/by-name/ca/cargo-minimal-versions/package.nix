@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "taiki-e";
     repo = "cargo-minimal-versions";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-zNZBFCb8wCOYl+ipE/E/2iDNECB8dC9ZO/CPoR2BSM4=";
+    hash = "sha256-zNZBFCb8wCOYl+ipE/E/2iDNECB8dC9ZO/CPoR2BSM4=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back

@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "KBNLresearch";
     repo = "isolyzer";
     tag = finalAttrs.version;
-    sha256 = "sha256-NqkjnEwpaoyguG5GLscKS9UQGtF9N4jUL5JhrMtKCFE=";
+    hash = "sha256-NqkjnEwpaoyguG5GLscKS9UQGtF9N4jUL5JhrMtKCFE=";
   };
 
   build-system = with python3.pkgs; [

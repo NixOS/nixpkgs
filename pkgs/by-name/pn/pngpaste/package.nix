@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jcsalterego";
     repo = "pngpaste";
     tag = finalAttrs.version;
-    sha256 = "uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
+    hash = "sha256-uvajxSelk1Wfd5is5kmT2fzDShlufBgC0PDCeabEOSE=";
   };
 
   installPhase = ''

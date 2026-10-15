@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "cleverca22";
     repo = "toxvpn";
     rev = "300991571421d6bbcbc9786c8e7a479b7b24d82b";
-    sha256 = "sha256-7kJ/vLJ+xYD2A4DaDGrW0NScByU/etINhPhZRRnS6Yw=";
+    hash = "sha256-7kJ/vLJ+xYD2A4DaDGrW0NScByU/etINhPhZRRnS6Yw=";
   };
 
   buildInputs = [

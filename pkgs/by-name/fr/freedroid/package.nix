@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "ReinhardPrix";
     repo = "FreedroidClassic";
     rev = "release-${version}";
-    sha256 = "027wns25nyyc8afyhyp5a8wn13x9nlzmnqzqyyma1055xjy5imis";
+    hash = "sha256-OtZYvOylgKCq9/hjWz+1qY9gOVLleuidQsx7W4S2/Ag=";
   };
 
   nativeBuildInputs = [

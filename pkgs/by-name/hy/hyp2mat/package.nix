@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "koendv";
     repo = "hyp2mat";
     rev = "v${finalAttrs.version}";
-    sha256 = "03ibk51swxfl7pfrhcrfiffdi4mnf8kla0g1xj1lsrvrjwapfx03";
+    hash = "sha256-A3R3FZd5Z02D7OEBRSdytpLYnIsuM5jdPdR1rkOZKw4=";
   };
 
   postPatch = ''

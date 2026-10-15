@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tomclegg";
     repo = "mp3cat";
     rev = finalAttrs.version;
-    sha256 = "0n6hjg2wgd06m561zc3ib5w2m3pwpf74njv2b2w4sqqh5md2ymfr";
+    hash = "sha256-2VUvWi0QY024WGJLS467/I4qeFlxsB9MqQa0x8WT0Fg=";
   };
 
   makeFlags = [

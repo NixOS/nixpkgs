@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "karlch";
     repo = "vimiv-qt";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-28sk5qDVmrgXYX2wm5G8zv564vG6GwxNp+gjrFHCRfU=";
+    hash = "sha256-28sk5qDVmrgXYX2wm5G8zv564vG6GwxNp+gjrFHCRfU=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

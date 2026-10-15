@@ -14,7 +14,7 @@ buildNpmPackage (finalAttrs: {
     owner = "aws-cloudformation";
     repo = "cloudformation-languageserver";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-wQ8KOoXe4p+k3qJBxeuRmRibqy8kUgM9NLX8S3wb9Mc=";
+    hash = "sha256-wQ8KOoXe4p+k3qJBxeuRmRibqy8kUgM9NLX8S3wb9Mc=";
   };
 
   npmDepsHash = "sha256-Hw1u5LFZ0+Ls1xZD1FInAJdAbtdjEhL8DWLTxxkJkW4=";

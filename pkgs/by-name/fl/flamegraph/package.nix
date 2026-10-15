@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "brendangregg";
     repo = "FlameGraph";
     rev = "a96184c6939f8c6281fcd7285b54fba80555ac74";
-    sha256 = "sha256-hvp1HxmgNbe85kxe0NyolFUd+kPPBDYAt+g2K8pE1Ak=";
+    hash = "sha256-hvp1HxmgNbe85kxe0NyolFUd+kPPBDYAt+g2K8pE1Ak=";
   };
 
   buildInputs = [ perl ];

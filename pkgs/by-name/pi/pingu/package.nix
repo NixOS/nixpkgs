@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "CactiChameleon9";
     repo = "pingu";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KiJRr06N5zOq2vov+iKf5omrzxORxIUaEjM+rXfaoR0=";
+    hash = "sha256-KiJRr06N5zOq2vov+iKf5omrzxORxIUaEjM+rXfaoR0=";
     # Get values that require us to use git, then delete .git
     leaveDotGit = true;
     postFetch = ''

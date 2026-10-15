@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "rust-osdev";
     repo = "bootimage";
     rev = "v${finalAttrs.version}";
-    sha256 = "12p18mk3l473is3ydv3zmn6s7ck8wgjwavllimcpja3yjilxm3zg";
+    hash = "sha256-74/aaZR+KHlZjZRuxeXjaLKjja1/7OaHjuMQOmZF4Yo=";
   };
 
   cargoHash = "sha256-CkFJHW7yrIJi/KMGJgyhnLTMkrxnDwO3X4M1aml9cuM=";

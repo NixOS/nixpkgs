@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "pb-";
     repo = "gotypist";
     rev = finalAttrs.version;
-    sha256 = "0khl2f6bl121slw9mlf4qzsdarpk1v3vry11f3dvz7pb1q6zjj11";
+    hash = "sha256-IUj5DQ7rnr/bcCH4vMcO82bV9MfE0Zo41UEEuowTFE4=";
   };
 
   vendorHash = null;

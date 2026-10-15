@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BourgeoisLab";
     repo = "GPXLab";
     rev = "v${finalAttrs.version}";
-    sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
+    hash = "sha256-BDVpPWmTPk+zwyW/dduEgWMqKJQvfe9WdnThyBi3GyA=";
   };
 
   nativeBuildInputs = [

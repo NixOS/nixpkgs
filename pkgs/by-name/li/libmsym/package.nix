@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mcodev31";
     repo = "libmsym";
     tag = "v${finalAttrs.version}";
-    sha256 = "k+OEwrA/saupP/wX6Ii5My0vffiJ0X9xMCTrliMSMik=";
+    hash = "sha256-k+OEwrA/saupP/wX6Ii5My0vffiJ0X9xMCTrliMSMik=";
   };
 
   nativeBuildInputs = [ cmake ];

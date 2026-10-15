@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "denilsonsa";
     repo = "prettyping";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GhsoWnhX9xBnupmmHuKW9DA2KFgIzVbSO0CyR2FpJ74=";
+    hash = "sha256-GhsoWnhX9xBnupmmHuKW9DA2KFgIzVbSO0CyR2FpJ74=";
   };
 
   installPhase = ''

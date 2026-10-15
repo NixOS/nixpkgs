@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   version = "2024-02-16";
 
   src = fetchFromGitHub {
-    sha256 = "9lS4th+qeglsoA+1s45uEE2UGmlE3YtSy4/uGqWKU/k=";
+    hash = "sha256-9lS4th+qeglsoA+1s45uEE2UGmlE3YtSy4/uGqWKU/k=";
     rev = "c1baefa4f4d5cefbbbc7bfefc0c18356752c8a1b";
     repo = "duff";
     owner = "elmindreda";

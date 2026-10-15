@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "bitcoinknots";
         repo = "guix.sigs";
         rev = "da0adcba7ebe5f9e207810c967e3a7b5e6fe6658";
-        sha256 = "sha256-IEk3w5ofPYgw6cmgqEw/Kb+q2xpzrptvNgfwH7h4zEM=";
+        hash = "sha256-IEk3w5ofPYgw6cmgqEw/Kb+q2xpzrptvNgfwH7h4zEM=";
       };
 
       checksums = fetchurl {

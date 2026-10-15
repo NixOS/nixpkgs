@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "adamewing";
     repo = "tebreak";
     rev = version;
-    sha256 = "13mgh775d8hkl340923lfwwm4r5ps70girn8d6wgfxzwzxylz8iz";
+    hash = "sha256-P6JPff/8d/e4acjm+MDRt2RSOXd0iATIoBOiVs6Br44=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "fablabnbg";
     repo = "inkscape-silhouette";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-MfR88BuaAx6n5XRIjslpIk4PnDf6TLU9AsmHxKkcFS0=";
+    hash = "sha256-MfR88BuaAx6n5XRIjslpIk4PnDf6TLU9AsmHxKkcFS0=";
   };
 
   patches = [

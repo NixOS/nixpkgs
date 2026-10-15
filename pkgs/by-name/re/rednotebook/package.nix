@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "jendrikseipp";
     repo = "rednotebook";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-s80s5saJCNkuOGgdA7rVMLinBYOcq8h8MPR6lquOHSw=";
+    hash = "sha256-s80s5saJCNkuOGgdA7rVMLinBYOcq8h8MPR6lquOHSw=";
   };
 
   # We have not packaged tests.

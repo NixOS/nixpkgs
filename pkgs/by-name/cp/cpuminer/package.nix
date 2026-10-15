@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pooler";
     repo = "cpuminer";
     rev = "v${finalAttrs.version}";
-    sha256 = "0f44i0z8rid20c2hiyp92xq0q0mjj537r05sa6vdbc0nl0a5q40i";
+    hash = "sha256-ERBcFKAWsNW2UbqAfEaRsgIMcBfp+ggFA6LFjD6IhDg=";
   };
 
   patches = [

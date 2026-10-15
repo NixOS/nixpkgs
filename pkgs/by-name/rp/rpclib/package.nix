@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rpclib";
     repo = "rpclib";
     rev = "v${finalAttrs.version}";
-    sha256 = "0dlbkl47zd2fkxwbn93w51wmvfr8ssp4zribn5wi4cpiky44a4g9";
+    hash = "sha256-6RFFiJ/xMhJ5sSvmT67WKLtdeSh8JLt4n060fwidizY=";
   };
 
   nativeBuildInputs = [ cmake ];

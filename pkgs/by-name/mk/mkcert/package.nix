@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "FiloSottile";
     repo = "mkcert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FMAXjRL+kJ/hwGmaWBy8ecON+JCMgRytfpryeLWsSVc=";
+    hash = "sha256-FMAXjRL+kJ/hwGmaWBy8ecON+JCMgRytfpryeLWsSVc=";
   };
 
   vendorHash = "sha256-DdA7s+N5S1ivwUgZ+M2W/HCp/7neeoqRQL0umn3m6Do=";

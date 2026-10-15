@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "LibOFX";
     repo = "libofx";
     rev = finalAttrs.version;
-    sha256 = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
+    hash = "sha256-KOQrEAt1jHrOpPQ7QbGUADe0i7sQXNH2fblPRzT0EIg=";
   };
 
   # C++20 changes the signature of std::allocator::allocate. Vendored patch

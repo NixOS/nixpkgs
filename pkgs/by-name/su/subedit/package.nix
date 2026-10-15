@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     owner = "helixarch";
     repo = "subedit";
     rev = "74e11816d7b4813064a2434a5abc0f78f66c0e53";
-    sha256 = "sha256-3ywBBCWbwDqNNkxRupNJX6mYKxVFnoCFKav3Hc4E+8A=";
+    hash = "sha256-3ywBBCWbwDqNNkxRupNJX6mYKxVFnoCFKav3Hc4E+8A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

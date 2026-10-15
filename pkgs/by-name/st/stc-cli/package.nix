@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "tenox7";
     repo = "stc";
     rev = finalAttrs.version;
-    sha256 = "sha256-/h5T7xzUvguHhrE1DyIep/z7Xt1jNdDFtWeQdpwq6iE=";
+    hash = "sha256-/h5T7xzUvguHhrE1DyIep/z7Xt1jNdDFtWeQdpwq6iE=";
   };
 
   vendorHash = "sha256-M86CoiTN03a7cXtUobsO8CYmfcRsVrHaekIPiYIeV50=";

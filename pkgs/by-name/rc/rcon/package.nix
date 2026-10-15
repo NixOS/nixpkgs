@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "n0la";
     repo = "rcon";
     rev = finalAttrs.version;
-    sha256 = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
+    hash = "sha256-bHm6JeWmpg42VZQXikHl+BMx9zimRLBQWemTqOxyLhw=";
   };
 
   nativeBuildInputs = [

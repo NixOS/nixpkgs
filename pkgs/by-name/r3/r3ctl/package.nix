@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "0xfeedc0de64";
     repo = "r3ctl";
     rev = "a82cb5b3123224e706835407f21acea9dc7ab0f0";
-    sha256 = "5/L8jvEDJGJzsuAxPrctSDS3d8lbFX/+f52OVyGQ/RY=";
+    hash = "sha256-5/L8jvEDJGJzsuAxPrctSDS3d8lbFX/+f52OVyGQ/RY=";
   };
 
   buildPhase = ''

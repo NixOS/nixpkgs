@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
     owner = "rose-pine";
     repo = "gtk";
     rev = "7a4c40989fd42fd8d4a797f460c79fc4a085c304";
-    sha256 = "0q74wjyrsjyym770i3sqs071bvanwmm727xzv50wk6kzvpyqgi67";
+    hash = "sha256-x8SH/d1/mslB2b8fcWrlVu0VDtBYjwjOqd5Lnb3k5GA=";
   };
 
   nativeBuildInputs = [

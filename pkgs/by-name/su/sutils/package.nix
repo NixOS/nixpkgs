@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "baskerville";
     repo = "sutils";
     rev = finalAttrs.version;
-    sha256 = "0i2g6a6xdaq3w613dhq7mnsz4ymwqn6kvkyan5kgy49mzq97va6j";
+    hash = "sha256-0qh9Ev41Ef9mscrPPY3FvHryta0HwzaC4QOr1o0yT0Q=";
   };
 
   hardeningDisable = [ "format" ];

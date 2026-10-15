@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "notandy";
     repo = "ympd";
     rev = "v${finalAttrs.version}";
-    sha256 = "1nvb19jd556v2h2bi7w4dcl507p3p8xvjkqfzrcsy7ccy3502brq";
+    hash = "sha256-OC8ByvCMHa9Z/g5PuTu64x5QKGuEn7gEFNuU0mQKa9s=";
   };
 
   patches = [

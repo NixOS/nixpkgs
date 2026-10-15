@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JlTmUPY3yo/uROyd3nW1dJa23zbLhgQTwcmqZkPOrHs=";
+    hash = "sha256-JlTmUPY3yo/uROyd3nW1dJa23zbLhgQTwcmqZkPOrHs=";
     name = "${pname}-${version}-source";
     postFetch = ''
       cd $out

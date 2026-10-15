@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BioPP";
     repo = "bpp-core";
     rev = "v${finalAttrs.version}";
-    sha256 = "0ma2cl677l7s0n5sffh66cy9lxp5wycm50f121g8rx85p95vkgwv";
+    hash = "sha256-m7+5S7oF9YxeEMGBUpnn5XaaPDMGOqeLBfrQcwxlQlU=";
   };
 
   patches = [

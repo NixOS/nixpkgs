@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "d3adb5";
     repo = "stalonetray";
     rev = finalAttrs.version;
-    sha256 = "sha256-8qf9WFvYdvBnX+Eca8vkAMDYkmEra9B9q+RkRhIXkX4=";
+    hash = "sha256-8qf9WFvYdvBnX+Eca8vkAMDYkmEra9B9q+RkRhIXkX4=";
   };
 
   preConfigure =

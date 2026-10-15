@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jomo";
     repo = "imgur-screenshot";
     rev = "v${finalAttrs.version}";
-    sha256 = "0fkhvfraijbrw806pgij41bn1hc3r7l7l3snkicmshxj83lmsd5k";
+    hash = "sha256-szRd6UCyQ11ZnFYPeujJg8FgVyAyvmsA4nnJqLLbcDo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

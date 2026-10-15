@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "KaylaPP";
     repo = "SoliCurses";
     rev = "dc89ca00fc1711dc449d0a594a4727af22fc35a0";
-    sha256 = "sha256-zWYXpvEnViT/8gsdMU9Ymi4Hw+nwkG6FT/3h5sNMCE4=";
+    hash = "sha256-zWYXpvEnViT/8gsdMU9Ymi4Hw+nwkG6FT/3h5sNMCE4=";
   };
 
   buildInputs = [

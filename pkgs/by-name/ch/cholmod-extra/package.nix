@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "cholmod-extra";
     owner = "jluttine";
     tag = finalAttrs.version;
-    sha256 = "0hz1lfp0zaarvl0dv0zgp337hyd8np41kmdpz5rr3fc6yzw7vmkg";
+    hash = "sha256-b9Z9+PeGuZFz+bfVGci1qHl4xrjvg90A3VmpD66j4UM=";
   };
 
   patches = [ ./cholmod-internal-suitesparse7.patch ];

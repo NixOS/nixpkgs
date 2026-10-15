@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "gopherdata";
     repo = "gophernotes";
     rev = "55142043d19696ba037e3e93f9ec6c7f8436e82d";
-    sha256 = "sha256-+crqbsZce2xVbXgb6pyXzpP/5eACkWG2T76TUsL1hKA=";
+    hash = "sha256-+crqbsZce2xVbXgb6pyXzpP/5eACkWG2T76TUsL1hKA=";
   };
 
   patches = [

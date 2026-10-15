@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "artemanufrij";
     repo = "hashit";
     rev = finalAttrs.version;
-    sha256 = "1s8fbzg1z2ypn55xg1pfm5xh15waq55fkp49j8rsqiq8flvg6ybf";
+    hash = "sha256-bnnzNnUIR6wzkonc6UrBipcAe6nuhtdLsdeLH95fDuk=";
   };
 
   nativeBuildInputs = [

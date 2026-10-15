@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "gotify";
     repo = "cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-l6WiwAIxKSQnciyssY+dfEdn+GuCSrXdxxBNek4XRiA=";
+    hash = "sha256-l6WiwAIxKSQnciyssY+dfEdn+GuCSrXdxxBNek4XRiA=";
   };
 
   vendorHash = "sha256-320MFcSPv05Zh/Lawq6ry+eemcsRpJu85LSd6TOZ8mM=";

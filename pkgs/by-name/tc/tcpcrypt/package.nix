@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "tcpcrypt";
     owner = "scslab";
     rev = "v${finalAttrs.version}";
-    sha256 = "0a015rlyvagz714pgwr85f8gjq1fkc0il7d7l39qcgxrsp15b96w";
+    hash = "sha256-3KRVwtW5P4bToKcdGgGbLmD5kCso83dJOP+p7WkuASg=";
   };
 
   postUnpack = "mkdir -vp $sourceRoot/m4";

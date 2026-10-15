@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "garrynewman";
     repo = "bootil";
     rev = "beb4cec8ad29533965491b767b177dc549e62d23";
-    sha256 = "1njdj6nvmwf7j2fwqbyvd1cf5l52797vk2wnsliylqdzqcjmfpij";
+    hash = "sha256-Ml5XJcO/Yeoj1ZaLuU86otDiWGjbL8ydkMfxuq2RTdo=";
   };
 
   enableParallelBuilding = true;

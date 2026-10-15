@@ -18,14 +18,14 @@ stdenv.mkDerivation rec {
     owner = "jbeverly";
     repo = "pam_ssh_agent_auth";
     rev = "pam_ssh_agent_auth-${version}";
-    sha256 = "YD1R8Cox0UoNiuWleKGzWSzxJ5lhDRCB2mZPp9OM6Cs=";
+    hash = "sha256-YD1R8Cox0UoNiuWleKGzWSzxJ5lhDRCB2mZPp9OM6Cs=";
   };
 
   ed25519-donna = fetchFromGitHub {
     owner = "floodyberry";
     repo = "ed25519-donna";
     rev = "8757bd4cd209cb032853ece0ce413f122eef212c";
-    sha256 = "ETFpIaWQnlYG8ZuDG2dNjUJddlvibB4ukHquTFn3NZM=";
+    hash = "sha256-ETFpIaWQnlYG8ZuDG2dNjUJddlvibB4ukHquTFn3NZM=";
   };
 
   # Required because of fix-configure.patch

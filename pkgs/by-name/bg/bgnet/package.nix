@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "beejjorgensen";
     repo = "bgnet";
     rev = "782a785a35d43c355951b8151628d7c64e4d0346";
-    sha256 = "19w0r3zr71ydd29amqwn8q3npgrpy5kkshyshyji2hw5hky6iy92";
+    hash = "sha256-Ivlo/ISFQxGlh9pDPWfxN79rB0aW46qSaM2Hk//IgKc=";
   };
 
   buildPhase = ''

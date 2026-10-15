@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "stolowski";
     repo = "QComicBook";
     rev = finalAttrs.version;
-    sha256 = "1b769lp6gfwds4jb2g7ymhdm9c06zg57zpyz3zpdb40w07zfsjzv";
+    hash = "sha256-+0vt/gEckNXuH9/ff8r7BrBUG6z+PLEk0Y27Zy5N5qw=";
   };
 
   patches = [

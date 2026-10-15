@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "NGT-labs";
     repo = "NGT";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-yVxiVLk4LvvLfNmUrRl47obNR1iS1JHeq1biqWY+nj4=";
+    hash = "sha256-yVxiVLk4LvvLfNmUrRl47obNR1iS1JHeq1biqWY+nj4=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "pritunl";
     repo = "pritunl-zero-client";
     rev = version;
-    sha256 = "sha256-kccc8ZDh3S/Ko/MaBd5u0UxMNIbg5dhvRuecJuE3D6c=";
+    hash = "sha256-kccc8ZDh3S/Ko/MaBd5u0UxMNIbg5dhvRuecJuE3D6c=";
   };
 
   buildInputs = [ python3 ];

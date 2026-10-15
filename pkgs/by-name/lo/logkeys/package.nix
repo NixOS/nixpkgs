@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "kernc";
     repo = "logkeys";
     rev = "7a9f19fb6b152d9f00a0b3fe29ab266ff1f88129";
-    sha256 = "1k6kj0913imwh53lh6hrhqmrpygqg2h462raafjsn7gbd3vkgx8n";
+    hash = "sha256-FvU392jrHaulUyoLQ6B4+PmbK4YZGkhHgbzGERKQ08w=";
   };
 
   nativeBuildInputs = [

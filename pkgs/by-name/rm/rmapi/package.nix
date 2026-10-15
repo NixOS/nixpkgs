@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "ddvk";
     repo = "rmapi";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-mRJH0fQ8e4igR7IwcJdvUhrZDXvpTt/Dac7Pc9p7ITw=";
+    hash = "sha256-mRJH0fQ8e4igR7IwcJdvUhrZDXvpTt/Dac7Pc9p7ITw=";
   };
 
   vendorHash = "sha256-Qisfw+lCFZns13jRe9NskCaCKVj5bV1CV8WPpGBhKFc=";

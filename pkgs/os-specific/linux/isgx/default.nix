@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "linux-sgx-driver";
     rev = "sgx_diver_${version}"; # Typo is upstream's.
-    sha256 = "0kbbf2inaywp44lm8ig26mkb36jq3smsln0yp6kmrirdwc3c53mi";
+    hash = "sha256-sY7CBuMtx1ynuR5YqqseWJqxZjXiRVQpIZd7ZaNwa00=";
   };
 
   hardeningDisable = [ "pic" ];

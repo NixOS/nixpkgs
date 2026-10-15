@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "netflix";
     repo = "vmaf";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-6mwU2so1YM2pyWkJbDHVl443GgWtQazbBv3gTMBq5NA=";
+    hash = "sha256-6mwU2so1YM2pyWkJbDHVl443GgWtQazbBv3gTMBq5NA=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libvmaf";

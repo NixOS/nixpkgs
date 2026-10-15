@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Coffee2CodeNL";
     repo = "gebaar-libinput";
     tag = "v${finalAttrs.version}";
-    sha256 = "1kqcgwkia1p195xr082838dvj1gqif9d63i8a52jb0lc32zzizh6";
+    hash = "sha256-Bv74vxiMgiVFUSgO05KL+AW5GxpIIJB7SeEGFSd/DM8=";
     fetchSubmodules = true;
   };
 

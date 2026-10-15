@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "CiscoCXSecurity";
     repo = "enum4linux";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/R0P4Ft9Y0LZwKwhDGAe36UKviih6CNbJbj1lcNKEkM=";
+    hash = "sha256-/R0P4Ft9Y0LZwKwhDGAe36UKviih6CNbJbj1lcNKEkM=";
   };
 
   dontBuild = true;

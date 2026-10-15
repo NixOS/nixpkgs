@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cernekee";
     repo = "ocproxy";
     rev = "v${finalAttrs.version}";
-    sha256 = "03323nnhb4y9nzwva04mq7xg03dvdrgp689g89f69jqc261skcqx";
+    hash = "sha256-HbOpgxEMy2RcQi8hc19uuw3w+sGVALX5t8mTBa0dYgw=";
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,7 @@ buildGoModule (finalAttrs: {
     owner = "redhat-developer";
     repo = "app-services-cli";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9fydRgp2u1LWf0lEDMi1OxxFURd14oKCBDKACqrgWII=";
+    hash = "sha256-9fydRgp2u1LWf0lEDMi1OxxFURd14oKCBDKACqrgWII=";
   };
 
   vendorHash = null;

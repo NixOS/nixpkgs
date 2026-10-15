@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "thliebig";
     repo = "openEMS";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-wdH+Zw7G2ZigzBMX8p3GKdFVx/AhbTNL+P3w+YjI/dc=";
+    hash = "sha256-wdH+Zw7G2ZigzBMX8p3GKdFVx/AhbTNL+P3w+YjI/dc=";
   };
 
   patches = [

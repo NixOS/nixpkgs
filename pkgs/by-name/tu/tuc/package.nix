@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "riquito";
     repo = "tuc";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
+    hash = "sha256-+QkkwQfp818bKVo1yUkWKLMqbdzRJ+oHpjxB+UFDRsU=";
   };
 
   cargoHash = "sha256-Ry7S/Pqo3AoUKCyGFfV9RNWOguBwajJ8rOqRg+LFReY=";

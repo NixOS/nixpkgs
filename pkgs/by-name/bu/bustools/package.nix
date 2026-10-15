@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "BUStools";
     repo = "bustools";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-G+ZMoUmhINp18XKmXpdb5GT7YMsiK/XX2zrjt56CbLg=";
+    hash = "sha256-G+ZMoUmhINp18XKmXpdb5GT7YMsiK/XX2zrjt56CbLg=";
   };
 
   nativeBuildInputs = [ cmake ];

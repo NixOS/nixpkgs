@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "tbvdm";
     repo = "sigtop";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ZI4GuXWeLuEIKEQtsv6nugsfIc/Dlj2JYoVVmAr2O28=";
+    hash = "sha256-ZI4GuXWeLuEIKEQtsv6nugsfIc/Dlj2JYoVVmAr2O28=";
   };
 
   vendorHash = "sha256-NyZTLut10DBNlBYIXjRB9zL98ZZ/A6hu0ypsu3GjHq8=";

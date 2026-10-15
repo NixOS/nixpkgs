@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "icculus";
     repo = "smpeg";
     rev = "release_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    sha256 = "sha256-nq/i7cFGpJXIuTwN/ScLMX7FN8NMdgdsRM9xOD3uycs=";
+    hash = "sha256-nq/i7cFGpJXIuTwN/ScLMX7FN8NMdgdsRM9xOD3uycs=";
   };
 
   patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [ ./libx11.patch ] ++ [

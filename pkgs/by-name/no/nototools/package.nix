@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "notofonts";
     repo = "nototools";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-QQVAaBUO5rGTctDssKx77X6xuw8Jvkstr3sYnvIsXgM=";
+    hash = "sha256-QQVAaBUO5rGTctDssKx77X6xuw8Jvkstr3sYnvIsXgM=";
   };
 
   build-system = with python3Packages; [

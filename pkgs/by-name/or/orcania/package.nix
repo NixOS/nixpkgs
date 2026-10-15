@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "babelouest";
     repo = "orcania";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Cz3IE5UrfoWjMxQ/+iR1bLsYxf5DVN+7aJqLBcPjduA=";
+    hash = "sha256-Cz3IE5UrfoWjMxQ/+iR1bLsYxf5DVN+7aJqLBcPjduA=";
   };
 
   patches = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "bleskodev";
     repo = "rubyripper";
     rev = "v${finalAttrs.version}";
-    sha256 = "1qfwv8bgc9pyfh3d40bvyr9n7sjc2na61481693wwww640lm0f9f";
+    hash = "sha256-LjlQKSCGc85HMgGRYJQVTOpjU/Z7AdIGdP4m9hba3OE=";
   };
 
   preConfigure = "patchShebangs .";

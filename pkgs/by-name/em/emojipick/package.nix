@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation {
     owner = "thingsiplay";
     repo = "emojipick";
     tag = "20210127";
-    sha256 = "1kib3cyx6z9v9qw6yrfx5sklanpk5jbxjc317wi7i7ljrg0vdazp";
+    hash = "sha256-96u2wcuSnngiP2Ew2Zcs81pFpy7dZW84Tjt90z0bK84=";
   };
 
   dontConfigure = true;

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hanschen";
     repo = "ksuperkey";
     rev = "v${finalAttrs.version}";
-    sha256 = "1dvgf356fihfav8pjzww1q6vgd96c5h18dh8vpv022g9iipiwq8a";
+    hash = "sha256-CmEeb4zpCQH23Qg2FGBhJrW3DQ6cf3nRVg5GZ8pwb7c=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

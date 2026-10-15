@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "olegkapitonov";
     repo = "kapitonov-plugins-pack";
     rev = finalAttrs.version;
-    sha256 = "1mxi7b1vrzg25x85lqk8c77iziqrqyz18mqkfjlz09sxp5wfs9w4";
+    hash = "sha256-hCfteLldJ/CpdBNXFL7HGccfz2FoYlpQL+L9vMM6sdc=";
   };
 
   nativeBuildInputs = [

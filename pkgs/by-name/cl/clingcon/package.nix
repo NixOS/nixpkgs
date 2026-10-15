@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "potassco";
     repo = "clingcon";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-ZHqEMD/jDLdFmupH1PyxKvuXvV6wVtwVJjoCe8RJ734=";
+    hash = "sha256-ZHqEMD/jDLdFmupH1PyxKvuXvV6wVtwVJjoCe8RJ734=";
   };
 
   postPatch = ''

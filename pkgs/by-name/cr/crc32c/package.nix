@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "crc32c";
     tag = finalAttrs.version;
-    sha256 = "0c383p7vkfq9rblww6mqxz8sygycyl27rr0j3bzb8l8ga71710ii";
+    hash = "sha256-MYJwwlEPUbT+GhLkfAT1zD+v0e+4Gs7pygm7uc8daDA=";
     fetchSubmodules = true;
   };
 

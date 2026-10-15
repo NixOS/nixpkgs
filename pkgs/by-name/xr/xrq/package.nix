@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "arianon";
     repo = "xrq";
     rev = "d5dc19c63881ebdd1287a02968e3a1447dde14a9";
-    sha256 = "1bxf6h3fjw3kjraz7028m7p229l423y1ngy88lqvf0xl1g3dhp36";
+    hash = "sha256-ZlzYxgu0A7cxRcg/G/wQhCYh7qlIgPNVlnNw6QY0rq8=";
   };
 
   installPhase = ''

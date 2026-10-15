@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "francma";
     repo = "wob";
     rev = finalAttrs.version;
-    sha256 = "sha256-Bn/WN9Ix4vm9FDFVKc/vRLP4WeVNaJFz1WBuS9tqJhY=";
+    hash = "sha256-Bn/WN9Ix4vm9FDFVKc/vRLP4WeVNaJFz1WBuS9tqJhY=";
   };
 
   strictDeps = true;

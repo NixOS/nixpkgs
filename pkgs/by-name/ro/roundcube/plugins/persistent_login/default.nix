@@ -8,6 +8,6 @@ roundcubePlugin rec {
     owner = "mfreiholz";
     repo = pname;
     rev = "version-${version}";
-    sha256 = "1qf7q1sypwa800pgxa3bg6ngcpkf4dqgg6jqx8cnd6cb7ikbfldb";
+    hash = "sha256-q1G3ZjyLmWYZ6lia93Ajbl72rHlrqP4uAEjx63XAx+E=";
   };
 }

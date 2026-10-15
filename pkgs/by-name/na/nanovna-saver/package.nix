@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "NanoVNA-Saver";
     repo = "nanovna-saver";
     tag = "v${version}";
-    sha256 = "sha256-Asx4drb9W2NobdgOlbgdm1aAzB69hnIWvOM915F7sgA=";
+    hash = "sha256-Asx4drb9W2NobdgOlbgdm1aAzB69hnIWvOM915F7sgA=";
   };
 
   nativeBuildInputs = [

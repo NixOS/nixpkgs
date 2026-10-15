@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "compudj";
     repo = "librseq";
     rev = "170f840b498e1aff068b90188727a656111bfc2f";
-    sha256 = "0rdx59y8y9x8cfmmx5gl66gibkzpk3kw5lrrqhrxan8zr37a055y";
+    hash = "sha256-vhSgzsgfWdUzxDnTwueY988VnzH0lV6rY6gnj3wqvWU=";
   };
 
   outputs = [

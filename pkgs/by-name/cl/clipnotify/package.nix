@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cdown";
     repo = "clipnotify";
     rev = "9cb223fbe494c5b71678a9eae704c21a97e3bddd";
-    sha256 = "1x9avjq0fgw0svcbw6b6873qnsqxbacls9sipmcv86xia4bxh8dn";
+    hash = "sha256-tiHYF1GxG7RZvVEnTZlaHWuLx0FmGb7Y1oA/B7DcKvU=";
   };
 
   buildInputs = [

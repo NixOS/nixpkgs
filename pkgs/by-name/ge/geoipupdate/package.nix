@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "maxmind";
     repo = "geoipupdate";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JGJOHFxRjK9N1jWgOwot84biWyNQEvbVXOFqrxRtRlY=";
+    hash = "sha256-JGJOHFxRjK9N1jWgOwot84biWyNQEvbVXOFqrxRtRlY=";
   };
 
   vendorHash = "sha256-CRJmTycjg195aYhGp85d1gCbbStaPBsfwKcXljpt4Ko=";

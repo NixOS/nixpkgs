@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "mkubaczyk";
     repo = "helmsman";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-TeP7M0Mtd3rx9hcRCvgJAs7fBx2SZwUZSAhI/yhaO6k=";
+    hash = "sha256-TeP7M0Mtd3rx9hcRCvgJAs7fBx2SZwUZSAhI/yhaO6k=";
   };
 
   subPackages = [ "cmd/helmsman" ];

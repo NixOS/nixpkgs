@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
     owner = "flozz";
     repo = "rivalcfg";
     tag = "v${version}";
-    sha256 = "sha256-MUbt8beVG6UjpLFqxGC8nTaSswvHN3PJ/jE28BBL8bs=";
+    hash = "sha256-MUbt8beVG6UjpLFqxGC8nTaSswvHN3PJ/jE28BBL8bs=";
   };
 
   build-system = with python3Packages; [ flit-core ];

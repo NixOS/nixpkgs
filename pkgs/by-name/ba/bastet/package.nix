@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fph";
     repo = "bastet";
     tag = finalAttrs.version;
-    sha256 = "09kamxapm9jw9przpsgjfg33n9k94bccv65w95dakj0br33a75wn";
+    hash = "sha256-lpejxsgLyKlaSbyYzdgiaSY7xnPy6fvzTVymelWvaiY=";
   };
 
   patches = [

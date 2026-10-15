@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "bennofs";
     repo = "nix-script";
     rev = "7706b45429ff22c35bab575734feb2926bf8840b";
-    sha256 = "0yiqljamcj9x8z801bwj7r30sskrwv4rm6sdf39j83jqql1fyq7y";
+    hash = "sha256-/mDvAsVYDiTTcE2bmsnmeWoNRj6SrwDQRz1JVpWkOHo=";
   };
 
   strictDeps = true;

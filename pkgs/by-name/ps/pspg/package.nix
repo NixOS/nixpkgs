@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "okbob";
     repo = "pspg";
     rev = finalAttrs.version;
-    sha256 = "sha256-Vta5sAfsJWiu+iUYPA5cxUxpk098FTIIYZwNtKRzIJw=";
+    hash = "sha256-Vta5sAfsJWiu+iUYPA5cxUxpk098FTIIYZwNtKRzIJw=";
   };
 
   nativeBuildInputs = [

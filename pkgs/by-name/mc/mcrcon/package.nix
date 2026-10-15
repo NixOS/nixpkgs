@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Tiiffi";
     repo = "mcrcon";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cedeKsZgEyu0jqN4kBSgMJzFNUfCVXCEwH3M54miSG4=";
+    hash = "sha256-cedeKsZgEyu0jqN4kBSgMJzFNUfCVXCEwH3M54miSG4=";
   };
 
   buildPhase = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ssdeep-project";
     repo = "ssdeep";
     rev = "release-${finalAttrs.version}";
-    sha256 = "1yx6yjkggshw5yl89m4kvyzarjdg2l3hs0bbjbrfzwp1lkfd8i0c";
+    hash = "sha256-DETU3KTh8u/ykmsBDQcVr8msvt+T1ISoLxzq96b0pvs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

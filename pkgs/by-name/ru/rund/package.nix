@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dragon-lang";
     repo = "rund";
     rev = "v${finalAttrs.version}";
-    sha256 = "10x6f1nn294r5qnpacrpcbp348dndz5fv4nz6ih55c61ckpkvgcf";
+    hash = "sha256-jr0972TBsFJgNN+S7cpvtiEy7mI3M3UtLpkkYW1wpoM=";
   };
 
   buildInputs = [ dcompiler ];

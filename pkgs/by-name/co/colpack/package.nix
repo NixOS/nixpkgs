@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "CSCsw";
     repo = "ColPack";
     rev = "v" + finalAttrs.version;
-    sha256 = "1p05vry940mrjp6236c0z83yizmw9pk6ly2lb7d8rpb7j9h03glr";
+    hash = "sha256-mb4BYJJn3YzaWVR4auZNvP7oB/qAmSHMlbkCknzeBdw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

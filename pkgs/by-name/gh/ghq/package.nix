@@ -19,7 +19,7 @@ buildGoModule (finalAttrs: {
     owner = "x-motemen";
     repo = "ghq";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-UrxfWZw9TBQUuTfhp2IVfVxnFvGF1GIRfP87mkND/1Q=";
+    hash = "sha256-UrxfWZw9TBQUuTfhp2IVfVxnFvGF1GIRfP87mkND/1Q=";
   };
 
   vendorHash = "sha256-FvMqeUfX4c2Vm+L2GIDGoxN3w+7UyNI0VRada0zSvcc=";

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "tonyrog";
     repo = "cl";
     rev = "cl-${version}";
-    sha256 = "1gwkjl305a0231hz3k0w448dsgbgdriaq764sizs5qfn59nzvinz";
+    hash = "sha256-38b9bSrW4aJ/1MQcrGJubz3dECEczPFhGAKoAgaVk78=";
   };
 
   # https://github.com/tonyrog/cl/issues/39

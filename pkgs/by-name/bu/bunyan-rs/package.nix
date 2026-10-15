@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "LukeMathWalker";
     repo = "bunyan";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-dqhZIwxWBMXS2RgE8YynYrESVyAOIJ9ujAKcp2tDhvA=";
+    hash = "sha256-dqhZIwxWBMXS2RgE8YynYrESVyAOIJ9ujAKcp2tDhvA=";
   };
 
   cargoHash = "sha256-eLbfrlZWwPv1AFgwFz+IacLZrSl9/KU9zfTstwB8ol0=";

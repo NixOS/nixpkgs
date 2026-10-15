@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "icholy";
     repo = "ttygif";
     rev = finalAttrs.version;
-    sha256 = "sha256-GsMeVR2wNivQguZ6B/0v39Td9VGHg+m3RtAG9DYkNmU=";
+    hash = "sha256-GsMeVR2wNivQguZ6B/0v39Td9VGHg+m3RtAG9DYkNmU=";
   };
 
   makeFlags = [

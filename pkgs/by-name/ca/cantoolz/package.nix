@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "CANToolz";
     repo = "CANToolz";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0ROWx1CsKtjxmbCgPYZpvr37VKsEsWCwMehf0/0/cnY=";
+    hash = "sha256-0ROWx1CsKtjxmbCgPYZpvr37VKsEsWCwMehf0/0/cnY=";
   };
 
   patches = [

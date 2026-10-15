@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "euank";
     repo = "pazi";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-PDgk6VQ/J9vkFJ0N+BH9LqHOXRYM+a+WhRz8QeLZGiM=";
+    hash = "sha256-PDgk6VQ/J9vkFJ0N+BH9LqHOXRYM+a+WhRz8QeLZGiM=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

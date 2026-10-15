@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "google";
     repo = "marl";
-    sha256 = "0pnbarbyv82h05ckays2m3vgxzdhpcpg59bnzsddlb5v7rqhw51w";
+    hash = "sha256-PBQOcT67LNqa/nal8i67sP3+9qhCezVZAVCg7VdWy14=";
     rev = "40209e952f5c1f3bc883d2b7f53b274bd454ca53";
   };
 

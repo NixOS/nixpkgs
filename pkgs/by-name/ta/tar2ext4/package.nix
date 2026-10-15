@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "microsoft";
     repo = "hcsshim";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Jl0Iiojc4Z20MQKKkjKDC3b6ZR6JXGfTWro9EWNXWjY=";
+    hash = "sha256-Jl0Iiojc4Z20MQKKkjKDC3b6ZR6JXGfTWro9EWNXWjY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/cmd/tar2ext4";

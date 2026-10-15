@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "colonelpanic8";
     repo = "rofi-systemd";
     tag = "v${version}";
-    sha256 = "1zwbw119mblp5b6dj4h92fi0y2ymimlgh4bawi5ks2051hpq6c1a";
+    hash = "sha256-KjCDLwwFCD1L5GoR+GiN1QsPohMJEtnMKpeumkLgi/8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

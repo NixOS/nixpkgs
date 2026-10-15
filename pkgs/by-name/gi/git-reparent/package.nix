@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "MarkLodato";
     repo = "git-reparent";
     rev = "a99554a32524a86421659d0f61af2a6c784b7715";
-    sha256 = "0v0yxydpw6r4awy0hb7sbnh520zsk86ibzh1xjf3983yhsvkfk5v";
+    hash = "sha256-u0w3t4Z+oDSc7AH+FQ2a+gNRoF36LAg8VyQbfpvvHmw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

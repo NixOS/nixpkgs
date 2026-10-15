@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KnightOS";
     repo = "scas";
     rev = finalAttrs.version;
-    sha256 = "sha256-JGQE+orVDKKJsTt8sIjPX+3yhpZkujISroQ6g19+MzU=";
+    hash = "sha256-JGQE+orVDKKJsTt8sIjPX+3yhpZkujISroQ6g19+MzU=";
   };
 
   cmakeFlags = [ "-DSCAS_LIBRARY=1" ];

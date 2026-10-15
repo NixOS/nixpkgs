@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "PapirusDevelopmentTeam";
     repo = "papirus-folders";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pkzYhE4dNqyl5TvXQqs915QzwZwsXtdAQ+4B29oe9LA=";
+    hash = "sha256-pkzYhE4dNqyl5TvXQqs915QzwZwsXtdAQ+4B29oe9LA=";
   };
 
   buildInputs = [

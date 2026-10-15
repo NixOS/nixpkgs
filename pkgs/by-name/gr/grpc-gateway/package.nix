@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "grpc-ecosystem";
     repo = "grpc-gateway";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-+Yi6yk6tumKlYl7XuGOIlB+Vlg453tBE17KDTHLdjsg=";
+    hash = "sha256-+Yi6yk6tumKlYl7XuGOIlB+Vlg453tBE17KDTHLdjsg=";
   };
 
   vendorHash = "sha256-a4M0fC/yzyV6erz/cJ4roIzMQNtWuGKMRTaZ47fJbVY=";

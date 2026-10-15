@@ -12,7 +12,7 @@ buildDartApplication {
     owner = "breitburg";
     repo = "domine";
     rev = "d99d02b014d009b0201380a21ddaa57696dc77af";
-    sha256 = "038yfa22q7lzz85czmny3c1lkv8mjv4pq62cbmh054fqvgf3k3s4";
+    hash = "sha256-RI853NvYkQJgXUwYfMmWFe1JAxve1s8K+p8eLIRyHg0=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;

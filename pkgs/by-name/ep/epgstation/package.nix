@@ -19,7 +19,7 @@ buildNpmPackage rec {
     owner = "l3tnun";
     repo = "EPGStation";
     rev = "v${version}";
-    sha256 = "K1cAvmqWEfS6EY4MKAtjXb388XLYHtouxNM70PWgFig=";
+    hash = "sha256-K1cAvmqWEfS6EY4MKAtjXb388XLYHtouxNM70PWgFig=";
   };
 
   patches = [

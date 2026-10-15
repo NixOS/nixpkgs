@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "orhun";
     repo = "systeroid";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-Ip5zFyCMtTwfgY/XoHPOJq7VGCjZWVAgnjf6QsTG9go=";
+    hash = "sha256-Ip5zFyCMtTwfgY/XoHPOJq7VGCjZWVAgnjf6QsTG9go=";
   };
 
   postPatch = ''

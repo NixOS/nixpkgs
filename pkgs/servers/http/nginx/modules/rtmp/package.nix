@@ -13,7 +13,7 @@ mkNginxPlugin (finalAttrs: {
     owner = "arut";
     repo = "nginx-rtmp-module";
     tag = "v${finalAttrs.version}";
-    sha256 = "0y45bswk213yhkc2v1xca2rnsxrhx8v6azxz9pvi71vvxcggqv6h";
+    hash = "sha256-0Gz8Hut7hxP3Tb9/ZTbqMHdts1Cshy3YhH4EMblehXg=";
   };
 
   patches = [

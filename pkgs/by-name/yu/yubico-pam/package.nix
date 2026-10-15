@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Yubico";
     repo = "yubico-pam";
     rev = finalAttrs.version;
-    sha256 = "0hb773zlf11xz4bwmsqv2mq5d4aq2g0crdr5cp9xwc4ivi5gd4kg";
+    hash = "sha256-b5L2StyRMN7TZSW3zMATWJFWcBUb68oX+T0ER/84Z0E=";
   };
 
   nativeBuildInputs = [

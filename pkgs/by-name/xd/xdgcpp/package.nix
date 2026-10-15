@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "Grumbel";
     repo = "xdgcpp";
     rev = "e2c40c081e2ee2d315d1d0b3ae5981d5fd77260e";
-    sha256 = "sha256-eujYRUw8UpDFgEvjHUPsJ/QJN+A+hzcebfgteM9kvXM=";
+    hash = "sha256-eujYRUw8UpDFgEvjHUPsJ/QJN+A+hzcebfgteM9kvXM=";
   };
 
   nativeBuildInputs = [ cmake ];

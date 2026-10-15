@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "elasticdog";
     repo = "transcrypt";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-OWLkgvhnQ9BqN+OTXnvAI3BWsO4RdzmJeWDYyFhfcJs=";
+    hash = "sha256-OWLkgvhnQ9BqN+OTXnvAI3BWsO4RdzmJeWDYyFhfcJs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

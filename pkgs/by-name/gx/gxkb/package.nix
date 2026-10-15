@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "zen-tools";
     repo = "gxkb";
     rev = "v${version}";
-    sha256 = "sha256-oBIBIkj4p6HlF0PRQtI/K5dhLs7pbPxN7Cgr/YZaI1s=";
+    hash = "sha256-oBIBIkj4p6HlF0PRQtI/K5dhLs7pbPxN7Cgr/YZaI1s=";
   };
 
   nativeBuildInputs = [

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "plattfot";
     repo = "pinentry-rofi";
     rev = finalAttrs.version;
-    sha256 = "sha256-GHpVO8FRphVW0+In7TtB39ewwVLU1EHOeVL05pnZdFQ=";
+    hash = "sha256-GHpVO8FRphVW0+In7TtB39ewwVLU1EHOeVL05pnZdFQ=";
   };
 
   nativeBuildInputs = [

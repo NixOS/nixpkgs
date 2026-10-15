@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mypaint";
     repo = "libmypaint";
     rev = "v${finalAttrs.version}";
-    sha256 = "1ppgpmnhph9h8ayx9776f79a0bxbdszfw9c6bw7c3ffy2yk40178";
+    hash = "sha256-6ARAphfeucEOX4Yl7r5uqy+g0nHmnNS9QjDBC229794=";
   };
 
   patches = [

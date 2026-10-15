@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "darrylb123";
     repo = "usbrelay";
     rev = finalAttrs.version;
-    sha256 = "sha256-9jEiMmBEpqY4+nKh3H8N/JrLohp/7oPK3rPmRjp2gvc=";
+    hash = "sha256-9jEiMmBEpqY4+nKh3H8N/JrLohp/7oPK3rPmRjp2gvc=";
   };
 
   nativeBuildInputs = [

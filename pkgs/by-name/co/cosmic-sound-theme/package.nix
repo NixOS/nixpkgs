@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pop-os";
     repo = "cosmic-sound-theme";
     tag = "epoch-${finalAttrs.version}";
-    sha256 = "sha256-TVB+GnFmrPf1+OdfQozFoi+P41oNNW+4qrKtVl08Bbg=";
+    hash = "sha256-TVB+GnFmrPf1+OdfQozFoi+P41oNNW+4qrKtVl08Bbg=";
   };
 
   strictDeps = true;

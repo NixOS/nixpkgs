@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Cockatrice";
     repo = "Cockatrice";
     rev = finalAttrs.version;
-    sha256 = "sha256-jLHGWtHbJTQ5Gefrnd8aUq1K3f2QzyE4YU5bW//gH4Y=";
+    hash = "sha256-jLHGWtHbJTQ5Gefrnd8aUq1K3f2QzyE4YU5bW//gH4Y=";
   };
 
   nativeBuildInputs = [

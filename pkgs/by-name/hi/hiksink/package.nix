@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "CornerBit";
     repo = "hiksink";
     rev = finalAttrs.version;
-    sha256 = "sha256-k/cBCc7DywyBbAzCRCHdrOVmo+QVCsSgDn8hcyTIUI8=";
+    hash = "sha256-k/cBCc7DywyBbAzCRCHdrOVmo+QVCsSgDn8hcyTIUI8=";
   };
 
   cargoHash = "sha256-P5h0jYSSy6i30g93Jor98vOmniJCA4eMyQkI8TLfbN8=";

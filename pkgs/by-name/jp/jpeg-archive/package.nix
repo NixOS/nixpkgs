@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "danielgtaylor";
     repo = "jpeg-archive";
     rev = "8da4bf76b6c3c0e11e4941294bfc1857c119419b";
-    sha256 = "1639y9qp2ls80fzimwmwds792q8rq5p6c14c0r4jswx4yp6dcs33";
+    hash = "sha256-Y2jWzPWkcy1JBowEZm7BGWGRjm688hq/A0hTcXHyaZg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

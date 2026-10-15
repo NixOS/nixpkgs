@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "quickfix";
     repo = "quickfix";
     rev = "v${finalAttrs.version}";
-    sha256 = "1fgpwgvyw992mbiawgza34427aakn5zrik3sjld0i924a9d17qwg";
+    hash = "sha256-j+MTWlJEpAgalXrMmH+xU6kjCBnqP67iqiIl7vfj97k=";
   };
 
   patches = [

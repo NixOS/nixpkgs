@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "lharding";
     repo = "tasknc";
     rev = "a182661fbcc097a933d5e8cce3922eb1734a563e";
-    sha256 = "0jrv2k1yizfdjndbl06lmy2bb62ky2rjdk308967j31c5kqqnw56";
+    hash = "sha256-pnCL8SwsDHlMQmDMJrPwU5i1hK/UALqalc396MMUO0s=";
   };
 
   # Pull pending upstream inclusion for ncurses-6.3:

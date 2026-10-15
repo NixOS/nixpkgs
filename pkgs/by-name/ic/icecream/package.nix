@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "icecc";
     repo = "icecream";
     rev = finalAttrs.version;
-    sha256 = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
+    hash = "sha256-nBdUbWNmTxKpkgFM3qbooNQISItt5eNKtnnzpBGVbd4=";
   };
   enableParallelBuilding = true;
 

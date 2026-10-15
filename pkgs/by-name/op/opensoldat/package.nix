@@ -26,7 +26,7 @@ let
       owner = "opensoldat";
       repo = "base";
       rev = "5b6e5bef23f5c0d58fb1d4d887b9b94ebcf799b4";
-      sha256 = "sha256-k3P4xSO7DgXn6EzDqlo+RHHTuMDPNvG5y+2iXqguh/M=";
+      hash = "sha256-k3P4xSO7DgXn6EzDqlo+RHHTuMDPNvG5y+2iXqguh/M=";
     };
 
     nativeBuildInputs = [ python3 ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "opensoldat";
     repo = "opensoldat";
     rev = "220468f558f6932ba1dc180a9ef84913d07ab324";
-    sha256 = "sha256-BnTLuc/wucFNKh0jnVggpHNvLj/1kqL7i7fF7ORiIZA=";
+    hash = "sha256-BnTLuc/wucFNKh0jnVggpHNvLj/1kqL7i7fF7ORiIZA=";
   };
 
   nativeBuildInputs = [

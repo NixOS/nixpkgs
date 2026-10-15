@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GhostNaN";
     repo = "mpvpaper";
     rev = finalAttrs.version;
-    sha256 = "sha256-FpwMhzYmbjwvbpJd6xDRka6h2bvgsqdopqP5deQKXSA=";
+    hash = "sha256-FpwMhzYmbjwvbpJd6xDRka6h2bvgsqdopqP5deQKXSA=";
   };
 
   strictDeps = true;

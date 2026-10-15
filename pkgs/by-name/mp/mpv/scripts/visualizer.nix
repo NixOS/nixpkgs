@@ -12,7 +12,7 @@ buildLua {
     owner = "mfcc64";
     repo = "mpv-scripts";
     rev = "fd73f95c6b642366adf1df8dd4ff998d89d2e13e";
-    sha256 = "+4QV1f+8YffevXNYETHDl4Rwb5cDx+YBbaDk7MscHEU=";
+    hash = "sha256-+4QV1f+8YffevXNYETHDl4Rwb5cDx+YBbaDk7MscHEU=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

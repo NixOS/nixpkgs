@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
     owner = "SorkinType";
     repo = "Merriweather-Sans";
     rev = "8a1b078e3aeec6aecc856c3422898816af9b9dc7";
-    sha256 = "1f6a64bv4b4b1v3g2pgrzxcys8rk12wq6wfxamgzligcq5fxaffd";
+    hash = "sha256-zTnVXcHsRfpfVd1xg7kIMyPtWf/5XfHGDossshcxyrg=";
   };
 
   # TODO: it would be nice to build this from scratch, but lots of

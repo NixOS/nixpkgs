@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "darakian";
     repo = "ddh";
     rev = finalAttrs.version;
-    sha256 = "XFfTpX4c821pcTAJZFUjdqM940fRoBwkJC6KTknXtCw=";
+    hash = "sha256-XFfTpX4c821pcTAJZFUjdqM940fRoBwkJC6KTknXtCw=";
   };
 
   cargoHash = "sha256-rl9+3JSFkqZwaIWCuZBDhDF0QBr+aB2I7kB1o9LWCEw=";

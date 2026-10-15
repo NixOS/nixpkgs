@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "octobanana";
     repo = "crex";
     rev = finalAttrs.version;
-    sha256 = "086rvwl494z48acgsq3yq11qh1nxm8kbf11adn16aszai4d4ipr3";
+    hash = "sha256-I99IGonqa2WCbSoEtyaq3QaIQ8B+YP2YQuSTRCjf2SA=";
   };
 
   postPatch = ''

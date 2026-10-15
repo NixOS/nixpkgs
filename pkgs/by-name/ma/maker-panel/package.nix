@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "twitchyliquid64";
     repo = "maker-panel";
     rev = finalAttrs.version;
-    sha256 = "0dlsy0c46781sb652kp80pvga7pzx6xla64axir92fcgg8k803bi";
+    hash = "sha256-cQ2AJnqPOZFy7IoYRbvp/x719gXoTlHM0gEdQxjwmjY=";
   };
 
   cargoHash = "sha256-H4eKZlay0IZ8vAclGruDAyh7Vd6kCvGLxJ5y/cuF+F4=";

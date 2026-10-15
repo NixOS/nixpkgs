@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "jaeles-project";
     repo = "gospider";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1EnKheHaS1kxw0cjxCahT3rUWBXiqxjKefrDBI2xIvY=";
+    hash = "sha256-1EnKheHaS1kxw0cjxCahT3rUWBXiqxjKefrDBI2xIvY=";
   };
 
   vendorHash = "sha256-egjjSEZH8F6UMbnkz3xytIzdW/oITB3RL1ddxrmvSZM=";

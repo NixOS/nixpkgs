@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "robokoding";
     repo = "sumorobot-manager";
     rev = "v${version}";
-    sha256 = "07snhwmqqp52vdgr66vx50zxx0nmpmns5cdjgh50hzlhji2z1fl9";
+    hash = "sha256-ibrwRZSQfggKfLKxom291YLePyh9G5Nf26JcjCuHVh8=";
   };
 
   buildInputs = [ python3Packages.python ];

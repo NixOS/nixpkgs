@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "brummer10";
     repo = "XTuner";
     tag = "v${finalAttrs.version}";
-    sha256 = "1i5chfnf3hcivwzni9z6cn9pb68qmwsx8bf4z7d29a5vig8kbhrv";
+    hash = "sha256-O8M10Yu7qCTa+cQt1DWvGJl1k2Xmp2g/35HB4ayDrMQ=";
     fetchSubmodules = true;
   };
 

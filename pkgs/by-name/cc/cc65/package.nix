@@ -12,7 +12,7 @@ gccStdenv.mkDerivation rec {
     owner = "cc65";
     repo = "cc65";
     rev = "V${version}";
-    sha256 = "01a15yvs455qp20hri2pbg2wqvcip0d50kb7dibi9427hqk9cnj4";
+    hash = "sha256-RFqWJoZHkBRXbGdNUBq4kW3MxVtXxAyBuLgUorcvQQU=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];

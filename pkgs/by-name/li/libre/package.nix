@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "baresip";
     repo = "re";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cG7etDjpWdOhZ2dUhkXxlKpDpEoUG/7z8KkQXgSSVbw=";
+    hash = "sha256-cG7etDjpWdOhZ2dUhkXxlKpDpEoUG/7z8KkQXgSSVbw=";
   };
 
   buildInputs = [

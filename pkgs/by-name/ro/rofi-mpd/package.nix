@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "JakeStanger";
     repo = "Rofi_MPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "0jabyn6gqh8ychn2a06xws3avz0lqdnx3qvqkavfd2xr6sp2q7lg";
+    hash = "sha256-jx4srja5i+a2mnjj0W3DFPythubdACUsZB5B/Iz1S0k=";
   };
 
   build-system = with python3Packages; [ setuptools ];

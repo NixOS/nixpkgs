@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "brandt";
     repo = "symlinks";
     rev = "v${finalAttrs.version}";
-    sha256 = "EMWd7T/k4v1uvXe2QxhyPoQKUpKIUANE9AOwX461FgU=";
+    hash = "sha256-EMWd7T/k4v1uvXe2QxhyPoQKUpKIUANE9AOwX461FgU=";
   };
 
   buildFlags = [ "CC=${stdenv.cc}/bin/cc" ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "IreneKnapp";
     repo = "oneko";
     rev = finalAttrs.version_name;
-    sha256 = "0vx12v5fm8ar3f1g6jbpmd3b1q652d32nc67ahkf28djbqjgcbnc";
+    hash = "sha256-zC72JF6yIeEmVMcwK0YTxeCwRqt3SfOCG1mh6soWoW8=";
   };
   nativeBuildInputs = [
     imake

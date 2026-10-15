@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "auriamg";
     repo = "macdylibbundler";
     rev = version;
-    sha256 = "0j4ij48jf5izgymzxxaakf6vc50w9q0761yir6nfj1n6qlnrlidf";
+    hash = "sha256-rkWaLcXGBumsydEHcwBOHBS2jZtK9f6rfz8WJxGRkUg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

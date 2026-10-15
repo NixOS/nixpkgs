@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "shibatch";
     repo = "SSRC";
     rev = "4adf75116dfc0ef709fef74a0e2f3360bd15007f";
-    sha256 = "0hgma66v7sszkpz5jkyscj0q6lmjfqdwf1hw57535c012pa2vdrh";
+    hash = "sha256-MLct1BUBsDLKKRwGxxt2slKDgWTaT1n+nV/rs41R9UE=";
   };
 
   installPhase = ''

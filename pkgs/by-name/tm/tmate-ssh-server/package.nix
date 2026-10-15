@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "tmate-io";
     repo = "tmate-ssh-server";
     rev = "d7334ee4c3c8036c27fb35c7a24df3a88a15676b";
-    sha256 = "sha256-V3p0vagt13YjQPdqpbSatx5DnIEXL4t/kfxETSFYye0=";
+    hash = "sha256-V3p0vagt13YjQPdqpbSatx5DnIEXL4t/kfxETSFYye0=";
   };
 
   postPatch = ''

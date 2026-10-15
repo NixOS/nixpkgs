@@ -12,7 +12,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "pelzlpj";
     repo = "orpie";
     tag = "release-${version}";
-    sha256 = "sha256-LwhH2BO4p8Y8CB2pNkl2heIR7yh42erdTcDsxgy1ouc=";
+    hash = "sha256-LwhH2BO4p8Y8CB2pNkl2heIR7yh42erdTcDsxgy1ouc=";
   };
 
   patches = [ ./prefix.patch ];

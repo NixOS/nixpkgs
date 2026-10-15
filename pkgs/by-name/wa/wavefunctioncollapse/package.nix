@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "mxgmn";
     repo = "WaveFunctionCollapse";
     rev = "ef660c037b1d7c4ebce66efc625af2bb2f2111c0";
-    sha256 = "1dr5fvdgn1jqqacby6rrqm951adx3jw0j70r5i8pmrqnnw482l8m";
+    hash = "sha256-FVGBCLcW53pRLBkcCbgcvalQUsU5G7+YwlgG+9p2Jbc=";
   };
   buildPhase = ''
     mcs *.cs -out:wavefunctioncollapse.exe -r:System.Drawing

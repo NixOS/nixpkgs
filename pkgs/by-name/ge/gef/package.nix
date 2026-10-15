@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "hugsy";
     repo = "gef";
     rev = finalAttrs.version;
-    sha256 = "sha256-KHPX4mGo+yy56Rmjd5yx8U5doXrACV2/ZCh+NeQxB0Y=";
+    hash = "sha256-KHPX4mGo+yy56Rmjd5yx8U5doXrACV2/ZCh+NeQxB0Y=";
   };
 
   dontBuild = true;

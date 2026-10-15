@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "jech";
     repo = "shncpd";
     rev = "62ef688db7a6535ce11e66c8c93ab64a1bb09484";
-    sha256 = "1sj7a77isc2jmh7gw2naw9l9366kjx6jb909h7spj7daxdwvji8f";
+    hash = "sha256-DkW5eeuqHXn1gQmkJU2X05iRaOLKCv4OrFIwHc9RR+o=";
   };
 
   preConfigure = ''

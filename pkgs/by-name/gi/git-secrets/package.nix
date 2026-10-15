@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "awslabs";
     repo = "git-secrets";
     rev = finalAttrs.version;
-    sha256 = "10lnxg0q855zi3d6804ivlrn6dc817kilzdh05mmz8a0ccvm2qc7";
+    hash = "sha256-h2FRN2NAoV9rAbB9GucJiDVjM92RAGTaiL8UhMHrloI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

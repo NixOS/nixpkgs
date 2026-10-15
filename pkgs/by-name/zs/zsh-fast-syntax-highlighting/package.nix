@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "zdharma-continuum";
     repo = "fast-syntax-highlighting";
     rev = "v${version}";
-    sha256 = "sha256-caVMOdDJbAwo8dvKNgwwidmxOVst/YDda7lNx2GvOjY=";
+    hash = "sha256-caVMOdDJbAwo8dvKNgwwidmxOVst/YDda7lNx2GvOjY=";
   };
 
   strictDeps = true;

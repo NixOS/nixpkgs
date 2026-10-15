@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "named-data";
     repo = "ndn-cxx";
     rev = "ndn-cxx-${finalAttrs.version}";
-    sha256 = "sha256-u9+QxqdCET1f5B54HF+Jk/YuQvhcYWsPNIVHi5l0XTM=";
+    hash = "sha256-u9+QxqdCET1f5B54HF+Jk/YuQvhcYWsPNIVHi5l0XTM=";
   };
 
   patches = [

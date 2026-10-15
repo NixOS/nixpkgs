@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
     owner = "stamblerre";
     repo = "gocode";
     rev = "v${finalAttrs.version}";
-    sha256 = "YAOYrPPKgnjCErq8+iW0Le51clGBv0MJy2Nnn7UVo/s=";
+    hash = "sha256-YAOYrPPKgnjCErq8+iW0Le51clGBv0MJy2Nnn7UVo/s=";
   };
 
   vendorHash = null;

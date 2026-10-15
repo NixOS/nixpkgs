@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "rotemreiss";
     repo = "uddup";
     rev = "v${finalAttrs.version}";
-    sha256 = "1f5dm3772hiik9irnyvbs7wygcafbwi7czw3b47cwhb90b8fi5hg";
+    hash = "sha256-D5bo0AJpQc4OWYN/diJfTrHn+dFre5tjmjFCcc6orbg=";
   };
 
   build-system = with python3.pkgs; [

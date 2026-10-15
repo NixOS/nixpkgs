@@ -16,7 +16,7 @@ buildLua rec {
     owner = "Ajatt-Tools";
     repo = "mpvacious";
     rev = "v${version}";
-    sha256 = "sha256-I0h9tf1pwCkWPn/6t2mxhe4MPx6GsPR+F5F29NAgdXI=";
+    hash = "sha256-I0h9tf1pwCkWPn/6t2mxhe4MPx6GsPR+F5F29NAgdXI=";
   };
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 

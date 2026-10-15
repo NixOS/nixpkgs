@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner = "streambinder";
     repo = "vpnc";
     rev = "6a70db13f6e9201101e1c4890393566be6000e6a";
-    sha256 = "sha256-8XgEoQn7hz/eU7w+jqxYUBuOpAQlc+2qTj1mcDMHK30=";
+    hash = "sha256-8XgEoQn7hz/eU7w+jqxYUBuOpAQlc+2qTj1mcDMHK30=";
     fetchSubmodules = true;
   };
 

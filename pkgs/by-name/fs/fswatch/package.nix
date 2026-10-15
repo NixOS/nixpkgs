@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "emcrisostomo";
     repo = "fswatch";
     rev = finalAttrs.version;
-    sha256 = "sha256-vzTegBbAgwscFuHbMKlXOmw6PuDRGeJiUciFxF55pKE=";
+    hash = "sha256-vzTegBbAgwscFuHbMKlXOmw6PuDRGeJiUciFxF55pKE=";
   };
 
   nativeBuildInputs = [

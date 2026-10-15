@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "wireghoul";
     repo = "doona";
     rev = "master";
-    sha256 = "0x9irwrw5x2ia6ch6gshadrlqrgdi1ivkadmr7j4m75k04a7nvz1";
+    hash = "sha256-4W97FAGznErkybWpuWOI7WVMc1NQPwOZUVH0wjPPMXU=";
   };
 
   buildInputs = [ perl ];

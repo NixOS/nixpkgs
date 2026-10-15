@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "wfxr";
     repo = "csview";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JFuqaGwCSfEIncBgLu6gGaOvAC5vojKFjruWcuSghS0=";
+    hash = "sha256-JFuqaGwCSfEIncBgLu6gGaOvAC5vojKFjruWcuSghS0=";
   };
 
   cargoHash = "sha256-CXIfE1EsNwm4vsybQSdfKewBYpzBh+uQu1jYAm8DDtI=";

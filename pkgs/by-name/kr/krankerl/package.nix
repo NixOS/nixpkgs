@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ChristophWurst";
     repo = "krankerl";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jQe4rDhRQdTILjbgMN1Fa3O2OCJxJOr8nmKDeI1AFos=";
+    hash = "sha256-jQe4rDhRQdTILjbgMN1Fa3O2OCJxJOr8nmKDeI1AFos=";
   };
 
   cargoHash = "sha256-lfW28vMxhnf6R1y82itf9dUTAtelH39Am3JYL/YlQNo=";

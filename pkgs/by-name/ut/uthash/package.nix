@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "troydhanson";
     repo = "uthash";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pEuBQVQSszuL7dIPZYSAyrr3tf6BTc/NWMBoFESCYkw=";
+    hash = "sha256-pEuBQVQSszuL7dIPZYSAyrr3tf6BTc/NWMBoFESCYkw=";
   };
 
   doCheck = true;

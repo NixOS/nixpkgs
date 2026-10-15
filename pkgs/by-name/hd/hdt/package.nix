@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rdfhdt";
     repo = "hdt-cpp";
     rev = "v${finalAttrs.version}";
-    sha256 = "1vsq80jnix6cy78ayag7v8ajyw7h8dqyad1q6xkf2hzz3skvr34z";
+    hash = "sha256-n4y8px7/Q+FmNzg05XFD8HAvFdrnKa/Q8cz0aCVAWO8=";
   };
 
   patches = [

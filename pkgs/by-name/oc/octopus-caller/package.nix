@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "luntergroup";
     repo = "octopus";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-FAogksVxUlzMlC0BqRu22Vchj6VX+8yNlHRLyb3g1sE=";
+    hash = "sha256-FAogksVxUlzMlC0BqRu22Vchj6VX+8yNlHRLyb3g1sE=";
   };
 
   nativeBuildInputs = [

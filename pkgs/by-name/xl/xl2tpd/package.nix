@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "xelerance";
     repo = "xl2tpd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-T4oEMMLb/SPkXfJ55fxBx9ii98qZVZRxPoU/eXlKb4U=";
+    hash = "sha256-T4oEMMLb/SPkXfJ55fxBx9ii98qZVZRxPoU/eXlKb4U=";
   };
 
   buildInputs = [ libpcap ];

@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     rev = "v${finalAttrs.version}";
     owner = "AcalephStorage";
     repo = "consul-alerts";
-    sha256 = "0836zicv76sd6ljhbbii1mrzh65pch10w3gfa128iynaviksbgn5";
+    hash = "sha256-xb6lZ9zK+ohEUO4NDgJktxj4cw0xrgUlNU2bs1n8ZiA=";
   };
 
   postPatch = ''

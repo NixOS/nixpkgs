@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     owner = "ryanbinns";
     repo = "ttwatch";
     rev = "260aff5869fd577d788d86b546399353d9ff72c1";
-    sha256 = "0yd2hs9d03gfvwm1vywpg2qga6x5c74zrj665wf9aa8gmn96hv8r";
+    hash = "sha256-GW1okq0PKZUcL8bI/MlhpRv1sHiX+x0q3+4N0JKGonk=";
   };
 
   nativeBuildInputs = [

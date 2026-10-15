@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dokuwiki";
     repo = "dokuwiki";
     rev = "release-${finalAttrs.version}";
-    sha256 = "sha256-84kMuFTWYo6Cjd6qpkZsLZoECIP9IzSrc9dX1uKMp0M=";
+    hash = "sha256-84kMuFTWYo6Cjd6qpkZsLZoECIP9IzSrc9dX1uKMp0M=";
   };
 
   preload = writeText "preload.php" ''

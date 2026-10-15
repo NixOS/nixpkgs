@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "marwan-at-work";
     repo = "mod";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-kk/+ePZpUc9Q8YYh4mbPy+n4VP7/NFL1wsMvmz9/Jog=";
+    hash = "sha256-kk/+ePZpUc9Q8YYh4mbPy+n4VP7/NFL1wsMvmz9/Jog=";
   };
 
   vendorHash = "sha256-drGfJFuEsJyZJ1x40ww0rFYsl0AkjLbznCWgluwOCYs=";

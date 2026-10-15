@@ -48,7 +48,7 @@ let
     repo = "libzt";
     fetchSubmodules = true;
     rev = "1a9d83b8c4c2bdcd7ea6d8ab1dd2771b16eb4e13";
-    sha256 = "sha256-/A77ZM4s+br1hYa0OBdjXcWXUXYG+GiEYcW8VB+UJHo=";
+    hash = "sha256-/A77ZM4s+br1hYa0OBdjXcWXUXYG+GiEYcW8VB+UJHo=";
   };
 in
 

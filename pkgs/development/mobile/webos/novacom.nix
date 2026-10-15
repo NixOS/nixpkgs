@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "openwebos";
     repo = "novacom";
     rev = "submissions/${version}";
-    sha256 = "12s6g7l20kakyjlhqpli496miv2kfsdp17lcwhdrzdxvxl6hnf4n";
+    hash = "sha256-ljgLDe27t58b5IyecJt2U+xYTSKRXgyp9FNNIOh5Ros=";
   };
 
   nativeBuildInputs = [

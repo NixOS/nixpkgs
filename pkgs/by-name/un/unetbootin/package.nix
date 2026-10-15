@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "unetbootin";
     repo = "unetbootin";
     rev = finalAttrs.version;
-    sha256 = "sha256-psX15XicPXAsd36BhuvK0G3GQS8hV/hazzO0HByCqV4=";
+    hash = "sha256-psX15XicPXAsd36BhuvK0G3GQS8hV/hazzO0HByCqV4=";
   };
 
   setSourceRoot = ''

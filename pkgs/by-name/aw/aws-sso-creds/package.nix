@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "jaxxstorm";
     repo = "aws-sso-creds";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-GcnxIS1ffnQnoquNob3rflr9VydkOkoPqrgpZ21gsd4=";
+    hash = "sha256-GcnxIS1ffnQnoquNob3rflr9VydkOkoPqrgpZ21gsd4=";
   };
   vendorHash = "sha256-GiloBizb8ec7PgXbzQEOKjyJP5doFnQ2ALH3Y1+AKZw=";
 

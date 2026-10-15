@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "Sarcasm";
     repo = "compdb";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-nFAgTrup6V5oE+LP4UWDOCgTVCv2v9HbQbkGW+oDnTg=";
+    hash = "sha256-nFAgTrup6V5oE+LP4UWDOCgTVCv2v9HbQbkGW+oDnTg=";
   };
 
   build-system = with python3.pkgs; [

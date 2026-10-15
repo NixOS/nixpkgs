@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "fhackenberger";
     repo = "ktikz";
     rev = version;
-    sha256 = "1s83x8r2yi64wc6ah2iz09dj3qahy0fkxx6cfgpkavjw9x0j0582";
+    hash = "sha256-AhUgQU9cbjXvc8z0Ph3wUOEhWwI/CqgM48RELzLqA+k=";
   };
 
   patches = [

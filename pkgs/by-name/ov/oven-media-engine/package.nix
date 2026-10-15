@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "OvenMediaLabs";
     repo = "OvenMediaEngine";
     rev = "v${version}";
-    sha256 = "sha256-T/ec3Ac9Kwu2GjdszfbXlGroSuDeOuiz/zxoPA3HBlo=";
+    hash = "sha256-T/ec3Ac9Kwu2GjdszfbXlGroSuDeOuiz/zxoPA3HBlo=";
   };
 
   patches = [

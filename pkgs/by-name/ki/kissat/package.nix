@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${finalAttrs.version}";
-    sha256 = "sha256-hgB1U2Pmh1hEyNA3ej3fXxxf0YjCRgtOuSddRl6s0eo=";
+    hash = "sha256-hgB1U2Pmh1hEyNA3ej3fXxxf0YjCRgtOuSddRl6s0eo=";
   };
 
   outputs = [

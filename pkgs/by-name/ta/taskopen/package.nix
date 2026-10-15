@@ -18,7 +18,7 @@ buildNimPackage (finalAttrs: {
     owner = "jschlatow";
     repo = "taskopen";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0SAiSaN9V1JYnyJsWda6unqUlyXRL8y8JHXP4VNAFhM=";
+    hash = "sha256-0SAiSaN9V1JYnyJsWda6unqUlyXRL8y8JHXP4VNAFhM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

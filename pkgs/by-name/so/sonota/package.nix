@@ -25,7 +25,7 @@ buildPythonApplication (finalAttrs: {
     owner = "mirko";
     repo = "SonOTA";
     rev = "d7f4b353858aae7ac403f95475a35560fb7ffeae";
-    sha256 = "0jd9xrhcyk8d2plbjnrlpn87536zr6n708797n0k5blf109q3c1z";
+    hash = "sha256-P7CBEwiOrjKBPekgcKzJ34xykL00W7noFQ1Nz2DuqUk=";
   };
 
   patches = [

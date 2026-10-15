@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     owner = "svanderburg";
     repo = "dydisnix";
     rev = "12ca1516bc1e5d161ac68f5d8252a0a2f353c8cf";
-    sha256 = "00f341274hwwil8mlgcgq331vfca9sscvpdbgkxsjvbhcqd8qa52";
+    hash = "sha256-oiiMGmZwban7fKvdzbROirkdxsCPPVoRjZxDckQgwwE=";
   };
 
   nativeBuildInputs = [

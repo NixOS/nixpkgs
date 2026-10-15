@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "a-nikolaev";
     repo = "curseofwar";
     rev = "v${finalAttrs.version}";
-    sha256 = "1wd71wdnj9izg5d95m81yx3684g4zdi7fsy0j5wwnbd9j34ilz1i";
+    hash = "sha256-MXwayZCpLct5kcBrd2L75BFkRvcB1ZJaeT8maRsPp/E=";
   };
 
   buildInputs = [

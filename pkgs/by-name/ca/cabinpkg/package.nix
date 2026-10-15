@@ -16,7 +16,7 @@ let
     repo = "toml11";
     version = "4.2.0";
     tag = "v${version}";
-    sha256 = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
+    hash = "sha256-NUuEgTpq86rDcsQnpG0IsSmgLT0cXhd1y32gT57QPAw=";
   };
 in
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "cabinpkg";
     repo = "cabin";
     tag = version;
-    sha256 = "sha256-qMmfViu3ol8+Tpyy8hn0j5r+bql0SFeKPVVj/ox4AGQ=";
+    hash = "sha256-qMmfViu3ol8+Tpyy8hn0j5r+bql0SFeKPVVj/ox4AGQ=";
   };
 
   strictDeps = true;

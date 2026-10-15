@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
         owner = "bitcoin-core";
         repo = "guix.sigs";
         rev = "d48edd96db3740c2073545cfb4010d47c3df7f50";
-        sha256 = "sha256-uMxAatrLXezDkzsthLrrPlAy8Mx8lM7L477CbmEMUM8=";
+        hash = "sha256-uMxAatrLXezDkzsthLrrPlAy8Mx8lM7L477CbmEMUM8=";
       };
 
       checksums = fetchurl {

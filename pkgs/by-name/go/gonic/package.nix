@@ -24,7 +24,7 @@ buildGo127Module (finalAttrs: {
     owner = "sentriz";
     repo = "gonic";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-yQu3NDBYuD/C0HtMF0ArSx+Im473mwRTREWlMOdLmf8=";
+    hash = "sha256-yQu3NDBYuD/C0HtMF0ArSx+Im473mwRTREWlMOdLmf8=";
   };
 
   vendorHash = "sha256-W/9BD/s+OUteXPIFm3ZJ+Eh+W6VfS8stgx98MLLk2ys=";

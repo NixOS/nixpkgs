@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "sha256-KymQThzYKpcgCjKX3ZQ2RAWNga2d0EaWXVQmHzw8hmA=";
+    hash = "sha256-KymQThzYKpcgCjKX3ZQ2RAWNga2d0EaWXVQmHzw8hmA=";
   };
 
   hardeningDisable = [ "pic" ];

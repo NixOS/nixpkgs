@@ -15,7 +15,7 @@ buildGoModule (finalAttrs: {
     owner = "Jeffail";
     repo = "leaps";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-9AYE8+K6B6/odwNR+UhTTqmJ1RD6HhKvtC3WibWUZic=";
+    hash = "sha256-9AYE8+K6B6/odwNR+UhTTqmJ1RD6HhKvtC3WibWUZic=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch

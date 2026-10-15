@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     owner = "esmil";
     repo = "stupidterm";
     rev = "f824e41c2ca9016db73556c5d2f5a2861e235c8e";
-    sha256 = "1f73wvqqvj5pr3fvb7jjc4bi1iwgkkknz24k8n69mdb75jnfjipp";
+    hash = "sha256-90bprCxntZqMRZOIb+ecj8cQF2FSnrXdyLfIjfHm47g=";
   };
 
   makeFlags = [

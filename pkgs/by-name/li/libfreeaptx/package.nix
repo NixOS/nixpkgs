@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "regularhunter";
     repo = "libfreeaptx";
     rev = finalAttrs.version;
-    sha256 = "sha256-ntbF0jz/ilOk45xMQxx00WJtJq4Wb7VyKE0eKvghYnY=";
+    hash = "sha256-ntbF0jz/ilOk45xMQxx00WJtJq4Wb7VyKE0eKvghYnY=";
   };
 
   outputs = [

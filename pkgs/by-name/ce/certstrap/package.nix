@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "square";
     repo = "certstrap";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-5w79prxZrmB7KazOagmdJH9e5GM7iybQy8ttWxVNTMU=";
+    hash = "sha256-5w79prxZrmB7KazOagmdJH9e5GM7iybQy8ttWxVNTMU=";
   };
 
   vendorHash = "sha256-wIEr8du0aQvcvQ4VXL6VdhtNUMo/bWVH32gaRQktSA0=";

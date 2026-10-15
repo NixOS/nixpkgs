@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "FedeDP";
     repo = "libmodule";
     rev = finalAttrs.version;
-    sha256 = "sha256-93ItLKThtT9JRc+X/bRm06pugsN31HAF3qTUqqCu6nE=";
+    hash = "sha256-93ItLKThtT9JRc+X/bRm06pugsN31HAF3qTUqqCu6nE=";
   };
 
   nativeBuildInputs = [

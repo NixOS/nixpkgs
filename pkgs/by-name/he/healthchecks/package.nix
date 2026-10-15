@@ -22,7 +22,7 @@ py.pkgs.buildPythonApplication rec {
     owner = "healthchecks";
     repo = "healthchecks";
     tag = "v${version}";
-    sha256 = "sha256-usTbAmxHr+B6pRKxtOsNobVyJr72sGvWq9kB7vbFRdA=";
+    hash = "sha256-usTbAmxHr+B6pRKxtOsNobVyJr72sGvWq9kB7vbFRdA=";
   };
 
   propagatedBuildInputs = with py.pkgs; [

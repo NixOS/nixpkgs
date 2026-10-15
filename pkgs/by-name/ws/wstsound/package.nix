@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     owner = "WindstilleTeam";
     repo = "wstsound";
     rev = "2c7b00dc1af52432185dc28c4ae87c09c9f4f444";
-    sha256 = "sha256-fus1ydypnDDHsQwMkYyZuRikZLbZXLlc/cY8Qol5Hwo=";
+    hash = "sha256-fus1ydypnDDHsQwMkYyZuRikZLbZXLlc/cY8Qol5Hwo=";
   };
 
   nativeBuildInputs = [ cmake ];

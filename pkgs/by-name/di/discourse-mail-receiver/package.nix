@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "discourse";
     repo = "mail-receiver";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ob4Hb88odlFf5vSC9qhikhJowo4C5LksVmMuJRMNoI4=";
+    hash = "sha256-ob4Hb88odlFf5vSC9qhikhJowo4C5LksVmMuJRMNoI4=";
   };
 
   nativeBuildInputs = [

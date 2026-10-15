@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "eyal0";
     repo = "Marlin";
     rev = "3d5a5c86bea35a2a169eb56c70128bf2d070feef";
-    sha256 = "14sqajm361gnrcqv84g7kbmyqm8pppbhqsabszc4j2cn7vbwkdg5";
+    hash = "sha256-5bXJ1z6WCUnY10tpDNe9F1Xs65rnEbQxy/YFM6pUWJM=";
   };
 
   postPatch = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     repo = "scala-runners";
     owner = "dwijnand";
     rev = "9bf096ca81f4974d7327e291eac291e22b344a8f";
-    sha256 = "032fds5nr102h1lc81n9jc60jmxzivi4md4hcjrlqn076hfhj4ax";
+    hash = "sha256-XREJHTQHWEyzZJC0SuKOv1cJDJPJBsRogAKEbItuTgw=";
   };
 
   dontBuild = true;

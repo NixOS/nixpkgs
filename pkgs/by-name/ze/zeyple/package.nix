@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication {
     owner = "infertux";
     repo = "zeyple";
     rev = "cc125b7b44432542b227887fd7e2701f77fd8ca2";
-    sha256 = "0r2d1drg2zvwmn3zg0qb32i9mh03r5di9q1yszx23r32rsax9mxh";
+    hash = "sha256-sNfUlc5i5CH61z7gFFvJA8CaohgLg/eHrXx/8XILTWQ=";
   };
 
   # SafeConfigParser was deprecated in Python 3.12: https://github.com/infertux/zeyple/issues/76

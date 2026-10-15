@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     owner = "simon-v";
     repo = "bean-add";
     rev = "660c657f295b019d8dbc26375924eb17bf654341";
-    sha256 = "0vzff2hdng8ybwd5frflhxpak0yqg0985p1dy7vpvhr8kbqqzwdz";
+    hash = "sha256-v/GP8Zoow3338S3cghJ42IOpbofUZVcaXx4926Bw7m8=";
   };
 
   propagatedBuildInputs = with python3Packages; [ python ];

@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "cfv-project";
     repo = "cfv";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-vKlnW6Z0Rg2bptU5fxIKDaOY2b+WY/fgaYZQu5tBU44=";
+    hash = "sha256-vKlnW6Z0Rg2bptU5fxIKDaOY2b+WY/fgaYZQu5tBU44=";
   };
 
   # The upstream test suite assumes a case-sensitive filesystem and

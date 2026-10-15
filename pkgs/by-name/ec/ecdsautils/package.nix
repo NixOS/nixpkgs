@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "freifunk-gluon";
     repo = "ecdsautils";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
+    hash = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
   };
 
   patches = [

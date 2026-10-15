@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "mxgmn";
     repo = "ConvChain";
     rev = "8abb1e88a496fcae4c0ae31acd4eea55957dab68";
-    sha256 = "0lnscljgbw0s90sfcahwvnxakml0f4d8jxi5ikm4ak8qgnvw6rql";
+    hash = "sha256-FGfDt30YTUXqjCV2iRpxgNaput0cKuY0SBrw9SRl2lI=";
   };
   buildPhase = ''
     mcs ConvChain.cs -out:convchain.exe -r:System.Drawing

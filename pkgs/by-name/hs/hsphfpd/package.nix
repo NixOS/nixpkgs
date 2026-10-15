@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "pali";
     repo = "hsphfpd-prototype";
     rev = "d294d064879591e9570ca3f444fa3eee2f269df8";
-    sha256 = "0pm5rbsfrm04hnifzdmsyz17rjk8h9h6d19jaikjc5y36z03xf1c";
+    hash = "sha256-LLg+wDfDFyZnVDKFZmCCaMp8wve6tu+ihQTU7PTKpV4=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

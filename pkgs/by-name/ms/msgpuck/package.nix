@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rtsisyk";
     repo = "msgpuck";
     rev = finalAttrs.version;
-    sha256 = "0cjq86kncn3lv65vig9cqkqqv2p296ymcjjbviw0j1s85cfflps0";
+    hash = "sha256-QF/qHCtIBwl43EtKVr1J4oqN8cQsvbiL2XRYZqdBWDI=";
   };
 
   outputs = [

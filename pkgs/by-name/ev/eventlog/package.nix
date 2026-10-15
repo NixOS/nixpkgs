@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "balabit";
     repo = "eventlog";
     rev = "a5c19163ba131f79452c6dfe4e31c2b4ce4be741";
-    sha256 = "0a2za3hs7wzy14z7mfgldy1r9xdlqv97yli9wlm8xldr0amsx869";
+    hash = "sha256-yaCuqwK50Y4q5SlSf9LGtPWUg2/0uXo+Cf7zo+FQXyg=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

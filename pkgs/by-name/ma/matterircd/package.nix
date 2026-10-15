@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "42wim";
     repo = "matterircd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-neNpbC9ukNMKvLVFD0AstCOWd0P3tmfdkTVdkGUXYO8=";
+    hash = "sha256-neNpbC9ukNMKvLVFD0AstCOWd0P3tmfdkTVdkGUXYO8=";
   };
 
   vendorHash = null;

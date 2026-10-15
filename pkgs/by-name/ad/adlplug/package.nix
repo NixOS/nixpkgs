@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     repo = "ADLplug";
     rev = "a488abedf1783c61cb4f0caa689f1b01bf9aa17d";
     fetchSubmodules = true;
-    sha256 = "1a5zw0rglqgc5wq1n0s5bxx7y59dsg6qy02236fakl34bvbk60yz";
+    hash = "sha256-3wMz115k0KmcGUIAj83TLRV/el9FAxswL+xh+jLgv6g=";
   };
 
   cmakeFlags = [

@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google";
     repo = "sentencepiece";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-q0JgMxoD9PLqr6zKmOdrK2A+9RXVDub6xy7NOapS+vs=";
+    hash = "sha256-q0JgMxoD9PLqr6zKmOdrK2A+9RXVDub6xy7NOapS+vs=";
   };
 
   nativeBuildInputs = [ cmake ];

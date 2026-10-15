@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "aliftype";
     repo = "xits";
     rev = "v${finalAttrs.version}";
-    sha256 = "1x3r505dylz9rz8dj98h5n9d0zixyxmvvhnjnms9qxdrz9bxy9g1";
+    hash = "sha256-4SXfV/q5dZx0tdLCvWv3PX7Qki0QJdnQz+lT3wooefQ=";
   };
 
   nativeBuildInputs =

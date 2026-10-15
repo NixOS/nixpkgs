@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "mod-audio";
     repo = "mod-distortion";
     rev = "e672d5feb9d631798e3d56eb96e8958c3d2c6821";
-    sha256 = "005wdkbhn9dgjqv019cwnziqg86yryc5vh7j5qayrzh9v446dw34";
+    hash = "sha256-ZPBmCNkJ/uwVLvLAXZjP3qCH47ecpQA2lq8lC9dsvAA=";
   };
 
   buildInputs = [ lv2 ];

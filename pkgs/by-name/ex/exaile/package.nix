@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "exaile";
     repo = "exaile";
     rev = finalAttrs.version;
-    sha256 = "sha256-8q7OP9imTaoxqNgDOcVmvGSb5Sra0JtPOtZPo7zgkHM=";
+    hash = "sha256-8q7OP9imTaoxqNgDOcVmvGSb5Sra0JtPOtZPo7zgkHM=";
   };
 
   nativeBuildInputs = [

@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "maxmind";
     repo = "geoip-api-c";
     rev = "v${finalAttrs.version}";
-    sha256 = "0ixyp3h51alnncr17hqp1p0rlqz9w69nlhm60rbzjjz3vjx52ajv";
+    hash = "sha256-WypRutzjS/lXBqZCapPh6WOawQ0XwxMys5aqUOC4vkc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Motion-Project";
     repo = "motion";
     rev = "release-${finalAttrs.version}";
-    sha256 = "sha256-NAzVFWWbys+jYYOifCOOoucAKfa19njIzXBQbtgGX9M=";
+    hash = "sha256-NAzVFWWbys+jYYOifCOOoucAKfa19njIzXBQbtgGX9M=";
   };
 
   patches = [

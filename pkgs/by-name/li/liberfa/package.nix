@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "liberfa";
     repo = "erfa";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-NtHYgiN5mo3kWC2H+5TUDbU1nFrwuhNyOIhg2jZbssM=";
+    hash = "sha256-NtHYgiN5mo3kWC2H+5TUDbU1nFrwuhNyOIhg2jZbssM=";
   };
 
   configureFlags = [ "--enable-shared" ];

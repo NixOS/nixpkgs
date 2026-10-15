@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "grafana";
     repo = "tanka";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/h9W2BIPfc1ts8bm/NM6l//L/Qv+mfvUT/rZVi23Qj4=";
+    hash = "sha256-/h9W2BIPfc1ts8bm/NM6l//L/Qv+mfvUT/rZVi23Qj4=";
   };
 
   vendorHash = "sha256-X0rPhhZUJ5slXsEII/w0iRIBKLuBKVTDOQCExQyyh9A=";

@@ -18,7 +18,7 @@ buildGoModule rec {
 
     owner = "zmb3";
     repo = "gogetdoc";
-    sha256 = "1v74zd0x2xh10603p8raazssacv3y0x0lr9apkpsdk0bfp5jj0lr";
+    hash = "sha256-mQIpy3ULzKbvvCplCjrwYzOl9VcqozuAAQF20UH75Ow=";
   };
 
   meta = {

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kikimosha";
     repo = "smarty3-i18n";
     rev = finalAttrs.version;
-    sha256 = "0rjxq4wka73ayna3hb5dxc5pgc8bw8p5fy507yc6cv2pl4h4nji2";
+    hash = "sha256-IkpLIKFXbGaYP6B4Vy7iC7F3C+utLDiU9WocNTnBXWY=";
   };
 
   installPhase = ''

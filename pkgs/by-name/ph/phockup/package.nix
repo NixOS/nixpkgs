@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ivandokov";
     repo = "phockup";
     rev = finalAttrs.version;
-    sha256 = "sha256-44UjxTbC2XK+NThvesROdd7aGP7zr7g7bQiQZv2TvvM=";
+    hash = "sha256-44UjxTbC2XK+NThvesROdd7aGP7zr7g7bQiQZv2TvvM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

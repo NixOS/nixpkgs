@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "vertcoin-project";
     repo = "vertcoin-core";
     rev = "2bd6dba7a822400581d5a6014afd671fb7e61f36";
-    sha256 = "ua9xXA+UQHGVpCZL0srX58DDUgpfNa+AAIKsxZbhvMk=";
+    hash = "sha256-ua9xXA+UQHGVpCZL0srX58DDUgpfNa+AAIKsxZbhvMk=";
   };
 
   postPatch = ''

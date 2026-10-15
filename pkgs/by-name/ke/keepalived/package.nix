@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "acassen";
     repo = "keepalived";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-I+SbxCY3D568L7U0cvlayZ8v4VEbufMCDX1hkRxyQVE=";
+    hash = "sha256-I+SbxCY3D568L7U0cvlayZ8v4VEbufMCDX1hkRxyQVE=";
   };
 
   buildInputs = [

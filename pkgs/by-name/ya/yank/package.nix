@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "mptre";
     repo = "yank";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JSkUBKQKl5TlpA2MSk6Lt2n1L8MdhLKzH/urYkOqlJo=";
+    hash = "sha256-JSkUBKQKl5TlpA2MSk6Lt2n1L8MdhLKzH/urYkOqlJo=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];
