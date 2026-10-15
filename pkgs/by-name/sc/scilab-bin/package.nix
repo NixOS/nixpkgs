@@ -6,12 +6,28 @@
   undmg,
   autoPatchelfHook,
   alsa-lib,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  glib,
+  libdrm,
+  libglvnd,
+  libxkbcommon,
+  mesa,
   ncurses5,
+  nspr,
+  nss,
+  pango,
+  udev,
   libxxf86vm,
   libxtst,
   libxrender,
   libxrandr,
   libxi,
+  libxcomposite,
+  libxdamage,
   libxft,
   libxext,
   libxcursor,
@@ -20,16 +36,16 @@
 
 let
   pname = "scilab-bin";
-  version = "6.1.1";
+  version = "2026.1.0";
 
   srcs = {
     aarch64-darwin = fetchurl {
-      url = "https://www.utc.fr/~mottelet/scilab/download/${version}/scilab-${version}-accelerate-arm64.dmg";
-      sha256 = "sha256-L4dxD8R8bY5nd+4oDs5Yk0LlNsFykLnAM+oN/O87SRI=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}-arm64.dmg";
+      hash = "sha256-qG5osaeUiPEkUHu8q4lr+zhkxhpbHOlxVa1dSYRGOLc=";
     };
     x86_64-linux = fetchurl {
-      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.linux-x86_64.tar.gz";
-      sha256 = "sha256-PuGnz2YdAhriavwnuf5Qyy0cnCeRHlWC6dQzfr7bLHk=";
+      url = "https://www.scilab.org/download/${version}/scilab-${version}.bin.x86_64-linux-gnu.tar.xz";
+      hash = "sha256-lncn1r5QfxO1Kss2jj/UAfCr7MKfLJIAlMs6maBAvck=";
     };
   };
   src =
@@ -89,10 +105,26 @@ let
 
     buildInputs = [
       alsa-lib
+      at-spi2-core
+      atk
+      cairo
+      cups
+      dbus
+      glib
+      libdrm
+      libglvnd
+      libxkbcommon
+      mesa
       ncurses5
+      nspr
+      nss
+      pango
       stdenv.cc.cc
+      udev
       libx11
       libxcursor
+      libxcomposite
+      libxdamage
       libxext
       libxft
       libxi
