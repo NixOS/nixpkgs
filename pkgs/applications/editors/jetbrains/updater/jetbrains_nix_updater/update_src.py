@@ -13,12 +13,7 @@ from jetbrains_nix_updater.update_src_maven import (
     ensure_is_list,
     get_maven_deps_for_ide,
 )
-from jetbrains_nix_updater.util import (
-    UpdateScriptBlockException,
-    convert_hash_to_sri,
-    replace_blocks,
-    run_command,
-)
+from jetbrains_nix_updater.util import convert_hash_to_sri, run_command
 
 
 class InvalidMetadataException(Exception):
@@ -194,38 +189,27 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
         f"[i] Prefetched IDEA Open Source requested Kotlin compiler {kotlinc_version}"
     )
 
-    repositories_nix = " ".join(f'"{x}"' for x in repositories)
+    source_args_path = ide.package_dir / "source_args.json"
+    source_args = {
+        "version": info.version,
+        "buildNumber": info.build_number,
+        "buildType": variant,
+        "ideaHash": intellij_hash,
+        "androidHash": android_hash,
+        "jpsHash": jps_hash,
+        "restarterHash": restarter_hash,
+        "repositories": repositories,
+        "kotlin-jps-plugin": {
+            "version": kjps_plugin_version,
+            "hash": kjps_plugin_hash,
+        },
+    }
 
-    try:
-        replace_blocks(
-            config,
-            ide.drv_path,
-            [
-                (
-                    "source-args",
-                    f"""
-                        version = "{info.version}";
-                        buildNumber = "{info.build_number}";
-                        buildType = "{variant}";
-                        ideaHash = "{intellij_hash}";
-                        androidHash = "{android_hash}";
-                        jpsHash = "{jps_hash}";
-                        restarterHash = "{restarter_hash}";
-                        mvnDeps = ./maven_artefacts.json;
-                        repositories = [
-                            {repositories_nix}
-                        ];
-                        kotlin-jps-plugin = {{
-                            version = "{kjps_plugin_version}";
-                            hash = "{kjps_plugin_hash}";
-                        }};
-                    """,
-                )
-            ],
-        )
-    except UpdateScriptBlockException as e:
-        print(f"[!] Writing update info to file failed: {e}", file=sys.stderr)
-        return False
+    print(f"[*] Writing mkJetBrainsSource args to {source_args_path}")
+    if not config.dry_run:
+        with source_args_path.open("w") as f:
+            json.dump(source_args, f, indent=2)
+            f.write("\n")
 
     if not config.no_maven_deps:
         print("[*] Collecting maven hashes")
@@ -235,7 +219,7 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
             assert maven_out_path.parent.exists()
             print(f"[D] --dry-run: {maven_out_path} not modified", file=sys.stderr)
         else:
-            with open(maven_out_path, "w") as f:
+            with maven_out_path.open("w") as f:
                 json.dump(maven_hashes, f, indent=4)
                 f.write("\n")
     return True

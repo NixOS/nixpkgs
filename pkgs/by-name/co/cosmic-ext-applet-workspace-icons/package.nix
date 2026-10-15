@@ -9,17 +9,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-ext-applet-workspace-icons";
-  version = "1.2.0";
+  version = "1.4.0";
 
   __structuredAttrs = true;
   src = fetchFromGitHub {
     owner = "crocodile";
     repo = "cosmic-ext-applet-workspace-icons";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gJfT7GpTRVlSJVHnEm4ezaWmJpObVz3Sjkd0ELYZQU4=";
+    hash = "sha256-h2XGWn/bGVe4KfPYiNcwAyJ3/gI0Tjc2NtqustASJhM=";
   };
 
-  cargoHash = "sha256-fuCmcnGKY/AjovGSBbrnifXY6iiWyXaPM0YmSqn2P4E=";
+  cargoHash = "sha256-5Jy3+dG5jc3ABIAwrjfZfyaZkoMuh9weeUzpIWiewB4=";
 
   nativeBuildInputs = [
     libcosmicAppHook
