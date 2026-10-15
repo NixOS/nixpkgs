@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "majutsushi";
     repo = "urxvt-font-size";
     rev = "v${version}";
-    sha256 = "1526ap161cp3378f4ijd09nmsh71ld7bkxxhp8p6razdi2v8r16h";
+    hash = "sha256-0ISMtojtq2wuurD3uU6j4UBdbQJNRuLQGeOyYMJVRpQ=";
   };
 
   installPhase = ''

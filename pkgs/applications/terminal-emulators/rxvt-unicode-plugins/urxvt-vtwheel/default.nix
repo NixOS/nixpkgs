@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://aur.archlinux.org/urxvt-vtwheel.git";
     rev = "36d3e861664aeae36a45f96100f10f8fe2218035";
-    sha256 = "1h3vrsbli5q9kr84j5ijbivlhpwlh3l8cv233pg362v2zz4ja8i7";
+    hash = "sha256-JyIlyf9iCzPeHUNshuiAlF9Id1wyFklQngmXSJfOe8A=";
   };
 
   installPhase = ''

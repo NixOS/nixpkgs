@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "effigies";
     repo = "urxvt-perl";
     rev = "c3beb9ff09a7139591416c61f8e9458c8a23bea5";
-    sha256 = "1w1p8ng7bwq5hnaprjl1zf073y5l3hdsj7sz7cll6isjswcm6r0s";
+    hash = "sha256-GmRTGddSR0MpO18fqRsctPhxgPuBynyVhQXzdZ5FN/A=";
   };
 
   installPhase = ''
