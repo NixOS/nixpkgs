@@ -76,6 +76,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preCheck = ''
     export HOME=$(mktemp -d)
+    # The e2e tests start an interactive bash, which sources the host's
+    # /etc/bashrc when the build is not sandboxed (the darwin default).
+    # The nix-darwin config resets PATH, so if the user has atuin installed,
+    # the shell integration runs the system atuin instead of the one currently building
+    # and no output is captured.
+    export NOSYSBASHRC=1
   '';
 
   __darwinAllowLocalNetworking = true;
