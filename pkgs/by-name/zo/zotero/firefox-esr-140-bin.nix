@@ -144,6 +144,9 @@ stdenv.mkDerivation {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames sources;
     hydraPlatforms = [ ];
+    knownVulnerabilities = [
+      "Firefox ESR 140 reached end-of-life on 2026-10-13 and receives no further security fixes"
+    ];
     maintainers = with lib.maintainers; [ mynacol ];
     mainProgram = binaryName;
   };
