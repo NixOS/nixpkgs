@@ -9,6 +9,7 @@
     ```
   */
   redistNames = [
+    "cublas"
     "cublasmp"
     "cuda"
     "cudnn"

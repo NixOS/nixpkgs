@@ -37,6 +37,9 @@ let
   #   - NVIDIA dropped linux-aarch64 (pre-Thor Jetson) support for CUDA 12 after 9.20.0, so we keep 9.20.0 for Jetson with
   #     CUDA 12, and use the latest release everywhere else.
   #   - Jetson Orin is supported with CUDA 13 only from CUDA 13.2, when it moved to linux-sbsa.
+  # - cublas:
+  #   - Standalone releases are used only when newer than the cuBLAS shipped with CUDA. 12.9.2, 13.1.1, and 13.2.2
+  #     aren't; 12.8.5 is a build-number bump without a linux-aarch64 build.
   # - cusparselt:
   #   - 0.7.0 requires CUDA 12.8 or newer, so we keep 0.6.3 for CUDA 12.6.
   #   - 0.8.x supports CUDA 12.9 and newer, so we keep 0.7.1 for CUDA 12.8.
@@ -146,6 +149,7 @@ let
   };
 
   cudaPackages_13_2 = mkCudaPackages {
+    cublas = "13.4.2";
     cublasmp = "0.10.0";
     cuda = "13.2.2";
     cudnn = "9.27.0";
@@ -163,6 +167,7 @@ let
   };
 
   cudaPackages_13_3 = mkCudaPackages {
+    cublas = "13.6.2";
     cublasmp = "0.10.0";
     cuda = "13.3.1";
     cudnn = "9.27.0";
@@ -180,6 +185,7 @@ let
   };
 
   cudaPackages_13_4 = mkCudaPackages {
+    cublas = "13.8.1";
     cublasmp = "0.10.0";
     cuda = "13.4.3";
     cudnn = "9.27.0";
