@@ -151,8 +151,12 @@ rec {
   makeOverridable =
     f:
     let
+      fArgs = functionArgs f;
       # Creates a functor with the same arguments as f
-      mirrorArgs = mirrorFunctionArgs f;
+      mirrorArgs = g: {
+        __functor = self: g;
+        __functionArgs = fArgs;
+      };
 
       f' =
         origArgs:
