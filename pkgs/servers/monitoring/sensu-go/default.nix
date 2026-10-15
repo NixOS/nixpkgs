@@ -14,19 +14,19 @@ let
     }:
     buildGoModule rec {
       inherit pname;
-      version = "6.14.2";
+      version = "6.15.0";
       shortRev = "591ed6e"; # for internal version info
 
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";
         rev = "v${version}";
-        sha256 = "sha256-DlJneEAmkWqM5SgbUvvFmiSZzapQd+IpMivlB9r47W8=";
+        sha256 = "sha256-Q9IZ+ANy+B1YuzkwPqQAJ8c8nSbuSzVg7JrUGOGHibs=";
       };
 
       inherit subPackages postInstall;
 
-      vendorHash = "sha256-iNIpUABozQpnBUiWBrp2ii4mNRKKJtChLiHnlaEQqvU=";
+      vendorHash = "sha256-tPI9dNOD1OnkBy1PDs3insRp7+2j7gyMELl29QsGU9w=";
 
       doCheck = false;
 
