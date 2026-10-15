@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,12 +16,10 @@ stdenvNoCC.mkDerivation {
 
   dontUnpack = true;
 
-  installPhase = ''
-    runHook preInstall
+  nativeBuildInputs = [ installFonts ];
 
-    install -D $src $out/share/fonts/opentype/linja-pi-pu-lukin.otf
-
-    runHook postInstall
+  preInstall = ''
+    cp $src linja-pi-pu-lukin.otf
   '';
 
   meta = {
