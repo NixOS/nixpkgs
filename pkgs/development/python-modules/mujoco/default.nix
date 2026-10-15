@@ -40,7 +40,7 @@ buildPythonPackage (finalAttrs: {
   # in the project's CI.
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-JqgL8mwxzFkiGrIHT5NkmnvuDbh/hkYgKZXcIGWiHn4=";
+    hash = "sha256-dqXof4nGjmYWUZkUzYrAbcC2DNkQjvSu+S4+UG9Z3FM=";
   };
 
   nativeBuildInputs = [ cmake ];
