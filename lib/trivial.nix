@@ -1126,9 +1126,21 @@ in
   */
   isFunction =
     let
-      isFunction = builtins.isFunction;
+      isLambda = builtins.isFunction;
     in
-    f: isFunction f || (f ? __functor && isFunction f.__functor && isFunction (f.__functor f));
+    f:
+    # Equivalent to `isLambda f || (f ? __functor && isFunction f.__functor && isFunction (f.__functor f))`
+    # but faster when `f.__functor` and `f.__functor f` are both lambdas.
+    isLambda f
+    || (
+      f ? __functor
+      && (
+        let
+          fFunctor = f.__functor;
+        in
+        (isLambda fFunctor || isFunction fFunctor) && (isLambda (fFunctor f) || isFunction (fFunctor f))
+      )
+    );
 
   /**
     `mirrorFunctionArgs f g` creates a new function `g'` with the same behavior as `g` (`g' x == g x`)
