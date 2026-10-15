@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# A stand-in for nvlink, run by the wrapper: records its arguments and environment in $FAKE_LOG, then acts as $FAKE asks.
+: "${FAKE:?}" "${FAKE_LOG:?}"
+# Whether it shares the process group of its parent, the wrapper.
+read -r _ _ _ _ group _ < "/proc/$$/stat"
+read -r _ _ _ _ parentGroup _ < "/proc/$PPID/stat"
+[[ $group == "$parentGroup" ]] && group=shared || group=own
+printf '%s\n' "$@" "FAKE_ENV=${FAKE_ENV-unset}" "pid=$$" "group=$group" > "$FAKE_LOG"
+case "$FAKE" in
+  exit) exit "$FAKE_STATUS" ;;
+  kill) kill -s "$FAKE_SIGNAL" $$ ;;
+  # Writes $FAKE_CONTENTS to the output, the argument after -o, and exits with $FAKE_STATUS.
+  write)
+    while [[ $1 != -o ]]; do shift; done
+    cp "$FAKE_CONTENTS" "$2"
+    exit "${FAKE_STATUS:-0}" ;;
+  # Records the signals it receives for a while.
+  wait)
+    for sig in HUP INT QUIT TERM USR1 USR2; do
+      # shellcheck disable=SC2064
+      trap "echo received $sig >> '$FAKE_LOG'" "$sig"
+    done
+    touch "$FAKE_LOG.ready"
+    for _ in $(seq 20); do sleep 0.1; done ;;
+  # Waits in a new session, outside of the terminal's process group.
+  detached) FAKE="wait" exec python3 -c 'import os, sys; os.setsid(); os.execv(sys.argv[1], sys.argv[1:])' "$0" ;;
+  # Sleeps without holding on to the output of the command running the wrapper.
+  sleep) touch "$FAKE_LOG.ready"; exec sleep 60 > /dev/null 2>&1 ;;
+  *) echo "fake-nvlink: unknown FAKE=$FAKE" >&2; exit 99 ;;
+esac
