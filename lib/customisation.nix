@@ -211,12 +211,12 @@ rec {
     if isAttrs f then
       # Preserve additional attributes for f
       f
-      // (mirrorArgs f')
-      # Decorate f.override if presented
       // {
+        __functor = self: f';
+        __functionArgs = fArgs;
+        # Decorate f.override if presented
         ${if f ? override then "override" else null} = fdrv: makeOverridable (f.override fdrv);
       }
-
     else
       mirrorArgs f';
 
