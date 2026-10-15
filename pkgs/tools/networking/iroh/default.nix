@@ -39,10 +39,12 @@ let
       meta = {
         description = "Efficient IPFS for the whole world right now";
         homepage = "https://iroh.computer";
-        license = with lib.licenses; [
-          asl20
-          mit
-        ];
+        license =
+          with lib.licenses;
+          OR [
+            asl20
+            mit
+          ];
         maintainers = with lib.maintainers; [
           andreashgk
         ];

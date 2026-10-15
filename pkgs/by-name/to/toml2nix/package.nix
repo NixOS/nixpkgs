@@ -25,10 +25,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Tool to convert TOML files to Nix expressions";
     mainProgram = "toml2nix";
     homepage = "https://crates.io/crates/toml2nix";
-    license = with lib.licenses; [
-      mit # or
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      OR [
+        mit
+        asl20
+      ];
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })

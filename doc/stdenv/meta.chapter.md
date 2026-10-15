@@ -77,12 +77,21 @@ A link or a list of links to the location of Changelog for a package. A link may
 
 ### `license` {#var-meta-license}
 
-The license, or licenses, for the package. One from the attribute set defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix). At this moment using both a list of licenses and a single license is valid. If the license field is in the form of a list representation, then it means that parts of the package are licensed differently. Each license should preferably be referenced by their attribute. The non-list attribute value can also be a space delimited string representation of the contained attribute `shortNames` or `spdxIds`. The following are all valid examples:
+The license for the package.
+One from the attribute set defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix).
+If the package is licensed under multiple licenses, use a compound license (see [Multiple Licenses](#sec-meta-license-multiple)).
+
+The license field also accepts a deprecated form of a list of simple licenses.
+This attribute may also be assigned to a space-delimited string representation of the contained attribute `shortNames` or `spdxIds`.
+Both of these forms should be avoided in new code.
+
+The following are all valid examples:
 
 - Single license referenced by attribute (preferred) `lib.licenses.gpl3Only`.
+- Multiple licenses referenced by attribute via compound license (preferred) `with lib.licenses; AND [ asl20 free ofl ]`.
 - Single license referenced by its attribute shortName (frowned upon) `"gpl3Only"`.
 - Single license referenced by its attribute spdxId (frowned upon) `"GPL-3.0-only"`.
-- Multiple licenses referenced by attribute (preferred) `with lib.licenses; [ asl20 free ofl ]`.
+- Multiple licenses referenced by attribute via list (frowned upon) `with lib.licenses; [ asl20 free ofl ]`.
 - Multiple licenses referenced as a space delimited string of attribute shortNames (frowned upon) `"asl20 free ofl"`.
 
 For details, see [Licenses](#sec-meta-license).
@@ -222,23 +231,61 @@ If this list is not empty, the package is marked as "insecure", meaning that it 
 
 The `meta.license` attribute should preferably contain a value from `lib.licenses` defined in [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix), or in-place license description of the same format if the license is unlikely to be useful in another expression.
 
+### Multiple Licenses {#sec-meta-license-multiple}
+
+If the package is covered under multiple licenses, the following license operators should be used.
+These produce compound licenses, and model the structure of SPDX license expressions.
+The semantics of these operators are defined in the [SPDX specification][spdx-spec].
+
+#### `lib.licenses.OR [ ... ]` {#lib.licenses.OR}
+
+If the user is able to choose between two or more licenses, this operator should be used.
+
+    # Apache-2.0 OR MIT
+    lib.licenses.OR [ lib.licenses.asl20 lib.licenses.mit ]
+
+#### `lib.licenses.AND [ ... ]` {#lib.licenses.AND}
+
+If the user must simultaneously abide by the rules of two or more licenses, this operator should be used.
+
+    # GPL-2.0-only AND CC-by-30
+    lib.licenses.AND [ lib.licenses.gpl2Only lib.licenses.cc-by-30 ]
+
+#### `lib.licenses.WITH license exception` {#lib.licenses.WITH}
+
+If the license text is modified from the original, this operator should be used.
+Common license exceptions are included in `lib.licenses`.
+
+    # Apache-2.0 WITH LLVM-exception
+    lib.licenses.WITH lib.licenses.asl20 lib.licenses.llvm-exception
+
+#### `lib.licenses.PLUS license` {#lib.licenses.PLUS}
+
+If the content is licensed under the current version of the license or any later version, this operator should be used.
+This should not be applied to GPL licenses.
+
+    # CDDL-1.0+
+    lib.licenses.PLUS lib.licenses.cddl
+
+### Generic Licenses {#sec-meta-license-generic}
+
 Although it’s typically better to indicate the specific license, a few generic options are available:
 
-### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
+#### `lib.licenses.free`, `"free"` {#lib.licenses.free-free}
 
 Catch-all for free software licenses not listed above.
 
-### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
+#### `lib.licenses.unfreeRedistributable`, `"unfree-redistributable"` {#lib.licenses.unfreeredistributable-unfree-redistributable}
 
 Unfree package that can be redistributed in binary form. That is, it’s legal to redistribute the *output* of the derivation. This means that the package can be included in the Nixpkgs channel.
 
 Sometimes proprietary software can only be redistributed unmodified. Make sure the builder doesn’t actually modify the original binaries; otherwise we’re breaking the license. For instance, the NVIDIA X11 drivers can be redistributed unmodified, but our builder applies `patchelf` to make them work. Thus, its license is `"unfree"` and it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfree`, `"unfree"` {#lib.licenses.unfree-unfree}
+#### `lib.licenses.unfree`, `"unfree"` {#lib.licenses.unfree-unfree}
 
 Unfree package that cannot be redistributed. You can build it yourself, but you cannot redistribute the output of the derivation. Thus it cannot be included in the Nixpkgs channel.
 
-### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
+#### `lib.licenses.unfreeRedistributableFirmware`, `"unfree-redistributable-firmware"` {#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware}
 
 This package supplies unfree, redistributable firmware. This is a separate value from `unfree-redistributable` because not everybody cares whether firmware is free.
 
@@ -373,3 +420,5 @@ It provides an interface for additional identifiers of `mkDerivation.src` or for
 
 Additional identifiers are generally not recommended, as they might cause maintenance overhead or diverge.
 For example, a source distribution `pkg:github` may be hard to keep correctly aligned with the corresponding binary distribution `pkg:pypi`.
+
+[spdx-spec]: https://spdx.github.io/spdx-spec/v3.0.1/annexes/spdx-license-expressions/

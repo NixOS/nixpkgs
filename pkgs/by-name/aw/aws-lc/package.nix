@@ -105,8 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "General-purpose cryptographic library maintained by the AWS Cryptography team for AWS and their customers";
     homepage = "https://github.com/aws/aws-lc";
-    license = [
-      lib.licenses.asl20 # or
+    license = lib.licenses.OR [
+      lib.licenses.asl20
       lib.licenses.isc
     ];
     maintainers = [ lib.maintainers.theoparis ];
