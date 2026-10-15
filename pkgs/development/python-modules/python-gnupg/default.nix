@@ -9,17 +9,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-gnupg";
-  version = "0.5.6";
+  version = "0.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vsajip";
     repo = "python-gnupg";
     tag = finalAttrs.version;
-    hash = "sha256-ztwITune/rO4c3wUCsw6wBN09jnpWpElgwQx7JCXsVw=";
+    hash = "sha256-xrtE5yKCGDJ6XsyLupOxzXpwW4eV3xb+W6iC/k1Zkj0=";
   };
 
   postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools >= 68,<75' setuptools
+
     substituteInPlace gnupg.py \
       --replace "gpgbinary='gpg'" "gpgbinary='${lib.getExe gnupg}'"
     substituteInPlace test_gnupg.py \

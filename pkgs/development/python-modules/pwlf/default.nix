@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pwlf";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cjekel";
     repo = "piecewise_linear_fit_py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RBGOQTvnLm0XdIfDItce38Cdt8+tYr7SL0QzTbkS/fQ=";
+    hash = "sha256-Tyoe18wpHwzZ1AXt8MUa2cckaRRgYClYKkAPgaCwVIE=";
   };
 
   build-system = [
