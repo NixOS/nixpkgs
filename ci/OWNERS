@@ -48,6 +48,10 @@
 /lib/options.nix            @infinisil @roberth @hsjobeki @llakala
 /lib/tests/modules.sh       @infinisil @roberth @hsjobeki
 /lib/tests/modules          @infinisil @roberth @hsjobeki
+## Libraries / Nix-implementation-dependent tests
+/lib/tests/release.nix       @NixOS/lix-maintainers @xokdvium
+/lib/tests/test-with-nix.nix @NixOS/lix-maintainers @xokdvium
+/lib/tests/strings.sh        @NixOS/lix-maintainers @xokdvium
 
 # Nixpkgs Internals
 /default.nix                                     @Ericson2314
