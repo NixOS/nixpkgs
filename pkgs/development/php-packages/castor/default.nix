@@ -5,6 +5,7 @@
   php,
   nix-update-script,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -20,7 +21,10 @@ php.buildComposerProject2 (finalAttrs: {
 
   vendorHash = "sha256-4YNO5dNtZnnP/UFUax/GQ+UBcIbzXfYwB7yQv6Mf7ig=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    writableTmpDirAsHomeHook
+  ];
 
   # install shell completions
   postInstall = ''
@@ -32,6 +36,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
     updateScript = nix-update-script { };
