@@ -20,7 +20,7 @@
 let
   nameVersionAssertion =
     pred: lib.assertMsg pred "either name or both pname and version must be given";
-  pname =
+  eggName =
     if args ? pname then
       assert nameVersionAssertion (!args ? name && args ? version);
       args.pname
@@ -29,7 +29,8 @@ let
       lib.getName args.name;
   version = if args ? version then args.version else lib.getVersion args.name;
   overrides = callPackage overridesFile { };
-  override = if builtins.hasAttr pname overrides then builtins.getAttr pname overrides else lib.id;
+  override =
+    if builtins.hasAttr eggName overrides then builtins.getAttr eggName overrides else lib.id;
 in
 (stdenv.mkDerivation (
   finalAttrs:
@@ -54,7 +55,9 @@ in
     '';
   in
   {
-    pname = "chicken-${pname}${lib.optionalString (!finalAttrs.doCheck) "-no-check"}";
+    pname = "chicken-${lib.versions.major chicken.version}-${eggName}${
+      lib.optionalString (!finalAttrs.doCheck) "-no-check"
+    }";
     inherit version;
     propagatedBuildInputs = buildInputs;
     nativeBuildInputs = [
@@ -117,7 +120,7 @@ in
       if [ -e tests/run.scm ]; then
         (
           cd tests
-          csi -s run.scm ${pname} "${version}"
+          csi -s run.scm ${eggName} "${version}"
         )
       fi
 
@@ -137,8 +140,8 @@ in
       # around https://bugs.call-cc.org/ticket/1855, which is unfixed as of
       # CHICKEN 6.0.0: eggs whose .egg carries no version property are
       # installed without one.
-      csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info" > "${pname}.egg-info.new"
-      mv "${pname}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${pname}.egg-info"
+      csi -e "(write (cons '(version \"${version}\") (read)))" < "$CHICKEN_INSTALL_REPOSITORY/${eggName}.egg-info" > "${eggName}.egg-info.new"
+      mv "${eggName}.egg-info.new" "$CHICKEN_INSTALL_REPOSITORY/${eggName}.egg-info"
 
       for f in $out/bin/*
       do
