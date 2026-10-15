@@ -84,6 +84,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "django-allauth"
+    "python-ipware"
     "redis"
     "regex"
     "turbohtml"

@@ -12,7 +12,7 @@ buildGo127Module (finalAttrs: {
   __structuredAttrs = true;
 
   nativeBuildInputs = [
-    (go-mockery.override { buildGoModule = buildGo127Module; })
+    go-mockery
     writableTmpDirAsHomeHook
   ];
 

@@ -5,13 +5,17 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   pnpm_10,
-  nodejs_22,
+  nodejs-slim_24,
   rustPlatform,
   cargo,
   rustc,
   cmake,
-  version ? "1.0.0",
+  nix-update-script,
+  version ? "1.2.9",
 }:
+let
+  pnpm = pnpm_10.override { nodejs-slim = nodejs-slim_24; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rolldown";
   # Default from top-level; .override { version = "..." } replaces this via merge, and src/cargoDeps/pnpmDeps use finalAttrs.version below.
@@ -22,21 +26,21 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "rolldown";
     repo = "rolldown";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EbxZe2JBj69F6bpPn4X7BTRE/dTb/mUIvvqw7oqhAe8=";
+    hash = "sha256-r6O+W5oduMkLNYWc+3dHOJRM0NvPuuMvE2ddJZXOeM8=";
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "rolldown";
     version = finalAttrs.version;
     src = finalAttrs.src;
-    hash = "sha256-VDDbS45Lefs/4x0fU1rULgBtjzZJgL1t2lYwENPknEE=";
+    hash = "sha256-79cKISF/hp8ouUKap39yqhnr+tLg8QtRt0PF39zjAfs=";
   };
   pnpmDeps = fetchPnpmDeps {
     pname = "rolldown";
     version = finalAttrs.version;
     src = finalAttrs.src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-pq94ZI0WW9XJFzecdiM/PaOUp7DSSOWWjRO91rd8Xs4=";
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-sMMdFPLkHNNEKO1S9DoyHdpYO33XxElPBGMXXW74m2c=";
   };
 
   # cmake is only needed for Rust build (mimalloc-sys), not for a top-level configure
@@ -44,18 +48,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
-    nodejs_22
+    pnpm
+    nodejs-slim_24
     rustPlatform.cargoSetupHook
     cargo
     rustc
     cmake
   ];
 
+  preBuild = ''
+    # On darwin, @napi-rs/cli probes process identity via /bin/ps, ioreg and sysctl.
+    # The sandbox makes spawn throw EPERM synchronously, bypassing its null fallback.
+    for f in node_modules/.pnpm/@napi-rs+cli@*/node_modules/@napi-rs/cli/dist/{index.js,index.cjs,cli.js}; do
+      chmod u+w "$f"
+      substituteInPlace "$f" --replace-fail \
+        'function executeProcessIncarnationCommand(' \
+        'function executeProcessIncarnationCommand(...a) { return executeProcessIncarnationCommandUnsafe(...a).catch(() => null); }
+    function executeProcessIncarnationCommandUnsafe('
+    done
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    pnpm run --filter "@rolldown/pluginutils" build
     pnpm run --filter rolldown build-native:release
 
     runHook postBuild
@@ -78,13 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp packages/rolldown/dist/*.node "$outPath/dist/" 2>/dev/null || true
     cp packages/rolldown/src/rolldown-binding.*.node "$outPath/dist/" 2>/dev/null || true
 
-    # Install @rolldown/pluginutils (rolldown's runtime dependency; only built output, no node_modules)
-    mkdir -p "$nodeModules/@rolldown/pluginutils"
-    cp packages/pluginutils/package.json "$nodeModules/@rolldown/pluginutils/"
-    [[ -d packages/pluginutils/dist ]] && cp -r packages/pluginutils/dist "$nodeModules/@rolldown/pluginutils/"
+    # Install @rolldown/pluginutils (rolldown's runtime dependency, now published separately on npm)
+    mkdir -p "$nodeModules/@rolldown"
+    cp -rL packages/rolldown/node_modules/@rolldown/pluginutils "$nodeModules/@rolldown/pluginutils"
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/rolldown/rolldown/blob/${finalAttrs.src.tag}/CHANGELOG.md";
@@ -92,6 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/rolldown/rolldown";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.chrisportela ];
-    inherit (nodejs_22.meta) platforms;
+    inherit (nodejs-slim_24.meta) platforms;
   };
 })

@@ -2246,8 +2246,8 @@ let
         mktplcRef = {
           name = "vscode-drawio";
           publisher = "hediet";
-          version = "1.15.0";
-          hash = "sha256-4tRtVxdDYAtkgMu0rpgDnTNqfN4j7JoIpAWYUcfJVRA=";
+          version = "1.17.0";
+          hash = "sha256-KYVxvE5/kVMcWCdEDcl3DA8sj0k/41flMi/Pro/11Kw=";
         };
         meta = {
           description = "This unofficial extension integrates Draw.io into VS Code";
