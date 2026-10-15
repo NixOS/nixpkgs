@@ -70,7 +70,9 @@ let
       url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${
         if isLinux then "linux" else "darwin"
       }_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
-      hash = hashes.${system}.hash.${phpMajor};
+      hash =
+        hashes.${system}.hash.${phpMajor}
+          or (throw "php-blackfire: unsupported PHP version ${phpMajor} on ${system}");
     };
 in
 
