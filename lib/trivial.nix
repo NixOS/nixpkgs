@@ -1104,9 +1104,22 @@ in
   */
   functionArgs =
     let
-      functionArgs = builtins.functionArgs;
+      functionArgsLambda = builtins.functionArgs;
     in
-    f: if f ? __functor then f.__functionArgs or (functionArgs (f.__functor f)) else functionArgs f;
+    f:
+    if f ? __functor then
+      f.__functionArgs or (
+        let
+          fInner = f.__functor f;
+        in
+        # Peel one recursion to avoid calling functionArgs
+        if fInner ? __functor then
+          fInner.__functionArgs or (functionArgs fInner)
+        else
+          functionArgsLambda fInner
+      )
+    else
+      functionArgsLambda f;
 
   /**
     Check whether something is a function or something

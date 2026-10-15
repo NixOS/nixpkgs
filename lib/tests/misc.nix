@@ -57,6 +57,7 @@ let
     foldlAttrs
     foldr
     functionArgs
+    genAttrs
     generators
     genList
     getExe
@@ -929,6 +930,54 @@ runTests {
     expr = versions.pad 3 "1.2.3.4";
     expected = "1.2.3";
   };
+
+  testFunctionArgsNestedFunctors =
+    let
+      faOrig = {
+        x = false;
+      };
+      faAlt = {
+        x = false;
+        y = true;
+      };
+      f0 = { x, ... }: x;
+    in
+    {
+      expr = {
+        a = functionArgs {
+          __functor = self: {
+            __functor = self: f0;
+            __functionArgs = faAlt;
+          };
+        };
+        b = functionArgs { __functor = self: { __functor = self: f0; }; };
+        c = functionArgs {
+          __functor = {
+            __functor = self: outer: f0;
+          };
+        };
+        d = functionArgs {
+          __functor = {
+            __functor = self: outer: {
+              __functor = self: f0;
+              __functionArgs = faAlt;
+            };
+          };
+        };
+        e = functionArgs {
+          __functor = {
+            __functor = self: outer: { __functor = self: f0; };
+          };
+        };
+      };
+      expected = {
+        a = faAlt;
+        b = faOrig;
+        c = faOrig;
+        d = faAlt;
+        e = faOrig;
+      };
+    };
 
   testIsFunctionStr = {
     expr = isFunction "a";
