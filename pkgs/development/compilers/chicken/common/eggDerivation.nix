@@ -53,7 +53,7 @@ lib.extendMkDerivation {
     let
       nameVersionAssertion =
         pred: lib.assertMsg pred "either name or both pname and version must be given";
-      pname =
+      eggName =
         if args ? pname then
           assert nameVersionAssertion (!args ? name && args ? version);
           args.pname
@@ -84,7 +84,9 @@ lib.extendMkDerivation {
       '';
     in
     {
-      pname = "chicken-${pname}${lib.optionalString (!finalAttrs.doCheck) "-no-check"}";
+      pname = "chicken-${lib.versions.major chicken.version}-${eggName}${
+        lib.optionalString (!finalAttrs.doCheck) "-no-check"
+      }";
       inherit version;
       # Eggs are found in dev, which propagates out and the eggs they depend on.
       outputs =
@@ -162,7 +164,7 @@ lib.extendMkDerivation {
         if [ -e tests/run.scm ]; then
           (
             cd tests
-            csi -s run.scm ${pname} "${version}"
+            csi -s run.scm ${eggName} "${version}"
           )
         fi
 
@@ -194,8 +196,8 @@ lib.extendMkDerivation {
 
           # Patching the generated .egg-info instead of the original .egg; see the
           # script for why.
-          csi -s ${./patch-egg-info.scm} ${lib.escapeShellArg version} "$devRepository" < "$devRepository/${pname}.egg-info" > "${pname}.egg-info.new"
-          mv "${pname}.egg-info.new" "$devRepository/${pname}.egg-info"
+          csi -s ${./patch-egg-info.scm} ${lib.escapeShellArg version} "$devRepository" < "$devRepository/${eggName}.egg-info" > "${eggName}.egg-info.new"
+          mv "${eggName}.egg-info.new" "$devRepository/${eggName}.egg-info"
 
           # Programs run with the repositories of the eggs they use, which are the
           # ones holding extensions and import libraries, in the out outputs, and
@@ -260,7 +262,7 @@ lib.extendMkDerivation {
           '';
 
       passthru = {
-        eggName = pname;
+        inherit eggName;
       }
       // args.passthru or { };
 
