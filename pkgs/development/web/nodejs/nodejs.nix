@@ -19,8 +19,6 @@
   merve,
   nbytes,
   nghttp2,
-  nghttp3,
-  ngtcp2,
   openssl,
   simdjson,
   simdutf,
@@ -138,8 +136,6 @@ let
       brotli
       libuv
       nghttp2
-      nghttp3
-      ngtcp2
       openssl
       uvwasi
       zlib
