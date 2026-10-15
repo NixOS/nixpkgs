@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "dtsarkov";
     repo = "factplusplus";
     rev = "Release-${finalAttrs.version}";
-    sha256 = "wzK1QJsNN0Q73NM+vjaE/vLuGf8J1Zu5ZPAkZNiKnME=";
+    hash = "sha256-wzK1QJsNN0Q73NM+vjaE/vLuGf8J1Zu5ZPAkZNiKnME=";
   };
 
   buildInputs = [ jdk ];

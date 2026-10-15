@@ -1,21 +1,34 @@
-commit f2d0ff85e05b49e9d11735ce4810b242c1dbf5af
-Author: John Ericson <John.Ericson@Obsidian.Systems>
-Date:   Wed Sep 1 15:38:56 2021 +0000
+From ed3e192669c67009d54b367e3f67f169787289af Mon Sep 17 00:00:00 2001
+From: John Ericson <John.Ericson@Obsidian.Systems>
+Date: Wed, 1 Sep 2021 00:00:00 -0400
+Subject: [PATCH] Make should not hit configure
 
-    Make should not hit configure
+We run `configure` ourselves in `configurePhase`, with the cross-compilation
+arguments we want. Leaving this rule in place means `make` notices the
+`config.cache` dependency and runs `configure` a second time, from within the
+build, discarding that setup.
 
-diff --git a/Makefile b/Makefile
-index b5adb8a5f2e9..1a914ef16739 100644
+Assisted-by: Claude Code (Claude Opus 5.5)
+---
+ tools/compat/Makefile | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/tools/compat/Makefile b/tools/compat/Makefile
+index d09e8edb882b..9fac6f06d802 100644
 --- a/tools/compat/Makefile
 +++ b/tools/compat/Makefile
-@@ -76,11 +76,6 @@ _CURDIR:=	${.CURDIR}
- 
- SRCS:=		${SRCS:M*.c}
+@@ -84,15 +84,6 @@ SRCS:=		${SRCS:M*.c}
+ CONFIGURE_ARGS+=--silent
+ .endif
  
 -config.cache: include/.stamp configure nbtool_config.h.in defs.mk.in
--	rm -f ${.TARGET}
--	CC=${HOST_CC:Q} CFLAGS=${HOST_CFLAGS:Q} LDFLAGS=${HOST_LDFLAGS:Q} \
--		${HOST_SH} ${.CURDIR}/configure --cache-file=config.cache
+-	rm -f ${.TARGET}.tmp ${.TARGET}
+-	CC=${HOST_CC:Q} CFLAGS=${HOST_CFLAGS:Q} CPPFLAGS=${HOST_CPPFLAGS:Q} \
+-		LDFLAGS=${HOST_LDFLAGS:Q} \
+-		${HOST_SH} ${.CURDIR}/configure \
+-		--cache-file=${.TARGET}.tmp \
+-		${CONFIGURE_ARGS}
+-	mv -f ${.TARGET}.tmp ${.TARGET}
 -
  defs.mk: config.cache
  	@touch ${.TARGET}

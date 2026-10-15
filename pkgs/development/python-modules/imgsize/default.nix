@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "ojii";
     repo = "imgsize";
     tag = version;
-    sha256 = "sha256-pHLYDC3UjrCKOdfgo2OreE5hGyIyWVSIsQR6piJZe6k=";
+    hash = "sha256-pHLYDC3UjrCKOdfgo2OreE5hGyIyWVSIsQR6piJZe6k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
