@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  openssh,
   openssl,
   sqlite,
 }:
@@ -36,6 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "out"
     "doc"
   ];
+
+  # Remove hardcoded paths
+  postPatch = ''
+    substituteInPlace lib/ssh-agent.ch \
+      --replace-fail "/usr/bin/ssh-add" "${lib.getBin openssh}/bin/ssh-add" \
+      --replace-fail "/usr/bin/ssh-agent" "${lib.getBin openssh}/bin/ssh-agent"
+  '';
 
   # Makefile expects the binary at target/release/cosh, but the already-ran
   # cargoBuildHook builds with --target, so the binary ends up @
