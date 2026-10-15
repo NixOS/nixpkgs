@@ -172,7 +172,7 @@ rec {
 
               This function was provided by `lib.makeOverridable`.
             */
-            newArgs: makeOverridable f (origArgs // (if isFunction newArgs then newArgs origArgs else newArgs))
+            newArgs: f' (origArgs // (if isFunction newArgs then newArgs origArgs else newArgs))
           );
         in
         if isAttrs result then
