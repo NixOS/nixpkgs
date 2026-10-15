@@ -104,7 +104,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
-    install -Dm755 {adrci,genezi,uidrvci,sqlplus,exp,expdp,imp,impdp} $out/bin
+    install -Dm755 {adrci,genezi,uidrvci,sqlplus,exp,expdp,imp,impdp,sqlldr,wrc} $out/bin
 
     # cp to preserve symlinks
     cp -P *${extLib}* $lib/lib
