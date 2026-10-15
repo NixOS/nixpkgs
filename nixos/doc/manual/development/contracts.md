@@ -46,6 +46,7 @@ In the example, the path of the secret file is `cfg.passwordFile.response.path`.
 
 A consumer can also accept a value without a contract, with `types.oneOf`.
 For example, `services.stash.passwordFile` also accepts a plain path, with `types.oneOf [ types.path contractType ]`.
+`lib.contract.isInstance` tells which of the two the user set: it is `true` for an attribute set with a `response`.
 
 ## Providers {#contracts-providers}
 

@@ -5344,4 +5344,21 @@ runTests {
       ))
     ];
   };
+
+  testContractIsInstance = {
+    expr = map lib.contract.isInstance [
+      { response.path = "/run/secrets/a"; }
+      { request.owner = "a"; }
+      /run/secrets/a
+      "/run/secrets/a"
+      null
+    ];
+    expected = [
+      true
+      false
+      false
+      false
+      false
+    ];
+  };
 }

@@ -397,7 +397,7 @@ let
     ];
 
   # A secret option holds either a plain path or a file secrets contract.
-  secretPath = secret: if builtins.isAttrs secret then secret.response.path else secret;
+  secretPath = secret: if lib.contract.isInstance secret then secret.response.path else secret;
 in
 {
   meta = {
@@ -509,9 +509,13 @@ in
     # Send the request of each secret option that uses the contract to `want`.
     # The user sets the `response`, for example from `results`.
     contracts.fileSecrets.want = {
-      stash-passwordFile = mkIf (lib.isAttrs cfg.passwordFile) { inherit (cfg.passwordFile) request; };
-      stash-jwtSecretKey = mkIf (lib.isAttrs cfg.jwtSecretKey) { inherit (cfg.jwtSecretKey) request; };
-      stash-sessionStoreKey = mkIf (lib.isAttrs cfg.sessionStoreKey) {
+      stash-passwordFile = mkIf (lib.contract.isInstance cfg.passwordFile) {
+        inherit (cfg.passwordFile) request;
+      };
+      stash-jwtSecretKey = mkIf (lib.contract.isInstance cfg.jwtSecretKey) {
+        inherit (cfg.jwtSecretKey) request;
+      };
+      stash-sessionStoreKey = mkIf (lib.contract.isInstance cfg.sessionStoreKey) {
         inherit (cfg.sessionStoreKey) request;
       };
     };
