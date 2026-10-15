@@ -72,6 +72,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Times out waiting for captured output on Darwin.
+    # https://github.com/NixOS/nixpkgs/issues/573527
+    "--skip=filtered_commands_leave_no_captured_output"
   ];
 
   preCheck = ''
