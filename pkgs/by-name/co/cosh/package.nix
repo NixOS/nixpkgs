@@ -59,10 +59,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     make all prefix="$out"
   '';
 
-  # Tests require:
-  # • /etc/resolv.conf (VM::new panics without)
-  # • PostgreSQL/MySQL services for some DB tests
-  doCheck = false;
+  doCheck = true;
+
+  checkFlags = [
+    "--skip=append_redirect_test"
+    "--skip=no_zombies"
+  ];
 
   postInstall = ''
     make install prefix="$out"
