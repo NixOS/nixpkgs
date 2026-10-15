@@ -1,0 +1,58 @@
+{
+  "stable": {
+    "linux": {
+      "version": "8.12.38",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/linux/tar/stable/x86_64/1password-8.12.38.x64.tar.gz",
+          "hash": "sha256-i5dnJ2rWeVqPG3kwaqgoL315YXx8oIvtp4Rv95obtPI="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/linux/tar/stable/aarch64/1password-8.12.38.arm64.tar.gz",
+          "hash": "sha256-y4s2Z6D1FwXkCk4eSrg9RAxXMkz6s/O/rLcT5A5jEp0="
+        }
+      }
+    },
+    "darwin": {
+      "version": "8.12.38",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.12.38-x86_64.zip",
+          "hash": "sha256-K/S/IHfe3vPtgNEQdqXxKkdgJrNVwlYrEHD35Qr/kkM="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.12.38-aarch64.zip",
+          "hash": "sha256-MKFMOsau1Mh1OA4OPU4lrAxY/eTCGdu4nkBnVjygx0w="
+        }
+      }
+    }
+  },
+  "beta": {
+    "linux": {
+      "version": "8.12.32-26.BETA",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/linux/tar/beta/x86_64/1password-8.12.32-26.BETA.x64.tar.gz",
+          "hash": "sha256-9LtsORe/o1+SxBfeGCFf6hiO1uwuBWyIjHVs2jW0FNo="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/linux/tar/beta/aarch64/1password-8.12.32-26.BETA.arm64.tar.gz",
+          "hash": "sha256-zyTyqTEIq4mXttyy5VCai9oBgTNo8tsmtqU+PuZOtGA="
+        }
+      }
+    },
+    "darwin": {
+      "version": "8.12.32-26.BETA",
+      "sources": {
+        "x86_64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.12.32-26.BETA-x86_64.zip",
+          "hash": "sha256-PhqdUmd7EjYiYbzxuzs4Z4v2TD0S6SJPaKLvinCxcqE="
+        },
+        "aarch64": {
+          "url": "https://downloads.1password.com/mac/1Password-8.12.32-26.BETA-aarch64.zip",
+          "hash": "sha256-eVkVAGQRRWv4vMnGJt+4ETAdnU6/slLXlTJgXxhNRzc="
+        }
+      }
+    }
+  }
+}

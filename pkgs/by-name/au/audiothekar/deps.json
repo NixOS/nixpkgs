@@ -1,0 +1,57 @@
+[
+  {
+    "pname": "GraphQL",
+    "version": "7.8.0",
+    "hash": "sha256-/wyyrDN/0FFoHF1abjUGccEFAYsH5sj3QnPXsKPbqsI="
+  },
+  {
+    "pname": "GraphQL-Parser",
+    "version": "8.4.2",
+    "hash": "sha256-wcXfsK4sQENAj3oRX9+5GlSAtyqA94l8Y5pSnyLCYHM="
+  },
+  {
+    "pname": "GraphQL.Analyzers",
+    "version": "7.8.0",
+    "hash": "sha256-6O9A1dBIbUzUNXdQT1hv0x9QnpYCFFmGL6r3LCkAjbg="
+  },
+  {
+    "pname": "GraphQL.Client",
+    "version": "6.1.0",
+    "hash": "sha256-snZ/7uvNQUwy1+p6X3m558Tl50J8W1C+HX5AA28gIv4="
+  },
+  {
+    "pname": "GraphQL.Client.Abstractions",
+    "version": "6.1.0",
+    "hash": "sha256-qRiGaJbKcCXY/78TTT38x02ljmWoIx82xG4ZZGbWqSU="
+  },
+  {
+    "pname": "GraphQL.Client.Abstractions.Websocket",
+    "version": "6.1.0",
+    "hash": "sha256-EmPuIS+gAwmsoh0EkQ3mO8tQACuxza6W4xR3DWiMyhw="
+  },
+  {
+    "pname": "GraphQL.Client.Serializer.SystemTextJson",
+    "version": "6.1.0",
+    "hash": "sha256-5U29jAhTkbsLQsZeSonSRFZzoVp9dmE7IoCVnr3TLT8="
+  },
+  {
+    "pname": "GraphQL.Primitives",
+    "version": "6.1.0",
+    "hash": "sha256-giNMmftzJu5LChFNU8Xqm6+q6l4vtXIEVF9LBKThBuI="
+  },
+  {
+    "pname": "GraphQL.SystemTextJson",
+    "version": "7.8.0",
+    "hash": "sha256-1/AjzAbg1jCYm0lTf20rVURMjm+m0ODeFkqdWqbH3aI="
+  },
+  {
+    "pname": "Spectre.Console",
+    "version": "0.49.1",
+    "hash": "sha256-tqSVojyuQjuB34lXo759NOcyLgNIw815mKXJPq5JFDo="
+  },
+  {
+    "pname": "System.Reactive",
+    "version": "6.0.0",
+    "hash": "sha256-hXB18OsiUHSCmRF3unAfdUEcbXVbG6/nZxcyz13oe9Y="
+  }
+]

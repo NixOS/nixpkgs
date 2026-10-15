@@ -1,0 +1,27 @@
+diff --git a/python/cuda_cccl/cuda/compute/_bindings.py b/python/cuda_cccl/cuda/compute/_bindings.py
+index 81aacebfbb..3947a4ac81 100644
+--- a/python/cuda_cccl/cuda/compute/_bindings.py
++++ b/python/cuda_cccl/cuda/compute/_bindings.py
+@@ -27,9 +27,7 @@ from __future__ import annotations
+ import importlib
+ import os
+ 
+-from cuda.pathfinder import (  # type: ignore[import-not-found]
+-    load_nvidia_dynamic_lib,
+-)
++from ctypes import CDLL
+ 
+ from cuda.cccl._cuda_version_utils import detect_cuda_version, get_recommended_extra
+ 
+@@ -43,8 +41,9 @@ def _load_cuda_libraries():
+     # nvJitLink. Without this preload the extension imports only where a system
+     # CUDA toolkit happens to be installed; a plain `pip install cuda-cccl[cu13]`
+     # fails to find it even though cuda-toolkit[cudart] is a declared dependency.
+-    for libname in ("nvrtc", "nvJitLink", "cudart"):
+-        load_nvidia_dynamic_lib(libname)
++    CDLL("@libnvrtc@/lib/libnvrtc.so")
++    CDLL("@libnvjitlink@/lib/libnvJitLink.so")
++    CDLL("@libcudart@/lib/libcudart.so")
+ 
+ 
+ _load_cuda_libraries()

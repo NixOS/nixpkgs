@@ -1,0 +1,10 @@
+--- a/internal/buildinfo/buildinfo.go
++++ b/internal/buildinfo/buildinfo.go
+@@ -117,6 +117,7 @@ func UserAgent() string {
+ }
+ 
+ func Commit() string {
++	return "@commit@"
+ 	info, _ := debug.ReadBuildInfo()
+ 	var rev = "<none>"
+ 	var dirty = ""

@@ -1,0 +1,96 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 16b26eac8..7bbdab0c7 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,13 +1,13 @@
+ ################################################################################
+ # Top-level CMakeLists.txt file for Crazy Eddie's GUI System
+ ################################################################################
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.10)
+ if (POLICY CMP0017)
+-    cmake_policy(SET CMP0017 OLD)
++    cmake_policy(SET CMP0017 NEW)
+ endif()
+ 
+ if (POLICY CMP0045)
+-    cmake_policy(SET CMP0045 OLD)
++    cmake_policy(SET CMP0045 NEW)
+ endif()
+ 
+ if (APPLE AND NOT CMAKE_OSX_ARCHITECTURES)
+@@ -112,7 +112,7 @@ if(NOT ${OGRE_FOUND})
+ endif()
+ if(${OGRE_FOUND})
+     if (${OGRE_VERSION} VERSION_GREATER 1.11)
+-        set(CMAKE_CXX_STANDARD 11)
++        set(CMAKE_CXX_STANDARD 14)
+         set(CMAKE_CXX_STANDARD_REQUIRED ON)
+         set(CMAKE_CXX_EXTENSIONS OFF)
+ 
+diff --git a/cmake/CEGUIMacros.cmake b/cmake/CEGUIMacros.cmake
+index 2aca3ff3d..6c3384d63 100644
+--- a/cmake/CEGUIMacros.cmake
++++ b/cmake/CEGUIMacros.cmake
+@@ -51,17 +51,15 @@ endmacro()
+ macro (cegui_target_link_libraries _TARGET_NAME)
+     target_link_libraries(${_TARGET_NAME} ${ARGN})
+ 
+-    get_target_property(_TARGET_EXISTS ${_TARGET_NAME}_Static TYPE)
+-    if (_TARGET_EXISTS)
++    if (TARGET ${_TARGET_NAME}_Static)
+         foreach(_LIB ${ARGN})
+             if (${_LIB} STREQUAL optimized OR ${_LIB} STREQUAL debug OR ${_LIB} STREQUAL general)
+                 set (_BUILD ${_LIB})
+             else()
+-                get_target_property(_LIB_IS_IN_PROJECT ${_LIB}_Static TYPE)
+-
+-                if (_LIB_IS_IN_PROJECT)
++                if (TARGET ${_LIB}_Static)
+                     target_link_libraries(${_TARGET_NAME}_Static ${_BUILD} ${_LIB}_Static)
+                 else()
++                    # Fall back to the provided dependency if it is not a CMake target
+                     target_link_libraries(${_TARGET_NAME}_Static ${_BUILD} ${_LIB})
+                 endif()
+             endif()
+@@ -73,9 +71,7 @@ endmacro()
+ # add dynamic dependency libraries to a target
+ #
+ macro (cegui_add_dependency_dynamic_libs _TARGET_NAME _DEP_NAME)
+-    get_target_property(_TARGET_EXISTS ${_TARGET_NAME} TYPE)
+-
+-    if (_TARGET_EXISTS)
++    if (TARGET ${_TARGET_NAME})
+         if (${_DEP_NAME}_LIBRARIES)
+             if (${_DEP_NAME}_LIBRARIES_DBG)
+                 foreach(_LIB ${${_DEP_NAME}_LIBRARIES})
+@@ -98,9 +94,7 @@ endmacro()
+ # if static do not exist)
+ #
+ macro (cegui_add_dependency_static_libs _TARGET_NAME _DEP_NAME)
+-    get_target_property(_TARGET_EXISTS ${_TARGET_NAME} TYPE)
+-
+-    if (_TARGET_EXISTS)
++    if (TARGET ${_TARGET_NAME})
+         if (${_DEP_NAME}_LIBRARIES_STATIC)
+             if (${_DEP_NAME}_LIBRARIES_STATIC_DBG)
+                 foreach(_LIB ${${_DEP_NAME}_LIBRARIES_STATIC})
+@@ -137,8 +131,16 @@ endmacro()
+ #
+ macro (cegui_add_dependency _TARGET_NAME _DEP_NAME)
+ # Optional additional arguments: "SCOPE" "IS_SYSTEM"
+-    get_target_property(_DYNAMIC_EXISTS ${_TARGET_NAME} TYPE)
+-    get_target_property(_STATIC_EXISTS ${_TARGET_NAME}_Static TYPE)
++    if (TARGET ${_TARGET_NAME})
++        set(_DYNAMIC_EXISTS TRUE)
++    else()
++        set(_DYNAMIC_EXISTS FALSE)
++    endif()
++    if (TARGET ${_TARGET_NAME}_Static)
++        set(_STATIC_EXISTS TRUE)
++    else()
++        set(_STATIC_EXISTS FALSE)
++    endif()
+     if ("${ARGC}" GREATER 2)
+         if (("${ARGC}" GREATER 3) AND "${ARGV3}")
+             if (_DYNAMIC_EXISTS)

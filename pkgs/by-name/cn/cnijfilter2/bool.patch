@@ -1,0 +1,11 @@
+--- a/lgmon3/src/common/libcnnet2_type.h
++++ b/lgmon3/src/common/libcnnet2_type.h
+@@ -48,7 +48,7 @@
+ } CNNET2_SETTING_FLAGS;
+ 
+ #ifndef __cplusplus
+-typedef char bool;
++#include <stdbool.h>
+ #endif
+ 
+ typedef struct {

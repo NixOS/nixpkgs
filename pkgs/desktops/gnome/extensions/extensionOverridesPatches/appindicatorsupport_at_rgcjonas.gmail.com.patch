@@ -1,0 +1,13 @@
+diff --git a/statusNotifierWatcher.js b/statusNotifierWatcher.js
+index c4c3486..67cf761 100644
+--- a/statusNotifierWatcher.js
++++ b/statusNotifierWatcher.js
+@@ -160,7 +160,7 @@ export class StatusNotifierWatcher {
+             extension.path, 'tools', 'busAnalyzer.js',
+         ]);
+ 
+-        const subProcess = Gio.Subprocess.new(['gjs', '-m', busAnalyzer],
++        const subProcess = Gio.Subprocess.new(['@gjs@', '-m', busAnalyzer],
+             Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_PIPE);
+ 
+         const stdOut = subProcess.get_stdout_pipe();

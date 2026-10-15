@@ -1,0 +1,34 @@
+From 6f4b1279e20781f1271cf73a7fe85b74c6258958 Mon Sep 17 00:00:00 2001
+From: Deluan <deluan@navidrome.org>
+Date: Thu, 24 Sep 2026 21:57:45 -0400
+Subject: [PATCH] test(server): make the handleM3U spec independent of spec
+ order
+
+It relied on another spec having set auth.PublicTokenAuth, so it panicked whenever Ginkgo ran it first.
+---
+ server/public/handle_shares_test.go | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/server/public/handle_shares_test.go b/server/public/handle_shares_test.go
+index 1bf631fd453..4de2a75c18f 100644
+--- a/server/public/handle_shares_test.go
++++ b/server/public/handle_shares_test.go
+@@ -4,7 +4,9 @@ import (
+ 	"net/http"
+ 	"net/http/httptest"
+ 
++	"github.com/go-chi/jwtauth/v5"
+ 	"github.com/navidrome/navidrome/core"
++	"github.com/navidrome/navidrome/core/auth"
+ 	"github.com/navidrome/navidrome/model"
+ 	"github.com/navidrome/navidrome/tests"
+ 	. "github.com/onsi/ginkgo/v2"
+@@ -17,6 +19,7 @@ var _ = Describe("handleM3U", func() {
+ 	var pub *Router
+ 
+ 	BeforeEach(func() {
++		auth.PublicTokenAuth = jwtauth.New("HS256", []byte("test-secret"), nil)
+ 		ds = &tests.MockDataStore{}
+ 		shareRepo = &tests.MockShareRepo{}
+ 		ds.MockedShare = shareRepo
+

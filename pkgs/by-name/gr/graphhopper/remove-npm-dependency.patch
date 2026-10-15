@@ -1,0 +1,55 @@
+From ad687709cfca51603264ff565f296cfb5dceb15a Mon Sep 17 00:00:00 2001
+From: Luke Bailey <baileylu@tcd.ie>
+Date: Wed, 19 Mar 2025 22:25:44 +0000
+Subject: [PATCH] Swap out frontend maven plugin which downloads npm
+ for fetching it through nix instead
+
+---
+ web-bundle/pom.xml | 31 -------------------------------
+ 1 file changed, 31 deletions(-)
+
+diff --git a/web-bundle/pom.xml b/web-bundle/pom.xml
+index 9a4d83b62..1d995cbaf 100644
+--- a/web-bundle/pom.xml
++++ b/web-bundle/pom.xml
+@@ -129,37 +129,6 @@
+ 
+     <build>
+         <plugins>
+-            <plugin>
+-                <groupId>com.github.eirslett</groupId>
+-                <artifactId>frontend-maven-plugin</artifactId>
+-                <version>1.12.1</version>
+-                <executions>
+-                    <execution>
+-                        <id>install node and npm</id>
+-                        <goals>
+-                            <goal>install-node-and-npm</goal>
+-                        </goals>
+-                        <configuration>
+-                            <nodeVersion>v20.14.0</nodeVersion>
+-                            <npmVersion>10.7.0</npmVersion>
+-                        </configuration>
+-                    </execution>
+-                    <execution>
+-                        <id>download graphhopper maps</id>
+-                        <phase>generate-resources</phase>
+-                        <goals>
+-                            <goal>npm</goal>
+-                        </goals>
+-                        <configuration>
+-                            <!--suppress UnresolvedMavenProperty (IntelliJ shows an error otherwise...)-->
+-                            <arguments>
+-                                pack --pack-destination=${basedir}/target
+-                                @graphhopper/graphhopper-maps-bundle@${graphhopper-maps.version}
+-                            </arguments>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-            </plugin>
+             <plugin>
+                 <artifactId>maven-antrun-plugin</artifactId>
+                 <executions>
+-- 
+2.48.1
+

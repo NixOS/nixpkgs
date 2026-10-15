@@ -1,0 +1,51 @@
+diff --git a/nss/nss_files/files-XXX.c b/nss/nss_files/files-XXX.c
+index 1db9e46127..3a567e0224 100644
+--- a/nss/nss_files/files-XXX.c
++++ b/nss/nss_files/files-XXX.c
+@@ -75,8 +75,20 @@ internal_setent (FILE **stream)
+ 
+   if (*stream == NULL)
+     {
+-      *stream = __nss_files_fopen (DATAFILE);
+-
++      const char *file = DATAFILE;
++
++      #ifdef NIX_DATAFILE
++      // use the Nix environment variable such as `NIX_ETC_PROTOCOLS`
++      char *path = secure_getenv (NIX_DATAFILE);
++
++      // if the environment variable is set, then read from the /nix/store entry instead
++      if (path && path[0]) {
++        file = path;
++      }
++      #endif
++      
++      *stream = __nss_files_fopen (file);
++    
+       if (*stream == NULL)
+ 	status = errno == EAGAIN ? NSS_STATUS_TRYAGAIN : NSS_STATUS_UNAVAIL;
+     }
+diff --git a/nss/nss_files/files-proto.c b/nss/nss_files/files-proto.c
+index c30bedc0aa..b321e68d3c 100644
+--- a/nss/nss_files/files-proto.c
++++ b/nss/nss_files/files-proto.c
+@@ -23,6 +23,7 @@ NSS_DECLARE_MODULE_FUNCTIONS (files)
+ 
+ #define ENTNAME		protoent
+ #define DATABASE	"protocols"
++#define NIX_DATAFILE "NIX_ETC_PROTOCOLS"
+ 
+ struct protoent_data {};
+ 
+diff --git a/nss/nss_files/files-service.c b/nss/nss_files/files-service.c
+index bfc2590699..0bff36aee5 100644
+--- a/nss/nss_files/files-service.c
++++ b/nss/nss_files/files-service.c
+@@ -24,6 +24,7 @@ NSS_DECLARE_MODULE_FUNCTIONS (files)
+ 
+ #define ENTNAME		servent
+ #define DATABASE	"services"
++#define NIX_DATAFILE "NIX_ETC_SERVICES"
+ 
+ struct servent_data {};
+ 

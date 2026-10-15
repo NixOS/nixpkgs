@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index d07ad5a..1c15203 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -64,7 +64,7 @@ install-strip-compress : install-bin-strip install-info-compress install-man-com
+ 
+ install-bin : all
+ 	if [ ! -d "$(DESTDIR)$(bindir)" ] ; then $(INSTALL_DIR) "$(DESTDIR)$(bindir)" ; fi
+-	$(INSTALL_PROGRAM) ./$(progname) "$(DESTDIR)$(bindir)/$(progname)"
++	$(INSTALL_PROGRAM) ./$(progname).exe "$(DESTDIR)$(bindir)/$(progname).exe"
+ 
+ install-bin-strip : all
+ 	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' install-bin

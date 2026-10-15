@@ -1,0 +1,14 @@
+diff --git a/liborigin.pc.in b/liborigin.pc.in
+index 80cd898..69d6b8f 100644
+--- a/liborigin.pc.in
++++ b/liborigin.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: liborigin
+ Description: Library for reading OriginLab files

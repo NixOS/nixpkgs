@@ -1,0 +1,51 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  openstackdocstheme,
+  pbr,
+  setuptools,
+  sphinxHook,
+  wrapt,
+  callPackage,
+}:
+
+buildPythonPackage rec {
+  pname = "debtcollector";
+  version = "3.1.0";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-J4pFYIzxbnnArhCFHYaRhca3j4ZhDfjyekUaGMH+xzI=";
+  };
+
+  build-system = [
+    openstackdocstheme
+    pbr
+    setuptools
+    sphinxHook
+  ];
+
+  sphinxBuilders = [ "man" ];
+
+  dependencies = [
+    wrapt
+  ];
+
+  # check in passthru.tests.pytest to escape infinite recursion with other oslo components
+  doCheck = false;
+
+  passthru.tests = {
+    tests = callPackage ./tests.nix { };
+  };
+
+  pythonImportsCheck = [ "debtcollector" ];
+
+  meta = {
+    description = "Collection of Python deprecation patterns and strategies that help you collect your technical debt in a non-destructive manner";
+    homepage = "https://github.com/openstack/debtcollector";
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
+  };
+}

@@ -1,0 +1,60 @@
+{
+  lib,
+  buildPythonPackage,
+  qemu,
+  setuptools,
+  fuseSupport ? false,
+  fusepy,
+  qemu-qmp,
+}:
+
+buildPythonPackage {
+  pname = "qemu";
+  version = "0.6.1.0a1";
+  pyproject = true;
+
+  src = qemu.src;
+
+  prePatch = ''
+    cd python
+  '';
+
+  # ensure the version matches qemu-xxx/python/VERSION
+  preConfigure = ''
+    if [ "$version" != "$(cat ./VERSION)" ]; then
+      echo "The nix package version attribute is not in sync with the QEMU source version" > /dev/stderr
+      echo "Please update the version attribute in the nix expression of python3Packages.qemu to '$version'" > /dev/stderr
+      exit 1
+    fi
+  '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [ qemu-qmp ] ++ lib.optionals fuseSupport [ fusepy ];
+
+  # Project now uses pytest instead of avocado-framework for testing but does not perform functional testing.
+  # let's keep it this way.
+  checkPhase = ''
+    for bin in $out/bin/*; do
+      $bin --help
+    done
+  '';
+
+  pythonImportsCheck = [ "qemu" ];
+
+  preFixup = (
+    lib.optionalString (!fuseSupport) ''
+      rm $out/bin/qom-fuse
+    ''
+  );
+
+  meta = {
+    homepage = "https://www.qemu.org/";
+    description = "Python tooling used by the QEMU project to build, configure, and test QEMU";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      devplayer0
+      davhau
+    ];
+  };
+}

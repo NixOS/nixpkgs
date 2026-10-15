@@ -1,0 +1,40 @@
+From 9ab9d33171ee35c948967a2a2d714b8059887607 Mon Sep 17 00:00:00 2001
+From: Tarun Prabhu <tarun@lanl.gov>
+Date: Wed, 29 Oct 2025 09:13:17 -0600
+Subject: [PATCH] [flang][driver] Use -Xflang in diagnostics
+
+When an option that is only available in `flang -fc1` is provided to
+`flang`, emit a diagnostic with a suggestion containing "did you mean
+-Xflang '-foo'".
+
+Partially addresses #163550.
+---
+ clang/lib/Driver/Driver.cpp | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/lib/Driver/Driver.cpp b/lib/Driver/Driver.cpp
+index 40ea513e85427..71c52807091ba 100644
+--- a/lib/Driver/Driver.cpp
++++ b/lib/Driver/Driver.cpp
+@@ -365,9 +365,18 @@
+     auto ArgString = A->getAsString(Args);
+     std::string Nearest;
+     if (getOpts().findNearest(ArgString, Nearest, VisibilityMask) > 1) {
+-      if (!IsCLMode() &&
+-          getOpts().findExact(ArgString, Nearest,
+-                              llvm::opt::Visibility(options::CC1Option))) {
++      if (IsFlangMode()) {
++        if (getOpts().findExact(ArgString, Nearest,
++                                llvm::opt::Visibility(options::FC1Option))) {
++          DiagID = diag::err_drv_unknown_argument_with_suggestion;
++          Diags.Report(DiagID) << ArgString << "-Xflang " + Nearest;
++        } else {
++          DiagID = diag::err_drv_unknown_argument;
++          Diags.Report(DiagID) << ArgString;
++        }
++      } else if (!IsCLMode() && getOpts().findExact(ArgString, Nearest,
++                                                    llvm::opt::Visibility(
++                                                        options::CC1Option))) {
+         DiagID = diag::err_drv_unknown_argument_with_suggestion;
+         Diags.Report(DiagID) << ArgString << "-Xclang " + Nearest;
+       } else {

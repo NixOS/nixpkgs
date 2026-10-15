@@ -1,0 +1,88 @@
+From: Friedemann Kleint <Friedemann.Kleint@qt.io>
+Date: Tue, 25 Apr 2023 10:00:39 +0200
+Subject: shiboken2/clang: Fix and simplify resolveType() helper
+
+The function had a bug which only manifested with clang 16:
+"type" should have been assigned the type of the cursor
+obtained from clang_getTypeDeclaration(). With this, the complicated
+lookup code in getBaseClass() can be removed.
+
+Task-number: PYSIDE-2288
+Pick-to: 6.5
+Change-Id: I861e30451b3f4af2ec0c2e4ffa4179a429854533
+Reviewed-by: Christian Tismer <tismer@stackless.com>
+Reviewed-by: Qt CI Bot <qt_ci_bot@qt-project.org>
+---
+ .../ApiExtractor/clangparser/clangbuilder.cpp      | 39 ++++++++++------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
+
+diff --git a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+index e8e5bcf..1b4c81c 100644
+--- a/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
++++ b/sources/shiboken2/ApiExtractor/clangparser/clangbuilder.cpp
+@@ -627,6 +627,9 @@ long clang_EnumDecl_isScoped4(BaseVisitor *bv, const CXCursor &cursor)
+ #endif // CLANG_NO_ENUMDECL_ISSCOPED
+ 
+ // Resolve declaration and type of a base class
++// Note: TypeAliasTemplateDecl ("using QVector<T>=QList<T>") is automatically
++// resolved by clang_getTypeDeclaration(), but it stops at
++// TypeAliasDecl / TypedefDecl.
+ 
+ struct TypeDeclaration
+ {
+@@ -634,19 +637,23 @@ struct TypeDeclaration
+     CXCursor declaration;
+ };
+ 
++static inline bool isTypeAliasDecl(const CXCursor &cursor)
++{
++    const auto kind = clang_getCursorKind(cursor);
++    return kind == CXCursor_TypeAliasDecl || kind == CXCursor_TypedefDecl;
++}
++
+ static TypeDeclaration resolveBaseSpecifier(const CXCursor &cursor)
+ {
+     Q_ASSERT(clang_getCursorKind(cursor) == CXCursor_CXXBaseSpecifier);
+     CXType inheritedType = clang_getCursorType(cursor);
+     CXCursor decl = clang_getTypeDeclaration(inheritedType);
+-    if (inheritedType.kind != CXType_Unexposed) {
+-        while (true) {
+-            auto kind = clang_getCursorKind(decl);
+-            if (kind != CXCursor_TypeAliasDecl && kind != CXCursor_TypedefDecl)
+-                break;
+-            inheritedType = clang_getTypedefDeclUnderlyingType(decl);
+-            decl = clang_getTypeDeclaration(inheritedType);
+-        }
++    auto resolvedType = clang_getCursorType(decl);
++    if (resolvedType.kind != CXType_Invalid && resolvedType.kind != inheritedType.kind)
++        inheritedType = resolvedType;
++    while (isTypeAliasDecl(decl)) {
++        inheritedType = clang_getTypedefDeclUnderlyingType(decl);
++        decl = clang_getTypeDeclaration(inheritedType);
+     }
+     return {inheritedType, decl};
+ }
+@@ -656,20 +663,10 @@ void BuilderPrivate::addBaseClass(const CXCursor &cursor)
+ {
+     Q_ASSERT(clang_getCursorKind(cursor) == CXCursor_CXXBaseSpecifier);
+     // Note: spelling has "struct baseClass", use type
+-    QString baseClassName;
+     const auto decl = resolveBaseSpecifier(cursor);
+-    if (decl.type.kind == CXType_Unexposed) {
+-        // The type is unexposed when the base class is a template type alias:
+-        // "class QItemSelection : public QList<X>" where QList is aliased to QVector.
+-        // Try to resolve via code model.
+-        TypeInfo info = createTypeInfo(decl.type);
+-        auto parentScope = m_scopeStack.at(m_scopeStack.size() - 2); // Current is class.
+-        auto resolved = TypeInfo::resolveType(info, parentScope);
+-        if (resolved != info)
+-            baseClassName = resolved.toString();
+-    }
+-    if (baseClassName.isEmpty())
+-        baseClassName = getTypeName(decl.type);
++    QString baseClassName = getTypeName(decl.type);
++    if (baseClassName.startsWith(u"std::")) // Simplify "std::" types
++        baseClassName = createTypeInfo(decl.type).toString();
+ 
+     auto it = m_cursorClassHash.constFind(decl.declaration);
+     const CodeModel::AccessPolicy access = accessPolicy(clang_getCXXAccessSpecifier(cursor));

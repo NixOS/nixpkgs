@@ -1,0 +1,12 @@
+diff --git a/setup.cfg b/setup.cfg
+index f23714b6..8aaeb330 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,6 +1,6 @@
+ [egg_info]
+ tag_build = .post
+-tag_date = 1
++tag_date = 0
+
+ [aliases]
+ clean_egg_info = egg_info -Db ''

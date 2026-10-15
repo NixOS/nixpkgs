@@ -1,0 +1,11 @@
+--- a/shtool	2008-07-05 05:43:08.000000000 +0800
++++ b/shtool	2018-07-25 15:45:40.559587471 +0800
+@@ -1400,7 +1400,7 @@
+             if [ ".$opt_t" = .yes ]; then
+                 echo "strip $dsttmp" 1>&2
+             fi
+-            strip $dsttmp || shtool_exit $?
++            $STRIP $dsttmp || shtool_exit $?
+         fi
+         if [ ".$opt_o" != . ]; then
+             if [ ".$opt_t" = .yes ]; then

@@ -1,0 +1,31 @@
+diff --git a/music_assistant/providers/spotify/helpers.py b/music_assistant/providers/spotify/helpers.py
+index 58623de63..ba3b2ca75 100644
+--- a/music_assistant/providers/spotify/helpers.py
++++ b/music_assistant/providers/spotify/helpers.py
+@@ -9,6 +9,7 @@ import platform
+ import re
+ import tempfile
+ import time
++from shutil import which
+ from contextlib import suppress
+ from pathlib import Path
+ from typing import TYPE_CHECKING, Any
+@@ -59,16 +60,12 @@ async def get_librespot_binary() -> str:
+         except OSError:
+             return None
+ 
+-    base_path = os.path.join(os.path.dirname(__file__), "bin")
+-    system = platform.system().lower().replace("darwin", "macos")
+-    architecture = platform.machine().lower()
+-
+     if librespot_binary := await check_librespot(
+-        os.path.join(base_path, f"librespot-{system}-{architecture}")
++        which("librespot")
+     ):
+         return librespot_binary
+ 
+-    msg = f"Unable to locate Librespot for {system}/{architecture}"
++    msg = f"Unable to locate Librespot"
+     raise RuntimeError(msg)
+ 
+ 

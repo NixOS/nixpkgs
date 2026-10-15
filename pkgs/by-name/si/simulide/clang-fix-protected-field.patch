@@ -1,0 +1,15 @@
+diff --git a/src/mcusim/mcuinterface.h b/src/mcusim/mcuinterface.h
+index cc5e24b..78871de 100644
+--- a/src/mcusim/mcuinterface.h
++++ b/src/mcusim/mcuinterface.h
+@@ -73,8 +73,9 @@ class McuInterface : public eElement
+         bool stepOne( int line );
+         virtual void stepCpu()=0;
+
+-    protected:
++    public:
+  static McuInterface* m_pSelf;
++    protected:
+
+         QString m_firmware;     // firmware file loaded
+         QString m_device;

@@ -1,0 +1,93 @@
+From 0293de5a5bd209386b3c021ee661e85eee1985a9 Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Sun, 21 Sep 2025 14:55:32 +0200
+Subject: [PATCH] Use up-to-date qdldl for CMake v4
+
+---
+ c/CMakeLists.txt                   | 5 +++--
+ c/amd/include/SuiteSparse_config.h | 2 +-
+ c/amd/include/perm.h               | 2 +-
+ cpp/qdldl.hpp                      | 2 +-
+ setup.py                           | 3 ++-
+ 5 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/c/CMakeLists.txt b/c/CMakeLists.txt
+index 728204d..df15d84 100644
+--- a/c/CMakeLists.txt
++++ b/c/CMakeLists.txt
+@@ -12,7 +12,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+ 
+ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/out)
+ 
+-add_subdirectory(qdldl EXCLUDE_FROM_ALL)
++find_package(qdldl REQUIRED CONFIG)
+ 
+ set(
+     amd_src
+@@ -37,7 +37,8 @@ set(
+ 
+ 
+ # Add QDLDL+AMD library
+-add_library(qdldlamd STATIC ${amd_src} $<TARGET_OBJECTS:qdldlobject>)
++add_library(qdldlamd STATIC ${amd_src})
++target_link_libraries(qdldlamd qdldl::qdldl)
+ target_include_directories(qdldlamd PRIVATE
+ 	                   ${CMAKE_CURRENT_SOURCE_DIR}/amd/include
+ 	                   ${CMAKE_CURRENT_SOURCE_DIR}/qdldl/include
+diff --git a/c/amd/include/SuiteSparse_config.h b/c/amd/include/SuiteSparse_config.h
+index ea3cea4..19ac8df 100644
+--- a/c/amd/include/SuiteSparse_config.h
++++ b/c/amd/include/SuiteSparse_config.h
+@@ -42,7 +42,7 @@
+ extern "C" {
+ #endif
+ 
+-#include "qdldl_types.h"
++#include "qdldl/qdldl_types.h"
+ #define DLONG
+ typedef QDLDL_float c_float;
+ 
+diff --git a/c/amd/include/perm.h b/c/amd/include/perm.h
+index 16c2617..841abe1 100644
+--- a/c/amd/include/perm.h
++++ b/c/amd/include/perm.h
+@@ -2,7 +2,7 @@
+ extern "C" {
+ # endif // ifdef __cplusplus
+ 
+-#include "qdldl_types.h"
++#include "qdldl/qdldl_types.h"
+ 
+ /**
+  * C = A(p,p)= PAP' where A and C are symmetric the upper part stored;
+diff --git a/cpp/qdldl.hpp b/cpp/qdldl.hpp
+index 83b4970..1a7b5d1 100644
+--- a/cpp/qdldl.hpp
++++ b/cpp/qdldl.hpp
+@@ -1,5 +1,5 @@
+ // Source code for QDLDL, AMD and permutations
+-#include "qdldl/include/qdldl.h"
++#include "qdldl/qdldl.h"
+ #include "amd/include/amd.h"
+ #include "amd/include/perm.h"
+ #include <stdexcept>
+diff --git a/setup.py b/setup.py
+index edb50ed..c0e4c23 100644
+--- a/setup.py
++++ b/setup.py
+@@ -97,10 +97,11 @@ class build_ext_qdldl(build_ext):
+ qdldl = Extension('qdldl',
+                   sources=glob(os.path.join('cpp', '*.cpp')),
+                   include_dirs=[os.path.join('c'),
+-                                os.path.join('c', 'qdldl', 'include'),
++                                os.path.join("@qdldl@", "include"),
+                                 get_pybind_include(),
+                                 get_pybind_include(user=False)],
+                   language='c++',
++                  extra_link_args=['-lqdldl'],
+                   extra_compile_args=compile_args + ['-std=c++11'],
+                   extra_objects=[qdldl_lib])
+ 
+-- 
+2.51.0
+

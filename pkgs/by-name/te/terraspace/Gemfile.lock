@@ -1,0 +1,147 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (8.0.2)
+      base64
+      benchmark (>= 0.3)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.3.1)
+      connection_pool (>= 2.2.5)
+      drb
+      i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
+      minitest (>= 5.1)
+      securerandom (>= 0.3)
+      tzinfo (~> 2.0, >= 2.0.5)
+      uri (>= 0.13.1)
+    aws-eventstream (1.3.2)
+    aws-partitions (1.1107.0)
+    aws-sdk-core (3.224.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.992.0)
+      aws-sigv4 (~> 1.9)
+      base64
+      jmespath (~> 1, >= 1.6.1)
+      logger
+    aws-sdk-kms (1.101.0)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sigv4 (~> 1.5)
+    aws-sdk-s3 (1.186.1)
+      aws-sdk-core (~> 3, >= 3.216.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.5)
+    aws-sigv4 (1.11.0)
+      aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.2.0)
+    benchmark (0.4.0)
+    bigdecimal (3.1.9)
+    cli-format (0.6.1)
+      activesupport
+      text-table
+      zeitwerk
+    concurrent-ruby (1.3.5)
+    connection_pool (2.5.3)
+    deep_merge (1.2.2)
+    diff-lcs (1.6.2)
+    dotenv (3.1.8)
+    drb (2.2.3)
+    dsl_evaluator (0.3.2)
+      activesupport
+      memoist
+      rainbow
+      zeitwerk
+    eventmachine (1.2.7)
+    eventmachine-tail (0.6.5)
+      eventmachine
+    graph (2.11.1)
+    hcl_parser (0.2.2)
+      rhcl
+    i18n (1.14.7)
+      concurrent-ruby (~> 1.0)
+    jmespath (1.6.2)
+    logger (1.7.0)
+    memoist (0.16.2)
+    mini_portile2 (2.8.9)
+    minitest (5.25.5)
+    nokogiri (1.18.8)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
+    racc (1.8.1)
+    rainbow (3.1.1)
+    render_me_pretty (1.0.0)
+      activesupport
+      rainbow
+      tilt
+    rexml (3.4.1)
+    rhcl (0.1.0)
+      deep_merge
+    rspec (3.13.0)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.3)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.4)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.4)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.3)
+    rspec-terraspace (0.3.3)
+      activesupport
+      memoist
+      rainbow
+      rspec
+      zeitwerk
+    rubyzip (2.4.1)
+    securerandom (0.4.1)
+    terraspace (2.2.17)
+      activesupport
+      bundler
+      cli-format
+      deep_merge
+      dotenv
+      dsl_evaluator
+      eventmachine-tail
+      graph
+      hcl_parser
+      memoist
+      rainbow
+      render_me_pretty
+      rexml
+      rspec-terraspace (>= 0.3.1)
+      terraspace-bundler (>= 0.5.0)
+      thor
+      tty-tree
+      zeitwerk
+      zip_folder
+    terraspace-bundler (0.5.0)
+      activesupport
+      aws-sdk-s3
+      dsl_evaluator
+      memoist
+      nokogiri
+      rainbow
+      rubyzip
+      thor
+      zeitwerk
+    text-table (1.2.4)
+    thor (1.3.2)
+    tilt (2.6.0)
+    tty-tree (0.4.0)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
+    uri (1.0.3)
+    zeitwerk (2.7.3)
+    zip_folder (0.1.0)
+      rubyzip
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  terraspace
+
+BUNDLED WITH
+   2.6.6

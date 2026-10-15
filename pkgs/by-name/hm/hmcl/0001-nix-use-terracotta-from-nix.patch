@@ -1,0 +1,45 @@
+From ff7e9316ae220c002cc6d3cced0ae0786bcd0392 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 4 Feb 2026 15:36:17 +0800
+Subject: [PATCH 1/2] nix: use terracotta from nix
+
+---
+ .../hmcl/terracotta/TerracottaBundle.java     | 19 ++-----------------
+ 1 file changed, 2 insertions(+), 17 deletions(-)
+
+diff --git a/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaBundle.java b/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaBundle.java
+index ecc99f3..b46ada0 100644
+--- a/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaBundle.java
++++ b/HMCL/src/main/java/org/jackhuang/hmcl/terracotta/TerracottaBundle.java
+@@ -147,26 +147,11 @@ public final class TerracottaBundle {
+     }
+ 
+     public Path locate(String file) {
+-        FileDownloadTask.IntegrityCheck check = files.get(file);
+-        if (check == null) {
+-            throw new AssertionError(String.format("Expecting %s file in terracotta bundle.", file));
+-        }
+-        return root.resolve(file).toAbsolutePath();
++        return Path.of("@TERRACOTTA_BIN@");
+     }
+ 
+     public AbstractTerracottaProvider.Status status() throws IOException {
+-        if (Files.exists(root) && isLocalBundleValid()) {
+-            return AbstractTerracottaProvider.Status.READY;
+-        }
+-
+-        try {
+-            if (TerracottaMetadata.hasLegacyVersionFiles()) {
+-                return AbstractTerracottaProvider.Status.LEGACY_VERSION;
+-            }
+-        } catch (IOException e) {
+-            LOG.warning("Cannot determine whether legacy versions exist.", e);
+-        }
+-        return AbstractTerracottaProvider.Status.NOT_EXIST;
++        return AbstractTerracottaProvider.Status.READY;
+     }
+ 
+     private boolean isLocalBundleValid() throws IOException { // FIXME: Make control flow clearer.
+-- 
+2.52.0
+

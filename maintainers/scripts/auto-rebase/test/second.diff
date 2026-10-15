@@ -1,0 +1,11 @@
+diff --git a/a.nix b/a.nix
+index 18ba7ce..bcf38bc 100644
+--- a/a.nix
++++ b/a.nix
+@@ -1,6 +1,5 @@
+ {
+   x,
+-  why,
+ 
+   z,
+ }:

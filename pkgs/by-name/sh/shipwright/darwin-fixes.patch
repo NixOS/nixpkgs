@@ -1,0 +1,37 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2771ee8c..0702adad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -250,17 +250,13 @@ endif()
+ if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+ add_custom_target(CreateOSXIcons
+     COMMAND mkdir -p ${CMAKE_BINARY_DIR}/macosx/soh.iconset
+-    COMMAND sips -z 16 16     ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_16x16.png
+-    COMMAND sips -z 32 32     ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_16x16@2x.png
+-    COMMAND sips -z 32 32     ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_32x32.png
+-    COMMAND sips -z 64 64     ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_32x32@2x.png
+-    COMMAND sips -z 128 128   ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_128x128.png
+-    COMMAND sips -z 256 256   ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_128x128@2x.png
+-    COMMAND sips -z 256 256   ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_256x256.png
+-    COMMAND sips -z 512 512   ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_256x256@2x.png
+-    COMMAND sips -z 512 512   ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png --out ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_512x512.png
+-    COMMAND cp                ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_512x512@2x.png
+-    COMMAND iconutil -c icns -o ${CMAKE_BINARY_DIR}/macosx/soh.icns ${CMAKE_BINARY_DIR}/macosx/soh.iconset
++    COMMAND convert ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png -resize 16x16 ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_16.png
++    COMMAND convert ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png -resize 32x32 ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_32.png
++    COMMAND convert ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png -resize 64x64 ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_64.png
++    COMMAND convert ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png -resize 128x128 ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_128.png
++    COMMAND convert ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png -resize 256x256 ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_256.png
++    COMMAND convert ${CMAKE_SOURCE_DIR}/soh/macosx/sohIcon.png -resize 512x512 ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_512.png
++    COMMAND png2icns ${CMAKE_BINARY_DIR}/macosx/soh.icns ${CMAKE_BINARY_DIR}/macosx/soh.iconset/icon_{16,32,64,128,256,512}.png
+     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+     COMMENT "Creating OSX icons ..."
+     )
+@@ -288,7 +284,6 @@ INSTALL(CODE "FILE(RENAME \${CMAKE_INSTALL_PREFIX}/../MacOS/soh-macos \${CMAKE_I
+ 
+ install(CODE "
+     include(BundleUtilities)
+-    fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/../MacOS/soh\" \"\" \"${dirs}\")
+     ")
+ 
+ endif()

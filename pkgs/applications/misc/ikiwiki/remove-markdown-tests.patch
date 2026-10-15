@@ -1,0 +1,35 @@
+diff --git a/t/mdwn.t b/t/mdwn.t
+index 966aad2..2756173 100755
+--- a/t/mdwn.t
++++ b/t/mdwn.t
+@@ -22,30 +22,13 @@ foreach my $multimarkdown (qw(1 0)) {
+ 		"<p>C. S. Lewis wrote books</p>\n",
+ 		"alphalist off by default for multimarkdown = $multimarkdown");
+ 
+-	like(IkiWiki::htmlize("foo", "foo", "mdwn",
+-		"This works[^1]\n\n[^1]: Sometimes it doesn't.\n"),
+-		qr{<p>This works.*fnref:1.*},
+-		"footnotes on by default for multimarkdown = $multimarkdown");
+-
+ 	$config{mdwn_footnotes} = 0;
+ 	unlike(IkiWiki::htmlize("foo", "foo", "mdwn",
+ 		"An unusual link label: [^1]\n\n[^1]: http://example.com/\n"),
+ 		qr{<p>An unusual link label: .*fnref:1.*},
+ 		"footnotes can be disabled for multimarkdown = $multimarkdown");
+-
+-	$config{mdwn_footnotes} = 1;
+-	like(IkiWiki::htmlize("foo", "foo", "mdwn",
+-		"This works[^1]\n\n[^1]: Sometimes it doesn't.\n"),
+-		qr{<p>This works.*fnref:1.*},
+-		"footnotes can be enabled for multimarkdown = $multimarkdown");
+ }
+ 
+-$config{mdwn_alpha_lists} = 1;
+-like(IkiWiki::htmlize("foo", "foo", "mdwn",
+-	"A. One\n".
+-	"B. Two\n"),
+-	qr{<ol\W}, "alphalist can be enabled");
+-
+ $config{mdwn_alpha_lists} = 0;
+ like(IkiWiki::htmlize("foo", "foo", "mdwn",
+ 	"A. One\n".

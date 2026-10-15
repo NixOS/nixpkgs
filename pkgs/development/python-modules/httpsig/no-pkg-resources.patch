@@ -1,0 +1,17 @@
+--- a/httpsig/__init__.py
++++ b/httpsig/__init__.py
+@@ -1,11 +1,11 @@
+-from pkg_resources import get_distribution, DistributionNotFound
++from importlib.metadata import PackageNotFoundError, version
+ 
+ from .sign import Signer, HeaderSigner
+ from .verify import Verifier, HeaderVerifier
+ 
+ try:
+-    __version__ = get_distribution(__name__).version
+-except DistributionNotFound:
++    __version__ = version(__name__)
++except PackageNotFoundError:
+     # package is not installed
+     pass
+ 

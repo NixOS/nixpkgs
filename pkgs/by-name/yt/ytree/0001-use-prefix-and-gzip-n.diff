@@ -1,0 +1,26 @@
+diff -Naur ytree-2.12-old/Makefile ytree-2.12-new/Makefile
+--- ytree-2.12-old/Makefile	2026-04-20 18:00:22.000000000 +0000
++++ ytree-2.12-new/Makefile	2026-05-17 12:00:00.000000000 +0000
+@@ -14,10 +14,11 @@
+ 
+ ADD_CFLAGS  = # -DVI_KEYS
+ 
+-DESTDIR     = /usr
+-BINDIR      = $(DESTDIR)/bin
+-MANDIR      = $(DESTDIR)/share/man/man1
++PREFIX      = /usr
+ 
++BINDIR      = $(DESTDIR)$(PREFIX)/bin
++MANDIR      = $(DESTDIR)$(PREFIX)/share/man/man1
++MANESDIR    = $(DESTDIR)$(PREFIX)/share/man/es/man1
+ 
+ # Uncomment the lines for your system (default is linux)
+ 
+@@ -218,7 +219,7 @@
+ install:	$(MAIN)
+ 		if [ ! -e $(BINDIR) ]; then mkdir -p $(BINDIR); fi
+ 		install $(MAIN) $(BINDIR)
+-		gzip -9c ytree.1 > ytree.1.gz
++		gzip -n -9c ytree.1 > ytree.1.gz
+ 		if [ ! -e $(MANDIR) ]; then mkdir -p $(MANDIR); fi
+ 		install -m 0644 ytree.1.gz  $(MANDIR)/

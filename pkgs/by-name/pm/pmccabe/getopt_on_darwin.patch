@@ -1,0 +1,15 @@
+diff --git a/decomment.c b/decomment.c
+index 400707a..aea29fd 100644
+--- a/decomment.c
++++ b/decomment.c
+@@ -11,6 +11,10 @@
+ #include "getopt.h"
+ #endif
+ 
++#ifdef __APPLE__
++#include "getopt.h"
++#endif
++
+ #ifdef NEED_OPTIND
+ extern int optind;
+ #endif

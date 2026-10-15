@@ -1,0 +1,217 @@
+From 92f25181dbf722cb749e445851580df4ea779299 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Sun, 21 Dec 2025 08:01:08 -0800
+Subject: [PATCH 1/2] fix(rdc): set CMAKE_CXX_FLAGS after project() to avoid
+ clobbering env
+
+CMAKE_CXX_FLAGS' initial value is set from $CXXFLAGS on project() call
+so the previous location ignored CXXFLAGS from env or CMake toolchain
+config.
+
+Ref: https://cmake.org/cmake/help/v4.2/variable/CMAKE_LANG_FLAGS_INIT.html
+Fixes: 874a7b438f ("CMAKE - Fix build types")
+---
+ CMakeLists.txt | 48 +++++++++++++++++++------------------
+ 1 file changed, 25 insertions(+), 23 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 907c9fbff42..8b386c7be3d 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -55,29 +55,6 @@ set_property(
+     PROPERTY STRINGS "Debug" "Release" "RelWithDebInfo" "MinSizeRel"
+ )
+ 
+-# Set compile flags
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -m64 -msse -msse2")
+-set(CMAKE_CXX_FLAGS_DEBUG
+-    "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb -DDEBUG"
+-    CACHE STRING
+-    "Flags for Debug builds"
+-)
+-set(CMAKE_CXX_FLAGS_RELEASE
+-    "${CMAKE_CXX_FLAGS_RELEASE} -O2 -s -DNDEBUG"
+-    CACHE STRING
+-    "Flags for Release builds"
+-)
+-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO
+-    "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g -DNDEBUG"
+-    CACHE STRING
+-    "Flags for RelWithDebInfo builds"
+-)
+-set(CMAKE_CXX_FLAGS_MINSIZEREL
+-    "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -DNDEBUG"
+-    CACHE STRING
+-    "Flags for MinSizeRel builds"
+-)
+-
+ set(CMAKE_MODULE_PATH
+     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/"
+     CACHE INTERNAL
+@@ -155,6 +132,31 @@ project(${RDC} VERSION "${VERSION_STRING}" HOMEPAGE_URL "https://github.com/Rade
+ # this must go after project()
+ include(GNUInstallDirs)
+ 
++# NB: CMAKE_<LANG>_FLAGS are initialized from environment (CXXFLAGS et al.)
++# during project(). Setting them before project() discards env and toolchain
++# defaults. Cf. CMAKE_<LANG>_FLAGS_INIT for toolchain overrides.
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -m64 -msse -msse2")
++set(CMAKE_CXX_FLAGS_DEBUG
++    "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb -DDEBUG"
++    CACHE STRING
++    "Flags for Debug builds"
++)
++set(CMAKE_CXX_FLAGS_RELEASE
++    "${CMAKE_CXX_FLAGS_RELEASE} -O2 -s -DNDEBUG"
++    CACHE STRING
++    "Flags for Release builds"
++)
++set(CMAKE_CXX_FLAGS_RELWITHDEBINFO
++    "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g -DNDEBUG"
++    CACHE STRING
++    "Flags for RelWithDebInfo builds"
++)
++set(CMAKE_CXX_FLAGS_MINSIZEREL
++    "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -DNDEBUG"
++    CACHE STRING
++    "Flags for MinSizeRel builds"
++)
++
+ set(COMMON_DIR "${CMAKE_CURRENT_SOURCE_DIR}/common")
+ 
+ set(GRPC_ROOT_DEFAULT "/usr")
+
+From 0c8710c3570963b29c709b1cd1f78b15fd73a950 Mon Sep 17 00:00:00 2001
+From: Luna Nova <git@lunnova.dev>
+Date: Sun, 21 Dec 2025 08:13:04 -0800
+Subject: [PATCH 2/2] fix(rdc): don't reimplement CMake default build type flag
+ logic
+
+The previous approach was overly complicated and added nothing. CMake already defaults
+similar flags for each of the default supported build types.
+Additionally, the previous flags broke AArch64 as -m64 -msse are incompatible.
+It's not necessary to explicitly set this with modern toolchains.
+
+Fixes: 874a7b438f ("CMAKE - Fix build types")
+Fixes: bc7f01e992 ("Initial RDC commit")
+---
+ CMakeLists.txt               | 25 +---------------------
+ example/CMakeLists.txt       | 26 ++---------------------
+ tests/example/CMakeLists.txt | 24 +--------------------
+ 3 files changed, 4 insertions(+), 71 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8b386c7be3d..251fcddd653 100755
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -132,30 +132,7 @@ project(${RDC} VERSION "${VERSION_STRING}" HOMEPAGE_URL "https://github.com/Rade
+ # this must go after project()
+ include(GNUInstallDirs)
+ 
+-# NB: CMAKE_<LANG>_FLAGS are initialized from environment (CXXFLAGS et al.)
+-# during project(). Setting them before project() discards env and toolchain
+-# defaults. Cf. CMAKE_<LANG>_FLAGS_INIT for toolchain overrides.
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -m64 -msse -msse2")
+-set(CMAKE_CXX_FLAGS_DEBUG
+-    "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb -DDEBUG"
+-    CACHE STRING
+-    "Flags for Debug builds"
+-)
+-set(CMAKE_CXX_FLAGS_RELEASE
+-    "${CMAKE_CXX_FLAGS_RELEASE} -O2 -s -DNDEBUG"
+-    CACHE STRING
+-    "Flags for Release builds"
+-)
+-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO
+-    "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g -DNDEBUG"
+-    CACHE STRING
+-    "Flags for RelWithDebInfo builds"
+-)
+-set(CMAKE_CXX_FLAGS_MINSIZEREL
+-    "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -DNDEBUG"
+-    CACHE STRING
+-    "Flags for MinSizeRel builds"
+-)
++add_compile_options(-Wall -Wextra)
+ 
+ set(COMMON_DIR "${CMAKE_CURRENT_SOURCE_DIR}/common")
+ 
+diff --git a/example/CMakeLists.txt b/example/CMakeLists.txt
+index 378a2005818..7c51307ec38 100755
+--- a/example/CMakeLists.txt
++++ b/example/CMakeLists.txt
+@@ -31,30 +31,6 @@ cmake_minimum_required(VERSION 3.15)
+ option(CMAKE_VERBOSE_MAKEFILE "Enable verbose output" ON)
+ option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile commands for linters and autocompleters" ON)
+ 
+-# Set compile flags
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -m64 -msse -msse2")
+-set(CMAKE_CXX_FLAGS_DEBUG
+-    "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb -DDEBUG"
+-    CACHE STRING
+-    "Flags for Debug builds"
+-)
+-# note: no '-s' here unlike other CMakeLists.txt
+-set(CMAKE_CXX_FLAGS_RELEASE
+-    "${CMAKE_CXX_FLAGS_RELEASE} -O2 -DNDEBUG"
+-    CACHE STRING
+-    "Flags for Release builds"
+-)
+-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO
+-    "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g -DNDEBUG"
+-    CACHE STRING
+-    "Flags for RelWithDebInfo builds"
+-)
+-set(CMAKE_CXX_FLAGS_MINSIZEREL
+-    "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -DNDEBUG"
+-    CACHE STRING
+-    "Flags for MinSizeRel builds"
+-)
+-
+ set(CMAKE_CXX_STANDARD 17 CACHE STRING "The C++ standard to use")
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
+ set(CMAKE_CXX_EXTENSIONS OFF)
+@@ -66,6 +42,8 @@ endif()
+ 
+ project(RDC_example)
+ 
++add_compile_options(-Wall -Wextra)
++
+ # provides cmake_print_variables(VAR)
+ include(CMakePrintHelpers)
+ 
+diff --git a/tests/example/CMakeLists.txt b/tests/example/CMakeLists.txt
+index d5614f387bd..13c2f3857a1 100755
+--- a/tests/example/CMakeLists.txt
++++ b/tests/example/CMakeLists.txt
+@@ -22,29 +22,7 @@ message("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+ message("                       Cmake Example Lib                           ")
+ message("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+ 
+-# Set compile flags
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -m64 -msse -msse2")
+-set(CMAKE_CXX_FLAGS_DEBUG
+-    "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb -DDEBUG"
+-    CACHE STRING
+-    "Flags for Debug builds"
+-)
+-# note: no '-s' here unlike other CMakeLists.txt
+-set(CMAKE_CXX_FLAGS_RELEASE
+-    "${CMAKE_CXX_FLAGS_RELEASE} -O2 -DNDEBUG"
+-    CACHE STRING
+-    "Flags for Release builds"
+-)
+-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO
+-    "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -g -DNDEBUG"
+-    CACHE STRING
+-    "Flags for RelWithDebInfo builds"
+-)
+-set(CMAKE_CXX_FLAGS_MINSIZEREL
+-    "${CMAKE_CXX_FLAGS_MINSIZEREL} -Os -DNDEBUG"
+-    CACHE STRING
+-    "Flags for MinSizeRel builds"
+-)
++add_compile_options(-Wall -Wextra)
+ 
+ # Required Defines first:
+ 

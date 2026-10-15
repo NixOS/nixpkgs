@@ -1,0 +1,36 @@
+diff --git a/vowpalwabbit/config/include/vw/config/option.h b/vowpalwabbit/config/include/vw/config/option.h
+index fa584b15..97d7d92f 100644
+--- a/vowpalwabbit/config/include/vw/config/option.h
++++ b/vowpalwabbit/config/include/vw/config/option.h
+@@ -7,6 +7,7 @@
+ #include "vw/common/vw_exception.h"
+ #include "vw/common/vw_throw.h"
+ 
++#include <cstdint>
+ #include <memory>
+ #include <set>
+ #include <sstream>
+diff --git a/vowpalwabbit/core/include/vw/core/feature_group.h b/vowpalwabbit/core/include/vw/core/feature_group.h
+index 569c54ca..6e390565 100644
+--- a/vowpalwabbit/core/include/vw/core/feature_group.h
++++ b/vowpalwabbit/core/include/vw/core/feature_group.h
+@@ -10,6 +10,7 @@
+ 
+ #include <algorithm>
+ #include <cstddef>
++#include <cstdint>
+ #include <iterator>
+ #include <memory>
+ #include <numeric>
+diff --git a/vowpalwabbit/io/include/vw/io/io_adapter.h b/vowpalwabbit/io/include/vw/io/io_adapter.h
+index f5131085..9c57a449 100644
+--- a/vowpalwabbit/io/include/vw/io/io_adapter.h
++++ b/vowpalwabbit/io/include/vw/io/io_adapter.h
+@@ -4,6 +4,7 @@
+ 
+ #pragma once
+ 
++#include <cstdint>
+ #include <functional>
+ #include <memory>
+ #include <string>

@@ -1,0 +1,20 @@
+diff --git a/diffoscope/comparators/apk.py b/diffoscope/comparators/apk.py
+index 061fbbb0..ce49b835 100644
+--- a/diffoscope/comparators/apk.py
++++ b/diffoscope/comparators/apk.py
+@@ -335,7 +335,14 @@ def get_v2_signing_keys(path):
+         return "\n".join(textwrap.wrap(binascii.hexlify(x).decode("utf-8")))
+
+     output = []
+-    for k, v in sorted(instance._v2_blocks.items()):
++    blocks = instance._v2_blocks
++    if isinstance(blocks, dict):
++        blocks = blocks.items()
++    else:
++        # androguard >= 4.1.4 preserves blocks with duplicate IDs in a list.
++        blocks = ((block.id, block.data) for block in blocks)
++
++    for k, v in sorted(blocks):
+         output.append("Key {}:\n{}\n".format(hex(k), format_key(v)))
+
+     return "\n".join(output)

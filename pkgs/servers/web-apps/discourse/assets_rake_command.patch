@@ -1,0 +1,13 @@
+diff --git a/lib/tasks/assets.rake b/lib/tasks/assets.rake
+index 9608297789..5487490915 100644
+--- a/lib/tasks/assets.rake
++++ b/lib/tasks/assets.rake
+@@ -36,7 +36,7 @@ task "assets:precompile:build" do
+     if only_ember_precompile_build_remaining
+       exec "#{compile_command}"
+     elsif only_assets_precompile_remaining
+-      exec "#{compile_command} && SKIP_EMBER_CLI_COMPILE=1 bin/rake assets:precompile"
++      exec "#{compile_command} && SKIP_EMBER_CLI_COMPILE=1 bundle exec rake assets:precompile"
+     else
+       system compile_command, exception: true
+       EmberCli.clear_cache!

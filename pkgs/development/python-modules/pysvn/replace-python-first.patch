@@ -1,0 +1,13 @@
+Index: Extension/Tests/benchmark_diff.py
+===================================================================
+--- Extension/Tests/benchmark_diff.py	(revision 2093)
++++ Extension/Tests/benchmark_diff.py	(working copy)
+@@ -115,7 +115,7 @@
+ 
+         if self.python:
+             python_re = LiteralCaseBlindSearch( self.python )
+-            self.replacement_list.append(
++            self.replacement_list.insert(0,
+                  (python_re,            '<PYTHON>') )
+ 
+         if self.svn_bin:

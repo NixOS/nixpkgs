@@ -1,0 +1,11 @@
+--- a/subprojects/libshew/src/meson.build
++++ b/subprojects/libshew/src/meson.build
+@@ -15,7 +15,7 @@ shew_sources = [
+ libshew = library(full_name,
+   sources: shew_sources,
+   dependencies: [gtk_dep],
+-  install_dir: pkglibdir,
++  install_dir: get_option('prefix') / pkglibdir,
+   install: true,
+ )
+ 

@@ -1,0 +1,13 @@
+diff --git a/macx/scripts/osxdist.py b/macx/scripts/osxdist.py
+index bdc7fcbd2..2114caf37 100755
+--- a/macx/scripts/osxdist.py
++++ b/macx/scripts/osxdist.py
+@@ -151,7 +151,7 @@ class AppBundle(object):
+ 		dst = os.path.join(self.bundle, 'Contents', 'Plugins')
+ 		if not os.path.exists(dst):
+ 			os.makedirs(dst)
+-		for plugin in glob.glob(os.path.join(options.binary_dir, 'plugins') + '/*.dylib'):
++		for plugin in glob.glob(os.path.join(options.binary_dir, 'lib/mumble/plugins') + '/*.dylib'):
+ 			shutil.copy(plugin, dst)
+
+ 	def update_plist(self):

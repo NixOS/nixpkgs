@@ -1,0 +1,80 @@
+From cbb17366904c97bb5db40644c277be41219261da Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Tue, 9 Sep 2025 20:42:11 +0100
+Subject: [PATCH] =?UTF-8?q?Fix=20the=20build=20with=20cereal=20=E2=89=A5?=
+ =?UTF-8?q?=201.3.1?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Based on <https://github.com/prusa3d/PrusaSlicer/pull/7809>.
+
+Co-authored-by: Yuri D'Elia <wavexx@thregr.org>
+Co-authored-by: tamasmeszaros <meszaros.q@gmail.com>
+---
+ CMakeLists.txt               | 6 ++++++
+ src/CMakeLists.txt           | 3 +--
+ src/libslic3r/CMakeLists.txt | 2 +-
+ src/slic3r/CMakeLists.txt    | 2 +-
+ 4 files changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a112949bba..81b0a4244f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -469,6 +469,12 @@ endif ()
+ 
+ # Find the Cereal serialization library
+ find_package(cereal REQUIRED)
++add_library(libcereal INTERFACE)
++if (NOT TARGET cereal::cereal)
++    target_link_libraries(libcereal INTERFACE cereal)
++else()
++    target_link_libraries(libcereal INTERFACE cereal::cereal)
++endif()
+ 
+ # l10n
+ set(L10N_DIR "${SLIC3R_RESOURCES_DIR}/localization")
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index bf721a7635..71a62a9024 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -144,8 +144,7 @@ if (NOT WIN32)
+     set_target_properties(Slic3r PROPERTIES OUTPUT_NAME "${SLIC3R_APP_CMD}")
+ endif ()
+ 
+-target_link_libraries(Slic3r libslic3r cereal)
+-
++target_link_libraries(Slic3r libslic3r libcereal)
+ if (APPLE)
+ #    add_compile_options(-stdlib=libc++)
+ #    add_definitions(-DBOOST_THREAD_DONT_USE_CHRONO -DBOOST_NO_CXX11_RVALUE_REFERENCES -DBOOST_THREAD_USES_MOVE)
+diff --git a/src/libslic3r/CMakeLists.txt b/src/libslic3r/CMakeLists.txt
+index 84be9c12e5..4940549134 100644
+--- a/src/libslic3r/CMakeLists.txt
++++ b/src/libslic3r/CMakeLists.txt
+@@ -420,7 +420,7 @@ find_package(JPEG REQUIRED)
+ target_link_libraries(libslic3r
+     libnest2d
+     admesh
+-    cereal
++    libcereal
+     libigl
+     miniz
+     boost_libs
+diff --git a/src/slic3r/CMakeLists.txt b/src/slic3r/CMakeLists.txt
+index c11f860c59..c1eb966de1 100644
+--- a/src/slic3r/CMakeLists.txt
++++ b/src/slic3r/CMakeLists.txt
+@@ -302,7 +302,7 @@ target_compile_definitions(libslic3r_gui PRIVATE $<$<BOOL:${SLIC3R_ALPHA}>:SLIC3
+ 
+ encoding_check(libslic3r_gui)
+ 
+-target_link_libraries(libslic3r_gui libslic3r avrdude cereal imgui GLEW::GLEW OpenGL::GL hidapi exif angelscript libcurl ${wxWidgets_LIBRARIES})
++target_link_libraries(libslic3r_gui libslic3r avrdude libcereal imgui GLEW::GLEW OpenGL::GL hidapi exif angelscript libcurl ${wxWidgets_LIBRARIES})
+ 
+ if (MSVC)
+     target_link_libraries(libslic3r_gui Setupapi.lib)
+-- 
+2.50.1
+

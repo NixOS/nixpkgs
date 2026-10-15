@@ -1,0 +1,12 @@
+diff --git a/src/main/main.ts b/src/main/main.ts
+index d9413cc..b49e641 100644
+--- a/src/main/main.ts
++++ b/src/main/main.ts
+@@ -280,7 +280,6 @@ app.whenReady().then(async () => {
+   }
+ 
+   createMainWindow();
+-  autoUpdater.checkForUpdatesAndNotify();
+ });
+ 
+ app.on("open-file", (_, path) => {

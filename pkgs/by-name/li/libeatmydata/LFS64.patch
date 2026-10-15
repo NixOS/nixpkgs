@@ -1,0 +1,70 @@
+From 59f04ad8730034a205a1a792662d4b5dc2006b7c Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Mon, 13 May 2024 09:53:23 +0200
+Subject: [PATCH] Fix sync_file_range() with musl 1.2.4
+
+musl 1.2.4 has removed the transitional LFS off64_t type.
+sync_file_range is declared with off_t in musl, which is always 64
+bits.
+
+This assumes that the same is true of any other libc which doesn't
+provide off64_t.  If it's not, gcc will produce an error due to the
+conflicting types of sync_file_range(), so it will be caught and can
+be fixed.
+---
+ configure.ac                |  2 ++
+ libeatmydata/libeatmydata.c | 11 +++++++++--
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 4d101ba..f3c4a69 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -37,6 +37,8 @@ AC_CHECK_HEADERS_ONCE(pthread.h)
+ AC_CHECK_SIZEOF(mode_t)
+ AC_CHECK_SIZEOF(int)
+ 
++AC_CHECK_TYPES([off64_t])
++
+ AC_CHECK_TYPE(pthread_barrier_t,,,[
+   #ifdef HAVE_PTHREAD_H
+   #include <pthread.h>
+diff --git a/libeatmydata/libeatmydata.c b/libeatmydata/libeatmydata.c
+index 134afcd..0015f1f 100644
+--- a/libeatmydata/libeatmydata.c
++++ b/libeatmydata/libeatmydata.c
+@@ -35,6 +35,12 @@
+ #define CHECK_FILE "/tmp/eatmydata"
+ */
+ 
++#ifdef HAVE_OFF64_T
++typedef off64_t sync_file_range_off;
++#else
++typedef off_t sync_file_range_off;
++#endif
++
+ typedef int (*libc_open_t)(const char*, int, ...);
+ #ifdef HAVE_OPEN64
+ typedef int (*libc_open64_t)(const char*, int, ...);
+@@ -44,7 +50,7 @@ typedef int (*libc_sync_t)(void);
+ typedef int (*libc_fdatasync_t)(int);
+ typedef int (*libc_msync_t)(void*, size_t, int);
+ #ifdef HAVE_SYNC_FILE_RANGE
+-typedef int (*libc_sync_file_range_t)(int, off64_t, off64_t, unsigned int);
++typedef int (*libc_sync_file_range_t)(int, sync_file_range_off, sync_file_range_off, unsigned int);
+ #endif
+ #ifdef HAVE_SYNCFS
+ typedef int (*libc_syncfs_t)(int);
+@@ -259,7 +265,8 @@ int LIBEATMYDATA_API msync(void *addr, size_t length, int flags)
+ }
+ 
+ #ifdef HAVE_SYNC_FILE_RANGE
+-int LIBEATMYDATA_API sync_file_range(int fd, off64_t offset, off64_t nbytes,
++int LIBEATMYDATA_API sync_file_range(int fd, sync_file_range_off offset,
++				     sync_file_range_off nbytes,
+ 				     unsigned int flags)
+ {
+ 	if (eatmydata_is_hungry()) {
+-- 
+2.45.1
+

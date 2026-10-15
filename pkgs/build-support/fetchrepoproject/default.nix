@@ -1,0 +1,116 @@
+{
+  lib,
+  stdenvNoCC,
+  gitRepo,
+  cacert,
+  copyPathsToStore,
+}:
+lib.fetchers.withNormalizedHash { } (
+  {
+    name,
+    manifest,
+    rev ? "HEAD",
+    outputHash,
+    outputHashAlgo,
+    # Optional parameters:
+    repoRepoURL ? "",
+    repoRepoRev ? "",
+    referenceDir ? "",
+    manifestName ? "",
+    localManifests ? [ ],
+    createMirror ? false,
+    useArchive ? false,
+  }:
+
+  assert repoRepoRev != "" -> repoRepoURL != "";
+  assert createMirror -> !useArchive;
+
+  let
+    inherit (lib)
+      concatMapStringsSep
+      concatStringsSep
+      fetchers
+      optional
+      ;
+
+    extraRepoInitFlags =
+      optional (repoRepoURL != "") "--repo-url=${repoRepoURL}"
+      ++ optional (repoRepoRev != "") "--repo-branch=${repoRepoRev}"
+      ++ optional (referenceDir != "") "--reference=${referenceDir}"
+      ++ optional (manifestName != "") "--manifest-name=${manifestName}";
+
+    repoInitFlags = [
+      "--manifest-url=${manifest}"
+      "--manifest-branch=${rev}"
+      "--depth=1"
+    ]
+    ++ optional createMirror "--mirror"
+    ++ optional useArchive "--archive"
+    ++ extraRepoInitFlags;
+
+    local_manifests = copyPathsToStore localManifests;
+
+  in
+  stdenvNoCC.mkDerivation {
+    inherit name;
+
+    inherit
+      cacert
+      manifest
+      rev
+      repoRepoURL
+      repoRepoRev
+      referenceDir
+      ; # TODO
+
+    inherit outputHash outputHashAlgo;
+    outputHashMode = "recursive";
+
+    preferLocalBuild = true;
+    enableParallelBuilding = true;
+
+    impureEnvVars = fetchers.proxyImpureEnvVars ++ [
+      "GIT_PROXY_COMMAND"
+      "SOCKS_SERVER"
+    ];
+
+    nativeBuildInputs = [
+      gitRepo
+      cacert
+    ];
+
+    strictDeps = true;
+    __structuredAttrs = true;
+
+    env.GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+    inherit repoInitFlags createMirror local_manifests;
+
+    buildCommand = ''
+      # Path must be absolute (e.g. for GnuPG: ~/.repoconfig/gnupg/pubring.kbx)
+      export HOME="$(pwd)"
+
+      mkdir $out
+      cd $out
+
+      mkdir .repo
+      if [ "''${#local_manifests[@]}" -gt 0 ]; then
+        mkdir .repo/local_manifests
+        for local_manifest in "''${local_manifests[@]}"; do
+          cp $local_manifest .repo/local_manifests/$(stripHash $local_manifest)
+        done
+      fi
+
+      repo init "''${repoInitFlags[@]}"
+      repo sync --jobs=$NIX_BUILD_CORES --current-branch
+
+      # TODO: The git-index files (and probably the files in .repo as well) have
+      # different contents each time and will therefore change the final hash
+      # (i.e. creating a mirror probably won't work).
+      if [ -z "$createMirror" ]; then
+        rm -rf .repo
+        find -type d -name '.git' -prune -exec rm -rf {} +
+      fi
+    '';
+  }
+)

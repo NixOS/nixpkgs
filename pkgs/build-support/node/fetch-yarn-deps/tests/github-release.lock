@@ -1,0 +1,6 @@
+"libsession_util_nodejs@https://github.com/oxen-io/libsession-util-nodejs/releases/download/v0.3.19/libsession_util_nodejs-v0.3.19.tar.gz":
+  version "0.3.19"
+  resolved "https://github.com/oxen-io/libsession-util-nodejs/releases/download/v0.3.19/libsession_util_nodejs-v0.3.19.tar.gz#221c1fc34fcc18601aea4ce1b733ebfa55af66ea"
+  dependencies:
+    cmake-js "^7.2.1"
+    node-addon-api "^6.1.0"

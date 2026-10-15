@@ -1,0 +1,50 @@
+diff --git a/plugin/install/install.go b/plugin/install/install.go
+index 60c61550..d7573c2d 100644
+--- a/plugin/install/install.go
++++ b/plugin/install/install.go
+@@ -151,6 +151,7 @@ func isOSCompatible(zipfile string) bool {
+ 
+ // InstallPluginFromZipFile installs plugin from given zip file
+ func InstallPluginFromZipFile(zipFile string, pluginName string) InstallResult {
++	CheckForNixStore(fmt.Sprintf("Tried to install the plugin `%s`.", pluginName))
+ 	if !isPlatformIndependent(zipFile) && !isOSCompatible(zipFile) {
+ 		err := fmt.Errorf("provided plugin is not compatible with OS %s %s", runtime.GOOS, runtime.GOARCH)
+ 		return installError(err)
+@@ -314,6 +315,7 @@ func runPlatformCommands(commands platformSpecificCommand, workingDir string) er
+ // UninstallPlugin uninstall the given plugin of the given uninstallVersion
+ // If uninstallVersion is not specified, it uninstalls all the versions of given plugin
+ func UninstallPlugin(pluginName string, uninstallVersion string) {
++	CheckForNixStore(fmt.Sprintf("Tried to uninstall the plugin `%s`.", pluginName))
+ 	pluginsHome, err := common.GetPrimaryPluginsInstallDir()
+ 	if err != nil {
+ 		logger.Fatalf(true, "Failed to uninstall plugin %s. %s", pluginName, err.Error())
+@@ -518,6 +520,7 @@ func AllPlugins(silent, languageOnly bool) {
+ 
+ // UpdatePlugins updates all the currently installed plugins to its latest version
+ func UpdatePlugins(silent bool) {
++	CheckForNixStore("Tried to update plugins")
+ 	var failedPlugin []string
+ 	pluginInfos, err := pluginInfo.GetPluginsInfo()
+ 	if err != nil {
+@@ -673,3 +676,21 @@ func AddPluginToProject(pluginName string) error {
+ 	logger.Infof(true, "Plugin %s was successfully added to the project\n", pluginName)
+ 	return nil
+ }
++
++func CheckForNixStore(message string) error {
++	installDir, err := common.GetPrimaryPluginsInstallDir()
++	if err != nil {
++		return err
++	}
++	if strings.HasPrefix(installDir, "/nix/store") {
++
++		// check if we're installing in the sandbox
++		if os.Getenv("NIX_GAUGE_IN_SANDBOX") == "true" {
++			return nil
++		}
++		logger.Errorf(true, "%s\ngauge is installed with nix.\nPlease install plugins using nix or use the `gauge-unwrapped` package.", message)
++		os.Exit(1)
++
++	}
++	return nil
++}

@@ -1,0 +1,165 @@
+LD_PRELOAD by itself only works with Cygwin builtin functions, but
+textdomain() and friends come from libintl.  In order to override
+those functions, we have to "replace" cygintl-?.dll since functions are
+bound to a DLL name at link time.  Our replacement will be used since
+it is loaded first by LD_PRELOAD.
+
+But as we are making this *the* libintl, we need to provide 
+pass-throughs for the other functions which we're not overriding,
+otherwise Locale::gettext won't load (not to mention the program
+that we're trying to help2man).
+
+--- help2man-1.46.5/Makefile.in	2014-10-09 13:03:01.000000000 +0200
++++ help2man-1.46.5/Makefile.in	2015-05-12 14:46:52.995521900 +0200
+@@ -76,7 +76,8 @@
+        fi
+
+ install_preload: install_dirs preload
+-	$(INSTALL_PROGRAM) $(preload).so $(DESTDIR)$(pkglibdir)
++	$(INSTALL_PROGRAM) lib/cygintl-9.dll $(DESTDIR)$(pkglibdir)
++	ln -sf cygintl-9.dll $(DESTDIR)$(pkglibdir)/$(preload).so
+
+ install_l10n: install_dirs msg_l10n man_l10n info_l10n
+        set -e; \
+@@ -144,7 +146,9 @@
+
+ preload: $(preload).so
+ $(preload).so: $(srcdir)/$(preload).c
+-	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ -fPIC -shared $? $(LIBS)
++	mkdir -p lib
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o lib/cygintl-9.dll -shared $? $(LIBS)
++	ln -sf lib/cygintl-9.dll $@
+
+ man: $(target).1
+ $(target).1: $(srcdir)/$(target).PL $(srcdir)/$(target).h2m.PL
+--- help2man-1.46.5/bindtextdomain.c	2009-11-13 00:01:34.000000000 -0600
++++ help2man-1.46.5/bindtextdomain.c	2011-12-29 00:24:33.608078600 -0600
+@@ -27,12 +27,34 @@ static char *(*r_textdomain)(char const
+ static char *(*r_bindtextdomain)(char const *, char const *) = 0;
+ static char *(*r_bind_textdomain_codeset)(char const *, char const *) = 0;
+ 
++#ifdef __CYGWIN__
++static void *RTLD_NEXT = 0;
++static char *(*r_gettext)(const char *) = 0;
++static char *(*r_dgettext)(const char *, const char *) = 0;
++static char *(*r_dcgettext)(const char *, const char *, int) = 0;
++static char *(*r_ngettext)(const char *, const char *, unsigned long int) = 0;
++static char *(*r_dngettext)(const char *, const char *, const char *,
++                            unsigned long int) = 0;
++static char *(*r_dcngettext)(const char *, const char *, const char *,
++                             unsigned long int, int) = 0;
++static char *(*r_setlocale)(int, const char *) = 0;
++
++#define SYM(sym) libintl_ ## sym
++#else
++#define SYM(sym) sym
++#endif
++
+ void setup()
+ {
+     static int done = 0;
+     if (done++)
+         return;
+ 
++#ifdef __CYGWIN__
++    if (!(RTLD_NEXT = dlopen("/usr/bin/cygintl-9.dll", RTLD_LAZY)))
++        die("libintl8 not found");
++#endif
++
+     if (!(e_textdomain = getenv("TEXTDOMAIN")))
+ 	die("TEXTDOMAIN not set");
+ 
+@@ -48,9 +70,19 @@ void setup()
+     if (!(r_bind_textdomain_codeset = dlsym(RTLD_NEXT,
+     					    "bind_textdomain_codeset")))
+ 	die("can't find symbol \"bind_textdomain_codeset\"");
++
++#ifdef __CYGWIN__
++    r_gettext = dlsym(RTLD_NEXT, "libintl_gettext");
++    r_dgettext = dlsym(RTLD_NEXT, "libintl_dgettext");
++    r_dcgettext = dlsym(RTLD_NEXT, "libintl_dcgettext");
++    r_ngettext = dlsym(RTLD_NEXT, "libintl_ngettext");
++    r_dngettext = dlsym(RTLD_NEXT, "libintl_dngettext");
++    r_dcngettext = dlsym(RTLD_NEXT, "libintl_dcngettext");
++    r_setlocale = dlsym(RTLD_NEXT, "libintl_setlocale");
++#endif
+ }
+ 
+-char *textdomain(char const *domainname)
++char *SYM(textdomain)(char const *domainname)
+ {
+     char *r;
+     setup();
+@@ -61,7 +93,7 @@ char *textdomain(char const *domainname)
+     return r;
+ }
+ 
+-char *bindtextdomain(char const *domainname, char const *dirname)
++char *SYM(bindtextdomain)(char const *domainname, char const *dirname)
+ {
+     char const *dir = dirname;
+     setup();
+@@ -71,7 +103,7 @@ char *bindtextdomain(char const *domainn
+     return r_bindtextdomain(domainname, dir);
+ }
+ 
+-char *bind_textdomain_codeset(char const *domainname, char const *codeset)
++char *SYM(bind_textdomain_codeset)(char const *domainname, char const *codeset)
+ {
+     char *r;
+     setup();
+@@ -81,3 +113,54 @@ char *bind_textdomain_codeset(char const
+ 
+     return r;
+ }
++
++#ifdef __CYGWIN__
++
++char *libintl_gettext(const char *msgid)
++{
++    setup();
++    return r_gettext(msgid);
++}
++
++char *libintl_dgettext (const char *domainname, const char *msgid)
++{
++    setup();
++    return r_dgettext(domainname, msgid);
++}
++
++char *libintl_dcgettext (const char *domainname, const char *msgid,
++                         int category)
++{
++    setup();
++    return r_dcgettext (domainname, msgid, category);
++}
++
++char *libintl_ngettext (const char *msgid1, const char *msgid2,
++                        unsigned long int n)
++{
++    setup();
++    return r_ngettext (msgid1, msgid2, n);
++}
++
++char *libintl_dngettext (const char *domainname, const char *msgid1,
++                         const char *msgid2, unsigned long int n)
++{
++    setup();
++    return r_dngettext (domainname, msgid1, msgid2, n);
++}
++
++char *libintl_dcngettext (const char *domainname,
++                          const char *msgid1, const char *msgid2,
++                          unsigned long int n, int category)
++{
++    setup();
++    return r_dcngettext (domainname, msgid1, msgid2, n, category);
++}
++
++char *libintl_setlocale (int i, const char *s)
++{
++    setup();
++    return r_setlocale (i, s);
++}
++
++#endif

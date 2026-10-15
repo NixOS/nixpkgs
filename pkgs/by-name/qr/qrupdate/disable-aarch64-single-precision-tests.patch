@@ -1,0 +1,111 @@
+--- i/test/tqr1up.f
++++ w/test/tqr1up.f
+@@ -31,7 +31,7 @@
+       m = 60
+       n = 40
+       write (*,*) 'sqr1up test (full factorization):'
+-      call stest(m,n,0)
++c     call stest(m,n,0)
+       write (*,*) 'dqr1up test (full factorization):'
+       call dtest(m,n,0)
+       write (*,*) 'cqr1up test (full factorization):'
+@@ -40,7 +40,7 @@
+       call ztest(m,n,0)
+
+       write (*,*) 'sqr1up test (economized factorization):'
+-      call stest(m,n,1)
++c     call stest(m,n,1)
+       write (*,*) 'dqr1up test (economized factorization):'
+       call dtest(m,n,1)
+       write (*,*) 'cqr1up test (economized factorization):'
+@@ -51,7 +51,7 @@
+       m = 40
+       n = 60
+       write (*,*) 'sqr1up test (rows < columns):'
+-      call stest(m,n,0)
++c     call stest(m,n,0)
+       write (*,*) 'dqr1up test (rows < columns):'
+       call dtest(m,n,0)
+       write (*,*) 'cqr1up test (rows < columns):'
+--- i/test/tqrdec.f
++++ w/test/tqrdec.f
+@@ -32,7 +32,7 @@
+       n = 40
+       j = 12
+       write (*,*) 'sqrdec test (full factorization):'
+-      call stest(m,n,j,0)
++c     call stest(m,n,j,0)
+       write (*,*) 'dqrdec test (full factorization):'
+       call dtest(m,n,j,0)
+       write (*,*) 'cqrdec test (full factorization):'
+@@ -41,7 +41,7 @@
+       call ztest(m,n,j,0)
+
+       write (*,*) 'sqrdec test (economized factorization):'
+-      call stest(m,n,j,1)
++c     call stest(m,n,j,1)
+       write (*,*) 'dqrdec test (economized factorization):'
+       call dtest(m,n,j,1)
+       write (*,*) 'cqrdec test (economized factorization):'
+--- i/test/tqrder.f
++++ w/test/tqrder.f
+@@ -32,7 +32,7 @@
+       n = 40
+       j = 30
+       write (*,*) 'sqrder test (full factorization):'
+-      call stest(m,n,j)
++c     call stest(m,n,j)
+       write (*,*) 'dqrder test (full factorization):'
+       call dtest(m,n,j)
+       write (*,*) 'cqrder test (full factorization):'
+--- i/test/tqrinc.f
++++ w/test/tqrinc.f
+@@ -32,7 +32,7 @@
+       n = 40
+       j = 28
+       write (*,*) 'sqrinc test (full factorization):'
+-      call stest(m,n,j,0)
++c     call stest(m,n,j,0)
+       write (*,*) 'dqrinc test (full factorization):'
+       call dtest(m,n,j,0)
+       write (*,*) 'cqrinc test (full factorization):'
+@@ -41,7 +41,7 @@
+       call ztest(m,n,j,0)
+
+       write (*,*) 'sqrinc test (economized factorization):'
+-      call stest(m,n,j,1)
++c     call stest(m,n,j,1)
+       write (*,*) 'dqrinc test (economized factorization):'
+       call dtest(m,n,j,1)
+       write (*,*) 'cqrinc test (economized factorization):'
+--- i/test/tqrinr.f
++++ w/test/tqrinr.f
+@@ -32,7 +32,7 @@
+       n = 40
+       j = 30
+       write (*,*) 'sqrinr test (full factorization):'
+-      call stest(m,n,j)
++c     call stest(m,n,j)
+       write (*,*) 'dqrinr test (full factorization):'
+       call dtest(m,n,j)
+       write (*,*) 'cqrinr test (full factorization):'
+--- i/test/tqrshc.f
++++ w/test/tqrshc.f
+@@ -33,7 +33,7 @@
+       i = 20
+       j = 40
+       write (*,*) 'sqrshc test (left shift, full factorization):'
+-      call stest(m,n,i,j,0)
++c     call stest(m,n,i,j,0)
+       write (*,*) 'dqrshc test (left shift, full factorization):'
+       call dtest(m,n,i,j,0)
+       write (*,*) 'cqrshc test (left shift, full factorization):'
+@@ -44,7 +44,7 @@
+       i = 40
+       j = 20
+       write (*,*) 'sqrshc test (right shift, economized factorization):'
+-      call stest(m,n,i,j,1)
++c     call stest(m,n,i,j,1)
+       write (*,*) 'dqrshc test (right shift, economized factorization):'
+       call dtest(m,n,i,j,1)
+       write (*,*) 'cqrshc test (right shift, economized factorization):'

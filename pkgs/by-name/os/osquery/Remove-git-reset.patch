@@ -1,0 +1,37 @@
+From: Jack Baldry <jack.baldry@grafana.com>
+Date: Tue, 15 Nov 2022 13:48:07 -0400
+Subject: [PATCH] Remove git reset
+
+This is not required for nixpkgs builds because we are not working in
+the source repository and therefore do not need to be careful about
+updating submodule content.
+
+Signed-off-by: Jack Baldry <jack.baldry@grafana.com>
+---
+ libraries/cmake/source/modules/utils.cmake | 11 -----------
+ 1 file changed, 11 deletions(-)
+
+diff --git a/libraries/cmake/source/modules/utils.cmake b/libraries/cmake/source/modules/utils.cmake
+--- a/libraries/cmake/source/modules/utils.cmake
++++ b/libraries/cmake/source/modules/utils.cmake
+@@ -102,17 +102,6 @@ function(patchSubmoduleSourceCode library_name patches_dir source_dir apply_to_d
+     file(COPY "${source_dir}" DESTINATION "${parent_dir}")
+   endif()
+ 
+-  # We need to restore the source code to its original state, pre patch
+-  execute_process(
+-    COMMAND "${GIT_EXECUTABLE}" reset --hard HEAD
+-    RESULT_VARIABLE process_exit_code
+-    WORKING_DIRECTORY "${source_dir}"
+-  )
+-
+-  if(NOT ${process_exit_code} EQUAL 0)
+-    message(FATAL_ERROR "Failed to git reset the following submodule: \"${source_dir}\"")
+-  endif()
+-
+   set(patchSubmoduleSourceCode_Patched TRUE PARENT_SCOPE)
+ endfunction()
+ 
+-- 
+2.38.1
+

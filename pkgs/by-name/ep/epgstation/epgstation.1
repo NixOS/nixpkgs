@@ -1,0 +1,56 @@
+.Dd $Mdocdate$
+.Dt EPGSTATION 1
+.Os
+.Sh NAME
+.Nm epgstation
+.Nd @DESCRIPTION@
+.Sh SYNOPSIS
+.Nm
+.Bk -words
+.Op Ar command Op Ar args
+.Ek
+.Sh DESCRIPTION
+.Nm
+is a wrapper command for EPGStation provided by Nix. It's actually a thin
+wrapper around the
+.Xr npm 1
+command line tool which you can use to invoke npm commands from the EPGStation
+project directory. The command line arguments are simply passed as-is to
+.Xr npm 1 .
+.Pp
+On NixOS, it is strongly recommended that you enable the epgstation module
+instead of invoking this command directly to launch EPGStation. On other
+platforms, run
+.Pp
+.Dl $ epgstation start
+.Pp
+to start EPGStation.
+.Sh FILES
+.Bl -tag -width Ds -compact
+.It Pa /etc/epgstation/config.yml
+.Nm
+configuration file.
+.El
+.Sh EXAMPLES
+Start EPGStation.
+.Pp
+.Dl $ epgstation start
+.Pp
+Start EPGStation in development mode.
+.Pp
+.Dl $ epgstation run dev-start
+.Pp
+Backup the EPGstation database.
+.Pp
+.Dl $ epgstation run backup /path/to/dst
+.Pp
+Restore the EPGstation database.
+.Pp
+.Dl $ epgstation run restore /path/to/src
+.Pp
+Restore the EPGstation database from the prior v1 release.
+.Pp
+.Dl $ epgstation run v1migrate /path/to/src
+.Pp
+.Sh SEE ALSO
+.Xr npm 1

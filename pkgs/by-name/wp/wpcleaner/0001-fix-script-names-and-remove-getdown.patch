@@ -1,0 +1,108 @@
+diff --git a/WikipediaCleaner/resources/getdown/Bot.sh b/WikipediaCleaner/resources/getdown/Bot.sh
+index c73ff234b..471b211b0 100644
+--- a/WikipediaCleaner/resources/getdown/Bot.sh
++++ b/WikipediaCleaner/resources/getdown/Bot.sh
+@@ -9,24 +9,24 @@
+ # ===== CONNECTION =====
+ # The first part of the parameters consists in connection information.
+ # You can use the following syntax:
+-# Bot.sh en <username> <password> ...
++# wpcleaner-bot en <username> <password> ...
+ # 
+ # Or with a credentials.txt file containing the following 2 lines :
+ #   user=<username>
+ #   password=<password>
+ # Then you can use the following syntax:
+-# Bot.sh -credentials credentials.txt en ...
++# wpcleaner-bot -credentials credentials.txt en ...
+ #
+ # ===== TASKS =====
+ # The second part of the parameters consists in the tasks to ask to the bot.
+ # For example, if you want to update disambiguation warnings, you can use the following syntax:
+-# Bot.sh ... UpdateDabWarnings
++# wpcleaner-bot ... UpdateDabWarnings
+ # Or if you want to execute a set of tasks described in a task file, you can use the following syntax:
+-# Bot.sh ... DoTasks <task file>
++# wpcleaner-bot ... DoTasks <task file>
+ #
+ # ===== NOTE =====
+ # If you want to pass extra arguments to the JVM, like increasing the memory available to Java,
+ # you can create an extra.txt file in the same folder with one parameter per line.
+ # For example, to allow 8G of RAM, the line will be: -Xmx=8192M
+ 
+-java -jar libs/getdown-launcher.jar . bot "$@"
++java -cp @wpcleaner_jar@ org.wikipediacleaner.Bot "$@"
+diff --git a/WikipediaCleaner/resources/getdown/WPCleaner.sh b/WikipediaCleaner/resources/getdown/WPCleaner.sh
+index 28e3726cd..8eb8563fd 100644
+--- a/WikipediaCleaner/resources/getdown/WPCleaner.sh
++++ b/WikipediaCleaner/resources/getdown/WPCleaner.sh
+@@ -29,33 +29,18 @@
+ # You can execute this script with optional parameters that will be passed to
+ # WPCleaner. For example, if you want to automatically login to English
+ # Wikipedia, you can use the following syntax:
+-#   WPCleaner.sh en <username> <password>
++#   wpcleaner en <username> <password>
+ #
+ # Or with a credentials.txt file containing these 2 lines,
+ #   user=<username>
+ #   password=<password>
+ # you can use the following syntax to login automatically:
+-#   WPCleaner.sh -credentials credentials.txt en
+-#
+-# If you want to pass extra arguments to the JVM, like increasing the memory
+-# available to Java, create a file named 'extra.txt' in the same directory as
+-# this script, with read permissions for any user which might invoke it, with
+-# one parameter per line. For example, to allow 8G of RAM, the line would read:
+-#   -Xmx=8192M
+-
+-JAVA_APP_DIR="$(cd "$(dirname "$0")"; pwd -P)"
+-JAVA_LIB_DIR="${JAVA_APP_DIR}/libs"
+-cd "$JAVA_APP_DIR" || ( echo "Unable to open install directory." >&2; exit 1; )
++#   wpcleaner -credentials credentials.txt en
++# or create a $XDG_CONFIG_HOME/wpcleaner/credentials.txt file, it will be used automatically
+ 
+-JAVA_PARAMS="-jar ${JAVA_LIB_DIR}/getdown-launcher.jar . client"
+-
+-if [ -f credentials.txt ]; then
+-  JAVA_PARAMS="${JAVA_PARAMS} -credentials credentials.txt"
++credentials="$XDG_CONFIG_HOME/wpcleaner/credentials.txt"
++if [[ "${credentials}" ]]; then
++  java -jar @wpcleaner_jar@ -credentials ${credentials} $@
++else
++  java -jar @wpcleaner_jar@ $@
+ fi
+-
+-case $# in
+-  0) java ${JAVA_PARAMS}
+-  ;;
+-  *) java ${JAVA_PARAMS} $@
+-  ;;
+-esac
+diff --git a/WikipediaCleaner/run-task.sh b/WikipediaCleaner/run-task.sh
+index fff6ab234..1c3eed957 100755
+--- a/WikipediaCleaner/run-task.sh
++++ b/WikipediaCleaner/run-task.sh
+@@ -1,12 +1,12 @@
+ #! /bin/bash
+ 
+-wpcleaner_jar="build/dist/full/WikipediaCleaner.jar"
++wpcleaner_jar="@wpcleaner_jar@"
+ if ! [[ -f "${wpcleaner_jar}" ]]; then
+   echo "WPCleaner is missing at ${wpcleaner_jar}, please build"
+   exit 1
+ fi
+ 
+-credentials="resources/credentials.txt"
++credentials="$XDG_CONFIG_HOME/wpcleaner/credentials.txt"
+ if ! [[ -f "${credentials}" ]]; then
+   echo "Credentials file is missing at ${credentials}, please create it"
+   exit 1
+@@ -24,7 +24,7 @@ if [[ "${task}" == "" ]]; then
+   exit 1
+ fi
+ 
+-tasks_dir="resources/tasks/${language}wiki"
++tasks_dir="@tasks@/${language}wiki"
+ if ! [[ -d "${tasks_dir}" ]]; then
+   echo "Task folder not found"
+   exit 1

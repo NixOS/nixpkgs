@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+<mime-type type="application/epub+zip">
+  <glob pattern="*.epub"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/pdf">
+  <glob pattern="*.pdf"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="image/vnd.djvu">
+  <glob pattern="*.djvu"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/x-mobipocket-ebook">
+  <glob pattern="*.mobi"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/vnd.amazon.ebook">
+  <glob pattern="*.azw3"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/vnd.amazon.ebook">
+  <glob pattern="*.azw"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/x-cbz">
+  <glob pattern="*.cbz"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/x-cbr">
+  <glob pattern="*.cbr"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/x-cbt">
+  <glob pattern="*.cbt"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/x-cb7">
+  <glob pattern="*.cb7"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+<mime-type type="application/x-fictionbook+xml">
+  <glob pattern="*.fb2"/>
+
+  <icon name="x-office-document" />
+</mime-type>
+</mime-info>

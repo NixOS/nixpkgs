@@ -1,0 +1,91 @@
+diff --git a/hdmedians/tests/test_geomedian.py b/hdmedians/tests/test_geomedian.py
+index 0bc37e9..ff5f938 100644
+--- a/hdmedians/tests/test_geomedian.py
++++ b/hdmedians/tests/test_geomedian.py
+@@ -4,9 +4,9 @@ Tests.
+ 
+ import numpy as np
+ import hdmedians as hd
++import pytest
+ 
+ from numpy.testing import assert_equal, assert_array_almost_equal
+-from nose.tools import assert_true, assert_raises
+ 
+ # shape (6, 25)
+ DATA1 = np.array([[693, 990, 1281, 2101, 3524, 2577],
+@@ -124,10 +124,12 @@ def test_nangeomedian_axis_one_two_good():
+ def test_nangeomedian_axis_bad():
+     data = np.array([[1.0, np.nan, 1.0],
+                      [2.0, 1.0, 1.0]])
+-    assert_raises(IndexError, hd.nangeomedian, data, axis=2)
++    with pytest.raises(IndexError):
++        hd.nangeomedian(data, axis=2)
+ 
+ 
+ def test_nangeomedian_all_nan():
+     data = np.array([[np.nan, np.nan, np.nan],
+                      [np.nan, np.nan, np.nan]])
+-    assert_raises(ValueError, hd.nangeomedian, data)
++    with pytest.raises(ValueError):
++        hd.nangeomedian(data)
+diff --git a/hdmedians/tests/test_medoid.py b/hdmedians/tests/test_medoid.py
+index c5e0a7f..4fbdf80 100644
+--- a/hdmedians/tests/test_medoid.py
++++ b/hdmedians/tests/test_medoid.py
+@@ -4,9 +4,9 @@ Tests.
+ 
+ import numpy as np
+ import hdmedians as hd
++import pytest
+ 
+ from numpy.testing import assert_equal, assert_array_almost_equal
+-from nose.tools import assert_true, assert_raises
+ 
+ # shape (6, 25)
+ DATA1 = np.array([[693, 990, 1281, 2101, 3524, 2577],
+@@ -59,7 +59,7 @@ def test_medoid_in_set_random():
+     s = [list(x) for x in a.T]
+     m = hd.medoid(a)
+     idx = s.index(list(m))
+-    assert_true(idx > -1)
++    assert(idx > -1)
+ 
+ 
+ def test_medoid_noaxis():
+@@ -85,7 +85,8 @@ def test_medoid_axis_one():
+ 
+ 
+ def test_medoid_axis_bad():
+-    assert_raises(IndexError, hd.medoid, DATA1, axis=2)
++    with pytest.raises(IndexError):
++        hd.medoid(DATA1, axis=2)
+ 
+ 
+ def test_medoid_noaxis_indexonly():
+@@ -136,7 +137,8 @@ def test_nanmedoid_two_obs():
+ def test_nanmedoid_all_nan():
+     data = np.array([[np.nan, np.nan, np.nan],
+                      [np.nan, np.nan, np.nan]])
+-    assert_raises(ValueError, hd.nanmedoid, data)
++    with pytest.raises(ValueError):
++        hd.nanmedoid(data)
+ 
+ 
+ def test_nanmedoid_axis_zero():
+@@ -170,7 +172,8 @@ def test_nanmedoid_axis_one_indexonly():
+ 
+ 
+ def test_nanmedoid_axis_bad():
+-    assert_raises(IndexError, hd.nanmedoid, DATA1, axis=2)
++    with pytest.raises(IndexError):
++        hd.nanmedoid(DATA1, axis=2)
+ 
+ 
+ def test_nanmedoid_two_obs():
+@@ -184,4 +187,5 @@ def test_nanmedoid_two_obs():
+ def test_nanmedoid_all_nan():
+     data = np.array([[np.nan, np.nan, np.nan],
+                      [np.nan, np.nan, np.nan]])
+-    assert_raises(ValueError, hd.nanmedoid, data)
++    with pytest.raises(ValueError):
++        hd.nanmedoid(data)

@@ -1,0 +1,24 @@
+From 43e696a388ddf4ce5f4b9f756e726544b6310092 Mon Sep 17 00:00:00 2001
+From: ReenigneArcher <reenignearcher@gmail.com>
+Date: Wed, 9 Jul 2025 14:41:33 +0000
+Subject: [PATCH] fix(dynamicHDR10): undefined-uint8_t
+
+---
+ source/dynamicHDR10/json11/json11.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/source/dynamicHDR10/json11/json11.cpp b/source/dynamicHDR10/json11/json11.cpp
+index 762577735..c111ebb82 100644
+--- a/dynamicHDR10/json11/json11.cpp
++++ b/dynamicHDR10/json11/json11.cpp
+@@ -22,6 +22,7 @@
+ #include "json11.h"
+ #include <cassert>
+ #include <cmath>
++#include <cstdint>
+ #include <cstdlib>
+ #include <cstdio>
+ #include <limits>
+-- 
+2.49.0
+

@@ -1,0 +1,24 @@
+From 8479bb8809a318f49ae5b881b65890db40b0e693 Mon Sep 17 00:00:00 2001
+From: loner <2788892716@qq.com>
+Date: Thu, 9 Oct 2025 10:18:44 +0800
+Subject: [PATCH] Remove deprecated setup_requires from setup.cfg
+
+---
+ setup.cfg | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/setup.cfg b/setup.cfg
+index 78468c0..7a875bb 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -27,8 +27,6 @@ classifiers =
+ keywords = toml, parser, serilization, deserialization, serdes
+
+ [options]
+-setup_requires =
+-    pybind11~=2.10
+ zip_safe = false
+ packages = find:
+ package_dir = =src
+--
+2.51.0

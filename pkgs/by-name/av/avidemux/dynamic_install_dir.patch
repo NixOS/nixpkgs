@@ -1,0 +1,12 @@
+diff -ru3 avidemux_2.6.15-old/avidemux_core/ADM_core/src/ADM_folder_linux.cpp avidemux_2.6.15/avidemux_core/ADM_core/src/ADM_folder_linux.cpp
+--- avidemux_2.6.15-old/avidemux_core/ADM_core/src/ADM_folder_linux.cpp	2016-11-23 02:13:41.406566362 +0300
++++ avidemux_2.6.15/avidemux_core/ADM_core/src/ADM_folder_linux.cpp	2016-11-23 02:14:33.433566147 +0300
+@@ -92,7 +92,7 @@
+ 
+ char *ADM_getInstallRelativePath(const char *base1, const char *base2, const char *base3)
+ {
+-	return ADM_getRelativePath(ADM_INSTALL_DIR, base1, base2, base3);
++	return ADM_getRelativePath(getenv("ADM_ROOT_DIR"), base1, base2, base3);
+ }
+ const std::string ADM_getI8NDir(const std::string &flavor)
+ {

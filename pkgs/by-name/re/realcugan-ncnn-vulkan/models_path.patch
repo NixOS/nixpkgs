@@ -1,0 +1,22 @@
+diff --git a/main.cpp b/main.cpp
+index bd78c99..75f162f 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -109,7 +109,7 @@ static void print_usage()
+     fprintf(stdout, "  -s scale             upscale ratio (1/2/3/4, default=2)\n");
+     fprintf(stdout, "  -t tile-size         tile size (>=32/0=auto, default=0) can be 0,0,0 for multi-gpu\n");
+     fprintf(stdout, "  -c syncgap-mode      sync gap mode (0/1/2/3, default=3)\n");
+-    fprintf(stdout, "  -m model-path        realcugan model path (default=models-se)\n");
++    fprintf(stdout, "  -m model-path        realcugan model path (default=REPLACE_MODELS)\n");
+     fprintf(stdout, "  -g gpu-id            gpu device to use (-1=cpu, default=auto) can be 0,1,2 for multi-gpu\n");
+     fprintf(stdout, "  -j load:proc:save    thread count for load/proc/save (default=1:2:2) can be 1:2,2,2:2 for multi-gpu\n");
+     fprintf(stdout, "  -x                   enable tta mode\n");
+@@ -442,7 +442,7 @@ int main(int argc, char** argv)
+     int noise = -1;
+     int scale = 2;
+     std::vector<int> tilesize;
+-    path_t model = PATHSTR("models-se");
++    path_t model = PATHSTR("REPLACE_MODELS");
+     std::vector<int> gpuid;
+     int jobs_load = 1;
+     std::vector<int> jobs_proc;

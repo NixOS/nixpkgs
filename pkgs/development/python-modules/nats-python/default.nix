@@ -1,0 +1,51 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-resources-backport,
+  poetry-core,
+  setuptools,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "nats-python";
+  version = "0.8.0";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "Gr1N";
+    repo = "nats-python";
+    tag = finalAttrs.version;
+    hash = "sha256-7/AGQfPEuSeoRGUXeyDZNbLhapfQa7vhrSPHRruf+sg=";
+  };
+
+  patches = [
+    # Switch to poetry-core, https://github.com/Gr1N/nats-python/pull/19
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/Gr1N/nats-python/commit/71b25b324212dccd7fc06ba3914491adba22e83f.patch";
+      hash = "sha256-9AUd/anWCAhuD0VdxRm6Ydlst8nttjwfPmqK+S8ON7o=";
+    })
+  ];
+
+  build-system = [ poetry-core ];
+
+  dependencies = [
+    pkg-resources-backport
+    setuptools
+  ];
+
+  # Tests require a running NATS server
+  doCheck = false;
+
+  pythonImportsCheck = [ "pynats" ];
+
+  meta = {
+    description = "Python client for NATS messaging system";
+    homepage = "https://github.com/Gr1N/nats-python";
+    changelog = "https://github.com/Gr1N/nats-python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+  };
+})

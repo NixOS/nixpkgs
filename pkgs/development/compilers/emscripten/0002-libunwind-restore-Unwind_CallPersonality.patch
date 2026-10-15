@@ -1,0 +1,23 @@
+libunwind: restore _Unwind_CallPersonality for release LLVM
+
+Nixpkgs builds emscripten with the release LLVM, not the llvm-project
+main commit that emsdk pins. Release LLVM (<= 22.x) emits calls to
+_Unwind_CallPersonality. llvm-project PR #209282 moved that helper into
+libc++abi, renamed to __gxx_wasm_personality_v0. Add the old name back
+as a forwarder to the new name. Remove this patch when llvmPackages
+reaches LLVM 23.
+
+--- a/system/lib/libunwind/src/Unwind-wasm.c
++++ b/system/lib/libunwind/src/Unwind-wasm.c
+@@ -95,4 +95,11 @@
+   return 0;
+ }
+ 
++_Unwind_Reason_Code __gxx_wasm_personality_v0(void *exception_ptr);
++
++_LIBUNWIND_EXPORT _Unwind_Reason_Code
++_Unwind_CallPersonality(void *exception_ptr) {
++  return __gxx_wasm_personality_v0(exception_ptr);
++}
++
+ #endif // defined(__WASM_EXCEPTIONS__)

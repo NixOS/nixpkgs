@@ -1,0 +1,46 @@
+From 64e5c63ef72ab97ecae6d43845634aa34da0b426 Mon Sep 17 00:00:00 2001
+From: Yureka <yuka@yuka.dev>
+Date: Sun, 11 Jan 2026 16:49:07 +0100
+Subject: [PATCH] getopt.{c,h}: Do not use unspecified signatures
+
+Unspecified signatures no longer work with C23, and the GNU getopt signature matches the one specified by POSIX
+---
+ src/getopt.c | 2 +-
+ src/getopt.h | 7 -------
+ 2 files changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/src/getopt.c b/src/getopt.c
+index 9bafa45..c268441 100644
+--- a/src/getopt.c
++++ b/src/getopt.c
+@@ -209,7 +209,7 @@ static char *posixly_correct;
+    whose names are inconsistent.  */
+ 
+ #ifndef getenv
+-extern char *getenv ();
++extern char *getenv (const char *);
+ #endif
+ 
+ static char *
+diff --git a/src/getopt.h b/src/getopt.h
+index a1b8dd6..0aea224 100644
+--- a/src/getopt.h
++++ b/src/getopt.h
+@@ -138,14 +138,7 @@ struct option
+    `getopt'.  */
+ 
+ #if (defined __STDC__ && __STDC__) || defined __cplusplus
+-# ifdef __GNU_LIBRARY__
+-/* Many other libraries have conflicting prototypes for getopt, with
+-   differences in the consts, in stdlib.h.  To avoid compilation
+-   errors, only prototype getopt for the GNU C library.  */
+ extern int getopt (int __argc, char *const *__argv, const char *__shortopts);
+-# else /* not __GNU_LIBRARY__ */
+-extern int getopt ();
+-# endif /* __GNU_LIBRARY__ */
+ 
+ # ifndef __need_getopt
+ extern int getopt_long (int __argc, char *const *__argv, const char *__shortopts,
+-- 
+2.52.0
+

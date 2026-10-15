@@ -1,0 +1,12 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 6981815..bcc4568 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -152,7 +152,6 @@ install-am: all-am
+ 	done
+ if WITH_TCB
+ 	set -e; for i in $(shadowsgidubins); do \
+-		chown root:shadow $(DESTDIR)$(ubindir)/$$i; \
+ 		chmod $(sgidperms) $(DESTDIR)$(ubindir)/$$i; \
+ 	done
+ endif

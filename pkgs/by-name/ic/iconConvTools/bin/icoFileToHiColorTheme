@@ -1,0 +1,28 @@
+#!/bin/sh
+
+SCRIPT_DIR=`cd "$(dirname $0)" && pwd`
+
+# The '*.ico' file that needs to be converted (e.g.: "./my/path/to/file.ico").
+icoFile="$1"
+
+# The desired name of created icon files without extension. (e.g.: "my-app").
+targetIconName="$2"
+
+# The output directory where the free desktop hierarchy will be created.
+# (e.g.: "./path/to/my/out" or usually in nix "$out"). Note that the
+# whole directory hierarchy to the icon will be created in the specified
+# output directory (e.g.: "$out/share/icons/hicolor/48x48/apps/my-app.png").
+out="$3"
+
+# An optional temp directory location (e.g.: ./tmp). If not specified
+# a random '/tmp' directory will be created.
+tmp="$4"
+
+$SCRIPT_DIR/extractWinRscIconsToStdFreeDesktopDir.sh \
+  "$icoFile" \
+  '[^\.]+_[0-9]+_([0-9]+x[0-9]+)x[0-9]+\.png' \
+  '\1' \
+  '([^\.]+).+' \
+  "$targetIconName" \
+  "$out" \
+  "$tmp"

@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ededc78b8..7ee1879a5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -188,6 +188,7 @@ add_subdirectory(src/ivector)
+ add_subdirectory(src/online)
+ add_subdirectory(src/online2)
+ add_subdirectory(src/kws)
++add_subdirectory(src/dragonfly)
+ 
+ add_subdirectory(src/itf)
+ 
+@@ -219,6 +220,7 @@ add_subdirectory(src/ivectorbin)
+ add_subdirectory(src/onlinebin)
+ add_subdirectory(src/online2bin)
+ add_subdirectory(src/kwsbin)
++add_subdirectory(src/dragonflybin)
+ 
+ # add all cuda executables
+ if(CUDA_FOUND)

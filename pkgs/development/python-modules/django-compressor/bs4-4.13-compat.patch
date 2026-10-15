@@ -1,0 +1,39 @@
+From 53f50bc0cee1cdfaf023ba65e1524b820cb7c18e Mon Sep 17 00:00:00 2001
+From: Matthias Kestenholz <mk@feinheit.ch>
+Date: Thu, 22 May 2025 10:37:20 +0200
+Subject: [PATCH] Disable bs4's multi valued attributes
+
+---
+ compressor/parser/beautifulsoup.py | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/compressor/parser/beautifulsoup.py b/compressor/parser/beautifulsoup.py
+index 91897485..f673410e 100644
+--- a/compressor/parser/beautifulsoup.py
++++ b/compressor/parser/beautifulsoup.py
+@@ -10,7 +10,9 @@ def __init__(self, content):
+         try:
+             from bs4 import BeautifulSoup
+ 
+-            self.soup = BeautifulSoup(self.content, "html.parser")
++            # Disable multi_valued_attributes
++            # http://www.crummy.com/software/BeautifulSoup/bs4/doc/#multi-valued-attributes
++            self.soup = BeautifulSoup(self.content, "html.parser", multi_valued_attributes={})
+         except ImportError as err:
+             raise ImproperlyConfigured("Error while importing BeautifulSoup: %s" % err)
+ 
+@@ -21,13 +23,7 @@ def js_elems(self):
+         return self.soup.find_all("script")
+ 
+     def elem_attribs(self, elem):
+-        attrs = dict(elem.attrs)
+-        # hack around changed behaviour in bs4, it returns lists now instead of one string, see
+-        # http://www.crummy.com/software/BeautifulSoup/bs4/doc/#multi-valued-attributes
+-        for key, value in attrs.items():
+-            if type(value) is list:
+-                attrs[key] = " ".join(value)
+-        return attrs
++        return elem.attrs
+ 
+     def elem_content(self, elem):
+         return elem.string

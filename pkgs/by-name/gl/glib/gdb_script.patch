@@ -1,0 +1,23 @@
+diff --git a/glib/meson.build b/glib/meson.build
+index b2dd569e1..b013991a1 100644
+--- a/glib/meson.build
++++ b/glib/meson.build
+@@ -541,7 +540,7 @@ configure_file(
+   input: 'libglib-gdb.py.in',
+   output: 'libglib-2.0.so.@0@-gdb.py'.format(library_version),
+   configuration: gdb_conf,
+-  install_dir: gdb_install_dir,
++  install_dir: glib_libdir,
+   install_tag: 'devel',
+   install: gdb_install,
+ )
+diff --git a/gobject/meson.build b/gobject/meson.build
+@@ -185,7 +184,7 @@ configure_file(
+   input: 'libgobject-gdb.py.in',
+   output: 'libgobject-2.0.so.@0@-gdb.py'.format(library_version),
+   configuration: gdb_conf,
+-  install_dir: gdb_install_dir,
++  install_dir: glib_libdir,
+   install_tag: 'devel',
+   install: gdb_install,
+ )

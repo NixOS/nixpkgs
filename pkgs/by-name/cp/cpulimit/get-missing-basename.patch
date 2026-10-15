@@ -1,0 +1,12 @@
+diff --git a/src/process_group.c b/src/process_group.c
+index 06d73a6..3ca66b0 100644
+--- a/src/process_group.c
++++ b/src/process_group.c
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include <string.h>
++#include <libgen.h>
+ #include <stdlib.h>
+ #include <limits.h>
+ #include <sys/time.h>
