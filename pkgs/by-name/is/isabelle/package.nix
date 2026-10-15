@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchurl,
   fetchFromGitHub,
   gcc14Stdenv,
@@ -360,6 +361,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
+    tests.linter = callPackage ./tests/linter.nix { isabelle = finalAttrs.finalPackage; };
     vampire = vampire';
     polyml = polyml';
     cvc5 = cvc5';
