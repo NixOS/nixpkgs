@@ -11,7 +11,9 @@ let
 
   inherit (pkgs.stdenv.hostPlatform) efiArch;
 
-  format = pkgs.formats.ini { };
+  format = pkgs.formats.ini {
+    listsAsDuplicateKeys = true;
+  };
 
   ukiSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
 in
