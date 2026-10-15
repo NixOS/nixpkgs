@@ -34,15 +34,27 @@ in
 (stdenv.mkDerivation (
   finalAttrs:
   let
-    # Some eggs' tests expect the egg to be installed already so that their modules
-    # can be imported and their programs found in PATH. The `doCheck = false`
-    # override below builds and installs the egg without running its tests, and the
-    # checked derivation takes it as an input. This builds every egg twice, but
-    # avoids duplicating the build and install logic in a second derivation.
+    # Some eggs' tests expect the egg to be installed already so that their modules can be imported
+    # and their programs found in PATH. The `doCheck = false` override below builds and installs the
+    # egg without running its tests, and the checked derivation takes it as an input. We avoid
+    # running the build twice by disabling the build in the main derivation and capturing the
+    # no-check derivation's build artifacts in a separate output. The main derivation then restores
+    # the build artifacts from that output in `checkPhase`.
     noCheckDrv = finalAttrs.finalPackage.overrideAttrs { doCheck = false; };
+    # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
+    # when building an egg from the current directory, and the cache defaults
+    # to a location under HOME, which is not writable in the sandbox. The
+    # cache itself stays empty: with -cached, chicken-install builds the
+    # unpacked egg in place. The install phase runs in the same shell, so it
+    # inherits this. This snippet is included in all phases which need to run
+    # chicken-install.
+    setupCache = ''
+      export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
+      mkdir -p "$CHICKEN_EGG_CACHE"
+    '';
   in
   {
-    pname = "chicken-${pname}";
+    pname = "chicken-${pname}${lib.optionalString (!finalAttrs.doCheck) "-no-check"}";
     inherit version;
     propagatedBuildInputs = buildInputs;
     nativeBuildInputs = [
@@ -69,27 +81,38 @@ in
     }
     // (args.env or { });
 
+    outputs = [
+      "out"
+    ]
+    ++ lib.optional (!finalAttrs.doCheck) "build";
+
+    dontUnpack = finalAttrs.doCheck;
+    dontPatch = finalAttrs.doCheck;
+    # Disable build when doCheck is true and re-use the build artifacts of the no-check variant via the "build" output.
+    # This way, we only need to build the egg once across the no-check and check variants.
+    dontBuild = finalAttrs.doCheck;
+
     buildPhase = ''
       runHook preBuild
 
-      # From CHICKEN 6 on, chicken-install takes a lock in its egg cache even
-      # when building an egg from the current directory, and the cache defaults
-      # to a location under HOME, which is not writable in the sandbox. The
-      # cache itself stays empty: with -cached, chicken-install builds the
-      # unpacked egg in place. The install phase runs in the same shell, so it
-      # inherits this.
-      export CHICKEN_EGG_CACHE="$NIX_BUILD_TOP/chicken-egg-cache"
-      mkdir -p "$CHICKEN_EGG_CACHE"
+      ${setupCache}
 
       chicken-install -cached -no-install -host ${lib.escapeShellArgs chickenInstallFlags}
+
+      # Capture sources and build artifacts so we can re-use them in checkPhase
+      cp -r . $build
 
       runHook postBuild
     '';
 
     doCheck = true;
 
-    checkPhase = ''
+    checkPhase = lib.optionalString finalAttrs.doCheck ''
       runHook preCheck
+
+      # Restore build output since buildPhase is disabled when we arrive here
+      cp -r ${noCheckDrv.build}/. .
+      chmod -R +w .
 
       if [ -e tests/run.scm ]; then
         (
@@ -103,6 +126,8 @@ in
 
     installPhase = ''
       runHook preInstall
+
+      ${setupCache}
 
       export CHICKEN_INSTALL_PREFIX=$out
       export CHICKEN_INSTALL_REPOSITORY=$out/lib/chicken/${toString chicken.binaryVersion}
