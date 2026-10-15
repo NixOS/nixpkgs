@@ -27,7 +27,7 @@ buildPythonPackage rec {
     # pytest 5 is currently unsupported. Fetch and apply a pr that resolves this.
     (fetchpatch {
       url = "https://github.com/zalando-stups/zign/commit/50140720211e547b0e59f7ddb39a732f0cc73ad7.patch";
-      sha256 = "1zmyvg1z1asaqqsmxvsx0srvxd6gkgavppvg3dblxwhkml01awqk";
+      hash = "sha256-E3MVAK0T8k5XG2/fu9Wbz7S+swZd7141xkqr8MPbvv4=";
     })
   ];
 
