@@ -74,7 +74,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    mdx.bin
+    mdx.out
   ];
 
   doCheck = lib.versionAtLeast ocaml.version "5.1";

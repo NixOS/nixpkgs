@@ -8,6 +8,11 @@
 
 buildDunePackage {
   pname = "rtop";
+
+  # The toplevel loads the rtop library at runtime,
+  # so the library can't be split into a separate "dev" output.
+  outputs = [ "out" ];
+
   inherit (reason) version src;
 
   nativeBuildInputs = [

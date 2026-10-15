@@ -19,7 +19,7 @@ buildDunePackage {
   ];
 
   doCheck = printbox.doCheck && lib.versionOlder ocaml.version "5.0";
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
 
   meta = printbox.meta // {
     description = "Text renderer for printbox, using unicode edges";

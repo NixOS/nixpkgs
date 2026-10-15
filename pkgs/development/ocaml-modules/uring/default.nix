@@ -65,7 +65,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    mdx.bin
+    mdx.out
   ];
 
   # Tests use io_uring, which is blocked by Lix's sandbox because it's

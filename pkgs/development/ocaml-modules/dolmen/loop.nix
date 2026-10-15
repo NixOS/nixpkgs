@@ -32,7 +32,7 @@ buildDunePackage {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ mdx.bin ];
+  nativeCheckInputs = [ mdx.out ];
   checkInputs = [ mdx ];
 
   meta = dolmen.meta // {
