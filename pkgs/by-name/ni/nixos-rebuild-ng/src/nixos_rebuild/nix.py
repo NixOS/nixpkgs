@@ -329,7 +329,10 @@ def get_build_image_name_flake(
             "eval",
             "--json",
             flake.to_attr(
-                get_build_image_attr(specialisation), image_variant, "passthru", "filePath"
+                get_build_image_attr(specialisation),
+                image_variant,
+                "passthru",
+                "filePath",
             ),
             *dict_to_flags(eval_flags),
         ],
@@ -392,10 +395,14 @@ def get_build_image_variants_flake(
     j: ImageVariants = json.loads(r.stdout.strip())
     return j
 
+
 def get_build_image_attr(specialisation: str | None) -> str:
     if specialisation:
-        return f"config.specialisation.{specialisation}.configuration.system.build.images"
+        return (
+            f"config.specialisation.{specialisation}.configuration.system.build.images"
+        )
     return "config.system.build.images"
+
 
 def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
     """Get Nixpkgs path as a Git revision.
