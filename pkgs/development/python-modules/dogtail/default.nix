@@ -33,7 +33,7 @@ buildPythonPackage {
   # };
   src = fetchurl {
     url = "https://gitlab.com/dogtail/dogtail/raw/released/dogtail-0.9.10.tar.gz";
-    sha256 = "EGyxYopupfXPYtTL9mm9ujZorvh8AGaNXVKBPWsGy3c=";
+    hash = "sha256-EGyxYopupfXPYtTL9mm9ujZorvh8AGaNXVKBPWsGy3c=";
   };
 
   patches = [ ./nix-support.patch ];

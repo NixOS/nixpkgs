@@ -27,7 +27,7 @@ buildPythonPackage rec {
     # Remove when PR 40 merged
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/slaypni/fastdtw/pull/40.patch";
-      sha256 = "0xjma0h84bk1n32wgk99rwfc85scp187a7fykhnylmcc73ppal9q";
+      hash = "sha256-OFF17ziMVeotnN4ddVC4TBfEHM8pzcfFsGEugiBQVXY=";
     })
   ];
 

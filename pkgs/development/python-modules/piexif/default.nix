@@ -23,7 +23,7 @@ buildPythonPackage rec {
     # Fix tests with Pillow >= 7.2.0: https://github.com/hMatoba/Piexif/pull/109
     (fetchpatch {
       url = "https://github.com/hMatoba/Piexif/commit/5209b53e9689ce28dcd045f384633378d619718f.patch";
-      sha256 = "0ak571jf76r1vszp2g3cd5c16fz2zkbi43scayy933m5qdrhd8g1";
+      hash = "sha256-4aEGc8OljpG8V0wPEtf84jsTWGlsPHG/3iGb42Q4ZSo=";
     })
   ];
 
