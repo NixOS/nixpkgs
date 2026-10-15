@@ -1,6 +1,6 @@
 --- a/src/portal_setup.rs
 +++ b/src/portal_setup.rs
-@@ -222,7 +222,11 @@
+@@ -239,7 +239,11 @@
              .is_ok_and(|name| name == "org.freedesktop.FileManager1")
              && config.string("D-BUS Service", "Exec").is_ok_and(|exec| {
                  crate::services::installed_executable()
@@ -13,7 +13,7 @@
              })
      } else {
          false
-@@ -438,7 +442,8 @@
+@@ -493,7 +497,8 @@
          return Ok(false);
      }
      let service = context.data_home.join("dbus-1/services").join(SERVICE_FILE);
@@ -23,7 +23,7 @@
      // Do not interfere with a portal explicitly installed from another Strata build.
      if !read_utf8(&service)?
          .lines()
-@@ -722,6 +727,18 @@
+@@ -788,6 +793,18 @@
  fn secure_executable_for_user(path: &Path, effective_user: u32) -> Result<PathBuf, String> {
      let path = fs::canonicalize(path)
          .map_err(|error| path_error("resolve the Strata executable", path, error))?;
@@ -42,9 +42,9 @@
      for (index, component) in path.ancestors().enumerate() {
          let metadata = fs::metadata(component)
              .map_err(|error| path_error("inspect the Strata executable path", component, error))?;
-@@ -737,13 +754,28 @@
-                 "The Strata executable path must be owned by the current user or root".to_owned(),
-             );
+@@ -807,13 +824,28 @@
+                 "The Strata executable path must be owned by the current user or root",
+             ));
          }
 -        if metadata.permissions().mode() & 0o022 != 0 {
 +        // Store entries must be root-owned so the sticky store cannot expose a
@@ -63,9 +63,9 @@
 +            && metadata.permissions().mode() & 0o1000 != 0
 +            && metadata.permissions().mode() & 0o002 == 0;
 +        if metadata.permissions().mode() & 0o022 != 0 && !nix_store {
-             return Err(
-                 "The Strata executable path must not be writable by other users".to_owned(),
-             );
+             return Err(crate::i18n::tr(
+                 "The Strata executable path must not be writable by other users",
+             ));
          }
      }
 -    Ok(path)

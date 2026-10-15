@@ -2,6 +2,7 @@
   bubblewrap,
   cairo,
   coreutils,
+  coreutils-prefixed,
   dbus,
   dejavu_fonts,
   desktop-file-utils,
@@ -14,6 +15,7 @@
   gst_all_1,
   gtk4,
   gtksourceview5,
+  gnutar,
   imagemagick,
   lib,
   libraw,
@@ -64,18 +66,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   __structuredAttrs = true;
 
   pname = "strata";
-  version = "0.21.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "lgse";
     repo = "strata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RSTEgtfDYYGxXef1J22NMGpmgjObg3T6APZqfSyfNPY=";
+    hash = "sha256-dFNsFCnkeZs0VwmYRyu+6Jh8XxJzv+agUlP70Fdxa5Q=";
   };
 
-  cargoHash = "sha256-0nMfswOfyXiwIWF0Xne61jGwPdU/gMo6Wt6JGZEfrJw=";
+  cargoHash = "sha256-vuhHierqb4WsMdg890NpkaztYnfsnck2FxMz5cPMwCQ=";
 
-  # Nix adaptations to https://github.com/lgse/strata/tree/v0.21.0.
+  # Nix adaptations to https://github.com/lgse/strata/tree/v1.0.0.
   # These have not been submitted upstream; remove them as upstream adopts them.
   patches = [
     # Validate the store permissions and retain the GApps wrapper during setup.
@@ -90,11 +92,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./test-sandbox-root.patch
     # Removing a recent app must leave a compatible app to open the chooser.
     ./test-open-with-fixture.patch
+    # The archive fixture needs a store-provided tar, not trusted runtime lookup.
+    ./test-release-tar.patch
+    # Keep permission/time checks on filesystems without user xattr support.
+    ./test-xattr-capability.patch
   ];
 
   postPatch = ''
     substituteInPlace src/sandbox/tests.rs \
       --replace-fail /bin/cat ${lib.getBin coreutils}/bin/cat
+    # Store files have an unmapped owner inside the build namespace. Providers
+    # require a root- or user-owned executable, so use a private fixture copy.
+    install -m555 ${lib.getExe python3} "$TMPDIR/strata-test-python3"
+    substituteInPlace src/services/file_providers/tests.rs src/ui/file_providers/tests.rs \
+      --replace-fail /usr/bin/python3 "$TMPDIR/strata-test-python3"
+    # This ELF is copied and renamed; gtrue is standalone, not multicall.
+    substituteInPlace src/services/update_install/manifest/tests.rs \
+      src/services/update_install/review_tests.rs \
+      --replace-fail /bin/true ${lib.getExe' coreutils-prefixed "gtrue"}
+    substituteInPlace src/services/update_install/archive/tests.rs \
+      --replace-fail @STRATA_TEST_TAR@ ${lib.getExe gnutar}
   '';
 
   nativeBuildInputs = [
@@ -115,9 +132,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ gstPlugins;
 
   nativeCheckInputs = [
+    coreutils-prefixed
     dbus
     dejavu_fonts
     ffmpeg-headless
+    gnutar
     imagemagick
     procps
     python3
@@ -181,7 +200,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     CARGO_PROFILE_TEST_DEBUG = "0";
     STRATA_BUILD_KIND = "stable";
     # Keep the resolved release commit in sync when updating the version.
-    STRATA_BUILD_COMMIT = "870fec8e022ff8d29a5a5c1bf1174698bc0b6b09";
+    STRATA_BUILD_COMMIT = "0a086aa3bdb251842a1e8413e2a6b35970d0b409";
     STRATA_RELEASE_TAG = "v${finalAttrs.version}";
     STRATA_SANDBOX_GDK_PIXBUF_MODULE_FILE = "${lib.getOutput "out" librsvg}/${gdk-pixbuf.binaryDir}/loaders.cache";
     STRATA_SANDBOX_GST_PLUGIN_PATH = lib.makeSearchPath "lib/gstreamer-1.0" (
