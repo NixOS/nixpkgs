@@ -20,10 +20,6 @@ class Ide:
     package_dir: Path
     update_info: UpdateInfo | None
 
-    @property
-    def drv_path(self) -> Path:
-        return self.package_dir / "package.nix"
-
     @cached_property
     def is_source(self) -> bool:
         return self.name.endswith("-oss")

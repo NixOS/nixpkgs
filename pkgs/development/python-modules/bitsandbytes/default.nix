@@ -159,6 +159,9 @@ buildPythonPackage (finalAttrs: {
         "cpu"
     ))
   ]
+  ++ lib.optionals cudaSupport [
+    (lib.cmakeFeature "COMPUTE_CAPABILITY" cudaPackages.flags.cmakeCudaArchitecturesString)
+  ]
   ++ lib.optionals rocmSupport [
     # ends up using g++ to build some files it shouldn't
     (lib.cmakeFeature "CMAKE_C_COMPILER" "amdclang")
