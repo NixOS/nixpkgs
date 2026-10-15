@@ -224,6 +224,19 @@ with haskellLib;
     ];
   }) super.lsp-test;
 
+  haskell-debugger = lib.pipe super.haskell-debugger [
+    (warnAfterVersion "0.13.1.0")
+    (overrideSrc {
+      version = "0.14.0.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "well-typed";
+        repo = "haskell-debugger";
+        rev = "v0.14.0.0";
+        hash = "sha256-2rnFKNogbFJzos3oKfMCI2IFEP3adCb5XFj2nw/BECc";
+      };
+    })
+  ];
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
