@@ -59,6 +59,7 @@ rec {
         containers-ip
         firewall
         ipv6
+        kernel-module-verification
         login
         misc
         nat
@@ -73,6 +74,7 @@ rec {
       latestKernel = {
         inherit (nixos'.tests.latestKernel)
           login
+          kernel-module-verification
           ;
       };
       installer = {
@@ -152,6 +154,8 @@ rec {
           "nixos.tests.firewall"
           "nixos.tests.ipv6"
           "nixos.tests.installer.simpleUefiSystemdBoot"
+          "nixos.tests.kernel-module-verification"
+          "nixos.tests.latestKernel.kernel-module-verification"
           "nixos.tests.login"
           "nixos.tests.latestKernel.login"
           "nixos.tests.misc"

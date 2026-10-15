@@ -127,6 +127,8 @@ rec {
         (onFullSupported "nixos.tests.keymap.dvorak-programmer")
         (onFullSupported "nixos.tests.keymap.neo")
         (onFullSupported "nixos.tests.keymap.qwertz")
+        (onFullSupported "nixos.tests.kernel-module-verification")
+        (onFullSupported "nixos.tests.latestKernel.kernel-module-verification")
         (onFullSupported "nixos.tests.latestKernel.login")
         (onFullSupported "nixos.tests.lightdm")
         (onFullSupported "nixos.tests.login")
