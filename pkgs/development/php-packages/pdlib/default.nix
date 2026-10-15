@@ -17,7 +17,7 @@ buildPecl {
     owner = "goodspb";
     repo = "pdlib";
     tag = "v${version}";
-    sha256 = "sha256-AKZ3F2XzEQCeZkacSXBinxeGQrHBmqjP7mDGQ3RBAiE=";
+    hash = "sha256-AKZ3F2XzEQCeZkacSXBinxeGQrHBmqjP7mDGQ3RBAiE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
