@@ -132,6 +132,12 @@ let
         else
           x;
 
+      # Embed the chart's nix store hash in the chart URL so that swapping
+      # the chart derivation changes the on-disk manifest, which makes
+      # ${name} re-apply the HelmChart CR and helm-controller upgrade the
+      # chart. The query string is ignored by the static file server.
+      chartRevision = pkg: builtins.head (builtins.split "-" (baseNameOf pkg));
+
       # Generate a HelmChart custom resource.
       mkHelmChartCR =
         name: value:
@@ -139,6 +145,11 @@ let
           chartValues = if (lib.isPath value.values) then fromYaml value.values else value.values;
           # use JSON for values as it's a subset of YAML and understood by the rancher Helm controller
           valuesContent = builtins.toJSON chartValues;
+          chartBase =
+            if staticContentPort == null then
+              "https://%{KUBERNETES_API}%/static/charts/${name}.tgz"
+            else
+              "https://localhost:${toString staticContentPort}/static/charts/${name}.tgz";
         in
         # merge with extraFieldDefinitions to allow setting advanced values and overwrite generated
         # values
@@ -152,11 +163,7 @@ let
           spec = {
             inherit valuesContent;
             inherit (value) targetNamespace createNamespace;
-            chart =
-              if staticContentPort == null then
-                "https://%{KUBERNETES_API}%/static/charts/${name}.tgz"
-              else
-                "https://localhost:${toString staticContentPort}/static/charts/${name}.tgz";
+            chart = "${chartBase}?v=${chartRevision value.package}";
             bootstrap = staticContentPort != null; # needed for host network access
           };
         } value.extraFieldDefinitions;
