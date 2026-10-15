@@ -5,7 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   # Pinned, because our FODs are not guaranteed to be stable between major versions.
-  pnpm_10,
+  pnpm_12,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -23,7 +23,7 @@
 }:
 
 let
-  pnpm = pnpm_10;
+  pnpm = pnpm_12;
   electron = electron_43;
 
   epic-integration = callPackage ./epic-integration.nix { };
@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.22.3";
+  version = "2.22.4";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gXG0ojLIT28aAYXhpMmR9Oksmdfidr4m6M7PDJWwa1c=";
+    hash = "sha256-3P2u2Pzle3KpYPehfJXGrqg3OAxUrTIlUH3yiWBDPpg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
       src
       ;
     inherit pnpm;
-    fetcherVersion = 3;
-    hash = "sha256-oY59X+Ma23fmw6K6/PuHCn5Jj4xFPLq5vJRVIzrpUrM=";
+    fetcherVersion = 4;
+    hash = "sha256-ffvwX+R4b8VezeJiKR9k3kRhf2tVXTUGUFw606lKL9A=";
   };
 
   nativeBuildInputs = [
