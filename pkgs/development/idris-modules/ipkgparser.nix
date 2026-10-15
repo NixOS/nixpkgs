@@ -20,7 +20,7 @@ build-idris-package {
     owner = "emptyflash";
     repo = "idris-ipkg-parser";
     rev = "35cc2f54d4f3b3710f637d0a8c897bfbb32fe183";
-    sha256 = "0vn3pigqddfy7cld0386hxzdv2nkl8mdpsx97hvyvqzrdpz4wl2q";
+    hash = "sha256-WFBO/m354+03PKnr2yqi04rdfocGDdAoO961hl+8w24=";
   };
 
   meta = {
