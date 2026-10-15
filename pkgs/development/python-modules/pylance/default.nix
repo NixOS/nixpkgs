@@ -36,7 +36,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pylance";
-  version = "12.0.0";
+  version = "13.0.0";
   pyproject = true;
   __structuredAttrs = true;
 
@@ -44,7 +44,7 @@ buildPythonPackage (finalAttrs: {
     owner = "lancedb";
     repo = "lance";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zrwR6JJs2VNIZg53iFsAwu6elqR6GmqXNetDTgb+e2U=";
+    hash = "sha256-3Z3tTWe60/4RJU/3R7rXH77MSgtyScL3pussNXbXlW0=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -56,7 +56,7 @@ buildPythonPackage (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-4eYZh9Ad1SXqVxExzlMb1tfxyWRoNHYAcAGcmjPLeLw=";
+    hash = "sha256-xt1VN0Q5Y60SslhppwHaC7nI7DXG75bNDib3nWSyupc=";
   };
 
   # `lance-linalg`'s AVX-512 VNNI u8-distance kernels call `_mm512_dpbusd_epi32` /
@@ -77,6 +77,18 @@ buildPythonPackage (finalAttrs: {
 
     substituteInPlace "$lanceDistance/cosine_u8.rs" \
       --replace-fail "return |a, b| unsafe { x86::cosine_u8_accum_avx512_vnni(a, b) };" ""
+  ''
+  # Same for `lance-index`'s pairwise BQ/SQ kernels: make their AVX-512 VNNI dispatch
+  # statically false so that the scalar fallbacks are always used.
+  + ''
+    lanceVector="../rust/lance-index/src/vector"
+
+    substituteInPlace "$lanceVector/bq/pairwise.rs" \
+      --replace-fail "if simd && *x86::HAS_AVX512_VNNI {" "if false {"
+
+    substituteInPlace "$lanceVector/sq/pairwise.rs" \
+      --replace-fail "dim <= MAX_BATCHED_DIM && has_vnni" "false && dim <= MAX_BATCHED_DIM && has_vnni" \
+      --replace-fail "if self.batched {" "if false {"
   '';
 
   nativeBuildInputs = [
@@ -144,9 +156,6 @@ buildPythonPackage (finalAttrs: {
   disabledTests = [
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_create_index_progress_callback_error_before_completion_propagates"
-
-    # Hangs indefinitely
-    "test_all_permutations"
 
     # Writes to read-only build directory
     "test_add_data_storage_version"

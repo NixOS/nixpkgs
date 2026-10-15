@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sassoftware";
     repo = "python-keyutils";
     rev = version;
-    sha256 = "0pfqfr5xqgsqkxzrmj8xl2glyl4nbq0irs0k6ik7iy3gd3mxf5g1";
+    hash = "sha256-4RXX62hv+HhmNBPoHAFellBPn6AdyZp/n1g/3Et22F0=";
   };
 
   postPatch = ''

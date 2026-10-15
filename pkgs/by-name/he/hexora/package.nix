@@ -12,19 +12,19 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hexora";
-  version = "0.3.1";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rushter";
     repo = "hexora";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xBg8Rrtwgg8Obi7JOPwdRXwoQKL8skCY72vLJA/VPRk=";
+    hash = "sha256-c0+E9Lc9EY14O423Vp5GGmCHzHXkbAhFztyxF4695x8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Xc6CcJ6s8X7T04W2SP7XT2rKGh2TatkaCxP2sSUC+2Y=";
+    hash = "sha256-QIFgq1e4qRJillhln6jyJfRZS6oMwlUlaDADWnhr2qE=";
   };
 
   build-system = [

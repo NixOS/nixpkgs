@@ -5,6 +5,14 @@
   python,
 }:
 
+let
+  inherit (lib)
+    isFunction
+    recursiveUpdate
+    toExtension
+    ;
+in
+
 self:
 
 let
@@ -18,25 +26,52 @@ let
   # Overridings specified through `overridePythonAttrs` will always be applied
   # before those specified by `overrideAttrs`, even if invoked after them.
   makeOverridablePythonPackage =
+    let
+      boilerplateProblems = {
+        # Handle `<pkg>.overridePythonAttrs` taking argument `disabled`
+        meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs = { };
+      };
+      boilerplateDisabledAttrNames = [ "disabled" ];
+    in
     f:
     lib.mirrorFunctionArgs f (
-      origArgs:
+      origArgs':
       let
+        # Transparently transition `disabled` -> `meta.problems.unsupportedPython`
+        origArgs =
+          if isFunction origArgs' then
+            finalAttrs:
+            let
+              fixedOrigArgs' = origArgs' finalAttrs;
+            in
+            if fixedOrigArgs' ? disabled then handleDisabledArg fixedOrigArgs' else fixedOrigArgs'
+          else if origArgs' ? disabled then
+            handleDisabledArg origArgs'
+          else
+            origArgs';
         result = f origArgs;
         overrideWith =
-          if lib.isFunction origArgs then
-            newArgs: lib.extends (lib.toExtension newArgs) origArgs
-          else
-            newArgs:
-            # origAttrs is a plain set here.
-            # Only build a fixed-point when newArgs is an extension
-            # to reduce allocation/GC.
-            if !(lib.isFunction newArgs) then
-              origArgs // newArgs
-            else if !(lib.isFunction (newArgs origArgs)) then
-              origArgs // newArgs origArgs
+          newArgs:
+          # Only build a fixed-point when origArgs or newArgs are functions
+          # or when we need to handle the `disabled` argument taken by `<pkg>.overridePyhtonAttrs`
+          # to reduce allocation/GC.
+          if isFunction origArgs || isFunction newArgs || newArgs ? disabled then
+            # In-lined `lib.extends` with custom filter logic.
+            finalAttrs:
+            let
+              previousArgs = if isFunction origArgs then origArgs finalAttrs else origArgs;
+              updatingArgs = if isFunction newArgs then toExtension newArgs finalAttrs previousArgs else newArgs;
+            in
+            if updatingArgs ? disabled then
+              # Remove disabled from newArgs
+              # and add `meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs`.
+              recursiveUpdate (
+                previousArgs // removeAttrs updatingArgs boilerplateDisabledAttrNames
+              ) boilerplateProblems
             else
-              finalAttrs: origArgs // newArgs finalAttrs origArgs;
+              previousArgs // updatingArgs
+          else
+            origArgs // newArgs;
       in
       if lib.isAttrs result then
         result
@@ -55,6 +90,33 @@ let
         newArgs: makeOverridablePythonPackage (f.override newArgs)
       );
     };
+
+  # When buildPython* is called,
+  # convert { disabled = true; } to meta.problems.unsupportedPython
+  # and remove the disabled argument.
+  # This ensure that <pkg>.overridePythonAttrs can remediate `{ disabled = true; }`
+  # by removing `unsupportedPython` from `meta.problems`.
+  handleDisabledArg =
+    let
+      boilerplateProblems = {
+        unsupportedPython = { };
+      };
+      ignoredNames = [ "disabled" ];
+    in
+    args:
+    if args.disabled == args ? meta.problems.unsupportedPython then
+      removeAttrs args ignoredNames
+    else if args.disabled then
+      removeAttrs args ignoredNames
+      // {
+        meta = args.meta or { } // {
+          problems = args.meta.problems or { } // boilerplateProblems;
+        };
+      }
+    else
+      throw "${
+        args.name or args.pname or "buildPythonPackage"
+      }: { disabled = false; } conflicts with the presence of meta.problems.unsupportedPython";
 
   mkPythonDerivation =
     if python.isPy3k then

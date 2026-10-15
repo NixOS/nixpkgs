@@ -462,6 +462,62 @@ let
         };
       });
 
+      package-stub-disabled = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+          disabled = true;
+        }
+      ) { };
+
+      package-stub-disabled-finalAttrs = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage (finalAttrs: {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+          disabled = true;
+        })
+      ) { };
+
+      package-stub-unsupportedPython = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+          meta.problems.unsupportedPython = { };
+        }
+      ) { };
+
+      package-stub-unsupportedPython-finalAttrs = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage (finalAttrs: {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+          meta.problems.unsupportedPython = { };
+        })
+      ) { };
+
       applyOverridePythonAttrs =
         p:
         p.overridePythonAttrs (previousAttrs: {
@@ -485,6 +541,35 @@ let
         );
     in
     {
+      buildPythonPackage-unsupportedPython =
+        let
+          package-stub = package-stub-unsupportedPython;
+        in
+        {
+          expr = lib.mapAttrs (n: f: f package-stub.meta.problems.unsupportedPython) {
+            kind = problems: problems.kind;
+            message-non-empty = problems: lib.isString problems.message && problems.message != "";
+          };
+          expected = {
+            kind = "broken";
+            message-non-empty = true;
+          };
+        };
+      buildPythonPackage-disabled-to-unsupportedPython =
+        let
+          package-stub = package-stub-disabled;
+        in
+        {
+          expr = lib.mapAttrs (n: f: f package-stub.meta.problems.unsupportedPython) {
+            kind = problem: problem.kind;
+            message-non-empty = problem: lib.isString problem.message && problem.message != "";
+          };
+          expected = {
+            kind = "broken";
+            message-non-empty = true;
+          };
+        };
+
       buildPythonPackage-override-gccStdenv = {
         expr = package-stub-gcc.stdenv;
         expected = pkgs.gccStdenv;
@@ -522,6 +607,112 @@ let
           overridePythonAttrsFlagP1 = 2;
         };
       };
+
+      # Even if buildPythonPackage takes `{ disabled = true }` instead of `{ meta.problems.unsupportedPython = { }; }`
+      # <pkg>.overridePythonAttrs should still be able to remove attribute `unsupportedPython` from `meta.problems`
+      # and remediate the problem.
+      overridePythonAttrs-unsupportedPython-remediation =
+        let
+          packageStubs = {
+            unsupportedPython = package-stub-unsupportedPython;
+            disabled = package-stub-disabled;
+          };
+          newArgsCandidates = rec {
+            plainFunction =
+              previousArgs:
+              previousArgs
+              // {
+                meta = previousArgs.meta or { } // {
+                  problems = removeAttrs previousArgs.problems or { } [ "unsupportedPython" ];
+                };
+              };
+            extension = finalAttrs: plainFunction;
+          };
+        in
+        {
+          expr = lib.concatMapAttrs (
+            packageStubName: package-stub:
+            lib.mapAttrs' (newArgsName: newArgs: {
+              name = "${packageStubName}-${newArgsName}";
+              value = (package-stub.overridePythonAttrs newArgs) ? meta.problems.unsupportedPython;
+            }) newArgsCandidates
+          ) packageStubs;
+          expected = {
+            unsupportedPython-plainFunction = false;
+            unsupportedPython-extension = false;
+            disabled-plainFunction = false;
+            disabled-extension = false;
+          };
+        };
+
+      overridePythonAttrs-deprecated-disabled =
+        let
+          packageStubs = {
+            unsupportedPython = package-stub-unsupportedPython;
+            disabled = package-stub-disabled;
+          };
+          newArgsCandidatesDisabled = rec {
+            plainAttrsDisabled = {
+              disabled = false;
+            };
+            plainFunctionDisabled = previousArgs: plainAttrsDisabled;
+            extensionDisabled = finalAttrs: plainFunctionDisabled;
+          };
+          newArgsCandidatesId = {
+            plainAttrsId = { };
+            plainFunctionDisabled = previousArgs: { };
+            extensionDisabled = finalAttrs: previousArgs: { };
+          };
+          applyOverridingWith =
+            newArgsCandidates: packageStubs:
+            lib.concatMapAttrs (
+              packageStubName: package-stub:
+              lib.mapAttrs' (newArgsName: newArgs: {
+                name = "${packageStubName}-${newArgsName}";
+                value = package-stub.overridePythonAttrs newArgs;
+              }) newArgsCandidates
+            ) packageStubs;
+        in
+        {
+          expr =
+            lib.mapAttrs
+              # Whether the problem buildPythonPackage-internal-disabled-overridePythonAttrs is present
+              (_: package: package ? meta.problems.buildPythonPackage-internal-disabled-overridePythonAttrs)
+              (
+                # .overridePythonAttrs { disabled = false; }
+                applyOverridingWith newArgsCandidatesDisabled packageStubs
+                # Nested overriding.
+                // applyOverridingWith newArgsCandidatesDisabled (
+                  applyOverridingWith newArgsCandidatesId packageStubs
+                )
+                // applyOverridingWith newArgsCandidatesId (
+                  applyOverridingWith newArgsCandidatesDisabled packageStubs
+                )
+                // applyOverridingWith newArgsCandidatesDisabled (
+                  applyOverridingWith newArgsCandidatesDisabled packageStubs
+                )
+              );
+          expected = lib.genAttrs (lib.crossLists (p: s: p + "-" + s) [
+            # { "${packageStudName}-${newArgsCandidateName}" = true; }
+            (lib.attrNames packageStubs)
+            # { "${packageStudName}-${newArgsCandidateName1}-${newArgsCandidateName2}" = true; }
+            (
+              (lib.attrNames newArgsCandidatesDisabled)
+              ++ (lib.crossLists (p: s: p + "-" + s) [
+                (lib.attrNames newArgsCandidatesDisabled)
+                (lib.attrNames newArgsCandidatesId)
+              ])
+              ++ (lib.crossLists (p: s: p + "-" + s) [
+                (lib.attrNames newArgsCandidatesId)
+                (lib.attrNames newArgsCandidatesDisabled)
+              ])
+              ++ (lib.crossLists (p: s: p + "-" + s) [
+                (lib.attrNames newArgsCandidatesDisabled)
+                (lib.attrNames newArgsCandidatesDisabled)
+              ])
+            )
+          ]) (_: true);
+        };
 
       overridePythonAttrs-deprecated-arg-stdenv = {
         expr =

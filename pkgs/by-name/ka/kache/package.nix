@@ -9,7 +9,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kache";
-  version = "1.1.1";
+  version = "1.2.1";
   __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optional stdenv.hostPlatform.isUnix "shims";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "kunobi-ninja";
     repo = "kache";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uefeCZ68g4WyG0UNUVp+vZvdFgxfeOQ1eyuG8XBOHuY=";
+    hash = "sha256-j3ZfQQcWZdPy7FTObe10a8DNaC1nVy1DG5TnErGEK00=";
   };
 
-  cargoHash = "sha256-fE5Dvf8f1Gv6QB4nuU1abjpJXFRs4ChYUOR5TKLdmM8=";
+  cargoHash = "sha256-aGDfVia8sF4tvOh2gedcSar/0o9vOV6cNN531TdTQjk=";
 
   nativeCheckInputs = [ cacert ];
   nativeInstallCheckInputs = [ versionCheckHook ];

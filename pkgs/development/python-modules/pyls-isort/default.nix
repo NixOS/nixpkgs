@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "paradoxxxzero";
     repo = "pyls-isort";
     tag = "v${version}";
-    sha256 = "0xba0aiyjfdi9swjzxk26l94dwlwvn17kkfjfscxl8gvspzsn057";
+    hash = "sha256-pwCr/9X7IdqZdtLNeYLdnPJGEjVi9i+5TrE56aMCanU=";
   };
 
   # no tests

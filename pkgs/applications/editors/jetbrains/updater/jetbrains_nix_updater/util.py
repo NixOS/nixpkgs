@@ -1,13 +1,20 @@
-import sys
-from typing import Iterable
-
 import subprocess
+import sys
+from collections.abc import Iterable, Sequence
+from os import PathLike
 from pathlib import Path
 
 from jetbrains_nix_updater.config import UpdaterConfig
 
 
-def run_command(cmd: list[str], **kwargs) -> str:
+class UpdateScriptBlockException(Exception):
+    "Raised when an update-script-{start,end} block is malformed"
+
+
+def run_command(
+    cmd: Sequence[str | bytes | PathLike[str] | PathLike[bytes]],
+    **kwargs,
+) -> str:
     result = subprocess.run(cmd, capture_output=True, check=True, text=True, **kwargs)
     return result.stdout.strip()
 
@@ -74,7 +81,7 @@ def replace_blocks(
             elif not have_found_start or have_found_end:
                 lines.append(line)
         if not have_found_start or not have_found_end:
-            raise Exception(
+            raise UpdateScriptBlockException(
                 f"Either start or end marker for `{name}` block missing in `{file}`"
             )
 

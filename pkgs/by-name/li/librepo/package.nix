@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
     homepage = "https://rpm-software-management.github.io/librepo/";
-    changelog = "https://github.com/rpm-software-management/dnf5/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/rpm-software-management/librepo/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
     maintainers = [ ];

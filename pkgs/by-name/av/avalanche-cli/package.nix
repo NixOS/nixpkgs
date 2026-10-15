@@ -14,17 +14,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "avalanche-cli";
-  version = "1.9.6";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanche-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bAZJRFlry7vYTTf95kTOJwcjYelN40n264oeykx7nxc=";
+    hash = "sha256-7ZNYO3SU+s6+VAq0h3EJHgUxAZ4BScbSlQwswKYQzqQ=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-0+YwlCHjiU46y333RSuaha4pLKFTYlj+M9+TFAALamY=";
+  vendorHash = "sha256-BNb3zifYaCkxiEoGnG8p0Z5gYtsdYIm22quvweFo0Jk=";
 
   env = {
     # Fix error: 'Caught SIGILL in blst_cgo_init'

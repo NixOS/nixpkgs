@@ -8,13 +8,17 @@
   xauth,
   util-linux,
   which,
-  fontsConf,
+  texFunctions,
   gawk,
   coreutils,
   installShellFiles,
   xterm,
   bashNonInteractive,
 }:
+
+let
+  fontsConf = texFunctions.fontsConf;
+in
 stdenvNoCC.mkDerivation {
   pname = "xvfb-run";
   version = "1+g87f6705";

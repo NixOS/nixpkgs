@@ -83,6 +83,18 @@
     "members": {},
     "name": "bootstrapping"
   },
+  "calamares-nixos-extensions": {
+    "description": "Maintainers of the calamares-nixos-extensions",
+    "id": 5946247,
+    "maintainers": {
+      "ElvishJerricco": 1365692,
+      "RaitoBezarius": 314564,
+      "lulu-berlin": 10565807,
+      "vlinkz": 20145996
+    },
+    "members": {},
+    "name": "calamares-nixos-extensions"
+  },
   "categorization": {
     "description": "Maintain the categorization system in Nixpkgs, per RFC 0146. This team has authority over all categorization issues in Nixpkgs. Matrix: https://matrix.to/#/%23nixpkgs-categorization:matrix.org",
     "id": 11723948,
@@ -392,7 +404,8 @@
       "jtojnar": 705123
     },
     "members": {
-      "Hythera": 87016780
+      "Hythera": 87016780,
+      "hesiod": 3159881
     },
     "name": "Freedesktop"
   },
@@ -483,8 +496,7 @@
       "kalbasit": 87115
     },
     "members": {
-      "mfrw": 4929861,
-      "qbit": 68368
+      "mfrw": 4929861
     },
     "name": "golang"
   },
@@ -1045,6 +1057,17 @@
       "arianvp": 628387
     },
     "name": "systemd"
+  },
+  "tenstorrent": {
+    "description": "Maintain Tenstorrent-related packages ",
+    "id": 19876744,
+    "maintainers": {
+      "RossComputerGuy": 19699320,
+      "ju1m": 21160136,
+      "liberodark": 4238928
+    },
+    "members": {},
+    "name": "tenstorrent"
   },
   "test-driver": {
     "description": "Maintain the NixOS integration test driver.",

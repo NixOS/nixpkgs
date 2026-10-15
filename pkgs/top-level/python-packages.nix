@@ -5312,7 +5312,7 @@ self: super: with self; {
 
   duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
 
-  duct-py = callPackage ../development/python-modules/duct-py { };
+  duct = callPackage ../development/python-modules/duct { };
 
   duden = callPackage ../development/python-modules/duden { };
 
@@ -6081,7 +6081,7 @@ self: super: with self; {
 
   ffpyplayer = callPackage ../development/python-modules/ffpyplayer { };
 
-  fhir-py = callPackage ../development/python-modules/fhir-py { };
+  fhirpy = callPackage ../development/python-modules/fhirpy { };
 
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
@@ -6396,6 +6396,8 @@ self: super: with self; {
   flexparser = callPackage ../development/python-modules/flexparser { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
+
+  flightradarapi = callPackage ../development/python-modules/flightradarapi { };
 
   flipr-api = callPackage ../development/python-modules/flipr-api { };
 
@@ -7546,6 +7548,8 @@ self: super: with self; {
   harbor-python = callPackage ../development/python-modules/harbor-python { };
 
   harlequin-bigquery = callPackage ../development/python-modules/harlequin-bigquery { };
+
+  harlequin-odbc = callPackage ../development/python-modules/harlequin-odbc { };
 
   harlequin-postgres = callPackage ../development/python-modules/harlequin-postgres { };
 
@@ -10659,6 +10663,10 @@ self: super: with self; {
   mcdreforged = callPackage ../development/python-modules/mcdreforged { };
 
   mcp = callPackage ../development/python-modules/mcp { };
+
+  mcp-types = callPackage ../development/python-modules/mcp-types { };
+
+  mcp_2 = callPackage ../development/python-modules/mcp/2.nix { };
 
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 

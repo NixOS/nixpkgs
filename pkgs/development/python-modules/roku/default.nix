@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "jcarbaugh";
     repo = "python-roku";
     rev = "v${version}";
-    sha256 = "09mq59kjll7gj1srw4qc921ncsm7cld95sbz5v3p2bwmgckpqza7";
+    hash = "sha256-R318J3uVL3HHLn/pkhplp2pmg0gME551kO9QKmcquCY=";
   };
 
   propagatedBuildInputs = [ requests ];

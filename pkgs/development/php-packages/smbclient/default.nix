@@ -1,6 +1,7 @@
 {
   buildPecl,
   lib,
+  php,
   samba,
   pkg-config,
 }:
@@ -16,6 +17,7 @@ buildPecl {
   buildInputs = [ samba ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP wrapper for libsmbclient";
     license = lib.licenses.bsd2;
     homepage = "https://github.com/eduardok/libsmbclient-php";

@@ -9,8 +9,8 @@
   writableTmpDirAsHomeHook,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
+  withOdbcAdapter ? true,
 }:
-
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "harlequin";
   version = "2.16.1";
@@ -60,7 +60,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
       wcwidth
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
-    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ];
+    ++ lib.optionals withBigQueryAdapter [ harlequin-bigquery ]
+    ++ lib.optionals withOdbcAdapter [ harlequin-odbc ];
 
   pythonImportsCheck = [
     "harlequin"
@@ -111,6 +112,12 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64
     "test_load_extension"
+  ]
+  ++ lib.optionals withOdbcAdapter [
+    # harlequin-odbc declares no adapter options (its connection string is a
+    # positional argument), and this test requires every installed adapter to
+    # declare at least one.
+    "test_spec_covers_every_installed_adapter"
   ];
 
   disabledTestPaths = [
