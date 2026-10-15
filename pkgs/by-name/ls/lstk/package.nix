@@ -24,6 +24,10 @@ buildGoModule (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  ldflags = [
+    "-X github.com/localstack/lstk/internal/version.version=${finalAttrs.version}"
+  ];
+
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   passthru.updateScript = nix-update-script { };
