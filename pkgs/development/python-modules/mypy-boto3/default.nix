@@ -227,8 +227,8 @@ in
       "sha256-g4MTo+JaUPz5aRYMTb68C8UUBxc//eoWPDREv1M0SL0=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.43.107"
-      "sha256-arisHkbfGkst1hHDxlaZkuxKmAq84C1os84Gyd3nRVU=";
+    buildMypyBoto3Package "cloudfront" "1.43.114"
+      "sha256-etjhcFRnBfWClWuEsqZBRmtp4FPQju+QBrLXeFfxEiM=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.43.0"
