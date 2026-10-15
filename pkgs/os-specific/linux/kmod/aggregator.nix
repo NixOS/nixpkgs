@@ -33,8 +33,15 @@ buildEnv {
     # Regenerate the depmod map files.  Be sure to pass an explicit
     # kernel version number, otherwise depmod will use `uname -r'.
     if test -w $out/lib/modules/$kernelVersion; then
-        rm -f $out/lib/modules/$kernelVersion/modules.!(builtin*|order*)
+        rm -f $out/lib/modules/$kernelVersion/modules.!(builtin*|order*|cer)
         ${kmod}/bin/depmod -b $out -C $out/etc/depmod.d -a $kernelVersion
+        cd -- "$out/lib/modules/$kernelVersion"
+
+        # Merge the single‐module certificates for external modules.
+        cp --no-preserve=mode,ownership --remove-destination \
+          -- "$(readlink -f modules.cer)" modules.cer
+        sed "1,$(wc -l < modules.order)d; s/\.ko.*/.ko.cer/" modules.dep \
+            | xargs -d'\n' cat >> modules.cer
     fi
   '';
 }

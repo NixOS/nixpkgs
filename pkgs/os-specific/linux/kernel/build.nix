@@ -551,6 +551,14 @@ lib.makeOverridable (
 
       # Delete empty directories
       find -empty -type d -delete
+
+      if [[ -v modules ]]; then
+        # Replace the individual kmodigest single‐module certificates (see
+        # `common-flags.nix`) with a concatenated `modules.cer`.
+        cd -- "$modules/lib/modules/${modDirVersion}"
+        sed 's/$/\.cer/' modules.order | xargs -d'\n' cat > modules.cer
+        sed 's/$/\.cer/' modules.order | xargs -d'\n' rm
+      fi
     '';
 
     stripDebugList = [

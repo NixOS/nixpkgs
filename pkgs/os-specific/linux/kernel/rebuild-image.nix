@@ -5,6 +5,7 @@
 
 {
   target ? kernel.target,
+  modulesTree ? null,
 }:
 
 let
@@ -44,7 +45,19 @@ stdenv.mkDerivation {
 
   installTargets = [ (kernel.installTargetFor target) ];
 
+  moduleCertificates =
+    if modulesTree != null then
+      "${modulesTree}/lib/modules/${kernel.modDirVersion}/modules.cer"
+    else
+      null;
+
   dontConfigure = true;
+
+  preBuild = ''
+    if [[ -v moduleCertificates ]]; then
+      scripts/insert-sys-cert -b vmlinux -c "$moduleCertificates"
+    fi
+  '';
 
   env = kernel.env // {
     buildRoot = ".";
