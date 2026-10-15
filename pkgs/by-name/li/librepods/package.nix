@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librepods";
-  version = "0.2.5";
+  version = "1.0.2";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "librepods-org";
     repo = "librepods";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6l1WjwjDbv5e3tDaWo9+XSEjr9ge/hKysIkeUqyiO4U=";
+    hash = "sha256-bppu9lNxlqcdl0Mkx6Vd4ZTl2sadhXhqoyPqiuhMdJY=";
   };
 
   sourceRoot = "source/linux";
