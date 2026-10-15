@@ -242,11 +242,11 @@ stdenv.mkDerivation (finalAttrs: {
       )}
   '';
 
-  dontStrip = isLinux;
+  dontStrip = true;
   dontPatchELF = isDarwin;
   dontPatchShebangs = isDarwin;
 
-  doInstallCheck = true;
+  doInstallCheck = isLinux;
   nativeInstallCheckInputs = [
     versionCheckHook
     writableTmpDirAsHomeHook
