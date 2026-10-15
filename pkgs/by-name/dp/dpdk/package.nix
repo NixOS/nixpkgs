@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpdk";
-  version = "26.03";
+  version = "26.07";
 
   src = fetchurl {
     url = "https://fast.dpdk.org/rel/dpdk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hJiSArvg+67rYvj9xj9pGICsC2bNDcZMFnhDxZ2ynSw=";
+    hash = "sha256-cUGotbrZ19llSDrA11MXrAwh3O4dE9NzaTxlX54/q+Y=";
   };
 
   __structuredAttrs = true;
