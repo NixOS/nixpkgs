@@ -12903,7 +12903,7 @@
   };
   jadewilk = {
     name = "Jade Wilk";
-    email = "p.wilk@student.reading.ac.uk";
+    email = "dev@jadewilk.uk";
     github = "jadewilk";
     githubId = 50517631;
   };
