@@ -1,25 +1,34 @@
-import os.path
-import sys
-
 import json
 import re
+import sys
 from pathlib import Path
-from xmltodict import parse
 from subprocess import CalledProcessError
+
+from xmltodict import parse
 
 from jetbrains_nix_updater.config import UpdaterConfig
 from jetbrains_nix_updater.fetcher import VersionInfo
-from jetbrains_nix_updater.ides import Ide, by_name_path
+from jetbrains_nix_updater.ides import Ide
 from jetbrains_nix_updater.update_src_maven import (
-    get_maven_deps_for_ide,
     ensure_is_list,
+    get_maven_deps_for_ide,
 )
-from jetbrains_nix_updater.util import replace_blocks, run_command, convert_hash_to_sri
+from jetbrains_nix_updater.util import (
+    UpdateScriptBlockException,
+    convert_hash_to_sri,
+    replace_blocks,
+    run_command,
+)
+
+
+class InvalidMetadataException(Exception):
+    "raised when required metadata is invalid or malformed."
 
 
 def jar_repositories(root_path: Path) -> list[str]:
     repositories = []
-    file_contents = parse(open(root_path / ".idea" / "jarRepositories.xml").read())
+    with open(root_path / ".idea" / "jarRepositories.xml") as f:
+        file_contents = parse(f.read())
     component = file_contents["project"]["component"]
     if component["@name"] != "RemoteRepositoriesConfiguration":
         return repositories
@@ -39,7 +48,8 @@ def jar_repositories(root_path: Path) -> list[str]:
 
 
 def kotlin_jps_plugin_info(root_path: Path) -> tuple[str, str]:
-    file_contents = parse(open(root_path / ".idea" / "kotlinc.xml").read())
+    with open(root_path / ".idea" / "kotlinc.xml") as f:
+        file_contents = parse(f.read())
     components = file_contents["project"]["component"]
     for component in components:
         if component["@name"] != "KotlinJpsPluginSettings":
@@ -59,10 +69,14 @@ def kotlin_jps_plugin_info(root_path: Path) -> tuple[str, str]:
         )
 
         return (version, convert_hash_to_sri(prefetch))
+    raise InvalidMetadataException(
+        "No KotlinJpsPluginSettings component in kotlinc.xml"
+    )
 
 
 def requested_kotlinc_version(root_path: Path) -> str:
-    file_contents = parse(open(root_path / ".idea" / "kotlinc.xml").read())
+    with open(root_path / ".idea" / "kotlinc.xml") as f:
+        file_contents = parse(f.read())
     components = file_contents["project"]["component"]
     for component in components:
         if component["@name"] != "KotlinJpsPluginSettings":
@@ -72,6 +86,9 @@ def requested_kotlinc_version(root_path: Path) -> str:
         version = option["@value"]
 
         return version
+    raise InvalidMetadataException(
+        "No KotlinJpsPluginSettings component in kotlinc.xml"
+    )
 
 
 def prefetch_intellij_community(variant: str, version: str) -> tuple[str, Path]:
@@ -206,14 +223,14 @@ def run_src_update(ide: Ide, info: VersionInfo, config: UpdaterConfig) -> bool:
                 )
             ],
         )
-    except Exception as e:
+    except UpdateScriptBlockException as e:
         print(f"[!] Writing update info to file failed: {e}", file=sys.stderr)
         return False
 
     if not config.no_maven_deps:
         print("[*] Collecting maven hashes")
         maven_hashes = get_maven_deps_for_ide(config, ide)
-        maven_out_path = by_name_path(ide.name, config.nixpkgs_root) / "maven_artefacts.json"
+        maven_out_path = ide.package_dir / "maven_artefacts.json"
         if config.dry_run:
             assert maven_out_path.parent.exists()
             print(f"[D] --dry-run: {maven_out_path} not modified", file=sys.stderr)
