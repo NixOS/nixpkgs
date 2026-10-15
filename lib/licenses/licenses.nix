@@ -1344,11 +1344,6 @@ lib.mapAttrs mkLicense (
       fullName = "Open LDAP Public License v2.8";
     };
 
-    openssl = {
-      spdxId = "OpenSSL";
-      fullName = "OpenSSL License";
-    };
-
     opubl = {
       spdxId = "OPUBL-1.0";
       fullName = "Open Publication License v1.0";
