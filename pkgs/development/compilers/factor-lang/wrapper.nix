@@ -18,6 +18,7 @@
   libGL,
   libGLU,
   gtk4,
+  gtk3,
   libepoxy,
   librsvg,
   graphviz,
@@ -80,6 +81,11 @@ let
           [
             gtk2-x11
             gtkglext
+          ]
+        else if (stdenv.hostPlatform.isx86_32) then
+          [
+            gtk3
+            libepoxy
           ]
         else
           [
