@@ -183,7 +183,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       santiagolxx
-      staFF6773
     ];
     mainProgram = "cubiclauncher";
     platforms = [
