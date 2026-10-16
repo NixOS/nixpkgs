@@ -9,13 +9,13 @@
 
 buildGo127Module (finalAttrs: {
   pname = "roadrunner";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "roadrunner-server";
     repo = "roadrunner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6x+K591t5zhHKk0ZBvpsdtH2qcuhmq2HCFXMoaodwY8=";
+    hash = "sha256-SQs/QOZ3j+PGS9iJ4TW/RmBWCZPxNxqnV5192FvEqxc=";
   };
 
   vendorHash = "sha256-LYHjx3ur1Qf0FPsndSKQNa04gursoAPv/Hdbt1+vsUg=";
