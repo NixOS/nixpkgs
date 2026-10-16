@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postCheck
     '';
 
+  __structuredAttrs = true;
+
   meta = {
     changelog = "https://github.com/acoustid/chromaprint/releases/tag/v${finalAttrs.version}";
     homepage = "https://acoustid.org/chromaprint";
