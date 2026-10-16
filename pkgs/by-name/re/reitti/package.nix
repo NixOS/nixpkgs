@@ -31,7 +31,7 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "reitti";
-  version = "5.0.1";
+  version = "5.6.1";
   __structuredAttrs = true;
   strictDeps = true;
 
@@ -39,10 +39,10 @@ maven.buildMavenPackage rec {
     owner = "dedicatedcode";
     repo = "reitti";
     tag = "v${version}";
-    hash = "sha256-+4J9us+8JhIAkE0bWQvo3X3PHVw6wq6h4Jewjrce/Zc=";
+    hash = "sha256-kV5AtbwV0gM+AUHhp0/Ccr2QLIFYNyk0t2sDnN3Lo+A=";
   };
 
-  mvnHash = "sha256-OZ0bDfWRHsZzB0IEmORb48frFBKNpoiT5/HDARXj8iQ=";
+  mvnHash = "sha256-3RDxMxDJtdypIYNGdnOS6TxQqxUo/otNbAYC0EHRXj4=";
   mvnJdk = openjdk25;
 
   mvnFlags = "-Dmaven.test.skip=true -DskipTests -Dmaven.gitcommitid.skip=true";
