@@ -1,0 +1,100 @@
+From f35abef6dd17c2704f3d84e1bee0acaac9d035e1 Mon Sep 17 00:00:00 2001
+From: NotAShelf <raf@notashelf.dev>
+Date: Tue, 25 Nov 2025 17:29:51 +0300
+Subject: [PATCH] Add Nix store path normalization for process monitor
+
+---
+ src/linux/btop_collect.cpp | 62 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 61 insertions(+), 1 deletion(-)
+
+diff --git a/src/linux/btop_collect.cpp b/src/linux/btop_collect.cpp
+index eebaa50..b895320 100644
+--- a/src/linux/btop_collect.cpp
++++ b/src/linux/btop_collect.cpp
+@@ -94,6 +94,54 @@ long long get_monotonicTimeUSec()
+ 	return time.tv_sec * 1000000 + time.tv_nsec / 1000;
+ }
+ 
++//? Nix store path normalization
++string normalize_nix_path(const string& path) {
++	// Check if path starts with /nix/store/
++	if (path.rfind("/nix/store/", 0) != 0) {
++		return path;
++	}
++	
++	// Find the end of the hash (31 characters after /nix/store/)
++	const size_t hash_start = 12; // length of "/nix/store/"
++	if (path.length() <= hash_start + 31) {
++		return path;
++	}
++	
++	// Look for the end of the hash (first dash after 31 chars)
++	size_t hash_end = path.find('-', hash_start);
++	if (hash_end == string::npos || hash_end != hash_start + 31) {
++		return path;
++	}
++	
++	// Extract the name part after the hash
++	string name_part = path.substr(hash_end + 1);
++	
++	// Check if the binary is in /libexec or /bin
++	size_t bin_pos = name_part.find("/bin/");
++	size_t libexec_pos = name_part.find("/libexec/");
++	if (bin_pos != string::npos || libexec_pos != string::npos) {
++		// Strip the directory and return just the binary name
++		size_t slash_pos = (bin_pos != string::npos) ? bin_pos + 1 : libexec_pos + 1;
++		size_t next_slash = name_part.find('/', slash_pos);
++		if (next_slash != string::npos) {
++			return name_part.substr(next_slash + 1);
++		}
++	}
++	
++	// Handle wrapped programs: .program-wrapped -> program-wrapped
++	if (name_part.rfind(".", 0) == 0 && name_part.find("-wrapped") != string::npos) {
++		return name_part.substr(1); // Remove the leading dot
++	}
++	
++	// Handle wrapped programs in directories: name/.program-wrapped -> program-wrapped
++	size_t wrapped_pos = name_part.find("/.");
++	if (wrapped_pos != string::npos && name_part.find("-wrapped", wrapped_pos) != string::npos) {
++		return name_part.substr(wrapped_pos + 2); // Remove "/."
++	}
++	
++	return name_part;
++}
++
+ }
+ 
+ namespace Cpu {
+@@ -3012,6 +3060,8 @@ namespace Proc {
+ 					if (not pread.good()) continue;
+ 					getline(pread, new_proc.name);
+ 					pread.close();
++					//? Apply Nix store path normalization
++					new_proc.name = normalize_nix_path(new_proc.name);
+ 					//? Check for whitespace characters in name and set offset to get correct fields from stat file
+ 					new_proc.name_offset = rng::count(new_proc.name, ' ');
+ 
+@@ -3026,7 +3076,17 @@ namespace Proc {
+ 						}
+ 					}
+ 					pread.close();
+-					if (not new_proc.cmd.empty()) new_proc.cmd.pop_back();
++					if (not new_proc.cmd.empty()) {
++						new_proc.cmd.pop_back();
++						//? Apply Nix store path normalization to first argument (program path)
++						size_t space_pos = new_proc.cmd.find(' ');
++						if (space_pos != string::npos) {
++							string first_arg = new_proc.cmd.substr(0, space_pos);
++							new_proc.cmd = normalize_nix_path(first_arg) + new_proc.cmd.substr(space_pos);
++						} else {
++							new_proc.cmd = normalize_nix_path(new_proc.cmd);
++						}
++					}
+ 
+ 					pread.open(d.path() / "status");
+ 					if (not pread.good()) continue;
+-- 
+2.51.0
+
+
