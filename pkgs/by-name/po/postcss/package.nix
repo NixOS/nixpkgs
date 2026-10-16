@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "postcss";
-  version = "8.5.28";
+  version = "8.5.30";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "postcss";
     tag = finalAttrs.version;
-    hash = "sha256-Gl10JGla7+mMKWN45LVDVrvScjsQ7ocMCeXn6I1L2zo=";
+    hash = "sha256-nUnhmcEbo7UHQvY4RaOi3WU6rs6hqx62Wy9ZCFCK/Tg=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-VlGXLJilG2ZMu9rJ69EWghR+Ynxo7tLOEOtEKwqJyyo=";
+    hash = "sha256-B9ypm9nmRiQ2HbP8c3nzNNNMus9jD9nF1mDgTQGOpPg=";
   };
 
   dontBuild = true;
