@@ -26,6 +26,8 @@
   boost,
   thrift,
   cef-binary,
+  darwin,
+  apple-sdk,
 }:
 
 let
@@ -34,6 +36,9 @@ let
     {
       "aarch64-linux" = "linuxarm64";
       "x86_64-linux" = "linux64";
+      "aarch64-darwin" = "macosarm64";
+      #TODO: 26.11: remove the support for x86_64-darwin for more info please see: https://github.com/NixOS/nixpkgs/pull/492160
+      "x86_64-darwin" = "macosx64";
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   arches =
@@ -43,8 +48,19 @@ let
         projectArch = "arm64";
         targetArch = "arm64";
       };
+      "macosarm64" = {
+        depsArch = "universal";
+        projectArch = "arm64";
+        targetArch = "arm64";
+      };
       "linux64" = {
         depsArch = "amd64";
+        projectArch = "x86_64";
+        targetArch = "x86_64";
+      };
+      #TODO: 26.11: remove the support for x86_64-darwin for more info please see: https://github.com/NixOS/nixpkgs/pull/492160
+      "macosx64" = {
+        depsArch = "universal";
         projectArch = "x86_64";
         targetArch = "x86_64";
       };
@@ -62,6 +78,7 @@ let
     srcHashes = {
       aarch64-linux = "sha256-2w2TDj7LGjYeUjpVvojAsHb8HlqG82AwH8Arg0NxREg=";
       x86_64-linux = "sha256-JDlZmIEg9ajjuFOL8qAr6HDVbeu3/Cg21Z57fHryfdc=";
+      aarch64-darwin = "sha256-rKXorqz0KxpwRjq2rf6eJiCzkgJe+9+Vfa0eG2dDSQQ=";
     };
   };
 
@@ -109,7 +126,12 @@ stdenv.mkDerivation rec {
     ninja
     strip-nondeterminism
     stripJavaArchivesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.xcode_16_1
   ];
 
   buildInputs = [
@@ -120,6 +142,9 @@ stdenv.mkDerivation rec {
     nss
     nspr
     thrift20
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk
   ];
 
   src = fetchFromGitHub {
@@ -129,11 +154,38 @@ stdenv.mkDerivation rec {
     hash = "sha256-eYn1T4cRrHeVDSye6FKBv8X3zZPDGFurk6HJG+jPypY=";
   };
 
-  # Find the hash in tools/buildtools/linux64/clang-format.sha1
-  clang-fmt = fetchurl {
-    url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
-    hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
-  };
+  clang-fmt =
+    let
+      platformInfo =
+        {
+          "linuxarm64" = {
+            key = "dd736afb28430c9782750fc0fd5f0ed497399263";
+            hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
+          };
+          "linux64" = {
+            key = "dd736afb28430c9782750fc0fd5f0ed497399263";
+            hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
+          };
+          #TODO: 26.11: remove the support for x86_64-darwin for more info please see: https://github.com/NixOS/nixpkgs/pull/492160
+          "macosx64" = {
+            key = "a1b33be85faf2578f3101d7806e443e1c0949498";
+            hash = "sha256-RscqWe309rwQe1vEoefAP+fHxx5KAtvQA0Zh3lj62pc=";
+          };
+          "macosarm64" = {
+            key = "f1424c44ee758922823d6b37de43705955c99d7e";
+            hash = "sha256-m+qCYEZUmCgU37JTlEVdyYml4T/rA3Lt/vJh7/ToSlo=";
+          };
+        }
+        .${platform};
+    in
+    fetchurl {
+      url = "https://storage.googleapis.com/chromium-clang-format/${platformInfo.key}";
+      hash = platformInfo.hash;
+    };
+
+  clangFmtFolder = if stdenv.hostPlatform.isDarwin then "mac" else "linux64";
+  os = if stdenv.hostPlatform.isDarwin then "macosx" else "linux";
+  toolFolder = if stdenv.hostPlatform.isDarwin then "mac" else "linux";
 
   configurePhase = ''
     runHook preConfigure
@@ -150,8 +202,8 @@ stdenv.mkDerivation rec {
       -e 's|"%s rev-list --count %s" % (git_exe, branch)|"echo '${version}'"|' \
       -i tools/git_util.py
 
-    cp ${clang-fmt} tools/buildtools/linux64/clang-format
-    chmod +w tools/buildtools/linux64/clang-format
+    cp ${clang-fmt} tools/buildtools/${clangFmtFolder}/clang-format
+    chmod +w tools/buildtools/${clangFmtFolder}/clang-format
 
     sed \
       -e 's|include(cmake/vcpkg.cmake)||' \
@@ -160,6 +212,10 @@ stdenv.mkDerivation rec {
       -i CMakeLists.txt
 
     sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift20})|' -i remote/CMakeLists.txt
+
+    # Remove runtime for appbundler because it only recognizes MacOS style Java home paths
+    # https://github.com/ome/appbundler/blob/6f153a3706960e3568a6815c27f5cd02cb36f654/appbundler/src/com/oracle/appbundler/AppBundlerTask.java#L629
+    sed -e 's|<runtime dir="''${env.JAVA_HOME}"/>||' -i build.xml
 
     mkdir jcef_build
     cd jcef_build
@@ -192,10 +248,10 @@ stdenv.mkDerivation rec {
     export OUT_NATIVE_DIR=$JCEF_ROOT_DIR/jcef_build/native/${buildType}
     export OUT_REMOTE_DIR=$JCEF_ROOT_DIR/jcef_build/remote/${buildType}
     export JB_TOOLS_DIR=$(realpath ../jb/tools)
-    export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/linux
+    export JB_TOOLS_OS_DIR=$JB_TOOLS_DIR/${toolFolder}
     export OUT_CLS_DIR=$(realpath ../out/${platform})
     export TARGET_ARCH=${targetArch} DEPS_ARCH=${depsArch}
-    export OS=linux
+    export OS=${os}
     export JOGAMP_DIR="$JCEF_ROOT_DIR"/third_party/jogamp/jar
 
     bash "$JB_TOOLS_DIR"/common/create_modules.sh
@@ -205,7 +261,7 @@ stdenv.mkDerivation rec {
     bash "$JB_TOOLS_DIR"/common/create_version_file.sh $out
 
     cp -r $JCEF_ROOT_DIR/jmods/ $out
-    cp -r $JCEF_ROOT_DIR/cef_server/ $out
+    ${if stdenv.hostPlatform.isLinux then "cp -r $JCEF_ROOT_DIR/cef_server/ $out" else ""}
 
     runHook postInstall
   '';
@@ -222,12 +278,13 @@ stdenv.mkDerivation rec {
     description = "Jetbrains' fork of JCEF";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/JetBrains/JCEF";
-    platforms = [
+    platforms = lib.platforms.darwin ++ [
       "aarch64-linux"
       "x86_64-linux"
     ];
     maintainers = with lib.maintainers; [
       aoli-al
+      eveeifyeve # Darwin
     ];
   };
 }
