@@ -253,7 +253,20 @@ let
   runtimeConfigManagedMarkerPath = "${stateDir}/.config.json.nix-managed";
   profilesApiKeyPath = "${configDir}/nix-managed-profiles-api-key";
 
-  profilesApiBaseUrl = "http://127.0.0.1:817/api/v1";
+  # Portmaster ignores a listen address that doesn't match this validation
+  # regex from base/api/config.go and listens on the default address instead.
+  apiListenAddressRegex = "[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}:[0-9]{1,5}|\\[[:0-9A-Fa-f]+]:[0-9]{1,5}";
+  configuredApiListenAddress =
+    cfg.settings."core/listenAddress" or cfg.settings.core.listenAddress or null;
+  apiListenAddress =
+    if
+      builtins.isString configuredApiListenAddress
+      && builtins.match apiListenAddressRegex configuredApiListenAddress != null
+    then
+      configuredApiListenAddress
+    else
+      "127.0.0.1:817";
+  profilesApiBaseUrl = "http://${apiListenAddress}/api/v1";
   profilesPingUrl = "${profilesApiBaseUrl}/ping";
   profilesImportUrl = "${profilesApiBaseUrl}/sync/profile/import?allowReplace";
 
@@ -655,6 +668,11 @@ in
         fingerprints creates a different Portmaster identity and can leave the
         previous imported profile behind. Removing a declaration does not delete
         a previously imported profile.
+
+        The profiles are imported through the API address set with
+        `core/listenAddress` in {option}`settings`; an address set only in
+        {option}`settingsFile`, in {option}`secretsFile` or with
+        `--api-address` in {option}`extraArgs` is not used for this.
       '';
     };
 
