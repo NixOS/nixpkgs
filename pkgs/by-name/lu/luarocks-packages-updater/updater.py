@@ -243,7 +243,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 commit_files(self.nixpkgs_repo, msg, [args.outfile])
 
     def generate_nix(self, results: list[tuple[LuaPlugin, str]], outfilename: str):
-        with tempfile.NamedTemporaryFile("w+") as f:
+        with tempfile.NamedTemporaryFile("w+", suffix=".nix") as f:
             f.write(HEADER)
             header2 = textwrap.dedent(
                 """
@@ -266,14 +266,13 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             f.write(FOOTER)
             f.flush()
 
+            subprocess.run(["nixfmt", f.name], check=True)
+
             # if everything went fine, move the generated file to its destination
             # using copy since move doesn't work across disks
             shutil.copy(f.name, outfilename)
 
         print(f"updated {outfilename}")
-
-        # Format the generated file with nixfmt
-        subprocess.run(["nixfmt", outfilename], check=True)
 
     @property
     def attr_path(self):
@@ -525,13 +524,21 @@ def generate_pkg_nix(plug: LuaPlugin):
                 cmd.append(f"--lua-dir={lua_dir}")
 
         output = run_luarocks(cmd)
+        subprocess.run(
+            ["nixfmt", "-"],
+            input=output,
+            text=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            check=True,
+        )
         ## FIXME: luarocks nix command output isn't formatted properly
         output = normalize_license_metadata(output)
         output = "callPackage(\n" + output.strip() + ") {};\n\n"
         return (plug, output, None)
     except subprocess.CalledProcessError as e:
         log.error("Failed to generate nix expression for %s: %s", plug.name, e)
-        return (plug, None, str(e))
+        return (plug, None, e.stderr or str(e))
 
 
 def main():
