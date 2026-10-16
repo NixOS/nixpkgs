@@ -5,6 +5,7 @@
   pkg-config,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -57,6 +58,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Toolbox for converting, checking and serving map tiles in various formats";
