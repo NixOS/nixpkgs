@@ -15,13 +15,13 @@
 }:
 beamPackages.mixRelease rec {
   pname = "pinchflat-ngx";
-  version = "2026.10.15";
+  version = "2026.10.16";
 
   src = fetchFromGitHub {
     owner = "TheBadFella";
     repo = "Pinchflat-NGX";
     tag = version;
-    hash = "sha256-a6Clfi1jib7nCGRjhDXSPIQFF6n7NAOJtQxsr2WHszQ=";
+    hash = "sha256-pbe3nKGDp8Hgt4clHzkRgqs4jXuRCGuK4oPSax0Sdqw=";
   };
 
   # force compile exqlite using our version
