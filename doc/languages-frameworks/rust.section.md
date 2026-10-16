@@ -465,6 +465,28 @@ also be used:
 * `patches`: patches to apply before vendoring. This is useful when
   the `Cargo.lock`/`Cargo.toml` files need to be patched before
   vendoring.
+* `registryDlOverrides`: attribute set mapping a `Cargo.lock` source
+  string to a download URL that overrides the `dl` value advertised
+  by the registry's `config.json`. This is useful for routing crate
+  downloads through an internal mirror (e.g. an Artifactory or Nexus
+  proxy) in corporate or air-gapped environments where builds cannot
+  reach `crates.io` directly, and for pinning downloads to a mirror
+  you control so that upstream outages or changes do not break
+  builds. The URL follows the same substitution rules as the registry
+  `dl` field (see the
+  [registry index configuration](https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration)).
+  A bare URL with no `{...}` placeholders is treated as
+  `<url>/{crate}/{version}/download`. Example:
+  ```nix
+  {
+    registryDlOverrides = {
+      "registry+https://github.com/rust-lang/crates.io-index" =
+        "https://artifacts.example.com/artifactory/api/cargo/crates";
+      "registry+https://github.com/rust-lang/staging.crates.io-index.git" =
+        "https://artifacts.example.com/artifactory/api/cargo/staging-crates";
+    };
+  }
+  ```
 
 If a `Cargo.lock` file is available, you can alternatively use the
 `importCargoLock` function. In contrast to `fetchCargoVendor`, this

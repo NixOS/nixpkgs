@@ -231,11 +231,6 @@ def download_file_with_checksum(url: str, destination_path: Path) -> str:
 # Fetch the config.json file and get the .dl key from it
 # See: https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
 def fetch_dl_for_registry_source(source: RegistrySource) -> str:
-    # We hardcode the .dl value for crates-io registries to avoid having to clone the git repo, saving a few seconds
-    if source.ind == 0:
-        return "https://static.crates.io/crates"
-
-    eprint(f'Fetching .dl value for registry "{source.url}"')
     if source.is_sparse:
         url = source.url + "/config.json"
 
@@ -333,7 +328,7 @@ def make_tarball_relpath(pkg: RegistryPackage) -> Path:
     return reldir / filename
 
 
-def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
+def create_vendor_staging(lockfile_path: Path, out_dir: Path, registry_dl_overrides_path: Path) -> None:
     lockfile = load_lockfile(lockfile_path)
 
     out_dir.mkdir(exist_ok=True)
@@ -347,10 +342,19 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
     for source in git_sources:
         download_git_tree(source.url, source.git_sha_rev, out_dir)
 
+    with registry_dl_overrides_path.open("rb") as f:
+        registry_dl_overrides: dict[str, str] = json.load(f)
+
     raw_registry_source_to_dl: dict[str, str] = {}
     for source in registry_sources:
-        dl = fetch_dl_for_registry_source(source)
-        eprint(f'Using .dl value of "{dl}" for registry "{source.raw}"')
+        if source.raw in registry_dl_overrides:
+            dl = registry_dl_overrides[source.raw]
+            eprint(f'Using explicitly specified .dl value of "{dl}" for registry "{source.raw}"')
+        else:
+            eprint(f'Fetching .dl value for registry "{source.raw}"')
+            dl = fetch_dl_for_registry_source(source)
+            eprint(f'Using .dl value of "{dl}" for registry "{source.raw}"')
+
         raw_registry_source_to_dl[source.raw] = dl
 
     eprint(f"Downloading crate tarballs with {MAX_WORKERS} workers...")
@@ -592,7 +596,8 @@ def main() -> None:
     subcommand_func_dict = {
         "create-vendor-staging": lambda: create_vendor_staging(
             lockfile_path=Path(sys.argv[2]),
-            out_dir=Path(sys.argv[3])
+            out_dir=Path(sys.argv[3]),
+            registry_dl_overrides_path=Path(sys.argv[4])
         ),
         "create-vendor": lambda: create_vendor(
             vendor_staging_dir=Path(sys.argv[2]),
