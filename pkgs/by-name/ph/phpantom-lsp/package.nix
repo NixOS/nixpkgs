@@ -5,6 +5,8 @@
   versionCheckHook,
   _experimental-update-script-combinators,
   nix-update-script,
+  pkg-config,
+  zstd,
 }:
 let
   stubsSrc = fetchFromGitHub {
@@ -37,6 +39,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   cargoHash = "sha256-PH2Q38v2eX51jwHjGEObbaiJKZdv4qf/8eup0d97Iis=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  env.ZSTD_SYS_USE_PKG_CONFIG = "1";
+  buildInputs = [ zstd ];
 
   checkFlags = [
     "--test"
