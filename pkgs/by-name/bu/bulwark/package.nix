@@ -10,13 +10,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "bulwark";
-  version = "1.14.2";
+  version = "1.21.3";
 
   src = fetchFromGitHub {
     owner = "bulwarkmail";
     repo = "webmail";
     tag = finalAttrs.version;
-    hash = "sha256-fVYFas6YWt3IEXPFodduTLDk4jtGUaZpgSGXP7yUZcQ=";
+    hash = "sha256-icecuXh/W5UE5HzOcI7C/4CqE4IQvRaOauuNu5atGUs=";
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
@@ -24,7 +24,7 @@ buildNpmPackage (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  npmDepsHash = "sha256-0a/41q/e7h6FdBSJKhVPBHxEFsUdPLaA4yIpptBeQIU=";
+  npmDepsHash = "sha256-wLCor9cvdB4BRodP6YTU11iQonwhRoum5XscaNKh8FI=";
 
   strictDeps = true;
 
@@ -50,6 +50,9 @@ buildNpmPackage (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    node scripts/build-pst-worker.mjs
+    node scripts/build-store-worker.mjs
+    node scripts/build-plugin-sandbox.mjs
     NEXT_TELEMETRY_DISABLED=1 GIT_COMMIT=$(cat COMMIT) node_modules/.bin/next build --webpack
 
     runHook postBuild
