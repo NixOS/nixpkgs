@@ -59,14 +59,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "paperless-ngx";
-  version = "3.3.1";
+  version = "3.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Njw5VpjwBkrhmoQGBF/dmQ7smz/RW3RyN+T8op3sLx4=";
+    hash = "sha256-523WG24e9qhBTdIl327HE/o8e0TwE+HEbHkWPxRZwgI=";
   };
 
   postPatch = ''
