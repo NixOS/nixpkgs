@@ -513,9 +513,11 @@ in
           type = types.bool;
           default = false;
           description = ''
-            Enable development mode, which relaxes local API authentication
-            for debugging and browser access to 127.0.0.1:817. The packaged
-            desktop client does not require this option.
+            Enable development mode for debugging. It turns off authentication
+            of the local API on 127.0.0.1:817, so every local process and user
+            gets full control over Portmaster, and pages served from
+            `localhost` can access the API. The packaged desktop client does
+            not require this option.
           '';
         };
       };
@@ -588,7 +590,7 @@ in
                 default = [ ];
                 example = literalExpression ''
                   [
-                    pkgs.firefox
+                    pkgs.curl
                     {
                       package = pkgs.go;
                       directory = "share/go/bin";
@@ -653,7 +655,12 @@ in
       example = literalExpression ''
         {
           Firefox = {
-            packages = [ pkgs.firefox ];
+            packages = [
+              {
+                package = pkgs.firefox;
+                directory = "lib/firefox";
+              }
+            ];
             settings.filter.defaultAction = "permit";
           };
         }
