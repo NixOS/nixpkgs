@@ -3,6 +3,7 @@
   config,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   removeReferencesTo,
   autoAddDriverRunpath,
@@ -12,6 +13,7 @@
   rocmPackages,
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
+  normaliseNixPaths ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-3gECGBSWcGTYQkUlD4X2zrxZVvH2x2xfh5zdZ2jJbDQ=";
   };
+
+  patches = lib.optionals normaliseNixPaths [
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/NotAShelf/nyxexprs/refs/heads/main/pkgs/btop/patches/normalize_processes.patch";
+      hash = "sha256-mqnH5DmiJT5BNP3WzCjc1DjbIkGxt0u+PpPfmb9HAas=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
