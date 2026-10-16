@@ -11,20 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "android-file-transfer";
-  version = "4.5-unstable-2026-04-17";
+  version = "4.6";
 
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
-    # tag = "v${finalAttrs.version}";
-    # Switch to unreleased version for recent fixes, especially to fix the build on Darwin
-    # https://github.com/whoozle/android-file-transfer-linux/pull/360
-    # TODO: Switch back when the next version releases
-    rev = "88926930db41238c7b4d7237fc5849b9586cc7b8";
-    sha256 = "sha256-rk1QXq8JiLRZu+dz9HvWkOj5JyaLMXzTybByl46obE8=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-Ogq8aTOZvZTfceJuQ1vSjl5Lm5Ww/8jTUZwcXkDDaxI=";
   };
-
-  patches = [ ./darwin-dont-vendor-dependencies.patch ];
 
   nativeBuildInputs = [
     cmake
