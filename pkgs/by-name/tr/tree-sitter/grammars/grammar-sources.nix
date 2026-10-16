@@ -720,9 +720,9 @@
   };
 
   erlang = rec {
-    version = "0.1.0";
+    version = "0.21.0";
     url = "github:WhatsApp/tree-sitter-erlang?ref=${version}";
-    hash = "sha256-FH8DNE03k95ZsRwaiXHkaU9/cdWrWALCEdChN5ZPdog=";
+    hash = "sha256-K4ytlHKE5YW8gu1YvXVv9bKrpU6o0I7NNP0kXcV4mSk=";
     meta = {
       license = lib.licenses.asl20;
     };
