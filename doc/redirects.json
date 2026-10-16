@@ -251,6 +251,21 @@
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
   ],
+  "meson-subprojects": [
+    "index.html#meson-subprojects"
+  ],
+  "meson-subprojects-example": [
+    "index.html#meson-subprojects-example"
+  ],
+  "meson-subprojects-path": [
+    "index.html#meson-subprojects-path"
+  ],
+  "meson-subprojects-variable": [
+    "index.html#meson-subprojects-variable"
+  ],
+  "meson-subprojects-variables": [
+    "index.html#meson-subprojects-variables"
+  ],
   "minor-ghc-deprecation": [
     "index.html#minor-ghc-deprecation"
   ],
