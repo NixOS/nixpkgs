@@ -51,7 +51,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-6+x5SRQHIchtkdYZAZl+b28hMCaiQHrp9i3tMsN3DhE=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--use-github-releases" ];
+  };
 
   meta = gpauth.meta // {
     # Anchor meta.position here so nixpkgs-update targets gpclient.
