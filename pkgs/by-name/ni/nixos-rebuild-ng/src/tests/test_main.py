@@ -467,6 +467,7 @@ def test_execute_nix_build_vm_with_bootloader_and_specialisation(
         ),
     ]
 
+
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
 def test_execute_nix_build_image(mock_run: Mock, tmp_path: Path) -> None:
@@ -512,7 +513,8 @@ def test_execute_nix_build_image(mock_run: Mock, tmp_path: Path) -> None:
                 "--eval",
                 "--strict",
                 "--json",
-                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  builtins.attrNames set.config.system.build.images\n"
+                "--expr",
+                "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  builtins.attrNames set.config.system.build.images\n",
             ],
             check=True,
             stdout=PIPE,
@@ -523,7 +525,7 @@ def test_execute_nix_build_image(mock_run: Mock, tmp_path: Path) -> None:
                 "nix-build",
                 "<nixpkgs/nixos>",
                 "--attr",
-                "config.system.build.images.azure"
+                "config.system.build.images.azure",
             ],
             check=True,
             stdout=PIPE,
@@ -535,7 +537,8 @@ def test_execute_nix_build_image(mock_run: Mock, tmp_path: Path) -> None:
                 "--eval",
                 "--strict",
                 "--json",
-                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  set.config.system.build.images.azure.passthru.filePath\n"
+                "--expr",
+                "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  set.config.system.build.images.azure.passthru.filePath\n",
             ],
             check=True,
             stdout=PIPE,
@@ -543,9 +546,13 @@ def test_execute_nix_build_image(mock_run: Mock, tmp_path: Path) -> None:
         ),
     ]
 
+
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-def test_execute_nix_build_image_and_specialisation(mock_run: Mock, tmp_path: Path) -> None:
+def test_execute_nix_build_image_and_specialisation(
+    mock_run: Mock,
+    tmp_path: Path,
+) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
@@ -590,7 +597,8 @@ def test_execute_nix_build_image_and_specialisation(mock_run: Mock, tmp_path: Pa
                 "--eval",
                 "--strict",
                 "--json",
-                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  builtins.attrNames set.config.specialisation.custom-specialisation.configuration.system.build.images\n"
+                "--expr",
+                "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  builtins.attrNames set.config.specialisation.custom-specialisation.configuration.system.build.images\n",
             ],
             check=True,
             stdout=PIPE,
@@ -601,7 +609,7 @@ def test_execute_nix_build_image_and_specialisation(mock_run: Mock, tmp_path: Pa
                 "nix-build",
                 "<nixpkgs/nixos>",
                 "--attr",
-                "config.specialisation.custom-specialisation.configuration.system.build.images.azure"
+                "config.specialisation.custom-specialisation.configuration.system.build.images.azure",
             ],
             check=True,
             stdout=PIPE,
@@ -613,13 +621,15 @@ def test_execute_nix_build_image_and_specialisation(mock_run: Mock, tmp_path: Pa
                 "--eval",
                 "--strict",
                 "--json",
-                "--expr", "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  set.config.specialisation.custom-specialisation.configuration.system.build.images.azure.passthru.filePath\n"
+                "--expr",
+                "\nlet\n  value = import <nixpkgs/nixos>;\n  set = if builtins.isFunction value then value {} else value;\nin\n  set.config.specialisation.custom-specialisation.configuration.system.build.images.azure.passthru.filePath\n",
             ],
             check=True,
             stdout=PIPE,
             **DEFAULT_RUN_KWARGS,
         ),
     ]
+
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
@@ -704,9 +714,12 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
         ),
     ]
 
+
 @patch.dict(os.environ, {}, clear=True)
 @patch("subprocess.run", autospec=True)
-def test_execute_nix_build_image_flake_and_specialisation(mock_run: Mock, tmp_path: Path) -> None:
+def test_execute_nix_build_image_flake_and_specialisation(
+    mock_run: Mock, tmp_path: Path
+) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 

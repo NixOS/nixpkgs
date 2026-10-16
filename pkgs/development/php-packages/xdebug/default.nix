@@ -16,7 +16,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "xdebug";
     repo = "xdebug";
-    rev = version;
+    tag = version;
     hash = "sha256-UrRQqnWEE0y8I4DTDWn21yGScG42+XaFFl6UjcJXbtM=";
   };
 
