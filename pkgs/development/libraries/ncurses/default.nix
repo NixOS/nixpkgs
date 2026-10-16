@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
-    configureFlagsArray+=(
+    configureFlags+=(
       "--libdir=$out/lib"
       "--includedir=$dev/include"
       "--bindir=$dev/bin"
@@ -179,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
       suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     ''
     # When building a wide-character (Unicode) build, create backward
-    # compatibility links from the the "normal" libraries to the
+    # compatibility links from the "normal" libraries to the
     # wide-character libraries (e.g. libncurses.so to libncursesw.so).
     + lib.optionalString unicodeSupport ''
       libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
@@ -258,6 +258,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.binlore.out = binlore.synthesize ncurses ''
     execer cannot bin/{reset,tput,tset}
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/ncurses/";

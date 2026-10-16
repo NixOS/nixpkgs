@@ -15,12 +15,12 @@ let
   dotnet-sdk =
     with dotnetCorePackages;
     # required sdk
-    sdk_10_0
+    sdk_11_0
     // {
       # with additional packages to minimize deps.json
       inherit
         (combinePackages [
-          sdk_9_0
+          sdk_10_0
           sdk_8_0
         ])
         packages
@@ -38,18 +38,18 @@ in
 buildDotnetModule (finalAttrs: {
   inherit pname dotnet-sdk dotnet-runtime;
 
-  vsVersion = "2.131.79-prerelease";
+  vsVersion = "11.2.14-prerelease";
   src = fetchFromGitHub {
     owner = "dotnet";
     repo = "roslyn";
     rev = "VSCode-CSharp-${finalAttrs.vsVersion}";
-    hash = "sha256-Jxfnb52ebOIL4rw99leN+2axQ+Y2eoq/37YmN5vuCK4=";
+    hash = "sha256-ROwBKlSO0kkvz79dtBucWrdlp6gCTxtvkreDFbKuQlI=";
   };
 
   # versioned independently from vscode-csharp
   # "roslyn" in here:
   # https://github.com/dotnet/vscode-csharp/blob/main/package.json
-  version = "5.6.0-2.26163.11";
+  version = "5.12.0-1.26475.2";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
   nugetDeps = ./deps.json;
@@ -63,7 +63,7 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postPatch = ''
-    # Upstream uses rollForward = latestPatch, which pins to an *exact* .NET SDK version.
+    # Upstream uses rollForward = patch, which pins to an exact .NET SDK feature band.
     jq '.sdk.rollForward = "latestMinor"' < global.json > global.json.tmp
     mv global.json.tmp global.json
   '';
@@ -73,7 +73,7 @@ buildDotnetModule (finalAttrs: {
   dotnetFlags = [
     "-p:TargetRid=${rid}"
     # we don't want to build the binary
-    # and useAppHost is not enough, need to explicilty set to false
+    # and useAppHost is not enough, need to explicitly set to false
     "-p:UseAppHost=false"
     # avoid platform-specific crossgen packages
     "-p:PublishReadyToRun=false"
@@ -136,19 +136,25 @@ buildDotnetModule (finalAttrs: {
               ];
               meta.timeout = 60;
             }
+            # run a LSP handshake rather than matching startup logs -
+            # those go through a StreamWriter that upstream never flushes
             ''
               HOME=$TMPDIR
               expect <<"EOF"
-                spawn ${finalAttrs.meta.mainProgram} --stdio --logLevel Information --extensionLogDirectory log
-                expect_before timeout {
-                  send_error "timeout!\n"
-                  exit 1
+                set timeout 60
+                set req "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"processId\":null,\"rootUri\":null,\"capabilities\":{}}}"
+
+                set chan [open "|${finalAttrs.meta.mainProgram} --stdio --extensionLogDirectory log 2>@stderr" r+]
+                fconfigure $chan -translation binary -buffering none
+                spawn -open $chan
+                match_max 100000
+
+                send -- "Content-Length: [string length $req]\r\n\r\n$req"
+                expect {
+                  -ex {"id":1,"result"} { }
+                  timeout { send_error "\ntimeout!\n"; exit 1 }
+                  eof { send_error "\nserver exited!\n"; exit 1 }
                 }
-                expect "Language server initialized"
-                send \x04
-                expect eof
-                catch wait result
-                exit [lindex $result 3]
               EOF
               touch $out
             '';
@@ -158,6 +164,7 @@ buildDotnetModule (finalAttrs: {
         with-net8-sdk = with-sdk dotnetCorePackages.sdk_8_0;
         with-net9-sdk = with-sdk dotnetCorePackages.sdk_9_0;
         with-net10-sdk = with-sdk dotnetCorePackages.sdk_10_0;
+        with-net11-sdk = with-sdk dotnetCorePackages.sdk_11_0;
         no-sdk = with-sdk null;
         version = testers.testVersion { package = finalAttrs.finalPackage; };
       };

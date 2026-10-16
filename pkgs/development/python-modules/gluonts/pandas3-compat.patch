@@ -1,0 +1,169 @@
+diff --git a/src/gluonts/__init__.py b/src/gluonts/__init__.py
+index 30cbec26..d863292c 100644
+--- a/src/gluonts/__init__.py
++++ b/src/gluonts/__init__.py
+@@ -16,6 +16,7 @@
+ 
+ from pkgutil import extend_path
+ 
++from . import _pandas_compat  # noqa: F401
+ from .meta._version import __version__
+ 
+ __all__ = ["__version__", "__path__"]
+diff --git a/src/gluonts/_pandas_compat.py b/src/gluonts/_pandas_compat.py
+new file mode 100644
+index 00000000..1cf209ea
+--- /dev/null
++++ b/src/gluonts/_pandas_compat.py
+@@ -0,0 +1,138 @@
++"""
++Compatibility shim for pandas 3.0+.
++
++pandas 3.0 removed deprecated frequency aliases (H, T, S, M, A, Q, etc.).
++gluonts 0.17.0 was written for pandas <3 and uses these old aliases
++throughout its source code and test suite. Upstream caps pandas at <3
++(see https://github.com/awslabs/gluonts/pull/3321), but nixpkgs ships
++pandas 3.0+ only.
++
++This module monkey-patches to_offset, pd.Period, pd.period_range,
++pd.date_range, and DatetimeIndex.to_period to translate old-style
++frequency strings to their new-style equivalents before they reach
++pandas. The mappings differ between offsets (which use ME/QE/YE for
++end frequencies) and periods (which use M/Q/Y).
++
++It also restores the Tick.delta property removed in pandas 3.0.
++"""
++
++import re
++
++import pandas as pd
++import pandas.tseries.frequencies as _freq_module
++from pandas.tseries.offsets import Tick as _Tick
++
++# Old to new mappings for to_offset and date_range.
++# End frequencies get an E suffix; AS becomes YS.
++_OFFSET_MAP = {
++    "H": "h",
++    "T": "min",
++    "S": "s",
++    "M": "ME",
++    "m": "ME",
++    "A": "YE",
++    "Y": "YE",
++    "Q": "QE",
++    "AS": "YS",
++}
++
++# Old to new mappings for pd.Period and pd.period_range.
++# Period uses short names for end frequencies (M, Q, Y) and does not
++# support start variants (MS, QS, YS, AS) at all.
++_PERIOD_MAP = {
++    "H": "h",
++    "T": "min",
++    "S": "s",
++    "M": "M",
++    "m": "M",
++    "A": "Y",
++    "AS": "Y",
++    "YS": "Y",
++    "MS": "M",
++    "QS": "Q",
++}
++
++_FREQ_RE = re.compile(r"^(\d*)\s*([A-Za-z]+)(-.*)?$")
++
++
++def _translate(freq, mapping):
++    if not isinstance(freq, str):
++        return freq
++    m = _FREQ_RE.match(freq.strip())
++    if not m:
++        return freq
++    n, base, suffix = m.groups()
++    if base in mapping:
++        result = f'{n}{mapping[base]}'
++        if suffix:
++            result += suffix
++        return result
++    return freq
++
++
++# Patch to_offset (Python-level; Cython-internal callers are not
++# affected, so period_range/date_range/to_period are patched separately).
++_orig_to_offset = _freq_module.to_offset
++
++
++def _compat_to_offset(freq, *args, **kwargs):
++    return _orig_to_offset(_translate(freq, _OFFSET_MAP), *args, **kwargs)
++
++
++_freq_module.to_offset = _compat_to_offset
++
++# Patch pd.Period.__new__ (not a subclass, so type(), isinstance,
++# pickling and pydantic validation all work correctly).
++_orig_Period_new = pd.Period.__new__
++
++
++def _compat_Period_new(cls, *args, **kwargs):
++    if "freq" in kwargs:
++        kwargs["freq"] = _translate(kwargs["freq"], _PERIOD_MAP)
++    elif len(args) >= 2:
++        args = (args[0], _translate(args[1], _PERIOD_MAP)) + args[2:]
++    return _orig_Period_new(cls, *args, **kwargs)
++
++
++pd.Period.__new__ = staticmethod(_compat_Period_new)
++
++# Patch pd.period_range.
++_orig_period_range = pd.period_range
++
++
++def _compat_period_range(*args, **kwargs):
++    if "freq" in kwargs:
++        kwargs["freq"] = _translate(kwargs["freq"], _PERIOD_MAP)
++    return _orig_period_range(*args, **kwargs)
++
++
++pd.period_range = _compat_period_range
++
++# Patch pd.date_range (uses the offset naming convention).
++_orig_date_range = pd.date_range
++
++
++def _compat_date_range(*args, **kwargs):
++    if "freq" in kwargs:
++        kwargs["freq"] = _translate(kwargs["freq"], _OFFSET_MAP)
++    return _orig_date_range(*args, **kwargs)
++
++
++pd.date_range = _compat_date_range
++
++# Patch DatetimeIndex.to_period (goes through Cython to_offset
++# internally, bypassing the Python-level patch above).
++_orig_di_to_period = pd.DatetimeIndex.to_period
++
++
++def _compat_di_to_period(self, freq=None, *args, **kwargs):
++    freq = _translate(freq, _PERIOD_MAP)
++    return _orig_di_to_period(self, freq, *args, **kwargs)
++
++
++pd.DatetimeIndex.to_period = _compat_di_to_period
++
++# Restore Tick.delta property removed in pandas 3.0.
++# gluonts uses offset.delta * n to shift periods by a fixed timedelta.
++if not hasattr(_Tick, "delta"):
++    _Tick.delta = property(lambda self: pd.Timedelta(self.nanos, unit="ns"))
+diff --git a/src/gluonts/transform/feature.py b/src/gluonts/transform/feature.py
+index f5f519d5..13d9ea2b 100644
+--- a/src/gluonts/transform/feature.py
++++ b/src/gluonts/transform/feature.py
+@@ -500,7 +500,7 @@ class AddAggregateLags(MapTransformation):
+             )
+ 
+     def map_transform(self, data: DataEntry, is_train: bool) -> DataEntry:
+-        assert self.base_freq == data["start"].freq
++        assert pd.tseries.frequencies.to_offset(self.base_freq) == data["start"].freq
+ 
+         # convert to pandas Series for easier indexing and aggregation
+         if is_train:

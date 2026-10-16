@@ -22,7 +22,7 @@ in
     oddlama
   ];
 
-  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm_1_8;
+  _module.args.kanidmPackage = pkgs.lib.mkDefault pkgs.kanidm_1_11;
 
   nodes.server =
     { pkgs, ... }:
@@ -31,6 +31,25 @@ in
         package = kanidmPackage;
         server = {
           enable = true;
+
+          entryManagement.migrations = {
+            "00-base" = {
+              id = "a2b58e97-0aaf-4b04-a4e4-7984616fe1df";
+              assertions = [
+                {
+                  state = "present";
+                  id = "0ee875bd-408d-4ff9-85ca-c162f262493d";
+                  class = [
+                    "person"
+                    "account"
+                  ];
+                  name = "migration_user";
+                  displayname = "Migration User";
+                }
+              ];
+            };
+          };
+
           settings = {
             origin = "https://${serverDomain}";
             domain = serverDomain;
@@ -77,6 +96,8 @@ in
 
       networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ serverDomain ];
 
+      programs.fish.enable = true;
+
       security.pki.certificateFiles = [ certs.ca.cert ];
     };
 
@@ -117,6 +138,10 @@ in
           client.send_chars(f"{idm_admin_password}\n")
           client.wait_until_tty_matches("1", "Login Success for idm_admin")
 
+      with subtest("Test entry management migration"):
+          output = client.succeed("kanidm person get migration_user")
+          assert "No matching entries" not in output, "The migration user was not created"
+
       with subtest("Test unixd connection"):
           client.wait_for_unit("kanidm-unixd.service")
           client.wait_for_file("/run/kanidm-unixd/sock")
@@ -126,7 +151,7 @@ in
           client.wait_for_unit("getty@tty1.service")
           client.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
           client.succeed("kanidm person create testuser TestUser")
-          client.succeed("kanidm person posix set --shell \"$SHELL\" testuser")
+          client.succeed("kanidm person posix set --shell \"/run/current-system/sw/bin/fish\" testuser")
           client.send_chars("kanidm person posix set-password testuser\n")
           client.wait_until_tty_matches("1", "Enter new")
           client.send_chars("${testCredentials.password}\n")
@@ -150,8 +175,10 @@ in
           client.wait_until_tty_matches("2", "Password: ")
           client.send_chars("${testCredentials.password}\n")
           client.wait_until_succeeds("systemctl is-active user@$(id -u testuser).service")
-          client.send_chars("touch done\n")
-          client.wait_for_file("/home/testuser@${serverDomain}/done")
+          client.send_chars("echo -n $SHELL > shell\n")
+          client.wait_for_file("/home/testuser@${serverDomain}/shell")
+          user_shell = client.succeed("cat /home/testuser@${serverDomain}/shell").strip()
+          assert user_shell == "/run/current-system/sw/bin/fish", f"Invalid user shell, expected /run/current-system/sw/bin/fish, got {user_shell}"
 
       server.shutdown()
       client.shutdown()

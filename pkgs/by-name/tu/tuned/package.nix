@@ -16,7 +16,6 @@
   pkg-config,
   powertop,
   python3Packages,
-  tuna,
   util-linux,
   versionCheckHook,
   virt-what,
@@ -26,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tuned";
-  version = "2.27.0";
+  version = "2.28.0";
 
   outputs = [
     "out"
@@ -38,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "redhat-performance";
     repo = "tuned";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PlF2T+EpveFkKPMU/6ZMXDO0q8Efzol4HJ4CX0wsBoY=";
+    hash = "sha256-WBQgtmlCbSUkeEtfYfCgf7kCCA9G+IZiWArOX9i/OH8=";
   };
 
   patches = [
@@ -63,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
       $(find profiles/ -type f -executable -name '*.sh') \
       --replace-warn "/usr/share" "$out/share" \
       --replace-warn "/usr/lib" "$out/lib"
+
+    substituteInPlace tests/unit/test_functions.py \
+      --replace-fail "/bin/bash" "${stdenv.shell}" \
+      --replace-fail '"/bin/" + command' "shutil.which(command)"
   '';
 
   strictDeps = true;
@@ -80,10 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus-python
     pygobject3
     pyinotify
-    pyperf
     python-linux-procfs
     pyudev
-    tuna
   ];
 
   makeFlags = [

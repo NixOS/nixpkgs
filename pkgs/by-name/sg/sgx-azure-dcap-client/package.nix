@@ -87,6 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
       veehaitch
     ];
     platforms = [ "x86_64-linux" ];
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
   };
 })

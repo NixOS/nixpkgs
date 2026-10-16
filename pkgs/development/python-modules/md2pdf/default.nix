@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "md2pdf";
-  version = "3.1.0";
+  version = "3.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jmaupetit";
     repo = "md2pdf";
     tag = "v${version}";
-    hash = "sha256-ksccl9K0o0mZleyLe1K1ob78W2MKZksTFtu6/dZUWeg=";
+    hash = "sha256-EZIiuyy2FhHgpCh95/KbYfQpxyPQfDHnB/Q5yo2xVac=";
   };
 
   build-system = [ hatchling ];

@@ -19,6 +19,8 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
+      patchShebangs .
+
       npm --workspace=gemini-cli-vscode-ide-companion run prepackage
 
       # the bundled vsce is broken, using our packaged version
@@ -36,6 +38,12 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=Google.gemini-cli-vscode-ide-companion";
     license = lib.licenses.asl20;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    problems.removal = {
+      message = "Unpaid tier and Google AI Pro/Ultra users: Gemini CLI was replaced by Antigravity CLI.";
+      urls = [
+        "https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/"
+      ];
+    };
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };
 })

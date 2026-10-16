@@ -3,10 +3,12 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   hatchling,
   lib,
   mashumaro,
   orjson,
+  pyprojectVersionPatchHook,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
@@ -16,15 +18,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyportainer";
-  version = "1.0.34";
+  version = "1.0.49";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qa+NbX8y/2bK3B7gHWuTeAKT0bTaZS2HbWS/75a8tcA=";
+    hash = "sha256-EnrLaPiJM8TUzJDw1c2rfa33sd2NQlv1PO4vYQwK81Y=";
   };
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   build-system = [ hatchling ];
 
@@ -40,10 +44,13 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     aresponses
+    freezegun
     pytest-cov-stub
     pytestCheckHook
     syrupy
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     changelog = "https://github.com/erwindouna/pyportainer/releases/tag/${finalAttrs.src.tag}";

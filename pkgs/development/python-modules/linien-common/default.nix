@@ -70,24 +70,6 @@ buildPythonPackage rec {
     #
     # - https://github.com/linien-org/linien/commit/ebbb2276b500a18826d11893bb43699b65692c5e
     # - https://github.com/linien-org/linien/issues/377
-    #
-    # To evaluate this package with python3.withPackages, use:
-    #
-    # pythonEnv = pkgs.linien-gui.passthru.python.withPackages(ps: {
-    #   ps.linien-common
-    #   # Other packages...
-    # });
-    #
-    # NOTE that the above Python environment will use Numpy 1 throughout all
-    # packages wrapped there (see expression in linien-gui), and this may
-    # trigger rebuilds for dependencies that depend on Numpy too. Be ready to
-    # also add more `packageOverrides` to make sure these other dependencies do
-    # build with numpy_1.
-    #
-    # Last NOTE: If you need more packageOverrides besides those provided in
-    # the `linien-gui` expression, beware of:
-    #
-    # - https://github.com/NixOS/nixpkgs/issues/44426
     broken = lib.versionAtLeast numpy.version "2";
   };
 }

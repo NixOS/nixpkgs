@@ -1,0 +1,17 @@
+diff --git a/OpenGL/platform/ctypesloader.py b/OpenGL/platform/ctypesloader.py
+index d9ff006..ce7d99e 100644
+--- a/OpenGL/platform/ctypesloader.py
++++ b/OpenGL/platform/ctypesloader.py
+@@ -59,6 +59,12 @@ def _loadLibraryPosix(dllType, name, mode):
+     ])))
+     err = None
+ 
++    filenames_to_try = [
++        (f"{prefix}/{filename}" if prefix else filename)
++        for prefix in ":@GL_LD_LIBRARY_PATH@".split(":")
++        for filename in filenames_to_try
++    ]
++
+     for filename in filenames_to_try:
+         try:
+             result = dllType(filename, mode)

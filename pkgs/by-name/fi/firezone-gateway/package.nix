@@ -6,15 +6,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "firezone-gateway";
-  version = "1.4.18";
+  version = "1.6.2";
   src = fetchFromGitHub {
     owner = "firezone";
     repo = "firezone";
     tag = "gateway-${finalAttrs.version}";
-    hash = "sha256-vxOFca6yO9AvgIJwizhaNlOjOvV00+ckQfXIJ17ASq4=";
+    hash = "sha256-Xu1wTncjBvlrlKqgDy7D+uR9O0clvmxlxrkkUvW0ET4=";
   };
 
-  cargoHash = "sha256-8YftVt72JpmxWB/WvOPpduE0/QgYvQhSuFRmsFth2iU=";
+  cargoHash = "sha256-/yGJpEfLeHSvlbb6HEBTgmt91DDd5jtzqfp+5SwjJBw=";
   sourceRoot = "${finalAttrs.src.name}/rust";
   buildAndTestSubdir = "gateway";
   env.RUSTFLAGS = "--cfg system_certs";

@@ -16,34 +16,30 @@
 let
   mcpp' = mcpp.overrideAttrs (prevAttrs: rec {
     pname = "mcpp-zeroc-ice";
-    version = "2.7.3";
+    version = "2.7.2.20";
 
     src = fetchFromGitHub {
       owner = "zeroc-ice";
       repo = "mcpp";
       rev = "v${version}";
-      hash = "sha256-hZGU5mqMRTTHV2bR9uzM6ALj1sypjPxO5Ajg8aKzLxc=";
+      hash = "sha256-FlzHpfYoHzbz5DfXgkr6Hf96xejRKd0Rr1TmzE5GyGg=";
     };
 
     # zeroc-ice's fork diverges quite a bit from upstream mcpp, so prevAttrs.patches is not used here
-    patches = [
-      # See https://github.com/zeroc-ice/mcpp/pull/12
-      ./fix-mb_init.patch
-      ./fix-reserved-keywords.patch
-    ];
+    patches = [ ];
 
     installFlags = prevAttrs.installFlags or [ ] ++ [ "PREFIX=$(out)" ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "zeroc-ice";
-  version = "3.7.10";
+  version = "3.7.11";
 
   src = fetchFromGitHub {
     owner = "zeroc-ice";
     repo = "ice";
     rev = "v${version}";
-    hash = "sha256-l3cKsR8HSdtFGw1S12xueQOu/U9ABlOxQQtbHBj2izs=";
+    hash = "sha256-mpPmrmzCNHccBcPCZtrYYURTIBLC9ppGp4pMc1RFrWo=";
   };
 
   buildInputs = [
@@ -64,8 +60,13 @@ stdenv.mkDerivation rec {
       "LANGUAGES=cpp"
       "CONFIGS=${if cpp11 then "cpp11-shared" else "shared"}"
       "SKIP=slice2py" # provided by a separate package
+      # Ice links the Slice compilers fully statically by default. This requires static glibc; link them dynamically like every other binary.
+      "fully_static_ldflags="
     )
   '';
+
+  # Ice 3.7 predates C++20. GCC 16 defaults to -std=gnu++20
+  env.NIX_CFLAGS_COMPILE = "-std=gnu++17";
 
   enableParallelBuilding = true;
 

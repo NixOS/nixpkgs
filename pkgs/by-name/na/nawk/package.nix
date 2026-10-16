@@ -5,17 +5,18 @@
   bison,
   buildPackages,
   installShellFiles,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nawk";
-  version = "20251225";
+  version = "20260426";
 
   src = fetchFromGitHub {
     owner = "onetrueawk";
     repo = "awk";
     rev = finalAttrs.version;
-    hash = "sha256-8QocZx6Diy3xLakZQxqmWdOywvhVYRjSndY5EiV+dng=";
+    hash = "sha256-ndhSOl4xEwbDQ51g7yuwe3MOfmQrzePuanmyXYhWp+I=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     installManPage nawk.1
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/onetrueawk/awk";

@@ -2,8 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  nodejs_20,
-  pnpm_9,
+  nodejs,
+  pnpm_10, # upstream uses pnpm 9 which is insecure. pnpm 11 breaks when fetching deps.
   fetchPnpmDeps,
   pnpmConfigHook,
   makeWrapper,
@@ -13,26 +13,28 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openspec";
-  version = "1.2.0";
+  version = "1.14.1";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "Fission-AI";
     repo = "OpenSpec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DIMMOEVQ2FQj48WAF4S1IhxX5ChrFZll51CZ3bZNGHE=";
+    hash = "sha256-676EHtFuukUZT+bipls4n/Zmk7tf1POW15CGXHflFSY=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-9s2kdvd7svK4hofnD66HkDc86WTQeayfF5y7L2dmjNg=";
+    hash = "sha256-NIMHf7t+FnBgsswDtB1k4E/zX1ks1r3708ggE2ps9E8=";
   };
 
   nativeBuildInputs = [
-    nodejs_20
+    nodejs
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     makeWrapper
     installShellFiles
   ];
@@ -51,8 +53,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mkdir -p $out/bin $out/lib/openspec
 
     substituteInPlace bin/openspec.js \
-      --replace '#!/usr/bin/env node' '#!${nodejs_20}/bin/node' \
-      --replace "../dist" "$out/lib/openspec/dist"
+      --replace-fail '#!/usr/bin/env node' '#!${nodejs}/bin/node' \
+      --replace-fail "../dist" "$out/lib/openspec/dist"
     install -Dm755 bin/openspec.js $out/bin/openspec
 
     cp -r dist $out/lib/openspec/
@@ -70,11 +72,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       --zsh <($out/bin/openspec completion generate zsh)
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "AI-native system for spec-driven development";
     homepage = "https://github.com/Fission-AI/OpenSpec";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ superherointj ];
+    maintainers = with lib.maintainers; [
+      kalbasit
+      sarahec
+    ];
     platforms = lib.platforms.all;
     mainProgram = "openspec";
   };

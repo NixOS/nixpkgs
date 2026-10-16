@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "7.1.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker-py";
     tag = version;
-    hash = "sha256-sk6TZLek+fRkKq7kG9g6cR9lvfPC8v8qUXKb7Tq4pLU=";
+    hash = "sha256-4LmmWAmwoFroV4Ez0r1X72jCpBt69upQMrsA4eP5K6o=";
   };
 
   build-system = [

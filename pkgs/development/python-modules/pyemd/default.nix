@@ -1,24 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  cython,
   fetchPypi,
   numpy,
-  oldest-supported-numpy,
-  packaging,
+  pot,
   pytestCheckHook,
+  pythonOlder,
   setuptools-scm,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyemd";
-  version = "1.0.0";
+  version = "2.0.0";
   pyproject = true;
 
+  __structuredAttrs = true;
+
+  disabled = pythonOlder "3.12";
+
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-tCta57LRWx1N7mOBDqeYo5IX6Kdre0nA62OoTg/ZAP4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-FZaflENcK+mOajakkwfINm49/BpnASrMMG6SyQtQP+U=";
   };
 
   build-system = [
@@ -26,28 +29,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [
-    cython
+  dependencies = [
     numpy
-    oldest-supported-numpy
-    packaging
+    pot
   ];
-
-  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # Broken with Numpy 2.x, https://github.com/wmayner/pyemd/issues/68
-    "test_emd_samples_2"
-    "test_emd_samples_3"
-  ];
 
   meta = {
     description = "Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance";
     homepage = "https://github.com/wmayner/pyemd";
-    changelog = "https://github.com/wmayner/pyemd/releases/tag/${version}";
+    changelog = "https://github.com/wmayner/pyemd/blob/v${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

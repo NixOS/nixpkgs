@@ -15,7 +15,7 @@
   libbs2b,
   libebur128,
   libmysofa,
-  libsigcxx30,
+  libsigcxx_3_0,
   libsndfile,
   lilv,
   lsp-plugins,
@@ -33,6 +33,7 @@
   speexdsp,
   onetbb,
   webrtc-audio-processing,
+  x42-plugins,
   zam-plugins,
   zita-convolver,
   wrapGAppsHook3,
@@ -55,17 +56,18 @@ let
     kirigami-addons
     qqc2-desktop-style
     ;
+  speexdsp' = speexdsp.override { withFftw3 = false; };
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.1.6";
+  version = "8.3.0";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MNBlhwF8quJ0wXBzwyn7KM2TNgbYbWYHTK6itn0fUVU=";
+    hash = "sha256-8SAmWeLK4eAtjoNzrlK+8qvshCY/T96KNk+oHBYdv9Q=";
   };
 
   nativeBuildInputs = [
@@ -98,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbs2b
     libebur128
     libmysofa
-    libsigcxx30
+    libsigcxx_3_0
     libsndfile
     lilv
     lv2
@@ -109,10 +111,13 @@ stdenv.mkDerivation (finalAttrs: {
     rnnoise
     rubberband
     soundtouch
-    speexdsp
+    speexdsp'
     onetbb
     webrtc-audio-processing
     zita-convolver
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86 [
+    x42-plugins
   ];
 
   preFixup =
@@ -122,6 +127,9 @@ stdenv.mkDerivation (finalAttrs: {
         lsp-plugins # delay, limiter, multiband compressor
         mda_lv2 # loudness
         zam-plugins # maximizer
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isx86 [
+        x42-plugins # autotune
       ];
 
       ladspaPlugins = [

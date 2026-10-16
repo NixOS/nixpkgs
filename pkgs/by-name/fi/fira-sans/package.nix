@@ -21,6 +21,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
+  preInstall = ''
+    rm -r "__MACOSX"
+  '';
+
   nativeBuildInputs = [ installFonts ];
 
   meta = {

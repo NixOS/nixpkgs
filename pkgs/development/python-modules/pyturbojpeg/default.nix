@@ -6,20 +6,21 @@
   libjpeg_turbo,
   setuptools,
   numpy,
-  python,
+  pytest-memray,
+  pytestCheckHook,
   replaceVars,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyturbojpeg";
-  version = "2.2.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilohuang";
     repo = "PyTurboJPEG";
-    tag = "v${version}";
-    hash = "sha256-Sue8S/2/dY3aF7fihHuqpHXotcXcijcqAXGCJn8Z5VE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sZB0BzgrA0I3GHtu5Z6cWpMQcE5Lqkvwix0ztbrWj3g=";
   };
 
   patches = [
@@ -32,22 +33,23 @@ buildPythonPackage rec {
 
   dependencies = [ numpy ];
 
-  # upstream has no tests, but we want to test whether the library is found
-  checkPhase = ''
-    runHook preCheck
+  nativeCheckInputs = [
+    pytest-memray
+    pytestCheckHook
+  ];
 
-    ${python.interpreter} -c 'from turbojpeg import TurboJPEG; TurboJPEG()'
-
-    runHook postCheck
-  '';
+  disabledTests = [
+    # our patch breaks the test
+    "test_library_loading_error_message"
+  ];
 
   pythonImportsCheck = [ "turbojpeg" ];
 
   meta = {
-    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${src.tag}";
+    changelog = "https://github.com/lilohuang/PyTurboJPEG/releases/tag/${finalAttrs.src.tag}";
     description = "Python wrapper of libjpeg-turbo for decoding and encoding JPEG image";
     homepage = "https://github.com/lilohuang/PyTurboJPEG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

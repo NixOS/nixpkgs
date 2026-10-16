@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # conbination of:
+    # combination of:
     # https://github.com/bmc/daemonize/commit/eaf4746d47e171e7b8655690eb1e91fc216f2866
     # https://github.com/bmc/daemonize/pull/39
     ./include-write-prototype.patch

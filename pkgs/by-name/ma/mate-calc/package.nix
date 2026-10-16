@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Calculator for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = [ lib.licenses.gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.mate ];
   };

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.5.4";
+  version = "4.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-python";
     tag = "v${version}";
-    hash = "sha256-2ZwLpkT46KNTQ1ymvMGjnrfHQaIy/rXid0kXoCBixXA=";
+    hash = "sha256-3MElqZALdwmyUA7xTWp6mG8mhRJuUZbYTkvvQc4UfVc=";
   };
 
   # undefined symbol: yr_finalize

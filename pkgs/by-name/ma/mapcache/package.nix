@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mapcache";
-  version = "1.14.1";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "mapcache";
     tag = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
-    hash = "sha256-AwdZdOEq9SZ5VzuBllg4U1gdVxZ9IVdqiDrn3QuRdCk=";
+    hash = "sha256-Cc8I2TWS+YZh8gFwpaCKVkXyyNqg0MKlfxkSMv3WjgE=";
   };
 
   nativeBuildInputs = [

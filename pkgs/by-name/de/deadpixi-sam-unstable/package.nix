@@ -48,6 +48,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/deadpixi/sam";
     description = "Updated version of the sam text editor";
     license = lib.licenses.lpl-102;

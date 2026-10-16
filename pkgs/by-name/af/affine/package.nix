@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitHub,
+  substitute,
   rustPlatform,
   electron,
   nodejs_22,
@@ -46,12 +47,28 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.26.4";
+  version = "0.26.7";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5tOAkKTpdkN1UDztmy4Dt9kpRrWYVLolnXRwHmfXpLo=";
+    hash = "sha256-RotC2mNtMig3QKcKo8zr15myAqkPDuBopvV9wLlr2tQ=";
+
+    # Remove when updating since upstream has updated Yarn
+    # https://github.com/toeverything/AFFiNE/commit/6375f5ab8c389831327284f4795d8397de085153
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -106,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-nNPttQJBYJ3eyjR/INoC0MW5e3WcUkDpLdQ0W10+qj0=";
+    outputHash = "sha256-gje8iTCiy3N/zYRuf/CGUVfGw0RSVXTPu4SjnE9+OY8=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [
@@ -251,7 +268,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.fromSource ];

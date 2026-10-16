@@ -6,7 +6,9 @@ BADLIST=ld-elf.so.1
 
 oobpatch() {
     $out/libexec/ld-elf.so.1 $src/bin/cp $1 ./tmp
-    $out/libexec/ld-elf.so.1 $out/bin/patchelf --set-rpath $out/lib --set-interpreter $out/libexec/ld-elf.so.1 ./tmp
+    $out/libexec/ld-elf.so.1 $out/bin/patchelf --set-rpath $out/lib ./tmp
+    # This will fail for libraries, but we don't have set -e so it's fine
+    $out/libexec/ld-elf.so.1 $out/bin/patchelf --set-interpreter $out/libexec/ld-elf.so.1 ./tmp
     $out/libexec/ld-elf.so.1 $src/bin/mv ./tmp $1
     BADLIST="$BADLIST|${1##*/}"
 }
@@ -14,6 +16,9 @@ oobpatch() {
 oobpatch $out/bin/patchelf
 oobpatch $out/lib/libthr.so.3
 oobpatch $out/lib/libc.so.7
+oobpatch $out/lib/libgmp.so.10
+oobpatch $out/lib/librt.so.1
+oobpatch $out/lib/libsys.so.7
 
 for f in $($out/libexec/ld-elf.so.1 $out/bin/find $out/lib -type f); do
     $out/libexec/ld-elf.so.1 $out/bin/grep -E "$BADLIST" <<<"$f" && continue

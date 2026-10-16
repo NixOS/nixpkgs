@@ -1,20 +1,21 @@
 {
-  buildGo126Module,
+  stdenv,
+  buildGo127Module,
   lib,
   fetchFromGitHub,
   nix-update-script,
   buildNpmPackage,
   nixosTests,
 }:
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "beszel";
-  version = "0.18.4";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ugxy23bLrKIDclrYRFJc6Nq4Ak2S3OLeyMaxuRkS/tY=";
+    hash = "sha256-F7N9IVqOk+pNrH1wIqkNthLNhqW+HmTkJB43RwBMWpo=";
   };
 
   webui = buildNpmPackage {
@@ -48,20 +49,48 @@ buildGo126Module (finalAttrs: {
 
     sourceRoot = "${finalAttrs.src.name}/internal/site";
 
-    npmDepsHash = "sha256-509/n5OH4z6LZH+jlmDLl2DlqKrD7M5ajtalmF/4n1o=";
+    npmDepsHash = "sha256-mYAD8FrQwa+F/VgGxFpe8vqucfZaM0PmY+gJJqw1IKk=";
   };
 
-  vendorHash = "sha256-V9P3VP4CsboaWPIt/MhtxYDsYH3pwKL4xK5YcLKgbI8=";
+  vendorHash = "sha256-rIDsv9BL4k04dMXm0Sqbdjt+W98SSGEaWYP/laBVFrk=";
 
   preBuild = ''
     mkdir -p internal/site/dist
     cp -r ${finalAttrs.webui}/* internal/site/dist
   '';
 
+  checkFlags =
+    let
+      skippedTests = [
+        "TestCollectorStartHelpers/nvtop_collector"
+        "TestCollectorStartHelpers/rocm-smi_collector"
+        "TestIoctlDeviceSizeFailure"
+        # This subtest assumes enough host CPUs for an 8s CPU delta over 1s to stay below 100%.
+        "TestServiceUpdateCPUPercent/subsequent_call_calculates_CPU_percentage"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "TestCollectorStartHelpers/nvidia-smi_collector"
+        "TestCollectorStartHelpers/tegrastats_collector"
+        "TestNewGPUManagerPriorityNvtopFallback"
+        "TestNewGPUManagerPriorityMixedCollectors"
+        "TestNewGPUManagerPriorityNvmlFallbackToNvidiaSmi"
+        "TestNewGPUManagerConfiguredCollectorsMustStart"
+        "TestNewGPUManagerConfiguredNvmlBypassesCapabilityGate"
+        "TestNewGPUManagerJetsonIgnoresCollectorConfig"
+        "TestMonitorTCPAddressFallback/first_address_fails"
+      ];
+    in
+    [
+      "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$"
+      "-tags=testing,no_ui"
+    ];
+
   postInstall = ''
     mv $out/bin/agent $out/bin/beszel-agent
     mv $out/bin/hub $out/bin/beszel-hub
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru = {
     updateScript = nix-update-script {

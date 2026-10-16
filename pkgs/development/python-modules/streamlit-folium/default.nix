@@ -15,14 +15,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "streamlit-folium";
-  version = "0.26.2";
+  version = "0.27.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "randyzwitch";
     repo = "streamlit-folium";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6BCJ1j6p46EA696Ll9p3JOwGywp5gdhFA6k6HhVAZYo=";
+    hash = "sha256-DpkAwbSi8nQ2E9ItxCq89ubPGn5u8/caYj0GaGuTnR4=";
   };
 
   postPatch = ''
@@ -64,5 +64,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/randyzwitch/streamlit-folium/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
+    teams = [ lib.teams.geospatial ];
   };
 })

@@ -6,7 +6,6 @@
   buildPythonPackage,
   click,
   dacite,
-  decorator,
   fetchFromGitHub,
   first,
   jsonpath-ng,
@@ -17,49 +16,53 @@
   pyfiglet,
   pyperclip,
   pytestCheckHook,
+  pyprojectVersionPatchHook,
+  pythonAtLeast,
   antlr4,
   pyyaml,
   setuptools,
+  typing-extensions,
   urwid,
   parameterized,
   wcwidth,
   yamale,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-fx";
-  version = "0.3.2";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cielong";
     repo = "pyfx";
-    tag = "v${version}";
-    hash = "sha256-Q5ihWnoa7nf4EkrY4SgrwjaNvTva4RdW9GRbnbsPXPc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a9gKdM6InH0KP0yrDOo6W90ClMVshbVxLjtiG9yiq1s=";
   };
 
   postPatch = ''
     rm src/pyfx/model/common/jsonpath/*.py # upstream checks in generated files, remove to ensure they were regenerated
     antlr -Dlanguage=Python3 -visitor src/pyfx/model/common/jsonpath/*.g4
     rm src/pyfx/model/common/jsonpath/*.{g4,interp,tokens} # no need to install
-
-    # https://github.com/cielong/pyfx/pull/148
-    substituteInPlace src/pyfx/view/common/frame.py \
-      --replace-fail "self.__super.__init__()" "super().__init__()"
   '';
+
+  # the antlr stuff is broken: NameError: name 'JSONPathParser' is not defined
+  disabled = pythonAtLeast "3.14";
 
   pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ antlr4 ];
+  nativeBuildInputs = [
+    antlr4
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     antlr4-python3-runtime
     asciimatics
     click
     dacite
-    decorator
     first
     jsonpath-ng
     loguru
@@ -69,6 +72,7 @@ buildPythonPackage rec {
     pyfiglet
     pyperclip
     pyyaml
+    typing-extensions
     urwid
     wcwidth
     yamale
@@ -84,17 +88,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyfx" ];
 
-  disabledTests = [
-    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
-    "test_start"
-  ];
-
   meta = {
     description = "Module to view JSON in a TUI";
     homepage = "https://github.com/cielong/pyfx";
-    changelog = "https://github.com/cielong/pyfx/releases/tag/${src.tag}";
+    changelog = "https://github.com/cielong/pyfx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pyfx";
   };
-}
+})

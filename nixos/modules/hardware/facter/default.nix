@@ -5,6 +5,7 @@
 }:
 {
   imports = [
+    ./amd-cpu.nix
     ./boot.nix
     ./bluetooth.nix
     ./camera

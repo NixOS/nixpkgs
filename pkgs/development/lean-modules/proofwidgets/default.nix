@@ -7,24 +7,20 @@
   nodejs,
 }:
 
-let
+buildLakePackage (finalAttrs: {
+  pname = "lean4-proofwidgets";
+  # nixpkgs-update: no auto update
+  version = "0.0.111-unstable-2026-09-14";
+
   src = fetchFromGitHub {
     owner = "leanprover-community";
     repo = "ProofWidgets4";
-    tag = "v0.0.87";
-    hash = "sha256-qXEqNfwUBPnxAtLRkBZTBFhrM4JYl43gLo/PM6HOG7o=";
+    rev = "106ff4fafc74ef4ac99d81dbf3ab399118f497a5";
+    hash = "sha256-xjd3p+637F5q7xGTpDpy3/UCewpO8ArCfSAMAnAAjgs=";
   };
-in
-
-buildLakePackage {
-  pname = "lean4-proofwidgets";
-  version = "0.0.87";
-
-  inherit src;
 
   leanPackageName = "proofwidgets";
 
-  # ProofWidgets has no Lean dependencies (lake-manifest.json packages = []).
   lakeHash = null;
 
   nativeBuildInputs = [
@@ -32,20 +28,14 @@ buildLakePackage {
     npmHooks.npmConfigHook
   ];
 
-  # Pre-fetched npm dependencies for the TypeScript widget build
-  # (npm/rollup in widget/).  npmConfigHook installs these offline.
   npmDeps = fetchNpmDeps {
     name = "lean4-proofwidgets-npm-deps";
-    inherit src;
+    src = finalAttrs.src;
     sourceRoot = "source/widget";
-    hash = "sha256-CzBRrreOSytquZ/xFHPlY8r+lz5Bg9Zk9ienRhc8SiY=";
+    hash = "sha256-z3LCBPmowLlkn5w/z72J1l8WnY60F8I7r48HMM/Lnns=";
   };
   npmRoot = "widget";
 
-  # Lake's widgetJsAll target runs `npm clean-install` which wipes
-  # node_modules and the patched shebangs that npmConfigHook applied.
-  # Wrap npm to skip ci/clean-install (deps already installed) while
-  # passing `npm run build` through — same pattern as llama-cpp/evcc.
   postConfigure = ''
     local realNpm
     realNpm="$(type -P npm)"
@@ -65,4 +55,4 @@ buildLakePackage {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nadja-y ];
   };
-}
+})

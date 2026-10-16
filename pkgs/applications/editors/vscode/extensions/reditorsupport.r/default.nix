@@ -14,8 +14,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "r";
     publisher = "reditorsupport";
-    version = "2.8.7";
-    hash = "sha256-pA3/81UYrieDfGYn1fVI6KY9B7A5KAhGIzftZtzXQVc=";
+    version = "2.8.8";
+    hash = "sha256-mt2bes7aHcAHLMngSLW/zI3kSIzNKALqX+g0UXo84uI=";
   };
   nativeBuildInputs = [
     jq

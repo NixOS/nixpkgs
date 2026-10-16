@@ -201,7 +201,7 @@ in
         in
         if builtins.length matches != 0 then
           { inherit path matches; }
-        else if path == /. then
+        else if toString path == "/" then
           null
         else
           go (dirOf path);
@@ -211,7 +211,7 @@ in
           base = baseNameOf file;
           type = (builtins.readDir parent).${base} or null;
         in
-        file == /. || type == "directory";
+        toString file == "/" || type == "directory";
     in
     go (if isDir then file else parent);
 
@@ -371,11 +371,12 @@ in
     let
       inherit (lib)
         concatMapAttrs
-        id
         makeScope
         recurseIntoAttrs
         removeSuffix
         ;
+      isNixFile = hasSuffix ".nix";
+      removeNixSuffix = removeSuffix ".nix";
 
       # Generate an attrset corresponding to a given directory.
       # This function is outside `packagesFromDirectoryRecursive`'s lambda expression,
@@ -398,10 +399,10 @@ in
                 }
               );
             }
-          else if type == "regular" && hasSuffix ".nix" name then
+          else if type == "regular" && isNixFile name then
             {
               # call .nix files
-              "${removeSuffix ".nix" name}" = callPackage path { };
+              "${removeNixSuffix name}" = callPackage path { };
             }
           else if type == "regular" then
             {

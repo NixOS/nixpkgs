@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-sepadebit";
-  version = "2.7.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-sepadebit";
     tag = "v${version}";
-    hash = "sha256-Xnp7aic+Xf4wJzJbWqhsfMajT4AOQGQMIGIewJ5B37o=";
+    hash = "sha256-CHhen9rtg3tu0UtlbXzee714fVc5tU4Y1rDqdMlzPYY=";
   };
 
   build-system = [

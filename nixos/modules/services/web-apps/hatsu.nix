@@ -66,7 +66,7 @@ in
 
       description = ''
         Configuration for Hatsu, see
-        <link xlink:href="https://hatsu.cli.rs/admins/environments.html"/>
+        <https://hatsu.cli.rs/admins/environments.html>
         for supported values.
       '';
     };

@@ -158,6 +158,8 @@ lib.extendMkDerivation {
       };
     in
     {
+      inherit universal;
+
       linux = universal // {
         outputs = universal.outputs or [ ] ++ [ "debug" ];
 

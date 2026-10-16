@@ -275,7 +275,7 @@ in
             "${cfg.package}/bin/sanoid"
             "--cron"
             "--configdir"
-            (pkgs.writeTextDir "sanoid.conf" configFile)
+            "/etc/sanoid"
           ]
           ++ cfg.extraArgs
         );
@@ -290,6 +290,8 @@ in
       after = [ "zfs.target" ];
       startAt = cfg.interval;
     };
+
+    environment.etc."sanoid/sanoid.conf".text = configFile;
   };
 
   meta.maintainers = with lib.maintainers; [ lopsided98 ];

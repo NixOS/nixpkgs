@@ -50,13 +50,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vpp";
-  version = "25.10";
+  version = "26.02";
 
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J+aJXzq9jKzcFKpUNBskX3KccwKtZhK+m8NTbrGjsXw=";
+    hash = "sha256-z9yh1ZMP28SSzHNBdO7UnvVqsIqtXUcwYZUH1UdBUB0=";
   };
 
   postPatch = ''
@@ -78,9 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/src";
 
   enableParallelBuilding = true;
-  # -Wno-incompatible-pointer-types can be removed in 26.02 (https://github.com/NixOS/nixpkgs/pull/479794)
-  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-array-bounds -Wno-maybe-uninitialized -Wno-incompatible-pointer-types";
-
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
     "-DVPP_LIBRARY_DIR=lib"

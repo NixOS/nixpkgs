@@ -1,3 +1,4 @@
+import datetime as dt
 import json
 import logging
 import os
@@ -13,9 +14,10 @@ logger = logging.getLogger(__name__)
 class QMPAPIError(RuntimeError):
     def __init__(self, message: dict[str, Any]):
         assert "error" in message, "Not an error message!"
+        error = message["error"]
         try:
-            self.class_name = message["class"]
-            self.description = message["desc"]
+            self.class_name = error["class"]
+            self.description = error["desc"]
             # NOTE: Some errors can occur before the Server is able to read the
             # id member; in these cases the id member will not be part of the
             # error response, even if provided by the client.
@@ -74,15 +76,19 @@ class QMPSession:
         else:
             raise QMPAPIError(evt_or_result)
 
-    def wait_for_event(self, timeout: int = 10) -> dict[str, Any]:
+    def wait_for_event(
+        self, timeout: dt.timedelta = dt.timedelta(seconds=10)
+    ) -> dict[str, Any]:
         while self.pending_events.empty():
             self.read_pending_messages()
 
-        return self.pending_events.get(timeout=timeout)
+        return self.pending_events.get(timeout=timeout.total_seconds())
 
-    def events(self, timeout: int = 10) -> Iterator[dict[str, Any]]:
+    def events(
+        self, timeout: dt.timedelta = dt.timedelta(seconds=10)
+    ) -> Iterator[dict[str, Any]]:
         while not self.pending_events.empty():
-            yield self.pending_events.get(timeout=timeout)
+            yield self.pending_events.get(timeout=timeout.total_seconds())
 
     def send(self, cmd: str, args: dict[str, str] = {}) -> dict[str, str]:
         self.read_pending_messages()

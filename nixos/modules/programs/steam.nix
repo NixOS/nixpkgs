@@ -56,38 +56,29 @@ in
       '';
       apply =
         steam:
-        steam.override (
-          prev:
-          {
-            extraEnv =
-              (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
-                STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
-              })
-              // (lib.optionalAttrs cfg.extest.enable {
-                LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
-              })
-              // (prev.extraEnv or { });
-            extraLibraries =
-              pkgs:
-              let
-                prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
-                additionalLibs =
-                  with config.hardware.graphics;
-                  if pkgs.stdenv.hostPlatform.is64bit then
-                    [ package ] ++ extraPackages
-                  else
-                    [ package32 ] ++ extraPackages32;
-              in
-              prevLibs ++ additionalLibs;
-            extraPkgs = p: (cfg.extraPackages ++ lib.optionals (prev ? extraPkgs) (prev.extraPkgs p));
-          }
-          // lib.optionalAttrs (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice) {
-            buildFHSEnv = pkgs.buildFHSEnv.override {
-              # use the setuid wrapped bubblewrap
-              bubblewrap = "${config.security.wrapperDir}/..";
-            };
-          }
-        );
+        steam.override (prev: {
+          extraEnv =
+            (lib.optionalAttrs (cfg.extraCompatPackages != [ ]) {
+              STEAM_EXTRA_COMPAT_TOOLS_PATHS = extraCompatPaths;
+            })
+            // (lib.optionalAttrs cfg.extest.enable {
+              LD_PRELOAD = "${pkgs.pkgsi686Linux.extest}/lib/libextest.so";
+            })
+            // (prev.extraEnv or { });
+          extraLibraries =
+            pkgs:
+            let
+              prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
+              additionalLibs =
+                with config.hardware.graphics;
+                if pkgs.stdenv.hostPlatform.is64bit then
+                  [ package ] ++ extraPackages
+                else
+                  [ package32 ] ++ extraPackages32;
+            in
+            prevLibs ++ additionalLibs;
+          extraPkgs = p: (cfg.extraPackages ++ lib.optionals (prev ? extraPkgs) (prev.extraPkgs p));
+        });
       description = ''
         The Steam package to use. Additional libraries are added from the system
         configuration to ensure graphics work properly.
@@ -216,16 +207,6 @@ in
       # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
       enable = true;
       enable32Bit = true;
-    };
-
-    security.wrappers = lib.mkIf (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice) {
-      # needed or steam fails
-      bwrap = {
-        owner = "root";
-        group = "root";
-        source = "${pkgs.bubblewrap}/bin/bwrap";
-        setuid = true;
-      };
     };
 
     programs.steam.extraPackages = cfg.fontPackages;

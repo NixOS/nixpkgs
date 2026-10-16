@@ -1,12 +1,13 @@
 {
   lib,
   aiohttp,
-  aioresponses,
+  aiointercept,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
   orjson,
-  poetry-core,
+  hatchling,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,17 +17,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "zinvolt";
-  version = "0.3.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-zinvolt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4p+2zzBDuS6N6b+FhE6mWRFBzCzzkxApVlQai7sG/HM=";
+    hash = "sha256-BFdvRQMVXeTkh0TidvwH8vu/rpdE+xWDsKSx6Pc+c+4=";
   };
 
-  build-system = [ poetry-core ];
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -36,7 +41,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    aioresponses
+    aiointercept
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook

@@ -17,8 +17,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
   build-system = with python3Packages; [ pdm-backend ];
 
   pythonRelaxDeps = [
-    "rich"
     "argcomplete"
+    "docker"
+    "requests"
+    "rich"
   ];
 
   dependencies =

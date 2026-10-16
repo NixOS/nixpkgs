@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Free C++ class library of cryptographic schemes";
-    homepage = "https://cryptopp.com/";
+    homepage = "https://github.com/weidai11/cryptopp";
     changelog = [
       "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt"
       "https://github.com/weidai11/cryptopp/releases/tag/CRYPTOPP_${underscoredVersion}"

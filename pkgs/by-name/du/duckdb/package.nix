@@ -5,15 +5,33 @@
   cmake,
   ninja,
   openssl,
-  openjdk11,
   python3,
-  unixodbc,
-  withJdbc ? false,
-  withOdbc ? false,
   versionCheckHook,
 }:
 
 let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Keep this in sync with DuckDBPlatform() in DuckDB's platform.hpp.
+  duckdbPlatform =
+    let
+      os =
+        if stdenv.hostPlatform.isWindows then
+          "windows"
+        else if stdenv.hostPlatform.isDarwin then
+          "osx"
+        else if stdenv.hostPlatform.isFreeBSD then
+          "freebsd"
+        else
+          "linux";
+      arch =
+        if stdenv.hostPlatform.isAarch64 then
+          "arm64"
+        else if stdenv.hostPlatform.is64bit then
+          "amd64"
+        else
+          "i686";
+    in
+    "${os}_${arch}${lib.optionalString stdenv.hostPlatform.isMusl "_musl"}${lib.optionalString stdenv.hostPlatform.isMinGW "_mingw"}";
   versions = lib.importJSON ./versions.json;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -40,22 +58,19 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     python3
   ];
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals withJdbc [ openjdk11 ]
-  ++ lib.optionals withOdbc [ unixodbc ];
+  buildInputs = [ openssl ];
 
   cmakeFlags = [
     (lib.cmakeFeature "DUCKDB_EXTENSION_CONFIGS" "${finalAttrs.src}/.github/config/in_tree_extensions.cmake")
-    (lib.cmakeBool "BUILD_ODBC_DRIVER" withOdbc)
-    (lib.cmakeBool "JDBC_DRIVER" withJdbc)
     (lib.cmakeFeature "OVERRIDE_GIT_DESCRIBE" "v${finalAttrs.version}-0-g${finalAttrs.rev}")
     # development settings
-    (lib.cmakeBool "BUILD_UNITTESTS" finalAttrs.doInstallCheck)
+    (lib.cmakeBool "BUILD_UNITTESTS" finalAttrs.finalPackage.doInstallCheck)
+  ]
+  ++ lib.optionals (!canExecute) [
+    (lib.cmakeFeature "DUCKDB_EXPLICIT_PLATFORM" duckdbPlatform)
   ];
 
-  doInstallCheck = true;
+  doInstallCheck = canExecute;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
@@ -122,14 +137,42 @@ stdenv.mkDerivation (finalAttrs: {
           "test/sql/function/list/aggregates/skewness.test"
           "test/sql/aggregate/aggregates/histogram_table_function.test"
         ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # UB in PhysicalRangeJoin (shared by IEJoin and PiecewiseMergeJoin) causes
+          # Apple Clang at -O3 to emit brk trap instructions on aarch64-darwin.
+          # Affects any test routing through PhysicalIEJoin (2+ inequality conditions,
+          # cardinality >= merge_join_threshold) or forcing IEJoin via debug_asof_iejoin.
+          "test/sql/join/iejoin/iejoin_issue_6314.test_slow"
+          "test/sql/join/iejoin/iejoin_issue_6861.test"
+          "test/sql/join/iejoin/iejoin_issue_7278.test"
+          "test/sql/join/iejoin/iejoin_projection_maps.test"
+          "test/sql/join/iejoin/merge_join_switch.test"
+          "test/sql/join/iejoin/predicate_expressions.test"
+          "test/sql/join/iejoin/test_countzeros.test"
+          "test/sql/join/iejoin/test_ieantijoin.test"
+          "test/sql/join/iejoin/test_iejoin.test"
+          "test/sql/join/iejoin/test_iejoin_east_west.test"
+          "test/sql/join/iejoin/test_iejoin_events.test"
+          "test/sql/join/iejoin/test_iejoin_null_keys.test"
+          "test/sql/join/iejoin/test_iejoin_overlaps.test"
+          "test/sql/join/iejoin/test_iejoin_predicate.test"
+          "test/sql/join/iejoin/test_iejoin_sort_tasks.test_slow"
+          "test/sql/join/iejoin/test_iesemijoin.test"
+          # asof tests that loop debug_asof_iejoin=True, forcing the IEJoin path
+          "test/sql/join/asof/test_asof_join_inequalities.test"
+          "test/sql/join/asof/test_asof_join_missing.test_slow"
+          # 10240-row inequality join routing to IEJoin via plan_comparison_join.cpp
+          "test/sql/join/test_complex_range_join.test"
+        ]
       );
       LD_LIBRARY_PATH = lib.optionalString stdenv.hostPlatform.isDarwin "DY" + "LD_LIBRARY_PATH";
     in
+    # FIXME: do something about the excessive logging on x86_64-linux (> 250 MiB).
     ''
       runHook preInstallCheck
       (($(ulimit -n) < 1024)) && ulimit -n 1024
 
-      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}
+      HOME="$(mktemp -d)" ${LD_LIBRARY_PATH}="$lib/lib" ./test/unittest ${toString excludes}${lib.optionalString stdenv.hostPlatform.isx86_64 " >/dev/null"}
 
       runHook postInstallCheck
     '';
@@ -144,6 +187,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "duckdb";
     maintainers = with lib.maintainers; [
+      cameronraysmith
       costrouc
       cpcloud
     ];

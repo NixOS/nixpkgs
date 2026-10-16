@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "karate";
-  version = "1.5.2";
+  version = "2.1.1";
 
   src = fetchurl {
     url = "https://github.com/karatelabs/karate/releases/download/v${version}/karate-${version}.jar";
-    sha256 = "sha256-zPR0DGShVMTCRX1vD9GajzeQLCnTKqxOIwEuCoeGFL4=";
+    sha256 = "sha256-XrDmWpl1aforNvsnJU4V4TUUoCTU+7D8NTgTrJHjmOE=";
   };
   dontUnpack = true;
 

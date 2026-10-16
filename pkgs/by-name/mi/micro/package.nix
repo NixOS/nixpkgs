@@ -50,8 +50,6 @@ let
         "-X ${t}/util.CommitHash=${self.src.rev}"
       ];
 
-    strictDeps = true;
-
     preBuild = ''
       GOOS= GOARCH= go generate ./runtime
     '';

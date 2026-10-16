@@ -1,31 +1,41 @@
 {
   lib,
-  fetchPypi,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   setuptools-scm,
+
+  # dependencies
   astropy,
   numpy,
   matplotlib,
   scipy,
   six,
+
+  # tests
   pytestCheckHook,
   pytest-astropy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "radio-beam";
-  version = "0.3.9";
+  version = "0.3.10";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "radio_beam"; # Tarball was uploaded with an underscore in this version
-    hash = "sha256-m1/qe8ybJlQyE3hGM7MugWMMnAhVB3t6v0tGz42E5kQ=";
+  src = fetchFromGitHub {
+    owner = "radio-astro-tools";
+    repo = "radio-beam";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EO3tyT2wF3TeXDRCt7WUoSEd1s+umciGEkdgA4Bfmqs=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy
     numpy
     scipy
@@ -33,9 +43,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     matplotlib
     pytest-astropy
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "radio_beam" ];
@@ -43,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Tools for Beam IO and Manipulation";
     homepage = "http://radio-astro-tools.github.io";
-    changelog = "https://github.com/radio-astro-tools/radio-beam/releases/tag/v${version}";
+    changelog = "https://github.com/radio-astro-tools/radio-beam/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ smaret ];
   };
-}
+})

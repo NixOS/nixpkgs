@@ -16,6 +16,7 @@
   kio-extras,
   opentimelineio,
   frei0r,
+  qtimageformats,
 }:
 mkKdeDerivation {
   pname = "kdenlive";
@@ -29,6 +30,8 @@ mkKdeDerivation {
 
   extraCmakeFlags = [
     "-DFETCH_OTIO=0"
+    # breaks because our QML import paths are not set up at build time
+    "-DBUILD_RUN_QMLLINT=0"
   ];
 
   extraNativeBuildInputs = [
@@ -40,6 +43,7 @@ mkKdeDerivation {
     qtsvg
     qtmultimedia
     qtnetworkauth
+    qtimageformats # UI uses webp images
 
     kddockwidgets
     qqc2-desktop-style

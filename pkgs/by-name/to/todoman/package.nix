@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "todoman";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "todoman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WMIXPPtW1227iDXLqG/JIYdNp5bxHxTlqpFtcIvZ8Aw=";
+    hash = "sha256-dlTV9x8ofxffM55fIJxxavagaTWx+UseK8ECBExxf78=";
   };
 
   nativeBuildInputs = [
@@ -74,9 +74,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   postInstall = ''
-    installShellCompletion --bash contrib/completion/bash/_todo
-    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${lib.getExe jq} "
-    installShellCompletion --zsh contrib/completion/zsh/_todo
+    substituteInPlace contrib/completion/zsh/_todo --replace-fail "jq " "${lib.getExe jq} "
+    installShellCompletion --bash contrib/completion/bash/_todo \
+                           --zsh contrib/completion/zsh/_todo \
+                           --fish contrib/completion/fish/todo.fish
   '';
 
   disabledTests = [

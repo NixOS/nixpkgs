@@ -12,7 +12,7 @@
   librsvg,
   atk,
   libnotify,
-  libappindicator-gtk3,
+  libappindicator,
   gst_all_1,
   makeWrapper,
   picotts,
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     atk
     gettext
     libnotify
-    libappindicator-gtk3
+    libappindicator
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

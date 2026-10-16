@@ -9,13 +9,15 @@
 
 buildDunePackage (finalAttrs: {
   pname = "symex";
-  version = "0.1";
+  version = "0.2";
+
+  minimalOCamlVersion = "5.1";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "symex";
     tag = finalAttrs.version;
-    hash = "sha256-jKwFtxVcBD8Y1bfKRB8Z/MSeQLQWKvk00i8HqodkBbM=";
+    hash = "sha256-KX+OHiCsAHEw0kBWLUDVakIcshUNXLYjm2f2le75Mj8=";
   };
 
   propagatedBuildInputs = [

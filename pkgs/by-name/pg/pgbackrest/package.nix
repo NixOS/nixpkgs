@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pgbackrest";
-  version = "2.57.0";
+  version = "2.58.0";
 
   src = fetchFromGitHub {
     owner = "pgbackrest";
     repo = "pgbackrest";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-TwyMWE9/aCWBIn+AKGaR0UC5qScWPEaDyOG723/2NHA=";
+    hash = "sha256-RxvVqThfGnTCWTaM54Job+2HgJ7baf6ciFYTz496aKQ=";
   };
 
   strictDeps = true;

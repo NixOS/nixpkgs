@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
+  versionCheckHook,
   boost,
   gtest,
   llvmPackages,
@@ -19,18 +18,20 @@
   pkg-config,
   testers,
   python3,
+  libxml2,
+  zlib,
 }:
 
 let
-  nixComponents = nixVersions.nixComponents_2_30;
+  nixComponents = nixVersions.latest.libs;
   common = rec {
-    version = "2.9.0";
+    version = "2.9.3";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-/IU5yJQzUwv/d4mXr+m/AKrw7ufY8r+JAysUhhaHUZY=";
+      hash = "sha256-ud2XcAxUUYenNrGyrh4B9LrDcMZ6eJfPkL60lDcanDI=";
     };
 
     nativeBuildInputs = [
@@ -38,12 +39,13 @@ let
       ninja
       python3
       pkg-config
-      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";
 
+    __structuredAttrs = true;
     strictDeps = true;
+    separateDebugInfo = true;
 
     doCheck = true;
 
@@ -55,7 +57,6 @@ let
         inclyc
         Ruixi-rebirth
         aleksana
-        redyf
       ];
       platforms = lib.platforms.unix;
     };
@@ -85,14 +86,12 @@ in
         nlohmann_json
       ];
 
-      passthru.tests.pkg-config = testers.hasPkgConfigModules {
-        package = nixf;
-        moduleNames = [ "nixf" ];
-      };
+      passthru.tests.pkg-config = testers.testMetaPkgConfig nixf;
 
       meta = common.meta // {
         description = "Nix language frontend, parser & semantic analysis";
         mainProgram = "nixf-tidy";
+        pkgConfigModules = [ "nixf" ];
       };
     }
   );
@@ -118,13 +117,11 @@ in
         boost
       ];
 
-      passthru.tests.pkg-config = testers.hasPkgConfigModules {
-        package = nixt;
-        moduleNames = [ "nixt" ];
-      };
+      passthru.tests.pkg-config = testers.testMetaPkgConfig nixt;
 
       meta = common.meta // {
         description = "Supporting library that wraps C++ nix";
+        pkgConfigModules = [ "nixt" ];
       };
     }
   );
@@ -133,17 +130,6 @@ in
     common
     // {
       pname = "nixd";
-
-      patches = [
-        # Pull upstream fix for boost-1.89 & boost 1.87 support:
-        #   https://github.com/nix-community/nixd/pull/783
-        (fetchpatch {
-          name = "boost-1.89.patch";
-          url = "https://github.com/nix-community/nixd/commit/11dfdf5f2db2e0fc1fea0349fb68739a9c747a41.patch";
-          hash = "sha256-aCb9wRKqZSuUXmamzjpYe0vRqEQh4tenwoScv+juYK8=";
-          stripLen = 1;
-        })
-      ];
 
       sourceRoot = "${common.src.name}/nixd";
 
@@ -157,12 +143,28 @@ in
         llvmPackages.llvm
         gtest
         boost
+        libxml2
+        zlib
       ];
 
-      nativeBuildInputs = common.nativeBuildInputs ++ [ cmake ];
+      nativeBuildInputs = common.nativeBuildInputs ++ [
+        # Meson can use either llvm-config (which lives in libllvm.dev) or CMake to find LLVM
+        # Since finding LLVM via CMake is more fragile, prefer llvm-config
+        (lib.getDev llvmPackages.libllvm)
+      ];
+
+      # Required when cross compiling to make Meson find llvm-config-native
+      preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+        export PATH="${lib.getDev llvmPackages.llvm}/bin:$PATH"
+      '';
+
+      disallowedRequisites = [ (lib.getLib llvmPackages.llvm) ];
 
       # See https://github.com/nix-community/nixd/issues/519
       doCheck = false;
+
+      doInstallCheck = true;
+      nativeInstallCheckInputs = [ versionCheckHook ];
 
       passthru = {
         updateScript = nix-update-script { };

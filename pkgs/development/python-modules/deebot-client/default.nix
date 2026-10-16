@@ -4,12 +4,14 @@
   aiomqtt,
   buildPythonPackage,
   cachetools,
+  cryptography,
   defusedxml,
   docker,
   fetchFromGitHub,
   orjson,
   pkg-config,
   pycountry,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytest-codspeed,
   pytestCheckHook,
@@ -22,35 +24,41 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "deebot-client";
-  version = "18.0.0";
+  version = "18.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.13";
+  disabled = pythonOlder "3.14";
 
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
     tag = finalAttrs.version;
-    hash = "sha256-ZKLA8RbYsysY+pAT9K6z2yThWo2YeM6TLqLBMuo+/GQ=";
+    hash = "sha256-keO5pDzaIc/55xqCig10JWWJPkaLXmu03K969WDt8gQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-UcgQKv8YhsWdOzKQ7K3HTX/FmopQen7HQ/Jyuj+hePI=";
+    hash = "sha256-0nTAuAcA5G1zBuDZkMALbfJS+WBIjvc5GyTQWBTxZUw=";
   };
 
   nativeBuildInputs = [
     pkg-config
+    pyprojectVersionPatchHook
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
   ];
 
   buildInputs = [ xz ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
+
   dependencies = [
     aiohttp
     aiomqtt
     cachetools
+    cryptography
     defusedxml
     orjson
   ];

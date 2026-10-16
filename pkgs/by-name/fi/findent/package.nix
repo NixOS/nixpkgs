@@ -2,16 +2,19 @@
   stdenv,
   lib,
   fetchurl,
+  buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "findent";
-  version = "4.3.6";
+  version = "4.3.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/findent/findent-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ctg02P8P3R27lCpv3tILSZ5ikn2Va25jHOWIuRfIONQ=";
+    hash = "sha256-4tqLjAwZYbK8nc5MbKp5ytCSRdNjiL6h/ALE7B/YuZg=";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   enableParallelBuilding = true;
 
@@ -21,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Fortran source code formatter";
-    homepage = "https://sourceforge.net/findent/";
+    homepage = "https://sourceforge.net/projects/findent/";
     license = lib.licenses.bsd3;
     mainProgram = "findent";
     maintainers = with lib.maintainers; [ sheepforce ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })

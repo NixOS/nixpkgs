@@ -55,6 +55,9 @@ buildPythonPackage rec {
     description = "Python virtual environment manager for the xonsh shell";
     homepage = "https://github.com/xonsh/xontrib-vox";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      infinidoge
+    ];
   };
 }

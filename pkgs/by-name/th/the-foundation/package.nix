@@ -1,26 +1,25 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   cmake,
   pkg-config,
   curl,
   libunistring,
   openssl,
-  pcre,
+  pcre2,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-foundation";
-  version = "1.12.0";
+  version = "1.13.1";
 
-  src = fetchFromGitea {
-    domain = "git.skyjake.fi";
+  src = fetchFromCodeberg {
     owner = "skyjake";
     repo = "the_Foundation";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dAeeeu0nWS/Tz4/t/s9xKcx2io5FGooHhWiK12GHJpQ=";
+    hash = "sha256-j8AeJdCjGxjsy6R+MFuWqXfYEFISfQqg2SlqiRx6G/k=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     libunistring
     openssl
-    pcre
+    pcre2
     zlib
   ];
 
@@ -40,11 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "UNISTRING_DIR" "${libunistring}")
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=attribute-warning";
-
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/the_Foundation.pc \
-      --replace '="''${prefix}//' '="/'
+      --replace-fail '="''${prefix}//' '="/'
   '';
 
   meta = {

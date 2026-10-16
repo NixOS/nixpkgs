@@ -46,5 +46,6 @@ python3Packages.buildPythonApplication {
     maintainers = with lib.maintainers; [ nicoo ];
     mainProgram = "memtree";
     platforms = lib.platforms.linux;
+    license = lib.licenses.isc;
   };
 }

@@ -6,21 +6,20 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "rivalcfg";
-  version = "4.15.0";
+  version = "4.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flozz";
     repo = "rivalcfg";
     tag = "v${version}";
-    sha256 = "sha256-UqVogJLv+sNhAxdMjBEvhBQw6LU+QUq1IekvWpeeMqk=";
+    sha256 = "sha256-MUbt8beVG6UjpLFqxGC8nTaSswvHN3PJ/jE28BBL8bs=";
   };
 
-  build-system = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ flit-core ];
 
   dependencies = with python3Packages; [
     hidapi
-    setuptools # pkg_resources is imported during runtime
   ];
 
   nativeCheckInputs = with python3Packages; [

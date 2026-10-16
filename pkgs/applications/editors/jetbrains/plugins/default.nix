@@ -1,12 +1,14 @@
 {
+  # keep-sorted start
+  autoPatchelfHook,
+  callPackage,
+  darwin,
   fetchurl,
   fetchzip,
+  glib,
   lib,
   stdenv,
-  callPackage,
-  autoPatchelfHook,
-  glib,
-  darwin,
+  # keep-sorted end
 }:
 {
   tests = callPackage ./tests.nix { };
@@ -16,7 +18,7 @@
     let
       processPlugin =
         plugin:
-        # We can remove this check and just asume plugins to be derivations starting with 26.11.
+        # We can remove this check and just assume plugins to be derivations starting with 26.11.
         lib.throwIfNot (lib.isDerivation plugin)
           "addPlugins no longer supports resolving plugins by name or id strings. Please supply a derivation instead"
           plugin;

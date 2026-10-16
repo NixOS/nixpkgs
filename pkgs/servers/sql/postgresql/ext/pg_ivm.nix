@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_ivm";
-  version = "1.13";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "sraoss";
     repo = "pg_ivm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DKU5jwnRo/kMycnq4nAdQTiZwv/wXybyjXLtz4xdaBo=";
+    hash = "sha256-mSyi8k1j8rIf9TIKkpL1oFlDQYlvp1PUAtcarjeGVVg=";
   };
 
   meta = {

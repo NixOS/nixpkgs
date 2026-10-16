@@ -7,7 +7,7 @@
 
 buildDunePackage (finalAttrs: {
   pname = "ninja_utils";
-  version = "1.0.0";
+  version = "2.0.0";
 
   minimalOCamlVersion = "4.12";
 
@@ -15,7 +15,7 @@ buildDunePackage (finalAttrs: {
     owner = "CatalaLang";
     repo = "ninja_utils";
     tag = finalAttrs.version;
-    hash = "sha256-2OYsZVk7/KYHXHTqAAEyVEHzcUCC+vBRU1s1XdfnWaE=";
+    hash = "sha256-chAVvgfS022BBslJKcnduR49VJaM8iz23Gfg6WCyT6w=";
   };
 
   propagatedBuildInputs = [ re ];

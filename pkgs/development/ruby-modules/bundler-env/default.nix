@@ -102,7 +102,7 @@ else
     };
   in
   if copyGemFiles then
-    runCommand basicEnv.name bundlerEnvArgs ''
+    runCommand basicEnv.name (bundlerEnvArgs // { __structuredAttrs = true; }) ''
       mkdir -p $out
       for i in $paths; do
         ${buildPackages.rsync}/bin/rsync -a $i/lib $out/

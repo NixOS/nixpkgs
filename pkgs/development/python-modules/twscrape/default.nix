@@ -14,16 +14,16 @@
   pytest-httpx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "twscrape";
-  version = "0.17.0";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vladkens";
     repo = "twscrape";
-    tag = "v${version}";
-    hash = "sha256-0j6nE8V0CWTuIHMS+2p5Ncz7d+D6VagjtyfMbQuI8Eg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FQYBC/b2L+c6UtqMZcsuVom01n0sRpBvMTnE2zZh86U=";
   };
 
   build-system = [ hatchling ];
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   meta = {
     description = "Twitter API scrapper with authorization support";
     homepage = "https://github.com/vladkens/twscrape";
-    changelog = "https://github.com/vladkens/twscrape/releases/tag/v${version}";
+    changelog = "https://github.com/vladkens/twscrape/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.amadejkastelic ];
   };
-}
+})

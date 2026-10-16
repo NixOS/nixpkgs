@@ -26,14 +26,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yardstick";
-  version = "0.16.1";
+  version = "0.16.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "yardstick";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4Kwgm2gmgOam7AVzlGYT3QhAyJf14h3pZohrhbzprpg=";
+    hash = "sha256-jKf1LH+YLRuds/5SKSgKm8PbI9OvkxgBhm5vOmg5EU0=";
   };
 
   build-system = [

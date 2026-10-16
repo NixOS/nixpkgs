@@ -5,6 +5,7 @@
   autoreconfHook,
   autoconf-archive,
   alsa-lib,
+  darwinMinVersionHook,
   fftw,
   iniparser,
   libGL,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cava";
-  version = "0.10.7";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "karlstav";
     repo = "cava";
     tag = finalAttrs.version;
-    hash = "sha256-eOGUDGGlja5Cq8XTJFRqyP6qyaoxOJm09vZrlk4KS9k=";
+    hash = "sha256-0vQWobnt9pAZTJc45Lgcfad72BE8DUPGQ5/YwMSmU98=";
   };
 
   buildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "14.2")
     portaudio
   ]
   ++ lib.optionals withSDL2 [

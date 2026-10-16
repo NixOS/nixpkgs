@@ -26,10 +26,6 @@ let
       url = "https://oakctl-releases.luxonis.com/data/${version}/darwin_arm64/oakctl";
       hash = "sha256-tJl9OKhaY9dIxkN+tsbQ3isyAfFPSDOqkgLgDDaRaSg=";
     };
-    x86_64-darwin = fetchurl {
-      url = "https://oakctl-releases.luxonis.com/data/${version}/darwin_x86_64/oakctl";
-      hash = "sha256-xjmMqECqZ+ukXAPRKoJ1m1y7ABMIltw9u236q9k56/o=";
-    };
   };
 
   src =
@@ -73,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
     ];
     mainProgram = "oakctl";

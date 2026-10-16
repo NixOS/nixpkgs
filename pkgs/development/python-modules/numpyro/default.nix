@@ -30,14 +30,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "numpyro";
-  version = "0.20.0";
+  version = "0.22.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pyro-ppl";
     repo = "numpyro";
     tag = finalAttrs.version;
-    hash = "sha256-lMga+mPQEh6RCeqXKa2KELR6RcksKJ/K32h7X7a1IcQ=";
+    hash = "sha256-aUd3u/fEMMSTPFyRJgalVTETG561AgJmGhJl2C3lMSw=";
   };
 
   build-system = [ setuptools ];
@@ -97,6 +98,7 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError due to tolerance issues
     "test_bijective_transforms"
+    "test_constrain_fn_two_batch_dims"
     "test_cpu"
     "test_entropy_categorical"
     "test_gaussian_model"

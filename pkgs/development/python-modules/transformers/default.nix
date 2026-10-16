@@ -79,12 +79,12 @@
   mistral-common,
   # chat_template
   jinja2,
-  jmespath,
   # quality
   ruff,
   gitpython,
   urllib3,
   libcst,
+  tomli,
   # opentelemetry
   opentelemetry-api,
   opentelemetry-exporter-otlp,
@@ -93,14 +93,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "transformers";
-  version = "5.3.0";
+  version = "5.17.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5FzsPIG4dFTR2WgcZbdmVwwwY9Dkqu5aprl5uIIalD0=";
+    hash = "sha256-zPVsX4i4Qe7yMW3gmTysPsIvXZ4cQWU0gITA/1vSlEw=";
   };
 
   build-system = [ setuptools ];
@@ -182,7 +183,6 @@ buildPythonPackage (finalAttrs: {
     mistral-common = [ mistral-common ] ++ mistral-common.optional-dependencies.image;
     chat-template = [
       jinja2
-      jmespath
     ];
     quality = [
       datasets
@@ -191,6 +191,10 @@ buildPythonPackage (finalAttrs: {
       urllib3
       libcst
       rich
+      tomli
+    ];
+    docs = [
+      # hf-docs-builder
     ];
     benchmark = [
       # optimum-benchmark

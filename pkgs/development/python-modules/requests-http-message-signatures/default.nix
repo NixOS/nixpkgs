@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  cryptography,
   fetchFromGitLab,
   poetry-core,
-  cryptography,
+  pyprojectVersionPatchHook,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "requests-http-message-signatures";
   version = "0.3.0";
   pyproject = true;
@@ -16,11 +17,13 @@ buildPythonPackage rec {
     domain = "dev.funkwhale.audio";
     owner = "funkwhale";
     repo = "requests-http-message-signatures";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-1GObY+bF5wwgjDORUlO61bmIadK+EpZtyYGMgS9Bqzg=";
   };
 
   build-system = [ poetry-core ];
+
+  nativeBuildInputs = [ pyprojectVersionPatchHook ];
 
   dependencies = [
     cryptography
@@ -35,8 +38,8 @@ buildPythonPackage rec {
   meta = {
     description = "Request authentication plugin implementing IETF HTTP Message Signatures";
     homepage = "https://dev.funkwhale.audio/funkwhale/requests-http-message-signatures";
-    changelog = "https://dev.funkwhale.audio/funkwhale/requests-http-message-signatures/-/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://dev.funkwhale.audio/funkwhale/requests-http-message-signatures/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     teams = [ lib.teams.ngi ];
   };
-}
+})

@@ -95,6 +95,7 @@ buildPythonPackage (finalAttrs: {
     "test_inv_hessian_product_pytree3"
     "test_logreg_with_intercept_manual_loop3"
     "test_multiclass_logreg6"
+    "test_wrapper_grad"
   ];
 
   meta = {

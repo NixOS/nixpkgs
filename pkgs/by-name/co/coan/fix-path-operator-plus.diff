@@ -1,0 +1,11 @@
+diff --git a/src/path.h b/src/path.h
+--- a/src/path.h
++++ b/src/path.h
+@@ -232,7 +232,7 @@
+ 	 */
+ 	path operator+(std::string const & str) const {
+ 		path p(*this);
+-		p.append(str);
++		p.push_back(str);
+ 		return p;
+ 	}

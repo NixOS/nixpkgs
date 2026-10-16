@@ -1,28 +1,35 @@
 {
   lib,
-  buildGo126Module,
+  stdenv,
+  buildGo127Module,
   fetchFromGitHub,
+  git,
+  installShellFiles,
   nix-update-script,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "crush";
-  version = "0.51.2";
+  version = "0.98.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "crush";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gKn/TcrCcmRF/FajsvzSR5t6SEuuxQWhiLaSmLdR8bg=";
+    hash = "sha256-sz/jlpWH43pgUqKDzaRVKJPK2u7smJLoL2eNrGkXtOY=";
   };
 
-  vendorHash = "sha256-EHESno8r2dDGcOjRHCU4799Ug7l0z8oSg/60l2HyaAg=";
+  vendorHash = "sha256-yEV/cBQ2XsmbsYrSWiyEj/dznzSVrpY9QHXMpuw2lpc=";
 
   ldflags = [
     "-s"
     "-X=github.com/charmbracelet/crush/internal/version.Version=${finalAttrs.version}"
+  ];
+
+  nativeBuildInputs = [
+    installShellFiles
   ];
 
   checkFlags =
@@ -33,18 +40,29 @@ buildGo126Module (finalAttrs: {
         "TestOpenAIClientStreamChoices"
         "TestGrepWithIgnoreFiles"
         "TestSearchImplementations"
+        "TestDispatch_BinaryPassthroughExecutes"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    git
+    writableTmpDirAsHomeHook
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  updateScript = nix-update-script { };
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd crush \
+      --bash <($out/bin/crush completion bash) \
+      --fish <($out/bin/crush completion fish) \
+      --zsh <($out/bin/crush completion zsh)
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Glamourous AI coding agent for your favourite terminal";

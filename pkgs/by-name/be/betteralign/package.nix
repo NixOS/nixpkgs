@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "betteralign";
-  version = "0.9.0";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "dkorunic";
     repo = "betteralign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NZBGcgI2SLkCUb4v7Tdm6QQd5dqtDmp+dhCTZEovU2Y=";
+    hash = "sha256-sofvg2bHXbIamGo2o33K+DybKMbIGvm4Nd0/exjHOEE=";
 
     # Trick for getting accurate commit, source date and timestamp for ldflags
     # Required by upstream https://github.com/dkorunic/betteralign/blob/346baa9c9dd024bfe55302c9d7d0ca46b2734c1c/.goreleaser.yml
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     '';
   };
 
-  vendorHash = "sha256-F9SCMJNu8XnkvYPYfuMGFLgbn9sFDn63ao7ExYXSOaM=";
+  vendorHash = "sha256-GHOHbNFV1ta/VaXsvbrwogfdjXIhSH3kdHLHLSDNkq4=";
 
   env.CGO_ENABLED = 0;
 

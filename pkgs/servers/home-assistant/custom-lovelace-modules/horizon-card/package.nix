@@ -3,17 +3,34 @@
   fetchFromGitHub,
   stdenvNoCC,
   yarn-berry,
+  substitute,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "horizon-card";
-  version = "1.4.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "rejuvenate";
     repo = "lovelace-horizon-card";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z2cJ6BIhNnzUo9nIFxVyrPBVWSKf35fyLXK72pE8TJw=";
+    hash = "sha256-p4GI4R5P1LjiXwzF1Hlk6Kk57i+YUcEEsm8bN+qIYdE=";
+
+    # Remove after upstream updates to Yarn 4.15
+    # https://github.com/rejuvenate/lovelace-horizon-card/blob/main/package.json#L4
+    postFetch = ''
+      cd $out
+      patch -p1 < ${
+        (substitute {
+          src = ./yarn-fix.patch;
+          substitutions = [
+            "--replace-fail"
+            "YARN_LOCKFILE_VERSION_PLACEHOLDER"
+            yarn-berry.lockfileVersion
+          ];
+        })
+      }
+    '';
   };
 
   nativeBuildInputs = [
@@ -21,9 +38,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
   ];
 
+  # nix run nixpkgs#yarn-berry_4.yarn-berry-fetcher missing-hashes yarn.lock
+  missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-LYPHBnDRcGeXo2btx1A4/e7fr7MYg/2G5GkuG/xDG+I=";
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-iHMIcnCQEbDkAugB9FO4G++eDq3/ABfp0E7Q6893fVY=";
   };
 
   buildPhase = ''
@@ -41,6 +60,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.entrypoint = "lovelace-horizon-card.js";
 
   meta = {
     description = "Sun Card successor: Visualize the position of the Sun over the horizon";

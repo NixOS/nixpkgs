@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "terminaltexteffects";
-  version = "0.14.2";
+  version = "0.15.0";
   pyproject = true;
 
   # no tests on pypi, no tags on github
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ITyJnOS492Q9LQVorxROEnThHkST259bBDh70XwhdxQ=";
+    hash = "sha256-9LMchr+pQ9W/Oyxey/rqDeZe1KlRAoxA+OTLVO/QZDk=";
   };
 
   build-system = [ hatchling ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of visual effects that can be applied to terminal piped stdin text";
     homepage = "https://chrisbuilds.github.io/terminaltexteffects";
-    changelog = "https://chrisbuilds.github.io/terminaltexteffects/changeblog/";
+    changelog = "https://chrisbuilds.github.io/terminaltexteffects/changeblog/changeblog/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [ ];

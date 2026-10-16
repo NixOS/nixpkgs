@@ -73,7 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Choose the application to open files and links";
     homepage = "https://apps.gnome.org/Junction/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ hqurve ];
     teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };

@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/postlight/parser/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    homepage = "https://reader.postlight.com";
+    homepage = "https://github.com/postlight/parser";
     description = "Extracts the bits that humans care about from any URL you give it";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];

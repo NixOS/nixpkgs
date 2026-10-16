@@ -8,10 +8,13 @@
   qt6Packages,
   hunspell,
   withLua ? true,
-  lua,
+  lua5_2_compat,
   withPython ? true,
   python3,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texworks";

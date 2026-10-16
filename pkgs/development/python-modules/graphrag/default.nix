@@ -96,7 +96,9 @@ buildPythonPackage rec {
   ++ fnllm.optional-dependencies.azure
   ++ fnllm.optional-dependencies.openai;
 
-  env.NUMBA_CACHE_DIR = "$TMPDIR";
+  preInstallCheck = ''
+    export NUMBA_CACHE_DIR=$(mktemp -d)
+  '';
 
   pythonImportsCheck = [ "graphrag" ];
 

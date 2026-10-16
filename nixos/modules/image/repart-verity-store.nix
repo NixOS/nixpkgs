@@ -89,6 +89,12 @@ in
       };
     };
 
+    fileSystems."/nix/store" = lib.mkDefault {
+      device = "/usr/nix/store";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+
     image.repart.partitions = {
       # dm-verity hash partition
       ${cfg.partitionIds.store-verity}.repartConfig = {
@@ -96,6 +102,7 @@ in
         Verity = "hash";
         VerityMatchKey = lib.mkDefault verityMatchKey;
         Label = lib.mkDefault "store-verity";
+        Minimize = lib.mkDefault "best";
       };
       # dm-verity data partition that contains the nix store
       ${cfg.partitionIds.store} = {
@@ -106,23 +113,29 @@ in
           Format = lib.mkDefault "erofs";
           VerityMatchKey = lib.mkDefault verityMatchKey;
           Label = lib.mkDefault "store";
+          Minimize = lib.mkDefault "best";
         };
       };
 
     };
 
     system.build = {
+      finalImage = lib.warn "system.build.finalImage has been renamed to system.build.image" config.system.build.image;
 
       # intermediate system image without ESP
       intermediateImage =
-        (config.system.build.image.override {
+        (config.image.repart.image.override {
           # always disable compression for the intermediate image
           compression.enable = false;
         }).overrideAttrs
           (
             _: previousAttrs: {
               # make it easier to identify the intermediate image in build logs
-              pname = "${previousAttrs.pname}-intermediate";
+              name =
+                if previousAttrs ? pname then
+                  "${previousAttrs.pname}-${previousAttrs.version}-intermediate"
+                else
+                  "${previousAttrs.name}-intermediate";
 
               # do not prepare the ESP, this is done in the final image
               systemdRepartFlags = previousAttrs.systemdRepartFlags ++ [ "--defer-partitions=esp" ];
@@ -162,8 +175,8 @@ in
         );
 
       # final system image that is created from the intermediate image by injecting the UKI from above
-      finalImage =
-        (config.system.build.image.override {
+      image = lib.mkOverride 99 (
+        (config.image.repart.image.override {
           # continue building with existing intermediate image
           createEmpty = false;
         }).overrideAttrs
@@ -216,7 +229,8 @@ in
                 rm -v repart-output_orig.json
               '';
             }
-          );
+          )
+      );
     };
   };
 

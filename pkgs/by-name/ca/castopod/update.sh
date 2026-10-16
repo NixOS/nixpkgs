@@ -3,7 +3,7 @@
 set -euo pipefail
 
 nixpkgs="$(git rev-parse --show-toplevel)"
-castopod_nix="$nixpkgs/pkgs/applications/audio/castopod/default.nix"
+castopod_nix="$(dirname "$0")/package.nix"
 
 # https://www.meetup.com/api/guide/#p02-querying-section
 query='

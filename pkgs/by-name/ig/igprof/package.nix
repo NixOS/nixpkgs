@@ -4,32 +4,25 @@
   fetchFromGitHub,
   libunwind,
   cmake,
-  pcre,
+  pcre2,
   gdb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "5.9.18";
+  version = "6.0.1";
   pname = "igprof";
 
   src = fetchFromGitHub {
     owner = "igprof";
     repo = "igprof";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-UTrAaH8C79km78Z/7NxvQ6dnl4u4Ki80nORf4bsoSNw=";
+    hash = "sha256-0W2P1jXegTBHgLi+Qb2oYnaGRF9brlmKhKdXzWv+n2E=";
   };
-
-  postPatch = ''
-    substituteInPlace src/igprof \
-      --replace-fail libigprof.so $out/lib/libigprof.so
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
-  '';
 
   buildInputs = [
     libunwind
     gdb
-    pcre
+    pcre2
   ];
   nativeBuildInputs = [ cmake ];
 
@@ -41,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Ignominous Profiler";
 
     longDescription = ''

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a74k8r21swmfwvgv4c014y6nbcyl229fspxw89ygsgb0j83xnar";
+    hash = "sha256-Wdk+kATr6ecT4v1ql4Sgni1rPAmAkf02d5XrIDKa5Kg=";
   };
 
   patchPhase = ''
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyHDI/Pyverilog";
     description = "Python-based Hardware Design Processing Toolkit for Verilog HDL";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ trepetti ];
+    maintainers = [ ];
   };
 }

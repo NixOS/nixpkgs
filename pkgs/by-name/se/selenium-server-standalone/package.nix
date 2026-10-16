@@ -42,9 +42,7 @@ stdenv.mkDerivation rec {
     description = "Selenium Server for remote WebDriver";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      coconnor
-    ];
+    maintainers = [ ];
     mainProgram = "selenium-server";
     platforms = lib.platforms.all;
   };

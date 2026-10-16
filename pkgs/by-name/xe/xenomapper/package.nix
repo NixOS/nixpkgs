@@ -18,8 +18,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python3.pkgs; [ statistics ];
-
   pythonImportsCheck = [
     "xenomapper.xenomapper"
     "xenomapper.mappability"

@@ -35,7 +35,7 @@
   libxrandr,
   libxkbfile,
   pango,
-  systemd,
+  systemdLibs,
   pciutils,
   libnotify,
   pipewire,
@@ -76,7 +76,7 @@ let
     pango
     pciutils
     stdenv.cc.cc
-    systemd
+    systemdLibs
     libnotify
     pipewire
     libsecret
@@ -92,13 +92,13 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
-  version = "6.2.0";
+  version = "8.1.3";
 
   src = fetchFromGitHub {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
     tag = finalAttrs.version;
-    hash = "sha256-DIJfVoNFr2K1bII9XJRWqhBw0TGnzZgpx4Eh1EVX2OE=";
+    hash = "sha256-R30UR5Ikcp50ASOay7418Tdz1mHWv7HSiwdETcZzrPE=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,7 @@ buildNpmPackage (finalAttrs: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-W3tfIiKCeLPbe/pEkXksJn/XufImp7XU/qJbCYROel8=";
+  npmDepsHash = "sha256-6qOeWKLBlGy32zY4p0Ar0scToQthbtrpCSi7MyS8igA=";
   forceGitDeps = true;
   makeCacheWritable = true;
 

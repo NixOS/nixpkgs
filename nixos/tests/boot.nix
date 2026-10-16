@@ -203,11 +203,26 @@ in
     makeTest {
       name = "boot-uboot-extlinux";
       nodes = { };
-      testScript = ''
-        import os
+      testScript = /* py */ ''
+        import subprocess
 
         # Create a mutable linked image backed by the read-only SD image
-        if os.system("qemu-img create -f qcow2 -F raw -b ${sdImage} ${mutableImage}") != 0:
+        if (
+            subprocess.run(
+                [
+                    "${pkgs.qemu}/bin/qemu-img",
+                    "create",
+                    "-f",
+                    "qcow2",
+                    "-F",
+                    "raw",
+                    "-b",
+                    "${sdImage}",
+                    "${mutableImage}",
+                ]
+            ).returncode
+            != 0
+        ):
             raise RuntimeError("Could not create mutable linked image")
 
         machine = create_machine("${startCommand}")

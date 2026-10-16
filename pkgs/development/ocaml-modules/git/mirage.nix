@@ -37,7 +37,8 @@ buildDunePackage {
 
   inherit (git) version src;
 
-  minimalOCamlVersion = "4.08";
+  # host key authenticator is mandatory in awa 0.7.0
+  patches = [ ./mirage-awa-0.7.0.patch ];
 
   buildInputs = [
     happy-eyeballs-mirage

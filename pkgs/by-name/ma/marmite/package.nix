@@ -2,42 +2,41 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  oniguruma,
-  stdenv,
-  darwin,
+  nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "marmite";
-  version = "0.2.7";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "rochacbruno";
     repo = "marmite";
-    tag = version;
-    hash = "sha256-EPoBNfKkefOe82jXE3c6Y59iP2N6lLIbRvu65fcIcLg=";
+    tag = finalAttrs.version;
+    hash = "sha256-5oTwSsE5h5BmMh4Msx3qrre+vMLTxuZrTX42DsXuDr0=";
   };
 
-  cargoHash = "sha256-ec9X4cR3sI1LW9680LB2dPeXQ6fmO/2fmsJmc7s/nxI=";
+  cargoHash = "sha256-/X3aGWL+YAJNeVyztl059RGUmfzlxO31HSOnG7SH/VU=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  # buildRustPackage sets RUST_LOG="" by default, which suppresses marmite's warn! output.
+  # These tests assert on that stderr output and would fail otherwise:
+  #   test_check_internal_links_warns_on_broken
+  #   test_check_media_links_warns_on_broken
+  #   test_static_drift_warning_for_core_files
+  logLevel = "marmite=warn";
 
-  buildInputs = [
-    oniguruma
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  env = {
-    RUSTONIG_SYSTEM_LIBONIG = true;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Static Site Generator for Blogs";
     homepage = "https://github.com/rochacbruno/marmite";
+    changelog = "https://github.com/rochacbruno/marmite/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "marmite";
   };
-}
+})

@@ -1,4 +1,4 @@
-{ mkDerivation }:
+{ lib, mkDerivation }:
 mkDerivation {
   path = "usr.bin/vtfontcvt";
   extraPaths = [ "sys/cddl/contrib/opensolaris/common/lz4" ];
@@ -6,4 +6,6 @@ mkDerivation {
   NIX_CFLAGS_COMPILE = [
     "-Wno-unterminated-string-initialization"
   ];
+
+  meta.platforms = lib.platforms.unix;
 }

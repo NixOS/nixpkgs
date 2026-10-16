@@ -19,7 +19,6 @@
   fetchpatch,
 }:
 let
-  version = "0.9.4";
   patchlevel = "4";
   tutorial4patch = fetchurl {
     url = "http://bugs.debian.org/cgi-bin/bugreport.cgi?msg=34;filename=tutorial-part4.map.bspatch;att=1;bug=595448";
@@ -28,10 +27,11 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "glob2-${version}.${patchlevel}";
+  pname = "glob2";
+  version = "0.9.4.${patchlevel}";
 
   src = fetchurl {
-    url = "mirror://savannah/glob2/${version}/${name}.tar.gz";
+    url = "mirror://savannah/glob2/${version}/${pname}-${version}.tar.gz";
     sha256 = "1f0l2cqp2g3llhr9jl6jj15k0wb5q8n29vqj99xy4p5hqs78jk8g";
   };
 

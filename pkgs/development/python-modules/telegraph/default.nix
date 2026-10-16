@@ -2,24 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   requests,
   httpx,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "telegraph";
   version = "2.2.0";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     repo = "telegraph";
     owner = "python273";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xARX8lSOftNVYY4InR5vU4OiguCJJJZv/W76G9eLgNY=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   optional-dependencies = {
     aio = [ httpx ];
@@ -29,6 +34,7 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/" ];
 
+  # Needs networking
   disabledTests = [ "test_get_page" ];
 
   pythonImportsCheck = [ "telegraph" ];
@@ -36,8 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Telegraph API wrapper";
     homepage = "https://github.com/python273/telegraph";
-    changelog = "https://github.com/python273/telegraph/releases/tag/v${version}";
+    changelog = "https://github.com/python273/telegraph/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ gp2112 ];
   };
-}
+})

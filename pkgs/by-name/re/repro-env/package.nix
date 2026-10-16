@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "repro-env";
-  version = "0.4.3";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "repro-env";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ViOUS7prwLl2C2BOlwqshFks+q+xeiAD4ONdKUcDgWU=";
+    hash = "sha256-McmZ5KzWGJYx+f3rXTUQK9sVaAZW7RxA2w2o8f/3kvU=";
   };
 
-  cargoHash = "sha256-0ljIt84CqcdC01YXU6J7RlvkN/nlU6Thige8TricFus=";
+  cargoHash = "sha256-0gTClY+jWfUpNa1aC/I5waSeZirB/sPGVno0qWYHTsA=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

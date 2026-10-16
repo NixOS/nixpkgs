@@ -16,6 +16,7 @@
   libgcrypt,
   libgpg-error,
   lz4,
+  icu,
   ncurses,
   numactl,
   openssl,
@@ -24,6 +25,7 @@
   valgrind,
   xxd,
   zlib,
+  zstd,
   perlPackages,
   version,
   hash,
@@ -32,7 +34,6 @@
   extraPostInstall ? "",
   ...
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-xtrabackup";
   inherit version;
@@ -62,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
     lz4
+    icu
     ncurses
     numactl
     openssl
@@ -70,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     valgrind
     xxd
     zlib
+    zstd
   ]
   ++ (with perlPackages; [
     perl
@@ -86,12 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_BOOST=system"
     "-DWITH_CURL=system"
     "-DWITH_EDITLINE=system"
+    "-DWITH_ICU=system"
     "-DWITH_LIBEVENT=system"
     "-DWITH_LZ4=system"
     "-DWITH_PROTOBUF=system"
     "-DWITH_SASL=system"
     "-DWITH_SSL=system"
     "-DWITH_ZLIB=system"
+    "-DWITH_ZSTD=system"
     "-DWITH_VALGRIND=ON"
     "-DWITH_MAN_PAGES=OFF"
   ];

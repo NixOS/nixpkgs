@@ -17,13 +17,13 @@
   man,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation (finalAttrs: {
   pname = "git-ftp";
   version = "1.6.0";
   src = fetchFromGitHub {
     owner = "git-ftp";
     repo = "git-ftp";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1hxkqf7jbrx24q18yxpnd3dxzh4xk6asymwkylp1x7zg6mcci87d";
   };
 
@@ -101,4 +101,4 @@ resholve.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "git-ftp";
   };
-}
+})

@@ -6,8 +6,8 @@
   pkg-config,
   openssl,
   ppp,
-  systemd,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemdLibs,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withPpp ? stdenv.hostPlatform.isLinux,
   versionCheckHook,
   nix-update-script,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
   ]
-  ++ lib.optional withSystemd systemd
+  ++ lib.optional withSystemd systemdLibs
   ++ lib.optional withPpp ppp;
 
   configureFlags = [

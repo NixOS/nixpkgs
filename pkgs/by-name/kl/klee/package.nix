@@ -1,6 +1,6 @@
 {
   lib,
-  llvmPackages_18,
+  llvmPackages_19,
   callPackage,
   fetchFromGitHub,
   cmake,
@@ -51,18 +51,20 @@ let
   # Python used for KLEE tests.
   kleePython = python3.withPackages (ps: with ps; [ tabulate ]);
 
-  # The LLVM we're using. Note that KLEE doesn't yet support 18 but this is the minimum in nixpkgs.
-  llvmPackages = llvmPackages_18;
+  # The LLVM we're using. KLEE 3.3 supports LLVM 15 through 19, with LLVM 18
+  # being the recommended version. LLVM 18 is on its way out of Nixpkgs, so we
+  # use LLVM 19 instead.
+  llvmPackages = llvmPackages_19;
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "klee";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8DofxLyTV8Al7ys8vSJpzf6qQV3sw940lGIZBvZqe2c=";
+    hash = "sha256-fixL1c4A+613rS/L9BYSpYz3PBf7GC0EiQioQiY31wE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -118,106 +120,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   env.FILECHECK_OPTS = "--dump-input-filter=all";
 
-  env.LIT_XFAIL = lib.concatStringsSep ";" [
-    "KLEE :: ArrayOpt/test_expr_arbitrary.c"
-    "KLEE :: CXX/SimpleVirtual.cpp"
-    "KLEE :: CXX/StaticConstructor.cpp"
-    "KLEE :: CXX/StaticDestructor.cpp"
-    "KLEE :: Concrete/ConstantExpr.ll"
-    "KLEE :: Concrete/OverlappingPhiNodes.ll"
-    "KLEE :: Concrete/UnorderedPhiNodes.ll"
-    "KLEE :: DeterministicAllocation/nullpage-read.c"
-    "KLEE :: DeterministicAllocation/nullpage-write.c"
-    "KLEE :: DeterministicAllocation/use-after-free-loh.c"
-    "KLEE :: DeterministicAllocation/use-after-free.c"
-    "KLEE :: Dogfood/ImmutableSet.cpp"
-    "KLEE :: Feature/Atomic.c"
-    "KLEE :: Feature/DivCheck.c"
-    "KLEE :: Feature/ExtCall.c"
-    "KLEE :: Feature/ExtCallWarnings.c"
-    "KLEE :: Feature/FunctionAlias.c"
-    "KLEE :: Feature/FunctionAliasExit.c"
-    "KLEE :: Feature/LargeArrayBecomesSym.c"
-    "KLEE :: Feature/LowerSwitch.c"
-    "KLEE :: Feature/MakeSymbolicName.c"
-    "KLEE :: Feature/NoExternalCallsAllowed.c"
-    "KLEE :: Feature/Optimize.c"
-    "KLEE :: Feature/OvershiftCheck.c"
-    "KLEE :: Feature/ReadStringAtAddress.c"
-    "KLEE :: Feature/SeedConcretizeExternalCall.c"
-    "KLEE :: Feature/ShiftCheck.c"
-    "KLEE :: Feature/consecutive_divide_by_zero.c"
-    "KLEE :: Feature/srem.c"
-    "KLEE :: InlineAsm/RaiseAsm.c"
-    "KLEE :: InlineAsm/asm_lifting.ll"
-    "KLEE :: Intrinsics/Freeze.ll"
-    "KLEE :: Intrinsics/IntrinsicTrap.ll"
-    "KLEE :: Intrinsics/IsConstant.ll"
-    "KLEE :: Intrinsics/Missing.ll"
-    "KLEE :: Intrinsics/Overflow.ll"
-    "KLEE :: Intrinsics/OverflowMul.ll"
-    "KLEE :: Intrinsics/Saturating.ll"
-    "KLEE :: Intrinsics/noalias-scope-decl.ll"
-    "KLEE :: Intrinsics/objectsize.ll"
-    "KLEE :: Replay/klee-replay/KleeZesti.c"
-    "KLEE :: Replay/libkleeruntest/replay_posix_runtime.c"
-    "KLEE :: Runtime/FreeStanding/memcpy_chk_err.c"
-    "KLEE :: Runtime/POSIX/CanonicalizeFileName.c"
-    "KLEE :: Runtime/POSIX/DirConsistency.c"
-    "KLEE :: Runtime/POSIX/DirSeek.c"
-    "KLEE :: Runtime/POSIX/Envp.c"
-    "KLEE :: Runtime/POSIX/FDNumbers.c"
-    "KLEE :: Runtime/POSIX/FD_Fail.c"
-    "KLEE :: Runtime/POSIX/FD_Fail2.c"
-    "KLEE :: Runtime/POSIX/Fcntl.c"
-    "KLEE :: Runtime/POSIX/FilePerm.c"
-    "KLEE :: Runtime/POSIX/FreeArgv.c"
-    "KLEE :: Runtime/POSIX/Futimesat.c"
-    "KLEE :: Runtime/POSIX/Getenv.c"
-    "KLEE :: Runtime/POSIX/Ioctl.c"
-    "KLEE :: Runtime/POSIX/Isatty.c"
-    "KLEE :: Runtime/POSIX/MixedConcreteSymbolic.c"
-    "KLEE :: Runtime/POSIX/Openat.c"
-    "KLEE :: Runtime/POSIX/PrgName.c"
-    "KLEE :: Runtime/POSIX/Read1.c"
-    "KLEE :: Runtime/POSIX/Replay.c"
-    "KLEE :: Runtime/POSIX/SeedAndFail.c"
-    "KLEE :: Runtime/POSIX/Stdin.c"
-    "KLEE :: Runtime/POSIX/SymFileConsistency.c"
-    "KLEE :: Runtime/POSIX/TestMain.c"
-    "KLEE :: Runtime/POSIX/Usage.c"
-    "KLEE :: Runtime/POSIX/Write1.c"
-    "KLEE :: Runtime/POSIX/Write2.c"
-    "KLEE :: Runtime/POSIX/_exit.c"
-    "KLEE :: Runtime/Uclibc/2007-10-08-optimization-calls-wrong-libc-functions.c"
-    "KLEE :: Runtime/klee-libc/mempcpy.c"
-    "KLEE :: Solver/Z3ConstantArray.c"
-    "KLEE :: UBSan/ubsan_alignment-type-mismatch.c"
-    "KLEE :: UBSan/ubsan_array_bounds.c"
-    "KLEE :: UBSan/ubsan_pointer_overflow-pointer_arithmetic.c"
-    "KLEE :: UBSan/ubsan_signed_integer_overflow.c"
-    "KLEE :: UBSan/ubsan_unsigned_integer_overflow.c"
-    "KLEE :: UBSan/ubsan_unsigned_shift_base.c"
-    "KLEE :: UBSan/ubsan_vla_bound.c"
-    "KLEE :: VarArgs/FunctionAliasVarArg.c"
-    "KLEE :: VarArgs/VarArg.c"
-    "KLEE :: VarArgs/VarArgAlignment.c"
-    "KLEE :: VarArgs/VarArgByVal.c"
-    "KLEE :: VarArgs/VarArgByValReported.c"
-    "KLEE :: VarArgs/VarArgLongDouble.c"
-    "KLEE :: VectorInstructions/floating_point_ops_constant.c"
-    "KLEE :: VectorInstructions/integer_ops_constant.c"
-    "KLEE :: VectorInstructions/integer_ops_signed_symbolic.c"
-    "KLEE :: VectorInstructions/integer_ops_unsigned_symbolic.c"
-    "KLEE :: VectorInstructions/memset.c"
-    "KLEE :: VectorInstructions/oob-write.c"
-    "KLEE :: VectorInstructions/shuffle_element.c"
-    "KLEE :: klee-stats/KleeStatsTermClasses.c"
-    "KLEE :: regression/2008-03-11-free-of-malloc-zero.c"
-    "KLEE :: regression/2014-07-04-unflushed-error-report.c"
-    "KLEE :: regression/2016-11-24-bitcast-weak-alias.c"
-  ];
-
   prePatch = ''
     patchShebangs --build .
   '';
@@ -267,19 +169,5 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.ncsa;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ numinit ];
-    # Upstream is still working on support for LLVM ≥ 16; see:
-    #
-    # * <https://github.com/klee/klee/pull/1664>
-    # * <https://github.com/klee/klee/pull/1745>
-    # * <https://github.com/klee/klee/pull/1751>
-    # * <https://github.com/klee/klee/issues/1754>
-    #
-    # The package builds with LLVM 18 but 23% of the tests unexpectedly
-    # fail due to missing functionality for newer LLVM versions. We
-    # mark them as expected failures above to allow the package to
-    # build for those who want to experiment with KLEE, but mark it
-    # broken to avoid giving the impression that this is the expected
-    # user experience and level of support.
-    broken = true;
   };
 })

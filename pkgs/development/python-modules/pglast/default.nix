@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pglast";
-  version = "7.11";
+  version = "7.13";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "pglast";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-b8NrgfPhneERu3kXrrLmhGUSmcnz44SUuv3tBvZ55rE=";
+    hash = "sha256-q5QiP8UPQQnG2Ehgj9hngXnhCKvZyCy8mKA0rzWM7EY=";
   };
 
   postPatch = ''

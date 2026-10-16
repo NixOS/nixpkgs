@@ -15,6 +15,7 @@ let
     getExe
     isStorePath
     literalMD
+    escapeShellArgs
     ;
 
   cfg = config.services.opentelemetry-collector;
@@ -30,7 +31,8 @@ let
     if cfg.validateConfigFile then
       pkgs.runCommandLocal "config.yaml" { inherit generatedConf; } ''
         cp $generatedConf $out
-        ${getExe opentelemetry-collector} validate --config=file:$out
+        ${getExe opentelemetry-collector} validate --config=file:$out \
+          ${escapeShellArgs (map (o: "--set=${o}") cfg.validateConfigOverrides)}
       ''
     else
       generatedConf;
@@ -60,12 +62,39 @@ in
     };
 
     validateConfigFile = lib.mkEnableOption "Validate configuration file" // {
-      defaultText = literalMD "`true` if `configFile` is a store path";
-      default = isStorePath cfg.configFile;
+      defaultText = literalMD "`true` unless `configFile` is a path outside the store";
+      default = cfg.configFile == null || isStorePath cfg.configFile;
+    };
+
+    validateConfigOverrides = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      example = [ "extensions::bearertokenauth::token=stub" ];
+      description = ''
+        Property overrides passed to `otelcol validate` as `--set` arguments,
+        used only for validation and not for the configuration that is
+        deployed. Use this configuration option if you are relying on confmap
+        providers like `''${file:/path}` and `''${env:VAR}` in your setup.
+
+        Note: `::` separates path elements, because component names may
+        themselves contain `.` and `/`.
+      '';
     };
   };
 
+  options.system.build.opentelemetryCollectorConfig = mkOption {
+    type = types.path;
+    readOnly = true;
+    internal = true;
+    description = ''
+      The configuration file the service is started with, after validation.
+      Exposed primarily so that tests can assert on it.
+    '';
+  };
+
   config = mkIf cfg.enable {
+    system.build.opentelemetryCollectorConfig = conf;
+
     assertions = [
       {
         assertion = ((cfg.settings == { }) != (cfg.configFile == null));

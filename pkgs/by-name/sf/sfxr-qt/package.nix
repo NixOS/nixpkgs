@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  kdePackages,
   libsForQt5,
   cmake,
   SDL,
@@ -25,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.extra-cmake-modules
+    kdePackages.extra-cmake-modules
     (python3.withPackages (
       pp: with pp; [
         pyyaml
@@ -61,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/agateau/sfxr-qt";
     description = "Sound effect generator, QtQuick port of sfxr";
     mainProgram = "sfxr-qt";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.linux;
   };

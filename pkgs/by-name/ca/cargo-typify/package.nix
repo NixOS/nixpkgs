@@ -3,22 +3,22 @@
   rustfmt,
   rustPlatform,
   fetchFromGitHub,
-  gitUpdater,
+  nix-update-script,
   makeWrapper,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-typify";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "typify";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-czVxvsRhKnNnvPmONF+pTzZG1tizfCCbThgPhaI8TLo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FqTl2eTp2IgL+ADiHvn9SYEVksvSQ6xO4tHzvfDrNWY=";
   };
 
-  cargoHash = "sha256-7z/gWIl2HqEkpRcWXZv6QQmLdJVJQfY7VCVP2ik5Mps=";
+  cargoHash = "sha256-PWi8o+hgE/TKAsVqwbhurfsFdc2BOWD8C4VcjKeCCZY=";
 
   nativeBuildInputs = [
     rustfmt
@@ -34,8 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "cargo-typify"
   ];
 
-  strictDeps = true;
-
   preCheck = ''
     # cargo-typify depends on rustfmt-wrapper, which requires RUSTFMT:
     export RUSTFMT="${lib.getExe rustfmt}"
@@ -46,13 +44,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --set RUSTFMT "${lib.getExe rustfmt}"
   '';
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "JSON Schema to Rust type converter";
-    mainProgram = "cargo-typify";
     homepage = "https://github.com/oxidecomputer/typify";
-    license = with lib.licenses; [ asl20 ];
-    maintainers = [ ];
+    changelog = "https://github.com/oxidecomputer/typify/blob/${finalAttrs.src.tag}/CHANGELOG.adoc";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ iamanaws ];
+    mainProgram = "cargo-typify";
   };
 })

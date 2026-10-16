@@ -26,14 +26,14 @@
 }:
 
 let
-  version = "2.84.0";
+  version = "2.91.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     tag = "azure-cli-${version}";
-    hash = "sha256-1vt7b9f3enQ3xQzO9JhDETUOpOkW2xWB1qR5arm6xZM=";
+    hash = "sha256-wZG9yWDgAk+7wNBUU5bmmkna2f8TmH+Fo7NX0UbPcCQ=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -187,10 +187,12 @@ py.pkgs.toPythonApplication (
         azure-mgmt-compute
         azure-mgmt-containerinstance
         azure-mgmt-containerregistry
+        azure-mgmt-containerregistrytasks
         azure-mgmt-containerservice
         azure-mgmt-cosmosdb
         azure-mgmt-datalake-store
         azure-mgmt-datamigration
+        azure-mgmt-domainregistration
         azure-mgmt-eventgrid
         azure-mgmt-eventhub
         azure-mgmt-extendedlocation
@@ -214,6 +216,7 @@ py.pkgs.toPythonApplication (
         azure-mgmt-rdbms
         azure-mgmt-mysqlflexibleservers
         azure-mgmt-recoveryservicesbackup
+        # azure-mgmt-recoveryservicesbackup-passivestamp is merged into azure-mgmt-recoveryservicesbackup
         azure-mgmt-recoveryservices
         azure-mgmt-redhatopenshift
         azure-mgmt-redis
@@ -371,6 +374,7 @@ py.pkgs.toPythonApplication (
       "azure.mgmt.rdbms"
       "azure.mgmt.recoveryservices"
       "azure.mgmt.recoveryservicesbackup"
+      "azure.mgmt.recoveryservicesbackup.passivestamp"
       "azure.mgmt.redis"
       "azure.mgmt.resource"
       "azure.mgmt.resource.deployments"

@@ -14,7 +14,7 @@ diff --git a/mkosi/sandbox.py b/mkosi/sandbox.py
 index 4a41f333a764bc41abbd36302bd9fe86baa45a3f..1f7f133912c022a9fb3258437f4ed09872d79dd4 100755
 --- a/mkosi/sandbox.py
 +++ b/mkosi/sandbox.py
-@@ -124,7 +124,7 @@ class cap_user_data_t(ctypes.Structure):
+@@ -158,7 +158,7 @@ class cap_user_data_t(ctypes.Structure):
      ]
  
  
@@ -23,7 +23,7 @@ index 4a41f333a764bc41abbd36302bd9fe86baa45a3f..1f7f133912c022a9fb3258437f4ed098
  
  libc.syscall.restype = ctypes.c_long
  libc.unshare.argtypes = (ctypes.c_int,)
-@@ -291,7 +291,7 @@ def seccomp_suppress(*, chown: bool = False, sync: bool = False) -> None:
+@@ -370,7 +370,7 @@ def seccomp_suppress(*, chown: bool = False, sync: bool = False) -> None:
      if not chown and not sync:
          return
  

@@ -36,7 +36,7 @@ buildGoModule (finalAttrs: {
     description = "Imports OpenStreetMap data into PostGIS";
     homepage = "https://imposm.org/";
     changelog = "https://github.com/omniscale/imposm3/releases/tag/${finalAttrs.src.rev}";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "imposm";
   };

@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-hNJXoUIyrCB9PCWLCmN81F6pBRwZApDR6JWA0adyklw=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace-fail "tag_build = .dev" ""
+  '';
+
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "kgb" ];

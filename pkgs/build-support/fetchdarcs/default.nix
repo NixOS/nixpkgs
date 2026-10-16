@@ -27,6 +27,9 @@ lib.makeOverridable (
         darcs
       ];
 
+      strictDeps = true;
+      __structuredAttrs = true;
+
       inherit outputHash outputHashAlgo;
       outputHashMode = "recursive";
 

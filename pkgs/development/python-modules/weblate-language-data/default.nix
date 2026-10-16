@@ -8,14 +8,17 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "weblate-language-data";
-  version = "2026.6";
+  version = "2026.10";
   pyproject = true;
+  __structuredAttrs = true;
 
+  # nixpkgs-update: no auto update
+  # Only weblate uses this and we want to follow its version constraints
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "language-data";
     tag = finalAttrs.version;
-    hash = "sha256-pgt2GtqlkbF+85wkSLkbyvaptN7Htp3SOdLtUptQ3OU=";
+    hash = "sha256-/kfdgsOT+6RulyzJuUsXK2gpUebaqNN58N66EzshwS0=";
   };
 
   build-system = [ setuptools ];

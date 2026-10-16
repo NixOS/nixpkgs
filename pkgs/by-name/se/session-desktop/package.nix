@@ -6,39 +6,36 @@
   copyDesktopItems,
   stdenv,
   makeWrapper,
-  fetchpatch,
   replaceVars,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  rustPlatform,
   nodejs,
   electron,
   jq,
   tsx,
   python3,
-  git,
   cmake,
-  openssl,
-  tcl,
   xcodebuild,
   cctools,
   darwin,
 }:
 
 let
+  pnpm = pnpm_10;
+
   fake-git = writeShellScriptBin "git" (lib.readFile ./fake-git.sh);
 
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {
     pname = "libsession-util-nodejs";
-    version = "0.6.16"; # find version in pnpm-lock.yaml
+    version = "0.6.17"; # find version in pnpm-lock.yaml
     src = fetchFromGitHub {
       owner = "session-foundation";
       repo = "libsession-util-nodejs";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
       deepClone = true; # need git rev for all submodules
-      hash = "sha256-xTaXPz5p+NBCdjCTErQVrG2gBA4oxHCvSqJTN8g9uE4=";
+      hash = "sha256-j7smb0Rgjdqs4l3ahUV2bFXyvieV6Mcoti6wjSRovLo=";
       # fetchgit is not reproducible with deepClone + fetchSubmodules:
       # https://github.com/NixOS/nixpkgs/issues/100498
       postFetch = ''
@@ -109,7 +106,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.17.15";
+  version = "1.18.1";
   src =
     (fetchFromGitHub {
       owner = "session-foundation";
@@ -123,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -rf .git
         popd
       '';
-      hash = "sha256-snQYyXwybXqDkCBHtIeSMTkQLIXrc8zET7kRiWjPwpI=";
+      hash = "sha256-z60TQuZHrg7PW3CkNSvsWuYKoMW5ACJNf9I/R+wR4e8=";
     }).overrideAttrs
       (oldAttrs: {
         # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050
@@ -133,6 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
           GIT_CONFIG_VALUE_0 = "git@github.com:";
         };
       });
+
+  # This upstream release's lockfile lacks integrity fields required by pnpm >= 10.34.1.
+  # Remove this packaging patch when updating to a source lockfile that includes them.
+  patches = [ ./add-pnpm-tarball-integrities.patch ];
 
   postPatch = ''
     # too restrictive Node version requirement
@@ -166,10 +167,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
   pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
+    inherit (finalAttrs)
+      patches
+      pname
+      src
+      version
+      ;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-cinhhPTFSzrr/hc/+Tyv1IKRn84MYpycOQ1qxCMQuy8=";
+    hash = "sha256-OHCiE2FtbQT0zo88n4aABnLS2gpi33rDCSMNc2FJLVc=";
   };
 
   buildPhase = ''

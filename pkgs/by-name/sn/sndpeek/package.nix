@@ -15,17 +15,24 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sndpeek";
-  version = "1.4";
+  version = "1.41";
 
   src = fetchurl {
     url = "https://soundlab.cs.princeton.edu/software/sndpeek/files/sndpeek-${finalAttrs.version}.tgz";
-    sha256 = "2d86cf74854fa00dcdc05a35dd92bc4cf6115e87102b17023be5cba9ead8eedf";
+    hash = "sha256-ZVMLZRDQfCCI5f+i5LEb34uHKqiTkT2pa2sBjnSyTk0=";
   };
-  sourceRoot = "sndpeek-${finalAttrs.version}/src/sndpeek";
 
-  # this patch adds -lpthread to the list of libraries, without it a
-  # symbol-not-found-error is thrown
-  patches = [ ./pthread.patch ];
+  patches = [
+    # this patch adds -lpthread to the list of libraries, without it a
+    # symbol-not-found-error is thrown
+    ./pthread.patch
+    # fix error: reference to 'complex' is ambiguous
+    ./ambiguous-complex.patch
+  ];
+
+  postPatch = ''
+    cd "src/sndpeek"
+  '';
 
   buildInputs = [
     libglut

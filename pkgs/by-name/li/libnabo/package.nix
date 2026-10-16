@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libnabo";
 
   src = fetchFromGitHub {
-    owner = "ethz-asl";
+    owner = "norlab-ulaval";
     repo = "libnabo";
     rev = finalAttrs.version;
     sha256 = "sha256-/XXRwiLLaEvp+Q+c6lBiuWBb9by6o0pDf8wFtBNp7o8=";

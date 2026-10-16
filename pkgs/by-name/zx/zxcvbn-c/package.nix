@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zxcvbn-c";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "tsyrogit";
     repo = "zxcvbn-c";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/ATlpcx0XTtmzs6REA2YsnINKWz5xPNaetfhfyMuFP0=";
+    sha256 = "sha256-xvdoH+r3kcFpsgJ0po/S5Q6m6yxVitxp+DP+kLS5YRI=";
   };
 
   installPhase = ''

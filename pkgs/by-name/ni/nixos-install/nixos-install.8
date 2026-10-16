@@ -26,6 +26,7 @@
 .Op Fl -option Ar name value
 .Op Fl -show-trace
 .Op Fl -keep-going
+.Op Fl -log-format Ar format
 .Op Fl -help
 .
 .
@@ -192,6 +193,9 @@ Causes Nix to print out a stack trace in case of Nix expression evaluation error
 .
 .It Fl -keep-going
 Causes Nix to continue building derivations as far as possible in the face of failed builds.
+.
+.It Fl -log-format Ar format
+Set the format of log output; one of raw, internal-json, bar or bar-with-logs.
 .
 .It Fl -help
 Synonym for

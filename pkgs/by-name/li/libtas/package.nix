@@ -14,7 +14,6 @@
   libxi,
   file,
   binutils,
-  makeDesktopItem,
 
   # Forces libTAS to run in X11.
   # Enabled by default because libTAS does not support Wayland.
@@ -86,17 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.optionalString withForceX11 "--set QT_QPA_PLATFORM xcb"} \
       --set-default LIBTAS_SO_PATH $out/lib/libtas.so
   '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "libTAS";
-      desktopName = "libTAS";
-      exec = "libTAS %U";
-      icon = "libTAS";
-      startupWMClass = "libTAS";
-      keywords = [ "libTAS" ];
-    })
-  ];
 
   meta = {
     homepage = "https://clementgallet.github.io/libTAS/";

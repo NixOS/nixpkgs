@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "annotator";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "annotator";
     tag = finalAttrs.version;
-    hash = "sha256-nJxms/df5OnASbdj4a2IjHyRT5PA2EaKHkBoQsyv8T8=";
+    hash = "sha256-sDrm3e2LuCyxopNoMRn3anXnrHVJzvDeqBNvEE//4rM=";
   };
 
   nativeBuildInputs = [

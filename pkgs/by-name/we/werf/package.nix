@@ -4,23 +4,24 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  nix-update-script,
   stdenv,
   versionCheckHook,
-  writableTmpDirAsHomeHook,
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.63.1";
+  version = "3.8.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xK86VoY+TQvUdPEchkuJZ9oxwQOSgIr8dkuFQGsgCqY=";
+    hash = "sha256-7k3zT7O/XvOMVr+yfQjl4hYs3ItTfFgkfxc5dBWEq+4=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-7IJq7xOF2ELJu8n1f2xXOIxOybKaN+FpuU7r4KGsfX0=";
+  vendorHash = "sha256-0zgQqYFo8K3bIEBTY/woYHB1L9yWsVErT7naodV/voY=";
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs =
@@ -34,7 +35,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/werf/werf/v2/pkg/werf.Version=v${finalAttrs.version}"
+    "-X github.com/werf/werf/v3/pkg/werf.Version=v${finalAttrs.version}"
   ]
   ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
     "-extldflags=-static"
@@ -49,7 +50,6 @@ buildGoModule (finalAttrs: {
     "dfssh"
   ]
   ++ lib.optionals (finalAttrs.env.CGO_ENABLED == 1) [
-    "cni"
     "exclude_graphdriver_devicemapper"
     "netgo"
     "no_devmapper"
@@ -57,23 +57,9 @@ buildGoModule (finalAttrs: {
     "static_build"
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
-  preCheck = ''
-    # Test all packages.
-    unset subPackages
-
-    # Remove tests that fail or require external services.
-    rm -rf \
-      integration/suites \
-      pkg/true_git/*_test.go \
-      pkg/werf/exec/*_test.go \
-      test/e2e \
-      test/legacy_e2e
-  ''
-  + lib.optionalString (finalAttrs.env.CGO_ENABLED == 0) ''
-    # A workaround for osusergo.
-    export USER=nixbld
-  '';
+  # As of 3.0.0 tests are way to burdensome to maintain because of a bespoke way
+  # they are handled and a general sandbox incompatability.
+  doCheck = false;
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -86,6 +72,8 @@ buildGoModule (finalAttrs: {
         --$shell <($out/bin/werf completion --shell=$shell)
     done
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "GitOps delivery tool";

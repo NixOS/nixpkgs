@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "nfpm";
-  version = "2.45.2";
+  version = "2.47.0";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "nfpm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MzxN4oQFmhnuR8T5wa5AGKjL+LhlTSBd2tGVf9WsCBc=";
+    hash = "sha256-khdD5wrTP7YSqnV5qhyvIIbOtx//eE+wgDu5y7pQ+NY=";
   };
 
-  vendorHash = "sha256-cq0pcbC0T3klh3D9l0e0u5JPYv1kWYlpeNYyGczGX+A=";
+  vendorHash = "sha256-BXbT/WpLsythZc3JsMIjXlB+SbWv0HBS7tPRS1/tk4w=";
 
   ldflags = [
     "-s"
@@ -49,7 +49,7 @@ buildGoModule (finalAttrs: {
       techknowlogick
       caarlos0
     ];
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "nfpm";
   };
 })

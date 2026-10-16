@@ -39,16 +39,16 @@
   tzdata,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django";
-  version = "5.2.12";
+  version = "5.2.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
-    tag = version;
-    hash = "sha256-vMP+/BLDOZL8NEP31Dp26XEK7bpusYluMevOg9iRT3s=";
+    tag = finalAttrs.version;
+    hash = "sha256-7it3opzsiN/hHhpipZz4ogmRKGz7E9/LmTF03/UYIB0=";
   };
 
   patches = [
@@ -59,6 +59,8 @@ buildPythonPackage rec {
     ./5.2/pythonpath.patch
     # disable test that expects timezone issues
     ./5.2/disable-failing-test.patch
+    # skip flaky performnace test
+    ./6.0/skip-flaky-tests.patch
   ]
   ++ lib.optionals withGdal [
     (replaceVars ./5.2/gdal.patch {
@@ -102,7 +104,7 @@ buildPythonPackage rec {
     tblib
     tzdata
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     # make sure the installed library gets imported
@@ -131,10 +133,22 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
+    changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor finalAttrs.version}/releases/${finalAttrs.version}/";
     description = "High-level Python Web framework that encourages rapid development and clean, pragmatic design";
     homepage = "https://www.djangoproject.com";
+    identifiers = {
+      cpeParts = {
+        inherit (finalAttrs) version;
+        product = "django";
+        update = "*";
+        vendor = "djangoproject";
+      };
+      purlParts = {
+        type = "pypi";
+        spec = "django@${finalAttrs.version}";
+      };
+    };
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

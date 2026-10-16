@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "nezha-agent";
-  version = "2.0.2";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JuR/9q8RzSHNKJFhe9pdRS30KlXepDho+1E4bOZa4M4=";
+    hash = "sha256-8rrzMaaY8DZecaY6JNyvBJVVPH02Y6ghaVJBInTViBY=";
   };
 
-  vendorHash = "sha256-O2ENDVq4Dt3f1FCZBKiz30P/xNRxx+0w3r7LzJP9URM=";
+  vendorHash = "sha256-hgYeFu7oo5dW1/rBgybVjY25EDdVnL9xmzXpfvLU4/c=";
 
   ldflags = [
     "-s"

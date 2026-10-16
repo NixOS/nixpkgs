@@ -66,6 +66,7 @@ in
       boot.kernel.sysctl."vm.swappiness" = 1;
       boot.kernelParams = [ "vsyscall=emulate" ];
       system.extraDependencies = [ foo ];
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
 
   testScript = ''
@@ -106,8 +107,7 @@ in
         assert "machine" == machine.succeed("hostname -s").strip()
 
     with subtest("whether systemd-udevd automatically loads modules for our hardware"):
-        machine.succeed("systemctl start systemd-udev-settle.service")
-        machine.wait_for_unit("systemd-udev-settle.service")
+        machine.succeed("udevadm settle --timeout=180")
         assert "mousedev" in machine.succeed("lsmod")
 
     with subtest("whether systemd-tmpfiles-clean works"):

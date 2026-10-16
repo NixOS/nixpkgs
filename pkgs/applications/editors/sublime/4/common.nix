@@ -6,6 +6,7 @@
 }:
 
 {
+  config,
   fetchurl,
   stdenv,
   lib,
@@ -22,7 +23,7 @@
   writeShellScript,
   common-updater-scripts,
   curl,
-  openssl_1_1,
+  openssl_3_5,
   bzip2,
   sqlite,
 }:
@@ -32,8 +33,7 @@ let
   packageAttribute = "sublime4${lib.optionalString dev "-dev"}";
   binaries = [
     "sublime_text"
-    "plugin_host-3.3"
-    "plugin_host-3.8"
+    "plugin_host-3.14"
     crashHandlerBinary
   ];
   primaryBinary = "sublime_text";
@@ -42,8 +42,7 @@ let
     "sublime"
     "sublime4"
   ];
-  crashHandlerBinary =
-    if lib.versionAtLeast buildVersion "4153" then "crash_handler" else "crash_reporter";
+  crashHandlerBinary = "crash_handler";
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
@@ -54,13 +53,10 @@ let
     libxtst
     glib
     libglvnd
-    openssl_1_1
     gtk3
     cairo
     pango
     curl
-  ]
-  ++ lib.optionals (lib.versionAtLeast buildVersion "4145") [
     sqlite
   ];
 
@@ -87,15 +83,23 @@ let
     buildPhase = ''
       runHook preBuild
 
+      # Remove old plugin host because it depends on EOL openssl 1.1
+      rm plugin_host-3.3
+
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${lib.getLib stdenv.cc.cc}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"}:$out \
           $binary
       done
 
-      # Rewrite pkexec argument. Note that we cannot delete bytes in binary.
-      sed -i -e 's,/bin/cp\x00,cp\x00\x00\x00\x00\x00\x00,g' ${primaryBinary}
+      # Unable to get plugin_host-3.14 not crash with Python from Nixpkgs
+      patchelf --set-rpath ${
+        lib.makeLibraryPath [
+          sqlite
+          openssl_3_5
+        ]
+      } libpython3.14.so.1.0
 
       runHook postBuild
     '';
@@ -105,7 +109,8 @@ let
 
       # No need to patch these libraries, it works well with our own
       rm libcrypto.so.1.1 libssl.so.1.1
-      ${lib.optionalString (lib.versionAtLeast buildVersion "4145") "rm libsqlite3.so"}
+      rm libsqlite3.so
+      rm libcrypto.so.3 libssl.so.3
 
       mkdir -p $out
       cp -r * $out/
@@ -116,8 +121,6 @@ let
     dontWrapGApps = true; # non-standard location, need to wrap the executables manually
 
     postFixup = ''
-      sed -i 's#/usr/bin/pkexec#pkexec\x00\x00\x00\x00\x00\x00\x00\x00\x00#g' "$out/${primaryBinary}"
-
       wrapProgram $out/${primaryBinary} \
         --set LOCALE_ARCHIVE "${glibcLocales.out}/lib/locale/locale-archive" \
         "''${gappsWrapperArgs[@]}"
@@ -211,6 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
       demin-dmitriy
       zimbatm
     ];
+    mainProgram = "subl";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [

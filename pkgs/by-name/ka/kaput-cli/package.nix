@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kaput-cli";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "davidchalifoux";
     repo = "kaput-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N+vdK9DpooPEtXVUNZtmbdjVSpN5ddYggb4FsrvyCwU=";
+    hash = "sha256-dDDwupYg+JiK7fS/9lxw/qV9/JEv5WeKS+2lwzDBPcE=";
   };
 
-  cargoHash = "sha256-bz7K3eWv9i50k5nXBb9k8IZ+xPIz4PSomp6K2LDSH78=";
+  cargoHash = "sha256-+CxIeNioN3JfINXkb3gMgyEJyCVPwbinIEr1S0IoSOk=";
 
   env = {
     OPENSSL_NO_VENDOR = 1;

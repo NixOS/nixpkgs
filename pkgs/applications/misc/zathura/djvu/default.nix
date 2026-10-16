@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura-djvu";
-  version = "2026.02.03";
+  version = "2026.07.18";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura-djvu";
     tag = finalAttrs.version;
-    hash = "sha256-5Nl9hK2uOS/NZ4MOxe3m6E9CBt5YKGeh1lZZ5E5bghw=";
+    hash = "sha256-NKINOR4lptZsXncvra7rGHd+825vLlxF/PEP+q48OH8=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.zlib;
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mithicspirit ];
   };
 })

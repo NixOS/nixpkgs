@@ -16,10 +16,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${zookeeper.pname}-${version}/apache-${zookeeper.pname}-${version}.tar.gz";
-    hash = "sha512-K8HvBwIdf0tHVotFoFuk0uYr2HFPsCKjPmK9xI/hHTxkpT1Tyx11Lxel9NlJppttillKMYAHvgrzinPDcQ7bdg==";
+    hash = "sha512-Zb6uvLbvf2m4RMLwpZ3E2S9ChFvcOpyp/TH+WSfTe6tOmecAnv/YM6gz4z5PyBulyg0j7jqc3BmQvotvyPt5tw==";
   };
 
   sourceRoot = "apache-${zookeeper.pname}-${version}/zookeeper-client/zookeeper-client-c";
+
+  # Fix build w/ glibc-2.44
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   nativeBuildInputs = [
     autoreconfHook

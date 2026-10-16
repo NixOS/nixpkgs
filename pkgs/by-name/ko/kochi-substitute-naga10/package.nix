@@ -33,7 +33,6 @@ stdenvNoCC.mkDerivation rec {
       this font may not be sold commercially. See kochi-substitute for the free
       Debian version.
     '';
-    homepage = "https://osdn.net/projects/efont/";
     license = lib.licenses.unfreeRedistributable;
     maintainers = [ lib.maintainers.auntie ];
   };

@@ -13,7 +13,6 @@ let
     mkOption
     mkIf
     mkRemovedOptionModule
-    types
     listToAttrs
     recursiveUpdate
     ;

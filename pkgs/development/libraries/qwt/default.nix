@@ -23,6 +23,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3LCFiWwoquxVGMvAjA7itOYK2nrJKdgmOfYYmFGmEpo=";
   };
 
+  patches = [
+    # Fix the generated pkg-config file when built against Qt6.
+    # The file wrongly pulled in an unsatisfied dependency to Qt5.
+    #
+    # When building Qwt using Qt6, the constructed pkgconfig .pc file was
+    # previously set up to only look for Qt5 libraries. This fix now matches
+    # the library dependency to the Qt version used in building Qwt.
+    #
+    # See upstream commit b225ea23753ce35356ad1b53c0854813004bb605.
+    # https://sourceforge.net/p/qwt/git/ci/b225ea23753ce35356ad1b53c0854813004bb605/basic
+    ./0001-pkgconfig-for-Qt-5-6-adjustments.patch
+  ];
+
   propagatedBuildInputs = [
     qtbase
     qtsvg

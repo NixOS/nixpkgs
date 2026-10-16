@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'google-protobuf'
+gem 'google-protobuf', '< 4'
 gem 'libusb'
-gem 'rubyserial'
 gem 'nokogiri'
-
+gem 'rake'
+gem 'serialport'

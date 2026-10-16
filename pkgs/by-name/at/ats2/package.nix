@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     sed -i 's/gcc/clang/g' utils/*/DATS/atscc_util.dats
   '';
 
+  patches = [
+    ./fix-build-glibc-2.44.patch
+  ];
+
   buildInputs = [ gmp ];
 
   # Disable parallel build, errors:
@@ -77,7 +81,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      ttuegel
       bbarker
     ];
   };

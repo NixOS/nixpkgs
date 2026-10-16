@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     description = "Remote control for Icom radio transceivers";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     mainProgram = "kappanhang";
   };
 })

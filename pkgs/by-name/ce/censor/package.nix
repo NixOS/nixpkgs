@@ -9,27 +9,33 @@
   ninja,
   pkg-config,
   desktop-file-utils,
+  libxml2,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "censor";
-  version = "0.4.0";
+  version = "0.10.1";
   pyproject = false;
 
   src = fetchFromCodeberg {
     owner = "censor";
     repo = "Censor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-piRIa/weDhSve+NCtwq9vhzGyC7jmtyJ/x//llPGQn8=";
+    hash = "sha256-cNUokMWbvwPIq6gdnwkPwMWBlqo3HjqLeSyPyEDYrts=";
   };
 
+  postPatch = ''
+    patchShebangs po/build.sh
+  '';
+
   nativeBuildInputs = [
+    desktop-file-utils
+    gobject-introspection
+    libxml2 # xmllint
     meson
     ninja
     pkg-config
-    gobject-introspection
     wrapGAppsHook4
-    desktop-file-utils
   ];
 
   buildInputs = [

@@ -14,9 +14,9 @@
   # buildInputs
   boost,
   fmt,
-  hyperscan,
   onetbb,
   opencv,
+  vectorscan,
 
   # tests
   versionCheckHook,
@@ -53,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     fmt
-    hyperscan
     onetbb
     opencv
+    vectorscan
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -75,7 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/todds-encoder/todds";
     changelog = "https://github.com/todds-encoder/todds/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ weirdrock ];
+    maintainers = with lib.maintainers; [
+      adda
+    ];
     mainProgram = "todds";
     platforms = lib.platforms.linux;
   };

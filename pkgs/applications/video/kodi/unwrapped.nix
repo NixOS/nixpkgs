@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   fetchzip,
   autoconf,
   automake,
@@ -105,8 +106,6 @@
   libxdmcp,
   dbusSupport ? true,
   dbus,
-  joystickSupport ? true,
-  cwiid,
   nfsSupport ? true,
   libnfs,
   pulseSupport ? true,
@@ -148,26 +147,26 @@ let
     owner = "xbmc";
     repo = "libdvdcss";
     rev = "1.4.3-Next-Nexus-Alpha2-2";
-    sha256 = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
+    hash = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
     rev = "6.1.1-Next-Nexus-Alpha2-2";
-    sha256 = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
+    hash = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
     rev = "6.1.3-Next-Nexus-Alpha2-2";
-    sha256 = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
+    hash = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
   };
 
   groovy = fetchzip {
     url = "mirror://apache/groovy/4.0.16/distribution/apache-groovy-binary-4.0.16.zip";
-    sha256 = "sha256-OfZBiMVrhw6VqHRHCSC7ZV3FiZ26n4+F8hsskk+L6yU=";
+    hash = "sha256-OfZBiMVrhw6VqHRHCSC7ZV3FiZ26n4+F8hsskk+L6yU=";
   };
 
   apache_commons_lang = fetchzip {
@@ -254,6 +253,18 @@ stdenv.mkDerivation (
       hash = "sha256-36wBAqGEDCRZ4t1ygTg03Pyk7Gg9quUTUGD3SBp6nCk=";
     };
 
+    patches = [
+      # TexturePacker has some conditionals on GIFLIB 5, which break with
+      # GIFLIB 6. This has been extended to support all versions >= 5 upstream,
+      # but has not yet made it into a release.
+      # https://github.com/xbmc/xbmc/pull/28016
+      (fetchpatch {
+        name = "texturepacker-giflib-6.patch";
+        url = "https://github.com/xbmc/xbmc/commit/29492cbd20d4c90a9c00a30ab525d4d0e81a968b.patch";
+        hash = "sha256-WNaODPCtRfn30jVU5HbBnAO2Vl/MQp2CYmKOTTyDGZI=";
+      })
+    ];
+
     # make  derivations declared in the let binding available here, so
     # they can be overridden
     inherit
@@ -287,7 +298,6 @@ stdenv.mkDerivation (
       tinyxml-2
       taglib
       libssh
-      gtest
       ncurses
       spdlog
       alsa-lib
@@ -362,7 +372,6 @@ stdenv.mkDerivation (
       libxfixes
     ]
     ++ lib.optional dbusSupport dbus
-    ++ lib.optional joystickSupport cwiid
     ++ lib.optional nfsSupport libnfs
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional pipewireSupport pipewire
@@ -405,6 +414,10 @@ stdenv.mkDerivation (
       waylandpp.bin
     ];
 
+    nativeCheckInputs = [
+      gtest
+    ];
+
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ];
@@ -445,9 +458,23 @@ stdenv.mkDerivation (
       "-DWITH_TEXTUREPACKER=${lib.getExe texturePacker}"
     ];
 
-    # 14 tests fail but the biggest issue is that every test takes 30 seconds -
-    # I'm guessing there is a thing waiting to time out
-    doCheck = false;
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    checkPhase = ''
+      runHook preCheck
+
+      make -j $NIX_BUILD_CORES kodi-test
+
+      ./kodi-test --gtest_filter=-${
+        lib.concatStringsSep ":" [
+          "TestCPUInfo.GetCPUFrequency"
+          "TestNetwork.PingHost"
+          "TestSystemInfo.GetOsName"
+          "TestSystemInfo.GetOsPrettyNameWithVersion"
+        ]
+      }
+
+      runHook postCheck
+    '';
 
     preConfigure = ''
       cmakeFlagsArray+=("-DCORE_PLATFORM_NAME=${lib.concatStringsSep " " kodi_platforms}")

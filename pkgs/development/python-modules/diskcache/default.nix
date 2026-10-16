@@ -3,23 +3,28 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytest-cov-stub,
   pytest-django,
   pytest-xdist,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "diskcache";
   version = "5.6.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1cDpdf+rLaG14TDd1wEHAiYXb69NFTFeOHD1Ib1oOVY=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-cov-stub
@@ -48,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

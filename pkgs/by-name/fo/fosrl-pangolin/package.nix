@@ -5,15 +5,23 @@
   buildNpmPackage,
   makeWrapper,
   formats,
-  inter,
   databaseType ? "sqlite",
+  edition ? "oss",
   environmentVariables ? { },
   nixosTests,
+  nodejs_22,
+  nix-update-script,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
   "sqlite"
   "pg"
+];
+
+assert lib.assertOneOf "edition" edition [
+  "enterprise"
+  "oss"
+  "saas"
 ];
 
 let
@@ -29,40 +37,45 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.15.3";
+  version = "1.24.0";
+
+  __structuredAttrs = true;
+  enableParallelBuilding = true;
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-UGfwbFbuQ0ljipCjnPxZ/Is2hh1vjZJb97Lo/43sWeg=";
+    hash = "sha256-EYyqT7yDz1KpkCyb1niOZcSNxkRMJ6LXjuAcXPhemgM=";
   };
 
-  npmDepsHash = "sha256-kfgwU5QusUNWVcRXlYCS3ES1Av/phCHG8nFBj0yjz2Q=";
+  nodejs = nodejs_22;
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-nWlIy+1m6IJuGaXV3U1ampTL9Xvxj7jONuJ0ecGAU3g=";
+  npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
     esbuild
     makeWrapper
   ];
 
-  # Replace the googleapis.com Inter font with a local copy from Nixpkgs.
-  # Based on pkgs.nextjs-ollama-llm-ui.
-  postPatch = ''
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "{ Geist, Inter, Manrope, Open_Sans } from \"next/font/google\"" \
-      "localFont from \"next/font/local\""
-
-    substituteInPlace src/app/layout.tsx --replace-fail \
-      "const font = Inter({${"\n"}    subsets: [\"latin\"]${"\n"}});" \
-      "const font = localFont({ src: './Inter.ttf' });"
-
-    cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
+  # remove the proprietary code
+  postUnpack = lib.optionalString (edition == "oss") ''
+    rm -rf server/private
   '';
+
+  # upstream inconsistently updates this
+  # so leaving this here in case it's needed
+  # postPatch = ''
+  #   substituteInPlace server/lib/consts.ts --replace-fail \
+  #     'export const APP_VERSION = "${lib.versions.majorMinor finalAttrs.version + ".0"}";' \
+  #     'export const APP_VERSION = "${finalAttrs.version}";'
+  # '';
 
   preBuild = ''
     npm run set:${db false}
-    npm run set:oss
-    npm run db:${db false}:generate
+    npm run set:${edition}
+    npm run db:generate
   '';
 
   buildPhase = ''
@@ -158,13 +171,14 @@ buildNpmPackage (finalAttrs: {
   passthru = {
     inherit databaseType;
     tests = { inherit (nixosTests) pangolin; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Tunneled reverse proxy server with identity and access control";
     homepage = "https://github.com/fosrl/pangolin";
     changelog = "https://github.com/fosrl/pangolin/releases/tag/${finalAttrs.version}";
-    license = lib.licenses.agpl3Only;
+    license = [ lib.licenses.agpl3Only ] ++ lib.optional (edition != "oss") lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       jackr
       water-sucks

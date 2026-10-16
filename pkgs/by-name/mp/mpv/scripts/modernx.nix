@@ -3,7 +3,6 @@
   buildLua,
   fetchFromGitHub,
   installFonts,
-  makeFontsConf,
   nix-update-script,
 }:
 buildLua (finalAttrs: {
@@ -20,13 +19,7 @@ buildLua (finalAttrs: {
 
   nativeBuildInputs = [ installFonts ];
 
-  passthru.extraWrapperArgs = [
-    "--set"
-    "FONTCONFIG_FILE"
-    (toString (makeFontsConf {
-      fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
-    }))
-  ];
+  passthru.fontDirectories = [ "${finalAttrs.finalPackage}/share/fonts" ];
 
   passthru.updateScript = nix-update-script { };
 

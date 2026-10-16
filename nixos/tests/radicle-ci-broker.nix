@@ -16,11 +16,11 @@ in
 
 {
   name = "radicle-ci-broker";
-  meta.maintainers = with lib.maintainers; [ defelo ];
+  meta.maintainers = lib.teams.radicle.members;
 
   nodes.seed = {
     virtualisation.credentials = {
-      "xyz.radicle.node.secret".source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
+      "dev.radicle.node.secret".source = "${seed-ssh-keys.snakeOilEd25519PrivateKey}";
     };
 
     services.radicle = {

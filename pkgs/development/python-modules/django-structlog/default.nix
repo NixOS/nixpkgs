@@ -24,14 +24,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "django-structlog";
-  version = "10.0.0";
+  version = "10.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrobichaud";
     repo = "django-structlog";
     tag = finalAttrs.version;
-    hash = "sha256-BNZ+nk2NK5x2YsTDZjH5BVizXAyLZhKp8zRvkWi068k=";
+    hash = "sha256-HQxvkArh0WPbVoIoiiSlb2YRk+cJvow/dE/O2JjMlIQ=";
   };
 
   build-system = [ setuptools ];

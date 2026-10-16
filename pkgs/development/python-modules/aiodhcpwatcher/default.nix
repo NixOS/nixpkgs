@@ -10,47 +10,45 @@
   scapy,
 
   # tests
+  blockbuster,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiodhcpwatcher";
-  version = "1.2.1";
+  version = "1.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "aiodhcpwatcher";
-    rev = "v${version}";
-    hash = "sha256-+BF3sBam8O9I4tY7QqnA4iNcJFsK9+imS8pY3N/v1HY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-a6svFLu0nmVVVVCg/evdmygTPj8VP+mjKTaaZGA0TQk=";
   };
-
-  postPatch = ''
-    sed -i "/addopts =/d" pyproject.toml
-  '';
 
   build-system = [ poetry-core ];
 
   dependencies = [ scapy ];
 
   nativeCheckInputs = [
+    blockbuster
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [ "aiodhcpwatcher" ];
 
   meta = {
     description = "Watch for DHCP packets with asyncio";
     homepage = "https://github.com/bdraco/aiodhcpwatcher";
-    changelog = "https://github.com/bdraco/aiodhcpwatcher/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/aiodhcpwatcher/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -6,20 +6,26 @@
     krita-plugin-gmic
   ],
   krita-unwrapped,
+  wrapGAppsHook3,
 }:
 symlinkJoin {
   pname = "krita";
   inherit (krita-unwrapped)
     version
     buildInputs
-    nativeBuildInputs
     meta
     ;
+
+  nativeBuildInputs = krita-unwrapped.nativeBuildInputs ++ [
+    wrapGAppsHook3
+  ];
 
   paths = [ krita-unwrapped ] ++ binaryPlugins;
 
   postBuild = ''
+    gappsWrapperArgsHook
     wrapQtApp "$out/bin/krita" \
+      "''${gappsWrapperArgs[@]}" \
       --prefix PYTHONPATH : "$PYTHONPATH" \
       --set KRITA_PLUGIN_PATH "$out/lib/kritaplugins"
   '';

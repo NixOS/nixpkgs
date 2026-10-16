@@ -24,7 +24,12 @@ let
           hash = "sha256-l5pEhv8D6jRlU24SlsGQEkXda/b7KUdP9mAqrZCbl38=";
         };
 
-        propagatedBuildInputs = with python3.pkgs; [ packaging ];
+        dependencies = with python3.pkgs; [ packaging ];
+
+        disabledTests = [
+          # 'year must be in 1..9999, not 292278994' instead of 'out of range'
+          "test_from_timestamp_with_overflow_value"
+        ];
       });
     };
   };

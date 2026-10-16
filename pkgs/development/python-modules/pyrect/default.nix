@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Simple module with a Rect class for Pygame-like rectangular areas";
     homepage = "https://github.com/asweigart/pyrect";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 }

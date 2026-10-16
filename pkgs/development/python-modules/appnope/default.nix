@@ -2,28 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "appnope";
-  version = "0.1.4";
-  format = "setuptools";
+  version = "1.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "minrk";
     repo = "appnope";
-    rev = version;
-    hash = "sha256-We7sZKVbQFIMdZpS+VMdi0RH1O/qtFNrfJNg/98tO5A=";
+    tag = finalAttrs.version;
+    hash = "sha256-saJ68R4zdquTWWT/QuWZk6oQhcx3R+AmVBYt/NmFtyM=";
   };
 
+  build-system = [ hatchling ];
+
   checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "appnope" ];
 
   meta = {
     description = "Disable App Nap on macOS";
     homepage = "https://github.com/minrk/appnope";
+    changelog = "https://github.com/minrk/appnope/releases/tag/${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ OPNA2608 ];
     # Not Darwin-specific because dummy fallback may be used cross-platform
   };
-}
+})

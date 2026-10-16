@@ -12,14 +12,14 @@
   libgcrypt,
   xkeyboard_config,
   libthai,
-  libsForQt5,
+  qt5,
 }:
 
 let
   pname = "insync";
   # Find a binary from https://www.insynchq.com/downloads/linux
-  version = "3.9.8.60034";
-  web-archive-id = "20260301163242"; # upload via https://web.archive.org/save/
+  version = "3.9.11.60043";
+  web-archive-id = "20260929183129"; # upload via https://web.archive.org/save/
   debian-dist = "forky_amd64";
   insync-pkg = stdenvNoCC.mkDerivation {
     pname = "${pname}-pkg";
@@ -30,13 +30,13 @@ let
         "https://cdn.insynchq.com/builds/linux/${version}/insync_${version}-${debian-dist}.deb"
         "https://web.archive.org/web/${web-archive-id}/${builtins.elemAt urls 0}"
       ];
-      hash = "sha256-EeTp49so038/bEJ9P1ubPiSj7dKhGHtHmkV0ExMCmj0=";
+      hash = "sha256-FaNsdye/EjZUBsZZr2bLfkQ+OgyfQ53UEgR+YSeBczs=";
     };
 
     nativeBuildInputs = [
       dpkg
       autoPatchelfHook
-      libsForQt5.qt5.wrapQtAppsHook
+      qt5.wrapQtAppsHook
     ];
 
     buildInputs = [
@@ -46,7 +46,7 @@ let
       libgcrypt
       libthai
     ]
-    ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
+    ++ [ qt5.qtvirtualkeyboard ];
 
     installPhase = ''
       runHook preInstall

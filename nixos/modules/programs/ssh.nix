@@ -35,6 +35,40 @@ let
   ]
   ++ map pkgs.copyPathToStore cfg.knownHostsFiles;
 
+  sshConfigValue = v: if builtins.isBool v then lib.boolToYesNo v else toString v;
+
+  hostSettingsText = lib.generators.toKeyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString = sshConfigValue;
+    } " ";
+    indent = "  ";
+  };
+
+  hostsText = lib.pipe cfg.hosts [
+    (lib.mapAttrsToList (
+      pattern: hostCfg:
+      # `order` is forced here so that it is required for a lone block too,
+      # which `sort` would otherwise never compare against anything.
+      lib.seq hostCfg.order {
+        inherit pattern;
+        inherit (hostCfg) order;
+        settings = removeAttrs hostCfg [ "order" ];
+      }
+    ))
+    # `ssh_config(5)` applies the first obtained value for each keyword, so the
+    # blocks are written in ascending `order`, and sharing an `order` value is
+    # an error rather than an arbitrary choice between the two blocks.
+    (lib.sort (
+      a: b:
+      if a.order != b.order then
+        a.order < b.order
+      else
+        throw "programs.ssh.hosts: blocks '${a.pattern}' and '${b.pattern}' cannot have the same order value (${toString a.order})"
+    ))
+    (map (host: "Host ${host.pattern}\n" + hostSettingsText host.settings))
+    (lib.concatStringsSep "\n")
+  ];
+
 in
 {
   ###### interface
@@ -121,6 +155,76 @@ in
           options will be added after a `Host *` pattern.
           See {manpage}`ssh_config(5)`
           for help.
+        '';
+      };
+
+      hosts = lib.mkOption {
+        default = { };
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            freeformType = lib.types.attrsOf (
+              lib.types.oneOf [
+                lib.types.bool
+                lib.types.int
+                lib.types.str
+              ]
+            );
+            options.order = lib.mkOption {
+              type = lib.types.int;
+              example = 100;
+              description = ''
+                Position of this block in {file}`ssh_config`. Blocks are
+                written in ascending order of this value, and two blocks
+                may not share a value.
+
+                Since {manpage}`ssh_config(5)` applies the *first* obtained
+                value for each keyword, a block with a lower value takes
+                precedence over the blocks that follow it. In particular, a
+                catch-all pattern such as `"*"` should have the highest
+                value, so that it does not shadow the more specific blocks.
+
+                To place a block relative to one that another module
+                declares, derive this value from that block's one instead of
+                hardcoding it, e.g.
+                `config.programs.ssh.hosts."*".order - 100`.
+              '';
+            };
+          }
+        );
+        description = ''
+          Per-host (or host-pattern) client configuration, added as `Host`
+          blocks to {file}`ssh_config`.
+
+          Attribute names are used as the `Host` pattern, as accepted by
+          {manpage}`ssh_config(5)`. Several space-separated patterns can be
+          given to apply one block to all of them, e.g.
+          `"foo bar *.baz.org"`.
+
+          Every attribute of a block besides {option}`order` becomes a
+          `Key Value` line within that block; boolean values are rendered as
+          `yes`/`no`.
+        '';
+        example = lib.literalExpression ''
+          {
+            jumphost = {
+              order = 100;
+              User = "deploy";
+              Port = 2222;
+              IdentityFile = "/root/.ssh/id_deploy";
+              IdentitiesOnly = true;
+            };
+            "*.example.org" = {
+              order = 200;
+              ControlMaster = "auto";
+              ControlPath = "/root/.ssh/master-%r@%n:%p";
+              ControlPersist = "5m";
+            };
+            # Written last, so that it does not shadow the blocks above.
+            "*" = {
+              order = 300;
+              ServerAliveInterval = 60;
+            };
+          }
         '';
       };
 
@@ -342,6 +446,7 @@ in
     environment.etc."ssh/ssh_config".text = lib.concatStringsSep "\n" (
       # Custom options from `extraConfig`, to override generated options
       lib.optional (cfg.extraConfig != "") cfg.extraConfig
+      ++ lib.optional (cfg.hosts != { }) hostsText
       ++ [
         ''
           # Generated options from other settings

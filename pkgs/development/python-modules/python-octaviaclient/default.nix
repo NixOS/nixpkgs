@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.13.0";
+  version = "3.15.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "python_octaviaclient";
     inherit version;
-    hash = "sha256-Iq1TdXMUDqrE33V+yh8H7yYPIW01NVEa6cPqFPq4Yv4=";
+    hash = "sha256-sJkCRjQ4b6JDtFVP1ex5lssC3zN8bcQTpKP/hHWuqjs=";
   };
 
   # NOTE(vinetos): This explicit dependency is removed to avoid infinite recursion

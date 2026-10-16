@@ -2,7 +2,12 @@
   lib,
   stdenv,
   fetchurl,
+  groff,
+  mandoc,
   ncurses,
+  nix-update-script,
+  util-linux,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.7.0";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/myman/files/myman/myman-${finalAttrs.version}/myman-${finalAttrs.version}.tar.gz";
-    hash = "sha512-elJo+pqSdcjUa1fPcU6InCIVgaXL4Zs4jmpgI2Z/mUH3ZK9r5H+/HxGkMPFJ+/anoLtb4t2SsWwHAg+d6PyYtg==";
+    url = "mirror://sourceforge/myman/myman/myman-${finalAttrs.version}/myman-${finalAttrs.version}.tar.gz";
+    hash = "sha256-MalLLIlJo10Y7tNej2hYAfv+txQYo8Aer79xDOlaKSs=";
   };
 
   outputs = [
@@ -20,19 +25,33 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    groff
+    mandoc
+    util-linux
+  ];
   buildInputs = [ ncurses ];
 
-  configureFlags = [
-    "--with-xterm"
-    "--with-rxvt"
-    "--with-kterm"
-    "--with-ncurses"
+  configureFlags = [ "--with-ncursesw" ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-D_XOPEN_SOURCE=600"
+    "-D_GNU_SOURCE"
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Pacman clone with an ncurses and a 'graphic' interface";
-    homepage = "http://myman.sourceforge.net/";
-    license = lib.licenses.bsd3;
+    description = "Text-mode videogame inspired by Namco's Pac-Man";
+    homepage = "https://myman.sourceforge.io/";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ silverhadch ];
     platforms = lib.platforms.unix;
     mainProgram = "myman";

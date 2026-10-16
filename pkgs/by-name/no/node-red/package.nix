@@ -9,18 +9,16 @@
 
 buildNpmPackage rec {
   pname = "node-red";
-  version = "4.1.8";
+  version = "5.0.8";
 
   src = fetchFromGitHub {
     owner = "node-red";
     repo = "node-red";
     tag = version;
-    hash = "sha256-IjV3hS1v+KgtXbXO2/Nr4GpABK+l2HXfqsPukGD7ViQ=";
+    hash = "sha256-G0ioaMyXuOUHci7MKW1/qX+sLYGinUvvYT4UDA8f75Q=";
   };
 
-  npmDepsHash = "sha256-eFRA3oJeuxHWrZepWyGztvNdJ3QKG+J6pAxQhdVqxxw=";
-
-  nativeBuildInputs = [ jq ];
+  npmDepsHash = "sha256-xv9oSonO8nKMmPl5pG+je7pHqEY6OpUJ3NMreD4JF/8=";
 
   postPatch =
     let
@@ -46,6 +44,9 @@ buildNpmPackage rec {
     homepage = "https://nodered.org/";
     license = lib.licenses.asl20;
     mainProgram = "node-red";
-    maintainers = with lib.maintainers; [ matthewcroughan ];
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      matthewcroughan
+    ];
   };
 }

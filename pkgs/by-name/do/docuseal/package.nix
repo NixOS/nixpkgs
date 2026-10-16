@@ -4,10 +4,10 @@
   fetchFromGitHub,
   bundlerEnv,
   nixosTests,
-  ruby_3_4,
-  pdfium-binaries,
+  ruby_4_0,
+  pdfium,
+  leptonica,
   makeWrapper,
-  bundler,
   fetchYarnDeps,
   yarn,
   yarnConfigHook,
@@ -16,29 +16,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "docuseal";
-  version = "2.3.4";
-
-  bundler = bundler.override { ruby = ruby_3_4; };
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "docusealco";
     repo = "docuseal";
     tag = finalAttrs.version;
-    hash = "sha256-JKV0xAtEbGETprC5zYEcmCVcUFrW4h/+lbYayzWefKs=";
+    hash = "sha256-yWy5mRrNHMZPimIPIVKyCXQDw5JlEhdgNZjOQ7mq8mY=";
     # https://github.com/docusealco/docuseal/issues/505#issuecomment-3153802333
     postFetch = "rm $out/db/schema.rb";
   };
 
-  patches = [
-    # Drop setxid calls in non-root mode (fails under strict seccomp).
-    # https://github.com/docusealco/docuseal/pull/593
-    ./only-switch-uid-when-root.patch
-  ];
-
   rubyEnv = bundlerEnv {
     name = "docuseal-gems";
-    ruby = ruby_3_4;
-    inherit (finalAttrs) bundler;
+    ruby = ruby_4_0;
     gemdir = ./.;
   };
 
@@ -52,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     offlineCache = fetchYarnDeps {
       inherit (finalAttrs) src;
-      hash = "sha256-AvdaSIXO31t15wWysTvFISqmKCAi1Q8CJgO0J2DqM6M=";
+      hash = "sha256-62nI/QUzlpI1VyZ6PWPz2kSp4S2GUIQDaf4jUwzyj24=";
     };
 
     nativeBuildInputs = [
@@ -117,7 +108,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     wrapProgram $out/bin/rails \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pdfium-binaries ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          pdfium
+          leptonica
+        ]
+      }"
   '';
 
   passthru = {

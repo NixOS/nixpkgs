@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
-  version = "2.3.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ogAug05ChGLSJ+KvmP5xXreDhkLHau15Wnp0ry7Ck88=";
+    hash = "sha256-S6elg+nneCdUwpG6Y9ABMr/bbRfzCvls0ba2Vva22Lk=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -21,7 +21,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   dependencies = with python3Packages; [
     beautifulsoup4
     fastmcp
-    mcp
     requests
   ];
 
@@ -34,11 +33,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     # Requires network access
     "tests/test_integration.py"
-  ];
-
-  disabledTests = [
-    # Requires network access
-    "test_valid_channel"
   ];
 
   pythonImportsCheck = [ "mcp_nixos" ];

@@ -4,31 +4,35 @@
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm_10_29_2,
+  pnpm_10,
   nodejs,
-  electron,
+  electron_43,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   autoPatchelfHook,
   pipewire,
   libpulseaudio,
+  jq,
   nix-update-script,
 }:
+let
+  electron = electron_43;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "legcord";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Legcord";
     repo = "Legcord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i4Pw1jvkRYCQg1+9eZVi30Qblpttz9V+k//zehBZGDM=";
+    hash = "sha256-Mjub2OFb5RN4yBwdUk8v6uo/dUeYZ5nELmpPzEFmx2c=";
   };
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10_29_2
+    pnpm_10
     nodejs
     # we use a script wrapper here for environment variable expansion at runtime
     # https://github.com/NixOS/nixpkgs/issues/172583
@@ -37,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     # legcord uses venmic, which is a shipped as a prebuilt node module
     # and needs to be patched
     autoPatchelfHook
+    jq
   ];
 
   buildInputs = [
@@ -47,10 +52,24 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10_29_2;
-    fetcherVersion = 3;
-    hash = "sha256-MgUOOr188t+t/4sTXVpbr+xYT/1qf7/B0ZG0w+QkVxc=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-xBW7D/3Nz/h7VqLqTiVL9dTjXLdNOqfdIlj66iYwuhM=";
   };
+
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    expectedMajor="$(jq -r '.devDependencies.electron | ltrimstr("^") | split(".") | .[0]' < package.json)"
+    actualMajor="${lib.versions.major electron.version}"
+    if [ "$actualMajor" != "$expectedMajor" ] 2>/dev/null; then
+      echo "ERROR: electron version mismatch between package.json (major $expectedMajor) and nixpkgs (major $actualMajor)"
+      exit 1
+    fi
+
+    # electron builds must be writable
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -76,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist="${electron.dist}" \
+      -c.electronDist=electron-dist \
       -c.electronVersion="${electron.version}"
 
     runHook postBuild

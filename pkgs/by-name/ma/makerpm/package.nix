@@ -35,6 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "makerpm";
     license = lib.licenses.free;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.ivan-tkatchev ];
+    maintainers = [ ];
   };
 })

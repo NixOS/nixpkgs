@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Update only together with voicevox and voicevox-engine
   # nixpkgs-update: no auto update
   version = "0.16.2";
-  passthru.modelVersion = "0.16.3";
+  passthru.modelVersion = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       owner = "VOICEVOX";
       repo = "voicevox_vvm";
       tag = finalAttrs.passthru.modelVersion;
-      hash = "sha256-VqSNEHJV/g9R+4XknRGi/s4C7/uXEGCK5/NC2XwiPcI=";
+      hash = "sha256-/NU9CZcb+gHXHeno3NLF0EgPLw+6f8XyiAE2b9XJmuE=";
     };
 
     nativeBuildInputs = [ python3 ];
@@ -109,7 +109,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/VOICEVOX/voicevox_core/releases/tag/${finalAttrs.version}";
     description = "Core library for the VOICEVOX speech synthesis software";
     homepage = "https://github.com/VOICEVOX/voicevox_core";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       tomasajt
       eljamm

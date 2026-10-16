@@ -2,26 +2,30 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installAgentSkills,
   makeWrapper,
   nix-update-script,
+  versionCheckHook,
 
   nodejs,
-  pnpm,
+  pnpm_10,
   pnpmConfigHook,
   fetchPnpmDeps,
 }:
 let
   tag-prefix = "@upstash/context7-mcp";
+
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "context7-mcp";
-  version = "2.1.4";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "upstash";
     repo = "context7";
     tag = "${tag-prefix}@${finalAttrs.version}";
-    hash = "sha256-bQXmKY4I5k5uaQ2FVEOPkym5X3mR87nALf3+jqJjJjE=";
+    hash = "sha256-jeuxlbYQKylSFvK6vde/lJ6Hwh+tgAr6K397Q0bW3pQ=";
   };
 
   nativeBuildInputs = [
@@ -29,12 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm
     pnpmConfigHook
     makeWrapper
+    installAgentSkills
   ];
+
+  # the monorepo vendors the same skills for many agents and packages
+  dontInstallAgentSkills = true;
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-EjEdbPKXJbxaDBuAg/j+BSjI/W3HdsqbtDky0TPUB88=";
+    hash = "sha256-264ZcKgkQZo+vG3gShVCN59143mrquIYHqdDyvgdJSo=";
   };
 
   buildPhase = ''
@@ -57,33 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper ${nodejs}/bin/node $out/bin/context7-mcp \
       --add-flags "$out/lib/context7/dist/index.js"
 
-    cp -r $src/skills $out
+    installSkill skills/context7-mcp
 
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    echo "Executing custom version check for MCP stdio server..."
-
-    output=$(< /dev/null $out/bin/context7-mcp 2>&1 || true)
-
-    if echo "$output" | grep -Fq "v${finalAttrs.version}"; then
-      echo "versionCheckPhase: found version v${finalAttrs.version}"
-    else
-      echo "versionCheckPhase: failed to find version v${finalAttrs.version}"
-      echo "Output was:"
-      echo "$output"
-      exit 1
-    fi
-
-    runHook postInstallCheck
-  '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex '${tag-prefix}@(.*)'" ];
+    extraArgs = [
+      "--version-regex"
+      "${tag-prefix}@(.*)"
+    ];
   };
 
   meta = {

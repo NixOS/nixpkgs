@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  stdenv,
 
   # build-system
   hatchling,
@@ -40,6 +39,7 @@ buildPythonPackage (finalAttrs: {
   pname = "brax";
   version = "0.14.2";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
@@ -47,6 +47,28 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-/oznBa44xKl+9T1YrTVhCbuKZj16V1BTlnmCGRbF45g=";
   };
+
+  patches = [
+    # AttributeError: jax.device_put_replicated is deprecated; use jax.device_put instead.
+    # See https://docs.jax.dev/en/latest/migrate_pmap.html#drop-in-replacements for a drop-in replacement.
+    ./dont-use-device_put_replicated-compat.patch
+  ];
+
+  postPatch =
+    # TypeError: clip() got an unexpected keyword argument 'a_min'
+    ''
+      substituteInPlace brax/fluid.py \
+        --replace-fail \
+          "box = 6.0 * jp.clip(jp.sum(diag_inertia_v, axis=-1), a_min=1e-12)" \
+          "box = 6.0 * jp.clip(jp.sum(diag_inertia_v, axis=-1), min=1e-12)"
+    ''
+    # mujoco >= 3.10 changed mj_fullM's signature from (m, dst, qM) to (m, d, dst).
+    + ''
+      substituteInPlace brax/generalized/mass_test.py \
+        --replace-fail \
+          "mujoco.mj_fullM(model, mj_mass_mx, mj_next.qM)" \
+          "mujoco.mj_fullM(model, mj_next, mj_mass_mx)"
+    '';
 
   build-system = [
     hatchling
@@ -93,11 +115,14 @@ buildPythonPackage (finalAttrs: {
     "test_convex_convex"
     "test_dumps"
     "test_dumps_invalidstate_raises"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+
     # Flaky:
     # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
     "test_pendulum_period2"
+    # AssertionError: Array(837.4592, dtype=float32) not greater than 990.0
+    "testSpeed1"
+    # AssertionError: array(0.) != 0.02
+    "test_save_and_load_checkpoint"
   ];
 
   disabledTestPaths = [

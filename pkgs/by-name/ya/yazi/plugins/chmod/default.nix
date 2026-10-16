@@ -5,13 +5,13 @@
 }:
 mkYaziPlugin {
   pname = "chmod.yazi";
-  version = "26.1.22-unstable-2026-02-27";
+  version = "0-unstable-2026-09-01";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "0897e20d41b79a5ec8e80e645b041bb950547a0b";
-    hash = "sha256-tHOHWFH9E7aGrmHb8bUD1sLGU0OIdTjQ2p4SbJVfh/s=";
+    rev = "4dc7f1b6458c2578f4494f10d468c68c1082214f";
+    hash = "sha256-BSAOkL4H4LVMbTRFv4kzGGRpLgtKkfNTEsDH2EQ219Q=";
   };
 
   meta = {

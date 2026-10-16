@@ -6,7 +6,7 @@
   pkg-config,
   bison,
   libiconv,
-  pcre,
+  pcre2,
   libgcrypt,
   libxcrypt-legacy,
   json_c,
@@ -39,6 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./mysql-compat.patch
+    # pcre2 support, vendored from the upstream maintainer's release prep
+    # branch, which is rebased regularly and so unsuitable for fetchpatch:
+    # https://github.com/amotzkau/ldmud/commit/421ae90e611b3a4816bf52d84abfdcc73bf999b7
+    # Remove when updating to the next release.
+    ./pcre2.patch
   ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
@@ -52,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libgcrypt
     libxcrypt-legacy
-    pcre
+    pcre2
     json_c
     libxml2
   ]
@@ -111,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Gamedriver for LPMuds including a LPC compiler, interpreter and runtime";
-    homepage = "https://ldmud.eu";
+    homepage = "https://github.com/ldmud/ldmud";
     changelog = "https://github.com/ldmud/ldmud/blob/${finalAttrs.version}/HISTORY";
     longDescription = ''
       LDMud started as a project to clean up and modernize Amylaar's LPMud

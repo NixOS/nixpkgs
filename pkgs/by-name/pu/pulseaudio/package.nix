@@ -29,7 +29,7 @@
   fftwFloat,
   soxr,
   speexdsp,
-  systemd,
+  systemdLibs,
   webrtc-audio-processing_1,
   gst_all_1,
   check,
@@ -43,7 +43,7 @@
 
   x11Support ? false,
 
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
 
   # Whether to support the JACK sound system as a backend.
   jackaudioSupport ? false,
@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
       libxi
       libxtst
     ]
-    ++ lib.optional useSystemd systemd
+    ++ lib.optional useSystemd systemdLibs
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       udev

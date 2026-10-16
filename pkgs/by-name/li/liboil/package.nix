@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.17";
 
   src = fetchurl {
-    url = "${finalAttrs.meta.homepage}/download/liboil-${finalAttrs.version}.tar.gz";
+    url = "https://liboil.freedesktop.org/download/liboil-${finalAttrs.version}.tar.gz";
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 

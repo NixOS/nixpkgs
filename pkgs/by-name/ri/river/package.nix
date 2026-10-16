@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromCodeberg,
   libGL,
   libx11,
   libevdev,
   libinput,
   libxkbcommon,
+  nix-update-script,
   pixman,
   pkg-config,
   scdoc,
@@ -16,16 +16,19 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   xwayland,
-  zig_0_15,
+  zig_0_16,
   withManpages ? true,
   xwaylandSupport ? true,
 }:
-
+let
+  zig = zig_0_16;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.4.1";
+  version = "0.5.0";
+  __structuredAttrs = true;
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -33,18 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "river";
     repo = "river";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EGWLJY9VPdoc4LrXkWi8cNLkahorvDeAIfSOc5yDfbU=";
+    hash = "sha256-Yn0+V0PMT+PIV4dVuy4d3BAEfLj5hwLh5ngGpM3RbHY=";
   };
 
   strictDeps = true;
 
-  deps = callPackage ./build.zig.zon.nix { };
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) src pname version;
+    fetchAll = true;
+    hash = "sha256-u7lnnqxrTdaiqNOeFrqvesDM6B4YUjYkmP7CtGOBDIs=";
+  };
+
+  postConfigure = ''
+    ln -s ${finalAttrs.zigDeps} "$ZIG_GLOBAL_CACHE_DIR/p"
+  '';
 
   nativeBuildInputs = [
     pkg-config
     wayland-scanner
     xwayland
-    zig_0_15
+    zig
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -58,18 +69,19 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wayland-scanner
-    wlroots_0_19
+    wlroots_0_20
   ]
   ++ lib.optionals xwaylandSupport [
     libx11
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ]
-  ++ lib.optional withManpages "-Dman-pages"
-  ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigBuildFlags =
+    lib.optionals withManpages [
+      "-Dman-pages"
+    ]
+    ++ lib.optionals xwaylandSupport [
+      "-Dxwayland"
+    ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -81,12 +93,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "river" ];
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Non-monolithic Wayland compositor";
     homepage = "https://codeberg.org/river/river";
+    donationPage = "https://codeberg.org/river/river#donate";
     longDescription = ''
       River is a non-monolithic Wayland compositor.
       Unlike other Wayland compositors, river does not combine the compositor and window manager into one program.
@@ -102,7 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       GaetanLepage
-      adamcstephens
     ];
     mainProgram = "river";
     platforms = lib.platforms.linux;

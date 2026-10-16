@@ -7,6 +7,7 @@
   fetchFromGitHub,
   dotnetCorePackages,
   buildDotnetModule,
+  makeWrapper,
   netcoredbg,
   testers,
 }:
@@ -18,11 +19,12 @@ let
   hash = "sha256-Ci4GwHYTCn7BoEG73WsjxyplCCThSF5uVi39lLVZDXY=";
 
   coreclr-version = "v10.0.1";
+  coreclr-hash = "sha256-pVcLvew3THRqXgKMVO6jTZyPP06R46KZPMpYdiM3yXU=";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    hash = "sha256-pVcLvew3THRqXgKMVO6jTZyPP06R46KZPMpYdiM3yXU=";
+    hash = coreclr-hash;
     name = "coreclr";
   };
 
@@ -92,18 +94,29 @@ stdenv.mkDerivation {
   # include source here so that autoPatchelfHook can do it's job
   src = managed;
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib stdenv.cc.cc) ];
   installPhase = ''
-    mkdir -p $out/share/netcoredbg $out/bin
-    cp ${unmanaged}/* $out/share/netcoredbg
-    cp ./lib/netcoredbg/* $out/share/netcoredbg
-    # darwin won't work unless we link all files
-    ln -s $out/share/netcoredbg/* "$out/bin/"
+    runHook preInstall
+
+    mkdir -p $out/libexec/netcoredbg
+    cp ${unmanaged}/* $out/libexec/netcoredbg
+    cp ./lib/netcoredbg/* $out/libexec/netcoredbg
+
+    # netcoredbg loads libdbgshim and ManagedPart.dll from the directory of its own
+    # executable. Use a wrapper: exec'ing the real path keeps the lookup inside
+    # $out/libexec/netcoredbg on both platforms.
+    makeWrapper $out/libexec/netcoredbg/netcoredbg $out/bin/netcoredbg
+
+    runHook postInstall
   '';
 
   passthru = {
     inherit (managed) fetch-deps;
+    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = netcoredbg;
       command = "netcoredbg --version";

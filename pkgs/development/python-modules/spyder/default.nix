@@ -61,12 +61,12 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.1.2";
+  version = "6.1.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bgkiihfqqIHnYes5gvIvAdQ7arUAm7NmGLaqnP/Ml40=";
+    hash = "sha256-eYbtAwq4BHiXS8uBtcjIgvUMpzZsqdVmzgGYZq1rBYM=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
@@ -77,6 +77,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "ipython"
+    "jedi"
     "python-lsp-server"
   ];
 

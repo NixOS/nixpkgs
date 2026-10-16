@@ -16,17 +16,17 @@
 
 buildGoModule rec {
   pname = "mautrix-gmessages";
-  version = "25.11";
-  tag = "v0.2511.0";
+  version = "26.09";
+  tag = "v0.2609.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "gmessages";
     inherit tag;
-    hash = "sha256-WmZ2eRKRckZtYMsI7r0b+atLSYA5e3N4ifeSEI2Rvu8=";
+    hash = "sha256-xIPH/IqnxfyeCaW/9utpN+SPZRkEp5KyabwjT8PsMUI=";
   };
 
-  vendorHash = "sha256-HVM9W4gOZFs9BDT1wFzDXkhDklCDtKUyNdYxPWkGZ3w=";
+  vendorHash = "sha256-fCu/cJoQdWZHAYgfYtGj+sxeJ9P6br7BinJiMkX5vk8=";
 
   ldflags = [
     "-s"
@@ -38,7 +38,7 @@ buildGoModule rec {
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
 
-  doCheck = false;
+  doCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };

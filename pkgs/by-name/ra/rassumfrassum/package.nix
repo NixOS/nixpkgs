@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.3.3";
+  version = "0.3.5";
 in
 python3Packages.buildPythonApplication {
   pname = "rassumfrassum";
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication {
     owner = "joaotavora";
     repo = "rassumfrassum";
     tag = "v${version}";
-    hash = "sha256-3Hcews5f7o45GUmFdpLwkAHf0bthC1tUikkxau952Ec=";
+    hash = "sha256-O9maAqmlj941aT7Y4rQ8Mwcgf9MCtffrH+rnzz1hBhY=";
   };
 
   postPatch = ''

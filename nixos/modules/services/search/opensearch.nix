@@ -39,7 +39,7 @@ in
           type = lib.types.str;
           default = "127.0.0.1";
           description = ''
-            Which port this service should listen on.
+            Which address this service should listen on.
           '';
         };
 
@@ -210,6 +210,7 @@ in
               ln -sfT "${cfg.package}/plugins" "${cfg.dataDir}/plugins"
               ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
               ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
+              ln -sfT ${cfg.package}/agent ${cfg.dataDir}/agent
 
               # opensearch needs to create the opensearch.keystore in the config directory
               # so this directory needs to be writable.

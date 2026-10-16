@@ -9,7 +9,7 @@
   perl,
   fmt,
   hiredis,
-  xxHash,
+  xxhash,
   zstd,
   bashInteractive,
   doctest,
@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.13.1";
+  version = "4.14.1";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-8Qw5nkY86wGJ7B2hrNk9jIoz18nJ2FK+EbPH5fS5aEc=";
+    hash = "sha256-Di37jkZ8w0/FOFxFbUUT34HjOoPxUxwoqPJWeVds1Vo=";
   };
 
   outputs = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fmt
     hiredis
-    xxHash
+    xxhash
     zstd
   ];
 
@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   disabledTests = [
-    "test.direct" # https://github.com/ccache/ccache/issues/1699
     "test.fileclone" # flaky on hydra, also seems to fail on zfs
     "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
   ]

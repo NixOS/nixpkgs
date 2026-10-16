@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qsynth";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/qsynth-${finalAttrs.version}.tar.gz";
-    hash = "sha256-nP08/Vzlf0WVSaPhCRgGqy/rsFRKH0OJfinvnx7tbww=";
+    hash = "sha256-e7oVka7CrrVxcao3aX0z8DjefuIrP4z1CqradyyomsE=";
   };
 
   nativeBuildInputs = [

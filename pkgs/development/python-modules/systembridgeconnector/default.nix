@@ -25,6 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-gkZRvS0abfXFEz2oRuaGJRmhFoxe92F3czNkahNdTm8=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail .dev0 ""
+  '';
+
   build-system = [
     incremental
     setuptools

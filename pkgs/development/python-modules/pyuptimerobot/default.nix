@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyuptimerobot";
-  version = "24.0.1";
+  version = "25.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.14";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = "pyuptimerobot";
     tag = version;
-    hash = "sha256-vlEXUwGCmscasdWyCxF1bFjA3weR74Zf3RCk5W5ljFg=";
+    hash = "sha256-Fa/65IANK/LP2AaD6hLVH+Jau0swCwd/iBQXVcle6Y0=";
   };
 
   postPatch = ''

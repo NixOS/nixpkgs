@@ -8,11 +8,11 @@
 
 buildGraalvmNativeImage (finalAttrs: {
   pname = "cljfmt";
-  version = "0.16.3";
+  version = "0.16.6";
 
   src = fetchurl {
     url = "https://github.com/weavejester/cljfmt/releases/download/${finalAttrs.version}/cljfmt-${finalAttrs.version}-standalone.jar";
-    hash = "sha256-V9fPLD2fbeaKLbGrVEk6hqCkHf/L49pxm6CmX/EnTno=";
+    hash = "sha256-iyXosbUQs5pZarXHHdV2xZLTsFU+XP1CqRrndUELtvk=";
   };
 
   extraNativeImageBuildArgs = [

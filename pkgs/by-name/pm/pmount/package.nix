@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # fails 1 out of 1 tests with "Error: could not open fstab-type file: No such file or directory"
 
   meta = {
-    homepage = "https://bazaar.launchpad.net/~fourmond/pmount/main/files";
+    homepage = "https://salsa.debian.org/debian/pmount";
     description = "Mount removable devices as normal user";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;

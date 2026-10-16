@@ -68,6 +68,6 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
-    maintainers = with lib.maintainers; [ coconnor ];
+    maintainers = [ ];
   };
 }

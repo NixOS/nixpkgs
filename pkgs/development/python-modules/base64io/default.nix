@@ -6,6 +6,7 @@
   pytestCheckHook,
   setuptools,
   unstableGitUpdater,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     rev = "1bd47f7f8cfeeff654ea0edda3fbb69f840ccd05";
     hash = "sha256-1MUWjFFitJ3nqvVwAQYcAVVPhPs6NEgq7t/mI71u2Bk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "default-buffer-size-compat.patch";
+      url = "https://github.com/abus-sh/base64io-python/commit/a929dc3c9d873eabe491ccae9a2d0d57726f37da.patch?full_index=1";
+      hash = "sha256-VfPOZ8cDRW2mQy6ROl77kBRE780NhH4kbjkyD1/jMRk=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

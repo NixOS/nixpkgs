@@ -4,14 +4,14 @@
   fetchurl,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "randomconv";
   version = "0.2.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/randomconv/releases/download/v${version}/randomconv-${version}.tbz";
+    url = "https://github.com/hannesm/randomconv/releases/download/v${finalAttrs.version}/randomconv-${finalAttrs.version}.tbz";
     hash = "sha256-sxce3wfjQaRGj5L/wh4qiGO4LtXDb3R3zJja8F1bY+o=";
   };
 
@@ -22,4 +22,4 @@ buildDunePackage rec {
     maintainers = [ lib.maintainers.vbgl ];
   };
 
-}
+})

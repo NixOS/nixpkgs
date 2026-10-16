@@ -23,7 +23,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Java extension for coc.nvim";
     homepage = "https://github.com/neoclide/coc-java";
-    license = lib.licenses.mit;
+    license = lib.licenses.epl10;
     maintainers = [ ];
   };
 })

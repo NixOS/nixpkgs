@@ -58,7 +58,7 @@ let
           example = lib.literalExpression ''
             {
               "/EFI/BOOT/BOOTX64.EFI".source =
-                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+                "''${config.systemd.package}/lib/systemd/boot/efi/systemd-bootx64.efi";
 
               "/loader/entries/nixos.conf".source = systemdBootEntry;
             }
@@ -131,6 +131,7 @@ in
   ];
 
   options.image.repart = {
+    enable = lib.mkEnableOption "systemd-repart boot image";
 
     name = lib.mkOption {
       type = lib.types.str;
@@ -227,7 +228,7 @@ in
           "10-esp" = {
             contents = {
               "/EFI/BOOT/BOOTX64.EFI".source =
-                "''${pkgs.systemd}/lib/systemd/boot/efi/systemd-bootx64.efi";
+                "''${config.systemd.package}/lib/systemd/boot/efi/systemd-bootx64.efi";
             };
             repartConfig = {
               Type = "esp";
@@ -282,6 +283,15 @@ in
       '';
     };
 
+    image = lib.mkOption {
+      type = lib.types.package;
+      internal = true;
+      readOnly = true;
+      description = ''
+        The image built by this module. Used as the default for `system.build.image`.
+      '';
+    };
+
     assertions = lib.mkOption {
       type = options.assertions.type;
       default = [ ];
@@ -304,7 +314,7 @@ in
 
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     image.baseName =
       let
         version = config.image.repart.version;
@@ -356,6 +366,37 @@ in
 
         finalPartitions = lib.mapAttrs addClosure cfg.partitions;
 
+        image =
+          let
+            fileSystems = lib.filter (f: f != null) (
+              lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions
+            );
+
+            format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
+
+            definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
+              lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions
+            );
+
+            mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
+            val = pkgs.callPackage ./repart-image.nix {
+              systemd = cfg.package;
+              inherit (config.image) baseName;
+              inherit (cfg)
+                name
+                version
+                compression
+                split
+                seed
+                imageSize
+                sectorSize
+                finalPartitions
+                ;
+              inherit fileSystems definitionsDirectory mkfsEnv;
+            };
+          in
+          lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
+
         assertions = lib.mapAttrsToList (
           fileName: partitionConfig:
           let
@@ -401,36 +442,7 @@ in
         );
       };
 
-    system.build.image =
-      let
-        fileSystems = lib.filter (f: f != null) (
-          lib.mapAttrsToList (_n: v: v.repartConfig.Format or null) cfg.partitions
-        );
-
-        format = pkgs.formats.ini { listsAsDuplicateKeys = true; };
-
-        definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
-          lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions
-        );
-
-        mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
-        val = pkgs.callPackage ./repart-image.nix {
-          systemd = cfg.package;
-          inherit (config.image) baseName;
-          inherit (cfg)
-            name
-            version
-            compression
-            split
-            seed
-            imageSize
-            sectorSize
-            finalPartitions
-            ;
-          inherit fileSystems definitionsDirectory mkfsEnv;
-        };
-      in
-      lib.asserts.checkAssertWarn cfg.assertions cfg.warnings val;
+    system.build.image = cfg.image;
   };
 
   meta.maintainers = with lib.maintainers; [

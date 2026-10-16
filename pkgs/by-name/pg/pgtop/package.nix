@@ -31,6 +31,6 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/cosimo/pgtop";
     changelog = "https://github.com/cosimo/pgtop/releases/tag/v${version}";
     maintainers = [ lib.maintainers.hagl ];
-    license = [ lib.licenses.gpl2Only ];
+    license = lib.licenses.gpl2Only;
   };
 }

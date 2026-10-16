@@ -48,6 +48,8 @@ buildPythonPackage rec {
     "test_expr_asserts_ok"
     "test_fuzz_math_floats"
     "test_model_skip_helpers2"
+    # test does not pass on python314 because an error message has changed
+    "test_type_error__table"
   ];
 
   meta = {

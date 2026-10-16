@@ -86,6 +86,8 @@ let
       targetRunFlags ? [ ],
     }:
     lib.optionalString (targets != [ ]) ''
+      concatTo bazelFlagsArray bazelFlags
+
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
       USER=homeless-shelter \
@@ -99,7 +101,7 @@ let
         "''${host_copts[@]}" \
         "''${linkopts[@]}" \
         "''${host_linkopts[@]}" \
-        $bazelFlags \
+        "''${bazelFlagsArray[@]}" \
         ${lib.strings.concatStringsSep " " additionalFlags} \
         ${lib.strings.concatStringsSep " " targets} \
         ${
@@ -239,13 +241,24 @@ stdenv.mkDerivation (
           );
 
         dontFixup = true;
-        allowedRequisites = [ ];
 
         inherit (lib.fetchers.normalizeHash { hashTypes = [ "sha256" ]; } fetchAttrs)
           outputHash
           outputHashAlgo
           ;
       }
+      // (
+        if fFetchAttrs.__structuredAttrs or false then
+          {
+            # With __structuredAttrs = true, the build always fails with “output $out is not allowed to refer to the following paths: $out”.
+            # This appears to be the same issue as in 283bca9648fc1afb01d3e4c3b5919251429da907.
+            outputChecks.out.allowedRequisites = [ "out" ];
+          }
+        else
+          {
+            allowedRequisites = [ ];
+          }
+      )
     );
 
     nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [ ] ++ [

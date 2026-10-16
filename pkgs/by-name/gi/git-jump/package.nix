@@ -20,10 +20,6 @@ buildNpmPackage (finalAttrs: {
     installManPage git-jump.1
   '';
 
-  preFixup = ''
-    rm $out/lib/node_modules/git-jump/node_modules/.bin/{tsc,tsserver}
-  '';
-
   meta = {
     description = "Improved navigation between Git branches";
     homepage = "https://github.com/mykolaharmash/git-jump";

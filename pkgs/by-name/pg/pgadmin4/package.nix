@@ -2,33 +2,27 @@
   lib,
   python3,
   fetchFromGitHub,
-  fetchpatch2,
+  substitute,
   zlib,
   nixosTests,
   postgresqlTestHook,
   postgresql,
   yarn-berry_4,
   nodejs,
-  autoconf,
-  automake,
-  libtool,
-  libpng,
-  nasm,
-  pkg-config,
   stdenv,
   server-mode ? true,
 }:
 
 let
   pname = "pgadmin";
-  version = "9.13";
-  yarnHash = "sha256-ViqjZ40M78EZ4ZOMuiAGJqx6Xyv4dqY9X7jMDbohaY8=";
+  version = "9.18";
+  yarnHash = "sha256-D9LN9+CsVTvfZKDsHrWUD1uvsa033tj34a52DNwYaDc=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-dG8oxE9g30Dz3K3PveoMjPa1/eY9RWEV2QBdx2Dz+Rg=";
+    hash = "sha256-oaNheNF4e1nL45fQM9/2ZIdLDwVvKWIRJnR93KmqR3M=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -68,12 +62,7 @@ pythonPackages.buildPythonApplication rec {
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
     ./check-system-config-dir.patch
-    # fix session.py See https://github.com/pgadmin-org/pgadmin4/pull/9706
-    (fetchpatch2 {
-      name = "session.patch";
-      url = "https://github.com/pgadmin-org/pgadmin4/commit/7043587387c17635f62bab8414546bb8c0dbadf4.patch?full_index=1";
-      hash = "sha256-gZrO0dBy5EklZf/dKr9j3RJ54rtzFrw53v91vqkRboY=";
-    })
+
   ];
 
   postPatch = ''
@@ -122,10 +111,10 @@ pythonPackages.buildPythonApplication rec {
     echo Building the web frontend...
     cd web
     (
-    export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
-    yarnBerryConfigHook
+      export LD=$CC # https://github.com/imagemin/optipng-bin/issues/108
+      yarnBerryConfigHook
     )
-    yarn webpacker
+    NODE_ENV=production yarn webpacker
     cp -r * ../pip-build/pgadmin4
     # save some disk space
     rm -rf ../pip-build/pgadmin4/node_modules
@@ -168,7 +157,6 @@ pythonPackages.buildPythonApplication rec {
     flask-sqlalchemy
     flask-wtf
     flask-compress
-    passlib
     pytz
     simplejson
     sqlparse

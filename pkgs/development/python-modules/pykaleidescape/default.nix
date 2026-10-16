@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pykaleidescape";
-  version = "1.1.3";
+  version = "1.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pykaleidescape";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IA6BefKBFMfatiaw+Ye8NdYZ6BDlR1z4L+YkZ4Iy3Wg=";
+    hash = "sha256-irXm1kX9gy6XU1PWvFKG2IeUE7raKI2C0I6Vge1ZKsI=";
   };
 
   build-system = [ setuptools ];
@@ -44,6 +44,8 @@ buildPythonPackage (finalAttrs: {
     # stuck in EpollSelector.poll()
     "test_manual_disconnect"
     "test_concurrency"
+    "test_reconnect_calls_on_reconnect"
+    "test_refresh_after_reconnect"
   ];
 
   meta = {

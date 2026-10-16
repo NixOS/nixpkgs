@@ -19,7 +19,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php-gnupg";
     repo = "php-gnupg";
-    rev = "gnupg-${version}";
+    tag = "gnupg-${version}";
     fetchSubmodules = true;
     hash = "sha256-g9w0v9qc/Q5qjB9/ekZyheQ1ClIEqMEoBc32nGWhXYA=";
   };
@@ -66,7 +66,7 @@ buildPecl {
 
   meta = {
     changelog = "https://github.com/php-gnupg/php-gnupg/releases/tag/gnupg-${version}";
-    broken = lib.versionOlder php.version "8.1"; # Broken on PHP older than 8.1.
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
     license = lib.licenses.bsd3;
     homepage = "https://pecl.php.net/package/gnupg";

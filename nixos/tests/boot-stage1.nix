@@ -1,3 +1,6 @@
+# Remove in 26.11. This test guards against problems with
+# stage-1-init.sh, which will be removed with scripted stage 1.
+
 { pkgs, ... }:
 {
   name = "boot-stage1";
@@ -10,6 +13,8 @@
       ...
     }:
     {
+      boot.initrd.systemd.enable = false;
+
       boot.extraModulePackages =
         let
           compileKernelModule =

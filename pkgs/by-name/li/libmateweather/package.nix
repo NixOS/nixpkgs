@@ -62,8 +62,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-zoneinfo-dir=${tzdata}/share/zoneinfo"
   ];
 
-  preFixup = "rm -f $out/share/icons/mate/icon-theme.cache";
-
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {

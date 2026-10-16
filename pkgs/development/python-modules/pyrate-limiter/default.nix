@@ -14,28 +14,24 @@
   redis,
 
   # test
+  aiohttp,
   pytestCheckHook,
   pytest-asyncio,
   pytest-xdist,
   redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyrate-limiter";
-  version = "4.0.2";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
-    tag = "v${version}";
-    hash = "sha256-xWxe70J69g9Tq35GjdJeT7MjUdoSEGj8w1cIKvLxJss=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UUNXb4lCcZZ+BPO1t8rStuDTj69dnIMMv6wdlNH+gcI=";
   };
-
-  postPatch = ''
-    # tests cause too many connections to the postgres server and crash/timeout
-    sed -i "/create_postgres_bucket,/d" tests/conftest.py
-  '';
 
   build-system = [
     hatchling
@@ -60,12 +56,14 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiohttp
+    filelock
     pytestCheckHook
     pytest-asyncio
     pytest-xdist
+    redis
     redisTestHook
-  ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ];
 
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine
@@ -89,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";
     homepage = "https://github.com/vutran1710/PyrateLimiter";
-    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     evdev
-    xlib
+    python-xlib
     inotify-simple
     appdirs
   ];

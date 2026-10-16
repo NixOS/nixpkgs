@@ -22,13 +22,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mydumper";
-  version = "0.21.1-1";
+  version = "1.0.3-1";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6x0d1Ywgy6kkfDs3KsS6pRK0/3z9Ur7klO8xMTsoDPI=";
+    hash = "sha256-r3f8WBF8pyWnxuqTKfNx3EBiRIP9pHk7dxGMaE7UOW4=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -67,16 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
   ];
-
-  env.NIX_CFLAGS_COMPILE = (
-    if stdenv.hostPlatform.isDarwin then
-      toString [
-        "-Wno-error=format"
-        "-Wno-error=sometimes-uninitialized"
-      ]
-    else
-      "-Wno-error=maybe-uninitialized"
-  );
 
   postPatch = ''
     # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc

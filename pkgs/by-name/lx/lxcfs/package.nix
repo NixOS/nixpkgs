@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxcfs";
-  version = "6.0.6";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lEXXbYDxnOi4Xa/fO1Uy/aVLjVfzYeZm6qzR4XBMBsY=";
+    hash = "sha256-xONV9Ss71id2Bwb2BFNqaaP+8vK6540sThs1MCw4gok=";
   };
 
   patches = [
@@ -32,9 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # skip installing systemd files
     ./skip-init.patch
-
-    # fix pidfd checks and include
-    ./pidfd.patch
   ];
 
   nativeBuildInputs = [

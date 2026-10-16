@@ -9,8 +9,9 @@
   git,
   glibcLocales,
   gnupg,
-  gpgme,
+  gpg,
   merge3,
+  nix-update-script,
   openssh,
   paramiko,
   pytestCheckHook,
@@ -24,19 +25,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "1.1.0";
+  version = "1.2.15";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${finalAttrs.version}";
-    hash = "sha256-9y7+00M2Ib5j+1fHNsJBomkyNZWhihqcIvAgGpJ5AB8=";
+    hash = "sha256-ZLTgVeY9seeElnRc0G7M+0bFx8b/9i5dMj4/61A/maY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-NEYauayn7laPLQUomQAFEskFP5m8546jYltazR/gn1A=";
+    hash = "sha256-X8sKVLTPQVjAcW+h1X/AsHW7UgwSOUbAa4VRZfhepM0=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +62,7 @@ buildPythonPackage (finalAttrs: {
     https = [ urllib3 ];
     merge = [ merge3 ];
     pgp = [
-      gpgme
+      gpg
       gnupg
     ];
     paramiko = [ paramiko ];
@@ -88,8 +90,6 @@ buildPythonPackage (finalAttrs: {
   '';
 
   disabledTestPaths = [
-    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
-    "tests/contrib"
     # AssertionError: GPGMEError not raised
     "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
   ];
@@ -97,6 +97,13 @@ buildPythonPackage (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "dulwich" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^dulwich-([1-9][0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Implementation of the Git file formats and protocols";

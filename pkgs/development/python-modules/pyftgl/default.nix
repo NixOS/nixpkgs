@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "umlaeute";
     repo = "pyftgl";
     tag = version;
-    sha256 = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
+    hash = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +47,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python bindings for FTGL (FreeType for OpenGL)";
+    homepage = "https://github.com/umlaeute/pyftgl";
     license = lib.licenses.gpl2Plus;
   };
 }

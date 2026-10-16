@@ -64,14 +64,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dvc";
-  version = "3.67.0";
+  version = "3.67.1";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "iterative";
+    owner = "treeverse";
     repo = "dvc";
     tag = finalAttrs.version;
-    hash = "sha256-JNwlZFDW/qRkGuGiXnqmp+Dfp1hod9ZfMwMJgWJ8X00=";
+    hash = "sha256-KzHaR7o3PUHMBrtSDWXvH7/YMPxSafPSGUnS9018XKg=";
   };
 
   pythonRelaxDeps = [
@@ -162,7 +162,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Version Control System for Machine Learning Projects";
     homepage = "https://dvc.org";
-    changelog = "https://github.com/iterative/dvc/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/treeverse/dvc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cmcdragonkai

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1lvhcs4ba8h3z78nyycbww8mj4cscb8k200dcc3cdy8vrvrp7g1n";
+    hash = "sha256-Nrxz884b+cYGYw0AMdFimhFZEeeLeW/R+QMitYhmcNM=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";
     mainProgram = "ephoto";
-    homepage = "https://www.smhouston.us/ephoto/";
+    homepage = "https://www.enlightenment.org/about-ephoto";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.enlightenment ];

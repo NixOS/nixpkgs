@@ -28,14 +28,15 @@ let
 in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchvision";
-  version = "0.26.0";
+  version = "0.28.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FOdDGY3v8yWBhtNo9tZP79/xwrc7AoIY5Y1ZABzWe6g=";
+    hash = "sha256-rku0QAW7RTkCjD4RorY7DeYfr6PDvqdm+6Yw9wBjGHU=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +50,16 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     libjpeg_turbo
     libpng
     torch.cxxdev
-  ];
+  ]
+  ++ lib.optionals cudaSupport (
+    with cudaPackages;
+    [
+      cuda_cudart # cuda_runtime.h
+      libcublas # cublas_v2.h
+      libcusolver # cusolverDn.h
+      libcusparse # cusparse.h
+    ]
+  );
 
   dependencies = [
     numpy
@@ -63,18 +73,6 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     TORCHVISION_LIBRARY = "${libjpeg_turbo}/lib/";
   }
   // lib.optionalAttrs cudaSupport {
-    # At of 2026-03-27, the default `cudaPackages` version is 12.9.1
-    # According to Nvidia, it should support GCC versions up to 14.x:
-    # -> https://docs.nvidia.com/cuda/archive/12.9.1/cuda-installation-guide-linux/index.html#host-compiler-support-policy
-    # However, PyTorch's *strict* upper bound is 14.0:
-    # -> https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L75
-    # Hence, the build fails with:
-    #   RuntimeError: The current installed version of g++ (14.3.0) is greater than the maximum
-    #   required version by CUDA 12.9. Please make sure to use an adequate version of g++
-    #   (>=6.0.0, <14.0).
-    # Hence, we disable the version check to silence the error:
-    TORCH_DONT_CHECK_COMPILER_ABI = 1;
-
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
     FORCE_CUDA = 1;
   };
@@ -95,7 +93,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   meta = {
     description = "PyTorch vision library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/vision";
+    downloadPage = "https://github.com/pytorch/vision";
     changelog = "https://github.com/pytorch/vision/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;

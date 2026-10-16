@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "siril";
-  version = "1.4.0";
+  version = "1.4.4";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
     tag = finalAttrs.version;
-    hash = "sha256-qE1K3/o7ubrIEWldRgus1quSVehJqjFxhsKb1HQPNLA=";
+    hash = "sha256-UgG/efOMVeQJ1r219YOPkgkPqEdaXJquqXyWZW0oWgI=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Necessary because project uses default build dir for flatpaks/snaps
   mesonBuildDir = "nixbld";
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ python3 ]})
+  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook

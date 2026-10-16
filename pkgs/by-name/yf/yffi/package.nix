@@ -1,41 +1,69 @@
 {
   fetchFromGitHub,
   lib,
-  rust-cbindgen,
+  buildPackages,
+  cargo-c,
   rustPlatform,
   stdenv,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "yffi";
-  version = "0.24.0";
+  version = "0.27.4";
 
   src = fetchFromGitHub {
     owner = "y-crdt";
     repo = "y-crdt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RFdLEsKQxt8BGqbf5FFM7mZD64glW7bTKRJaAQOe+vo=";
+    hash = "sha256-lW6IvPyOsAOZlopLWTxqtHvuCRjGtmdYedmnyFVdQqk=";
   };
 
-  cargoHash = "sha256-RL9lBc7lSmc6jOavE5lZupmaNGZgQhJBedNhjfHVajg=";
+  cargoHash = "sha256-r9wT9PIsAaRp2kHvwYB0vJIAKnsVmoqkQrdmoyKtZcs=";
 
   buildAndTestSubdir = "yffi";
 
+  postPatch = ''
+    cat << 'EOF' >> yffi/Cargo.toml
+    [features]
+    capi = []
+
+    [package.metadata.capi.header]
+    name = "libyrs"
+    subdirectory = false
+    EOF
+  '';
+
   nativeBuildInputs = [
-    rust-cbindgen
+    cargo-c
   ];
 
-  postBuild = ''
-    cbindgen --config yffi/cbindgen.toml --crate yffi --output libyrs.h --lang C
+  buildPhase = ''
+    runHook preBuild
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild -p yffi -j $NIX_BUILD_CORES \
+      --frozen --release --prefix=${placeholder "out"} \
+      --target ${stdenv.hostPlatform.rust.rustcTarget}
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall -p yffi -j $NIX_BUILD_CORES \
+      --frozen --release --prefix=${placeholder "out"} \
+      --target ${stdenv.hostPlatform.rust.rustcTarget}
+    runHook postInstall
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    ${buildPackages.rust.envVars.setEnv} cargo ctest -p yffi -j $NIX_BUILD_CORES \
+      --frozen --release --prefix=${placeholder "out"} \
+      --target ${stdenv.hostPlatform.rust.rustcTarget}
+    runHook postCheck
   '';
 
   postCheck = ''
     $CXX -o yrs-ffi-tests -I . tests-ffi/main.cpp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/libyrs.a
     ./yrs-ffi-tests
-  '';
-
-  postInstall = ''
-    install -Dm644 libyrs.h $out/include/libyrs.h
   '';
 
   meta = {

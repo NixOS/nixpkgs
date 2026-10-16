@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1r6qabnqxyy3llnj10z60d4w9pg2zabysl3l7znpy1adss4ywxl0";
+    hash = "sha256-gHbuidZNBX/tP3RQ7Zf64t3ESQPmgyAtpcP7ju1S2OQ=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python implementation of the Wink API";
     homepage = "https://github.com/python-wink/python-wink";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }

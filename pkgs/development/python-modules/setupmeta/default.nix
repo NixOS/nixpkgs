@@ -23,6 +23,11 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-ONl+hFvMkUmPbzbeduCrqidGrKZvbWE0wTvaZMhs64w=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'args["versioning"] = "dev"' 'args["version"] = "${finalAttrs.version}"'
+  '';
+
   preBuild = ''
     export PYGRADLE_PROJECT_VERSION=${finalAttrs.version};
   '';

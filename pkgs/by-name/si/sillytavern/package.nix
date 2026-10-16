@@ -1,25 +1,26 @@
 {
   buildNpmPackage,
   fetchFromGitHub,
-  nodejs_22,
   lib,
 }:
 buildNpmPackage (finalAttrs: {
   pname = "sillytavern";
-  version = "1.16.0";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "SillyTavern";
     repo = "SillyTavern";
     tag = finalAttrs.version;
-    hash = "sha256-v2OAyaKBczo7BdTyA3WUlcIko484YgcgvYmwUk60AeI=";
+    hash = "sha256-qBlR/4OnIyJeX9JWpzlrhGp/M+KeYqJDpAzI803jUqc=";
   };
-  npmDepsHash = "sha256-fzKZnJbVXaPFn4l7VGiYBqJUT299fiVuKqfTZd2p53c=";
+  npmDepsHash = "sha256-wAVmQuchjDXh7sTj8Q7+bJJoYCi7JdvlEeC5G9VtjMU=";
 
   dontNpmBuild = true;
 
-  # https://github.com/NixOS/nixpkgs/issues/474535
-  nodejs = nodejs_22;
+  postPatch = ''
+    # `.npmrc` breaks `npm pack`.
+    rm .npmrc
+  '';
 
   # These dirs are not installed automatically.
   # And if they were not in place, the app would try to create them at runtime, which is of course impossible to achieve.
@@ -40,6 +41,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://docs.sillytavern.app/";
     mainProgram = "sillytavern";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.wrvsrx ];
+    maintainers = [ lib.maintainers.Notarin ];
   };
 })

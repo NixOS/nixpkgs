@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Strategy collectible card game";
-    homepage = "https://scrolls.com/";
+    homepage = "https://mojang.github.io/CallersBaneSiteArchive/";
     # http://www.reddit.com/r/Scrolls/comments/2j3pxw/linux_client_experimental/
 
     platforms = [ "x86_64-linux" ];

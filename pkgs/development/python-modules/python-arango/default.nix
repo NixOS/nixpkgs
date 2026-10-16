@@ -29,24 +29,24 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-arango";
-  version = "8.3.1";
+  version = "8.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arangodb";
     repo = "python-arango";
-    tag = version;
-    hash = "sha256-8H1SKaQWuQfiMGTEaohdr/N8zXVCo1QkDEGP331Kt5k=";
+    tag = finalAttrs.version;
+    hash = "sha256-UefxRfHVFin9IO/FNeXYWBa0L0CpifLLE9u/2XCjZXY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     importlib-metadata
     requests
     requests-toolbelt
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # ArangoDB has been removed from Nixpkgs due to lack of maintenace,
+  # ArangoDB has been removed from Nixpkgs due to lack of maintenance,
   # so we cannot run the tests at present.
   #
   # Before that, the issue was:
@@ -150,8 +150,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Driver for ArangoDB";
     homepage = "https://github.com/ArangoDB-Community/python-arango";
-    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${src.tag}";
+    changelog = "https://github.com/ArangoDB-Community/python-arango/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jsoo1 ];
   };
-}
+})

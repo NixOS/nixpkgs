@@ -5,12 +5,14 @@
   ocaml,
   fetchFromGitHub,
   menhir,
+  darwin,
   bitwuzla-cxx,
   bos,
   cmdliner,
   dolmen_model,
   dolmen_type,
   dune-build-info,
+  dune-site,
   fpath,
   hc,
   menhirLib,
@@ -18,6 +20,7 @@
   # fix eval on legacy ocaml versions
   ocaml_intrinsics ? null,
   prelude,
+  ppx_enumerate,
   scfg,
   yojson,
   z3,
@@ -28,23 +31,27 @@
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.20.0";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VnkF+bZXeqaj9LSpyzqH5AM9EQsrW4Rlj5kvyTfYTKE=";
+    hash = "sha256-TZMBUnw1AtsVUfLLQJ/gs0CBtnphBiREH99QP3VuAL0=";
   };
 
   minimalOCamlVersion = "4.14";
 
   nativeBuildInputs = [
     menhir
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
   ];
 
   buildInputs = [
     dune-build-info
+    dune-site
   ];
 
   propagatedBuildInputs = [
@@ -58,6 +65,7 @@ buildDunePackage (finalAttrs: {
     menhirLib
     mtime
     ocaml_intrinsics
+    ppx_enumerate
     prelude
     scfg
     yojson

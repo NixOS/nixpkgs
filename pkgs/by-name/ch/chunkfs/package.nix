@@ -3,27 +3,38 @@
   stdenv,
   fetchurl,
   perl,
-  fuse,
+  fuse3,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chunkfs";
   version = "0.8";
 
+  patches = [
+    ./fuse3.diff
+  ];
+
   src = fetchurl {
     url = "https://chunkfs.florz.de/chunkfs_${finalAttrs.version}.tar.xz";
     hash = "sha256-HFv51ta2eNW9Qt9CUp2oTTlC8Lpwc1XKR/uYzMDfd88=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
     perl
-    fuse
+    fuse3
   ];
 
   makeFlags = [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
+
+  enableParallelBuilding = true;
 
   preInstall = ''
     mkdir -p $out/bin

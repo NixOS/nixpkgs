@@ -17,10 +17,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "clfft";
   version = "2.12.2";
 
+  strictDeps = true;
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "clMathLibraries";
     repo = "clFFT";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-yp7u6qhpPYQpBw3d+VLg0GgMyZONVII8BsBCEoRZm4w=";
   };
 
@@ -49,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.CXXFLAGS = "-std=c++98";
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Library containing FFT functions written in OpenCL";
     longDescription = ''
       clFFT is a software library containing FFT functions written in OpenCL.

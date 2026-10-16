@@ -32,21 +32,17 @@
     machine.succeed("curl -sSf http://localhost/")
 
     machine.succeed(
-        "curl -c cookies -sSf -X POST http://localhost/login -d 'username=admin&password=admin'"
-    )
-
-    cookie = machine.succeed(
-        "grep -v '^#' cookies | awk '{ print $7 }' | sed -e '/^$/d' | perl -pe 'chomp'"
+        "curl --cookie-jar cookies.txt -sSf -X POST http://localhost/login -d 'username=admin&password=admin'"
     )
 
     machine.succeed(
-        f"curl -sSf -X POST http://localhost/api/objects/tasks -b 'grocy_session={cookie}' "
+        "curl -sSf -X POST http://localhost/api/objects/tasks --cookie cookies.txt "
         + '-d \'{"assigned_to_user_id":1,"name":"Test Task","due_date":"1970-01-01"}\'''
         + " --header 'Content-Type: application/json'"
     )
 
     task_name = machine.succeed(
-        f"curl -sSf http://localhost/api/tasks -b 'grocy_session={cookie}' --header 'Accept: application/json' | jq '.[].name' | xargs echo | perl -pe 'chomp'"
+        "curl -sSf http://localhost/api/tasks --cookie cookies.txt --header 'Accept: application/json' | jq '.[].name' | xargs echo | perl -pe 'chomp'"
     )
 
     assert task_name == "Test Task"
@@ -62,7 +58,7 @@
     )
 
     machine.succeed(
-        f"curl -sSf -X 'PUT' -b 'grocy_session={cookie}' "
+        "curl -sSf -X 'PUT' --cookie cookies.txt "
         + f" 'http://localhost/api/files/equipmentmanuals/{file_name_base64_urlencode}' "
         + "  --header 'Accept: */*' "
         + "  --header 'Content-Type: application/octet-stream' "
@@ -70,7 +66,7 @@
     )
 
     machine.succeed(
-        f"curl -sSf -X 'GET' -b 'grocy_session={cookie}' "
+        "curl -sSf -X 'GET' --cookie cookies.txt "
         + f" 'http://localhost/api/files/equipmentmanuals/{file_name_base64_urlencode}' "
         + "  --header 'Accept: application/octet-stream' "
         + f" | cmp /tmp/{file_name}"

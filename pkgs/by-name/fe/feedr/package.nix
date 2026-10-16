@@ -6,20 +6,24 @@
   pkg-config,
   openssl,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "feedr";
-  version = "0.5.0";
+  version = "0.8.0";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bahdotsh";
     repo = "feedr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-owdJDY61170g28Ujnwzt/8dZ+uyPHlM0iXRyfOL9gls=";
+    hash = "sha256-x8FypbvuAzARc/Jy9kSfSVSSVUsTTdLJU9ihNWpUbak=";
   };
 
-  cargoHash = "sha256-gl6kiDNvRzn5ZG6syuZ9Y8EgwcHpr+5lVEmn3mI5qSw=";
+  cargoHash = "sha256-bUZnaAKlbNCOoMYufBZSHu2QLtxsrur3Cdmpd5y4Sw8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -39,10 +43,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # event loop thread panicked
     "--skip=test_problematic_feeds"
     "--skip=test_reddit_style_atom_feeds"
+    "--skip=test_extract_article_rejects_non_http_scheme"
+    # bind 127.0.0.1: Os { code: 1, kind: PermissionDenied, message: "Operation not permitted" }
+    "--skip=test_extract_article_rejects_non_html_content_type"
+    "--skip=test_extract_article_follows_safe_redirect_to_public_target"
+    "--skip=test_extract_article_does_not_send_authorization_header"
+    "--skip=test_extract_article_rejects_oversized_content_length"
+    "--skip=test_extract_article_rejects_redirect_into_private_ip_via_safe_client"
   ];
 
   doInstallCheck = true;
-  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/bahdotsh/feedr/releases/tag/${finalAttrs.src.tag}";

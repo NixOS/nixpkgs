@@ -11,16 +11,16 @@
   numpy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "biocutils";
-  version = "0.3.4";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "BiocPy";
     repo = "BiocUtils";
-    tag = version;
-    hash = "sha256-G7g+jjXoKtnp+d7a5NoEtVBEN5Di1P/pWjgiJJv6fHA=";
+    tag = finalAttrs.version;
+    hash = "sha256-B8kt2rTya/kiSPSY8Xeo6dOdSszUK76ySaqLlJ7kFQk=";
   };
 
   build-system = [
@@ -42,7 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Miscellaneous utilities for BiocPy, mostly to mimic base functionality in R";
     homepage = "https://github.com/BiocPy/BiocUtils";
+    changelog = "https://github.com/BiocPy/biocutils/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ b-rodrigues ];
   };
-}
+})

@@ -50,6 +50,7 @@ in
     };
 
   testScript = ''
+    machine.wait_for_unit("seatd.service")
     machine.wait_for_file("/tmp/foot_started")
     machine.succeed("test $(seatd-client-pid) = $(pgrep dwl)")
   '';

@@ -33,6 +33,21 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
+  # click 8.3.x regression breaks `--list` / `--generate-config` optional-value flags (pallets/click#3130)
+  disabledTestPaths = [
+    "tests/utest/test_cli.py::TestCli::test_list_transformers[4---list]"
+    "tests/utest/test_cli.py::TestCli::test_list_transformers[4--l]"
+    "tests/utest/test_cli.py::TestCli::test_list_transformers[5---list]"
+    "tests/utest/test_cli.py::TestCli::test_list_transformers[5--l]"
+    "tests/utest/test_cli.py::TestCli::test_list_transformers[None---list]"
+    "tests/utest/test_cli.py::TestCli::test_list_transformers[None--l]"
+    "tests/utest/test_cli.py::TestCli::test_list_no_config"
+    "tests/utest/test_cli.py::TestGenerateConfig::test_generate_default_config"
+    "tests/utest/test_cli.py::TestGenerateConfig::test_generate_config_ignore_existing_config"
+    "tests/utest/test_cli.py::TestGenerateConfig::test_generate_config_with_cli_config"
+    "tests/utest/test_cli.py::TestGenerateConfig::test_missing_dependency"
+  ];
+
   meta = {
     description = "Code autoformatter for Robot Framework";
     homepage = "https://robotidy.readthedocs.io";

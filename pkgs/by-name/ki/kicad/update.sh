@@ -22,7 +22,7 @@ export TMPDIR=/tmp
 # support parallel instances for each pname
 #   currently risks reusing old data
 # no getting around manually checking if the build product works...
-# if there is, default to commiting?
+# if there is, default to committing?
 #   won't work when running in parallel?
 # remove items left in /nix/store?
 # reuse hashes of already checked revs (to avoid redownloading testing's packages3d)

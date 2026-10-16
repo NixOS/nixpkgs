@@ -1,18 +1,19 @@
 {
   lib,
-  tmux,
+  zellij,
+  ncurses,
   hexdump,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
   runtimeShell,
   rustPlatform,
-  skim,
-  testers,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "4.0.0";
+  version = "5.7.3";
+  __structuredAttrs = true;
 
   outputs = [
     "out"
@@ -24,18 +25,20 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1ckQ9ZWf4PWgRxE8jtQL7yuitPGvgebNJFPMWQ3xdrU=";
+    hash = "sha256-sG7nfBfsJWQFo/uS6nJ5VPBG7q3YBF4+5T8E9UmurME=";
   };
 
   postPatch = ''
-    sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
+    substituteInPlace plugin/skim.vim \
+      --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-AIMmgspcj40Ktw5THk2p/bOcPBsqjD0/9jfpOJEm23w=";
+  cargoHash = "sha256-QyqAAJhEqJnajwras4/ipsf93B04NXq98j+9T5LTibY=";
 
   nativeBuildInputs = [ installShellFiles ];
   nativeCheckInputs = [
-    tmux
+    zellij
+    ncurses
     hexdump
   ];
 
@@ -65,11 +68,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useNextest = true;
 
   checkPhase = ''
-    cargo nextest run --features test-utils --release --offline --lib --bins --examples --tests
+    cargo nextest run --release --offline --lib --bins --examples --tests --profile ci
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
-    tests.version = testers.testVersion { package = skim; };
     updateScript = nix-update-script { };
   };
 

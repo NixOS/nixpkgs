@@ -7,19 +7,19 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mackup";
-  version = "0.10.2";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lra";
     repo = "mackup";
     rev = "${finalAttrs.version}";
-    hash = "sha256-f2mbxehOMg9pZU7uQwWk9JjEa90d5YtS/Ha1m2wns+c=";
+    hash = "sha256-+pdeG3uoNC3LCTyxWnBZ8U1pDIMKpws/Y62VrLtNghY=";
   };
 
   postPatch = ''
     substituteInPlace src/mackup/utils.py \
-      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"' \
+      --replace-fail '"/usr/bin/pgrep"' '"${lib.getExe' procps "pgrep"}"'
   '';
 
   build-system = with python3Packages; [ hatchling ];

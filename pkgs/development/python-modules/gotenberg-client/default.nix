@@ -4,17 +4,20 @@
   fetchFromGitHub,
   hatchling,
   httpx,
+  niquests,
+  python-magic,
+  requests,
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
-  version = "0.13.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stumpylog";
     repo = "gotenberg-client";
     tag = version;
-    hash = "sha256-JYb0+Dj4QowcN+I6MMoWlv+Q5YoK4nfzYB/UNwhnRu8=";
+    hash = "sha256-NgfqUgtD70XvpFee8e32rTPe3TOS+JdmCnefzFY4gNY=";
   };
 
   build-system = [ hatchling ];
@@ -23,6 +26,13 @@ buildPythonPackage rec {
     httpx
   ]
   ++ httpx.optional-dependencies.http2;
+
+  optional-dependencies = {
+    httpx = [ httpx ] ++ httpx.optional-dependencies.http2;
+    magic = [ python-magic ];
+    niquests = [ niquests ];
+    requests = [ requests ];
+  };
 
   # requires running gotenberg service
   doCheck = false;

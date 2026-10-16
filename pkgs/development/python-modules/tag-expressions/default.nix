@@ -17,6 +17,11 @@ buildPythonPackage rec {
     hash = "sha256-EbSwfAH+sL3JGW+COfDA2f7cLGyKmQMsbyyDGy13Lkg=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version=read_version()' 'version="${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];

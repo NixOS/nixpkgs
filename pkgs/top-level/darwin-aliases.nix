@@ -103,11 +103,14 @@ stubs
 
   ### B ###
 
+  binutilsDualAs = throw "binutilsDualAs has been removed because it was only useful on `x86_64-darwin` and also only useful for the GNAT bootstrap and also not even used for that any more and actually what on earth were you using this thing for anyway?"; # Added 2026-06-27
+  binutilsDualAs-unwrapped = throw "binutilsDualAs has been removed because it was only useful on `x86_64-darwin` and also only useful for the GNAT bootstrap and also not even used for that any more and actually what on earth were you using this thing for anyway?"; # Added 2026-06-27
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
   bsdmake = pkgs.bmake; # added 2024-10-03
 
   ### C ###
 
+  Csu = throw "darwin.Csu has been removed, as it was only used on `x86_64-darwin`, which is no longer supported"; # added 2026-06-26
   cctools = pkgs.cctools; # added 2024-07-17
   cctools-apple = pkgs.cctools; # added 2024-07-01
   cctools-llvm = pkgs.cctools; # added 2024-07-01
@@ -138,7 +141,7 @@ stubs
   ### O ###
 
   opencflite = pkgs.opencflite; # added 2024-05-02
-  openwith = pkgs.openwith; # added 2025-11-28
+  openwith = throw "'openwith' has been removed, doesn't seem to work correctly on macOS 26 or newer"; # Added 2026-08-12
 
   ### P ###
   postLinkSignHook = throw "'darwin.postLinkSignHook' has been removed because it is obsolete"; # added 2025-02-23

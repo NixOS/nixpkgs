@@ -6,14 +6,14 @@
   SDL_image,
   SDL_mixer,
   SDL_sound,
-  libsigcxx,
+  libsigcxx_2_0,
   physfs,
   boost,
   expat,
   freetype,
   libjpeg,
   wxwidgets_3_2,
-  lua,
+  lua5_2_compat,
   perl,
   pkg-config,
   zlib,
@@ -27,6 +27,9 @@
   flac,
   libogg,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation {
   pname = "asc";
@@ -64,7 +67,7 @@ stdenv.mkDerivation {
     flac
     libvorbis
     libogg
-    libsigcxx
+    libsigcxx_2_0
   ];
 
   meta = {

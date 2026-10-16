@@ -22,7 +22,7 @@ buildOctavePackage rec {
   meta = {
     homepage = "https://gnu-octave.github.io/packages/gsl/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ KarlJoad ];
+    maintainers = with lib.maintainers; [ ravenjoad ];
     description = "Octave bindings to the GNU Scientific Library";
     # gsl_sf.cc:1782:11: error: no member named 'is_real_type' in 'octave_value'
     #  1782 |     if (! ISREAL(args(i)))

@@ -14,7 +14,7 @@
   pkg-config,
   glib,
   hiredis,
-  systemd,
+  systemdLibs,
   perl,
   python3,
   riemann_c_client,
@@ -62,16 +62,18 @@ let
       ply
     ];
   py = python3.withPackages python-deps;
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "syslog-ng";
-  version = "4.11.0";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "syslog-ng";
     repo = "syslog-ng";
     tag = "syslog-ng-${finalAttrs.version}";
-    hash = "sha256-7t1Q3qaPMp36siQALmeB27G6hfsql+kepERGB0yPsVU=";
+    hash = "sha256-89v0Ape6FZVYePb+wjy0RO+NOyzluQNJliexM04li3Y=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [
@@ -94,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     eventlog
     glib
     py
-    systemd
+    systemdLibs'
     riemann_c_client
     protobufc
     libnet

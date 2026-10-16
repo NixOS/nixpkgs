@@ -6,7 +6,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "tarsum";
+  pname = "tarsum";
+  inherit (docker) version;
 
   nativeBuildInputs = [ go ];
   disallowedReferences = [ go ];

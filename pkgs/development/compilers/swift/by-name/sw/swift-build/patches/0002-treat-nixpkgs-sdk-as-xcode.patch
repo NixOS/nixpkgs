@@ -1,0 +1,49 @@
+From 0e17f25cf6827dfa94ad37590964d4f7b1d23625 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 9 Dec 2025 21:03:16 -0500
+Subject: [PATCH] treat-nixpkgs-sdk-as-xcode
+
+---
+ Sources/SWBCore/Core.swift                      | 4 ++--
+ Sources/SWBTestSupport/SkippedTestSupport.swift | 3 ++-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/SWBCore/Core.swift b/Sources/SWBCore/Core.swift
+index 8a19a5e..7ab64fd 100644
+--- a/Sources/SWBCore/Core.swift
++++ b/Sources/SWBCore/Core.swift
+@@ -267,7 +267,7 @@ public final class Core: Sendable {
+ 
+             switch developerPath {
+             case .xcode(let path):
+-                toolchainPaths.append((path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer")))
++                toolchainPaths.append((path.join("Toolchains"), strict: path.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@")))
+             case .swiftToolchain(let path, xcodeDeveloperPath: let xcodeDeveloperPath):
+                 if hostOperatingSystem == .windows {
+                     toolchainPaths.append((path.join("Toolchains"), strict: true))
+@@ -275,7 +275,7 @@ public final class Core: Sendable {
+                     toolchainPaths.append((path, strict: true))
+                 }
+                 if let xcodeDeveloperPath {
+-                    toolchainPaths.append((xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer")))
++                    toolchainPaths.append((xcodeDeveloperPath.join("Toolchains"), strict: xcodeDeveloperPath.str.hasSuffix(".app/Contents/Developer") || path.str.hasPrefix("@store-dir@")))
+                 }
+             }
+ 
+diff --git a/Sources/SWBTestSupport/SkippedTestSupport.swift b/Sources/SWBTestSupport/SkippedTestSupport.swift
+index 1db4090..08e3109 100644
+--- a/Sources/SWBTestSupport/SkippedTestSupport.swift
++++ b/Sources/SWBTestSupport/SkippedTestSupport.swift
+@@ -148,7 +148,8 @@ extension Trait where Self == Testing.ConditionTrait {
+     /// Constructs a condition trait that causes a test to be disabled if the developer directory is pointing at an Xcode developer directory.
+     package static var skipXcodeToolchain: Self {
+         disabled("This test is incompatible with Xcode toolchains.", {
+-            try await ConditionTraitContext.shared.getCore().developerPath.path.str.contains(".app/Contents/Developer")
++            let core = try await ConditionTraitContext.shared.getCore()
++            return core.developerPath.path.str.contains(".app/Contents/Developer") || core.developerPath.path.str.hasPrefix("@store-dir@")
+         })
+     }
+ 
+-- 
+2.51.2
+

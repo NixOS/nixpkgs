@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    # last successful hydra build on darwin was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://sjeng.org/vorbisgain.html";
     description = "Utility that corrects the volume of an Ogg Vorbis file to a predefined standardized loudness";
     license = lib.licenses.gpl2Only;

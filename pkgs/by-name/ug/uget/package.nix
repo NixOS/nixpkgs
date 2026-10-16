@@ -7,7 +7,7 @@
   openssl,
   curl,
   libnotify,
-  libappindicator-gtk3,
+  libappindicator,
   gst_all_1,
   gtk3,
   dconf,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     curl
     libnotify
-    libappindicator-gtk3
+    libappindicator
     gtk3
     (lib.getLib dconf)
   ]
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       thinking that it "might be too powerful" because remember power is good
       and lightweight power is uGet!
     '';
-    homepage = "http://www.ugetdm.com";
+    homepage = "https://sourceforge.net/projects/urlget/";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ romildo ];

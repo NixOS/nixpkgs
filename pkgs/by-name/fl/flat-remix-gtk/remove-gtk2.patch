@@ -1,0 +1,15 @@
+--- a/Makefile
++++ b/Makefile
+@@ -13,7 +13,11 @@
+ 
+ install:
+ 	mkdir -p $(DESTDIR)$(PREFIX)/share/themes
+-	cp -a $(foreach theme,$(THEMES),themes/$(theme)) $(DESTDIR)$(PREFIX)/share/themes
++	for theme in $(THEMES); do \
++		mkdir -p $(DESTDIR)$(PREFIX)/share/themes/$$theme; \
++		find themes/$$theme -mindepth 1 -maxdepth 1 ! -name gtk-2.0 \
++			-exec cp -a {} $(DESTDIR)$(PREFIX)/share/themes/$$theme/ \; ; \
++	done
+ 
+ uninstall:
+ 	-rm -rf $(foreach theme,$(THEMES),$(DESTDIR)$(PREFIX)/share/themes/$(theme))

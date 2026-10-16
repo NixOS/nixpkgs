@@ -40,7 +40,7 @@
   nss,
   openssl,
   pango,
-  systemd,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libcxx
-    systemd
+    systemdLibs
     libpulseaudio
     stdenv.cc.cc
     alsa-lib
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     nspr
     nss
     pango
-    systemd
+    systemdLibs
   ];
 
   libPath = lib.makeLibraryPath buildInputs;

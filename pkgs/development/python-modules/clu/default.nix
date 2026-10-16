@@ -31,6 +31,7 @@ buildPythonPackage (finalAttrs: {
   pname = "clu";
   version = "0.0.12";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "google";
@@ -38,6 +39,15 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-ntqRz3fCXMf0EDQsddT68Mdi105ECBVQpVsStzk2kvQ=";
   };
+
+  # Fix Jax 0.10.0 compatibility
+  # TypeError: clip() got an unexpected keyword argument 'a_min'
+  postPatch = ''
+    substituteInPlace clu/metrics.py \
+      --replace-fail \
+        "variance = jnp.clip(variance, a_min=0.0)" \
+        "variance = jnp.clip(variance, min=0.0)"
+  '';
 
   build-system = [
     setuptools

@@ -2,27 +2,30 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
+  versionCheckHook,
 }:
 
 # note: upstream has a flake
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ghgrab";
-  version = "1.2.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "abhixdd";
     repo = "ghgrab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eXyLIrXsMV1p6xicKA5QNRPc4pkBdVM+fovOSaJT9/8=";
+    hash = "sha256-l0uaX31jbbN8zi98l4fdqh/gq8IuHVQNoBcZVzEa50k=";
   };
 
-  cargoHash = "sha256-mYOl2yI6D6c7Xs8ABFnRazyQZYQJCElXqvqQUET0zEc=";
+  cargoHash = "sha256-eJ2W9m33o/j9pRA41c3Iy1QWvMp7OV8sCAY7A97qP3M=";
 
-  # fails on darwin
-  # https://github.com/abhixdd/ghgrab/issues/31
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=agent_tree_invalid_url_returns_json_error"
+  doInstallCheck = true;
+  versionCheckProgramArg = "--version";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  checkFlags = [
+    # sends request to a github.com url
+    "--skip=test_mcp_repo_info_on_actual_repo"
   ];
 
   meta = {
@@ -30,7 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Simple, pretty terminal tool that lets you search and download files from GitHub without leaving your CLI";
     homepage = "https://github.com/abhixdd/ghgrab";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ phanirithvij ];
     mainProgram = "ghgrab";
+    maintainers = with lib.maintainers; [ phanirithvij ];
   };
 })

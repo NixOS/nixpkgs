@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
+  pythonOlder,
 
   # nativeBuildInputs
   protoc,
@@ -12,33 +13,38 @@
   protobuf,
 
   # dependencies
+  cloudpickle,
   pyarrow,
   typing-extensions,
 
   # tests
+  arro3-core,
+  nanoarrow,
   numpy,
   pytest-asyncio,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datafusion";
-  version = "50.1.0";
+  # WARNING: Ensure rerun-sdk is compatible with this version of datafusion
+  version = "54.0.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     name = "datafusion-source";
     owner = "apache";
-    repo = "arrow-datafusion-python";
-    tag = version;
+    repo = "datafusion-python";
+    tag = finalAttrs.version;
     # Fetch arrow-testing and parquet-testing (tests assets)
     fetchSubmodules = true;
-    hash = "sha256-+r3msFc9yu3aJBDRI66A/AIctCbLxfZB3Ur/raDV3x8=";
+    hash = "sha256-Kh8w8L3AJCs9a3KA9RHaA0btbJEBdYZge1VK7AX0lX0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname src version;
-    hash = "sha256-XJ2x/EtMZu/fdS6XB/IydMfHmlaxEWJ3XJPY73WoGqs=";
+    inherit (finalAttrs) pname src version;
+    hash = "sha256-s4+Y2axZKL7wKiw8Z6c12eWAnf1zGPAFFvWS45vFrlo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -52,11 +58,16 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    cloudpickle
     pyarrow
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    arro3-core
+    nanoarrow
     numpy
     pytest-asyncio
     pytestCheckHook
@@ -87,8 +98,8 @@ buildPythonPackage rec {
       that uses Apache Arrow as its in-memory format.
     '';
     homepage = "https://arrow.apache.org/datafusion/";
-    changelog = "https://github.com/apache/arrow-datafusion-python/blob/${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 ];
+    changelog = "https://github.com/apache/datafusion-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cpcloud ];
   };
-}
+})

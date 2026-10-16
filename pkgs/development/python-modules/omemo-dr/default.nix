@@ -14,7 +14,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitLab {
-    domain = "dev.gajim.org";
     owner = "gajim";
     repo = "omemo-dr";
     tag = "v${version}";
@@ -34,9 +33,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "OMEMO Double Ratchet";
-    homepage = "https://dev.gajim.org/gajim/omemo-dr/";
-    changelog = "https://dev.gajim.org/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
+    homepage = "https://gitlab.com/gajim/omemo-dr/";
+    changelog = "https://gitlab.com/gajim/omemo-dr/-/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ haansn08 ];
   };
 }

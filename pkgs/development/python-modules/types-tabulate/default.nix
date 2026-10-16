@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-tabulate";
-  version = "0.10.0.20260308";
+  version = "0.10.0.20261006";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_tabulate";
     inherit version;
-    hash = "sha256-ck3LEzD/ul9G089uKfRQifzLjoWAHm56ye+xGVv3vqE=";
+    hash = "sha256-UFu0VeM36F8s8d+lbCUyLvcAWfCVZzhhEURE+uPp6Nc=";
   };
 
   build-system = [ setuptools ];

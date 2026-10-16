@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tusd";
-  version = "2.9.2";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "tus";
     repo = "tusd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bHC1pUx/GW3IWtGqsGOOBMWTRM65oCKg9gTL5L8GT+0=";
+    hash = "sha256-uUug+Es1ioGjwPmwU9NuuIVnxbn5M/oorSsvjKTNFXU=";
   };
 
-  vendorHash = "sha256-sNWB/qiF/DhRpF0Z+m1NQ3ydUWAr9NdsSaRx0BT8C98=";
+  vendorHash = "sha256-IxzQFZtT3Krg+lNGomvMciooM1m4k8npExD80bIpAFQ=";
 
   ldflags = [
     "-X github.com/tus/tusd/v2/cmd/tusd/cli.VersionName=v${finalAttrs.version}"
@@ -34,6 +34,7 @@ buildGoModule (finalAttrs: {
     description = "Reference server implementation in Go of tus: the open protocol for resumable file uploads";
     license = lib.licenses.mit;
     homepage = "https://tus.io/";
+    mainProgram = "tusd";
     maintainers = with lib.maintainers; [
       nh2
       kalbasit

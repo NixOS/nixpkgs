@@ -6,6 +6,7 @@
   openssl,
   versionCheckHook,
   nix-update-script,
+  withTls ? true,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,10 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
-
-  # Currently no tests are implemented, so we avoid building the package twice
-  doCheck = false;
+  buildInputs = lib.optional withTls openssl;
+  buildFeatures = lib.optional withTls "tls";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

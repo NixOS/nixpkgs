@@ -9,6 +9,10 @@ export PATH=@path@:$PATH
 # Ensure a consistent umask.
 umask 0022
 
+log() {
+    echo "$@" >&2
+}
+
 # Parse the command line for the -I flag
 extraBuildFlags=()
 flakeFlags=()
@@ -25,7 +29,7 @@ declare -A requestedBuildMethods
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
-        --max-jobs|-j|--cores|-I|--substituters)
+        --max-jobs|-j|--cores|-I|--substituters|--log-format)
             j="$1"; shift 1
             extraBuildFlags+=("$i" "$j")
             ;;

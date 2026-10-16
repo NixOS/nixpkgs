@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-tree";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = "kubectl-tree";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-vk134/zetBYzsN+cfEfAzsDl6QNKOAVmpzIa9ZtpMt8=";
+    sha256 = "sha256-Ti2RWGNjCgaf02c2PXHL4Uml8Nws9gICwbrKcWmQ9pE=";
   };
 
-  vendorHash = "sha256-GJQZLES0CDaA0OBp1LNKDcIWd8V49b5YFuLcubIpnDQ=";
+  vendorHash = "sha256-34mxaCX5Em6/SiIrUDvTG9ZvWCzVUURk0SH+oQuOvlA=";
 
   meta = {
     description = "kubectl plugin to browse Kubernetes object hierarchies as a tree";

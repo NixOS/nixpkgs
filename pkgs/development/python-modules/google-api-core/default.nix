@@ -56,6 +56,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   # prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google

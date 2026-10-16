@@ -7,7 +7,7 @@
 (callPackage ./common.nix { }) rec {
   version = "0.0.6";
   src = fetchurl {
-    url = "https://www.soft-switch.org/downloads/spandsp/spandsp-${version}.tar.gz";
+    url = "https://src.fedoraproject.org/lookaside/pkgs/spandsp/spandsp-${version}.tar.gz/897d839516a6d4edb20397d4757a7ca3/spandsp-${version}.tar.gz";
     sha256 = "0rclrkyspzk575v8fslzjpgp4y2s4x7xk3r55ycvpi4agv33l1fc";
   };
   patches = [

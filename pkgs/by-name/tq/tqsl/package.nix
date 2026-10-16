@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tqsl";
-  version = "2.8.2";
+  version = "2.8.6";
 
   src = fetchurl {
     url = "https://www.arrl.org/files/file/LoTW%20Instructions/tqsl-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-HH78pTeT/wW9dZggxcqRiZ3OqShU7B2uPWa4ya59LfA=";
+    hash = "sha256-GC5fKsNaPbi0CbRdllBea9JlrkZo7QZHVCCcS4573zc=";
   };
 
   nativeBuildInputs = [

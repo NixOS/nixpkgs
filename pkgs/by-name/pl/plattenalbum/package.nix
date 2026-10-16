@@ -13,14 +13,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "plattenalbum";
-  version = "2.4.1";
+  version = "2.7.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "SoongNoonien";
     repo = "plattenalbum";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k2rrXTYYrk8I8Rsy/vCiAkkcwP5LHcxzRLJrp2QAOpk=";
+    hash = "sha256-dBgn6du5gQHYFjDw9YVBNxeiSA9WBrPrjWRnMXBYQIU=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     pygobject3
-    mpd2
+    python-mpd2
   ];
 
   dontWrapGApps = true;

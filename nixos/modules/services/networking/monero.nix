@@ -128,6 +128,13 @@ in
         default = null;
         description = ''
           Password for RPC connections.
+
+          ::: {.warning}
+          A literal value is written to `monero.conf` in the Nix store, which is
+          world-readable. To keep the password out of the store, set this to a
+          placeholder such as `"$MONERO_RPC_PASSWORD"` and provide the value
+          through {option}`services.monero.environmentFile`.
+          :::
         '';
       };
 
@@ -241,11 +248,13 @@ in
           ```
           # In environment file:
           MINING_ADDRESS=888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H
+          MONERO_RPC_PASSWORD=correct-horse-battery-staple
           ```
 
           ```
           # Service config
           services.monero.mining.address = "$MINING_ADDRESS";
+          services.monero.rpc.password = "$MONERO_RPC_PASSWORD";
           ```
         '';
       };
@@ -271,7 +280,7 @@ in
       group = "monero";
       description = "Monero daemon user";
       home = cfg.dataDir;
-      createHome = true;
+      createHome = !(lib.strings.hasPrefix "/var/lib/" cfg.dataDir);
     };
 
     users.groups.monero = { };
@@ -297,6 +306,40 @@ in
         SuccessExitStatus = [
           0
           1
+        ];
+        StateDirectory = lib.mkIf (lib.strings.hasPrefix "/var/lib/" cfg.dataDir) (
+          lib.strings.removePrefix "/var/lib/" cfg.dataDir
+        );
+        ReadWritePaths = lib.mkIf (!(lib.strings.hasPrefix "/var/lib/" cfg.dataDir)) [ cfg.dataDir ];
+        WorkingDirectory = "${cfg.dataDir}";
+        LockPersonality = lib.mkDefault true;
+        NoNewPrivileges = lib.mkDefault true;
+        PrivateDevices = lib.mkDefault true;
+        PrivateMounts = lib.mkDefault true;
+        PrivateNetwork = lib.mkDefault false;
+        PrivateTmp = lib.mkDefault true;
+        PrivateUsers = lib.mkDefault true;
+        ProcSubset = lib.mkDefault "pid";
+        ProtectClock = lib.mkDefault true;
+        ProtectHome = lib.mkDefault true;
+        ProtectHostname = lib.mkDefault true;
+        ProtectSystem = lib.mkDefault "strict";
+        ProtectControlGroups = lib.mkDefault true;
+        ProtectKernelLogs = lib.mkDefault true;
+        ProtectKernelModules = lib.mkDefault true;
+        ProtectKernelTunables = lib.mkDefault true;
+        ProtectProc = lib.mkDefault "invisible";
+        CapabilityBoundingSet = lib.mkDefault "";
+        RemoveIPC = lib.mkDefault true;
+        RestrictNamespaces = lib.mkDefault true;
+        RestrictRealtime = lib.mkDefault true;
+        RestrictSUIDSGID = lib.mkDefault true;
+        SystemCallFilter = "@system-service";
+        UMask = "0077";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
         ];
       };
     };

@@ -38,7 +38,7 @@ buildNpmPackage {
     mainProgram = "godot-mcp";
     homepage = "https://github.com/Coding-Solo/godot-mcp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ superherointj ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

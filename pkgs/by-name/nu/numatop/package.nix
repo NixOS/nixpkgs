@@ -7,6 +7,7 @@
   numactl,
   ncurses,
   check,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,12 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool for runtime memory locality characterization and analysis of processes and threads on a NUMA system";
     mainProgram = "numatop";
-    homepage = "https://01.org/numatop";
+    homepage = "https://www.intel.com/content/www/us/en/developer/topic-technology/open/numatop/overview.html";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ VZstless ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

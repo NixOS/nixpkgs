@@ -14,24 +14,24 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "timr-tui";
-  version = "1.6.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "sectore";
     repo = "timr-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s2FnMwDq4tYBaWaT9y1GLbVGFs7zSnOmjcF5leO12JE=";
+    hash = "sha256-ZudyEkYAwVQ7Q61B7ElkwHBs9V36+aTOGgA+Rvr/F7Q=";
   };
 
-  cargoHash = "sha256-9yd348QGjFxt+QmEBuYzd612mFm/PyETrZy4z5wW+nI=";
+  cargoHash = "sha256-1fGcVNjPs4UER9QVraUDX0twlm5hrbg7rzL7RjYZTEo=";
 
   # Enable upstream "sound" feature when requested
   buildFeatures = lib.optionals enableSound [ "sound" ];
 
-  nativeBuildInputs = lib.optionals (enableSound && stdenv.isLinux) [ pkg-config ];
+  nativeBuildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [ pkg-config ];
 
   # Runtime/FFI deps for the sound feature (Linux)
-  buildInputs = lib.optionals (enableSound && stdenv.isLinux) [
+  buildInputs = lib.optionals (enableSound && stdenv.hostPlatform.isLinux) [
     (alsa-lib-with-plugins.override {
       plugins = [
         alsa-plugins
@@ -55,12 +55,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "TUI to organize your time: Pomodoro, Countdown, Timer";
+    description = "TUI to organize your time: Pomodoro, Countdown, Timer, Event";
     homepage = "https://github.com/sectore/timr-tui";
     changelog = "https://github.com/sectore/timr-tui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "timr-tui";
-    maintainers = [ lib.maintainers.flokkq ];
+    maintainers = with lib.maintainers; [
+      flokkq
+      sectore
+    ];
     platforms = lib.platforms.unix;
   };
 })

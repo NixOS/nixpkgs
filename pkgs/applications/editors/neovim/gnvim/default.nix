@@ -50,6 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "gnvim";
     homepage = "https://github.com/vhakulinen/gnvim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ minijackson ];
+    maintainers = [ ];
   };
 })

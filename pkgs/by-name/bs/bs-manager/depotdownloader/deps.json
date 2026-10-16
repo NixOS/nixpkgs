@@ -11,8 +11,8 @@
   },
   {
     "pname": "Microsoft.Windows.CsWin32",
-    "version": "0.3.106",
-    "hash": "sha256-S1uQa684taPb6uh69784ebVpXoirMoX+pxBRA+Rrzlg="
+    "version": "0.3.275",
+    "hash": "sha256-sqIFj1dNatchuS9R7sk0Os6vSoSXFjm20qppvnnw78c="
   },
   {
     "pname": "Microsoft.Windows.SDK.Win32Docs",
@@ -21,38 +21,38 @@
   },
   {
     "pname": "Microsoft.Windows.SDK.Win32Metadata",
-    "version": "60.0.34-preview",
-    "hash": "sha256-KdRe73sXipzMvm2BLmwwBZGh+l9isZDC9l8WFyUR1zM="
+    "version": "63.0.31-preview",
+    "hash": "sha256-MMvQoyVT15IU93EKZ46rhP/hyx3wV452vuFnf8OTd60="
+  },
+  {
+    "pname": "Microsoft.Windows.SDK.Win32Metadata",
+    "version": "70.0.11-preview",
+    "hash": "sha256-JRcTFlzV+sDfgUKPtn0oOn25SdNivmhbS8+0HcAozu8="
   },
   {
     "pname": "Microsoft.Windows.WDK.Win32Metadata",
-    "version": "0.11.4-experimental",
-    "hash": "sha256-b3oKUKbr+3Udfl7RWzUY9BR/XWNsN+VmEkBxk6KiFo0="
+    "version": "0.13.25-experimental",
+    "hash": "sha256-eQeaRJ2PYhBSvK8TA55BHRwbd67EqJzwTZZRjQphlhc="
   },
   {
     "pname": "protobuf-net",
-    "version": "3.2.30",
-    "hash": "sha256-keRy5OWT+/tlZt3D7x+9PEdjTvEJcZdYsf/i1ZBtciE="
+    "version": "3.2.56",
+    "hash": "sha256-KjwRHyGwflQDjVaudT+NjRnfGhHb4CpCfn9hHVixI+E="
   },
   {
     "pname": "protobuf-net.Core",
-    "version": "3.2.30",
-    "hash": "sha256-GMpJNecoBfrV2VgpYOhcZnKZaLFDObNLcX2LBTThrwY="
+    "version": "3.2.56",
+    "hash": "sha256-NVvLreCvvvnS/s0syL5/L3mRpXeswP7E71C6WP9f2Dc="
   },
   {
     "pname": "SteamKit2",
-    "version": "3.0.0-beta.4",
-    "hash": "sha256-7cXlpCuUD8ZuTMtqsT5MdklkZb+XIGBdoI28anjUXtg="
-  },
-  {
-    "pname": "System.Collections.Immutable",
-    "version": "7.0.0",
-    "hash": "sha256-9an2wbxue2qrtugYES9awshQg+KfJqajhnhs45kQIdk="
+    "version": "3.3.1",
+    "hash": "sha256-f6kc15RKNxCSIlynlVHU8fBqQ7N8nG1xV3DNbBlRmvo="
   },
   {
     "pname": "System.IO.Hashing",
-    "version": "8.0.0",
-    "hash": "sha256-szOGt0TNBo6dEdC3gf6H+e9YW3Nw0woa6UnCGGGK5cE="
+    "version": "9.0.8",
+    "hash": "sha256-Jj1XwumBjBa5LJqSVTN2naQJ0FM4wwPvZS8NxGd5Hnw="
   },
   {
     "pname": "System.Security.AccessControl",
@@ -63,5 +63,10 @@
     "pname": "System.Security.Principal.Windows",
     "version": "5.0.0",
     "hash": "sha256-CBOQwl9veFkrKK2oU8JFFEiKIh/p+aJO+q9Tc2Q/89Y="
+  },
+  {
+    "pname": "ZstdSharp.Port",
+    "version": "0.8.6",
+    "hash": "sha256-rc3YWP80fykqujDsD72SXOA1tBDoy2KrvVETOC8eTx8="
   }
 ]

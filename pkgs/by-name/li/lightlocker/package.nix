@@ -14,7 +14,7 @@
   libxscrnsaver,
   libxxf86vm,
   libxext,
-  systemd,
+  systemdLibs,
   pantheon,
   wrapGAppsHook3,
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     libxscrnsaver
     libxext
     libxxf86vm
-    systemd
+    systemdLibs
   ];
 
   mesonFlags = [

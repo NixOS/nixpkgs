@@ -10,16 +10,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "notmuch-mailmover";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "michaeladler";
     repo = "notmuch-mailmover";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fJljqNSPLM1JiyeGMNvub/4wk5L9+lVTqtgCdoe7S88=";
+    hash = "sha256-HbWiWoCVyYW2tgu0V3ysB27oUQx2EQNQUPg6ZjA3QjQ=";
   };
 
-  cargoHash = "sha256-PeSlErwGBCZECYoWqmJrlRY7peNNY7c/wxd6R09uUz4=";
+  cargoHash = "sha256-E3t7aWatRIc7pjLX6T8L8sNloz5H0qsTBOpKPvXbwEo=";
+
+  env.RUST_LOG = "info"; # needed for integration tests
 
   nativeBuildInputs = [
     installShellFiles
@@ -31,8 +33,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     lua5_4
   ];
 
+  nativeCheckInputs = [
+    notmuch
+  ];
+
   postInstall = ''
-    installManPage share/notmuch-mailmover.1.gz
+    installManPage share/notmuch-mailmover.1
 
     mkdir -p $out/share/notmuch-mailmover
     cp -dR example $out/share/notmuch-mailmover/

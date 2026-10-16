@@ -1,0 +1,29 @@
+Build and install the Darwin testing helper for the CMake-based package.
+
+Upstream supports CMake builds on macOS only for bootstrapping. Nixpkgs
+distributes the CMake-built tools, so include the helper required to run
+Swift Testing tests.
+
+https://github.com/swiftlang/swift-package-manager/issues/10600
+
+--- a/Sources/CMakeLists.txt
++++ b/Sources/CMakeLists.txt
+@@ -49,3 +49,7 @@
+ add_subdirectory(XCBuildSupport)
+ add_subdirectory(SwiftBuildSupport)
+ add_subdirectory(tsan_utils)
++
++if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
++  add_subdirectory(swiftpm-testing-helper)
++endif()
+--- /dev/null
++++ b/Sources/swiftpm-testing-helper/CMakeLists.txt
+@@ -0,0 +1,8 @@
++add_executable(swiftpm-testing-helper
++  Entrypoint.swift)
++
++target_compile_options(swiftpm-testing-helper PRIVATE
++  -parse-as-library)
++
++install(TARGETS swiftpm-testing-helper
++  RUNTIME DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/swift/pm")

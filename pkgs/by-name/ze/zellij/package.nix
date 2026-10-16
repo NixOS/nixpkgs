@@ -1,95 +1,38 @@
 {
   lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  mandown,
-  installShellFiles,
-  pkg-config,
-  curl,
-  openssl,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
-  nix-update-script,
+  zellij-unwrapped,
+  makeBinaryWrapper,
+  stdenvNoCC,
+  symlinkJoin,
+
+  extraPackages ? [ ],
 }:
+if extraPackages == [ ] then
+  symlinkJoin {
+    inherit (zellij-unwrapped) version meta;
+    pname = "zellij";
 
-rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "zellij";
-  version = "0.44.0";
+    __structuredAttrs = true;
+    strictDeps = true;
 
-  src = fetchFromGitHub {
-    owner = "zellij-org";
-    repo = "zellij";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-9jVBz+in8TrdX5qYXdSBCN3SYhG/JJLIbkq0DC0tm4Q=";
-  };
+    paths = [ zellij-unwrapped ];
+  }
+else
+  stdenvNoCC.mkDerivation {
+    inherit (zellij-unwrapped) version meta;
+    pname = "zellij";
 
-  # Remove the `vendored_curl` feature in order to link against the libcurl from nixpkgs instead of
-  # the vendored one
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail ', "vendored_curl"' ""
-  '';
+    __structuredAttrs = true;
+    strictDeps = true;
 
-  cargoHash = "sha256-nGMOVq5etxiOfocjTKXAd8sJHFw34T49Ga48Isc8dCg=";
+    src = zellij-unwrapped;
+    dontUnpack = true;
 
-  env.OPENSSL_NO_VENDOR = 1;
+    nativeBuildInputs = [ makeBinaryWrapper ];
+    buildPhase = ''
+      cp -rs --no-preserve=mode "$src" "$out"
 
-  nativeBuildInputs = [
-    mandown
-    installShellFiles
-    pkg-config
-    (lib.getDev curl)
-  ];
-
-  buildInputs = [
-    curl
-    openssl
-  ];
-
-  nativeCheckInputs = [
-    writableTmpDirAsHomeHook
-  ];
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
-  doInstallCheck = true;
-
-  # Ensure that we don't vendor curl, but instead link against the libcurl from nixpkgs
-  installCheckPhase = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-    runHook preInstallCheck
-
-    ldd "$out/bin/zellij" | grep libcurl.so
-
-    runHook postInstallCheck
-  '';
-
-  postInstall = ''
-    mandown docs/MANPAGE.md > zellij.1
-    installManPage zellij.1
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd $pname \
-      --bash <($out/bin/zellij setup --generate-completion bash) \
-      --fish <($out/bin/zellij setup --generate-completion fish) \
-      --zsh <($out/bin/zellij setup --generate-completion zsh)
-  '';
-
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
-    description = "Terminal workspace with batteries included";
-    homepage = "https://zellij.dev/";
-    changelog = "https://github.com/zellij-org/zellij/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [
-      therealansh
-      _0x4A6F
-      abbe
-      matthiasbeyer
-      ryan4yin
-    ];
-    mainProgram = "zellij";
-  };
-})
+      wrapProgram "$out/bin/zellij" \
+        --prefix PATH : '${lib.makeBinPath extraPackages}'
+    '';
+  }

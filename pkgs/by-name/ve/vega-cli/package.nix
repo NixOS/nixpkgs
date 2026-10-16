@@ -11,13 +11,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "vega-cli";
-  version = "6.2.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "vega";
     repo = "vega";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YO3YzTRNJKDOgCxMXnw2P2d1ZN79Db3//L9iLjDGiyM=";
+    hash = "sha256-1mlVIKWor/omBMNxh862eUS/NOgPAjO1XtrWwCaZnus=";
   };
 
   postPatch = ''
@@ -27,11 +27,11 @@ buildNpmPackage (finalAttrs: {
       --replace-fail "npm run data" "true"
 
     # Patch lerna.json to not use nx
-    mv lerna.json lerna.old.json
-    jq '. + {useNx: false}' < lerna.old.json > lerna.json
+    ${jq}/bin/jq '. + {useNx: false}' lerna.json > lerna.json.tmp
+    mv lerna.json.tmp lerna.json
   '';
 
-  npmDepsHash = "sha256-mBe1fHnhor7ZR8CuRNs1zD7JzaZXZI5VM7mdAieVKqE=";
+  npmDepsHash = "sha256-GF+1ZCgcKDdcXVMR8neI8URzzrl7KewFbOnTvqcd95c=";
 
   npmWorkspace = "vega-cli";
 
@@ -72,6 +72,8 @@ buildNpmPackage (finalAttrs: {
     description = "Command line tools for the Vega visualization grammar";
     homepage = "https://vega.github.io/vega/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = with lib.maintainers; [
+      philocalyst
+    ];
   };
 })

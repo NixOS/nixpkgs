@@ -32,6 +32,7 @@
   azure-identity,
   google-auth,
   gcsfs,
+  geoarrow-pyarrow,
   huggingface-hub,
   thrift,
   kerberos,
@@ -51,23 +52,23 @@
   moto,
   pyspark,
   pytestCheckHook,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytest-mock,
   pytest-timeout,
   requests-mock,
-  pythonAtLeast,
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "iceberg-python";
-  version = "0.11.1";
+  pname = "pyiceberg";
+  version = "0.12.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-python";
     tag = "pyiceberg-${finalAttrs.version}";
-    hash = "sha256-MjBvLJOnjtpIwBMkI+81S6aipye+PnbrC8T317Qj6rY=";
+    hash = "sha256-rH+lURcsMqU+Dz4AdofngxLVhJzZIp4LMru1yyvyItI=";
   };
 
   build-system = [
@@ -125,6 +126,9 @@ buildPythonPackage (finalAttrs: {
     gcsfs = [
       gcsfs
     ];
+    geoarrow = [
+      geoarrow-pyarrow
+    ];
     glue = [
       boto3
     ];
@@ -148,7 +152,6 @@ buildPythonPackage (finalAttrs: {
     ];
     pyarrow = [
       pyarrow
-      pyiceberg-core
     ];
     pyiceberg-core = [
       pyiceberg-core
@@ -190,7 +193,7 @@ buildPythonPackage (finalAttrs: {
     fastavro
     moto
     pyspark
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytest-mock
     pytest-timeout
     pytestCheckHook
@@ -199,19 +202,14 @@ buildPythonPackage (finalAttrs: {
   ++ finalAttrs.passthru.optional-dependencies.adlfs
   ++ finalAttrs.passthru.optional-dependencies.bigquery
   ++ finalAttrs.passthru.optional-dependencies.entra-auth
+  ++ finalAttrs.passthru.optional-dependencies.geoarrow
   ++ finalAttrs.passthru.optional-dependencies.hive
   ++ finalAttrs.passthru.optional-dependencies.pandas
   ++ finalAttrs.passthru.optional-dependencies.pyarrow
+  ++ finalAttrs.passthru.optional-dependencies.pyiceberg-core
   ++ finalAttrs.passthru.optional-dependencies.s3fs
   ++ finalAttrs.passthru.optional-dependencies.sql-sqlite
   ++ moto.optional-dependencies.server;
-
-  pytestFlags = [
-    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
-    "-Wignore::ResourceWarning"
-    # Using `@model_validator` with mode='after' on a classmethod is deprecated
-    "-Wignore::pydantic.warnings.PydanticDeprecatedSince212"
-  ];
 
   preCheck = ''
     rm -rf pyiceberg
@@ -223,12 +221,17 @@ buildPythonPackage (finalAttrs: {
     # - requests.exceptions.ConnectionError: HTTPConnectionPool(host='localhost', port=8181): Max retries exceeded with url: /v1/config
     # - thrift.transport.TTransport.TTransportException: Could not connect to any of [('127.0.0.1', 9083)]
     "tests/integration"
+
+    # ModuleNotFoundError: No module named 'nbformat'
+    "tests/notebooks"
+
+    # Segfaults: `pyiceberg-core` bundles `datafusion-ffi` 53.x, whose ABI is
+    # incompatible with the packaged `datafusion` 54.x
+    # https://github.com/apache/datafusion/issues/17374
+    "tests/table/test_datafusion.py"
   ];
 
   disabledTests = [
-    # assert "Expected '<=' | '<>' | '<' | '>=' | '>' | '==' | '=' | '!=', found '.'" in str(exc_info.value)
-    "test_quoted_column_with_dots"
-
     # AssertionError: assert 'grant_type=c...scope=catalog' == 'grant_type=c...scope=catalog'
     "test_auth_header"
 
@@ -239,12 +242,10 @@ buildPythonPackage (finalAttrs: {
     "test_token_with_optional_oauth_params"
     "test_token_with_custom_scope"
 
-    # AttributeError: 'SessionContext' object has no attribute 'register_table_provider'
-    "test_datafusion_register_pyiceberg_tabl"
-
     # ModuleNotFoundError: No module named 'puresasl'
     "test_create_hive_client_with_kerberos"
     "test_create_hive_client_with_kerberos_using_context_manager"
+    "test_kerberized_client_uses_fresh_transport_on_reuse"
 
     # botocore.exceptions.EndpointConnectionError: Could not connect to the endpoint URL
     "test_checking_if_a_file_exists"
@@ -286,8 +287,12 @@ buildPythonPackage (finalAttrs: {
     "test_getting_length_of_file_gcs"
 
     # Timing sensitive
-    # AssertionError: assert 8 == 5
+    #   AssertionError: assert 8 == 5
     "test_hive_wait_for_lock"
+
+    # Memory usage sensitive
+    #   AssertionError: Peak memory ratio (5.7x) exceeds 3.0x
+    "test_add_files_dup_check_memory_growth"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # ImportError: The pyarrow installation is not built with support for 'GcsFileSystem'
@@ -305,11 +310,6 @@ buildPythonPackage (finalAttrs: {
     "test_inspect_partition_for_nested_field"
     "test_inspect_partitions_respects_partition_evolution"
     "test_partition_column_projection_with_schema_evolution"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.13") [
-    # AssertionError:
-    # assert "Incompatible with StructProtocol: <class 'str'>" in "Unable to initialize struct: <class 'str'>"
-    "test_read_not_struct_type"
   ];
 
   __darwinAllowLocalNetworking = true;

@@ -60,7 +60,7 @@ in
     services.nginx = lib.mkIf cfg.nginx.enable {
       enable = lib.mkDefault true;
       virtualHosts."${cfg.domain}" = lib.mkMerge [
-        cfg.nginx.virtualHost
+        (lib.mapAttrsRecursive (_: lib.mkDefault) cfg.nginx.virtualHost)
         {
           root = lib.mkForce "${cfg.package}";
 
@@ -82,7 +82,7 @@ in
     services.caddy = lib.mkIf cfg.caddy.enable {
       enable = lib.mkDefault true;
       virtualHosts."${cfg.domain}" = lib.mkMerge [
-        cfg.caddy.virtualHost
+        (lib.mapAttrsRecursive (_: lib.mkDefault) cfg.caddy.virtualHost)
         {
           hostName = lib.mkForce cfg.domain;
           extraConfig = ''

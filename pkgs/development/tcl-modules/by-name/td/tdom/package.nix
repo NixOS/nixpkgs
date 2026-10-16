@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-mkTclDerivation rec {
+mkTclDerivation (finalAttrs: {
   pname = "tdom";
   version = "0.9.6";
 
   src = fetchzip {
-    url = "https://tdom.org/downloads/tdom-${version}-src.tgz";
+    url = "https://tdom.org/downloads/tdom-${finalAttrs.version}-src.tgz";
     hash = "sha256-zN855tb9JQUtcB7K1DeAjUBrqhoNH44KbeHwp3qewqw=";
   };
 
@@ -37,4 +37,4 @@ mkTclDerivation rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

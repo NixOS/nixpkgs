@@ -1,12 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  arviz,
   fetchFromGitHub,
 
   # build-system
   flit-core,
 
   # dependencies
+  lazy-loader,
   numpy,
   typing-extensions,
   xarray,
@@ -23,14 +25,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-base";
-  version = "0.8.2";
+  inherit (arviz) version;
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz-base";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g2DmhYqO9dgvDZwAXXSDFn5wHU0BvxXNgOzk6mmEmsw=";
+    hash = "sha256-viGjQrAeelzC7DBqMA4kltBllDAXJvymWdntOMYapEA=";
   };
 
   build-system = [
@@ -38,6 +41,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    lazy-loader
     numpy
     typing-extensions
     xarray
@@ -62,6 +66,11 @@ buildPythonPackage (finalAttrs: {
     netcdf4
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

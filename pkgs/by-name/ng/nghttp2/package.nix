@@ -22,7 +22,6 @@
   jemalloc,
   enablePython ? false,
   python3,
-  ncurses,
 
   # Unit tests ; we have to set TZDIR, which is a GNUism.
   enableTests ? stdenv.hostPlatform.isGnu,
@@ -43,13 +42,13 @@ assert enableHpack -> enableApp;
 assert enableHttp3 -> enableApp;
 assert enableJemalloc -> enableApp;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nghttp2";
-  version = "1.67.1";
+  version = "1.70.0";
 
   src = fetchurl {
-    url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    hash = "sha256-37cg1CQ6eVBYn6JjI3i+te6a1ELpS3lLO44soowdfio=";
+    url = "https://github.com/nghttp2/nghttp2/releases/download/v${finalAttrs.version}/nghttp2-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-j6yh94qpmsO8F2ina34PazbY5qYsE4GHUbHSBfAvlAU=";
   };
 
   outputs = [
@@ -77,6 +76,8 @@ stdenv.mkDerivation rec {
       nghttp3
     ]
     ++ lib.optionals enablePython [ python3 ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -117,6 +118,8 @@ stdenv.mkDerivation rec {
     inherit curl libsoup_3;
   };
 
+  __structuredAttrs = true;
+
   meta = {
     description = "HTTP/2 C library and tools";
     longDescription = ''
@@ -130,10 +133,10 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://nghttp2.org/";
-    changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${version}";
+    changelog = "https://github.com/nghttp2/nghttp2/releases/tag/v${finalAttrs.version}";
     # News articles with changes summary can be found here: https://nghttp2.org/blog/archives/
     license = lib.licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

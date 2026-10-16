@@ -1,15 +1,17 @@
 {
   lib,
+  ast-serialize,
   black,
   buildPythonPackage,
   cachecontrol,
   fetchFromGitHub,
   mistune,
-  mypy,
   mypy-extensions,
+  mypy,
   pytestCheckHook,
   rdflib,
   requests,
+  rich-argparse,
   ruamel-yaml,
   setuptools-scm,
   types-dataclasses,
@@ -19,36 +21,37 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.9.20251102115403";
+  version = "8.10.20260814121804";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "schema_salad";
     tag = version;
-    hash = "sha256-3axwM3fSxDIG1P0CvcqzqwpdDkhg/5pY7AmjUpU3mEk=";
+    hash = "sha256-82124Xb4fOl0CjaE/FVbf8V1adtVw2dVpifql6xUB2k=";
   };
 
   pythonRelaxDeps = [ "mistune" ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<9"]' '["setuptools_scm"]'
+      --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<11"]' '["setuptools_scm"]'
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools_scm[toml]>=8.0.4,<9"' '"setuptools_scm[toml]"' \
-      --replace-fail "mypy[mypyc]==1.17.0" "mypy"
+      --replace-fail '"setuptools_scm[toml]>=8.0.4,<11"' '"setuptools_scm[toml]"'
     sed -i "/black>=/d" pyproject.toml
   '';
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    ast-serialize
     cachecontrol
     mistune
     mypy
     mypy-extensions
     rdflib
     requests
+    rich-argparse
     ruamel-yaml
     types-dataclasses
     types-requests
@@ -83,7 +86,7 @@ buildPythonPackage rec {
     description = "Semantic Annotations for Linked Avro Data";
     homepage = "https://github.com/common-workflow-language/schema_salad";
     changelog = "https://github.com/common-workflow-language/schema_salad/releases/tag/${src.tag}";
-    license = with lib.licenses; [ asl20 ];
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };
 }

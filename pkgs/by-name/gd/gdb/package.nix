@@ -12,6 +12,7 @@
   buildPackages,
 
   # Run time
+  bashNonInteractive,
   readline,
   expat,
   libipt,
@@ -21,7 +22,7 @@
   dejagnu,
   sourceHighlight,
   libiconv,
-  xxHash,
+  xxhash,
 
   withTui ? true,
   ncurses,
@@ -46,6 +47,7 @@
     (lib.getLib targetPackages.stdenv.cc.cc)
   ],
   writeScript,
+  versionCheckHook,
 }:
 
 let
@@ -65,17 +67,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "17.1";
+  version = "17.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/gdb-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FJlvX3TJ9o9aVD/cRbyngAIH+R+SrupsLnkYIsfG2HY=";
+    hash = "sha256-HANsDXLks9H7XJTIhjKt1vnXb018TS6nk8EqnxmjIow=";
   };
 
   postPatch =
     optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace gdb/darwin-nat.c \
-        --replace-fail '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+        --replace-fail '#include "bfd/mach-o.h"' '#include "mach-o.h"' \
+        --replace-fail '#include "inferior.h"' $'#include "inferior.h"\n#include "gdbsupport/common-inferior.h"'
     ''
     + optionalString stdenv.hostPlatform.isMusl ''
       substituteInPlace sim/erc32/erc32.c  --replace-fail sys/fcntl.h fcntl.h
@@ -96,9 +99,11 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
     perl
     setupDebugInfoDirs
-  ];
+  ]
+  ++ optional pythonSupport python3;
 
   buildInputs = [
+    bashNonInteractive # for shebangs of gcore, gdb-add-index, gstack
     ncurses
     readline
     expat
@@ -107,13 +112,12 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     xz
     sourceHighlight
-    xxHash
+    xxhash
     dejagnu # for tests
   ]
   ++ optional withTui ncurses
   ++ optional withMpfr mpfr
   ++ optional withGmp gmp
-  ++ optional pythonSupport python3
   ++ optional withGuile guile
   ++ optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
   ++ optional stdenv.hostPlatform.isDarwin libiconv;
@@ -121,6 +125,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -169,9 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     (withFeature true "system-readline")
     (withFeature true "system-zlib")
     (withFeature true "expat")
-    (withFeatureAs true "libexpat-prefix" "${expat.dev}")
-    (withFeatureAs withGmp "gmp" "${gmp.dev}")
-    (withFeatureAs withMpfr "mpfr" "${mpfr.dev}")
+    (withFeatureAs true "libexpat-prefix" expat.dev)
+    (withFeatureAs withGmp "gmp" gmp.dev)
+    (withFeatureAs withMpfr "mpfr" mpfr.dev)
     (withFeature pythonSupport "python")
     (withFeature withGuile "guile")
     (enableFeature enableSim "sim")
@@ -181,10 +187,8 @@ stdenv.mkDerivation (finalAttrs: {
     (withFeatureAs true "auto-load-safe-path" (builtins.concatStringsSep ":" safePaths))
     (withFeature enableDebuginfod "debuginfod")
     (enableFeature (!stdenv.hostPlatform.isMusl) "nls")
-    (enableFeature (
-      !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isLoongArch64
-    ) "inprocess-agent")
   ]
+  ++ optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
   ++ optional (!hostCpuOnly) "--enable-targets=all"
   # Workaround for Apple Silicon, "--target" must be "faked", see eg: https://github.com/Homebrew/homebrew-core/pull/209753
   ++ optional (
@@ -196,23 +200,26 @@ stdenv.mkDerivation (finalAttrs: {
     rm -v $out/share/info/bfd.info
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru = {
     updateScript = writeScript "update-gdb" ''
       #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p curl pcre common-updater-scripts
+      #!nix-shell -i bash -p curl pcre2 common-updater-scripts
 
       set -eu -o pipefail
 
       # Expect the text in format of '<h3>GDB version 12.1</h3>'
       new_version="$(curl -s https://www.sourceware.org/gdb/ |
-          pcregrep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
+          pcre2grep -o1 '<h3>GDB version ([0-9.]+)</h3>')"
       update-source-version ${pname} "$new_version"
     '';
   };
 
   meta = {
     description = "GNU Project debugger";
-    mainProgram = "gdb";
+    mainProgram = "${targetPrefix}gdb";
     longDescription = ''
       GDB, the GNU Project debugger, allows you to see what is going
       on `inside' another program while it executes -- or what another

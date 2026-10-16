@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gallia";
-  version = "2.0.2";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2jiD2ZZGinfTT+35TYl3+okWkkTrY1IdfSYbjC+/cvs=";
+    hash = "sha256-vM19d5alD9xhFgR4are0pDhJyNiUY320nJmjEF2BvxM=";
   };
 
   postPatch = ''
@@ -35,6 +35,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     platformdirs
     pydantic
     tabulate
+    wcwidth
     zstandard
   ];
 

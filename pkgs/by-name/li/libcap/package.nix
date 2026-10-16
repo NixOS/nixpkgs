@@ -3,7 +3,6 @@
   lib,
   buildPackages,
   fetchurl,
-  fetchpatch,
   runtimeShell,
   pkgsBuildHost,
   usePam ? !isStatic,
@@ -29,13 +28,13 @@
 
 assert usePam -> pam != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcap";
-  version = "2.77";
+  version = "2.78";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    hash = "sha256-iXvBi0Svwmxw54zq09uzHhVKzCS+4IWloJB5qI2/b1I=";
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/libcap-${finalAttrs.version}.tar.xz";
+    hash = "sha256-DWIeVi/ZMsz2e5Zg+wGORopoPXuCdUHfJ4EyKMmWuxE=";
   };
 
   outputs = [
@@ -76,13 +75,6 @@ stdenv.mkDerivation rec {
     "LIBCSTATIC=yes"
   ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/libs/libcap/libcap.git/patch/?id=d628b3bfe40338d4efff6b0ae50f250a0eb884c7";
-      hash = "sha256-Eiv/BOJZkduL+hOEJd8K1LQd9wvOeCKchE2GaLcerVc=";
-    })
-  ];
-
   postPatch = ''
     patchShebangs ./progs/mkcapshdoc.sh
 
@@ -102,8 +94,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
-    mkdir -p "$doc/share/doc/${pname}-${version}"
-    cp License "$doc/share/doc/${pname}-${version}/"
+    mkdir -p "$doc/share/doc/libcap-${finalAttrs.version}"
+    cp License "$doc/share/doc/libcap-${finalAttrs.version}/"
   ''
   + lib.optionalString usePam ''
     mkdir -p "$pam/lib/security"
@@ -138,11 +130,14 @@ stdenv.mkDerivation rec {
     description = "Library for working with POSIX capabilities";
     homepage = "https://sites.google.com/site/fullycapable";
     platforms = lib.platforms.linux;
-    license = lib.licenses.bsd3;
+    license = lib.licenses.OR [
+      lib.licenses.bsd3
+      lib.licenses.gpl2Only
+    ];
     pkgConfigModules = [
       "libcap"
       "libpsx"
     ];
-    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap_project" version;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap_project" finalAttrs.version;
   };
-}
+})

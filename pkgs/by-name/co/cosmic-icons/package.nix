@@ -9,27 +9,30 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-icons";
-  version = "1.0.8";
+  version = "1.9.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-icons";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-dLiBao8jvtxxSlENceVkPJNChwEK1Wtf3k5hY97WZoI=";
+    hash = "sha256-IlWVDJZBDn0RZaWpMx+mVJrcn5eqz2i6qDIjvQjkTZ4=";
   };
 
+  __structuredAttrs = true;
+  strictDeps = true;
+
   nativeBuildInputs = [ just ];
+
+  propagatedBuildInputs = [
+    pop-icon-theme
+    hicolor-icon-theme
+  ];
 
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
-  ];
-
-  propagatedBuildInputs = [
-    pop-icon-theme
-    hicolor-icon-theme
   ];
 
   dontDropIconThemeCache = true;

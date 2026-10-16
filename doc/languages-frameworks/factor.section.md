@@ -193,7 +193,7 @@ Additional attributes that are understood by `buildFactorApplication`:
 
   : is the path to the vocabulary to be deployed relative to the source root.
     So, directory `foo/` from the example above could be `extra/deep/down/foo`.
-    This allows you to maintain Factor's vocabulary hierarchy and distribute the same source tree as a stand-alone application and as a library in the Factor development environment via the `extraVocabs` attribute.
+    Use this to maintain Factor's vocabulary hierarchy and distribute the same source tree as a stand-alone application and as a library in the Factor development environment via the `extraVocabs` attribute.
 
   `binName` (String; _optional_)
 

@@ -1,0 +1,17 @@
+Description: Add libnetsnmpaget link to libnetsnmptrapd
+ Causes a linking issue otherwise 
+Author: Craig Small <csmall@debian.org>
+Reviewed-by: Craig Small <csmall@debian.org>
+Last-Update: 2023-08-19
+---
+--- a/apps/Makefile.in
++++ b/apps/Makefile.in
+@@ -237,7 +237,7 @@
+ 	$(LINK) ${CFLAGS} -o $@ snmppcap.$(OSUFFIX) ${LDFLAGS} ${USEAGENTLIBS} ${LIBS} -lpcap
+ 
+ libnetsnmptrapd.$(LIB_EXTENSION)$(LIB_VERSION): $(LLIBTRAPD_OBJS)
+-	$(LIB_LD_CMD) $@ ${LLIBTRAPD_OBJS} $(MIBLIB) $(MYSQL_LIBS) $(USELIBS) $(PERLLDOPTS_FOR_LIBS) $(LDFLAGS)
++	$(LIB_LD_CMD) $@ ${LLIBTRAPD_OBJS} $(MIBLIB) $(MYSQL_LIBS) $(USELIBS) $(USEAGENTLIBS) $(PERLLDOPTS_FOR_LIBS) $(LDFLAGS)
+ 	$(RANLIB) $@
+ 
+ snmpinforminstall:

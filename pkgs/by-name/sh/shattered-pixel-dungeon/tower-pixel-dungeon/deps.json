@@ -1,65 +1,6 @@
 {
  "!comment": "This is a nixpkgs Gradle dependency lockfile. For more details, refer to the Gradle section in the nixpkgs manual.",
  "!version": 1,
- "https://central.sonatype.com/repository/maven-snapshots/com/badlogicgames": {
-  "gdx#gdx-backend-lwjgl3/1.13.6-20251016.105554-34/SNAPSHOT": {
-   "jar": "sha256-unqPp0fol5ow2OPp46AmljGbt/b/zaDG8AP2QcKrVjU=",
-   "module": "sha256-3lbjdtsywfNKS5fxEeIEh8f8EunPNrEHieih8rqJXpE=",
-   "pom": "sha256-P7DA/UDAWmA+/t4H3EJkktKK/e9+pX0gH4fpljqZXWQ="
-  },
-  "gdx#gdx-freetype-platform/1.13.6-20251016.105554-35/SNAPSHOT": {
-   "pom": "sha256-kTnggHqjEcoBlUTM+K15WHCqKodiKvGPrgnTHuTKU4o="
-  },
-  "gdx#gdx-freetype-platform/1.13.6-20251016.105554-35/SNAPSHOT/natives-desktop": {
-   "jar": "sha256-TJvhHfQ9qRTZCDnOvymAn4PXmS6CziqEKN7yv5ioIQU="
-  },
-  "gdx#gdx-freetype/1.13.6-20251016.105554-35/SNAPSHOT": {
-   "jar": "sha256-qZWM1tkaKatC6U1h/Jgo9fV6/Six9XOuNU4qpVYhzsg=",
-   "module": "sha256-tyz5DG0UTrK0tt4ZK1BgJb35T5EBuNpj1gZLe6zoCTI=",
-   "pom": "sha256-wi92v9kAtTv++AZjKT3wJYBeISF98NLNy26X9kEVFSk="
-  },
-  "gdx#gdx-platform/1.13.6-20251016.105554-34/SNAPSHOT": {
-   "pom": "sha256-UW0w1+UTHDD4HaYruY6QVmd/ur/0vHS4wYDZ5hDCEuQ="
-  },
-  "gdx#gdx-platform/1.13.6-20251016.105554-34/SNAPSHOT/natives-desktop": {
-   "jar": "sha256-hCVxiuw/clRgnObDu+eM/OhDnTXEHhVt/gUmHTyzcgU="
-  },
-  "gdx#gdx/1.13.6-20251016.105554-34/SNAPSHOT": {
-   "jar": "sha256-40W5tyVSTXgmSdHtQQoll9OiGhDLhDqRPPWjrrspunM=",
-   "module": "sha256-4xOqM5QcQy7HCliD3TZNk+QvjI0FWI62x1pKpRNzwVs=",
-   "pom": "sha256-aDtJJZT/VHJyxd5RKFrQbc32IFT2wk9R7LeDvhBt8v4="
-  },
-  "gdx/gdx-backend-lwjgl3/1.13.6-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "com.badlogicgames.gdx",
-    "lastUpdated": "20251017222916"
-   }
-  },
-  "gdx/gdx-freetype-platform/1.13.6-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "com.badlogicgames.gdx",
-    "lastUpdated": "20251212063147"
-   }
-  },
-  "gdx/gdx-freetype/1.13.6-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "com.badlogicgames.gdx",
-    "lastUpdated": "20251017222931"
-   }
-  },
-  "gdx/gdx-platform/1.13.6-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "com.badlogicgames.gdx",
-    "lastUpdated": "20251218070227"
-   }
-  },
-  "gdx/gdx/1.13.6-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "com.badlogicgames.gdx",
-    "lastUpdated": "20251017222908"
-   }
-  }
- },
  "https://plugins.gradle.org/m2/org": {
   "beryx#badass-runtime-plugin/1.12.7": {
    "jar": "sha256-N3Mx2VyxIFb6U6Qt9/RfF4svqG1sWF9w74TRIz0RB0U=",
@@ -100,10 +41,37 @@
   }
  },
  "https://repo.maven.apache.org/maven2": {
+  "com/badlogicgames/gdx#gdx-backend-lwjgl3/1.14.0": {
+   "jar": "sha256-3pV68nyhyv+3eO2hqNMbmDXcc/AEcB0WduyjOWMHICA=",
+   "module": "sha256-GJYW7PSrxbXLJMt1Xwc+IsogkUv4ojCdFdJ/fnpoyOU=",
+   "pom": "sha256-S+xaAWtXxkg0Rruzr4XV0V9f4gedhSpnTcVLMOWd9pY="
+  },
+  "com/badlogicgames/gdx#gdx-freetype-platform/1.14.0": {
+   "pom": "sha256-qQmd0nb4AW2O5i/+TUneaeGohmjS2crXrGc7PvSbKM0="
+  },
+  "com/badlogicgames/gdx#gdx-freetype-platform/1.14.0/natives-desktop": {
+   "jar": "sha256-SFwrJdkZBLlBQ0Bm+BAgBpJHMMLCONBIcq5goC63Ofc="
+  },
+  "com/badlogicgames/gdx#gdx-freetype/1.14.0": {
+   "jar": "sha256-Pr/nUymeEYNLyIzzxMDCzIucJDWsA+VgsKh2QlZYK7Q=",
+   "module": "sha256-fUf8X7lgc5I5ddUqrgMuACcJ144JKU/wOK6K3R7W44A=",
+   "pom": "sha256-Rtq9qlQ6ZRDgUGOMNmphRdkGkbIaBiEf+rSbICMyQiw="
+  },
   "com/badlogicgames/gdx#gdx-jnigen-loader/2.5.2": {
    "jar": "sha256-34HyPP1nhcUtNeEI7qo5MPVZ1NJ3CmEC51ynv6b58no=",
    "module": "sha256-jwtii5G9Ez24XxUuFZMprPf0tmeDvR32AcNZfcJRIiQ=",
    "pom": "sha256-i0dgu2bbPz+ZuEBj7z6ZDWOhzZx81XSlatf07kvRdoc="
+  },
+  "com/badlogicgames/gdx#gdx-platform/1.14.0": {
+   "pom": "sha256-2Ps74A82eRr6thqFkeVCr7qkkQEHoFdUnMlwBu2NoRs="
+  },
+  "com/badlogicgames/gdx#gdx-platform/1.14.0/natives-desktop": {
+   "jar": "sha256-qKjJzM9endUYJWs8315raJpdaWoU4EYK9bDLxR218vE="
+  },
+  "com/badlogicgames/gdx#gdx/1.14.0": {
+   "jar": "sha256-owWJXpFfxfWUg95dOZokoMpi/hFQFf/oIQw249ZPgSY=",
+   "module": "sha256-xJCoyufsdrraEiLaEyJl5fqyyyzc3q51IXrIhkmUWyU=",
+   "pom": "sha256-CiUFNinRwfRgZMN7orOC0MRmQstKTssVF3jbNXEKmgw="
   },
   "com/badlogicgames/gdx-controllers#gdx-controllers-core/2.2.4": {
    "jar": "sha256-BNpnYnsaNkbvjyFMkdKWdCp8BVl9vCFnqqsJy9zHdHA=",

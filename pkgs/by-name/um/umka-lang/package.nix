@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umka-lang";
-  version = "1.5.5";
+  version = "1.5.7";
 
   src = fetchFromGitHub {
     owner = "vtereshkov";
     repo = "umka-lang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+jt44mbV2gr7BuciCeT/YkAhJqZtzbuBpYGqfMpQsCQ=";
+    hash = "sha256-ahM38oz1a1HhyNblolXYvg0adAkk5ttBwuA/De4NCPY=";
   };
 
   postPatch = ''

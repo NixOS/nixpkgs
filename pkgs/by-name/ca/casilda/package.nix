@@ -12,13 +12,13 @@
   libepoxy,
   wayland,
   wayland-scanner,
-  wlroots_0_19,
+  wlroots_0_20,
   libxkbcommon,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "1.2.0";
+  version = "1.2.2";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpu";
     repo = "casilda";
     tag = finalAttrs.version;
-    hash = "sha256-JaWHKKNYeeW7QKB6DpGrXowvufeBZUnc9pP0ZAAo3gU=";
+    hash = "sha256-JMDS+fx0vUZnfNz5bzmTy8/4BkgMypWBp+qjorTVmK4=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wayland # for wayland-server
     libxkbcommon
-    wlroots_0_19
+    wlroots_0_20
   ];
 
   propagatedBuildInputs = [ gtk4 ];

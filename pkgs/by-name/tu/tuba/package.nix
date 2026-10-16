@@ -12,7 +12,7 @@
   gtk4,
   libadwaita,
   json-glib,
-  gexiv2,
+  gexiv2_0_10,
   glib,
   glib-networking,
   gnome,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gexiv2
+    gexiv2_0_10
     glib
     glib-networking
     gtksourceview5

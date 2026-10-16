@@ -8,7 +8,6 @@
   pkg-config,
   gnome,
   gtk3,
-  gtk4,
   atk,
   gobject-introspection,
   spidermonkey_140,
@@ -31,17 +30,19 @@
 let
   testDeps = [
     gtk3
-    gtk4
+    # FIXME: Gtk4Warnings fails
+    # gtk4
     atk
     pango.out
     gdk-pixbuf
     harfbuzz
     glib.out
+    gobject-introspection
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";
-  version = "1.86.0";
+  version = "1.88.1";
 
   outputs = [
     "out"
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor finalAttrs.version}/gjs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Y0SPeleATUwqjQx/XpDiJNBNTrLVYBQsB2xlqO2gB5k=";
+    hash = "sha256-dnurgOZl1nLLAFY8JfCzkqnsjCmW7R1EVMaYtMLwo9k=";
   };
 
   patches = [

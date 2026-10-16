@@ -6,20 +6,22 @@
   git,
   writableTmpDirAsHomeHook,
   cacert,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jj-vine";
-  version = "0.3.6";
+  version = "0.5.4";
 
   src = fetchFromCodeberg {
     owner = "abrenneke";
     repo = "jj-vine";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vvNbeQvP205snAGiql/i8yFGyMw23YkSU4/uxOSnycY=";
+    hash = "sha256-rgTFo4mrGlIe7lfwpT0P7r5RBjD/XaX2S4AOp+oUaqY=";
   };
 
-  cargoHash = "sha256-vcpaKlNeORnDpVqXxu0TrXWaWNfaK9QPVJOrty9WmcQ=";
+  cargoHash = "sha256-7j/eWCc5PvllLYSyC2CcL+R5xxDqqfjdhQ/xtb2b3rE=";
 
   nativeCheckInputs = [
     jujutsu
@@ -28,6 +30,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   checkFeatures = [ "no-e2e-tests" ];
   env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for submitting stacked Pull/Merge Requests from Jujutsu bookmarks";

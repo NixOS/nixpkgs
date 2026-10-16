@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cassette";
-  version = "0.2.1.g49";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "Rirusha";
     repo = "Cassette";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1wIYEDaVlqNDS50MiYGqCtf5xGWou/g/YfZChTdQIns=";
+    hash = "sha256-ceXEWcSBQMbG9cuhWjtwI0z/gTzI1t5+9qvFcUeKyrQ=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9].*)$" ];
+  };
 
   meta = {
     description = "GTK4/Adwaita application that allows you to use Yandex Music service on Linux operating systems";

@@ -11,21 +11,17 @@
   libmysqlclient,
   libpq,
   samba,
-  withGUI ? false,
-  makeWrapper,
-  pkg-config,
-  gtk2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
-  version = "9.6";
+  version = "9.7";
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
-    sha256 = "sha256-DS3Fh4a6OtqZRHubgJewB7qnJXm10sYv85R6o/NePoU=";
+    sha256 = "sha256-6YNHy9k/NJkZYj0TjciPMOXMq/McGQnmj7HWk6KbgI4=";
   };
 
   postPatch =
@@ -43,11 +39,6 @@ stdenv.mkDerivation rec {
         --replace-fail "-lcurses" "-lncurses"
     '';
 
-  nativeBuildInputs = lib.optionals withGUI [
-    pkg-config
-    makeWrapper
-  ];
-
   buildInputs = [
     zlib
     openssl
@@ -58,17 +49,11 @@ stdenv.mkDerivation rec {
     libmysqlclient
     libpq
     samba
-  ]
-  ++ lib.optional withGUI gtk2;
+  ];
 
   enableParallelBuilding = true;
 
   env.DATADIR = "/share/${pname}";
-
-  postInstall = lib.optionalString withGUI ''
-    wrapProgram $out/bin/xhydra \
-      --add-flags --hydra-path --add-flags "$out/bin/hydra"
-  '';
 
   meta = {
     description = "Very fast network logon cracker which support many different services";

@@ -2,25 +2,30 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   click,
   psutil,
   pytestCheckHook,
   lsof,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "daemonocle";
   version = "1.2.3";
-  format = "setuptools";
+  pyproject = true;
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "jnrbsn";
     repo = "daemonocle";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-K+IqpEQ4yhfSguPPm2Ult3kGNO/9H56B+kD5ntaCZdk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     click
     psutil
   ];
@@ -56,4 +61,4 @@ buildPythonPackage rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

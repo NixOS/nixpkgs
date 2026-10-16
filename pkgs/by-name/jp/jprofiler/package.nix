@@ -105,7 +105,7 @@ let
     unpackPhase = ''
       runHook preUnpack
 
-      7zz x $src -x!JProfiler/\[\]
+      7zz x -snld $src -x!JProfiler/\[\]
 
       runHook postUnpack
     '';

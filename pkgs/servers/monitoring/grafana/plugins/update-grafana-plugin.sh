@@ -35,12 +35,11 @@ update() {
     update-source-version $system "grafanaPlugins.${plugin_name}" "$latest_version" "$hash"
 }
 
-if echo "$api_response" | jq -e .packages.any > /dev/null; then
-    # the package contains an "any" package, so there should be only one zipHash.
+if echo "$api_response" | jq -e '.packages | select(length == 1) | .any' > /dev/null; then
+    # the package only contains an "any" package, so there should be only one zipHash.
     update "any"
 else
     update "linux-amd64" "x86_64-linux"
     update "linux-arm64" "aarch64-linux"
-    update "darwin-amd64" "x86_64-darwin"
     update "darwin-arm64" "aarch64-darwin"
 fi

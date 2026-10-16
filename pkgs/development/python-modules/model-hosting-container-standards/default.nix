@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   poetry-core,
@@ -22,17 +23,27 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "model-hosting-container-standards";
-  version = "0.1.14";
+  version = "0.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "model-hosting-container-standards";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Nuus+MO3ASW7y5Bl7+04C2WvuSWG4HKNyQ+bx/uOw4=";
+    hash = "sha256-bEL2CKJ4IryacurRmSe5nGGHTMIkSegSlbDciAGL6VI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
+
+  patches = [
+    # Upstream PR: https://github.com/aws/model-hosting-container-standards/pull/63
+    (fetchpatch {
+      name = "fix-compat-with-fastapi-0.137.patch";
+      url = "https://github.com/aws/model-hosting-container-standards/commit/ce3f9590088e3194d56345074c65ae96524fb127.patch";
+      hash = "sha256-H0oxuIOoGthN+JdXQmeJ/9PRwrfhBUnVEj0ASwgtztQ=";
+      stripLen = 1;
+    })
+  ];
 
   build-system = [
     poetry-core
@@ -63,6 +74,11 @@ buildPythonPackage (finalAttrs: {
     # AssertionError: Server should have created restart log
     "test_continuous_restart_behavior"
     "test_startup_retry_limit"
+  ];
+
+  disabledTestPaths = [
+    # Runs `pip install`
+    "tests/integration/test_dependency_install_integration.py"
   ];
 
   meta = {

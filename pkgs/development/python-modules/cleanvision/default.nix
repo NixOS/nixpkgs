@@ -83,7 +83,7 @@ buildPythonPackage (finalAttrs: {
     description = "Automatically find issues in image datasets and practice data-centric computer vision";
     homepage = "https://github.com/cleanlab/cleanvision";
     changelog = "https://github.com/cleanlab/cleanvision/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 })

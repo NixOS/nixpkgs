@@ -44,7 +44,7 @@ buildPythonPackage {
     changelog = "https://github.com/meta-pytorch/torcheval/releases/tag/${version}";
 
     platforms = lib.platforms.unix;
-    license = [ lib.licenses.bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.bengsparks ];
   };
 }

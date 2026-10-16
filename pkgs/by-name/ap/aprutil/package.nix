@@ -24,17 +24,15 @@ assert ldapSupport -> openldap != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apr-util";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = fetchurl {
     url = "mirror://apache/apr/apr-util-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-pBB243EHRjJsOUUEKZStmk/KwM4Cd92P6gdv7DyXcrU=";
+    sha256 = "sha256-lt4d1vagR20tLnlkkm2MHdw7sOIQ4bGBLTulpFSjkuI=";
   };
 
   patches = [
     ./fix-libxcrypt-build.patch
-    # Fix incorrect Berkeley DB detection with newer versions of clang due to implicit `int` on main errors.
-    ./clang-bdb.patch
   ]
   ++ lib.optional stdenv.hostPlatform.isFreeBSD ./include-static-dependencies.patch;
 

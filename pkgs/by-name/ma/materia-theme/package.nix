@@ -1,27 +1,26 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   meson,
   ninja,
   sassc,
-  gnome-shell,
-  gnome-themes-extra,
-  gtk-engine-murrine,
-  gdk-pixbuf,
-  librsvg,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "materia-theme";
   version = "20210322";
 
   src = fetchFromGitHub {
     owner = "nana-4";
     repo = "materia-theme";
-    rev = "v${version}";
-    sha256 = "1fsicmcni70jkl4jb3fvh7yv0v9jhb8nwjzdq8vfwn256qyk0xvl";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-dHcwPTZFWO42wu1LbtGCMm2w/YHbjSUJnRKcaFllUbs=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -29,26 +28,23 @@ stdenv.mkDerivation rec {
     sassc
   ];
 
-  buildInputs = [
-    gnome-themes-extra
-    gdk-pixbuf
-    librsvg
-  ];
-
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
   mesonFlags = [
-    "-Dgnome_shell_version=${lib.versions.majorMinor gnome-shell.version}"
+    (lib.mesonOption "gnome_shell_version" "40")
   ];
 
-  postInstall = ''
-    rm $out/share/themes/*/COPYING
+  # The GTK2 theme needs gtk-engine-murrine, which is no longer packaged.
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "subdir('gtk-2.0')" ""
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Material Design theme for GNOME/GTK based desktop environments";
     homepage = "https://github.com/nana-4/materia-theme";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.marrobHD ];
   };
-}
+})

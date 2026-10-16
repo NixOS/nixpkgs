@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication rec {
     description = "Tweak tool for the MATE Desktop";
     homepage = "https://github.com/ubuntu-mate/mate-tweak";
     changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
-    license = [ lib.licenses.gpl2Plus ];
+    license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     teams = [ lib.teams.mate ];
   };

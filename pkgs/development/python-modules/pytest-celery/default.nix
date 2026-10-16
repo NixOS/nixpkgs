@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-celery";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "pytest-celery";
     tag = "v${version}";
-    hash = "sha256-E8GO/00IC9kUvQLZmTFaK4FFQ7d+/tw/kVTQbAqRRRM=";
+    hash = "sha256-8qDnyMv0NxMFWGRbJ63Ye/dSRr8A6Azh2J5gkiwYYzI=";
   };
 
   postPatch = ''

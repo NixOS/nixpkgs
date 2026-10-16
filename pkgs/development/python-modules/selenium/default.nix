@@ -93,8 +93,8 @@ buildPythonPackage rec {
     # Fails to find browsers during test phase
     "test/selenium"
   ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-    # Unsupported platform/architecture combination: linux/aarch64
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && (!stdenv.hostPlatform.isx86_64)) [
+    # Unsupported platform/architecture combination: linux/{aarch64,loongarch64}
     "test/unit/selenium/webdriver/common/selenium_manager_tests.py::test_errors_if_not_file"
   ];
 

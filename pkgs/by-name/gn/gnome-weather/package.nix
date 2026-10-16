@@ -17,16 +17,16 @@
   geoclue2,
   python3,
   gsettings-desktop-schemas,
-  typescript,
+  typescript_5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-weather";
-  version = "49.0";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major finalAttrs.version}/gnome-weather-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7h92uF66nbDI1cAgQanYXs3SKrtexrs/8yIlkpwPzl8=";
+    hash = "sha256-V951eGBfkfmrQAVRznc423UFvIj0KjPHDOenAWf9tRM=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     gobject-introspection
     gjs
-    typescript
+    typescript_5
   ];
 
   buildInputs = [

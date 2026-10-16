@@ -2,40 +2,41 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
   nodejs,
-  yarnBuildHook,
-  yarnConfigHook,
-  yarnInstallHook,
+  yarn-berry_4,
   diffutils,
   zip,
   jq,
+  python3,
   unzip,
   testers,
-  nix-update-script,
 }:
 
+let
+  yarn-berry = yarn-berry_4;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-cdk-cli";
-  version = "2.1104.0";
+  version = "2.1142.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cdk-cli";
     tag = "cdk@v${finalAttrs.version}";
-    hash = "sha256-bIrTc87gk14ckVhcoZKa1aOo0wpWZCceafpxzKLcDEY=";
+    hash = "sha256-6CYUcMXwP2yNsIix+2ECTX1k9nMZ3R3JeIsIjTNoYvk=";
   };
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-JuklEESNm/eadB5iBvomfY87NRaPywEnwL2GtPUTQ2Y=";
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-lTT7hO0dZxrUlmah7d9UQEIAt/STLoH0xZ3oxx2Vh5I=";
   };
 
   nativeBuildInputs = [
-    yarnConfigHook
-    yarnBuildHook
-    yarnInstallHook
+    yarn-berry
+    yarn-berry.yarnBerryConfigHook
     nodejs
+    python3
     zip
     jq
     # tests
@@ -76,10 +77,27 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    yarn "$yarnBuildScript"
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/node_modules/aws-cdk-cli
+    cp -r . $out/lib/node_modules/aws-cdk-cli
+
+    runHook postInstall
+  '';
+
   postInstall = ''
     # Manually bundle non-bundled dependencies
-    cp -r packages/@aws-cdk/cloud-assembly-schema/node_modules/jsonschema $out/lib/node_modules/aws-cdk-cli/node_modules/jsonschema
-    cp -r packages/aws-cdk/node_modules/decamelize $out/lib/node_modules/aws-cdk-cli/node_modules/decamelize
+    cp -r node_modules/jsonschema $out/lib/node_modules/aws-cdk-cli/node_modules/jsonschema
+    cp -r node_modules/decamelize $out/lib/node_modules/aws-cdk-cli/node_modules/decamelize
 
     patchShebangs "$out/lib/node_modules/aws-cdk-cli/node_modules/aws-cdk/bin"
     ln -s "$out/lib/node_modules/aws-cdk-cli/node_modules/aws-cdk/bin" "$out/bin"
@@ -102,12 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "cdk@v(.*)"
-      ];
-    };
+    updateScript = ./update.sh;
   };
 
   meta = {

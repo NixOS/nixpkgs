@@ -18,7 +18,7 @@ let
   gnomeDeps =
     pkgs: with pkgs; [
       zenity
-      gtksourceview
+      gtksourceview3
       gnome-desktop
       libgnome-keyring
       webkitgtk_4_1
@@ -87,7 +87,7 @@ buildFHSEnv {
       libnghttp2
 
       # Desmume
-      lua
+      lua5_2_compat
       agg
       soundtouch
       openal

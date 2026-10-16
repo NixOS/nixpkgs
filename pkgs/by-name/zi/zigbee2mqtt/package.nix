@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nodejs,
   npmHooks,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   systemdMinimal,
@@ -14,27 +14,27 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigbee2mqtt";
-  version = "2.9.1";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     tag = finalAttrs.version;
-    hash = "sha256-PsgQ1/h9YCQNV58PB7o3CQyfuOXzU878I9qIfozX02w=";
+    hash = "sha256-az/mbrflILDWSu3kIA280dJWqTlImh1s7FvHeu/DKe4=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_9;
-    fetcherVersion = 1;
-    hash = "sha256-MM184JsFVGqOALyQjCyR3QnHqHoQr39lnodq5v4cXAQ=";
+    pnpm = pnpm_10;
+    fetcherVersion = 4;
+    hash = "sha256-D4qF40ZyyqHjveLvu56Vy6lRJF6LxxhU+79KlfLYhN4=";
   };
 
   nativeBuildInputs = [
     nodejs
     npmHooks.npmInstallHook
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
   ];
 
   buildInputs = lib.optionals withSystemd [
@@ -65,10 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       It bridges events and allows you to control your Zigbee devices via MQTT.
       In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
     '';
-    maintainers = with lib.maintainers; [
-      sweber
-      hexa
-    ];
+    maintainers = with lib.maintainers; [ hexa ];
     mainProgram = "zigbee2mqtt";
   };
 })

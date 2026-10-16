@@ -28,24 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "faustlive";
-  version = "2.5.17";
+  version = "2.5.19";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
     tag = finalAttrs.version;
-    hash = "sha256-RqtdDkP63l/30sL5PDocvpar5TI4LdKfeeliSNeOHog=";
+    hash = "sha256-IBMgesMkT+0Oh1TjHa+bcSp6YziLNBtNPoUCzbyhMFI=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # move mutex initialization outside assert call
-    # https://github.com/grame-cncm/faustlive/pull/59
-    (fetchpatch {
-      name = "initalize-mutexes.patch";
-      url = "https://github.com/grame-cncm/faustlive/commit/fdd46b12202def9731b9ed2f6363287af16be892.patch";
-      hash = "sha256-yH95Y4Jbqgs8siE9rtutmu5C2sNZwQMJzCgDYqNBDj4=";
-    })
-  ];
 
   strictDeps = true;
 

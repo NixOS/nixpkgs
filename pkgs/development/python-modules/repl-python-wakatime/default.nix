@@ -11,7 +11,7 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "repl-python-wakatime";
   version = "0.1.6";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "repl-python-wakatime";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-U7p0TnGtjxssYAMk6QteeU1Vdq7mrjdDZvwYhyNOIoY=";
   };
 
@@ -44,8 +44,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python REPL plugin for automatic time tracking and metrics generated from your programming activity";
     homepage = "https://github.com/wakatime/repl-python-wakatime";
-    changelog = "https://github.com/wakatime/repl-python-wakatime/releases/tag/${src.tag}";
+    changelog = "https://github.com/wakatime/repl-python-wakatime/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ jfvillablanca ];
   };
-}
+})

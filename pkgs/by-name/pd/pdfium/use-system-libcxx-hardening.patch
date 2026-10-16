@@ -1,0 +1,9 @@
+--- a/build/config/compiler/BUILD.gn
++++ b/build/config/compiler/BUILD.gn
+@@ -2033,5 +2033,5 @@ config("compiler") {
+   if (use_safe_libcxx) {
+     defines += [ "_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE" ]
+-  } else {
++  } else if (use_custom_libcxx) {
+     defines += [ "_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_NONE" ]
+   }

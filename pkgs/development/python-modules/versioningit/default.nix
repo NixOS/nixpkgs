@@ -47,6 +47,10 @@ buildPythonPackage rec {
     mercurial
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn10Warning"
+  ];
+
   disabledTests = [
     # wants to write to the Nix store
     "test_editable_mode"

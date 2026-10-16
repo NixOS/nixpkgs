@@ -1,25 +1,26 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+# Requires Go 1.27; switch back to buildGoModule once the default is updated.
+buildGo127Module (finalAttrs: {
   pname = "timoni";
-  version = "0.26.0";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "stefanprodan";
     repo = "timoni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KdUFIGbP6tG7LVYUJFhVtgSfc1FSjlNOLCc+kQqGP4A=";
+    hash = "sha256-ZS8ebKFxqEWuZD98tqyWOC/AocSXhHctFZ7kSAfPHdQ=";
   };
 
-  vendorHash = "sha256-UGpwdcITI8/aJ3Mt4dJ3xJRxLrohX2sHD3DGEJgQeo4=";
+  vendorHash = "sha256-PmN6zdxNJFleB3CVjOxI/AMglVEmzqtr4dYSLG3HKWY=";
 
   subPackages = [ "cmd/timoni" ];
   nativeBuildInputs = [ installShellFiles ];

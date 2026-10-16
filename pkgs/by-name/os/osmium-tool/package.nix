@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osmium-tool";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "osmcode";
     repo = "osmium-tool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x5qEW4DqOw/vA+IuZA7VC5WRn+uDOZ6dJhyJoi7UKOA=";
+    hash = "sha256-WPNXzS5XiCWSA5iycPqulybQtVED9oVfAsRz0WYmApA=";
   };
 
   nativeBuildInputs = [
@@ -57,11 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multipurpose command line tool for working with OpenStreetMap data based on the Osmium library";
     homepage = "https://osmcode.org/osmium-tool/";
     changelog = "https://github.com/osmcode/osmium-tool/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = with lib.licenses; [
-      gpl3Plus
-      mit
-      bsd3
-    ];
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ das-g ];
     teams = [ lib.teams.geospatial ];
     mainProgram = "osmium";

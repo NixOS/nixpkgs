@@ -10,7 +10,6 @@ let
   cfg = config.services.prometheus.exporters.script;
   inherit (lib)
     mkOption
-    types
     literalExpression
     concatStringsSep
     ;

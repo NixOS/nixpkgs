@@ -64,10 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Experimental Neural Net speech coding for FreeDV";
     homepage = "https://github.com/drowe67/LPCNet";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      doronbehar
-      mvs
-    ];
+    maintainers = with lib.maintainers; [ doronbehar ];
     platforms = lib.platforms.all;
   };
 })

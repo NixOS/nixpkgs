@@ -13,17 +13,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py-nymta";
-  version = "0.4.0";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OnFreund";
     repo = "py-nymta";
     tag = finalAttrs.version;
-    hash = "sha256-JVcdpS7qcrULOLnlV2ZJr7NQPJGGUKfrQCFcb64X2ak=";
+    hash = "sha256-PnjQhqV2PuQeGPasu9BiicXT49Pounh8Ry/BpJyg1Bo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "gtfs-realtime-bindings"
+  ];
 
   dependencies = [
     aiofiles

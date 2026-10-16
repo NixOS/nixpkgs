@@ -26,16 +26,17 @@
   nixosTests,
   pkgsStatic ? { }, # CI has allowVariants = false, in which case pkgsMusl would not be passed. So, instead add a default here.
   pkgsMusl ? { },
+  callPackage,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audit";
-  version = "4.1.2-unstable-2025-09-06"; # fixes to non-static builds right after 4.1.2 release
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "linux-audit";
     repo = "audit-userspace";
-    rev = "cb13fe75ee2c36d5c525ed9de22aae10dbc8caf4";
-    hash = "sha256-NX0TWA+LtcZgbM9aQfokWv2rGNAAb3ksGqAH8URAkYM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-W8VyeOYQGPAvvmQUe3F22u5ldWwIuxrVJ/sXyu0Qrl4=";
   };
 
   postPatch = ''
@@ -131,10 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Instead, we load audit rules in a dedicated module.
   postFixup = ''
     moveToOutput bin/augenrules $scripts
-    substituteInPlace $scripts/bin/augenrules \
-      --replace-fail "/sbin/auditctl -R" "$bin/bin/auditctl -R" \
-      --replace-fail "auditctl -s" "$bin/bin/auditctl -s" \
-      --replace-fail "/bin/ls" "ls"
     wrapProgram $scripts/bin/augenrules \
       --prefix PATH : ${
         lib.makeBinPath [
@@ -151,11 +148,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    testsuite = callPackage ./testsuite.nix { };
     tests = {
       musl = pkgsMusl.audit or null;
       static = pkgsStatic.audit or null;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      audit = nixosTests.audit;
+      inherit (nixosTests) audit audit-testsuite utmp;
       # Broken on a hardened kernel
       package = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
         pname = previousAttrs.pname + "-test";
@@ -167,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://people.redhat.com/sgrubb/audit/";
     description = "Audit Library";
-    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v4.1.2";
+    changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ grimmauld ];
     teams = [ lib.teams.security-review ];

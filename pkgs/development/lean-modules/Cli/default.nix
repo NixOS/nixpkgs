@@ -4,18 +4,29 @@
   fetchFromGitHub,
 }:
 
-buildLakePackage {
+buildLakePackage (finalAttrs: {
   pname = "lean4-cli";
-  version = "4.28.0";
+  # nixpkgs-update: no auto update
+  version = "4.34.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "lean4-cli";
-    tag = "v4.28.0";
-    hash = "sha256-9nX+dozmDAaVb5uKWL14zbILr7aqbVerTyPcN12Niw4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3HLYlycvm4Ho98pB7eF+u8RN1GQJ7Ve6COqMSZr4Hic=";
   };
 
   leanPackageName = "Cli";
+
+  # Pre-build static library for downstream executables.
+  # TODO: upstream this to lean4-cli
+  postPatch = ''
+    substituteInPlace lakefile.toml \
+      --replace-fail '[[lean_lib]]
+    name = "Cli"' '[[lean_lib]]
+    name = "Cli"
+    defaultFacets = ["static"]'
+  '';
 
   meta = {
     description = "Command-line argument parser for Lean 4";
@@ -23,4 +34,4 @@ buildLakePackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nadja-y ];
   };
-}
+})

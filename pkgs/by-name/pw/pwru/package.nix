@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pwru";
-  version = "1.0.11";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "pwru";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P4CKQOSpRujrgBVVNj1DD1jHoN7DEZ18PrfSOKSd31Y=";
+    hash = "sha256-U7xDjurLVX46cLjjKiWBtx1rKZ3CarWXaSXvuJpnejg=";
   };
 
   vendorHash = null;

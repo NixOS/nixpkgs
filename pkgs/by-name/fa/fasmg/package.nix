@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fasmg";
-  version = "l4gs";
+  version = "l8vn";
 
   src = fetchzip {
     url = "https://flatassembler.net/fasmg.${finalAttrs.version}.zip";
-    sha256 = "sha256-lx46RKXVu6z3+luIizSfGf697wJvS+ccwZaOgGwGXr4=";
+    sha256 = "sha256-/Izf7w7yofmPp1J85BgWbMLIGC4SGsCqXzhdecOo7CE=";
     stripRoot = false;
   };
 
@@ -31,10 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
           x86_64-linux = {
             bin = "fasmg.x64";
             asm = "source/linux/x64/fasmg.asm";
-          };
-          x86_64-darwin = {
-            bin = "source/macos/x64/fasmg";
-            asm = "source/macos/x64/fasmg.asm";
           };
           x86-linux = {
             bin = "fasmg";

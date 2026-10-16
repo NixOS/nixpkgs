@@ -54,15 +54,14 @@ in
 
   # `stdenv` without a C compiler. Passing in this helps avoid infinite
   # recursions, and may eventually replace passing in the full stdenv.
-  stdenvNoCC ? stdenv.override (
-    {
-      cc = null;
-      hasCC = false;
-    }
+  stdenvNoCC ? stdenv.override {
+    name = "${stdenv.name}-no-cc";
+    cc = null;
+    hasCC = false;
     # Darwin doesn’t need an SDK in `stdenvNoCC`.  Dropping it shrinks the closure
     # size down from ~1 GiB to ~83 MiB, which is a considerable reduction.
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin { extraBuildInputs = [ ]; }
-  ),
+    ${if stdenv.hostPlatform.isDarwin then "extraBuildInputs" else null} = [ ];
+  },
 
   # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
@@ -119,7 +118,7 @@ let
       # `pkgs{theirHost}{theirTarget}`. For example, `pkgsBuildHost` means their
       # host platform is our build platform, and their target platform is our host
       # platform. We only care about their host/target platforms, not their build
-      # platform, because the the former two alone affect the interface of the
+      # platform, because the former two alone affect the interface of the
       # final package; the build platform is just an implementation detail that
       # should not leak.
       pkgsBuildBuild = withFallback adjacentPackages.pkgsBuildBuild;
@@ -154,7 +153,7 @@ let
           config
           overlays
           ;
-      } res self super;
+      } self;
 
       conflictingAttrs = lib.intersectAttrs res super;
     in
@@ -218,35 +217,34 @@ let
       if !config.allowAliases || isSupported then
         nixpkgsFun {
           overlays = [
-            (
-              self': super':
-              {
-                pkgsi686Linux = super';
-              }
-              // lib.optionalAttrs (!isSupported) {
-                # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
-                # when used on a non x86_64-linux platform in CI.
-                # TODO: Remove this, once pkgsi686Linux can become a variant.
-                stdenv = super'.stdenv // {
-                  mkDerivation =
-                    args:
-                    (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
-                      meta = prevAttrs.meta or { } // {
-                        broken = true;
-                      };
-                    });
-                };
-              }
-            )
+            (self': super': {
+              pkgsi686Linux = super';
+              # Overrides pkgsi686Linux.stdenv.mkDerivation to produce only broken derivations,
+              # when used on a non x86_64-linux platform in CI.
+              # TODO: Remove this, once pkgsi686Linux can become a variant.
+              ${if !isSupported then "stdenv" else null} = super'.stdenv // {
+                mkDerivation =
+                  args:
+                  (super'.stdenv.mkDerivation args).overrideAttrs (prevAttrs: {
+                    meta = prevAttrs.meta or { } // {
+                      broken = true;
+                    };
+                  });
+              };
+            })
           ]
           ++ overlays;
           ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
-            config = lib.systems.parse.tripleFromSystem (
-              stdenv.hostPlatform.parsed
-              // {
-                cpu = lib.systems.parse.cpuTypes.i686;
-              }
-            );
+            config =
+              if isSupported then
+                lib.systems.parse.tripleFromSystem (
+                  stdenv.hostPlatform.parsed
+                  // {
+                    cpu = lib.systems.parse.cpuTypes.i686;
+                  }
+                )
+              else
+                "i686-unknown-linux-gnu";
           };
         }
       else
@@ -268,7 +266,10 @@ let
     # in one go when calling Nixpkgs, for performance and simplicity.
     appendOverlays =
       extraOverlays:
-      if extraOverlays == [ ] then self else nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
+      if extraOverlays == [ ] then
+        self.__splicedPackages
+      else
+        nixpkgsFun { overlays = args.overlays ++ extraOverlays; };
 
     # NOTE: each call to extend causes a full nixpkgs rebuild, adding ~130MB
     #       of allocations. DO NOT USE THIS IN NIXPKGS.
@@ -283,9 +284,15 @@ let
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
     pkgsStatic = nixpkgsFun {
       overlays = [
-        (self': super': {
-          pkgsStatic = super';
-        })
+        (
+          self': super':
+          {
+            pkgsStatic = super';
+          }
+          // lib.optionalAttrs super'.stdenv.hostPlatform.isMusl {
+            pkgsMusl = super';
+          }
+        )
       ]
       ++ overlays;
       crossSystem = {
@@ -303,6 +310,49 @@ let
     };
   };
 
+  # Replaces the attributes in config.attrPathsDisallowedForInternalUse with aborts.
+  # Not warnings because those wouldn't give a backtrace, which is important for debugging
+  # Not throws because those would be ignored by nix-env, which is what CI uses to evaluate everything
+  # See also ./default.nix, which removes these attributes entirely from the end result
+  internallyDisallowedAttrPathsOverlay =
+    final: prev:
+    # Generally only set by CI, don't want to cause a performance hit for users
+    if config.attrPathsDisallowedForInternalUse == [ ] then
+      { }
+    else
+      let
+        # Abort only when this derivation, or one of its `outputs`, is instantiated.
+        # That is, when a `drvPath`, `outPath`, or `shellPath` is evaluated.
+        # Not to be confused with `lib.warnOnInstantiate`, which warns on much more than just instantiation.
+        abortOnInstantiate =
+          msg: drv:
+          let
+            paths = lib.filter (name: drv ? ${name}) [
+              "drvPath"
+              "outPath"
+              "shellPath"
+            ];
+          in
+          drv
+          // lib.genAttrs paths (name: abort msg drv.${name})
+          // lib.genAttrs (drv.outputs or [ ]) (name: abortOnInstantiate msg drv.${name})
+          // {
+            ${if lib.isFunction (drv.override or null) then "override" else null} =
+              args: abortOnInstantiate msg (drv.override args);
+            ${if lib.isFunction (drv.overrideAttrs or null) then "overrideAttrs" else null} =
+              args: abortOnInstantiate msg (drv.overrideAttrs args);
+          };
+      in
+      lib.updateManyAttrsByPath (map (
+        { attrPath, reason }:
+        {
+          path = attrPath;
+          update = abortOnInstantiate "${lib.showAttrPath attrPath} is disallowed from being used within Nixpkgs${
+            lib.optionalString (reason != null) ", because ${reason}"
+          }";
+        }
+      ) config.attrPathsDisallowedForInternalUse) prev;
+
   # The complete chain of package set builders, applied from top to bottom.
   # stdenvOverlays must be last as it brings package forward from the
   # previous bootstrapping phases which have already been overlaid.
@@ -318,6 +368,7 @@ let
       aliases
       variants
       configOverrides
+      internallyDisallowedAttrPathsOverlay
     ]
     ++ overlays
     ++ [

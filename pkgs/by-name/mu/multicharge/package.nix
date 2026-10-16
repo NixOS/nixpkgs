@@ -15,7 +15,7 @@
   mstore,
 }:
 
-assert !blas.isILP64 && !lapack.isILP64;
+assert blas.isILP64 == lapack.isILP64;
 assert (
   builtins.elem buildType [
     "meson"
@@ -25,13 +25,15 @@ assert (
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multicharge";
-  version = "0.3.1";
+  version = "0.5.0";
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "grimme-lab";
     repo = "multicharge";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-8qwM3dpvFoL2WrMWNf14zYtRap0ijdfZ95XaTlkHhqQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hswqC+fvC6tuxDpuUgowyqm72ubVikzpR4EzXtTM5cs=";
   };
 
   patches = [
@@ -48,7 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
   ]
-  ++ lib.optional (buildType == "cmake") cmake;
+  ++ lib.optionals (buildType == "cmake") [
+    cmake
+  ];
 
   buildInputs = [
     blas
@@ -60,6 +64,31 @@ stdenv.mkDerivation (finalAttrs: {
     mstore
   ];
 
+  # For the Meson build, the `ilp64` option sets the -DIK=i8 preprocessor flag
+  # for 64-bit integer BLAS/LAPACK calls.  Because nixpkgs always provides the
+  # BLAS library as `libblas` (regardless of the integer size), the `custom`
+  # LAPACK vendor is used with explicit library names when ILP64 is enabled,
+  # instead of the upstream default which would look for `libblas64`.
+  mesonFlags = [
+    "-Dilp64=${if blas.isILP64 then "true" else "false"}"
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-Dlapack=custom"
+    "-Dcustom_libraries=blas,lapack"
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "WITH_ILP64" blas.isILP64)
+  ]
+  ++ lib.optionals blas.isILP64 [
+    "-DBLAS_LIBRARIES=${lib.getLib blas}/lib/libblas${
+      if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary
+    }"
+    "-DLAPACK_LIBRARIES=${lib.getLib lapack}/lib/liblapack${
+      if stdenv.hostPlatform.isStatic then ".a" else stdenv.hostPlatform.extensions.sharedLibrary
+    }"
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -69,10 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs --build config/install-mod.py
-  '';
 
-  preCheck = ''
-    export OMP_NUM_THREADS=2
+    # custom blas and lapack need to be explicitly found for transitive dependencies
+    # otherwise CMAKE builds can not proceed.
+    echo 'set(custom-blas_FOUND TRUE)' >> config/cmake/Findcustom-blas.cmake
+    echo 'set(custom-lapack_FOUND TRUE)' >> config/cmake/Findcustom-lapack.cmake
   '';
 
   meta = {
@@ -80,6 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "multicharge";
     license = lib.licenses.asl20;
     homepage = "https://github.com/grimme-lab/multicharge";
+    changelog = "https://github.com/grimme-lab/multicharge/releases/tag/${finalAttrs.src.tag}";
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.sheepforce ];
   };

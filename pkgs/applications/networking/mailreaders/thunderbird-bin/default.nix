@@ -39,18 +39,14 @@ let
 
   mozillaPlatforms = {
     x86_64-linux = "linux-x86_64";
-    # bundles are universal and can be re-used for both darwin architectures
     aarch64-darwin = "mac";
-    x86_64-darwin = "mac";
   };
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system} or throwSystem;
 
-  isPrefixOf = prefix: string: builtins.substring 0 (builtins.stringLength prefix) string == prefix;
-
-  sourceMatches = locale: source: (isPrefixOf source.locale locale) && source.arch == arch;
+  sourceMatches = locale: source: (lib.hasPrefix source.locale locale) && source.arch == arch;
 
   defaultSource = lib.findFirst (sourceMatches "en-US") { } sources;
 
@@ -69,7 +65,8 @@ let
   meta = {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
-    homepage = "http://www.mozilla.org/thunderbird/";
+    homepage = "https://www.thunderbird.net/";
+    donationPage = "https://www.thunderbird.net/donate/";
     mainProgram = "thunderbird";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mpl20;
@@ -107,7 +104,8 @@ let
       gtk3
       ;
     binaryName = "thunderbird";
-    gssSupport = true;
+    withFFmpeg = true;
+    withGSSAPI = true;
   };
 
 in

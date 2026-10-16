@@ -269,6 +269,7 @@ in
         PrivateMounts = true;
         PrivateTmp = true;
         PrivateUsers = true;
+        ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = "strict";
         ProtectHome = true;

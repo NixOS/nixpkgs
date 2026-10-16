@@ -57,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
   ];
 
+  patches = [ ./gcc-16.patch ];
+
   configureFlags = [
     "--with-ssl"
   ]

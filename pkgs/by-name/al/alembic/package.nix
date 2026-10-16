@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alembic";
-  version = "1.8.8";
+  version = "1.8.12";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
     tag = finalAttrs.version;
-    hash = "sha256-R69UYyvLnMwv1JzEQ6S6elvR83Rmvc8acBJwSV/+hCk=";
+    hash = "sha256-cH/hfGnl037Q2kWzGz68RZW9MOqU/M2I+/osyyGlN/s=";
   };
 
   # note: out is unused (but required for outputDoc anyway)
@@ -52,6 +52,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DConfigPackageLocation=${placeholder "dev"}/lib/cmake/Alembic"
     "-DCMAKE_INSTALL_PREFIX=${placeholder "dev"}"
     "-DQUIET=ON"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Upstream defaults the dylib's install RPATH to $dev/..., embedding a $dev
+    # path in the $lib output and cycling with the CMake config in $dev. Linux
+    # is spared by patchelf --shrink-rpath; Darwin has no such step. Overriding
+    # the (guarded) default to the real lib dir breaks the cycle without a patch.
+    "-DCMAKE_INSTALL_RPATH=${placeholder "lib"}/lib"
   ];
 
   postPatch = ''

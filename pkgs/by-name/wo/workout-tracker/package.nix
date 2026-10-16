@@ -8,19 +8,19 @@
 }:
 let
   pname = "workout-tracker";
-  version = "2.6.0";
+  version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
     tag = "v${version}";
-    hash = "sha256-bSeZkUzcRrdH3jSagj842DoxKBf0ysNuINY/g+VWkl0=";
+    hash = "sha256-sISgUNrs3mRGyAG9i/BFV6DAUM3v+07FDWTLVxmTDnU=";
   };
 
   assets = buildNpmPackage {
     pname = "${pname}-assets";
     inherit version src;
-    npmDepsHash = "sha256-vSFwCB5qbiHLiK0ns6YUj8yr3FjeNCqT8yvLRQzZycI=";
+    npmDepsHash = "sha256-gY5xkP/MxVLiUz1O69uOw1VpqnKUKXonecgjadKHsxQ=";
     makeCacheWritable = true;
     postPatch = ''
       cd frontend
@@ -35,7 +35,7 @@ in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = null;
+  vendorHash = "sha256-Val73lO3Ris3ufJUh3XYLo0p8gWHsHdDSlJyHRVHJ/4=";
 
   postPatch = ''
     rm -r assets
@@ -53,7 +53,10 @@ buildGoModule {
 
   __darwinAllowLocalNetworking = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit assets;
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=assets" ]; };
+  };
 
   passthru.tests = {
     inherit (nixosTests) workout-tracker;

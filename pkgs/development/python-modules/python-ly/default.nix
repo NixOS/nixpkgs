@@ -10,22 +10,20 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "python-ly";
-  version = "0.9.9";
+  version = "0.9.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frescobaldi";
     repo = "python-ly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CMMssU+qoHbhdny0sgpoYQas4ySPVHnu7GPnSthuMuE=";
+    hash = "sha256-diLg1rU+SmCutW1WJQtMJvpipU+k8GluvAqFfcv1GS4=";
   };
 
   pythonImportsCheck = [ "ly" ];
 
   build-system = [ hatchling ];
 
-  # Tests seem to be broken ATM: https://github.com/wbsoft/python-ly/issues/70
-  doCheck = false;
   nativeCheckInputs = [
     lxml
     pytestCheckHook
@@ -48,7 +46,7 @@ buildPythonPackage (finalAttrs: {
       the GNU music typesetter [LilyPond](https://lilypond.org).
     '';
     homepage = "https://pypi.org/project/python-ly";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "ly";
   };

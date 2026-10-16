@@ -2,18 +2,17 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  kustomize-lint,
-  testers,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kustomize-lint";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "groq";
     repo = "kustomize-lint";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zVtF66A7w0RtEzZ9MNA4dqgxQUtpiUqcmnjslm4NxaE=";
   };
 
@@ -23,20 +22,17 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = kustomize-lint;
-    command = "kustomize-lint --version";
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Linter for Kustomize configuration files";
     homepage = "https://github.com/groq/kustomize-lint";
-    changelog = "https://github.com/groq/kustomize-lint/releases/tag/v${version}";
+    changelog = "https://github.com/groq/kustomize-lint/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ matanyall ];
     mainProgram = "kustomize-lint";
   };
-}
+})

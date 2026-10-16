@@ -31,6 +31,22 @@ Unfree software is not tested or built in Nixpkgs continuous integration, and th
 Most unfree licenses prohibit either executing or distributing the software.
 :::
 
+The `NIXPKGS_CONFIG` environment variable can override the configuration file location.
+Nixpkgs resolves the config in this order:
+
+1.  `$NIXPKGS_CONFIG`, if set and the file exists.
+2.  `~/.config/nixpkgs/config.nix`, if it exists.
+3.  `~/.nixpkgs/config.nix` (legacy), if it exists.
+4.  Empty configuration.
+
+On NixOS, `NIXPKGS_CONFIG` points to `/etc/nix/nixpkgs-config.nix` system-wide.
+Drop a file there to apply configuration to `nix-env`, `nix-shell`, and other user-level commands.
+NixOS does not create this file.
+The [`nixpkgs.config`](https://nixos.org/manual/nixos/stable/options#opt-nixpkgs.config) option does not affect `nix-env`, `nix-shell`, or other user-level commands.
+
+This lookup applies to non-flake usage like channels and `<nixpkgs>`.
+Flakes ignore it; pass `config` directly when importing `nixpkgs`.
+
 ## Installing broken packages {#sec-allow-broken}
 
 There are several ways to try compiling a package which has been marked as broken.
@@ -89,26 +105,47 @@ There are several ways to tweak how Nix handles a package which has been marked 
     $ export NIXPKGS_ALLOW_UNFREE=1
     ```
 
--   It is possible to permanently allow individual unfree packages, while still blocking unfree packages by default using the `allowUnfreePredicate` configuration option in the user configuration file.
-
-    This option is a function which accepts a package as a parameter, and returns a boolean. The following example configuration accepts a package and always returns false:
-
-    ```nix
-    { allowUnfreePredicate = (pkg: false); }
-    ```
-
-    For a more useful example, try the following. This configuration only allows unfree packages named roon-server and Visual Studio Code:
+-   To allow specific unfree packages, add their names to your Nixpkgs configuration file:
 
     ```nix
     {
-      allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "roon-server"
-          "vscode"
-        ];
+      allowUnfreePackages = [
+        "fence"
+        "roon-server"
+        "vscode"
+      ];
     }
     ```
+
+    `allowUnfreePackages` permits the listed unfree packages.
+
+    In NixOS modules, lists set through `nixpkgs.config.allowUnfreePackages` merge additively across modules. Declare your unfree exceptions in the same modules that triggered them.
+
+    To allow unfree packages programmatically:
+
+    ```nix
+    { lib, ... }:
+    {
+      allowUnfreePredicate = pkg: lib.hasPrefix "roon" (lib.getName pkg);
+    }
+    ```
+
+    This permits packages such as `roon-bridge` and `roon-server`.
+
+    To combine the list and predicate, set both options:
+
+    ```nix
+    { lib, ... }:
+    {
+      allowUnfreePackages = [
+        "fence"
+        "vscode"
+      ];
+      allowUnfreePredicate = pkg: lib.hasPrefix "roon" (lib.getName pkg);
+    }
+    ```
+
+    This permits unfree packages that match either option.
 
 -   It is also possible to allow and block licenses that are specifically acceptable or not acceptable, using `allowlistedLicenses` and `blocklistedLicenses`, respectively.
 
@@ -136,7 +173,7 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     Note that `allowlistedLicenses` only applies to unfree licenses unless `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses. `blocklistedLicenses` applies to all licenses.
 
-A complete list of licenses can be found in the file `lib/licenses.nix` of the nixpkgs tree.
+A complete list of licenses can be found in the file [`nixpkgs/lib/licenses/licenses.nix`](https://github.com/NixOS/nixpkgs/blob/master/lib/licenses/licenses.nix) of the nixpkgs tree.
 
 ## Installing insecure packages {#sec-allow-insecure}
 

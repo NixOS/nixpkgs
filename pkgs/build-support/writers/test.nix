@@ -254,6 +254,23 @@ recurseIntoAttrs {
       ''
     );
 
+    nuDocComment =
+      let
+        script = writeNu "test-writers-nushell-doc-comment" ''
+          # Doc comment example
+          def main [] {}
+        '';
+      in
+      runCommand "test-writers-nushell-doc-comment" { } ''
+        ${script} --help > help
+        grep -F "Doc comment example" help
+        if grep -F "#!" help; then
+          echo "shebang included in Nushell doc comment" >&2
+          exit 1
+        fi
+        touch $out
+      '';
+
     babashka = expectSuccess (
       writeBabashka "test-writers-babashka" { } ''
         (println "success")
@@ -456,6 +473,25 @@ recurseIntoAttrs {
         ''
       )
     );
+
+    nuDocComment =
+      let
+        script = writeNu "test-writers-nushell-path-doc-comment" (
+          writeText "test" ''
+            # Doc comment example
+            def main [] {}
+          ''
+        );
+      in
+      runCommand "test-writers-nushell-path-doc-comment" { } ''
+        ${script} --help > help
+        grep -F "Doc comment example" help
+        if grep -F "#!" help; then
+          echo "shebang included in Nushell doc comment" >&2
+          exit 1
+        fi
+        touch $out
+      '';
   };
 
   data = recurseIntoAttrs {
@@ -477,7 +513,11 @@ recurseIntoAttrs {
 
     yaml = expectDataEqual {
       file = writeYAML "data.yaml" { hello = "world"; };
-      expected = "hello: world\n";
+      expected = ''
+        %YAML 1.1
+        ---
+        hello: world
+      '';
     };
   };
 

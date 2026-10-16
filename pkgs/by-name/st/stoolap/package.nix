@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stoolap";
-  version = "0.3.7";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "stoolap";
     repo = "stoolap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NfGs9TDyX+8hC2bCGJL0AWFd3C1joowT061vea5hxx0=";
+    hash = "sha256-e+RUEEADHbbVF4wfY3wrOUV+C2EmzhV+kLA+k21StuI=";
   };
 
-  cargoHash = "sha256-tzgxffwXd331Sz1xftXNBowqud29pKvbw+Epv01xOiQ=";
+  cargoHash = "sha256-ZZa+F0yQKBNkxZgPsMi6imjfojn2oUIrGKmMfjY4tD8=";
 
   # On aarch64-darwin, dev target needs to set panic strategy to abort
   # However this must be set while the flag `-Zpanic_abort_tests` is also set,

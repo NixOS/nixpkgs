@@ -10,7 +10,7 @@
   makeWrapper,
   makeDesktopItem,
   requireFile,
-  src ? null,
+  overriddenSrc ? null,
   withMods ? true,
   withBridgePatch ? true,
   withLinuxPatch ? true,
@@ -20,11 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.1o";
 
   src =
-    if src != null then
-      src
+    if overriddenSrc != null then
+      overriddenSrc
     else
       requireFile {
-        name = "Balatro-${finalAttrs.version}.exe";
+        name = "Balatro.exe";
         url = "https://store.steampowered.com/app/2379780/Balatro/";
         message = ''
           You must own Balatro in order to install it with Nix.  The Steam,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
           pass the resulting path to override:
 
             balatro.override {
-              src = /nix/store/g44bp7ymc7qlkfv5f03b55cgs1wdmkzl-com.playstack.balatro.android.apk;
+              overriddenSrc = /nix/store/g44bp7ymc7qlkfv5f03b55cgs1wdmkzl-com.playstack.balatro.android.apk;
             }
         '';
         # Use `nix --extra-experimental-features nix-command hash file --sri --type sha256` to get the correct hash

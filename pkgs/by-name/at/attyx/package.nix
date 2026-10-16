@@ -5,7 +5,7 @@
   callPackage,
 
   pkg-config,
-  zig,
+  zig_0_15,
 
   fontconfig,
   freetype,
@@ -18,20 +18,20 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "attyx";
-  version = "0.2.47";
+  version = "0.4.16";
 
   src = fetchFromGitHub {
     owner = "semos-labs";
     repo = "attyx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fREiPiBTzzJtFEPWOISiZ/BI5lZmPyn80oAXohEEGig=";
+    hash = "sha256-j6VahzpBZFd6lOtBlqrjK5oZ7sPwet6+FZcZ2fn3STE=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
     pkg-config
-    zig
+    zig_0_15
   ];
 
   buildInputs = [

@@ -1,0 +1,84 @@
+From 5e3d2b6377a920f6af40981651a1f829f138c2d7 Mon Sep 17 00:00:00 2001
+From: Miro <200482516+Mirochill@users.noreply.github.com>
+Date: Fri, 22 May 2026 23:03:09 +0200
+Subject: [PATCH] Drop pkg_resources from filter help loader
+
+---
+ src/wfuzz/helpers/file_func.py  | 18 +++++++++++-------
+ tests/helpers/test_file_func.py | 29 +++++++++++++++++++++++++++++
+ 2 files changed, 40 insertions(+), 7 deletions(-)
+ create mode 100644 tests/helpers/test_file_func.py
+
+diff --git a/src/wfuzz/helpers/file_func.py b/src/wfuzz/helpers/file_func.py
+index e5459faf82b940fa474d758f63b94d3768f958a2..ae8081bfac785339f4f59bffc3942ecf0ddc1949 100644
+--- a/src/wfuzz/helpers/file_func.py
++++ b/src/wfuzz/helpers/file_func.py
+@@ -1,7 +1,7 @@
+ import os
+ import sys
+ import re
+-import pkg_resources
++import pkgutil
+ 
+ from chardet.universaldetector import UniversalDetector
+ import chardet
+@@ -13,14 +13,18 @@ def get_filter_help_file():
+     FILTER_HELP_FILE = "advanced.rst"
+     FILTER_HELP_DEV_FILE = "../../../docs/user/advanced.rst"
+ 
+-    filter_help_text = None
+     try:
+-        fname = pkg_resources.resource_filename("wfuzz", FILTER_HELP_FILE)
+-        filter_help_text = open(fname).read()
+-    except IOError:
+-        filter_help_text = open(get_path(FILTER_HELP_DEV_FILE)).read()
++        filter_help_text = pkgutil.get_data("wfuzz", FILTER_HELP_FILE)
++    except (IOError, OSError):
++        filter_help_text = None
+ 
+-    return filter_help_text
++    if filter_help_text is not None:
++        if not isinstance(filter_help_text, str):
++            filter_help_text = filter_help_text.decode("utf-8")
++        return filter_help_text
++
++    with open(get_path(FILTER_HELP_DEV_FILE)) as filter_help:
++        return filter_help.read()
+ 
+ 
+ def create_dir(dir_path):
+diff --git a/tests/helpers/test_file_func.py b/tests/helpers/test_file_func.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..66c58b3dcc992d6a4afb3b1860b1cd3f944a7bf4
+--- /dev/null
++++ b/tests/helpers/test_file_func.py
+@@ -0,0 +1,29 @@
++try:
++    from unittest import mock
++except ImportError:
++    import mock
++
++from wfuzz.helpers import file_func
++
++
++def test_get_filter_help_file_uses_package_data():
++    with mock.patch(
++        "wfuzz.helpers.file_func.pkgutil.get_data",
++        return_value=b"Package help",
++    ):
++        assert file_func.get_filter_help_file() == "Package help"
++
++
++def test_get_filter_help_file_falls_back_to_development_file(tmpdir):
++    help_file = tmpdir.join("advanced.rst")
++    help_file.write("Development help")
++
++    with mock.patch(
++        "wfuzz.helpers.file_func.pkgutil.get_data",
++        return_value=None,
++    ):
++        with mock.patch(
++            "wfuzz.helpers.file_func.get_path",
++            return_value=str(help_file),
++        ):
++            assert file_func.get_filter_help_file() == "Development help"

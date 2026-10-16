@@ -144,10 +144,15 @@ buildPythonPackage (finalAttrs: {
   pytestFlags = [
     "--benchmark-disable"
     "-Wignore::FutureWarning"
+    # DeprecationWarning: fetch_arrow_table() is deprecated, use to_arrow_table() instead.
+    "-Wignore:fetch_arrow_table:DeprecationWarning"
+    # DeprecationWarning: fetch_record_batch() is deprecated, use to_arrow_reader() instead.
+    "-Wignore:fetch_record_batch:DeprecationWarning"
+    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    # DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
+    "-Wignore::DeprecationWarning"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
-    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
-    "-Wignore::DeprecationWarning"
     # Multiple tests with warnings fail without it
     "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
@@ -185,6 +190,12 @@ buildPythonPackage (finalAttrs: {
 
     # assert 0 == 3 (tests edge case behavior of databases)
     "test_self_join_with_generated_keys"
+
+    # _duckdb.BinderException: DECIMAL type width must be between 1 and 38
+    "test_decimal_literal[duckdb-decimal-big]"
+
+    # AssertionError: joining an empty array returns '' instead of NULL in duckdb 1.5
+    "test_empty_array_string_join[duckdb]"
 
     # https://github.com/ibis-project/ibis/issues/11929
     # AssertionError: value does not match the expected value
@@ -259,6 +270,13 @@ buildPythonPackage (finalAttrs: {
     "test_error_message"
     "test_error_message_when_constructing_literal"
     "test_signature_from_callable_with_keyword_only_arguments"
+  ];
+
+  disabledTestPaths = [
+    # TypeError: pytest.approx() does not support nan_ok for datetime/timedelta comparisons.
+    "ibis/backends/tests/tpc/h/test_queries.py::test_18"
+    "ibis/backends/tests/tpc/h/test_queries.py::test_03"
+    "ibis/backends/tests/tpc/ds/test_queries.py::test_51"
   ];
 
   # patch out tests that check formatting with black
@@ -438,7 +456,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
-    changelog = "https://github.com/ibis-project/ibis/blob/${finalAttrs.src.tag}/docs/release_notes.md";
+    changelog = "https://github.com/ibis-project/ibis/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cpcloud

@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.8.5";
 
   src = fetchFromGitHub {
-    owner = "ierton";
+    owner = "sergei-mironov";
     repo = "xkb-switch";
     rev = finalAttrs.version;
     sha256 = "sha256-DZAIL6+D+Hgs+fkJwRaQb9BHrEjAkxiqhOZyrR+Mpuk=";
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Switch your X keyboard layouts from the command line";
-    homepage = "https://github.com/ierton/xkb-switch";
+    homepage = "https://github.com/sergei-mironov/xkb-switch";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;

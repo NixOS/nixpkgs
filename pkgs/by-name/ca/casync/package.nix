@@ -9,12 +9,10 @@
   sphinx,
   acl,
   curl,
-  fuse,
   libselinux,
   udev,
   xz,
   zstd,
-  fuseSupport ? true,
   selinuxSupport ? true,
   udevSupport ? true,
   glibcLocales,
@@ -39,7 +37,6 @@ stdenv.mkDerivation {
     xz
     zstd
   ]
-  ++ lib.optionals fuseSupport [ fuse ]
   ++ lib.optionals selinuxSupport [ libselinux ]
   ++ lib.optionals udevSupport [ udev ];
   nativeBuildInputs = [
@@ -66,10 +63,12 @@ stdenv.mkDerivation {
 
   env.PKG_CONFIG_UDEV_UDEVDIR = "lib/udev";
 
-  mesonFlags =
-    lib.optionals (!fuseSupport) [ "-Dfuse=false" ]
-    ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
-    ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
+  mesonFlags = [
+    # fuse2 only, https://github.com/systemd/casync/issues/269
+    "-Dfuse=false"
+  ]
+  ++ lib.optionals (!udevSupport) [ "-Dudev=false" ]
+  ++ lib.optionals (!selinuxSupport) [ "-Dselinux=false" ];
 
   doCheck = true;
   preCheck = ''

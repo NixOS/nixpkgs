@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {
-    homepage = "http://sawfish.tuxfamily.org/";
+    homepage = "https://github.com/SawfishWM/librep";
     description = "Fast, lightweight, and versatile Lisp environment";
     longDescription = ''
       librep is a Lisp system for UNIX, comprising an interpreter, a byte-code

@@ -19,7 +19,7 @@
   ompdSupport ? true,
   ompdGdbSupport ? ompdSupport,
   getVersionFile,
-  fetchpatch,
+  checkPhaseThreadLimitHook,
 }:
 
 assert lib.assertMsg (ompdGdbSupport -> ompdSupport) "OMPD GDB support requires OMPD support!";
@@ -30,11 +30,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src =
     if monorepoSrc != null then
-      runCommand "openmp-src-${version}" { inherit (monorepoSrc) passthru; } ''
-        mkdir -p "$out"
-        cp -r ${monorepoSrc}/cmake "$out"
-        cp -r ${monorepoSrc}/openmp "$out"
-      ''
+      runCommand "openmp-src-${version}"
+        {
+          inherit (monorepoSrc) passthru;
+          strictDeps = true;
+          __structuredAttrs = true;
+        }
+        ''
+          mkdir -p "$out"
+          cp -r ${monorepoSrc}/cmake "$out"
+          cp -r ${monorepoSrc}/openmp "$out"
+        ''
     else
       src;
 
@@ -60,12 +66,18 @@ stdenv.mkDerivation (finalAttrs: {
     lit
   ];
 
+  propagatedNativeBuildInputs = [
+    checkPhaseThreadLimitHook
+  ];
+
   buildInputs = [
     llvm
   ]
   ++ lib.optionals (ompdSupport && ompdGdbSupport) [
     python3
   ];
+
+  strictDeps = true;
 
   cmakeFlags = [
     (lib.cmakeBool "LIBOMP_ENABLE_SHARED" (
@@ -86,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     patchShebangs ../tools/archer/tests/deflake.bash
   '';
+
+  __structuredAttrs = true;
 
   meta = llvm_meta // {
     homepage = "https://openmp.llvm.org/";

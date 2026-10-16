@@ -24,18 +24,17 @@ assert lib.assertOneOf "displayServer" displayServer [
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringboard" + lib.optionalString (displayServer == "wayland") "-wayland";
 
-  # release version needs nightly, so we use a custom tree, see:
-  # https://github.com/SUPERCILEX/clipboard-history/issues/22#issuecomment-3676256971
-  version = "0.14.0-unstable-2026-01-19";
+  version = "0.17.0";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "SUPERCILEX";
     repo = "clipboard-history";
-    rev = "cb2e94add2388a68a8f015b77f9b082b1658b3b7";
-    hash = "sha256-r2632XJ/2Er1TuHCDNm6uItvdhqJ87i9p+h9M2MwKwk=";
+    tag = finalAttrs.version;
+    hash = "sha256-qLYQeZTrtUUn4JSzK3SX687xV4FO6h7GshVdQi8Qkbk=";
   };
 
-  cargoHash = "sha256-c5Zdvz2xHsGh4VnOED2JiitNWwNTSkygaMFHPPLANqw=";
+  cargoHash = "sha256-T65TxIes0171uDxDE72SnFeRVAgw5FR2z6yTcmH3Z6k=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -103,13 +102,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.nixos = nixosTests.ringboard;
-    updateScript = nix-update-script { extraArgs = [ "--version=branch=stable" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Fast, efficient, and composable clipboard manager for Linux";
     homepage = "https://github.com/SUPERCILEX/clipboard-history";
-    changelog = "https://github.com/SUPERCILEX/clipboard-history/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/SUPERCILEX/clipboard-history/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.magnetophon ];

@@ -2,7 +2,7 @@ import ./make-test-python.nix (
   { lib, ... }:
   {
     name = "listmonk";
-    meta.maintainers = with lib.maintainers; [ raitobezarius ];
+    meta.maintainers = [ ];
 
     nodes.machine =
       { pkgs, ... }:

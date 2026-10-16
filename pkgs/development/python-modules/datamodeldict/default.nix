@@ -1,32 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pytestCheckHook,
+  uv-build,
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "datamodeldict";
-  version = "0.9.9";
-  format = "setuptools";
+  version = "0.9.11";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "DataModelDict";
-    inherit version;
-    hash = "sha256-DadBRsc8qEu9PWgMNllGS2ESKL7kgBLDhg4yDr87WRk=";
+  src = fetchFromGitHub {
+    owner = "usnistgov";
+    repo = "DataModelDict";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/wvA/CS3DKuD7kBmzaIvhElkpdEPjRA3UiJUvzCSths=";
   };
 
-  propagatedBuildInputs = [ xmltodict ];
+  build-system = [ uv-build ];
 
-  # no tests
-  doCheck = false;
+  dependencies = [ xmltodict ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "DataModelDict" ];
 
   meta = {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     homepage = "https://github.com/usnistgov/DataModelDict/";
+    changelog = "https://github.com/usnistgov/DataModelDict/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

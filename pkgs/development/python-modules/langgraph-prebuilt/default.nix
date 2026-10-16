@@ -14,6 +14,7 @@
   # tests
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
+  langgraph-sdk,
   postgresql,
   postgresqlTestHook,
   psycopg,
@@ -31,14 +32,15 @@
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
 buildPythonPackage (finalAttrs: {
   pname = "langgraph-prebuilt";
-  version = "1.0.8";
+  version = "1.1.0";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "prebuilt==${finalAttrs.version}";
-    hash = "sha256-Gsh2bCcity0zf9A+FENxwktK5j3WhQOG/jZmhJ18KVE=";
+    hash = "sha256-xSYJ9D86GuaJEgQYk+pkJ4O7HK6HXfAOGBv4f1CBY5g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/libs/prebuilt";
@@ -48,6 +50,7 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     langchain-core
     langgraph-checkpoint
+    langgraph-sdk
   ];
 
   skipPythonImportsCheck = true; # This will be packaged with langgraph
@@ -94,6 +97,7 @@ buildPythonPackage (finalAttrs: {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "prebuilt==";
+      ignoredVersions = "a|b|dev|rc";
     };
   };
 

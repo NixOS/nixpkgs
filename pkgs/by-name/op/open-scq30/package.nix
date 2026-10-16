@@ -9,8 +9,7 @@
   dbus,
   gdk-pixbuf,
   glib,
-  gtk4,
-  libadwaita,
+  cosmic-icons,
   pango,
   just,
   sqlite,
@@ -26,13 +25,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "open-scq30";
-  version = "2.5.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "Oppzippy";
     repo = "OpenSCQ30";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XBK7KxuksQoYZs/uVkh6+8S20G05W9ftK9pviUFNJ8s=";
+    hash = "sha256-5/b71nZrvN7Q/56FM/orMz6vb+FKf6k/qqYgusirTyI=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +47,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     dbus
     gdk-pixbuf
     glib
-    gtk4
-    libadwaita
     pango
     sqlite
     libxkbcommon
@@ -65,9 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libxi
   ];
 
-  cargoHash = "sha256-P4r1MoFCkG80X0dJ1MpmjgedcpQ/HDTC3XikNUDKRaQ=";
-
-  env.INSTALL_PREFIX = placeholder "out";
+  cargoHash = "sha256-mLKK2J3CJ6qSM5EDjB6LkrFWKxijFl6jjcjrCgXVg8c=";
 
   # Requires headphones
   doCheck = false;
@@ -83,6 +78,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   installPhase = ''
     just install ${placeholder "out"}
+  '';
+
+  # fix missing icons
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${cosmic-icons}/share")
   '';
 
   passthru.updateScript = nix-update-script { };

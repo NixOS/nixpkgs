@@ -24,7 +24,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "unified-memory-framework";
-  version = "1.1.0";
+  version = "1.2.0";
 
   nativeBuildInputs = [
     cmake
@@ -43,24 +43,28 @@ stdenv.mkDerivation (finalAttrs: {
     onetbb
     level-zero
   ]
-  ++ lib.optionals useJemalloc [
-    hwloc
-  ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ]
-  ++ lib.optionals finalAttrs.doCheck [
+  ++ lib.optionals finalAttrs.finalPackage.doCheck [
     numactl
     gtest
     gbenchmark
+  ];
+
+  propagatedBuildInputs = [
+    hwloc
   ];
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "unified-memory-framework";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Z65rNsUNeaeSJmxwpEHPbiU4KEDvyrWL9LyAWFsR1c=";
+    hash = "sha256-HC4ZtW9rcoY9krWJnhdD/vwborBVKjbaZKyS/5MmRjw=";
   };
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   postPatch = ''
     # The CMake tries to find out the version via git.
@@ -72,6 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
     # causing the package to link to /build
     substituteInPlace CMakeLists.txt \
       --replace-fail "\''${jemalloc_targ_BINARY_DIR}" "$out/jemalloc"
+
+    # $<BUILD_INTERFACE:hwloc> only links hwloc at build time, so the installed
+    # cmake targets omit it. Downstream static consumers (e.g. UR adapters in
+    # intel-llvm) then fail to link. Export hwloc unconditionally instead.
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse $<BUILD_INTERFACE:''${UMF_HWLOC_NAME}>)' \
+        'set(UMF_LIBS umf_utils umf_ba umf_coarse ''${UMF_HWLOC_NAME})'
   '';
 
   # If included, jemalloc needs to be vendored, as they don't support using a pre-built version
@@ -94,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.cmakeBool "UMF_BUILD_LIBUMF_POOL_JEMALLOC" useJemalloc)
 
-    (lib.cmakeBool "UMF_BUILD_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "UMF_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     # We won't be able to run these inside the sandbox, so no use in building them
     (lib.cmakeBool "UMF_BUILD_GPU_TESTS" false)
     (lib.cmakeBool "UMF_BUILD_BENCHMARKS" false)

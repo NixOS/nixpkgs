@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ip4bfwcpwkq9hz2dai14k2cyabvwrnvcvrcmzxmqm04g8fnimwn";
+    hash = "sha256-ltdoHXoEVFz7ryxvtm3meynPxCQhqiY+THjyy7hb5MY=";
   };
 
   meta = {
@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://docs.pylonsproject.org/projects/peppercorn/en/latest/";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    license = lib.licenses.bsd3Modification;
   };
 }

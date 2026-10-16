@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "triton";
-  version = "7.18.0";
+  version = "7.18.1";
 
   src = fetchFromGitHub {
     owner = "TritonDataCenter";
     repo = "node-triton";
     rev = version;
-    hash = "sha256-65GfN8nqr2hDz+QiBgIM/Jp5poITPUvHQYECjZMtBM4=";
+    hash = "sha256-ODaeSTtBrGKhV28TstYaqdv7cC6OoJfZExQ/YFqBmD0=";
   };
 
-  npmDepsHash = "sha256-oCtS2OG3fGit54ChiVwL2Y/S4XtBVjpGumKbZgn8f00=";
+  npmDepsHash = "sha256-Rs9Qac9o2aJRoy0bv+LqNvmer0uvy9NyMGSj0eQbxa8=";
 
   dontBuild = true;
 
@@ -40,7 +40,7 @@ buildNpmPackage rec {
     description = "TritonDataCenter Client CLI and Node.js SDK";
     homepage = "https://github.com/TritonDataCenter/node-triton";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ teutat3s ];
+    maintainers = [ ];
     mainProgram = "triton";
   };
 }

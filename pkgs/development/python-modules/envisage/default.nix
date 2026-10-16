@@ -2,7 +2,7 @@
   lib,
   apptools,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pyface,
   pytestCheckHook,
   setuptools,
@@ -10,14 +10,16 @@
   traitsui,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "envisage";
-  version = "7.0.4";
+  version = "7.0.4-unstable-2026-07-07";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1rspOLu0XE7xdmxV7W9sHHK2/OcEaKyfWw780e+MHZc=";
+  src = fetchFromGitHub {
+    owner = "enthought";
+    repo = "envisage";
+    rev = "8b1548a589ff1c317a3a1c709e2d186302e8df88";
+    hash = "sha256-EF0FEuKX0TPmb9eOyiF7M3DoLyvxpcq8ePQHxEfg30g=";
   };
 
   build-system = [ setuptools ];

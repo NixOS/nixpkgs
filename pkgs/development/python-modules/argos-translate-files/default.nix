@@ -62,7 +62,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Translate files using Argos Translate";
     homepage = "https://www.argosopentech.com";
-    license = lib.licenses.mit;
+    license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
   };
 })

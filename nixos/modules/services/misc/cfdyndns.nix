@@ -78,7 +78,7 @@ in
           export CLOUDFLARE_EMAIL="${cfg.email}"
         ''}
         ${lib.optionalString (cfg.apiTokenFile != null) ''
-          export CLOUDFLARE_APITOKEN=$(${pkgs.systemd}/bin/systemd-creds cat CLOUDFLARE_APITOKEN_FILE)
+          export CLOUDFLARE_APITOKEN=$(${config.systemd.package}/bin/systemd-creds cat CLOUDFLARE_APITOKEN_FILE)
         ''}
         ${pkgs.cfdyndns}/bin/cfdyndns
       '';

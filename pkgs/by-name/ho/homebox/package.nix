@@ -13,18 +13,18 @@
 }:
 let
   pname = "homebox";
-  version = "0.24.0";
+  version = "0.26.2";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
     tag = "v${version}";
-    hash = "sha256-/h+m2M+sljogw/fYbcgOrakeLErTrA87MCGHgZPIV5Y=";
+    hash = "sha256-JUhRpUWbydy28Xw7j6oCKJLBmaOxcruWAdkqm+hvouY=";
   };
 in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-dFjscefpqBNTQOOZ+itVnUtYX2w/MrU8+FjDpy0AuEM=";
+  vendorHash = "sha256-peQaPSbxGn8MnbZPqCi5ptW+dMh9l4W1hB6HqBLTqh4=";
   modRoot = "backend";
   # the goModules derivation inherits our buildInputs and buildPhases
   # Since we do pnpm thing in those it fails if we don't explicitly remove them
@@ -42,7 +42,7 @@ buildGoModule {
     src = "${src}/frontend";
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-u1MvHGUVX3cUs3+ZUVgv8LeL8B/R/USi539NMCOZ06E=";
+    hash = "sha256-oHS2uMWyuqpiK7yWznmZ2mgxPJpWsyOZL2wz6zBu0cc=";
   };
   pnpmRoot = "../frontend";
 

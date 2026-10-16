@@ -13,10 +13,10 @@
 }:
 
 let
-  rev = "7b6eb2d6ab524bb30487f31612cdbeb35ae37533"; # should be the HEAD of nodejs/release-keys
+  rev = "481637f813e912c4aa3622d7964ab426c97b8e8d"; # should be the HEAD of nodejs/release-keys
   pubring = fetchurl {
     url = "https://github.com/nodejs/release-keys/raw/${rev}/gpg-only-active-keys/pubring.kbx";
-    hash = "sha256-cNpMrJ0Eh8F3bGZAPV9v55mR8bo0+ulkFgN94ZUBl+E=";
+    hash = "sha256-FA8q1SYP1idztiQ86OHTAJZF1VjxIbgmLFXjg9woWTI=";
   };
 in
 writeScript "update-nodejs" ''

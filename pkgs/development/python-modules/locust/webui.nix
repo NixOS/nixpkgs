@@ -1,14 +1,11 @@
 {
   stdenv,
-  yarn-berry_4,
+  yarn-berry,
   nodejs,
   version,
   src,
   lib,
 }:
-let
-  yarn-berry = yarn-berry_4;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "locust-ui";
   inherit version src;
@@ -16,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-dxt7rRA6kh0msjy3DAUvtj7LoE7vEaf4pmP2B95HoeY=";
+    hash = "sha256-fjvgnXKenRxML1JkpxYIOnVuNZ7BpU9L/XgblcQV0vA=";
   };
 
   nativeBuildInputs = [

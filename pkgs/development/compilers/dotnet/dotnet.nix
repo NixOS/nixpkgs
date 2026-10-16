@@ -1,85 +1,40 @@
 {
-  stdenvNoCC,
+  config,
   callPackage,
   lib,
-  fetchurl,
-  releaseManifestFile,
-  releaseInfoFile,
-  bootstrapSdkFile ? null,
-  bootstrapSdk ? null,
-  allowPrerelease ? false,
-  depsFile,
-  fallbackTargetPackages,
-  pkgsBuildHost,
+  channel,
+  dir ? ./. + ("/" + channel),
   buildDotnetSdk,
-}:
-
-assert bootstrapSdkFile != null || bootstrapSdk != null;
+  ...
+}@attrs:
 
 let
-  inherit (lib.importJSON releaseInfoFile)
-    tarballHash
-    artifactsUrl
-    artifactsHash
-    ;
+  binary =
+    let
+      path = dir + "/releases.nix";
+    in
+    if lib.pathExists path then buildDotnetSdk path else { };
 
-  mkPackages = callPackage ./packages.nix;
+  withVMR = lib.pathExists (dir + "/release.json");
 
-  vmr =
-    if bootstrapSdk != null then
-      callPackage ./vmr.nix {
-        inherit
-          releaseManifestFile
-          tarballHash
-          ;
-        bootstrapSdk = bootstrapSdk.unwrapped;
-        hasRuntime = false;
-      }
-    else
-      callPackage ./stage1.nix {
-        inherit
-          releaseManifestFile
-          tarballHash
-          depsFile
-          ;
-        bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.unwrapped.overrideAttrs (old: {
-          passthru = old.passthru or { } // {
-            artifacts = stdenvNoCC.mkDerivation {
-              name = lib.nameFromURL artifactsUrl ".tar.gz";
+  sourcePackages = lib.optionalAttrs withVMR (callPackage ./source (attrs // { inherit binary; }));
 
-              src = fetchurl {
-                url = artifactsUrl;
-                hash = artifactsHash;
-              };
+  pkgs =
+    lib.optionalAttrs config.allowAliases binary
+    // lib.mapAttrs' (k: v: lib.nameValuePair "${k}-bin" v) binary
+    // sourcePackages;
 
-              sourceRoot = ".";
-
-              installPhase = ''
-                mkdir -p $out
-                cp -r * $out/
-              '';
-            };
-          };
-        });
-      };
-
-  pkgs = mkPackages {
-    inherit vmr fallbackTargetPackages;
-  };
-
+  suffix = lib.replaceStrings [ "." ] [ "_" ] channel;
+  sdkAttr = "sdk_${suffix}" + lib.optionalString (!withVMR) "-bin";
 in
 pkgs
 // {
-  vmr = pkgs.vmr.overrideAttrs (old: {
-    passthru = old.passthru // {
-      updateScript = pkgsBuildHost.callPackage ./update.nix {
-        inherit
-          releaseManifestFile
-          releaseInfoFile
-          bootstrapSdkFile
-          allowPrerelease
-          ;
-      };
+  ${sdkAttr} = pkgs.${sdkAttr}.overrideAttrs (prev: {
+    passthru = prev.passthru or { } // {
+      updateScript = [
+        ./update.sh
+        channel
+      ];
     };
   });
 }

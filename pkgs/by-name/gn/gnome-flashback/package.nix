@@ -32,7 +32,6 @@
   libxxf86vm,
   nixosTests,
   runCommand,
-  buildEnv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -20,18 +20,20 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "17.4.0";
+  version = "18.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-Xtgzz5Z0tkwr9EmiYs8Nt/MUTvJ8sysySMp8QJnr33A=";
+    hash = "sha256-2lz3TMI4/QoNVfnZga5Ro9rheixFpVJfNbvVLy0lnLA=";
   };
 
   postPatch = ''
-    test -f setup.py || mv setup/setup.publish.py setup.py
+    test -f setup.py || mv setup/setup.approvaltests.py setup.py
+
+    python3 setup/set_version.py '${version}'
 
     patchShebangs internal_documentation/scripts
   '';

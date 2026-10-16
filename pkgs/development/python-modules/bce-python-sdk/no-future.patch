@@ -59,10 +59,12 @@ diff --git a/baidubce/bce_response.py b/baidubce/bce_response.py
 index d55447b..1db49dd 100644
 --- a/baidubce/bce_response.py
 +++ b/baidubce/bce_response.py
-@@ -13,9 +13,6 @@
+@@ -13,11 +13,8 @@
  """
  This module provides a general response class for BCE services.
  """
+ import json
+ 
 -from future.utils import iteritems
 -from builtins import str
 -from builtins import bytes
@@ -343,6 +345,7 @@ index 54ca7b6..281de62 100644
      version=SDK_VERSION,
      install_requires=['pycryptodome>=3.8.0',
 -                      'future>=0.6.0',
-                       'six>=1.4.0'],
+                       'six>=1.4.0',
+                       'crc32c>=2.2.post0'],
      python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, <4',
      packages=['baidubce',

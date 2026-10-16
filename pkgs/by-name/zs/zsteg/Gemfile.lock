@@ -1,25 +1,27 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    forwardable (1.3.3)
-    iostruct (0.5.0)
-    prime (0.1.3)
+    forwardable (1.4.0)
+    iostruct (0.7.0)
+    prime (0.1.4)
       forwardable
       singleton
     rainbow (3.1.1)
     singleton (0.3.0)
-    zpng (0.4.5)
+    zpng (0.4.6)
+      iostruct (>= 0.7.0)
       rainbow (~> 3.1.1)
-    zsteg (0.2.13)
-      iostruct (>= 0.0.5)
+    zsteg (0.2.14)
+      iostruct (>= 0.7.0)
       prime
-      zpng (>= 0.4.5)
+      zpng (>= 0.4.6)
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   zsteg
 
 BUNDLED WITH
-   2.6.6
+   2.6.9

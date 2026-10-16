@@ -5,7 +5,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pylzma";
   version = "0.6.0";
   pyproject = true;
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   # After some discussion, it seemed most reasonable to keep it that way
   # xz, and uefi-firmware-parser also does this
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-OwCniSKNBaBvqZXNK0H/SpZXhKoZSKBthLPKa4cwQfA=";
   };
 
@@ -28,4 +28,4 @@ buildPythonPackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

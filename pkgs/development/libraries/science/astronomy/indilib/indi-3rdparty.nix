@@ -30,7 +30,7 @@
   ninja,
   nut,
   glib,
-  systemd,
+  systemdLibs,
   urjtag,
   gpsd,
   ffmpeg-headless,
@@ -41,13 +41,13 @@
 }:
 
 let
-  thirdparty_version = "2.1.9";
+  thirdparty_version = "2.2.4";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${thirdparty_version}";
-    hash = "sha256-zHcJDbi+xsI1xDnZTFmUbk4GNGD8WqZUzf3hfSCmvpU=";
+    hash = "sha256-knmu+ARLvbEQqRfwXYogYkfD8j5QCKy4V8YMIeEjMbU=";
   };
 
   buildIndi3rdParty =
@@ -77,7 +77,7 @@ let
           "-DRULES_INSTALL_DIR=lib/udev/rules.d"
           "-DINDI_DATA_DIR=share/indi/"
         ]
-        ++ lib.optional doCheck [
+        ++ lib.optionals doCheck [
           "-DINDI_BUILD_UNITTESTS=ON"
           "-DINDI_BUILD_INTEGTESTS=ON"
         ]
@@ -177,7 +177,6 @@ let
         "armv6l-linux"
         "armv7l-linux"
         "aarch64-linux"
-        "x86_64-darwin"
       ];
     };
   };
@@ -198,7 +197,6 @@ let
         "x86_64-linux"
         "armv6l-linux"
         "armv7l-linux"
-        "x86_64-darwin"
       ];
     };
   };
@@ -213,7 +211,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
-      systemd
+      systemdLibs
       libdc1394
     ];
     nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
@@ -241,7 +239,7 @@ let
     pname = "libfishcamp";
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace-fail "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt --replace-fail "/usr/lib/firmware" "lib/firmware"
     '';
 
     buildInputs = [
@@ -411,7 +409,7 @@ let
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
-      systemd
+      systemdLibs
     ];
     nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
     meta = {
@@ -426,7 +424,7 @@ let
     postPatch = ''
       sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
       substituteInPlace CMakeLists.txt \
-        --replace-fail "/lib/firmware" "lib/firmware"
+        --replace-fail "/usr/lib/firmware" "lib/firmware"
 
       substituteInPlace 85-qhyccd.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
@@ -451,7 +449,6 @@ let
         "armv6l-linux"
         "armv7l-linux"
         "aarch64-linux"
-        "x86_64-darwin"
       ];
     };
   };
@@ -487,7 +484,7 @@ let
 
     postPatch = ''
       sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
-      substituteInPlace CMakeLists.txt --replace-fail "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt --replace-fail "/usr/lib/firmware" "lib/firmware"
       substituteInPlace 51-sbig-debian.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
         --replace-fail "/lib/firmware" "$out/lib/firmware"
@@ -538,7 +535,6 @@ let
         "armv6l-linux"
         "armv7l-linux"
         "aarch64-linux"
-        "x86_64-darwin"
       ];
     };
   };
@@ -635,7 +631,7 @@ in
       libnova
     ];
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/usr/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 
@@ -745,8 +741,8 @@ in
 
     postPatch = ''
       substituteInPlace CMakeLists.txt \
-        --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d" \
-        --replace-fail "/lib/firmware" "lib/firmware"
+        --replace-fail "/usr/lib/udev/rules.d" "lib/udev/rules.d" \
+        --replace-fail "/usr/lib/firmware" "lib/firmware"
       substituteInPlace 99-meadedsi.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
         --replace-fail "/lib/firmware" "$out/lib/firmware"
@@ -979,7 +975,7 @@ in
     ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/usr/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 
@@ -1036,7 +1032,7 @@ in
     ];
 
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/usr/lib/udev/rules.d" "lib/udev/rules.d"
     '';
 
     meta.platforms = libqsi.meta.platforms;
@@ -1109,6 +1105,7 @@ in
     buildInputs = [
       cfitsio
       indilib
+      libusb1
       zlib
     ];
     propagatedBuildInputs = [ libsvbony ];
@@ -1124,7 +1121,7 @@ in
       libusb1
     ];
     postPatch = ''
-      substituteInPlace CMakeLists.txt --replace-fail "/lib/udev/rules.d" "lib/udev/rules.d"
+      substituteInPlace CMakeLists.txt --replace-fail "/usr/lib/udev/rules.d" "lib/udev/rules.d"
     '';
   };
 

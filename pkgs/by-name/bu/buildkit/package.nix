@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "buildkit";
-  version = "0.28.1";
+  version = "0.32.2";
 
   src = fetchFromGitHub {
     owner = "moby";
     repo = "buildkit";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tGn4TQZq1kcueuadwORRZbLTeJs79E7TFEwawfiFGsY=";
+    hash = "sha256-sRSFypb/CZiCISMumVTor9XI4KOCvBhY6UaNUk2Y4t8=";
   };
 
   vendorHash = null;

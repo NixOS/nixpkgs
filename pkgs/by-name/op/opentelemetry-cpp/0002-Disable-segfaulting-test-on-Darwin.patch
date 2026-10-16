@@ -1,10 +1,10 @@
 diff --git a/api/test/singleton/singleton_test.cc b/api/test/singleton/singleton_test.cc
-index 187e26f..ddbe29f 100644
+index e63e00c1..299af7a2 100644
 --- a/api/test/singleton/singleton_test.cc
 +++ b/api/test/singleton/singleton_test.cc
-@@ -306,7 +306,7 @@ void cleanup_otel()
-   trace_api::Provider::SetTracerProvider(provider);
- }
+@@ -360,7 +360,7 @@ static void cleanup_otel()
+ #  define RUN_FAILING_WINDOWS_TEST 1
+ #endif
  
 -TEST(SingletonTest, Uniqueness)
 +TEST(SingletonTest, DISABLED_Uniqueness)
@@ -12,5 +12,5 @@ index 187e26f..ddbe29f 100644
    do_something();
  
 -- 
-2.42.0
+2.54.0
 

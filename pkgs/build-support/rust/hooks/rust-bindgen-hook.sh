@@ -6,7 +6,7 @@
 
 populateBindgenEnv () {
     export LIBCLANG_PATH=@libclang@/lib
-    BINDGEN_EXTRA_CLANG_ARGS="$(< @clang@/nix-support/cc-cflags) $(< @clang@/nix-support/libc-cflags) $(< @clang@/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
+    BINDGEN_EXTRA_CLANG_ARGS="@targetFlag@ $(< @clang@/nix-support/cc-cflags) $(< @clang@/nix-support/libc-cflags) $(< @clang@/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
     export BINDGEN_EXTRA_CLANG_ARGS
 }
 

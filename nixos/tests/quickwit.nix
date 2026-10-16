@@ -75,18 +75,18 @@ in
     )
 
     with subtest("verify UI installed"):
-      machine.succeed("curl -sSf http://127.0.0.1:7280/ui/")
+      server.succeed("curl -sSf http://127.0.0.1:7280/ui/")
 
     with subtest("injest and query data"):
       import json
 
       # Test CLI ingestion
-      print(machine.succeed('${pkgs.quickwit}/bin/quickwit index create --index-config ${pkgs.writeText "index.yaml" index_yaml}'))
+      print(server.succeed('${pkgs.quickwit}/bin/quickwit index create --index-config ${pkgs.writeText "index.yaml" index_yaml}'))
       # Important to use `--wait`, otherwise the queries below race with index processing.
-      print(machine.succeed('${pkgs.quickwit}/bin/quickwit index ingest --index example_server_logs --input-path ${pkgs.writeText "exampleDocs.json" exampleDocs} --wait'))
+      print(server.succeed('${pkgs.quickwit}/bin/quickwit index ingest --index example_server_logs --input-path ${pkgs.writeText "exampleDocs.json" exampleDocs} --wait'))
 
       # Test CLI query
-      cli_query_output = machine.succeed('${pkgs.quickwit}/bin/quickwit index search --index example_server_logs --query "exception"')
+      cli_query_output = server.succeed('${pkgs.quickwit}/bin/quickwit index search --index example_server_logs --query "exception"')
       print(cli_query_output)
 
       # Assert query result is as expected.
@@ -94,7 +94,7 @@ in
       assert num_hits == 3, f"cli_query_output contains unexpected number of results: {num_hits}"
 
       # Test API query
-      api_query_output = machine.succeed('curl --fail http://127.0.0.1:7280/api/v1/example_server_logs/search?query=exception')
+      api_query_output = server.succeed('curl --fail http://127.0.0.1:7280/api/v1/example_server_logs/search?query=exception')
       print(api_query_output)
 
     quickwit.log(quickwit.succeed(

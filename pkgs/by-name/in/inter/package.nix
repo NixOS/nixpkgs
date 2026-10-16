@@ -2,26 +2,26 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
-
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "inter";
   version = "4.1";
 
   src = fetchzip {
-    url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+    url = "https://github.com/rsms/inter/releases/download/v${finalAttrs.version}/Inter-${finalAttrs.version}.zip";
     stripRoot = false;
     hash = "sha256-5vdKKvHAeZi6igrfpbOdhZlDX2/5+UvzlnCQV6DdqoQ=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype
-    cp Inter.ttc InterVariable*.ttf $out/share/fonts/truetype
-
-    runHook postInstall
+  nativeBuildInputs = [ installFonts ];
+  postPatch = ''
+    rm extras/ -rf
   '';
+
+  dontInstallWebfonts = true;
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://rsms.me/inter/";
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ demize ];
   };
-}
+})

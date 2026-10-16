@@ -2,13 +2,14 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
+  fetchpatch2,
   versionCheckHook,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "sigsum";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitLab {
     domain = "git.glasklar.is";
@@ -16,15 +17,31 @@ buildGoModule (finalAttrs: {
     owner = "core";
     repo = "sigsum-go";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+opDvVUG2OVJ/V1lHPXl2rxk4CCaXxc+4xBguvGqO1o=";
+    hash = "sha256-ZiU5eEI2pKknpjc3HU9EqQu6u1ZD/N7sOD0DyTma0/g=";
   };
+
+  # FIXME: remove in next release
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/sigsum/sigsum-go/commit/f96375480607612154814e0442b3428696cf35f5.patch?full_index=1";
+      hash = "sha256-MR151ZVfrYniyDGzVonLNKcBAHEflAgjULBfp+vhFvg=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/sigsum/sigsum-go/commit/bbf212c19dfc9af66f102f3932381e9476428966.patch?full_index=1";
+      hash = "sha256-fPMIdcH22hVMKiARPQSJ3W/1q74LuALbaf9B5TtzD/o=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/sigsum/sigsum-go/commit/5e7b309d82a34d60872441573eb843c343bc43ba.patch?full_index=1";
+      hash = "sha256-yvKkeJxaGi353X+zlrbpLiYj/q34cuGcuVWn1ghab1s=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace internal/version/version.go \
       --replace-fail "info.Main.Version" '"${finalAttrs.version}"'
   '';
 
-  vendorHash = "sha256-s5IUDGA/8Qv6XhvqJG396EZt7HTaG/BMknPj8uYhVZc=";
+  vendorHash = "sha256-BaN9NslTvVyIp1Gi0N3UKdTXCd5opdL6Fb0AVoy9diM=";
 
   ldflags = [
     "-s"

@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "libtypec";
-    repo = pname;
-    rev = "${pname}-${version}";
+    repo = "libtypec";
+    rev = "libtypec-${version}";
     hash = "sha256-XkT0bgBjoJTAFa9NLZdzbJSpchiXxKjeu88PeT/AlPY=";
   };
 

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feh";
-  version = "3.11.3";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = "derf";
     repo = "feh";
     rev = finalAttrs.version;
-    hash = "sha256-7I/aqm8mE6B/FLmkirgybr6QUZKU6p0inlvj0rFH/lU=";
+    hash = "sha256-P3oak9wxsAsts8Is8rtl/WiVDiEu8pyVIR+i+bUH/8c=";
   };
 
   outputs = [
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    "VERSION=${finalAttrs.version}"
     "exif=1"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "verscmp=0"

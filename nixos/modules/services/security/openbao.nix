@@ -15,7 +15,7 @@ in
       enable = lib.mkEnableOption "OpenBao daemon";
 
       package = lib.mkPackageOption pkgs "openbao" {
-        example = "pkgs.openbao.override { withHsm = false; withUi = false; }";
+        example = "pkgs.openbao.override { withUi = false; }";
       };
 
       settings = lib.mkOption {
@@ -90,11 +90,48 @@ in
           Additional arguments given to OpenBao.
         '';
       };
+
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+        default = [ ];
+        example = lib.literalExpression "[ pkgs.openbaoPlugins.secrets-oauthapp ]";
+        description = ''
+          Plugins to register with OpenBao on startup, such as those in
+          `pkgs.openbaoPlugins`.
+
+          Enable mounts with `-plugin-version=latest` so they follow plugin
+          updates. Otherwise a mount pins the version that was used when
+          it was enabled and has to be tuned after every update.
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = lib.all (plugin: plugin ? pluginType && plugin ? pluginName) cfg.plugins;
+        message = "Every package in services.openbao.plugins must set passthru.pluginType and passthru.pluginName.";
+      }
+      {
+        assertion = lib.allUnique (map (plugin: "${plugin.pluginType}/${plugin.pluginName}") cfg.plugins);
+        message = "services.openbao.plugins contains more than one plugin with the same type and name.";
+      }
+    ];
+
     environment.systemPackages = [ cfg.package ];
+
+    services.openbao.settings = lib.mkIf (cfg.plugins != [ ]) {
+      plugin_directory = "/run/openbao/plugins";
+      plugin = lib.foldl' lib.recursiveUpdate { } (
+        map (plugin: {
+          ${plugin.pluginType}.${plugin.pluginName} = {
+            command = plugin.meta.mainProgram;
+            version = "v${plugin.version}";
+          };
+        }) cfg.plugins
+      );
+    };
 
     systemd.services.openbao = {
       description = "OpenBao - A tool for managing secrets";
@@ -121,15 +158,26 @@ in
         StateDirectory = "openbao";
         StateDirectoryMode = "0700";
         RuntimeDirectory = "openbao";
-        RuntimeDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0755";
+
+        # OpenBao refuses plugins that resolve to a path outside plugin_directory,
+        # so the binaries are bind-mounted into it rather than symlinked.
+        BindReadOnlyPaths = lib.mkIf (cfg.plugins != [ ]) (
+          map (
+            plugin: "${lib.getExe plugin}:${cfg.settings.plugin_directory}/${plugin.meta.mainProgram}"
+          ) cfg.plugins
+        );
+
+        DynamicUser = true;
+        User = "openbao";
+        Group = "openbao";
 
         CapabilityBoundingSet = "";
-        DynamicUser = true;
         LimitCORE = 0;
         LockPersonality = true;
         MemorySwapMax = 0;
         MemoryZSwapMax = 0;
-        PrivateUsers = true;
+        PrivateUsers = "identity";
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -152,6 +200,7 @@ in
           "@system-service"
           "@resources"
           "~@privileged"
+          "@chown"
         ];
         UMask = "0077";
       };

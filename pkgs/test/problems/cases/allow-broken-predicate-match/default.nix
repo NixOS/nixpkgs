@@ -5,7 +5,7 @@ let
     system = "x86_64-linux";
     overlays = [ ];
     config = {
-      allowBrokenPredicate = attrs: lib.getName attrs == "a";
+      problems.handlers.a.broken = "ignore";
     };
   };
 in

@@ -5,7 +5,7 @@
   haskell,
   removeReferencesTo,
   installShellFiles,
-  selectPandocCLI ? (p: p.pandoc-cli), # The version of pandoc-cli choosen from haskellPackages.
+  selectPandocCLI ? (p: p.pandoc-cli), # The version of pandoc-cli chosen from haskellPackages.
 }:
 
 let
@@ -15,8 +15,6 @@ let
 
 in
 (haskell.lib.compose.overrideCabal (drv: {
-  configureFlags = drv.configureFlags or [ ] ++ [ "-fembed_data_files" ];
-  buildDepends = drv.buildDepends or [ ] ++ [ pandoc-cli.scope.file-embed ];
   buildTools = (drv.buildTools or [ ]) ++ [
     removeReferencesTo
     installShellFiles

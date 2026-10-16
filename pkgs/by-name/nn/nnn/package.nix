@@ -28,13 +28,13 @@ assert withEmojis -> (!withIcons && !withNerdIcons);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
-  version = "5.2";
+  version = "5.3";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-u+88aDHfOZ6bSkg6ahS6eNZWj2QCwJXKW+8nHR99kic=";
+    hash = "sha256-l6/q3eFX/M4hvxOuKm31Xh+UBV+McvH09Sa7yK2/+W4=";
   };
 
   patches = [

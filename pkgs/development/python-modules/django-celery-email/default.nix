@@ -2,18 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   django,
   django-appconf,
   celery,
   pytest-django,
-  pytestCheckHook,
+  pytest,
   python,
 }:
 
 buildPythonPackage rec {
   pname = "django-celery-email";
   version = "3.0.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pmclanahan";
@@ -22,7 +23,9 @@ buildPythonPackage rec {
     hash = "sha256-LBavz5Nh2ObmIwLCem8nHvsuKgPwkzbS/OzFPmSje/M=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     django
     django-appconf
     celery
@@ -32,9 +35,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-django
-    pytestCheckHook
+    pytest
   ];
 
+  pytestFlags = [ "tests/tests.py" ];
+
+  # Don't use pytestCheckHook since tests need to override the django `EMAIL_BACKEND` which can only be done in python
   checkPhase = ''
     ${python.executable} runtests.py
   '';

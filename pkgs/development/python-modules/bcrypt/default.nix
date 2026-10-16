@@ -10,7 +10,7 @@
   pytestCheckHook,
   # for passthru.tests
   asyncssh,
-  django_4,
+  django,
   fastapi,
   paramiko,
   twisted,
@@ -57,7 +57,7 @@ buildPythonPackage rec {
   passthru.tests = {
     inherit
       asyncssh
-      django_4
+      django
       fastapi
       paramiko
       twisted

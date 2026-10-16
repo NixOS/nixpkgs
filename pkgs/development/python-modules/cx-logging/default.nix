@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -21,6 +22,13 @@ buildPythonPackage (finalAttrs: {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools>=70.1,<75" "setuptools"
+
+    echo '${finalAttrs.version}' > VERSION
+  ''
+  # The flag -soname isn't recognized by the linker on darwin. Only -install_name is valid.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace setup.py \
+      --replace-fail "-soname" "-install_name"
   '';
 
   build-system = [ setuptools ];
@@ -31,6 +39,7 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python and C interfaces for logging";
+    homepage = "https://github.com/anthony-tuininga/cx_Logging";
     changelog = "https://github.com/anthony-tuininga/cx_Logging/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sigmanificient ];

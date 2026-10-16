@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://launchpad.net/libdbusmenu-qt";
     description = "Provides a Qt implementation of the DBusMenu spec";
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
     inherit (libsForQt5.qtbase.meta) platforms;
     license = lib.licenses.lgpl2;
   };

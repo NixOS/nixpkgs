@@ -2,30 +2,33 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_40,
+  electron_44,
   fetchFromGitHub,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
+  _experimental-update-script-combinators,
+  writeShellApplication,
+  nix,
+  jq,
 }:
 
 let
-  electron = electron_40;
-  version = "2026.2.1";
+  electron = electron_44;
 in
 
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "appium-inspector";
-  inherit version;
+  version = "2026.9.2";
 
   src = fetchFromGitHub {
     owner = "appium";
     repo = "appium-inspector";
-    tag = "v${version}";
-    hash = "sha256-89u8MifBPh5AwaMFp+aGSzsiwp75Skca/t6OyDSzrGo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ePHLOHEXaigZwoCrZG18K7oYVeFEg3ZhZIKJJHyFQe8=";
   };
 
-  npmDepsHash = "sha256-mwNn7TllWCtr4sif9Wc3FDtK2Icu72/iI+IllhBswHQ=";
+  npmDepsHash = "sha256-MvDKtSx/1w3s8NjQczEzvxSE6SmJrWb5CUpPYhSX7Ts=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
@@ -75,15 +78,37 @@ buildNpmPackage {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (lib.getExe (writeShellApplication {
+      name = "${finalAttrs.pname}-electron-updater";
+      runtimeInputs = [
+        nix
+        jq
+      ];
+      runtimeEnv = {
+        PNAME = finalAttrs.pname;
+        PKG_FILE = toString ./package.nix;
+      };
+      text = ''
+        current_electron_version="$(grep -oP -m 1 "(?<=electron_)(\d+)" "$PKG_FILE")"
+        new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
+        new_electron_major="$(jq -r '.devDependencies.electron | split(".")[0] | tonumber' "$new_src/package.json")"
+        if (( current_electron_version >= new_electron_major )); then
+          exit 0
+        fi
+        sed -i -E "s/electron_$current_electron_version/electron_$new_electron_major/g" "$PKG_FILE"
+      '';
+    }))
+  ];
 
   meta = {
     description = "GUI inspector for the appium UI automation tool";
     homepage = "https://appium.github.io/appium-inspector";
-    changelog = "https://github.com/appium/appium-inspector/releases/tag/v${version}";
+    changelog = "https://github.com/appium/appium-inspector/releases/tag/v${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "appium-inspector";
     maintainers = with lib.maintainers; [ marie ];
     platforms = lib.platforms.linux;
   };
-}
+})

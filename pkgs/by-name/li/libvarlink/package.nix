@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvarlink";
-  version = "24";
+  version = "24.0.1";
 
   src = fetchFromGitHub {
     owner = "varlink";
     repo = "libvarlink";
-    rev = finalAttrs.version;
-    sha256 = "sha256-/BWbbDFLxa1da5ewrt3DG/+096dZ+s6p8VdcRGDiEiU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-MO5wfmPAm90AD+Y+vYqZynB4A18/XtJ1cys+lIIwbTY=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'assert(setlocale(LC_NUMERIC, "de_DE.UTF-8") != 0);' ""
 
     patchShebangs lib/test-symbols.sh varlink-wrapper.py
+
+    # They forgot to update the version
+    substituteInPlace meson.build \
+      --replace-fail "24.0.0" "${finalAttrs.version}"
   '';
 
   doCheck = true;

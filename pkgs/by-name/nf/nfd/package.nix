@@ -8,10 +8,10 @@
   openssl,
   pkg-config,
   sphinx,
-  systemd,
+  systemdLibs,
   wafHook,
   websocketpp,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
   withWebSocket ? true,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HbKPO3gwQWOZf4QZE+N7tAiqsNl1GrcwE4EUGjWmf5s=";
   };
 
-  prePatch = lib.optional withWebSocket ''
+  prePatch = lib.optionalString withWebSocket ''
     ln -s ${websocketpp}/include/websocketpp websocketpp
   '';
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optional withWebSocket websocketpp
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemdLibs;
   wafConfigureFlags = [
     "--boost-includes=${boost186.dev}/include"
     "--boost-libs=${boost186.out}/lib"

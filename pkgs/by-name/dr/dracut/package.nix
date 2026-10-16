@@ -2,10 +2,11 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   gitUpdater,
   makeBinaryWrapper,
   pkg-config,
-  asciidoc,
+  asciidoctor,
   libxslt,
   docbook_xsl,
   bash,
@@ -21,7 +22,7 @@
   gzip,
   lz4,
   lzop,
-  squashfsTools,
+  squashfs-tools,
   util-linux,
   xz,
   zstd,
@@ -29,16 +30,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dracut";
-  version = "059";
+  version = "112";
 
   src = fetchFromGitHub {
-    owner = "dracutdevs";
+    owner = "dracut-ng";
     repo = "dracut";
-    rev = finalAttrs.version;
-    hash = "sha256-zSyC2SnSQkmS/mDpBXG2DtVVanRRI9COKQJqYZZCPJM=";
+    tag = finalAttrs.version;
+    hash = "sha256-aER+3EbJP3HCBuei+oLHzt/j90fpWj5NgyhMTx3V/YQ=";
   };
 
+  # Remove with the first release containing c4d555716d569038ca38365741e94ee07908f261.
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-15816.patch";
+      url = "https://github.com/dracut-ng/dracut/commit/c4d555716d569038ca38365741e94ee07908f261.patch?full_index=1";
+      hash = "sha256-UpeoiMyQgvwMNOjX39v0IQSIlwvM+MczyPKPRWmT6vQ=";
+    })
+  ];
+
   strictDeps = true;
+  __structuredAttrs = true;
 
   buildInputs = [
     bash
@@ -48,16 +59,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
-    asciidoc
+    asciidoctor
     libxslt
     docbook_xsl
   ];
 
   postPatch = ''
     substituteInPlace dracut.sh \
-      --replace 'dracutbasedir="$dracutsysrootdir"/usr/lib/dracut' 'dracutbasedir="$dracutsysrootdir"'"$out/lib/dracut"
+      --replace-fail "dracutbasedir=\"$""{dracutsysrootdir-}\"/usr/lib/dracut" \
+        "if [ -n \"$""{dracutsysrootdir:-}\" ]; then dracutbasedir=\"$""{dracutsysrootdir}/usr/lib/dracut\" ; else dracutbasedir=\"$out/lib/dracut\" ; fi"
     substituteInPlace lsinitrd.sh \
-      --replace 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
+      --replace-fail 'dracutbasedir=/usr/lib/dracut' "dracutbasedir=$out/lib/dracut"
 
     echo 'DRACUT_VERSION=${finalAttrs.version}' >dracut-version.sh
   '';
@@ -99,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
         gzip
         lz4
         lzop
-        squashfsTools
+        squashfs-tools
         util-linux
         xz
         zstd
@@ -110,10 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = gitUpdater { };
 
   meta = {
-    homepage = "https://github.com/dracutdevs/dracut/wiki";
+    homepage = "https://dracut-ng.github.io/";
+    changelog = "https://github.com/dracut-ng/dracut/blob/${finalAttrs.src.tag}/NEWS.md";
     description = "Event driven initramfs infrastructure";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.linux;
   };
 })

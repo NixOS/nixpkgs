@@ -1,6 +1,7 @@
 {
   mkDerivation,
   include,
+  libcompiler_rt,
   csu,
 }:
 
@@ -25,6 +26,7 @@ mkDerivation {
   buildInputs = [
     include
     csu
+    libcompiler_rt
   ];
 
   preBuild = ''

@@ -10,13 +10,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubevirt";
-  version = "1.7.2";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Bx2DzuKNcDkFnkyiEay9WosM6qZ4vnDLrz2NwNn5J3E=";
+    hash = "sha256-4MQtONb8opLDBLtGr+5oDrOQkkK1q4RlMXDcqyilarM=";
   };
 
   vendorHash = null;

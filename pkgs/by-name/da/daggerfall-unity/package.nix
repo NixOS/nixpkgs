@@ -41,10 +41,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "1.1.1";
+  zipVersion = "1.1.1";
+  version = "${finalAttrs.zipVersion}-cve-2025";
 
   src = fetchzip {
-    url = "https://github.com/Interkarma/daggerfall-unity/releases/download/v${finalAttrs.version}/dfu_linux_64bit-v${finalAttrs.version}.zip";
+    url = "https://github.com/Interkarma/daggerfall-unity/releases/download/v${finalAttrs.version}/dfu_linux_64bit-v${finalAttrs.zipVersion}.zip";
     hash = "sha256-JuhhVLpREM9e9UtlDttvFUhHWpH7Sh79OEo1OM4ggKA=";
     stripRoot = false;
   };

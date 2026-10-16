@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "http://www.t2-project.org/packages/bsd-games.html";
+    homepage = "https://t2linux.com/packages/bsd-games.html";
     description = "Ports of all the games from NetBSD-current that are free";
     license = lib.licenses.free;
     maintainers = with lib.maintainers; [ viric ];

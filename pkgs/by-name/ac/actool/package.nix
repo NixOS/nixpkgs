@@ -1,35 +1,26 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
+  rustPlatform,
   icu,
 }:
-python3Packages.buildPythonApplication (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "actool";
-  version = "1.3.0";
-  pyproject = true;
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "viraptor";
     repo = "actool";
     tag = finalAttrs.version;
-    hash = "sha256-8v2P6Z1ZOP65M30+7dTtfXvD0dvaKYSLA9aaP2uzA7E=";
+    hash = "sha256-dDTa6J2by6uvg4gecwCcBIRGesZ1F0gAXSLr+6DYjGc=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
-
-  dependencies = with python3Packages; [
-    pillow
-    liblzfse
-    icu
-  ];
+  cargoHash = "sha256-Q0fSZNXw/71kMemYzwVsBRFcAMNl4ItKu56YdB0AAdM=";
 
   meta = {
     description = "Apple's actool reimplementation";
     homepage = "https://github.com/viraptor/actool";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     mainProgram = "actool";
     maintainers = [ lib.maintainers.viraptor ];
   };

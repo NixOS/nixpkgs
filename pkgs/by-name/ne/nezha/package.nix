@@ -1,12 +1,13 @@
 {
   lib,
-  buildGo126Module,
+  buildGoModule,
   fetchFromGitHub,
   go-swag,
   versionCheckHook,
   dbip-country-lite,
   formats,
   nix-update-script,
+  nixosTests,
   nezha-theme-admin,
   nezha-theme-user,
   withThemes ? [ ],
@@ -46,15 +47,15 @@ let
     in
     (formats.yaml { }).generate "frontend-templates.yaml" (officialThemes ++ communityThemes);
 in
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "nezha";
-  version = "2.0.5";
+  version = "2.3.18";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g5mXt0NfRFezLmQ27FAE+wU+a+sSHlCzx2oh/z1Xz+I=";
+    hash = "sha256-tv9JDy6dI23tGZF9hEnA6tbXz0/SQlHUFKpQ6VEhtXk=";
   };
 
   proxyVendor = true;
@@ -94,13 +95,14 @@ buildGo126Module (finalAttrs: {
     GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d cmd/dashboard -g main.go -o cmd/dashboard/docs
   '';
 
-  vendorHash = "sha256-k1Xcmsx1QnkDCmSijtdG+rB34L6d1AbNLuU14zWTDhY=";
+  vendorHash = "sha256-NpGdVymENUkxW1N3BQGdVPGbp/snMOf22khQ6xEsNuk=";
 
   ldflags = [
     "-s"
     "-X github.com/nezhahq/nezha/service/singleton.Version=${finalAttrs.version}"
   ];
 
+  __darwinAllowLocalNetworking = true; # TestOptionalAuth_PATWithoutScopeIsDenied
   checkFlags = "-skip=^TestSplitDomainSOA$";
 
   postInstall = ''
@@ -113,6 +115,9 @@ buildGo126Module (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) nezha;
+    };
   };
 
   meta = {

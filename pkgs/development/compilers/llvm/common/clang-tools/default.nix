@@ -3,6 +3,7 @@
   stdenv,
   runCommand,
   writeText,
+  bashNonInteractive,
   clang-unwrapped,
   clang,
   libcxxClang,
@@ -16,7 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "clang-tools";
   version = lib.getVersion clang-unwrapped;
   dontUnpack = true;
-  clang = if enableLibcxx then libcxxClang else clang;
+
+  strictDeps = true;
+  __structuredAttrs = true;
+
+  buildInputs = [ bashNonInteractive ];
 
   installPhase = ''
     runHook preInstall
@@ -38,7 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
       fi
 
       cp $toolPath $out/bin/$toolName-unwrapped
-      substituteAll ${./wrapper} $out/bin/$toolName
+      substitute ${./wrapper} $out/bin/$toolName \
+        --replace-fail "@clang@" "${if enableLibcxx then libcxxClang else clang}" \
+        --replace-fail "@out@" "$out"
       chmod +x $out/bin/$toolName
     done
 
@@ -59,9 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests =
     let
       src = writeText "main.cpp" ''
+        #include <assert.h>
         #include <iostream>
 
         int main() {
+          assert(true);
           std::cout << "Hi!";
         }
       '';
@@ -70,6 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     {
       smokeOk = runCommand "clang-tools-test-smoke-ok" { } ''
         ${finalAttrs.finalPackage}/bin/clangd  --check=${src}
+        touch $out
+      '';
+      smokeOkClangTidy = runCommand "clang-tidy-test-smoke-ok" { } ''
+        ${finalAttrs.finalPackage}/bin/clang-tidy ${src}
         touch $out
       '';
       smokeErr = runCommand "clang-tools-test-smoke-err" { } ''

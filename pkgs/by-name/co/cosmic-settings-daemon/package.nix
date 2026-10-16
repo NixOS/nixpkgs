@@ -3,12 +3,15 @@
   fetchFromGitHub,
   stdenv,
   rustPlatform,
-  pop-gtk-theme,
+  makeBinaryWrapper,
   adw-gtk3,
   pkg-config,
   libpulseaudio,
+  pipewire,
   libinput,
   udev,
+  libxkbcommon,
+  wayland,
   openssl,
   nixosTests,
   nix-update-script,
@@ -16,39 +19,40 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-settings-daemon";
-  version = "1.0.8";
+  version = "1.9.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-settings-daemon";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-np1syOfFqL6eZpnlwNb8WOXB0oqSkxIshX0JiyDlN1A=";
+    hash = "sha256-0xacJ7NivwME4w079Tu+Jdm2CTmnSp0cPpviAVs4yQU=";
   };
 
-  cargoPatches = [
-    # The lockfile references two different revisions of the same internal repository dbus-settings-bindings,
-    # which likely is unintentional and currently causing issues with fetchCargoVendor.
-    # Upstream PR: https://github.com/pop-os/cosmic-settings-daemon/pull/139
-    ./dedup-dbus-settings-bindings.patch
-  ];
-
   postPatch = ''
-    substituteInPlace src/battery.rs \
-      --replace-fail '/usr/share/sounds/Pop/' '${pop-gtk-theme}/share/sounds/Pop/'
     substituteInPlace src/theme.rs \
       --replace-fail '/usr/share/themes/adw-gtk3' '${adw-gtk3}/share/themes/adw-gtk3'
   '';
 
-  cargoHash = "sha256-r9ZL3eNvoCWHFfxzSrETewPXIo+aGebWzBk19ra4AXY=";
+  cargoHash = "sha256-ba3JKWTC5f0DSIILayUFmQQfA3oHaq477AzL3qo3CDE=";
 
-  nativeBuildInputs = [ pkg-config ];
+  separateDebugInfo = true;
+  __structuredAttrs = true;
+
+  nativeBuildInputs = [
+    pkg-config
+    rustPlatform.bindgenHook
+    makeBinaryWrapper
+  ];
 
   buildInputs = [
     libinput
     libpulseaudio
     openssl
     udev
+    pipewire
+    libxkbcommon
+    wayland
   ];
 
   makeFlags = [
@@ -57,6 +61,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   dontCargoInstall = true;
+
+  postFixup = ''
+    wrapProgram $out/bin/cosmic-settings-daemon \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          wayland
+          libxkbcommon
+        ]
+      }
+  '';
 
   passthru = {
     tests = {

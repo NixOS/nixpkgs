@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pyprojectVersionPatchHook,
   pytestCheckHook,
   setuptools,
   simpleeval,
@@ -10,17 +11,21 @@
 
 buildPythonPackage rec {
   pname = "pycasbin";
-  version = "2.7.1";
+  version = "2.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "casbin";
     repo = "pycasbin";
     tag = "v${version}";
-    hash = "sha256-UYl+n0quHOfC0lTAdLi7EbrvwcGa8Gzh+1ofc38rPx8=";
+    hash = "sha256-jK6zmT5trj6qBcS6edXPmK8eHfqw58seraswEQQzhZ0=";
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     simpleeval

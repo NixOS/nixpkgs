@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libraqm";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "HOST-Oman";
     repo = "libraqm";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-8tCMxhRhqbrpry4ktHYQc9eAH49W4Wo39TbIVgjVF5g=";
+    sha256 = "sha256-3wE2Xr07kFMDw5j6cWwv1cutL2bg7Ia7CdkAx4ysa5A=";
   };
 
   buildInputs = [

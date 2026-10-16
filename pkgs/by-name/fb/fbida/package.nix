@@ -1,91 +1,95 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  libGL,
-  libjpeg,
-  libexif,
-  giflib,
-  libtiff,
-  libpng,
-  libwebp,
-  libdrm,
+  fetchFromGitLab,
+  hexdump,
+  meson,
+  ninja,
+  perl,
   pkg-config,
-  freetype,
-  fontconfig,
-  which,
-  imagemagick,
-  curl,
-  sane-backends,
+  giflib,
+  libdrm,
+  libexif,
+  libiconvReal,
+  libinput,
+  libtsm,
+  libwebp,
+  libxkbcommon,
   libxpm,
-  libepoxy,
+  libxt,
+  motif,
   pixman,
   poppler,
-  libgbm,
-  lirc,
+  udev,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbida";
-  version = "2.14";
+  version = "2.15-1";
 
-  src = fetchurl {
-    url = "http://dl.bytesex.org/releases/fbida/fbida-${finalAttrs.version}.tar.gz";
-    sha256 = "0f242mix20rgsqz1llibhsz4r2pbvx6k32rmky0zjvnbaqaw1dwm";
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  src = fetchFromGitLab {
+    owner = "kraxel";
+    repo = "fbida";
+    tag = "fbida-${finalAttrs.version}";
+    hash = "sha256-iwJkFynhz3SJ8MRjUsKtQAjPCBvST1ezsxTw2ZCXBag=";
   };
 
   patches = [
-    # Upstream patch to fix build on -fno-common toolchains.
-    (fetchurl {
-      name = "no-common.patch";
-      url = "https://git.kraxel.org/cgit/fbida/patch/?id=1bb8a8aa29845378903f3c690e17c0867c820da2";
-      sha256 = "0n5vqbp8wd87q60zfwdf22jirggzngypc02ha34gsj1rd6pvwahi";
-    })
     # Prevents using function declaration without explicit parameters.
     ./function-parameters.patch
   ];
 
   nativeBuildInputs = [
+    hexdump
+    meson
+    ninja
+    perl
     pkg-config
-    which
   ];
+
   buildInputs = [
-    libGL
-    libexif
-    libjpeg
-    libpng
     giflib
-    freetype
-    fontconfig
-    libtiff
-    libwebp
-    imagemagick
-    curl
-    sane-backends
     libdrm
+    libexif
+    libiconvReal
+    libinput
+    libtsm
+    libwebp
+    libxkbcommon
     libxpm
-    libepoxy
+    libxt
+    motif
     pixman
     poppler
-    lirc
-    libgbm
+    udev
   ];
+
+  patchPhase = ''
+    runHook prePatch
+
+    patchShebangs scripts/*.pl
+    patchShebangs scripts/*.sh
+
+    sed -i -E \
+      -e '/^jpeg_run[[:space:]]*=.*$/d' \
+      -e "/^jpeg_ver[[:space:]]*=.*$/c\\jpeg_ver = '62'" \
+      meson.build
+
+    runHook postPatch
+  '';
 
   makeFlags = [
-    "prefix=$(out)"
-    "verbose=yes"
-    "STRIP="
-    "JPEG_VER=62"
+    "HOST=nix"
   ];
-
-  postPatch = ''
-    sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile
-    sed -e 's@$(HAVE_LINUX_FB_H)@yes@' -i GNUmakefile
-  '';
 
   meta = {
     description = "Image viewing and manipulation programs including fbi, fbgs, ida, exiftran and thumbnail.cgi";
     homepage = "https://www.kraxel.org/blog/linux/fbida/";
+    downloadPage = "https://gitlab.com/kraxel/fbida/";
+    changelog = "https://gitlab.com/kraxel/fbida/-/blob/${finalAttrs.src.tag}/Changes?ref_type=tags";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.linux;

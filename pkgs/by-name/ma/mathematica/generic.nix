@@ -3,8 +3,6 @@
   autoPatchelfHook,
   lib,
   makeWrapper,
-  requireFile,
-  runCommand,
   stdenv,
   symlinkJoin,
   # arguments from default.nix
@@ -91,8 +89,12 @@ stdenv.mkDerivation {
     meta
     pname
     src
-    version
     ;
+
+  version =
+    version # a comment to trick nixfmt
+    + lib.optionalString cudaSupport "-cuda"
+    + lib.optionalString (lang != "en") "-${lang}";
 
   nativeBuildInputs = [
     autoPatchelfHook

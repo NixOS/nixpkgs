@@ -1,39 +1,57 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
   cython,
-  fetchPypi,
-  fontconfig,
-  gdal,
+  setuptools-scm,
+
+  # nativeBuildInputs
   geos,
+  proj,
+
+  # dependencies
   matplotlib,
   numpy,
-  owslib,
-  pillow,
-  proj,
   pyproj,
   pyshp,
+  shapely,
+
+  # optional-dependencies
+  # ows
+  owslib,
+  pillow,
+  # plotting
+  gdal,
+  scipy,
+
+  # tests
+  fontconfig,
   pytest-mpl,
   pytestCheckHook,
-  scipy,
-  setuptools-scm,
-  shapely,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cartopy";
-  version = "0.25.0";
+  version = "0.26.0";
   pyproject = true;
+  __structuredAttrs = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VfGjkOXz8HWyIcfZH7ECWK2XjbeGx5MOugbrRdKHU/4=";
+  src = fetchFromGitHub {
+    owner = "SciTools";
+    repo = "cartopy";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oOLcCMBKJNfOCqIdjGG0vB/7rJf3mw+t4HZ60RuiXk8=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    cython
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
-    cython
     geos # for geos-config
     proj
   ];
@@ -66,12 +84,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-    export HOME=$TMPDIR
   '';
 
   pytestFlags = [
@@ -84,17 +102,13 @@ buildPythonPackage rec {
     "natural_earth"
   ];
 
-  disabledTests = [
-    "test_gridliner_constrained_adjust_datalim"
-    "test_gridliner_labels_bbox_style"
-  ];
-
   meta = {
     description = "Process geospatial data to create maps and perform analyses";
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
+    changelog = "https://github.com/SciTools/cartopy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "feature_download";
   };
-}
+})

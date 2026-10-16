@@ -1,5 +1,5 @@
 {
-  buildGo126Module,
+  buildGoModule,
   fetchFromCodeberg,
   lib,
   jq,
@@ -9,15 +9,15 @@
   nix-update-script,
 }:
 
-buildGo126Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "ijq";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromCodeberg {
     owner = "gpanders";
     repo = "ijq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-U4UKhWI/xd7+rLa350oIFlCqbiMSZe3ztPFR0uierOo=";
+    hash = "sha256-iZkDGmWmpuVNAY6HfyhcC70K2DMUb0sUBbt9wxgqHwU=";
   };
 
   vendorHash = "sha256-aU/0CIbI49OwgY6ioT50uPxld/rHAve3+KoILgPpWSQ=";

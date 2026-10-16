@@ -1,35 +1,30 @@
 {
   lib,
   rustPlatform,
-  fetchFromGitHub,
+  fetchCrate,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fontc";
-  version = "0.3.0";
+  version = "0.6.0";
 
-  src = fetchFromGitHub {
-    owner = "googlefonts";
-    repo = "fontc";
-    tag = "fontc-v${finalAttrs.version}";
-    hash = "sha256-Zr2nJRNY1vLGhVOGC3KSWbd4cQReO/F8Wgzx3y/qPFc=";
+  src = fetchCrate {
+    inherit (finalAttrs) pname version;
+    hash = "sha256-TjbhVkhoIoyp6A33v/QVaNLoHxB5whT/gOlehQTUKxM=";
   };
-  buildAndTestSubdir = "fontc";
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tidy-sys-0.8.2" = "sha256-Okt+mqakdwm0OlD4UXBtQIbO+Wmlk6jTMWi9Q5Y1M2o=";
-    };
-  };
+  cargoHash = "sha256-FLvEgIFgLE++59j5LeCRC4ptgRhAiDF7hani4Yh8kn0=";
+
+  # skip `cargo test` because source code from crates.io doesn't include necessary resources for testing
+  doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Wherein we pursue oxidizing fontmake";
     homepage = "https://github.com/googlefonts/fontc";
-    changelog = "https://github.com/googlefonts/fontc/releases/tag/${finalAttrs.src.tag}";
+    changelog = "https://github.com/googlefonts/fontc/releases/tag/fontc-v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ shiphan ];
     mainProgram = "fontc";

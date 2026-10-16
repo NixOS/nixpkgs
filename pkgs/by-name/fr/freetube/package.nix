@@ -2,32 +2,38 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  fetchYarnDeps,
+  fetchPnpmDeps,
   replaceVars,
   makeDesktopItem,
 
   nodejs,
-  yarnConfigHook,
-  yarnBuildHook,
+  pnpmConfigHook,
+  pnpmBuildHook,
+  pnpm_10,
   makeShellWrapper,
   copyDesktopItems,
-  electron,
-
+  darwin,
+  electron_42,
   nixosTests,
 }:
 let
   description = "Open Source YouTube app for privacy";
+  pnpm = pnpm_10;
+  electron = electron_42;
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "freetube";
-  version = "0.23.15";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "FreeTubeApp";
     repo = "FreeTube";
     tag = "v${finalAttrs.version}-beta";
-    hash = "sha256-tYRvR75qbJwt6U4KzT9jrJjO5UznpoALqhUTDkeUlzI=";
+    hash = "sha256-eaf10W8dBMJDlqOFd57hsqQqRcBOYAMavLrfmkuRbSw=";
   };
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   # Darwin requires writable Electron dist
   postUnpack =
@@ -45,20 +51,26 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     (replaceVars ./patch-build-script.patch {
       electron-version = electron.version;
     })
-    ./darwin-targets.patch
+    ./targets.patch
   ];
 
-  yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-sxDlPB3CWbFAm3WZ6AlwuVu/4UFR9Stl3q0wpkUXPPU=";
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs) pname version src;
+    inherit pnpm;
+    fetcherVersion = 4;
+    hash = "sha256-rsgDxK6X2EzgPwIb9A9I+STkKI882i8jDuL4pO5kJHU=";
   };
 
   nativeBuildInputs = [
     nodejs
-    yarnConfigHook
-    yarnBuildHook
+    pnpmConfigHook
+    pnpmBuildHook
+    pnpm
     makeShellWrapper
     copyDesktopItems
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    darwin.autoSignDarwinBinariesHook
   ];
 
   installPhase = ''
@@ -70,7 +82,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper ${lib.getExe electron} $out/bin/freetube \
       --add-flags "$out/share/freetube/resources/app.asar" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     install -D _icons/icon.svg $out/share/icons/hicolor/scalable/apps/freetube.svg
   ''

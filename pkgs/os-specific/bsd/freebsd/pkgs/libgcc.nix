@@ -1,4 +1,6 @@
 {
+  lib,
+  stdenv,
   mkDerivation,
   include,
   libcMinimal,
@@ -30,6 +32,10 @@ mkDerivation {
 
   preBuild = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -B${csu}/lib"
+  ''
+  # Undefined symbols in the version script related to arm-optimized-routines
+  + lib.optionalString (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS --undefined-version"
   '';
 
   postBuild = ''

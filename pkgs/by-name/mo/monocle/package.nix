@@ -3,32 +3,27 @@
   rustPlatform,
   fetchFromGitHub,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "1.2.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ha9Q7FkEqoVi0SqmLfXG6ewexN+ad/RNfS4l4/QPo0o=";
+    hash = "sha256-Z+0YKohmgSNnGtw6yDTrLsx4Q5LFOOyIUt0ji0x18BQ=";
   };
 
-  cargoHash = "sha256-jI0uAXjj/GEgNtV6Pm/rpZJ0avVcnnBPnHZFmtxg/Zc=";
+  cargoHash = "sha256-h/FWi+LmGObU6FEOC0yNRhN8wQS6UzYN7Gxe9YO8fos=";
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   # require internet access
   checkFlags = map (t: "--skip=${t}") [
-    "datasets::as2org::tests::test_crawling"
-    "datasets::ip::tests::test_fetch_ip_info"
-    "datasets::rpki::validator::tests::test_bgp"
-    "datasets::rpki::validator::tests::test_list_asn"
-    "datasets::rpki::validator::tests::test_list_prefix"
-    "datasets::rpki::validator::tests::test_validation"
-    "filters::search::tests::test_build_broker_with_filters"
-    "filters::search::tests::test_pagination_logic"
     "lens::country::tests::test_all"
     "lens::country::tests::test_lookup_by_code"
     "lens::country::tests::test_lookup_by_name"
@@ -37,7 +32,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "lens::ip::tests::test_fetch_ip_info"
     "lens::search::tests::test_build_broker_with_filters"
     "lens::search::tests::test_pagination_logic"
-    "server::handlers::country::tests::test_country_lens_lookup"
   ];
 
   doInstallCheck = true;

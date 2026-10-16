@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://grammalecte.net/grammalecte/zip/Grammalecte-fr-v${version}.zip";
-    sha256 = "076jv3ywdgqqzg92bfbagc7ypy08xjq5zn4vgna6j9350fkfqhzn";
+    hash = "sha256-9kPspgNlJGmUfZvYX7DsCPjrD3tquSXS+xi/xv3Y0hw=";
   };
 
   patchPhase = ''

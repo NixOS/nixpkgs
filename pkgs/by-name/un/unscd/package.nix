@@ -2,7 +2,7 @@
   fetchurl,
   fetchpatch,
   stdenv,
-  systemd,
+  systemdLibs,
   lib,
 }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ./0001-adjust-socket-paths-for-nixos.patch
   ];
 
-  buildInputs = [ systemd ];
+  buildInputs = [ systemdLibs ];
 
   buildPhase = ''
     runHook preBuild

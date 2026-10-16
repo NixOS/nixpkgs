@@ -6,18 +6,17 @@
   bison,
   perl,
   libnsl,
-  # --with-libwrap=yes is currently broken, TODO unbreak
-  withLibWrap ? false,
+  withLibWrap ? true,
   tcp_wrappers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tacacsplus";
-  version = "4.0.4.28";
+  version = "4.0.4.32";
 
   src = fetchurl {
     url = "ftp://ftp.shrubbery.net/pub/tac_plus/tacacs-F${finalAttrs.version}.tar.gz";
-    hash = "sha256-FH8tyY0m0vk/Crp2yYjO0Zb/4cAB3C6R94ihosdHIZ4=";
+    hash = "sha256-7j5AOgecdcrRPOnkUcGvARWwZHFCdlu9heYNep8/P9I=";
   };
 
   nativeBuildInputs = [

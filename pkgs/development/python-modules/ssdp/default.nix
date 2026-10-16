@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch,
   buildPythonPackage,
   click,
   fetchFromGitHub,
@@ -22,6 +23,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-1LO5+lfykaepp+MfS/2mlngobhcV1nZvU19Jb0sbVzk=";
   };
 
+  patches = [
+    # Fix CLI test skipping under pytest >= 9.1
+    (fetchpatch {
+      url = "https://github.com/lukegb/ssdp/commit/e5570a13342a2b7271acae1408b37a49e0729e3c.patch";
+      hash = "sha256-RwpsrGRn6rEowwHc39bLO8dVTKJP3d3v7Rr1d8sKYvM=";
+    })
+  ];
+
   build-system = [
     flit-core
     flit-scm
@@ -38,6 +47,12 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
+
+  disabledTests = [
+    "test_call"
+    "test_call_w_search_target"
   ];
 
   pythonImportsCheck = [ "ssdp" ];

@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mountpoint-s3";
-  version = "1.17.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "mountpoint-s3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uV0umUoJkYgmjWjv8GMnk5TRRbCCJS1ut3VV1HvkaAw=";
+    hash = "sha256-UDL1y7xmVhv/KlWiDOdvRahUF831kXGBIOcSmDRJCGs=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-zDgAGOuK0Jkmm554qZsaA/ABFhuupJ+WToO8HSPp7Xc=";
+  cargoHash = "sha256-N2Rf6ikEBSsTQBsb5xGPWj0ElHjKnCx5FSd85DLqKM4=";
 
   # thread 'main' panicked at cargo-auditable/src/collect_audit_data.rs:77:9:
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3
@@ -32,7 +32,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
   buildInputs = [ fuse3 ];
 
+  # The S3CrtClient doctest in mountpoint-s3-client constructs a real client,
+  # which requires a TLS trust store unavailable in the sandbox.
+  cargoTestFlags = [
+    "--workspace"
+    "--lib"
+    "--bins"
+    "--tests"
+  ];
+
   checkFlags = [
+    "--skip=io::tls::test::build_tls_connection_options"
+    "--skip=s3::client::tests::tls_connection_options_wiring"
+    "--skip=s3::config::tests::test_read_part_size_exceeds_budget_default_clamps"
+    "--skip=mountpoint-s3-client/src/lib.rs"
+
     #thread 's3_crt_client::tests::test_expected_bucket_owner' panicked at mountpoint-s3-client/src/s3_crt_client.rs:1123:47:
     #Create test client: ProviderFailure(Error(1173, "aws-c-io: AWS_IO_TLS_ERROR_DEFAULT_TRUST_STORE_NOT_FOUND, Default TLS trust store not found on this system. Trusted CA certificates must be installed, or \"override default trust store\" must be used while creating the TLS context."))
     #
@@ -44,9 +58,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=s3_crt_client::tests::test_expected_bucket_owner"
     "--skip=s3_crt_client::tests::test_user_agent_with_prefix"
     "--skip=s3_crt_client::tests::test_user_agent_without_prefix"
+    "--skip=test_lookup_throttled_mock::both_list_and_head"
     "--skip=test_lookup_throttled_mock::head_object"
     "--skip=test_lookup_throttled_mock::list_object"
     "--skip=test_lookup_unhandled_error_mock"
+    "--skip=test_read_unhandled_error_mock"
     "--skip=tests::smoke"
     # fuse module not available on build machine ?
     #

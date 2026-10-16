@@ -28,12 +28,12 @@ let
           ]}
           }
         '';
-        passAsFile = [ "serversList" ];
+        __structuredAttrs = true;
       }
       ''
         cp -r ${cfg.package}/assets $out
         chmod +w "$out/servers_list.js"
-        cp "$serversListPath" "$out/servers_list.js"
+        printf "%s" "$serversList" > "$out/servers_list.js"
         substitute ${cfg.package}/assets/index.html $out/index.html \
           --replace-fail "s.setParameter(\"telemetry_level\",\"basic\"); //enable telemetry" "override_settings();" \
           --replace-fail "LibreSpeed Example" ${lib.escapeShellArg (lib.escapeXML cfg.frontend.pageTitle)} \

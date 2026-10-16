@@ -25,17 +25,22 @@
   yelp-tools,
   xapp,
   xapp-symbolic-icons,
+  gnome,
+  libavif,
+  libheif,
+  libjxl,
+  webp-pixbuf-loader,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xviewer";
-  version = "3.4.16";
+  version = "3.4.17";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xviewer";
     rev = finalAttrs.version;
-    hash = "sha256-ayd91gVLuSUVlCxaPSBbx7hg4tthVTaBEnl5V9YYbQw=";
+    hash = "sha256-U6p79pgiXdCLLnLZ4h3fvXj9UXG0atBccoBXGvAM5Yo=";
   };
 
   nativeBuildInputs = [
@@ -66,16 +71,19 @@ stdenv.mkDerivation (finalAttrs: {
     xapp
   ];
 
-  postPatch = ''
-    # Switch to girepository-2.0
-    substituteInPlace src/main.c \
-      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
-      --replace-fail "g_irepository_get_option_group" "gi_repository_get_option_group"
-
-    substituteInPlace src/xviewer-plugin-engine.c \
-      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
-      --replace-fail "g_irepository_get_default" "gi_repository_dup_default" \
-      --replace-fail "g_irepository_require" "gi_repository_require"
+  postInstall = ''
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libavif
+          libheif.lib
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   preFixup = ''

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hid-ite8291r3";
-  version = "0-unstable-2025-06-27";
+  version = "0-unstable-2026-07-31";
 
   src = fetchFromGitHub {
     owner = "pobrn";
     repo = "hid-ite8291r3";
-    rev = "961702de7d80609a2a21567e44dd2fe860b96c87";
-    hash = "sha256-egFX+Dm3KSEVAP/YIy1/KUypBHClZW8o49ua47o64N8=";
+    rev = "1e1f01b5d8d0e45d70275a0dc29369002c39eb39";
+    hash = "sha256-EyBZ1qhg7ebVdkHtQD6iBQpRjPJbJLYxjfECx1EffK0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

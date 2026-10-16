@@ -6,6 +6,7 @@
   bleak,
   bleak-retry-connector,
   construct-typing,
+  pyprojectVersionPatchHook,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -23,6 +24,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
+
+  nativeBuildInputs = [
+    pyprojectVersionPatchHook
+  ];
 
   dependencies = [
     bleak

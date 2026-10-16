@@ -14,7 +14,7 @@
   udevCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cflib";
   version = "0.1.31";
   pyproject = true;
@@ -22,11 +22,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bitcraze";
     repo = "crazyflie-lib-python";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-PYAkN52dx1qeRKoe5FwpKj1A4oJNYb7Dx8vko9Pwspw=";
   };
-
-  strictDeps = true;
 
   build-system = [
     setuptools
@@ -84,9 +82,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Crazyflie quadcopter by Bitcraze";
     homepage = "https://github.com/bitcraze/crazyflie-lib-python";
-    changelog = "https://github.com/bitcraze/crazyflie-lib-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/bitcraze/crazyflie-lib-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     maintainers = [ lib.maintainers.brianmcgillion ];
     platforms = lib.platforms.linux;
   };
-}
+})

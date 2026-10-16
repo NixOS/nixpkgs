@@ -3,7 +3,7 @@
 
 
 # executing this script without arguments will
-# - find the newest stable plex-htpc version avaiable on snapcraft (https://snapcraft.io/plex-htpc)
+# - find the newest stable plex-htpc version available on snapcraft (https://snapcraft.io/plex-htpc)
 # - read the current plex-htpc version from the current nix expression
 # - update the nix expression if the versions differ
 # - try to build the updated version, exit if that fails
@@ -20,7 +20,7 @@ plex_nix="$nixpkgs/pkgs/by-name/pl/plex-htpc/package.nix"
 
 
 #
-# find the newest stable plex-htpc version avaiable on snapcraft
+# find the newest stable plex-htpc version available on snapcraft
 #
 
 # create bash array from snap info

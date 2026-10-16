@@ -1,16 +1,16 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 {
   name = "hedgedoc";
 
   meta.maintainers = [ ];
-  nodes = {
-    hedgedocSqlite =
+  containers = {
+    sqlite =
       { ... }:
       {
         services.hedgedoc.enable = true;
       };
 
-    hedgedocPostgresWithTCPSocket =
+    pgsqltcp =
       { ... }:
       {
         systemd.services.hedgedoc.after = [ "postgresql.target" ];
@@ -44,7 +44,7 @@
         };
       };
 
-    hedgedocPostgresWithUNIXSocket =
+    pgsqluds =
       { ... }:
       {
         systemd.services.hedgedoc.after = [ "postgresql.target" ];
@@ -78,22 +78,22 @@
     start_all()
 
     with subtest("HedgeDoc sqlite"):
-        hedgedocSqlite.wait_for_unit("hedgedoc.service")
-        hedgedocSqlite.wait_for_open_port(3000)
-        hedgedocSqlite.wait_until_succeeds("curl -sSf http://localhost:3000/new")
+        sqlite.wait_for_unit("hedgedoc.service")
+        sqlite.wait_for_open_port(3000)
+        sqlite.wait_until_succeeds("curl -sSf http://localhost:3000/new")
 
     with subtest("HedgeDoc postgres with TCP socket"):
-        hedgedocPostgresWithTCPSocket.wait_for_unit("postgresql.target")
-        hedgedocPostgresWithTCPSocket.wait_for_unit("hedgedoc.service")
-        hedgedocPostgresWithTCPSocket.wait_for_open_port(5432)
-        hedgedocPostgresWithTCPSocket.wait_for_open_port(3000)
-        hedgedocPostgresWithTCPSocket.wait_until_succeeds("curl -sSf http://localhost:3000/new")
+        pgsqltcp.wait_for_unit("postgresql.target")
+        pgsqltcp.wait_for_unit("hedgedoc.service")
+        pgsqltcp.wait_for_open_port(5432)
+        pgsqltcp.wait_for_open_port(3000)
+        pgsqltcp.wait_until_succeeds("curl -sSf http://localhost:3000/new")
 
     with subtest("HedgeDoc postgres with UNIX socket"):
-        hedgedocPostgresWithUNIXSocket.wait_for_unit("postgresql.target")
-        hedgedocPostgresWithUNIXSocket.wait_for_unit("hedgedoc.service")
-        hedgedocPostgresWithUNIXSocket.wait_for_open_port(5432)
-        hedgedocPostgresWithUNIXSocket.wait_for_open_port(3000)
-        hedgedocPostgresWithUNIXSocket.wait_until_succeeds("curl -sSf http://localhost:3000/new")
+        pgsqluds.wait_for_unit("postgresql.target")
+        pgsqluds.wait_for_unit("hedgedoc.service")
+        pgsqluds.wait_for_open_port(5432)
+        pgsqluds.wait_for_open_port(3000)
+        pgsqluds.wait_until_succeeds("curl -sSf http://localhost:3000/new")
   '';
 }

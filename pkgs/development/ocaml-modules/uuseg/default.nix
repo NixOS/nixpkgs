@@ -9,7 +9,7 @@
   uucp,
   uutf,
   cmdliner,
-  version ? if lib.versionAtLeast ocaml.version "4.14" then "17.0.0" else "15.0.0",
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "18.0.0" else "15.0.0",
   cmdlinerSupport ? lib.versionAtLeast cmdliner.version "1.1",
 }:
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://erratique.ch/software/uuseg/releases/uuseg-${finalAttrs.version}.tbz";
     hash =
       {
-        "17.0.0" = "sha256-Fn41ajEFbMv3LLkD+zqy76217/kWFS7q9jm9ubc6TI4=";
+        "18.0.0" = "sha256-bXzGAF6U+HH6B0TEzvPuB25fC+TlMcSu7wy4budLvRA=";
         "15.0.0" = "sha256-q8x3bia1QaKpzrWFxUmLWIraKqby7TuPNGvbSjkY4eM=";
       }
       ."${finalAttrs.version}";

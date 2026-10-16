@@ -6,7 +6,7 @@ You can pass in multiple files or paths.
 
 You'll likely want to use
 ``
-  $ ./update-python-libraries ../../pkgs/development/python-modules/**/default.nix
+  $ ./update-python-libraries ../../development/python-modules/**/default.nix
 ``
 to update all non-pinned libraries in that folder.
 """

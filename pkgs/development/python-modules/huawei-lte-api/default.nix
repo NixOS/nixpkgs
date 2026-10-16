@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
-  version = "1.11.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "huawei-lte-api";
     tag = version;
-    hash = "sha256-cSoH3g5olrcv4/IJeRWFR6Yy1ntBuL0zpO1TrnwvIwk=";
+    hash = "sha256-5BXVzTt6M8sEJtsoz/CYezJWNQTcLEw8rLJd4mAPQks=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [
-    "huawei_lte_api.AuthorizedConnection"
     "huawei_lte_api.Client"
     "huawei_lte_api.Connection"
   ];

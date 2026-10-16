@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a873fihw4rhshc722j4h6j7g3nj7xpgsna9hhg3zn6ksknnhx5y";
+    hash = "sha256-vnRo7dTT2D8ehElZ/W4/0o53pIFECnEY1DATDqMbB6k=";
   };
 
   buildInputs = [ pytest ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     license = lib.licenses.mit;
-    homepage = "https://pypi.python.org/pypi/pytest-cache/";
+    homepage = "https://pypi.org/project/pytest-cache/";
     description = "Pytest plugin with mechanisms for caching across test runs";
   };
 }

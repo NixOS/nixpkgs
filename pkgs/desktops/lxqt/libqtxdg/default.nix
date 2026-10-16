@@ -8,7 +8,7 @@
   lxqt-build-tools,
   wrapQtAppsHook,
   gitUpdater,
-  version ? "4.3.0",
+  version ? "4.4.0",
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash =
       {
         "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
-        "4.3.0" = "sha256-aec+NjKkaH8dI0cFVxGehdRGO2aH6BD+aix+IvD+2LI=";
+        "4.4.0" = "sha256-9Hj5RnPWtqRkzhrAuXoHnMAQloFbnF/8koPT8ExfSAs=";
       }
       ."${finalAttrs.version}";
   };
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postPatch = lib.optionals (version == "3.12.0") ''
+  postPatch = lib.optionalString (version == "3.12.0") ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';

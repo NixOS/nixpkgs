@@ -8,17 +8,19 @@
   makeWrapper,
   guile,
   guile-config,
+  guile-lib,
+  guix,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-hall";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     owner = "a-sassmannshausen";
     repo = "guile-hall";
     rev = finalAttrs.version;
-    hash = "sha256-TUCN8kW44X6iGbSJURurcz/Tc2eCH1xgmXH1sMOMOXs=";
+    hash = "sha256-pDQlG3C6bCz4jowR4Y99p/CGSqLlw04MTiWS32h9Z4c=";
   };
 
   strictDeps = true;
@@ -26,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     guile
+    guix
     pkg-config
     texinfo
     makeWrapper
@@ -34,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     guile
     guile-config
+    guile-lib
   ];
 
   enableParallelBuilding = true;

@@ -1,8 +1,8 @@
 diff --git a/ext/test/http/curl_http_test.cc b/ext/test/http/curl_http_test.cc
-index e8299202..19dbd7b1 100644
+index 0d7d09bd..18c4d9b9 100644
 --- a/ext/test/http/curl_http_test.cc
 +++ b/ext/test/http/curl_http_test.cc
-@@ -270,7 +270,7 @@ TEST_F(BasicCurlHttpTests, HttpResponse)
+@@ -385,7 +385,7 @@ TEST_F(BasicCurlHttpTests, HttpResponse)
    ASSERT_EQ(count, 4);
  }
  
@@ -10,8 +10,8 @@ index e8299202..19dbd7b1 100644
 +TEST_F(BasicCurlHttpTests, DISABLED_SendGetRequest)
  {
    received_requests_.clear();
-   auto session_manager = http_client::HttpClientFactory::Create();
-@@ -287,7 +287,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequest)
+   auto session_manager = std::make_shared<http_client::curl::HttpCurlClientFactory>()->Create();
+@@ -402,7 +402,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequest)
    ASSERT_TRUE(handler->got_response_.load(std::memory_order_acquire));
  }
  
@@ -19,26 +19,62 @@ index e8299202..19dbd7b1 100644
 +TEST_F(BasicCurlHttpTests, DISABLED_SendPostRequest)
  {
    received_requests_.clear();
-   auto session_manager = http_client::HttpClientFactory::Create();
-@@ -313,7 +313,7 @@ TEST_F(BasicCurlHttpTests, SendPostRequest)
-   session_manager->FinishAllSessions();
+   auto session_manager = std::make_shared<http_client::curl::HttpCurlClientFactory>()->Create();
+@@ -511,7 +511,7 @@ TEST_F(BasicCurlHttpTests, SeekCallbackRepositionsTheRequestBody)
+   EXPECT_EQ(CURL_SEEKFUNC_CANTSEEK, Peer::SeekNullUserData(0, SEEK_SET));
  }
  
 -TEST_F(BasicCurlHttpTests, RequestTimeout)
 +TEST_F(BasicCurlHttpTests, DISABLED_RequestTimeout)
  {
    received_requests_.clear();
-   auto session_manager = http_client::HttpClientFactory::Create();
-@@ -442,7 +442,7 @@ TEST_F(BasicCurlHttpTests, ExponentialBackoffRetry)
+   auto session_manager = std::make_shared<http_client::curl::HttpCurlClientFactory>()->Create();
+@@ -556,7 +556,7 @@ TEST_F(BasicCurlHttpTests, CurlHttpOperations)
  }
- #endif  // ENABLE_OTLP_RETRY_PREVIEW
+ 
+ #ifdef ENABLE_OTLP_RETRY_PREVIEW
+-TEST_F(BasicCurlHttpTests, RetryPolicyEnabled)
++TEST_F(BasicCurlHttpTests, DISABLED_RetryPolicyEnabled)
+ {
+   RetryEventHandler handler;
+   http_client::HttpSslOptions no_ssl;
+@@ -574,7 +574,7 @@ TEST_F(BasicCurlHttpTests, RetryPolicyEnabled)
+   ASSERT_TRUE(operation.IsRetryable());
+ }
+ 
+-TEST_F(BasicCurlHttpTests, RetryPolicyDisabled)
++TEST_F(BasicCurlHttpTests, DISABLED_RetryPolicyDisabled)
+ {
+   RetryEventHandler handler;
+   http_client::HttpSslOptions no_ssl;
+@@ -592,7 +592,7 @@ TEST_F(BasicCurlHttpTests, RetryPolicyDisabled)
+   ASSERT_FALSE(operation.IsRetryable());
+ }
+ 
+-TEST_F(BasicCurlHttpTests, ExponentialBackoffRetry)
++TEST_F(BasicCurlHttpTests, DISABLED_ExponentialBackoffRetry)
+ {
+   using ::testing::AllOf;
+   using ::testing::Gt;
+@@ -802,7 +802,7 @@ TEST_F(BasicCurlHttpTests, RepeatedCallerThreadCancelsAreClean)
+   EXPECT_GE(terminal_total, 20);
+ }
  
 -TEST_F(BasicCurlHttpTests, SendGetRequestSync)
 +TEST_F(BasicCurlHttpTests, DISABLED_SendGetRequestSync)
  {
    received_requests_.clear();
    curl::HttpClientSync http_client;
-@@ -467,7 +467,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequestSyncTimeout)
+@@ -813,7 +813,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequestSync)
+   EXPECT_EQ(result.GetSessionState(), http_client::SessionState::Response);
+ }
+ 
+-TEST_F(BasicCurlHttpTests, HandlerRequestedCloseKeepsServerUsable)
++TEST_F(BasicCurlHttpTests, DISABLED_HandlerRequestedCloseKeepsServerUsable)
+ {
+   curl::HttpClientSync http_client;
+   http_client::Headers m1 = {};
+@@ -849,7 +849,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequestSyncTimeout)
                result.GetSessionState() == http_client::SessionState::SendFailed);
  }
  
@@ -47,7 +83,7 @@ index e8299202..19dbd7b1 100644
  {
    received_requests_.clear();
    curl::HttpClientSync http_client;
-@@ -570,7 +570,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequestAsyncTimeout)
+@@ -955,7 +955,7 @@ TEST_F(BasicCurlHttpTests, SendGetRequestAsyncTimeout)
    }
  }
  
@@ -56,7 +92,7 @@ index e8299202..19dbd7b1 100644
  {
    curl::HttpClient http_client;
  
-@@ -609,7 +609,7 @@ TEST_F(BasicCurlHttpTests, SendPostRequestAsync)
+@@ -994,7 +994,7 @@ TEST_F(BasicCurlHttpTests, SendPostRequestAsync)
    }
  }
  
@@ -65,12 +101,15 @@ index e8299202..19dbd7b1 100644
  {
    curl::HttpClient http_client;
  
-@@ -647,7 +647,7 @@ TEST_F(BasicCurlHttpTests, FinishInAsyncCallback)
-   }
- }
- 
+@@ -1035,7 +1035,7 @@ TEST_F(BasicCurlHttpTests, FinishInAsyncCallback)
+ // Destroying the client wakes the polling background thread instead of letting it sleep out
+ // scheduled_delay_milliseconds_. A missed wakeup is slow rather than wrong, so the bound is the
+ // assertion: measured, the quit is under a millisecond and a slept out poll is 256 ms.
 -TEST_F(BasicCurlHttpTests, ElegantQuitQuick)
 +TEST_F(BasicCurlHttpTests, DISABLED_ElegantQuitQuick)
  {
-   auto http_client = http_client::HttpClientFactory::Create();
-   std::static_pointer_cast<curl::HttpClient>(http_client)->MaybeSpawnBackgroundThread();
+   received_requests_.clear();
+   auto http_client = std::make_shared<http_client::curl::HttpCurlClientFactory>()->Create();
+-- 
+2.54.0
+

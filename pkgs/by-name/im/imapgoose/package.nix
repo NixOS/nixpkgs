@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "imapgoose";
-  version = "0.4.2";
+  version = "0.5.3";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "ImapGoose";
     tag = "v${version}";
-    hash = "sha256-Zu2cHCTl6RyZzndFrLM7xTeD/T3isVerIB8D6vD3jIU=";
+    hash = "sha256-koNf75sK3jd/gkUWm+pgbORuZGYBjsNCvQikjLAOvnU=";
   };
 
-  vendorHash = "sha256-6mh6KsJlijXn+bLzmtJSC4lcYFChQdyBKEjFzbQMIM0=";
+  vendorHash = "sha256-PY6m92/8bzbYjkGvbNtL1W9sMayjPOyWVvJPwKAnLc8=";
 
   subPackages = [
     "cmd/imapgoose"
@@ -27,6 +27,8 @@ buildGoModule rec {
   postInstall = ''
     installManPage imapgoose.1
     installManPage imapgoose.conf.5
+
+    installShellCompletion --zsh contrib/_imapgoose
   '';
 
   meta = {
@@ -44,9 +46,10 @@ buildGoModule rec {
     homepage = "https://git.sr.ht/~whynothugo/ImapGoose";
     changelog = "https://git.sr.ht/~whynothugo/ImapGoose/refs/v${version}";
     license = lib.licenses.isc;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "imapgoose";
     maintainers = with lib.maintainers; [
+      philocalyst
       bobberb
     ];
   };

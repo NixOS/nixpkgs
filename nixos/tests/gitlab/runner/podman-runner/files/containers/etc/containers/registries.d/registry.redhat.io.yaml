@@ -1,3 +1,0 @@
-docker:
-  registry.redhat.io:
-    lookaside: https://registry.redhat.io/containers/sigstore

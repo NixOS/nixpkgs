@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Open-source low latency livestreaming server, based on Secure Reliable Tranport (SRT)";
+    description = "Open-source low latency livestreaming server, based on Secure Reliable Transport (SRT)";
     license = lib.licenses.mit;
     homepage = "https://github.com/Edward-Wu/srt-live-server";
     platforms = lib.platforms.linux;

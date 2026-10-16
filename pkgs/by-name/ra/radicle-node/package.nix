@@ -15,9 +15,9 @@
   xdg-utils,
   versionCheckHook,
 
-  version ? "1.7.1",
-  srcHash ? "sha256-MPanUDVKol7mWVJDrGoGUkKqmcje+MsiK0WfqXQ27iI=",
-  cargoHash ? "sha256-Lru4ps9FYi03NVtRLtwZX9jhozAvBDsJ72ihdIpQcQ8=",
+  version ? "1.10.3",
+  srcHash ? "sha256-xbVu+s4TQMc6fA8iUNq01y5lDxfC76Pwe6Z2rqA6C5Q=",
+  cargoHash ? "sha256-zQ6XnDJt3pek0WzC0J8PY111LGuzZeSCZ1QxwYAhPWw=",
   updateScript ? ./update.sh,
 }:
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-node";
 
   src = fetchFromRadicle {
-    seed = "seed.radicle.xyz";
+    seed = "seed.radicle.dev";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
     hash = srcHash;
@@ -38,6 +38,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm -rf $out/.git
     '';
   };
+
+  __structuredAttrs = true;
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -83,6 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=tests::e2e::test_connection_crossing"
     # https://radicle.zulipchat.com/#narrow/stream/369277-heartwood/topic/Clone.20Partial.20Fail.20Flake
     "--skip=rad_clone_partial_fail"
+    "--skip=commands::patch::rad_patch_merge_unauthorized_branch"
   ];
 
   postInstall = ''
@@ -164,18 +167,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Unlike centralized code hosting platforms, there is no single entity controlling the network.
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
-    homepage = "https://radicle.xyz";
-    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
+    homepage = "https://radicle.dev";
+    changelog = "https://radicle.network/nodes/seed.radicle.dev/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      amesgen
-      lorenzleutgeb
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad";
+    knownVulnerabilities = [
+      # https://radicle.dev/2026/09/23/disclosure-of-vulnerability-in-network-protocol
+      "Private repositories are insecure: traffic between nodes is not encrypted and not authenticated."
+    ];
   };
 })

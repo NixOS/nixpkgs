@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   installShellFiles,
   buildPackages,
@@ -9,18 +9,18 @@
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "hugo";
-  version = "0.159.0";
+  version = "0.167.0";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R+XUgATk6KHaQ+hTIbFSHEzC0VIzaVLna0mMGDRZILw=";
+    hash = "sha256-T6dEgvY1Akt+GUWdNvVTjkmtM/MwW9HX/v4Ra+jmZKY=";
   };
 
-  vendorHash = "sha256-qAZ+EnU1Yaom8QHjaMoAJSaN7HslNpwifmBMlgnmmAE=";
+  vendorHash = "sha256-67v7yJx2q/YrY5yvlDXmNzH1oFnM+9nN18QgjPhT3tg=";
 
   checkFlags =
     let
@@ -73,7 +73,7 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/hugo";
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
   versionCheckProgramArg = "version";
 
   passthru.updateScript = nix-update-script { };

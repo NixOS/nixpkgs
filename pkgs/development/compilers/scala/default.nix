@@ -28,7 +28,6 @@ stdenv.mkDerivation {
     ln -s ${bare}/bin/scalac $out/bin/scalac
     ln -s ${bare}/bin/scaladoc $out/bin/scaladoc
     ln -s ${bare}/bin/scala $out/bin/scala
-    ln -s ${bare}/bin/common $out/bin/common
   '';
 
   inherit (bare) meta;

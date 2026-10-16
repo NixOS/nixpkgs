@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  nix-update-script,
+  unstableGitUpdater,
   cmake,
   pkg-config,
   makeWrapper,
@@ -17,48 +17,44 @@
   libGLU,
   alsa-lib,
   fontconfig,
+  wayland,
+  wayland-scanner,
+  libdecor,
+  libxkbcommon,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "foxotron";
-  version = "2024-09-23";
+  version = "2024-09-23-unstable-2026-03-20";
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
-    tag = finalAttrs.version;
+    rev = "6edbf2e52e59a4206420bc667225a4e18778be76";
     fetchSubmodules = true;
-    hash = "sha256-OnZWoiQ5ASKQV73/W6nl17B2ANwqCy/PlybHbNwrOyQ=";
+    hash = "sha256-bqqtBXufeAncOQktpKFLkmc15p2Z8yrrGFLH62aXfj0=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "0001-assimp-Include-cstdint-for-std-uint32_t.patch";
-      url = "https://github.com/assimp/assimp/commit/108e3192a201635e49e99a91ff2044e1851a2953.patch";
-      stripLen = 1;
-      extraPrefix = "externals/assimp/";
-      hash = "sha256-rk0EFmgeZVwvx3NJOOob5Jwj9/J+eOtuAzfwp88o+J4=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail "set(CMAKE_OSX_ARCHITECTURES x86_64)" "" \
-      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
-
-    substituteInPlace externals/glm/CMakeLists.txt \
-      --replace-fail "cmake_minimum_required(VERSION 3.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)" \
-      --replace-fail "cmake_policy(VERSION 3.2)" "cmake_policy(VERSION 3.10)"
-
-    # Outdated vendored assimp, many warnings with newer compilers, too old for CMake option to control this
-    # Note that this -Werror caused issues on darwin, so make sure to re-check builds there before removing this
-    substituteInPlace externals/assimp/code/CMakeLists.txt \
-      --replace-fail 'TARGET_COMPILE_OPTIONS(assimp PRIVATE -Werror)' ""
+      --replace-fail "set(CMAKE_OSX_ARCHITECTURES x86_64)" ""
+  ''
+  # From glfw package
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace externals/glfw/src/wl_init.c \
+      --replace-fail '"libdecor-0.so.0"' '"${lib.getLib libdecor}/lib/libdecor-0.so.0"' \
+      --replace-fail '"libwayland-client.so.0"' '"${lib.getLib wayland}/lib/libwayland-client.so.0"' \
+      --replace-fail '"libwayland-cursor.so.0"' '"${lib.getLib wayland}/lib/libwayland-cursor.so.0"' \
+      --replace-fail '"libwayland-egl.so.1"' '"${lib.getLib wayland}/lib/libwayland-egl.so.1"' \
+      --replace-fail '"libxkbcommon.so.0"' '"${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0"'
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -74,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     fontconfig
     libGLU
+    libxkbcommon
+    wayland
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -98,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = {

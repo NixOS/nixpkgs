@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/localtunnel/localtunnel/blob/v${finalAttrs.version}/CHANGELOG.md";

@@ -8,22 +8,18 @@
 
 let
   pname = "hoppscotch";
-  version = "26.2.1-0";
+  version = "26.9.0-0";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
-          hash = "sha256-F9kEa1trZKm2sUs5JMQY8lwkM+Vs0SFGd5NGbrmythQ=";
-        };
-        x86_64-darwin = {
-          url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_x64.dmg";
-          hash = "sha256-jxqYV3OsfJljfFi5PeMD/rOnpuuEJ0+08lozjCTZlOc=";
+          hash = "sha256-pK6+YBhkZLwldAF34SYMLjMjr4Ol9b7WIyWuI+9lOhs=";
         };
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
-          hash = "sha256-PiFcLAAXvR1GlIAeKlK066NE/bCCpLqJ32tVEY/VZ1s=";
+          hash = "sha256-QXY9fPTc7lg0X+x46todzcWDaDpT91gJ8n+xztJnjm8=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -46,7 +42,6 @@ let
     mainProgram = "hoppscotch";
     platforms = [
       "aarch64-darwin"
-      "x86_64-darwin"
       "x86_64-linux"
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
@@ -87,7 +82,7 @@ else
 
     extraInstallCommands =
       let
-        appimageContents = appimageTools.extractType2 { inherit pname version src; };
+        appimageContents = appimageTools.extract { inherit pname version src; };
       in
       ''
         # Install .desktop files

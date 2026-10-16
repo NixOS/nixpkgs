@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   version = "2.4.1";
 
   src = fetchFromGitHub {
-    owner = "RustScan";
+    owner = "bee-san";
     repo = "RustScan";
     tag = finalAttrs.version;
     hash = "sha256-+qPSeDpOeCq+KwZb5ANXx6z+pYbgdT1hVgcrSzxyGp0=";
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Faster Nmap Scanning with Rust";
-    homepage = "https://github.com/RustScan/RustScan";
-    changelog = "https://github.com/RustScan/RustScan/releases/tag/${finalAttrs.version}";
+    homepage = "https://github.com/bee-san/RustScan";
+    changelog = "https://github.com/bee-san/RustScan/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ bodier123 ];
     mainProgram = "rustscan";

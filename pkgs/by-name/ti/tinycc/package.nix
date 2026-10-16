@@ -1,8 +1,9 @@
 {
   lib,
   copyPkgconfigItems,
-  fetchFromRepoOrCz,
+  fetchgit,
   makePkgconfigItem,
+  apple-sdk,
   perl,
   stdenv,
   texinfo,
@@ -10,7 +11,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tcc";
-  version = "0.9.27-unstable-2025-01-06";
+  version = "0.9.27-unstable-2026-09-22";
 
   outputs = [
     "dev"
@@ -21,10 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  src = fetchFromRepoOrCz {
-    repo = "tinycc";
-    rev = "f6385c05308f715bdd2c06336801193a21d69b50";
-    hash = "sha256-tO3N+NplYy8QUOC2N3x0CO5Ui75j9bQzLSZQF1HQyhY=";
+  src = fetchgit {
+    url = "git://repo.or.cz/tinycc.git";
+    rev = "3dc99dbc82f8e07308c5d398136803e62f9676df";
+    hash = "sha256-qYsGgihowp2C6WFzbQuXEWgJG6evtu/10p5IH/ozIKY=";
   };
 
   nativeBuildInputs = [
@@ -63,18 +64,39 @@ stdenv.mkDerivation (finalAttrs: {
     "--cc=$CC"
     "--ar=$AR"
     "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
-    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
+    "--sysincludepaths=${
+      lib.concatStringsSep ":" (
+        [
+          "{B}/include"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "${apple-sdk.sdkroot}/usr/include"
+        ]
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+          "${lib.getDev stdenv.cc.libc}/include"
+        ]
+      )
+    }"
     # The first libpath will be the one in which tcc will look for libtcc1.a,
     # which is need for its tests.
     "--libpaths=$lib/lib/tcc:$lib/lib:${lib.getLib stdenv.cc.libc}/lib"
     # build cross compilers
     "--enable-cross"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # The bounds checker has an unresolved arm64 atomic helper on Darwin.
+    "--config-bcheck=no"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     "--config-musl"
   ];
 
   enableParallelBuilding = true;
+
+  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    # TCC cannot cross-compile x86 long double constants from aarch64-darwin.
+    makeFlagsArray+=("TCC_X=i386-win32 x86_64-win32 arm arm64 arm-wince c67 riscv64 arm64-osx")
+  '';
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=implicit-int"
@@ -83,7 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Test segfault for static build
   doInstallCheck =
-    !stdenv.hostPlatform.isStatic && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    !stdenv.hostPlatform.isStatic
+    && stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    && !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     patchShebangs texi2pod.pl
@@ -105,13 +129,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   installCheckTarget = "test";
-
-  # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
-  preInstallCheck =
-    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
-      ''
-        rm tests/tests2/{108,114}*
-      '';
 
   meta = {
     homepage = "https://repo.or.cz/tinycc.git";
@@ -137,14 +154,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       With libtcc, you can use TCC as a backend for dynamic code generation.
     '';
-    license = with lib.licenses; [ lgpl21Only ];
+    license = lib.licenses.lgpl21Only;
     mainProgram = "tcc";
     maintainers = with lib.maintainers; [
       onemoresuza
     ];
     platforms = lib.platforms.unix;
-    # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })
 # TODO: self-compilation

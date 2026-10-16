@@ -1,23 +1,23 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo127Module,
   installShellFiles,
   stdenv,
   writableTmpDirAsHomeHook,
 }:
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "gh-enhance";
-  version = "0.5.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-enhance";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IHtI8wnPLMkqxdBFXqkt6inYMOIqKjdTKdZbTxIhPzo=";
+    hash = "sha256-W7EyYi/Ycyu9WcWxPexJJTGkcHWveY4xsySfEZKy5/c=";
   };
 
-  vendorHash = "sha256-rgql0vsHAzWeubw4EYBu/yPmm2QeADsIeACWsbcWtSk=";
+  vendorHash = "sha256-gPs05ByMdsfjjY4rVp8UYX9OkfJ1BkUl4ywiFIBen8w=";
 
   ldflags = [
     "-s"

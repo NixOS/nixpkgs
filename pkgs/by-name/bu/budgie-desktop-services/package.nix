@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop-services";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitea {
     domain = "forge.moderndesktop.dev";
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop-services";
     tag = finalAttrs.version;
-    hash = "sha256-YOa2pUePp33d1xKF7HrBX2EkjEQsRmzoiJMq72fl3CE=";
+    hash = "sha256-k3gpDQ61GZT1DW/Otk/JBj30it9Ogp8OjL5LZVKDL7Q=";
   };
 
   nativeBuildInputs = [

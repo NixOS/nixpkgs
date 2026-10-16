@@ -5,7 +5,7 @@
   nixosTests,
   testers,
   sqlite3-to-mysql,
-  mysql80,
+  mysql84,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dependencies = with python3Packages; [
     click
-    mysql-connector
+    mysql-connector-python
     pytimeparse2
     pymysql
     pymysqlsa
@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tabulate
     unidecode
     packaging
-    mysql80
+    mysql84.client
     python-dateutil
     sqlglot
   ];

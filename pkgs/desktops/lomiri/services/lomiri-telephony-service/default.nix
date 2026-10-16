@@ -2,13 +2,13 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   nixosTests,
   runCommand,
   ayatana-indicator-messages,
   bash,
   cmake,
-  ctestCheckHook,
   dbus,
   dbus-glib,
   dbus-test-runner,
@@ -53,24 +53,57 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CNtJPMust7zCuoXw/CpaK4NVXijTXA3Xs4YMJiZyxes=";
   };
 
-  postPatch = ''
+  patches = [
+    # Fixes for test flakiness & newer libnotify compatibility
+    # Remove when version > 0.6.2
+    (fetchpatch {
+      name = "0001-lomiri-telephony-service-new-libnotify-needs-spec_version.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/6b0b51a4fcfafcd10ae5fe4928d49c9f73f14d12.patch";
+      hash = "sha256-E9THrqE77GXBY8ftwrkwFzFCTSa/YpkaHiX4ivjH6mM=";
+    })
+    (fetchpatch {
+      name = "0002-lomiri-telephony-service-tests-depend-on-the-notification-mock.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/8c5a3048492eb01354565f0892a61770eb27b957.patch";
+      hash = "sha256-nLN+Evyq4Yf9GN2wSSPXmzEzTPXHDl+Pl5FKOiwdDY8=";
+    })
+    (fetchpatch {
+      name = "0003-lomiri-telephony-service-approver-fix-race-condition-when-accepting-calls.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/b3123f784ed692f9424c978e68867a8662d00083.patch";
+      hash = "sha256-/JEkoEEivFwFoNOrcdDleAGOjdUwS4SlUovMr9trNQQ=";
+    })
+    (fetchpatch {
+      name = "0004-lomiri-telephony-service-Robustness-fixes-for-tests.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/e886fbdd016327634e935986f2b63b90833295be.patch";
+      hash = "sha256-Ie9kM7UHSjmORTOTNzZ1/qtM4ILkOnGjyQCXXo1PU88=";
+    })
+  ];
+
+  postPatch =
     # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
     # Patch out failure if QMake is not found, since we don't use it
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}" \
-      --replace-fail 'QMAKE_EXECUTABLE STREQUAL "QMAKE_EXECUTABLE-NOTFOUND"' 'FALSE'
+    ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}" \
+        --replace-fail 'QMAKE_EXECUTABLE STREQUAL "QMAKE_EXECUTABLE-NOTFOUND"' 'FALSE'
+    ''
 
-  ''
-  + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    substituteInPlace tests/common/dbus-services/CMakeLists.txt \
-      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
-      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
-      ${replaceDbusService dconf "ca.desrt.dconf.service"}
+    # protobuf -> abseil-cpp needs >= C++20
+    + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'set(CMAKE_CXX_STANDARD 17)' 'set(CMAKE_CXX_STANDARD 20)'
+    ''
 
-    substituteInPlace cmake/modules/GenerateTest.cmake \
-      --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
-      --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
-  '';
+    # Tests launch these DBus services, fix paths related to them
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      substituteInPlace tests/common/dbus-services/CMakeLists.txt \
+        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
+        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
+        ${replaceDbusService dconf "ca.desrt.dconf.service"}
+
+      substituteInPlace cmake/modules/GenerateTest.cmake \
+        --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
+        --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
+    '';
 
   strictDeps = true;
 
@@ -112,7 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    ctestCheckHook
     dbus-test-runner
     dconf
     gnome-keyring
@@ -138,25 +170,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Starts & talks to D-Bus services, breaks with parallelism
   enableParallelChecking = false;
-
-  disabledTests = [
-    # Flaky, randomly failing to launch properly & stuck until test timeout
-    # https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/issues/70
-    "AccountEntryTest"
-    "AccountEntryFactoryTest"
-    "AuthHandlerTest"
-    "CallEntryTest"
-    "ChatManagerTest"
-    "HandlerTest"
-    "OfonoAccountEntryTest"
-    "PresenceRequestTest"
-    "TelepathyHelperSetupTest"
-
-    # Failing most of the time since libnotify 0.8.8
-    # https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/issues/75
-    "ApproverTest"
-    "MessagingMenuTest"
-  ];
 
   preCheck = ''
     export QT_QPA_PLATFORM=minimal

@@ -92,7 +92,12 @@ stdenv.mkDerivation (finalAttrs: {
     "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
     "PYTHON_SETUP_ARGS=--no-build-isolation"
-  ];
+  ]
+  ++
+    lib.optionals (stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name)
+      [
+        "OS=${if stdenv.hostPlatform.isDarwin then "Darwin" else "Linux"}"
+      ];
 
   preInstall = lib.optionalString enablePython ''
     mkdir -p $py/${python3.sitePackages}/selinux

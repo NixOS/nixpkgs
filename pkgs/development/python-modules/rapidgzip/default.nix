@@ -17,6 +17,9 @@ buildPythonPackage rec {
     hash = "sha256-ixJPKbwS3kJJq4HoPlrTXmd0KhqP9Ky2G3TA2f2hwU4=";
   };
 
+  # Newer setuptools removed the dry_run compiler constructor argument.
+  patches = [ ./setuptools-compiler-api.patch ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools >= 61.2, < 72" setuptools

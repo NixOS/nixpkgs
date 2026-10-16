@@ -24,9 +24,7 @@ buildDunePackage {
       hash = "sha256-znm+mX60RwYNCYXwm9HYCO8BRbzUM0Bm6dI1f1FzncA=";
     })
   ];
-  propagatedBuildInputs = [ ];
   doCheck = true;
-  checkInputs = [ ];
   meta = {
     description = "OCaml interface to Alan Murta's General Polygon Clipper";
     homepage = "https://github.com/johnwhitington/camlgpc";

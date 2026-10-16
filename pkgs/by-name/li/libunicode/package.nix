@@ -21,17 +21,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunicode";
-  version = "0.7.0";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "libunicode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J8qawT1oiUO9xTVEMQvsY0K2NtIfkUq9PoCbFt6wqek=";
+    hash = "sha256-teyo4KYVdS6+WIjOdS5p7fXZJoMQsL7lPugoaAQ07r4=";
   };
-
-  # Fix: set_target_properties Can not find target to add properties to: Catch2, et al.
-  patches = [ ./remove-target-properties.diff ];
 
   nativeBuildInputs = [
     cmake
@@ -49,6 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Modern C++20 Unicode library";
+    homepage = "https://github.com/contour-terminal/libunicode";
     mainProgram = "unicode-query";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;

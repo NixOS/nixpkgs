@@ -28,7 +28,7 @@ buildRedist (
     ];
 
     buildInputs = [
-      # NOTE: Verions of CUDNN after 9.0 no longer depend on libcublas:
+      # NOTE: Versions of CUDNN after 9.0 no longer depend on libcublas:
       # https://docs.nvidia.com/deeplearning/cudnn/latest/release-notes.html?highlight=cublas#cudnn-9-0-0
       # However, NVIDIA only provides libcublasLT via the libcublas package.
       (lib.getLib libcublas)
@@ -43,14 +43,21 @@ buildRedist (
       ${lib.getExe patchelf} ''${!outputLib:?}/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
 
+    # From 9.27.0, libcudnn_engines_runtime_compiled links directly against the driver library, which is provided at
+    # runtime.
+    autoPatchelfIgnoreMissingDeps = lib.optionals (cudnnAtLeast "9.27") [ "libcuda.so.1" ];
+
     # CuDNN depends on libnvrtc.so at runtime, as mentioned here in one small error description
     # https://docs.nvidia.com/deeplearning/cudnn/backend/latest/api/cudnn-graph-library.html
-    appendRunpaths = [
-      "${lib.getLib cuda_nvrtc}/lib"
+    # libcudnn_adv and libcudnn_engines_precompiled dlopen libcublasLt -- the soname lives in
+    # .rodata and is never DT_NEEDED, so the buildInputs entry above never reaches a runpath.
+    appendRunpaths = map (pkg: "${lib.getLib pkg}/lib") [
+      cuda_nvrtc # libnvrtc.so.%s
+      libcublas # libcublasLt.so.%s
     ];
 
     # NOTE:
-    #   With cuDNN forward compatiblity, all non-natively supported compute capabilities JIT compile PTX kernels.
+    #   With cuDNN forward compatibility, all non-natively supported compute capabilities JIT compile PTX kernels.
     #
     #   While this is sub-optimal and we should warn the user and encourage them to use a newer version of cuDNN, we
     #   have no clean mechanism by which we can warn the user, or allow silencing such a warning if the use of an
@@ -66,6 +73,24 @@ buildRedist (
     #
     #   We don't need to check the CUDA version to see if it falls within some supported range -- if a user decides
     #   to do static linking against some odd combination of CUDA 11 and cuDNN, that's on them.
+    #
+    #   From 9.23.0, the forward compatibility promise covers only the dynamic build: the static build supports linking
+    #   only against the CUDA release it was built with (12.9 and 13.4.1 for 9.27.0).
+    #
+    # NOTE:
+    #
+    #   From 9.26.0, the build for CUDA 13 requires Linux driver 615.71.09 or newer (9.25.1 and earlier required
+    #   580.65.06 or newer, matching the CUDA 13 minor version compatibility requirement; the 9.25.0 preview release
+    #   required 615 or newer). The driver is not known at evaluation time, so we cannot assert on it.
+    #
+    # NOTE:
+    #
+    #   From 9.24.0, the causal Conv1d engines are compiled at runtime with NVRTC and locate the CUDA headers they need
+    #   through the CUDA_HOME, CUDA_PATH, or CUDA_ROOT environment variables, which must point to a CUDA Toolkit
+    #   installation (e.g., cudaPackages.cudatoolkit).
+    #
+    #   https://docs.nvidia.com/deeplearning/cudnn/backend/latest/reference/support-matrix.html
+    #   https://docs.nvidia.com/deeplearning/cudnn/backend/latest/release-notes.html
     #
     platformAssertions =
       let
@@ -112,7 +137,7 @@ buildRedist (
       homepage = "https://developer.nvidia.com/cudnn";
       changelog = "https://docs.nvidia.com/deeplearning/cudnn/backend/latest/release-notes.html";
 
-      license = _cuda.lib.licenses.cudnn;
+      license = lib.licenses.nvidiaCudnn;
 
       maintainers = with lib.maintainers; [
         mdaiter

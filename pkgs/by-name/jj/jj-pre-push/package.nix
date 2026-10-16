@@ -11,14 +11,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "jj-pre-push";
-  version = "0.3.4";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "acarapetis";
     repo = "jj-pre-push";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sj1JM2gcwTRMeEXSozI73LCwxSf69t4u/SmovV7Cyeg=";
+    hash = "sha256-Vi50t+AMUgSlUjwBRZPJ+yxfJMQWKDAr21trkqjcuQM=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Run pre-commit.com before `jj git push`";
     homepage = "https://github.com/acarapetis/jj-pre-push";
-    changelog = "https://github.com/acarapetis/jj-pre-push/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/acarapetis/jj-pre-push/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ xanderio ];
     mainProgram = "jj-pre-push";

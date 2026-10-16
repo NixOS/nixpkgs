@@ -36,9 +36,9 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/unit" ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # pyproject.toml specifies -n auto which only pytest-xdist understands
-    "--override-ini addopts=''"
+    "--override-ini=addopts="
   ];
 
   pythonImportsCheck = [ "dbt.adapters.snowflake" ];

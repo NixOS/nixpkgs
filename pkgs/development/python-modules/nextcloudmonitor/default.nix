@@ -18,6 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-748cDMxPjOQFKdSt1GrQqZHmPgz20HN1+lMzo2vMj6c=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'version="1.5.1"' 'version="${version}"'
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [ requests ];

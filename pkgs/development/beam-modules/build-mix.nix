@@ -60,6 +60,9 @@ lib.extendMkDerivation {
       }
       // (args.env or { });
 
+      __structuredAttrs = true;
+      strictDeps = true;
+
       __darwinAllowLocalNetworking = true;
 
       # add to ERL_LIBS so other modules can find at runtime.
@@ -71,6 +74,7 @@ lib.extendMkDerivation {
       '';
 
       nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+        erlang
         elixir
         hex
 

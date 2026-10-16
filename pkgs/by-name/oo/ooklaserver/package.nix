@@ -8,8 +8,6 @@ let
   filenameMapping = {
     "x86_64-linux" = "OoklaServer-linux-x86_64-static-musl.zip";
     "aarch64-linux" = "OoklaServer-linux-aarch64-static-musl.zip";
-    # Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64]
-    "x86_64-darwin" = "OoklaServer-macosx.zip";
     "aarch64-darwin" = "OoklaServer-macosx.zip";
     "x86_64-windows" = "OoklaServer-windows64.zip";
     "i686-windows" = "OoklaServer-windows32.zip";

@@ -5,15 +5,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "types-six";
-  version = "1.17.0.20251009";
+  version = "1.17.0.20261008";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_six";
-    inherit version;
-    hash = "sha256-7+AwZOzQ/7D3r+EzmQojmNhJPY0cHMEP89/kdtV7pE8=";
+    inherit (finalAttrs) version;
+    hash = "sha256-eY0oKDNMSw2xYV1AIjzNjXn9Y+7HjLkgVsgpLBH4vfY=";
   };
 
   build-system = [ setuptools ];
@@ -31,4 +31,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ YorikSar ];
   };
-}
+})

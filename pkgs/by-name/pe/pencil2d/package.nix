@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pencil2d";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "pencil2d";
     repo = "pencil";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rgoi7WvE2lnGeHA2DzROREDa0iAI4nj9VTRlSmFuh4E=";
+    hash = "sha256-OZlDx+L3kIIp9c2iXvfxLKEJntOA6sji5ugwZXnUqRA=";
     leaveDotGit = true;
     postFetch = ''
       # Obtain the last commit ID and its timestamp, then zap .git for reproducibility

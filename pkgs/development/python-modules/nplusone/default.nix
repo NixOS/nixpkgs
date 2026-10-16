@@ -6,7 +6,6 @@
   fetchFromGitHub,
   flake8,
   flask-sqlalchemy,
-  isPy27,
   mock,
   peewee,
   pytest-django,
@@ -21,13 +20,12 @@ buildPythonPackage rec {
   pname = "nplusone";
   version = "1.0.0";
   format = "setuptools";
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jmcarp";
     repo = "nplusone";
     rev = "v${version}";
-    sha256 = "0qdwpvvg7dzmksz3vqkvb27n52lq5sa8i06m7idnj5xk2dgjkdxg";
+    hash = "sha256-r7cpXxOzF2lbPNWAiJQumIpij1h74j2+nvW38/a+vGE=";
   };
 
   propagatedBuildInputs = [

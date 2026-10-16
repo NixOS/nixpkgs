@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
+  strictDeps = true;
+
   configureFlags = lib.optional static "LDFLAGS=-static";
 
   makeFlags =
@@ -42,8 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
       "LDFLAGS+=-lws2_32"
     ]);
 
+  __structuredAttrs = true;
+
   meta = {
     description = "High-performance event loop/event model with lots of features";
+    homepage = "https://software.schmorp.de/pkg/libev.html";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2; # or GPL2+

@@ -133,6 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
     # Segfaults when building shaders
-    broken = stdenv.isLinux;
+    broken = stdenv.hostPlatform.isLinux;
   };
 })

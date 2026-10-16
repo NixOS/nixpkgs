@@ -2,6 +2,7 @@
   fetchCrate,
   lib,
   openssl,
+  zstd,
   pkg-config,
   rustPlatform,
 }:
@@ -18,6 +19,8 @@ let
 
       inherit version;
 
+      __structuredAttrs = true;
+
       src = fetchCrate {
         inherit version hash;
         pname = "cargo-pgrx";
@@ -31,6 +34,7 @@ let
 
       buildInputs = [
         openssl
+        zstd
       ];
 
       preCheck = ''
@@ -39,7 +43,13 @@ let
 
       checkFlags = [
         # requires pgrx to be properly initialized with cargo pgrx init
+        "--skip=object_utils::tests::parses_managed_postmasters"
+        # test name in versions < 0.18
         "--skip=command::schema::tests::test_parse_managed_postmasters"
+        # requires tests/fixtures/workspace, which is not in the crate
+        "--skip=command::upgrade::tests::find_package_manifest_in_workspace"
+        "--skip=command::upgrade::tests::process_workspace_manifest"
+        "--skip=command::upgrade::tests::process_workspace_package_manifest"
       ];
 
       meta = {
@@ -50,6 +60,7 @@ let
         maintainers = with lib.maintainers; [
           happysalada
           matthiasbeyer
+          anish
         ];
         mainProgram = "cargo-pgrx";
       };
@@ -60,9 +71,9 @@ in
   # Not to be used with buildPgrxExtension, where it should be pinned.
   # When you make an extension use the latest version, *copy* this to a separate pinned attribute.
   cargo-pgrx = generic {
-    version = "0.17.0";
-    hash = "sha256-Ld7m7ggxlf8FufpeiAE9qcu49X0SgX6XXHS6KIewGyA=";
-    cargoHash = "sha256-hNj39YzJna8iZxnlrLz+uLduxaD+uvggQRM7ng3MN1k=";
+    version = "0.19.3";
+    hash = "sha256-TyViMU+ZLUHNK5CRi8CN3tThFNUJQnuWTeCxT2JTYG0=";
+    cargoHash = "sha256-43B3zl/mJXuBD/w8x+lek7Wtg/lZ/bZWuJdv5v9ImSE=";
   };
 }
 // lib.mapAttrs (_: generic) (import ./pinned.nix)

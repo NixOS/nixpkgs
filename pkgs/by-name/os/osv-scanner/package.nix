@@ -1,23 +1,24 @@
 {
   lib,
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
+  nix-update-script,
   testers,
   osv-scanner,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo127Module (finalAttrs: {
   pname = "osv-scanner";
-  version = "2.3.3";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "osv-scanner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XUNtSLokTp7fq25vAb1hVg2eCtok+pe/nIWKMu4tVlI=";
+    hash = "sha256-kBAGlTz+GED9e4O/tCLuica0YgkGp+AgYKIcMHKJ31s=";
   };
 
-  vendorHash = "sha256-tSvKKX4P3XzHMF7jYnupZ5Fd9DUfIHT9a1bOHhB2gMs=";
+  vendorHash = "sha256-5on5A933JvMfUJZjrMImNvNqGK6u9MsNxl425nv0ktU=";
 
   subPackages = [
     "cmd/osv-scanner"
@@ -34,8 +35,11 @@ buildGoModule (finalAttrs: {
   # Tests require network connectivity to query https://api.osv.dev.
   doCheck = false;
 
-  passthru.tests.version = testers.testVersion {
-    package = osv-scanner;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = osv-scanner;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

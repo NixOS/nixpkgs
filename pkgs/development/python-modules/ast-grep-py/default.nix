@@ -18,7 +18,7 @@ buildPythonPackage {
     maturinBuildHook
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace ./crates/pyo3/tests/test_register_lang.py \
       --replace-fail '../..' ${ast-grep.src}
   '';

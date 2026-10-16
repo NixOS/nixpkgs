@@ -40,12 +40,24 @@ let
       --replace-fail 'defined(__linux__)' '0'
   '';
 
+  meta = {
+    description = "SMT solver for Monotonic Theories";
+    mainProgram = "monosat";
+    platforms = lib.platforms.unix;
+    license = if includeGplCode then lib.licenses.gpl2 else lib.licenses.mit;
+    homepage = "https://github.com/sambayless/monosat";
+    maintainers = [ lib.maintainers.acairncross ];
+    # last successful hydra build on darwin was in 2025
+    broken = stdenv.hostPlatform.isDarwin;
+  };
+
   core = stdenv.mkDerivation {
     inherit
       pname
       version
       src
       patches
+      meta
       ;
     postPatch = commonPostPatch + ''
       substituteInPlace CMakeLists.txt \
@@ -72,15 +84,6 @@ let
     '';
 
     passthru = { inherit python; };
-
-    meta = {
-      description = "SMT solver for Monotonic Theories";
-      mainProgram = "monosat";
-      platforms = lib.platforms.unix;
-      license = if includeGplCode then lib.licenses.gpl2 else lib.licenses.mit;
-      homepage = "https://github.com/sambayless/monosat";
-      maintainers = [ lib.maintainers.acairncross ];
-    };
   };
 
   python =
@@ -98,6 +101,7 @@ let
         version
         src
         patches
+        meta
         ;
 
       build-system = [
@@ -114,7 +118,11 @@ let
       # the sourceRoot if it weren't for the patch.
       postPatch =
         commonPostPatch
+        # cython 3.1 dropped the python 2 `long` builtin
         + ''
+          substituteInPlace src/monosat/api/python/monosat/monosat_p.pyx \
+            --replace-fail '(int, long)' 'int' \
+            --replace-fail '(int,long)' 'int'
           cd src/monosat/api/python
         ''
         +

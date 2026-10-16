@@ -1,5 +1,4 @@
 {
-  config,
   stdenv,
   lib,
   fetchurl,
@@ -18,7 +17,7 @@
   wrapGAppsHook3,
   gobject-introspection,
   networkmanager,
-  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  withPulseAudio ? stdenv.hostPlatform.isLinux,
   libpulseaudio,
   procps,
 }:
@@ -76,6 +75,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
+  dontWrapGApps = true;
+
   makeWrapperArgs = [
     "--prefix PATH ':' ${
       lib.makeBinPath [
@@ -85,6 +86,7 @@ stdenv.mkDerivation rec {
       ]
     }"
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
+    "\${gappsWrapperArgs[@]}"
   ];
 
   postFixup = ''

@@ -20,7 +20,7 @@
   gpgme,
   python3,
   openldap,
-  gcr,
+  gcr_3,
   libsecret,
   avahi,
   p11-kit,
@@ -59,14 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
     openssh
     gnupg
     desktop-file-utils
-    gcr
+    gcr_3
   ];
 
   buildInputs = [
     gtk3
     glib
     glib-networking
-    gcr
+    gcr_3
     gsettings-desktop-schemas
     gpgme
     libsecret
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Add “org.gnome.crypto.pgp” GSettings schema to path
     # to make it available for “gpgme-backend” test.
     # It is used by Seahorse’s internal “common” library.
-    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr}"
+    addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr_3}"
     # The same test also requires home directory so that it can store settings.
     export HOME=$TMPDIR
   '';
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       # Pick up icons from Gcr
-      --prefix XDG_DATA_DIRS : "${gcr}/share"
+      --prefix XDG_DATA_DIRS : "${gcr_3}/share"
     )
   '';
 

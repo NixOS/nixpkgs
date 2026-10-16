@@ -17,7 +17,7 @@
 # However, apython will work fine when using python##.withPackages,
 # because with python##.withPackages the sys.executable is already
 # wrapped to be able to find aioconsole and any other packages.
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aioconsole";
   version = "0.8.2";
   pyproject = true;
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aioconsole";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-j4nzt8mvn+AYObh1lvgxS8wWK662KN+OxjJ2b5ZNAcQ=";
   };
 
@@ -59,9 +59,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Asynchronous console and interfaces for asyncio";
-    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${version}";
+    changelog = "https://github.com/vxgmichel/aioconsole/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/vxgmichel/aioconsole";
     license = lib.licenses.gpl3Only;
     mainProgram = "apython";
   };
-}
+})

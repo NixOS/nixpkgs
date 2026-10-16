@@ -11,14 +11,14 @@
   freeglut,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fsnav";
   version = "0.1";
 
   src = fetchFromGitHub {
     owner = "jtsiomb";
     repo = "fsnav";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Bt1QRqtJkVFR1uMzmB3OUyqyzUyJdQyQdbMOfMyWJOc=";
   };
 
@@ -30,18 +30,18 @@ stdenv.mkDerivation rec {
     freetype
     libpng
     libjpeg
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libGLU
     freeglut
-  ];
+  ]);
 
-  preBuild = ''
-    makeFlagsArray+=(
-      "PREFIX=$out"
-      "CC=$CC"
-      "CXX=$CXX"
-    )
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -54,8 +54,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ aaravrav ];
     mainProgram = "fsnav";
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; linux ++ darwin;
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
-
-}
+})

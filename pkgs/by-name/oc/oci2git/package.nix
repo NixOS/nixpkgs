@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Introspecting Docker images as easy as using Git";
     homepage = "https://github.com/Virviil/oci2git";
     changelog = "https://github.com/Virviil/oci2git/releases/tag/v${finalAttrs.version}";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers.kpbaks ];
     mainProgram = "oci2git";
     platforms = lib.platforms.all;

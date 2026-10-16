@@ -32,7 +32,7 @@ buildPythonPackage {
       This is not a MkDocs plugin, but a companion tool that is useful to validate links in Markdown files for
       static site generators like MkDocs, Hugo or Jekyll. It can be used with any text files containing links.
     '';
-    homepage = "https://github.com/byrnereese/mkdocs-linkcheck";
+    homepage = "https://github.com/byrnereese/linkchecker-mkdocs";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ totoroot ];
   };

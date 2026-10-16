@@ -4,6 +4,7 @@
   lib,
   tls ? true,
   gnutls,
+  nixosTests,
 }:
 
 gccStdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,8 @@ gccStdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.nixos = nixosTests.nullmailer;
 
   meta = {
     homepage = "http://untroubled.org/nullmailer/";

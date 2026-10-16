@@ -1,33 +1,18 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nix-update common-updater-scripts curl jq
+#!nix-shell -i bash -p curl jq gh
 
-# Update all leanPackages to match the lean4 version in nixpkgs.
-#
-# All mathlib-ecosystem packages (batteries, aesop, Qq, plausible,
-# importGraph, Cli, mathlib) release with the same version tag as
-# lean4 (lockstep versioning).  ProofWidgets and LeanSearchClient
-# have their own versioning; the correct versions are read from
-# mathlib's lake-manifest.json at the matching lean4 tag.
-#
-# This script only prefetches source hashes — it does not build
-# anything.  Output is a summary suitable for commit messages.
-#
-# Usage:
-#   ./pkgs/development/lean-modules/update.sh
+# Updates the leanPackages dependency tree to match mathlib's
+# lake-manifest.json for the current lean4 version.
 
 set -euo pipefail
 
-lean4_version=$(nix eval --raw .#lean4.version)
+lean4_version=$(nix eval --raw .#leanPackages.lean4.version 2>/dev/null)
 
-# Snapshot current versions for diffing.
-old_lockstep=$(nix eval --raw .#leanPackages.mathlib.version 2>/dev/null || echo "")
-old_pw=$(nix eval --raw .#leanPackages.proofwidgets.version 2>/dev/null || echo "")
-old_lsc=$(nix eval --raw .#leanPackages.LeanSearchClient.version 2>/dev/null || echo "")
+dir=$(dirname "$0")
+FAKE="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 
 manifest=$(curl -sL "https://raw.githubusercontent.com/leanprover-community/mathlib4/v${lean4_version}/lake-manifest.json")
 
-# Verify that mathlib's dependency set matches what we package.
-# If mathlib adds or removes a dep, this script needs manual updating.
 known_deps="Cli LeanSearchClient Qq aesop batteries importGraph plausible proofwidgets"
 manifest_deps=$(echo "$manifest" | jq -r '[.packages[].name] | sort | join(" ")')
 if [ "$manifest_deps" != "$known_deps" ]; then
@@ -37,47 +22,77 @@ if [ "$manifest_deps" != "$known_deps" ]; then
   exit 1
 fi
 
-pw_version=$(echo "$manifest" | jq -r '.packages[] | select(.name == "proofwidgets") | .inputRev' | sed 's/^v//')
+patch_pkg() {
+  local pkgname="$1" repo="$2"
+  local file="$dir/$pkgname/default.nix"
+  local inputRev rev version
+  inputRev=$(echo "$manifest" | jq -r ".packages[] | select(.name == \"$pkgname\") | .inputRev")
+  rev=$(echo "$manifest" | jq -r ".packages[] | select(.name == \"$pkgname\") | .rev")
 
-lsc_rev=$(echo "$manifest" | jq -r '.packages[] | select(.name == "LeanSearchClient") | .rev')
-lsc_date=$(curl -sL "https://api.github.com/repos/leanprover-community/LeanSearchClient/commits/$lsc_rev" | jq -r '.commit.committer.date[:10]')
-lsc_version="0-unstable-$lsc_date"
+  if [[ "$inputRev" =~ ^v[0-9] ]]; then
+    version="${inputRev#v}"
+    # tag = "v${...version}" auto-follows; convert rev → tag if needed.
+    if grep -q 'rev = "' "$file"; then
+      sed -i -E "s|rev = \"[^\"]*\";|tag = \"${inputRev}\";|" "$file"
+    fi
+  else
+    local tmp=$(mktemp -d)
+    git clone --bare --filter=tree:0 --depth=100 --single-branch "https://github.com/$repo" "$tmp" 2>/dev/null
+    local latest_tag=$(git -C "$tmp" describe --tags --abbrev=0 --match 'v[0-9]*' "$rev" 2>/dev/null | sed 's/^v//')
+    rm -rf "$tmp"
+    local date=$(gh api "repos/$repo/commits/$rev" --jq '.commit.committer.date[:10]')
+    version="${latest_tag:-0}-unstable-$date"
+    if grep -q 'rev = "' "$file"; then
+      sed -i -E "s|rev = \"[^\"]*\";|rev = \"${rev}\";|" "$file"
+    else
+      sed -i -E "s|tag = \"[^\"]*\";|rev = \"${rev}\";|" "$file"
+    fi
+  fi
 
-# Leaf packages (no leanDeps).
-nix-update leanPackages.batteries        --version="$lean4_version"
-nix-update leanPackages.Qq               --version="$lean4_version"
-nix-update leanPackages.plausible        --version="$lean4_version"
-nix-update leanPackages.Cli              --version="$lean4_version"
-nix-update leanPackages.proofwidgets     --version="$pw_version"
+  sed -i -E "s|version = \"[^\"]*\";|version = \"${version}\";|" "$file"
+  sed -i "0,/hash = \"sha256-[^\"]*\"/{s||hash = \"$FAKE\"|}" "$file"
+}
 
-# LeanSearchClient has no lockstep tags; pin to the exact rev mathlib uses.
-update-source-version leanPackages.LeanSearchClient "$lsc_version" \
-  --rev="$lsc_rev"
+echo "--- mathlib tree ---"
 
-# Packages with leanDeps.
-nix-update leanPackages.aesop            --version="$lean4_version"
-nix-update leanPackages.importGraph      --version="$lean4_version"
+patch_pkg batteries        leanprover-community/batteries
+patch_pkg Qq               leanprover-community/quote4
+patch_pkg aesop            leanprover-community/aesop
+patch_pkg Cli              leanprover/lean4-cli
+patch_pkg plausible        leanprover-community/plausible
+patch_pkg importGraph      leanprover-community/import-graph
+patch_pkg proofwidgets     leanprover-community/ProofWidgets4
+patch_pkg LeanSearchClient leanprover-community/LeanSearchClient
 
-# mathlib (all deps are nix-packaged, no lakeHash needed).
-nix-update leanPackages.mathlib          --version="$lean4_version"
-
-# Summary.
-changes=()
-if [ "$old_lockstep" != "$lean4_version" ]; then
-  changes+=("lockstep packages: $old_lockstep -> $lean4_version")
+sed -i -E "/lean4-mathlib/,/version/s|version = \"[^\"]*\";|version = \"${lean4_version}\";|" "$dir/mathlib/default.nix"
+if ! grep -q 'tag = "v\${finalAttrs.version}"' "$dir/mathlib/default.nix"; then
+  sed -i -E 's|tag = "v[^"]*";|tag = "v${finalAttrs.version}";|' "$dir/mathlib/default.nix"
 fi
-if [ "$old_pw" != "$pw_version" ]; then
-  changes+=("proofwidgets: $old_pw -> $pw_version")
-fi
-if [ "$old_lsc" != "$lsc_version" ]; then
-  changes+=("LeanSearchClient: $old_lsc -> $lsc_version")
-fi
+sed -i "0,/hash = \"sha256-[^\"]*\"/{s||hash = \"$FAKE\"|}" "$dir/mathlib/default.nix"
 
-if [ ${#changes[@]} -eq 0 ]; then
-  echo "leanPackages: already up to date at lean4 $lean4_version"
-else
-  echo "leanPackages: update to lean4 $lean4_version"
-  for c in "${changes[@]}"; do
-    echo "  - $c"
-  done
-fi
+prefetch() {
+  local out newhash
+  out=$(nix build ".#leanPackages.${1}.${2:-src}" 2>&1 || true)
+  newhash=$(echo "$out" | awk '/got:/ {print $2}' | head -1)
+  if [ -z "$newhash" ]; then
+    echo "ERROR: failed to prefetch $1.${2:-src}" >&2
+    echo "$out" >&2
+    return 1
+  fi
+  echo "$newhash"
+}
+
+for pkg in batteries Qq aesop Cli plausible importGraph proofwidgets LeanSearchClient mathlib; do
+  echo "  prefetching $pkg"
+  newhash=$(prefetch "$pkg")
+  sed -i "s|$FAKE|$newhash|" "$dir/$pkg/default.nix"
+done
+
+echo "  prefetching proofwidgets npmDeps"
+# Replace the second hash (the one inside fetchNpmDeps) with fake.
+sed -i "0,/hash = \"sha256-[^\"]*\"/!{s|hash = \"sha256-[^\"]*\"|hash = \"$FAKE\"|}" "$dir/proofwidgets/default.nix"
+newhash=$(prefetch proofwidgets npmDeps)
+sed -i "s|$FAKE|$newhash|" "$dir/proofwidgets/default.nix"
+
+echo "leanPackages: updated dependency tree for lean4 $lean4_version"
+echo "https://github.com/leanprover-community/mathlib4/blob/v${lean4_version}/lake-manifest.json"

@@ -13,13 +13,13 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "moreutils";
   version = "0.70";
 
   src = fetchgit {
     url = "git://git.joeyh.name/moreutils";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-71ACHzzk258U4q2L7GJ59mrMZG99M7nQkcH4gHafGP0=";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
+    "CC=${lib.getExe stdenv.cc}"
     "DOCBOOKXSL=${docbook-xsl}/xml/xsl/docbook"
     "INSTALL_BIN=install"
     "PREFIX=${placeholder "out"}"
@@ -54,6 +54,8 @@ stdenv.mkDerivation rec {
     # No nicer place to find latest release.
     url = "git://git.joeyh.name/moreutils";
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Growing collection of the unix tools that nobody thought to write long ago when unix was young";
@@ -69,4 +71,4 @@ stdenv.mkDerivation rec {
     # its parallel executable instead of moreutils'.
     priority = (parallel.meta.priority or lib.meta.defaultPriority) + 1;
   };
-}
+})

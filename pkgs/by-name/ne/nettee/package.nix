@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sourceforge.net/projects/nettee";
     description = ''Network "tee" program'';
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "nettee";
   };

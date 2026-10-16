@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Create asciinema videos from a text file";
     homepage = "https://github.com/garbas/asciinema-scenario/";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     mainProgram = "asciinema-scenario";
   };
 })

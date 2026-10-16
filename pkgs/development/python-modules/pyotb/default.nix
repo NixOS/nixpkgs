@@ -22,12 +22,12 @@ let
   # https://github.com/orfeotoolbox/pyotb/blob/develop/tests/tests_data.py
   spotImage = fetchurl {
     url = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/raw/develop/Data/Input/SP67_FR_subset_1.tif";
-    sha256 = "sha256-MuWY/g7KI+F23lFY/+AX5MLWJlIgHCr5BvFjDHzpWgY=";
+    hash = "sha256-MuWY/g7KI+F23lFY/+AX5MLWJlIgHCr5BvFjDHzpWgY=";
   };
 
   pleiadesImage = fetchurl {
     url = "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/raw/develop/Data/Baseline/OTB/Images/prTvOrthoRectification_pleiades-1_noDEM.tif";
-    sha256 = "sha256-1EsGAJdHgBIb/gfbh4Y7yEEmYHb54bSx4fEMKssZ/oA=";
+    hash = "sha256-1EsGAJdHgBIb/gfbh4Y7yEEmYHb54bSx4fEMKssZ/oA=";
   };
 
   otbWithPy = otb.override {
@@ -37,14 +37,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pyotb";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "orfeotoolbox";
     repo = "pyotb";
     tag = version;
-    hash = "sha256-KomIMVx4jfsTSbGtoml9ON/82sHanOkp/mp1TiUaa2E=";
+    hash = "sha256-TDBhMCdO3kGjbysYZN9un7Y8YY+dGlHw5Vj/ZJVPXdk=";
   };
 
   postPatch = ''
@@ -71,6 +71,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ otbWithPy ];
+
+  pythonRelaxDeps = [ "numpy" ];
 
   pythonImportsCheck = [ "pyotb" ];
 

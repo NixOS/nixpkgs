@@ -17,7 +17,7 @@
   libxfce4ui,
   libxfce4util,
   sqlite,
-  systemd,
+  systemdLibs,
   xfce4-panel,
   xfconf,
   gitUpdater,
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxfce4ui
     libxfce4util
     sqlite
-    systemd
+    systemdLibs
     xfce4-panel
     xfconf
   ];

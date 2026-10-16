@@ -1,4 +1,5 @@
 {
+  lib,
   buildPythonPackage,
   hatchling,
   httpx,
@@ -6,7 +7,9 @@
   opentelemetry-instrumentation,
   opentelemetry-util-http,
   opentelemetry-test-utils,
+  opentelemetry-semantic-conventions,
   pytestCheckHook,
+  pythonOlder,
   respx,
 }:
 
@@ -23,6 +26,7 @@ buildPythonPackage {
     httpx
     opentelemetry-api
     opentelemetry-instrumentation
+    opentelemetry-semantic-conventions
     opentelemetry-util-http
   ];
 
@@ -31,6 +35,8 @@ buildPythonPackage {
     pytestCheckHook
     respx
   ];
+
+  doCheck = pythonOlder "3.14";
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.httpx" ];
 

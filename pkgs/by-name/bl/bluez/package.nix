@@ -8,7 +8,7 @@
   docutils,
   ell,
   enableExperimental ? false,
-  fetchurl,
+  fetchpatch2,
   glib,
   json_c,
   libical,
@@ -32,10 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   inherit (bluez-headers) version src;
 
   patches = [
-    (fetchurl {
-      name = "static.patch";
-      url = "https://lore.kernel.org/linux-bluetooth/20250703182908.2370130-1-hi@alyssa.is/raw";
-      hash = "sha256-4Yz3ljsn2emJf+uTcJO4hG/YXvjERtitce71TZx5Hak=";
+    ./lreadline.patch
+    # https://github.com/bluez/bluez/issues/2282
+    (fetchpatch2 {
+      name = "fix-uuid-discovery-segfault";
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=82af2beafc39510e2c4a439bf44faea711d6503f";
+      hash = "sha256-Zf5J4USdfwKe7DVfivyj2q15LPy2GkUqVUq2tE1bG6M=";
     })
   ];
 

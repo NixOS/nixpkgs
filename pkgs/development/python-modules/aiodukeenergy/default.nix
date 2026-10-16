@@ -5,6 +5,7 @@
   fetchFromGitHub,
   lib,
   poetry-core,
+  pyjwt,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -13,20 +14,21 @@
 
 buildPythonPackage rec {
   pname = "aiodukeenergy";
-  version = "0.3.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hunterjm";
     repo = "aiodukeenergy";
     tag = "v${version}";
-    hash = "sha256-BYDC2j2s6gg8/owTDdijqmReUSqDYWqHXf8BUzYn+sI=";
+    hash = "sha256-//sxl5eOaO6HIEJzxCSxSQaJu5F0sOItawpF3cNTXm0=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    pyjwt
     yarl
   ];
 

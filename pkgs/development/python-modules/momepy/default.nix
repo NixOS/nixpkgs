@@ -28,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-Og7W+35k9HIIEFGcDmsxggb1BT5cwnaMIi3HO3VRAX0=";
   };
 
+  patches = [
+    # see https://github.com/pysal/momepy/pull/733
+    ./fix_test_elements.patch
+  ];
+
   build-system = [ setuptools-scm ];
 
   propagatedBuildInputs = [
@@ -45,6 +50,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "momepy" ];
+
+  disabledTestPaths = [
+    # this tests depends on neatnet, not packaged in nixpkgs
+    # it's probably not worthy to package it just for this test
+    "momepy/tests/test_continuity.py"
+  ];
 
   meta = {
     description = "Urban Morphology Measuring Toolkit";

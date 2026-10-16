@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "0.102.1";
+  version = "0.106.0";
 
   serverSource_x64.url = "https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-x64.tar.xz";
-  serverSource_x64.hash = "sha256-5UW+3VrexXbtfVEcoPGEl1cu44nX89a88ny5o2pSv1I=";
+  serverSource_x64.hash = "sha256-xpOijrhtKJLjBVPY/ZoXH01y5cdvAt0/szX2vUdrauw=";
   serverSource_arm64.url = "https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-Server-v${version}-linux-arm64.tar.xz";
-  serverSource_arm64.hash = "sha256-uwOYXCoWmpRK2XQfSYervEzdbwHy0qQ+OkRh6izvDNM=";
+  serverSource_arm64.hash = "sha256-di+BwgYiHIpqxSN0TKy7KWk2lq1/F7Bf81hfPSl9jxw=";
 
   serverSource =
     if stdenv.hostPlatform.isx86_64 then
@@ -46,16 +46,19 @@ stdenv.mkDerivation {
 
     cp -r ./* "$out/share/trilium-server/"
 
+    # Unused musl prebuilds confuse autoPatchelfHook (glibc-only).
+    rm -f "$out/share/trilium-server/node_modules/better-sqlite3/prebuilds"/linuxmusl-*.node
+
     makeWrapper "$out/share/trilium-server/node/bin/node" "$out/bin/trilium-server" \
       --chdir "$out/share/trilium-server" \
-      --add-flags "main.cjs"
+      --add-flags "main.mjs"
 
     runHook postInstall
   '';
 
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
-    homepage = "https://github.com/TriliumNext/Notes";
+    homepage = "https://github.com/TriliumNext/Trilium";
     license = lib.licenses.agpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [

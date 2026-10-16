@@ -15,10 +15,12 @@
   libsecret,
   ffmpeg,
   yt-dlp,
-  electron,
+  electron_43,
   chromium,
 }:
-
+let
+  electron = electron_43;
+in
 buildNpmPackage (finalAttrs: {
   pname = "Sharedown";
   version = "5.3.6-unstable-2025-12-16";
@@ -59,7 +61,7 @@ buildNpmPackage (finalAttrs: {
       --add-flags $out/lib/node_modules/sharedown/app.js \
       --set PUPPETEER_EXECUTABLE_PATH ${chromium}/bin/chromium \
       --prefix PATH : ${lib.makeBinPath finalAttrs.finalPackage.passthru.wrapperPaths} \
-      --add-flags "--no-sandbox" \
+      --add-flags "--no-sandbox"
   '';
 
   desktopItems = [

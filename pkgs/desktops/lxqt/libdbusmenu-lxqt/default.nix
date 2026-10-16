@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdbusmenu-lxqt";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libdbusmenu-lxqt";
     rev = version;
-    hash = "sha256-PqX8ShSu3CYN9XIRp6IjVmr/eKH+oLNhXvwiudUH660=";
+    hash = "sha256-5X73kRUtOYeqBEIw2ctUnwXnWKPHDaoT489yT5nugZw=";
   };
 
   nativeBuildInputs = [

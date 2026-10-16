@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Program that can validate your HTML, as well as modify it to be more clean and standard";
     mainProgram = "tidyp";
-    homepage = "http://tidyp.com/";
+    homepage = "https://github.com/petdance/tidyp";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ pSub ];
     license = lib.licenses.bsd3;

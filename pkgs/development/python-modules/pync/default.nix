@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "38b9e61735a3161f9211a5773c5f5ea698f36af4ff7f77fa03e8d1ff0caa117f";
+    hash = "sha256-OLnmFzWjFh+SEaV3PF9eppjzavT/f3f6A+jR/wyqEX8=";
   };
 
   nativeCheckInputs = [ which ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python Wrapper for Mac OS 10.8 Notification Center";
-    homepage = "https://pypi.python.org/pypi/pync";
+    homepage = "https://pypi.org/project/pync/";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     maintainers = [ ];

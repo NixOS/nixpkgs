@@ -31,7 +31,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "Simple static site generator for Gemini";
-    homepage = "https://kiln.adnano.co/";
+    homepage = "https://git.sr.ht/~adnano/kiln";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "kiln";

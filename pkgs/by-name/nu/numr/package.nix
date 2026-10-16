@@ -1,36 +1,31 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  openssl,
   versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "numr";
-  version = "0.5.5";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "nasedkinpv";
     repo = "numr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dx5Ow+trL0/gVKj0IOAVwwgNMl4ZwF5K7MEi6fv/QYc=";
+    hash = "sha256-0xBGWArMnn1H9DaVW0QYA6bT3U1/yIHqSeBm4kRu9HY=";
   };
 
-  cargoHash = "sha256-8illKr1unCiZRlcpuzBSCJ/H7HJPW2cHDLq1vF76vss=";
+  cargoHash = "sha256-jZzJG2/xEaisi4lXvVwSIcKwdraYi7FhL3AxdnagFb4=";
 
-  nativeBuildInputs = [
-    pkg-config
+  checkFlags = [
+    # Skip tests that require network access
+    "--skip=fetch::tests::test_build_crypto_prices_request_adds_query_params"
+    "--skip=fetch::tests::test_build_crypto_prices_request_skips_api_key_for_non_coingecko_url"
+    "--skip=fetch::tests::test_build_crypto_prices_request_uses_demo_api_key_header"
+    "--skip=fetch::tests::test_build_crypto_prices_request_uses_pro_api_key_header"
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    openssl
-  ];
-
-  env.OPENSSL_NO_VENDOR = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -45,6 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
+    badPlatforms = [ "aarch64-darwin" ];
     mainProgram = "numr";
   };
 })

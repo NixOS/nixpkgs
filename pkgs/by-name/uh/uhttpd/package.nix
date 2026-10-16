@@ -6,7 +6,7 @@
   pkg-config,
   lua5_1,
   json_c,
-  libubox-wolfssl,
+  libubox,
   ubus,
   libxcrypt,
   unstableGitUpdater,
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     lua5_1
     json_c
-    libubox-wolfssl
+    libubox
     ubus
     libxcrypt
   ];

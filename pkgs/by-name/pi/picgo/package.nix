@@ -3,32 +3,35 @@
   stdenv,
   fetchFromGitHub,
   nodejs_22,
-  pnpm,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_40,
+  electron_43,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   writableTmpDirAsHomeHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
-  version = "2.5.3";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "Molunerfinn";
     repo = "PicGo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4Ih7PPBo6scJoUS8yTAR0iyG5vxNc/c0CCw5FGaIbHM=";
+    hash = "sha256-wT9CfPchNbD2CzSVA9kZAYsstpc2mvgqAl305rmrUdo=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) version src;
+    inherit pnpm;
     pname = "picgo";
-    hash = "sha256-tILvWDoHAN5XT1F/cJYgfeMzowuO/fhiughI+0FvHzc=";
+    hash = "sha256-a08WFoWcjo0mV1eu8oOQgbOiu/xfpoMxx3v17Eltsbk=";
     fetcherVersion = 3; # lockfileVersion 9.0 corresponds to fetcherVersion 3
   };
 
@@ -45,12 +48,28 @@ stdenv.mkDerivation (finalAttrs: {
     NODE_ENV = "development";
   };
 
+  postPatch = ''
+    # Maximizing a hidden BrowserWindow makes it visible on Linux. Defer restoring
+    # the maximized state until the main window is explicitly shown.
+    # https://github.com/Molunerfinn/PicGo/blob/4676326eb88d087432989366d71e61e17a039e98/src/main/apis/app/window/windowList.ts#L83-L94
+    substituteInPlace src/main/apis/app/window/windowList.ts \
+      --replace-fail "      window.maximize()" \
+        "      window.once('show', () => window.maximize())"
+  '';
+
   buildPhase = ''
     runHook preBuild
 
     pnpm run build
 
     runHook postBuild
+  '';
+
+  postBuild = ''
+    # Renderer assets are loaded from a file:// URL, so the mini window logo must
+    # use a path relative to its index.html.
+    substituteInPlace dist_electron/renderer/assets/mini-*.js \
+      --replace-fail '"/squareLogo.png"' '"./squareLogo.png"'
   '';
 
   installPhase = ''
@@ -70,10 +89,20 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create startup script
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe electron_40} $out/bin/picgo \
+    # PicGo uses app.isPackaged to decide whether it is running in development mode.
+    # With the nixpkgs Electron wrapper the executable is still the generic electron
+    # binary, so app.isPackaged is false unless we force the packaged code path.
+    # https://github.com/Molunerfinn/PicGo/blob/4d92ca199b7afead168785d7375a525ca156b25f/src/main/utils/env.ts#L17-L22
+
+    # ELECTRON_FORCE_IS_PACKAGED makes PicGo use its production resource path,
+    # but with the nixpkgs Electron wrapper process.resourcesPath points to Electron
+    # itself, so point PicGo at the installed public assets
+    makeWrapper ${lib.getExe electron_43} $out/bin/picgo \
+      --add-flags "--class=picgo" \
       --add-flags "$out/lib/picgo/.launcher.cjs" \
-      --add-flags "--name picgo" \
       --set NODE_ENV production \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set STATIC_PATH "$out/lib/picgo/public" \
       --set-default ELECTRON_OZONE_PLATFORM_HINT auto \
       --chdir "$out/lib/picgo"
 

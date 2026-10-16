@@ -9,10 +9,12 @@
   gettext,
   itstool,
   fetchurl,
+  fetchpatch,
   pkg-config,
   libxml2,
   gtk4,
   glib,
+  glib-networking,
   gtksourceview5,
   wrapGAppsHook4,
   gnome,
@@ -27,12 +29,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-calculator";
-  version = "49.2";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major finalAttrs.version}/gnome-calculator-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3fTNLt2hNcQcivaPnAzc2dmpFjy59/jijKLI6B/Ydlc=";
+    hash = "sha256-gFPWiRVl6IKHS2XB21HFvzEABet4i4usNUY5B0M1CpA=";
   };
+
+  patches = [
+    # Fix tests with GNU MPC 1.4.0
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-calculator/-/commit/c9bf69ce3688390a584ca7571ea5fcda5aea8863.patch";
+      hash = "sha256-FoV6SUprVdNcRORpoi+bNMTjzMM8bmXuze+6C9lqF8E=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -49,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     glib
+    glib-networking
     libxml2
     gtksourceview5
     mpfr

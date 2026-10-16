@@ -3,22 +3,27 @@
   rustPlatform,
   fetchFromGitHub,
   perl,
+  cacert,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "samloader-rs";
-  version = "1.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "topjohnwu";
     repo = "samloader-rs";
     tag = finalAttrs.version;
-    hash = "sha256-LgN/vGfb5hdy9/YH4x3+vFUjH97omGu2iNtkDJRMmsk=";
+    hash = "sha256-KexuDojik7AmWzGErKwVoWk97ex0MtXcMoFOpFjg81Q=";
   };
 
-  cargoHash = "sha256-o0+Kb8teYhuhvl8U6FiAq8Z6vd4IWA8k4Z104Z9BkMw=";
+  cargoHash = "sha256-L3Ysb26pp2HXxIwj58TFBQtWp4K8gzi6C7HMrGjFyIE=";
 
   nativeBuildInputs = [ perl ];
+
+  nativeCheckInputs = [ cacert ];
+
+  checkFeatures = [ "mock" ];
 
   passthru.updateScript = nix-update-script { };
 

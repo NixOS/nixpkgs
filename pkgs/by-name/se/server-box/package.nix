@@ -1,6 +1,6 @@
 {
   lib,
-  flutter341,
+  flutter344,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -13,17 +13,17 @@
 }:
 
 let
-  version = "1.0.1340";
+  version = "1.0.1491";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-O9JW8BKe/qJcoHZNt2ayJOYlQLHhEs28JCWU9Xz7gVI=";
+    hash = "sha256-4Y9yFHTN+ZjsrFjSQ3rUjzkayj5sKvlTCYsB2eZbXas=";
   };
 in
-flutter341.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 

@@ -14,20 +14,20 @@
   pytestCheckHook,
   python-dateutil,
   setuptools,
-  syrupy,
+  syrupy_6,
   voluptuous,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "env-canada";
-  version = "0.14.0";
+  version = "0.20.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1UjBE2Oc6bqwmJSFeqWukgAVU7b6OwOt1KMV0UigM3o=";
+    hash = "sha256-pgZ4LE7Yd+qdNkQzr/1hxvbR94GHxCiBtUm5JeR7X9Y=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
     pytest-asyncio
     freezegun
     pytestCheckHook
-    syrupy
+    syrupy_6
   ];
 
   disabledTests = [

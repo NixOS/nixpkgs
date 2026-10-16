@@ -11,6 +11,7 @@ with lib;
 let
   cfg = config.services.coder;
   name = "coder";
+  configRefUrl = "https://coder.com/docs/@main/admin/setup/configuration-reference";
 in
 {
   options = {
@@ -82,7 +83,10 @@ in
       environment = {
         extra = mkOption {
           type = types.attrs;
-          description = "Extra environment variables to pass run Coder's server with. See Coder documentation.";
+          description = ''
+            Extra environment variables to pass run Coder's server with.
+            See [Coder configuration reference](${configRefUrl}).
+          '';
           default = { };
           example = {
             CODER_OAUTH2_GITHUB_ALLOW_SIGNUPS = true;
@@ -91,7 +95,10 @@ in
         };
         file = mkOption {
           type = types.nullOr types.path;
-          description = "Systemd environment file to add to Coder.";
+          description = ''
+            Systemd environment file to add to Coder.
+            See [Coder configuration reference](${configRefUrl}).
+          '';
           default = null;
         };
       };

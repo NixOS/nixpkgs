@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "zamg";
-  version = "0.3.6";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "killer0071234";
     repo = "python-zamg";
     tag = "v${version}";
-    hash = "sha256-j864+3c0GDDftdLqLDD0hizT54c0IgTjT77jOneXlq0=";
+    hash = "sha256-H5YG4Qg72c/wLFErWdC6xpPNnOIuye+4CimOItSFVZU=";
   };
 
   pythonRelaxDeps = [ "async-timeout" ];

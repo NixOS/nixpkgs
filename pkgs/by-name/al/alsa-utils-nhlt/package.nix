@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool to extract microphone array information from ACPI NHLT table";
     homepage = "http://www.alsa-project.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = [ ];
     mainProgram = "nhlt-dmic-info";
     platforms = lib.platforms.linux;
   };

@@ -3,13 +3,13 @@
   afdko,
   buildPythonPackage,
   cmake,
-  distutils,
+  distutils_80,
   fetchPypi,
   fonttools,
   ninja,
   pytestCheckHook,
   scikit-build,
-  setuptools,
+  setuptools_80,
   setuptools-scm,
 }:
 
@@ -31,11 +31,11 @@ buildPythonPackage rec {
   '';
 
   build-system = [
+    distutils_80
+    setuptools_80
     cmake
-    distutils
     ninja
     scikit-build
-    setuptools
     setuptools-scm
   ];
 

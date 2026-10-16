@@ -12,16 +12,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "git-lfs";
-  version = "3.7.1";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N5ckTnyA3mueZre+rMhFZBiAFgEu4pmtzkiUidXnan8=";
+    hash = "sha256-0EmIP0h1te5opicGAWJalPCxz2q42M5a0oHHt0QafDA=";
   };
 
-  vendorHash = "sha256-6H0KpLin+DqwEg5bdzaxj2CoNSneZ/ET43MTrrdF3h8=";
+  proxyVendor = true;
+  vendorHash = "sha256-5N2ygwzxbSiTuwusCF9/wpcZsrNzPalbrEOLTs2ywII=";
 
   nativeBuildInputs = [
     asciidoctor
@@ -37,7 +38,7 @@ buildGoModule (finalAttrs: {
   subPackages = [ "." ];
 
   preBuild = ''
-    GOARCH= go generate ./commands
+    CC= GOOS= GOARCH= go generate ./commands
   '';
 
   postBuild = ''

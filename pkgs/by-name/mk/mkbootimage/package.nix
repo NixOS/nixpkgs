@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   elfutils,
-  pcre,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +20,6 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://github.com/NixOS/nixpkgs/pull/271568
   buildInputs = [
     elfutils
-    pcre
   ];
 
   postPatch = ''

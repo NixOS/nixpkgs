@@ -1,10 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-
-  # buildInputs
-  llvmPackages,
 
   # build-system
   setuptools,
@@ -14,22 +12,30 @@
   torchcodec,
 
   # tests
+  expecttest,
   inflect,
+  librosa,
   parameterized,
   pytestCheckHook,
   pytorch-lightning,
+  requests,
   scipy,
   sentencepiece,
+  soundfile,
   unidecode,
+  writableTmpDirAsHomeHook,
 
   # passthru
   torchaudio,
 
   cudaSupport ? torch.cudaSupport,
-  cudaPackages,
   rocmSupport ? torch.rocmSupport,
 }:
 
+let
+  inherit (stdenv) hostPlatform;
+  inherit (torch) cudaCapabilities cudaPackages;
+in
 buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pname = "torchaudio";
   version = "2.11.0";
@@ -48,22 +54,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # CUDA
     USE_CUDA = cudaSupport;
-    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" cudaCapabilities}";
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUCTC_DECODER = 1;
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_CUDA = 1;
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_MULTIGPU_CUDA = 1;
-
-    # At of 2026-03-27, the default `cudaPackages` version is 12.9.1
-    # According to Nvidia, it should support GCC versions up to 14.x:
-    # -> https://docs.nvidia.com/cuda/archive/12.9.1/cuda-installation-guide-linux/index.html#host-compiler-support-policy
-    # However, PyTorch's *strict* upper bound is 14.0:
-    # -> https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L75
-    # Hence, the build fails with:
-    #   RuntimeError: The current installed version of g++ (14.3.0) is greater than the maximum
-    #   required version by CUDA 12.9. Please make sure to use an adequate version of g++
-    #   (>=6.0.0, <14.0).
-    # Hence, we disable the version check to silence the error:
-    TORCH_DONT_CHECK_COMPILER_ABI = cudaSupport;
 
     # ROCM
     USE_ROCM = rocmSupport;
@@ -80,6 +74,12 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     #   RuntimeError: Test is known to fail for Python 3.10, disabling for now
     #   See: https://github.com/pytorch/audio/pull/2224#issuecomment-1048329450
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_ON_PYTHON_310 = true;
+
+    # Fails on aarch64-linux and darwin with:
+    #   RuntimeError: `fbgemm` is not available
+    # `fbgemm` is indeed an x86_64-linux-only feature
+    # in some x86_64-linux build environments this is also needed
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION = 1;
   };
 
   build-system = [
@@ -90,13 +90,9 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     cudaPackages.cuda_nvcc
   ];
 
-  buildInputs =
-    lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-    ]
-    ++ lib.optionals torch.stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
   dependencies = [
     torch
@@ -106,6 +102,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   pythonImportsCheck = [ "torchaudio" ];
 
   nativeCheckInputs = [
+    expecttest
     inflect
     parameterized
     pytestCheckHook
@@ -113,6 +110,10 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     scipy
     sentencepiece
     unidecode
+    librosa
+    requests
+    soundfile
+    writableTmpDirAsHomeHook
   ];
 
   disabledTestPaths = [
@@ -125,12 +126,37 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     # Mismatched elements: 1070 / 32800 (3.3%)
     "test_amplitude_to_DB"
     "test_amplitude_to_DB_power"
+    "test_griffinlim_0_99"
+    "test_MelSpectrogram_00"
+    "test_MelSpectrogram_01"
+    "test_MelSpectrogram_04"
+    "test_MelSpectrogram_05"
+    "test_MelSpectrogram_08"
+    "test_MelSpectrogram_09"
 
     # Very long to run
     "AutogradCPUTest"
+    "TestAutogradLfilterCPU"
+    "TestWav2Vec2Model"
+
+    # Massive RAM usage
+    "TestConvTasNet"
+  ]
+  ++ lib.optionals (hostPlatform.isLinux && hostPlatform.isAarch64) [
+    # AssertionError: Tensor-likes are not close!
+    "test_batch_inverse_spectrogram"
+    "test_batch_pitch_shift"
+    "test_batch_spectrogram"
+
+    # RuntimeError: illegal immediate parameter (range error)
+    "test_lfilter_shape_4"
+    "test_lfilter_shape_6"
   ];
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
+    pname = "${finalAttrs.pname}-gpuCheck";
+    # This is only a test derivation; its metadata still identifies the package as "torchaudio".
+    dontCheckPythonMetadata = true;
     requiredSystemFeatures = [ "cuda" ];
 
     env = (old.env or { }) // {
@@ -141,7 +167,8 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
   meta = {
     description = "PyTorch audio library";
-    homepage = "https://pytorch.org/";
+    homepage = "https://pytorch.org/audio";
+    downloadPage = "https://github.com/pytorch/audio";
     changelog = "https://github.com/pytorch/audio/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     platforms =

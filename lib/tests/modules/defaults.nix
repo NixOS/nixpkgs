@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 let
   inherit (lib) types;
 in
@@ -19,6 +19,18 @@ in
     submodule = lib.mkOption {
       type = types.submodule { };
     };
+    submoduleWithDefaults = lib.mkOption {
+      type = types.submodule {
+        options.enabled = lib.mkOption {
+          type = types.bool;
+          default = true;
+        };
+        options.count = lib.mkOption {
+          type = types.int;
+          default = 13;
+        };
+      };
+    };
     unique = lib.mkOption {
       type = types.unique { message = "hi"; } (types.listOf types.int);
     };
@@ -28,6 +40,17 @@ in
     # no empty value
     int = lib.mkOption {
       type = types.int;
+    };
+
+    result = lib.mkOption {
+      type = types.str;
+      default =
+        assert
+          config.submoduleWithDefaults == {
+            enabled = true;
+            count = 13;
+          };
+        "ok";
     };
   };
 }

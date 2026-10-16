@@ -15,7 +15,7 @@
   dmidecode,
   libuuid,
   newt,
-  lua,
+  lua5_2_compat,
   speex,
   libopus,
   opusfile,
@@ -36,6 +36,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   common =
     {
       version,

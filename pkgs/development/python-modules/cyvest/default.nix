@@ -15,19 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "cyvest";
-  version = "5.3.3";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PakitoSec";
     repo = "cyvest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4vNfv5dIoeRhnTXNFgqvtxBaCONceXnJhF9RsLD1CIA=";
+    hash = "sha256-w2Cphhb1iNAFlJEglF1ndVRZErs6vc3+pb+BHYEp7Xw=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.9.8,<0.10.0" "uv_build"
+      --replace-fail "uv_build>=0.9.8,<0.12.0" "uv_build"
   '';
 
   pythonRelaxDeps = [ "pydantic" ];

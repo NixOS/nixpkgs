@@ -8,32 +8,35 @@
   python3,
   cacert,
   versionCheckHook,
-  nodejs_22,
+  nodejs_24,
 }:
 
-buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_24; } (finalAttrs: {
   pname = "homebridge-config-ui-x";
-  version = "5.18.0";
+  version = "5.29.0";
 
   src = fetchFromGitHub {
     owner = "homebridge";
     repo = "homebridge-config-ui-x";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bdE/uu3uh3qgPNaDKU47wD1LtER/wJfLmwp2J624rK4=";
+    hash = "sha256-QDvgi7tHS6OAlZ0+ybLemqlMD4a09YqtDs0YBcs+3uA=";
   };
 
   # Deps hash for the root package
-  npmDepsHash = "sha256-pbmnAAQs6RVwklAoKY4LY0k+nheX2BeAgkQEFNVDofc=";
+  npmDepsHash = "sha256-7YhwV+IJsEVxrgir84uP+YwXgovtVxPMCk5Jt57mez8=";
 
   # Deps src and hash for ui subdirectory
   npmDeps_ui = fetchNpmDeps {
     name = "npm-deps-ui";
     src = "${finalAttrs.src}/ui";
-    hash = "sha256-uBB2WxbCXJL2Ys6sMFcLUlh88TLAz3U+XMhvDc8yFPk=";
+    hash = "sha256-DKDixaXDDovHVnlWvV16p72a3ejMdDsNWaCfUnzMSX0=";
   };
 
   # Need to also run npm ci in the ui subdirectory
   preBuild = ''
+    # Apply upstream package patch before TypeScript compilation.
+    npm run prepare
+
     # Tricky way to run npmConfigHook multiple times
     (
       source ${npmHooks.npmConfigHook}/nix-support/setup-hook
@@ -49,6 +52,8 @@ buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   # Remove this (and the makeCacheWritable in preBuild), once we fix
   # compiling node-pty on darwin
   makeCacheWritable = stdenv.hostPlatform.isDarwin;
+
+  npmInstallFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
     python3

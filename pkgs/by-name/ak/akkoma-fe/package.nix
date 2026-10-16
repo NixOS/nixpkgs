@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "akkoma-fe";
-  version = "3.18.0";
+  version = "3.19.0";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s9rHuZsNHQLCXqqF8VJPgiTHkHHXro97mUTvLB9WKfI=";
+    hash = "sha256-2uyyW/Ai0lbjj/nxjpN039iskg9UQ4QqUmjnhvsj33k=";
 
     # upstream repository archive fetching is broken
     forceFetchGit = true;
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-QB523QZX8oBMHWBSFF7MpaWWXc+MgEUaw/2gsCPZ9a4=";
+    hash = "sha256-oGmO2AVa6tGYIvs3K7bJ+5db6NxTjO1ZR40aZ/yJQ2M=";
   };
 
   nativeBuildInputs = [
@@ -70,6 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Frontend for Akkoma";
     homepage = "https://akkoma.dev/AkkomaGang/akkoma-fe/";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ mvs ];
+    maintainers = with lib.maintainers; [ yuka ];
   };
 })

@@ -4,37 +4,45 @@
   fetchFromGitHub,
   pkg-config,
   wrapGAppsHook4,
+  accountsservice,
+  dbus,
   glib,
+  gst_all_1,
   gtk4,
   pango,
   librsvg,
+  libseccomp,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "regreet";
-  version = "0.2.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "rharish101";
     repo = "ReGreet";
     rev = finalAttrs.version;
-    hash = "sha256-f8Xvno5QqmWz4SUiFYDvs8lFU1ZaqQ8gpTaVzWxW4T8=";
+    hash = "sha256-fJZqEcsqorTJA5qFhJ8wcNZKAC3q/KKFFIEZlrnkGHQ=";
   };
 
-  cargoHash = "sha256-abCQ3RsnZ/a1DbjQFOiA7Xs7bbqSJxwNps8yV6Q4FIw=";
-
-  buildFeatures = [ "gtk4_8" ];
+  cargoHash = "sha256-vWZ5lF5VKAPJTamvU/EavMHZsp4Gu2JvH4kbAvOqWTY=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
   ];
   buildInputs = [
+    accountsservice
+    dbus
     glib
     gtk4
+    gst_all_1.gstreamer # Used for animated wallpapers or video playback
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-base
     pango
     librsvg
+    libseccomp
   ];
 
   passthru.updateScript = nix-update-script { };

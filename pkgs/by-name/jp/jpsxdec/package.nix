@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jpsxdec";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "m35";
     repo = "jpsxdec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PZOc5mpnUiUyydWyfZjWuPG4w+tRd6WLJ6YQMqu/95I=";
+    hash = "sha256-X55/FKfPLSwl7veB0LOmXeFEh5zJ10zKdTbCUnnyB5g=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/jpsxdec";
@@ -71,7 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/m35/jpsxdec/blob/${finalAttrs.src.rev}/jpsxdec/doc/CHANGES.txt";
     description = "Cross-platform PlayStation 1 audio and video converter";
     homepage = "https://jpsxdec.blogspot.com/";
-    license = {
+    license = lib.licenses.mkLicense {
+      shortName = "jpsxdec";
       url = "https://raw.githubusercontent.com/m35/jpsxdec/${finalAttrs.src.rev}/.github/LICENSE.md";
       free = true;
     };

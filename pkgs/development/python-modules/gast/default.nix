@@ -1,6 +1,5 @@
 {
   lib,
-  astunparse,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -22,7 +21,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
-    astunparse
     pytestCheckHook
   ];
 

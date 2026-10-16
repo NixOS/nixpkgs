@@ -4,7 +4,7 @@
   fetchurl,
   pkg-config,
   gtkmm3,
-  glibmm,
+  glibmm_2_4,
   gtksourceview3,
   gnome,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glibmm
+    glibmm_2_4
     gtkmm3
     gtksourceview3
   ];

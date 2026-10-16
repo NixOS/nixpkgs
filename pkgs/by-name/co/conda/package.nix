@@ -49,7 +49,7 @@
 # $ conda-shell
 # $ conda install spyder
 let
-  version = "25.11.1-1";
+  version = "26.7.1-1";
 
   src =
     let
@@ -63,10 +63,10 @@ let
       };
     in
     fetchurl {
-      url = "https://repo.anaconda.com/miniconda/Miniconda3-py313_${version}-Linux-${arch}.sh";
+      url = "https://repo.anaconda.com/miniconda/Miniconda3-py314_${version}-Linux-${arch}.sh";
       hash = selectSystem {
-        x86_64-linux = "sha256-4LEOBQ6JKOLrmq0sUi7jtdMdMASLipmXZjqKRg1TjO8=";
-        aarch64-linux = "sha256-nznMjEbKN6/tXlY8wjSzrdNP6i8RGeB23K56N3ymuO4=";
+        x86_64-linux = "sha256-6LJbkrJiSZFBxb1XqY08AIAkGF+pUUlLnNm22U5yM4s=";
+        aarch64-linux = "sha256-4xVFr9dGLTycM7FUx6EBxay14BtpOAtplGUa6taUKJM=";
       };
     };
 
@@ -143,7 +143,7 @@ buildFHSEnv {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    license = with lib.licenses; [ bsd3 ];
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ jluttine ];
   };
 }

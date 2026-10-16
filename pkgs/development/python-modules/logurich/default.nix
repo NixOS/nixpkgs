@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "logurich";
-  version = "0.7.1";
+  version = "0.9.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PakitoSec";
     repo = "logurich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+Ez1tS/kDguq8mQImiu2/h64YsBCTVv4b4sT/tJaD7E=";
+    hash = "sha256-VYlmwDws8YjjcWGugD/CMqCoutKQj0W7J8NHkMzsX8U=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Logger that combine loguru and rich";
     homepage = "https://github.com/PakitoSec/logurich";
-    changelog = "https://github.com/PakitoSec/logurich/releases/tag/v${finalAttrs.src.tag}";
+    changelog = "https://github.com/PakitoSec/logurich/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

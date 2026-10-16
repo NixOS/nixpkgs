@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = "make install-system";
 
   meta = {
-    homepage = "http://plugin.org.uk";
+    homepage = "https://github.com/swh/lv2";
     description = "LV2 version of Steve Harris' SWH plugins";
     longDescription = ''
       SWH plugins include:

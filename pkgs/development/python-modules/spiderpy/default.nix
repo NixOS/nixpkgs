@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  isPy27,
   fetchFromGitHub,
   poetry-core,
   requests,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "spiderpy";
   version = "1.7.2";
   pyproject = true;
-
-  disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "peternijssen";

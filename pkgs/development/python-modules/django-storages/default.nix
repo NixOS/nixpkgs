@@ -74,6 +74,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/jschneier/django-storages/";
     homepage = "https://django-storages.readthedocs.io";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ mmai ];
+    maintainers = [ ];
   };
 }

@@ -5,6 +5,7 @@
   cmake,
   pkg-config,
   libsodium,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,8 +15,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     repo = "minisign";
     owner = "jedisct1";
-    rev = finalAttrs.version;
-    sha256 = "sha256-qhAzhht9p4bsa2ntJwhcNurm8QgYYiKi3dA3ifpT8aw=";
+    tag = finalAttrs.version;
+    hash = "sha256-qhAzhht9p4bsa2ntJwhcNurm8QgYYiKi3dA3ifpT8aw=";
   };
 
   nativeBuildInputs = [
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
   buildInputs = [ libsodium ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Simple tool for signing files and verifying signatures";
@@ -33,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://jedisct1.github.io/minisign/";
     license = lib.licenses.isc;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sotormd ];
     platforms = lib.platforms.unix;
     mainProgram = "minisign";
   };

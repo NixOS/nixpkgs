@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "bidict"
     "markdownify"
+    "mautrix"
     "ruamel-yaml"
     "zulip-emoji-mapping"
   ];

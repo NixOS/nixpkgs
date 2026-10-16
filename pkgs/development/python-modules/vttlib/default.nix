@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "vttlib";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "daltonmaag";
     repo = "vttLib";
     rev = "v${version}";
-    hash = "sha256-ChsuzeFRQFDYGlAE4TWzE+et7yGLOfha1VqGcOdayOs=";
+    hash = "sha256-m6oxJj6JEKo3HUMfKNIqHwOHNpuCkA0R8ZrY5HLsiKc=";
   };
 
   build-system = [

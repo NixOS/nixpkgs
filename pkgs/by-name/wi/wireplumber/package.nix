@@ -15,8 +15,8 @@
   gobject-introspection,
   # runtime deps
   glib,
-  systemd,
-  lua5_4,
+  systemdLibs,
+  lua5_5,
   pipewire,
   # options
   enableDocs ? true,
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wireplumber";
-  version = "0.5.14";
+  version = "0.5.18";
 
   outputs = [
     "out"
@@ -38,11 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "wireplumber";
     tag = finalAttrs.version;
-    hash = "sha256-Ap7vrkSxVQFzAJoBN8wWer4gOFc8iknN1A9KyRfdImc=";
+    hash = "sha256-VIa11ynYJsr4zqZ7XogPin4Ks0oEDltCjo51aWVMH8c=";
   };
 
   strictDeps = true;
   __structuredAttrs = true;
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     meson
@@ -71,8 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
-    systemd
-    lua5_4
+    systemdLibs
+    lua5_5
     pipewire
   ];
 

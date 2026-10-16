@@ -2,18 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   pygame,
   pyglet,
   pysdl2,
+
+  # tests
   pytestCheckHook,
-  setuptools-scm,
 }:
 
 buildPythonPackage {
   pname = "pytmx";
   version = "3.32";
-
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "bitcraft";

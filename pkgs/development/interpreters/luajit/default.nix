@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   luaversion = "5.1";
 
   postPatch = ''
-    substituteInPlace Makefile --replace ldconfig :
+    substituteInPlace Makefile --replace-fail ldconfig :
     if test -n "''${dontStrip-}"; then
       # CCDEBUG must be non-empty or everything will be stripped, -g being
       # passed by nixpkgs CC wrapper is insufficient on its own
@@ -172,7 +172,9 @@ stdenv.mkDerivation (finalAttrs: {
       badPlatforms = [
         "loongarch64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/1278
         "riscv64-linux" # See https://github.com/LuaJIT/LuaJIT/issues/628
-        "powerpc64le-linux" # `#error "No support for PPC64"`
+        # `#error "No support for PPC64"`
+        "powerpc64-linux"
+        "powerpc64le-linux"
       ];
       mainProgram = "lua";
       maintainers = with lib.maintainers; [

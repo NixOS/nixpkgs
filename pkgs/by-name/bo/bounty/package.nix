@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CLI tool for bountybot.dev";
     homepage = "https://github.com/ghbountybot/cli";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ andrewgazelka ];
     mainProgram = "bounty";
   };

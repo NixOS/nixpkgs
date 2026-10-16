@@ -135,6 +135,7 @@ buildBazelPackage rec {
     description = "Japanese input method from Google";
     mainProgram = "mozc_emacs_helper";
     homepage = "https://github.com/google/mozc";
+    changelog = "https://github.com/google/mozc/releases/tag/${version}";
     license = lib.licenses.free;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [

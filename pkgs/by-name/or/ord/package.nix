@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ord";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "ordinals";
     repo = "ord";
     rev = finalAttrs.version;
-    hash = "sha256-LP/Hgo7seXoNf0IHMpxd2euMmxH1usGCkuYMPmw6jn4=";
+    hash = "sha256-0jcp8zOWeLjIOpop15DE5ue8axSHJiy7Jnv8oQiPbmo=";
   };
 
-  cargoHash = "sha256-qJhTh6nXVlZJ3kAZN2hrZ6XDrv1dk45nX6KRSQ1EbS4=";
+  cargoHash = "sha256-HPMRibZTYxKeaXRNmlriXaU3NyCMgm6Yitl2tBbOX8c=";
 
   nativeBuildInputs = [
     pkg-config

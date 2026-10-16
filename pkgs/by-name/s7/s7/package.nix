@@ -26,14 +26,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.7-unstable-2026-03-24";
+  version = "11.9-unstable-2026-08-19";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "cd2667b03715dde80c0188ee117d1853b8c2a05f";
-    hash = "sha256-1+b8yM8JkHRn8b/BsETf5sLWGBN0QSdzQ31NH6Hni0U=";
+    rev = "b884eafa5be1b4f8620881e0db7c47696438be28";
+    hash = "sha256-8bVRO+KYsLe50WW7jBAmWLEHNUQfT/RDI+frcgOADy8=";
   };
 
   buildInputs =
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-lpthread"
       "--export-all-symbols"
     ]
-    ++ lib.optional (!static && stdenv.hostPlatform.isMinGW) [ "--out-implib,libs7dll.a" ]
+    ++ lib.optionals (!static && stdenv.hostPlatform.isMinGW) [ "--out-implib,libs7dll.a" ]
     ++ lib.optional withArb "-lflint"
     ++ lib.optionals withGMP [
       "-lgmp"

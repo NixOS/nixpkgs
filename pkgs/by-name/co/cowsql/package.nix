@@ -9,6 +9,7 @@
   sqlite,
   incus,
   nix-update-script,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-7djVcozWklI/0KhDC20df+H3YQbodUZaXBnQT4Ug8oI=";
   };
+
+  patches = [
+    # fix build w/ glibc-2.44
+    (fetchpatch {
+      url = "https://github.com/cowsql/cowsql/commit/7c4d73151969ead4f81077ae243d81396ce67988.patch";
+      hash = "sha256-aJkf3egKbF23KNC0feDkxh8gIEupsyDBY3PTKuT6lcQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

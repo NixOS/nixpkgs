@@ -9,7 +9,7 @@ buildGoModule (finalAttrs: {
   version = "1.2.2";
 
   src = fetchFromGitHub {
-    owner = "bitvora";
+    owner = "barrydeen";
     repo = "haven";
     tag = "v${finalAttrs.version}";
     hash = "sha256-gpfTgaO3VK65GBy/W/rR8181yHlvgTx9UyWReo7s2gQ=";
@@ -25,8 +25,8 @@ buildGoModule (finalAttrs: {
 
   meta = {
     description = "High Availability Vault for Events on Nostr";
-    homepage = "https://github.com/bitvora/haven";
-    changelog = "https://github.com/bitvora/haven/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/barrydeen/haven";
+    changelog = "https://github.com/barrydeen/haven/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixzieger ];
     mainProgram = "haven";

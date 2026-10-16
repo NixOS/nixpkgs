@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation {
   pname = "rc-9front";
-  version = "0-unstable-2025-06-14";
+  version = "0-unstable-2026-06-20";
 
   src = fetchFrom9Front {
     domain = "shithub.us";
     owner = "cinap_lenrek";
     repo = "rc";
-    rev = "3e907e648d7263c159c604dc51aa8ca5d5fcd7f8";
-    hash = "sha256-XucMQXlGdMcs3piMKRgmQNhuirSQP9mKmXbfTWbuePg=";
+    rev = "b7d36ddb71a2469b226727506c17d9e875e2e668";
+    hash = "sha256-6Smtv/D2r4R4/wo6EWimhbWQQCUf+gcNln9+YBFoFsY=";
   };
 
   strictDeps = true;

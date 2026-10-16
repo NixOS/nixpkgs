@@ -7,18 +7,19 @@
   certifi,
   ecs-logging,
   fetchFromGitHub,
-  fetchpatch,
   httpx,
   jinja2,
   jsonschema,
   logbook,
   mock,
+  psutil,
   pytest-asyncio,
   pytest-bdd,
   pytest-localserver,
   pytest-mock,
   pytest-random-order,
   pytestCheckHook,
+  versionCheckHook,
   sanic,
   sanic-testing,
   setuptools,
@@ -30,16 +31,16 @@
   wrapt,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "elastic-apm";
-  version = "6.25.0";
+  version = "6.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "apm-agent-python";
-    tag = "v${version}";
-    hash = "sha256-0RNZqQqXVI7CkzcKE0qA+iOBkjkH0s7Tre/a38LPW7c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KfZbRwIQ+DW3gfCkJeo7oSUs4LRsUnvtzbyB7BgGA7E=";
   };
 
   build-system = [ setuptools ];
@@ -62,6 +63,7 @@ buildPythonPackage rec {
     jsonschema
     logbook
     mock
+    psutil
     pytest-asyncio
     pytest-bdd
     pytest-localserver
@@ -73,14 +75,11 @@ buildPythonPackage rec {
     webob
   ];
 
-  disabledTests = [
-    "elasticapm_client"
-    "test_get_name_from_func_partialmethod_unbound"
-  ];
-
   disabledTestPaths = [
     # Exclude tornado tests
     "tests/contrib/asyncio/tornado/tornado_tests.py"
+    # Exclude starlette test
+    "tests/contrib/asyncio/starlette_tests.py"
     # Exclude client tests
     "tests/instrumentation/asyncio_tests/aiohttp_client_tests.py"
   ]
@@ -91,12 +90,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elasticapm" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = {
     description = "Python agent for the Elastic APM";
     homepage = "https://github.com/elastic/apm-agent-python";
-    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/${src.tag}";
+    changelog = "https://github.com/elastic/apm-agent-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "elasticapm-run";
   };
-}
+})

@@ -9,6 +9,7 @@
         extra-nix-path = [ "extra=/etc/value.nix" ];
       };
       environment.etc."value.nix".text = "42";
+      nix.enable = true; # disabled by default. See all-tests.nix / tag(no-nix-by-default)
     };
   testScript = ''
     start_all()

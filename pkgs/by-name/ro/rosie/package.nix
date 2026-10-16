@@ -56,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://rosie-lang.org";
     description = "Tools for searching using parsing expression grammars";
     mainProgram = "rosie";

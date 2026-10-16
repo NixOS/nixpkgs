@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i source/Makefile -e /ldconfig/d
-    substituteInPlace source/main.cc --replace /etc/ "$out/etc/"
+    substituteInPlace source/main.cc --replace-fail /etc/ "$out/etc/"
   '';
 
   preBuild = "cd source";

@@ -4,19 +4,22 @@
   fetchFromGitHub,
   pytestCheckHook,
   pytest-cov-stub,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "anonip";
   version = "1.1.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DigitaleGesellschaft";
     repo = "Anonip";
-    rev = "v${version}";
-    sha256 = "0cssdcridadjzichz1vv1ng7jwphqkn8ihh83hpz9mcjmxyb94qc";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DJO0fK+S1fQvHAjCiOzE8HJ5ng17hw9Z/LKpFjNrWjM=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -34,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ mmahut ];
   };
-}
+})

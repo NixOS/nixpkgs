@@ -12,7 +12,7 @@ let
     hash = "sha256-sN8i/MOPhaLZ4iJNKz/MdpRIGTZVV/G5qD7o+ID8dAM=";
   };
 
-  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
   inherit pname version src;
@@ -21,8 +21,9 @@ appimageTools.wrapType2 {
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     cp -r ${appimageContents}/usr/share/icons $out/share
 
-    mkdir -p $out/etc/udev/rules.d/ # https://get.vial.today/getting-started/linux-udev.html
-    echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", MODE="0666", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/92-viia.rules
+    mkdir -p $out/etc/udev/rules.d/
+    # https://get.vial.today/manual/linux-udev.html#universal-vial-udev-rule
+    echo 'KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{serial}=="*vial:f64c2b3c*", MODE="0600", TAG+="uaccess", TAG+="udev-acl"' > $out/etc/udev/rules.d/59-vial.rules
   '';
 
   meta = {
@@ -30,7 +31,7 @@ appimageTools.wrapType2 {
     homepage = "https://get.vial.today";
     license = lib.licenses.gpl2Plus;
     mainProgram = "Vial";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ tallesCoelho ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

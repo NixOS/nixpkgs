@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rbspy";
-  version = "0.44.0";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5oCSrKtNmvleJwkJN2Sz/1i7MpaiNTD9i0whlFLHSgg=";
+    hash = "sha256-lrTy7AADpwzIj5TO+4tQ+SpDCxi85GQKCVNUU0HOuwo=";
   };
 
-  cargoHash = "sha256-3AK/No9rbPvS2QhUwVDl7OsvUzWaW9DCkNlf3PSp1Ic=";
+  cargoHash = "sha256-6VJP9YQI46SlMq0k0k+LtUitHS7/kxA/O9jIVrUAmvg=";
 
   doCheck = true;
 
@@ -33,14 +33,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/core/ruby_spy.rs \
       --replace-fail "/usr/bin/ruby" "${lib.getExe ruby}"
   '';
-
-  checkFlags = [
-    "--skip=test_get_trace"
-    "--skip=test_get_trace_when_process_has_exited"
-    "--skip=test_sample_single_process"
-    "--skip=test_sample_single_process_with_time_limit"
-    "--skip=test_sample_subprocesses"
-  ];
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 

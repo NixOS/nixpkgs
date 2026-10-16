@@ -190,10 +190,11 @@ in
               ${config.users.defaultUserShell} = icnu
           '';
           footer = "${pkgs.apparmor-utils}/etc/apparmor/logprof.conf";
-          passAsFile = [ "header" ];
+          strictDeps = true;
+          __structuredAttrs = true;
         }
         ''
-          cp $headerPath $out
+          printf "%s" "$header" > $out
           sed '1,/\[qualifiers\]/d' $footer >> $out
         '';
 
@@ -241,7 +242,7 @@ in
         {
           Type = "oneshot";
           RemainAfterExit = "yes";
-          ExecStartPre = "${pkgs.apparmor-utils}/bin/aa-teardown";
+          ExecStartPre = lib.getExe' pkgs.apparmor-init "aa-teardown";
           ExecStart = lib.mapAttrsToList (
             n: p: "${pkgs.apparmor-parser}/bin/apparmor_parser --add ${commonOpts n p}"
           ) enabledPolicies;
@@ -262,7 +263,7 @@ in
               # Optionally kill the processes which are unconfined but now have a profile loaded
               # (because AppArmor can only start to confine new processes).
               lib.optional cfg.killUnconfinedConfinables killUnconfinedConfinables;
-          ExecStop = "${pkgs.apparmor-utils}/bin/aa-teardown";
+          ExecStop = lib.getExe' pkgs.apparmor-init "aa-teardown";
           CacheDirectory = [
             "apparmor"
             "apparmor/logprof"

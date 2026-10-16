@@ -4,6 +4,7 @@
   fetchFromGitHub,
   esbuild,
   buildGoModule,
+  nodejs_22,
 }:
 let
   esbuild' = esbuild.override {
@@ -36,19 +37,22 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-JbTS54e1pNxoqTAlEdOqKqkEyAzFJLI6he7/jivVPzI=";
   };
 
-  patches = [
-    ./package-lock-fix.patch
-  ];
+  # upstream's package-lock.json is missing entries needed by npm >= 11
+  postPatch = ''
+    cp ${./package-lock.json} package-lock.json
+  '';
 
-  npmDepsHash = "sha256-RNgx3Oorc/+nHHZHdOmyA9Q3fCW7yaAzX0DqHbCMqt0=";
+  npmDepsHash = "sha256-OH/ippCHRy7glq+wXBwnHIVCO6yL5CItng/vCKv+0fQ=";
+
+  nodejs = nodejs_22;
 
   npmFlags = [ "--ignore-scripts" ];
 
   env.ESBUILD_BINARY_PATH = lib.getExe esbuild';
 
-  # While this errors, it makes the build complete successfully. Therefore, ????
+  # ssh2's optional cpu-features native module needs node-gyp building to satisfy esbuild's bundler
   preBuild = ''
-    npm rebuild --verbose cpu-features
+    npm rebuild cpu-features
   '';
 
   npmBuildScript = "build:app";

@@ -10,8 +10,8 @@
 
 skawarePackages.buildPackage {
   pname = "s6-rc";
-  version = "0.6.0.0";
-  sha256 = "sha256-RtSmKVnvFgl7hNz7DDsxpv9JqkdtSu7Jxbe94c5oSQE=";
+  version = "0.7.0.0";
+  sha256 = "sha256-v1uM4NpaTucNZCuBi2HZkWp6m2SkV1lfOIET5UoYhog=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-rc-man-pages";
@@ -21,8 +21,8 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.qyliss ];
   };
 
-  description = "Service manager for s6-based systems";
-  platforms = lib.platforms.unix;
+  meta.description = "Service manager for s6-based systems";
+  meta.platforms = lib.platforms.unix;
 
   outputs = [
     # "bin" "lib"
@@ -30,23 +30,20 @@ skawarePackages.buildPackage {
     "dev"
     "doc"
   ];
+  buildInputs = [
+    skalibs
+    execline
+    s6
+  ];
 
   configureFlags = [
-    "--libdir=\${out}/lib"
-    "--libexecdir=\${out}/libexec"
-    "--dynlibdir=\${out}/lib"
-    "--bindir=\${out}/bin"
-    "--includedir=\${dev}/include"
+    "--libdir=${placeholder "out"}/lib"
+    "--dynlibdir=${placeholder "out"}/lib"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--bindir=${placeholder "out"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--pkgconfdir=${placeholder "dev"}/lib/pkgconfig"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
-    "--with-include=${skalibs.dev}/include"
-    "--with-include=${execline.dev}/include"
-    "--with-include=${s6.dev}/include"
-    "--with-lib=${skalibs.lib}/lib"
-    "--with-lib=${execline.lib}/lib"
-    "--with-lib=${s6.out}/lib"
-    "--with-dynlib=${skalibs.lib}/lib"
-    "--with-dynlib=${execline.lib}/lib"
-    "--with-dynlib=${s6.out}/lib"
   ];
 
   # s6-rc-compile generates built-in service definitions containing

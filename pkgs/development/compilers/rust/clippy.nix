@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage {
   pname = "clippy";
   inherit (rustc) version src;
 
-  separateDebugInfo = true;
+  separateDebugInfo = !stdenv.buildPlatform.is32bit;
 
   # the rust source tarball already has all the dependencies vendored, no need to fetch them again
   cargoVendorDir = "vendor";

@@ -4,7 +4,7 @@
   eudev,
   fetchFromGitHub,
   installShellFiles,
-  libdisplay-info,
+  libdisplay-info_0_3,
   libglvnd,
   libinput,
   libxkbcommon,
@@ -17,7 +17,7 @@
   rustPlatform,
   seatd,
   stdenv,
-  systemd,
+  systemdLibs,
   wayland,
   withDbus ? true,
   withDinit ? false,
@@ -27,13 +27,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "niri";
-  version = "25.11";
+  version = "26.04";
 
   src = fetchFromGitHub {
     owner = "niri-wm";
     repo = "niri";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FC9eYtSmplgxllCX4/3hJq5J3sXWKLSc7at8ZUxycVw=";
+    hash = "sha256-ehSMsSpE+0k8r+2Vseu8kangsYxToZv3vinynsDp9zs=";
   };
 
   outputs = [
@@ -44,12 +44,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postPatch = ''
     patchShebangs resources/niri-session
     substituteInPlace resources/niri.service \
-      --replace-fail '/usr/bin' "$out/bin"
+      --replace-fail 'niri' "$out/bin/niri"
   '';
 
-  cargoHash = "sha256-X28M0jyhUtVtMQAYdxIPQF9mJ5a77v8jw1LKaXSjy7E=";
-
-  strictDeps = true;
+  cargoHash = "sha256-gfnalA3qI3a9h3PvsxgQLCrzapfjLLkxhTMJpwRh+ro=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -58,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    libdisplay-info
+    libdisplay-info_0_3
     libglvnd # For libEGL
     libinput
     libxkbcommon
@@ -69,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
   ++ lib.optional withScreencastSupport pipewire
-  ++ lib.optional withSystemd systemd # Includes libudev
+  ++ lib.optional withSystemd systemdLibs # Includes libudev
   ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
 
   buildFeatures =
@@ -101,6 +99,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd $pname \
       --bash <($out/bin/niri completions bash) \
       --fish <($out/bin/niri completions fish) \
+      --nushell <($out/bin/niri completions nushell) \
       --zsh <($out/bin/niri completions zsh)
   '';
 
@@ -139,6 +138,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       sodiboo
       getchoo
+      zimward
     ];
     mainProgram = "niri";
     platforms = lib.platforms.linux;

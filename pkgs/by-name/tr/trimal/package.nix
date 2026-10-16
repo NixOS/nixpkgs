@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     repo = "trimal";
-    owner = "scapella";
+    owner = "inab";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-ONSkYceCgYGSpABj0iOx6yj2hMyFHqCHflYRW+Q6RVc=";
   };
@@ -20,6 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     echo Source root reset to ''${sourceRoot}
   '';
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}c++"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp -a trimal readal statal $out/bin
@@ -28,8 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tool for the automated removal of spurious sequences or poorly aligned regions from a multiple sequence alignment";
     license = lib.licenses.gpl3;
-    platforms = lib.platforms.linux;
-    homepage = "http://trimal.cgenomics.org";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    homepage = "https://trimal.readthedocs.io/en/latest/";
     maintainers = [ lib.maintainers.bzizou ];
   };
 })

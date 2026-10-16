@@ -10,7 +10,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "casterbyte";
+    owner = "caster0x00";
     repo = "Above";
     tag = "v${finalAttrs.version}";
     hash = "sha256-wyXWGfthzJeHZoJe4OKe9k2BIwLae/aOUtiJpT4SfHw=";
@@ -28,8 +28,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   meta = {
     description = "Invisible network protocol sniffer";
-    homepage = "https://github.com/casterbyte/Above";
-    changelog = "https://github.com/casterbyte/Above/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/caster0x00/Above";
+    changelog = "https://github.com/caster0x00/Above/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "above";

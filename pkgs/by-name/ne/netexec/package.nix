@@ -43,7 +43,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   pythonRemoveDeps = [
     # Fail to detect dev version requirement
     "neo4j"
-    # No python package in nixpkgs; use bloodhound-py instead.
+    # No python package in nixpkgs; use bloodhound instead.
     "bloodhound-ce"
   ];
 
@@ -72,7 +72,7 @@ python.pkgs.buildPythonApplication (finalAttrs: {
     argcomplete
     asyauth
     beautifulsoup4
-    bloodhound-py
+    bloodhound
     certipy-ad
     dploot
     dsinternals

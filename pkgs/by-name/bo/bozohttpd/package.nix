@@ -5,7 +5,7 @@
   groff,
   inetutils,
   libxcrypt,
-  lua,
+  lua5_2_compat,
   openssl,
   stdenv,
   wget,
@@ -19,6 +19,9 @@
   luaSupport ? !minimal,
   htpasswdSupport ? !minimal,
 }:
+let
+  lua = lua5_2_compat;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bozohttpd";

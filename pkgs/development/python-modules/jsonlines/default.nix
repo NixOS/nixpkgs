@@ -4,21 +4,26 @@
   fetchFromGitHub,
   buildPythonPackage,
   pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "jsonlines";
   version = "4.0.0";
-  format = "setuptools";
+
+  __structuredAttrs = true;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wbolster";
     repo = "jsonlines";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-KNEJdAxEgd0NGPnk9J51C3yUN2e6Cvvevth0iKOMlhE=";
   };
 
-  propagatedBuildInputs = [ attrs ];
+  build-system = [ setuptools ];
+
+  dependencies = [ attrs ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -30,4 +35,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };
-}
+})

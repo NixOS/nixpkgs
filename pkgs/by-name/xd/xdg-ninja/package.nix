@@ -3,6 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   makeWrapper,
+  installShellFiles,
   jq,
   glow,
   nix-update-script,
@@ -10,16 +11,19 @@
 
 stdenvNoCC.mkDerivation {
   pname = "xdg-ninja";
-  version = "0.2.0.2-unstable-2025-11-01";
+  version = "0.2.0.2-unstable-2026-10-04";
 
   src = fetchFromGitHub {
     owner = "b3nj5m1n";
     repo = "xdg-ninja";
-    rev = "cb09ebd6479e276070a55fcffae9a5320bc52ed5";
-    hash = "sha256-VpMSMWwYD0GIPtAuSkdG417RxSx6XCRh09IMrLDOi6A=";
+    rev = "ebf481aee21326cacb87bcb628b19be53b00db82";
+    hash = "sha256-UgsB+jldwkMicmacfUHMeGPiY6QLcOHqYDuRqAx8Rdg=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -36,6 +40,8 @@ stdenvNoCC.mkDerivation {
           jq
         ]
       }"
+
+    installManPage man/xdg-ninja.1
     runHook postInstall
   '';
 

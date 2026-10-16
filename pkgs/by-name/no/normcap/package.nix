@@ -46,6 +46,7 @@ ps.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "jeepney"
     "shiboken6"
+    "zxing-cpp"
   ];
 
   build-system = [
@@ -70,7 +71,6 @@ ps.buildPythonApplication (finalAttrs: {
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
-      --set QT_QPA_PLATFORM xcb
       --prefix PATH : ${lib.makeBinPath wrapperDeps}
     )
   ''

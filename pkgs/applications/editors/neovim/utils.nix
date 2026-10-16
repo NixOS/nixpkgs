@@ -6,12 +6,8 @@
   config,
   vimUtils,
   vimPlugins,
-  nodejs,
   neovim-unwrapped,
-  bundlerEnv,
-  ruby,
   lua,
-  python3Packages,
   wrapNeovimUnstable,
 }:
 let
@@ -74,6 +70,11 @@ let
     #       config   = "let g:grug_far = { 'startInInsertMode': v:false }";
     #       optional = false;
     #     }
+    #     {
+    #       plugin = vimPlugins.far-vim;
+    #       type   = "lua";
+    #       config = "vim.g['far#source'] = 'rg'";
+    #     }
     #     vimPlugins.vim-fugitive
     #  ]
     plugins:
@@ -109,11 +110,12 @@ let
 
       # viml config set by the user along with the plugin
       inherit (checked_cfg)
-        userPluginViml
+        userPluginViml # redefine via userPluginConfigs
         runtimeDeps
         pluginAdvisedLua
         pluginPython3Packages
         luaDependencies
+        userPluginConfigs
         ;
 
       # A Vim "package", see ':h packages'
@@ -262,6 +264,30 @@ let
     inherit lua;
   };
 
+  toGrammarName = lib.flip lib.pipe [
+    lib.getName
+
+    # added in buildGrammar
+    (lib.removeSuffix "-grammar")
+
+    # grammars from tree-sitter.builtGrammars
+    (lib.removePrefix "tree-sitter-")
+    (lib.replaceStrings [ "-" ] [ "_" ])
+  ];
+
+  nvimGrammars = lib.mapAttrsToList (
+    name: value:
+    value.origGrammar
+      or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+  ) vimPlugins.nvim-treesitter.grammarPlugins;
+
+  isNvimGrammar = x: builtins.elem x nvimGrammars;
+
+  toNvimTreesitterGrammar = makeSetupHook {
+    name = "to-nvim-treesitter-grammar";
+    meta.license = lib.licenses.mit;
+  } ./to-nvim-treesitter-grammar.sh;
+
   grammarToPlugin =
     grammar:
     # If the grammar has already been processed by this function, return it as-is.
@@ -271,27 +297,7 @@ let
       grammar
     else
       let
-        name = lib.pipe grammar [
-          lib.getName
-
-          # added in buildGrammar
-          (lib.removeSuffix "-grammar")
-
-          # grammars from tree-sitter.builtGrammars
-          (lib.removePrefix "tree-sitter-")
-          (lib.replaceStrings [ "-" ] [ "_" ])
-        ];
-
-        nvimGrammars = lib.mapAttrsToList (
-          name: value:
-          value.origGrammar
-            or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
-        ) vimPlugins.nvim-treesitter.grammarPlugins;
-        isNvimGrammar = x: builtins.elem x nvimGrammars;
-
-        toNvimTreesitterGrammar = makeSetupHook {
-          name = "to-nvim-treesitter-grammar";
-        } ./to-nvim-treesitter-grammar.sh;
+        name = toGrammarName grammar;
       in
 
       (toVimPlugin (

@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "yolink-api";
-  version = "0.6.3";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "YoSmart-Inc";
     repo = "yolink-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m/AYuGZNXGk7h0YL4p6jRnqbY/XV91u73lpdgSpstnE=";
+    hash = "sha256-2nZNrCLxgO/pwjZZQYb3C4ImVn70WRa+THbi4iRDgJw=";
   };
 
   build-system = [ setuptools ];

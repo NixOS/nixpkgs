@@ -17,12 +17,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flashprog";
-  version = "1.5";
+  version = "1.6";
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   src = fetchgit {
     url = "https://review.sourcearcade.org/flashprog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-laU2S7SPFCso/HzPSpbEM6hAE5/XYkNoBqFTT4PU8TU=";
+    hash = "sha256-Ih6cRUbmKIKRt8dIGNBbaLDomNvVdcl5P/lRBAzwwTI=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     changelog = "https://flashprog.org/wiki/Flashprog/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2 ];
+    license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [
       felixsinger
       funkeleinhorn

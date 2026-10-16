@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pytest-benchmark,
+  pytest-describe,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -23,6 +23,10 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail ', "setuptools>=59,<81"' ""
+
+    # avoid big pytest-benchmark dependency
+    substituteInPlace setup.cfg \
+      --replace-fail "addopts = --benchmark-disable" ""
   '';
 
   build-system = [
@@ -31,11 +35,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-benchmark
+    pytest-describe
     pytestCheckHook
   ];
 
-  pytestFlags = [ "--benchmark-disable" ];
+  disabledTestPaths = [
+    "tests/benchmarks"
+  ];
 
   pythonImportsCheck = [ "graphql" ];
 

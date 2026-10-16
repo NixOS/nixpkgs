@@ -9,37 +9,42 @@
   # dependencies
   lxml,
   unicode-segmentation-rs,
-  urllib3,
 
   # optional-dependencies
-  tomlkit,
-
-  # tests
-  aeidon,
   charset-normalizer,
-  cheroot,
   fluent-syntax,
-  gettext,
+  vobject,
   iniparse,
+  rapidfuzz,
   mistletoe,
   phply,
   pyparsing,
-  pytestCheckHook,
+  pyenchant,
+  aeidon,
+  tomlkit,
   ruamel-yaml,
+
+  # tests
+  pytestCheckHook,
+  addBinToPathHook,
+  pytest-xdist,
+  gettext,
   syrupy,
-  vobject,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.19.3";
+  version = "3.19.19";
   pyproject = true;
+  __structuredAttrs = true;
 
+  # nixpkgs-update: no auto update
+  # Only weblate uses this and we want to follow its version constraints
   src = fetchFromGitHub {
     owner = "translate";
     repo = "translate";
     tag = finalAttrs.version;
-    hash = "sha256-k+gCrY2r1ILeSvjdEHT3wE2LF9Qn76ENe9RRVcaHmq4=";
+    hash = "sha256-TWEVrZHtMgXn4oG3Wfx3LMbAoX1S770PCdRoq/qKzZE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -47,36 +52,37 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     lxml
     unicode-segmentation-rs
-    urllib3
   ];
 
+  pythonRelaxDeps = [ "lxml" ];
+
   optional-dependencies = {
+    chardet = [ charset-normalizer ];
+    fluent = [ fluent-syntax ];
+    ical = [ vobject ];
+    ini = [ iniparse ];
+    levenshtein = [ rapidfuzz ];
+    markdown = [ mistletoe ];
+    php = [ phply ];
+    rc = [ pyparsing ];
+    spellcheck = [ pyenchant ];
+    subtitles = [ aeidon ];
     toml = [ tomlkit ];
+    yaml = [ ruamel-yaml ];
   };
 
   nativeCheckInputs = [
-    aeidon
-    charset-normalizer
-    cheroot
-    fluent-syntax
-    gettext
-    iniparse
-    mistletoe
-    phply
-    pyparsing
     pytestCheckHook
-    ruamel-yaml
+    addBinToPathHook
+    pytest-xdist
     syrupy
-    tomlkit
-    vobject
-  ];
+    gettext
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   disabledTests = [
     # Probably breaks because of nix sandbox
     "test_timezones"
-
-    # Requires network
-    "test_xliff_conformance"
   ];
 
   pythonImportsCheck = [ "translate" ];
@@ -87,7 +93,7 @@ buildPythonPackage (finalAttrs: {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
     changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${finalAttrs.src.tag}.html";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ erictapen ];
   };
 })

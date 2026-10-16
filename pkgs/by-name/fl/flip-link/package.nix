@@ -4,6 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   libiconv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -13,7 +14,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = "flip-link";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HYNaHXgI02xY1/eBkwLPN1AGwO6w98tCjwvP8YinuxE=";
   };
 
@@ -28,11 +29,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=should_verify_memory_layout"
   ];
 
+  __structuredAttrs = true;
+
+  passthru.updateScript = nix-update-script {
+    # Ignore the stray flip-link-v0.1.12 tag upstream carries.
+    extraArgs = [
+      "--version-regex"
+      "v([0-9.]+)"
+    ];
+  };
+
   meta = {
     description = "Adds zero-cost stack overflow protection to your embedded programs";
     mainProgram = "flip-link";
     homepage = "https://github.com/knurling-rs/flip-link";
-    changelog = "https://github.com/knurling-rs/flip-link/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/knurling-rs/flip-link/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit

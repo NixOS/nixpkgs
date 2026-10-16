@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Minimal, standalone OpenEXR reader for single-part, uncompressed scan line files";
     homepage = "https://github.com/cheind/py-minexr";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lucasew ];
+    maintainers = [ ];
   };
 }

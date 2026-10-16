@@ -19,14 +19,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "elastic";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
     rev = finalAttrs.version;
-    hash = "sha256-ydRKkVYQ1f6Jlymej1Wzoppo6E0FEUvIfrfnDqLRcPY=";
+    hash = "sha256-NAxztd+Q5TlBAuXCgGPT6aTfj5mVsNdU+5WoNM8Bb84=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Design spring animations";
     homepage = "https://gitlab.gnome.org/World/elastic/";
+    changelog = "https://gitlab.gnome.org/World/elastic/-/releases/${finalAttrs.version}";
     mainProgram = "app.drey.Elastic";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;

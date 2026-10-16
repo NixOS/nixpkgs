@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool for visualizing changes in Linux software packages";
     homepage = "https://lvc.github.io/pkgdiff/";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ sweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "pkgdiff";
   };

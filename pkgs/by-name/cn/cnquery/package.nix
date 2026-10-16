@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "mondoohq";
-    repo = "cnquery";
+    repo = "mql";
     tag = "v${version}";
     hash = "sha256-CTg2jfpCLTYuRx5R+9Si0Ig1NT1ZGXMFbcPPa8CbMKY=";
   };
@@ -32,7 +32,7 @@ buildGoModule rec {
       accounts, Kubernetes, containers, services, VMs, APIs, and more.
     '';
     homepage = "https://mondoo.com/cnquery";
-    changelog = "https://github.com/mondoohq/cnquery/releases/tag/v${version}";
+    changelog = "https://github.com/mondoohq/mql/releases/tag/v${version}";
     license = lib.licenses.bsl11;
     maintainers = with lib.maintainers; [ mariuskimmina ];
   };

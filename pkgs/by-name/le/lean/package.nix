@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    # last successful hydra build on darwin was in 2024
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Automatic and interactive theorem prover";
     homepage = "https://leanprover.github.io/";
     changelog = "https://github.com/leanprover-community/lean/blob/v${version}/doc/changes.md";

@@ -10,14 +10,16 @@
   nix-update-script,
   nixosTests,
 }:
+
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "25.11.1";
+  version = "26.08.3";
+
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-6shFVaCtPQeZCeeswAQHgcXOwVwABNa3ljsdUG63QGo=";
+    hash = "sha256-25XQH6Kn+ydtUUKiIlQQ1WEBXfljkams+yyCht/bLQ8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
@@ -27,8 +29,8 @@ stdenvNoCC.mkDerivation rec {
       src
       ;
     pnpm = pnpm_10;
-    fetcherVersion = 2;
-    hash = "sha256-TtazfRhcniA1H//C95AMH8/Pw+Rbtinlfg7dDAmSk1w=";
+    fetcherVersion = 3;
+    hash = "sha256-CpwZYUNZVPTQqEPbH7AqwqkKeA+vLpr7AKr3JfPJYxc=";
   };
 
   nativeBuildInputs = [

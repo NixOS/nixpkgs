@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gmap";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
-    owner = "seeyebe";
+    owner = "marawny";
     repo = "gmap";
-    tag = finalAttrs.version;
-    hash = "sha256-+klVySOgI/M57f98Cx3omkEBx/NcaWD4FuIW6cz1aN8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bHQjOZrY7tuyI7ScX+Hazkch4QtPD7bxc3+fy+HCVVs=";
   };
 
-  cargoHash = "sha256-WjYCwGyFjBjITqsMPsD4kkeuSGPXtSKOFKaEfznMryI=";
+  cargoHash = "sha256-CiSt+ETQa3qVHolOo2y0wZQac8pMJZbtxqfWiEPbfM8=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,8 +41,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Built for developers who live in the CLI and want quick,
       powerful insights.
     '';
-    homepage = "https://github.com/seeyebe/gmap";
-    changelog = "https://github.com/seeyebe/gmap/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/marawny/gmap";
+    changelog = "https://github.com/marawny/gmap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "gmap";

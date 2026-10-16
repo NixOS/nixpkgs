@@ -158,7 +158,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelTunables = true;
         ProtectHostname = true;
-        ProtectProc = true;
+        ProtectProc = "invisible";
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"

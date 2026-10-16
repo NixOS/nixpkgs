@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   gmp,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +20,18 @@ stdenv.mkDerivation {
     ./fix-signal-handler-type.patch
   ];
 
-  buildInputs = [ gmp ];
+  # https://github.com/macports/macports-ports/blob/master/math/lrslib/Portfile
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Makefile \
+      --replace-fail "-shared -Wl,-soname=" "-dynamiclib -install_name $out/lib/"
+  '';
+
+  buildInputs = [
+    gmp
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"
@@ -30,7 +42,7 @@ stdenv.mkDerivation {
     description = "Implementation of the reverse search algorithm for vertex enumeration/convex hull problems";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.raskin ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     homepage = "http://cgm.cs.mcgill.ca/~avis/C/lrs.html";
   };
 }

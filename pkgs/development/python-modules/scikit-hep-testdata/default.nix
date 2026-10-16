@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.6.4";
+  version = "0.6.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "scikit-hep-testdata";
     tag = "v${version}";
-    hash = "sha256-Z1EPws4qHo03HcfwvUnjvQlmOZEztT3v6f3j03acbog=";
+    hash = "sha256-wbhZyAXtTQAhJbQa7pgzAHqsZ1mr2kp2x/j5Si1mQgU=";
   };
 
   build-system = [ setuptools-scm ];

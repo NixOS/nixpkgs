@@ -3,8 +3,6 @@
   config,
   callPackage,
   newScope,
-  symlinkJoin,
-  fetchFromGitHub,
   boost179,
   opencv,
   python3Packages,
@@ -89,6 +87,9 @@ let
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
+      rocprofiler-sdk = self.callPackage ./rocprofiler-sdk { };
+
+      rocprof-compute-viewer = self.callPackage ./rocprof-compute-viewer { };
 
       rocprof-trace-decoder = self.callPackage ./rocprof-trace-decoder { };
 
@@ -115,6 +116,8 @@ let
       mscclpp = self.callPackage ./mscclpp { };
 
       rccl = self.callPackage ./rccl { };
+
+      rocshmem = self.callPackage ./rocshmem { };
 
       hipcub = self.callPackage ./hipcub { };
 
@@ -153,6 +156,8 @@ let
       hipblas = self.callPackage ./hipblas { };
 
       hipblaslt = self.callPackage ./hipblaslt { };
+
+      hipsparselt = self.callPackage ./hipsparselt { };
 
       # hipTensor - Only supports GFX9
 
@@ -308,12 +313,7 @@ let
     );
 in
 outer
-// builtins.listToAttrs (
-  map (arch: {
-    name = arch;
-    value = scopeForArches [ arch ];
-  }) outer.clr.gpuTargets
-)
+// lib.genAttrs outer.clr.gpuTargets (arch: scopeForArches [ arch ])
 // {
   gfx9 = scopeForArches [
     "gfx906"

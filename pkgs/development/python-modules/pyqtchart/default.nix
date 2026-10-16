@@ -5,7 +5,7 @@
   pyqt5,
   pyqt-builder,
   python,
-  qtcharts,
+  qt5,
   setuptools,
   sip,
 }:
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   enableParallelBuilding = true;
-  # HACK: paralellize compilation of make calls within pyqt's setup.py
+  # HACK: parallelize compilation of make calls within pyqt's setup.py
   # pkgs/stdenv/generic/setup.sh doesn't set this for us because
   # make gets called by python code and not its build phase
   # format=pyproject means the pip-build-hook hook gets used to build this project
@@ -46,12 +46,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sip
-    qtcharts
+    qt5.qtcharts
     setuptools
     pyqt-builder
   ];
 
-  buildInputs = [ qtcharts ];
+  buildInputs = [ qt5.qtcharts ];
 
   propagatedBuildInputs = [ pyqt5 ];
 

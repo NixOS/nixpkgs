@@ -15,7 +15,7 @@ buildKodiBinaryAddon rec {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    sha256 = "sha256-ADkXvbTsx4xMUiu90hvHIMvpAF0FQ2HNkKDX/E/tRok=";
+    hash = "sha256-ADkXvbTsx4xMUiu90hvHIMvpAF0FQ2HNkKDX/E/tRok=";
   };
 
   extraBuildInputs = [
@@ -25,6 +25,7 @@ buildKodiBinaryAddon rec {
 
   meta = {
     description = "Binary addon for raw joystick input";
+    homepage = "https://github.com/xbmc/peripheral.joystick";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl2Only;
     teams = [ lib.teams.kodi ];

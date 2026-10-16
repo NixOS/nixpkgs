@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pythonic API to Linux uinput kernel module";
-    homepage = "https://tjjr.fi/sw/python-uinput/";
+    homepage = "https://github.com/pyinput/python-uinput";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };

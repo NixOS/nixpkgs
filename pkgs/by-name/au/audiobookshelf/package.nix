@@ -2,49 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  runCommand,
   buildNpmPackage,
-  nodejs_22,
-  ffmpeg-full,
+  callPackage,
+  nodejs_24,
+  ffmpeg_8-full,
   nunicode,
   util-linux,
   python3,
   getopt,
   nixosTests,
+  nix-update-script,
 }:
 
 let
-  source = {
-    version = "2.33.1";
-    hash = "sha256-O1AurSUq3MNcSchQlC/UfPO2KoB4dBBsONAQ2Bmxk9o=";
-    npmDepsHash = "sha256-NVHKPiT4GFiFVVyO7z/fZtU8Zf4o/LM1PmUs6zwzZF0=";
-    clientNpmDepsHash = "sha256-KWGnFeXxOVGqAruB9k/FqQfQNG6JrZFUQpo0Ls8jEYA=";
-  };
-
-  src = fetchFromGitHub {
-    owner = "advplyr";
-    repo = "audiobookshelf";
-    tag = "v${source.version}";
-    inherit (source) hash;
-  };
-
-  client = buildNpmPackage {
-    pname = "audiobookshelf-client";
-    inherit (source) version;
-
-    nodejs = nodejs_22;
-
-    src = runCommand "cp-source" { } ''
-      cp -r ${src}/client $out
-    '';
-
-    # don't download the Cypress binary
-    CYPRESS_INSTALL_BINARY = 0;
-    NODE_OPTIONS = "--openssl-legacy-provider";
-
-    npmBuildScript = "generate";
-    npmDepsHash = source.clientNpmDepsHash;
-  };
+  ffmpeg-full = ffmpeg_8-full;
+  nodejs = nodejs_24;
 
   wrapper = import ./wrapper.nix {
     inherit
@@ -54,14 +26,21 @@ let
       getopt
       ;
   };
-
 in
-buildNpmPackage {
+buildNpmPackage (finalAttrs: {
   pname = "audiobookshelf";
+  version = "2.37.1";
 
-  inherit src;
-  inherit (source) npmDepsHash version;
-  nodejs = nodejs_22;
+  src = fetchFromGitHub {
+    owner = "advplyr";
+    repo = "audiobookshelf";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rTn64PrGPSKwDbsQmzvdSRa7UQEV1f2xXaYGtcVfrpk=";
+  };
+
+  npmDepsHash = "sha256-xHjZ3E1DGeb5NueP67hEX3vHH0Qlk4LTeZkMEFBhGyE=";
+
+  inherit nodejs;
 
   buildInputs = [ util-linux ];
   nativeBuildInputs = [ python3 ];
@@ -69,27 +48,33 @@ buildNpmPackage {
   dontNpmBuild = true;
   npmInstallFlags = [ "--only-production" ];
 
+  client = callPackage ./client.nix { inherit (finalAttrs) src version nodejs; };
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/opt/client
     cp -r index.js server package* node_modules $out/opt/
-    cp -r ${client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
+    cp -r ${finalAttrs.client}/lib/node_modules/audiobookshelf-client/dist $out/opt/client/dist
     mkdir $out/bin
 
     echo '${wrapper}' > $out/bin/audiobookshelf
-    echo "  exec ${nodejs_22}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
+    echo "  exec ${finalAttrs.nodejs}/bin/node $out/opt/index.js" >> $out/bin/audiobookshelf
 
     chmod +x $out/bin/audiobookshelf
+
+    runHook postInstall
   '';
 
   passthru = {
     tests.basic = nixosTests.audiobookshelf;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { extraArgs = [ "--subpackage=client" ]; };
   };
 
   meta = {
     homepage = "https://www.audiobookshelf.org/";
     description = "Self-hosted audiobook and podcast server";
-    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${source.version}";
+    changelog = "https://github.com/advplyr/audiobookshelf/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       jvanbruegge
@@ -99,4 +84,4 @@ buildNpmPackage {
     platforms = lib.platforms.linux;
     mainProgram = "audiobookshelf";
   };
-}
+})

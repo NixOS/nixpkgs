@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-OWNER="wez"
+OWNER="wezterm"
 REPO="wezterm"
 
 NIXPKGS_ROOT=$(git rev-parse --show-toplevel)

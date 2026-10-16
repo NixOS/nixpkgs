@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "shfmt";
-  version = "3.13.0";
+  version = "3.14.1";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VFLnQNhySXB/VE0u9u2X4jAHq+083+QjhWM7vfyxhM8=";
+    hash = "sha256-taZfXF8i8Kb6RjW7tWMFfaHH8K4OE4FT+U+X0IBaj08=";
   };
 
-  vendorHash = "sha256-WLGHcmBslXJO4OKdUK7HqimdUCOtdCdK+AOdlo4hgWk=";
+  vendorHash = "sha256-OfdXhgPyRRifRK4CylmOqWh0qmZ80mNAhBZtqJlwPPY=";
 
   patches = [
     (replaceVars ./version.patch {
@@ -50,6 +50,7 @@ buildGoModule (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/mvdan/sh";
+    changelog = "https://github.com/mvdan/sh/releases/tag/v${finalAttrs.version}";
     description = "Shell parser and formatter";
     longDescription = ''
       shfmt formats shell programs. It can use tabs or any number of spaces to indent.

@@ -10,7 +10,7 @@
   libepoxy,
   libsForQt5,
   libzip,
-  lua,
+  lua5_2_compat,
   minizip,
   pkg-config,
   stdenv,
@@ -19,6 +19,7 @@
 }:
 
 let
+  lua = lua5_2_compat;
   inherit (libsForQt5)
     qtbase
     qtmultimedia
@@ -102,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       not support.
     '';
     changelog = "https://raw.githubusercontent.com/mgba-emu/mgba/${finalAttrs.src.rev}/CHANGES";
-    license = with lib.licenses; [ mpl20 ];
+    license = lib.licenses.mpl20;
     mainProgram = "mgba";
     maintainers = with lib.maintainers; [ Gliczy ];
     platforms = lib.platforms.linux;

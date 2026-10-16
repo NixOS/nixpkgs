@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "rego-query";
-  version = "0.0.14";
+  version = "0.0.16";
 
   src = fetchFromSourcehut {
     owner = "~charles";
     repo = "rq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SZnbjPiXW6mw3abyL2475sNq3s5Jw12D9ZqbLfvaHN8=";
+    hash = "sha256-MTUuNIw8HD9LV/Q678M1xH7VzKViwMkPlz/LicLMNWY=";
   };
 
-  vendorHash = "sha256-fOq62QRx7BoE7RJielTnu1dtvkLy2FkzG59uuMQVLc4=";
+  vendorHash = "sha256-APmEsnfJ07ENzdIebrfNPSxypzTuRpCNhTvNK9n1Gmk=";
 
   subPackages = [ "cmd/rq" ];
 
@@ -36,6 +36,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://sr.ht/~charles/rq";
     changelog = "https://git.sr.ht/~charles/rq/tree/${finalAttrs.src.rev}/item/CHANGELOG.md";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ refi64 ];
+    maintainers = with lib.maintainers; [
+      refi64
+      push-f
+    ];
   };
 })

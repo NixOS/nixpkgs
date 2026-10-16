@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Fixes GCC15 compatability
+    # Fixes GCC15 compatibility
     # Can be removed with the next release
     # Custom version of https://github.com/pmacct/pmacct/commit/6466578967d3d39c46f7ec10b308bca36568697d.patch
     # without the copyright date changes.

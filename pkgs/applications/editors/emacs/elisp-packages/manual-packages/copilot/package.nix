@@ -12,13 +12,13 @@
 }:
 melpaBuild (finalAttrs: {
   pname = "copilot";
-  version = "0.5.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "copilot-emacs";
     repo = "copilot.el";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-1uHPtz0F0pim7KlotB1+pmls1i7H3hRhZ0DX1h53cPc=";
+    sha256 = "sha256-x2Lzhz8Yi3/EsahkJZ/pJoaJuVb1xIHgNt50qi0ndeo=";
   };
 
   files = ''(:defaults "dist")'';
@@ -47,7 +47,6 @@ melpaBuild (finalAttrs: {
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
-      "x86_64-darwin"
       "x86_64-linux"
       "x86_64-windows"
     ];

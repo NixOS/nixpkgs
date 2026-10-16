@@ -1,30 +1,25 @@
 {
   lib,
   buildPythonPackage,
+  flit-core,
   construct,
   fetchFromGitHub,
   pytestCheckHook,
-  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "construct-classes";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "matejcik";
     repo = "construct-classes";
     tag = "v${version}";
-    hash = "sha256-goOQMt/nVjWXYltpnKHtJaLOhR+gRTmtoUh7zVb7go4=";
+    hash = "sha256-xRYf6Tg4XyQN+g8uOaws46KKb0abD/M/5Q+SlnzEp/8=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "uv_build>=0.8.13,<0.9.0" "uv_build>=0.8.13"
-  '';
-
-  build-system = [ uv-build ];
+  build-system = [ flit-core ];
 
   dependencies = [ construct ];
 

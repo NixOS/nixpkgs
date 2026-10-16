@@ -10,13 +10,12 @@
 
   # dependencies
   filecheck,
+  numpy,
   psutil,
   rich,
   scikit-learn,
-  torch,
-  tqdm,
-  triton,
   typing-extensions,
+  torch,
 
   # tests
   pytestCheckHook,
@@ -26,14 +25,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "helion";
-  version = "0.3.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "helion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MR8fo6MhMSAXlBsx//ODIprXPXFhMy6K5Mno9BnZGHc=";
+    hash = "sha256-3Iam+1FUg9I9kKmkQBZp9/FTZpEjf4Ba+cKRo5eLEzw=";
   };
 
   build-system = [
@@ -43,13 +42,15 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     filecheck
+    numpy
     psutil
     rich
     scikit-learn
-    torch
-    tqdm
-    triton
     typing-extensions
+
+    # torch is not listed as a dependency, but is actually required at import time
+    # https://github.com/pytorch/helion/blob/v1.0.0/helion/_compat.py#L13
+    torch
   ];
 
   pythonImportsCheck = [ "helion" ];
@@ -67,11 +68,9 @@ buildPythonPackage (finalAttrs: {
 
   # Tests require GPU access
   doCheck = false;
-  passthru.gpuChecks = {
-    pytest = helion.overridePythonAttrs {
-      doCheck = true;
-      requiredSystemFeatures = [ "cuda" ];
-    };
+  passthru.gpuCheck = helion.overridePythonAttrs {
+    doCheck = true;
+    requiredSystemFeatures = [ "cuda" ];
   };
 
   meta = {

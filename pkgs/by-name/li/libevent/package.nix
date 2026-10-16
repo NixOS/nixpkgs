@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libevent";
-  version = "2.1.12";
+  version = "2.1.13";
 
   src = fetchurl {
     url = "https://github.com/libevent/libevent/releases/download/release-${finalAttrs.version}-stable/libevent-${finalAttrs.version}-stable.tar.gz";
-    sha256 = "1fq30imk8zd26x8066di3kpc5zyfc5z6frr3zll685zcx4dxxrlj";
+    hash = "sha256-9+k4O4wLqoG2h+W17swBvu+vGxm2QVHZXtYWR/56MVw=";
   };
 
   patches = [
     # Don't define BIO_get_init() for LibreSSL 3.5+
     (fetchpatch {
       url = "https://github.com/libevent/libevent/commit/883630f76cbf512003b81de25cd96cb75c6cf0f9.patch";
-      sha256 = "sha256-VPJqJUAovw6V92jpqIXkIR1xYGbxIWxaHr8cePWI2SU=";
+      hash = "sha256-VPJqJUAovw6V92jpqIXkIR1xYGbxIWxaHr8cePWI2SU=";
     })
   ];
 
@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optional sslSupport openssl ++ lib.optional stdenv.hostPlatform.isCygwin findutils;
 
+  strictDeps = true;
+
   doCheck = false; # needs the net
 
   postInstall = lib.optionalString sslSupport ''
@@ -69,6 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelBuilding = true;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Event notification library";

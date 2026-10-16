@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     makeFlagsArray+=(SYSDEFS="-DSYSVR4 -D_XOPEN_SOURCE=500" \
+      OPTFLAGS="-O -Wno-error=incompatible-pointer-types" \
       JTMPDIR=$TMPDIR
       TERMCAPLIB=-lncurses \
       SHELL=${runtimeShell} \

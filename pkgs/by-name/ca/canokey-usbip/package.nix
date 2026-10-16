@@ -37,6 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=incompatible-pointer-types"
+      # GCC 16 warns about set-but-unused variables/parameters in the vendored mbedtls
+      "-Wno-error=unused-but-set-variable"
+      "-Wno-error=unused-but-set-parameter"
       (lib.optionalString stdenv.cc.isClang "-Wno-error=documentation")
     ];
   };

@@ -6,13 +6,13 @@
 
 buildFishPlugin rec {
   pname = "plugin-git";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "jhillyerd";
     repo = "plugin-git";
     tag = "v${version}";
-    hash = "sha256-p7vvwisu3mvVOE1DcALbzuGJqWBcE1h71UjaopGdxE0=";
+    hash = "sha256-2+CX9ZGNkois7h3m30VG19Cf4ykRdoiPpEVxJMk75I4=";
   };
 
   meta = {

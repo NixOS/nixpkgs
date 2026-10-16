@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.5.3";
 
   src = fetchFromGitHub {
-    owner = "bytepixie";
+    owner = "ianmjones";
     repo = "snippetpixie";
     rev = finalAttrs.version;
     sha256 = "0gs3d9hdywg4vcfbp4qfcagfjqalfgw9xpvywg4pw1cm3rzbdqmz";

@@ -33,14 +33,14 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "9.2.2";
+  version = "9.2.5";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-5ZvvYsWfj51ie8LOP0fWeg3lDBHGjLwDjz4wQIvCj4A=";
+    hash = "sha256-tKbxWDTGiblXBr4LOap0ZjojM2ommERRU/i/WpFykdE=";
   };
 
   postPatch = ''
@@ -89,6 +89,10 @@ pythonPackages.buildPythonApplication rec {
       zstandard
       pythonPackages.ollama
     ]
+    ++ markitdown.optional-dependencies.pptx
+    ++ markitdown.optional-dependencies.docx
+    ++ markitdown.optional-dependencies.pdf
+    ++ markitdown.optional-dependencies.youtube-transcription
     ++ lib.concatAttrValues optional-dependencies;
 
   optional-dependencies = with pythonPackages; {

@@ -570,9 +570,11 @@ in
       enableStrictShellChecks = true;
     };
 
-    systemd.services.virtchd = {
-      path = [ pkgs.cloud-hypervisor ];
-    };
+    systemd.services.virtchd =
+      lib.mkIf (lib.meta.availableOn pkgs.stdenv.hostPlatform pkgs.cloud-hypervisor)
+        {
+          path = [ pkgs.cloud-hypervisor ];
+        };
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
@@ -643,7 +645,7 @@ in
       '';
     };
 
-    system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
+    system.nssModules = optional (cfg.nss.enable || cfg.nss.enableGuest) cfg.package;
     system.nssDatabases.hosts = mkMerge [
       # ensure that the NSS modules come between mymachines (which is 400) and resolve (which is 501)
       (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))

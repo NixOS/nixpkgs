@@ -2,12 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  autoreconfHook,
   pkg-config,
   fftwFloat,
   libjack2,
-  libsigcxx,
+  libsigcxx_2_0,
   libxml2,
   wxwidgets_3_2,
 
@@ -15,31 +14,28 @@
 
 stdenv.mkDerivation {
   pname = "freqtweak";
-  version = "unstable-2019-08-03";
+  version = "0.6.1-unstable-2019-08-03";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "essej";
     repo = "freqtweak";
     rev = "d4205337558d36657a4ee6b3afb29358aa18c0fd";
-    sha256 = "10cq27mdgrrc54a40al9ahi0wqd0p2c1wxbdg518q8pzfxaxs5fi";
+    hash = "sha256-0RXdVXf/IoxCeW11Hpi4oGEOIlSJKkAUKSzn1+oRmIE=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     pkg-config
   ];
   buildInputs = [
     fftwFloat
     libjack2
-    libsigcxx
+    libsigcxx_2_0
     libxml2
     wxwidgets_3_2
   ];
-
-  preConfigure = ''
-    sh autogen.sh
-  '';
 
   enableParallelBuilding = true;
 

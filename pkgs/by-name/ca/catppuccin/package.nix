@@ -4,6 +4,7 @@ let
     "bat"
     "bottom"
     "btop"
+    "delta"
     "element"
     "grub"
     "hyprland"
@@ -19,6 +20,7 @@ let
     "starship"
     "thunderbird"
     "waybar"
+    "whoogle"
   ];
 in
 {
@@ -87,6 +89,14 @@ let
       repo = "btop";
       rev = "f437574b600f1c6d932627050b15ff5153b58fa3";
       hash = "sha256-mEGZwScVPWGu+Vbtddc/sJ+mNdD2kKienGZVUcTSl+c=";
+    };
+
+    delta = fetchFromGitHub {
+      name = "delta";
+      owner = "catppuccin";
+      repo = "delta";
+      rev = "011516f5d14f66b771b3e716f29c77231e008c74";
+      hash = "sha256-lztkxX9O41YossvRzpR7tqxMhDNT1Efy2JvkCwtsiXQ=";
     };
 
     element = fetchFromGitHub {
@@ -208,6 +218,14 @@ let
       rev = "ee8ed32b4f63e9c417249c109818dcc05a2e25da";
       hash = "sha256-za0y6hcN2rvN6Xjf31xLRe4PP0YyHu2i454ZPjr+lWA=";
     };
+
+    whoogle = fetchFromGitHub {
+      name = "whoogle";
+      owner = "catppuccin";
+      repo = "whoogle";
+      rev = "9d961dc6e2ac405fee18ee1da9a14db1f139db39";
+      hash = "sha256-GyJD/xAF481ZMHOEfwW1SrWW6LT8ARRFizbfjl526XE=";
+    };
   };
 in
 lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListOfEnum
@@ -258,6 +276,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     + lib.optionalString (lib.elem "bottom" themeList) ''
       mkdir -p "$out/bottom"
       cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom"
+
+    ''
+    + lib.optionalString (lib.elem "delta" themeList) ''
+      mkdir -p "$out/delta"
+      cp "${sources.delta}/catppuccin.gitconfig" "$out/delta"
 
     ''
     + lib.optionalString (lib.elem "element" themeList) ''
@@ -337,6 +360,11 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
     + lib.optionalString (lib.elem "waybar" themeList) ''
       mkdir -p "$out/waybar"
       cp "${sources.waybar}/themes/${variant}.css" "$out/waybar"
+
+    ''
+    + lib.optionalString (lib.elem "whoogle" themeList) ''
+      mkdir -p "$out/whoogle"
+      cp "${sources.whoogle}/css/${variant}.css" "$out/whoogle"
 
     ''
     + ''

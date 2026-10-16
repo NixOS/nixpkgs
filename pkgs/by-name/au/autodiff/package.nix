@@ -19,6 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hKIufS5o5tfsbVchwTJxms1n5Im1iTfY3KGWD1s5g9M=";
   };
 
+  # BUILD file exists and darwin can't deal with case insensitive collisions
+  preConfigure = ''
+    cmakeBuildDir=alt_build
+  '';
+
   nativeBuildInputs = [
     cmake
     eigen

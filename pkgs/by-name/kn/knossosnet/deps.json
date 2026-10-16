@@ -201,8 +201,8 @@
   },
   {
     "pname": "SharpCompress",
-    "version": "0.39.0",
-    "hash": "sha256-Me88MMn5NUiw5bugFKCKFRnFSXQKIFZJ+k97Ex6jgZE="
+    "version": "0.48.0",
+    "hash": "sha256-2MXainbTJeuBwRA6eJU+AlUT8ireNrWxHYNCMkFG8Lc="
   },
   {
     "pname": "SkiaSharp",
@@ -230,28 +230,18 @@
     "hash": "sha256-kP5XM5GgwHGfNJfe4T2yO5NIZtiF71Ddp0pd1vG5V/4="
   },
   {
-    "pname": "System.Buffers",
-    "version": "4.6.0",
-    "hash": "sha256-c2QlgFB16IlfBms5YLsTCFQ/QeKoS6ph1a9mdRkq/Jc="
-  },
-  {
     "pname": "System.IO.Pipelines",
     "version": "8.0.0",
     "hash": "sha256-LdpB1s4vQzsOODaxiKstLks57X9DTD5D6cPx8DE1wwE="
   },
   {
     "pname": "Tmds.DBus.Protocol",
-    "version": "0.21.2",
-    "hash": "sha256-gaK/5aAummyin6ptnhaJbnA0ih4+2xADrtrLfFbHwYI="
+    "version": "0.21.3",
+    "hash": "sha256-HVEIHSeSe29ergHxsNvWYu3o7Ai8VZKo09yFn+miTnI="
   },
   {
     "pname": "WindowsShortcutFactory",
     "version": "1.2.0",
     "hash": "sha256-TScGgF++Av8QRSanZ3bIPhYaUEv6RQyAET3NvbKDxWQ="
-  },
-  {
-    "pname": "ZstdSharp.Port",
-    "version": "0.8.4",
-    "hash": "sha256-4bFUNK++6yUOnY7bZQiibClSJUQjH0uIiUbQLBtPWbo="
   }
 ]

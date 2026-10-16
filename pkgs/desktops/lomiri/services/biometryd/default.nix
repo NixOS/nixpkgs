@@ -23,6 +23,11 @@
   validatePkgConfig,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+  listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
+  qtQmlPaths = listToQtVar qtbase.qtQmlPrefix [ qtdeclarative ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
   version = "0.4.0";
@@ -46,6 +51,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/8def6dfb18ee56971f0f64e3622af2a5a39ab0f6.patch";
       hash = "sha256-PddZRML4Gc+s4aNeOyZwJJjmPSixMGFVFNcrO9dNDSI=";
     })
+
+    # Remove when version > 0.4.0
+    (fetchpatch {
+      name = "0002-biometryd-Fix-compatibility-with-gtest-1.18.patch";
+      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/1445ea904b192fbdd9f2aa20c8ee1eeb61f2ad1d.patch";
+      hash = "sha256-yKcbvJ9BTudOuN+R4eWmltH/fnjRV+4H2deIiNlVS8A=";
+    })
   ];
 
   postPatch = ''
@@ -60,6 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace data/biometryd.pc.in \
       --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
       --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}' \
+
+    # Suffix our QML2_IMPORT_PATH
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail \
+        'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml;' \
+        'QML2_IMPORT_PATH=''${CMAKE_BINARY_DIR}/src/biometry/qml:${qtQmlPaths};'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
@@ -96,14 +114,14 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
     (lib.cmakeBool "ENABLE_WERROR" true)
     (lib.cmakeBool "WITH_HYBRIS" false)
   ];
 
   preBuild = ''
     # Generating plugins.qmltypes (also used in checkPhase?)
-    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
   '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

@@ -11,19 +11,19 @@
 
 buildPythonPackage rec {
   pname = "cryptg";
-  version = "0.5.2";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cher-nov";
     repo = "cryptg";
     rev = "v${version}";
-    hash = "sha256-4WerXUEkdkIkVEyZB4EzM1HITvNbO7a1Cfi3bpJGUVA=";
+    hash = "sha256-3vdZGtr4NTtba42jqklhEEMWqHgEct/0Rw0Krllgcn4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-kR92lvyBCFxEvIlzRX796XQn71ARrlsfK+fAKrwimEo=";
+    hash = "sha256-dnSxRHpjUIXgWScZS18ImxMOfhyq1iC2QPFs1h4l1AQ=";
   };
 
   build-system = [

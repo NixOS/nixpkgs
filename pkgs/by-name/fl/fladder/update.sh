@@ -24,6 +24,13 @@ fi
 
 nix-update --version="$latestVersion" fladder
 
+darwinHash=$(
+    nix store prefetch-file --json \
+        "https://github.com/DonutWare/Fladder/releases/download/v${latestVersion}/Fladder-macOS-${latestVersion}.dmg" |
+        jq --raw-output .hash
+)
+update-source-version fladder "$latestVersion" "$darwinHash" --system=aarch64-darwin --ignore-same-version
+
 curl --fail --silent "https://raw.githubusercontent.com/DonutWare/Fladder/v${latestVersion}/pubspec.lock" | yq eval --output-format=json --prettyPrint >"$PACKAGE_DIR"/pubspec.lock.json
 
 $(nix eval --file "$NIXPKGS_DIR" dart.fetchGitHashesScript) --input "$PACKAGE_DIR"/pubspec.lock.json --output "$PACKAGE_DIR"/git-hashes.json

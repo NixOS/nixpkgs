@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Official launcher for the IW4x mod";
-    longDescription = "IW4x allows you to relive Call of Duty: Modern Warfare 2 (2009) in a secure environment with expanded modding capabilites";
+    longDescription = "IW4x allows you to relive Call of Duty: Modern Warfare 2 (2009) in a secure environment with expanded modding capabilities";
     homepage = "https://iw4x.io";
     downloadPage = "https://github.com/iw4x/launcher";
     changelog = "https://github.com/iw4x/launcher/releases/tag/v${finalAttrs.version}";

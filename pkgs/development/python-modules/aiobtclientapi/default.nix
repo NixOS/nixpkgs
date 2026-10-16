@@ -7,6 +7,7 @@
   httpx,
   torf,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
   setuptools,
@@ -14,23 +15,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiobtclientapi";
-  version = "1.1.4";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromCodeberg {
     owner = "plotski";
     repo = "aiobtclientapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ga3EyKhfdEKkjFktUlgLSX54QbTc/a48vmWjmRqa+4w=";
+    hash = "sha256-7LpLkbN1PJCLOGjPm3HN2LWS0JeFzP7se6NGEtZb6uk=";
   };
 
-  pythonRelaxDeps = [
-    "async-timeout"
-  ];
+  pythonRelaxDeps = [ "async-timeout" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     aiobtclientrpc
@@ -41,6 +38,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];

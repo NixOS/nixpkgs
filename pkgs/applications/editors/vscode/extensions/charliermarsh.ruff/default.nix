@@ -12,26 +12,22 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-42JBEjdLrjg6Txo9efJltz4NXhkaIOgIg+gosA/uNYk=";
-        };
-        "x86_64-darwin" = {
-          arch = "darwin-x64";
-          hash = "sha256-WU/7HBuVAcHR/z1WNXzH3xpUVDvf4pYML7LiMIqjA/U=";
+          hash = "sha256-rcF2hINVWsnGkOoGz/pCbUngaK9p/Wan03qSTnxB/Xs=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-JIuWbIZPWeR0pDi6Ee4jM38qqb/p/H3AvMI/Eek66BY=";
+          hash = "sha256-j7pv4MICFzqfFCI+dmgB7xtnMRIXkgRYyEBzIZaJwNI=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-p2ry5uNzmJqHEz2/aNTdUMOV+hPne4pJ+RYQ0/MBB/A=";
+          hash = "sha256-ef52k2aBnFnTdrUWyw5n4tIaMHXaOpWTW+3DWIai1+o=";
         };
       };
     in
     {
       name = "ruff";
       publisher = "charliermarsh";
-      version = "2026.38.0";
+      version = "2026.84.0";
     }
     // sources.${stdenvNoCC.hostPlatform.system}
       or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
@@ -57,7 +53,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
       "aarch64-linux"
       "aarch64-darwin"
       "x86_64-linux"
-      "x86_64-darwin"
     ];
     maintainers = [ lib.maintainers.azd325 ];
   };

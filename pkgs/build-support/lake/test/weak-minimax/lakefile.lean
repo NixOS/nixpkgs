@@ -6,7 +6,3 @@ package weakMinimax
 require "leanprover-community" / "mathlib" @ git "main"
 
 @[default_target] lean_lib WeakMinimax
-
-@[default_target]
-lean_exe weakMinimax.run where
-  root := `Main

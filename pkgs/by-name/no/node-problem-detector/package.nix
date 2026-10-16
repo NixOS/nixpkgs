@@ -3,18 +3,22 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  systemd,
+  systemdLibs,
 }:
 
+let
+  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
+  systemdLibs' = systemdLibs.override { withCompression = true; };
+in
 buildGoModule (finalAttrs: {
   pname = "node-problem-detector";
-  version = "1.35.2";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "node-problem-detector";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hDf6F9sCrX6vu9FJlXTMRtGaA+gwI7PdqD9GKINHPO0=";
+    sha256 = "sha256-oWnjyuhEONPgmmyZUz/CIPpKSDpeN554VsQFgyZdIxo=";
   };
 
   vendorHash = null;
@@ -34,7 +38,7 @@ buildGoModule (finalAttrs: {
     export CGO_ENABLED=${if stdenv.hostPlatform.isLinux then "1" else "0"}
   '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs' ];
 
   tags = lib.optionals stdenv.hostPlatform.isLinux [ "journald" ];
 

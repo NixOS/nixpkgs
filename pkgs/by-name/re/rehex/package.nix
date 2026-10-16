@@ -11,7 +11,7 @@
   jansson,
   libunistring,
   wxwidgets_3_2,
-  lua53Packages,
+  lua55Packages,
   perlPackages,
   gtk3,
   nix-update-script,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rehex";
-  version = "0.63.4";
+  version = "0.64.0";
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = "rehex";
     tag = finalAttrs.version;
-    hash = "sha256-Iy87iEadK9fXApeYpJbG0jV437wGJxlOoiJLfaUTkVs=";
+    hash = "sha256-X68wcKXtjHF8IaDM7qYEDFwxJwqG0cvpvSvyIgMd8kA=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libunistring
     wxwidgets_3_2
   ]
-  ++ (with lua53Packages; [
+  ++ (with lua55Packages; [
     lua
     busted
   ])

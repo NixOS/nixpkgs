@@ -57,17 +57,17 @@ let
       attrs
       // {
 
-        name = "${pname}-${version}";
         inherit version pname;
 
-        buildInputs =
-          buildInputs
-          ++ [
-            erlang
-            rebar3
-            openssl
-          ]
-          ++ beamDeps;
+        nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
+          erlang
+          rebar3
+        ];
+
+        buildInputs = buildInputs ++ [ openssl ] ++ beamDeps;
+
+        __structuredAttrs = true;
+        strictDeps = true;
 
         # ensure we strip any native binaries (eg. NIFs, ports)
         stripDebugList = lib.optional (releaseType == "release") "rel";

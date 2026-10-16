@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "awk-language-server";
+  pname = "awk-language-server";
   version = "0.10.6";
 
   src = fetchFromGitHub {

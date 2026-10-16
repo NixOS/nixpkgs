@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "mongodb_exporter";
-  version = "0.49.0";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "percona";
     repo = "mongodb_exporter";
     rev = "v${version}";
-    hash = "sha256-KgfJ/o+LsEF4NAlUbNdhg8of/qfaPxnd8+rHlp+URHc=";
+    hash = "sha256-JmUWxiLKRd7ogXduCAuHCq0QayQxeoYlWXrzS/ZxWeQ=";
   };
 
-  vendorHash = "sha256-1yTSQ3ktAtUfy2nKm98hFX+A7eR0z5FoKbM2vAJQWbU=";
+  vendorHash = "sha256-o4ts3K+wWCO+WnyBsN1GFiEh2MG3l3C5pMxkTvhj4hU=";
 
   buildInputs = lib.optionals withGssapi [ krb5 ];
 

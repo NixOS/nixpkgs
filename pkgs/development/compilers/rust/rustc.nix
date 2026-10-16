@@ -20,9 +20,11 @@
   rustc,
   rustfmt,
   pkg-config,
+  bashNonInteractive,
   openssl,
   xz,
   zlib,
+  rust-jemalloc-sys,
   bintools,
   which,
   libffi,
@@ -260,6 +262,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals stdenv.targetPlatform.isMusl [
       "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
     ]
+    ++ optionals stdenv.targetPlatform.isWasi [
+      "${setTarget}.wasi-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
+    ]
     ++ optionals stdenv.targetPlatform.rust.isNoStdTarget [
       "--disable-docs"
     ]
@@ -398,13 +403,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    bashNonInteractive
     openssl
+    rust-jemalloc-sys
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     zlib
   ]
   ++ optional (!withBundledLLVM) llvmShared.lib
   ++ optional (useLLVM && !withBundledLLVM) llvmPackages.libunwind;
+
+  strictDeps = true;
 
   outputs = [
     "out"
@@ -442,6 +451,12 @@ stdenv.mkDerivation (finalAttrs: {
   setupHooks = ./setup-hook.sh;
 
   requiredSystemFeatures = [ "big-parallel" ];
+
+  # Make sure our bootstrap packages don't end up in our runtime closure
+  disallowedReferences = [
+    cargo
+    rustc
+  ];
 
   passthru = {
     llvm = llvmShared;

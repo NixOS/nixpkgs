@@ -37,6 +37,11 @@ let
         ;
     }
   ) cfg.waylandCompositors;
+
+  sessionServices = [
+    "wayland-wm@"
+    "wayland-session-bindpid@"
+  ];
 in
 {
   options.programs.uwsm = {
@@ -136,6 +141,17 @@ in
 
         # UWSM recommends dbus broker for better compatibility
         services.dbus.implementation = "broker";
+
+        # Restarting these kills the graphical session, same treatment as the
+        # display-manager modules.
+        systemd.user.services = lib.genAttrs sessionServices (_: {
+          restartIfChanged = false;
+          # Defining the units here generates drop-ins; without this they
+          # would carry the NixOS default Environment="PATH=coreutils:…",
+          # clobbering the PATH that uwsm imported into the user manager
+          # and breaking spawn actions that rely on it.
+          enableDefaultPath = false;
+        });
       }
 
       (lib.mkIf (cfg.waylandCompositors != { }) {

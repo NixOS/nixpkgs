@@ -2,12 +2,15 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "chaos";
   version = "0.5.2";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
@@ -20,19 +23,18 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "cmd/chaos/" ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Tool to communicate with Chaos DNS API";
     homepage = "https://github.com/projectdiscovery/chaos-client";
-    changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/projectdiscovery/chaos-client/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "chaos";

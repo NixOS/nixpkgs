@@ -15,7 +15,7 @@ let
       overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
     };
 
-  mkScope = scope: pkgs // pkgs.gnome2 // scope;
+  mkScope = scope: pkgs // scope;
 
   idrisPackages =
     self:

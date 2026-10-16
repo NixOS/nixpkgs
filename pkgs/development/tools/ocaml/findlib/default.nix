@@ -90,9 +90,7 @@ stdenv.mkDerivation rec {
     description = "O'Caml library manager";
     homepage = "http://projects.camlcity.org/projects/findlib.html";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      vbmithr
-    ];
+    maintainers = [ ];
     mainProgram = "ocamlfind";
     platforms = ocaml.meta.platforms or [ ];
   };

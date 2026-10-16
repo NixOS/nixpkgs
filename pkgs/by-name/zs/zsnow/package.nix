@@ -1,6 +1,6 @@
 {
   lib,
-  zig,
+  zig_0_15,
   stdenv,
   fetchFromGitHub,
   pkg-config,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    zig
+    zig_0_15
     pkg-config
     wayland-scanner
   ];

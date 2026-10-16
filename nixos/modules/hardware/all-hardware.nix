@@ -79,6 +79,7 @@ in
       # USB support, especially for booting from USB CD-ROM
       # drives.
       "uas"
+      "xhci-pci-renesas"
 
       # SD cards.
       "sdhci_pci"
@@ -107,6 +108,10 @@ in
     ++ lib.optionals (lib.versionOlder config.boot.kernelPackages.kernel.version "7.0") [
       "pata_qdi"
       "pata_winbond"
+    ]
+    ++ lib.optionals (lib.versionAtLeast config.boot.kernelPackages.kernel.version "7.2") [
+      # xhci-pci defers AMD 800-series chipset controllers to this driver.
+      "xhci_pci_prom21"
     ]
     ++ lib.optionals platform.isx86 [ "vmw_balloon" ]
     ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
@@ -157,9 +162,6 @@ in
       "axp20x-battery"
       "pinctrl-axp209"
       "mp8859"
-
-      # USB drivers
-      "xhci-pci-renesas"
 
       # Reset controllers
       "reset-raspberrypi" # Triggers USB chip firmware load.

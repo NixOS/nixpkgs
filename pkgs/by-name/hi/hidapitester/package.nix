@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hidapitester";
-  version = "0.5";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "todbot";
     repo = "hidapitester";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OpLeKTouCB3efsXWJO0lZxUHxtDKeBY7OYk0HwC2NF4=";
+    hash = "sha256-tnPKCSDhoCFUUHAWQrm7lytsMEnKmTkPaaKXJoEVuts=";
   };
 
   postUnpack = ''
@@ -28,8 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   env.HIDAPITESTER_VERSION = finalAttrs.version;
 
   buildInputs = [
-    udev
     hidapi
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
   ];
 
   nativeBuildInputs = [

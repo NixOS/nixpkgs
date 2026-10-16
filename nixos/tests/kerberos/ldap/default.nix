@@ -1,7 +1,7 @@
 {
-  system ? builtins.currentSystem,
-  pkgs ? import ../../../.. { inherit system; },
+  pkgs,
+  runTest,
 }:
 {
-  mit = import ./mit.nix { inherit system pkgs; };
+  mit = runTest ./mit.nix;
 }

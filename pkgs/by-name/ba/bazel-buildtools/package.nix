@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "bazel-buildtools";
-  version = "8.5.1";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ykfdajj9KpP9+j0uePYCRf7TDpb1GbGAiR6bI++jslg=";
+    hash = "sha256-6yWPmjKyZsYZZ73a+yryZl1xAREiPFiBANnZZJ4Qv5o=";
   };
 
-  vendorHash = "sha256-sYZ7ogQY0dWOwJMvLljOjaKeYGYdLrF5AnetregdlYY=";
+  vendorHash = "sha256-bUvWtQ0DCdAQRETyPJ6gp4qlaPowlpO5l3GHFaEcH94=";
 
   preBuild = ''
     rm -r warn/docs
@@ -39,9 +39,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/bazelbuild/buildtools";
     changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      elasticdog
-    ];
     teams = [ lib.teams.bazel ];
   };
 })

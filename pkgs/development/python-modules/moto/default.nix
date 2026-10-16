@@ -21,6 +21,7 @@
   multipart,
   openapi-spec-validator,
   py-partiql-parser,
+  pyotp,
   pyparsing,
   pytest-order,
   pytest-xdist,
@@ -36,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.20";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-YYRXGsdAsPk/0U8VTOBBTBs84xjskar1IczWOxoEFLQ=";
+    hash = "sha256-edMV/EDSVxbQfTjl81y4aM490qtt5NnHSFOvO5o015I=";
   };
 
   build-system = [
@@ -303,6 +304,7 @@ buildPythonPackage rec {
     joserfc
     openapi-spec-validator
     py-partiql-parser
+    pyotp
     pyparsing
     pytest-order
     pytest-xdist
@@ -395,6 +397,12 @@ buildPythonPackage rec {
 
     # Requires cfn-lint which is broken on Python 3.14
     "tests/test_cloudformation/test_validate.py"
+
+    #  Unknown parameter in input: "BucketNamespace", must be one of: ACL, Bucket, CreateBucketConfiguration, GrantFullControl, GrantRead, GrantReadACP, GrantWrite, GrantWriteACP, ObjectLockEnabledForBucket, ObjectOwnership
+    "tests/test_s3/test_s3.py::test_create_bucket_account_regional_namespace"
+    "tests/test_s3/test_s3.py::test_create_bucket_account_regional_namespace_other_region"
+    "tests/test_s3/test_s3.py::test_create_bucket_account_regional_namespace_invalid_name"
+    "tests/test_ec2/test_instance_types.py::test_describe_instance_types_gpu_instance_types"
   ];
 
   meta = {

@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "homelink-integration-api";
-  version = "0.0.1";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Gentex-Corporation";
     repo = "homelink-integration-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ELEqx41JSAmXBEowwJ1tYPZV40hMjswaHQonD+1IG5E=";
+    hash = "sha256-2nRljWhCiO0oBuyn+d7tnxmb4WFWHIwaHSEBCeQ7nOg=";
   };
 
   build-system = [ setuptools ];

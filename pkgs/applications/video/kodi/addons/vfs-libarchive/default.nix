@@ -20,7 +20,7 @@ buildKodiBinaryAddon rec {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    sha256 = "sha256-D0eLH+G+qF5xLBBX/FdJC+gKNQpqSb7LjRmi/99rPNg=";
+    hash = "sha256-D0eLH+G+qF5xLBBX/FdJC+gKNQpqSb7LjRmi/99rPNg=";
   };
 
   extraBuildInputs = [
@@ -35,6 +35,7 @@ buildKodiBinaryAddon rec {
 
   meta = {
     description = "LibArchive Virtual Filesystem add-on for Kodi";
+    homepage = "https://github.com/xbmc/vfs.libarchive";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.all;
     teams = [ lib.teams.kodi ];

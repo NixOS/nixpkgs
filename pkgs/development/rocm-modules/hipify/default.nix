@@ -12,12 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "7.2.0";
+  version = "7.2.4";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPIFY";
-    rev = "rocm-${finalAttrs.version}";
+    tag = "rocm-${finalAttrs.version}";
     hash = "sha256-LC0lnYetV7RPVw92zew6za6bDH4zmnERXUM4MVaRVtc=";
   };
 
@@ -45,11 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     chmod +x bin/*
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   postInstall = ''
     rm $out/bin/hipify-perl
@@ -63,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Convert CUDA to Portable C++ Code";
     homepage = "https://github.com/ROCm/HIPIFY";
-    license = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };

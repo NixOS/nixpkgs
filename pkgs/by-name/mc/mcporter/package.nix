@@ -5,27 +5,30 @@
   nodejs,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10,
   npmHooks,
   versionCheckHook,
   nix-update-script,
 }:
-
+let
+  pnpm = pnpm_10;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mcporter";
-  version = "0.7.3";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
-    owner = "steipete";
+    owner = "openclaw";
     repo = "mcporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x/2Ln6kohj59RSJgctWlYKckmGbWjY2ryPaLhoj0Q48=";
+    hash = "sha256-0Wvt/SEvz4MFiGEZ+y7GrV+yW75WCEk/cZjgLnVBttM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-0nc+jYANd95/R+BrkGRHcdqw9/RqMja88qkVvHtj1W4=";
+    inherit pnpm;
+    fetcherVersion = 3;
+    hash = "sha256-IkjJjI+x0bpn8Wlkw1Q7TTChttMk+GcgybdJthinoc8=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "TypeScript runtime and CLI for connecting to configured Model Context Protocol servers";
-    homepage = "https://github.com/steipete/mcporter";
-    changelog = "https://github.com/steipete/mcporter/releases/tag/v${finalAttrs.version}";
+    homepage = "https://github.com/openclaw/mcporter";
+    changelog = "https://github.com/openclaw/mcporter/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mkg20001 ];
     mainProgram = "mcporter";

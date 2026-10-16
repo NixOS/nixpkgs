@@ -6,9 +6,6 @@
   # build-system
   poetry-core,
 
-  # dependencies
-  typing-extensions,
-
   # tests
   pytest-cov-stub,
   pytest-django,
@@ -19,22 +16,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "django-test-migrations";
-  version = "1.5.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wemake-services";
     repo = "django-test-migrations";
     tag = finalAttrs.version;
-    hash = "sha256-mYDGGfkLo+GMgItCje46KtXdPsedawRKXLbRnD+CC+8=";
+    hash = "sha256-eCG+1iUx9V38qQjNla0azmOJbB/Gl/x4yQ6Z+9M0YKo=";
   };
 
   build-system = [
     poetry-core
-  ];
-
-  dependencies = [
-    typing-extensions
   ];
 
   preCheck = ''

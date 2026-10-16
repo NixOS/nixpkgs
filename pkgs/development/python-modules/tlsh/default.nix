@@ -23,16 +23,21 @@ buildPythonPackage rec {
     ./cmake-4-compat.patch
   ];
 
+  postPatch = ''
+    substituteInPlace py_ext/setup.py \
+      --replace-fail "4.5.0" "${version}"
+  '';
+
   nativeBuildInputs = [ cmake ];
+
+  postConfigure = ''
+    cd ../py_ext
+  '';
 
   build-system = [ setuptools ];
 
   # no test data
   doCheck = false;
-
-  postConfigure = ''
-    cd ../py_ext
-  '';
 
   pythonImportsCheck = [ "tlsh" ];
 

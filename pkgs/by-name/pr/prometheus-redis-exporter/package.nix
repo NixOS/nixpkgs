@@ -6,23 +6,27 @@
 
   # Test dependencies
   redisTestHook,
+
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "redis_exporter";
-  version = "1.82.0";
+  version = "1.92.1";
+
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "oliver006";
     repo = "redis_exporter";
-    rev = "v${version}";
-    sha256 = "sha256-zmJe3AQTYGDR2/reof0MRkN+JRx6jPKN98M4iGdAjUw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uMx8oArJHCA/bl+hbHeAe6xlb1dJspMevE29fQYicLQ=";
   };
 
-  vendorHash = "sha256-ZiYyFEzG8Si5+sCYrqU0Ka1qogvbchsuDXQwsLo2c14=";
+  vendorHash = "sha256-CDnPvaXttKvNK2gMM5/pYJRCiZya9CzQC7UTwGOg2iw=";
 
   ldflags = [
-    "-X main.BuildVersion=${version}"
+    "-X main.BuildVersion=${finalAttrs.version}"
     "-X main.BuildCommitSha=unknown"
     "-X main.BuildDate=unknown"
   ];
@@ -53,6 +57,9 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   passthru.tests = { inherit (nixosTests.prometheus-exporters) redis; };
 
   meta = {
@@ -66,4 +73,4 @@ buildGoModule rec {
       ma27
     ];
   };
-}
+})

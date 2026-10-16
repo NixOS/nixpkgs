@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  libgcrypt,
+  openssl,
   zlib,
   bzip2,
   nixosTests,
@@ -20,13 +20,18 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-Hoaldm55E0HC3qqqBS5uZvlgcWepnVLyJNQMB2P/t9Q=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
-    libgcrypt # provides libgcrypt.m4
   ];
 
   buildInputs = [
-    libgcrypt
+    openssl
     zlib
     bzip2
   ];
@@ -44,8 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-pkgconfigdir=${placeholder "out"}/lib/pkgconfig"
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
 
-    # Cross-compilation hacks
-    "--with-libgcrypt-prefix=${lib.getDev libgcrypt}"
+    "--with-crypto-lib=openssl"
     # workaround for cross compilation: https://github.com/dun/munge/issues/103
     "ac_cv_file__dev_spx=no"
     "x_ac_cv_check_fifo_recvfd=no"
@@ -69,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = ''
       An authentication service for creating and validating credentials
     '';
+    homepage = "https://github.com/dun/munge";
     license = [
       # MUNGE
       lib.licenses.gpl3Plus

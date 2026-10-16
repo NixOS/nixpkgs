@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   melpaBuild,
   fetchFromGitHub,
   hydra,
@@ -18,21 +17,23 @@
 
 melpaBuild {
   pname = "notdeft";
-  version = "0-unstable-2025-02-04";
+  version = "0-unstable-2025-06-14";
 
   src = fetchFromGitHub {
     owner = "hasu";
     repo = "notdeft";
-    rev = "de2b6a7666e9e5010184966f89a04241f221afe3";
-    hash = "sha256-B8aVRb8hyAKmHTTVCtDRcb2F0Rs5zhlqyfRe7IxH5jc=";
+    rev = "e0426807f608f550df14b7cd50b8455dee4dbfb3";
+    hash = "sha256-RB7KL04JNJ0d+wH9Q7aHCLYJHevy67XfXEyDxpjTbvg=";
   };
 
   packageRequires = lib.optional withHydra hydra ++ lib.optional withIvy ivy;
 
+  patches = [
+    ./notdeft-xapian-program.diff
+  ];
   postPatch = ''
     substituteInPlace notdeft-xapian.el \
-      --replace-fail 'defcustom notdeft-xapian-program nil' \
-                     "defcustom notdeft-xapian-program \"$out/bin/notdeft-xapian\""
+      --replace-fail "@notdeft-xapian@" "$out/bin/notdeft-xapian"
   '';
 
   files = ''
@@ -65,7 +66,13 @@ melpaBuild {
     homepage = "https://tero.hasu.is/notdeft/";
     description = "Fork of Deft that uses Xapian as a search engine";
     maintainers = [ lib.maintainers.nessdoor ];
-    license = lib.licenses.bsd3;
+    license =
+      with lib.licenses;
+      AND [
+        gpl3Plus
+        bsd3
+        gpl2Plus
+      ];
     platforms = lib.platforms.linux;
   };
 }

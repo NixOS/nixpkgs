@@ -7,6 +7,7 @@
 }:
 let
   fun = import ./maintainers.nix { inherit lib; };
+  utils = import ./utils.nix { inherit lib; };
 
   mockPkgs =
     {
@@ -224,6 +225,83 @@ let
         users."0" = [
           { file = "a"; }
         ];
+      };
+    };
+    testGroupAttrdiffByPlatform = {
+      expr = utils.groupAttrdiffByPlatform {
+        added = [
+          "new-tool.aarch64-linux"
+          "new-tool.x86_64-darwin"
+        ];
+        changed = [
+          "updated-tool.x86_64-darwin"
+          "shared-tool.x86_64-darwin"
+        ];
+        removed = [
+          "removed-tool.aarch64-darwin"
+          "shared-tool.aarch64-darwin"
+        ];
+      };
+      expected = {
+        aarch64-darwin = {
+          added = [ ];
+          changed = [ ];
+          removed = [
+            "removed-tool"
+            "shared-tool"
+          ];
+        };
+        aarch64-linux = {
+          added = [ "new-tool" ];
+          changed = [ ];
+          removed = [ ];
+        };
+        x86_64-darwin = {
+          added = [ "new-tool" ];
+          changed = [
+            "shared-tool"
+            "updated-tool"
+          ];
+          removed = [ ];
+        };
+      };
+    };
+    testGroupAttrdiffByKernel = {
+      expr =
+        let
+          grouped = utils.groupAttrdiffByKernel {
+            added = [
+              "new-tool.aarch64-linux"
+              "new-tool.x86_64-darwin"
+            ];
+            changed = [
+              "updated-tool.x86_64-darwin"
+              "shared-tool.x86_64-darwin"
+            ];
+            removed = [
+              "removed-tool.aarch64-darwin"
+              "shared-tool.aarch64-darwin"
+            ];
+          };
+        in
+        lib.mapAttrs (_: diff: lib.mapAttrs (_: lib.sort lib.lessThan) diff) grouped;
+      expected = {
+        darwin = {
+          added = [ "new-tool" ];
+          changed = [
+            "shared-tool"
+            "updated-tool"
+          ];
+          removed = [
+            "removed-tool"
+            "shared-tool"
+          ];
+        };
+        linux = {
+          added = [ "new-tool" ];
+          changed = [ ];
+          removed = [ ];
+        };
       };
     };
   };

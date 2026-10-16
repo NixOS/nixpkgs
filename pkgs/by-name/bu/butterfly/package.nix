@@ -1,6 +1,6 @@
 {
   lib,
-  flutter338,
+  flutter344,
   fetchFromGitHub,
   runCommand,
   yq-go,
@@ -10,16 +10,16 @@
 }:
 
 let
-  version = "2.4.4";
+  version = "2.5.5";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-fndhtUSawdnR5l0E5pcetBpt841aysncJb9IHoK3UKw=";
+    hash = "sha256-TRIchx3BK+ImF+oORU922BeOnUKG8nvyOh8luLTpi5E=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter344.buildFlutterApplication {
   pname = "butterfly";
   inherit version src;
 
@@ -76,11 +76,13 @@ flutter338.buildFlutterApplication {
     description = "Note taking app where your ideas come first";
     homepage = "https://github.com/LinwoodDev/Butterfly";
     mainProgram = "butterfly";
-    license = with lib.licenses; [
-      agpl3Plus
-      cc-by-sa-40
-      asl20
-    ];
+    license =
+      with lib.licenses;
+      AND [
+        agpl3Only
+        cc-by-sa-40
+        asl20
+      ];
     maintainers = [ ];
     platforms = [
       "aarch64-linux"

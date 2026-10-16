@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goreman";
-  version = "0.3.16";
+  version = "0.3.19";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "goreman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hOFnLxHsrauOrsbJYKNrwFFT5yYX/rdZUVjscBIGDLo=";
+    hash = "sha256-WVgMJ/9HTwNY7M0hXW7ag8vyQkIrUg+n0e7RX3LQ6a4=";
   };
 
-  vendorHash = "sha256-Udm0xdrW8Aky26oxUhdbpsNTWziZxkM0G1ZRKLwyl1Q=";
+  vendorHash = "sha256-KaqihJ5lu65EQQZGZ6Ym1Q/7jbN6zBdZ2AFovTpQ9S8=";
 
   ldflags = [
     "-s"

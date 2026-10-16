@@ -39,7 +39,6 @@ bundlerApp {
     maintainers = with lib.maintainers; [
       fdns
       nicknovitski
-      amesgen
     ];
     platforms = lib.platforms.unix;
   };

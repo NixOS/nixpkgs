@@ -11,7 +11,7 @@ build-idris-package {
     owner = "idris-hackers";
     repo = "IdrisScript";
     rev = "4bb7019182392f24d2246a3e616f829156c8f091";
-    sha256 = "074ignh2hqwq4ng5nk7dswga4lm7342w7h4bmx4n03ygrn7w89ff";
+    hash = "sha256-ziXEj83PD2BJr4vAwwUZp1KiHtftTFueJZhjKKB9kRw=";
   };
 
   meta = {

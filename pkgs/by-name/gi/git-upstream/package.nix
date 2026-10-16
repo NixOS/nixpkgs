@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/9999years/git-upstream";
     changelog = "https://github.com/9999years/git-upstream/releases/tag/v${finalAttrs.version}";
     description = "Shortcut for `git push --set-upstream`";
-    license = [ lib.licenses.mit ];
+    license = lib.licenses.mit;
     maintainers = [ lib.maintainers._9999years ];
     mainProgram = "git-upstream";
   };

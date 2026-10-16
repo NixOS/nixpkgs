@@ -92,8 +92,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  strictDeps = true;
-
   passthru = {
     extensionPortalSlug = "slobdict";
     extensionUuid = "slobdict@muntashir.dev";

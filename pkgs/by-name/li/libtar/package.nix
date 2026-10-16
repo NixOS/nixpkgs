@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  configureFlags = [ "CFLAGS=-std=gnu17" ];
+
   # libtar/Makefile.in hardcodes `INSTALL_PROGRAM = @INSTALL_PROGRAM@ -s`,
   # which runs bare `strip` during `make install`. This fails in cross builds
   # where only the prefixed strip (e.g. aarch64-unknown-linux-gnu-strip) is

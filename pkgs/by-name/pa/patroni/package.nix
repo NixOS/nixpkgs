@@ -23,14 +23,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "patroni";
-  version = "4.1.0";
+  version = "4.1.5";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "zalando";
+    owner = "patroni";
     repo = "patroni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iY5QLbJXfQtfkzpQxvqSOzYQwgfFsBh8HPYujqxU44k=";
+    hash = "sha256-tb5FkGfZJdNZKybWJjpZ327sFcnXiqF3UdbUj0i1oc8=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       urllib3
       ydiff
     ])
-    ++ lib.attrVals extras finalAttrs.passthru.optional-dependencies;
+    ++ lib.flatten (lib.attrVals extras finalAttrs.passthru.optional-dependencies);
 
   optional-dependencies = with python3Packages; {
     aws = [ boto3 ];

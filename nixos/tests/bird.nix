@@ -1,4 +1,5 @@
 {
+  lib,
   runTest,
   package,
 }:
@@ -101,7 +102,7 @@ let
 in
 {
   twoNodeOSPF = runTest {
-    name = "bird-twoNodeOSPF";
+    name = "bird${lib.versions.major package.version}-twoNodeOSPF";
 
     nodes.host1 = makeBirdHost "1";
     nodes.host2 = makeBirdHost "2";

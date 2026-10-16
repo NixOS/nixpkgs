@@ -56,8 +56,8 @@ pkgs.runCommand "nixpkgs-release-checks"
           set -x
           nix-env -f $src \
               --show-trace --argstr system "$platform" \
-              --arg config '{ allowAliases = false; allowDeprecatedx86_64Darwin = true; }' \
-              --option experimental-features 'no-url-literals' \
+              --arg config '{ lib, pkgs }: { problems.matchers = lib.mkForce [ ]; allowAliases = false; }' \
+              --option lint-url-literals fatal \
               -qa --drv-path --system-filter \* --system \
               "''${opts[@]}" 2> eval-warnings.log > packages1
         )
@@ -72,8 +72,8 @@ pkgs.runCommand "nixpkgs-release-checks"
 
         nix-env -f $src2 \
             --show-trace --argstr system "$platform" \
-            --arg config '{ allowAliases = false; allowDeprecatedx86_64Darwin = true; }' \
-            --option experimental-features 'no-url-literals' \
+            --arg config '{ lib, pkgs }: { problems.matchers = lib.mkForce [ ]; allowAliases = false; }' \
+            --option lint-url-literals fatal \
             -qa --drv-path --system-filter \* --system \
             "''${opts[@]}" > packages2
 
@@ -95,8 +95,8 @@ pkgs.runCommand "nixpkgs-release-checks"
 
         nix-env -f $src \
             --show-trace --argstr system "$platform" \
-            --arg config '{ allowAliases = false; allowDeprecatedx86_64Darwin = true; }' \
-            --option experimental-features 'no-url-literals' \
+            --arg config '{ lib, pkgs }: { problems.matchers = lib.mkForce [ ]; allowAliases = false; }' \
+            --option lint-url-literals fatal \
             -qa --drv-path --system-filter \* --system --meta --xml \
             "''${opts[@]}" > /dev/null
     done
