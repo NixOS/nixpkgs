@@ -18,4 +18,6 @@ rec {
     inherit src;
     hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
   };
+
+  updateScript = ./update-git.sh;
 }
