@@ -930,9 +930,9 @@ let
     createPartitions = ''
       installer.succeed(
           "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
-          + " mkpart ESP fat32 1M 100MiB"  # /boot
+          + " mkpart ESP fat32 1M 256MiB"  # /boot
           + " set 1 boot on"
-          + " mkpart primary linux-swap 100MiB 1024MiB"
+          + " mkpart primary linux-swap 256MiB 1024MiB"
           + " mkpart primary ext2 1024MiB -1MiB",  # /
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
