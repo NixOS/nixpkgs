@@ -1,0 +1,12 @@
+diff --git a/project.godot b/project.godot
+index b22af13..f6eaa4c 100644
+--- a/project.godot
++++ b/project.godot
+@@ -85,6 +85,7 @@ common/physics_ticks_per_second=120
+ 
+ [rendering]
+ 
++textures/vram_compression/import_s3tc_bptc=true
+ textures/vram_compression/import_etc2_astc=true
+ textures/lossless_compression/force_png=true
+ environment/defaults/default_clear_color=Color(0.0885599, 0.08855992, 0.08855987, 1)
