@@ -50,8 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
-    description = "Open source clone of UFO: Enemy Unknown";
+    description = "Open source clone of UFO: Enemy Unknown and X-COM: Terror From the Deep (legacy version)";
+    longDescription = ''
+      OpenXcom is an open source clone of UFO: Enemy Unknown (X-COM: UFO
+      Defense) and X-COM: Terror From the Deep. It requires the data files
+      from either or both of the original games.
+
+      OpenXcom is kept as a legacy version which only receives bugfixes. Its
+      developers recommend OpenXcom Extended instead, see openxcom-extended.
+    '';
     homepage = "https://openxcom.org";
+    downloadPage = "https://openxcom.org/download/";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ keenanweaver ];
     mainProgram = "openxcom";
