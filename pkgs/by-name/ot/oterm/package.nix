@@ -3,6 +3,7 @@
   stdenv,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
 }:
@@ -67,7 +68,24 @@ python3Packages.buildPythonApplication (finalAttrs: {
     versionCheckHook
   ];
 
-  passthru.updateScript = nix-update-script { };
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd oterm \
+      --bash <(_OTERM_COMPLETE=source_bash $out/bin/oterm) \
+      --fish <(_OTERM_COMPLETE=source_fish $out/bin/oterm) \
+      --zsh  <(_OTERM_COMPLETE=source_zsh  $out/bin/oterm)
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Text-based terminal client for Ollama";
