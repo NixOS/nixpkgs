@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion finalAttrs.version}.zip";
-    hash = "sha256-dnQsv6quvqU1XGtHShjKhQq1EGJfwz+kLQJQ/8rCepU=";
+    hash = "sha256-oXlaxb9JHz57W07OBBDuO04EgPaod7wnzSEnxZH+J74=";
   };
 
   outputs = [
