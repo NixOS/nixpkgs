@@ -12,6 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "cosmic-sound-theme";
   version = "1.10.0";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-sound-theme";
