@@ -3,13 +3,9 @@
 vimUtils.buildVimPlugin {
   pname = "mirth";
   inherit (mirth) version;
-  src = mirth.vim;
+  src = "${mirth.src}/tools/mirth-vim";
   meta = {
-    inherit (mirth.meta)
-      homepage
-      license
-      platforms
-      ;
+    inherit (mirth.meta) homepage license;
     description = "Syntax highlighting & filetype detection for the Mirth programming language";
   };
 }
