@@ -291,7 +291,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     # We want to use asciidoc from the build platform to build the documentation.
     substituteInPlace Makefile.in \
-      --replace "python3 -m asciidoc.a2x" "${lib.getExe' buildPackages.asciidoc "a2x"}"
+      --replace-fail "python3 -m asciidoc.a2x" "${lib.getExe' buildPackages.asciidoc "a2x"}"
   '';
 
   build-system = with python3.pythonOnBuildForHost.pkgs; [ setuptools ];
