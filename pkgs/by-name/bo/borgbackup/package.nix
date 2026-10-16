@@ -55,11 +55,8 @@ python.pkgs.buildPythonApplication (finalAttrs: {
   ];
 
   sphinxBuilders = [
-    # HACK: sphinxBuilders is currently broken with __structuredAttrs = true,
-    # and ignores all but the first array item. for now, pass them as a single
-    # space-separated entry. fixed on staging, but requires a mass-rebuild.
-    # TODO: revert to [ "singlehtml" "man" ] on staging.
-    "singlehtml man"
+    "singlehtml"
+    "man"
   ];
 
   buildInputs = [
