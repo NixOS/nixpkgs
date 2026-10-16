@@ -95,7 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
         isc
       ];
     mainProgram = "bssl";
-    maintainers = [ lib.maintainers.theoparis ];
+    maintainers = with lib.maintainers; [
+      theoparis
+      whispersofthedawn
+    ];
     pkgConfigModules = [
       "aws-lc"
       "libcrypto"
