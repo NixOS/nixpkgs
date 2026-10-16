@@ -16,6 +16,11 @@ in
         default = true;
       };
 
+      defaultEditor = lib.mkEnableOption "nano as the default editor" // {
+        default = cfg.enable;
+        defaultText = "config.programs.nano.enable";
+      };
+
       package = lib.mkPackageOption pkgs "nano" { };
 
       nanorc = lib.mkOption {
@@ -40,7 +45,13 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable || cfg.defaultEditor) {
+    assertions = [
+      {
+        assertion = cfg.defaultEditor -> cfg.enable;
+        message = "{option}`programs.nano.defaultEditor` requires {option}`programs.nano.enable` to be set to true.";
+      }
+    ];
     environment = {
       etc.nanorc.text =
         (lib.optionalString cfg.syntaxHighlight ''
@@ -50,6 +61,7 @@ in
         '')
         + cfg.nanorc;
       systemPackages = [ cfg.package ];
+      variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkDefault "nano");
       pathsToLink = [ "/share/nano" ];
     };
   };
