@@ -187,7 +187,7 @@ buildPythonPackage (finalAttrs: {
   # remove references to dev dependencies
   postInstall = ''
     nuke-refs $out/${python.sitePackages}/scipy/__config__.py
-    rm $out/${python.sitePackages}/scipy/__pycache__/__config__.*.opt-1.pyc
+    rm $out/${python.sitePackages}/scipy/__pycache__/__config__.*.pyc
   '';
 
   preCheck = ''
