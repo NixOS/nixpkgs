@@ -242,6 +242,28 @@ in
   # Default overrides that are applied to all package sets.
   packageOverrides = self: super: { };
 
+  # Selected packages (HLS) for multiple Haskell compilers
+  # to rebuild the cache after a staging merge
+  _specialPackagesToBuildOnHydraDoNotUses =
+    pkgs.recurseIntoAttrsWith
+      {
+        eval = false;
+        search = false;
+      }
+      (
+        pkgs.lib.genAttrs'
+          [
+            "ghc96"
+            "ghc98"
+            "ghc910"
+            "ghc912"
+          ]
+          (name: {
+            name = "haskell-language-server-${name}";
+            value = pkgs.haskell.packages.${name}.haskell-language-server;
+          })
+      );
+
   # Always get compilers from `buildPackages`
   packages =
     let
