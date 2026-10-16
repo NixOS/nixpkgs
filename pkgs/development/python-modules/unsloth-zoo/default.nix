@@ -39,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "unsloth-zoo";
-  version = "2026.4.7";
+  version = "2026.5.1";
   pyproject = true;
 
   # no tags on GitHub
   src = fetchPypi {
     pname = "unsloth_zoo";
     inherit (finalAttrs) version;
-    hash = "sha256-jJ58d2+5lEALEaASELZtQkY2YxNWaLrfLvOCUGnwrh4=";
+    hash = "sha256-Lt9A7OWuLjzHhkmiJ4jsii0480d17/oQg5/W0HqAyH0=";
   };
 
   postPatch = ''
