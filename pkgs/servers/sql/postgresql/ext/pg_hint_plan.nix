@@ -8,8 +8,8 @@
 let
   sources = {
     "18" = {
-      version = "1.8.0";
-      hash = "sha256-QsDppGN5TE7CSii3mNmwqT/riNNjyRTJk6d6Xcf0JMw=";
+      version = "1.8.1";
+      hash = "sha256-gUjOxq1LexasLJny2Y74ZmkKbJ7Jzb0dbETtRfnr8zc=";
     };
     "17" = {
       version = "1.7.2";
