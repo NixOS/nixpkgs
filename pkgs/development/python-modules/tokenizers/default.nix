@@ -14,6 +14,7 @@
 
   # buildInputs
   openssl,
+  oniguruma,
 
   # dependencies
   huggingface-hub,
@@ -89,6 +90,7 @@ buildPythonPackage (finalAttrs: {
 
   buildInputs = [
     openssl
+    oniguruma
   ];
 
   dependencies = [
