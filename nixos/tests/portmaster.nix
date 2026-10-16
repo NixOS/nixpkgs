@@ -203,6 +203,13 @@ in
         secretsFile = lib.mkForce null;
         profiles = lib.mkForce { };
       };
+
+      nestedDevMode.configuration.services.portmaster = {
+        settings = lib.mkForce { core.devMode = true; };
+        settingsFile = lib.mkForce null;
+        secretsFile = lib.mkForce null;
+        profiles = lib.mkForce { };
+      };
     };
 
     systemd.services.portmaster-test-inputs = {
@@ -216,6 +223,9 @@ in
       script = ''
         cat > /run/portmaster-settings.json <<'EOF'
         {
+          "core": {
+            "apiKeys": [ "0123456789abcdef?read=user&write=user" ]
+          },
           "core/log/level": "error",
           "nested": {
             "fromFile": true,
@@ -244,6 +254,7 @@ in
       rejected = "${nodes.machine.system.build.toplevel}/specialisation/rejected";
       unmanaged = "${nodes.machine.system.build.toplevel}/specialisation/unmanaged";
       development = "${nodes.machine.system.build.toplevel}/specialisation/development";
+      nestedDevMode = "${nodes.machine.system.build.toplevel}/specialisation/nestedDevMode";
     in
     ''
       machine.wait_for_unit("portmaster.service")
@@ -263,9 +274,11 @@ in
       machine.succeed("jq -e '.\"core/devMode\" == false' ${stateDir}/config.json")
       machine.succeed("jq -e 'has(\"devmode\") | not' ${stateDir}/config.json")
       machine.succeed("jq -e '.\"core/log/level\" == \"error\"' ${stateDir}/config.json")
-      machine.succeed("jq -e '.nested.fromSettings == true' ${stateDir}/config.json")
-      machine.succeed("jq -e '.nested.fromFile == true' ${stateDir}/config.json")
-      machine.succeed("jq -e '.nested.shared == \"secrets-file\"' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"nested/fromSettings\" == true' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"nested/fromFile\" == true' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"nested/shared\" == \"secrets-file\"' ${stateDir}/config.json")
+      machine.succeed("jq -e 'has(\"core\") or has(\"nested\") | not' ${stateDir}/config.json")
+      machine.succeed("jq -e '.\"core/apiKeys\" | index(\"0123456789abcdef?read=user&write=user\")' ${stateDir}/config.json")
       machine.succeed("jq -e '.\"secret/value\" == \"kept-out-of-store\"' ${stateDir}/config.json")
       machine.succeed("test -f ${stateDir}/.config.json.nix-managed")
       machine.succeed("test \"$(stat -c %a ${stateDir}/.config.json.nix-managed)\" = 600")
@@ -312,5 +325,9 @@ in
       machine.succeed("${development}/bin/switch-to-configuration test >&2")
       machine.wait_for_unit("portmaster.service")
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--devmode'")
+
+      machine.succeed("${nestedDevMode}/bin/switch-to-configuration test >&2")
+      machine.wait_for_unit("portmaster.service")
+      machine.succeed("jq -e '. == {\"core/devMode\": true}' ${stateDir}/config.json")
     '';
 }

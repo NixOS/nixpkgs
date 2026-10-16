@@ -263,9 +263,11 @@ let
   shouldGenerateManagedConfig = configSettings != { } || hasExternalConfigInputs || profilesEnabled;
 
   managedConfigSettings =
-    optionalAttrs (shouldGenerateManagedConfig && !builtins.hasAttr "core/devMode" cfg.settings) {
-      "core/devMode" = cfg.settings.devmode;
-    }
+    optionalAttrs
+      (shouldGenerateManagedConfig && !(cfg.settings ? "core/devMode" || cfg.settings ? core.devMode))
+      {
+        "core/devMode" = cfg.settings.devmode;
+      }
     // configSettings;
   generatedManagedConfigFile = settingsFormat.generate "portmaster-config.json" managedConfigSettings;
   managedConfigMergeInputs =
@@ -450,7 +452,16 @@ let
     ''}
 
     ${getExe pkgs.jq} "''${jq_merge_args[@]}" '
-      reduce .[] as $item ({}; . * $item)
+      # Portmaster flattens nested objects into "a/b" keys in random order when
+      # loading, so merge per flattened key to get a deterministic result.
+      def flatten_config($prefix):
+        reduce to_entries[] as $entry ({};
+          if ($entry.value | type) == "object" then
+            . + ($entry.value | flatten_config($prefix + $entry.key + "/"))
+          else
+            . + { ($prefix + $entry.key): $entry.value }
+          end);
+      map(flatten_config("")) | add
       ${lib.optionalString profilesEnabled ''
           | if has("core/apiKeys") and (."core/apiKeys" | type != "array") then
               error("core/apiKeys must be an array")
@@ -503,8 +514,10 @@ in
         Global Portmaster settings for runtime {file}`config.json`.
         Per-application profiles are managed by {option}`profiles`.
 
-        Merge order is recursive and later inputs win: this option,
-        {option}`settingsFile`, then {option}`secretsFile`.
+        Inputs are merged per Portmaster setting key and later inputs win:
+        this option, {option}`settingsFile`, then {option}`secretsFile`.
+        Nested objects are flattened first, so `core.devMode` and
+        `"core/devMode"` refer to the same setting.
 
         When declarative configuration is active, the module owns runtime
         {file}`config.json`; global changes made only through the UI are not
