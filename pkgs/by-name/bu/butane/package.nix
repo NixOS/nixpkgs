@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "butane";
-  version = "2.27.0";
+  version = "2.28.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "ignition";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-CjYiBcUdbfrQWpMzvKjFG53SPVkQyxbQ/8coQt7BuH8=";
+    hash = "sha256-XfqaxUEqMSbSsNrjr8A302ZKAmYr0eqRndiuMb6oqKg=";
   };
 
   vendorHash = null;

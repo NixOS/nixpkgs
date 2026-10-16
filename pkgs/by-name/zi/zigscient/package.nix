@@ -7,7 +7,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zigscient";
-  version = "0.17.0";
+  version = "0.17.1";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "llogick";
     repo = "zigscient";
     tag = finalAttrs.version;
-    hash = "sha256-tWgUZm9kW8B/tCIx5g2N4mVRiqKxLy+YuxBv0iSvLds=";
+    hash = "sha256-YlR4X0Y9xF6MgRMYpMlvVwb6u2MqDaIjVWnG6Ko+e4I=";
   };
 
   meta = {
