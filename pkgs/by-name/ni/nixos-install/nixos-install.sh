@@ -9,6 +9,10 @@ export PATH=@path@:$PATH
 # Ensure a consistent umask.
 umask 0022
 
+log() {
+    echo "$@" >&2
+}
+
 # Parse the command line for the -I flag
 extraBuildFlags=()
 flakeFlags=()
