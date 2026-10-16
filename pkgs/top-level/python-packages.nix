@@ -6000,6 +6000,8 @@ self: super: with self; {
 
   fastmcp-slim = callPackage ../development/python-modules/fastmcp-slim { };
 
+  fastmcp-tasks = callPackage ../development/python-modules/fastmcp-tasks { };
+
   fastmri = callPackage ../development/python-modules/fastmri { };
 
   fastnlo-toolkit = toPythonModule (
@@ -14807,6 +14809,10 @@ self: super: with self; {
   pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
 
   pydantic-monty = callPackage ../development/python-modules/pydantic-monty { };
+
+  pydantic-monty-client = callPackage ../development/python-modules/pydantic-monty-client { };
+
+  pydantic-monty-runtime = callPackage ../development/python-modules/pydantic-monty-runtime { };
 
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 

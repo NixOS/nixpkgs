@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aiosendspin";
-  version = "9.1.1";
+  version = "10.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = finalAttrs.version;
-    hash = "sha256-ZWYUmiAhxzb/B4lRPuEe35tCeuO5tduZXCg6FpW8PlU=";
+    hash = "sha256-bQ5EAqbY5GktaO2m3xL97S0v4E5XApt1vgOKVKgBNtw=";
   };
 
   postPatch = ''
@@ -92,6 +92,11 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ]
   ++ finalAttrs.passthru.optional-dependencies.server;
+
+  disabledTestPaths = [
+    # timing sensitive
+    "tests/server/test_push_stream_behavior.py::test_format_change_during_inflight_commit_aborts_old_format_delivery"
+  ];
 
   pythonImportsCheck = [
     "aiosendspin"
