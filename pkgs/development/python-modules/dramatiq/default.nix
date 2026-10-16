@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "dramatiq";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bogdanp";
     repo = "dramatiq";
     tag = "v${version}";
-    hash = "sha256-wUE3R/lFafP7P9tjKjFC+jwCc3jkvGeXunC8AhkBLbM=";
+    hash = "sha256-ZqVykvdUVMVD3TOpjTXBTbuUD6IhViPPihxDFw6Rssk=";
   };
 
   build-system = [ setuptools_80 ];
