@@ -21,7 +21,7 @@ buildDunePackage rec {
 
   meta = {
     description = "Remove accents from utf8 strings";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/sanette/ubase";
     maintainers = with lib.maintainers; [ mrdev023 ];
   };

@@ -172,7 +172,7 @@ runTest (
             # Cannot assert an exact number here, nc27 writes more stuff initially into S3.
             # For now let's assume it's always the most recently added file.
             assert len(files) > 0, f"""
-              Expected to have at least one object in garage/nextcloud. But `mc ls` gave output:
+              Expected to have at least one object in garage/nextcloud. But `aws s3 ls` gave output:
 
               '{files}'
             """

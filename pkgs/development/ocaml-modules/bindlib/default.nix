@@ -28,7 +28,7 @@ buildDunePackage (finalAttrs: {
   meta = {
     homepage = "https://rlepigre.github.io/ocaml-bindlib";
     description = "Efficient binder representation in Ocaml";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.lgpl3Only;
     changelog = "https://github.com/rlepigre/ocaml-bindlib/raw/${finalAttrs.version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
