@@ -18,8 +18,8 @@ in
       '';
     };
 
-    package = lib.mkPackageOption pkgs "t3code" {
-      example = "t3code.override { enableClaude = true; }";
+    package = lib.mkPackageOption pkgs "t3code-cli" {
+      example = "t3code-cli.override { enableClaude = true; }";
     };
 
     user = lib.mkOption {
