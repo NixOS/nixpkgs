@@ -6,7 +6,7 @@
   fetchFromGitHub,
   flask-sqlalchemy,
   flask,
-  httpx,
+  httpx2,
   joserfc,
   mock,
   pytest-asyncio,
@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "authlib";
-  version = "1.7.2";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FLSe9piZoFlOAutzoMcgygbsJsR8uSlZWqdNBU6D+aE=";
+    hash = "sha256-/RfE5RKzQnZRe+V3ZTBu+890tV1Ybcd8SnazKMG0jQc=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     cachelib
     flask
     flask-sqlalchemy
-    httpx
+    httpx2
     mock
     pytest-asyncio
     pytestCheckHook
