@@ -15,7 +15,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxpm";
-  version = "3.5.19";
+  version = "3.5.20";
 
   outputs = [
     "bin"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXpm-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rTV21okiGjncco8ODcAsp7tqDXJMmnf9G/oemvg76QA=";
+    hash = "sha256-wGTq0D5N3niv3rEh/gtkTSXFUERM+QP73FN/Gnjz73Q=";
   };
 
   strictDeps = true;
