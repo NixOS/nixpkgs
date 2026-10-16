@@ -18277,6 +18277,10 @@ self: super: with self; {
 
   rich-click = callPackage ../development/python-modules/rich-click { };
 
+  rich-color-ext = callPackage ../development/python-modules/rich-color-ext { };
+
+  rich-gradient = callPackage ../development/python-modules/rich-gradient { };
+
   rich-pixels = callPackage ../development/python-modules/rich-pixels { };
 
   rich-rst = callPackage ../development/python-modules/rich-rst { };
