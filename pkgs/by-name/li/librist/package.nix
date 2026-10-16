@@ -40,11 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
   };
 
+  mesonFlags = lib.mapAttrsToList lib.mesonBool {
+    test = finalAttrs.finalPackage.doCheck;
+  };
+
   buildInputs = [
     cjson
-    cmocka
     mbedtls
   ];
+
+  checkInputs = [ cmocka ];
+  # needs disabledTest support
+  doCheck = false;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
