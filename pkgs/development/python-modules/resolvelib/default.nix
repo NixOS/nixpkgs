@@ -43,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/sarugaku/resolvelib/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

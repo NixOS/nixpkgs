@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
     mainProgram = "bchunk";
+    hasNoMaintainersButDependents = true;
   };
 })

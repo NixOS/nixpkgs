@@ -95,5 +95,6 @@ buildPythonPackage rec {
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

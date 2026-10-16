@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

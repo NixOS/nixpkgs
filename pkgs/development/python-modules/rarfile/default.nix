@@ -55,5 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/markokr/rarfile/releases/tag/v${version}";
     license = lib.licenses.isc;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

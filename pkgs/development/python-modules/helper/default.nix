@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Development library for quickly writing configurable applications and daemons";
     homepage = "https://github.com/gmr/helper";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

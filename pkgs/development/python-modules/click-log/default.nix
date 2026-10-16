@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     description = "Logging integration for Click";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

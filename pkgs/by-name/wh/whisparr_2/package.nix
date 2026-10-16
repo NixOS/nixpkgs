@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "Whisparr";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

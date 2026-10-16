@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

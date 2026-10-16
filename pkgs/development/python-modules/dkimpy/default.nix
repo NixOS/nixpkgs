@@ -49,5 +49,6 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://launchpad.net/dkimpy";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 })

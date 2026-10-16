@@ -35,5 +35,6 @@ buildDunePackage (finalAttrs: {
       sequence is iterated/folded on.
     '';
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 })

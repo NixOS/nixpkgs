@@ -28,6 +28,7 @@ let
     license = lib.licenses.free;
 
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 
   full-ttf = stdenv.mkDerivation {

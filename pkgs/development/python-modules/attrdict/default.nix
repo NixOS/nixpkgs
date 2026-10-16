@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bcj/AttrDict/blob/master/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -17,6 +17,7 @@ in
   targetPackages,
   wrapBintoolsWith,
   config,
+  noMaintainersNorDependents,
 }:
 
 let

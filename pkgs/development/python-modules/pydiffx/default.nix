@@ -43,5 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/beanbaginc/diffx";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

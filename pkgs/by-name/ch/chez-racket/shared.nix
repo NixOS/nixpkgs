@@ -59,6 +59,7 @@ stdenv.mkDerivation (
       platforms = lib.intersectLists lib.platforms.unix (
         lib.platforms.x86 ++ lib.platforms.aarch64 ++ lib.platforms.arm ++ lib.platforms.power
       );
+      hasNoMaintainersButDependents = true;
     };
   }
 )

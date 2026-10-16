@@ -21,5 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Daemon for delivering ACPI events to userspace programs";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

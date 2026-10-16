@@ -71,5 +71,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -22,6 +22,7 @@ buildDunePackage {
   doCheck = true;
 
   meta = macaddr.meta // {
+    hasNoMaintainersButDependents = false;
     description = "Library for manipulation of MAC address representations using sexp";
   };
 }

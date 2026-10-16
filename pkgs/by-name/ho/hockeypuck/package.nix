@@ -28,5 +28,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.agpl3Plus;
     maintainers = [ ];
     teams = with lib.teams; [ ngi ];
+    hasNoMaintainersButDependents = true;
   };
 })

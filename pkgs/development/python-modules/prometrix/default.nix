@@ -55,5 +55,6 @@ buildPythonPackage {
     homepage = "https://github.com/robusta-dev/prometrix";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

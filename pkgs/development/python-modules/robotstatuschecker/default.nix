@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/robotframework/statuschecker";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

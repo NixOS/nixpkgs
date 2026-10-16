@@ -25,5 +25,6 @@ buildNpmPackage {
     homepage = "https://github.com/fannheyward/coc-rust-analyzer";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

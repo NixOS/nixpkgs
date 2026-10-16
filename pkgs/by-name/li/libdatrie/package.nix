@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
     pkgConfigModules = [ "datrie-0.2" ];
+    hasNoMaintainersButDependents = true;
   };
 }

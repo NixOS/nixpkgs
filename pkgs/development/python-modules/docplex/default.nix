@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://ibmdecisionoptimization.github.io/docplex-doc/";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

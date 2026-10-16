@@ -30,5 +30,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Audio file normalizer";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

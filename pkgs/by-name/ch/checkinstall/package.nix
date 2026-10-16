@@ -100,5 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ philiptaron ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
+    hasNoMaintainersButDependents = true;
   };
 })

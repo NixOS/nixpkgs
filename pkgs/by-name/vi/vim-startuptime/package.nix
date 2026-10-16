@@ -34,5 +34,6 @@ buildGoModule (finalAttrs: {
     maintainers = [ ];
     license = lib.licenses.mit;
     mainProgram = "vim-startuptime";
+    hasNoMaintainersButDependents = true;
   };
 })

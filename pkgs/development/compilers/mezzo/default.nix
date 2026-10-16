@@ -76,5 +76,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2;
     broken = lib.versionAtLeast ocaml.version "4.06";
     platforms = ocaml.meta.platforms or [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

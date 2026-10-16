@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/facelessuser/wcmatch";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

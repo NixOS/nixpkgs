@@ -55,5 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     pkgConfigModules = [ "xcb-renderutil" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

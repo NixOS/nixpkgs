@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl3
       lgpl3
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

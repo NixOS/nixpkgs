@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     description = "Compression library that can be used with the hdf5 library";
     homepage = "https://www.hdfgroup.org/doc_resource/SZIP/";
     license = lib.licenses.unfree;
+    hasNoMaintainersButDependents = true;
   };
 }

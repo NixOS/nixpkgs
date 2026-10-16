@@ -50,5 +50,6 @@ buildDunePackage (finalAttrs: {
     description = "Core parallel and shared memory library used by Hack, Flow, and Pyre";
     license = lib.licenses.mit;
     homepage = "https://github.com/rvantonder/hack_parallel";
+    hasNoMaintainersButDependents = true;
   };
 })

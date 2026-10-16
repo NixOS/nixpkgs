@@ -27,6 +27,8 @@ let
     warn
     all
     groupBy
+    substring
+    stringLength
     ;
 
   inherit (lib.lists)
@@ -60,7 +62,7 @@ let
     genCheckProblems
     completeMetaProblems
     ;
-  checkProblems = genCheckProblems config;
+  checkProblems = genCheckProblems config defaultRequiresMaintainers;
 
   inherit (import ./remediations.nix { inherit lib; })
     remediateOutputsToInstall
@@ -320,6 +322,9 @@ let
       teamsPosition = any;
 
       identifiers = attrs;
+
+      requiresMaintainers = bool;
+      hasNoMaintainersButDependents = bool;
     };
 
   checkMeta = config.checkMeta;
@@ -444,6 +449,30 @@ let
     })
   ];
 
+  # TODO: Improve comment
+  # To get usable output, we want to avoid flagging "internal" derivations.
+  # Because we do not have a way to reliably decide between internal or
+  # external derivation, some heuristics are required to decide.
+  #
+  # Simply checking whether `meta` is defined is insufficient,
+  # as some fetchers and trivial builders do define meta.
+  defaultRequiresMaintainers =
+    let
+      inNixpkgs =
+        let
+          nixpkgsRoot = toString ../../.. + "/";
+          nixpkgsRootLength = stringLength nixpkgsRoot;
+        in
+        path: substring 0 nixpkgsRootLength path == nixpkgsRoot;
+    in
+    attrs: pos:
+    # If `outputHash` is defined, the derivation is a FOD, such as the output of a fetcher.
+    !(attrs ? outputHash)
+    # If `description` is not defined, the derivation is probably not a package.
+    && (attrs ? meta.description)
+    # If the position is outside Nixpkgs, we don't want to give maintainerless problems
+    && (pos != null -> inNixpkgs pos.file);
+
   # The meta attribute is passed in the resulting attribute set,
   # but it's not part of the actual derivation, i.e., it's not
   # passed to the builder and is not a dependency.  But since we
@@ -471,7 +500,10 @@ let
       maintainersPosition = unsafeGetAttrPos "maintainers" (attrs.meta or { });
       teamsPosition = unsafeGetAttrPos "teams" (attrs.meta or { });
 
-      problems = completeMetaProblems' attrs;
+      # TODO: Duduplicate with below defined requiresMaintainers value
+      problems = completeMetaProblems' attrs (
+        attrs.meta.requiresMaintainers or (defaultRequiresMaintainers attrs pos)
+      );
       problemsGroupedByKind = groupBy (p: p.name) (
         mapAttrsToList (name: problem: {
           inherit name;
@@ -531,6 +563,9 @@ let
       # team members.
       # Prefer nonTeamMaintainers in case meta is copied from another package
       nonTeamMaintainers = attrs.meta.nonTeamMaintainers or attrs.meta.maintainers or [ ];
+
+      requiresMaintainers = attrs.meta.requiresMaintainers or (defaultRequiresMaintainers attrs pos);
+      hasNoMaintainersButDependents = attrs.meta.hasNoMaintainersButDependents or false;
 
       identifiers =
         let
@@ -660,10 +695,14 @@ let
     let
       checkValidity' = checkValidity hostPlatform;
     in
-    { meta, attrs }:
+    {
+      meta,
+      attrs,
+      pos ? null,
+    }:
     let
       invalid = checkValidity' attrs;
-      problems = checkProblems attrs;
+      problems = checkProblems attrs pos;
     in
     if invalid == null then
       if problems == null then

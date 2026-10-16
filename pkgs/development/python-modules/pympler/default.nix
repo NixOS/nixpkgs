@@ -62,5 +62,6 @@ buildPythonPackage rec {
     description = "Tool to measure, monitor and analyze memory behavior";
     homepage = "https://github.com/pympler/pympler";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

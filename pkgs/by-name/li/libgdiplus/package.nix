@@ -81,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.mono-project.com/docs/gui/libgdiplus/";
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 })

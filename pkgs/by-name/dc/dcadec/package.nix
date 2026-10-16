@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/foo86/dcadec";
     license = lib.licenses.lgpl21;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

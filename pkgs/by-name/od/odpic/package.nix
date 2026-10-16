@@ -53,5 +53,6 @@ stdenv.mkDerivation {
       "aarch64-linux"
     ];
     hydraPlatforms = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     teams = with lib.teams; [ ngi ];
+    hasNoMaintainersButDependents = true;
   };
 }

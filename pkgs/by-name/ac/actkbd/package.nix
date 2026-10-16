@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://users.softlab.ece.ntua.gr/~thkala/projects/actkbd/";
     platforms = lib.platforms.linux;
     mainProgram = "actkbd";
+    hasNoMaintainersButDependents = true;
   };
 })

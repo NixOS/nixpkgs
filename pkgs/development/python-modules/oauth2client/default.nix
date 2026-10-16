@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "Client library for OAuth 2.0";
     homepage = "https://github.com/google/oauth2client/";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

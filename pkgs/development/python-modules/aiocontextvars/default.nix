@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/fantix/aiocontextvars";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

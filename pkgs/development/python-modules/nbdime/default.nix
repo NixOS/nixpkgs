@@ -91,5 +91,6 @@ buildPythonPackage rec {
     description = "Tools for diffing and merging of Jupyter notebooks";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

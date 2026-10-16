@@ -25,5 +25,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library for manipulating pipelines of subprocesses in a flexible and convenient way";
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -56,5 +56,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/wolph/python-utils/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

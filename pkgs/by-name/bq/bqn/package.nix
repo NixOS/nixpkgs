@@ -58,6 +58,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = [ ];
     inherit (nodejs.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })
 # TODO: install docs and other stuff

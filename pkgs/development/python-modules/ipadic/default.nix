@@ -35,5 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/polm/ipadic-py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

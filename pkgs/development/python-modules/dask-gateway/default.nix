@@ -41,5 +41,6 @@ buildPythonPackage rec {
     homepage = "https://gateway.dask.org/";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

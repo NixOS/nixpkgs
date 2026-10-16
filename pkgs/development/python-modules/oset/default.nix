@@ -19,5 +19,6 @@ buildPythonPackage rec {
   meta = {
     description = "Ordered set";
     license = lib.licenses.psfl;
+    hasNoMaintainersButDependents = true;
   };
 }

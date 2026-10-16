@@ -42,5 +42,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/hercules-team/python-augeas";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

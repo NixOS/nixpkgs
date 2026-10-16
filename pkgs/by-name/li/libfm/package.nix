@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     description = "Glib-based library for file management";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

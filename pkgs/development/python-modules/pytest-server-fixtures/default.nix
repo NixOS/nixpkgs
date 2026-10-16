@@ -43,5 +43,6 @@ buildPythonPackage {
     homepage = "https://github.com/manahl/pytest-plugins";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

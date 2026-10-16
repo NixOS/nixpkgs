@@ -57,5 +57,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 }

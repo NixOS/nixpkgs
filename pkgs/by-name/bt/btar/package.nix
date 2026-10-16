@@ -39,5 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://briantracy.xyz/writing/btar.html";
     platforms = lib.platforms.all;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

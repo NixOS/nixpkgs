@@ -51,5 +51,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pasteorg/paste/blob/${version}/docs/news.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

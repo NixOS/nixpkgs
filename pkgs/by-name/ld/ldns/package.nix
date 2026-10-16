@@ -66,5 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "drill";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

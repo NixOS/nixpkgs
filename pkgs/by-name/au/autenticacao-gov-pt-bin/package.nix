@@ -45,6 +45,7 @@ let
       homepage = "https://xerces.apache.org/xerces-c/";
       license = lib.licenses.asl20;
       platforms = lib.platforms.unix;
+      hasNoMaintainersButDependents = true;
     };
   };
 

@@ -58,5 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/aio-libs/aiohttp-cors";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

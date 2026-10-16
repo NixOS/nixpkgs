@@ -88,5 +88,6 @@ buildDunePackage {
     description = "Language for describing the instruction-set architecture (ISA) semantics of processors";
     maintainers = [ ];
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

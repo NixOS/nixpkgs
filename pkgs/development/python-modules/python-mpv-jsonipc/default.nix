@@ -29,5 +29,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python API to MPV using JSON IPC";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

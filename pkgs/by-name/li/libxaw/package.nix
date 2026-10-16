@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
       "xaw7"
     ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

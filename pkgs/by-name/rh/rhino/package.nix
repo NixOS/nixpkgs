@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

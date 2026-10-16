@@ -31,5 +31,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/snowballstem/snowball/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

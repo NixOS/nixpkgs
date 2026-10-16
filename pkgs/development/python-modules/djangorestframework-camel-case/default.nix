@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vbabiy/djangorestframework-camel-case";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

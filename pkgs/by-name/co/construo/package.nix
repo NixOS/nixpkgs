@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://fs.fsf.org/construo/";
     license = lib.licenses.gpl3;
     priority = 10;
+    hasNoMaintainersButDependents = true;
   };
 })

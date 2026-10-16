@@ -164,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = [
     ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "w1.fi" finalAttrs.version;
   };

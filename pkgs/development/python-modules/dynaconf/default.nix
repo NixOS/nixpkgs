@@ -101,5 +101,6 @@ buildPythonPackage rec {
     mainProgram = "dynaconf";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

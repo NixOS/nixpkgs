@@ -29,5 +29,6 @@ buildPythonPackage (finalAttrs: {
     description = "Powerful, accurate, and easy-to-use Python library for doing colorspace conversions";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

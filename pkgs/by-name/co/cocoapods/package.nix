@@ -22,5 +22,6 @@ bundlerApp {
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     mainProgram = "pod";
+    hasNoMaintainersButDependents = true;
   };
 }

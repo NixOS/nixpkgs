@@ -23,5 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.asl20;
     mainProgram = "felix.jar";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -54,5 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nose-devs/nose2";
     license = lib.licenses.bsd0;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

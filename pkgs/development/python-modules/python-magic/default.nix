@@ -61,5 +61,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ahupp/python-magic";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

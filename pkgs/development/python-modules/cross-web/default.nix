@@ -89,5 +89,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/usecross/cross-web/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

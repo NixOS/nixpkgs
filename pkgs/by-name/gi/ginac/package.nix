@@ -45,5 +45,6 @@ gccStdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

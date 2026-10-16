@@ -52,5 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     description = "Mixed integer programming solver";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -36,5 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://docbook.org/xml/5.0/";
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -35,5 +35,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/ppannuto/python-titlecase";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

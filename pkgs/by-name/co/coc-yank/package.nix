@@ -58,5 +58,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/neoclide/coc-yank";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

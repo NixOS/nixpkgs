@@ -48,5 +48,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jamielennox/requests-mock/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

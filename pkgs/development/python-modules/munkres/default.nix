@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Munkres algorithm for the Assignment Problem";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

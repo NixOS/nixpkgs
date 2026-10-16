@@ -30,5 +30,6 @@ buildPythonPackage rec {
     changelog = "https://webwareforpython.github.io/DBUtils/changelog.html";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

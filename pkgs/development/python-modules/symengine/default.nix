@@ -62,5 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/symengine/symengine.py";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

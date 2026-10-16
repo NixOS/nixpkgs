@@ -34,5 +34,6 @@ buildPythonPackage rec {
     mainProgram = "range-detector";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

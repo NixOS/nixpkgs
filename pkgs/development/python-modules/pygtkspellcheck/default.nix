@@ -39,5 +39,6 @@ buildPythonPackage (finalAttrs: {
     description = "Python spell-checking library for GtkTextViews based on Enchant";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

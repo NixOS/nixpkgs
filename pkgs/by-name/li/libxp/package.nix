@@ -65,5 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     pkgConfigModules = [ "xp" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -51,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://openwsman.github.io";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux; # PAM is not available on Darwin
   };
 })

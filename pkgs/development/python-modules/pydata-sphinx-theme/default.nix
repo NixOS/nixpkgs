@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pydata/pydata-sphinx-theme/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

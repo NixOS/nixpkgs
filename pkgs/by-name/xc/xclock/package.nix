@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xclock";
     maintainers = with lib.maintainers; [ booxter ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

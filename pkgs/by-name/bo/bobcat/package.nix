@@ -68,5 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://fbb-git.gitlab.io/bobcat/";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

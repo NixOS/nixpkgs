@@ -56,5 +56,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/c0fec0de/anytree/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -37,5 +37,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/freach/udatetime";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -25,5 +25,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/takluyver/entrypoints";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

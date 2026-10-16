@@ -18,5 +18,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://getfem.org/gmm.html";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

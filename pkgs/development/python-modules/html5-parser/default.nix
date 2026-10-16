@@ -45,5 +45,6 @@ buildPythonPackage rec {
     homepage = "https://html5-parser.readthedocs.io";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

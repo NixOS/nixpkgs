@@ -53,5 +53,6 @@ buildPythonPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "stone";
+    hasNoMaintainersButDependents = true;
   };
 })

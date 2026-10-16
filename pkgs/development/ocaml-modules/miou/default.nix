@@ -24,5 +24,6 @@ buildDunePackage (finalAttrs: {
     changelog = "https://github.com/robur-coop/miou/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

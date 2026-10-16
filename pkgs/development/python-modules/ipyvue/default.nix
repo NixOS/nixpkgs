@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mariobuikhuizen/ipyvue";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

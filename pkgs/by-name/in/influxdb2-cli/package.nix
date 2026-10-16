@@ -44,5 +44,6 @@ buildGoModule {
     homepage = "https://influxdata.com/";
     maintainers = [ ];
     mainProgram = "influx";
+    hasNoMaintainersButDependents = true;
   };
 }

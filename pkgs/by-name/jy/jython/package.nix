@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.psfl;
     platforms = jre.meta.platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -46,5 +46,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/carltongibson/django-filter/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

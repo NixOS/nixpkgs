@@ -36,5 +36,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/arsenetar/send2trash/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

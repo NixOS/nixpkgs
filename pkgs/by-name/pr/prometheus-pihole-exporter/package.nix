@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/eko/pihole-exporter";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

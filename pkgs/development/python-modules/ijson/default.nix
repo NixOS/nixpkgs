@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/ICRAR/ijson/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -88,5 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "berry";
     maintainers = [ ];
     inherit (libx11.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

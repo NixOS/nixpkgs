@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/spesmilo/electrum-aionostr";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

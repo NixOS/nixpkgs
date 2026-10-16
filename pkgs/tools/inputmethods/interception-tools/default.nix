@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 }

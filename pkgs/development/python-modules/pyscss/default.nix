@@ -36,5 +36,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://pyscss.readthedocs.org/en/latest/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

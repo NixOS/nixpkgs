@@ -26,6 +26,7 @@ let
     "4.05" = {
       version = "4.05+1";
       sha256 = "0wm795hpwvwpib9c9z6p8kw2fh7p7b2hml6g15z8zry3y7w738sv";
+      hasNoMaintainersButDependents = true;
     };
     "4.06" = {
       version = "4.06+1";

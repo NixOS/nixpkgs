@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     description = "Tool for lightweight executable mathematics";
     mainProgram = "lem";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     license = with lib.licenses; [
       bsd3
       gpl2

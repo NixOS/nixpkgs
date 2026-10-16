@@ -94,4 +94,5 @@ mkDerivation {
   };
   description = "GHC build system";
   license = lib.licenses.bsd3;
+  hasNoMaintainersButDependents = true;
 }

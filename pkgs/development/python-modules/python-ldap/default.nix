@@ -73,5 +73,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/python-ldap/python-ldap/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.psfl;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

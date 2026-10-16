@@ -47,5 +47,6 @@ buildPythonPackage {
     homepage = "https://github.com/nix-community/nixops-digitalocean";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -34,5 +34,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/click-contrib/click-help-colors/blob/${finalAttrs.version}/CHANGES.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

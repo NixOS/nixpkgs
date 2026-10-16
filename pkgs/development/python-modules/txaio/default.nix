@@ -34,5 +34,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/crossbario/txaio/blob/${finalAttrs.src.tag}/docs/releases.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

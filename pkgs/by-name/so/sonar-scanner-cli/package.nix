@@ -77,5 +77,6 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ kmjayadeep ];
     mainProgram = "sonar-scanner";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

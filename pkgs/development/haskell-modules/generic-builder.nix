@@ -157,6 +157,7 @@ in
   license ? null,
   enableParallelBuilding ? true,
   maintainers ? null,
+  hasNoMaintainersButDependents ? false,
   teams ? null,
   changelog ? null,
   mainProgram ? null,
@@ -637,6 +638,8 @@ let
       + lib.optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
   };
 
+  pos = builtins.unsafeGetAttrPos "pname" args;
+
 in
 lib.fix (
   drv:
@@ -655,7 +658,7 @@ lib.fix (
 
       setOutputFlags = false;
 
-      pos = builtins.unsafeGetAttrPos "pname" args;
+      inherit pos;
 
       prePhases = [ "setupCompilerEnvironmentPhase" ];
       preConfigurePhases = [ "compileBuildDriverPhase" ];
@@ -1107,7 +1110,12 @@ lib.fix (
       // optionalAttrs (args ? hydraPlatforms) { inherit hydraPlatforms; }
       // optionalAttrs (args ? badPlatforms) { inherit badPlatforms; }
       // optionalAttrs (args ? changelog) { inherit changelog; }
-      // optionalAttrs (args ? mainProgram) { inherit mainProgram; };
+      // optionalAttrs (args ? mainProgram) { inherit mainProgram; }
+      // optionalAttrs (pos.file == toString ./hackage-packages.nix) {
+        # Because generated
+        requiresMaintainers = false;
+      }
+      // optionalAttrs (args ? hasNoMaintainersButDependents) { inherit hasNoMaintainersButDependents; };
 
     }
     // optionalAttrs (args ? sourceRoot) { inherit sourceRoot; }

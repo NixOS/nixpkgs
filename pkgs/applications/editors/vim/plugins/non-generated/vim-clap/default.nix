@@ -31,7 +31,7 @@ let
 
   maple = rustPlatform.buildRustPackage {
     pname = "maple";
-    inherit version src meta;
+    inherit version src;
 
     strictDeps = false;
 
@@ -54,6 +54,10 @@ let
       libgit2
       zlib
     ];
+
+    meta = meta // {
+      hasNoMaintainersButDependents = true;
+    };
   };
 in
 

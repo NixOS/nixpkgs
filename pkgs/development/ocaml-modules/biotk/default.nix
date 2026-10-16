@@ -53,5 +53,6 @@ buildDunePackage (finalAttrs: {
   meta = {
     description = "Toolkit for bioinformatics in OCaml";
     license = lib.licenses.cecill-c;
+    hasNoMaintainersButDependents = true;
   };
 })

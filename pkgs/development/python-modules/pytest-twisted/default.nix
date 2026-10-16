@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-twisted";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

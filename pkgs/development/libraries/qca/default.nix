@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.lgpl21Plus;
     platforms = with lib.platforms; unix;
+    hasNoMaintainersButDependents = true;
   };
 }

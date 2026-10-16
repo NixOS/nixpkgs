@@ -22,5 +22,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.ofl;
     maintainers = [ ];
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 })

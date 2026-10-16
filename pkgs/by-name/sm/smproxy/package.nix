@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "smproxy";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

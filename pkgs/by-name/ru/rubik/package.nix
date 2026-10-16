@@ -47,5 +47,6 @@ stdenvNoCC.mkDerivation {
     '';
     platforms = lib.platforms.all;
     license = lib.licenses.ofl;
+    hasNoMaintainersButDependents = true;
   };
 }

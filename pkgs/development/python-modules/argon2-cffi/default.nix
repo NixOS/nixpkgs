@@ -40,5 +40,6 @@ buildPythonPackage rec {
     description = "Secure Password Hashes for Python";
     homepage = "https://argon2-cffi.readthedocs.io/";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

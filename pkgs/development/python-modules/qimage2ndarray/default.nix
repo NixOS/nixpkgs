@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "Small python extension for quickly converting between QImages and numpy.ndarrays (in both directions)";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -24,5 +24,6 @@ buildGoModule (finalAttrs: {
     description = "Todoist CLI Client";
     license = lib.licenses.mit;
     mainProgram = "todoist";
+    hasNoMaintainersButDependents = true;
   };
 })

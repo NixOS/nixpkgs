@@ -41,5 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     # build tool "json" is built for the host platform
     broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    hasNoMaintainersButDependents = true;
   };
 })

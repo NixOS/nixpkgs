@@ -193,6 +193,7 @@ stdenv.mkDerivation {
 
   meta = (blasProvider'.meta or { }) // {
     description = "${lib.getName blasProvider} with just the BLAS C and FORTRAN ABI";
+    hasNoMaintainersButDependents = true;
   };
 
   passthru = {

@@ -42,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/graeme-hill/crossguid";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

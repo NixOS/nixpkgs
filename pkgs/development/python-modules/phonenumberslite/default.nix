@@ -10,5 +10,6 @@ mkPythonMetaPackage {
   optional-dependencies = phonenumbers.optional-dependencies or { };
   meta = {
     inherit (phonenumbers.meta) changelog description homepage;
+    hasNoMaintainersButDependents = true;
   };
 }

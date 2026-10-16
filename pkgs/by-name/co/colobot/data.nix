@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Game data for colobot";
     license = lib.licenses.gpl3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
     platforms = lib.platforms.linux;
   };
 })

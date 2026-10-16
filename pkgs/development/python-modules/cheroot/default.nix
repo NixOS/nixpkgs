@@ -90,5 +90,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cherrypy/cheroot";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

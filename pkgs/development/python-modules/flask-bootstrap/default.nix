@@ -49,5 +49,6 @@ buildPythonPackage rec {
     description = "Ready-to-use Twitter-bootstrap for use in Flask";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

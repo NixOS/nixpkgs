@@ -137,6 +137,7 @@ in
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -812,6 +813,7 @@ in
       homepage = "https://github.com/rose-pine/tmux";
       description = "Rosé Pine theme for tmux";
       license = lib.licenses.mit;
+      hasNoMaintainersButDependents = true;
     };
   };
 

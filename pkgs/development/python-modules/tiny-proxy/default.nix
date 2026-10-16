@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/romis2012/tiny-proxy";
     changelog = "https://github.com/romis2012/tiny-proxy/releases/tag/v${version}";
     license = lib.licenses.asl20;
+    hasNoMaintainersButDependents = true;
   };
 }

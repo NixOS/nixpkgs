@@ -70,6 +70,7 @@ let
         # The name is a poor fit, but it does exactly what we want.
         isROCm = true;
       };
+      meta.hasNoMaintainersButDependents = true;
     }
   );
 

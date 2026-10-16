@@ -65,5 +65,6 @@ buildPythonPackage rec {
     mainProgram = "milc-color";
     homepage = "https://milc.clueboard.co";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

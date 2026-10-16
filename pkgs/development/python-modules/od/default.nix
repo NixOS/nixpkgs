@@ -24,5 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/epsy/od";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

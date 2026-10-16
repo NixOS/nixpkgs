@@ -97,5 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "virgl_test_server";
     platforms = lib.platforms.unix;
     teams = [ lib.teams.freedesktop ];
+    hasNoMaintainersButDependents = true;
   };
 })

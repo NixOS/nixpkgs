@@ -51,5 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     # libdrm_omap is only available on linux
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

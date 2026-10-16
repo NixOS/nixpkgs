@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
     maintainers = [ ];
     mainProgram = "mjpg_streamer";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = [ ];
     mainProgram = "pbzx";
+    hasNoMaintainersButDependents = true;
   };
 })

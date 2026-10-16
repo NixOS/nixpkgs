@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cldf/segments";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

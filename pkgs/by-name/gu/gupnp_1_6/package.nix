@@ -75,5 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gupnp-binding-tool-1.6";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

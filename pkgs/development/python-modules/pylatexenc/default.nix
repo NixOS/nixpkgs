@@ -33,5 +33,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://pylatexenc.readthedocs.io/en/latest/changes/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

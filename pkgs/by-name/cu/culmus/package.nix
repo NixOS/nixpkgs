@@ -34,5 +34,6 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.gpl2;
     homepage = "http://culmus.sourceforge.net/";
     downloadPage = "http://culmus.sourceforge.net/download.html";
+    hasNoMaintainersButDependents = true;
   };
 }

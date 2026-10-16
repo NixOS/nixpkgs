@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "tini";
+    hasNoMaintainersButDependents = true;
   };
 })

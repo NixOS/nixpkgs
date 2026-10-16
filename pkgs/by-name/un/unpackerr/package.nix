@@ -45,5 +45,6 @@ buildGo127Module (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [ connor-grady ];
     mainProgram = "unpackerr";
+    hasNoMaintainersButDependents = true;
   };
 })

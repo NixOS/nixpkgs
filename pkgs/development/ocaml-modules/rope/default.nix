@@ -35,5 +35,6 @@ buildDunePackage {
     description = "Ropes (“heavyweight strings”) in OCaml";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

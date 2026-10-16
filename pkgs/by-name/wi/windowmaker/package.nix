@@ -84,5 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "wmaker";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

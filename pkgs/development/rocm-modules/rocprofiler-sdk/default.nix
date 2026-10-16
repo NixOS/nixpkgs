@@ -222,5 +222,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
+    hasNoMaintainersButDependents = true;
   };
 })

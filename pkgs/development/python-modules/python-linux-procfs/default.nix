@@ -29,5 +29,6 @@ buildPythonPackage rec {
     mainProgram = "pflags";
     homepage = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/";
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 }

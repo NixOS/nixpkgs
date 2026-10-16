@@ -159,6 +159,7 @@ rec {
       platforms = lib.platforms.unix;
       mainProgram = "redshift";
       maintainers = [ ];
+      hasNoMaintainersButDependents = true;
     };
   };
 
@@ -178,6 +179,7 @@ rec {
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
       maintainers = with lib.maintainers; [ acidbong ] ++ redshift.meta.maintainers;
+      hasNoMaintainersButDependents = false;
     };
   };
 }

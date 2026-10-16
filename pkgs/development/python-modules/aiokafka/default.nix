@@ -59,5 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/aio-libs/aiokafka/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

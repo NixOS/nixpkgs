@@ -54,5 +54,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "mars";
+    hasNoMaintainersButDependents = true;
   };
 }

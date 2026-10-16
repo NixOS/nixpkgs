@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/txels/ddt";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

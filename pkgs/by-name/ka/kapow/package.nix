@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ tbutter ];
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

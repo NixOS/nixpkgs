@@ -36,5 +36,6 @@ buildPythonPackage rec {
     description = "Collection of cache libraries in the same API interface";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

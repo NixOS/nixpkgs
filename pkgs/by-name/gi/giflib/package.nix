@@ -86,5 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     branch = "5.2";
+    hasNoMaintainersButDependents = true;
   };
 })

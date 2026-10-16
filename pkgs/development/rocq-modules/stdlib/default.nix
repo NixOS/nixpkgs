@@ -35,6 +35,7 @@ let
     meta = {
       description = "Rocq Proof Assistant -- Standard Library";
       license = lib.licenses.lgpl21Only;
+      hasNoMaintainersButDependents = true;
     };
 
   };

@@ -52,5 +52,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/Changaco/python-libarchive-c";
     description = "Python interface to libarchive";
     license = lib.licenses.cc0;
+    hasNoMaintainersButDependents = true;
   };
 })

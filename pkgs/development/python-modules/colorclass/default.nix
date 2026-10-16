@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Robpol86/colorclass";
     license = lib.licenses.mit;
     description = "Automatic support for console colors";
+    hasNoMaintainersButDependents = true;
   };
 }

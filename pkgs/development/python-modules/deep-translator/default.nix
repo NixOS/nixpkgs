@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/nidhaloff/deep-translator/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

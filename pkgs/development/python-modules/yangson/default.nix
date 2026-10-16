@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/CZ-NIC/yangson";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

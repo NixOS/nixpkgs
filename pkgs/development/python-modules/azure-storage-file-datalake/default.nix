@@ -44,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-storage-file-datalake_${version}/sdk/storage/azure-storage-file-datalake/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

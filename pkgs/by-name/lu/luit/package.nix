@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "luit";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

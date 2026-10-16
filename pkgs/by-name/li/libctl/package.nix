@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/NanoComp/libctl";
     license = lib.licenses.gpl2Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

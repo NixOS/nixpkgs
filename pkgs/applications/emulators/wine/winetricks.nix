@@ -84,5 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Winetricks/winetricks";
     maintainers = with lib.maintainers; [ ferris-qq ];
     platforms = with lib.platforms; linux ++ darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

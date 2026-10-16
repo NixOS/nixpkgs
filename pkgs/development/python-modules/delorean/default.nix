@@ -43,5 +43,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/myusuf3/delorean";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

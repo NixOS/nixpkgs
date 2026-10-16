@@ -38,5 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     pkgConfigModules = [ "pthread-stubs" ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

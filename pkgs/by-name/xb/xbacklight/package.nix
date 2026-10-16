@@ -48,5 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xbacklight";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

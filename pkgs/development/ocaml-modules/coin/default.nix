@@ -22,5 +22,6 @@ buildDunePackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "coin.generate";
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -28,5 +28,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://dash.plotly.com/datatable";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

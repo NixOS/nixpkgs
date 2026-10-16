@@ -25,5 +25,6 @@ buildDunePackage (finalAttrs: {
     description = "Maps over integers implemented as Patricia trees";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/libguestfs/hivex";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

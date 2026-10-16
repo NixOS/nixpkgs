@@ -195,5 +195,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
     maintainers = [ ];
     license = lib.licenses.gpl3;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/frankosterfeld/qtkeychain";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 }

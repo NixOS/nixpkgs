@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nwhitehead/pyfluidsynth";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

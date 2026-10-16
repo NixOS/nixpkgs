@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nucleic/kiwi";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

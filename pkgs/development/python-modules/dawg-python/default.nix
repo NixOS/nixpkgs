@@ -27,5 +27,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/pytries/DAWG-Python";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

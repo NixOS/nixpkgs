@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DBuildService/dockerfile-parse";
     changelog = "https://github.com/containerbuildsystem/dockerfile-parse/releases/tag/${version}";
     license = lib.licenses.bsd3;
+    hasNoMaintainersButDependents = true;
   };
 }

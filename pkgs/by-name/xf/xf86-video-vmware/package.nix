@@ -61,5 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = [ ];
     platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
+    hasNoMaintainersButDependents = true;
   };
 })

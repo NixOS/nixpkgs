@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "dhcpcd";
+    hasNoMaintainersButDependents = true;
   };
 })

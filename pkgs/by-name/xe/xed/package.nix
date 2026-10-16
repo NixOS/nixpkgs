@@ -28,6 +28,7 @@ let
       description = "Python-based build system used for building XED";
       homepage = "https://github.com/intelxed/mbuild";
       license = lib.licenses.asl20;
+      hasNoMaintainersButDependents = true;
     };
   };
 

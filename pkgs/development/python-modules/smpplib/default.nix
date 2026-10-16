@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-smpplib/python-smpplib";
     license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

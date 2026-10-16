@@ -32,5 +32,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/tfranzel/drf-spectacular-sidecar";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

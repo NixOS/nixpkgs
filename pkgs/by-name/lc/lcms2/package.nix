@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.littlecms.com/";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+    hasNoMaintainersButDependents = true;
   };
 }

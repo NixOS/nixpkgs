@@ -27,5 +27,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://launchpad.net/versiontools";
     description = "Smart replacement for plain tuple used in __version__";
     license = lib.licenses.lgpl2;
+    hasNoMaintainersButDependents = true;
   };
 })

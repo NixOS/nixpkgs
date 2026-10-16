@@ -37,5 +37,6 @@ buildPythonPackage (finalAttrs: {
     description = "Babel Glade XML files translatable strings extractor";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

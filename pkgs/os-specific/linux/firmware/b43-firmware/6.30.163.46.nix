@@ -28,5 +28,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     downloadPage = "http://www.lwfinger.com/b43-firmware";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
+    hasNoMaintainersButDependents = true;
   };
 })

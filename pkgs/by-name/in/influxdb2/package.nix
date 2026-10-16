@@ -13,4 +13,6 @@ buildEnv {
     influxdb2-server
     influxdb2-cli
   ];
+  # TODO: Why not?
+  meta.requiresMaintainers = false;
 }

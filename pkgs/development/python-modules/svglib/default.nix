@@ -47,5 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/deeplook/svglib/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

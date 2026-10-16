@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/spacy-alignments";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

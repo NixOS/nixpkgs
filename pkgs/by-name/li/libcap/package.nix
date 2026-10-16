@@ -139,5 +139,6 @@ stdenv.mkDerivation (finalAttrs: {
       "libpsx"
     ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap_project" finalAttrs.version;
+    hasNoMaintainersButDependents = true;
   };
 })

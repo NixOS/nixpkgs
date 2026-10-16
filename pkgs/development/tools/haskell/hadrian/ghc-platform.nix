@@ -16,4 +16,5 @@ mkDerivation {
   libraryHaskellDepends = [ base ];
   description = "Platform information used by GHC and friends";
   license = lib.licenses.bsd3;
+  hasNoMaintainersButDependents = true;
 }

@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [
       "libxxhash"
     ];
+    hasNoMaintainersButDependents = true;
   };
 })

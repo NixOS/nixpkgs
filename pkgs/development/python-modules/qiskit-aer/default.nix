@@ -83,5 +83,6 @@ buildPythonPackage rec {
     changelog = "https://qiskit.github.io/qiskit-aer/release_notes.html";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

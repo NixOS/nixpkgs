@@ -42,5 +42,6 @@ buildGoModule {
     mainProgram = "skydns";
     # link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 }

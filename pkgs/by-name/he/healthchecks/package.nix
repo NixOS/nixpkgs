@@ -98,5 +98,6 @@ py.pkgs.buildPythonApplication rec {
     description = "Cron monitoring tool written in Python & Django";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

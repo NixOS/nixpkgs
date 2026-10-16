@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "Sphinx extension which outputs Devhelp document";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-devhelp";
     license = lib.licenses.bsd2;
+    hasNoMaintainersButDependents = true;
   };
 }

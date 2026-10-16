@@ -42,5 +42,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "riscv-config";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -216,5 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "cups" ];
+    hasNoMaintainersButDependents = true;
   };
 })

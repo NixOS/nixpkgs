@@ -71,5 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.gupnp.org/";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

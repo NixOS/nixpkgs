@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sethmlarson/rfc6555";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

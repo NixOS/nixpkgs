@@ -38,5 +38,6 @@ replaceVarsWith {
     homepage = "https://github.com/NixOS/nixpkgs/tree/master/pkgs/by-name/ni/nixos-install";
     license = lib.licenses.mit;
     mainProgram = "nixos-install";
+    hasNoMaintainersButDependents = true;
   };
 }

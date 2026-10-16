@@ -52,5 +52,6 @@ buildPythonPackage rec {
     homepage = "https://nuitka.net/";
     # never built on darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 }

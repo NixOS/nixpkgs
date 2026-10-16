@@ -41,5 +41,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     maintainers = [ ];
     mainProgram = "millet-ls";
+    hasNoMaintainersButDependents = true;
   };
 })

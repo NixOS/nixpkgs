@@ -44,5 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "nanocat";
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

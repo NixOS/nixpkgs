@@ -91,5 +91,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/ansible/ansible-compat/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

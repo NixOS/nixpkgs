@@ -42,5 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/uvjustin/pyforked-daapd/blob/v${version}/CHANGES.txt";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

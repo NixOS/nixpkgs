@@ -99,5 +99,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/PyAV-Org/PyAV/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

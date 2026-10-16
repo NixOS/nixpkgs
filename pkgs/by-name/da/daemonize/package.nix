@@ -28,5 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ freebsd ++ darwin;
     mainProgram = "daemonize";
+    hasNoMaintainersButDependents = true;
   };
 })

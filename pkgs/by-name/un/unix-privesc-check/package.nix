@@ -82,5 +82,6 @@ resholve.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Plus;
+    hasNoMaintainersButDependents = true;
   };
 })

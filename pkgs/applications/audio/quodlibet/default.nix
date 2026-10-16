@@ -198,5 +198,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
+    hasNoMaintainersButDependents = true;
   };
 })

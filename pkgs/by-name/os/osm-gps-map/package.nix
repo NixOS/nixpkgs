@@ -78,5 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://nzjrs.github.io/osm-gps-map";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    hasNoMaintainersButDependents = true;
   };
 })

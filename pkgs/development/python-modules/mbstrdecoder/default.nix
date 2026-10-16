@@ -37,5 +37,6 @@ buildPythonPackage rec {
     description = "Library for decoding multi-byte character strings";
     maintainers = [ ];
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }

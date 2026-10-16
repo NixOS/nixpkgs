@@ -65,5 +65,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/napalm-automation-community/napalm-hp-procurve/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

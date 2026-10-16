@@ -40,5 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "ff2mpv.py";
+    hasNoMaintainersButDependents = true;
   };
 })

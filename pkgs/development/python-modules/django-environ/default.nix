@@ -32,5 +32,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/joke2k/django-environ/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -40,5 +40,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/PyCQA/flake8-import-order/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

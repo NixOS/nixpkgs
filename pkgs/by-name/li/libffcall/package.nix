@@ -33,5 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/libffcall/";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

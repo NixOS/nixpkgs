@@ -48,5 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/freevo/kaa-base";
     license = lib.licenses.lgpl21;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

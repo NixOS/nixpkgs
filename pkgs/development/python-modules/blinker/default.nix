@@ -36,5 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pallets-eco/blinker/";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

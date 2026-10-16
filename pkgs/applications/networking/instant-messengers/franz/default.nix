@@ -20,5 +20,6 @@ mkFranzDerivation rec {
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

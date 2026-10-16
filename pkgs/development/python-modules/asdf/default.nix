@@ -73,5 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/asdf-format/asdf";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -47,5 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ethanfurman/aenum";
     license = lib.licenses.bsd3;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -36,5 +36,6 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     homepage = "https://github.com/mirage/yuscii";
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

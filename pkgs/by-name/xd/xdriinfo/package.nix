@@ -45,5 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xdriinfo";
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    hasNoMaintainersButDependents = true;
   };
 })

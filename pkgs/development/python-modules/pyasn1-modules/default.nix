@@ -33,5 +33,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pyasn1/pyasn1-modules/releases/tag/v${version}";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

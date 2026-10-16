@@ -103,5 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "labwc";
     maintainers = [ ];
     inherit (wayland.meta) platforms;
+    hasNoMaintainersButDependents = true;
   };
 })

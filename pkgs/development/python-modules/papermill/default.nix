@@ -123,5 +123,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "papermill";
+    hasNoMaintainersButDependents = true;
   };
 }

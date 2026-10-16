@@ -45,5 +45,6 @@ buildPythonPackage (finalAttrs: {
     changelog = "https://github.com/digitalbitbox/bitbox02-firmware/blob/py-bitbox02-${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 })

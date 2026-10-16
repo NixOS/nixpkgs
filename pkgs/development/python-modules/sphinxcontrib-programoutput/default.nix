@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/NextThought/sphinxcontrib-programoutput";
     license = lib.licenses.bsd2;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

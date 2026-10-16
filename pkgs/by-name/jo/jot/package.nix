@@ -23,5 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "jt";
+    hasNoMaintainersButDependents = true;
   };
 })

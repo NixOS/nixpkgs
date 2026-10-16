@@ -192,5 +192,6 @@ builder rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
     mainProgram = "guile";
+    hasNoMaintainersButDependents = true;
   };
 }

@@ -26,5 +26,6 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "json_exporter";
+    hasNoMaintainersButDependents = true;
   };
 }

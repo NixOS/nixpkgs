@@ -34,5 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "natspec";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21;
+    hasNoMaintainersButDependents = true;
   };
 })

@@ -78,5 +78,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
     license = lib.licenses.mit;
     maintainers = [ ];
+    hasNoMaintainersButDependents = true;
   };
 }

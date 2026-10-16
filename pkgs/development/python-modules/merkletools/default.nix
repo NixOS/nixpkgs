@@ -32,5 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Tierion/pymerkletools";
     changelog = "https://github.com/Tierion/pymerkletools/releases/tag/${version}";
     license = lib.licenses.mit;
+    hasNoMaintainersButDependents = true;
   };
 }
