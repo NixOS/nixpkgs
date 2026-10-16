@@ -287,8 +287,10 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   + ''
     # Fix tests
     for f in $(grep -R --files-with-matches "2002-11-25") ; do
-      substituteInPlace $f --replace "2002-11-25" "1980-01-02"
-      substituteInPlace $f --replace "00:37:42" "00:00:00"
+      substituteInPlace $f --replace-fail "2002-11-25" "1980-01-02"
+    done
+    for f in $(grep -R --files-with-matches "00:37:42") ; do
+      substituteInPlace $f --replace-fail "00:37:42" "00:00:00"
     done
   ''
   + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
