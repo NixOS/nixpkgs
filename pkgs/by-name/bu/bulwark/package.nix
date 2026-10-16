@@ -62,6 +62,7 @@ buildNpmPackage (finalAttrs: {
     cp -R .next/standalone/. $out/
     cp -R public $out/public
     cp -R .next/static $out/.next/static
+    ln -s /var/cache/bulwark $out/.next/cache
 
     makeWrapper ${nodejs}/bin/node $out/bin/bulwark \
       --add-flags "$out/server.js" \
