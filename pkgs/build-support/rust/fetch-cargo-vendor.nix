@@ -3,6 +3,7 @@
   stdenvNoCC,
   runCommand,
   writers,
+  writeText,
   python3,
   cargo,
   gitMinimal,
@@ -42,6 +43,7 @@ let
     "pname"
     "version"
     "nativeBuildInputs"
+    "registryDlOverrides"
     "hash"
   ];
 
@@ -63,12 +65,33 @@ in
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
   nativeBuildInputs ? [ ],
+  # An attrset mapping a Cargo.lock registry source string to a `dl` value.
+  # `dl` is used as a template for constructing crate download URLs.
+  # The provided value overrides the `dl` value advertised by the registry's config.json
+  # See the Cargo registry index configuration reference for the schema of `dl`:
+  # https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
+  #
+  # Example:
+  #   registryDlOverrides = {
+  #     "registry+https://github.com/rust-lang/crates.io-index" = "https://artifacts.example.com/artifactory/api/cargo/crates";
+  #     "registry+https://github.com/rust-lang/staging.crates.io-index.git" = "https://artifacts.example.com/artifactory/api/cargo/staging-crates";
+  #   };
+  registryDlOverrides ? { },
   ...
 }@args:
+
+assert (lib.all lib.isString (lib.attrValues registryDlOverrides));
 
 # TODO: add asserts about pname version and name
 
 let
+  # Hardcoding the .dl values for crates.io speeds up the
+  # non-sparse logic by avoiding having to clone the repo
+  defaultRegistryDlOverrides = {
+    "registry+https://github.com/rust-lang/crates.io-index" = "https://static.crates.io/crates";
+    "sparse+https://index.crates.io/" = "https://static.crates.io/crates";
+  };
+
   vendorStaging = stdenvNoCC.mkDerivation (
     {
       name = "${name}-vendor-staging";
@@ -82,6 +105,10 @@ let
       ]
       ++ nativeBuildInputs;
 
+      registryDlOverridesFile = writeText "registry-dl-overrides.json" (
+        builtins.toJSON (defaultRegistryDlOverrides // registryDlOverrides)
+      );
+
       buildPhase = ''
         runHook preBuild
 
@@ -89,7 +116,7 @@ let
           cd "$cargoRoot"
         fi
 
-        fetch-cargo-vendor-util create-vendor-staging ./Cargo.lock "$out"
+        fetch-cargo-vendor-util create-vendor-staging ./Cargo.lock "$out" "$registryDlOverridesFile"
 
         runHook postBuild
       '';
