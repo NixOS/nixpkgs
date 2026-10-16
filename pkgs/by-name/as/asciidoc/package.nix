@@ -232,12 +232,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   + (
     if enableStandardFeatures then
       ''
-        sed -e "s|dot|${graphviz}/bin/dot|g" \
-            -e "s|neato|${graphviz}/bin/neato|g" \
-            -e "s|twopi|${graphviz}/bin/twopi|g" \
-            -e "s|circo|${graphviz}/bin/circo|g" \
-            -e "s|fdp|${graphviz}/bin/fdp|g" \
-            -i "asciidoc/resources/filters/graphviz/graphviz2png.py"
+        substituteInPlace asciidoc/resources/filters/graphviz/graphviz2png.py \
+          --replace-fail '["dot", "-T?"]' '["${lib.getExe' graphviz "dot"}", "-T?"]' \
+          --replace-fail "cmd = '%s -T%s" "cmd = '${lib.getBin graphviz}/bin/%s -T%s"
 
         sed -e "s|run('latex|run('${texlive}/bin/latex|g" \
             -e "s|cmd = 'dvipng'|cmd = '${texlive}/bin/dvipng'|g" \
