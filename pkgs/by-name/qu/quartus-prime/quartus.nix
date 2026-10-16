@@ -50,6 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''))
     lib.concatLines
   ]
+  + lib.pipe finalAttrs.finalPackage.passthru.installerParts [
+    (lib.mapAttrsToList finalAttrs.finalPackage.passthru.download)
+    (map (installerPart: "ln -s ${installerPart} $TEMP/${installerPart.name}"))
+    lib.concatLines
+  ]
   + (
     let
       availableDevices = lib.pipe finalAttrs.finalPackage.passthru.deviceIds [
@@ -129,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
       "QuestaSetup-${finalAttrs.version}-linux.run" =
         "sha256-0F7psE+jTimCoy+UVJRgxNC6GEVdY/PJu49hf+D7T3U=";
     };
+    installerParts = { };
     mainInstaller = "QuartusLiteSetup-${finalAttrs.version}-linux.run";
     # Make it a bit easier to override the download URL schema.
     baseURL = "https://download.altera.com/akdlm/software/acdsinst";
