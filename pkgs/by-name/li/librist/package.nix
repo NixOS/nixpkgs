@@ -9,6 +9,7 @@
   cjson,
   cmocka,
   mbedtls,
+  lz4,
 
   # for passthru.tests
   ffmpeg-headless,
@@ -17,21 +18,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librist";
-  version = "0.2.11";
+  version = "0.2.20";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TaO1vQsJ/sJ/YFW7Ykv9HywsrtEy/3R4+BfxS1v/ZBY=";
   };
-
-  # avoid rebuild on Linux for now
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [
-    # https://code.videolan.org/rist/librist/-/issues/192
-    ./no-brew-darwin.diff
-  ];
 
   outputs = [
     "out"
@@ -51,11 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = lib.mapAttrsToList lib.mesonBool {
     test = finalAttrs.finalPackage.doCheck;
+    fallback_builtin = false;
   };
 
   buildInputs = [
     cjson
     mbedtls
+    lz4
   ];
 
   checkInputs = [ cmocka ];
