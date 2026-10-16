@@ -23,6 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9tLjz+HrdJN0Ok1ByH/URGDnfFMCxtDec0bsQpb1EC4=";
   };
 
+  # Upstream disables libc++ availability checks for conda's newer libc++.
+  # We link the system libc++, so the checks must stay on.
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "_args += ['-D_LIBCPP_DISABLE_AVAILABILITY']" ""
+  '';
+
   doCheck = true;
   strictDeps = true;
   __structuredAttrs = true;
@@ -55,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://dseams.info";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iedame ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "seams";
   };
 })
