@@ -20,7 +20,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
-    rev = version;
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-pfhoj5a+kUVOuMnAHgL2s05Pcc6uhlTcp2t5aj1eJ0E=";
   };
@@ -59,7 +59,7 @@ buildPecl rec {
 
   meta = {
     broken = lib.versionAtLeast php.version "8.6";
-    changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.tag}/CHANGELOG.md";
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";
     license = with lib.licenses; [
