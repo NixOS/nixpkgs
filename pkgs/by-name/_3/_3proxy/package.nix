@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pcre2,
   nixosTests,
 }:
 
@@ -15,6 +16,8 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     sha256 = "sha256-hLxafFU6nJ3I3NT3R24LPD7PBmQ1IZEbrVqvfmMZHIM=";
   };
+
+  buildInputs = [ pcre2 ];
 
   # They use 'install -s', that calls the native strip instead of the cross.
   # Don't strip binary on install, we strip it on fixup phase anyway.
