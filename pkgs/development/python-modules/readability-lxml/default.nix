@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.4.1";
+  version = "0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
     rev = "${version}";
-    hash = "sha256-tL0OnvCrbrpBvcy+6RJ+u/BDdra+MnVT51DSAeYxJbc=";
+    hash = "sha256-N7f4PYwuTP5MSRw3xXm3lopZfKe6UHkSOJbUMeL5VBU=";
   };
 
   build-system = [ poetry-core ];
