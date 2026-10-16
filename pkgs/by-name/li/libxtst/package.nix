@@ -12,11 +12,11 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxtst";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXtst-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tQ1MJblwCadEcGwQOcWY9NjmSRDJ/eOBmU4criNdkkI=";
+    hash = "sha256-+U8LN8B9gNh38+2iwkBcx+YqqYQvYxA1SqNJ49ZqT+U=";
   };
 
   strictDeps = true;
