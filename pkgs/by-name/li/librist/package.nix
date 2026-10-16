@@ -29,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./no-brew-darwin.diff
   ];
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
