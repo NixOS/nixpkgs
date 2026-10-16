@@ -22,6 +22,7 @@
   boost,
   eigen,
   libvdwxc,
+  fftwMpi,
   dftd4,
   simple-dftd3,
   mctc-lib,
@@ -53,7 +54,7 @@ assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SIRIUS";
-  version = "7.10.0";
+  version = "7.12.0";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "electronic-structure";
     repo = "SIRIUS";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cq4ajtAJXfIH1B866FYhgROMSwd7nsbXf/6kbSwJAso=";
+    hash = "sha256-9PlXyJLfunbinsZM6V3PFklqY/JWJkbVD8/vvkIsywA=";
   };
 
   postPatch = ''
@@ -104,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     eigen
     libvdwxc
+    fftwMpi
     jonquil
     simple-dftd3
     dftd4
