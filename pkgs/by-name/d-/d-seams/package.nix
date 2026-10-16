@@ -9,17 +9,18 @@
   blas,
   lapack,
   catch2_3,
+  minimage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "d-seams";
-  version = "2.10.0";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "d-SEAMS";
     repo = "seams-core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gtDD0Nc3pC+7eLtH8h+c7j1E9OSGwUWip+Nu0LTOEmw=";
+    hash = "sha256-9tLjz+HrdJN0Ok1ByH/URGDnfFMCxtDec0bsQpb1EC4=";
   };
 
   doCheck = true;
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     blas
     lapack
     catch2_3
+    minimage
   ];
 
   mesonFlags = [
@@ -44,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith_ira=disabled"
     "-Dwith_sphericart=disabled"
     "-Dwith_nauty=disabled"
+    "-Dwith_linkcell=disabled"
+    "-Dwith_minimage=enabled"
   ];
 
   meta = {
