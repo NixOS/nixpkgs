@@ -34,14 +34,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libGL
-    libGLU
     SDL_gfx
     SDL_image
     SDL_mixer
     sdl12-compat
     yaml-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libGLU
   ];
+
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ (lib.cmakeBool "CREATE_BUNDLE" false) ];
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
@@ -51,6 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ keenanweaver ];
     mainProgram = "openxcom";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
