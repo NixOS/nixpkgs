@@ -10,6 +10,7 @@
   lapack,
   catch2_3,
   minimage,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +57,25 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dwith_linkcell=disabled"
     "-Dwith_minimage=enabled"
   ];
+
+  # A clathrate unit cell has a known number of cages: sI has 2 small (5^12),
+  # sII has 16 small and 8 large (5^12 6^4).
+  passthru.tests.cages =
+    runCommand "d-seams-test-cages" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+      ''
+        traj=${finalAttrs.src}/input/traj
+
+        check() {
+          echo "$1"
+          [[ "$1" == *"cages $2 "* ]] || { echo "expected $2 cages"; exit 1; }
+        }
+
+        check "$(seams cages $traj/genice_sI.lammpstrj --graph cutoff --signature 512)" 2
+        check "$(seams cages $traj/genice_sII.lammpstrj --graph cutoff --signature 512)" 16
+        check "$(seams cages $traj/genice_sII.lammpstrj --graph cutoff --signature 51264)" 8
+
+        touch $out
+      '';
 
   meta = {
     description = "Deferred Structural Elucidation Analysis for Molecular Simulations";
