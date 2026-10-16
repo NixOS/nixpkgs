@@ -48,7 +48,7 @@ let
     plugins:
     buildPythonApplication rec {
       pname = "${buildbot.pname}-with-plugins";
-      inherit (buildbot) version;
+      inherit (buildbot) version meta;
       pyproject = false;
 
       dontUnpack = true;

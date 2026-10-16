@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "crytic";
     repo = "pyevmasm";
     rev = version;
-    sha256 = "134q0z0dqzxzr0jw5jr98kp90kx2dl0qw9smykwxdgq555q1l6qa";
+    hash = "sha256-ChsacCkFv9b59FUnjgFtok+Q7kQpy8IlyL9/3MAHmIw=";
   };
 
   propagatedBuildInputs = [ future ];

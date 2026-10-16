@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "etsy";
     repo = "logster";
     rev = version;
-    sha256 = "06ac5hydas24h2cn8l5i69v1z0min5hwh6a1lcm1b08xnvpsi85q";
+    hash = "sha256-uKCo77YdgRUqo0EZyGGxsYIfdjKxUGSZgERo1TwsTBk=";
   };
 
   propagatedBuildInputs = [ pygtail ];

@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ast-grep";
-  version = "0.45.3";
+  version = "0.50.0";
 
   __structuredAttrs = true;
 
@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "ast-grep";
     repo = "ast-grep";
     tag = finalAttrs.version;
-    hash = "sha256-J2wmOKfac/8yeN2TUqzLpCw77eY9ixVaBoGovOPEeaw=";
+    hash = "sha256-qrLcPFA6r/p4Tc7s3sVbt/w5RuCfYLLmA+fn9ZKHIk4=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm .cargo/config.toml
   '';
 
-  cargoHash = "sha256-BkSwH5+FFsiP8Ev8MEIqwVs9lYPXNpIUYcjkTw1BFyI=";
+  cargoHash = "sha256-TrWwhraCQ8saRpASRJi2wmflOA6YD7eCULeRURwHmko=";
 
   nativeBuildInputs = [ installShellFiles ];
 

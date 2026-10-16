@@ -2,26 +2,32 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchzip,
   SDL2,
   SDL2_net,
+  fetchzip,
+  nix-update-script,
   pkg-config,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentyrian";
-  version = "2.1.20221123";
+  version = "2.1.20260913";
+
+  __structuredAttrs = true;
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "opentyrian";
     repo = "opentyrian";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fVcc8v1c9uU72X6afEo4VoMo6YuDECQSwDQ/TQjgwUY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zAYn8/JKGtjj3REuQ3WeeKlQ+ifuhwEF7m3ixg/5154=";
   };
 
   data = fetchzip {
     url = "https://camanis.net/tyrian/tyrian21.zip";
-    sha256 = "1biz6hf6s7qrwn8ky0g6p8w7yg715w7yklpn6258bkks1s15hpdb";
+    hash = "sha256-q11Ygg56zoWKMPbS6Q8v4Tx/OLrmAT+R5RkfbRw0P64=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -30,24 +36,43 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_net
   ];
 
-  enableParallelBuilding = true;
-
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "OPENTYRIAN_VERSION=${finalAttrs.src.tag}"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/games/tyrian
-    cp -r $data/* $out/share/games/tyrian/
+    cp -r ${finalAttrs.data}/* $out/share/games/tyrian/
   '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  enableParallelBuilding = true;
+  versionCheckKeepEnvironment = [ "HOME" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = ''Open source port of the game "Tyrian"'';
-    mainProgram = "opentyrian";
     homepage = "https://github.com/opentyrian/opentyrian";
+    changelog = "https://github.com/opentyrian/opentyrian/releases/tag/${finalAttrs.src.tag}";
     license =
       with lib.licenses;
       AND [
         gpl2Plus # opentyrian
         unfree # First-party assets we bundle
       ];
+    maintainers = with lib.maintainers; [
+      iedame
+      keenanweaver
+    ];
+    platforms = lib.platforms.unix;
+    mainProgram = "opentyrian";
   };
 })

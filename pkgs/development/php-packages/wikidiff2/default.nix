@@ -1,5 +1,6 @@
 {
   lib,
+  php,
   buildPecl,
   fetchFromGitHub,
   pkg-config,
@@ -21,6 +22,7 @@ buildPecl rec {
   buildInputs = [ libthai ];
 
   meta = {
+    broken = lib.versionAtLeast php.version "8.6";
     description = "PHP extension which formats changes between two input texts, producing HTML or JSON";
     license = lib.licenses.gpl2;
     homepage = "https://www.mediawiki.org/wiki/Wikidiff2";

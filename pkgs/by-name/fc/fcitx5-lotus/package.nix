@@ -6,9 +6,9 @@
   fcitx5,
   fetchFromGitHub,
   gettext,
-  go,
   hicolor-icon-theme,
   kdePackages,
+  libevdev,
   libinput,
   nix-update-script,
   pkg-config,
@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fcitx5-lotus";
-  version = "5.0.0";
+  version = "5.0.3";
 
   src = fetchFromGitHub {
     owner = "LotusInputMethod";
     repo = "fcitx5-lotus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dUZrJ5mAeEVOWWjkl0g2Q3QMgJe0Tje+zeXDd7AJgZQ=";
+    hash = "sha256-XTyXzO0rF0zkW9li0sFBSAf+qakU9uFxl1CrQVlbMms=";
   };
 
   passthru = {
@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     gettext
-    go
     hicolor-icon-theme
     kdePackages.extra-cmake-modules
     pkg-config
@@ -55,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     acl
     fcitx5
     kdePackages.extra-cmake-modules
+    libevdev
     libinput
     pythonEnv
     qt6.qtbase
@@ -67,11 +67,6 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   dontWrapQtApps = true;
-
-  preConfigure = ''
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH=$TMPDIR/go
-  '';
 
   cmakeFlags = [
     "-DLOTUS_ALT_EXECUTABLE_PREFIX=/nix/store/"

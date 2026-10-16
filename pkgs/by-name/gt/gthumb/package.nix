@@ -10,54 +10,47 @@
   libheif,
   libjpeg,
   libtiff,
+  libadwaita,
   gst_all_1,
   libraw,
   glib,
-  gtk3,
+  gtk4,
+  libportal-gtk4,
   gsettings-desktop-schemas,
   libjxl,
   librsvg,
   libwebp,
-  libx11,
   lcms2,
-  bison,
-  brasero,
-  flex,
-  clutter-gtk,
   colord,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   shared-mime-info,
   python3,
   desktop-file-utils,
-  itstool,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gthumb";
-  version = "3.12.11";
+  version = "4.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gthumb/${lib.versions.majorMinor finalAttrs.version}/gthumb-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-HDGuxNoV7Ma6AcAa8LH4JTf7JQuXDIboBm1enDEfZIE=";
+    sha256 = "sha256-okqqcrVjf0kJfe3JwUGjNhXadw0CkxXzKF6/IVbPe2E=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    bison
     desktop-file-utils
-    flex
-    itstool
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook3
+    wrapGAppsHook4
+    vala
   ];
 
   buildInputs = [
-    brasero
-    clutter-gtk
     colord
     exiv2
     glib
@@ -67,25 +60,21 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
-    gtk3
+    gtk4
     lcms2
+    libadwaita
     libheif
     libjpeg
     libjxl
+    libportal-gtk4
     libraw
     librsvg
     libtiff
     libwebp
-    libx11
   ];
 
   postPatch = ''
-    chmod +x gthumb/make-gthumb-h.py
-
-    patchShebangs data/gschemas/make-enums.py \
-      gthumb/make-gthumb-h.py \
-      po/make-potfiles-in.py \
-      gthumb/make-authors-tab.py
+    patchShebangs po/make-potfiles-in.py
   '';
 
   preFixup = ''
@@ -95,7 +84,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gthumb";
-      versionPolicy = "odd-unstable";
     };
   };
 

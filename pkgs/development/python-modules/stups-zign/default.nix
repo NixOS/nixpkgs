@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "zalando-stups";
     repo = "zign";
     rev = version;
-    sha256 = "1vk6pnprnd5lfx96hc2c1n7kwh99f260r730x4y2h7lamlv82fh4";
+    hash = "sha256-BDqBNq2KHig86WCcDIxwKUE+jw1MMGhSd7Q0m6+9Zu4=";
   };
 
   patches = [

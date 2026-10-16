@@ -1,7 +1,9 @@
 {
   buildPythonPackage,
+  coverage,
   docutils,
   fetchFromGitHub,
+  html5lib,
   httpx2,
   jinja2,
   lib,
@@ -14,6 +16,7 @@
   pytest-mock,
   pytestCheckHook,
   tenacity,
+  tinycss2,
 }:
 
 let
@@ -26,14 +29,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "turbohtml";
-  version = "1.13.1";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "turbohtml";
     tag = finalAttrs.version;
-    hash = "sha256-ztkdLZll4kbDFLw+ZDSjcsRw93ltPhHQFXHrWoq2ITM=";
+    hash = "sha256-9UttEgGVRTdgd4tPQ5cNBnTkqyFAgYn6v5YlSa52iDU=";
   };
 
   postPatch = ''
@@ -41,6 +44,9 @@ buildPythonPackage (finalAttrs: {
     ln -s ${html5lib-tests} tests/html5lib-tests
 
     patchShebangs tools
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'meson-python>=0.22.1' meson-python
   '';
 
   nativeBuildInputs = [
@@ -56,7 +62,9 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "turbohtml" ];
 
   nativeCheckInputs = [
+    coverage # imported in tests/test_fuzz_round_trip_cli.py
     docutils
+    html5lib
     httpx2
     jinja2
     pyperf
@@ -64,9 +72,14 @@ buildPythonPackage (finalAttrs: {
     pytest-mock
     pytestCheckHook
     tenacity
+    tinycss2
   ];
 
   disabledTestPaths = [
+    # tests modify $PYTHONPATH
+    "tests/test_fuzz_release_diff.py"
+    # requires building with `pypaBuildFlags = [ "-Csetup-args=-Dfuzzing=true" ]`
+    "tests/test_fuzz_self_test.py"
     # we cannot generate the version from git
     "tests/build/test_generate_version.py"
     # tests depend on submodules

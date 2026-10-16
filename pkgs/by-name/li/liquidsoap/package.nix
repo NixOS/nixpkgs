@@ -26,13 +26,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "liquidsoap";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "liquidsoap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9H0+si3JRw+NIBMWREHm4zzm4D4Asjoi6JbsJqJEpN0=";
+    hash = "sha256-N9aZ6IaasUyCf2wtU2eCMUoB7AJADbMgJ/M8oz2hOT4=";
   };
 
   postPatch = ''

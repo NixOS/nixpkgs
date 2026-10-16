@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deepseek-harness";
-  version = "0.2.0-rc.2";
+  version = "0.2.1-alpha.3";
 
   strictDeps = true;
   __structuredAttrs = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "deepseek-ai";
     repo = "deepseek-harness";
     tag = "dsh-v${finalAttrs.version}";
-    hash = "sha256-8r1HngwiAK6cjH5f70tBXsIx1wce2f3wp3VeYvq6/o0=";
+    hash = "sha256-W8iZIFJ7+RlB1O88D0g7fmAgPIFhVu2xnjtkVl90fMg=";
 
     # Capture the commit hash at fetch time to avoid git build dependency
     leaveDotGit = true;
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_11;
     fetcherVersion = 4;
-    hash = "sha256-+7jFaROKpN8XHFpulloK2lb0GsYXbEdMs/V7ZO9leKE=";
+    hash = "sha256-gfDO4Z6Uks1dFLs7A+96tqTKEF1zEbZjVsQZzSQPFYA=";
   };
 
   nativeBuildInputs = [
@@ -125,16 +125,22 @@ stdenv.mkDerivation (finalAttrs: {
           }
           ''
             export HOME=$TMPDIR
-            dsh --profile web --no-open >server.log 2>&1 &
+            dsh --profile web --no-open --port 0 >server.log 2>&1 &
             pid=$!
             trap 'kill $pid 2>/dev/null || true' EXIT
             for i in $(seq 1 30); do
-              if launch_url=$(grep -o 'http://127.0.0.1:3080/?token=[^[:space:]]*' server.log); then
+              if launch_url=$(grep -o 'http://127.0.0.1:[0-9]\+/?token=[^[:space:]]*' server.log); then
                 break
               fi
               sleep 1
             done
-            curl --fail --silent "''${launch_url:-}" | grep -q '<!doctype html>'
+            if [ -z "''${launch_url:-}" ]; then
+              echo "dsh web profile failed to print the authenticated launch URL" >&2
+              cat server.log >&2
+              exit 1
+            fi
+            echo "✓ Found launch URL on server logs ($launch_url)"
+            curl --fail --silent --show-error --location -c cookies.txt "$launch_url" | grep -q '<!doctype html>'
             touch $out
           '';
     };

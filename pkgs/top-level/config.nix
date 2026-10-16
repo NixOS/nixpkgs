@@ -538,7 +538,10 @@ in
           config.problems.matchers = [ { kind = "maintainerless"; handler = "warn"; } ];
 
         See this page for more details: https://nixos.org/manual/nixpkgs/unstable#sec-problems
-      '';
+      ''
+      ++ lib.optionals (config ? pulseaudio) [
+        "`config.pulseaudio` is deprecated, and no longer has an effect. Please remove it from your Nixpkgs configuration."
+      ];
 
     assertions =
       # Collect the assertions from the problems.matchers.* submodules, propagate them into here
