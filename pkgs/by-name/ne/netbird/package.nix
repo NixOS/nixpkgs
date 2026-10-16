@@ -78,7 +78,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "netbird-${componentName}";
-  version = "0.81.0";
+  version = "0.81.1";
 
   __structuredAttrs = true;
 
@@ -86,7 +86,7 @@ buildGoModule (finalAttrs: {
     owner = "netbirdio";
     repo = "netbird";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YIbnOLsccXJrm1+YTcxaAFtmpP27w8suCWE9nLRYeug=";
+    hash = "sha256-zXuOun7cplqMEQNUuX/qv7uUlII+OdOsEVcgjjSMo/M=";
   };
 
   overrideModAttrs = final: prev: {
