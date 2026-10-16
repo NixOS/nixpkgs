@@ -6,11 +6,12 @@
   rustPlatform,
   stdenv,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "datadog-pup";
-  version = "1.27.1";
+  version = "2.0.0";
 
   __structuredAttrs = true;
 
@@ -18,14 +19,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "DataDog";
     repo = "pup";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r3F5IsE0t7vnwnANxWFhNxrP1BAV6oyCDZhsH3jgiCg=";
+    hash = "sha256-6WdDnCzCoOzndHaYhEM7YOeLE9RyJghXaZkw4wbldss=";
   };
 
-  cargoHash = "sha256-8J1wkf3CARi5Jxh1DupSezHLMczwqkFRvZSyCIQsKBA=";
+  cargoHash = "sha256-M7PqzXi3RVqDSoCUQlRfqRNey7/LayMEDLmgTEqcdRQ=";
 
   checkType = "debug";
   dontUseCargoParallelTests = true;
   __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   checkFlags = [
     # These tests fail when stdout is a tty, due to ANSI color codes from comfy-table
