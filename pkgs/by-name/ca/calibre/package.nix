@@ -11,6 +11,7 @@
   hyphen,
   icu,
   imagemagick,
+  libavif,
   libjpeg,
   libmtp,
   libpng,
@@ -41,14 +42,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.15.0";
+  version = "9.16.0";
 
   __structuredAttrs = true;
   strictDeps = true;
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nwLTbeyvRrF2ob73Q0kjJQi8wrSwbRZiu9H9QmxX1Vk=";
+    hash = "sha256-mUipq6Kk7h9FiqeRymMIUoAX+ScPspgP3wFjeWf3yeU=";
   };
 
   patches =
@@ -66,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         name = "0007-Hardening-Qt-code-${debian-tag}.patch";
         url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-        hash = "sha256-ItJalYmBhK4Qgz6QDGbPpBMaa6oGQetQvg5ie3oxFMM=";
+        hash = "sha256-IMrk//WCn3rvriBuivnYrurRdLc7R7XBCpaWgHmMcHY=";
       })
     ];
 
@@ -113,6 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     hyphen
     icu
     imagemagick
+    libavif
     libjpeg
     libmtp
     libpng
