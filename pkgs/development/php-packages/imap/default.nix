@@ -22,7 +22,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php";
     repo = "pecl-mail-imap";
-    rev = version;
+    tag = version;
     hash = "sha256-eDrznw5OtQXJZa7dR9roUiJyINXFZI5qmS+cyoaGHnk=";
   };
 
