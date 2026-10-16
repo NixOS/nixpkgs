@@ -21,7 +21,7 @@
   stdenv,
   unzip,
   webkitgtk_4_1,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   zip,
 }:
 
@@ -101,7 +101,7 @@ let
     nativeBuildInputs = [
       cargo-tauri.hook
       pkg-config
-      wrapGAppsHook4
+      wrapGAppsHook3
     ];
 
     buildInputs = [
@@ -158,7 +158,7 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [
     copyDesktopItems
     makeBinaryWrapper
-    wrapGAppsHook4
+    wrapGAppsHook3
     zip
   ];
 
