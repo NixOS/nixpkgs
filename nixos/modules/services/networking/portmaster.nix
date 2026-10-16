@@ -674,8 +674,9 @@ in
     boot.kernelModules = [ "nfnetlink_queue" ];
 
     systemd = {
-      tmpfiles.settings."10-portmaster" = genAttrs tmpfileDirectories (_: {
-        d = tmpfileDir;
+      tmpfiles.settings."10-portmaster" = genAttrs tmpfileDirectories (dir: {
+        # Logs can contain sensitive data; upstream creates this directory as 0700.
+        d = tmpfileDir // optionalAttrs (dir == logsDir) { mode = "0700"; };
       });
 
       services.portmaster = {

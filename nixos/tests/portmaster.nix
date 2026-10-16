@@ -254,6 +254,7 @@ in
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--bin-dir=${fakePortmaster}/lib/portmaster'")
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--data-dir=${stateDir}'")
       machine.succeed("systemctl cat portmaster.service | grep -F -- '--log-dir=${stateDir}/logs'")
+      machine.succeed("test \"$(stat -c %a ${stateDir}/logs)\" = 700")
       machine.succeed("systemctl cat portmaster.service | grep -F 'ReadOnlyPaths=/nix/store'")
       machine.fail("systemctl cat portmaster.service | grep -F -- '--devmode'")
 
