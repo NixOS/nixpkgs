@@ -4,6 +4,7 @@
   fetchurl,
   undmg,
   nix-update-script,
+  re-plistbuddy,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -36,6 +37,29 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # Preserve upstream's signature and notarization, which are required for
   # stable macOS Accessibility permissions.
   dontFixup = true;
+
+  nativeInstallCheckInputs = [ re-plistbuddy ];
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    app="$out/Applications/Harper.app"
+    plist="$app/Contents/Info.plist"
+    bundleVersion=$(PlistBuddy -c 'Print :CFBundleShortVersionString' "$plist")
+    if [[ "$bundleVersion" != "$version" ]]; then
+      echo "Expected Harper version $version, found $bundleVersion" >&2
+      exit 1
+    fi
+
+    executable=$(PlistBuddy -c 'Print :CFBundleExecutable' "$plist")
+    test -n "$executable"
+    test -x "$app/Contents/MacOS/$executable"
+
+    # rcodesign verify only supports individual Mach-O files, not app bundles.
+    /usr/bin/codesign --verify --deep --strict --verbose=2 "$app"
+
+    runHook postInstallCheck
+  '';
 
   passthru.updateScript = nix-update-script { };
 
