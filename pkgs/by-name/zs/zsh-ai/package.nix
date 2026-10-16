@@ -27,11 +27,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Natural language shell command generator for Zsh using AI";
     homepage = "https://github.com/matheusml/zsh-ai";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = with maintainers; [ _2hexed ];
   };
 }
