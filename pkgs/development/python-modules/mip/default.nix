@@ -23,12 +23,12 @@
 
 buildPythonPackage rec {
   pname = "mip";
-  version = "1.15.0";
+  version = "1.17.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f28Dgc/ixSwbhkAgPaLLVpdLJuI5UN37GnazfZFvGX4=";
+    hash = "sha256-nagHS4C9PveIUT1aIU74MpFtgqpmSH2hGknH2p+J0nA=";
   };
 
   nativeCheckInputs = [

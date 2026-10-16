@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoreconfHook
     tcl.tclPackageHook
+    tcl.tclRequiresCheckHook
     pandoc
   ];
 
@@ -38,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  tclRequiresCheck = [ "rl_json" ];
 
   meta = {
     homepage = "https://github.com/RubyLane/rl_json";

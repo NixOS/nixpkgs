@@ -8,6 +8,7 @@
   packaging,
   pathspec,
   pluggy,
+  tomlkit,
   trove-classifiers,
 
   # tests
@@ -33,6 +34,7 @@ buildPythonPackage (finalAttrs: {
     packaging
     pathspec
     pluggy
+    tomlkit
     trove-classifiers
   ];
 

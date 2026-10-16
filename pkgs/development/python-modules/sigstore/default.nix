@@ -54,6 +54,7 @@ buildPythonPackage (finalAttrs: {
     "cryptography"
     "rich"
     "sigstore-models"
+    "tuf"
   ];
 
   dependencies = [

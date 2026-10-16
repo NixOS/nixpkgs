@@ -5,18 +5,19 @@
   hatch-vcs,
   hatchling,
   pytest,
+  python-dotenv,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-env";
-  version = "1.2.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_env";
-    inherit version;
-    hash = "sha256-R14uvoYmzuAfSR8wSnSxITd0I5fWx4TqS8JY8GkjK4A=";
+    inherit (finalAttrs) version;
+    hash = "sha256-DB3BEB+406s2Eej41le6BsPAwWf8hckEV+WyfyUI9D4=";
   };
 
   nativeBuildInputs = [
@@ -26,6 +27,8 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
+  dependencies = [ python-dotenv ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
@@ -34,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erikarvstedt ];
   };
-}
+})

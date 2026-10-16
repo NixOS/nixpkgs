@@ -28,7 +28,10 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-4FWfzt+A9BY4nnaQU3xwdDFhuOMtfBFHYNoHaEOy7+0=";
   };
 
-  pythonRelaxDeps = [ "async-timeout" ];
+  pythonRelaxDeps = [
+    "async-timeout"
+    "python-socks"
+  ];
 
   build-system = [ setuptools ];
 

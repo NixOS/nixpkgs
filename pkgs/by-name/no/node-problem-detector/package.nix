@@ -6,10 +6,6 @@
   systemdLibs,
 }:
 
-let
-  # TODO: remove when https://github.com/NixOS/nixpkgs/pull/571072 hits master
-  systemdLibs' = systemdLibs.override { withCompression = true; };
-in
 buildGoModule (finalAttrs: {
   pname = "node-problem-detector";
   version = "1.36.0";
@@ -38,7 +34,7 @@ buildGoModule (finalAttrs: {
     export CGO_ENABLED=${if stdenv.hostPlatform.isLinux then "1" else "0"}
   '';
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs' ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdLibs ];
 
   tags = lib.optionals stdenv.hostPlatform.isLinux [ "journald" ];
 

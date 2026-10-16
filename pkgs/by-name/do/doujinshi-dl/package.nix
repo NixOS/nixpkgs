@@ -1,45 +1,46 @@
 {
   lib,
-  python3,
   fetchFromGitHub,
+  fetchPypi,
+  python3Packages,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "doujinshi-dl";
-  version = "2.0.9";
+  version = "2.1.0";
   pyproject = true;
-
-  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "RicterZ";
     repo = "doujinshi-dl";
-    tag = "v${version}";
-    hash = "sha256-MeJZEsLH+guMwwkqDBpzqHws6TuhMG79LGR/Sdw7xRw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h/7uJThrGA4MEksHVHqAoToYgaYrFOLJd30mXP83Sfg=";
   };
 
-  build-system = with python3.pkgs; [
-    poetry-core
-  ];
+  build-system = with python3Packages; [ poetry-core ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
+    beautifulsoup4
+    chardet
+    httpx
+    iso8601
     requests
     soupsieve
-    beautifulsoup4
     tabulate
-    iso8601
     urllib3
-    httpx
-    chardet
-    img2pdf
-    doujinshi-dl-nhentai
   ];
 
+  # Project has no test
+  doCheck = false;
+
+  pythonImportsCheck = [ "doujinshi_dl" ];
+
   meta = {
-    homepage = "https://github.com/RicterZ/doujinshi-dl";
     description = "CLI tool for downloading doujinshi from adult site(s)";
+    homepage = "https://github.com/RicterZ/doujinshi-dl";
+    changelog = "https://github.com/RicterZ/doujinshi-dl/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "doujinshi-dl";
   };
-}
+})

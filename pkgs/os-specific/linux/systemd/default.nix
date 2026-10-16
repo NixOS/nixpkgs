@@ -35,7 +35,6 @@
   lz4,
   openssl,
   libucontext,
-  libgcrypt,
   libidn2,
   curl,
   zlib,
@@ -105,7 +104,6 @@
   withEfi ? stdenv.hostPlatform.isEfi,
   withFido2 ? true,
   withFirstboot ? true,
-  withGcrypt ? true,
   withHomed ? true,
   withHostnamed ? true,
   withHwdb ? true,
@@ -196,7 +194,7 @@ assert withFido2 -> withOpenSSL;
 assert withSysupdate -> withOpenSSL;
 assert withNsresourced -> withLibBPF;
 assert withMountfsd -> withLibBPF;
-assert withImportd -> (withGcrypt || withOpenSSL);
+assert withImportd -> withOpenSSL;
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
@@ -213,13 +211,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "261.3";
+  version = "262";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W3E6QUxr+x5jt4KJlHWbP4unyQCI7yA5oymgz6la1ng=";
+    hash = "sha256-oGzFW2dD8abLXBwDczr1hvl712s03CHTUqOz6uPfhmQ=";
   };
 
   # PATCH POLICY
@@ -246,12 +244,8 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./0001-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0002-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
-    ./0003-add-rootprefix-to-lookup-dir-paths.patch
-    ./0004-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
-    ./0005-core-don-t-taint-on-unmerged-usr.patch
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
-    ./0006-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
+    ./0003-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0004-core-don-t-taint-on-unmerged-usr.patch
   ];
 
   postPatch = ''
@@ -345,9 +339,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
     libucontext
-  ]
-  ++ lib.optionals withGcrypt [
-    libgcrypt
   ]
   ++ lib.optionals withOpenSSL [ openssl ]
   ++ lib.optional withTests glib
@@ -512,7 +503,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "acl" withAcl)
     (lib.mesonEnable "audit" withAudit)
     (lib.mesonEnable "apparmor" withApparmor)
-    (lib.mesonEnable "gcrypt" withGcrypt)
     (lib.mesonEnable "importd" withImportd)
     (lib.mesonEnable "imds" withImds)
     (lib.mesonEnable "homed" withHomed)

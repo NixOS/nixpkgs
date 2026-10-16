@@ -57,11 +57,9 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '"setuptools_changelog_shortener",' ""
   '';
 
-  sourceRoot = "${finalAttrs.src.name}/server";
+  pythonRelaxDeps = [ "cryptography" ];
 
-  build-system = [
-    setuptools_80
-  ];
+  sourceRoot = "${finalAttrs.src.name}/server";
 
   dependencies = [
     aiohttp
@@ -102,26 +100,28 @@ buildPythonPackage (finalAttrs: {
     export PATH=$PATH:$out/bin
     export HOME=$TMPDIR
   '';
+
   pytestFlags = [
     "-rfsxX"
   ];
+
   enabledTestPaths = [
     "./test_devpi_server"
   ];
+
   disabledTestPaths = [
     "test_devpi_server/test_nginx_replica.py"
     "test_devpi_server/test_streaming_nginx.py"
     "test_devpi_server/test_streaming_replica_nginx.py"
   ];
+
   disabledTests = [
     "test_fetch_later_deleted" # incompatible with newer pytest
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "devpi_server"
-  ];
+  pythonImportsCheck = [ "devpi_server" ];
 
   passthru.tests = {
     devpi-server = nixosTests.devpi-server;
@@ -137,7 +137,6 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     homepage = "http://doc.devpi.net";
-    description = "Github-style pypi index server and packaging meta tool";
     changelog = "https://github.com/devpi/devpi/blob/${finalAttrs.src.tag}/server/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [

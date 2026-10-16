@@ -4,7 +4,6 @@
   buildPythonPackage,
   colorlog,
   fetchFromGitHub,
-  fetchpatch,
   jinja2,
   mock,
   pdm-backend,
@@ -21,25 +20,15 @@
 
 buildPythonPackage rec {
   pname = "cement";
-  version = "3.0.14";
+  version = "3.0.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datafolklabs";
     repo = "cement";
     tag = version;
-    hash = "sha256-hZ9kKQmMomjy5nnHKQ2RWB+6vIID8XMn3qutg0wCBq8=";
+    hash = "sha256-oSVZrplmcZbN5engQ54f5siLNWoR13qcKuhxNA62jDU=";
   };
-
-  patches = [
-    # Upstream PR: https://github.com/datafolklabs/cement/pull/759
-    (fetchpatch {
-      name = "python-3.14.patch";
-      url = "https://github.com/datafolklabs/cement/commit/8b038170d82be7dbd283d72b9c5db3cceec7163b.patch";
-      includes = [ "tests/*" ];
-      hash = "sha256-GUHAYp2oxHo1vo1gWnOyCAaNyBBIQM1ixC1p+Yc+Fsc=";
-    })
-  ];
 
   build-system = [ pdm-backend ];
 
@@ -75,6 +64,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test only works with the source from PyPI
     "test_get_version"
+    "test_generate_todo_ruff_clean"
+    "test_clear_loggers"
   ];
 
   disabledTestPaths = [

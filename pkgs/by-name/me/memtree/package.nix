@@ -5,9 +5,9 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "memtree";
-  version = "0-unstable-2025-06-10";
+  version = "0.1.0-unstable-2025-06-10";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -20,13 +20,11 @@ python3Packages.buildPythonApplication {
     postFetch = "rm -r $out/.* $out/flake.* $out/bors.toml";
   };
 
-  build-system = with python3Packages; [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "rich" ];
 
-  dependencies = with python3Packages; [
-    rich
-  ];
+  build-system = with python3Packages; [ poetry-core ];
+
+  dependencies = with python3Packages; [ rich ];
 
   nativeCheckInputs = with python3Packages; [
     hypothesis
@@ -34,6 +32,7 @@ python3Packages.buildPythonApplication {
   ];
 
   pytestFlags = [ "-v" ];
+
   pythonImportsCheck = [ "memtree" ];
 
   passthru.updateScript = nix-update-script {
@@ -48,4 +47,4 @@ python3Packages.buildPythonApplication {
     platforms = lib.platforms.linux;
     license = lib.licenses.isc;
   };
-}
+})

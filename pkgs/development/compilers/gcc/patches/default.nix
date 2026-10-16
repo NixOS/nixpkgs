@@ -31,6 +31,7 @@
 let
   atLeast15 = lib.versionAtLeast version "15";
   atLeast14 = lib.versionAtLeast version "14";
+  is16 = majorVersion == "16";
   is15 = majorVersion == "15";
   is14 = majorVersion == "14";
   is13 = majorVersion == "13";
@@ -104,6 +105,9 @@ optionals noSysDirs (
 # c++tools: Don't check --enable-default-pie.
 # --enable-default-pie breaks bootstrap gcc otherwise, because libiberty.a is not found
 ++ optional (is14 || is15) ./c++tools-dont-check-enable-default-pie.patch
+# LoongArch: fix miscompile of both_non_zero{,_subreg} when operands[0] == operands[2]
+# See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=127153
+++ optional is16 ./16/loongarch-fix-miscompile-of-both_non_zero.patch
 
 ## 2. Patches relevant on specific platforms ####################################
 

@@ -233,6 +233,24 @@ let
 
     inherit (_crubit) cargoHash;
 
+    patches = [
+      (fetchpatch {
+        # needed for patch below
+        name = "partial-rustfmt.patch";
+        # https://github.com/google/crubit/pull/2151
+        url = "https://github.com/google/crubit/commit/3ed0fa613223e09172e22363953f6587fe5d8bb7.patch";
+        includes = [ "cc_bindings_from_rs/rustversion_impl.rs" ];
+        hash = "sha256-+JMYo6ujPF4lQNUUAXwV6D2A4Ss39y8fh+V9lv8BZ2I=";
+      })
+
+      (fetchpatch {
+        name = "fix-rust-1.99-compat.patch";
+        # https://github.com/google/crubit/pull/2204
+        url = "https://github.com/google/crubit/commit/943b515b25ca3868050b3ea3410b0b979ccc28a2.patch";
+        hash = "sha256-pgoAX+pjliRM230w2GS07hbrR2USe5heQP4ETjiacrA=";
+      })
+    ];
+
     buildInputs = [
       buildPackages.rustc.llvmPackages.llvm
     ];
