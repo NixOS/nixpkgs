@@ -254,13 +254,15 @@ buildGoModule (finalAttrs: {
     runHook preInstallCheck
 
     $out/bin/portmaster-core version | grep -F 'Portmaster ${version}'
-    ${lib.getExe unzip} -tq $out/lib/portmaster/portmaster.zip
-    ${lib.getExe unzip} -tq $out/lib/portmaster/assets.zip
-    ${lib.getExe unzip} -Z1 $out/lib/portmaster/portmaster.zip | grep -Fx index.html
-    ${lib.getExe unzip} -Z1 $out/lib/portmaster/assets.zip | grep -q '^img/flags/'
-    ! ${lib.getExe unzip} -Z1 $out/lib/portmaster/assets.zip | grep -q '^data/'
+    unzip -tq $out/lib/portmaster/portmaster.zip
+    unzip -tq $out/lib/portmaster/assets.zip
+    unzip -Z1 $out/lib/portmaster/portmaster.zip | grep -Fx index.html
+    unzip -Z1 $out/lib/portmaster/assets.zip > assets.list
+    grep -q '^img/flags/' assets.list
+    # A negated command doesn't trigger set -e, but a failing subshell does.
+    (! grep -q '^data/' assets.list)
     test -x $out/lib/portmaster/portmaster
-    grep -aF \
+    grep -qaF \
       '${libayatana-appindicator}/lib/libayatana-appindicator3.so.1' \
       $out/lib/portmaster/portmaster
 
