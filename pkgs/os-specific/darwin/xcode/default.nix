@@ -136,10 +136,5 @@ lib.makeExtensible (self: {
   xcode_26_6 = requireXcode "26.6_Universal" "sha256-D2xuCXVhTLJLScQ1sxaVH8nANfgkm7/+9iYdi7/FCLI=";
   xcode_26_6_Apple_silicon = requireXcode "26.6_Apple_silicon" "sha256-UOtZRrSPNhwCLGgpNJTPrdOrVKq+7UHnUJjlxakZmOA=";
   xcode_27 = requireXcode "27" "sha256-k0YuMjPbP5Adnnx6KhQXGRi8kRLPpXJN+EUxpqYHwOE=";
-  xcode =
-    self."xcode_${
-      lib.replaceStrings [ "." ] [ "_" ] (
-        if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3"
-      )
-    }";
+  xcode = self.xcode_27;
 })
