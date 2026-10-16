@@ -18,13 +18,17 @@
   # optional-dependencies
   astropy,
   av,
+  fsspec,
+  gdal,
   imageio-ffmpeg,
+  itk,
   pillow-heif,
   psutil,
+  pydicom,
+  rawpy,
   tifffile,
 
   # tests
-  fsspec,
   gitMinimal,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
@@ -74,27 +78,33 @@ buildPythonPackage rec {
       psutil
     ];
     fits = lib.optionals (!isPyPy) [ astropy ];
-    freeimage = [ ];
+    freeimage = [ fsspec ] ++ fsspec.optional-dependencies.http;
+    gdal = [ gdal ];
+    itk = [ itk ];
     lytro = [ ];
     numpy = [ ];
     pillow = [ ];
+    pillow-heif = [ pillow-heif ];
+    pydicom = [ pydicom ];
+    rawpy = [
+      numpy
+      rawpy
+    ];
     simpleitk = [ ];
     spe = [ ];
     swf = [ ];
     tifffile = [ tifffile ];
     pyav = [ av ];
-    heif = [ pillow-heif ];
   };
 
   nativeCheckInputs = [
-    fsspec
     gitMinimal
     psutil
     pytestCheckHook
     writableTmpDirAsHomeHook
   ]
-  ++ fsspec.optional-dependencies.github
-  ++ lib.concatAttrValues optional-dependencies;
+  # rawpy causes an infinite recursion
+  ++ lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "rawpy" ]);
 
   pytestFlags = [ "--test-images=file://${test_images}" ];
 
