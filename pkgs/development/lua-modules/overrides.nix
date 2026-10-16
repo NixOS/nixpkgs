@@ -116,6 +116,9 @@ in
   });
 
   cqueues = prev.cqueues.overrideAttrs (old: {
+    # The rockspec below is rewritten to build for every supported Lua version.
+    disabled = luaOlder "5.1" || luaAtLeast "5.6";
+
     # Parse out a version number without the Lua version inserted
     version =
       let
@@ -162,6 +165,8 @@ in
         sed -Ei ''${rockspecFilename} \
           -e 's|lua == 5.[[:digit:]]|lua >= 5.1, <= 5.5|' \
           -e 's|build_target = "[^"]+"|build_target = "all"|' \
+          -e 's|install_target = "[^"]+"|install_target = "install${lua.luaversion}"|' \
+          -e 's|lua5[0-9](c?path)|lua${lib.replaceStrings [ "." ] [ "" ] lua.luaversion}\1|g' \
           -e 's|version = "[^"]+"|version = "${version}"|'
         specDir=$(dirname ''${rockspecFilename})
         cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
