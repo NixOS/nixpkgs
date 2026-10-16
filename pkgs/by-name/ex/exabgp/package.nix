@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "exabgp";
-  version = "5.0.1";
+  version = "5.0.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Exa-Networks";
     repo = "exabgp";
     tag = finalAttrs.version;
-    hash = "sha256-UFo92jS/QmwTUEAhxQnbtY9K905jiBrJujfqGIUCUOg=";
+    hash = "sha256-dV6WS4dLOkgFrLAx3iazqtiddxegIGU5fFi439FeXrM=";
   };
 
   postPatch = ''
