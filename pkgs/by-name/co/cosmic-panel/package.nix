@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cosmic-panel";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
     platforms = lib.platforms.linux;
   };
 })

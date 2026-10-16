@@ -86,5 +86,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cosmic-reader";
     platforms = lib.platforms.linux;
     teams = [ lib.teams.cosmic ];
+    upgradeGroup = lib.upgradeGroups.cosmic;
   };
 })

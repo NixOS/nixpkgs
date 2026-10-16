@@ -76,6 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "stardust-xr-server";
     teams = with lib.teams; [ stardust-xr ];
+    upgradeGroup = lib.upgradeGroups.stardust-xr;
     platforms = lib.platforms.unix;
   };
 })

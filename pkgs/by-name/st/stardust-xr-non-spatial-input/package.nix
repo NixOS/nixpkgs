@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     teams = with lib.teams; [ stardust-xr ];
+    upgradeGroup = lib.upgradeGroups.stardust-xr;
     platforms = lib.platforms.unix;
   };
 })
