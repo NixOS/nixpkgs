@@ -30,7 +30,7 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "uvtools";
-  version = "7.0.0";
+  version = "7.0.3";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -39,7 +39,7 @@ buildDotnetModule (finalAttrs: {
     owner = "sn4k3";
     repo = "UVtools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hc94dkgxMWZ7e3+Tt6RRpgSkCELtCitnOVlT4JFcPTQ=";
+    hash = "sha256-ViCOAgKHOCWSBhknXgPnJnL6rxqS7bM+7NB1Hshp9UQ=";
   };
 
   # UVtools.Core reaches OpenCV through Emgu.CV, whose native half upstream
