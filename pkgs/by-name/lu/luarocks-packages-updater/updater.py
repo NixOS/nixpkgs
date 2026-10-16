@@ -130,6 +130,10 @@ class LuaPlugin:
         return self.name.replace(".", "-")
 
 
+class LuaUpdateError(RuntimeError):
+    pass
+
+
 def extract_version(nix_expr: str) -> str | None:
     match = re.search(r'version\s*=\s*"([^"]+)"', nix_expr)
     if match:
@@ -225,6 +229,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
             return
 
         assert self.nixpkgs_repo is not None
+        failed_packages = []
         for spec in specs:
             update = self.get_update(
                 str(args.input_file),
@@ -232,7 +237,11 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 fetch_config,
                 to_update=[spec.name],
             )
-            _redirects, updated_plugins = update()
+            try:
+                _redirects, updated_plugins = update()
+            except LuaUpdateError:
+                failed_packages.append(spec.name)
+                continue
 
             for name, old_ver, new_ver in updated_plugins:
                 if old_ver == "init":
@@ -241,6 +250,9 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                     msg = f"{self.attr_path}.{name}: {old_ver} -> {new_ver}"
 
                 commit_files(self.nixpkgs_repo, msg, [args.outfile])
+
+        if failed_packages:
+            raise LuaUpdateError(f"Failed to update Lua packages: {', '.join(failed_packages)}")
 
     def generate_nix(self, results: list[tuple[LuaPlugin, str]], outfilename: str):
         with tempfile.NamedTemporaryFile("w+", suffix=".nix") as f:
@@ -395,11 +407,8 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                     r = extract_rev(expr)
                     old_versions[name] = f"{v}-{r}" if r else v
 
-            try:
-                pool = Pool(processes=config.proc)
+            with Pool(processes=config.proc) as pool:
                 results = pool.map(generate_pkg_nix, specs_to_process)
-            finally:
-                pass
 
             results_map = {}
             for plug, nix_expr, error in results:
@@ -442,6 +451,7 @@ class LuaEditor(nixpkgs_plugin_update.Editor):
                 log.error("The following plugins failed to update:")
                 for plug, error in errors:
                     log.error("%s: %s", plug.name, error)
+                raise LuaUpdateError(f"Failed to update Lua packages: {', '.join(plug.name for plug, _ in errors)}")
 
             redirects: Redirects = {}
             return redirects, updated_plugins
