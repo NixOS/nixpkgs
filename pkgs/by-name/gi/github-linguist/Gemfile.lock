@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    github-linguist (9.5.0)
+    github-linguist (9.7.0)
       cgi
       charlock_holmes (~> 0.7.7)
       mini_mime (~> 1.0)
@@ -91,7 +91,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 2.0)
   byebug
   github-linguist!
   licensed (~> 5.0)
