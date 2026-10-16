@@ -32,6 +32,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/matheusml/zsh-ai";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with maintainers; [ _2hexed ];
+    maintainers = with lib.maintainers; [ _2hexed ];
   };
 }
