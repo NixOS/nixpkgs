@@ -174,9 +174,18 @@ buildPythonPackage (finalAttrs: {
   '';
 
   makeWrapperArgs = [
-    "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
-    "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\""
-    "--prefix PATH : ${lib.makeBinPath finalAttrs.finalPackage.passthru.plugins.wrapperBins}"
+    "--set"
+    "GI_TYPELIB_PATH"
+    "$GI_TYPELIB_PATH"
+
+    "--set"
+    "GST_PLUGIN_SYSTEM_PATH_1_0"
+    "$GST_PLUGIN_SYSTEM_PATH_1_0"
+
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath finalAttrs.finalPackage.passthru.plugins.wrapperBins)
   ];
 
   nativeCheckInputs = [
