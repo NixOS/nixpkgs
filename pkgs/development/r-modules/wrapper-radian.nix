@@ -11,6 +11,7 @@
 
 runCommand (radian.name + "-wrapper")
   {
+    __structuredAttrs = true;
     preferLocalBuild = true;
     allowSubstitutes = false;
 
