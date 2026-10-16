@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     with python3Packages;
     [
       markitdown
-      mcp_2
+      mcp
       requests
     ]
     ++ markitdown.optional-dependencies.all;
