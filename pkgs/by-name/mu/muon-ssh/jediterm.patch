@@ -1,0 +1,28 @@
+diff --git a/muon-app/pom.xml b/muon-app/pom.xml
+index 29847d3..595447a 100644
+--- a/muon-app/pom.xml
++++ b/muon-app/pom.xml
+@@ -24,12 +24,12 @@
+         <dependency>
+             <groupId>org.jetbrains.jediterm</groupId>
+             <artifactId>jediterm-core</artifactId>
+-            <version>3.51-SNAPSHOT</version>
++            <version>3.51</version>
+         </dependency>
+         <dependency>
+             <groupId>org.jetbrains.jediterm</groupId>
+             <artifactId>jediterm-ui</artifactId>
+-            <version>3.51-SNAPSHOT</version>
++            <version>3.51</version>
+         </dependency>
+ 
+         <dependency>
+@@ -374,7 +374,7 @@
+         <repository>
+             <id>personal</id>
+             <name>extra</name>
+-            <url>https://subhra74.github.io/extra-jars/</url>
++            <url>https://packages.jetbrains.team/maven/p/ij/intellij-dependencies</url>
+         </repository>
+     </repositories>
+ </project>
