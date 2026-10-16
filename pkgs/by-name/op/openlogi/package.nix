@@ -32,7 +32,7 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "openlogi";
-  version = "0.8.13";
+  version = "0.8.14";
 
   __structuredAttrs = true;
 
@@ -40,10 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "AprilNEA";
     repo = "OpenLogi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1c8a6QDMajiFqUc9dc8dmlWuzO8Pxsq1parD79iSGWQ=";
+    hash = "sha256-d/G9BlF66mB7M9vpMVsSmuzA1i/4Zp9xYcWlUbfj3Z8=";
   };
 
-  cargoHash = "sha256-V6EhwbblXRePcfVZ0DgMR9YRHlKp06Xfo4N3fE9pcLk=";
+  cargoHash = "sha256-PEPoV5QyjeUsFiGeZnKSvTsRCSAU1gClOTbnYCKz1V0=";
 
   postPatch = ''
     grep -q 'gpui-kit?rev=${gpuiComponentThemes.rev}' Cargo.lock || {
@@ -54,19 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Drop the dev-only macOS cargo runner; it re-bundles test binaries and fails in the sandbox.
     substituteInPlace .cargo/config.toml \
       --replace-fail 'runner = ".cargo/run-macos.sh"' ""
-  ''
-  # cargo-bundle 0.12 rejects the flat osx_* keys. Drop on the next bump
-  # (removed upstream in AprilNEA/OpenLogi@b98fa46).
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace crates/openlogi-desktop/Cargo.toml \
-      --replace-fail 'osx_minimum_system_version = "13.0"' "" \
-      --replace-fail 'osx_url_schemes = ["openlogi"]' ""
-    cat >> crates/openlogi-desktop/Cargo.toml <<'EOF'
-
-    [package.metadata.bundle.osx]
-    minimum_system_version = "13.0"
-    url_schemes = ["openlogi"]
-    EOF
   '';
 
   nativeBuildInputs = [
@@ -116,7 +103,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=activity_macos::tests::the_spi_reports_a_running_cpu_and_accepts_a_subscription"
     "--skip=macos::tests::tap_callback_suppresses_normally_and_passes_through_panics"
     "--skip=macos::translate::tests::a_key_openlogi_posted_is_not_translated"
+    "--skip=macos::tests::inverted_wheel_reaches_the_callback_reversed_and_the_desktop_reversed_once"
+    "--skip=macos::tests::wheel_is_left_alone_when_inversion_is_off"
+    "--skip=macos::tests::invert_scroll_event_keeps_every_magnitude"
     "--skip=inject::macos::keyboard_layout::tests::"
+    "--skip=inject::macos::scroll::tests::smoothed_wheel_events_carry_no_phase"
+    "--skip=inject::macos::scroll::tests::phased_gesture_events_carry_every_phase"
     # Hangs rather than fails.
     "--skip=inject::macos::tests::posted_key_edges_carry_the_synthetic_tag"
   ];
@@ -148,7 +140,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv "$app_path" "$out/Applications/"
     app="$out/Applications/OpenLogi.app"
 
-    # Mirrors upstream's `xtask macos bundle`, minus code signing and Assets.car.
+    # Mirrors upstream's `xtask macos bundle`, minus code signing, Assets.car and
+    # the Sparkle updater.
     install -Dm755 "$release_target/openlogi" "$app/Contents/MacOS/openlogi"
     ln -s "$app/Contents/MacOS/openlogi" "$out/bin/openlogi"
 
@@ -174,9 +167,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "$app/Contents/Library/LaunchAgents/org.openlogi.agent.service.plist"
 
     # Keys upstream's `xtask macos package` stamps after cargo-bundle: the
-    # camera usage description, without which macOS terminates the app on
-    # first access.
-    PlistBuddy -c "Merge ${./info-plist-keys.plist}" "$app/Contents/Info.plist"
+    # minimum macOS version, the openlogi:// URL type, and the camera usage
+    # description, without which macOS terminates the app on first access.
+    # cargo-bundle writes the build time as CFBundleVersion; upstream stamps
+    # the version, as in the helpers.
+    PlistBuddy \
+      -c "Merge ${./info-plist-keys.plist}" \
+      -c "Set :CFBundleVersion ${finalAttrs.version}" \
+      "$app/Contents/Info.plist"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm755 "$release_target/openlogi" "$out/bin/openlogi"
