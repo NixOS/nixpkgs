@@ -39,5 +39,8 @@ pkgsBB.symlinkJoin {
       inherit pkgs;
       lib = import ../.;
     })
+    (import ./python {
+      inherit pkgs lib;
+    })
   ];
 }
