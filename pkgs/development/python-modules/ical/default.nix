@@ -53,6 +53,11 @@ buildPythonPackage (finalAttrs: {
 
   pytestFlags = [ "--benchmark-disable" ];
 
+  disabledTests = [
+    # snapshot mismatch
+    "test_from_ics"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "ical" ];

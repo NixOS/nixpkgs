@@ -1,5 +1,6 @@
 {
   qtModule,
+  fetchzip,
   qtdeclarative,
   qtwebchannel,
   qtpositioning,
@@ -7,7 +8,6 @@
   buildPackages,
   bison,
   coreutils,
-  fetchpatch2,
   flex,
   gperf,
   ninja,
@@ -53,7 +53,6 @@
   pulseaudio,
   libcap,
   pciutils,
-  systemd,
   pipewire,
   gn,
   ffmpeg,
@@ -75,6 +74,13 @@
 
 qtModule {
   pname = "qtwebengine";
+
+  version = "6.140.0-rc";
+  src = fetchzip {
+    url = "https://download.qt.io/development_releases/qtwebengine/6.140.0-rc/qtwebengine-everywhere-src-6.140.0-rc.tar.xz";
+    hash = "sha256-ij7oWNkbzf98FwKjhub3lyvDb32G4qFtUiYJvdlw01Y=";
+  };
+
   nativeBuildInputs = [
     bison
     coreutils
@@ -154,13 +160,6 @@ qtModule {
     substituteInPlace src/3rdparty/chromium/third_party/angle/src/libANGLE/renderer/metal/metal_backend.gni \
       --replace-fail 'angle_has_build && !is_ios && target_os == host_os' "false"
   ''
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-      src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
-
-    sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-      src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-  ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/QtToolchainHelpers.cmake \
       --replace-fail "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
@@ -189,7 +188,6 @@ qtModule {
     "-DQT_FEATURE_webengine_system_ffmpeg=ON"
     # android only. https://bugreports.qt.io/browse/QTBUG-100293
     # "-DQT_FEATURE_webengine_native_spellchecker=ON"
-    "-DQT_FEATURE_webengine_sanitizer=ON"
     "-DQT_FEATURE_webengine_kerberos=ON"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -296,6 +294,16 @@ qtModule {
 
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
+
+  # Add dlopen-only dependencies after shrink-rpath, which would remove them.
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath "${
+      lib.makeLibraryPath [
+        pipewire
+        pciutils
+      ]
+    }" "$out/lib/libQt6WebEngineCore.so"
+  '';
 
   meta = {
     description = "Web engine based on the Chromium web browser";

@@ -24,14 +24,14 @@ let
 in
 buildPythonPackage rec {
   pname = "pythran";
-  version = "0.18.1";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     tag = version;
-    hash = "sha256-H13FGApWCgBLWOtoZ5yEIV4Z+KAOK3Xs4KFM4oLmKmk=";
+    hash = "sha256-+ZHp6cExAi1dFPS+LhNRyFCUhNeDdtAPSWRT5T03dcg=";
   };
 
   patches = [

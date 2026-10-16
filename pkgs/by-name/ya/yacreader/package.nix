@@ -13,7 +13,6 @@
   xz,
   libwebp,
   qtwebapp,
-  pipewire,
   qt6Packages,
   onlyServer ? false,
 }:
@@ -41,15 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf third_party/QtWebApp
   '';
 
-  # Pipewire is dlopen'd, so we must tell it where to look
-  # So is qtwebapp on macOS
-  preConfigure =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      qtWrapperArgs+=("--prefix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ pipewire ]}")
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      qtWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ qtwebapp ]}")
-    '';
+  # qtwebapp is dlopen'd on macOS.
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    qtWrapperArgs+=("--prefix" "DYLD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ qtwebapp ]}")
+  '';
 
   strictDeps = true;
   __structuredAttrs = true;

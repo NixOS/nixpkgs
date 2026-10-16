@@ -60,6 +60,9 @@ buildPythonPackage rec {
     # AssertionError: b'' != b'out\n'
     "tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
     "tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
+    # libuv >= 1.53 spawns via posix_spawn, so preexec_fn never runs in the child
+    "tests/test_process.py::Test_UV_Process::test_process_preexec_fn_1"
+    "tests/test_process.py::Test_UV_Process::test_process_preexec_fn_2"
     # Depends on performance of builder
     "tests/test_base.py::TestBaseUV.test_call_at"
     # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)

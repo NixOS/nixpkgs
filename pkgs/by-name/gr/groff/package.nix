@@ -41,11 +41,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "groff";
-  version = "1.24.1";
+  version = "1.24.2";
 
   src = fetchurl {
     url = "mirror://gnu/groff/groff-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dOKBl5W2r/QxrqyYPWOpyJaO6roqLrp9+LpMe0Hnz9g=";
+    hash = "sha256-+cHv1b6743/G4QY9t0c86N8ePgvk/w9DzgT85X6cXdk=";
   };
 
   patches = [

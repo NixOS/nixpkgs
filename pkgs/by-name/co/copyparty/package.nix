@@ -109,7 +109,12 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optional withMagic magic
     ++ (extraPythonPackages python3Packages);
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath runtimeDeps}" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath runtimeDeps)
+  ];
 
   meta = {
     description = "turn almost any device into a file server over http(s), webdav, ftp(s), and tftp";

@@ -22,15 +22,15 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    jsonschema
-  ];
-
   optional-dependencies.schema = [
     jsonschema
     pydantic
   ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   disabledTestPaths = [
     # Disable benchmark tests

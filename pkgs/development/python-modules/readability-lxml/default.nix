@@ -13,22 +13,23 @@
 
 buildPythonPackage rec {
   pname = "readability-lxml";
-  version = "0.8.4.1";
+  version = "0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "buriy";
     repo = "python-readability";
-    rev = "${version}";
-    hash = "sha256-tL0OnvCrbrpBvcy+6RJ+u/BDdra+MnVT51DSAeYxJbc=";
+    tag = "${version}";
+    hash = "sha256-N7f4PYwuTP5MSRw3xXm3lopZfKe6UHkSOJbUMeL5VBU=";
   };
-
-  build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
     "chardet"
+    "cssselect"
     "lxml"
   ];
+
+  build-system = [ poetry-core ];
 
   dependencies = [
     chardet
@@ -42,9 +43,12 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
+  pythonImportsCheck = [ "readability" ];
+
   meta = {
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
+    changelog = "https://github.com/buriy/python-readability/releases/tag/${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ siraben ];
   };

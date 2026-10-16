@@ -1,12 +1,12 @@
 {
   lib,
+  brotli,
   buildPythonPackage,
   camelot,
   defusedxml,
   fetchFromGitHub,
   fonttools,
   lxml,
-  pikepdf,
   pillow,
   pytest-cov-stub,
   pytestCheckHook,
@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "fpdf2";
-  version = "2.8.5";
+  version = "2.8.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
     repo = "fpdf2";
     tag = version;
-    hash = "sha256-LQZ7OMfL+PFxEc7q/dSw+YJoKr+eYEaZF8XCzd7AdBI=";
+    hash = "sha256-bMVi0ZNV9Al9dxH8t801y4zkJpNmQUVTeMoOh+DDzFA=";
   };
 
   build-system = [ setuptools ];
@@ -36,9 +36,9 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    brotli
     camelot
     lxml
-    pikepdf
     pytest-cov-stub
     pytestCheckHook
     qrcode
@@ -53,10 +53,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_png_url" # tries to download file
     "test_page_background" # tries to download file
-    "test_share_images_cache" # uses timing functions
-    "test_bidi_character" # tries to download file
-    "test_bidi_conformance" # tries to download file
-    "test_insert_jpg_jpxdecode" # JPEG2000 is broken
+    "test_twitter_emoji_shaping" # hash mismatch
+    "test_twitter_emoji_text" # hash mismatch
   ];
 
   meta = {

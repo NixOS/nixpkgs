@@ -305,6 +305,7 @@ mapAliases {
   gpgme = gpg; # added 2026-06-26
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
   gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
+  gradient-utils = throw "'gradient-utils' has been removed because it was archived upstream and unused in tree."; # Added 2026-10-15
   gradient_statsd = throw "'gradient_statsd' has been renamed to/replaced by 'gradient-statsd'"; # Converted to throw 2025-10-29
   grapheme = throw "'grapheme' has been removed as it is unmaintained upstream. Consider using 'graphemeu' instead."; # Converted to throw 2025-12-22
   grappelli_safe = throw "'grappelli_safe' has been renamed to/replaced by 'grappelli-safe'"; # Converted to throw 2025-10-29
@@ -532,6 +533,7 @@ mapAliases {
   py-multiaddr = multiaddr; # added 2026-06-27
   py-scrypt = scrypt; # added 2025-08-07
   py_stringmatching = throw "'py_stringmatching' has been renamed to/replaced by 'py-stringmatching'"; # Converted to throw 2025-10-29
+  pyacaia-async = throw "'pyacaia-async' has been renamed to/replaced by 'aioacaia'"; # added 2026-08-26
   pybind11-protobuf = throw "'pybind11-protobuf' was only used by or-tools, and with some overrides, so vendored in there until it's used in other places."; # Converted to throw 2025-11-06
   pycategories = throw "'pycategories' has been removed as it was broken and unmaintained"; # added 2025-11-08
   PyChromecast = throw "'PyChromecast' has been renamed to/replaced by 'pychromecast'"; # Converted to throw 2025-10-29

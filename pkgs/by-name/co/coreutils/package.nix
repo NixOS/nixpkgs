@@ -51,16 +51,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.11";
+  version = "9.12";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
-    hash = "sha256-OUAk7aCllVIXztqc0SAeZdyPo6opwpURNaSVIdV8PMM=";
+    hash = "sha256-pIAZhVlzPps9qZnpBUOsb4iKLKpUTY1mTFofF+Uo4hA=";
   };
 
   patches = [
-    ./CVE-2026-56391.patch
-    ./CVE-2026-56392.patch
+    # https://github.com/NixOS/nixpkgs/pull/564032#issuecomment-5711340439
+    ./only_quote_env_and_printenv_when_outputting_to_tty.patch
   ];
 
   postPatch = ''

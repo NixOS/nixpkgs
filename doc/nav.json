@@ -470,6 +470,10 @@
                   "file": "hooks/gnome.section.md"
                 },
                 {
+                  "id": "guileimportscheckhook",
+                  "file": "hooks/guileImportsCheckHook.section.md"
+                },
+                {
                   "id": "haredo",
                   "file": "hooks/haredo.section.md"
                 },

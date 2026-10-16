@@ -11,12 +11,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pygtkspellcheck";
-  version = "5.0.3";
+  version = "5.0.4";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-NzaxRXU3BTIcRO9nowEak+Vk+XYw8nBCsTl//e/qg6w=";
+    hash = "sha256-ppPe/t4Eg2C2th596E9PydagQhttkIkirQUTz9YoDOM=";
   };
 
   nativeBuildInputs = [

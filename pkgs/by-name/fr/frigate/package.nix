@@ -56,6 +56,9 @@ let
 
       huggingface-hub = super.huggingface-hub_0;
       transformers = super.transformers_4;
+
+      peewee = super.peewee_3;
+      peewee-migrate = super.peewee-migrate_1;
     }
   );
 

@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchPypi,
-  cachelib,
-  flask,
   asgiref,
+  buildPythonPackage,
+  cachelib,
+  fetchPypi,
+  flask,
+  flit-core,
   pytest-asyncio,
   pytest-xprocess,
   pytestCheckHook,
@@ -13,21 +14,18 @@
 
 buildPythonPackage rec {
   pname = "flask-caching";
-  version = "2.3.1";
-  format = "setuptools";
+  version = "2.5.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "flask_caching";
     inherit version;
-    hash = "sha256-Zdf9G07r+BD4RN595iWCVLMkgpbuQpvcs/dBvL97mMk=";
+    hash = "sha256-Wod5tUaV+W4bSnoUndjG2GNDPqZjJ83kMRzn/XtXOR8=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cachelib >= 0.9.0, < 0.10.0" "cachelib"
-  '';
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachelib
     flask
   ];
@@ -56,7 +54,7 @@ buildPythonPackage rec {
     description = "Caching extension for Flask";
     homepage = "https://github.com/pallets-eco/flask-caching";
     changelog = "https://github.com/pallets-eco/flask-caching/blob/v${version}/CHANGES.rst";
-    maintainers = [ ];
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

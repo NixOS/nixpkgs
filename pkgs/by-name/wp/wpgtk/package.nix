@@ -47,7 +47,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   dontWrapGApps = true;
 
-  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   # No test exist
   doCheck = false;

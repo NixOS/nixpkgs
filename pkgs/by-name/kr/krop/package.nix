@@ -32,7 +32,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
     ghostscript
   ];
 
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
 
   # Disable checks because of interference with older Qt versions // xcb
   doCheck = false;

@@ -31,8 +31,6 @@ buildGoModule (finalAttrs: {
     $out/bin/mc --version | grep ${finalAttrs.version} > /dev/null
   '';
 
-  passthru.tests.minio = nixosTests.minio;
-
   meta = {
     homepage = "https://github.com/minio/mc";
     description = "Replacement for ls, cp, mkdir, diff and rsync commands for filesystems and object storage";

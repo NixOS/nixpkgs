@@ -15,7 +15,6 @@
   libsecret,
   libzip,
   lua5_1,
-  pipewire,
   pugixml,
   qt6Packages,
   yajl,
@@ -94,11 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     qtWrapperArgs+=(--set LUA_CPATH "${luaEnv}/lib/lua/${lua5_1.luaversion}/?.so")
     qtWrapperArgs+=(--prefix LUA_PATH : "$NIX_LUA_PATH")
-    qtWrapperArgs+=(--prefix ${libPathVar} : "${
-      lib.makeLibraryPath (
-        lib.optional stdenv.hostPlatform.isLinux pipewire ++ lib.optional withDiscordRpc discord-rpc
-      )
-    }")
+    ${lib.optionalString withDiscordRpc ''
+      qtWrapperArgs+=(--prefix ${libPathVar} : "${lib.makeLibraryPath [ discord-rpc ]}")
+    ''}
     qtWrapperArgs+=(--chdir "$out")
   '';
 

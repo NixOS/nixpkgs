@@ -29,6 +29,5 @@ postgresqlBuildExtension (finalAttrs: {
     platforms = postgresql.meta.platforms;
     license = lib.licenses.mit;
     maintainers = [ ];
-    broken = lib.versionOlder postgresql.version "14";
   };
 })

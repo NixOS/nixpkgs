@@ -51,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./export-variable.patch
     # https://github.com/madler/zlib/pull/1296
     ./mingw-shared.patch
+    # CVE-2026-85091: buffer overflow in non-blocking gzwrite
+    ./cve-2026-85091.patch
   ];
 
   postPatch = ''
