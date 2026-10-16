@@ -1,5 +1,5 @@
 {
-  buildGoModule,
+  buildGo127Module,
   fetchFromGitHub,
   fetchPnpmDeps,
   git,
@@ -13,17 +13,17 @@
 }:
 let
   pname = "headplane";
-  version = "0.7.1";
-  goVendorHash = "sha256-Q5lRDbx7bg3WsrF+ukVPl7rTSJcqKFhYM9lWtqfiIw4=";
-  pnpmDepsHash = "sha256-2W/BTqarSlTMKIByB106xsyitRtK2bIeWeVKe2P96j8=";
+  version = "0.8.1";
+  goVendorHash = "sha256-Unjq1QCckuY+xO4HLaNfMJbsjSSv9WYAYeb5OqOR/P0=";
+  pnpmDepsHash = "sha256-dVhVzjhNdMmI0myNmZzjxexgvQftSyezOozps1s5c98=";
   src = fetchFromGitHub {
     owner = "tale";
     repo = "headplane";
     tag = "v${version}";
-    hash = "sha256-hRM+TTAKUxonJF3YHHvz9fpZeRo1kUpe7gHVyZy6sDc=";
+    hash = "sha256-xs1oFlrDTSCjhEHYj3XfSNg+3qQEtDCaR526tesOtk4=";
   };
 
-  headplaneSshWasm = buildGoModule {
+  headplaneSshWasm = buildGo127Module {
     pname = "headplane-ssh-wasm";
     inherit version src;
     subPackages = [ "cmd/hp_ssh" ];
