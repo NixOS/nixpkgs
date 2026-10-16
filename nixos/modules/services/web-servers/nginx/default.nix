@@ -1386,7 +1386,7 @@ in
 
         skips = lib.mkOption {
           type = types.listOf types.str;
-          default = [ ];
+          default = [ "default_server_flag" ];
           example = [ "version_disclosure" ];
           description = ''
             List of gixy checks to skip.
