@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     for size in 16 24 32 48 64 128 256; do
       geometry="$size"x"$size"
       mkdir -p "$out/share/icons/hicolor/$geometry/apps"
-      magick package/windows.svg -resize "$geometry" \
+      magick -background none package/windows.svg -resize "$geometry" \
         "$out/share/icons/hicolor/$geometry/apps/pandora_launcher.png"
     done
   '';
