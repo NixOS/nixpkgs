@@ -2283,8 +2283,8 @@ in
                 Setting origin to an host independent value will allow you to
                 reuse credentials across machines
 
-                When using {command}`pamu2fcfg`, you can specify your
-                application ID with the `-o` flag.
+                When using {command}`pamu2fcfg`, you can specify the origin
+                with the `-o` flag.
 
                 More information can be found [here](https://developers.yubico.com/pam-u2f/Manuals/pam_u2f.8.html)
               '';
