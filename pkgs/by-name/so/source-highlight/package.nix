@@ -5,6 +5,7 @@
   fetchurl,
   boost,
   updateAutotoolsGnuConfigScriptsHook,
+  versionCheckHook,
   llvmPackages,
 }:
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnu/src-highlite/source-highlight-${finalAttrs.version}.tar.gz";
-    sha256 = "148w47k3zswbxvhg83z38ifi85f9dqcpg7icvvw1cm6bg21x4zrs";
+    hash = "sha256-On/Sg3jLVBb43iyedxluyRUUXUTjD/Tg7ovrP+YhHJE=";
   };
 
   patches = [
@@ -68,9 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ]
   ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-    llvmPackages.compiler-rt.override {
-      doFakeLibgcc = true;
-    }
+    llvmPackages.compiler-rt.override { doFakeLibgcc = true; }
   );
 
   configureFlags = [
@@ -90,6 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
   # them in parallel by make will eventually break one or more tests.
   enableParallelChecking = false;
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   __structuredAttrs = true;
 
   meta = {
@@ -100,7 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gnu.org/software/src-highlite/";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    mainProgram = "source-highlight";
+    maintainers = with lib.maintainers; [
+      yiyu
+    ];
+    platforms = lib.platforms.all;
   };
 })

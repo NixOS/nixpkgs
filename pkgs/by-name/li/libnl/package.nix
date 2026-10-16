@@ -15,7 +15,7 @@
   graphviz,
   mscgen,
   asciidoc,
-  sourceHighlight,
+  source-highlight,
   python3Packages,
 }:
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
     mscgen
     asciidoc
-    sourceHighlight
+    source-highlight
     python3Packages.pygments
   ];
 
