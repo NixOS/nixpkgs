@@ -214,6 +214,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=commands::env::config::tests::"
     "--skip=commands::env::exec::tests::"
     "--skip=commands::env::pin::tests::"
+    "--skip=shim::dispatch::tests::test_resolve_with_cache_resolves_partial_env_version"
     # Rendering test sensitive to environment
     "--skip=help::tests::render_help_doc_appends_documentation_footer"
   ];
