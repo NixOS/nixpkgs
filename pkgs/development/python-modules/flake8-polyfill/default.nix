@@ -35,7 +35,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "skip-tests.patch";
       url = "https://github.com/PyCQA/flake8-polyfill/commit/3cf414350e82ceb835ca2edbd5d5967d33e9ff35.patch";
-      sha256 = "mElZafodq8dF3wLO/LOqwFb7eLMsPLlEjNSu5AWqets=";
+      hash = "sha256-mElZafodq8dF3wLO/LOqwFb7eLMsPLlEjNSu5AWqets=";
     })
   ];
 

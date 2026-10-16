@@ -18,7 +18,7 @@ build-idris-package {
     owner = "jdublu10";
     repo = "pacman";
     rev = "263ae58aeb5147e2af9cc76411970ccd90fa9121";
-    sha256 = "02m3ic2fk3a8j50xdpq70yx30hkxzjg6idsia482sm1nlkmxxin9";
+    hash = "sha256-ycbe66Q2VC0QUVG3aJ78fUIwugcH39ZBkUiN6QSLowo=";
   };
 
   postUnpack = ''

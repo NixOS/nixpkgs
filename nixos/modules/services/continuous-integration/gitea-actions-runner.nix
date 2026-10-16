@@ -191,6 +191,13 @@ in
         assertion = wantsContainerRuntime -> hasDocker || hasPodman;
         message = "Label configuration on gitea-actions-runner instance requires either docker or podman.";
       }
+      {
+        assertion = lib.getName cfg.package != "forgejo-runner";
+        message = ''
+          Running forgejo-runner via `services.gitea-actions-runner' is no longer supported.
+          Please use `services.forgejo-runner' instead.
+        '';
+      }
     ];
 
     systemd.services =
