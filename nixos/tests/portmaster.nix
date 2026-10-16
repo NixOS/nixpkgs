@@ -316,7 +316,7 @@ in
       machine.succeed("printf '%s\n' '{\"manual\":true}' > ${stateDir}/config.json")
       machine.succeed("chmod 0600 ${stateDir}/config.json")
 
-      machine.succeed("${unmanaged}/bin/switch-to-configuration test >&2")
+      machine.succeed("systemctl restart portmaster.service")
       machine.wait_for_unit("portmaster.service")
       machine.succeed("test -f ${stateDir}/config.json")
       machine.succeed("jq -e '.manual == true' ${stateDir}/config.json")
