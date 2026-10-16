@@ -230,8 +230,10 @@ buildGoModule (finalAttrs: {
     substituteInPlace "$out/share/applications/portmaster.desktop" \
       --replace-fail 'Exec=portmaster' "Exec=$out/bin/portmaster"
 
-    wrapGApp "$out/lib/portmaster/portmaster"
-    ln -s ../lib/portmaster/portmaster "$out/bin/portmaster"
+    # portmaster-core recognises its UI by the exact path <bin-dir>/portmaster,
+    # so the real executable stays there and the wrapper goes to bin/.
+    makeWrapper "$out/lib/portmaster/portmaster" "$out/bin/portmaster" \
+      --inherit-argv0 "''${gappsWrapperArgs[@]}"
 
     makeWrapper "$out/lib/portmaster/portmaster-core" "$out/bin/portmaster-core" \
       --prefix PATH : ${
@@ -243,7 +245,7 @@ buildGoModule (finalAttrs: {
       }
   '';
 
-  # The desktop executable is wrapped explicitly in its non-standard location.
+  # The desktop executable is wrapped explicitly in preFixup.
   dontWrapGApps = true;
 
   doInstallCheck = true;
@@ -257,10 +259,10 @@ buildGoModule (finalAttrs: {
     ${lib.getExe unzip} -Z1 $out/lib/portmaster/portmaster.zip | grep -Fx index.html
     ${lib.getExe unzip} -Z1 $out/lib/portmaster/assets.zip | grep -q '^img/flags/'
     ! ${lib.getExe unzip} -Z1 $out/lib/portmaster/assets.zip | grep -q '^data/'
-    test -x $out/lib/portmaster/.portmaster-wrapped
+    test -x $out/lib/portmaster/portmaster
     grep -aF \
       '${libayatana-appindicator}/lib/libayatana-appindicator3.so.1' \
-      $out/lib/portmaster/.portmaster-wrapped
+      $out/lib/portmaster/portmaster
 
     runHook postInstallCheck
   '';
