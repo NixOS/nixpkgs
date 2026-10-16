@@ -9,6 +9,7 @@ let
     attrsToList
     elem
     filter
+    length
     literalExpression
     mkEnableOption
     mkIf
@@ -396,94 +397,27 @@ in
         freeformType = format.type;
 
         options = {
-          features =
-            let
-              feature =
-                description:
-                mkOption {
-                  type = bool;
-                  default = true;
-                  description = description;
-                };
-            in
-            {
-              pluginsEnabled = feature "Allow the plugin system to load and run plugins for users.";
-              requirePluginApproval = feature "User-uploaded plugins must be approved by an admin before they can be enabled.";
-              themesEnabled = feature "Allow users to select and apply themes.";
-              sidebarAppsEnabled = feature "Allow custom web apps in navigation rail.";
-              settingsExportEnabled = feature "Allow users to export and import settings JSON.";
-              customKeywordsEnabled = feature "Allow user-created labels and tags.";
-              templatesEnabled = feature "Allow email template creation and library.";
-              calendarTasksEnabled = feature "Show task panel in calendar view.";
-              smimeEnabled = feature "Enable certificate management and email signing.";
-              externalContentEnabled = feature "Allow users to choose external content loading policy.";
-              debugModeEnabled = feature "Allow users to enable debug/diagnostic mode.";
-              folderIconsEnabled = feature "Allow custom folder icon picker.";
-              hoverActionsConfigEnabled = feature "Allow users to customize email hover actions.";
-              filesEnabled = feature "Enable file storage via WebDAV. WARNING: Large uploads can cause Stalwart/RocksDB instability. Not recommended for production.";
-              contactsEnabled = feature "Enable contacts/address book features.";
-              crossUnreadViewEnabled = feature ''
-                Allow an Unread entry in the Unified Mailbox section that lists unread mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on). Honors the user's folder selection.
-                Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              crossStarredViewEnabled = feature ''
-                Allow a Starred entry in the Unified Mailbox section that lists flagged/starred mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on). Honors the user's folder selection.
-                Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              crossAllViewEnabled = feature ''
-                Allow an All mail entry in the Unified Mailbox section that lists all mail across the account and its shared folders
-                (or every account when the cross-account sub-option is on).
-                Honors the user's folder selection. Requires the matching per-user toggle in Settings → Appearance.
-              '';
-              unifiedCrossAccountEnabled = feature ''
-                Allow users to expand the Unified Mailbox beyond the active account boundary so its lists merge across every logged-in account.
-                When off, the Unified Mailbox stays within the active account and its shared folders.
-              '';
+          features = mkOption {
+            type = submodule {
+              freeformType = format.type;
             };
-          restrictions =
-            let
-              restricted =
-                description:
-                mkOption {
-                  type = submodule {
-                    options = {
-                      locked = mkOption {
-                        type = bool;
-                        default = false;
-                        description = "Whether this option is locked.";
-                      };
-                      hidden = mkOption {
-                        type = bool;
-                        default = false;
-                        description = "Whether this option is hidden.";
-                      };
-                    };
-                  };
-                  default = { };
-                  description = description;
-                };
-            in
-            {
-              fontSize = restricted "Appearance: Font Size";
-              density = restricted "Appearance: Density";
-              animationsEnabled = restricted "Appearance: Animations";
-              markAsReadDelay = restricted "Email: Mark as Read Delay";
-              deleteAction = restricted "Email: Delete Action";
-              showPreview = restricted "Email: Show Preview";
-              mailLayout = restricted "Email: Mail Layout";
-              emailsPerPage = restricted "Email: Emails Per Page";
-              externalContentPolicy = restricted "Email: External Content Policy";
-              sendConfirmation = restricted "Composer: Send Confirmation";
-              defaultReplyMode = restricted "Composer: Default Reply Mode";
-              autoSelectReplyIdentity = restricted "Composer: Auto-select Reply Identity";
-              plainTextMode = restricted "Composer: Plain Text Only";
-              sessionTimeout = restricted "Privacy: Session Timeout";
-              emailNotificationsEnabled = restricted "Notifications: Email Notifications";
-              calendarNotificationsEnabled = restricted "Notifications: Calendar Notifications";
-              debugMode = restricted "Advanced: Debug Mode";
+            default = { };
+            example = literalExpression ''
+              sidebarAppsEnabled = true;
+            '';
+            description = "Enabled features. Check the `FEATURE_GATE_LABELS` [upstream](https://github.com/bulwarkmail/webmail/blob/1.16.0/app/(main)/admin/_tabs/policy.tsx#L23) for all available features. Most are on per default, so you don’t need to manually enable them.";
+          };
+          restrictions = mkOption {
+            type = submodule {
+              freeformType = format.type;
             };
+            default = { };
+            example = literalExpression ''
+              fontSize.locked = true;
+              debugMode.hidden = true;
+            '';
+            description = "Restricted settings. Check the `RESTRICTABLE_SETTINGS` [upstream](https://github.com/bulwarkmail/webmail/blob/1.16.0/app/(main)/admin/_tabs/policy.tsx#L48) for all available restrictions.";
+          };
 
           pushRelayUrl = mkOption {
             type = str;
@@ -731,7 +665,9 @@ in
                 name = "policy.json";
                 path = format.generate "policy.json" (
                   recursiveUpdate cfg.policies {
+                    features.pluginsEnabled = length cfg.plugins != 0;
                     features.pluginsUploadEnabled = false;
+                    features.requirePluginApproval = true;
                     features.userThemesEnabled = false;
                   }
                 );
