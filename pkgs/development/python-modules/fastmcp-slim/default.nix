@@ -18,9 +18,10 @@
   google-genai,
   griffelib,
   httpx,
+  joserfc,
   jsonref,
   jsonschema-path,
-  mcp,
+  mcp_1,
   openai,
   openapi-pydantic,
   opentelemetry-api,
@@ -37,6 +38,7 @@
   python-multipart,
   pyyaml,
   rich,
+  starlette,
   typing-extensions,
   uncalled-for,
   uvicorn,
@@ -46,7 +48,9 @@
   # tests
   anyio,
 }:
-
+let
+  mcp = mcp_1;
+in
 buildPythonPackage (finalAttrs: {
   pname = "fastmcp-slim";
   inherit (fastmcp) version src;
@@ -90,6 +94,7 @@ buildPythonPackage (finalAttrs: {
     ];
     client = [
       authlib
+      py-key-value-aio
     ]
     ++ finalAttrs.passthru.optional-dependencies.mcp
     ++ py-key-value-aio.optional-dependencies.filetree
@@ -105,12 +110,14 @@ buildPythonPackage (finalAttrs: {
       httpx
       mcp
       opentelemetry-api
+      starlette
     ];
     openai = [ openai ];
     server = [
       authlib
       cyclopts
       griffelib
+      joserfc
       jsonref
       jsonschema-path
       openapi-pydantic
@@ -151,14 +158,11 @@ buildPythonPackage (finalAttrs: {
 
     from fastmcp.tools.function_tool import _resolve_param_hints
 
-
     class Item:
         pass
 
-
     async def base(prefix: str, items: list[Item]) -> str:
         return prefix
-
 
     hints = _resolve_param_hints(partial(base, "bound"))
     assert hints["items"] == list[Item]
