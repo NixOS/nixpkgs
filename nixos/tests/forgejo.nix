@@ -240,10 +240,10 @@ let
               server.fail("curl --fail http://localhost:3000/metrics")
               server.succeed('curl --fail http://localhost:3000/metrics -H "Authorization: Bearer ${metricSecret}"')
 
-          def poll_workflow_action_status(id: int) -> bool:
+          def poll_workflow_action_status(_) -> bool:
               try:
                   response = server.succeed("curl --fail http://localhost:3000/api/v1/repos/test/repo/actions/tasks")
-                  status = json.loads(response).get("workflow_runs")[id].get("status")
+                  status = json.loads(response).get("workflow_runs")[0].get("status")
 
               except IndexError:
                   status = "???"
@@ -271,14 +271,6 @@ let
               client.succeed("git -C /tmp/repo commit -m 'Add dummy workflow'")
               client.succeed("git -C /tmp/repo push origin main")
 
-              # enable actions feature for this repository, defaults to disabled
-              server.succeed(
-                  "curl --fail -X PATCH http://localhost:3000/api/v1/repos/test/repo "
-                  + "-H 'Accept: application/json' -H 'Content-Type: application/json' "
-                  + f"-H 'Authorization: token {api_token}'"
-                  + ' -d \'{"has_actions":true}\'''
-              )
-
               runner_registration_response = server.succeed(
                   "curl --fail http://localhost:3000/api/v1/admin/actions/runners "
                   + f"-H 'Authorization: token {api_token}' "
@@ -293,11 +285,8 @@ let
               server.wait_for_unit("forgejo-runner-test.service")
               server.succeed("journalctl -o cat -u forgejo-runner-test.service | grep -q 'declared successfully'")
 
-              client.succeed("git -C /tmp/repo commit --allow-empty -m 'Retrigger dummy workflow'")
-              client.succeed("git -C /tmp/repo push origin main")
-
               with server.nested("Waiting for the workflow run to be successful"):
-                  retry(lambda _: poll_workflow_action_status(1), 180)
+                  retry(poll_workflow_action_status, 180)
 
           with subtest("Testing backup service"):
               server.succeed("${serverSystem}/specialisation/dump/bin/switch-to-configuration test")
