@@ -128,10 +128,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gtk_doc" withIntrospection)
     (lib.mesonBool "tpm2" withTpm2Tss)
     (lib.mesonOption "bashcompdir" "share/bash-completion/completions")
-  ]
-  # interactive test environment relies on dbus-run-session
-  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-    (lib.mesonEnable "test_setup" false)
+    # interactive test environment relies on dbus-run-session
+    (lib.mesonEnable "test_setup" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = stdenv.hostPlatform.isLinux && withIntrospection;
