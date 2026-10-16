@@ -916,7 +916,8 @@ rec {
 
   /**
     A path that is contained in the Nix store. This can be a top-level store
-    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
+    path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`,
+    (or, more simply, `lib.getExe pkgs.hello`).
   */
   pathInStore = pathWith {
     inStore = true;
