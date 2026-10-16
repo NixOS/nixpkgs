@@ -248,6 +248,18 @@ in
     };
   };
 
+  # The real package. The VM has no network, so Portmaster runs without intel data.
+  nodes.real = {
+    environment.systemPackages = [ pkgs.iptables ];
+
+    services.portmaster = {
+      enable = true;
+      # Also checks that the profile sync uses the configured API address.
+      settings."core/listenAddress" = "127.0.0.1:818";
+      profiles.Curl.packages = [ pkgs.curl ];
+    };
+  };
+
   testScript =
     { nodes, ... }:
     let
@@ -257,6 +269,8 @@ in
       nestedDevMode = "${nodes.machine.system.build.toplevel}/specialisation/nestedDevMode";
     in
     ''
+      start_all()
+
       machine.wait_for_unit("portmaster.service")
       machine.wait_for_unit("portmaster-managed-profiles.service")
       machine.succeed("grep -Fx nfnetlink_queue /etc/modules-load.d/nixos.conf")
@@ -329,5 +343,13 @@ in
       machine.succeed("${nestedDevMode}/bin/switch-to-configuration test >&2")
       machine.wait_for_unit("portmaster.service")
       machine.succeed("jq -e '. == {\"core/devMode\": true}' ${stateDir}/config.json")
+
+      real.wait_for_unit("portmaster-managed-profiles.service")
+      real.succeed("ss -lnt | grep -F 127.0.0.1:818")
+      real.wait_until_succeeds("ss -lnu | grep -F 127.0.0.17:53")
+      real.wait_until_succeeds("iptables-save | grep -F -- '-A OUTPUT -j PORTMASTER-INGEST-OUTPUT'")
+      real.succeed("test \"$(stat -c %a /var/lib/portmaster/logs)\" = 700")
+      real.succeed("systemctl stop portmaster.service")
+      real.fail("iptables-save | grep -F PORTMASTER")
     '';
 }
