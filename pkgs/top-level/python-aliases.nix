@@ -305,6 +305,7 @@ mapAliases {
   gpgme = gpg; # added 2026-06-26
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
   gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
+  gradient-utils = throw "'gradient-utils' has been removed because it was archived upstream and unused in tree."; # Added 2026-10-15
   gradient_statsd = throw "'gradient_statsd' has been renamed to/replaced by 'gradient-statsd'"; # Converted to throw 2025-10-29
   grapheme = throw "'grapheme' has been removed as it is unmaintained upstream. Consider using 'graphemeu' instead."; # Converted to throw 2025-12-22
   grappelli_safe = throw "'grappelli_safe' has been renamed to/replaced by 'grappelli-safe'"; # Converted to throw 2025-10-29

@@ -7274,8 +7274,6 @@ self: super: with self; {
 
   gradient-statsd = callPackage ../development/python-modules/gradient-statsd { };
 
-  gradient-utils = callPackage ../development/python-modules/gradient-utils { };
-
   gradio = callPackage ../development/python-modules/gradio { };
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix {
