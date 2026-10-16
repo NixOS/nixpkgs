@@ -7,7 +7,6 @@
   libtool,
   removeReferencesTo,
   gitUpdater,
-  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,10 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     autoconf
     libtool
     removeReferencesTo
-    autoreconfHook
   ];
 
   enableParallelBuilding = true;
+
+  preConfigure = ''
+    autoreconf -i
+  '';
 
   # Debian has outputs like these too
   # (https://packages.debian.org/source/bullseye/pkgconf), so it is safe to
