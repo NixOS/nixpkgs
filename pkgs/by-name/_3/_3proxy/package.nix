@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pcre2,
+  python3,
   nixosTests,
 }:
 
@@ -18,6 +19,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ pcre2 ];
+
+  nativeCheckInputs = [ python3 ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    python3 tests/run.py -v
+    runHook postCheck
+  '';
 
   # They use 'install -s', that calls the native strip instead of the cross.
   # Don't strip binary on install, we strip it on fixup phase anyway.
