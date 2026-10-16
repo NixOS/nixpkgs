@@ -104,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "source-highlight";
     maintainers = with lib.maintainers; [
-      SuperSandro2000
       yiyu
     ];
     platforms = lib.platforms.all;
