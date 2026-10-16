@@ -18,14 +18,14 @@ let
 in
 py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "netbox";
-  version = "4.7.1";
+  version = "4.7.3";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6IJrDD+1yBv15cbJwZOLkwiAlGZH2zRC+a/CG79C10Y=";
+    hash = "sha256-t/Ch4BNLrO3YhZo7BCY2xy3ArHrHh3qsH5d0o3SvRBc=";
   };
 
   patches = [

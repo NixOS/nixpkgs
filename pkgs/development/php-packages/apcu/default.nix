@@ -16,7 +16,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "krakjoe";
     repo = "apcu";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-L8bGSPUuBsZXsJdeY6cVA0DvI2+0wEbNHH6IcfT+cFU=";
   };
 

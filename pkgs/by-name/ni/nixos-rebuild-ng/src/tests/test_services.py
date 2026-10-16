@@ -60,10 +60,15 @@ def test__get_system_attr() -> None:
             == expected_system_attr
         )
 
+
 @patch(
     get_qualified_name(n.nix.run_wrapper, n.nix),
     autospec=True,
-    return_value=CompletedProcess([], 0, stdout='["amazon","azure","cloudstack","digital-ocean","google-compute","hyperv","iso","iso-installer","kexec","kubevirt","linode","lxc","lxc-metadata","oci","openstack","openstack-zfs","proxmox","proxmox-lxc","qemu","qemu-efi","raw","raw-efi","sd-card","vagrant-virtualbox","virtualbox","vmware"]\n'),
+    return_value=CompletedProcess(
+        [],
+        0,
+        stdout='["amazon","azure","cloudstack","digital-ocean","google-compute","hyperv","iso","iso-installer","kexec","kubevirt","linode","lxc","lxc-metadata","oci","openstack","openstack-zfs","proxmox","proxmox-lxc","qemu","qemu-efi","raw","raw-efi","sd-card","vagrant-virtualbox","virtualbox","vmware"]\n',
+    ),
 )
 def test__get_system_attr__build_image(
     mock_run: Mock,
@@ -74,7 +79,7 @@ def test__get_system_attr__build_image(
 
     # both `flake` & `build_attr` None
     args = argparse.Namespace(specialisation=None)
-    with pytest.raises(Exception) as e:
+    with pytest.raises(n.models.NixOSRebuildError):
         s._get_system_attr(
             action=n.models.Action.BUILD_IMAGE,
             args=args,
@@ -112,7 +117,9 @@ def test__get_system_attr__build_image(
 
     # with specialisation
     ## flake
-    args = argparse.Namespace(image_variant="iso", specialisation="custom-specialisation")
+    args = argparse.Namespace(
+        image_variant="iso", specialisation="custom-specialisation"
+    )
     assert (
         s._get_system_attr(
             action=n.models.Action.BUILD_IMAGE,
@@ -125,7 +132,9 @@ def test__get_system_attr__build_image(
     )
 
     ## build_attr
-    args = argparse.Namespace(image_variant="iso", specialisation="custom-specialisation")
+    args = argparse.Namespace(
+        image_variant="iso", specialisation="custom-specialisation"
+    )
     assert (
         s._get_system_attr(
             action=n.models.Action.BUILD_IMAGE,
@@ -136,6 +145,7 @@ def test__get_system_attr__build_image(
         )
         == "config.specialisation.custom-specialisation.configuration.system.build.images.iso"
     )
+
 
 @patch.dict(os.environ, {}, clear=True)
 @patch("os.execve", autospec=True)

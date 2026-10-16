@@ -14798,6 +14798,8 @@ self: super: with self; {
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
+  pydantic-ai-harness = callPackage ../development/python-modules/pydantic-ai-harness { };
+
   pydantic-ai-slim = callPackage ../development/python-modules/pydantic-ai-slim { };
 
   pydantic-argparse-extensible =

@@ -16,7 +16,7 @@ buildPecl rec {
   src = fetchFromGitHub {
     owner = "php-memcached-dev";
     repo = "php-memcached";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-sweEM4TVId+6ySffulmebZpz390dZXb+G3zFZvc45L8=";
   };
 
