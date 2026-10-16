@@ -16,7 +16,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php-amqp";
     repo = "php-amqp";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-HgwuQWxJFno24yo26qM30Qb8s3L9mYVntvMxC2MYxTk=";
   };
 
