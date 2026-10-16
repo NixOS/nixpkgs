@@ -26,10 +26,12 @@ rustPlatform.buildRustPackage {
   # reqwest initializes its rustls client in tests and needs a CA bundle.
   nativeCheckInputs = [ cacert ];
 
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
-    # Avoid nondeterministic LC_UUIDs emitted by ld64 on arm64.
-    RUSTFLAGS = "-C link-arg=-Wl,-no_uuid";
-  };
+  # Make darwin builds reproducible by disabling debug symbols in ring.
+  # See: https://github.com/briansmith/ring/pull/2881
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace "$cargoDepsCopy"/source-registry-*/ring-0.17.14/build.rs \
+      --replace-fail 'c.flag("-gfull")' 'c.flag("-g0")'
+  '';
 
   preBuild = ''
     # Remap transient Nix build paths for reproducible output.
