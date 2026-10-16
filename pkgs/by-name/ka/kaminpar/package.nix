@@ -14,13 +14,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kaminpar";
-  version = "3.7.3";
+  version = "3.7.4";
 
   src = fetchFromGitHub {
     owner = "KaHIP";
     repo = "KaMinPar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YjETyYnVcWzZqEv3z4xaBcdlWhSmsKC4PyFvUOZFBYA=";
+    hash = "sha256-yENBHeUodDd7s6oGhG7D+Jzq3Dff/HrmYMYGXrnyfmA=";
   };
 
   nativeBuildInputs = [ cmake ];
