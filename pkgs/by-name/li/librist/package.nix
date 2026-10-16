@@ -1,6 +1,7 @@
 {
   stdenv,
   lib,
+  testers,
   fetchFromGitLab,
   meson,
   ninja,
@@ -45,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = {
     description = "Library that can be used to easily add the RIST protocol to your application";
     homepage = "https://code.videolan.org/rist/librist";
@@ -55,5 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ raphaelr ];
     platforms = lib.platforms.all;
+    pkgConfigModules = [ "librist" ];
   };
 })
