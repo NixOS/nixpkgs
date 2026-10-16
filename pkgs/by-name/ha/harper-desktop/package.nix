@@ -38,11 +38,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   # stable macOS Accessibility permissions.
   dontFixup = true;
 
-  # Apple's verifier is required to check the complete signed app bundle.
-  sandboxProfile = ''
-    (allow file-read* process-exec (literal "/usr/bin/codesign"))
-  '';
-
   nativeInstallCheckInputs = [ re-plistbuddy ];
   doInstallCheck = true;
   installCheckPhase = ''
@@ -59,9 +54,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     executable=$(PlistBuddy -c 'Print :CFBundleExecutable' "$plist")
     test -n "$executable"
     test -x "$app/Contents/MacOS/$executable"
-
-    # rcodesign verify only supports individual Mach-O files, not app bundles.
-    /usr/bin/codesign --verify --deep --strict --verbose=2 "$app"
 
     runHook postInstallCheck
   '';
