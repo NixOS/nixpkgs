@@ -23,15 +23,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "1.0.91";
+  version = "1.0.98";
 
   src = fetchurl {
     url = "https://github.com/github/copilot-cli/releases/download/v${finalAttrs.version}/github-copilot-${finalAttrs.version}-${platform}.tgz";
     hash =
       {
-        "aarch64-darwin" = "sha256-7eqWUaRON3dXEwZ5pjf36zWRdJf+OKDPULaG2GnEDzE=";
-        "x86_64-linux" = "sha256-j682m6rqqJXLQLyN6WC2SreM44OTWBGdtEX2/MGTZ3k=";
-        "aarch64-linux" = "sha256-+Zpd0Xt7DfuAD51v379ahCZaw+vkr/qDfnnK7LqbZrM=";
+        "aarch64-darwin" = "sha256-JsYWXLRbzhs3o6jWu81ITi2TjPUT1ZcMvfnvDai5KnA=";
+        "x86_64-linux" = "sha256-pPX/6cooiGypsfiQFpmjpFZQJl27RzzBdXcsv8e4io8=";
+        "aarch64-linux" = "sha256-jAlbr0kiWueOUWMy1Qa4rQil2mD6pBu5OSXb1s4pkKc=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
