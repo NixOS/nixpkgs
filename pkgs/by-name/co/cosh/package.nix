@@ -74,6 +74,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Concatenative command-line shell";
+    # VM’s parallelism requires epoll
+    platforms = lib.platforms.linux;
     mainProgram = "cosh";
     homepage = "https://github.com/tomhrr/cosh";
     license = lib.licenses.bsd3;
