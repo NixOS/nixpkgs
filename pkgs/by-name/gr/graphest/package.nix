@@ -198,6 +198,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ulysseszhan ];
     mainProgram = "Graphest";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
