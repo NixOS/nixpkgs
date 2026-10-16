@@ -79,13 +79,50 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $XDG_CACHE_HOME
   '';
 
-  makeTarget = "linux-x86-64";
+  archParameters =
+    with stdenv.hostPlatform;
+    let
+      os =
+        if isDarwin then
+          "macos"
+        else if isWindows then
+          "windows"
+        else if isFreeBSD then
+          "freebsd"
+        else
+          "linux";
+      unixOrWin = if isWindows then "windows" else "unix";
+      arch =
+        if isAarch64 then
+          {
+            a = "arm";
+            b = "64";
+          }
+        else if isRiscV then
+          {
+            a = "riscv";
+            b = if isRiscV32 then "32" else "64";
+          }
+        else if isx86 then
+          {
+            a = "x86";
+            b = if isx86_32 then "32" else "64";
+          }
+        else
+          throw "Unsupported platform architecture";
+    in
+    {
+      bootImage = "${unixOrWin}-${arch.a}.${arch.b}";
+      makeTarget = "${os}-${arch.a}-${arch.b}";
+    };
+
+  makeTarget = finalAttrs.archParameters.makeTarget;
 
   postBuild = ''
     printf "First build from upstream boot image\n" >&2
     ./build.sh bootstrap
     printf "Rebuild boot image\n" >&2
-    ./factor -script -e='"unix-x86.64" USING: system bootstrap.image memory ; make-image save 0 exit'
+    ./factor -script -e='"${finalAttrs.archParameters.bootImage}" USING: system bootstrap.image memory ; make-image save 0 exit'
     printf "Second build from local boot image\n" >&2
     ./build.sh bootstrap
   '';
@@ -94,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     mkdir -p $out/lib/factor
     cp -r factor factor.image libfactor.a libfactor-ffi-test.so \
-        boot.unix-*.image LICENSE.txt README.md basis core extra misc \
+        boot.${finalAttrs.archParameters.bootImage}.image LICENSE.txt README.md basis core extra misc \
         $out/lib/factor
   ''
   + optionalString (versionOlder finalAttrs.version "0.101") ''
@@ -124,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       spacefrogg
     ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 })
