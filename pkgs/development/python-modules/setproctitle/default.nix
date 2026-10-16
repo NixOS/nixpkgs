@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "setproctitle";
-  version = "1.3.7";
+  version = "1.3.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dvarrazzo";
     repo = "py-setproctitle";
     tag = "version-${version}";
-    hash = "sha256-dfOdtfOXRAoCQLW307+YMsFIWRv4CupbKUxckev1oUw=";
+    hash = "sha256-PGTaK9/Wwd5Lp2tZCVSrnPkfVwWvJIq8rWNQ83OH/eI=";
   };
 
   build-system = [ setuptools ];
